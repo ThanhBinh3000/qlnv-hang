@@ -36,18 +36,20 @@ import com.tcdt.qlnvhang.entities.UserInfoEntity;
 import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.QlnvDiemKhoEntityRepository;
-import com.tcdt.qlnvhang.repository.QlnvKhoachLcntRepository;
+import com.tcdt.qlnvhang.repository.QlnvKhoachLcntHdrRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviEntityRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.util.PaginationSet;
-import com.tcdt.qlnvhang.request.object.QlnvKhoachLcntReq;
+import com.tcdt.qlnvhang.request.object.QlnvKhoachLcntDtlReq;
+import com.tcdt.qlnvhang.request.object.QlnvKhoachLcntHdrReq;
 import com.tcdt.qlnvhang.request.object.TTinGoiThau;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.search.QlnvKhoachLcntSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.request.QlnvDmDonviSearchReq;
 import com.tcdt.qlnvhang.request.StrSearchReq;
-import com.tcdt.qlnvhang.table.QlnvKhoachLcnt;
+import com.tcdt.qlnvhang.table.QlnvKhoachLcntDtl;
+import com.tcdt.qlnvhang.table.QlnvKhoachLcntHdr;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.UserInfo;
 
@@ -60,10 +62,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping(value = "/ke-hoach-lcnt")
 @Slf4j
 @Api(tags = "Kế hoạch lựa chọn nhà thầu")
-public class QlnvKhoachLcntController extends BaseController {
+public class QlnvKhoachLcntHdrController extends BaseController {
 
 	@Autowired
-	private QlnvKhoachLcntRepository qlnvKhoachLcntRepository;
+	private QlnvKhoachLcntHdrRepository qlnvKhoachLcntHdrRepository;
 	
 	@Autowired
 	private QlnvDmDonviEntityRepository qDmDonviEntityRepository;
@@ -86,7 +88,7 @@ public class QlnvKhoachLcntController extends BaseController {
 		try {
 			if (StringUtils.isEmpty(ids))
 				throw new UnsupportedOperationException("Không tồn tại bản ghi");
-			Optional<QlnvKhoachLcnt> qOptional = qlnvKhoachLcntRepository.findById(Long.parseLong(ids));
+			Optional<QlnvKhoachLcntHdr> qOptional = qlnvKhoachLcntHdrRepository.findById(Long.parseLong(ids));
 			if (!qOptional.isPresent())
 				throw new UnsupportedOperationException("Không tồn tại bản ghi");
 			resp.setData(qOptional);
@@ -106,16 +108,12 @@ public class QlnvKhoachLcntController extends BaseController {
 	public ResponseEntity<BaseResponse> colection(@Valid @RequestBody QlnvKhoachLcntSearchReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-//			if (!GenericValidator.isDate(objReq.getTuNgayLap(), "dd/mm/yyyy", true))
-//				throw new UnsupportedDataTypeException("Trường ngày không đúng định dạng");
-//			if (!GenericValidator.isDate(objReq.getDenNgayLap(), "dd/mm/yyyy", true))
-//				throw new UnsupportedDataTypeException("Trường ngày không đúng định dạng");
-
 			int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
 			int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
-			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
+			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").descending());
 
-			Page<QlnvKhoachLcnt> data = qlnvKhoachLcntRepository.selectParams(objReq.getMaDvi(), objReq.getLoaiHanghoa(),
+			Page<QlnvKhoachLcntHdr> data = qlnvKhoachLcntHdrRepository.selectParams(objReq.getMaDvi(), objReq.getLoaiHanghoa(),
+					objReq.getLoaiHanghoa(),
 					objReq.getTrangThai(), objReq.getNguoiTao(), objReq.getTuNgayLap(), objReq.getDenNgayLap(),
 					pageable);
 			resp.setData(data);
@@ -132,22 +130,24 @@ public class QlnvKhoachLcntController extends BaseController {
 	@ApiOperation(value = "Thêm mới kế hoạch lựa chọn nhà thầu", response = List.class)
 	@PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<BaseResponse> create(@Valid @RequestBody QlnvKhoachLcntReq objReq, HttpServletRequest req) {
+	public ResponseEntity<BaseResponse> create(@Valid @RequestBody QlnvKhoachLcntHdrReq objReq, HttpServletRequest req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			TTinGoiThau doc = objReq.getDoc();
-			objReq.setDoc(null);
-			QlnvKhoachLcnt dataMap = new ModelMapper().map(objReq, QlnvKhoachLcnt.class);
+			List<QlnvKhoachLcntDtlReq> dtlReqList = objReq.getDetailList();
+			objReq.setDetailList(null);
+			QlnvKhoachLcntHdr dataMap = new ModelMapper().map(objReq, QlnvKhoachLcntHdr.class);
 			String username= getUserName(req);
 			UserInfo u =  userInfoRepository.findByUsername(username);
 			Optional<QlnvDmDonvi> dvi =   qlnvDmDonviRepository.findById(u.getDvql());
 			dataMap.setMaDvi(dvi.get().getMaDvi());
-			dataMap.setDoc(new Gson().toJson(doc));
 			dataMap.setTrangThai(Contains.TAO_MOI);
 			dataMap.setNguoiTao(getUserName(req));
 			dataMap.setNgayTao(new Date());
-
-			QlnvKhoachLcnt createCheck = qlnvKhoachLcntRepository.save(dataMap);
+			for (QlnvKhoachLcntDtlReq dtlReq : dtlReqList) {
+				QlnvKhoachLcntDtl detail = new ModelMapper().map(dtlReq, QlnvKhoachLcntDtl.class);
+				dataMap.addDetail(detail);
+			}
+			QlnvKhoachLcntHdr createCheck = qlnvKhoachLcntHdrRepository.save(dataMap);
 
 			resp.setData(createCheck);
 			resp.setStatusCode(Contains.RESP_SUCC);
@@ -163,25 +163,31 @@ public class QlnvKhoachLcntController extends BaseController {
 	@ApiOperation(value = "Sửa kế hoạch lựa chọn nhà thầu", response = List.class)
 	@PostMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<BaseResponse> edit(@Valid @RequestBody QlnvKhoachLcntReq objReq, HttpServletRequest req) {
+	public ResponseEntity<BaseResponse> edit(@Valid @RequestBody QlnvKhoachLcntHdrReq objReq, HttpServletRequest req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			Optional<QlnvKhoachLcnt> qOptional = qlnvKhoachLcntRepository.findById(objReq.getId());
+			Optional<QlnvKhoachLcntHdr> qOptional = qlnvKhoachLcntHdrRepository.findById(objReq.getId());
 
 			if (!qOptional.isPresent())
 				throw new UnsupportedOperationException("Kế hoạch lựa chọn nhà thầu không tồn tại");
-			TTinGoiThau doc = objReq.getDoc();
-			objReq.setDoc(null);
-			QlnvKhoachLcnt dataDTB = qOptional.get();
-			QlnvKhoachLcnt dataMap = new ModelMapper().map(objReq, QlnvKhoachLcnt.class);
+			QlnvKhoachLcntHdr dataDTB = qOptional.get();
+			List<QlnvKhoachLcntDtlReq> dtlReqList = objReq.getDetailList();
+			objReq.setDetailList(null);
+			QlnvKhoachLcntHdr dataMap = new ModelMapper().map(objReq, QlnvKhoachLcntHdr.class);
 
 			updateObjectToObject(dataDTB, dataMap);
-
-			dataDTB.setDoc(new Gson().toJson(doc));
 			dataDTB.setNguoiSua(getUserName(req));
 			dataDTB.setNgaySua(new Date());
-
-			QlnvKhoachLcnt createCheck = qlnvKhoachLcntRepository.save(dataDTB);
+			
+			List<QlnvKhoachLcntDtl> dtlList = dataDTB.getDetailList();
+			for (QlnvKhoachLcntDtl dtl : dtlList) {
+				dataDTB.removeDetail(dtl);
+			}
+			for (QlnvKhoachLcntDtlReq dtlReq : dtlReqList) {
+				QlnvKhoachLcntDtl detail = new ModelMapper().map(dtlReq, QlnvKhoachLcntDtl.class);
+				dataDTB.addDetail(detail);
+			}
+			QlnvKhoachLcntHdr createCheck = qlnvKhoachLcntHdrRepository.save(dataDTB);
 
 			resp.setData(createCheck);
 			resp.setStatusCode(Contains.RESP_SUCC);
@@ -203,7 +209,7 @@ public class QlnvKhoachLcntController extends BaseController {
 			if (stReq.getId() == null)
 				throw new Exception("Không tìm thấy dữ liệu");
 
-			Optional<QlnvKhoachLcnt> approveCheck = qlnvKhoachLcntRepository.findById(stReq.getId());
+			Optional<QlnvKhoachLcntHdr> approveCheck = qlnvKhoachLcntHdrRepository.findById(stReq.getId());
 			if (!approveCheck.isPresent())
 				throw new Exception("Không tìm thấy dữ liệu");
 
@@ -225,7 +231,7 @@ public class QlnvKhoachLcntController extends BaseController {
 			}
 
 			approveCheck.get().setTrangThai(stReq.getTrangThai());
-			qlnvKhoachLcntRepository.save(approveCheck.get());
+			qlnvKhoachLcntHdrRepository.save(approveCheck.get());
 
 			resp.setData(approveCheck);
 			resp.setStatusCode(Contains.RESP_SUCC);
@@ -248,11 +254,11 @@ public class QlnvKhoachLcntController extends BaseController {
 		try {
 			if (StringUtils.isEmpty(ids))
 				throw new UnsupportedOperationException("Không tồn tại bản ghi");
-			Optional<QlnvKhoachLcnt> qOptional = qlnvKhoachLcntRepository.findById(Long.parseLong(ids));
+			Optional<QlnvKhoachLcntHdr> qOptional = qlnvKhoachLcntHdrRepository.findById(Long.parseLong(ids));
 			if (!qOptional.isPresent())
 				throw new UnsupportedOperationException("Không tồn tại bản ghi");
 
-			qlnvKhoachLcntRepository.delete(qOptional.get());
+			qlnvKhoachLcntHdrRepository.delete(qOptional.get());
 
 			resp.setData(qOptional);
 			resp.setStatusCode(Contains.RESP_SUCC);
