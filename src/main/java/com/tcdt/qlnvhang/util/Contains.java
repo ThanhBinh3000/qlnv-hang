@@ -24,19 +24,23 @@ public class Contains {
 	public static final String TU_CHOI_KHOA = "04";
 	public static final String MO_SO = "05";
 	public static final String HUY_PDUYET = "06";
-	
-	//Trang thai phe duyet kho tang
+
+	// Trang thai phe duyet kho tang
 	public static final String TAO_MOI = "00";
 	public static final String CHO_DUYET = "01";
 	public static final String DUYET = "02";
 	public static final String TU_CHOI = "03";
 	public static final String HUY = "04";
-	 
 
 	// Trang thai response
 	public static final int RESP_SUCC = 0;
 	public static final int RESP_FAIL = 1;
-	
+
 	public static final String TYPE_USER_BACKEND = "BE";
 	public static final String TYPE_USER_FRONTEND = "FE";
+
+	// Cap trang don vi
+	public static final String CAP_TONG_CUC = "1";
+	public static final String CAP_CUC = "2";
+	public static final String CAP_CHI_CUC = "3";
 }
