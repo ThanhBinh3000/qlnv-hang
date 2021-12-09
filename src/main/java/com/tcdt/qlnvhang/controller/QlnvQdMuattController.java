@@ -31,7 +31,6 @@ import com.tcdt.qlnvhang.request.object.QlnvQdMuattDtlReq;
 import com.tcdt.qlnvhang.request.object.QlnvQdMuattHdrReq;
 import com.tcdt.qlnvhang.request.search.QlnvQdMuattSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.table.QlnvDxkhMuaTtHdr;
 import com.tcdt.qlnvhang.table.QlnvQdMuattDtl;
 import com.tcdt.qlnvhang.table.QlnvQdMuattDtlCtiet;
 import com.tcdt.qlnvhang.table.QlnvQdMuattHdr;
@@ -215,7 +214,7 @@ public class QlnvQdMuattController extends BaseController {
 			int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
 			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
 
-			Page<QlnvDxkhMuaTtHdr> dataPage = qdMuaHangHdrRepository.selectParams(objReq.getSoQdinh(),
+			Page<QlnvQdMuattHdr> dataPage = qdMuaHangHdrRepository.selectParams(objReq.getSoQdinh(),
 					objReq.getTrangThai(), objReq.getTuNgayQdinh(), objReq.getDenNgayQdinh(), objReq.getMaHhoa(),
 					objReq.getSoQdKh(), pageable);
 
