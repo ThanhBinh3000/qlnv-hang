@@ -68,15 +68,17 @@ public class QlnvQdMuattController extends BaseController {
 			dataMap.setNguoiTao(getUserName(req));
 			dataMap.setNgayTao(getDateTimeNow());
 
-			List<QlnvQdMuattDtlCtiet> detailChild;
-			List<QlnvQdMuattDtlReq> dtlReqList = objReq.getDetail();
-			for (QlnvQdMuattDtlReq dtlReq : dtlReqList) {
-				QlnvQdMuattDtl detail = ObjectMapperUtils.map(dtlReq, QlnvQdMuattDtl.class);
-				detailChild = new ArrayList<QlnvQdMuattDtlCtiet>();
-				if (dtlReq.getDetail() != null)
-					detailChild = ObjectMapperUtils.mapAll(dtlReq.getDetail(), QlnvQdMuattDtlCtiet.class);
-				detail.setChildren(detailChild);
-				dataMap.addChild(detail);
+			if (objReq.getDetail() != null) {
+				List<QlnvQdMuattDtlCtiet> detailChild;
+				List<QlnvQdMuattDtlReq> dtlReqList = objReq.getDetail();
+				for (QlnvQdMuattDtlReq dtlReq : dtlReqList) {
+					QlnvQdMuattDtl detail = ObjectMapperUtils.map(dtlReq, QlnvQdMuattDtl.class);
+					detailChild = new ArrayList<QlnvQdMuattDtlCtiet>();
+					if (dtlReq.getDetail() != null)
+						detailChild = ObjectMapperUtils.mapAll(dtlReq.getDetail(), QlnvQdMuattDtlCtiet.class);
+					detail.setChildren(detailChild);
+					dataMap.addChild(detail);
+				}
 			}
 
 			QlnvQdMuattHdr createCheck = qdMuaHangHdrRepository.save(dataMap);
