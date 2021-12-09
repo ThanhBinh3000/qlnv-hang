@@ -7,13 +7,11 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import lombok.Builder;
 import lombok.Data;
 
 @Entity
 @Table(name = "USER_ACTION")
 @Data
-@Builder
 public class UserAction {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_ACTION_SEQ")

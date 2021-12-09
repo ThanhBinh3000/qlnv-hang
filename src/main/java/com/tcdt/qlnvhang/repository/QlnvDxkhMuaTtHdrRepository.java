@@ -22,7 +22,8 @@ public interface QlnvDxkhMuaTtHdrRepository extends CrudRepository<QlnvDxkhMuaTt
 					+ " AND (:maDvi is null or t.MA_DVI = :maDvi) AND (:trangThai is null or t.TRANG_THAI = :trangThai)"
 					+ " AND (:tuNgayLap is null or t.NGAY_LAP >= TO_DATE(:tuNgayLap,'dd/mm/yyyy'))"
 					+ " AND (:denNgayLap is null or t.NGAY_LAP < TO_DATE(:denNgayLap,'dd/mm/yyyy') + INTERVAL '1' DAY)"
-					+ " AND (:maHhoa is null or lower(t.MA_HHOA) like lower(concat(concat('%', :maHhoa),'%')))", nativeQuery = true)
+					+ " AND (:maHhoa is null or lower(t.MA_HHOA) like lower(concat(concat('%', :maHhoa),'%')))"
+					+ " AND (:soQdKhoach is null or lower(t.SO_QD_KHOACH) like lower(concat(concat('%', :soQdKhoach),'%')))", nativeQuery = true)
 	Page<QlnvDxkhMuaTtHdr> selectParams(String soDxuat, String maDvi, String trangThai, Date tuNgayLap, Date denNgayLap,
 			String maHhoa, String soQdKhoach, Pageable pageable);
 }
