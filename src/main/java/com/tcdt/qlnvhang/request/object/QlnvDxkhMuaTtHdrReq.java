@@ -56,8 +56,8 @@ public class QlnvDxkhMuaTtHdrReq {
 
 	@NotNull(message = "Không được để trống")
 	@Size(max = 2, message = "Trạng thái không được vượt quá 2 ký tự")
-	@ApiModelProperty(example = Contains.MOI_TAO )
+	@ApiModelProperty(example = Contains.MOI_TAO)
 	String trangThai;
 
-	private List<QlnvDxkhMuaTtDtlReq> detailList;
+	private List<QlnvDxkhMuaTtDtlReq> detailListReq;
 }

@@ -17,7 +17,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
 
@@ -39,7 +43,8 @@ public class QlnvQdMuattDtl implements Serializable {
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "id_dtl")
-	@JsonIgnore
+	@Fetch(value = FetchMode.SUBSELECT)
+	@JsonIgnoreProperties("children")
 	private List<QlnvQdMuattDtlCtiet> children = new ArrayList<>();
 
 	public void setChildren(List<QlnvQdMuattDtlCtiet> children) {
@@ -57,6 +62,7 @@ public class QlnvQdMuattDtl implements Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_hdr")
+	@JsonBackReference
 	private QlnvQdMuattHdr parent;
 
 }

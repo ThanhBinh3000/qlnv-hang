@@ -16,7 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
 
@@ -51,10 +51,10 @@ public class QlnvQdMuattHdr implements Serializable {
 	Date denNgayThien;
 	String loaiDchinh;
 	Date ngayQdGoc;
-	
+
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "id_hdr")
-	@JsonIgnore
+	@JsonManagedReference
 	private List<QlnvQdMuattDtl> children = new ArrayList<>();
 
 	public void setChildren(List<QlnvQdMuattDtl> children) {

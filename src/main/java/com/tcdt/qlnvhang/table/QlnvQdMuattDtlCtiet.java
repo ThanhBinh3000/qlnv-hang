@@ -13,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.Data;
 
 @Entity
@@ -38,6 +40,7 @@ public class QlnvQdMuattDtlCtiet implements Serializable {
 	BigDecimal tongTien;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_dtl", nullable = false)
+	@JoinColumn(name = "id_dtl")
+	@JsonBackReference
 	private QlnvQdMuattDtl parent;
 }
