@@ -13,5 +13,12 @@ public class PathContains {
 	public static final String QL_NHA_CCAP = "/ql-nha-ccap";
 	public static final String QL_DXUAT_KH_MUATT = "/ql-dxuat-khoach-muatt";
 	public static final String QL_QD_MUATT = "/qly-qd-muatt";
-
+	
+	
+	
+	
+	//5.6 Lua chon don vi mua hang
+	public static final String QL_LCDVBH = "/ql-lcbh";
+	public static final String QL_DXKH_BANHANG = "/qldxkh-banhang";
+	public static final String QL_QD_BANHANG = "/qlyqd-banhang";
 }

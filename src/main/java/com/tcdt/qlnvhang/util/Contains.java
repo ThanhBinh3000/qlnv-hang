@@ -25,12 +25,13 @@ public class Contains {
 	public static final String MO_SO = "05";
 	public static final String HUY_PDUYET = "06";
 
-	// Trang thai phe duyet kho tang
+	// Trang thai phe duyet
 	public static final String TAO_MOI = "00";
 	public static final String CHO_DUYET = "01";
 	public static final String DUYET = "02";
 	public static final String TU_CHOI = "03";
 	public static final String HUY = "04";
+	public static final String TONG_HOP = "05";
 
 	// Trang thai response
 	public static final int RESP_SUCC = 0;
