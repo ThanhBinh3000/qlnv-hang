@@ -1,10 +1,14 @@
 package com.tcdt.qlnvhang.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +28,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.repository.QlnvQdMuattHdrRepository;
+import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.QlnvQdMuattDtlReq;
 import com.tcdt.qlnvhang.request.object.QlnvQdMuattHdrReq;
@@ -35,9 +41,11 @@ import com.tcdt.qlnvhang.table.QlnvQdMuattDtl;
 import com.tcdt.qlnvhang.table.QlnvQdMuattDtlCtiet;
 import com.tcdt.qlnvhang.table.QlnvQdMuattHdr;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DynWordUtils;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import com.tcdt.qlnvhang.util.PaginationSet;
 import com.tcdt.qlnvhang.util.PathContains;
+import com.tcdt.qlnvhang.util.PoiWordUtils;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -232,6 +240,55 @@ public class QlnvQdMuattController extends BaseController {
 		}
 
 		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "In phụ lục kế hoạch được duyệt", response = List.class)
+	@PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public void export(@RequestBody IdSearchReq req, HttpServletResponse response) throws Exception {
+		try {
+			String filePath = "/reports/PL_QD_MUA_TT.docx";
+			String outPath = "D:\\22.docx";
+//			ServletOutputStream dataOutput = response.getOutputStream();
+//			response.setContentType("application/octet-stream");
+//			response.addHeader("content-disposition", "attachment;filename=PL_QD_MUA_TT_" + getDateTimeNow() + ".docx");
+
+			// Add gia tri bien string
+			Map<String, Object> paramMap = new HashMap<>(16);
+			paramMap.put("param1", "Gia tri 1");
+			paramMap.put("param2", "Gia tri 2");
+			paramMap.put("param3", "Gia tri 3");
+			paramMap.put("param4", "Gia tri 4");
+
+			// Add gia tri vao table
+			List<List<String>> tbRow1 = new ArrayList<>();
+			List<String> tbRow1_row1 = new ArrayList<>(
+					Arrays.asList("1", "module 1", "category 1", "type 1", " size 1", "price 1"));
+			List<String> tbRow1_row2 = new ArrayList<>(
+					Arrays.asList("2", "module 2", "category 2", "type 1", " size 1", "price 1"));
+			tbRow1.add(tbRow1_row1);
+			tbRow1.add(tbRow1_row2);
+			paramMap.put(PoiWordUtils.addRowText + "tb1", tbRow1);
+
+			DynWordUtils.process(paramMap, filePath, outPath);
+
+			// save the docs
+//			doc.write(dataOutput);
+//			dataOutput.flush();
+//			dataOutput.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+			log.error("In phụ lục kế hoạch được duyệt", e);
+			final Map<String, Object> body = new HashMap<>();
+			body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			body.put("msg", e.getMessage());
+
+			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+			response.setCharacterEncoding("UTF-8");
+
+			final ObjectMapper mapper = new ObjectMapper();
+			mapper.writeValue(response.getOutputStream(), body);
+		}
 	}
 
 }
