@@ -291,4 +291,28 @@ public class QlnvQdMuattController extends BaseController {
 		}
 	}
 
+	public static void main(String[] args) {
+		String filePath = "/reports/PL_QD_MUA_TT.docx";
+		String outPath = "D:\\22.docx";
+
+		// Add gia tri bien string
+		Map<String, Object> paramMap = new HashMap<>(16);
+		paramMap.put("param1", "Gia tri 1");
+		paramMap.put("param2", "Gia tri 2");
+		paramMap.put("param3", "Gia tri 3");
+		paramMap.put("param4", "Gia tri 4");
+
+		// Add gia tri vao table
+		List<List<String>> tbRow1 = new ArrayList<>();
+		List<String> tbRow1_row1 = new ArrayList<>(
+				Arrays.asList("1", "module 1", "category 1", "type 1", " size 1", "price 1"));
+		List<String> tbRow1_row2 = new ArrayList<>(
+				Arrays.asList("2", "module 2", "category 2", "type 1", " size 1", "price 1"));
+		tbRow1.add(tbRow1_row1);
+		tbRow1.add(tbRow1_row2);
+		paramMap.put(PoiWordUtils.addRowText + "tb1", tbRow1);
+
+		DynWordUtils.process(paramMap, filePath, outPath);
+	}
+
 }
