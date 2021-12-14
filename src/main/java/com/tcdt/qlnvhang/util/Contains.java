@@ -31,6 +31,7 @@ public class Contains {
 	public static final String DUYET = "02";
 	public static final String TU_CHOI = "03";
 	public static final String HUY = "04";
+	public static final String TONG_HOP = "05";
 
 	// Trang thai response
 	public static final int RESP_SUCC = 0;
@@ -43,4 +44,14 @@ public class Contains {
 	public static final String CAP_TONG_CUC = "1";
 	public static final String CAP_CUC = "2";
 	public static final String CAP_CHI_CUC = "3";
+
+	// Loai dieu chinh quyet dinh
+	public static final String QD_GOC = "00";
+	public static final String DC_GIA = "01";
+	public static final String DC_SO_LUONG = "02";
+	public static final String DC_THOI_GIAN = "03";
+	public static final String DC_KHAC = "04";
+
+	public static final String QUYET_DINH = "QD";
+	public static final String QUYET_DINH_DC = "DC";
 }

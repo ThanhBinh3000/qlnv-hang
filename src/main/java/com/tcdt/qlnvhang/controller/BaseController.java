@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -228,5 +229,11 @@ public class BaseController {
 		String local = df.format(date);
 		Date datenow = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(local);
 		return datenow;
+	}
+
+	public static String getUUID(String code) {
+		if (StringUtils.isEmpty(code))
+			return UUID.randomUUID().toString().replace("-", "");
+		return code + UUID.randomUUID().toString().replace("-", "");
 	}
 }

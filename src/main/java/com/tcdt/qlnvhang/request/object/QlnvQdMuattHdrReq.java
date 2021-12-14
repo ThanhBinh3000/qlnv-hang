@@ -20,7 +20,8 @@ public class QlnvQdMuattHdrReq {
 	@Size(max = 50, message = "Số quyết định không được vượt quá 50 ký tự")
 	@ApiModelProperty(example = "SQD123")
 	String soQdinh;
-
+	
+	@NotNull(message = "Không được để trống")
 	@Size(max = 50, message = "Số quyết định giao chỉ tiêu năm không được vượt quá 50 ký tự")
 	@ApiModelProperty(example = "SQDGCT123")
 	String soQdKhoach;
@@ -48,7 +49,7 @@ public class QlnvQdMuattHdrReq {
 
 	@NotNull(message = "Không được để trống")
 	@Size(max = 2, message = "Loại điều chỉnh được vượt quá 2 ký tự")
-	@ApiModelProperty(example = "01")
+	@ApiModelProperty(example = "00")
 	String loaiDchinh;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
