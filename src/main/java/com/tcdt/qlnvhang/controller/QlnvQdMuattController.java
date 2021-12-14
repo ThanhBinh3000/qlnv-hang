@@ -132,6 +132,12 @@ public class QlnvQdMuattController extends BaseController {
 			if (!qOptional.isPresent())
 				throw new Exception("Không tìm thấy dữ liệu cần sửa");
 
+			if (qOptional.get().getChildren().size() > 0) {
+				List<String> soDxuatList = qOptional.get().getChildren().stream().map(QlnvQdMuattDtl::getSoDxuat)
+						.collect(Collectors.toList());
+				qlnvDxkhMuaTtHdrRepository.updateTongHop(soDxuatList, Contains.DUYET);
+			}
+
 			objReq.setSoQdinh(null);
 
 			QlnvQdMuattHdr dataDB = qOptional.get();
@@ -156,6 +162,11 @@ public class QlnvQdMuattController extends BaseController {
 			}
 
 			QlnvQdMuattHdr createCheck = qdMuaHangHdrRepository.save(dataDB);
+			if (createCheck.getId() > 0 && createCheck.getChildren().size() > 0) {
+				List<String> soDxuatList = createCheck.getChildren().stream().map(QlnvQdMuattDtl::getSoDxuat)
+						.collect(Collectors.toList());
+				qlnvDxkhMuaTtHdrRepository.updateTongHop(soDxuatList, Contains.TONG_HOP);
+			}
 
 			resp.setData(createCheck);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
