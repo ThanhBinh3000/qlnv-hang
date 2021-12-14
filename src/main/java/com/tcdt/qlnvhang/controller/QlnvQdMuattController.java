@@ -1,17 +1,26 @@
 package com.tcdt.qlnvhang.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.docx4j.Docx4J;
+import org.docx4j.TraversalUtil;
+import org.docx4j.XmlUtils;
+import org.docx4j.finders.ClassFinder;
+import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
+import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
+import org.docx4j.wml.Tbl;
+import org.docx4j.wml.Tr;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -41,11 +50,9 @@ import com.tcdt.qlnvhang.table.QlnvQdMuattDtl;
 import com.tcdt.qlnvhang.table.QlnvQdMuattDtlCtiet;
 import com.tcdt.qlnvhang.table.QlnvQdMuattHdr;
 import com.tcdt.qlnvhang.util.Contains;
-import com.tcdt.qlnvhang.util.DynWordUtils;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import com.tcdt.qlnvhang.util.PaginationSet;
 import com.tcdt.qlnvhang.util.PathContains;
-import com.tcdt.qlnvhang.util.PoiWordUtils;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -245,37 +252,77 @@ public class QlnvQdMuattController extends BaseController {
 	@ApiOperation(value = "In phụ lục kế hoạch được duyệt", response = List.class)
 	@PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public void export(@RequestBody IdSearchReq req, HttpServletResponse response) throws Exception {
+	public void export(@Valid @RequestBody IdSearchReq searchReq, HttpServletResponse response, HttpServletRequest req)
+			throws Exception {
+		String template = "/reports/PL_QD_MUA_TT.docx";
+		WordprocessingMLPackage wordMLPackage;
 		try {
-			String filePath = "/reports/PL_QD_MUA_TT.docx";
-			String outPath = "D:\\22.docx";
-//			ServletOutputStream dataOutput = response.getOutputStream();
-//			response.setContentType("application/octet-stream");
-//			response.addHeader("content-disposition", "attachment;filename=PL_QD_MUA_TT_" + getDateTimeNow() + ".docx");
+			if (StringUtils.isEmpty(searchReq.getId()))
+				throw new Exception("Không tìm thấy dữ liệu");
+
+			Optional<QlnvQdMuattHdr> qHoach = qdMuaHangHdrRepository.findById(searchReq.getId());
+			if (!qHoach.isPresent())
+				throw new Exception("Không tìm thấy dữ liệu");
+
+			ServletOutputStream dataOutput = response.getOutputStream();
+			response.setContentType("application/octet-stream");
+			response.addHeader("content-disposition", "attachment;filename=PL_QD_MUA_TT_" + getDateTimeNow() + ".docx");
+
+			wordMLPackage = WordprocessingMLPackage.load(new ClassPathResource(template).getFile());
+			MainDocumentPart documentPart = wordMLPackage.getMainDocumentPart();
+
+			// Data to construct a circular list
+			ClassFinder find = new ClassFinder(Tbl.class);
+			new TraversalUtil(wordMLPackage.getMainDocumentPart().getContent(), find);
+			Tbl table = (Tbl) find.results.get(0);// Get the first table element
+			// The second line is agreed as a template, and the content of the second line
+			// is obtained
+			Tr dynamicTr = (Tr) table.getContent().get(1);
+			// Get the xml data of the template row
+			String dynamicTrXml = XmlUtils.marshaltoString(dynamicTr);
+
+			// Add parameter to table
+			List<QlnvQdMuattDtl> detail = new ArrayList<QlnvQdMuattDtl>();
+			if (qHoach.get().getChildren() != null)
+				detail = qHoach.get().getChildren();
+
+			List<QlnvQdMuattDtlCtiet> detailCtiets = new ArrayList<QlnvQdMuattDtlCtiet>();
+			if (detail.size() > 0)
+				detailCtiets = detail.get(0).getChildren();
+
+			if (detailCtiets.size() > 0) {
+				Map<String, Object> map;
+				for (int i = 0; i < detailCtiets.size(); i++) {
+					map = new HashMap<String, Object>();
+					map.put("stt", i + 1);
+					map.put("donvi",
+							StringUtils.isEmpty(detailCtiets.get(i).getMaDvi()) ? "" : detailCtiets.get(i).getMaDvi());
+					map.put("diadiem", "");
+					map.put("soluong", detailCtiets.get(i).getSoDuyet());
+					map.put("dongia", detailCtiets.get(i).getDonGia());
+					map.put("thanhtien", detailCtiets.get(i).getTongTien());
+					Tr newTr = (Tr) XmlUtils.unmarshallFromTemplate(dynamicTrXml, map);// Fill in template row data
+					table.getContent().add(newTr);
+				}
+			}
+
+			// Delete the placeholder row of the template row
+			table.getContent().remove(1);
 
 			// Add gia tri bien string
-			Map<String, Object> paramMap = new HashMap<>(16);
-			paramMap.put("param1", "Gia tri 1");
-			paramMap.put("param2", "Gia tri 2");
-			paramMap.put("param3", "Gia tri 3");
-			paramMap.put("param4", "Gia tri 4");
+			HashMap<String, String> mappings = new HashMap<String, String>();
+			mappings.put("param1", "(1) …");
+			mappings.put("param2", qHoach.get().getMaHanghoa());
+			mappings.put("param3", getDvi(req).getTenDvi());
+			mappings.put("param4", qHoach.get().getSoQdinh());
 
-			// Add gia tri vao table
-			List<List<String>> tbRow1 = new ArrayList<>();
-			List<String> tbRow1_row1 = new ArrayList<>(
-					Arrays.asList("1", "module 1", "category 1", "type 1", " size 1", "price 1"));
-			List<String> tbRow1_row2 = new ArrayList<>(
-					Arrays.asList("2", "module 2", "category 2", "type 1", " size 1", "price 1"));
-			tbRow1.add(tbRow1_row1);
-			tbRow1.add(tbRow1_row2);
-			paramMap.put(PoiWordUtils.addRowText + "tb1", tbRow1);
-
-			DynWordUtils.process(paramMap, filePath, outPath);
+			// Replace bien
+			documentPart.variableReplace(mappings);
 
 			// save the docs
-//			doc.write(dataOutput);
-//			dataOutput.flush();
-//			dataOutput.close();
+			Docx4J.save(wordMLPackage, dataOutput);
+			dataOutput.flush();
+			dataOutput.close();
 		} catch (Exception e) {
 			// TODO: handle exception
 			log.error("In phụ lục kế hoạch được duyệt", e);
@@ -289,30 +336,6 @@ public class QlnvQdMuattController extends BaseController {
 			final ObjectMapper mapper = new ObjectMapper();
 			mapper.writeValue(response.getOutputStream(), body);
 		}
-	}
-
-	public static void main(String[] args) {
-		String filePath = "/reports/PL_QD_MUA_TT.docx";
-		String outPath = "D:\\22.docx";
-
-		// Add gia tri bien string
-		Map<String, Object> paramMap = new HashMap<>(16);
-		paramMap.put("param1", "Gia tri 1");
-		paramMap.put("param2", "Gia tri 2");
-		paramMap.put("param3", "Gia tri 3");
-		paramMap.put("param4", "Gia tri 4");
-
-		// Add gia tri vao table
-		List<List<String>> tbRow1 = new ArrayList<>();
-		List<String> tbRow1_row1 = new ArrayList<>(
-				Arrays.asList("1", "module 1", "category 1", "type 1", " size 1", "price 1"));
-		List<String> tbRow1_row2 = new ArrayList<>(
-				Arrays.asList("2", "module 2", "category 2", "type 1", " size 1", "price 1"));
-		tbRow1.add(tbRow1_row1);
-		tbRow1.add(tbRow1_row2);
-		paramMap.put(PoiWordUtils.addRowText + "tb1", tbRow1);
-
-		DynWordUtils.process(paramMap, filePath, outPath);
 	}
 
 }

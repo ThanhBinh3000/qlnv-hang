@@ -205,6 +205,12 @@
 			<artifactId>poi-ooxml</artifactId>
 			<version>5.0.0</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.docx4j/docx4j -->
+		<dependency>
+			<groupId>org.docx4j</groupId>
+			<artifactId>docx4j</artifactId>
+			<version>6.1.2</version>
+		</dependency>
 		<dependency>
 			<groupId>net.logstash.logback</groupId>
 			<artifactId>logstash-logback-encoder</artifactId>

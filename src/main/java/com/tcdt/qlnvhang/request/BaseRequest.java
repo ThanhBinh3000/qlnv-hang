@@ -6,5 +6,5 @@ import lombok.Data;
 public class BaseRequest {
 	PaggingReq paggingReq;
 	String trangThai;
-
+	String str;
 }
