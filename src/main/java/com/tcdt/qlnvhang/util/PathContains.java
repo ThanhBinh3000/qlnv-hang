@@ -9,6 +9,7 @@ public class PathContains {
 	public static final String URL_CHI_TIET = "/chi-tiet";
 	public static final String URL_PHE_DUYET = "/phe-duyet";
 	public static final String URL_KET_XUAT = "/ket-xuat";
+	public static final String URL_DIEU_CHINH = "/dieu-chinh";
 
 	// Path menu
 	public static final String QL_NHA_CCAP = "/ql-nha-ccap";

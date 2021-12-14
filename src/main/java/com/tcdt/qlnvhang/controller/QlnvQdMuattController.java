@@ -6,12 +6,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.docx4j.Docx4J;
+import org.docx4j.TraversalUtil;
+import org.docx4j.XmlUtils;
+import org.docx4j.finders.ClassFinder;
+import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
+import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
+import org.docx4j.wml.Tbl;
+import org.docx4j.wml.Tr;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,22 +41,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.enums.EnumResponse;
+import com.tcdt.qlnvhang.repository.QlnvDxkhMuaTtHdrRepository;
 import com.tcdt.qlnvhang.repository.QlnvQdMuattHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.QlnvQdMuattDtlReq;
 import com.tcdt.qlnvhang.request.object.QlnvQdMuattHdrReq;
+import com.tcdt.qlnvhang.request.search.QlnvQdMuattSearchAdjustReq;
 import com.tcdt.qlnvhang.request.search.QlnvQdMuattSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.table.QlnvQdMuattDtl;
 import com.tcdt.qlnvhang.table.QlnvQdMuattDtlCtiet;
 import com.tcdt.qlnvhang.table.QlnvQdMuattHdr;
 import com.tcdt.qlnvhang.util.Contains;
-import com.tcdt.qlnvhang.util.DynWordUtils;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import com.tcdt.qlnvhang.util.PaginationSet;
 import com.tcdt.qlnvhang.util.PathContains;
-import com.tcdt.qlnvhang.util.PoiWordUtils;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -60,21 +71,23 @@ public class QlnvQdMuattController extends BaseController {
 	@Autowired
 	private QlnvQdMuattHdrRepository qdMuaHangHdrRepository;
 
+	@Autowired
+	private QlnvDxkhMuaTtHdrRepository qlnvDxkhMuaTtHdrRepository;
+
 	@ApiOperation(value = "Tạo mới quyết định mua trực tiếp", response = List.class)
 	@PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<BaseResponse> create(HttpServletRequest req, @Valid @RequestBody QlnvQdMuattHdrReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			if (qdMuaHangHdrRepository.findBySoQdinh(objReq.getSoQdinh()) != null)
-				throw new UnsupportedOperationException("Số quyết định đã tồn tại");
-
 			QlnvQdMuattHdr dataMap = ObjectMapperUtils.map(objReq, QlnvQdMuattHdr.class);
 
 			dataMap.setNgayQd(getDateTimeNow());
-			dataMap.setTrangThai(Contains.HOAT_DONG);
+			dataMap.setTrangThai(Contains.TAO_MOI);
 			dataMap.setNguoiTao(getUserName(req));
 			dataMap.setNgayTao(getDateTimeNow());
+			dataMap.setSoQdinh(getUUID(Contains.QUYET_DINH));
+			dataMap.setLoaiDchinh(Contains.QD_GOC);
 
 			if (objReq.getDetail() != null) {
 				List<QlnvQdMuattDtlCtiet> detailChild;
@@ -90,6 +103,11 @@ public class QlnvQdMuattController extends BaseController {
 			}
 
 			QlnvQdMuattHdr createCheck = qdMuaHangHdrRepository.save(dataMap);
+			if (createCheck.getId() > 0 && createCheck.getChildren().size() > 0) {
+				List<String> soDxuatList = createCheck.getChildren().stream().map(QlnvQdMuattDtl::getSoDxuat)
+						.collect(Collectors.toList());
+				qlnvDxkhMuaTtHdrRepository.updateTongHop(soDxuatList, Contains.TONG_HOP);
+			}
 
 			resp.setData(createCheck);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
@@ -114,6 +132,14 @@ public class QlnvQdMuattController extends BaseController {
 			if (!qOptional.isPresent())
 				throw new Exception("Không tìm thấy dữ liệu cần sửa");
 
+			if (qOptional.get().getChildren().size() > 0) {
+				List<String> soDxuatList = qOptional.get().getChildren().stream().map(QlnvQdMuattDtl::getSoDxuat)
+						.collect(Collectors.toList());
+				qlnvDxkhMuaTtHdrRepository.updateTongHop(soDxuatList, Contains.DUYET);
+			}
+
+			objReq.setSoQdinh(null);
+
 			QlnvQdMuattHdr dataDB = qOptional.get();
 			QlnvQdMuattHdr dataMap = ObjectMapperUtils.map(objReq, QlnvQdMuattHdr.class);
 
@@ -136,6 +162,11 @@ public class QlnvQdMuattController extends BaseController {
 			}
 
 			QlnvQdMuattHdr createCheck = qdMuaHangHdrRepository.save(dataDB);
+			if (createCheck.getId() > 0 && createCheck.getChildren().size() > 0) {
+				List<String> soDxuatList = createCheck.getChildren().stream().map(QlnvQdMuattDtl::getSoDxuat)
+						.collect(Collectors.toList());
+				qlnvDxkhMuaTtHdrRepository.updateTongHop(soDxuatList, Contains.TONG_HOP);
+			}
 
 			resp.setData(createCheck);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
@@ -203,6 +234,12 @@ public class QlnvQdMuattController extends BaseController {
 			qHoach.get().setTrangThai(stReq.getTrangThai());
 			qdMuaHangHdrRepository.save(qHoach.get());
 
+			if (status.equals(Contains.TU_CHOI) && qHoach.get().getChildren().size() > 0) {
+				List<String> soDxuatList = qHoach.get().getChildren().stream().map(QlnvQdMuattDtl::getSoDxuat)
+						.collect(Collectors.toList());
+				qlnvDxkhMuaTtHdrRepository.updateTongHop(soDxuatList, Contains.DUYET);
+			}
+
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -245,39 +282,78 @@ public class QlnvQdMuattController extends BaseController {
 	@ApiOperation(value = "In phụ lục kế hoạch được duyệt", response = List.class)
 	@PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public void export(@RequestBody IdSearchReq req, HttpServletResponse response) throws Exception {
+	public void export(@Valid @RequestBody IdSearchReq searchReq, HttpServletResponse response, HttpServletRequest req)
+			throws Exception {
+		String template = "/reports/PL_QD_MUA_TT.docx";
+		WordprocessingMLPackage wordMLPackage;
 		try {
-			String filePath = "/reports/PL_QD_MUA_TT.docx";
-			String outPath = "D:\\22.docx";
-//			ServletOutputStream dataOutput = response.getOutputStream();
-//			response.setContentType("application/octet-stream");
-//			response.addHeader("content-disposition", "attachment;filename=PL_QD_MUA_TT_" + getDateTimeNow() + ".docx");
+			if (StringUtils.isEmpty(searchReq.getId()))
+				throw new Exception("Không tìm thấy dữ liệu");
+
+			Optional<QlnvQdMuattHdr> qHoach = qdMuaHangHdrRepository.findById(searchReq.getId());
+			if (!qHoach.isPresent())
+				throw new Exception("Không tìm thấy dữ liệu");
+
+			ServletOutputStream dataOutput = response.getOutputStream();
+			response.setContentType("application/octet-stream");
+			response.addHeader("content-disposition", "attachment;filename=PL_QD_MUA_TT_" + getDateTimeNow() + ".docx");
+
+			wordMLPackage = WordprocessingMLPackage.load(new ClassPathResource(template).getFile());
+			MainDocumentPart documentPart = wordMLPackage.getMainDocumentPart();
+
+			// Data to construct a circular list
+			ClassFinder find = new ClassFinder(Tbl.class);
+			new TraversalUtil(wordMLPackage.getMainDocumentPart().getContent(), find);
+			Tbl table = (Tbl) find.results.get(0);// Get the first table element
+			// The second line is agreed as a template, and the content of the second line
+			// is obtained
+			Tr dynamicTr = (Tr) table.getContent().get(1);
+			// Get the xml data of the template row
+			String dynamicTrXml = XmlUtils.marshaltoString(dynamicTr);
+
+			// Add parameter to table
+			List<QlnvQdMuattDtl> detail = new ArrayList<QlnvQdMuattDtl>();
+			if (qHoach.get().getChildren() != null)
+				detail = qHoach.get().getChildren();
+
+			List<QlnvQdMuattDtlCtiet> detailCtiets = new ArrayList<QlnvQdMuattDtlCtiet>();
+			if (detail.size() > 0)
+				detailCtiets = detail.get(0).getChildren();
+
+			if (detailCtiets.size() > 0) {
+				Map<String, Object> map;
+				for (int i = 0; i < detailCtiets.size(); i++) {
+					map = new HashMap<String, Object>();
+					map.put("stt", i + 1);
+					map.put("donvi",
+							StringUtils.isEmpty(detailCtiets.get(i).getMaDvi()) ? "" : detailCtiets.get(i).getMaDvi());
+					map.put("diadiem", "");
+					map.put("soluong", detailCtiets.get(i).getSoDuyet());
+					map.put("dongia", detailCtiets.get(i).getDonGia());
+					map.put("thanhtien", detailCtiets.get(i).getTongTien());
+					Tr newTr = (Tr) XmlUtils.unmarshallFromTemplate(dynamicTrXml, map);// Fill in template row data
+					table.getContent().add(newTr);
+				}
+			}
+
+			// Delete the placeholder row of the template row
+			table.getContent().remove(1);
 
 			// Add gia tri bien string
-			Map<String, Object> paramMap = new HashMap<>(16);
-			paramMap.put("param1", "Gia tri 1");
-			paramMap.put("param2", "Gia tri 2");
-			paramMap.put("param3", "Gia tri 3");
-			paramMap.put("param4", "Gia tri 4");
+			HashMap<String, String> mappings = new HashMap<String, String>();
+			mappings.put("param1", "(1) …");
+			mappings.put("param2", qHoach.get().getMaHanghoa());
+			mappings.put("param3", getDvi(req).getTenDvi());
+			mappings.put("param4", qHoach.get().getSoQdinh());
 
-			// Add gia tri vao table
-			List<List<String>> tbRow1 = new ArrayList<>();
-			List<String> tbRow1_row1 = new ArrayList<>(
-					Arrays.asList("1", "module 1", "category 1", "type 1", " size 1", "price 1"));
-			List<String> tbRow1_row2 = new ArrayList<>(
-					Arrays.asList("2", "module 2", "category 2", "type 1", " size 1", "price 1"));
-			tbRow1.add(tbRow1_row1);
-			tbRow1.add(tbRow1_row2);
-			paramMap.put(PoiWordUtils.addRowText + "tb1", tbRow1);
-
-			DynWordUtils.process(paramMap, filePath, outPath);
+			// Replace bien
+			documentPart.variableReplace(mappings);
 
 			// save the docs
-//			doc.write(dataOutput);
-//			dataOutput.flush();
-//			dataOutput.close();
+			Docx4J.save(wordMLPackage, dataOutput);
+			dataOutput.flush();
+			dataOutput.close();
 		} catch (Exception e) {
-			// TODO: handle exception
 			log.error("In phụ lục kế hoạch được duyệt", e);
 			final Map<String, Object> body = new HashMap<>();
 			body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -291,28 +367,152 @@ public class QlnvQdMuattController extends BaseController {
 		}
 	}
 
-	public static void main(String[] args) {
-		String filePath = "/reports/PL_QD_MUA_TT.docx";
-		String outPath = "D:\\22.docx";
+	@ApiOperation(value = "Tra cứu quyết định điều chỉnh phê duyệt kế hoạch mua trực tiếp", response = List.class)
+	@PostMapping(value = PathContains.URL_TRA_CUU
+			+ PathContains.URL_DIEU_CHINH, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> colectionAdjust(HttpServletRequest request,
+			@Valid @RequestBody QlnvQdMuattSearchAdjustReq objReq) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
+			int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
+			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
 
-		// Add gia tri bien string
-		Map<String, Object> paramMap = new HashMap<>(16);
-		paramMap.put("param1", "Gia tri 1");
-		paramMap.put("param2", "Gia tri 2");
-		paramMap.put("param3", "Gia tri 3");
-		paramMap.put("param4", "Gia tri 4");
+			Page<QlnvQdMuattHdr> dataPage = qdMuaHangHdrRepository.selectParamsAdjust(objReq.getSoQdinh(),
+					objReq.getTrangThai(), objReq.getTuNgayQdinh(), objReq.getDenNgayQdinh(), objReq.getSoQdinhGoc(),
+					objReq.getSoQdKh(), objReq.getLoaiDchinh(), pageable);
 
-		// Add gia tri vao table
-		List<List<String>> tbRow1 = new ArrayList<>();
-		List<String> tbRow1_row1 = new ArrayList<>(
-				Arrays.asList("1", "module 1", "category 1", "type 1", " size 1", "price 1"));
-		List<String> tbRow1_row2 = new ArrayList<>(
-				Arrays.asList("2", "module 2", "category 2", "type 1", " size 1", "price 1"));
-		tbRow1.add(tbRow1_row1);
-		tbRow1.add(tbRow1_row2);
-		paramMap.put(PoiWordUtils.addRowText + "tb1", tbRow1);
+			resp.setData(dataPage);
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (
 
-		DynWordUtils.process(paramMap, filePath, outPath);
+		Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error(e.getMessage());
+		}
+
+		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Tạo mới quyết định điều chỉnh phê duyệt kế hoạch mua trực tiếp", response = List.class)
+	@PostMapping(value = PathContains.URL_TAO_MOI
+			+ PathContains.URL_DIEU_CHINH, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<BaseResponse> createAdjust(HttpServletRequest req,
+			@Valid @RequestBody QlnvQdMuattHdrReq objReq) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			// Check quyet dinh goc co ton tai
+			if (StringUtils.isEmpty(objReq.getSoQdinhGoc()))
+				throw new Exception("Không tìm thấy số quyết định gốc");
+
+			String[] listType = { Contains.DC_GIA, Contains.DC_SO_LUONG, Contains.DC_THOI_GIAN, Contains.DC_KHAC };
+			if (!Arrays.stream(listType).anyMatch(objReq.getLoaiDchinh()::equals))
+				throw new Exception("Loại điều chỉnh không phù hợp");
+
+			Optional<QlnvQdMuattHdr> opCheck = qdMuaHangHdrRepository
+					.findBySoQdinhGocAndTrangThai(objReq.getSoQdinhGoc(), Contains.DUYET);
+			if (!opCheck.isPresent())
+				throw new Exception("Quyết định gốc không tồn tại hoặc đã bị điều chỉnh");
+
+			QlnvQdMuattHdr dataMap = ObjectMapperUtils.map(objReq, QlnvQdMuattHdr.class);
+
+			dataMap.setNgayQd(getDateTimeNow());
+			dataMap.setTrangThai(Contains.TAO_MOI);
+			dataMap.setNguoiTao(getUserName(req));
+			dataMap.setNgayTao(getDateTimeNow());
+			dataMap.setSoQdinh(getUUID(Contains.QUYET_DINH_DC));
+
+			if (objReq.getDetail() != null) {
+				List<QlnvQdMuattDtlCtiet> detailChild;
+				List<QlnvQdMuattDtlReq> dtlReqList = objReq.getDetail();
+				for (QlnvQdMuattDtlReq dtlReq : dtlReqList) {
+					QlnvQdMuattDtl detail = ObjectMapperUtils.map(dtlReq, QlnvQdMuattDtl.class);
+					detailChild = new ArrayList<QlnvQdMuattDtlCtiet>();
+					if (dtlReq.getDetail() != null)
+						detailChild = ObjectMapperUtils.mapAll(dtlReq.getDetail(), QlnvQdMuattDtlCtiet.class);
+					detail.setChildren(detailChild);
+					dataMap.addChild(detail);
+				}
+			}
+
+			QlnvQdMuattHdr createCheck = qdMuaHangHdrRepository.save(dataMap);
+
+			resp.setData(createCheck);
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error(e.getMessage());
+		}
+		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Cập nhật quyết định điều chỉnh phê duyệt kế hoạch mua trực tiếp", response = List.class)
+	@PostMapping(value = PathContains.URL_CAP_NHAT
+			+ PathContains.URL_DIEU_CHINH, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<BaseResponse> updateAdjust(HttpServletRequest req,
+			@Valid @RequestBody QlnvQdMuattHdrReq objReq) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			// Check quyet dinh goc co ton tai
+			if (StringUtils.isEmpty(objReq.getSoQdinhGoc()))
+				throw new Exception("Không tìm thấy số quyết định gốc");
+
+			if (StringUtils.isEmpty(objReq.getId()))
+				throw new Exception("Sửa thất bại, không tìm thấy dữ liệu");
+
+			String[] listType = { Contains.DC_GIA, Contains.DC_SO_LUONG, Contains.DC_THOI_GIAN, Contains.DC_KHAC };
+			if (!Arrays.stream(listType).anyMatch(objReq.getLoaiDchinh()::equals))
+				throw new Exception("Loại điều chỉnh không phù hợp");
+
+			Optional<QlnvQdMuattHdr> opCheck = qdMuaHangHdrRepository
+					.findBySoQdinhGocAndTrangThai(objReq.getSoQdinhGoc(), Contains.DUYET);
+			if (!opCheck.isPresent())
+				throw new Exception("Quyết định gốc không tồn tại hoặc đã bị điều chỉnh");
+
+			Optional<QlnvQdMuattHdr> qOptional = qdMuaHangHdrRepository.findById(Long.valueOf(objReq.getId()));
+			if (!qOptional.isPresent())
+				throw new Exception("Không tìm thấy dữ liệu cần sửa");
+
+			objReq.setSoQdinh(null);
+
+			QlnvQdMuattHdr dataDB = qOptional.get();
+			QlnvQdMuattHdr dataMap = ObjectMapperUtils.map(objReq, QlnvQdMuattHdr.class);
+
+			updateObjectToObject(dataDB, dataMap);
+
+			dataDB.setNgaySua(getDateTimeNow());
+			dataDB.setNguoiSua(getUserName(req));
+
+			if (objReq.getDetail() != null) {
+				List<QlnvQdMuattDtlCtiet> detailChild;
+				List<QlnvQdMuattDtlReq> dtlReqList = objReq.getDetail();
+				for (QlnvQdMuattDtlReq dtlReq : dtlReqList) {
+					QlnvQdMuattDtl detail = ObjectMapperUtils.map(dtlReq, QlnvQdMuattDtl.class);
+					detailChild = new ArrayList<QlnvQdMuattDtlCtiet>();
+					if (dtlReq.getDetail() != null)
+						detailChild = ObjectMapperUtils.mapAll(dtlReq.getDetail(), QlnvQdMuattDtlCtiet.class);
+					detail.setChildren(detailChild);
+					dataDB.addChild(detail);
+				}
+			}
+
+			QlnvQdMuattHdr createCheck = qdMuaHangHdrRepository.save(dataDB);
+
+			resp.setData(createCheck);
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error(e.getMessage());
+		}
+		return ResponseEntity.ok(resp);
 	}
 
 }

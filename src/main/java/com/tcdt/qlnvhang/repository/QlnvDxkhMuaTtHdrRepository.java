@@ -1,11 +1,14 @@
 package com.tcdt.qlnvhang.repository;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.tcdt.qlnvhang.table.QlnvDxkhMuaTtHdr;
 
@@ -24,4 +27,9 @@ public interface QlnvDxkhMuaTtHdrRepository extends CrudRepository<QlnvDxkhMuaTt
 	@Query(value = querySelect + queryTable, countQuery = queryCount + queryTable, nativeQuery = true)
 	Page<QlnvDxkhMuaTtHdr> selectParams(String soDxuat, String maDvi, String trangThai, Date tuNgayLap, Date denNgayLap,
 			String maHhoa, String soQdKhoach, Pageable pageable);
+
+	@Transactional()
+	@Modifying
+	@Query(value = "UPDATE QLNV_DXKH_MUA_TT_HDR SET TRANG_THAI=:trangThai WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
+	void updateTongHop(List<String> soDxuatList, String tongHop);
 }

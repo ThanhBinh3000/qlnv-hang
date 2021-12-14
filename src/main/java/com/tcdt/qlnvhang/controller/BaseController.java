@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,6 +33,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.TokenAuthenticationService;
+import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.service.feign.CategoryServiceProxy;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.util.Request;
@@ -82,6 +84,27 @@ public class BaseController {
 		// Call feign get dvql
 		ResponseEntity<String> response = categoryServiceProxy.getDetail(this.getAuthorizationToken(request),
 				this.getDvql(request));
+
+		if (Request.getStatus(response.getBody()) != EnumResponse.RESP_SUCC.getValue())
+			throw new Exception("Không tìm truy vấn được thông tin đơn vị");
+
+		// Passed ket qua tra ve, tuy bien type list or object
+		String str = Request.getAttrFromJson(response.getBody(), "data");
+		Type type = new TypeToken<QlnvDmDonvi>() {
+		}.getType();
+		QlnvDmDonvi objDonVi = new Gson().fromJson(str, type);
+
+		if (ObjectUtils.isEmpty(objDonVi))
+			throw new Exception("Không tìm truy vấn được thông tin đơn vị");
+		return objDonVi;
+	}
+
+	public QlnvDmDonvi getDviByMa(HttpServletRequest request, String maDvi) throws Exception {
+		// Call feign get dvql
+		BaseRequest baseRequest = new BaseRequest();
+		baseRequest.setStr(maDvi);
+		ResponseEntity<String> response = categoryServiceProxy.getDetailByCode(this.getAuthorizationToken(request),
+				baseRequest);
 
 		if (Request.getStatus(response.getBody()) != EnumResponse.RESP_SUCC.getValue())
 			throw new Exception("Không tìm truy vấn được thông tin đơn vị");
@@ -206,5 +229,11 @@ public class BaseController {
 		String local = df.format(date);
 		Date datenow = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(local);
 		return datenow;
+	}
+
+	public static String getUUID(String code) {
+		if (StringUtils.isEmpty(code))
+			return UUID.randomUUID().toString().replace("-", "");
+		return code + UUID.randomUUID().toString().replace("-", "");
 	}
 }
