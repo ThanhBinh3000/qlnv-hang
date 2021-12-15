@@ -64,7 +64,7 @@ public class Contains {
 				.put(Contains.DC_KHAC, "Điều chỉnh khác").get();
 	}
 
-	public static String getType(String key) {
+	public static String getLoaiDc(String key) {
 		return Contains.mappingLoaiDc.get(key);
 	}
 }
