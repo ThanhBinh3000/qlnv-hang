@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -409,8 +408,7 @@ public class QlnvQdMuattController extends BaseController {
 			if (StringUtils.isEmpty(objReq.getSoQdinhGoc()))
 				throw new Exception("Không tìm thấy số quyết định gốc");
 
-			String[] listType = { Contains.DC_GIA, Contains.DC_SO_LUONG, Contains.DC_THOI_GIAN, Contains.DC_KHAC };
-			if (!Arrays.stream(listType).anyMatch(objReq.getLoaiDchinh()::equals))
+			if (objReq.getLoaiDchinh() == null || !Contains.mappingLoaiDc.containsKey(objReq.getLoaiDchinh()))
 				throw new Exception("Loại điều chỉnh không phù hợp");
 
 			Optional<QlnvQdMuattHdr> opCheck = qdMuaHangHdrRepository
@@ -466,8 +464,7 @@ public class QlnvQdMuattController extends BaseController {
 			if (StringUtils.isEmpty(objReq.getId()))
 				throw new Exception("Sửa thất bại, không tìm thấy dữ liệu");
 
-			String[] listType = { Contains.DC_GIA, Contains.DC_SO_LUONG, Contains.DC_THOI_GIAN, Contains.DC_KHAC };
-			if (!Arrays.stream(listType).anyMatch(objReq.getLoaiDchinh()::equals))
+			if (objReq.getLoaiDchinh() == null || !Contains.mappingLoaiDc.containsKey(objReq.getLoaiDchinh()))
 				throw new Exception("Loại điều chỉnh không phù hợp");
 
 			Optional<QlnvQdMuattHdr> opCheck = qdMuaHangHdrRepository

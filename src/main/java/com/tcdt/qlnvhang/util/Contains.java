@@ -1,5 +1,7 @@
 package com.tcdt.qlnvhang.util;
 
+import java.util.Map;
+
 public class Contains {
 	public static final String TRANG_THAI_HIEU_LUC_NHOM = "01";
 	public static final String API_NHOM = "/group";
@@ -54,4 +56,15 @@ public class Contains {
 
 	public static final String QUYET_DINH = "QD";
 	public static final String QUYET_DINH_DC = "DC";
+
+	public static final Map<String, String> mappingLoaiDc;
+	static {
+		mappingLoaiDc = Maps.<String, String>buildMap().put(Contains.QD_GOC, "Quyết định gốc")
+				.put(Contains.DC_GIA, "Điều chỉnh giá").put(Contains.DC_SO_LUONG, "Điều chỉnh số lượng")
+				.put(Contains.DC_THOI_GIAN, "Điều chỉnh thời gian").put(Contains.DC_KHAC, "Điều chỉnh khác").get();
+	}
+
+	public static String getType(String key) {
+		return Contains.mappingLoaiDc.get(key);
+	}
 }

@@ -29,7 +29,7 @@ public interface QlnvQdMuattHdrRepository extends CrudRepository<QlnvQdMuattHdr,
 			+ " AND (:denNgayQdinh is null or t.NGAY_QD < TO_DATE(:denNgayQdinh,'dd/mm/yyyy') + INTERVAL '1' DAY)"
 			+ " AND (:soQdinhGoc is null or lower(t.SO_QDINH_GOC) like lower(concat(concat('%', :soQdinhGoc),'%')))"
 			+ " AND (:soQdKh is null or lower(t.SO_QD_KH) like lower(concat(concat('%', :soQdKh),'%')))"
-			+ " AND (:loaiDchinh is null or t.LOAI_DCHINH = :loaiDchinh) AND t.LOAI_DCHINH not in ('0')";
+			+ " AND (:loaiDchinh is null or t.LOAI_DCHINH = :loaiDchinh) AND t.LOAI_DCHINH <> '0'";
 
 	@Query(value = querySelect + queryTable, countQuery = queryCount + queryTable, nativeQuery = true)
 	Page<QlnvQdMuattHdr> selectParams(String soQdinh, String trangThai, Date tuNgayQdinh, Date denNgayQdinh,
