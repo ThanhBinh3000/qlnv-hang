@@ -307,8 +307,7 @@ public class QlnvQdMuattController extends BaseController {
 							.put("donvi",
 									StringUtils.isEmpty(detailCtiets.get(i).getMaDvi()) ? ""
 											: detailCtiets.get(i).getMaDvi())
-							.put(Contains.DC_THOI_GIAN, "Điều chỉnh thời gian").put("diadiem", "")
-							.put("soluong", detailCtiets.get(i).getSoDuyet())
+							.put("diadiem", "").put("soluong", detailCtiets.get(i).getSoDuyet())
 							.put("dongia", detailCtiets.get(i).getDonGia())
 							.put("thanhtien", detailCtiets.get(i).getTongTien()).get();
 					lstMapDetail.add(detailMap);
