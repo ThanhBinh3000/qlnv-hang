@@ -31,5 +31,5 @@ public interface QlnvDxkhMuaTtHdrRepository extends CrudRepository<QlnvDxkhMuaTt
 	@Transactional()
 	@Modifying
 	@Query(value = "UPDATE QLNV_DXKH_MUA_TT_HDR SET TRANG_THAI=:trangThai WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
-	void updateTongHop(List<String> soDxuatList, String tongHop);
+	void updateTongHop(List<String> soDxuatList, String trangThai);
 }
