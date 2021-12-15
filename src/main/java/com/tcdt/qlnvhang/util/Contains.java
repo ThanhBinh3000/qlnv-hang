@@ -59,9 +59,9 @@ public class Contains {
 
 	public static final Map<String, String> mappingLoaiDc;
 	static {
-		mappingLoaiDc = Maps.<String, String>buildMap().put(Contains.QD_GOC, "Quyết định gốc")
-				.put(Contains.DC_GIA, "Điều chỉnh giá").put(Contains.DC_SO_LUONG, "Điều chỉnh số lượng")
-				.put(Contains.DC_THOI_GIAN, "Điều chỉnh thời gian").put(Contains.DC_KHAC, "Điều chỉnh khác").get();
+		mappingLoaiDc = Maps.<String, String>buildMap().put(Contains.DC_GIA, "Điều chỉnh giá")
+				.put(Contains.DC_SO_LUONG, "Điều chỉnh số lượng").put(Contains.DC_THOI_GIAN, "Điều chỉnh thời gian")
+				.put(Contains.DC_KHAC, "Điều chỉnh khác").get();
 	}
 
 	public static String getType(String key) {
