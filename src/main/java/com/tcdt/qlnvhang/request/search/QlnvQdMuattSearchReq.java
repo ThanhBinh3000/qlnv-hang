@@ -34,5 +34,11 @@ public class QlnvQdMuattSearchReq extends BaseRequest {
 	
 	@ApiModelProperty(example = Contains.MOI_TAO)
 	String trangThai;
+	
+	@ApiModelProperty(example = "HNO")
+	String maDvi;
+	
+	@ApiModelProperty(example = "MHH001")
+	String loaiDchinh;
 
 }
