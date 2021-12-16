@@ -618,6 +618,6 @@ public class QlnvQdMuattController extends BaseController {
 			resp.setMsg(e.getMessage());
 			log.error(e.getMessage());
 		}
-		return ResponseEntity.ok(resp);
+		return ResponseEntity.ok(resp); 
 	}
 }
