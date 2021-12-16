@@ -18,7 +18,7 @@ import org.springframework.core.io.ClassPathResource;
 
 public class Doc4jUtils {
 	public static void generateDoc(String template, HashMap<String, String> mapHeader,
-			List<Map<String, Object>> lstMapDetail, OutputStream dataOutput) throws Exception {
+			List<Map<String, Object>> lstMapDetail, OutputStream dataOutput)  throws Exception {
 		WordprocessingMLPackage wordMLPackage;
 		wordMLPackage = WordprocessingMLPackage.load(new ClassPathResource(template).getFile());
 		VariablePrepare.prepare(wordMLPackage);
@@ -26,7 +26,6 @@ public class Doc4jUtils {
 		// Data to construct a circular list
 		ClassFinder find = new ClassFinder(Tbl.class);
 		new TraversalUtil(wordMLPackage.getMainDocumentPart().getContent(), find);
-
 		if (lstMapDetail != null && lstMapDetail.size() > 0) {
 			Tbl table = (Tbl) find.results.get(0);// Get the first table element
 			// The second line is agreed as a template, and the content of the second line
