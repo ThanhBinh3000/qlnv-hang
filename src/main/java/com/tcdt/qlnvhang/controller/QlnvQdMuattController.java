@@ -581,7 +581,8 @@ public class QlnvQdMuattController extends BaseController {
 	}
 
 	@ApiOperation(value = "Lấy chi tiết thông tin quyết định mua trực tiếp dành cho cấp cục", response = List.class)
-	@PostMapping(value = PathContains.URL_CHI_TIET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = PathContains.URL_CHI_TIET
+			+ PathContains.URL_CAP_CUC, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<BaseResponse> detailChild(@Valid @RequestBody IdSearchReq objReq,
 			HttpServletRequest request) {
@@ -624,7 +625,8 @@ public class QlnvQdMuattController extends BaseController {
 	}
 
 	@ApiOperation(value = "In phụ lục kế hoạch được duyệt dành cho cấp cục", response = List.class)
-	@PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = PathContains.URL_KET_XUAT
+			+ PathContains.URL_CAP_CUC, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public void exportChild(@Valid @RequestBody IdSearchReq objReq, HttpServletResponse response,
 			HttpServletRequest req) throws Exception {
