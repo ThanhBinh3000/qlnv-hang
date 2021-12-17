@@ -41,5 +41,5 @@ public interface QlnvQdMuattHdrRepository extends CrudRepository<QlnvQdMuattHdr,
 	Page<QlnvQdMuattHdr> selectParamsAdjust(String soQdinh, String trangThai, Date tuNgayQdinh, Date denNgayQdinh,
 			String soQdinhGoc, String soQdKh, String loaiDchinh, Pageable pageable);
 
-	Optional<QlnvQdMuattHdr> findBySoQdinhGocAndTrangThai(String soQdinhGoc, String trangThai);
+	Optional<QlnvQdMuattHdr> findBySoQdinhAndTrangThai(String soQdinhGoc, String trangThai);
 }
