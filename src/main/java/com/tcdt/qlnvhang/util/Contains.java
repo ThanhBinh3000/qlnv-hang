@@ -67,4 +67,7 @@ public class Contains {
 	public static String getLoaiDc(String key) {
 		return Contains.mappingLoaiDc.get(key);
 	}
+	
+	public static final String TEMPLATE_SO_KHO = "/reports/SO_KHO.docx";
+
 }

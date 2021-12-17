@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.table;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 import javax.persistence.Entity;
@@ -17,27 +18,29 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 @Entity
-@Table(name = "QLNV_QD_MUA_HANG_DTL_CTIET")
+@Table(name = "QLNV_QD_MUATT_DTL_CTIET")
 @Data
-public class QlnvQdMuaHangDtlCtiet {
+public class QlnvQdMuattDtlCtiet2 implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "QLNV_QD_MUA_HANG_DTL_CTIET_SEQ")
-	@SequenceGenerator(sequenceName = "QLNV_QD_MUA_HANG_DTL_CTIET_SEQ", allocationSize = 1, name = "QLNV_QD_MUA_HANG_DTL_CTIET_SEQ")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "QLNV_QD_MUATT_DTL_CTIET_SEQ")
+	@SequenceGenerator(sequenceName = "QLNV_QD_MUATT_DTL_CTIET_SEQ", allocationSize = 1, name = "QLNV_QD_MUATT_DTL_CTIET_SEQ")
 	private Long id;
 
-	Long idDtl;
 	String maDvi;
 	String dvts;
 	BigDecimal soDxuat;
 	BigDecimal soDuyet;
 	String dviTinh;
-	String donGia;
-	BigDecimal tongTienCoc;
+	BigDecimal donGia;
+	BigDecimal giaDuyetKthue;
+	BigDecimal giaDuyetCothue;
 	BigDecimal tongTien;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_dtl")
 	@JsonBackReference
-	private QlnvQdMuaHangDtl parent;
+	private QlnvQdMuattDtl2 parent;
 }

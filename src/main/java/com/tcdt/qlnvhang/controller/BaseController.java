@@ -231,6 +231,11 @@ public class BaseController {
 		return datenow;
 	}
 
+	public static String convertDateToString(Date date) throws Exception{
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		return df.format(date);
+	}
+	
 	public static String getUUID(String code) {
 		if (StringUtils.isEmpty(code))
 			return UUID.randomUUID().toString().replace("-", "");

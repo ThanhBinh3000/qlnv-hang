@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.table;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,7 +16,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.FilterJoinTable;
+import org.hibernate.annotations.ParamDef;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -24,7 +27,10 @@ import lombok.Data;
 @Entity
 @Table(name = "QLNV_QD_MUA_HANG_HDR")
 @Data
-public class QlnvQdMuaHangHdr {
+@FilterDef(name = "pFilter", parameters = @ParamDef(name = "maDvi", type = "string"))
+public class QlnvQdMuaHangHdr2 implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "QLNV_QD_MUA_HANG_HDR_SEQ")
@@ -56,19 +62,20 @@ public class QlnvQdMuaHangHdr {
 	@JoinTable(name = "QLNV_QD_MUA_HANG_DTL", joinColumns = @JoinColumn(name = "id_hdr"), inverseJoinColumns = @JoinColumn(name = "id"))
 	@FilterJoinTable(name = "pFilter", condition = ":maDvi = ma_dvi")
 	@JsonManagedReference
-	private List<QlnvQdMuaHangDtl> children = new ArrayList<>();
+	private List<QlnvQdMuaHangDtl2> children = new ArrayList<>();
 
-	public void setChildren(List<QlnvQdMuaHangDtl> children) {
+	public void setChildren(List<QlnvQdMuaHangDtl2> children) {
 		this.children.clear();
-		for (QlnvQdMuaHangDtl child : children) {
+		for (QlnvQdMuaHangDtl2 child : children) {
 			child.setParent(this);
 		}
 		this.children.addAll(children);
 	}
 
-	public void addChild(QlnvQdMuaHangDtl child) {
+	public void addChild(QlnvQdMuaHangDtl2 child) {
 		child.setParent(this);
 		this.children.add(child);
 	}
 
+	
 }

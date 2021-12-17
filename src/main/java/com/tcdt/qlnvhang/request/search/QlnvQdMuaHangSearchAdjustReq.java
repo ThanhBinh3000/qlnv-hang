@@ -14,7 +14,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class QlnvQdMuattSearchReq extends BaseRequest {
+public class QlnvQdMuaHangSearchAdjustReq extends BaseRequest {
 	@ApiModelProperty(example = "SQD12389")
 	String soQdinh;
 
@@ -26,19 +26,16 @@ public class QlnvQdMuattSearchReq extends BaseRequest {
 	@Past
 	Date denNgayQdinh;
 
-	@ApiModelProperty(example = "MHH001")
-	String maHhoa;
-
 	@ApiModelProperty(example = "XXXCT123")
 	String soQdKh;
-	
+
+	@ApiModelProperty(example = "XXXCT123")
+	String soQdinhGoc;
+
+	@ApiModelProperty(example = "1")
+	String loaiDchinh;
+
 	@ApiModelProperty(example = Contains.MOI_TAO)
 	String trangThai;
-	
-	@ApiModelProperty(example = "HNO")
-	String maDvi;
-	
-	@ApiModelProperty(example = "MHH001")
-	String loaiDchinh;
 
 }

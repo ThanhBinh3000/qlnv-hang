@@ -8,4 +8,5 @@ import lombok.Data;
 public class IdSearchReq {
 	@NotNull(message = "Không được để trống")
 	Long id;
+	String maDvi;
 }

@@ -18,10 +18,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Formula;
-import org.hibernate.annotations.JoinFormula;
-import org.springframework.data.annotation.Transient;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -30,7 +26,7 @@ import lombok.Data;
 @Entity
 @Table(name = "QLNV_QD_MUA_HANG_DTL")
 @Data
-public class QlnvQdMuaHangDtl implements Serializable {
+public class QlnvQdMuaHangDtl2 implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -46,17 +42,17 @@ public class QlnvQdMuaHangDtl implements Serializable {
 	@JoinColumn(name = "id_dtl")
 	@Fetch(value = FetchMode.SUBSELECT)
 	@JsonIgnoreProperties("children")
-	private List<QlnvQdMuaHangDtlCtiet> children = new ArrayList<>();
+	private List<QlnvQdMuaHangDtlCtiet2> children = new ArrayList<>();
 
-	public void setChildren(List<QlnvQdMuaHangDtlCtiet> children) {
+	public void setChildren(List<QlnvQdMuaHangDtlCtiet2> children) {
 		this.children.clear();
-		for (QlnvQdMuaHangDtlCtiet child : children) {
+		for (QlnvQdMuaHangDtlCtiet2 child : children) {
 			child.setParent(this);
 		}
 		this.children.addAll(children);
 	}
 
-	public void addChild(QlnvQdMuaHangDtlCtiet child) {
+	public void addChild(QlnvQdMuaHangDtlCtiet2 child) {
 		child.setParent(this);
 		this.children.add(child);
 	}
@@ -64,10 +60,7 @@ public class QlnvQdMuaHangDtl implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_hdr")
 	@JsonBackReference
-	private QlnvQdMuaHangHdr parent;
+	private QlnvQdMuaHangHdr2 parent;
 	
 	
-	@Transient
-	@Formula("(select o.ten_dvi from qlnv_dm_donvi o where o.ma_dvi = ma_dvi)")
-	private String tenDVi;
 }
