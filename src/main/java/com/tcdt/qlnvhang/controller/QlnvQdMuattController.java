@@ -47,7 +47,9 @@ import com.tcdt.qlnvhang.request.search.QlnvQdMuattSearchAdjustReq;
 import com.tcdt.qlnvhang.request.search.QlnvQdMuattSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.table.QlnvQdMuattDtl;
+import com.tcdt.qlnvhang.table.QlnvQdMuattDtl2;
 import com.tcdt.qlnvhang.table.QlnvQdMuattDtlCtiet;
+import com.tcdt.qlnvhang.table.QlnvQdMuattDtlCtiet2;
 import com.tcdt.qlnvhang.table.QlnvQdMuattHdr;
 import com.tcdt.qlnvhang.table.QlnvQdMuattHdr2;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
@@ -618,6 +620,91 @@ public class QlnvQdMuattController extends BaseController {
 			resp.setMsg(e.getMessage());
 			log.error(e.getMessage());
 		}
-		return ResponseEntity.ok(resp); 
+		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "In phụ lục kế hoạch được duyệt dành cho cấp cục", response = List.class)
+	@PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public void exportChild(@Valid @RequestBody IdSearchReq objReq, HttpServletResponse response,
+			HttpServletRequest req) throws Exception {
+		String template = "/reports/PL_QD_MUA_TT.docx";
+		try {
+			if (StringUtils.isEmpty(objReq.getId()))
+				throw new Exception("Không tìm thấy dữ liệu");
+
+			// Lay thong tin don vi quan ly
+			QlnvDmDonvi objDvi = getDvi(req);
+			if (ObjectUtils.isEmpty(objDvi) || StringUtils.isEmpty(objDvi.getCapDvi()))
+				throw new UnsupportedOperationException("Không lấy được thông tin đơn vị");
+
+			// Add them dk loc trong child
+			Session session = entityManager.unwrap(Session.class);
+			if (!objDvi.getCapDvi().equals(Contains.CAP_TONG_CUC)) {
+				Filter filter = session.enableFilter("pFilter");
+				filter.setParameter("maDvi", objDvi.getMaDvi());
+			}
+
+			if (objDvi.getCapDvi().equals(Contains.CAP_TONG_CUC) && !StringUtils.isEmpty(objReq.getMaDvi())) {
+				Filter filter = session.enableFilter("pFilter");
+				filter.setParameter("maDvi", objReq.getMaDvi());
+			}
+
+			Optional<QlnvQdMuattHdr2> qOptional = qdMuaHangHdr2Repository.findById(objReq.getId());
+			if (!qOptional.isPresent())
+				throw new Exception("Không tìm thấy dữ liệu");
+
+			ServletOutputStream dataOutput = response.getOutputStream();
+			response.setContentType("application/octet-stream");
+			response.addHeader("content-disposition", "attachment;filename=PL_QD_MUA_TT_" + getDateTimeNow() + ".docx");
+
+			// Add parameter to table
+			List<QlnvQdMuattDtl2> detail = new ArrayList<QlnvQdMuattDtl2>();
+			if (qOptional.get().getChildren() != null)
+				detail = qOptional.get().getChildren();
+
+			List<QlnvQdMuattDtlCtiet2> detailCtiets = new ArrayList<QlnvQdMuattDtlCtiet2>();
+			if (detail.size() > 0)
+				detailCtiets = detail.get(0).getChildren();
+
+			List<Map<String, Object>> lstMapDetail = null;
+			if (detailCtiets.size() > 0) {
+				lstMapDetail = new ArrayList<Map<String, Object>>();
+				Map<String, Object> detailMap;
+				for (int i = 0; i < detailCtiets.size(); i++) {
+					detailMap = Maps.<String, Object>buildMap().put("stt", i + 1)
+							.put("donvi",
+									StringUtils.isEmpty(detailCtiets.get(i).getMaDvi()) ? ""
+											: detailCtiets.get(i).getMaDvi())
+							.put("diadiem", "").put("soluong", detailCtiets.get(i).getSoDuyet())
+							.put("dongia", detailCtiets.get(i).getDonGia())
+							.put("thanhtien", detailCtiets.get(i).getTongTien()).get();
+					lstMapDetail.add(detailMap);
+				}
+			}
+
+			// Add gia tri bien string
+			HashMap<String, String> mappings = new HashMap<String, String>();
+			mappings.put("param1", "(1) …");
+			mappings.put("param2", qOptional.get().getMaHanghoa());
+			mappings.put("param3", objDvi.getTenDvi());
+			mappings.put("param4", qOptional.get().getSoQdinh());
+
+			// save the docs
+			Doc4jUtils.generateDoc(template, mappings, lstMapDetail, dataOutput);
+			dataOutput.flush();
+			dataOutput.close();
+		} catch (Exception e) {
+			log.error("In phụ lục kế hoạch được duyệt", e);
+			final Map<String, Object> body = new HashMap<>();
+			body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			body.put("msg", e.getMessage());
+
+			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+			response.setCharacterEncoding("UTF-8");
+
+			final ObjectMapper mapper = new ObjectMapper();
+			mapper.writeValue(response.getOutputStream(), body);
+		}
 	}
 }
