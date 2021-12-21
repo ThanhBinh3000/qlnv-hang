@@ -25,8 +25,6 @@ public class QlnvQdMuaHangDtlCtiet {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "QLNV_QD_MUA_HANG_DTL_CTIET_SEQ")
 	@SequenceGenerator(sequenceName = "QLNV_QD_MUA_HANG_DTL_CTIET_SEQ", allocationSize = 1, name = "QLNV_QD_MUA_HANG_DTL_CTIET_SEQ")
 	private Long id;
-
-	Long idDtl;
 	String maDvi;
 	String dvts;
 	BigDecimal soDxuat;
