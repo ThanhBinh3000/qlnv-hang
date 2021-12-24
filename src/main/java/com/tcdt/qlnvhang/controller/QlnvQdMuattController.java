@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.enums.EnumResponse;
+import com.tcdt.qlnvhang.repository.QlnvDxkhMuaTtDtlRepository;
 import com.tcdt.qlnvhang.repository.QlnvDxkhMuaTtHdrRepository;
 import com.tcdt.qlnvhang.repository.QlnvQdMuattHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -39,10 +40,13 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.StrSearchReq;
 import com.tcdt.qlnvhang.request.object.QlnvQdMuattDtlReq;
 import com.tcdt.qlnvhang.request.object.QlnvQdMuattHdrReq;
+import com.tcdt.qlnvhang.request.search.QlnvDxkhMuaTtThopSearchReq;
 import com.tcdt.qlnvhang.request.search.QlnvQdMuattSearchAdjustReq;
 import com.tcdt.qlnvhang.request.search.QlnvQdMuattSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
+import com.tcdt.qlnvhang.secification.QlnvDxkhMuaTtHdrSpecification;
 import com.tcdt.qlnvhang.secification.QlnvQdMuattHdrSpecification;
+import com.tcdt.qlnvhang.table.QlnvDxkhMuaTtDtl;
 import com.tcdt.qlnvhang.table.QlnvQdMuattDtl;
 import com.tcdt.qlnvhang.table.QlnvQdMuattDtlCtiet;
 import com.tcdt.qlnvhang.table.QlnvQdMuattHdr;
@@ -69,6 +73,35 @@ public class QlnvQdMuattController extends BaseController {
 
 	@Autowired
 	private QlnvDxkhMuaTtHdrRepository qlnvDxkhMuaTtHdrRepository;
+
+	@Autowired
+	private QlnvDxkhMuaTtDtlRepository qlnvDxkhMuaTtDtlRepository;
+
+	@ApiOperation(value = "Tổng hợp thông đề xuất để làm quyết định", response = List.class)
+	@PostMapping(value = PathContains.URL_THOP_DATA, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<BaseResponse> sumarryData(HttpServletRequest request,
+			@Valid @RequestBody QlnvDxkhMuaTtThopSearchReq objReq) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			String maDvi = objReq.getMaDvi();
+			if (StringUtils.isEmpty(maDvi))
+				maDvi = getDvql(request);
+
+			List<QlnvDxkhMuaTtDtl> data = qlnvDxkhMuaTtDtlRepository
+					.findAll(QlnvDxkhMuaTtHdrSpecification.buildTHopQuery(objReq));
+
+			resp.setData(data);
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			e.printStackTrace();
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error(e.getMessage());
+		}
+		return ResponseEntity.ok(resp);
+	}
 
 	@ApiOperation(value = "Tạo mới quyết định mua trực tiếp", response = List.class)
 	@PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)

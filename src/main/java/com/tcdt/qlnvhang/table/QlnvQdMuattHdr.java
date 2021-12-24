@@ -26,7 +26,6 @@ import lombok.Data;
 @Entity
 @Table(name = "QLNV_QD_MUATT_HDR")
 @Data
-
 @NamedEntityGraph(name = "QLNV_QD_MUATT_HDR.children", attributeNodes = @NamedAttributeNode(value = "children", subgraph = "QLNV_QD_MUATT_HDR.children.children"), 
 subgraphs = @NamedSubgraph(name = "QLNV_QD_MUATT_HDR.children.children", attributeNodes = @NamedAttributeNode("children")))
 public class QlnvQdMuattHdr implements Serializable {
