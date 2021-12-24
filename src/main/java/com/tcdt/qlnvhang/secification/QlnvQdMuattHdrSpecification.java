@@ -195,9 +195,7 @@ public class QlnvQdMuattHdrSpecification {
 				root.fetch("children", JoinType.LEFT);
 				Join<QlnvQdMuattHdr, QlnvQdMuattDtl> joinQuerry = root.join("children");
 
-				if (id > 0)
-					predicate.getExpressions().add(builder.and(builder.equal(root.get("id"), id)));
-
+				predicate.getExpressions().add(builder.and(builder.equal(root.get("id"), id)));
 				if (StringUtils.isNotBlank(maDvi))
 					predicate.getExpressions().add(builder.and(builder.equal(joinQuerry.get("maDvi"), maDvi)));
 
