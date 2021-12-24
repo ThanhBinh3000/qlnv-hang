@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -25,7 +26,9 @@ import lombok.Data;
 @Entity
 @Table(name = "QLNV_QD_MUATT_HDR")
 @Data
-@NamedEntityGraph(name = "QLNV_QD_MUATT_HDR.children", attributeNodes = @NamedAttributeNode("children"))
+
+@NamedEntityGraph(name = "QLNV_QD_MUATT_HDR.children", attributeNodes = @NamedAttributeNode(value = "children", subgraph = "QLNV_QD_MUATT_HDR.children.children"), 
+subgraphs = @NamedSubgraph(name = "QLNV_QD_MUATT_HDR.children.children", attributeNodes = @NamedAttributeNode("children")))
 public class QlnvQdMuattHdr implements Serializable {
 
 	private static final long serialVersionUID = 1L;
