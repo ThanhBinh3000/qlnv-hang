@@ -13,50 +13,31 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-public class QlnvQdMuaHangHdrReq {
+public class QlnvQdKQDGHangHdrReq {
 	@ApiModelProperty(notes = "Bắt buộc set đối với update")
 	private Long id;
-
 	@Size(max = 50, message = "Số quyết định không được vượt quá 50 ký tự")
 	@ApiModelProperty(example = "SQD123")
 	String soQdinh;
-
-	@Size(max = 50, message = "Số quyết định giao chỉ tiêu năm không được vượt quá 50 ký tự")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	Date ngayQdinh;
+	@Size(max = 50, message = "Số quyết định phê duyệt kế hoạch bán không được vượt quá 50 ký tự")
 	@ApiModelProperty(example = "SQDGCT123")
 	String soQdKhoach;
-
-	@NotNull(message = "Mã hàng hóa không được để trống")
+	@NotNull(message = "Không được để trống")
 	@Size(max = 50, message = "Mã hàng hóa không được vượt quá 50 ký tự")
 	String maHanghoa;
-
+	@NotNull(message = "Mã đơn vị Không được để trống")
+	@Size(max = 50, message = "Mã đơn vị không được vượt quá 50 ký tự")
+	@ApiModelProperty(example = "HNO")
+	String maDvi;
+	@ApiModelProperty(example = "1")
+	Integer lanDaugia;
 	@NotNull(message = "Không được để trống")
 	@Size(max = 2, message = "Trạng thái không được vượt quá 2 ký tự")
 	@ApiModelProperty(example = Contains.MOI_TAO)
 	String trangThai;
-
 	@Size(max = 250, message = "Lý do từ chối không được vượt quá 250 ký tự")
 	String ldoTuchoi;
-
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-	Date tuNgayThien;
-
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-	Date denNgayThien;
-	
-	@NotNull(message = "Không được để trống")
-	@Size(max = 50, message = "Phương thức bán không được vượt quá 50 ký tự")
-	String pthucBan;
-
-	// Danh cho dieu chinh
-	String soQdinhGoc;
-
-	@NotNull(message = "Không được để trống")
-	@Size(max = 2, message = "Loại điều chỉnh được vượt quá 2 ký tự")
-	@ApiModelProperty(example = "01")
-	String loaiDchinh;
-
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-	Date ngayQdGoc;
-
-	private List<QlnvQdMuaHangDtlReq> detail;
+	private List<QlnvQdKQDGHangDtlReq> detail;
 }

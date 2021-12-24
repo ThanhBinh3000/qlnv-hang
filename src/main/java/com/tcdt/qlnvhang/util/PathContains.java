@@ -11,6 +11,7 @@ public class PathContains {
 	public static final String URL_KET_XUAT = "/ket-xuat";
 	public static final String URL_DIEU_CHINH = "/dieu-chinh";
 	public static final String URL_CHI_TIET_GOC = "/chi-tiet-goc";
+	public static final String URL_THOP_DATA = "/thop-dlieu";
 	// Level
 	public static final String URL_CAP_CUC = "/cap-cuc";
 	public static final String URL_CAP_TONG_CUC = "/cap-tong-cuc";
@@ -24,4 +25,6 @@ public class PathContains {
 	public static final String QL_LCDVBH = "/ql-lcbh";
 	public static final String QL_DXKH_BANHANG = "/qldxkh-banhang";
 	public static final String QL_QD_BANHANG = "/qlyqd-banhang";
+	public static final String QL_TTIN_DGIA_HANG = "/ttin-dgia-hang";
+	public static final String QL_QDKQ_DGIA_HANG = "/qdkq-dgia-hang";
 }
