@@ -6,11 +6,9 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-
 import com.tcdt.qlnvhang.table.QlnvQdMuaHangHdr2;
 
-public interface QlnvQdMuaHangHdr2Repository extends CrudRepository<QlnvQdMuaHangHdr2, Long> {
+public interface QlnvQdMuaHangHdr2Repository extends BaseRepository<QlnvQdMuaHangHdr2, Long> {
 	
 	
 	final String querySelect = "SELECT *";

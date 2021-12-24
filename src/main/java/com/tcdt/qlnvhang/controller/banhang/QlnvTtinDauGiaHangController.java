@@ -33,6 +33,7 @@ import com.tcdt.qlnvhang.request.object.QlnvTtinDauGiaHangDtlReq;
 import com.tcdt.qlnvhang.request.object.QlnvTtinDauGiaHangHdrReq;
 import com.tcdt.qlnvhang.request.search.QlnvTtinDauGiaHangSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
+import com.tcdt.qlnvhang.secification.TtinDauGiaHangSpecification;
 import com.tcdt.qlnvhang.table.QlnvQdMuaHangHdr;
 import com.tcdt.qlnvhang.table.QlnvTtinDauGiaHangDtl;
 import com.tcdt.qlnvhang.table.QlnvTtinDauGiaHangDtlCtiet;
@@ -138,9 +139,7 @@ public class QlnvTtinDauGiaHangController extends BaseController {
 			int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
 			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
 
-			Page<QlnvTtinDauGiaHangHdr> dataPage = ttinDauGiaHangRepository.selectParams(objReq.getMaDvi(),
-					objReq.getTrangThai(), objReq.getTuNgayLap(), objReq.getDenNgayLap(), objReq.getMaHhoa(),
-					objReq.getSoQdKhoach(), pageable);
+			Page<QlnvTtinDauGiaHangHdr> dataPage = ttinDauGiaHangRepository.findAll(TtinDauGiaHangSpecification.buildSearchQuery(objReq),pageable);
 
 			resp.setData(dataPage);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());

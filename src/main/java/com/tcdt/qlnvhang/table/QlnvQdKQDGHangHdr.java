@@ -12,9 +12,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
@@ -22,6 +26,7 @@ import lombok.Data;
 @Entity
 @Table(name = "QLNV_QD_KQDG_HANG_HDR")
 @Data
+@NamedEntityGraph(name = "QLNV_QD_KQDG_HANG_HDR.children",attributeNodes = @NamedAttributeNode("children"))
 public class QlnvQdKQDGHangHdr implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -31,6 +36,7 @@ public class QlnvQdKQDGHangHdr implements Serializable {
 	@SequenceGenerator(sequenceName = "QLNV_QD_KQDG_HANG_HDR_SEQ", allocationSize = 1, name = "QLNV_QD_KQDG_HANG_HDR_SEQ")
 	private Long id;
 	String soQdinh;
+	@Temporal(TemporalType.DATE)
 	Date ngayQdinh;
 	String soQdKhoach;	
 	String maHanghoa;
