@@ -57,6 +57,14 @@ public class Contains {
 	public static final String QUYET_DINH = "QD";
 	public static final String QUYET_DINH_DC = "DC";
 
+	// Loai mua ban
+	public static final String MUA_TT = "00";
+	public static final String BAN_TT = "01";
+
+	// Ket qua chao thau
+	public static final String TRUNG_THAU = "00";
+	public static final String TRUOT_THAU = "01";
+
 	public static final Map<String, String> mappingLoaiDc;
 	static {
 		mappingLoaiDc = Maps.<String, String>buildMap().put(Contains.DC_GIA, "Điều chỉnh giá")
@@ -67,7 +75,7 @@ public class Contains {
 	public static String getLoaiDc(String key) {
 		return Contains.mappingLoaiDc.get(key);
 	}
-	
+
 	public static final String TEMPLATE_SO_KHO = "/reports/SO_KHO.docx";
 
 }
