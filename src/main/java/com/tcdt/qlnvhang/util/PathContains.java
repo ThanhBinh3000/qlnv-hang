@@ -16,11 +16,14 @@ public class PathContains {
 	public static final String URL_CAP_CUC = "/cap-cuc";
 	public static final String URL_CAP_TONG_CUC = "/cap-tong-cuc";
 
-	// Path menu
+	// 5.2 Quan ly lua chon nha cung cap theo phuong thuc truc tiep
 	public static final String QL_NHA_CCAP = "/ql-nha-ccap";
 	public static final String QL_DXUAT_KH_MUATT = "/ql-dxuat-khoach-muatt";
-	public static final String QL_QD_MUATT = "/qly-qd-muatt";
-	public static final String QL_TT_CHAOGIA = "/qly-tt-chaogia";
+	public static final String QL_QD_MUATT = "/ql-qd-muatt";
+	public static final String QL_TT_CHAOGIA = "/ql-tt-chaogia";
+
+	// 5.3 Quan ly hop dong nhap/xuat hang DTQG
+	public static final String QL_HOP_DONG = "/ql-hdong-hang";
 
 	// 5.6 Lua chon don vi mua hang
 	public static final String QL_LCDVBH = "/ql-lcbh";

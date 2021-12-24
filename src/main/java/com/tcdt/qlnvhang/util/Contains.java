@@ -3,10 +3,7 @@ package com.tcdt.qlnvhang.util;
 import java.util.Map;
 
 public class Contains {
-	public static final String TRANG_THAI_HIEU_LUC_NHOM = "01";
-	public static final String API_NHOM = "/group";
-
-	public static final String GET_MAX_ID_NOTIFY = "/notify/maxId";
+	public static final String FORMAT_DATE_STR = "dd/MM/yyyy";
 	public static final String NGUOI_DUNG_NOI_BO = "BE";
 	public static final String NGUOI_DUNG_BEN_NGOAI = "FE";
 
@@ -54,8 +51,10 @@ public class Contains {
 	public static final String DC_THOI_GIAN = "03";
 	public static final String DC_KHAC = "04";
 
+	// Dinh nghia code gen key
 	public static final String QUYET_DINH = "QD";
 	public static final String QUYET_DINH_DC = "DC";
+	public static final String HOP_DONG = "HD";
 
 	// Loai mua ban
 	public static final String MUA_TT = "00";
@@ -64,6 +63,10 @@ public class Contains {
 	// Ket qua chao thau
 	public static final String TRUNG_THAU = "00";
 	public static final String TRUOT_THAU = "01";
+
+	// Loai hop dong
+	public static final String HD_MUA = "00";
+	public static final String HD_BAN = "01";
 
 	public static final Map<String, String> mappingLoaiDc;
 	static {
