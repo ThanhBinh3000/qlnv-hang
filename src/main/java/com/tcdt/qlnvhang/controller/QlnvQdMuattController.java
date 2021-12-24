@@ -46,6 +46,7 @@ import com.tcdt.qlnvhang.request.object.QlnvQdMuattHdrReq;
 import com.tcdt.qlnvhang.request.search.QlnvQdMuattSearchAdjustReq;
 import com.tcdt.qlnvhang.request.search.QlnvQdMuattSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
+import com.tcdt.qlnvhang.secification.QlnvQdMuattHdrSpecification;
 import com.tcdt.qlnvhang.table.QlnvQdMuattDtl;
 import com.tcdt.qlnvhang.table.QlnvQdMuattDtl2;
 import com.tcdt.qlnvhang.table.QlnvQdMuattDtlCtiet;
@@ -269,9 +270,8 @@ public class QlnvQdMuattController extends BaseController {
 			int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
 			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
 
-			Page<QlnvQdMuattHdr> dataPage = qdMuaHangHdrRepository.selectParams(objReq.getSoQdinh(),
-					objReq.getTrangThai(), objReq.getTuNgayQdinh(), objReq.getDenNgayQdinh(), objReq.getMaHhoa(),
-					objReq.getSoQdKh(), pageable);
+			Page<QlnvQdMuattHdr> dataPage = qdMuaHangHdrRepository
+					.findAll(QlnvQdMuattHdrSpecification.buildSearchQuery(objReq), pageable);
 
 			resp.setData(dataPage);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
@@ -367,9 +367,8 @@ public class QlnvQdMuattController extends BaseController {
 			int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
 			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
 
-			Page<QlnvQdMuattHdr> dataPage = qdMuaHangHdrRepository.selectParamsAdjust(objReq.getSoQdinh(),
-					objReq.getTrangThai(), objReq.getTuNgayQdinh(), objReq.getDenNgayQdinh(), objReq.getSoQdinhGoc(),
-					objReq.getSoQdKh(), objReq.getLoaiDchinh(), pageable);
+			Page<QlnvQdMuattHdr> dataPage = qdMuaHangHdrRepository
+					.findAll(QlnvQdMuattHdrSpecification.buildSearchAdjQuery(objReq), pageable);
 
 			resp.setData(dataPage);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
