@@ -7,15 +7,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.persistence.EntityManager;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.ObjectUtils;
-import org.hibernate.Filter;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,7 +33,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.repository.QlnvDxkhMuaTtHdrRepository;
-import com.tcdt.qlnvhang.repository.QlnvQdMuattHdr2Repository;
 import com.tcdt.qlnvhang.repository.QlnvQdMuattHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -48,11 +44,8 @@ import com.tcdt.qlnvhang.request.search.QlnvQdMuattSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.secification.QlnvQdMuattHdrSpecification;
 import com.tcdt.qlnvhang.table.QlnvQdMuattDtl;
-import com.tcdt.qlnvhang.table.QlnvQdMuattDtl2;
 import com.tcdt.qlnvhang.table.QlnvQdMuattDtlCtiet;
-import com.tcdt.qlnvhang.table.QlnvQdMuattDtlCtiet2;
 import com.tcdt.qlnvhang.table.QlnvQdMuattHdr;
-import com.tcdt.qlnvhang.table.QlnvQdMuattHdr2;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.Doc4jUtils;
@@ -76,12 +69,6 @@ public class QlnvQdMuattController extends BaseController {
 
 	@Autowired
 	private QlnvDxkhMuaTtHdrRepository qlnvDxkhMuaTtHdrRepository;
-
-	@Autowired
-	private QlnvQdMuattHdr2Repository qdMuaHangHdr2Repository;
-
-	@Autowired
-	private EntityManager entityManager;
 
 	@ApiOperation(value = "Tạo mới quyết định mua trực tiếp", response = List.class)
 	@PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -541,16 +528,8 @@ public class QlnvQdMuattController extends BaseController {
 				throw new UnsupportedOperationException("Không lấy được thông tin đơn vị");
 
 			// Add them dk loc trong child
-			Session session = entityManager.unwrap(Session.class);
-			if (!objDvi.getCapDvi().equals(Contains.CAP_TONG_CUC)) {
-				Filter filter = session.enableFilter("pFilter");
-				filter.setParameter("maDvi", objDvi.getMaDvi());
-			}
-
-			if (objDvi.getCapDvi().equals(Contains.CAP_TONG_CUC) && !StringUtils.isEmpty(objReq.getMaDvi())) {
-				Filter filter = session.enableFilter("pFilter");
-				filter.setParameter("maDvi", objReq.getMaDvi());
-			}
+			if (!objDvi.getCapDvi().equals(Contains.CAP_TONG_CUC))
+				objReq.setMaDvi(objDvi.getMaDvi());
 
 			Map<String, String> mappingLoaiDc = new HashMap<>();
 			if (!StringUtils.isEmpty(objReq.getLoaiDchinh())
@@ -561,11 +540,8 @@ public class QlnvQdMuattController extends BaseController {
 
 			List<String> listLoaiDc = new ArrayList<String>(mappingLoaiDc.keySet());
 
-			Page<QlnvQdMuattHdr2> dataPage = qdMuaHangHdr2Repository.selectParams(objReq.getSoQdinh(),
-					objReq.getTrangThai(), objReq.getTuNgayQdinh(), objReq.getDenNgayQdinh(), objReq.getMaHhoa(),
-					objReq.getSoQdKh(), listLoaiDc, pageable);
-
-			session.disableFilter("pFilter");
+			Page<QlnvQdMuattHdr> dataPage = qdMuaHangHdrRepository
+					.findAll(QlnvQdMuattHdrSpecification.buildSearchChildQuery(objReq, listLoaiDc), pageable);
 
 			resp.setData(dataPage);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
@@ -596,23 +572,16 @@ public class QlnvQdMuattController extends BaseController {
 				throw new UnsupportedOperationException("Không lấy được thông tin đơn vị");
 
 			// Add them dk loc trong child
-			Session session = entityManager.unwrap(Session.class);
-			if (!objDvi.getCapDvi().equals(Contains.CAP_TONG_CUC)) {
-				Filter filter = session.enableFilter("pFilter");
-				filter.setParameter("maDvi", objDvi.getMaDvi());
-			}
+			if (!objDvi.getCapDvi().equals(Contains.CAP_TONG_CUC))
+				objReq.setMaDvi(objDvi.getMaDvi());
 
-			if (objDvi.getCapDvi().equals(Contains.CAP_TONG_CUC) && !StringUtils.isEmpty(objReq.getMaDvi())) {
-				Filter filter = session.enableFilter("pFilter");
-				filter.setParameter("maDvi", objReq.getMaDvi());
-			}
+			List<QlnvQdMuattHdr> lMuattHdrs = qdMuaHangHdrRepository
+					.findAll(QlnvQdMuattHdrSpecification.buildFindByIdQuery(objReq));
 
-			Optional<QlnvQdMuattHdr2> qOptional = qdMuaHangHdr2Repository.findById(objReq.getId());
-
-			if (!qOptional.isPresent())
+			if (lMuattHdrs.isEmpty())
 				throw new UnsupportedOperationException("Không tồn tại bản ghi");
 
-			resp.setData(qOptional);
+			resp.setData(lMuattHdrs.get(0));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -640,31 +609,27 @@ public class QlnvQdMuattController extends BaseController {
 				throw new UnsupportedOperationException("Không lấy được thông tin đơn vị");
 
 			// Add them dk loc trong child
-			Session session = entityManager.unwrap(Session.class);
-			if (!objDvi.getCapDvi().equals(Contains.CAP_TONG_CUC)) {
-				Filter filter = session.enableFilter("pFilter");
-				filter.setParameter("maDvi", objDvi.getMaDvi());
-			}
+			if (!objDvi.getCapDvi().equals(Contains.CAP_TONG_CUC))
+				objReq.setMaDvi(objDvi.getMaDvi());
 
-			if (objDvi.getCapDvi().equals(Contains.CAP_TONG_CUC) && !StringUtils.isEmpty(objReq.getMaDvi())) {
-				Filter filter = session.enableFilter("pFilter");
-				filter.setParameter("maDvi", objReq.getMaDvi());
-			}
+			List<QlnvQdMuattHdr> lMuattHdrs = qdMuaHangHdrRepository
+					.findAll(QlnvQdMuattHdrSpecification.buildFindByIdQuery(objReq));
 
-			Optional<QlnvQdMuattHdr2> qOptional = qdMuaHangHdr2Repository.findById(objReq.getId());
-			if (!qOptional.isPresent())
-				throw new Exception("Không tìm thấy dữ liệu");
+			if (lMuattHdrs.isEmpty())
+				throw new UnsupportedOperationException("Không tồn tại bản ghi");
+
+			QlnvQdMuattHdr objHdr = lMuattHdrs.get(0);
 
 			ServletOutputStream dataOutput = response.getOutputStream();
 			response.setContentType("application/octet-stream");
 			response.addHeader("content-disposition", "attachment;filename=PL_QD_MUA_TT_" + getDateTimeNow() + ".docx");
 
 			// Add parameter to table
-			List<QlnvQdMuattDtl2> detail = new ArrayList<QlnvQdMuattDtl2>();
-			if (qOptional.get().getChildren() != null)
-				detail = qOptional.get().getChildren();
+			List<QlnvQdMuattDtl> detail = new ArrayList<QlnvQdMuattDtl>();
+			if (objHdr.getChildren() != null)
+				detail = objHdr.getChildren();
 
-			List<QlnvQdMuattDtlCtiet2> detailCtiets = new ArrayList<QlnvQdMuattDtlCtiet2>();
+			List<QlnvQdMuattDtlCtiet> detailCtiets = new ArrayList<QlnvQdMuattDtlCtiet>();
 			if (detail.size() > 0)
 				detailCtiets = detail.get(0).getChildren();
 
@@ -687,9 +652,9 @@ public class QlnvQdMuattController extends BaseController {
 			// Add gia tri bien string
 			HashMap<String, String> mappings = new HashMap<String, String>();
 			mappings.put("param1", "(1) …");
-			mappings.put("param2", qOptional.get().getMaHanghoa());
+			mappings.put("param2", objHdr.getMaHanghoa());
 			mappings.put("param3", objDvi.getTenDvi());
-			mappings.put("param4", qOptional.get().getSoQdinh());
+			mappings.put("param4", objHdr.getSoQdinh());
 
 			// save the docs
 			Doc4jUtils.generateDoc(template, mappings, lstMapDetail, dataOutput);
