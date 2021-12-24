@@ -47,6 +47,7 @@ import com.tcdt.qlnvhang.request.object.QlnvQdMuaHangHdrReq;
 import com.tcdt.qlnvhang.request.search.QlnvQdMuaHangSearchAdjustReq;
 import com.tcdt.qlnvhang.request.search.QlnvQdMuaHangSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
+import com.tcdt.qlnvhang.secification.QDinhMuaHangSpecification;
 import com.tcdt.qlnvhang.table.QlnvQdMuaHangDtl;
 import com.tcdt.qlnvhang.table.QlnvQdMuaHangDtlCtiet;
 import com.tcdt.qlnvhang.table.QlnvQdMuaHangHdr;
@@ -267,9 +268,7 @@ public class QlnvQdMuaHangController extends BaseController {
 			int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
 			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
 
-			Page<QlnvQdMuaHangHdr> dataPage = qdMuaHangHdrRepository.selectParams(objReq.getSoQdinh(),
-					objReq.getTrangThai(), objReq.getTuNgayQdinh(), objReq.getDenNgayQdinh(), objReq.getMaHhoa(),
-					objReq.getSoQdKh(), pageable);
+			Page<QlnvQdMuaHangHdr> dataPage = qdMuaHangHdrRepository.findAll(QDinhMuaHangSpecification.buildSearchQuery(objReq), pageable);
 
 			resp.setData(dataPage);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
@@ -364,9 +363,10 @@ public class QlnvQdMuaHangController extends BaseController {
 			int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
 			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
 
-			Page<QlnvQdMuaHangHdr> dataPage = qdMuaHangHdrRepository.selectParamsAdjust(objReq.getSoQdinh(),
-					objReq.getTrangThai(), objReq.getTuNgayQdinh(), objReq.getDenNgayQdinh(), objReq.getSoQdinhGoc(),
-					objReq.getSoQdKh(), objReq.getLoaiDchinh(), pageable);
+//			Page<QlnvQdMuaHangHdr> dataPage = qdMuaHangHdrRepository.selectParamsAdjust(objReq.getSoQdinh(),
+//					objReq.getTrangThai(), objReq.getTuNgayQdinh(), objReq.getDenNgayQdinh(), objReq.getSoQdinhGoc(),
+//					objReq.getSoQdKh(), objReq.getLoaiDchinh(), pageable);
+			Page<QlnvQdMuaHangHdr> dataPage = qdMuaHangHdrRepository.findAll(QDinhMuaHangSpecification.buildSearchQueryAjust(objReq), pageable);
 
 			resp.setData(dataPage);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
