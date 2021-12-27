@@ -19,7 +19,7 @@ public class QlnvQdKQDGHangHdrReq {
 	@Size(max = 50, message = "Số quyết định không được vượt quá 50 ký tự")
 	@ApiModelProperty(example = "SQD123")
 	String soQdinh;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayQdinh;
 	@Size(max = 50, message = "Số quyết định phê duyệt kế hoạch bán không được vượt quá 50 ký tự")
 	@ApiModelProperty(example = "SQDGCT123")

@@ -33,10 +33,10 @@ public class QlnvTtinChaogiaSearchReq extends BaseRequest {
 	@ApiModelProperty(example = Contains.MOI_TAO)
 	String trangThai;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date tuNgayCgia;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date denNgayCgia;
 
 	String maDvi;

@@ -31,6 +31,7 @@ import com.tcdt.qlnvhang.request.object.QlnvTtinChaogiaDtlReq;
 import com.tcdt.qlnvhang.request.object.QlnvTtinChaogiaHdrReq;
 import com.tcdt.qlnvhang.request.search.QlnvTtinChaogiaSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
+import com.tcdt.qlnvhang.secification.QlnvTtinChaogiaSpecification;
 import com.tcdt.qlnvhang.table.QlnvTtinChaogiaDtl;
 import com.tcdt.qlnvhang.table.QlnvTtinChaogiaDtlCtiet;
 import com.tcdt.qlnvhang.table.QlnvTtinChaogiaHdr;
@@ -215,9 +216,8 @@ public class QlnvTtinChaogiaController extends BaseController {
 			int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
 			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
 
-			Page<QlnvTtinChaogiaHdr> dataPage = qdMuaHangHdrRepository.selectParams(objReq.getSoQdKhoach(),
-					objReq.getTrangThai(), objReq.getTuNgayCgia(), objReq.getDenNgayCgia(), objReq.getMaHhoa(),
-					objReq.getLoaiMuaban(), objReq.getMaDvi(), pageable);
+			Page<QlnvTtinChaogiaHdr> dataPage = qdMuaHangHdrRepository
+					.findAll(QlnvTtinChaogiaSpecification.buildSearchQuery(objReq), pageable);
 
 			resp.setData(dataPage);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());

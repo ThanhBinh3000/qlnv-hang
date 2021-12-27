@@ -42,10 +42,10 @@ public class QlnvDxkhMuaHangHdrReq {
 	@ApiModelProperty(example = "Tên hàng hóa 01")
 	String tenHhoa;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date tuNgayThien;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date denNgayThien;
 
 	@Size(max = 250, message = "Địa điểm không được vượt quá 250 ký tự")

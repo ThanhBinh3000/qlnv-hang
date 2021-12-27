@@ -31,7 +31,7 @@ public class QlnvTtinChaogiaHdrReq {
 	String loaiMuaban;
 
 	@NotNull(message = "Không được để trống")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayThien;
 
 	@NotNull(message = "Không được để trống")

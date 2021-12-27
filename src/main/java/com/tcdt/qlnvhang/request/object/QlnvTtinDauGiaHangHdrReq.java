@@ -19,7 +19,7 @@ public class QlnvTtinDauGiaHangHdrReq {
 	private Long id;
 	@ApiModelProperty(example = "1")
 	Integer lanDaugia;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayDaugia;
 	@Size(max = 250, message = "Tên đại diện không được vượt quá 250 ký tự")
 	String tenDaidien;

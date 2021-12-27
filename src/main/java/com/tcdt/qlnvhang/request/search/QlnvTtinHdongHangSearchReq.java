@@ -20,12 +20,12 @@ public class QlnvTtinHdongHangSearchReq extends BaseRequest {
 	@ApiModelProperty(example = "SHD0001")
 	String soHdong;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	@Past
 	@Temporal(TemporalType.DATE)
 	Date tuNgayHdong;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	@Past
 	@Temporal(TemporalType.DATE)
 	Date denNgayHdong;

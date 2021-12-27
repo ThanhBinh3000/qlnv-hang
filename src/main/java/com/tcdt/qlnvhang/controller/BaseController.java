@@ -36,6 +36,7 @@ import com.tcdt.qlnvhang.jwt.TokenAuthenticationService;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.service.feign.CategoryServiceProxy;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
+import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.Request;
 
 public class BaseController {
@@ -144,7 +145,7 @@ public class BaseController {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	<T> void updateMapToObject(Map<String, String> params, T source, Class cls) throws JsonMappingException {
 		ObjectMapper mapper = new ObjectMapper();
-		mapper.setDateFormat(new SimpleDateFormat("dd/MM/yyyy"));
+		mapper.setDateFormat(new SimpleDateFormat(Contains.FORMAT_DATE_STR));
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		Object overrideObj = mapper.convertValue(params, cls);
 		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
@@ -153,7 +154,7 @@ public class BaseController {
 
 	public <T> void updateObjectToObject(T source, T objectEdit) throws JsonMappingException {
 		ObjectMapper mapper = new ObjectMapper();
-		mapper.setDateFormat(new SimpleDateFormat("dd/MM/yyyy"));
+		mapper.setDateFormat(new SimpleDateFormat(Contains.FORMAT_DATE_STR));
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		mapper.updateValue(source, objectEdit);
@@ -232,7 +233,7 @@ public class BaseController {
 	}
 
 	public static String convertDateToString(Date date) throws Exception{
-		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		DateFormat df = new SimpleDateFormat(Contains.FORMAT_DATE_STR);
 		return df.format(date);
 	}
 	

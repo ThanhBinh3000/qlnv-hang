@@ -37,10 +37,10 @@ public class QlnvQdMuaHangHdrReq {
 	@Size(max = 250, message = "Lý do từ chối không được vượt quá 250 ký tự")
 	String ldoTuchoi;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date tuNgayThien;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date denNgayThien;
 	
 	@NotNull(message = "Không được để trống")
@@ -55,7 +55,7 @@ public class QlnvQdMuaHangHdrReq {
 	@ApiModelProperty(example = "01")
 	String loaiDchinh;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayQdGoc;
 
 	private List<QlnvQdMuaHangDtlReq> detail;
