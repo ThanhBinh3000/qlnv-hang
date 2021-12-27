@@ -71,6 +71,7 @@ public class QlnvQdGiaoNhapxuatHdr implements Serializable {
 	@Temporal(TemporalType.DATE)
 	Date denNgayThien;
 	String loaiHdong;
+	String trangThai;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)

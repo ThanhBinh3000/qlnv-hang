@@ -4,6 +4,7 @@ import java.util.Map;
 
 public class Contains {
 	public static final String FORMAT_DATE_STR = "dd/MM/yyyy";
+	public static final String FORMAT_DATE_TIME_STR = "dd/MM/yyyy HH:mm:ss";
 	public static final String NGUOI_DUNG_NOI_BO = "BE";
 	public static final String NGUOI_DUNG_BEN_NGOAI = "FE";
 
@@ -67,6 +68,10 @@ public class Contains {
 	// Loai hop dong
 	public static final String HD_MUA = "00";
 	public static final String HD_BAN = "01";
+
+	// Loai quyet dinh
+	public static final String QD_MUA = "00";
+	public static final String QD_BAN = "01";
 
 	public static final Map<String, String> mappingLoaiDc;
 	static {

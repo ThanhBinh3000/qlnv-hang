@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.util;
+package com.tcdt.qlnvhang.contraints;
 
 import java.lang.reflect.Field;
 import java.util.Date;

@@ -44,7 +44,7 @@ import com.tcdt.qlnvhang.request.search.QlnvDxkhMuaTtThopSearchReq;
 import com.tcdt.qlnvhang.request.search.QlnvQdMuattSearchAdjustReq;
 import com.tcdt.qlnvhang.request.search.QlnvQdMuattSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.secification.QlnvDxkhMuaTtHdrSpecification;
+import com.tcdt.qlnvhang.secification.QlnvDxkhMuaTtDtlSpecification;
 import com.tcdt.qlnvhang.secification.QlnvQdMuattHdrSpecification;
 import com.tcdt.qlnvhang.table.QlnvDxkhMuaTtDtl;
 import com.tcdt.qlnvhang.table.QlnvQdMuattDtl;
@@ -89,7 +89,7 @@ public class QlnvQdMuattController extends BaseController {
 				maDvi = getDvql(request);
 
 			List<QlnvDxkhMuaTtDtl> data = qlnvDxkhMuaTtDtlRepository
-					.findAll(QlnvDxkhMuaTtHdrSpecification.buildTHopQuery(objReq));
+					.findAll(QlnvDxkhMuaTtDtlSpecification.buildTHopQuery(objReq));
 
 			resp.setData(data);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());

@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.util;
+package com.tcdt.qlnvhang.contraints;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.Documented;
@@ -13,7 +13,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Documented
 public @interface CompareDate {
-  String message() default "{com.tericcabrel.hotel.constraints.CompareDate.message}";
+  String message() default "{com.tcdt.qlnvhang.contraints.CompareDate.message}";
   Class <?> [] groups() default {};
   Class <? extends Payload> [] payload() default {};
 

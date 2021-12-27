@@ -225,18 +225,18 @@ public class BaseController {
 	}
 
 	public static Date getDateTimeNow() throws Exception {
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		DateFormat df = new SimpleDateFormat(Contains.FORMAT_DATE_TIME_STR);
 		Date date = new Date();
 		String local = df.format(date);
-		Date datenow = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(local);
+		Date datenow = new SimpleDateFormat(Contains.FORMAT_DATE_TIME_STR).parse(local);
 		return datenow;
 	}
 
-	public static String convertDateToString(Date date) throws Exception{
+	public static String convertDateToString(Date date) throws Exception {
 		DateFormat df = new SimpleDateFormat(Contains.FORMAT_DATE_STR);
 		return df.format(date);
 	}
-	
+
 	public static String getUUID(String code) {
 		if (StringUtils.isEmpty(code))
 			return UUID.randomUUID().toString().replace("-", "");
