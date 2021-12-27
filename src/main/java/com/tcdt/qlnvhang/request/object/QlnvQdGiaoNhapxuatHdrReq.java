@@ -15,7 +15,9 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-@CompareDate(before = "tuNgayThien", after = "denNgayThien", message = "Đến ngày thực hiện phải lớn hơn Từ ngày thực hiện")
+@CompareDate.List({
+		@CompareDate(before = "tuNgayThien", after = "denNgayThien", message = "Đến ngày thực hiện phải lớn hơn Từ ngày thực hiện"),
+		@CompareDate(before = "ngayHluc", after = "tuNgayThien", message = "Từ ngày thực hiện phải lớn hơn Ngày hiệu lực") })
 public class QlnvQdGiaoNhapxuatHdrReq {
 	@ApiModelProperty(notes = "Bắt buộc set đối với update")
 	private Long id;
@@ -69,7 +71,6 @@ public class QlnvQdGiaoNhapxuatHdrReq {
 
 	@NotNull(message = "Không được để trống")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-	@CompareDate(before = "tuNgayThien", after = "ngayHluc", message = "Từ ngày thực hiện phải lớn hơn Ngày hiệu lực")
 	Date tuNgayThien;
 
 	@NotNull(message = "Không được để trống")

@@ -1,4 +1,5 @@
 package com.tcdt.qlnvhang.contraints;
+
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.Documented;
@@ -13,11 +14,25 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Documented
 public @interface CompareDate {
-  String message() default "{com.tcdt.qlnvhang.contraints.CompareDate.message}";
-  Class <?> [] groups() default {};
-  Class <? extends Payload> [] payload() default {};
+	String message() default "{com.tcdt.qlnvhang.contraints.CompareDate.message}";
 
-  String before();
-  String after();
+	Class<?>[] groups() default {};
+
+	Class<? extends Payload>[] payload() default {};
+
+	String before();
+
+	String after();
+
+	/**
+	 * Defines several <code>@CompareDate</code> annotations on the same element
+	 *
+	 * @see CompareDate
+	 */
+	@Target({ TYPE, FIELD, ANNOTATION_TYPE })
+	@Retention(RUNTIME)
+	@Documented
+	@interface List {
+		CompareDate[] value();
+	}
 }
-
