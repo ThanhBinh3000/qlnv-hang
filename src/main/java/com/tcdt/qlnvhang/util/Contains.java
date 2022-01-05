@@ -56,6 +56,7 @@ public class Contains {
 	public static final String QUYET_DINH = "QD";
 	public static final String QUYET_DINH_DC = "DC";
 	public static final String HOP_DONG = "HD";
+	public static final String PHIEU_NX = "PH";
 
 	// Loai mua ban
 	public static final String MUA_TT = "00";
@@ -72,6 +73,10 @@ public class Contains {
 	// Loai quyet dinh
 	public static final String QD_MUA = "00";
 	public static final String QD_BAN = "01";
+
+	// Loai phieu
+	public static final String PHIEU_NHAP = "00";
+	public static final String PHIEU_XUAT = "01";
 
 	public static final Map<String, String> mappingLoaiDc;
 	static {

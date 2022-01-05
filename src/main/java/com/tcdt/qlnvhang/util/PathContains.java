@@ -28,6 +28,7 @@ public class PathContains {
 	// 5.4 Quan ly hop dong nhap/xuat hang DTQG
 	public static final String QL_NXUAT_HANG = "/ql-nxuat-hang";
 	public static final String QL_QD_NXUAT_HANG = "/qd-nxuat-hang";
+	public static final String QL_PHIEU_NXUAT_KHO = "/phieu-nhap-xuat";
 
 	// 5.6 Lua chon don vi mua hang
 	public static final String QL_LCDVBH = "/ql-lcbh";
