@@ -33,7 +33,6 @@ public class Doc4jUtils {
 		ClassFinder find = new ClassFinder(Tbl.class);
 		new TraversalUtil(wordMLPackage.getMainDocumentPart().getContent(), find);
 
-		// TODO: Chinh sua them doi voi template co nhieu table
 		if (lstMapDetail != null && lstMapDetail.size() > 0) {
 			Tbl table = (Tbl) find.results.get(0);// Get the first table element
 			// The second line is agreed as a template, and the content of the second line
@@ -58,7 +57,7 @@ public class Doc4jUtils {
 		Docx4J.save(wordMLPackage, dataOutput);
 	}
 
-	public static void generateDocMutipleTable(String template, HashMap<String, String> mapHeader,
+	public static void generateDocMutipleTable(String template, Map<String, String> mapHeader,
 			Map<TableInWord, List<Map<String, Object>>> tableMap, OutputStream dataOutput) throws Exception {
 		WordprocessingMLPackage wordMLPackage;
 		wordMLPackage = WordprocessingMLPackage.load(new ClassPathResource(template).getFile());
@@ -68,7 +67,6 @@ public class Doc4jUtils {
 		ClassFinder find = new ClassFinder(Tbl.class);
 		new TraversalUtil(wordMLPackage.getMainDocumentPart().getContent(), find);
 
-		// TODO: Chinh sua them doi voi template co nhieu table
 		if (!tableMap.isEmpty()) {
 			for (TableInWord tabWord : tableMap.keySet()) {
 				Tbl table = (Tbl) find.results.get(tabWord.getTbNum());// Get the first table element

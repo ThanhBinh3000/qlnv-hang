@@ -32,6 +32,8 @@ public class Contains {
 	public static final String TU_CHOI = "03";
 	public static final String HUY = "04";
 	public static final String TONG_HOP = "05";
+	public static final String TK_DUYET = "06";// Trang thai trung gian, thu kho phe duyet
+	public static final String KTT_DUYET = "07";// Trang thai trung gian, ke toan truong phe duyet
 
 	// Trang thai response
 	public static final int RESP_SUCC = 0;
@@ -57,6 +59,7 @@ public class Contains {
 	public static final String QUYET_DINH_DC = "DC";
 	public static final String HOP_DONG = "HD";
 	public static final String PHIEU_NX = "PH";
+	public static final String BANG_KE = "BK";
 
 	// Loai mua ban
 	public static final String MUA_TT = "00";
@@ -77,6 +80,10 @@ public class Contains {
 	// Loai phieu
 	public static final String PHIEU_NHAP = "00";
 	public static final String PHIEU_XUAT = "01";
+
+	// Loai bang ke
+	public static final String BK_NHAP = "00";
+	public static final String BK_XUAT = "01";
 
 	public static final Map<String, String> mappingLoaiDc;
 	static {
