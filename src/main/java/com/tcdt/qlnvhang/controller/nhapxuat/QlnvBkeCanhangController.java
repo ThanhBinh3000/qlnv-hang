@@ -79,7 +79,7 @@ public class QlnvBkeCanhangController extends BaseController {
 			// Add thong tin hdr
 			QlnvBkeCanhangHdr dataMap = ObjectMapperUtils.map(objReq, QlnvBkeCanhangHdr.class);
 
-			dataMap.setSoPhieu(getUUID(Contains.BANG_KE));
+			dataMap.setSoBke(getUUID(Contains.BANG_KE));
 			dataMap.setTrangThai(Contains.TAO_MOI);
 			dataMap.setNguoiTao(getUserName(req));
 			dataMap.setNgayTao(getDateTimeNow());
@@ -117,7 +117,7 @@ public class QlnvBkeCanhangController extends BaseController {
 			if (!qOptional.isPresent())
 				throw new Exception("Không tìm thấy dữ liệu cần sửa");
 
-			objReq.setSoPhieu(null);
+			objReq.setSoBke(null);
 			QlnvBkeCanhangHdr dataDB = qOptional.get();
 			QlnvBkeCanhangHdr dataMap = ObjectMapperUtils.map(objReq, QlnvBkeCanhangHdr.class);
 
