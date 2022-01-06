@@ -32,7 +32,11 @@ public class Contains {
 	public static final String TU_CHOI = "03";
 	public static final String HUY = "04";
 	public static final String TONG_HOP = "05";
-
+	
+	public static final String CCUC_DUYET = "06";
+	public static final String CUC_DUYET = "07";
+	public static final String TCUC_DUYET = "08";
+	
 	// Trang thai response
 	public static final int RESP_SUCC = 0;
 	public static final int RESP_FAIL = 1;

@@ -35,4 +35,6 @@ public class PathContains {
 	public static final String QL_QD_BANHANG = "/qlyqd-banhang";
 	public static final String QL_TTIN_DGIA_HANG = "/ttin-dgia-hang";
 	public static final String QL_QDKQ_DGIA_HANG = "/qdkq-dgia-hang";
+	public static final String QL_DXKH_DCHANG = "/qldxkh-dchang";
+	public static final String QL_QD_DCHANG = "/qlqd-dchang";
 }
