@@ -200,7 +200,7 @@ public class QlnvDxkhMuaTtController extends BaseController {
 
 	@ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03/Xoá-04 Đề xuất kế hoạch mua trực tiếp", response = List.class)
 	@PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> approve(HttpServletRequest request, @Valid @RequestBody StatusReq stReq) {
+	public ResponseEntity<BaseResponse> approve(HttpServletRequest req, @Valid @RequestBody StatusReq stReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			if (StringUtils.isEmpty(stReq.getId()))
@@ -210,21 +210,23 @@ public class QlnvDxkhMuaTtController extends BaseController {
 			if (!qHoach.isPresent())
 				throw new Exception("Không tìm thấy dữ liệu");
 
-			String status = stReq.getTrangThai();
+			String status = stReq.getTrangThai() + qHoach.get().getTrangThai();
 			switch (status) {
-			case Contains.CHO_DUYET:
-				qHoach.get().setNguoiGuiDuyet(getUserName(request));
+			case Contains.CHO_DUYET + Contains.MOI_TAO:
+				qHoach.get().setNguoiGuiDuyet(getUserName(req));
 				qHoach.get().setNgayGuiDuyet(getDateTimeNow());
 				break;
-			case Contains.DUYET:
-				qHoach.get().setNguoiPduyet(getUserName(request));
+			case Contains.TU_CHOI + Contains.CHO_DUYET:
+				qHoach.get().setNguoiPduyet(getUserName(req));
 				qHoach.get().setNgayPduyet(getDateTimeNow());
-				break;
-			case Contains.TU_CHOI:
 				qHoach.get().setLdoTuchoi(stReq.getLyDo());
 				break;
-			default:
+			case Contains.DUYET + Contains.CHO_DUYET:
+				qHoach.get().setNguoiPduyet(getUserName(req));
+				qHoach.get().setNgayPduyet(getDateTimeNow());
 				break;
+			default:
+				throw new Exception("Phê duyệt không thành công");
 			}
 
 			qHoach.get().setTrangThai(stReq.getTrangThai());

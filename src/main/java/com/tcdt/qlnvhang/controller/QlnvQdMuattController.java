@@ -243,27 +243,29 @@ public class QlnvQdMuattController extends BaseController {
 			if (!qHoach.isPresent())
 				throw new Exception("Không tìm thấy dữ liệu");
 
-			String status = stReq.getTrangThai();
+			String status = stReq.getTrangThai() + qHoach.get().getTrangThai();
 			switch (status) {
-			case Contains.CHO_DUYET:
+			case Contains.CHO_DUYET + Contains.MOI_TAO:
 				qHoach.get().setNguoiGuiDuyet(getUserName(req));
 				qHoach.get().setNgayGuiDuyet(getDateTimeNow());
 				break;
-			case Contains.DUYET:
+			case Contains.TU_CHOI + Contains.CHO_DUYET:
+				qHoach.get().setNguoiPduyet(getUserName(req));
+				qHoach.get().setNgayPduyet(getDateTimeNow());
+				qHoach.get().setLdoTuchoi(stReq.getLyDo());
+				break;
+			case Contains.DUYET + Contains.CHO_DUYET:
 				qHoach.get().setNguoiPduyet(getUserName(req));
 				qHoach.get().setNgayPduyet(getDateTimeNow());
 				break;
-			case Contains.TU_CHOI:
-				qHoach.get().setLdoTuchoi(stReq.getLyDo());
-				break;
 			default:
-				break;
+				throw new Exception("Phê duyệt không thành công");
 			}
 
 			qHoach.get().setTrangThai(stReq.getTrangThai());
 			qdMuaHangHdrRepository.save(qHoach.get());
 
-			if (status.equals(Contains.TU_CHOI) && qHoach.get().getChildren().size() > 0) {
+			if (status.equals(Contains.TU_CHOI + Contains.CHO_DUYET) && qHoach.get().getChildren().size() > 0) {
 				List<String> soDxuatList = qHoach.get().getChildren().stream().map(QlnvQdMuattDtl::getSoDxuat)
 						.collect(Collectors.toList());
 				qlnvDxkhMuaTtHdrRepository.updateTongHop(soDxuatList, Contains.DUYET);

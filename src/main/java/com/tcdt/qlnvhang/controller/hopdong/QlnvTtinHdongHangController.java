@@ -176,24 +176,26 @@ public class QlnvTtinHdongHangController extends BaseController {
 			if (!qHoach.isPresent())
 				throw new Exception("Không tìm thấy dữ liệu");
 
-			String status = stReq.getTrangThai();
+			String status = stReq.getTrangThai() + qHoach.get().getTthaiHdong();
 			switch (status) {
-			case Contains.CHO_DUYET:
+			case Contains.CHO_DUYET + Contains.MOI_TAO:
 				qHoach.get().setNguoiGuiDuyet(getUserName(req));
 				qHoach.get().setNgayGuiDuyet(getDateTimeNow());
 				break;
-			case Contains.DUYET:
+			case Contains.TU_CHOI + Contains.CHO_DUYET:
+				qHoach.get().setNguoiPduyet(getUserName(req)); 
+				qHoach.get().setNgayPduyet(getDateTimeNow());
+				qHoach.get().setLdoTuchoi(stReq.getLyDo());
+				break;
+			case Contains.DUYET + Contains.CHO_DUYET:
 				qHoach.get().setNguoiPduyet(getUserName(req));
 				qHoach.get().setNgayPduyet(getDateTimeNow());
 				break;
-			case Contains.TU_CHOI:
-				qHoach.get().setLdoTuchoi(stReq.getLyDo());
-				break;
 			default:
-				break;
+				throw new Exception("Phê duyệt không thành công");
 			}
 
-			qHoach.get().setTthaiHdong(status);
+			qHoach.get().setTthaiHdong(stReq.getTrangThai());
 			hdongHangHdrRepository.save(qHoach.get());
 
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
