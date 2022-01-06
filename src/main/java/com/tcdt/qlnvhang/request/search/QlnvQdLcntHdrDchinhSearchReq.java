@@ -5,14 +5,16 @@ import lombok.Data;
 
 
 @Data
-public class QlnvQdLcntHdrSearchReq {
+public class QlnvQdLcntHdrDchinhSearchReq {
 
 	String soQdinh;
 	String soQdGiaoCtkh;
+	String soQdinhGoc;
 	String tuNgayQd;
 	String denNgayQd;
 	String maHanghoa;
 	String loaiHanghoa;
+	String loaiDieuChinh;
 	
 	PaggingReq paggingReq;
 	
