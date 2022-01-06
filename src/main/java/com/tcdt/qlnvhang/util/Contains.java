@@ -33,7 +33,8 @@ public class Contains {
 	public static final String HUY = "04";
 	public static final String TONG_HOP = "05";
 	public static final String TK_DUYET = "06";// Trang thai trung gian, thu kho phe duyet
-	public static final String KTT_DUYET = "07";// Trang thai trung gian, ke toan truong phe duyet
+	public static final String KTV_DUYET = "07";// Trang thai trung gian, ky thuat vien phe duyet
+	public static final String KTT_DUYET = "08";// Trang thai trung gian, ke toan truong phe duyet
 
 	// Trang thai response
 	public static final int RESP_SUCC = 0;
@@ -60,6 +61,7 @@ public class Contains {
 	public static final String HOP_DONG = "HD";
 	public static final String PHIEU_NX = "PH";
 	public static final String BANG_KE = "BK";
+	public static final String BIEN_BAN = "BB";
 
 	// Loai mua ban
 	public static final String MUA_TT = "00";
