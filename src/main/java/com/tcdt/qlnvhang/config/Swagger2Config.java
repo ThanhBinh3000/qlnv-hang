@@ -49,6 +49,14 @@ public class Swagger2Config {
 				.groupName("Quản lý nhập/xuất hàng");
 	}
 
+	@Bean
+	public Docket api4() {
+		return new Docket(DocumentationType.SWAGGER_2).select()
+				.apis(RequestHandlerSelectors.basePackage("com.tcdt.qlnvhang.controller.dchuyenhang"))
+				.paths(PathSelectors.regex("/.*")).build().securitySchemes(Lists.newArrayList(apiKey()))
+				.securityContexts(Lists.newArrayList(securityContext())).apiInfo(apiEndPointsInfo())
+				.groupName("Quản lý điều chuyển hàng");
+	}
 	private ApiInfo apiEndPointsInfo() {
 		return new ApiInfoBuilder().title("TCDT REST API").description("Quản lý API hệ thống Quản lý nghiệp vụ - TCDT")
 				.version("1.0.0").build();

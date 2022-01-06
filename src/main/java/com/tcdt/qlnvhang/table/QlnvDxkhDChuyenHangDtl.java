@@ -13,34 +13,33 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
 @Entity
-@Table(name = "QLNV_QD_MUA_HANG_DTL_CTIET")
+@Table(name = "QLNV_DXKH_CHUYEN_HANG_DTL")
 @Data
-public class QlnvQdMuaHangDtlCtiet2 implements Serializable {
-
+public class QlnvDxkhDChuyenHangDtl implements Serializable {
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "QLNV_QD_MUA_HANG_DTL_CTIET_SEQ")
-	@SequenceGenerator(sequenceName = "QLNV_QD_MUA_HANG_DTL_CTIET_SEQ", allocationSize = 1, name = "QLNV_QD_MUA_HANG_DTL_CTIET_SEQ")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "QLNV_DXKH_CHUYEN_HANG_DTL_SEQ")
+	@SequenceGenerator(sequenceName = "QLNV_DXKH_CHUYEN_HANG_DTL_SEQ", allocationSize = 1, name = "QLNV_DXKH_CHUYEN_HANG_DTL_SEQ")
 	private Long id;
-	
 	String maDvi;
-	String dvts;
-	BigDecimal soDxuat;
-	BigDecimal soDuyet;
+	String maKho;
+	String maNgan;
+	String maLo;
+	BigDecimal soLuong;
 	String dviTinh;
-	String donGia;
-	BigDecimal tongTienCoc;
-	BigDecimal tongTien;
+	String ghiChu;
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_dtl")
-	@JsonBackReference
-	private QlnvQdMuaHangDtl2 parent;
-	
+	@JoinColumn(name = "id_hdr")
+	private QlnvDxkhDChuyenHangHdr parent;
 }
