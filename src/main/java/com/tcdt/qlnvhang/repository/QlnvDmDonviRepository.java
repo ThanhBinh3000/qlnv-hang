@@ -40,4 +40,7 @@ public interface QlnvDmDonviRepository extends CrudRepository<QlnvDmDonvi, Long>
 	int deleteWithIds(List<Long> ids);
 
 	Iterable<QlnvDmDonvi> findByTrangThai(String trangThai);
+	
+	@Query(value = "SELECT * from QLNV_DM_DONVI where MA_DVI_CHA = :maDviCha AND (:trangThai is null or TRANG_THAI = :trangThai) ", nativeQuery = true)
+	List<QlnvDmDonvi> findByMaDviChaAndTrangThai(String maDviCha, String trangThai);
 }

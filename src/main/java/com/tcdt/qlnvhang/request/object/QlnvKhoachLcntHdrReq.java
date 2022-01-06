@@ -9,6 +9,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.Range;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -31,13 +34,11 @@ public class QlnvKhoachLcntHdrReq {
 	String soKhDtoan;
 
 	@NotNull(message = "Không được để trống")
-	Date ngayQd;
-
-	@NotNull(message = "Không được để trống")
 	@Size(max = 20, message = "Số văn bản không được vượt quá 20 ký tự")
 	String soVban;
 
 	@NotNull(message = "Không được để trống")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	Date ngayVban;
 	String ldoTuchoi;
 	@NotNull(message = "Không được để trống")
@@ -51,31 +52,38 @@ public class QlnvKhoachLcntHdrReq {
 	String soDx;
 	
 	@NotNull(message = "Không được để trống")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	String ngayDx;
 	@NotNull(message = "Không được để trống")
-	String tenGoiThau;
+	String tenGoithau;
 	@NotNull(message = "Không được để trống")
 	BigDecimal tongTien;
 	@NotNull(message = "Không được để trống")
 	Integer soLuong;
 	@NotNull(message = "Không được để trống")
 	String donVi;//don vi tinh
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	Date ngayThienTu;
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	Date ngayThienDen;
 	String tcChatLuong;
 	@NotNull(message = "Không được để trống")
-	@Length(min = 0, max = 999)
+	@Range(min= 1, max= 999)
 	Integer soPhanThau;
 	@NotNull(message = "Không được để trống")
 	String hthucLcnt;
 	@NotNull(message = "Không được để trống")
 	String pthucLcnt;
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	Date ngayPhanh;
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	Date thoiHanNhap;
 	BigDecimal giaBan;
 	BigDecimal tienBaoLanh;
 	BigDecimal tienDamBao;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
 	Date ngayDongThau;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
 	Date ngayMoHso;
 	String loaiHdong;
 	BigDecimal giaTtinh;
