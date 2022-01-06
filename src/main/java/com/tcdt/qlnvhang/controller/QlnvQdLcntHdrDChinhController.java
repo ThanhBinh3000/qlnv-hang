@@ -123,7 +123,7 @@ public class QlnvQdLcntHdrDChinhController extends BaseController {
 			hdrReq.setDetail(dtlReqList);
 			hdrReq.setLoaiHanghoa(dataDTB.getLoaiHanghoa());
 			hdrReq.setNguonvon(dataDTB.getNguonvon());
-			hdrReq.setLoaiQd(Contains.DIEU_CHINH);
+			hdrReq.setLoaiQd(Contains.QUYET_DINH_DC);
 			hdrReq.setSoQdGiaoCtkh(dataDTB.getSoQdGiaoCtkh());
 			hdrReq.setMaHanghoa(dataDTB.getMaHanghoa());
 			hdrReq.setSoQdinhGoc(dataDTB.getSoQdinh());

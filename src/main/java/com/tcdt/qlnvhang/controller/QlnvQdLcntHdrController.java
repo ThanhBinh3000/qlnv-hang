@@ -88,7 +88,7 @@ public class QlnvQdLcntHdrController extends BaseController {
 			dataMap.setNgayTao(cal.getTime());
 			dataMap.setTrangThai(Contains.TAO_MOI);
 			dataMap.setNguoiTao(getUserName(request));
-			dataMap.setLoaiQd(Contains.GOC);
+			dataMap.setLoaiQd(Contains.QUYET_DINH);
 				for (QlnvQdLcntDtlReq dtlReq : dtlReqList) {
 					QlnvQdLcntDtl detail = new ModelMapper().map(dtlReq, QlnvQdLcntDtl.class);
 					List<QlnvQdLcntDtlCtietReq> dtlCtietReqList = dtlReq.getDetail();
