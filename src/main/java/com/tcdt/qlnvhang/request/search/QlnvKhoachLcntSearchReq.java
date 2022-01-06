@@ -9,12 +9,9 @@ import lombok.Data;
 @Data
 public class QlnvKhoachLcntSearchReq {
 	String loaiHanghoa;
+	String hoanghoa;
 	String maDvi;
-	String soQdinh;
-	Date ngayQd;
-	String soVban;
-	Date ngayVban;
-	String nguoiTao;
+	String soDx;
 	String trangThai;
 	String tuNgayLap;
 	String denNgayLap;

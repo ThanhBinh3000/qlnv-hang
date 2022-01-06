@@ -15,6 +15,12 @@ import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
 
@@ -32,14 +38,22 @@ public class QlnvKhoachLcntHdr {
 	String soQdGiaoCtkh;
 	String soKhDtoan;
 	String soVban;
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	//@DateTimeFormat(pattern = "yyyy-MM-dd")
+	//@Temporal(TemporalType.DATE)
 	Date ngayVban;
 	String trangThai;
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	Date ngayTao;
 	String nguoiTao;
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	Date ngaySua;
 	String nguoiSua;
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	Date ngayGuiDuyet;
 	String nguoiGuiDuyet;
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	Date ngayPduyet;
 	String nguoiPduyet;
 	String ldoTuchoi;
@@ -47,23 +61,30 @@ public class QlnvKhoachLcntHdr {
 	String nguonvon;
 	String hanghoa;
 	String soDx;
-	String ngayDx;
-	String tenGoiThau;
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	Date ngayDx;
+	String tenGoithau;
 	BigDecimal tongTien;
 	Integer soLuong;
 	String donVi;
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	Date ngayThienTu;
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	Date ngayThienDen;
 	String tcChatLuong;
 	Integer soPhanThau;
 	String hthucLcnt;
 	String pthucLcnt;
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	Date ngayPhanh;
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	Date thoiHanNhap;
 	BigDecimal giaBan;
 	BigDecimal tienBaoLanh;
 	BigDecimal tienDamBao;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
 	Date ngayDongThau;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
 	Date ngayMoHso;
 	String loaiHdong;
 	BigDecimal giaTtinh;

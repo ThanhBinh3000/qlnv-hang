@@ -24,6 +24,5 @@ public class QlnvKhoachLcntDtlReq{
 	String dviTinh;
 	BigDecimal giaDkien;
 	BigDecimal giaDkienVat;
-	String maKho;
 	String diaChi;
 }

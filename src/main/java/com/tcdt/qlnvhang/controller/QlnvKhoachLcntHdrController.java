@@ -113,8 +113,8 @@ public class QlnvKhoachLcntHdrController extends BaseController {
 			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").descending());
 
 			Page<QlnvKhoachLcntHdr> data = qlnvKhoachLcntHdrRepository.selectParams(objReq.getMaDvi(), objReq.getLoaiHanghoa(),
-					objReq.getLoaiHanghoa(),
-					objReq.getTrangThai(), objReq.getNguoiTao(), objReq.getTuNgayLap(), objReq.getDenNgayLap(),
+					objReq.getHoanghoa(),
+					objReq.getTrangThai(), objReq.getSoDx(), objReq.getTuNgayLap(), objReq.getDenNgayLap(),
 					pageable);
 			resp.setData(data);
 			resp.setStatusCode(Contains.RESP_SUCC);
@@ -141,6 +141,7 @@ public class QlnvKhoachLcntHdrController extends BaseController {
 			Optional<QlnvDmDonvi> dvi =   qlnvDmDonviRepository.findById(u.getDvql());
 			dataMap.setMaDvi(dvi.get().getMaDvi());
 			dataMap.setTrangThai(Contains.TAO_MOI);
+			dataMap.setTrangThaiTh(Contains.TAO_MOI);
 			dataMap.setNguoiTao(getUserName(req));
 			dataMap.setNgayTao(new Date());
 			for (QlnvKhoachLcntDtlReq dtlReq : dtlReqList) {

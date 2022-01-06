@@ -35,7 +35,6 @@ public class QlnvKhoachLcntDtl implements Serializable {
 	String dviTinh;
 	BigDecimal giaDkien;
 	BigDecimal giaDkienVat;
-	String maKho;
 	String diaChi;
 	
 	@JsonIgnore

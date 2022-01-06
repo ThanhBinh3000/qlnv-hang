@@ -31,7 +31,6 @@ public class QlnvQdLcntHdr implements Serializable {
 	private Long id;
 	String soQdinh;
 	Date ngayQd;
-	String soQdKh;
 	String loaiHanghoa;
 	String maHanghoa;
 	String nguonvon;
@@ -49,6 +48,8 @@ public class QlnvQdLcntHdr implements Serializable {
 	String nguoiPduyet;
 	Date tuNgayThien;
 	Date denNgayThien;
+	String soQdGiaoCtkh;
+	String loaiDieuChinh;
 	//@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	@OneToMany(
 	        mappedBy = "header",

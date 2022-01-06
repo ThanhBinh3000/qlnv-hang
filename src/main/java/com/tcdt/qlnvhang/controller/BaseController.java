@@ -242,4 +242,17 @@ public class BaseController {
 			return UUID.randomUUID().toString().replace("-", "");
 		return code + UUID.randomUUID().toString().replace("-", "");
 	}
+
+	public static String getDateText(Date date) throws Exception {
+		DateTimeFormatter df = DateTimeFormatter.ofPattern(Contains.FORMAT_DATE_STR);
+		String dateStr = convertDateToString(date);
+		LocalDate currentDate = LocalDate.parse(dateStr, df);
+		// Get day from date
+		int day = currentDate.getDayOfMonth();
+		// Get month from date
+		int month = currentDate.getMonthValue();
+		// Get year from date
+		int year = currentDate.getYear();
+		return "Ngày " + day + " tháng " + month + " năm " + year;
+	}
 }

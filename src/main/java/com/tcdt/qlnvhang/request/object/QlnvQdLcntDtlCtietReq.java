@@ -11,7 +11,7 @@ import lombok.Data;
 public class QlnvQdLcntDtlCtietReq{
 	@ApiModelProperty(notes = "Bắt buộc set đối với update")
 	private Long id;
-	Long ttinCtietId;
+	Long idDtl;
 	String maDvi;
 	String diaChi;
 	BigDecimal soDxuat;
