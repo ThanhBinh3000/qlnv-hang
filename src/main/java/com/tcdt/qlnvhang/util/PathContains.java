@@ -31,6 +31,7 @@ public class PathContains {
 	public static final String QL_PHIEU_NXUAT_KHO = "/phieu-nhap-xuat";
 	public static final String QL_BKE_CANHANG = "/bke-can-hang";
 	public static final String QL_BBAN_NHAPDAY = "/bban-nhap-day-kho";
+	public static final String QL_BKE_NHAPVTU = "/bke-nhap-vtu";
 
 	// 5.6 Lua chon don vi mua hang
 	public static final String QL_LCDVBH = "/ql-lcbh";
