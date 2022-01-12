@@ -30,7 +30,7 @@ public class QlnvBkeNhapvtuHdrReq {
 	@Size(max = 50, message = "Số hợp đồng không được vượt quá 50 ký tự")
 	@ApiModelProperty(example = "SHD001")
 	String soHdong;
-	
+
 	@NotNull(message = "Không được để trống")
 	@Size(max = 50, message = "Mã đơn vị ra quyết định không được vượt quá 50 ký tự")
 	String maDvi;
@@ -39,11 +39,15 @@ public class QlnvBkeNhapvtuHdrReq {
 	@Size(max = 2, message = "Loại bảng kê không được vượt quá 2 ký tự")
 	@ApiModelProperty(example = Contains.BK_NHAP)
 	String loaiBke;
-	
+
 	@NotNull(message = "Không được để trống")
 	@Size(max = 50, message = "Tên người giao hàng không được vượt quá 50 ký tự")
 	String tenNguoiGiao;
-	
+
+	@NotNull(message = "Không được để trống")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date ngayGiao;
+
 	@NotNull(message = "Không được để trống")
 	@Size(max = 50, message = "Mã kho không được vượt quá 50 ký tự")
 	String maKho;
@@ -67,7 +71,7 @@ public class QlnvBkeNhapvtuHdrReq {
 	@NotNull(message = "Không được để trống")
 	@Size(max = 50, message = "Đơn vị tính không được vượt quá 50 ký tự")
 	String dviTinh;
-	
+
 	@NotNull(message = "Không được để trống")
 	@Size(max = 2, message = "Trạng thái không được vượt quá 2 ký tự")
 	String trangThai;
