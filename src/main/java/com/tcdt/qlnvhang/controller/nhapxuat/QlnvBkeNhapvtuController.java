@@ -296,8 +296,7 @@ public class QlnvBkeNhapvtuController extends BaseController {
 							.put("soluong", detailList.get(i).getSoLuong())
 							.put("soserial", detailList.get(i).getSoSerial()).get();
 					lstMapDetail.add(detailMap);
-					soLuong = Optional.ofNullable(detailList.get(i - 1).getSoLuong()).orElse(BigDecimal.ZERO)
-							.add(soLuong);
+					soLuong = Optional.ofNullable(detailList.get(i).getSoLuong()).orElse(BigDecimal.ZERO).add(soLuong);
 				}
 			}
 			TableInWord tabWord = new TableInWord();
