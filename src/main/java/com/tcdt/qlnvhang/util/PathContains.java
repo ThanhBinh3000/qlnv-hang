@@ -42,4 +42,7 @@ public class PathContains {
 	public static final String QL_QDKQ_DGIA_HANG = "/qdkq-dgia-hang";
 	public static final String QL_DXKH_DCHANG = "/qldxkh-dchang";
 	public static final String QL_QD_DCHANG = "/qlqd-dchang";
+	
+	// 5.10	Quản lý xuất thanh lý, tiêu hủy
+	public static final String QL_XTLTH = "/ql-xtlth";
 }

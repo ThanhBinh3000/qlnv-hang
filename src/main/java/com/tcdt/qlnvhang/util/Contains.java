@@ -90,6 +90,10 @@ public class Contains {
 	// Loai bang ke
 	public static final String BK_NHAP = "00";
 	public static final String BK_XUAT = "01";
+	
+	// Loai de xuat
+	public static final String DX_THANH_LY = "00";
+	public static final String DX_TIEU_HUY = "01";
 
 	public static final Map<String, String> mappingLoaiDc;
 	static {
