@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class QlnvDxkhTlyThuySearchReq extends BaseRequest {
+public class QlnvDxkhTlthSearchReq extends BaseRequest {
 	@ApiModelProperty(example = "XXXSDX123")
 	String soDxuat;
 

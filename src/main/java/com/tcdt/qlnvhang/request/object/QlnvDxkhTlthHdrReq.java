@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.object;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -12,7 +13,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-public class QlnvDxkhTlyThuyHdrReq {
+public class QlnvDxkhTlthHdrReq {
 
 	@ApiModelProperty(notes = "Bắt buộc set đối với update")
 	private Long id;
@@ -57,5 +58,7 @@ public class QlnvDxkhTlyThuyHdrReq {
 	@Size(max = 2, message = "Trạng thái không được vượt quá 2 ký tự")
 	@ApiModelProperty(example = Contains.MOI_TAO)
 	String trangThai;
+	
+	private List<QlnvDxkhTlthDtlReq> detailListReq;
 }
 
