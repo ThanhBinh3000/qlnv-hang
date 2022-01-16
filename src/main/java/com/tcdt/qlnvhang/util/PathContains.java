@@ -45,4 +45,5 @@ public class PathContains {
 	
 	// 5.10	Quản lý xuất thanh lý, tiêu hủy
 	public static final String QL_XTLTH = "/ql-xtlth";
+	public static final String QL_QD_TLTH = "/ql-qd-tlth";
 }
