@@ -1,10 +1,14 @@
 package com.tcdt.qlnvhang.controller.tlth;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.tcdt.qlnvhang.repository.QlnvQdTlthHdrRepository;
@@ -29,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -42,6 +47,8 @@ import com.tcdt.qlnvhang.table.QlnvQdTlthDtlCtiet;
 import com.tcdt.qlnvhang.table.QlnvQdTlthHdr;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.Doc4jUtils;
+import com.tcdt.qlnvhang.util.Maps;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import com.tcdt.qlnvhang.util.PaginationSet;
 import com.tcdt.qlnvhang.util.PathContains;
@@ -268,6 +275,73 @@ public class QlnvQdTlthController extends BaseController {
 		return ResponseEntity.ok(resp);
 	}
 	
+	
+	@ApiOperation(value = "In quyết định thanh lý tiêu hủy", response = List.class)
+	@PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public void export(@Valid @RequestBody IdSearchReq searchReq, HttpServletResponse response, HttpServletRequest req)
+			throws Exception {
+		String template = "/reports/QD_TLTH.docx";
+		try {
+			if (StringUtils.isEmpty(searchReq.getId()))
+				throw new Exception("Không tìm thấy dữ liệu");
+
+			Optional<QlnvQdTlthHdr> optional = qlnvQdTlthHdrRepository.findById(searchReq.getId());
+			if (!optional.isPresent())
+				throw new Exception("Không tìm thấy dữ liệu");
+
+			QlnvQdTlthHdr quyetDinh = optional.get();
+			
+			ServletOutputStream dataOutput = response.getOutputStream();
+			response.setContentType("application/octet-stream");
+			response.addHeader("content-disposition", "attachment;filename=QD_TLTH" + getDateTimeNow() + ".docx");
+
+			// Add parameter to table
+			List<QlnvQdTlthDtl> detail = Optional.ofNullable(quyetDinh.getChildren()).orElse(new ArrayList<>());
+
+			List<QlnvQdTlthDtlCtiet> detailCtiets = new ArrayList<QlnvQdTlthDtlCtiet>();
+			if (detail.size() > 0)
+				detailCtiets = detail.get(0).getChildren();
+
+			List<Map<String, Object>> lstMapDetail = null;
+			if (detailCtiets.size() > 0) {
+				lstMapDetail = new ArrayList<Map<String, Object>>();
+				Map<String, Object> detailMap;
+				for (int i = 0; i < detailCtiets.size(); i++) {
+					QlnvQdTlthDtlCtiet cTiet = detailCtiets.get(i);
+					detailMap = Maps.<String, Object>buildMap().put("stt", i + 1)
+							.put("soluongdxuat", cTiet.getSoDxuat())
+							.put("soluongduyet", cTiet.getSoDuyet())
+							.put("donvitinh", cTiet.getDviTinh())
+							.get();
+					lstMapDetail.add(detailMap);
+				}
+			}
+
+			HashMap<String, String> mappings = new HashMap<String, String>();
+			mappings.put("param1", Contains.mappingLoaiDx.get(quyetDinh.getLhinhXuat()));
+			mappings.put("param2", quyetDinh.getMaHhoa());
+			mappings.put("param3", getDvi(req).getTenDvi());
+
+
+			// save the docs
+			Doc4jUtils.generateDoc(template, mappings, lstMapDetail, dataOutput);
+			dataOutput.flush();
+			dataOutput.close();
+		} catch (Exception e) {
+			log.error("In phụ lục kế hoạch được duyệt", e);
+			final Map<String, Object> body = new HashMap<>();
+			body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			body.put("msg", e.getMessage());
+
+			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+			response.setCharacterEncoding("UTF-8");
+
+			final ObjectMapper mapper = new ObjectMapper();
+			mapper.writeValue(response.getOutputStream(), body);
+		}
+	}
+	
 	@ApiOperation(value = "Tra cứu quyết định thanh lý tiêu hủy dành cho cấp cục", response = List.class)
 	@PostMapping(value = PathContains.URL_TRA_CUU
 			+ PathContains.URL_CAP_CUC, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -339,5 +413,80 @@ public class QlnvQdTlthController extends BaseController {
 			log.error(e.getMessage());
 		}
 		return ResponseEntity.ok(resp);
+	}
+	
+	@ApiOperation(value = "In quyết định thanh lý tiêu hủy dành cho cấp cục", response = List.class)
+	@PostMapping(value = PathContains.URL_KET_XUAT + PathContains.URL_CAP_CUC, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public void exportChild(@Valid @RequestBody IdSearchReq searchReq, HttpServletResponse response, HttpServletRequest req)
+			throws Exception {
+		String template = "/reports/QD_TLTH.docx";
+		try {
+			if (StringUtils.isEmpty(searchReq.getId()))
+				throw new Exception("Không tìm thấy dữ liệu");
+
+			// Lay thong tin don vi quan ly
+			QlnvDmDonvi objDvi = getDvi(req);
+			if (ObjectUtils.isEmpty(objDvi) || StringUtils.isEmpty(objDvi.getCapDvi()))
+				throw new UnsupportedOperationException("Không lấy được thông tin đơn vị");
+
+			// Add them dk loc trong child
+			if (!objDvi.getCapDvi().equals(Contains.CAP_TONG_CUC))
+				searchReq.setMaDvi(objDvi.getMaDvi());
+						
+			List<QlnvQdTlthHdr> qdTlths = qlnvQdTlthHdrRepository.findAll(QlnvQdTlthSpecification.buildFindByIdQuery(searchReq));
+			if (qdTlths.isEmpty())
+				throw new Exception("Không tìm thấy dữ liệu");
+
+			QlnvQdTlthHdr quyetDinh = qdTlths.get(0);
+			
+			ServletOutputStream dataOutput = response.getOutputStream();
+			response.setContentType("application/octet-stream");
+			response.addHeader("content-disposition", "attachment;filename=QD_TLTH" + getDateTimeNow() + ".docx");
+
+			// Add parameter to table
+			List<QlnvQdTlthDtl> detail = Optional.ofNullable(quyetDinh.getChildren()).orElse(new ArrayList<>());
+
+			List<QlnvQdTlthDtlCtiet> detailCtiets = new ArrayList<QlnvQdTlthDtlCtiet>();
+			if (detail.size() > 0)
+				detailCtiets = detail.get(0).getChildren();
+
+			List<Map<String, Object>> lstMapDetail = null;
+			if (detailCtiets.size() > 0) {
+				lstMapDetail = new ArrayList<Map<String, Object>>();
+				Map<String, Object> detailMap;
+				for (int i = 0; i < detailCtiets.size(); i++) {
+					QlnvQdTlthDtlCtiet cTiet = detailCtiets.get(i);
+					detailMap = Maps.<String, Object>buildMap().put("stt", i + 1)
+							.put("soluongdxuat", cTiet.getSoDxuat())
+							.put("soluongduyet", cTiet.getSoDuyet())
+							.put("donvitinh", cTiet.getDviTinh())
+							.get();
+					lstMapDetail.add(detailMap);
+				}
+			}
+
+			HashMap<String, String> mappings = new HashMap<String, String>();
+			mappings.put("param1", Contains.mappingLoaiDx.get(quyetDinh.getLhinhXuat()));
+			mappings.put("param2", quyetDinh.getMaHhoa());
+			mappings.put("param3", getDvi(req).getTenDvi());
+
+
+			// save the docs
+			Doc4jUtils.generateDoc(template, mappings, lstMapDetail, dataOutput);
+			dataOutput.flush();
+			dataOutput.close();
+		} catch (Exception e) {
+			log.error("In phụ lục kế hoạch được duyệt", e);
+			final Map<String, Object> body = new HashMap<>();
+			body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			body.put("msg", e.getMessage());
+
+			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+			response.setCharacterEncoding("UTF-8");
+
+			final ObjectMapper mapper = new ObjectMapper();
+			mapper.writeValue(response.getOutputStream(), body);
+		}
 	}
 }
