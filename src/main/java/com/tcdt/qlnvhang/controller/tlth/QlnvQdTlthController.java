@@ -9,6 +9,8 @@ import javax.validation.Valid;
 
 import com.tcdt.qlnvhang.repository.QlnvQdTlthHdrRepository;
 import com.tcdt.qlnvhang.request.object.QlnvQdTlthHdrReq;
+
+import org.apache.commons.lang3.ObjectUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,6 +40,7 @@ import com.tcdt.qlnvhang.secification.QlnvQdTlthSpecification;
 import com.tcdt.qlnvhang.table.QlnvQdTlthDtl;
 import com.tcdt.qlnvhang.table.QlnvQdTlthDtlCtiet;
 import com.tcdt.qlnvhang.table.QlnvQdTlthHdr;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import com.tcdt.qlnvhang.util.PaginationSet;
@@ -255,6 +258,79 @@ public class QlnvQdTlthController extends BaseController {
 			qlnvQdTlthHdr.setTrangThai(stReq.getTrangThai());
 			qlnvQdTlthHdrRepository.save(qlnvQdTlthHdr);
 
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error(e.getMessage());
+		}
+		return ResponseEntity.ok(resp);
+	}
+	
+	@ApiOperation(value = "Tra cứu quyết định thanh lý tiêu hủy dành cho cấp cục", response = List.class)
+	@PostMapping(value = PathContains.URL_TRA_CUU
+			+ PathContains.URL_CAP_CUC, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> colectionChild(HttpServletRequest request,
+			@Valid @RequestBody QlnvQdTlthSearchReq objReq) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
+			int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
+			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
+
+			// Lay thong tin don vi quan ly
+			QlnvDmDonvi objDvi = getDvi(request);
+			if (ObjectUtils.isEmpty(objDvi) || StringUtils.isEmpty(objDvi.getCapDvi()))
+				throw new UnsupportedOperationException("Không lấy được thông tin đơn vị");
+
+			// Add them dk loc trong child
+			if (!objDvi.getCapDvi().equals(Contains.CAP_TONG_CUC))
+				objReq.setMaDvi(objDvi.getMaDvi());
+
+			Page<QlnvQdTlthHdr> qlnvQdTlthHdr = qlnvQdTlthHdrRepository.findAll(QlnvQdTlthSpecification.buildSearchChildQuery(objReq), pageable);
+
+			resp.setData(qlnvQdTlthHdr);
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error(e.getMessage());
+		}
+
+		return ResponseEntity.ok(resp);
+	}
+	
+	@ApiOperation(value = "Lấy chi tiết thông tin quyết định thanh lý tiêu hủy dành cho cấp cục", response = List.class)
+	@PostMapping(value = PathContains.URL_CHI_TIET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> detailChild(@Valid @RequestBody IdSearchReq objReq,
+			HttpServletRequest request) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			if (StringUtils.isEmpty(objReq.getId()))
+				throw new UnsupportedOperationException("Không tồn tại bản ghi");
+
+			// Lay thong tin don vi quan ly
+			QlnvDmDonvi objDvi = getDvi(request);
+			if (ObjectUtils.isEmpty(objDvi) || StringUtils.isEmpty(objDvi.getCapDvi()))
+				throw new UnsupportedOperationException("Không lấy được thông tin đơn vị");
+
+			// Add them dk loc trong child
+			if (!objDvi.getCapDvi().equals(Contains.CAP_TONG_CUC)) {
+				objReq.setMaDvi(objDvi.getMaDvi());
+			} else if (objDvi.getCapDvi().equals(Contains.CAP_TONG_CUC) && !StringUtils.isEmpty(objReq.getMaDvi())) {
+				objReq.setMaDvi(objDvi.getMaDvi());
+			}
+
+			List<QlnvQdTlthHdr> qOptional = qlnvQdTlthHdrRepository.findAll(QlnvQdTlthSpecification.buildFindByIdQuery(objReq));
+
+			if (qOptional.isEmpty())
+				throw new UnsupportedOperationException("Không tồn tại bản ghi");
+
+			resp.setData(qOptional.get(0));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {

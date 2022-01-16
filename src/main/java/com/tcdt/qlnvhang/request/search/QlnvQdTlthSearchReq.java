@@ -2,6 +2,8 @@ package com.tcdt.qlnvhang.request.search;
 
 import java.util.Date;
 
+import javax.validation.constraints.Size;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.util.Contains;
@@ -30,4 +32,7 @@ public class QlnvQdTlthSearchReq extends BaseRequest {
 	Date tuNgayQdinh;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date denNgayQdinh;
+	
+    @Size(max = 20, message = "Mã đơn vị không được vượt quá 20 ký tự")
+    String maDvi;
 }
