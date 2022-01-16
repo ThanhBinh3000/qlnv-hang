@@ -1,9 +1,14 @@
 package com.tcdt.qlnvhang.controller.tlth;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.ObjectUtils;
@@ -25,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.repository.QlnvDxkhTlthHdrRepository;
@@ -39,6 +45,8 @@ import com.tcdt.qlnvhang.table.QlnvDxkhTlthDtl;
 import com.tcdt.qlnvhang.table.QlnvDxkhTlthHdr;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.Doc4jUtils;
+import com.tcdt.qlnvhang.util.Maps;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import com.tcdt.qlnvhang.util.PaginationSet;
 import com.tcdt.qlnvhang.util.PathContains;
@@ -125,11 +133,11 @@ public class QlnvDxkhTlthController extends BaseController {
 			int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
 			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
 
-			Page<QlnvDxkhTlthHdr> QlnvDxkhTlthHdr = qlnvDxkhTlthHdrRepository.findAll(QlnvDxkhTlthSpecification.buildSearchQuery(objReq), pageable);
+			Page<QlnvDxkhTlthHdr> qlnvDxkhTlthHdr = qlnvDxkhTlthHdrRepository.findAll(QlnvDxkhTlthSpecification.buildSearchQuery(objReq), pageable);
 
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-			resp.setData(QlnvDxkhTlthHdr);
+			resp.setData(qlnvDxkhTlthHdr);
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
@@ -148,12 +156,12 @@ public class QlnvDxkhTlthController extends BaseController {
 			if (StringUtils.isEmpty(objReq.getId()))
 				throw new Exception("Sửa thất bại, không tìm thấy dữ liệu");
 
-			Optional<QlnvDxkhTlthHdr> QlnvDxkhTlthHdr = qlnvDxkhTlthHdrRepository
+			Optional<QlnvDxkhTlthHdr> qlnvDxkhTlthHdr = qlnvDxkhTlthHdrRepository
 					.findById(Long.valueOf(objReq.getId()));
-			if (!QlnvDxkhTlthHdr.isPresent())
+			if (!qlnvDxkhTlthHdr.isPresent())
 				throw new Exception("Không tìm thấy dữ liệu cần sửa");
 
-			QlnvDxkhTlthHdr dataDB = QlnvDxkhTlthHdr.get();
+			QlnvDxkhTlthHdr dataDB = qlnvDxkhTlthHdr.get();
 			QlnvDxkhTlthHdr dataMap = ObjectMapperUtils.map(objReq, QlnvDxkhTlthHdr.class);
 			updateObjectToObject(dataDB, dataMap);
 			dataDB.setNgaySua(getDateTimeNow());
@@ -207,10 +215,12 @@ public class QlnvDxkhTlthController extends BaseController {
 			if (StringUtils.isEmpty(stReq.getId()))
 				throw new Exception("Không tìm thấy dữ liệu");
 
-			Optional<QlnvDxkhTlthHdr> QlnvDxkhTlthHdr = qlnvDxkhTlthHdrRepository.findById(Long.valueOf(stReq.getId()));
-			if (!QlnvDxkhTlthHdr.isPresent())
+			Optional<QlnvDxkhTlthHdr> optional = qlnvDxkhTlthHdrRepository.findById(Long.valueOf(stReq.getId()));
+			if (!optional.isPresent())
 				throw new Exception("Không tìm thấy dữ liệu");
 
+			QlnvDxkhTlthHdr qlnvDxkhTlthHdr = optional.get();
+			
 			String status = stReq.getTrangThai();
 			// Lay thong tin don vi quan ly
 			QlnvDmDonvi objDvi = getDvi(req);
@@ -229,30 +239,30 @@ public class QlnvDxkhTlthController extends BaseController {
 			
 			switch (status) {
 			case Contains.CHO_DUYET:
-				QlnvDxkhTlthHdr.get().setNguoiGuiDuyet(getUserName(req));
-				QlnvDxkhTlthHdr.get().setNgayGuiDuyet(getDateTimeNow());
+				qlnvDxkhTlthHdr.setNguoiGuiDuyet(getUserName(req));
+				qlnvDxkhTlthHdr.setNgayGuiDuyet(getDateTimeNow());
 				break;
 			case Contains.CCUC_DUYET:
-				QlnvDxkhTlthHdr.get().setNguoiCcucPduyet(getUserName(req));
-				QlnvDxkhTlthHdr.get().setNgayCcucPduyet(getDateTimeNow());
+				qlnvDxkhTlthHdr.setNguoiCcucPduyet(getUserName(req));
+				qlnvDxkhTlthHdr.setNgayCcucPduyet(getDateTimeNow());
 				break;
 			case Contains.CUC_DUYET:
-				QlnvDxkhTlthHdr.get().setNguoiCucPduyet(getUserName(req));
-				QlnvDxkhTlthHdr.get().setNgayCucPduyet(getDateTimeNow());
+				qlnvDxkhTlthHdr.setNguoiCucPduyet(getUserName(req));
+				qlnvDxkhTlthHdr.setNgayCucPduyet(getDateTimeNow());
 				break;
 			case Contains.TCUC_DUYET:
-				QlnvDxkhTlthHdr.get().setNguoiTcucPduyet(getUserName(req));
-				QlnvDxkhTlthHdr.get().setNgayTcucPduyet(getDateTimeNow());
+				qlnvDxkhTlthHdr.setNguoiTcucPduyet(getUserName(req));
+				qlnvDxkhTlthHdr.setNgayTcucPduyet(getDateTimeNow());
 				break;
 			case Contains.TU_CHOI:
-				QlnvDxkhTlthHdr.get().setLdoTuchoi(stReq.getLyDo());
+				qlnvDxkhTlthHdr.setLdoTuchoi(stReq.getLyDo());
 				break;
 			default:
 				break;
 			}
 
-			QlnvDxkhTlthHdr.get().setTrangThai(stReq.getTrangThai());
-			qlnvDxkhTlthHdrRepository.save(QlnvDxkhTlthHdr.get());
+			qlnvDxkhTlthHdr.setTrangThai(stReq.getTrangThai());
+			qlnvDxkhTlthHdrRepository.save(qlnvDxkhTlthHdr);
 
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
@@ -262,5 +272,68 @@ public class QlnvDxkhTlthController extends BaseController {
 			log.error(e.getMessage());
 		}
 		return ResponseEntity.ok(resp);
+	}
+	
+	@ApiOperation(value = "In đề xuất thanh lý, tiêu hủy", response = List.class)
+	@PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public void export(@Valid @RequestBody IdSearchReq searchReq, HttpServletResponse response, HttpServletRequest req)
+			throws Exception {
+		String template = "/reports/DX_TLTH.docx";
+		try {
+			if (StringUtils.isEmpty(searchReq.getId()))
+				throw new Exception("Không tìm thấy dữ liệu");
+
+			Optional<QlnvDxkhTlthHdr> optional = qlnvDxkhTlthHdrRepository.findById(Long.valueOf(searchReq.getId()));
+
+			if (!optional.isPresent())
+				throw new Exception("Không tìm thấy dữ liệu");
+
+			ServletOutputStream dataOutput = response.getOutputStream();
+			response.setContentType("application/octet-stream");
+			response.addHeader("content-disposition",
+					"attachment;filename=DX_TLTH_" + getDateTimeNow() + ".docx");
+
+			QlnvDxkhTlthHdr qlnvDxkhTlthHdr = optional.get();
+			
+			// Add parameter to table
+			List<QlnvDxkhTlthDtl> detailList = Optional.ofNullable(qlnvDxkhTlthHdr.getChildren()).orElse(new ArrayList<>());
+
+			List<Map<String, Object>> lstMapDetail = null;
+			if (detailList.size() > 0) {
+				lstMapDetail = new ArrayList<Map<String, Object>>();
+				Map<String, Object> detailMap;
+				for (int i = 0; i < detailList.size(); i++) {
+					QlnvDxkhTlthDtl tlthDtl = detailList.get(i);
+					detailMap = Maps.<String, Object>buildMap().put("stt", i + 1)
+							.put("donvitinh", tlthDtl.getDviTinh())
+							.put("soluong", tlthDtl.getSoLuong())
+							.put("ghichu", tlthDtl.getGhiChu())
+							.get();
+					lstMapDetail.add(detailMap);
+				}
+			}
+
+			HashMap<String, String> mappings = new HashMap<String, String>();
+			mappings.put("param1", Contains.mappingLoaiDx.get(qlnvDxkhTlthHdr.getLhinhXuat()));
+			mappings.put("param2", qlnvDxkhTlthHdr.getTenHhoa());
+			mappings.put("param3", getDvi(req).getTenDvi());
+
+			// save the docs
+			Doc4jUtils.generateDoc(template, mappings, lstMapDetail, dataOutput);
+			dataOutput.flush();
+			dataOutput.close();
+		} catch (Exception e) {
+			log.error("In đề xuất thanh lý, tiêu hủy", e);
+			final Map<String, Object> body = new HashMap<>();
+			body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			body.put("msg", e.getMessage());
+
+			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+			response.setCharacterEncoding("UTF-8");
+
+			final ObjectMapper mapper = new ObjectMapper();
+			mapper.writeValue(response.getOutputStream(), body);
+		}
 	}
 }
