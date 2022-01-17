@@ -16,6 +16,9 @@ public class PathContains {
 	public static final String URL_CAP_CUC = "/cap-cuc";
 	public static final String URL_CAP_TONG_CUC = "/cap-tong-cuc";
 
+	// 5.1	Quản lý lựa chọn nhà cung cấp theo phương thức đấu thầu 
+	public static final String QL_KE_HOACH_LCNT = "/ke-hoach-lcnt";
+	
 	// 5.2 Quan ly lua chon nha cung cap theo phuong thuc truc tiep
 	public static final String QL_NHA_CCAP = "/ql-nha-ccap";
 	public static final String QL_DXUAT_KH_MUATT = "/ql-dxuat-khoach-muatt";

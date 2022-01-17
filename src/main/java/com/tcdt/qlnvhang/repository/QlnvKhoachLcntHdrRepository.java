@@ -5,14 +5,15 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import com.tcdt.qlnvhang.table.QlnvKhoachLcntHdr;
 import com.tcdt.qlnvhang.util.Contains;
 
 @Repository
-public interface QlnvKhoachLcntHdrRepository extends CrudRepository<QlnvKhoachLcntHdr, Long> {
+public interface QlnvKhoachLcntHdrRepository extends BaseRepository<QlnvKhoachLcntHdr, Long> {
+	
+	@Deprecated
 	@Query(value = "SELECT * FROM QLNV_KHOACH_LCNT_HDR t WHERE (:maDvi is null or t.MA_DVI = :maDvi) AND (:loaiHanghoa is null or t.LOAI_HANGHOA = :loaiHanghoa) "
 			+ "AND (:hanghoa is null or t.HANGHOA = :hanghoa) "
 			+ "AND (:trangThai is null or t.TRANG_THAI = :trangThai) "

@@ -94,7 +94,15 @@ public class Contains {
 	// Loai de xuat
 	public static final String DX_THANH_LY = "00";
 	public static final String DX_TIEU_HUY = "01";
-
+	
+	public static final Map<String, String> mappingLoaiDx;
+	static {
+		mappingLoaiDx = Maps.<String, String>buildMap()
+				.put(Contains.DX_THANH_LY, "Thanh lý")
+				.put(Contains.DX_TIEU_HUY, "Tiêu hủy")
+				.get();
+	}
+	
 	public static final Map<String, String> mappingLoaiDc;
 	static {
 		mappingLoaiDc = Maps.<String, String>buildMap().put(Contains.DC_GIA, "Điều chỉnh giá")

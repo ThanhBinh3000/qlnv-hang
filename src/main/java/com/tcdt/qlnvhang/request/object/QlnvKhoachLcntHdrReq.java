@@ -4,14 +4,13 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.util.Contains;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -38,13 +37,17 @@ public class QlnvKhoachLcntHdrReq {
 	String soVban;
 
 	@NotNull(message = "Không được để trống")
-	@JsonFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayVban;
+	
 	String ldoTuchoi;
 	@NotNull(message = "Không được để trống")
+	
 	String maDvi;
+	
 	@NotNull(message = "Không được để trống")
 	String nguonvon;
+	
 	@NotNull(message = "Không được để trống")
 	String hanghoa;
 	
@@ -52,41 +55,61 @@ public class QlnvKhoachLcntHdrReq {
 	String soDx;
 	
 	@NotNull(message = "Không được để trống")
-	@JsonFormat(pattern = "yyyy-MM-dd")
-	String ngayDx;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date ngayDx;
+	
 	@NotNull(message = "Không được để trống")
 	String tenGoithau;
+	
 	@NotNull(message = "Không được để trống")
 	BigDecimal tongTien;
+	
 	@NotNull(message = "Không được để trống")
 	Integer soLuong;
+	
 	@NotNull(message = "Không được để trống")
 	String donVi;//don vi tinh
-	@JsonFormat(pattern = "yyyy-MM-dd")
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayThienTu;
-	@JsonFormat(pattern = "yyyy-MM-dd")
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayThienDen;
+	
 	String tcChatLuong;
+	
 	@NotNull(message = "Không được để trống")
 	@Range(min= 1, max= 999)
 	Integer soPhanThau;
+	
 	@NotNull(message = "Không được để trống")
 	String hthucLcnt;
+	
 	@NotNull(message = "Không được để trống")
 	String pthucLcnt;
-	@JsonFormat(pattern = "yyyy-MM-dd")
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayPhanh;
-	@JsonFormat(pattern = "yyyy-MM-dd")
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date thoiHanNhap;
+	
 	BigDecimal giaBan;
+	
 	BigDecimal tienBaoLanh;
+	
 	BigDecimal tienDamBao;
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
 	Date ngayDongThau;
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
 	Date ngayMoHso;
+	
 	String loaiHdong;
+	
 	BigDecimal giaTtinh;
+	
 	String kienNghi;
 	
 	private List<QlnvKhoachLcntDtlReq> detailList;
