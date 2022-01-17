@@ -294,7 +294,7 @@ public class QlnvQdTlthController extends BaseController {
 			
 			ServletOutputStream dataOutput = response.getOutputStream();
 			response.setContentType("application/octet-stream");
-			response.addHeader("content-disposition", "attachment;filename=QD_TLTH" + getDateTimeNow() + ".docx");
+			response.addHeader("content-disposition", "attachment;filename=QD_TLTH_" + getDateTimeNow() + ".docx");
 
 			// Add parameter to table
 			List<QlnvQdTlthDtl> detail = Optional.ofNullable(quyetDinh.getChildren()).orElse(new ArrayList<>());
@@ -442,7 +442,7 @@ public class QlnvQdTlthController extends BaseController {
 			
 			ServletOutputStream dataOutput = response.getOutputStream();
 			response.setContentType("application/octet-stream");
-			response.addHeader("content-disposition", "attachment;filename=QD_TLTH" + getDateTimeNow() + ".docx");
+			response.addHeader("content-disposition", "attachment;filename=QD_TLTH_" + getDateTimeNow() + ".docx");
 
 			// Add parameter to table
 			List<QlnvQdTlthDtl> detail = Optional.ofNullable(quyetDinh.getChildren()).orElse(new ArrayList<>());
