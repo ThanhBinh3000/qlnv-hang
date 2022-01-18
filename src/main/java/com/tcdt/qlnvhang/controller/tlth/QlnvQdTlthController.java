@@ -244,21 +244,19 @@ public class QlnvQdTlthController extends BaseController {
 			String status = stReq.getTrangThai();
 			
 			switch (status) {
-			case Contains.CHO_DUYET + Contains.MOI_TAO:
+			case Contains.CHO_DUYET:
 				qlnvQdTlthHdr.setNguoiGuiDuyet(getUserName(req));
 				qlnvQdTlthHdr.setNgayGuiDuyet(getDateTimeNow());
 				break;
-			case Contains.TU_CHOI + Contains.CHO_DUYET:
+			case Contains.DUYET:
 				qlnvQdTlthHdr.setNguoiPduyet(getUserName(req));
 				qlnvQdTlthHdr.setNgayPduyet(getDateTimeNow());
+				break;
+			case Contains.TU_CHOI:
 				qlnvQdTlthHdr.setLdoTuchoi(stReq.getLyDo());
 				break;
-			case Contains.DUYET + Contains.CHO_DUYET:
-				qlnvQdTlthHdr.setNguoiPduyet(getUserName(req));
-				qlnvQdTlthHdr.setNgayPduyet(getDateTimeNow());
-				break;
 			default:
-				throw new Exception("Phê duyệt không thành công");
+				break;
 			}
 			
 
