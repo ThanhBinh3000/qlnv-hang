@@ -18,6 +18,7 @@ public class PathContains {
 
 	// 5.1	Quản lý lựa chọn nhà cung cấp theo phương thức đấu thầu 
 	public static final String QL_KE_HOACH_LCNT = "/ke-hoach-lcnt";
+	public static final String VAT_TU = "/vat-tu";
 	
 	// 5.2 Quan ly lua chon nha cung cap theo phuong thuc truc tiep
 	public static final String QL_NHA_CCAP = "/ql-nha-ccap";
