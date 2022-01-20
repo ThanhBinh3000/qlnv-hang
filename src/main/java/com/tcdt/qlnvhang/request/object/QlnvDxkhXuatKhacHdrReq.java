@@ -60,6 +60,9 @@ public class QlnvDxkhXuatKhacHdrReq {
 	@Size(max = 2, message = "Loại hình xuất không được vượt quá 2 ký tự")
 	@ApiModelProperty(example = "00")
 	String lhinhXuat;
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date ngayDxuat;
 
 	private List<QlnvDxkhXuatKhacDtlReq> detailListReq;
 }

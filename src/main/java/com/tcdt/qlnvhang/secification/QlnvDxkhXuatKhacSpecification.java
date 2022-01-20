@@ -8,12 +8,11 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 
-import com.tcdt.qlnvhang.request.search.QlnvDxkhMuaHangSearchReq;
 import com.tcdt.qlnvhang.request.search.QlnvDxkhXuatKhacSearchReq;
-import com.tcdt.qlnvhang.table.QlnvDxkhMuaHangHdr;
 import com.tcdt.qlnvhang.table.QlnvDxkhXuatKhacHdr;
 
 public class QlnvDxkhXuatKhacSpecification {
@@ -32,21 +31,18 @@ public class QlnvDxkhXuatKhacSpecification {
 					String lhinhXuat = req.getLhinhXuat();
 					String dviDtQgia = req.getDviDtQgia();
 					root.fetch("children", JoinType.LEFT);
-					if (denNgay != null) {
-						if (tuNgay != null) {
-							predicate.getExpressions()
-									.add(builder.and(builder.lessThanOrEqualTo(root.get("ngayDxuat"), tuNgay)));
-							predicate.getExpressions()
-									.add(builder.and(builder.greaterThanOrEqualTo(root.get("ngayDxuat"), denNgay)));
-						} else {
-							predicate.getExpressions()
-									.add(builder.and(builder.greaterThanOrEqualTo(root.get("ngayDxuat"), denNgay)));
-						}
-					} else {
-						if (tuNgay != null) {
-							predicate.getExpressions()
-									.add(builder.and(builder.lessThanOrEqualTo(root.get("ngayDxuat"), tuNgay)));
-						}
+
+					if (ObjectUtils.isNotEmpty(tuNgay) && ObjectUtils.isNotEmpty(denNgay)) {
+						predicate.getExpressions()
+								.add(builder.and(builder.greaterThanOrEqualTo(root.get("ngayDxuat"), tuNgay)));
+						predicate.getExpressions()
+								.add(builder.and(builder.lessThanOrEqualTo(root.get("ngayDxuat"), denNgay)));
+					} else if (ObjectUtils.isNotEmpty(tuNgay)) {
+						predicate.getExpressions()
+								.add(builder.and(builder.greaterThanOrEqualTo(root.get("ngayDxuat"), tuNgay)));
+					} else if (ObjectUtils.isNotEmpty(denNgay)) {
+						predicate.getExpressions()
+								.add(builder.and(builder.lessThanOrEqualTo(root.get("ngayDxuat"), denNgay)));
 					}
 
 					if (StringUtils.isNotBlank(dviDtQgia)) {
@@ -55,11 +51,11 @@ public class QlnvDxkhXuatKhacSpecification {
 					if (StringUtils.isNotBlank(soDxuat)) {
 						predicate.getExpressions().add(builder.and(builder.equal(root.get("soDxuat"), soDxuat)));
 					}
-					
+
 					if (StringUtils.isNotBlank(lhangDtQgia)) {
 						predicate.getExpressions().add(builder.and(builder.equal(root.get("maHhoa"), lhangDtQgia)));
 					}
-					
+
 					if (StringUtils.isNotBlank(lhinhXuat)) {
 						predicate.getExpressions().add(builder.and(builder.equal(root.get("lhinhXuat"), lhinhXuat)));
 					}

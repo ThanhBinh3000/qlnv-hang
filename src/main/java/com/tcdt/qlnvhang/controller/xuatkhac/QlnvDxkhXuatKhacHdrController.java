@@ -165,6 +165,7 @@ public class QlnvDxkhXuatKhacHdrController extends BaseController {
 
 			qlnvDxkhXuatKhacHdrRepository.save(dataDB);
 
+			resp.setData(dataDB);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {

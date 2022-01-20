@@ -11,10 +11,9 @@ public class QlnvDxkhXuatKhacDtlReq {
 	@ApiModelProperty(notes = "Bắt buộc set đối với update")
 	private Long id;
 
-	@NotNull(message = "Mã cha không được để trống")
 	Long idHdr;
 
-	@NotNull(message = "Mã kho không được để trống")
+	@NotNull(message = "Không được để trống")
 	@Size(max = 50, message = "Mã kho không được vượt quá 50 ký tự")
 	@ApiModelProperty(example = "MKXX1")
 	String maKho;
@@ -27,8 +26,10 @@ public class QlnvDxkhXuatKhacDtlReq {
 	@ApiModelProperty(example = "MLXX1")
 	String maLo;
 
+	@NotNull(message = "Không được để trống")
 	Integer soLuong;
 
+	@NotNull(message = "Không được để trống")
 	@Size(max = 50, message = "Đơn vị tính không được vượt quá 50 ký tự")
 	@ApiModelProperty(example = "DVT1")
 	String dviTinh;

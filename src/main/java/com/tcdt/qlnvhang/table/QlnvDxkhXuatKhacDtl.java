@@ -29,7 +29,7 @@ public class QlnvDxkhXuatKhacDtl {
 	String maLo;
 	Integer soLuong;
 	String dviTinh;
-	String ghichu;
+	String ghiChu;
 
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)

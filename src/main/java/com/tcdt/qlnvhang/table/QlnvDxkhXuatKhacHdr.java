@@ -27,6 +27,7 @@ public class QlnvDxkhXuatKhacHdr {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "QLNV_DXKH_XUATKHAC_HDR_SEQ")
 	@SequenceGenerator(sequenceName = "QLNV_DXKH_XUATKHAC_HDR_SEQ", allocationSize = 1, name = "QLNV_DXKH_XUATKHAC_HDR_SEQ")
+	private Long id; 
 	String soDxuat;
 	String maDvi;
 	String soQdKhoach;
@@ -35,7 +36,6 @@ public class QlnvDxkhXuatKhacHdr {
 	String tenHhoa;
 	Date tuNgayThien;
 	Date denNgayThien;
-	String diaDiem;
 	Date ngayTao;
 	String nguoiTao;
 	Date ngaySua;
