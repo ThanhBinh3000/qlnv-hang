@@ -16,14 +16,24 @@ public class QlnvKhoachLcntDtlReq{
 	@NotNull(message = "Không được để trống")
 	@Size(max = 20, message = "Mã đơn vị không được vượt quá 20 ký tự")
 	String maDvi;
+	
 	@NotNull(message = "Không được để trống")
+	@Size(max = 500, message = "Kiến nghị không được vượt quá 500 ký tự")
 	String phanThau;
+	
 	@NotNull(message = "Không được để trống")
 	BigDecimal soLuong;
+	
 	@NotNull(message = "Không được để trống")
+	@Size(max = 20, message = "Đơn vị tính không được vượt quá 20 ký tự")
 	String dviTinh;
+	
 	BigDecimal giaDkien;
 	BigDecimal giaDkienVat;
+	
+	@Size(max = 500, message = "Địa chỉ không được vượt quá 500 ký tự")
 	String diaChi;
+	
+	@Size(max = 20, message = "Mã kho không được vượt quá 20 ký tự")
 	String maDkho;
 }

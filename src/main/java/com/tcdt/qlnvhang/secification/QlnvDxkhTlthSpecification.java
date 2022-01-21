@@ -10,7 +10,6 @@ import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.tcdt.qlnvhang.request.search.QlnvDxkhTlthSearchReq;
@@ -21,8 +20,7 @@ public class QlnvDxkhTlthSpecification {
 	public static Specification<QlnvDxkhTlthHdr> buildSearchQuery(final QlnvDxkhTlthSearchReq req) {
 		return new Specification<QlnvDxkhTlthHdr>() {
 			@Override
-			public Predicate toPredicate(Root<QlnvDxkhTlthHdr> root, CriteriaQuery<?> query,
-					CriteriaBuilder builder) {
+			public Predicate toPredicate(Root<QlnvDxkhTlthHdr> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
 				Predicate predicate = builder.conjunction();
 				if (req != null) {
 					String maDvi = req.getMaDvi();
@@ -32,18 +30,22 @@ public class QlnvDxkhTlthSpecification {
 					String soDxuat = req.getSoDxuat();
 					String lhinhXuat = req.getLhinhXuat();
 					root.fetch("children", JoinType.LEFT);
-					
+
 					if (ObjectUtils.isNotEmpty(tuNgay) && ObjectUtils.isNotEmpty(denNgay)) {
 						predicate.getExpressions()
 								.add(builder.and(builder.greaterThanOrEqualTo(root.get("ngayDxuat"), tuNgay)));
-						predicate.getExpressions().add(builder.and(
-								builder.lessThan(root.get("ngayDxuat"), new DateTime(denNgay).plusDays(1).toDate())));
+						predicate.getExpressions().add(builder.and(builder.lessThan(root.get("ngayDxuat"), denNgay)));
+					} else if (ObjectUtils.isNotEmpty(tuNgay)) {
+						predicate.getExpressions()
+								.add(builder.and(builder.greaterThanOrEqualTo(root.get("ngayDxuat"), tuNgay)));
+					} else if (ObjectUtils.isNotEmpty(denNgay)) {
+						predicate.getExpressions().add(builder.and(builder.lessThan(root.get("ngayDxuat"), denNgay)));
 					}
 
 					if (StringUtils.isNotBlank(maDvi)) {
 						predicate.getExpressions().add(builder.and(builder.equal(root.get("maDvi"), maDvi)));
 					}
-					
+
 					if (StringUtils.isNotBlank(soDxuat)) {
 						predicate.getExpressions().add(builder.and(builder.equal(root.get("soDxuat"), soDxuat)));
 					}

@@ -40,18 +40,23 @@ public class QlnvKhoachLcntHdrReq {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayVban;
 	
+	@Size(max = 250, message = "Lý do từ chối không được vượt quá 250 ký tự")
 	String ldoTuchoi;
-	@NotNull(message = "Không được để trống")
 	
+	@NotNull(message = "Không được để trống")
+	@Size(max = 50, message = "Mã đơn vị không được vượt quá 50 ký tự")
 	String maDvi;
 	
 	@NotNull(message = "Không được để trống")
+	@Size(max = 50, message = "Nguồn vốn không được vượt quá 50 ký tự")
 	String nguonvon;
 	
 	@NotNull(message = "Không được để trống")
+	@Size(max = 50, message = "Hàng hóa không được vượt quá 50 ký tự")
 	String hanghoa;
 	
 	@NotNull(message = "Không được để trống")
+	@Size(max = 50, message = "Số đề xuất được vượt quá 50 ký tự")
 	String soDx;
 	
 	@NotNull(message = "Không được để trống")
@@ -59,6 +64,7 @@ public class QlnvKhoachLcntHdrReq {
 	Date ngayDx;
 	
 	@NotNull(message = "Không được để trống")
+	@Size(max = 50, message = "Tên gói thầu được vượt quá 50 ký tự")
 	String tenGoithau;
 	
 	@NotNull(message = "Không được để trống")
@@ -68,6 +74,7 @@ public class QlnvKhoachLcntHdrReq {
 	Integer soLuong;
 	
 	@NotNull(message = "Không được để trống")
+	@Size(max = 200, message = "Đơn vị tính không được vượt quá 200 ký tự")
 	String donVi;//don vi tinh
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
@@ -83,9 +90,11 @@ public class QlnvKhoachLcntHdrReq {
 	Integer soPhanThau;
 	
 	@NotNull(message = "Không được để trống")
+	@Size(max = 50, message = "Hình thức lựa chọn nhà thầu không được vượt quá 50 ký tự")
 	String hthucLcnt;
 	
 	@NotNull(message = "Không được để trống")
+	@Size(max = 50, message = "Phương thức lựa chọn nhà thầu không được vượt quá 50 ký tự")
 	String pthucLcnt;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
@@ -106,10 +115,12 @@ public class QlnvKhoachLcntHdrReq {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
 	Date ngayMoHso;
 	
+	@Size(max = 50, message = "Phương thức lựa chọn nhà thầu không được vượt quá 50 ký tự")
 	String loaiHdong;
 	
 	BigDecimal giaTtinh;
 	
+	@Size(max = 500, message = "Kiến nghị không được vượt quá 500 ký tự")
 	String kienNghi;
 	
 	private List<QlnvKhoachLcntDtlReq> detailList;

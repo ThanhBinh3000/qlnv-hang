@@ -10,7 +10,6 @@ import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.tcdt.qlnvhang.request.search.QlnvKhoachLcntSearchReq;
@@ -33,14 +32,18 @@ public class QlnvKhoachLcntSpecification {
 					String soDx = req.getSoDx();
 					Date tuNgayLap = req.getTuNgayLap();
 					Date denNgayLap = req.getDenNgayLap();
-					
+
 					root.fetch("detailList", JoinType.LEFT);
-					
+
 					if (ObjectUtils.isNotEmpty(tuNgayLap) && ObjectUtils.isNotEmpty(denNgayLap)) {
 						predicate.getExpressions()
 								.add(builder.and(builder.greaterThanOrEqualTo(root.get("ngayDx"), tuNgayLap)));
-						predicate.getExpressions().add(builder.and(
-								builder.lessThan(root.get("ngayDx"), new DateTime(denNgayLap).plusDays(1).toDate())));
+						predicate.getExpressions().add(builder.and(builder.lessThan(root.get("ngayDx"), denNgayLap)));
+					} else if (ObjectUtils.isNotEmpty(tuNgayLap)) {
+						predicate.getExpressions()
+								.add(builder.and(builder.greaterThanOrEqualTo(root.get("ngayDx"), tuNgayLap)));
+					} else if (ObjectUtils.isNotEmpty(denNgayLap)) {
+						predicate.getExpressions().add(builder.and(builder.lessThan(root.get("ngayDx"), denNgayLap)));
 					}
 
 					if (StringUtils.isNotBlank(maDvi)) {
@@ -53,7 +56,8 @@ public class QlnvKhoachLcntSpecification {
 						predicate.getExpressions().add(builder.and(builder.equal(root.get("soDx"), soDx)));
 					}
 					if (StringUtils.isNotBlank(loaiHanghoa)) {
-						predicate.getExpressions().add(builder.and(builder.equal(root.get("loaiHanghoa"), loaiHanghoa)));
+						predicate.getExpressions()
+								.add(builder.and(builder.equal(root.get("loaiHanghoa"), loaiHanghoa)));
 					}
 					if (StringUtils.isNotBlank(hanghoa)) {
 						predicate.getExpressions().add(builder.and(builder.equal(root.get("hanghoa"), hanghoa)));

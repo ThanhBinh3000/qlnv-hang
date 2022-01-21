@@ -54,9 +54,6 @@ import com.tcdt.qlnvhang.table.QlnvKhoachLcntHdr;
 import com.tcdt.qlnvhang.table.QlnvQdLcntDtl;
 import com.tcdt.qlnvhang.table.QlnvQdLcntDtlCtiet;
 import com.tcdt.qlnvhang.table.QlnvQdLcntHdr;
-import com.tcdt.qlnvhang.table.QlnvQdMuattDtl;
-import com.tcdt.qlnvhang.table.QlnvQdMuattDtlCtiet;
-import com.tcdt.qlnvhang.table.QlnvQdMuattHdr;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.Doc4jUtils;
@@ -214,7 +211,7 @@ public class QlnvQdLcntHdrController extends BaseController {
 			int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
 			int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
 			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
-
+			objReq.setLoaiQd(Contains.QUYET_DINH);
 			Page<QlnvQdLcntHdr> qdLcnt = qlnvQdLcntHdrRepository.findAll(QlnvQdLcntSpecification.buildSearchQuery(objReq), pageable);
 
 			resp.setData(qdLcnt);
@@ -247,7 +244,7 @@ public class QlnvQdLcntHdrController extends BaseController {
 			updateObjectToObject(dataDTB, dataMap);
 			dataDTB.setNgaySua(getDateTimeNow());
 			dataDTB.setNguoiSua(getUserName(request));
-			
+			dataDTB.setLoaiQd(Contains.QUYET_DINH);
 			List<QlnvQdLcntDtlReq> dtlReqList = objReq.getDetail();
 			List<QlnvQdLcntDtl> details = new ArrayList<>();
 			if (dtlReqList != null) {

@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class QlnvQdLcntHdrSearchReq extends BaseRequest{
+public class QlnvQdLcntHdrSearchReq extends BaseRequest {
 
 	String soQdinh;
 	String soQdGiaoCtkh;
@@ -23,4 +23,5 @@ public class QlnvQdLcntHdrSearchReq extends BaseRequest{
 	String maHanghoa;
 	String loaiHanghoa;
 	String loaiDieuChinh;
+	String loaiQd;
 }

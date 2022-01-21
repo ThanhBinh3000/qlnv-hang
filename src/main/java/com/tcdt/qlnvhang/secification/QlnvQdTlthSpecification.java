@@ -26,8 +26,7 @@ public class QlnvQdTlthSpecification {
 	public static Specification<QlnvQdTlthHdr> buildSearchQuery(final QlnvQdTlthSearchReq req) {
 		return new Specification<QlnvQdTlthHdr>() {
 			@Override
-			public Predicate toPredicate(Root<QlnvQdTlthHdr> root, CriteriaQuery<?> query,
-					CriteriaBuilder builder) {
+			public Predicate toPredicate(Root<QlnvQdTlthHdr> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
 				Predicate predicate = builder.conjunction();
 				if (req != null) {
 					Date tuNgayQdinh = req.getTuNgayQdinh();
@@ -36,16 +35,23 @@ public class QlnvQdTlthSpecification {
 					String soQdinh = req.getSoQdinh();
 					String lhinhXuat = req.getLhinhXuat();
 					root.fetch("children", JoinType.LEFT);
-					
+
 					if (ObjectUtils.isNotEmpty(tuNgayQdinh) && ObjectUtils.isNotEmpty(denNgayQdinh)) {
 						predicate.getExpressions()
 								.add(builder.and(builder.greaterThanOrEqualTo(root.get("ngayQdinh"), tuNgayQdinh)));
-						predicate.getExpressions().add(builder.and(
-								builder.lessThan(root.get("ngayQdinh"), new DateTime(denNgayQdinh).plusDays(1).toDate())));
+						predicate.getExpressions()
+								.add(builder.and(builder.lessThan(root.get("ngayQdinh"), denNgayQdinh)));
+					} else if (ObjectUtils.isNotEmpty(tuNgayQdinh)) {
+						predicate.getExpressions()
+								.add(builder.and(builder.greaterThanOrEqualTo(root.get("ngayQdinh"), tuNgayQdinh)));
+					} else if (ObjectUtils.isNotEmpty(denNgayQdinh)) {
+						predicate.getExpressions()
+								.add(builder.and(builder.lessThan(root.get("ngayQdinh"), denNgayQdinh)));
 					}
 
 					if (StringUtils.isNotBlank(soQdinh)) {
-						predicate.getExpressions().add(builder.like(builder.lower(root.get("soQdinh")), "%" + soQdinh.toLowerCase() + "%"));
+						predicate.getExpressions().add(
+								builder.like(builder.lower(root.get("soQdinh")), "%" + soQdinh.toLowerCase() + "%"));
 					}
 					if (StringUtils.isNotBlank(lhinhXuat)) {
 						predicate.getExpressions().add(builder.and(builder.equal(root.get("lhinhXuat"), lhinhXuat)));
@@ -58,7 +64,7 @@ public class QlnvQdTlthSpecification {
 			}
 		};
 	}
-	
+
 	public static Specification<QlnvQdTlthHdr> buildSearchChildQuery(final QlnvQdTlthSearchReq req) {
 		return new Specification<QlnvQdTlthHdr>() {
 			/**
@@ -67,8 +73,7 @@ public class QlnvQdTlthSpecification {
 			private static final long serialVersionUID = 7196589727342771480L;
 
 			@Override
-			public Predicate toPredicate(Root<QlnvQdTlthHdr> root, CriteriaQuery<?> query,
-					CriteriaBuilder builder) {
+			public Predicate toPredicate(Root<QlnvQdTlthHdr> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
 				Predicate predicate = builder.conjunction();
 				if (req != null) {
 					Date tuNgayQdinh = req.getTuNgayQdinh();
@@ -78,18 +83,25 @@ public class QlnvQdTlthSpecification {
 					String lhinhXuat = req.getLhinhXuat();
 					String maDvi = req.getMaDvi();
 					root.fetch("children", JoinType.LEFT);
-					
+
 					Join<QlnvQdTlthHdr, QlnvQdTlthDtl> joinQuerry = root.join("children");
-					
+
 					if (ObjectUtils.isNotEmpty(tuNgayQdinh) && ObjectUtils.isNotEmpty(denNgayQdinh)) {
 						predicate.getExpressions()
 								.add(builder.and(builder.greaterThanOrEqualTo(root.get("ngayQdinh"), tuNgayQdinh)));
-						predicate.getExpressions().add(builder.and(
-								builder.lessThan(root.get("ngayQdinh"), new DateTime(denNgayQdinh).plusDays(1).toDate())));
+						predicate.getExpressions()
+								.add(builder.and(builder.lessThan(root.get("ngayQdinh"), denNgayQdinh)));
+					} else if (ObjectUtils.isNotEmpty(tuNgayQdinh)) {
+						predicate.getExpressions()
+								.add(builder.and(builder.greaterThanOrEqualTo(root.get("ngayQdinh"), tuNgayQdinh)));
+					} else if (ObjectUtils.isNotEmpty(denNgayQdinh)) {
+						predicate.getExpressions()
+								.add(builder.and(builder.lessThan(root.get("ngayQdinh"), denNgayQdinh)));
 					}
 
 					if (StringUtils.isNotBlank(soQdinh)) {
-						predicate.getExpressions().add(builder.like(builder.lower(root.get("soQdinh")), "%" + soQdinh.toLowerCase() + "%"));
+						predicate.getExpressions().add(
+								builder.like(builder.lower(root.get("soQdinh")), "%" + soQdinh.toLowerCase() + "%"));
 					}
 					if (StringUtils.isNotBlank(lhinhXuat)) {
 						predicate.getExpressions().add(builder.and(builder.equal(root.get("lhinhXuat"), lhinhXuat)));
@@ -97,7 +109,7 @@ public class QlnvQdTlthSpecification {
 					if (StringUtils.isNotBlank(maHhoa)) {
 						predicate.getExpressions().add(builder.and(builder.equal(root.get("maHhoa"), maHhoa)));
 					}
-					
+
 					if (StringUtils.isNotBlank(maDvi)) {
 						predicate.getExpressions().add(builder.and(builder.equal(joinQuerry.get("maDvi"), maDvi)));
 					}
@@ -106,7 +118,7 @@ public class QlnvQdTlthSpecification {
 			}
 		};
 	}
-	
+
 	public static Specification<QlnvQdTlthHdr> buildFindByIdQuery(final @Valid IdSearchReq objReq) {
 		return new Specification<QlnvQdTlthHdr>() {
 			/**
