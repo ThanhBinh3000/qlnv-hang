@@ -1,21 +1,27 @@
 package com.tcdt.qlnvhang.request.search;
 
-import com.tcdt.qlnvhang.request.PaggingReq;
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.request.BaseRequest;
+import com.tcdt.qlnvhang.util.Contains;
+
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 
 @Data
-public class QlnvQdLcntHdrDchinhSearchReq {
+@EqualsAndHashCode(callSuper = false)
+public class QlnvQdLcntHdrDchinhSearchReq extends BaseRequest {
 
 	String soQdinh;
 	String soQdGiaoCtkh;
 	String soQdinhGoc;
-	String tuNgayQd;
-	String denNgayQd;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date tuNgayQd;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date denNgayQd;
 	String maHanghoa;
 	String loaiHanghoa;
 	String loaiDieuChinh;
-	
-	PaggingReq paggingReq;
-	
 }
