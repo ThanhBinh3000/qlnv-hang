@@ -13,7 +13,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-public class QlnvQdLcntHdrReq {
+public class QlnvQdLcntVtuHdrReq {
 	@ApiModelProperty(notes = "Bắt buộc set đối với update")
 	private Long id;
 	
@@ -22,8 +22,11 @@ public class QlnvQdLcntHdrReq {
 	@ApiModelProperty(example = "SHD001")
 	String soQdinh;
 	
+	@NotNull(message = "Không được để trống")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayQd;
+	
+	String soQdKh;
 	
 	@NotNull(message = "Không được để trống")
 	@Size(max = 50, message = "Loại hàng hóa không được vượt quá 50 ký tự")
@@ -34,31 +37,27 @@ public class QlnvQdLcntHdrReq {
 	@ApiModelProperty(example = "MHH001")
 	String maHanghoa;
 	
-	@NotNull(message = "Không được để trống")
-	@Size(max = 50, message = "Nguồn vốn không được vượt quá 50 ký tự")
-	String nguonvon;
+	@Size(max = 50, message = "TC kĩ thuật không được vượt quá 50 ký tự")
+	String tcKiThuat;
 	
 	String soQdinhGoc;
 	
 	@Size(max = 50, message = "Lý do từ chối không được vượt quá 50 ký tự")
 	String ldoTuchoi;
 	
-	String loaiQd;
-	
 	@NotNull(message = "Không được để trống")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-	Date tuNgayThien;
+	Date ngayDx;
 	
-	@NotNull(message = "Không được để trống")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-	Date denNgayThien;
+	Date ngayQdGoc;
 	
 	@NotNull(message = "Không được để trống")
-	String soQdGiaoCtkh;
+	@Size(max = 50, message = "Số đề xuất không được vượt quá 50 ký tự")
+	String soDxuat;
 	
-	@Size(max = 2, message = "Lý do từ chối không được vượt quá 2 ký tự")
-	@ApiModelProperty(example = "01")
+	@Size(max = 50, message = "Loại điều chỉnh không được vượt quá 50 ký tự")
 	String loaiDieuChinh;
 	
-	private List<QlnvQdLcntDtlReq> detail;
+	private List<QlnvQdLcntVtuDtlReq> detail;
 }

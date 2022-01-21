@@ -21,7 +21,7 @@ public class PathContains {
 	public static final String VAT_TU = "/vat-tu";
 	public static final String QL_QD_LCNT = "/qd-lcnt";
 	public static final String DIEU_CHINH = "/dieu-chinh";
-	
+	public static final String QL_QD_LCNT_VTU = "/qd-lcnt-vtu";
 	
 	// 5.2 Quan ly lua chon nha cung cap theo phuong thuc truc tiep
 	public static final String QL_NHA_CCAP = "/ql-nha-ccap";
