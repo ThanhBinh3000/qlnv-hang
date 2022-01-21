@@ -21,7 +21,6 @@ public class PathContains {
 	public static final String QL_DXUAT_KH_MUATT = "/ql-dxuat-khoach-muatt";
 	public static final String QL_QD_MUATT = "/ql-qd-muatt";
 	public static final String QL_TT_CHAOGIA = "/ql-tt-chaogia";
-	public static final String QL_DXUAT_KH_XUATKHAC = "/ql-dxuat-kh-xuatkhac";
 
 	// 5.3 Quan ly hop dong nhap/xuat hang DTQG
 	public static final String QL_HOP_DONG = "/ql-hdong-hang";
@@ -43,4 +42,8 @@ public class PathContains {
 	public static final String QL_QDKQ_DGIA_HANG = "/qdkq-dgia-hang";
 	public static final String QL_DXKH_DCHANG = "/qldxkh-dchang";
 	public static final String QL_QD_DCHANG = "/qlqd-dchang";
+	
+	// 5.9 Quản lý xuất khác 
+	public static final String QL_DXUAT_KH_XUATKHAC = "/ql-dxuat-kh-xuatkhac";
+	public static final String QL_QD_DXUAT_KH_XUATKHAC = "/ql-qd-dxuat-kh-xuatkhac";
 }

@@ -7,6 +7,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -38,6 +39,7 @@ import com.tcdt.qlnvhang.secification.QlnvQdXuatKhacSpecification;
 import com.tcdt.qlnvhang.table.QlnvQdXuatKhacDtl;
 import com.tcdt.qlnvhang.table.QlnvQdXuatKhacDtlCtiet;
 import com.tcdt.qlnvhang.table.QlnvQdXuatKhacHdr;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import com.tcdt.qlnvhang.util.PaginationSet;
@@ -84,7 +86,7 @@ public class QlnvQdXuatKhacHdrController extends BaseController {
 				}
 				dataMap.setChildren(details);
 			}
-			
+
 			qlnvQdXuatKhacHdrRepository.save(dataMap);
 
 			resp.setData(dataMap);
@@ -258,6 +260,81 @@ public class QlnvQdXuatKhacHdrController extends BaseController {
 			qOptional.get().setTrangThai(stReq.getTrangThai());
 			qlnvQdXuatKhacHdrRepository.save(qOptional.get());
 
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error(e.getMessage());
+		}
+		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Tra cứu quyết định Đề xuất kế hoạch xuất khác dành cho cấp cục", response = List.class)
+	@PostMapping(value = PathContains.URL_TRA_CUU
+			+ PathContains.URL_CAP_CUC, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> colectionChild(HttpServletRequest request,
+			@Valid @RequestBody QlnvQdXuatKhacSearchReq objReq) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
+			int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
+			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
+
+			// Lay thong tin don vi quan ly
+			QlnvDmDonvi objDvi = getDvi(request);
+			if (ObjectUtils.isEmpty(objDvi) || StringUtils.isEmpty(objDvi.getCapDvi()))
+				throw new UnsupportedOperationException("Không lấy được thông tin đơn vị");
+
+			// Add them dk loc trong child
+			if (!objDvi.getCapDvi().equals(Contains.CAP_TONG_CUC))
+				objReq.setMaDvi(objDvi.getMaDvi());
+
+			Page<QlnvQdXuatKhacHdr> qlnvQdTlthHdr = qlnvQdXuatKhacHdrRepository
+					.findAll(QlnvQdXuatKhacSpecification.buildSearchChildQuery(objReq), pageable);
+
+			resp.setData(qlnvQdTlthHdr);
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error(e.getMessage());
+		}
+
+		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Lấy chi tiết thông tin quyết định Đề xuất kế hoạch xuất khác dành cho cấp cục", response = List.class)
+	@PostMapping(value = PathContains.URL_CHI_TIET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> detailChild(@Valid @RequestBody IdSearchReq objReq,
+			HttpServletRequest request) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			if (StringUtils.isEmpty(objReq.getId()))
+				throw new UnsupportedOperationException("Không tồn tại bản ghi");
+
+			// Lay thong tin don vi quan ly
+			QlnvDmDonvi objDvi = getDvi(request);
+			if (ObjectUtils.isEmpty(objDvi) || StringUtils.isEmpty(objDvi.getCapDvi()))
+				throw new UnsupportedOperationException("Không lấy được thông tin đơn vị");
+
+			// Add them dk loc trong child
+			if (!objDvi.getCapDvi().equals(Contains.CAP_TONG_CUC)) {
+				objReq.setMaDvi(objDvi.getMaDvi());
+			} else if (objDvi.getCapDvi().equals(Contains.CAP_TONG_CUC) && !StringUtils.isEmpty(objReq.getMaDvi())) {
+				objReq.setMaDvi(objDvi.getMaDvi());
+			}
+
+			List<QlnvQdXuatKhacHdr> qOptional = qlnvQdXuatKhacHdrRepository
+					.findAll(QlnvQdXuatKhacSpecification.buildFindByIdQuery(objReq));
+
+			if (qOptional.isEmpty())
+				throw new UnsupportedOperationException("Không tồn tại bản ghi");
+
+			resp.setData(qOptional.get(0));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {

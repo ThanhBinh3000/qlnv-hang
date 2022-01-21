@@ -38,4 +38,7 @@ public class QlnvQdXuatKhacSearchReq extends BaseRequest {
 	
 	@ApiModelProperty(example = "00")
 	String trangThai;
+	
+	@ApiModelProperty(example = "HNO")
+	String maDvi;
 }
