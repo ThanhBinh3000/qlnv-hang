@@ -60,5 +60,8 @@ public class QlnvQdLcntHdrReq {
 	@ApiModelProperty(example = "01")
 	String loaiDieuChinh;
 	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date ngayQdGoc;
+	
 	private List<QlnvQdLcntDtlReq> detail;
 }

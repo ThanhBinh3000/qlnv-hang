@@ -27,16 +27,25 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.repository.QlnvQdLcntHdrRepository;
+import com.tcdt.qlnvhang.repository.QlnvQdLcntVtuHdrRepository;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.QlnvQdLcntDtlCtietReq;
 import com.tcdt.qlnvhang.request.object.QlnvQdLcntDtlReq;
 import com.tcdt.qlnvhang.request.object.QlnvQdLcntHdrReq;
+import com.tcdt.qlnvhang.request.object.QlnvQdLcntVtuDtlCtietReq;
+import com.tcdt.qlnvhang.request.object.QlnvQdLcntVtuDtlReq;
+import com.tcdt.qlnvhang.request.object.QlnvQdLcntVtuHdrReq;
 import com.tcdt.qlnvhang.request.search.QlnvQdLcntHdrDChinhSearchReq;
+import com.tcdt.qlnvhang.request.search.QlnvQdLcntVtuHdrDChinhSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.secification.QlnvQdLcntSpecification;
+import com.tcdt.qlnvhang.secification.QlnvQdLcntVtuSpecification;
 import com.tcdt.qlnvhang.table.QlnvQdLcntDtl;
 import com.tcdt.qlnvhang.table.QlnvQdLcntDtlCtiet;
 import com.tcdt.qlnvhang.table.QlnvQdLcntHdr;
+import com.tcdt.qlnvhang.table.QlnvQdLcntVtuDtl;
+import com.tcdt.qlnvhang.table.QlnvQdLcntVtuDtlCtiet;
+import com.tcdt.qlnvhang.table.QlnvQdLcntVtuHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import com.tcdt.qlnvhang.util.PaginationSet;
@@ -50,29 +59,29 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = PathContains.QL_QD_LCNT + PathContains.DIEU_CHINH)
-@Api(tags = "Quyết định điều chỉnh phê duyệt KHLCNT")
-public class QlnvQdLcntHdrDChinhController extends BaseController {
+@RequestMapping(value = PathContains.QL_QD_LCNT_VTU + PathContains.DIEU_CHINH)
+@Api(tags = "Quyết định điều chỉnh phê duyệt KHLCNT vật tư")
+public class QlnvQdLcntVtuHdrDChinhController extends BaseController {
 	@Autowired
-	private QlnvQdLcntHdrRepository qlnvQdLcntHdrRepository;
+	private QlnvQdLcntVtuHdrRepository qlnvQdLcntVtuHdrRepository;
 	
 	/**
 	 * DIEU CHINH- search
 	 * @param objReq
 	 * @return
 	 */
-	@ApiOperation(value = "Tra cứu Quyết định điều chỉnh phê duyệt KHLCNT", response = List.class)
+	@ApiOperation(value = "Tra cứu Quyết định điều chỉnh phê duyệt KHLCNT vật tư", response = List.class)
 	@PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<BaseResponse> selectAll(@Valid @RequestBody QlnvQdLcntHdrDChinhSearchReq objReq) {
+	public ResponseEntity<BaseResponse> selectAll(@Valid @RequestBody QlnvQdLcntVtuHdrDChinhSearchReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
 			int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
 			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
-
 			objReq.setLoaiQd(Contains.QUYET_DINH_DC);
-			Page<QlnvQdLcntHdr> qhKho = qlnvQdLcntHdrRepository.findAll(QlnvQdLcntSpecification.buildSearchQuery(objReq), pageable);
+
+			Page<QlnvQdLcntVtuHdr> qhKho = qlnvQdLcntVtuHdrRepository.findAll(QlnvQdLcntVtuSpecification.buildSearchQuery(objReq), pageable);
 
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
@@ -91,18 +100,18 @@ public class QlnvQdLcntHdrDChinhController extends BaseController {
 	 * @param objReq
 	 * @return
 	 */
-	@ApiOperation(value = "Tạo Quyết định điều chỉnh qđ phê duyệt KHLCNT", response = List.class)
+	@ApiOperation(value = "Tạo Quyết định điều chỉnh qđ phê duyệt KHLCNT vật tư", response = List.class)
 	@PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> createDchinh(HttpServletRequest request,@Valid @RequestBody QlnvQdLcntHdrReq objReq) {
+	public ResponseEntity<BaseResponse> createDchinh(HttpServletRequest request,@Valid @RequestBody QlnvQdLcntVtuHdrReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			if (StringUtils.isEmpty(objReq.getId()))
 				throw new Exception("Tạo thất bại, không tìm thấy dữ liệu");
-			Optional<QlnvQdLcntHdr> QlnvQdLcntHdr = qlnvQdLcntHdrRepository.findById(Long.valueOf(objReq.getId()));
-			if (!QlnvQdLcntHdr.isPresent())
+			Optional<QlnvQdLcntVtuHdr> optional = qlnvQdLcntVtuHdrRepository.findById(Long.valueOf(objReq.getId()));
+			if (!optional.isPresent())
 				throw new Exception("Không tìm thấy dữ liệu cần tạo");
 			
-			QlnvQdLcntHdr dataDTB = QlnvQdLcntHdr.get();
+			QlnvQdLcntVtuHdr dataDTB = optional.get();
 			
 			// build request
 //			List<QlnvQdLcntDtl> khoachList = dataDTB.getDetailList();
@@ -142,34 +151,32 @@ public class QlnvQdLcntHdrDChinhController extends BaseController {
 			
 			// TODO: review 
 			objReq.setSoQdinhGoc(dataDTB.getSoQdinh());
-			objReq.setSoQdGiaoCtkh(dataDTB.getSoQdGiaoCtkh());
-			objReq.setNguonvon(dataDTB.getNguonvon());
 			objReq.setLoaiQd(Contains.QUYET_DINH_DC);
-			objReq.setNgayQdGoc(dataDTB.getNgayQd());
+			
 			// create new qd
-			QlnvQdLcntHdr qdDc = new ModelMapper().map(objReq, QlnvQdLcntHdr.class);
+			QlnvQdLcntVtuHdr qdDc = new ModelMapper().map(objReq, QlnvQdLcntVtuHdr.class);
 			qdDc.setId(null);
 			qdDc.setNgayTao(getDateTimeNow());
 			qdDc.setTrangThai(Contains.TAO_MOI);
 			qdDc.setNguoiTao(getUserName(request));
 			qdDc.setNgayQd(getDateTimeNow());
 			
-			List<QlnvQdLcntDtlReq> dtlReqList = objReq.getDetail();
-			List<QlnvQdLcntDtl> details = new ArrayList<>();
+			List<QlnvQdLcntVtuDtlReq> dtlReqList = objReq.getDetail();
+			List<QlnvQdLcntVtuDtl> details = new ArrayList<>();
 			if (dtlReqList != null) {
-				List<QlnvQdLcntDtlCtiet> detailChild;
-				for (QlnvQdLcntDtlReq dtlReq : dtlReqList) {
-					List<QlnvQdLcntDtlCtietReq> cTietReq = dtlReq.getDetail();
-					QlnvQdLcntDtl detail = ObjectMapperUtils.map(dtlReq, QlnvQdLcntDtl.class);
-					detailChild = new ArrayList<QlnvQdLcntDtlCtiet>();
+				List<QlnvQdLcntVtuDtlCtiet> detailChild;
+				for (QlnvQdLcntVtuDtlReq dtlReq : dtlReqList) {
+					List<QlnvQdLcntVtuDtlCtietReq> cTietReq = dtlReq.getDetail();
+					QlnvQdLcntVtuDtl detail = ObjectMapperUtils.map(dtlReq, QlnvQdLcntVtuDtl.class);
+					detailChild = new ArrayList<QlnvQdLcntVtuDtlCtiet>();
 					if (cTietReq != null)
-						detailChild = ObjectMapperUtils.mapAll(cTietReq, QlnvQdLcntDtlCtiet.class);
+						detailChild = ObjectMapperUtils.mapAll(cTietReq, QlnvQdLcntVtuDtlCtiet.class);
 					detail.setDetailList(detailChild);
 					details.add(detail);
 				}
 				qdDc.setDetailList(details);
 			}
-			qlnvQdLcntHdrRepository.save(qdDc);
+			qlnvQdLcntVtuHdrRepository.save(qdDc);
 			
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
@@ -183,54 +190,50 @@ public class QlnvQdLcntHdrDChinhController extends BaseController {
 		return ResponseEntity.ok(resp);
 	}
 	
-	@ApiOperation(value = "Cập nhật Quyết định điều chỉnh qđ phê duyệt KHLCNT", response = List.class)
+	@ApiOperation(value = "Cập nhật Quyết định điều chỉnh qđ phê duyệt KHLCNT vật tư", response = List.class)
 	@PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> update(HttpServletRequest request,@Valid @RequestBody QlnvQdLcntHdrReq objReq) {
+	public ResponseEntity<BaseResponse> update(HttpServletRequest request,@Valid @RequestBody QlnvQdLcntVtuHdrReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			if (StringUtils.isEmpty(objReq.getId()))
 				throw new Exception("Sửa thất bại, không tìm thấy dữ liệu");
-			Optional<QlnvQdLcntHdr> QlnvQdLcntHdr = qlnvQdLcntHdrRepository.findById(Long.valueOf(objReq.getId()));
+			Optional<QlnvQdLcntVtuHdr> optional = qlnvQdLcntVtuHdrRepository.findById(Long.valueOf(objReq.getId()));
 			
-			if (!QlnvQdLcntHdr.isPresent())
+			if (!optional.isPresent())
 				throw new Exception("Không tìm thấy dữ liệu cần sửa");
 			
-			QlnvQdLcntHdr dataDTB = QlnvQdLcntHdr.get();
+			QlnvQdLcntVtuHdr dataDTB = optional.get();
 			
 			if (!Contains.QUYET_DINH_DC.equalsIgnoreCase(dataDTB.getLoaiQd()))
 				throw new Exception("Không tìm thấy dữ liệu cần sửa");
 			
 			String soQdinhGoc = dataDTB.getSoQdinhGoc();
-			String soQdGiaoCtkh = dataDTB.getSoQdGiaoCtkh();
-			String nguonvon = dataDTB.getNguonvon();
 			
-			QlnvQdLcntHdr dataMap = new ModelMapper().map(objReq, QlnvQdLcntHdr.class);
+			QlnvQdLcntVtuHdr dataMap = new ModelMapper().map(objReq, QlnvQdLcntVtuHdr.class);
 			
 			updateObjectToObject(dataDTB, dataMap);
 			dataDTB.setNgaySua(getDateTimeNow());
 			dataDTB.setNguoiSua(getUserName(request));
 			dataDTB.setSoQdinhGoc(soQdinhGoc);
-			dataDTB.setSoQdGiaoCtkh(soQdGiaoCtkh);
-			dataDTB.setNguonvon(nguonvon);
 			dataDTB.setLoaiDieuChinh(Contains.QUYET_DINH_DC);
 			
-			List<QlnvQdLcntDtlReq> dtlReqList = objReq.getDetail();
-			List<QlnvQdLcntDtl> details = new ArrayList<>();
+			List<QlnvQdLcntVtuDtlReq> dtlReqList = objReq.getDetail();
+			List<QlnvQdLcntVtuDtl> details = new ArrayList<>();
 			if (dtlReqList != null) {
-				List<QlnvQdLcntDtlCtiet> detailChild;
-				for (QlnvQdLcntDtlReq dtlReq : dtlReqList) {
-					List<QlnvQdLcntDtlCtietReq> cTietReq = dtlReq.getDetail();
-					QlnvQdLcntDtl detail = ObjectMapperUtils.map(dtlReq, QlnvQdLcntDtl.class);
-					detailChild = new ArrayList<QlnvQdLcntDtlCtiet>();
+				List<QlnvQdLcntVtuDtlCtiet> detailChild;
+				for (QlnvQdLcntVtuDtlReq dtlReq : dtlReqList) {
+					List<QlnvQdLcntVtuDtlCtietReq> cTietReq = dtlReq.getDetail();
+					QlnvQdLcntVtuDtl detail = ObjectMapperUtils.map(dtlReq, QlnvQdLcntVtuDtl.class);
+					detailChild = new ArrayList<QlnvQdLcntVtuDtlCtiet>();
 					if (cTietReq != null)
-						detailChild = ObjectMapperUtils.mapAll(cTietReq, QlnvQdLcntDtlCtiet.class);
+						detailChild = ObjectMapperUtils.mapAll(cTietReq, QlnvQdLcntVtuDtlCtiet.class);
 					detail.setDetailList(detailChild);
 					details.add(detail);
 				}
 				dataMap.setDetailList(details);
 			}
 			
-			qlnvQdLcntHdrRepository.save(dataDTB);
+			qlnvQdLcntVtuHdrRepository.save(dataDTB);
 			resp.setData(dataDTB);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
@@ -243,7 +246,7 @@ public class QlnvQdLcntHdrDChinhController extends BaseController {
 		return ResponseEntity.ok(resp);
 	}
 	
-	@ApiOperation(value = "Lấy chi tiết thông tin Quyết định điều chỉnh qđ phê duyệt KHLCNT", response = List.class)
+	@ApiOperation(value = "Lấy chi tiết thông tin Quyết định điều chỉnh qđ phê duyệt KHLCNT vật tư", response = List.class)
 	@GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<BaseResponse> detail(
@@ -252,7 +255,7 @@ public class QlnvQdLcntHdrDChinhController extends BaseController {
 		try {
 			if (StringUtils.isEmpty(ids))
 				throw new UnsupportedOperationException("Không tồn tại bản ghi");
-			Optional<QlnvQdLcntHdr> qOptional = qlnvQdLcntHdrRepository.findById(Long.parseLong(ids));
+			Optional<QlnvQdLcntVtuHdr> qOptional = qlnvQdLcntVtuHdrRepository.findById(Long.parseLong(ids));
 			if (!qOptional.isPresent())
 				throw new UnsupportedOperationException("Không tồn tại bản ghi");
 			resp.setData(qOptional);
@@ -265,7 +268,7 @@ public class QlnvQdLcntHdrDChinhController extends BaseController {
 		}
 		return ResponseEntity.ok(resp);
 	}
-	@ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03/Xoá-04 Quyết định điều chỉnh qđ phê duyệt KHLCNT", response = List.class)
+	@ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03/Xoá-04 Quyết định điều chỉnh qđ phê duyệt KHLCNT vật tư", response = List.class)
 	@PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> updateStatus(HttpServletRequest request,@Valid  @RequestBody StatusReq stReq) {
 		BaseResponse resp = new BaseResponse();
@@ -273,7 +276,7 @@ public class QlnvQdLcntHdrDChinhController extends BaseController {
 			if (StringUtils.isEmpty(stReq.getId()))
 				throw new Exception("Không tìm thấy dữ liệu");
 
-			Optional<QlnvQdLcntHdr> qdLcnt = qlnvQdLcntHdrRepository.findById(Long.valueOf(stReq.getId()));
+			Optional<QlnvQdLcntVtuHdr> qdLcnt = qlnvQdLcntVtuHdrRepository.findById(Long.valueOf(stReq.getId()));
 			if (!qdLcnt.isPresent())
 				throw new Exception("Không tìm thấy dữ liệu");
 			qdLcnt.get().setTrangThai(stReq.getTrangThai());
@@ -294,7 +297,7 @@ public class QlnvQdLcntHdrDChinhController extends BaseController {
 				default:
 					break;
 			}
-			qlnvQdLcntHdrRepository.save(qdLcnt.get());
+			qlnvQdLcntVtuHdrRepository.save(qdLcnt.get());
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -305,7 +308,7 @@ public class QlnvQdLcntHdrDChinhController extends BaseController {
 		return ResponseEntity.ok(resp);
 	}
 	
-	@ApiOperation(value = "Xoá thông tin Quyết định điều chỉnh qđ phê duyệt KHLCNT", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value = "Xoá thông tin Quyết định điều chỉnh qđ phê duyệt KHLCNT vật tư", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
 	@PostMapping(value = PathContains.URL_XOA + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<BaseResponse> delete(@ApiParam(value = "ID kế hoạch lựa chọn nhà thầu", example = "1", required = true) @PathVariable("ids") String ids) {
@@ -313,10 +316,10 @@ public class QlnvQdLcntHdrDChinhController extends BaseController {
 		try {
 			if (StringUtils.isEmpty(ids))
 				throw new UnsupportedOperationException("Không tồn tại bản ghi");
-			Optional<QlnvQdLcntHdr> QlnvQdLcntHdr = qlnvQdLcntHdrRepository.findById(Long.parseLong(ids));
+			Optional<QlnvQdLcntVtuHdr> QlnvQdLcntHdr = qlnvQdLcntVtuHdrRepository.findById(Long.parseLong(ids));
 			if (!QlnvQdLcntHdr.isPresent())
 				throw new Exception("Không tìm thấy dữ liệu cần xoá");
-			qlnvQdLcntHdrRepository.delete(QlnvQdLcntHdr.get());
+			qlnvQdLcntVtuHdrRepository.delete(QlnvQdLcntHdr.get());
 			
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());

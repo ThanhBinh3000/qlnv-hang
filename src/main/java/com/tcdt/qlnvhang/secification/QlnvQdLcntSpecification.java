@@ -15,7 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.tcdt.qlnvhang.request.IdSearchReq;
-import com.tcdt.qlnvhang.request.search.QlnvQdLcntHdrDchinhSearchReq;
+import com.tcdt.qlnvhang.request.search.QlnvQdLcntHdrDChinhSearchReq;
 import com.tcdt.qlnvhang.request.search.QlnvQdLcntHdrSearchReq;
 import com.tcdt.qlnvhang.table.QlnvQdLcntDtl;
 import com.tcdt.qlnvhang.table.QlnvQdLcntHdr;
@@ -181,7 +181,7 @@ public class QlnvQdLcntSpecification {
 		};
 	}
 	
-	public static Specification<QlnvQdLcntHdr> buildSearchQuery(final QlnvQdLcntHdrDchinhSearchReq objReq) {
+	public static Specification<QlnvQdLcntHdr> buildSearchQuery(final QlnvQdLcntHdrDChinhSearchReq objReq) {
 		return new Specification<QlnvQdLcntHdr>() {
 			/**
 			 * 

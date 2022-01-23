@@ -59,5 +59,7 @@ public class QlnvQdLcntVtuHdrReq {
 	@Size(max = 50, message = "Loại điều chỉnh không được vượt quá 50 ký tự")
 	String loaiDieuChinh;
 	
+	String loaiQd;
+	
 	private List<QlnvQdLcntVtuDtlReq> detail;
 }
