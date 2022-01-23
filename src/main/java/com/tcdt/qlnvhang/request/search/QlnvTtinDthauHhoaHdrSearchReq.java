@@ -1,15 +1,15 @@
 package com.tcdt.qlnvhang.request.search;
 
-import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.BaseRequest;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 
 @Data
-public class QlnvTtinDthauHhoaHdrSearchReq {
+@EqualsAndHashCode(callSuper = false)
+public class QlnvTtinDthauHhoaHdrSearchReq extends BaseRequest{
 
 	String soQdKh;
 	String maHhoa;
-	
-	PaggingReq paggingReq;
-	
+	String tenHhoa;
 }

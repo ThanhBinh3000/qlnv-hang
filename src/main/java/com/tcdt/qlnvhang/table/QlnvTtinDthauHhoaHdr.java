@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.table;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,13 +27,14 @@ public class QlnvTtinDthauHhoaHdr implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "QLNV_TTIN_DTHAU_HHOA_HDR_SEQ")
 	@SequenceGenerator(sequenceName = "QLNV_TTIN_DTHAU_HHOA_HDR_SEQ", allocationSize = 1, name = "QLNV_TTIN_DTHAU_HHOA_HDR_SEQ")
 	private Long id;
 	String maDvi;
 	String soQdKh;
-	String ngayQdKh;
+	Date ngayQdKh;
 	String maHhoa;
 	String tenHhoa;
 	String dviTinh;
@@ -42,12 +42,17 @@ public class QlnvTtinDthauHhoaHdr implements Serializable {
 	String soQdLquan;
 	String moTa;
 	String trangThai;
-	@JsonFormat(pattern = "yyyy-MM-dd")
 	Date ngayTao;
 	String nguoiTao;
-	@JsonFormat(pattern = "yyyy-MM-dd")
 	Date ngaySua;
 	String nguoiSua;
+	String tenPage;
+	Date ngayDangPage;
+	Date tuNgayPhanhHsmt;
+	Date denNgayPhanhHsmt;
+	Date ngayMothau;
+	Date ngayDongthau;
+	
 	@OneToMany(
 	        mappedBy = "header",
 	        		fetch = FetchType.LAZY, cascade = CascadeType.ALL,
