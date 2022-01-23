@@ -78,6 +78,12 @@ public class Contains {
 	// Loai hop dong
 	public static final String HD_MUA = "00";
 	public static final String HD_BAN = "01";
+	
+	// Loai hop dong thong tin dau thau vat tu
+	public static final String HD_VT_TRON_GOI = "00";
+	public static final String HD_VT_THEO_DON_GIA = "01";
+	public static final String HD_VT_THEO_DON_GIA_DIEU_CHINH = "02";
+	public static final String HD_VT_THEO_THOI_GIAN = "03";
 
 	// Loai quyet dinh
 	public static final String QD_MUA = "00";
