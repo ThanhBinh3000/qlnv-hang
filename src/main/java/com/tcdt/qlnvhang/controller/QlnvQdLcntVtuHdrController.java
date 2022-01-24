@@ -206,7 +206,7 @@ public class QlnvQdLcntVtuHdrController extends BaseController {
 	@GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<BaseResponse> detail(
-			@ApiParam(value = "ID Quyết định phê duyệt KHLCNT", example = "1", required = true) @PathVariable("ids") String ids) {
+			@ApiParam(value = "ID Quyết định phê duyệt KHLCNT vật tư", example = "1", required = true) @PathVariable("ids") String ids) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			if (StringUtils.isEmpty(ids))

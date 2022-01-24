@@ -19,7 +19,7 @@ public class QlnvQdLcntVtuHdrReq {
 	
 	@NotNull(message = "Không được để trống")
 	@Size(max = 50, message = "Số quyết định không được vượt quá 50 ký tự")
-	@ApiModelProperty(example = "SHD001")
+	@ApiModelProperty(example = "SQD001")
 	String soQdinh;
 	
 	@NotNull(message = "Không được để trống")
@@ -42,7 +42,7 @@ public class QlnvQdLcntVtuHdrReq {
 	
 	String soQdinhGoc;
 	
-	@Size(max = 50, message = "Lý do từ chối không được vượt quá 50 ký tự")
+	@Size(max = 250, message = "Lý do từ chối không được vượt quá 250 ký tự")
 	String ldoTuchoi;
 	
 	@NotNull(message = "Không được để trống")

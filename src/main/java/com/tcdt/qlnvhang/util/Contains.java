@@ -101,6 +101,14 @@ public class Contains {
 	public static final String DX_THANH_LY = "00";
 	public static final String DX_TIEU_HUY = "01";
 	
+	// Loai hang
+	public static final String VAT_TU = "00";
+	public static final String LUONG_THUC_MUOI = "01";
+	
+	// Ket qua dau thau
+	public static final String DUYET_THAU = "00";
+	public static final String HUY_THAU = "01";
+	
 	public static final Map<String, String> mappingLoaiDx;
 	static {
 		mappingLoaiDx = Maps.<String, String>buildMap()

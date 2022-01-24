@@ -24,6 +24,7 @@ public class PathContains {
 	public static final String QL_QD_LCNT_VTU = "/qd-lcnt-vtu";
 	public static final String QL_TTIN_DTHAU_VTU = "/ql-ttin-dthau-vtu";
 	public static final String QL_TTIN_DTHAU_HHOA = "/ql-ttin-dthau-hhoa";
+	public static final String QL_QDKQ_LCNT = "/ql-qdkq-lcnt";
 	
 	// 5.2 Quan ly lua chon nha cung cap theo phuong thuc truc tiep
 	public static final String QL_NHA_CCAP = "/ql-nha-ccap";
