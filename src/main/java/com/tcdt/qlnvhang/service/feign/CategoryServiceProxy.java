@@ -12,7 +12,7 @@ import com.tcdt.qlnvhang.request.BaseRequest;
 
 import feign.Headers;
 
-@FeignClient(name = "qlnv-category", url = "http://192.168.1.62:8762/qlnv-gateway/qlnv-category")
+@FeignClient(name = "qlnv-category")
 public interface CategoryServiceProxy {
 
 	@GetMapping("/dmuc-donvi/chi-tiet/{ids}")
