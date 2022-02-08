@@ -38,6 +38,8 @@ public class Contains {
 	public static final String TK_DUYET = "06";// Trang thai trung gian, thu kho phe duyet
 	public static final String KTV_DUYET = "07";// Trang thai trung gian, ky thuat vien phe duyet
 	public static final String KTT_DUYET = "08";// Trang thai trung gian, ke toan truong phe duyet
+	public static final String TPHONG_DUYET = "09"; // Trang thai Truong phong duyet
+	public static final String LANHDAO_DUYET = "10"; // Trang thai Lanh dao duyet
 
 
 	// Trang thai response
@@ -96,7 +98,16 @@ public class Contains {
 	public static final String XK_VIEN_TRO = "01";
 	public static final String XK_KIEM_TRA = "02";
 	public static final String XK_XUAT_KHAC = "03";
-
+	
+	// Loai hinh xuat
+	public static final String LHX_THANH_LY = "00";
+	public static final String LHX_TIEU_HUY = "01";
+	
+	// Trang thai xuat
+	public static final String TTHAI_XUAT_CHUA_HTHANH = "00";
+	public static final String TTHAI_XUAT_HTHANH = "01";
+	
+	
 	public static final Map<String, String> mappingLoaiDc;
 	static {
 		mappingLoaiDc = Maps.<String, String>buildMap().put(Contains.DC_GIA, "Điều chỉnh giá")

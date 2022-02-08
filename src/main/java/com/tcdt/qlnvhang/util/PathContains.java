@@ -46,4 +46,8 @@ public class PathContains {
 	// 5.9 Quản lý xuất khác 
 	public static final String QL_DXUAT_KH_XUATKHAC = "/ql-dxuat-kh-xuatkhac";
 	public static final String QL_QD_DXUAT_KH_XUATKHAC = "/ql-qd-dxuat-kh-xuatkhac";
+	
+	// 5.10.4 Báo cáo kết quả Thanh lý, Tiêu hủy hàng DTQG
+	
+	public static final String BC_KQ_TLTH = "/bc-kq-tlth";
 }
