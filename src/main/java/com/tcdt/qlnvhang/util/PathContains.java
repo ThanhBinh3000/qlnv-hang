@@ -56,6 +56,7 @@ public class PathContains {
 	// 5.7	Quản lý xuất hàng DTQG
 	public static final String QL_XUAT_HANG = "/ql-xuat-hang";
 	public static final String BIEN_BAN_TINH_KHO = "/bien-ban-tinh-kho";
+	public static final String BIEN_BAN_HAO_DOI = "/bien-ban-hao-doi";
 	
 	// 5.10	Quản lý xuất thanh lý, tiêu hủy
 	public static final String QL_XTLTH = "/ql-xtlth";
