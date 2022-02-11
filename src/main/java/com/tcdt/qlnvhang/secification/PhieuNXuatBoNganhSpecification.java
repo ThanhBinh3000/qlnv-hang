@@ -4,8 +4,6 @@ import java.util.Date;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -14,21 +12,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.data.jpa.domain.Specification;
 
-import com.tcdt.qlnvhang.request.search.QlnvQdDChuyenHangSearchReq;
-import com.tcdt.qlnvhang.table.QlnvQdDChuyenHangDtl;
-import com.tcdt.qlnvhang.table.QlnvQdDChuyenHangHdr;
+import com.tcdt.qlnvhang.request.search.QlnvPhieuNhapxuatSearchReq;
+import com.tcdt.qlnvhang.table.QlnvPhieuNXuatBoNganhHdr;
 
-public class QdinhDChuyenHangSpecification {
-
-	public static Specification<QlnvQdDChuyenHangHdr> buildSearchQuery(final QlnvQdDChuyenHangSearchReq req) {
-		return new Specification<QlnvQdDChuyenHangHdr>() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
+public class PhieuNXuatBoNganhSpecification {
+	@SuppressWarnings("serial")
+	public static Specification<QlnvPhieuNXuatBoNganhHdr> buildSearchQuery(final QlnvPhieuNhapxuatSearchReq req) {
+		return new Specification<QlnvPhieuNXuatBoNganhHdr>() {
 			@Override
-			public Predicate toPredicate(Root<QlnvQdDChuyenHangHdr> root, CriteriaQuery<?> query,
+			public Predicate toPredicate(Root<QlnvPhieuNXuatBoNganhHdr> root, CriteriaQuery<?> query,
 					CriteriaBuilder builder) {
 				Predicate predicate = builder.conjunction();
 				if (req != null) {
@@ -37,37 +29,35 @@ public class QdinhDChuyenHangSpecification {
 					Date tuNgay = req.getTuNgayLap();
 					Date denNgay = req.getDenNgayLap();
 					String maHhoa = req.getMaHhoa();
-					String soQdinh = req.getSoQdinh();
-					String hthucDChuyen = req.getHthucDchuyen();
-					String maDviDen = req.getMaDviDen();
-					root.fetch("children", JoinType.LEFT);
+					String soQdinh = req.getSoQdinhNhapxuat();
+					String lhinhNhapxuat = req.getLhinhNhapxuat();
+					String soPhieu = req.getSoPhieu();
 
 					if (ObjectUtils.isNotEmpty(tuNgay) && ObjectUtils.isNotEmpty(denNgay)) {
 						predicate.getExpressions()
-								.add(builder.and(builder.greaterThanOrEqualTo(root.get("ngayQdinh"), tuNgay)));
+								.add(builder.and(builder.greaterThanOrEqualTo(root.get("ngayLap"), tuNgay)));
 						predicate.getExpressions().add(builder.and(
-								builder.lessThan(root.get("ngayQdinh"), new DateTime(denNgay).plusDays(1).toDate())));
+								builder.lessThan(root.get("ngayLap"), new DateTime(denNgay).plusDays(1).toDate())));
 					}
 
 					if (StringUtils.isNotBlank(maDvi)) {
 						predicate.getExpressions().add(builder.and(builder.equal(root.get("maDvi"), maDvi)));
 					}
+					if (StringUtils.isNotBlank(soPhieu)) {
+						predicate.getExpressions().add(builder.and(builder.equal(root.get("soPhieu"), soPhieu)));
+					}
 					if (StringUtils.isNotBlank(trangThai)) {
 						predicate.getExpressions().add(builder.and(builder.equal(root.get("trangThai"), trangThai)));
 					}
 					if (StringUtils.isNotBlank(soQdinh)) {
-						predicate.getExpressions().add(builder.and(builder.equal(root.get("soQdinh"), soQdinh)));
+						predicate.getExpressions().add(builder.and(builder.equal(root.get("soQdinhNhapxuat"), soQdinh)));
 					}
-					if (StringUtils.isNotBlank(hthucDChuyen)) {
+					if (StringUtils.isNotBlank(lhinhNhapxuat)) {
 						predicate.getExpressions()
-								.add(builder.and(builder.equal(root.get("hthucDchuyen"), hthucDChuyen)));
+								.add(builder.and(builder.equal(root.get("lhinhNhapxuat"), lhinhNhapxuat)));
 					}
 					if (StringUtils.isNotBlank(maHhoa)) {
 						predicate.getExpressions().add(builder.and(builder.equal(root.get("maHhoa"), maHhoa)));
-					}
-					if (StringUtils.isNotBlank(maDviDen)) {
-						Join<QlnvQdDChuyenHangHdr, QlnvQdDChuyenHangDtl> joinQuerry = root.join("children");
-						predicate.getExpressions().add(builder.and(builder.equal(joinQuerry.get("maDvi"), maDviDen)));
 					}
 				}
 				return predicate;
