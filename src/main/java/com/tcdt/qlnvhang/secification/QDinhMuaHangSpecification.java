@@ -9,7 +9,6 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Subquery;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.ObjectUtils;
@@ -21,12 +20,11 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.search.QlnvDxkhMuaHangThopSearchReq;
 import com.tcdt.qlnvhang.request.search.QlnvQdMuaHangSearchAdjustReq;
 import com.tcdt.qlnvhang.request.search.QlnvQdMuaHangSearchReq;
-import com.tcdt.qlnvhang.table.QlnvDxkhMuaHangDtl;
 import com.tcdt.qlnvhang.table.QlnvDxkhMuaHangHdr;
+import com.tcdt.qlnvhang.table.QlnvQdMuaHangDtl;
 import com.tcdt.qlnvhang.table.QlnvQdMuaHangHdr;
 import com.tcdt.qlnvhang.table.QlnvQdMuattDtl;
 import com.tcdt.qlnvhang.table.QlnvQdMuattHdr;
-import com.tcdt.qlnvhang.util.Contains;
 
 public class QDinhMuaHangSpecification {	
 
@@ -187,7 +185,7 @@ public class QDinhMuaHangSpecification {
 				String maDvi = objReq.getMaDvi();
 
 				root.fetch("children", JoinType.LEFT);
-				Join<QlnvQdMuattHdr, QlnvQdMuattDtl> joinQuerry = root.join("children");
+				Join<QlnvQdMuaHangHdr, QlnvQdMuaHangDtl> joinQuerry = root.join("children");
 
 				predicate.getExpressions().add(builder.and(builder.equal(root.get("id"), id)));
 				if (StringUtils.isNotBlank(maDvi))
@@ -197,44 +195,38 @@ public class QDinhMuaHangSpecification {
 			}
 		};
 	}
-	public static Specification<QlnvDxkhMuaHangDtl> buildTHopQuery(final QlnvDxkhMuaHangThopSearchReq objReq) {
-		return new Specification<QlnvDxkhMuaHangDtl>() {
+	public static Specification<QlnvDxkhMuaHangHdr> buildTHopQuery(final QlnvDxkhMuaHangThopSearchReq req) {
+		return new Specification<QlnvDxkhMuaHangHdr>() {
 			/**
 			 * 
 			 */
 			private static final long serialVersionUID = -2124090610735753749L;
 
 			@Override
-			public Predicate toPredicate(Root<QlnvDxkhMuaHangDtl> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
-				Predicate predicate1 = builder.conjunction();
+			public Predicate toPredicate(Root<QlnvDxkhMuaHangHdr> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
 				Predicate predicate = builder.conjunction();
-				if (ObjectUtils.isEmpty(objReq))
-					return predicate1;
+				if (req != null) {
+					String trangThai = req.getTrangThai();
+					String maHhoa = req.getMaHhoa();
+					String soQDKhoach = req.getSoQdKhoach();
+					String pthucBan = req.getPthucBan();
+					root.fetch("children", JoinType.LEFT);					
 
-				String trangThai = Contains.DUYET;
-				String maDvi = objReq.getMaDvi();
-				String maHhoa = objReq.getMaHhoa();
-				String soQdKhoach = objReq.getSoQdKhoach();
-				root.fetch("children", JoinType.LEFT);
-
-				Subquery<QlnvDxkhMuaHangHdr> hdrQuery = query.subquery(QlnvDxkhMuaHangHdr.class);
-				Root<QlnvDxkhMuaHangHdr> hdr = hdrQuery.from(QlnvDxkhMuaHangHdr.class);
-
-				if (StringUtils.isNotBlank(maDvi))
-					predicate.getExpressions().add(builder.and(builder.equal(hdr.get("maDvi"), maDvi)));
-
-				if (StringUtils.isNotBlank(trangThai))
-					predicate.getExpressions().add(builder.and(builder.equal(hdr.get("trangThai"), trangThai)));
-
-				if (StringUtils.isNotBlank(soQdKhoach))
-					predicate.getExpressions().add(builder.and(builder.equal(hdr.get("soQdKhoach"), soQdKhoach)));
-
-				if (StringUtils.isNotBlank(maHhoa))
-					predicate.getExpressions().add(builder.and(builder.equal(hdr.get("maHanghoa"), maHhoa)));
-
-				predicate1.getExpressions().add(root.get("parent").in(hdrQuery.select(hdr).where(predicate)));
-
-				return predicate1;
+					if (StringUtils.isNotBlank(pthucBan)) {
+						predicate.getExpressions().add(builder.and(builder.equal(root.get("pthucBan"), pthucBan)));
+					}
+					if (StringUtils.isNotBlank(trangThai)) {
+						predicate.getExpressions().add(builder.and(builder.equal(root.get("trangThai"), trangThai)));
+					}
+					
+					if (StringUtils.isNotBlank(soQDKhoach)) {
+						predicate.getExpressions().add(builder.and(builder.equal(root.get("soQdKhoach"), soQDKhoach)));
+					}
+					if (StringUtils.isNotBlank(maHhoa)) {
+						predicate.getExpressions().add(builder.and(builder.equal(root.get("maHhoa"), maHhoa)));
+					}
+				}
+				return predicate;
 			}
 		};
 	}
