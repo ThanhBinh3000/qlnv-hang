@@ -12,7 +12,6 @@
 	<groupId>com.tcdt</groupId>
 	<artifactId>qlnv-hang</artifactId>
 	<version>0.0.1</version>
-	<!-- <packaging>war</packaging> -->
 	<name>qlnv-hang</name>
 	<description>qlnv-hang project for Spring Boot</description>
 	<properties>

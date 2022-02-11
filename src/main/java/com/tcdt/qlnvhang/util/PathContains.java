@@ -40,6 +40,17 @@ public class PathContains {
 	public static final String QL_QD_BANHANG = "/qlyqd-banhang";
 	public static final String QL_TTIN_DGIA_HANG = "/ttin-dgia-hang";
 	public static final String QL_QDKQ_DGIA_HANG = "/qdkq-dgia-hang";
+
+	// 5.8 Quản lý điều chuyển hàng DTQG
+	public static final String QL_DCHANG = "/ql-dchang";
 	public static final String QL_DXKH_DCHANG = "/qldxkh-dchang";
 	public static final String QL_QD_DCHANG = "/qlqd-dchang";
+	public static final String QL_KQ_DCHANG = "/qlkq-dchang";
+	// 5.11 Quản lý phiếu nhập, xuất kho hàng DTQG của các Bộ ngành
+	public static final String QL_BONGANH = "/ql-bonganh";
+	public static final String QL_PHIEU_BONGANH = "/qlphieu-nxuat-bo";
+	// 4.3 Quản lý phương án giá mua, bán hàng DTQG
+	public static final String QL_PANGIA = "/ql-pangia";
+	public static final String QL_DX_PANGIA = "/ql-dxuat-gia";
+	public static final String QL_QD_PANGIA = "/qlyqd-pangia";
 }
