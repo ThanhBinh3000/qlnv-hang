@@ -38,7 +38,8 @@ public class Contains {
 	public static final String TK_DUYET = "06";// Trang thai trung gian, thu kho phe duyet
 	public static final String KTV_DUYET = "07";// Trang thai trung gian, ky thuat vien phe duyet
 	public static final String KTT_DUYET = "08";// Trang thai trung gian, ke toan truong phe duyet
-
+	public static final String TPHONG_DUYET = "09"; // Trang thai Truong phong duyet
+	public static final String LANHDAO_DUYET = "10"; // Trang thai Lanh dao duyet
 
 	// Trang thai response
 	public static final int RESP_SUCC = 0;
@@ -78,7 +79,7 @@ public class Contains {
 	// Loai hop dong
 	public static final String HD_MUA = "00";
 	public static final String HD_BAN = "01";
-	
+
 	// Loai hop dong thong tin dau thau vat tu
 	public static final String HD_VT_TRON_GOI = "00";
 	public static final String HD_VT_THEO_DON_GIA = "01";
@@ -96,27 +97,39 @@ public class Contains {
 	// Loai bang ke
 	public static final String BK_NHAP = "00";
 	public static final String BK_XUAT = "01";
-	
+
+	// Loai hinh xuat khac
+	public static final String XK_CUU_TRO = "00";
+	public static final String XK_VIEN_TRO = "01";
+	public static final String XK_KIEM_TRA = "02";
+	public static final String XK_XUAT_KHAC = "03";
+
+	// Loai hinh xuat
+	public static final String LHX_THANH_LY = "00";
+	public static final String LHX_TIEU_HUY = "01";
+
+	// Trang thai xuat
+	public static final String TTHAI_XUAT_CHUA_HTHANH = "00";
+	public static final String TTHAI_XUAT_HTHANH = "01";
+
 	// Loai de xuat
 	public static final String DX_THANH_LY = "00";
 	public static final String DX_TIEU_HUY = "01";
-	
+
 	// Loai hang
 	public static final String VAT_TU = "00";
 	public static final String LUONG_THUC_MUOI = "01";
-	
+
 	// Ket qua dau thau
 	public static final String DUYET_THAU = "00";
 	public static final String HUY_THAU = "01";
-	
+
 	public static final Map<String, String> mappingLoaiDx;
 	static {
-		mappingLoaiDx = Maps.<String, String>buildMap()
-				.put(Contains.DX_THANH_LY, "Thanh lý")
-				.put(Contains.DX_TIEU_HUY, "Tiêu hủy")
-				.get();
+		mappingLoaiDx = Maps.<String, String>buildMap().put(Contains.DX_THANH_LY, "Thanh lý")
+				.put(Contains.DX_TIEU_HUY, "Tiêu hủy").get();
 	}
-	
+
 	public static final Map<String, String> mappingLoaiDc;
 	static {
 		mappingLoaiDc = Maps.<String, String>buildMap().put(Contains.DC_GIA, "Điều chỉnh giá")
