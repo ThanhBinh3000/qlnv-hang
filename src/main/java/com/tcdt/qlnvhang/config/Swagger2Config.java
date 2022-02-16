@@ -48,6 +48,15 @@ public class Swagger2Config {
 				.securityContexts(Lists.newArrayList(securityContext())).apiInfo(apiEndPointsInfo())
 				.groupName("Quản lý nhập/xuất hàng");
 	}
+	
+	@Bean
+	public Docket api7() {
+		return new Docket(DocumentationType.SWAGGER_2).select()
+				.apis(RequestHandlerSelectors.basePackage("com.tcdt.qlnvhang.controller.banhang"))
+				.paths(PathSelectors.regex("/.*")).build().securitySchemes(Lists.newArrayList(apiKey()))
+				.securityContexts(Lists.newArrayList(securityContext())).apiInfo(apiEndPointsInfo())
+				.groupName("Quản lý lựa chọn đơn vị mua hàng");
+	}
 
 	@Bean
 	public Docket api4() {
@@ -56,6 +65,22 @@ public class Swagger2Config {
 				.paths(PathSelectors.regex("/.*")).build().securitySchemes(Lists.newArrayList(apiKey()))
 				.securityContexts(Lists.newArrayList(securityContext())).apiInfo(apiEndPointsInfo())
 				.groupName("Quản lý điều chuyển hàng");
+	}
+	@Bean
+	public Docket api5() {
+		return new Docket(DocumentationType.SWAGGER_2).select()
+				.apis(RequestHandlerSelectors.basePackage("com.tcdt.qlnvhang.controller.bonganh"))
+				.paths(PathSelectors.regex("/.*")).build().securitySchemes(Lists.newArrayList(apiKey()))
+				.securityContexts(Lists.newArrayList(securityContext())).apiInfo(apiEndPointsInfo())
+				.groupName("Quản lý nhập xuất hàng Bộ ngành");
+	}
+	@Bean
+	public Docket api6() {
+		return new Docket(DocumentationType.SWAGGER_2).select()
+				.apis(RequestHandlerSelectors.basePackage("com.tcdt.qlnvhang.controller.pangia"))
+				.paths(PathSelectors.regex("/.*")).build().securitySchemes(Lists.newArrayList(apiKey()))
+				.securityContexts(Lists.newArrayList(securityContext())).apiInfo(apiEndPointsInfo())
+				.groupName("Quản lý phương án giá mua, bán hàng DTQG");
 	}
 	private ApiInfo apiEndPointsInfo() {
 		return new ApiInfoBuilder().title("TCDT REST API").description("Quản lý API hệ thống Quản lý nghiệp vụ - TCDT")

@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -14,12 +15,18 @@ import org.joda.time.DateTime;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.tcdt.qlnvhang.request.search.QlnvQdDChuyenHangSearchReq;
+import com.tcdt.qlnvhang.table.QlnvQdDChuyenHangDtl;
 import com.tcdt.qlnvhang.table.QlnvQdDChuyenHangHdr;
 
 public class QdinhDChuyenHangSpecification {
-	@SuppressWarnings("serial")
+
 	public static Specification<QlnvQdDChuyenHangHdr> buildSearchQuery(final QlnvQdDChuyenHangSearchReq req) {
 		return new Specification<QlnvQdDChuyenHangHdr>() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public Predicate toPredicate(Root<QlnvQdDChuyenHangHdr> root, CriteriaQuery<?> query,
 					CriteriaBuilder builder) {
@@ -32,6 +39,7 @@ public class QdinhDChuyenHangSpecification {
 					String maHhoa = req.getMaHhoa();
 					String soQdinh = req.getSoQdinh();
 					String hthucDChuyen = req.getHthucDchuyen();
+					String maDviDen = req.getMaDviDen();
 					root.fetch("children", JoinType.LEFT);
 
 					if (ObjectUtils.isNotEmpty(tuNgay) && ObjectUtils.isNotEmpty(denNgay)) {
@@ -56,6 +64,10 @@ public class QdinhDChuyenHangSpecification {
 					}
 					if (StringUtils.isNotBlank(maHhoa)) {
 						predicate.getExpressions().add(builder.and(builder.equal(root.get("maHhoa"), maHhoa)));
+					}
+					if (StringUtils.isNotBlank(maDviDen)) {
+						Join<QlnvQdDChuyenHangHdr, QlnvQdDChuyenHangDtl> joinQuerry = root.join("children");
+						predicate.getExpressions().add(builder.and(builder.equal(joinQuerry.get("maDvi"), maDviDen)));
 					}
 				}
 				return predicate;

@@ -34,4 +34,7 @@ public class QlnvQdDChuyenHangSearchReq extends BaseRequest {
 
 	@ApiModelProperty(example = "1")
 	String hthucDchuyen;
+	
+	@ApiModelProperty(example = "HNO1")
+	String maDviDen;
 }

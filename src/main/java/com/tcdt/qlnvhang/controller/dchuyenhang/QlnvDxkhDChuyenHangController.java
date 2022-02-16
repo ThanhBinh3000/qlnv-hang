@@ -49,7 +49,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping(value = PathContains.QL_LCDVBH + PathContains.QL_DXKH_DCHANG)
+@RequestMapping(value = PathContains.QL_DCHANG + PathContains.QL_DXKH_DCHANG)
 @Api(tags = "Quản lý đề xuất kế hoạch điều chuyển hàng DTQG")
 public class QlnvDxkhDChuyenHangController extends BaseController {
 	@Autowired

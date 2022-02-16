@@ -1,17 +1,13 @@
 package com.tcdt.qlnvhang.request.object;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.Range;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.util.Contains;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -20,14 +16,46 @@ import lombok.Data;
 public class QlnvTtinDthauHhoaHdrReq {
 	@ApiModelProperty(notes = "Bắt buộc set đối với update")
 	Long id;
-	String maDvi;
-	String soQdKh;
-	String ngayQdKh;
+	
+	@NotNull(message = "Không được để trống")
+	@ApiModelProperty(example = "MH")
+	@Size(max = 50, message = "Mã hàng hóa không được vượt quá 50 ký tự")
 	String maHhoa;
+	
+	@NotNull(message = "Không được để trống")
+	@ApiModelProperty(example = "THH1")
+	@Size(max = 50, message = "Tên hàng hóa không được vượt quá 50 ký tự")
 	String tenHhoa;
+	
+	@NotNull(message = "Không được để trống")
+	@ApiModelProperty(example = "MDV1")
+	@Size(max = 50, message = "Mã đơn vị không được vượt quá 50 ký tự")
+	String maDvi;
+
+	@NotNull(message = "Không được để trống")
+	@ApiModelProperty(example = "SQDKH123")
+	@Size(max = 50, message = "Số quyết định KH không được vượt quá 50 ký tự")
+	String soQdKh;
+	
+	@NotNull(message = "Không được để trống")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date ngayQdKh;
+	
+	@NotNull(message = "Không được để trống")
+	@ApiModelProperty(example = "Tấn")
+	@Size(max = 50, message = "Đơn vị tính không được vượt quá 50 ký tự")
 	String dviTinh;
+	
+	@NotNull(message = "Không được để trống")
+	@ApiModelProperty(example = "nguonVon")
+	@Size(max = 50, message = "Nguồn vốn không được vượt quá 50 ký tự")
 	String nguonVon;
+	
+	@ApiModelProperty(example = "SQDLQ123")
+	@Size(max = 250, message = "Số quyết định liên quan không được vượt quá 250 ký tự")
 	String soQdLquan;
+	
+	@Size(max = 250, message = "Mô tả không được vượt quá 250 ký tự")
 	String moTa;
 	
 	private List<QlnvTtinDthauHhoaDtlReq> dtlList;

@@ -35,7 +35,7 @@ public class QlnvBbanNhapdayDtl implements Serializable {
 	String ghiChu;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_hdr")
+	@JoinColumn(name = "tcHdrId")
 	@JsonBackReference
 	private QlnvBbanNhapdayHdr parent;
 }

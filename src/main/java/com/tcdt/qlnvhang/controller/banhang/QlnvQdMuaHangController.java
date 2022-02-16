@@ -7,15 +7,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.persistence.EntityManager;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.ObjectUtils;
-import org.hibernate.Filter;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,7 +33,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
-import com.tcdt.qlnvhang.repository.QlnvDxkhBanHangDtlRepository;
 import com.tcdt.qlnvhang.repository.QlnvDxkhBanHangRepository;
 import com.tcdt.qlnvhang.repository.QlnvQdMuaHangHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -49,7 +45,7 @@ import com.tcdt.qlnvhang.request.search.QlnvQdMuaHangSearchAdjustReq;
 import com.tcdt.qlnvhang.request.search.QlnvQdMuaHangSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.secification.QDinhMuaHangSpecification;
-import com.tcdt.qlnvhang.table.QlnvDxkhMuaHangDtl;
+import com.tcdt.qlnvhang.table.QlnvDxkhMuaHangHdr;
 import com.tcdt.qlnvhang.table.QlnvQdMuaHangDtl;
 import com.tcdt.qlnvhang.table.QlnvQdMuaHangDtlCtiet;
 import com.tcdt.qlnvhang.table.QlnvQdMuaHangHdr;
@@ -77,12 +73,6 @@ public class QlnvQdMuaHangController extends BaseController {
 	@Autowired
 	private QlnvDxkhBanHangRepository qlnvDxkhBanHangRepository;
 	
-	@Autowired
-	private QlnvDxkhBanHangDtlRepository qdMuaHangDtlRepository;
-
-	@Autowired
-	private EntityManager entityManager;
-	
 	@ApiOperation(value = "Tổng hợp thông đề xuất để làm quyết định", response = List.class)
 	@PostMapping(value = PathContains.URL_THOP_DATA, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
@@ -90,11 +80,9 @@ public class QlnvQdMuaHangController extends BaseController {
 			@Valid @RequestBody QlnvDxkhMuaHangThopSearchReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			String maDvi = objReq.getMaDvi();
-			if (StringUtils.isEmpty(maDvi))
-				maDvi = getDvql(request);
+			
 
-			List<QlnvDxkhMuaHangDtl> data = qdMuaHangDtlRepository.findAll(QDinhMuaHangSpecification.buildTHopQuery(objReq));
+			List<QlnvDxkhMuaHangHdr> data = qlnvDxkhBanHangRepository.findAll(QDinhMuaHangSpecification.buildTHopQuery(objReq));
 
 			resp.setData(data);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
@@ -603,16 +591,8 @@ public class QlnvQdMuaHangController extends BaseController {
 				throw new UnsupportedOperationException("Không lấy được thông tin đơn vị");
 
 			// Add them dk loc trong child
-			Session session = entityManager.unwrap(Session.class);
-			if (!objDvi.getCapDvi().equals(Contains.CAP_TONG_CUC)) {
-				Filter filter = session.enableFilter("pFilter");
-				filter.setParameter("maDvi", objDvi.getMaDvi());
-			}
-
-			if (objDvi.getCapDvi().equals(Contains.CAP_TONG_CUC) && !StringUtils.isEmpty(objReq.getMaDvi())) {
-				Filter filter = session.enableFilter("pFilter");
-				filter.setParameter("maDvi", objReq.getMaDvi());
-			}
+			if (!objDvi.getCapDvi().equals(Contains.CAP_TONG_CUC))
+				objReq.setMaDvi(objDvi.getMaDvi());
 
 			List<QlnvQdMuaHangHdr> qOptional = qdMuaHangHdrRepository
 					.findAll(QDinhMuaHangSpecification.buildFindByIdQuery(objReq));
