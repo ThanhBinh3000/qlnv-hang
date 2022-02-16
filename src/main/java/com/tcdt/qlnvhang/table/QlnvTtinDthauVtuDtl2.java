@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.table;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 @Entity
-@Table(name = "QLNV_TTIN_DTHAU_VTU_DTL2")
+@Table(name = "QLNV_TTIN_DTHAU_VTU_DTL_2")
 @Data
 public class QlnvTtinDthauVtuDtl2 implements Serializable {
 	/**

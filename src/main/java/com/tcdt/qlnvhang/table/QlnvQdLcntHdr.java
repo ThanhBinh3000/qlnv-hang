@@ -58,14 +58,15 @@ public class QlnvQdLcntHdr implements Serializable {
 	    )
 	private List<QlnvQdLcntDtl> detailList = new ArrayList<QlnvQdLcntDtl>();
 	
-	public void setDetailList(List<QlnvQdLcntDtl> detail) {
+	public void setDetailList(List<QlnvQdLcntDtl> details) {
         if (this.detailList == null) {
-            this.detailList = detail;
-        } else if(this.detailList != detail) { // not the same instance, in other case we can get ConcurrentModificationException from hibernate AbstractPersistentCollection
-            this.detailList.clear();
-            if(detail != null){
-                this.detailList.addAll(detail);
-            }
+            this.detailList = details;
+        } else if(this.detailList != details) { // not the same instance, in other case we can get ConcurrentModificationException from hibernate AbstractPersistentCollection
+        	 this.detailList.clear();
+             for (QlnvQdLcntDtl detail : details) {
+             	detail.setHeader(this);
+     		}
+     		this.detailList.addAll(details);
         }
     }
 	

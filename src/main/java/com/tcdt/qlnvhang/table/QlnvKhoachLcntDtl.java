@@ -36,7 +36,7 @@ public class QlnvKhoachLcntDtl implements Serializable {
 	BigDecimal giaDkien;
 	BigDecimal giaDkienVat;
 	String diaChi;
-	
+	String maDkho;
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_hdr")

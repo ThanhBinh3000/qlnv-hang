@@ -1,12 +1,9 @@
 package com.tcdt.qlnvhang.table;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -58,14 +55,15 @@ public class QlnvKhLcntVtuHdr implements Serializable {
 	    )
 	private List<QlnvKhLcntVtuDtl> detailList = new ArrayList<QlnvKhLcntVtuDtl>();
 	
-	public void setDetailList(List<QlnvKhLcntVtuDtl> detail) {
+	public void setDetailList(List<QlnvKhLcntVtuDtl> details) {
         if (this.detailList == null) {
-            this.detailList = detail;
-        } else if(this.detailList != detail) { // not the same instance, in other case we can get ConcurrentModificationException from hibernate AbstractPersistentCollection
+            this.detailList = details;
+        } else if(this.detailList != details) { // not the same instance, in other case we can get ConcurrentModificationException from hibernate AbstractPersistentCollection
             this.detailList.clear();
-            if(detail != null){
-                this.detailList.addAll(detail);
-            }
+            for (QlnvKhLcntVtuDtl detail : details) {
+            	detail.setHeader(this);
+    		}
+    		this.detailList.addAll(details);
         }
     }
 	

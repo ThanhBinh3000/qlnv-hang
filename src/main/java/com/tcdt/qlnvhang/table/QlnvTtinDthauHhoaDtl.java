@@ -41,23 +41,10 @@ public class QlnvTtinDthauHhoaDtl implements Serializable {
 	BigDecimal giaThau;
 	String hthucLcnt;
 	String pthucLcnt;
-	@JsonFormat(pattern = "yyyy-MM-dd")
 	Date tuNgayLcnt;
-	@JsonFormat(pattern = "yyyy-MM-dd")
 	Date denNgayLcnt;
 	String loaiHdong;
 	BigDecimal tgianHdong;
-	String tenPage;
-	@JsonFormat(pattern = "yyyy-MM-dd")
-	Date ngayDangPage;
-	@JsonFormat(pattern = "yyyy-MM-dd")
-	Date tuNgayPhanhHsmt;
-	@JsonFormat(pattern = "yyyy-MM-dd")
-	Date denNgayPhanhHsmt;
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-	Date ngayMothau;
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-	Date ngayDongThau;
 	String maDvi;
 	
 	@JsonIgnore
