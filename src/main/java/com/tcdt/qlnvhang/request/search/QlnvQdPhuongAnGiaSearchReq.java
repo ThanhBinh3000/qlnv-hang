@@ -14,27 +14,25 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class QlnvQdDChuyenHangSearchReq extends BaseRequest {
-	@ApiModelProperty(example = "XXXSDX123")
+public class QlnvQdPhuongAnGiaSearchReq extends BaseRequest {
+	@ApiModelProperty(example = "SQD12389")
 	String soQdinh;
 
-	@ApiModelProperty(example = "HNO")
-	String maDvi;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	@Past
+	Date tuNgayQdinh;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	@Past
-	Date tuNgayLap;
+	Date denNgayQdinh;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-	@Past
-	Date denNgayLap;
-
-	@ApiModelProperty(example = "MHH001")
-	String maHhoa;
-
-	@ApiModelProperty(example = "1")
-	String hthucDchuyen;
+	@ApiModelProperty(example = "2021")
+	String namKhoach;
 	
-	@ApiModelProperty(example = "HNO1")
-	String maDviDen;
+	@ApiModelProperty(example = Contains.MOI_TAO)
+	String trangThai;
+	
+//	@ApiModelProperty(example = "HNO")
+//	String maDvi;
+
 }

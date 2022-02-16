@@ -18,24 +18,27 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 @Entity
-@Table(name = "QLNV_BBAN_NHAPDAY_DTL")
+@Table(name = "QLNV_QD_PAN_GIA_DTL_CTIET")
 @Data
-public class QlnvBbanNhapdayDtl implements Serializable {
+public class QlnvQdPhuongAnGiaDtlCtiet implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "QLNV_BBAN_NHAPDAY_DTL_SEQ")
-	@SequenceGenerator(sequenceName = "QLNV_BBAN_NHAPDAY_DTL_SEQ", allocationSize = 1, name = "QLNV_BBAN_NHAPDAY_DTL_SEQ")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "QLNV_QD_PAN_GIA_DTL_CTIET_SEQ")
+	@SequenceGenerator(sequenceName = "QLNV_QD_PAN_GIA_DTL_CTIET_SEQ", allocationSize = 1, name = "QLNV_QD_PAN_GIA_DTL_CTIET_SEQ")
 	private Long id;
-
-	BigDecimal thanhTien;
-	BigDecimal soLuong;
-	BigDecimal donGia;
-	String ghiChu;
+	String maDvi;
+	String maHhoa;
+	String tenHhoa;
+	String loaiMban;
+	BigDecimal giaDxuatKthue;
+	BigDecimal giaDxuatCothue;
+	BigDecimal giaDuyetKthue;
+	BigDecimal giaDuyetCothue;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "tcHdrId")
+	@JoinColumn(name = "id_dtl")
 	@JsonBackReference
-	private QlnvBbanNhapdayHdr parent;
+	private QlnvQdPhuongAnGiaDtl parent;
 }

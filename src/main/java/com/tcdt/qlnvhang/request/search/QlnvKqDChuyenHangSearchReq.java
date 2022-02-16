@@ -14,20 +14,20 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class QlnvQdDChuyenHangSearchReq extends BaseRequest {
+public class QlnvKqDChuyenHangSearchReq extends BaseRequest {
 	@ApiModelProperty(example = "XXXSDX123")
 	String soQdinh;
 
 	@ApiModelProperty(example = "HNO")
-	String maDvi;
+	String maDviDi;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	@Past
-	Date tuNgayLap;
+	Date tuNgayBcao;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	@Past
-	Date denNgayLap;
+	Date denNgayBcao;
 
 	@ApiModelProperty(example = "MHH001")
 	String maHhoa;

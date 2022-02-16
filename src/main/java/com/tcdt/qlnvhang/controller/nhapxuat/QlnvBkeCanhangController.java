@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tcdt.qlnvhang.common.AsyncProduct;
 import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.repository.QlnvBkeCanhangHdrRepository;
@@ -64,6 +65,9 @@ import lombok.extern.slf4j.Slf4j;
 public class QlnvBkeCanhangController extends BaseController {
 	@Autowired
 	private QlnvBkeCanhangHdrRepository qlnvBkeCanhangHdrRepository;
+
+	@Autowired
+	AsyncProduct asyncProduct;
 
 	@ApiOperation(value = "Tạo mới bảng kê cân hàng", response = List.class)
 	@PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
