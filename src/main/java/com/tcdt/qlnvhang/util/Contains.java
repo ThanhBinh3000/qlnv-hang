@@ -124,6 +124,12 @@ public class Contains {
 	public static final String DUYET_THAU = "00";
 	public static final String HUY_THAU = "01";
 
+	// Loai vat tu hang hoa
+	public static final String LOAI_VTHH_GAO = "00";
+	public static final String LOAI_VTHH_THOC = "01";
+	public static final String LOAI_VTHH_MUOI = "02";
+	public static final String LOAI_VTHH_VATTU = "03";
+
 	public static final Map<String, String> mappingLoaiDx;
 	static {
 		mappingLoaiDx = Maps.<String, String>buildMap().put(Contains.DX_THANH_LY, "Thanh lý")
@@ -142,5 +148,16 @@ public class Contains {
 	}
 
 	public static final String TEMPLATE_SO_KHO = "/reports/SO_KHO.docx";
+
+	public static final Map<String, String> mpLoaiVthh;
+	static {
+		mpLoaiVthh = Maps.<String, String>buildMap().put(Contains.LOAI_VTHH_GAO, "Gạo")
+				.put(Contains.LOAI_VTHH_THOC, "Thóc").put(Contains.LOAI_VTHH_MUOI, "Muối")
+				.put(Contains.LOAI_VTHH_THOC, "Vật tư").get();
+	}
+
+	public static String getLoaiVthh(String key) {
+		return Contains.mpLoaiVthh.get(key);
+	}
 
 }

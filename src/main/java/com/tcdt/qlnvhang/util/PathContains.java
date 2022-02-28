@@ -81,4 +81,8 @@ public class PathContains {
 	public static final String QL_PANGIA = "/ql-pangia";
 	public static final String QL_DX_PANGIA = "/ql-dxuat-gia";
 	public static final String QL_QD_PANGIA = "/qlyqd-pangia";
+	
+	//De xuat ke hoach lua chon nha thau
+	public static final String DX_KH = "/dx-kh";
+	public static final String DX_KH_LCNT_GAO = "/lcnt-gao";
 }

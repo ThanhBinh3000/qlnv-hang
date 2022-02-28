@@ -82,6 +82,14 @@ public class Swagger2Config {
 				.securityContexts(Lists.newArrayList(securityContext())).apiInfo(apiEndPointsInfo())
 				.groupName("Quản lý phương án giá mua, bán hàng DTQG");
 	}
+	@Bean
+	public Docket api8() {
+		return new Docket(DocumentationType.SWAGGER_2).select()
+				.apis(RequestHandlerSelectors.basePackage("com.tcdt.qlnvhang.controller.dexuat"))
+				.paths(PathSelectors.regex("/.*")).build().securitySchemes(Lists.newArrayList(apiKey()))
+				.securityContexts(Lists.newArrayList(securityContext())).apiInfo(apiEndPointsInfo())
+				.groupName("Đề xuất kế hoạch lựa chọn nhà thầu");
+	}
 	private ApiInfo apiEndPointsInfo() {
 		return new ApiInfoBuilder().title("TCDT REST API").description("Quản lý API hệ thống Quản lý nghiệp vụ - TCDT")
 				.version("1.0.0").build();
