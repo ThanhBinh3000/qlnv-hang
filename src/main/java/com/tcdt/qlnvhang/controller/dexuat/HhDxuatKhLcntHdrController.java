@@ -73,8 +73,8 @@ public class HhDxuatKhLcntHdrController extends BaseController {
 				throw new Exception("Loại vật tư hàng hóa không phù hợp");
 
 			Optional<HhDxuatKhLcntHdr> qOptional = hhDxuatKhLcntHdrRepository.findBySoDxuat(objReq.getSoDxuat());
-			if (!qOptional.isPresent())
-				throw new Exception("Số đề xuất " + objReq.getSoDxuat() + "đã tồn tại");
+			if (qOptional.isPresent())
+				throw new Exception("Số đề xuất " + objReq.getSoDxuat() + " đã tồn tại");
 
 			// Add danh sach file dinh kem o Master
 			List<FileDKemJoinDxKhLcntHdr> fileDinhKemList = new ArrayList<FileDKemJoinDxKhLcntHdr>();
