@@ -7,7 +7,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tcdt.qlnvhang.table.HhDxuatKhLcntDsgtDtl;
 import com.tcdt.qlnvhang.util.Contains;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -46,7 +45,7 @@ public class HhDxuatKhLcntHdrReq {
 
 	private List<HhDxuatKhLcntGaoDtlReq> detail1;
 
-	private List<HhDxuatKhLcntDsgtDtl> detail2;
+	private List<HhDxuatKhLcntDsgtDtlReq> detail2;
 
 	private List<HhDxuatKhLcntCcxdgDtlReq> detail3;
 }
