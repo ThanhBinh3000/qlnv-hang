@@ -354,7 +354,7 @@ public class HhDxuatKhLcntHdrController extends BaseController {
 	}
 
 	@ApiOperation(value = "Kết xuất danh sách gói thầu", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
-	@PostMapping("/exportExcel")
+	@PostMapping(PathContains.URL_KET_XUAT+"/ds-goi-thau")
 	@ResponseStatus(HttpStatus.OK)
 	public void exportToExcel(@Valid @RequestBody IdSearchReq searchReq, HttpServletResponse response)
 			throws Exception {
