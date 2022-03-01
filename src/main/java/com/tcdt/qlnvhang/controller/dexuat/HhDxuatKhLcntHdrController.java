@@ -1,11 +1,15 @@
 package com.tcdt.qlnvhang.controller.dexuat;
 
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
@@ -25,8 +29,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
+import com.tcdt.qlnvhang.repository.HhDxuatKhLcntDsgtDtlRepository;
 import com.tcdt.qlnvhang.repository.HhDxuatKhLcntHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -42,9 +48,12 @@ import com.tcdt.qlnvhang.table.HhDxuatKhLcntDsgtDtl;
 import com.tcdt.qlnvhang.table.HhDxuatKhLcntGaoDtl;
 import com.tcdt.qlnvhang.table.HhDxuatKhLcntHdr;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.ExportExcel;
+import com.tcdt.qlnvhang.util.MoneyConvert;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import com.tcdt.qlnvhang.util.PaginationSet;
 import com.tcdt.qlnvhang.util.PathContains;
+import com.tcdt.qlnvhang.util.UnitScaler;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -61,6 +70,9 @@ public class HhDxuatKhLcntHdrController extends BaseController {
 
 	@Autowired
 	private HhDxuatKhLcntHdrRepository hhDxuatKhLcntHdrRepository;
+
+	@Autowired
+	private HhDxuatKhLcntDsgtDtlRepository hhDxuatKhLcntDtlRepository;
 
 	@ApiOperation(value = "Tạo mới đề xuất kế hoạch lựa chọn nhà thầu Gạo", response = List.class)
 	@PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -98,6 +110,7 @@ public class HhDxuatKhLcntHdrController extends BaseController {
 			// Add danh sach goi thau
 			List<HhDxuatKhLcntDsgtDtl> dtls2 = ObjectMapperUtils.mapAll(objReq.getDetail2(),
 					HhDxuatKhLcntDsgtDtl.class);
+			UnitScaler.reverseFormatList(dtls2, Contains.DVT_TAN);
 			dataMap.setChildren2(dtls2);
 			// Add danh sach can cu xac dinh gia
 			if (objReq.getDetail3() != null) {
@@ -173,6 +186,7 @@ public class HhDxuatKhLcntHdrController extends BaseController {
 			// Add danh sach goi thau
 			List<HhDxuatKhLcntDsgtDtl> dtls2 = ObjectMapperUtils.mapAll(objReq.getDetail2(),
 					HhDxuatKhLcntDsgtDtl.class);
+			UnitScaler.reverseFormatList(dtls2, Contains.DVT_TAN);
 			dataDTB.setChildren2(dtls2);
 			// Add danh sach can cu xac dinh gia
 			if (objReq.getDetail3() != null) {
@@ -246,6 +260,12 @@ public class HhDxuatKhLcntHdrController extends BaseController {
 
 			if (!qOptional.isPresent())
 				throw new UnsupportedOperationException("Không tồn tại bản ghi");
+			
+			//Quy doi don vi kg = tan
+			List<HhDxuatKhLcntDsgtDtl> dtls2 = ObjectMapperUtils.mapAll(qOptional.get().getChildren2(),
+					HhDxuatKhLcntDsgtDtl.class);
+			UnitScaler.formatList(dtls2, Contains.DVT_TAN);
+			qOptional.get().setChildren2(dtls2);
 
 			resp.setData(qOptional.get());
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
@@ -331,5 +351,55 @@ public class HhDxuatKhLcntHdrController extends BaseController {
 			log.error(e.getMessage());
 		}
 		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Kết xuất danh sách gói thầu", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping("/exportExcel")
+	@ResponseStatus(HttpStatus.OK)
+	public void exportToExcel(@Valid @RequestBody IdSearchReq searchReq, HttpServletResponse response)
+			throws Exception {
+		try {
+			// Tao form excel
+			String title = "Danh sách gói thầu";
+			String[] rowsName = new String[] { "STT", "Gói thầu", "Số lượng (tấn)", "Địa điểm nhập kho",
+					"Đơn giá (đồng/kg)", "Thành tiền (đồng)", "Bằng chữ" };
+			List<HhDxuatKhLcntDsgtDtl> dsgtDtls = hhDxuatKhLcntDtlRepository.findByIdHdr(searchReq.getId());
+
+			if (dsgtDtls.isEmpty())
+				throw new UnsupportedOperationException("Không tìm thấy dữ liệu");
+
+			String filename = "Dexuat_Danhsachgoithau_" + dsgtDtls.get(0).getParent().getSoDxuat() + ".xlsx";
+
+			List<Object[]> dataList = new ArrayList<Object[]>();
+			Object[] objs = null;
+			for (int i = 0; i < dsgtDtls.size(); i++) {
+				HhDxuatKhLcntDsgtDtl dsgtDtl = dsgtDtls.get(i);
+				objs = new Object[rowsName.length];
+				objs[0] = i;
+				objs[1] = dsgtDtl.getGoiThau();
+				objs[2] = dsgtDtl.getSoLuong().multiply(Contains.getDVTinh(Contains.DVT_KG))
+						.divide(Contains.getDVTinh(Contains.DVT_TAN)).setScale(0, RoundingMode.HALF_UP);
+				objs[3] = dsgtDtl.getDiaDiemNhap();
+				objs[4] = dsgtDtl.getDonGia();
+				objs[5] = dsgtDtl.getThanhTien();
+				objs[6] = MoneyConvert.doctienBangChu(dsgtDtl.getThanhTien().toString(), "");
+				dataList.add(objs);
+			}
+
+			ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+			ex.export();
+		} catch (Exception e) {
+			// TODO: handle exception
+			log.error("Kết xuất danh sách gói thầu", e);
+			final Map<String, Object> body = new HashMap<>();
+			body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			body.put("msg", e.getMessage());
+
+			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+			response.setCharacterEncoding("UTF-8");
+
+			final ObjectMapper mapper = new ObjectMapper();
+			mapper.writeValue(response.getOutputStream(), body);
+		}
 	}
 }

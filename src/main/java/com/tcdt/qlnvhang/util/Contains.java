@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.util;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 public class Contains {
@@ -130,6 +131,13 @@ public class Contains {
 	public static final String LOAI_VTHH_MUOI = "02";
 	public static final String LOAI_VTHH_VATTU = "03";
 
+	// Don vi tinh
+	public static final String DVT_KG = "kg";
+	public static final String DVT_YEN = "yen";
+	public static final String DVT_TA = "ta";
+	public static final String DVT_TAN = "tan";
+	public static final String COLUMN_CONVERT = "SoLuong";
+
 	public static final Map<String, String> mappingLoaiDx;
 	static {
 		mappingLoaiDx = Maps.<String, String>buildMap().put(Contains.DX_THANH_LY, "Thanh lý")
@@ -158,6 +166,17 @@ public class Contains {
 
 	public static String getLoaiVthh(String key) {
 		return Contains.mpLoaiVthh.get(key);
+	}
+
+	public static final Map<String, BigDecimal> mpDVTinh;
+	static {
+		mpDVTinh = Maps.<String, BigDecimal>buildMap().put(Contains.DVT_KG, new BigDecimal(1))
+				.put(Contains.DVT_YEN, new BigDecimal(10)).put(Contains.DVT_TA, new BigDecimal(100))
+				.put(Contains.DVT_TAN, new BigDecimal(1000)).get();
+	}
+
+	public static BigDecimal getDVTinh(String key) {
+		return Contains.mpDVTinh.get(key);
 	}
 
 }
