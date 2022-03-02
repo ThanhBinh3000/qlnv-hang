@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 @Entity
-@Table(name = "HH_DXUAT_KH_LCNT_DSGT_DTL")
+@Table(name = "HH_DX_KHLCNT_DSACH_GTHAU_DTL")
 @Data
 public class HhDxuatKhLcntDsgtDtl implements Serializable {
 

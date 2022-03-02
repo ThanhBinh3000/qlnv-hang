@@ -32,7 +32,7 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public static final String TABLE_NAME = "HH_DXUAT_KH_LCNT_HDR";
+	public static final String TABLE_NAME = "HH_DX_KHLCNT_HDR";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_DXUAT_KH_LCNT_HDR_SEQ")
