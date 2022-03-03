@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -33,16 +34,22 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.TokenAuthenticationService;
+import com.tcdt.qlnvhang.repository.DanhMucRepository;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.service.feign.CategoryServiceProxy;
+import com.tcdt.qlnvhang.table.QlnvDanhMuc;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.MapCategory;
 import com.tcdt.qlnvhang.util.Request;
 
 public class BaseController {
 
 	@Autowired
 	private CategoryServiceProxy categoryServiceProxy;
+
+	@Autowired
+	DanhMucRepository danhMucRepository;
 
 	public String getStringParams(Map<String, String> allParams, String nameParam) {
 		if (StringUtils.isEmpty(allParams.get(nameParam))) {
@@ -254,5 +261,16 @@ public class BaseController {
 		// Get year from date
 		int year = currentDate.getYear();
 		return "Ngày " + day + " tháng " + month + " năm " + year;
+	}
+
+	public Map<String, String> getMapCategory() {
+		if (MapCategory.map == null && danhMucRepository != null) {
+			MapCategory.map = new HashMap<>();
+			Iterable<QlnvDanhMuc> list = danhMucRepository.findByTrangThai(Contains.HOAT_DONG);
+			for (QlnvDanhMuc cate : list) {
+				MapCategory.map.put(cate.getMa(), cate.getGiaTri());
+			}
+		}
+		return MapCategory.map;
 	}
 }

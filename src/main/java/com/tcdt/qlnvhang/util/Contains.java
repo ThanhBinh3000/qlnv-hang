@@ -137,6 +137,12 @@ public class Contains {
 	public static final String DVT_TA = "ta";
 	public static final String DVT_TAN = "tan";
 	public static final String COLUMN_CONVERT = "SoLuong";
+	
+	//Danh muc
+	public static final String DM_NGUON_VON = "NGUON_VON";
+	public static final String DM_LOAI_HD = "LOAI_HDONG";
+	public static final String DM_HT_LCNT = "HT_LCNT";
+	public static final String DM_PTHUC_DTHAU = "PT_DTHAU";
 
 	public static final Map<String, String> mappingLoaiDx;
 	static {

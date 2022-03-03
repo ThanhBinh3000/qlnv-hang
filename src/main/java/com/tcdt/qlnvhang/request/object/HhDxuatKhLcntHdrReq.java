@@ -41,6 +41,13 @@ public class HhDxuatKhLcntHdrReq {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayKy;
 
+	@NotNull(message = "Không được để trống")
+	@Size(max = 20, message = "Mã đơn vị không được vượt quá 20 ký tự")
+	@ApiModelProperty(example = "HNO")
+	String maDvi;
+
+	Long namKhoach;
+
 	private List<FileDinhKemReq> fileDinhKems;
 
 	private List<HhDxuatKhLcntGaoDtlReq> detail1;

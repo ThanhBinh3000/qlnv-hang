@@ -15,6 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -53,7 +55,9 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	String nguoiGuiDuyet;
 	Date ngayPduyet;
 	String nguoiPduyet;
+	@Temporal(TemporalType.DATE)
 	Date ngayKy;
+	Long namKhoach;
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)
