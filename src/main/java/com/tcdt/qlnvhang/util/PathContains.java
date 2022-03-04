@@ -85,4 +85,5 @@ public class PathContains {
 	//De xuat ke hoach lua chon nha thau
 	public static final String DX_KH = "/dx-kh";
 	public static final String DX_KH_LCNT_GAO = "/lcnt-gao";
+	public static final String PA_LCNT_GAO = "/pan-lcnt-gao";
 }

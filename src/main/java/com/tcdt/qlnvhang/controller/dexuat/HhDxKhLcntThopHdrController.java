@@ -396,8 +396,9 @@ public class HhDxKhLcntThopHdrController extends BaseController {
 			Optional<HhDxKhLcntThopHdr> optional = hhDxKhLcntThopHdrRepository.findById(idSearchReq.getId());
 			if (!optional.isPresent())
 				throw new Exception("Không tìm thấy dữ liệu cần xoá");
-			// TODO: Kiem tra ke hoach tong hop chua duoc phe duyet va chua lap phuong an
-			// trinh Tong cuc => Moi cho phep xoa
+
+			if (optional.get().getPhuongAn().equals(Contains.ACTIVE))
+				throw new Exception("Tổng hợp đã được lập phương án trình Tổng cục, không được phép xóa");
 
 			handlingDelete(Contains.DUYET, optional.get());
 

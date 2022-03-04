@@ -42,6 +42,7 @@ public class HhDxuatKhLcntSpecification {
 				String trangThai = objReq.getTrangThai();
 				String loaiVthh = objReq.getLoaiVthh();
 				String trichYeu = objReq.getTrichYeu();
+				String maDvi = objReq.getMaDvi();
 
 				if (StringUtils.isNotEmpty(soDxuat))
 					predicate.getExpressions()
@@ -63,6 +64,9 @@ public class HhDxuatKhLcntSpecification {
 				if (StringUtils.isNotEmpty(trichYeu))
 					predicate.getExpressions()
 							.add(builder.like(builder.lower(root.get("trichYeu")), "%" + trichYeu.toLowerCase() + "%"));
+
+				if (StringUtils.isNotBlank(maDvi))
+					predicate.getExpressions().add(builder.and(builder.equal(root.get("maDvi"), maDvi)));
 
 				return predicate;
 			}
