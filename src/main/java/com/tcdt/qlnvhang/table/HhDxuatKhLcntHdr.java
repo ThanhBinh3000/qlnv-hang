@@ -12,11 +12,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -29,6 +33,8 @@ import lombok.Data;
 @Entity
 @Table(name = HhDxuatKhLcntHdr.TABLE_NAME)
 @Data
+@NamedEntityGraph(name = "HH_DX_KHLCNT_HDR.children2", attributeNodes = @NamedAttributeNode("children2"), 
+subgraphs = {@NamedSubgraph(name = "HH_DX_KHLCNT_HDR.children2.children", attributeNodes = { @NamedAttributeNode("children") })})
 public class HhDxuatKhLcntHdr implements Serializable {
 	/**
 	 * 
@@ -45,6 +51,8 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	String qdCanCu;
 	String trichYeu;
 	String maDvi;
+	@Transient
+	String tenDvi;
 	String trangThai;
 	Date ngayTao;
 	String nguoiTao;
@@ -58,7 +66,7 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	@Temporal(TemporalType.DATE)
 	Date ngayKy;
 	Long namKhoach;
-	
+
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)
 	@JoinColumn(name = "dataId")
@@ -132,5 +140,5 @@ public class HhDxuatKhLcntHdr implements Serializable {
 		child3.setParent(this);
 		this.children3.add(child3);
 	}
-	
+
 }

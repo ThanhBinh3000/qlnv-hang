@@ -12,42 +12,46 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.data.jpa.domain.Specification;
 
-import com.tcdt.qlnvhang.request.search.HhDxKhLcntThopSearchReq;
-import com.tcdt.qlnvhang.table.HhDxKhLcntThopHdr;
+import com.tcdt.qlnvhang.request.search.HhQdKhlcntSearchReq;
+import com.tcdt.qlnvhang.table.HhQdKhlcntHdr;
 
-public class HhDxKhLcntThopSpecification {
-	public static Specification<HhDxKhLcntThopHdr> buildSearchQuery(final HhDxKhLcntThopSearchReq objReq) {
-		return new Specification<HhDxKhLcntThopHdr>() {
+public class HhQdKhlcntSpecification {
+	public static Specification<HhQdKhlcntHdr> buildSearchQuery(final HhQdKhlcntSearchReq objReq) {
+		return new Specification<HhQdKhlcntHdr>() {
 			/**
 			 * 
 			 */
 			private static final long serialVersionUID = 3571167956165654062L;
 
 			@Override
-			public Predicate toPredicate(Root<HhDxKhLcntThopHdr> root, CriteriaQuery<?> query,
-					CriteriaBuilder builder) {
+			public Predicate toPredicate(Root<HhQdKhlcntHdr> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
 				Predicate predicate = builder.conjunction();
 				if (ObjectUtils.isEmpty(objReq))
 					return predicate;
 
 				String namKhoach = objReq.getNamKhoach();
-				Date tuNgayTao = objReq.getTuNgayTao();
-				Date denNgayTao = objReq.getDenNgayTao();
+				Date tuNgayQd = objReq.getTuNgayQd();
+				Date denNgayQd = objReq.getDenNgayQd();
 				String loaiVthh = objReq.getLoaiVthh();
+				String soQd = objReq.getSoQd();
 
 				if (StringUtils.isNotEmpty(namKhoach))
 					predicate.getExpressions().add(builder.and(builder.equal(root.get("namKhoach"), namKhoach)));
 
-				if (ObjectUtils.isNotEmpty(tuNgayTao))
+				if (ObjectUtils.isNotEmpty(tuNgayQd))
 					predicate.getExpressions()
-							.add(builder.and(builder.greaterThanOrEqualTo(root.get("ngayTao"), tuNgayTao)));
+							.add(builder.and(builder.greaterThanOrEqualTo(root.get("ngayQd"), tuNgayQd)));
 
-				if (ObjectUtils.isNotEmpty(denNgayTao))
+				if (ObjectUtils.isNotEmpty(denNgayQd))
 					predicate.getExpressions().add(builder
-							.and(builder.lessThan(root.get("ngayTao"), new DateTime(denNgayTao).plusDays(1).toDate())));
+							.and(builder.lessThan(root.get("ngayQd"), new DateTime(denNgayQd).plusDays(1).toDate())));
 
 				if (StringUtils.isNotBlank(loaiVthh))
 					predicate.getExpressions().add(builder.and(builder.equal(root.get("loaiVthh"), loaiVthh)));
+
+				if (StringUtils.isNotEmpty(soQd))
+					predicate.getExpressions()
+							.add(builder.like(builder.lower(root.get("soQd")), "%" + soQd.toLowerCase() + "%"));
 
 				return predicate;
 			}

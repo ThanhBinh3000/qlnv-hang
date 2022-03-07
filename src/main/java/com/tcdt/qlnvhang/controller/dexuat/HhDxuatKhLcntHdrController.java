@@ -224,7 +224,8 @@ public class HhDxuatKhLcntHdrController extends BaseController {
 	@ApiOperation(value = "Tra cứu đề xuất kế hoạch lựa chọn nhà thầu Gạo", response = List.class)
 	@PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<BaseResponse> selectAll(@RequestBody HhDxuatKhLcntSearchReq objReq) {
+	public ResponseEntity<BaseResponse> selectAll(@Valid HttpServletRequest request,
+			@RequestBody HhDxuatKhLcntSearchReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
@@ -233,6 +234,10 @@ public class HhDxuatKhLcntHdrController extends BaseController {
 
 			Page<HhDxuatKhLcntHdr> qhKho = hhDxuatKhLcntHdrRepository
 					.findAll(HhDxuatKhLcntSpecification.buildSearchQuery(objReq), pageable);
+
+			for (HhDxuatKhLcntHdr hdr : qhKho.getContent()) {
+				hdr.setTenDvi(getDviByMa(request, hdr.getMaDvi()).getTenDvi());
+			}
 
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
@@ -260,8 +265,8 @@ public class HhDxuatKhLcntHdrController extends BaseController {
 
 			if (!qOptional.isPresent())
 				throw new UnsupportedOperationException("Không tồn tại bản ghi");
-			
-			//Quy doi don vi kg = tan
+
+			// Quy doi don vi kg = tan
 			List<HhDxuatKhLcntDsgtDtl> dtls2 = ObjectMapperUtils.mapAll(qOptional.get().getChildren2(),
 					HhDxuatKhLcntDsgtDtl.class);
 			UnitScaler.formatList(dtls2, Contains.DVT_TAN);
@@ -354,7 +359,7 @@ public class HhDxuatKhLcntHdrController extends BaseController {
 	}
 
 	@ApiOperation(value = "Kết xuất danh sách gói thầu", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
-	@PostMapping(PathContains.URL_KET_XUAT+"/ds-goi-thau")
+	@PostMapping(PathContains.URL_KET_XUAT + "/ds-goi-thau")
 	@ResponseStatus(HttpStatus.OK)
 	public void exportToExcel(@Valid @RequestBody IdSearchReq searchReq, HttpServletResponse response)
 			throws Exception {

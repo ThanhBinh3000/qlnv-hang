@@ -24,8 +24,7 @@ public class HhPaKhlcntSpecification {
 			private static final long serialVersionUID = 3571167956165654062L;
 
 			@Override
-			public Predicate toPredicate(Root<HhPaKhlcntHdr> root, CriteriaQuery<?> query,
-					CriteriaBuilder builder) {
+			public Predicate toPredicate(Root<HhPaKhlcntHdr> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
 				Predicate predicate = builder.conjunction();
 				if (ObjectUtils.isEmpty(objReq))
 					return predicate;
@@ -38,12 +37,13 @@ public class HhPaKhlcntSpecification {
 				if (StringUtils.isNotEmpty(namKhoach))
 					predicate.getExpressions().add(builder.and(builder.equal(root.get("namKhoach"), namKhoach)));
 
-				if (ObjectUtils.isNotEmpty(tuNgayTao) && ObjectUtils.isNotEmpty(denNgayTao)) {
+				if (ObjectUtils.isNotEmpty(tuNgayTao))
 					predicate.getExpressions()
 							.add(builder.and(builder.greaterThanOrEqualTo(root.get("ngayTao"), tuNgayTao)));
+
+				if (ObjectUtils.isNotEmpty(denNgayTao))
 					predicate.getExpressions().add(builder
 							.and(builder.lessThan(root.get("ngayTao"), new DateTime(denNgayTao).plusDays(1).toDate())));
-				}
 
 				if (StringUtils.isNotBlank(loaiVthh))
 					predicate.getExpressions().add(builder.and(builder.equal(root.get("loaiVthh"), loaiVthh)));

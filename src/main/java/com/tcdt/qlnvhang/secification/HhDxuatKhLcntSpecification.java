@@ -48,12 +48,13 @@ public class HhDxuatKhLcntSpecification {
 					predicate.getExpressions()
 							.add(builder.like(builder.lower(root.get("soDxuat")), "%" + soDxuat.toLowerCase() + "%"));
 
-				if (ObjectUtils.isNotEmpty(tuNgayKy) && ObjectUtils.isNotEmpty(denNgayKy)) {
+				if (ObjectUtils.isNotEmpty(tuNgayKy))
 					predicate.getExpressions()
 							.add(builder.and(builder.greaterThanOrEqualTo(root.get("ngayKy"), tuNgayKy)));
+
+				if (ObjectUtils.isNotEmpty(tuNgayKy) && ObjectUtils.isNotEmpty(denNgayKy))
 					predicate.getExpressions().add(builder
 							.and(builder.lessThan(root.get("ngayKy"), new DateTime(denNgayKy).plusDays(1).toDate())));
-				}
 
 				if (StringUtils.isNotBlank(trangThai))
 					predicate.getExpressions().add(builder.and(builder.equal(root.get("trangThai"), trangThai)));
