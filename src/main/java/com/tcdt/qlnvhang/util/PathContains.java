@@ -87,4 +87,5 @@ public class PathContains {
 	public static final String DX_KH_LCNT_GAO = "/lcnt-gao";
 	public static final String PA_LCNT_GAO = "/pan-lcnt-gao";
 	public static final String QD_LCNT_GAO = "/qd-lcnt-gao";
+	public static final String TTIN_DTHAU = "/ttin-dthau";
 }
