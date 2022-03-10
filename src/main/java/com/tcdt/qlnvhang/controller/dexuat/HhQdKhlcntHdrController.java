@@ -373,6 +373,38 @@ public class HhQdKhlcntHdrController extends BaseController {
 		return ResponseEntity.ok(resp);
 	}
 
+	@ApiOperation(value = "Lấy chi tiết Quyết định phê duyệt kế hoạch lựa chọn nhà thầu theo số quyết định", response = List.class)
+	@GetMapping(value = PathContains.URL_CHI_TIET + "/so-qd" + "/{soQd}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> detailNumber(
+			@ApiParam(value = "Số quyết định phê duyệt kế hoạch lựa chọn nhà thầu", example = "1", required = true) @PathVariable("soQd") String soQd) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			if (StringUtils.isEmpty(soQd))
+				throw new UnsupportedOperationException("Không tồn tại bản ghi");
+
+			Optional<HhQdKhlcntHdr> qOptional = hhQdKhlcntHdrRepository.findBySoQd(soQd);
+
+			if (!qOptional.isPresent())
+				throw new UnsupportedOperationException("Không tồn tại bản ghi");
+
+			// Quy doi don vi kg = tan
+			List<HhQdKhlcntDtl> dtls2 = ObjectMapperUtils.mapAll(qOptional.get().getChildren1(), HhQdKhlcntDtl.class);
+			for (HhQdKhlcntDtl dtl : dtls2) {
+				UnitScaler.formatList(dtl.getChildren(), Contains.DVT_TAN);
+			}
+
+			resp.setData(qOptional.get());
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error(e.getMessage());
+		}
+		return ResponseEntity.ok(resp);
+	}
+
 	@Transactional
 	synchronized HhQdKhlcntHdr handlingApprove(String trangThai, HhQdKhlcntHdr hThopHdr) throws Exception {
 		HhQdKhlcntHdr createCheck = hhQdKhlcntHdrRepository.save(hThopHdr);
