@@ -143,14 +143,20 @@ public class KhLuaChonNhaThauServiceImpl implements KhLuaChonNhaThauService{
 			khLuaChonNhaThau.setTrangThai(Contains.CHO_DUYET);
 			khLuaChonNhaThau.setNgayGuiDuyet(LocalDate.now());
 			khLuaChonNhaThau.setNguoiPduyetId(userInfo.getId());
-		} else if (Contains.CHO_DUYET.equals(khLuaChonNhaThau.getTrangThai())) {
-			if (Contains.DUYET.equals(req.getTrangThai())) {
-				khLuaChonNhaThau.setNgayPduyet(LocalDate.now());
-				khLuaChonNhaThau.setNguoiPduyetId(userInfo.getId());
-				khLuaChonNhaThau.setTrangThai(Contains.DUYET);
-			}
+		} else if (Contains.CHO_DUYET.equals(khLuaChonNhaThau.getTrangThai()) && Contains.DUYET.equals(req.getTrangThai())) {
+			khLuaChonNhaThau.setNgayPduyet(LocalDate.now());
+			khLuaChonNhaThau.setNguoiPduyetId(userInfo.getId());
+			khLuaChonNhaThau.setTrangThai(Contains.DUYET);
+		} else if (Contains.CHO_DUYET.equals(khLuaChonNhaThau.getTrangThai()) && Contains.TU_CHOI.equals(req.getTrangThai())) {
+			khLuaChonNhaThau.setNgayPduyet(LocalDate.now());
+			khLuaChonNhaThau.setNguoiPduyetId(userInfo.getId());
+			khLuaChonNhaThau.setTrangThai(Contains.TU_CHOI);
+			khLuaChonNhaThau.setLdoTchoi(req.getLyDo());
+		} else {
+			return false;
 		}
-		return false;
+
+		return true;
 	}
 
 	private List<KhLuaChonNhaThauRes> toResponseList(List<KhLuaChonNhaThau> list) {
