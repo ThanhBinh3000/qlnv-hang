@@ -10,6 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 public class GoiThauReq {
 	private Long id;
+	private Integer stt;
 	private Long khLcntId;
 	private String tenGoiThau;
 	private String maVatTu;

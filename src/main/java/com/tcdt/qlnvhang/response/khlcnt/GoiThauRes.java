@@ -3,7 +3,6 @@ package com.tcdt.qlnvhang.response.khlcnt;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -18,7 +17,9 @@ public class GoiThauRes {
 	private Double soLuong;
 	private Double donGia;
 	private Integer stt;
-	private List<DiaDiemNhapRes> diaDiemNhap = new ArrayList<>();
+	private List<DiaDiemNhapRes> diaDiemNhap;
+	private int tongSoDiaDiemNhap;
+	private int soLuongDiaDiemNhap;
 
 	public Double getThanhTien() {
 		if (soLuong != null && donGia != null)

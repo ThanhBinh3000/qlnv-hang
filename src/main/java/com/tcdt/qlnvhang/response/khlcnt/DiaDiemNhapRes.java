@@ -9,6 +9,7 @@ public class DiaDiemNhapRes {
 	private Long id;
 	private Long goiThauId;
 	private String maDonVi;
+	private String tenDonVi;
 	private Double soLuongNhap;
 	private Integer stt;
 }

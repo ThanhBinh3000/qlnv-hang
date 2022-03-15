@@ -32,4 +32,5 @@ public class GoiThau implements Serializable {
 	private Long vatTuId;
 	private Double soLuong;
 	private Double donGia;
+	private Integer stt;
 }

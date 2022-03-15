@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -42,4 +43,10 @@ public class KhLuaChonNhaThau extends BaseEntity implements Serializable {
 	private String hthucLcnt;
 	private String tgianThienDuAn;
 	private String qchuanKthuat;
+	private String trangThai;
+	private Long nguoiPduyetId;
+	private LocalDate ngayPduyet;
+	private String ldoTchoi;
+	private Long nguoiGuiDuyetId;
+	private LocalDate ngayGuiDuyet;
 }

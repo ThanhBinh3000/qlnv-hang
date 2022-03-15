@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.repository;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -33,6 +34,8 @@ public interface QlnvDmDonviRepository extends CrudRepository<QlnvDmDonvi, Long>
 			String maPhuong, String capDvi, String kieuDvi, String loaiDvi, Pageable pageable);
 
 	QlnvDmDonvi findByMaDvi(String maDvi);
+
+	List<QlnvDmDonvi> findByMaDviIn(Set<String> maDvi);
 
 	@Transactional
 	@Modifying
