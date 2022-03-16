@@ -78,7 +78,7 @@ public class KhLuaChonNhaThauController {
 
 	@ApiOperation(value = "Tìm kiếm Kế hoạch lựa chọn nhà thầu vật tư", response = ListResponse.class)
 	@GetMapping
-	public final ResponseEntity<BaseResponse> search(@RequestParam KhLuaChonNhaThauSearchReq req) {
+	public final ResponseEntity<BaseResponse> search(KhLuaChonNhaThauSearchReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			resp.setData(khLuaChonNhaThauService.search(req));
@@ -113,7 +113,7 @@ public class KhLuaChonNhaThauController {
 	}
 
 	@ApiOperation(value = "Gửi duyệt/Phê duyệt/Từ chối Kế hoạch lựa chọn nhà thầu vật tư", response = Boolean.class)
-	@PutMapping
+	@PutMapping("/status")
 	public final ResponseEntity<BaseResponse> updateStatus(@RequestBody StatusReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
