@@ -17,12 +17,14 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Where;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.tcdt.qlnvhang.entities.FileDKemJoinPaKhlcntHdr;
 
 import lombok.Data;
 
@@ -47,6 +49,17 @@ public class HhPaKhlcntHdr implements Serializable {
 	String loaiHdong;
 	String nguonVon;
 
+	@Transient
+	String tenLoaiVthh;
+	@Transient
+	String tenHthucLcnt;
+	@Transient
+	String tenPthucLcnt;
+	@Transient
+	String tenLoaiHdong;
+	@Transient
+	String tenNguonVon;
+
 	@Temporal(TemporalType.DATE)
 	Date tgianTbao;
 	@Temporal(TemporalType.DATE)
@@ -61,6 +74,7 @@ public class HhPaKhlcntHdr implements Serializable {
 	String veViec;
 	String namKhoach;
 	Long idThHdr;
+	String quyetDinh;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)

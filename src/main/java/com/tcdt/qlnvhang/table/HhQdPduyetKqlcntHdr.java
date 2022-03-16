@@ -25,6 +25,7 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Where;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.tcdt.qlnvhang.entities.FileDKemJoinKquaLcntHdr;
 
 import lombok.Data;
 

@@ -48,6 +48,10 @@ public class HhDxuatKhLcntHdrReq {
 
 	Long namKhoach;
 
+	@Size(max = 2000, message = "Mã đơn vị không được vượt quá 2000 ký tự")
+	@ApiModelProperty(example = "Ghi chú")
+	String ghiChu;
+
 	private List<FileDinhKemReq> fileDinhKems;
 
 	private List<HhDxuatKhLcntGaoDtlReq> detail1;

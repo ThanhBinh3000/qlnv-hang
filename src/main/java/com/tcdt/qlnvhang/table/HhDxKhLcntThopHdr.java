@@ -17,6 +17,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -42,6 +43,17 @@ public class HhDxKhLcntThopHdr implements Serializable {
 	String pthucLcnt;
 	String loaiHdong;
 	String nguonVon;
+
+	@Transient
+	String tenLoaiVthh;
+	@Transient
+	String tenHthucLcnt;
+	@Transient
+	String tenPthucLcnt;
+	@Transient
+	String tenLoaiHdong;
+	@Transient
+	String tenNguonVon;
 
 	@Temporal(TemporalType.DATE)
 	Date tuTgianTbao;

@@ -24,6 +24,7 @@ import org.hibernate.annotations.Where;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.tcdt.qlnvhang.entities.FileDKemJoinTthaoHdong;
 
 import lombok.Data;
 
@@ -51,6 +52,8 @@ public class HhDthauTthaoHdong implements Serializable {
 	BigDecimal giaHdTrThue;
 	BigDecimal giaHdSauThue;
 	Long giaHdVat;
+	String huyThau;
+	String lyDo;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_gt_hdr")

@@ -12,8 +12,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.data.jpa.domain.Specification;
 
+import com.tcdt.qlnvhang.request.search.HhPaKhLcntDsChuaQdReq;
 import com.tcdt.qlnvhang.request.search.HhPaKhlcntSearchReq;
 import com.tcdt.qlnvhang.table.HhPaKhlcntHdr;
+import com.tcdt.qlnvhang.util.Contains;
 
 public class HhPaKhlcntSpecification {
 	public static Specification<HhPaKhlcntHdr> buildSearchQuery(final HhPaKhlcntSearchReq objReq) {
@@ -47,6 +49,35 @@ public class HhPaKhlcntSpecification {
 
 				if (StringUtils.isNotBlank(loaiVthh))
 					predicate.getExpressions().add(builder.and(builder.equal(root.get("loaiVthh"), loaiVthh)));
+
+				return predicate;
+			}
+		};
+	}
+
+	public static Specification<HhPaKhlcntHdr> buildDsChuaQd(final HhPaKhLcntDsChuaQdReq objReq) {
+		return new Specification<HhPaKhlcntHdr>() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 3571167956165654062L;
+
+			@Override
+			public Predicate toPredicate(Root<HhPaKhlcntHdr> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
+				Predicate predicate = builder.conjunction();
+				if (ObjectUtils.isEmpty(objReq))
+					return predicate;
+
+				String namKhoach = objReq.getNamKhoach();
+				String loaiVthh = objReq.getLoaiVthh();
+
+				if (StringUtils.isNotEmpty(namKhoach))
+					predicate.getExpressions().add(builder.and(builder.equal(root.get("namKhoach"), namKhoach)));
+
+				if (StringUtils.isNotBlank(loaiVthh))
+					predicate.getExpressions().add(builder.and(builder.equal(root.get("loaiVthh"), loaiVthh)));
+
+				predicate.getExpressions().add(builder.and(builder.equal(root.get("quyetDinh"), Contains.DISABLE)));
 
 				return predicate;
 			}

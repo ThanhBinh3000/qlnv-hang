@@ -48,6 +48,7 @@ public class HhPaKhlcntDtl implements Serializable {
 	BigDecimal tongTien;
 	Long soGthau;
 	String namKhoach;
+//	String maCha;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_hdr")
