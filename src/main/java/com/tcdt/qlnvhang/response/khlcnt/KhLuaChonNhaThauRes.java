@@ -26,6 +26,6 @@ public class KhLuaChonNhaThauRes {
 	private String qchuanKthuat;
 
 	private List<GoiThauRes> goiThau = new ArrayList<>();
-	private int tongSoGoiThau;
-	private int soGoiThau;
+	private long tongSoGoiThau;
+	private long soGoiThau;
 }

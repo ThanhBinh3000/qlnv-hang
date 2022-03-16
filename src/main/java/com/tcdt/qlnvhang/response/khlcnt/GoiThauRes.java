@@ -18,8 +18,8 @@ public class GoiThauRes {
 	private Double donGia;
 	private Integer stt;
 	private List<DiaDiemNhapRes> diaDiemNhap;
-	private int tongSoDiaDiemNhap;
-	private int soLuongDiaDiemNhap;
+	private long tongSoDiaDiemNhap;
+	private long soLuongDiaDiemNhap;
 
 	public Double getThanhTien() {
 		if (soLuong != null && donGia != null)

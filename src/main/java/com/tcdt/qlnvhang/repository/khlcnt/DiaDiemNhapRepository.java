@@ -12,6 +12,6 @@ import java.util.Set;
 public interface DiaDiemNhapRepository extends CrudRepository<DiaDiemNhap, Long> {
 	List<DiaDiemNhap> findByGoiThauId(Long goiThauId, Pageable pageable);
 	List<DiaDiemNhap> findByGoiThauId(Long goiThauId);
-	Integer countByGoiThauId(Long goiThauId);
+	long countByGoiThauId(Long goiThauId);
 	List<DiaDiemNhap> findByGoiThauIdIn(Set<Long> goiThauIds);
 }

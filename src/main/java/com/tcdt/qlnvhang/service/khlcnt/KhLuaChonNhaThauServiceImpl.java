@@ -13,7 +13,9 @@ import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import com.tcdt.qlnvhang.util.Contains;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
+@Log4j2
 public class KhLuaChonNhaThauServiceImpl implements KhLuaChonNhaThauService{
 	@Autowired
 	private KhLuaChonNhaThauRepository khLuaChonNhaThauRepository;
@@ -114,8 +117,12 @@ public class KhLuaChonNhaThauServiceImpl implements KhLuaChonNhaThauService{
 	}
 
 	@Override
-	public List<KhLuaChonNhaThauRes> search(KhLuaChonNhaThauSearchReq req) {
-		return null;
+	public ListResponse<KhLuaChonNhaThauRes> search(KhLuaChonNhaThauSearchReq req) {
+		Page<KhLuaChonNhaThau> list = khLuaChonNhaThauRepository.search(req);
+		ListResponse<KhLuaChonNhaThauRes> response = new ListResponse<>();
+		response.setList(this.toResponseList(list.getContent()));
+		response.setTotal(list.getTotalElements());
+		return response;
 	}
 
 	@Override

@@ -9,11 +9,11 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class ListResponse<T> {
-	private int total;
-	private int count;
+	private long total;
+	private long count;
 	private List<T> list = new ArrayList<>();
 
-	public int getCount() {
+	public long getCount() {
 		return this.list.size();
 	}
 }
