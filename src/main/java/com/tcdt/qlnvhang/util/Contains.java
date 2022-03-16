@@ -68,6 +68,7 @@ public class Contains {
 	public static final String PHIEU_NX = "PH";
 	public static final String BANG_KE = "BK";
 	public static final String BIEN_BAN = "BB";
+	public static final String SHGT = "SHGT";
 
 	// Loai mua ban
 	public static final String MUA_TT = "00";

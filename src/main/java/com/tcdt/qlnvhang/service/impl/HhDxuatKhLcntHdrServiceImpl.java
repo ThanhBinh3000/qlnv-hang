@@ -31,6 +31,7 @@ import com.tcdt.qlnvhang.table.HhDxuatKhLcntCcxdgDtl;
 import com.tcdt.qlnvhang.table.HhDxuatKhLcntDsgtDtl;
 import com.tcdt.qlnvhang.table.HhDxuatKhLcntGaoDtl;
 import com.tcdt.qlnvhang.table.HhDxuatKhLcntHdr;
+import com.tcdt.qlnvhang.table.QlnvDanhMuc;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.MoneyConvert;
@@ -46,6 +47,8 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 
 	@Autowired
 	private HhDxuatKhLcntDsgtDtlRepository hhDxuatKhLcntDtlRepository;
+
+	Long shgtNext = new Long(0);
 
 	@Override
 	public HhDxuatKhLcntHdr create(HhDxuatKhLcntHdrReq objReq) throws Exception {
@@ -75,9 +78,24 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		// Add thong tin chung
 		List<HhDxuatKhLcntGaoDtl> dtls1 = ObjectMapperUtils.mapAll(objReq.getDetail1(), HhDxuatKhLcntGaoDtl.class);
 		dataMap.setChildren1(dtls1);
+
 		// Add danh sach goi thau
 		List<HhDxuatKhLcntDsgtDtl> dtls2 = ObjectMapperUtils.mapAll(objReq.getDetail2(), HhDxuatKhLcntDsgtDtl.class);
 		UnitScaler.reverseFormatList(dtls2, Contains.DVT_TAN);
+		String prefix = "-SHGT/" + dataMap.getMaDvi();
+		// Lay danh muc dung chung
+		String shgtStr = "0";
+		QlnvDanhMuc qlnvDanhMuc = danhMucRepository.findByMa(Contains.SHGT);
+		if (qlnvDanhMuc != null)
+			shgtStr = qlnvDanhMuc.getGiaTri();
+		Long shgt = Long.parseLong(shgtStr);
+		dtls2.forEach(h -> {
+			h.setShgt(String.format("%07d", shgt) + prefix);
+			shgtNext = Long.sum(shgt, 1);
+		});
+
+		danhMucRepository.updateVal(Contains.SHGT, shgtNext);
+
 		dataMap.setChildren2(dtls2);
 		// Add danh sach can cu xac dinh gia
 		if (objReq.getDetail3() != null) {
