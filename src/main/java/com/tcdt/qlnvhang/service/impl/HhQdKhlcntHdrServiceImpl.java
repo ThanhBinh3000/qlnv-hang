@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,6 +32,7 @@ import com.tcdt.qlnvhang.table.HhQdKhlcntDsgthau;
 import com.tcdt.qlnvhang.table.HhQdKhlcntDtl;
 import com.tcdt.qlnvhang.table.HhQdKhlcntHdr;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import com.tcdt.qlnvhang.util.PaginationSet;
 import com.tcdt.qlnvhang.util.UnitScaler;
@@ -284,6 +287,45 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		}
 
 		return dataPage;
+	}
+
+	@Override
+	public void exportToExcel(HhQdKhlcntSearchReq searchReq, HttpServletResponse response) throws Exception {
+		// Tao form excel
+		String title = "Danh sách QĐ phê duyệt KHLCNT";
+		String[] rowsName = new String[] { "STT", "Số quyết định", "Ngày QĐ", "Về việc", "Số QĐ giao chỉ tiêu",
+				"Loại hàng DTQG", "Tên loại hàng", "Tiêu chuẩn chất lượng", "Nguồn vốn", "Trạng thái" };
+		List<HhQdKhlcntHdr> dsgtDtls = hhQdKhlcntHdrRepository
+				.findAll(HhQdKhlcntSpecification.buildSearchQuery(searchReq));
+
+		if (dsgtDtls.isEmpty())
+			throw new UnsupportedOperationException("Không tìm thấy dữ liệu");
+
+		String filename = "Quyetdinhkehoachlcnt.xlsx";
+
+		// Lay danh muc dung chung
+		Map<String, String> mapDmuc = getMapCategory();
+
+		List<Object[]> dataList = new ArrayList<Object[]>();
+		Object[] objs = null;
+		for (int i = 0; i < dsgtDtls.size(); i++) {
+			HhQdKhlcntHdr dsgtDtl = dsgtDtls.get(i);
+			objs = new Object[rowsName.length];
+			objs[0] = i;
+			objs[1] = dsgtDtl.getSoQd();
+			objs[2] = convertDateToString(dsgtDtl.getNgayQd());
+			objs[3] = dsgtDtl.getVeViec();
+			objs[4] = "01/QD-TCDT";//TODO: lam min lai
+			objs[5] = mapDmuc.get(dsgtDtl.getLoaiVthh());
+			objs[6] = "Tiêu chuẩn chất lượng";
+			objs[7] = mapDmuc.get(dsgtDtl.getNguonVon());
+			objs[7] = mapDmuc.get(dsgtDtl.getTrangThai());
+
+			dataList.add(objs);
+		}
+
+		ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+		ex.export();
 	}
 
 }

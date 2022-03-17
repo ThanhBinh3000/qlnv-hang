@@ -82,7 +82,8 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		// Add danh sach goi thau
 		List<HhDxuatKhLcntDsgtDtl> dtls2 = ObjectMapperUtils.mapAll(objReq.getDetail2(), HhDxuatKhLcntDsgtDtl.class);
 		UnitScaler.reverseFormatList(dtls2, Contains.DVT_TAN);
-		String prefix = "-SHGT/" + dataMap.getMaDvi();
+		String prefix = "-" + Contains.SHGT + "/" + dataMap.getMaDvi();
+		//TODO: xem lai cach sinh so, viet tam de lay so
 		// Lay danh muc dung chung
 		String shgtStr = "0";
 		QlnvDanhMuc qlnvDanhMuc = danhMucRepository.findByMa(Contains.SHGT);

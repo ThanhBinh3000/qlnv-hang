@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
@@ -29,5 +30,7 @@ public interface HhQdKhlcntHdrService {
 	void delete(IdSearchReq idSearchReq) throws Exception;
 
 	HhQdKhlcntHdr detailNumber(String soQd) throws Exception;
+
+	void exportToExcel(HhQdKhlcntSearchReq searchReq, HttpServletResponse response) throws Exception;
 
 }
