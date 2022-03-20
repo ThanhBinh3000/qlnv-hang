@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.entities.dtvt;
+package com.tcdt.qlnvhang.entities.ttdtvt;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import lombok.AllArgsConstructor;
@@ -6,7 +6,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 

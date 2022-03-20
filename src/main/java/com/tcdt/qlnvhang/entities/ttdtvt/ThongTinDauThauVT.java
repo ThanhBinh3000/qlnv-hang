@@ -28,7 +28,7 @@ public class ThongTinDauThauVT extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "THONG_TIN_DAU_THAU_VT_SEQ")
 	@SequenceGenerator(sequenceName = "THONG_TIN_DAU_THAU_VT_SEQ", allocationSize = 1, name = "THONG_TIN_DAU_THAU_VT_SEQ")
 	private Long id;
-	private Long khlcntId;
+	private Long qdKhlcntId;
 	private String soDxuat;
 	private LocalDate ngayDxuat;
 	private String soQdinhPduyetKhlcnt;
