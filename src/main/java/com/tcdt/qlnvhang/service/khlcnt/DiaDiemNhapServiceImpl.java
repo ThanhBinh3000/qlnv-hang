@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.service.khlcnt;
 
-import com.tcdt.qlnvhang.entities.khlcnt.DiaDiemNhap;
+import com.tcdt.qlnvhang.entities.kehoachluachonnhathau.DiaDiemNhap;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.repository.khlcnt.DiaDiemNhapRepository;
 import com.tcdt.qlnvhang.request.object.khlcnt.DiaDiemNhapReq;

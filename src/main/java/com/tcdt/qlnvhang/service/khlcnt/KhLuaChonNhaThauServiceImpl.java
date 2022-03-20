@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.service.khlcnt;
 
-import com.tcdt.qlnvhang.entities.khlcnt.KhLuaChonNhaThau;
+import com.tcdt.qlnvhang.entities.kehoachluachonnhathau.KhLuaChonNhaThau;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.khlcnt.KhLuaChonNhaThauRepository;
 import com.tcdt.qlnvhang.request.StatusReq;

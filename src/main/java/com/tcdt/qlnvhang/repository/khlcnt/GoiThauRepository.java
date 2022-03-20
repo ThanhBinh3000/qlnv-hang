@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.repository.khlcnt;
 
-import com.tcdt.qlnvhang.entities.khlcnt.GoiThau;
+import com.tcdt.qlnvhang.entities.kehoachluachonnhathau.GoiThau;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

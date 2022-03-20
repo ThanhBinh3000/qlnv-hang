@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.entities.khlcnt;
+package com.tcdt.qlnvhang.entities.kehoachluachonnhathau;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import lombok.AllArgsConstructor;

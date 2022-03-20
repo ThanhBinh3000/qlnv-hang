@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.repository.khlcnt;
 
-import com.tcdt.qlnvhang.entities.khlcnt.KhLuaChonNhaThau;
+import com.tcdt.qlnvhang.entities.kehoachluachonnhathau.KhLuaChonNhaThau;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

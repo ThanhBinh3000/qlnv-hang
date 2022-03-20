@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.repository.khlcnt;
 
-import com.tcdt.qlnvhang.entities.khlcnt.KhLuaChonNhaThau;
+import com.tcdt.qlnvhang.entities.kehoachluachonnhathau.KhLuaChonNhaThau;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.object.khlcnt.KhLuaChonNhaThauSearchReq;
 import org.apache.commons.lang3.StringUtils;
