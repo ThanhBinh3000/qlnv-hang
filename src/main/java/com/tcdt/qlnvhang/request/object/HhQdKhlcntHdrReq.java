@@ -64,6 +64,11 @@ public class HhQdKhlcntHdrReq {
 	@ApiModelProperty(example = "2022")
 	String namKhoach;
 
+	@NotNull(message = "Không được để trống")
+	@Size(max = 20, message = "Căn cứ quyết định giao chỉ tiêu không được vượt quá 20 ký tự")
+	@ApiModelProperty(example = "20-QD/TCDT")
+	String qdCanCu;
+
 	@ApiModelProperty(notes = "Id của phương án đề xuất kế hoạch lựa chọn nhà thầu (nếu có)")
 	private Long idPaHdr;
 

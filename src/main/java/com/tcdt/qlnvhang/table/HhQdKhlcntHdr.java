@@ -43,6 +43,7 @@ public class HhQdKhlcntHdr implements Serializable {
 	@SequenceGenerator(sequenceName = "HH_QD_KHLCNT_HDR_SEQ", allocationSize = 1, name = "HH_QD_KHLCNT_HDR_SEQ")
 	private Long id;
 
+	String qdCanCu;
 	String soQd;
 	Date ngayQd;
 	Long idPaHdr;

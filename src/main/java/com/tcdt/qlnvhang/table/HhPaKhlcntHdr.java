@@ -74,6 +74,7 @@ public class HhPaKhlcntHdr implements Serializable {
 	String veViec;
 	String namKhoach;
 	Long idThHdr;
+	String soPhAn;
 	String quyetDinh;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
