@@ -26,7 +26,7 @@ public class UserInfo {
 	String password;
 	String fullName;
 	String status;
-	Long dvql;
+	String dvql;
 	String token;
 	String sysType;
 	Long groupId;

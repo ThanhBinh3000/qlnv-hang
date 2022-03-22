@@ -18,6 +18,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.tcdt.qlnvhang.request.BaseRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -66,8 +67,10 @@ public class BaseServiceImpl {
 		try {
 
 			// Call feign get dvql
-			ResponseEntity<String> response = categoryServiceProxy.getDetail(getAuthorizationToken(req), getDvql(req));
-
+			BaseRequest baseRequest = new BaseRequest();
+			baseRequest.setStr(maDvi);
+			ResponseEntity<String> response = categoryServiceProxy.getDetailByCode(getAuthorizationToken(req),
+					baseRequest);
 			log.info("Kết quả danh mục đơn vị: {}", gson.toJson(response));
 			if (Request.getStatus(response.getBody()) != EnumResponse.RESP_SUCC.getValue())
 				throw new NotFoundException("Không tìm truy vấn được thông tin đơn vị");
