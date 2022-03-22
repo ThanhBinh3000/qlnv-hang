@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.table;
+package com.tcdt.qlnvhang.entities;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,13 +14,14 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.tcdt.qlnvhang.table.HhDthauGthau;
 
 import lombok.Data;
 
 @Entity
 @Table(name = "FILE_DINH_KEM")
 @Data
-public class FileDKemJoinKquaLcnt implements Serializable {
+public class FileDKemJoinGoiThau implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -38,5 +39,5 @@ public class FileDKemJoinKquaLcnt implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "dataId")
 	@JsonBackReference
-	private HhDthauKquaLcnt parent;
+	private HhDthauGthau parent;
 }

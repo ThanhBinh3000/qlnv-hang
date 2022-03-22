@@ -27,6 +27,7 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Where;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.tcdt.qlnvhang.entities.FileDKemJoinDxKhLcntHdr;
 
 import lombok.Data;
 
@@ -66,6 +67,7 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	@Temporal(TemporalType.DATE)
 	Date ngayKy;
 	Long namKhoach;
+	String ghiChu;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)

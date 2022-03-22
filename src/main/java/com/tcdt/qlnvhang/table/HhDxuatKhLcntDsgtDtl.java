@@ -34,6 +34,7 @@ public class HhDxuatKhLcntDsgtDtl implements Serializable {
 	String diaDiemNhap;
 	BigDecimal donGia;
 	BigDecimal thanhTien;
+	String shgt;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_hdr")

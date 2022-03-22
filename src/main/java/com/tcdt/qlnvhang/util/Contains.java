@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 public class Contains {
-	public static final String FORMAT_DATE_STR = "dd/MM/yyyy";
-	public static final String FORMAT_DATE_TIME_STR = "dd/MM/yyyy HH:mm:ss";
+	public static final String FORMAT_DATE_STR = "yyyy-MM-dd";
+	public static final String FORMAT_DATE_TIME_STR = "yyyy-MM-dd HH:mm";
 	public static final String NGUOI_DUNG_NOI_BO = "BE";
 	public static final String NGUOI_DUNG_BEN_NGOAI = "FE";
 
@@ -68,6 +68,7 @@ public class Contains {
 	public static final String PHIEU_NX = "PH";
 	public static final String BANG_KE = "BK";
 	public static final String BIEN_BAN = "BB";
+	public static final String SHGT = "SHGT";
 
 	// Loai mua ban
 	public static final String MUA_TT = "00";

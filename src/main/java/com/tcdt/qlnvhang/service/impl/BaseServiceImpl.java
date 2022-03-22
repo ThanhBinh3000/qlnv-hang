@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.controller;
+package com.tcdt.qlnvhang.service.impl;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
@@ -10,20 +10,20 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.ObjectUtils;
+import com.tcdt.qlnvhang.request.BaseRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -33,101 +33,107 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.tcdt.qlnvhang.enums.EnumResponse;
+import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.jwt.TokenAuthenticationService;
 import com.tcdt.qlnvhang.repository.DanhMucRepository;
-import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.service.feign.CategoryServiceProxy;
 import com.tcdt.qlnvhang.table.QlnvDanhMuc;
+import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.MapCategory;
 import com.tcdt.qlnvhang.util.Request;
 
-public class BaseController {
+import javassist.NotFoundException;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
+@Service
+public class BaseServiceImpl {
 	@Autowired
 	private CategoryServiceProxy categoryServiceProxy;
 
 	@Autowired
 	DanhMucRepository danhMucRepository;
 
-	public String getStringParams(Map<String, String> allParams, String nameParam) {
-		if (StringUtils.isEmpty(allParams.get(nameParam))) {
-			return null;
+	@Autowired
+	private Gson gson;
+
+	@Autowired
+	private HttpServletRequest req;
+
+	public QlnvDmDonvi getDviByMa(String maDvi) throws Exception {
+		QlnvDmDonvi qlnvDmDonvi = null;
+		try {
+
+			// Call feign get dvql
+			BaseRequest baseRequest = new BaseRequest();
+			baseRequest.setStr(maDvi);
+			ResponseEntity<String> response = categoryServiceProxy.getDetailByCode(getAuthorizationToken(req),
+					baseRequest);
+			log.info("Kết quả danh mục đơn vị: {}", gson.toJson(response));
+			if (Request.getStatus(response.getBody()) != EnumResponse.RESP_SUCC.getValue())
+				throw new NotFoundException("Không tìm truy vấn được thông tin đơn vị");
+
+			// Passed ket qua tra ve, tuy bien type list or object
+			String str = Request.getAttrFromJson(response.getBody(), "data");
+			Type type = new TypeToken<QlnvDmDonvi>() {
+			}.getType();
+
+			qlnvDmDonvi = gson.fromJson(str, type);
+
+		} catch (Exception e) {
+			log.error("Không lấy thông tin danh mục đơn vị", e);
+			throw e;
 		}
-		return allParams.get(nameParam);
+		return qlnvDmDonvi;
+	}
+
+	public Map<String, String> getMapCategory() {
+		if (MapCategory.map == null && danhMucRepository != null) {
+			MapCategory.map = new HashMap<>();
+			Iterable<QlnvDanhMuc> list = danhMucRepository.findByTrangThai(Contains.HOAT_DONG);
+			for (QlnvDanhMuc cate : list) {
+				MapCategory.map.put(cate.getMa(), cate.getGiaTri());
+			}
+		}
+		return MapCategory.map;
+	}
+
+	public UserInfo getUser() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (auth != null && auth.getPrincipal() instanceof CustomUserDetails) {
+			CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+			return userDetails.getUser();
+		}
+		return null;
 	}
 
 	public String getAuthorizationToken(HttpServletRequest request) {
 		return (String) request.getHeader("Authorization");
 	}
 
-	public Long getLongParams(Map<String, String> allParams, String nameParam) {
-		if (StringUtils.isEmpty(allParams.get(nameParam))) {
-			return null;
-		}
-		return Long.valueOf(allParams.get(nameParam));
-	}
-
-	public Integer getIntParams(Map<String, String> allParams, String nameParam) {
-		if (StringUtils.isEmpty(allParams.get(nameParam))) {
-			return null;
-		}
-		return Integer.valueOf(allParams.get(nameParam));
-	}
-
-	private static final List<String> EXTENSIONS = Arrays.asList(".doc", ".docx", ".xls", ".xlsx");
-
 	public String getDvql(HttpServletRequest req) {
 		Authentication authentication = TokenAuthenticationService.getAuthentication(req);
 		return authentication.getDetails().toString();
 	}
 
-	public String getUserName(HttpServletRequest req) {
-		Authentication authentication = TokenAuthenticationService.getAuthentication(req);
-		return authentication.getName();
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	<T> void updateMapToObject(Map<String, String> params, T source, Class cls) throws JsonMappingException {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.setDateFormat(new SimpleDateFormat(Contains.FORMAT_DATE_STR));
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		Object overrideObj = mapper.convertValue(params, cls);
+		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+		mapper.updateValue(source, overrideObj);
 	}
 
-	public QlnvDmDonvi getDvi(HttpServletRequest request) throws Exception {
-		// Call feign get dvql
-		BaseRequest baseRequest = new BaseRequest();
-		baseRequest.setStr(getDvql(request));
-		ResponseEntity<String> response = categoryServiceProxy.getDetailByCode(this.getAuthorizationToken(request),
-				baseRequest);
-
-		if (Request.getStatus(response.getBody()) != EnumResponse.RESP_SUCC.getValue())
-			throw new Exception("Không tìm truy vấn được thông tin đơn vị");
-
-		// Passed ket qua tra ve, tuy bien type list or object
-		String str = Request.getAttrFromJson(response.getBody(), "data");
-		Type type = new TypeToken<QlnvDmDonvi>() {
-		}.getType();
-		QlnvDmDonvi objDonVi = new Gson().fromJson(str, type);
-
-		if (ObjectUtils.isEmpty(objDonVi))
-			throw new Exception("Không tìm truy vấn được thông tin đơn vị");
-		return objDonVi;
-	}
-
-	public QlnvDmDonvi getDviByMa(HttpServletRequest request, String maDvi) throws Exception {
-		// Call feign get dvql
-		BaseRequest baseRequest = new BaseRequest();
-		baseRequest.setStr(maDvi);
-		ResponseEntity<String> response = categoryServiceProxy.getDetailByCode(this.getAuthorizationToken(request),
-				baseRequest);
-
-		if (Request.getStatus(response.getBody()) != EnumResponse.RESP_SUCC.getValue())
-			throw new Exception("Không tìm truy vấn được thông tin đơn vị");
-
-		// Passed ket qua tra ve, tuy bien type list or object
-		String str = Request.getAttrFromJson(response.getBody(), "data");
-		Type type = new TypeToken<QlnvDmDonvi>() {
-		}.getType();
-		QlnvDmDonvi objDonVi = new Gson().fromJson(str, type);
-
-		if (ObjectUtils.isEmpty(objDonVi))
-			throw new Exception("Không tìm truy vấn được thông tin đơn vị");
-		return objDonVi;
+	public <T> void updateObjectToObject(T source, T objectEdit) throws JsonMappingException {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.setDateFormat(new SimpleDateFormat(Contains.FORMAT_DATE_STR));
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+		mapper.updateValue(source, objectEdit);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -149,24 +155,6 @@ public class BaseController {
 		}
 
 		return null;
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	<T> void updateMapToObject(Map<String, String> params, T source, Class cls) throws JsonMappingException {
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.setDateFormat(new SimpleDateFormat(Contains.FORMAT_DATE_STR));
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		Object overrideObj = mapper.convertValue(params, cls);
-		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-		mapper.updateValue(source, overrideObj);
-	}
-
-	public <T> void updateObjectToObject(T source, T objectEdit) throws JsonMappingException {
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.setDateFormat(new SimpleDateFormat(Contains.FORMAT_DATE_STR));
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-		mapper.updateValue(source, objectEdit);
 	}
 
 	public Date convertStringToDate(String format, String strDate) {
@@ -217,22 +205,6 @@ public class BaseController {
 		return false;
 	}
 
-	public String getSort(Map<String, String> allParams) {
-		if (allParams.get("sort") == null) {
-			return "desc";
-		}
-		return allParams.get("sort");
-	}
-
-	boolean allowExtension(String fileName) {
-		for (String ext : EXTENSIONS) {
-			if (fileName.endsWith(ext)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	public static Date getDateTimeNow() throws Exception {
 		DateFormat df = new SimpleDateFormat(Contains.FORMAT_DATE_TIME_STR);
 		Date date = new Date();
@@ -263,16 +235,5 @@ public class BaseController {
 		// Get year from date
 		int year = currentDate.getYear();
 		return "Ngày " + day + " tháng " + month + " năm " + year;
-	}
-
-	public Map<String, String> getMapCategory() {
-		if (MapCategory.map == null && danhMucRepository != null) {
-			MapCategory.map = new HashMap<>();
-			Iterable<QlnvDanhMuc> list = danhMucRepository.findByTrangThai(Contains.HOAT_DONG);
-			for (QlnvDanhMuc cate : list) {
-				MapCategory.map.put(cate.getMa(), cate.getGiaTri());
-			}
-		}
-		return MapCategory.map;
 	}
 }

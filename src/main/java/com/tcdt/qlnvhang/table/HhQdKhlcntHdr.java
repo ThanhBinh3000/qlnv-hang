@@ -17,12 +17,14 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Where;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.tcdt.qlnvhang.entities.FileDKemJoinQdKhlcntHdr;
 
 import lombok.Data;
 
@@ -41,6 +43,7 @@ public class HhQdKhlcntHdr implements Serializable {
 	@SequenceGenerator(sequenceName = "HH_QD_KHLCNT_HDR_SEQ", allocationSize = 1, name = "HH_QD_KHLCNT_HDR_SEQ")
 	private Long id;
 
+	String qdCanCu;
 	String soQd;
 	Date ngayQd;
 	Long idPaHdr;
@@ -59,6 +62,17 @@ public class HhQdKhlcntHdr implements Serializable {
 	String pthucLcnt;
 	String loaiHdong;
 	String nguonVon;
+
+	@Transient
+	String tenLoaiVthh;
+	@Transient
+	String tenHthucLcnt;
+	@Transient
+	String tenPthucLcnt;
+	@Transient
+	String tenLoaiHdong;
+	@Transient
+	String tenNguonVon;
 
 	@Temporal(TemporalType.DATE)
 	Date tgianTbao;

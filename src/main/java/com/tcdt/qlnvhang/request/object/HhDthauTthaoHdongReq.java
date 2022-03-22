@@ -35,5 +35,13 @@ public class HhDthauTthaoHdongReq {
 
 	Long idGtHdr;
 
+	@NotNull(message = "Không được để trống")
+	@Size(max = 1, message = "Hủy thầu không được vượt quá 1 ký tự")
+	@ApiModelProperty(example = "N")
+	String huyThau;
+
+	@Size(max = 500, message = "Lý do hủy thầu không được vượt quá 500 ký tự")
+	String lyDo;
+
 	private List<FileDinhKemReq> fileDinhKems;
 }
