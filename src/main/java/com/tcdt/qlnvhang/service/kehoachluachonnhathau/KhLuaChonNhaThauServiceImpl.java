@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.kehoachluachonnhathau;
 
 import com.tcdt.qlnvhang.entities.kehoachluachonnhathau.KhLuaChonNhaThau;
+import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.khlcnt.KhLuaChonNhaThauRepository;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -146,18 +147,18 @@ public class KhLuaChonNhaThauServiceImpl implements KhLuaChonNhaThauService{
 		if (khLuaChonNhaThau == null)
 			throw new Exception("Không tìm thấy dữ liệu.");
 
-		if (Contains.TAO_MOI.equals(khLuaChonNhaThau.getTrangThai()) && Contains.CHO_DUYET.equals(req.getTrangThai())) {
-			khLuaChonNhaThau.setTrangThai(Contains.CHO_DUYET);
+		if (TrangThaiEnum.MOI_TAO.getMa().equals(khLuaChonNhaThau.getTrangThai()) && TrangThaiEnum.CHO_DUYET.getMa().equals(req.getTrangThai())) {
+			khLuaChonNhaThau.setTrangThai(TrangThaiEnum.CHO_DUYET.getMa());
 			khLuaChonNhaThau.setNgayGuiDuyet(LocalDate.now());
 			khLuaChonNhaThau.setNguoiPduyetId(userInfo.getId());
-		} else if (Contains.CHO_DUYET.equals(khLuaChonNhaThau.getTrangThai()) && Contains.DUYET.equals(req.getTrangThai())) {
+		} else if (TrangThaiEnum.CHO_DUYET.getMa().equals(khLuaChonNhaThau.getTrangThai()) && TrangThaiEnum.DA_DUYET.getMa().equals(req.getTrangThai())) {
 			khLuaChonNhaThau.setNgayPduyet(LocalDate.now());
 			khLuaChonNhaThau.setNguoiPduyetId(userInfo.getId());
-			khLuaChonNhaThau.setTrangThai(Contains.DUYET);
-		} else if (Contains.CHO_DUYET.equals(khLuaChonNhaThau.getTrangThai()) && Contains.TU_CHOI.equals(req.getTrangThai())) {
+			khLuaChonNhaThau.setTrangThai(TrangThaiEnum.DA_DUYET.getMa());
+		} else if (TrangThaiEnum.CHO_DUYET.getMa().equals(khLuaChonNhaThau.getTrangThai()) && TrangThaiEnum.TU_CHOI.getMa().equals(req.getTrangThai())) {
 			khLuaChonNhaThau.setNgayPduyet(LocalDate.now());
 			khLuaChonNhaThau.setNguoiPduyetId(userInfo.getId());
-			khLuaChonNhaThau.setTrangThai(Contains.TU_CHOI);
+			khLuaChonNhaThau.setTrangThai(TrangThaiEnum.TU_CHOI.getMa());
 			khLuaChonNhaThau.setLdoTchoi(req.getLyDo());
 		} else {
 			return false;
