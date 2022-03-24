@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
@@ -21,7 +22,7 @@ public interface HhDauThauService {
 
 	HhDthau detail(String ids) throws Exception;
 
-	Page<HhDthau2> colection(HhDthauSearchReq objReq) throws Exception;
+	Page<HhDthau2> colection(HhDthauSearchReq objReq, HttpServletRequest req) throws Exception;
 
 	@Transactional(rollbackOn = Exception.class)
 	HhDthau approve(StatusReq stReq) throws Exception;

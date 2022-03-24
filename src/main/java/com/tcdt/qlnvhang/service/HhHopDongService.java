@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
@@ -20,7 +21,7 @@ public interface HhHopDongService {
 
 	HhHopDongHdr detail(String ids) throws Exception;
 
-	Page<HhHopDongHdr> colection(HhHopDongSearchReq objReq) throws Exception;
+	Page<HhHopDongHdr> colection(HhHopDongSearchReq objReq, HttpServletRequest req) throws Exception;
 
 	@Transactional(rollbackOn = Exception.class)
 	HhHopDongHdr approve(StatusReq stReq) throws Exception;

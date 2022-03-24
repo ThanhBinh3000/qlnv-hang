@@ -134,7 +134,7 @@ public class HhHopDongController {
 			@Valid @RequestBody HhHopDongSearchReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(service.colection(objReq));
+			resp.setData(service.colection(objReq, request));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (

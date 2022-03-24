@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
@@ -21,7 +22,7 @@ public interface HhDxuatKhLcntHdrService {
 
 	HhDxuatKhLcntHdr detail(String ids) throws Exception;
 
-	Page<HhDxuatKhLcntHdr> colection(HhDxuatKhLcntSearchReq objReq) throws Exception;
+	Page<HhDxuatKhLcntHdr> colection(HhDxuatKhLcntSearchReq objReq, HttpServletRequest req) throws Exception;
 
 	@Transactional(rollbackOn = Exception.class)
 	HhDxuatKhLcntHdr approve(StatusReq stReq) throws Exception;

@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.modelmapper.ModelMapper;
@@ -83,7 +84,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		List<HhDxuatKhLcntDsgtDtl> dtls2 = ObjectMapperUtils.mapAll(objReq.getDetail2(), HhDxuatKhLcntDsgtDtl.class);
 		UnitScaler.reverseFormatList(dtls2, Contains.DVT_TAN);
 		String prefix = "-" + Contains.SHGT + "/" + dataMap.getMaDvi();
-		//TODO: xem lai cach sinh so, viet tam de lay so
+		// TODO: xem lai cach sinh so, viet tam de lay so
 		// Lay danh muc dung chung
 		String shgtStr = "0";
 		QlnvDanhMuc qlnvDanhMuc = danhMucRepository.findByMa(Contains.SHGT);
@@ -202,7 +203,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 	}
 
 	@Override
-	public Page<HhDxuatKhLcntHdr> colection(HhDxuatKhLcntSearchReq objReq) throws Exception {
+	public Page<HhDxuatKhLcntHdr> colection(HhDxuatKhLcntSearchReq objReq, HttpServletRequest req) throws Exception {
 		int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
 		int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
 		Pageable pageable = PageRequest.of(page, limit);
@@ -211,7 +212,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 				.findAll(HhDxuatKhLcntSpecification.buildSearchQuery(objReq), pageable);
 
 		for (HhDxuatKhLcntHdr hdr : qhKho.getContent()) {
-			hdr.setTenDvi(getDviByMa(hdr.getMaDvi()).getTenDvi());
+			hdr.setTenDvi(getDviByMa(hdr.getMaDvi(), req).getTenDvi());
 		}
 
 		return qhKho;

@@ -18,7 +18,6 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.tcdt.qlnvhang.request.BaseRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -36,6 +35,7 @@ import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.jwt.TokenAuthenticationService;
 import com.tcdt.qlnvhang.repository.DanhMucRepository;
+import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.service.feign.CategoryServiceProxy;
 import com.tcdt.qlnvhang.table.QlnvDanhMuc;
 import com.tcdt.qlnvhang.table.UserInfo;
@@ -44,7 +44,6 @@ import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.MapCategory;
 import com.tcdt.qlnvhang.util.Request;
 
-import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -59,10 +58,10 @@ public class BaseServiceImpl {
 	@Autowired
 	private Gson gson;
 
-	@Autowired
-	private HttpServletRequest req;
+//	@Autowired
+//	private HttpServletRequest req;
 
-	public QlnvDmDonvi getDviByMa(String maDvi) throws Exception {
+	public QlnvDmDonvi getDviByMa(String maDvi, HttpServletRequest req) throws Exception {
 		QlnvDmDonvi qlnvDmDonvi = null;
 		try {
 
@@ -73,7 +72,7 @@ public class BaseServiceImpl {
 					baseRequest);
 			log.info("Kết quả danh mục đơn vị: {}", gson.toJson(response));
 			if (Request.getStatus(response.getBody()) != EnumResponse.RESP_SUCC.getValue())
-				throw new NotFoundException("Không tìm truy vấn được thông tin đơn vị");
+				qlnvDmDonvi = new QlnvDmDonvi();
 
 			// Passed ket qua tra ve, tuy bien type list or object
 			String str = Request.getAttrFromJson(response.getBody(), "data");

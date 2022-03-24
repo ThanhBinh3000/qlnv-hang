@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -281,7 +283,7 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 	}
 
 	@Override
-	public Page<HhDthau2> colection(HhDthauSearchReq objReq) throws Exception {
+	public Page<HhDthau2> colection(HhDthauSearchReq objReq, HttpServletRequest req) throws Exception {
 		int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
 		int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
 		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
@@ -289,7 +291,7 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 		Page<HhDthau2> dataPage = hhDthau2Repository.findAll(HhDthau2Specification.buildSearchQuery(objReq), pageable);
 
 		for (HhDthau2 hdr : dataPage.getContent()) {
-			hdr.setTenDvi(getDviByMa(hdr.getMaDvi()).getTenDvi());
+			hdr.setTenDvi(getDviByMa(hdr.getMaDvi(), req).getTenDvi());
 		}
 		return dataPage;
 	}
