@@ -88,6 +88,7 @@ public class HhQdKhlcntHdr implements Serializable {
 	String veViec;
 	String namKhoach;
 	String blanhDthau;
+	String soPhAn;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)
