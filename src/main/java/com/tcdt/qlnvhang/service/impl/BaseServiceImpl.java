@@ -35,6 +35,7 @@ import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.jwt.TokenAuthenticationService;
 import com.tcdt.qlnvhang.repository.DanhMucRepository;
+import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.service.feign.CategoryServiceProxy;
 import com.tcdt.qlnvhang.table.QlnvDanhMuc;
@@ -42,6 +43,7 @@ import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.MapCategory;
+import com.tcdt.qlnvhang.util.MapDmucDvi;
 import com.tcdt.qlnvhang.util.Request;
 
 import lombok.extern.slf4j.Slf4j;
@@ -54,6 +56,9 @@ public class BaseServiceImpl {
 
 	@Autowired
 	DanhMucRepository danhMucRepository;
+
+	@Autowired
+	private QlnvDmDonviRepository qlnvDmDonviRepository;
 
 	@Autowired
 	private Gson gson;
@@ -97,6 +102,17 @@ public class BaseServiceImpl {
 			}
 		}
 		return MapCategory.map;
+	}
+
+	public Map<String, String> getMapDmucDvi() {
+		if (MapDmucDvi.map == null && qlnvDmDonviRepository != null) {
+			MapDmucDvi.map = new HashMap<>();
+			Iterable<QlnvDmDonvi> list = qlnvDmDonviRepository.findByTrangThai(Contains.HOAT_DONG);
+			for (QlnvDmDonvi cate : list) {
+				MapDmucDvi.map.put(cate.getMaDvi(), cate.getTenDvi());
+			}
+		}
+		return MapDmucDvi.map;
 	}
 
 	public UserInfo getUser() {

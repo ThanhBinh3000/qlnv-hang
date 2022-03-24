@@ -4,6 +4,7 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -211,8 +212,10 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		Page<HhDxuatKhLcntHdr> qhKho = hhDxuatKhLcntHdrRepository
 				.findAll(HhDxuatKhLcntSpecification.buildSearchQuery(objReq), pageable);
 
+		// Lay danh muc dung chung
+		Map<String, String> mapDmucDvi = getMapDmucDvi();
 		for (HhDxuatKhLcntHdr hdr : qhKho.getContent()) {
-			hdr.setTenDvi(getDviByMa(hdr.getMaDvi(), req).getTenDvi());
+			hdr.setTenDvi(mapDmucDvi.get(hdr.getMaDvi()));
 		}
 
 		return qhKho;
