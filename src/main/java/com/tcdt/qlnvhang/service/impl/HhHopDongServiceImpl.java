@@ -78,6 +78,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 			for (HhHopDongDtlReq dtlReq : dtlReqList) {
 				List<HhDdiemNhapKhoReq> cTietReq = dtlReq.getDetail();
 				HhHopDongDtl detail = ObjectMapperUtils.map(dtlReq, HhHopDongDtl.class);
+				detail.setType(Contains.HOP_DONG);
 				detailChild = new ArrayList<HhDdiemNhapKho>();
 				if (cTietReq != null)
 					detailChild = ObjectMapperUtils.mapAll(cTietReq, HhDdiemNhapKho.class);
@@ -148,6 +149,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 			for (HhHopDongDtlReq dtlReq : dtlReqList) {
 				List<HhDdiemNhapKhoReq> cTietReq = dtlReq.getDetail();
 				HhHopDongDtl detail = ObjectMapperUtils.map(dtlReq, HhHopDongDtl.class);
+				detail.setType(Contains.HOP_DONG);
 				detailChild = new ArrayList<HhDdiemNhapKho>();
 				if (cTietReq != null)
 					detailChild = ObjectMapperUtils.mapAll(cTietReq, HhDdiemNhapKho.class);

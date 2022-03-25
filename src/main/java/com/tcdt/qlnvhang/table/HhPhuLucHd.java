@@ -69,17 +69,17 @@ public class HhPhuLucHd implements Serializable {
 	@JoinColumn(name = "id_hdr")
 	@JsonManagedReference
 	@Where(clause = "type='" + Contains.PHU_LUC + "'")
-	private List<HhDdiemNhapKhoPluc> children = new ArrayList<>();
+	private List<HhPhuLucHdDtl> children = new ArrayList<>();
 
-	public void setChildren(List<HhDdiemNhapKhoPluc> children) {
+	public void setChildren(List<HhPhuLucHdDtl> children) {
 		this.children.clear();
-		for (HhDdiemNhapKhoPluc child : children) {
+		for (HhPhuLucHdDtl child : children) {
 			child.setParent(this);
 		}
 		this.children.addAll(children);
 	}
 
-	public void addChild(HhDdiemNhapKhoPluc child) {
+	public void addChild(HhPhuLucHdDtl child) {
 		child.setParent(this);
 		this.children.add(child);
 	}

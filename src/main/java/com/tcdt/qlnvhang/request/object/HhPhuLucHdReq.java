@@ -60,7 +60,7 @@ public class HhPhuLucHdReq {
 	@ApiModelProperty(example = "00")
 	String loaiVthh;
 
-	private List<HhDdiemNhapKhoReq> detail;
+	private List<HhHopDongDtlReq> detail;
 	private List<FileDinhKemReq> fileDinhKems;
 
 }

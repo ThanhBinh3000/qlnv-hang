@@ -21,6 +21,7 @@ import com.tcdt.qlnvhang.repository.HhPhuLucHdRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.HhDdiemNhapKhoReq;
+import com.tcdt.qlnvhang.request.object.HhHopDongDtlReq;
 import com.tcdt.qlnvhang.request.object.HhPhuLucHdReq;
 import com.tcdt.qlnvhang.request.search.HhPhuLucHdSearchReq;
 import com.tcdt.qlnvhang.secification.HhPhuLucHdSpecification;
@@ -28,6 +29,7 @@ import com.tcdt.qlnvhang.service.HhPhuLucHdService;
 import com.tcdt.qlnvhang.table.HhDdiemNhapKhoPluc;
 import com.tcdt.qlnvhang.table.HhHopDongHdr;
 import com.tcdt.qlnvhang.table.HhPhuLucHd;
+import com.tcdt.qlnvhang.table.HhPhuLucHdDtl;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import com.tcdt.qlnvhang.util.PaginationSet;
@@ -68,13 +70,25 @@ public class HhPhuLucHdServiceImpl extends BaseServiceImpl implements HhPhuLucHd
 		dataMap.setMaDvi(getDvql(req));
 
 		// Add thong tin dieu chinh dia diem nhap
-		List<HhDdiemNhapKhoReq> dtlReqList = objReq.getDetail();
+		List<HhHopDongDtlReq> dtlReqList = objReq.getDetail();
+		List<HhPhuLucHdDtl> details = new ArrayList<>();
 		if (dtlReqList != null) {
-			List<HhDdiemNhapKhoPluc> dtls1 = ObjectMapperUtils.mapAll(dtlReqList, HhDdiemNhapKhoPluc.class);
-			dtls1.forEach(f -> {
-				f.setType(Contains.PHU_LUC);
-			});
-			dataMap.setChildren(dtls1);
+			List<HhDdiemNhapKhoPluc> detailChild;
+			for (HhHopDongDtlReq dtlReq : dtlReqList) {
+				List<HhDdiemNhapKhoReq> cTietReq = dtlReq.getDetail();
+				HhPhuLucHdDtl detail = ObjectMapperUtils.map(dtlReq, HhPhuLucHdDtl.class);
+				detail.setType(Contains.PHU_LUC);
+				detailChild = new ArrayList<HhDdiemNhapKhoPluc>();
+				if (cTietReq != null)
+					detailChild = ObjectMapperUtils.mapAll(cTietReq, HhDdiemNhapKhoPluc.class);
+				detailChild.forEach(f -> {
+					f.setType(Contains.PHU_LUC);
+				});
+
+				detail.setChildren(detailChild);
+				details.add(detail);
+			}
+			dataMap.setChildren(details);
 		}
 
 		// File dinh kem cua phu luc
@@ -124,13 +138,25 @@ public class HhPhuLucHdServiceImpl extends BaseServiceImpl implements HhPhuLucHd
 		dataDB.setNguoiSua(getUser().getUsername());
 
 		// Add thong tin dieu chinh dia diem nhap
-		List<HhDdiemNhapKhoReq> dtlReqList = objReq.getDetail();
+		List<HhHopDongDtlReq> dtlReqList = objReq.getDetail();
+		List<HhPhuLucHdDtl> details = new ArrayList<>();
 		if (dtlReqList != null) {
-			List<HhDdiemNhapKhoPluc> dtls1 = ObjectMapperUtils.mapAll(dtlReqList, HhDdiemNhapKhoPluc.class);
-			dtls1.forEach(f -> {
-				f.setType(Contains.PHU_LUC);
-			});
-			dataDB.setChildren(dtls1);
+			List<HhDdiemNhapKhoPluc> detailChild;
+			for (HhHopDongDtlReq dtlReq : dtlReqList) {
+				List<HhDdiemNhapKhoReq> cTietReq = dtlReq.getDetail();
+				HhPhuLucHdDtl detail = ObjectMapperUtils.map(dtlReq, HhPhuLucHdDtl.class);
+				detail.setType(Contains.PHU_LUC);
+				detailChild = new ArrayList<HhDdiemNhapKhoPluc>();
+				if (cTietReq != null)
+					detailChild = ObjectMapperUtils.mapAll(cTietReq, HhDdiemNhapKhoPluc.class);
+				detailChild.forEach(f -> {
+					f.setType(Contains.PHU_LUC);
+				});
+
+				detail.setChildren(detailChild);
+				details.add(detail);
+			}
+			dataDB.setChildren(details);
 		}
 
 		// File dinh kem cua phu luc

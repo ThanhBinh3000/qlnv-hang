@@ -28,7 +28,7 @@ import lombok.Data;
 @Entity
 @Table(name = "HH_HOP_DONG_DTL")
 @Data
-public class HhHopDongDtl implements Serializable {
+public class HhPhuLucHdDtl implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -49,23 +49,23 @@ public class HhHopDongDtl implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_hdr")
 	@JsonBackReference
-	private HhHopDongHdr parent;
+	private HhPhuLucHd parent;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "id_hdr")
 	@JsonManagedReference
-	@Where(clause = "type='" + Contains.HOP_DONG + "'")
-	private List<HhDdiemNhapKho> children = new ArrayList<>();
+	@Where(clause = "type='" + Contains.PHU_LUC + "'")
+	private List<HhDdiemNhapKhoPluc> children = new ArrayList<>();
 
-	public void setChildren(List<HhDdiemNhapKho> children) {
+	public void setChildren(List<HhDdiemNhapKhoPluc> children) {
 		this.children.clear();
-		for (HhDdiemNhapKho child : children) {
+		for (HhDdiemNhapKhoPluc child : children) {
 			child.setParent(this);
 		}
 		this.children.addAll(children);
 	}
 
-	public void addChild(HhDdiemNhapKho child) {
+	public void addChild(HhDdiemNhapKhoPluc child) {
 		child.setParent(this);
 		this.children.add(child);
 	}

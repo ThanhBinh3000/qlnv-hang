@@ -38,6 +38,6 @@ public class HhDdiemNhapKhoPluc implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_hdr")
 	@JsonBackReference
-	private HhPhuLucHd parent;
+	private HhPhuLucHdDtl parent;
 
 }

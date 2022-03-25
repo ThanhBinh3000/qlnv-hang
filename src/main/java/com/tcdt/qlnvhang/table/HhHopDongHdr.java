@@ -25,6 +25,7 @@ import org.hibernate.annotations.Where;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tcdt.qlnvhang.entities.FileDKemJoinHopDong;
+import com.tcdt.qlnvhang.util.Contains;
 
 import lombok.Data;
 
@@ -95,6 +96,7 @@ public class HhHopDongHdr implements Serializable {
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "id_hdr")
 	@JsonManagedReference
+	@Where(clause = "type='" + Contains.HOP_DONG + "'")
 	private List<HhHopDongDtl> children = new ArrayList<>();
 
 	public void setChildren(List<HhHopDongDtl> children) {
