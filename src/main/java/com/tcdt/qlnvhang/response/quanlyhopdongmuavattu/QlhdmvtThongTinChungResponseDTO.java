@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.response.quanlyhopdongmuavattu;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +13,8 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class QlhdmvtThongTinChungDTO {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class QlhdmvtThongTinChungResponseDTO {
 	private Long id;
 	private LocalDate nhlTuNgay;
 	private Long nhlDenNgay;
@@ -30,6 +32,6 @@ public class QlhdmvtThongTinChungDTO {
 	private BigDecimal giaTriHdSauThu;
 	private Long fileDinhKemId;
 	private String ghiChu;
-	private QlhdmvtTtChuDauTuDTO thongTinChuDauTu;
-	private QlhdmvtTtDonViCcDTO donViCungCap;
+	private QlhdmvtTtChuDauTuResponseDTO thongTinChuDauTu;
+	private QlhdmvtTtDonViCcResponseDTO donViCungCap;
 }

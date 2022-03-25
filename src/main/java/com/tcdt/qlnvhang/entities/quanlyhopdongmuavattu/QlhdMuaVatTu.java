@@ -2,11 +2,9 @@ package com.tcdt.qlnvhang.entities.quanlyhopdongmuavattu;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Builder
@@ -52,4 +50,10 @@ public class QlhdMuaVatTu {
 
     @Column(name = "THONG_TIN_CHUNG_ID")
     private Long thongTinChungId;
+
+    @Transient
+    private List<QlhdmvtDsGoiThau> danhSachGoiThau;
+
+    @Transient
+    private List<QlhdmvtPhuLucHopDong> phuLucHopDongList;
 }

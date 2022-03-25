@@ -9,8 +9,8 @@ public class DataUtils {
 	@Autowired
 	private ObjectMapper objectMapper;
 
-	public <T> T mapObject(Object source, Class<T> toClass) {
+	public <T> T toObject(Object source, Class<T> clazz) {
 		if (source == null) return null;
-		return objectMapper.convertValue(source, toClass);
+		return objectMapper.convertValue(source, clazz);
 	}
 }
