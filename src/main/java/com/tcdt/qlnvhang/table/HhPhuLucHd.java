@@ -99,4 +99,9 @@ public class HhPhuLucHd implements Serializable {
 		this.children1.addAll(children1);
 	}
 
+	public void addChild1(FileDKemJoinPhuLuc child1) {
+		child1.setParent(this);
+		this.children1.add(child1);
+	}
+
 }

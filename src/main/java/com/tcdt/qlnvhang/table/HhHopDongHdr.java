@@ -144,4 +144,9 @@ public class HhHopDongHdr implements Serializable {
 		this.children2.addAll(children2);
 	}
 
+	public void addChild2(FileDKemJoinHopDong child2) {
+		child2.setParent(this);
+		this.children2.add(child2);
+	}
+
 }
