@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -290,8 +291,9 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 
 		Page<HhDthau2> dataPage = hhDthau2Repository.findAll(HhDthau2Specification.buildSearchQuery(objReq), pageable);
 
+		Map<String, String> mapDmucDvi = getMapDmucDvi();
 		for (HhDthau2 hdr : dataPage.getContent()) {
-			hdr.setTenDvi(getDviByMa(hdr.getMaDvi(), req).getTenDvi());
+			hdr.setTenDvi(mapDmucDvi.get(hdr.getMaDvi()));
 		}
 		return dataPage;
 	}

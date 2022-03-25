@@ -20,7 +20,7 @@ import lombok.Data;
 @Entity
 @Table(name = "HH_DDIEM_NHAP_KHO")
 @Data
-public class HhDdiemNhapKho implements Serializable {
+public class HhDdiemNhapKhoPluc implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -38,6 +38,6 @@ public class HhDdiemNhapKho implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_hdr")
 	@JsonBackReference
-	private HhHopDongDtl parent;
+	private HhPhuLucHd parent;
 
 }

@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -250,5 +251,13 @@ public class BaseServiceImpl {
 		// Get year from date
 		int year = currentDate.getYear();
 		return "Ngày " + day + " tháng " + month + " năm " + year;
+	}
+
+	public static long minusDate(Date date1, Date date2) throws Exception {
+		LocalDate d1 = LocalDate.parse(convertDateToString(date1), DateTimeFormatter.ISO_LOCAL_DATE);
+		LocalDate d2 = LocalDate.parse(convertDateToString(date2), DateTimeFormatter.ISO_LOCAL_DATE);
+		Duration diff = Duration.between(d1.atStartOfDay(), d2.atStartOfDay());
+		long diffDays = diff.toDays();
+		return diffDays;
 	}
 }

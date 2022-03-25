@@ -1,7 +1,7 @@
-package com.tcdt.qlnvhang.table;
+package com.tcdt.qlnvhang.entities;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,30 +14,30 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.tcdt.qlnvhang.table.HhPhuLucHd;
 
 import lombok.Data;
 
 @Entity
-@Table(name = "HH_DDIEM_NHAP_KHO")
+@Table(name = "FILE_DINH_KEM")
 @Data
-public class HhDdiemNhapKho implements Serializable {
+public class FileDKemJoinPhuLuc implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_DDIEM_NHAP_KHO_SEQ")
-	@SequenceGenerator(sequenceName = "HH_DDIEM_NHAP_KHO_SEQ", allocationSize = 1, name = "HH_DDIEM_NHAP_KHO_SEQ")
-	private Long id;
-
-	String chiCuc;
-	String diemKho;
-	String nhaKho;
-	BigDecimal soLuong;
-	String type;
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FILE_DINH_KEM_SEQ")
+	@SequenceGenerator(sequenceName = "FILE_DINH_KEM_SEQ", allocationSize = 1, name = "FILE_DINH_KEM_SEQ")
+	Long id;
+	String fileName;
+	String fileSize;
+	String fileUrl;
+	String fileType;
+	String dataType;
+	Date createDate;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_hdr")
+	@JoinColumn(name = "dataId")
 	@JsonBackReference
-	private HhHopDongDtl parent;
-
+	private HhPhuLucHd parent;
 }

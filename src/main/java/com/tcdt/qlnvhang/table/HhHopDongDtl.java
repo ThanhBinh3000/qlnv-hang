@@ -17,8 +17,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Where;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.tcdt.qlnvhang.util.Contains;
 
 import lombok.Data;
 
@@ -50,6 +53,7 @@ public class HhHopDongDtl implements Serializable {
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "id_hdr")
 	@JsonManagedReference
+	@Where(clause = "type='" + Contains.HOP_DONG + "'")
 	private List<HhDdiemNhapKho> children = new ArrayList<>();
 
 	public void setChildren(List<HhDdiemNhapKho> children) {
