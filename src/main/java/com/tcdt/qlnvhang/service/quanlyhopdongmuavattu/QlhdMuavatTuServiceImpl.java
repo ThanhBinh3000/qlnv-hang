@@ -54,7 +54,7 @@ public class QlhdMuavatTuServiceImpl implements QlhdMuavatTuService {
 		thongTinDonViCungCap.setNguoiTaoId(userInfo.getId());
 		thongTinDonViCungCap = qlhdmvtTtDonViCcRepository.save(thongTinDonViCungCap);
 
-		//Thông tin chung
+		//Thông tin chung bao gồm: thông tin chung, thông tin chủ đầu tư, thông tin đơn vị cung cấp
 		QlhdmvtThongTinChung thongTinChung = dataUtils.toObject(request.getThongTinChung(), QlhdmvtThongTinChung.class);
 		thongTinChung.setNgayTao(LocalDate.now());
 		thongTinChung.setNguoiTaoId(userInfo.getId());
@@ -62,9 +62,10 @@ public class QlhdMuavatTuServiceImpl implements QlhdMuavatTuService {
 		thongTinChung.setDvCungCapId(thongTinDonViCungCap.getId());
 		thongTinChung = qlhdmvtThongTinChungRepository.save(thongTinChung);
 
-		//Quản lý hợp đồng mua vật tư
+		//Quản lý hợp đồng mua vật tư: set thông tin chung
 		QlhdMuaVatTu qlhdMuaVatTu = dataUtils.toObject(request, QlhdMuaVatTu.class);
 		qlhdMuaVatTu.setThongTinChungId(thongTinChung.getId());
+
 
 		//Danh sach goi thau
 		List<QlhdmvtDsGoiThau> danhSachGoiThau = request.getDanhSachGoiThau()
@@ -78,14 +79,29 @@ public class QlhdMuavatTuServiceImpl implements QlhdMuavatTuService {
 
 				}).collect(Collectors.toList());
 
-		return buildQlhdMuaVatTuResponse(thongTinChuDauTu, thongTinDonViCungCap, thongTinChung, qlhdMuaVatTu, danhSachGoiThau);
+		//Phụ Lục quản lý hợp đồng mua vật tư
+		List<QlhdmvtPhuLucHopDong> phuLucHopDongList = request.getPhuLucHopDongList()
+				.stream()
+				.map(item -> {
+					QlhdmvtPhuLucHopDong phuLucHopDong = dataUtils.toObject(item, QlhdmvtPhuLucHopDong.class);
+					phuLucHopDong.setNgayTao(LocalDate.now());
+					phuLucHopDong.setNguoiTaoId(userInfo.getId());
+					phuLucHopDong.setQlhdMuaVatTuId(qlhdMuaVatTu.getId());
+					return phuLucHopDong;
+				}).collect(Collectors.toList());
+
+		//Quản lý hợp đồng mua vật tư: set danh sách gói thầu, danh sách phụ lục hợp đồng
+		qlhdMuaVatTu.setPhuLucHopDongList(phuLucHopDongList);
+		qlhdMuaVatTu.setDanhSachGoiThau(danhSachGoiThau);
+
+
+		return buildQlhdMuaVatTuResponse(thongTinChuDauTu, thongTinDonViCungCap, thongTinChung, qlhdMuaVatTu);
 	}
 
 	private QlhdMuaVatTuResponseDTO buildQlhdMuaVatTuResponse(QlhdmvtTtChuDauTu ttChuDauTu,
 															  QlhdmvtTtDonViCc ttDonViCc,
 															  QlhdmvtThongTinChung thongTinChung,
-															  QlhdMuaVatTu qlhdMuaVatTu,
-															  List<QlhdmvtDsGoiThau> danhSachGoiThau) {
+															  QlhdMuaVatTu qlhdMuaVatTu) {
 		//Thông tin chủ đầu tư
 		QlhdmvtTtChuDauTuResponseDTO chuDauTuResponse = dataUtils.toObject(ttChuDauTu, QlhdmvtTtChuDauTuResponseDTO.class);
 
@@ -98,14 +114,20 @@ public class QlhdMuavatTuServiceImpl implements QlhdMuavatTuService {
 		thongTinChungResponse.setThongTinChuDauTu(chuDauTuResponse);
 
 		//Danh sách gói thầu
-		List<QlhdmvtDsGoiThauResponseDTO> danhSachGoiThauResponse = danhSachGoiThau
+		List<QlhdmvtDsGoiThauResponseDTO> danhSachGoiThauResponse = qlhdMuaVatTu.getDanhSachGoiThau()
 				.stream()
 				.map(item -> dataUtils.toObject(item, QlhdmvtDsGoiThauResponseDTO.class)).collect(Collectors.toList());
+
+		//Danh sách phụ lục hợp đồng
+		List<QlhdmvtPhuLucHopDongResponseDTO> phuLucHopDongResponseList = qlhdMuaVatTu.getPhuLucHopDongList()
+				.stream()
+				.map(item -> dataUtils.toObject(item, QlhdmvtPhuLucHopDongResponseDTO.class)).collect(Collectors.toList());
 
 		//Quản lý hợp đồng mua vật tư
 		QlhdMuaVatTuResponseDTO qlhdMuaVatTuResponse = dataUtils.toObject(qlhdMuaVatTu, QlhdMuaVatTuResponseDTO.class);
 		qlhdMuaVatTuResponse.setDanhSachGoiThau(danhSachGoiThauResponse);
 		qlhdMuaVatTuResponse.setThongTinChung(thongTinChungResponse);
+		qlhdMuaVatTuResponse.setPhuLucHopDongList(phuLucHopDongResponseList);
 
 		return qlhdMuaVatTuResponse;
 	}

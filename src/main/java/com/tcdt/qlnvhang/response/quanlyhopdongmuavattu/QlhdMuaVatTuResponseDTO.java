@@ -23,5 +23,5 @@ public class QlhdMuaVatTuResponseDTO {
     private LocalDate ngayKy;
     private QlhdmvtThongTinChungResponseDTO thongTinChung;
     private List<QlhdmvtDsGoiThauResponseDTO> danhSachGoiThau;
-    private QlhdmvtPhuLucHopDongResponseDTO phuLuc;
+    private List<QlhdmvtPhuLucHopDongResponseDTO> phuLucHopDongList;
 }

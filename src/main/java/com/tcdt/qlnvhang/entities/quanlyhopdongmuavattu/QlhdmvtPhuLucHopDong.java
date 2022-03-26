@@ -2,7 +2,11 @@ package com.tcdt.qlnvhang.entities.quanlyhopdongmuavattu;
 
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.time.LocalDate;
 
 @Entity
 @Builder
@@ -23,22 +27,22 @@ public class QlhdmvtPhuLucHopDong {
 	private String soPhuLuc;
 
 	@Column(name = "NGAY_KY")
-	private java.sql.Date ngayKy;
+	private LocalDate ngayKy;
 
 	@Column(name = "NGAY_HIEU_LUC")
-	private java.sql.Date ngayHieuLuc;
+	private LocalDate ngayHieuLuc;
 
 	@Column(name = "VE_VIEC")
 	private String veViec;
 
 	@Column(name = "NGAY_TAO")
-	private java.sql.Date ngayTao;
+	private LocalDate ngayTao;
 
 	@Column(name = "NGUOI_TAO_ID")
 	private Long nguoiTaoId;
 
 	@Column(name = "NGAY_SUA")
-	private java.sql.Date ngaySua;
+	private LocalDate ngaySua;
 
 	@Column(name = "NGUOI_SUA_ID")
 	private Long nguoiSuaId;
