@@ -2,11 +2,9 @@ package com.tcdt.qlnvhang.entities.quanlyhopdongmuavattu;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Builder
@@ -64,4 +62,7 @@ public class QlhdmvtDsGoiThau {
 
     @Column(name = "QLHD_MUA_VAT_TU_ID")
     private Long qlhdMuaVatTuId;
+
+    @Transient
+    private List<QlhdmvtDiaDiemNhapVt> diaDiemNhapVtList;
 }

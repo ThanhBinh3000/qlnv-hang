@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.entities.quanlyhopdongmuavattu;
 
+import com.tcdt.qlnvhang.entities.BaseEntity;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -16,16 +17,16 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "QLHDMVT_THONG_TIN_CHUNG")
-public class QlhdmvtThongTinChung {
+public class QlhdmvtThongTinChung extends BaseEntity {
     @Id
     @Column(name = "ID")
     private Long id;
 
     @Column(name = "NHL_TU_NGAY")
-    private LocalDate nhlTuNgay;
+    private LocalDate ngayHieuLucTuNgay;
 
     @Column(name = "NHL_DEN_NGAY")
-    private Long nhlDenNgay;
+    private Long ngayHieuLucDenNgay;
 
     @Column(name = "SO_NGAY_TH")
     private Long soNgayTh;
@@ -74,16 +75,4 @@ public class QlhdmvtThongTinChung {
 
     @Column(name = "GHI_CHU")
     private String ghiChu;
-
-    @Column(name = "NGAY_TAO")
-    private LocalDate ngayTao;
-
-    @Column(name = "NGUOI_TAO_ID")
-    private Long nguoiTaoId;
-
-    @Column(name = "NGAY_SUA")
-    private LocalDate ngaySua;
-
-    @Column(name = "NGUOI_SUA_ID")
-    private Long nguoiSuaId;
 }

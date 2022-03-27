@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Builder
 @Data
@@ -25,4 +26,5 @@ public class QlhdmvtDsGoiThauResponseDTO {
     private BigDecimal giaTru0CThue;
     private BigDecimal giaSauThue;
     private String ghiChu;
+    private List<QlhdmvtDiaDiemNhapVtResponseDTO> diaDiemNhapVtList;
 }

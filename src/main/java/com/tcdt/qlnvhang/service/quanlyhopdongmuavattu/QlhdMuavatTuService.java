@@ -5,4 +5,6 @@ import com.tcdt.qlnvhang.response.quanlyhopdongmuavattu.QlhdMuaVatTuResponseDTO;
 
 public interface QlhdMuavatTuService {
 	QlhdMuaVatTuResponseDTO create(QlhdMuaVatTuRequestDTO request) throws Exception;
+
+	QlhdMuaVatTuResponseDTO update(QlhdMuaVatTuRequestDTO request) throws Exception;
 }

@@ -1,9 +1,8 @@
 package com.tcdt.qlnvhang.repository.quanlyhopdongmuavattu;
 
 import com.tcdt.qlnvhang.entities.quanlyhopdongmuavattu.QlhdmvtTtDonViCc;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import com.tcdt.qlnvhang.repository.quyetdinhpheduyetketqualuachonnhathauvatu.GenericRepository;
 
-public interface QlhdmvtTtDonViCcRepository extends JpaRepository<QlhdmvtTtDonViCc, Long>, JpaSpecificationExecutor<QlhdmvtTtDonViCc> {
+public interface QlhdmvtTtDonViCcRepository extends GenericRepository<QlhdmvtTtDonViCc, Long> {
 
 }

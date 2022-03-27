@@ -44,4 +44,20 @@ public class QlhdMuaVatTuController {
 		return ResponseEntity.ok(resp);
 	}
 
+	@ApiOperation(value = "Cập nhật quản lý hợp đồng mua vật tư", response = List.class)
+	@PutMapping
+	public ResponseEntity<BaseResponse> update(@Valid @RequestBody QlhdMuaVatTuRequestDTO request) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.create(request));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Quan ly hop dong mua vat tu loi: {}", e);
+		}
+		return ResponseEntity.ok(resp);
+	}
+
 }

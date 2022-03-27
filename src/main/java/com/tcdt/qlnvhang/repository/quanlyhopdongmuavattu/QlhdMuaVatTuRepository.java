@@ -1,9 +1,12 @@
 package com.tcdt.qlnvhang.repository.quanlyhopdongmuavattu;
 
 import com.tcdt.qlnvhang.entities.quanlyhopdongmuavattu.QlhdMuaVatTu;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import com.tcdt.qlnvhang.repository.quyetdinhpheduyetketqualuachonnhathauvatu.GenericRepository;
 
-public interface QlhdMuaVatTuRepository extends JpaRepository<QlhdMuaVatTu, Long>, JpaSpecificationExecutor<QlhdMuaVatTu> {
+import java.util.Collection;
+import java.util.List;
 
+public interface QlhdMuaVatTuRepository extends GenericRepository<QlhdMuaVatTu, Long> {
+	@Override
+	List<QlhdMuaVatTu> findByIdIn(Collection<Long> ids);
 }
