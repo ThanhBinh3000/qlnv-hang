@@ -1,15 +1,15 @@
 package com.tcdt.qlnvhang.entities.quyetdinhpheduyetketqualuachonnhathauvatu;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
+@EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "QD_PHE_DUYET_KQLCNT_VT")
 @Data
@@ -30,4 +30,11 @@ public class QdPheDuyetKqlcntVt extends BaseEntity implements Serializable {
     private Long vatTuId; // QLNV_DM_DONVI
     private Long khLcntVtId; // KH_LCNT_VT
     private Long thongTinDauThauId; //THONG_TIN_DAU_THAU_VT
+    private LocalDate ngayGuiDuyet;
+    private Long nguoiGuiDuyetId;
+    private LocalDate ngayPheDuyet;
+    private Long nguoiPheDuyetId;
+    private String lyDoTuChoi;
+    @Transient
+    private List<QdKqlcntGoiThauVt> goiThauList = new ArrayList<>();
 }

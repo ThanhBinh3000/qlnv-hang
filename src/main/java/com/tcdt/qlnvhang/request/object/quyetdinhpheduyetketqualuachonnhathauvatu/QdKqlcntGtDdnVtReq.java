@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class QdKqlcntGtDdnVtReq {
 	private Long id;
-	private Long goiThauId;
 	private Long donViId;
 	private String maDonVi;
 	private Double soLuongNhap;
