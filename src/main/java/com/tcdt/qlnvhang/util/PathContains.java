@@ -90,4 +90,8 @@ public class PathContains {
 	public static final String TTIN_DTHAU = "/ttin-dthau";
 	public static final String QD_PDUYET_KQLCNT = "/qd-pduyet-kqlcnt";
 	public static final String KH_LCNT_VT = "/kh-lcnt/vat-tu";
+
+	//Quản lý hợp đồng mua vật tư
+	public static final String QLHD_MUA_VAT_TU = "/qlhd-mua-vat-tu";
+
 }

@@ -1,5 +1,8 @@
 package com.tcdt.qlnvhang.service.quanlyhopdongmuavattu;
 
-public interface QlhdMuavatTuService {
+import com.tcdt.qlnvhang.request.quanlyhopdongmuavattu.QlhdMuaVatTuRequestDTO;
+import com.tcdt.qlnvhang.response.quanlyhopdongmuavattu.QlhdMuaVatTuResponseDTO;
 
+public interface QlhdMuavatTuService {
+	QlhdMuaVatTuResponseDTO create(QlhdMuaVatTuRequestDTO request) throws Exception;
 }

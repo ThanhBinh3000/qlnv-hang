@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.response.quanlyhopdongmuavattu;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +12,8 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class QlhdmvtDsGoiThauDTO {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class QlhdmvtDsGoiThauResponseDTO {
     private Long id;
     private Long stt;
     private String tenGoiThau;

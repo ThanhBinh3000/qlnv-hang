@@ -44,18 +44,18 @@ public class QuyetDinhKHLCNTGoiThauVatTuServiceImpl implements QuyetDinhKHLCNTGo
 
 		UserInfo userInfo = UserUtils.getUserInfo();
 
-		QuyetDinhKHLCNTVatTu quyetDinh = dataUtils.mapObject(req, QuyetDinhKHLCNTVatTu.class);
+		QuyetDinhKHLCNTVatTu quyetDinh = dataUtils.toObject(req, QuyetDinhKHLCNTVatTu.class);
 		quyetDinh.setNgayTao(LocalDate.now());
 		quyetDinh.setNguoiTaoId(userInfo.getId());
 
 		quyetDinh = quyetDinhKHLCNTVatTuRepo.save(quyetDinh);
 
-		QuyetDinhKHLCNTVatTuRes response = dataUtils.mapObject(quyetDinh, QuyetDinhKHLCNTVatTuRes.class);
+		QuyetDinhKHLCNTVatTuRes response = dataUtils.toObject(quyetDinh, QuyetDinhKHLCNTVatTuRes.class);
 
 		if (CollectionUtils.isEmpty(req.getGoiThau())) return response;
 
 		List<QuyetDinhKHLCNTGoiThauVatTu> goiThauVatTuList = req.getGoiThau().stream().map(item -> {
-			QuyetDinhKHLCNTGoiThauVatTu goiThauVatTu = dataUtils.mapObject(item, QuyetDinhKHLCNTGoiThauVatTu.class);
+			QuyetDinhKHLCNTGoiThauVatTu goiThauVatTu = dataUtils.toObject(item, QuyetDinhKHLCNTGoiThauVatTu.class);
 			goiThauVatTu.setNguoiTaoId(userInfo.getId());
 			goiThauVatTu.setNgayTao(LocalDate.now());
 			return goiThauVatTu;
@@ -64,7 +64,7 @@ public class QuyetDinhKHLCNTGoiThauVatTuServiceImpl implements QuyetDinhKHLCNTGo
 		goiThauVatTuList = goiThauVatTuRepo.saveAll(goiThauVatTuList);
 
 		List<QuyetDinhKHLCNTGoiThauVatTuRes> goiThauVatTuRes = goiThauVatTuList.stream()
-				.map(item -> dataUtils.mapObject(item, QuyetDinhKHLCNTGoiThauVatTuRes.class))
+				.map(item -> dataUtils.toObject(item, QuyetDinhKHLCNTGoiThauVatTuRes.class))
 				.collect(Collectors.toList());
 
 		response.setGoiThauList(goiThauVatTuRes);
@@ -92,7 +92,7 @@ public class QuyetDinhKHLCNTGoiThauVatTuServiceImpl implements QuyetDinhKHLCNTGo
 
 		quyetDinh = quyetDinhKHLCNTVatTuRepo.save(quyetDinh);
 
-		QuyetDinhKHLCNTVatTuRes response = dataUtils.mapObject(quyetDinh, QuyetDinhKHLCNTVatTuRes.class);
+		QuyetDinhKHLCNTVatTuRes response = dataUtils.toObject(quyetDinh, QuyetDinhKHLCNTVatTuRes.class);
 
 		List<QuyetDinhKHLCNTGoiThauVatTuReq> goiThauListReq = req.getGoiThau();
 
@@ -121,7 +121,7 @@ public class QuyetDinhKHLCNTGoiThauVatTuServiceImpl implements QuyetDinhKHLCNTGo
 
 		List<QuyetDinhKHLCNTGoiThauVatTuRes> goiThauVatTuRes = goiThauVatTuList
 				.stream()
-				.map(item -> dataUtils.mapObject(item, QuyetDinhKHLCNTGoiThauVatTuRes.class)).collect(Collectors.toList());
+				.map(item -> dataUtils.toObject(item, QuyetDinhKHLCNTGoiThauVatTuRes.class)).collect(Collectors.toList());
 
 		response.setGoiThauList(goiThauVatTuRes);
 

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class QlhdmvtDiaDiemNhapVtDTO {
+public class QlhdmvtDiaDiemNhapVtResponseDTO {
     private Long id;
     private Long stt;
     private Long donViId;

@@ -61,4 +61,7 @@ public class QlhdmvtDsGoiThau {
 
     @Column(name = "NGUOI_SUA_ID")
     private Long nguoiSuaId;
+
+    @Column(name = "QLHD_MUA_VAT_TU_ID")
+    private Long qlhdMuaVatTuId;
 }

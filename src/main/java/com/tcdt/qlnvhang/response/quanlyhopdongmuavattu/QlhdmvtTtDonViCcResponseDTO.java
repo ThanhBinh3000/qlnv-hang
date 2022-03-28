@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class QlhdmvtTtChuDauTuDTO {
+public class QlhdmvtTtDonViCcResponseDTO {
     private Long id;
-    private String tenDvDtnn;
+    private String tenDvThucHien;
     private String diaChi;
     private String maSoThue;
     private String soDienThoai;
