@@ -5,5 +5,5 @@ import com.tcdt.qlnvhang.repository.BaseRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DtThuongThaoHopDongVtRepository extends BaseRepository<Long, DtThuongThaoHopDongVt> {
+public interface DtThuongThaoHopDongVtRepository extends BaseRepository<DtThuongThaoHopDongVt, Long> {
 }
