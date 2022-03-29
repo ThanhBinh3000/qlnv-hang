@@ -119,7 +119,7 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 		this.children2.addAll(children2);
 	}
 
-	public void addChild(FileDKemJoinQdNhapxuat child2) {
+	public void addChild2(FileDKemJoinQdNhapxuat child2) {
 		child2.setParent(this);
 		this.children2.add(child2);
 	}
