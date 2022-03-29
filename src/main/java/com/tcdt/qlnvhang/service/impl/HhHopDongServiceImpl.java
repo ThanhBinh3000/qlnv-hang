@@ -93,7 +93,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 		}
 
 		// add thong tin don vi lien quan
-		List<HhDviLquan> dtls1 = ObjectMapperUtils.mapAll(dtlReqList, HhDviLquan.class);
+		List<HhDviLquan> dtls1 = ObjectMapperUtils.mapAll(objReq.getDetail1(), HhDviLquan.class);
 		dataMap.setChildren1(dtls1);
 
 		// File dinh kem cua goi thau
@@ -263,6 +263,9 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 		}
 
 		optional.get().setTrangThai(stReq.getTrangThai());
+
+		// TODO: Cap nhat lai tinh trang hien thoi cua kho sau khi phe duyet quyet dinh
+		// giao nhiem vu nhap hang
 		return hhHopDongRepository.save(optional.get());
 	}
 
