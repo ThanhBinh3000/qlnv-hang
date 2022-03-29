@@ -7,4 +7,6 @@ public class BaseRequest {
 	PaggingReq paggingReq;
 	String trangThai;
 	String str;
+	String orderBy;
+	String orderDirection;
 }

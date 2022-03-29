@@ -96,4 +96,7 @@ public class PathContains {
 
 	// Quyết định phê duyệt kết quả lựa chọn nhà thầu vật tư
 	public static final String QL_PHE_DUYET_KQLCNT_VT = "/ql-phe-duyet-kqlcnt-vt";
+
+	// Quản lý phiếu nhập kho lương thực
+	public static final String QL_PHIEU_NHAP_KHO_LT = "/ql-phieu-nhap-kho-lt";
 }
