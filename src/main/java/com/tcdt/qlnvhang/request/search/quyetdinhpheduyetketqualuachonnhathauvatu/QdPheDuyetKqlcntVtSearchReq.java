@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.search.quyetdinhpheduyetketqualuachonnhathauva
 
 import com.tcdt.qlnvhang.request.search.BaseSearchRequest;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -11,7 +12,9 @@ import java.time.LocalDate;
 @EqualsAndHashCode(callSuper = false)
 public class QdPheDuyetKqlcntVtSearchReq extends BaseSearchRequest {
     private String soQd;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate tuNgay;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate denNgay;
     private Long vatTuId;
     private Integer namKeHoach;

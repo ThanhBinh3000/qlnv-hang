@@ -52,26 +52,26 @@ public class QdPheDuyetKqlcntVtRepositoryCustomImpl implements QdPheDuyetKqlcntV
         builder.append("WHERE 1 = 1 ");
 
         if (!StringUtils.isEmpty(req.getSoQd())) {
-            builder.append("AND ").append("SO_QUYET_DINH = :soQD ");
+            builder.append("AND ").append("qd.soQuyetDinh = :soQD ");
         }
         if (req.getTuNgay() != null) {
-            builder.append("AND ").append("NGAY_QUYET_DINH >= :tuNgay ");
+            builder.append("AND ").append("qd.ngayQuyetDinh >= :tuNgay ");
         }
         if (req.getDenNgay() != null) {
-            builder.append("AND ").append("NGAY_QUYET_DINH <= :denNgay ");
+            builder.append("AND ").append("qd.ngayQuyetDinh <= :denNgay ");
         }
         if (req.getVatTuId() != null) {
-            builder.append("AND ").append("VAT_TU_ID = :vatTuId ");
+            builder.append("AND ").append("qd.vatTuId = :vatTuId ");
         }
         if (req.getNamKeHoach() != null) {
-            builder.append("AND ").append("NAM_KE_HOACH = :namKeHoach ");
+            builder.append("AND ").append("qd.namKeHoach = :namKeHoach ");
         }
     }
 
     private int countCtkhn(QdPheDuyetKqlcntVtSearchReq req) {
         int total = 0;
         StringBuilder builder = new StringBuilder();
-        builder.append("SELECT COUNT(1) AS totalRecord FROM QD_PHE_DUYET_KQLCNT_VT ");
+        builder.append("SELECT COUNT(qd.id) AS totalRecord FROM QdPheDuyetKqlcntVt qd");
 
         this.setConditionSearchCtkhn(req, builder);
 

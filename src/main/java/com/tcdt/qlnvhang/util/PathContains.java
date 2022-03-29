@@ -94,4 +94,6 @@ public class PathContains {
 	//Quản lý hợp đồng mua vật tư
 	public static final String QLHD_MUA_VAT_TU = "/qlhd-mua-vat-tu";
 
+	// Quyết định phê duyệt kết quả lựa chọn nhà thầu vật tư
+	public static final String QL_PHE_DUYET_KQLCNT_VT = "/ql-phe-duyet-kqlcnt-vt";
 }

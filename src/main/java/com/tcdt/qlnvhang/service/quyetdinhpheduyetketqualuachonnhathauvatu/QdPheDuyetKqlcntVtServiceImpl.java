@@ -227,8 +227,8 @@ public class QdPheDuyetKqlcntVtServiceImpl implements QdPheDuyetKqlcntVtService 
         if (!optionalQd.isPresent())
             throw new Exception("Quyết định không tồn tại.");
 
-        QdPheDuyetKqlcntVt chiTieuKeHoachNam = optionalQd.get();
-        return this.updateStatus(req, chiTieuKeHoachNam, userInfo);
+        QdPheDuyetKqlcntVt qd = optionalQd.get();
+        return this.updateStatus(req, qd, userInfo);
     }
 
     public boolean updateStatus(StatusReq req, QdPheDuyetKqlcntVt qd, UserInfo userInfo) throws Exception {
