@@ -4,10 +4,11 @@ import com.tcdt.qlnvhang.entities.dauthauvattu.DTGoiThauDiaDiemNhapVT;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.repository.dauthauvattu.DTGoiThauDiaDiemNhapVTRepository;
 import com.tcdt.qlnvhang.request.object.dauthauvattu.DTGoiThauDiaDiemNhapVTReq;
-import com.tcdt.qlnvhang.response.ListResponse;
 import com.tcdt.qlnvhang.response.dauthauvattu.DTGoiThauDiaDiemNhapVTRes;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -28,12 +29,9 @@ public class DTGoiThauDiaDiemNhapVTServiceImpl implements DTGoiThauDiaDiemNhapVT
 	private QlnvDmDonviRepository qlnvDmDonviRepository;
 
 	@Override
-	public ListResponse<DTGoiThauDiaDiemNhapVTRes> findByGoiThauId(Long dtvtGoiThauId, Pageable pageable) {
-		List<DTGoiThauDiaDiemNhapVT> list = dtGoiThauDiaDiemNhapVTRepository.findByDtvtGoiThauId(dtvtGoiThauId, pageable);
-		ListResponse<DTGoiThauDiaDiemNhapVTRes> response = new ListResponse<>();
-		response.setTotal(dtGoiThauDiaDiemNhapVTRepository.countByDtvtGoiThauId(dtvtGoiThauId));
-		response.setList(this.toResponseList(list));
-		return response;
+	public Page<DTGoiThauDiaDiemNhapVTRes> findByGoiThauId(Long dtvtGoiThauId, Pageable pageable) {
+		Page<DTGoiThauDiaDiemNhapVT> list = dtGoiThauDiaDiemNhapVTRepository.findByDtvtGoiThauId(dtvtGoiThauId, pageable);
+		return new PageImpl<>(this.toResponseList(list.getContent()), pageable, list.getTotalElements());
 	}
 
 	@Override

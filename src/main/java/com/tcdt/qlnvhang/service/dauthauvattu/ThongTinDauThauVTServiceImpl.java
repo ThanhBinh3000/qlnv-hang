@@ -6,14 +6,16 @@ import com.tcdt.qlnvhang.repository.dauthauvattu.ThongTinDauThauVTRepository;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.dauthauvattu.ThongTinDauThauVTReq;
 import com.tcdt.qlnvhang.request.search.ThongTinDauThauVTSearchReq;
-import com.tcdt.qlnvhang.response.ListResponse;
 import com.tcdt.qlnvhang.response.dauthauvattu.DTVatTuGoiThauVTRes;
 import com.tcdt.qlnvhang.response.dauthauvattu.ThongTinDauThauRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.table.UserInfo;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -30,10 +32,19 @@ public class ThongTinDauThauVTServiceImpl implements ThongTinDauThauVTService {
 	@Autowired
 	private DTVatTuGoiThauVTService dtVatTuGoiThauVTService;
 
+	private final int DEFAULT_PAGE_SIZE = 10;
+	private final int DEFAULT_PAGE_INDEX = 0;
+
 	@Override
-	public ThongTinDauThauRes create(ThongTinDauThauVTReq req) {
+	public ThongTinDauThauRes create(ThongTinDauThauVTReq req) throws Exception {
+		UserInfo userInfo = SecurityContextService.getUser();
+		if (userInfo == null)
+			throw new Exception("Access denied.");
+
 		ThongTinDauThauVT thongTinDauThauVT = new ThongTinDauThauVT();
 		updateEntity(req, thongTinDauThauVT);
+		thongTinDauThauVT.setNgayTao(LocalDate.now());
+		thongTinDauThauVT.setNguoiTaoId(userInfo.getId());
 
 		thongTinDauThauVTRepository.save(thongTinDauThauVT);
 		dtVatTuGoiThauVTService.update(req.getGoiThau(), thongTinDauThauVT.getId());
@@ -43,6 +54,10 @@ public class ThongTinDauThauVTServiceImpl implements ThongTinDauThauVTService {
 
 	@Override
 	public ThongTinDauThauRes update(ThongTinDauThauVTReq req) throws Exception {
+		UserInfo userInfo = SecurityContextService.getUser();
+		if (userInfo == null)
+			throw new Exception("Access denied.");
+
 		Optional<ThongTinDauThauVT> thongTinDauThauVTOptional = thongTinDauThauVTRepository.findById(req.getId());
 		if (!thongTinDauThauVTOptional.isPresent())
 			throw new Exception("Không tìm thấy dữ liệu.");
@@ -50,6 +65,9 @@ public class ThongTinDauThauVTServiceImpl implements ThongTinDauThauVTService {
 		ThongTinDauThauVT thongTinDauThauVT = thongTinDauThauVTOptional.get();
 
 		updateEntity(req, thongTinDauThauVT);
+		thongTinDauThauVT.setNgaySua(LocalDate.now());
+		thongTinDauThauVT.setNguoiSuaId(userInfo.getId());
+		thongTinDauThauVTRepository.save(thongTinDauThauVT);
 
 		dtVatTuGoiThauVTService.update(req.getGoiThau(), thongTinDauThauVT.getId());
 
@@ -93,10 +111,10 @@ public class ThongTinDauThauVTServiceImpl implements ThongTinDauThauVTService {
 		if (pageSize == null)
 			pageSize = DEFAULT_PAGE_SIZE;
 
-		ListResponse<DTVatTuGoiThauVTRes> goiThau = dtVatTuGoiThauVTService.list(thongTinDauThauVT.getId(), PageRequest.of(pageIndex, pageSize));
-		res.setGoiThau(goiThau.getList());
-		res.setSoGoiThau(goiThau.getCount());
-		res.setTongGoiThau(goiThau.getTotal());
+		Page<DTVatTuGoiThauVTRes> goiThau = dtVatTuGoiThauVTService.list(thongTinDauThauVT.getId(), PageRequest.of(pageIndex, pageSize));
+		res.setGoiThau(goiThau.getContent());
+		res.setSoGoiThau((long) goiThau.getNumberOfElements());
+		res.setTongGoiThau(goiThau.getTotalElements());
 
 		return res;
 	}
@@ -142,8 +160,14 @@ public class ThongTinDauThauVTServiceImpl implements ThongTinDauThauVTService {
 	}
 
 	@Override
-	public ListResponse<ThongTinDauThauRes> search(ThongTinDauThauVTSearchReq req) {
-		return null;
+	public Page<ThongTinDauThauRes> search(ThongTinDauThauVTSearchReq req) {
+		int pageSize = req.getPaggingReq() != null && req.getPaggingReq().getPage() != null ? req.getPaggingReq().getPage() : DEFAULT_PAGE_SIZE;
+		int pageIndex = req.getPaggingReq() != null && req.getPaggingReq().getLimit() != null ? req.getPaggingReq().getLimit() : DEFAULT_PAGE_INDEX;
+
+		Pageable pageable = PageRequest.of(pageIndex, pageSize);
+
+		Page<ThongTinDauThauVT> list = thongTinDauThauVTRepository.search(req, pageable);
+		return new PageImpl<>(this.toResponseList(list.getContent()), pageable, list.getTotalElements());
 	}
 
 	private List<ThongTinDauThauRes> toResponseList(List<ThongTinDauThauVT> list) {

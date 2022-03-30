@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.request.object.dauthauvattu;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ public class ThongTinDauThauVTReq {
 	private String hthucDuThau;
 	private LocalDate tgianDongThau;
 	private Integer tgianHlucEhsmt;
-	private Double tongMucDtu;
+	private BigDecimal tongMucDtu;
 	private String ghiChu;
 	List<DTVatTuGoiThauVTReq> goiThau = new ArrayList<>();
 }

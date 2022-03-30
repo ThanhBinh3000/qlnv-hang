@@ -4,11 +4,12 @@ import com.tcdt.qlnvhang.entities.dauthauvattu.DTVatTuGoiThauVT;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.dauthauvattu.DTVatTuGoiThauVTRepository;
 import com.tcdt.qlnvhang.request.object.dauthauvattu.DTVatTuGoiThauVTReq;
-import com.tcdt.qlnvhang.response.ListResponse;
 import com.tcdt.qlnvhang.response.dauthauvattu.DTGoiThauDiaDiemNhapVTRes;
 import com.tcdt.qlnvhang.response.dauthauvattu.DTVatTuGoiThauVTRes;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -33,12 +34,9 @@ public class DTVatTuGoiThauVTServiceImpl implements DTVatTuGoiThauVTService {
 	private QlnvDmVattuRepository qlnvDmVattuRepository;
 
 	@Override
-	public ListResponse<DTVatTuGoiThauVTRes> list(Long ttdtVtId, Pageable pageable) {
-		List<DTVatTuGoiThauVT> list = dtVatTuGoiThauVTRepository.findByTtdtVtId(ttdtVtId, pageable);
-		ListResponse<DTVatTuGoiThauVTRes> response = new ListResponse<>();
-		response.setList(this.toResponseList(list));
-		response.setTotal(dtVatTuGoiThauVTRepository.countByTtdtVtId(ttdtVtId));
-		return response;
+	public Page<DTVatTuGoiThauVTRes> list(Long ttdtVtId, Pageable pageable) {
+		Page<DTVatTuGoiThauVT> list = dtVatTuGoiThauVTRepository.findByTtdtVtId(ttdtVtId, pageable);
+		return new PageImpl<>(this.toResponseList(list.getContent()), pageable, list.getTotalElements());
 	}
 
 	@Override
@@ -118,10 +116,10 @@ public class DTVatTuGoiThauVTServiceImpl implements DTVatTuGoiThauVTService {
 		if (pageIndex == null)
 			pageIndex = DEFAULT_PAGE_INDEX;
 
-		ListResponse<DTGoiThauDiaDiemNhapVTRes> diaDiemNhapVTResList = dtGoiThauDiaDiemNhapVTService.findByGoiThauId(goiThauVT.getId(), PageRequest.of(pageIndex, pageSize));
-		res.setDiaDiemNhap(diaDiemNhapVTResList.getList());
-		res.setSoLuongDiaDiemNhap(diaDiemNhapVTResList.getCount());
-		res.setTongDiaDiemNhap(diaDiemNhapVTResList.getTotal());
+		Page<DTGoiThauDiaDiemNhapVTRes> diaDiemNhapVTResList = dtGoiThauDiaDiemNhapVTService.findByGoiThauId(goiThauVT.getId(), PageRequest.of(pageIndex, pageSize));
+		res.setDiaDiemNhap(diaDiemNhapVTResList.getContent());
+		res.setSoLuongDiaDiemNhap((long) diaDiemNhapVTResList.getNumberOfElements());
+		res.setTongDiaDiemNhap(diaDiemNhapVTResList.getTotalElements());
 
 		return res;
 	}

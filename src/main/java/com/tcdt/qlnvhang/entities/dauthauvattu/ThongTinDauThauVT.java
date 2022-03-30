@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @EqualsAndHashCode(callSuper = true)
@@ -39,7 +40,7 @@ public class ThongTinDauThauVT extends BaseEntity {
 	private String hthucDuThau;
 	private LocalDate tgianDongThau;
 	private Integer tgianHlucEhsmt;
-	private Double tongMucDtu;
+	private BigDecimal tongMucDtu;
 	private String ghiChu;
 	private String trangThai;
 	private LocalDate ngayGuiDuyet;

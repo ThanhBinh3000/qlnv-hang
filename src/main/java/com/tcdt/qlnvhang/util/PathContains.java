@@ -91,6 +91,10 @@ public class PathContains {
 	public static final String QD_PDUYET_KQLCNT = "/qd-pduyet-kqlcnt";
 	public static final String KH_LCNT_VT = "/kh-lcnt/vat-tu";
 
+	// Dau thau vat tu
+	public static final String DAU_THAU_VAT_TU = "/dau-thau-vt";
+	public static final String THONG_TIN_DAU_THAU = "/tt-dau-thau";
+
 	//Quản lý hợp đồng mua vật tư
 	public static final String QLHD_MUA_VAT_TU = "/qlhd-mua-vat-tu";
 

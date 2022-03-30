@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.response.dauthauvattu;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class ThongTinDauThauRes {
 	private String hthucDuThau;
 	private LocalDate tgianDongThau;
 	private Integer tgianHlucEhsmt;
-	private Double tongMucDtu;
+	private BigDecimal tongMucDtu;
 	private String ghiChu;
 
 	private Long soGoiThau;
