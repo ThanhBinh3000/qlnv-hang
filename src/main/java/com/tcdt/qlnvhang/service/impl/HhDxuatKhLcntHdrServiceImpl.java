@@ -262,8 +262,9 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		if (!optional.isPresent())
 			throw new Exception("Không tìm thấy dữ liệu cần xoá");
 
-		if (!optional.get().getTrangThai().equals(Contains.TAO_MOI))
-			throw new Exception("Chỉ thực hiện xóa với kế hoạch ở trạng thái bản nháp");
+		if (!optional.get().getTrangThai().equals(Contains.TAO_MOI)
+				|| !optional.get().getTrangThai().equals(Contains.TU_CHOI))
+			throw new Exception("Chỉ thực hiện xóa với kế hoạch ở trạng thái bản nháp hoặc từ chối");
 
 		hhDxuatKhLcntHdrRepository.delete(optional.get());
 	}

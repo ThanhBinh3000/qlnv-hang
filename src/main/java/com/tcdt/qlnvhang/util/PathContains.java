@@ -92,4 +92,5 @@ public class PathContains {
 	public static final String HOP_DONG = "/hop-dong";
 	public static final String PHU_LUC = "/phu-luc";
 	public static final String NHAP_XUAT = "/nhap-xuat";
+	public static final String BB_NGHIEMTHU_KLST = "/bb-nghiemthu-klst";
 }
