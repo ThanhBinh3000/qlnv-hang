@@ -106,4 +106,7 @@ public class PathContains {
 
 	// Quản lý bảng kê cân hàng
 	public static final String QL_BANG_KE_CAN_HANG_LT = "/ql-bang-ke-can-hang-lt";
+
+	//Quản lý biên bản nhập đầy kho
+	public static final String QL_BIEN_BAN_NHAP_DAY_KHO_LT = "/ql-bien-ban-nhap-day-kho-lt";
 }
