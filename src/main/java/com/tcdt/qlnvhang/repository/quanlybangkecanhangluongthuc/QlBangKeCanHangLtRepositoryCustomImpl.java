@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.repository.quanlybangkecanhangluongthuc;
 
 import com.tcdt.qlnvhang.entities.quanlybangkecanhangluongthuc.QlBangKeCanHangLt;
+import com.tcdt.qlnvhang.enums.QlBangKeCanHangLtStatus;
 import com.tcdt.qlnvhang.enums.QlPhieuNhapKhoLtStatus;
 import com.tcdt.qlnvhang.request.search.quanlybangkecanhangluongthuc.QlBangKeCanHangLtSearchReq;
 import com.tcdt.qlnvhang.response.quanlybangkecanhangluongthuc.QlBangKeCanHangLtRes;
@@ -43,7 +44,7 @@ public class QlBangKeCanHangLtRepositoryCustomImpl implements QlBangKeCanHangLtR
         for (QlBangKeCanHangLt qd : data) {
             QlBangKeCanHangLtRes response = new QlBangKeCanHangLtRes();
             BeanUtils.copyProperties(qd, response);
-            response.setTenTrangThai(QlPhieuNhapKhoLtStatus.getTenById(qd.getTrangThai()));
+            response.setTenTrangThai(QlBangKeCanHangLtStatus.getTenById(qd.getTrangThai()));
             responses.add(response);
         }
 

@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.quanlybangkecanhangluongthuc;
 import com.tcdt.qlnvhang.entities.quanlybangkecanhangluongthuc.QlBangKeCanHangLt;
 import com.tcdt.qlnvhang.entities.quanlybangkecanhangluongthuc.QlBangKeChCtLt;
 import com.tcdt.qlnvhang.enums.QdPheDuyetKqlcntVtStatus;
+import com.tcdt.qlnvhang.enums.QlBangKeCanHangLtStatus;
 import com.tcdt.qlnvhang.repository.quanlybangkecanhangluongthuc.QlBangKeCanHangLtRepository;
 import com.tcdt.qlnvhang.repository.quanlybangkecanhangluongthuc.QlBangKeChCtLtRepository;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -35,6 +36,7 @@ public class QlBangKeCanHangLtServiceImpl implements QlBangKeCanHangLtService {
     private QlBangKeChCtLtRepository qlBangKeChCtLtRepository;
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public QlBangKeCanHangLtRes create(QlBangKeCanHangLtReq req) throws Exception {
         if (req == null)
             return null;
@@ -47,7 +49,7 @@ public class QlBangKeCanHangLtServiceImpl implements QlBangKeCanHangLtService {
         BeanUtils.copyProperties(req, item, "id");
         item.setNgayTao(LocalDate.now());
         item.setNguoiTaoId(userInfo.getId());
-        item.setTrangThai(QdPheDuyetKqlcntVtStatus.MOI_TAO.getId());
+        item.setTrangThai(QlBangKeCanHangLtStatus.MOI_TAO.getId());
         item.setMaDonVi(userInfo.getDvql());
         qlBangKeCanHangLtRepository.save(item);
 
@@ -95,6 +97,7 @@ public class QlBangKeCanHangLtServiceImpl implements QlBangKeCanHangLtService {
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public QlBangKeCanHangLtRes update(QlBangKeCanHangLtReq req) throws Exception {
         if (req == null)
             return null;
@@ -139,6 +142,7 @@ public class QlBangKeCanHangLtServiceImpl implements QlBangKeCanHangLtService {
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public boolean delete(Long id) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null)
@@ -178,25 +182,25 @@ public class QlBangKeCanHangLtServiceImpl implements QlBangKeCanHangLtService {
 
     public boolean updateStatus(StatusReq req, QlBangKeCanHangLt bangKe, UserInfo userInfo) throws Exception {
         String trangThai = bangKe.getTrangThai();
-        if (QdPheDuyetKqlcntVtStatus.CHO_DUYET.getId().equals(req.getTrangThai())) {
-            if (!QdPheDuyetKqlcntVtStatus.MOI_TAO.getId().equals(trangThai))
+        if (QlBangKeCanHangLtStatus.CHO_DUYET.getId().equals(req.getTrangThai())) {
+            if (!QlBangKeCanHangLtStatus.MOI_TAO.getId().equals(trangThai))
                 return false;
 
-            bangKe.setTrangThai(QdPheDuyetKqlcntVtStatus.CHO_DUYET.getId());
+            bangKe.setTrangThai(QlBangKeCanHangLtStatus.CHO_DUYET.getId());
             bangKe.setNguoiGuiDuyetId(userInfo.getId());
             bangKe.setNgayGuiDuyet(LocalDate.now());
 
-        } else if (QdPheDuyetKqlcntVtStatus.DA_DUYET.getId().equals(req.getTrangThai())) {
-            if (!QdPheDuyetKqlcntVtStatus.CHO_DUYET.getId().equals(trangThai))
+        } else if (QlBangKeCanHangLtStatus.DA_DUYET.getId().equals(req.getTrangThai())) {
+            if (!QlBangKeCanHangLtStatus.CHO_DUYET.getId().equals(trangThai))
                 return false;
-            bangKe.setTrangThai(QdPheDuyetKqlcntVtStatus.DA_DUYET.getId());
+            bangKe.setTrangThai(QlBangKeCanHangLtStatus.DA_DUYET.getId());
             bangKe.setNguoiPheDuyetId(userInfo.getId());
             bangKe.setNgayPheDuyet(LocalDate.now());
-        } else if (QdPheDuyetKqlcntVtStatus.TU_CHOI.getId().equals(req.getTrangThai())) {
-            if (!QdPheDuyetKqlcntVtStatus.CHO_DUYET.getId().equals(trangThai))
+        } else if (QlBangKeCanHangLtStatus.TU_CHOI.getId().equals(req.getTrangThai())) {
+            if (!QlBangKeCanHangLtStatus.CHO_DUYET.getId().equals(trangThai))
                 return false;
 
-            bangKe.setTrangThai(QdPheDuyetKqlcntVtStatus.TU_CHOI.getId());
+            bangKe.setTrangThai(QlBangKeCanHangLtStatus.TU_CHOI.getId());
             bangKe.setNguoiPheDuyetId(userInfo.getId());
             bangKe.setNgayPheDuyet(LocalDate.now());
             bangKe.setLyDoTuChoi(req.getLyDo());
