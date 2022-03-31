@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.quanlyhopdongmuavattu;
 import com.tcdt.qlnvhang.entities.quanlyhopdongmuavattu.*;
 import com.tcdt.qlnvhang.repository.quanlyhopdongmuavattu.*;
 import com.tcdt.qlnvhang.request.quanlyhopdongmuavattu.QlhdMuaVatTuRequestDTO;
+import com.tcdt.qlnvhang.request.quanlyhopdongmuavattu.QlhdmvtFilterRequest;
 import com.tcdt.qlnvhang.response.quanlyhopdongmuavattu.*;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -248,4 +249,8 @@ public class QlhdMuavatTuServiceImpl implements QlhdMuavatTuService {
 		return buildQlhdMuaVatTuResponse(chuDauTu, donViCc, thongTinChung, qlhdMuaVatTu);
 	}
 
+	@Override
+	public QlhdMuaVatTuResponseDTO filter(QlhdmvtFilterRequest request) {
+		return null;
+	}
 }
