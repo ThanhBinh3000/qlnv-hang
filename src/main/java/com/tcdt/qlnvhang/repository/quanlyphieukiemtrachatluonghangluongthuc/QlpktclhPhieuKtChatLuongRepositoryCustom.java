@@ -1,0 +1,9 @@
+package com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc;
+
+import com.tcdt.qlnvhang.request.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongFilterRequestDto;
+import com.tcdt.qlnvhang.response.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongResponseDto;
+import org.springframework.data.domain.Page;
+
+public interface QlpktclhPhieuKtChatLuongRepositoryCustom {
+	Page<QlpktclhPhieuKtChatLuongResponseDto> filter(QlpktclhPhieuKtChatLuongFilterRequestDto req);
+}

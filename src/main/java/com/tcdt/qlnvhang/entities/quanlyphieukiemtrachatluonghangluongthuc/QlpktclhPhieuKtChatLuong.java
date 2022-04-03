@@ -23,7 +23,7 @@ public class QlpktclhPhieuKtChatLuong extends BaseEntity {
 	private Long soPhieu;
 
 	@Column(name = "NGAY_KIEM_TRA")
-	private Long ngayKiemTra;
+	private LocalDate ngayKiemTra;
 
 	@Column(name = "NGUOI_THEO_XE")
 	private String nguoiTheoXe;

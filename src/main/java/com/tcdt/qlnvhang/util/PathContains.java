@@ -109,4 +109,7 @@ public class PathContains {
 
 	//Quản lý biên bản nhập đầy kho
 	public static final String QL_BIEN_BAN_NHAP_DAY_KHO_LT = "/ql-bien-ban-nhap-day-kho-lt";
+
+	//Quản lý phiếu kiếm tra chất lượng hàng lương thực
+	public static final String QL_PHIEU_KIEM_TRA_CHAT_LUONG_HANG_LT = "/ql-phieu-kiem-tra-chat-luong-hang-lt";
 }

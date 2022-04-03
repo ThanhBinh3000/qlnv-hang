@@ -59,5 +59,7 @@ public class QlpktclhPhieuKtChatLuongResponseDto {
 
 	private String lyDoTuChoi;
 
+	private String tenTrangThai;
+
 	private List<QlpktclhKetQuaKiemTraResponseDto> ketQuaKiemTra;
 }

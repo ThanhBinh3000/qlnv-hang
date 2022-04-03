@@ -1,8 +1,16 @@
 package com.tcdt.qlnvhang.service.quanlyphieukiemtrachatluonghangluongthuc;
 
+import com.tcdt.qlnvhang.request.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongFilterRequestDto;
 import com.tcdt.qlnvhang.request.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongRequestDto;
 import com.tcdt.qlnvhang.response.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongResponseDto;
+import org.springframework.data.domain.Page;
 
 public interface QlpktclhPhieuKtChatLuongService {
 	QlpktclhPhieuKtChatLuongResponseDto create (QlpktclhPhieuKtChatLuongRequestDto req) throws Exception;
+
+	QlpktclhPhieuKtChatLuongResponseDto update (QlpktclhPhieuKtChatLuongRequestDto req) throws Exception;
+
+	Page<QlpktclhPhieuKtChatLuongResponseDto> filter (QlpktclhPhieuKtChatLuongFilterRequestDto req) throws Exception;
+
+
 }
