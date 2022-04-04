@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.CollectionUtils;
 
@@ -37,7 +38,7 @@ public class QlPhieuNhapKhoLtRepositoryCustomImpl implements QlPhieuNhapKhoLtRep
         //Set params
         this.setParameterSearchCtkhn(req, query);
 
-        Pageable pageable = req.getPageable();
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         //Set pageable
         query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize()).setMaxResults(pageable.getPageSize());
 

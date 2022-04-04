@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.request.search.quanlyphieunhapkholuongthuc;
 
+import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.search.BaseSearchRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +12,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class QlPhieuNhapKhoLtSearchReq extends BaseSearchRequest {
+public class QlPhieuNhapKhoLtSearchReq extends BaseRequest {
 
     private String soPhieu;
     private Long vatTuId;
