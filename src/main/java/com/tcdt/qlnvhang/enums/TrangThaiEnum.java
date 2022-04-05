@@ -21,4 +21,13 @@ public enum TrangThaiEnum {
 	public String getTen() {
 		return ten;
 	}
+
+	public static String getTen(String ma) {
+		for (TrangThaiEnum e : TrangThaiEnum.values()) {
+			if (e.getMa().equals(ma))
+				return e.getTen();
+		}
+
+		return null;
+	}
 }

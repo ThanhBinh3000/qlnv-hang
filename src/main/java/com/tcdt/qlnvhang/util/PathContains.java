@@ -95,6 +95,13 @@ public class PathContains {
 	public static final String DAU_THAU_VAT_TU = "/dau-thau-vt";
 	public static final String THONG_TIN_DAU_THAU = "/tt-dau-thau";
 
+	// Bien Ban lay mau
+	public static final String BBAN_LAY_MAU = "/bban-lay-mau";
+
+	// Phieu kiem nghiem chat luong hang
+	public static final String KNGHIEM_CLUONG = "/knghiem-cluong";
+	public static final String KQUA_KNGHIEM = "/kqua-knghiem";
+
 	//Quản lý hợp đồng mua vật tư
 	public static final String QLHD_MUA_VAT_TU = "/qlhd-mua-vat-tu";
 
