@@ -108,6 +108,25 @@ public class ThongTinDauThauVTController {
 		return ResponseEntity.ok(resp);
 	}
 
+	@ApiOperation(value = "Chi tiết thông tin đấu thầu vật tư", response = Page.class)
+	@GetMapping(value = PathContains.URL_CHI_TIET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<BaseResponse> detail(@RequestParam("id") Long id, @RequestParam("page") int page, @RequestParam("limit") int limit) {
+		BaseResponse resp = new BaseResponse();
+		try {
+
+			ThongTinDauThauRes res = thongTinDauThauVTService.detail(id, page, limit);
+			resp.setData(res);
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error(e.getMessage());
+		}
+		return ResponseEntity.ok(resp);
+	}
+
 	@ApiOperation(value = "Tra cứu thông tin đấu thầu vật tư", response = Page.class)
 	@GetMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)

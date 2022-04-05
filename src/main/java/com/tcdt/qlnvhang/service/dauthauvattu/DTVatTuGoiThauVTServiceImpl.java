@@ -44,7 +44,7 @@ public class DTVatTuGoiThauVTServiceImpl implements DTVatTuGoiThauVTService {
 		Set<Long> requestIds = reqList.stream().map(DTVatTuGoiThauVTReq::getId).collect(Collectors.toSet());
 		List<DTVatTuGoiThauVT> list = dtVatTuGoiThauVTRepository.findByTtdtVtId(ttdtVtId);
 
-		// Get all deleted GoiThau, then delete all DiaDiemNhap of them.
+		// Get all deleted GoiThau, then delete all their DiaDiemNhap.
 		Set<Long> deleteIds = list.stream().map(DTVatTuGoiThauVT::getId).filter(id -> !requestIds.contains(id)).collect(Collectors.toSet());
 		dtGoiThauDiaDiemNhapVTService.deleteByGoiThauIds(deleteIds);
 
@@ -53,7 +53,11 @@ public class DTVatTuGoiThauVTServiceImpl implements DTVatTuGoiThauVTService {
 			if (req == null)
 				continue;
 
-			DTVatTuGoiThauVT goiThauVT = new DTVatTuGoiThauVT();
+			DTVatTuGoiThauVT goiThauVT = list.stream().filter(item -> item.getId().equals(req.getId())).findFirst().orElse(null);
+			if (goiThauVT == null) {
+				goiThauVT = new DTVatTuGoiThauVT();
+				goiThauVT.setTtdtVtId(ttdtVtId);
+			}
 			goiThauVT.setId(req.getId());
 			goiThauVT.setTtdtVtId(req.getTtdtVtId());
 			goiThauVT.setStt(req.getStt());

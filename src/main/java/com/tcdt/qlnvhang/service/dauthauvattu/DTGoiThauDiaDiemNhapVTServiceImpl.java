@@ -37,13 +37,18 @@ public class DTGoiThauDiaDiemNhapVTServiceImpl implements DTGoiThauDiaDiemNhapVT
 	@Override
 	public List<DTGoiThauDiaDiemNhapVTRes> update(List<DTGoiThauDiaDiemNhapVTReq> list, Long dtvtGoiThauId) {
 		Set<Long> requestIds = list.stream().map(DTGoiThauDiaDiemNhapVTReq::getId).collect(Collectors.toSet());
+		List<DTGoiThauDiaDiemNhapVT> diaDiemNhapVTList = dtGoiThauDiaDiemNhapVTRepository.findByIdIn(requestIds);
 		dtGoiThauDiaDiemNhapVTRepository.deleteByDtvtGoiThauIdAndIdNotIn(dtvtGoiThauId, requestIds);
 		List<DTGoiThauDiaDiemNhapVT> saveList = new ArrayList<>();
 		for (DTGoiThauDiaDiemNhapVTReq req : list) {
 			if (req == null)
 				continue;
 
-			DTGoiThauDiaDiemNhapVT diaDiemNhapVT = new DTGoiThauDiaDiemNhapVT();
+			DTGoiThauDiaDiemNhapVT diaDiemNhapVT = diaDiemNhapVTList.stream().filter(item -> item.getId().equals(req.getId())).findFirst().orElse(null);
+			if (diaDiemNhapVT == null) {
+				diaDiemNhapVT = new DTGoiThauDiaDiemNhapVT();
+				diaDiemNhapVT.setDtvtGoiThauId(dtvtGoiThauId);
+			}
 			diaDiemNhapVT.setId(req.getId());
 			diaDiemNhapVT.setDtvtGoiThauId(dtvtGoiThauId);
 			diaDiemNhapVT.setStt(req.getStt());

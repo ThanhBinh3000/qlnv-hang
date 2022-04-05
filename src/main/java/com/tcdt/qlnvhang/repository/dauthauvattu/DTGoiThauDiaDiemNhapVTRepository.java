@@ -12,6 +12,7 @@ import java.util.Set;
 @Repository
 public interface DTGoiThauDiaDiemNhapVTRepository extends BaseRepository<DTGoiThauDiaDiemNhapVT, Long> {
 	List<DTGoiThauDiaDiemNhapVT> findByDtvtGoiThauId(Long dtvtGoiThauId);
+	List<DTGoiThauDiaDiemNhapVT> findByIdIn(Set<Long> dtvtGoiThauIds);
 	Page<DTGoiThauDiaDiemNhapVT> findByDtvtGoiThauId(Long dtvtGoiThauId, Pageable pageable);
 	Long countByDtvtGoiThauId(Long dtvtGoiThauId);
 	void deleteByDtvtGoiThauIdIn(Set<Long> dtvtGoiThauIds);
