@@ -10,6 +10,7 @@ import org.springframework.data.domain.*;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,11 +82,11 @@ public class QdPheDuyetKqlcntVtRepositoryCustomImpl implements QdPheDuyetKqlcntV
 
         List<?> dataCount = query.getResultList();
 
-        if (!CollectionUtils.isEmpty(dataCount)) {
+        if (CollectionUtils.isEmpty(dataCount)) {
             return total;
         }
         Tuple result = (Tuple) dataCount.get(0);
-        return result.get("totalRecord", BigInteger.class).intValue();
+        return result.get("totalRecord", BigDecimal.class).intValue();
     }
 
     private void setParameterSearchCtkhn(QdPheDuyetKqlcntVtSearchReq req, Query query) {

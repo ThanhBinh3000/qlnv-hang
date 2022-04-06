@@ -102,11 +102,11 @@ public class ThongTinDauThauVTRepositoryCustomImpl implements ThongTinDauThauVTR
 
 		List<?> dataCount = query.getResultList();
 
-		if (!CollectionUtils.isEmpty(dataCount)) {
+		if (CollectionUtils.isEmpty(dataCount)) {
 			return total;
 		}
 		Tuple result = (Tuple) dataCount.get(0);
-		return result.get("totalRecord", BigInteger.class).intValue();
+		return result.get("totalRecord", BigDecimal.class).intValue();
 	}
 
 	private void setParameterSearchCtkhn(ThongTinDauThauVTSearchReq req, Query query) {

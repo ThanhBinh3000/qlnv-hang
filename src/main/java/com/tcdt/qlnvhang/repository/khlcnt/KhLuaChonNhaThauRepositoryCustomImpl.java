@@ -119,11 +119,11 @@ public class KhLuaChonNhaThauRepositoryCustomImpl implements KhLuaChonNhaThauRep
 
 		List<?> dataCount = query.getResultList();
 
-		if (!CollectionUtils.isEmpty(dataCount)) {
+		if (CollectionUtils.isEmpty(dataCount)) {
 			return total;
 		}
 		Tuple result = (Tuple) dataCount.get(0);
-		return result.get("totalRecord", Long.class).intValue();
+		return result.get("totalRecord", BigDecimal.class).intValue();
 	}
 
 	private void setParameters(KhLuaChonNhaThauSearchReq req, Query query) {
