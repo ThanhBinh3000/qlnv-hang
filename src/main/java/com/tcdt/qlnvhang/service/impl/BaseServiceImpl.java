@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -18,7 +19,6 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.tcdt.qlnvhang.request.BaseRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -36,15 +36,17 @@ import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.jwt.TokenAuthenticationService;
 import com.tcdt.qlnvhang.repository.DanhMucRepository;
+import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
+import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.service.feign.CategoryServiceProxy;
 import com.tcdt.qlnvhang.table.QlnvDanhMuc;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.MapCategory;
+import com.tcdt.qlnvhang.util.MapDmucDvi;
 import com.tcdt.qlnvhang.util.Request;
 
-import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -57,12 +59,15 @@ public class BaseServiceImpl {
 	DanhMucRepository danhMucRepository;
 
 	@Autowired
-	private Gson gson;
+	private QlnvDmDonviRepository qlnvDmDonviRepository;
 
 	@Autowired
-	private HttpServletRequest req;
+	private Gson gson;
 
-	public QlnvDmDonvi getDviByMa(String maDvi) throws Exception {
+//	@Autowired
+//	private HttpServletRequest req;
+
+	public QlnvDmDonvi getDviByMa(String maDvi, HttpServletRequest req) throws Exception {
 		QlnvDmDonvi qlnvDmDonvi = null;
 		try {
 
@@ -73,7 +78,7 @@ public class BaseServiceImpl {
 					baseRequest);
 			log.info("Kết quả danh mục đơn vị: {}", gson.toJson(response));
 			if (Request.getStatus(response.getBody()) != EnumResponse.RESP_SUCC.getValue())
-				throw new NotFoundException("Không tìm truy vấn được thông tin đơn vị");
+				qlnvDmDonvi = new QlnvDmDonvi();
 
 			// Passed ket qua tra ve, tuy bien type list or object
 			String str = Request.getAttrFromJson(response.getBody(), "data");
@@ -98,6 +103,17 @@ public class BaseServiceImpl {
 			}
 		}
 		return MapCategory.map;
+	}
+
+	public Map<String, String> getMapDmucDvi() {
+		if (MapDmucDvi.map == null && qlnvDmDonviRepository != null) {
+			MapDmucDvi.map = new HashMap<>();
+			Iterable<QlnvDmDonvi> list = qlnvDmDonviRepository.findByTrangThai(Contains.HOAT_DONG);
+			for (QlnvDmDonvi cate : list) {
+				MapDmucDvi.map.put(cate.getMaDvi(), cate.getTenDvi());
+			}
+		}
+		return MapDmucDvi.map;
 	}
 
 	public UserInfo getUser() {
@@ -235,5 +251,13 @@ public class BaseServiceImpl {
 		// Get year from date
 		int year = currentDate.getYear();
 		return "Ngày " + day + " tháng " + month + " năm " + year;
+	}
+
+	public static long minusDate(Date date1, Date date2) throws Exception {
+		LocalDate d1 = LocalDate.parse(convertDateToString(date1), DateTimeFormatter.ISO_LOCAL_DATE);
+		LocalDate d2 = LocalDate.parse(convertDateToString(date2), DateTimeFormatter.ISO_LOCAL_DATE);
+		Duration diff = Duration.between(d1.atStartOfDay(), d2.atStartOfDay());
+		long diffDays = diff.toDays();
+		return diffDays;
 	}
 }

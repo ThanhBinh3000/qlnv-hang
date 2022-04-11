@@ -4,8 +4,10 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.modelmapper.ModelMapper;
@@ -83,7 +85,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		List<HhDxuatKhLcntDsgtDtl> dtls2 = ObjectMapperUtils.mapAll(objReq.getDetail2(), HhDxuatKhLcntDsgtDtl.class);
 		UnitScaler.reverseFormatList(dtls2, Contains.DVT_TAN);
 		String prefix = "-" + Contains.SHGT + "/" + dataMap.getMaDvi();
-		//TODO: xem lai cach sinh so, viet tam de lay so
+		// TODO: xem lai cach sinh so, viet tam de lay so
 		// Lay danh muc dung chung
 		String shgtStr = "0";
 		QlnvDanhMuc qlnvDanhMuc = danhMucRepository.findByMa(Contains.SHGT);
@@ -202,7 +204,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 	}
 
 	@Override
-	public Page<HhDxuatKhLcntHdr> colection(HhDxuatKhLcntSearchReq objReq) throws Exception {
+	public Page<HhDxuatKhLcntHdr> colection(HhDxuatKhLcntSearchReq objReq, HttpServletRequest req) throws Exception {
 		int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
 		int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
 		Pageable pageable = PageRequest.of(page, limit);
@@ -210,8 +212,10 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		Page<HhDxuatKhLcntHdr> qhKho = hhDxuatKhLcntHdrRepository
 				.findAll(HhDxuatKhLcntSpecification.buildSearchQuery(objReq), pageable);
 
+		// Lay danh muc dung chung
+		Map<String, String> mapDmucDvi = getMapDmucDvi();
 		for (HhDxuatKhLcntHdr hdr : qhKho.getContent()) {
-			hdr.setTenDvi(getDviByMa(hdr.getMaDvi()).getTenDvi());
+			hdr.setTenDvi(mapDmucDvi.get(hdr.getMaDvi()));
 		}
 
 		return qhKho;
@@ -258,8 +262,9 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		if (!optional.isPresent())
 			throw new Exception("Không tìm thấy dữ liệu cần xoá");
 
-		if (!optional.get().getTrangThai().equals(Contains.TAO_MOI))
-			throw new Exception("Chỉ thực hiện xóa với kế hoạch ở trạng thái bản nháp");
+		if (!optional.get().getTrangThai().equals(Contains.TAO_MOI)
+				|| !optional.get().getTrangThai().equals(Contains.TU_CHOI))
+			throw new Exception("Chỉ thực hiện xóa với kế hoạch ở trạng thái bản nháp hoặc từ chối");
 
 		hhDxuatKhLcntHdrRepository.delete(optional.get());
 	}

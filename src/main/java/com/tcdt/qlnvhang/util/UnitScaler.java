@@ -44,7 +44,7 @@ public class UnitScaler {
 				Method setter = list.getClass().getMethod("set" + format, type);
 				Object raw = getter.invoke(list, null);
 				if (type.equals(BigDecimal.class) && ((BigDecimal) raw).scale() == 0
-						&& format.equals(Contains.COLUMN_CONVERT)) {
+						&& format.contains(Contains.COLUMN_CONVERT)) {
 					BigDecimal value = ((BigDecimal) raw).multiply(unitScaleFrom).divide(unitScaleTo).setScale(0,
 							RoundingMode.HALF_UP);
 					setter.invoke(list, value);

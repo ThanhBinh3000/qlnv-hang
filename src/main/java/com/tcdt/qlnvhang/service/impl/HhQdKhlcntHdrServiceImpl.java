@@ -55,11 +55,12 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		if (checkSoQd.isPresent())
 			throw new Exception("Số quyết định " + objReq.getSoQd() + " đã tồn tại");
 
-		if (ObjectUtils.isNotEmpty(objReq.getIdPaHdr()) && objReq.getIdPaHdr() > 0) {
-			Optional<HhPaKhlcntHdr> qOptional = hhPaKhlcntHdrRepository.findById(objReq.getIdPaHdr());
-			if (!qOptional.isPresent())
-				throw new Exception("Không tìm thấy phương án kế hoạch lựa chọn nhà thầu");
-		}
+		if (ObjectUtils.isEmpty(objReq.getIdPaHdr()) || objReq.getIdPaHdr() <= 0)
+			throw new Exception("Không tìm thấy phương án kế hoạch lựa chọn nhà thầu");
+
+		Optional<HhPaKhlcntHdr> qOptional = hhPaKhlcntHdrRepository.findById(objReq.getIdPaHdr());
+		if (!qOptional.isPresent())
+			throw new Exception("Không tìm thấy phương án kế hoạch lựa chọn nhà thầu");
 
 		// Lay danh muc dung chung
 		Map<String, String> mapDmuc = getMapCategory();
@@ -91,6 +92,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		dataMap.setTrangThai(Contains.TAO_MOI);
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setChildren(fileDinhKemList);
+		dataMap.setSoPhAn(qOptional.get().getSoPhAn());
 
 		if (objReq.getDetail() != null) {
 			List<HhQdKhlcntDsgthau> detailChild;
@@ -126,6 +128,13 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				throw new Exception("Số quyết định " + objReq.getSoQd() + " đã tồn tại");
 		}
 
+		if (ObjectUtils.isEmpty(objReq.getIdPaHdr()) || objReq.getIdPaHdr() <= 0)
+			throw new Exception("Không tìm thấy phương án kế hoạch lựa chọn nhà thầu");
+
+		Optional<HhPaKhlcntHdr> qOpPa = hhPaKhlcntHdrRepository.findById(objReq.getIdPaHdr());
+		if (!qOpPa.isPresent())
+			throw new Exception("Không tìm thấy phương án kế hoạch lựa chọn nhà thầu");
+
 		// Lay danh muc dung chung
 		Map<String, String> mapDmuc = getMapCategory();
 		if (objReq.getHthucLcnt() == null || !mapDmuc.containsKey(objReq.getHthucLcnt()))
@@ -158,6 +167,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		dataDB.setNgaySua(getDateTimeNow());
 		dataDB.setNguoiSua(getUser().getUsername());
 		dataDB.setChildren(fileDinhKemList);
+		dataDB.setSoPhAn(qOpPa.get().getSoPhAn());
 
 		if (objReq.getDetail() != null) {
 			List<HhQdKhlcntDsgthau> detailChild;
@@ -315,7 +325,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			objs[1] = dsgtDtl.getSoQd();
 			objs[2] = convertDateToString(dsgtDtl.getNgayQd());
 			objs[3] = dsgtDtl.getVeViec();
-			objs[4] = "01/QD-TCDT";//TODO: lam min lai
+			objs[4] = "01/QD-TCDT";// TODO: lam min lai
 			objs[5] = mapDmuc.get(dsgtDtl.getLoaiVthh());
 			objs[6] = "Tiêu chuẩn chất lượng";
 			objs[7] = mapDmuc.get(dsgtDtl.getNguonVon());

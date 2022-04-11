@@ -50,7 +50,7 @@ public class HhDxKhLcntThopHdrController {
 			@Valid @RequestBody HhDxKhLcntTChiThopReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(service.sumarryData(objReq));
+			resp.setData(service.sumarryData(objReq, request));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -68,7 +68,7 @@ public class HhDxKhLcntThopHdrController {
 			@Valid @RequestBody HhDxKhLcntThopHdrReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(service.create(objReq));
+			resp.setData(service.create(objReq, request));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -158,7 +158,7 @@ public class HhDxKhLcntThopHdrController {
 			HttpServletRequest request) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(service.findByStatus(objReq));
+			resp.setData(service.findByStatus(objReq, request));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {

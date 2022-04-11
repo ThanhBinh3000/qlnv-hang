@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +20,7 @@ import org.springframework.util.StringUtils;
 import com.tcdt.qlnvhang.entities.FileDKemJoinPaKhlcntHdr;
 import com.tcdt.qlnvhang.repository.HhDxKhLcntThopHdrRepository;
 import com.tcdt.qlnvhang.repository.HhPaKhlcntHdrRepository;
+import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.object.HhPaKhlcntDtlReq;
 import com.tcdt.qlnvhang.request.object.HhPaKhlcntHdrReq;
 import com.tcdt.qlnvhang.request.search.HhPaKhLcntDsChuaQdReq;
@@ -28,6 +32,7 @@ import com.tcdt.qlnvhang.table.HhPaKhlcntDsgthau;
 import com.tcdt.qlnvhang.table.HhPaKhlcntDtl;
 import com.tcdt.qlnvhang.table.HhPaKhlcntHdr;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import com.tcdt.qlnvhang.util.PaginationSet;
 import com.tcdt.qlnvhang.util.UnitScaler;
@@ -226,6 +231,60 @@ public class HhPaKhlcntHdrServiceImpl extends BaseServiceImpl implements HhPaKhl
 			hdr.setTenNguonVon(mapDmuc.get(hdr.getNguonVon()));
 		}
 		return panList;
+	}
+
+	@Override
+	public void delete(@Valid IdSearchReq idSearchReq) throws Exception {
+		if (StringUtils.isEmpty(idSearchReq.getId()))
+			throw new Exception("Xoá thất bại, không tìm thấy dữ liệu");
+
+		Optional<HhPaKhlcntHdr> optional = hhPaKhlcntHdrRepository.findById(idSearchReq.getId());
+		if (!optional.isPresent())
+			throw new Exception("Không tìm thấy dữ liệu cần xoá");
+
+		if (optional.get().getQuyetDinh().equals(Contains.ACTIVE))
+			throw new Exception("Phương án đã được lên quyết định, không được phép xóa");
+
+		hhPaKhlcntHdrRepository.delete(optional.get());
+
+	}
+
+	@Override
+	public void exportToExcel(HhPaKhlcntSearchReq objReq, HttpServletResponse response) throws Exception {
+		// Tao form excel
+		String title = "Danh sách gói thầu";
+		String[] rowsName = new String[] { "STT", "Ngày tạo phương án", "Năm kế hoạch", "Hình thức LCNT",
+				"Phương thức LCNT", "Loại hợp đồng", "Nguồn vốn", "Tiêu chuẩn chất lượng", "Trạng thái" };
+		List<HhPaKhlcntHdr> paList = hhPaKhlcntHdrRepository.findAll(HhPaKhlcntSpecification.buildSearchQuery(objReq));
+
+		if (paList.isEmpty())
+			throw new UnsupportedOperationException("Không tìm thấy dữ liệu");
+
+		String filename = "PHUONGAN_KHLCNT_" + getDateTimeNow() + ".xlsx";
+
+		// Lay danh muc dung chung
+		Map<String, String> mapDmuc = getMapCategory();
+
+		List<Object[]> dataList = new ArrayList<Object[]>();
+		Object[] objs = null;
+		for (int i = 0; i < paList.size(); i++) {
+			HhPaKhlcntHdr hdr = paList.get(i);
+			objs = new Object[rowsName.length];
+			objs[0] = i;
+			objs[1] = hdr.getNgayTao();
+			objs[2] = hdr.getNamKhoach();
+			objs[3] = mapDmuc.get(hdr.getHthucLcnt());
+			objs[4] = mapDmuc.get(hdr.getPthucLcnt());
+			objs[5] = mapDmuc.get(hdr.getLoaiHdong());
+			objs[6] = mapDmuc.get(hdr.getNguonVon());
+			objs[7] = "Tiêu chuẩn chất lượng";// TODO: chinh sua lai khi thong nhat duoc cach lay bo tieu chuan
+			objs[8] = hdr.getQuyetDinh().equals(Contains.ACTIVE) ? "Đã được tạo quyết định"
+					: "Chưa được tạo quyết định";
+			dataList.add(objs);
+		}
+
+		ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+		ex.export();
 	}
 
 }

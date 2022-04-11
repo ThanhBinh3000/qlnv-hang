@@ -49,6 +49,19 @@ public class HhDxuatKhLcntCcxdgDtl implements Serializable {
 	@Where(clause = "data_type='" + HhDxuatKhLcntCcxdgDtl.TABLE_NAME + "'")
 	private List<FileDKemJoinDxKhLcntCcxdg> children = new ArrayList<>();
 
+	public void setChildren(List<FileDKemJoinDxKhLcntCcxdg> children) {
+		this.children.clear();
+		for (FileDKemJoinDxKhLcntCcxdg child : children) {
+			child.setParent(this);
+		}
+		this.children.addAll(children);
+	}
+
+	public void addChild(FileDKemJoinDxKhLcntCcxdg child) {
+		child.setParent(this);
+		this.children.add(child);
+	}
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_hdr")
 	@JsonBackReference

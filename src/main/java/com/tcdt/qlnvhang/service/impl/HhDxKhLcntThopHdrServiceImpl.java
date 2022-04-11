@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -43,7 +45,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 	private HhDxuatKhLcntHdrRepository hhDxuatKhLcntHdrRepository;
 
 	@Override
-	public HhDxKhLcntThopHdr sumarryData(HhDxKhLcntTChiThopReq objReq) throws Exception {
+	public HhDxKhLcntThopHdr sumarryData(HhDxKhLcntTChiThopReq objReq, HttpServletRequest req) throws Exception {
 		List<HhDxuatKhLcntHdr> dxuatList = hhDxuatKhLcntHdrRepository
 				.findAll(HhDxuatKhLcntSpecification.buildTHopQuery(objReq));
 
@@ -57,11 +59,22 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		Map<String, String> mapDmuc = getMapCategory();
 
 		thopHdr.setNamKhoach(dxuatList.get(0).getNamKhoach().toString());
-		thopHdr.setLoaiVthh(Contains.getLoaiVthh(dxuatList.get(0).getLoaiVthh()));
-		thopHdr.setHthucLcnt(mapDmuc.get(dxuatList.get(0).getChildren1().get(0).getHthucLcnt()));
-		thopHdr.setPthucLcnt(mapDmuc.get(dxuatList.get(0).getChildren1().get(0).getPthucLcnt()));
-		thopHdr.setLoaiHdong(mapDmuc.get(dxuatList.get(0).getChildren1().get(0).getLoaiHdong()));
-		thopHdr.setNguonVon(mapDmuc.get(dxuatList.get(0).getChildren1().get(0).getNguonVon()));
+		//tai sao ???????????????
+		//thopHdr.setLoaiVthh(Contains.getLoaiVthh(dxuatList.get(0).getLoaiVthh()));
+		//thopHdr.setHthucLcnt(mapDmuc.get(dxuatList.get(0).getChildren1().get(0).getHthucLcnt()));
+		//thopHdr.setPthucLcnt(mapDmuc.get(dxuatList.get(0).getChildren1().get(0).getPthucLcnt()));
+		//thopHdr.setLoaiHdong(mapDmuc.get(dxuatList.get(0).getChildren1().get(0).getLoaiHdong()));
+		//thopHdr.setNguonVon(mapDmuc.get(dxuatList.get(0).getChildren1().get(0).getNguonVon()));
+		thopHdr.setLoaiVthh(objReq.getLoaiVthh());
+		thopHdr.setHthucLcnt(objReq.getHthucLcnt());
+		thopHdr.setPthucLcnt(objReq.getPthucLcnt());
+		thopHdr.setLoaiHdong(objReq.getLoaiHdong());
+		thopHdr.setNguonVon(objReq.getNguonVon());
+		thopHdr.setTenLoaiVthh(Contains.getLoaiVthh(objReq.getLoaiVthh()));
+		thopHdr.setTenHthucLcnt(mapDmuc.get(dxuatList.get(0).getChildren1().get(0).getHthucLcnt()));
+		thopHdr.setTenPthucLcnt(mapDmuc.get(dxuatList.get(0).getChildren1().get(0).getPthucLcnt()));
+		thopHdr.setTenLoaiHdong(mapDmuc.get(dxuatList.get(0).getChildren1().get(0).getLoaiHdong()));
+		thopHdr.setTenNguonVon(mapDmuc.get(dxuatList.get(0).getChildren1().get(0).getNguonVon()));
 
 		// Add thong tin list dtl
 		List<HhDxKhLcntThopDtl> thopDtls = new ArrayList<HhDxKhLcntThopDtl>();
@@ -105,7 +118,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 			// Set thong tin chung lay tu de xuat
 			thopDtl.setIdDxHdr(dxuat.getId());
 			thopDtl.setMaDvi(dxuat.getMaDvi());
-			thopDtl.setTenDvi(getDviByMa(dxuat.getMaDvi()).getTenDvi());
+			thopDtl.setTenDvi(getDviByMa(dxuat.getMaDvi(), req).getTenDvi());
 			thopDtl.setSoDxuat(dxuat.getSoDxuat());
 			thopDtl.setNgayDxuat(dxuat.getNgayKy());
 			thopDtl.setTenDuAn(dtlsGao.get(0).getTenDuAn());
@@ -134,7 +147,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 	}
 
 	@Override
-	public HhDxKhLcntThopHdr create(HhDxKhLcntThopHdrReq objReq) throws Exception {
+	public HhDxKhLcntThopHdr create(HhDxKhLcntThopHdrReq objReq, HttpServletRequest req) throws Exception {
 		if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh()))
 			throw new Exception("Loại vật tư hàng hóa không phù hợp");
 
@@ -200,7 +213,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 			// Set thong tin chung lay tu de xuat
 			thopDtl.setIdDxHdr(dxuat.getId());
 			thopDtl.setMaDvi(dxuat.getMaDvi());
-			thopDtl.setTenDvi(getDviByMa(dxuat.getMaDvi()).getTenDvi());
+			thopDtl.setTenDvi(getDviByMa(dxuat.getMaDvi(), req).getTenDvi());
 			thopDtl.setSoDxuat(dxuat.getSoDxuat());
 			thopDtl.setNgayDxuat(dxuat.getNgayKy());
 			thopDtl.setTenDuAn(dtlsGao.get(0).getTenDuAn());
@@ -321,7 +334,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 	}
 
 	@Override
-	public List<HhDxKhLcntThopDtl> findByStatus(HhDxKhLcntDsChuaThReq objReq) throws Exception {
+	public List<HhDxKhLcntThopDtl> findByStatus(HhDxKhLcntDsChuaThReq objReq, HttpServletRequest req) throws Exception {
 		List<HhDxuatKhLcntHdr> dxuatList = hhDxuatKhLcntHdrRepository
 				.findAll(HhDxuatKhLcntSpecification.buildDsChuaTh(objReq));
 
@@ -340,7 +353,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 			// Set thong tin chung lay tu de xuat
 			thopDtl.setIdDxHdr(dxuat.getId());
 			thopDtl.setMaDvi(dxuat.getMaDvi());
-			thopDtl.setTenDvi(getDviByMa(dxuat.getMaDvi()).getTenDvi());
+			thopDtl.setTenDvi(getDviByMa(dxuat.getMaDvi(), req).getTenDvi());
 			thopDtl.setSoDxuat(dxuat.getSoDxuat());
 			thopDtl.setNgayDxuat(dxuat.getNgayKy());
 			thopDtl.setTenDuAn(dtlsGao.get(0).getTenDuAn());

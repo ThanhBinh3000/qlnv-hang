@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
@@ -16,10 +17,10 @@ import com.tcdt.qlnvhang.table.HhDxKhLcntThopHdr;
 
 public interface HhDxKhLcntThopHdrService {
 
-	HhDxKhLcntThopHdr sumarryData(HhDxKhLcntTChiThopReq objReq) throws Exception;
+	HhDxKhLcntThopHdr sumarryData(HhDxKhLcntTChiThopReq objReq, HttpServletRequest req) throws Exception;
 
 	@Transactional(rollbackOn = Exception.class)
-	HhDxKhLcntThopHdr create(HhDxKhLcntThopHdrReq objReq) throws Exception;
+	HhDxKhLcntThopHdr create(HhDxKhLcntThopHdrReq objReq, HttpServletRequest req) throws Exception;
 
 	@Transactional(rollbackOn = Exception.class)
 	HhDxKhLcntThopHdr update(HhDxKhLcntThopHdrReq objReq) throws Exception;
@@ -31,6 +32,6 @@ public interface HhDxKhLcntThopHdrService {
 	@Transactional(rollbackOn = Exception.class)
 	void delete(IdSearchReq idSearchReq) throws Exception;
 
-	List<HhDxKhLcntThopDtl> findByStatus(HhDxKhLcntDsChuaThReq objReq) throws Exception;
+	List<HhDxKhLcntThopDtl> findByStatus(HhDxKhLcntDsChuaThReq objReq, HttpServletRequest req) throws Exception;
 
 }

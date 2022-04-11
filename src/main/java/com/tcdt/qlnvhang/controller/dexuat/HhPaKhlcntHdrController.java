@@ -1,8 +1,11 @@
 package com.tcdt.qlnvhang.controller.dexuat;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.enums.EnumResponse;
+import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.object.HhPaKhlcntHdrReq;
 import com.tcdt.qlnvhang.request.search.HhPaKhLcntDsChuaQdReq;
 import com.tcdt.qlnvhang.request.search.HhPaKhlcntSearchReq;
@@ -132,5 +137,45 @@ public class HhPaKhlcntHdrController {
 		}
 
 		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Xoá phương án lựa chọn nhà thầu", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			service.delete(idSearchReq);
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Xoá phương án lựa chọn nhà thầu trace: {}", e);
+		}
+
+		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Kết xuất danh sách phương án kế hoạch lựa chọn nhà thầu", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(PathContains.URL_KET_XUAT)
+	@ResponseStatus(HttpStatus.OK)
+	public void exportToExcel(@Valid @RequestBody HhPaKhlcntSearchReq objReq, HttpServletResponse response)
+			throws Exception {
+		try {
+			service.exportToExcel(objReq, response);
+		} catch (Exception e) {
+			// TODO: handle exception
+			log.error("Kết xuất danh sách phương án kế hoạch lựa chọn nhà thầu trace: {}", e);
+			final Map<String, Object> body = new HashMap<>();
+			body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			body.put("msg", e.getMessage());
+
+			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+			response.setCharacterEncoding("UTF-8");
+
+			final ObjectMapper mapper = new ObjectMapper();
+			mapper.writeValue(response.getOutputStream(), body);
+		}
 	}
 }

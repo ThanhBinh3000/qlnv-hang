@@ -3,7 +3,10 @@ package com.tcdt.qlnvhang.service.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -281,15 +284,16 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 	}
 
 	@Override
-	public Page<HhDthau2> colection(HhDthauSearchReq objReq) throws Exception {
+	public Page<HhDthau2> colection(HhDthauSearchReq objReq, HttpServletRequest req) throws Exception {
 		int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
 		int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
 		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
 
 		Page<HhDthau2> dataPage = hhDthau2Repository.findAll(HhDthau2Specification.buildSearchQuery(objReq), pageable);
 
+		Map<String, String> mapDmucDvi = getMapDmucDvi();
 		for (HhDthau2 hdr : dataPage.getContent()) {
-			hdr.setTenDvi(getDviByMa(hdr.getMaDvi()).getTenDvi());
+			hdr.setTenDvi(mapDmucDvi.get(hdr.getMaDvi()));
 		}
 		return dataPage;
 	}
