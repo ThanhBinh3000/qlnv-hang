@@ -2,12 +2,9 @@ package com.tcdt.qlnvhang.secification;
 
 import java.util.Date;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 
+import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatDtl;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.data.jpa.domain.Specification;
@@ -35,6 +32,7 @@ public class HhQdGiaoNvuNhapxuatSpecification {
 					String loaiQd = req.getLoaiQd();
 
 					root.fetch("children", JoinType.LEFT);
+					Join<HhQdGiaoNvuNhapxuatHdr, HhQdGiaoNvuNhapxuatDtl> joinQuerry = root.join("children");
 
 					if (ngayQd != null) {
 						predicate.getExpressions()
@@ -56,7 +54,7 @@ public class HhQdGiaoNvuNhapxuatSpecification {
 						predicate.getExpressions().add(builder.and(builder.equal(root.get("soHd"), soHd)));
 
 					if (StringUtils.isNotBlank(maVthh))
-						predicate.getExpressions().add(builder.and(builder.equal(root.get("maVthh"), maVthh)));
+						predicate.getExpressions().add(builder.and(builder.equal(joinQuerry.get("maVthh"), maVthh)));
 
 					if (StringUtils.isNotBlank(loaiQd))
 						predicate.getExpressions().add(builder.and(builder.equal(root.get("loaiQd"), loaiQd)));

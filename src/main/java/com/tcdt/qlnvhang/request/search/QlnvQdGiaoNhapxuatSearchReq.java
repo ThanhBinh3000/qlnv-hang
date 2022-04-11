@@ -42,7 +42,7 @@ public class QlnvQdGiaoNhapxuatSearchReq extends BaseRequest {
 	@ApiModelProperty(example = "HNO")
 	String maDvi;
 
-	@ApiModelProperty(example = Contains.QD_MUA)
+	@ApiModelProperty(example = Contains.QD_NHAP)
 	String loaiHdong;
 
 }

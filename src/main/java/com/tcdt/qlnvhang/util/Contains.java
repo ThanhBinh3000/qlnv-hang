@@ -90,8 +90,8 @@ public class Contains {
 	public static final String HD_VT_THEO_THOI_GIAN = "03";
 
 	// Loai quyet dinh
-	public static final String QD_MUA = "00";
-	public static final String QD_BAN = "01";
+	public static final String QD_NHAP = "00";
+	public static final String QD_XUAT = "01";
 
 	// Loai phieu
 	public static final String PHIEU_NHAP = "00";

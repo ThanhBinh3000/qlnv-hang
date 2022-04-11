@@ -73,7 +73,7 @@ public class QlnvQdGiaoNhapxuatController extends BaseController {
 			dataMap.setTrangThai(Contains.TAO_MOI);
 			dataMap.setNguoiTao(getUserName(req));
 			dataMap.setNgayTao(getDateTimeNow());
-			dataMap.setLoaiHdong(objReq.getLoaiHdong().equals(Contains.QD_MUA) ? Contains.QD_MUA : Contains.QD_BAN);
+			dataMap.setLoaiHdong(objReq.getLoaiHdong().equals(Contains.QD_NHAP) ? Contains.QD_NHAP : Contains.QD_XUAT);
 			// Add thong tin detail
 			List<QlnvQdGiaoNhapxuatDtlReq> dtlReqList = objReq.getDetail();
 			List<QlnvQdGiaoNhapxuatDtl> dtls = ObjectMapperUtils.mapAll(dtlReqList, QlnvQdGiaoNhapxuatDtl.class);
