@@ -99,6 +99,9 @@ public class QlPhieuNhapKhoLt implements Serializable {
     @Column(name = "TRANG_THAI")
     private String trangThai;
 
+    @Column(name = "CAP_DON_VI")
+    private String capDonVi;
+
     @Transient
     private List<QlPhieuNhapKhoHangHoaLt> hangHoaList = new ArrayList<>();
 }

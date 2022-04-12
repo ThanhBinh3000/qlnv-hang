@@ -28,6 +28,7 @@ public class QdPheDuyetKqlcntVt extends BaseEntity implements Serializable {
     private String veViec;
     private String trangThai;
     private Long vatTuId; // QLNV_DM_DONVI
+    private String maVatTu;
     private Long khLcntVtId; // KH_LCNT_VT
     private Long thongTinDauThauId; //THONG_TIN_DAU_THAU_VT
     private LocalDate ngayGuiDuyet;
@@ -35,6 +36,8 @@ public class QdPheDuyetKqlcntVt extends BaseEntity implements Serializable {
     private LocalDate ngayPheDuyet;
     private Long nguoiPheDuyetId;
     private String lyDoTuChoi;
+    private String maDonVi;
+    private String capDonVi;
     @Transient
     private List<QdKqlcntGoiThauVt> goiThauList = new ArrayList<>();
 }

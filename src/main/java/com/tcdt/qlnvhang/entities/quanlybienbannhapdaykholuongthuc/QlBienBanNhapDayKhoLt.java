@@ -83,6 +83,9 @@ public class QlBienBanNhapDayKhoLt extends BaseEntity implements Serializable {
     @Column(name = "NGUOI_PHE_DUYET_ID")
     private Long nguoiPheDuyetId;
 
+    @Column(name = "CAP_DON_VI")
+    private String capDonVi;
+
     @Transient
     private List<QlBienBanNdkCtLt> chiTiets = new ArrayList<>();
 }

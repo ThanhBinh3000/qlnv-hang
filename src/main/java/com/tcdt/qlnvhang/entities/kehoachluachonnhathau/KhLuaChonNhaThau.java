@@ -49,4 +49,6 @@ public class KhLuaChonNhaThau extends BaseEntity implements Serializable {
 	private String ldoTchoi;
 	private Long nguoiGuiDuyetId;
 	private LocalDate ngayGuiDuyet;
+	private String maDonVi;
+	private String capDonVi;
 }

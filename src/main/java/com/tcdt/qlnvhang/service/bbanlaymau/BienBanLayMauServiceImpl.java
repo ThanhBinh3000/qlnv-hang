@@ -10,6 +10,7 @@ import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauReq;
 import com.tcdt.qlnvhang.request.search.BienBanLayMauSearchReq;
 import com.tcdt.qlnvhang.response.bbanlaymau.BienBanLayMauRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.donvi.QlnvDmDonViService;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
@@ -41,6 +42,9 @@ public class BienBanLayMauServiceImpl implements BienBanLayMauService{
 	@Autowired
 	private QlnvDmDonviRepository qlnvDmDonviRepository;
 
+	@Autowired
+	private QlnvDmDonViService qlnvDmDonViService;
+
 	private static final int DEFAULT_PAGE_SIZE = 10;
 	private static final int DEFAULT_PAGE_INDEX = 0;
 
@@ -64,7 +68,8 @@ public class BienBanLayMauServiceImpl implements BienBanLayMauService{
 		bienBienLayMau.setTrangThai(TrangThaiEnum.MOI_TAO.getMa());
 		bienBienLayMau.setNguoiTaoId(userInfo.getId());
 		bienBienLayMau.setNgayTao(LocalDate.now());
-
+		bienBienLayMau.setMaDonVi(userInfo.getDvql());
+		bienBienLayMau.setCapDonVi(qlnvDmDonViService.getCapDviByMa(userInfo.getDvql()));
 		bienBanLayMauRepository.save(bienBienLayMau);
 		return this.toResponseList(Collections.singletonList(bienBienLayMau)).stream().findFirst().orElse(null);
 	}

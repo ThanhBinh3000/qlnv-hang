@@ -30,7 +30,7 @@ public class QdPheDuyetKqlcntVtReq {
     private String veViec;
 
     @NotNull(message = "Không được để trống")
-    private Long vatTuId;
+    private String maVatTu;
 
     @NotNull(message = "Không được để trống")
     private Long khLcntVtId;

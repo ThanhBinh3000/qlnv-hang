@@ -22,6 +22,8 @@ public class QdPheDuyetKqlcntVtRes {
     private Integer namKeHoach;
     private String veViec;
     private Long vatTuId;
+    private String maVatTu;
+    private String tenVatTu;
     private Long khLcntVtId;
     private Long thongTinDauThauId;
     private String trangThai;

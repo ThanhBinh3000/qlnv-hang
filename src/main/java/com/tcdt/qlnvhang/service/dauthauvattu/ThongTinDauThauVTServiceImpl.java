@@ -9,6 +9,7 @@ import com.tcdt.qlnvhang.request.search.ThongTinDauThauVTSearchReq;
 import com.tcdt.qlnvhang.response.dauthauvattu.DTVatTuGoiThauVTRes;
 import com.tcdt.qlnvhang.response.dauthauvattu.ThongTinDauThauRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.donvi.QlnvDmDonViService;
 import com.tcdt.qlnvhang.table.UserInfo;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,9 @@ public class ThongTinDauThauVTServiceImpl implements ThongTinDauThauVTService {
 	@Autowired
 	private DTVatTuGoiThauVTService dtVatTuGoiThauVTService;
 
+	@Autowired
+	private QlnvDmDonViService qlnvDmDonViService;
+
 	private final int DEFAULT_PAGE_SIZE = 10;
 	private final int DEFAULT_PAGE_INDEX = 0;
 
@@ -45,7 +49,8 @@ public class ThongTinDauThauVTServiceImpl implements ThongTinDauThauVTService {
 		updateEntity(req, thongTinDauThauVT);
 		thongTinDauThauVT.setNgayTao(LocalDate.now());
 		thongTinDauThauVT.setNguoiTaoId(userInfo.getId());
-
+		thongTinDauThauVT.setMaDonVi(userInfo.getDvql());
+		thongTinDauThauVT.setCapDonVi(qlnvDmDonViService.getCapDviByMa(userInfo.getDvql()));
 		thongTinDauThauVTRepository.save(thongTinDauThauVT);
 		dtVatTuGoiThauVTService.update(req.getGoiThau(), thongTinDauThauVT.getId());
 

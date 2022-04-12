@@ -51,4 +51,6 @@ public class BienBanLayMau extends BaseEntity {
 	private LocalDate ngayPduyet;
 	private String trangThai;
 	private String ldoTchoi;
+	private String maDonVi;
+	private String capDonVi;
 }

@@ -25,6 +25,8 @@ public class QdKqlcntGoiThauVtRes {
     private BigDecimal donGiaHopDongSauThue;
     private Long qdPdKhlcntId;
     private Long vatTuId;
+    private String maVatTu;
+    private String tenVatTu;
 
     private List<QdKqlcntGtDdnVtRes> ddns = new ArrayList<>();
 }

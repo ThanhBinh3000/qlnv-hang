@@ -14,6 +14,7 @@ import com.tcdt.qlnvhang.request.search.quanlyphieunhapkholuongthuc.QlPhieuNhapK
 import com.tcdt.qlnvhang.response.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoHangHoaLtRes;
 import com.tcdt.qlnvhang.response.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLtRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.donvi.QlnvDmDonViService;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import org.springframework.beans.BeanUtils;
@@ -39,6 +40,9 @@ public class QlPhieuNhapKhoLtServiceImpl implements QlPhieuNhapKhoLtService {
     @Autowired
     private QlnvDmVattuRepository qlnvDmVattuRepository;
 
+    @Autowired
+    private QlnvDmDonViService qlnvDmDonViService;
+
     @Override
     @Transactional(rollbackOn = Exception.class)
     public QlPhieuNhapKhoLtRes create(QlPhieuNhapKhoLtReq req) throws Exception {
@@ -55,6 +59,7 @@ public class QlPhieuNhapKhoLtServiceImpl implements QlPhieuNhapKhoLtService {
         phieu.setNguoiTaoId(userInfo.getId());
         phieu.setTrangThai(QdPheDuyetKqlcntVtStatus.MOI_TAO.getId());
         phieu.setMaDonVi(userInfo.getDvql());
+        phieu.setCapDonVi(qlnvDmDonViService.getCapDviByMa(userInfo.getDvql()));
         qlPhieuNhapKhoLtRepository.save(phieu);
 
         List<QlPhieuNhapKhoHangHoaLtReq> hangHoaReqs = req.getHangHoaList();

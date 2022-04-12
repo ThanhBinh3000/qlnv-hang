@@ -14,6 +14,7 @@ import com.tcdt.qlnvhang.request.search.quanlybienbannhapdaykholuongthuc.QlBienB
 import com.tcdt.qlnvhang.response.quanlybienbannhapdaykholuongthuc.QlBienBanNdkCtLtRes;
 import com.tcdt.qlnvhang.response.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.donvi.QlnvDmDonViService;
 import com.tcdt.qlnvhang.table.UserInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,9 @@ public class QlBienBanNhapDayKhoLtServiceImpl implements QlBienBanNhapDayKhoLtSe
     @Autowired
     private QlBienBanNdkCtLtRepository qlBienBanNdkCtLtRepository;
 
+    @Autowired
+    private QlnvDmDonViService qlnvDmDonViService;
+
     @Override
     @Transactional(rollbackOn = Exception.class)
     public QlBienBanNhapDayKhoLtRes create(QlBienBanNhapDayKhoLtReq req) throws Exception {
@@ -52,6 +56,7 @@ public class QlBienBanNhapDayKhoLtServiceImpl implements QlBienBanNhapDayKhoLtSe
         item.setNguoiTaoId(userInfo.getId());
         item.setTrangThai(QlBienBanNhapDayKhoLtStatus.MOI_TAO.getId());
         item.setMaDonVi(userInfo.getDvql());
+        item.setCapDonVi(qlnvDmDonViService.getCapDviByMa(userInfo.getDvql()));
         qlBienBanNhapDayKhoLtRepository.save(item);
 
         List<QlBienBanNdkCtLt> chiTiets = this.saveListChiTiet(item.getId(), req.getChiTiets(), new HashMap<>());

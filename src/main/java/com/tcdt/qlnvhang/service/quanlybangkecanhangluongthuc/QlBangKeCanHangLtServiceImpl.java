@@ -13,6 +13,7 @@ import com.tcdt.qlnvhang.request.search.quanlybangkecanhangluongthuc.QlBangKeCan
 import com.tcdt.qlnvhang.response.quanlybangkecanhangluongthuc.QlBangKeCanHangLtRes;
 import com.tcdt.qlnvhang.response.quanlybangkecanhangluongthuc.QlBangKeChCtLtRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.donvi.QlnvDmDonViService;
 import com.tcdt.qlnvhang.table.UserInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,9 @@ public class QlBangKeCanHangLtServiceImpl implements QlBangKeCanHangLtService {
     @Autowired
     private QlBangKeChCtLtRepository qlBangKeChCtLtRepository;
 
+    @Autowired
+    private QlnvDmDonViService qlnvDmDonViService;
+
     @Override
     @Transactional(rollbackOn = Exception.class)
     public QlBangKeCanHangLtRes create(QlBangKeCanHangLtReq req) throws Exception {
@@ -51,6 +55,7 @@ public class QlBangKeCanHangLtServiceImpl implements QlBangKeCanHangLtService {
         item.setNguoiTaoId(userInfo.getId());
         item.setTrangThai(QlBangKeCanHangLtStatus.MOI_TAO.getId());
         item.setMaDonVi(userInfo.getDvql());
+        item.setCapDonVi(qlnvDmDonViService.getCapDviByMa(userInfo.getDvql()));
         qlBangKeCanHangLtRepository.save(item);
 
         List<QlBangKeChCtLtReq> chiTietReqs = req.getChiTiets();

@@ -48,4 +48,6 @@ public class ThongTinDauThauVT extends BaseEntity {
 	private LocalDate ngayPduyet;
 	private Long nguoiPduyetId;
 	private String ldoTchoi;
+	private String maDonVi;
+	private String capDonVi;
 }

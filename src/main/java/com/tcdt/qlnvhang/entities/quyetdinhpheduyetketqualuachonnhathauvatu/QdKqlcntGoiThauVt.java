@@ -36,4 +36,5 @@ public class QdKqlcntGoiThauVt implements Serializable {
     private BigDecimal donGiaHopDongSauThue;
     private Long qdPdKhlcntId; //QD_PHE_DUYET_KQLCNT_VT
     private Long vatTuId; //QLNV_DM_VATTU
+    private String maVatTu;
 }

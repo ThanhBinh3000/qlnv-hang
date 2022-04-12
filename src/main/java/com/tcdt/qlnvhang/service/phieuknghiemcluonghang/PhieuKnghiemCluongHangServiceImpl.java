@@ -10,6 +10,7 @@ import com.tcdt.qlnvhang.request.search.PhieuKnghiemCluongHangSearchReq;
 import com.tcdt.qlnvhang.response.phieuknghiemcluonghang.KquaKnghiemRes;
 import com.tcdt.qlnvhang.response.phieuknghiemcluonghang.PhieuKnghiemCluongHangRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.donvi.QlnvDmDonViService;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import org.springframework.beans.BeanUtils;
@@ -37,6 +38,9 @@ public class PhieuKnghiemCluongHangServiceImpl implements PhieuKnghiemCluongHang
 	@Autowired
 	private KquaKnghiemService kquaKnghiemService;
 
+	@Autowired
+	private QlnvDmDonViService qlnvDmDonViService;
+
 	private static final int DEFAULT_PAGE_SIZE = 10;
 	private static final int DEFAULT_PAGE_INDEX = 0;
 
@@ -56,7 +60,8 @@ public class PhieuKnghiemCluongHangServiceImpl implements PhieuKnghiemCluongHang
 		this.updateEntity(phieuKnclh, req);
 		phieuKnclh.setNguoiTaoId(userInfo.getId());
 		phieuKnclh.setNgayTao(LocalDate.now());
-
+		phieuKnclh.setMaDonVi(userInfo.getDvql());
+		phieuKnclh.setCapDonVi(qlnvDmDonViService.getCapDviByMa(userInfo.getDvql()));
 		return this.detail(phieuKnclh);
 	}
 

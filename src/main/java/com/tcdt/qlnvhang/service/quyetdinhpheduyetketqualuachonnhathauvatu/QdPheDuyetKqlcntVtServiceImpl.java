@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.entities.quyetdinhpheduyetketqualuachonnhathauvatu.QdKq
 import com.tcdt.qlnvhang.entities.quyetdinhpheduyetketqualuachonnhathauvatu.QdKqlcntGtDdnVt;
 import com.tcdt.qlnvhang.entities.quyetdinhpheduyetketqualuachonnhathauvatu.QdPheDuyetKqlcntVt;
 import com.tcdt.qlnvhang.enums.QdPheDuyetKqlcntVtStatus;
+import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhpheduyetketqualuachonnhathauvatu.QdKqlcntGoiThauVtRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhpheduyetketqualuachonnhathauvatu.QdKqlcntGtDdnVtRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhpheduyetketqualuachonnhathauvatu.QdPheDuyetKqlcntVtRepository;
@@ -14,7 +15,9 @@ import com.tcdt.qlnvhang.request.object.quyetdinhpheduyetketqualuachonnhathauvat
 import com.tcdt.qlnvhang.request.search.quyetdinhpheduyetketqualuachonnhathauvatu.QdPheDuyetKqlcntVtSearchReq;
 import com.tcdt.qlnvhang.response.quyetdinhpheduyetketqualuachonnhathauvatu.QdPheDuyetKqlcntVtRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.donvi.QlnvDmDonViService;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -42,6 +45,12 @@ public class QdPheDuyetKqlcntVtServiceImpl implements QdPheDuyetKqlcntVtService 
     @Autowired
     private QdKqlcntGoiThauVtService qdKqlcntGoiThauVtService;
 
+    @Autowired
+    private QlnvDmVattuRepository qlnvDmVattuRepository;
+
+    @Autowired
+    private QlnvDmDonViService qlnvDmDonViService;
+
     @Override
     @Transactional(rollbackOn = Exception.class)
     public QdPheDuyetKqlcntVtRes create(QdPheDuyetKqlcntVtReq req) throws Exception {
@@ -53,11 +62,17 @@ public class QdPheDuyetKqlcntVtServiceImpl implements QdPheDuyetKqlcntVtService 
         if (userInfo == null)
             throw new Exception("Bad request.");
 
+        QlnvDmVattu vattu = qlnvDmVattuRepository.findByMa(req.getMaVatTu());
+        if (vattu == null)
+            throw new Exception("Vật tư không tồn tại.");
+
         QdPheDuyetKqlcntVt qd = new QdPheDuyetKqlcntVt();
         BeanUtils.copyProperties(req, qd, "id");
         qd.setNgayTao(LocalDate.now());
         qd.setNguoiTaoId(userInfo.getId());
         qd.setTrangThai(QdPheDuyetKqlcntVtStatus.MOI_TAO.getId());
+        qd.setMaDonVi(userInfo.getDvql());
+        qd.setCapDonVi(qlnvDmDonViService.getCapDviByMa(userInfo.getDvql()));
         qdPheDuyetKqlcntVtRepo.save(qd);
 
         List<QdKqlcntGoiThauVt> goiThauList = new ArrayList<>();
@@ -70,7 +85,7 @@ public class QdPheDuyetKqlcntVtServiceImpl implements QdPheDuyetKqlcntVtService 
         }
 
         qd.setGoiThauList(goiThauList);
-        return this.buildResponse(qd);
+        return this.buildResponse(qd, vattu);
     }
 
     private QdKqlcntGoiThauVt saveGoiThauVt(Long qdId, QdKqlcntGoiThauVtReq goiThauReq, Map<Long, QdKqlcntGoiThauVt> mapGoiThau) throws Exception {
@@ -129,6 +144,10 @@ public class QdPheDuyetKqlcntVtServiceImpl implements QdPheDuyetKqlcntVtService 
         if (!optionalQd.isPresent())
             throw new Exception("Quyết định không tồn tại.");
 
+        QlnvDmVattu vattu = qlnvDmVattuRepository.findByMa(req.getMaVatTu());
+        if (vattu == null)
+            throw new Exception("Vật tư không tồn tại.");
+
         QdPheDuyetKqlcntVt qd = optionalQd.get();
         BeanUtils.copyProperties(req, qd, "id");
         qd.setNgaySua(LocalDate.now());
@@ -151,12 +170,15 @@ public class QdPheDuyetKqlcntVtServiceImpl implements QdPheDuyetKqlcntVtService 
             List<QdKqlcntGtDdnVtReq> ddnReqs = goiThauReq.getDdnReqs();
             this.saveListDdnVt(goiThau.getId(), ddnReqs, mapDdn);
         }
-        return this.buildResponse(qd);
+        return this.buildResponse(qd, vattu);
     }
 
-    private QdPheDuyetKqlcntVtRes buildResponse(QdPheDuyetKqlcntVt qd) {
+    private QdPheDuyetKqlcntVtRes buildResponse(QdPheDuyetKqlcntVt qd, QlnvDmVattu vattu) {
         QdPheDuyetKqlcntVtRes response = new QdPheDuyetKqlcntVtRes();
         BeanUtils.copyProperties(qd, response);
+        response.setVatTuId(vattu.getId());
+        response.setMaVatTu(vattu.getMa());
+        response.setTenVatTu(vattu.getTen());
         List<QdKqlcntGoiThauVt> goiThauList = qd.getGoiThauList();
         for (QdKqlcntGoiThauVt goiThau : goiThauList) {
             response.getGoiThaus().add(qdKqlcntGoiThauVtService.buildResponseForList(goiThau));
@@ -213,8 +235,13 @@ public class QdPheDuyetKqlcntVtServiceImpl implements QdPheDuyetKqlcntVtService 
             throw new Exception("Quyết định không tồn tại.");
 
         QdPheDuyetKqlcntVt qd = optionalQd.get();
+        QlnvDmVattu vattu = qlnvDmVattuRepository.findByMa(qd.getMaVatTu());
+        if (vattu == null)
+            throw new Exception("Vật tư không tồn tại.");
+
         qd.setGoiThauList(qdKqlcntGoiThauVtRepo.findAllByQdPdKhlcntId(qd.getId()));
-        return this.buildResponse(qd);
+
+        return this.buildResponse(qd, vattu);
     }
 
     @Override

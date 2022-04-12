@@ -11,6 +11,7 @@ import com.tcdt.qlnvhang.response.ListResponse;
 import com.tcdt.qlnvhang.response.kehoachluachonnhathau.GoiThauRes;
 import com.tcdt.qlnvhang.response.kehoachluachonnhathau.KhLuaChonNhaThauRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.donvi.QlnvDmDonViService;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import com.tcdt.qlnvhang.util.Contains;
@@ -40,6 +41,9 @@ public class KhLuaChonNhaThauServiceImpl implements KhLuaChonNhaThauService{
 	@Autowired
 	private QlnvDmVattuRepository qlnvDmVattuRepository;
 
+	@Autowired
+	private QlnvDmDonViService qlnvDmDonViService;
+
 	private final int DEFAULT_PAGE_SIZE = 10;
 
 	@Override
@@ -53,7 +57,8 @@ public class KhLuaChonNhaThauServiceImpl implements KhLuaChonNhaThauService{
 		khLuaChonNhaThau.setNgayTao(LocalDate.now());
 		khLuaChonNhaThau.setNguoiTaoId(userInfo.getId());
 		khLuaChonNhaThau.setTrangThai(Contains.TAO_MOI);
-
+		khLuaChonNhaThau.setMaDonVi(userInfo.getDvql());
+		khLuaChonNhaThau.setCapDonVi(qlnvDmDonViService.getCapDviByMa(userInfo.getDvql()));
 		khLuaChonNhaThauRepository.save(khLuaChonNhaThau);
 		goiThauService.update(khLuaChonNhaThau.getId(), req.getGoiThau());
 
