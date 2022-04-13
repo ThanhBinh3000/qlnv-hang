@@ -41,8 +41,8 @@ public class HhQdGiaoNvuNhapxuatHdrReq {
 	String maDvi;
 
 	@NotNull(message = "Không được để trống")
-	@Size(max = 1, message = "Loại quyết định được vượt quá 20 ký tự")
-	@ApiModelProperty(example = "N")
+	@Size(max = 2, message = "Loại quyết định được vượt quá 20 ký tự")
+	@ApiModelProperty(example = "00")
 	String loaiQd;
 
 	@Size(max = 250, message = "Lý do từ chối không được vượt quá 250 ký tự")
