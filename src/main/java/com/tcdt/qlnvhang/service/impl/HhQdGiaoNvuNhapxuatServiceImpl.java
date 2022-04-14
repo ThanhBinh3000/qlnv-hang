@@ -8,6 +8,8 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.table.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -44,17 +46,20 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 	@Override
 	public HhQdGiaoNvuNhapxuatHdr create(HhQdGiaoNvuNhapxuatHdrReq objReq) throws Exception {
 
+		UserInfo userInfo = SecurityContextService.getUser();
+		if (userInfo == null)
+			throw new Exception("Bad request.");
+
 		Optional<HhQdGiaoNvuNhapxuatHdr> qOpQdinh = hhQdGiaoNvuNhapxuatRepository.findBySoQd(objReq.getSoQd());
 		if (qOpQdinh.isPresent())
 			throw new Exception("Hợp quyết định " + objReq.getSoHd() + " đã tồn tại");
 
 		HhQdGiaoNvuNhapxuatHdr dataMap = ObjectMapperUtils.map(objReq, HhQdGiaoNvuNhapxuatHdr.class);
 
-		dataMap.setNguoiTao(getUser().getUsername());
+		dataMap.setNguoiTao(userInfo.getUsername());
 		dataMap.setNgayTao(getDateTimeNow());
 		dataMap.setTrangThai(Contains.TAO_MOI);
-		dataMap.setMaDvi(getDvql(req));
-
+		dataMap.setMaDvi(userInfo.getDvql());
 		// add thong tin chi tiet
 		List<HhQdGiaoNvuNhapxuatDtl> dtls = ObjectMapperUtils.mapAll(objReq.getDetail(), HhQdGiaoNvuNhapxuatDtl.class);
 		dataMap.setChildren(dtls);
@@ -80,6 +85,10 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 	@Override
 	public HhQdGiaoNvuNhapxuatHdr update(HhQdGiaoNvuNhapxuatHdrReq objReq) throws Exception {
+		UserInfo userInfo = SecurityContextService.getUser();
+		if (userInfo == null)
+			throw new Exception("Bad request.");
+
 		if (StringUtils.isEmpty(objReq.getId()))
 			throw new Exception("Sửa thất bại, không tìm thấy dữ liệu");
 
@@ -99,7 +108,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		updateObjectToObject(dataDB, dataMap);
 
 		dataDB.setNgaySua(getDateTimeNow());
-		dataDB.setNguoiSua(getUser().getUsername());
+		dataDB.setNguoiSua(userInfo.getUsername());
 
 		// add thong tin chi tiet
 		List<HhQdGiaoNvuNhapxuatDtl> dtls = ObjectMapperUtils.mapAll(objReq.getDetail(), HhQdGiaoNvuNhapxuatDtl.class);
