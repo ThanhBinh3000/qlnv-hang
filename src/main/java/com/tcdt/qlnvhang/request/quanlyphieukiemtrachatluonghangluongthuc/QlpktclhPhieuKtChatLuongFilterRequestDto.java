@@ -1,11 +1,12 @@
 package com.tcdt.qlnvhang.request.quanlyphieukiemtrachatluonghangluongthuc;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.tcdt.qlnvhang.request.BaseRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -14,12 +15,14 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class QlpktclhPhieuKtChatLuongFilterRequestDto {
+public class QlpktclhPhieuKtChatLuongFilterRequestDto extends BaseRequest {
 
 	private Long soPhieu;
 
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate ngayKiemTraTuNgay;
 
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate ngayKiemTraDenNgay;
 
 	private Long maNganKho;
@@ -27,7 +30,4 @@ public class QlpktclhPhieuKtChatLuongFilterRequestDto {
 	private Long maHangHoa;
 
 	private String maDonVi;
-
-	private Pageable pageable;
-
 }

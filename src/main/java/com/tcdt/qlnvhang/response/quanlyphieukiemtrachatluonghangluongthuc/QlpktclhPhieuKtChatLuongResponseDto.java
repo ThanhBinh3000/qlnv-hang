@@ -19,7 +19,7 @@ public class QlpktclhPhieuKtChatLuongResponseDto {
 
 	private Long soPhieu;
 
-	private Long ngayKiemTra;
+	private LocalDate ngayKiemTra;
 
 	private String nguoiTheoXe;
 

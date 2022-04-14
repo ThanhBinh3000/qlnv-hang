@@ -1,11 +1,13 @@
 package com.tcdt.qlnvhang.service.quanlyhopdongmuavattu;
 
 import com.tcdt.qlnvhang.entities.quanlyhopdongmuavattu.*;
+import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.repository.quanlyhopdongmuavattu.*;
 import com.tcdt.qlnvhang.request.quanlyhopdongmuavattu.QlhdMuaVatTuRequestDTO;
 import com.tcdt.qlnvhang.request.quanlyhopdongmuavattu.QlhdmvtFilterRequest;
 import com.tcdt.qlnvhang.response.quanlyhopdongmuavattu.*;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -42,10 +41,20 @@ public class QlhdMuavatTuServiceImpl implements QlhdMuavatTuService {
 
 	private final QlhdmvtPhuLucHopDongRepository qlhdmvtPhuLucHopDongRepository;
 
+	private final QlnvDmDonviRepository qlnvDmDonviRepository;
+
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public QlhdMuaVatTuResponseDTO create(QlhdMuaVatTuRequestDTO request) throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
+
+		Optional<QlnvDmDonvi> donViOpt = qlnvDmDonviRepository.findById(request.getDonViId());
+
+		if (!donViOpt.isPresent()) {
+			throw new Exception("Đơn vị không tồn tại");
+		}
+		QlnvDmDonvi donvi = donViOpt.get();
+
 
 		//Quản lý thông tin chủ đầu tư
 		QlhdmvtTtChuDauTu thongTinChuDauTu = dataUtils.toObject(request.getThongTinChung().getThongTinChuDauTu(), QlhdmvtTtChuDauTu.class);
@@ -116,6 +125,8 @@ public class QlhdMuavatTuServiceImpl implements QlhdMuavatTuService {
 		//Quản lý hợp đồng mua vật tư: set danh sách gói thầu, danh sách phụ lục hợp đồng
 		qlhdMuaVatTu.setPhuLucHopDongList(phuLucHopDongList);
 		qlhdMuaVatTu.setDanhSachGoiThau(dsGoiThauList);
+		qlhdMuaVatTu.setMaDonVi(donvi.getMaDvi());
+		qlhdMuaVatTu.setCapDonVi(donvi.getCapDvi());
 
 
 		return buildQlhdMuaVatTuResponse(thongTinChuDauTu, thongTinDonViCungCap, thongTinChung, qlhdMuaVatTu);

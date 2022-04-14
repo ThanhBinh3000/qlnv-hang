@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,7 +20,8 @@ public class QlpktclhPhieuKtChatLuongRequestDto {
 
 	private Long soPhieu;
 
-	private Long ngayKiemTra;
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+	private LocalDate ngayKiemTra;
 
 	private String nguoiTheoXe;
 
@@ -51,6 +53,7 @@ public class QlpktclhPhieuKtChatLuongRequestDto {
 
 	private Long nguoiPheDuyet;
 
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate ngayPheDuyet;
 
 	private String trangThai;

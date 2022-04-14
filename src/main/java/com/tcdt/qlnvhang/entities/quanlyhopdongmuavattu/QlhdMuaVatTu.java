@@ -46,6 +46,11 @@ public class QlhdMuaVatTu extends BaseEntity {
     @Column(name = "MA_DON_VI")
     private String maDonVi;
 
+    @Column(name = "CAP_DON_VI")
+    private String capDonVi;
+
+
+
     @Transient
     private List<QlhdmvtDsGoiThau> danhSachGoiThau;
 
