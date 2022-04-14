@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 
@@ -20,4 +21,5 @@ public class QlhdmvtFilterRequest {
 	private Long loaiHangId;
 	private Long canCuId;
 	private Long benBId;
+	private Pageable pageable;
 }

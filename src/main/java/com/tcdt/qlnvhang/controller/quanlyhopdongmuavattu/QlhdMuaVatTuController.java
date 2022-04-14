@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.controller.quanlyhopdongmuavattu;
 
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.quanlyhopdongmuavattu.QlhdMuaVatTuRequestDTO;
+import com.tcdt.qlnvhang.request.quanlyhopdongmuavattu.QlhdmvtFilterRequest;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.quanlyhopdongmuavattu.QlhdMuavatTuService;
 import com.tcdt.qlnvhang.util.PathContains;
@@ -39,7 +40,7 @@ public class QlhdMuaVatTuController {
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error("Quan ly hop dong mua vat tu loi: {}", e);
+			log.error("Quan ly hop dong mua vat tu loi", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
@@ -55,7 +56,23 @@ public class QlhdMuaVatTuController {
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error("Quan ly hop dong mua vat tu loi: {}", e);
+			log.error("Cập nhật quản lý hợp đồng mua vật tư lỗi", e);
+		}
+		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Tìm kiếm quản lý hợp đồng mua vật tư", response = List.class)
+	@GetMapping
+	public ResponseEntity<BaseResponse> filter(QlhdmvtFilterRequest request) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.filter(request));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Tìm kiếm quan ly hop dong mua vat tu loi", e);
 		}
 		return ResponseEntity.ok(resp);
 	}

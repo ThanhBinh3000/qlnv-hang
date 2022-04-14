@@ -6,7 +6,7 @@ import com.tcdt.qlnvhang.repository.quyetdinhpheduyetketqualuachonnhathauvatu.Ge
 import java.util.Collection;
 import java.util.List;
 
-public interface QlhdMuaVatTuRepository extends GenericRepository<QlhdMuaVatTu, Long> {
+public interface QlhdMuaVatTuRepository extends GenericRepository<QlhdMuaVatTu, Long>, QlhdMuaVatTuRepositoryCustom {
 	@Override
 	List<QlhdMuaVatTu> findByIdIn(Collection<Long> ids);
 }

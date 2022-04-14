@@ -37,6 +37,15 @@ public class QlhdMuaVatTu extends BaseEntity {
     @Column(name = "THONG_TIN_CHUNG_ID")
     private Long thongTinChungId;
 
+    @Column(name = "LY_DO_TU_CHOI")
+    private String lyDoTuChoi;
+
+    @Column(name = "TRANG_THAI")
+    private String trangThai;
+
+    @Column(name = "MA_DON_VI")
+    private String maDonVi;
+
     @Transient
     private List<QlhdmvtDsGoiThau> danhSachGoiThau;
 

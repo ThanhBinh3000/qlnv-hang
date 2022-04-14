@@ -21,6 +21,7 @@ public class QlhdMuaVatTuResponseDTO {
     private String tenHopDong;
     private Long donViTrungThauId;
     private LocalDate ngayKy;
+    private String tenTrangThai;
     private QlhdmvtThongTinChungResponseDTO thongTinChung;
     private List<QlhdmvtDsGoiThauResponseDTO> danhSachGoiThau;
     private List<QlhdmvtPhuLucHopDongResponseDTO> phuLucHopDongList;
