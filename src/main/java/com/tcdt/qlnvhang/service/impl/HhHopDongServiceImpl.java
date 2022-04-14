@@ -227,7 +227,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 				pageable);
 
 		// Lay danh muc dung chung
-		Map<String, String> mapDmucDvi = getMapDmucDvi();
+		Map<String, String> mapDmucDvi = getMapTenDvi();
 		for (HhHopDongHdr hdr : dataPage.getContent()) {
 			hdr.setTenDvi(mapDmucDvi.get(hdr.getMaDvi()));
 		}

@@ -147,7 +147,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 				.findAll(HhBbNghiemthuKlstSpecification.buildSearchQuery(objReq), pageable);
 
 		// Lay danh muc dung chung
-		Map<String, String> mapDmucDvi = getMapDmucDvi();
+		Map<String, String> mapDmucDvi = getMapTenDvi();
 		for (HhBbNghiemthuKlstHdr hdr : qhKho.getContent()) {
 			hdr.setTenDvi(mapDmucDvi.get(hdr.getMaDvi()));
 		}

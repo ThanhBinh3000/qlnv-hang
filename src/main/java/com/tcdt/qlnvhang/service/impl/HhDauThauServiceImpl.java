@@ -291,7 +291,7 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 
 		Page<HhDthau2> dataPage = hhDthau2Repository.findAll(HhDthau2Specification.buildSearchQuery(objReq), pageable);
 
-		Map<String, String> mapDmucDvi = getMapDmucDvi();
+		Map<String, String> mapDmucDvi = getMapTenDvi();
 		for (HhDthau2 hdr : dataPage.getContent()) {
 			hdr.setTenDvi(mapDmucDvi.get(hdr.getMaDvi()));
 		}

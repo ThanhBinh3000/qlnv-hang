@@ -213,7 +213,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 				.findAll(HhDxuatKhLcntSpecification.buildSearchQuery(objReq), pageable);
 
 		// Lay danh muc dung chung
-		Map<String, String> mapDmucDvi = getMapDmucDvi();
+		Map<String, String> mapDmucDvi = getMapTenDvi();
 		for (HhDxuatKhLcntHdr hdr : qhKho.getContent()) {
 			hdr.setTenDvi(mapDmucDvi.get(hdr.getMaDvi()));
 		}

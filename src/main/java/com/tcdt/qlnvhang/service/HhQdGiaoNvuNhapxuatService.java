@@ -3,6 +3,8 @@ package com.tcdt.qlnvhang.service;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
+import com.tcdt.qlnvhang.table.HhDviThuchienQdinh;
+import com.tcdt.qlnvhang.table.HhDviThuchienQdinh_;
 import org.springframework.data.domain.Page;
 
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -32,4 +34,5 @@ public interface HhQdGiaoNvuNhapxuatService {
 
 	HhQdGiaoNvuNhapxuatHdr findBySoHd(StrSearchReq strSearchReq) throws Exception;
 
+	HhDviThuchienQdinh dviThQdDetail(String ids) throws Exception;
 }

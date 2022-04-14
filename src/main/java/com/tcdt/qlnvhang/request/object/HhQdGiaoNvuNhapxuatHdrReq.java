@@ -51,6 +51,8 @@ public class HhQdGiaoNvuNhapxuatHdrReq {
 	@Size(max = 2000, message = "Ghi chú không được vượt quá 2000 ký tự")
 	String ghiChu;
 
+
+
 	private List<HhQdGiaoNvuNhapxuatDtlReq> detail;
 
 	private List<HhDviThuhienQdinhReq> detail1;

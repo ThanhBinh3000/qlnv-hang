@@ -150,4 +150,20 @@ public class HhQdGiaoNvuNhapxuatController {
 		return ResponseEntity.ok(resp);
 	}
 
+	@ApiOperation(value = "Lấy chi tiết thông tin đơn vị thực hiện", response = List.class)
+	@GetMapping(value = "/don-vi-thuc-hien/" + PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> dviThucHienDetail(@PathVariable("ids") String ids) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.dviThQdDetail(ids));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Lấy chi tiết thông tin đơn vị thực hiện trace: {}", e);
+		}
+		return ResponseEntity.ok(resp);
+	}
 }

@@ -105,7 +105,7 @@ public class BaseServiceImpl {
 		return MapCategory.map;
 	}
 
-	public Map<String, String> getMapDmucDvi() {
+	public Map<String, String> getMapTenDvi() {
 		if (MapDmucDvi.map == null && qlnvDmDonviRepository != null) {
 			MapDmucDvi.map = new HashMap<>();
 			Iterable<QlnvDmDonvi> list = qlnvDmDonviRepository.findByTrangThai(Contains.HOAT_DONG);
@@ -114,6 +114,17 @@ public class BaseServiceImpl {
 			}
 		}
 		return MapDmucDvi.map;
+	}
+
+	public Map<String, QlnvDmDonvi> getMapDvi() {
+		if (MapDmucDvi.mapDonVi == null && qlnvDmDonviRepository != null) {
+			MapDmucDvi.mapDonVi = new HashMap<>();
+			Iterable<QlnvDmDonvi> list = qlnvDmDonviRepository.findByTrangThai(Contains.HOAT_DONG);
+			for (QlnvDmDonvi cate : list) {
+				MapDmucDvi.mapDonVi.put(cate.getMaDvi(), cate);
+			}
+		}
+		return MapDmucDvi.mapDonVi;
 	}
 
 	public UserInfo getUser() {
