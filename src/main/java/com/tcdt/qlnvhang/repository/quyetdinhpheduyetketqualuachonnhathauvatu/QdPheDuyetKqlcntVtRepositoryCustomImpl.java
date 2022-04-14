@@ -7,11 +7,8 @@ import com.tcdt.qlnvhang.response.quyetdinhpheduyetketqualuachonnhathauvatu.QdPh
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.*;
-import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,13 +20,13 @@ public class QdPheDuyetKqlcntVtRepositoryCustomImpl implements QdPheDuyetKqlcntV
     public Page<QdPheDuyetKqlcntVtRes> search(QdPheDuyetKqlcntVtSearchReq req) {
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT qd FROM QdPheDuyetKqlcntVt qd ");
-        setConditionSearchCtkhn(req, builder);
+        setConditionSearch(req, builder);
         builder.append("ORDER BY qd.ngayQuyetDinh DESC");
 
         TypedQuery<QdPheDuyetKqlcntVt> query = em.createQuery(builder.toString(), QdPheDuyetKqlcntVt.class);
 
         //Set params
-        this.setParameterSearchCtkhn(req, query);
+        this.setParameterSearch(req, query);
 
         Pageable pageable = req.getPageable();
         //Set pageable
@@ -45,11 +42,11 @@ public class QdPheDuyetKqlcntVtRepositoryCustomImpl implements QdPheDuyetKqlcntV
             responses.add(response);
         }
 
-        return new PageImpl<>(responses, pageable, this.countCtkhn(req));
+        return new PageImpl<>(responses, pageable, this.count(req));
     }
 
 
-    private void setConditionSearchCtkhn(QdPheDuyetKqlcntVtSearchReq req, StringBuilder builder) {
+    private void setConditionSearch(QdPheDuyetKqlcntVtSearchReq req, StringBuilder builder) {
         builder.append("WHERE 1 = 1 ");
 
         if (!StringUtils.isEmpty(req.getSoQd())) {
@@ -69,27 +66,18 @@ public class QdPheDuyetKqlcntVtRepositoryCustomImpl implements QdPheDuyetKqlcntV
         }
     }
 
-    private int countCtkhn(QdPheDuyetKqlcntVtSearchReq req) {
-        int total = 0;
+    private int count(QdPheDuyetKqlcntVtSearchReq req) {
         StringBuilder builder = new StringBuilder();
-        builder.append("SELECT COUNT(qd.id) AS totalRecord FROM QdPheDuyetKqlcntVt qd");
+        builder.append("SELECT COUNT(qd.id) FROM QdPheDuyetKqlcntVt qd");
 
-        this.setConditionSearchCtkhn(req, builder);
+        this.setConditionSearch(req, builder);
 
-        Query query = em.createNativeQuery(builder.toString(), Tuple.class);
-
-        this.setParameterSearchCtkhn(req, query);
-
-        List<?> dataCount = query.getResultList();
-
-        if (CollectionUtils.isEmpty(dataCount)) {
-            return total;
-        }
-        Tuple result = (Tuple) dataCount.get(0);
-        return result.get("totalRecord", BigDecimal.class).intValue();
+        TypedQuery<Long> query = em.createQuery(builder.toString(), Long.class);
+        this.setParameterSearch(req, query);
+        return query.getSingleResult().intValue();
     }
 
-    private void setParameterSearchCtkhn(QdPheDuyetKqlcntVtSearchReq req, Query query) {
+    private void setParameterSearch(QdPheDuyetKqlcntVtSearchReq req, Query query) {
         if (!StringUtils.isEmpty(req.getSoQd())) {
             query.setParameter("soQd", req.getSoQd());
         }

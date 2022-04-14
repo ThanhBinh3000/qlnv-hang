@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.repository.quanlybangkecanhangluongthuc;
 
 import com.tcdt.qlnvhang.entities.quanlybangkecanhangluongthuc.QlBangKeCanHangLt;
 import com.tcdt.qlnvhang.enums.QlBangKeCanHangLtStatus;
-import com.tcdt.qlnvhang.enums.QlPhieuNhapKhoLtStatus;
 import com.tcdt.qlnvhang.request.search.quanlybangkecanhangluongthuc.QlBangKeCanHangLtSearchReq;
 import com.tcdt.qlnvhang.response.quanlybangkecanhangluongthuc.QlBangKeCanHangLtRes;
 import org.apache.commons.lang3.StringUtils;
@@ -11,11 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,13 +24,13 @@ public class QlBangKeCanHangLtRepositoryCustomImpl implements QlBangKeCanHangLtR
     public Page<QlBangKeCanHangLtRes> search(QlBangKeCanHangLtSearchReq req) {
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT p FROM QlBangKeCanHangLt p ");
-        setConditionSearchCtkhn(req, builder);
+        setConditionSearch(req, builder);
         builder.append("ORDER BY p.ngayLap DESC");
 
         TypedQuery<QlBangKeCanHangLt> query = em.createQuery(builder.toString(), QlBangKeCanHangLt.class);
 
         //Set params
-        this.setParameterSearchCtkhn(req, query);
+        this.setParameterSearch(req, query);
 
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         //Set pageable
@@ -50,11 +46,11 @@ public class QlBangKeCanHangLtRepositoryCustomImpl implements QlBangKeCanHangLtR
             responses.add(response);
         }
 
-        return new PageImpl<>(responses, pageable, this.countCtkhn(req));
+        return new PageImpl<>(responses, pageable, this.count(req));
     }
 
 
-    private void setConditionSearchCtkhn(QlBangKeCanHangLtSearchReq req, StringBuilder builder) {
+    private void setConditionSearch(QlBangKeCanHangLtSearchReq req, StringBuilder builder) {
         builder.append("WHERE 1 = 1 ");
 
         if (!StringUtils.isEmpty(req.getSoBangKe())) {
@@ -80,27 +76,19 @@ public class QlBangKeCanHangLtRepositoryCustomImpl implements QlBangKeCanHangLtR
         }
     }
 
-    private int countCtkhn(QlBangKeCanHangLtSearchReq req) {
+    private int count(QlBangKeCanHangLtSearchReq req) {
         int total = 0;
         StringBuilder builder = new StringBuilder();
-        builder.append("SELECT COUNT(p.id) AS totalRecord FROM QlBangKeCanHangLt p ");
+        builder.append("SELECT COUNT(p.id) FROM QlBangKeCanHangLt p ");
 
-        this.setConditionSearchCtkhn(req, builder);
+        this.setConditionSearch(req, builder);
 
-        Query query = em.createNativeQuery(builder.toString(), Tuple.class);
-
-        this.setParameterSearchCtkhn(req, query);
-
-        List<?> dataCount = query.getResultList();
-
-        if (CollectionUtils.isEmpty(dataCount)) {
-            return total;
-        }
-        Tuple result = (Tuple) dataCount.get(0);
-        return result.get("totalRecord", BigDecimal.class).intValue();
+        TypedQuery<Long> query = em.createQuery(builder.toString(), Long.class);
+        this.setParameterSearch(req, query);
+        return query.getSingleResult().intValue();
     }
 
-    private void setParameterSearchCtkhn(QlBangKeCanHangLtSearchReq req, Query query) {
+    private void setParameterSearch(QlBangKeCanHangLtSearchReq req, Query query) {
         if (!StringUtils.isEmpty(req.getSoBangKe())) {
             query.setParameter("soBangKe", req.getSoBangKe());
         }
