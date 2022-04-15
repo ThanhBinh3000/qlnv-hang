@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.tcdt.qlnvhang.repository.HhPaKhlcntHdrRepository;
+import com.tcdt.qlnvhang.table.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,11 +28,6 @@ import com.tcdt.qlnvhang.request.search.HhDxKhLcntThopSearchReq;
 import com.tcdt.qlnvhang.secification.HhDxKhLcntThopSpecification;
 import com.tcdt.qlnvhang.secification.HhDxuatKhLcntSpecification;
 import com.tcdt.qlnvhang.service.HhDxKhLcntThopHdrService;
-import com.tcdt.qlnvhang.table.HhDxKhLcntThopDtl;
-import com.tcdt.qlnvhang.table.HhDxKhLcntThopHdr;
-import com.tcdt.qlnvhang.table.HhDxuatKhLcntDsgtDtl;
-import com.tcdt.qlnvhang.table.HhDxuatKhLcntGaoDtl;
-import com.tcdt.qlnvhang.table.HhDxuatKhLcntHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import com.tcdt.qlnvhang.util.PaginationSet;
@@ -43,6 +40,9 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 
 	@Autowired
 	private HhDxuatKhLcntHdrRepository hhDxuatKhLcntHdrRepository;
+
+	@Autowired
+	private HhPaKhlcntHdrRepository hhPaKhlcntHdrRepository;
 
 	@Override
 	public HhDxKhLcntThopHdr sumarryData(HhDxKhLcntTChiThopReq objReq, HttpServletRequest req) throws Exception {
@@ -143,6 +143,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		// Quy doi don vi do luong khoi luong
 		UnitScaler.reverseFormatList(thopDtls, Contains.DVT_TAN);
 		thopHdr.setChildren(thopDtls);
+		this.setPhuongAnId(thopHdr);
 		return thopHdr;
 	}
 
@@ -242,6 +243,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 					.collect(Collectors.toList());
 			hhDxuatKhLcntHdrRepository.updateTongHop(soDxuatList, Contains.TONG_HOP);
 		}
+		this.setPhuongAnId(createCheck);
 		return createCheck;
 	}
 
@@ -261,8 +263,9 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		HhDxKhLcntThopHdr dataMap = ObjectMapperUtils.map(objReq, HhDxKhLcntThopHdr.class);
 
 		updateObjectToObject(dataDTB, dataMap);
-
-		return hhDxKhLcntThopHdrRepository.save(dataDTB);
+		hhDxKhLcntThopHdrRepository.save(dataDTB);
+		this.setPhuongAnId(dataDTB);
+		return dataDTB;
 	}
 
 	@Override
@@ -290,6 +293,8 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		List<HhDxKhLcntThopDtl> dtls = ObjectMapperUtils.mapAll(qOptional.get().getChildren(), HhDxKhLcntThopDtl.class);
 		UnitScaler.formatList(dtls, Contains.DVT_TAN);
 		qOptional.get().setChildren(dtls);
+
+		this.setPhuongAnId(qOptional.get());
 		return qOptional.get();
 	}
 
@@ -310,6 +315,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 			hdr.setTenPthucLcnt(mapDmuc.get(hdr.getPthucLcnt()));
 			hdr.setTenLoaiHdong(mapDmuc.get(hdr.getLoaiHdong()));
 			hdr.setTenNguonVon(mapDmuc.get(hdr.getNguonVon()));
+			this.setPhuongAnId(hdr);
 		}
 		return qhKho;
 	}
@@ -380,4 +386,10 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		return thopDtls;
 	}
 
+	private void setPhuongAnId(HhDxKhLcntThopHdr dx) {
+		if (Contains.ACTIVE.equalsIgnoreCase(dx.getPhuongAn())) {
+			Optional<HhPaKhlcntHdr> optional = hhPaKhlcntHdrRepository.findByIdThHdr(dx.getId());
+			optional.ifPresent(hhPaKhlcntHdr -> dx.setPhuongAnId(hhPaKhlcntHdr.getId()));
+		}
+	}
 }

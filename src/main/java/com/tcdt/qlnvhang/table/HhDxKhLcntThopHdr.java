@@ -54,6 +54,8 @@ public class HhDxKhLcntThopHdr implements Serializable {
 	String tenLoaiHdong;
 	@Transient
 	String tenNguonVon;
+	@Transient
+	Long phuongAnId;
 
 	@Temporal(TemporalType.DATE)
 	Date tuTgianTbao;
