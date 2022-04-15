@@ -31,7 +31,6 @@ public class HhQdGiaoNvuNhapxuatSpecification {
 					String maVthh = req.getMaVthh();
 					String loaiQd = req.getLoaiQd();
 
-					root.fetch("children", JoinType.LEFT);
 					Join<HhQdGiaoNvuNhapxuatHdr, HhQdGiaoNvuNhapxuatDtl> joinQuerry = root.join("children");
 
 					if (ngayQd != null) {

@@ -16,6 +16,7 @@ import com.tcdt.qlnvhang.request.object.HhDviThuhienQdinhReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
+import com.tcdt.qlnvhang.util.PaginationSet;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -210,8 +211,8 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 	@Override
 	public Page<HhQdGiaoNvuNhapxuatHdr> colection(HhQdNhapxuatSearchReq objReq, HttpServletRequest req)
 			throws Exception {
-		int page = objReq.getPaggingReq().getPage();
-		int limit = objReq.getPaggingReq().getLimit();
+		int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
+		int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
 		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
 
 		Page<HhQdGiaoNvuNhapxuatHdr> dataPage = hhQdGiaoNvuNhapxuatRepository
