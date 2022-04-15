@@ -9,6 +9,8 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import com.tcdt.qlnvhang.repository.HhQdKhlcntHdrRepository;
+import com.tcdt.qlnvhang.table.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,10 +29,6 @@ import com.tcdt.qlnvhang.request.search.HhPaKhLcntDsChuaQdReq;
 import com.tcdt.qlnvhang.request.search.HhPaKhlcntSearchReq;
 import com.tcdt.qlnvhang.secification.HhPaKhlcntSpecification;
 import com.tcdt.qlnvhang.service.HhPaKhlcntHdrService;
-import com.tcdt.qlnvhang.table.HhDxKhLcntThopHdr;
-import com.tcdt.qlnvhang.table.HhPaKhlcntDsgthau;
-import com.tcdt.qlnvhang.table.HhPaKhlcntDtl;
-import com.tcdt.qlnvhang.table.HhPaKhlcntHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
@@ -45,6 +43,9 @@ public class HhPaKhlcntHdrServiceImpl extends BaseServiceImpl implements HhPaKhl
 
 	@Autowired
 	private HhDxKhLcntThopHdrRepository hhDxKhLcntThopHdrRepository;
+
+	@Autowired
+	private HhQdKhlcntHdrRepository hhQdKhlcntHdrRepository;
 
 	@Override
 	public HhPaKhlcntHdr create(HhPaKhlcntHdrReq objReq) throws Exception {
@@ -104,6 +105,7 @@ public class HhPaKhlcntHdrServiceImpl extends BaseServiceImpl implements HhPaKhl
 			hhDxKhLcntThopHdrRepository.updateTongHop(createCheck.getIdThHdr(), Contains.ACTIVE);
 		}
 
+		this.setDataQuyetDinh(createCheck);
 		return createCheck;
 	}
 
@@ -164,6 +166,7 @@ public class HhPaKhlcntHdrServiceImpl extends BaseServiceImpl implements HhPaKhl
 
 		HhPaKhlcntHdr createCheck = hhPaKhlcntHdrRepository.save(dataDB);
 
+		this.setDataQuyetDinh(createCheck);
 		return createCheck;
 	}
 
@@ -194,6 +197,7 @@ public class HhPaKhlcntHdrServiceImpl extends BaseServiceImpl implements HhPaKhl
 		hdrThop.setTenLoaiHdong(mapDmuc.get(hdrThop.getLoaiHdong()));
 		hdrThop.setTenNguonVon(mapDmuc.get(hdrThop.getNguonVon()));
 
+		this.setDataQuyetDinh(hdrThop);
 		return hdrThop;
 	}
 
@@ -214,6 +218,7 @@ public class HhPaKhlcntHdrServiceImpl extends BaseServiceImpl implements HhPaKhl
 			hdr.setTenPthucLcnt(mapDmuc.get(hdr.getPthucLcnt()));
 			hdr.setTenLoaiHdong(mapDmuc.get(hdr.getLoaiHdong()));
 			hdr.setTenNguonVon(mapDmuc.get(hdr.getNguonVon()));
+			this.setDataQuyetDinh(hdr);
 		}
 		return dataPage;
 	}
@@ -229,6 +234,7 @@ public class HhPaKhlcntHdrServiceImpl extends BaseServiceImpl implements HhPaKhl
 			hdr.setTenPthucLcnt(mapDmuc.get(hdr.getPthucLcnt()));
 			hdr.setTenLoaiHdong(mapDmuc.get(hdr.getLoaiHdong()));
 			hdr.setTenNguonVon(mapDmuc.get(hdr.getNguonVon()));
+			this.setDataQuyetDinh(hdr);
 		}
 		return panList;
 	}
@@ -287,5 +293,14 @@ public class HhPaKhlcntHdrServiceImpl extends BaseServiceImpl implements HhPaKhl
 		ex.export();
 	}
 
+	private void setDataQuyetDinh(HhPaKhlcntHdr pa) {
+		if (Contains.ACTIVE.equalsIgnoreCase(pa.getQuyetDinh())) {
+			Optional<HhQdKhlcntHdr> optional = hhQdKhlcntHdrRepository.findByIdPaHdr(pa.getId());
+			optional.ifPresent(qd -> {
+				pa.setSoQd(qd.getSoQd());
+				pa.setQdId(qd.getId());
+			});
+		}
+	}
 
 }

@@ -71,6 +71,9 @@ public class HhPaKhlcntHdrReq {
 	@ApiModelProperty(example = "20-PA/TCDT")
 	String soPhAn;
 
+	@NotNull(message = "Không được để trống")
+	String ghiChu;
+
 	private List<HhPaKhlcntDtlReq> detail;
 	private List<FileDinhKemReq> fileDinhKems;
 
