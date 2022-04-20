@@ -175,4 +175,26 @@ public class HhDxuatKhLcntHdrController {
 			mapper.writeValue(response.getOutputStream(), body);
 		}
 	}
+
+	@ApiOperation(value = "Kết xuất danh sách đề xuất kế hoạch lựa chọn nhà thầu", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(PathContains.URL_KET_XUAT)
+	@ResponseStatus(HttpStatus.OK)
+	public void exportDsKhlcnt(@Valid @RequestBody HhDxuatKhLcntSearchReq searchReq, HttpServletResponse response)
+			throws Exception {
+		try {
+			service.exportDsKhlcnt(searchReq, response);
+		} catch (Exception e) {
+			// TODO: handle exception
+			log.error("Kết xuất danh sách gói thầu trace: {}", e);
+			final Map<String, Object> body = new HashMap<>();
+			body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			body.put("msg", e.getMessage());
+
+			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+			response.setCharacterEncoding("UTF-8");
+
+			final ObjectMapper mapper = new ObjectMapper();
+			mapper.writeValue(response.getOutputStream(), body);
+		}
+	}
 }

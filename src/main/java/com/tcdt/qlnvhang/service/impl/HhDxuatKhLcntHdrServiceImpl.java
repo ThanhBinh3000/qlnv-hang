@@ -10,6 +10,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.tcdt.qlnvhang.request.PaggingReq;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -302,4 +303,33 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		ex.export();
 	}
 
+	@Override
+	public void exportDsKhlcnt(HhDxuatKhLcntSearchReq searchReq, HttpServletResponse response) throws Exception {
+		PaggingReq paggingReq = new PaggingReq();
+		paggingReq.setPage(1);
+		paggingReq.setLimit(Integer.MAX_VALUE);
+		searchReq.setPaggingReq(paggingReq);
+		Page<HhDxuatKhLcntHdr> page = this.colection(searchReq, null);
+		List<HhDxuatKhLcntHdr> data = page.getContent();
+
+		String title = "Danh sách kế hoạch đề xuất lựa chọn nhà thầu";
+		String[] rowsName = new String[] { "STT", "Số đề xuất", "Đơn vị xuất", "Trích yếu", "Trạng thái" };
+		String filename = "Danh_sach_ke_hoach_de_xuat_lua_chon_nha_thau.xlsx";
+
+		List<Object[]> dataList = new ArrayList<Object[]>();
+		Object[] objs = null;
+		for (int i = 0; i < data.size(); i++) {
+			HhDxuatKhLcntHdr dx = data.get(i);
+			objs = new Object[rowsName.length];
+			objs[0] = i;
+			objs[1] = dx.getSoDxuat();
+			objs[2] = dx.getTenDvi();
+			objs[3] = dx.getTrichYeu();
+			objs[4] = Contains.mapTrangThaiPheDuyet.get(dx.getTrangThai());
+			dataList.add(objs);
+		}
+
+		ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+		ex.export();
+	}
 }

@@ -32,4 +32,5 @@ public interface HhDxuatKhLcntHdrService {
 
 	void exportToExcel(IdSearchReq searchReq, HttpServletResponse response) throws Exception;
 
+	void exportDsKhlcnt(HhDxuatKhLcntSearchReq searchReq, HttpServletResponse response) throws Exception;
 }

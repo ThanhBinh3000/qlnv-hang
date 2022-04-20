@@ -191,4 +191,23 @@ public class Contains {
 		return Contains.mpDVTinh.get(key);
 	}
 
+	public static final Map<String, String> mapTrangThaiPheDuyet;
+	static {
+		mapTrangThaiPheDuyet = Maps.<String, String>buildMap()
+				.put(Contains.MOI_TAO, "Mới tạo")
+				.put(Contains.CHO_DUYET, "Chờ duyệt")
+				.put(Contains.DUYET, "Đã duyệt")
+				.put(Contains.TU_CHOI, "Từ chối")
+				.put(Contains.HUY, "Hủy")
+				.put(Contains.TONG_HOP, "Tổng hợp")
+				.put(Contains.CCUC_DUYET, "Chi cục duyệt")
+				.put(Contains.CUC_DUYET, "Cục duyệt")
+				.put(Contains.TCUC_DUYET, "Tổng cục duyệt")
+				.put(Contains.TK_DUYET, "Thủ kho duyệt")
+				.put(Contains.KTV_DUYET, "Kỹ thuật viên duyệt")
+				.put(Contains.KTT_DUYET, "Kế toán trưởng duyệt")
+				.put(Contains.TPHONG_DUYET, "Trưởng phòng duyệt")
+				.put(Contains.LANHDAO_DUYET, "Lãnh đạo duyệt")
+				.get();
+	}
 }
