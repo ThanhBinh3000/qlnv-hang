@@ -185,7 +185,7 @@ public class HhDxuatKhLcntHdrController {
 			service.exportDsKhlcnt(searchReq, response);
 		} catch (Exception e) {
 			// TODO: handle exception
-			log.error("Kết xuất danh sách gói thầu trace: {}", e);
+			log.error("Kết xuất danh sách đề xuất kế hoạch lựa chọn nhà thầu trace: {}", e);
 			final Map<String, Object> body = new HashMap<>();
 			body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			body.put("msg", e.getMessage());

@@ -8,9 +8,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.tcdt.qlnvhang.repository.HhPaKhlcntHdrRepository;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.table.*;
+import com.tcdt.qlnvhang.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,10 +31,6 @@ import com.tcdt.qlnvhang.request.search.HhDxKhLcntThopSearchReq;
 import com.tcdt.qlnvhang.secification.HhDxKhLcntThopSpecification;
 import com.tcdt.qlnvhang.secification.HhDxuatKhLcntSpecification;
 import com.tcdt.qlnvhang.service.HhDxKhLcntThopHdrService;
-import com.tcdt.qlnvhang.util.Contains;
-import com.tcdt.qlnvhang.util.ObjectMapperUtils;
-import com.tcdt.qlnvhang.util.PaginationSet;
-import com.tcdt.qlnvhang.util.UnitScaler;
 
 @Service
 public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhDxKhLcntThopHdrService {
@@ -391,5 +390,38 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 			Optional<HhPaKhlcntHdr> optional = hhPaKhlcntHdrRepository.findByIdThHdr(dx.getId());
 			optional.ifPresent(hhPaKhlcntHdr -> dx.setPhuongAnId(hhPaKhlcntHdr.getId()));
 		}
+	}
+
+	@Override
+	public void exportDsThDxKhLcnt(HhDxKhLcntThopSearchReq searchReq, HttpServletResponse response) throws Exception {
+		PaggingReq paggingReq = new PaggingReq();
+		paggingReq.setPage(1);
+		paggingReq.setLimit(Integer.MAX_VALUE);
+		searchReq.setPaggingReq(paggingReq);
+		Page<HhDxKhLcntThopHdr> page = this.colection(searchReq);
+		List<HhDxKhLcntThopHdr> data = page.getContent();
+
+		String title = "Tổng hợp đề xuất kế hoạch lựa chọn nhà thầu";
+		String[] rowsName = new String[] { "STT", "Ngày tạo phương án", "Năm kế hoạch", "Hình thức LCNT",
+		"Phương thức LCNT", "Loại hợp đồng", "Nguồn vốn", "Tiêu chuẩn chất lượng"};
+		String filename = "Tong_hop_de_xuat_ke_hoach_lua_chon_nha_thau.xlsx";
+
+		List<Object[]> dataList = new ArrayList<Object[]>();
+		Object[] objs = null;
+		for (int i = 0; i < data.size(); i++) {
+			HhDxKhLcntThopHdr dx = data.get(i);
+			objs = new Object[rowsName.length];
+			objs[0] = i;
+			objs[1] = dx.getNgayTao();
+			objs[2] = dx.getNamKhoach();
+			objs[3] = dx.getTenHthucLcnt();
+			objs[4] = dx.getTenPthucLcnt();
+			objs[5] = dx.getTenLoaiHdong();
+			objs[6] = dx.getNguonVon();
+			dataList.add(objs);
+		}
+
+		ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+		ex.export();
 	}
 }

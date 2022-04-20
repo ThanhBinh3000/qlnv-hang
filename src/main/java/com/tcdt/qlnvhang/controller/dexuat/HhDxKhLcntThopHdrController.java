@@ -1,10 +1,14 @@
 package com.tcdt.qlnvhang.controller.dexuat;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -170,4 +174,25 @@ public class HhDxKhLcntThopHdrController {
 		return ResponseEntity.ok(resp);
 	}
 
+	@ApiOperation(value = "Kết xuất danh sách tổng hợp đề xuất kế hoạch lựa chọn nhà thầu", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(PathContains.URL_KET_XUAT)
+	@ResponseStatus(HttpStatus.OK)
+	public void exportDsThDxKhLcnt(@Valid @RequestBody HhDxKhLcntThopSearchReq searchReq, HttpServletResponse response)
+			throws Exception {
+		try {
+			service.exportDsThDxKhLcnt(searchReq, response);
+		} catch (Exception e) {
+			// TODO: handle exception
+			log.error("Kết xuất danh sách tổng hợp đề xuất kế hoạch lựa chọn nhà thầu trace: {}", e);
+			final Map<String, Object> body = new HashMap<>();
+			body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			body.put("msg", e.getMessage());
+
+			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+			response.setCharacterEncoding("UTF-8");
+
+			final ObjectMapper mapper = new ObjectMapper();
+			mapper.writeValue(response.getOutputStream(), body);
+		}
+	}
 }
