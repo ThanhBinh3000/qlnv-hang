@@ -1,10 +1,6 @@
 package com.tcdt.qlnvhang.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -111,8 +107,8 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 		UnitScaler.reverseFormatList(dataMap.getChildren(), Contains.DVT_TAN);
 		hhQdGiaoNvuNhapxuatRepository.save(dataMap);
-		dataMap.setTenDvi(qlnvDmDonvi.getTenDvi());
 		dataMap.setTenLoaiQd(HhQdGiaoNvuNhapxuatHdrLoaiQd.getTenById(dataMap.getLoaiQd()));
+		this.setTenDvi(dataMap);
 		return dataMap;
 	}
 
@@ -150,12 +146,13 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		}
 		dataDB.setChildren(dtls);
 
+		Map<String, String> mapDmucDvi = getMapTenDvi();
 		// add thong tin don vi thuc hien quyet dinh
 		List<HhDviThuhienQdinhReq> dvThReqs = objReq.getDetail1();
 		List<HhDviThuchienQdinh> dvThs =  new ArrayList<>();
 		for (HhDviThuhienQdinhReq req : dvThReqs) {
 			HhDviThuchienQdinh dvTh = new HhDviThuchienQdinh();
-			BeanUtils.copyProperties(req, dvTh);
+			BeanUtils.copyProperties(req, dvTh, "id");
 			List<HhDviThQdDtlReq> dvThCtReqs = req.getDetail();
 			List<HhDviThQdDtl> dvThCts =  new ArrayList<>();
 			for (HhDviThQdDtlReq dvThCtReq : dvThCtReqs) {
@@ -163,11 +160,12 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 				BeanUtils.copyProperties(dvThCtReq, dtl);
 				dvThCts.add(dtl);
 			}
+			dvTh.setTenDvi(mapDmucDvi.get(dvTh.getMaDvi()));
 			dvTh.setChildren(dvThCts);
 			dvThs.add(dvTh);
 		}
 
-		dataMap.setChildren1(dvThs);
+		dataDB.setChildren1(dvThs);
 
 		// File dinh kem cua goi thau
 		List<FileDKemJoinQdNhapxuat> dtls2 = new ArrayList<FileDKemJoinQdNhapxuat>();
@@ -180,13 +178,21 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		}
 		dataDB.setChildren2(dtls2);
 
-		UnitScaler.reverseFormatList(dataMap.getChildren(), Contains.DVT_TAN);
-
 		hhQdGiaoNvuNhapxuatRepository.save(dataDB);
-		Map<String, String> mapDmucDvi = getMapTenDvi();
-		dataDB.setTenDvi(mapDmucDvi.get(dataMap.getMaDvi()));
-		dataMap.setTenLoaiQd(HhQdGiaoNvuNhapxuatHdrLoaiQd.getTenById(dataMap.getLoaiQd()));
+
+		dataDB.setTenLoaiQd(HhQdGiaoNvuNhapxuatHdrLoaiQd.getTenById(dataDB.getLoaiQd()));
+		this.setTenDvi(dataDB);
 		return dataDB;
+	}
+
+	private void setTenDvi(HhQdGiaoNvuNhapxuatHdr data) {
+		Map<String, String> mapDmucDvi = getMapTenDvi();
+		data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
+		List<HhDviThuchienQdinh> children1 = data.getChildren1();
+		children1.forEach(c -> {
+			String a = mapDmucDvi.get(c.getMaDvi());
+			c.setTenDvi(mapDmucDvi.get(c.getMaDvi()));
+		});
 	}
 
 	@Override
@@ -200,11 +206,10 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
 
 		HhQdGiaoNvuNhapxuatHdr data = qOptional.get();
-		// Quy doi don vi kg = tan
-		UnitScaler.reverseFormatList(data.getChildren(), Contains.DVT_TAN);
+
 		Map<String, String> mapDmucDvi = getMapTenDvi();
-		data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
 		data.setTenLoaiQd(HhQdGiaoNvuNhapxuatHdrLoaiQd.getTenById(data.getLoaiQd()));
+		this.setTenDvi(data);
 		return data;
 	}
 
@@ -297,5 +302,4 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
 		return data;
 	}
-
 }

@@ -33,5 +33,7 @@ public class HhDviThuhienQdinhReq {
 	@Size(max = 20, message = "Tên thủ kho không được vượt quá 20 ký tự")
 	String thuKho;
 
+	@NotNull(message = "Không được để trống")
+	String ghiChu;
 	private List<HhDviThQdDtlReq> detail = new ArrayList<>();
 }
