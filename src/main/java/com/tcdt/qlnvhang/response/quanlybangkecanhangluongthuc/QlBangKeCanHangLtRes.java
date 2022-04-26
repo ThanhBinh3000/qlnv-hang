@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.response.quanlybangkecanhangluongthuc;
 
-import com.tcdt.qlnvhang.response.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoHangHoaLtRes;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,6 +28,7 @@ public class QlBangKeCanHangLtRes {
     private String tenHang;
     private String donViTinh;
     private String tenNguoiGiaoHang;
+    private String tenDonViLap;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime thoiGianGiaoHang;

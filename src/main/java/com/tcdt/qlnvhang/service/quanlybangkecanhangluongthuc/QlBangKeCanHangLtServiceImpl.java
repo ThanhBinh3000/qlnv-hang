@@ -14,10 +14,14 @@ import com.tcdt.qlnvhang.response.quanlybangkecanhangluongthuc.QlBangKeCanHangLt
 import com.tcdt.qlnvhang.response.quanlybangkecanhangluongthuc.QlBangKeChCtLtRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.donvi.QlnvDmDonViService;
+import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.UserInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -28,7 +32,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
-public class QlBangKeCanHangLtServiceImpl implements QlBangKeCanHangLtService {
+public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlBangKeCanHangLtService {
 
     @Autowired
     private QlBangKeCanHangLtRepository qlBangKeCanHangLtRepository;
@@ -68,6 +72,10 @@ public class QlBangKeCanHangLtServiceImpl implements QlBangKeCanHangLtService {
     private QlBangKeCanHangLtRes buildResponse(QlBangKeCanHangLt item) {
         QlBangKeCanHangLtRes response = new QlBangKeCanHangLtRes();
         BeanUtils.copyProperties(item, response);
+
+        Map<String, String> mapDmucDvi = getMapTenDvi();
+        response.setTenDonViLap(mapDmucDvi.get(item.getMaDonViLap()));
+        response.setTenTrangThai(QlBangKeCanHangLtStatus.getTenById(item.getTrangThai()));
         List<QlBangKeChCtLt> chiTiets = item.getChiTiets();
         for (QlBangKeChCtLt chiTiet : chiTiets) {
             QlBangKeChCtLtRes chiTietRes = new QlBangKeChCtLtRes();
@@ -224,6 +232,13 @@ public class QlBangKeCanHangLtServiceImpl implements QlBangKeCanHangLtService {
             throw new Exception("Bad request.");
 
         req.setMaDonVi(userInfo.getDvql());
-        return qlBangKeCanHangLtRepository.search(req);
+
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
+        List<QlBangKeCanHangLt> data = qlBangKeCanHangLtRepository.search(req);
+        List<QlBangKeCanHangLtRes> responses = new ArrayList<>();
+        data.forEach(d -> {
+            responses.add(buildResponse(d));
+        });
+        return new PageImpl<>(responses, pageable, qlBangKeCanHangLtRepository.count(req));
     }
 }
