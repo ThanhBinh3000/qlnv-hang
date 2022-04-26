@@ -166,4 +166,21 @@ public class HhQdGiaoNvuNhapxuatController {
 		}
 		return ResponseEntity.ok(resp);
 	}
+
+	@ApiOperation(value = "Lấy danh sách loại nhập xuất", response = List.class)
+	@GetMapping(value = "/loai-nhap-xuat", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> listLoaiNx() {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.listLoaiNx());
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Lấy chi tiết thông tin đơn vị thực hiện trace: {}", e);
+		}
+		return ResponseEntity.ok(resp);
+	}
 }

@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Map;
 
 public interface HhQdGiaoNvuNhapxuatService {
 
@@ -33,4 +35,6 @@ public interface HhQdGiaoNvuNhapxuatService {
 	HhQdGiaoNvuNhapxuatHdr findBySoHd(StrSearchReq strSearchReq) throws Exception;
 
 	HhDviThuchienQdinh dviThQdDetail(String ids) throws Exception;
+
+	List<Map<String, String>> listLoaiNx();
 }

@@ -302,4 +302,16 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
 		return data;
 	}
+
+	@Override
+	public List<Map<String, String>> listLoaiNx() {
+		List<Map<String, String>> response = new ArrayList<>();
+		for (HhQdGiaoNvuNhapxuatDtlLoaiNx loaiNx : HhQdGiaoNvuNhapxuatDtlLoaiNx.values()) {
+			Map<String, String> map = new HashMap<>();
+			map.put("ma", loaiNx.getId());
+			map.put("ten", loaiNx.getTen());
+			response.add(map);
+		}
+		return response;
+	}
 }
