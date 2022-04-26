@@ -10,6 +10,7 @@ import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import org.springframework.data.domain.Page;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Map;
@@ -37,4 +38,6 @@ public interface HhQdGiaoNvuNhapxuatService {
 	HhDviThuchienQdinh dviThQdDetail(String ids) throws Exception;
 
 	List<Map<String, String>> listLoaiNx();
+
+	void exportDsQdGNvNx(HhQdNhapxuatSearchReq searchReq, HttpServletResponse response) throws Exception;
 }

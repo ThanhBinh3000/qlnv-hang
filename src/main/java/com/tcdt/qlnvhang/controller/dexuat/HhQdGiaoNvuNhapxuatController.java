@@ -1,10 +1,15 @@
 package com.tcdt.qlnvhang.controller.dexuat;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tcdt.qlnvhang.request.search.HhDxKhLcntThopSearchReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -182,5 +187,27 @@ public class HhQdGiaoNvuNhapxuatController {
 			log.error("Lấy chi tiết thông tin đơn vị thực hiện trace: {}", e);
 		}
 		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Kết xuất Danh sách quyết định giao nhiệm vụ nhập xuất", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(PathContains.URL_KET_XUAT)
+	@ResponseStatus(HttpStatus.OK)
+	public void exportDsQdGNvNx(@Valid @RequestBody HhQdNhapxuatSearchReq searchReq, HttpServletResponse response)
+			throws Exception {
+		try {
+			service.exportDsQdGNvNx(searchReq, response);
+		} catch (Exception e) {
+			// TODO: handle exception
+			log.error("Kết xuất Danh sách quyết định giao nhiệm vụ nhập xuất trace: {}", e);
+			final Map<String, Object> body = new HashMap<>();
+			body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			body.put("msg", e.getMessage());
+
+			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+			response.setCharacterEncoding("UTF-8");
+
+			final ObjectMapper mapper = new ObjectMapper();
+			mapper.writeValue(response.getOutputStream(), body);
+		}
 	}
 }

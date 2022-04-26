@@ -72,6 +72,9 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 	@Transient
 	String tenLoaiQd;
 
+	@Transient
+	String tenTrangThai;
+
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "id_hdr")
 	@JsonManagedReference

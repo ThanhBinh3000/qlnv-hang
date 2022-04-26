@@ -3,16 +3,19 @@ package com.tcdt.qlnvhang.service.impl;
 import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatDtlLoaiNx;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatHdrLoaiQd;
 import com.tcdt.qlnvhang.repository.HhDviThuchienQdinhRepository;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.object.HhDviThQdDtlReq;
 import com.tcdt.qlnvhang.request.object.HhDviThuhienQdinhReq;
+import com.tcdt.qlnvhang.request.search.HhDxKhLcntThopSearchReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
-import com.tcdt.qlnvhang.util.PaginationSet;
+import com.tcdt.qlnvhang.util.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,6 +23,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import com.tcdt.qlnvhang.entities.FileDKemJoinQdNhapxuat;
@@ -31,9 +35,6 @@ import com.tcdt.qlnvhang.request.object.HhQdGiaoNvuNhapxuatHdrReq;
 import com.tcdt.qlnvhang.request.search.HhQdNhapxuatSearchReq;
 import com.tcdt.qlnvhang.secification.HhQdGiaoNvuNhapxuatSpecification;
 import com.tcdt.qlnvhang.service.HhQdGiaoNvuNhapxuatService;
-import com.tcdt.qlnvhang.util.Contains;
-import com.tcdt.qlnvhang.util.ObjectMapperUtils;
-import com.tcdt.qlnvhang.util.UnitScaler;
 
 @Service
 public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements HhQdGiaoNvuNhapxuatService {
@@ -313,5 +314,40 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			response.add(map);
 		}
 		return response;
+	}
+
+	@Override
+	public void exportDsQdGNvNx(HhQdNhapxuatSearchReq searchReq, HttpServletResponse response) throws Exception {
+		PaggingReq paggingReq = new PaggingReq();
+		paggingReq.setPage(1);
+		paggingReq.setLimit(Integer.MAX_VALUE);
+		searchReq.setPaggingReq(paggingReq);
+		Page<HhQdGiaoNvuNhapxuatHdr> page = this.colection(searchReq, null);
+		List<HhQdGiaoNvuNhapxuatHdr> data = page.getContent();
+
+		String title = "Danh sách quyết định giao nhiệm vụ nhập xuất";
+		String[] rowsName = new String[] { "STT", "Số QĐ", "Ngày ký", "Về việc",
+				"Căn cứ", "Đơn vị ra quyết định", "Loại QĐ", "Tên hàng DTQG", "Trạng thái"};
+		String filename = "Danh_sach_quyet_dinh_giao_nhiem_vu_nhap_xuat.xlsx";
+
+		List<Object[]> dataList = new ArrayList<Object[]>();
+		Object[] objs = null;
+		for (int i = 0; i < data.size(); i++) {
+			HhQdGiaoNvuNhapxuatHdr qd = data.get(i);
+			objs = new Object[rowsName.length];
+			objs[0] = i;
+			objs[1] = qd.getSoQd();
+			objs[2] = qd.getNgayKy();
+			objs[3] = qd.getVeViec();
+			objs[4] = qd.getSoHd();
+			objs[5] = qd.getTenDvi();
+			objs[6] = qd.getTenLoaiQd();
+			objs[7] = !CollectionUtils.isEmpty(qd.getChildren()) ? qd.getChildren().get(0).getTenVthh() : "";
+			objs[8] = Contains.mapTrangThaiPheDuyet.get(qd.getTrangThai());
+			dataList.add(objs);
+		}
+
+		ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+		ex.export();
 	}
 }
