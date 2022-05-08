@@ -68,6 +68,6 @@ public class QlnvQdMuaHangDtl implements Serializable {
 	
 	
 	@Transient
-	@Formula("(select o.ten_dvi from qlnv_dm_donvi o where o.ma_dvi = ma_dvi)")
+	@Formula("(select o.ten_dvi from dm_donvi o where o.ma_dvi = ma_dvi)")
 	private String tenDVi;
 }

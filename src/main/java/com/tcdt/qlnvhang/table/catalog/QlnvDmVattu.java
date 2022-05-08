@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
-@Table(name = "QLNV_DM_VATTU")
+@Table(name = "DM_VATTU")
 @Data
 public class QlnvDmVattu {
 	/**
