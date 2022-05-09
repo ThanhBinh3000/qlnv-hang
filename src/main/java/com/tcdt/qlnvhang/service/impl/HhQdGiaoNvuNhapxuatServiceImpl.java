@@ -76,7 +76,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		}
 		dataMap.setChildren(dtls);
 
-		// add thong tin don vi thuc hien quyet dinh
+		/*// add thong tin don vi thuc hien quyet dinh
 		List<HhDviThuhienQdinhReq> dvThReqs = objReq.getDetail1();
 		List<HhDviThuchienQdinh> dvThs =  new ArrayList<>();
 		for (HhDviThuhienQdinhReq req : dvThReqs) {
@@ -93,7 +93,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			dvThs.add(dvTh);
 		}
 
-		dataMap.setChildren1(dvThs);
+		dataMap.setChildren1(dvThs);*/
 
 		// File dinh kem cua goi thau
 		List<FileDKemJoinQdNhapxuat> dtls2 = new ArrayList<FileDKemJoinQdNhapxuat>();
@@ -108,8 +108,8 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 		UnitScaler.reverseFormatList(dataMap.getChildren(), Contains.DVT_TAN);
 		hhQdGiaoNvuNhapxuatRepository.save(dataMap);
-		dataMap.setTenLoaiQd(HhQdGiaoNvuNhapxuatHdrLoaiQd.getTenById(dataMap.getLoaiQd()));
-		this.setTenDvi(dataMap);
+		/*dataMap.setTenLoaiQd(HhQdGiaoNvuNhapxuatHdrLoaiQd.getTenById(dataMap.getLoaiQd()));
+		this.setTenDvi(dataMap);*/
 		return dataMap;
 	}
 
@@ -147,7 +147,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		}
 		dataDB.setChildren(dtls);
 
-		Map<String, String> mapDmucDvi = getMapTenDvi();
+		/*Map<String, String> mapDmucDvi = getMapTenDvi();
 		// add thong tin don vi thuc hien quyet dinh
 		List<HhDviThuhienQdinhReq> dvThReqs = objReq.getDetail1();
 		List<HhDviThuchienQdinh> dvThs =  new ArrayList<>();
@@ -166,7 +166,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			dvThs.add(dvTh);
 		}
 
-		dataDB.setChildren1(dvThs);
+		dataDB.setChildren1(dvThs);*/
 
 		// File dinh kem cua goi thau
 		List<FileDKemJoinQdNhapxuat> dtls2 = new ArrayList<FileDKemJoinQdNhapxuat>();
@@ -181,12 +181,12 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 		hhQdGiaoNvuNhapxuatRepository.save(dataDB);
 
-		dataDB.setTenLoaiQd(HhQdGiaoNvuNhapxuatHdrLoaiQd.getTenById(dataDB.getLoaiQd()));
-		this.setTenDvi(dataDB);
+		/*dataDB.setTenLoaiQd(HhQdGiaoNvuNhapxuatHdrLoaiQd.getTenById(dataDB.getLoaiQd()));
+		this.setTenDvi(dataDB);*/
 		return dataDB;
 	}
 
-	private void setTenDvi(HhQdGiaoNvuNhapxuatHdr data) {
+	/*private void setTenDvi(HhQdGiaoNvuNhapxuatHdr data) {
 		Map<String, String> mapDmucDvi = getMapTenDvi();
 		data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
 		List<HhDviThuchienQdinh> children1 = data.getChildren1();
@@ -194,7 +194,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			String a = mapDmucDvi.get(c.getMaDvi());
 			c.setTenDvi(mapDmucDvi.get(c.getMaDvi()));
 		});
-	}
+	}*/
 
 	@Override
 	public HhQdGiaoNvuNhapxuatHdr detail(String ids) throws Exception {
@@ -210,7 +210,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 		Map<String, String> mapDmucDvi = getMapTenDvi();
 		data.setTenLoaiQd(HhQdGiaoNvuNhapxuatHdrLoaiQd.getTenById(data.getLoaiQd()));
-		this.setTenDvi(data);
+//		this.setTenDvi(data);
 		return data;
 	}
 

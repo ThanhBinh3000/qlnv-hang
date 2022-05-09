@@ -27,9 +27,9 @@ public class HhQdGiaoNvuNhapxuatHdrReq {
 
 	@NotNull(message = "Không được để trống")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	@ApiModelProperty(example = "2022-09-05")
 	Date ngayKy;
 
-	@NotNull(message = "Không được để trống")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayHluc;
 
@@ -55,7 +55,7 @@ public class HhQdGiaoNvuNhapxuatHdrReq {
 
 	private List<HhQdGiaoNvuNhapxuatDtlReq> detail;
 
-	private List<HhDviThuhienQdinhReq> detail1;
+	/*private List<HhDviThuhienQdinhReq> detail1;*/
 
 	private List<FileDinhKemReq> fileDinhKems;
 

@@ -27,6 +27,7 @@ public class HhQdGiaoNvuNhapxuatDtl implements Serializable {
 	Date tuNgayThien;
 	Date denNgayThien;
 	Double soLuong;
+	String maDvi;
 
 	String donViTinh;
 

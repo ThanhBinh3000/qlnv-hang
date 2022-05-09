@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.secification;
 
 import java.util.Date;
+import java.util.Objects;
 
 import javax.persistence.criteria.*;
 
@@ -26,18 +27,20 @@ public class HhQdGiaoNvuNhapxuatSpecification {
 					String trangThai = req.getTrangThai();
 					String maDvi = req.getMaDvi();
 					Date ngayQd = req.getNgayQd();
-					String soQD = req.getSoQd();
+					String soQd = req.getSoQd();
 					String soHd = req.getSoHd();
 					String maVthh = req.getMaVthh();
 					String loaiQd = req.getLoaiQd();
+					Integer namNhap = req.getNamNhap();
+					String veViec = req.getVeViec();
 
 					Join<HhQdGiaoNvuNhapxuatHdr, HhQdGiaoNvuNhapxuatDtl> joinQuerry = root.join("children");
 
 					if (ngayQd != null) {
 						predicate.getExpressions()
-								.add(builder.and(builder.greaterThanOrEqualTo(root.get("ngayQd"), ngayQd)));
+								.add(builder.and(builder.greaterThanOrEqualTo(root.get("ngayKy"), ngayQd)));
 						predicate.getExpressions().add(builder
-								.and(builder.lessThan(root.get("ngayQd"), new DateTime(ngayQd).plusDays(1).toDate())));
+								.and(builder.lessThan(root.get("ngayKy"), new DateTime(ngayQd).plusDays(1).toDate())));
 					}
 
 					if (StringUtils.isNotBlank(maDvi))
@@ -46,8 +49,8 @@ public class HhQdGiaoNvuNhapxuatSpecification {
 					if (StringUtils.isNotBlank(trangThai))
 						predicate.getExpressions().add(builder.and(builder.equal(root.get("trangThai"), trangThai)));
 
-					if (StringUtils.isNotBlank(soQD))
-						predicate.getExpressions().add(builder.and(builder.equal(root.get("soQD"), soQD)));
+					if (StringUtils.isNotBlank(soQd))
+						predicate.getExpressions().add(builder.and(builder.equal(root.get("soQd"), soQd)));
 
 					if (StringUtils.isNotBlank(soHd))
 						predicate.getExpressions().add(builder.and(builder.equal(root.get("soHd"), soHd)));
@@ -57,6 +60,12 @@ public class HhQdGiaoNvuNhapxuatSpecification {
 
 					if (StringUtils.isNotBlank(loaiQd))
 						predicate.getExpressions().add(builder.and(builder.equal(root.get("loaiQd"), loaiQd)));
+
+					if (!Objects.isNull(namNhap))
+						predicate.getExpressions().add(builder.and(builder.equal(root.get("namNhap"), namNhap)));
+
+					if (!Objects.isNull(veViec))
+						predicate.getExpressions().add(builder.and(builder.equal(root.get("veViec"), veViec)));
 
 				}
 				return predicate;
