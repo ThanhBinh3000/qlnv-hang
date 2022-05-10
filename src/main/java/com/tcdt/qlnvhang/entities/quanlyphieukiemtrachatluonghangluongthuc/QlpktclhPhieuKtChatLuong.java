@@ -25,8 +25,8 @@ public class QlpktclhPhieuKtChatLuong extends BaseEntity {
 	@Column(name = "NGAY_KIEM_TRA")
 	private LocalDate ngayKiemTra;
 
-	@Column(name = "NGUOI_THEO_XE")
-	private String nguoiTheoXe;
+	@Column(name = "NGUOI_GIAO_HANG")
+	private String nguoiGiaoHang;
 
 	@Column(name = "DIA_CHI")
 	private String diaChi;

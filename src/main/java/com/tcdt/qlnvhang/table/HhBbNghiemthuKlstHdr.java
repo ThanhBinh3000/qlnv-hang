@@ -46,11 +46,17 @@ public class HhBbNghiemthuKlstHdr implements Serializable {
 	String soBb;
 	@Temporal(TemporalType.DATE)
 	Date ngayLap;
+	Date ngayNghiemThu;
+	String thuTruong;
+	String keToan;
+	String kyThuatVien;
+	String thuKho;
 	String maNgankho;
 	String ongBa;
 	String chucVu;
 	String maVthh;
 	String pthucBquan;
+	String hthucBquan;
 	Double tichLuong;
 	Double slThucNhap;
 	String hthucKlot;

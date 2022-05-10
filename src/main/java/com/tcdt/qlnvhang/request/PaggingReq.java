@@ -19,4 +19,9 @@ public class PaggingReq {
 	@PositiveOrZero(message = "Trang tìm kiếm phải >= 0")
 	@ApiModelProperty(example = "0")
 	Integer page;
+
+	String orderBy;
+
+	String orderType;
+
 }

@@ -14,6 +14,9 @@ import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -110,5 +113,11 @@ public class QlpktclhPhieuKtChatLuongServiceImpl implements QlpktclhPhieuKtChatL
 	public Page<QlpktclhPhieuKtChatLuongResponseDto> filter(QlpktclhPhieuKtChatLuongFilterRequestDto req) throws Exception {
 
 		return qlpktclhPhieuKtChatLuongRepo.filter(req);
+	}
+
+	@Override
+	public Page<QlpktclhPhieuKtChatLuong> timKiem(QlpktclhPhieuKtChatLuongFilterRequestDto req) {
+		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
+		return qlpktclhPhieuKtChatLuongRepo.select(req.getSoPhieu(),req.getNgayLapPhieu(),req.getTenNguoiGiao(), pageable);
 	}
 }

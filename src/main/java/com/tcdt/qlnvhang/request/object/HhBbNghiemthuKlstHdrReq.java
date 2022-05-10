@@ -22,19 +22,40 @@ public class HhBbNghiemthuKlstHdrReq {
 	@ApiModelProperty(example = "20/BB-TCDT")
 	String soBb;
 
+	String maDvi;
+
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayLap;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date ngayNghiemThu;
+
+	@NotNull(message = "Không được để trống")
+	@Size(max = 50, message = "Tên thủ trưởng không được vượt quá 50 ký tự")
+	String thuTruong;
+
+	@NotNull(message = "Không được để trống")
+	@Size(max = 50, message = "Tên kế toán trưởng không được vượt quá 50 ký tự")
+	String keToan;
+
+	@NotNull(message = "Không được để trống")
+	@Size(max = 50, message = "Tên kỹ thuật viên bảo quản không được vượt quá 50 ký tự")
+	String kyThuatVien;
+
+	@NotNull(message = "Không được để trống")
+	@Size(max = 50, message = "Thủ kho không được vượt quá 50 ký tự")
+	String thuKho;
 
 	@NotNull(message = "Không được để trống")
 	@Size(max = 20, message = "Mã ngăn kho được vượt quá 20 ký tự")
 	@ApiModelProperty(example = "010201010101")
 	String maNganKho;
 
-	@Size(max = 250, message = "Ông bà được vượt quá 250 ký tự")
+	/*@Size(max = 250, message = "Ông bà được vượt quá 250 ký tự")
 	String ongBa;
 
 	@Size(max = 250, message = "Chức vụ được vượt quá 250 ký tự")
-	String chucVu;
+	String chucVu;*/
 
 	@NotNull(message = "Không được để trống")
 	@Size(max = 20, message = "Mã ngăn kho được vượt quá 20 ký tự")
@@ -47,6 +68,9 @@ public class HhBbNghiemthuKlstHdrReq {
 
 	@Size(max = 20, message = "Phương thức bảo quản được vượt quá 20 ký tự")
 	String pthucBquan;
+
+	@Size(max = 20, message = "Hình thức bảo quản được vượt quá 20 ký tự")
+	String hthucBquan;
 
 	Double tichLuong;
 	Double slThucNhap;

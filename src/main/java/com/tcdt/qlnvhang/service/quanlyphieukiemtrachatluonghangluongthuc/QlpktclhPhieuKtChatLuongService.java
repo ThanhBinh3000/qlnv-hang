@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.quanlyphieukiemtrachatluonghangluongthuc;
 
+import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.request.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongFilterRequestDto;
 import com.tcdt.qlnvhang.request.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongRequestDto;
 import com.tcdt.qlnvhang.response.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongResponseDto;
@@ -11,6 +12,8 @@ public interface QlpktclhPhieuKtChatLuongService {
 	QlpktclhPhieuKtChatLuongResponseDto update (QlpktclhPhieuKtChatLuongRequestDto req) throws Exception;
 
 	Page<QlpktclhPhieuKtChatLuongResponseDto> filter (QlpktclhPhieuKtChatLuongFilterRequestDto req) throws Exception;
+
+	Page<QlpktclhPhieuKtChatLuong> timKiem (QlpktclhPhieuKtChatLuongFilterRequestDto req) throws Exception;
 
 
 }
