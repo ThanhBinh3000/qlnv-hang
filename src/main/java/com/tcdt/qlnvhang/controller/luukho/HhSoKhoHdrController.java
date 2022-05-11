@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.controller.luukho;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -11,6 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import com.tcdt.qlnvhang.table.HhSoKhoHdr;
+import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.util.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,17 +38,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.TokenAuthenticationService;
-import com.tcdt.qlnvhang.repository.QlnvSoKhoRepository;
+import com.tcdt.qlnvhang.repository.HhSoKhoHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
-import com.tcdt.qlnvhang.request.object.QlnvSoKhoReq;
-import com.tcdt.qlnvhang.request.search.QlnvSoKhoSearchReq;
+import com.tcdt.qlnvhang.request.object.sokho.HhSoKhoHdrReq;
+import com.tcdt.qlnvhang.request.search.sokho.HHSoKhoHdrSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.table.QlnvSoKho;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
-import com.tcdt.qlnvhang.util.Contains;
-import com.tcdt.qlnvhang.util.Doc4jUtils;
-import com.tcdt.qlnvhang.util.PaginationSet;
-import com.tcdt.qlnvhang.util.PathContains;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -59,22 +58,22 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @RequestMapping("/business/so-kho")
 @Api(tags = "Quản lý thông tin sổ kho")
-public class QlnvSoKhoController extends BaseController {
+public class HhSoKhoHdrController extends BaseController {
 
 	@Autowired
-	private QlnvSoKhoRepository qlnvSoKhoRepository;
+	private HhSoKhoHdrRepository qlnvSoKhoRepository;
 
 	@ApiOperation(value = "Tạo mới Thông tin sổ kho", response = List.class)
 	@PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<BaseResponse> insert(HttpServletRequest request,@Valid @RequestBody QlnvSoKhoReq objReq) {
+	public ResponseEntity<BaseResponse> insert(HttpServletRequest request,@Valid @RequestBody HhSoKhoHdrReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		Calendar cal = Calendar.getInstance();
 		try {
-			QlnvSoKho dataMap = new ModelMapper().map(objReq, QlnvSoKho.class);
-			Authentication authentication = TokenAuthenticationService.getAuthentication(request);
-			dataMap.setNgayTao(cal.getTime());
-			dataMap.setNguoiTao(authentication.getName());
+			UserInfo userInfo = UserUtils.getUserInfo();
+			HhSoKhoHdr dataMap = new ModelMapper().map(objReq, HhSoKhoHdr.class);
+			dataMap.setNgayTao(LocalDate.now());
+			dataMap.setNguoiTaoId(userInfo.getId());
 			qlnvSoKhoRepository.save(dataMap);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
@@ -95,7 +94,7 @@ public class QlnvSoKhoController extends BaseController {
 			if (StringUtils.isEmpty(idSearchReq.getId()))
 				throw new Exception("Xoá thất bại, không tìm thấy dữ liệu");
 			Long qhoachId = idSearchReq.getId();
-			Optional<QlnvSoKho> qlnvSoKho = qlnvSoKhoRepository.findById(qhoachId);
+			Optional<HhSoKhoHdr> qlnvSoKho = qlnvSoKhoRepository.findById(qhoachId);
 			if (!qlnvSoKho.isPresent())
 				throw new Exception("Không tìm thấy dữ liệu cần xoá");
 			qlnvSoKhoRepository.deleteById(qhoachId);
@@ -113,15 +112,15 @@ public class QlnvSoKhoController extends BaseController {
 	@ApiOperation(value = "Tra cứu Thông tin sổ kho", response = List.class)
 	@PostMapping(value = "/findList", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<BaseResponse> selectAll(@RequestBody QlnvSoKhoSearchReq objReq) {
+	public ResponseEntity<BaseResponse> selectAll(@RequestBody HHSoKhoHdrSearchReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
 			int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
 			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
 
-			Page<QlnvSoKho> qhKho = qlnvSoKhoRepository.selectParams(objReq.getSoKho(), objReq.getMaDvi(),
-					objReq.getMaKho(), objReq.getTuNgayLap(), objReq.getDenNgayLap(), pageable);
+			Page<HhSoKhoHdr> qhKho = qlnvSoKhoRepository.selectParams(objReq.getMaDvi(), objReq.getTenHhoa(),
+					objReq.getMaHhoa(),objReq.getMaNgan(),objReq.getMaLo(), objReq.getTuNgayMoSo(), objReq.getDenNgayMoSo(), pageable);
 
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
@@ -137,21 +136,21 @@ public class QlnvSoKhoController extends BaseController {
 
 	@ApiOperation(value = "Cập nhật Thông tin sổ kho", response = List.class)
 	@PostMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> update(HttpServletRequest request, @Valid @RequestBody QlnvSoKhoReq objReq) {
+	public ResponseEntity<BaseResponse> update(HttpServletRequest request, @Valid @RequestBody HhSoKhoHdrReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
+			UserInfo userInfo = UserUtils.getUserInfo();
 			if (StringUtils.isEmpty(objReq.getId()))
 				throw new Exception("Sửa thất bại, không tìm thấy dữ liệu");
 			Calendar cal = Calendar.getInstance();
-			Optional<QlnvSoKho> QlnvTtinHdongHdr = qlnvSoKhoRepository.findById(Long.valueOf(objReq.getId()));
+			Optional<HhSoKhoHdr> QlnvTtinHdongHdr = qlnvSoKhoRepository.findById(Long.valueOf(objReq.getId()));
 			if (!QlnvTtinHdongHdr.isPresent())
 				throw new Exception("Không tìm thấy dữ liệu cần sửa");
-			QlnvSoKho dataDTB = QlnvTtinHdongHdr.get();
-			QlnvSoKho dataMap = new ModelMapper().map(objReq, QlnvSoKho.class);
-			Authentication authentication = TokenAuthenticationService.getAuthentication(request);
+			HhSoKhoHdr dataDTB = QlnvTtinHdongHdr.get();
+			HhSoKhoHdr dataMap = new ModelMapper().map(objReq, HhSoKhoHdr.class);
 			updateObjectToObject(dataDTB, dataMap);
-			dataDTB.setNgaySua(cal.getTime());
-			dataDTB.setNguoiSua(authentication.getName());
+			dataDTB.setNgaySua(LocalDate.now());
+			dataDTB.setNguoiSuaId(userInfo.getId());
 			qlnvSoKhoRepository.save(dataDTB);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
@@ -172,7 +171,7 @@ public class QlnvSoKhoController extends BaseController {
 		try {
 			if (StringUtils.isEmpty(ids))
 				throw new UnsupportedOperationException("Không tồn tại bản ghi");
-			Optional<QlnvSoKho> qOptional = qlnvSoKhoRepository.findById(Long.parseLong(ids));
+			Optional<HhSoKhoHdr> qOptional = qlnvSoKhoRepository.findById(Long.parseLong(ids));
 			if (!qOptional.isPresent())
 				throw new UnsupportedOperationException("Không tồn tại bản ghi");
 			resp.setData(qOptional);
@@ -194,7 +193,7 @@ public class QlnvSoKhoController extends BaseController {
 			if (StringUtils.isEmpty(searchReq.getId()))
 				throw new Exception("Không tìm thấy dữ liệu");
 
-			Optional<QlnvSoKho> qOptional = qlnvSoKhoRepository.findById(searchReq.getId());
+			Optional<HhSoKhoHdr> qOptional = qlnvSoKhoRepository.findById(searchReq.getId());
 			if (!qOptional.isPresent())
 				throw new Exception("Không tìm thấy dữ liệu");
 
@@ -207,13 +206,13 @@ public class QlnvSoKhoController extends BaseController {
 			QlnvDmDonvi dvi = getDvi(req);
 			mappings.put("param1", dvi.getTenDvi());
 			mappings.put("param2", dvi.getDiaChi());
-			mappings.put("param3", qOptional.get().getNguoiTao());
+			mappings.put("param3", qOptional.get().getThuKho());
 			mappings.put("param4", "");
 			mappings.put("param5", qOptional.get().getMaHhoa());
 			mappings.put("param6", qOptional.get().getDviTinh());
-			mappings.put("param7", qOptional.get().getSoKho());
-			mappings.put("param8", convertDateToString(qOptional.get().getNgayLap()));
-			mappings.put("param9", convertDateToString(qOptional.get().getNgayLap()));
+			mappings.put("param7", "");
+			mappings.put("param8", convertDateToString(qOptional.get().getNgayMoSo()));
+			mappings.put("param9", convertDateToString(qOptional.get().getNgayMoSo()));
 			
 			TestObject obj = new TestObject(1, "22/12/2021", "123","1234","dien giai", "20/12/2021", "10000","2000000","2222");
 			List<TestObject> lstObject = new ArrayList<TestObject>();

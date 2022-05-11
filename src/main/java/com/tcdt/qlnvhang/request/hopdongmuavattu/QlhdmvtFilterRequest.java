@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.request.quanlyhopdongmuavattu;
+package com.tcdt.qlnvhang.request.hopdongmuavattu;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;

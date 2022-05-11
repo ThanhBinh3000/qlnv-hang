@@ -4,7 +4,7 @@ import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.Qlpkt
 import com.tcdt.qlnvhang.enums.QdPheDuyetKqlcntVtStatus;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.PaggingReq;
-import com.tcdt.qlnvhang.request.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongFilterRequestDto;
+import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongFilterRequestDto;
 import com.tcdt.qlnvhang.response.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongResponseDto;
 import com.tcdt.qlnvhang.util.DataUtils;
 import org.springframework.beans.factory.annotation.Autowired;

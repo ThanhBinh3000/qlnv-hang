@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.request.quanlyphieukiemtrachatluonghangluongthuc;
+package com.tcdt.qlnvhang.request.phieuktracluong;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Builder
 @Data

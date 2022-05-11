@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.request.quanlyhopdongmuavattu;
+package com.tcdt.qlnvhang.request.hopdongmuavattu;
 
 import com.tcdt.qlnvhang.response.quanlyhopdongmuavattu.QlhdMuaVatTuResponseDTO;
 import lombok.Getter;
