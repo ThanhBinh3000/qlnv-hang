@@ -11,11 +11,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -241,6 +237,17 @@ public class BaseServiceImpl {
 	}
 
 	public static String convertDateToString(Date date) throws Exception {
+		if(Objects.isNull(date)){
+			return null;
+		}
+		DateFormat df = new SimpleDateFormat(Contains.FORMAT_DATE_STR);
+		return df.format(date);
+	}
+
+	public static String convertDateToString(LocalDate date) throws Exception {
+		if(Objects.isNull(date)){
+			return null;
+		}
 		DateFormat df = new SimpleDateFormat(Contains.FORMAT_DATE_STR);
 		return df.format(date);
 	}

@@ -25,7 +25,7 @@ public class BienBanLayMauRepositoryCustomImpl implements BienBanLayMauRepositor
 	@Override
 	public Page<BienBanLayMau> search(BienBanLayMauSearchReq req, Pageable pageable) {
 		StringBuilder builder = new StringBuilder();
-		builder.append("SELECT * FROM BIEN_BAN_LAY_MAU ");
+		builder.append("SELECT * FROM BB_LAY_MAU ");
 		setConditionSearchCtkhn(req, builder);
 
 		//Sort

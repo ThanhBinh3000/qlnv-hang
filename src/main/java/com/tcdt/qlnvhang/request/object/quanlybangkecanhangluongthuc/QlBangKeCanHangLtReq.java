@@ -24,10 +24,12 @@ public class QlBangKeCanHangLtReq {
 
     @NotNull(message = "Không được để trống")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate ngayLap;
+    private LocalDate ngayNhapXuat;
 
     @NotNull(message = "Không được để trống")
-    private String maDonViLap;
+    private String maDonVi;
+
+    private String maQhns;
 
     @NotNull(message = "Không được để trống")
     private Long qlPhieuNhapKhoLtId;
@@ -50,7 +52,18 @@ public class QlBangKeCanHangLtReq {
     @NotNull(message = "Không được để trống")
     private String tenNguoiGiaoHang;
 
-    @NotNull(message = "Không được để trống")
+    private String maThuKho;
+
+    private String maLhKho;
+
+    private String maDiemKho;
+
+    private String maNhaKho;
+
+    private String diaChiNguoiGiao;
+
+    private String soHd;
+
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime thoiGianGiaoHang;
 

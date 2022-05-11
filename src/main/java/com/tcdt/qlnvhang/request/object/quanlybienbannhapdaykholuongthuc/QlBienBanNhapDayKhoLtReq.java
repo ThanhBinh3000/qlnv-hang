@@ -1,10 +1,12 @@
 package com.tcdt.qlnvhang.request.object.quanlybienbannhapdaykholuongthuc;
 
 
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.tomcat.jni.Local;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
@@ -26,8 +28,12 @@ public class QlBienBanNhapDayKhoLtReq {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate ngayLap;
 
+    private LocalDate ngayNhapDayKho;
+
     @NotNull(message = "Không được để trống")
-    private String maDonViLap;
+    private String maDonVi;
+
+    private String maQhns;
 
     @NotNull(message = "Không được để trống")
     private String maKhoNganLo;
@@ -58,5 +64,12 @@ public class QlBienBanNhapDayKhoLtReq {
     @NotNull(message = "Không được để trống")
     private String thuTruong;
 
+    private String chungLoaiHh;
+
+    private String maDiemKho;
+    private String maNhaKho;
+
     private List<QlBienBanNdkCtLtReq> chiTiets = new ArrayList<>();
+
+    private List<FileDinhKemReq> fileDinhKems;
 }

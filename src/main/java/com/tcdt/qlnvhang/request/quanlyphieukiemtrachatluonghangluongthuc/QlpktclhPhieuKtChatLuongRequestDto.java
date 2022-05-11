@@ -23,7 +23,7 @@ public class QlpktclhPhieuKtChatLuongRequestDto {
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate ngayKiemTra;
 
-	private String nguoiTheoXe;
+	private String nguoiGiaoHang;
 
 	private String diaChi;
 
@@ -50,6 +50,17 @@ public class QlpktclhPhieuKtChatLuongRequestDto {
 	private Long fileDinhKemId;
 
 	private String maDonVi;
+
+	private String maQhns;
+
+	private String maDiemKho;
+
+	private String maNhaKho;
+
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+	private LocalDate ngayGdinh;
+
+	private String tchucGdinh;
 
 	private Long nguoiPheDuyet;
 

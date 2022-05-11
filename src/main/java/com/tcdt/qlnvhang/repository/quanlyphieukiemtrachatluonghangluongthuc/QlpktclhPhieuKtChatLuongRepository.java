@@ -15,7 +15,6 @@ public interface QlpktclhPhieuKtChatLuongRepository extends CrudRepository<Qlpkt
 
     @Query(
         value = "SELECT * FROM QLPKTCLH_PHIEU_KT_CHAT_LUONG PKTCL WHERE (:soPhieu IS NULL OR PKTCL.SO_PHIEU = TO_NUMBER(:soPhieu)) AND (:ngayLPhieu IS NULL OR TO_CHAR(PKTCL.NGAY_TAO,'yyyy-MM-dd') = :ngayLPhieu) AND (:nguoiGiaoHang IS NULL OR LOWER(PKTCL.NGUOI_GIAO_HANG) LIKE LOWER(CONCAT(CONCAT('%', :nguoiGiaoHang), '%')))",
-        countQuery = "SELECT count(1) FROM QLPKTCLH_PHIEU_KT_CHAT_LUONG PKTCL WHERE (:soPhieu IS NULL OR PKTCL.SO_PHIEU = TO_NUMBER(:soPhieu)) AND (:ngayLPhieu IS NULL OR TO_CHAR(PKTCL.NGAY_TAO,'yyyy-MM-dd') = :ngayLPhieu)AND (:nguoiGiaoHang IS NULL OR LOWER(PKTCL.NGUOI_GIAO_HANG) LIKE LOWER(CONCAT(CONCAT('%', :nguoiGiaoHang), '%')))",
             nativeQuery = true)
     Page<QlpktclhPhieuKtChatLuong> select(Long soPhieu, String ngayLPhieu, String nguoiGiaoHang, Pageable pageable);
 }

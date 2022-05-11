@@ -49,4 +49,5 @@ public class PhieuKnghiemCluongHang extends BaseEntity {
 	private String ldoTchoi;
 	private String maDonVi;
 	private String capDonVi;
+	private String maQhns;
 }

@@ -16,7 +16,7 @@ import java.time.LocalDate;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "BIEN_BAN_LAY_MAU")
+@Table(name = "BB_LAY_MAU")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -53,4 +53,16 @@ public class BienBanLayMau extends BaseEntity {
 	private String ldoTchoi;
 	private String maDonVi;
 	private String capDonVi;
+	private String maQhns;
+	private String soHd;
+	private String ngayLayMau;
+	private String ddiemLayMau;
+	private String ddienCucDtruNnuoc;
+	private String tPhongKthuatBquan;
+	private String ddienBenNhan;
+	private String ngayBgiaoMau;
+	private String ddienCucDtruGiao;
+	private String ddienDviTchucNhan;
+	private String tinhTrang;
+	private String soTrang;
 }

@@ -26,4 +26,19 @@ public class BienBanLayMauReq {
 	private String pphapLayMau;
 	private String ctieuKtra;
 	private String kquaNiemPhongMau;
+
+	private String maDonVi;
+	private String maQHNS;
+	private String soHd;
+	private String ngayLayMau;
+	private String ddiemLayMau;
+	private String ddienCucDtruNnuoc;
+	private String tPhongKthuatBquan;
+	private String ddienBenNhan;
+	private String ngayBgiaoMau;
+	private String ddienCucDtruBenGiao;
+	private String ddienDviTchucBenNhan;
+	private String tinhTrang;
+	private String soTrang;
+
 }

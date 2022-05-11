@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,7 @@ public class QlBangKeCanHangLtController {
     private QlBangKeCanHangLtService qlBangKeCanHangLtService;
 
     @ApiOperation(value = "Tạo mới Quản lý bảng kê cân hàng lương thực", response = List.class)
-    @PostMapping
+    @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> insert(@Valid @RequestBody QlBangKeCanHangLtReq request) {
         BaseResponse resp = new BaseResponse();
         try {

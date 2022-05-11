@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "QL_BIEN_BAN_NHAP_DAY_KHO_LT")
+@Table(name = "BB_NHAP_DAY_KHO_LT")
 public class QlBienBanNhapDayKhoLt extends BaseEntity implements Serializable {
     private static final long serialVersionUID = -5271141998400379431L;
     @Id
@@ -29,8 +29,8 @@ public class QlBienBanNhapDayKhoLt extends BaseEntity implements Serializable {
     @Column(name = "SO_BIEN_BAN")
     private String soBienBan;
 
-    @Column(name = "NGAY_LAP")
-    private LocalDate ngayLap;
+    @Column(name = "NGAY_NHAP_DAY_KHO")
+    private LocalDate ngayNhapDayKho;
 
     @Column(name = "MA_DON_VI")
     private String maDonVi;

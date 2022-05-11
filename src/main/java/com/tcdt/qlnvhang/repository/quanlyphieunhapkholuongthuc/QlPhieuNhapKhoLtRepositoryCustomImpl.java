@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class QlPhieuNhapKhoLtRepositoryCustomImpl implements QlPhieuNhapKhoLtRepositoryCustom {
 
@@ -53,7 +54,7 @@ public class QlPhieuNhapKhoLtRepositoryCustomImpl implements QlPhieuNhapKhoLtRep
     private void setConditionSearch(QlPhieuNhapKhoLtSearchReq req, StringBuilder builder) {
         builder.append("WHERE 1 = 1 ");
 
-        if (!StringUtils.isEmpty(req.getSoPhieu())) {
+        if (!Objects.isNull(req.getSoPhieu())) {
             builder.append("AND ").append("p.soPhieu = :soPhieu ");
         }
         if (req.getTuNgay() != null) {
@@ -86,7 +87,7 @@ public class QlPhieuNhapKhoLtRepositoryCustomImpl implements QlPhieuNhapKhoLtRep
     }
 
     private void setParameterSearch(QlPhieuNhapKhoLtSearchReq req, Query query) {
-        if (!StringUtils.isEmpty(req.getSoPhieu())) {
+        if (!Objects.isNull(req.getSoPhieu())) {
             query.setParameter("soPhieu", req.getSoPhieu());
         }
         if (req.getTuNgay() != null) {

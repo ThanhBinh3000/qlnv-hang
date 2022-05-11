@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc;
 
+import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.quyetdinhpheduyetketqualuachonnhathauvatu.QdKqlcntGoiThauVt;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +20,7 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "QL_PHIEU_NHAP_KHO_LT")
-public class QlPhieuNhapKhoLt implements Serializable {
+public class QlPhieuNhapKhoLt  extends BaseEntity implements Serializable {
     private static final long serialVersionUID = -1880694858465293452L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "QL_PHIEU_NHAP_KHO_LT_SEQ")
@@ -34,7 +35,7 @@ public class QlPhieuNhapKhoLt implements Serializable {
     private Long bbNghiemThuKlId;
 
     @Column(name = "SO_PHIEU")
-    private String soPhieu;
+    private Long soPhieu;
 
     @Column(name = "NGAY_LAP")
     private LocalDate ngayLap;
@@ -45,8 +46,8 @@ public class QlPhieuNhapKhoLt implements Serializable {
     @Column(name = "TEN_NGAN_LO")
     private String tenNganLo;
 
-    @Column(name = "TEN_NGUOI_GIAO_NHAN")
-    private String tenNguoiGiaoNhan;
+    @Column(name = "NGUOI_GIAO_HANG")
+    private String nguoiGiaoHang;
 
     @Column(name = "DIA_CHI_GIAO_NHAN")
     private String diaChiGiaoNhan;
@@ -101,6 +102,24 @@ public class QlPhieuNhapKhoLt implements Serializable {
 
     @Column(name = "CAP_DON_VI")
     private String capDonVi;
+
+    @Column(name = "MA_DIEM_KHO")
+    private String maDiemKho;
+
+    @Column(name = "MA_NHA_KHO")
+    private String maNhaKho;
+
+    @Column(name = "MA_QHNS")
+    private String maQhns;
+
+    @Column(name = "NGAY_NHAP_KHO")
+    private LocalDate ngayNhapKho;
+
+    @Column(name = "SO_QD_NVU_NHANG")
+    private Long soQdNvuNhang;
+
+    @Column(name = "NGAY_QD_NVU_NHANG")
+    private LocalDate ngayQdNvuNhang;
 
     @Transient
     private List<QlPhieuNhapKhoHangHoaLt> hangHoaList = new ArrayList<>();

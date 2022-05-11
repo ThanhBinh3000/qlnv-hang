@@ -14,6 +14,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +31,7 @@ public class QlBienBanNhapDayKhoLtController {
     private QlBienBanNhapDayKhoLtService qlBienBanNhapDayKhoLtService;
 
     @ApiOperation(value = "Tạo mới Quản lý biên bản nhập đầy kho lương thực", response = List.class)
-    @PostMapping
+    @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> insert(@Valid @RequestBody QlBienBanNhapDayKhoLtReq request) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -110,11 +111,11 @@ public class QlBienBanNhapDayKhoLtController {
     }
 
     @ApiOperation(value = "Tra cứu Quản lý biên bản nhập đầy kho lương thực", response = List.class)
-    @GetMapping()
-    public ResponseEntity<BaseResponse> search(QlBienBanNhapDayKhoLtSearchReq req) {
+    @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> search(@RequestBody QlBienBanNhapDayKhoLtSearchReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(qlBienBanNhapDayKhoLtService.search(req));
+            resp.setData(qlBienBanNhapDayKhoLtService.timKiem(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

@@ -20,6 +20,9 @@ import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -28,6 +31,8 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static com.tcdt.qlnvhang.service.impl.BaseServiceImpl.convertDateToString;
 
 @Service
 public class QlPhieuNhapKhoLtServiceImpl implements QlPhieuNhapKhoLtService {
@@ -233,5 +238,11 @@ public class QlPhieuNhapKhoLtServiceImpl implements QlPhieuNhapKhoLtService {
         if (userInfo == null)
             throw new Exception("Bad request.");
         return qlPhieuNhapKhoLtRepository.search(req);
+    }
+
+    @Override
+    public Page<QlPhieuNhapKhoLt> timKiem(QlPhieuNhapKhoLtSearchReq req) throws Exception {
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
+        return qlPhieuNhapKhoLtRepository.select(req.getSoPhieu(),convertDateToString(req.getNgayNhapKho()),req.getMaDiemKho(),req.getMaKhoNgan(),convertDateToString(req.getNgayTaoPhieu()),convertDateToString(req.getNgayGiaoNhanHang()),req.getMaNhaKho(),req.getNguoiGiaoHang(), pageable);
     }
 }

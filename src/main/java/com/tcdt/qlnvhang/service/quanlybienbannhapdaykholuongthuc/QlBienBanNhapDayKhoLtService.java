@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.quanlybienbannhapdaykholuongthuc;
 
+import com.tcdt.qlnvhang.entities.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLt;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtReq;
 import com.tcdt.qlnvhang.request.search.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtSearchReq;
@@ -17,4 +18,7 @@ public interface QlBienBanNhapDayKhoLtService {
 
     @Transactional(rollbackOn = Exception.class)
     boolean updateStatusQd(StatusReq req) throws Exception;
+
+    Page<QlBienBanNhapDayKhoLt> timKiem(QlBienBanNhapDayKhoLtSearchReq req) throws Exception;
+
 }

@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.quanlyphieunhapkholuongthuc;
 
+import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLt;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLtReq;
 import com.tcdt.qlnvhang.request.search.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLtSearchReq;
@@ -14,4 +15,6 @@ public interface QlPhieuNhapKhoLtService {
     boolean updateStatusQd(StatusReq req) throws Exception;
 
     Page<QlPhieuNhapKhoLtRes> search(QlPhieuNhapKhoLtSearchReq req) throws Exception;
+
+    Page<QlPhieuNhapKhoLt> timKiem(QlPhieuNhapKhoLtSearchReq req) throws Exception;
 }

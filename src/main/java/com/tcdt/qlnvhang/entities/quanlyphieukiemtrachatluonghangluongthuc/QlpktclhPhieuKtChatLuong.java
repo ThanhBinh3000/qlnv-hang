@@ -22,6 +22,9 @@ public class QlpktclhPhieuKtChatLuong extends BaseEntity {
 	@Column(name = "SO_PHIEU")
 	private Long soPhieu;
 
+	@Column(name = "MA_QHNS")
+	private String maQhns;
+
 	@Column(name = "NGAY_KIEM_TRA")
 	private LocalDate ngayKiemTra;
 
@@ -81,4 +84,17 @@ public class QlpktclhPhieuKtChatLuong extends BaseEntity {
 
 	@Column(name = "LY_DO_TU_CHOI")
 	private String lyDoTuChoi;
+
+	@Column(name = "MA_DIEM_KHO")
+	private String maDiemKho;
+
+	@Column(name = "MA_NHA_KHO")
+	private String maNhaKho;
+
+	@Column(name = "NGAY_GDINH")
+	private LocalDate ngayGdinh;
+
+	@Column(name = "TCHUC_GDINH")
+	private String tchucGdinh;
+
 }
