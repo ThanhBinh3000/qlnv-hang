@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc;
 
-import com.tcdt.qlnvhang.request.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongFilterRequestDto;
+import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongFilterRequestDto;
 import com.tcdt.qlnvhang.response.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongResponseDto;
 import org.springframework.data.domain.Page;
 

@@ -1,8 +1,8 @@
 package com.tcdt.qlnvhang.controller.quanlyhopdongmuavattu;
 
 import com.tcdt.qlnvhang.enums.EnumResponse;
-import com.tcdt.qlnvhang.request.quanlyhopdongmuavattu.QlhdMuaVatTuRequestDTO;
-import com.tcdt.qlnvhang.request.quanlyhopdongmuavattu.QlhdmvtFilterRequest;
+import com.tcdt.qlnvhang.request.hopdongmuavattu.QlhdMuaVatTuRequestDTO;
+import com.tcdt.qlnvhang.request.hopdongmuavattu.QlhdmvtFilterRequest;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.quanlyhopdongmuavattu.QlhdMuavatTuService;
 import com.tcdt.qlnvhang.util.PathContains;

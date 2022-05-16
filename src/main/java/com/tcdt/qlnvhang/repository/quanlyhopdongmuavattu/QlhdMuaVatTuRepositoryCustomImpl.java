@@ -2,7 +2,7 @@ package com.tcdt.qlnvhang.repository.quanlyhopdongmuavattu;
 
 import com.tcdt.qlnvhang.entities.quanlyhopdongmuavattu.QlhdMuaVatTu;
 import com.tcdt.qlnvhang.enums.QdPheDuyetKqlcntVtStatus;
-import com.tcdt.qlnvhang.request.quanlyhopdongmuavattu.QlhdmvtFilterRequest;
+import com.tcdt.qlnvhang.request.hopdongmuavattu.QlhdmvtFilterRequest;
 import com.tcdt.qlnvhang.response.quanlyhopdongmuavattu.QlhdMuaVatTuResponseDTO;
 import com.tcdt.qlnvhang.util.DataUtils;
 import org.springframework.beans.factory.annotation.Autowired;

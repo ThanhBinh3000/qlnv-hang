@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.request.quanlyphieukiemtrachatluonghangluongthuc;
+package com.tcdt.qlnvhang.request.phieuktracluong;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
