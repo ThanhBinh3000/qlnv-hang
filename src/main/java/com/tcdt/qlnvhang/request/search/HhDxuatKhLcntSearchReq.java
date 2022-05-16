@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.request.search;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.validation.constraints.NotNull;
@@ -12,6 +13,7 @@ import com.tcdt.qlnvhang.util.Contains;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Getter
 @Setter
@@ -42,5 +44,11 @@ public class HhDxuatKhLcntSearchReq extends BaseRequest {
 	String loaiVthh;
 
 	String maDvi;
+
+	private String namKh;
+
+	private String soTr;
+
+	private String quyetDinh;
 
 }

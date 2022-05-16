@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -423,5 +424,11 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 
 		ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
 		ex.export();
+	}
+
+	@Override
+	public Page<HhDxKhLcntThopHdr> timKiem(HhDxKhLcntThopSearchReq req) throws Exception {
+		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
+		return hhDxKhLcntThopHdrRepository.select(req.getNamKhoach(),req.getLoaiVthh(),convertDateToString(req.getTuNgayTao()),convertDateToString(req.getDenNgayTao()),req.getSoQd(), pageable);
 	}
 }

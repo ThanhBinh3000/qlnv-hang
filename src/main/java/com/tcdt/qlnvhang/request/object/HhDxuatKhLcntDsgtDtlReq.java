@@ -22,6 +22,9 @@ public class HhDxuatKhLcntDsgtDtlReq {
 
 	BigDecimal soLuong;
 
+	String maDvi;
+	String maDiemKho;
+
 	@NotNull(message = "Không được để trống")
 	@Size(max = 250, message = "Địa điểm nhập không được vượt quá 250 ký tự")
 	@ApiModelProperty(example = "Địa điểm nhập")

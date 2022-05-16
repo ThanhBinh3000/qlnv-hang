@@ -106,7 +106,7 @@ public class HhDxKhLcntThopHdrController {
 	public ResponseEntity<BaseResponse> selectAll(@RequestBody HhDxKhLcntThopSearchReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(service.colection(objReq));
+			resp.setData(service.timKiem(objReq));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
