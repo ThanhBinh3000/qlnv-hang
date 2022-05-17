@@ -84,9 +84,9 @@ public class PathContains {
 
 	// De xuat ke hoach lua chon nha thau
 	public static final String DX_KH = "/dx-kh";// TODO: doi ten thanh dau-thau
-	public static final String DX_KH_LCNT_GAO = "/lcnt-gao";
-	public static final String PA_LCNT_GAO = "/pan-lcnt-gao";
-	public static final String QD_LCNT_GAO = "/qd-lcnt-gao";
+	public static final String DX_KH_LCNT = "/lcnt";
+	public static final String PA_LCNT = "/pan-lcnt";
+	public static final String QD_LCNT = "/qd-lcnt";
 	public static final String TTIN_DTHAU = "/ttin-dthau";
 	public static final String QD_PDUYET_KQLCNT = "/qd-pduyet-kqlcnt";
 	public static final String HOP_DONG = "/hop-dong";

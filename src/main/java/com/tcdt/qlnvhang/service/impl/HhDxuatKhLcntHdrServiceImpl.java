@@ -338,6 +338,6 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 	@Override
 	public Page<HhDxuatKhLcntHdr> timKiem(HhDxuatKhLcntSearchReq req) throws Exception {
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
-		return hhDxuatKhLcntHdrRepository.select(req.getNamKh(),req.getSoTr(),req.getQuyetDinh(),convertDateToString(req.getTuNgayKy()),convertDateToString(req.getDenNgayKy()), pageable);
+		return hhDxuatKhLcntHdrRepository.select(req.getNamKh(),req.getSoTr(),req.getQuyetDinh(),convertDateToString(req.getTuNgayKy()),convertDateToString(req.getDenNgayKy()),req.getLoaiVthh(),req.getTrangThai(), pageable);
 	}
 }

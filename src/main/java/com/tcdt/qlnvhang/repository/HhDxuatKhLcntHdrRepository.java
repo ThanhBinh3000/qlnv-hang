@@ -31,7 +31,10 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 					"  AND (:soTr IS NULL OR KHLCNT.SO_DXUAT = :soTr)\n" +
 					"  AND (:quyetDinh IS NULL OR KHLCNT.QD_CAN_CU = :quyetDinh)\n" +
 					"  AND (:ngayKyTu IS NULL OR KHLCNT.NGAY_KY >= TO_DATE(:ngayKyTu, 'yyyy-MM-dd'))\n" +
-					"  AND (:ngayKyDen IS NULL OR KHLCNT.NGAY_KY <= TO_DATE(:ngayKyDen, 'yyyy-MM-dd'))",
+					"  AND (:ngayKyDen IS NULL OR KHLCNT.NGAY_KY <= TO_DATE(:ngayKyDen, 'yyyy-MM-dd'))\n" +
+					"  AND (:loaiVthh IS NULL OR KHLCNT.LOAI_VTHH = :loaiVthh)" +
+					"  AND (:trangThai IS NULL OR KHLCNT.TRANG_THAI = :trangThai)"
+			,
 			nativeQuery = true)
-	Page<HhDxuatKhLcntHdr> select(String namKh, String soTr,String quyetDinh, String ngayKyTu,String ngayKyDen, Pageable pageable);
+	Page<HhDxuatKhLcntHdr> select(String namKh, String soTr,String quyetDinh, String ngayKyTu,String ngayKyDen,String maVthh,String trangThai, Pageable pageable);
 }

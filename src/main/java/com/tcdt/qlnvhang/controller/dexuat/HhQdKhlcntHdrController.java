@@ -39,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = PathContains.DX_KH + PathContains.QD_LCNT_GAO)
+@RequestMapping(value = PathContains.DX_KH + PathContains.QD_LCNT)
 @Api(tags = "Quyết định phê duyệt kế hoạch lựa chọn nhà thầu")
 public class HhQdKhlcntHdrController {
 
