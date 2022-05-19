@@ -28,7 +28,7 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 			value = "SELECT * " +
 					"FROM HH_DX_KHLCNT_HDR KHLCNT " +
 					" WHERE (:namKh IS NULL OR KHLCNT.NAM_KHOACH = TO_NUMBER(:namKh)) " +
-					"  AND (:soTr IS NULL OR KHLCNT.SO_DXUAT = :soTr) " +
+					"  AND (:soTr IS NULL OR LOWER(KHLCNT.SO_DXUAT) LIKE LOWER(CONCAT(CONCAT('%', :soTr),'%'))) " +
 					"  AND (:quyetDinh IS NULL OR KHLCNT.QD_CAN_CU = :quyetDinh)" +
 					"  AND (:ngayKyTu IS NULL OR KHLCNT.NGAY_KY >= TO_DATE(:ngayKyTu, 'yyyy-MM-dd'))" +
 					"  AND (:ngayKyDen IS NULL OR KHLCNT.NGAY_KY <= TO_DATE(:ngayKyDen, 'yyyy-MM-dd'))" +

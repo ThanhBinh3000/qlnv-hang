@@ -54,7 +54,7 @@ public class HhDxuatKhLcntHdrReq {
 
 	private List<FileDinhKemReq> fileDinhKems;
 
-	private List<HhDxuatKhLcntGaoDtlReq> detail1;
+	private HhDxuatKhLcntGaoDtlReq detail1;
 
 	private List<HhDxuatKhLcntDsgtDtlReq> detail2;
 

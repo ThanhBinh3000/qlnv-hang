@@ -4,26 +4,17 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 @Entity
-@Table(name = "HH_DX_KHLCNT_GAO_DTL")
+@Table(name = "HH_DX_KHLCNT_LT_DTL")
 @Data
-public class HhDxuatKhLcntGaoDtl implements Serializable {
+public class HhDxuatKhLcntLtDtl implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -56,7 +47,7 @@ public class HhDxuatKhLcntGaoDtl implements Serializable {
 	String blanhDthau;
 	String ghiChu;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@OneToOne()
 	@JoinColumn(name = "id_hdr")
 	@JsonBackReference
 	private HhDxuatKhLcntHdr parent;

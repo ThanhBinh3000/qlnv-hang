@@ -10,6 +10,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.validation.Valid;
 
+import com.tcdt.qlnvhang.table.HhDxuatKhLcntLtDtl;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -18,7 +19,6 @@ import org.springframework.data.jpa.domain.Specification;
 import com.tcdt.qlnvhang.request.search.HhDxKhLcntDsChuaThReq;
 import com.tcdt.qlnvhang.request.search.HhDxKhLcntTChiThopReq;
 import com.tcdt.qlnvhang.request.search.HhDxuatKhLcntSearchReq;
-import com.tcdt.qlnvhang.table.HhDxuatKhLcntGaoDtl;
 import com.tcdt.qlnvhang.table.HhDxuatKhLcntHdr;
 import com.tcdt.qlnvhang.util.Contains;
 
@@ -88,7 +88,7 @@ public class HhDxuatKhLcntSpecification {
 					return predicate;
 
 				root.fetch("children1", JoinType.LEFT);
-				Join<HhDxuatKhLcntHdr, HhDxuatKhLcntGaoDtl> joinQuerry = root.join("children1");
+				Join<HhDxuatKhLcntHdr, HhDxuatKhLcntLtDtl> joinQuerry = root.join("children1");
 
 				String trangThai = Contains.DUYET;
 				String namKhoach = req.getNamKhoach();
