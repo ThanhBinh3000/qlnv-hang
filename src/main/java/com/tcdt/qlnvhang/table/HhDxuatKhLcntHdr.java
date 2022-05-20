@@ -76,7 +76,7 @@ public class HhDxuatKhLcntHdr implements Serializable {
 		this.children.add(child);
 	}
 
-	@OneToOne(mappedBy = "parent")
+	@OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "parent")
 	@JsonManagedReference
 	private HhDxuatKhLcntLtDtl children1;
 

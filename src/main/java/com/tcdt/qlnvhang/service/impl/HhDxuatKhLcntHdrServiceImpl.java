@@ -65,8 +65,8 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 
 		// Add danh sach file dinh kem o Master
 		List<FileDKemJoinDxKhLcntHdr> fileDinhKemList = new ArrayList<FileDKemJoinDxKhLcntHdr>();
-		if (objReq.getFileDinhKems() != null) {
-			fileDinhKemList = ObjectMapperUtils.mapAll(objReq.getFileDinhKems(), FileDKemJoinDxKhLcntHdr.class);
+		if (objReq.getChildren() != null) {
+			fileDinhKemList = ObjectMapperUtils.mapAll(objReq.getChildren(), FileDKemJoinDxKhLcntHdr.class);
 			fileDinhKemList.forEach(f -> {
 				f.setDataType(HhDxuatKhLcntHdr.TABLE_NAME);
 				f.setCreateDate(new Date());
@@ -84,7 +84,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 //		dataMap.setChildren1(dtls1);
 
 		// Add danh sach goi thau
-		List<HhDxuatKhLcntDsgtDtl> dtls2 = ObjectMapperUtils.mapAll(objReq.getDetail2(), HhDxuatKhLcntDsgtDtl.class);
+		List<HhDxuatKhLcntDsgtDtl> dtls2 = ObjectMapperUtils.mapAll(objReq.getChildren2(), HhDxuatKhLcntDsgtDtl.class);
 		UnitScaler.reverseFormatList(dtls2, Contains.DVT_TAN);
 		String prefix = "-" + Contains.SHGT + "/" + dataMap.getMaDvi();
 		// TODO: xem lai cach sinh so, viet tam de lay so
@@ -103,9 +103,9 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 
 		dataMap.setChildren2(dtls2);
 		// Add danh sach can cu xac dinh gia
-		if (objReq.getDetail3() != null) {
+		if (objReq.getChildren3() != null) {
 			List<FileDKemJoinDxKhLcntCcxdg> detailChild;
-			List<HhDxuatKhLcntCcxdgDtlReq> dtlReqList = objReq.getDetail3();
+			List<HhDxuatKhLcntCcxdgDtlReq> dtlReqList = objReq.getChildren3();
 			for (HhDxuatKhLcntCcxdgDtlReq dtlReq : dtlReqList) {
 				HhDxuatKhLcntCcxdgDtl detail = ObjectMapperUtils.map(dtlReq, HhDxuatKhLcntCcxdgDtl.class);
 				detailChild = new ArrayList<FileDKemJoinDxKhLcntCcxdg>();
@@ -139,8 +139,8 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 
 		// Add danh sach file dinh kem o Master
 		List<FileDKemJoinDxKhLcntHdr> fileDinhKemList = new ArrayList<FileDKemJoinDxKhLcntHdr>();
-		if (objReq.getFileDinhKems() != null) {
-			fileDinhKemList = ObjectMapperUtils.mapAll(objReq.getFileDinhKems(), FileDKemJoinDxKhLcntHdr.class);
+		if (objReq.getChildren() != null) {
+			fileDinhKemList = ObjectMapperUtils.mapAll(objReq.getChildren(), FileDKemJoinDxKhLcntHdr.class);
 			fileDinhKemList.forEach(f -> {
 				f.setDataType(HhDxuatKhLcntHdr.TABLE_NAME);
 				f.setCreateDate(new Date());
@@ -160,13 +160,13 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 //		List<HhDxuatKhLcntGaoDtl> dtls1 = ObjectMapperUtils.mapAll(objReq.getDetail1(), HhDxuatKhLcntGaoDtl.class);
 //		dataDTB.setChildren1(dtls1);
 		// Add danh sach goi thau
-		List<HhDxuatKhLcntDsgtDtl> dtls2 = ObjectMapperUtils.mapAll(objReq.getDetail2(), HhDxuatKhLcntDsgtDtl.class);
+		List<HhDxuatKhLcntDsgtDtl> dtls2 = ObjectMapperUtils.mapAll(objReq.getChildren2(), HhDxuatKhLcntDsgtDtl.class);
 		UnitScaler.reverseFormatList(dtls2, Contains.DVT_TAN);
 		dataDTB.setChildren2(dtls2);
 		// Add danh sach can cu xac dinh gia
-		if (objReq.getDetail3() != null) {
+		if (objReq.getChildren2() != null) {
 			List<FileDKemJoinDxKhLcntCcxdg> detailChild;
-			List<HhDxuatKhLcntCcxdgDtlReq> dtlReqList = objReq.getDetail3();
+			List<HhDxuatKhLcntCcxdgDtlReq> dtlReqList = objReq.getChildren3();
 			for (HhDxuatKhLcntCcxdgDtlReq dtlReq : dtlReqList) {
 				HhDxuatKhLcntCcxdgDtl detail = ObjectMapperUtils.map(dtlReq, HhDxuatKhLcntCcxdgDtl.class);
 				detailChild = new ArrayList<FileDKemJoinDxKhLcntCcxdg>();

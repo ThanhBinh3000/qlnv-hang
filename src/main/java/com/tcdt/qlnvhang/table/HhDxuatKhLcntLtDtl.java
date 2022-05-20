@@ -22,7 +22,6 @@ public class HhDxuatKhLcntLtDtl implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_DXUAT_KH_LCNT_GAO_DTL_SEQ")
 	@SequenceGenerator(sequenceName = "HH_DXUAT_KH_LCNT_GAO_DTL_SEQ", allocationSize = 1, name = "HH_DXUAT_KH_LCNT_GAO_DTL_SEQ")
 	private Long id;
-
 	String tenDuAn;
 	BigDecimal tongMucDt;
 	@Temporal(TemporalType.DATE)
@@ -47,8 +46,8 @@ public class HhDxuatKhLcntLtDtl implements Serializable {
 	String blanhDthau;
 	String ghiChu;
 
-	@OneToOne()
-	@JoinColumn(name = "id_hdr")
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "id_hdr",nullable = false)
 	@JsonBackReference
 	private HhDxuatKhLcntHdr parent;
 

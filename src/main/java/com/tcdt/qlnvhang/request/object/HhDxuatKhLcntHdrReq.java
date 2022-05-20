@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.request.object;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -52,11 +53,12 @@ public class HhDxuatKhLcntHdrReq {
 	@ApiModelProperty(example = "Ghi chú")
 	String ghiChu;
 
-	private List<FileDinhKemReq> fileDinhKems;
+	private List<FileDinhKemReq> children =  new ArrayList<>();
 
-	private HhDxuatKhLcntGaoDtlReq detail1;
+	private HhDxuatKhLcntGaoDtlReq children1;
 
-	private List<HhDxuatKhLcntDsgtDtlReq> detail2;
+	private List<HhDxuatKhLcntDsgtDtlReq> children2 =  new ArrayList<>();
 
-	private List<HhDxuatKhLcntCcxdgDtlReq> detail3;
+	private List<HhDxuatKhLcntCcxdgDtlReq> children3 =  new ArrayList<>();
+
 }
