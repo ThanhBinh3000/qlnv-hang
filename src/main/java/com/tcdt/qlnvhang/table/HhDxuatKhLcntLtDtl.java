@@ -46,9 +46,9 @@ public class HhDxuatKhLcntLtDtl implements Serializable {
 	String blanhDthau;
 	String ghiChu;
 
-	@OneToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "id_hdr",nullable = false)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JsonBackReference
+	@JoinColumn(name = "id")
 	private HhDxuatKhLcntHdr parent;
 
 }
