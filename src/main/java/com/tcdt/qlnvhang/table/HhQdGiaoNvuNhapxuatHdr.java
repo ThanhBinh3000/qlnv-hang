@@ -132,4 +132,6 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 	}
 
 	Integer namNhap;
+
+	Date ngayQdinh;
 }

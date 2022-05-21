@@ -31,7 +31,7 @@ public class HhQdGiaoNvuNhapxuatSpecification {
 					String soHd = req.getSoHd();
 					String maVthh = req.getMaVthh();
 					String loaiQd = req.getLoaiQd();
-					Integer namNhap = req.getNamNhap();
+					Integer namNhap = Integer.valueOf(req.getNamNhap());
 					String veViec = req.getVeViec();
 
 					Join<HhQdGiaoNvuNhapxuatHdr, HhQdGiaoNvuNhapxuatDtl> joinQuerry = root.join("children");

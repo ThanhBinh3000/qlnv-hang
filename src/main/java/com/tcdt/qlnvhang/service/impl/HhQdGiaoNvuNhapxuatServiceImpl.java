@@ -350,4 +350,10 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
 		ex.export();
 	}
+
+	@Override
+	public Page<HhQdGiaoNvuNhapxuatHdr> timKiem(HhQdNhapxuatSearchReq req) throws Exception {
+		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
+		return hhQdGiaoNvuNhapxuatRepository.select(req.getNamNhap(),req.getVeViec(),req.getSoQd(),convertDateToString(req.getTuNgayQd()),convertDateToString(req.getDenNgayQd()), pageable);
+	}
 }
