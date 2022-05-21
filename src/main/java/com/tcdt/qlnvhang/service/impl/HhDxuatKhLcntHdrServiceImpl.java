@@ -234,19 +234,29 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 
 		String status = stReq.getTrangThai() + optional.get().getTrangThai();
 		switch (status) {
-		case Contains.CHO_DUYET + Contains.MOI_TAO:
-			optional.get().setNguoiGuiDuyet(getUser().getUsername());
-			optional.get().setNgayGuiDuyet(getDateTimeNow());
-			break;
-		case Contains.TU_CHOI + Contains.CHO_DUYET:
-			optional.get().setNguoiPduyet(getUser().getUsername());
-			optional.get().setNgayPduyet(getDateTimeNow());
-			optional.get().setLdoTuchoi(stReq.getLyDo());
-			break;
-		case Contains.DUYET + Contains.CHO_DUYET:
-			optional.get().setNguoiPduyet(getUser().getUsername());
-			optional.get().setNgayPduyet(getDateTimeNow());
-			break;
+			case Contains.CHO_DUYET + Contains.TU_CHOI:
+			case Contains.CHO_DUYET + Contains.MOI_TAO:
+				optional.get().setNguoiGuiDuyet(getUser().getUsername());
+				optional.get().setNgayGuiDuyet(getDateTimeNow());
+				break;
+			case Contains.TU_CHOI + Contains.CHO_DUYET:
+				optional.get().setNguoiPduyet(getUser().getUsername());
+				optional.get().setNgayPduyet(getDateTimeNow());
+				optional.get().setLdoTuchoi(stReq.getLyDo());
+				break;
+			case Contains.TPHONG_DUYET + Contains.CHO_DUYET:
+			case Contains.BAN_HANH + Contains.TPHONG_DUYET:
+				optional.get().setNguoiPduyet(getUser().getUsername());
+				optional.get().setNgayPduyet(getDateTimeNow());
+				break;
+//			case Contains.LANHDAO_DUYET + Contains.TPHONG_DUYET:
+//				optional.get().setNguoiPduyet(getUser().getUsername());
+//				optional.get().setNgayPduyet(getDateTimeNow());
+//				break;
+//			case Contains.DUYET + Contains.CHO_DUYET:
+//				optional.get().setNguoiPduyet(getUser().getUsername());
+//				optional.get().setNgayPduyet(getDateTimeNow());
+//				break;
 		default:
 			throw new Exception("Phê duyệt không thành công");
 		}
@@ -261,12 +271,13 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 			throw new Exception("Xoá thất bại, không tìm thấy dữ liệu");
 		Optional<HhDxuatKhLcntHdr> optional = hhDxuatKhLcntHdrRepository.findById(idSearchReq.getId());
 
-		if (!optional.isPresent())
+		if (!optional.isPresent()){
 			throw new Exception("Không tìm thấy dữ liệu cần xoá");
+		}
 
-		if (!optional.get().getTrangThai().equals(Contains.TAO_MOI)
-				|| !optional.get().getTrangThai().equals(Contains.TU_CHOI))
+		if (!optional.get().getTrangThai().equals(Contains.TAO_MOI) && !optional.get().getTrangThai().equals(Contains.TU_CHOI)){
 			throw new Exception("Chỉ thực hiện xóa với kế hoạch ở trạng thái bản nháp hoặc từ chối");
+		}
 
 		hhDxuatKhLcntHdrRepository.delete(optional.get());
 	}
