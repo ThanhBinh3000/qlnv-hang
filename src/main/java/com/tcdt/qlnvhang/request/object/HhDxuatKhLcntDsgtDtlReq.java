@@ -23,6 +23,7 @@ public class HhDxuatKhLcntDsgtDtlReq {
 	BigDecimal soLuong;
 
 	String maDvi;
+	String maCcuc;
 	String maDiemKho;
 
 	@NotNull(message = "Không được để trống")

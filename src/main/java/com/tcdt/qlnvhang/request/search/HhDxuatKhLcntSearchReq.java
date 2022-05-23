@@ -49,6 +49,6 @@ public class HhDxuatKhLcntSearchReq extends BaseRequest {
 
 	private String soTr;
 
-	private String quyetDinh;
+	private String soQd;
 
 }

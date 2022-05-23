@@ -1,11 +1,7 @@
 package com.tcdt.qlnvhang.service.impl;
 
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -188,13 +184,15 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 
 	@Override
 	public HhDxuatKhLcntHdr detail(String ids) throws Exception {
-		if (StringUtils.isEmpty(ids))
+		if (StringUtils.isEmpty(ids)){
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
 
+		}
 		Optional<HhDxuatKhLcntHdr> qOptional = hhDxuatKhLcntHdrRepository.findById(Long.parseLong(ids));
 
-		if (!qOptional.isPresent())
+		if (!qOptional.isPresent()){
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
+		}
 
 		// Quy doi don vi kg = tan
 		List<HhDxuatKhLcntDsgtDtl> dtls2 = ObjectMapperUtils.mapAll(qOptional.get().getChildren2(),
@@ -240,6 +238,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 				optional.get().setNgayGuiDuyet(getDateTimeNow());
 				break;
 			case Contains.TU_CHOI + Contains.CHO_DUYET:
+			case Contains.TU_CHOI + Contains.TPHONG_DUYET:
 				optional.get().setNguoiPduyet(getUser().getUsername());
 				optional.get().setNgayPduyet(getDateTimeNow());
 				optional.get().setLdoTuchoi(stReq.getLyDo());
@@ -348,6 +347,6 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 	@Override
 	public Page<HhDxuatKhLcntHdr> timKiem(HhDxuatKhLcntSearchReq req) throws Exception {
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
-		return hhDxuatKhLcntHdrRepository.select(req.getNamKh(),req.getSoTr(),req.getQuyetDinh(),convertDateToString(req.getTuNgayKy()),convertDateToString(req.getDenNgayKy()),req.getLoaiVthh(),req.getTrangThai(), pageable);
+		return hhDxuatKhLcntHdrRepository.select(req.getNamKh(),req.getSoTr(),req.getSoQd(),convertDateToString(req.getTuNgayKy()),convertDateToString(req.getDenNgayKy()),req.getLoaiVthh(),req.getTrangThai(), pageable);
 	}
 }

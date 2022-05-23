@@ -31,7 +31,7 @@ public class HhDxuatKhLcntHdrReq {
 	@NotNull(message = "Không được để trống")
 	@Size(max = 50, message = "Căn cứ quyết định không được vượt quá 50 ký tự")
 	@ApiModelProperty(example = "01/QD-TCDT")
-	String qdCanCu;
+	String soQd;
 
 	@Size(max = 500, message = "Trích yếu không được vượt quá 500 ký tự")
 	String trichYeu;

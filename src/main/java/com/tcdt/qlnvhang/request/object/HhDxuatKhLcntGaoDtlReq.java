@@ -26,7 +26,6 @@ public class HhDxuatKhLcntGaoDtlReq {
 	@ApiModelProperty(example = "Tên dự án")
 	String tenDuAn;
 	
-	
 	BigDecimal tongMucDt;
 	
 	@NotNull(message = "Không được để trống")
@@ -74,9 +73,7 @@ public class HhDxuatKhLcntGaoDtlReq {
 	String loaiHdong;
 	
 	@NotNull(message = "Không được để trống")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-	@Temporal(TemporalType.DATE)
-	Date tgianThHienHd;
+	Integer tgianThHienHd;
 	
 	@NotNull(message = "Không được để trống")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
@@ -89,5 +86,14 @@ public class HhDxuatKhLcntGaoDtlReq {
 	
 	@Size(max = 500, message = "Ghi chú không được vượt quá 500 ký tự")
 	String ghiChu;
+
+	@NotNull(message = "Không được để trống")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	@Temporal(TemporalType.DATE)
+	Date tgianPhatHanh;
+
+	BigDecimal donGia;
+
+	String maDvi;
 
 }

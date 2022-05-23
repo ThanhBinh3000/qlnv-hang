@@ -39,12 +39,17 @@ public class HhDxuatKhLcntLtDtl implements Serializable {
 	@Temporal(TemporalType.DATE)
 	Date tgianMoThau;
 	String loaiHdong;
-	@Temporal(TemporalType.DATE)
-	Date tgianThHienHd;
+	Integer tgianThHienHd;
 	@Temporal(TemporalType.DATE)
 	Date tgianNhapHang;
 	String blanhDthau;
 	String ghiChu;
+	@Temporal(TemporalType.DATE)
+	Date tgianPhatHanh;
+	BigDecimal donGia;
+	String maDvi;
+	@Transient
+	String tenDvi;
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JsonBackReference

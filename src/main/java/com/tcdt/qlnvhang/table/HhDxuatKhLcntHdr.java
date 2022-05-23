@@ -36,7 +36,7 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	private Long id;
 	String soDxuat;
 	String loaiVthh;
-	String qdCanCu;
+	String soQd;
 	String trichYeu;
 	String maDvi;
 	@Transient
