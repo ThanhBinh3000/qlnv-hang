@@ -51,9 +51,8 @@ public class HhDxuatKhLcntLtDtl implements Serializable {
 	@Transient
 	String tenDvi;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY,mappedBy = "children1")
 	@JsonBackReference
-	@JoinColumn(name = "id")
 	private HhDxuatKhLcntHdr parent;
 
 }

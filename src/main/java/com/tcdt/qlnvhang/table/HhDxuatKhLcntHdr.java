@@ -76,12 +76,12 @@ public class HhDxuatKhLcntHdr implements Serializable {
 		this.children.add(child);
 	}
 
-	@OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "parent")
-	@JsonManagedReference
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "id_hdr", referencedColumnName = "id")
 	private HhDxuatKhLcntLtDtl children1;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "id_hdr")
+	@JoinColumn(name = "ID_KH_HDR")
 	@JsonManagedReference
 	private List<HhDxuatKhLcntDsgtDtl> children2 = new ArrayList<>();
 

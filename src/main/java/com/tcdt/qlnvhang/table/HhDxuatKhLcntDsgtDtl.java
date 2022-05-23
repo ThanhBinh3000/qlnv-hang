@@ -39,7 +39,7 @@ public class HhDxuatKhLcntDsgtDtl implements Serializable {
 	String shgt;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_hdr")
+	@JoinColumn(name = "ID_KH_HDR",nullable=false)
 	@JsonBackReference
 	private HhDxuatKhLcntHdr parent;
 

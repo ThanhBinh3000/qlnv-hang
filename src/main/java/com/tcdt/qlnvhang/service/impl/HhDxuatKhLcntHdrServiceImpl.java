@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.object.HhDxuatKhLcntDsgtDtlReq;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -82,20 +83,20 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		// Add danh sach goi thau
 		List<HhDxuatKhLcntDsgtDtl> dtls2 = ObjectMapperUtils.mapAll(objReq.getChildren2(), HhDxuatKhLcntDsgtDtl.class);
 		UnitScaler.reverseFormatList(dtls2, Contains.DVT_TAN);
-		String prefix = "-" + Contains.SHGT + "/" + dataMap.getMaDvi();
-		// TODO: xem lai cach sinh so, viet tam de lay so
-		// Lay danh muc dung chung
-		String shgtStr = "0";
-		QlnvDanhMuc qlnvDanhMuc = danhMucRepository.findByMa(Contains.SHGT);
-		if (qlnvDanhMuc != null)
-			shgtStr = qlnvDanhMuc.getGiaTri();
-		Long shgt = Long.parseLong(shgtStr);
-		dtls2.forEach(h -> {
-			h.setShgt(String.format("%07d", shgt) + prefix);
-			shgtNext = Long.sum(shgt, 1);
-		});
+//		String prefix = "-" + Contains.SHGT + "/" + dataMap.getMaDvi();
+//		// TODO: xem lai cach sinh so, viet tam de lay so
+//		// Lay danh muc dung chung
+//		String shgtStr = "0";
+//		QlnvDanhMuc qlnvDanhMuc = danhMucRepository.findByMa(Contains.SHGT);
+//		if (qlnvDanhMuc != null)
+//			shgtStr = qlnvDanhMuc.getGiaTri();
+//		Long shgt = Long.parseLong(shgtStr);
+//		dtls2.forEach(h -> {
+//			h.setShgt(String.format("%07d", shgt) + prefix);
+//			shgtNext = Long.sum(shgt, 1);
+//		});
 
-		danhMucRepository.updateVal(Contains.SHGT, shgtNext);
+//		danhMucRepository.updateVal(Contains.SHGT, shgtNext);
 
 		dataMap.setChildren2(dtls2);
 		// Add danh sach can cu xac dinh gia
@@ -160,7 +161,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		UnitScaler.reverseFormatList(dtls2, Contains.DVT_TAN);
 		dataDTB.setChildren2(dtls2);
 		// Add danh sach can cu xac dinh gia
-		if (objReq.getChildren2() != null) {
+		if (objReq.getChildren3() != null) {
 			List<FileDKemJoinDxKhLcntCcxdg> detailChild;
 			List<HhDxuatKhLcntCcxdgDtlReq> dtlReqList = objReq.getChildren3();
 			for (HhDxuatKhLcntCcxdgDtlReq dtlReq : dtlReqList) {
