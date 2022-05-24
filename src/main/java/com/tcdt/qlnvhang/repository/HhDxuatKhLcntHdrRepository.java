@@ -35,4 +35,16 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 					"  AND (:loaiVthh IS NULL OR KHLCNT.LOAI_VTHH = :loaiVthh) " +
 					"  AND (:trangThai IS NULL OR KHLCNT.TRANG_THAI = :trangThai) ", nativeQuery = true)
 	Page<HhDxuatKhLcntHdr> select(String namKh, String soTr,String soQd, String ngayKyTu,String ngayKyDen,String loaiVthh,String trangThai, Pageable pageable);
+
+	@Query(value = " SELECT KHLCNT.* \n" +
+			"FROM HH_DX_KHLCNT_HDR KHLCNT \n" +
+			"LEFT JOIN HH_DX_KHLCNT_LT_DTL KHLCNT_DETAIL ON KHLCNT.ID_HDR = KHLCNT_DETAIL.ID \n" +
+			" WHERE KHLCNT.LOAI_VTHH = :loaiVthh \n" +
+			" AND KHLCNT.NAM_KHOACH = :namKh \n" +
+			" AND KHLCNT_DETAIL.HTHUC_LCNT = :hthucLcnt \n" +
+			" AND KHLCNT_DETAIL.PTHUC_LCNT = :pthucLcnt \n" +
+			" AND KHLCNT_DETAIL.LOAI_HDONG = :loatHdong \n" +
+			" AND KHLCNT_DETAIL.NGUON_VON = :nguonVon " +
+			" AND KHLCNT.TRANG_THAI = '11' ", nativeQuery = true)
+	List<HhDxuatKhLcntHdr> listTongHop(String loaiVthh,String namKh, String hthucLcnt,String pthucLcnt, String loatHdong,String nguonVon);
 }
