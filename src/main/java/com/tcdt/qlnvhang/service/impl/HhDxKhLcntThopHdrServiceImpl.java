@@ -46,11 +46,13 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 
 	@Override
 	public HhDxKhLcntThopHdr sumarryData(HhDxKhLcntTChiThopReq objReq, HttpServletRequest req) throws Exception {
-		List<HhDxuatKhLcntHdr> dxuatList = hhDxuatKhLcntHdrRepository
-				.findAll(HhDxuatKhLcntSpecification.buildTHopQuery(objReq));
+		List<HhDxuatKhLcntHdr> dxuatList =
+				hhDxuatKhLcntHdrRepository.listTongHop(objReq.getLoaiVthh(),objReq.getNamKh(),objReq.getHthucLcnt(),objReq.getPthucLcnt(),objReq.getLoaiHdong(),objReq.getNguonVon());
 
-		if (dxuatList.isEmpty())
+
+		if (dxuatList.isEmpty()){
 			throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
+		}
 
 		// Set thong tin hdr tong hop
 		HhDxKhLcntThopHdr thopHdr = new HhDxKhLcntThopHdr();
@@ -149,8 +151,9 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 
 	@Override
 	public HhDxKhLcntThopHdr create(HhDxKhLcntThopHdrReq objReq, HttpServletRequest req) throws Exception {
-		if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh()))
+		if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh())){
 			throw new Exception("Loại vật tư hàng hóa không phù hợp");
+		}
 
 		List<HhDxuatKhLcntHdr> dxuatList = hhDxuatKhLcntHdrRepository
 				.findAll(HhDxuatKhLcntSpecification.buildTHopQuery(objReq));
