@@ -155,8 +155,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 			throw new Exception("Loại vật tư hàng hóa không phù hợp");
 		}
 
-		List<HhDxuatKhLcntHdr> dxuatList = hhDxuatKhLcntHdrRepository
-				.findAll(HhDxuatKhLcntSpecification.buildTHopQuery(objReq));
+		List<HhDxuatKhLcntHdr> dxuatList = hhDxuatKhLcntHdrRepository.listTongHop(objReq.getLoaiVthh(),objReq.getNamKh(),objReq.getHthucLcnt(),objReq.getPthucLcnt(),objReq.getLoaiHdong(),objReq.getNguonVon());
 
 		if (dxuatList.isEmpty())
 			throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
