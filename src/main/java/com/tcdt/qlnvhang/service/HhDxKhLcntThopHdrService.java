@@ -37,6 +37,8 @@ public interface HhDxKhLcntThopHdrService {
 
 	void exportDsThDxKhLcnt(HhDxKhLcntThopSearchReq searchReq, HttpServletResponse response) throws Exception;
 
-	Page<HhDxKhLcntThopHdr> timKiem(HhDxKhLcntThopSearchReq objReq) throws Exception;
+	Page<HhDxKhLcntThopHdr> timKiemPage(HhDxKhLcntThopSearchReq objReq) throws Exception;
+
+	List<HhDxKhLcntThopHdr> timKiemAll(HhDxKhLcntThopSearchReq objReq) throws Exception;
 
 }

@@ -88,7 +88,7 @@ public class HhQdKhlcntHdrController {
 			@Valid @RequestBody HhQdKhlcntSearchReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(service.colection(objReq));
+			resp.setData(service.getAllPage(objReq));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -191,6 +191,25 @@ public class HhQdKhlcntHdrController {
 			final ObjectMapper mapper = new ObjectMapper();
 			mapper.writeValue(response.getOutputStream(), body);
 		}
+	}
+
+	@ApiOperation(value = "Lấy tất cả Quyết định phê duyệt kế hoạch lựa chọn nhà thầu", response = List.class)
+	@PostMapping(value = PathContains.URL_TAT_CA, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> getAll(HttpServletRequest request,
+												  @Valid @RequestBody HhQdKhlcntSearchReq objReq) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.getAll(objReq));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Tra cứu Quyết định phê duyệt kế hoạch lựa chọn nhà thầu trace: {}", e);
+		}
+
+		return ResponseEntity.ok(resp);
 	}
 
 }

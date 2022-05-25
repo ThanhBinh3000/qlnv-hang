@@ -97,10 +97,10 @@ public class HhDxKhLcntThopHdrController {
 	@ApiOperation(value = "Tra cứu danh sách tổng hợp đề xuất kế hoạch lựa chọn nhà thầu", response = List.class)
 	@PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<BaseResponse> selectAll(@RequestBody HhDxKhLcntThopSearchReq objReq) {
+	public ResponseEntity<BaseResponse> selectPage(@RequestBody HhDxKhLcntThopSearchReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(service.timKiem(objReq));
+			resp.setData(service.timKiemPage(objReq));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -188,5 +188,23 @@ public class HhDxKhLcntThopHdrController {
 			final ObjectMapper mapper = new ObjectMapper();
 			mapper.writeValue(response.getOutputStream(), body);
 		}
+	}
+
+	@ApiOperation(value = "Tra cứu danh sách tổng hợp đề xuất kế hoạch lựa chọn nhà thầu", response = List.class)
+	@PostMapping(value = PathContains.URL_TAT_CA, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> selectAll(@RequestBody HhDxKhLcntThopSearchReq objReq) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.timKiemAll(objReq));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Tra cứu danh sách tổng hợp đề xuất kế hoạch lựa chọn nhà thầu gạo trace: {}", e);
+		}
+
+		return ResponseEntity.ok(resp);
 	}
 }

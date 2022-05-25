@@ -429,8 +429,13 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 	}
 
 	@Override
-	public Page<HhDxKhLcntThopHdr> timKiem(HhDxKhLcntThopSearchReq req) throws Exception {
+	public Page<HhDxKhLcntThopHdr> timKiemPage(HhDxKhLcntThopSearchReq req) throws Exception {
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
-		return hhDxKhLcntThopHdrRepository.select(req.getNamKhoach(),req.getLoaiVthh(),convertDateToString(req.getTuNgayTao()),convertDateToString(req.getDenNgayTao()),req.getSoQd(), pageable);
+		return hhDxKhLcntThopHdrRepository.select(req.getNamKhoach(),req.getLoaiVthh(),convertDateToString(req.getTuNgayTao()),convertDateToString(req.getDenNgayTao()),req.getSoQd(),req.getTrangThai(), pageable);
+	}
+
+	@Override
+	public List<HhDxKhLcntThopHdr> timKiemAll(HhDxKhLcntThopSearchReq req) throws Exception {
+		return hhDxKhLcntThopHdrRepository.selectAll(req.getNamKhoach(),req.getLoaiVthh(),convertDateToString(req.getTuNgayTao()),convertDateToString(req.getDenNgayTao()),req.getSoQd(), req.getTrangThai());
 	}
 }
