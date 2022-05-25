@@ -18,6 +18,9 @@ public class HhBbNghiemthuKlstHdrReq {
 	private Long id;
 
 	@NotNull(message = "Không được để trống")
+	private Long qdgnvnxId; // Quyết định giao nhiệm vụ nhập xuất id
+
+	@NotNull(message = "Không được để trống")
 	@Size(max = 20, message = "Số biên bản được vượt quá 20 ký tự")
 	@ApiModelProperty(example = "20/BB-TCDT")
 	String soBb;
@@ -47,9 +50,9 @@ public class HhBbNghiemthuKlstHdrReq {
 	String thuKho;
 
 	@NotNull(message = "Không được để trống")
-	@Size(max = 20, message = "Mã ngăn kho được vượt quá 20 ký tự")
+	@Size(max = 20, message = "Mã ngăn lô được vượt quá 20 ký tự")
 	@ApiModelProperty(example = "010201010101")
-	String maNganKho;
+	String maNganlo;
 
 	/*@Size(max = 250, message = "Ông bà được vượt quá 250 ký tự")
 	String ongBa;

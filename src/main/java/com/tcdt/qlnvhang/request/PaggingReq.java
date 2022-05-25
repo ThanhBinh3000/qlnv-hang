@@ -24,4 +24,8 @@ public class PaggingReq {
 
 	String orderType;
 
+	public PaggingReq(Integer limit, Integer page) {
+		this.limit = limit;
+		this.page = page;
+	}
 }
