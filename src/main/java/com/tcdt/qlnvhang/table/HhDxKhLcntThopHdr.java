@@ -79,6 +79,7 @@ public class HhDxKhLcntThopHdr implements Serializable {
 	String veViec;
 	String namKhoach;
 	String phuongAn;
+	String trangThai;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "id_hdr")
