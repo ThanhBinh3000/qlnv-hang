@@ -127,25 +127,34 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 
 	@Override
 	public HhQdKhlcntHdr update(HhQdKhlcntHdrReq objReq) throws Exception {
-		if (StringUtils.isEmpty(objReq.getId()))
+		if (StringUtils.isEmpty(objReq.getId())){
 			throw new Exception("Sửa thất bại, không tìm thấy dữ liệu");
+		}
 
 		Optional<HhQdKhlcntHdr> qOptional = hhQdKhlcntHdrRepository.findById(objReq.getId());
-		if (!qOptional.isPresent())
+		if (!qOptional.isPresent()){
 			throw new Exception("Không tìm thấy dữ liệu cần sửa");
+		}
 
 		if (!qOptional.get().getSoQd().equals(objReq.getSoQd())) {
 			Optional<HhQdKhlcntHdr> checkSoQd = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQd());
-			if (checkSoQd.isPresent())
+			if (checkSoQd.isPresent()){
 				throw new Exception("Số quyết định " + objReq.getSoQd() + " đã tồn tại");
+			}
 		}
 
-		if (ObjectUtils.isEmpty(objReq.getIdPaHdr()) || objReq.getIdPaHdr() <= 0)
-			throw new Exception("Không tìm thấy phương án kế hoạch lựa chọn nhà thầu");
+//		if (ObjectUtils.isEmpty(objReq.getIdPaHdr()) || objReq.getIdPaHdr() <= 0)
+//			throw new Exception("Không tìm thấy phương án kế hoạch lựa chọn nhà thầu");
 
-		Optional<HhPaKhlcntHdr> qOpPa = hhPaKhlcntHdrRepository.findById(objReq.getIdPaHdr());
-		if (!qOpPa.isPresent())
-			throw new Exception("Không tìm thấy phương án kế hoạch lựa chọn nhà thầu");
+//		Optional<HhPaKhlcntHdr> qOpPa = hhPaKhlcntHdrRepository.findById(objReq.getIdPaHdr());
+//		if (!qOpPa.isPresent()){
+//			throw new Exception("Không tìm thấy phương án kế hoạch lựa chọn nhà thầu");
+//		}
+
+		Optional<HhDxKhLcntThopHdr> qOptionalTh = hhDxKhLcntThopHdrRepository.findById(objReq.getIdThHdr());
+		if (!qOptionalTh.isPresent()){
+			throw new Exception("Không tìm thấy tổng hợp kế hoạch lựa chọn nhà thầu");
+		}
 
 		// Lay danh muc dung chung
 		Map<String, String> mapDmuc = getMapCategory();
@@ -179,7 +188,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		dataDB.setNgaySua(getDateTimeNow());
 		dataDB.setNguoiSua(getUser().getUsername());
 		dataDB.setChildren(fileDinhKemList);
-		dataDB.setSoPhAn(qOpPa.get().getSoPhAn());
+//		dataDB.setSoPhAn(qOpPa.get().getSoPhAn());
 
 		if (objReq.getDetail() != null) {
 			List<HhQdKhlcntDsgthau> detailChild;
