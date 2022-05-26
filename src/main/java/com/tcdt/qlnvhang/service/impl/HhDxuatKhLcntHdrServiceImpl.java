@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.object.HhDxuatKhLcntDsgtDtlReq;
+import com.tcdt.qlnvhang.request.object.HhQdKhlcntDtlReq;
+import com.tcdt.qlnvhang.table.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,10 +31,6 @@ import com.tcdt.qlnvhang.request.object.HhDxuatKhLcntHdrReq;
 import com.tcdt.qlnvhang.request.search.HhDxuatKhLcntSearchReq;
 import com.tcdt.qlnvhang.secification.HhDxuatKhLcntSpecification;
 import com.tcdt.qlnvhang.service.HhDxuatKhLcntHdrService;
-import com.tcdt.qlnvhang.table.HhDxuatKhLcntCcxdgDtl;
-import com.tcdt.qlnvhang.table.HhDxuatKhLcntDsgtDtl;
-import com.tcdt.qlnvhang.table.HhDxuatKhLcntHdr;
-import com.tcdt.qlnvhang.table.QlnvDanhMuc;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.MoneyConvert;
@@ -113,6 +111,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 						f.setCreateDate(new Date());
 					});
 				}
+				detail.setId(null);
 				detail.setChildren(detailChild);
 				dataMap.addChild3(detail);
 			}

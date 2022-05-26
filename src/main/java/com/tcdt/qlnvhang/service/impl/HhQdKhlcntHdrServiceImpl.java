@@ -110,8 +110,10 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			for (HhQdKhlcntDtlReq dtlReq : dtlReqList) {
 				HhQdKhlcntDtl detail = ObjectMapperUtils.map(dtlReq, HhQdKhlcntDtl.class);
 				detailChild = new ArrayList<HhQdKhlcntDsgthau>();
-				if (dtlReq.getDetail() != null)
+				detail.setId(null);
+				if (dtlReq.getDetail() != null){
 					detailChild = ObjectMapperUtils.mapAll(dtlReq.getDetail(), HhQdKhlcntDsgthau.class);
+				}
 				UnitScaler.reverseFormatList(detailChild, Contains.DVT_TAN);
 				detail.setChildren(detailChild);
 				dataMap.addChild1(detail);
