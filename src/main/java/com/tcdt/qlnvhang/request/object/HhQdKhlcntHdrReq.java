@@ -54,6 +54,9 @@ public class HhQdKhlcntHdrReq {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date tgianMthau;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date tgianPhanh;
+
 	@NotNull(message = "Không được để trống")
 	@Size(max = 250, message = "Về việc không được vượt quá 20 ký tự")
 	@ApiModelProperty(example = "Nội dung về việc")
@@ -67,7 +70,7 @@ public class HhQdKhlcntHdrReq {
 	@NotNull(message = "Không được để trống")
 	@Size(max = 20, message = "Căn cứ quyết định giao chỉ tiêu không được vượt quá 20 ký tự")
 	@ApiModelProperty(example = "20-QD/TCDT")
-	String qdCanCu;
+	String soQdCc;
 
 	@ApiModelProperty(notes = "Id của phương án đề xuất kế hoạch lựa chọn nhà thầu (nếu có)")
 	private Long idPaHdr;
@@ -87,6 +90,9 @@ public class HhQdKhlcntHdrReq {
 	@Size(max = 200, message = "Bảo lãnh dự thầu không được vượt quá 200 ký tự")
 	@ApiModelProperty(example = "Số tiền bảo lãnh dự thầu")
 	String blanhDthau;
+
+	@NotNull(message = "Không được để trống")
+	private Long idThHdr;
 
 	private List<HhQdKhlcntDtlReq> detail;
 	private List<FileDinhKemReq> fileDinhKems;

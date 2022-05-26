@@ -47,6 +47,7 @@ public class HhQdKhlcntHdr implements Serializable {
 	String soQd;
 	Date ngayQd;
 	Long idPaHdr;
+	Long idThHdr;
 	String trangThai;
 	Date ngaySua;
 	String nguoiSua;
