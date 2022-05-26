@@ -269,7 +269,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 			throw new Exception("Không tìm thấy dữ liệu cần xoá");
 
 		if (!optional.get().getTrangThai().equals(Contains.TAO_MOI)
-				|| !optional.get().getTrangThai().equals(Contains.TU_CHOI))
+				&& !optional.get().getTrangThai().equals(Contains.TU_CHOI))
 			throw new Exception("Chỉ thực hiện xóa với biên bản ở trạng thái bản nháp hoặc từ chối");
 
 		hhBbNghiemthuKlstRepository.delete(optional.get());
