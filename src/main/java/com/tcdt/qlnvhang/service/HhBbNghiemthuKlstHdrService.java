@@ -30,6 +30,5 @@ public interface HhBbNghiemthuKlstHdrService {
 	@Transactional(rollbackOn = Exception.class)
 	void delete(IdSearchReq idSearchReq) throws Exception;
 
-	void exportToExcel(IdSearchReq searchReq, HttpServletResponse response) throws Exception;
-
+    boolean exportToExcel(HhBbNghiemthuKlstSearchReq objReq, HttpServletResponse response) throws Exception;
 }

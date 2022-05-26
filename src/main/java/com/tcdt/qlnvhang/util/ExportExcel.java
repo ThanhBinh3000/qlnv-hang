@@ -7,11 +7,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.poi.ss.usermodel.BorderStyle;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
@@ -243,5 +239,35 @@ public class ExportExcel {
 
 		return style;
 
+	}
+
+	public static MergeCellObj buildMergeCell(Row row, String value, int firstRow, int lastRow, int firstCol, int lastCol) {
+		return MergeCellObj.builder()
+				.firstRow(firstRow)
+				.lastRow(lastRow)
+				.firstCol(firstCol)
+				.lastCol(lastCol)
+				.value(value)
+				.row(row)
+				.build();
+	}
+
+	public static void createCell(Row row, int columnCount, Object value, CellStyle style, XSSFSheet sheet) {
+		sheet.autoSizeColumn(columnCount);
+		Cell cell = row.createCell(columnCount);
+		cell.setCellStyle(style);
+		if (value == null) {
+			cell.setCellValue("");
+			return;
+		}
+		if (value instanceof Integer) {
+			cell.setCellValue((Integer) value);
+		} else if (value instanceof Boolean) {
+			cell.setCellValue((Boolean) value);
+		} else if (value instanceof Double) {
+			cell.setCellValue((Double) value);
+		} else {
+			cell.setCellValue((String) value);
+		}
 	}
 }

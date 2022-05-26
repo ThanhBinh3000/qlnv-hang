@@ -36,7 +36,7 @@ public class HhBbNghiemthuKlstSpecification {
 				String trangThai = objReq.getTrangThai();
 				String soBb = objReq.getSoBb();
 				String maDvi = objReq.getMaDvi();
-				String maNgankho = objReq.getMaNganKho();
+				String maNganlo = objReq.getMaNganlo();
 
 				if (StringUtils.isNotEmpty(soBb))
 					predicate.getExpressions().add(builder.and(builder.equal(root.get("soBb"), soBb)));
@@ -55,10 +55,11 @@ public class HhBbNghiemthuKlstSpecification {
 				if (StringUtils.isNotEmpty(maDvi))
 					predicate.getExpressions().add(builder.and(builder.equal(root.get("maDvi"), maDvi)));
 
-				if (StringUtils.isNotEmpty(maNgankho))
-					predicate.getExpressions().add(builder.and(builder.equal(root.get("maNgankho"), maNgankho)));
+				if (StringUtils.isNotEmpty(maNganlo))
+					predicate.getExpressions().add(builder.and(builder.equal(root.get("maNganlo"), maNganlo)));
 
-				predicate.getExpressions().add(builder.and(builder.equal(root.get("loaiVthh"), loaiVthh)));
+				if (StringUtils.isNotEmpty(loaiVthh))
+					predicate.getExpressions().add(builder.and(builder.equal(root.get("loaiVthh"), loaiVthh)));
 
 				return predicate;
 			}
