@@ -43,10 +43,11 @@ public class HhQdKhlcntHdr implements Serializable {
 	@SequenceGenerator(sequenceName = "HH_QD_KHLCNT_HDR_SEQ", allocationSize = 1, name = "HH_QD_KHLCNT_HDR_SEQ")
 	private Long id;
 
-	String qdCanCu;
+	String soQdCc;
 	String soQd;
 	Date ngayQd;
 	Long idPaHdr;
+	Long idThHdr;
 	String trangThai;
 	Date ngaySua;
 	String nguoiSua;
@@ -74,14 +75,16 @@ public class HhQdKhlcntHdr implements Serializable {
 	@Transient
 	String tenNguonVon;
 
-	@Temporal(TemporalType.DATE)
+//	@Temporal(TemporalType.DATE)
 	Date tgianTbao;
-	@Temporal(TemporalType.DATE)
+//	@Temporal(TemporalType.DATE)
 	Date tgianDthau;
-	@Temporal(TemporalType.DATE)
+//	@Temporal(TemporalType.DATE)
 	Date tgianNhang;
-	@Temporal(TemporalType.DATE)
+//	@Temporal(TemporalType.DATE)
 	Date tgianMthau;
+//	@Temporal(TemporalType.DATE)
+	Date tgianPhanh;
 
 	Date ngayTao;
 	String nguoiTao;

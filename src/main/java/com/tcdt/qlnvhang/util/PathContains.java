@@ -6,6 +6,7 @@ public class PathContains {
 	public static final String URL_CAP_NHAT = "/cap-nhat";
 	public static final String URL_XOA = "/xoa";
 	public static final String URL_TRA_CUU = "/tra-cuu";
+	public static final String URL_TAT_CA = "/tat-ca";
 	public static final String URL_CHI_TIET = "/chi-tiet";
 	public static final String URL_PHE_DUYET = "/phe-duyet";
 	public static final String URL_KET_XUAT = "/ket-xuat";
@@ -84,13 +85,43 @@ public class PathContains {
 
 	// De xuat ke hoach lua chon nha thau
 	public static final String DX_KH = "/dx-kh";// TODO: doi ten thanh dau-thau
-	public static final String DX_KH_LCNT_GAO = "/lcnt-gao";
-	public static final String PA_LCNT_GAO = "/pan-lcnt-gao";
-	public static final String QD_LCNT_GAO = "/qd-lcnt-gao";
+	public static final String DX_KH_LCNT = "/lcnt";
+	public static final String PA_LCNT = "/pan-lcnt";
+	public static final String QD_LCNT = "/qd-lcnt";
 	public static final String TTIN_DTHAU = "/ttin-dthau";
 	public static final String QD_PDUYET_KQLCNT = "/qd-pduyet-kqlcnt";
 	public static final String HOP_DONG = "/hop-dong";
 	public static final String PHU_LUC = "/phu-luc";
 	public static final String NHAP_XUAT = "/nhap-xuat";
 	public static final String BB_NGHIEMTHU_KLST = "/bb-nghiemthu-klst";
+
+	// Dau thau vat tu
+	public static final String KH_LCNT_VT = "/kh-lcnt/vat-tu";
+	public static final String DAU_THAU_VAT_TU = "/dau-thau-vt";
+	public static final String THONG_TIN_DAU_THAU = "/tt-dau-thau";
+
+	// Bien Ban lay mau
+	public static final String BBAN_LAY_MAU = "/bban-lay-mau";
+
+	// Phieu kiem nghiem chat luong hang
+	public static final String KNGHIEM_CLUONG = "/knghiem-cluong";
+	public static final String KQUA_KNGHIEM = "/kqua-knghiem";
+
+	//Quản lý hợp đồng mua vật tư
+	public static final String QLHD_MUA_VAT_TU = "/qlhd-mua-vat-tu";
+
+	// Quyết định phê duyệt kết quả lựa chọn nhà thầu vật tư
+	public static final String QL_PHE_DUYET_KQLCNT_VT = "/ql-phe-duyet-kqlcnt-vt";
+
+	// Quản lý phiếu nhập kho lương thực
+	public static final String QL_PHIEU_NHAP_KHO_LT = "/ql-phieu-nhap-kho-lt";
+
+	// Quản lý bảng kê cân hàng
+	public static final String QL_BANG_KE_CAN_HANG_LT = "/ql-bang-ke-can-hang-lt";
+
+	//Quản lý biên bản nhập đầy kho
+	public static final String QL_BIEN_BAN_NHAP_DAY_KHO_LT = "/ql-bien-ban-nhap-day-kho-lt";
+
+	//Quản lý phiếu kiếm tra chất lượng hàng lương thực
+	public static final String QL_PHIEU_KIEM_TRA_CHAT_LUONG_HANG_LT = "/ql-phieu-kiem-tra-chat-luong-hang-lt";
 }

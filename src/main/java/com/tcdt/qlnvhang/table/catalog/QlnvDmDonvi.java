@@ -18,7 +18,7 @@ import javax.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "QLNV_DM_DONVI")
+@Table(name = "DM_DONVI")
 @Data
 public class QlnvDmDonvi implements Serializable {
 	/**
@@ -47,6 +47,11 @@ public class QlnvDmDonvi implements Serializable {
 	String nguoiTao;
 	Date ngaySua;
 	String nguoiSua;
+	String maQd;
+	String maTr;
+	String maKhqlh;
+	String maKtbq;
+	String maTckt;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
 	@JoinColumn(name = "maDviCha", referencedColumnName = "maDvi")

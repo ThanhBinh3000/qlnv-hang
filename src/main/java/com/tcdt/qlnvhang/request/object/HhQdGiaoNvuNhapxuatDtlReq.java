@@ -33,18 +33,19 @@ public class HhQdGiaoNvuNhapxuatDtlReq {
 	@ApiModelProperty(example = "01")
 	String loaiNx;
 
-	@NotNull(message = "Không được để trống")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date tuNgayThien;
 
 	@NotNull(message = "Không được để trống")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	@ApiModelProperty(example = "2022-09-05")
 	Date denNgayThien;
 
 	Double soLuong;
 
 	@Size(max = 20, message = "Đơn vị tính không được vượt quá 20 ký tự")
 	@ApiModelProperty(example = "DVT01")
-	String dvt;
+	String donViTinh;
 
+	String maDvi;
 }

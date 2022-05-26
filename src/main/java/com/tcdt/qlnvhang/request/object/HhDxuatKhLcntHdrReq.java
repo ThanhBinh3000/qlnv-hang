@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.request.object;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class HhDxuatKhLcntHdrReq {
 	@NotNull(message = "Không được để trống")
 	@Size(max = 50, message = "Căn cứ quyết định không được vượt quá 50 ký tự")
 	@ApiModelProperty(example = "01/QD-TCDT")
-	String qdCanCu;
+	String soQd;
 
 	@Size(max = 500, message = "Trích yếu không được vượt quá 500 ký tự")
 	String trichYeu;
@@ -52,11 +53,12 @@ public class HhDxuatKhLcntHdrReq {
 	@ApiModelProperty(example = "Ghi chú")
 	String ghiChu;
 
-	private List<FileDinhKemReq> fileDinhKems;
+	private List<FileDinhKemReq> children =  new ArrayList<>();
 
-	private List<HhDxuatKhLcntGaoDtlReq> detail1;
+	private HhDxuatKhLcntGaoDtlReq children1;
 
-	private List<HhDxuatKhLcntDsgtDtlReq> detail2;
+	private List<HhDxuatKhLcntDsgtDtlReq> children2 =  new ArrayList<>();
 
-	private List<HhDxuatKhLcntCcxdgDtlReq> detail3;
+	private List<HhDxuatKhLcntCcxdgDtlReq> children3 =  new ArrayList<>();
+
 }

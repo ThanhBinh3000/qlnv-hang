@@ -5,23 +5,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
-import javax.persistence.NamedSubgraph;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Where;
@@ -49,7 +36,7 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	private Long id;
 	String soDxuat;
 	String loaiVthh;
-	String qdCanCu;
+	String soQd;
 	String trichYeu;
 	String maDvi;
 	@Transient
@@ -89,26 +76,12 @@ public class HhDxuatKhLcntHdr implements Serializable {
 		this.children.add(child);
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "id_hdr")
-	@JsonManagedReference
-	private List<HhDxuatKhLcntGaoDtl> children1 = new ArrayList<>();
-
-	public void setChildren1(List<HhDxuatKhLcntGaoDtl> children1) {
-		this.children1.clear();
-		for (HhDxuatKhLcntGaoDtl child : children1) {
-			child.setParent(this);
-		}
-		this.children1.addAll(children1);
-	}
-
-	public void addChild1(HhDxuatKhLcntGaoDtl child1) {
-		child1.setParent(this);
-		this.children1.add(child1);
-	}
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "id_hdr", referencedColumnName = "id")
+	private HhDxuatKhLcntLtDtl children1;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "id_hdr")
+	@JoinColumn(name = "ID_KH_HDR")
 	@JsonManagedReference
 	private List<HhDxuatKhLcntDsgtDtl> children2 = new ArrayList<>();
 

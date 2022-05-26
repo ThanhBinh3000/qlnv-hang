@@ -218,6 +218,17 @@
 			<groupId>org.docx4j</groupId>
 			<artifactId>docx4j</artifactId>
 			<version>6.1.2</version>
+
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>log4j</groupId>
+					<artifactId>log4j</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>net.logstash.logback</groupId>
@@ -264,7 +275,22 @@
 			<version>2.10.13</version>
 		</dependency>
 	</dependencies>
-
+	<repositories>
+		<repository>
+			<id>jaspersoft-third-party</id>
+			<url>https://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/</url>
+		</repository>
+		<repository>
+			<id>jr-ce-snapshots</id>
+			<name>JasperReports CE Snapshots</name>
+			<url>https://jaspersoft.jfrog.io/jaspersoft/jr-ce-snapshots</url>
+		</repository>
+		<repository>
+			<id>jr-ce-releases</id>
+			<name>JasperReports CE Releases</name>
+			<url>https://jaspersoft.jfrog.io/jaspersoft/jr-ce-releases</url>
+		</repository>
+	</repositories>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>

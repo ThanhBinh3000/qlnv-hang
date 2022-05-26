@@ -2,16 +2,8 @@ package com.tcdt.qlnvhang.table;
 import java.sql.Timestamp;
 import java.util.Set;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 import lombok.Data;
 
 @Entity
@@ -42,6 +34,19 @@ public class UserInfo {
 	String department;
 	long notifyViewId;
 	String groupsArr;
+
+	@Transient
+	String maQd;
+	@Transient
+	String maTr;
+	@Transient
+	String maKhqlh;
+	@Transient
+	String maKtbq;
+	@Transient
+	String maTckt;
+	@Transient
+	String capDvi;
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_roles", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "role_id") })

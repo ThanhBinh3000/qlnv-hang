@@ -27,9 +27,9 @@ public class HhQdGiaoNvuNhapxuatHdrReq {
 
 	@NotNull(message = "Không được để trống")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	@ApiModelProperty(example = "2022-09-05")
 	Date ngayKy;
 
-	@NotNull(message = "Không được để trống")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayHluc;
 
@@ -41,8 +41,8 @@ public class HhQdGiaoNvuNhapxuatHdrReq {
 	String maDvi;
 
 	@NotNull(message = "Không được để trống")
-	@Size(max = 1, message = "Loại quyết định được vượt quá 20 ký tự")
-	@ApiModelProperty(example = "N")
+	@Size(max = 2, message = "Loại quyết định được vượt quá 20 ký tự")
+	@ApiModelProperty(example = "00")
 	String loaiQd;
 
 	@Size(max = 250, message = "Lý do từ chối không được vượt quá 250 ký tự")
@@ -53,7 +53,7 @@ public class HhQdGiaoNvuNhapxuatHdrReq {
 
 	private List<HhQdGiaoNvuNhapxuatDtlReq> detail;
 
-	private List<HhDviThuhienQdinhReq> detail1;
+	/*private List<HhDviThuhienQdinhReq> detail1;*/
 
 	private List<FileDinhKemReq> fileDinhKems;
 

@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.request.search;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.validation.constraints.NotNull;
@@ -12,6 +13,7 @@ import com.tcdt.qlnvhang.util.Contains;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Getter
 @Setter
@@ -37,11 +39,16 @@ public class HhDxuatKhLcntSearchReq extends BaseRequest {
 	@ApiModelProperty(example = Contains.MOI_TAO)
 	String trangThai;
 
-	@NotNull(message = "Không được để trống")
 	@Size(max = 2, message = "Loại vật tư hàng hóa không được vượt quá 2 ký tự")
 	@ApiModelProperty(example = Contains.LOAI_VTHH_GAO)
 	String loaiVthh;
 
 	String maDvi;
+
+	private String namKh;
+
+	private String soTr;
+
+	private String soQd;
 
 }

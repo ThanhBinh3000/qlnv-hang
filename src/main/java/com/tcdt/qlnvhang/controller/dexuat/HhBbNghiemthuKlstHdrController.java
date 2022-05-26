@@ -1,8 +1,12 @@
 package com.tcdt.qlnvhang.controller.dexuat;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -147,6 +151,26 @@ public class HhBbNghiemthuKlstHdrController {
 			log.error("Xoá Biên bản nghiệm thu kê lót, bảo quản ban đầu trace: {}", e);
 		}
 		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Export Biên bản nghiệm thu bảo quản lần đầu nhập", response = List.class)
+	@PostMapping(value = "/export/list", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody HhBbNghiemthuKlstSearchReq req) {
+
+		try {
+			response.setContentType("application/octet-stream");
+			DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+			String currentDateTime = dateFormatter.format(new Date());
+
+			String headerKey = "Content-Disposition";
+			String headerValue = "attachment; filename=bien_ban_nghiem_thu_bao_quan_lan_dau_nhap_" + currentDateTime + ".xlsx";
+			response.setHeader(headerKey, headerValue);
+			service.exportToExcel(req, response);
+		} catch (Exception e) {
+			log.error("Error can not export", e);
+		}
+
 	}
 
 }

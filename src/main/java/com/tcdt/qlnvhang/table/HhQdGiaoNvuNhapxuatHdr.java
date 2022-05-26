@@ -65,8 +65,15 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 	Date ngayPduyet;
 	String nguoiPduyet;
 	String ghiChu;
+	String capDvi;
 	@Transient
 	String tenDvi;
+
+	@Transient
+	String tenLoaiQd;
+
+	@Transient
+	String tenTrangThai;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "id_hdr")
@@ -86,12 +93,12 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 		this.children.add(child);
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	/*@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "id_hdr")
 	@JsonManagedReference
-	private List<HhDviThuchienQdinh> children1 = new ArrayList<>();
+	private List<HhDviThuchienQdinh> children1 = new ArrayList<>();*/
 
-	public void setChildren1(List<HhDviThuchienQdinh> children1) {
+	/*public void setChildren1(List<HhDviThuchienQdinh> children1) {
 		this.children1.clear();
 		for (HhDviThuchienQdinh child1 : children1) {
 			child1.setParent(this);
@@ -102,7 +109,7 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 	public void addChild1(HhDviThuchienQdinh child1) {
 		child1.setParent(this);
 		this.children1.add(child1);
-	}
+	}*/
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)
@@ -123,4 +130,8 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 		child2.setParent(this);
 		this.children2.add(child2);
 	}
+
+	Integer namNhap;
+
+	Date ngayQdinh;
 }

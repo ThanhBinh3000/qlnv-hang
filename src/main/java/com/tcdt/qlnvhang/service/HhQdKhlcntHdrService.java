@@ -11,6 +11,8 @@ import com.tcdt.qlnvhang.request.object.HhQdKhlcntHdrReq;
 import com.tcdt.qlnvhang.request.search.HhQdKhlcntSearchReq;
 import com.tcdt.qlnvhang.table.HhQdKhlcntHdr;
 
+import java.util.List;
+
 public interface HhQdKhlcntHdrService {
 
 	@Transactional(rollbackOn = Exception.class)
@@ -32,5 +34,9 @@ public interface HhQdKhlcntHdrService {
 	HhQdKhlcntHdr detailNumber(String soQd) throws Exception;
 
 	void exportToExcel(HhQdKhlcntSearchReq searchReq, HttpServletResponse response) throws Exception;
+
+	Page<HhQdKhlcntHdr> getAllPage(HhQdKhlcntSearchReq objReq) throws Exception;
+
+	List<HhQdKhlcntHdr> getAll(HhQdKhlcntSearchReq objReq) throws Exception;
 
 }

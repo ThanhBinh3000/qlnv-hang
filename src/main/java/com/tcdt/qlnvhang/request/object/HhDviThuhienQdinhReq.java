@@ -6,6 +6,9 @@ import javax.validation.constraints.Size;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 public class HhDviThuhienQdinhReq {
 	@ApiModelProperty(notes = "Bắt buộc set đối với update")
@@ -30,4 +33,7 @@ public class HhDviThuhienQdinhReq {
 	@Size(max = 20, message = "Tên thủ kho không được vượt quá 20 ký tự")
 	String thuKho;
 
+	@NotNull(message = "Không được để trống")
+	String ghiChu;
+	private List<HhDviThQdDtlReq> detail = new ArrayList<>();
 }

@@ -42,15 +42,21 @@ public class HhBbNghiemthuKlstHdr implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_BB_NGHIEMTHU_KLST_HDR_SEQ")
 	@SequenceGenerator(sequenceName = "HH_BB_NGHIEMTHU_KLST_HDR_SEQ", allocationSize = 1, name = "HH_BB_NGHIEMTHU_KLST_HDR_SEQ")
 	private Long id;
-
+	private Long qdgnvnxId; // HhQdGiaoNvuNhapxuatHdr
 	String soBb;
 	@Temporal(TemporalType.DATE)
 	Date ngayLap;
-	String maNgankho;
+	Date ngayNghiemThu;
+	String thuTruong;
+	String keToan;
+	String kyThuatVien;
+	String thuKho;
+	String maNganlo;
 	String ongBa;
 	String chucVu;
 	String maVthh;
 	String pthucBquan;
+	String hthucBquan;
 	Double tichLuong;
 	Double slThucNhap;
 	String hthucKlot;
@@ -71,10 +77,39 @@ public class HhBbNghiemthuKlstHdr implements Serializable {
 	String ldoTuchoi;
 	Date ngayPduyet;
 	String nguoiPduyet;
+	String capDvi;
 	String maDvi;
+	Integer nam;
 	@Transient
 	String tenDvi;
 	String loaiVthh;
+
+	@Transient
+	String maDiemkho;
+	@Transient
+	String tenDiemkho;
+
+	@Transient
+	String maNhakho;
+	@Transient
+	String tenNhakho;
+
+	@Transient
+	String maNgankho;
+	@Transient
+	String tenNgankho;
+
+	@Transient
+	String tenNganlo;
+
+	@Transient
+	HhBbNghiemthuKlstHdr namTruoc;
+
+	@Transient
+	Double chiPhiThucHienTrongNam;
+
+	@Transient
+	Double tongGiaTri;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "id_hdr")

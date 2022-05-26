@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
+import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
 import org.springframework.data.domain.Page;
 
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -31,5 +32,9 @@ public interface HhDxuatKhLcntHdrService {
 	void delete(IdSearchReq idSearchReq) throws Exception;
 
 	void exportToExcel(IdSearchReq searchReq, HttpServletResponse response) throws Exception;
+
+	void exportDsKhlcnt(HhDxuatKhLcntSearchReq searchReq, HttpServletResponse response) throws Exception;
+
+	Page<HhDxuatKhLcntHdr> timKiem (HhDxuatKhLcntSearchReq objReq) throws Exception;
 
 }

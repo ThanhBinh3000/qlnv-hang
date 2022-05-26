@@ -17,13 +17,12 @@ import lombok.Setter;
 public class HhBbNghiemthuKlstSearchReq extends BaseRequest {
 	String soBb;
 
-	@NotNull(message = "Không được để trống")
-	@ApiModelProperty(example = Contains.LOAI_VTHH_GAO)
 	String loaiVthh;
 
 	String maDvi;
-	String maNganKho;
-
+	String maNganlo;
+	String maNhakho;
+	String maDiemkho;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date tuNgayLap;
 

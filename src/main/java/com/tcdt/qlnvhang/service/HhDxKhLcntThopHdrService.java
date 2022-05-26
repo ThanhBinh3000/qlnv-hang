@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
@@ -33,5 +34,11 @@ public interface HhDxKhLcntThopHdrService {
 	void delete(IdSearchReq idSearchReq) throws Exception;
 
 	List<HhDxKhLcntThopDtl> findByStatus(HhDxKhLcntDsChuaThReq objReq, HttpServletRequest req) throws Exception;
+
+	void exportDsThDxKhLcnt(HhDxKhLcntThopSearchReq searchReq, HttpServletResponse response) throws Exception;
+
+	Page<HhDxKhLcntThopHdr> timKiemPage(HhDxKhLcntThopSearchReq objReq) throws Exception;
+
+	List<HhDxKhLcntThopHdr> timKiemAll(HhDxKhLcntThopSearchReq objReq) throws Exception;
 
 }

@@ -13,7 +13,7 @@ import lombok.Setter;
 public class HhDxKhLcntTChiThopReq {
 	@NotNull(message = "Không được để trống")
 	@ApiModelProperty(example = "2022")
-	String namKhoach;
+	String namKh;
 
 	@NotNull(message = "Không được để trống")
 	@ApiModelProperty(example = Contains.LOAI_VTHH_GAO)

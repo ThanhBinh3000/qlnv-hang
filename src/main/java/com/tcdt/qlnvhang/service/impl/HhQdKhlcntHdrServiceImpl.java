@@ -8,6 +8,8 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.tcdt.qlnvhang.repository.HhDxKhLcntThopHdrRepository;
+import com.tcdt.qlnvhang.table.*;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,10 +29,6 @@ import com.tcdt.qlnvhang.request.object.HhQdKhlcntHdrReq;
 import com.tcdt.qlnvhang.request.search.HhQdKhlcntSearchReq;
 import com.tcdt.qlnvhang.secification.HhQdKhlcntSpecification;
 import com.tcdt.qlnvhang.service.HhQdKhlcntHdrService;
-import com.tcdt.qlnvhang.table.HhPaKhlcntHdr;
-import com.tcdt.qlnvhang.table.HhQdKhlcntDsgthau;
-import com.tcdt.qlnvhang.table.HhQdKhlcntDtl;
-import com.tcdt.qlnvhang.table.HhQdKhlcntHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
@@ -46,35 +44,46 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	@Autowired
 	private HhPaKhlcntHdrRepository hhPaKhlcntHdrRepository;
 
+	@Autowired
+	private HhDxKhLcntThopHdrRepository hhDxKhLcntThopHdrRepository;
+
+
 	@Override
 	public HhQdKhlcntHdr create(HhQdKhlcntHdrReq objReq) throws Exception {
 		if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh()))
 			throw new Exception("Loại vật tư hàng hóa không phù hợp");
 
 		Optional<HhQdKhlcntHdr> checkSoQd = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQd());
-		if (checkSoQd.isPresent())
+		if (checkSoQd.isPresent()) {
 			throw new Exception("Số quyết định " + objReq.getSoQd() + " đã tồn tại");
+		}
+//
+//		if (ObjectUtils.isEmpty(objReq.getIdPaHdr()) || objReq.getIdPaHdr() <= 0) {
+//			throw new Exception("Không tìm thấy phương án kế hoạch lựa chọn nhà thầu");
+//		}
 
-		if (ObjectUtils.isEmpty(objReq.getIdPaHdr()) || objReq.getIdPaHdr() <= 0)
-			throw new Exception("Không tìm thấy phương án kế hoạch lựa chọn nhà thầu");
-
-		Optional<HhPaKhlcntHdr> qOptional = hhPaKhlcntHdrRepository.findById(objReq.getIdPaHdr());
-		if (!qOptional.isPresent())
-			throw new Exception("Không tìm thấy phương án kế hoạch lựa chọn nhà thầu");
+		Optional<HhDxKhLcntThopHdr> qOptional = hhDxKhLcntThopHdrRepository.findById(objReq.getIdThHdr());
+		if (!qOptional.isPresent()){
+			throw new Exception("Không tìm thấy tổng hợp kế hoạch lựa chọn nhà thầu");
+		}
 
 		// Lay danh muc dung chung
 		Map<String, String> mapDmuc = getMapCategory();
-		if (objReq.getHthucLcnt() == null || !mapDmuc.containsKey(objReq.getHthucLcnt()))
+		if (objReq.getHthucLcnt() == null || !mapDmuc.containsKey(objReq.getHthucLcnt())){
 			throw new Exception("Hình thức lựa chọn nhà thầu không phù hợp");
+		}
 
-		if (objReq.getPthucLcnt() == null || !mapDmuc.containsKey(objReq.getPthucLcnt()))
+		if (objReq.getPthucLcnt() == null || !mapDmuc.containsKey(objReq.getPthucLcnt())){
 			throw new Exception("Phương thức đấu thầu không phù hợp");
+		}
 
-		if (objReq.getLoaiHdong() == null || !mapDmuc.containsKey(objReq.getLoaiHdong()))
+		if (objReq.getLoaiHdong() == null || !mapDmuc.containsKey(objReq.getLoaiHdong())){
 			throw new Exception("Loại hợp đồng không phù hợp");
+		}
 
-		if (objReq.getNguonVon() == null || !mapDmuc.containsKey(objReq.getNguonVon()))
+		if (objReq.getNguonVon() == null || !mapDmuc.containsKey(objReq.getNguonVon())){
 			throw new Exception("Nguồn vốn không phù hợp");
+		}
 
 		// Add danh sach file dinh kem o Master
 		List<FileDKemJoinQdKhlcntHdr> fileDinhKemList = new ArrayList<FileDKemJoinQdKhlcntHdr>();
@@ -92,7 +101,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		dataMap.setTrangThai(Contains.TAO_MOI);
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setChildren(fileDinhKemList);
-		dataMap.setSoPhAn(qOptional.get().getSoPhAn());
+		dataMap.setIdThHdr(qOptional.get().getId());
+//		dataMap.setSoPhAn(qOptional.get().getSoPhAn());
 
 		if (objReq.getDetail() != null) {
 			List<HhQdKhlcntDsgthau> detailChild;
@@ -100,8 +110,10 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			for (HhQdKhlcntDtlReq dtlReq : dtlReqList) {
 				HhQdKhlcntDtl detail = ObjectMapperUtils.map(dtlReq, HhQdKhlcntDtl.class);
 				detailChild = new ArrayList<HhQdKhlcntDsgthau>();
-				if (dtlReq.getDetail() != null)
+				detail.setId(null);
+				if (dtlReq.getDetail() != null){
 					detailChild = ObjectMapperUtils.mapAll(dtlReq.getDetail(), HhQdKhlcntDsgthau.class);
+				}
 				UnitScaler.reverseFormatList(detailChild, Contains.DVT_TAN);
 				detail.setChildren(detailChild);
 				dataMap.addChild1(detail);
@@ -115,25 +127,34 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 
 	@Override
 	public HhQdKhlcntHdr update(HhQdKhlcntHdrReq objReq) throws Exception {
-		if (StringUtils.isEmpty(objReq.getId()))
+		if (StringUtils.isEmpty(objReq.getId())){
 			throw new Exception("Sửa thất bại, không tìm thấy dữ liệu");
+		}
 
 		Optional<HhQdKhlcntHdr> qOptional = hhQdKhlcntHdrRepository.findById(objReq.getId());
-		if (!qOptional.isPresent())
+		if (!qOptional.isPresent()){
 			throw new Exception("Không tìm thấy dữ liệu cần sửa");
+		}
 
 		if (!qOptional.get().getSoQd().equals(objReq.getSoQd())) {
 			Optional<HhQdKhlcntHdr> checkSoQd = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQd());
-			if (checkSoQd.isPresent())
+			if (checkSoQd.isPresent()){
 				throw new Exception("Số quyết định " + objReq.getSoQd() + " đã tồn tại");
+			}
 		}
 
-		if (ObjectUtils.isEmpty(objReq.getIdPaHdr()) || objReq.getIdPaHdr() <= 0)
-			throw new Exception("Không tìm thấy phương án kế hoạch lựa chọn nhà thầu");
+//		if (ObjectUtils.isEmpty(objReq.getIdPaHdr()) || objReq.getIdPaHdr() <= 0)
+//			throw new Exception("Không tìm thấy phương án kế hoạch lựa chọn nhà thầu");
 
-		Optional<HhPaKhlcntHdr> qOpPa = hhPaKhlcntHdrRepository.findById(objReq.getIdPaHdr());
-		if (!qOpPa.isPresent())
-			throw new Exception("Không tìm thấy phương án kế hoạch lựa chọn nhà thầu");
+//		Optional<HhPaKhlcntHdr> qOpPa = hhPaKhlcntHdrRepository.findById(objReq.getIdPaHdr());
+//		if (!qOpPa.isPresent()){
+//			throw new Exception("Không tìm thấy phương án kế hoạch lựa chọn nhà thầu");
+//		}
+
+		Optional<HhDxKhLcntThopHdr> qOptionalTh = hhDxKhLcntThopHdrRepository.findById(objReq.getIdThHdr());
+		if (!qOptionalTh.isPresent()){
+			throw new Exception("Không tìm thấy tổng hợp kế hoạch lựa chọn nhà thầu");
+		}
 
 		// Lay danh muc dung chung
 		Map<String, String> mapDmuc = getMapCategory();
@@ -167,7 +188,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		dataDB.setNgaySua(getDateTimeNow());
 		dataDB.setNguoiSua(getUser().getUsername());
 		dataDB.setChildren(fileDinhKemList);
-		dataDB.setSoPhAn(qOpPa.get().getSoPhAn());
+//		dataDB.setSoPhAn(qOpPa.get().getSoPhAn());
 
 		if (objReq.getDetail() != null) {
 			List<HhQdKhlcntDsgthau> detailChild;
@@ -209,12 +230,14 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 
 	@Override
 	public HhQdKhlcntHdr approve(StatusReq stReq) throws Exception {
-		if (StringUtils.isEmpty(stReq.getId()))
+		if (StringUtils.isEmpty(stReq.getId())){
 			throw new Exception("Không tìm thấy dữ liệu");
+		}
 
 		Optional<HhQdKhlcntHdr> optional = hhQdKhlcntHdrRepository.findById(Long.valueOf(stReq.getId()));
-		if (!optional.isPresent())
+		if (!optional.isPresent()){
 			throw new Exception("Không tìm thấy dữ liệu");
+		}
 
 		String status = stReq.getTrangThai() + optional.get().getTrangThai();
 		switch (status) {
@@ -227,18 +250,27 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			optional.get().setNgayPduyet(getDateTimeNow());
 			optional.get().setLdoTuchoi(stReq.getLyDo());
 			break;
-		case Contains.DUYET + Contains.CHO_DUYET:
+		case Contains.BAN_HANH + Contains.CHO_DUYET:
 			optional.get().setNguoiPduyet(getUser().getUsername());
 			optional.get().setNgayPduyet(getDateTimeNow());
 			break;
 		default:
 			throw new Exception("Phê duyệt không thành công");
 		}
-
-		HhQdKhlcntHdr createCheck = hhQdKhlcntHdrRepository.save(optional.get());
-		if (createCheck.getIdPaHdr() > 0 && optional.get().getTrangThai().equals(Contains.DUYET)) {
-			hhPaKhlcntHdrRepository.updateTongHop(createCheck.getIdPaHdr(), Contains.ACTIVE);
+		optional.get().setTrangThai(stReq.getTrangThai());
+		if (stReq.getTrangThai().equals(Contains.BAN_HANH)) {
+			Optional<HhDxKhLcntThopHdr> qOptional = hhDxKhLcntThopHdrRepository.findById(optional.get().getIdThHdr());
+			if(qOptional.isPresent()){
+				if(qOptional.get().getTrangThai().equals(Contains.DA_QUYET_DINH)){
+					throw new Exception("Tổng hợp kế hoạch này đã được quyết định");
+				}
+				hhDxKhLcntThopHdrRepository.updateTrangThai(optional.get().getIdThHdr(), Contains.DA_QUYET_DINH);
+			}else{
+				throw new Exception("Tổng hợp kế hoạch không được tìm thấy");
+			}
+//			hhPaKhlcntHdrRepository.updateTongHop(createCheck.getIdPaHdr(), Contains.ACTIVE);
 		}
+		HhQdKhlcntHdr createCheck = hhQdKhlcntHdrRepository.save(optional.get());
 		return createCheck;
 	}
 
@@ -336,6 +368,17 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 
 		ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
 		ex.export();
+	}
+
+	@Override
+	public Page<HhQdKhlcntHdr> getAllPage(HhQdKhlcntSearchReq req) throws Exception {
+		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
+		return hhQdKhlcntHdrRepository.selectPage(req.getNamKhoach(),req.getLoaiVthh(), req.getSoQd(), convertDateToString(req.getTuNgayQd()),convertDateToString(req.getDenNgayQd()), pageable);
+	}
+
+	@Override
+	public List<HhQdKhlcntHdr> getAll(HhQdKhlcntSearchReq req) throws Exception {
+		return hhQdKhlcntHdrRepository.selectAll(req.getNamKhoach(),req.getLoaiVthh(), req.getSoQd(), convertDateToString(req.getTuNgayQd()),convertDateToString(req.getDenNgayQd()));
 	}
 
 }

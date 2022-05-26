@@ -1,13 +1,11 @@
 package com.tcdt.qlnvhang.secification;
 
 import java.util.Date;
+import java.util.Objects;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 
+import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatDtl;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.data.jpa.domain.Specification;
@@ -29,18 +27,20 @@ public class HhQdGiaoNvuNhapxuatSpecification {
 					String trangThai = req.getTrangThai();
 					String maDvi = req.getMaDvi();
 					Date ngayQd = req.getNgayQd();
-					String soQD = req.getSoQd();
+					String soQd = req.getSoQd();
 					String soHd = req.getSoHd();
 					String maVthh = req.getMaVthh();
 					String loaiQd = req.getLoaiQd();
+					Integer namNhap = Integer.valueOf(req.getNamNhap());
+					String veViec = req.getVeViec();
 
-					root.fetch("children", JoinType.LEFT);
+					Join<HhQdGiaoNvuNhapxuatHdr, HhQdGiaoNvuNhapxuatDtl> joinQuerry = root.join("children");
 
 					if (ngayQd != null) {
 						predicate.getExpressions()
-								.add(builder.and(builder.greaterThanOrEqualTo(root.get("ngayQd"), ngayQd)));
+								.add(builder.and(builder.greaterThanOrEqualTo(root.get("ngayKy"), ngayQd)));
 						predicate.getExpressions().add(builder
-								.and(builder.lessThan(root.get("ngayQd"), new DateTime(ngayQd).plusDays(1).toDate())));
+								.and(builder.lessThan(root.get("ngayKy"), new DateTime(ngayQd).plusDays(1).toDate())));
 					}
 
 					if (StringUtils.isNotBlank(maDvi))
@@ -49,17 +49,23 @@ public class HhQdGiaoNvuNhapxuatSpecification {
 					if (StringUtils.isNotBlank(trangThai))
 						predicate.getExpressions().add(builder.and(builder.equal(root.get("trangThai"), trangThai)));
 
-					if (StringUtils.isNotBlank(soQD))
-						predicate.getExpressions().add(builder.and(builder.equal(root.get("soQD"), soQD)));
+					if (StringUtils.isNotBlank(soQd))
+						predicate.getExpressions().add(builder.and(builder.equal(root.get("soQd"), soQd)));
 
 					if (StringUtils.isNotBlank(soHd))
 						predicate.getExpressions().add(builder.and(builder.equal(root.get("soHd"), soHd)));
 
 					if (StringUtils.isNotBlank(maVthh))
-						predicate.getExpressions().add(builder.and(builder.equal(root.get("maVthh"), maVthh)));
+						predicate.getExpressions().add(builder.and(builder.equal(joinQuerry.get("maVthh"), maVthh)));
 
 					if (StringUtils.isNotBlank(loaiQd))
 						predicate.getExpressions().add(builder.and(builder.equal(root.get("loaiQd"), loaiQd)));
+
+					if (!Objects.isNull(namNhap))
+						predicate.getExpressions().add(builder.and(builder.equal(root.get("namNhap"), namNhap)));
+
+					if (!Objects.isNull(veViec))
+						predicate.getExpressions().add(builder.and(builder.equal(root.get("veViec"), veViec)));
 
 				}
 				return predicate;

@@ -80,10 +80,7 @@ public class QlnvQdMuaHangController extends BaseController {
 			@Valid @RequestBody QlnvDxkhMuaHangThopSearchReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			
-
 			List<QlnvDxkhMuaHangHdr> data = qlnvDxkhBanHangRepository.findAll(QDinhMuaHangSpecification.buildTHopQuery(objReq));
-
 			resp.setData(data);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());

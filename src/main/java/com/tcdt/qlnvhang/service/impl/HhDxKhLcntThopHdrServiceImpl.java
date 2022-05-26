@@ -8,11 +8,17 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import com.tcdt.qlnvhang.repository.HhPaKhlcntHdrRepository;
+import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.table.*;
+import com.tcdt.qlnvhang.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -26,15 +32,6 @@ import com.tcdt.qlnvhang.request.search.HhDxKhLcntThopSearchReq;
 import com.tcdt.qlnvhang.secification.HhDxKhLcntThopSpecification;
 import com.tcdt.qlnvhang.secification.HhDxuatKhLcntSpecification;
 import com.tcdt.qlnvhang.service.HhDxKhLcntThopHdrService;
-import com.tcdt.qlnvhang.table.HhDxKhLcntThopDtl;
-import com.tcdt.qlnvhang.table.HhDxKhLcntThopHdr;
-import com.tcdt.qlnvhang.table.HhDxuatKhLcntDsgtDtl;
-import com.tcdt.qlnvhang.table.HhDxuatKhLcntGaoDtl;
-import com.tcdt.qlnvhang.table.HhDxuatKhLcntHdr;
-import com.tcdt.qlnvhang.util.Contains;
-import com.tcdt.qlnvhang.util.ObjectMapperUtils;
-import com.tcdt.qlnvhang.util.PaginationSet;
-import com.tcdt.qlnvhang.util.UnitScaler;
 
 @Service
 public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhDxKhLcntThopHdrService {
@@ -44,13 +41,18 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 	@Autowired
 	private HhDxuatKhLcntHdrRepository hhDxuatKhLcntHdrRepository;
 
+	@Autowired
+	private HhPaKhlcntHdrRepository hhPaKhlcntHdrRepository;
+
 	@Override
 	public HhDxKhLcntThopHdr sumarryData(HhDxKhLcntTChiThopReq objReq, HttpServletRequest req) throws Exception {
-		List<HhDxuatKhLcntHdr> dxuatList = hhDxuatKhLcntHdrRepository
-				.findAll(HhDxuatKhLcntSpecification.buildTHopQuery(objReq));
+		List<HhDxuatKhLcntHdr> dxuatList =
+				hhDxuatKhLcntHdrRepository.listTongHop(objReq.getLoaiVthh(),objReq.getNamKh(),objReq.getHthucLcnt(),objReq.getPthucLcnt(),objReq.getLoaiHdong(),objReq.getNguonVon());
 
-		if (dxuatList.isEmpty())
+
+		if (dxuatList.isEmpty()){
 			throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
+		}
 
 		// Set thong tin hdr tong hop
 		HhDxKhLcntThopHdr thopHdr = new HhDxKhLcntThopHdr();
@@ -71,21 +73,21 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		thopHdr.setLoaiHdong(objReq.getLoaiHdong());
 		thopHdr.setNguonVon(objReq.getNguonVon());
 		thopHdr.setTenLoaiVthh(Contains.getLoaiVthh(objReq.getLoaiVthh()));
-		thopHdr.setTenHthucLcnt(mapDmuc.get(dxuatList.get(0).getChildren1().get(0).getHthucLcnt()));
-		thopHdr.setTenPthucLcnt(mapDmuc.get(dxuatList.get(0).getChildren1().get(0).getPthucLcnt()));
-		thopHdr.setTenLoaiHdong(mapDmuc.get(dxuatList.get(0).getChildren1().get(0).getLoaiHdong()));
-		thopHdr.setTenNguonVon(mapDmuc.get(dxuatList.get(0).getChildren1().get(0).getNguonVon()));
+		thopHdr.setTenHthucLcnt(mapDmuc.get(dxuatList.get(0).getChildren1().getHthucLcnt()));
+		thopHdr.setTenPthucLcnt(mapDmuc.get(dxuatList.get(0).getChildren1().getPthucLcnt()));
+		thopHdr.setTenLoaiHdong(mapDmuc.get(dxuatList.get(0).getChildren1().getLoaiHdong()));
+		thopHdr.setTenNguonVon(mapDmuc.get(dxuatList.get(0).getChildren1().getNguonVon()));
 
 		// Add thong tin list dtl
 		List<HhDxKhLcntThopDtl> thopDtls = new ArrayList<HhDxKhLcntThopDtl>();
 		for (HhDxuatKhLcntHdr dxuat : dxuatList) {
 			HhDxKhLcntThopDtl thopDtl = new HhDxKhLcntThopDtl();
 			// Set ngay min va ngay max o detail Gao
-			List<HhDxuatKhLcntGaoDtl> dtlsGao = dxuat.getChildren1();
-			if (dtlsGao.isEmpty())
-				continue;
+			HhDxuatKhLcntLtDtl dxuatGao = dxuat.getChildren1();
+//			if (dtlsGao.isEmpty())
+//				continue;
 
-			for (HhDxuatKhLcntGaoDtl dxuatGao : dtlsGao) {
+//			for (HhDxuatKhLcntGaoDtl dxuatGao : dtlsGao) {
 				if (StringUtils.isEmpty(thopHdr.getTuTgianTbao())
 						|| thopHdr.getTuTgianTbao().compareTo(dxuatGao.getTgianTbao()) > 0)
 					thopHdr.setTuTgianTbao(dxuatGao.getTgianTbao());
@@ -113,7 +115,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 				if (StringUtils.isEmpty(thopHdr.getDenTgianNhang())
 						|| thopHdr.getDenTgianNhang().compareTo(dxuatGao.getTgianNhapHang()) < 0)
 					thopHdr.setDenTgianNhang(dxuatGao.getTgianNhapHang());
-			}
+//			}
 
 			// Set thong tin chung lay tu de xuat
 			thopDtl.setIdDxHdr(dxuat.getId());
@@ -121,7 +123,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 			thopDtl.setTenDvi(getDviByMa(dxuat.getMaDvi(), req).getTenDvi());
 			thopDtl.setSoDxuat(dxuat.getSoDxuat());
 			thopDtl.setNgayDxuat(dxuat.getNgayKy());
-			thopDtl.setTenDuAn(dtlsGao.get(0).getTenDuAn());
+			thopDtl.setTenDuAn(dxuatGao.getTenDuAn());
 
 			// Add danh sach goi thau
 			List<HhDxuatKhLcntDsgtDtl> dtlsGThau = dxuat.getChildren2();
@@ -143,16 +145,17 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		// Quy doi don vi do luong khoi luong
 		UnitScaler.reverseFormatList(thopDtls, Contains.DVT_TAN);
 		thopHdr.setChildren(thopDtls);
+		this.setPhuongAnId(thopHdr);
 		return thopHdr;
 	}
 
 	@Override
 	public HhDxKhLcntThopHdr create(HhDxKhLcntThopHdrReq objReq, HttpServletRequest req) throws Exception {
-		if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh()))
+		if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh())){
 			throw new Exception("Loại vật tư hàng hóa không phù hợp");
+		}
 
-		List<HhDxuatKhLcntHdr> dxuatList = hhDxuatKhLcntHdrRepository
-				.findAll(HhDxuatKhLcntSpecification.buildTHopQuery(objReq));
+		List<HhDxuatKhLcntHdr> dxuatList = hhDxuatKhLcntHdrRepository.listTongHop(objReq.getLoaiVthh(),objReq.getNamKh(),objReq.getHthucLcnt(),objReq.getPthucLcnt(),objReq.getLoaiHdong(),objReq.getNguonVon());
 
 		if (dxuatList.isEmpty())
 			throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
@@ -162,10 +165,10 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 
 		thopHdr.setNamKhoach(dxuatList.get(0).getNamKhoach().toString());
 		thopHdr.setLoaiVthh(dxuatList.get(0).getLoaiVthh());
-		thopHdr.setHthucLcnt(dxuatList.get(0).getChildren1().get(0).getHthucLcnt());
-		thopHdr.setPthucLcnt(dxuatList.get(0).getChildren1().get(0).getPthucLcnt());
-		thopHdr.setLoaiHdong(dxuatList.get(0).getChildren1().get(0).getLoaiHdong());
-		thopHdr.setNguonVon(dxuatList.get(0).getChildren1().get(0).getNguonVon());
+		thopHdr.setHthucLcnt(dxuatList.get(0).getChildren1().getHthucLcnt());
+		thopHdr.setPthucLcnt(dxuatList.get(0).getChildren1().getPthucLcnt());
+		thopHdr.setLoaiHdong(dxuatList.get(0).getChildren1().getLoaiHdong());
+		thopHdr.setNguonVon(dxuatList.get(0).getChildren1().getNguonVon());
 
 		thopHdr.setNgayTao(getDateTimeNow());
 		thopHdr.setNguoiTao(getUser().getUsername());
@@ -176,11 +179,11 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		for (HhDxuatKhLcntHdr dxuat : dxuatList) {
 			HhDxKhLcntThopDtl thopDtl = new HhDxKhLcntThopDtl();
 			// Set ngay min va ngay max o detail Gao
-			List<HhDxuatKhLcntGaoDtl> dtlsGao = dxuat.getChildren1();
-			if (dtlsGao.isEmpty())
-				continue;
+			HhDxuatKhLcntLtDtl dxuatGao = dxuat.getChildren1();
+//			if (dtlsGao.isEmpty())
+//				continue;
 
-			for (HhDxuatKhLcntGaoDtl dxuatGao : dtlsGao) {
+//			for (HhDxuatKhLcntGaoDtl dxuatGao : dtlsGao) {
 				if (StringUtils.isEmpty(thopHdr.getTuTgianTbao())
 						|| thopHdr.getTuTgianTbao().compareTo(dxuatGao.getTgianTbao()) > 0)
 					thopHdr.setTuTgianTbao(dxuatGao.getTgianTbao());
@@ -208,7 +211,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 				if (StringUtils.isEmpty(thopHdr.getDenTgianNhang())
 						|| thopHdr.getDenTgianNhang().compareTo(dxuatGao.getTgianNhapHang()) < 0)
 					thopHdr.setDenTgianNhang(dxuatGao.getTgianNhapHang());
-			}
+//			}
 
 			// Set thong tin chung lay tu de xuat
 			thopDtl.setIdDxHdr(dxuat.getId());
@@ -216,7 +219,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 			thopDtl.setTenDvi(getDviByMa(dxuat.getMaDvi(), req).getTenDvi());
 			thopDtl.setSoDxuat(dxuat.getSoDxuat());
 			thopDtl.setNgayDxuat(dxuat.getNgayKy());
-			thopDtl.setTenDuAn(dtlsGao.get(0).getTenDuAn());
+			thopDtl.setTenDuAn(dxuatGao.getTenDuAn());
 
 			// Add danh sach goi thau
 			List<HhDxuatKhLcntDsgtDtl> dtlsGThau = dxuat.getChildren2();
@@ -242,6 +245,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 					.collect(Collectors.toList());
 			hhDxuatKhLcntHdrRepository.updateTongHop(soDxuatList, Contains.TONG_HOP);
 		}
+		this.setPhuongAnId(createCheck);
 		return createCheck;
 	}
 
@@ -261,8 +265,9 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		HhDxKhLcntThopHdr dataMap = ObjectMapperUtils.map(objReq, HhDxKhLcntThopHdr.class);
 
 		updateObjectToObject(dataDTB, dataMap);
-
-		return hhDxKhLcntThopHdrRepository.save(dataDTB);
+		hhDxKhLcntThopHdrRepository.save(dataDTB);
+		this.setPhuongAnId(dataDTB);
+		return dataDTB;
 	}
 
 	@Override
@@ -290,6 +295,8 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		List<HhDxKhLcntThopDtl> dtls = ObjectMapperUtils.mapAll(qOptional.get().getChildren(), HhDxKhLcntThopDtl.class);
 		UnitScaler.formatList(dtls, Contains.DVT_TAN);
 		qOptional.get().setChildren(dtls);
+
+		this.setPhuongAnId(qOptional.get());
 		return qOptional.get();
 	}
 
@@ -310,6 +317,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 			hdr.setTenPthucLcnt(mapDmuc.get(hdr.getPthucLcnt()));
 			hdr.setTenLoaiHdong(mapDmuc.get(hdr.getLoaiHdong()));
 			hdr.setTenNguonVon(mapDmuc.get(hdr.getNguonVon()));
+			this.setPhuongAnId(hdr);
 		}
 		return qhKho;
 	}
@@ -346,9 +354,9 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		for (HhDxuatKhLcntHdr dxuat : dxuatList) {
 			HhDxKhLcntThopDtl thopDtl = new HhDxKhLcntThopDtl();
 			// Set ngay min va ngay max o detail Gao
-			List<HhDxuatKhLcntGaoDtl> dtlsGao = dxuat.getChildren1();
-			if (dtlsGao.isEmpty())
-				continue;
+			HhDxuatKhLcntLtDtl dtlsGao = dxuat.getChildren1();
+//			if (dtlsGao.isEmpty())
+//				continue;
 
 			// Set thong tin chung lay tu de xuat
 			thopDtl.setIdDxHdr(dxuat.getId());
@@ -356,7 +364,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 			thopDtl.setTenDvi(getDviByMa(dxuat.getMaDvi(), req).getTenDvi());
 			thopDtl.setSoDxuat(dxuat.getSoDxuat());
 			thopDtl.setNgayDxuat(dxuat.getNgayKy());
-			thopDtl.setTenDuAn(dtlsGao.get(0).getTenDuAn());
+			thopDtl.setTenDuAn(dtlsGao.getTenDuAn());
 
 			// Add danh sach goi thau
 			List<HhDxuatKhLcntDsgtDtl> dtlsGThau = dxuat.getChildren2();
@@ -380,4 +388,54 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		return thopDtls;
 	}
 
+	private void setPhuongAnId(HhDxKhLcntThopHdr dx) {
+		if (Contains.ACTIVE.equalsIgnoreCase(dx.getPhuongAn())) {
+			Optional<HhPaKhlcntHdr> optional = hhPaKhlcntHdrRepository.findByIdThHdr(dx.getId());
+			optional.ifPresent(hhPaKhlcntHdr -> dx.setPhuongAnId(hhPaKhlcntHdr.getId()));
+		}
+	}
+
+	@Override
+	public void exportDsThDxKhLcnt(HhDxKhLcntThopSearchReq searchReq, HttpServletResponse response) throws Exception {
+		PaggingReq paggingReq = new PaggingReq();
+		paggingReq.setPage(1);
+		paggingReq.setLimit(Integer.MAX_VALUE);
+		searchReq.setPaggingReq(paggingReq);
+		Page<HhDxKhLcntThopHdr> page = this.colection(searchReq);
+		List<HhDxKhLcntThopHdr> data = page.getContent();
+
+		String title = "Tổng hợp đề xuất kế hoạch lựa chọn nhà thầu";
+		String[] rowsName = new String[] { "STT", "Ngày tạo phương án", "Năm kế hoạch", "Hình thức LCNT",
+		"Phương thức LCNT", "Loại hợp đồng", "Nguồn vốn", "Tiêu chuẩn chất lượng"};
+		String filename = "Tong_hop_de_xuat_ke_hoach_lua_chon_nha_thau.xlsx";
+
+		List<Object[]> dataList = new ArrayList<Object[]>();
+		Object[] objs = null;
+		for (int i = 0; i < data.size(); i++) {
+			HhDxKhLcntThopHdr dx = data.get(i);
+			objs = new Object[rowsName.length];
+			objs[0] = i;
+			objs[1] = dx.getNgayTao();
+			objs[2] = dx.getNamKhoach();
+			objs[3] = dx.getTenHthucLcnt();
+			objs[4] = dx.getTenPthucLcnt();
+			objs[5] = dx.getTenLoaiHdong();
+			objs[6] = dx.getNguonVon();
+			dataList.add(objs);
+		}
+
+		ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+		ex.export();
+	}
+
+	@Override
+	public Page<HhDxKhLcntThopHdr> timKiemPage(HhDxKhLcntThopSearchReq req) throws Exception {
+		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
+		return hhDxKhLcntThopHdrRepository.select(req.getNamKhoach(),req.getLoaiVthh(),convertDateToString(req.getTuNgayTao()),convertDateToString(req.getDenNgayTao()),req.getSoQd(),req.getTrangThai(), pageable);
+	}
+
+	@Override
+	public List<HhDxKhLcntThopHdr> timKiemAll(HhDxKhLcntThopSearchReq req) throws Exception {
+		return hhDxKhLcntThopHdrRepository.selectAll(req.getNamKhoach(),req.getLoaiVthh(),convertDateToString(req.getTuNgayTao()),convertDateToString(req.getDenNgayTao()),req.getSoQd(), req.getTrangThai());
+	}
 }

@@ -41,6 +41,12 @@ public class Contains {
 	public static final String KTT_DUYET = "08";// Trang thai trung gian, ke toan truong phe duyet
 	public static final String TPHONG_DUYET = "09"; // Trang thai Truong phong duyet
 	public static final String LANHDAO_DUYET = "10"; // Trang thai Lanh dao duyet
+	public static final String BAN_HANH = "11"; // Trang thai Lanh dao duyet
+
+	// Trạng thái tổng hợp
+	public static final String CHUA_QUYET_DINH = "00";
+
+	public static final String DA_QUYET_DINH = "01";
 
 	// Trang thai response
 	public static final int RESP_SUCC = 0;
@@ -90,8 +96,8 @@ public class Contains {
 	public static final String HD_VT_THEO_THOI_GIAN = "03";
 
 	// Loai quyet dinh
-	public static final String QD_MUA = "00";
-	public static final String QD_BAN = "01";
+	public static final String QD_NHAP = "00";
+	public static final String QD_XUAT = "01";
 
 	// Loai phieu
 	public static final String PHIEU_NHAP = "00";
@@ -191,4 +197,23 @@ public class Contains {
 		return Contains.mpDVTinh.get(key);
 	}
 
+	public static final Map<String, String> mapTrangThaiPheDuyet;
+	static {
+		mapTrangThaiPheDuyet = Maps.<String, String>buildMap()
+				.put(Contains.MOI_TAO, "Mới tạo")
+				.put(Contains.CHO_DUYET, "Chờ duyệt")
+				.put(Contains.DUYET, "Đã duyệt")
+				.put(Contains.TU_CHOI, "Từ chối")
+				.put(Contains.HUY, "Hủy")
+				.put(Contains.TONG_HOP, "Tổng hợp")
+				.put(Contains.CCUC_DUYET, "Chi cục duyệt")
+				.put(Contains.CUC_DUYET, "Cục duyệt")
+				.put(Contains.TCUC_DUYET, "Tổng cục duyệt")
+				.put(Contains.TK_DUYET, "Thủ kho duyệt")
+				.put(Contains.KTV_DUYET, "Kỹ thuật viên duyệt")
+				.put(Contains.KTT_DUYET, "Kế toán trưởng duyệt")
+				.put(Contains.TPHONG_DUYET, "Trưởng phòng duyệt")
+				.put(Contains.LANHDAO_DUYET, "Lãnh đạo duyệt")
+				.get();
+	}
 }
