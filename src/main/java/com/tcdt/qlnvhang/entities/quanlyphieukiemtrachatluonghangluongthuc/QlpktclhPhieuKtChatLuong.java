@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "QLPKTCLH_PHIEU_KT_CHAT_LUONG")
@@ -40,20 +42,14 @@ public class QlpktclhPhieuKtChatLuong extends BaseEntity {
 	@Column(name = "QUYET_DINH_NHAP_ID")
 	private Long quyetDinhNhapId;
 
-	@Column(name = "MA_NGAN_KHO")
-	private Long maNganKho;
-
-	@Column(name = "TEN_NGAN_KHO")
-	private String tenNganKho;
-
 	@Column(name = "MA_HANG_HOA")
-	private Long maHangHoa;
+	private String maHangHoa;
 
 	@Column(name = "TEN_HANG_HOA")
 	private String tenHangHoa;
 
 	@Column(name = "KHOI_LUONG")
-	private Long khoiLuong;
+	private Double khoiLuong;
 
 	@Column(name = "SO_CHUNG_THU_GIAM_DINH")
 	private Long soChungThuGiamDinh;
@@ -64,17 +60,20 @@ public class QlpktclhPhieuKtChatLuong extends BaseEntity {
 	@Column(name = "SO_PHIEU_AN_TOAN_THUC_PHAM")
 	private String soPhieuAnToanThucPham;
 
-	@Column(name = "FILE_DINH_KEM_ID")
-	private Long fileDinhKemId;
-
 	@Column(name = "MA_DON_VI")
 	private String maDonVi;
 
-	@Column(name = "NGUOI_PHE_DUYET")
-	private Long nguoiPheDuyet;
+	@Column(name = "NGUOI_PHE_DUYET_ID")
+	private Long nguoiPheDuyetId;
 
 	@Column(name = "NGAY_PHE_DUYET")
 	private LocalDate ngayPheDuyet;
+
+	@Column(name = "NGUOI_GUI_DUYET_ID")
+	private Long nguoiGuiDuyetId;
+
+	@Column(name = "NGAY_GUI_DUYET")
+	private LocalDate ngayGuiDuyet;
 
 	@Column(name = "TRANG_THAI")
 	private String trangThai;
@@ -85,16 +84,39 @@ public class QlpktclhPhieuKtChatLuong extends BaseEntity {
 	@Column(name = "LY_DO_TU_CHOI")
 	private String lyDoTuChoi;
 
-	@Column(name = "MA_DIEM_KHO")
-	private String maDiemKho;
-
-	@Column(name = "MA_NHA_KHO")
-	private String maNhaKho;
-
 	@Column(name = "NGAY_GDINH")
 	private LocalDate ngayGdinh;
 
 	@Column(name = "TCHUC_GDINH")
 	private String tchucGdinh;
 
+	@Column(name = "MA_NGAN_KHO")
+	private String maNganKho;
+
+	@Column(name = "TEN_NGAN_KHO")
+	private String tenNganKho;
+
+	@Column(name = "MA_NGAN_LO")
+	private String maNganLo;
+
+	@Column(name = "TEN_NGAN_LO")
+	private String tenNganLo;
+
+	@Column(name = "MA_DIEM_KHO")
+	private String maDiemKho;
+
+	@Column(name = "TEN_DIEM_KHO")
+	private String tenDiemKho;
+
+	@Column(name = "MA_NHA_KHO")
+	private String maNhaKho;
+
+	@Column(name = "TEN_NHA_KHO")
+	private String tenNhaKho;
+
+	@Column(name = "CAP_DVI")
+	private String capDvi;
+
+	@Transient
+	private List<QlpktclhKetQuaKiemTra> ketQuaKiemTra = new ArrayList<>();
 }

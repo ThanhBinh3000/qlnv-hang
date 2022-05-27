@@ -275,6 +275,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 			throw new Exception("Bad request.");
 		}
 
+		hhBbNghiemthuKlstRepository.save(bb);
 		return true;
 	}
 

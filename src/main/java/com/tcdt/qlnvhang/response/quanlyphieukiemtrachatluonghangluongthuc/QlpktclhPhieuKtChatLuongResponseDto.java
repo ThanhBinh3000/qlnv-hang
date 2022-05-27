@@ -29,23 +29,17 @@ public class QlpktclhPhieuKtChatLuongResponseDto {
 
 	private Long quyetDinhNhapId;
 
-	private Long maNganKho;
-
-	private String tenNganKho;
-
 	private Long maHangHoa;
 
 	private String tenHangHoa;
 
-	private Long khoiLuong;
+	private Double khoiLuong;
 
 	private Long soChungThuGiamDinh;
 
 	private String bienSoXe;
 
 	private String soPhieuAnToanThucPham;
-
-	private Long fileDinhKemId;
 
 	private String maDonVi;
 
@@ -60,6 +54,22 @@ public class QlpktclhPhieuKtChatLuongResponseDto {
 	private String lyDoTuChoi;
 
 	private String tenTrangThai;
+
+	private String maNganKho;
+
+	private String tenNganKho;
+
+	private String maNganLo;
+
+	private String tenNganLo;
+
+	private String maDiemKho;
+
+	private String tenDiemKho;
+
+	private String maNhaKho;
+
+	private String tenNhaKho;
 
 	private List<QlpktclhKetQuaKiemTraResponseDto> ketQuaKiemTra;
 }

@@ -31,15 +31,27 @@ public class QlpktclhPhieuKtChatLuongRequestDto {
 
 	private Long quyetDinhNhapId;
 
-	private Long maNganKho;
+	private String maNganKho;
 
 	private String tenNganKho;
+
+	private String maNganLo;
+
+	private String tenNganLo;
+
+	private String maDiemKho;
+
+	private String tenDiemKho;
+
+	private String maNhaKho;
+
+	private String tenNhaKho;
 
 	private Long maHangHoa;
 
 	private String tenHangHoa;
 
-	private Long khoiLuong;
+	private Double khoiLuong;
 
 	private Long soChungThuGiamDinh;
 
@@ -47,15 +59,9 @@ public class QlpktclhPhieuKtChatLuongRequestDto {
 
 	private String soPhieuAnToanThucPham;
 
-	private Long fileDinhKemId;
-
 	private String maDonVi;
 
 	private String maQhns;
-
-	private String maDiemKho;
-
-	private String maNhaKho;
 
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate ngayGdinh;
