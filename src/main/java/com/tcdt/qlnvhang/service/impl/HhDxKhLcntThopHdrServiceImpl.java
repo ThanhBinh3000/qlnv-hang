@@ -173,6 +173,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		thopHdr.setNgayTao(getDateTimeNow());
 		thopHdr.setNguoiTao(getUser().getUsername());
 		thopHdr.setVeViec(objReq.getVeViec());
+		thopHdr.setTrangThai(Contains.TAO_MOI);
 
 		// Add thong tin list dtl
 		List<HhDxKhLcntThopDtl> thopDtls = new ArrayList<HhDxKhLcntThopDtl>();

@@ -231,6 +231,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		String status = stReq.getTrangThai() + optional.get().getTrangThai();
 		switch (status) {
 		case Contains.CHO_DUYET + Contains.MOI_TAO:
+		case Contains.CHO_DUYET + Contains.TU_CHOI:
 			optional.get().setNguoiGuiDuyet(getUser().getUsername());
 			optional.get().setNgayGuiDuyet(getDateTimeNow());
 			break;
@@ -353,12 +354,12 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	@Override
 	public Page<HhQdKhlcntHdr> getAllPage(HhQdKhlcntSearchReq req) throws Exception {
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
-		return hhQdKhlcntHdrRepository.selectPage(req.getNamKhoach(),req.getLoaiVthh(), req.getSoQd(), convertDateToString(req.getTuNgayQd()),convertDateToString(req.getDenNgayQd()), pageable);
+		return hhQdKhlcntHdrRepository.selectPage(req.getNamKhoach(),req.getLoaiVthh(), req.getSoQd(), convertDateToString(req.getTuNgayQd()),convertDateToString(req.getDenNgayQd()), req.getTrangThai(), pageable);
 	}
 
 	@Override
 	public List<HhQdKhlcntHdr> getAll(HhQdKhlcntSearchReq req) throws Exception {
-		return hhQdKhlcntHdrRepository.selectAll(req.getNamKhoach(),req.getLoaiVthh(), req.getSoQd(), convertDateToString(req.getTuNgayQd()),convertDateToString(req.getDenNgayQd()));
+		return hhQdKhlcntHdrRepository.selectAll(req.getNamKhoach(),req.getLoaiVthh(), req.getSoQd(), convertDateToString(req.getTuNgayQd()),convertDateToString(req.getDenNgayQd()),req.getTrangThai());
 	}
 
 }
