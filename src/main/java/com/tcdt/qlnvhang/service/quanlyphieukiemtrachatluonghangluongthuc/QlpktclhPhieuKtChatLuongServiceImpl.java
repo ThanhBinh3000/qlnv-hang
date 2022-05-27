@@ -6,24 +6,36 @@ import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.Qlpkt
 import com.tcdt.qlnvhang.enums.QlpktclhPhieuKtChatLuongStatusEnum;
 import com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhKetQuaKiemTraRepository;
 import com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongRepository;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongFilterRequestDto;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongRequestDto;
+import com.tcdt.qlnvhang.request.search.HhBbNghiemthuKlstSearchReq;
 import com.tcdt.qlnvhang.response.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhKetQuaKiemTraResponseDto;
 import com.tcdt.qlnvhang.response.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongResponseDto;
+import com.tcdt.qlnvhang.table.HhBbNghiemthuKlstHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.util.DataUtils;
-import com.tcdt.qlnvhang.util.UserUtils;
+import com.tcdt.qlnvhang.util.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,10 +46,15 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class QlpktclhPhieuKtChatLuongServiceImpl implements QlpktclhPhieuKtChatLuongService {
+	private static final String SHEET_PHIEU_KIEM_TRA_CHAT_LUONG_HANG = "Phiếu kiểm tra chất lượng hàng";
+	private static final String STT = "STT";
+	private static final String SO_PHIEU = "Số Phiếu";
+	private static final String KET_QUA_DANH_GIA = "Kết Quả Đánh Giá";
+	private static final String NGAY_GIAM_DINH = "Ngày Giám Định";
+	private static final String TRANG_THAI = "Trạng Thái";
 	private final QlpktclhPhieuKtChatLuongRepository qlpktclhPhieuKtChatLuongRepo;
 	private final QlpktclhKetQuaKiemTraRepository qlpktclhKetQuaKiemTraRepo;
 	private final DataUtils dataUtils;
-
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -105,7 +122,6 @@ public class QlpktclhPhieuKtChatLuongServiceImpl implements QlpktclhPhieuKtChatL
 
 	@Override
 	public Page<QlpktclhPhieuKtChatLuongResponseDto> filter(QlpktclhPhieuKtChatLuongFilterRequestDto req) throws Exception {
-
 		return qlpktclhPhieuKtChatLuongRepo.filter(req);
 	}
 
@@ -117,6 +133,7 @@ public class QlpktclhPhieuKtChatLuongServiceImpl implements QlpktclhPhieuKtChatL
 
 	private QlpktclhPhieuKtChatLuongResponseDto buildResponse(QlpktclhPhieuKtChatLuong qlpktclhPhieuKtChatLuong) {
 		QlpktclhPhieuKtChatLuongResponseDto response = dataUtils.toObject(qlpktclhPhieuKtChatLuong, QlpktclhPhieuKtChatLuongResponseDto.class);
+		response.setTenTrangThai(QlpktclhPhieuKtChatLuongStatusEnum.getTenById(qlpktclhPhieuKtChatLuong.getTrangThai()));
 		List<QlpktclhKetQuaKiemTraResponseDto> ketQuaKiemTraRes = qlpktclhPhieuKtChatLuong.getKetQuaKiemTra().stream()
 						.map(item -> dataUtils.toObject(item, QlpktclhKetQuaKiemTraResponseDto.class))
 						.collect(Collectors.toList());
@@ -209,6 +226,64 @@ public class QlpktclhPhieuKtChatLuongServiceImpl implements QlpktclhPhieuKtChatL
 		Long phieuKiemTraChatLuongId = phieu.getId();
 		qlpktclhKetQuaKiemTraRepo.deleteByPhieuKtChatLuongId(phieuKiemTraChatLuongId);
 		qlpktclhPhieuKtChatLuongRepo.delete(phieu);
+		return true;
+	}
+
+	@Override
+	public boolean exportToExcel(QlpktclhPhieuKtChatLuongFilterRequestDto objReq, HttpServletResponse response) throws Exception {
+		objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
+		List<QlpktclhPhieuKtChatLuongResponseDto> list = this.filter(objReq).get().collect(Collectors.toList());
+
+		if (CollectionUtils.isEmpty(list))
+			return true;
+
+		try {
+			XSSFWorkbook workbook = new XSSFWorkbook();
+
+			//STYLE
+			CellStyle style = workbook.createCellStyle();
+			XSSFFont font = workbook.createFont();
+			font.setFontHeight(11);
+			font.setBold(true);
+			style.setFont(font);
+			style.setAlignment(HorizontalAlignment.CENTER);
+			style.setVerticalAlignment(VerticalAlignment.CENTER);
+			XSSFSheet sheet = workbook.createSheet(SHEET_PHIEU_KIEM_TRA_CHAT_LUONG_HANG);
+			Row row0 = sheet.createRow(0);
+			//STT
+
+			ExportExcel.createCell(row0, 0, STT, style, sheet);
+			ExportExcel.createCell(row0, 1, SO_PHIEU, style, sheet);
+			ExportExcel.createCell(row0, 2, NGAY_GIAM_DINH, style, sheet);
+			ExportExcel.createCell(row0, 3, KET_QUA_DANH_GIA, style, sheet);
+			ExportExcel.createCell(row0, 4, TRANG_THAI, style, sheet);
+
+			style = workbook.createCellStyle();
+			font = workbook.createFont();
+			font.setFontHeight(11);
+			style.setFont(font);
+
+			Row row;
+			int startRowIndex = 1;
+
+			for (QlpktclhPhieuKtChatLuongResponseDto item : list) {
+				row = sheet.createRow(startRowIndex);
+				ExportExcel.createCell(row, 0, startRowIndex, style, sheet);
+				ExportExcel.createCell(row, 1, item.getSoPhieu(), style, sheet);
+				ExportExcel.createCell(row, 2, LocalDateTimeUtils.localDateToString(item.getNgayGdinh()), style, sheet);
+				ExportExcel.createCell(row, 3, item.getKetLuan(), style, sheet);
+				ExportExcel.createCell(row, 4, QlpktclhPhieuKtChatLuongStatusEnum.getTenById(item.getTrangThai()), style, sheet);
+				startRowIndex++;
+			}
+
+			ServletOutputStream outputStream = response.getOutputStream();
+			workbook.write(outputStream);
+			workbook.close();
+			outputStream.close();
+		} catch (Exception e) {
+			log.error("Error export", e);
+			return false;
+		}
 		return true;
 	}
 }

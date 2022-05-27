@@ -8,6 +8,8 @@ import com.tcdt.qlnvhang.response.quanlyphieukiemtrachatluonghangluongthuc.Qlpkt
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
+
 public interface QlpktclhPhieuKtChatLuongService {
 	QlpktclhPhieuKtChatLuongResponseDto create (QlpktclhPhieuKtChatLuongRequestDto req) throws Exception;
 
@@ -24,4 +26,6 @@ public interface QlpktclhPhieuKtChatLuongService {
 
 	@Transactional(rollbackFor = Exception.class)
 	boolean delete(Long id) throws Exception;
+
+    boolean exportToExcel(QlpktclhPhieuKtChatLuongFilterRequestDto objReq, HttpServletResponse response) throws Exception;
 }

@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongFilterRequestDto;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongRequestDto;
+import com.tcdt.qlnvhang.request.search.HhBbNghiemthuKlstSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongService;
 import com.tcdt.qlnvhang.util.PathContains;
@@ -16,7 +17,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -126,5 +131,25 @@ public class QlpktclhPhieuKtChatLuongController {
 			log.error("Xóa phiếu kiểm tra chất lượng hàng lương thực error", e);
 		}
 		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Export phiếu kiểm tra chất lượng hàng lương thực", response = List.class)
+	@PostMapping(value = "/export/list", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody QlpktclhPhieuKtChatLuongFilterRequestDto req) {
+
+		try {
+			response.setContentType("application/octet-stream");
+			DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+			String currentDateTime = dateFormatter.format(new Date());
+
+			String headerKey = "Content-Disposition";
+			String headerValue = "attachment; filename=bien_ban_nghiem_thu_bao_quan_lan_dau_nhap_" + currentDateTime + ".xlsx";
+			response.setHeader(headerKey, headerValue);
+			service.exportToExcel(req, response);
+		} catch (Exception e) {
+			log.error("Error can not export", e);
+		}
+
 	}
 }

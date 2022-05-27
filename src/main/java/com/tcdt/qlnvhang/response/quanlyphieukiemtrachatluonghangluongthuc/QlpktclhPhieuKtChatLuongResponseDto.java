@@ -71,5 +71,7 @@ public class QlpktclhPhieuKtChatLuongResponseDto {
 
 	private String tenNhaKho;
 
+	private LocalDate ngayGdinh;
+
 	private List<QlpktclhKetQuaKiemTraResponseDto> ketQuaKiemTra;
 }
