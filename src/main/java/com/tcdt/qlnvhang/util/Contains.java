@@ -43,6 +43,11 @@ public class Contains {
 	public static final String LANHDAO_DUYET = "10"; // Trang thai Lanh dao duyet
 	public static final String BAN_HANH = "11"; // Trang thai Lanh dao duyet
 
+	// Trạng thái tổng hợp
+	public static final String CHUA_QUYET_DINH = "00";
+
+	public static final String DA_QUYET_DINH = "01";
+
 	// Trang thai response
 	public static final int RESP_SUCC = 0;
 	public static final int RESP_FAIL = 1;

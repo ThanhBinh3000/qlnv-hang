@@ -75,14 +75,16 @@ public class HhQdKhlcntHdr implements Serializable {
 	@Transient
 	String tenNguonVon;
 
-	@Temporal(TemporalType.DATE)
+//	@Temporal(TemporalType.DATE)
 	Date tgianTbao;
-	@Temporal(TemporalType.DATE)
+//	@Temporal(TemporalType.DATE)
 	Date tgianDthau;
-	@Temporal(TemporalType.DATE)
+//	@Temporal(TemporalType.DATE)
 	Date tgianNhang;
-	@Temporal(TemporalType.DATE)
+//	@Temporal(TemporalType.DATE)
 	Date tgianMthau;
+//	@Temporal(TemporalType.DATE)
+	Date tgianPhanh;
 
 	Date ngayTao;
 	String nguoiTao;

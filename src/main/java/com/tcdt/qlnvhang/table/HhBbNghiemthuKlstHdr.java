@@ -103,13 +103,16 @@ public class HhBbNghiemthuKlstHdr implements Serializable {
 	String tenNganlo;
 
 	@Transient
-	HhBbNghiemthuKlstHdr namTruoc;
-
-	@Transient
 	Double chiPhiThucHienTrongNam;
 
 	@Transient
+	Double chiPhiThucHienNamTruoc;
+
+	@Transient
 	Double tongGiaTri;
+
+	@Transient
+	String tenTrangThai;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "id_hdr")

@@ -10,6 +10,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.tcdt.qlnvhang.enums.HhBbNghiemthuKlstStatusEnum;
 import com.tcdt.qlnvhang.repository.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -103,7 +104,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 
 		HhBbNghiemthuKlstHdr dataMap = new ModelMapper().map(objReq, HhBbNghiemthuKlstHdr.class);
 		dataMap.setNgayTao(getDateTimeNow());
-		dataMap.setTrangThai(Contains.TAO_MOI);
+		dataMap.setTrangThai(HhBbNghiemthuKlstStatusEnum.DU_THAO.getId());
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setChildren1(fileDinhKemList);
 
@@ -111,13 +112,12 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 		List<HhBbNghiemthuKlstDtl> dtls1 = ObjectMapperUtils.mapAll(objReq.getDetail(), HhBbNghiemthuKlstDtl.class);
 		dataMap.setChildren(dtls1);
 
-		UnitScaler.reverseFormatList(dataMap.getChildren(), Contains.DVT_TAN);
 		dataMap.setNam(qdNxOptional.get().getNamNhap());
 		dataMap.setMaDvi(userInfo.getDvql());
 		dataMap.setCapDvi(userInfo.getCapDvi());
 		hhBbNghiemthuKlstRepository.save(dataMap);
 
-		return this.buildResponse(dataMap, userInfo);
+		return this.buildResponse(dataMap);
 
 	}
 
@@ -176,7 +176,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 		dataDTB.setCapDvi(userInfo.getCapDvi());
 		hhBbNghiemthuKlstRepository.save(dataDTB);
 
-		return this.buildResponse(dataDTB, userInfo);
+		return this.buildResponse(dataDTB);
 
 	}
 
@@ -201,7 +201,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 				HhBbNghiemthuKlstDtl.class);
 		UnitScaler.formatList(dtls, Contains.DVT_TAN);
 
-		return this.buildResponse(qOptional.get(), userInfo);
+		return this.buildResponse(qOptional.get());
 	}
 
 	@Override
@@ -220,7 +220,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 		// Lay danh muc dung chung
 		//Map<String, String> mapDmucDvi = getMapTenDvi();
 		for (HhBbNghiemthuKlstHdr hdr : qhKho.getContent()) {
-			this.buildResponse(hdr, userInfo);
+			this.buildResponse(hdr);
 			//hdr.setTenDvi(mapDmucDvi.get(hdr.getMaDvi()));
 		}
 
@@ -228,7 +228,12 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 	}
 
 	@Override
-	public HhBbNghiemthuKlstHdr approve(StatusReq stReq) throws Exception {
+	public boolean approve(StatusReq stReq) throws Exception {
+
+		UserInfo userInfo = SecurityContextService.getUser();
+		if (userInfo == null)
+			throw new Exception("Bad request");
+
 		if (StringUtils.isEmpty(stReq.getId()))
 			throw new Exception("Không tìm thấy dữ liệu");
 
@@ -236,27 +241,41 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 		if (!optional.isPresent())
 			throw new Exception("Không tìm thấy dữ liệu");
 
-		String status = stReq.getTrangThai() + optional.get().getTrangThai();
-		switch (status) {
-		case Contains.CHO_DUYET + Contains.MOI_TAO:
-			optional.get().setNguoiGuiDuyet(getUser().getUsername());
-			optional.get().setNgayGuiDuyet(getDateTimeNow());
-			break;
-		case Contains.TU_CHOI + Contains.CHO_DUYET:
-			optional.get().setNguoiPduyet(getUser().getUsername());
-			optional.get().setNgayPduyet(getDateTimeNow());
-			optional.get().setLdoTuchoi(stReq.getLyDo());
-			break;
-		case Contains.DUYET + Contains.CHO_DUYET:
-			optional.get().setNguoiPduyet(getUser().getUsername());
-			optional.get().setNgayPduyet(getDateTimeNow());
-			break;
-		default:
-			throw new Exception("Phê duyệt không thành công");
+		HhBbNghiemthuKlstHdr bb = optional.get();
+		String trangThai = bb.getTrangThai();
+		if (HhBbNghiemthuKlstStatusEnum.DU_THAO_TRINH_DUYET.getId().equals(stReq.getTrangThai())) {
+			if (!HhBbNghiemthuKlstStatusEnum.DU_THAO.getId().equals(trangThai))
+				return false;
+
+			bb.setTrangThai(HhBbNghiemthuKlstStatusEnum.DU_THAO_TRINH_DUYET.getId());
+			bb.setNguoiGuiDuyet(userInfo.getUsername());
+			bb.setNgayGuiDuyet(getDateTimeNow());
+		} else if (HhBbNghiemthuKlstStatusEnum.LANH_DAO_DUYET.getId().equals(stReq.getTrangThai())) {
+			if (!HhBbNghiemthuKlstStatusEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
+				return false;
+			bb.setTrangThai(HhBbNghiemthuKlstStatusEnum.LANH_DAO_DUYET.getId());
+			bb.setNguoiPduyet(userInfo.getUsername());
+			bb.setNgayPduyet(getDateTimeNow());
+		} else if (HhBbNghiemthuKlstStatusEnum.BAN_HANH.getId().equals(stReq.getTrangThai())) {
+			if (!HhBbNghiemthuKlstStatusEnum.LANH_DAO_DUYET.getId().equals(trangThai))
+				return false;
+
+			bb.setTrangThai(HhBbNghiemthuKlstStatusEnum.BAN_HANH.getId());
+			bb.setNguoiPduyet(userInfo.getUsername());
+			bb.setNgayPduyet(getDateTimeNow());
+		} else if (HhBbNghiemthuKlstStatusEnum.TU_CHOI.getId().equals(stReq.getTrangThai())) {
+			if (!HhBbNghiemthuKlstStatusEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
+				return false;
+
+			bb.setTrangThai(HhBbNghiemthuKlstStatusEnum.TU_CHOI.getId());
+			bb.setNguoiPduyet(userInfo.getUsername());
+			bb.setNgayPduyet(getDateTimeNow());
+			bb.setLdoTuchoi(stReq.getLyDo());
+		}  else {
+			throw new Exception("Bad request.");
 		}
 
-		optional.get().setTrangThai(stReq.getTrangThai());
-		return hhBbNghiemthuKlstRepository.save(optional.get());
+		return true;
 	}
 
 	@Override
@@ -269,7 +288,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 			throw new Exception("Không tìm thấy dữ liệu cần xoá");
 
 		if (!optional.get().getTrangThai().equals(Contains.TAO_MOI)
-				|| !optional.get().getTrangThai().equals(Contains.TU_CHOI))
+				&& !optional.get().getTrangThai().equals(Contains.TU_CHOI))
 			throw new Exception("Chỉ thực hiện xóa với biên bản ở trạng thái bản nháp hoặc từ chối");
 
 		hhBbNghiemthuKlstRepository.delete(optional.get());
@@ -318,7 +337,6 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 			int startRowIndex = 1;
 
 			for (HhBbNghiemthuKlstHdr item : list) {
-				HhBbNghiemthuKlstHdr namTruoc = item.getNamTruoc();
 				row = sheet.createRow(startRowIndex);
 				ExportExcel.createCell(row, 0, startRowIndex, style, sheet);
 				ExportExcel.createCell(row, 1, item.getSoBb(), style, sheet);
@@ -327,7 +345,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 				ExportExcel.createCell(row, 4, item.getTenNhakho(), style, sheet);
 				ExportExcel.createCell(row, 5, item.getTenNganlo(), style, sheet);
 				ExportExcel.createCell(row, 6,  Optional.ofNullable(item.getChiPhiThucHienTrongNam()).orElse(0D), style, sheet);
-				ExportExcel.createCell(row, 7, Optional.ofNullable(namTruoc).map(HhBbNghiemthuKlstHdr::getChiPhiThucHienTrongNam).orElse(0D), style, sheet);
+				ExportExcel.createCell(row, 7, Optional.ofNullable(item.getChiPhiThucHienNamTruoc()).orElse(0D), style, sheet);
 				ExportExcel.createCell(row, 8, item.getTongGiaTri(), style, sheet);
 				ExportExcel.createCell(row, 9, Contains.MOI_TAO, style, sheet);
 				startRowIndex++;
@@ -344,11 +362,23 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 		return true;
 	}
 
-	private HhBbNghiemthuKlstHdr buildResponse(HhBbNghiemthuKlstHdr bb, UserInfo userInfo) {
-		if (bb.getNam() != null) {
-			hhBbNghiemthuKlstRepository.findFirstByNamAndMaDvi(bb.getNam() - 1, userInfo.getDvql())
-					.ifPresent(bb::setNamTruoc);
-		}
+	private HhBbNghiemthuKlstHdr buildResponse(HhBbNghiemthuKlstHdr bb) {
+
+		bb.setTenTrangThai(HhBbNghiemthuKlstStatusEnum.getTenById(bb.getTenTrangThai()));
+		Double chiPhiTn = bb.getChildren().stream()
+				.filter(i -> i.getThanhTienTn() != null)
+				.mapToDouble(HhBbNghiemthuKlstDtl::getThanhTienTn).sum();
+
+		Double chiPhiNt = bb.getChildren().stream()
+				.filter(i -> i.getThanhTienQt() != null)
+				.mapToDouble(HhBbNghiemthuKlstDtl::getThanhTienQt).sum();
+
+		Double tongGiaTri = bb.getChildren().stream()
+				.filter(i -> i.getTongGtri() != null)
+				.mapToDouble(HhBbNghiemthuKlstDtl::getTongGtri).sum();
+		bb.setChiPhiThucHienTrongNam(chiPhiTn);
+		bb.setChiPhiThucHienNamTruoc(chiPhiNt);
+		bb.setTongGiaTri(tongGiaTri);
 
 		if (!StringUtils.hasText(bb.getMaNganlo()))
 			return bb;
@@ -374,13 +404,6 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 
 			bb.setTenDiemkho(diemKho.getTenDiemkho());
 			bb.setMaDiemkho(diemKho.getMaDiemkho());
-		}
-		bb.setChiPhiThucHienTrongNam(bb.getChildren().stream().mapToDouble(HhBbNghiemthuKlstDtl::getThanhTienTn).sum());
-		bb.setTongGiaTri(bb.getChildren().stream().mapToDouble(HhBbNghiemthuKlstDtl::getTongGtri).sum());
-		HhBbNghiemthuKlstHdr namTruoc = bb.getNamTruoc();
-		if (namTruoc != null) {
-			namTruoc.setChiPhiThucHienTrongNam(namTruoc.getChildren().stream().mapToDouble(HhBbNghiemthuKlstDtl::getThanhTienTn).sum());
-			namTruoc.setTongGiaTri(namTruoc.getChildren().stream().mapToDouble(HhBbNghiemthuKlstDtl::getTongGtri).sum());
 		}
 		return bb;
 	}

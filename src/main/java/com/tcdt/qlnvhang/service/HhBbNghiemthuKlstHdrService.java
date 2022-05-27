@@ -25,7 +25,7 @@ public interface HhBbNghiemthuKlstHdrService {
 	Page<HhBbNghiemthuKlstHdr> colection(HhBbNghiemthuKlstSearchReq objReq, HttpServletRequest req) throws Exception;
 
 	@Transactional(rollbackOn = Exception.class)
-	HhBbNghiemthuKlstHdr approve(StatusReq stReq) throws Exception;
+	boolean approve(StatusReq stReq) throws Exception;
 
 	@Transactional(rollbackOn = Exception.class)
 	void delete(IdSearchReq idSearchReq) throws Exception;

@@ -41,5 +41,4 @@ public class HhBbNghiemthuKlstDtl implements Serializable {
 	@JoinColumn(name = "id_hdr")
 	@JsonBackReference
 	private HhBbNghiemthuKlstHdr parent;
-
 }
