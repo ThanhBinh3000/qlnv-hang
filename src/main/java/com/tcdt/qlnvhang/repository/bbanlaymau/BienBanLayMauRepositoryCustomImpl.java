@@ -108,7 +108,7 @@ public class BienBanLayMauRepositoryCustomImpl implements BienBanLayMauRepositor
 	private int countCtkhn(BienBanLayMauSearchReq req) {
 		int total = 0;
 		StringBuilder builder = new StringBuilder();
-		builder.append("SELECT COUNT(1) AS totalRecord FROM BIEN_BAN_LAY_MAU");
+		builder.append("SELECT COUNT(1) AS totalRecord FROM BB_LAY_MAU ");
 
 		this.setConditionSearchCtkhn(req, builder);
 

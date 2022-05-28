@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,6 +59,7 @@ public class BienBanLayMauServiceImpl implements BienBanLayMauService{
 	}
 
 	@Override
+	@Transactional(rollbackOn = Exception.class)
 	public BienBanLayMauRes create(BienBanLayMauReq req) throws Exception {
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null)
@@ -75,6 +77,7 @@ public class BienBanLayMauServiceImpl implements BienBanLayMauService{
 	}
 
 	@Override
+	@Transactional(rollbackOn = Exception.class)
 	public BienBanLayMauRes update(BienBanLayMauReq req) throws Exception {
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null)
@@ -95,6 +98,7 @@ public class BienBanLayMauServiceImpl implements BienBanLayMauService{
 	}
 
 	@Override
+	@Transactional(rollbackOn = Exception.class)
 	public boolean updateStatus(StatusReq req) throws Exception {
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null)
@@ -158,6 +162,7 @@ public class BienBanLayMauServiceImpl implements BienBanLayMauService{
 	}
 
 	@Override
+	@Transactional(rollbackOn = Exception.class)
 	public boolean delete(Long id) {
 		bienBanLayMauRepository.deleteById(id);
 		return true;
