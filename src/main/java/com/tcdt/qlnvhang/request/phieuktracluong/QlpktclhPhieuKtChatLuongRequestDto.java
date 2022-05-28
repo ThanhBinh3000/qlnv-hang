@@ -34,7 +34,6 @@ public class QlpktclhPhieuKtChatLuongRequestDto {
 	@NotNull
 	private Long quyetDinhNhapId;
 
-	@NotNull
 	private String maNganKho;
 	private String tenNganKho;
 
