@@ -117,6 +117,9 @@ public class QlpktclhPhieuKtChatLuong extends BaseEntity {
 	@Column(name = "CAP_DVI")
 	private String capDvi;
 
+	@Column(name = "DIEM_KHO_ID")
+	private Long diemKhoId;
+
 	@Transient
 	private List<QlpktclhKetQuaKiemTra> ketQuaKiemTra = new ArrayList<>();
 }

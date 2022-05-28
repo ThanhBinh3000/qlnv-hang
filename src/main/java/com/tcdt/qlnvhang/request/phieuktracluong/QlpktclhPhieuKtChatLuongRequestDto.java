@@ -42,6 +42,9 @@ public class QlpktclhPhieuKtChatLuongRequestDto {
 	private String tenNganLo;
 
 	@NotNull
+	private Long diemKhoId;
+
+	@NotNull
 	private String maDiemKho;
 
 	private String tenDiemKho;

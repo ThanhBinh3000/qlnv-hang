@@ -63,6 +63,8 @@ public class QlpktclhPhieuKtChatLuongResponseDto {
 
 	private String tenNganLo;
 
+	private Long diemKhoId;
+
 	private String maDiemKho;
 
 	private String tenDiemKho;
