@@ -20,7 +20,7 @@ public class QlBangKeCanHangLtRepositoryCustomImpl implements QlBangKeCanHangLtR
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT p FROM QlBangKeCanHangLt p ");
         setConditionSearch(req, builder);
-        builder.append("ORDER BY p.ngayLap DESC");
+        builder.append("ORDER BY p.ngayNhapXuat DESC");
 
         TypedQuery<QlBangKeCanHangLt> query = em.createQuery(builder.toString(), QlBangKeCanHangLt.class);
 
@@ -42,10 +42,10 @@ public class QlBangKeCanHangLtRepositoryCustomImpl implements QlBangKeCanHangLtR
             builder.append("AND ").append("p.soBangKe = :soBangKe ");
         }
         if (req.getTuNgay() != null) {
-            builder.append("AND ").append("p.ngayLap >= :tuNgay ");
+            builder.append("AND ").append("p.ngayNhapXuat >= :tuNgay ");
         }
         if (req.getDenNgay() != null) {
-            builder.append("AND ").append("p.ngayLap <= :denNgay ");
+            builder.append("AND ").append("p.ngayNhapXuat <= :denNgay ");
         }
 
         if (!StringUtils.isEmpty(req.getMaHang())) {

@@ -77,11 +77,13 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
         response.setTenDonViLap(mapDmucDvi.get(item.getMaDonViLap()));
         response.setTenTrangThai(QlBangKeCanHangLtStatus.getTenById(item.getTrangThai()));
         List<QlBangKeChCtLt> chiTiets = item.getChiTiets();
+        List<QlBangKeChCtLtRes> chiTietResList = new ArrayList<>();
         for (QlBangKeChCtLt chiTiet : chiTiets) {
             QlBangKeChCtLtRes chiTietRes = new QlBangKeChCtLtRes();
             BeanUtils.copyProperties(chiTiet, chiTietRes);
-            response.getChiTiets().add(chiTietRes);
+            chiTietResList.add(chiTietRes);
         }
+        response.setChiTiets(chiTietResList);
         return response;
     }
 
