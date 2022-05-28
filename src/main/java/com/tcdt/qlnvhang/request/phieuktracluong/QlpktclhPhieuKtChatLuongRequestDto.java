@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -25,40 +26,49 @@ public class QlpktclhPhieuKtChatLuongRequestDto {
 
 	private String nguoiGiaoHang;
 
+	@NotNull
 	private String diaChi;
 
+	@NotNull
 	private Long hopDongId;
 
+	@NotNull
 	private Long quyetDinhNhapId;
 
+	@NotNull
 	private String maNganKho;
-
+	@NotNull
 	private String tenNganKho;
-
+	@NotNull
 	private String maNganLo;
 
 	private String tenNganLo;
 
+	@NotNull
 	private String maDiemKho;
 
 	private String tenDiemKho;
-
+	@NotNull
 	private String maNhaKho;
 
 	private String tenNhaKho;
 
+	@NotNull
 	private Long maHangHoa;
 
 	private String tenHangHoa;
 
+	@NotNull
 	private Double khoiLuong;
 
 	private Long soChungThuGiamDinh;
 
+	@NotNull
 	private String bienSoXe;
 
 	private String soPhieuAnToanThucPham;
 
+	@NotNull
 	private String maDonVi;
 
 	private String maQhns;
@@ -75,6 +85,7 @@ public class QlpktclhPhieuKtChatLuongRequestDto {
 
 	private String trangThai;
 
+	@NotNull
 	private String ketLuan;
 
 	private String lyDoTuChoi;
