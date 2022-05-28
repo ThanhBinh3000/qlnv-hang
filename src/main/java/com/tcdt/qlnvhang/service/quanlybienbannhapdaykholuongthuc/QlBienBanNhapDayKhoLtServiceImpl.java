@@ -130,6 +130,8 @@ public class QlBienBanNhapDayKhoLtServiceImpl implements QlBienBanNhapDayKhoLtSe
         List<QlBienBanNdkCtLtReq> chiTietReqs = req.getChiTiets();
         List<QlBienBanNdkCtLt> chiTiets = this.saveListChiTiet(item.getId(), chiTietReqs, map);
         item.setChiTiets(chiTiets);
+        if (!CollectionUtils.isEmpty(map.values()))
+            qlBienBanNdkCtLtRepository.deleteAll(map.values());
 
         return this.buildResponse(item);
     }

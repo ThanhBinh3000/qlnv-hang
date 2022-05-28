@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
@@ -19,16 +20,20 @@ public class QlPhieuNhapKhoHangHoaLtReq {
     private String donViTinh;
 
     @NotNull(message = "Không được để trống")
-    private Long soLuongTrenCt;
+    private BigDecimal soLuongTrenCt;
 
     @NotNull(message = "Không được để trống")
-    private Long soLuongThuc;
+    private BigDecimal soLuongThuc;
 
     @NotNull(message = "Không được để trống")
-    private Long donGia;
+    private BigDecimal donGia;
 
     @NotNull(message = "Không được để trống")
-    private Long thanhTien;
+    private BigDecimal thanhTien;
+
+    private BigDecimal soChungTu;
+
+    private BigDecimal soThucNhap;
 
     private String maVatTu;
 }

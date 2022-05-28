@@ -10,14 +10,10 @@ import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatHdrLoaiQd;
 import com.tcdt.qlnvhang.repository.HhDviThuchienQdinhRepository;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
-import com.tcdt.qlnvhang.request.object.HhDviThQdDtlReq;
-import com.tcdt.qlnvhang.request.object.HhDviThuhienQdinhReq;
-import com.tcdt.qlnvhang.request.search.HhDxKhLcntThopSearchReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.util.*;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -212,9 +208,9 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 		HhQdGiaoNvuNhapxuatHdr data = qOptional.get();
 
-		Map<String, String> mapDmucDvi = getMapTenDvi();
 		data.setTenLoaiQd(HhQdGiaoNvuNhapxuatHdrLoaiQd.getTenById(data.getLoaiQd()));
-//		this.setTenDvi(data);
+		Map<String, String> mapDmucDvi = getMapTenDvi();
+		data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
 
 		if (StringUtils.hasText(data.getSoHd())) {
 			Optional<HhHopDongHdr> qOpHdong = hhHopDongRepository.findBySoHd(data.getSoHd());

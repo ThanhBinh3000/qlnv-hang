@@ -38,7 +38,7 @@ public class QlPhieuNhapKhoLt  extends BaseEntity implements Serializable {
     private Long qdgnvnxId; // HhQdGiaoNvuNhapxuatHdr
 
     @Column(name = "SO_PHIEU")
-    private Long soPhieu;
+    private String soPhieu;
 
     @Column(name = "NGAY_LAP")
     private LocalDate ngayLap;

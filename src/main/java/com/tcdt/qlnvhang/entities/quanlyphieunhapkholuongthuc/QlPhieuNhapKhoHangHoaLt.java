@@ -44,4 +44,10 @@ public class QlPhieuNhapKhoHangHoaLt implements Serializable {
 
     @Column(name = "THANH_TIEN")
     private BigDecimal thanhTien;
+
+    @Column(name = "SO_CHUNG_TU")
+    private BigDecimal soChungTu;
+
+    @Column(name = "SO_THUC_NHAP")
+    private BigDecimal soThucNhap;
 }

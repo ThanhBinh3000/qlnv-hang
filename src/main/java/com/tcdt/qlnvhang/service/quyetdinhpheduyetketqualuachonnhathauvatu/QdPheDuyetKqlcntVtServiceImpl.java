@@ -170,6 +170,12 @@ public class QdPheDuyetKqlcntVtServiceImpl implements QdPheDuyetKqlcntVtService 
             List<QdKqlcntGtDdnVtReq> ddnReqs = goiThauReq.getDdnReqs();
             this.saveListDdnVt(goiThau.getId(), ddnReqs, mapDdn);
         }
+
+        if (!CollectionUtils.isEmpty(mapGoiThau.values()))
+            qdKqlcntGoiThauVtRepo.deleteAll(mapGoiThau.values());
+
+        if (!CollectionUtils.isEmpty(mapDdn.values()))
+            qdKqlcntGtDdnVtRepo.deleteAll(mapDdn.values());
         return this.buildResponse(qd, vattu);
     }
 

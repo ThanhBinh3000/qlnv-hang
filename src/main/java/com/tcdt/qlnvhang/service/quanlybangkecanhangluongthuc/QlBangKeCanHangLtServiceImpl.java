@@ -138,6 +138,9 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
         List<QlBangKeChCtLt> chiTiets = this.saveListChiTiet(item.getId(), chiTietReqs, map);
         item.setChiTiets(chiTiets);
 
+        if (!CollectionUtils.isEmpty(map.values()))
+            qlBangKeChCtLtRepository.deleteAll(map.values());
+
         return this.buildResponse(item);
     }
 
