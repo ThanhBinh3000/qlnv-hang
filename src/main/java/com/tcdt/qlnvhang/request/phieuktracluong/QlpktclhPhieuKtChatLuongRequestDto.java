@@ -26,7 +26,6 @@ public class QlpktclhPhieuKtChatLuongRequestDto {
 
 	private String nguoiGiaoHang;
 
-	@NotNull
 	private String diaChi;
 
 	@NotNull
@@ -37,9 +36,8 @@ public class QlpktclhPhieuKtChatLuongRequestDto {
 
 	@NotNull
 	private String maNganKho;
-	@NotNull
 	private String tenNganKho;
-	@NotNull
+
 	private String maNganLo;
 
 	private String tenNganLo;
