@@ -114,6 +114,9 @@ public class HhBbNghiemthuKlstHdr implements Serializable {
 	@Transient
 	String tenTrangThai;
 
+	@Transient
+	String trangThaiDuyet;
+
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "id_hdr")
 	@JsonManagedReference

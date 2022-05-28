@@ -365,7 +365,8 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 
 	private HhBbNghiemthuKlstHdr buildResponse(HhBbNghiemthuKlstHdr bb) {
 
-		bb.setTenTrangThai(HhBbNghiemthuKlstStatusEnum.getTenById(bb.getTenTrangThai()));
+		bb.setTenTrangThai(HhBbNghiemthuKlstStatusEnum.getTenById(bb.getTrangThai()));
+		bb.setTrangThaiDuyet(HhBbNghiemthuKlstStatusEnum.getTrangThaiDuyetById(bb.getTrangThai()));
 		Double chiPhiTn = bb.getChildren().stream()
 				.filter(i -> i.getThanhTienTn() != null)
 				.mapToDouble(HhBbNghiemthuKlstDtl::getThanhTienTn).sum();
