@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatDtlLoaiNx;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatHdrLoaiQd;
 import com.tcdt.qlnvhang.repository.HhDviThuchienQdinhRepository;
+import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.object.HhDviThQdDtlReq;
 import com.tcdt.qlnvhang.request.object.HhDviThuhienQdinhReq;
@@ -43,6 +44,9 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 	@Autowired
 	private HhDviThuchienQdinhRepository hhDviThuchienQdinhRepository;
+
+	@Autowired
+	private HhHopDongRepository hhHopDongRepository;
 
 	@Autowired
 	private HttpServletRequest req;
@@ -211,6 +215,14 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		Map<String, String> mapDmucDvi = getMapTenDvi();
 		data.setTenLoaiQd(HhQdGiaoNvuNhapxuatHdrLoaiQd.getTenById(data.getLoaiQd()));
 //		this.setTenDvi(data);
+
+		if (StringUtils.hasText(data.getSoHd())) {
+			Optional<HhHopDongHdr> qOpHdong = hhHopDongRepository.findBySoHd(data.getSoHd());
+			if (!qOpHdong.isPresent())
+				throw new Exception("Hợp đồng số không tồn tại");
+
+			data.setHdId(qOpHdong.get().getId());
+		}
 		return data;
 	}
 
