@@ -12,5 +12,5 @@ public interface BienBanLayMauService {
 	BienBanLayMauRes update(BienBanLayMauReq req) throws Exception;
 	boolean updateStatus(StatusReq req) throws Exception;
 	BienBanLayMauRes detail(Long id) throws Exception;
-	boolean delete(Long id);
+	boolean delete(Long id) throws Exception;
 }

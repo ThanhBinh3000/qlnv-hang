@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.service.bbanlaymau;
 
 import com.tcdt.qlnvhang.entities.bbanlaymau.BienBanLayMau;
+import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
+import com.tcdt.qlnvhang.enums.QlpktclhPhieuKtChatLuongStatusEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
@@ -14,6 +16,7 @@ import com.tcdt.qlnvhang.service.donvi.QlnvDmDonViService;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
+import com.tcdt.qlnvhang.util.UserUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -163,7 +166,17 @@ public class BienBanLayMauServiceImpl implements BienBanLayMauService{
 
 	@Override
 	@Transactional(rollbackOn = Exception.class)
-	public boolean delete(Long id) {
+	public boolean delete(Long id) throws Exception {
+		UserInfo userInfo = UserUtils.getUserInfo();
+		Optional<BienBanLayMau> optional = bienBanLayMauRepository.findById(id);
+		if (!optional.isPresent())
+			throw new Exception("Không tìm thấy dữ liệu.");
+
+		BienBanLayMau bb = optional.get();
+
+		if (TrangThaiEnum.DA_DUYET.getMa().equals(bb.getTrangThai())) {
+			throw new Exception("Không thể xóa đề xuất điều chỉnh đã ban hành");
+		}
 		bienBanLayMauRepository.deleteById(id);
 		return true;
 	}
