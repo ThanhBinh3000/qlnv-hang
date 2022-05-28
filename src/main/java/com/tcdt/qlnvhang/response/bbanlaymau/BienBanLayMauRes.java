@@ -25,9 +25,23 @@ public class BienBanLayMauRes {
 	private String cvuDdienCcap;
 	private String canCu;
 	private String ddiemKtra;
-	private String sluongLMau;
+	private String sluongLmau;
 	private String pphapLayMau;
 	private String ctieuKtra;
 	private String kquaNiemPhongMau;
 	private String trangThai;
+
+	private String maDonVi;
+	private String maQHNS;
+	private String soHd;
+	private LocalDate ngayLayMau;
+	private String ddiemLayMau;
+	private String ddienCucDtruNnuoc;
+	private String tphongKthuatBquan;
+	private String ddienBenNhan;
+	private LocalDate ngayBgiaoMau;
+	private String ddienCucDtruBenGiao;
+	private String ddienDviTchucBenNhan;
+	private String tinhTrang;
+	private Integer soTrang;
 }

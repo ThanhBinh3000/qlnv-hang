@@ -145,7 +145,7 @@ public class BienBanLayMauServiceImpl implements BienBanLayMauService{
 		bb.setTenDdienCcap(req.getTenDdienCcap());
 		bb.setCvuDdienCcap(req.getCvuDdienCcap());
 		bb.setPphapLayMau(req.getPphapLayMau());
-		bb.setSluongLMau(req.getSluongLMau());
+		bb.setSluongLmau(req.getSluongLmau());
 		bb.setDdiemKtra(req.getDdiemKtra());
 		bb.setMaHhoa(req.getMaHhoa());
 		bb.setMaKho(req.getMaKho());

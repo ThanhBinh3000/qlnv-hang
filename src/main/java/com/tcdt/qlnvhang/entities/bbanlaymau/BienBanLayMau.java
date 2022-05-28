@@ -41,7 +41,7 @@ public class BienBanLayMau extends BaseEntity {
 	private String cvuDdienCcap;
 	private String canCu;
 	private String ddiemKtra;
-	private String sluongLMau;
+	private String sluongLmau;
 	private String pphapLayMau;
 	private String ctieuKtra;
 	private String kquaNiemPhongMau;
@@ -55,14 +55,14 @@ public class BienBanLayMau extends BaseEntity {
 	private String capDonVi;
 	private String maQhns;
 	private String soHd;
-	private String ngayLayMau;
+	private LocalDate ngayLayMau;
 	private String ddiemLayMau;
 	private String ddienCucDtruNnuoc;
-	private String tPhongKthuatBquan;
+	private String tphongKthuatBquan;
 	private String ddienBenNhan;
-	private String ngayBgiaoMau;
+	private LocalDate ngayBgiaoMau;
 	private String ddienCucDtruGiao;
 	private String ddienDviTchucNhan;
 	private String tinhTrang;
-	private String soTrang;
+	private Integer soTrang;
 }

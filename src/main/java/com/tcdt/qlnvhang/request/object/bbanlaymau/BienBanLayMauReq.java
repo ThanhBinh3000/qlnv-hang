@@ -22,7 +22,7 @@ public class BienBanLayMauReq {
 	private String cvuDdienCcap;
 	private String canCu;
 	private String ddiemKtra;
-	private String sluongLMau;
+	private String sluongLmau;
 	private String pphapLayMau;
 	private String ctieuKtra;
 	private String kquaNiemPhongMau;
@@ -30,15 +30,15 @@ public class BienBanLayMauReq {
 	private String maDonVi;
 	private String maQHNS;
 	private String soHd;
-	private String ngayLayMau;
+	private LocalDate ngayLayMau;
 	private String ddiemLayMau;
 	private String ddienCucDtruNnuoc;
-	private String tPhongKthuatBquan;
+	private String tphongKthuatBquan;
 	private String ddienBenNhan;
-	private String ngayBgiaoMau;
+	private LocalDate ngayBgiaoMau;
 	private String ddienCucDtruBenGiao;
 	private String ddienDviTchucBenNhan;
 	private String tinhTrang;
-	private String soTrang;
+	private Integer soTrang;
 
 }

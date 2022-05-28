@@ -58,7 +58,7 @@ public class BienBanLayMauRepositoryCustomImpl implements BienBanLayMauRepositor
 					bb.setMaLo(item.get("MA_LO", String.class));
 					bb.setMaHhoa(item.get("MA_HHOA", String.class));
 					bb.setPphapLayMau(item.get("PPHAP_LAY_MAU", String.class));
-					bb.setSluongLMau(item.get("SLUONG_MAU", String.class));
+					bb.setSluongLmau(item.get("SLUONG_MAU", String.class));
 					bb.setKquaNiemPhongMau(item.get("KQUA_NIEM_PHONG_MAU", String.class));
 					bb.setDdiemKtra(item.get("DDIEM_KTRA", String.class));
 					bb.setCcuQdinhGiaoNvuNhap(item.get("CCU_QDINH_GIAO_NVU_NHAP", String.class));
