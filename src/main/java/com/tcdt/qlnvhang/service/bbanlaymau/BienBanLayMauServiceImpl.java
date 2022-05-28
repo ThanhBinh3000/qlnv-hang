@@ -90,7 +90,7 @@ public class BienBanLayMauServiceImpl implements BienBanLayMauService{
 			throw new Exception("Không tìm thấy dữ liệu.");
 		}
 
-		BienBanLayMau bienBienLayMau = new BienBanLayMau();
+		BienBanLayMau bienBienLayMau = optional.get();
 		BeanUtils.copyProperties(req, bienBienLayMau, "id");
 		bienBienLayMau.setNguoiSuaId(userInfo.getId());
 		bienBienLayMau.setNgaySua(LocalDate.now());

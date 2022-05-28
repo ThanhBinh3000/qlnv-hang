@@ -1,17 +1,20 @@
 package com.tcdt.qlnvhang.enums;
 
 public enum QlPhieuNhapKhoLtStatus {
-    MOI_TAO("00", "Mới tạo"),
-    CHO_DUYET("01", "Chờ duyệt"),
-    DA_DUYET("02", "Đã duyệt"),
-    TU_CHOI("03", "Từ chối");
+    DU_THAO("00", "Dự Thảo", "Dự Thảo"),
+    LANH_DAO_DUYET("01", "Lãnh Đạo Duyệt", "Lãnh Đạo Duyệt"),
+    BAN_HANH("02", "Ban Hành", "Ban Hành"),
+    TU_CHOI("03", "Từ Chối", "Từ Chối"),
+    DU_THAO_TRINH_DUYET("04", "Dự Thảo", "Trình Duyệt");
 
     private final String id;
     private final String ten;
+    private final String trangThaiDuyet;
 
-    QlPhieuNhapKhoLtStatus(String id, String ten) {
+    QlPhieuNhapKhoLtStatus(String id, String ten, String trangThaiDuyet) {
         this.id = id;
         this.ten = ten;
+        this.trangThaiDuyet = trangThaiDuyet;
     }
 
     public String getId() {
@@ -22,10 +25,23 @@ public enum QlPhieuNhapKhoLtStatus {
         return ten;
     }
 
+    public String getTrangThaiDuyet() {
+        return trangThaiDuyet;
+    }
+
     public static String getTenById(String id) {
         for (QlPhieuNhapKhoLtStatus status : QlPhieuNhapKhoLtStatus.values()) {
             if (status.getId().equals(id))
                 return status.getTen();
+        }
+
+        return null;
+    }
+
+    public static String getTrangThaiDuyetById(String id) {
+        for (QlPhieuNhapKhoLtStatus status : QlPhieuNhapKhoLtStatus.values()) {
+            if (status.getId().equals(id))
+                return status.getTrangThaiDuyet();
         }
 
         return null;

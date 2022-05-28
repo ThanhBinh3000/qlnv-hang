@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc;
 
-import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoHangHoaLt;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,7 +25,6 @@ public class QlPhieuNhapKhoLtReq {
     @NotNull(message = "Không được để trống")
     private Long phieuKtClId;
 
-    @NotNull(message = "Không được để trống")
     private Long bbNghiemThuKlId;
 
     private Long soPhieu;
@@ -41,26 +39,19 @@ public class QlPhieuNhapKhoLtReq {
 
     private String tenNganLo;
 
-    @NotNull(message = "Không được để trống")
     private String nguoiGiaoHang;
 
-    @NotNull(message = "Không được để trống")
     private String tenNguoiGiaoNhan;
 
-    @NotNull(message = "Không được để trống")
     private String diaChiGiaoNhan;
 
-    @NotNull(message = "Không được để trống")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime thoiGianGiaoNhan;
 
-    @NotNull(message = "Không được để trống")
     private String taiKhoanNo;
 
-    @NotNull(message = "Không được để trống")
     private String taiKhoanCo;
 
-    @NotNull(message = "Không được để trống")
     private String loaiHinhNhap;
 
     private String ghiChu;
@@ -75,7 +66,6 @@ public class QlPhieuNhapKhoLtReq {
 
     private String maDiemKho;
     private String maNhaKho;
-
-
+    private String qdgnvnxId;
     private List<QlPhieuNhapKhoHangHoaLtReq> hangHoaList = new ArrayList<>();
 }

@@ -219,7 +219,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		if (StringUtils.hasText(data.getSoHd())) {
 			Optional<HhHopDongHdr> qOpHdong = hhHopDongRepository.findBySoHd(data.getSoHd());
 			if (!qOpHdong.isPresent())
-				throw new Exception("Hợp đồng số không tồn tại");
+				throw new Exception("Hợp đồng không tồn tại");
 
 			data.setHdId(qOpHdong.get().getId());
 		}

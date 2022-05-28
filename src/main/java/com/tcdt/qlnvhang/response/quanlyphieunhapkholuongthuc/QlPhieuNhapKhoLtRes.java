@@ -33,6 +33,8 @@ public class QlPhieuNhapKhoLtRes {
     private String ghiChu;
     private String trangThai;
     private String tenTrangThai;
+    private String trangThaiDuyet;
+    private String qdgnvnxId;
 
     private List<QlPhieuNhapKhoHangHoaLtRes> hangHoaRes = new ArrayList<>();
 }

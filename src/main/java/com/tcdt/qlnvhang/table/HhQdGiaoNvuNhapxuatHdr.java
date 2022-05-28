@@ -45,7 +45,6 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 
 	String soQd;
 	String veViec;
-
 	@Temporal(TemporalType.DATE)
 	Date ngayKy;
 

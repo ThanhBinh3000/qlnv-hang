@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoHangHoaLt;
 import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLt;
 import com.tcdt.qlnvhang.enums.QdPheDuyetKqlcntVtStatus;
+import com.tcdt.qlnvhang.enums.QlPhieuNhapKhoLtStatus;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoHangHoaLtRepository;
 import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLtRepository;
@@ -62,7 +63,7 @@ public class QlPhieuNhapKhoLtServiceImpl implements QlPhieuNhapKhoLtService {
         BeanUtils.copyProperties(req, phieu, "id");
         phieu.setNgayTao(LocalDate.now());
         phieu.setNguoiTaoId(userInfo.getId());
-        phieu.setTrangThai(QdPheDuyetKqlcntVtStatus.MOI_TAO.getId());
+        phieu.setTrangThai(QlPhieuNhapKhoLtStatus.DU_THAO.getId());
         phieu.setMaDonVi(userInfo.getDvql());
         phieu.setCapDonVi(qlnvDmDonViService.getCapDviByMa(userInfo.getDvql()));
         qlPhieuNhapKhoLtRepository.save(phieu);
@@ -107,6 +108,8 @@ public class QlPhieuNhapKhoLtServiceImpl implements QlPhieuNhapKhoLtService {
     private QlPhieuNhapKhoLtRes buildResponse(QlPhieuNhapKhoLt phieu) {
         QlPhieuNhapKhoLtRes response = new QlPhieuNhapKhoLtRes();
         BeanUtils.copyProperties(phieu, response);
+        response.setTenTrangThai(QlPhieuNhapKhoLtStatus.getTenById(phieu.getTrangThai()));
+        response.setTenTrangThai(QlPhieuNhapKhoLtStatus.getTrangThaiDuyetById(phieu.getTrangThai()));
         List<QlPhieuNhapKhoHangHoaLt> hangHoaList = phieu.getHangHoaList();
         for (QlPhieuNhapKhoHangHoaLt hangHoa : hangHoaList) {
             QlPhieuNhapKhoHangHoaLtRes hangHoaRes = new QlPhieuNhapKhoHangHoaLtRes();

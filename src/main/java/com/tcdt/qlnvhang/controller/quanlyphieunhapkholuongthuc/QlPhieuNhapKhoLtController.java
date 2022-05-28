@@ -60,7 +60,7 @@ public class QlPhieuNhapKhoLtController {
     }
 
     @ApiOperation(value = "Chi tiết Quản lý phiếu nhập kho lương thực", response = List.class)
-    @GetMapping("/id")
+    @GetMapping("/{id}")
     public ResponseEntity<BaseResponse> detail(@PathVariable Long id) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -76,7 +76,7 @@ public class QlPhieuNhapKhoLtController {
     }
 
     @ApiOperation(value = "Xóa Quản lý phiếu nhập kho lương thực", response = List.class)
-    @DeleteMapping("/id")
+    @DeleteMapping("/{id}")
     public ResponseEntity<BaseResponse> delete(@PathVariable Long id) {
         BaseResponse resp = new BaseResponse();
         try {

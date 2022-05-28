@@ -44,6 +44,7 @@ public class QlPhieuNhapKhoLtRepositoryCustomImpl implements QlPhieuNhapKhoLtRep
             QlPhieuNhapKhoLtRes response = new QlPhieuNhapKhoLtRes();
             BeanUtils.copyProperties(qd, response);
             response.setTenTrangThai(QlPhieuNhapKhoLtStatus.getTenById(qd.getTrangThai()));
+            response.setTrangThaiDuyet(QlPhieuNhapKhoLtStatus.getTrangThaiDuyetById(qd.getTrangThai()));
             responses.add(response);
         }
 
