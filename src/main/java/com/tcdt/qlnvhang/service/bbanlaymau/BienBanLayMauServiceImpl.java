@@ -1,8 +1,7 @@
 package com.tcdt.qlnvhang.service.bbanlaymau;
 
 import com.tcdt.qlnvhang.entities.bbanlaymau.BienBanLayMau;
-import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
-import com.tcdt.qlnvhang.enums.QlpktclhPhieuKtChatLuongStatusEnum;
+import com.tcdt.qlnvhang.enums.HhBbNghiemthuKlstStatusEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
@@ -57,8 +56,8 @@ public class BienBanLayMauServiceImpl implements BienBanLayMauService{
 		int pageIndex = req.getPaggingReq().getPage() == null ? DEFAULT_PAGE_INDEX : req.getPaggingReq().getPage();
 		int pageSize = req.getPaggingReq().getLimit() == null ? DEFAULT_PAGE_SIZE : req.getPaggingReq().getLimit();
 		Pageable pageable = PageRequest.of(pageIndex, pageSize);
-		Page<BienBanLayMau> page = bienBanLayMauRepository.search(req, pageable);
-		return new PageImpl<>(this.toResponseList(page.getContent()), pageable, page.getTotalElements());
+		List<BienBanLayMau> data = bienBanLayMauRepository.search(req, pageable);
+		return new PageImpl<>(this.toResponseList(data), pageable, bienBanLayMauRepository.countBienBan(req));
 	}
 
 	@Override
@@ -69,8 +68,8 @@ public class BienBanLayMauServiceImpl implements BienBanLayMauService{
 			throw new Exception("Bad request.");
 
 		BienBanLayMau bienBienLayMau = new BienBanLayMau();
-		this.updateEntity(bienBienLayMau, req);
-		bienBienLayMau.setTrangThai(TrangThaiEnum.MOI_TAO.getMa());
+		BeanUtils.copyProperties(req, bienBienLayMau, "id");
+		bienBienLayMau.setTrangThai(TrangThaiEnum.DU_THAO.getMa());
 		bienBienLayMau.setNguoiTaoId(userInfo.getId());
 		bienBienLayMau.setNgayTao(LocalDate.now());
 		bienBienLayMau.setMaDonVi(userInfo.getDvql());
@@ -92,7 +91,7 @@ public class BienBanLayMauServiceImpl implements BienBanLayMauService{
 		}
 
 		BienBanLayMau bienBienLayMau = new BienBanLayMau();
-
+		BeanUtils.copyProperties(req, bienBienLayMau, "id");
 		bienBienLayMau.setNguoiSuaId(userInfo.getId());
 		bienBienLayMau.setNgaySua(LocalDate.now());
 		bienBanLayMauRepository.save(bienBienLayMau);
@@ -102,34 +101,51 @@ public class BienBanLayMauServiceImpl implements BienBanLayMauService{
 
 	@Override
 	@Transactional(rollbackOn = Exception.class)
-	public boolean updateStatus(StatusReq req) throws Exception {
+	public boolean updateStatus(StatusReq stReq) throws Exception {
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null)
 			throw new Exception("Bad request.");
 
-		Optional<BienBanLayMau> optional = bienBanLayMauRepository.findById(req.getId());
+		Optional<BienBanLayMau> optional = bienBanLayMauRepository.findById(stReq.getId());
 		if (!optional.isPresent()) {
 			throw new Exception("Không tìm thấy dữ liệu.");
 		}
 
 		BienBanLayMau bb = optional.get();
+		String trangThai = bb.getTrangThai();
+		if (HhBbNghiemthuKlstStatusEnum.DU_THAO_TRINH_DUYET.getId().equals(stReq.getTrangThai())) {
+			if (!HhBbNghiemthuKlstStatusEnum.DU_THAO.getId().equals(trangThai))
+				return false;
 
-		if (TrangThaiEnum.MOI_TAO.getMa().equals(bb.getTrangThai()) && TrangThaiEnum.CHO_DUYET.getMa().equals(req.getTrangThai())) {
-			bb.setTrangThai(TrangThaiEnum.CHO_DUYET.getMa());
+			bb.setTrangThai(HhBbNghiemthuKlstStatusEnum.DU_THAO_TRINH_DUYET.getId());
+			bb.setNguoiGuiDuyetId(userInfo.getId());
 			bb.setNgayGuiDuyet(LocalDate.now());
+		} else if (HhBbNghiemthuKlstStatusEnum.LANH_DAO_DUYET.getId().equals(stReq.getTrangThai())) {
+			if (!HhBbNghiemthuKlstStatusEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
+				return false;
+			bb.setTrangThai(HhBbNghiemthuKlstStatusEnum.LANH_DAO_DUYET.getId());
 			bb.setNguoiPduyetId(userInfo.getId());
-		} else if (TrangThaiEnum.CHO_DUYET.getMa().equals(bb.getTrangThai()) && TrangThaiEnum.DA_DUYET.getMa().equals(req.getTrangThai())) {
 			bb.setNgayPduyet(LocalDate.now());
+		} else if (HhBbNghiemthuKlstStatusEnum.BAN_HANH.getId().equals(stReq.getTrangThai())) {
+			if (!HhBbNghiemthuKlstStatusEnum.LANH_DAO_DUYET.getId().equals(trangThai))
+				return false;
+
+			bb.setTrangThai(HhBbNghiemthuKlstStatusEnum.BAN_HANH.getId());
 			bb.setNguoiPduyetId(userInfo.getId());
-			bb.setTrangThai(TrangThaiEnum.DA_DUYET.getMa());
-		} else if (TrangThaiEnum.CHO_DUYET.getMa().equals(bb.getTrangThai()) && TrangThaiEnum.TU_CHOI.getMa().equals(req.getTrangThai())) {
 			bb.setNgayPduyet(LocalDate.now());
+		} else if (HhBbNghiemthuKlstStatusEnum.TU_CHOI.getId().equals(stReq.getTrangThai())) {
+			if (!HhBbNghiemthuKlstStatusEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
+				return false;
+
+			bb.setTrangThai(HhBbNghiemthuKlstStatusEnum.TU_CHOI.getId());
 			bb.setNguoiPduyetId(userInfo.getId());
-			bb.setTrangThai(TrangThaiEnum.TU_CHOI.getMa());
-			bb.setLdoTchoi(req.getLyDo());
-		} else {
-			return false;
+			bb.setNgayPduyet(LocalDate.now());
+			bb.setLdoTchoi(stReq.getLyDo());
+		}  else {
+			throw new Exception("Bad request.");
 		}
+
+		bienBanLayMauRepository.save(bb);
 		return false;
 	}
 
@@ -174,7 +190,7 @@ public class BienBanLayMauServiceImpl implements BienBanLayMauService{
 
 		BienBanLayMau bb = optional.get();
 
-		if (TrangThaiEnum.DA_DUYET.getMa().equals(bb.getTrangThai())) {
+		if (TrangThaiEnum.BAN_HANH.getMa().equals(bb.getTrangThai())) {
 			throw new Exception("Không thể xóa đề xuất điều chỉnh đã ban hành");
 		}
 		bienBanLayMauRepository.deleteById(id);
@@ -217,7 +233,7 @@ public class BienBanLayMauServiceImpl implements BienBanLayMauService{
 
 		BienBanLayMauRes res = new BienBanLayMauRes();
 		BeanUtils.copyProperties(bb, res);
-		res.setTrangThai(TrangThaiEnum.getTen(res.getTrangThai()));
+		res.setTrangThai(bb.getTrangThai());
 		if (dviNhan != null)
 			res.setTenDviNhan(dviNhan.getTenDvi());
 
@@ -227,6 +243,8 @@ public class BienBanLayMauServiceImpl implements BienBanLayMauService{
 		if (vattu != null)
 			res.setTenHhoa(vattu.getTen());
 
+		res.setTenTrangThai(TrangThaiEnum.getTen(bb.getTrangThai()));
+		res.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(bb.getTrangThai()));
 		return res;
 	}
 }

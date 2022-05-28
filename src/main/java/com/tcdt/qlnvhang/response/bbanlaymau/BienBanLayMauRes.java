@@ -30,6 +30,8 @@ public class BienBanLayMauRes {
 	private String ctieuKtra;
 	private String kquaNiemPhongMau;
 	private String trangThai;
+	private String tenTrangThai;
+	private String trangThaiDuyet;
 
 	private String maDonVi;
 	private String maQHNS;
