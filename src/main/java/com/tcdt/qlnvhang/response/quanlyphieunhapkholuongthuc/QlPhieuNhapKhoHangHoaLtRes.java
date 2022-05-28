@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 public class QlPhieuNhapKhoHangHoaLtRes {
     private Long id;
     private Integer stt;
-    private Long vatTuId;
+    private String maVatTu;
     private String tenVatTu;
     private String donViTinh;
     private Long soLuongTrenCt;

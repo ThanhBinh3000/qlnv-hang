@@ -77,12 +77,12 @@ public class QlPhieuNhapKhoLtServiceImpl implements QlPhieuNhapKhoLtService {
 
     private List<QlPhieuNhapKhoHangHoaLt> saveListHangHoa(Long phieuNhapKhoId, List<QlPhieuNhapKhoHangHoaLtReq> hangHoaReqs, Map<Long, QlPhieuNhapKhoHangHoaLt> mapHangHoa) throws Exception {
         List<QlPhieuNhapKhoHangHoaLt> hangHoaList = new ArrayList<>();
-        Set<Long> vatTuIds = hangHoaReqs.stream().map(QlPhieuNhapKhoHangHoaLtReq::getVatTuId).collect(Collectors.toSet());
-        Set<QlnvDmVattu> qlnvDmVattus = Sets.newHashSet(qlnvDmVattuRepository.findAllById(vatTuIds));
+        Set<String> maVatTus = hangHoaReqs.stream().map(QlPhieuNhapKhoHangHoaLtReq::getMaVatTu).collect(Collectors.toSet());
+        Set<QlnvDmVattu> qlnvDmVattus = Sets.newHashSet(qlnvDmVattuRepository.findByMaIn(maVatTus));
         for (QlPhieuNhapKhoHangHoaLtReq req : hangHoaReqs) {
             Long id = req.getId();
             QlPhieuNhapKhoHangHoaLt hangHoa = new QlPhieuNhapKhoHangHoaLt();
-            QlnvDmVattu vatTu = qlnvDmVattus.stream().filter(v -> v.getId().equals(req.getVatTuId())).findFirst().orElse(null);
+            QlnvDmVattu vatTu = qlnvDmVattus.stream().filter(v -> v.getMa().equals(req.getMaVatTu())).findFirst().orElse(null);
             if (vatTu == null)
                 throw new Exception("Hàng Hóa không tồn tại.");
 
@@ -95,7 +95,7 @@ public class QlPhieuNhapKhoLtServiceImpl implements QlPhieuNhapKhoLtService {
 
             BeanUtils.copyProperties(req, hangHoa, "id");
             hangHoa.setQlPhieuNhapKhoLtId(phieuNhapKhoId);
-            hangHoa.setVatTuId(req.getVatTuId());
+            hangHoa.setMaVatTu(req.getMaVatTu());
             hangHoaList.add(hangHoa);
         }
 

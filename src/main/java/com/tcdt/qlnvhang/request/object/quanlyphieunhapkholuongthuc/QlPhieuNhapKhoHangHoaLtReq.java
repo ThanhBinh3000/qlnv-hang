@@ -16,9 +16,6 @@ public class QlPhieuNhapKhoHangHoaLtReq {
     private Integer stt;
 
     @NotNull(message = "Không được để trống")
-    private Long vatTuId;
-
-    @NotNull(message = "Không được để trống")
     private String donViTinh;
 
     @NotNull(message = "Không được để trống")
@@ -32,4 +29,6 @@ public class QlPhieuNhapKhoHangHoaLtReq {
 
     @NotNull(message = "Không được để trống")
     private Long thanhTien;
+
+    private String maVatTu;
 }

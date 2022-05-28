@@ -27,8 +27,8 @@ public class QlPhieuNhapKhoHangHoaLt implements Serializable {
     @Column(name = "QL_PHIEU_NHAP_KHO_LT_ID")
     private Long qlPhieuNhapKhoLtId;
 
-    @Column(name = "VAT_TU_ID")
-    private Long vatTuId;
+    @Column(name = "MA_VAT_TU")
+    private String maVatTu;
 
     @Column(name = "DON_VI_TINH")
     private String donViTinh;
