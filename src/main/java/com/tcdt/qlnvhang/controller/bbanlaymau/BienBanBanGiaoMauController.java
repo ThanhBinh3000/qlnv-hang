@@ -21,7 +21,7 @@ import javax.validation.Valid;
 
 @Slf4j
 @RestController
-@RequestMapping(value = PathContains.BBAN_LAY_MAU)
+@RequestMapping(value = PathContains.BBAN_GIAO_MAU)
 @Api(tags = "Quản lý Biên bản bàn giao mẫu")
 public class BienBanBanGiaoMauController {
 	@Autowired
