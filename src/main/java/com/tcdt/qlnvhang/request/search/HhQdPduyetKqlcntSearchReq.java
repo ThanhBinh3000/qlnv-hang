@@ -15,7 +15,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class HhQdPduyetKqlcntSearchReq extends BaseRequest {
-	@NotNull(message = "Không được để trống")
+	//@NotNull(message = "Không được để trống")
 	@ApiModelProperty(example = "2022")
 	String namKhoach;
 
