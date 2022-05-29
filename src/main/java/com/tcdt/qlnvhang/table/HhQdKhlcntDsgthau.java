@@ -31,6 +31,8 @@ public class HhQdKhlcntDsgthau implements Serializable {
 
 	String goiThau;
 	BigDecimal soLuong;
+	String maDvi;
+	String maDiemKho;
 	String diaDiemNhap;
 	BigDecimal donGia;
 	BigDecimal thanhTien;

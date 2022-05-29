@@ -111,8 +111,9 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				HhQdKhlcntDtl detail = ObjectMapperUtils.map(dtlReq, HhQdKhlcntDtl.class);
 				detailChild = new ArrayList<HhQdKhlcntDsgthau>();
 				detail.setId(null);
-				if (dtlReq.getDetail() != null){
-					detailChild = ObjectMapperUtils.mapAll(dtlReq.getDetail(), HhQdKhlcntDsgthau.class);
+				if (dtlReq.getChildren() != null){
+					detailChild = ObjectMapperUtils.mapAll(dtlReq.getChildren(), HhQdKhlcntDsgthau.class);
+					detailChild.forEach(f -> {f.setId(null);});
 				}
 				UnitScaler.reverseFormatList(detailChild, Contains.DVT_TAN);
 				detail.setChildren(detailChild);
@@ -196,8 +197,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			for (HhQdKhlcntDtlReq dtlReq : dtlReqList) {
 				HhQdKhlcntDtl detail = ObjectMapperUtils.map(dtlReq, HhQdKhlcntDtl.class);
 				detailChild = new ArrayList<HhQdKhlcntDsgthau>();
-				if (dtlReq.getDetail() != null)
-					detailChild = ObjectMapperUtils.mapAll(dtlReq.getDetail(), HhQdKhlcntDsgthau.class);
+				if (dtlReq.getChildren() != null)
+					detailChild = ObjectMapperUtils.mapAll(dtlReq.getChildren(), HhQdKhlcntDsgthau.class);
 				UnitScaler.reverseFormatList(detailChild, Contains.DVT_TAN);
 				detail.setChildren(detailChild);
 				dataDB.addChild1(detail);

@@ -26,6 +26,10 @@ public class HhKhlcntDsgthauReq {
 	@Size(max = 250, message = "Địa điểm nhập không được vượt quá 250 ký tự")
 	@ApiModelProperty(example = "Địa điểm nhập")
 	String diaDiemNhap;
+
+	String maDiemKho;
+
+	String maDvi;
 	
 	BigDecimal donGia;
 	BigDecimal thanhTien;
