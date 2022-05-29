@@ -102,6 +102,8 @@ public class PathContains {
 
 	// Bien Ban lay mau
 	public static final String BBAN_LAY_MAU = "/bban-lay-mau";
+	// Bien Ban ban giao mau
+	public static final String BBAN_GIAO_MAU = "/bban-giao-mau";
 
 	// Phieu kiem nghiem chat luong hang
 	public static final String KNGHIEM_CLUONG = "/knghiem-cluong";
