@@ -46,4 +46,5 @@ public class BienBanLayMauRes {
 	private String ddienDviTchucBenNhan;
 	private String tinhTrang;
 	private Integer soTrang;
+	private Long qdgnvnxId;
 }

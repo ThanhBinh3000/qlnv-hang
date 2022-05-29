@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.apache.tomcat.jni.Local;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -34,9 +35,6 @@ public class QlBienBanNhapDayKhoLtReq {
     private String maDonVi;
 
     private String maQhns;
-
-    @NotNull(message = "Không được để trống")
-    private String maKhoNganLo;
 
     @NotNull(message = "Không được để trống")
     private String maHang;
@@ -66,9 +64,22 @@ public class QlBienBanNhapDayKhoLtReq {
 
     private String chungLoaiHh;
 
+    private Long diemKhoId;
     private String maDiemKho;
-    private String maNhaKho;
+    private String tenDiemKho;
 
+    private Long nganLoId;
+    private String maNganLo;
+    private String tenNganLo;
+
+    private Long nhaKhoId;
+    private String maNhaKho;
+    private String tenNhaKho;
+
+    @NotNull(message = "Không được để trống")
+    private Long qdgnvnxId;
+
+    private String chungLoaiHangHoa;
     private List<QlBienBanNdkCtLtReq> chiTiets = new ArrayList<>();
 
     private List<FileDinhKemReq> fileDinhKems;

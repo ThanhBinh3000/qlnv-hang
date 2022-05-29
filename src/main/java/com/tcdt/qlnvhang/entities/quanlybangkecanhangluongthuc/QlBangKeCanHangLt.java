@@ -46,9 +46,6 @@ public class QlBangKeCanHangLt extends BaseEntity implements Serializable {
     @Column(name = "QL_PHIEU_NHAP_KHO_LT_ID")
     private Long qlPhieuNhapKhoLtId;
 
-    @Column(name = "MA_KHO_NGAN_LO")
-    private String maKhoNganLo;
-
     @Column(name = "SO_KHO")
     private String soKho;
 
@@ -91,17 +88,11 @@ public class QlBangKeCanHangLt extends BaseEntity implements Serializable {
     @Column(name = "CAP_DON_VI")
     private String capDonVi;
 
-    @Column(name = "MA_THUKHO")
+    @Column(name = "MA_THU_KHO")
     private String maThuKho;
 
     @Column(name = "MA_LH_KHO")
     private String maLhKho;
-
-    @Column(name = "MA_DIEM_KHO")
-    private String maDiemKho;
-
-    @Column(name = "MA_NHA_KHO")
-    private String maNhaKho;
 
     @Column(name = "DIA_CHI_NGUOI_GIAO")
     private String diaChiNguoiGiao;
@@ -109,6 +100,15 @@ public class QlBangKeCanHangLt extends BaseEntity implements Serializable {
     @Column(name = "SO_HD")
     private String soHd;
 
+    private String maNganLo;
+    private String tenNganLo;
+    private String maNhaKho;
+    private String tenNhaKho;
+    private String maDiemKho;
+    private String tenDiemKho;
+
+    @Column(name = "QDGNVNX_ID")
+    private Long qdgnvnxId;
     @Transient
     private List<QlBangKeChCtLt> chiTiets = new ArrayList<>();
 }

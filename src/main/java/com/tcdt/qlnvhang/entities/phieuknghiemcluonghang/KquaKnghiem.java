@@ -30,4 +30,5 @@ public class KquaKnghiem {
 	private String donVi;
 	private String kquaKtra;
 	private String pphapXdinh;
+	private String chiSoChatLuong;
 }

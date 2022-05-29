@@ -40,5 +40,6 @@ public class BienBanLayMauReq {
 	private String ddienDviTchucBenNhan;
 	private String tinhTrang;
 	private Integer soTrang;
+	private Long qdgnvnxId;
 
 }

@@ -113,31 +113,31 @@ public class BienBanLayMauServiceImpl implements BienBanLayMauService{
 
 		BienBanLayMau bb = optional.get();
 		String trangThai = bb.getTrangThai();
-		if (HhBbNghiemthuKlstStatusEnum.DU_THAO_TRINH_DUYET.getId().equals(stReq.getTrangThai())) {
+		if (TrangThaiEnum.DU_THAO_TRINH_DUYET.getMa().equals(stReq.getTrangThai())) {
 			if (!HhBbNghiemthuKlstStatusEnum.DU_THAO.getId().equals(trangThai))
 				return false;
 
-			bb.setTrangThai(HhBbNghiemthuKlstStatusEnum.DU_THAO_TRINH_DUYET.getId());
+			bb.setTrangThai(TrangThaiEnum.DU_THAO_TRINH_DUYET.getMa());
 			bb.setNguoiGuiDuyetId(userInfo.getId());
 			bb.setNgayGuiDuyet(LocalDate.now());
-		} else if (HhBbNghiemthuKlstStatusEnum.LANH_DAO_DUYET.getId().equals(stReq.getTrangThai())) {
-			if (!HhBbNghiemthuKlstStatusEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
+		} else if (TrangThaiEnum.LANH_DAO_DUYET.getMa().equals(stReq.getTrangThai())) {
+			if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getMa().equals(trangThai))
 				return false;
-			bb.setTrangThai(HhBbNghiemthuKlstStatusEnum.LANH_DAO_DUYET.getId());
+			bb.setTrangThai(TrangThaiEnum.LANH_DAO_DUYET.getMa());
 			bb.setNguoiPduyetId(userInfo.getId());
 			bb.setNgayPduyet(LocalDate.now());
-		} else if (HhBbNghiemthuKlstStatusEnum.BAN_HANH.getId().equals(stReq.getTrangThai())) {
-			if (!HhBbNghiemthuKlstStatusEnum.LANH_DAO_DUYET.getId().equals(trangThai))
+		} else if (TrangThaiEnum.BAN_HANH.getMa().equals(stReq.getTrangThai())) {
+			if (!TrangThaiEnum.LANH_DAO_DUYET.getMa().equals(trangThai))
 				return false;
 
-			bb.setTrangThai(HhBbNghiemthuKlstStatusEnum.BAN_HANH.getId());
+			bb.setTrangThai(TrangThaiEnum.BAN_HANH.getMa());
 			bb.setNguoiPduyetId(userInfo.getId());
 			bb.setNgayPduyet(LocalDate.now());
-		} else if (HhBbNghiemthuKlstStatusEnum.TU_CHOI.getId().equals(stReq.getTrangThai())) {
-			if (!HhBbNghiemthuKlstStatusEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
+		} else if (TrangThaiEnum.TU_CHOI.getMa().equals(stReq.getTrangThai())) {
+			if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getMa().equals(trangThai))
 				return false;
 
-			bb.setTrangThai(HhBbNghiemthuKlstStatusEnum.TU_CHOI.getId());
+			bb.setTrangThai(TrangThaiEnum.TU_CHOI.getMa());
 			bb.setNguoiPduyetId(userInfo.getId());
 			bb.setNgayPduyet(LocalDate.now());
 			bb.setLdoTchoi(stReq.getLyDo());

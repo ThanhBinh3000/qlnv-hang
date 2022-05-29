@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -35,7 +36,7 @@ public class QlBangKeCanHangLtReq {
     private Long qlPhieuNhapKhoLtId;
 
     @NotNull(message = "Không được để trống")
-    private String maKhoNganLo;
+    private Long qdgnvnxId;
 
     @NotNull(message = "Không được để trống")
     private String soKho;
@@ -56,13 +57,21 @@ public class QlBangKeCanHangLtReq {
 
     private String maLhKho;
 
-    private String maDiemKho;
-
-    private String maNhaKho;
-
     private String diaChiNguoiGiao;
 
     private String soHd;
+
+    private Long diemKhoId;
+    private String maDiemKho;
+    private String tenDiemKho;
+
+    private Long nganLoId;
+    private String maNganLo;
+    private String tenNganLo;
+
+    private Long nhaKhoId;
+    private String maNhaKho;
+    private String tenNhaKho;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime thoiGianGiaoHang;

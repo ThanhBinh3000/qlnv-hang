@@ -63,7 +63,7 @@ public class QlBienBanNhapDayKhoLtController {
     }
 
     @ApiOperation(value = "Chi tiết Quản lý biên bản nhập đầy kho lương thực", response = List.class)
-    @GetMapping("/id")
+    @GetMapping("/{id}")
     public ResponseEntity<BaseResponse> detail(@PathVariable Long id) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -79,7 +79,7 @@ public class QlBienBanNhapDayKhoLtController {
     }
 
     @ApiOperation(value = "Xóa Quản lý biên bản nhập đầy kho lương thực", response = List.class)
-    @DeleteMapping("/id")
+    @DeleteMapping("/{id}")
     public ResponseEntity<BaseResponse> delete(@PathVariable Long id) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -115,7 +115,7 @@ public class QlBienBanNhapDayKhoLtController {
     public ResponseEntity<BaseResponse> search(@RequestBody QlBienBanNhapDayKhoLtSearchReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(qlBienBanNhapDayKhoLtService.timKiem(req));
+            resp.setData(qlBienBanNhapDayKhoLtService.search(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

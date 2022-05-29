@@ -24,7 +24,17 @@ public class QlBienBanNhapDayKhoLtRes {
 
     private String maDonViLap;
 
-    private String maKhoNganLo;
+    private Long diemKhoId;
+    private String maDiemKho;
+    private String tenDiemKho;
+
+    private Long nganLoId;
+    private String maNganLo;
+    private String tenNganLo;
+
+    private Long nhaKhoId;
+    private String maNhaKho;
+    private String tenNhaKho;
 
     private String maHang;
 
@@ -48,5 +58,13 @@ public class QlBienBanNhapDayKhoLtRes {
 
     private String tenTrangThai;
 
+    private String trangThaiDuyet;
+
+    private Long qdgnvnxId;
+
+    private String maDvi;
+    private String tenDvi;
+    private String chungLoaiHangHoa;
+    private LocalDate ngayNhapDayKho;
     private List<QlBienBanNdkCtLtRes> chiTiets = new ArrayList<>();
 }

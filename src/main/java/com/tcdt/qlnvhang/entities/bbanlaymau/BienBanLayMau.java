@@ -65,4 +65,5 @@ public class BienBanLayMau extends BaseEntity {
 	private String ddienDviTchucNhan;
 	private String tinhTrang;
 	private Integer soTrang;
+	private Long qdgnvnxId;
 }

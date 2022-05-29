@@ -10,4 +10,6 @@ import java.util.List;
 public interface KquaKnghiemService {
 	Page<KquaKnghiemRes> list(Long phieuKnghiemId, Pageable pageable);
 	void update(Long phieuKnghiemId, List<KquaKnghiemReq> list);
+
+	void deleteByPhieuKnghiemId(Long phieuKnghiemId);
 }

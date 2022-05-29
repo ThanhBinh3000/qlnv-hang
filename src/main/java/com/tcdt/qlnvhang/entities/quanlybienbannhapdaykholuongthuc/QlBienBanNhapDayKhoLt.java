@@ -21,8 +21,8 @@ import java.util.List;
 public class QlBienBanNhapDayKhoLt extends BaseEntity implements Serializable {
     private static final long serialVersionUID = -5271141998400379431L;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "QL_BIEN_BAN_NHAP_DAY_KHO_LT_SEQ")
-    @SequenceGenerator(sequenceName = "QL_BIEN_BAN_NHAP_DAY_KHO_LT_SEQ", allocationSize = 1, name = "QL_BIEN_BAN_NHAP_DAY_KHO_LT_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "QL_BIEN_BAN_NDK_LT_SEQ")
+    @SequenceGenerator(sequenceName = "QL_BIEN_BAN_NDK_LT_SEQ", allocationSize = 1, name = "QL_BIEN_BAN_NDK_LT_SEQ")
     @Column(name = "ID")
     private Long id;
 
@@ -37,9 +37,6 @@ public class QlBienBanNhapDayKhoLt extends BaseEntity implements Serializable {
 
     @Column(name = "MA_DON_VI_LAP")
     private String maDonViLap;
-
-    @Column(name = "MA_KHO_NGAN_LO")
-    private String maKhoNganLo;
 
     @Column(name = "MA_HANG")
     private String maHang;
@@ -86,6 +83,18 @@ public class QlBienBanNhapDayKhoLt extends BaseEntity implements Serializable {
     @Column(name = "CAP_DON_VI")
     private String capDonVi;
 
+    private String maNganLo;
+    private String tenNganLo;
+    private String maNhaKho;
+    private String tenNhaKho;
+    private String maDiemKho;
+    private String tenDiemKho;
+
+    @Column(name = "CHUNG_LOAI_HANG_HOA")
+    private String chungLoaiHangHoa;
+
+    @Column(name = "QDGNVNX_ID")
+    private Long qdgnvnxId;
     @Transient
     private List<QlBienBanNdkCtLt> chiTiets = new ArrayList<>();
 }

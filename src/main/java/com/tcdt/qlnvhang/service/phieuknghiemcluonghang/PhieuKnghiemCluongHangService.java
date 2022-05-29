@@ -12,5 +12,5 @@ public interface PhieuKnghiemCluongHangService {
 	PhieuKnghiemCluongHangRes update(PhieuKnghiemCluongHangReq req) throws Exception;
 	boolean updateStatus(StatusReq req) throws Exception;
 	PhieuKnghiemCluongHangRes detail(Long id) throws Exception;
-	boolean delete(Long id);
+	boolean delete(Long id) throws Exception;
 }

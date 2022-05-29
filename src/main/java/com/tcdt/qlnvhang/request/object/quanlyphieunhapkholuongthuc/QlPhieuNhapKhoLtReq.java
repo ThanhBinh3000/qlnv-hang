@@ -27,7 +27,7 @@ public class QlPhieuNhapKhoLtReq {
 
     private Long bbNghiemThuKlId;
 
-    private Long soPhieu;
+    private String soPhieu;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate ngayLap;

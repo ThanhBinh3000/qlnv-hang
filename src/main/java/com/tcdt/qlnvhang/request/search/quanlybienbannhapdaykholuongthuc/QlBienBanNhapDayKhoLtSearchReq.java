@@ -27,6 +27,4 @@ public class QlBienBanNhapDayKhoLtSearchReq extends BaseRequest {
     private String maDonViLap;
     private String maHang;
     private String maDonVi;
-    private LocalDate tuNgay;
-    private LocalDate denNgay;
 }

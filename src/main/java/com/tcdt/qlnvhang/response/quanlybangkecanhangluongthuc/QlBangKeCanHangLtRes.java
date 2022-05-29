@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.Column;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,7 +23,6 @@ public class QlBangKeCanHangLtRes {
     private LocalDate ngayLap;
     private String maDonViLap;
     private Long qlPhieuNhapKhoLtId;
-    private String maKhoNganLo;
     private String soKho;
     private String maHang;
     private String tenHang;
@@ -35,7 +35,25 @@ public class QlBangKeCanHangLtRes {
     private String diaChi;
     private String trangThai;
     private String tenTrangThai;
+    private String trangThaiDuyet;
+    private String soHd;
 
+    private Long diemKhoId;
+    private String maDiemKho;
+    private String tenDiemKho;
 
+    private Long nganLoId;
+    private String maNganLo;
+    private String tenNganLo;
+
+    private Long nhaKhoId;
+    private String maNhaKho;
+    private String tenNhaKho;
+
+    private Long qdgnvnxId;
+    private String maThuKho;
+    private String maLhKho;
+    private String diaChiNguoiGiao;
+    private LocalDate ngayNhapXuat;
     private List<QlBangKeChCtLtRes> chiTiets = new ArrayList<>();
 }

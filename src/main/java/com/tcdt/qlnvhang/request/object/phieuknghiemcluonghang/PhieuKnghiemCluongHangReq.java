@@ -4,6 +4,8 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class PhieuKnghiemCluongHangReq {
@@ -11,10 +13,6 @@ public class PhieuKnghiemCluongHangReq {
 	private String soPhieu;
 	private LocalDate ngayLayMau;
 	private LocalDate ngayKnghiem;
-	private String maNgan;
-	private String tenNgan;
-	private String maKho;
-	private String tenKho;
 	private String maHhoa;
 	private String tenHhoa;
 	private String soBbanKthucNhap;
@@ -23,4 +21,21 @@ public class PhieuKnghiemCluongHangReq {
 	private String hthucBquan;
 	private String ddiemBquan;
 	private String trangThai;
+	private String chiSoChatLuong;
+
+	private Long diemKhoId;
+	private String maDiemKho;
+	private String tenDiemKho;
+
+	private Long nganLoId;
+	private String maNganLo;
+	private String tenNganLo;
+
+	private Long nhaKhoId;
+	private String maNhaKho;
+	private String tenNhaKho;
+
+	private String thuKho;
+	private Long qdgnvnxId;
+	private List<KquaKnghiemReq> ketQuaKiemNghiem = new ArrayList<>();
 }

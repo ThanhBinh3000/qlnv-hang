@@ -64,10 +64,11 @@ public class KquaKnghiemServiceImpl implements KquaKnghiemService {
 	}
 
 	private void updateEntity(KquaKnghiem kq, KquaKnghiemReq req) {
-		kq.setKquaKtra(req.getKquaKtra());
-		kq.setDonVi(req.getDonVi());
-		kq.setStt(req.getStt());
-		kq.setTenCtieu(req.getTenCtieu());
-		kq.setPphapXdinh(req.getPphapXdinh());
+		BeanUtils.copyProperties(req, kq, "id");
+	}
+
+	@Override
+	public void deleteByPhieuKnghiemId(Long phieuKnghiemId) {
+		kquaKnghiemRepository.deleteByphieuKnghiemId(phieuKnghiemId);
 	}
 }

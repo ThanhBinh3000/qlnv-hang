@@ -30,12 +30,14 @@ public class PhieuKnghiemCluongHang extends BaseEntity {
 	private String soPhieu;
 	private LocalDate ngayLayMau;
 	private LocalDate ngayKnghiem;
-	private String maNgan;
-	private String tenNgan;
-	private String maKho;
-	private String tenKho;
+	private String maNganLo;
+	private String tenNganLo;
+	private String maNhaKho;
+	private String tenNhaKho;
 	private String maHhoa;
 	private String tenHhoa;
+	private String maDiemKho;
+	private String tenDiemKho;
 	private String soBbanKthucNhap;
 	private LocalDate ngayNhapDay;
 	private BigDecimal sluongBquan;
@@ -50,4 +52,7 @@ public class PhieuKnghiemCluongHang extends BaseEntity {
 	private String maDonVi;
 	private String capDonVi;
 	private String maQhns;
+	private String thuKho;
+	private String ketLuan;
+	private Long qdgnvnxId;
 }

@@ -1,18 +1,12 @@
 package com.tcdt.qlnvhang.repository.quanlybienbannhapdaykholuongthuc;
 
 import com.tcdt.qlnvhang.entities.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLt;
-import com.tcdt.qlnvhang.enums.QlPhieuNhapKhoLtStatus;
 import com.tcdt.qlnvhang.request.search.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtSearchReq;
-import com.tcdt.qlnvhang.response.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtRes;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class QlBienBanNhapDayKhoLtRepositoryCustomImpl implements QlBienBanNhapDayKhoLtRepositoryCustom {
@@ -20,11 +14,11 @@ public class QlBienBanNhapDayKhoLtRepositoryCustomImpl implements QlBienBanNhapD
     private EntityManager em;
 
     @Override
-    public Page<QlBienBanNhapDayKhoLtRes> search(QlBienBanNhapDayKhoLtSearchReq req) {
+    public List<QlBienBanNhapDayKhoLt> search(QlBienBanNhapDayKhoLtSearchReq req) {
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT p FROM QlBienBanNhapDayKhoLt p ");
         setConditionSearch(req, builder);
-        builder.append("ORDER BY p.ngayLap DESC");
+        builder.append("ORDER BY p.id DESC");
 
         TypedQuery<QlBienBanNhapDayKhoLt> query = em.createQuery(builder.toString(), QlBienBanNhapDayKhoLt.class);
 
@@ -35,17 +29,7 @@ public class QlBienBanNhapDayKhoLtRepositoryCustomImpl implements QlBienBanNhapD
         //Set pageable
         query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize()).setMaxResults(pageable.getPageSize());
 
-        List<QlBienBanNhapDayKhoLt> data = query.getResultList();
-
-        List<QlBienBanNhapDayKhoLtRes> responses = new ArrayList<>();
-        for (QlBienBanNhapDayKhoLt qd : data) {
-            QlBienBanNhapDayKhoLtRes response = new QlBienBanNhapDayKhoLtRes();
-            BeanUtils.copyProperties(qd, response);
-            response.setTenTrangThai(QlPhieuNhapKhoLtStatus.getTenById(qd.getTrangThai()));
-            responses.add(response);
-        }
-
-        return new PageImpl<>(responses, pageable, this.count(req));
+        return query.getResultList();
     }
 
 
@@ -55,11 +39,11 @@ public class QlBienBanNhapDayKhoLtRepositoryCustomImpl implements QlBienBanNhapD
         if (!StringUtils.isEmpty(req.getSoBienBan())) {
             builder.append("AND ").append("p.soBienBan = :soBienBan ");
         }
-        if (req.getTuNgay() != null) {
-            builder.append("AND ").append("p.ngayLap >= :tuNgay ");
+        if (req.getNgayNhapDayKhoTu() != null) {
+            builder.append("AND ").append("p.ngayNhapDayKho >= :ngayNhapDayKhoTu ");
         }
-        if (req.getDenNgay() != null) {
-            builder.append("AND ").append("p.ngayLap <= :denNgay ");
+        if (req.getNgayNhapDayKhoDen() != null) {
+            builder.append("AND ").append("p.ngayNhapDayKho <= :ngayNhapDayKhoDen ");
         }
 
         if (!StringUtils.isEmpty(req.getMaHang())) {
@@ -75,7 +59,8 @@ public class QlBienBanNhapDayKhoLtRepositoryCustomImpl implements QlBienBanNhapD
         }
     }
 
-    private int count(QlBienBanNhapDayKhoLtSearchReq req) {
+    @Override
+    public int count(QlBienBanNhapDayKhoLtSearchReq req) {
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT COUNT(p.id) FROM QlBienBanNhapDayKhoLt p ");
 
@@ -89,11 +74,12 @@ public class QlBienBanNhapDayKhoLtRepositoryCustomImpl implements QlBienBanNhapD
         if (!StringUtils.isEmpty(req.getSoBienBan())) {
             query.setParameter("soBienBan", req.getSoBienBan());
         }
-        if (req.getTuNgay() != null) {
-            query.setParameter("tuNgay", req.getTuNgay());
+
+        if (req.getNgayNhapDayKhoTu() != null) {
+            query.setParameter("ngayNhapDayKhoTu", req.getNgayNhapDayKhoTu());
         }
-        if (req.getDenNgay() != null) {
-            query.setParameter("denNgay", req.getDenNgay());
+        if (req.getNgayNhapDayKhoDen() != null) {
+            query.setParameter("ngayNhapDayKhoDen", req.getNgayNhapDayKhoDen());
         }
 
         if (!StringUtils.isEmpty(req.getMaHang())) {
