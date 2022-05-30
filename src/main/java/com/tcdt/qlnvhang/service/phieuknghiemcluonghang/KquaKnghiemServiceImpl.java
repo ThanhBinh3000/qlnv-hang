@@ -24,7 +24,7 @@ public class KquaKnghiemServiceImpl implements KquaKnghiemService {
 
 	@Override
 	public Page<KquaKnghiemRes> list(Long phieuKnghiemId, Pageable pageable) {
-		Page<KquaKnghiem> list = kquaKnghiemRepository.findByPhieuKnghiemId(phieuKnghiemId, pageable);
+		Page<KquaKnghiem> list = kquaKnghiemRepository.findByPhieuKnghiemIdOrderBySttAsc(phieuKnghiemId, pageable);
 		return new PageImpl<>(this.toResponseList(list.getContent()), pageable, list.getTotalElements());
 	}
 

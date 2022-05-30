@@ -54,5 +54,6 @@ public class PhieuKnghiemCluongHang extends BaseEntity {
 	private String maQhns;
 	private String thuKho;
 	private String ketLuan;
+	private String ketQuaDanhGia;
 	private Long qdgnvnxId;
 }

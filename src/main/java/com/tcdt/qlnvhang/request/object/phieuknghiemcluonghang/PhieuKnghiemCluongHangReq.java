@@ -37,5 +37,7 @@ public class PhieuKnghiemCluongHangReq {
 
 	private String thuKho;
 	private Long qdgnvnxId;
-	private List<KquaKnghiemReq> ketQuaKiemNghiem = new ArrayList<>();
+	private String ketLuan;
+	private String ketQuaDanhGia;
+	private List<KquaKnghiemReq> kquaKnghiem = new ArrayList<>();
 }

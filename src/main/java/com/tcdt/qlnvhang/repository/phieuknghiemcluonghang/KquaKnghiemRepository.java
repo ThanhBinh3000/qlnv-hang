@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface KquaKnghiemRepository extends CrudRepository<KquaKnghiem, Long> {
-	Page<KquaKnghiem> findByPhieuKnghiemId(Long phieuKnghiemId, Pageable pageable);
+	Page<KquaKnghiem> findByPhieuKnghiemIdOrderBySttAsc(Long phieuKnghiemId, Pageable pageable);
 	List<KquaKnghiem> findByPhieuKnghiemId(Long phieuKnghiemId);
 
 	@Transactional

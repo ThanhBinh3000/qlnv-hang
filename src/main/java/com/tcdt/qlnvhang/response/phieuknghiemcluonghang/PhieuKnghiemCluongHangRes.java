@@ -45,4 +45,5 @@ public class PhieuKnghiemCluongHangRes {
 
 	private String ketLuan;
 	private String thuKho;
+	private String ketQuaDanhGia;
 }

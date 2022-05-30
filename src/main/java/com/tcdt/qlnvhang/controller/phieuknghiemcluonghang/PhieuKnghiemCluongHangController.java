@@ -105,7 +105,7 @@ public class PhieuKnghiemCluongHangController {
 
 	@ApiOperation(value = "Gửi duyệt/Duyệt/Từ chối Phiếu Kiểm nghiệm chất lượng hàng", response = Boolean.class)
 	@PutMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> updateStatus(StatusReq req) {
+	public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody StatusReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			Boolean res = phieuKnghiemCluongHangService.updateStatus(req);

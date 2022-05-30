@@ -78,7 +78,7 @@ public class PhieuKnghiemCluongHangServiceImpl implements PhieuKnghiemCluongHang
 		phieuKnclh.setCapDonVi(userInfo.getCapDvi());
 		phieuKnclh.setTrangThai(TrangThaiEnum.DU_THAO.getMa());
 		phieuKnghiemCluongHangRepository.save(phieuKnclh);
-		kquaKnghiemService.update(phieuKnclh.getId(), req.getKetQuaKiemNghiem());
+		kquaKnghiemService.update(phieuKnclh.getId(), req.getKquaKnghiem());
 
 		return this.detail(phieuKnclh);
 	}
@@ -100,7 +100,7 @@ public class PhieuKnghiemCluongHangServiceImpl implements PhieuKnghiemCluongHang
 		phieuKnclh.setNgaySua(LocalDate.now());
 
 		phieuKnghiemCluongHangRepository.save(phieuKnclh);
-		kquaKnghiemService.update(phieuKnclh.getId(), req.getKetQuaKiemNghiem());
+		kquaKnghiemService.update(phieuKnclh.getId(), req.getKquaKnghiem());
 
 		return this.detail(phieuKnclh);
 	}
@@ -168,6 +168,9 @@ public class PhieuKnghiemCluongHangServiceImpl implements PhieuKnghiemCluongHang
 		QlnvDmVattu vattu = qlnvDmVattuRepository.findByMa(phieuKnclh.getMaHhoa());
 		if (vattu != null)
 			res.setTenHhoa(vattu.getTen());
+
+		res.setTenTrangThai(TrangThaiEnum.getTen(res.getTrangThai()));
+		res.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(res.getTrangThai()));
 
 		Page<KquaKnghiemRes> list = kquaKnghiemService.list(phieuKnclh.getId(), PageRequest.of(DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE));
 		res.setTongSoKquaKnghiem(list.getTotalElements());
