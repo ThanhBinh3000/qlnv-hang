@@ -8,6 +8,8 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.table.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,11 +30,6 @@ import com.tcdt.qlnvhang.request.object.HhHopDongHdrReq;
 import com.tcdt.qlnvhang.request.search.HhHopDongSearchReq;
 import com.tcdt.qlnvhang.secification.HhHopDongSpecification;
 import com.tcdt.qlnvhang.service.HhHopDongService;
-import com.tcdt.qlnvhang.table.HhDdiemNhapKho;
-import com.tcdt.qlnvhang.table.HhDviLquan;
-import com.tcdt.qlnvhang.table.HhHopDongDtl;
-import com.tcdt.qlnvhang.table.HhHopDongHdr;
-import com.tcdt.qlnvhang.table.HhQdPduyetKqlcntHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import com.tcdt.qlnvhang.util.PaginationSet;
@@ -62,13 +59,16 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 		if (!checkSoQd.isPresent())
 			throw new Exception(
 					"Số quyết định phê duyệt kết quả lựa chọn nhà thầu " + objReq.getCanCu() + " không tồn tại");
+		UserInfo userInfo = SecurityContextService.getUser();
+		if (userInfo == null)
+			throw new Exception("Bad request.");
 
 		HhHopDongHdr dataMap = ObjectMapperUtils.map(objReq, HhHopDongHdr.class);
 
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setNgayTao(getDateTimeNow());
 		dataMap.setTrangThai(Contains.TAO_MOI);
-		dataMap.setMaDvi(getDvql(req));
+		dataMap.setMaDvi(userInfo.getDvql());
 
 		// add thong tin detail
 		List<HhHopDongDtlReq> dtlReqList = objReq.getDetail();
