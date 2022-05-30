@@ -40,9 +40,9 @@ public class KquaKnghiemServiceImpl implements KquaKnghiemService {
 			KquaKnghiem kq = kquaKnghiemList.stream().filter(k -> k.getId().equals(kqReq.getId())).findFirst().orElse(null);
 			if (kq == null) {
 				kq = new KquaKnghiem();
-				kq.setPhieuKnghiemId(phieuKnghiemId);
 			}
 			this.updateEntity(kq, kqReq);
+			kq.setPhieuKnghiemId(phieuKnghiemId);
 			saveList.add(kq);
 		}
 
