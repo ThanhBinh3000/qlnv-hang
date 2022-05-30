@@ -10,6 +10,8 @@ import com.tcdt.qlnvhang.request.object.HhQdPduyetKqlcntHdrReq;
 import com.tcdt.qlnvhang.request.search.HhQdPduyetKqlcntSearchReq;
 import com.tcdt.qlnvhang.table.HhQdPduyetKqlcntHdr;
 
+import java.util.List;
+
 public interface HhQdPduyetKqlcntHdrService {
 
 	@Transactional(rollbackOn = Exception.class)
@@ -27,5 +29,10 @@ public interface HhQdPduyetKqlcntHdrService {
 
 	@Transactional(rollbackOn = Exception.class)
 	void delete(IdSearchReq idSearchReq) throws Exception;
+
+	Page<HhQdPduyetKqlcntHdr> timKiemPage(HhQdPduyetKqlcntSearchReq objReq) throws Exception;
+
+	List<HhQdPduyetKqlcntHdr> timKiemAll(HhQdPduyetKqlcntSearchReq objReq) throws Exception;
+
 
 }

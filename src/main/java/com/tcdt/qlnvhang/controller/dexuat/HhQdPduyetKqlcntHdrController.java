@@ -9,13 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
@@ -137,12 +131,33 @@ public class HhQdPduyetKqlcntHdrController extends BaseController {
 			@Valid @RequestBody HhQdPduyetKqlcntSearchReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(service.colection(objReq));
+			resp.setData(service.timKiemPage(objReq));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (
 
 		Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Tra cứu quyết định phê duyệt kết quả lựa chọn nhà thầu trace: {}", e);
+		}
+
+		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Tra cứu quyết định phê duyệt kết quả lựa chọn nhà thầu", response = List.class)
+	@PostMapping(value = PathContains.URL_TAT_CA, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> colectionAll(HttpServletRequest request,
+												  @Valid @RequestBody HhQdPduyetKqlcntSearchReq objReq) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.timKiemAll(objReq));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (
+
+				Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
 			log.error("Tra cứu quyết định phê duyệt kết quả lựa chọn nhà thầu trace: {}", e);

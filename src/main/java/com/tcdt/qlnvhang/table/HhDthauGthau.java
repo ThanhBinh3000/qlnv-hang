@@ -44,6 +44,7 @@ public class HhDthauGthau implements Serializable {
 			+ "_SEQ", allocationSize = 1, name = HhDthauGthau.TABLE_NAME + "_SEQ")
 	private Long id;
 
+	Long idGoiThau;
 	String tenGthau;
 	String maHhoa;
 	String dviTinh;
