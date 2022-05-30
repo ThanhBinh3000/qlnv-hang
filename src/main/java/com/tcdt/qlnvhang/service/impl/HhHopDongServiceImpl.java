@@ -129,6 +129,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 		if (!qOptional.get().getCanCu().equals(objReq.getCanCu())) {
 			Optional<HhQdPduyetKqlcntHdr> checkSoQd = hhQdPduyetKqlcntHdrRepository.findBySoQd(objReq.getCanCu());
 			if (!checkSoQd.isPresent())
+
 				throw new Exception(
 						"Số quyết định phê duyệt kết quả lựa chọn nhà thầu " + objReq.getCanCu() + " không tồn tại");
 		}
