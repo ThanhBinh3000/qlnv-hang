@@ -57,4 +57,7 @@ public class HhQdPduyetKqlcntHdrReq {
 	private List<HhQdPduyetKqlcntDtlReq> detail;
 	private List<FileDinhKemReq> fileDinhKems;
 
+	public String getSoQd() {
+		return soQd + "/DX-TCDT";
+	}
 }
