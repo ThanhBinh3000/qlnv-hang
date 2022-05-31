@@ -24,7 +24,7 @@ public class hhDthauGthauService {
 
 	@Transactional(rollbackOn = Exception.class)
 	public HhDthauGthau create(HhDthauGthauReq objReq){
-		HhDthauGthau dataMap = ObjectMapperUtils.map(objReq, HhDthauGthau.class);
+ 		HhDthauGthau dataMap = ObjectMapperUtils.map(objReq, HhDthauGthau.class);
 		return hhDthauGthauRepository.save(dataMap);
 	}
 

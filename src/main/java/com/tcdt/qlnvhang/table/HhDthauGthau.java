@@ -61,6 +61,9 @@ public class HhDthauGthau implements Serializable {
 	Date tgianMoHsdxtc;
 	String soQd;
 	Date ngayKy;
+	String nhaThauTthao;
+	Integer vat;
+	Long donGia;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_dt_hdr")

@@ -83,8 +83,8 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 				detailChild5 = new ArrayList<FileDKemJoinGoiThau>();
 
 				// Thong tin danh sach cac nha thau du thau
-				if (dtlReq.getDetail() != null)
-					detailChild = ObjectMapperUtils.mapAll(dtlReq.getDetail(), HhDthauNthauDuthau.class);
+				if (dtlReq.getChildren() != null)
+					detailChild = ObjectMapperUtils.mapAll(dtlReq.getChildren(), HhDthauNthauDuthau.class);
 
 				// Thong tin danh sach ho so ky thuat
 				if (dtlReq.getDetail1() != null) {
@@ -193,8 +193,8 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 				detailChild4 = new ArrayList<HhDthauKquaLcnt>();
 				detailChild5 = new ArrayList<FileDKemJoinGoiThau>();
 
-				if (dtlReq.getDetail() != null)
-					detailChild = ObjectMapperUtils.mapAll(dtlReq.getDetail(), HhDthauNthauDuthau.class);
+				if (dtlReq.getChildren() != null)
+					detailChild = ObjectMapperUtils.mapAll(dtlReq.getChildren(), HhDthauNthauDuthau.class);
 
 				if (dtlReq.getDetail1() != null) {
 					for (HhDthauHsoKthuatReq hsKthuatReq : dtlReq.getDetail1()) {

@@ -16,6 +16,8 @@ public class HhDthauNthauDuthauReq {
 	@ApiModelProperty(example = "Tên nhà thầu")
 	String ten;
 
+	String soThue;
+
 	@Size(max = 500, message = "Địa chỉ nhà thầu không được vượt quá 500 ký tự")
 	@ApiModelProperty(example = "Địa chỉ nhà thầu")
 	String diaChi;

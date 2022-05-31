@@ -33,6 +33,7 @@ public class HhDthauNthauDuthau implements Serializable {
 	private Long id;
 
 	String ten;
+	String soThue;
 	String diaChi;
 	String soDt;
 

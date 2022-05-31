@@ -62,14 +62,14 @@ public class HhDthauGthauReq {
 //	@ApiModelProperty(example = "HTH01")
 	String hthucHdong;
 
-//	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date tgianThHienHd;
 
 	@Size(max = 500, message = "Ghi chú không được vượt quá 500 ký tự")
 	@ApiModelProperty(example = "Ghi chú")
 	String ghiChu;
 
-//	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date tgianMoHsdxtc;
 
 //	@NotNull(message = "Không được để trống")
@@ -77,14 +77,18 @@ public class HhDthauGthauReq {
 //	@ApiModelProperty(example = "20-QĐ/VPH")
 	String soQd;
 
-//	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayKy;
 
 	private Long idDtHdr;
 
 	private Long idGoiThau;
 
-	private List<HhDthauNthauDuthauReq> detail;
+	private String nhaThauTthao;
+
+	private Long donGia;
+
+	private List<HhDthauNthauDuthauReq> children;
 
 	private List<HhDthauHsoKthuatReq> detail1;
 
