@@ -30,7 +30,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping(value = PathContains.DX_KH + PathContains.TTIN_DTHAU_GTHAU)
 @Api(tags = "Thông tin đấu thầu gói thầu")
-@CrossOrigin("*")
 public class HhDauThauGoiThauController {
 
 	@Autowired
