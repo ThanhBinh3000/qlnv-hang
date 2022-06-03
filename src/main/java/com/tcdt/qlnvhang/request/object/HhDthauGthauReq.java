@@ -88,6 +88,8 @@ public class HhDthauGthauReq {
 
 	private Long donGia;
 
+	private Long vat;
+
 	private List<HhDthauNthauDuthauReq> children;
 
 	private List<HhDthauHsoKthuatReq> detail1;

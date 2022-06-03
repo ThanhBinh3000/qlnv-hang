@@ -101,11 +101,12 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		if (objReq.getChildren3() != null) {
 			List<FileDKemJoinDxKhLcntCcxdg> detailChild;
 			List<HhDxuatKhLcntCcxdgDtlReq> dtlReqList = objReq.getChildren3();
+			List<HhDxuatKhLcntCcxdgDtl> listChild3 = new ArrayList<>();
 			for (HhDxuatKhLcntCcxdgDtlReq dtlReq : dtlReqList) {
 				HhDxuatKhLcntCcxdgDtl detail = ObjectMapperUtils.map(dtlReq, HhDxuatKhLcntCcxdgDtl.class);
 				detailChild = new ArrayList<FileDKemJoinDxKhLcntCcxdg>();
-				if (dtlReq.getFileDinhKems() != null) {
-					detailChild = ObjectMapperUtils.mapAll(dtlReq.getFileDinhKems(), FileDKemJoinDxKhLcntCcxdg.class);
+				if (dtlReq.getChildren() != null) {
+					detailChild = ObjectMapperUtils.mapAll(dtlReq.getChildren(), FileDKemJoinDxKhLcntCcxdg.class);
 					detailChild.forEach(f -> {
 						f.setDataType(HhDxuatKhLcntCcxdgDtl.TABLE_NAME);
 						f.setCreateDate(new Date());
@@ -113,8 +114,9 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 				}
 				detail.setId(null);
 				detail.setChildren(detailChild);
-				dataMap.addChild3(detail);
+				listChild3.add(detail);
 			}
+			dataMap.setChildren3(listChild3);
 		}
 
 		return hhDxuatKhLcntHdrRepository.save(dataMap);
@@ -163,19 +165,21 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		if (objReq.getChildren3() != null) {
 			List<FileDKemJoinDxKhLcntCcxdg> detailChild;
 			List<HhDxuatKhLcntCcxdgDtlReq> dtlReqList = objReq.getChildren3();
+			List<HhDxuatKhLcntCcxdgDtl> listChild3 = new ArrayList<>();
 			for (HhDxuatKhLcntCcxdgDtlReq dtlReq : dtlReqList) {
 				HhDxuatKhLcntCcxdgDtl detail = ObjectMapperUtils.map(dtlReq, HhDxuatKhLcntCcxdgDtl.class);
 				detailChild = new ArrayList<FileDKemJoinDxKhLcntCcxdg>();
-				if (dtlReq.getFileDinhKems() != null) {
-					detailChild = ObjectMapperUtils.mapAll(dtlReq.getFileDinhKems(), FileDKemJoinDxKhLcntCcxdg.class);
+				if (dtlReq.getChildren() != null) {
+					detailChild = ObjectMapperUtils.mapAll(dtlReq.getChildren(), FileDKemJoinDxKhLcntCcxdg.class);
 					detailChild.forEach(f -> {
 						f.setDataType(HhDxuatKhLcntCcxdgDtl.TABLE_NAME);
 						f.setCreateDate(new Date());
 					});
 				}
 				detail.setChildren(detailChild);
-				dataDTB.addChild3(detail);
+				listChild3.add(detail);
 			}
+			dataDTB.setChildren3(listChild3);
 		}
 
 		return hhDxuatKhLcntHdrRepository.save(dataDTB);
