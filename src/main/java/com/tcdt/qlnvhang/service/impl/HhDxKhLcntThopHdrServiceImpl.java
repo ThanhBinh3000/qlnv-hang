@@ -88,33 +88,42 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 //				continue;
 
 //			for (HhDxuatKhLcntGaoDtl dxuatGao : dtlsGao) {
-				if (StringUtils.isEmpty(thopHdr.getTuTgianTbao())
-						|| thopHdr.getTuTgianTbao().compareTo(dxuatGao.getTgianTbao()) > 0)
-					thopHdr.setTuTgianTbao(dxuatGao.getTgianTbao());
-				if (StringUtils.isEmpty(thopHdr.getDenTgianTbao())
-						|| thopHdr.getDenTgianTbao().compareTo(dxuatGao.getTgianTbao()) < 0)
-					thopHdr.setDenTgianTbao(dxuatGao.getTgianTbao());
+			if (StringUtils.isEmpty(thopHdr.getTuTgianTbao())
+					|| thopHdr.getTuTgianTbao().compareTo(dxuatGao.getTgianTbao()) > 0)
+				thopHdr.setTuTgianTbao(dxuatGao.getTgianTbao());
+			if (StringUtils.isEmpty(thopHdr.getDenTgianTbao())
+					|| thopHdr.getDenTgianTbao().compareTo(dxuatGao.getTgianTbao()) < 0)
+				thopHdr.setDenTgianTbao(dxuatGao.getTgianTbao());
 
-				if (StringUtils.isEmpty(thopHdr.getTuTgianMthau())
-						|| thopHdr.getTuTgianMthau().compareTo(dxuatGao.getTgianMoThau()) > 0)
-					thopHdr.setTuTgianMthau(dxuatGao.getTgianMoThau());
-				if (StringUtils.isEmpty(thopHdr.getDenTgianDthau())
-						|| thopHdr.getDenTgianMthau().compareTo(dxuatGao.getTgianMoThau()) < 0)
-					thopHdr.setDenTgianMthau(dxuatGao.getTgianMoThau());
+			if (StringUtils.isEmpty(thopHdr.getTuTgianPhanh())
+					|| thopHdr.getTuTgianPhanh().compareTo(dxuatGao.getTgianPhatHanh()) > 0)
+				thopHdr.setTuTgianPhanh(dxuatGao.getTgianPhatHanh());
+			if (StringUtils.isEmpty(thopHdr.getDenTgianPhanh())
+					|| thopHdr.getDenTgianPhanh().compareTo(dxuatGao.getTgianPhatHanh()) < 0)
+				thopHdr.setDenTgianPhanh(dxuatGao.getTgianPhatHanh());
 
-				if (StringUtils.isEmpty(thopHdr.getTuTgianDthau())
-						|| thopHdr.getTuTgianDthau().compareTo(dxuatGao.getTgianDongThau()) > 0)
-					thopHdr.setTuTgianDthau(dxuatGao.getTgianDongThau());
-				if (StringUtils.isEmpty(thopHdr.getDenTgianDthau())
-						|| thopHdr.getDenTgianDthau().compareTo(dxuatGao.getTgianDongThau()) < 0)
-					thopHdr.setDenTgianDthau(dxuatGao.getTgianDongThau());
+			if (StringUtils.isEmpty(thopHdr.getTuTgianMthau())
+					|| thopHdr.getTuTgianMthau().compareTo(dxuatGao.getTgianMoThau()) > 0)
+				thopHdr.setTuTgianMthau(dxuatGao.getTgianMoThau());
+			if (StringUtils.isEmpty(thopHdr.getDenTgianDthau())
+					|| thopHdr.getDenTgianMthau().compareTo(dxuatGao.getTgianMoThau()) < 0)
+				thopHdr.setDenTgianMthau(dxuatGao.getTgianMoThau());
 
-				if (StringUtils.isEmpty(thopHdr.getTuTgianNhang())
-						|| thopHdr.getTuTgianNhang().compareTo(dxuatGao.getTgianNhapHang()) > 0)
-					thopHdr.setTuTgianNhang(dxuatGao.getTgianNhapHang());
-				if (StringUtils.isEmpty(thopHdr.getDenTgianNhang())
-						|| thopHdr.getDenTgianNhang().compareTo(dxuatGao.getTgianNhapHang()) < 0)
-					thopHdr.setDenTgianNhang(dxuatGao.getTgianNhapHang());
+			if (StringUtils.isEmpty(thopHdr.getTuTgianDthau())
+					|| thopHdr.getTuTgianDthau().compareTo(dxuatGao.getTgianDongThau()) > 0)
+				thopHdr.setTuTgianDthau(dxuatGao.getTgianDongThau());
+			if (StringUtils.isEmpty(thopHdr.getDenTgianDthau())
+					|| thopHdr.getDenTgianDthau().compareTo(dxuatGao.getTgianDongThau()) < 0)
+				thopHdr.setDenTgianDthau(dxuatGao.getTgianDongThau());
+
+			if (StringUtils.isEmpty(thopHdr.getTuTgianNhang())
+					|| thopHdr.getTuTgianNhang().compareTo(dxuatGao.getTgianNhapHang()) > 0)
+				thopHdr.setTuTgianNhang(dxuatGao.getTgianNhapHang());
+			if (StringUtils.isEmpty(thopHdr.getDenTgianNhang())
+					|| thopHdr.getDenTgianNhang().compareTo(dxuatGao.getTgianNhapHang()) < 0)
+				thopHdr.setDenTgianNhang(dxuatGao.getTgianNhapHang());
+
+
 //			}
 
 			// Set thong tin chung lay tu de xuat

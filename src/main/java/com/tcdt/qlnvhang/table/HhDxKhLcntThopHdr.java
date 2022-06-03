@@ -73,6 +73,10 @@ public class HhDxKhLcntThopHdr implements Serializable {
 	Date tuTgianMthau;
 	@Temporal(TemporalType.DATE)
 	Date denTgianMthau;
+	@Temporal(TemporalType.DATE)
+	Date tuTgianPhanh;
+	@Temporal(TemporalType.DATE)
+	Date denTgianPhanh;
 
 	Date ngayTao;
 	String nguoiTao;

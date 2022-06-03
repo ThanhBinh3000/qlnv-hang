@@ -18,7 +18,7 @@ public interface HhQdKhlcntHdrRepository extends BaseRepository<HhQdKhlcntHdr, L
 	@Query(value = " SELECT * FROM HH_QD_KHLCNT_HDR QDKHLCNT "+
 			" WHERE (:namKh IS NULL OR QDKHLCNT.NAM_KHOACH = TO_NUMBER(:namKh)) "+
 			" AND (:loaiVthh IS NULL OR QDKHLCNT.LOAI_VTHH = :loaiVthh) "+
-			" AND (:soQd IS NULL OR QDKHLCNT.SO_QD = :soQd) "+
+			" AND (:soQd IS NULL OR LOWER(QDKHLCNT.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQd),'%'))) "+
 			" AND (:tuNgayQd IS NULL OR QDKHLCNT.NGAY_QD >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) "+
 			" AND (:denNgayQd IS NULL OR QDKHLCNT.NGAY_QD <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) "+
 			" AND (:trangThai IS NULL OR QDKHLCNT.TRANG_THAI = :trangThai) ",
