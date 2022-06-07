@@ -24,26 +24,26 @@ public interface HhDxKhLcntThopHdrRepository extends BaseRepository<HhDxKhLcntTh
 	void updateTrangThai(Long idThHdr, String trangThai);
 
 	@Query(
-			value = "SELECT * \n" +
-					"FROM HH_DX_KHLCNT_THOP_HDR THOP \n" +
-					" WHERE (:namKh IS NULL OR THOP.NAM_KHOACH = TO_NUMBER(:namKh)) \n" +
-					"  AND (:loatVthh IS NULL OR THOP.LOAI_VTHH = :loatVthh)\n" +
-					"  AND (:quyetDinh IS NULL OR THOP.QD_CAN_CU = :quyetDinh)\n" +
-					"  AND (:tuNgayTao IS NULL OR THOP.NGAY_TAO >= TO_DATE(:tuNgayTao, 'yyyy-MM-dd')) " +
-					"  AND (:denNgayTao IS NULL OR THOP.NGAY_TAO <= TO_DATE(:denNgayTao, 'yyyy-MM-dd')) " +
-					"  AND (:trangThai IS NULL OR THOP.TRANG_THAI = :trangThai) ",
+			value = "SELECT * " +
+					"FROM HH_DX_KHLCNT_THOP_HDR " +
+					" WHERE (:namKh IS NULL OR HH_DX_KHLCNT_THOP_HDR.NAM_KHOACH = TO_NUMBER(:namKh))  " +
+					"  AND (:loaiVthh IS NULL OR HH_DX_KHLCNT_THOP_HDR.LOAI_VTHH = :loaiVthh) " +
+					"  AND (:quyetDinh IS NULL OR HH_DX_KHLCNT_THOP_HDR.QD_CAN_CU = :quyetDinh) " +
+					"  AND (:tuNgayTao IS NULL OR HH_DX_KHLCNT_THOP_HDR.NGAY_TAO >= TO_DATE(:tuNgayTao, 'yyyy-MM-dd')) " +
+					"  AND (:denNgayTao IS NULL OR HH_DX_KHLCNT_THOP_HDR.NGAY_TAO <= TO_DATE(:denNgayTao, 'yyyy-MM-dd')) " +
+					"  AND (:trangThai IS NULL OR HH_DX_KHLCNT_THOP_HDR.TRANG_THAI = :trangThai) ",
 			nativeQuery = true)
-	Page<HhDxKhLcntThopHdr> select(String namKh, String loatVthh, String tuNgayTao, String denNgayTao,String quyetDinh,String trangThai, Pageable pageable);
+	Page<HhDxKhLcntThopHdr> select(String namKh, String loaiVthh, String tuNgayTao, String denNgayTao,String quyetDinh,String trangThai, Pageable pageable);
 
 	@Query(
-			value = "SELECT * \n" +
-					"FROM HH_DX_KHLCNT_THOP_HDR THOP \n" +
-					" WHERE (:namKh IS NULL OR THOP.NAM_KHOACH = TO_NUMBER(:namKh))\n" +
-					"  AND (:loatVthh IS NULL OR THOP.LOAI_VTHH = :loatVthh)\n" +
-					"  AND (:quyetDinh IS NULL OR THOP.QD_CAN_CU = :quyetDinh)\n" +
-					"  AND (:tuNgayTao IS NULL OR THOP.NGAY_TAO >= TO_DATE(:tuNgayTao, 'yyyy-MM-dd')) \n" +
-					"  AND (:denNgayTao IS NULL OR THOP.NGAY_TAO <= TO_DATE(:denNgayTao, 'yyyy-MM-dd')) \n" +
-					"  AND (:trangThai IS NULL OR THOP.TRANG_THAI = :trangThai) ",
+			value = "SELECT *  " +
+					"FROM HH_DX_KHLCNT_THOP_HDR " +
+					" WHERE (:namKh IS NULL OR HH_DX_KHLCNT_THOP_HDR.NAM_KHOACH = TO_NUMBER(:namKh)) " +
+					"  AND (:loaiVthh IS NULL OR HH_DX_KHLCNT_THOP_HDR.LOAI_VTHH = :loaiVthh) " +
+					"  AND (:quyetDinh IS NULL OR HH_DX_KHLCNT_THOP_HDR.QD_CAN_CU = :quyetDinh) " +
+					"  AND (:tuNgayTao IS NULL OR HH_DX_KHLCNT_THOP_HDR.NGAY_TAO >= TO_DATE(:tuNgayTao, 'yyyy-MM-dd'))  " +
+					"  AND (:denNgayTao IS NULL OR HH_DX_KHLCNT_THOP_HDR.NGAY_TAO <= TO_DATE(:denNgayTao, 'yyyy-MM-dd'))  " +
+					"  AND (:trangThai IS NULL OR HH_DX_KHLCNT_THOP_HDR.TRANG_THAI = :trangThai) ",
 			nativeQuery = true)
-	List<HhDxKhLcntThopHdr> selectAll(String namKh, String loatVthh, String tuNgayTao, String denNgayTao, String quyetDinh, String trangThai);
+	List<HhDxKhLcntThopHdr> selectAll(String namKh, String loaiVthh, String tuNgayTao, String denNgayTao, String quyetDinh, String trangThai);
 }

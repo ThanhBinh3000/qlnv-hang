@@ -201,6 +201,13 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 						|| thopHdr.getDenTgianTbao().compareTo(dxuatGao.getTgianTbao()) < 0)
 					thopHdr.setDenTgianTbao(dxuatGao.getTgianTbao());
 
+				if (StringUtils.isEmpty(thopHdr.getTuTgianPhanh())
+						|| thopHdr.getTuTgianPhanh().compareTo(dxuatGao.getTgianPhatHanh()) > 0)
+					thopHdr.setTuTgianPhanh(dxuatGao.getTgianPhatHanh());
+				if (StringUtils.isEmpty(thopHdr.getDenTgianPhanh())
+						|| thopHdr.getDenTgianPhanh().compareTo(dxuatGao.getTgianPhatHanh()) < 0)
+					thopHdr.setDenTgianPhanh(dxuatGao.getTgianPhatHanh());
+
 				if (StringUtils.isEmpty(thopHdr.getTuTgianMthau())
 						|| thopHdr.getTuTgianMthau().compareTo(dxuatGao.getTgianMoThau()) > 0)
 					thopHdr.setTuTgianMthau(dxuatGao.getTgianMoThau());
