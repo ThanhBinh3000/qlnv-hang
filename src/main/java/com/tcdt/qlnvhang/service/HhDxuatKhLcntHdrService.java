@@ -35,6 +35,6 @@ public interface HhDxuatKhLcntHdrService {
 
 	void exportDsKhlcnt(HhDxuatKhLcntSearchReq searchReq, HttpServletResponse response) throws Exception;
 
-	Page<HhDxuatKhLcntHdr> timKiem (HhDxuatKhLcntSearchReq objReq) throws Exception;
+	Page<HhDxuatKhLcntHdr> timKiem (HttpServletRequest request,HhDxuatKhLcntSearchReq objReq) throws Exception;
 
 }

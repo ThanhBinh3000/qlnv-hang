@@ -36,6 +36,12 @@ public class HhDxuatKhLcntHdrReq {
 	@Size(max = 500, message = "Trích yếu không được vượt quá 500 ký tự")
 	String trichYeu;
 
+	@NotNull(message = "Không được để trống")
+	@Size(max = 20, message = "Chủng loại vật tư hàng hóa không được vượt quá 20 ký tự")
+	String cloaiVthh;
+
+	String maVtu;
+
 	@Size(max = 250, message = "Lý do từ chối không được vượt quá 250 ký tự")
 	String ldoTuchoi;
 

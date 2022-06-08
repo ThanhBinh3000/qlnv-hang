@@ -36,6 +36,8 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	private Long id;
 	String soDxuat;
 	String loaiVthh;
+	@Transient
+	String tenVthh;
 	String soQd;
 	String trichYeu;
 	String maDvi;
@@ -55,6 +57,12 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	Date ngayKy;
 	Long namKhoach;
 	String ghiChu;
+	String cloaiVthh;
+	@Transient
+	String tenCloaiVthh;
+	String maVtu;
+	@Transient
+	String tenVtu;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)

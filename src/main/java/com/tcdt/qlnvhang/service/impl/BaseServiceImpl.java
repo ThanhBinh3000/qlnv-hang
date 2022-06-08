@@ -90,6 +90,29 @@ public class BaseServiceImpl {
 		return qlnvDmDonvi;
 	}
 
+	public Map<String, String> getListDanhMucChung(String loai, HttpServletRequest req){
+		ResponseEntity<String> response = categoryServiceProxy.getDanhMucChung(getAuthorizationToken(req),
+				loai);
+		String str = Request.getAttrFromJson(response.getBody(), "data");
+		HashMap<String, String> data = new HashMap<String, String>();
+		List<Map<String, Object>> retMap = new Gson().fromJson(str, new TypeToken<List<HashMap<String, Object>>>() {}.getType());
+		for (Map<String, Object> map : retMap){
+			data.put(String.valueOf(map.get("ma")), String.valueOf(map.get("giaTri")));
+		}
+		return data;
+	}
+
+	public Map<String, String> getListDanhMucHangHoa(HttpServletRequest req){
+		ResponseEntity<String> response = categoryServiceProxy.getDanhMucHangHoa(getAuthorizationToken(req));
+		String str = Request.getAttrFromJson(response.getBody(), "data");
+		HashMap<String, String> data = new HashMap<String, String>();
+		List<Map<String, Object>> retMap = new Gson().fromJson(str, new TypeToken<List<HashMap<String, Object>>>() {}.getType());
+		for (Map<String, Object> map : retMap){
+			data.put(String.valueOf(map.get("ma")), String.valueOf(map.get("ten")));
+		}
+		return data;
+	}
+
 	public Map<String, String> getMapCategory() {
 		if (MapCategory.map == null && danhMucRepository != null) {
 			MapCategory.map = new HashMap<>();

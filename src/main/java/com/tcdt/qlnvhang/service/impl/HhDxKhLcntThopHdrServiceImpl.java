@@ -1,10 +1,7 @@
 package com.tcdt.qlnvhang.service.impl;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -446,13 +443,25 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 	}
 
 	@Override
-	public Page<HhDxKhLcntThopHdr> timKiemPage(HhDxKhLcntThopSearchReq req) throws Exception {
+	public Page<HhDxKhLcntThopHdr> timKiemPage(HttpServletRequest request,HhDxKhLcntThopSearchReq req) throws Exception {
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
-		return hhDxKhLcntThopHdrRepository.select(req.getNamKhoach(),req.getLoaiVthh(),convertDateToString(req.getTuNgayTao()),convertDateToString(req.getDenNgayTao()),req.getSoQd(),req.getTrangThai(), pageable);
+		Page<HhDxKhLcntThopHdr> page = hhDxKhLcntThopHdrRepository.select(req.getNamKhoach(),req.getLoaiVthh(),convertDateToString(req.getTuNgayTao()),convertDateToString(req.getDenNgayTao()),req.getSoQd(),req.getTrangThai(), pageable);
+
+		Map<String,String> hashMapPthucDthau = getListDanhMucChung("PT_DTHAU",request);
+		Map<String,String> hashMapNguonVon = getListDanhMucChung("NGUON_VON",request);
+		Map<String,String> hashMapHtLcnt = getListDanhMucChung("HT_LCNT",request);
+		Map<String,String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG",request);
+		page.getContent().forEach(f -> {
+			f.setTenHthucLcnt( StringUtils.isEmpty(f.getHthucLcnt()) ? null : hashMapHtLcnt.get(f.getHthucLcnt()));
+			f.setTenPthucLcnt( StringUtils.isEmpty(f.getPthucLcnt()) ? null :hashMapPthucDthau.get(f.getPthucLcnt()));
+			f.setTenLoaiHdong( StringUtils.isEmpty(f.getLoaiHdong()) ? null :hashMapLoaiHdong.get(f.getLoaiHdong()));
+			f.setTenNguonVon( StringUtils.isEmpty(f.getNguonVon()) ? null :hashMapNguonVon.get(f.getNguonVon()));
+		});
+		return page;
 	}
 
 	@Override
-	public List<HhDxKhLcntThopHdr> timKiemAll(HhDxKhLcntThopSearchReq req) throws Exception {
+	public List<HhDxKhLcntThopHdr> timKiemAll(HttpServletRequest request,HhDxKhLcntThopSearchReq req) throws Exception {
 		return hhDxKhLcntThopHdrRepository.selectAll(req.getNamKhoach(),req.getLoaiVthh(),convertDateToString(req.getTuNgayTao()),convertDateToString(req.getDenNgayTao()),req.getSoQd(), req.getTrangThai());
 	}
 }

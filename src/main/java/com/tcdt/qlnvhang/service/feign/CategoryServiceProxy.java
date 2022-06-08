@@ -27,4 +27,15 @@ public interface CategoryServiceProxy {
 			@RequestHeader(value = "Authorization", required = true) String authorizationHeader,
 			@RequestBody BaseRequest objReq);
 
+	@GetMapping("/dmuc-chung/danh-sach/{loai}")
+	@Headers({ "Accept: application/json; charset=utf-8", "Content-Type: application/x-www-form-urlencoded" })
+	public ResponseEntity<String> getDanhMucChung(
+			@RequestHeader(value = "Authorization", required = true) String authorizationHeader,
+			@PathVariable("loai") String loai);
+
+	@GetMapping("/dm-hang/danh-sach/dvql")
+	@Headers({ "Accept: application/json; charset=utf-8", "Content-Type: application/x-www-form-urlencoded" })
+	public ResponseEntity<String> getDanhMucHangHoa(
+			@RequestHeader(value = "Authorization", required = true) String authorizationHeader);
+
 }
