@@ -42,6 +42,9 @@ import com.tcdt.qlnvhang.util.UnitScaler;
 public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDxuatKhLcntHdrService {
 
 	@Autowired
+	HttpServletRequest request;
+
+	@Autowired
 	private HhDxuatKhLcntHdrRepository hhDxuatKhLcntHdrRepository;
 
 	@Autowired
@@ -198,6 +201,10 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
 		}
 
+		Map<String,String> mapVthh = getListDanhMucHangHoa(request);
+		qOptional.get().setTenVthh( StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : mapVthh.get(qOptional.get().getLoaiVthh()));
+		qOptional.get().setTenCloaiVthh( StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null :mapVthh.get(qOptional.get().getCloaiVthh()));
+		qOptional.get().setMaVtu( StringUtils.isEmpty(qOptional.get().getMaVtu()) ? null :mapVthh.get(qOptional.get().getMaVtu()));
 		// Quy doi don vi kg = tan
 		List<HhDxuatKhLcntDsgtDtl> dtls2 = ObjectMapperUtils.mapAll(qOptional.get().getChildren2(),
 				HhDxuatKhLcntDsgtDtl.class);
