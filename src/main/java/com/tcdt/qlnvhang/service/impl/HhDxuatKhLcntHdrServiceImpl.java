@@ -58,8 +58,9 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 			throw new Exception("Loại vật tư hàng hóa không phù hợp");
 
 		Optional<HhDxuatKhLcntHdr> qOptional = hhDxuatKhLcntHdrRepository.findBySoDxuat(objReq.getSoDxuat());
-		if (qOptional.isPresent())
+		if (qOptional.isPresent()){
 			throw new Exception("Số đề xuất " + objReq.getSoDxuat() + " đã tồn tại");
+		}
 
 		// Add danh sach file dinh kem o Master
 		List<FileDKemJoinDxKhLcntHdr> fileDinhKemList = new ArrayList<FileDKemJoinDxKhLcntHdr>();
@@ -138,6 +139,13 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh()))
 			throw new Exception("Loại vật tư hàng hóa không phù hợp");
 
+		Optional<HhDxuatKhLcntHdr> deXuat = hhDxuatKhLcntHdrRepository.findBySoDxuat(objReq.getSoDxuat());
+		if (deXuat.isPresent()){
+			if(!deXuat.get().getId().equals(objReq.getId())){
+				throw new Exception("Số đề xuất " + objReq.getSoDxuat() + " đã tồn tại");
+			}
+		}
+
 		// Add danh sach file dinh kem o Master
 		List<FileDKemJoinDxKhLcntHdr> fileDinhKemList = new ArrayList<FileDKemJoinDxKhLcntHdr>();
 		if (objReq.getChildren() != null) {
@@ -204,7 +212,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		Map<String,String> mapVthh = getListDanhMucHangHoa(request);
 		qOptional.get().setTenVthh( StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : mapVthh.get(qOptional.get().getLoaiVthh()));
 		qOptional.get().setTenCloaiVthh( StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null :mapVthh.get(qOptional.get().getCloaiVthh()));
-		qOptional.get().setMaVtu( StringUtils.isEmpty(qOptional.get().getMaVtu()) ? null :mapVthh.get(qOptional.get().getMaVtu()));
+		qOptional.get().setTenVtu( StringUtils.isEmpty(qOptional.get().getMaVtu()) ? null :mapVthh.get(qOptional.get().getMaVtu()));
 		// Quy doi don vi kg = tan
 		List<HhDxuatKhLcntDsgtDtl> dtls2 = ObjectMapperUtils.mapAll(qOptional.get().getChildren2(),
 				HhDxuatKhLcntDsgtDtl.class);
