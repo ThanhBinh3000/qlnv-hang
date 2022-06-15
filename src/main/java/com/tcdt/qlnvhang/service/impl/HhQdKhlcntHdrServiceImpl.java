@@ -8,7 +8,9 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.tcdt.qlnvhang.repository.HhDxKhLcntThopHdrRepository;
+import com.tcdt.qlnvhang.repository.*;
+import com.tcdt.qlnvhang.request.object.HhDxuatKhLcntDsgVtuDtlCtietReq;
+import com.tcdt.qlnvhang.request.object.HhQdKhlcntDsgthauReq;
 import com.tcdt.qlnvhang.table.*;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.tcdt.qlnvhang.entities.FileDKemJoinQdKhlcntHdr;
-import com.tcdt.qlnvhang.repository.HhPaKhlcntHdrRepository;
-import com.tcdt.qlnvhang.repository.HhQdKhlcntHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.HhQdKhlcntDtlReq;
@@ -47,6 +47,15 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	@Autowired
 	private HhDxKhLcntThopHdrRepository hhDxKhLcntThopHdrRepository;
 
+	@Autowired
+	private HhQdKhlcntDsgthauRepository hhQdKhlcntDsgthauRepository;
+
+	@Autowired
+	private HhQdKhlcntDsgthauCtietRepository hhQdKhlcntDsgthauCtietRepository;
+
+	@Autowired
+	private HhDxuatKhLcntHdrRepository hhDxuatKhLcntHdrRepository;
+
 
 	@Override
 	public HhQdKhlcntHdr create(HhQdKhlcntHdrReq objReq) throws Exception {
@@ -57,10 +66,6 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		if (checkSoQd.isPresent()) {
 			throw new Exception("Số quyết định " + objReq.getSoQd() + " đã tồn tại");
 		}
-//
-//		if (ObjectUtils.isEmpty(objReq.getIdPaHdr()) || objReq.getIdPaHdr() <= 0) {
-//			throw new Exception("Không tìm thấy phương án kế hoạch lựa chọn nhà thầu");
-//		}
 
 		Optional<HhDxKhLcntThopHdr> qOptional = hhDxKhLcntThopHdrRepository.findById(objReq.getIdThHdr());
 		if (!qOptional.isPresent()){
@@ -270,7 +275,6 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			}else{
 				throw new Exception("Tổng hợp kế hoạch không được tìm thấy");
 			}
-//			hhPaKhlcntHdrRepository.updateTongHop(createCheck.getIdPaHdr(), Contains.ACTIVE);
 		}
 		HhQdKhlcntHdr createCheck = hhQdKhlcntHdrRepository.save(optional.get());
 		return createCheck;
@@ -381,6 +385,103 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	@Override
 	public List<HhQdKhlcntHdr> getAll(HhQdKhlcntSearchReq req) throws Exception {
 		return hhQdKhlcntHdrRepository.selectAll(req.getNamKhoach(),req.getLoaiVthh(), req.getSoQd(), convertDateToString(req.getTuNgayQd()),convertDateToString(req.getDenNgayQd()),req.getTrangThai());
+	}
+
+	@Override
+	public HhQdKhlcntHdr createVatTu(HhQdKhlcntHdrReq objReq) throws Exception {
+
+		Optional<HhQdKhlcntHdr> checkSoQd = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQd());
+		if (checkSoQd.isPresent()) {
+			throw new Exception("Số quyết định " + objReq.getSoQd() + " đã tồn tại");
+		}
+
+		// Add danh sach file dinh kem o Master
+		List<FileDKemJoinQdKhlcntHdr> fileDinhKemList = new ArrayList<FileDKemJoinQdKhlcntHdr>();
+		if (objReq.getFileDinhKems() != null) {
+			fileDinhKemList = ObjectMapperUtils.mapAll(objReq.getFileDinhKems(), FileDKemJoinQdKhlcntHdr.class);
+			fileDinhKemList.forEach(f -> {
+				f.setDataType(HhQdKhlcntHdr.TABLE_NAME);
+				f.setCreateDate(new Date());
+			});
+		}
+
+		HhQdKhlcntHdr dataMap = ObjectMapperUtils.map(objReq, HhQdKhlcntHdr.class);
+
+		dataMap.setNgayTao(getDateTimeNow());
+		dataMap.setTrangThai(Contains.TAO_MOI);
+		dataMap.setNguoiTao(getUser().getUsername());
+		dataMap.setChildren(fileDinhKemList);
+//		dataMap.setIdThHdr(qOptional.get().getId());
+//		dataMap.setSoPhAn(qOptional.get().getSoPhAn());
+
+		HhQdKhlcntHdr createCheck = hhQdKhlcntHdrRepository.save(dataMap);
+		Long idHhQdKhlcntHdr = createCheck.getId();
+		if (objReq.getDsGoiThau() != null && objReq.getDsGoiThau().size() > 0) {
+			for (HhQdKhlcntDsgthauReq dsgThau : objReq.getDsGoiThau()){
+				HhQdKhlcntDsgthau gThau = ObjectMapperUtils.map(dsgThau, HhQdKhlcntDsgthau.class);
+				gThau.setIdQdKhlcntHdr(idHhQdKhlcntHdr);
+				hhQdKhlcntDsgthauRepository.save(gThau);
+				for (HhDxuatKhLcntDsgVtuDtlCtietReq dsDdNhap : dsgThau.getDanhSachDiaDiemNhap()){
+					HhQdKhlcntDsgthauCtiet ddNhap = ObjectMapperUtils.map(dsDdNhap, HhQdKhlcntDsgthauCtiet.class);
+					ddNhap.setIdGoiThau(gThau.getId());
+					hhQdKhlcntDsgthauCtietRepository.save(ddNhap);
+				}
+			}
+		}
+		return createCheck;
+	}
+
+	@Override
+	public HhQdKhlcntHdr updateVatTu(HhQdKhlcntHdrReq objReq) throws Exception {
+		return null;
+	}
+
+	@Override
+	public HhQdKhlcntHdr detailVatTu(String ids) throws Exception {
+		if (StringUtils.isEmpty(ids))
+			throw new UnsupportedOperationException("Không tồn tại bản ghi");
+
+		Optional<HhQdKhlcntHdr> qOptional = hhQdKhlcntHdrRepository.findById(Long.parseLong(ids));
+
+		if (!qOptional.isPresent())
+			throw new UnsupportedOperationException("Không tồn tại bản ghi");
+
+		List<HhQdKhlcntDsgthau>  listGThau = hhQdKhlcntDsgthauRepository.findByIdQdKhlcntHdr(Long.parseLong(ids));
+		qOptional.get().setDsGoiThau(listGThau);
+		for (int i = 0; i < qOptional.get().getDsGoiThau().size();i++){
+			HhQdKhlcntDsgthau dsgThau = qOptional.get().getDsGoiThau().get(i);
+			List<HhQdKhlcntDsgthauCtiet> listDdNhap = hhQdKhlcntDsgthauCtietRepository.findByIdGoiThau(dsgThau.getId());
+			qOptional.get().getDsGoiThau().get(i).setDanhSachDiaDiemNhap(listDdNhap);
+		}
+		return qOptional.get();
+	}
+
+	@Override
+	public HhQdKhlcntHdr approveVatTu(StatusReq stReq) throws Exception {
+		if (StringUtils.isEmpty(stReq.getId())){
+			throw new Exception("Không tìm thấy dữ liệu");
+		}
+		Optional<HhQdKhlcntHdr> optional = hhQdKhlcntHdrRepository.findById(Long.valueOf(stReq.getId()));
+		if (!optional.isPresent()){
+			throw new Exception("Không tìm thấy dữ liệu");
+		}
+		String status = stReq.getTrangThai() + optional.get().getTrangThai();
+		switch (status) {
+			case Contains.BAN_HANH + Contains.TAO_MOI:
+				optional.get().setNguoiPduyet(getUser().getUsername());
+				optional.get().setNgayPduyet(getDateTimeNow());
+				break;
+			default:
+				throw new Exception("Phê duyệt không thành công");
+		}
+		optional.get().setTrangThai(stReq.getTrangThai());
+		if (stReq.getTrangThai().equals(Contains.BAN_HANH)) {
+			List<String> list = new ArrayList<>();
+			list.add(String.valueOf(optional.get().getIdTrHdr()));
+			hhDxuatKhLcntHdrRepository.updateTongHop(list, Contains.BAN_HANH);
+		}
+		HhQdKhlcntHdr createCheck = hhQdKhlcntHdrRepository.save(optional.get());
+		return createCheck;
 	}
 
 }

@@ -12,7 +12,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-public class HhDxuatKhLcntDsgtDtlReq {
+public class HhQdKhlcntDsgthauReq {
 	@ApiModelProperty(notes = "Bắt buộc set đối với update")
 	private Long id;
 
@@ -25,14 +25,14 @@ public class HhDxuatKhLcntDsgtDtlReq {
 
 	BigDecimal soLuong;
 
-	String maDvi;
-	String maCcuc;
-	String maDiemKho;
-
 	@NotNull(message = "Không được để trống")
 	@Size(max = 250, message = "Địa điểm nhập không được vượt quá 250 ký tự")
 	@ApiModelProperty(example = "Địa điểm nhập")
 	String diaDiemNhap;
+
+	String maDiemKho;
+
+	String maDvi;
 	
 	BigDecimal donGia;
 	BigDecimal thanhTien;

@@ -2,16 +2,10 @@ package com.tcdt.qlnvhang.table;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -42,5 +36,19 @@ public class HhDxuatKhLcntDsgtDtl implements Serializable {
 	@JoinColumn(name = "ID_KH_HDR",nullable=false)
 	@JsonBackReference
 	private HhDxuatKhLcntHdr parent;
+
+	String loaiVthh;
+	String cloaiVthh;
+	String dviTinh;
+	String hthucLcnt;
+	String pthucLcnt;
+	String loaiHdong;
+	String nguonVon;
+	String tgianBdauLcnt;
+	Integer tgianThienHd;
+
+
+	@Transient
+	private List<HhDxuatKhLcntVtuDtlCtiet> danhSachDiaDiepNhap = new ArrayList<>();
 
 }

@@ -50,6 +50,7 @@ public class HhDxuatKhLcntLtDtl implements Serializable {
 	String maDvi;
 	@Transient
 	String tenDvi;
+	String dienGiai;
 
 	@OneToOne(fetch = FetchType.LAZY,mappedBy = "children1")
 	@JsonBackReference

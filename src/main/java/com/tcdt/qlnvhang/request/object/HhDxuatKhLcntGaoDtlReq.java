@@ -28,43 +28,43 @@ public class HhDxuatKhLcntGaoDtlReq {
 	
 	BigDecimal tongMucDt;
 	
-	@NotNull(message = "Không được để trống")
+//	@NotNull(message = "Không được để trống")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date tuNgayThHien;
-	
-	@NotNull(message = "Không được để trống")
+
+//	@NotNull(message = "Không được để trống")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date denNgayThHien;
 	
-	@NotNull(message = "Không được để trống")
-	@Size(max = 20, message = "Tiêu chuẩn chất lượng không được vượt quá 20 ký tự")
+//	@NotNull(message = "Không được để trống")
+//	@Size(max = 20, message = "Tiêu chuẩn chất lượng không được vượt quá 20 ký tự")
 	@ApiModelProperty(example = "Tiêu chuẩn")
 	String tchuanCluong;
 	
-	@NotNull(message = "Không được để trống")
-	@Size(max = 20, message = "Nguồn vốn không được vượt quá 20 ký tự")
+//	@NotNull(message = "Không được để trống")
+//	@Size(max = 20, message = "Nguồn vốn không được vượt quá 20 ký tự")
 	@ApiModelProperty(example = "Nguồn vốn")
 	String nguonVon;
 	
-	@NotNull(message = "Không được để trống")
+//	@NotNull(message = "Không được để trống")
 	@Size(max = 20, message = "Hình thức lựa chọn nhà thầu không được vượt quá 20 ký tự")
 	@ApiModelProperty(example = "Hình thức")
 	String hthucLcnt;
 	
-	@NotNull(message = "Không được để trống")
+//	@NotNull(message = "Không được để trống")
 	@Size(max = 20, message = "Phương thức lựa chọn nhà thầu không được vượt quá 20 ký tự")
 	@ApiModelProperty(example = "Phương thức")
 	String pthucLcnt;
 	
-	@NotNull(message = "Không được để trống")
+//	@NotNull(message = "Không được để trống")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date tgianTbao;
 	
-	@NotNull(message = "Không được để trống")
+//	@NotNull(message = "Không được để trống")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date tgianDongThau;
 	
-	@NotNull(message = "Không được để trống")
+//	@NotNull(message = "Không được để trống")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date tgianMoThau;
 	
@@ -75,7 +75,7 @@ public class HhDxuatKhLcntGaoDtlReq {
 	@NotNull(message = "Không được để trống")
 	Integer tgianThHienHd;
 	
-	@NotNull(message = "Không được để trống")
+//	@NotNull(message = "Không được để trống")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	@Temporal(TemporalType.DATE)
 	Date tgianNhapHang;
@@ -87,7 +87,7 @@ public class HhDxuatKhLcntGaoDtlReq {
 	@Size(max = 500, message = "Ghi chú không được vượt quá 500 ký tự")
 	String ghiChu;
 
-	@NotNull(message = "Không được để trống")
+//	@NotNull(message = "Không được để trống")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	@Temporal(TemporalType.DATE)
 	Date tgianPhatHanh;
@@ -95,5 +95,7 @@ public class HhDxuatKhLcntGaoDtlReq {
 	BigDecimal donGia;
 
 	String maDvi;
+
+	String dienGiai;
 
 }

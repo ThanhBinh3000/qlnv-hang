@@ -37,4 +37,15 @@ public interface HhDxuatKhLcntHdrService {
 
 	Page<HhDxuatKhLcntHdr> timKiem (HttpServletRequest request,HhDxuatKhLcntSearchReq objReq) throws Exception;
 
+	@Transactional(rollbackOn = Exception.class)
+	HhDxuatKhLcntHdr createVatTu(HhDxuatKhLcntHdrReq objReq) throws Exception;
+
+	@Transactional(rollbackOn = Exception.class)
+	HhDxuatKhLcntHdr updateVatTu(HhDxuatKhLcntHdrReq objReq) throws Exception;
+
+	HhDxuatKhLcntHdr detailVatTu(String ids) throws Exception;
+
+	@Transactional(rollbackOn = Exception.class)
+	HhDxuatKhLcntHdr approveVatTu(StatusReq stReq) throws Exception;
+
 }

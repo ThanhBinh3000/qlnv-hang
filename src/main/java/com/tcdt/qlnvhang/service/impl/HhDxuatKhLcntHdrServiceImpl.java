@@ -7,9 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
+import com.tcdt.qlnvhang.repository.HhDxuatKhLcntVtuDtlCtietRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
-import com.tcdt.qlnvhang.request.object.HhDxuatKhLcntDsgtDtlReq;
-import com.tcdt.qlnvhang.request.object.HhQdKhlcntDtlReq;
+import com.tcdt.qlnvhang.request.object.*;
 import com.tcdt.qlnvhang.table.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +26,6 @@ import com.tcdt.qlnvhang.repository.HhDxuatKhLcntDsgtDtlRepository;
 import com.tcdt.qlnvhang.repository.HhDxuatKhLcntHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.object.HhDxuatKhLcntCcxdgDtlReq;
-import com.tcdt.qlnvhang.request.object.HhDxuatKhLcntHdrReq;
 import com.tcdt.qlnvhang.request.search.HhDxuatKhLcntSearchReq;
 import com.tcdt.qlnvhang.secification.HhDxuatKhLcntSpecification;
 import com.tcdt.qlnvhang.service.HhDxuatKhLcntHdrService;
@@ -49,6 +47,9 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 
 	@Autowired
 	private HhDxuatKhLcntDsgtDtlRepository hhDxuatKhLcntDtlRepository;
+
+	@Autowired
+	private HhDxuatKhLcntVtuDtlCtietRepository hhDxuatKhLcntVtuDtlCtietRepository;
 
 	Long shgtNext = new Long(0);
 
@@ -375,5 +376,166 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 			f.setMaVtu( StringUtils.isEmpty(f.getMaVtu()) ? null :mapVthh.get(f.getMaVtu()));
 		});
 		return page;
+	}
+
+	@Override
+	public HhDxuatKhLcntHdr createVatTu(HhDxuatKhLcntHdrReq objReq) throws Exception {
+//		if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh()))
+//			throw new Exception("Loại vật tư hàng hóa không phù hợp");
+
+		Optional<HhDxuatKhLcntHdr> qOptional = hhDxuatKhLcntHdrRepository.findBySoDxuat(objReq.getSoDxuat());
+		if (qOptional.isPresent()){
+			throw new Exception("Số đề xuất " + objReq.getSoDxuat() + " đã tồn tại");
+		}
+
+		// Add danh sach file dinh kem o Master
+		List<FileDKemJoinDxKhLcntHdr> fileDinhKemList = new ArrayList<FileDKemJoinDxKhLcntHdr>();
+		if (objReq.getChildren() != null) {
+			fileDinhKemList = ObjectMapperUtils.mapAll(objReq.getChildren(), FileDKemJoinDxKhLcntHdr.class);
+			fileDinhKemList.forEach(f -> {
+				f.setDataType(HhDxuatKhLcntHdr.TABLE_NAME);
+				f.setCreateDate(new Date());
+			});
+		}
+
+		HhDxuatKhLcntHdr dataMap = new ModelMapper().map(objReq, HhDxuatKhLcntHdr.class);
+		dataMap.setNgayTao(getDateTimeNow());
+		dataMap.setTrangThai(Contains.TAO_MOI);
+		dataMap.setNguoiTao(getUser().getUsername());
+		dataMap.setChildren(fileDinhKemList);
+
+		// Add danh sach goi thau
+		List<HhDxuatKhLcntDsgtDtl> dtls2 = ObjectMapperUtils.mapAll(objReq.getChildren2(), HhDxuatKhLcntDsgtDtl.class);
+		UnitScaler.reverseFormatList(dtls2, Contains.DVT_TAN);
+
+		dataMap.setChildren2(dtls2);
+
+		hhDxuatKhLcntHdrRepository.save(dataMap);
+
+		for (int i = 0; i < dataMap.getChildren2().size(); i++){
+			HhDxuatKhLcntDsgtDtlReq dsgThau = objReq.getChildren2().get(i);
+			HhDxuatKhLcntDsgtDtl dsgThauSaved =  dataMap.getChildren2().get(i);
+			for (int j = 0; j < dsgThau.getDanhSachDiaDiemNhap().size(); j++){
+				HhDxuatKhLcntVtuDtlCtiet ddNhap = ObjectMapperUtils.map(dsgThau.getDanhSachDiaDiemNhap().get(j), HhDxuatKhLcntVtuDtlCtiet.class);
+				ddNhap.setIdGoiThau(dsgThauSaved.getId());
+				hhDxuatKhLcntVtuDtlCtietRepository.save(ddNhap);
+			}
+		}
+		return dataMap;
+	}
+
+	@Override
+	public HhDxuatKhLcntHdr updateVatTu(HhDxuatKhLcntHdrReq objReq) throws Exception {
+		if (StringUtils.isEmpty(objReq.getId()))
+			throw new Exception("Sửa thất bại, không tìm thấy dữ liệu");
+
+		Optional<HhDxuatKhLcntHdr> qOptional = hhDxuatKhLcntHdrRepository.findById(Long.valueOf(objReq.getId()));
+		if (!qOptional.isPresent())
+			throw new Exception("Không tìm thấy dữ liệu cần sửa");
+
+		Optional<HhDxuatKhLcntHdr> deXuat = hhDxuatKhLcntHdrRepository.findBySoDxuat(objReq.getSoDxuat());
+		if (deXuat.isPresent()){
+			if(!deXuat.get().getId().equals(objReq.getId())){
+				throw new Exception("Số đề xuất " + objReq.getSoDxuat() + " đã tồn tại");
+			}
+		}
+
+		List<FileDKemJoinDxKhLcntHdr> fileDinhKemList = new ArrayList<FileDKemJoinDxKhLcntHdr>();
+		if (objReq.getChildren() != null) {
+			fileDinhKemList = ObjectMapperUtils.mapAll(objReq.getChildren(), FileDKemJoinDxKhLcntHdr.class);
+			fileDinhKemList.forEach(f -> {
+				f.setDataType(HhDxuatKhLcntHdr.TABLE_NAME);
+				f.setCreateDate(new Date());
+			});
+		}
+
+		HhDxuatKhLcntHdr dataDTB = qOptional.get();
+		HhDxuatKhLcntHdr dataMap = ObjectMapperUtils.map(objReq, HhDxuatKhLcntHdr.class);
+
+		updateObjectToObject(dataDTB, dataMap);
+
+		dataDTB.setNgaySua(getDateTimeNow());
+		dataDTB.setNguoiSua(getUser().getUsername());
+		dataDTB.setChildren(fileDinhKemList);
+
+		List<HhDxuatKhLcntDsgtDtl> dtls2 = ObjectMapperUtils.mapAll(objReq.getChildren2(), HhDxuatKhLcntDsgtDtl.class);
+		UnitScaler.reverseFormatList(dtls2, Contains.DVT_TAN);
+		dataDTB.setChildren2(dtls2);
+
+		hhDxuatKhLcntHdrRepository.save(dataMap);
+		for (int i = 0; i < dataMap.getChildren2().size(); i++){
+			HhDxuatKhLcntDsgtDtlReq dsgThau = objReq.getChildren2().get(i);
+			HhDxuatKhLcntDsgtDtl dsgThauSaved =  dataMap.getChildren2().get(i);
+			for (int j = 0; j < dsgThau.getDanhSachDiaDiemNhap().size(); j++){
+				HhDxuatKhLcntVtuDtlCtiet ddNhap = ObjectMapperUtils.map(dsgThau.getDanhSachDiaDiemNhap().get(j), HhDxuatKhLcntVtuDtlCtiet.class);
+				ddNhap.setIdGoiThau(dsgThauSaved.getId());
+				hhDxuatKhLcntVtuDtlCtietRepository.save(ddNhap);
+			}
+		}
+		return dataMap;
+	}
+
+	@Override
+	public HhDxuatKhLcntHdr detailVatTu(String ids) throws Exception {
+		if (StringUtils.isEmpty(ids)){
+			throw new UnsupportedOperationException("Không tồn tại bản ghi");
+
+		}
+		Optional<HhDxuatKhLcntHdr> qOptional = hhDxuatKhLcntHdrRepository.findById(Long.parseLong(ids));
+
+		if (!qOptional.isPresent()){
+			throw new UnsupportedOperationException("Không tồn tại bản ghi");
+		}
+
+		Map<String,String> mapVthh = getListDanhMucHangHoa(request);
+		qOptional.get().setTenVthh( StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : mapVthh.get(qOptional.get().getLoaiVthh()));
+		qOptional.get().setTenCloaiVthh( StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null :mapVthh.get(qOptional.get().getCloaiVthh()));
+		qOptional.get().setTenVtu( StringUtils.isEmpty(qOptional.get().getMaVtu()) ? null :mapVthh.get(qOptional.get().getMaVtu()));
+		// Quy doi don vi kg = tan
+		List<HhDxuatKhLcntDsgtDtl> dtls2 = ObjectMapperUtils.mapAll(qOptional.get().getChildren2(),
+				HhDxuatKhLcntDsgtDtl.class);
+		UnitScaler.formatList(dtls2, Contains.DVT_TAN);
+		qOptional.get().setChildren2(dtls2);
+		for (int i = 0; i < qOptional.get().getChildren2().size();i++){
+			HhDxuatKhLcntDsgtDtl dsgThau = qOptional.get().getChildren2().get(i);
+			System.out.println(dsgThau.getId());
+			List<HhDxuatKhLcntVtuDtlCtiet> listDdNhap = hhDxuatKhLcntVtuDtlCtietRepository.findByIdGoiThau(dsgThau.getId());
+			System.out.println(listDdNhap.size());
+			qOptional.get().getChildren2().get(i).setDanhSachDiaDiepNhap(listDdNhap);
+		}
+		return qOptional.get();
+	}
+
+	@Override
+	public HhDxuatKhLcntHdr approveVatTu(StatusReq stReq) throws Exception {
+		if (StringUtils.isEmpty(stReq.getId()))
+			throw new Exception("Không tìm thấy dữ liệu");
+
+		Optional<HhDxuatKhLcntHdr> optional = hhDxuatKhLcntHdrRepository.findById(Long.valueOf(stReq.getId()));
+		if (!optional.isPresent())
+			throw new Exception("Không tìm thấy dữ liệu");
+
+		String status = stReq.getTrangThai() + optional.get().getTrangThai();
+		switch (status) {
+			case Contains.CHO_DUYET + Contains.TU_CHOI:
+			case Contains.CHO_DUYET + Contains.MOI_TAO:
+				optional.get().setNguoiGuiDuyet(getUser().getUsername());
+				optional.get().setNgayGuiDuyet(getDateTimeNow());
+				break;
+			case Contains.TU_CHOI + Contains.CHO_DUYET:
+				optional.get().setNguoiPduyet(getUser().getUsername());
+				optional.get().setNgayPduyet(getDateTimeNow());
+				optional.get().setLdoTuchoi(stReq.getLyDo());
+				break;
+			case Contains.DUYET + Contains.CHO_DUYET:
+				optional.get().setNguoiPduyet(getUser().getUsername());
+				optional.get().setNgayPduyet(getDateTimeNow());
+				break;
+			default:
+				throw new Exception("Phê duyệt không thành công");
+		}
+
+		optional.get().setTrangThai(stReq.getTrangThai());
+		return hhDxuatKhLcntHdrRepository.save(optional.get());
 	}
 }

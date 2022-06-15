@@ -48,6 +48,7 @@ public class HhQdKhlcntHdr implements Serializable {
 	Date ngayQd;
 	Long idPaHdr;
 	Long idThHdr;
+	Long idTrHdr;
 	String trangThai;
 	Date ngaySua;
 	String nguoiSua;
@@ -59,6 +60,7 @@ public class HhQdKhlcntHdr implements Serializable {
 	String ghiChu;
 
 	String loaiVthh;
+	String cloaiVthh;
 	String hthucLcnt;
 	String pthucLcnt;
 	String loaiHdong;
@@ -130,4 +132,7 @@ public class HhQdKhlcntHdr implements Serializable {
 		child1.setParent(this);
 		this.children1.add(child1);
 	}
+
+	@Transient
+	private List<HhQdKhlcntDsgthau> dsGoiThau = new ArrayList<>();
 }
