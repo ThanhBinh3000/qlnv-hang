@@ -38,7 +38,7 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 
 	@Query(value = " SELECT KHLCNT.* \n" +
 			"FROM HH_DX_KHLCNT_HDR KHLCNT \n" +
-			"LEFT JOIN HH_DX_KHLCNT_LT_DTL KHLCNT_DETAIL ON KHLCNT.ID_HDR = KHLCNT_DETAIL.ID \n" +
+			"LEFT JOIN HH_DX_KHLCNT_DTL KHLCNT_DETAIL ON KHLCNT.ID_HDR = KHLCNT_DETAIL.ID \n" +
 			" WHERE KHLCNT.LOAI_VTHH = :loaiVthh \n" +
 			" AND KHLCNT.NAM_KHOACH = :namKh \n" +
 			" AND KHLCNT_DETAIL.HTHUC_LCNT = :hthucLcnt \n" +

@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 @Entity
-@Table(name = "HH_DX_KHLCNT_LT_DTL")
+@Table(name = "HH_DX_KHLCNT_DTL")
 @Data
 public class HhDxuatKhLcntLtDtl implements Serializable {
 
