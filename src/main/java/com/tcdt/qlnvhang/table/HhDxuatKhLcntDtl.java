@@ -8,13 +8,12 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 @Entity
 @Table(name = "HH_DX_KHLCNT_DTL")
 @Data
-public class HhDxuatKhLcntLtDtl implements Serializable {
+public class HhDxuatKhLcntDtl implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

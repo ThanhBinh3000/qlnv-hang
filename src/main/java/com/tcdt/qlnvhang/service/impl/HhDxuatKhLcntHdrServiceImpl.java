@@ -78,6 +78,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		dataMap.setTrangThai(Contains.TAO_MOI);
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setChildren(fileDinhKemList);
+		dataMap.setLastest(false);
 
 		// Add thong tin chung
 //		List<HhDxuatKhLcntGaoDtl> dtls1 = ObjectMapperUtils.mapAll(objReq.getDetail1(), HhDxuatKhLcntGaoDtl.class);
@@ -264,23 +265,18 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 				optional.get().setLdoTuchoi(stReq.getLyDo());
 				break;
 			case Contains.TPHONG_DUYET + Contains.CHO_DUYET:
-			case Contains.BAN_HANH + Contains.TPHONG_DUYET:
+			case Contains.DUYET + Contains.TPHONG_DUYET:
 				optional.get().setNguoiPduyet(getUser().getUsername());
 				optional.get().setNgayPduyet(getDateTimeNow());
 				break;
-//			case Contains.LANHDAO_DUYET + Contains.TPHONG_DUYET:
-//				optional.get().setNguoiPduyet(getUser().getUsername());
-//				optional.get().setNgayPduyet(getDateTimeNow());
-//				break;
-//			case Contains.DUYET + Contains.CHO_DUYET:
-//				optional.get().setNguoiPduyet(getUser().getUsername());
-//				optional.get().setNgayPduyet(getDateTimeNow());
-//				break;
 		default:
 			throw new Exception("Phê duyệt không thành công");
 		}
 
 		optional.get().setTrangThai(stReq.getTrangThai());
+		if (stReq.getTrangThai().equals(Contains.DUYET)) {
+			optional.get().setLastest(true);
+		}
 		return hhDxuatKhLcntHdrRepository.save(optional.get());
 	}
 
@@ -403,6 +399,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		dataMap.setTrangThai(Contains.TAO_MOI);
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setChildren(fileDinhKemList);
+		dataMap.setLastest(false);
 
 		// Add danh sach goi thau
 		List<HhDxuatKhLcntDsgtDtl> dtls2 = ObjectMapperUtils.mapAll(objReq.getChildren2(), HhDxuatKhLcntDsgtDtl.class);

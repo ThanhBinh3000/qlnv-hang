@@ -17,9 +17,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 @Entity
-@Table(name = "QLNV_QD_LCNT_DTL_CTIET")
+@Table(name = "HH_DC_DX_LCNT_DTL_CTIET")
 @Data
-public class QlnvQdLcntDtlCtiet implements Serializable {
+public class HhDchinhDxKhLcntDtlCtiet implements Serializable {
 	/**
 	 * 
 	 */
@@ -29,18 +29,8 @@ public class QlnvQdLcntDtlCtiet implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "QLNV_QD_LCNT_DTL_CTIET_SEQ")
 	@SequenceGenerator(sequenceName = "QLNV_QD_LCNT_DTL_CTIET_SEQ", allocationSize = 1, name = "QLNV_QD_LCNT_DTL_CTIET_SEQ")
 	private Long id;
-	String maDvi;
-	String diaChi;
-	BigDecimal soDxuat;
-	BigDecimal soDuyet;
-	String dviTinh;
-	BigDecimal donGia;
-	BigDecimal thuesuat;
-	BigDecimal thanhtien;
-	BigDecimal tongtien;
-	
-	@JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_dtl")
-    private QlnvQdLcntDtl dtl;
+	private Integer soLuong;
+	private String tenDvi;
+	private String maDvi;
+	private Long idDtl;
 }

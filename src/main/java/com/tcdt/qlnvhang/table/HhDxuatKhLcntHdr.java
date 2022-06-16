@@ -7,8 +7,6 @@ import java.util.List;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Where;
@@ -64,6 +62,8 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	@Transient
 	String tenVtu;
 
+	boolean lastest;
+
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)
 	@JoinColumn(name = "dataId")
@@ -86,7 +86,7 @@ public class HhDxuatKhLcntHdr implements Serializable {
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_hdr", referencedColumnName = "id")
-	private HhDxuatKhLcntLtDtl children1;
+	private HhDxuatKhLcntDtl children1;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "ID_KH_HDR")

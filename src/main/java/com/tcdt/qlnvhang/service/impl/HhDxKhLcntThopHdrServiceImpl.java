@@ -80,7 +80,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		for (HhDxuatKhLcntHdr dxuat : dxuatList) {
 			HhDxKhLcntThopDtl thopDtl = new HhDxKhLcntThopDtl();
 			// Set ngay min va ngay max o detail Gao
-			HhDxuatKhLcntLtDtl dxuatGao = dxuat.getChildren1();
+			HhDxuatKhLcntDtl dxuatGao = dxuat.getChildren1();
 //			if (dtlsGao.isEmpty())
 //				continue;
 
@@ -186,7 +186,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		for (HhDxuatKhLcntHdr dxuat : dxuatList) {
 			HhDxKhLcntThopDtl thopDtl = new HhDxKhLcntThopDtl();
 			// Set ngay min va ngay max o detail Gao
-			HhDxuatKhLcntLtDtl dxuatGao = dxuat.getChildren1();
+			HhDxuatKhLcntDtl dxuatGao = dxuat.getChildren1();
 //			if (dtlsGao.isEmpty())
 //				continue;
 
@@ -368,7 +368,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		for (HhDxuatKhLcntHdr dxuat : dxuatList) {
 			HhDxKhLcntThopDtl thopDtl = new HhDxKhLcntThopDtl();
 			// Set ngay min va ngay max o detail Gao
-			HhDxuatKhLcntLtDtl dtlsGao = dxuat.getChildren1();
+			HhDxuatKhLcntDtl dtlsGao = dxuat.getChildren1();
 //			if (dtlsGao.isEmpty())
 //				continue;
 
