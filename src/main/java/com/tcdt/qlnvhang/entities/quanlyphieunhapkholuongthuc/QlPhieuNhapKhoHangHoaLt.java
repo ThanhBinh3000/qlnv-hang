@@ -12,12 +12,12 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "QL_PHIEU_NHAP_KHO_HANG_HOA_LT")
+@Table(name = "NH_PHIEU_NHAP_KHO_LT_CT")
 public class QlPhieuNhapKhoHangHoaLt implements Serializable {
     private static final long serialVersionUID = 3529822360093876437L;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "QL_PHIEU_NHAP_KHO_HH_LT_SEQ")
-    @SequenceGenerator(sequenceName = "QL_PHIEU_NHAP_KHO_HH_LT_SEQ", allocationSize = 1, name = "QL_PHIEU_NHAP_KHO_HH_LT_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PHIEU_NHAP_KHO_LT_CT_SEQ")
+    @SequenceGenerator(sequenceName = "PHIEU_NHAP_KHO_LT_CT_SEQ", allocationSize = 1, name = "PHIEU_NHAP_KHO_LT_CT_SEQ")
     @Column(name = "ID")
     private Long id;
 

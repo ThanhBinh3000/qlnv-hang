@@ -11,13 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "QLPKTCLH_PHIEU_KT_CHAT_LUONG")
+@Table(name = "NH_PHIEU_KT_CHAT_LUONG")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class QlpktclhPhieuKtChatLuong extends BaseEntity {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PHIEU_KT_CHAT_LUONG_SEQ")
+	@SequenceGenerator(sequenceName = "NPHIEU_KT_CHAT_LUONG_SEQ", allocationSize = 1, name = "PHIEU_KT_CHAT_LUONG_SEQ")
 	@Column(name = "ID")
 	private Long id;
 

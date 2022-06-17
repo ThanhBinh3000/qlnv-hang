@@ -16,7 +16,7 @@ public interface HhQdGiaoNvuNhapxuatRepository extends BaseRepository<HhQdGiaoNv
 
 	@Query(
 			value = "SELECT * \n" +
-					"FROM HH_QD_GIAO_NVU_NHAPXUAT_HDR NX " +
+					"FROM NH_QD_GIAO_NVU_NHAPXUAT NX " +
 					" WHERE (:namNhap IS NULL OR NX.NAM_NHAP = TO_NUMBER(:namNhap)) " +
 					"  AND (:veViec IS NULL OR LOWER(NX.VE_VIEC) LIKE LOWER(CONCAT(CONCAT('%', :veViec),'%'))) " +
 					"  AND (:soQd IS NULL OR LOWER(NX.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQd),'%'))) " +

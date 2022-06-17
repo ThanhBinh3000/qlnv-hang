@@ -17,12 +17,12 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "BB_NHAP_DAY_KHO_LT")
+@Table(name = "NH_BB_NHAP_DAY_KHO_LT")
 public class QlBienBanNhapDayKhoLt extends BaseEntity implements Serializable {
     private static final long serialVersionUID = -5271141998400379431L;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "QL_BIEN_BAN_NDK_LT_SEQ")
-    @SequenceGenerator(sequenceName = "QL_BIEN_BAN_NDK_LT_SEQ", allocationSize = 1, name = "QL_BIEN_BAN_NDK_LT_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BB_NHAP_DAY_KHO_LT_SEQ")
+    @SequenceGenerator(sequenceName = "BB_NHAP_DAY_KHO_LT_SEQ", allocationSize = 1, name = "BB_NHAP_DAY_KHO_LT_SEQ")
     @Column(name = "ID")
     private Long id;
 

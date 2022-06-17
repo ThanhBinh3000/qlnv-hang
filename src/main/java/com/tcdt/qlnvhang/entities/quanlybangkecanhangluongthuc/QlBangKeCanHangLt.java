@@ -18,13 +18,13 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "QL_BANG_KE_CAN_HANG_LT")
+@Table(name = "NH_BANG_KE_CAN_HANG_LT")
 public class QlBangKeCanHangLt extends BaseEntity implements Serializable {
     private static final long serialVersionUID = -628455991119242429L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "QL_BANG_KE_CAN_HANG_LT_SEQ")
-    @SequenceGenerator(sequenceName = "QL_BANG_KE_CAN_HANG_LT_SEQ", allocationSize = 1, name = "QL_BANG_KE_CAN_HANG_LT_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BANG_KE_CAN_HANG_LT_SEQ")
+    @SequenceGenerator(sequenceName = "BANG_KE_CAN_HANG_LT_SEQ", allocationSize = 1, name = "BANG_KE_CAN_HANG_LT_SEQ")
     @Column(name = "ID")
     private Long id;
 

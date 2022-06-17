@@ -19,12 +19,12 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "QL_PHIEU_NHAP_KHO_LT")
+@Table(name = "NH_PHIEU_NHAP_KHO_LT")
 public class QlPhieuNhapKhoLt  extends BaseEntity implements Serializable {
     private static final long serialVersionUID = -1880694858465293452L;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "QL_PHIEU_NHAP_KHO_LT_SEQ")
-    @SequenceGenerator(sequenceName = "QL_PHIEU_NHAP_KHO_LT_SEQ", allocationSize = 1, name = "QL_PHIEU_NHAP_KHO_LT_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PHIEU_NHAP_KHO_LT_SEQ")
+    @SequenceGenerator(sequenceName = "PHIEU_NHAP_KHO_LT_SEQ", allocationSize = 1, name = "PHIEU_NHAP_KHO_LT_SEQ")
     @Column(name = "ID")
     private Long id;
 

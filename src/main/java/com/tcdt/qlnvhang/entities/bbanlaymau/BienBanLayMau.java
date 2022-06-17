@@ -16,15 +16,15 @@ import java.time.LocalDate;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "BB_LAY_MAU")
+@Table(name = "NH_BB_LAY_MAU")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class BienBanLayMau extends BaseEntity {
 	private static final long serialVersionUID = 6093365068005372524L;
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BIEN_BAN_LAY_MAU_SEQ")
-	@SequenceGenerator(sequenceName = "BIEN_BAN_LAY_MAU_SEQ", allocationSize = 1, name = "BIEN_BAN_LAY_MAU_SEQ")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BB_LAY_MAU_SEQ")
+	@SequenceGenerator(sequenceName = "BB_LAY_MAU_SEQ", allocationSize = 1, name = "BB_LAY_MAU_SEQ")
 	private Long id;
 	private String maHhoa;
 	private String ccuQdinhGiaoNvuNhap;

@@ -10,15 +10,15 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 @Entity
-@Table(name = "HH_QD_GIAO_NVU_NHAPXUAT_DTL")
+@Table(name = "NH_QD_GIAO_NVU_NHAPXUAT_CT")
 @Data
 public class HhQdGiaoNvuNhapxuatDtl implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "QD_GIAO_NVU_NHAPXUAT_DTL_SEQ")
-	@SequenceGenerator(sequenceName = "QD_GIAO_NVU_NHAPXUAT_DTL_SEQ", allocationSize = 1, name = "QD_GIAO_NVU_NHAPXUAT_DTL_SEQ")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "QD_GIAO_NVU_NHAPXUAT_CT_SEQ")
+	@SequenceGenerator(sequenceName = "QD_GIAO_NVU_NHAPXUAT_CT_SEQ", allocationSize = 1, name = "QD_GIAO_NVU_NHAPXUAT_CT_SEQ")
 	private Long id;
 
 	String maVthh;

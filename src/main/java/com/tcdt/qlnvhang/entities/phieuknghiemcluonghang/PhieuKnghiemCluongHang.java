@@ -17,15 +17,15 @@ import java.time.LocalDate;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "PHIEU_KNGHIEM_CLUONG_HANG")
+@Table(name = "NH_PHIEU_KNGHIEM_CLUONG")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class PhieuKnghiemCluongHang extends BaseEntity {
 	private static final long serialVersionUID = 6093365068005372524L;
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PHIEU_KNGHIEM_CLUONG_HANG_SEQ")
-	@SequenceGenerator(sequenceName = "PHIEU_KNGHIEM_CLUONG_HANG_SEQ", allocationSize = 1, name = "PHIEU_KNGHIEM_CLUONG_HANG_SEQ")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PHIEU_KNGHIEM_CLUONG_SEQ")
+	@SequenceGenerator(sequenceName = "PHIEU_KNGHIEM_CLUONG_SEQ", allocationSize = 1, name = "PHIEU_KNGHIEM_CLUONG_SEQ")
 	private Long id;
 	private String soPhieu;
 	private LocalDate ngayLayMau;

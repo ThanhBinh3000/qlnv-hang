@@ -36,11 +36,11 @@ public class HhBbNghiemthuKlstHdr implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public static final String TABLE_NAME = "HH_BB_NGHIEMTHU_KLST_HDR";
+	public static final String TABLE_NAME = "NH_BB_NGHIEM_THU";
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_BB_NGHIEMTHU_KLST_HDR_SEQ")
-	@SequenceGenerator(sequenceName = "HH_BB_NGHIEMTHU_KLST_HDR_SEQ", allocationSize = 1, name = "HH_BB_NGHIEMTHU_KLST_HDR_SEQ")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BB_NGHIEM_THU_SEQ")
+	@SequenceGenerator(sequenceName = "BB_NGHIEM_THU_SEQ", allocationSize = 1, name = "BB_NGHIEM_THU_SEQ")
 	private Long id;
 	private Long qdgnvnxId; // HhQdGiaoNvuNhapxuatHdr
 	String soBb;

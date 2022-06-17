@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 public interface QlPhieuNhapKhoLtRepository extends BaseRepository<QlPhieuNhapKhoLt, Long>, QlPhieuNhapKhoLtRepositoryCustom {
 
     @Query(
-            value = "SELECT * FROM QL_PHIEU_NHAP_KHO_LT PNKLT " +
+            value = "SELECT * FROM NH_PHIEU_NHAP_KHO_LT PNKLT " +
                     "WHERE (:soPhieu IS NULL OR PNKLT.SO_PHIEU = TO_NUMBER(:soPhieu))" +
                     "  AND (:ngayNhapKho IS NULL OR TO_CHAR(PNKLT.NGAY_PHE_DUYET,'YYYY-MM-DD') = :ngayNhapKho)" +
                     "  AND (:maDiemKho IS NULL OR LOWER(PNKLT.MA_DIEM_KHO) = LOWER(:maDiemKho))" +

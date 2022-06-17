@@ -12,7 +12,7 @@ public interface QlBienBanNhapDayKhoLtRepository extends BaseRepository<QlBienBa
 
     @Query(
             value = "Select BBNDKLT.* \n" +
-                    "FROM BB_NHAP_DAY_KHO_LT BBNDKLT\n" +
+                    "FROM NH_BB_NHAP_DAY_KHO_LT BBNDKLT\n" +
                     "WHERE (:soBienBan IS NULL OR LOWER(BBNDKLT.SO_BIEN_BAN) LIKE LOWER(CONCAT(CONCAT('%', :soBienBan), '%')))\n" +
                     "  AND ((:ngayBatDauNhap IS NULL OR BBNDKLT.NGAY_BAT_DAU_NHAP >= TO_DATE(:ngayBatDauNhap,'yyyy-MM-dd'))\n" +
                     "  OR (:ngayKetThucNhap IS NULL OR BBNDKLT.NGAY_KET_THUC_NHAP <= TO_DATE(:ngayKetThucNhap,'yyyy-MM-dd')))\n" +

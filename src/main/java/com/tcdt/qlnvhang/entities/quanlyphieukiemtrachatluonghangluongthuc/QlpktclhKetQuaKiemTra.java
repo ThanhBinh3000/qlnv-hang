@@ -12,10 +12,11 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "QLPKTCLH_KET_QUA_KIEM_TRA")
+@Table(name = "NH_PHIEU_KT_CHAT_LUONG_CT")
 public class QlpktclhKetQuaKiemTra {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PHIEU_KT_CHAT_LUONG_CT_SEQ")
+	@SequenceGenerator(sequenceName = "PHIEU_KT_CHAT_LUONG_CT_SEQ", allocationSize = 1, name = "PHIEU_KT_CHAT_LUONG_CT_SEQ")
 	@Column(name = "ID")
 	private Long id;
 
