@@ -55,18 +55,18 @@ public class HhHopDongDtl implements Serializable {
 	@JoinColumn(name = "id_hdr")
 	@JsonManagedReference
 	@Where(clause = "type='" + Contains.HOP_DONG + "'")
-	private List<HhDdiemNhapKho> children = new ArrayList<>();
+	private List<HhHopDongDdiemNhapKho> children = new ArrayList<>();
 
-	public void setChildren(List<HhDdiemNhapKho> children) {
+	public void setChildren(List<HhHopDongDdiemNhapKho> children) {
 		this.children.clear();
-		for (HhDdiemNhapKho child : children) {
-			child.setParent(this);
+		for (HhHopDongDdiemNhapKho child : children) {
+//			child.setParent(this);
 		}
 		this.children.addAll(children);
 	}
 
-	public void addChild(HhDdiemNhapKho child) {
-		child.setParent(this);
+	public void addChild(HhHopDongDdiemNhapKho child) {
+//		child.setParent(this);
 		this.children.add(child);
 	}
 

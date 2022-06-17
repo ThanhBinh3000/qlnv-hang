@@ -15,7 +15,7 @@ import com.tcdt.qlnvhang.table.HhHopDongHdr;
 public interface HhHopDongService {
 
 	@Transactional(rollbackOn = Exception.class)
-	HhHopDongHdr      create(HhHopDongHdrReq objReq) throws Exception;
+	HhHopDongHdr create(HhHopDongHdrReq objReq) throws Exception;
 
 	@Transactional(rollbackOn = Exception.class)
 	HhHopDongHdr update(HhHopDongHdrReq objReq) throws Exception;

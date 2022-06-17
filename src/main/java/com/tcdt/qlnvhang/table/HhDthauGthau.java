@@ -45,9 +45,13 @@ public class HhDthauGthau implements Serializable {
 	private Long id;
 
 	Long idGoiThau;
+	String soQdPdKhlcnt;
+	String ngayQdPdKhlcnt;
 	String tenGthau;
-	String maHhoa;
+	String loaiVthh;
+	String cloaiVthh;
 	String dviTinh;
+	String maHhoa;
 	BigDecimal soLuong;
 	BigDecimal giaGthau;
 	String nguonVon;
@@ -64,6 +68,7 @@ public class HhDthauGthau implements Serializable {
 	String nhaThauTthao;
 	Integer vat;
 	Long donGia;
+	Integer tgianThienHd;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_dt_hdr")

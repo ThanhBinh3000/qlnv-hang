@@ -44,6 +44,7 @@ public class HhQdPduyetKqlcntDtl implements Serializable {
 	BigDecimal donGiaHd;
 	BigDecimal vatHd;
 	BigDecimal dgiaHdSauVat;
+	Long idGoiThau;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_hdr")

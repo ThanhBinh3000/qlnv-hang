@@ -32,6 +32,8 @@ public class HhHopDongHdrReq {
 	@ApiModelProperty(example = "20/QD-TCDT")
 	String canCu;
 
+	String idGoiThau;
+
 //	String dviTrungThau;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
@@ -61,6 +63,9 @@ public class HhHopDongHdrReq {
 	String tieuChuanCl;
 
 	Double soLuong;
+
+	Double donGiaVat;
+
 	Double gtriHdTrcVat;
 	Double vat;
 	Double gtriHdSauVat;
@@ -69,6 +74,10 @@ public class HhHopDongHdrReq {
 	@Size(max = 20, message = "Loại vật tư hàng hóa không được vượt quá 20 ký tự")
 	@ApiModelProperty(example = "00")
 	String loaiVthh;
+
+	@Size(max = 20, message = "Loại vật tư hàng hóa không được vượt quá 20 ký tự")
+	@ApiModelProperty(example = "00")
+	String cloaiVthh;
 
 	@NotNull(message = "Không được để trống")
 	@Size(max = 20, message = "Loại hợp đồng không được vượt quá 20 ký tự")
@@ -90,6 +99,26 @@ public class HhHopDongHdrReq {
 	@Size(max = 4, message = "Năm kế hoạch không được vượt quá 4 ký tự")
 	@ApiModelProperty(example = "2022")
 	Long namKh;
+
+	//Thông tin chủ đầu tư
+
+	String maDvi;
+
+	String diaChi;
+
+	String mst;
+
+	String sdt;
+
+	String stk;
+
+	String tenNguoiDdien;
+
+	String chucVu;
+
+	String idNhaThau;
+
+	private List<HhDdiemNhapKhoReq> diaDiemNhapKhoReq;
 
 	private List<HhHopDongDtlReq> detail;
 

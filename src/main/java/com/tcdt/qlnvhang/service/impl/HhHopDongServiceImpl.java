@@ -74,14 +74,14 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 		List<HhHopDongDtlReq> dtlReqList = objReq.getDetail();
 		List<HhHopDongDtl> details = new ArrayList<>();
 		if (dtlReqList != null) {
-			List<HhDdiemNhapKho> detailChild;
+			List<HhHopDongDdiemNhapKho> detailChild;
 			for (HhHopDongDtlReq dtlReq : dtlReqList) {
 				List<HhDdiemNhapKhoReq> cTietReq = dtlReq.getDetail();
 				HhHopDongDtl detail = ObjectMapperUtils.map(dtlReq, HhHopDongDtl.class);
 				detail.setType(Contains.HOP_DONG);
-				detailChild = new ArrayList<HhDdiemNhapKho>();
+				detailChild = new ArrayList<HhHopDongDdiemNhapKho>();
 				if (cTietReq != null)
-					detailChild = ObjectMapperUtils.mapAll(cTietReq, HhDdiemNhapKho.class);
+					detailChild = ObjectMapperUtils.mapAll(cTietReq, HhHopDongDdiemNhapKho.class);
 				detailChild.forEach(f -> {
 					f.setType(Contains.HOP_DONG);
 				});
@@ -146,14 +146,14 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 		List<HhHopDongDtlReq> dtlReqList = objReq.getDetail();
 		List<HhHopDongDtl> details = new ArrayList<>();
 		if (dtlReqList != null) {
-			List<HhDdiemNhapKho> detailChild;
+			List<HhHopDongDdiemNhapKho> detailChild;
 			for (HhHopDongDtlReq dtlReq : dtlReqList) {
 				List<HhDdiemNhapKhoReq> cTietReq = dtlReq.getDetail();
 				HhHopDongDtl detail = ObjectMapperUtils.map(dtlReq, HhHopDongDtl.class);
 				detail.setType(Contains.HOP_DONG);
-				detailChild = new ArrayList<HhDdiemNhapKho>();
+				detailChild = new ArrayList<HhHopDongDdiemNhapKho>();
 				if (cTietReq != null)
-					detailChild = ObjectMapperUtils.mapAll(cTietReq, HhDdiemNhapKho.class);
+					detailChild = ObjectMapperUtils.mapAll(cTietReq, HhHopDongDdiemNhapKho.class);
 				detail.setChildren(detailChild);
 				details.add(detail);
 			}

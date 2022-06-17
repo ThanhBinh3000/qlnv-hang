@@ -8,7 +8,7 @@ import com.tcdt.qlnvhang.request.object.HhDthauReq;
 import com.tcdt.qlnvhang.request.search.HhDthauSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.HhDauThauService;
-import com.tcdt.qlnvhang.service.hhDthauGthauService;
+import com.tcdt.qlnvhang.service.HhDthauGthauService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,7 +33,7 @@ import java.util.List;
 public class HhDauThauGoiThauController {
 
 	@Autowired
-	private hhDthauGthauService service;
+	private HhDthauGthauService service;
 
 	@ApiOperation(value = "Tạo mới thông tin đấu thầu gạo", response = List.class)
 	@PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)

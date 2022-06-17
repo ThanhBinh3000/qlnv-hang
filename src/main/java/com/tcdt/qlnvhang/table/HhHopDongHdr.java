@@ -72,6 +72,7 @@ public class HhHopDongHdr implements Serializable {
 	Double vat;
 	Double gtriHdSauVat;
 	String loaiVthh;
+	String cloaiVthh;
 	String loaiHd;
 
 	@Temporal(TemporalType.DATE)
@@ -92,6 +93,23 @@ public class HhHopDongHdr implements Serializable {
 	String maDvi;
 	@Transient
 	String tenDvi;
+
+	String diaChi;
+
+	String mst;
+
+	String sdt;
+
+	String stk;
+
+	String tenNguoiDdien;
+
+	String chucVu;
+
+	String idNhaThau;
+
+	@Transient
+	private List<HhHopDongDdiemNhapKho> listDdiemNhapKho = new ArrayList<>();
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "id_hdr")
