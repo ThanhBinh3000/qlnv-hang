@@ -145,7 +145,7 @@ public class HhQdPduyetKqlcntHdrController extends BaseController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Tra cứu quyết định phê duyệt kết quả lựa chọn nhà thầu", response = List.class)
+	@ApiOperation(value = "Tra cứu tất cả quyết định phê duyệt kết quả lựa chọn nhà thầu", response = List.class)
 	@PostMapping(value = PathContains.URL_TAT_CA, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<BaseResponse> colectionAll(HttpServletRequest request,
