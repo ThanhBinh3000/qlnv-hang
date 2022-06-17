@@ -32,4 +32,7 @@ public interface HhHopDongService {
 
 	HhHopDongHdr findBySoHd(StrSearchReq strSearchReq) throws Exception;
 
+	Page<HhHopDongHdr> selectPage(HhHopDongSearchReq objReq, HttpServletRequest req) throws Exception;
+
+
 }

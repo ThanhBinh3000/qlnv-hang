@@ -219,6 +219,13 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 	}
 
 	@Override
+	public Page<HhHopDongHdr> selectPage(HhHopDongSearchReq req, HttpServletRequest request) throws Exception {
+		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
+		Page<HhHopDongHdr> page = hhHopDongRepository.select(req.getLoaiVthh(),req.getSoHd(),req.getTenHd(),req.getNhaCcap(),convertDateToString(req.getTuNgayKy()),convertDateToString(req.getDenNgayKy()),req.getTrangThai(), pageable);
+		return page;
+	}
+
+	@Override
 	public Page<HhHopDongHdr> colection(HhHopDongSearchReq objReq, HttpServletRequest req) throws Exception {
 		int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
 		int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());

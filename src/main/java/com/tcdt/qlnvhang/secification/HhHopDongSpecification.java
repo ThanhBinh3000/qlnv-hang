@@ -35,16 +35,16 @@ public class HhHopDongSpecification {
 				String loaiVthh = objReq.getLoaiVthh();
 				String maDvi = objReq.getMaDvi();
 				String sohd = objReq.getSoHd();
-				String maDviB = objReq.getMaDviB();
+//				String maDviB = objReq.getMaDviB();
 				String trangThai = objReq.getTrangThai();
 				Date tuNgayKy = objReq.getTuNgayKy();
 				Date denNgayKy = objReq.getDenNgayKy();
 
 				Join<Object, Object> fetchParent = (Join<Object, Object>) root.fetch("children1", JoinType.LEFT);
 
-				if (StringUtils.isNotEmpty(maDviB))
-					predicate.getExpressions()
-							.add(builder.like(builder.lower(fetchParent.get("ten")), "%" + maDviB.toLowerCase() + "%"));
+//				if (StringUtils.isNotEmpty(maDviB))
+//					predicate.getExpressions()
+//							.add(builder.like(builder.lower(fetchParent.get("ten")), "%" + maDviB.toLowerCase() + "%"));
 
 				if (StringUtils.isNotEmpty(sohd))
 					predicate.getExpressions()

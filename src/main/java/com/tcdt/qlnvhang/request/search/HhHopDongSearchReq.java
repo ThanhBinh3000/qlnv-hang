@@ -15,11 +15,16 @@ import lombok.Setter;
 @Getter
 @Setter
 public class HhHopDongSearchReq extends BaseRequest {
+
 	String soHd;
+
+	String tenHd;
 
 	@NotNull(message = "Không được để trống")
 	@ApiModelProperty(example = Contains.LOAI_VTHH_GAO)
 	String loaiVthh;
+
+	String nhaCcap;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date tuNgayKy;
@@ -29,5 +34,4 @@ public class HhHopDongSearchReq extends BaseRequest {
 
 	String maDvi;
 
-	String maDviB;
 }
