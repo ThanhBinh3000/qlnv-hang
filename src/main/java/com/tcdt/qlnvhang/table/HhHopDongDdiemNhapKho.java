@@ -36,10 +36,10 @@ public class HhHopDongDdiemNhapKho implements Serializable {
 	String type;
 
 	Long idHopDongHdr;
-//
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "id_hdr")
-//	@JsonBackReference
-//	private HhHopDongDtl parent;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_hdr")
+	@JsonBackReference
+	private HhHopDongDtl parent;
 
 }

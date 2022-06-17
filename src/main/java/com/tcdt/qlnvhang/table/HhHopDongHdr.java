@@ -106,7 +106,7 @@ public class HhHopDongHdr implements Serializable {
 
 	String chucVu;
 
-	String idNhaThau;
+	String idNthau;
 
 	@Transient
 	private List<HhHopDongDdiemNhapKho> listDdiemNhapKho = new ArrayList<>();
