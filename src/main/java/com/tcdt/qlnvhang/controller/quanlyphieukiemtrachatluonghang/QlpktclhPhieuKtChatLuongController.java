@@ -70,7 +70,7 @@ public class QlpktclhPhieuKtChatLuongController {
 	public ResponseEntity<BaseResponse> search(@RequestBody QlpktclhPhieuKtChatLuongFilterRequestDto req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(service.search(req));
+			resp.setData(service.filter(req));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {

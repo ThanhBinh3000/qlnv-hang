@@ -19,7 +19,7 @@ import java.util.List;
 public class QlpktclhPhieuKtChatLuongRequestDto {
 	private Long id;
 
-	private Long soPhieu;
+	private String soPhieu;
 
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate ngayKiemTra;
@@ -54,14 +54,14 @@ public class QlpktclhPhieuKtChatLuongRequestDto {
 	private String tenNhaKho;
 
 	@NotNull
-	private Long maHangHoa;
+	private String maHangHoa;
 
 	private String tenHangHoa;
 
 	@NotNull
 	private Double khoiLuong;
 
-	private Long soChungThuGiamDinh;
+	private String soChungThuGiamDinh;
 
 	@NotNull
 	private String bienSoXe;

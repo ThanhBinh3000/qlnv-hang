@@ -23,7 +23,7 @@ public class QlpktclhPhieuKtChatLuong extends BaseEntity {
 	private Long id;
 
 	@Column(name = "SO_PHIEU")
-	private Long soPhieu;
+	private String soPhieu;
 
 	@Column(name = "MA_QHNS")
 	private String maQhns;
@@ -49,15 +49,6 @@ public class QlpktclhPhieuKtChatLuong extends BaseEntity {
 	@Column(name = "TEN_HANG_HOA")
 	private String tenHangHoa;
 
-	@Column(name = "KHOI_LUONG")
-	private Double khoiLuong;
-
-	@Column(name = "SO_CHUNG_THU_GIAM_DINH")
-	private Long soChungThuGiamDinh;
-
-	@Column(name = "BIEN_SO_XE")
-	private String bienSoXe;
-
 	@Column(name = "SO_PHIEU_AN_TOAN_THUC_PHAM")
 	private String soPhieuAnToanThucPham;
 
@@ -79,17 +70,8 @@ public class QlpktclhPhieuKtChatLuong extends BaseEntity {
 	@Column(name = "TRANG_THAI")
 	private String trangThai;
 
-	@Column(name = "KET_LUAN")
-	private String ketLuan;
-
 	@Column(name = "LY_DO_TU_CHOI")
 	private String lyDoTuChoi;
-
-	@Column(name = "NGAY_GDINH")
-	private LocalDate ngayGdinh;
-
-	@Column(name = "TCHUC_GDINH")
-	private String tchucGdinh;
 
 	@Column(name = "MA_NGAN_KHO")
 	private String maNganKho;
@@ -120,6 +102,27 @@ public class QlpktclhPhieuKtChatLuong extends BaseEntity {
 
 	@Column(name = "DIEM_KHO_ID")
 	private Long diemKhoId;
+
+	@Column(name = "KHOI_LUONG_DE_NGHI_KT")
+	private Double khoiLuongDeNghiKt;
+
+	@Column(name = "KHOI_LUONG")
+	private Double khoiLuong;
+
+	@Column(name = "SO_CHUNG_THU_GIAM_DINH")
+	private String soChungThuGiamDinh;
+
+	@Column(name = "TCHUC_GDINH")
+	private String tchucGdinh;
+
+	@Column(name = "NGAY_GDINH")
+	private LocalDate ngayGdinh;
+
+	@Column(name = "BIEN_SO_XE")
+	private String bienSoXe;
+
+	@Column(name = "KET_LUAN")
+	private String ketLuan;
 
 	@Transient
 	private List<QlpktclhKetQuaKiemTra> ketQuaKiemTra = new ArrayList<>();

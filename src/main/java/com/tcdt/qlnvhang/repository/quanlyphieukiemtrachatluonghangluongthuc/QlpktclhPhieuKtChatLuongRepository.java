@@ -20,5 +20,5 @@ public interface QlpktclhPhieuKtChatLuongRepository extends CrudRepository<Qlpkt
                 "AND (:nguoiGiaoHang IS NULL OR LOWER(PKTCL.NGUOI_GIAO_HANG) " +
                 "LIKE LOWER(CONCAT(CONCAT('%', :nguoiGiaoHang), '%')))",
             nativeQuery = true)
-    Page<QlpktclhPhieuKtChatLuong> select(Long soPhieu, String ngayLPhieu, String nguoiGiaoHang, Pageable pageable);
+    Page<QlpktclhPhieuKtChatLuong> select(String soPhieu, String ngayLPhieu, String nguoiGiaoHang, Pageable pageable);
 }

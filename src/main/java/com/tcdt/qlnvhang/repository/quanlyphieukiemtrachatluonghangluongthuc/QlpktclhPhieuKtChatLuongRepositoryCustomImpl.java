@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -28,11 +29,12 @@ public class QlpktclhPhieuKtChatLuongRepositoryCustomImpl implements QlpktclhPhi
 	@Override
 	public Page<QlpktclhPhieuKtChatLuongResponseDto> filter(QlpktclhPhieuKtChatLuongFilterRequestDto req) {
 		StringBuilder builder = new StringBuilder();
-		builder.append("SELECT qd FROM QlpktclhPhieuKtChatLuong qd ");
+		builder.append("SELECT qd, nx.id, nx.soQd FROM QlpktclhPhieuKtChatLuong qd ");
+		builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON qd.quyetDinhNhapId = nx.id ");
 		setConditionFilter(req, builder);
 		builder.append("ORDER BY qd.ngayKiemTra DESC");
 
-		TypedQuery<QlpktclhPhieuKtChatLuong> query = em.createQuery(builder.toString(), QlpktclhPhieuKtChatLuong.class);
+		TypedQuery<Object[]> query = em.createQuery(builder.toString(), Object[].class);
 
 		//Set params
 		this.setParameterFilter(req, query);
@@ -40,12 +42,17 @@ public class QlpktclhPhieuKtChatLuongRepositoryCustomImpl implements QlpktclhPhi
 		//Set pageable
 		query.setFirstResult(req.getPaggingReq().getPage() * req.getPaggingReq().getLimit()).setMaxResults(req.getPaggingReq().getLimit());
 
-		List<QlpktclhPhieuKtChatLuong> data = query.getResultList();
+		List<Object[]> data = query.getResultList();
 
 		List<QlpktclhPhieuKtChatLuongResponseDto> responses = new ArrayList<>();
-		for (QlpktclhPhieuKtChatLuong qd : data) {
+		for (Object[] o : data) {
+			QlpktclhPhieuKtChatLuong qd = (QlpktclhPhieuKtChatLuong) o[0];
+			Long quyetDinhNhapId = (Long) o[1];
+			String soQdNhap = (String) o[2];
 			QlpktclhPhieuKtChatLuongResponseDto response = dataUtils.toObject(qd, QlpktclhPhieuKtChatLuongResponseDto.class);
 			response.setTenTrangThai(QdPheDuyetKqlcntVtStatus.getTenById(qd.getTrangThai()));
+			response.setQuyetDinhNhapId(quyetDinhNhapId);
+			response.setSoQuyetDinhNhap(soQdNhap);
 			responses.add(response);
 		}
 
@@ -59,8 +66,11 @@ public class QlpktclhPhieuKtChatLuongRepositoryCustomImpl implements QlpktclhPhi
 	private void setConditionFilter(QlpktclhPhieuKtChatLuongFilterRequestDto req, StringBuilder builder) {
 		builder.append("WHERE 1 = 1 ");
 
-		if (req.getSoPhieu() != null) {
-			builder.append("AND ").append("qd.soPhieu = :soPhieu ");
+		if (StringUtils.hasText(req.getSoQd())) {
+			builder.append("AND ").append("LOWER(nx.soQd) LIKE :soQd ");
+		}
+		if (StringUtils.hasText(req.getSoPhieu())) {
+			builder.append("AND ").append("LOWER(qd.soPhieu) LIKE :soPhieu ");
 		}
 		if (req.getNgayKiemTraTuNgay() != null) {
 			builder.append("AND ").append("qd.ngayKiemTra >= :ngayKiemTraTuNgay ");
@@ -68,17 +78,18 @@ public class QlpktclhPhieuKtChatLuongRepositoryCustomImpl implements QlpktclhPhi
 		if (req.getNgayKiemTraDenNgay() != null) {
 			builder.append("AND ").append("qd.ngayKiemTra <= :ngayKiemTraDenNgay ");
 		}
-		if (req.getMaNganKho() != null) {
+		if (StringUtils.hasText(req.getMaNganKho())) {
 			builder.append("AND ").append("qd.maNganKho = :maNganKho ");
 		}
-		if (req.getMaHangHoa() != null) {
+		if (StringUtils.hasText(req.getMaHangHoa())) {
 			builder.append("AND ").append("qd.maHangHoa = :maHangHoa ");
 		}
 
-		if (req.getMaDonVi() != null) {
+		if (StringUtils.hasText(req.getMaDvi())) {
 			builder.append("AND ").append("qd.maDonVi = :maDonVi ");
 		}
 	}
+
 
 	private int countPhieuKiemTraChatLuong(QlpktclhPhieuKtChatLuongFilterRequestDto req) {
 		int total = 0;
@@ -101,8 +112,13 @@ public class QlpktclhPhieuKtChatLuongRepositoryCustomImpl implements QlpktclhPhi
 	}
 
 	private void setParameterFilter(QlpktclhPhieuKtChatLuongFilterRequestDto req, Query query) {
-		if (req.getSoPhieu() != null) {
-			query.setParameter("soPhieu", req.getSoPhieu());
+
+		if (StringUtils.hasText(req.getSoQd())) {
+			query.setParameter("soQd", "%" + req.getSoQd().toLowerCase() + "%");
+		}
+
+		if (StringUtils.hasText(req.getSoPhieu())) {
+			query.setParameter("soPhieu", "%" + req.getSoPhieu().toLowerCase() + "%");
 		}
 		if (req.getNgayKiemTraTuNgay() != null) {
 			query.setParameter("ngayKiemTraTuNgay", req.getNgayKiemTraTuNgay());
@@ -110,15 +126,15 @@ public class QlpktclhPhieuKtChatLuongRepositoryCustomImpl implements QlpktclhPhi
 		if (req.getNgayKiemTraDenNgay() != null) {
 			query.setParameter("ngayKiemTraDenNgay", req.getNgayKiemTraDenNgay());
 		}
-		if (req.getMaNganKho() != null) {
+		if (StringUtils.hasText(req.getMaNganKho())) {
 			query.setParameter("maNganKho", req.getMaNganKho());
 		}
-		if (req.getMaHangHoa() != null) {
+		if (StringUtils.hasText(req.getMaHangHoa())) {
 			query.setParameter("maHangHoa", req.getMaHangHoa());
 		}
 
-		if (req.getMaDonVi() != null) {
-			query.setParameter("maDonVi", req.getMaDonVi());
+		if (StringUtils.hasText(req.getMaDvi())) {
+			query.setParameter("maDonVi", req.getMaDvi());
 		}
 	}
 }

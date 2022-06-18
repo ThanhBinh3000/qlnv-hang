@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Builder
@@ -17,7 +18,7 @@ import java.util.List;
 public class QlpktclhPhieuKtChatLuongResponseDto {
 	private Long id;
 
-	private Long soPhieu;
+	private String soPhieu;
 
 	private LocalDate ngayKiemTra;
 
@@ -29,13 +30,15 @@ public class QlpktclhPhieuKtChatLuongResponseDto {
 
 	private Long quyetDinhNhapId;
 
+	private String soQuyetDinhNhap;
+
 	private Long maHangHoa;
 
 	private String tenHangHoa;
 
 	private Double khoiLuong;
 
-	private Long soChungThuGiamDinh;
+	private String soChungThuGiamDinh;
 
 	private String bienSoXe;
 
@@ -43,15 +46,11 @@ public class QlpktclhPhieuKtChatLuongResponseDto {
 
 	private String maDonVi;
 
-	private Long nguoiPheDuyet;
-
-	private LocalDate ngayPheDuyet;
-
-	private String trangThai;
-
 	private String ketLuan;
 
 	private String lyDoTuChoi;
+
+	private String trangThai;
 
 	private String tenTrangThai;
 
@@ -78,6 +77,15 @@ public class QlpktclhPhieuKtChatLuongResponseDto {
 	private String nguoiGiaoHang;
 
 	private String tchucGdinh;
+
+	private String khoiLuongDeNghiKt;
+
+	private String soHopDong;
+
+	private Date ngayHopDong;
+
+	private String tenLoaiVthh;
+	private String loaiVthh;
 
 	private List<QlpktclhKetQuaKiemTraResponseDto> ketQuaKiemTra;
 }

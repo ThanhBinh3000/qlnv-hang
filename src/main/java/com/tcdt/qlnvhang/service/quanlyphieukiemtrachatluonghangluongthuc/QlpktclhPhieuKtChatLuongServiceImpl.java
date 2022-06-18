@@ -1,19 +1,20 @@
 package com.tcdt.qlnvhang.service.quanlyphieukiemtrachatluonghangluongthuc;
 
-import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhKetQuaKiemTra;
 import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.enums.QlpktclhPhieuKtChatLuongStatusEnum;
+import com.tcdt.qlnvhang.repository.HhHopDongRepository;
+import com.tcdt.qlnvhang.repository.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhKetQuaKiemTraRepository;
 import com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongFilterRequestDto;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongRequestDto;
-import com.tcdt.qlnvhang.request.search.HhBbNghiemthuKlstSearchReq;
 import com.tcdt.qlnvhang.response.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhKetQuaKiemTraResponseDto;
 import com.tcdt.qlnvhang.response.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongResponseDto;
-import com.tcdt.qlnvhang.table.HhBbNghiemthuKlstHdr;
+import com.tcdt.qlnvhang.table.HhHopDongHdr;
+import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.*;
 import lombok.RequiredArgsConstructor;
@@ -55,12 +56,16 @@ public class QlpktclhPhieuKtChatLuongServiceImpl implements QlpktclhPhieuKtChatL
 	private final QlpktclhPhieuKtChatLuongRepository qlpktclhPhieuKtChatLuongRepo;
 	private final QlpktclhKetQuaKiemTraRepository qlpktclhKetQuaKiemTraRepo;
 	private final DataUtils dataUtils;
+	private final HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
+	private final HhHopDongRepository hhHopDongRepository;
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public QlpktclhPhieuKtChatLuongResponseDto create(QlpktclhPhieuKtChatLuongRequestDto req) throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
 
+		if (!Contains.CAP_CHI_CUC.equals(userInfo.getCapDvi()))
+			throw new Exception("Bad Request");
 		//Quản lý thông tin chủ đầu tư
 		QlpktclhPhieuKtChatLuong qlpktclhPhieuKtChatLuong = dataUtils.toObject(req, QlpktclhPhieuKtChatLuong.class);
 		qlpktclhPhieuKtChatLuong.setNgayTao(LocalDate.now());
@@ -90,6 +95,8 @@ public class QlpktclhPhieuKtChatLuongServiceImpl implements QlpktclhPhieuKtChatL
 	public QlpktclhPhieuKtChatLuongResponseDto update(QlpktclhPhieuKtChatLuongRequestDto req) throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
 
+		if (!Contains.CAP_CHI_CUC.equals(userInfo.getCapDvi()))
+			throw new Exception("Bad Request");
 		if (req.getId() == null) throw new Exception("Id is required in update");
 
 		Optional<QlpktclhPhieuKtChatLuong> qlpktclhPhieuKtChatLuongOpt = qlpktclhPhieuKtChatLuongRepo.findById(req.getId());
@@ -122,6 +129,8 @@ public class QlpktclhPhieuKtChatLuongServiceImpl implements QlpktclhPhieuKtChatL
 
 	@Override
 	public Page<QlpktclhPhieuKtChatLuongResponseDto> filter(QlpktclhPhieuKtChatLuongFilterRequestDto req) throws Exception {
+		UserInfo userInfo = UserUtils.getUserInfo();
+		req.setMaDvi(userInfo.getDvql());
 		return qlpktclhPhieuKtChatLuongRepo.filter(req);
 	}
 
@@ -131,14 +140,35 @@ public class QlpktclhPhieuKtChatLuongServiceImpl implements QlpktclhPhieuKtChatL
 		return qlpktclhPhieuKtChatLuongRepo.select(req.getSoPhieu(),req.getNgayLapPhieu(),req.getTenNguoiGiao(), pageable);
 	}
 
-	private QlpktclhPhieuKtChatLuongResponseDto buildResponse(QlpktclhPhieuKtChatLuong qlpktclhPhieuKtChatLuong) {
+	private QlpktclhPhieuKtChatLuongResponseDto buildResponse(QlpktclhPhieuKtChatLuong qlpktclhPhieuKtChatLuong) throws Exception {
 		QlpktclhPhieuKtChatLuongResponseDto response = dataUtils.toObject(qlpktclhPhieuKtChatLuong, QlpktclhPhieuKtChatLuongResponseDto.class);
 		response.setTenTrangThai(QlpktclhPhieuKtChatLuongStatusEnum.getTenById(qlpktclhPhieuKtChatLuong.getTrangThai()));
 		List<QlpktclhKetQuaKiemTraResponseDto> ketQuaKiemTraRes = qlpktclhPhieuKtChatLuong.getKetQuaKiemTra().stream()
 						.map(item -> dataUtils.toObject(item, QlpktclhKetQuaKiemTraResponseDto.class))
 						.collect(Collectors.toList());
 
+		if (qlpktclhPhieuKtChatLuong.getQuyetDinhNhapId() != null) {
+			Optional<HhQdGiaoNvuNhapxuatHdr> qdNhap = hhQdGiaoNvuNhapxuatRepository.findById(qlpktclhPhieuKtChatLuong.getQuyetDinhNhapId());
+			if (!qdNhap.isPresent()) {
+				throw new Exception("Không tìm thấy quyết định nhập");
+			}
+			response.setSoQuyetDinhNhap(qdNhap.get().getSoQd());
+		}
+
+		if (qlpktclhPhieuKtChatLuong.getHopDongId() != null) {
+			Optional<HhHopDongHdr> hopDong = hhHopDongRepository.findById(qlpktclhPhieuKtChatLuong.getHopDongId());
+			if (!hopDong.isPresent()) {
+				throw new Exception("Không tìm thấy hợp đồng");
+			}
+			response.setSoHopDong(hopDong.get().getSoHd());
+			response.setNgayHopDong(hopDong.get().getDenNgayHluc());
+
+			response.setLoaiVthh(hopDong.get().getLoaiVthh());
+			response.setLoaiVthh(Contains.mpLoaiVthh.get(hopDong.get().getLoaiVthh()));
+		}
+
 		response.setKetQuaKiemTra(ketQuaKiemTraRes);
+		response.setTenTrangThai(QlpktclhPhieuKtChatLuongStatusEnum.getTenById(qlpktclhPhieuKtChatLuong.getTrangThai()));
 		return response;
 	}
 
@@ -160,6 +190,10 @@ public class QlpktclhPhieuKtChatLuongServiceImpl implements QlpktclhPhieuKtChatL
 	public boolean approve(StatusReq req) throws Exception {
 
 		UserInfo userInfo = UserUtils.getUserInfo();
+
+		if (!Contains.CAP_CHI_CUC.equals(userInfo.getCapDvi()))
+			throw new Exception("Bad Request");
+
 		if (StringUtils.isEmpty(req.getId()))
 			throw new Exception("Không tìm thấy dữ liệu");
 
@@ -211,6 +245,9 @@ public class QlpktclhPhieuKtChatLuongServiceImpl implements QlpktclhPhieuKtChatL
 	@Override
 	public boolean delete(Long id) throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
+		if (!Contains.CAP_CHI_CUC.equals(userInfo.getCapDvi()))
+			throw new Exception("Bad Request");
+
 		Optional<QlpktclhPhieuKtChatLuong> optional = qlpktclhPhieuKtChatLuongRepo.findById(id);
 		if (!optional.isPresent())
 			throw new Exception("Phiếu kiểm tra chất lượng không tồn tại");
