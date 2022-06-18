@@ -105,7 +105,7 @@ public class HhQdGiaoNvuNhapxuatController {
 	public ResponseEntity<BaseResponse> updateStatus(@Valid HttpServletRequest req, @RequestBody StatusReq stReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			service.approve(stReq);
+			service.updateStatus(stReq);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -209,5 +209,22 @@ public class HhQdGiaoNvuNhapxuatController {
 			final ObjectMapper mapper = new ObjectMapper();
 			mapper.writeValue(response.getOutputStream(), body);
 		}
+	}
+
+	@ApiOperation(value = "Count quyết định nhập xuất", response = List.class)
+	@GetMapping(value = "/count", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> count() {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.count());
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Count quyết định nhập xuất trace: {}", e);
+		}
+		return ResponseEntity.ok(resp);
 	}
 }

@@ -65,6 +65,10 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 	String nguoiPduyet;
 	String ghiChu;
 	String capDvi;
+	String loaiVthh;
+	String trichYeu;
+	Integer namNhap;
+	Date ngayQdinh;
 	@Transient
 	String tenDvi;
 
@@ -73,6 +77,9 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 
 	@Transient
 	String tenTrangThai;
+
+	@Transient
+	String trangThaiDuyet;
 
 	@Transient
 	Long hdId;
@@ -132,8 +139,4 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 		child2.setParent(this);
 		this.children2.add(child2);
 	}
-
-	Integer namNhap;
-
-	Date ngayQdinh;
 }

@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.StrSearchReq;
 import com.tcdt.qlnvhang.request.object.HhQdGiaoNvuNhapxuatHdrReq;
 import com.tcdt.qlnvhang.request.search.HhQdNhapxuatSearchReq;
+import com.tcdt.qlnvhang.response.QdGiaoNvNhapXuatCount;
 import com.tcdt.qlnvhang.table.HhDviThuchienQdinh;
 import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import org.springframework.data.domain.Page;
@@ -27,10 +28,10 @@ public interface HhQdGiaoNvuNhapxuatService {
 
 	Page<HhQdGiaoNvuNhapxuatHdr> colection(HhQdNhapxuatSearchReq objReq, HttpServletRequest req) throws Exception;
 
-	@Transactional(rollbackOn = Exception.class)
-	HhQdGiaoNvuNhapxuatHdr approve(StatusReq stReq) throws Exception;
+    @Transactional(rollbackOn = Exception.class)
+    boolean updateStatus(StatusReq req) throws Exception;
 
-	@Transactional(rollbackOn = Exception.class)
+    @Transactional(rollbackOn = Exception.class)
 	void delete(IdSearchReq idSearchReq) throws Exception;
 
 	HhQdGiaoNvuNhapxuatHdr findBySoHd(StrSearchReq strSearchReq) throws Exception;
@@ -43,4 +44,5 @@ public interface HhQdGiaoNvuNhapxuatService {
 
 	Page<HhQdGiaoNvuNhapxuatHdr> timKiem(HhQdNhapxuatSearchReq objReq) throws Exception;
 
+	QdGiaoNvNhapXuatCount count() throws Exception;
 }

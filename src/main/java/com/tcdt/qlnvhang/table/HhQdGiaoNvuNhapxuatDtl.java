@@ -34,6 +34,9 @@ public class HhQdGiaoNvuNhapxuatDtl implements Serializable {
 	@Transient
 	String tenLoaiNx;
 
+	@Transient
+	String tenDvi;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_hdr")
 	@JsonBackReference
