@@ -126,7 +126,9 @@ public class Contains {
 	public static final String DX_TIEU_HUY = "01";
 
 	// Loai hang
+	@Deprecated
 	public static final String VAT_TU = "00";
+	@Deprecated
 	public static final String LUONG_THUC_MUOI = "01";
 
 	// Ket qua dau thau

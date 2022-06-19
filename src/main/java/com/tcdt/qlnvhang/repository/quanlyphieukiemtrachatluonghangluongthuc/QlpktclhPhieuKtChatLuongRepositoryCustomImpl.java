@@ -88,13 +88,17 @@ public class QlpktclhPhieuKtChatLuongRepositoryCustomImpl implements QlpktclhPhi
 		if (StringUtils.hasText(req.getMaDvi())) {
 			builder.append("AND ").append("qd.maDonVi = :maDonVi ");
 		}
+
+		if (StringUtils.hasText(req.getLoaiVthh())) {
+			builder.append("AND ").append("qd.loaiVthh = :loaiVthh ");
+		}
 	}
 
-
-	private int countPhieuKiemTraChatLuong(QlpktclhPhieuKtChatLuongFilterRequestDto req) {
+	@Override
+	public int countPhieuKiemTraChatLuong(QlpktclhPhieuKtChatLuongFilterRequestDto req) {
 		int total = 0;
 		StringBuilder builder = new StringBuilder();
-		builder.append("SELECT COUNT(qd.id) AS totalRecord FROM QlpktclhPhieuKtChatLuong qd ");
+		builder.append("SELECT COUNT(DISTINCT qd.id) AS totalRecord FROM QlpktclhPhieuKtChatLuong qd ");
 
 		this.setConditionFilter(req, builder);
 
@@ -135,6 +139,10 @@ public class QlpktclhPhieuKtChatLuongRepositoryCustomImpl implements QlpktclhPhi
 
 		if (StringUtils.hasText(req.getMaDvi())) {
 			query.setParameter("maDonVi", req.getMaDvi());
+		}
+
+		if (StringUtils.hasText(req.getLoaiVthh())) {
+			query.setParameter("loaiVthh", req.getLoaiVthh());
 		}
 	}
 }

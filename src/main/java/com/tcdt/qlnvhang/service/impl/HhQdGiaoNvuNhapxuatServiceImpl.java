@@ -6,14 +6,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
-import com.tcdt.qlnvhang.enums.BaseStatusEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatDtlLoaiNx;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatHdrLoaiQd;
-import com.tcdt.qlnvhang.enums.QdGiaoNvNhapXuatLoaiHangHoaEnum;
 import com.tcdt.qlnvhang.repository.HhDviThuchienQdinhRepository;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
-import com.tcdt.qlnvhang.response.QdGiaoNvNhapXuatCount;
+import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
@@ -70,7 +69,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 		dataMap.setNguoiTao(userInfo.getUsername());
 		dataMap.setNgayTao(getDateTimeNow());
-		dataMap.setTrangThai(BaseStatusEnum.DU_THAO.getId());
+		dataMap.setTrangThai(TrangThaiEnum.DU_THAO.getId());
 		dataMap.setMaDvi(userInfo.getDvql());
 		dataMap.setCapDvi(userInfo.getCapDvi());
 		// add thong tin chi tiet
@@ -94,8 +93,8 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		UnitScaler.reverseFormatList(dataMap.getChildren(), Contains.DVT_TAN);
 		hhQdGiaoNvuNhapxuatRepository.save(dataMap);
 
-		dataMap.setTenTrangThai(BaseStatusEnum.getTenById(dataMap.getTrangThai()));
-		dataMap.setTrangThaiDuyet(BaseStatusEnum.getTrangThaiDuyetById(dataMap.getTrangThai()));
+		dataMap.setTenTrangThai(TrangThaiEnum.getTenById(dataMap.getTrangThai()));
+		dataMap.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(dataMap.getTrangThai()));
 		this.setTenDvi(dataMap);
 		this.setHopDong(dataMap);
 		return dataMap;
@@ -150,8 +149,8 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		dataDB.setChildren2(dtls2);
 
 		hhQdGiaoNvuNhapxuatRepository.save(dataDB);
-		dataDB.setTenTrangThai(BaseStatusEnum.getTenById(dataMap.getTrangThai()));
-		dataDB.setTrangThaiDuyet(BaseStatusEnum.getTrangThaiDuyetById(dataMap.getTrangThai()));
+		dataDB.setTenTrangThai(TrangThaiEnum.getTenById(dataMap.getTrangThai()));
+		dataDB.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(dataMap.getTrangThai()));
 		this.setTenDvi(dataDB);
 		this.setHopDong(dataDB);
 		return dataDB;
@@ -193,8 +192,8 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		Map<String, String> mapDmucDvi = getMapTenDvi();
 		data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
 
-		data.setTenTrangThai(BaseStatusEnum.getTenById(data.getTrangThai()));
-		data.setTrangThaiDuyet(BaseStatusEnum.getTrangThaiDuyetById(data.getTrangThai()));
+		data.setTenTrangThai(TrangThaiEnum.getTenById(data.getTrangThai()));
+		data.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(data.getTrangThai()));
 		this.setTenDvi(data);
 		this.setHopDong(data);
 
@@ -237,32 +236,32 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		HhQdGiaoNvuNhapxuatHdr item = optional.get();
 
 		String trangThai = item.getTrangThai();
-		if (BaseStatusEnum.DU_THAO_TRINH_DUYET.getId().equals(req.getTrangThai())) {
-			if (!BaseStatusEnum.DU_THAO.getId().equals(trangThai))
+		if (TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(req.getTrangThai())) {
+			if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
 				return false;
 
-			item.setTrangThai(BaseStatusEnum.DU_THAO_TRINH_DUYET.getId());
+			item.setTrangThai(TrangThaiEnum.DU_THAO_TRINH_DUYET.getId());
 			item.setNguoiGuiDuyet(userInfo.getUsername());
 			item.setNgayGuiDuyet(getDateTimeNow());
 
-		} else if (BaseStatusEnum.LANH_DAO_DUYET.getId().equals(req.getTrangThai())) {
-			if (!BaseStatusEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
+		} else if (TrangThaiEnum.LANH_DAO_DUYET.getId().equals(req.getTrangThai())) {
+			if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
 				return false;
-			item.setTrangThai(BaseStatusEnum.LANH_DAO_DUYET.getId());
+			item.setTrangThai(TrangThaiEnum.LANH_DAO_DUYET.getId());
 			item.setNguoiPduyet(userInfo.getUsername());
 			item.setNgayPduyet(getDateTimeNow());
-		} else if (BaseStatusEnum.BAN_HANH.getId().equals(req.getTrangThai())) {
-			if (!BaseStatusEnum.LANH_DAO_DUYET.getId().equals(trangThai))
+		} else if (TrangThaiEnum.BAN_HANH.getId().equals(req.getTrangThai())) {
+			if (!TrangThaiEnum.LANH_DAO_DUYET.getId().equals(trangThai))
 				return false;
 
-			item.setTrangThai(BaseStatusEnum.BAN_HANH.getId());
+			item.setTrangThai(TrangThaiEnum.BAN_HANH.getId());
 			item.setNguoiPduyet(userInfo.getUsername());
 			item.setNgayPduyet(getDateTimeNow());
-		} else if (BaseStatusEnum.TU_CHOI.getId().equals(req.getTrangThai())) {
-			if (!BaseStatusEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
+		} else if (TrangThaiEnum.TU_CHOI.getId().equals(req.getTrangThai())) {
+			if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
 				return false;
 
-			item.setTrangThai(BaseStatusEnum.TU_CHOI.getId());
+			item.setTrangThai(TrangThaiEnum.TU_CHOI.getId());
 			item.setNguoiPduyet(userInfo.getUsername());
 			item.setNgayPduyet(getDateTimeNow());
 			item.setLdoTuchoi(req.getLyDo());
@@ -393,21 +392,23 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 	}
 
 	@Override
-	public QdGiaoNvNhapXuatCount count() throws Exception {
+	public BaseNhapHangCount count() throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
 		String dvql = userInfo.getDvql();
+		BaseNhapHangCount count = new BaseNhapHangCount();
 
-		QdGiaoNvNhapXuatCount count = new QdGiaoNvNhapXuatCount();
 		if (Contains.CAP_CUC.equalsIgnoreCase(userInfo.getCapDvi())) {
 			count.setTatCa(hhQdGiaoNvuNhapxuatRepository.countQdCuc(dvql, null));
-			count.setThoc(hhQdGiaoNvuNhapxuatRepository.countQdCuc(dvql, QdGiaoNvNhapXuatLoaiHangHoaEnum.THOC.getValue()));
-			count.setGao(hhQdGiaoNvuNhapxuatRepository.countQdCuc(dvql, QdGiaoNvNhapXuatLoaiHangHoaEnum.GAO.getValue()));
-			count.setVatTu(hhQdGiaoNvuNhapxuatRepository.countQdCuc(dvql, QdGiaoNvNhapXuatLoaiHangHoaEnum.VAT_TU.getValue()));
+			count.setThoc(hhQdGiaoNvuNhapxuatRepository.countQdCuc(dvql, Contains.LOAI_VTHH_THOC));
+			count.setGao(hhQdGiaoNvuNhapxuatRepository.countQdCuc(dvql, Contains.LOAI_VTHH_GAO));
+			count.setVatTu(hhQdGiaoNvuNhapxuatRepository.countQdCuc(dvql, Contains.LOAI_VTHH_VATTU));
+			count.setMuoi(hhQdGiaoNvuNhapxuatRepository.countQdCuc(dvql, Contains.LOAI_VTHH_MUOI));
 		} else if (Contains.CAP_CHI_CUC.equalsIgnoreCase(userInfo.getCapDvi())){
 			count.setTatCa(hhQdGiaoNvuNhapxuatRepository.countQdChiCuc(dvql, null));
-			count.setThoc(hhQdGiaoNvuNhapxuatRepository.countQdChiCuc(dvql, QdGiaoNvNhapXuatLoaiHangHoaEnum.THOC.getValue()));
-			count.setGao(hhQdGiaoNvuNhapxuatRepository.countQdChiCuc(dvql, QdGiaoNvNhapXuatLoaiHangHoaEnum.GAO.getValue()));
-			count.setVatTu(hhQdGiaoNvuNhapxuatRepository.countQdChiCuc(dvql, QdGiaoNvNhapXuatLoaiHangHoaEnum.VAT_TU.getValue()));
+			count.setThoc(hhQdGiaoNvuNhapxuatRepository.countQdChiCuc(dvql, Contains.LOAI_VTHH_THOC));
+			count.setGao(hhQdGiaoNvuNhapxuatRepository.countQdChiCuc(dvql, Contains.LOAI_VTHH_GAO));
+			count.setVatTu(hhQdGiaoNvuNhapxuatRepository.countQdChiCuc(dvql, Contains.LOAI_VTHH_VATTU));
+			count.setMuoi(hhQdGiaoNvuNhapxuatRepository.countQdChiCuc(dvql, Contains.LOAI_VTHH_MUOI));
 		}
 
 		return count;

@@ -41,4 +41,6 @@ public class QlpktclhPhieuKtChatLuongFilterRequestDto extends BaseRequest {
 	private String ketLuan;
 
 	private String soQd;
+
+	private String loaiVthh;
 }

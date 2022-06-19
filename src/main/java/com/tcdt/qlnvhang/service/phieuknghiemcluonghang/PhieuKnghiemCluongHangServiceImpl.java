@@ -76,7 +76,7 @@ public class PhieuKnghiemCluongHangServiceImpl implements PhieuKnghiemCluongHang
 		phieuKnclh.setNgayTao(LocalDate.now());
 		phieuKnclh.setMaDonVi(userInfo.getDvql());
 		phieuKnclh.setCapDonVi(userInfo.getCapDvi());
-		phieuKnclh.setTrangThai(TrangThaiEnum.DU_THAO.getMa());
+		phieuKnclh.setTrangThai(TrangThaiEnum.DU_THAO.getId());
 		phieuKnghiemCluongHangRepository.save(phieuKnclh);
 		kquaKnghiemService.update(phieuKnclh.getId(), req.getKquaKnghiem());
 
@@ -118,31 +118,31 @@ public class PhieuKnghiemCluongHangServiceImpl implements PhieuKnghiemCluongHang
 
 		PhieuKnghiemCluongHang phieu = optional.get();
 		String trangThai = phieu.getTrangThai();
-		if (TrangThaiEnum.DU_THAO_TRINH_DUYET.getMa().equals(stReq.getTrangThai())) {
-			if (!TrangThaiEnum.DU_THAO.getMa().equals(trangThai))
+		if (TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(stReq.getTrangThai())) {
+			if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
 				return false;
 
-			phieu.setTrangThai(TrangThaiEnum.DU_THAO_TRINH_DUYET.getMa());
+			phieu.setTrangThai(TrangThaiEnum.DU_THAO_TRINH_DUYET.getId());
 			phieu.setNguoiGuiDuyetId(userInfo.getId());
 			phieu.setNgayGuiDuyet(LocalDate.now());
-		} else if (TrangThaiEnum.LANH_DAO_DUYET.getMa().equals(stReq.getTrangThai())) {
-			if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getMa().equals(trangThai))
+		} else if (TrangThaiEnum.LANH_DAO_DUYET.getId().equals(stReq.getTrangThai())) {
+			if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
 				return false;
-			phieu.setTrangThai(TrangThaiEnum.LANH_DAO_DUYET.getMa());
+			phieu.setTrangThai(TrangThaiEnum.LANH_DAO_DUYET.getId());
 			phieu.setNguoiPduyetId(userInfo.getId());
 			phieu.setNgayPduyet(LocalDate.now());
-		} else if (TrangThaiEnum.BAN_HANH.getMa().equals(stReq.getTrangThai())) {
-			if (!TrangThaiEnum.LANH_DAO_DUYET.getMa().equals(trangThai))
+		} else if (TrangThaiEnum.BAN_HANH.getId().equals(stReq.getTrangThai())) {
+			if (!TrangThaiEnum.LANH_DAO_DUYET.getId().equals(trangThai))
 				return false;
 
-			phieu.setTrangThai(TrangThaiEnum.BAN_HANH.getMa());
+			phieu.setTrangThai(TrangThaiEnum.BAN_HANH.getId());
 			phieu.setNguoiPduyetId(userInfo.getId());
 			phieu.setNgayPduyet(LocalDate.now());
-		} else if (TrangThaiEnum.TU_CHOI.getMa().equals(stReq.getTrangThai())) {
-			if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getMa().equals(trangThai))
+		} else if (TrangThaiEnum.TU_CHOI.getId().equals(stReq.getTrangThai())) {
+			if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
 				return false;
 
-			phieu.setTrangThai(TrangThaiEnum.TU_CHOI.getMa());
+			phieu.setTrangThai(TrangThaiEnum.TU_CHOI.getId());
 			phieu.setNguoiPduyetId(userInfo.getId());
 			phieu.setNgayPduyet(LocalDate.now());
 			phieu.setLdoTchoi(stReq.getLyDo());
@@ -169,7 +169,7 @@ public class PhieuKnghiemCluongHangServiceImpl implements PhieuKnghiemCluongHang
 		if (vattu != null)
 			res.setTenHhoa(vattu.getTen());
 
-		res.setTenTrangThai(TrangThaiEnum.getTen(res.getTrangThai()));
+		res.setTenTrangThai(TrangThaiEnum.getTenById(res.getTrangThai()));
 		res.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(res.getTrangThai()));
 
 		Page<KquaKnghiemRes> list = kquaKnghiemService.list(phieuKnclh.getId(), PageRequest.of(DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE));
@@ -207,7 +207,7 @@ public class PhieuKnghiemCluongHangServiceImpl implements PhieuKnghiemCluongHang
 
 		PhieuKnghiemCluongHang phieu = optional.get();
 
-		if (TrangThaiEnum.BAN_HANH.getMa().equals(phieu.getTrangThai())) {
+		if (TrangThaiEnum.BAN_HANH.getId().equals(phieu.getTrangThai())) {
 			throw new Exception("Không thể xóa đề xuất điều chỉnh đã ban hành");
 		}
 		kquaKnghiemService.deleteByPhieuKnghiemId(phieu.getId());
@@ -260,7 +260,7 @@ public class PhieuKnghiemCluongHangServiceImpl implements PhieuKnghiemCluongHang
 
 		PhieuKnghiemCluongHangRes res = new PhieuKnghiemCluongHangRes();
 		BeanUtils.copyProperties(phieu, res);
-		res.setTenTrangThai(TrangThaiEnum.getTen(res.getTrangThai()));
+		res.setTenTrangThai(TrangThaiEnum.getTenById(res.getTrangThai()));
 		res.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(res.getTrangThai()));
 		if (vattu != null)
 			res.setTenHhoa(vattu.getTen());

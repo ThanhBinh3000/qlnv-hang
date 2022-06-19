@@ -90,5 +90,7 @@ public class QlpktclhPhieuKtChatLuongRequestDto {
 
 	private String lyDoTuChoi;
 
+	private String loaiVthh;
+
 	private List<QlpktclhKetQuaKiemTraRequestDto> ketQuaKiemTra;
 }

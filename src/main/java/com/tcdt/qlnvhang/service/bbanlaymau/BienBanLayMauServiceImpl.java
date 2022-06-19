@@ -69,7 +69,7 @@ public class BienBanLayMauServiceImpl implements BienBanLayMauService{
 
 		BienBanLayMau bienBienLayMau = new BienBanLayMau();
 		BeanUtils.copyProperties(req, bienBienLayMau, "id");
-		bienBienLayMau.setTrangThai(TrangThaiEnum.DU_THAO.getMa());
+		bienBienLayMau.setTrangThai(TrangThaiEnum.DU_THAO.getId());
 		bienBienLayMau.setNguoiTaoId(userInfo.getId());
 		bienBienLayMau.setNgayTao(LocalDate.now());
 		bienBienLayMau.setMaDonVi(userInfo.getDvql());
@@ -113,31 +113,31 @@ public class BienBanLayMauServiceImpl implements BienBanLayMauService{
 
 		BienBanLayMau bb = optional.get();
 		String trangThai = bb.getTrangThai();
-		if (TrangThaiEnum.DU_THAO_TRINH_DUYET.getMa().equals(stReq.getTrangThai())) {
+		if (TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(stReq.getTrangThai())) {
 			if (!HhBbNghiemthuKlstStatusEnum.DU_THAO.getId().equals(trangThai))
 				return false;
 
-			bb.setTrangThai(TrangThaiEnum.DU_THAO_TRINH_DUYET.getMa());
+			bb.setTrangThai(TrangThaiEnum.DU_THAO_TRINH_DUYET.getId());
 			bb.setNguoiGuiDuyetId(userInfo.getId());
 			bb.setNgayGuiDuyet(LocalDate.now());
-		} else if (TrangThaiEnum.LANH_DAO_DUYET.getMa().equals(stReq.getTrangThai())) {
-			if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getMa().equals(trangThai))
+		} else if (TrangThaiEnum.LANH_DAO_DUYET.getId().equals(stReq.getTrangThai())) {
+			if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
 				return false;
-			bb.setTrangThai(TrangThaiEnum.LANH_DAO_DUYET.getMa());
+			bb.setTrangThai(TrangThaiEnum.LANH_DAO_DUYET.getId());
 			bb.setNguoiPduyetId(userInfo.getId());
 			bb.setNgayPduyet(LocalDate.now());
-		} else if (TrangThaiEnum.BAN_HANH.getMa().equals(stReq.getTrangThai())) {
-			if (!TrangThaiEnum.LANH_DAO_DUYET.getMa().equals(trangThai))
+		} else if (TrangThaiEnum.BAN_HANH.getId().equals(stReq.getTrangThai())) {
+			if (!TrangThaiEnum.LANH_DAO_DUYET.getId().equals(trangThai))
 				return false;
 
-			bb.setTrangThai(TrangThaiEnum.BAN_HANH.getMa());
+			bb.setTrangThai(TrangThaiEnum.BAN_HANH.getId());
 			bb.setNguoiPduyetId(userInfo.getId());
 			bb.setNgayPduyet(LocalDate.now());
-		} else if (TrangThaiEnum.TU_CHOI.getMa().equals(stReq.getTrangThai())) {
-			if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getMa().equals(trangThai))
+		} else if (TrangThaiEnum.TU_CHOI.getId().equals(stReq.getTrangThai())) {
+			if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
 				return false;
 
-			bb.setTrangThai(TrangThaiEnum.TU_CHOI.getMa());
+			bb.setTrangThai(TrangThaiEnum.TU_CHOI.getId());
 			bb.setNguoiPduyetId(userInfo.getId());
 			bb.setNgayPduyet(LocalDate.now());
 			bb.setLdoTchoi(stReq.getLyDo());
@@ -190,7 +190,7 @@ public class BienBanLayMauServiceImpl implements BienBanLayMauService{
 
 		BienBanLayMau bb = optional.get();
 
-		if (TrangThaiEnum.BAN_HANH.getMa().equals(bb.getTrangThai())) {
+		if (TrangThaiEnum.BAN_HANH.getId().equals(bb.getTrangThai())) {
 			throw new Exception("Không thể xóa đề xuất điều chỉnh đã ban hành");
 		}
 		bienBanLayMauRepository.deleteById(id);
@@ -243,7 +243,7 @@ public class BienBanLayMauServiceImpl implements BienBanLayMauService{
 		if (vattu != null)
 			res.setTenHhoa(vattu.getTen());
 
-		res.setTenTrangThai(TrangThaiEnum.getTen(bb.getTrangThai()));
+		res.setTenTrangThai(TrangThaiEnum.getTenById(bb.getTrangThai()));
 		res.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(bb.getTrangThai()));
 		return res;
 	}

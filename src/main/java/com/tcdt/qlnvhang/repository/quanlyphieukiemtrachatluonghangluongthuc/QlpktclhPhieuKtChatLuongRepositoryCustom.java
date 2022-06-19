@@ -6,4 +6,6 @@ import org.springframework.data.domain.Page;
 
 public interface QlpktclhPhieuKtChatLuongRepositoryCustom {
 	Page<QlpktclhPhieuKtChatLuongResponseDto> filter(QlpktclhPhieuKtChatLuongFilterRequestDto req);
+
+	int countPhieuKiemTraChatLuong(QlpktclhPhieuKtChatLuongFilterRequestDto req);
 }

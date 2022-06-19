@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.quanlyphieukiemtrachatluonghangluongthuc;
 
 import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
+import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongFilterRequestDto;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongRequestDto;
@@ -28,4 +29,7 @@ public interface QlpktclhPhieuKtChatLuongService {
 	boolean delete(Long id) throws Exception;
 
     boolean exportToExcel(QlpktclhPhieuKtChatLuongFilterRequestDto objReq, HttpServletResponse response) throws Exception;
+
+	@Transactional
+	boolean deleteMultiple(DeleteReq req) throws Exception;
 }

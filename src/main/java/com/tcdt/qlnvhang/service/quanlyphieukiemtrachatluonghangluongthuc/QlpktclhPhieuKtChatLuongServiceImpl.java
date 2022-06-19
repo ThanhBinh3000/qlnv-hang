@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.quanlyphieukiemtrachatluonghangluongthuc;
 
+import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhKetQuaKiemTra;
 import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.enums.QlpktclhPhieuKtChatLuongStatusEnum;
@@ -7,10 +8,12 @@ import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhKetQuaKiemTraRepository;
 import com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongRepository;
+import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongFilterRequestDto;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongRequestDto;
+import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.response.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhKetQuaKiemTraResponseDto;
 import com.tcdt.qlnvhang.response.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongResponseDto;
 import com.tcdt.qlnvhang.table.HhHopDongHdr;
@@ -132,6 +135,16 @@ public class QlpktclhPhieuKtChatLuongServiceImpl implements QlpktclhPhieuKtChatL
 		UserInfo userInfo = UserUtils.getUserInfo();
 		req.setMaDvi(userInfo.getDvql());
 		return qlpktclhPhieuKtChatLuongRepo.filter(req);
+	}
+
+	public BaseNhapHangCount count() throws Exception {
+		UserInfo userInfo = UserUtils.getUserInfo();
+		QlpktclhPhieuKtChatLuongFilterRequestDto req = new QlpktclhPhieuKtChatLuongFilterRequestDto();
+		req.setMaDvi(userInfo.getDvql());
+		BaseNhapHangCount count = new BaseNhapHangCount();
+
+		count.setTatCa(qlpktclhPhieuKtChatLuongRepo.countPhieuKiemTraChatLuong(req));
+		return count;
 	}
 
 	@Override
@@ -321,6 +334,20 @@ public class QlpktclhPhieuKtChatLuongServiceImpl implements QlpktclhPhieuKtChatL
 			log.error("Error export", e);
 			return false;
 		}
+		return true;
+	}
+
+	@Transactional
+	@Override
+	public boolean deleteMultiple(DeleteReq req) throws Exception {
+		UserInfo userInfo = UserUtils.getUserInfo();
+
+		if (CollectionUtils.isEmpty(req.getIds()))
+			return false;
+
+
+		qlpktclhKetQuaKiemTraRepo.deleteByPhieuKtChatLuongIdIn(req.getIds());
+		qlpktclhPhieuKtChatLuongRepo.deleteByIdIn(req.getIds());
 		return true;
 	}
 }
