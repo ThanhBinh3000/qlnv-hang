@@ -105,7 +105,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 				f.setCreateDate(new Date());
 			});
 		}
-		dataMap.setChildren2(dtls2);
+		dataMap.setFileDinhKems(dtls2);
 
 		UnitScaler.reverseFormatList(dataMap.getChildren(), Contains.DVT_TAN);
 		return hhHopDongRepository.save(dataMap);
@@ -173,7 +173,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 				f.setCreateDate(new Date());
 			});
 		}
-		dataDB.setChildren2(dtls2);
+		dataDB.setFileDinhKems(dtls2);
 
 		UnitScaler.reverseFormatList(dataMap.getChildren(), Contains.DVT_TAN);
 

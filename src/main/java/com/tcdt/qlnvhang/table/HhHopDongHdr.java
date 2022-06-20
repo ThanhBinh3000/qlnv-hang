@@ -160,19 +160,19 @@ public class HhHopDongHdr implements Serializable {
 	@JoinColumn(name = "dataId")
 	@JsonManagedReference
 	@Where(clause = "data_type='" + HhHopDongHdr.TABLE_NAME + "'")
-	private List<FileDKemJoinHopDong> children2 = new ArrayList<>();
+	private List<FileDKemJoinHopDong> fileDinhKems = new ArrayList<>();
 
-	public void setChildren2(List<FileDKemJoinHopDong> children2) {
-		this.children2.clear();
+	public void setFileDinhKems(List<FileDKemJoinHopDong> children2) {
+		this.fileDinhKems.clear();
 		for (FileDKemJoinHopDong child2 : children2) {
 			child2.setParent(this);
 		}
-		this.children2.addAll(children2);
+		this.fileDinhKems.addAll(children2);
 	}
 
-	public void addChild2(FileDKemJoinHopDong child2) {
+	public void addFileDinhKems(FileDKemJoinHopDong child2) {
 		child2.setParent(this);
-		this.children2.add(child2);
+		this.fileDinhKems.add(child2);
 	}
 
 }
