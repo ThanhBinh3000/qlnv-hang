@@ -115,7 +115,7 @@ public class HhHopDongHdrReq {
 
 	String chucVu;
 
-	String idNhaThau;
+	String idNthau;
 
 	private List<HhDdiemNhapKhoReq> diaDiemNhapKhoReq;
 

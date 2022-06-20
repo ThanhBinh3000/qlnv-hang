@@ -44,7 +44,9 @@ public class HhHopDongHdr implements Serializable {
 	@SequenceGenerator(sequenceName = HhHopDongHdr.TABLE_NAME
 			+ "_SEQ", allocationSize = 1, name = HhHopDongHdr.TABLE_NAME + "_SEQ")
 	private Long id;
-
+	private Long idGoiThau;
+	private Long namKh;
+	private Long donGiaVat;
 	String soHd;
 	String tenHd;
 	String canCu;
@@ -72,7 +74,11 @@ public class HhHopDongHdr implements Serializable {
 	Double vat;
 	Double gtriHdSauVat;
 	String loaiVthh;
+	@Transient
+	String tenVthh;
 	String cloaiVthh;
+	@Transient
+	String tenCloaiVthh;
 	String loaiHd;
 
 	@Temporal(TemporalType.DATE)

@@ -196,6 +196,10 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 			UnitScaler.formatList(dtl.getChildren(), Contains.DVT_TAN);
 		}
 
+		Map<String,String> mapVthh = getListDanhMucHangHoa (req);
+		qOptional.get().setTenVthh( StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : mapVthh.get(qOptional.get().getLoaiVthh()));
+		qOptional.get().setTenCloaiVthh( StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null :mapVthh.get(qOptional.get().getCloaiVthh()));
+
 		return qOptional.get();
 	}
 
