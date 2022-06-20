@@ -52,14 +52,14 @@ public class HhHopDongHdrReq {
 
 	Double soNgayTdo;
 
-	@NotNull(message = "Không được để trống")
-	@Size(max = 20, message = "Nước sản xuất được vượt quá 20 ký tự")
-	@ApiModelProperty(example = "Nhật Bản")
+//	@NotNull(message = "Không được để trống")
+//	@Size(max = 20, message = "Nước sản xuất được vượt quá 20 ký tự")
+//	@ApiModelProperty(example = "Nhật Bản")
 	String nuocSxuat;
 
-	@NotNull(message = "Không được để trống")
-	@Size(max = 20, message = "Tiêu chuẩn chất lượng được vượt quá 20 ký tự")
-	@ApiModelProperty(example = "Tiêu chuẩn")
+//	@NotNull(message = "Không được để trống")
+//	@Size(max = 20, message = "Tiêu chuẩn chất lượng được vượt quá 20 ký tự")
+//	@ApiModelProperty(example = "Tiêu chuẩn")
 	String tieuChuanCl;
 
 	Double soLuong;
@@ -79,9 +79,9 @@ public class HhHopDongHdrReq {
 	@ApiModelProperty(example = "00")
 	String cloaiVthh;
 
-	@NotNull(message = "Không được để trống")
-	@Size(max = 20, message = "Loại hợp đồng không được vượt quá 20 ký tự")
-	@ApiModelProperty(example = "00")
+//	@NotNull(message = "Không được để trống")
+//	@Size(max = 20, message = "Loại hợp đồng không được vượt quá 20 ký tự")
+//	@ApiModelProperty(example = "00")
 	String loaiHd;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
@@ -96,7 +96,6 @@ public class HhHopDongHdrReq {
 	String ghiChu;
 
 	@NotNull(message = "Không được để trống")
-	@Size(max = 4, message = "Năm kế hoạch không được vượt quá 4 ký tự")
 	@ApiModelProperty(example = "2022")
 	Long namKh;
 
