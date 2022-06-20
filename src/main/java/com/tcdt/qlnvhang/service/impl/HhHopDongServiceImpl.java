@@ -93,8 +93,8 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 		}
 
 		// add thong tin don vi lien quan
-		List<HhDviLquan> dtls1 = ObjectMapperUtils.mapAll(objReq.getDetail1(), HhDviLquan.class);
-		dataMap.setChildren1(dtls1);
+//		List<HhDviLquan> dtls1 = ObjectMapperUtils.mapAll(objReq.getDetail1(), HhDviLquan.class);
+//		dataMap.setChildren1(dtls1);
 
 		// File dinh kem cua goi thau
 		List<FileDKemJoinHopDong> dtls2 = new ArrayList<FileDKemJoinHopDong>();
