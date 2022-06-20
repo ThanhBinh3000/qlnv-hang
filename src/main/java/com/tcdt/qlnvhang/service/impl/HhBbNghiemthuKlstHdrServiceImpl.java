@@ -1,9 +1,8 @@
 package com.tcdt.qlnvhang.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletOutputStream;
@@ -13,8 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.tcdt.qlnvhang.enums.HhBbNghiemthuKlstStatusEnum;
 import com.tcdt.qlnvhang.repository.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
+import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
-import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
@@ -36,6 +35,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -57,9 +57,11 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 	private static final String SHEET_BIEN_BAN_NGHIEM_THU_BAO_QUAN_LAN_DAU_NHAP = "Biên bản nghiệm thu bảo quản lần đầu nhập";
 	private static final String STT = "STT";
 	private static final String SO_BIEN_BAN = "Số Biên Bản";
+	private static final String SO_QUYET_DINH_NHAP = "Số Quyết Định Nhập";
 	private static final String NGAY_NGHIEM_THU = "Ngày Nghiệm Thu";
 	private static final String DIEM_KHO = "Điểm Kho";
 	private static final String NHA_KHO = "Nhà Kho";
+	private static final String NGAN_KHO = "Ngăn Kho";
 	private static final String NGAN_LO = "Ngăn Lô";
 	private static final String CHI_PHI_THUC_HIEN_TRONG_NAM = "Chi Phí Thực Hiện Trong Năm";
 	private static final String CHI_PHI_THUC_HIEN_NAM_TRUOC = "Chi Phí Thực Hiện Năm Trước";
@@ -77,9 +79,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 
 	@Override
 	public HhBbNghiemthuKlstHdr create(HhBbNghiemthuKlstHdrReq objReq) throws Exception {
-		UserInfo userInfo = SecurityContextService.getUser();
-		if (userInfo == null)
-			throw new Exception("Bad request");
+		UserInfo userInfo = UserUtils.getUserInfo();
 
 		if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh()))
 			throw new Exception("Loại vật tư hàng hóa không phù hợp");
@@ -123,9 +123,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 
 	@Override
 	public HhBbNghiemthuKlstHdr update(HhBbNghiemthuKlstHdrReq objReq) throws Exception {
-		UserInfo userInfo = SecurityContextService.getUser();
-		if (userInfo == null)
-			throw new Exception("Bad request");
+		UserInfo userInfo = UserUtils.getUserInfo();
 
 		if (StringUtils.isEmpty(objReq.getId()))
 			throw new Exception("Sửa thất bại, không tìm thấy dữ liệu");
@@ -183,9 +181,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 	@Override
 	public HhBbNghiemthuKlstHdr detail(String ids) throws Exception {
 
-		UserInfo userInfo = SecurityContextService.getUser();
-		if (userInfo == null)
-			throw new Exception("Bad request");
+		UserInfo userInfo = UserUtils.getUserInfo();
 
 
 		if (StringUtils.isEmpty(ids))
@@ -207,9 +203,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 	@Override
 	public Page<HhBbNghiemthuKlstHdr> colection(HhBbNghiemthuKlstSearchReq objReq, HttpServletRequest req)
 			throws Exception {
-		UserInfo userInfo = SecurityContextService.getUser();
-		if (userInfo == null)
-			throw new Exception("Bad request");
+		UserInfo userInfo = UserUtils.getUserInfo();
 		int page = objReq.getPaggingReq().getPage();
 		int limit = objReq.getPaggingReq().getLimit();
 		Pageable pageable = PageRequest.of(page, limit);
@@ -217,11 +211,30 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 		Page<HhBbNghiemthuKlstHdr> qhKho = hhBbNghiemthuKlstRepository
 				.findAll(HhBbNghiemthuKlstSpecification.buildSearchQuery(objReq), pageable);
 
-		// Lay danh muc dung chung
-		//Map<String, String> mapDmucDvi = getMapTenDvi();
-		for (HhBbNghiemthuKlstHdr hdr : qhKho.getContent()) {
-			this.buildResponse(hdr);
-			//hdr.setTenDvi(mapDmucDvi.get(hdr.getMaDvi()));
+		List<HhBbNghiemthuKlstHdr> data = qhKho.getContent();
+		if (CollectionUtils.isEmpty(data))
+			return qhKho;
+
+		// Quyet dinh giao nhiem vu nhap hang
+		Set<Long> qdNhapIds = data.stream().map(HhBbNghiemthuKlstHdr::getQdgnvnxId).collect(Collectors.toSet());
+		Map<Long, HhQdGiaoNvuNhapxuatHdr> mapQdNhap = new HashMap<>();
+		if (!CollectionUtils.isEmpty(qdNhapIds)) {
+			mapQdNhap = hhQdGiaoNvuNhapxuatRepository.findByIdIn(qdNhapIds)
+					.stream().collect(Collectors.toMap(HhQdGiaoNvuNhapxuatHdr::getId, Function.identity()));
+		}
+
+		// Ngan lo
+		Set<String> maNganLos = data.stream().map(HhBbNghiemthuKlstHdr::getMaNganlo).collect(Collectors.toSet());
+		Map<String, KtNganLo> mapNganLo = new HashMap<>();
+		if (!CollectionUtils.isEmpty(maNganLos)) {
+			mapNganLo = ktNganLoRepository.findByMaNganloIn(maNganLos)
+					.stream().collect(Collectors.toMap(KtNganLo::getMaNganlo, Function.identity()));
+		}
+
+		for (HhBbNghiemthuKlstHdr hdr : data) {
+			HhQdGiaoNvuNhapxuatHdr qdNhap = hdr.getQdgnvnxId() != null ? mapQdNhap.get(hdr.getQdgnvnxId()) : null;
+			KtNganLo nganLo = StringUtils.hasText(hdr.getMaNganlo()) ? mapNganLo.get(hdr.getMaNganlo()) : null;
+			this.buildResponseForList(hdr, qdNhap, nganLo);
 		}
 
 		return qhKho;
@@ -230,9 +243,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 	@Override
 	public boolean approve(StatusReq stReq) throws Exception {
 
-		UserInfo userInfo = SecurityContextService.getUser();
-		if (userInfo == null)
-			throw new Exception("Bad request");
+		UserInfo userInfo = UserUtils.getUserInfo();
 
 		if (StringUtils.isEmpty(stReq.getId()))
 			throw new Exception("Không tìm thấy dữ liệu");
@@ -281,6 +292,8 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 
 	@Override
 	public void delete(IdSearchReq idSearchReq) throws Exception {
+		UserInfo userInfo = UserUtils.getUserInfo();
+
 		if (StringUtils.isEmpty(idSearchReq.getId()))
 			throw new Exception("Xoá thất bại, không tìm thấy dữ liệu");
 		Optional<HhBbNghiemthuKlstHdr> optional = hhBbNghiemthuKlstRepository.findById(idSearchReq.getId());
@@ -320,14 +333,16 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 
 			ExportExcel.createCell(row0, 0, STT, style, sheet);
 			ExportExcel.createCell(row0, 1, SO_BIEN_BAN, style, sheet);
-			ExportExcel.createCell(row0, 2, NGAY_NGHIEM_THU, style, sheet);
-			ExportExcel.createCell(row0, 3, DIEM_KHO, style, sheet);
-			ExportExcel.createCell(row0, 4, NHA_KHO, style, sheet);
-			ExportExcel.createCell(row0, 5, NGAN_LO, style, sheet);
-			ExportExcel.createCell(row0, 6, CHI_PHI_THUC_HIEN_TRONG_NAM, style, sheet);
-			ExportExcel.createCell(row0, 7, CHI_PHI_THUC_HIEN_NAM_TRUOC, style, sheet);
-			ExportExcel.createCell(row0, 8, TONG_GIA_TRI, style, sheet);
-			ExportExcel.createCell(row0, 9, TRANG_THAI, style, sheet);
+			ExportExcel.createCell(row0, 2, SO_QUYET_DINH_NHAP, style, sheet);
+			ExportExcel.createCell(row0, 3, NGAY_NGHIEM_THU, style, sheet);
+			ExportExcel.createCell(row0, 4, DIEM_KHO, style, sheet);
+			ExportExcel.createCell(row0, 5, NHA_KHO, style, sheet);
+			ExportExcel.createCell(row0, 6, NGAN_KHO, style, sheet);
+			ExportExcel.createCell(row0, 7, NGAN_LO, style, sheet);
+			ExportExcel.createCell(row0, 8, CHI_PHI_THUC_HIEN_TRONG_NAM, style, sheet);
+			ExportExcel.createCell(row0, 9, CHI_PHI_THUC_HIEN_NAM_TRUOC, style, sheet);
+			ExportExcel.createCell(row0, 10, TONG_GIA_TRI, style, sheet);
+			ExportExcel.createCell(row0, 11, TRANG_THAI, style, sheet);
 
 			style = workbook.createCellStyle();
 			font = workbook.createFont();
@@ -341,14 +356,16 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 				row = sheet.createRow(startRowIndex);
 				ExportExcel.createCell(row, 0, startRowIndex, style, sheet);
 				ExportExcel.createCell(row, 1, item.getSoBb(), style, sheet);
-				ExportExcel.createCell(row, 2, convertDateToString(item.getNgayNghiemThu()), style, sheet);
-				ExportExcel.createCell(row, 3, item.getTenDiemkho(), style, sheet);
-				ExportExcel.createCell(row, 4, item.getTenNhakho(), style, sheet);
-				ExportExcel.createCell(row, 5, item.getTenNganlo(), style, sheet);
-				ExportExcel.createCell(row, 6,  Optional.ofNullable(item.getChiPhiThucHienTrongNam()).orElse(0D), style, sheet);
-				ExportExcel.createCell(row, 7, Optional.ofNullable(item.getChiPhiThucHienNamTruoc()).orElse(0D), style, sheet);
-				ExportExcel.createCell(row, 8, item.getTongGiaTri(), style, sheet);
-				ExportExcel.createCell(row, 9, Contains.MOI_TAO, style, sheet);
+				ExportExcel.createCell(row, 2, item.getSoQuyetDinhNhap(), style, sheet);
+				ExportExcel.createCell(row, 3, convertDateToString(item.getNgayNghiemThu()), style, sheet);
+				ExportExcel.createCell(row, 4, item.getTenDiemkho(), style, sheet);
+				ExportExcel.createCell(row, 5, item.getTenNhakho(), style, sheet);
+				ExportExcel.createCell(row, 6, item.getTenNgankho(), style, sheet);
+				ExportExcel.createCell(row, 7, item.getTenNganlo(), style, sheet);
+				ExportExcel.createCell(row, 8,  Optional.ofNullable(item.getChiPhiThucHienTrongNam()).orElse(BigDecimal.valueOf(0D)), style, sheet);
+				ExportExcel.createCell(row, 9, Optional.ofNullable(item.getChiPhiThucHienNamTruoc()).orElse(BigDecimal.valueOf(0D)), style, sheet);
+				ExportExcel.createCell(row, 10, item.getTongGiaTri(), style, sheet);
+				ExportExcel.createCell(row, 11, HhBbNghiemthuKlstStatusEnum.getTenById(item.getTrangThai()), style, sheet);
 				startRowIndex++;
 			}
 
@@ -363,50 +380,90 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 		return true;
 	}
 
-	private HhBbNghiemthuKlstHdr buildResponse(HhBbNghiemthuKlstHdr bb) {
+	private void buildResponseForList(HhBbNghiemthuKlstHdr bb, HhQdGiaoNvuNhapxuatHdr qdNhap, KtNganLo ktNganLo) {
+		this.baseResponse(bb);
+		if (qdNhap != null) {
+			bb.setSoQuyetDinhNhap(qdNhap.getSoQd());
+		}
+		this.thongTinNganLo(bb, ktNganLo);
 
-		bb.setTenTrangThai(HhBbNghiemthuKlstStatusEnum.getTenById(bb.getTrangThai()));
-		bb.setTrangThaiDuyet(HhBbNghiemthuKlstStatusEnum.getTrangThaiDuyetById(bb.getTrangThai()));
-		Double chiPhiTn = bb.getChildren().stream()
-				.filter(i -> i.getThanhTienTn() != null)
-				.mapToDouble(HhBbNghiemthuKlstDtl::getThanhTienTn).sum();
+	}
 
-		Double chiPhiNt = bb.getChildren().stream()
-				.filter(i -> i.getThanhTienQt() != null)
-				.mapToDouble(HhBbNghiemthuKlstDtl::getThanhTienQt).sum();
+	private HhBbNghiemthuKlstHdr buildResponse(HhBbNghiemthuKlstHdr bb) throws Exception {
 
-		Double tongGiaTri = bb.getChildren().stream()
-				.filter(i -> i.getTongGtri() != null)
-				.mapToDouble(HhBbNghiemthuKlstDtl::getTongGtri).sum();
-		bb.setChiPhiThucHienTrongNam(chiPhiTn);
-		bb.setChiPhiThucHienNamTruoc(chiPhiNt);
-		bb.setTongGiaTri(tongGiaTri);
+		this.baseResponse(bb);
+		if (bb.getQdgnvnxId() != null) {
+			Optional<HhQdGiaoNvuNhapxuatHdr> qdNhap = hhQdGiaoNvuNhapxuatRepository.findById(bb.getQdgnvnxId());
+			if (!qdNhap.isPresent()) {
+				throw new Exception("Không tìm thấy quyết định nhập");
+			}
+			bb.setSoQuyetDinhNhap(qdNhap.get().getSoQd());
+		}
 
 		if (!StringUtils.hasText(bb.getMaNganlo()))
 			return bb;
 
 		KtNganLo nganLo = ktNganLoRepository.findFirstByMaNganlo(bb.getMaNganlo());
+		this.thongTinNganLo(bb, nganLo);
+		return bb;
+	}
+
+	private void baseResponse(HhBbNghiemthuKlstHdr bb) {
+		bb.setTenTrangThai(HhBbNghiemthuKlstStatusEnum.getTenById(bb.getTrangThai()));
+		bb.setTrangThaiDuyet(HhBbNghiemthuKlstStatusEnum.getTrangThaiDuyetById(bb.getTrangThai()));
+		BigDecimal chiPhiTn = bb.getChildren().stream()
+				.map(HhBbNghiemthuKlstDtl::getThanhTienTn)
+				.filter(Objects::nonNull)
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
+
+		BigDecimal chiPhiNt = bb.getChildren().stream()
+				.map(HhBbNghiemthuKlstDtl::getThanhTienQt)
+				.filter(Objects::nonNull)
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
+
+		BigDecimal tongGiaTri = bb.getChildren().stream()
+				.map(HhBbNghiemthuKlstDtl::getTongGtri)
+				.filter(Objects::nonNull)
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
+
+		bb.setChiPhiThucHienTrongNam(chiPhiTn);
+		bb.setChiPhiThucHienNamTruoc(chiPhiNt);
+		bb.setTongGiaTri(tongGiaTri);
+		bb.setTongGiaTriBangChu(MoneyConvert.doctienBangChu(tongGiaTri.toString(), null));
+	}
+
+	private void thongTinNganLo(HhBbNghiemthuKlstHdr bb, KtNganLo nganLo) {
 		if (nganLo != null) {
 			bb.setTenNganlo(nganLo.getTenNganlo());
 			KtNganKho nganKho = nganLo.getParent();
 			if (nganKho == null)
-				return bb;
+				return;
 
 			bb.setTenNgankho(nganKho.getTenNgankho());
 			bb.setMaNgankho(nganKho.getMaNgankho());
 			KtNhaKho nhaKho = nganKho.getParent();
 			if (nhaKho == null)
-				return bb;
+				return;
 
 			bb.setTenNhakho(nhaKho.getTenNhakho());
 			bb.setMaNhakho(nhaKho.getMaNhakho());
 			KtDiemKho diemKho = nhaKho.getParent();
 			if (diemKho == null)
-				return bb;
+				return;
 
 			bb.setTenDiemkho(diemKho.getTenDiemkho());
 			bb.setMaDiemkho(diemKho.getMaDiemkho());
 		}
-		return bb;
+	}
+
+	@Transactional
+	@Override
+	public boolean deleteMultiple(DeleteReq req) throws Exception {
+		UserInfo userInfo = UserUtils.getUserInfo();
+
+		if (CollectionUtils.isEmpty(req.getIds()))
+			return false;
+		hhBbNghiemthuKlstRepository.deleteByIdIn(req.getIds());
+		return true;
 	}
 }

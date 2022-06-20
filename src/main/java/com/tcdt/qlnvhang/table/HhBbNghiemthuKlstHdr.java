@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -45,44 +46,49 @@ public class HhBbNghiemthuKlstHdr implements Serializable {
 	private Long qdgnvnxId; // HhQdGiaoNvuNhapxuatHdr
 	String soBb;
 	@Temporal(TemporalType.DATE)
-	Date ngayLap;
+//	Date ngayLap;
 	Date ngayNghiemThu;
 	String thuTruong;
 	String keToan;
 	String kyThuatVien;
 	String thuKho;
 	String maNganlo;
-	String ongBa;
-	String chucVu;
-	String maVthh;
+	String lhKho;
+	Double slThucNhap;
+	Double tichLuong;
 	String pthucBquan;
 	String hthucBquan;
-	Double tichLuong;
-	Double slThucNhap;
-	String hthucKlot;
-	String kieuKlot;
-	String lhKho;
 	Double dinhMuc;
-	String trangThaiNhap;
-	@Temporal(TemporalType.DATE)
-	Date ngayKthuc;
 	String ketLuan;
 	String trangThai;
+	String ldoTuchoi;
+	String capDvi;
+	String maDvi;
+	Integer nam;
+	String loaiVthh;
+
 	Date ngayTao;
 	String nguoiTao;
 	Date ngaySua;
 	String nguoiSua;
 	Date ngayGuiDuyet;
 	String nguoiGuiDuyet;
-	String ldoTuchoi;
 	Date ngayPduyet;
 	String nguoiPduyet;
-	String capDvi;
-	String maDvi;
-	Integer nam;
+
+//	String ongBa;
+//	String chucVu;
+//	String maVthh;
+//	String hthucKlot;
+//	String kieuKlot;
+
+//	String trangThaiNhap;
+
+//	@Temporal(TemporalType.DATE)
+//	Date ngayKthuc;
+
 	@Transient
 	String tenDvi;
-	String loaiVthh;
 
 	@Transient
 	String maDiemkho;
@@ -103,19 +109,25 @@ public class HhBbNghiemthuKlstHdr implements Serializable {
 	String tenNganlo;
 
 	@Transient
-	Double chiPhiThucHienTrongNam;
+	BigDecimal chiPhiThucHienTrongNam;
 
 	@Transient
-	Double chiPhiThucHienNamTruoc;
+	BigDecimal chiPhiThucHienNamTruoc;
 
 	@Transient
-	Double tongGiaTri;
+	BigDecimal tongGiaTri;
 
 	@Transient
 	String tenTrangThai;
 
 	@Transient
 	String trangThaiDuyet;
+
+	@Transient
+	String tongGiaTriBangChu;
+
+	@Transient
+	String soQuyetDinhNhap;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "id_hdr")

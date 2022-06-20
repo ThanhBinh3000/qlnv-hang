@@ -30,8 +30,8 @@ public class HhBbNghiemthuKlstSpecification {
 				if (ObjectUtils.isEmpty(objReq))
 					return predicate;
 
-				Date tuNgayLap = objReq.getTuNgayLap();
-				Date denNgayLap = objReq.getDenNgayLap();
+				Date tuNgayNghiemThu = objReq.getTuNgayNghiemThu();
+				Date denNgayNghiemThu = objReq.getDenNgayNghiemThu();
 				String loaiVthh = objReq.getLoaiVthh();
 				String trangThai = objReq.getTrangThai();
 				String soBb = objReq.getSoBb();
@@ -41,13 +41,13 @@ public class HhBbNghiemthuKlstSpecification {
 				if (StringUtils.isNotEmpty(soBb))
 					predicate.getExpressions().add(builder.and(builder.equal(root.get("soBb"), soBb)));
 
-				if (ObjectUtils.isNotEmpty(tuNgayLap))
+				if (ObjectUtils.isNotEmpty(tuNgayNghiemThu))
 					predicate.getExpressions()
-							.add(builder.and(builder.greaterThanOrEqualTo(root.get("ngayLap"), tuNgayLap)));
+							.add(builder.and(builder.greaterThanOrEqualTo(root.get("ngayNghiemThu"), tuNgayNghiemThu)));
 
-				if (ObjectUtils.isNotEmpty(denNgayLap))
+				if (ObjectUtils.isNotEmpty(denNgayNghiemThu))
 					predicate.getExpressions().add(builder
-							.and(builder.lessThan(root.get("ngayLap"), new DateTime(denNgayLap).plusDays(1).toDate())));
+							.and(builder.lessThan(root.get("ngayNghiemThu"), new DateTime(denNgayNghiemThu).plusDays(1).toDate())));
 
 				if (StringUtils.isNotBlank(trangThai))
 					predicate.getExpressions().add(builder.and(builder.equal(root.get("trangThai"), trangThai)));

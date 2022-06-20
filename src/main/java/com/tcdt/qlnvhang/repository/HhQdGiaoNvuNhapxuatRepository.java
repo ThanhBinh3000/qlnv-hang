@@ -1,8 +1,9 @@
 package com.tcdt.qlnvhang.repository;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
-import com.tcdt.qlnvhang.table.HhDxKhLcntThopHdr;
 import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -69,4 +70,6 @@ public interface HhQdGiaoNvuNhapxuatRepository extends BaseRepository<HhQdGiaoNv
 			"WHERE ct.maDvi = ?1 " +
 			"AND (?2 IS NULL OR qd.loaiVthh = ?2)")
 	int countQdChiCuc(String maDvi, String loaiVtth);
+
+	List<HhQdGiaoNvuNhapxuatHdr> findByIdIn(Collection<Long> ids);
 }

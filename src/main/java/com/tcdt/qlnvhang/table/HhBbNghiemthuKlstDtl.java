@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -31,11 +32,11 @@ public class HhBbNghiemthuKlstDtl implements Serializable {
 	String noiDung;
 	String dvt;
 	Double soLuongTn;
-	Double donGiaTn;
-	Double thanhTienTn;
+	BigDecimal donGiaTn;
+	BigDecimal thanhTienTn;
 	Double soLuongQt;
-	Double thanhTienQt;
-	Double tongGtri;
+	BigDecimal thanhTienQt;
+	BigDecimal tongGtri;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_hdr")
