@@ -22,7 +22,7 @@ public class HhDxuatKhLcntDsgtDtl implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_DXUAT_KH_LCNT_DSGT_DTL_SEQ")
 	@SequenceGenerator(sequenceName = "HH_DXUAT_KH_LCNT_DSGT_DTL_SEQ", allocationSize = 1, name = "HH_DXUAT_KH_LCNT_DSGT_DTL_SEQ")
 	private Long id;
-
+	private Long idDxKhlcnt;
 	String goiThau;
 	BigDecimal soLuong;
 	String maDvi;
@@ -30,12 +30,6 @@ public class HhDxuatKhLcntDsgtDtl implements Serializable {
 	String diaDiemNhap;
 	BigDecimal donGia;
 	BigDecimal thanhTien;
-	String shgt;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ID_KH_HDR",nullable=false)
-	@JsonBackReference
-	private HhDxuatKhLcntHdr parent;
 
 	String loaiVthh;
 	String cloaiVthh;
@@ -46,7 +40,6 @@ public class HhDxuatKhLcntDsgtDtl implements Serializable {
 	String nguonVon;
 	String tgianBdauLcnt;
 	Integer tgianThienHd;
-
 
 	@Transient
 	private List<HhDxuatKhLcntVtuDtlCtiet> danhSachDiaDiepNhap = new ArrayList<>();

@@ -38,6 +38,7 @@ public class HhDxuatKhLcntCcxdgDtl implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_DXUAT_KH_LCNT_CCXDG_DTL_SEQ")
 	@SequenceGenerator(sequenceName = "HH_DXUAT_KH_LCNT_CCXDG_DTL_SEQ", allocationSize = 1, name = "HH_DXUAT_KH_LCNT_CCXDG_DTL_SEQ")
 	private Long id;
+	private Long idDxKhlcnt;
 
 	String tenTlieu;
 	String loaiCanCu;
@@ -61,10 +62,5 @@ public class HhDxuatKhLcntCcxdgDtl implements Serializable {
 		child.setParent(this);
 		this.children.add(child);
 	}
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_hdr")
-	@JsonBackReference
-	private HhDxuatKhLcntHdr parent;
 
 }

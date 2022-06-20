@@ -51,8 +51,4 @@ public class HhDxuatKhLcntDtl implements Serializable {
 	String tenDvi;
 	String dienGiai;
 
-	@OneToOne(fetch = FetchType.LAZY,mappedBy = "children1")
-	@JsonBackReference
-	private HhDxuatKhLcntHdr parent;
-
 }

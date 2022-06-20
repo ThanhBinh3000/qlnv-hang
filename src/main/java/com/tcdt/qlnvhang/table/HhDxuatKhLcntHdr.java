@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,8 +20,6 @@ import lombok.Data;
 @Entity
 @Table(name = HhDxuatKhLcntHdr.TABLE_NAME)
 @Data
-@NamedEntityGraph(name = "HH_DX_KHLCNT_HDR.children2", attributeNodes = @NamedAttributeNode("children2"), 
-subgraphs = {@NamedSubgraph(name = "HH_DX_KHLCNT_HDR.children2.children", attributeNodes = { @NamedAttributeNode("children") })})
 public class HhDxuatKhLcntHdr implements Serializable {
 	/**
 	 * 
@@ -61,67 +60,43 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	String maVtu;
 	@Transient
 	String tenVtu;
-
 	boolean lastest;
+	String tenDuAn;
+	BigDecimal tongMucDt;
+	String loaiHdong;
+	String tchuanCluong;
+	String nguonVon;
+	String hthucLcnt;
+	String pthucLcnt;
+	@Temporal(TemporalType.DATE)
+	Date tgianBdauTchuc;
+	@Temporal(TemporalType.DATE)
+	Date tgianMthau;
+	@Temporal(TemporalType.DATE)
+	Date tgianDthau;
+	Integer tgianThienHd;
+	@Temporal(TemporalType.DATE)
+	Date tgianNhang;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)
 	@JoinColumn(name = "dataId")
 	@JsonManagedReference
 	@Where(clause = "data_type='" + HhDxuatKhLcntHdr.TABLE_NAME + "'")
-	private List<FileDKemJoinDxKhLcntHdr> children = new ArrayList<>();
+	private List<FileDKemJoinDxKhLcntHdr> fileDinhKems = new ArrayList<>();
 
-	public void setChildren(List<FileDKemJoinDxKhLcntHdr> children) {
-		this.children.clear();
+	public void setFileDinhKems(List<FileDKemJoinDxKhLcntHdr> children) {
+		this.fileDinhKems.clear();
 		for (FileDKemJoinDxKhLcntHdr child : children) {
 			child.setParent(this);
 		}
-		this.children.addAll(children);
+		this.fileDinhKems.addAll(children);
 	}
 
-	public void addChild(FileDKemJoinDxKhLcntHdr child) {
-		child.setParent(this);
-		this.children.add(child);
-	}
+	@Transient
+	private List<HhDxuatKhLcntDsgtDtl> dsGtDtlList = new ArrayList<>();
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "id_hdr", referencedColumnName = "id")
-	private HhDxuatKhLcntDtl children1;
-
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "ID_KH_HDR")
-	@JsonManagedReference
-	private List<HhDxuatKhLcntDsgtDtl> children2 = new ArrayList<>();
-
-	public void setChildren2(List<HhDxuatKhLcntDsgtDtl> children2) {
-		this.children2.clear();
-		for (HhDxuatKhLcntDsgtDtl child : children2) {
-			child.setParent(this);
-		}
-		this.children2.addAll(children2);
-	}
-
-	public void addChild2(HhDxuatKhLcntDsgtDtl child2) {
-		child2.setParent(this);
-		this.children2.add(child2);
-	}
-
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "id_hdr")
-	@JsonManagedReference
-	private List<HhDxuatKhLcntCcxdgDtl> children3 = new ArrayList<>();
-
-	public void setChildren3(List<HhDxuatKhLcntCcxdgDtl> children3) {
-		this.children3.clear();
-		for (HhDxuatKhLcntCcxdgDtl child : children3) {
-			child.setParent(this);
-		}
-		this.children3.addAll(children3);
-	}
-
-	public void addChild3(HhDxuatKhLcntCcxdgDtl child3) {
-		child3.setParent(this);
-		this.children3.add(child3);
-	}
+	@Transient
+	private List<HhDxuatKhLcntCcxdgDtl> ccXdgDtlList = new ArrayList<>();
 
 }
