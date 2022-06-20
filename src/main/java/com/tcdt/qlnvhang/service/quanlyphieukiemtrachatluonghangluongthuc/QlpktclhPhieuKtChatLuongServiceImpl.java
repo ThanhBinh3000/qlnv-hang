@@ -29,6 +29,7 @@ import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -121,7 +122,8 @@ public class QlpktclhPhieuKtChatLuongServiceImpl implements QlpktclhPhieuKtChatL
 
 		List<QlpktclhKetQuaKiemTra> ketQuaKiemTras = new ArrayList<>();
 		req.getKetQuaKiemTra().forEach(item -> {
-			QlpktclhKetQuaKiemTra ketQuaKiemTra = dataUtils.toObject(item, QlpktclhKetQuaKiemTra.class);
+			QlpktclhKetQuaKiemTra ketQuaKiemTra = new QlpktclhKetQuaKiemTra();
+			BeanUtils.copyProperties(item, ketQuaKiemTra, "id");
 			ketQuaKiemTra.setPhieuKtChatLuongId(phieuKiemTraChatLuongId);
 			ketQuaKiemTra = qlpktclhKetQuaKiemTraRepo.save(ketQuaKiemTra);
 			ketQuaKiemTras.add(ketQuaKiemTra);
