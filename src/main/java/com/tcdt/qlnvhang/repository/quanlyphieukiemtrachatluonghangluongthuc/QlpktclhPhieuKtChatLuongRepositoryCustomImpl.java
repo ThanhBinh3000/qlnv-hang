@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc;
 
 import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.enums.QdPheDuyetKqlcntVtStatus;
+import com.tcdt.qlnvhang.enums.QlpktclhPhieuKtChatLuongStatusEnum;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongFilterRequestDto;
@@ -50,7 +51,7 @@ public class QlpktclhPhieuKtChatLuongRepositoryCustomImpl implements QlpktclhPhi
 			Long quyetDinhNhapId = (Long) o[1];
 			String soQdNhap = (String) o[2];
 			QlpktclhPhieuKtChatLuongResponseDto response = dataUtils.toObject(qd, QlpktclhPhieuKtChatLuongResponseDto.class);
-			response.setTenTrangThai(QdPheDuyetKqlcntVtStatus.getTenById(qd.getTrangThai()));
+			response.setTenTrangThai(QlpktclhPhieuKtChatLuongStatusEnum.getTenById(qd.getTrangThai()));
 			response.setQuyetDinhNhapId(quyetDinhNhapId);
 			response.setSoQuyetDinhNhap(soQdNhap);
 			responses.add(response);

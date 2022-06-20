@@ -100,9 +100,6 @@ public class QlpktclhPhieuKtChatLuong extends BaseEntity {
 	@Column(name = "CAP_DVI")
 	private String capDvi;
 
-	@Column(name = "DIEM_KHO_ID")
-	private Long diemKhoId;
-
 	@Column(name = "KHOI_LUONG_DE_NGHI_KT")
 	private Double khoiLuongDeNghiKt;
 
