@@ -3,7 +3,6 @@ package com.tcdt.qlnvhang.request.object;
 import java.util.Date;
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -17,7 +16,6 @@ public class HhQdGiaoNvuNhapxuatHdrReq {
 	@ApiModelProperty(notes = "Bắt buộc set đối với update")
 	private Long id;
 
-	@NotNull(message = "Không được để trống")
 	@Size(max = 20, message = "Số quyết định được vượt quá 20 ký tự")
 	@ApiModelProperty(example = "20/QD-TCDT")
 	String soQd;
@@ -36,14 +34,12 @@ public class HhQdGiaoNvuNhapxuatHdrReq {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayHluc;
 
-	@NotNull(message = "Không được để trống")	
 	@Size(max = 20, message = "Số hợp đồng được vượt quá 20 ký tự")
 	@ApiModelProperty(example = "20/HD-TCDT")
 	String soHd;
 
 	String maDvi;
 
-	@NotNull(message = "Không được để trống")
 	@Size(max = 2, message = "Loại quyết định được vượt quá 20 ký tự")
 	@ApiModelProperty(example = "00")
 	String loaiQd;
@@ -57,13 +53,15 @@ public class HhQdGiaoNvuNhapxuatHdrReq {
 	/**
 	 * @link QdGiaoNvNhapXuatLoaiHangHoaEnum
 	 */
-	@NotNull(message = "Không được để trống")
 	String loaiVthh;
 
 	String trichYeu;
 
-	@NotNull(message = "Không được để trống")
 	Integer namNhap;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date tgNhapKhoMuonNhat;
+
 	private List<HhQdGiaoNvuNhapxuatDtlReq> detail;
 
 	/*private List<HhDviThuhienQdinhReq> detail1;*/
