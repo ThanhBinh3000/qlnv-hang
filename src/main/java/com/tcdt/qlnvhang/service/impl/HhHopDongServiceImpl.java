@@ -195,11 +195,12 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 		for (HhHopDongDtl dtl : dtls2) {
 			UnitScaler.formatList(dtl.getChildren(), Contains.DVT_TAN);
 		}
+		Map<String, String> mapDmucDvi = getMapTenDvi();
 
 		Map<String,String> mapVthh = getListDanhMucHangHoa (req);
 		qOptional.get().setTenVthh( StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : mapVthh.get(qOptional.get().getLoaiVthh()));
 		qOptional.get().setTenCloaiVthh( StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null :mapVthh.get(qOptional.get().getCloaiVthh()));
-
+		qOptional.get().setTenDvi(StringUtils.isEmpty(qOptional.get().getMaDvi()) ? null :mapDmucDvi.get(qOptional.get().getMaDvi()));
 		return qOptional.get();
 	}
 
@@ -257,23 +258,22 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 
 		String status = stReq.getTrangThai() + optional.get().getTrangThai();
 		switch (status) {
-		case Contains.CHO_DUYET + Contains.MOI_TAO:
-			optional.get().setNguoiGuiDuyet(getUser().getUsername());
-			optional.get().setNgayGuiDuyet(getDateTimeNow());
-			break;
-		case Contains.TU_CHOI + Contains.CHO_DUYET:
-			optional.get().setNguoiPduyet(getUser().getUsername());
-			optional.get().setNgayPduyet(getDateTimeNow());
-			optional.get().setLdoTuchoi(stReq.getLyDo());
-			break;
-		case Contains.DUYET + Contains.CHO_DUYET:
-			optional.get().setNguoiPduyet(getUser().getUsername());
-			optional.get().setNgayPduyet(getDateTimeNow());
-			break;
-		default:
-			throw new Exception("Phê duyệt không thành công");
+//			case Contains.DUYET + Contains.MOI_TAO:
+//				optional.get().setNguoiGuiDuyet(getUser().getUsername());
+//				optional.get().setNgayGuiDuyet(getDateTimeNow());
+//				break;
+//			case Contains.TU_CHOI + Contains.CHO_DUYET:
+//				optional.get().setNguoiPduyet(getUser().getUsername());
+//				optional.get().setNgayPduyet(getDateTimeNow());
+//				optional.get().setLdoTuchoi(stReq.getLyDo());
+//				break;
+			case Contains.DUYET + Contains.MOI_TAO:
+				optional.get().setNguoiPduyet(getUser().getUsername());
+				optional.get().setNgayPduyet(getDateTimeNow());
+				break;
+			default:
+				throw new Exception("Phê duyệt không thành công");
 		}
-
 		optional.get().setTrangThai(stReq.getTrangThai());
 
 		// TODO: Cap nhat lai tinh trang hien thoi cua kho sau khi phe duyet quyet dinh

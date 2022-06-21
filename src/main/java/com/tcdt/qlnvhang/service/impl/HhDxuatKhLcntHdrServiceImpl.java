@@ -237,6 +237,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		switch (status) {
 			case Contains.CHO_DUYET + Contains.TU_CHOI:
 			case Contains.CHO_DUYET + Contains.MOI_TAO:
+			case Contains.CHO_DUYET + Contains.LANHDAO_TU_CHOI:
 				optional.get().setNguoiGuiDuyet(getUser().getUsername());
 				optional.get().setNgayGuiDuyet(getDateTimeNow());
 				break;
