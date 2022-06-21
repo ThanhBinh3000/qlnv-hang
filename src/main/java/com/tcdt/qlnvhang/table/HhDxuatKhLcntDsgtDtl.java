@@ -22,11 +22,17 @@ public class HhDxuatKhLcntDsgtDtl implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_DXUAT_KH_LCNT_DSGT_DTL_SEQ")
 	@SequenceGenerator(sequenceName = "HH_DXUAT_KH_LCNT_DSGT_DTL_SEQ", allocationSize = 1, name = "HH_DXUAT_KH_LCNT_DSGT_DTL_SEQ")
 	private Long id;
+	@Transient
+	Long idVirtual;
 	private Long idDxKhlcnt;
 	String goiThau;
 	BigDecimal soLuong;
 	String maDvi;
+	@Transient
+	String tenDvi;
 	String maDiemKho;
+	@Transient
+	String tenDiemKho;
 	String diaDiemNhap;
 	BigDecimal donGia;
 	BigDecimal thanhTien;
@@ -40,6 +46,9 @@ public class HhDxuatKhLcntDsgtDtl implements Serializable {
 	String nguonVon;
 	String tgianBdauLcnt;
 	Integer tgianThienHd;
+
+	@Transient
+	List<HhDxuatKhLcntDsgtDtl> children = new ArrayList<>();
 
 	@Transient
 	private List<HhDxuatKhLcntVtuDtlCtiet> danhSachDiaDiepNhap = new ArrayList<>();

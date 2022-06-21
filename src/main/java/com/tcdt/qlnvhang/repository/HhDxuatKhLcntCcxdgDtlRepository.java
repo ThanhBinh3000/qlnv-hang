@@ -10,4 +10,6 @@ public interface HhDxuatKhLcntCcxdgDtlRepository extends BaseRepository<HhDxuatK
 
     List<HhDxuatKhLcntCcxdgDtl> findByIdDxKhlcnt (Long idDxKhlcnt);
 
+    void deleteAllByIdDxKhlcnt(Long idDxKhlcnt);
+
 }

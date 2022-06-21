@@ -2,8 +2,6 @@ package com.tcdt.qlnvhang.repository;
 
 import java.util.List;
 
-import org.springframework.data.jpa.repository.Query;
-
 import com.tcdt.qlnvhang.table.HhDxuatKhLcntDsgtDtl;
 
 public interface HhDxuatKhLcntDsgtDtlRepository extends BaseRepository<HhDxuatKhLcntDsgtDtl, Long> {
@@ -12,5 +10,7 @@ public interface HhDxuatKhLcntDsgtDtlRepository extends BaseRepository<HhDxuatKh
 //	List<HhDxuatKhLcntDsgtDtl> findByIdHdr(Long id);
 
 	List<HhDxuatKhLcntDsgtDtl> findByIdDxKhlcnt(Long idDxKhlcnt);
+
+	void deleteAllByIdDxKhlcnt(Long idDxKhlcnt);
 
 }
