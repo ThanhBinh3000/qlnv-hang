@@ -60,13 +60,13 @@ public class HhHopDongDtl implements Serializable {
 	public void setChildren(List<HhHopDongDdiemNhapKho> children) {
 		this.children.clear();
 		for (HhHopDongDdiemNhapKho child : children) {
-//			child.setParent(this);
+			child.setParent(this);
 		}
 		this.children.addAll(children);
 	}
 
 	public void addChild(HhHopDongDdiemNhapKho child) {
-//		child.setParent(this);
+		child.setParent(this);
 		this.children.add(child);
 	}
 

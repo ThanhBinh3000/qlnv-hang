@@ -39,13 +39,13 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 
 	@Query(value = " SELECT KHLCNT.* \n" +
 			"FROM HH_DX_KHLCNT_HDR KHLCNT \n" +
-			"LEFT JOIN HH_DX_KHLCNT_DTL KHLCNT_DETAIL ON KHLCNT.ID_HDR = KHLCNT_DETAIL.ID \n" +
 			" WHERE KHLCNT.LOAI_VTHH = :loaiVthh \n" +
+			" AND KHLCNT.CLOAI_VTHH = :cloaiVthh \n" +
 			" AND KHLCNT.NAM_KHOACH = :namKh \n" +
-			" AND KHLCNT_DETAIL.HTHUC_LCNT = :hthucLcnt \n" +
-			" AND KHLCNT_DETAIL.PTHUC_LCNT = :pthucLcnt \n" +
-			" AND KHLCNT_DETAIL.LOAI_HDONG = :loatHdong \n" +
-			" AND KHLCNT_DETAIL.NGUON_VON = :nguonVon " +
-			" AND KHLCNT.TRANG_THAI = '11' ", nativeQuery = true)
-	List<HhDxuatKhLcntHdr> listTongHop(String loaiVthh,String namKh, String hthucLcnt,String pthucLcnt, String loatHdong,String nguonVon);
+			" AND KHLCNT.HTHUC_LCNT = :hthucLcnt \n" +
+			" AND KHLCNT.PTHUC_LCNT = :pthucLcnt \n" +
+			" AND KHLCNT.LOAI_HDONG = :loaiHdong \n" +
+			" AND KHLCNT.NGUON_VON = :nguonVon " +
+			" AND KHLCNT.TRANG_THAI = '02' ", nativeQuery = true)
+	List<HhDxuatKhLcntHdr> listTongHop(String loaiVthh,String cloaiVthh,String namKh, String hthucLcnt,String pthucLcnt, String loaiHdong,String nguonVon);
 }

@@ -31,8 +31,8 @@ public class HhDxKhLcntThopSpecification {
 					return predicate;
 
 				String namKhoach = objReq.getNamKhoach();
-				Date tuNgayTao = objReq.getTuNgayTao();
-				Date denNgayTao = objReq.getDenNgayTao();
+				Date tuNgayTao = objReq.getTuNgayThop();
+				Date denNgayTao = objReq.getDenNgayThop();
 				String loaiVthh = objReq.getLoaiVthh();
 
 				if (StringUtils.isNotEmpty(namKhoach))

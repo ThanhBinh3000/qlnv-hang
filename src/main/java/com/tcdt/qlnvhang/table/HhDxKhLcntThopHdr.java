@@ -38,7 +38,11 @@ public class HhDxKhLcntThopHdr implements Serializable {
 	@SequenceGenerator(sequenceName = "HH_DX_KHLCNT_THOP_HDR_SEQ", allocationSize = 1, name = "HH_DX_KHLCNT_THOP_HDR_SEQ")
 	private Long id;
 
+	@Temporal(TemporalType.DATE)
+	Date ngayThop;
+
 	String loaiVthh;
+	String cloaiVthh;
 	String hthucLcnt;
 	String pthucLcnt;
 	String loaiHdong;
@@ -58,48 +62,35 @@ public class HhDxKhLcntThopHdr implements Serializable {
 	Long phuongAnId;
 
 	@Temporal(TemporalType.DATE)
-	Date tuTgianTbao;
+	Date tgianBdauTchucTu;
 	@Temporal(TemporalType.DATE)
-	Date denTgianTbao;
-	@Temporal(TemporalType.DATE)
-	Date tuTgianDthau;
-	@Temporal(TemporalType.DATE)
-	Date denTgianDthau;
-	@Temporal(TemporalType.DATE)
-	Date tuTgianNhang;
-	@Temporal(TemporalType.DATE)
-	Date denTgianNhang;
-	@Temporal(TemporalType.DATE)
-	Date tuTgianMthau;
-	@Temporal(TemporalType.DATE)
-	Date denTgianMthau;
-	@Temporal(TemporalType.DATE)
-	Date tuTgianPhanh;
-	@Temporal(TemporalType.DATE)
-	Date denTgianPhanh;
+	Date tgianBdauTchucDen;
 
+	@Temporal(TemporalType.DATE)
+	Date tgianMthauTu;
+	@Temporal(TemporalType.DATE)
+	Date tgianMthauDen;
+
+	@Temporal(TemporalType.DATE)
+	Date tgianDthauTu;
+	@Temporal(TemporalType.DATE)
+	Date tgianDthauDen;
+
+	@Temporal(TemporalType.DATE)
+	Date tgianNhangTu;
+	@Temporal(TemporalType.DATE)
+	Date tgianNhangDen;
+
+	@Temporal(TemporalType.DATE)
 	Date ngayTao;
+
+	String noiDung;
+	String ghiChu;
 	String nguoiTao;
-	String veViec;
 	String namKhoach;
-	String phuongAn;
 	String trangThai;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "id_hdr")
-	@JsonManagedReference
-	private List<HhDxKhLcntThopDtl> children = new ArrayList<>();
+	@Transient
+	private List<HhDxKhLcntThopDtl> hhDxKhLcntThopDtlList = new ArrayList<>();
 
-	public void setChildren(List<HhDxKhLcntThopDtl> children) {
-		this.children.clear();
-		for (HhDxKhLcntThopDtl child : children) {
-			child.setParent(this);
-		}
-		this.children.addAll(children);
-	}
-
-	public void addChild(HhDxKhLcntThopDtl child) {
-		child.setParent(this);
-		this.children.add(child);
-	}
 }

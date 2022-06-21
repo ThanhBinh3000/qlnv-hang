@@ -91,7 +91,7 @@ public class HhDxuatKhLcntSpecification {
 				Join<HhDxuatKhLcntHdr, HhDxuatKhLcntDtl> joinQuerry = root.join("children1");
 
 				String trangThai = Contains.DUYET;
-				String namKhoach = req.getNamKh();
+				String namKhoach = req.getNamKhoach();
 				String loaiVthh = req.getLoaiVthh();
 				String hthucLcnt = req.getHthucLcnt();
 				String pthucLcnt = req.getPthucLcnt();
