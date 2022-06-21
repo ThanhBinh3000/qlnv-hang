@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
@@ -17,9 +18,9 @@ public class QlPhieuNhapKhoHangHoaLtRes {
     private String tenVatTu;
     private String donViTinh;
     private BigDecimal soLuongTrenCt;
-    private BigDecimal soLuongThuc;
+    private BigDecimal soLuongThucNhap;
     private BigDecimal donGia;
     private BigDecimal thanhTien;
-    private BigDecimal soChungTu;
-    private BigDecimal soThucNhap;
+    private String maSo;
+
 }

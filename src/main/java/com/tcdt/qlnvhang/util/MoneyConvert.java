@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -241,6 +242,7 @@ public class MoneyConvert {
 	}
 
 	public static String docSoLuong(String number, String unit) {
+		unit = Optional.ofNullable(unit).orElse("");
 		String sotien = "";
 		String arr[] = number.split(",");
 		String phannguyen = arr[0];

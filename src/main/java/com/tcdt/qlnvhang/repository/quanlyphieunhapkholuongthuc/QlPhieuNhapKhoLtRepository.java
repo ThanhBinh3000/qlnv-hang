@@ -5,8 +5,12 @@ import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLt;
 import com.tcdt.qlnvhang.repository.BaseRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import javax.transaction.Transactional;
+import java.util.Collection;
 
 @Repository
 public interface QlPhieuNhapKhoLtRepository extends BaseRepository<QlPhieuNhapKhoLt, Long>, QlPhieuNhapKhoLtRepositoryCustom {
@@ -24,4 +28,7 @@ public interface QlPhieuNhapKhoLtRepository extends BaseRepository<QlPhieuNhapKh
             nativeQuery = true)
     Page<QlPhieuNhapKhoLt> select(Long soPhieu, String ngayNhapKho, String maDiemKho, String maNganLo, String ngayTaoPhieu, String thoiGianGiaoNhan, String maNhaKho,String nguoiGiaoHang, Pageable pageable);
 
+    @Transactional
+    @Modifying
+    void deleteByIdIn(Collection<Long> ids);
 }

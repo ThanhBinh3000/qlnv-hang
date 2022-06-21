@@ -4,6 +4,10 @@ import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLt;
 import com.tcdt.qlnvhang.enums.QlPhieuNhapKhoLtStatus;
 import com.tcdt.qlnvhang.request.search.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLtSearchReq;
 import com.tcdt.qlnvhang.response.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLtRes;
+import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
+import com.tcdt.qlnvhang.table.khotang.KtNganKho;
+import com.tcdt.qlnvhang.table.khotang.KtNganLo;
+import com.tcdt.qlnvhang.table.khotang.KtNhaKho;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -24,11 +28,14 @@ public class QlPhieuNhapKhoLtRepositoryCustomImpl implements QlPhieuNhapKhoLtRep
     @Override
     public Page<QlPhieuNhapKhoLtRes> search(QlPhieuNhapKhoLtSearchReq req) {
         StringBuilder builder = new StringBuilder();
-        builder.append("SELECT p FROM QlPhieuNhapKhoLt p ");
+        builder.append("SELECT p, pktcl.id, pktcl.soPhieu, nganLo, nx.id, nx.soQd FROM QlPhieuNhapKhoLt p ");
+        builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON p.qdgnvnxId = nx.id ");
+        builder.append("INNER JOIN QlpktclhPhieuKtChatLuong pktcl ON p.phieuKtClId = pktcl.id ");
+        builder.append("LEFT JOIN KtNganLo nganLo ON p.maNganLo = nganLo.maNganlo ");
         setConditionSearch(req, builder);
         builder.append("ORDER BY p.ngayLap DESC");
 
-        TypedQuery<QlPhieuNhapKhoLt> query = em.createQuery(builder.toString(), QlPhieuNhapKhoLt.class);
+        TypedQuery<Object[]> query = em.createQuery(builder.toString(), Object[].class);
 
         //Set params
         this.setParameterSearch(req, query);
@@ -37,18 +44,53 @@ public class QlPhieuNhapKhoLtRepositoryCustomImpl implements QlPhieuNhapKhoLtRep
         //Set pageable
         query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize()).setMaxResults(pageable.getPageSize());
 
-        List<QlPhieuNhapKhoLt> data = query.getResultList();
+        List<Object[]> data = query.getResultList();
 
         List<QlPhieuNhapKhoLtRes> responses = new ArrayList<>();
-        for (QlPhieuNhapKhoLt qd : data) {
+        for (Object[] o : data) {
             QlPhieuNhapKhoLtRes response = new QlPhieuNhapKhoLtRes();
-            BeanUtils.copyProperties(qd, response);
-            response.setTenTrangThai(QlPhieuNhapKhoLtStatus.getTenById(qd.getTrangThai()));
-            response.setTrangThaiDuyet(QlPhieuNhapKhoLtStatus.getTrangThaiDuyetById(qd.getTrangThai()));
+            QlPhieuNhapKhoLt phieu = (QlPhieuNhapKhoLt) o[0];
+            Long pktclId = (Long) o[1];
+            String soPhieuKtcl = (String) o[2];
+            KtNganLo nganLo = o[3] != null ? (KtNganLo) o[3] : null;
+            Long qdNhapId = (Long) o[4];
+            String soQdNhap = (String) o[5];
+            BeanUtils.copyProperties(phieu, response);
+            response.setTenTrangThai(QlPhieuNhapKhoLtStatus.getTenById(phieu.getTrangThai()));
+            response.setTrangThaiDuyet(QlPhieuNhapKhoLtStatus.getTrangThaiDuyetById(phieu.getTrangThai()));
+            response.setPhieuKtClId(pktclId);
+            response.setSoPhieuKtCl(soPhieuKtcl);
+            this.thongTinNganLo(response, nganLo);
+            response.setQdgnvnxId(qdNhapId);
+            response.setSoQuyetDinhNhap(soQdNhap);
             responses.add(response);
         }
 
         return new PageImpl<>(responses, pageable, this.count(req));
+    }
+
+    private void thongTinNganLo(QlPhieuNhapKhoLtRes phieu, KtNganLo nganLo) {
+        if (nganLo != null) {
+            phieu.setTenNganLo(nganLo.getTenNganlo());
+            KtNganKho nganKho = nganLo.getParent();
+            if (nganKho == null)
+                return;
+
+            phieu.setTenNganKho(nganKho.getTenNgankho());
+            phieu.setMaNganKho(nganKho.getMaNgankho());
+            KtNhaKho nhaKho = nganKho.getParent();
+            if (nhaKho == null)
+                return;
+
+            phieu.setTenNhaKho(nhaKho.getTenNhakho());
+            phieu.setMaNhaKho(nhaKho.getMaNhakho());
+            KtDiemKho diemKho = nhaKho.getParent();
+            if (diemKho == null)
+                return;
+
+            phieu.setTenDiemKho(diemKho.getTenDiemkho());
+            phieu.setMaDiemKho(diemKho.getMaDiemkho());
+        }
     }
 
 
@@ -58,25 +100,24 @@ public class QlPhieuNhapKhoLtRepositoryCustomImpl implements QlPhieuNhapKhoLtRep
         if (!Objects.isNull(req.getSoPhieu())) {
             builder.append("AND ").append("p.soPhieu = :soPhieu ");
         }
-        if (req.getTuNgay() != null) {
-            builder.append("AND ").append("p.ngayLap >= :tuNgay ");
+        if (req.getTuNgayNhapKho() != null) {
+            builder.append("AND ").append("p.ngayNhapKho >= :tuNgayNhapKho ");
         }
-        if (req.getDenNgay() != null) {
-            builder.append("AND ").append("p.ngayLap <= :denNgay ");
-        }
-        if (req.getVatTuId() != null) {
-            builder.append("AND ").append("p.vatTuId = :vatTuId ");
-        }
-        if (!StringUtils.isEmpty(req.getMaDonVi())) {
-            builder.append("AND ").append("p.maDonVi = :maDonVi ");
+        if (req.getDenNgayNhapKho() != null) {
+            builder.append("AND ").append("p.ngayNhapKho <= :denNgayNhapKho ");
         }
 
-        if (!StringUtils.isEmpty(req.getMaKhoNgan())) {
-            builder.append("AND ").append("p.maNganLo = :maKhoNgan ");
+        if (!StringUtils.isEmpty(req.getMaDvi())) {
+            builder.append("AND ").append("p.maDvi = :maDvi ");
+        }
+
+        if (!StringUtils.isEmpty(req.getSoQdNhap())) {
+            builder.append("AND ").append("nx.soQd LIKE :soQdNhap ");
         }
     }
 
-    private int count(QlPhieuNhapKhoLtSearchReq req) {
+    @Override
+    public int count(QlPhieuNhapKhoLtSearchReq req) {
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT COUNT(p.id) FROM QlPhieuNhapKhoLt p ");
 
@@ -91,23 +132,20 @@ public class QlPhieuNhapKhoLtRepositoryCustomImpl implements QlPhieuNhapKhoLtRep
         if (!Objects.isNull(req.getSoPhieu())) {
             query.setParameter("soPhieu", req.getSoPhieu());
         }
-        if (req.getTuNgay() != null) {
-            query.setParameter("tuNgay", req.getTuNgay());
+        if (req.getTuNgayNhapKho() != null) {
+            query.setParameter("tuNgayNhapKho", req.getTuNgayNhapKho());
         }
-        if (req.getDenNgay() != null) {
-            query.setParameter("denNgay", req.getDenNgay());
-        }
-
-        if (req.getVatTuId() != null) {
-            query.setParameter("vatTuId", req.getVatTuId());
+        if (req.getDenNgayNhapKho() != null) {
+            query.setParameter("denNgayNhapKho", req.getDenNgayNhapKho());
         }
 
-        if (!StringUtils.isEmpty(req.getMaDonVi())) {
-            query.setParameter("maDonVi", req.getMaDonVi());
+
+        if (!StringUtils.isEmpty(req.getMaDvi())) {
+            query.setParameter("maDvi", req.getMaDvi());
         }
 
-        if (!StringUtils.isEmpty(req.getMaKhoNgan())) {
-            query.setParameter("maKhoNgan", req.getMaKhoNgan());
+        if (!StringUtils.isEmpty(req.getSoQdNhap())) {
+            query.setParameter("soQdNhap", "%" + req.getSoQdNhap() + "%");
         }
     }
 }
