@@ -36,18 +36,11 @@ public class QlpktclhPhieuKtChatLuongRequestDto {
 
 	private String maNganKho;
 	private String tenNganKho;
-
 	private String maNganLo;
-
 	private String tenNganLo;
-
-	@NotNull
-	private Long diemKhoId;
-
-	@NotNull
 	private String maDiemKho;
-
 	private String tenDiemKho;
+
 	@NotNull
 	private String maNhaKho;
 
@@ -89,6 +82,10 @@ public class QlpktclhPhieuKtChatLuongRequestDto {
 	private String ketLuan;
 
 	private String lyDoTuChoi;
+
+	private String loaiVthh;
+
+	private Double khoiLuongDeNghiKt;
 
 	private List<QlpktclhKetQuaKiemTraRequestDto> ketQuaKiemTra;
 }

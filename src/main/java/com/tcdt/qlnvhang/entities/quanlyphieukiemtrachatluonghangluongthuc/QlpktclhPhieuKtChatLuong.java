@@ -18,7 +18,7 @@ import java.util.List;
 public class QlpktclhPhieuKtChatLuong extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PHIEU_KT_CHAT_LUONG_SEQ")
-	@SequenceGenerator(sequenceName = "NPHIEU_KT_CHAT_LUONG_SEQ", allocationSize = 1, name = "PHIEU_KT_CHAT_LUONG_SEQ")
+	@SequenceGenerator(sequenceName = "PHIEU_KT_CHAT_LUONG_SEQ", allocationSize = 1, name = "PHIEU_KT_CHAT_LUONG_SEQ")
 	@Column(name = "ID")
 	private Long id;
 
@@ -100,9 +100,6 @@ public class QlpktclhPhieuKtChatLuong extends BaseEntity {
 	@Column(name = "CAP_DVI")
 	private String capDvi;
 
-	@Column(name = "DIEM_KHO_ID")
-	private Long diemKhoId;
-
 	@Column(name = "KHOI_LUONG_DE_NGHI_KT")
 	private Double khoiLuongDeNghiKt;
 
@@ -123,6 +120,9 @@ public class QlpktclhPhieuKtChatLuong extends BaseEntity {
 
 	@Column(name = "KET_LUAN")
 	private String ketLuan;
+
+	@Column(name = "LOAI_VTHH")
+	private String loaiVthh;
 
 	@Transient
 	private List<QlpktclhKetQuaKiemTra> ketQuaKiemTra = new ArrayList<>();

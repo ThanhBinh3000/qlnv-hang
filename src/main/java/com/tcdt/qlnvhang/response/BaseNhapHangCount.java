@@ -7,9 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class QdGiaoNvNhapXuatCount {
+public class BaseNhapHangCount {
     private int tatCa;
     private int thoc;
     private int gao;
+    private int muoi;
     private int vatTu;
 }

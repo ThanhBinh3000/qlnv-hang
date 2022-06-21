@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -15,4 +16,8 @@ public interface QlpktclhKetQuaKiemTraRepository extends BaseRepository<Qlpktclh
     void deleteByPhieuKtChatLuongId(Long phieuKtChatLuongId);
 
     List<QlpktclhKetQuaKiemTra> findAllByPhieuKtChatLuongId(Long phieuKtChatLuongId);
+
+    @Transactional
+    @Modifying
+    void deleteByPhieuKtChatLuongIdIn(Collection<Long> phieuKtChatLuongIds);
 }

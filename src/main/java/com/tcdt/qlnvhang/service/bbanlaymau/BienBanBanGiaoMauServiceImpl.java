@@ -64,7 +64,7 @@ public class BienBanBanGiaoMauServiceImpl implements BienBanBanGiaoMauService {
 
 		BienBanBanGiaoMau bienBienBanGiaoMau = new BienBanBanGiaoMau();
 		BeanUtils.copyProperties(req, bienBienBanGiaoMau, "id");
-		bienBienBanGiaoMau.setTrangThai(TrangThaiEnum.DU_THAO.getMa());
+		bienBienBanGiaoMau.setTrangThai(TrangThaiEnum.DU_THAO.getId());
 		bienBienBanGiaoMau.setNguoiTaoId(userInfo.getId());
 		bienBienBanGiaoMau.setNgayTao(LocalDate.now());
 		bienBienBanGiaoMau.setMaDonVi(userInfo.getDvql());
@@ -185,7 +185,7 @@ public class BienBanBanGiaoMauServiceImpl implements BienBanBanGiaoMauService {
 
 		BienBanBanGiaoMau bb = optional.get();
 
-		if (TrangThaiEnum.BAN_HANH.getMa().equals(bb.getTrangThai())) {
+		if (TrangThaiEnum.BAN_HANH.getId().equals(bb.getTrangThai())) {
 			throw new Exception("Không thể xóa đề xuất điều chỉnh đã ban hành");
 		}
 		bienBanBanGiaoMauRepository.deleteById(id);
@@ -238,7 +238,7 @@ public class BienBanBanGiaoMauServiceImpl implements BienBanBanGiaoMauService {
 		if (vattu != null)
 			res.setTenHhoa(vattu.getTen());
 
-		res.setTenTrangThai(TrangThaiEnum.getTen(bb.getTrangThai()));
+		res.setTenTrangThai(TrangThaiEnum.getTenById(bb.getTrangThai()));
 		res.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(bb.getTrangThai()));
 		return res;
 	}

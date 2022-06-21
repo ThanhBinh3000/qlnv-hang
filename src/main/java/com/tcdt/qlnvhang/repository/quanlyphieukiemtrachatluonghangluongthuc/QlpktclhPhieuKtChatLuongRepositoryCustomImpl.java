@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc;
 
 import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.enums.QdPheDuyetKqlcntVtStatus;
+import com.tcdt.qlnvhang.enums.QlpktclhPhieuKtChatLuongStatusEnum;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongFilterRequestDto;
@@ -50,7 +51,7 @@ public class QlpktclhPhieuKtChatLuongRepositoryCustomImpl implements QlpktclhPhi
 			Long quyetDinhNhapId = (Long) o[1];
 			String soQdNhap = (String) o[2];
 			QlpktclhPhieuKtChatLuongResponseDto response = dataUtils.toObject(qd, QlpktclhPhieuKtChatLuongResponseDto.class);
-			response.setTenTrangThai(QdPheDuyetKqlcntVtStatus.getTenById(qd.getTrangThai()));
+			response.setTenTrangThai(QlpktclhPhieuKtChatLuongStatusEnum.getTenById(qd.getTrangThai()));
 			response.setQuyetDinhNhapId(quyetDinhNhapId);
 			response.setSoQuyetDinhNhap(soQdNhap);
 			responses.add(response);
@@ -88,13 +89,17 @@ public class QlpktclhPhieuKtChatLuongRepositoryCustomImpl implements QlpktclhPhi
 		if (StringUtils.hasText(req.getMaDvi())) {
 			builder.append("AND ").append("qd.maDonVi = :maDonVi ");
 		}
+
+		if (StringUtils.hasText(req.getLoaiVthh())) {
+			builder.append("AND ").append("qd.loaiVthh = :loaiVthh ");
+		}
 	}
 
-
-	private int countPhieuKiemTraChatLuong(QlpktclhPhieuKtChatLuongFilterRequestDto req) {
+	@Override
+	public int countPhieuKiemTraChatLuong(QlpktclhPhieuKtChatLuongFilterRequestDto req) {
 		int total = 0;
 		StringBuilder builder = new StringBuilder();
-		builder.append("SELECT COUNT(qd.id) AS totalRecord FROM QlpktclhPhieuKtChatLuong qd ");
+		builder.append("SELECT COUNT(DISTINCT qd.id) AS totalRecord FROM QlpktclhPhieuKtChatLuong qd ");
 
 		this.setConditionFilter(req, builder);
 
@@ -135,6 +140,10 @@ public class QlpktclhPhieuKtChatLuongRepositoryCustomImpl implements QlpktclhPhi
 
 		if (StringUtils.hasText(req.getMaDvi())) {
 			query.setParameter("maDonVi", req.getMaDvi());
+		}
+
+		if (StringUtils.hasText(req.getLoaiVthh())) {
+			query.setParameter("loaiVthh", req.getLoaiVthh());
 		}
 	}
 }

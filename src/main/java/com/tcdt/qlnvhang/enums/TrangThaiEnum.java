@@ -7,18 +7,18 @@ public enum TrangThaiEnum {
 	TU_CHOI("03", "Từ Chối", "Từ Chối"),
 	DU_THAO_TRINH_DUYET("04", "Dự Thảo", "Trình Duyệt");
 
-	private final String ma;
+	private final String id;
 	private final String ten;
 	private final String trangThaiDuyet;
 
-	TrangThaiEnum(String ma, String ten, String trangThaiDuyet) {
-		this.ma = ma;
+	TrangThaiEnum(String id, String ten, String trangThaiDuyet) {
+		this.id = id;
 		this.ten = ten;
 		this.trangThaiDuyet= trangThaiDuyet;
 	}
 
-	public String getMa() {
-		return ma;
+	public String getId() {
+		return id;
 	}
 
 	public String getTen() {
@@ -29,18 +29,18 @@ public enum TrangThaiEnum {
 		return trangThaiDuyet;
 	}
 
-	public static String getTen(String ma) {
+	public static String getTenById(String id) {
 		for (TrangThaiEnum e : TrangThaiEnum.values()) {
-			if (e.getMa().equals(ma))
+			if (e.getId().equals(id))
 				return e.getTen();
 		}
 
 		return null;
 	}
 
-	public static String getTrangThaiDuyetById(String ma) {
+	public static String getTrangThaiDuyetById(String id) {
 		for (TrangThaiEnum status : TrangThaiEnum.values()) {
-			if (status.getMa().equals(ma))
+			if (status.getId().equals(id))
 				return status.getTrangThaiDuyet();
 		}
 

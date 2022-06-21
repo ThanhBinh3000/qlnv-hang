@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
+import com.tcdt.qlnvhang.request.DeleteReq;
 import org.springframework.data.domain.Page;
 
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -31,4 +32,7 @@ public interface HhBbNghiemthuKlstHdrService {
 	void delete(IdSearchReq idSearchReq) throws Exception;
 
     boolean exportToExcel(HhBbNghiemthuKlstSearchReq objReq, HttpServletResponse response) throws Exception;
+
+    @org.springframework.transaction.annotation.Transactional
+    boolean deleteMultiple(DeleteReq req) throws Exception;
 }

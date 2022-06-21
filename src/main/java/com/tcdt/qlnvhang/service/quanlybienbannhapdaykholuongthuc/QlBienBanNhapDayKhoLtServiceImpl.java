@@ -67,7 +67,7 @@ public class QlBienBanNhapDayKhoLtServiceImpl implements QlBienBanNhapDayKhoLtSe
         BeanUtils.copyProperties(req, item, "id");
         item.setNgayTao(LocalDate.now());
         item.setNguoiTaoId(userInfo.getId());
-        item.setTrangThai(TrangThaiEnum.DU_THAO.getMa());
+        item.setTrangThai(TrangThaiEnum.DU_THAO.getId());
         item.setMaDonVi(userInfo.getDvql());
         item.setCapDonVi(userInfo.getCapDvi());
         qlBienBanNhapDayKhoLtRepository.save(item);
@@ -89,7 +89,7 @@ public class QlBienBanNhapDayKhoLtServiceImpl implements QlBienBanNhapDayKhoLtSe
                                                    UserInfo userInfo) {
         QlBienBanNhapDayKhoLtRes response = new QlBienBanNhapDayKhoLtRes();
         BeanUtils.copyProperties(item, response);
-        response.setTenTrangThai(TrangThaiEnum.getTen(item.getTrangThai()));
+        response.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
         response.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
         nganLos.stream().filter(l -> l.getMaNganlo().equals(item.getMaNganLo())).findFirst().ifPresent(l -> {
             response.setTenNganLo(l.getTenNganlo());
@@ -209,7 +209,7 @@ public class QlBienBanNhapDayKhoLtServiceImpl implements QlBienBanNhapDayKhoLtSe
             throw new Exception("Bảng kê không tồn tại.");
 
         QlBienBanNhapDayKhoLt item = optional.get();
-        if (TrangThaiEnum.BAN_HANH.getMa().equals(item.getTrangThai())) {
+        if (TrangThaiEnum.BAN_HANH.getId().equals(item.getTrangThai())) {
             throw new Exception("Không thể xóa bảng kê đã ban hành");
         }
 
@@ -278,31 +278,31 @@ public class QlBienBanNhapDayKhoLtServiceImpl implements QlBienBanNhapDayKhoLtSe
 
     public boolean updateStatus(StatusReq stReq, QlBienBanNhapDayKhoLt bangKe, UserInfo userInfo) throws Exception {
         String trangThai = bangKe.getTrangThai();
-        if (TrangThaiEnum.DU_THAO_TRINH_DUYET.getMa().equals(stReq.getTrangThai())) {
-            if (!TrangThaiEnum.DU_THAO.getMa().equals(trangThai))
+        if (TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(stReq.getTrangThai())) {
+            if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
                 return false;
 
-            bangKe.setTrangThai(TrangThaiEnum.DU_THAO_TRINH_DUYET.getMa());
+            bangKe.setTrangThai(TrangThaiEnum.DU_THAO_TRINH_DUYET.getId());
             bangKe.setNguoiGuiDuyetId(userInfo.getId());
             bangKe.setNgayGuiDuyet(LocalDate.now());
-        } else if (TrangThaiEnum.LANH_DAO_DUYET.getMa().equals(stReq.getTrangThai())) {
-            if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getMa().equals(trangThai))
+        } else if (TrangThaiEnum.LANH_DAO_DUYET.getId().equals(stReq.getTrangThai())) {
+            if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
                 return false;
-            bangKe.setTrangThai(TrangThaiEnum.LANH_DAO_DUYET.getMa());
+            bangKe.setTrangThai(TrangThaiEnum.LANH_DAO_DUYET.getId());
             bangKe.setNguoiPheDuyetId(userInfo.getId());
             bangKe.setNgayPheDuyet(LocalDate.now());
-        } else if (TrangThaiEnum.BAN_HANH.getMa().equals(stReq.getTrangThai())) {
-            if (!TrangThaiEnum.LANH_DAO_DUYET.getMa().equals(trangThai))
+        } else if (TrangThaiEnum.BAN_HANH.getId().equals(stReq.getTrangThai())) {
+            if (!TrangThaiEnum.LANH_DAO_DUYET.getId().equals(trangThai))
                 return false;
 
-            bangKe.setTrangThai(TrangThaiEnum.BAN_HANH.getMa());
+            bangKe.setTrangThai(TrangThaiEnum.BAN_HANH.getId());
             bangKe.setNguoiPheDuyetId(userInfo.getId());
             bangKe.setNgayPheDuyet(LocalDate.now());
-        } else if (TrangThaiEnum.TU_CHOI.getMa().equals(stReq.getTrangThai())) {
-            if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getMa().equals(trangThai))
+        } else if (TrangThaiEnum.TU_CHOI.getId().equals(stReq.getTrangThai())) {
+            if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
                 return false;
 
-            bangKe.setTrangThai(TrangThaiEnum.TU_CHOI.getMa());
+            bangKe.setTrangThai(TrangThaiEnum.TU_CHOI.getId());
             bangKe.setNguoiPheDuyetId(userInfo.getId());
             bangKe.setNgayPheDuyet(LocalDate.now());
             bangKe.setLyDoTuChoi(stReq.getLyDo());
