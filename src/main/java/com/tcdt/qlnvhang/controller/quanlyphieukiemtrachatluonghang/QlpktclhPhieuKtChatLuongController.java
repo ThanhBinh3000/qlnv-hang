@@ -171,4 +171,20 @@ public class QlpktclhPhieuKtChatLuongController {
 		}
 		return ResponseEntity.ok(resp);
 	}
+
+	@ApiOperation(value = "Count phiếu kiểm tra chất lượng hàng lương thực", response = List.class)
+	@PostMapping("/count")
+	public ResponseEntity<BaseResponse> count() {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.count());
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Count phiếu kiểm tra chất lượng hàng lương thực", e);
+		}
+		return ResponseEntity.ok(resp);
+	}
 }

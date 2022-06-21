@@ -138,6 +138,7 @@ public class QlpktclhPhieuKtChatLuongServiceImpl implements QlpktclhPhieuKtChatL
 		return qlpktclhPhieuKtChatLuongRepo.filter(req);
 	}
 
+	@Override
 	public BaseNhapHangCount count() throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
 		QlpktclhPhieuKtChatLuongFilterRequestDto req = new QlpktclhPhieuKtChatLuongFilterRequestDto();
