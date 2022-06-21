@@ -10,7 +10,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.validation.Valid;
 
-import com.tcdt.qlnvhang.table.HhDxuatKhLcntDtl;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -88,7 +87,7 @@ public class HhDxuatKhLcntSpecification {
 					return predicate;
 
 				root.fetch("children1", JoinType.LEFT);
-				Join<HhDxuatKhLcntHdr, HhDxuatKhLcntDtl> joinQuerry = root.join("children1");
+//				Join<HhDxuatKhLcntHdr, HhDxuatKhLcntDtl> joinQuerry = root.join("children1");
 
 				String trangThai = Contains.DUYET;
 				String namKhoach = req.getNamKhoach();
@@ -103,10 +102,10 @@ public class HhDxuatKhLcntSpecification {
 				predicate.getExpressions().add(builder.and(builder.equal(root.get("trangThai"), trangThai)));
 				predicate.getExpressions().add(builder.and(builder.equal(root.get("loaiVthh"), loaiVthh)));
 				// Add parameter vao bang dtl
-				predicate.getExpressions().add(builder.and(builder.equal(joinQuerry.get("hthucLcnt"), hthucLcnt)));
-				predicate.getExpressions().add(builder.and(builder.equal(joinQuerry.get("pthucLcnt"), pthucLcnt)));
-				predicate.getExpressions().add(builder.and(builder.equal(joinQuerry.get("loaiHdong"), loaiHdong)));
-				predicate.getExpressions().add(builder.and(builder.equal(joinQuerry.get("nguonVon"), nguonVon)));
+//				predicate.getExpressions().add(builder.and(builder.equal(joinQuerry.get("hthucLcnt"), hthucLcnt)));
+//				predicate.getExpressions().add(builder.and(builder.equal(joinQuerry.get("pthucLcnt"), pthucLcnt)));
+//				predicate.getExpressions().add(builder.and(builder.equal(joinQuerry.get("loaiHdong"), loaiHdong)));
+//				predicate.getExpressions().add(builder.and(builder.equal(joinQuerry.get("nguonVon"), nguonVon)));
 
 				return predicate;
 			}

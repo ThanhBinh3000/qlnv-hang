@@ -12,4 +12,6 @@ import java.util.List;
 
 public interface HhDxKhLcntThopDtlRepository extends BaseRepository<HhDxKhLcntThopDtl, Long> {
 
+    List<HhDxKhLcntThopDtl> findByIdThopHdr(Long idThopHdr);
+
 }

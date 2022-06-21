@@ -199,21 +199,17 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		HhDxKhLcntThopHdr hdrThop = qOptional.get();
 
 		// Lay danh muc dung chung
-		Map<String, String> mapDmuc = getMapCategory();
+//		Map<String, String> mapDmuc = getMapCategory();
 
-		hdrThop.setTenLoaiVthh(Contains.getLoaiVthh(hdrThop.getLoaiVthh()));
-		hdrThop.setTenHthucLcnt(mapDmuc.get(hdrThop.getHthucLcnt()));
-		hdrThop.setTenPthucLcnt(mapDmuc.get(hdrThop.getPthucLcnt()));
-		hdrThop.setTenLoaiHdong(mapDmuc.get(hdrThop.getLoaiHdong()));
-		hdrThop.setTenNguonVon(mapDmuc.get(hdrThop.getNguonVon()));
+//		hdrThop.setTenVthh(Contains.getLoaiVthh(hdrThop.getLoaiVthh()));
+//		hdrThop.setTenHthucLcnt(mapDmuc.get(hdrThop.getHthucLcnt()));
+//		hdrThop.setTenPthucLcnt(mapDmuc.get(hdrThop.getPthucLcnt()));
+//		hdrThop.setTenLoaiHdong(mapDmuc.get(hdrThop.getLoaiHdong()));
+//		hdrThop.setTenNguonVon(mapDmuc.get(hdrThop.getNguonVon()));
 
-		// Quy doi don vi kg = tan
-//		List<HhDxKhLcntThopDtl> dtls = ObjectMapperUtils.mapAll(qOptional.get().getChildren(), HhDxKhLcntThopDtl.class);
-//		UnitScaler.formatList(dtls, Contains.DVT_TAN);
-//		qOptional.get().setChildren(dtls);
+		hdrThop.setHhDxKhLcntThopDtlList(hhDxKhLcntThopDtlRepository.findByIdThopHdr(hdrThop.getId()));
 
-		this.setPhuongAnId(qOptional.get());
-		return qOptional.get();
+		return hdrThop;
 	}
 
 	@Override
@@ -353,7 +349,10 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		Map<String,String> hashMapNguonVon = getListDanhMucChung("NGUON_VON",request);
 		Map<String,String> hashMapHtLcnt = getListDanhMucChung("HT_LCNT",request);
 		Map<String,String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG",request);
+		Map<String,String> hashMapDmHh = getListDanhMucHangHoa(request);
 		page.getContent().forEach(f -> {
+			f.setTenVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
+			f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
 			f.setTenHthucLcnt( StringUtils.isEmpty(f.getHthucLcnt()) ? null : hashMapHtLcnt.get(f.getHthucLcnt()));
 			f.setTenPthucLcnt( StringUtils.isEmpty(f.getPthucLcnt()) ? null :hashMapPthucDthau.get(f.getPthucLcnt()));
 			f.setTenLoaiHdong( StringUtils.isEmpty(f.getLoaiHdong()) ? null :hashMapLoaiHdong.get(f.getLoaiHdong()));

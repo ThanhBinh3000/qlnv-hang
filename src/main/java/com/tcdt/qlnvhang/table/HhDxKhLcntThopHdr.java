@@ -42,14 +42,16 @@ public class HhDxKhLcntThopHdr implements Serializable {
 	Date ngayThop;
 
 	String loaiVthh;
+	@Transient
+	String tenVthh;
 	String cloaiVthh;
+	@Transient
+	String tenCloaiVthh;
 	String hthucLcnt;
 	String pthucLcnt;
 	String loaiHdong;
 	String nguonVon;
 
-	@Transient
-	String tenLoaiVthh;
 	@Transient
 	String tenHthucLcnt;
 	@Transient
