@@ -28,9 +28,6 @@ public class QlBangKeChCtLt {
     @Column(name = "STT")
     private Integer stt;
 
-    @Column(name = "MA_CAN")
-    private String maCan;
-
     @Column(name = "SO_BAO_BI")
     private BigDecimal soBaoBi;
 

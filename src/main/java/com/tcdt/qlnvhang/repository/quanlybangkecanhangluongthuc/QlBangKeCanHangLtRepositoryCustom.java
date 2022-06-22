@@ -6,7 +6,7 @@ import com.tcdt.qlnvhang.request.search.quanlybangkecanhangluongthuc.QlBangKeCan
 import java.util.List;
 
 public interface QlBangKeCanHangLtRepositoryCustom {
-    List<QlBangKeCanHangLt> search(QlBangKeCanHangLtSearchReq req);
+    List<Object[]> search(QlBangKeCanHangLtSearchReq req);
 
     int count(QlBangKeCanHangLtSearchReq req);
 }

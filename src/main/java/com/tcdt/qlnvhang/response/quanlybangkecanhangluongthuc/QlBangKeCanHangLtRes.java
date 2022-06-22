@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,41 +20,36 @@ import java.util.List;
 public class QlBangKeCanHangLtRes {
     private Long id;
     private String soBangKe;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate ngayLap;
-    private String maDonViLap;
+    private Long qdgnvnxId;
+    private String soQuyetDinhNhap;
     private Long qlPhieuNhapKhoLtId;
-    private String soKho;
-    private String maHang;
-    private String tenHang;
+    private String soPhieuNhapKho;
     private String donViTinh;
     private String tenNguoiGiaoHang;
-    private String tenDonViLap;
-
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime thoiGianGiaoHang;
-    private String diaChi;
     private String trangThai;
     private String tenTrangThai;
     private String trangThaiDuyet;
     private String soHd;
-
-    private Long diemKhoId;
     private String maDiemKho;
     private String tenDiemKho;
-
-    private Long nganLoId;
-    private String maNganLo;
-    private String tenNganLo;
-
-    private Long nhaKhoId;
     private String maNhaKho;
     private String tenNhaKho;
-
-    private Long qdgnvnxId;
-    private String maThuKho;
-    private String maLhKho;
+    private String maNganKho;
+    private String tenNganKho;
+    private String maNganLo;
+    private String tenNganLo;
     private String diaChiNguoiGiao;
-    private LocalDate ngayNhapXuat;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate ngayNhap;
+    private String thuKho;
+    private String tenVatTu;
+    private String maVatTu;
+    private String diaDiem;
+
+    private BigDecimal tongTrongLuongBaoBi;
+    private BigDecimal tongTrongLuongCaBi;
+    private String tongTrongLuongHangTruBiBangChu;
+
     private List<QlBangKeChCtLtRes> chiTiets = new ArrayList<>();
 }
