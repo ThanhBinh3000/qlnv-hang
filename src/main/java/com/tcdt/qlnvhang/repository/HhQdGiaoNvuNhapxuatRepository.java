@@ -7,7 +7,10 @@ import java.util.Optional;
 import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+
+import javax.transaction.Transactional;
 
 public interface HhQdGiaoNvuNhapxuatRepository extends BaseRepository<HhQdGiaoNvuNhapxuatHdr, Long> {
 
@@ -72,4 +75,8 @@ public interface HhQdGiaoNvuNhapxuatRepository extends BaseRepository<HhQdGiaoNv
 	int countQdChiCuc(String maDvi, String loaiVtth);
 
 	List<HhQdGiaoNvuNhapxuatHdr> findByIdIn(Collection<Long> ids);
+
+	@Transactional
+	@Modifying
+	void deleteByIdIn(Collection<Long> ids);
 }

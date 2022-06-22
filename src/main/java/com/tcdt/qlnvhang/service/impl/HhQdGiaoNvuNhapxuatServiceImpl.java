@@ -6,12 +6,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
+import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLt;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatDtlLoaiNx;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatHdrLoaiQd;
 import com.tcdt.qlnvhang.repository.HhDviThuchienQdinhRepository;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
-import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.*;
 import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.table.*;
@@ -25,9 +26,6 @@ import org.springframework.util.StringUtils;
 
 import com.tcdt.qlnvhang.entities.FileDKemJoinQdNhapxuat;
 import com.tcdt.qlnvhang.repository.HhQdGiaoNvuNhapxuatRepository;
-import com.tcdt.qlnvhang.request.IdSearchReq;
-import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.StrSearchReq;
 import com.tcdt.qlnvhang.request.object.HhQdGiaoNvuNhapxuatHdrReq;
 import com.tcdt.qlnvhang.request.search.HhQdNhapxuatSearchReq;
 import com.tcdt.qlnvhang.secification.HhQdGiaoNvuNhapxuatSpecification;
@@ -412,5 +410,17 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		}
 
 		return count;
+	}
+
+	@Override
+	@Transactional(rollbackOn = Exception.class)
+	public boolean deleteMultiple(DeleteReq req) throws Exception {
+		UserInfo userInfo = UserUtils.getUserInfo();
+
+		if (CollectionUtils.isEmpty(req.getIds()))
+			return false;
+
+		hhQdGiaoNvuNhapxuatRepository.deleteByIdIn(req.getIds());
+		return true;
 	}
 }
