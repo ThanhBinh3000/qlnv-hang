@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongFilterRequestDto;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongRequestDto;
+import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.response.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +19,9 @@ public interface QlpktclhPhieuKtChatLuongService {
 
 	Page<QlpktclhPhieuKtChatLuongResponseDto> filter (QlpktclhPhieuKtChatLuongFilterRequestDto req) throws Exception;
 
-	Page<QlpktclhPhieuKtChatLuong> search (QlpktclhPhieuKtChatLuongFilterRequestDto req) throws Exception;
+    BaseNhapHangCount count() throws Exception;
+
+    Page<QlpktclhPhieuKtChatLuong> search (QlpktclhPhieuKtChatLuongFilterRequestDto req) throws Exception;
 
 
     QlpktclhPhieuKtChatLuongResponseDto detail(Long id) throws Exception;

@@ -19,6 +19,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.util.Contains;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Where;
@@ -69,6 +71,11 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 	String trichYeu;
 	Integer namNhap;
 	Date ngayQdinh;
+
+	@Temporal(TemporalType.DATE)
+	Date tgNhapKhoMuonNhat;
+
+
 	@Transient
 	String tenDvi;
 

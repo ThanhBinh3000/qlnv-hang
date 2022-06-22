@@ -27,6 +27,9 @@ public class QlPhieuNhapKhoHangHoaLt implements Serializable {
     @Column(name = "QL_PHIEU_NHAP_KHO_LT_ID")
     private Long qlPhieuNhapKhoLtId;
 
+    @Column(name = "MA_SO")
+    private String maSo;
+
     @Column(name = "MA_VAT_TU")
     private String maVatTu;
 
@@ -36,18 +39,12 @@ public class QlPhieuNhapKhoHangHoaLt implements Serializable {
     @Column(name = "SO_LUONG_TREN_CT")
     private BigDecimal soLuongTrenCt;
 
-    @Column(name = "SO_LUONG_THUC")
-    private BigDecimal soLuongThuc;
+    @Column(name = "SO_LUONG_THUC_NHAP")
+    private BigDecimal soLuongThucNhap;
 
     @Column(name = "DON_GIA")
     private BigDecimal donGia;
 
     @Column(name = "THANH_TIEN")
     private BigDecimal thanhTien;
-
-    @Column(name = "SO_CHUNG_TU")
-    private BigDecimal soChungTu;
-
-    @Column(name = "SO_THUC_NHAP")
-    private BigDecimal soThucNhap;
 }

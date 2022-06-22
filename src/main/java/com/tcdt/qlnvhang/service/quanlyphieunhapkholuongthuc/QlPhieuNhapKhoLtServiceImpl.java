@@ -1,31 +1,48 @@
 package com.tcdt.qlnvhang.service.quanlyphieunhapkholuongthuc;
 
 import com.google.common.collect.Sets;
+import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoHangHoaLt;
 import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLt;
 import com.tcdt.qlnvhang.enums.QdPheDuyetKqlcntVtStatus;
 import com.tcdt.qlnvhang.enums.QlPhieuNhapKhoLtStatus;
+import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
-import com.tcdt.qlnvhang.repository.khotang.KtDiemKhoRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
-import com.tcdt.qlnvhang.repository.khotang.KtNhaKhoRepository;
+import com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongRepository;
 import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoHangHoaLtRepository;
 import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLtRepository;
+import com.tcdt.qlnvhang.request.DeleteReq;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoHangHoaLtReq;
 import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLtReq;
 import com.tcdt.qlnvhang.request.search.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLtSearchReq;
+import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.response.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoHangHoaLtRes;
 import com.tcdt.qlnvhang.response.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLtRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
-import com.tcdt.qlnvhang.service.donvi.QlnvDmDonViService;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
+import com.tcdt.qlnvhang.table.khotang.KtNganKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganLo;
 import com.tcdt.qlnvhang.table.khotang.KtNhaKho;
+import com.tcdt.qlnvhang.util.ExportExcel;
+import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
+import com.tcdt.qlnvhang.util.MoneyConvert;
+import com.tcdt.qlnvhang.util.UserUtils;
+import lombok.extern.log4j.Log4j2;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -33,34 +50,47 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
+@Log4j2
 public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPhieuNhapKhoLtService {
+
+    private static final String SHEET_PHIEU_NHAP_HANG_LUONG_THUC = "Phiếu nhập hàng lương thực";
+    private static final String STT = "STT";
+    private static final String SO_PHIEU = "Số Phiếu";
+    private static final String SO_QUYET_DINH_NHAP = "Số Quyết Định Nhập";
+    private static final String NGAY_NHAP_KHO = "Ngày Nhập Kho";
+    private static final String DIEM_KHO = "Điểm KHo";
+    private static final String NHA_KHO = "Nhà Kho";
+    private static final String NGAN_KHO = "Ngăn Kho";
+    private static final String NGAN_LO = "Ngăn Lô";
+    private static final String TRANG_THAI = "Ngăn Lô";
 
     @Autowired
     private QlPhieuNhapKhoLtRepository qlPhieuNhapKhoLtRepository;
 
     @Autowired
     private QlPhieuNhapKhoHangHoaLtRepository qlPhieuNhapKhoHangHoaLtRepository;
-    @Autowired
-    private QlnvDmVattuRepository qlnvDmVattuRepository;
 
     @Autowired
-    private QlnvDmDonViService qlnvDmDonViService;
+    private QlnvDmVattuRepository qlnvDmVattuRepository;
 
     @Autowired
     private KtNganLoRepository ktNganLoRepository;
 
     @Autowired
-    private KtDiemKhoRepository ktDiemKhoRepository;
+    private FileDinhKemService fileDinhKemService;
 
     @Autowired
-    private KtNhaKhoRepository ktNhaKhoRepository;
+    private QlpktclhPhieuKtChatLuongRepository phieuKtChatLuongRepository;
 
     @Override
     @Transactional(rollbackOn = Exception.class)
@@ -74,24 +104,21 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
 
         QlPhieuNhapKhoLt phieu = new QlPhieuNhapKhoLt();
         BeanUtils.copyProperties(req, phieu, "id");
-        phieu.setNgayTao(req.getNgayTao());
+        phieu.setNgayTao(LocalDate.now());
         phieu.setNguoiTaoId(userInfo.getId());
         phieu.setTrangThai(QlPhieuNhapKhoLtStatus.DU_THAO.getId());
-        phieu.setMaDonVi(userInfo.getDvql());
-        phieu.setCapDonVi(qlnvDmDonViService.getCapDviByMa(userInfo.getDvql()));
+        phieu.setMaDvi(userInfo.getDvql());
+        phieu.setCapDvi(userInfo.getCapDvi());
         qlPhieuNhapKhoLtRepository.save(phieu);
 
         List<QlPhieuNhapKhoHangHoaLtReq> hangHoaReqs = req.getHangHoaList();
         List<QlPhieuNhapKhoHangHoaLt> hangHoaList = this.saveListHangHoa(phieu.getId(), hangHoaReqs, new HashMap<>());
         phieu.setHangHoaList(hangHoaList);
 
-        Set<String> maVatTus = hangHoaList.stream().map(QlPhieuNhapKhoHangHoaLt::getMaVatTu).collect(Collectors.toSet());
-        Set<QlnvDmVattu> qlnvDmVattus = !CollectionUtils.isEmpty(maVatTus) ? Sets.newHashSet(qlnvDmVattuRepository.findByMaIn(maVatTus)) : new HashSet<>();
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getChungTus(), phieu.getId(), QlPhieuNhapKhoLt.TABLE_NAME);
+        phieu.setChungTus(fileDinhKems);
 
-        List<KtNganLo> byMaNganloIn = StringUtils.hasText(phieu.getMaNganLo()) ? ktNganLoRepository.findByMaNganloIn(Sets.newHashSet(phieu.getMaNganLo())) : new ArrayList<>();
-        List<KtDiemKho> byMaDiemkhoIn = StringUtils.hasText(phieu.getMaDiemKho()) ? ktDiemKhoRepository.findByMaDiemkhoIn(Sets.newHashSet(phieu.getMaDiemKho())) : new ArrayList<>();
-        List<KtNhaKho> byMaNhakhoIn = StringUtils.hasText(phieu.getMaNhaKho()) ?  ktNhaKhoRepository.findByMaNhakhoIn(Sets.newHashSet(phieu.getMaNhaKho())) : new ArrayList<>();
-        return this.buildResponse(phieu, qlnvDmVattus, byMaNganloIn, byMaDiemkhoIn, byMaNhakhoIn);
+        return this.buildResponse(phieu);
     }
 
     private List<QlPhieuNhapKhoHangHoaLt> saveListHangHoa(Long phieuNhapKhoId, List<QlPhieuNhapKhoHangHoaLtReq> hangHoaReqs, Map<Long, QlPhieuNhapKhoHangHoaLt> mapHangHoa) throws Exception {
@@ -124,30 +151,19 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
         return hangHoaList;
     }
 
-    private QlPhieuNhapKhoLtRes buildResponse(QlPhieuNhapKhoLt phieu,
-                                              Set<QlnvDmVattu> qlnvDmVattus,
-                                              Collection<KtNganLo> nganLos,
-                                              Collection<KtDiemKho> diemKhos,
-                                              Collection<KtNhaKho> nhaKhos) {
+    private QlPhieuNhapKhoLtRes buildResponse(QlPhieuNhapKhoLt phieu) throws Exception {
+        Set<String> maVatTus = phieu.getHangHoaList().stream().map(QlPhieuNhapKhoHangHoaLt::getMaVatTu).collect(Collectors.toSet());
+        Set<QlnvDmVattu> qlnvDmVattus = !CollectionUtils.isEmpty(maVatTus) ? Sets.newHashSet(qlnvDmVattuRepository.findByMaIn(maVatTus)) : new HashSet<>();
+
         QlPhieuNhapKhoLtRes response = new QlPhieuNhapKhoLtRes();
         BeanUtils.copyProperties(phieu, response);
         response.setTenTrangThai(QlPhieuNhapKhoLtStatus.getTenById(phieu.getTrangThai()));
         response.setTenTrangThai(QlPhieuNhapKhoLtStatus.getTrangThaiDuyetById(phieu.getTrangThai()));
-        nganLos.stream().filter(l -> l.getMaNganlo().equals(phieu.getMaNganLo())).findFirst().ifPresent(l -> {
-            response.setTenNganLo(l.getTenNganlo());
-            response.setNganLoId(l.getId());
-        });
-
-        diemKhos.stream().filter(l -> l.getMaDiemkho().equals(phieu.getMaDiemKho())).findFirst().ifPresent(l -> {
-            response.setTenDiemKho(l.getTenDiemkho());
-            response.setDiemKhoId(l.getId());
-        });
-
-        nhaKhos.stream().filter(l -> l.getMaNhakho().equals(phieu.getMaNhaKho())).findFirst().ifPresent(l -> {
-            response.setTenNhaKho(l.getTenNhakho());
-            response.setNhaKhoId(l.getId());
-        });
         List<QlPhieuNhapKhoHangHoaLt> hangHoaList = phieu.getHangHoaList();
+
+        BigDecimal tongSoLuong = BigDecimal.ZERO;
+        BigDecimal tongSoTien = BigDecimal.ZERO;
+
         for (QlPhieuNhapKhoHangHoaLt hangHoa : hangHoaList) {
             QlPhieuNhapKhoHangHoaLtRes hangHoaRes = new QlPhieuNhapKhoHangHoaLtRes();
             BeanUtils.copyProperties(hangHoa, hangHoaRes);
@@ -156,7 +172,30 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
                 hangHoaRes.setTenVatTu(t.getTen());
             });
             response.getHangHoaRes().add(hangHoaRes);
+
+            tongSoLuong = tongSoLuong.add(Optional.ofNullable(hangHoa.getSoLuongThucNhap()).orElse(BigDecimal.ZERO));
+            tongSoTien = tongSoTien.add(Optional.ofNullable(hangHoa.getThanhTien()).orElse(BigDecimal.ZERO));
         }
+
+        response.setTongSoLuong(tongSoLuong);
+        response.setTongSoTien(tongSoTien);
+        response.setTongSoLuongBangChu(MoneyConvert.docSoLuong(tongSoLuong.toString(), null));
+        response.setTongSoTienBangChu(MoneyConvert.doctienBangChu(tongSoTien.toString(), null));
+
+        if (phieu.getPhieuKtClId() != null) {
+            QlpktclhPhieuKtChatLuong phieuKtChatLuong = phieuKtChatLuongRepository.findById(phieu.getId())
+                    .orElseThrow(() -> new Exception("Không tìm thấy phiếu kiểm tra chất lượng"));
+
+            response.setSoPhieuKtCl(phieuKtChatLuong.getSoPhieu());
+        }
+
+        KtNganLo nganLo = null;
+        if (StringUtils.hasText(phieu.getMaNganLo())) {
+            nganLo = ktNganLoRepository.findFirstByMaNganlo(phieu.getMaNganLo());
+        }
+
+        this.thongTinNganLo(response, nganLo);
+        response.setChungTus(fileDinhKemService.search(phieu.getId(), Collections.singleton(QlPhieuNhapKhoLt.TABLE_NAME)));
         return response;
     }
 
@@ -190,14 +229,10 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
         if (!CollectionUtils.isEmpty(mapHangHoa.values()))
             qlPhieuNhapKhoHangHoaLtRepository.deleteAll(mapHangHoa.values());
 
-        Set<String> maVatTus = hangHoaList.stream().map(QlPhieuNhapKhoHangHoaLt::getMaVatTu).collect(Collectors.toSet());
-        Set<QlnvDmVattu> qlnvDmVattus = !CollectionUtils.isEmpty(maVatTus) ? Sets.newHashSet(qlnvDmVattuRepository.findByMaIn(maVatTus)) : new HashSet<>();
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getChungTus(), phieu.getId(), QlPhieuNhapKhoLt.TABLE_NAME);
+        phieu.setChungTus(fileDinhKems);
 
-        List<KtNganLo> byMaNganloIn = StringUtils.hasText(phieu.getMaNganLo()) ? ktNganLoRepository.findByMaNganloIn(Sets.newHashSet(phieu.getMaNganLo())) : new ArrayList<>();
-        List<KtDiemKho> byMaDiemkhoIn = StringUtils.hasText(phieu.getMaDiemKho()) ? ktDiemKhoRepository.findByMaDiemkhoIn(Sets.newHashSet(phieu.getMaDiemKho())) : new ArrayList<>();
-        List<KtNhaKho> byMaNhakhoIn = StringUtils.hasText(phieu.getMaNhaKho()) ?  ktNhaKhoRepository.findByMaNhakhoIn(Sets.newHashSet(phieu.getMaNhaKho())) : new ArrayList<>();
-
-        return this.buildResponse(phieu, qlnvDmVattus,byMaNganloIn, byMaDiemkhoIn, byMaNhakhoIn);
+        return this.buildResponse(phieu);
     }
 
     @Override
@@ -222,6 +257,7 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
         }
 
         qlPhieuNhapKhoLtRepository.delete(phieu);
+        fileDinhKemService.delete(phieu.getId(), Collections.singleton(QlPhieuNhapKhoLt.TABLE_NAME));
         return true;
     }
 
@@ -237,14 +273,7 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
 
         QlPhieuNhapKhoLt phieu = optional.get();
         phieu.setHangHoaList(qlPhieuNhapKhoHangHoaLtRepository.findAllByQlPhieuNhapKhoLtId(phieu.getId()));
-
-        Set<String> maVatTus = phieu.getHangHoaList().stream().map(QlPhieuNhapKhoHangHoaLt::getMaVatTu).collect(Collectors.toSet());
-        Set<QlnvDmVattu> qlnvDmVattus = !CollectionUtils.isEmpty(maVatTus) ? Sets.newHashSet(qlnvDmVattuRepository.findByMaIn(maVatTus)) : new HashSet<>();
-
-        List<KtNganLo> byMaNganloIn = StringUtils.hasText(phieu.getMaNganLo()) ? ktNganLoRepository.findByMaNganloIn(Sets.newHashSet(phieu.getMaNganLo())) : new ArrayList<>();
-        List<KtDiemKho> byMaDiemkhoIn = StringUtils.hasText(phieu.getMaDiemKho()) ? ktDiemKhoRepository.findByMaDiemkhoIn(Sets.newHashSet(phieu.getMaDiemKho())) : new ArrayList<>();
-        List<KtNhaKho> byMaNhakhoIn = StringUtils.hasText(phieu.getMaNhaKho()) ?  ktNhaKhoRepository.findByMaNhakhoIn(Sets.newHashSet(phieu.getMaNhaKho())) : new ArrayList<>();
-        return this.buildResponse(phieu, qlnvDmVattus, byMaNganloIn, byMaDiemkhoIn, byMaNhakhoIn);
+        return this.buildResponse(phieu);
     }
 
     @Override
@@ -301,39 +330,119 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
         return qlPhieuNhapKhoLtRepository.search(req);
     }
 
-    @Override
-    public Page<QlPhieuNhapKhoLtRes> timKiem(QlPhieuNhapKhoLtSearchReq req) throws Exception {
-        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
-        Page<QlPhieuNhapKhoLt> page = qlPhieuNhapKhoLtRepository.select(req.getSoPhieu(), convertDateToString(req.getNgayNhapKho()), req.getMaDiemKho(), req.getMaKhoNgan(), convertDateToString(req.getNgayTaoPhieu()), convertDateToString(req.getNgayGiaoNhanHang()), req.getMaNhaKho(), req.getNguoiGiaoHang(), pageable);
-        List<QlPhieuNhapKhoLt> list = page.getContent();
+    private void thongTinNganLo(QlPhieuNhapKhoLtRes phieu, KtNganLo nganLo) {
+        if (nganLo != null) {
+            phieu.setTenNganLo(nganLo.getTenNganlo());
+            KtNganKho nganKho = nganLo.getParent();
+            if (nganKho == null)
+                return;
 
-        Set<String> maVatTus = list.stream()
-                .flatMap(p -> p.getHangHoaList().stream())
-                .map(QlPhieuNhapKhoHangHoaLt::getMaVatTu).collect(Collectors.toSet());
-        Set<QlnvDmVattu> qlnvDmVattus = !CollectionUtils.isEmpty(maVatTus) ? Sets.newHashSet(qlnvDmVattuRepository.findByMaIn(maVatTus)) : new HashSet<>();
+            phieu.setTenNganKho(nganKho.getTenNgankho());
+            phieu.setMaNganKho(nganKho.getMaNgankho());
+            KtNhaKho nhaKho = nganKho.getParent();
+            if (nhaKho == null)
+                return;
 
-        Set<String> maNganLos = list.stream()
-                .map(QlPhieuNhapKhoLt::getMaNganLo).collect(Collectors.toSet());
+            phieu.setTenNhaKho(nhaKho.getTenNhakho());
+            phieu.setMaNhaKho(nhaKho.getMaNhakho());
+            KtDiemKho diemKho = nhaKho.getParent();
+            if (diemKho == null)
+                return;
 
-        List<KtNganLo> byMaNganloIn = !CollectionUtils.isEmpty(maNganLos) ? ktNganLoRepository.findByMaNganloIn(maNganLos) : new ArrayList<>();
-
-        Set<String> maDiemKhos = list.stream()
-                .map(QlPhieuNhapKhoLt::getMaDiemKho).collect(Collectors.toSet());
-        List<KtDiemKho> byMaDiemkhoIn = !CollectionUtils.isEmpty(maDiemKhos) ? ktDiemKhoRepository.findByMaDiemkhoIn(maDiemKhos) : new ArrayList<>();
-
-        Set<String> maNhaKhos = list.stream()
-                .map(QlPhieuNhapKhoLt::getMaNhaKho).collect(Collectors.toSet());
-        List<KtNhaKho> byMaNhakhoIn = !CollectionUtils.isEmpty(maNhaKhos) ?  ktNhaKhoRepository.findByMaNhakhoIn(maNhaKhos) : new ArrayList<>();
-
-        List<QlPhieuNhapKhoLtRes> resList = new ArrayList<>();
-        for (QlPhieuNhapKhoLt phieu : list) {
-            resList.add(this.buildResponse(phieu, qlnvDmVattus, byMaNganloIn, byMaDiemkhoIn, byMaNhakhoIn));
+            phieu.setTenDiemKho(diemKho.getTenDiemkho());
+            phieu.setMaDiemKho(diemKho.getMaDiemkho());
         }
-        return new PageImpl<>(resList, pageable, page.getTotalElements());
     }
 
-    private void setTenDvi(HhQdGiaoNvuNhapxuatHdr data) {
-        Map<String, String> mapDmucDvi = getMapTenDvi();
-        data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
+    @Override
+    public BaseNhapHangCount count() throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        QlPhieuNhapKhoLtSearchReq req = new QlPhieuNhapKhoLtSearchReq();
+        req.setMaDvi(userInfo.getDvql());
+        BaseNhapHangCount count = new BaseNhapHangCount();
+
+        count.setTatCa(qlPhieuNhapKhoLtRepository.count(req));
+        return count;
+    }
+
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public boolean deleteMultiple(DeleteReq req) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+
+        if (CollectionUtils.isEmpty(req.getIds()))
+            return false;
+
+
+        qlPhieuNhapKhoHangHoaLtRepository.deleteByQlPhieuNhapKhoLtIdIn(req.getIds());
+        qlPhieuNhapKhoLtRepository.deleteByIdIn(req.getIds());
+        fileDinhKemService.deleteMultiple(req.getIds(), Collections.singleton(QlPhieuNhapKhoLt.TABLE_NAME));
+        return true;
+    }
+
+    @Override
+    public boolean exportToExcel(QlPhieuNhapKhoLtSearchReq objReq, HttpServletResponse response) throws Exception {
+        objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
+        List<QlPhieuNhapKhoLtRes> list = this.search(objReq).get().collect(Collectors.toList());
+
+        if (CollectionUtils.isEmpty(list))
+            return true;
+
+        try {
+            XSSFWorkbook workbook = new XSSFWorkbook();
+
+            //STYLE
+            CellStyle style = workbook.createCellStyle();
+            XSSFFont font = workbook.createFont();
+            font.setFontHeight(11);
+            font.setBold(true);
+            style.setFont(font);
+            style.setAlignment(HorizontalAlignment.CENTER);
+            style.setVerticalAlignment(VerticalAlignment.CENTER);
+            XSSFSheet sheet = workbook.createSheet(SHEET_PHIEU_NHAP_HANG_LUONG_THUC);
+            Row row0 = sheet.createRow(0);
+            //STT
+
+            ExportExcel.createCell(row0, 0, STT, style, sheet);
+            ExportExcel.createCell(row0, 1, SO_PHIEU, style, sheet);
+            ExportExcel.createCell(row0, 2, SO_QUYET_DINH_NHAP, style, sheet);
+            ExportExcel.createCell(row0, 3, NGAY_NHAP_KHO, style, sheet);
+            ExportExcel.createCell(row0, 4, DIEM_KHO, style, sheet);
+            ExportExcel.createCell(row0, 5, NHA_KHO, style, sheet);
+            ExportExcel.createCell(row0, 6, NGAN_KHO, style, sheet);
+            ExportExcel.createCell(row0, 7, NGAN_LO, style, sheet);
+            ExportExcel.createCell(row0, 8, TRANG_THAI, style, sheet);
+
+            style = workbook.createCellStyle();
+            font = workbook.createFont();
+            font.setFontHeight(11);
+            style.setFont(font);
+
+            Row row;
+            int startRowIndex = 1;
+
+            for (QlPhieuNhapKhoLtRes item : list) {
+                row = sheet.createRow(startRowIndex);
+                ExportExcel.createCell(row, 0, startRowIndex, style, sheet);
+                ExportExcel.createCell(row, 1, item.getSoPhieu(), style, sheet);
+                ExportExcel.createCell(row, 2, item.getSoQuyetDinhNhap(), style, sheet);
+                ExportExcel.createCell(row, 3, LocalDateTimeUtils.localDateToString(item.getNgayNhapKho()), style, sheet);
+                ExportExcel.createCell(row, 4, item.getTenDiemKho(), style, sheet);
+                ExportExcel.createCell(row, 4, item.getTenNhaKho(), style, sheet);
+                ExportExcel.createCell(row, 4, item.getTenNganKho(), style, sheet);
+                ExportExcel.createCell(row, 4, item.getTenNganLo(), style, sheet);
+                ExportExcel.createCell(row, 4, TrangThaiEnum.getTenById(item.getTrangThai()), style, sheet);
+                startRowIndex++;
+            }
+
+            ServletOutputStream outputStream = response.getOutputStream();
+            workbook.write(outputStream);
+            workbook.close();
+            outputStream.close();
+        } catch (Exception e) {
+            log.error("Error export", e);
+            return false;
+        }
+        return true;
     }
 }

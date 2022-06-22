@@ -25,4 +25,5 @@ public class FileDinhKem {
 	String fileType;
 	String dataType;
 	Date createDate;
+	Long dataId;
 }
