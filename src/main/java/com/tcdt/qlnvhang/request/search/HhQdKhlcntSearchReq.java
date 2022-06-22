@@ -25,7 +25,6 @@ public class HhQdKhlcntSearchReq extends BaseRequest {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date denNgayQd;
 
-	@NotNull(message = "Không được để trống")
 	@ApiModelProperty(example = Contains.LOAI_VTHH_GAO)
 	String loaiVthh;
 

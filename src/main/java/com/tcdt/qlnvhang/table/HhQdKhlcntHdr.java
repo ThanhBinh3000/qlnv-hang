@@ -84,11 +84,10 @@ public class HhQdKhlcntHdr implements Serializable {
 	@Temporal(TemporalType.DATE)
 	Date tgianMthau;
 	@Temporal(TemporalType.DATE)
-
 	Date ngayTao;
 	String nguoiTao;
 	String trichYeu;
-	String namKhoach;
+	Long namKhoach;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)
