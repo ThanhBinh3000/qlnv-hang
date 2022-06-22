@@ -29,4 +29,6 @@ public class HhQdKhlcntSearchReq extends BaseRequest {
 	String loaiVthh;
 
 	String soQd;
+
+	String trichYeu;
 }
