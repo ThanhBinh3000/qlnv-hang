@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.impl;
 
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -87,18 +88,31 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		dataMap.setLastest(false);
 		hhDxuatKhLcntHdrRepository.save(dataMap);
 
+		// Lưu danh sách gói thầu
 		for (HhDxuatKhLcntDsgtDtlReq gt : objReq.getDsGtReq()){
 			HhDxuatKhLcntDsgtDtl data = new ModelMapper().map(gt, HhDxuatKhLcntDsgtDtl.class);
 			data.setIdDxKhlcnt(dataMap.getId());
+			BigDecimal thanhTien = data.getDonGia().multiply(data.getSoLuong());
+			data.setThanhTien(thanhTien);
 			hhDxuatKhLcntDsgtDtlRepository.save(data);
 		}
-
+		// Lưu quyết định căn cứ
 		for (HhDxuatKhLcntCcxdgDtlReq cc : objReq.getCcXdgReq()){
-			HhDxuatKhLcntCcxdgDtl data = new ModelMapper().map(cc, HhDxuatKhLcntCcxdgDtl.class);
+			HhDxuatKhLcntCcxdgDtl data = ObjectMapperUtils.map(cc, HhDxuatKhLcntCcxdgDtl.class);
+			List<FileDKemJoinDxKhLcntCcxdg> detailChild = new ArrayList<>();
+			if (data.getChildren() != null) {
+				detailChild = ObjectMapperUtils.mapAll(data.getChildren(), FileDKemJoinDxKhLcntCcxdg.class);
+				detailChild.forEach(f -> {
+					f.setDataType(HhDxuatKhLcntCcxdgDtl.TABLE_NAME);
+					f.setCreateDate(new Date());
+				});
+			}
+			data.setChildren(detailChild);
 			data.setIdDxKhlcnt(dataMap.getId());
+
 			hhDxuatKhLcntCcxdgDtlRepository.save(data);
 		}
-		return hhDxuatKhLcntHdrRepository.save(dataMap);
+		return dataMap;
 	}
 
 	@Override
@@ -147,14 +161,26 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		for (HhDxuatKhLcntDsgtDtlReq gt : objReq.getDsGtReq()){
 			HhDxuatKhLcntDsgtDtl data = new ModelMapper().map(gt, HhDxuatKhLcntDsgtDtl.class);
 			data.setIdDxKhlcnt(dataMap.getId());
+			BigDecimal thanhTien = data.getDonGia().multiply(data.getSoLuong());
+			data.setThanhTien(thanhTien);
 			hhDxuatKhLcntDsgtDtlRepository.save(data);
 		}
 
 		hhDxuatKhLcntCcxdgDtlRepository.deleteAllByIdDxKhlcnt(dataMap.getId());
 
 		for (HhDxuatKhLcntCcxdgDtlReq cc : objReq.getCcXdgReq()){
-			HhDxuatKhLcntCcxdgDtl data = new ModelMapper().map(cc, HhDxuatKhLcntCcxdgDtl.class);
+			HhDxuatKhLcntCcxdgDtl data = ObjectMapperUtils.map(cc, HhDxuatKhLcntCcxdgDtl.class);
+			List<FileDKemJoinDxKhLcntCcxdg> detailChild = new ArrayList<>();
+			if (data.getChildren() != null) {
+				detailChild = ObjectMapperUtils.mapAll(data.getChildren(), FileDKemJoinDxKhLcntCcxdg.class);
+				detailChild.forEach(f -> {
+					f.setDataType(HhDxuatKhLcntCcxdgDtl.TABLE_NAME);
+					f.setCreateDate(new Date());
+				});
+			}
+			data.setChildren(detailChild);
 			data.setIdDxKhlcnt(dataMap.getId());
+
 			hhDxuatKhLcntCcxdgDtlRepository.save(data);
 		}
 
@@ -179,7 +205,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		qOptional.get().setTenVthh( StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : mapVthh.get(qOptional.get().getLoaiVthh()));
 		qOptional.get().setTenCloaiVthh( StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null :mapVthh.get(qOptional.get().getCloaiVthh()));
 		qOptional.get().setTenVtu( StringUtils.isEmpty(qOptional.get().getMaVtu()) ? null :mapVthh.get(qOptional.get().getMaVtu()));
-
+		qOptional.get().setTenDvi(mapDmucDvi.get(qOptional.get().getMaDvi()));
 		qOptional.get().setCcXdgDtlList(hhDxuatKhLcntCcxdgDtlRepository.findByIdDxKhlcnt(qOptional.get().getId()));
 
 		Map<String,List<HhDxuatKhLcntDsgtDtl>> result = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcnt(qOptional.get().getId()).stream().collect(Collectors.groupingBy(HhDxuatKhLcntDsgtDtl::getMaDvi));

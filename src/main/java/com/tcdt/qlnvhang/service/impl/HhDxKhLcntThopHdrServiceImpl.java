@@ -42,7 +42,6 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 	@Autowired
 	private HhDxuatKhLcntDsgtDtlRepository hhDxuatKhLcntDsgtDtlRepository;
 
-
 	@Override
 	public HhDxKhLcntThopHdr sumarryData(HhDxKhLcntTChiThopReq objReq, HttpServletRequest req) throws Exception {
 		List<HhDxuatKhLcntHdr> dxuatList =
@@ -149,7 +148,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		thopHdr.setNgayTao(getDateTimeNow());
 		thopHdr.setNguoiTao(getUser().getUsername());
 		thopHdr.setNoiDung(objReq.getNoiDung());
-		thopHdr.setTrangThai(Contains.TAO_MOI);
+		thopHdr.setTrangThai(Contains.CHUA_QUYET_DINH);
 		thopHdr.setNgayThop(new Date());
 		thopHdr.setGhiChu(objReq.getGhiChu());
 		hhDxKhLcntThopHdrRepository.save(thopHdr);
