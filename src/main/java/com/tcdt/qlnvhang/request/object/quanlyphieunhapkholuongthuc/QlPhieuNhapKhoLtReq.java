@@ -40,11 +40,10 @@ public class QlPhieuNhapKhoLtReq {
     private String maNhaKho;
     private String maNganKho;
     private String maNganLo;
-
     private String loaiHinhNhap;
 
     @NotNull(message = "Không được để trống")
-    private String qdgnvnxId;
+    private Long qdgnvnxId;
 
     private List<QlPhieuNhapKhoHangHoaLtReq> hangHoaList = new ArrayList<>();
 
