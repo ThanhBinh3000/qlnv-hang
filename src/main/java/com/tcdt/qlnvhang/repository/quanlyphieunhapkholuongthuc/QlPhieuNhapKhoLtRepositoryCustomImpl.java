@@ -120,7 +120,9 @@ public class QlPhieuNhapKhoLtRepositoryCustomImpl implements QlPhieuNhapKhoLtRep
     public int count(QlPhieuNhapKhoLtSearchReq req) {
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT COUNT(p.id) FROM QlPhieuNhapKhoLt p ");
-
+        builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON p.qdgnvnxId = nx.id ");
+        builder.append("INNER JOIN QlpktclhPhieuKtChatLuong pktcl ON p.phieuKtClId = pktcl.id ");
+        builder.append("LEFT JOIN KtNganLo nganLo ON p.maNganLo = nganLo.maNganlo ");
         this.setConditionSearch(req, builder);
 
         TypedQuery<Long> query = em.createQuery(builder.toString(), Long.class);

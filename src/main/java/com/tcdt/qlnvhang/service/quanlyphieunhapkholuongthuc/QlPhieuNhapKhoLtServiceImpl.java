@@ -7,6 +7,7 @@ import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLt;
 import com.tcdt.qlnvhang.enums.QdPheDuyetKqlcntVtStatus;
 import com.tcdt.qlnvhang.enums.QlPhieuNhapKhoLtStatus;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
+import com.tcdt.qlnvhang.repository.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongRepository;
@@ -25,6 +26,7 @@ import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
@@ -91,6 +93,9 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
 
     @Autowired
     private QlpktclhPhieuKtChatLuongRepository phieuKtChatLuongRepository;
+
+    @Autowired
+    private HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
 
     @Override
     @Transactional(rollbackOn = Exception.class)
@@ -183,10 +188,18 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
         response.setTongSoTienBangChu(MoneyConvert.doctienBangChu(tongSoTien.toString(), null));
 
         if (phieu.getPhieuKtClId() != null) {
-            QlpktclhPhieuKtChatLuong phieuKtChatLuong = phieuKtChatLuongRepository.findById(phieu.getId())
+            QlpktclhPhieuKtChatLuong phieuKtChatLuong = phieuKtChatLuongRepository.findById(phieu.getPhieuKtClId())
                     .orElseThrow(() -> new Exception("Không tìm thấy phiếu kiểm tra chất lượng"));
 
             response.setSoPhieuKtCl(phieuKtChatLuong.getSoPhieu());
+        }
+
+        if (phieu.getQdgnvnxId() != null) {
+            Optional<HhQdGiaoNvuNhapxuatHdr> qdNhap = hhQdGiaoNvuNhapxuatRepository.findById(phieu.getQdgnvnxId());
+            if (!qdNhap.isPresent()) {
+                throw new Exception("Không tìm thấy quyết định nhập");
+            }
+            response.setSoQuyetDinhNhap(qdNhap.get().getSoQd());
         }
 
         KtNganLo nganLo = null;
@@ -428,10 +441,10 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
                 ExportExcel.createCell(row, 2, item.getSoQuyetDinhNhap(), style, sheet);
                 ExportExcel.createCell(row, 3, LocalDateTimeUtils.localDateToString(item.getNgayNhapKho()), style, sheet);
                 ExportExcel.createCell(row, 4, item.getTenDiemKho(), style, sheet);
-                ExportExcel.createCell(row, 4, item.getTenNhaKho(), style, sheet);
-                ExportExcel.createCell(row, 4, item.getTenNganKho(), style, sheet);
-                ExportExcel.createCell(row, 4, item.getTenNganLo(), style, sheet);
-                ExportExcel.createCell(row, 4, TrangThaiEnum.getTenById(item.getTrangThai()), style, sheet);
+                ExportExcel.createCell(row, 5, item.getTenNhaKho(), style, sheet);
+                ExportExcel.createCell(row, 6, item.getTenNganKho(), style, sheet);
+                ExportExcel.createCell(row, 7, item.getTenNganLo(), style, sheet);
+                ExportExcel.createCell(row, 8, TrangThaiEnum.getTenById(item.getTrangThai()), style, sheet);
                 startRowIndex++;
             }
 
