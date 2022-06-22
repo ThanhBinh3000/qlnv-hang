@@ -97,7 +97,7 @@ public class HhQdKhlcntHdrReq {
 	private Long idThHdr;
 	private Long idTrHdr;
 
-	private List<HhQdKhlcntDtlReq> detail;
+	private List<HhQdKhlcntDtlReq> dsDeXuat;
 	private List<FileDinhKemReq> fileDinhKems;
 	private List<HhQdKhlcntDsgthauReq> dsGoiThau;
 

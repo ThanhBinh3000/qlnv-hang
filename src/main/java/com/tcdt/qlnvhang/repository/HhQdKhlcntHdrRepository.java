@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface HhQdKhlcntHdrRepository extends BaseRepository<HhQdKhlcntHdr, Long> {
 
-	Optional<HhQdKhlcntHdr> findByIdPaHdr(Long idPaHdr);
+//	Optional<HhQdKhlcntHdr> findByIdPaHdr(Long idPaHdr);
 
 	Optional<HhQdKhlcntHdr> findBySoQd(String soQd);
 

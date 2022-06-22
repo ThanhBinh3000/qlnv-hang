@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.tcdt.qlnvhang.repository.HhPhuLucRepository;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.table.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,9 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 	private HhHopDongRepository hhHopDongRepository;
 
 	@Autowired
+	private HhPhuLucRepository hhPhuLucRepository;
+
+	@Autowired
 	private HhQdPduyetKqlcntHdrRepository hhQdPduyetKqlcntHdrRepository;
 
 	@Autowired
@@ -70,27 +74,27 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 		dataMap.setTrangThai(Contains.TAO_MOI);
 		dataMap.setMaDvi(userInfo.getDvql());
 
-		// add thong tin detail
-		List<HhHopDongDtlReq> dtlReqList = objReq.getDetail();
-		List<HhHopDongDtl> details = new ArrayList<>();
-		if (dtlReqList != null) {
-			List<HhHopDongDdiemNhapKho> detailChild;
-			for (HhHopDongDtlReq dtlReq : dtlReqList) {
-				List<HhDdiemNhapKhoReq> cTietReq = dtlReq.getDetail();
-				HhHopDongDtl detail = ObjectMapperUtils.map(dtlReq, HhHopDongDtl.class);
-				detail.setType(Contains.HOP_DONG);
-				detailChild = new ArrayList<HhHopDongDdiemNhapKho>();
-				if (cTietReq != null)
-					detailChild = ObjectMapperUtils.mapAll(cTietReq, HhHopDongDdiemNhapKho.class);
-				detailChild.forEach(f -> {
-					f.setType(Contains.HOP_DONG);
-				});
-
-				detail.setChildren(detailChild);
-				details.add(detail);
-			}
-			dataMap.setChildren(details);
-		}
+//		// add thong tin detail
+//		List<HhHopDongDtlReq> dtlReqList = objReq.getDetail();
+//		List<HhHopDongDtl> details = new ArrayList<>();
+//		if (dtlReqList != null) {
+//			List<HhHopDongDdiemNhapKho> detailChild;
+//			for (HhHopDongDtlReq dtlReq : dtlReqList) {
+//				List<HhDdiemNhapKhoReq> cTietReq = dtlReq.getDetail();
+//				HhHopDongDtl detail = ObjectMapperUtils.map(dtlReq, HhHopDongDtl.class);
+//				detail.setType(Contains.HOP_DONG);
+//				detailChild = new ArrayList<HhHopDongDdiemNhapKho>();
+//				if (cTietReq != null)
+//					detailChild = ObjectMapperUtils.mapAll(cTietReq, HhHopDongDdiemNhapKho.class);
+//				detailChild.forEach(f -> {
+//					f.setType(Contains.HOP_DONG);
+//				});
+//
+//				detail.setChildren(detailChild);
+//				details.add(detail);
+//			}
+//			dataMap.setChildren(details);
+//		}
 
 		// add thong tin don vi lien quan
 //		List<HhDviLquan> dtls1 = ObjectMapperUtils.mapAll(objReq.getDetail1(), HhDviLquan.class);
@@ -107,7 +111,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 		}
 		dataMap.setFileDinhKems(dtls2);
 
-		UnitScaler.reverseFormatList(dataMap.getChildren(), Contains.DVT_TAN);
+//		UnitScaler.reverseFormatList(dataMap.getChildren(), Contains.DVT_TAN);
 		return hhHopDongRepository.save(dataMap);
 	}
 
@@ -142,27 +146,27 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 		dataDB.setNgaySua(getDateTimeNow());
 		dataDB.setNguoiSua(getUser().getUsername());
 
-		// add thong tin detail
-		List<HhHopDongDtlReq> dtlReqList = objReq.getDetail();
-		List<HhHopDongDtl> details = new ArrayList<>();
-		if (dtlReqList != null) {
-			List<HhHopDongDdiemNhapKho> detailChild;
-			for (HhHopDongDtlReq dtlReq : dtlReqList) {
-				List<HhDdiemNhapKhoReq> cTietReq = dtlReq.getDetail();
-				HhHopDongDtl detail = ObjectMapperUtils.map(dtlReq, HhHopDongDtl.class);
-				detail.setType(Contains.HOP_DONG);
-				detailChild = new ArrayList<HhHopDongDdiemNhapKho>();
-				if (cTietReq != null)
-					detailChild = ObjectMapperUtils.mapAll(cTietReq, HhHopDongDdiemNhapKho.class);
-				detail.setChildren(detailChild);
-				details.add(detail);
-			}
-			dataDB.setChildren(details);
-		}
-
-		// add thong tin don vi lien quan
-		List<HhDviLquan> dtls1 = ObjectMapperUtils.mapAll(dtlReqList, HhDviLquan.class);
-		dataDB.setChildren1(dtls1);
+//		// add thong tin detail
+//		List<HhHopDongDtlReq> dtlReqList = objReq.getDetail();
+//		List<HhHopDongDtl> details = new ArrayList<>();
+//		if (dtlReqList != null) {
+//			List<HhHopDongDdiemNhapKho> detailChild;
+//			for (HhHopDongDtlReq dtlReq : dtlReqList) {
+//				List<HhDdiemNhapKhoReq> cTietReq = dtlReq.getDetail();
+//				HhHopDongDtl detail = ObjectMapperUtils.map(dtlReq, HhHopDongDtl.class);
+//				detail.setType(Contains.HOP_DONG);
+//				detailChild = new ArrayList<HhHopDongDdiemNhapKho>();
+//				if (cTietReq != null)
+//					detailChild = ObjectMapperUtils.mapAll(cTietReq, HhHopDongDdiemNhapKho.class);
+//				detail.setChildren(detailChild);
+//				details.add(detail);
+//			}
+//			dataDB.setChildren(details);
+//		}
+//
+//		// add thong tin don vi lien quan
+//		List<HhDviLquan> dtls1 = ObjectMapperUtils.mapAll(dtlReqList, HhDviLquan.class);
+//		dataDB.setChildren1(dtls1);
 
 		// File dinh kem cua goi thau
 		List<FileDKemJoinHopDong> dtls2 = new ArrayList<FileDKemJoinHopDong>();
@@ -175,7 +179,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 		}
 		dataDB.setFileDinhKems(dtls2);
 
-		UnitScaler.reverseFormatList(dataMap.getChildren(), Contains.DVT_TAN);
+//		UnitScaler.reverseFormatList(dataMap.getChildren(), Contains.DVT_TAN);
 
 		return hhHopDongRepository.save(dataDB);
 	}
@@ -191,16 +195,19 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
 
 		// Quy doi don vi kg = tan
-		List<HhHopDongDtl> dtls2 = ObjectMapperUtils.mapAll(qOptional.get().getChildren(), HhHopDongDtl.class);
-		for (HhHopDongDtl dtl : dtls2) {
-			UnitScaler.formatList(dtl.getChildren(), Contains.DVT_TAN);
-		}
+//		List<HhHopDongDtl> dtls2 = ObjectMapperUtils.mapAll(qOptional.get().getChildren(), HhHopDongDtl.class);
+//		for (HhHopDongDtl dtl : dtls2) {
+//			UnitScaler.formatList(dtl.getChildren(), Contains.DVT_TAN);
+//		}
 		Map<String, String> mapDmucDvi = getMapTenDvi();
 
 		Map<String,String> mapVthh = getListDanhMucHangHoa (req);
 		qOptional.get().setTenVthh( StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : mapVthh.get(qOptional.get().getLoaiVthh()));
 		qOptional.get().setTenCloaiVthh( StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null :mapVthh.get(qOptional.get().getCloaiVthh()));
 		qOptional.get().setTenDvi(StringUtils.isEmpty(qOptional.get().getMaDvi()) ? null :mapDmucDvi.get(qOptional.get().getMaDvi()));
+
+		qOptional.get().setHhPhuLucHdongList(hhPhuLucRepository.findBySoHd(qOptional.get().getSoHd()));
+
 		return qOptional.get();
 	}
 
@@ -215,10 +222,10 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
 
 		// Quy doi don vi kg = tan
-		List<HhHopDongDtl> dtls2 = ObjectMapperUtils.mapAll(qOptional.get().getChildren(), HhHopDongDtl.class);
-		for (HhHopDongDtl dtl : dtls2) {
-			UnitScaler.formatList(dtl.getChildren(), Contains.DVT_TAN);
-		}
+//		List<HhHopDongDtl> dtls2 = ObjectMapperUtils.mapAll(qOptional.get().getChildren(), HhHopDongDtl.class);
+//		for (HhHopDongDtl dtl : dtls2) {
+//			UnitScaler.formatList(dtl.getChildren(), Contains.DVT_TAN);
+//		}
 
 		return qOptional.get();
 	}

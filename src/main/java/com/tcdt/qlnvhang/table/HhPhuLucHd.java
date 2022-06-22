@@ -5,16 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -39,19 +30,19 @@ public class HhPhuLucHd implements Serializable {
 	@SequenceGenerator(sequenceName = HhPhuLucHd.TABLE_NAME + "_SEQ", allocationSize = 1, name = HhPhuLucHd.TABLE_NAME
 			+ "_SEQ")
 	private Long id;
-
 	String soPluc;
 	Date ngayKy;
 	Date ngayHluc;
 	String veViec;
-	Date tuNgayTrcDc;
-	Date tuNgaySauDc;
-	long soNgayTrcDc;
-	long soNgaySauDc;
-	Date denNgayTrcDc;
-	Date denNgaySauDc;
+	Integer tgianThienHdTrc;
+	Integer tgianThienHdDc;
+	Date tuNgayHlucTrc;
+	Date denNgayHlucTrc;
+	Date tuNgayHlucDc;
+	Date denNgayHlucDc;
 	String soHd;
-	String noiDungDc;
+	String tenHd;
+	String noiDung;
 	String trangThai;
 	Date ngayTao;
 	String nguoiTao;
@@ -63,45 +54,27 @@ public class HhPhuLucHd implements Serializable {
 	Date ngayPduyet;
 	String nguoiPduyet;
 	String loaiVthh;
+	String cloaiVthh;
 	String maDvi;
+	String ghiChu;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "id_hdr")
-	@JsonManagedReference
-	@Where(clause = "type='" + Contains.PHU_LUC + "'")
-	private List<HhPhuLucHdDtl> children = new ArrayList<>();
-
-	public void setChildren(List<HhPhuLucHdDtl> children) {
-		this.children.clear();
-		for (HhPhuLucHdDtl child : children) {
-			child.setParent(this);
-		}
-		this.children.addAll(children);
-	}
-
-	public void addChild(HhPhuLucHdDtl child) {
-		child.setParent(this);
-		this.children.add(child);
-	}
+	@Transient
+	private List<HhPhuLucHdDtl> HhPhuLucHdDtl = new ArrayList<>();
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)
 	@JoinColumn(name = "dataId")
 	@JsonManagedReference
 	@Where(clause = "data_type='" + HhPhuLucHd.TABLE_NAME + "'")
-	private List<FileDKemJoinPhuLuc> children1 = new ArrayList<>();
+	private List<FileDKemJoinPhuLuc> fileDinhKems = new ArrayList<>();
 
-	public void setChildren1(List<FileDKemJoinPhuLuc> children1) {
-		this.children1.clear();
+	public void setFileDinhKems(List<FileDKemJoinPhuLuc> children1) {
+		this.fileDinhKems.clear();
 		for (FileDKemJoinPhuLuc child1 : children1) {
 			child1.setParent(this);
 		}
-		this.children1.addAll(children1);
+		this.fileDinhKems.addAll(children1);
 	}
 
-	public void addChild1(FileDKemJoinPhuLuc child1) {
-		child1.setParent(this);
-		this.children1.add(child1);
-	}
 
 }

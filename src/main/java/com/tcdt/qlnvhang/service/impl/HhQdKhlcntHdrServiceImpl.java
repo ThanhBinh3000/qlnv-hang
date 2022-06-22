@@ -42,13 +42,16 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	private HhQdKhlcntHdrRepository hhQdKhlcntHdrRepository;
 
 	@Autowired
+	private HhQdKhlcntDtlRepository hhQdKhlcntDtlRepository;
+
+	@Autowired
+	private HhQdKhlcntDsgthauRepository hhQdKhlcntDsgthauRepository;
+
+	@Autowired
 	private HhPaKhlcntHdrRepository hhPaKhlcntHdrRepository;
 
 	@Autowired
 	private HhDxKhLcntThopHdrRepository hhDxKhLcntThopHdrRepository;
-
-	@Autowired
-	private HhQdKhlcntDsgthauRepository hhQdKhlcntDsgthauRepository;
 
 	@Autowired
 	private HhQdKhlcntDsgthauCtietRepository hhQdKhlcntDsgthauCtietRepository;
@@ -107,28 +110,22 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setChildren(fileDinhKemList);
 		dataMap.setIdThHdr(qOptional.get().getId());
-//		dataMap.setSoPhAn(qOptional.get().getSoPhAn());
 
-		if (objReq.getDetail() != null) {
-			List<HhQdKhlcntDsgthau> detailChild;
-			List<HhQdKhlcntDtlReq> dtlReqList = objReq.getDetail();
-			for (HhQdKhlcntDtlReq dtlReq : dtlReqList) {
-				HhQdKhlcntDtl detail = ObjectMapperUtils.map(dtlReq, HhQdKhlcntDtl.class);
-				detailChild = new ArrayList<HhQdKhlcntDsgthau>();
-				detail.setId(null);
-				if (dtlReq.getChildren() != null){
-					detailChild = ObjectMapperUtils.mapAll(dtlReq.getChildren(), HhQdKhlcntDsgthau.class);
-					detailChild.forEach(f -> {f.setId(null);});
+		hhQdKhlcntHdrRepository.save(dataMap);
+
+		for (HhQdKhlcntDtlReq dx : objReq.getDsDeXuat()){
+			HhQdKhlcntDtl qd = ObjectMapperUtils.map(dx, HhQdKhlcntDtl.class);
+			qd.setIdQdHdr(dataMap.getId());
+			hhQdKhlcntDtlRepository.save(qd);
+			for (HhQdKhlcntDsgthauReq gt : dx.getDsGoiThau()){
+				for(HhQdKhlcntDsgthauReq gt1 : gt.getChildren()){
+					HhQdKhlcntDsgthau gtD =  ObjectMapperUtils.map(gt1, HhQdKhlcntDsgthau.class);
+					gtD.setIdQdDtl(qd.getId());
+					hhQdKhlcntDsgthauRepository.save(gtD);
 				}
-				UnitScaler.reverseFormatList(detailChild, Contains.DVT_TAN);
-				detail.setChildren(detailChild);
-				dataMap.addChild1(detail);
 			}
 		}
-
-		HhQdKhlcntHdr createCheck = hhQdKhlcntHdrRepository.save(dataMap);
-
-		return createCheck;
+		return dataMap;
 	}
 
 	@Override
@@ -196,19 +193,19 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		dataDB.setChildren(fileDinhKemList);
 //		dataDB.setSoPhAn(qOpPa.get().getSoPhAn());
 
-		if (objReq.getDetail() != null) {
-			List<HhQdKhlcntDsgthau> detailChild;
-			List<HhQdKhlcntDtlReq> dtlReqList = objReq.getDetail();
-			for (HhQdKhlcntDtlReq dtlReq : dtlReqList) {
-				HhQdKhlcntDtl detail = ObjectMapperUtils.map(dtlReq, HhQdKhlcntDtl.class);
-				detailChild = new ArrayList<HhQdKhlcntDsgthau>();
-				if (dtlReq.getChildren() != null)
-					detailChild = ObjectMapperUtils.mapAll(dtlReq.getChildren(), HhQdKhlcntDsgthau.class);
-				UnitScaler.reverseFormatList(detailChild, Contains.DVT_TAN);
-				detail.setChildren(detailChild);
-				dataDB.addChild1(detail);
-			}
-		}
+//		if (objReq.getDetail() != null) {
+//			List<HhQdKhlcntDsgthau> detailChild;
+//			List<HhQdKhlcntDtlReq> dtlReqList = objReq.getDetail();
+//			for (HhQdKhlcntDtlReq dtlReq : dtlReqList) {
+//				HhQdKhlcntDtl detail = ObjectMapperUtils.map(dtlReq, HhQdKhlcntDtl.class);
+//				detailChild = new ArrayList<HhQdKhlcntDsgthau>();
+//				if (dtlReq.getChildren() != null)
+//					detailChild = ObjectMapperUtils.mapAll(dtlReq.getChildren(), HhQdKhlcntDsgthau.class);
+//				UnitScaler.reverseFormatList(detailChild, Contains.DVT_TAN);
+//				detail.setChildren(detailChild);
+//				dataDB.addChild1(detail);
+//			}
+//		}
 
 		HhQdKhlcntHdr createCheck = hhQdKhlcntHdrRepository.save(dataDB);
 
@@ -226,10 +223,10 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
 
 		// Quy doi don vi kg = tan
-		List<HhQdKhlcntDtl> dtls2 = ObjectMapperUtils.mapAll(qOptional.get().getChildren1(), HhQdKhlcntDtl.class);
-		for (HhQdKhlcntDtl dtl : dtls2) {
-			UnitScaler.formatList(dtl.getChildren(), Contains.DVT_TAN);
-		}
+//		List<HhQdKhlcntDtl> dtls2 = ObjectMapperUtils.mapAll(qOptional.get().getChildren1(), HhQdKhlcntDtl.class);
+//		for (HhQdKhlcntDtl dtl : dtls2) {
+//			UnitScaler.formatList(dtl.getChildren(), Contains.DVT_TAN);
+//		}
 
 		return qOptional.get();
 	}
@@ -308,10 +305,10 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
 
 		// Quy doi don vi kg = tan
-		List<HhQdKhlcntDtl> dtls2 = ObjectMapperUtils.mapAll(qOptional.get().getChildren1(), HhQdKhlcntDtl.class);
-		for (HhQdKhlcntDtl dtl : dtls2) {
-			UnitScaler.formatList(dtl.getChildren(), Contains.DVT_TAN);
-		}
+//		List<HhQdKhlcntDtl> dtls2 = ObjectMapperUtils.mapAll(qOptional.get().getChildren1(), HhQdKhlcntDtl.class);
+//		for (HhQdKhlcntDtl dtl : dtls2) {
+//			UnitScaler.formatList(dtl.getChildren(), Contains.DVT_TAN);
+//		}
 		return qOptional.get();
 	}
 
@@ -362,7 +359,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			objs[0] = i;
 			objs[1] = dsgtDtl.getSoQd();
 			objs[2] = convertDateToString(dsgtDtl.getNgayQd());
-			objs[3] = dsgtDtl.getVeViec();
+//			objs[3] = dsgtDtl.getVeViec();
 			objs[4] = "01/QD-TCDT";// TODO: lam min lai
 			objs[5] = mapDmuc.get(dsgtDtl.getLoaiVthh());
 			objs[6] = "Tiêu chuẩn chất lượng";
@@ -419,7 +416,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		if (objReq.getDsGoiThau() != null && objReq.getDsGoiThau().size() > 0) {
 			for (HhQdKhlcntDsgthauReq dsgThau : objReq.getDsGoiThau()){
 				HhQdKhlcntDsgthau gThau = ObjectMapperUtils.map(dsgThau, HhQdKhlcntDsgthau.class);
-				gThau.setIdQdKhlcntHdr(idHhQdKhlcntHdr);
+//				gThau.setIdQdKhlcntHdr(idHhQdKhlcntHdr);
 				hhQdKhlcntDsgthauRepository.save(gThau);
 				for (HhDxuatKhLcntDsgVtuDtlCtietReq dsDdNhap : dsgThau.getDanhSachDiaDiemNhap()){
 					HhQdKhlcntDsgthauCtiet ddNhap = ObjectMapperUtils.map(dsDdNhap, HhQdKhlcntDsgthauCtiet.class);
@@ -446,7 +443,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		if (!qOptional.isPresent())
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
 
-		List<HhQdKhlcntDsgthau>  listGThau = hhQdKhlcntDsgthauRepository.findByIdQdKhlcntHdr(Long.parseLong(ids));
+		List<HhQdKhlcntDsgthau>  listGThau = hhQdKhlcntDsgthauRepository.findByIdQdHdr(Long.parseLong(ids));
 		qOptional.get().setDsGoiThau(listGThau);
 		for (int i = 0; i < qOptional.get().getDsGoiThau().size();i++){
 			HhQdKhlcntDsgthau dsgThau = qOptional.get().getDsGoiThau().get(i);

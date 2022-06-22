@@ -117,43 +117,14 @@ public class HhHopDongHdr implements Serializable {
 	@Transient
 	private List<HhHopDongDdiemNhapKho> listDdiemNhapKho = new ArrayList<>();
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "id_hdr")
-	@JsonManagedReference
-	@Where(clause = "type='" + Contains.HOP_DONG + "'")
-	private List<HhHopDongDtl> children = new ArrayList<>();
+	@Transient
+	private List<HhPhuLucHd> hhPhuLucHdongList = new ArrayList<>();
 
-	public void setChildren(List<HhHopDongDtl> children) {
-		this.children.clear();
-		for (HhHopDongDtl child : children) {
-			child.setParent(this);
-		}
-		this.children.addAll(children);
-	}
+	@Transient
+	private List<HhHopDongDtl> hhHopDongDtlList = new ArrayList<>();
 
-	public void addChild(HhHopDongDtl child) {
-		child.setParent(this);
-		this.children.add(child);
-	}
-
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "id_hdr")
-	@JsonManagedReference
-
-	private List<HhDviLquan> children1 = new ArrayList<>();
-
-	public void setChildren1(List<HhDviLquan> children1) {
-		this.children1.clear();
-		for (HhDviLquan child1 : children1) {
-			child1.setParent(this);
-		}
-		this.children1.addAll(children1);
-	}
-
-	public void addChild1(HhDviLquan child1) {
-		child1.setParent(this);
-		this.children1.add(child1);
-	}
+	@Transient
+	private List<HhDviLquan> hhDviLquanList = new ArrayList<>();
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)

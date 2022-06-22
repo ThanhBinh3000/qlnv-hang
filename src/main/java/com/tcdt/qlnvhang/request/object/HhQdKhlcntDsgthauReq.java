@@ -62,6 +62,8 @@ public class HhQdKhlcntDsgthauReq {
 	@NotNull(message = "Không được để trống")
 	Integer tgianThienHd;
 
+	private List<HhQdKhlcntDsgthauReq> children;
+
 	private List<HhDxuatKhLcntDsgVtuDtlCtietReq> danhSachDiaDiemNhap = new ArrayList<>();
 
 }
