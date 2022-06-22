@@ -36,7 +36,7 @@ public class HhDthauGthauService extends BaseServiceImpl {
 
 	public HhDthauGthau detailByIdGoiThau(String id){
 		Optional<HhDthauGthau> optional = hhDthauGthauRepository.findByIdGoiThau(Long.parseLong(id));
-		Map<String,String> mapVthh = getListDanhMucHangHoa (request);
+		Map<String,String> mapVthh = getListDanhMucHangHoa();
 		optional.get().setTenVthh( StringUtils.isEmpty(optional.get().getLoaiVthh()) ? null : mapVthh.get(optional.get().getLoaiVthh()));
 		optional.get().setTenCloaiVthh( StringUtils.isEmpty(optional.get().getCloaiVthh()) ? null :mapVthh.get(optional.get().getCloaiVthh()));
 		return optional.get();

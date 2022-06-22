@@ -49,7 +49,8 @@ public class Contains {
 	// Trạng thái tổng hợp
 	public static final String CHUA_QUYET_DINH = "00";
 
-	public static final String DA_QUYET_DINH = "01";
+	public static final String DU_THAO_QD = "01";
+	public static final String DA_QUYET_DINH = "02";
 
 	// Trang thai response
 	public static final int RESP_SUCC = 0;

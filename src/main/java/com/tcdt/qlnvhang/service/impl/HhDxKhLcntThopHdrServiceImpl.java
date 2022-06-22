@@ -199,13 +199,10 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		HhDxKhLcntThopHdr hdrThop = qOptional.get();
 
 		// Lay danh muc dung chung
-//		Map<String, String> mapDmuc = getMapCategory();
+		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 
-//		hdrThop.setTenVthh(Contains.getLoaiVthh(hdrThop.getLoaiVthh()));
-//		hdrThop.setTenHthucLcnt(mapDmuc.get(hdrThop.getHthucLcnt()));
-//		hdrThop.setTenPthucLcnt(mapDmuc.get(hdrThop.getPthucLcnt()));
-//		hdrThop.setTenLoaiHdong(mapDmuc.get(hdrThop.getLoaiHdong()));
-//		hdrThop.setTenNguonVon(mapDmuc.get(hdrThop.getNguonVon()));
+		hdrThop.setTenVthh(hashMapDmHh.get(hdrThop.getLoaiVthh()));
+		hdrThop.setTenCloaiVthh(hashMapDmHh.get(hdrThop.getCloaiVthh()));
 
 		hdrThop.setHhDxKhLcntThopDtlList(hhDxKhLcntThopDtlRepository.findByIdThopHdr(hdrThop.getId()));
 
@@ -349,7 +346,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		Map<String,String> hashMapNguonVon = getListDanhMucChung("NGUON_VON",request);
 		Map<String,String> hashMapHtLcnt = getListDanhMucChung("HT_LCNT",request);
 		Map<String,String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG",request);
-		Map<String,String> hashMapDmHh = getListDanhMucHangHoa(request);
+		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 		page.getContent().forEach(f -> {
 			f.setTenVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
 			f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));

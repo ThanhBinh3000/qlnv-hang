@@ -110,6 +110,12 @@ public class HhDxuatKhLcntHdrReq {
 	@Temporal(TemporalType.DATE)
 	Date tgianNhang;
 
+	@NotNull(message = "Không được để trống")
+	Integer gtriDthau;
+
+	@NotNull(message = "Không được để trống")
+	Integer gtriHdong;
+
 	@Size(max = 500, message = "Ghi chú không được vượt quá 500 ký tự")
 	String ghiChu;
 

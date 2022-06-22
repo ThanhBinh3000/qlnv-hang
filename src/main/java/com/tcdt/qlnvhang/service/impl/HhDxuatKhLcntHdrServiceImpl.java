@@ -173,7 +173,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
 		}
 
-		Map<String,String> mapVthh = getListDanhMucHangHoa(request);
+		Map<String,String> mapVthh = getListDanhMucHangHoa();
 		Map<String, String> mapDmucDvi = getMapTenDvi();
 
 		qOptional.get().setTenVthh( StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : mapVthh.get(qOptional.get().getLoaiVthh()));
@@ -351,7 +351,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
 		Page<HhDxuatKhLcntHdr> page = hhDxuatKhLcntHdrRepository.select(req.getNamKh(),req.getSoTr(),req.getSoQd(),convertDateToString(req.getTuNgayKy()),convertDateToString(req.getDenNgayKy()),req.getLoaiVthh(),req.getTrichYeu(),req.getTrangThai(), pageable);
 
-		Map<String,String> mapVthh = getListDanhMucHangHoa(request);
+		Map<String,String> mapVthh = getListDanhMucHangHoa();
 		page.getContent().forEach(f -> {
 			f.setTenVthh( StringUtils.isEmpty(f.getLoaiVthh()) ? null : mapVthh.get(f.getLoaiVthh()));
 			f.setTenCloaiVthh( StringUtils.isEmpty(f.getCloaiVthh()) ? null :mapVthh.get(f.getCloaiVthh()));

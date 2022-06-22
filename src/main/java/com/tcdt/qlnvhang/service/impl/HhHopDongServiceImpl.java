@@ -201,7 +201,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 //		}
 		Map<String, String> mapDmucDvi = getMapTenDvi();
 
-		Map<String,String> mapVthh = getListDanhMucHangHoa (req);
+		Map<String,String> mapVthh = getListDanhMucHangHoa();
 		qOptional.get().setTenVthh( StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : mapVthh.get(qOptional.get().getLoaiVthh()));
 		qOptional.get().setTenCloaiVthh( StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null :mapVthh.get(qOptional.get().getCloaiVthh()));
 		qOptional.get().setTenDvi(StringUtils.isEmpty(qOptional.get().getMaDvi()) ? null :mapDmucDvi.get(qOptional.get().getMaDvi()));

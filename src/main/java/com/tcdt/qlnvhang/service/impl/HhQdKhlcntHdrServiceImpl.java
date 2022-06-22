@@ -113,6 +113,10 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 
 		hhQdKhlcntHdrRepository.save(dataMap);
 
+//		Optional<HhDxKhLcntThopHdr> tongHop = hhDxKhLcntThopHdrRepository.findById(dataMap.getIdThHdr());
+		// Update trạng thái tổng hợp dxkhclnt
+		hhDxKhLcntThopHdrRepository.updateTrangThai(dataMap.getIdThHdr(), Contains.DU_THAO_QD);
+
 		for (HhQdKhlcntDtlReq dx : objReq.getDsDeXuat()){
 			HhQdKhlcntDtl qd = ObjectMapperUtils.map(dx, HhQdKhlcntDtl.class);
 			qd.setIdQdHdr(dataMap.getId());
@@ -244,17 +248,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 
 		String status = stReq.getTrangThai() + optional.get().getTrangThai();
 		switch (status) {
-		case Contains.CHO_DUYET + Contains.MOI_TAO:
-		case Contains.CHO_DUYET + Contains.TU_CHOI:
-			optional.get().setNguoiGuiDuyet(getUser().getUsername());
-			optional.get().setNgayGuiDuyet(getDateTimeNow());
-			break;
-		case Contains.TU_CHOI + Contains.CHO_DUYET:
-			optional.get().setNguoiPduyet(getUser().getUsername());
-			optional.get().setNgayPduyet(getDateTimeNow());
-			optional.get().setLdoTuchoi(stReq.getLyDo());
-			break;
-		case Contains.BAN_HANH + Contains.CHO_DUYET:
+		case Contains.BAN_HANH + Contains.MOI_TAO:
 			optional.get().setNguoiPduyet(getUser().getUsername());
 			optional.get().setNgayPduyet(getDateTimeNow());
 			break;

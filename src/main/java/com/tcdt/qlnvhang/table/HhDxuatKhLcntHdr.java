@@ -77,6 +77,8 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	Integer tgianThienHd;
 	@Temporal(TemporalType.DATE)
 	Date tgianNhang;
+	Integer gtriDthau;
+	Integer gtriHdong;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)
