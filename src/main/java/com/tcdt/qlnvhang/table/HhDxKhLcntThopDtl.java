@@ -38,5 +38,9 @@ public class HhDxKhLcntThopDtl implements Serializable {
 	String namKhoach;
 	@Transient
 	String trichYeu;
+	@Transient
+	Integer gtriDthau;
+	@Transient
+	Integer gtriHdong;
 
 }
