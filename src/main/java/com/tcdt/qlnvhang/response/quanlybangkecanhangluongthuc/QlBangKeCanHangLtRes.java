@@ -45,6 +45,8 @@ public class QlBangKeCanHangLtRes {
     private String thuKho;
     private String tenVatTu;
     private String maVatTu;
+    private String maVatTuCha;
+    private String tenVatTuCha;
     private String diaDiem;
 
     private BigDecimal tongTrongLuongBaoBi;

@@ -59,6 +59,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Log4j2
@@ -127,12 +128,15 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
         response.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
         response.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
 
-        if (StringUtils.hasText(item.getMaVatTu())) {
-            QlnvDmVattu vatTu = qlnvDmVattuRepository.findByMa(item.getMaVatTu());
-            if (vatTu == null)
+        Set<String> maVatTus = Stream.of(item.getMaVatTu(), item.getMaVatTuCha()).collect(Collectors.toSet());
+        if (!CollectionUtils.isEmpty(maVatTus)) {
+            Set<QlnvDmVattu> vatTus = qlnvDmVattuRepository.findByMaIn(maVatTus.stream().filter(Objects::nonNull).collect(Collectors.toSet()));
+            if (CollectionUtils.isEmpty(vatTus))
                 throw new Exception("Không tìm thấy vật tư");
-
-            response.setTenVatTu(vatTu.getTen());
+            vatTus.stream().filter(v -> v.getMa().equalsIgnoreCase(item.getMaVatTu())).findFirst()
+                    .ifPresent(v -> response.setTenVatTu(v.getTen()));
+            vatTus.stream().filter(v -> v.getMa().equalsIgnoreCase(item.getMaVatTuCha())).findFirst()
+                    .ifPresent(v -> response.setTenVatTuCha(v.getTen()));
         }
         List<QlBangKeChCtLt> chiTiets = item.getChiTiets();
         List<QlBangKeChCtLtRes> chiTietResList = new ArrayList<>();
