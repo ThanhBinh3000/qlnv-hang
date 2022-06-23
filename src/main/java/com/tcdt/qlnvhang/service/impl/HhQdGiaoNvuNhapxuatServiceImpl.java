@@ -375,6 +375,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 					req.getTrichYeu(),
 					req.getLoaiVthh(),
 					dvql,
+					req.getTrangThai(),
 					pageable);
 		} else if (Contains.CAP_CHI_CUC.equalsIgnoreCase(userInfo.getCapDvi())){
 			page = hhQdGiaoNvuNhapxuatRepository.findQdChiCuc(req.getNamNhap(),
@@ -385,6 +386,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 					req.getTrichYeu(),
 					req.getLoaiVthh(),
 					dvql,
+					req.getTrangThai(),
 					pageable);
 		} else {
 			return new PageImpl<>(new ArrayList<>(), pageable, 0);
