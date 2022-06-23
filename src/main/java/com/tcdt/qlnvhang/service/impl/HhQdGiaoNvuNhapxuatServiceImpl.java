@@ -18,6 +18,7 @@ import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.util.*;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -56,14 +57,15 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			throw new Exception("Bad request.");
 		Optional<HhQdGiaoNvuNhapxuatHdr> qOpQdinh = hhQdGiaoNvuNhapxuatRepository.findBySoQd(objReq.getSoQd());
 		if (qOpQdinh.isPresent())
-			throw new Exception("Hợp quyết định " + objReq.getSoHd() + " đã tồn tại");
+			throw new Exception("Số quyết định " + objReq.getSoQd() + " đã tồn tại");
 
 		Map<String, QlnvDmDonvi> mapDmucDvi = getMapDvi();
 		QlnvDmDonvi qlnvDmDonvi = mapDmucDvi.get(userInfo.getDvql());
 		if (qlnvDmDonvi == null)
 			throw new Exception("Bad request.");
 
-		HhQdGiaoNvuNhapxuatHdr dataMap = ObjectMapperUtils.map(objReq, HhQdGiaoNvuNhapxuatHdr.class);
+		HhQdGiaoNvuNhapxuatHdr dataMap = new HhQdGiaoNvuNhapxuatHdr();
+		BeanUtils.copyProperties(objReq, dataMap, "id");
 
 		dataMap.setNguoiTao(userInfo.getUsername());
 		dataMap.setNgayTao(getDateTimeNow());
@@ -121,13 +123,11 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		}
 
 		HhQdGiaoNvuNhapxuatHdr dataDB = qOptional.get();
-		HhQdGiaoNvuNhapxuatHdr dataMap = ObjectMapperUtils.map(objReq, HhQdGiaoNvuNhapxuatHdr.class);
-
-		updateObjectToObject(dataDB, dataMap);
+		BeanUtils.copyProperties(objReq, dataDB, "id");
 
 		dataDB.setNgaySua(getDateTimeNow());
 		dataDB.setNguoiSua(userInfo.getUsername());
-
+		dataDB.setId(dataDB.getId());
 		// add thong tin chi tiet
 		List<HhQdGiaoNvuNhapxuatDtl> dtls = ObjectMapperUtils.mapAll(objReq.getDetail(), HhQdGiaoNvuNhapxuatDtl.class);
 		for (HhQdGiaoNvuNhapxuatDtl dtl : dtls) {
@@ -147,8 +147,8 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		dataDB.setChildren2(dtls2);
 
 		hhQdGiaoNvuNhapxuatRepository.save(dataDB);
-		dataDB.setTenTrangThai(TrangThaiEnum.getTenById(dataMap.getTrangThai()));
-		dataDB.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(dataMap.getTrangThai()));
+		dataDB.setTenTrangThai(TrangThaiEnum.getTenById(dataDB.getTrangThai()));
+		dataDB.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(dataDB.getTrangThai()));
 		this.setTenDvi(dataDB);
 		this.setHopDong(dataDB);
 		return dataDB;
@@ -431,12 +431,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		if (CollectionUtils.isEmpty(req.getIds()))
 			return false;
 
-		try {
-			hhQdGiaoNvuNhapxuatRepository.deleteByIdIn(req.getIds());
-		} catch (Exception e) {
-			throw new Exception("Xóa quyết định giao nhiệm vụ nhập hàng lỗi.");
-		}
-
+		hhQdGiaoNvuNhapxuatRepository.deleteByIdIn(req.getIds());
 		return true;
 	}
 }
