@@ -53,5 +53,7 @@ public class QlBangKeCanHangLtRes {
     private BigDecimal tongTrongLuongCaBi;
     private String tongTrongLuongHangTruBiBangChu;
 
+    private String maDvi;
+    private String tenDvi;
     private List<QlBangKeChCtLtRes> chiTiets = new ArrayList<>();
 }

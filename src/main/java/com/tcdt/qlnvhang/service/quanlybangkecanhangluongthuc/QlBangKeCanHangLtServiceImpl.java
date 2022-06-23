@@ -24,6 +24,7 @@ import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganKho;
@@ -52,6 +53,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
@@ -95,6 +97,9 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
     @Autowired
     private QlnvDmVattuRepository qlnvDmVattuRepository;
 
+    @Autowired
+    private HttpServletRequest req;
+
     @Override
     @Transactional(rollbackOn = Exception.class)
     public QlBangKeCanHangLtRes create(QlBangKeCanHangLtReq req) throws Exception {
@@ -127,6 +132,9 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
         BeanUtils.copyProperties(item, response);
         response.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
         response.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
+        QlnvDmDonvi donvi = getDviByMa(item.getMaDvi(), req);
+        response.setMaDvi(donvi.getMaDvi());
+        response.setTenDvi(donvi.getTenDvi());
 
         Set<String> maVatTus = Stream.of(item.getMaVatTu(), item.getMaVatTuCha()).collect(Collectors.toSet());
         if (!CollectionUtils.isEmpty(maVatTus)) {
