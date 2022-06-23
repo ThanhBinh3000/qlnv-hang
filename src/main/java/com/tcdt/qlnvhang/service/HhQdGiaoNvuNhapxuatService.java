@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service;
 
+import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.StrSearchReq;
@@ -45,4 +46,7 @@ public interface HhQdGiaoNvuNhapxuatService {
 	Page<HhQdGiaoNvuNhapxuatHdr> timKiem(HhQdNhapxuatSearchReq objReq) throws Exception;
 
 	BaseNhapHangCount count() throws Exception;
+
+	@Transactional(rollbackOn = Exception.class)
+	boolean deleteMultiple(DeleteReq req) throws Exception;
 }

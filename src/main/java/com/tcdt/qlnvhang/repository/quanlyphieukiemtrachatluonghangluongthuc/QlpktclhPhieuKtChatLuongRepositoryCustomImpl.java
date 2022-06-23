@@ -54,6 +54,10 @@ public class QlpktclhPhieuKtChatLuongRepositoryCustomImpl implements QlpktclhPhi
 			response.setTenTrangThai(QlpktclhPhieuKtChatLuongStatusEnum.getTenById(qd.getTrangThai()));
 			response.setQuyetDinhNhapId(quyetDinhNhapId);
 			response.setSoQuyetDinhNhap(soQdNhap);
+			response.setMaDiemKho(qd.getMaDiemKho());
+			response.setMaNhaKho(qd.getMaNhaKho());
+			response.setMaNganKho(qd.getMaNganKho());
+			response.setMaNganLo(qd.getMaNganLo());
 			responses.add(response);
 		}
 

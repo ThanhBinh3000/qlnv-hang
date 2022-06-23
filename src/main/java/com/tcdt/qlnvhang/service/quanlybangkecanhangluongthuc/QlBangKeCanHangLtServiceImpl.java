@@ -1,26 +1,46 @@
 package com.tcdt.qlnvhang.service.quanlybangkecanhangluongthuc;
 
-import com.google.common.collect.Sets;
 import com.tcdt.qlnvhang.entities.quanlybangkecanhangluongthuc.QlBangKeCanHangLt;
 import com.tcdt.qlnvhang.entities.quanlybangkecanhangluongthuc.QlBangKeChCtLt;
+import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLt;
+import com.tcdt.qlnvhang.enums.QlPhieuNhapKhoLtStatus;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
-import com.tcdt.qlnvhang.repository.khotang.KtDiemKhoRepository;
+import com.tcdt.qlnvhang.repository.HhQdGiaoNvuNhapxuatRepository;
+import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
-import com.tcdt.qlnvhang.repository.khotang.KtNhaKhoRepository;
 import com.tcdt.qlnvhang.repository.quanlybangkecanhangluongthuc.QlBangKeCanHangLtRepository;
 import com.tcdt.qlnvhang.repository.quanlybangkecanhangluongthuc.QlBangKeChCtLtRepository;
+import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLtRepository;
+import com.tcdt.qlnvhang.request.DeleteReq;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.quanlybangkecanhangluongthuc.QlBangKeCanHangLtReq;
 import com.tcdt.qlnvhang.request.object.quanlybangkecanhangluongthuc.QlBangKeChCtLtReq;
 import com.tcdt.qlnvhang.request.search.quanlybangkecanhangluongthuc.QlBangKeCanHangLtSearchReq;
+import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.response.quanlybangkecanhangluongthuc.QlBangKeCanHangLtRes;
 import com.tcdt.qlnvhang.response.quanlybangkecanhangluongthuc.QlBangKeChCtLtRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
+import com.tcdt.qlnvhang.table.khotang.KtNganKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganLo;
 import com.tcdt.qlnvhang.table.khotang.KtNhaKho;
+import com.tcdt.qlnvhang.util.ExportExcel;
+import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
+import com.tcdt.qlnvhang.util.MoneyConvert;
+import com.tcdt.qlnvhang.util.UserUtils;
+import lombok.extern.log4j.Log4j2;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,14 +51,30 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
+@Log4j2
 public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlBangKeCanHangLtService {
+
+    private static final String SHEET_BANG_KE_CAN_HANG_LUONG_THUC = "Bảng kê cân hàng lương thực";
+    private static final String STT = "STT";
+    private static final String SO_BANG_KE = "Số Bảng Kê";
+    private static final String SO_QUYET_DINH_NHAP = "Số Quyết Định Nhập";
+    private static final String SO_PHIEU_NHAP = "Số Phiếu Nhập";
+    private static final String NGAY_NHAP_KHO = "Ngày Nhập Kho";
+    private static final String DIEM_KHO = "Điểm Kho";
+    private static final String NHA_KHO = "Nhà Kho";
+    private static final String NGAN_KHO = "Ngăn Kho";
+    private static final String NGAN_LO = "Ngăn Lô";
+    private static final String TRANG_THAI = "Trạng Thái";
 
     @Autowired
     private QlBangKeCanHangLtRepository qlBangKeCanHangLtRepository;
@@ -50,10 +86,13 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
     private KtNganLoRepository ktNganLoRepository;
 
     @Autowired
-    private KtDiemKhoRepository ktDiemKhoRepository;
+    private HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
 
     @Autowired
-    private KtNhaKhoRepository ktNhaKhoRepository;
+    private QlPhieuNhapKhoLtRepository qlPhieuNhapKhoLtRepository;
+
+    @Autowired
+    private QlnvDmVattuRepository qlnvDmVattuRepository;
 
     @Override
     @Transactional(rollbackOn = Exception.class)
@@ -70,58 +109,67 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
         item.setNgayTao(LocalDate.now());
         item.setNguoiTaoId(userInfo.getId());
         item.setTrangThai(TrangThaiEnum.DU_THAO.getId());
-        item.setMaDonVi(userInfo.getDvql());
-        item.setCapDonVi(userInfo.getCapDvi());
+        item.setMaDvi(userInfo.getDvql());
+        item.setCapDvi(userInfo.getCapDvi());
         qlBangKeCanHangLtRepository.save(item);
 
         List<QlBangKeChCtLtReq> chiTietReqs = req.getChiTiets();
         List<QlBangKeChCtLt> chiTiets = this.saveListChiTiet(item.getId(), chiTietReqs, new HashMap<>());
         item.setChiTiets(chiTiets);
 
-        List<KtNganLo> byMaNganloIn = StringUtils.hasText(item.getMaNganLo()) ? ktNganLoRepository.findByMaNganloIn(Sets.newHashSet(item.getMaNganLo())) : new ArrayList<>();
-        List<KtDiemKho> byMaDiemkhoIn = StringUtils.hasText(item.getMaDiemKho()) ? ktDiemKhoRepository.findByMaDiemkhoIn(Sets.newHashSet(item.getMaDiemKho())) : new ArrayList<>();
-        List<KtNhaKho> byMaNhakhoIn = StringUtils.hasText(item.getMaNhaKho()) ?  ktNhaKhoRepository.findByMaNhakhoIn(Sets.newHashSet(item.getMaNhaKho())) : new ArrayList<>();
-
-
-        return this.buildResponse(item, byMaNganloIn , byMaDiemkhoIn, byMaNhakhoIn);
+        return this.buildResponse(item);
     }
 
-    private QlBangKeCanHangLtRes buildResponse(QlBangKeCanHangLt item,
-                                               Collection<KtNganLo> nganLos,
-                                               Collection<KtDiemKho> diemKhos,
-                                               Collection<KtNhaKho> nhaKhos) {
+    private QlBangKeCanHangLtRes buildResponse(QlBangKeCanHangLt item) throws Exception {
+
         QlBangKeCanHangLtRes response = new QlBangKeCanHangLtRes();
         BeanUtils.copyProperties(item, response);
-
-        Map<String, String> mapDmucDvi = getMapTenDvi();
-        response.setTenDonViLap(mapDmucDvi.get(item.getMaDonViLap()));
         response.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
         response.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
 
-        nganLos.stream().filter(l -> l.getMaNganlo().equals(item.getMaNganLo())).findFirst().ifPresent(l -> {
-            response.setTenNganLo(l.getTenNganlo());
-            response.setNganLoId(l.getId());
-        });
+        if (StringUtils.hasText(item.getMaVatTu())) {
+            QlnvDmVattu vatTu = qlnvDmVattuRepository.findByMa(item.getMaVatTu());
+            if (vatTu == null)
+                throw new Exception("Không tìm thấy vật tư");
 
-        diemKhos.stream().filter(l -> l.getMaDiemkho().equals(item.getMaDiemKho())).findFirst().ifPresent(l -> {
-            response.setTenDiemKho(l.getTenDiemkho());
-            response.setDiemKhoId(l.getId());
-        });
-
-        nhaKhos.stream().filter(l -> l.getMaNhakho().equals(item.getMaNhaKho())).findFirst().ifPresent(l -> {
-            response.setTenNhaKho(l.getTenNhakho());
-            response.setNhaKhoId(l.getId());
-        });
-
-
+            response.setTenVatTu(vatTu.getTen());
+        }
         List<QlBangKeChCtLt> chiTiets = item.getChiTiets();
         List<QlBangKeChCtLtRes> chiTietResList = new ArrayList<>();
+        BigDecimal tongTrongLuongCaBi = BigDecimal.ZERO;
         for (QlBangKeChCtLt chiTiet : chiTiets) {
             QlBangKeChCtLtRes chiTietRes = new QlBangKeChCtLtRes();
             BeanUtils.copyProperties(chiTiet, chiTietRes);
             chiTietResList.add(chiTietRes);
+            tongTrongLuongCaBi = tongTrongLuongCaBi.add(Optional.ofNullable(chiTiet.getTrongLuongCaBi()).orElse(BigDecimal.ZERO));
         }
         response.setChiTiets(chiTietResList);
+
+        response.setTongTrongLuongCaBi(tongTrongLuongCaBi);
+        BigDecimal tongTrongLuongHangTruBi = tongTrongLuongCaBi.subtract(Optional.ofNullable(item.getTongTrongLuongBaoBi()).orElse(BigDecimal.ZERO));
+        response.setTongTrongLuongHangTruBiBangChu(MoneyConvert.docSoLuong(tongTrongLuongHangTruBi.toString(), null));
+
+        if (item.getQlPhieuNhapKhoLtId() != null) {
+            QlPhieuNhapKhoLt phieuNhapKho = qlPhieuNhapKhoLtRepository.findById(item.getQlPhieuNhapKhoLtId())
+                    .orElseThrow(() -> new Exception("Không tìm thấy phiếu nhập kho"));
+
+            response.setSoPhieuNhapKho(phieuNhapKho.getSoPhieu());
+        }
+
+        if (item.getQdgnvnxId() != null) {
+            Optional<HhQdGiaoNvuNhapxuatHdr> qdNhap = hhQdGiaoNvuNhapxuatRepository.findById(item.getQdgnvnxId());
+            if (!qdNhap.isPresent()) {
+                throw new Exception("Không tìm thấy quyết định nhập");
+            }
+            response.setSoQuyetDinhNhap(qdNhap.get().getSoQd());
+        }
+
+        KtNganLo nganLo = null;
+        if (StringUtils.hasText(item.getMaNganLo())) {
+            nganLo = ktNganLoRepository.findFirstByMaNganlo(item.getMaNganLo());
+        }
+
+        this.thongTinNganLo(response, nganLo);
         return response;
     }
 
@@ -179,10 +227,7 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
         if (!CollectionUtils.isEmpty(map.values()))
             qlBangKeChCtLtRepository.deleteAll(map.values());
 
-        List<KtNganLo> byMaNganloIn = StringUtils.hasText(item.getMaNganLo()) ? ktNganLoRepository.findByMaNganloIn(Sets.newHashSet(item.getMaNganLo())) : new ArrayList<>();
-        List<KtDiemKho> byMaDiemkhoIn = StringUtils.hasText(item.getMaDiemKho()) ? ktDiemKhoRepository.findByMaDiemkhoIn(Sets.newHashSet(item.getMaDiemKho())) : new ArrayList<>();
-        List<KtNhaKho> byMaNhakhoIn = StringUtils.hasText(item.getMaNhaKho()) ?  ktNhaKhoRepository.findByMaNhakhoIn(Sets.newHashSet(item.getMaNhaKho())) : new ArrayList<>();
-        return this.buildResponse(item,byMaNganloIn, byMaDiemkhoIn, byMaNhakhoIn);
+        return this.buildResponse(item);
     }
 
     @Override
@@ -197,11 +242,7 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
 
         QlBangKeCanHangLt item = optional.get();
         item.setChiTiets(qlBangKeChCtLtRepository.findAllByQlBangKeCanHangLtId(item.getId()));
-
-        List<KtNganLo> byMaNganloIn = StringUtils.hasText(item.getMaNganLo()) ? ktNganLoRepository.findByMaNganloIn(Sets.newHashSet(item.getMaNganLo())) : new ArrayList<>();
-        List<KtDiemKho> byMaDiemkhoIn = StringUtils.hasText(item.getMaDiemKho()) ? ktDiemKhoRepository.findByMaDiemkhoIn(Sets.newHashSet(item.getMaDiemKho())) : new ArrayList<>();
-        List<KtNhaKho> byMaNhakhoIn = StringUtils.hasText(item.getMaNhaKho()) ?  ktNhaKhoRepository.findByMaNhakhoIn(Sets.newHashSet(item.getMaNhaKho())) : new ArrayList<>();
-        return this.buildResponse(item,byMaNganloIn, byMaDiemkhoIn, byMaNhakhoIn);
+        return this.buildResponse(item);
     }
 
     @Override
@@ -287,33 +328,151 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
         if (userInfo == null)
             throw new Exception("Bad request.");
 
-        req.setMaDonVi(userInfo.getDvql());
+        req.setMaDvi(userInfo.getDvql());
 
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        List<QlBangKeCanHangLt> data = qlBangKeCanHangLtRepository.search(req);
-        Set<String> maNganLos =  new HashSet<>();
-        Set<String> maDiemKhos = new HashSet<>();
-        Set<String> maNhaKhos = new HashSet<>();
-        for (QlBangKeCanHangLt bb : data) {
-
-            if (StringUtils.hasText(bb.getMaNganLo()))
-                maNganLos.add(bb.getMaNganLo());
-
-            if (StringUtils.hasText(bb.getMaDiemKho()))
-                maDiemKhos.add(bb.getMaDiemKho());
-
-            if (StringUtils.hasText(bb.getMaNhaKho()))
-                maNhaKhos.add(bb.getMaNhaKho());
+        List<Object[]> data = qlBangKeCanHangLtRepository.search(req);
+        List<QlBangKeCanHangLtRes> responses = new ArrayList<>();
+        for (Object[] o : data) {
+            QlBangKeCanHangLtRes response = new QlBangKeCanHangLtRes();
+            QlBangKeCanHangLt item = (QlBangKeCanHangLt) o[0];
+            Long pnkId = (Long) o[1];
+            String soPnk = (String) o[2];
+            KtNganLo nganLo = o[3] != null ? (KtNganLo) o[3] : null;
+            Long qdNhapId = (Long) o[4];
+            String soQdNhap = (String) o[5];
+            String maVatTu = (String) o[6];
+            String tenVatTu = (String) o[7];
+            BeanUtils.copyProperties(item, response);
+            response.setTenTrangThai(QlPhieuNhapKhoLtStatus.getTenById(item.getTrangThai()));
+            response.setTrangThaiDuyet(QlPhieuNhapKhoLtStatus.getTrangThaiDuyetById(item.getTrangThai()));
+            response.setQlPhieuNhapKhoLtId(pnkId);
+            response.setSoPhieuNhapKho(soPnk);
+            this.thongTinNganLo(response, nganLo);
+            response.setQdgnvnxId(qdNhapId);
+            response.setSoQuyetDinhNhap(soQdNhap);
+            response.setMaVatTu(maVatTu);
+            response.setTenVatTu(tenVatTu);
+            responses.add(response);
         }
 
-        List<KtNganLo> byMaNganloIn = !CollectionUtils.isEmpty(maNganLos) ? ktNganLoRepository.findByMaNganloIn(maNganLos) : new ArrayList<>();
-        List<KtDiemKho> byMaDiemkhoIn = !CollectionUtils.isEmpty(maDiemKhos) ? ktDiemKhoRepository.findByMaDiemkhoIn(maDiemKhos) : new ArrayList<>();
-        List<KtNhaKho> byMaNhakhoIn = !CollectionUtils.isEmpty(maNhaKhos) ?  ktNhaKhoRepository.findByMaNhakhoIn(maNhaKhos) : new ArrayList<>();
-
-        List<QlBangKeCanHangLtRes> responses = new ArrayList<>();
-        data.forEach(d -> {
-            responses.add(buildResponse(d, byMaNganloIn, byMaDiemkhoIn, byMaNhakhoIn));
-        });
         return new PageImpl<>(responses, pageable, qlBangKeCanHangLtRepository.count(req));
+    }
+
+    private void thongTinNganLo(QlBangKeCanHangLtRes item, KtNganLo nganLo) {
+        if (nganLo != null) {
+            item.setTenNganLo(nganLo.getTenNganlo());
+            KtNganKho nganKho = nganLo.getParent();
+            if (nganKho == null)
+                return;
+
+            item.setTenNganKho(nganKho.getTenNgankho());
+            item.setMaNganKho(nganKho.getMaNgankho());
+            KtNhaKho nhaKho = nganKho.getParent();
+            if (nhaKho == null)
+                return;
+
+            item.setTenNhaKho(nhaKho.getTenNhakho());
+            item.setMaNhaKho(nhaKho.getMaNhakho());
+            KtDiemKho diemKho = nhaKho.getParent();
+            if (diemKho == null)
+                return;
+
+            item.setTenDiemKho(diemKho.getTenDiemkho());
+            item.setMaDiemKho(diemKho.getMaDiemkho());
+        }
+    }
+
+    @Override
+    public BaseNhapHangCount count() throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        QlBangKeCanHangLtSearchReq req = new QlBangKeCanHangLtSearchReq();
+        req.setMaDvi(userInfo.getDvql());
+        BaseNhapHangCount count = new BaseNhapHangCount();
+
+        count.setTatCa(qlBangKeCanHangLtRepository.count(req));
+        return count;
+    }
+
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public boolean deleteMultiple(DeleteReq req) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+
+        if (CollectionUtils.isEmpty(req.getIds()))
+            return false;
+
+
+        qlBangKeChCtLtRepository.deleteByQlBangKeCanHangLtIdIn(req.getIds());
+        qlBangKeCanHangLtRepository.deleteByIdIn(req.getIds());
+        return true;
+    }
+
+    @Override
+    public boolean exportToExcel(QlBangKeCanHangLtSearchReq objReq, HttpServletResponse response) throws Exception {
+        objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
+        List<QlBangKeCanHangLtRes> list = this.search(objReq).get().collect(Collectors.toList());
+
+        if (CollectionUtils.isEmpty(list))
+            return true;
+
+        try {
+            XSSFWorkbook workbook = new XSSFWorkbook();
+
+            //STYLE
+            CellStyle style = workbook.createCellStyle();
+            XSSFFont font = workbook.createFont();
+            font.setFontHeight(11);
+            font.setBold(true);
+            style.setFont(font);
+            style.setAlignment(HorizontalAlignment.CENTER);
+            style.setVerticalAlignment(VerticalAlignment.CENTER);
+            XSSFSheet sheet = workbook.createSheet(SHEET_BANG_KE_CAN_HANG_LUONG_THUC);
+            Row row0 = sheet.createRow(0);
+            //STT
+
+            ExportExcel.createCell(row0, 0, STT, style, sheet);
+            ExportExcel.createCell(row0, 1, SO_BANG_KE, style, sheet);
+            ExportExcel.createCell(row0, 2, SO_QUYET_DINH_NHAP, style, sheet);
+            ExportExcel.createCell(row0, 3, SO_PHIEU_NHAP, style, sheet);
+            ExportExcel.createCell(row0, 4, NGAY_NHAP_KHO, style, sheet);
+            ExportExcel.createCell(row0, 5, DIEM_KHO, style, sheet);
+            ExportExcel.createCell(row0, 6, NHA_KHO, style, sheet);
+            ExportExcel.createCell(row0, 7, NGAN_KHO, style, sheet);
+            ExportExcel.createCell(row0, 8, NGAN_LO, style, sheet);
+            ExportExcel.createCell(row0, 9, TRANG_THAI, style, sheet);
+
+            style = workbook.createCellStyle();
+            font = workbook.createFont();
+            font.setFontHeight(11);
+            style.setFont(font);
+
+            Row row;
+            int startRowIndex = 1;
+
+            for (QlBangKeCanHangLtRes item : list) {
+                row = sheet.createRow(startRowIndex);
+                ExportExcel.createCell(row, 0, startRowIndex, style, sheet);
+                ExportExcel.createCell(row, 1, item.getSoBangKe(), style, sheet);
+                ExportExcel.createCell(row, 2, item.getSoQuyetDinhNhap(), style, sheet);
+                ExportExcel.createCell(row, 3, item.getSoPhieuNhapKho(), style, sheet);
+                ExportExcel.createCell(row, 4, LocalDateTimeUtils.localDateToString(item.getNgayNhap()), style, sheet);
+                ExportExcel.createCell(row, 5, item.getTenDiemKho(), style, sheet);
+                ExportExcel.createCell(row, 6, item.getTenNhaKho(), style, sheet);
+                ExportExcel.createCell(row, 7, item.getTenNganKho(), style, sheet);
+                ExportExcel.createCell(row, 8, item.getTenNganLo(), style, sheet);
+                ExportExcel.createCell(row, 9, TrangThaiEnum.getTenById(item.getTrangThai()), style, sheet);
+                startRowIndex++;
+            }
+
+            ServletOutputStream outputStream = response.getOutputStream();
+            workbook.write(outputStream);
+            workbook.close();
+            outputStream.close();
+        } catch (Exception e) {
+            log.error("Error export", e);
+            return false;
+        }
+        return true;
     }
 }
