@@ -365,8 +365,9 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
 		UserInfo userInfo = UserUtils.getUserInfo();
 		String dvql = userInfo.getDvql();
+		Page<HhQdGiaoNvuNhapxuatHdr> page = null;
 		if (Contains.CAP_CUC.equalsIgnoreCase(userInfo.getCapDvi())) {
-			return hhQdGiaoNvuNhapxuatRepository.select(req.getNamNhap(),
+			page =  hhQdGiaoNvuNhapxuatRepository.select(req.getNamNhap(),
 					req.getVeViec(),
 					req.getSoQd(),
 					convertDateToString(req.getTuNgayQd()),
@@ -376,7 +377,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 					dvql,
 					pageable);
 		} else if (Contains.CAP_CHI_CUC.equalsIgnoreCase(userInfo.getCapDvi())){
-			return hhQdGiaoNvuNhapxuatRepository.findQdChiCuc(req.getNamNhap(),
+			page = hhQdGiaoNvuNhapxuatRepository.findQdChiCuc(req.getNamNhap(),
 					req.getVeViec(),
 					req.getSoQd(),
 					convertDateToString(req.getTuNgayQd()),
@@ -385,8 +386,16 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 					req.getLoaiVthh(),
 					dvql,
 					pageable);
+		} else {
+			return new PageImpl<>(new ArrayList<>(), pageable, 0);
 		}
-		return new PageImpl<>(new ArrayList<>(), pageable, 0);
+
+		List<HhQdGiaoNvuNhapxuatHdr> data = page.getContent();
+		for (HhQdGiaoNvuNhapxuatHdr qd : data) {
+			qd.setTenTrangThai(TrangThaiEnum.getTenById(qd.getTrangThai()));
+			qd.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(qd.getTrangThai()));
+		}
+		return new PageImpl<>(data, pageable, page.getTotalElements());
 	}
 
 	@Override
@@ -420,7 +429,12 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		if (CollectionUtils.isEmpty(req.getIds()))
 			return false;
 
-		hhQdGiaoNvuNhapxuatRepository.deleteByIdIn(req.getIds());
+		try {
+			hhQdGiaoNvuNhapxuatRepository.deleteByIdIn(req.getIds());
+		} catch (Exception e) {
+			throw new Exception("Xóa quyết định giao nhiệm vụ nhập hàng lỗi.");
+		}
+
 		return true;
 	}
 }
