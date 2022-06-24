@@ -43,6 +43,10 @@ public class HhQdGiaoNvuNhapxuatRepositoryCustomImpl implements HhQdGiaoNvuNhapx
     private void setConditionSearch(HhQdNhapxuatSearchReq req, StringBuilder builder, String capDvi) {
         builder.append("WHERE 1 = 1 ");
 
+        if (!StringUtils.isEmpty(req.getLoaiVthh())) {
+            builder.append("AND ").append("qd.loaiVthh = :loaiVthh ");
+        }
+
         if (req.getNamNhap() != null) {
             builder.append("AND ").append("qd.namNhap = :namNhap ");
         }
@@ -121,6 +125,10 @@ public class HhQdGiaoNvuNhapxuatRepositoryCustomImpl implements HhQdGiaoNvuNhapx
 
         if (!StringUtils.isEmpty(req.getTrichYeu())) {
             query.setParameter("trichYeu", "%" + req.getTrichYeu() + "%");
+        }
+
+        if (!StringUtils.isEmpty(req.getLoaiVthh())) {
+            query.setParameter("loaiVthh", req.getLoaiVthh());
         }
     }
 }
