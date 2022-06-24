@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
-import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLt;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatDtlLoaiNx;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatHdrLoaiQd;
@@ -26,7 +25,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import com.tcdt.qlnvhang.entities.FileDKemJoinQdNhapxuat;
-import com.tcdt.qlnvhang.repository.HhQdGiaoNvuNhapxuatRepository;
+import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.request.object.HhQdGiaoNvuNhapxuatHdrReq;
 import com.tcdt.qlnvhang.request.search.HhQdNhapxuatSearchReq;
 import com.tcdt.qlnvhang.secification.HhQdGiaoNvuNhapxuatSpecification;
@@ -365,39 +364,18 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
 		UserInfo userInfo = UserUtils.getUserInfo();
 		String dvql = userInfo.getDvql();
-		Page<HhQdGiaoNvuNhapxuatHdr> page = null;
-		if (Contains.CAP_CUC.equalsIgnoreCase(userInfo.getCapDvi())) {
-			page =  hhQdGiaoNvuNhapxuatRepository.select(req.getNamNhap(),
-					req.getVeViec(),
-					req.getSoQd(),
-					convertDateToString(req.getTuNgayQd()),
-					convertDateToString(req.getDenNgayQd()),
-					req.getTrichYeu(),
-					req.getLoaiVthh(),
-					dvql,
-					req.getTrangThai(),
-					pageable);
-		} else if (Contains.CAP_CHI_CUC.equalsIgnoreCase(userInfo.getCapDvi())){
-			page = hhQdGiaoNvuNhapxuatRepository.findQdChiCuc(req.getNamNhap(),
-					req.getVeViec(),
-					req.getSoQd(),
-					convertDateToString(req.getTuNgayQd()),
-					convertDateToString(req.getDenNgayQd()),
-					req.getTrichYeu(),
-					req.getLoaiVthh(),
-					dvql,
-					req.getTrangThai(),
-					pageable);
-		} else {
+		req.setMaDvi(dvql);
+		String capDvi = userInfo.getCapDvi();
+		if (!Contains.CAP_CHI_CUC.equalsIgnoreCase(userInfo.getCapDvi()) && !Contains.CAP_CUC.equalsIgnoreCase(userInfo.getCapDvi())) {
 			return new PageImpl<>(new ArrayList<>(), pageable, 0);
 		}
 
-		List<HhQdGiaoNvuNhapxuatHdr> data = page.getContent();
+		List<HhQdGiaoNvuNhapxuatHdr> data = hhQdGiaoNvuNhapxuatRepository.search(req, capDvi);
 		for (HhQdGiaoNvuNhapxuatHdr qd : data) {
 			qd.setTenTrangThai(TrangThaiEnum.getTenById(qd.getTrangThai()));
 			qd.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(qd.getTrangThai()));
 		}
-		return new PageImpl<>(data, pageable, page.getTotalElements());
+		return new PageImpl<>(data, pageable, hhQdGiaoNvuNhapxuatRepository.count(req, capDvi));
 	}
 
 	@Override

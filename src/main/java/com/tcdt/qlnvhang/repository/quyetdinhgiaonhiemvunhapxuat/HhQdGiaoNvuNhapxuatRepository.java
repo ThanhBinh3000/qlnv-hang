@@ -1,18 +1,21 @@
-package com.tcdt.qlnvhang.repository;
+package com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import com.tcdt.qlnvhang.repository.BaseRepository;
 import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 
-public interface HhQdGiaoNvuNhapxuatRepository extends BaseRepository<HhQdGiaoNvuNhapxuatHdr, Long> {
+@Repository
+public interface HhQdGiaoNvuNhapxuatRepository extends BaseRepository<HhQdGiaoNvuNhapxuatHdr, Long>, HhQdGiaoNvuNhapxuatRepositoryCustom {
 
 	Optional<HhQdGiaoNvuNhapxuatHdr> findBySoHd(String soHd);
 
