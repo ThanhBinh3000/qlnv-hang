@@ -1,25 +1,46 @@
 package com.tcdt.qlnvhang.service.quanlybienbannhapdaykholuongthuc;
 
-import com.google.common.collect.Sets;
 import com.tcdt.qlnvhang.entities.quanlybienbannhapdaykholuongthuc.QlBienBanNdkCtLt;
 import com.tcdt.qlnvhang.entities.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLt;
+import com.tcdt.qlnvhang.enums.QlPhieuNhapKhoLtStatus;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
-import com.tcdt.qlnvhang.repository.khotang.KtDiemKhoRepository;
+import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
-import com.tcdt.qlnvhang.repository.khotang.KtNhaKhoRepository;
 import com.tcdt.qlnvhang.repository.quanlybienbannhapdaykholuongthuc.QlBienBanNdkCtLtRepository;
 import com.tcdt.qlnvhang.repository.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtRepository;
+import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
+import com.tcdt.qlnvhang.request.DeleteReq;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.quanlybienbannhapdaykholuongthuc.QlBienBanNdkCtLtReq;
 import com.tcdt.qlnvhang.request.object.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtReq;
 import com.tcdt.qlnvhang.request.search.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtSearchReq;
+import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.response.quanlybienbannhapdaykholuongthuc.QlBienBanNdkCtLtRes;
 import com.tcdt.qlnvhang.response.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
+import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
+import com.tcdt.qlnvhang.table.khotang.KtNganKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganLo;
 import com.tcdt.qlnvhang.table.khotang.KtNhaKho;
+import com.tcdt.qlnvhang.util.ExportExcel;
+import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
+import com.tcdt.qlnvhang.util.UserUtils;
+import lombok.extern.log4j.Log4j2;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -27,16 +48,30 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import static com.tcdt.qlnvhang.service.impl.BaseServiceImpl.convertDateToString;
+import java.util.stream.Stream;
 
 @Service
-public class QlBienBanNhapDayKhoLtServiceImpl implements QlBienBanNhapDayKhoLtService {
+@Log4j2
+public class QlBienBanNhapDayKhoLtServiceImpl extends BaseServiceImpl implements QlBienBanNhapDayKhoLtService {
+
+    private static final String SHEET_BIEN_BAN_NHAP_DAY_KHO_LUONG_THUC = "Biên bản nhập đầy kho lương thức";
+    private static final String STT = "STT";
+    private static final String SO_BIEN_BAN = "Số Biên Bản";
+    private static final String SO_QUYET_DINH_NHAP = "Số Quyết Định Nhập";
+    private static final String NGAY_NHAP_DAY_KHO = "Ngày Nhập Đầy Kho";
+    private static final String DIEM_KHO = "Điểm Kho";
+    private static final String NHA_KHO = "Nhà Kho";
+    private static final String NGAN_KHO = "Ngăn Kho";
+    private static final String NGAN_LO = "Ngăn Lô";
+    private static final String TRANG_THAI = "Trạng Thái";
 
     @Autowired
     private QlBienBanNhapDayKhoLtRepository qlBienBanNhapDayKhoLtRepository;
@@ -48,10 +83,16 @@ public class QlBienBanNhapDayKhoLtServiceImpl implements QlBienBanNhapDayKhoLtSe
     private KtNganLoRepository ktNganLoRepository;
 
     @Autowired
-    private KtDiemKhoRepository ktDiemKhoRepository;
+    private QlnvDmVattuRepository qlnvDmVattuRepository;
 
     @Autowired
-    private KtNhaKhoRepository ktNhaKhoRepository;
+    private HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
+
+    @Autowired
+    private FileDinhKemService fileDinhKemService;
+
+    @Autowired
+    private HttpServletRequest req;
 
     @Override
     @Transactional(rollbackOn = Exception.class)
@@ -68,43 +109,38 @@ public class QlBienBanNhapDayKhoLtServiceImpl implements QlBienBanNhapDayKhoLtSe
         item.setNgayTao(LocalDate.now());
         item.setNguoiTaoId(userInfo.getId());
         item.setTrangThai(TrangThaiEnum.DU_THAO.getId());
-        item.setMaDonVi(userInfo.getDvql());
-        item.setCapDonVi(userInfo.getCapDvi());
+        item.setMaDvi(userInfo.getDvql());
+        item.setCapDvi(userInfo.getCapDvi());
         qlBienBanNhapDayKhoLtRepository.save(item);
 
         List<QlBienBanNdkCtLt> chiTiets = this.saveListChiTiet(item.getId(), req.getChiTiets(), new HashMap<>());
         item.setChiTiets(chiTiets);
 
-        List<KtNganLo> byMaNganloIn = StringUtils.hasText(item.getMaNganLo()) ? ktNganLoRepository.findByMaNganloIn(Sets.newHashSet(item.getMaNganLo())) : new ArrayList<>();
-        List<KtDiemKho> byMaDiemkhoIn = StringUtils.hasText(item.getMaDiemKho()) ? ktDiemKhoRepository.findByMaDiemkhoIn(Sets.newHashSet(item.getMaDiemKho())) : new ArrayList<>();
-        List<KtNhaKho> byMaNhakhoIn = StringUtils.hasText(item.getMaNhaKho()) ?  ktNhaKhoRepository.findByMaNhakhoIn(Sets.newHashSet(item.getMaNhaKho())) : new ArrayList<>();
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), item.getId(), QlBienBanNhapDayKhoLt.TABLE_NAME);
+        item.setFileDinhKems(fileDinhKems);
 
-        return buildResponse(item, byMaNganloIn, byMaDiemkhoIn, byMaNhakhoIn, userInfo);
+        return buildResponse(item);
     }
 
-    private QlBienBanNhapDayKhoLtRes buildResponse(QlBienBanNhapDayKhoLt item,
-                                                   Collection<KtNganLo> nganLos,
-                                                   Collection<KtDiemKho> diemKhos,
-                                                   Collection<KtNhaKho> nhaKhos,
-                                                   UserInfo userInfo) {
+    private QlBienBanNhapDayKhoLtRes buildResponse(QlBienBanNhapDayKhoLt item) throws Exception {
         QlBienBanNhapDayKhoLtRes response = new QlBienBanNhapDayKhoLtRes();
         BeanUtils.copyProperties(item, response);
         response.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
         response.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
-        nganLos.stream().filter(l -> l.getMaNganlo().equals(item.getMaNganLo())).findFirst().ifPresent(l -> {
-            response.setTenNganLo(l.getTenNganlo());
-            response.setNganLoId(l.getId());
-        });
+        QlnvDmDonvi donvi = getDviByMa(item.getMaDvi(), req);
+        response.setMaDvi(donvi.getMaDvi());
+        response.setTenDvi(donvi.getTenDvi());
 
-        diemKhos.stream().filter(l -> l.getMaDiemkho().equals(item.getMaDiemKho())).findFirst().ifPresent(l -> {
-            response.setTenDiemKho(l.getTenDiemkho());
-            response.setDiemKhoId(l.getId());
-        });
-
-        nhaKhos.stream().filter(l -> l.getMaNhakho().equals(item.getMaNhaKho())).findFirst().ifPresent(l -> {
-            response.setTenNhaKho(l.getTenNhakho());
-            response.setNhaKhoId(l.getId());
-        });
+        Set<String> maVatTus = Stream.of(item.getMaVatTu(), item.getMaVatTuCha()).collect(Collectors.toSet());
+        if (!CollectionUtils.isEmpty(maVatTus)) {
+            Set<QlnvDmVattu> vatTus = qlnvDmVattuRepository.findByMaIn(maVatTus.stream().filter(Objects::nonNull).collect(Collectors.toSet()));
+            if (CollectionUtils.isEmpty(vatTus))
+                throw new Exception("Không tìm thấy vật tư");
+            vatTus.stream().filter(v -> v.getMa().equalsIgnoreCase(item.getMaVatTu())).findFirst()
+                    .ifPresent(v -> response.setTenVatTu(v.getTen()));
+            vatTus.stream().filter(v -> v.getMa().equalsIgnoreCase(item.getMaVatTuCha())).findFirst()
+                    .ifPresent(v -> response.setTenVatTuCha(v.getTen()));
+        }
 
         List<QlBienBanNdkCtLt> chiTiets = item.getChiTiets();
         List<QlBienBanNdkCtLtRes> chiTietResList = new ArrayList<>();
@@ -114,8 +150,21 @@ public class QlBienBanNhapDayKhoLtServiceImpl implements QlBienBanNhapDayKhoLtSe
             chiTietResList.add(chiTietRes);
         }
         response.setChiTiets(chiTietResList);
-        response.setTenDvi(userInfo.getTenDvi());
-        response.setMaDvi(userInfo.getDvql());
+        if (item.getQdgnvnxId() != null) {
+            Optional<HhQdGiaoNvuNhapxuatHdr> qdNhap = hhQdGiaoNvuNhapxuatRepository.findById(item.getQdgnvnxId());
+            if (!qdNhap.isPresent()) {
+                throw new Exception("Không tìm thấy quyết định nhập");
+            }
+            response.setSoQuyetDinhNhap(qdNhap.get().getSoQd());
+        }
+
+        KtNganLo nganLo = null;
+        if (StringUtils.hasText(item.getMaNganLo())) {
+            nganLo = ktNganLoRepository.findFirstByMaNganlo(item.getMaNganLo());
+        }
+
+        this.thongTinNganLo(response, nganLo);
+        response.setFileDinhKems(fileDinhKemService.search(item.getId(), Collections.singleton(QlBienBanNhapDayKhoLt.TABLE_NAME)));
         return response;
     }
 
@@ -171,11 +220,7 @@ public class QlBienBanNhapDayKhoLtServiceImpl implements QlBienBanNhapDayKhoLtSe
         if (!CollectionUtils.isEmpty(map.values()))
             qlBienBanNdkCtLtRepository.deleteAll(map.values());
 
-        List<KtNganLo> byMaNganloIn = StringUtils.hasText(item.getMaNganLo()) ? ktNganLoRepository.findByMaNganloIn(Sets.newHashSet(item.getMaNganLo())) : new ArrayList<>();
-        List<KtDiemKho> byMaDiemkhoIn = StringUtils.hasText(item.getMaDiemKho()) ? ktDiemKhoRepository.findByMaDiemkhoIn(Sets.newHashSet(item.getMaDiemKho())) : new ArrayList<>();
-        List<KtNhaKho> byMaNhakhoIn = StringUtils.hasText(item.getMaNhaKho()) ?  ktNhaKhoRepository.findByMaNhakhoIn(Sets.newHashSet(item.getMaNhaKho())) : new ArrayList<>();
-
-        return this.buildResponse(item, byMaNganloIn, byMaDiemkhoIn, byMaNhakhoIn, userInfo);
+        return this.buildResponse(item);
     }
 
     @Override
@@ -190,11 +235,7 @@ public class QlBienBanNhapDayKhoLtServiceImpl implements QlBienBanNhapDayKhoLtSe
 
         QlBienBanNhapDayKhoLt item = optional.get();
         item.setChiTiets(qlBienBanNdkCtLtRepository.findAllByQlBienBanNdkLtIdOrderBySttAsc(item.getId()));
-        List<KtNganLo> byMaNganloIn = StringUtils.hasText(item.getMaNganLo()) ? ktNganLoRepository.findByMaNganloIn(Sets.newHashSet(item.getMaNganLo())) : new ArrayList<>();
-        List<KtDiemKho> byMaDiemkhoIn = StringUtils.hasText(item.getMaDiemKho()) ? ktDiemKhoRepository.findByMaDiemkhoIn(Sets.newHashSet(item.getMaDiemKho())) : new ArrayList<>();
-        List<KtNhaKho> byMaNhakhoIn = StringUtils.hasText(item.getMaNhaKho()) ?  ktNhaKhoRepository.findByMaNhakhoIn(Sets.newHashSet(item.getMaNhaKho())) : new ArrayList<>();
-
-        return this.buildResponse(item, byMaNganloIn, byMaDiemkhoIn, byMaNhakhoIn, userInfo);
+        return this.buildResponse(item);
     }
 
     @Override
@@ -228,32 +269,30 @@ public class QlBienBanNhapDayKhoLtServiceImpl implements QlBienBanNhapDayKhoLtSe
         if (userInfo == null)
             throw new Exception("Bad request.");
 
-        req.setMaDonVi(userInfo.getDvql());
-        List<QlBienBanNhapDayKhoLt> list = qlBienBanNhapDayKhoLtRepository.search(req);
+        req.setMaDvi(userInfo.getDvql());
+        List<Object[]> list = qlBienBanNhapDayKhoLtRepository.search(req);
+        List<QlBienBanNhapDayKhoLtRes> responses = new ArrayList<>();
+        for (Object[] o : list) {
+            QlBienBanNhapDayKhoLtRes response = new QlBienBanNhapDayKhoLtRes();
+            QlBienBanNhapDayKhoLt item = (QlBienBanNhapDayKhoLt) o[0];
+            KtNganLo nganLo = o[1] != null ? (KtNganLo) o[1] : null;
+            Long qdNhapId = (Long) o[2];
+            String soQdNhap = (String) o[3];
+            String maVatTu = (String) o[4];
+            String tenVatTu = (String) o[5];
 
-        Set<String> maNganLos =  new HashSet<>();
-        Set<String> maDiemKhos = new HashSet<>();
-        Set<String> maNhaKhos = new HashSet<>();
-        for (QlBienBanNhapDayKhoLt bb : list) {
-
-            if (StringUtils.hasText(bb.getMaNganLo()))
-                maNganLos.add(bb.getMaNganLo());
-
-            if (StringUtils.hasText(bb.getMaDiemKho()))
-                maDiemKhos.add(bb.getMaDiemKho());
-
-            if (StringUtils.hasText(bb.getMaNhaKho()))
-                maNhaKhos.add(bb.getMaNhaKho());
+            BeanUtils.copyProperties(item, response);
+            response.setTenTrangThai(QlPhieuNhapKhoLtStatus.getTenById(item.getTrangThai()));
+            response.setTrangThaiDuyet(QlPhieuNhapKhoLtStatus.getTrangThaiDuyetById(item.getTrangThai()));
+            this.thongTinNganLo(response, nganLo);
+            response.setQdgnvnxId(qdNhapId);
+            response.setSoQuyetDinhNhap(soQdNhap);
+            response.setMaVatTu(maVatTu);
+            response.setTenVatTu(tenVatTu);
+            responses.add(response);
         }
 
-        List<KtNganLo> byMaNganloIn = !CollectionUtils.isEmpty(maNganLos) ? ktNganLoRepository.findByMaNganloIn(maNganLos) : new ArrayList<>();
-        List<KtDiemKho> byMaDiemkhoIn = !CollectionUtils.isEmpty(maDiemKhos) ? ktDiemKhoRepository.findByMaDiemkhoIn(maDiemKhos) : new ArrayList<>();
-        List<KtNhaKho> byMaNhakhoIn = !CollectionUtils.isEmpty(maNhaKhos) ?  ktNhaKhoRepository.findByMaNhakhoIn(maNhaKhos) : new ArrayList<>();
-        List<QlBienBanNhapDayKhoLtRes> data = new ArrayList<>();
-        for (QlBienBanNhapDayKhoLt bb : list) {
-            data.add(this.buildResponse(bb, byMaNganloIn, byMaDiemkhoIn, byMaNhakhoIn, userInfo));
-        }
-        return new PageImpl<>(data, PageRequest.of(req.getPaggingReq().getPage(),  req.getPaggingReq().getLimit()), qlBienBanNhapDayKhoLtRepository.count(req));
+        return new PageImpl<>(responses, PageRequest.of(req.getPaggingReq().getPage(),  req.getPaggingReq().getLimit()), qlBienBanNhapDayKhoLtRepository.count(req));
     }
 
     @Override
@@ -268,12 +307,6 @@ public class QlBienBanNhapDayKhoLtServiceImpl implements QlBienBanNhapDayKhoLtSe
 
         QlBienBanNhapDayKhoLt bangKe = optional.get();
         return this.updateStatus(req, bangKe, userInfo);
-    }
-
-    @Override
-    public Page<QlBienBanNhapDayKhoLt> timKiem(QlBienBanNhapDayKhoLtSearchReq req) throws Exception {
-        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
-        return qlBienBanNhapDayKhoLtRepository.select(req.getSoBienBan(),convertDateToString(req.getNgayBatDauNhap()),convertDateToString(req.getNgayKetThucNhap()),convertDateToString(req.getNgayNhapDayKhoTu()),convertDateToString(req.getNgayNhapDayKhoDen()),req.getMaDiemKho(),req.getMaNhaKho(),req.getMaKhoNganLo(),req.getKyThuatVien(), pageable);
     }
 
     public boolean updateStatus(StatusReq stReq, QlBienBanNhapDayKhoLt bangKe, UserInfo userInfo) throws Exception {
@@ -311,6 +344,121 @@ public class QlBienBanNhapDayKhoLtServiceImpl implements QlBienBanNhapDayKhoLtSe
         }
 
         qlBienBanNhapDayKhoLtRepository.save(bangKe);
+        return true;
+    }
+
+    private void thongTinNganLo(QlBienBanNhapDayKhoLtRes item, KtNganLo nganLo) {
+        if (nganLo != null) {
+            item.setTenNganLo(nganLo.getTenNganlo());
+            KtNganKho nganKho = nganLo.getParent();
+            if (nganKho == null)
+                return;
+
+            item.setTenNganKho(nganKho.getTenNgankho());
+            item.setMaNganKho(nganKho.getMaNgankho());
+            KtNhaKho nhaKho = nganKho.getParent();
+            if (nhaKho == null)
+                return;
+
+            item.setTenNhaKho(nhaKho.getTenNhakho());
+            item.setMaNhaKho(nhaKho.getMaNhakho());
+            KtDiemKho diemKho = nhaKho.getParent();
+            if (diemKho == null)
+                return;
+
+            item.setTenDiemKho(diemKho.getTenDiemkho());
+            item.setMaDiemKho(diemKho.getMaDiemkho());
+        }
+    }
+
+    @Override
+    public BaseNhapHangCount count() throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        QlBienBanNhapDayKhoLtSearchReq req = new QlBienBanNhapDayKhoLtSearchReq();
+        req.setMaDvi(userInfo.getDvql());
+        BaseNhapHangCount count = new BaseNhapHangCount();
+
+        count.setTatCa(qlBienBanNhapDayKhoLtRepository.count(req));
+        return count;
+    }
+
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public boolean deleteMultiple(DeleteReq req) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+
+        if (CollectionUtils.isEmpty(req.getIds()))
+            return false;
+
+
+        qlBienBanNdkCtLtRepository.deleteByQlBienBanNdkLtIdIn(req.getIds());
+        qlBienBanNhapDayKhoLtRepository.deleteByIdIn(req.getIds());
+        return true;
+    }
+
+    @Override
+    public boolean exportToExcel(QlBienBanNhapDayKhoLtSearchReq objReq, HttpServletResponse response) throws Exception {
+        objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
+        List<QlBienBanNhapDayKhoLtRes> list = this.search(objReq).get().collect(Collectors.toList());
+
+        if (CollectionUtils.isEmpty(list))
+            return true;
+
+        try {
+            XSSFWorkbook workbook = new XSSFWorkbook();
+
+            //STYLE
+            CellStyle style = workbook.createCellStyle();
+            XSSFFont font = workbook.createFont();
+            font.setFontHeight(11);
+            font.setBold(true);
+            style.setFont(font);
+            style.setAlignment(HorizontalAlignment.CENTER);
+            style.setVerticalAlignment(VerticalAlignment.CENTER);
+            XSSFSheet sheet = workbook.createSheet(SHEET_BIEN_BAN_NHAP_DAY_KHO_LUONG_THUC);
+            Row row0 = sheet.createRow(0);
+            //STT
+
+            ExportExcel.createCell(row0, 0, STT, style, sheet);
+            ExportExcel.createCell(row0, 1, SO_BIEN_BAN, style, sheet);
+            ExportExcel.createCell(row0, 2, SO_QUYET_DINH_NHAP, style, sheet);
+            ExportExcel.createCell(row0, 3, NGAY_NHAP_DAY_KHO, style, sheet);
+            ExportExcel.createCell(row0, 4, DIEM_KHO, style, sheet);
+            ExportExcel.createCell(row0, 5, NHA_KHO, style, sheet);
+            ExportExcel.createCell(row0, 6, NGAN_KHO, style, sheet);
+            ExportExcel.createCell(row0, 7, NGAN_LO, style, sheet);
+            ExportExcel.createCell(row0, 8, TRANG_THAI, style, sheet);
+
+            style = workbook.createCellStyle();
+            font = workbook.createFont();
+            font.setFontHeight(11);
+            style.setFont(font);
+
+            Row row;
+            int startRowIndex = 1;
+
+            for (QlBienBanNhapDayKhoLtRes item : list) {
+                row = sheet.createRow(startRowIndex);
+                ExportExcel.createCell(row, 0, startRowIndex, style, sheet);
+                ExportExcel.createCell(row, 1, item.getSoBienBan(), style, sheet);
+                ExportExcel.createCell(row, 2, item.getSoQuyetDinhNhap(), style, sheet);
+                ExportExcel.createCell(row, 3, LocalDateTimeUtils.localDateToString(item.getNgayNhapDayKho()), style, sheet);
+                ExportExcel.createCell(row, 4, item.getTenDiemKho(), style, sheet);
+                ExportExcel.createCell(row, 5, item.getTenNhaKho(), style, sheet);
+                ExportExcel.createCell(row, 6, item.getTenNganKho(), style, sheet);
+                ExportExcel.createCell(row, 7, item.getTenNganLo(), style, sheet);
+                ExportExcel.createCell(row, 8, TrangThaiEnum.getTenById(item.getTrangThai()), style, sheet);
+                startRowIndex++;
+            }
+
+            ServletOutputStream outputStream = response.getOutputStream();
+            workbook.write(outputStream);
+            workbook.close();
+            outputStream.close();
+        } catch (Exception e) {
+            log.error("Error export", e);
+            return false;
+        }
         return true;
     }
 }

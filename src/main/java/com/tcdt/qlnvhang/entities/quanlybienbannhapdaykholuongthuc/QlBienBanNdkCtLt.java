@@ -36,7 +36,7 @@ public class QlBienBanNdkCtLt implements Serializable {
     private String ghiChu;
 
     @Column(name = "QL_BIEN_BAN_NDK_LT_ID")
-    private Long qlBienBanNdkLtId; // QL_BIEN_BAN_NHAP_DAY_KHO_LT
+    private Long qlBienBanNdkLtId; // NH_BB_NHAP_DAY_KHO_LT
 
     @Column(name = "STT")
     private Integer stt;

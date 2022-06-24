@@ -17,14 +17,10 @@ public class QlBienBanNhapDayKhoLtSearchReq extends BaseRequest {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate ngayNhapDayKhoDen;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate ngayBatDauNhap;
+    private LocalDate ngayKetThucNhapTu;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate ngayKetThucNhap;
-    private String maDiemKho;
-    private String maNhaKho;
-    private String maKhoNganLo;
-    private String kyThuatVien;
-    private String maDonViLap;
-    private String maHang;
-    private String maDonVi;
+    private LocalDate ngayKetThucNhapDen;
+    private String maDvi;
+    private String soQdNhap;
+    private String maVatTuCha;
 }
