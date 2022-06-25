@@ -326,10 +326,12 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 	@Override
 	public void exportDsQdGNvNx(HhQdNhapxuatSearchReq searchReq, HttpServletResponse response) throws Exception {
+		UserInfo userInfo = UserUtils.getUserInfo();
 		PaggingReq paggingReq = new PaggingReq();
-		paggingReq.setPage(1);
+		paggingReq.setPage(0);
 		paggingReq.setLimit(Integer.MAX_VALUE);
 		searchReq.setPaggingReq(paggingReq);
+		searchReq.setMaDvi(userInfo.getDvql());
 		Page<HhQdGiaoNvuNhapxuatHdr> page = this.timKiem(searchReq);
 		List<HhQdGiaoNvuNhapxuatHdr> data = page.getContent();
 
@@ -345,7 +347,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			objs = new Object[rowsName.length];
 			objs[0] = i;
 			objs[1] = qd.getSoQd();
-			objs[2] = qd.getNgayQdinh();
+			objs[2] = convertDateToString(qd.getNgayQdinh());
 			objs[3] = qd.getNamNhap();
 			objs[4] = qd.getTrichYeu();
 			objs[5] = TrangThaiEnum.getTenById(qd.getTrangThai());
