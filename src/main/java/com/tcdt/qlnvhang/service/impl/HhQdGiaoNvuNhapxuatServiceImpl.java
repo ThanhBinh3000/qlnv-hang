@@ -334,8 +334,8 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		List<HhQdGiaoNvuNhapxuatHdr> data = page.getContent();
 
 		String title = "Danh sách quyết định giao nhiệm vụ nhập xuất";
-		String[] rowsName = new String[] { "STT", "Số QĐ", "Ngày ký", "Về việc",
-				"Căn cứ", "Đơn vị ra quyết định", "Loại QĐ", "Tên hàng DTQG", "Trạng thái"};
+		String[] rowsName = new String[] { "STT", "Số QĐ", "Ngày QĐ", "Năm Nhập",
+				"Trích Yếu Quyết Định", "Trạng thái"};
 		String filename = "Danh_sach_quyet_dinh_giao_nhiem_vu_nhap_xuat.xlsx";
 
 		List<Object[]> dataList = new ArrayList<Object[]>();
@@ -345,13 +345,10 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			objs = new Object[rowsName.length];
 			objs[0] = i;
 			objs[1] = qd.getSoQd();
-			objs[2] = qd.getNgayKy();
-			objs[3] = qd.getVeViec();
-			objs[4] = qd.getSoHd();
-			objs[5] = qd.getTenDvi();
-			objs[6] = qd.getTenLoaiQd();
-			objs[7] = !CollectionUtils.isEmpty(qd.getChildren()) ? qd.getChildren().get(0).getTenVthh() : "";
-			objs[8] = Contains.mapTrangThaiPheDuyet.get(qd.getTrangThai());
+			objs[2] = qd.getNgayQdinh();
+			objs[3] = qd.getNamNhap();
+			objs[4] = qd.getTrichYeu();
+			objs[5] = TrangThaiEnum.getTenById(qd.getTrangThai());
 			dataList.add(objs);
 		}
 
