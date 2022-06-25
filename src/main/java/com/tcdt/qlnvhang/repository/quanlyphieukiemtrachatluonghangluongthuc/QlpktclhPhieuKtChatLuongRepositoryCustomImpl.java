@@ -104,6 +104,7 @@ public class QlpktclhPhieuKtChatLuongRepositoryCustomImpl implements QlpktclhPhi
 		int total = 0;
 		StringBuilder builder = new StringBuilder();
 		builder.append("SELECT COUNT(DISTINCT qd.id) AS totalRecord FROM QlpktclhPhieuKtChatLuong qd ");
+		builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON qd.quyetDinhNhapId = nx.id ");
 
 		this.setConditionFilter(req, builder);
 

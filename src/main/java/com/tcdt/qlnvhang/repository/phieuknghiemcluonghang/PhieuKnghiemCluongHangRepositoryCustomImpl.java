@@ -15,9 +15,13 @@ public class PhieuKnghiemCluongHangRepositoryCustomImpl implements PhieuKnghiemC
 	private EntityManager em;
 
 	@Override
-	public List<PhieuKnghiemCluongHang> search(PhieuKnghiemCluongHangSearchReq req, Pageable pageable) {
+	public List<Object[]> search(PhieuKnghiemCluongHangSearchReq req, Pageable pageable) {
 		StringBuilder builder = new StringBuilder();
-		builder.append("SELECT phieu FROM PhieuKnghiemCluongHang phieu ");
+		builder.append("SELECT phieu, nganLo, nx.id, nx.soQd, vatTu.ma, vatTu.ten, bbBanGiao.id, bbBanGiao.soBban, bbBanGiao.ngayBgiaoMau FROM PhieuKnghiemCluongHang phieu ");
+		builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON phieu.qdgnvnxId = nx.id ");
+		builder.append("INNER JOIN BienBanBanGiaoMau bbBanGiao ON phieu.bbBanGiaoMauId = bbBanGiao.id ");
+		builder.append("INNER JOIN QlnvDmVattu vatTu ON p.maVatTu = vatTu.ma ");
+		builder.append("LEFT JOIN KtNganLo nganLo ON p.maNganLo = nganLo.maNganlo ");
 		setConditionSearchCtkhn(req, builder);
 
 		//Sort
@@ -27,7 +31,7 @@ public class PhieuKnghiemCluongHangRepositoryCustomImpl implements PhieuKnghiemC
 					.map(o -> o.getProperty() + " " + o.getDirection()).collect(Collectors.joining(", ")));
 		}
 
-		TypedQuery<PhieuKnghiemCluongHang> query = em.createQuery(builder.toString(), PhieuKnghiemCluongHang.class);
+		TypedQuery<Object[]> query = em.createQuery(builder.toString(), Object[].class);
 
 		//Set params
 		this.setParameterSearchCtkhn(req, query);
@@ -41,34 +45,31 @@ public class PhieuKnghiemCluongHangRepositoryCustomImpl implements PhieuKnghiemC
 	private void setConditionSearchCtkhn(PhieuKnghiemCluongHangSearchReq req, StringBuilder builder) {
 		builder.append("WHERE 1 = 1 ");
 
-		if (!StringUtils.isEmpty(req.getMaDvi())) {
-			builder.append("AND ").append("phieu.maHhoa = :maHhoa ");
+		if (!StringUtils.isEmpty(req.getSoBbBanGiao())) {
+			builder.append("AND ").append("bbBanGiao.soBban LIKE :soBbBanGiao ");
+		}
+		if (!StringUtils.isEmpty(req.getSoPhieu())) {
+			builder.append("AND ").append("phieu.soPhieu LIKE :soPhieu ");
 		}
 
-		if (!StringUtils.isEmpty(req.getSoPhieu())) {
-			builder.append("AND ").append("phieu.soPhieu = :soPhieu ");
-		}
 		if (!StringUtils.isEmpty(req.getMaDvi())) {
 			builder.append("AND ").append("phieu.maDvi = :maDvi ");
 		}
 
-		if (!StringUtils.isEmpty(req.getMaKho())) {
-			builder.append("AND ").append("phieu.maKho = :maKho ");
+		if (req.getNgayBanGiaoMauTu() != null) {
+			builder.append("AND ").append("bbBanGiao.ngayBgiaoMau >= :ngayBanGiaoMauTu ");
 		}
 
-		if (!StringUtils.isEmpty(req.getMaNgan())) {
-			builder.append("AND ").append("phieu.maNgan = :maNgan ");
+		if (req.getNgayBanGiaoMauDen() != null) {
+			builder.append("AND ").append("bbBanGiao.ngayBgiaoMau <= :ngayBanGiaoMauDen ");
 		}
 
-		if (!StringUtils.isEmpty(req.getMaLo())) {
-			builder.append("AND ").append("phieu.maLo = :maLo ");
-		}
-		if (req.getNgayKnghiemTuNgay() != null) {
-			builder.append("AND ").append("phieu.ngayKnghiem >= :ngayKnghiemTuNgay ");
+		if (!StringUtils.isEmpty(req.getSoQdNhap())) {
+			builder.append("AND ").append("nx.soQd LIKE :soQdNhap ");
 		}
 
-		if (req.getNgayKnghiemDenNgay() != null) {
-			builder.append("AND ").append("phieu.ngayKnghiem <= :ngayKnghiemDenNgay ");
+		if (!StringUtils.isEmpty(req.getMaVatTuCha())) {
+			builder.append("AND ").append("p.maVatTuCha = :maVatTuCha ");
 		}
 	}
 
@@ -86,36 +87,33 @@ public class PhieuKnghiemCluongHangRepositoryCustomImpl implements PhieuKnghiemC
 	}
 
 	private void setParameterSearchCtkhn(PhieuKnghiemCluongHangSearchReq req, Query query) {
-		if (!StringUtils.isEmpty(req.getMaHhoa())) {
-			query.setParameter("maHhoa", req.getMaHhoa());
-		}
 
-		if (!StringUtils.isEmpty(req.getMaKho())) {
-			query.setParameter("maKho", req.getMaKho());
-		}
-
-		if (!StringUtils.isEmpty(req.getMaNgan())) {
-			query.setParameter("maNgan", req.getMaNgan());
-		}
-
-		if (!StringUtils.isEmpty(req.getMaLo())) {
-			query.setParameter("maLo", req.getMaLo());
+		if (!StringUtils.isEmpty(req.getSoBbBanGiao())) {
+			query.setParameter("soBbBanGiao", "%" + req.getSoBbBanGiao() + "%");
 		}
 
 		if (!StringUtils.isEmpty(req.getSoPhieu())) {
-			query.setParameter("soPhieu", req.getSoPhieu());
+			query.setParameter("soPhieu", "%" + req.getSoPhieu() + "%");
 		}
 
 		if (!StringUtils.isEmpty(req.getMaDvi())) {
 			query.setParameter("maDvi", req.getMaDvi());
 		}
 
-		if (req.getNgayKnghiemTuNgay() != null) {
-			query.setParameter("ngayKnghiemTuNgay", req.getNgayKnghiemTuNgay());
+		if (req.getNgayBanGiaoMauTu() != null) {
+			query.setParameter("ngayBanGiaoMauTu", req.getNgayBanGiaoMauTu());
 		}
 
-		if (req.getNgayKnghiemDenNgay() != null) {
-			query.setParameter("ngayKnghiemDenNgay", req.getNgayKnghiemDenNgay());
+		if (req.getNgayBanGiaoMauDen() != null) {
+			query.setParameter("ngayBanGiaoMauDen", req.getNgayBanGiaoMauDen());
+		}
+
+		if (!StringUtils.isEmpty(req.getSoQdNhap())) {
+			query.setParameter("soQdNhap", "%" + req.getSoQdNhap() + "%");
+		}
+
+		if (!StringUtils.isEmpty(req.getMaVatTuCha())) {
+			query.setParameter("maVatTuCha", req.getMaVatTuCha());
 		}
 	}
 }

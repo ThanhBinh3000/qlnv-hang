@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.controller.phieuknghiemcluonghang;
 
 import com.tcdt.qlnvhang.enums.EnumResponse;
+import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.phieuknghiemcluonghang.PhieuKnghiemCluongHangReq;
 import com.tcdt.qlnvhang.request.search.PhieuKnghiemCluongHangSearchReq;
@@ -14,18 +15,17 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -36,7 +36,7 @@ public class PhieuKnghiemCluongHangController {
 	private PhieuKnghiemCluongHangService phieuKnghiemCluongHangService;
 
 	@ApiOperation(value = "Tạo mới Phiếu Kiểm nghiệm chất lượng hàng", response = BienBanLayMauRes.class)
-	@PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping
 	public ResponseEntity<BaseResponse> create(@Valid @RequestBody PhieuKnghiemCluongHangReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
@@ -53,7 +53,7 @@ public class PhieuKnghiemCluongHangController {
 	}
 
 	@ApiOperation(value = "Sửa thông tin Phiếu Kiểm nghiệm chất lượng hàng", response = BienBanLayMauRes.class)
-	@PutMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping
 	public ResponseEntity<BaseResponse> update(@Valid @RequestBody PhieuKnghiemCluongHangReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
@@ -70,7 +70,7 @@ public class PhieuKnghiemCluongHangController {
 	}
 
 	@ApiOperation(value = "Xoá thông tin Phiếu Kiểm nghiệm chất lượng hàng", response = Boolean.class)
-	@DeleteMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
+	@DeleteMapping
 	public ResponseEntity<BaseResponse> delete(@RequestParam("id") Long id) {
 		BaseResponse resp = new BaseResponse();
 		try {
@@ -87,7 +87,7 @@ public class PhieuKnghiemCluongHangController {
 	}
 
 	@ApiOperation(value = "Chi tiết Phiếu Kiểm nghiệm chất lượng hàng", response = Page.class)
-	@GetMapping(value = PathContains.URL_CHI_TIET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping("/{id}")
 	public ResponseEntity<BaseResponse> detail(@RequestParam("id") Long id) {
 		BaseResponse resp = new BaseResponse();
 		try {
@@ -104,7 +104,7 @@ public class PhieuKnghiemCluongHangController {
 	}
 
 	@ApiOperation(value = "Gửi duyệt/Duyệt/Từ chối Phiếu Kiểm nghiệm chất lượng hàng", response = Boolean.class)
-	@PutMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping("/status")
 	public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody StatusReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
@@ -121,7 +121,7 @@ public class PhieuKnghiemCluongHangController {
 	}
 
 	@ApiOperation(value = "Tra cứu thông tin Phiếu Kiểm nghiệm chất lượng hàng", response = Page.class)
-	@GetMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping
 	public ResponseEntity<BaseResponse> search(PhieuKnghiemCluongHangSearchReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
@@ -135,6 +135,43 @@ public class PhieuKnghiemCluongHangController {
 			log.error(e.getMessage());
 		}
 		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Delete multiple Phiếu Kiểm nghiệm chất lượng hàng", response = List.class)
+	@ResponseStatus(HttpStatus.OK)
+	@PostMapping("/delete/multiple")
+	public final ResponseEntity<BaseResponse> deleteMultiple(@RequestBody @Valid DeleteReq req) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(phieuKnghiemCluongHangService.deleteMultiple(req));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg("Delete multiple Phiếu Kiểm nghiệm chất lượng hàng lỗi");
+			log.error("Delete multiple Phiếu Kiểm nghiệm chất lượng hàng lỗi", e);
+		}
+		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Export biên bản nhập đầy kho lương thực", response = List.class)
+	@PostMapping(value = "/export/list", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody PhieuKnghiemCluongHangSearchReq req) {
+
+		try {
+			response.setContentType("application/octet-stream");
+			DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+			String currentDateTime = dateFormatter.format(new Date());
+
+			String headerKey = "Content-Disposition";
+			String headerValue = "attachment; filename=phieu_kiem_nghiem_chat_luong_hang_" + currentDateTime + ".xlsx";
+			response.setHeader(headerKey, headerValue);
+			phieuKnghiemCluongHangService.exportToExcel(req, response);
+		} catch (Exception e) {
+			log.error("Error can not export", e);
+		}
+
 	}
 }
 

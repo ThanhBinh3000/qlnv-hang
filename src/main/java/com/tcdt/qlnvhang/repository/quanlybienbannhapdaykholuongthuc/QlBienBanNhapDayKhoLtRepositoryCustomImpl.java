@@ -71,7 +71,10 @@ public class QlBienBanNhapDayKhoLtRepositoryCustomImpl implements QlBienBanNhapD
     @Override
     public int count(QlBienBanNhapDayKhoLtSearchReq req) {
         StringBuilder builder = new StringBuilder();
-        builder.append("SELECT COUNT(p.id) FROM QlBienBanNhapDayKhoLt p ");
+        builder.append("SELECT COUNT(DISTINCT p.id) FROM QlBienBanNhapDayKhoLt p ");
+        builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON p.qdgnvnxId = nx.id ");
+        builder.append("INNER JOIN QlnvDmVattu vatTu ON p.maVatTu = vatTu.ma ");
+        builder.append("LEFT JOIN KtNganLo nganLo ON p.maNganLo = nganLo.maNganlo ");
 
         this.setConditionSearch(req, builder);
         TypedQuery<Long> query = em.createQuery(builder.toString(), Long.class);

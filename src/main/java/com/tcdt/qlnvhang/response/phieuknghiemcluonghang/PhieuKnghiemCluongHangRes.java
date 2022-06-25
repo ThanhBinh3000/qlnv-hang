@@ -14,36 +14,43 @@ public class PhieuKnghiemCluongHangRes {
 	private LocalDate ngayLayMau;
 	private LocalDate ngayKnghiem;
 
-	private String maHhoa;
-	private String tenHhoa;
+	private String maVatTu;
+	private String tenVatTu;
+	private String maVatTuCha;
+	private String tenVatTuCha;
+
 	private String soBbanKthucNhap;
 	private LocalDate ngayNhapDay;
 	private BigDecimal sluongBquan;
 	private String hthucBquan;
-	private String ddiemBquan;
 	private String trangThai;
 	private String tenTrangThai;
 	private String trangThaiDuyet;
 	private String ldoTchoi;
 	private List<KquaKnghiemRes> kquaKnghiem = new ArrayList<>();
-	private Long sluongKquaKnghiem;
-	private Long tongSoKquaKnghiem;
-
-
-	private Long diemKhoId;
+	private Integer soLuongMauHangKt;
 	private String maDiemKho;
 	private String tenDiemKho;
-
-	private Long nganLoId;
+	private String maNhaKho;
+	private String tenNhaKho;
+	private String maNganKho;
+	private String tenNganKho;
 	private String maNganLo;
 	private String tenNganLo;
 
-	private Long nhaKhoId;
-	private String maNhaKho;
-	private String tenNhaKho;
+	private String maDvi;
+	private String tenDvi;
+	private String maDviCha;
+	private String tenDviCha;
 	private Long qdgnvnxId;
+	private  String soQuyetDinhNhap;
+
+	private Long bbBanGiaoMauId;
+	private String soBbBanGiao;
+	private LocalDate ngayBanGiaoMau;
 
 	private String ketLuan;
 	private String thuKho;
 	private String ketQuaDanhGia;
+
 }

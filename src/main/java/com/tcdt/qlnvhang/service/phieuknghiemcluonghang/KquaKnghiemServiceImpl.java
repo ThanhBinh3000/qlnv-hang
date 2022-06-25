@@ -12,9 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -70,5 +68,17 @@ public class KquaKnghiemServiceImpl implements KquaKnghiemService {
 	@Override
 	public void deleteByPhieuKnghiemId(Long phieuKnghiemId) {
 		kquaKnghiemRepository.deleteByphieuKnghiemId(phieuKnghiemId);
+	}
+
+	@Override
+	public void deleteByPhieuKnghiemIdIn(Collection<Long> phieuKnghiemIds) {
+		kquaKnghiemRepository.deleteByPhieuKnghiemIdIn(phieuKnghiemIds);
+	}
+
+	@Override
+	public Map<Long, Integer> countKqByPhieuKnghiemId(Collection<Long> phieuKnhiemIds) {
+		return kquaKnghiemRepository.countByPhieuKnghiemIdIn(phieuKnhiemIds)
+				.stream().collect(Collectors.toMap(o -> (Long) o[0], o -> (Integer) o[1]));
+
 	}
 }
