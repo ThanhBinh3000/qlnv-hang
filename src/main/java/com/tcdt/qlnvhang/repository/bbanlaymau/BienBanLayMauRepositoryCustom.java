@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface BienBanLayMauRepositoryCustom {
-	List<BienBanLayMau> search(BienBanLayMauSearchReq req, Pageable pageable);
+	List<Object[]> search(BienBanLayMauSearchReq req, Pageable pageable);
 
 	int countBienBan(BienBanLayMauSearchReq req);
 }

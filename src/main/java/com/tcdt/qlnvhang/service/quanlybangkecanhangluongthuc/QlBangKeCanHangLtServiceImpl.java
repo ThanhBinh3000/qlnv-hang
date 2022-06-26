@@ -422,6 +422,8 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
 
     @Override
     public boolean exportToExcel(QlBangKeCanHangLtSearchReq objReq, HttpServletResponse response) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        objReq.setMaDvi(userInfo.getDvql());
         objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
         List<QlBangKeCanHangLtRes> list = this.search(objReq).get().collect(Collectors.toList());
 

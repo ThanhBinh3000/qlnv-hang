@@ -340,6 +340,7 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null)
             throw new Exception("Bad request.");
+        req.setMaDvi(userInfo.getDvql());
         return qlPhieuNhapKhoLtRepository.search(req);
     }
 
@@ -395,6 +396,8 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
 
     @Override
     public boolean exportToExcel(QlPhieuNhapKhoLtSearchReq objReq, HttpServletResponse response) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        objReq.setMaDvi(userInfo.getDvql());
         objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
         List<QlPhieuNhapKhoLtRes> list = this.search(objReq).get().collect(Collectors.toList());
 

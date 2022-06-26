@@ -398,6 +398,8 @@ public class QlBienBanNhapDayKhoLtServiceImpl extends BaseServiceImpl implements
 
     @Override
     public boolean exportToExcel(QlBienBanNhapDayKhoLtSearchReq objReq, HttpServletResponse response) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        objReq.setMaDvi(userInfo.getDvql());
         objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
         List<QlBienBanNhapDayKhoLtRes> list = this.search(objReq).get().collect(Collectors.toList());
 
