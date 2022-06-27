@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
+import com.tcdt.qlnvhang.table.HhQdKhlcntDsgthau;
 import org.springframework.data.domain.Page;
 
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -22,6 +23,8 @@ public interface HhQdKhlcntHdrService {
 	HhQdKhlcntHdr update(HhQdKhlcntHdrReq objReq) throws Exception;
 
 	HhQdKhlcntHdr detail(String ids) throws Exception;
+
+	HhQdKhlcntDsgthau detailGoiThau(String ids) throws Exception;
 
 	Page<HhQdKhlcntHdr> colection(HhQdKhlcntSearchReq objReq) throws Exception;
 

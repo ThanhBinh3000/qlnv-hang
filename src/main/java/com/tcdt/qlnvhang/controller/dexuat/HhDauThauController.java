@@ -131,7 +131,7 @@ public class HhDauThauController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Tra cứu thông tin đấu thầu gạo", response = List.class)
+	@ApiOperation(value = "Tra cứu thông tin đấu thầu ", response = List.class)
 	@PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<BaseResponse> colection(HttpServletRequest request,

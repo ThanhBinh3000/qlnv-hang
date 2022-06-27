@@ -26,6 +26,7 @@ public class HhQdKhlcntDtl implements Serializable {
 	private Long id;
 	private Long idQdHdr;
 	String maDvi;
+	@Transient
 	String tenDvi;
 	String soDxuat;
 	@Temporal(TemporalType.DATE)
@@ -36,6 +37,9 @@ public class HhQdKhlcntDtl implements Serializable {
 	BigDecimal tongTien;
 	Long soGthau;
 	String namKhoach;
+
+	@Transient
+	private HhQdKhlcntHdr hhQdKhlcntHdr;
 
 	@Transient
 	private List<HhQdKhlcntDsgthau> children = new ArrayList<>();

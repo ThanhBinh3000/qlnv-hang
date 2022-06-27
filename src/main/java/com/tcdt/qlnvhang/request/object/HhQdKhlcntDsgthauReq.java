@@ -24,13 +24,6 @@ public class HhQdKhlcntDsgthauReq {
 
 	BigDecimal soLuong;
 
-	@NotNull(message = "Không được để trống")
-	@Size(max = 250, message = "Địa điểm nhập không được vượt quá 250 ký tự")
-	@ApiModelProperty(example = "Địa điểm nhập")
-	String diaDiemNhap;
-
-	String maDiemKho;
-
 	String maDvi;
 	
 	BigDecimal donGia;
@@ -61,8 +54,6 @@ public class HhQdKhlcntDsgthauReq {
 	@NotNull(message = "Không được để trống")
 	Integer tgianThienHd;
 
-	private List<HhQdKhlcntDsgthauReq> children;
-
-	private List<HhDxuatKhLcntDsgthauDtlCtietReq> danhSachDiaDiemNhap = new ArrayList<>();
+	private List<HhDxuatKhLcntDsgthauDtlCtietReq> children = new ArrayList<>();
 
 }

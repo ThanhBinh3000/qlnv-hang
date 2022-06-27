@@ -27,8 +27,8 @@ public class HhQdKhlcntDsgthau implements Serializable {
 	String goiThau;
 	BigDecimal soLuong;
 	String maDvi;
-	String maDiemKho;
-	String diaDiemNhap;
+	@Transient
+	String tenDvi;
 	BigDecimal donGia;
 	BigDecimal thanhTien;
 	String loaiVthh;
@@ -43,6 +43,9 @@ public class HhQdKhlcntDsgthau implements Serializable {
 	String trangThai;
 
 	@Transient
-	private List<HhQdKhlcntDsgthauCtiet> danhSachDiaDiemNhap = new ArrayList<>();
+	private HhQdKhlcntDtl hhQdKhlcntDtl;
+
+	@Transient
+	private List<HhQdKhlcntDsgthauCtiet> children = new ArrayList<>();
 
 }

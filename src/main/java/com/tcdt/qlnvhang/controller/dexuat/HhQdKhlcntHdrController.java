@@ -35,6 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @RequestMapping(value = PathContains.DX_KH + PathContains.QD_LCNT)
 @Api(tags = "Quyết định phê duyệt kế hoạch lựa chọn nhà thầu lương thực và vật tư")
+@CrossOrigin("*")
 public class HhQdKhlcntHdrController {
 
 	@Autowired
@@ -102,6 +103,24 @@ public class HhQdKhlcntHdrController {
 		BaseResponse resp = new BaseResponse();
 		try {
 			resp.setData(service.detail(ids));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Lấy chi tiết Quyết định phê duyệt kế hoạch lựa chọn nhà thầu trace: {}", e);
+		}
+		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Lấy chi tiết Quyết định phê duyệt kế hoạch lựa chọn nhà thầu", response = List.class)
+	@GetMapping(value = PathContains.URL_CHI_TIET + "/goi-thau/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> detailGoiThau(
+			@ApiParam(value = "ID phương án kế hoạch lựa chọn nhà thầu", example = "1", required = true) @PathVariable("ids") String ids) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.detailGoiThau(ids));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {

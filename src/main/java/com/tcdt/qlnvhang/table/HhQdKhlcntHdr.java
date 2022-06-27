@@ -90,6 +90,7 @@ public class HhQdKhlcntHdr implements Serializable {
 	String nguoiTao;
 	String trichYeu;
 	Long namKhoach;
+	Integer tgianThienHd;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)

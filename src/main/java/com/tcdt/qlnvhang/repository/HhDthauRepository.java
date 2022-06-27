@@ -24,7 +24,8 @@ public interface HhDthauRepository extends CrudRepository<HhDthau, Long> {
 			" FROM HhQdKhlcntDsgthau DSG " +
 			" LEFT JOIN HhQdKhlcntDtl DTL ON DTL.id = DSG.idQdDtl " +
 			" LEFT JOIN HhQdKhlcntHdr HDR ON HDR.id = DTL.idQdHdr " +
-			" WHERE (?1 is null or HDR.namKhoach = ?1 )" +
+			" WHERE HDR.trangThai = '11' " +
+			" AND (?1 is null or HDR.namKhoach = ?1 )" +
 			" AND (?2 is null or  HDR.loaiVthh = ?2 )" +
 			" AND (?3 is null or  HDR.soQd = ?3 )" +
 			" AND (?4 is null or  DTL.maDvi = ?4 )" +
@@ -32,5 +33,7 @@ public interface HhDthauRepository extends CrudRepository<HhDthau, Long> {
 //			" AND (?6 is null or HDR.ngayQd <= ?6 )" +
 			" AND (?5 is null or HDR.trichYeu = ?5 )")
 	Page<ThongTinDauThauRes> cusTomQuerySearch(Long namKh, String loaiVthh, String soQd, String maDvi, String trichYeu,Pageable pageable);
+
+
 
 }
