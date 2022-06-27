@@ -17,6 +17,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauCtReq;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauReq;
 import com.tcdt.qlnvhang.request.search.BienBanLayMauSearchReq;
+import com.tcdt.qlnvhang.response.bbanlaymau.BienBanLayMauCtRes;
 import com.tcdt.qlnvhang.response.bbanlaymau.BienBanLayMauRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -278,6 +279,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 		if (TrangThaiEnum.BAN_HANH.getId().equals(bb.getTrangThai())) {
 			throw new Exception("Không thể xóa đề xuất điều chỉnh đã ban hành");
 		}
+		bienBanLayMauCtRepository.deleteByBbLayMauIdIn(Collections.singleton(bb.getId()));
 		bienBanLayMauRepository.deleteById(id);
 		return true;
 	}
@@ -330,6 +332,9 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 		}
 
 		this.thongTinNganLo(res, nganLo);
+
+		List<BienBanLayMauCtRes> chiTiets = item.getChiTiets().stream().map(BienBanLayMauCtRes::new).collect(Collectors.toList());
+		res.setChiTiets(chiTiets);
 		return res;
 	}
 

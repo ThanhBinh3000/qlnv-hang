@@ -7,11 +7,11 @@ import java.time.LocalDate;
 
 @Data
 public class BienBanBanGiaoMauSearchReq extends BaseRequest {
-	private String soQdinhGiaoNvuNhap;
-	private String maKho;
-	private String maNgan;
-	private String maLo;
-	private String maHhoa;
-	private LocalDate ngayLapBbanTuNgay;
-	private LocalDate ngayLapBbanDenNgay;
+	private String soQuyetDinhNhap;
+	private LocalDate ngayBanGiaoMauTu;
+	private LocalDate ngayBanGiaoMauDen;
+	private String soBienBan;
+	private String soHopDong;
+	private String maDvi;
+	private String maVatTuCha;
 }

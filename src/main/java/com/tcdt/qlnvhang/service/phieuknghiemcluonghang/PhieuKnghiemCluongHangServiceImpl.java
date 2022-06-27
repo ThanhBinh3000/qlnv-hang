@@ -314,7 +314,7 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 			if (!bbBanGiao.isPresent()) {
 				throw new Exception("Không tìm thấy biên bản bàn giao mẫu");
 			}
-			res.setSoBbBanGiao(bbBanGiao.get().getSoBban());
+			res.setSoBbBanGiao(bbBanGiao.get().getSoBienBan());
 		}
 
 		Page<KquaKnghiemRes> list = kquaKnghiemService.list(phieu.getId(), PageRequest.of(DEFAULT_PAGE_INDEX, Integer.MAX_VALUE));
