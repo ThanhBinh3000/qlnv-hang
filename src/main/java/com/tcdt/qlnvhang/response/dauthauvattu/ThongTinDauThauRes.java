@@ -46,6 +46,8 @@ public class ThongTinDauThauRes {
 	private BigDecimal thanhGiaGoiThau;
 	private String trangThai;
 
+	private String tenDvi;
+
 	public ThongTinDauThauRes(Long idQdHdr, Long idQdDtl, Long idGt, String goiThau, String maDvi, String soQdPdKhlcnt,Date ngayQd, String trichYeu, String loaiVthh, String cloaiVthh, BigDecimal thanhGiaGoiThau, String trangThai) {
 		this.idQdHdr = idQdHdr;
 		this.idQdDtl = idQdDtl;

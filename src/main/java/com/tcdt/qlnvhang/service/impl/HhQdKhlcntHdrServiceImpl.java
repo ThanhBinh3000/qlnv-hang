@@ -9,10 +9,9 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletResponse;
 
 import com.tcdt.qlnvhang.repository.*;
-import com.tcdt.qlnvhang.request.object.HhDxuatKhLcntDsgVtuDtlCtietReq;
+import com.tcdt.qlnvhang.request.object.HhDxuatKhLcntDsgthauDtlCtietReq;
 import com.tcdt.qlnvhang.request.object.HhQdKhlcntDsgthauReq;
 import com.tcdt.qlnvhang.table.*;
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,7 +32,6 @@ import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import com.tcdt.qlnvhang.util.PaginationSet;
-import com.tcdt.qlnvhang.util.UnitScaler;
 
 @Service
 public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhlcntHdrService {
@@ -420,7 +418,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				HhQdKhlcntDsgthau gThau = ObjectMapperUtils.map(dsgThau, HhQdKhlcntDsgthau.class);
 //				gThau.setIdQdKhlcntHdr(idHhQdKhlcntHdr);
 				hhQdKhlcntDsgthauRepository.save(gThau);
-				for (HhDxuatKhLcntDsgVtuDtlCtietReq dsDdNhap : dsgThau.getDanhSachDiaDiemNhap()){
+				for (HhDxuatKhLcntDsgthauDtlCtietReq dsDdNhap : dsgThau.getDanhSachDiaDiemNhap()){
 					HhQdKhlcntDsgthauCtiet ddNhap = ObjectMapperUtils.map(dsDdNhap, HhQdKhlcntDsgthauCtiet.class);
 					ddNhap.setIdGoiThau(gThau.getId());
 					hhQdKhlcntDsgthauCtietRepository.save(ddNhap);

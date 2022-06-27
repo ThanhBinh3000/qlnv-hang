@@ -52,6 +52,18 @@ public class Contains {
 	public static final String DU_THAO_QD = "01";
 	public static final String DA_QUYET_DINH = "02";
 
+	// Trạng thái gói thầu
+
+	private static final String CHUA_CAP_NHAT = "00";
+
+	private static final String DANG_CAP_NHAT = "01";
+
+	private static final String HOAN_THANH_CAP_NHAT = "02";
+
+	private static final String GT_TRUNG_THAU = "03";
+
+	private static final String GT_HUY_THAU = "04";
+
 	// Trang thai response
 	public static final int RESP_SUCC = 0;
 	public static final int RESP_FAIL = 1;

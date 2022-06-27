@@ -96,7 +96,7 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	}
 
 	@Transient
-	private List<HhDxuatKhLcntDsgtDtl> dsGtDtlList = new ArrayList<>();
+	private List<HhDxKhlcntDsgthau> dsGtDtlList = new ArrayList<>();
 
 	@Transient
 	private List<HhDxuatKhLcntCcxdgDtl> ccXdgDtlList = new ArrayList<>();

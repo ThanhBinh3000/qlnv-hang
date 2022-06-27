@@ -7,7 +7,6 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.tcdt.qlnvhang.table.HhDxuatKhLcntVtuDtlCtiet;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -64,6 +63,6 @@ public class HhQdKhlcntDsgthauReq {
 
 	private List<HhQdKhlcntDsgthauReq> children;
 
-	private List<HhDxuatKhLcntDsgVtuDtlCtietReq> danhSachDiaDiemNhap = new ArrayList<>();
+	private List<HhDxuatKhLcntDsgthauDtlCtietReq> danhSachDiaDiemNhap = new ArrayList<>();
 
 }

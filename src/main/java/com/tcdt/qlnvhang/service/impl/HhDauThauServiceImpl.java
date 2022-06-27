@@ -138,14 +138,14 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 						f.setCreateDate(new Date());
 					});
 				}
-
-				detail.setChildren(detailChild);
-				detail.setChildren1(detailChild1);
-				detail.setChildren2(detailChild2);
-				detail.setChildren3(detailChild3);
-				detail.setChildren4(detailChild4);
-				detail.setChildren5(detailChild5);
-				dataMap.addChild(detail);
+//
+//				detail.setChildren(detailChild);
+//				detail.setChildren1(detailChild1);
+//				detail.setChildren2(detailChild2);
+//				detail.setChildren3(detailChild3);
+//				detail.setChildren4(detailChild4);
+//				detail.setChildren5(detailChild5);
+//				dataMap.addChild(detail);
 			}
 		}
 
@@ -157,7 +157,14 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 	public Page<ThongTinDauThauRes> selectPage(HhDthauSearchReq objReq) throws Exception {
 		Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit(), Sort.by("id").ascending());
 		Page<ThongTinDauThauRes> page = hhDthauRepository.cusTomQuerySearch(objReq.getNamKhoach(),objReq.getLoaiVthh(),objReq.getSoQd(),objReq.getMaDvi(),objReq.getTrichYeu(),pageable);
-//		List<ThongTinDauThauRes> page = hhDthauRepository.cusTomQuerySearch(objReq.getNamKhoach(),objReq.getLoaiVthh(),objReq.getSoQd(),objReq.getMaDvi(),objReq.getTuNgayQd(),objReq.getDenNgayQd(),objReq.getTrichYeu());
+		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
+		Map<String, String> mapDmucDvi = getMapTenDvi();
+		page.forEach(f -> {
+			f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
+			f.setTenVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
+			f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
+		});
+
 		return page;
 	}
 
@@ -252,13 +259,13 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 					});
 				}
 
-				detail.setChildren(detailChild);
-				detail.setChildren1(detailChild1);
-				detail.setChildren2(detailChild2);
-				detail.setChildren3(detailChild3);
-				detail.setChildren4(detailChild4);
-				detail.setChildren5(detailChild5);
-				dataDB.addChild(detail);
+//				detail.setChildren(detailChild);
+//				detail.setChildren1(detailChild1);
+//				detail.setChildren2(detailChild2);
+//				detail.setChildren3(detailChild3);
+//				detail.setChildren4(detailChild4);
+//				detail.setChildren5(detailChild5);
+//				dataDB.addChild(detail);
 			}
 		}
 
@@ -278,10 +285,10 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
 
 		// Quy doi don vi kg = tan
-		List<HhDthauGthau> dtls2 = ObjectMapperUtils.mapAll(qOptional.get().getChildren(), HhDthauGthau.class);
-		for (HhDthauGthau dtl : dtls2) {
-			UnitScaler.formatList(dtl.getChildren(), Contains.DVT_TAN);
-		}
+//		List<HhDthauGthau> dtls2 = ObjectMapperUtils.mapAll(qOptional.get().getChildren(), HhDthauGthau.class);
+//		for (HhDthauGthau dtl : dtls2) {
+//			UnitScaler.formatList(dtl.getChildren(), Contains.DVT_TAN);
+//		}
 
 		return qOptional.get();
 	}

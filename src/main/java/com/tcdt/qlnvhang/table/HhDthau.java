@@ -5,16 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -54,22 +45,7 @@ public class HhDthau implements Serializable {
 	String nguoiPduyet;
 	String ghiChu;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "id_dt_hdr")
-	@JsonManagedReference
+	@Transient
 	private List<HhDthauGthau> children = new ArrayList<>();
-
-	public void setChildren(List<HhDthauGthau> children) {
-		this.children.clear();
-		for (HhDthauGthau child : children) {
-			child.setParent(this);
-		}
-		this.children.addAll(children);
-	}
-
-	public void addChild(HhDthauGthau child) {
-		child.setParent(this);
-		this.children.add(child);
-	}
 
 }

@@ -119,11 +119,11 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 			thopDtl.setGtriDthau(dxuat.getGtriDthau());
 			thopDtl.setGtriHdong(dxuat.getGtriHdong());
 			// Add danh sach goi thau
-			List<HhDxuatKhLcntDsgtDtl> dtlsGThau = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcnt(dxuat.getId());
+			List<HhDxKhlcntDsgthau> dtlsGThau = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcnt(dxuat.getId());
 			BigDecimal soLuong = BigDecimal.ZERO;
 			BigDecimal tongTien = BigDecimal.ZERO;
 			int soGthau = dtlsGThau.size();
-			for (HhDxuatKhLcntDsgtDtl gthauDtl : dtlsGThau) {
+			for (HhDxKhlcntDsgthau gthauDtl : dtlsGThau) {
 				soLuong = soLuong.add(gthauDtl.getSoLuong());
 				tongTien = tongTien.add(gthauDtl.getThanhTien() == null ? BigDecimal.ZERO : gthauDtl.getThanhTien());
 			}
