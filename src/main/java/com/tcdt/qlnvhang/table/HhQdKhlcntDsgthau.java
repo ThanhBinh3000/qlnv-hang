@@ -40,6 +40,7 @@ public class HhQdKhlcntDsgthau implements Serializable {
 	String nguonVon;
 	String tgianBdauLcnt;
 	Integer tgianThienHd;
+	String trangThai;
 
 	@Transient
 	private List<HhQdKhlcntDsgthauCtiet> danhSachDiaDiemNhap = new ArrayList<>();

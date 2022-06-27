@@ -8,6 +8,8 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.tcdt.qlnvhang.request.search.HhDthauSearchReq;
+import com.tcdt.qlnvhang.response.dauthauvattu.ThongTinDauThauRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +21,6 @@ import org.springframework.util.StringUtils;
 import com.tcdt.qlnvhang.entities.FileDKemJoinGoiThau;
 import com.tcdt.qlnvhang.entities.FileDKemJoinHsoKthuat;
 import com.tcdt.qlnvhang.entities.FileDKemJoinTthaoHdong;
-import com.tcdt.qlnvhang.repository.HhDthau2Repository;
 import com.tcdt.qlnvhang.repository.HhDthauRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -27,11 +28,8 @@ import com.tcdt.qlnvhang.request.object.HhDthauGthauReq;
 import com.tcdt.qlnvhang.request.object.HhDthauHsoKthuatReq;
 import com.tcdt.qlnvhang.request.object.HhDthauReq;
 import com.tcdt.qlnvhang.request.object.HhDthauTthaoHdongReq;
-import com.tcdt.qlnvhang.request.search.HhDthauSearchReq;
-import com.tcdt.qlnvhang.secification.HhDthau2Specification;
 import com.tcdt.qlnvhang.service.HhDauThauService;
 import com.tcdt.qlnvhang.table.HhDthau;
-import com.tcdt.qlnvhang.table.HhDthau2;
 import com.tcdt.qlnvhang.table.HhDthauGthau;
 import com.tcdt.qlnvhang.table.HhDthauHsoKthuat;
 import com.tcdt.qlnvhang.table.HhDthauHsoTchinh;
@@ -47,9 +45,6 @@ import com.tcdt.qlnvhang.util.UnitScaler;
 public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauService {
 	@Autowired
 	private HhDthauRepository hhDthauRepository;
-
-	@Autowired
-	private HhDthau2Repository hhDthau2Repository;
 
 	@Override
 	public HhDthau create(HhDthauReq objReq) throws Exception {
@@ -156,6 +151,14 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 
 		UnitScaler.reverseFormatList(dataMap.getChildren(), Contains.DVT_TAN);
 		return hhDthauRepository.save(dataMap);
+	}
+
+	@Override
+	public Page<ThongTinDauThauRes> selectPage(HhDthauSearchReq objReq) throws Exception {
+		Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit(), Sort.by("id").ascending());
+		Page<ThongTinDauThauRes> page = hhDthauRepository.cusTomQuerySearch(objReq.getNamKhoach(),objReq.getLoaiVthh(),objReq.getSoQd(),objReq.getMaDvi(),objReq.getTrichYeu(),pageable);
+//		List<ThongTinDauThauRes> page = hhDthauRepository.cusTomQuerySearch(objReq.getNamKhoach(),objReq.getLoaiVthh(),objReq.getSoQd(),objReq.getMaDvi(),objReq.getTuNgayQd(),objReq.getDenNgayQd(),objReq.getTrichYeu());
+		return page;
 	}
 
 	@Override
@@ -283,20 +286,20 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 		return qOptional.get();
 	}
 
-	@Override
-	public Page<HhDthau2> colection(HhDthauSearchReq objReq, HttpServletRequest req) throws Exception {
-		int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
-		int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
-		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
-
-		Page<HhDthau2> dataPage = hhDthau2Repository.findAll(HhDthau2Specification.buildSearchQuery(objReq), pageable);
-
-		Map<String, String> mapDmucDvi = getMapTenDvi();
-		for (HhDthau2 hdr : dataPage.getContent()) {
-			hdr.setTenDvi(mapDmucDvi.get(hdr.getMaDvi()));
-		}
-		return dataPage;
-	}
+//	@Override
+//	public Page<HhDthau2> colection(HhDthauSearchReq objReq, HttpServletRequest req) throws Exception {
+//		int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
+//		int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
+//		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
+//
+//		Page<HhDthau2> dataPage = hhDthau2Repository.findAll(HhDthau2Specification.buildSearchQuery(objReq), pageable);
+//
+//		Map<String, String> mapDmucDvi = getMapTenDvi();
+//		for (HhDthau2 hdr : dataPage.getContent()) {
+//			hdr.setTenDvi(mapDmucDvi.get(hdr.getMaDvi()));
+//		}
+//		return dataPage;
+//	}
 
 	@Override
 	public HhDthau approve(StatusReq stReq) throws Exception {

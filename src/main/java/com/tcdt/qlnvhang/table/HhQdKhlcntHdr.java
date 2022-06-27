@@ -65,7 +65,9 @@ public class HhQdKhlcntHdr implements Serializable {
 	String nguonVon;
 
 	@Transient
-	String tenLoaiVthh;
+	String tenVthh;
+	@Transient
+	String tenCloaiVthh;
 	@Transient
 	String tenHthucLcnt;
 	@Transient

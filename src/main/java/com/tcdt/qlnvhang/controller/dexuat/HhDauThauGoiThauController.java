@@ -29,7 +29,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = PathContains.DX_KH + PathContains.TTIN_DTHAU_GTHAU)
-@Api(tags = "Thông tin đấu thầu gói thầu")
+@Api(tags = "Thông tin đề xuất kế hoạch đấu thầu gói thầu")
 public class HhDauThauGoiThauController {
 
 	@Autowired
@@ -138,7 +138,7 @@ public class HhDauThauGoiThauController {
 //
 //		return ResponseEntity.ok(resp);
 //	}
-//
+
 //	@ApiOperation(value = "Tra cứu thông tin đấu thầu gạo", response = List.class)
 //	@PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
 //	@ResponseStatus(HttpStatus.OK)

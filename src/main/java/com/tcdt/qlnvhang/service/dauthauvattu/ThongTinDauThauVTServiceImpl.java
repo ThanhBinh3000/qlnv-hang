@@ -118,7 +118,7 @@ public class ThongTinDauThauVTServiceImpl implements ThongTinDauThauVTService {
 			pageSize = DEFAULT_PAGE_SIZE;
 
 		Page<DTVatTuGoiThauVTRes> goiThau = dtVatTuGoiThauVTService.list(thongTinDauThauVT.getId(), PageRequest.of(pageIndex, pageSize));
-		res.setGoiThau(goiThau.getContent());
+//		res.setGoiThau(goiThau.getContent());
 		res.setSoGoiThau((long) goiThau.getNumberOfElements());
 		res.setTongGoiThau(goiThau.getTotalElements());
 
