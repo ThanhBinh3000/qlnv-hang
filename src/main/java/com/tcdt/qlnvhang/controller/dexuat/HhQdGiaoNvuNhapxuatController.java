@@ -240,8 +240,7 @@ public class HhQdGiaoNvuNhapxuatController {
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-			resp.setMsg(e.getMessage());
-			resp.setMsg(e.getMessage());
+			resp.setMsg("Xóa quyết định giao nhiệm vụ nhập hàng lỗi.");
 			log.error("Delete multiple quyết định nhập xuất lỗi ", e);
 		}
 		return ResponseEntity.ok(resp);

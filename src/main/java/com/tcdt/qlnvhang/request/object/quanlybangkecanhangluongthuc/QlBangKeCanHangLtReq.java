@@ -27,7 +27,8 @@ public class QlBangKeCanHangLtReq {
     private String thuKho;
     private Long qlPhieuNhapKhoLtId;
     private Long qdgnvnxId;
-    private String maVatTu;
+    private String maVatTu;// Chung loai hang hoa
+    private String maVatTuCha;// Loai Hang
     private String donViTinh;
     private String tenNguoiGiaoHang;
     private String diaChiNguoiGiao;

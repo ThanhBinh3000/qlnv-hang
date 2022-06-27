@@ -6,10 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.tomcat.jni.Local;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -23,63 +21,25 @@ public class QlBienBanNhapDayKhoLtReq {
     private Long id;
 
     @NotNull(message = "Không được để trống")
+    private Long qdgnvnxId;
     private String soBienBan;
-
-    @NotNull(message = "Không được để trống")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate ngayLap;
-
     private LocalDate ngayNhapDayKho;
-
-    @NotNull(message = "Không được để trống")
-    private String maDonVi;
-
-    private String maQhns;
-
-    @NotNull(message = "Không được để trống")
-    private String maHang;
-
-    @NotNull(message = "Không được để trống")
-    private String tenHang;
-
-    @NotNull(message = "Không được để trống")
+    private String maVatTu;
+    private String maVatTuCha;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate ngayBatDauNhap;
-
-    @NotNull(message = "Không được để trống")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate ngayKetThucNhap;
-
-    @NotNull(message = "Không được để trống")
     private String thuKho;
-
-    @NotNull(message = "Không được để trống")
     private String kyThuatVien;
-
-    @NotNull(message = "Không được để trống")
     private String keToan;
-
-    @NotNull(message = "Không được để trống")
     private String thuTruong;
-
-    private String chungLoaiHh;
-
-    private Long diemKhoId;
     private String maDiemKho;
-    private String tenDiemKho;
-
-    private Long nganLoId;
-    private String maNganLo;
-    private String tenNganLo;
-
-    private Long nhaKhoId;
     private String maNhaKho;
-    private String tenNhaKho;
+    private String maNganKho;
+    private String maNganLo;
 
-    @NotNull(message = "Không được để trống")
-    private Long qdgnvnxId;
-
-    private String chungLoaiHangHoa;
     private List<QlBienBanNdkCtLtReq> chiTiets = new ArrayList<>();
 
     private List<FileDinhKemReq> fileDinhKems;

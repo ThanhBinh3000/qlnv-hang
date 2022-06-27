@@ -1,9 +1,11 @@
 package com.tcdt.qlnvhang.controller.bbanlaymau;
 
 import com.tcdt.qlnvhang.enums.EnumResponse;
+import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauReq;
 import com.tcdt.qlnvhang.request.search.BienBanLayMauSearchReq;
+import com.tcdt.qlnvhang.request.search.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.response.bbanlaymau.BienBanLayMauRes;
 import com.tcdt.qlnvhang.service.bbanlaymau.BienBanLayMauService;
@@ -13,18 +15,17 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -134,6 +135,43 @@ public class BienBanLayMauController {
 			log.error(e.getMessage());
 		}
 		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Delete multiple Biên bản lấy mẫu", response = List.class)
+	@ResponseStatus(HttpStatus.OK)
+	@PostMapping("/delete/multiple")
+	public final ResponseEntity<BaseResponse> deleteMultiple(@RequestBody @Valid DeleteReq req) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(bienBanLayMauService.deleteMultiple(req));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg("Delete multiple Biên bản lấy mẫu lỗi");
+			log.error("Delete multiple Biên bản lấy mẫu lỗi", e);
+		}
+		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Export Biên bản lấy mẫu", response = List.class)
+	@PostMapping(value = "/export/list", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody BienBanLayMauSearchReq req) {
+
+		try {
+			response.setContentType("application/octet-stream");
+			DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+			String currentDateTime = dateFormatter.format(new Date());
+
+			String headerKey = "Content-Disposition";
+			String headerValue = "attachment; filename=bien_ban_lay_mau_" + currentDateTime + ".xlsx";
+			response.setHeader(headerKey, headerValue);
+			bienBanLayMauService.exportToExcel(req, response);
+		} catch (Exception e) {
+			log.error("Error can not export", e);
+		}
+
 	}
 }
 

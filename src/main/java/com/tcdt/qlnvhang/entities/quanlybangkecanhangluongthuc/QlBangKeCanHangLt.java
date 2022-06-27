@@ -58,6 +58,9 @@ public class QlBangKeCanHangLt extends BaseEntity implements Serializable {
     @Column(name = "MA_VAT_TU")
     private String maVatTu;
 
+    @Column(name = "MA_VAT_TU_CHA")
+    private String maVatTuCha;
+
     @Column(name = "DON_VI_TINH")
     private String donViTinh;
 

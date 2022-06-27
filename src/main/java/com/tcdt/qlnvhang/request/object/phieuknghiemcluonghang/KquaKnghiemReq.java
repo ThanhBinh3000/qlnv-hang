@@ -8,8 +8,7 @@ public class KquaKnghiemReq {
 	private Long phieuKnghiemId;
 	private Integer stt;
 	private String tenCtieu;
-	private String donVi;
-	private String kquaKtra;
+	private Double kquaKtra;
 	private String pphapXdinh;
 	private String chiSoChatLuong;
 }

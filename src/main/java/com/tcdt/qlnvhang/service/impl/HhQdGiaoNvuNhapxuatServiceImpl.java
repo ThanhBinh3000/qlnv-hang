@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
-import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLt;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatDtlLoaiNx;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatHdrLoaiQd;
@@ -18,6 +17,7 @@ import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.util.*;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import com.tcdt.qlnvhang.entities.FileDKemJoinQdNhapxuat;
-import com.tcdt.qlnvhang.repository.HhQdGiaoNvuNhapxuatRepository;
+import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.request.object.HhQdGiaoNvuNhapxuatHdrReq;
 import com.tcdt.qlnvhang.request.search.HhQdNhapxuatSearchReq;
 import com.tcdt.qlnvhang.secification.HhQdGiaoNvuNhapxuatSpecification;
@@ -56,14 +56,15 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			throw new Exception("Bad request.");
 		Optional<HhQdGiaoNvuNhapxuatHdr> qOpQdinh = hhQdGiaoNvuNhapxuatRepository.findBySoQd(objReq.getSoQd());
 		if (qOpQdinh.isPresent())
-			throw new Exception("Hợp quyết định " + objReq.getSoHd() + " đã tồn tại");
+			throw new Exception("Số quyết định " + objReq.getSoQd() + " đã tồn tại");
 
 		Map<String, QlnvDmDonvi> mapDmucDvi = getMapDvi();
 		QlnvDmDonvi qlnvDmDonvi = mapDmucDvi.get(userInfo.getDvql());
 		if (qlnvDmDonvi == null)
 			throw new Exception("Bad request.");
 
-		HhQdGiaoNvuNhapxuatHdr dataMap = ObjectMapperUtils.map(objReq, HhQdGiaoNvuNhapxuatHdr.class);
+		HhQdGiaoNvuNhapxuatHdr dataMap = new HhQdGiaoNvuNhapxuatHdr();
+		BeanUtils.copyProperties(objReq, dataMap, "id");
 
 		dataMap.setNguoiTao(userInfo.getUsername());
 		dataMap.setNgayTao(getDateTimeNow());
@@ -121,13 +122,11 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		}
 
 		HhQdGiaoNvuNhapxuatHdr dataDB = qOptional.get();
-		HhQdGiaoNvuNhapxuatHdr dataMap = ObjectMapperUtils.map(objReq, HhQdGiaoNvuNhapxuatHdr.class);
-
-		updateObjectToObject(dataDB, dataMap);
+		BeanUtils.copyProperties(objReq, dataDB, "id");
 
 		dataDB.setNgaySua(getDateTimeNow());
 		dataDB.setNguoiSua(userInfo.getUsername());
-
+		dataDB.setId(dataDB.getId());
 		// add thong tin chi tiet
 		List<HhQdGiaoNvuNhapxuatDtl> dtls = ObjectMapperUtils.mapAll(objReq.getDetail(), HhQdGiaoNvuNhapxuatDtl.class);
 		for (HhQdGiaoNvuNhapxuatDtl dtl : dtls) {
@@ -147,8 +146,8 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		dataDB.setChildren2(dtls2);
 
 		hhQdGiaoNvuNhapxuatRepository.save(dataDB);
-		dataDB.setTenTrangThai(TrangThaiEnum.getTenById(dataMap.getTrangThai()));
-		dataDB.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(dataMap.getTrangThai()));
+		dataDB.setTenTrangThai(TrangThaiEnum.getTenById(dataDB.getTrangThai()));
+		dataDB.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(dataDB.getTrangThai()));
 		this.setTenDvi(dataDB);
 		this.setHopDong(dataDB);
 		return dataDB;
@@ -327,16 +326,18 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 	@Override
 	public void exportDsQdGNvNx(HhQdNhapxuatSearchReq searchReq, HttpServletResponse response) throws Exception {
+		UserInfo userInfo = UserUtils.getUserInfo();
 		PaggingReq paggingReq = new PaggingReq();
-		paggingReq.setPage(1);
+		paggingReq.setPage(0);
 		paggingReq.setLimit(Integer.MAX_VALUE);
 		searchReq.setPaggingReq(paggingReq);
+		searchReq.setMaDvi(userInfo.getDvql());
 		Page<HhQdGiaoNvuNhapxuatHdr> page = this.timKiem(searchReq);
 		List<HhQdGiaoNvuNhapxuatHdr> data = page.getContent();
 
 		String title = "Danh sách quyết định giao nhiệm vụ nhập xuất";
-		String[] rowsName = new String[] { "STT", "Số QĐ", "Ngày ký", "Về việc",
-				"Căn cứ", "Đơn vị ra quyết định", "Loại QĐ", "Tên hàng DTQG", "Trạng thái"};
+		String[] rowsName = new String[] { "STT", "Số QĐ", "Ngày QĐ", "Năm Nhập",
+				"Trích Yếu Quyết Định", "Trạng thái"};
 		String filename = "Danh_sach_quyet_dinh_giao_nhiem_vu_nhap_xuat.xlsx";
 
 		List<Object[]> dataList = new ArrayList<Object[]>();
@@ -346,13 +347,10 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			objs = new Object[rowsName.length];
 			objs[0] = i;
 			objs[1] = qd.getSoQd();
-			objs[2] = qd.getNgayKy();
-			objs[3] = qd.getVeViec();
-			objs[4] = qd.getSoHd();
-			objs[5] = qd.getTenDvi();
-			objs[6] = qd.getTenLoaiQd();
-			objs[7] = !CollectionUtils.isEmpty(qd.getChildren()) ? qd.getChildren().get(0).getTenVthh() : "";
-			objs[8] = Contains.mapTrangThaiPheDuyet.get(qd.getTrangThai());
+			objs[2] = convertDateToString(qd.getNgayQdinh());
+			objs[3] = qd.getNamNhap();
+			objs[4] = qd.getTrichYeu();
+			objs[5] = TrangThaiEnum.getTenById(qd.getTrangThai());
 			dataList.add(objs);
 		}
 
@@ -365,28 +363,18 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
 		UserInfo userInfo = UserUtils.getUserInfo();
 		String dvql = userInfo.getDvql();
-		if (Contains.CAP_CUC.equalsIgnoreCase(userInfo.getCapDvi())) {
-			return hhQdGiaoNvuNhapxuatRepository.select(req.getNamNhap(),
-					req.getVeViec(),
-					req.getSoQd(),
-					convertDateToString(req.getTuNgayQd()),
-					convertDateToString(req.getDenNgayQd()),
-					req.getTrichYeu(),
-					req.getLoaiVthh(),
-					dvql,
-					pageable);
-		} else if (Contains.CAP_CHI_CUC.equalsIgnoreCase(userInfo.getCapDvi())){
-			return hhQdGiaoNvuNhapxuatRepository.findQdChiCuc(req.getNamNhap(),
-					req.getVeViec(),
-					req.getSoQd(),
-					convertDateToString(req.getTuNgayQd()),
-					convertDateToString(req.getDenNgayQd()),
-					req.getTrichYeu(),
-					req.getLoaiVthh(),
-					dvql,
-					pageable);
+		req.setMaDvi(dvql);
+		String capDvi = userInfo.getCapDvi();
+		if (!Contains.CAP_CHI_CUC.equalsIgnoreCase(userInfo.getCapDvi()) && !Contains.CAP_CUC.equalsIgnoreCase(userInfo.getCapDvi())) {
+			return new PageImpl<>(new ArrayList<>(), pageable, 0);
 		}
-		return new PageImpl<>(new ArrayList<>(), pageable, 0);
+
+		List<HhQdGiaoNvuNhapxuatHdr> data = hhQdGiaoNvuNhapxuatRepository.search(req, capDvi);
+		for (HhQdGiaoNvuNhapxuatHdr qd : data) {
+			qd.setTenTrangThai(TrangThaiEnum.getTenById(qd.getTrangThai()));
+			qd.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(qd.getTrangThai()));
+		}
+		return new PageImpl<>(data, pageable, hhQdGiaoNvuNhapxuatRepository.count(req, capDvi));
 	}
 
 	@Override

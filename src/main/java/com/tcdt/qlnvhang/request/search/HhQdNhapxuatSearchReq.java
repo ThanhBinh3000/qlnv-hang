@@ -27,7 +27,7 @@ public class HhQdNhapxuatSearchReq extends BaseRequest {
 	String maDvi;
 	String maVthh;
 	String loaiQd;
-	String namNhap;
+	Integer namNhap;
 	String veViec;
 	String loaiVthh;
 	String trichYeu;

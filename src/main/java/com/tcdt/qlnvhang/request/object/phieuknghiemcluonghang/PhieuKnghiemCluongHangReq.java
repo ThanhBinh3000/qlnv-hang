@@ -10,11 +10,13 @@ import java.util.List;
 @Data
 public class PhieuKnghiemCluongHangReq {
 	private Long id;
+	private Long qdgnvnxId;
+	private Long bbBanGiaoMauId;
 	private String soPhieu;
 	private LocalDate ngayLayMau;
 	private LocalDate ngayKnghiem;
-	private String maHhoa;
-	private String tenHhoa;
+	private String maVatTu;
+	private String maVatTuCha;
 	private String soBbanKthucNhap;
 	private LocalDate ngayNhapDay;
 	private BigDecimal sluongBquan;
@@ -23,20 +25,12 @@ public class PhieuKnghiemCluongHangReq {
 	private String trangThai;
 	private String chiSoChatLuong;
 
-	private Long diemKhoId;
 	private String maDiemKho;
-	private String tenDiemKho;
-
-	private Long nganLoId;
-	private String maNganLo;
-	private String tenNganLo;
-
-	private Long nhaKhoId;
 	private String maNhaKho;
-	private String tenNhaKho;
+	private String maNganKho;
+	private String maNganLo;
 
 	private String thuKho;
-	private Long qdgnvnxId;
 	private String ketLuan;
 	private String ketQuaDanhGia;
 	private List<KquaKnghiemReq> kquaKnghiem = new ArrayList<>();

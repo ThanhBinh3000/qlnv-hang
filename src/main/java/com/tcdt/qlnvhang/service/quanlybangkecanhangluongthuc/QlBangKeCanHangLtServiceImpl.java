@@ -5,7 +5,7 @@ import com.tcdt.qlnvhang.entities.quanlybangkecanhangluongthuc.QlBangKeChCtLt;
 import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLt;
 import com.tcdt.qlnvhang.enums.QlPhieuNhapKhoLtStatus;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
-import com.tcdt.qlnvhang.repository.HhQdGiaoNvuNhapxuatRepository;
+import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.repository.quanlybangkecanhangluongthuc.QlBangKeCanHangLtRepository;
@@ -24,6 +24,7 @@ import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganKho;
@@ -52,6 +53,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
@@ -59,6 +61,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Log4j2
@@ -94,6 +97,9 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
     @Autowired
     private QlnvDmVattuRepository qlnvDmVattuRepository;
 
+    @Autowired
+    private HttpServletRequest req;
+
     @Override
     @Transactional(rollbackOn = Exception.class)
     public QlBangKeCanHangLtRes create(QlBangKeCanHangLtReq req) throws Exception {
@@ -126,13 +132,19 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
         BeanUtils.copyProperties(item, response);
         response.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
         response.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
+        QlnvDmDonvi donvi = getDviByMa(item.getMaDvi(), req);
+        response.setMaDvi(donvi.getMaDvi());
+        response.setTenDvi(donvi.getTenDvi());
 
-        if (StringUtils.hasText(item.getMaVatTu())) {
-            QlnvDmVattu vatTu = qlnvDmVattuRepository.findByMa(item.getMaVatTu());
-            if (vatTu == null)
+        Set<String> maVatTus = Stream.of(item.getMaVatTu(), item.getMaVatTuCha()).collect(Collectors.toSet());
+        if (!CollectionUtils.isEmpty(maVatTus)) {
+            Set<QlnvDmVattu> vatTus = qlnvDmVattuRepository.findByMaIn(maVatTus.stream().filter(Objects::nonNull).collect(Collectors.toSet()));
+            if (CollectionUtils.isEmpty(vatTus))
                 throw new Exception("Không tìm thấy vật tư");
-
-            response.setTenVatTu(vatTu.getTen());
+            vatTus.stream().filter(v -> v.getMa().equalsIgnoreCase(item.getMaVatTu())).findFirst()
+                    .ifPresent(v -> response.setTenVatTu(v.getTen()));
+            vatTus.stream().filter(v -> v.getMa().equalsIgnoreCase(item.getMaVatTuCha())).findFirst()
+                    .ifPresent(v -> response.setTenVatTuCha(v.getTen()));
         }
         List<QlBangKeChCtLt> chiTiets = item.getChiTiets();
         List<QlBangKeChCtLtRes> chiTietResList = new ArrayList<>();
@@ -410,6 +422,8 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
 
     @Override
     public boolean exportToExcel(QlBangKeCanHangLtSearchReq objReq, HttpServletResponse response) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        objReq.setMaDvi(userInfo.getDvql());
         objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
         List<QlBangKeCanHangLtRes> list = this.search(objReq).get().collect(Collectors.toList());
 

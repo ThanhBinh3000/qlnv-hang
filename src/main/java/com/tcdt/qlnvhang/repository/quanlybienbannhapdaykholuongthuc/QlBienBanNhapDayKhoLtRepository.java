@@ -4,8 +4,12 @@ import com.tcdt.qlnvhang.entities.quanlybienbannhapdaykholuongthuc.QlBienBanNhap
 import com.tcdt.qlnvhang.repository.BaseRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import javax.transaction.Transactional;
+import java.util.Collection;
 
 @Repository
 public interface QlBienBanNhapDayKhoLtRepository extends BaseRepository<QlBienBanNhapDayKhoLt, Long>, QlBienBanNhapDayKhoLtRepositoryCustom {
@@ -25,4 +29,7 @@ public interface QlBienBanNhapDayKhoLtRepository extends BaseRepository<QlBienBa
             nativeQuery = true)
     Page<QlBienBanNhapDayKhoLt> select(String soBienBan, String ngayBatDauNhap, String ngayKetThucNhap, String ngayNhapDayKhoTu, String ngayNhapDayKhoDen, String diemKho, String nhaKho, String maKhoNganLo,String kyThuatVien, Pageable pageable);
 
+    @Transactional
+    @Modifying
+    void deleteByIdIn(Collection<Long> ids);
 }

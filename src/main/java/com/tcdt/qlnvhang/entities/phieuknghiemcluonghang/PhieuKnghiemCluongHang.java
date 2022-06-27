@@ -27,33 +27,29 @@ public class PhieuKnghiemCluongHang extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PHIEU_KNGHIEM_CLUONG_SEQ")
 	@SequenceGenerator(sequenceName = "PHIEU_KNGHIEM_CLUONG_SEQ", allocationSize = 1, name = "PHIEU_KNGHIEM_CLUONG_SEQ")
 	private Long id;
+	private Long qdgnvnxId;
+	private Long bbBanGiaoMauId;
 	private String soPhieu;
-	private LocalDate ngayLayMau;
-	private LocalDate ngayKnghiem;
-	private String maNganLo;
-	private String tenNganLo;
-	private String maNhaKho;
-	private String tenNhaKho;
-	private String maHhoa;
-	private String tenHhoa;
 	private String maDiemKho;
-	private String tenDiemKho;
-	private String soBbanKthucNhap;
-	private LocalDate ngayNhapDay;
+	private String maNhaKho;
+	private String maNganKho;
+	private String maNganLo;
+	private String maVatTu;
+	private String maVatTuCha;
 	private BigDecimal sluongBquan;
 	private String hthucBquan;
-	private String ddiemBquan;
+	private String thuKho;
+	private LocalDate ngayNhapDay;
+	private LocalDate ngayLayMau;
+	private LocalDate ngayKnghiem;
+	private String maDvi;
+	private String capDvi;
+	private String ketLuan;
+	private String ketQuaDanhGia;
 	private Long nguoiGuiDuyetId;
 	private LocalDate ngayGuiDuyet;
 	private Long nguoiPduyetId;
 	private LocalDate ngayPduyet;
 	private String trangThai;
 	private String ldoTchoi;
-	private String maDonVi;
-	private String capDonVi;
-	private String maQhns;
-	private String thuKho;
-	private String ketLuan;
-	private String ketQuaDanhGia;
-	private Long qdgnvnxId;
 }

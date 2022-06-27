@@ -6,7 +6,7 @@ import com.tcdt.qlnvhang.request.search.quanlybienbannhapdaykholuongthuc.QlBienB
 import java.util.List;
 
 public interface QlBienBanNhapDayKhoLtRepositoryCustom {
-    List<QlBienBanNhapDayKhoLt> search(QlBienBanNhapDayKhoLtSearchReq req);
+    List<Object[]> search(QlBienBanNhapDayKhoLtSearchReq req);
 
     int count(QlBienBanNhapDayKhoLtSearchReq req);
 }

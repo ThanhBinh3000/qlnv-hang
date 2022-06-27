@@ -57,6 +57,10 @@ public class QlBangKeCanHangLtRepositoryCustomImpl implements QlBangKeCanHangLtR
         if (!StringUtils.isEmpty(req.getSoQdNhap())) {
             builder.append("AND ").append("nx.soQd LIKE :soQdNhap ");
         }
+
+        if (!StringUtils.isEmpty(req.getTrangThai())) {
+            builder.append("AND ").append("p.trangThai = :trangThai ");
+        }
     }
 
     @Override
@@ -91,6 +95,10 @@ public class QlBangKeCanHangLtRepositoryCustomImpl implements QlBangKeCanHangLtR
         }
         if (!StringUtils.isEmpty(req.getMaDvi())) {
             query.setParameter("maDvi", req.getMaDvi());
+        }
+
+        if (!StringUtils.isEmpty(req.getTrangThai())) {
+            query.setParameter("trangThai", req.getTrangThai());
         }
     }
 }
