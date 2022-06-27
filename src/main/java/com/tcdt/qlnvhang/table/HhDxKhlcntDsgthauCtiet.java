@@ -15,6 +15,9 @@ public class HhDxKhlcntDsgthauCtiet {
 	@SequenceGenerator(sequenceName = "QLNV_KH_LCNT_VTU_DTL_CTIET_SEQ", allocationSize = 1, name = "QLNV_KH_LCNT_VTU_DTL_CTIET_SEQ")
 	private Long id;
 
+	@Transient
+	private Long IdVirtual;
+
 	private String maDvi;
 
 	@Transient

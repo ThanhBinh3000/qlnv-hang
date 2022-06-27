@@ -223,14 +223,18 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 
 
 		List<HhDxKhlcntDsgthau> dsGthauList = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcnt(qOptional.get().getId());
-
+		int time = 1;
 		for(HhDxKhlcntDsgthau dsG : dsGthauList){
 			dsG.setTenDvi(mapDmucDvi.get(dsG.getMaDvi()));
+			dsG.setIdVirtual(new Date().getTime()+ time);
+			time ++;
 			List<HhDxKhlcntDsgthauCtiet> listDdNhap = hhDxKhlcntDsgthauCtietRepository.findByIdGoiThau(dsG.getId());
-			listDdNhap.forEach(item -> {
-				item.setTenDvi(StringUtils.isEmpty(item.getMaDvi())? null : mapDmucDvi.get(item.getTenDvi()));
-				item.setTenDiemKho(StringUtils.isEmpty(item.getMaDiemKho())? null : mapDmucDvi.get(item.getMaDiemKho()));
-			});
+			for(int i = 0;i < listDdNhap.size();i++){
+				listDdNhap.get(i).setTenDvi(StringUtils.isEmpty(listDdNhap.get(i).getMaDvi())? null : mapDmucDvi.get(listDdNhap.get(i).getTenDvi()));
+				listDdNhap.get(i).setTenDiemKho(StringUtils.isEmpty(listDdNhap.get(i).getMaDiemKho())? null : mapDmucDvi.get(listDdNhap.get(i).getMaDiemKho()));
+				listDdNhap.get(i).setIdVirtual(new Date().getTime()+time);
+				time++;
+			}
 			dsG.setChildren(listDdNhap);
 		}
 		qOptional.get().setDsGtDtlList(dsGthauList);
