@@ -49,7 +49,7 @@ public class BienBanLayMauRepositoryCustomImpl implements BienBanLayMauRepositor
 			builder.append("AND ").append("bb.soBienBan LIKE :soBienBan ");
 		}
 
-		if (!StringUtils.isEmpty(req.getSoQuyetdinhNhap())) {
+		if (!StringUtils.isEmpty(req.getSoQuyetDinhNhap())) {
 			builder.append("AND ").append("nx.soQd LIKE :soQdNhap ");
 		}
 		if (req.getNgayLayMauTu() != null) {
@@ -90,8 +90,8 @@ public class BienBanLayMauRepositoryCustomImpl implements BienBanLayMauRepositor
 			query.setParameter("soBienBan", "%" + req.getSoBienBan() + "%");
 		}
 
-		if (!StringUtils.isEmpty(req.getSoQuyetdinhNhap())) {
-			query.setParameter("soQdNhap", "%" + req.getSoQuyetdinhNhap() + "%");
+		if (!StringUtils.isEmpty(req.getSoQuyetDinhNhap())) {
+			query.setParameter("soQdNhap", "%" + req.getSoQuyetDinhNhap() + "%");
 		}
 		if (req.getNgayLayMauTu() != null) {
 			query.setParameter("ngayLayMauTu", req.getNgayLayMauTu());

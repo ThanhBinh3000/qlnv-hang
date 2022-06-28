@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Data
 public class BienBanLayMauSearchReq extends BaseRequest {
-	private String soQuyetdinhNhap;
+	private String soQuyetDinhNhap;
 	private String soBienBan;
 	private LocalDate ngayLayMauTu;
 	private LocalDate ngayLayMauDen;

@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.repository.bbanbangiaomau;
 
-import com.tcdt.qlnvhang.entities.bbanlaymau.BienBanBanGiaoMau;
 import com.tcdt.qlnvhang.request.search.BienBanBanGiaoMauSearchReq;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
@@ -18,9 +17,11 @@ public class BienBanBanGiaoMauRepositoryCustomImpl implements BienBanBanGiaoMauR
 	private EntityManager em;
 
 	@Override
-	public List<BienBanBanGiaoMau> search(BienBanBanGiaoMauSearchReq req, Pageable pageable) {
+	public List<Object[]> search(BienBanBanGiaoMauSearchReq req, Pageable pageable) {
 		StringBuilder builder = new StringBuilder();
-		builder.append("SELECT bb FROM BienBanBanGiaoMau bb ");
+		builder.append("SELECT bb, nx.id, nx.soQd, bbLayMau.id, bbLayMau.soBienBan FROM BienBanBanGiaoMau bb ");
+		builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON bb.qdgnvnxId = nx.id ");
+		builder.append("INNER JOIN BienBanLayMau bbLayMau ON bb.bbLayMauId = bbLayMau.id ");
 		setConditionSearchCtkhn(req, builder);
 
 		//Sort
@@ -30,7 +31,7 @@ public class BienBanBanGiaoMauRepositoryCustomImpl implements BienBanBanGiaoMauR
 					.map(o -> o.getProperty() + " " + o.getDirection()).collect(Collectors.joining(", ")));
 		}
 
-		TypedQuery<BienBanBanGiaoMau> query = em.createQuery(builder.toString(), BienBanBanGiaoMau.class);
+		TypedQuery<Object[]> query = em.createQuery(builder.toString(), Object[].class);
 
 		//Set params
 		this.setParameterSearchCtkhn(req, query);
@@ -44,29 +45,26 @@ public class BienBanBanGiaoMauRepositoryCustomImpl implements BienBanBanGiaoMauR
 	private void setConditionSearchCtkhn(BienBanBanGiaoMauSearchReq req, StringBuilder builder) {
 		builder.append("WHERE 1 = 1 ");
 
-		if (!StringUtils.isEmpty(req.getMaHhoa())) {
-			builder.append("AND ").append("bb.maHhoa = :maHhoa ");
+		if (!StringUtils.isEmpty(req.getSoBienBan())) {
+			builder.append("AND ").append("bb.soBienBan LIKE :soBienBan ");
 		}
 
-		if (!StringUtils.isEmpty(req.getMaKho())) {
-			builder.append("AND ").append("bb.maKho = :maKho ");
+		if (!StringUtils.isEmpty(req.getSoQuyetDinhNhap())) {
+			builder.append("AND ").append("nx.soQd LIKE :soQdNhap ");
+		}
+		if (req.getNgayBanGiaoMauTu() != null) {
+			builder.append("AND ").append("bb.ngayBanGiaoMau >= :ngayBanGiaoMauTu ");
+		}
+		if (req.getNgayBanGiaoMauDen() != null) {
+			builder.append("AND ").append("bb.ngayBanGiaoMau <= :ngayBanGiaoMauDen ");
 		}
 
-		if (!StringUtils.isEmpty(req.getMaNgan())) {
-			builder.append("AND ").append("bb.maNgan = :maNgan ");
+		if (!StringUtils.isEmpty(req.getMaVatTuCha())) {
+			builder.append("AND ").append("bb.maVatTuCha <= :maVatTuCha ");
 		}
 
-		if (!StringUtils.isEmpty(req.getMaLo())) {
-			builder.append("AND ").append("bb.maLo = :maLo ");
-		}
-		if (!StringUtils.isEmpty(req.getSoQdinhGiaoNvuNhap())) {
-			builder.append("AND ").append("bb.soQdinhGiaoNvuNhap = :soQdinhGiaoNvuNhap ");
-		}
-		if (req.getNgayLapBbanTuNgay() != null) {
-			builder.append("AND ").append("bb.ngayLapBban >= :ngayLapBbanTuNgay ");
-		}
-		if (req.getNgayLapBbanDenNgay() != null) {
-			builder.append("AND ").append("bb.ngayLapBban <= :ngayLapBbanDenNgay ");
+		if (!StringUtils.isEmpty(req.getMaDvi())) {
+			builder.append("AND ").append("bb.maDvi <= :maDvi ");
 		}
 	}
 
@@ -75,7 +73,8 @@ public class BienBanBanGiaoMauRepositoryCustomImpl implements BienBanBanGiaoMauR
 		int total = 0;
 		StringBuilder builder = new StringBuilder();
 		builder.append("SELECT COUNT(1) FROM BienBanBanGiaoMau bb ");
-
+		builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON bb.qdgnvnxId = nx.id ");
+		builder.append("INNER JOIN BienBanLayMau bbLayMau ON bb.bbLayMauId = bbLayMau.id ");
 		this.setConditionSearchCtkhn(req, builder);
 
 		TypedQuery<Long> query = em.createQuery(builder.toString(), Long.class);
@@ -85,32 +84,26 @@ public class BienBanBanGiaoMauRepositoryCustomImpl implements BienBanBanGiaoMauR
 	}
 
 	private void setParameterSearchCtkhn(BienBanBanGiaoMauSearchReq req, Query query) {
-		if (!StringUtils.isEmpty(req.getMaHhoa())) {
-			query.setParameter("maHhoa", req.getMaHhoa());
+		if (!StringUtils.isEmpty(req.getSoBienBan())) {
+			query.setParameter("soBienBan", "%" + req.getSoBienBan() + "%");
 		}
 
-		if (!StringUtils.isEmpty(req.getMaKho())) {
-			query.setParameter("maKho", req.getMaKho());
+		if (!StringUtils.isEmpty(req.getSoQuyetDinhNhap())) {
+			query.setParameter("soQdNhap", "%" + req.getSoQuyetDinhNhap() + "%");
+		}
+		if (req.getNgayBanGiaoMauTu() != null) {
+			query.setParameter("ngayBanGiaoMauTu", req.getNgayBanGiaoMauTu());
+		}
+		if (req.getNgayBanGiaoMauDen() != null) {
+			query.setParameter("ngayBanGiaoMauDen", req.getNgayBanGiaoMauDen());
 		}
 
-		if (!StringUtils.isEmpty(req.getMaNgan())) {
-			query.setParameter("maNgan", req.getMaNgan());
+		if (!StringUtils.isEmpty(req.getMaVatTuCha())) {
+			query.setParameter("maVatTuCha", req.getMaVatTuCha());
 		}
 
-		if (!StringUtils.isEmpty(req.getMaLo())) {
-			query.setParameter("maLo", req.getMaLo());
-		}
-
-		if (!StringUtils.isEmpty(req.getSoQdinhGiaoNvuNhap())) {
-			query.setParameter("soQdinhGiaoNvuNhap", req.getSoQdinhGiaoNvuNhap());
-		}
-
-		if (req.getNgayLapBbanTuNgay() != null) {
-			query.setParameter("ngayLapBbanTuNgay", req.getNgayLapBbanTuNgay());
-		}
-
-		if (req.getNgayLapBbanDenNgay() != null) {
-			query.setParameter("ngayLapBbanDenNgay", req.getNgayLapBbanDenNgay());
+		if (!StringUtils.isEmpty(req.getMaDvi())) {
+			query.setParameter("maDvi", req.getMaDvi());
 		}
 	}
 }

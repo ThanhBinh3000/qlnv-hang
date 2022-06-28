@@ -1,51 +1,39 @@
 package com.tcdt.qlnvhang.response.bbanlaymau;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
+@NoArgsConstructor
 public class BienBanBanGiaoMauRes {
 	private Long id;
-	private String tenHhoa;
-	private String ccuQdinhGiaoNvuNhap;
-	private String maKho;
-	private String tenKho;
-	private String maLo;
-	private String tenLo;
-	private String maNgan;
-	private String tenNgan;
-	private String soBban;
-	private String soBbanLayMau;
-	private LocalDate ngayLapBban;
-	private String tenDviNhan;
-	private String tenDdienNhan;
-	private String cvuDdienNhan;
-	private String tenDviCcap;
-	private String tenDdienCcap;
-	private String cvuDdienCcap;
-	private String canCu;
-	private String ddiemKtra;
-	private String sluongLmau;
-	private String pphapLayMau;
-	private String ctieuKtra;
-	private String kquaNiemPhongMau;
+	private Long qdgnvnxId;
+	private String soQuyetDinhNhap;
+	private Long bbLayMauId;
+	private String soBbLayMau;
+	private String soBienBan;
+	private LocalDate ngayBanGiaoMau;
+
+	private String maVatTuCha;
+	private String tenVatTuCha;
+	private String maVatTu;
+	private String tenVatTu;
+	private String tenDviBenNhan;
+	private Integer soLuongMau;
+	private String chiTieuKiemTra;
+	private String tNiemPhongMauHang;
+
+	private String maDvi;
+	private String tenDvi;
+
+	private String lyDoTuChoi;
 	private String trangThai;
 	private String tenTrangThai;
 	private String trangThaiDuyet;
 
-	private String maDonVi;
-	private String maQHNS;
-	private String soHd;
-	private LocalDate ngayLayMau;
-	private String ddiemLayMau;
-	private String ddienCucDtruNnuoc;
-	private String tphongKthuatBquan;
-	private String ddienBenNhan;
-	private LocalDate ngayBgiaoMau;
-	private String ddienCucDtruBenGiao;
-	private String ddienDviTchucBenNhan;
-	private String tinhTrang;
-	private Integer soTrang;
-	private Long qdgnvnxId;
+	private List<BienBanBanGiaoMauCtRes> chiTiets = new ArrayList<>();
 }

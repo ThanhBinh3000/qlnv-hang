@@ -3,6 +3,8 @@ package com.tcdt.qlnvhang.response.bbanlaymau;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class BienBanLayMauRes {
@@ -43,4 +45,6 @@ public class BienBanLayMauRes {
 	private String lyDoTuChoi;
 	private String maDvi;
 	private String tenDvi;
+
+	private List<BienBanLayMauCtRes> chiTiets = new ArrayList<>();
 }
