@@ -255,7 +255,7 @@ public class BienBanBanGiaoMauServiceImpl extends BaseServiceImpl implements Bie
 			if (id != null) {
 				chiTiet = mapChiTiet.get(id);
 				if (chiTiet == null)
-					throw new Exception("Biên bản lấy mẫu chi tiết không tồn tại.");
+					throw new Exception("Biên bản bàn giao mẫu chi tiết không tồn tại.");
 				mapChiTiet.remove(id);
 			}
 

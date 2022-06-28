@@ -127,4 +127,7 @@ public class PathContains {
 
 	//Quản lý phiếu kiếm tra chất lượng hàng lương thực
 	public static final String QL_PHIEU_KIEM_TRA_CHAT_LUONG_HANG_LT = "/ql-phieu-kiem-tra-chat-luong-hang-lt";
+
+	// Nhập kho vật tư: Phiếu nhập kho tam gui
+	public static final String PHIEU_NHAP_KHO_TAM_GUI = "/phieu-nhap-kho-tam-gui";
 }
