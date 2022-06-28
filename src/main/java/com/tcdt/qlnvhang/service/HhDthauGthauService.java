@@ -51,13 +51,13 @@ public class HhDthauGthauService extends BaseServiceImpl {
 
 		for(HhDthauNthauDuthauReq nthauDthau : objReq.getNthauDuThauList()){
 			HhDthauNthauDuthau dataDtl = new ModelMapper().map(nthauDthau, HhDthauNthauDuthau.class);
-			dataDtl.setIdDtGt(dataMap.getId());
+			dataDtl.setIdDtGt(dataMap.getIdGoiThau());
 			hhDthauNthauDuthauRepository.save(dataDtl);
 		}
 
 		for(HhDxuatKhLcntDsgthauDtlCtietReq ddNhap : objReq.getDiaDiemNhap()){
 			HhDthauDdiemNhap dd = new ModelMapper().map(ddNhap, HhDthauDdiemNhap.class);
-			dd.setIdGoiThau(dataMap.getId());
+			dd.setIdDtGt(dataMap.getIdGoiThau());
 			hhDthauDdiemNhapRepository.save(dd);
 		}
 
@@ -74,6 +74,11 @@ public class HhDthauGthauService extends BaseServiceImpl {
 		Map<String,String> mapVthh = getListDanhMucHangHoa();
 		optional.get().setTenVthh( StringUtils.isEmpty(optional.get().getLoaiVthh()) ? null : mapVthh.get(optional.get().getLoaiVthh()));
 		optional.get().setTenCloaiVthh( StringUtils.isEmpty(optional.get().getCloaiVthh()) ? null :mapVthh.get(optional.get().getCloaiVthh()));
+
+
+		optional.get().setNthauDuThauList(hhDthauNthauDuthauRepository.findByIdDtGt(optional.get().getIdGoiThau()));
+		optional.get().setDiaDiemNhapList(hhDthauDdiemNhapRepository.findByIdDtGt(optional.get().getIdGoiThau()));
+
 		return optional.get();
 	}
 

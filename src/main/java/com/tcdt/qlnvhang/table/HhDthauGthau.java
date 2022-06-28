@@ -83,6 +83,9 @@ public class HhDthauGthau implements Serializable {
 
 	@Transient
 	private List<HhDthauHsoTchinh> hsoTchinhLinh = new ArrayList<>();
+
+	@Transient
+	private List<HhDthauDdiemNhap> diaDiemNhapList = new ArrayList<>();
 //
 //	@Transient
 //	private HhDthauTthaoHdong tthaoHdong;

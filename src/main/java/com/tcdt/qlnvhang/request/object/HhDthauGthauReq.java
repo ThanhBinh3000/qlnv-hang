@@ -84,7 +84,7 @@ public class HhDthauGthauReq {
 
 	private Long vat;
 
-	private List<HhDthauNthauDuthauReq> nthauDuThauList;
+	private List<HhDthauNthauDuthauReq> nthauDuThauList = new ArrayList<>();
 
 	private List<HhDxuatKhLcntDsgthauDtlCtietReq> diaDiemNhap = new ArrayList<>();
 

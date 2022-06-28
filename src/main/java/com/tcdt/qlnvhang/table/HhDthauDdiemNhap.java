@@ -39,5 +39,5 @@ public class HhDthauDdiemNhap {
 
 	private BigDecimal thanhTien;
 
-	private Long idGoiThau;
+	private Long idDtGt;
 }
