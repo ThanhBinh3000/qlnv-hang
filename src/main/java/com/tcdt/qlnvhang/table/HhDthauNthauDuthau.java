@@ -14,6 +14,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import io.swagger.models.auth.In;
 import lombok.Data;
 
 @Entity
@@ -32,14 +33,12 @@ public class HhDthauNthauDuthau implements Serializable {
 			+ "_SEQ", allocationSize = 1, name = HhDthauNthauDuthau.TABLE_NAME + "_SEQ")
 	private Long id;
 
-	String ten;
-	String soThue;
+	String tenDvi;
+	String mst;
 	String diaChi;
-	String soDt;
+	String sdt;
+	private Integer version;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_gt_hdr")
-	@JsonBackReference
-	private HhDthauGthau parent;
+	private Long idDtGt;
 
 }

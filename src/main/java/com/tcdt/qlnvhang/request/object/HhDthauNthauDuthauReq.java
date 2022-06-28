@@ -14,9 +14,9 @@ public class HhDthauNthauDuthauReq {
 	@NotNull(message = "Không được để trống")
 	@Size(max = 250, message = "Tên nhà thầu không được vượt quá 250 ký tự")
 	@ApiModelProperty(example = "Tên nhà thầu")
-	String ten;
+	String tenDvi;
 
-	String soThue;
+	String mst;
 
 	@Size(max = 500, message = "Địa chỉ nhà thầu không được vượt quá 500 ký tự")
 	@ApiModelProperty(example = "Địa chỉ nhà thầu")
@@ -24,7 +24,9 @@ public class HhDthauNthauDuthauReq {
 
 	@Size(max = 20, message = "Số điện thoại không được vượt quá 20 ký tự")
 	@ApiModelProperty(example = "0999999999")
-	String soDt;
+	String sdt;
+
+	private Long version;
 
 	Long idGtHdr;
 }

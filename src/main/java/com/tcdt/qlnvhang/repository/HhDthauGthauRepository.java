@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface HhDthauGthauRepository extends BaseRepository<HhDthauGthau, Long> {
 
-	Optional<HhDthauGthau> findBySoQd(String soQd);
+//	Optional<HhDthauGthau> findBySoQd(String soQd);
 
 	Optional<HhDthauGthau> findByIdGoiThau (Long idGoiThau);
 

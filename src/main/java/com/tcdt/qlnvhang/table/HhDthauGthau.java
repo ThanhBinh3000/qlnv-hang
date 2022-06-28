@@ -36,7 +36,7 @@ public class HhDthauGthau implements Serializable {
 
 	Long idGoiThau;
 	String soQdPdKhlcnt;
-	String ngayQdPdKhlcnt;
+	Date ngayQdPdKhlcnt;
 	String tenGthau;
 	String loaiVthh;
 	@Transient
@@ -45,24 +45,35 @@ public class HhDthauGthau implements Serializable {
 	@Transient
 	String tenCloaiVthh;
 	String dviTinh;
-	String maHhoa;
+//	String maHhoa;
+	Long donGia;
 	BigDecimal soLuong;
-	BigDecimal giaGthau;
+	BigDecimal tongTien;
 	String nguonVon;
 	String hthucLcnt;
 	String pthucLcnt;
-	Date tuTgianLcnt;
-	Date denTgianLcnt;
-	String hthucHdong;
-	Date tgianThHienHd;
-	String ghiChu;
-	Date tgianMoHsdxtc;
-	String soQd;
-	Date ngayKy;
-	String nhaThauTthao;
-	Integer vat;
-	Long donGia;
+	String loaiHdong;
 	Integer tgianThienHd;
+	Date tgianNhang;
+	Date tgianMthau;
+	Date tgianDthau;
+
+	Date ngayKyBban;
+	String idNhaThau;
+	BigDecimal donGiaTrcVat;
+	Integer vat;
+
+	Long idDtHdr;
+
+	//	Date tuTgianLcnt;
+//	Date denTgianLcnt;
+//	String hthucHdong;
+//	Date tgianThHienHd;
+	String ghiChu;
+//	Date tgianMoHsdxtc;
+//	String soQd;
+//	Date ngayKy;
+
 
 	@Transient
 	private List<HhDthauNthauDuthau> nthauDuThauList = new ArrayList<>();
@@ -72,26 +83,11 @@ public class HhDthauGthau implements Serializable {
 
 	@Transient
 	private List<HhDthauHsoTchinh> hsoTchinhLinh = new ArrayList<>();
-
-	@Transient
-	private HhDthauTthaoHdong tthaoHdong;
+//
+//	@Transient
+//	private HhDthauTthaoHdong tthaoHdong;
 
 	@Transient
 	private HhDthauKquaLcnt kquaLcnt;
-
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@Fetch(value = FetchMode.SUBSELECT)
-	@JoinColumn(name = "dataId")
-	@JsonManagedReference
-	@Where(clause = "data_type='" + HhDthauGthau.TABLE_NAME + "'")
-	private List<FileDKemJoinGoiThau> fileDinhKems = new ArrayList<>();
-
-	public void setFileDinhKems(List<FileDKemJoinGoiThau> children5) {
-		this.fileDinhKems.clear();
-		for (FileDKemJoinGoiThau child5 : children5) {
-			child5.setParent(this);
-		}
-		this.fileDinhKems.addAll(children5);
-	}
 
 }

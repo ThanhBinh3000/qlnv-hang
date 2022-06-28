@@ -78,42 +78,42 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 				detailChild5 = new ArrayList<FileDKemJoinGoiThau>();
 
 				// Thong tin danh sach cac nha thau du thau
-				if (dtlReq.getChildren() != null)
-					detailChild = ObjectMapperUtils.mapAll(dtlReq.getChildren(), HhDthauNthauDuthau.class);
-
-				// Thong tin danh sach ho so ky thuat
-				if (dtlReq.getDetail1() != null) {
-					for (HhDthauHsoKthuatReq hsKthuatReq : dtlReq.getDetail1()) {
-						HhDthauHsoKthuat hsKthuat = ObjectMapperUtils.map(hsKthuatReq, HhDthauHsoKthuat.class);
-						List<FileDKemJoinHsoKthuat> fileDkHsKts = ObjectMapperUtils
-								.mapAll(hsKthuatReq.getFileDinhKems(), FileDKemJoinHsoKthuat.class);
-						fileDkHsKts.forEach(f -> {
-							f.setDataType(HhDthauHsoKthuat.TABLE_NAME);
-							f.setCreateDate(new Date());
-						});
-						hsKthuat.setChildren(fileDkHsKts);
-						detailChild1.add(hsKthuat);
-					}
-				}
-
-				// Thong tin danh sach ho so tai chinh
-				if (dtlReq.getDetail2() != null)
-					detailChild2 = ObjectMapperUtils.mapAll(dtlReq.getDetail2(), HhDthauHsoTchinh.class);
-
-				// Thong tin thuong thao hop dong
-				if (dtlReq.getDetail3() != null) {
-					for (HhDthauTthaoHdongReq hsTtHdReq : dtlReq.getDetail3()) {
-						HhDthauTthaoHdong hsTtHd = ObjectMapperUtils.map(hsTtHdReq, HhDthauTthaoHdong.class);
-						List<FileDKemJoinTthaoHdong> fileDkTtHds = ObjectMapperUtils.mapAll(hsTtHdReq.getFileDinhKems(),
-								FileDKemJoinTthaoHdong.class);
-						fileDkTtHds.forEach(f -> {
-							f.setDataType(HhDthauTthaoHdong.TABLE_NAME);
-							f.setCreateDate(new Date());
-						});
-						hsTtHd.setChildren(fileDkTtHds);
-						detailChild3.add(hsTtHd);
-					}
-				}
+//				if (dtlReq.getChildren() != null)
+//					detailChild = ObjectMapperUtils.mapAll(dtlReq.getChildren(), HhDthauNthauDuthau.class);
+//
+//				// Thong tin danh sach ho so ky thuat
+//				if (dtlReq.getDetail1() != null) {
+//					for (HhDthauHsoKthuatReq hsKthuatReq : dtlReq.getDetail1()) {
+//						HhDthauHsoKthuat hsKthuat = ObjectMapperUtils.map(hsKthuatReq, HhDthauHsoKthuat.class);
+//						List<FileDKemJoinHsoKthuat> fileDkHsKts = ObjectMapperUtils
+//								.mapAll(hsKthuatReq.getFileDinhKems(), FileDKemJoinHsoKthuat.class);
+//						fileDkHsKts.forEach(f -> {
+//							f.setDataType(HhDthauHsoKthuat.TABLE_NAME);
+//							f.setCreateDate(new Date());
+//						});
+//						hsKthuat.setChildren(fileDkHsKts);
+//						detailChild1.add(hsKthuat);
+//					}
+//				}
+//
+//				// Thong tin danh sach ho so tai chinh
+//				if (dtlReq.getDetail2() != null)
+//					detailChild2 = ObjectMapperUtils.mapAll(dtlReq.getDetail2(), HhDthauHsoTchinh.class);
+//
+//				// Thong tin thuong thao hop dong
+//				if (dtlReq.getDetail3() != null) {
+//					for (HhDthauTthaoHdongReq hsTtHdReq : dtlReq.getDetail3()) {
+//						HhDthauTthaoHdong hsTtHd = ObjectMapperUtils.map(hsTtHdReq, HhDthauTthaoHdong.class);
+//						List<FileDKemJoinTthaoHdong> fileDkTtHds = ObjectMapperUtils.mapAll(hsTtHdReq.getFileDinhKems(),
+//								FileDKemJoinTthaoHdong.class);
+//						fileDkTtHds.forEach(f -> {
+//							f.setDataType(HhDthauTthaoHdong.TABLE_NAME);
+//							f.setCreateDate(new Date());
+//						});
+//						hsTtHd.setChildren(fileDkTtHds);
+//						detailChild3.add(hsTtHd);
+//					}
+//				}
 
 				// Thong tin ket qua lua chon nha thau
 //				if (dtlReq.getDetail4() != null) {
@@ -130,14 +130,14 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 //					}
 //				}
 
-				// File dinh kem cua goi thau
-				if (dtlReq.getFileDinhKems() != null) {
-					detailChild5 = ObjectMapperUtils.mapAll(dtlReq.getFileDinhKems(), FileDKemJoinGoiThau.class);
-					detailChild5.forEach(f -> {
-						f.setDataType(HhDthauGthau.TABLE_NAME);
-						f.setCreateDate(new Date());
-					});
-				}
+//				// File dinh kem cua goi thau
+//				if (dtlReq.getFileDinhKems() != null) {
+//					detailChild5 = ObjectMapperUtils.mapAll(dtlReq.getFileDinhKems(), FileDKemJoinGoiThau.class);
+//					detailChild5.forEach(f -> {
+//						f.setDataType(HhDthauGthau.TABLE_NAME);
+//						f.setCreateDate(new Date());
+//					});
+//				}
 //
 //				detail.setChildren(detailChild);
 //				detail.setChildren1(detailChild1);
@@ -203,39 +203,39 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 				detailChild4 = new ArrayList<HhDthauKquaLcnt>();
 				detailChild5 = new ArrayList<FileDKemJoinGoiThau>();
 
-				if (dtlReq.getChildren() != null)
-					detailChild = ObjectMapperUtils.mapAll(dtlReq.getChildren(), HhDthauNthauDuthau.class);
-
-				if (dtlReq.getDetail1() != null) {
-					for (HhDthauHsoKthuatReq hsKthuatReq : dtlReq.getDetail1()) {
-						HhDthauHsoKthuat hsKthuat = ObjectMapperUtils.map(hsKthuatReq, HhDthauHsoKthuat.class);
-						List<FileDKemJoinHsoKthuat> fileDkHsKts = ObjectMapperUtils
-								.mapAll(hsKthuatReq.getFileDinhKems(), FileDKemJoinHsoKthuat.class);
-						fileDkHsKts.forEach(f -> {
-							f.setDataType(HhDthauHsoKthuat.TABLE_NAME);
-							f.setCreateDate(new Date());
-						});
-						hsKthuat.setChildren(fileDkHsKts);
-						detailChild1.add(hsKthuat);
-					}
-				}
-
-				if (dtlReq.getDetail2() != null)
-					detailChild2 = ObjectMapperUtils.mapAll(dtlReq.getDetail2(), HhDthauHsoTchinh.class);
-
-				if (dtlReq.getDetail3() != null) {
-					for (HhDthauTthaoHdongReq hsTtHdReq : dtlReq.getDetail3()) {
-						HhDthauTthaoHdong hsTtHd = ObjectMapperUtils.map(hsTtHdReq, HhDthauTthaoHdong.class);
-						List<FileDKemJoinTthaoHdong> fileDkTtHds = ObjectMapperUtils.mapAll(hsTtHdReq.getFileDinhKems(),
-								FileDKemJoinTthaoHdong.class);
-						fileDkTtHds.forEach(f -> {
-							f.setDataType(HhDthauTthaoHdong.TABLE_NAME);
-							f.setCreateDate(new Date());
-						});
-						hsTtHd.setChildren(fileDkTtHds);
-						detailChild3.add(hsTtHd);
-					}
-				}
+//				if (dtlReq.getChildren() != null)
+//					detailChild = ObjectMapperUtils.mapAll(dtlReq.getChildren(), HhDthauNthauDuthau.class);
+//
+//				if (dtlReq.getDetail1() != null) {
+//					for (HhDthauHsoKthuatReq hsKthuatReq : dtlReq.getDetail1()) {
+//						HhDthauHsoKthuat hsKthuat = ObjectMapperUtils.map(hsKthuatReq, HhDthauHsoKthuat.class);
+//						List<FileDKemJoinHsoKthuat> fileDkHsKts = ObjectMapperUtils
+//								.mapAll(hsKthuatReq.getFileDinhKems(), FileDKemJoinHsoKthuat.class);
+//						fileDkHsKts.forEach(f -> {
+//							f.setDataType(HhDthauHsoKthuat.TABLE_NAME);
+//							f.setCreateDate(new Date());
+//						});
+//						hsKthuat.setChildren(fileDkHsKts);
+//						detailChild1.add(hsKthuat);
+//					}
+//				}
+//
+//				if (dtlReq.getDetail2() != null)
+//					detailChild2 = ObjectMapperUtils.mapAll(dtlReq.getDetail2(), HhDthauHsoTchinh.class);
+//
+//				if (dtlReq.getDetail3() != null) {
+//					for (HhDthauTthaoHdongReq hsTtHdReq : dtlReq.getDetail3()) {
+//						HhDthauTthaoHdong hsTtHd = ObjectMapperUtils.map(hsTtHdReq, HhDthauTthaoHdong.class);
+//						List<FileDKemJoinTthaoHdong> fileDkTtHds = ObjectMapperUtils.mapAll(hsTtHdReq.getFileDinhKems(),
+//								FileDKemJoinTthaoHdong.class);
+//						fileDkTtHds.forEach(f -> {
+//							f.setDataType(HhDthauTthaoHdong.TABLE_NAME);
+//							f.setCreateDate(new Date());
+//						});
+//						hsTtHd.setChildren(fileDkTtHds);
+//						detailChild3.add(hsTtHd);
+//					}
+//				}
 
 //				if (dtlReq.getDetail4() != null) {
 //					for (HhDthauKquaLcntReq kqLcntReq : dtlReq.getDetail4()) {
@@ -251,13 +251,13 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 //					}
 //				}
 
-				if (dtlReq.getFileDinhKems() != null) {
-					detailChild5 = ObjectMapperUtils.mapAll(dtlReq.getFileDinhKems(), FileDKemJoinGoiThau.class);
-					detailChild5.forEach(f -> {
-						f.setDataType(HhDthauGthau.TABLE_NAME);
-						f.setCreateDate(new Date());
-					});
-				}
+//				if (dtlReq.getFileDinhKems() != null) {
+//					detailChild5 = ObjectMapperUtils.mapAll(dtlReq.getFileDinhKems(), FileDKemJoinGoiThau.class);
+//					detailChild5.forEach(f -> {
+//						f.setDataType(HhDthauGthau.TABLE_NAME);
+//						f.setCreateDate(new Date());
+//					});
+//				}
 
 //				detail.setChildren(detailChild);
 //				detail.setChildren1(detailChild1);

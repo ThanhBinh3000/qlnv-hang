@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.object;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,23 +19,26 @@ public class HhDthauGthauReq {
 	@ApiModelProperty(notes = "Bắt buộc set đối với update")
 	private Long id;
 
-//	@NotNull(message = "Không được để trống")
-//	@Size(max = 250, message = "Tên gói thầu không được vượt quá 250 ký tự")
-//	@ApiModelProperty(example = "Tên gói thầu")
+	private Long idGoiThau;
+
+	private String soQdPdKhlcnt;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date ngayQdPdKhlcnt;
+
 	String tenGthau;
 
-//	@NotNull(message = "Không được để trống")
-//	@Size(max = 20, message = "Mã hàng hóa không được vượt quá 20 ký tự")
-//	@ApiModelProperty(example = "HH001")
-	String maHhoa;
+	String loaiVthh;
 
-//	@NotNull(message = "Không được để trống")
-//	@Size(max = 20, message = "Đơn vị tính không được vượt quá 20 ký tự")
-//	@ApiModelProperty(example = "DVT01")
+	String cloaiVthh;
+
 	String dviTinh;
 
+	Long donGia;
+
 	BigDecimal soLuong;
-	BigDecimal giaGthau;
+
+	BigDecimal tongTien;
 
 //	@NotNull(message = "Không được để trống")
 //	@Size(max = 20, message = "Nguồn vốn không được vượt quá 20 ký tự")
@@ -51,55 +55,48 @@ public class HhDthauGthauReq {
 //	@ApiModelProperty(example = "HLC01")
 	String pthucLcnt;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-	Date tuTgianLcnt;
+	String loaiHdong;
+
+	Integer tgianThienHd;
+
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-	Date denTgianLcnt;
-
-//	@NotNull(message = "Không được để trống")
-//	@Size(max = 20, message = "Hình thức hợp đồng không được vượt quá 20 ký tự")
-//	@ApiModelProperty(example = "HTH01")
-	String hthucHdong;
+	Date tgianNhang;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-	Date tgianThHienHd;
+	Date tgianMthau;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date tgianDthau;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date ngayKyBban;
+
+	private Long idDtHdr;
 
 	@Size(max = 500, message = "Ghi chú không được vượt quá 500 ký tự")
 	@ApiModelProperty(example = "Ghi chú")
 	String ghiChu;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-	Date tgianMoHsdxtc;
+	private String idNhaThau;
 
-//	@NotNull(message = "Không được để trống")
-//	@Size(max = 20, message = "Số quyết định không được vượt quá 20 ký tự")
-//	@ApiModelProperty(example = "20-QĐ/VPH")
-	String soQd;
-
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-	Date ngayKy;
-
-	private Long idDtHdr;
-
-	private Long idGoiThau;
-
-	private String nhaThauTthao;
-
-	private Long donGia;
+	private BigDecimal donGiaTrcVat;
 
 	private Long vat;
 
-	private List<HhDthauNthauDuthauReq> children;
+	private List<HhDthauNthauDuthauReq> nthauDuThauList;
 
-	private List<HhDthauHsoKthuatReq> detail1;
+	private List<HhDxuatKhLcntDsgthauDtlCtietReq> diaDiemNhap = new ArrayList<>();
 
-	private List<HhDthauHsoTchinhReq> detail2;
+//	private List<HhDthauHsoKthuatReq> hsoKthuatList;
+//
+//	private List<HhDthauHsoTchinhReq> hsoTchinhLinh;
 
-	private List<HhDthauTthaoHdongReq> detail3;
+//	private HhDthauTthaoHdongReq tthaoHdong;
 
-	private List<HhDthauKquaLcntReq> detail4;
+//	private HhDthauKquaLcntReq kquaLcnt;
 
-	private List<FileDinhKemReq> fileDinhKems;
+	private String trangThaiLuu;
+
 
 }
