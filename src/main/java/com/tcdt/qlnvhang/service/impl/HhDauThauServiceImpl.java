@@ -169,6 +169,19 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 	}
 
 	@Override
+	public List<ThongTinDauThauRes> selectAll(HhDthauSearchReq objReq) throws Exception {
+		List<ThongTinDauThauRes> list = hhDthauRepository.cusTomQuerySearch(objReq.getNamKhoach(),objReq.getLoaiVthh(),objReq.getCloaiVthh(),objReq.getSoQd(),objReq.getMaDvi(),objReq.getTrangThai());
+//		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
+//		Map<String, String> mapDmucDvi = getMapTenDvi();
+//		list.forEach(f -> {
+//			f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
+//			f.setTenVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
+//			f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
+//		});
+		return list;
+	}
+
+	@Override
 	public HhDthau update(HhDthauReq objReq) throws Exception {
 		if (StringUtils.isEmpty(objReq.getId()))
 			throw new Exception("Sửa thất bại, không tìm thấy dữ liệu");

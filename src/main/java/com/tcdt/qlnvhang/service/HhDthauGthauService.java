@@ -49,6 +49,8 @@ public class HhDthauGthauService extends BaseServiceImpl {
 			hhQdKhlcntDsgthauRepository.updateGoiThau(dataMap.getIdGoiThau(), Contains.DANG_CAP_NHAT);
 		}
 
+		// Delete all and add new nha thau
+		hhDthauNthauDuthauRepository.deleteAllByIdDtGt(dataMap.getIdGoiThau());
 		for(HhDthauNthauDuthauReq nthauDthau : objReq.getNthauDuThauList()){
 			HhDthauNthauDuthau dataDtl = new ModelMapper().map(nthauDthau, HhDthauNthauDuthau.class);
 			dataDtl.setIdDtGt(dataMap.getIdGoiThau());

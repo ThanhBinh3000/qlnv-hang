@@ -34,6 +34,20 @@ public interface HhDthauRepository extends CrudRepository<HhDthau, Long> {
 			" AND (?5 is null or HDR.trichYeu = ?5 )")
 	Page<ThongTinDauThauRes> cusTomQuerySearch(Long namKh, String loaiVthh, String soQd, String maDvi, String trichYeu,Pageable pageable);
 
+	@Query("SELECT new com.tcdt.qlnvhang.response.dauthauvattu.ThongTinDauThauRes(HDR.id,DTL.id,DSG.id,DSG.goiThau,DTL.maDvi,HDR.soQd,HDR.ngayQd,HDR.trichYeu,HDR.loaiVthh,HDR.cloaiVthh,DSG.thanhTien,DSG.trangThai) " +
+			" FROM HhQdKhlcntDsgthau DSG " +
+			" LEFT JOIN HhQdKhlcntDtl DTL ON DTL.id = DSG.idQdDtl " +
+			" LEFT JOIN HhQdKhlcntHdr HDR ON HDR.id = DTL.idQdHdr " +
+			" WHERE HDR.trangThai = '11' " +
+			" AND (?1 is null or HDR.namKhoach = ?1 )" +
+			" AND (?2 is null or  HDR.loaiVthh = ?2 )" +
+			" AND (?3 is null or  HDR.cloaiVthh = ?3 )" +
+			" AND (?4 is null or  HDR.soQd = ?4 )" +
+			" AND (?5 is null or  DTL.maDvi = ?5 )" +
+			" AND (?6 is null or  DSG.trangThai = ?6 )"
+	)
+	List<ThongTinDauThauRes> cusTomQuerySearch(Long namKh, String loaiVthh, String cloaiVthh,String soQd, String maDvi,String trangThai);
+
 
 
 }

@@ -27,6 +27,8 @@ public class HhDthauSearchReq extends BaseRequest {
 	@ApiModelProperty(example = Contains.LOAI_VTHH_GAO)
 	String loaiVthh;
 
+	String cloaiVthh;
+
 	String maDvi;
 
 	String tenHd;

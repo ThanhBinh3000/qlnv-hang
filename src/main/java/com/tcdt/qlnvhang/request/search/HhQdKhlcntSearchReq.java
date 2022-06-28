@@ -28,6 +28,8 @@ public class HhQdKhlcntSearchReq extends BaseRequest {
 	@ApiModelProperty(example = Contains.LOAI_VTHH_GAO)
 	String loaiVthh;
 
+	String cloaiVthh;
+
 	String soQd;
 
 	String trichYeu;

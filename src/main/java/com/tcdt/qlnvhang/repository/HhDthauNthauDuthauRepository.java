@@ -12,6 +12,8 @@ public interface HhDthauNthauDuthauRepository extends BaseRepository<HhDthauNtha
 
 	List<HhDthauNthauDuthau> findByIdDtGt (Long idGoiThau);
 
+	void deleteAllByIdDtGt(Long idGoiThau);
+
 
 
 }

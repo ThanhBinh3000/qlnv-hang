@@ -12,12 +12,16 @@ import com.tcdt.qlnvhang.request.object.HhDthauReq;
 import com.tcdt.qlnvhang.request.search.HhDthauSearchReq;
 import com.tcdt.qlnvhang.table.HhDthau;
 
+import java.util.List;
+
 public interface HhDauThauService {
 
 	@Transactional(rollbackOn = Exception.class)
 	HhDthau create(HhDthauReq objReq) throws Exception;
 
 	Page<ThongTinDauThauRes> selectPage(HhDthauSearchReq objReq) throws Exception;
+
+	List<ThongTinDauThauRes> selectAll(HhDthauSearchReq objReq) throws Exception;
 
 	@Transactional(rollbackOn = Exception.class)
 	HhDthau update(HhDthauReq objReq) throws Exception;

@@ -152,4 +152,25 @@ public class HhDauThauController {
 		return ResponseEntity.ok(resp);
 	}
 
+	@ApiOperation(value = "Tra cứu thông tin đấu thầu ", response = List.class)
+	@PostMapping(value = PathContains.URL_TAT_CA, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> colectionAll(HttpServletRequest request,
+												  @Valid @RequestBody HhDthauSearchReq objReq) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.selectAll(objReq));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (
+
+				Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Tra cứu thông tin đấu thầu gạo trace: {}", e);
+		}
+
+		return ResponseEntity.ok(resp);
+	}
+
 }
