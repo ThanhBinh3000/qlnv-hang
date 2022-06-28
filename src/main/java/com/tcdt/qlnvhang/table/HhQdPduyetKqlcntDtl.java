@@ -31,19 +31,18 @@ public class HhQdPduyetKqlcntDtl implements Serializable {
 			+ "_SEQ", allocationSize = 1, name = HhQdPduyetKqlcntDtl.TABLE_NAME + "_SEQ")
 	private Long id;
 
-	String shgt;
+//	String shgt;
 	String tenGthau;
-	String diaDiem;
 	BigDecimal soLuong;
-	BigDecimal giaGthau;
-	String tenDvi;
+	BigDecimal tongTien;
+//	String tenDvi;
 	String loaiHd;
 	BigDecimal donGia;
 	BigDecimal vat;
-	BigDecimal dgiaSauVat;
-	BigDecimal donGiaHd;
-	BigDecimal vatHd;
-	BigDecimal dgiaHdSauVat;
+//	BigDecimal dgiaSauVat;
+//	BigDecimal donGiaHd;
+//	BigDecimal vatHd;
+//	BigDecimal dgiaHdSauVat;
 	Long idGoiThau;
 	Long idQdPdHdr;
 

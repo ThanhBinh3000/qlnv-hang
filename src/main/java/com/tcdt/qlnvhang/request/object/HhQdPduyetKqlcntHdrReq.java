@@ -56,7 +56,11 @@ public class HhQdPduyetKqlcntHdrReq {
 	@ApiModelProperty(example = "00")
 	String ghiChu;
 
-	private List<HhQdPduyetKqlcntDtlReq> detail;
+	Long idGoiThau;
+
+	Boolean trungThau;
+
+	private List<HhQdPduyetKqlcntDtlReq> detailList;
 	private List<FileDinhKemReq> fileDinhKems;
 
 }
