@@ -30,10 +30,12 @@ public class HhQdPduyetKqlcntHdrReq {
 	@ApiModelProperty(example = "00")
 	String loaiVthh;
 
+	String cloaiVthh;
+
 	@NotNull(message = "Không được để trống")
 	@Size(max = 500, message = "Về việc không được vượt quá 500 ký tự")
 	@ApiModelProperty(example = "Nội dung về việc")
-	String veViec;
+	String trichYeu;
 
 	@NotNull(message = "Không được để trống")
 	@Size(max = 4, message = "Năm kế hoạch không được vượt quá 4 ký tự")
@@ -43,7 +45,7 @@ public class HhQdPduyetKqlcntHdrReq {
 	@NotNull(message = "Không được để trống")
 	@Size(max = 500, message = "Căn cứ quyết định phê duyệt kế hoạch lựa chọn nhà thầu không được vượt quá 500 ký tự")
 	@ApiModelProperty(example = "20/QD-TCDT")
-	String canCu;
+	String soQdPdKhlcnt;
 
 	@NotNull(message = "Không được để trống")
 	@Size(max = 20, message = "Mã đơn vị không được vượt quá 20 ký tự")

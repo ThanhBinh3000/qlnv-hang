@@ -11,6 +11,8 @@ public class HhDthauNthauDuthauReq {
 	@ApiModelProperty(notes = "Bắt buộc set đối với update")
 	private Long id;
 
+	private Long idNhaThau;
+
 	@NotNull(message = "Không được để trống")
 	@Size(max = 250, message = "Tên nhà thầu không được vượt quá 250 ký tự")
 	@ApiModelProperty(example = "Tên nhà thầu")

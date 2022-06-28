@@ -59,7 +59,7 @@ public class HhDthauGthau implements Serializable {
 	Date tgianDthau;
 
 	Date ngayKyBban;
-	String idNhaThau;
+	Long idNhaThau;
 	BigDecimal donGiaTrcVat;
 	Integer vat;
 

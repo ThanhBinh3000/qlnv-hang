@@ -78,7 +78,7 @@ public class HhDthauGthauReq {
 	@ApiModelProperty(example = "Ghi chú")
 	String ghiChu;
 
-	private String idNhaThau;
+	private Long idNhaThau;
 
 	private BigDecimal donGiaTrcVat;
 

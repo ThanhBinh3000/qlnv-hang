@@ -32,13 +32,11 @@ public class HhDthauNthauDuthau implements Serializable {
 	@SequenceGenerator(sequenceName = HhDthauNthauDuthau.TABLE_NAME
 			+ "_SEQ", allocationSize = 1, name = HhDthauNthauDuthau.TABLE_NAME + "_SEQ")
 	private Long id;
-
+	private Long idNhaThau;
 	String tenDvi;
 	String mst;
 	String diaChi;
 	String sdt;
-	private Integer version;
-
 	private Long idDtGt;
 
 }

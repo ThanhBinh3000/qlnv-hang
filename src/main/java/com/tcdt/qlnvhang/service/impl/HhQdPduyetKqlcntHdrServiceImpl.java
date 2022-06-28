@@ -54,11 +54,11 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 			throw new Exception("Loại vật tư hàng hóa không phù hợp");
 		}
 
-		Optional<HhQdKhlcntHdr> checkSoCc = hhQdKhlcntHdrRepository.findBySoQd(objReq.getCanCu());
-		if (!checkSoCc.isPresent()){
-			throw new Exception(
-					"Số quyết định phê duyệt kế hoạch lựa chọn nhà thầu " + objReq.getCanCu() + " không tồn tại");
-		}
+//		Optional<HhQdKhlcntHdr> checkSoCc = hhQdKhlcntHdrRepository.findBySoQd(objReq.getCanCu());
+//		if (!checkSoCc.isPresent()){
+//			throw new Exception(
+//					"Số quyết định phê duyệt kế hoạch lựa chọn nhà thầu " + objReq.getCanCu() + " không tồn tại");
+//		}
 
 		Optional<HhQdPduyetKqlcntHdr> checkSoQd = hhQdPduyetKqlcntHdrRepository.findBySoQd(objReq.getSoQd());
 		if (!checkSoQd.isPresent()){
@@ -83,12 +83,12 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		dataMap.setTrangThai(Contains.TAO_MOI);
 		dataMap.setChildren(fileDinhKemList);
 
-		if (objReq.getDetail() != null) {
-			// Add danh sach goi thau
-			List<HhQdPduyetKqlcntDtl> dtls = ObjectMapperUtils.mapAll(objReq.getDetail(), HhQdPduyetKqlcntDtl.class);
-			UnitScaler.reverseFormatList(dtls, Contains.DVT_TAN);
-			dataMap.setChildren1(dtls);
-		}
+//		if (objReq.getDetail() != null) {
+//			// Add danh sach goi thau
+//			List<HhQdPduyetKqlcntDtl> dtls = ObjectMapperUtils.mapAll(objReq.getDetail(), HhQdPduyetKqlcntDtl.class);
+//			UnitScaler.reverseFormatList(dtls, Contains.DVT_TAN);
+//			dataMap.setChildren1(dtls);
+//		}
 
 		HhQdPduyetKqlcntHdr createCheck = hhQdPduyetKqlcntHdrRepository.save(dataMap);
 
@@ -104,12 +104,12 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		if (!qOptional.isPresent())
 			throw new Exception("Không tìm thấy dữ liệu cần sửa");
 
-		if (!qOptional.get().getSoQd().equals(objReq.getSoQd())) {
-			Optional<HhQdKhlcntHdr> checkSoQd = hhQdKhlcntHdrRepository.findBySoQd(objReq.getCanCu());
-			if (!checkSoQd.isPresent())
-				throw new Exception(
-						"Số quyết định phê duyệt kế hoạch lựa chọn nhà thầu " + objReq.getCanCu() + " không tồn tại");
-		}
+//		if (!qOptional.get().getSoQd().equals(objReq.getSoQd())) {
+//			Optional<HhQdKhlcntHdr> checkSoQd = hhQdKhlcntHdrRepository.findBySoQd(objReq.getCanCu());
+//			if (!checkSoQd.isPresent())
+//				throw new Exception(
+//						"Số quyết định phê duyệt kế hoạch lựa chọn nhà thầu " + objReq.getCanCu() + " không tồn tại");
+//		}
 
 		// Add danh sach file dinh kem o Master
 		List<FileDKemJoinKquaLcntHdr> fileDinhKemList = new ArrayList<FileDKemJoinKquaLcntHdr>();
@@ -134,7 +134,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 			// Add danh sach goi thau
 			List<HhQdPduyetKqlcntDtl> dtls = ObjectMapperUtils.mapAll(objReq.getDetail(), HhQdPduyetKqlcntDtl.class);
 			UnitScaler.reverseFormatList(dtls, Contains.DVT_TAN);
-			dataDB.setChildren1(dtls);
+//			dataDB.setChildren1(dtls);
 		}
 
 		HhQdPduyetKqlcntHdr createCheck = hhQdPduyetKqlcntHdrRepository.save(dataDB);
@@ -153,7 +153,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
 
 		// Quy doi don vi kg = tan
-		UnitScaler.formatList(qOptional.get().getChildren1(), Contains.DVT_TAN);
+//		UnitScaler.formatList(qOptional.get().getChildren1(), Contains.DVT_TAN);
 
 		return qOptional.get();
 	}
@@ -202,25 +202,25 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 
 		// TODO: Add thong tin quyet dinh phe duyet ket qua lcnt o phan thong tin dau
 		// thau
-		if (optional.get().getChildren1() != null) {
-
-			Optional<HhDthau> dThau = hhDthauRepository.findBySoQd(optional.get().getSoQd());
-			List<HhDthauGthau> dThauChild = dThau.get().getChildren();
-
-			List<HhQdPduyetKqlcntDtl> dtlsKqua = optional.get().getChildren1();
-			for (HhQdPduyetKqlcntDtl kqua : dtlsKqua) {
-				HhDthauKquaLcnt kqLcnt = new HhDthauKquaLcnt();
-//				kqLcnt.setParent(dThau.get().getChildren());
-
-				List<FileDKemJoinKquaLcnt> fileDkKqLcnts = ObjectMapperUtils.mapAll(optional.get().getChildren(),
-						FileDKemJoinKquaLcnt.class);
-				fileDkKqLcnts.forEach(f -> {
-					f.setDataType(HhDthauKquaLcnt.TABLE_NAME);
-					f.setCreateDate(new Date());
-				});
-				kqLcnt.setChildren(fileDkKqLcnts);
-			}
-		}
+//		if (optional.get().getChildren1() != null) {
+//
+//			Optional<HhDthau> dThau = hhDthauRepository.findBySoQd(optional.get().getSoQd());
+//			List<HhDthauGthau> dThauChild = dThau.get().getChildren();
+//
+//			List<HhQdPduyetKqlcntDtl> dtlsKqua = optional.get().getChildren1();
+//			for (HhQdPduyetKqlcntDtl kqua : dtlsKqua) {
+//				HhDthauKquaLcnt kqLcnt = new HhDthauKquaLcnt();
+////				kqLcnt.setParent(dThau.get().getChildren());
+//
+//				List<FileDKemJoinKquaLcnt> fileDkKqLcnts = ObjectMapperUtils.mapAll(optional.get().getChildren(),
+//						FileDKemJoinKquaLcnt.class);
+//				fileDkKqLcnts.forEach(f -> {
+//					f.setDataType(HhDthauKquaLcnt.TABLE_NAME);
+//					f.setCreateDate(new Date());
+//				});
+//				kqLcnt.setChildren(fileDkKqLcnts);
+//			}
+//		}
 
 		HhQdPduyetKqlcntHdr createCheck = hhQdPduyetKqlcntHdrRepository.save(optional.get());
 
