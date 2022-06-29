@@ -15,6 +15,7 @@ import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.tcdt.qlnvhang.request.object.HhDmDviLquanSearchReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -95,7 +96,7 @@ public class BaseServiceImpl {
 
 	public Map<String, String> getListDanhMucChung(String loai){
 		ResponseEntity<String> response = categoryServiceProxy.getDanhMucChung(getAuthorizationToken(request),
-				loai);
+				 loai);
 		String str = Request.getAttrFromJson(response.getBody(), "data");
 		HashMap<String, String> data = new HashMap<String, String>();
 		List<Map<String, Object>> retMap = new Gson().fromJson(str, new TypeToken<List<HashMap<String, Object>>>() {}.getType());
@@ -106,13 +107,15 @@ public class BaseServiceImpl {
 	}
 
 	public Map<String, String> getListDanhMucDviLq(String loai){
+		HhDmDviLquanSearchReq objReq = new HhDmDviLquanSearchReq();
+		objReq.setTypeDvi(loai);
 		ResponseEntity<String> response = categoryServiceProxy.getDanhMucDviLquan(getAuthorizationToken(request),
-				loai);
+				objReq);
 		String str = Request.getAttrFromJson(response.getBody(), "data");
 		HashMap<String, String> data = new HashMap<String, String>();
 		List<Map<String, Object>> retMap = new Gson().fromJson(str, new TypeToken<List<HashMap<String, Object>>>() {}.getType());
 		for (Map<String, Object> map : retMap){
-			data.put(String.valueOf(map.get("ma")), String.valueOf(map.get("giaTri")));
+			data.put(String.valueOf(map.get("id")), String.valueOf(map.get("tenDvi")));
 		}
 		return data;
 	}

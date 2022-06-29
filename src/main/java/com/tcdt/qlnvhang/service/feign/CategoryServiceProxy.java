@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.feign;
 
+import com.tcdt.qlnvhang.request.object.HhDmDviLquanSearchReq;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,7 +38,7 @@ public interface CategoryServiceProxy {
 	@Headers({ "Accept: application/json; charset=utf-8", "Content-Type: application/x-www-form-urlencoded" })
 	public ResponseEntity<String> getDanhMucDviLquan(
 			@RequestHeader(value = "Authorization", required = true) String authorizationHeader,
-			@RequestBody BaseRequest objReq);
+			@RequestBody HhDmDviLquanSearchReq objReq);
 
 	@GetMapping("/dm-hang/danh-sach/dvql")
 	@Headers({ "Accept: application/json; charset=utf-8", "Content-Type: application/x-www-form-urlencoded" })

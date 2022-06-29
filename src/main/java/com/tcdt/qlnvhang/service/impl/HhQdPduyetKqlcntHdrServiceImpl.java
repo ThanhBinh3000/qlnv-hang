@@ -258,9 +258,10 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
 		Page<HhQdPduyetKqlcntRes> page =  hhQdPduyetKqlcntHdrRepository.customQuerySearch(req.getNamKhoach(),req.getLoaiVthh(),req.getTrichYeu(),pageable);
 		Map<String,String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
-			page.forEach(f -> {
+		Map<String,String> hashMapDviLquan = getListDanhMucDviLq("NT");
+		page.forEach(f -> {
 			f.setTenHdong(StringUtils.isEmpty(f.getLoaiHdong()) ? null : hashMapLoaiHdong.get(f.getLoaiHdong()));
-			f.setTenNhaThau(StringUtils.isEmpty(f.getLoaiHdong()) ? null : hashMapLoaiHdong.get(f.getLoaiHdong()));
+			f.setTenNhaThau(StringUtils.isEmpty(f.getIdNhaThau()) ? null : hashMapDviLquan.get(String.valueOf(Double.parseDouble(f.getIdNhaThau().toString()))));
 		});
 		return page;
 	}
