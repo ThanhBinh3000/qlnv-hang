@@ -13,7 +13,7 @@ public interface HhQdKhlcntDsgthauRepository extends BaseRepository<HhQdKhlcntDs
 
     @Transactional()
     @Modifying
-    @Query(value = "UPDATE HH_QD_KHLCNT_DSGTHAU SET TRANG_THAI =:trangThai WHERE ID = :idGt", nativeQuery = true)
-    void updateGoiThau(Long idGt, String trangThai);
+    @Query(value = "UPDATE HH_QD_KHLCNT_DSGTHAU SET TRANG_THAI =:trangThai AND LY_DO_HUY = :lyDoHuy WHERE ID = :idGt", nativeQuery = true)
+    void updateGoiThau(Long idGt, String trangThai,String lyDoHuy);
 
 }

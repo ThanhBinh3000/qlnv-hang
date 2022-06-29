@@ -83,8 +83,6 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 
 		HhQdPduyetKqlcntHdr createCheck = hhQdPduyetKqlcntHdrRepository.save(dataMap);
 
-		hhQdKhlcntDsgthauRepository.updateGoiThau(objReq.getIdGoiThau(),objReq.getTrungThau() ? Contains.GT_TRUNG_THAU : Contains.GT_HUY_THAU);
-
 		Optional<HhQdKhlcntDsgthau> gt =  hhQdKhlcntDsgthauRepository.findById(objReq.getIdGoiThau());
 		HhQdPduyetKqlcntDtl dtl = ObjectMapperUtils.map(gt.get(), HhQdPduyetKqlcntDtl.class);
 		dtl.setId(null);
@@ -183,27 +181,18 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 
 		String status = stReq.getTrangThai() + optional.get().getTrangThai();
 		switch (status) {
-		case Contains.CHO_DUYET + Contains.MOI_TAO:
-			optional.get().setNguoiGuiDuyet(getUser().getUsername());
-			optional.get().setNgayGuiDuyet(getDateTimeNow());
-			break;
-		case Contains.TU_CHOI + Contains.CHO_DUYET:
-			optional.get().setNguoiPduyet(getUser().getUsername());
-			optional.get().setNgayPduyet(getDateTimeNow());
-			optional.get().setLdoTuchoi(stReq.getLyDo());
-			break;
-		case Contains.DUYET + Contains.CHO_DUYET:
-			optional.get().setNguoiPduyet(getUser().getUsername());
-			optional.get().setNgayPduyet(getDateTimeNow());
-			break;
+			case Contains.BAN_HANH + Contains.MOI_TAO:
+				optional.get().setNguoiPduyet(getUser().getUsername());
+				optional.get().setNgayPduyet(getDateTimeNow());
+				break;
 		default:
 			throw new Exception("Phê duyệt không thành công");
 		}
 
 		optional.get().setTrangThai(stReq.getTrangThai());
-
-		// TODO: Add thong tin quyet dinh phe duyet ket qua lcnt o phan thong tin dau
-		// thau
+		if( stReq.getTrangThai().equals(Contains.BAN_HANH)){
+			hhQdKhlcntDsgthauRepository.updateGoiThau(optional.get().getIdGoiThau(),optional.get().getTrungThau() ? Contains.GT_TRUNG_THAU : Contains.GT_HUY_THAU,optional.get().getLyDoHuy());
+		}
 //		if (optional.get().getChildren1() != null) {
 //
 //			Optional<HhDthau> dThau = hhDthauRepository.findBySoQd(optional.get().getSoQd());

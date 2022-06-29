@@ -36,9 +36,13 @@ public class HhQdPduyetKqlcntHdr implements Serializable {
 	@Temporal(TemporalType.DATE)
 	Date ngayQd;
 	String loaiVthh;
-	String namKhoach;
+	String cloaiVthh;
+	Integer namKhoach;
 	String trichYeu;
 	String soQdPdKhlcnt;
+	@Temporal(TemporalType.DATE)
+	Date ngayQdPdKhlcnt;
+	Boolean trungThau;
 	String maDvi;
 	String ghiChu;
 	String trangThai;
@@ -51,6 +55,8 @@ public class HhQdPduyetKqlcntHdr implements Serializable {
 	String nguoiGuiDuyet;
 	Date ngayPduyet;
 	String nguoiPduyet;
+	Long idGoiThau;
+	String lyDoHuy;
 
 	@Transient
 	private List<HhQdPduyetKqlcntDtl> hhQdPduyetKqlcntDtlList = new ArrayList<>();

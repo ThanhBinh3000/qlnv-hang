@@ -44,9 +44,9 @@ public class HhDthauGthauService extends BaseServiceImpl {
 	    hhDthauGthauRepository.save(dataMap);
 
 		if(objReq.getTrangThaiLuu().equals("02")){
-			hhQdKhlcntDsgthauRepository.updateGoiThau(dataMap.getIdGoiThau(), Contains.HOAN_THANH_CAP_NHAT);
+			hhQdKhlcntDsgthauRepository.updateGoiThau(dataMap.getIdGoiThau(), Contains.HOAN_THANH_CAP_NHAT,null);
 		}else{
-			hhQdKhlcntDsgthauRepository.updateGoiThau(dataMap.getIdGoiThau(), Contains.DANG_CAP_NHAT);
+			hhQdKhlcntDsgthauRepository.updateGoiThau(dataMap.getIdGoiThau(), Contains.DANG_CAP_NHAT,null);
 		}
 
 		// Delete all and add new nha thau
