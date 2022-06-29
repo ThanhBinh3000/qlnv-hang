@@ -37,8 +37,8 @@ public class HhQdPduyetKqlcntHdr implements Serializable {
 	Date ngayQd;
 	String loaiVthh;
 	String namKhoach;
-	String veViec;
-	String canCu;
+	String trichYeu;
+	String soQdPdKhlcnt;
 	String maDvi;
 	String ghiChu;
 	String trangThai;
