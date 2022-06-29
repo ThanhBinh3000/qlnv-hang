@@ -117,6 +117,9 @@ public class HhHopDongHdrReq {
 
 	String idNthau;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date tgianNkho;
+
 	private List<HhDdiemNhapKhoReq> diaDiemNhapKhoReq;
 
 	private List<HhHopDongDtlReq> detail;

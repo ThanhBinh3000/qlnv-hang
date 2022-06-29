@@ -60,6 +60,9 @@ public class HhQdPduyetKqlcntHdrReq {
 
 	Boolean trungThau;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date ngayHluc;
+
 	private List<HhQdPduyetKqlcntDtlReq> detailList;
 	private List<FileDinhKemReq> fileDinhKems;
 

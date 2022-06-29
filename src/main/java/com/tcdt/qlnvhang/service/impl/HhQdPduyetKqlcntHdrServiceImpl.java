@@ -172,12 +172,14 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 
 	@Override
 	public HhQdPduyetKqlcntHdr approve(StatusReq stReq) throws Exception {
-		if (StringUtils.isEmpty(stReq.getId()))
+		if (StringUtils.isEmpty(stReq.getId())){
 			throw new Exception("Không tìm thấy dữ liệu");
+		}
 
 		Optional<HhQdPduyetKqlcntHdr> optional = hhQdPduyetKqlcntHdrRepository.findById(Long.valueOf(stReq.getId()));
-		if (!optional.isPresent())
+		if (!optional.isPresent()){
 			throw new Exception("Không tìm thấy dữ liệu");
+		}
 
 		String status = stReq.getTrangThai() + optional.get().getTrangThai();
 		switch (status) {
@@ -190,28 +192,9 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		}
 
 		optional.get().setTrangThai(stReq.getTrangThai());
-		if( stReq.getTrangThai().equals(Contains.BAN_HANH)){
+		if(stReq.getTrangThai().equals(Contains.BAN_HANH)){
 			hhQdKhlcntDsgthauRepository.updateGoiThau(optional.get().getIdGoiThau(),optional.get().getTrungThau() ? Contains.GT_TRUNG_THAU : Contains.GT_HUY_THAU,optional.get().getLyDoHuy());
 		}
-//		if (optional.get().getChildren1() != null) {
-//
-//			Optional<HhDthau> dThau = hhDthauRepository.findBySoQd(optional.get().getSoQd());
-//			List<HhDthauGthau> dThauChild = dThau.get().getChildren();
-//
-//			List<HhQdPduyetKqlcntDtl> dtlsKqua = optional.get().getChildren1();
-//			for (HhQdPduyetKqlcntDtl kqua : dtlsKqua) {
-//				HhDthauKquaLcnt kqLcnt = new HhDthauKquaLcnt();
-////				kqLcnt.setParent(dThau.get().getChildren());
-//
-//				List<FileDKemJoinKquaLcnt> fileDkKqLcnts = ObjectMapperUtils.mapAll(optional.get().getChildren(),
-//						FileDKemJoinKquaLcnt.class);
-//				fileDkKqLcnts.forEach(f -> {
-//					f.setDataType(HhDthauKquaLcnt.TABLE_NAME);
-//					f.setCreateDate(new Date());
-//				});
-//				kqLcnt.setChildren(fileDkKqLcnts);
-//			}
-//		}
 
 		HhQdPduyetKqlcntHdr createCheck = hhQdPduyetKqlcntHdrRepository.save(optional.get());
 
