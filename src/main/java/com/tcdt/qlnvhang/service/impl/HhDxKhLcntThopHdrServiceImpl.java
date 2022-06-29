@@ -347,10 +347,10 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
 		Page<HhDxKhLcntThopHdr> page = hhDxKhLcntThopHdrRepository.select(req.getNamKhoach(),req.getLoaiVthh(),req.getCloaiVthh(),convertDateToString(req.getTuNgayThop()),convertDateToString(req.getDenNgayThop()),req.getNoiDung(),req.getTrangThai(), pageable);
 
-		Map<String,String> hashMapPthucDthau = getListDanhMucChung("PT_DTHAU",request);
-		Map<String,String> hashMapNguonVon = getListDanhMucChung("NGUON_VON",request);
-		Map<String,String> hashMapHtLcnt = getListDanhMucChung("HT_LCNT",request);
-		Map<String,String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG",request);
+		Map<String,String> hashMapPthucDthau = getListDanhMucChung("PT_DTHAU");
+		Map<String,String> hashMapNguonVon = getListDanhMucChung("NGUON_VON");
+		Map<String,String> hashMapHtLcnt = getListDanhMucChung("HT_LCNT");
+		Map<String,String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
 		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 		page.getContent().forEach(f -> {
 			f.setTenVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));

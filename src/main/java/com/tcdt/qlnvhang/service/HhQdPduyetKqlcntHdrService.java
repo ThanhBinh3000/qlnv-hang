@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service;
 
 import javax.transaction.Transactional;
 
+import com.tcdt.qlnvhang.response.dauthauvattu.HhQdPduyetKqlcntRes;
 import org.springframework.data.domain.Page;
 
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -31,6 +32,8 @@ public interface HhQdPduyetKqlcntHdrService {
 	void delete(IdSearchReq idSearchReq) throws Exception;
 
 	Page<HhQdPduyetKqlcntHdr> timKiemPage(HhQdPduyetKqlcntSearchReq objReq) throws Exception;
+
+	Page<HhQdPduyetKqlcntRes> timKiemPageCustom(HhQdPduyetKqlcntSearchReq objReq) throws Exception;
 
 	List<HhQdPduyetKqlcntHdr> timKiemAll(HhQdPduyetKqlcntSearchReq objReq) throws Exception;
 

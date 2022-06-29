@@ -115,7 +115,7 @@ public class HhHopDongHdr implements Serializable {
 	String idNthau;
 
 	@Transient
-	private List<HhHopDongDdiemNhapKho> listDdiemNhapKho = new ArrayList<>();
+	private List<HhHopDongDdiemNhapKho> hhDdiemNhapKhoList = new ArrayList<>();
 
 	@Transient
 	private List<HhPhuLucHd> hhPhuLucHdongList = new ArrayList<>();

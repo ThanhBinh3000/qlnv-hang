@@ -28,18 +28,12 @@ public class HhHopDongDdiemNhapKho implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_DDIEM_NHAP_KHO_SEQ")
 	@SequenceGenerator(sequenceName = "HH_DDIEM_NHAP_KHO_SEQ", allocationSize = 1, name = "HH_DDIEM_NHAP_KHO_SEQ")
 	private Long id;
-
-	String chiCuc;
-	String diemKho;
-	String nhaKho;
-	BigDecimal soLuong;
 	String type;
+	Long idHdongHdr;
 
-	Long idHopDongHdr;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_hdr")
-	@JsonBackReference
-	private HhHopDongDtl parent;
-
+	String maDvi;
+	String maDiemKho;
+	BigDecimal soLuong;
+	BigDecimal donGia;
+	String dviTinh;
 }

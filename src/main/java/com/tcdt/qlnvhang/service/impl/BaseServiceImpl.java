@@ -93,8 +93,20 @@ public class BaseServiceImpl {
 		return qlnvDmDonvi;
 	}
 
-	public Map<String, String> getListDanhMucChung(String loai, HttpServletRequest req){
-		ResponseEntity<String> response = categoryServiceProxy.getDanhMucChung(getAuthorizationToken(req),
+	public Map<String, String> getListDanhMucChung(String loai){
+		ResponseEntity<String> response = categoryServiceProxy.getDanhMucChung(getAuthorizationToken(request),
+				loai);
+		String str = Request.getAttrFromJson(response.getBody(), "data");
+		HashMap<String, String> data = new HashMap<String, String>();
+		List<Map<String, Object>> retMap = new Gson().fromJson(str, new TypeToken<List<HashMap<String, Object>>>() {}.getType());
+		for (Map<String, Object> map : retMap){
+			data.put(String.valueOf(map.get("ma")), String.valueOf(map.get("giaTri")));
+		}
+		return data;
+	}
+
+	public Map<String, String> getListDanhMucDviLq(String loai){
+		ResponseEntity<String> response = categoryServiceProxy.getDanhMucDviLquan(getAuthorizationToken(request),
 				loai);
 		String str = Request.getAttrFromJson(response.getBody(), "data");
 		HashMap<String, String> data = new HashMap<String, String>();

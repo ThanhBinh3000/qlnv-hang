@@ -41,6 +41,7 @@ public class HhQdKhlcntDsgthau implements Serializable {
 	String tgianBdauLcnt;
 	Integer tgianThienHd;
 	String trangThai;
+	String lyDoHuy;
 
 	@Transient
 	private HhQdKhlcntDtl hhQdKhlcntDtl;

@@ -8,9 +8,11 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.tcdt.qlnvhang.repository.HhHopDongDdiemNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.HhPhuLucRepository;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.table.*;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -45,6 +47,9 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 	private HhPhuLucRepository hhPhuLucRepository;
 
 	@Autowired
+	private HhHopDongDdiemNhapKhoRepository hhHopDongDdiemNhapKhoRepository;
+
+	@Autowired
 	private HhQdPduyetKqlcntHdrRepository hhQdPduyetKqlcntHdrRepository;
 
 	@Autowired
@@ -74,32 +79,6 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 		dataMap.setTrangThai(Contains.TAO_MOI);
 		dataMap.setMaDvi(userInfo.getDvql());
 
-//		// add thong tin detail
-//		List<HhHopDongDtlReq> dtlReqList = objReq.getDetail();
-//		List<HhHopDongDtl> details = new ArrayList<>();
-//		if (dtlReqList != null) {
-//			List<HhHopDongDdiemNhapKho> detailChild;
-//			for (HhHopDongDtlReq dtlReq : dtlReqList) {
-//				List<HhDdiemNhapKhoReq> cTietReq = dtlReq.getDetail();
-//				HhHopDongDtl detail = ObjectMapperUtils.map(dtlReq, HhHopDongDtl.class);
-//				detail.setType(Contains.HOP_DONG);
-//				detailChild = new ArrayList<HhHopDongDdiemNhapKho>();
-//				if (cTietReq != null)
-//					detailChild = ObjectMapperUtils.mapAll(cTietReq, HhHopDongDdiemNhapKho.class);
-//				detailChild.forEach(f -> {
-//					f.setType(Contains.HOP_DONG);
-//				});
-//
-//				detail.setChildren(detailChild);
-//				details.add(detail);
-//			}
-//			dataMap.setChildren(details);
-//		}
-
-		// add thong tin don vi lien quan
-//		List<HhDviLquan> dtls1 = ObjectMapperUtils.mapAll(objReq.getDetail1(), HhDviLquan.class);
-//		dataMap.setChildren1(dtls1);
-
 		// File dinh kem cua goi thau
 		List<FileDKemJoinHopDong> dtls2 = new ArrayList<FileDKemJoinHopDong>();
 		if (objReq.getFileDinhKems() != null) {
@@ -111,8 +90,14 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 		}
 		dataMap.setFileDinhKems(dtls2);
 
-//		UnitScaler.reverseFormatList(dataMap.getChildren(), Contains.DVT_TAN);
-		return hhHopDongRepository.save(dataMap);
+		hhHopDongRepository.save(dataMap);
+
+        for(HhDdiemNhapKhoReq ddNhapRq : objReq.getDiaDiemNhapKhoReq()){
+			HhHopDongDdiemNhapKho ddNhap = ObjectMapperUtils.map(ddNhapRq, HhHopDongDdiemNhapKho.class);
+			ddNhap.setIdHdongHdr(dataMap.getId());
+			hhHopDongDdiemNhapKhoRepository.save(ddNhap);
+		}
+		return dataMap;
 	}
 
 	@Override
@@ -207,6 +192,8 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 		qOptional.get().setTenDvi(StringUtils.isEmpty(qOptional.get().getMaDvi()) ? null :mapDmucDvi.get(qOptional.get().getMaDvi()));
 
 		qOptional.get().setHhPhuLucHdongList(hhPhuLucRepository.findBySoHd(qOptional.get().getSoHd()));
+		qOptional.get().setHhDdiemNhapKhoList(hhHopDongDdiemNhapKhoRepository.findAllByIdHdongHdr(Long.parseLong(ids)));
+
 
 		return qOptional.get();
 	}

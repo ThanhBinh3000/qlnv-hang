@@ -33,4 +33,6 @@ public class HhQdPduyetKqlcntSearchReq extends BaseRequest {
 
 	@ApiModelProperty(example = "2022")
 	String maDvi;
+
+	String trichYeu;
 }

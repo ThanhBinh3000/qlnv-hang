@@ -33,6 +33,12 @@ public interface CategoryServiceProxy {
 			@RequestHeader(value = "Authorization", required = true) String authorizationHeader,
 			@PathVariable("loai") String loai);
 
+	@PostMapping("/dmuc-dvi-lquan/tat-ca")
+	@Headers({ "Accept: application/json; charset=utf-8", "Content-Type: application/x-www-form-urlencoded" })
+	public ResponseEntity<String> getDanhMucDviLquan(
+			@RequestHeader(value = "Authorization", required = true) String authorizationHeader,
+			@RequestBody BaseRequest objReq);
+
 	@GetMapping("/dm-hang/danh-sach/dvql")
 	@Headers({ "Accept: application/json; charset=utf-8", "Content-Type: application/x-www-form-urlencoded" })
 	public ResponseEntity<String> getDanhMucHangHoa(

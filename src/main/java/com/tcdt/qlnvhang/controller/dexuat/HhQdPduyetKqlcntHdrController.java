@@ -131,7 +131,7 @@ public class HhQdPduyetKqlcntHdrController extends BaseController {
 			@Valid @RequestBody HhQdPduyetKqlcntSearchReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(service.timKiemPage(objReq));
+			resp.setData(service.timKiemPageCustom(objReq));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (
