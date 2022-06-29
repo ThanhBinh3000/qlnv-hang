@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.phieuknghiemcluonghang;
 
 import com.tcdt.qlnvhang.entities.bbanlaymau.BienBanBanGiaoMau;
 import com.tcdt.qlnvhang.entities.phieuknghiemcluonghang.PhieuKnghiemCluongHang;
+import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.enums.QlPhieuNhapKhoLtStatus;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
@@ -13,6 +14,7 @@ import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.phieuknghiemcluonghang.PhieuKnghiemCluongHangReq;
+import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongRequestDto;
 import com.tcdt.qlnvhang.request.search.PhieuKnghiemCluongHangSearchReq;
 import com.tcdt.qlnvhang.request.search.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtSearchReq;
 import com.tcdt.qlnvhang.response.phieuknghiemcluonghang.KquaKnghiemRes;
@@ -159,6 +161,7 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 			throw new Exception("Bad request.");
 		}
 
+		this.validateSoPhieu(null, req);
 		PhieuKnghiemCluongHang phieuKnclh = new PhieuKnghiemCluongHang();
 		this.updateEntity(phieuKnclh, req);
 		phieuKnclh.setNguoiTaoId(userInfo.getId());
@@ -183,6 +186,7 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 		if (!optional.isPresent())
 			throw new Exception("Không tìm thấy dữ liệu.");
 
+		this.validateSoPhieu(optional.get(), req);
 		PhieuKnghiemCluongHang phieuKnclh = optional.get();
 		this.updateEntity(phieuKnclh, req);
 		phieuKnclh.setNguoiSuaId(userInfo.getId());
@@ -437,5 +441,15 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 			return false;
 		}
 		return true;
+	}
+
+	private void validateSoPhieu(PhieuKnghiemCluongHang update, PhieuKnghiemCluongHangReq req) throws Exception {
+		String so = req.getSoPhieu();
+		if (update == null || (StringUtils.hasText(update.getSoPhieu()) && !update.getSoPhieu().equalsIgnoreCase(so))) {
+			Optional<PhieuKnghiemCluongHang> optional = phieuKnghiemCluongHangRepository.findFirstBySoPhieu(so);
+			Long updateId = Optional.ofNullable(update).map(PhieuKnghiemCluongHang::getId).orElse(null);
+			if (optional.isPresent() && !optional.get().getId().equals(updateId))
+				throw new Exception("Số phiếu " + so + " đã tồn tại");
+		}
 	}
 }

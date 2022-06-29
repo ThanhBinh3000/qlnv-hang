@@ -83,10 +83,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 
 		if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh()))
 			throw new Exception("Loại vật tư hàng hóa không phù hợp");
-
-		Optional<HhBbNghiemthuKlstHdr> qOptional = hhBbNghiemthuKlstRepository.findBySoBb(objReq.getSoBb());
-		if (qOptional.isPresent())
-			throw new Exception("Số biên bản " + objReq.getSoBb() + " đã tồn tại");
+		this.validateSoBb(null, objReq);
 
 		Optional<HhQdGiaoNvuNhapxuatHdr> qdNxOptional = hhQdGiaoNvuNhapxuatRepository.findById(objReq.getQdgnvnxId());
 		if (!qdNxOptional.isPresent())
@@ -121,6 +118,16 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 
 	}
 
+	private void validateSoBb(HhBbNghiemthuKlstHdr update, HhBbNghiemthuKlstHdrReq req) throws Exception {
+		String soBB = req.getSoBb();
+		if (update == null || (StringUtils.hasText(update.getSoBb()) && !update.getSoBb().equalsIgnoreCase(soBB))) {
+			Optional<HhBbNghiemthuKlstHdr> optional = hhBbNghiemthuKlstRepository.findFirstBySoBb(soBB);
+			Long updateId = Optional.ofNullable(update).map(HhBbNghiemthuKlstHdr::getId).orElse(null);
+			if (optional.isPresent() && !optional.get().getId().equals(updateId))
+				throw new Exception("Số biên bản " + soBB + " đã tồn tại");
+		}
+	}
+
 	@Override
 	public HhBbNghiemthuKlstHdr update(HhBbNghiemthuKlstHdrReq objReq) throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
@@ -135,11 +142,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 		if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh()))
 			throw new Exception("Loại vật tư hàng hóa không phù hợp");
 
-		if (!qOptional.get().getSoBb().equals(objReq.getSoBb())) {
-			Optional<HhBbNghiemthuKlstHdr> qOpBban = hhBbNghiemthuKlstRepository.findBySoBb(objReq.getSoBb());
-			if (qOpBban.isPresent())
-				throw new Exception("Số biên bản " + objReq.getSoBb() + " đã tồn tại");
-		}
+		this.validateSoBb(qOptional.get(), objReq);
 
 		Optional<HhQdGiaoNvuNhapxuatHdr> qdNxOptional = hhQdGiaoNvuNhapxuatRepository.findById(objReq.getQdgnvnxId());
 		if (!qdNxOptional.isPresent())

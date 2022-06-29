@@ -19,7 +19,7 @@ public interface HhQdGiaoNvuNhapxuatRepository extends BaseRepository<HhQdGiaoNv
 
 	Optional<HhQdGiaoNvuNhapxuatHdr> findBySoHd(String soHd);
 
-	Optional<HhQdGiaoNvuNhapxuatHdr> findBySoQd(String soQd);
+	Optional<HhQdGiaoNvuNhapxuatHdr> findFirstBySoQd(String soQd);
 
 	@Query(
 			value = "SELECT * \n" +

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.Collection;
+import java.util.Optional;
 
 @Repository
 public interface QlBienBanNhapDayKhoLtRepository extends BaseRepository<QlBienBanNhapDayKhoLt, Long>, QlBienBanNhapDayKhoLtRepositoryCustom {
@@ -32,4 +33,6 @@ public interface QlBienBanNhapDayKhoLtRepository extends BaseRepository<QlBienBa
     @Transactional
     @Modifying
     void deleteByIdIn(Collection<Long> ids);
+
+    Optional<QlBienBanNhapDayKhoLt> findFirstBySoBienBan(String soBb);
 }

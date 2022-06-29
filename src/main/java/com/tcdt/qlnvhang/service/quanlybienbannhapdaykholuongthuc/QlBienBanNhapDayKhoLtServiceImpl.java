@@ -12,6 +12,7 @@ import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhap
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.object.HhBbNghiemthuKlstHdrReq;
 import com.tcdt.qlnvhang.request.object.quanlybienbannhapdaykholuongthuc.QlBienBanNdkCtLtReq;
 import com.tcdt.qlnvhang.request.object.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtReq;
 import com.tcdt.qlnvhang.request.search.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtSearchReq;
@@ -22,6 +23,7 @@ import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.HhBbNghiemthuKlstHdr;
 import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
@@ -104,6 +106,7 @@ public class QlBienBanNhapDayKhoLtServiceImpl extends BaseServiceImpl implements
         if (userInfo == null)
             throw new Exception("Bad request.");
 
+        this.validateSoBb(null, req);
         QlBienBanNhapDayKhoLt item = new QlBienBanNhapDayKhoLt();
         BeanUtils.copyProperties(req, item, "id");
         item.setNgayTao(LocalDate.now());
@@ -205,6 +208,7 @@ public class QlBienBanNhapDayKhoLtServiceImpl extends BaseServiceImpl implements
         if (!optional.isPresent())
             throw new Exception("Biên bản không tồn tại.");
 
+        this.validateSoBb(optional.get(), req);
         QlBienBanNhapDayKhoLt item = optional.get();
         BeanUtils.copyProperties(req, item, "id");
         item.setNgaySua(LocalDate.now());
@@ -462,5 +466,15 @@ public class QlBienBanNhapDayKhoLtServiceImpl extends BaseServiceImpl implements
             return false;
         }
         return true;
+    }
+
+    private void validateSoBb(QlBienBanNhapDayKhoLt update, QlBienBanNhapDayKhoLtReq req) throws Exception {
+        String soBB = req.getSoBienBan();
+        if (update == null || (StringUtils.hasText(update.getSoBienBan()) && !update.getSoBienBan().equalsIgnoreCase(soBB))) {
+            Optional<QlBienBanNhapDayKhoLt> optional = qlBienBanNhapDayKhoLtRepository.findFirstBySoBienBan(soBB);
+            Long updateId = Optional.ofNullable(update).map(QlBienBanNhapDayKhoLt::getId).orElse(null);
+            if (optional.isPresent() && !optional.get().getId().equals(updateId))
+                throw new Exception("Số biên bản " + soBB + " đã tồn tại");
+        }
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.Collection;
+import java.util.Optional;
 
 @Repository
 public interface PhieuKnghiemCluongHangRepository extends CrudRepository<PhieuKnghiemCluongHang, Long>, PhieuKnghiemCluongHangRepositoryCustom {
@@ -14,4 +15,6 @@ public interface PhieuKnghiemCluongHangRepository extends CrudRepository<PhieuKn
     @Transactional
     @Modifying
     void deleteByIdIn(Collection<Long> ids);
+
+    Optional<PhieuKnghiemCluongHang> findFirstBySoPhieu(String soPhieu);
 }

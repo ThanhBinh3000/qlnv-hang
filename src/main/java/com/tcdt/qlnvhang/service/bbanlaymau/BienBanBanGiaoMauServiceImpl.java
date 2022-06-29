@@ -15,6 +15,7 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanBanGiaoMauReq;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauCtReq;
+import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauReq;
 import com.tcdt.qlnvhang.request.search.BienBanBanGiaoMauSearchReq;
 import com.tcdt.qlnvhang.response.bbanlaymau.BienBanBanGiaoMauCtRes;
 import com.tcdt.qlnvhang.response.bbanlaymau.BienBanBanGiaoMauRes;
@@ -43,6 +44,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -123,6 +125,7 @@ public class BienBanBanGiaoMauServiceImpl extends BaseServiceImpl implements Bie
 		if (userInfo == null)
 			throw new Exception("Bad request.");
 
+		this.validateSoBb(null, req);
 		BienBanBanGiaoMau bienBienBanGiaoMau = new BienBanBanGiaoMau();
 		BeanUtils.copyProperties(req, bienBienBanGiaoMau, "id");
 		bienBienBanGiaoMau.setTrangThai(TrangThaiEnum.DU_THAO.getId());
@@ -150,6 +153,7 @@ public class BienBanBanGiaoMauServiceImpl extends BaseServiceImpl implements Bie
 			throw new Exception("Không tìm thấy dữ liệu.");
 		}
 
+		this.validateSoBb(optional.get(), req);
 		BienBanBanGiaoMau bienBienBanGiaoMau = optional.get();
 		BeanUtils.copyProperties(req, bienBienBanGiaoMau, "id");
 		bienBienBanGiaoMau.setNguoiSuaId(userInfo.getId());
@@ -395,5 +399,15 @@ public class BienBanBanGiaoMauServiceImpl extends BaseServiceImpl implements Bie
 			return false;
 		}
 		return true;
+	}
+
+	private void validateSoBb(BienBanBanGiaoMau update, BienBanBanGiaoMauReq req) throws Exception {
+		String soBB = req.getSoBienBan();
+		if (update == null || (StringUtils.hasText(update.getSoBienBan()) && !update.getSoBienBan().equalsIgnoreCase(soBB))) {
+			Optional<BienBanBanGiaoMau> optional = bienBanBanGiaoMauRepository.findFirstBySoBienBan(soBB);
+			Long updateId = Optional.ofNullable(update).map(BienBanBanGiaoMau::getId).orElse(null);
+			if (optional.isPresent() && !optional.get().getId().equals(updateId))
+				throw new Exception("Số biên bản " + soBB + " đã tồn tại");
+		}
 	}
 }

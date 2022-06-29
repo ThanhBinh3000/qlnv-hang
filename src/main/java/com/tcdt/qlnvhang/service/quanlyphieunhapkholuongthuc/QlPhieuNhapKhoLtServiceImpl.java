@@ -16,6 +16,7 @@ import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLt
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.object.HhBbNghiemthuKlstHdrReq;
 import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoHangHoaLtReq;
 import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLtReq;
 import com.tcdt.qlnvhang.request.search.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLtSearchReq;
@@ -26,6 +27,7 @@ import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.HhBbNghiemthuKlstHdr;
 import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
@@ -106,6 +108,8 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null)
             throw new Exception("Bad request.");
+
+        this.validateSoPhieu(null, req);
 
         QlPhieuNhapKhoLt phieu = new QlPhieuNhapKhoLt();
         BeanUtils.copyProperties(req, phieu, "id");
@@ -225,6 +229,8 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
         Optional<QlPhieuNhapKhoLt> optionalQd = qlPhieuNhapKhoLtRepository.findById(req.getId());
         if (!optionalQd.isPresent())
             throw new Exception("Phiếu nhập kho không tồn tại.");
+
+        this.validateSoPhieu(optionalQd.get(), req);
 
         QlPhieuNhapKhoLt phieu = optionalQd.get();
         BeanUtils.copyProperties(req, phieu, "id");
@@ -460,5 +466,15 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
             return false;
         }
         return true;
+    }
+
+    private void validateSoPhieu(QlPhieuNhapKhoLt update, QlPhieuNhapKhoLtReq req) throws Exception {
+        String so = req.getSoPhieu();
+        if (update == null || (StringUtils.hasText(update.getSoPhieu()) && !update.getSoPhieu().equalsIgnoreCase(so))) {
+            Optional<QlPhieuNhapKhoLt> optional = qlPhieuNhapKhoLtRepository.findFirstBySoPhieu(so);
+            Long updateId = Optional.ofNullable(update).map(QlPhieuNhapKhoLt::getId).orElse(null);
+            if (optional.isPresent() && !optional.get().getId().equals(updateId))
+                throw new Exception("Số phiếu " + so + " đã tồn tại");
+        }
     }
 }

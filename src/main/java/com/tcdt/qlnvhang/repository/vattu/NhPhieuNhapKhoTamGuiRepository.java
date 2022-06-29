@@ -8,10 +8,14 @@ import org.springframework.stereotype.Repository;
 import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface NhPhieuNhapKhoTamGuiRepository extends BaseRepository<NhPhieuNhapKhoTamGui, Long>, NhPhieuNhapKhoTamGuiRepositoryCustom {
     @Transactional
     @Modifying
     void deleteByIdIn(Collection<Long> ids);
+
+    Optional<NhPhieuNhapKhoTamGui> findFirstBySoPhieu(String soPhieu);
+
 }

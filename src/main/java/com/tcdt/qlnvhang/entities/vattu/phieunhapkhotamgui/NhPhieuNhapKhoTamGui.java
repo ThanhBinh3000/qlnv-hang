@@ -1,16 +1,10 @@
 package com.tcdt.qlnvhang.entities.vattu.phieunhapkhotamgui;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tcdt.qlnvhang.entities.BaseEntity;
-import com.tcdt.qlnvhang.request.object.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiCtReq;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.apache.commons.collections.CollectionUtils;
-import org.hibernate.annotations.Where;
-import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -18,12 +12,12 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = NhPhieuNhapKhoTamGui.TABLE_NAME)
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class NhPhieuNhapKhoTamGui extends BaseEntity implements Serializable {
     private static final long serialVersionUID = -4126804462700206222L;
     public static final String TABLE_NAME = "NH_PHIEU_NHAP_KHO_TAM_GUI";
@@ -34,9 +28,8 @@ public class NhPhieuNhapKhoTamGui extends BaseEntity implements Serializable {
     @Column(name = "ID")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "qdgnvnx_Id")
-    private HhQdGiaoNvuNhapxuatHdr qdGiaoNvNhapXuat;
+    @Column(name = "QDGNVNX_ID")
+    private Long qdgnvnxId;
 
     @Column(name = "SO_PHIEU")
     private String soPhieu;
@@ -89,28 +82,9 @@ public class NhPhieuNhapKhoTamGui extends BaseEntity implements Serializable {
     private String maDvi;
     private String capDvi;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "phieuNkTg", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
+    @Transient
     private List<NhPhieuNhapKhoTamGuiCt> chiTiets = new ArrayList<>();
 
-    public void manageChiTiets(List<NhPhieuNhapKhoTamGuiCtReq> chiTietsRq) {
-
-        List<NhPhieuNhapKhoTamGuiCt> chiTiets = new ArrayList<>();
-        if (!CollectionUtils.isEmpty(chiTietsRq)) {
-            chiTiets = chiTietsRq.stream()
-                    .map(l -> {
-                        NhPhieuNhapKhoTamGuiCt ct = new NhPhieuNhapKhoTamGuiCt();
-                        BeanUtils.copyProperties(l, ct, "id");
-                        return ct;
-                    }).collect(Collectors.toList());
-        }
-
-        this.setChiTiets(chiTiets);
-    }
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    @JoinColumn(name = "dataId")
-    @Where(clause = "data_type='" + NhPhieuNhapKhoTamGui.TABLE_NAME + "'")
+    @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 }

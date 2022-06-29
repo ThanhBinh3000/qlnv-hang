@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.bbanlaymau;
 
 import com.tcdt.qlnvhang.entities.bbanlaymau.BienBanLayMau;
 import com.tcdt.qlnvhang.entities.bbanlaymau.BienBanLayMauCt;
+import com.tcdt.qlnvhang.entities.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLt;
 import com.tcdt.qlnvhang.enums.HhBbNghiemthuKlstStatusEnum;
 import com.tcdt.qlnvhang.enums.QlPhieuNhapKhoLtStatus;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
@@ -16,6 +17,7 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauCtReq;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauReq;
+import com.tcdt.qlnvhang.request.object.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtReq;
 import com.tcdt.qlnvhang.request.search.BienBanLayMauSearchReq;
 import com.tcdt.qlnvhang.response.bbanlaymau.BienBanLayMauCtRes;
 import com.tcdt.qlnvhang.response.bbanlaymau.BienBanLayMauRes;
@@ -138,6 +140,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 		if (userInfo == null)
 			throw new Exception("Bad request.");
 
+		this.validateSoBb(null, req);
 		BienBanLayMau bienBienLayMau = new BienBanLayMau();
 		BeanUtils.copyProperties(req, bienBienLayMau, "id");
 		bienBienLayMau.setTrangThai(TrangThaiEnum.DU_THAO.getId());
@@ -189,6 +192,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 			throw new Exception("Không tìm thấy dữ liệu.");
 		}
 
+		this.validateSoBb(optional.get(), req);
 		BienBanLayMau bienBienLayMau = optional.get();
 		BeanUtils.copyProperties(req, bienBienLayMau, "id");
 		bienBienLayMau.setNguoiSuaId(userInfo.getId());
@@ -444,5 +448,15 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 			return false;
 		}
 		return true;
+	}
+
+	private void validateSoBb(BienBanLayMau update, BienBanLayMauReq req) throws Exception {
+		String soBB = req.getSoBienBan();
+		if (update == null || (StringUtils.hasText(update.getSoBienBan()) && !update.getSoBienBan().equalsIgnoreCase(soBB))) {
+			Optional<BienBanLayMau> optional = bienBanLayMauRepository.findFirstBySoBienBan(soBB);
+			Long updateId = Optional.ofNullable(update).map(BienBanLayMau::getId).orElse(null);
+			if (optional.isPresent() && !optional.get().getId().equals(updateId))
+				throw new Exception("Số biên bản " + soBB + " đã tồn tại");
+		}
 	}
 }

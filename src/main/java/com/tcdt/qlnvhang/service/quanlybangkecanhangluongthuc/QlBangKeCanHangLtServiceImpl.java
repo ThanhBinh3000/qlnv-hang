@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.quanlybangkecanhangluongthuc;
 
 import com.tcdt.qlnvhang.entities.quanlybangkecanhangluongthuc.QlBangKeCanHangLt;
 import com.tcdt.qlnvhang.entities.quanlybangkecanhangluongthuc.QlBangKeChCtLt;
+import com.tcdt.qlnvhang.entities.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLt;
 import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLt;
 import com.tcdt.qlnvhang.enums.QlPhieuNhapKhoLtStatus;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
@@ -16,6 +17,7 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.quanlybangkecanhangluongthuc.QlBangKeCanHangLtReq;
 import com.tcdt.qlnvhang.request.object.quanlybangkecanhangluongthuc.QlBangKeChCtLtReq;
+import com.tcdt.qlnvhang.request.object.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtReq;
 import com.tcdt.qlnvhang.request.search.quanlybangkecanhangluongthuc.QlBangKeCanHangLtSearchReq;
 import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.response.quanlybangkecanhangluongthuc.QlBangKeCanHangLtRes;
@@ -110,6 +112,7 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
         if (userInfo == null)
             throw new Exception("Bad request.");
 
+        this.validateSoBb(null, req);
         QlBangKeCanHangLt item = new QlBangKeCanHangLt();
         BeanUtils.copyProperties(req, item, "id");
         item.setNgayTao(LocalDate.now());
@@ -223,6 +226,7 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
         if (!optional.isPresent())
             throw new Exception("Bảng kê không tồn tại.");
 
+        this.validateSoBb(optional.get(), req);
         QlBangKeCanHangLt item = optional.get();
         BeanUtils.copyProperties(req, item, "id");
         item.setNgaySua(LocalDate.now());
@@ -488,5 +492,15 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
             return false;
         }
         return true;
+    }
+
+    private void validateSoBb(QlBangKeCanHangLt update, QlBangKeCanHangLtReq req) throws Exception {
+        String so = req.getSoBangKe();
+        if (update == null || (StringUtils.hasText(update.getSoBangKe()) && !update.getSoBangKe().equalsIgnoreCase(so))) {
+            Optional<QlBangKeCanHangLt> optional = qlBangKeCanHangLtRepository.findFirstBySoBangKe(so);
+            Long updateId = Optional.ofNullable(update).map(QlBangKeCanHangLt::getId).orElse(null);
+            if (optional.isPresent() && !optional.get().getId().equals(updateId))
+                throw new Exception("Số bảng kê " + so + " đã tồn tại");
+        }
     }
 }

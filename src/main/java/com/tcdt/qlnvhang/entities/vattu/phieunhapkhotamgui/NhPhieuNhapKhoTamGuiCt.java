@@ -20,9 +20,8 @@ public class NhPhieuNhapKhoTamGuiCt implements Serializable {
     @Column(name = "ID")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "PHIEU_NK_TG_ID")
-    private NhPhieuNhapKhoTamGui phieuNkTg;
+    @Column(name = "PHIEU_NK_TG_ID")
+    private Long phieuNkTgId;
 
     @Column(name = "MA_SO")
     private String maSo;

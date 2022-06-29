@@ -54,9 +54,8 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 		if (!Contains.CAP_CUC.equalsIgnoreCase(userInfo.getCapDvi()))
 			throw new Exception("Bad request.");
-		Optional<HhQdGiaoNvuNhapxuatHdr> qOpQdinh = hhQdGiaoNvuNhapxuatRepository.findBySoQd(objReq.getSoQd());
-		if (qOpQdinh.isPresent())
-			throw new Exception("Số quyết định " + objReq.getSoQd() + " đã tồn tại");
+
+		this.validateSoQd(null, objReq);
 
 		Map<String, QlnvDmDonvi> mapDmucDvi = getMapDvi();
 		QlnvDmDonvi qlnvDmDonvi = mapDmucDvi.get(userInfo.getDvql());
@@ -115,11 +114,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		if (!qOptional.isPresent())
 			throw new Exception("Không tìm thấy dữ liệu cần sửa");
 
-		if (!qOptional.get().getSoQd().equals(objReq.getSoQd())) {
-			Optional<HhQdGiaoNvuNhapxuatHdr> qOpHdong = hhQdGiaoNvuNhapxuatRepository.findBySoQd(objReq.getSoQd());
-			if (qOpHdong.isPresent())
-				throw new Exception("Số quyết định " + objReq.getSoQd() + " đã tồn tại");
-		}
+		this.validateSoQd(qOptional.get(), objReq);
 
 		HhQdGiaoNvuNhapxuatHdr dataDB = qOptional.get();
 		BeanUtils.copyProperties(objReq, dataDB, "id");
@@ -410,5 +405,15 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 		hhQdGiaoNvuNhapxuatRepository.deleteByIdIn(req.getIds());
 		return true;
+	}
+
+	private void validateSoQd(HhQdGiaoNvuNhapxuatHdr update, HhQdGiaoNvuNhapxuatHdrReq req) throws Exception {
+		String soQd = req.getSoQd();
+		if (update == null || (StringUtils.hasText(update.getSoQd()) && !update.getSoQd().equalsIgnoreCase(soQd))) {
+			Optional<HhQdGiaoNvuNhapxuatHdr> optional = hhQdGiaoNvuNhapxuatRepository.findFirstBySoQd(soQd);
+			Long updateId = Optional.ofNullable(update).map(HhQdGiaoNvuNhapxuatHdr::getId).orElse(null);
+			if (optional.isPresent() && !optional.get().getId().equals(updateId))
+				throw new Exception("Số quyết định " + soQd + " đã tồn tại");
+		}
 	}
 }

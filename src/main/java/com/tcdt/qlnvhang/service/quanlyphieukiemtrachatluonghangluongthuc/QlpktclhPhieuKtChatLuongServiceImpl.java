@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.quanlyphieukiemtrachatluonghangluongthuc;
 
 import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhKetQuaKiemTra;
 import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
+import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLt;
 import com.tcdt.qlnvhang.enums.QlpktclhPhieuKtChatLuongStatusEnum;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
@@ -10,6 +11,7 @@ import com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc.Qlp
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLtReq;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongFilterRequestDto;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongRequestDto;
 import com.tcdt.qlnvhang.response.BaseNhapHangCount;
@@ -69,6 +71,8 @@ public class QlpktclhPhieuKtChatLuongServiceImpl implements QlpktclhPhieuKtChatL
 
 		if (!Contains.CAP_CHI_CUC.equals(userInfo.getCapDvi()))
 			throw new Exception("Bad Request");
+
+		this.validateSoPhieu(null, req);
 		//Quản lý thông tin chủ đầu tư
 		QlpktclhPhieuKtChatLuong qlpktclhPhieuKtChatLuong = dataUtils.toObject(req, QlpktclhPhieuKtChatLuong.class);
 		qlpktclhPhieuKtChatLuong.setNgayTao(LocalDate.now());
@@ -106,8 +110,10 @@ public class QlpktclhPhieuKtChatLuongServiceImpl implements QlpktclhPhieuKtChatL
 
 		if (!qlpktclhPhieuKtChatLuongOpt.isPresent()) throw new Exception("Entity can not be found");
 
+
 		QlpktclhPhieuKtChatLuong qlpktclhPhieuKtChatLuong = qlpktclhPhieuKtChatLuongOpt.get();
 
+		this.validateSoPhieu(qlpktclhPhieuKtChatLuong, req);
 		qlpktclhPhieuKtChatLuong = dataUtils.toObject(req, QlpktclhPhieuKtChatLuong.class);
 
 		qlpktclhPhieuKtChatLuong.setNgaySua(LocalDate.now());
@@ -353,5 +359,15 @@ public class QlpktclhPhieuKtChatLuongServiceImpl implements QlpktclhPhieuKtChatL
 		qlpktclhKetQuaKiemTraRepo.deleteByPhieuKtChatLuongIdIn(req.getIds());
 		qlpktclhPhieuKtChatLuongRepo.deleteByIdIn(req.getIds());
 		return true;
+	}
+
+	private void validateSoPhieu(QlpktclhPhieuKtChatLuong update, QlpktclhPhieuKtChatLuongRequestDto req) throws Exception {
+		String so = req.getSoPhieu();
+		if (update == null || (StringUtils.hasText(update.getSoPhieu()) && !update.getSoPhieu().equalsIgnoreCase(so))) {
+			Optional<QlpktclhPhieuKtChatLuong> optional = qlpktclhPhieuKtChatLuongRepo.findFirstBySoPhieu(so);
+			Long updateId = Optional.ofNullable(update).map(QlpktclhPhieuKtChatLuong::getId).orElse(null);
+			if (optional.isPresent() && !optional.get().getId().equals(updateId))
+				throw new Exception("Số phiếu " + so + " đã tồn tại");
+		}
 	}
 }

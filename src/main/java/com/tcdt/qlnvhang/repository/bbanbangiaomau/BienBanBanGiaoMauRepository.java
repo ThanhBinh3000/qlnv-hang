@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.Collection;
+import java.util.Optional;
 
 @Repository
 public interface BienBanBanGiaoMauRepository extends CrudRepository<BienBanBanGiaoMau, Long>, BienBanBanGiaoMauRepositoryCustom {
@@ -14,4 +15,6 @@ public interface BienBanBanGiaoMauRepository extends CrudRepository<BienBanBanGi
     @Transactional
     @Modifying
     void deleteByIdIn(Collection<Long> ids);
+
+    Optional<BienBanBanGiaoMau> findFirstBySoBienBan(String soBienBan);
 }

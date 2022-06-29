@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.Collection;
+import java.util.Optional;
 
 @Repository
 public interface QlPhieuNhapKhoLtRepository extends BaseRepository<QlPhieuNhapKhoLt, Long>, QlPhieuNhapKhoLtRepositoryCustom {
@@ -31,4 +32,6 @@ public interface QlPhieuNhapKhoLtRepository extends BaseRepository<QlPhieuNhapKh
     @Transactional
     @Modifying
     void deleteByIdIn(Collection<Long> ids);
+
+    Optional<QlPhieuNhapKhoLt> findFirstBySoPhieu(String soPhieu);
 }

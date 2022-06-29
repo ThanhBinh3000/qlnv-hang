@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface HhBbNghiemthuKlstRepository extends BaseRepository<HhBbNghiemthuKlstHdr, Long> {
 
-	Optional<HhBbNghiemthuKlstHdr> findBySoBb(String soBb);
+	Optional<HhBbNghiemthuKlstHdr> findFirstBySoBb(String soBb);
 
 	Optional<HhBbNghiemthuKlstHdr> findFirstByNamAndMaDvi(Integer nam, String maDvi);
 
