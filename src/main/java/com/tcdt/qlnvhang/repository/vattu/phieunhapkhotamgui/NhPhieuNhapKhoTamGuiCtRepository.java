@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.repository.vattu;
+package com.tcdt.qlnvhang.repository.vattu.phieunhapkhotamgui;
 
 import com.tcdt.qlnvhang.entities.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiCt;
 import com.tcdt.qlnvhang.repository.BaseRepository;

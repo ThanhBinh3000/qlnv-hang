@@ -6,8 +6,8 @@ import com.tcdt.qlnvhang.entities.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiC
 import com.tcdt.qlnvhang.enums.QlPhieuNhapKhoLtStatus;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
-import com.tcdt.qlnvhang.repository.vattu.NhPhieuNhapKhoTamGuiCtRepository;
-import com.tcdt.qlnvhang.repository.vattu.NhPhieuNhapKhoTamGuiRepository;
+import com.tcdt.qlnvhang.repository.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiCtRepository;
+import com.tcdt.qlnvhang.repository.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -268,8 +268,6 @@ public class NhPhieuNhapKhoTamGuiServiceImpl implements NhPhieuNhapKhoTamGuiServ
             response.setQdgnvnxId(qdNhapId);
             response.setSoQuyetDinhNhap(soQdNhap);
             this.thongTinNganLo(response, nganLo);
-            response.setQdgnvnxId(qdNhapId);
-            response.setSoQuyetDinhNhap(soQdNhap);
             responses.add(response);
         }
 
