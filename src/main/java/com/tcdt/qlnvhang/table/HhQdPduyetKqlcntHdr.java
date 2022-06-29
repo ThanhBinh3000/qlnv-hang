@@ -36,7 +36,11 @@ public class HhQdPduyetKqlcntHdr implements Serializable {
 	@Temporal(TemporalType.DATE)
 	Date ngayQd;
 	String loaiVthh;
+	@Transient
+	String tenVthh;
 	String cloaiVthh;
+	@Transient
+	String tenCloaiVthh;
 	Integer namKhoach;
 	String trichYeu;
 	String soQdPdKhlcnt;

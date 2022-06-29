@@ -150,6 +150,12 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		if (!qOptional.isPresent())
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
 
+		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
+
+
+		qOptional.get().setTenVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getLoaiVthh()));
+		qOptional.get().setTenCloaiVthh(StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getCloaiVthh()));
+
 		qOptional.get().setHhQdPduyetKqlcntDtlList(hhQdPduyetKqlcntDtlRepository.findByIdQdPdHdr(Long.parseLong(ids)));
 
 		// Quy doi don vi kg = tan
@@ -207,15 +213,15 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 			throw new Exception("Xoá thất bại, không tìm thấy dữ liệu");
 
 		Optional<HhQdPduyetKqlcntHdr> optional = hhQdPduyetKqlcntHdrRepository.findById(idSearchReq.getId());
-		if (!optional.isPresent())
+		if (!optional.isPresent()){
 			throw new Exception("Không tìm thấy dữ liệu cần xoá");
+		}
 
-		if (!optional.get().getTrangThai().equals(Contains.TAO_MOI)
-				&& !optional.get().getTrangThai().equals(Contains.TU_CHOI))
+		if (!optional.get().getTrangThai().equals(Contains.TAO_MOI)){
 			throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối");
+		}
 
 		hhQdPduyetKqlcntHdrRepository.delete(optional.get());
-
 	}
 
 	@Override

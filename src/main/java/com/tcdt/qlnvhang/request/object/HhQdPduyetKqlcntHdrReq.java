@@ -32,7 +32,6 @@ public class HhQdPduyetKqlcntHdrReq {
 
 	String cloaiVthh;
 
-	@NotNull(message = "Không được để trống")
 	@Size(max = 500, message = "Về việc không được vượt quá 500 ký tự")
 	@ApiModelProperty(example = "Nội dung về việc")
 	String trichYeu;
@@ -52,6 +51,9 @@ public class HhQdPduyetKqlcntHdrReq {
 	@ApiModelProperty(example = "0102")
 	String maDvi;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date ngayQdPdKhlcnt;
+
 	@Size(max = 500, message = "Ghi chú không được vượt quá 500 ký tự")
 	@ApiModelProperty(example = "00")
 	String ghiChu;
@@ -62,6 +64,8 @@ public class HhQdPduyetKqlcntHdrReq {
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayHluc;
+
+	String lyDoHuy;
 
 	private List<HhQdPduyetKqlcntDtlReq> detailList;
 	private List<FileDinhKemReq> fileDinhKems;
