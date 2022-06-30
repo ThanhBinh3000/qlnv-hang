@@ -165,6 +165,8 @@ public class NhPhieuNhapKhoTamGuiServiceImpl implements NhPhieuNhapKhoTamGuiServ
 
         List<NhPhieuNhapKhoTamGuiCt> chiTiets = this.saveListChiTiet(item.getId(), req.getChiTiets(), mapChiTiet);
         item.setChiTiets(chiTiets);
+        if (!CollectionUtils.isEmpty(mapChiTiet.values()))
+            phieuNhapKhoTamGuiCtRepository.deleteAll(mapChiTiet.values());
 
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), item.getId(), QlBienBanNhapDayKhoLt.TABLE_NAME);
         item.setFileDinhKems(fileDinhKems);

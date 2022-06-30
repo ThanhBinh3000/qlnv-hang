@@ -104,7 +104,7 @@ public class NhBienBanGuiHangServiceImpl implements NhBienBanGuiHangService {
         }
 
         if (item.getHopDongId() != null) {
-            Optional<HhHopDongHdr> hd = hhHopDongRepository.findById(item.getQdgnvnxId());
+            Optional<HhHopDongHdr> hd = hhHopDongRepository.findById(item.getHopDongId());
             if (!hd.isPresent()) {
                 throw new Exception("Không tìm thấy hợp đồng");
             }
@@ -159,6 +159,9 @@ public class NhBienBanGuiHangServiceImpl implements NhBienBanGuiHangService {
 
         List<NhBienBanGuiHangCt> chiTiets = this.saveListChiTiet(item.getId(), req.getChiTiets(), mapChiTiet);
         item.setChiTiets(chiTiets);
+
+        if (!CollectionUtils.isEmpty(mapChiTiet.values()))
+            bienBanGuiHangCtRepository.deleteAll(mapChiTiet.values());
         return this.buildResponse(item);
     }
 

@@ -165,6 +165,9 @@ public class BienBanBanGiaoMauServiceImpl extends BaseServiceImpl implements Bie
 
 		List<BienBanBanGiaoMauCt> chiTiets = this.saveListChiTiet(bienBienBanGiaoMau.getId(), req.getChiTiets(), mapChiTiet);
 		bienBienBanGiaoMau.setChiTiets(chiTiets);
+
+		if (!CollectionUtils.isEmpty(mapChiTiet.values()))
+			bienBanBanGiaoMauCtRepository.deleteAll(mapChiTiet.values());
 		return this.toResponse(bienBienBanGiaoMau);
 	}
 

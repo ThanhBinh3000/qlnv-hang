@@ -205,6 +205,9 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 		List<BienBanLayMauCt> chiTiets = this.saveListChiTiet(bienBienLayMau.getId(), req.getChiTiets(), mapChiTiet);
 		bienBienLayMau.setChiTiets(chiTiets);
 
+		if (!CollectionUtils.isEmpty(mapChiTiet.values()))
+			bienBanLayMauCtRepository.deleteAll(mapChiTiet.values());
+
 		return this.toResponse(bienBienLayMau);
 	}
 
