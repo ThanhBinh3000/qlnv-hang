@@ -91,6 +91,7 @@ public class HhDxKhLcntThopHdr implements Serializable {
 	String nguoiTao;
 	String namKhoach;
 	String trangThai;
+	String tchuanCluong;
 
 	@Transient
 	private List<HhDxKhLcntThopDtl> hhDxKhLcntThopDtlList = new ArrayList<>();

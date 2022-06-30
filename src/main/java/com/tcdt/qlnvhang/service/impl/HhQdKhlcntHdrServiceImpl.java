@@ -231,11 +231,10 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		if (!qOptional.isPresent())
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
 
-		// Quy doi don vi kg = tan
-//		List<HhQdKhlcntDtl> dtls2 = ObjectMapperUtils.mapAll(qOptional.get().getChildren1(), HhQdKhlcntDtl.class);
-//		for (HhQdKhlcntDtl dtl : dtls2) {
-//			UnitScaler.formatList(dtl.getChildren(), Contains.DVT_TAN);
-//		}
+		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
+
+		qOptional.get().setTenVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getLoaiVthh()));
+		qOptional.get().setTenCloaiVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getLoaiVthh()));
 
 		return qOptional.get();
 	}

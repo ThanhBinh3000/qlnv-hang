@@ -45,10 +45,7 @@ public class HhQdKhlcntHdrReq {
 	String nguonVon;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-	Date tgianTbao;
-
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-	Date tgianDthau;
+	Date tgianBdauTchuc;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date tgianNhang;
@@ -92,6 +89,11 @@ public class HhQdKhlcntHdrReq {
 //	@Size(max = 200, message = "Bảo lãnh dự thầu không được vượt quá 200 ký tự")
 	@ApiModelProperty(example = "Số tiền bảo lãnh dự thầu")
 	String blanhDthau;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date ngayHluc;
+
+	String trichYeu;
 
 //	@NotNull(message = "Không được để trống")
 	private Long idThHdr;

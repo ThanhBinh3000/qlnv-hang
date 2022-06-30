@@ -68,6 +68,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 
 		// Add thong tin list dtl
 		List<HhDxKhLcntThopDtl> thopDtls = new ArrayList<HhDxKhLcntThopDtl>();
+		String tChuanCluong = "";
 		for (HhDxuatKhLcntHdr dxuat : dxuatList) {
 			HhDxKhLcntThopDtl thopDtl = new HhDxKhLcntThopDtl();
 			// Set ngay min va ngay max o detail
@@ -130,9 +131,10 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 			thopDtl.setSoLuong(soLuong);
 			thopDtl.setTongTien(tongTien);
 			thopDtl.setSoGthau(Long.valueOf(soGthau));
+			tChuanCluong = tChuanCluong.concat(dxuat.getTchuanCluong()+",");
 			thopDtls.add(thopDtl);
 		}
-
+		thopHdr.setTchuanCluong(tChuanCluong);
 		// Quy doi don vi do luong khoi luong
 //		UnitScaler.reverseFormatList(thopDtls, Contains.DVT_TAN);
 		thopHdr.setHhDxKhLcntThopDtlList(thopDtls);
