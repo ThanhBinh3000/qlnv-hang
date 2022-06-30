@@ -323,7 +323,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 		}
 
 		if (item.getHopDongId() != null) {
-			Optional<HhHopDongHdr> qOpHdong = hhHopDongRepository.findById(item.getId());
+			Optional<HhHopDongHdr> qOpHdong = hhHopDongRepository.findById(item.getHopDongId());
 			if (!qOpHdong.isPresent())
 				throw new Exception("Hợp đồng không tồn tại");
 
