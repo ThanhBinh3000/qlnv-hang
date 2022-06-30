@@ -20,7 +20,7 @@ public class BienBanLayMauRepositoryCustomImpl implements BienBanLayMauRepositor
 		builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON bb.qdgnvnxId = nx.id ");
 		builder.append("INNER JOIN HhHopDongHdr hopDong ON bb.hopDongId = hopDong.id ");
 		builder.append("INNER JOIN QlBienBanNhapDayKhoLt bbNhapDayKho ON bb.bbNhapDayKhoId = bbNhapDayKho.id ");
-		builder.append("LEFT JOIN KtNganLo nganLo ON p.maNganLo = nganLo.maNganlo ");
+		builder.append("LEFT JOIN KtNganLo nganLo ON bb.maNganLo = nganLo.maNganlo ");
 		setConditionSearchCtkhn(req, builder);
 
 		//Sort
@@ -75,7 +75,7 @@ public class BienBanLayMauRepositoryCustomImpl implements BienBanLayMauRepositor
 		builder.append("SELECT COUNT(DISTINCT bb.id) FROM BienBanLayMau bb ");
 		builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON bb.qdgnvnxId = nx.id ");
 		builder.append("INNER JOIN HhHopDongHdr hopDong ON bb.hopDongId = hopDong.id ");
-		builder.append("LEFT JOIN KtNganLo nganLo ON p.maNganLo = nganLo.maNganlo ");
+		builder.append("LEFT JOIN KtNganLo nganLo ON bb.maNganLo = nganLo.maNganlo ");
 		this.setConditionSearchCtkhn(req, builder);
 
 		TypedQuery<Long> query = em.createQuery(builder.toString(), Long.class);
