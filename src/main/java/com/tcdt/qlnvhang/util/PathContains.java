@@ -133,4 +133,7 @@ public class PathContains {
 
 	// Nhập kho vật tư: Biên bản gửi hàng
 	public static final String BIEN_BAN_GUI_HANG = "/bien-ban-gui-hang";
+
+	// Nhập kho vật tư: Hồ sơ kỹ thuật
+	public static final String HO_SO_KY_THUAT = "/ho-so-ky-thuat";
 }

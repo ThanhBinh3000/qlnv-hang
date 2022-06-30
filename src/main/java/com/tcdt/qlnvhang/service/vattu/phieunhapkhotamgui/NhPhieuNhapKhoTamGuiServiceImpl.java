@@ -127,6 +127,8 @@ public class NhPhieuNhapKhoTamGuiServiceImpl implements NhPhieuNhapKhoTamGuiServ
         NhPhieuNhapKhoTamGuiRes res = new NhPhieuNhapKhoTamGuiRes();
         List<NhPhieuNhapKhoTamGuiCtRes> chiTiets = new ArrayList<>();
         BeanUtils.copyProperties(item, res);
+        res.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
+        res.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
         for (NhPhieuNhapKhoTamGuiCt phieuNhapKhoTamGuiCt : item.getChiTiets()) {
             chiTiets.add(new NhPhieuNhapKhoTamGuiCtRes(phieuNhapKhoTamGuiCt));
         }

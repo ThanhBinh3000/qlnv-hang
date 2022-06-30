@@ -1,23 +1,26 @@
-package com.tcdt.qlnvhang.service.vattu.bienbanguihang;
+package com.tcdt.qlnvhang.service.vattu.hosokythuat;
 
-import com.tcdt.qlnvhang.entities.vattu.bienbanguihang.NhBienBanGuiHang;
-import com.tcdt.qlnvhang.entities.vattu.bienbanguihang.NhBienBanGuiHangCt;
+import com.tcdt.qlnvhang.entities.vattu.hosokythuat.NhHoSoKyThuat;
+import com.tcdt.qlnvhang.entities.vattu.hosokythuat.NhHoSoKyThuatCt;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
+import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
-import com.tcdt.qlnvhang.repository.vattu.bienbanguihang.NhBienBanGuiHangCtRepository;
-import com.tcdt.qlnvhang.repository.vattu.bienbanguihang.NhBienBanGuiHangRepository;
+import com.tcdt.qlnvhang.repository.vattu.hosokythuat.NhHoSoKyThuatCtRepository;
+import com.tcdt.qlnvhang.repository.vattu.hosokythuat.NhHoSoKyThuatRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.object.vattu.bienbanguihang.NhBienBanGuiHangCtReq;
-import com.tcdt.qlnvhang.request.object.vattu.bienbanguihang.NhBienBanGuiHangReq;
-import com.tcdt.qlnvhang.request.search.vattu.bienbanguihang.NhBienBanGuiHangSearchReq;
-import com.tcdt.qlnvhang.response.vattu.bienbanguihang.NhBienBanGuiHangCtRes;
-import com.tcdt.qlnvhang.response.vattu.bienbanguihang.NhBienBanGuiHangRes;
+import com.tcdt.qlnvhang.request.object.vattu.hosokythuat.NhHoSoKyThuatCtReq;
+import com.tcdt.qlnvhang.request.object.vattu.hosokythuat.NhHoSoKyThuatReq;
+import com.tcdt.qlnvhang.request.search.vattu.hosokythuat.NhHoSoKyThuatSearchReq;
+import com.tcdt.qlnvhang.response.vattu.hosokythuat.NhHoSoKyThuatCtRes;
+import com.tcdt.qlnvhang.response.vattu.hosokythuat.NhHoSoKyThuatRes;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.HhHopDongHdr;
 import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -41,61 +44,106 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
 @Log4j2
-public class NhBienBanGuiHangServiceImpl implements NhBienBanGuiHangService {
-    private final NhBienBanGuiHangRepository bienBanGuiHangRepository;
-    private final NhBienBanGuiHangCtRepository bienBanGuiHangCtRepository;
+public class NhHoSoKyThuatServiceImpl implements NhHoSoKyThuatService {
+
+    private final NhHoSoKyThuatRepository nhHoSoKyThuatRepository;
+    private final NhHoSoKyThuatCtRepository nhHoSoKyThuatCtRepository;
+    private final FileDinhKemService fileDinhKemService;
     private final HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
     private final HhHopDongRepository hhHopDongRepository;
+    private final QlnvDmVattuRepository qlnvDmVattuRepository;
 
-    private static final String SHEET_BIEN_BAN_GUI_HANG = "Biên bản gửi hàng";
+    private static final String SHEET_HO_SO_KY_THUAT = "Hồ Sơ Kỹ Thuật";
     private static final String STT = "STT";
     private static final String SO_BIEN_BAN = "Số Biên Bản";
     private static final String SO_QUYET_DINH_NHAP = "Số Quyết Định Nhập";
-    private static final String NAM_NHAP = "Năm Nhập";
-    private static final String NGAY_GUI = "Ngày Gửi";
-    private static final String BEN_NHAN = "Bên Nhận";
-    private static final String BEN_GIAO = "Bên Giao";
+    private static final String NGAY = "Ngày";
+    private static final String LOAI_HANG_HOA = "Loại Hàng Hóa";
+    private static final String CHUNG_LOAI_HANG_HO = "Chủng Loại Hàng Hóa";
+    private static final String KET_LUAT = "Kết Luận";
     private static final String TRANG_THAI = "Trạng Thái";
 
     @Override
-    public NhBienBanGuiHangRes create(NhBienBanGuiHangReq req) throws Exception {
+    @Transactional(rollbackOn = Exception.class)
+    public NhHoSoKyThuatRes create(NhHoSoKyThuatReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         this.validateSoBb(null, req);
 
-        NhBienBanGuiHang item = new NhBienBanGuiHang();
+        NhHoSoKyThuat item = new NhHoSoKyThuat();
         BeanUtils.copyProperties(req, item, "id");
         item.setNgayTao(LocalDate.now());
         item.setNguoiTaoId(userInfo.getId());
         item.setTrangThai(TrangThaiEnum.DU_THAO.getId());
         item.setMaDvi(userInfo.getDvql());
         item.setCapDvi(userInfo.getCapDvi());
-        bienBanGuiHangRepository.save(item);
+        nhHoSoKyThuatRepository.save(item);
 
-        List<NhBienBanGuiHangCt> chiTiets = this.saveListChiTiet(item.getId(), req.getChiTiets(), new HashMap<>());
+        List<NhHoSoKyThuatCt> chiTiets = this.saveListChiTiet(item.getId(), req.getChiTiets(), new HashMap<>());
         item.setChiTiets(chiTiets);
+
+        item.setFileDinhKems(fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReqs(), item.getId(), NhHoSoKyThuat.TABLE_NAME));
+        item.setFdkCanCus(fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReqs(), item.getId(), NhHoSoKyThuat.CAN_CU));
 
         return this.buildResponse(item);
     }
 
-    private NhBienBanGuiHangRes buildResponse(NhBienBanGuiHang item) throws Exception {
-        NhBienBanGuiHangRes res = new NhBienBanGuiHangRes();
-        List<NhBienBanGuiHangCtRes> chiTiets = new ArrayList<>();
+    private List<NhHoSoKyThuatCt> saveListChiTiet(Long parentId,
+                                                     List<NhHoSoKyThuatCtReq> chiTietReqs,
+                                                     Map<Long, NhHoSoKyThuatCt> mapChiTiet) throws Exception {
+        List<NhHoSoKyThuatCt> chiTiets = new ArrayList<>();
+        for (NhHoSoKyThuatCtReq req : chiTietReqs) {
+            Long id = req.getId();
+            NhHoSoKyThuatCt chiTiet = new NhHoSoKyThuatCt();
+
+            if (id != null) {
+                chiTiet = mapChiTiet.get(id);
+                if (chiTiet == null)
+                    throw new Exception("Biên bản gửi hàng chi tiết không tồn tại.");
+                mapChiTiet.remove(id);
+            }
+
+            BeanUtils.copyProperties(req, chiTiet, "id");
+            chiTiet.setHoSoKyThuatId(parentId);
+            chiTiets.add(chiTiet);
+        }
+
+        if (!CollectionUtils.isEmpty(chiTiets))
+            nhHoSoKyThuatCtRepository.saveAll(chiTiets);
+
+        return chiTiets;
+    }
+
+    private NhHoSoKyThuatRes buildResponse(NhHoSoKyThuat item) throws Exception {
+        NhHoSoKyThuatRes res = new NhHoSoKyThuatRes();
+        List<NhHoSoKyThuatCtRes> chiTiets = new ArrayList<>();
         BeanUtils.copyProperties(item, res);
-        res.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
-        res.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
-        for (NhBienBanGuiHangCt bienBanGuiHangCt : item.getChiTiets()) {
-            chiTiets.add(new NhBienBanGuiHangCtRes(bienBanGuiHangCt));
+        for (NhHoSoKyThuatCt ct : item.getChiTiets()) {
+            chiTiets.add(new NhHoSoKyThuatCtRes(ct));
         }
         res.setChiTiets(chiTiets);
+        res.setFileDinhKems(item.getFileDinhKems());
+        res.setFdkCanCus(item.getFdkCanCus());
+
+        Set<String> maVatTus = Stream.of(item.getMaVatTu(), item.getMaVatTuCha()).collect(Collectors.toSet());
+        if (!CollectionUtils.isEmpty(maVatTus)) {
+            Set<QlnvDmVattu> vatTus = qlnvDmVattuRepository.findByMaIn(maVatTus.stream().filter(Objects::nonNull).collect(Collectors.toSet()));
+            if (CollectionUtils.isEmpty(vatTus))
+                throw new Exception("Không tìm thấy vật tư");
+            vatTus.stream().filter(v -> v.getMa().equalsIgnoreCase(item.getMaVatTu())).findFirst()
+                    .ifPresent(v -> res.setTenVatTu(v.getTen()));
+            vatTus.stream().filter(v -> v.getMa().equalsIgnoreCase(item.getMaVatTuCha())).findFirst()
+                    .ifPresent(v -> res.setTenVatTuCha(v.getTen()));
+        }
 
         if (item.getQdgnvnxId() != null) {
             Optional<HhQdGiaoNvuNhapxuatHdr> qdNhap = hhQdGiaoNvuNhapxuatRepository.findById(item.getQdgnvnxId());
@@ -112,97 +160,84 @@ public class NhBienBanGuiHangServiceImpl implements NhBienBanGuiHangService {
             }
             res.setSoHopDong(hd.get().getSoHd());
         }
+
+        if (item.getBienBanGiaoMauId() != null) {
+            //TODO: Bieen ban giao mau
+        }
         return res;
     }
-    
-    private List<NhBienBanGuiHangCt> saveListChiTiet(Long parentId,
-                                                         List<NhBienBanGuiHangCtReq> chiTietReqs,
-                                                         Map<Long, NhBienBanGuiHangCt> mapChiTiet) throws Exception {
-        List<NhBienBanGuiHangCt> chiTiets = new ArrayList<>();
-        for (NhBienBanGuiHangCtReq req : chiTietReqs) {
-            Long id = req.getId();
-            NhBienBanGuiHangCt chiTiet = new NhBienBanGuiHangCt();
 
-            if (id != null) {
-                chiTiet = mapChiTiet.get(id);
-                if (chiTiet == null)
-                    throw new Exception("Biên bản gửi hàng chi tiết không tồn tại.");
-                mapChiTiet.remove(id);
-            }
-
-            BeanUtils.copyProperties(req, chiTiet, "id");
-            chiTiet.setBienBanGuiHangId(parentId);
-            chiTiets.add(chiTiet);
-        }
-
-        if (!CollectionUtils.isEmpty(chiTiets))
-            bienBanGuiHangCtRepository.saveAll(chiTiets);
-
-        return chiTiets;
-    }
-    
     @Override
-    public NhBienBanGuiHangRes update(NhBienBanGuiHangReq req) throws Exception {
+    @Transactional(rollbackOn = Exception.class)
+    public NhHoSoKyThuatRes update(NhHoSoKyThuatReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
 
-        Optional<NhBienBanGuiHang> optional = bienBanGuiHangRepository.findById(req.getId());
+        Optional<NhHoSoKyThuat> optional = nhHoSoKyThuatRepository.findById(req.getId());
         if (!optional.isPresent())
-            throw new Exception("Biên bản gửi hàng không tồn tại.");
+            throw new Exception("Hồ sơ kỹ thuật không tồn tại.");
 
         this.validateSoBb(optional.get(), req);
 
-        NhBienBanGuiHang item = optional.get();
+        NhHoSoKyThuat item = optional.get();
         BeanUtils.copyProperties(req, item, "id");
         item.setNgaySua(LocalDate.now());
         item.setNguoiSuaId(userInfo.getId());
-        bienBanGuiHangRepository.save(item);
-        Map<Long, NhBienBanGuiHangCt> mapChiTiet = bienBanGuiHangCtRepository.findByBienBanGuiHangIdIn(Collections.singleton(item.getId()))
-                .stream().collect(Collectors.toMap(NhBienBanGuiHangCt::getId, Function.identity()));
+        nhHoSoKyThuatRepository.save(item);
+        Map<Long, NhHoSoKyThuatCt> mapChiTiet = nhHoSoKyThuatCtRepository.findByHoSoKyThuatIdIn(Collections.singleton(item.getId()))
+                .stream().collect(Collectors.toMap(NhHoSoKyThuatCt::getId, Function.identity()));
 
-        List<NhBienBanGuiHangCt> chiTiets = this.saveListChiTiet(item.getId(), req.getChiTiets(), mapChiTiet);
+        List<NhHoSoKyThuatCt> chiTiets = this.saveListChiTiet(item.getId(), req.getChiTiets(), mapChiTiet);
         item.setChiTiets(chiTiets);
 
         if (!CollectionUtils.isEmpty(mapChiTiet.values()))
-            bienBanGuiHangCtRepository.deleteAll(mapChiTiet.values());
+            nhHoSoKyThuatCtRepository.deleteAll(mapChiTiet.values());
+
+        item.setFileDinhKems(fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReqs(), item.getId(), NhHoSoKyThuat.TABLE_NAME));
+        item.setFdkCanCus(fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReqs(), item.getId(), NhHoSoKyThuat.CAN_CU));
         return this.buildResponse(item);
     }
 
     @Override
-    public NhBienBanGuiHangRes detail(Long id) throws Exception {
+    public NhHoSoKyThuatRes detail(Long id) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
-        Optional<NhBienBanGuiHang> optional = bienBanGuiHangRepository.findById(id);
+        Optional<NhHoSoKyThuat> optional = nhHoSoKyThuatRepository.findById(id);
         if (!optional.isPresent())
-            throw new Exception("Biên bản gửi hàng không tồn tại.");
+            throw new Exception("Hồ sơ kỹ thuật không tồn tại.");
 
-        NhBienBanGuiHang item = optional.get();
-        item.setChiTiets(bienBanGuiHangCtRepository.findByBienBanGuiHangIdIn(Collections.singleton(item.getId())));
+        NhHoSoKyThuat item = optional.get();
+        item.setChiTiets(nhHoSoKyThuatCtRepository.findByHoSoKyThuatIdIn(Collections.singleton(item.getId())));
+        item.setFileDinhKems(fileDinhKemService.search(item.getId(), Collections.singleton(NhHoSoKyThuat.TABLE_NAME)));
+        item.setFdkCanCus(fileDinhKemService.search(item.getId(), Collections.singleton(NhHoSoKyThuat.CAN_CU)));
         return this.buildResponse(item);
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public boolean delete(Long id) throws Exception {
-        UserInfo userInfo = UserUtils.getUserInfo();
-        Optional<NhBienBanGuiHang> optional = bienBanGuiHangRepository.findById(id);
-        if (!optional.isPresent())
-            throw new Exception("Biên bản gửi hàng không tồn tại.");
 
-        NhBienBanGuiHang item = optional.get();
+        UserInfo userInfo = UserUtils.getUserInfo();
+        Optional<NhHoSoKyThuat> optional = nhHoSoKyThuatRepository.findById(id);
+        if (!optional.isPresent())
+            throw new Exception("Hồ sơ kỹ thuật không tồn tại.");
+
+        NhHoSoKyThuat item = optional.get();
         if (TrangThaiEnum.BAN_HANH.getId().equals(item.getTrangThai())) {
             throw new Exception("Không thể xóa biên bản đã ban hành");
         }
-        bienBanGuiHangCtRepository.deleteByBienBanGuiHangIdIn(Collections.singleton(item.getId()));
-        bienBanGuiHangRepository.delete(item);
+        nhHoSoKyThuatCtRepository.deleteByHoSoKyThuatIdIn(Collections.singleton(item.getId()));
+        nhHoSoKyThuatRepository.delete(item);
         return true;
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public boolean updateStatusQd(StatusReq stReq) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
-        Optional<NhBienBanGuiHang> optional = bienBanGuiHangRepository.findById(stReq.getId());
+        Optional<NhHoSoKyThuat> optional = nhHoSoKyThuatRepository.findById(stReq.getId());
         if (!optional.isPresent())
-            throw new Exception("Biên bản gửi hàng không tồn tại.");
+            throw new Exception("Hồ sơ kỹ thuật không tồn tại.");
 
-        NhBienBanGuiHang phieu = optional.get();
+        NhHoSoKyThuat phieu = optional.get();
 
         String trangThai = phieu.getTrangThai();
         if (TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(stReq.getTrangThai())) {
@@ -237,49 +272,58 @@ public class NhBienBanGuiHangServiceImpl implements NhBienBanGuiHangService {
             throw new Exception("Bad request.");
         }
 
-        bienBanGuiHangRepository.save(phieu);
+        nhHoSoKyThuatRepository.save(phieu);
         return true;
     }
 
     @Override
-    public Page<NhBienBanGuiHangRes> search(NhBienBanGuiHangSearchReq req) throws Exception {
+    public Page<NhHoSoKyThuatRes> search(NhHoSoKyThuatSearchReq req) throws Exception {
+        // TODO: Bien ban giao mau
         UserInfo userInfo = UserUtils.getUserInfo();
 
         req.setMaDvi(userInfo.getDvql());
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        List<Object[]> data = bienBanGuiHangRepository.search(req);
-        List<NhBienBanGuiHangRes> responses = new ArrayList<>();
+        List<Object[]> data = nhHoSoKyThuatRepository.search(req);
+        List<NhHoSoKyThuatRes> responses = new ArrayList<>();
         for (Object[] o : data) {
-            NhBienBanGuiHangRes response = new NhBienBanGuiHangRes();
-            NhBienBanGuiHang item = (NhBienBanGuiHang) o[0];
+            NhHoSoKyThuatRes response = new NhHoSoKyThuatRes();
+            NhHoSoKyThuat item = (NhHoSoKyThuat) o[0];
             Long qdNhapId = (Long) o[1];
             String soQdNhap = (String) o[2];
+            String maVatTu = (String) o[3];
+            String tenVatTu = (String) o[4];
+            String maVatTuCha = (String) o[5];
+            String tenVatTuCha = (String) o[6];
             BeanUtils.copyProperties(item, response);
             response.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
             response.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
             response.setQdgnvnxId(qdNhapId);
             response.setSoQuyetDinhNhap(soQdNhap);
-            response.setNamNhap(Optional.ofNullable(item.getThoiGian()).map(LocalDateTime::getYear).orElse(LocalDateTime.now().getYear()));
+            response.setMaVatTu(maVatTu);
+            response.setTenVatTu(tenVatTu);
+            response.setMaVatTuCha(maVatTuCha);
+            response.setTenVatTuCha(tenVatTuCha);
             responses.add(response);
         }
 
-        return new PageImpl<>(responses, pageable, bienBanGuiHangRepository.count(req));
+        return new PageImpl<>(responses, pageable, nhHoSoKyThuatRepository.count(req));
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public boolean deleteMultiple(DeleteReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
-        bienBanGuiHangCtRepository.deleteByBienBanGuiHangIdIn(req.getIds());
-        bienBanGuiHangRepository.deleteByIdIn(req.getIds());
+        nhHoSoKyThuatCtRepository.deleteByHoSoKyThuatIdIn(req.getIds());
+        nhHoSoKyThuatRepository.deleteByIdIn(req.getIds());
         return true;
     }
 
     @Override
-    public boolean exportToExcel(NhBienBanGuiHangSearchReq objReq, HttpServletResponse response) throws Exception {
+    public boolean exportToExcel(NhHoSoKyThuatSearchReq objReq, HttpServletResponse response) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         objReq.setMaDvi(userInfo.getDvql());
         objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
-        List<NhBienBanGuiHangRes> list = this.search(objReq).get().collect(Collectors.toList());
+        List<NhHoSoKyThuatRes> list = this.search(objReq).get().collect(Collectors.toList());
 
         if (CollectionUtils.isEmpty(list))
             return true;
@@ -295,17 +339,17 @@ public class NhBienBanGuiHangServiceImpl implements NhBienBanGuiHangService {
             style.setFont(font);
             style.setAlignment(HorizontalAlignment.CENTER);
             style.setVerticalAlignment(VerticalAlignment.CENTER);
-            XSSFSheet sheet = workbook.createSheet(SHEET_BIEN_BAN_GUI_HANG);
+            XSSFSheet sheet = workbook.createSheet(SHEET_HO_SO_KY_THUAT);
             Row row0 = sheet.createRow(0);
             //STT
 
             ExportExcel.createCell(row0, 0, STT, style, sheet);
             ExportExcel.createCell(row0, 1, SO_BIEN_BAN, style, sheet);
             ExportExcel.createCell(row0, 2, SO_QUYET_DINH_NHAP, style, sheet);
-            ExportExcel.createCell(row0, 3, NAM_NHAP, style, sheet);
-            ExportExcel.createCell(row0, 4, NGAY_GUI, style, sheet);
-            ExportExcel.createCell(row0, 5, BEN_NHAN, style, sheet);
-            ExportExcel.createCell(row0, 6, BEN_GIAO, style, sheet);
+            ExportExcel.createCell(row0, 3, NGAY, style, sheet);
+            ExportExcel.createCell(row0, 4, LOAI_HANG_HOA, style, sheet);
+            ExportExcel.createCell(row0, 5, CHUNG_LOAI_HANG_HO, style, sheet);
+            ExportExcel.createCell(row0, 6, KET_LUAT, style, sheet);
             ExportExcel.createCell(row0, 7, TRANG_THAI, style, sheet);
 
             style = workbook.createCellStyle();
@@ -316,15 +360,15 @@ public class NhBienBanGuiHangServiceImpl implements NhBienBanGuiHangService {
             Row row;
             int startRowIndex = 1;
 
-            for (NhBienBanGuiHangRes item : list) {
+            for (NhHoSoKyThuatRes item : list) {
                 row = sheet.createRow(startRowIndex);
                 ExportExcel.createCell(row, 0, startRowIndex, style, sheet);
                 ExportExcel.createCell(row, 1, item.getSoBienBan(), style, sheet);
                 ExportExcel.createCell(row, 2, item.getSoQuyetDinhNhap(), style, sheet);
-                ExportExcel.createCell(row, 3, Optional.ofNullable(item.getThoiGian()).map(LocalDateTime::getYear).orElse(LocalDate.now().getYear()), style, sheet);
-                ExportExcel.createCell(row, 4, LocalDateTimeUtils.localDateToString(item.getNgayGui()), style, sheet);
-                ExportExcel.createCell(row, 5, item.getBenNhan(), style, sheet);
-                ExportExcel.createCell(row, 6, item.getBenGiao(), style, sheet);
+                ExportExcel.createCell(row, 3, LocalDateTimeUtils.localDateToString(item.getNgayKiemTra()), style, sheet);
+                ExportExcel.createCell(row, 4, item.getTenVatTuCha(), style, sheet);
+                ExportExcel.createCell(row, 5, item.getTenVatTu(), style, sheet);
+                ExportExcel.createCell(row, 6, item.getKetLuan(), style, sheet);
                 ExportExcel.createCell(row, 7, TrangThaiEnum.getTenById(item.getTrangThai()), style, sheet);
                 startRowIndex++;
             }
@@ -340,11 +384,11 @@ public class NhBienBanGuiHangServiceImpl implements NhBienBanGuiHangService {
         return true;
     }
 
-    private void validateSoBb(NhBienBanGuiHang update, NhBienBanGuiHangReq req) throws Exception {
+    private void validateSoBb(NhHoSoKyThuat update, NhHoSoKyThuatReq req) throws Exception {
         String so = req.getSoBienBan();
         if (update == null || (StringUtils.hasText(update.getSoBienBan()) && !update.getSoBienBan().equalsIgnoreCase(so))) {
-            Optional<NhBienBanGuiHang> optional = bienBanGuiHangRepository.findFirstBySoBienBan(so);
-            Long updateId = Optional.ofNullable(update).map(NhBienBanGuiHang::getId).orElse(null);
+            Optional<NhHoSoKyThuat> optional = nhHoSoKyThuatRepository.findFirstBySoBienBan(so);
+            Long updateId = Optional.ofNullable(update).map(NhHoSoKyThuat::getId).orElse(null);
             if (optional.isPresent() && !optional.get().getId().equals(updateId))
                 throw new Exception("Số biên bản " + so + " đã tồn tại");
         }
