@@ -11,13 +11,13 @@ import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauCtRepository;
 import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
+import com.tcdt.qlnvhang.repository.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauCtReq;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauReq;
-import com.tcdt.qlnvhang.request.object.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtReq;
 import com.tcdt.qlnvhang.request.search.BienBanLayMauSearchReq;
 import com.tcdt.qlnvhang.response.bbanlaymau.BienBanLayMauCtRes;
 import com.tcdt.qlnvhang.response.bbanlaymau.BienBanLayMauRes;
@@ -98,6 +98,9 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 
 	@Autowired
 	private HhHopDongRepository hhHopDongRepository;
+
+	@Autowired
+	private QlBienBanNhapDayKhoLtRepository qlBienBanNhapDayKhoLtRepository;
 
 	@Override
 	public Page<BienBanLayMauRes> search(BienBanLayMauSearchReq req) throws Exception {
@@ -333,12 +336,17 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 			res.setSoHopDong(qOpHdong.get().getSoHd());
 		}
 
-		KtNganLo nganLo = null;
-		if (StringUtils.hasText(item.getMaNganLo())) {
-			nganLo = ktNganLoRepository.findFirstByMaNganlo(item.getMaNganLo());
-		}
+		if (item.getBbNhapDayKhoId() != null) {
+			Optional<QlBienBanNhapDayKhoLt> bbNhapDayKho = qlBienBanNhapDayKhoLtRepository.findById(item.getBbNhapDayKhoId());
+			if (!bbNhapDayKho.isPresent())
+				throw new Exception("Biên bản nhập đầy kho không tồn tại");
 
-		this.thongTinNganLo(res, nganLo);
+			res.setSoBienBan(bbNhapDayKho.get().getSoBienBan());
+			if (StringUtils.hasText(bbNhapDayKho.get().getMaNganLo())) {
+				KtNganLo nganLo = ktNganLoRepository.findFirstByMaNganlo(bbNhapDayKho.get().getMaNganLo());
+				this.thongTinNganLo(res, nganLo);
+			}
+		}
 
 		List<BienBanLayMauCtRes> chiTiets = item.getChiTiets().stream().map(BienBanLayMauCtRes::new).collect(Collectors.toList());
 		res.setChiTiets(chiTiets);
