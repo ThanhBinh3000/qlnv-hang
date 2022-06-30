@@ -44,6 +44,7 @@ public class BienBanLayMau extends BaseEntity implements Serializable  {
 	private Integer soLuongMau;
 	private String ppLayMau;
 	private String chiTieuKiemTra;
+	private String ketQuaNiemPhong;
 
 	private String trangThai;
 	private String lyDoTuChoi;

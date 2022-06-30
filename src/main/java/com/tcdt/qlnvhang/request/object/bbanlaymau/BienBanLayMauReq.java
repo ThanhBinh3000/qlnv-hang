@@ -31,6 +31,7 @@ public class BienBanLayMauReq {
 	private Integer soLuongMau;
 	private String ppLayMau;
 	private String chiTieuKiemTra;
+	private String ketQuaNiemPhong;
 
 	private List<BienBanLayMauCtReq> chiTiets = new ArrayList<>();
 }
