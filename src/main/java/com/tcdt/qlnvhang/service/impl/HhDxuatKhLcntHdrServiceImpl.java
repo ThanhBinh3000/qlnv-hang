@@ -166,6 +166,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		hhDxuatKhLcntDsgtDtlRepository.deleteAllByIdDxKhlcnt(dataMap.getId());
 		for (HhDxuatKhLcntDsgtDtlReq gt : objReq.getDsGtReq()){
 			HhDxKhlcntDsgthau data = new ModelMapper().map(gt, HhDxKhlcntDsgthau.class);
+			data.setId(null);
 			data.setIdDxKhlcnt(dataMap.getId());
 			BigDecimal thanhTien = data.getDonGia().multiply(data.getSoLuong());
 			data.setThanhTien(thanhTien);
@@ -174,6 +175,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 			// Lưu chi tiết danh sách gói thaauff ( địa điểm nhập );
 			for (HhDxuatKhLcntDsgthauDtlCtietReq ddNhap : gt.getChildren()){
 				HhDxKhlcntDsgthauCtiet dataDdNhap = new ModelMapper().map(ddNhap, HhDxKhlcntDsgthauCtiet.class);
+				dataDdNhap.setId(null);
 				dataDdNhap.setIdGoiThau(data.getId());
 				hhDxKhlcntDsgthauCtietRepository.save(dataDdNhap);
 			}
@@ -201,12 +203,9 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 	}
 
 	@Override
-	public HhDxuatKhLcntHdr detail(String ids) throws Exception {
-		if (StringUtils.isEmpty(ids)){
-			throw new UnsupportedOperationException("Không tồn tại bản ghi");
+	public HhDxuatKhLcntHdr detail(Long ids) throws Exception {
 
-		}
-		Optional<HhDxuatKhLcntHdr> qOptional = hhDxuatKhLcntHdrRepository.findById(Long.parseLong(ids));
+		Optional<HhDxuatKhLcntHdr> qOptional = hhDxuatKhLcntHdrRepository.findById(ids);
 
 		if (!qOptional.isPresent()){
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
@@ -313,6 +312,13 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 			throw new Exception("Chỉ thực hiện xóa với kế hoạch ở trạng thái bản nháp hoặc từ chối");
 		}
 
+		for(HhDxKhlcntDsgthau dsgThau :  hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcnt(idSearchReq.getId())){
+			hhDxKhlcntDsgthauCtietRepository.deleteAllByIdGoiThau(dsgThau.getId());
+		}
+		hhDxuatKhLcntDsgtDtlRepository.deleteAllByIdDxKhlcnt(idSearchReq.getId());
+		for(HhDxuatKhLcntCcxdgDtl cCu : hhDxuatKhLcntCcxdgDtlRepository.findByIdDxKhlcnt(idSearchReq.getId())){
+			hhDxuatKhLcntCcxdgDtlRepository.deleteAllByIdDxKhlcnt(cCu.getId());
+		}
 		hhDxuatKhLcntHdrRepository.delete(optional.get());
 	}
 

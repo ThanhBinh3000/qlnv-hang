@@ -21,7 +21,7 @@ public interface HhDxuatKhLcntHdrService {
 	@Transactional(rollbackOn = Exception.class)
 	HhDxuatKhLcntHdr update(HhDxuatKhLcntHdrReq objReq) throws Exception;
 
-	HhDxuatKhLcntHdr detail(String ids) throws Exception;
+	HhDxuatKhLcntHdr detail(Long id) throws Exception;
 
 	Page<HhDxuatKhLcntHdr> colection(HhDxuatKhLcntSearchReq objReq, HttpServletRequest req) throws Exception;
 

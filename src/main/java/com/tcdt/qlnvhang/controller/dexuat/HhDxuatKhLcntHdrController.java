@@ -95,13 +95,13 @@ public class HhDxuatKhLcntHdrController {
 	}
 
 	@ApiOperation(value = "Lấy chi tiết đề xuất kế hoạch lựa chọn nhà thầu lương thực", response = List.class)
-	@GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = PathContains.URL_CHI_TIET + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<BaseResponse> detail(
-			@ApiParam(value = "ID đề xuất kế hoạch lựa chọn nhà thầu lương thực", example = "1", required = true) @PathVariable("ids") String ids) {
+			@ApiParam(value = "ID đề xuất kế hoạch lựa chọn nhà thầu lương thực", example = "1", required = true) @PathVariable("id") Long id) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(service.detail(ids));
+			resp.setData(service.detail(id));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
