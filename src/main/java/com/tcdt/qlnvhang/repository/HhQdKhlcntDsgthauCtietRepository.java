@@ -8,4 +8,6 @@ public interface HhQdKhlcntDsgthauCtietRepository extends BaseRepository<HhQdKhl
 
     List<HhQdKhlcntDsgthauCtiet> findByIdGoiThau(Long idGoiThau);
 
+    void deleteAllByIdGoiThau(Long idGoiThau);
+
 }

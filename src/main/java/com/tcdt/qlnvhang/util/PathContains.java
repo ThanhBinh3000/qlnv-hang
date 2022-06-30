@@ -20,7 +20,7 @@ public class PathContains {
 	// 5.1 Quản lý lựa chọn nhà cung cấp theo phương thức đấu thầu
 	public static final String QL_KE_HOACH_LCNT = "/ql-ke-hoach-lcnt";
 	public static final String VAT_TU = "/vat-tu";
-	public static final String QL_QD_LCNT = "/qd-lcnt";
+
 	public static final String DIEU_CHINH = "/dieu-chinh";
 	public static final String QL_QD_LCNT_VTU = "/qd-lcnt-vtu";
 	public static final String QL_TTIN_DTHAU_VTU = "/ql-ttin-dthau-vtu";
