@@ -21,7 +21,7 @@ public class BienBanBanGiaoMauReq {
 	private String tenDviBenNhan;
 	private Integer soLuongMau;
 	private String chiTieuKiemTra;
-	private String tNiemPhongMauHang;
+	private String ttNiemPhongMauHang;
 
 	private List<BienBanLayMauCtReq> chiTiets = new ArrayList<>();
 }
