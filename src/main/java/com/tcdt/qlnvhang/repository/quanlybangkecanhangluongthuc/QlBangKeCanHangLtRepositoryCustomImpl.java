@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.request.search.quanlybangkecanhangluongthuc.QlBangKeCan
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
 import java.util.List;
@@ -50,16 +51,16 @@ public class QlBangKeCanHangLtRepositoryCustomImpl implements QlBangKeCanHangLtR
             builder.append("AND ").append("p.ngayNhap <= :denNgayNhap ");
         }
 
-        if (!StringUtils.isEmpty(req.getMaDvi())) {
-            builder.append("AND ").append("p.maDvi = :maDvi ");
-        }
-
         if (!StringUtils.isEmpty(req.getSoQdNhap())) {
             builder.append("AND ").append("nx.soQd LIKE :soQdNhap ");
         }
 
-        if (!StringUtils.isEmpty(req.getTrangThai())) {
-            builder.append("AND ").append("p.trangThai = :trangThai ");
+        if (!CollectionUtils.isEmpty(req.getMaDvis())) {
+            builder.append("AND ").append("p.maDvi IN :maDvis ");
+        }
+
+        if (!CollectionUtils.isEmpty(req.getTrangThais())) {
+            builder.append("AND ").append("p.trangThai IN :trangThais ");
         }
     }
 
@@ -93,12 +94,13 @@ public class QlBangKeCanHangLtRepositoryCustomImpl implements QlBangKeCanHangLtR
         if (!StringUtils.isEmpty(req.getSoQdNhap())) {
             query.setParameter("soQdNhap", "%" + req.getSoQdNhap() + "%");
         }
-        if (!StringUtils.isEmpty(req.getMaDvi())) {
-            query.setParameter("maDvi", req.getMaDvi());
+
+        if (!CollectionUtils.isEmpty(req.getMaDvis())) {
+            query.setParameter("maDvis", req.getMaDvis());
         }
 
-        if (!StringUtils.isEmpty(req.getTrangThai())) {
-            query.setParameter("trangThai", req.getTrangThai());
+        if (!CollectionUtils.isEmpty(req.getTrangThais())) {
+            query.setParameter("trangThais", req.getTrangThais());
         }
     }
 }

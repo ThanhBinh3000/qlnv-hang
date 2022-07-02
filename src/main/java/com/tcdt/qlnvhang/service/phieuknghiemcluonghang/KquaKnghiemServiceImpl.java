@@ -76,9 +76,9 @@ public class KquaKnghiemServiceImpl implements KquaKnghiemService {
 	}
 
 	@Override
-	public Map<Long, Integer> countKqByPhieuKnghiemId(Collection<Long> phieuKnhiemIds) {
+	public Map<Long, Long> countKqByPhieuKnghiemId(Collection<Long> phieuKnhiemIds) {
 		return kquaKnghiemRepository.countByPhieuKnghiemIdIn(phieuKnhiemIds)
-				.stream().collect(Collectors.toMap(o -> (Long) o[0], o -> (Integer) o[1]));
+				.stream().collect(Collectors.toMap(o -> (Long) o[0], o -> (Long) o[1]));
 
 	}
 }

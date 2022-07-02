@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -107,12 +108,16 @@ public class QlPhieuNhapKhoLtRepositoryCustomImpl implements QlPhieuNhapKhoLtRep
             builder.append("AND ").append("p.ngayNhapKho <= :denNgayNhapKho ");
         }
 
-        if (!StringUtils.isEmpty(req.getMaDvi())) {
-            builder.append("AND ").append("p.maDvi = :maDvi ");
-        }
-
         if (!StringUtils.isEmpty(req.getSoQdNhap())) {
             builder.append("AND ").append("nx.soQd LIKE :soQdNhap ");
+        }
+
+        if (!CollectionUtils.isEmpty(req.getMaDvis())) {
+            builder.append("AND ").append("p.maDvi IN :maDvis ");
+        }
+
+        if (!CollectionUtils.isEmpty(req.getTrangThais())) {
+            builder.append("AND ").append("p.trangThai IN :trangThais ");
         }
     }
 
@@ -141,13 +146,16 @@ public class QlPhieuNhapKhoLtRepositoryCustomImpl implements QlPhieuNhapKhoLtRep
             query.setParameter("denNgayNhapKho", req.getDenNgayNhapKho());
         }
 
-
-        if (!StringUtils.isEmpty(req.getMaDvi())) {
-            query.setParameter("maDvi", req.getMaDvi());
-        }
-
         if (!StringUtils.isEmpty(req.getSoQdNhap())) {
             query.setParameter("soQdNhap", "%" + req.getSoQdNhap() + "%");
+        }
+
+        if (!CollectionUtils.isEmpty(req.getMaDvis())) {
+            query.setParameter("maDvis", req.getMaDvis());
+        }
+
+        if (!CollectionUtils.isEmpty(req.getTrangThais())) {
+            query.setParameter("trangThais", req.getTrangThais());
         }
     }
 }

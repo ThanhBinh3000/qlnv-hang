@@ -319,4 +319,20 @@ public class BaseServiceImpl {
 		long diffDays = diff.toDays();
 		return diffDays;
 	}
+
+	public Set<String> getMaDviCon(String maDviCha) {
+		return qlnvDmDonviRepository.findMaDviByMaDviChaAndTrangThai(maDviCha, Contains.HOAT_DONG);
+	}
+
+	public <T extends BaseRequest> void prepareSearchReq(T req, UserInfo userInfo, String capDviReq, Set<String> trangThais) {
+		String userCapDvi = userInfo.getCapDvi();
+		if (StringUtils.hasText(capDviReq)
+				&& !capDviReq.equalsIgnoreCase(userCapDvi)
+				&& (Contains.CAP_CUC.equals(userCapDvi) || Contains.CAP_TONG_CUC.equals(userCapDvi))) {
+			req.setMaDvis(this.getMaDviCon(userInfo.getDvql()));
+		} else {
+			req.setMaDvis(Collections.singleton(userInfo.getDvql()));
+		}
+		req.setTrangThais(trangThais);
+	}
 }

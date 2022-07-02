@@ -105,10 +105,10 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 	@Override
 	public Page<BienBanLayMauRes> search(BienBanLayMauSearchReq req) throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
+		this.prepareSearchReq(req, userInfo, req.getCapDvi(), req.getTrangThais());
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
 		List<Object[]> data = bienBanLayMauRepository.search(req, pageable);
 
-		req.setMaDvi(userInfo.getDvql());
 		List<BienBanLayMauRes> responses = new ArrayList<>();
 		for (Object[] o : data) {
 			BienBanLayMauRes response = new BienBanLayMauRes();
@@ -394,7 +394,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 	@Override
 	public boolean exportToExcel(BienBanLayMauSearchReq objReq, HttpServletResponse response) throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
-		objReq.setMaDvi(userInfo.getDvql());
+		this.prepareSearchReq(objReq, userInfo, objReq.getCapDvi(), objReq.getTrangThais());
 		objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
 		List<BienBanLayMauRes> list = this.search(objReq).get().collect(Collectors.toList());
 

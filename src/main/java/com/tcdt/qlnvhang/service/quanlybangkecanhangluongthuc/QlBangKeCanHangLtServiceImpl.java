@@ -344,7 +344,7 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
         if (userInfo == null)
             throw new Exception("Bad request.");
 
-        req.setMaDvi(userInfo.getDvql());
+        this.prepareSearchReq(req, userInfo, req.getCapDvi(), req.getTrangThais());
 
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         List<Object[]> data = qlBangKeCanHangLtRepository.search(req);
@@ -403,7 +403,7 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
     public BaseNhapHangCount count() throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         QlBangKeCanHangLtSearchReq req = new QlBangKeCanHangLtSearchReq();
-        req.setMaDvi(userInfo.getDvql());
+        this.prepareSearchReq(req, userInfo, userInfo.getCapDvi(), req.getTrangThais());
         BaseNhapHangCount count = new BaseNhapHangCount();
 
         count.setTatCa(qlBangKeCanHangLtRepository.count(req));
@@ -427,7 +427,7 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
     @Override
     public boolean exportToExcel(QlBangKeCanHangLtSearchReq objReq, HttpServletResponse response) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
-        objReq.setMaDvi(userInfo.getDvql());
+        this.prepareSearchReq(objReq, userInfo, objReq.getCapDvi(), objReq.getTrangThais());
         objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
         List<QlBangKeCanHangLtRes> list = this.search(objReq).get().collect(Collectors.toList());
 

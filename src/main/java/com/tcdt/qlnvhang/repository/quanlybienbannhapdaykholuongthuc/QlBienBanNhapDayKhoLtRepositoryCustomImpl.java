@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.request.search.quanlybienbannhapdaykholuongthuc.QlBienB
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
 import java.util.List;
@@ -55,16 +56,20 @@ public class QlBienBanNhapDayKhoLtRepositoryCustomImpl implements QlBienBanNhapD
             builder.append("AND ").append("p.ngayKetThucNhap <= :ngayKetThucNhapDen ");
         }
 
-        if (!StringUtils.isEmpty(req.getMaDvi())) {
-            builder.append("AND ").append("p.maDvi = :maDvi ");
-        }
-
         if (!StringUtils.isEmpty(req.getSoQdNhap())) {
             builder.append("AND ").append("nx.soQd LIKE :soQdNhap ");
         }
 
         if (!StringUtils.isEmpty(req.getMaVatTuCha())) {
             builder.append("AND ").append("p.maVatTuCha = :maVatTuCha ");
+        }
+
+        if (!CollectionUtils.isEmpty(req.getMaDvis())) {
+            builder.append("AND ").append("p.maDvi IN :maDvis ");
+        }
+
+        if (!CollectionUtils.isEmpty(req.getTrangThais())) {
+            builder.append("AND ").append("p.trangThai IN :trangThais ");
         }
     }
 
@@ -101,16 +106,20 @@ public class QlBienBanNhapDayKhoLtRepositoryCustomImpl implements QlBienBanNhapD
             query.setParameter("ngayKetThucNhapDen", req.getNgayKetThucNhapDen());
         }
 
-        if (!StringUtils.isEmpty(req.getMaDvi())) {
-            query.setParameter("maDvi", req.getMaDvi());
-        }
-
         if (!StringUtils.isEmpty(req.getSoQdNhap())) {
             query.setParameter("soQdNhap", "%" + req.getSoQdNhap() + "%");
         }
 
         if (!StringUtils.isEmpty(req.getMaVatTuCha())) {
             query.setParameter("maVatTuCha", req.getMaVatTuCha());
+        }
+
+        if (!CollectionUtils.isEmpty(req.getMaDvis())) {
+            query.setParameter("maDvis", req.getMaDvis());
+        }
+
+        if (!CollectionUtils.isEmpty(req.getTrangThais())) {
+            query.setParameter("trangThais", req.getTrangThais());
         }
     }
 }

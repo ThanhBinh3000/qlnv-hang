@@ -12,5 +12,4 @@ public class BienBanLayMauSearchReq extends BaseRequest {
 	private LocalDate ngayLayMauTu;
 	private LocalDate ngayLayMauDen;
 	private String maVatTuCha;
-	private String maDvi;
 }

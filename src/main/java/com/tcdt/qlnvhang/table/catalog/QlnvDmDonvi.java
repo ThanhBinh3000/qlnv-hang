@@ -31,7 +31,7 @@ public class QlnvDmDonvi implements Serializable {
 	@SequenceGenerator(sequenceName = "QLNV_DM_COMMON_SEQ", allocationSize = 1, name = "QLNV_DM_COMMON_SEQ")
 	private Long id;
 	String maDvi;
-//	String maDviCha;
+	//String maDviCha;
 	String tenDvi;
 	String maHchinh;
 	String maTinh;

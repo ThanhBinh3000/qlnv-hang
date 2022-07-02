@@ -15,6 +15,7 @@ import com.tcdt.qlnvhang.request.object.vattu.bienbanguihang.NhBienBanGuiHangReq
 import com.tcdt.qlnvhang.request.search.vattu.bienbanguihang.NhBienBanGuiHangSearchReq;
 import com.tcdt.qlnvhang.response.vattu.bienbanguihang.NhBienBanGuiHangCtRes;
 import com.tcdt.qlnvhang.response.vattu.bienbanguihang.NhBienBanGuiHangRes;
+import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.HhHopDongHdr;
 import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
@@ -50,7 +51,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Log4j2
-public class NhBienBanGuiHangServiceImpl implements NhBienBanGuiHangService {
+public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBienBanGuiHangService {
     private final NhBienBanGuiHangRepository bienBanGuiHangRepository;
     private final NhBienBanGuiHangCtRepository bienBanGuiHangCtRepository;
     private final HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
@@ -245,7 +246,7 @@ public class NhBienBanGuiHangServiceImpl implements NhBienBanGuiHangService {
     public Page<NhBienBanGuiHangRes> search(NhBienBanGuiHangSearchReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
 
-        req.setMaDvi(userInfo.getDvql());
+        this.prepareSearchReq(req, userInfo, req.getCapDvi(), req.getTrangThais());
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         List<Object[]> data = bienBanGuiHangRepository.search(req);
         List<NhBienBanGuiHangRes> responses = new ArrayList<>();
@@ -277,7 +278,7 @@ public class NhBienBanGuiHangServiceImpl implements NhBienBanGuiHangService {
     @Override
     public boolean exportToExcel(NhBienBanGuiHangSearchReq objReq, HttpServletResponse response) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
-        objReq.setMaDvi(userInfo.getDvql());
+        this.prepareSearchReq(objReq, userInfo, objReq.getCapDvi(), objReq.getTrangThais());
         objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
         List<NhBienBanGuiHangRes> list = this.search(objReq).get().collect(Collectors.toList());
 

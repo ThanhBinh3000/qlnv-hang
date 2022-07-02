@@ -210,7 +210,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 		int page = objReq.getPaggingReq().getPage();
 		int limit = objReq.getPaggingReq().getLimit();
 		Pageable pageable = PageRequest.of(page, limit);
-
+		this.prepareSearchReq(objReq, userInfo, objReq.getCapDvi(), objReq.getTrangThais());
 		Page<HhBbNghiemthuKlstHdr> qhKho = hhBbNghiemthuKlstRepository
 				.findAll(HhBbNghiemthuKlstSpecification.buildSearchQuery(objReq), pageable);
 

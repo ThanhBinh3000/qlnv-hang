@@ -90,12 +90,16 @@ public class QlpktclhPhieuKtChatLuongRepositoryCustomImpl implements QlpktclhPhi
 			builder.append("AND ").append("qd.maHangHoa = :maHangHoa ");
 		}
 
-		if (StringUtils.hasText(req.getMaDvi())) {
-			builder.append("AND ").append("qd.maDonVi = :maDonVi ");
-		}
-
 		if (StringUtils.hasText(req.getLoaiVthh())) {
 			builder.append("AND ").append("qd.loaiVthh = :loaiVthh ");
+		}
+
+		if (!CollectionUtils.isEmpty(req.getMaDvis())) {
+			builder.append("AND ").append("qd.maDvi IN :maDvis ");
+		}
+
+		if (!CollectionUtils.isEmpty(req.getTrangThais())) {
+			builder.append("AND ").append("qd.trangThai IN :trangThais ");
 		}
 	}
 
@@ -143,12 +147,16 @@ public class QlpktclhPhieuKtChatLuongRepositoryCustomImpl implements QlpktclhPhi
 			query.setParameter("maHangHoa", req.getMaHangHoa());
 		}
 
-		if (StringUtils.hasText(req.getMaDvi())) {
-			query.setParameter("maDonVi", req.getMaDvi());
-		}
-
 		if (StringUtils.hasText(req.getLoaiVthh())) {
 			query.setParameter("loaiVthh", req.getLoaiVthh());
+		}
+
+		if (!CollectionUtils.isEmpty(req.getMaDvis())) {
+			query.setParameter("maDvis", req.getMaDvis());
+		}
+
+		if (!CollectionUtils.isEmpty(req.getTrangThais())) {
+			query.setParameter("trangThais", req.getTrangThais());
 		}
 	}
 }

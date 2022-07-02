@@ -18,6 +18,5 @@ public class NhPhieuNhapKhoTamGuiSearchReq extends BaseRequest {
     private LocalDate ngayNhapKhoTu;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate ngayNhapKhoDen;
-    private String maDvi;
     private String loaiVthh;
 }

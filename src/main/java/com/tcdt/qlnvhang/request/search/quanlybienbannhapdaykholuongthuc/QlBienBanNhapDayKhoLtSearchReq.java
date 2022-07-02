@@ -20,7 +20,6 @@ public class QlBienBanNhapDayKhoLtSearchReq extends BaseRequest {
     private LocalDate ngayKetThucNhapTu;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate ngayKetThucNhapDen;
-    private String maDvi;
     private String soQdNhap;
     private String maVatTuCha;
 }

@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.repository.phieuknghiemcluonghang;
 
-import com.tcdt.qlnvhang.entities.phieuknghiemcluonghang.PhieuKnghiemCluongHang;
 import com.tcdt.qlnvhang.request.search.PhieuKnghiemCluongHangSearchReq;
 import org.springframework.data.domain.Pageable;
 

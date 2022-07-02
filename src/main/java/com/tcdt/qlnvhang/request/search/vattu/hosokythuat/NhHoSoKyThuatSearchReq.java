@@ -20,6 +20,5 @@ public class NhHoSoKyThuatSearchReq extends BaseRequest {
     private LocalDate ngayKiemTraDen;
     private String maVatTuCha;
     private String maVatTu;
-    private String maDvi;
     private String loaiVthh;
 }

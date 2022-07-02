@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.request.search.vattu.phieunhapkhotamgui.NhPhieuNhapKhoT
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -51,16 +52,20 @@ public class NhPhieuNhapKhoTamGuiRepositoryCustomImpl implements NhPhieuNhapKhoT
             builder.append("AND ").append("p.ngayNhapKho <= :ngayNhapKhoDen ");
         }
 
-        if (!StringUtils.isEmpty(req.getMaDvi())) {
-            builder.append("AND ").append("p.maDvi = :maDvi ");
-        }
-
         if (!StringUtils.isEmpty(req.getSoQdNhap())) {
             builder.append("AND ").append("nx.soQd LIKE :soQdNhap ");
         }
 
         if (!StringUtils.isEmpty(req.getLoaiVthh())) {
             builder.append("AND ").append("p.loaiVthh = :loaiVthh ");
+        }
+
+        if (!CollectionUtils.isEmpty(req.getMaDvis())) {
+            builder.append("AND ").append("p.maDvi IN :maDvis ");
+        }
+
+        if (!CollectionUtils.isEmpty(req.getTrangThais())) {
+            builder.append("AND ").append("p.trangThai IN :trangThais ");
         }
     }
 
@@ -90,16 +95,20 @@ public class NhPhieuNhapKhoTamGuiRepositoryCustomImpl implements NhPhieuNhapKhoT
             query.setParameter("ngayNhapKhoDen", req.getNgayNhapKhoDen());
         }
 
-        if (!StringUtils.isEmpty(req.getMaDvi())) {
-            query.setParameter("maDvi", req.getMaDvi());
-        }
-
         if (!StringUtils.isEmpty(req.getSoQdNhap())) {
             query.setParameter("soQdNhap", "%" + req.getSoQdNhap() + "%");
         }
 
         if (!StringUtils.isEmpty(req.getLoaiVthh())) {
             query.setParameter("loaiVthh", req.getLoaiVthh());
+        }
+
+        if (!CollectionUtils.isEmpty(req.getMaDvis())) {
+            query.setParameter("maDvis", req.getMaDvis());
+        }
+
+        if (!CollectionUtils.isEmpty(req.getTrangThais())) {
+            query.setParameter("trangThais", req.getTrangThais());
         }
     }
 }

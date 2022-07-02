@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.secification;
 
 import java.util.Date;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.criteria.*;
 
@@ -12,6 +13,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import com.tcdt.qlnvhang.request.search.HhQdNhapxuatSearchReq;
 import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
+import org.springframework.util.CollectionUtils;
 
 public class HhQdGiaoNvuNhapxuatSpecification {
 
@@ -24,7 +26,7 @@ public class HhQdGiaoNvuNhapxuatSpecification {
 				Predicate predicate = builder.conjunction();
 				
 				if (req != null) {
-					String trangThai = req.getTrangThai();
+					Set<String> trangThais = req.getTrangThais();
 					String maDvi = req.getMaDvi();
 					Date ngayQd = req.getNgayQd();
 					String soQd = req.getSoQd();
@@ -46,8 +48,8 @@ public class HhQdGiaoNvuNhapxuatSpecification {
 					if (StringUtils.isNotBlank(maDvi))
 						predicate.getExpressions().add(builder.and(builder.equal(root.get("maDvi"), maDvi)));
 
-					if (StringUtils.isNotBlank(trangThai))
-						predicate.getExpressions().add(builder.and(builder.equal(root.get("trangThai"), trangThai)));
+					if (!CollectionUtils.isEmpty(trangThais))
+						predicate.getExpressions().add(builder.and(root.get("trangThai").in(trangThais)));
 
 					if (StringUtils.isNotBlank(soQd))
 						predicate.getExpressions().add(builder.and(builder.equal(root.get("soQd"), soQd)));

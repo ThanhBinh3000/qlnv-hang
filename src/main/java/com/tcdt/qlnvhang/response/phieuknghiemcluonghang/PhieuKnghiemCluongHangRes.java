@@ -28,7 +28,7 @@ public class PhieuKnghiemCluongHangRes {
 	private String trangThaiDuyet;
 	private String ldoTchoi;
 	private List<KquaKnghiemRes> kquaKnghiem = new ArrayList<>();
-	private Integer soLuongMauHangKt;
+	private Long soLuongMauHangKt;
 	private String maDiemKho;
 	private String tenDiemKho;
 	private String maNhaKho;

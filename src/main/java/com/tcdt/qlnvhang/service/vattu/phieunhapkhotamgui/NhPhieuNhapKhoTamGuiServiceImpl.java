@@ -18,6 +18,7 @@ import com.tcdt.qlnvhang.request.search.vattu.phieunhapkhotamgui.NhPhieuNhapKhoT
 import com.tcdt.qlnvhang.response.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiCtRes;
 import com.tcdt.qlnvhang.response.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiRes;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
+import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
@@ -58,7 +59,7 @@ import java.util.stream.Collectors;
 @Log4j2
 @Service
 @RequiredArgsConstructor
-public class NhPhieuNhapKhoTamGuiServiceImpl implements NhPhieuNhapKhoTamGuiService {
+public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements NhPhieuNhapKhoTamGuiService {
     private final NhPhieuNhapKhoTamGuiRepository nhPhieuNhapKhoTamGuiRepository;
     private final NhPhieuNhapKhoTamGuiCtRepository phieuNhapKhoTamGuiCtRepository;
     private final FileDinhKemService fileDinhKemService;
@@ -264,7 +265,7 @@ public class NhPhieuNhapKhoTamGuiServiceImpl implements NhPhieuNhapKhoTamGuiServ
     public Page<NhPhieuNhapKhoTamGuiRes> search(NhPhieuNhapKhoTamGuiSearchReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
 
-        req.setMaDvi(userInfo.getDvql());
+        this.prepareSearchReq(req, userInfo, req.getCapDvi(), req.getTrangThais());
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         List<Object[]> data = nhPhieuNhapKhoTamGuiRepository.search(req);
         List<NhPhieuNhapKhoTamGuiRes> responses = new ArrayList<>();
@@ -299,7 +300,7 @@ public class NhPhieuNhapKhoTamGuiServiceImpl implements NhPhieuNhapKhoTamGuiServ
     public boolean exportToExcel(NhPhieuNhapKhoTamGuiSearchReq objReq, HttpServletResponse response) throws Exception {
 
         UserInfo userInfo = UserUtils.getUserInfo();
-        objReq.setMaDvi(userInfo.getDvql());
+        this.prepareSearchReq(objReq, userInfo, objReq.getCapDvi(), objReq.getTrangThais());
         objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
         List<NhPhieuNhapKhoTamGuiRes> list = this.search(objReq).get().collect(Collectors.toList());
 

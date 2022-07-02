@@ -16,5 +16,4 @@ public class PhieuKnghiemCluongHangSearchReq extends BaseRequest {
 	private String maVatTuCha;
 	private String soQdNhap;
 	private String soBbBanGiao;
-	private String maDvi;
 }

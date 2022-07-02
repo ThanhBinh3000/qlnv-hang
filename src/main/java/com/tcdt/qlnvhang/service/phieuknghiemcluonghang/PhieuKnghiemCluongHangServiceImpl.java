@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.service.phieuknghiemcluonghang;
 
 import com.tcdt.qlnvhang.entities.bbanlaymau.BienBanBanGiaoMau;
 import com.tcdt.qlnvhang.entities.phieuknghiemcluonghang.PhieuKnghiemCluongHang;
-import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.enums.QlPhieuNhapKhoLtStatus;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
@@ -14,12 +13,9 @@ import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.phieuknghiemcluonghang.PhieuKnghiemCluongHangReq;
-import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongRequestDto;
 import com.tcdt.qlnvhang.request.search.PhieuKnghiemCluongHangSearchReq;
-import com.tcdt.qlnvhang.request.search.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtSearchReq;
 import com.tcdt.qlnvhang.response.phieuknghiemcluonghang.KquaKnghiemRes;
 import com.tcdt.qlnvhang.response.phieuknghiemcluonghang.PhieuKnghiemCluongHangRes;
-import com.tcdt.qlnvhang.response.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
@@ -106,14 +102,14 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 		QlnvDmDonvi donVi = getDviByMa(dvql, httpServletRequest);
 		QlnvDmDonvi donViCha = Optional.ofNullable(donVi).map(QlnvDmDonvi::getParent).orElse(null);
 
-		req.setMaDvi(dvql);
+		this.prepareSearchReq(req, userInfo, req.getCapDvi(), req.getTrangThais());
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),  req.getPaggingReq().getLimit());
 		List<Object[]> list = phieuKnghiemCluongHangRepository.search(req, pageable);
 
 		Set<Long> ids = list.stream().filter(o -> o[0] != null)
 				.map(o -> ((PhieuKnghiemCluongHang) o[0]).getId())
 				.collect(Collectors.toSet());
-		Map<Long, Integer> mapCount = kquaKnghiemService.countKqByPhieuKnghiemId(ids);
+		Map<Long, Long> mapCount = kquaKnghiemService.countKqByPhieuKnghiemId(ids);
 
 		List<PhieuKnghiemCluongHangRes> responses = new ArrayList<>();
 		for (Object[] o : list) {
@@ -122,11 +118,9 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 			KtNganLo nganLo = o[1] != null ? (KtNganLo) o[1] : null;
 			Long qdNhapId = (Long) o[2];
 			String soQdNhap = (String) o[3];
-			String maVatTu = (String) o[4];
-			String tenVatTu = (String) o[5];
-			Long bbBanGiaoId = (Long) o[6];
-			String soBbBanGiao = (String) o[7];
-			LocalDate ngayBgiaoMau = (LocalDate) o[8];
+			Long bbBanGiaoId = (Long) o[4];
+			String soBbBanGiao = (String) o[5];
+			LocalDate ngayBgiaoMau = (LocalDate) o[6];
 
 			BeanUtils.copyProperties(item, response);
 			response.setTenTrangThai(QlPhieuNhapKhoLtStatus.getTenById(item.getTrangThai()));
@@ -134,8 +128,6 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 			this.thongTinNganLo(response, nganLo);
 			response.setQdgnvnxId(qdNhapId);
 			response.setSoQuyetDinhNhap(soQdNhap);
-			response.setMaVatTu(maVatTu);
-			response.setTenVatTu(tenVatTu);
 			response.setBbBanGiaoMauId(bbBanGiaoId);
 			response.setSoBbBanGiao(soBbBanGiao);
 			response.setNgayBanGiaoMau(ngayBgiaoMau);
@@ -380,7 +372,7 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 	@Override
 	public boolean exportToExcel(PhieuKnghiemCluongHangSearchReq objReq, HttpServletResponse response) throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
-		objReq.setMaDvi(userInfo.getDvql());
+		this.prepareSearchReq(objReq, userInfo, objReq.getCapDvi(), objReq.getTrangThais());
 		objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
 		List<PhieuKnghiemCluongHangRes> list = this.search(objReq).get().collect(Collectors.toList());
 

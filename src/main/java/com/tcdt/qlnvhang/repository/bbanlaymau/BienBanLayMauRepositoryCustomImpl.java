@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.request.search.BienBanLayMauSearchReq;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
 import java.util.List;
@@ -60,11 +61,15 @@ public class BienBanLayMauRepositoryCustomImpl implements BienBanLayMauRepositor
 		}
 
 		if (!StringUtils.isEmpty(req.getMaVatTuCha())) {
-			builder.append("AND ").append("bb.maVatTuCha <= :maVatTuCha ");
+			builder.append("AND ").append("bb.maVatTuCha = :maVatTuCha ");
 		}
 
-		if (!StringUtils.isEmpty(req.getMaDvi())) {
-			builder.append("AND ").append("bb.maDvi <= :maDvi ");
+		if (!CollectionUtils.isEmpty(req.getMaDvis())) {
+			builder.append("AND ").append("bb.maDvi IN :maDvis ");
+		}
+
+		if (!CollectionUtils.isEmpty(req.getTrangThais())) {
+			builder.append("AND ").append("bb.trangThai IN :trangThais ");
 		}
 	}
 
@@ -104,8 +109,12 @@ public class BienBanLayMauRepositoryCustomImpl implements BienBanLayMauRepositor
 			query.setParameter("maVatTuCha", req.getMaVatTuCha());
 		}
 
-		if (!StringUtils.isEmpty(req.getMaDvi())) {
-			query.setParameter("maDvi", req.getMaDvi());
+		if (!CollectionUtils.isEmpty(req.getMaDvis())) {
+			query.setParameter("maDvis", req.getMaDvis());
+		}
+
+		if (!CollectionUtils.isEmpty(req.getTrangThais())) {
+			query.setParameter("trangThais", req.getTrangThais());
 		}
 	}
 }

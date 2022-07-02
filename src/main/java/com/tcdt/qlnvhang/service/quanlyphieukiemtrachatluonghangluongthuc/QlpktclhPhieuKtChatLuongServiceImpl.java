@@ -17,6 +17,7 @@ import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongRequest
 import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.response.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhKetQuaKiemTraResponseDto;
 import com.tcdt.qlnvhang.response.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongResponseDto;
+import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.HhHopDongHdr;
 import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
@@ -51,7 +52,7 @@ import java.util.stream.Collectors;
 @Log4j2
 @Service
 @RequiredArgsConstructor
-public class QlpktclhPhieuKtChatLuongServiceImpl implements QlpktclhPhieuKtChatLuongService {
+public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl implements QlpktclhPhieuKtChatLuongService {
 	private static final String SHEET_PHIEU_KIEM_TRA_CHAT_LUONG_HANG = "Phiếu kiểm tra chất lượng hàng";
 	private static final String STT = "STT";
 	private static final String SO_PHIEU = "Số Phiếu";
@@ -140,7 +141,7 @@ public class QlpktclhPhieuKtChatLuongServiceImpl implements QlpktclhPhieuKtChatL
 	@Override
 	public Page<QlpktclhPhieuKtChatLuongResponseDto> filter(QlpktclhPhieuKtChatLuongFilterRequestDto req) throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
-		req.setMaDvi(userInfo.getDvql());
+		this.prepareSearchReq(req, userInfo, req.getCapDvi(), req.getTrangThais());
 		return qlpktclhPhieuKtChatLuongRepo.filter(req);
 	}
 
@@ -148,7 +149,7 @@ public class QlpktclhPhieuKtChatLuongServiceImpl implements QlpktclhPhieuKtChatL
 	public BaseNhapHangCount count() throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
 		QlpktclhPhieuKtChatLuongFilterRequestDto req = new QlpktclhPhieuKtChatLuongFilterRequestDto();
-		req.setMaDvi(userInfo.getDvql());
+		this.prepareSearchReq(req, userInfo, userInfo.getCapDvi(), req.getTrangThais());
 		BaseNhapHangCount count = new BaseNhapHangCount();
 
 		count.setTatCa(qlpktclhPhieuKtChatLuongRepo.countPhieuKiemTraChatLuong(req));
@@ -290,7 +291,7 @@ public class QlpktclhPhieuKtChatLuongServiceImpl implements QlpktclhPhieuKtChatL
 	@Override
 	public boolean exportToExcel(QlpktclhPhieuKtChatLuongFilterRequestDto objReq, HttpServletResponse response) throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
-		objReq.setMaDvi(userInfo.getDvql());
+		this.prepareSearchReq(objReq, userInfo, objReq.getCapDvi(), objReq.getTrangThais());
 		objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
 		List<QlpktclhPhieuKtChatLuongResponseDto> list = this.filter(objReq).get().collect(Collectors.toList());
 

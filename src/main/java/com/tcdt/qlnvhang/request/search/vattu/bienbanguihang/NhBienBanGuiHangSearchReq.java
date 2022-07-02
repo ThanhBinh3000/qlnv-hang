@@ -18,6 +18,5 @@ public class NhBienBanGuiHangSearchReq extends BaseRequest {
     private LocalDate ngayGuiHangTu;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate ngayGuiHangDen;
-    private String maDvi;
     private String loaiVthh;
 }

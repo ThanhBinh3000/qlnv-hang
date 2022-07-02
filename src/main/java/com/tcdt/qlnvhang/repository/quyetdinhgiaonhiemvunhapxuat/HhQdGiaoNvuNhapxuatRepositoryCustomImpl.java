@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.util.Contains;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -65,8 +66,8 @@ public class HhQdGiaoNvuNhapxuatRepositoryCustomImpl implements HhQdGiaoNvuNhapx
             builder.append("AND ").append("qd.ngayQdinh <= :denNgayQd ");
         }
 
-        if (!StringUtils.isEmpty(req.getTrangThai())) {
-            builder.append("AND ").append("qd.trangThai = :trangThai ");
+        if (!CollectionUtils.isEmpty(req.getTrangThais())) {
+            builder.append("AND ").append("qd.trangThai IN :trangThais ");
         }
 
         if (!StringUtils.isEmpty(req.getTrichYeu())) {
@@ -119,16 +120,16 @@ public class HhQdGiaoNvuNhapxuatRepositoryCustomImpl implements HhQdGiaoNvuNhapx
             query.setParameter("maDvi", req.getMaDvi());
         }
 
-        if (!StringUtils.isEmpty(req.getTrangThai())) {
-            query.setParameter("trangThai", req.getTrangThai());
-        }
-
         if (!StringUtils.isEmpty(req.getTrichYeu())) {
             query.setParameter("trichYeu", "%" + req.getTrichYeu() + "%");
         }
 
         if (!StringUtils.isEmpty(req.getLoaiVthh())) {
             query.setParameter("loaiVthh", req.getLoaiVthh());
+        }
+
+        if (!CollectionUtils.isEmpty(req.getTrangThais())) {
+            query.setParameter("trangThais", req.getTrangThais());
         }
     }
 }

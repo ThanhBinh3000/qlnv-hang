@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.request.search.vattu.hosokythuat.NhHoSoKyThuatSearchReq
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -53,10 +54,6 @@ public class NhHoSoKyThuatRepositoryCustomImpl implements NhHoSoKyThuatRepositor
             builder.append("AND ").append("p.ngayKiemTra <= :ngayKiemTraDen ");
         }
 
-        if (!StringUtils.isEmpty(req.getMaDvi())) {
-            builder.append("AND ").append("p.maDvi = :maDvi ");
-        }
-
         if (!StringUtils.isEmpty(req.getSoQdNhap())) {
             builder.append("AND ").append("nx.soQd LIKE :soQdNhap ");
         }
@@ -72,12 +69,20 @@ public class NhHoSoKyThuatRepositoryCustomImpl implements NhHoSoKyThuatRepositor
         if (!StringUtils.isEmpty(req.getMaVatTu())) {
             builder.append("AND ").append("p.maVatTu = :maVatTu ");
         }
+
+        if (!CollectionUtils.isEmpty(req.getMaDvis())) {
+            builder.append("AND ").append("p.maDvi IN :maDvis ");
+        }
+
+        if (!CollectionUtils.isEmpty(req.getTrangThais())) {
+            builder.append("AND ").append("p.trangThai IN :trangThais ");
+        }
     }
 
     @Override
     public int count(NhHoSoKyThuatSearchReq req) {
         StringBuilder builder = new StringBuilder();
-        builder.append("SELECT COUNT(DISTINCT p.id) FROM FROM NhHoSoKyThuat p ");
+        builder.append("SELECT COUNT(DISTINCT p.id) FROM NhHoSoKyThuat p ");
         builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON p.qdgnvnxId = nx.id ");
         builder.append("INNER JOIN QlnvDmVattu vatTu ON vatTu.ma = p.maVatTu ");
         builder.append("INNER JOIN QlnvDmVattu vatTuCha ON vatTuCha.ma = p.maVatTuCha ");
@@ -101,10 +106,6 @@ public class NhHoSoKyThuatRepositoryCustomImpl implements NhHoSoKyThuatRepositor
             query.setParameter("ngayKiemTraDen", req.getNgayKiemTraDen());
         }
 
-        if (!StringUtils.isEmpty(req.getMaDvi())) {
-            query.setParameter("maDvi", req.getMaDvi());
-        }
-
         if (!StringUtils.isEmpty(req.getSoQdNhap())) {
             query.setParameter("soQdNhap", "%" + req.getSoQdNhap() + "%");
         }
@@ -119,6 +120,14 @@ public class NhHoSoKyThuatRepositoryCustomImpl implements NhHoSoKyThuatRepositor
 
         if (!StringUtils.isEmpty(req.getMaVatTu())) {
             query.setParameter("maVatTu", req.getMaVatTu());
+        }
+
+        if (!CollectionUtils.isEmpty(req.getMaDvis())) {
+            query.setParameter("maDvis", req.getMaDvis());
+        }
+
+        if (!CollectionUtils.isEmpty(req.getTrangThais())) {
+            query.setParameter("trangThais", req.getTrangThais());
         }
     }
 }

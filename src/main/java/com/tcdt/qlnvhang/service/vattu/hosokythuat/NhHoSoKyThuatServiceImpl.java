@@ -17,6 +17,7 @@ import com.tcdt.qlnvhang.request.search.vattu.hosokythuat.NhHoSoKyThuatSearchReq
 import com.tcdt.qlnvhang.response.vattu.hosokythuat.NhHoSoKyThuatCtRes;
 import com.tcdt.qlnvhang.response.vattu.hosokythuat.NhHoSoKyThuatRes;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
+import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.HhHopDongHdr;
 import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
@@ -54,7 +55,7 @@ import java.util.stream.Stream;
 @Service
 @RequiredArgsConstructor
 @Log4j2
-public class NhHoSoKyThuatServiceImpl implements NhHoSoKyThuatService {
+public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoKyThuatService {
 
     private final NhHoSoKyThuatRepository nhHoSoKyThuatRepository;
     private final NhHoSoKyThuatCtRepository nhHoSoKyThuatCtRepository;
@@ -281,7 +282,7 @@ public class NhHoSoKyThuatServiceImpl implements NhHoSoKyThuatService {
         // TODO: Bien ban giao mau
         UserInfo userInfo = UserUtils.getUserInfo();
 
-        req.setMaDvi(userInfo.getDvql());
+        this.prepareSearchReq(req, userInfo, req.getCapDvi(), req.getTrangThais());
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         List<Object[]> data = nhHoSoKyThuatRepository.search(req);
         List<NhHoSoKyThuatRes> responses = new ArrayList<>();
@@ -321,7 +322,7 @@ public class NhHoSoKyThuatServiceImpl implements NhHoSoKyThuatService {
     @Override
     public boolean exportToExcel(NhHoSoKyThuatSearchReq objReq, HttpServletResponse response) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
-        objReq.setMaDvi(userInfo.getDvql());
+        this.prepareSearchReq(objReq, userInfo, objReq.getCapDvi(), objReq.getTrangThais());
         objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
         List<NhHoSoKyThuatRes> list = this.search(objReq).get().collect(Collectors.toList());
 

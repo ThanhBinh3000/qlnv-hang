@@ -273,7 +273,7 @@ public class QlBienBanNhapDayKhoLtServiceImpl extends BaseServiceImpl implements
         if (userInfo == null)
             throw new Exception("Bad request.");
 
-        req.setMaDvi(userInfo.getDvql());
+        this.prepareSearchReq(req, userInfo, req.getCapDvi(), req.getTrangThais());
         List<Object[]> list = qlBienBanNhapDayKhoLtRepository.search(req);
         List<QlBienBanNhapDayKhoLtRes> responses = new ArrayList<>();
         for (Object[] o : list) {
@@ -379,7 +379,7 @@ public class QlBienBanNhapDayKhoLtServiceImpl extends BaseServiceImpl implements
     public BaseNhapHangCount count() throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         QlBienBanNhapDayKhoLtSearchReq req = new QlBienBanNhapDayKhoLtSearchReq();
-        req.setMaDvi(userInfo.getDvql());
+        this.prepareSearchReq(req, userInfo, userInfo.getCapDvi(), req.getTrangThais());
         BaseNhapHangCount count = new BaseNhapHangCount();
 
         count.setTatCa(qlBienBanNhapDayKhoLtRepository.count(req));
@@ -403,7 +403,7 @@ public class QlBienBanNhapDayKhoLtServiceImpl extends BaseServiceImpl implements
     @Override
     public boolean exportToExcel(QlBienBanNhapDayKhoLtSearchReq objReq, HttpServletResponse response) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
-        objReq.setMaDvi(userInfo.getDvql());
+        this.prepareSearchReq(objReq, userInfo, objReq.getCapDvi(), objReq.getTrangThais());
         objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
         List<QlBienBanNhapDayKhoLtRes> list = this.search(objReq).get().collect(Collectors.toList());
 

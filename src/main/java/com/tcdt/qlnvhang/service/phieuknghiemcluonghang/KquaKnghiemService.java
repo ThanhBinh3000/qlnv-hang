@@ -17,5 +17,5 @@ public interface KquaKnghiemService {
 
 	void deleteByPhieuKnghiemIdIn(Collection<Long> phieuKnghiemIds);
 
-	Map<Long, Integer> countKqByPhieuKnghiemId(Collection<Long> phieuKnhiemIds);
+	Map<Long, Long> countKqByPhieuKnghiemId(Collection<Long> phieuKnhiemIds);
 }
