@@ -20,6 +20,7 @@ public class BienBanLayMauRes {
 	private String donViCungCap;
 	private LocalDate ngayLayMau;
 	private String diaDiemLayMau;
+	private String diaDiemBanGiao;
 
 	private String maVatTuCha;
 	private String tenVatTuCha;
