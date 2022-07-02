@@ -239,6 +239,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
 
 		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
+		Map<String, String> mapDmucDvi = getMapTenDvi();
 
 		qOptional.get().setTenVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getLoaiVthh()));
 		qOptional.get().setTenCloaiVthh(StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getCloaiVthh()));
@@ -251,6 +252,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				dsg.setChildren(listGtCtiet);
 				hhQdKhlcntDsgthauList.add(dsg);
 			};
+			dtl.setTenDvi(StringUtils.isEmpty(dtl.getMaDvi()) ? null : mapDmucDvi.get(dtl.getMaDvi()));
 			dtl.setDsGoiThau(hhQdKhlcntDsgthauList);
 			hhQdKhlcntDtlList.add(dtl);
 		}

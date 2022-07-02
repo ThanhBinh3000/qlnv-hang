@@ -214,7 +214,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 //			UnitScaler.formatList(dtl.getChildren(), Contains.DVT_TAN);
 //		}
 
-		return qOptional.get();
+		return this.detail(qOptional.get().getId().toString());
 	}
 
 	@Override
