@@ -17,11 +17,11 @@ public class PhieuKnghiemCluongHangRepositoryCustomImpl implements PhieuKnghiemC
 	@Override
 	public List<Object[]> search(PhieuKnghiemCluongHangSearchReq req, Pageable pageable) {
 		StringBuilder builder = new StringBuilder();
-		builder.append("SELECT phieu, nganLo, nx.id, nx.soQd, vatTu.ma, vatTu.ten, bbBanGiao.id, bbBanGiao.soBban, bbBanGiao.ngayBgiaoMau FROM PhieuKnghiemCluongHang phieu ");
+		builder.append("SELECT phieu, nganLo, nx.id, nx.soQd, vatTu.ma, vatTu.ten, bbBanGiao.id, bbBanGiao.soBienBan, bbBanGiao.ngayBanGiaoMau FROM PhieuKnghiemCluongHang phieu ");
 		builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON phieu.qdgnvnxId = nx.id ");
 		builder.append("INNER JOIN BienBanBanGiaoMau bbBanGiao ON phieu.bbBanGiaoMauId = bbBanGiao.id ");
-		builder.append("INNER JOIN QlnvDmVattu vatTu ON p.maVatTu = vatTu.ma ");
-		builder.append("LEFT JOIN KtNganLo nganLo ON p.maNganLo = nganLo.maNganlo ");
+		builder.append("INNER JOIN QlnvDmVattu vatTu ON phieu.maVatTu = vatTu.ma ");
+		builder.append("LEFT JOIN KtNganLo nganLo ON phieu.maNganLo = nganLo.maNganlo ");
 		setConditionSearchCtkhn(req, builder);
 
 		//Sort
@@ -57,11 +57,11 @@ public class PhieuKnghiemCluongHangRepositoryCustomImpl implements PhieuKnghiemC
 		}
 
 		if (req.getNgayBanGiaoMauTu() != null) {
-			builder.append("AND ").append("bbBanGiao.ngayBgiaoMau >= :ngayBanGiaoMauTu ");
+			builder.append("AND ").append("bbBanGiao.ngayBanGiaoMau >= :ngayBanGiaoMauTu ");
 		}
 
 		if (req.getNgayBanGiaoMauDen() != null) {
-			builder.append("AND ").append("bbBanGiao.ngayBgiaoMau <= :ngayBanGiaoMauDen ");
+			builder.append("AND ").append("bbBanGiao.ngayBanGiaoMau <= :ngayBanGiaoMauDen ");
 		}
 
 		if (!StringUtils.isEmpty(req.getSoQdNhap())) {
@@ -69,7 +69,7 @@ public class PhieuKnghiemCluongHangRepositoryCustomImpl implements PhieuKnghiemC
 		}
 
 		if (!StringUtils.isEmpty(req.getMaVatTuCha())) {
-			builder.append("AND ").append("p.maVatTuCha = :maVatTuCha ");
+			builder.append("AND ").append("phieu.maVatTuCha = :maVatTuCha ");
 		}
 	}
 
@@ -78,6 +78,10 @@ public class PhieuKnghiemCluongHangRepositoryCustomImpl implements PhieuKnghiemC
 		int total = 0;
 		StringBuilder builder = new StringBuilder();
 		builder.append("SELECT COUNT(1) FROM PhieuKnghiemCluongHang phieu ");
+		builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON phieu.qdgnvnxId = nx.id ");
+		builder.append("INNER JOIN BienBanBanGiaoMau bbBanGiao ON phieu.bbBanGiaoMauId = bbBanGiao.id ");
+		builder.append("INNER JOIN QlnvDmVattu vatTu ON phieu.maVatTu = vatTu.ma ");
+		builder.append("LEFT JOIN KtNganLo nganLo ON phieu.maNganLo = nganLo.maNganlo ");
 		this.setConditionSearchCtkhn(req, builder);
 
 		TypedQuery<Long> query = em.createQuery(builder.toString(), Long.class);
