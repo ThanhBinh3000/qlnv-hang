@@ -463,6 +463,8 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 
 	private void validateSoBb(BienBanLayMau update, BienBanLayMauReq req) throws Exception {
 		String soBB = req.getSoBienBan();
+		if (!StringUtils.hasText(soBB))
+			return;
 		if (update == null || (StringUtils.hasText(update.getSoBienBan()) && !update.getSoBienBan().equalsIgnoreCase(soBB))) {
 			Optional<BienBanLayMau> optional = bienBanLayMauRepository.findFirstBySoBienBan(soBB);
 			Long updateId = Optional.ofNullable(update).map(BienBanLayMau::getId).orElse(null);

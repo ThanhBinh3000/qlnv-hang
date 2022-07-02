@@ -406,6 +406,8 @@ public class BienBanBanGiaoMauServiceImpl extends BaseServiceImpl implements Bie
 
 	private void validateSoBb(BienBanBanGiaoMau update, BienBanBanGiaoMauReq req) throws Exception {
 		String soBB = req.getSoBienBan();
+		if (!StringUtils.hasText(soBB))
+			return;
 		if (update == null || (StringUtils.hasText(update.getSoBienBan()) && !update.getSoBienBan().equalsIgnoreCase(soBB))) {
 			Optional<BienBanBanGiaoMau> optional = bienBanBanGiaoMauRepository.findFirstBySoBienBan(soBB);
 			Long updateId = Optional.ofNullable(update).map(BienBanBanGiaoMau::getId).orElse(null);

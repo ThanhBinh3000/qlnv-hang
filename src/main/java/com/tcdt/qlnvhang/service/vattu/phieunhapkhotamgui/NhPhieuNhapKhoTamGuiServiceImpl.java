@@ -93,7 +93,7 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
 
         List<NhPhieuNhapKhoTamGuiCt> chiTiets = this.saveListChiTiet(item.getId(), req.getChiTiets(), new HashMap<>());
         item.setChiTiets(chiTiets);
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), item.getId(), QlBienBanNhapDayKhoLt.TABLE_NAME);
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), item.getId(), NhPhieuNhapKhoTamGui.TABLE_NAME);
         item.setFileDinhKems(fileDinhKems);
 
         return this.buildResponse(item);
@@ -179,7 +179,7 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
         if (!CollectionUtils.isEmpty(mapChiTiet.values()))
             phieuNhapKhoTamGuiCtRepository.deleteAll(mapChiTiet.values());
 
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), item.getId(), QlBienBanNhapDayKhoLt.TABLE_NAME);
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), item.getId(), NhPhieuNhapKhoTamGui.TABLE_NAME);
         item.setFileDinhKems(fileDinhKems);
         return this.buildResponse(item);
     }
@@ -391,6 +391,8 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
 
     private void validateSoPhieu(NhPhieuNhapKhoTamGui update, NhPhieuNhapKhoTamGuiReq req) throws Exception {
         String so = req.getSoPhieu();
+        if (!StringUtils.hasText(so))
+            return;
         if (update == null || (StringUtils.hasText(update.getSoPhieu()) && !update.getSoPhieu().equalsIgnoreCase(so))) {
             Optional<NhPhieuNhapKhoTamGui> optional = nhPhieuNhapKhoTamGuiRepository.findFirstBySoPhieu(so);
             Long updateId = Optional.ofNullable(update).map(NhPhieuNhapKhoTamGui::getId).orElse(null);

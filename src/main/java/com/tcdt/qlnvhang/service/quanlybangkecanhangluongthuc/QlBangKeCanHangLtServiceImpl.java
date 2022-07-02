@@ -496,6 +496,8 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
 
     private void validateSoBb(QlBangKeCanHangLt update, QlBangKeCanHangLtReq req) throws Exception {
         String so = req.getSoBangKe();
+        if (!StringUtils.hasText(so))
+            return;
         if (update == null || (StringUtils.hasText(update.getSoBangKe()) && !update.getSoBangKe().equalsIgnoreCase(so))) {
             Optional<QlBangKeCanHangLt> optional = qlBangKeCanHangLtRepository.findFirstBySoBangKe(so);
             Long updateId = Optional.ofNullable(update).map(QlBangKeCanHangLt::getId).orElse(null);

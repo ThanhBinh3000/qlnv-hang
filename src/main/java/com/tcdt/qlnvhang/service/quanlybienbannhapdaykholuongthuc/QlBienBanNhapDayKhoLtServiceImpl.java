@@ -470,6 +470,8 @@ public class QlBienBanNhapDayKhoLtServiceImpl extends BaseServiceImpl implements
 
     private void validateSoBb(QlBienBanNhapDayKhoLt update, QlBienBanNhapDayKhoLtReq req) throws Exception {
         String soBB = req.getSoBienBan();
+        if (!StringUtils.hasText(soBB))
+            return;
         if (update == null || (StringUtils.hasText(update.getSoBienBan()) && !update.getSoBienBan().equalsIgnoreCase(soBB))) {
             Optional<QlBienBanNhapDayKhoLt> optional = qlBienBanNhapDayKhoLtRepository.findFirstBySoBienBan(soBB);
             Long updateId = Optional.ofNullable(update).map(QlBienBanNhapDayKhoLt::getId).orElse(null);

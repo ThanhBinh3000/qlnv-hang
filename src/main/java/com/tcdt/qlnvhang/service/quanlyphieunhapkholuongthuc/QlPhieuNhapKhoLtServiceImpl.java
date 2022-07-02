@@ -470,6 +470,9 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
 
     private void validateSoPhieu(QlPhieuNhapKhoLt update, QlPhieuNhapKhoLtReq req) throws Exception {
         String so = req.getSoPhieu();
+        if (!StringUtils.hasText(so))
+            return;
+
         if (update == null || (StringUtils.hasText(update.getSoPhieu()) && !update.getSoPhieu().equalsIgnoreCase(so))) {
             Optional<QlPhieuNhapKhoLt> optional = qlPhieuNhapKhoLtRepository.findFirstBySoPhieu(so);
             Long updateId = Optional.ofNullable(update).map(QlPhieuNhapKhoLt::getId).orElse(null);

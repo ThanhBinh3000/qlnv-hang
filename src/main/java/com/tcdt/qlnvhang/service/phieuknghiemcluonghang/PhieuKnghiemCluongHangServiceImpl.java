@@ -64,7 +64,8 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 	private static final String STT = "STT";
 	private static final String SO_PHIEU = "Số Phiếu";
 	private static final String SO_QUYET_DINH_NHAP = "Số Quyết Định Nhập";
-	private static final String NGAY_BAN_GIAO_MAU = "Ngày Bàn Giao Mẫu";
+	private static final String NGAY_KIEM_NGHIEM = "Ngày Kiểm Nghiệm";
+	private static final String SO_BIEN_BAN_BAN_GIAO_MAU = "Số Biên Bản Bàn Giao Mẫu";
 	private static final String CUC_DU_TRU_NHA_NUOC_KHU_VUC = "Cục Dự Trữ Nhà Nước Khu Vực";
 	private static final String DON_VI_TO_CHUC_THU_NGHIEM = "Đơn Vị Tổ Chức Thử Nghiệm";
 	private static final String SO_LUONG_MAU_HANG_KIEM_TRA = "Số Lượng Mẫu Hàng Kiểm Tra";
@@ -119,8 +120,7 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 			Long qdNhapId = (Long) o[2];
 			String soQdNhap = (String) o[3];
 			Long bbBanGiaoId = (Long) o[4];
-			String soBbBanGiao = (String) o[5];
-			LocalDate ngayBgiaoMau = (LocalDate) o[6];
+			String soBienBanBanGiao = (String) o[5];
 
 			BeanUtils.copyProperties(item, response);
 			response.setTenTrangThai(QlPhieuNhapKhoLtStatus.getTenById(item.getTrangThai()));
@@ -128,9 +128,6 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 			this.thongTinNganLo(response, nganLo);
 			response.setQdgnvnxId(qdNhapId);
 			response.setSoQuyetDinhNhap(soQdNhap);
-			response.setBbBanGiaoMauId(bbBanGiaoId);
-			response.setSoBbBanGiao(soBbBanGiao);
-			response.setNgayBanGiaoMau(ngayBgiaoMau);
 			if (donVi != null) {
 				response.setMaDvi(donVi.getMaDvi());
 				response.setTenDvi(donVi.getTenDvi());
@@ -139,7 +136,8 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 				response.setMaDviCha(donViCha.getMaDvi());
 				response.setTenDviCha(donViCha.getTenDvi());
 			}
-
+			response.setBbBanGiaoMauId(bbBanGiaoId);
+			response.setSoBbBanGiao(soBienBanBanGiao);
 			response.setSoLuongMauHangKt(mapCount.get(item.getId()));
 			responses.add(response);
 		}
@@ -397,11 +395,12 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 			ExportExcel.createCell(row0, 0, STT, style, sheet);
 			ExportExcel.createCell(row0, 1, SO_PHIEU, style, sheet);
 			ExportExcel.createCell(row0, 2, SO_QUYET_DINH_NHAP, style, sheet);
-			ExportExcel.createCell(row0, 3, NGAY_BAN_GIAO_MAU, style, sheet);
-			ExportExcel.createCell(row0, 4, CUC_DU_TRU_NHA_NUOC_KHU_VUC, style, sheet);
-			ExportExcel.createCell(row0, 5, DON_VI_TO_CHUC_THU_NGHIEM, style, sheet);
-			ExportExcel.createCell(row0, 6, SO_LUONG_MAU_HANG_KIEM_TRA, style, sheet);
-			ExportExcel.createCell(row0, 7, TRANG_THAI, style, sheet);
+			ExportExcel.createCell(row0, 3, NGAY_KIEM_NGHIEM, style, sheet);
+			ExportExcel.createCell(row0, 4, SO_BIEN_BAN_BAN_GIAO_MAU, style, sheet);
+			ExportExcel.createCell(row0, 5, CUC_DU_TRU_NHA_NUOC_KHU_VUC, style, sheet);
+			ExportExcel.createCell(row0, 6, DON_VI_TO_CHUC_THU_NGHIEM, style, sheet);
+			ExportExcel.createCell(row0, 7, SO_LUONG_MAU_HANG_KIEM_TRA, style, sheet);
+			ExportExcel.createCell(row0, 8, TRANG_THAI, style, sheet);
 
 			style = workbook.createCellStyle();
 			font = workbook.createFont();
@@ -416,11 +415,12 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 				ExportExcel.createCell(row, 0, startRowIndex, style, sheet);
 				ExportExcel.createCell(row, 1, item.getSoPhieu(), style, sheet);
 				ExportExcel.createCell(row, 2, item.getSoQuyetDinhNhap(), style, sheet);
-				ExportExcel.createCell(row, 3, LocalDateTimeUtils.localDateToString(item.getNgayBanGiaoMau()), style, sheet);
+				ExportExcel.createCell(row, 3, LocalDateTimeUtils.localDateToString(item.getNgayKnghiem()), style, sheet);
 				ExportExcel.createCell(row, 4, item.getTenDviCha(), style, sheet);
-				ExportExcel.createCell(row, 5, item.getTenDvi(), style, sheet);
-				ExportExcel.createCell(row, 6, item.getSoLuongMauHangKt(), style, sheet);
-				ExportExcel.createCell(row, 7, TrangThaiEnum.getTenById(item.getTrangThai()), style, sheet);
+				ExportExcel.createCell(row, 5, item.getTenDviCha(), style, sheet);
+				ExportExcel.createCell(row, 6, item.getTenDvi(), style, sheet);
+				ExportExcel.createCell(row, 7, item.getSoLuongMauHangKt(), style, sheet);
+				ExportExcel.createCell(row, 8, TrangThaiEnum.getTenById(item.getTrangThai()), style, sheet);
 				startRowIndex++;
 			}
 
@@ -437,6 +437,9 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 
 	private void validateSoPhieu(PhieuKnghiemCluongHang update, PhieuKnghiemCluongHangReq req) throws Exception {
 		String so = req.getSoPhieu();
+		if (!StringUtils.hasText(so))
+			return;
+
 		if (update == null || (StringUtils.hasText(update.getSoPhieu()) && !update.getSoPhieu().equalsIgnoreCase(so))) {
 			Optional<PhieuKnghiemCluongHang> optional = phieuKnghiemCluongHangRepository.findFirstBySoPhieu(so);
 			Long updateId = Optional.ofNullable(update).map(PhieuKnghiemCluongHang::getId).orElse(null);

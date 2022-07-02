@@ -387,6 +387,8 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
 
     private void validateSoBb(NhHoSoKyThuat update, NhHoSoKyThuatReq req) throws Exception {
         String so = req.getSoBienBan();
+        if (!StringUtils.hasText(so))
+            return;
         if (update == null || (StringUtils.hasText(update.getSoBienBan()) && !update.getSoBienBan().equalsIgnoreCase(so))) {
             Optional<NhHoSoKyThuat> optional = nhHoSoKyThuatRepository.findFirstBySoBienBan(so);
             Long updateId = Optional.ofNullable(update).map(NhHoSoKyThuat::getId).orElse(null);

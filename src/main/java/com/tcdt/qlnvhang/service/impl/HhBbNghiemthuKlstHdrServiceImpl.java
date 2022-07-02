@@ -14,6 +14,7 @@ import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhap
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.object.HhQdGiaoNvuNhapxuatHdrReq;
 import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
@@ -120,6 +121,9 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 
 	private void validateSoBb(HhBbNghiemthuKlstHdr update, HhBbNghiemthuKlstHdrReq req) throws Exception {
 		String soBB = req.getSoBb();
+		if (!StringUtils.hasText(soBB))
+			return;
+
 		if (update == null || (StringUtils.hasText(update.getSoBb()) && !update.getSoBb().equalsIgnoreCase(soBB))) {
 			Optional<HhBbNghiemthuKlstHdr> optional = hhBbNghiemthuKlstRepository.findFirstBySoBb(soBB);
 			Long updateId = Optional.ofNullable(update).map(HhBbNghiemthuKlstHdr::getId).orElse(null);

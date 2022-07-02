@@ -47,7 +47,6 @@ public class PhieuKnghiemCluongHangRes {
 
 	private Long bbBanGiaoMauId;
 	private String soBbBanGiao;
-	private LocalDate ngayBanGiaoMau;
 
 	private String ketLuan;
 	private String thuKho;

@@ -364,6 +364,8 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 
 	private void validateSoPhieu(QlpktclhPhieuKtChatLuong update, QlpktclhPhieuKtChatLuongRequestDto req) throws Exception {
 		String so = req.getSoPhieu();
+		if (!StringUtils.hasText(so))
+			return;
 		if (update == null || (StringUtils.hasText(update.getSoPhieu()) && !update.getSoPhieu().equalsIgnoreCase(so))) {
 			Optional<QlpktclhPhieuKtChatLuong> optional = qlpktclhPhieuKtChatLuongRepo.findFirstBySoPhieu(so);
 			Long updateId = Optional.ofNullable(update).map(QlpktclhPhieuKtChatLuong::getId).orElse(null);

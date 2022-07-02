@@ -343,6 +343,8 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
 
     private void validateSoBb(NhBienBanGuiHang update, NhBienBanGuiHangReq req) throws Exception {
         String so = req.getSoBienBan();
+        if (!StringUtils.hasText(so))
+            return;
         if (update == null || (StringUtils.hasText(update.getSoBienBan()) && !update.getSoBienBan().equalsIgnoreCase(so))) {
             Optional<NhBienBanGuiHang> optional = bienBanGuiHangRepository.findFirstBySoBienBan(so);
             Long updateId = Optional.ofNullable(update).map(NhBienBanGuiHang::getId).orElse(null);
