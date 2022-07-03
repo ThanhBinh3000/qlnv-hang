@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -21,7 +22,9 @@ public class NhPhieuNhapKhoTamGuiReq {
     private BigDecimal no;
     private BigDecimal co;
     private String nguoiGiaoHang;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime thoiGianGiaoNhanHang;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate ngayTaoPhieu;
     private String maDiemKho;
     private String maNhaKho;

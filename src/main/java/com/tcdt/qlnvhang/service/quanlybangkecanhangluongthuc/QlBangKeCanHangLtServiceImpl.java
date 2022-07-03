@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.service.quanlybangkecanhangluongthuc;
 
 import com.tcdt.qlnvhang.entities.quanlybangkecanhangluongthuc.QlBangKeCanHangLt;
 import com.tcdt.qlnvhang.entities.quanlybangkecanhangluongthuc.QlBangKeChCtLt;
-import com.tcdt.qlnvhang.entities.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLt;
 import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLt;
 import com.tcdt.qlnvhang.enums.QlPhieuNhapKhoLtStatus;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
@@ -17,7 +16,6 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.quanlybangkecanhangluongthuc.QlBangKeCanHangLtReq;
 import com.tcdt.qlnvhang.request.object.quanlybangkecanhangluongthuc.QlBangKeChCtLtReq;
-import com.tcdt.qlnvhang.request.object.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtReq;
 import com.tcdt.qlnvhang.request.search.quanlybangkecanhangluongthuc.QlBangKeCanHangLtSearchReq;
 import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.response.quanlybangkecanhangluongthuc.QlBangKeCanHangLtRes;
@@ -344,7 +342,7 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
         if (userInfo == null)
             throw new Exception("Bad request.");
 
-        this.prepareSearchReq(req, userInfo, req.getCapDvi(), req.getTrangThais());
+        this.prepareSearchReq(req, userInfo, req.getCapDvis(), req.getTrangThais());
 
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         List<Object[]> data = qlBangKeCanHangLtRepository.search(req);
@@ -403,7 +401,7 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
     public BaseNhapHangCount count() throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         QlBangKeCanHangLtSearchReq req = new QlBangKeCanHangLtSearchReq();
-        this.prepareSearchReq(req, userInfo, userInfo.getCapDvi(), req.getTrangThais());
+        this.prepareSearchReq(req, userInfo, null, req.getTrangThais());
         BaseNhapHangCount count = new BaseNhapHangCount();
 
         count.setTatCa(qlBangKeCanHangLtRepository.count(req));
@@ -427,7 +425,7 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
     @Override
     public boolean exportToExcel(QlBangKeCanHangLtSearchReq objReq, HttpServletResponse response) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
-        this.prepareSearchReq(objReq, userInfo, objReq.getCapDvi(), objReq.getTrangThais());
+        this.prepareSearchReq(objReq, userInfo, objReq.getCapDvis(), objReq.getTrangThais());
         objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
         List<QlBangKeCanHangLtRes> list = this.search(objReq).get().collect(Collectors.toList());
 

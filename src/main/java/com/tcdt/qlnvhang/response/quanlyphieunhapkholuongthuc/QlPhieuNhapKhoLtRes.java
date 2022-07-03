@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.response.quanlyphieunhapkholuongthuc;
 
-import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -24,7 +24,7 @@ public class BaseRequest {
 	String orderDirection;
 	Set<String> maDvis = new HashSet<>();
 	Set<String> trangThais = new HashSet<>();
-	String capDvi;
+	Set<String> capDvis = new HashSet<>();
 
 	public PaggingReq getPaggingReq() {
 		if (this.paggingReq == null) {

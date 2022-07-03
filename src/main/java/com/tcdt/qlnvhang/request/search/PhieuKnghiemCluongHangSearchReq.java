@@ -10,15 +10,9 @@ import java.time.LocalDate;
 public class PhieuKnghiemCluongHangSearchReq extends BaseRequest {
 	private String soPhieu;
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-	private LocalDate ngayKnghiemTu;
+	private LocalDate ngayBanGiaoMauTu;
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-	private LocalDate ngayKnghiemDen;
-
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-	private LocalDate ngayLayMauTu;
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-	private LocalDate ngayLayMauDen;
-
+	private LocalDate ngayBanGiaoMauDen;
 	private String maVatTuCha;
 	private String soQdNhap;
 	private String soBbBanGiao;

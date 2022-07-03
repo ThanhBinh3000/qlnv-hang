@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.service.quanlyphieukiemtrachatluonghangluongthuc;
 
 import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhKetQuaKiemTra;
 import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
-import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLt;
 import com.tcdt.qlnvhang.enums.QlpktclhPhieuKtChatLuongStatusEnum;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
@@ -11,7 +10,6 @@ import com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc.Qlp
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLtReq;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongFilterRequestDto;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongRequestDto;
 import com.tcdt.qlnvhang.response.BaseNhapHangCount;
@@ -78,7 +76,7 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 		QlpktclhPhieuKtChatLuong qlpktclhPhieuKtChatLuong = dataUtils.toObject(req, QlpktclhPhieuKtChatLuong.class);
 		qlpktclhPhieuKtChatLuong.setNgayTao(LocalDate.now());
 		qlpktclhPhieuKtChatLuong.setNguoiTaoId(userInfo.getId());
-		qlpktclhPhieuKtChatLuong.setMaDonVi(userInfo.getDvql());
+		qlpktclhPhieuKtChatLuong.setMaDvi(userInfo.getDvql());
 		qlpktclhPhieuKtChatLuong.setTrangThai(QlpktclhPhieuKtChatLuongStatusEnum.DU_THAO.getId());
 		qlpktclhPhieuKtChatLuong.setCapDvi(userInfo.getCapDvi());
 		qlpktclhPhieuKtChatLuong = qlpktclhPhieuKtChatLuongRepo.save(qlpktclhPhieuKtChatLuong);
@@ -119,7 +117,7 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 
 		qlpktclhPhieuKtChatLuong.setNgaySua(LocalDate.now());
 		qlpktclhPhieuKtChatLuong.setNguoiSuaId(userInfo.getId());
-		qlpktclhPhieuKtChatLuong.setMaDonVi(userInfo.getDvql());
+		qlpktclhPhieuKtChatLuong.setMaDvi(userInfo.getDvql());
 		qlpktclhPhieuKtChatLuong = qlpktclhPhieuKtChatLuongRepo.save(qlpktclhPhieuKtChatLuong);
 
 		//Update kết quả kiểm tra
@@ -141,7 +139,7 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 	@Override
 	public Page<QlpktclhPhieuKtChatLuongResponseDto> filter(QlpktclhPhieuKtChatLuongFilterRequestDto req) throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
-		this.prepareSearchReq(req, userInfo, req.getCapDvi(), req.getTrangThais());
+		this.prepareSearchReq(req, userInfo, req.getCapDvis(), req.getTrangThais());
 		return qlpktclhPhieuKtChatLuongRepo.filter(req);
 	}
 
@@ -149,7 +147,7 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 	public BaseNhapHangCount count() throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
 		QlpktclhPhieuKtChatLuongFilterRequestDto req = new QlpktclhPhieuKtChatLuongFilterRequestDto();
-		this.prepareSearchReq(req, userInfo, userInfo.getCapDvi(), req.getTrangThais());
+		this.prepareSearchReq(req, userInfo, null, req.getTrangThais());
 		BaseNhapHangCount count = new BaseNhapHangCount();
 
 		count.setTatCa(qlpktclhPhieuKtChatLuongRepo.countPhieuKiemTraChatLuong(req));
@@ -291,7 +289,7 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 	@Override
 	public boolean exportToExcel(QlpktclhPhieuKtChatLuongFilterRequestDto objReq, HttpServletResponse response) throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
-		this.prepareSearchReq(objReq, userInfo, objReq.getCapDvi(), objReq.getTrangThais());
+		this.prepareSearchReq(objReq, userInfo, objReq.getCapDvis(), objReq.getTrangThais());
 		objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
 		List<QlpktclhPhieuKtChatLuongResponseDto> list = this.filter(objReq).get().collect(Collectors.toList());
 

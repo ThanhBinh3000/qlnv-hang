@@ -26,6 +26,7 @@ public class BienBanBanGiaoMauRes {
 	private Integer soLuongMau;
 	private String chiTieuKiemTra;
 	private String ttNiemPhongMauHang;
+	private String diaDiemBanGiao;
 
 	private String maDvi;
 	private String tenDvi;

@@ -35,6 +35,7 @@ public class BienBanBanGiaoMau extends BaseEntity implements Serializable {
 	private Integer soLuongMau;
 	private String chiTieuKiemTra;
 	private String ttNiemPhongMauHang;
+	private String diaDiemBanGiao;
 
 	private Long nguoiGuiDuyetId;
 	private LocalDate ngayGuiDuyet;

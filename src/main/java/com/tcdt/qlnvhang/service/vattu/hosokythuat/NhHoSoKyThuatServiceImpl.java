@@ -282,7 +282,7 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
         // TODO: Bien ban giao mau
         UserInfo userInfo = UserUtils.getUserInfo();
 
-        this.prepareSearchReq(req, userInfo, req.getCapDvi(), req.getTrangThais());
+        this.prepareSearchReq(req, userInfo, req.getCapDvis(), req.getTrangThais());
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         List<Object[]> data = nhHoSoKyThuatRepository.search(req);
         List<NhHoSoKyThuatRes> responses = new ArrayList<>();
@@ -322,7 +322,7 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
     @Override
     public boolean exportToExcel(NhHoSoKyThuatSearchReq objReq, HttpServletResponse response) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
-        this.prepareSearchReq(objReq, userInfo, objReq.getCapDvi(), objReq.getTrangThais());
+        this.prepareSearchReq(objReq, userInfo, objReq.getCapDvis(), objReq.getTrangThais());
         objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
         List<NhHoSoKyThuatRes> list = this.search(objReq).get().collect(Collectors.toList());
 

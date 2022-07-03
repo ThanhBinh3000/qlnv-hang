@@ -17,7 +17,7 @@ public class PhieuKnghiemCluongHangRepositoryCustomImpl implements PhieuKnghiemC
 	@Override
 	public List<Object[]> search(PhieuKnghiemCluongHangSearchReq req, Pageable pageable) {
 		StringBuilder builder = new StringBuilder();
-		builder.append("SELECT phieu, nganLo, nx.id, nx.soQd, bbBanGiao.id, bbBanGiao.soBienBan FROM PhieuKnghiemCluongHang phieu ");
+		builder.append("SELECT phieu, nganLo, nx.id, nx.soQd, bbBanGiao.id, bbBanGiao.soBienBan, bbBanGiao.ngayBanGiaoMau FROM PhieuKnghiemCluongHang phieu ");
 		builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON phieu.qdgnvnxId = nx.id ");
 		builder.append("INNER JOIN BienBanBanGiaoMau bbBanGiao ON phieu.bbBanGiaoMauId = bbBanGiao.id ");
 		builder.append("LEFT JOIN KtNganLo nganLo ON phieu.maNganLo = nganLo.maNganlo ");
@@ -51,21 +51,14 @@ public class PhieuKnghiemCluongHangRepositoryCustomImpl implements PhieuKnghiemC
 			builder.append("AND ").append("phieu.soPhieu LIKE :soPhieu ");
 		}
 
-		if (req.getNgayKnghiemTu() != null) {
-			builder.append("AND ").append("phieu.ngayKnghiem >= :ngayKnghiemTu ");
+		if (req.getNgayBanGiaoMauTu() != null) {
+			builder.append("AND ").append("bbBanGiao.ngayBanGiaoMau >= :ngayBanGiaoMauTu ");
 		}
 
-		if (req.getNgayKnghiemDen() != null) {
-			builder.append("AND ").append("phieu.ngayKnghiem <= :ngayKnghiemDen ");
+		if (req.getNgayBanGiaoMauDen() != null) {
+			builder.append("AND ").append("bbBanGiao.ngayBanGiaoMau <= :ngayBanGiaoMauDen ");
 		}
 
-		if (req.getNgayLayMauTu() != null) {
-			builder.append("AND ").append("phieu.ngayLayMau >= :ngayLayMauTu ");
-		}
-
-		if (req.getNgayLayMauDen() != null) {
-			builder.append("AND ").append("phieu.ngayLayMau <= :ngayLayMauDen ");
-		}
 
 		if (!StringUtils.isEmpty(req.getSoQdNhap())) {
 			builder.append("AND ").append("nx.soQd LIKE :soQdNhap ");
@@ -110,20 +103,12 @@ public class PhieuKnghiemCluongHangRepositoryCustomImpl implements PhieuKnghiemC
 			query.setParameter("soPhieu", "%" + req.getSoPhieu() + "%");
 		}
 
-		if (req.getNgayKnghiemTu() != null) {
-			query.setParameter("ngayKnghiemTu", req.getNgayKnghiemTu());
+		if (req.getNgayBanGiaoMauTu() != null) {
+			query.setParameter("ngayBanGiaoMauTu", req.getNgayBanGiaoMauTu());
 		}
 
-		if (req.getNgayKnghiemDen() != null) {
-			query.setParameter("ngayKnghiemDen", req.getNgayKnghiemDen());
-		}
-
-		if (req.getNgayLayMauTu() != null) {
-			query.setParameter("ngayLayMauTu", req.getNgayLayMauTu());
-		}
-
-		if (req.getNgayLayMauDen() != null) {
-			query.setParameter("ngayLayMauDen", req.getNgayLayMauDen());
+		if (req.getNgayBanGiaoMauDen() != null) {
+			query.setParameter("ngayBanGiaoMauDen", req.getNgayBanGiaoMauDen());
 		}
 
 		if (!StringUtils.isEmpty(req.getSoQdNhap())) {

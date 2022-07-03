@@ -16,7 +16,6 @@ import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLt
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.object.HhBbNghiemthuKlstHdrReq;
 import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoHangHoaLtReq;
 import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLtReq;
 import com.tcdt.qlnvhang.request.search.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLtSearchReq;
@@ -27,7 +26,6 @@ import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.HhBbNghiemthuKlstHdr;
 import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
@@ -346,7 +344,7 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null)
             throw new Exception("Bad request.");
-        this.prepareSearchReq(req, userInfo, req.getCapDvi(), req.getTrangThais());
+        this.prepareSearchReq(req, userInfo, req.getCapDvis(), req.getTrangThais());
         return qlPhieuNhapKhoLtRepository.search(req);
     }
 
@@ -378,7 +376,7 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
     public BaseNhapHangCount count() throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         QlPhieuNhapKhoLtSearchReq req = new QlPhieuNhapKhoLtSearchReq();
-        this.prepareSearchReq(req, userInfo, userInfo.getCapDvi(), req.getTrangThais());
+        this.prepareSearchReq(req, userInfo, null, req.getTrangThais());
         BaseNhapHangCount count = new BaseNhapHangCount();
 
         count.setTatCa(qlPhieuNhapKhoLtRepository.count(req));
@@ -403,7 +401,7 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
     @Override
     public boolean exportToExcel(QlPhieuNhapKhoLtSearchReq objReq, HttpServletResponse response) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
-        this.prepareSearchReq(objReq, userInfo, objReq.getCapDvi(), objReq.getTrangThais());
+        this.prepareSearchReq(objReq, userInfo, objReq.getCapDvis(), objReq.getTrangThais());
         objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
         List<QlPhieuNhapKhoLtRes> list = this.search(objReq).get().collect(Collectors.toList());
 

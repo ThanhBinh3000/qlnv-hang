@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -324,12 +325,19 @@ public class BaseServiceImpl {
 		return qlnvDmDonviRepository.findMaDviByMaDviChaAndTrangThai(maDviCha, Contains.HOAT_DONG);
 	}
 
-	public <T extends BaseRequest> void prepareSearchReq(T req, UserInfo userInfo, String capDviReq, Set<String> trangThais) {
+	public <T extends BaseRequest> void prepareSearchReq(T req, UserInfo userInfo, Set<String> capDviReqs, Set<String> trangThais) {
 		String userCapDvi = userInfo.getCapDvi();
-		if (StringUtils.hasText(capDviReq)
-				&& !capDviReq.equalsIgnoreCase(userCapDvi)
-				&& (Contains.CAP_CUC.equals(userCapDvi) || Contains.CAP_TONG_CUC.equals(userCapDvi))) {
-			req.setMaDvis(this.getMaDviCon(userInfo.getDvql()));
+		if (!CollectionUtils.isEmpty(capDviReqs)) {
+			Set<String> maDvis = new HashSet<>();
+			if ((Contains.CAP_TONG_CUC.equals(userCapDvi) && capDviReqs.contains(Contains.CAP_TONG_CUC))
+					|| Contains.CAP_CUC.equals(userCapDvi) && capDviReqs.contains(Contains.CAP_CUC)) {
+				maDvis.add(userInfo.getDvql());
+			}
+			if ((Contains.CAP_TONG_CUC.equals(userCapDvi) && capDviReqs.contains(Contains.CAP_CUC)) ||
+					(Contains.CAP_CUC.equals(userCapDvi) && capDviReqs.contains(Contains.CAP_CHI_CUC))) {
+				maDvis.addAll(this.getMaDviCon(userInfo.getDvql()));
+			}
+			req.setMaDvis(maDvis);
 		} else {
 			req.setMaDvis(Collections.singleton(userInfo.getDvql()));
 		}

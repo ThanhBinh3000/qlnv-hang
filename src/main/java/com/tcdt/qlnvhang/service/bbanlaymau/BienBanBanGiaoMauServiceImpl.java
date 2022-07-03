@@ -15,7 +15,6 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanBanGiaoMauReq;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauCtReq;
-import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauReq;
 import com.tcdt.qlnvhang.request.search.BienBanBanGiaoMauSearchReq;
 import com.tcdt.qlnvhang.response.bbanlaymau.BienBanBanGiaoMauCtRes;
 import com.tcdt.qlnvhang.response.bbanlaymau.BienBanBanGiaoMauRes;
@@ -92,7 +91,7 @@ public class BienBanBanGiaoMauServiceImpl extends BaseServiceImpl implements Bie
 	public Page<BienBanBanGiaoMauRes> search(BienBanBanGiaoMauSearchReq req) throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-		this.prepareSearchReq(req, userInfo, req.getCapDvi(), req.getTrangThais());
+		this.prepareSearchReq(req, userInfo, req.getCapDvis(), req.getTrangThais());
 		List<Object[]> data = bienBanBanGiaoMauRepository.search(req, pageable);
 
 		List<BienBanBanGiaoMauRes> responses = new ArrayList<>();
@@ -341,7 +340,7 @@ public class BienBanBanGiaoMauServiceImpl extends BaseServiceImpl implements Bie
 	@Override
 	public boolean exportToExcel(BienBanBanGiaoMauSearchReq objReq, HttpServletResponse response) throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
-		this.prepareSearchReq(objReq, userInfo, objReq.getCapDvi(), objReq.getTrangThais());
+		this.prepareSearchReq(objReq, userInfo, objReq.getCapDvis(), objReq.getTrangThais());
 		objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
 		List<BienBanBanGiaoMauRes> list = this.search(objReq).get().collect(Collectors.toList());
 

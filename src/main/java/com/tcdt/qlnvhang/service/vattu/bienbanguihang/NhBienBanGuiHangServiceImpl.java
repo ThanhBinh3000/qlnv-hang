@@ -246,7 +246,7 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
     public Page<NhBienBanGuiHangRes> search(NhBienBanGuiHangSearchReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
 
-        this.prepareSearchReq(req, userInfo, req.getCapDvi(), req.getTrangThais());
+        this.prepareSearchReq(req, userInfo, req.getCapDvis(), req.getTrangThais());
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         List<Object[]> data = bienBanGuiHangRepository.search(req);
         List<NhBienBanGuiHangRes> responses = new ArrayList<>();
@@ -278,7 +278,7 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
     @Override
     public boolean exportToExcel(NhBienBanGuiHangSearchReq objReq, HttpServletResponse response) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
-        this.prepareSearchReq(objReq, userInfo, objReq.getCapDvi(), objReq.getTrangThais());
+        this.prepareSearchReq(objReq, userInfo, objReq.getCapDvis(), objReq.getTrangThais());
         objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
         List<NhBienBanGuiHangRes> list = this.search(objReq).get().collect(Collectors.toList());
 

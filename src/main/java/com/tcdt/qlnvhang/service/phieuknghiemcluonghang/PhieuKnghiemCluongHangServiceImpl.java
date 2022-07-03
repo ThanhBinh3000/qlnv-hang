@@ -52,6 +52,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -64,8 +65,7 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 	private static final String STT = "STT";
 	private static final String SO_PHIEU = "Số Phiếu";
 	private static final String SO_QUYET_DINH_NHAP = "Số Quyết Định Nhập";
-	private static final String NGAY_KIEM_NGHIEM = "Ngày Kiểm Nghiệm";
-	private static final String SO_BIEN_BAN_BAN_GIAO_MAU = "Số Biên Bản Bàn Giao Mẫu";
+	private static final String NGAY_BAN_GIAO_MAU = "Ngày Bàn Giao Mẫu";
 	private static final String CUC_DU_TRU_NHA_NUOC_KHU_VUC = "Cục Dự Trữ Nhà Nước Khu Vực";
 	private static final String DON_VI_TO_CHUC_THU_NGHIEM = "Đơn Vị Tổ Chức Thử Nghiệm";
 	private static final String SO_LUONG_MAU_HANG_KIEM_TRA = "Số Lượng Mẫu Hàng Kiểm Tra";
@@ -103,7 +103,7 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 		QlnvDmDonvi donVi = getDviByMa(dvql, httpServletRequest);
 		QlnvDmDonvi donViCha = Optional.ofNullable(donVi).map(QlnvDmDonvi::getParent).orElse(null);
 
-		this.prepareSearchReq(req, userInfo, req.getCapDvi(), req.getTrangThais());
+		this.prepareSearchReq(req, userInfo, req.getCapDvis(), req.getTrangThais());
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),  req.getPaggingReq().getLimit());
 		List<Object[]> list = phieuKnghiemCluongHangRepository.search(req, pageable);
 
@@ -121,6 +121,7 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 			String soQdNhap = (String) o[3];
 			Long bbBanGiaoId = (Long) o[4];
 			String soBienBanBanGiao = (String) o[5];
+			LocalDate ngayBanGiaoMau = (LocalDate) o[6];
 
 			BeanUtils.copyProperties(item, response);
 			response.setTenTrangThai(QlPhieuNhapKhoLtStatus.getTenById(item.getTrangThai()));
@@ -138,6 +139,7 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 			}
 			response.setBbBanGiaoMauId(bbBanGiaoId);
 			response.setSoBbBanGiao(soBienBanBanGiao);
+			response.setNgayBanGiaoMau(ngayBanGiaoMau);
 			response.setSoLuongMauHangKt(mapCount.get(item.getId()));
 			responses.add(response);
 		}
@@ -309,6 +311,7 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 				throw new Exception("Không tìm thấy biên bản bàn giao mẫu");
 			}
 			res.setSoBbBanGiao(bbBanGiao.get().getSoBienBan());
+			res.setNgayBanGiaoMau(bbBanGiao.get().getNgayBanGiaoMau());
 		}
 
 		Page<KquaKnghiemRes> list = kquaKnghiemService.list(phieu.getId(), PageRequest.of(DEFAULT_PAGE_INDEX, Integer.MAX_VALUE));
@@ -370,7 +373,7 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 	@Override
 	public boolean exportToExcel(PhieuKnghiemCluongHangSearchReq objReq, HttpServletResponse response) throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
-		this.prepareSearchReq(objReq, userInfo, objReq.getCapDvi(), objReq.getTrangThais());
+		this.prepareSearchReq(objReq, userInfo, objReq.getCapDvis(), objReq.getTrangThais());
 		objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
 		List<PhieuKnghiemCluongHangRes> list = this.search(objReq).get().collect(Collectors.toList());
 
@@ -395,12 +398,11 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 			ExportExcel.createCell(row0, 0, STT, style, sheet);
 			ExportExcel.createCell(row0, 1, SO_PHIEU, style, sheet);
 			ExportExcel.createCell(row0, 2, SO_QUYET_DINH_NHAP, style, sheet);
-			ExportExcel.createCell(row0, 3, NGAY_KIEM_NGHIEM, style, sheet);
-			ExportExcel.createCell(row0, 4, SO_BIEN_BAN_BAN_GIAO_MAU, style, sheet);
-			ExportExcel.createCell(row0, 5, CUC_DU_TRU_NHA_NUOC_KHU_VUC, style, sheet);
-			ExportExcel.createCell(row0, 6, DON_VI_TO_CHUC_THU_NGHIEM, style, sheet);
-			ExportExcel.createCell(row0, 7, SO_LUONG_MAU_HANG_KIEM_TRA, style, sheet);
-			ExportExcel.createCell(row0, 8, TRANG_THAI, style, sheet);
+			ExportExcel.createCell(row0, 3, NGAY_BAN_GIAO_MAU, style, sheet);
+			ExportExcel.createCell(row0, 4, CUC_DU_TRU_NHA_NUOC_KHU_VUC, style, sheet);
+			ExportExcel.createCell(row0, 5, DON_VI_TO_CHUC_THU_NGHIEM, style, sheet);
+			ExportExcel.createCell(row0, 6, SO_LUONG_MAU_HANG_KIEM_TRA, style, sheet);
+			ExportExcel.createCell(row0, 7, TRANG_THAI, style, sheet);
 
 			style = workbook.createCellStyle();
 			font = workbook.createFont();
@@ -415,12 +417,11 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 				ExportExcel.createCell(row, 0, startRowIndex, style, sheet);
 				ExportExcel.createCell(row, 1, item.getSoPhieu(), style, sheet);
 				ExportExcel.createCell(row, 2, item.getSoQuyetDinhNhap(), style, sheet);
-				ExportExcel.createCell(row, 3, LocalDateTimeUtils.localDateToString(item.getNgayKnghiem()), style, sheet);
+				ExportExcel.createCell(row, 3, LocalDateTimeUtils.localDateToString(item.getNgayBanGiaoMau()), style, sheet);
 				ExportExcel.createCell(row, 4, item.getTenDviCha(), style, sheet);
-				ExportExcel.createCell(row, 5, item.getTenDviCha(), style, sheet);
-				ExportExcel.createCell(row, 6, item.getTenDvi(), style, sheet);
-				ExportExcel.createCell(row, 7, item.getSoLuongMauHangKt(), style, sheet);
-				ExportExcel.createCell(row, 8, TrangThaiEnum.getTenById(item.getTrangThai()), style, sheet);
+				ExportExcel.createCell(row, 5, item.getTenDvi(), style, sheet);
+				ExportExcel.createCell(row, 6, item.getSoLuongMauHangKt(), style, sheet);
+				ExportExcel.createCell(row, 7, TrangThaiEnum.getTenById(item.getTrangThai()), style, sheet);
 				startRowIndex++;
 			}
 

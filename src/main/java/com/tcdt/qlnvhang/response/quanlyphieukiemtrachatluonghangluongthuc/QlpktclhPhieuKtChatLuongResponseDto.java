@@ -44,7 +44,7 @@ public class QlpktclhPhieuKtChatLuongResponseDto {
 
 	private String soPhieuAnToanThucPham;
 
-	private String maDonVi;
+	private String maDvi;
 
 	private String ketLuan;
 

@@ -70,8 +70,8 @@ public class PhieuKnghiemCluongHangController {
 	}
 
 	@ApiOperation(value = "Xoá thông tin Phiếu Kiểm nghiệm chất lượng hàng", response = Boolean.class)
-	@DeleteMapping
-	public ResponseEntity<BaseResponse> delete(@RequestParam("id") Long id) {
+	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<BaseResponse> delete(@PathVariable("id") Long id) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			Boolean res = phieuKnghiemCluongHangService.delete(id);
@@ -88,7 +88,7 @@ public class PhieuKnghiemCluongHangController {
 
 	@ApiOperation(value = "Chi tiết Phiếu Kiểm nghiệm chất lượng hàng", response = Page.class)
 	@GetMapping("/{id}")
-	public ResponseEntity<BaseResponse> detail(@RequestParam("id") Long id) {
+	public ResponseEntity<BaseResponse> detail(@PathVariable("id") Long id) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			PhieuKnghiemCluongHangRes res = phieuKnghiemCluongHangService.detail(id);

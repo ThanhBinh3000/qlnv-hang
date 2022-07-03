@@ -62,7 +62,7 @@ public class QlpktclhPhieuKtChatLuongRequestDto {
 	private String soPhieuAnToanThucPham;
 
 	@NotNull
-	private String maDonVi;
+	private String maDvi;
 
 	private String maQhns;
 
