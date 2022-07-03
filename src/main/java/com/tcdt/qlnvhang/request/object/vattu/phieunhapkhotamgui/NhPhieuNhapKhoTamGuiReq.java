@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class NhPhieuNhapKhoTamGuiReq {
     private BigDecimal no;
     private BigDecimal co;
     private String nguoiGiaoHang;
-    private LocalDate thoiGianGiaoNhanHang;
+    private LocalDateTime thoiGianGiaoNhanHang;
     private LocalDate ngayTaoPhieu;
     private String maDiemKho;
     private String maNhaKho;
