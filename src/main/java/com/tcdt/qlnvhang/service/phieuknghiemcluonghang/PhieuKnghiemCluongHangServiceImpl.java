@@ -420,7 +420,7 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 				ExportExcel.createCell(row, 3, LocalDateTimeUtils.localDateToString(item.getNgayBanGiaoMau()), style, sheet);
 				ExportExcel.createCell(row, 4, item.getTenDviCha(), style, sheet);
 				ExportExcel.createCell(row, 5, item.getTenDvi(), style, sheet);
-				ExportExcel.createCell(row, 6, item.getSoLuongMauHangKt(), style, sheet);
+				ExportExcel.createCell(row, 6, item.getSoLuongMauHangKt() != null ? item.getSoLuongMauHangKt().toString() : 0, style, sheet);
 				ExportExcel.createCell(row, 7, TrangThaiEnum.getTenById(item.getTrangThai()), style, sheet);
 				startRowIndex++;
 			}
