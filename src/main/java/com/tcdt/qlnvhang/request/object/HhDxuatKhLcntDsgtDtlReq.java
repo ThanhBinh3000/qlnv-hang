@@ -56,7 +56,7 @@ public class HhDxuatKhLcntDsgtDtlReq {
 	@NotNull(message = "Không được để trống")
 	String nguonVon;
 
-	String tgianBdauLcnt;
+	String tgianBdauThien;
 
 	@NotNull(message = "Không được để trống")
 	Integer tgianThienHd;

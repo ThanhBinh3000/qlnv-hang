@@ -52,9 +52,11 @@ public class HhDxKhlcntDsgthau implements Serializable {
 
 	private String nguonVon;
 
-	private String tgianBdauLcnt;
+	private String tgianBdauThien;
 
 	private Integer tgianThienHd;
+
+	String diaDiemNhap;
 
 	@Transient
 	private List<HhDxKhlcntDsgthauCtiet> children = new ArrayList<>();
