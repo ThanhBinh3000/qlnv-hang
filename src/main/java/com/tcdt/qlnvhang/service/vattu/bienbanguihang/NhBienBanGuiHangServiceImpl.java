@@ -42,6 +42,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -68,6 +69,7 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
     private static final String TRANG_THAI = "Trạng Thái";
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public NhBienBanGuiHangRes create(NhBienBanGuiHangReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         this.validateSoBb(null, req);
@@ -143,6 +145,7 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
     }
     
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public NhBienBanGuiHangRes update(NhBienBanGuiHangReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
 
@@ -181,6 +184,7 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public boolean delete(Long id) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         Optional<NhBienBanGuiHang> optional = bienBanGuiHangRepository.findById(id);
@@ -197,6 +201,7 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public boolean updateStatusQd(StatusReq stReq) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         Optional<NhBienBanGuiHang> optional = bienBanGuiHangRepository.findById(stReq.getId());
@@ -268,6 +273,7 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public boolean deleteMultiple(DeleteReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         bienBanGuiHangCtRepository.deleteByBienBanGuiHangIdIn(req.getIds());
