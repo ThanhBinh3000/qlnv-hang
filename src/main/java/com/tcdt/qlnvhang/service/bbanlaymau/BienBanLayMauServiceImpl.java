@@ -19,6 +19,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauCtReq;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauReq;
 import com.tcdt.qlnvhang.request.search.BienBanLayMauSearchReq;
+import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
 import com.tcdt.qlnvhang.response.bbanlaymau.BienBanLayMauCtRes;
 import com.tcdt.qlnvhang.response.bbanlaymau.BienBanLayMauRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
@@ -471,5 +472,14 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 			if (optional.isPresent() && !optional.get().getId().equals(updateId))
 				throw new Exception("Số biên bản " + soBB + " đã tồn tại");
 		}
+	}
+
+	@Override
+	public SoBienBanPhieuRes getSo() throws Exception {
+		UserInfo userInfo = UserUtils.getUserInfo();
+		Integer so = bienBanLayMauRepository.findMaxSo(userInfo.getDvql(), LocalDate.now().getYear());
+		so = Optional.ofNullable(so).orElse(0);
+		so = so + 1;
+		return new SoBienBanPhieuRes(so, LocalDate.now().getYear());
 	}
 }

@@ -95,38 +95,41 @@ public class BaseServiceImpl {
 		return qlnvDmDonvi;
 	}
 
-	public Map<String, String> getListDanhMucChung(String loai){
+	public Map<String, String> getListDanhMucChung(String loai) {
 		ResponseEntity<String> response = categoryServiceProxy.getDanhMucChung(getAuthorizationToken(request),
-				 loai);
+				loai);
 		String str = Request.getAttrFromJson(response.getBody(), "data");
 		HashMap<String, String> data = new HashMap<String, String>();
-		List<Map<String, Object>> retMap = new Gson().fromJson(str, new TypeToken<List<HashMap<String, Object>>>() {}.getType());
-		for (Map<String, Object> map : retMap){
+		List<Map<String, Object>> retMap = new Gson().fromJson(str, new TypeToken<List<HashMap<String, Object>>>() {
+		}.getType());
+		for (Map<String, Object> map : retMap) {
 			data.put(String.valueOf(map.get("ma")), String.valueOf(map.get("giaTri")));
 		}
 		return data;
 	}
 
-	public Map<String, String> getListDanhMucDviLq(String loai){
+	public Map<String, String> getListDanhMucDviLq(String loai) {
 		HhDmDviLquanSearchReq objReq = new HhDmDviLquanSearchReq();
 		objReq.setTypeDvi(loai);
 		ResponseEntity<String> response = categoryServiceProxy.getDanhMucDviLquan(getAuthorizationToken(request),
 				objReq);
 		String str = Request.getAttrFromJson(response.getBody(), "data");
 		HashMap<String, String> data = new HashMap<String, String>();
-		List<Map<String, Object>> retMap = new Gson().fromJson(str, new TypeToken<List<HashMap<String, Object>>>() {}.getType());
-		for (Map<String, Object> map : retMap){
+		List<Map<String, Object>> retMap = new Gson().fromJson(str, new TypeToken<List<HashMap<String, Object>>>() {
+		}.getType());
+		for (Map<String, Object> map : retMap) {
 			data.put(String.valueOf(map.get("id")), String.valueOf(map.get("tenDvi")));
 		}
 		return data;
 	}
 
-	public Map<String, String> getListDanhMucHangHoa(){
+	public Map<String, String> getListDanhMucHangHoa() {
 		ResponseEntity<String> response = categoryServiceProxy.getDanhMucHangHoa(getAuthorizationToken(request));
 		String str = Request.getAttrFromJson(response.getBody(), "data");
 		HashMap<String, String> data = new HashMap<String, String>();
-		List<Map<String, Object>> retMap = new Gson().fromJson(str, new TypeToken<List<HashMap<String, Object>>>() {}.getType());
-		for (Map<String, Object> map : retMap){
+		List<Map<String, Object>> retMap = new Gson().fromJson(str, new TypeToken<List<HashMap<String, Object>>>() {
+		}.getType());
+		for (Map<String, Object> map : retMap) {
 			data.put(String.valueOf(map.get("ma")), String.valueOf(map.get("ten")));
 		}
 		return data;
@@ -183,7 +186,7 @@ public class BaseServiceImpl {
 		return authentication.getDetails().toString();
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	<T> void updateMapToObject(Map<String, String> params, T source, Class cls) throws JsonMappingException {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setDateFormat(new SimpleDateFormat(Contains.FORMAT_DATE_STR));
@@ -201,7 +204,7 @@ public class BaseServiceImpl {
 		mapper.updateValue(source, objectEdit);
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public <T> T mapToClass(Map data, Class cls) {
 		try {
 			Object obj = cls.getDeclaredConstructor().newInstance();
@@ -279,7 +282,7 @@ public class BaseServiceImpl {
 	}
 
 	public static String convertDateToString(Date date) throws Exception {
-		if(Objects.isNull(date)){
+		if (Objects.isNull(date)) {
 			return null;
 		}
 		DateFormat df = new SimpleDateFormat(Contains.FORMAT_DATE_STR);
@@ -287,7 +290,7 @@ public class BaseServiceImpl {
 	}
 
 	public static String convertDateToString(LocalDate date) throws Exception {
-		if(Objects.isNull(date)){
+		if (Objects.isNull(date)) {
 			return null;
 		}
 		DateFormat df = new SimpleDateFormat(Contains.FORMAT_DATE_STR);
@@ -344,3 +347,5 @@ public class BaseServiceImpl {
 		req.setTrangThais(trangThais);
 	}
 }
+
+

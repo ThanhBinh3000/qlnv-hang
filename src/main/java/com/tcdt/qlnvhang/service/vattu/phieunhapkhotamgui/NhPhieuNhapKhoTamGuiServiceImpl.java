@@ -14,6 +14,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiReq;
 import com.tcdt.qlnvhang.request.search.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiSearchReq;
+import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
 import com.tcdt.qlnvhang.response.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiCtRes;
 import com.tcdt.qlnvhang.response.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiRes;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -397,5 +398,14 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
             if (optional.isPresent() && !optional.get().getId().equals(updateId))
                 throw new Exception("Số phiếu " + so + " đã tồn tại");
         }
+    }
+
+    @Override
+    public SoBienBanPhieuRes getSo() throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        Integer so = nhPhieuNhapKhoTamGuiRepository.findMaxSo(userInfo.getDvql(), LocalDate.now().getYear());
+        so = Optional.ofNullable(so).orElse(0);
+        so = so + 1;
+        return new SoBienBanPhieuRes(so, LocalDate.now().getYear());
     }
 }

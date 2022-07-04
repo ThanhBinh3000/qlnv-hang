@@ -154,7 +154,7 @@ public class PhieuKnghiemCluongHangController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Export biên bản nhập đầy kho lương thực", response = List.class)
+	@ApiOperation(value = "Export Phiếu Kiểm nghiệm chất lượng hàng", response = List.class)
 	@PostMapping(value = "/export/list", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody PhieuKnghiemCluongHangSearchReq req) {
@@ -172,6 +172,22 @@ public class PhieuKnghiemCluongHangController {
 			log.error("Error can not export", e);
 		}
 
+	}
+
+	@ApiOperation(value = "Get số Phiếu Kiểm nghiệm chất lượng hàng", response = List.class)
+	@GetMapping("/so")
+	public ResponseEntity<BaseResponse> getSo() {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(phieuKnghiemCluongHangService.getSo());
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Get số Phiếu Kiểm nghiệm chất lượng hàng lỗi", e);
+		}
+		return ResponseEntity.ok(resp);
 	}
 }
 

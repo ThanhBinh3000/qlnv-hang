@@ -181,4 +181,20 @@ public class QlBienBanNhapDayKhoLtController {
         }
 
     }
+
+    @ApiOperation(value = "Get số biên bản nhập đầy kho lương thực", response = List.class)
+    @GetMapping("/so")
+    public ResponseEntity<BaseResponse> getSo() {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(qlBienBanNhapDayKhoLtService.getSo());
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Get số biên bản nhập đầy kho lương thực lỗi", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
 }

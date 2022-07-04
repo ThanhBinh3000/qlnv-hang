@@ -13,6 +13,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongFilterRequestDto;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongRequestDto;
 import com.tcdt.qlnvhang.response.BaseNhapHangCount;
+import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
 import com.tcdt.qlnvhang.response.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhKetQuaKiemTraResponseDto;
 import com.tcdt.qlnvhang.response.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongResponseDto;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -370,5 +371,14 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 			if (optional.isPresent() && !optional.get().getId().equals(updateId))
 				throw new Exception("Số phiếu " + so + " đã tồn tại");
 		}
+	}
+
+	@Override
+	public SoBienBanPhieuRes getSo() throws Exception {
+		UserInfo userInfo = UserUtils.getUserInfo();
+		Integer so = qlpktclhPhieuKtChatLuongRepo.findMaxSo(userInfo.getDvql(), LocalDate.now().getYear());
+		so = Optional.ofNullable(so).orElse(0);
+		so = so + 1;
+		return new SoBienBanPhieuRes(so, LocalDate.now().getYear());
 	}
 }

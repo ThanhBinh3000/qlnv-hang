@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.request.object.phieuknghiemcluonghang;
 
+import com.tcdt.qlnvhang.request.object.SoBienBanPhieuReq;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class PhieuKnghiemCluongHangReq {
+public class PhieuKnghiemCluongHangReq extends SoBienBanPhieuReq {
 	private Long id;
 	private Long qdgnvnxId;
 	private Long bbBanGiaoMauId;

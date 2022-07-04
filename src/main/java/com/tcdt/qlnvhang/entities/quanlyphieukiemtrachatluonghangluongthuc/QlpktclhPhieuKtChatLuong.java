@@ -124,6 +124,9 @@ public class QlpktclhPhieuKtChatLuong extends BaseEntity {
 	@Column(name = "LOAI_VTHH")
 	private String loaiVthh;
 
+	private Integer so;
+	private Integer nam;
+
 	@Transient
 	private List<QlpktclhKetQuaKiemTra> ketQuaKiemTra = new ArrayList<>();
 }

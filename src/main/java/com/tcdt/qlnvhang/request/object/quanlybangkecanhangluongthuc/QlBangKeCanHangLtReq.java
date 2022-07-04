@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.request.object.quanlybangkecanhangluongthuc;
 
+import com.tcdt.qlnvhang.request.object.SoBienBanPhieuReq;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class QlBangKeCanHangLtReq {
+public class QlBangKeCanHangLtReq extends SoBienBanPhieuReq {
     private Long id;
 
     private String soBangKe;

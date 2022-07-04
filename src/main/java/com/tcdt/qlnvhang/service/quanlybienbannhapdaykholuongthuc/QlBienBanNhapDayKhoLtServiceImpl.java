@@ -16,6 +16,7 @@ import com.tcdt.qlnvhang.request.object.quanlybienbannhapdaykholuongthuc.QlBienB
 import com.tcdt.qlnvhang.request.object.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtReq;
 import com.tcdt.qlnvhang.request.search.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtSearchReq;
 import com.tcdt.qlnvhang.response.BaseNhapHangCount;
+import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
 import com.tcdt.qlnvhang.response.quanlybienbannhapdaykholuongthuc.QlBienBanNdkCtLtRes;
 import com.tcdt.qlnvhang.response.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
@@ -476,5 +477,14 @@ public class QlBienBanNhapDayKhoLtServiceImpl extends BaseServiceImpl implements
             if (optional.isPresent() && !optional.get().getId().equals(updateId))
                 throw new Exception("Số biên bản " + soBB + " đã tồn tại");
         }
+    }
+
+    @Override
+    public SoBienBanPhieuRes getSo() throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        Integer so = qlBienBanNhapDayKhoLtRepository.findMaxSo(userInfo.getDvql(), LocalDate.now().getYear());
+        so = Optional.ofNullable(so).orElse(0);
+        so = so + 1;
+        return new SoBienBanPhieuRes(so, LocalDate.now().getYear());
     }
 }

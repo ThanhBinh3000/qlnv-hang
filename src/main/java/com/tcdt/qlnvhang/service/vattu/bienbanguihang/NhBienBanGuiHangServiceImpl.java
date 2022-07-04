@@ -13,6 +13,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanguihang.NhBienBanGuiHangCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanguihang.NhBienBanGuiHangReq;
 import com.tcdt.qlnvhang.request.search.vattu.bienbanguihang.NhBienBanGuiHangSearchReq;
+import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
 import com.tcdt.qlnvhang.response.vattu.bienbanguihang.NhBienBanGuiHangCtRes;
 import com.tcdt.qlnvhang.response.vattu.bienbanguihang.NhBienBanGuiHangRes;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -358,4 +359,14 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
                 throw new Exception("Số biên bản " + so + " đã tồn tại");
         }
     }
+
+    @Override
+    public SoBienBanPhieuRes getSo() throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        Integer so = bienBanGuiHangRepository.findMaxSo(userInfo.getDvql(), LocalDate.now().getYear());
+        so = Optional.ofNullable(so).orElse(0);
+        so = so + 1;
+        return new SoBienBanPhieuRes(so, LocalDate.now().getYear());
+    }
+
 }

@@ -192,4 +192,19 @@ public class HhBbNghiemthuKlstHdrController {
 		return ResponseEntity.ok(resp);
 	}
 
+	@ApiOperation(value = "Get số Biên bản nghiệm thu bảo quản lần đầu nhập", response = List.class)
+	@GetMapping("/so")
+	public ResponseEntity<BaseResponse> getSo() {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.getSo());
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Get số Biên bản nghiệm thu bảo quản lần đầu nhập lỗi", e);
+		}
+		return ResponseEntity.ok(resp);
+	}
 }

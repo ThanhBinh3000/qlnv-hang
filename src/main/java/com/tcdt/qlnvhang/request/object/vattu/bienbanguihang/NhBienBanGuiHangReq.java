@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.request.object.vattu.bienbanguihang;
 
+import com.tcdt.qlnvhang.request.object.SoBienBanPhieuReq;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +11,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class NhBienBanGuiHangReq {
+public class NhBienBanGuiHangReq extends SoBienBanPhieuReq {
     private Long id;
     private String maDvi;
     private String capDvi;

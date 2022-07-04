@@ -18,6 +18,7 @@ import com.tcdt.qlnvhang.request.object.quanlybangkecanhangluongthuc.QlBangKeCan
 import com.tcdt.qlnvhang.request.object.quanlybangkecanhangluongthuc.QlBangKeChCtLtReq;
 import com.tcdt.qlnvhang.request.search.quanlybangkecanhangluongthuc.QlBangKeCanHangLtSearchReq;
 import com.tcdt.qlnvhang.response.BaseNhapHangCount;
+import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
 import com.tcdt.qlnvhang.response.quanlybangkecanhangluongthuc.QlBangKeCanHangLtRes;
 import com.tcdt.qlnvhang.response.quanlybangkecanhangluongthuc.QlBangKeChCtLtRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
@@ -502,5 +503,14 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
             if (optional.isPresent() && !optional.get().getId().equals(updateId))
                 throw new Exception("Số bảng kê " + so + " đã tồn tại");
         }
+    }
+
+    @Override
+    public SoBienBanPhieuRes getSo() throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        Integer so = qlBangKeCanHangLtRepository.findMaxSo(userInfo.getDvql(), LocalDate.now().getYear());
+        so = Optional.ofNullable(so).orElse(0);
+        so = so + 1;
+        return new SoBienBanPhieuRes(so, LocalDate.now().getYear());
     }
 }

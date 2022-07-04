@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.response.bbanlaymau;
 
+import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +10,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class BienBanBanGiaoMauRes {
+public class BienBanBanGiaoMauRes extends SoBienBanPhieuRes {
 	private Long id;
 	private Long qdgnvnxId;
 	private String soQuyetDinhNhap;

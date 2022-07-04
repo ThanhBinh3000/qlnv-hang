@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.request.object.bbanlaymau;
 
+import com.tcdt.qlnvhang.request.object.SoBienBanPhieuReq;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +10,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class BienBanLayMauReq {
+public class BienBanLayMauReq extends SoBienBanPhieuReq {
 	private Long id;
 	private Long qdgnvnxId;
 	private Long bbNhapDayKhoId;

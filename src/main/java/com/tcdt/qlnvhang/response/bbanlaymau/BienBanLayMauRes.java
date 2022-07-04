@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.response.bbanlaymau;
 
+import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -7,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class BienBanLayMauRes {
+public class BienBanLayMauRes extends SoBienBanPhieuRes {
 	private Long id;
 	private Long qdgnvnxId;
 	private String soQuyetDinhNhap;

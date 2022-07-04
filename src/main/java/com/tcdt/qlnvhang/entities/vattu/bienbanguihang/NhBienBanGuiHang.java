@@ -113,6 +113,9 @@ public class NhBienBanGuiHang extends BaseEntity implements Serializable {
     @Column(name = "THOI_GIAN")
     private LocalDateTime thoiGian;
 
+    private Integer so;
+    private Integer nam;
+
     @Transient
     private List<NhBienBanGuiHangCt> chiTiets = new ArrayList<>();
 }

@@ -82,6 +82,8 @@ public class NhPhieuNhapKhoTamGui extends BaseEntity implements Serializable {
     private String lyDoTuChoi;
     private String maDvi;
     private String capDvi;
+    private Integer so;
+    private Integer nam;
 
     @Transient
     private List<NhPhieuNhapKhoTamGuiCt> chiTiets = new ArrayList<>();

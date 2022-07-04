@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.impl;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -14,6 +15,7 @@ import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhap
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
 import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
@@ -471,5 +473,14 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 			return false;
 		hhBbNghiemthuKlstRepository.deleteByIdIn(req.getIds());
 		return true;
+	}
+
+	@Override
+	public SoBienBanPhieuRes getSo() throws Exception {
+		UserInfo userInfo = UserUtils.getUserInfo();
+		Integer so = hhBbNghiemthuKlstRepository.findMaxSo(userInfo.getDvql(), LocalDate.now().getYear());
+		so = Optional.ofNullable(so).orElse(0);
+		so = so + 1;
+		return new SoBienBanPhieuRes(so, LocalDate.now().getYear());
 	}
 }

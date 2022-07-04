@@ -14,6 +14,7 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.phieuknghiemcluonghang.PhieuKnghiemCluongHangReq;
 import com.tcdt.qlnvhang.request.search.PhieuKnghiemCluongHangSearchReq;
+import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
 import com.tcdt.qlnvhang.response.phieuknghiemcluonghang.KquaKnghiemRes;
 import com.tcdt.qlnvhang.response.phieuknghiemcluonghang.PhieuKnghiemCluongHangRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
@@ -447,5 +448,14 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 			if (optional.isPresent() && !optional.get().getId().equals(updateId))
 				throw new Exception("Số phiếu " + so + " đã tồn tại");
 		}
+	}
+
+	@Override
+	public SoBienBanPhieuRes getSo() throws Exception {
+		UserInfo userInfo = UserUtils.getUserInfo();
+		Integer so = phieuKnghiemCluongHangRepository.findMaxSo(userInfo.getDvql(), LocalDate.now().getYear());
+		so = Optional.ofNullable(so).orElse(0);
+		so = so + 1;
+		return new SoBienBanPhieuRes(so, LocalDate.now().getYear());
 	}
 }

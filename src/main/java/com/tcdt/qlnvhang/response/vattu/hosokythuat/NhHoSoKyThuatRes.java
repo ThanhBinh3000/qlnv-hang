@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.response.vattu.hosokythuat;
 
+import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class NhHoSoKyThuatRes {
+public class NhHoSoKyThuatRes extends SoBienBanPhieuRes {
     private Long id;
     private Long qdgnvnxId;
     private String soQuyetDinhNhap;

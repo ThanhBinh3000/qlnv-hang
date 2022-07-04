@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.phieuktracluong;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.tcdt.qlnvhang.request.object.SoBienBanPhieuReq;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class QlpktclhPhieuKtChatLuongRequestDto {
+public class QlpktclhPhieuKtChatLuongRequestDto extends SoBienBanPhieuReq {
 	private Long id;
 
 	private String soPhieu;
