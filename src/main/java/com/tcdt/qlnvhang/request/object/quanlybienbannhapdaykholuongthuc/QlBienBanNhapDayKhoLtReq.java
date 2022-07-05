@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.object.quanlybienbannhapdaykholuongthuc;
 
 
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.request.object.SoBienBanPhieuReq;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class QlBienBanNhapDayKhoLtReq {
+public class QlBienBanNhapDayKhoLtReq extends SoBienBanPhieuReq {
     private Long id;
 
     @NotNull(message = "Không được để trống")

@@ -108,6 +108,9 @@ public class QlPhieuNhapKhoLt  extends BaseEntity implements Serializable {
     @Column(name = "LY_DO_TU_CHOI")
     private String lyDoTuChoi;
 
+    private Integer so;
+    private Integer nam;
+
     @Transient
     private List<QlPhieuNhapKhoHangHoaLt> hangHoaList = new ArrayList<>();
 

@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.Optional;
 
 @Repository
-public interface QlpktclhPhieuKtChatLuongRepository extends CrudRepository<QlpktclhPhieuKtChatLuong, Long>, QlpktclhPhieuKtChatLuongRepositoryCustom {
+public interface QlpktclhPhieuKtChatLuongRepository extends BaseRepository<QlpktclhPhieuKtChatLuong, Long>, QlpktclhPhieuKtChatLuongRepositoryCustom {
 
     @Query(
         value = "SELECT * FROM NH_PHIEU_KT_CHAT_LUONG PKTCL " +

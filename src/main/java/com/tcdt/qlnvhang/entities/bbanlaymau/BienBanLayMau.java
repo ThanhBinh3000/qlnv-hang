@@ -57,6 +57,9 @@ public class BienBanLayMau extends BaseEntity implements Serializable  {
 	private Long nguoiPduyetId;
 	private LocalDate ngayPduyet;
 
+	private Integer so;
+	private Integer nam;
+
 	@Transient
 	private List<BienBanLayMauCt> chiTiets = new ArrayList<>();
 }

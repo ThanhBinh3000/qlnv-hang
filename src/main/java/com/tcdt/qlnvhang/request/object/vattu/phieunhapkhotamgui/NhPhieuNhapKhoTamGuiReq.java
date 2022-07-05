@@ -1,18 +1,21 @@
 package com.tcdt.qlnvhang.request.object.vattu.phieunhapkhotamgui;
 
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.request.object.SoBienBanPhieuReq;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class NhPhieuNhapKhoTamGuiReq {
+public class NhPhieuNhapKhoTamGuiReq extends SoBienBanPhieuReq {
     private Long id;
     private Long qdgnvnxId;
     private String soPhieu;
@@ -20,7 +23,9 @@ public class NhPhieuNhapKhoTamGuiReq {
     private BigDecimal no;
     private BigDecimal co;
     private String nguoiGiaoHang;
-    private LocalDate thoiGianGiaoNhanHang;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime thoiGianGiaoNhanHang;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate ngayTaoPhieu;
     private String maDiemKho;
     private String maNhaKho;

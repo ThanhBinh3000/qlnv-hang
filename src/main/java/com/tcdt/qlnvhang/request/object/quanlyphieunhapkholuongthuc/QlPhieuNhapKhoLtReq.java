@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc;
 
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.request.object.SoBienBanPhieuReq;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class QlPhieuNhapKhoLtReq {
+public class QlPhieuNhapKhoLtReq extends SoBienBanPhieuReq {
 
     private Long id;
 

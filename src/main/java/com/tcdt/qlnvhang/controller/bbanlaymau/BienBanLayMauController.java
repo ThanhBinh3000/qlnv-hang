@@ -173,5 +173,21 @@ public class BienBanLayMauController {
 		}
 
 	}
+
+	@ApiOperation(value = "Get số Biên bản lấy mẫu", response = List.class)
+	@GetMapping("/so")
+	public ResponseEntity<BaseResponse> getSo() {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(bienBanLayMauService.getSo());
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Get số Biên bản lấy mẫu lỗi", e);
+		}
+		return ResponseEntity.ok(resp);
+	}
 }
 

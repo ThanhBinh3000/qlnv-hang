@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.response.vattu.phieunhapkhotamgui;
 
 import com.tcdt.qlnvhang.entities.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGui;
+import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,12 +9,13 @@ import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class NhPhieuNhapKhoTamGuiRes {
+public class NhPhieuNhapKhoTamGuiRes extends SoBienBanPhieuRes {
     private Long id;
     private Long qdgnvnxId;
     private String soQuyetDinhNhap;
@@ -22,7 +24,7 @@ public class NhPhieuNhapKhoTamGuiRes {
     private BigDecimal no;
     private BigDecimal co;
     private String nguoiGiaoHang;
-    private LocalDate thoiGianGiaoNhanHang;
+    private LocalDateTime thoiGianGiaoNhanHang;
     private LocalDate ngayTaoPhieu;
 
     private String tenDiemKho;

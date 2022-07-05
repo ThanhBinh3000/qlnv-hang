@@ -13,7 +13,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-public class HhBbNghiemthuKlstHdrReq {
+public class HhBbNghiemthuKlstHdrReq extends SoBienBanPhieuReq {
 	@ApiModelProperty(notes = "Bắt buộc set đối với update")
 	private Long id;
 

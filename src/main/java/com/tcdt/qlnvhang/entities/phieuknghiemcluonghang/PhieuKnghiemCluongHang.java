@@ -52,4 +52,6 @@ public class PhieuKnghiemCluongHang extends BaseEntity {
 	private LocalDate ngayPduyet;
 	private String trangThai;
 	private String ldoTchoi;
+	private Integer so;
+	private Integer nam;
 }

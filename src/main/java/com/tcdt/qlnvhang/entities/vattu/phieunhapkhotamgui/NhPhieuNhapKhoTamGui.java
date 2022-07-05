@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class NhPhieuNhapKhoTamGui extends BaseEntity implements Serializable {
     private String nguoiGiaoHang;
 
     @Column(name = "THOI_GIAN_GIAO_NHAN_HANG")
-    private LocalDate thoiGianGiaoNhanHang;
+    private LocalDateTime thoiGianGiaoNhanHang;
 
     @Column(name = "NGAY_TAO_PHIEU")
     private LocalDate ngayTaoPhieu;
@@ -81,6 +82,8 @@ public class NhPhieuNhapKhoTamGui extends BaseEntity implements Serializable {
     private String lyDoTuChoi;
     private String maDvi;
     private String capDvi;
+    private Integer so;
+    private Integer nam;
 
     @Transient
     private List<NhPhieuNhapKhoTamGuiCt> chiTiets = new ArrayList<>();

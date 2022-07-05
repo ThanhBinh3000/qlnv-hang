@@ -75,6 +75,7 @@ public class HhBbNghiemthuKlstHdr implements Serializable {
 	String nguoiGuiDuyet;
 	Date ngayPduyet;
 	String nguoiPduyet;
+	private Integer so;
 
 //	String ongBa;
 //	String chucVu;

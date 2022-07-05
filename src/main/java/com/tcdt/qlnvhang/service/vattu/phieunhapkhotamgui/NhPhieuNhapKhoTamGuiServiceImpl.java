@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.service.vattu.phieunhapkhotamgui;
 
-import com.tcdt.qlnvhang.entities.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLt;
 import com.tcdt.qlnvhang.entities.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGui;
 import com.tcdt.qlnvhang.entities.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiCt;
 import com.tcdt.qlnvhang.enums.QlPhieuNhapKhoLtStatus;
@@ -15,6 +14,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiReq;
 import com.tcdt.qlnvhang.request.search.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiSearchReq;
+import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
 import com.tcdt.qlnvhang.response.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiCtRes;
 import com.tcdt.qlnvhang.response.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiRes;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -39,7 +39,6 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -265,7 +264,7 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
     public Page<NhPhieuNhapKhoTamGuiRes> search(NhPhieuNhapKhoTamGuiSearchReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
 
-        this.prepareSearchReq(req, userInfo, req.getCapDvi(), req.getTrangThais());
+        this.prepareSearchReq(req, userInfo, req.getCapDvis(), req.getTrangThais());
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         List<Object[]> data = nhPhieuNhapKhoTamGuiRepository.search(req);
         List<NhPhieuNhapKhoTamGuiRes> responses = new ArrayList<>();
@@ -300,7 +299,7 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
     public boolean exportToExcel(NhPhieuNhapKhoTamGuiSearchReq objReq, HttpServletResponse response) throws Exception {
 
         UserInfo userInfo = UserUtils.getUserInfo();
-        this.prepareSearchReq(objReq, userInfo, objReq.getCapDvi(), objReq.getTrangThais());
+        this.prepareSearchReq(objReq, userInfo, objReq.getCapDvis(), objReq.getTrangThais());
         objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
         List<NhPhieuNhapKhoTamGuiRes> list = this.search(objReq).get().collect(Collectors.toList());
 
@@ -399,5 +398,14 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
             if (optional.isPresent() && !optional.get().getId().equals(updateId))
                 throw new Exception("Số phiếu " + so + " đã tồn tại");
         }
+    }
+
+    @Override
+    public SoBienBanPhieuRes getSo() throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        Integer so = nhPhieuNhapKhoTamGuiRepository.findMaxSo(userInfo.getDvql(), LocalDate.now().getYear());
+        so = Optional.ofNullable(so).orElse(0);
+        so = so + 1;
+        return new SoBienBanPhieuRes(so, LocalDate.now().getYear());
     }
 }

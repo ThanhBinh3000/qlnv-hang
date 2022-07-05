@@ -52,8 +52,8 @@ public class QlpktclhPhieuKtChatLuong extends BaseEntity {
 	@Column(name = "SO_PHIEU_AN_TOAN_THUC_PHAM")
 	private String soPhieuAnToanThucPham;
 
-	@Column(name = "MA_DON_VI")
-	private String maDonVi;
+	@Column(name = "MA_DVI")
+	private String maDvi;
 
 	@Column(name = "NGUOI_PHE_DUYET_ID")
 	private Long nguoiPheDuyetId;
@@ -123,6 +123,9 @@ public class QlpktclhPhieuKtChatLuong extends BaseEntity {
 
 	@Column(name = "LOAI_VTHH")
 	private String loaiVthh;
+
+	private Integer so;
+	private Integer nam;
 
 	@Transient
 	private List<QlpktclhKetQuaKiemTra> ketQuaKiemTra = new ArrayList<>();

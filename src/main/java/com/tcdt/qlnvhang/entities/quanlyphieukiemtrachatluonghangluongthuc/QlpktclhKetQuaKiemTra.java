@@ -30,7 +30,7 @@ public class QlpktclhKetQuaKiemTra {
 	private String tieuChuan;
 
 	@Column(name = "KET_QUA_KIEM_TRA")
-	private String ketQuaKiemTra;
+	private String ketQuaKiemTra; // Ket qua phan tich
 
 	@Column(name = "PHUONG_PHAP_XAC_DINH")
 	private String phuongPhapXacDinh;

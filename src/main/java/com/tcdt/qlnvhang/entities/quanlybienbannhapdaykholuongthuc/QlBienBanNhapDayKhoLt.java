@@ -97,6 +97,9 @@ public class QlBienBanNhapDayKhoLt extends BaseEntity implements Serializable {
     @Column(name = "NGUOI_PHE_DUYET_ID")
     private Long nguoiPheDuyetId;
 
+    private Integer so;
+    private Integer nam;
+
     @Transient
     private List<QlBienBanNdkCtLt> chiTiets = new ArrayList<>();
 

@@ -103,6 +103,9 @@ public class QlBangKeCanHangLt extends BaseEntity implements Serializable {
     @Column(name = "TONG_TRONG_LUONG_BAO_BI")
     private BigDecimal tongTrongLuongBaoBi;
 
+    private Integer so;
+    private Integer nam;
+
     @Transient
     private List<QlBangKeChCtLt> chiTiets = new ArrayList<>();
 }

@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.response.quanlyphieukiemtrachatluonghangluongthuc;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class QlpktclhPhieuKtChatLuongResponseDto {
+public class QlpktclhPhieuKtChatLuongResponseDto extends SoBienBanPhieuRes {
 	private Long id;
 
 	private String soPhieu;
@@ -44,7 +45,7 @@ public class QlpktclhPhieuKtChatLuongResponseDto {
 
 	private String soPhieuAnToanThucPham;
 
-	private String maDonVi;
+	private String maDvi;
 
 	private String ketLuan;
 

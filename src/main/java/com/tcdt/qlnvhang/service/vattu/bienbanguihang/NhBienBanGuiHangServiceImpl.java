@@ -13,6 +13,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanguihang.NhBienBanGuiHangCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanguihang.NhBienBanGuiHangReq;
 import com.tcdt.qlnvhang.request.search.vattu.bienbanguihang.NhBienBanGuiHangSearchReq;
+import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
 import com.tcdt.qlnvhang.response.vattu.bienbanguihang.NhBienBanGuiHangCtRes;
 import com.tcdt.qlnvhang.response.vattu.bienbanguihang.NhBienBanGuiHangRes;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -42,6 +43,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -68,6 +70,7 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
     private static final String TRANG_THAI = "Trạng Thái";
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public NhBienBanGuiHangRes create(NhBienBanGuiHangReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         this.validateSoBb(null, req);
@@ -143,6 +146,7 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
     }
     
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public NhBienBanGuiHangRes update(NhBienBanGuiHangReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
 
@@ -181,6 +185,7 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public boolean delete(Long id) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         Optional<NhBienBanGuiHang> optional = bienBanGuiHangRepository.findById(id);
@@ -197,6 +202,7 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public boolean updateStatusQd(StatusReq stReq) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         Optional<NhBienBanGuiHang> optional = bienBanGuiHangRepository.findById(stReq.getId());
@@ -246,7 +252,7 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
     public Page<NhBienBanGuiHangRes> search(NhBienBanGuiHangSearchReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
 
-        this.prepareSearchReq(req, userInfo, req.getCapDvi(), req.getTrangThais());
+        this.prepareSearchReq(req, userInfo, req.getCapDvis(), req.getTrangThais());
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         List<Object[]> data = bienBanGuiHangRepository.search(req);
         List<NhBienBanGuiHangRes> responses = new ArrayList<>();
@@ -268,6 +274,7 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public boolean deleteMultiple(DeleteReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         bienBanGuiHangCtRepository.deleteByBienBanGuiHangIdIn(req.getIds());
@@ -278,7 +285,7 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
     @Override
     public boolean exportToExcel(NhBienBanGuiHangSearchReq objReq, HttpServletResponse response) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
-        this.prepareSearchReq(objReq, userInfo, objReq.getCapDvi(), objReq.getTrangThais());
+        this.prepareSearchReq(objReq, userInfo, objReq.getCapDvis(), objReq.getTrangThais());
         objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
         List<NhBienBanGuiHangRes> list = this.search(objReq).get().collect(Collectors.toList());
 
@@ -352,4 +359,14 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
                 throw new Exception("Số biên bản " + so + " đã tồn tại");
         }
     }
+
+    @Override
+    public SoBienBanPhieuRes getSo() throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        Integer so = bienBanGuiHangRepository.findMaxSo(userInfo.getDvql(), LocalDate.now().getYear());
+        so = Optional.ofNullable(so).orElse(0);
+        so = so + 1;
+        return new SoBienBanPhieuRes(so, LocalDate.now().getYear());
+    }
+
 }

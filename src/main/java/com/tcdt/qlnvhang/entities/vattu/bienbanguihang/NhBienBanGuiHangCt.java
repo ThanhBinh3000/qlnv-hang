@@ -1,11 +1,15 @@
 package com.tcdt.qlnvhang.entities.vattu.bienbanguihang;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "NH_BIEN_BAN_GUI_HANG_CT")
-public class NhBienBanGuiHangCt {
+public class NhBienBanGuiHangCt implements Serializable {
+    private static final long serialVersionUID = -1130590655733872367L;
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BIEN_BAN_GUI_HANG_CT_SEQ")
+    @SequenceGenerator(sequenceName = "BIEN_BAN_GUI_HANG_CT_SEQ", allocationSize = 1, name = "BIEN_BAN_GUI_HANG_CT_SEQ")
     @Column(name = "ID")
     private Long id;
 

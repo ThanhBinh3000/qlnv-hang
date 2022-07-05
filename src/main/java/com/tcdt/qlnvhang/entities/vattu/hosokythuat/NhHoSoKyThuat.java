@@ -109,6 +109,9 @@ public class NhHoSoKyThuat extends BaseEntity implements Serializable {
     @Column(name = "LOAI_VTHH")
     private String loaiVthh;
 
+    private Integer so;
+    private Integer nam;
+
     @Transient
     private List<NhHoSoKyThuatCt> chiTiets = new ArrayList<>();
 

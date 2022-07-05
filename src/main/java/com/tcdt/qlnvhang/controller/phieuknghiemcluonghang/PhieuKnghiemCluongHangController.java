@@ -70,8 +70,8 @@ public class PhieuKnghiemCluongHangController {
 	}
 
 	@ApiOperation(value = "Xoá thông tin Phiếu Kiểm nghiệm chất lượng hàng", response = Boolean.class)
-	@DeleteMapping
-	public ResponseEntity<BaseResponse> delete(@RequestParam("id") Long id) {
+	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<BaseResponse> delete(@PathVariable("id") Long id) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			Boolean res = phieuKnghiemCluongHangService.delete(id);
@@ -88,7 +88,7 @@ public class PhieuKnghiemCluongHangController {
 
 	@ApiOperation(value = "Chi tiết Phiếu Kiểm nghiệm chất lượng hàng", response = Page.class)
 	@GetMapping("/{id}")
-	public ResponseEntity<BaseResponse> detail(@RequestParam("id") Long id) {
+	public ResponseEntity<BaseResponse> detail(@PathVariable("id") Long id) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			PhieuKnghiemCluongHangRes res = phieuKnghiemCluongHangService.detail(id);
@@ -154,7 +154,7 @@ public class PhieuKnghiemCluongHangController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Export biên bản nhập đầy kho lương thực", response = List.class)
+	@ApiOperation(value = "Export Phiếu Kiểm nghiệm chất lượng hàng", response = List.class)
 	@PostMapping(value = "/export/list", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody PhieuKnghiemCluongHangSearchReq req) {
@@ -172,6 +172,22 @@ public class PhieuKnghiemCluongHangController {
 			log.error("Error can not export", e);
 		}
 
+	}
+
+	@ApiOperation(value = "Get số Phiếu Kiểm nghiệm chất lượng hàng", response = List.class)
+	@GetMapping("/so")
+	public ResponseEntity<BaseResponse> getSo() {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(phieuKnghiemCluongHangService.getSo());
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Get số Phiếu Kiểm nghiệm chất lượng hàng lỗi", e);
+		}
+		return ResponseEntity.ok(resp);
 	}
 }
 
