@@ -44,6 +44,8 @@ public class Contains {
 
 	public static final String BAN_HANH = "11"; // Trang thai Lanh dao duyet
 
+	public static final String TT_DA_QUYET_DINH = "12"; // Trang thai Lanh dao duyet
+
 	public static final String LANHDAO_TU_CHOI = "12";
 
 	// Trạng thái tổng hợp

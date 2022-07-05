@@ -40,17 +40,35 @@ public class HhDxKhlcntDsgthau implements Serializable {
 
 	private String loaiVthh;
 
+	@Transient
+	private String tenVthh;
+
 	private String cloaiVthh;
+
+	@Transient
+	private String tenCloaiVthh;
 
 	private String dviTinh;
 
 	private String hthucLcnt;
 
+	@Transient
+	private String tenHthucLcnt;
+
 	private String pthucLcnt;
+
+	@Transient
+	private String tenPthucLcnt;
 
 	private String loaiHdong;
 
+	@Transient
+	private String tenLoaiHdong;
+
 	private String nguonVon;
+
+	@Transient
+	private String tenNguonVon;
 
 	private String tgianBdauThien;
 

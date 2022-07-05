@@ -21,6 +21,11 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 	@Query(value = "UPDATE HH_DX_KHLCNT_HDR SET TRANG_THAI=:trangThai WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
 	void updateTongHop(List<String> soDxuatList, String trangThai);
 
+	@Transactional()
+	@Modifying
+	@Query(value = "UPDATE HH_DX_KHLCNT_HDR SET TRANG_THAI=:trangThai WHERE ID = :id ", nativeQuery = true)
+	void updateStatus(Long id, String trangThai);
+
 	@Query(value = "select shgt.nextval from dual", nativeQuery = true)
 	Long getIdShgt();
 

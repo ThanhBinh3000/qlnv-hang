@@ -47,6 +47,9 @@ public class HhQdKhlcntDsgthau implements Serializable {
 	private HhQdKhlcntDtl hhQdKhlcntDtl;
 
 	@Transient
+	private HhQdKhlcntHdr hhQdKhlcntHdr;
+
+	@Transient
 	private List<HhQdKhlcntDsgthauCtiet> children = new ArrayList<>();
 
 }

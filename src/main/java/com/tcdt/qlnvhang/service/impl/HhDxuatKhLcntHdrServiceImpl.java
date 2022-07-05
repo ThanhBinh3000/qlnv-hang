@@ -537,10 +537,16 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 
 		Map<String,String> mapVthh = getListDanhMucHangHoa();
 		Map<String, String> mapDmucDvi = getMapTenDvi();
+		Map<String,String> hashMapPthucDthau = getListDanhMucChung("PT_DTHAU");
+		Map<String,String> hashMapNguonVon = getListDanhMucChung("NGUON_VON");
+		Map<String,String> hashMapHtLcnt = getListDanhMucChung("HT_LCNT");
+		Map<String,String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
 
 		qOptional.get().setTenVthh( StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : mapVthh.get(qOptional.get().getLoaiVthh()));
 		qOptional.get().setTenCloaiVthh( StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null :mapVthh.get(qOptional.get().getCloaiVthh()));
 		qOptional.get().setTenVtu( StringUtils.isEmpty(qOptional.get().getMaVtu()) ? null :mapVthh.get(qOptional.get().getMaVtu()));
+		qOptional.get().setTenDvi(StringUtils.isEmpty(qOptional.get().getMaDvi())? null : mapDmucDvi.get(qOptional.get().getTenDvi()));
+
 		// Quy doi don vi kg = tan
 
 //		UnitScaler.formatList(dtls2, Contains.DVT_TAN);
@@ -549,6 +555,10 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		List<HhDxKhlcntDsgthau> dsGthauList = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcnt(qOptional.get().getId());
 		for(HhDxKhlcntDsgthau dsG : dsGthauList){
 			dsG.setTenDvi(mapDmucDvi.get(dsG.getMaDvi()));
+			dsG.setTenHthucLcnt( StringUtils.isEmpty(dsG.getHthucLcnt()) ? null : hashMapHtLcnt.get(dsG.getHthucLcnt()));
+			dsG.setTenPthucLcnt( StringUtils.isEmpty(dsG.getPthucLcnt()) ? null :hashMapPthucDthau.get(dsG.getPthucLcnt()));
+			dsG.setTenLoaiHdong( StringUtils.isEmpty(dsG.getLoaiHdong()) ? null :hashMapLoaiHdong.get(dsG.getLoaiHdong()));
+			dsG.setTenNguonVon( StringUtils.isEmpty(dsG.getNguonVon()) ? null :hashMapNguonVon.get(dsG.getNguonVon()));
 			List<HhDxKhlcntDsgthauCtiet> listDdNhap = hhDxKhlcntDsgthauCtietRepository.findByIdGoiThau(dsG.getId());
 			for(int i = 0;i < listDdNhap.size();i++){
 				listDdNhap.get(i).setTenDvi(StringUtils.isEmpty(listDdNhap.get(i).getMaDvi())? null : mapDmucDvi.get(listDdNhap.get(i).getTenDvi()));
