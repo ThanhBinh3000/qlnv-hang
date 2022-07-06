@@ -119,6 +119,8 @@ public class HhDxuatKhLcntHdrReq {
 	@Size(max = 500, message = "Ghi chú không được vượt quá 500 ký tự")
 	String ghiChu;
 
+	String dienGiai;
+
 	private List<FileDinhKemReq> fileDinhKemReq =  new ArrayList<>();
 
 	private List<HhDxuatKhLcntDsgtDtlReq> dsGtReq =  new ArrayList<>();

@@ -387,9 +387,10 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 	public Page<HhDxuatKhLcntHdr> timKiem(HttpServletRequest request,HhDxuatKhLcntSearchReq req) throws Exception {
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
 		Page<HhDxuatKhLcntHdr> page = hhDxuatKhLcntHdrRepository.select(req.getNamKh(),req.getSoTr(),req.getSoQd(),convertDateToString(req.getTuNgayKy()),convertDateToString(req.getDenNgayKy()),req.getLoaiVthh(),req.getTrichYeu(),req.getTrangThai(), pageable);
-
+		Map<String, String> mapDmucDvi = getListDanhMucDvi("3");
 		Map<String,String> mapVthh = getListDanhMucHangHoa();
 		page.getContent().forEach(f -> {
+			f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
 			f.setTenVthh( StringUtils.isEmpty(f.getLoaiVthh()) ? null : mapVthh.get(f.getLoaiVthh()));
 			f.setTenCloaiVthh( StringUtils.isEmpty(f.getCloaiVthh()) ? null :mapVthh.get(f.getCloaiVthh()));
 			f.setMaVtu( StringUtils.isEmpty(f.getMaVtu()) ? null :mapVthh.get(f.getMaVtu()));
@@ -463,6 +464,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 	}
 
 	@Override
+	@Transactional
 	public HhDxuatKhLcntHdr updateVatTu(HhDxuatKhLcntHdrReq objReq) throws Exception {
 		if (StringUtils.isEmpty(objReq.getId()))
 			throw new Exception("Sửa thất bại, không tìm thấy dữ liệu");
@@ -495,23 +497,18 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		dataDTB.setNgaySua(getDateTimeNow());
 		dataDTB.setNguoiSua(getUser().getUsername());
 		dataDTB.setFileDinhKems(fileDinhKemList);
-//
-//		List<HhDxuatKhLcntDsgtDtl> dtls2 = ObjectMapperUtils.mapAll(objReq.getChildren2(), HhDxuatKhLcntDsgtDtl.class);
-//		UnitScaler.reverseFormatList(dtls2, Contains.DVT_TAN);
-//		dataDTB.setChildren2(dtls2);
-//
-		hhDxuatKhLcntHdrRepository.save(dataMap);
-		hhDxKhlcntDsgthauCtietRepository.deleteAllByIdGoiThau(dataMap.getId());
+
+		hhDxuatKhLcntHdrRepository.save(dataDTB);
+		hhDxuatKhLcntDsgtDtlRepository.deleteAllByIdDxKhlcnt(dataMap.getId());
 		// Lưu danh sách gói thầu
 		for (HhDxuatKhLcntDsgtDtlReq gt : objReq.getDsGtReq()){
 			HhDxKhlcntDsgthau data = new ModelMapper().map(gt, HhDxKhlcntDsgthau.class);
+			hhDxKhlcntDsgthauCtietRepository.deleteAllByIdGoiThau(gt.getId());
 			data.setId(null);
 			data.setIdDxKhlcnt(dataMap.getId());
 			BigDecimal thanhTien = data.getDonGia().multiply(data.getSoLuong());
 			data.setThanhTien(thanhTien);
 			hhDxuatKhLcntDsgtDtlRepository.save(data);
-			hhDxKhlcntDsgthauCtietRepository.deleteAllByIdGoiThau(data.getId());
-
 			// Lưu chi tiết danh sách gói thaauff ( địa điểm nhập )
 			for (HhDxuatKhLcntDsgthauDtlCtietReq ddNhap : gt.getChildren()){
 				HhDxKhlcntDsgthauCtiet dataDdNhap = new ModelMapper().map(ddNhap, HhDxKhlcntDsgthauCtiet.class);
@@ -536,7 +533,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		}
 
 		Map<String,String> mapVthh = getListDanhMucHangHoa();
-		Map<String, String> mapDmucDvi = getMapTenDvi();
+		Map<String, String> mapDmucDvi = getListDanhMucDvi("3");
 		Map<String,String> hashMapPthucDthau = getListDanhMucChung("PT_DTHAU");
 		Map<String,String> hashMapNguonVon = getListDanhMucChung("NGUON_VON");
 		Map<String,String> hashMapHtLcnt = getListDanhMucChung("HT_LCNT");
@@ -602,6 +599,9 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		}
 
 		optional.get().setTrangThai(stReq.getTrangThai());
+		if (stReq.getTrangThai().equals(Contains.DUYET)) {
+			optional.get().setLastest(true);
+		}
 		return hhDxuatKhLcntHdrRepository.save(optional.get());
 	}
 }

@@ -108,6 +108,19 @@ public class BaseServiceImpl {
 		return data;
 	}
 
+	public Map<String, String> getListDanhMucDvi(String capDvi) {
+		ResponseEntity<String> response = categoryServiceProxy.getDanhMucDviByLevel(getAuthorizationToken(request),
+				capDvi);
+		String str = Request.getAttrFromJson(response.getBody(), "data");
+		HashMap<String, String> data = new HashMap<String, String>();
+		List<Map<String, Object>> retMap = new Gson().fromJson(str, new TypeToken<List<HashMap<String, Object>>>() {
+		}.getType());
+		for (Map<String, Object> map : retMap) {
+			data.put(String.valueOf(map.get("maDvi")), String.valueOf(map.get("tenDvi")));
+		}
+		return data;
+	}
+
 	public Map<String, String> getListDanhMucDviLq(String loai) {
 		HhDmDviLquanSearchReq objReq = new HhDmDviLquanSearchReq();
 		objReq.setTypeDvi(loai);

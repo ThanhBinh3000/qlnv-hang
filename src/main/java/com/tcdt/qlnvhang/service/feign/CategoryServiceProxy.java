@@ -34,6 +34,12 @@ public interface CategoryServiceProxy {
 			@RequestHeader(value = "Authorization", required = true) String authorizationHeader,
 			@PathVariable("loai") String loai);
 
+	@GetMapping("/dmuc-donvi/tat-ca/{capDvi}")
+	@Headers({ "Accept: application/json; charset=utf-8", "Content-Type: application/x-www-form-urlencoded" })
+	public ResponseEntity<String> getDanhMucDviByLevel(
+			@RequestHeader(value = "Authorization", required = true) String authorizationHeader,
+			@PathVariable("capDvi") String capDvi);
+
 	@PostMapping("/dmuc-dvi-lquan/tat-ca")
 	@Headers({ "Accept: application/json; charset=utf-8", "Content-Type: application/x-www-form-urlencoded" })
 	public ResponseEntity<String> getDanhMucDviLquan(
