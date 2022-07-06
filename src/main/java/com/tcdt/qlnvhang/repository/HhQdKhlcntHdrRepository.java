@@ -3,7 +3,6 @@ package com.tcdt.qlnvhang.repository;
 import java.util.List;
 import java.util.Optional;
 
-import com.tcdt.qlnvhang.table.HhDxKhLcntThopHdr;
 import com.tcdt.qlnvhang.table.HhQdKhlcntHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,14 +13,20 @@ public interface HhQdKhlcntHdrRepository extends BaseRepository<HhQdKhlcntHdr, L
 
 	Optional<HhQdKhlcntHdr> findBySoQd(String soQd);
 
-	@Query(value = " SELECT * FROM HH_QD_KHLCNT_HDR QDHDR  "+
-			" WHERE (:namKh IS NULL OR QDHDR.NAM_KHOACH = TO_NUMBER(:namKh)) "+
-			" AND (:loaiVthh IS NULL OR QDHDR.LOAI_VTHH = :loaiVthh) "+
-			" AND (:soQd IS NULL OR LOWER(QDHDR.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQd),'%'))) "+
-			" AND (:trichYeu IS NULL OR LOWER(QDHDR.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%'))) "+
-			" AND (:tuNgayQd IS NULL OR QDHDR.NGAY_QD >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) "+
-			" AND (:denNgayQd IS NULL OR QDHDR.NGAY_QD <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) "+
-			" AND (:trangThai IS NULL OR QDHDR.TRANG_THAI = :trangThai) ",
+	@Query(value = " SELECT * FROM HH_QD_KHLCNT_HDR  QD_HDR WHERE (:namKh IS NULL OR QD_HDR.NAM_KHOACH = TO_NUMBER(:namKh)) "+
+			" AND (:loaiVthh IS NULL OR QD_HDR.LOAI_VTHH = :loaiVthh) "+
+			" AND (:soQd IS NULL OR LOWER(QD_HDR.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQd),'%'))) "+
+			" AND (:trichYeu IS NULL OR LOWER(QD_HDR.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%'))) "+
+			" AND (:tuNgayQd IS NULL OR QD_HDR.NGAY_QD >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) "+
+			" AND (:denNgayQd IS NULL OR QD_HDR.NGAY_QD <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) "+
+			" AND (:trangThai IS NULL OR QD_HDR.TRANG_THAI = :trangThai) ",
+			countQuery = " SELECT COUNT(1) FROM HH_QD_KHLCNT_HDR  QD_HDR WHERE (:namKh IS NULL OR QD_HDR.NAM_KHOACH = TO_NUMBER(:namKh)) "+
+					" AND (:loaiVthh IS NULL OR QD_HDR.LOAI_VTHH = :loaiVthh) "+
+					" AND (:soQd IS NULL OR LOWER(QD_HDR.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQd),'%'))) "+
+					" AND (:trichYeu IS NULL OR LOWER(QD_HDR.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%'))) "+
+					" AND (:tuNgayQd IS NULL OR QD_HDR.NGAY_QD >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) "+
+					" AND (:denNgayQd IS NULL OR QD_HDR.NGAY_QD <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) "+
+					" AND (:trangThai IS NULL OR QD_HDR.TRANG_THAI = :trangThai) ",
 			nativeQuery = true)
 	Page<HhQdKhlcntHdr> selectPage(String namKh, String loaiVthh, String soQd,String trichYeu, String tuNgayQd, String denNgayQd,String trangThai, Pageable pageable);
 

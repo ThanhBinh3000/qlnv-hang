@@ -44,53 +44,84 @@ public class HhQdKhlcntHdr implements Serializable {
 	private Long id;
 
 	String soQd;
+
 	Date ngayQd;
+
 	Long idThHdr;
+
 	Long idTrHdr;
+
 	String trangThai;
+
 	Date ngaySua;
+
 	String nguoiSua;
+
 	String ldoTuchoi;
+
 	Date ngayGuiDuyet;
+
 	String nguoiGuiDuyet;
+
 	Date ngayPduyet;
+
 	String nguoiPduyet;
+
 	String ghiChu;
 
 	String loaiVthh;
+
 	String cloaiVthh;
+
 	String hthucLcnt;
+
 	String pthucLcnt;
+
 	String loaiHdong;
+
 	String nguonVon;
 
 	@Transient
 	String tenVthh;
+
 	@Transient
 	String tenCloaiVthh;
+
 	@Transient
 	String tenHthucLcnt;
+
 	@Transient
 	String tenPthucLcnt;
+
 	@Transient
 	String tenLoaiHdong;
+
 	@Transient
 	String tenNguonVon;
 
 	@Temporal(TemporalType.DATE)
 	Date tgianBdauTchuc;
+
 	@Temporal(TemporalType.DATE)
 	Date tgianDthau;
+
 	@Temporal(TemporalType.DATE)
 	Date tgianNhang;
+
 	@Temporal(TemporalType.DATE)
 	Date tgianMthau;
+
 	@Temporal(TemporalType.DATE)
 	Date ngayTao;
+
 	String nguoiTao;
+
 	String trichYeu;
+
 	Long namKhoach;
+
 	Integer tgianThienHd;
+
 	@Temporal(TemporalType.DATE)
 	Date ngayHluc;
 

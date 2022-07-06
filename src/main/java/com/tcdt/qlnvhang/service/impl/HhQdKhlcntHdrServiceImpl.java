@@ -442,8 +442,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
 		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
 
-		Page<HhQdKhlcntHdr> dataPage = hhQdKhlcntHdrRepository.findAll(HhQdKhlcntSpecification.buildSearchQuery(objReq),
-				pageable);
+		Page<HhQdKhlcntHdr> dataPage = null;
 
 		// Lay danh muc dung chung
 		Map<String, String> mapDmuc = getMapCategory();
@@ -464,8 +463,10 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		String title = "Danh sách QĐ phê duyệt KHLCNT";
 		String[] rowsName = new String[] { "STT", "Số quyết định", "Ngày QĐ", "Về việc", "Số QĐ giao chỉ tiêu",
 				"Loại hàng DTQG", "Tên loại hàng", "Tiêu chuẩn chất lượng", "Nguồn vốn", "Trạng thái" };
-		List<HhQdKhlcntHdr> dsgtDtls = hhQdKhlcntHdrRepository
-				.findAll(HhQdKhlcntSpecification.buildSearchQuery(searchReq));
+		List<HhQdKhlcntHdr> dsgtDtls = null;
+//
+//		List<HhQdKhlcntHdr> dsgtDtls = hhQdKhlcntHdrRepository
+//				.findAll(HhQdKhlcntSpecification.buildSearchQuery(searchReq));
 
 		if (dsgtDtls.isEmpty())
 			throw new UnsupportedOperationException("Không tìm thấy dữ liệu");
