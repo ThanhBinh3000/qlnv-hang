@@ -21,6 +21,11 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 	@Query(value = "UPDATE HH_DX_KHLCNT_HDR SET TRANG_THAI=:trangThai WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
 	void updateTongHop(List<String> soDxuatList, String trangThai);
 
+	@Transactional()
+	@Modifying
+	@Query(value = "UPDATE HH_DX_KHLCNT_HDR SET TRANG_THAI=:trangThai WHERE ID = :id ", nativeQuery = true)
+	void updateStatus(Long id, String trangThai);
+
 	@Query(value = "select shgt.nextval from dual", nativeQuery = true)
 	Long getIdShgt();
 
@@ -33,18 +38,19 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 					"  AND (:ngayKyTu IS NULL OR KHLCNT.NGAY_KY >= TO_DATE(:ngayKyTu, 'yyyy-MM-dd'))" +
 					"  AND (:ngayKyDen IS NULL OR KHLCNT.NGAY_KY <= TO_DATE(:ngayKyDen, 'yyyy-MM-dd'))" +
 					"  AND (:loaiVthh IS NULL OR KHLCNT.LOAI_VTHH = :loaiVthh) " +
+					"  AND (:trichYeu IS NULL OR LOWER(KHLCNT.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%')))" +
 					"  AND (:trangThai IS NULL OR KHLCNT.TRANG_THAI = :trangThai) ", nativeQuery = true)
-	Page<HhDxuatKhLcntHdr> select(String namKh, String soTr,String soQd, String ngayKyTu,String ngayKyDen,String loaiVthh,String trangThai, Pageable pageable);
+	Page<HhDxuatKhLcntHdr> select(String namKh, String soTr,String soQd, String ngayKyTu,String ngayKyDen,String loaiVthh,String trichYeu,String trangThai, Pageable pageable);
 
 	@Query(value = " SELECT KHLCNT.* \n" +
 			"FROM HH_DX_KHLCNT_HDR KHLCNT \n" +
-			"LEFT JOIN HH_DX_KHLCNT_LT_DTL KHLCNT_DETAIL ON KHLCNT.ID_HDR = KHLCNT_DETAIL.ID \n" +
 			" WHERE KHLCNT.LOAI_VTHH = :loaiVthh \n" +
+			" AND KHLCNT.CLOAI_VTHH = :cloaiVthh \n" +
 			" AND KHLCNT.NAM_KHOACH = :namKh \n" +
-			" AND KHLCNT_DETAIL.HTHUC_LCNT = :hthucLcnt \n" +
-			" AND KHLCNT_DETAIL.PTHUC_LCNT = :pthucLcnt \n" +
-			" AND KHLCNT_DETAIL.LOAI_HDONG = :loatHdong \n" +
-			" AND KHLCNT_DETAIL.NGUON_VON = :nguonVon " +
-			" AND KHLCNT.TRANG_THAI = '11' ", nativeQuery = true)
-	List<HhDxuatKhLcntHdr> listTongHop(String loaiVthh,String namKh, String hthucLcnt,String pthucLcnt, String loatHdong,String nguonVon);
+			" AND KHLCNT.HTHUC_LCNT = :hthucLcnt \n" +
+			" AND KHLCNT.PTHUC_LCNT = :pthucLcnt \n" +
+			" AND KHLCNT.LOAI_HDONG = :loaiHdong \n" +
+			" AND KHLCNT.NGUON_VON = :nguonVon " +
+			" AND KHLCNT.TRANG_THAI = '02' ", nativeQuery = true)
+	List<HhDxuatKhLcntHdr> listTongHop(String loaiVthh,String cloaiVthh,String namKh, String hthucLcnt,String pthucLcnt, String loaiHdong,String nguonVon);
 }

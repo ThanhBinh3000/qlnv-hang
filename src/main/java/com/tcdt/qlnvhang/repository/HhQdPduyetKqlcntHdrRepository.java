@@ -1,11 +1,50 @@
 package com.tcdt.qlnvhang.repository;
 
+import java.util.List;
 import java.util.Optional;
 
+import com.tcdt.qlnvhang.response.dauthauvattu.HhQdPduyetKqlcntRes;
+import com.tcdt.qlnvhang.table.HhQdKhlcntHdr;
 import com.tcdt.qlnvhang.table.HhQdPduyetKqlcntHdr;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 
 public interface HhQdPduyetKqlcntHdrRepository extends BaseRepository<HhQdPduyetKqlcntHdr, Long> {
 
 	Optional<HhQdPduyetKqlcntHdr> findBySoQd(String canCu);
+
+	@Query(value = " SELECT * FROM HH_QD_PDUYET_KQLCNT_HDR QDPD "+
+			" WHERE (:namKh IS NULL OR QDPD.NAM_KHOACH = TO_NUMBER(:namKh)) "+
+			" AND (:loaiVthh IS NULL OR QDPD.LOAI_VTHH = :loaiVthh) "+
+			" AND (:soQd IS NULL OR QDPD.SO_QD = :soQd) "+
+			" AND (:tuNgayQd IS NULL OR QDPD.NGAY_QD >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) "+
+			" AND (:denNgayQd IS NULL OR QDPD.NGAY_QD <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) "+
+			" AND (:trangThai IS NULL OR QDPD.TRANG_THAI = :trangThai) ",
+			nativeQuery = true)
+	Page<HhQdPduyetKqlcntHdr> selectPage(String namKh, String loaiVthh, String soQd, String tuNgayQd, String denNgayQd, String trangThai, Pageable pageable);
+
+	@Query(" SELECT new com.tcdt.qlnvhang.response.dauthauvattu.HhQdPduyetKqlcntRes(HDR.id,HDR.soQd,HDR.ngayQd,HDR.trichYeu,DSG.goiThau,DSG.trangThai,DTGT.idNhaThau,DSG.lyDoHuy,DTGT.donGiaTrcVat,DTGT.vat,DTGT.soLuong,DTGT.loaiHdong,DTGT.tgianThienHd,HDR.trangThai) " +
+			"    FROM HhQdPduyetKqlcntHdr HDR " +
+			"    LEFT JOIN HhQdPduyetKqlcntDtl DTL ON HDR.id = DTL.idQdPdHdr " +
+			"    LEFT JOIN HhQdKhlcntDsgthau DSG ON DTL.idGoiThau = DSG.id " +
+			"    LEFT JOIN HhDthauGthau DTGT ON DTGT.idGoiThau = DTL.idGoiThau " +
+			" WHERE (?1 is null or HDR.namKhoach = ?1 ) " +
+			" AND (?2 is null or  DTGT.loaiVthh = ?2 ) " +
+//			" AND (?5 is null or HDR.ngayQd >= ?5 )  " +
+//			" AND (?6 is null or HDR.ngayQd <= ?6 ) " +
+			" AND (?3 is null or HDR.trichYeu = ?3 ) ")
+	Page<HhQdPduyetKqlcntRes> customQuerySearch(String namKh, String loaiVthh, String trichYeu, Pageable pageable);
+
+
+	@Query(value = "SELECT * FROM HH_QD_PDUYET_KQLCNT_HDR QDPD " +
+			" WHERE (:namKh IS NULL OR QDPD.NAM_KHOACH = TO_NUMBER(:namKh)) "+
+			" AND (:loaiVthh IS NULL OR QDPD.LOAI_VTHH = :loaiVthh) "+
+			" AND (:soQd IS NULL OR QDPD.SO_QD = :soQd) "+
+			" AND (:tuNgayQd IS NULL OR QDPD.NGAY_QD >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) "+
+			" AND (:denNgayQd IS NULL OR QDPD.NGAY_QD <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) " +
+			" AND (:trangThai IS NULL OR QDPD.TRANG_THAI = :trangThai) ",
+			nativeQuery = true)
+	List<HhQdPduyetKqlcntHdr> selectAll(String namKh, String loaiVthh, String soQd, String tuNgayQd, String denNgayQd, String trangThai);
 
 }

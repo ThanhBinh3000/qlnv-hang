@@ -32,6 +32,8 @@ public class HhHopDongHdrReq {
 	@ApiModelProperty(example = "20/QD-TCDT")
 	String canCu;
 
+	String idGoiThau;
+
 //	String dviTrungThau;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
@@ -50,17 +52,20 @@ public class HhHopDongHdrReq {
 
 	Double soNgayTdo;
 
-	@NotNull(message = "Không được để trống")
-	@Size(max = 20, message = "Nước sản xuất được vượt quá 20 ký tự")
-	@ApiModelProperty(example = "Nhật Bản")
+//	@NotNull(message = "Không được để trống")
+//	@Size(max = 20, message = "Nước sản xuất được vượt quá 20 ký tự")
+//	@ApiModelProperty(example = "Nhật Bản")
 	String nuocSxuat;
 
-	@NotNull(message = "Không được để trống")
-	@Size(max = 20, message = "Tiêu chuẩn chất lượng được vượt quá 20 ký tự")
-	@ApiModelProperty(example = "Tiêu chuẩn")
+//	@NotNull(message = "Không được để trống")
+//	@Size(max = 20, message = "Tiêu chuẩn chất lượng được vượt quá 20 ký tự")
+//	@ApiModelProperty(example = "Tiêu chuẩn")
 	String tieuChuanCl;
 
 	Double soLuong;
+
+	Double donGiaVat;
+
 	Double gtriHdTrcVat;
 	Double vat;
 	Double gtriHdSauVat;
@@ -70,9 +75,13 @@ public class HhHopDongHdrReq {
 	@ApiModelProperty(example = "00")
 	String loaiVthh;
 
-	@NotNull(message = "Không được để trống")
-	@Size(max = 20, message = "Loại hợp đồng không được vượt quá 20 ký tự")
+	@Size(max = 20, message = "Loại vật tư hàng hóa không được vượt quá 20 ký tự")
 	@ApiModelProperty(example = "00")
+	String cloaiVthh;
+
+//	@NotNull(message = "Không được để trống")
+//	@Size(max = 20, message = "Loại hợp đồng không được vượt quá 20 ký tự")
+//	@ApiModelProperty(example = "00")
 	String loaiHd;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
@@ -87,9 +96,31 @@ public class HhHopDongHdrReq {
 	String ghiChu;
 
 	@NotNull(message = "Không được để trống")
-	@Size(max = 4, message = "Năm kế hoạch không được vượt quá 4 ký tự")
 	@ApiModelProperty(example = "2022")
-	String namKhoach;
+	Long namKh;
+
+	//Thông tin chủ đầu tư
+
+	String maDvi;
+
+	String diaChi;
+
+	String mst;
+
+	String sdt;
+
+	String stk;
+
+	String tenNguoiDdien;
+
+	String chucVu;
+
+	String idNthau;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date tgianNkho;
+
+	private List<HhDdiemNhapKhoReq> diaDiemNhapKhoReq;
 
 	private List<HhHopDongDtlReq> detail;
 

@@ -18,6 +18,8 @@ public class HhDxKhLcntThopHdrReq extends HhDxKhLcntTChiThopReq {
 	@NotNull(message = "Không được để trống")
 	@Size(max = 250, message = "Về việc không được vượt quá 20 ký tự")
 	@ApiModelProperty(example = "Nội dung về việc")
-	String veViec;
+	String noiDung;
+
+	String ghiChu;
 
 }

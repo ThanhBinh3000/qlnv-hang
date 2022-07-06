@@ -14,12 +14,9 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class QlBangKeCanHangLtSearchReq extends BaseRequest {
     private String soBangKe;
-    private String maHang;
-    private String maDonViLap;
-    private String maDonVi;
+    private String soQdNhap;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate tuNgay;
-
+    private LocalDate tuNgayNhap;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate denNgay;
+    private LocalDate denNgayNhap;
 }

@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.entities.quanlybienbannhapdaykholuongthuc;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,14 +18,18 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "BB_NHAP_DAY_KHO_LT")
+@Table(name = QlBienBanNhapDayKhoLt.TABLE_NAME)
 public class QlBienBanNhapDayKhoLt extends BaseEntity implements Serializable {
     private static final long serialVersionUID = -5271141998400379431L;
+    public static final String TABLE_NAME = "NH_BB_NHAP_DAY_KHO_LT";
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "QL_BIEN_BAN_NHAP_DAY_KHO_LT_SEQ")
-    @SequenceGenerator(sequenceName = "QL_BIEN_BAN_NHAP_DAY_KHO_LT_SEQ", allocationSize = 1, name = "QL_BIEN_BAN_NHAP_DAY_KHO_LT_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BB_NHAP_DAY_KHO_LT_SEQ")
+    @SequenceGenerator(sequenceName = "BB_NHAP_DAY_KHO_LT_SEQ", allocationSize = 1, name = "BB_NHAP_DAY_KHO_LT_SEQ")
     @Column(name = "ID")
     private Long id;
+
+    @Column(name = "QDGNVNX_ID")
+    private Long qdgnvnxId;
 
     @Column(name = "SO_BIEN_BAN")
     private String soBienBan;
@@ -32,20 +37,23 @@ public class QlBienBanNhapDayKhoLt extends BaseEntity implements Serializable {
     @Column(name = "NGAY_NHAP_DAY_KHO")
     private LocalDate ngayNhapDayKho;
 
-    @Column(name = "MA_DON_VI")
-    private String maDonVi;
+    @Column(name = "THU_TRUONG")
+    private String thuTruong;
 
-    @Column(name = "MA_DON_VI_LAP")
-    private String maDonViLap;
+    @Column(name = "KE_TOAN")
+    private String keToan;
 
-    @Column(name = "MA_KHO_NGAN_LO")
-    private String maKhoNganLo;
+    @Column(name = "KY_THUAT_VIEN")
+    private String kyThuatVien;
 
-    @Column(name = "MA_HANG")
-    private String maHang;
+    @Column(name = "THU_KHO")
+    private String thuKho;
 
-    @Column(name = "TEN_HANG")
-    private String tenHang;
+    @Column(name = "MA_VAT_TU")
+    private String maVatTu; // Chủng loại hàng hóa
+
+    @Column(name = "MA_VAT_TU_CHA")
+    private String maVatTuCha; // Loại hàng
 
     @Column(name = "NGAY_BAT_DAU_NHAP")
     private LocalDate ngayBatDauNhap;
@@ -53,17 +61,23 @@ public class QlBienBanNhapDayKhoLt extends BaseEntity implements Serializable {
     @Column(name = "NGAY_KET_THUC_NHAP")
     private LocalDate ngayKetThucNhap;
 
-    @Column(name = "THU_KHO")
-    private String thuKho;
+    @Column(name = "MA_DIEM_KHO")
+    private String maDiemKho;
 
-    @Column(name = "KY_THUAT_VIEN")
-    private String kyThuatVien;
+    @Column(name = "MA_NHA_KHO")
+    private String maNhaKho;
 
-    @Column(name = "KE_TOAN")
-    private String keToan;
+    @Column(name = "MA_NGAN_KHO")
+    private String maNganKho;
 
-    @Column(name = "THU_TRUONG")
-    private String thuTruong;
+    @Column(name = "MA_NGAN_LO")
+    private String maNganLo;
+
+    @Column(name = "MA_DVI")
+    private String maDvi;
+
+    @Column(name = "CAP_DVI")
+    private String capDvi;
 
     @Column(name = "TRANG_THAI")
     private String trangThai;
@@ -83,9 +97,12 @@ public class QlBienBanNhapDayKhoLt extends BaseEntity implements Serializable {
     @Column(name = "NGUOI_PHE_DUYET_ID")
     private Long nguoiPheDuyetId;
 
-    @Column(name = "CAP_DON_VI")
-    private String capDonVi;
+    private Integer so;
+    private Integer nam;
 
     @Transient
     private List<QlBienBanNdkCtLt> chiTiets = new ArrayList<>();
+
+    @Transient
+    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 }

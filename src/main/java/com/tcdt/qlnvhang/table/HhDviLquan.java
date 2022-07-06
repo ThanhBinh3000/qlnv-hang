@@ -27,7 +27,7 @@ public class HhDviLquan implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_DVI_LQUAN_SEQ")
 	@SequenceGenerator(sequenceName = "HH_DVI_LQUAN_SEQ", allocationSize = 1, name = "HH_DVI_LQUAN_SEQ")
 	private Long id;
-
+	private Long idHdHdr;
 	String ma;
 	String ten;
 	String diaChi;
@@ -37,10 +37,5 @@ public class HhDviLquan implements Serializable {
 	String tenNguoiDdien;
 	String chucVu;
 	String type;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_hdr")
-	@JsonBackReference
-	private HhHopDongHdr parent;
 
 }

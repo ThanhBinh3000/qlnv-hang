@@ -1,20 +1,12 @@
 package com.tcdt.qlnvhang.repository.bbanlaymau;
 
-import com.tcdt.qlnvhang.entities.bbanlaymau.BienBanLayMau;
 import com.tcdt.qlnvhang.request.search.BienBanLayMauSearchReq;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.Tuple;
-import java.math.BigInteger;
-import java.time.LocalDate;
+import javax.persistence.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,9 +15,13 @@ public class BienBanLayMauRepositoryCustomImpl implements BienBanLayMauRepositor
 	private EntityManager em;
 
 	@Override
-	public Page<BienBanLayMau> search(BienBanLayMauSearchReq req, Pageable pageable) {
+	public List<Object[]> search(BienBanLayMauSearchReq req, Pageable pageable) {
 		StringBuilder builder = new StringBuilder();
-		builder.append("SELECT * FROM BB_LAY_MAU ");
+		builder.append("SELECT bb, nx.id, nx.soQd, hopDong.id, hopDong.soHd, nganLo, bbNhapDayKho.id, bbNhapDayKho.soBienBan FROM BienBanLayMau bb ");
+		builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON bb.qdgnvnxId = nx.id ");
+		builder.append("INNER JOIN HhHopDongHdr hopDong ON bb.hopDongId = hopDong.id ");
+		builder.append("INNER JOIN QlBienBanNhapDayKhoLt bbNhapDayKho ON bb.bbNhapDayKhoId = bbNhapDayKho.id ");
+		builder.append("LEFT JOIN KtNganLo nganLo ON bbNhapDayKho.maNganLo = nganLo.maNganlo ");
 		setConditionSearchCtkhn(req, builder);
 
 		//Sort
@@ -35,123 +31,90 @@ public class BienBanLayMauRepositoryCustomImpl implements BienBanLayMauRepositor
 					.map(o -> o.getProperty() + " " + o.getDirection()).collect(Collectors.joining(", ")));
 		}
 
-		Query query = em.createNativeQuery(builder.toString(), Tuple.class);
+		TypedQuery<Object[]> query = em.createQuery(builder.toString(), Object[].class);
 
 		//Set params
 		this.setParameterSearchCtkhn(req, query);
-
 		//Set pageable
 		query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize()).setMaxResults(pageable.getPageSize());
 
-		List<?> data = query.getResultList();
-
-		List<BienBanLayMau> response = data
-				.stream()
-				.map(res -> {
-					Tuple item = (Tuple) res;
-					BienBanLayMau bb = new BienBanLayMau();
-					bb.setId(item.get("ID", Long.class));
-					bb.setSoBban(item.get("SO_BBAN", String.class));
-					bb.setNgayLapBban(item.get("NGAY_LAP_BBAN", LocalDate.class));
-					bb.setMaKho(item.get("MA_KHO", String.class));
-					bb.setMaNgan(item.get("MA_NGAN", String.class));
-					bb.setMaLo(item.get("MA_LO", String.class));
-					bb.setMaHhoa(item.get("MA_HHOA", String.class));
-					bb.setPphapLayMau(item.get("PPHAP_LAY_MAU", String.class));
-					bb.setSluongLMau(item.get("SLUONG_MAU", String.class));
-					bb.setKquaNiemPhongMau(item.get("KQUA_NIEM_PHONG_MAU", String.class));
-					bb.setDdiemKtra(item.get("DDIEM_KTRA", String.class));
-					bb.setCcuQdinhGiaoNvuNhap(item.get("CCU_QDINH_GIAO_NVU_NHAP", String.class));
-					bb.setCtieuKtra(item.get("CTIEU_KTRA", String.class));
-					bb.setTenDdienNhan(item.get("TEN_DDIEN_NHAN", String.class));
-					bb.setMaDviNhan(item.get("MA_DVI_NHAN", String.class));
-					bb.setCvuDdienNhan(item.get("CVU_DDIEN_NHAN", String.class));
-					bb.setTenDdienCcap(item.get("TEN_DDIEN_CCAP", String.class));
-					bb.setMaDviCcap(item.get("MA_DVI_CCAP", String.class));
-					bb.setTrangThai(item.get("TRANG_THAI", String.class));
-					return bb;
-				}).collect(Collectors.toList());
-
-		return new PageImpl<>(response, pageable, this.countCtkhn(req));
+		return query.getResultList();
 	}
 
 
 	private void setConditionSearchCtkhn(BienBanLayMauSearchReq req, StringBuilder builder) {
 		builder.append("WHERE 1 = 1 ");
 
-		if (!StringUtils.isEmpty(req.getMaHhoa())) {
-			builder.append("AND ").append("MA_HHOA = :maHhoa ");
+
+		if (!StringUtils.isEmpty(req.getSoBienBan())) {
+			builder.append("AND ").append("bb.soBienBan LIKE :soBienBan ");
 		}
 
-		if (!StringUtils.isEmpty(req.getMaKho())) {
-			builder.append("AND ").append("MA_KHO = :maKho ");
+		if (!StringUtils.isEmpty(req.getSoQuyetDinhNhap())) {
+			builder.append("AND ").append("nx.soQd LIKE :soQdNhap ");
+		}
+		if (req.getNgayLayMauTu() != null) {
+			builder.append("AND ").append("bb.ngayLayMau >= :ngayLayMauTu ");
+		}
+		if (req.getNgayLayMauDen() != null) {
+			builder.append("AND ").append("bb.ngayLayMau <= :ngayLayMauDen ");
 		}
 
-		if (!StringUtils.isEmpty(req.getMaNgan())) {
-			builder.append("AND ").append("MA_NGAN = :maNgan ");
+		if (!StringUtils.isEmpty(req.getMaVatTuCha())) {
+			builder.append("AND ").append("bb.maVatTuCha = :maVatTuCha ");
 		}
 
-		if (!StringUtils.isEmpty(req.getMaLo())) {
-			builder.append("AND ").append("MA_LO = :maLo ");
+		if (!CollectionUtils.isEmpty(req.getMaDvis())) {
+			builder.append("AND ").append("bb.maDvi IN :maDvis ");
 		}
-		if (!StringUtils.isEmpty(req.getSoQdinhGiaoNvuNhap())) {
-			builder.append("AND ").append("SO_QDINH_GIAO_NVU_NHAP = :soQdinhGiaoNvuNhap ");
-		}
-		if (req.getNgayLapBbanTuNgay() != null) {
-			builder.append("AND ").append("NGAY_LAP_BBAN >= :ngayLapBbanTuNgay ");
-		}
-		if (req.getNgayLapBbanDenNgay() != null) {
-			builder.append("AND ").append("NGAY_LAP_BBAN <= :ngayLapBbanDenNgay ");
+
+		if (!CollectionUtils.isEmpty(req.getTrangThais())) {
+			builder.append("AND ").append("bb.trangThai IN :trangThais ");
 		}
 	}
 
-	private int countCtkhn(BienBanLayMauSearchReq req) {
+	@Override
+	public int countBienBan(BienBanLayMauSearchReq req) {
 		int total = 0;
 		StringBuilder builder = new StringBuilder();
-		builder.append("SELECT COUNT(1) AS totalRecord FROM BIEN_BAN_LAY_MAU");
-
+		builder.append("SELECT COUNT(DISTINCT bb.id) FROM BienBanLayMau bb ");
+		builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON bb.qdgnvnxId = nx.id ");
+		builder.append("INNER JOIN HhHopDongHdr hopDong ON bb.hopDongId = hopDong.id ");
+		builder.append("LEFT JOIN KtNganLo nganLo ON bb.maNganLo = nganLo.maNganlo ");
 		this.setConditionSearchCtkhn(req, builder);
 
-		Query query = em.createNativeQuery(builder.toString(), Tuple.class);
+		TypedQuery<Long> query = em.createQuery(builder.toString(), Long.class);
 
 		this.setParameterSearchCtkhn(req, query);
-
-		List<?> dataCount = query.getResultList();
-
-		if (!CollectionUtils.isEmpty(dataCount)) {
-			return total;
-		}
-		Tuple result = (Tuple) dataCount.get(0);
-		return result.get("totalRecord", BigInteger.class).intValue();
+		return query.getSingleResult().intValue();
 	}
 
 	private void setParameterSearchCtkhn(BienBanLayMauSearchReq req, Query query) {
-		if (!StringUtils.isEmpty(req.getMaHhoa())) {
-			query.setParameter("maHhoa", req.getMaHhoa());
+
+		if (!StringUtils.isEmpty(req.getSoBienBan())) {
+			query.setParameter("soBienBan", "%" + req.getSoBienBan() + "%");
 		}
 
-		if (!StringUtils.isEmpty(req.getMaKho())) {
-			query.setParameter("maKho", req.getMaKho());
+		if (!StringUtils.isEmpty(req.getSoQuyetDinhNhap())) {
+			query.setParameter("soQdNhap", "%" + req.getSoQuyetDinhNhap() + "%");
+		}
+		if (req.getNgayLayMauTu() != null) {
+			query.setParameter("ngayLayMauTu", req.getNgayLayMauTu());
+		}
+		if (req.getNgayLayMauDen() != null) {
+			query.setParameter("ngayLayMauDen", req.getNgayLayMauDen());
 		}
 
-		if (!StringUtils.isEmpty(req.getMaNgan())) {
-			query.setParameter("maNgan", req.getMaNgan());
+		if (!StringUtils.isEmpty(req.getMaVatTuCha())) {
+			query.setParameter("maVatTuCha", req.getMaVatTuCha());
 		}
 
-		if (!StringUtils.isEmpty(req.getMaLo())) {
-			query.setParameter("maLo", req.getMaLo());
+		if (!CollectionUtils.isEmpty(req.getMaDvis())) {
+			query.setParameter("maDvis", req.getMaDvis());
 		}
 
-		if (!StringUtils.isEmpty(req.getSoQdinhGiaoNvuNhap())) {
-			query.setParameter("soQdinhGiaoNvuNhap", req.getSoQdinhGiaoNvuNhap());
-		}
-
-		if (req.getNgayLapBbanTuNgay() != null) {
-			query.setParameter("ngayLapBbanTuNgay", req.getNgayLapBbanTuNgay());
-		}
-
-		if (req.getNgayLapBbanDenNgay() != null) {
-			query.setParameter("ngayLapBbanDenNgay", req.getNgayLapBbanDenNgay());
+		if (!CollectionUtils.isEmpty(req.getTrangThais())) {
+			query.setParameter("trangThais", req.getTrangThais());
 		}
 	}
 }

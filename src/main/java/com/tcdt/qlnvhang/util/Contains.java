@@ -41,12 +41,30 @@ public class Contains {
 	public static final String KTT_DUYET = "08";// Trang thai trung gian, ke toan truong phe duyet
 	public static final String TPHONG_DUYET = "09"; // Trang thai Truong phong duyet
 	public static final String LANHDAO_DUYET = "10"; // Trang thai Lanh dao duyet
+
 	public static final String BAN_HANH = "11"; // Trang thai Lanh dao duyet
+
+	public static final String TT_DA_QUYET_DINH = "12"; // Trang thai Lanh dao duyet
+
+	public static final String LANHDAO_TU_CHOI = "12";
 
 	// Trạng thái tổng hợp
 	public static final String CHUA_QUYET_DINH = "00";
 
-	public static final String DA_QUYET_DINH = "01";
+	public static final String DU_THAO_QD = "01";
+	public static final String DA_QUYET_DINH = "02";
+
+	// Trạng thái gói thầu
+
+	public static final String CHUA_CAP_NHAT = "00";
+
+	public static final String DANG_CAP_NHAT = "01";
+
+	public static final String HOAN_THANH_CAP_NHAT = "02";
+
+	public static final String GT_TRUNG_THAU = "03";
+
+	public static final String GT_HUY_THAU = "04";
 
 	// Trang thai response
 	public static final int RESP_SUCC = 0;
@@ -126,7 +144,9 @@ public class Contains {
 	public static final String DX_TIEU_HUY = "01";
 
 	// Loai hang
+	@Deprecated
 	public static final String VAT_TU = "00";
+	@Deprecated
 	public static final String LUONG_THUC_MUOI = "01";
 
 	// Ket qua dau thau
@@ -134,10 +154,10 @@ public class Contains {
 	public static final String HUY_THAU = "01";
 
 	// Loai vat tu hang hoa
-	public static final String LOAI_VTHH_GAO = "00";
-	public static final String LOAI_VTHH_THOC = "01";
-	public static final String LOAI_VTHH_MUOI = "02";
-	public static final String LOAI_VTHH_VATTU = "03";
+	public static final String LOAI_VTHH_GAO = "0102";
+	public static final String LOAI_VTHH_THOC = "0101";
+	public static final String LOAI_VTHH_MUOI = "04";
+	public static final String LOAI_VTHH_VATTU = "02";
 
 	// Don vi tinh
 	public static final String DVT_KG = "kg";
@@ -179,7 +199,7 @@ public class Contains {
 	static {
 		mpLoaiVthh = Maps.<String, String>buildMap().put(Contains.LOAI_VTHH_GAO, "Gạo")
 				.put(Contains.LOAI_VTHH_THOC, "Thóc").put(Contains.LOAI_VTHH_MUOI, "Muối")
-				.put(Contains.LOAI_VTHH_THOC, "Vật tư").get();
+				.put(Contains.LOAI_VTHH_VATTU, "Vật tư").get();
 	}
 
 	public static String getLoaiVthh(String key) {

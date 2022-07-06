@@ -6,63 +6,60 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "BB_LAY_MAU")
+@Table(name = "NH_BB_LAY_MAU")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BienBanLayMau extends BaseEntity {
+public class BienBanLayMau extends BaseEntity implements Serializable  {
 	private static final long serialVersionUID = 6093365068005372524L;
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BIEN_BAN_LAY_MAU_SEQ")
-	@SequenceGenerator(sequenceName = "BIEN_BAN_LAY_MAU_SEQ", allocationSize = 1, name = "BIEN_BAN_LAY_MAU_SEQ")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BB_LAY_MAU_SEQ")
+	@SequenceGenerator(sequenceName = "BB_LAY_MAU_SEQ", allocationSize = 1, name = "BB_LAY_MAU_SEQ")
 	private Long id;
-	private String maHhoa;
-	private String ccuQdinhGiaoNvuNhap;
-	private String maKho;
-	private String maLo;
-	private String maNgan;
-	private String soBban;
-	private LocalDate ngayLapBban;
-	private String maDviNhan;
-	private String tenDdienNhan;
-	private String cvuDdienNhan;
-	private String maDviCcap;
-	private String tenDdienCcap;
-	private String cvuDdienCcap;
-	private String canCu;
-	private String ddiemKtra;
-	private String sluongLMau;
-	private String pphapLayMau;
-	private String ctieuKtra;
-	private String kquaNiemPhongMau;
+	private Long qdgnvnxId;
+	private Long bbNhapDayKhoId;
+	private String soBienBan;
+	private Long hopDongId;
+	private LocalDate ngayHopDong;
+	private String donViCungCap;
+	private LocalDate ngayLayMau;
+	private String diaDiemLayMau;
+	private String diaDiemBanGiao;
+
+	private String maVatTuCha;
+	private String maVatTu;
+
+	private String maDiemKho;
+	private String maNhaKho;
+	private String maNganKho;
+	private String maNganLo;
+
+	private Integer soLuongMau;
+	private String ppLayMau;
+	private String chiTieuKiemTra;
+	private String ketQuaNiemPhong;
+
+	private String trangThai;
+	private String lyDoTuChoi;
+	private String maDvi;
+	private String capDvi;
+
 	private Long nguoiGuiDuyetId;
 	private LocalDate ngayGuiDuyet;
 	private Long nguoiPduyetId;
 	private LocalDate ngayPduyet;
-	private String trangThai;
-	private String ldoTchoi;
-	private String maDonVi;
-	private String capDonVi;
-	private String maQhns;
-	private String soHd;
-	private String ngayLayMau;
-	private String ddiemLayMau;
-	private String ddienCucDtruNnuoc;
-	private String tPhongKthuatBquan;
-	private String ddienBenNhan;
-	private String ngayBgiaoMau;
-	private String ddienCucDtruGiao;
-	private String ddienDviTchucNhan;
-	private String tinhTrang;
-	private String soTrang;
+
+	private Integer so;
+	private Integer nam;
+
+	@Transient
+	private List<BienBanLayMauCt> chiTiets = new ArrayList<>();
 }

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import com.tcdt.qlnvhang.request.DeleteReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -173,4 +174,37 @@ public class HhBbNghiemthuKlstHdrController {
 
 	}
 
+	@ApiOperation(value = "Delete multiple Biên bản nghiệm thu bảo quản lần đầu nhập", response = List.class)
+	@ResponseStatus(HttpStatus.OK)
+	@PostMapping("/delete/multiple")
+	public final ResponseEntity<BaseResponse> deleteMultiple(@RequestBody @Valid DeleteReq req) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.deleteMultiple(req));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			resp.setMsg(e.getMessage());
+			log.error("Delete multiple Biên bản nghiệm thu bảo quản lần đầu nhập lỗi ", e);
+		}
+		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Get số Biên bản nghiệm thu bảo quản lần đầu nhập", response = List.class)
+	@GetMapping("/so")
+	public ResponseEntity<BaseResponse> getSo() {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.getSo());
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Get số Biên bản nghiệm thu bảo quản lần đầu nhập lỗi", e);
+		}
+		return ResponseEntity.ok(resp);
+	}
 }

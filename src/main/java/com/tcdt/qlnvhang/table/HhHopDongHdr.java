@@ -44,7 +44,9 @@ public class HhHopDongHdr implements Serializable {
 	@SequenceGenerator(sequenceName = HhHopDongHdr.TABLE_NAME
 			+ "_SEQ", allocationSize = 1, name = HhHopDongHdr.TABLE_NAME + "_SEQ")
 	private Long id;
-
+	private Long idGoiThau;
+	private Long namKh;
+	private Long donGiaVat;
 	String soHd;
 	String tenHd;
 	String canCu;
@@ -72,6 +74,11 @@ public class HhHopDongHdr implements Serializable {
 	Double vat;
 	Double gtriHdSauVat;
 	String loaiVthh;
+	@Transient
+	String tenVthh;
+	String cloaiVthh;
+	@Transient
+	String tenCloaiVthh;
 	String loaiHd;
 
 	@Temporal(TemporalType.DATE)
@@ -93,62 +100,53 @@ public class HhHopDongHdr implements Serializable {
 	@Transient
 	String tenDvi;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "id_hdr")
-	@JsonManagedReference
-	@Where(clause = "type='" + Contains.HOP_DONG + "'")
-	private List<HhHopDongDtl> children = new ArrayList<>();
+	String diaChi;
 
-	public void setChildren(List<HhHopDongDtl> children) {
-		this.children.clear();
-		for (HhHopDongDtl child : children) {
-			child.setParent(this);
-		}
-		this.children.addAll(children);
-	}
+	String mst;
 
-	public void addChild(HhHopDongDtl child) {
-		child.setParent(this);
-		this.children.add(child);
-	}
+	String sdt;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "id_hdr")
-	@JsonManagedReference
+	String stk;
 
-	private List<HhDviLquan> children1 = new ArrayList<>();
+	String tenNguoiDdien;
 
-	public void setChildren1(List<HhDviLquan> children1) {
-		this.children1.clear();
-		for (HhDviLquan child1 : children1) {
-			child1.setParent(this);
-		}
-		this.children1.addAll(children1);
-	}
+	String chucVu;
 
-	public void addChild1(HhDviLquan child1) {
-		child1.setParent(this);
-		this.children1.add(child1);
-	}
+	String idNthau;
+
+	@Temporal(TemporalType.DATE)
+	Date tgianNkho;
+
+	@Transient
+	private List<HhHopDongDdiemNhapKho> hhDdiemNhapKhoList = new ArrayList<>();
+
+	@Transient
+	private List<HhPhuLucHd> hhPhuLucHdongList = new ArrayList<>();
+
+	@Transient
+	private List<HhHopDongDtl> hhHopDongDtlList = new ArrayList<>();
+
+	@Transient
+	private List<HhDviLquan> hhDviLquanList = new ArrayList<>();
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)
 	@JoinColumn(name = "dataId")
 	@JsonManagedReference
 	@Where(clause = "data_type='" + HhHopDongHdr.TABLE_NAME + "'")
-	private List<FileDKemJoinHopDong> children2 = new ArrayList<>();
+	private List<FileDKemJoinHopDong> fileDinhKems = new ArrayList<>();
 
-	public void setChildren2(List<FileDKemJoinHopDong> children2) {
-		this.children2.clear();
+	public void setFileDinhKems(List<FileDKemJoinHopDong> children2) {
+		this.fileDinhKems.clear();
 		for (FileDKemJoinHopDong child2 : children2) {
 			child2.setParent(this);
 		}
-		this.children2.addAll(children2);
+		this.fileDinhKems.addAll(children2);
 	}
 
-	public void addChild2(FileDKemJoinHopDong child2) {
+	public void addFileDinhKems(FileDKemJoinHopDong child2) {
 		child2.setParent(this);
-		this.children2.add(child2);
+		this.fileDinhKems.add(child2);
 	}
 
 }

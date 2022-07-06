@@ -1,44 +1,39 @@
 package com.tcdt.qlnvhang.request.object.bbanlaymau;
 
+import com.tcdt.qlnvhang.request.object.SoBienBanPhieuReq;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
-public class BienBanLayMauReq {
+@NoArgsConstructor
+public class BienBanLayMauReq extends SoBienBanPhieuReq {
 	private Long id;
-	private String maHhoa;
-	private String ccuQdinhGiaoNvuNhap;
-	private String maKho;
-	private String maLo;
-	private String maNgan;
-	private String soBban;
-	private LocalDate ngayLapBban;
-	private String maDviNhan;
-	private String tenDdienNhan;
-	private String cvuDdienNhan;
-	private String maDviCcap;
-	private String tenDdienCcap;
-	private String cvuDdienCcap;
-	private String canCu;
-	private String ddiemKtra;
-	private String sluongLMau;
-	private String pphapLayMau;
-	private String ctieuKtra;
-	private String kquaNiemPhongMau;
+	private Long qdgnvnxId;
+	private Long bbNhapDayKhoId;
+	private String soBienBan;
+	private Long hopDongId;
+	private LocalDate ngayHopDong;
+	private String donViCungCap;
+	private LocalDate ngayLayMau;
+	private String diaDiemLayMau;
+	private String diaDiemBanGiao;
 
-	private String maDonVi;
-	private String maQHNS;
-	private String soHd;
-	private String ngayLayMau;
-	private String ddiemLayMau;
-	private String ddienCucDtruNnuoc;
-	private String tPhongKthuatBquan;
-	private String ddienBenNhan;
-	private String ngayBgiaoMau;
-	private String ddienCucDtruBenGiao;
-	private String ddienDviTchucBenNhan;
-	private String tinhTrang;
-	private String soTrang;
+	private String maVatTuCha;
+	private String maVatTu;
 
+	private String maDiemKho;
+	private String maNhaKho;
+	private String maNganKho;
+	private String maNganLo;
+
+	private Integer soLuongMau;
+	private String ppLayMau;
+	private String chiTieuKiemTra;
+	private String ketQuaNiemPhong;
+
+	private List<BienBanLayMauCtReq> chiTiets = new ArrayList<>();
 }

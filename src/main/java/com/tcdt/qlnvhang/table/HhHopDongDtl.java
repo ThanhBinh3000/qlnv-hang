@@ -5,17 +5,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.hibernate.annotations.Where;
 
@@ -46,28 +36,8 @@ public class HhHopDongDtl implements Serializable {
 	BigDecimal giaSauVat;
 	String type;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_hdr")
-	@JsonBackReference
-	private HhHopDongHdr parent;
+	@Transient
+	private List<HhHopDongDdiemNhapKho> children = new ArrayList<>();
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "id_hdr")
-	@JsonManagedReference
-	@Where(clause = "type='" + Contains.HOP_DONG + "'")
-	private List<HhDdiemNhapKho> children = new ArrayList<>();
-
-	public void setChildren(List<HhDdiemNhapKho> children) {
-		this.children.clear();
-		for (HhDdiemNhapKho child : children) {
-			child.setParent(this);
-		}
-		this.children.addAll(children);
-	}
-
-	public void addChild(HhDdiemNhapKho child) {
-		child.setParent(this);
-		this.children.add(child);
-	}
 
 }

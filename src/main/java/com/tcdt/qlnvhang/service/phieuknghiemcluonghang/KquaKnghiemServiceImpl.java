@@ -12,9 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,7 +22,7 @@ public class KquaKnghiemServiceImpl implements KquaKnghiemService {
 
 	@Override
 	public Page<KquaKnghiemRes> list(Long phieuKnghiemId, Pageable pageable) {
-		Page<KquaKnghiem> list = kquaKnghiemRepository.findByPhieuKnghiemId(phieuKnghiemId, pageable);
+		Page<KquaKnghiem> list = kquaKnghiemRepository.findByPhieuKnghiemIdOrderBySttAsc(phieuKnghiemId, pageable);
 		return new PageImpl<>(this.toResponseList(list.getContent()), pageable, list.getTotalElements());
 	}
 
@@ -40,9 +38,9 @@ public class KquaKnghiemServiceImpl implements KquaKnghiemService {
 			KquaKnghiem kq = kquaKnghiemList.stream().filter(k -> k.getId().equals(kqReq.getId())).findFirst().orElse(null);
 			if (kq == null) {
 				kq = new KquaKnghiem();
-				kq.setPhieuKnghiemId(phieuKnghiemId);
 			}
 			this.updateEntity(kq, kqReq);
+			kq.setPhieuKnghiemId(phieuKnghiemId);
 			saveList.add(kq);
 		}
 
@@ -64,10 +62,23 @@ public class KquaKnghiemServiceImpl implements KquaKnghiemService {
 	}
 
 	private void updateEntity(KquaKnghiem kq, KquaKnghiemReq req) {
-		kq.setKquaKtra(req.getKquaKtra());
-		kq.setDonVi(req.getDonVi());
-		kq.setStt(req.getStt());
-		kq.setTenCtieu(req.getTenCtieu());
-		kq.setPphapXdinh(req.getPphapXdinh());
+		BeanUtils.copyProperties(req, kq, "id");
+	}
+
+	@Override
+	public void deleteByPhieuKnghiemId(Long phieuKnghiemId) {
+		kquaKnghiemRepository.deleteByphieuKnghiemId(phieuKnghiemId);
+	}
+
+	@Override
+	public void deleteByPhieuKnghiemIdIn(Collection<Long> phieuKnghiemIds) {
+		kquaKnghiemRepository.deleteByPhieuKnghiemIdIn(phieuKnghiemIds);
+	}
+
+	@Override
+	public Map<Long, Long> countKqByPhieuKnghiemId(Collection<Long> phieuKnhiemIds) {
+		return kquaKnghiemRepository.countByPhieuKnghiemIdIn(phieuKnhiemIds)
+				.stream().collect(Collectors.toMap(o -> (Long) o[0], o -> (Long) o[1]));
+
 	}
 }

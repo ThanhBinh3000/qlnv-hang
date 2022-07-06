@@ -1,26 +1,38 @@
 package com.tcdt.qlnvhang.request.object.phieuknghiemcluonghang;
 
+import com.tcdt.qlnvhang.request.object.SoBienBanPhieuReq;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
-public class PhieuKnghiemCluongHangReq {
+public class PhieuKnghiemCluongHangReq extends SoBienBanPhieuReq {
 	private Long id;
+	private Long qdgnvnxId;
+	private Long bbBanGiaoMauId;
 	private String soPhieu;
 	private LocalDate ngayLayMau;
 	private LocalDate ngayKnghiem;
-	private String maNgan;
-	private String tenNgan;
-	private String maKho;
-	private String tenKho;
-	private String maHhoa;
-	private String tenHhoa;
+	private String maVatTu;
+	private String maVatTuCha;
 	private String soBbanKthucNhap;
 	private LocalDate ngayNhapDay;
 	private BigDecimal sluongBquan;
 	private String hthucBquan;
 	private String ddiemBquan;
 	private String trangThai;
+	private String chiSoChatLuong;
+
+	private String maDiemKho;
+	private String maNhaKho;
+	private String maNganKho;
+	private String maNganLo;
+
+	private String thuKho;
+	private String ketLuan;
+	private String ketQuaDanhGia;
+	private List<KquaKnghiemReq> kquaKnghiem = new ArrayList<>();
 }

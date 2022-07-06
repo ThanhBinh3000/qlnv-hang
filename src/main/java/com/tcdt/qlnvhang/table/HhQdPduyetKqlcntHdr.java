@@ -5,20 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -32,9 +19,6 @@ import lombok.Data;
 @Entity
 @Table(name = HhQdPduyetKqlcntHdr.TABLE_NAME)
 @Data
-@NamedEntityGraph(name = HhQdPduyetKqlcntHdr.TABLE_NAME + ".children", attributeNodes = {
-		@NamedAttributeNode("children"), @NamedAttributeNode("children1") })
-
 public class HhQdPduyetKqlcntHdr implements Serializable {
 	/**
 	 * 
@@ -52,9 +36,17 @@ public class HhQdPduyetKqlcntHdr implements Serializable {
 	@Temporal(TemporalType.DATE)
 	Date ngayQd;
 	String loaiVthh;
-	String namKhoach;
-	String veViec;
-	String canCu;
+	@Transient
+	String tenVthh;
+	String cloaiVthh;
+	@Transient
+	String tenCloaiVthh;
+	Integer namKhoach;
+	String trichYeu;
+	String soQdPdKhlcnt;
+	@Temporal(TemporalType.DATE)
+	Date ngayQdPdKhlcnt;
+	Boolean trungThau;
 	String maDvi;
 	String ghiChu;
 	String trangThai;
@@ -67,6 +59,13 @@ public class HhQdPduyetKqlcntHdr implements Serializable {
 	String nguoiGuiDuyet;
 	Date ngayPduyet;
 	String nguoiPduyet;
+	Long idGoiThau;
+	String lyDoHuy;
+	@Temporal(TemporalType.DATE)
+	Date ngayHluc;
+
+	@Transient
+	private List<HhQdPduyetKqlcntDtl> hhQdPduyetKqlcntDtlList = new ArrayList<>();
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)
@@ -88,21 +87,4 @@ public class HhQdPduyetKqlcntHdr implements Serializable {
 		this.children.add(child);
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "id_hdr")
-	@JsonManagedReference
-	private List<HhQdPduyetKqlcntDtl> children1 = new ArrayList<>();
-
-	public void setChildren1(List<HhQdPduyetKqlcntDtl> children1) {
-		this.children1.clear();
-		for (HhQdPduyetKqlcntDtl child1 : children1) {
-			child1.setParent(this);
-		}
-		this.children1.addAll(children1);
-	}
-
-	public void addChild1(HhQdPduyetKqlcntDtl child1) {
-		child1.setParent(this);
-		this.children1.add(child1);
-	}
 }

@@ -20,7 +20,7 @@ public class PathContains {
 	// 5.1 Quản lý lựa chọn nhà cung cấp theo phương thức đấu thầu
 	public static final String QL_KE_HOACH_LCNT = "/ql-ke-hoach-lcnt";
 	public static final String VAT_TU = "/vat-tu";
-	public static final String QL_QD_LCNT = "/qd-lcnt";
+
 	public static final String DIEU_CHINH = "/dieu-chinh";
 	public static final String QL_QD_LCNT_VTU = "/qd-lcnt-vtu";
 	public static final String QL_TTIN_DTHAU_VTU = "/ql-ttin-dthau-vtu";
@@ -89,6 +89,7 @@ public class PathContains {
 	public static final String PA_LCNT = "/pan-lcnt";
 	public static final String QD_LCNT = "/qd-lcnt";
 	public static final String TTIN_DTHAU = "/ttin-dthau";
+	public static final String TTIN_DTHAU_GTHAU = "/ttin-dthau-gthau";
 	public static final String QD_PDUYET_KQLCNT = "/qd-pduyet-kqlcnt";
 	public static final String HOP_DONG = "/hop-dong";
 	public static final String PHU_LUC = "/phu-luc";
@@ -102,6 +103,8 @@ public class PathContains {
 
 	// Bien Ban lay mau
 	public static final String BBAN_LAY_MAU = "/bban-lay-mau";
+	// Bien Ban ban giao mau
+	public static final String BBAN_GIAO_MAU = "/bban-giao-mau";
 
 	// Phieu kiem nghiem chat luong hang
 	public static final String KNGHIEM_CLUONG = "/knghiem-cluong";
@@ -124,4 +127,13 @@ public class PathContains {
 
 	//Quản lý phiếu kiếm tra chất lượng hàng lương thực
 	public static final String QL_PHIEU_KIEM_TRA_CHAT_LUONG_HANG_LT = "/ql-phieu-kiem-tra-chat-luong-hang-lt";
+
+	// Nhập kho vật tư: Phiếu nhập kho tam gui
+	public static final String PHIEU_NHAP_KHO_TAM_GUI = "/phieu-nhap-kho-tam-gui";
+
+	// Nhập kho vật tư: Biên bản gửi hàng
+	public static final String BIEN_BAN_GUI_HANG = "/bien-ban-gui-hang";
+
+	// Nhập kho vật tư: Hồ sơ kỹ thuật
+	public static final String HO_SO_KY_THUAT = "/ho-so-ky-thuat";
 }

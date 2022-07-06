@@ -15,13 +15,16 @@ public class HhDdiemNhapKhoReq {
 	Long idHdr;
 
 	@Size(max = 250, message = "Chi cục dự trữ nhà nước không được vượt quá 250 ký tự")
-	String chiCuc;
+	String maDvi;
 
 	@Size(max = 250, message = "Điểm kho không được vượt quá 250 ký tự")
-	String diemKho;
+	String maDiemKho;
 
 	@Size(max = 250, message = "Nhà kho không được vượt quá 250 ký tự")
 	String nhaKho;
+
 	BigDecimal soLuong;
+
+	BigDecimal donGia;
 
 }

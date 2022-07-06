@@ -34,13 +34,13 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = PathContains.DX_KH + PathContains.QD_LCNT)
-@Api(tags = "Quyết định phê duyệt kế hoạch lựa chọn nhà thầu")
+@Api(tags = "Quyết định phê duyệt kế hoạch lựa chọn nhà thầu lương thực và vật tư")
 public class HhQdKhlcntHdrController {
 
 	@Autowired
 	private HhQdKhlcntHdrService service;
 
-	@ApiOperation(value = "Tạo mới Quyết định phê duyệt kế hoạch lựa chọn nhà thầu", response = List.class)
+	@ApiOperation(value = "Tạo mới Quyết định phê duyệt kế hoạch lựa chọn nhà thầu lương thực", response = List.class)
 	@PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<BaseResponse> insert(HttpServletRequest request,
@@ -102,6 +102,24 @@ public class HhQdKhlcntHdrController {
 		BaseResponse resp = new BaseResponse();
 		try {
 			resp.setData(service.detail(ids));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Lấy chi tiết Quyết định phê duyệt kế hoạch lựa chọn nhà thầu trace: {}", e);
+		}
+		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Lấy chi tiết Quyết định phê duyệt kế hoạch lựa chọn nhà thầu", response = List.class)
+	@GetMapping(value = PathContains.URL_CHI_TIET + "/goi-thau/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> detailGoiThau(
+			@ApiParam(value = "ID phương án kế hoạch lựa chọn nhà thầu", example = "1", required = true) @PathVariable("ids") String ids) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.detailGoiThau(ids));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -203,6 +221,60 @@ public class HhQdKhlcntHdrController {
 			log.error("Tra cứu Quyết định phê duyệt kế hoạch lựa chọn nhà thầu trace: {}", e);
 		}
 
+		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Tạo mới Quyết định phê duyệt kế hoạch lựa chọn nhà thầu vật tư", response = List.class)
+	@PostMapping(value = PathContains.VAT_TU+PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<BaseResponse> insertVatTu(HttpServletRequest request,
+											   @Valid @RequestBody HhQdKhlcntHdrReq objReq) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.createVatTu2(objReq));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Tạo mới Quyết định phê duyệt kế hoạch lựa chọn nhà thầu trace: {}", e);
+		}
+		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Cập nhật Quyết định phê duyệt kế hoạch lựa chọn nhà thầu vật tư", response = List.class)
+	@PostMapping(value = PathContains.VAT_TU+PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<BaseResponse> updateVatTu(HttpServletRequest request,
+													@Valid @RequestBody HhQdKhlcntHdrReq objReq) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.updateVatTu(objReq));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Tạo mới Quyết định phê duyệt kế hoạch lựa chọn nhà thầu trace: {}", e);
+		}
+		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Lấy chi tiết Quyết định phê duyệt kế hoạch lựa chọn nhà thầu vật tư", response = List.class)
+	@GetMapping(value = PathContains.VAT_TU+PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> detailVatTu(
+			@ApiParam(value = "ID phương án kế hoạch lựa chọn nhà thầu", example = "1", required = true) @PathVariable("ids") String ids) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.detailVatTu(ids));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Lấy chi tiết Quyết định phê duyệt kế hoạch lựa chọn nhà thầu trace: {}", e);
+		}
 		return ResponseEntity.ok(resp);
 	}
 

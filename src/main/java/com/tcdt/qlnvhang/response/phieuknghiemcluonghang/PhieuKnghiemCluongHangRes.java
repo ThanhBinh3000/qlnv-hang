@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.response.phieuknghiemcluonghang;
 
+import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -8,25 +9,48 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class PhieuKnghiemCluongHangRes {
+public class PhieuKnghiemCluongHangRes extends SoBienBanPhieuRes {
 	private Long id;
 	private String soPhieu;
 	private LocalDate ngayLayMau;
 	private LocalDate ngayKnghiem;
-	private String maNgan;
-	private String tenNgan;
-	private String maKho;
-	private String tenKho;
-	private String maHhoa;
-	private String tenHhoa;
+
+	private String maVatTu;
+	private String tenVatTu;
+	private String maVatTuCha;
+	private String tenVatTuCha;
+
 	private String soBbanKthucNhap;
 	private LocalDate ngayNhapDay;
 	private BigDecimal sluongBquan;
 	private String hthucBquan;
-	private String ddiemBquan;
 	private String trangThai;
+	private String tenTrangThai;
+	private String trangThaiDuyet;
 	private String ldoTchoi;
 	private List<KquaKnghiemRes> kquaKnghiem = new ArrayList<>();
-	private Long sluongKquaKnghiem = 0L;
-	private Long tongSoKquaKnghiem = 0L;
+	private Long soLuongMauHangKt;
+	private String maDiemKho;
+	private String tenDiemKho;
+	private String maNhaKho;
+	private String tenNhaKho;
+	private String maNganKho;
+	private String tenNganKho;
+	private String maNganLo;
+	private String tenNganLo;
+
+	private String maDvi;
+	private String tenDvi;
+	private String maDviCha;
+	private String tenDviCha;
+	private Long qdgnvnxId;
+	private  String soQuyetDinhNhap;
+
+	private Long bbBanGiaoMauId;
+	private String soBbBanGiao;
+	private LocalDate ngayBanGiaoMau;
+
+	private String ketLuan;
+	private String thuKho;
+	private String ketQuaDanhGia;
 }

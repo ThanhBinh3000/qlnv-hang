@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
+import com.tcdt.qlnvhang.table.HhQdKhlcntDsgthau;
 import org.springframework.data.domain.Page;
 
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -23,6 +24,8 @@ public interface HhQdKhlcntHdrService {
 
 	HhQdKhlcntHdr detail(String ids) throws Exception;
 
+	HhQdKhlcntDsgthau detailGoiThau(String ids) throws Exception;
+
 	Page<HhQdKhlcntHdr> colection(HhQdKhlcntSearchReq objReq) throws Exception;
 
 	@Transactional(rollbackOn = Exception.class)
@@ -38,5 +41,17 @@ public interface HhQdKhlcntHdrService {
 	Page<HhQdKhlcntHdr> getAllPage(HhQdKhlcntSearchReq objReq) throws Exception;
 
 	List<HhQdKhlcntHdr> getAll(HhQdKhlcntSearchReq objReq) throws Exception;
+
+	@Transactional(rollbackOn = Exception.class)
+	HhQdKhlcntHdr createVatTu2(HhQdKhlcntHdrReq objReq) throws Exception;
+
+	@Transactional(rollbackOn = Exception.class)
+	HhQdKhlcntHdr updateVatTu(HhQdKhlcntHdrReq objReq) throws Exception;
+
+	@Transactional(rollbackOn = Exception.class)
+	HhQdKhlcntHdr detailVatTu(String ids) throws Exception;
+
+	@Transactional(rollbackOn = Exception.class)
+	HhQdKhlcntHdr approveVatTu(StatusReq stReq) throws Exception;
 
 }

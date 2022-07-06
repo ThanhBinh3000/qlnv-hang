@@ -1,7 +1,7 @@
 package com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
-import com.tcdt.qlnvhang.entities.quyetdinhpheduyetketqualuachonnhathauvatu.QdKqlcntGoiThauVt;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,59 +20,45 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "QL_PHIEU_NHAP_KHO_LT")
+@Table(name = QlPhieuNhapKhoLt.TABLE_NAME)
 public class QlPhieuNhapKhoLt  extends BaseEntity implements Serializable {
     private static final long serialVersionUID = -1880694858465293452L;
+    public static final String TABLE_NAME = "NH_PHIEU_NHAP_KHO_LT";
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "QL_PHIEU_NHAP_KHO_LT_SEQ")
-    @SequenceGenerator(sequenceName = "QL_PHIEU_NHAP_KHO_LT_SEQ", allocationSize = 1, name = "QL_PHIEU_NHAP_KHO_LT_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PHIEU_NHAP_KHO_LT_SEQ")
+    @SequenceGenerator(sequenceName = "PHIEU_NHAP_KHO_LT_SEQ", allocationSize = 1, name = "PHIEU_NHAP_KHO_LT_SEQ")
     @Column(name = "ID")
     private Long id;
 
     @Column(name = "PHIEU_KT_CL_ID")
     private Long phieuKtClId;
 
-    @Column(name = "BB_NGHIEM_THU_KL_ID")
-    private Long bbNghiemThuKlId;
+    @Column(name = "QDGNVNX_ID")
+    private Long qdgnvnxId; // HhQdGiaoNvuNhapxuatHdr
 
     @Column(name = "SO_PHIEU")
-    private Long soPhieu;
+    private String soPhieu;
 
-    @Column(name = "NGAY_LAP")
-    private LocalDate ngayLap;
-
-    @Column(name = "MA_NGAN_LO")
-    private String maNganLo;
-
-    @Column(name = "TEN_NGAN_LO")
-    private String tenNganLo;
+    @Column(name = "NGAY_NHAP_KHO")
+    private LocalDate ngayNhapKho;
 
     @Column(name = "NGUOI_GIAO_HANG")
     private String nguoiGiaoHang;
 
-    @Column(name = "DIA_CHI_GIAO_NHAN")
-    private String diaChiGiaoNhan;
-
     @Column(name = "THOI_GIAN_GIAO_NHAN")
     private LocalDateTime thoiGianGiaoNhan;
 
+    @Column(name = "NGAY_LAP")
+    private LocalDate ngayLap;
+
     @Column(name = "TAI_KHOAN_NO")
-    private String taiKhoanNo;
+    private BigDecimal taiKhoanNo;
 
     @Column(name = "TAI_KHOAN_CO")
-    private String taiKhoanCo;
+    private BigDecimal taiKhoanCo;
 
     @Column(name = "LOAI_HINH_NHAP")
     private String loaiHinhNhap;
-
-    @Column(name = "GHI_CHU")
-    private String ghiChu;
-
-    @Column(name = "LY_DO_TU_CHOI")
-    private String lyDoTuChoi;
-
-    @Column(name = "MA_DON_VI")
-    private String maDonVi;
 
     @Column(name = "NGAY_TAO")
     private LocalDate ngayTao;
@@ -97,30 +84,36 @@ public class QlPhieuNhapKhoLt  extends BaseEntity implements Serializable {
     @Column(name = "NGUOI_PHE_DUYET_ID")
     private Long nguoiPheDuyetId;
 
-    @Column(name = "TRANG_THAI")
-    private String trangThai;
-
-    @Column(name = "CAP_DON_VI")
-    private String capDonVi;
-
     @Column(name = "MA_DIEM_KHO")
     private String maDiemKho;
 
     @Column(name = "MA_NHA_KHO")
     private String maNhaKho;
 
-    @Column(name = "MA_QHNS")
-    private String maQhns;
+    @Column(name = "MA_NGAN_KHO")
+    private String maNganKho;
 
-    @Column(name = "NGAY_NHAP_KHO")
-    private LocalDate ngayNhapKho;
+    @Column(name = "MA_NGAN_LO")
+    private String maNganLo;
 
-    @Column(name = "SO_QD_NVU_NHANG")
-    private Long soQdNvuNhang;
+    @Column(name = "TRANG_THAI")
+    private String trangThai;
 
-    @Column(name = "NGAY_QD_NVU_NHANG")
-    private LocalDate ngayQdNvuNhang;
+    @Column(name = "MA_DVI")
+    private String maDvi;
+
+    @Column(name = "CAP_DVI")
+    private String capDvi;
+
+    @Column(name = "LY_DO_TU_CHOI")
+    private String lyDoTuChoi;
+
+    private Integer so;
+    private Integer nam;
 
     @Transient
     private List<QlPhieuNhapKhoHangHoaLt> hangHoaList = new ArrayList<>();
+
+    @Transient
+    private List<FileDinhKem> chungTus = new ArrayList<>();
 }

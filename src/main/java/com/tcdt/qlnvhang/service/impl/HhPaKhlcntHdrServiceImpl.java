@@ -295,11 +295,11 @@ public class HhPaKhlcntHdrServiceImpl extends BaseServiceImpl implements HhPaKhl
 
 	private void setDataQuyetDinh(HhPaKhlcntHdr pa) {
 		if (Contains.ACTIVE.equalsIgnoreCase(pa.getQuyetDinh())) {
-			Optional<HhQdKhlcntHdr> optional = hhQdKhlcntHdrRepository.findByIdPaHdr(pa.getId());
-			optional.ifPresent(qd -> {
-				pa.setSoQd(qd.getSoQd());
-				pa.setQdId(qd.getId());
-			});
+//			Optional<HhQdKhlcntHdr> optional = hhQdKhlcntHdrRepository.findByIdPaHdr(pa.getId());
+//			optional.ifPresent(qd -> {
+//				pa.setSoQd(qd.getSoQd());
+//				pa.setQdId(qd.getId());
+//			});
 		}
 	}
 

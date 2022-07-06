@@ -6,4 +6,6 @@ import org.springframework.data.domain.Page;
 
 public interface QlPhieuNhapKhoLtRepositoryCustom {
     Page<QlPhieuNhapKhoLtRes> search(QlPhieuNhapKhoLtSearchReq req);
+
+    int count(QlPhieuNhapKhoLtSearchReq req);
 }

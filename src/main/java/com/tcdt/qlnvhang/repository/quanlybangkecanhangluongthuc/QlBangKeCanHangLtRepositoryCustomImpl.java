@@ -1,13 +1,12 @@
 package com.tcdt.qlnvhang.repository.quanlybangkecanhangluongthuc;
 
-import com.tcdt.qlnvhang.entities.quanlybangkecanhangluongthuc.QlBangKeCanHangLt;
 import com.tcdt.qlnvhang.request.search.quanlybangkecanhangluongthuc.QlBangKeCanHangLtSearchReq;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class QlBangKeCanHangLtRepositoryCustomImpl implements QlBangKeCanHangLtRepositoryCustom {
@@ -16,13 +15,17 @@ public class QlBangKeCanHangLtRepositoryCustomImpl implements QlBangKeCanHangLtR
     private EntityManager em;
 
     @Override
-    public List<QlBangKeCanHangLt> search(QlBangKeCanHangLtSearchReq req) {
+    public List<Object[]> search(QlBangKeCanHangLtSearchReq req) {
         StringBuilder builder = new StringBuilder();
-        builder.append("SELECT p FROM QlBangKeCanHangLt p ");
+        builder.append("SELECT p, pnk.id, pnk.soPhieu, nganLo, nx.id, nx.soQd, vatTu.ma, vatTu.ten FROM QlBangKeCanHangLt p ");
+        builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON p.qdgnvnxId = nx.id ");
+        builder.append("INNER JOIN QlPhieuNhapKhoLt pnk ON p.qlPhieuNhapKhoLtId = pnk.id ");
+        builder.append("INNER JOIN QlnvDmVattu vatTu ON p.maVatTu = vatTu.ma ");
+        builder.append("LEFT JOIN KtNganLo nganLo ON p.maNganLo = nganLo.maNganlo ");
         setConditionSearch(req, builder);
-        builder.append("ORDER BY p.ngayLap DESC");
+        builder.append("ORDER BY p.ngayNhap DESC");
 
-        TypedQuery<QlBangKeCanHangLt> query = em.createQuery(builder.toString(), QlBangKeCanHangLt.class);
+        TypedQuery<Object[]> query = em.createQuery(builder.toString(), Object[].class);
 
         //Set params
         this.setParameterSearch(req, query);
@@ -39,25 +42,25 @@ public class QlBangKeCanHangLtRepositoryCustomImpl implements QlBangKeCanHangLtR
         builder.append("WHERE 1 = 1 ");
 
         if (!StringUtils.isEmpty(req.getSoBangKe())) {
-            builder.append("AND ").append("p.soBangKe = :soBangKe ");
+            builder.append("AND ").append("p.soBangKe LIKE :soBangKe ");
         }
-        if (req.getTuNgay() != null) {
-            builder.append("AND ").append("p.ngayLap >= :tuNgay ");
+        if (req.getTuNgayNhap() != null) {
+            builder.append("AND ").append("p.ngayNhap >= :tuNgayNhap ");
         }
-        if (req.getDenNgay() != null) {
-            builder.append("AND ").append("p.ngayLap <= :denNgay ");
-        }
-
-        if (!StringUtils.isEmpty(req.getMaHang())) {
-            builder.append("AND ").append("p.maHang = :maHang ");
+        if (req.getDenNgayNhap() != null) {
+            builder.append("AND ").append("p.ngayNhap <= :denNgayNhap ");
         }
 
-        if (!StringUtils.isEmpty(req.getMaDonViLap())) {
-            builder.append("AND ").append("p.maDonViLap = :maDonViLap ");
+        if (!StringUtils.isEmpty(req.getSoQdNhap())) {
+            builder.append("AND ").append("nx.soQd LIKE :soQdNhap ");
         }
 
-        if (!StringUtils.isEmpty(req.getMaDonVi())) {
-            builder.append("AND ").append("p.maDonVi = :maDonVi ");
+        if (!CollectionUtils.isEmpty(req.getMaDvis())) {
+            builder.append("AND ").append("p.maDvi IN :maDvis ");
+        }
+
+        if (!CollectionUtils.isEmpty(req.getTrangThais())) {
+            builder.append("AND ").append("p.trangThai IN :trangThais ");
         }
     }
 
@@ -66,7 +69,10 @@ public class QlBangKeCanHangLtRepositoryCustomImpl implements QlBangKeCanHangLtR
         int total = 0;
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT COUNT(p.id) FROM QlBangKeCanHangLt p ");
-
+        builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON p.qdgnvnxId = nx.id ");
+        builder.append("INNER JOIN QlPhieuNhapKhoLt pnk ON p.qlPhieuNhapKhoLtId = pnk.id ");
+        builder.append("INNER JOIN QlnvDmVattu vatTu ON p.maVatTu = vatTu.ma ");
+        builder.append("LEFT JOIN KtNganLo nganLo ON p.maNganLo = nganLo.maNganlo ");
         this.setConditionSearch(req, builder);
 
         TypedQuery<Long> query = em.createQuery(builder.toString(), Long.class);
@@ -76,25 +82,25 @@ public class QlBangKeCanHangLtRepositoryCustomImpl implements QlBangKeCanHangLtR
 
     private void setParameterSearch(QlBangKeCanHangLtSearchReq req, Query query) {
         if (!StringUtils.isEmpty(req.getSoBangKe())) {
-            query.setParameter("soBangKe", req.getSoBangKe());
+            query.setParameter("soBangKe", "%" + req.getSoBangKe() + "%");
         }
-        if (req.getTuNgay() != null) {
-            query.setParameter("tuNgay", req.getTuNgay());
+        if (req.getTuNgayNhap() != null) {
+            query.setParameter("tuNgayNhap", req.getTuNgayNhap());
         }
-        if (req.getDenNgay() != null) {
-            query.setParameter("denNgay", req.getDenNgay());
-        }
-
-        if (!StringUtils.isEmpty(req.getMaHang())) {
-            query.setParameter("maHang", req.getMaHang());
+        if (req.getDenNgayNhap() != null) {
+            query.setParameter("denNgayNhap", req.getDenNgayNhap());
         }
 
-        if (!StringUtils.isEmpty(req.getMaDonViLap())) {
-            query.setParameter("maDonViLap", req.getMaDonViLap());
+        if (!StringUtils.isEmpty(req.getSoQdNhap())) {
+            query.setParameter("soQdNhap", "%" + req.getSoQdNhap() + "%");
         }
 
-        if (!StringUtils.isEmpty(req.getMaDonVi())) {
-            query.setParameter("maDonVi", req.getMaDonVi());
+        if (!CollectionUtils.isEmpty(req.getMaDvis())) {
+            query.setParameter("maDvis", req.getMaDvis());
+        }
+
+        if (!CollectionUtils.isEmpty(req.getTrangThais())) {
+            query.setParameter("trangThais", req.getTrangThais());
         }
     }
 }

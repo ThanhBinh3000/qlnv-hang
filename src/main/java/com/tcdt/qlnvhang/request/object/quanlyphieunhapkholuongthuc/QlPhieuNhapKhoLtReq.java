@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc;
 
-import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoHangHoaLt;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.request.object.SoBienBanPhieuReq;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,21 +16,14 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class QlPhieuNhapKhoLtReq {
+public class QlPhieuNhapKhoLtReq extends SoBienBanPhieuReq {
 
     private Long id;
-
-    private String maDvi;
-
-    private String maQhns;
 
     @NotNull(message = "Không được để trống")
     private Long phieuKtClId;
 
-    @NotNull(message = "Không được để trống")
-    private Long bbNghiemThuKlId;
-
-    private Long soPhieu;
+    private String soPhieu;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate ngayLap;
@@ -37,45 +31,22 @@ public class QlPhieuNhapKhoLtReq {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate ngayNhapKho;
 
-    private String maNganLo;
-
-    private String tenNganLo;
-
-    @NotNull(message = "Không được để trống")
     private String nguoiGiaoHang;
-
-    @NotNull(message = "Không được để trống")
-    private String tenNguoiGiaoNhan;
-
-    @NotNull(message = "Không được để trống")
-    private String diaChiGiaoNhan;
-
-    @NotNull(message = "Không được để trống")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime thoiGianGiaoNhan;
 
-    @NotNull(message = "Không được để trống")
     private String taiKhoanNo;
-
-    @NotNull(message = "Không được để trống")
     private String taiKhoanCo;
-
-    @NotNull(message = "Không được để trống")
-    private String loaiHinhNhap;
-
-    private String ghiChu;
-
-    private Long soQdNvuNhang;
-
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private String ngayQdNvuNhang;
-
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate ngayTao;
-
     private String maDiemKho;
     private String maNhaKho;
+    private String maNganKho;
+    private String maNganLo;
+    private String loaiHinhNhap;
 
+    @NotNull(message = "Không được để trống")
+    private Long qdgnvnxId;
 
     private List<QlPhieuNhapKhoHangHoaLtReq> hangHoaList = new ArrayList<>();
+
+    private List<FileDinhKemReq> chungTus;
 }

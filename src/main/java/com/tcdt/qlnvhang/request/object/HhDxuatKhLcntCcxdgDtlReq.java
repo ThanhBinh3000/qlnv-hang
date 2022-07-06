@@ -25,5 +25,5 @@ public class HhDxuatKhLcntCcxdgDtlReq {
 	@ApiModelProperty(example = "00")
 	String loaiCanCu;
 	
-	List<FileDinhKemReq> fileDinhKems;
+	List<FileDinhKemReq> children;
 }

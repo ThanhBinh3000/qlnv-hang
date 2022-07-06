@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.tcdt.qlnvhang.service.HhQdKhlcntHdrService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -36,11 +37,14 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = PathContains.DX_KH + PathContains.TTIN_DTHAU)
-@Api(tags = "Thông tin đấu thầu gạo")
+@Api(tags = "Thông tin đấu thầu ")
 public class HhDauThauController {
 
 	@Autowired
 	private HhDauThauService service;
+
+	@Autowired
+	private HhQdKhlcntHdrService hhQdKhlcntHdrService;
 
 	@ApiOperation(value = "Tạo mới thông tin đấu thầu gạo", response = List.class)
 	@PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -127,19 +131,40 @@ public class HhDauThauController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Tra cứu thông tin đấu thầu gạo", response = List.class)
+	@ApiOperation(value = "Tra cứu thông tin đấu thầu ", response = List.class)
 	@PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<BaseResponse> colection(HttpServletRequest request,
 			@Valid @RequestBody HhDthauSearchReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(service.colection(objReq, request));
+			resp.setData(service.selectPage(objReq));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (
 
 		Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Tra cứu thông tin đấu thầu gạo trace: {}", e);
+		}
+
+		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Tra cứu thông tin đấu thầu ", response = List.class)
+	@PostMapping(value = PathContains.URL_TAT_CA, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> colectionAll(HttpServletRequest request,
+												  @Valid @RequestBody HhDthauSearchReq objReq) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.selectAll(objReq));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (
+
+				Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
 			log.error("Tra cứu thông tin đấu thầu gạo trace: {}", e);

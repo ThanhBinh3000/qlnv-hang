@@ -19,13 +19,17 @@ public class HhDxKhLcntThopSearchReq extends BaseRequest {
 	String namKhoach;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-	Date tuNgayTao;
+	Date tuNgayThop;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-	Date denNgayTao;
+	Date denNgayThop;
 
 	@ApiModelProperty(example = Contains.LOAI_VTHH_GAO)
 	String loaiVthh;
+
+	String cloaiVthh;
+
+	String noiDung;
 
 	String trangThai;
 

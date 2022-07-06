@@ -8,6 +8,8 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.tcdt.qlnvhang.request.search.HhDthauSearchReq;
+import com.tcdt.qlnvhang.response.dauthauvattu.ThongTinDauThauRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +21,6 @@ import org.springframework.util.StringUtils;
 import com.tcdt.qlnvhang.entities.FileDKemJoinGoiThau;
 import com.tcdt.qlnvhang.entities.FileDKemJoinHsoKthuat;
 import com.tcdt.qlnvhang.entities.FileDKemJoinTthaoHdong;
-import com.tcdt.qlnvhang.repository.HhDthau2Repository;
 import com.tcdt.qlnvhang.repository.HhDthauRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -27,11 +28,8 @@ import com.tcdt.qlnvhang.request.object.HhDthauGthauReq;
 import com.tcdt.qlnvhang.request.object.HhDthauHsoKthuatReq;
 import com.tcdt.qlnvhang.request.object.HhDthauReq;
 import com.tcdt.qlnvhang.request.object.HhDthauTthaoHdongReq;
-import com.tcdt.qlnvhang.request.search.HhDthauSearchReq;
-import com.tcdt.qlnvhang.secification.HhDthau2Specification;
 import com.tcdt.qlnvhang.service.HhDauThauService;
 import com.tcdt.qlnvhang.table.HhDthau;
-import com.tcdt.qlnvhang.table.HhDthau2;
 import com.tcdt.qlnvhang.table.HhDthauGthau;
 import com.tcdt.qlnvhang.table.HhDthauHsoKthuat;
 import com.tcdt.qlnvhang.table.HhDthauHsoTchinh;
@@ -47,9 +45,6 @@ import com.tcdt.qlnvhang.util.UnitScaler;
 public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauService {
 	@Autowired
 	private HhDthauRepository hhDthauRepository;
-
-	@Autowired
-	private HhDthau2Repository hhDthau2Repository;
 
 	@Override
 	public HhDthau create(HhDthauReq objReq) throws Exception {
@@ -83,42 +78,42 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 				detailChild5 = new ArrayList<FileDKemJoinGoiThau>();
 
 				// Thong tin danh sach cac nha thau du thau
-				if (dtlReq.getDetail() != null)
-					detailChild = ObjectMapperUtils.mapAll(dtlReq.getDetail(), HhDthauNthauDuthau.class);
-
-				// Thong tin danh sach ho so ky thuat
-				if (dtlReq.getDetail1() != null) {
-					for (HhDthauHsoKthuatReq hsKthuatReq : dtlReq.getDetail1()) {
-						HhDthauHsoKthuat hsKthuat = ObjectMapperUtils.map(hsKthuatReq, HhDthauHsoKthuat.class);
-						List<FileDKemJoinHsoKthuat> fileDkHsKts = ObjectMapperUtils
-								.mapAll(hsKthuatReq.getFileDinhKems(), FileDKemJoinHsoKthuat.class);
-						fileDkHsKts.forEach(f -> {
-							f.setDataType(HhDthauHsoKthuat.TABLE_NAME);
-							f.setCreateDate(new Date());
-						});
-						hsKthuat.setChildren(fileDkHsKts);
-						detailChild1.add(hsKthuat);
-					}
-				}
-
-				// Thong tin danh sach ho so tai chinh
-				if (dtlReq.getDetail2() != null)
-					detailChild2 = ObjectMapperUtils.mapAll(dtlReq.getDetail2(), HhDthauHsoTchinh.class);
-
-				// Thong tin thuong thao hop dong
-				if (dtlReq.getDetail3() != null) {
-					for (HhDthauTthaoHdongReq hsTtHdReq : dtlReq.getDetail3()) {
-						HhDthauTthaoHdong hsTtHd = ObjectMapperUtils.map(hsTtHdReq, HhDthauTthaoHdong.class);
-						List<FileDKemJoinTthaoHdong> fileDkTtHds = ObjectMapperUtils.mapAll(hsTtHdReq.getFileDinhKems(),
-								FileDKemJoinTthaoHdong.class);
-						fileDkTtHds.forEach(f -> {
-							f.setDataType(HhDthauTthaoHdong.TABLE_NAME);
-							f.setCreateDate(new Date());
-						});
-						hsTtHd.setChildren(fileDkTtHds);
-						detailChild3.add(hsTtHd);
-					}
-				}
+//				if (dtlReq.getChildren() != null)
+//					detailChild = ObjectMapperUtils.mapAll(dtlReq.getChildren(), HhDthauNthauDuthau.class);
+//
+//				// Thong tin danh sach ho so ky thuat
+//				if (dtlReq.getDetail1() != null) {
+//					for (HhDthauHsoKthuatReq hsKthuatReq : dtlReq.getDetail1()) {
+//						HhDthauHsoKthuat hsKthuat = ObjectMapperUtils.map(hsKthuatReq, HhDthauHsoKthuat.class);
+//						List<FileDKemJoinHsoKthuat> fileDkHsKts = ObjectMapperUtils
+//								.mapAll(hsKthuatReq.getFileDinhKems(), FileDKemJoinHsoKthuat.class);
+//						fileDkHsKts.forEach(f -> {
+//							f.setDataType(HhDthauHsoKthuat.TABLE_NAME);
+//							f.setCreateDate(new Date());
+//						});
+//						hsKthuat.setChildren(fileDkHsKts);
+//						detailChild1.add(hsKthuat);
+//					}
+//				}
+//
+//				// Thong tin danh sach ho so tai chinh
+//				if (dtlReq.getDetail2() != null)
+//					detailChild2 = ObjectMapperUtils.mapAll(dtlReq.getDetail2(), HhDthauHsoTchinh.class);
+//
+//				// Thong tin thuong thao hop dong
+//				if (dtlReq.getDetail3() != null) {
+//					for (HhDthauTthaoHdongReq hsTtHdReq : dtlReq.getDetail3()) {
+//						HhDthauTthaoHdong hsTtHd = ObjectMapperUtils.map(hsTtHdReq, HhDthauTthaoHdong.class);
+//						List<FileDKemJoinTthaoHdong> fileDkTtHds = ObjectMapperUtils.mapAll(hsTtHdReq.getFileDinhKems(),
+//								FileDKemJoinTthaoHdong.class);
+//						fileDkTtHds.forEach(f -> {
+//							f.setDataType(HhDthauTthaoHdong.TABLE_NAME);
+//							f.setCreateDate(new Date());
+//						});
+//						hsTtHd.setChildren(fileDkTtHds);
+//						detailChild3.add(hsTtHd);
+//					}
+//				}
 
 				// Thong tin ket qua lua chon nha thau
 //				if (dtlReq.getDetail4() != null) {
@@ -135,27 +130,55 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 //					}
 //				}
 
-				// File dinh kem cua goi thau
-				if (dtlReq.getFileDinhKems() != null) {
-					detailChild5 = ObjectMapperUtils.mapAll(dtlReq.getFileDinhKems(), FileDKemJoinGoiThau.class);
-					detailChild5.forEach(f -> {
-						f.setDataType(HhDthauGthau.TABLE_NAME);
-						f.setCreateDate(new Date());
-					});
-				}
-
-				detail.setChildren(detailChild);
-				detail.setChildren1(detailChild1);
-				detail.setChildren2(detailChild2);
-				detail.setChildren3(detailChild3);
-				detail.setChildren4(detailChild4);
-				detail.setChildren5(detailChild5);
-				dataMap.addChild(detail);
+//				// File dinh kem cua goi thau
+//				if (dtlReq.getFileDinhKems() != null) {
+//					detailChild5 = ObjectMapperUtils.mapAll(dtlReq.getFileDinhKems(), FileDKemJoinGoiThau.class);
+//					detailChild5.forEach(f -> {
+//						f.setDataType(HhDthauGthau.TABLE_NAME);
+//						f.setCreateDate(new Date());
+//					});
+//				}
+//
+//				detail.setChildren(detailChild);
+//				detail.setChildren1(detailChild1);
+//				detail.setChildren2(detailChild2);
+//				detail.setChildren3(detailChild3);
+//				detail.setChildren4(detailChild4);
+//				detail.setChildren5(detailChild5);
+//				dataMap.addChild(detail);
 			}
 		}
 
 		UnitScaler.reverseFormatList(dataMap.getChildren(), Contains.DVT_TAN);
 		return hhDthauRepository.save(dataMap);
+	}
+
+	@Override
+	public Page<ThongTinDauThauRes> selectPage(HhDthauSearchReq objReq) throws Exception {
+		Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit(), Sort.by("id").ascending());
+		Page<ThongTinDauThauRes> page = hhDthauRepository.cusTomQuerySearch(objReq.getNamKhoach(),objReq.getLoaiVthh(),objReq.getSoQd(),objReq.getMaDvi(),objReq.getTrichYeu(),pageable);
+		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
+		Map<String, String> mapDmucDvi = getMapTenDvi();
+		page.forEach(f -> {
+			f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
+			f.setTenVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
+			f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
+		});
+
+		return page;
+	}
+
+	@Override
+	public List<ThongTinDauThauRes> selectAll(HhDthauSearchReq objReq) throws Exception {
+		List<ThongTinDauThauRes> list = hhDthauRepository.cusTomQuerySearch(objReq.getNamKhoach(),objReq.getLoaiVthh(),objReq.getCloaiVthh(),objReq.getSoQd(),objReq.getMaDvi(),objReq.getTrangThai());
+//		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
+//		Map<String, String> mapDmucDvi = getMapTenDvi();
+//		list.forEach(f -> {
+//			f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
+//			f.setTenVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
+//			f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
+//		});
+		return list;
 	}
 
 	@Override
@@ -193,39 +216,39 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 				detailChild4 = new ArrayList<HhDthauKquaLcnt>();
 				detailChild5 = new ArrayList<FileDKemJoinGoiThau>();
 
-				if (dtlReq.getDetail() != null)
-					detailChild = ObjectMapperUtils.mapAll(dtlReq.getDetail(), HhDthauNthauDuthau.class);
-
-				if (dtlReq.getDetail1() != null) {
-					for (HhDthauHsoKthuatReq hsKthuatReq : dtlReq.getDetail1()) {
-						HhDthauHsoKthuat hsKthuat = ObjectMapperUtils.map(hsKthuatReq, HhDthauHsoKthuat.class);
-						List<FileDKemJoinHsoKthuat> fileDkHsKts = ObjectMapperUtils
-								.mapAll(hsKthuatReq.getFileDinhKems(), FileDKemJoinHsoKthuat.class);
-						fileDkHsKts.forEach(f -> {
-							f.setDataType(HhDthauHsoKthuat.TABLE_NAME);
-							f.setCreateDate(new Date());
-						});
-						hsKthuat.setChildren(fileDkHsKts);
-						detailChild1.add(hsKthuat);
-					}
-				}
-
-				if (dtlReq.getDetail2() != null)
-					detailChild2 = ObjectMapperUtils.mapAll(dtlReq.getDetail2(), HhDthauHsoTchinh.class);
-
-				if (dtlReq.getDetail3() != null) {
-					for (HhDthauTthaoHdongReq hsTtHdReq : dtlReq.getDetail3()) {
-						HhDthauTthaoHdong hsTtHd = ObjectMapperUtils.map(hsTtHdReq, HhDthauTthaoHdong.class);
-						List<FileDKemJoinTthaoHdong> fileDkTtHds = ObjectMapperUtils.mapAll(hsTtHdReq.getFileDinhKems(),
-								FileDKemJoinTthaoHdong.class);
-						fileDkTtHds.forEach(f -> {
-							f.setDataType(HhDthauTthaoHdong.TABLE_NAME);
-							f.setCreateDate(new Date());
-						});
-						hsTtHd.setChildren(fileDkTtHds);
-						detailChild3.add(hsTtHd);
-					}
-				}
+//				if (dtlReq.getChildren() != null)
+//					detailChild = ObjectMapperUtils.mapAll(dtlReq.getChildren(), HhDthauNthauDuthau.class);
+//
+//				if (dtlReq.getDetail1() != null) {
+//					for (HhDthauHsoKthuatReq hsKthuatReq : dtlReq.getDetail1()) {
+//						HhDthauHsoKthuat hsKthuat = ObjectMapperUtils.map(hsKthuatReq, HhDthauHsoKthuat.class);
+//						List<FileDKemJoinHsoKthuat> fileDkHsKts = ObjectMapperUtils
+//								.mapAll(hsKthuatReq.getFileDinhKems(), FileDKemJoinHsoKthuat.class);
+//						fileDkHsKts.forEach(f -> {
+//							f.setDataType(HhDthauHsoKthuat.TABLE_NAME);
+//							f.setCreateDate(new Date());
+//						});
+//						hsKthuat.setChildren(fileDkHsKts);
+//						detailChild1.add(hsKthuat);
+//					}
+//				}
+//
+//				if (dtlReq.getDetail2() != null)
+//					detailChild2 = ObjectMapperUtils.mapAll(dtlReq.getDetail2(), HhDthauHsoTchinh.class);
+//
+//				if (dtlReq.getDetail3() != null) {
+//					for (HhDthauTthaoHdongReq hsTtHdReq : dtlReq.getDetail3()) {
+//						HhDthauTthaoHdong hsTtHd = ObjectMapperUtils.map(hsTtHdReq, HhDthauTthaoHdong.class);
+//						List<FileDKemJoinTthaoHdong> fileDkTtHds = ObjectMapperUtils.mapAll(hsTtHdReq.getFileDinhKems(),
+//								FileDKemJoinTthaoHdong.class);
+//						fileDkTtHds.forEach(f -> {
+//							f.setDataType(HhDthauTthaoHdong.TABLE_NAME);
+//							f.setCreateDate(new Date());
+//						});
+//						hsTtHd.setChildren(fileDkTtHds);
+//						detailChild3.add(hsTtHd);
+//					}
+//				}
 
 //				if (dtlReq.getDetail4() != null) {
 //					for (HhDthauKquaLcntReq kqLcntReq : dtlReq.getDetail4()) {
@@ -241,21 +264,21 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 //					}
 //				}
 
-				if (dtlReq.getFileDinhKems() != null) {
-					detailChild5 = ObjectMapperUtils.mapAll(dtlReq.getFileDinhKems(), FileDKemJoinGoiThau.class);
-					detailChild5.forEach(f -> {
-						f.setDataType(HhDthauGthau.TABLE_NAME);
-						f.setCreateDate(new Date());
-					});
-				}
+//				if (dtlReq.getFileDinhKems() != null) {
+//					detailChild5 = ObjectMapperUtils.mapAll(dtlReq.getFileDinhKems(), FileDKemJoinGoiThau.class);
+//					detailChild5.forEach(f -> {
+//						f.setDataType(HhDthauGthau.TABLE_NAME);
+//						f.setCreateDate(new Date());
+//					});
+//				}
 
-				detail.setChildren(detailChild);
-				detail.setChildren1(detailChild1);
-				detail.setChildren2(detailChild2);
-				detail.setChildren3(detailChild3);
-				detail.setChildren4(detailChild4);
-				detail.setChildren5(detailChild5);
-				dataDB.addChild(detail);
+//				detail.setChildren(detailChild);
+//				detail.setChildren1(detailChild1);
+//				detail.setChildren2(detailChild2);
+//				detail.setChildren3(detailChild3);
+//				detail.setChildren4(detailChild4);
+//				detail.setChildren5(detailChild5);
+//				dataDB.addChild(detail);
 			}
 		}
 
@@ -275,28 +298,28 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
 
 		// Quy doi don vi kg = tan
-		List<HhDthauGthau> dtls2 = ObjectMapperUtils.mapAll(qOptional.get().getChildren(), HhDthauGthau.class);
-		for (HhDthauGthau dtl : dtls2) {
-			UnitScaler.formatList(dtl.getChildren(), Contains.DVT_TAN);
-		}
+//		List<HhDthauGthau> dtls2 = ObjectMapperUtils.mapAll(qOptional.get().getChildren(), HhDthauGthau.class);
+//		for (HhDthauGthau dtl : dtls2) {
+//			UnitScaler.formatList(dtl.getChildren(), Contains.DVT_TAN);
+//		}
 
 		return qOptional.get();
 	}
 
-	@Override
-	public Page<HhDthau2> colection(HhDthauSearchReq objReq, HttpServletRequest req) throws Exception {
-		int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
-		int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
-		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
-
-		Page<HhDthau2> dataPage = hhDthau2Repository.findAll(HhDthau2Specification.buildSearchQuery(objReq), pageable);
-
-		Map<String, String> mapDmucDvi = getMapTenDvi();
-		for (HhDthau2 hdr : dataPage.getContent()) {
-			hdr.setTenDvi(mapDmucDvi.get(hdr.getMaDvi()));
-		}
-		return dataPage;
-	}
+//	@Override
+//	public Page<HhDthau2> colection(HhDthauSearchReq objReq, HttpServletRequest req) throws Exception {
+//		int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
+//		int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
+//		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
+//
+//		Page<HhDthau2> dataPage = hhDthau2Repository.findAll(HhDthau2Specification.buildSearchQuery(objReq), pageable);
+//
+//		Map<String, String> mapDmucDvi = getMapTenDvi();
+//		for (HhDthau2 hdr : dataPage.getContent()) {
+//			hdr.setTenDvi(mapDmucDvi.get(hdr.getMaDvi()));
+//		}
+//		return dataPage;
+//	}
 
 	@Override
 	public HhDthau approve(StatusReq stReq) throws Exception {

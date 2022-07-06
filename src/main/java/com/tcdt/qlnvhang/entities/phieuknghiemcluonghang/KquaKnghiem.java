@@ -13,7 +13,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "KQUA_KNGHIEM")
+@Table(name = "NH_PHIEU_KNGHIEM_CLUONG_CT")
 @Data
 @Builder
 @NoArgsConstructor
@@ -21,13 +21,13 @@ import javax.persistence.Table;
 public class KquaKnghiem {
 	private static final long serialVersionUID = 6093365068005372524L;
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "KQUA_KNGHIEM_SEQ")
-	@SequenceGenerator(sequenceName = "KQUA_KNGHIEM_SEQ", allocationSize = 1, name = "KQUA_KNGHIEM_SEQ")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PHIEU_KNGHIEM_CLUONG_CT_SEQ")
+	@SequenceGenerator(sequenceName = "PHIEU_KNGHIEM_CLUONG_CT_SEQ", allocationSize = 1, name = "PHIEU_KNGHIEM_CLUONG_CT_SEQ")
 	private Long id;
 	private Long phieuKnghiemId;
 	private Integer stt;
 	private String tenCtieu;
-	private String donVi;
 	private String kquaKtra;
 	private String pphapXdinh;
+	private String chiSoChatLuong;
 }

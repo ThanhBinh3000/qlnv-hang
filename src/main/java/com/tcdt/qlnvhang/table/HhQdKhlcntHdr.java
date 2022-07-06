@@ -43,11 +43,10 @@ public class HhQdKhlcntHdr implements Serializable {
 	@SequenceGenerator(sequenceName = "HH_QD_KHLCNT_HDR_SEQ", allocationSize = 1, name = "HH_QD_KHLCNT_HDR_SEQ")
 	private Long id;
 
-	String soQdCc;
 	String soQd;
 	Date ngayQd;
-	Long idPaHdr;
 	Long idThHdr;
+	Long idTrHdr;
 	String trangThai;
 	Date ngaySua;
 	String nguoiSua;
@@ -59,13 +58,16 @@ public class HhQdKhlcntHdr implements Serializable {
 	String ghiChu;
 
 	String loaiVthh;
+	String cloaiVthh;
 	String hthucLcnt;
 	String pthucLcnt;
 	String loaiHdong;
 	String nguonVon;
 
 	@Transient
-	String tenLoaiVthh;
+	String tenVthh;
+	@Transient
+	String tenCloaiVthh;
 	@Transient
 	String tenHthucLcnt;
 	@Transient
@@ -75,23 +77,22 @@ public class HhQdKhlcntHdr implements Serializable {
 	@Transient
 	String tenNguonVon;
 
-//	@Temporal(TemporalType.DATE)
-	Date tgianTbao;
-//	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.DATE)
+	Date tgianBdauTchuc;
+	@Temporal(TemporalType.DATE)
 	Date tgianDthau;
-//	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.DATE)
 	Date tgianNhang;
-//	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.DATE)
 	Date tgianMthau;
-//	@Temporal(TemporalType.DATE)
-	Date tgianPhanh;
-
+	@Temporal(TemporalType.DATE)
 	Date ngayTao;
 	String nguoiTao;
-	String veViec;
-	String namKhoach;
-	String blanhDthau;
-	String soPhAn;
+	String trichYeu;
+	Long namKhoach;
+	Integer tgianThienHd;
+	@Temporal(TemporalType.DATE)
+	Date ngayHluc;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)
@@ -113,21 +114,9 @@ public class HhQdKhlcntHdr implements Serializable {
 		this.children.add(child);
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "id_hdr")
-	@JsonManagedReference
-	private List<HhQdKhlcntDtl> children1 = new ArrayList<>();
+	@Transient
+	private List<HhQdKhlcntDtl> hhQdKhlcntDtlList = new ArrayList<>();
 
-	public void setChildren1(List<HhQdKhlcntDtl> children1) {
-		this.children1.clear();
-		for (HhQdKhlcntDtl child1 : children1) {
-			child1.setParent(this);
-		}
-		this.children1.addAll(children1);
-	}
-
-	public void addChild1(HhQdKhlcntDtl child1) {
-		child1.setParent(this);
-		this.children1.add(child1);
-	}
+	@Transient
+	private List<HhQdKhlcntDsgthau> dsGoiThau = new ArrayList<>();
 }

@@ -15,7 +15,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class HhQdKhlcntSearchReq extends BaseRequest {
-	@NotNull(message = "Không được để trống")
+
 	@ApiModelProperty(example = "2022")
 	String namKhoach;
 
@@ -25,9 +25,12 @@ public class HhQdKhlcntSearchReq extends BaseRequest {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date denNgayQd;
 
-	@NotNull(message = "Không được để trống")
 	@ApiModelProperty(example = Contains.LOAI_VTHH_GAO)
 	String loaiVthh;
 
+	String cloaiVthh;
+
 	String soQd;
+
+	String trichYeu;
 }

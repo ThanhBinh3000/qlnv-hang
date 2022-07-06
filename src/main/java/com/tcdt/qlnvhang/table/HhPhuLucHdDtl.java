@@ -36,6 +36,7 @@ public class HhPhuLucHdDtl implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_HOP_DONG_DTL_SEQ")
 	@SequenceGenerator(sequenceName = "HH_HOP_DONG_DTL_SEQ", allocationSize = 1, name = "HH_HOP_DONG_DTL_SEQ")
 	private Long id;
+	private Long idHdHdr;
 
 	String shgt;
 	String tenGthau;
@@ -45,11 +46,6 @@ public class HhPhuLucHdDtl implements Serializable {
 	BigDecimal giaTruocVat;
 	BigDecimal giaSauVat;
 	String type;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_hdr")
-	@JsonBackReference
-	private HhPhuLucHd parent;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "id_hdr")

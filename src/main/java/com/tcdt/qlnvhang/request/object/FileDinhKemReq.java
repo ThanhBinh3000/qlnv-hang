@@ -26,4 +26,6 @@ public class FileDinhKemReq {
 
 	@Size(max = 20, message = "Dung lượng không được vượt quá 20 ký tự")
 	String fileSize;
+
+	private String noiDung;
 }

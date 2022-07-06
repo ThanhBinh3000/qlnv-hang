@@ -25,4 +25,6 @@ public class QlnvQdLcntHdrDChinhSearchReq extends BaseRequest {
 	String loaiHanghoa;
 	String loaiDieuChinh;
 	String loaiQd;
+	String namKh;
+	String trichYeu;
 }

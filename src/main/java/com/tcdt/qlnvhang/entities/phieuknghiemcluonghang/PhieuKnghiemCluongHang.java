@@ -17,37 +17,41 @@ import java.time.LocalDate;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "PHIEU_KNGHIEM_CLUONG_HANG")
+@Table(name = "NH_PHIEU_KNGHIEM_CLUONG")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class PhieuKnghiemCluongHang extends BaseEntity {
 	private static final long serialVersionUID = 6093365068005372524L;
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PHIEU_KNGHIEM_CLUONG_HANG_SEQ")
-	@SequenceGenerator(sequenceName = "PHIEU_KNGHIEM_CLUONG_HANG_SEQ", allocationSize = 1, name = "PHIEU_KNGHIEM_CLUONG_HANG_SEQ")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PHIEU_KNGHIEM_CLUONG_SEQ")
+	@SequenceGenerator(sequenceName = "PHIEU_KNGHIEM_CLUONG_SEQ", allocationSize = 1, name = "PHIEU_KNGHIEM_CLUONG_SEQ")
 	private Long id;
+	private Long qdgnvnxId;
+	private Long bbBanGiaoMauId;
 	private String soPhieu;
-	private LocalDate ngayLayMau;
-	private LocalDate ngayKnghiem;
-	private String maNgan;
-	private String tenNgan;
-	private String maKho;
-	private String tenKho;
-	private String maHhoa;
-	private String tenHhoa;
-	private String soBbanKthucNhap;
-	private LocalDate ngayNhapDay;
+	private String maDiemKho;
+	private String maNhaKho;
+	private String maNganKho;
+	private String maNganLo;
+	private String maVatTu;
+	private String maVatTuCha;
 	private BigDecimal sluongBquan;
 	private String hthucBquan;
-	private String ddiemBquan;
+	private String thuKho;
+	private LocalDate ngayNhapDay;
+	private LocalDate ngayLayMau;
+	private LocalDate ngayKnghiem;
+	private String maDvi;
+	private String capDvi;
+	private String ketLuan;
+	private String ketQuaDanhGia;
 	private Long nguoiGuiDuyetId;
 	private LocalDate ngayGuiDuyet;
 	private Long nguoiPduyetId;
 	private LocalDate ngayPduyet;
 	private String trangThai;
 	private String ldoTchoi;
-	private String maDonVi;
-	private String capDonVi;
-	private String maQhns;
+	private Integer so;
+	private Integer nam;
 }

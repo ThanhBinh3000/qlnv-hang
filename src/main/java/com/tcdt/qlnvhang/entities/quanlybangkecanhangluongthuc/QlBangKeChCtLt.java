@@ -13,12 +13,12 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "QL_BANG_KE_CH_CT_LT")
+@Table(name = "NH_BANG_KE_CAN_HANG_LT_CT")
 public class QlBangKeChCtLt {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "QL_BANG_KE_CH_CT_LT_SEQ")
-    @SequenceGenerator(sequenceName = "QL_BANG_KE_CH_CT_LT_SEQ", allocationSize = 1, name = "QL_BANG_KE_CH_CT_LT_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BANG_KE_CAN_HANG_LT_CT_SEQ")
+    @SequenceGenerator(sequenceName = "BANG_KE_CAN_HANG_LT_CT_SEQ", allocationSize = 1, name = "BANG_KE_CAN_HANG_LT_CT_SEQ")
     @Column(name = "ID")
     private Long id;
 
@@ -27,9 +27,6 @@ public class QlBangKeChCtLt {
 
     @Column(name = "STT")
     private Integer stt;
-
-    @Column(name = "MA_CAN")
-    private String maCan;
 
     @Column(name = "SO_BAO_BI")
     private BigDecimal soBaoBi;

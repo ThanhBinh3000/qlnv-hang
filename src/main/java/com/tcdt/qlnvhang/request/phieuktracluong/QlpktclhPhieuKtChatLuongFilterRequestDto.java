@@ -19,7 +19,7 @@ import java.time.LocalDate;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class QlpktclhPhieuKtChatLuongFilterRequestDto extends BaseRequest {
 
-	private Long soPhieu;
+	private String soPhieu;
 
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate ngayKiemTraTuNgay;
@@ -30,11 +30,15 @@ public class QlpktclhPhieuKtChatLuongFilterRequestDto extends BaseRequest {
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate ngayKiemTraDenNgay;
 
-	private Long maNganKho;
+	private String maNganKho;
 
-	private Long maHangHoa;
-
-	private String maDonVi;
+	private String maHangHoa;
 
 	private String tenNguoiGiao;
+
+	private String ketLuan;
+
+	private String soQd;
+
+	private String loaiVthh;
 }

@@ -4,6 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
+import com.tcdt.qlnvhang.request.DeleteReq;
+import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
 import org.springframework.data.domain.Page;
 
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -25,10 +27,15 @@ public interface HhBbNghiemthuKlstHdrService {
 	Page<HhBbNghiemthuKlstHdr> colection(HhBbNghiemthuKlstSearchReq objReq, HttpServletRequest req) throws Exception;
 
 	@Transactional(rollbackOn = Exception.class)
-	HhBbNghiemthuKlstHdr approve(StatusReq stReq) throws Exception;
+	boolean approve(StatusReq stReq) throws Exception;
 
 	@Transactional(rollbackOn = Exception.class)
 	void delete(IdSearchReq idSearchReq) throws Exception;
 
     boolean exportToExcel(HhBbNghiemthuKlstSearchReq objReq, HttpServletResponse response) throws Exception;
+
+    @org.springframework.transaction.annotation.Transactional
+    boolean deleteMultiple(DeleteReq req) throws Exception;
+
+    SoBienBanPhieuRes getSo() throws Exception;
 }

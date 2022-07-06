@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,53 +37,59 @@ public class HhBbNghiemthuKlstHdr implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public static final String TABLE_NAME = "HH_BB_NGHIEMTHU_KLST_HDR";
+	public static final String TABLE_NAME = "NH_BB_NGHIEM_THU";
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_BB_NGHIEMTHU_KLST_HDR_SEQ")
-	@SequenceGenerator(sequenceName = "HH_BB_NGHIEMTHU_KLST_HDR_SEQ", allocationSize = 1, name = "HH_BB_NGHIEMTHU_KLST_HDR_SEQ")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BB_NGHIEM_THU_SEQ")
+	@SequenceGenerator(sequenceName = "BB_NGHIEM_THU_SEQ", allocationSize = 1, name = "BB_NGHIEM_THU_SEQ")
 	private Long id;
 	private Long qdgnvnxId; // HhQdGiaoNvuNhapxuatHdr
 	String soBb;
 	@Temporal(TemporalType.DATE)
-	Date ngayLap;
+//	Date ngayLap;
 	Date ngayNghiemThu;
 	String thuTruong;
 	String keToan;
 	String kyThuatVien;
 	String thuKho;
 	String maNganlo;
-	String ongBa;
-	String chucVu;
-	String maVthh;
+	String lhKho;
+	Double slThucNhap;
+	Double tichLuong;
 	String pthucBquan;
 	String hthucBquan;
-	Double tichLuong;
-	Double slThucNhap;
-	String hthucKlot;
-	String kieuKlot;
-	String lhKho;
 	Double dinhMuc;
-	String trangThaiNhap;
-	@Temporal(TemporalType.DATE)
-	Date ngayKthuc;
 	String ketLuan;
 	String trangThai;
+	String ldoTuchoi;
+	String capDvi;
+	String maDvi;
+	Integer nam;
+	String loaiVthh;
+
 	Date ngayTao;
 	String nguoiTao;
 	Date ngaySua;
 	String nguoiSua;
 	Date ngayGuiDuyet;
 	String nguoiGuiDuyet;
-	String ldoTuchoi;
 	Date ngayPduyet;
 	String nguoiPduyet;
-	String capDvi;
-	String maDvi;
-	Integer nam;
+	private Integer so;
+
+//	String ongBa;
+//	String chucVu;
+//	String maVthh;
+//	String hthucKlot;
+//	String kieuKlot;
+
+//	String trangThaiNhap;
+
+//	@Temporal(TemporalType.DATE)
+//	Date ngayKthuc;
+
 	@Transient
 	String tenDvi;
-	String loaiVthh;
 
 	@Transient
 	String maDiemkho;
@@ -103,13 +110,25 @@ public class HhBbNghiemthuKlstHdr implements Serializable {
 	String tenNganlo;
 
 	@Transient
-	HhBbNghiemthuKlstHdr namTruoc;
+	BigDecimal chiPhiThucHienTrongNam;
 
 	@Transient
-	Double chiPhiThucHienTrongNam;
+	BigDecimal chiPhiThucHienNamTruoc;
 
 	@Transient
-	Double tongGiaTri;
+	BigDecimal tongGiaTri;
+
+	@Transient
+	String tenTrangThai;
+
+	@Transient
+	String trangThaiDuyet;
+
+	@Transient
+	String tongGiaTriBangChu;
+
+	@Transient
+	String soQuyetDinhNhap;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "id_hdr")

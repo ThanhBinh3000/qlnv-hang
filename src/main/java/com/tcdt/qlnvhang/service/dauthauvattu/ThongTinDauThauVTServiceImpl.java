@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.dauthauvattu;
 
 import com.tcdt.qlnvhang.entities.dauthauvattu.ThongTinDauThauVT;
+import com.tcdt.qlnvhang.enums.HhBbNghiemthuKlstStatusEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.dauthauvattu.ThongTinDauThauVTRepository;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -117,7 +118,7 @@ public class ThongTinDauThauVTServiceImpl implements ThongTinDauThauVTService {
 			pageSize = DEFAULT_PAGE_SIZE;
 
 		Page<DTVatTuGoiThauVTRes> goiThau = dtVatTuGoiThauVTService.list(thongTinDauThauVT.getId(), PageRequest.of(pageIndex, pageSize));
-		res.setGoiThau(goiThau.getContent());
+//		res.setGoiThau(goiThau.getContent());
 		res.setSoGoiThau((long) goiThau.getNumberOfElements());
 		res.setTongGoiThau(goiThau.getTotalElements());
 
@@ -135,31 +136,48 @@ public class ThongTinDauThauVTServiceImpl implements ThongTinDauThauVTService {
 	}
 
 	@Override
-	public boolean updateStatus(StatusReq req) throws Exception {
+	public boolean updateStatus(StatusReq stReq) throws Exception {
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null)
 			throw new Exception("Bad request.");
 
-		ThongTinDauThauVT thongTinDauThauVT = thongTinDauThauVTRepository.findById(req.getId()).orElse(null);
+		ThongTinDauThauVT thongTinDauThauVT = thongTinDauThauVTRepository.findById(stReq.getId()).orElse(null);
 		if (thongTinDauThauVT == null)
 			throw new Exception("Không tìm thấy dữ liệu.");
 
-		if (TrangThaiEnum.MOI_TAO.getMa().equals(thongTinDauThauVT.getTrangThai()) && TrangThaiEnum.CHO_DUYET.getMa().equals(req.getTrangThai())) {
-			thongTinDauThauVT.setTrangThai(TrangThaiEnum.CHO_DUYET.getMa());
+		String trangThai = thongTinDauThauVT.getTrangThai();
+		if (HhBbNghiemthuKlstStatusEnum.DU_THAO_TRINH_DUYET.getId().equals(stReq.getTrangThai())) {
+			if (!HhBbNghiemthuKlstStatusEnum.DU_THAO.getId().equals(trangThai))
+				return false;
+
+			thongTinDauThauVT.setTrangThai(HhBbNghiemthuKlstStatusEnum.DU_THAO_TRINH_DUYET.getId());
+			thongTinDauThauVT.setNguoiGuiDuyetId(userInfo.getId());
 			thongTinDauThauVT.setNgayGuiDuyet(LocalDate.now());
+		} else if (HhBbNghiemthuKlstStatusEnum.LANH_DAO_DUYET.getId().equals(stReq.getTrangThai())) {
+			if (!HhBbNghiemthuKlstStatusEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
+				return false;
+			thongTinDauThauVT.setTrangThai(HhBbNghiemthuKlstStatusEnum.LANH_DAO_DUYET.getId());
 			thongTinDauThauVT.setNguoiPduyetId(userInfo.getId());
-		} else if (TrangThaiEnum.CHO_DUYET.getMa().equals(thongTinDauThauVT.getTrangThai()) && TrangThaiEnum.DA_DUYET.getMa().equals(req.getTrangThai())) {
 			thongTinDauThauVT.setNgayPduyet(LocalDate.now());
+		} else if (HhBbNghiemthuKlstStatusEnum.BAN_HANH.getId().equals(stReq.getTrangThai())) {
+			if (!HhBbNghiemthuKlstStatusEnum.LANH_DAO_DUYET.getId().equals(trangThai))
+				return false;
+
+			thongTinDauThauVT.setTrangThai(HhBbNghiemthuKlstStatusEnum.BAN_HANH.getId());
 			thongTinDauThauVT.setNguoiPduyetId(userInfo.getId());
-			thongTinDauThauVT.setTrangThai(TrangThaiEnum.DA_DUYET.getMa());
-		} else if (TrangThaiEnum.CHO_DUYET.getMa().equals(thongTinDauThauVT.getTrangThai()) && TrangThaiEnum.TU_CHOI.getMa().equals(req.getTrangThai())) {
 			thongTinDauThauVT.setNgayPduyet(LocalDate.now());
+		} else if (HhBbNghiemthuKlstStatusEnum.TU_CHOI.getId().equals(stReq.getTrangThai())) {
+			if (!HhBbNghiemthuKlstStatusEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
+				return false;
+
+			thongTinDauThauVT.setTrangThai(HhBbNghiemthuKlstStatusEnum.TU_CHOI.getId());
 			thongTinDauThauVT.setNguoiPduyetId(userInfo.getId());
-			thongTinDauThauVT.setTrangThai(TrangThaiEnum.TU_CHOI.getMa());
-			thongTinDauThauVT.setLdoTchoi(req.getLyDo());
-		} else {
-			return false;
+			thongTinDauThauVT.setNgayPduyet(LocalDate.now());
+			thongTinDauThauVT.setLdoTchoi(stReq.getLyDo());
+		}  else {
+			throw new Exception("Bad request.");
 		}
+		thongTinDauThauVTRepository.save(thongTinDauThauVT);
 
 		return true;
 	}

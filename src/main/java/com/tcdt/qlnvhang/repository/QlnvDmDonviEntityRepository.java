@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.repository;
 
 
+import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -8,6 +9,8 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import com.tcdt.qlnvhang.entities.QlnvDmDonviEntity;
+
+import java.util.List;
 
 @Repository
 public interface QlnvDmDonviEntityRepository extends CrudRepository<QlnvDmDonviEntity, Long> {
@@ -32,4 +35,7 @@ public interface QlnvDmDonviEntityRepository extends CrudRepository<QlnvDmDonviE
 	@Query(value = value, nativeQuery = true)
 	Iterable<QlnvDmDonviEntity> finDvi(String maDvi, String tenDvi, String trangThai, String maTinh, String maQuan,
 			String maPhuong, String capDvi, String kieuDvi, String loaiDvi);
+
+	@Query(value = "SELECT * from DM_DONVI", nativeQuery = true)
+	List<QlnvDmDonviEntity> findAll();
 }

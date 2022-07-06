@@ -21,7 +21,7 @@ public interface HhDxuatKhLcntHdrService {
 	@Transactional(rollbackOn = Exception.class)
 	HhDxuatKhLcntHdr update(HhDxuatKhLcntHdrReq objReq) throws Exception;
 
-	HhDxuatKhLcntHdr detail(String ids) throws Exception;
+	HhDxuatKhLcntHdr detail(Long id) throws Exception;
 
 	Page<HhDxuatKhLcntHdr> colection(HhDxuatKhLcntSearchReq objReq, HttpServletRequest req) throws Exception;
 
@@ -35,6 +35,17 @@ public interface HhDxuatKhLcntHdrService {
 
 	void exportDsKhlcnt(HhDxuatKhLcntSearchReq searchReq, HttpServletResponse response) throws Exception;
 
-	Page<HhDxuatKhLcntHdr> timKiem (HhDxuatKhLcntSearchReq objReq) throws Exception;
+	Page<HhDxuatKhLcntHdr> timKiem (HttpServletRequest request,HhDxuatKhLcntSearchReq objReq) throws Exception;
+
+	@Transactional(rollbackOn = Exception.class)
+	HhDxuatKhLcntHdr createVatTu(HhDxuatKhLcntHdrReq objReq) throws Exception;
+
+	@Transactional(rollbackOn = Exception.class)
+	HhDxuatKhLcntHdr updateVatTu(HhDxuatKhLcntHdrReq objReq) throws Exception;
+
+	HhDxuatKhLcntHdr detailVatTu(String ids) throws Exception;
+
+	@Transactional(rollbackOn = Exception.class)
+	HhDxuatKhLcntHdr approveVatTu(StatusReq stReq) throws Exception;
 
 }

@@ -1,11 +1,9 @@
 package com.tcdt.qlnvhang.secification;
 
 import java.util.Date;
+import java.util.Set;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +12,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import com.tcdt.qlnvhang.request.search.HhBbNghiemthuKlstSearchReq;
 import com.tcdt.qlnvhang.table.HhBbNghiemthuKlstHdr;
+import org.springframework.util.CollectionUtils;
 
 public class HhBbNghiemthuKlstSpecification {
 	public static Specification<HhBbNghiemthuKlstHdr> buildSearchQuery(final HhBbNghiemthuKlstSearchReq objReq) {
@@ -30,30 +29,30 @@ public class HhBbNghiemthuKlstSpecification {
 				if (ObjectUtils.isEmpty(objReq))
 					return predicate;
 
-				Date tuNgayLap = objReq.getTuNgayLap();
-				Date denNgayLap = objReq.getDenNgayLap();
+				Date tuNgayNghiemThu = objReq.getTuNgayNghiemThu();
+				Date denNgayNghiemThu = objReq.getDenNgayNghiemThu();
 				String loaiVthh = objReq.getLoaiVthh();
-				String trangThai = objReq.getTrangThai();
+				Set<String> trangThais = objReq.getTrangThais();
 				String soBb = objReq.getSoBb();
-				String maDvi = objReq.getMaDvi();
+				Set<String> maDvis = objReq.getMaDvis();
 				String maNganlo = objReq.getMaNganlo();
 
 				if (StringUtils.isNotEmpty(soBb))
 					predicate.getExpressions().add(builder.and(builder.equal(root.get("soBb"), soBb)));
 
-				if (ObjectUtils.isNotEmpty(tuNgayLap))
+				if (ObjectUtils.isNotEmpty(tuNgayNghiemThu))
 					predicate.getExpressions()
-							.add(builder.and(builder.greaterThanOrEqualTo(root.get("ngayLap"), tuNgayLap)));
+							.add(builder.and(builder.greaterThanOrEqualTo(root.get("ngayNghiemThu"), tuNgayNghiemThu)));
 
-				if (ObjectUtils.isNotEmpty(denNgayLap))
+				if (ObjectUtils.isNotEmpty(denNgayNghiemThu))
 					predicate.getExpressions().add(builder
-							.and(builder.lessThan(root.get("ngayLap"), new DateTime(denNgayLap).plusDays(1).toDate())));
+							.and(builder.lessThan(root.get("ngayNghiemThu"), new DateTime(denNgayNghiemThu).plusDays(1).toDate())));
 
-				if (StringUtils.isNotBlank(trangThai))
-					predicate.getExpressions().add(builder.and(builder.equal(root.get("trangThai"), trangThai)));
+				if (!CollectionUtils.isEmpty(trangThais))
+					predicate.getExpressions().add(builder.and(root.get("trangThai").in(trangThais)));
 
-				if (StringUtils.isNotEmpty(maDvi))
-					predicate.getExpressions().add(builder.and(builder.equal(root.get("maDvi"), maDvi)));
+				if (!CollectionUtils.isEmpty(maDvis))
+					predicate.getExpressions().add(builder.and(root.get("maDvi").in(maDvis)));
 
 				if (StringUtils.isNotEmpty(maNganlo))
 					predicate.getExpressions().add(builder.and(builder.equal(root.get("maNganlo"), maNganlo)));

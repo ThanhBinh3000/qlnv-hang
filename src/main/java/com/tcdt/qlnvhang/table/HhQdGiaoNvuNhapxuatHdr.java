@@ -19,6 +19,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.util.Contains;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Where;
@@ -36,16 +38,15 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public static final String TABLE_NAME = "HH_QD_GIAO_NVU_NHAPXUAT_HDR";
+	public static final String TABLE_NAME = "NH_QD_GIAO_NVU_NHAPXUAT";
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "GIAO_NVU_NHAPXUAT_HDR_SEQ")
-	@SequenceGenerator(sequenceName = "GIAO_NVU_NHAPXUAT_HDR_SEQ", allocationSize = 1, name = "GIAO_NVU_NHAPXUAT_HDR_SEQ")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "QD_GIAO_NVU_NHAPXUAT_SEQ")
+	@SequenceGenerator(sequenceName = "QD_GIAO_NVU_NHAPXUAT_SEQ", allocationSize = 1, name = "QD_GIAO_NVU_NHAPXUAT_SEQ")
 	private Long id;
 
 	String soQd;
 	String veViec;
-
 	@Temporal(TemporalType.DATE)
 	Date ngayKy;
 
@@ -66,6 +67,15 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 	String nguoiPduyet;
 	String ghiChu;
 	String capDvi;
+	String loaiVthh;
+	String trichYeu;
+	Integer namNhap;
+	Date ngayQdinh;
+
+	@Temporal(TemporalType.DATE)
+	Date tgNhapKhoMuonNhat;
+
+
 	@Transient
 	String tenDvi;
 
@@ -74,6 +84,12 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 
 	@Transient
 	String tenTrangThai;
+
+	@Transient
+	String trangThaiDuyet;
+
+	@Transient
+	Long hdId;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "id_hdr")
@@ -130,8 +146,4 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 		child2.setParent(this);
 		this.children2.add(child2);
 	}
-
-	Integer namNhap;
-
-	Date ngayQdinh;
 }

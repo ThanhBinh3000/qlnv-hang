@@ -6,7 +6,7 @@ public class PaginationSet {
 
 	public static int getPage(Integer page) {
 		if (page != null) {
-			return page - 1;
+			return page;
 		}
 		return DEFAULT_PAGE;
 	}

@@ -10,6 +10,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.validation.Valid;
 
+import com.tcdt.qlnvhang.table.HhDxuatKhLcntHdr;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
@@ -17,15 +18,14 @@ import org.springframework.data.jpa.domain.Specification;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.search.QlnvQdLcntHdrDChinhSearchReq;
 import com.tcdt.qlnvhang.request.search.QlnvQdLcntHdrSearchReq;
-import com.tcdt.qlnvhang.table.QlnvQdLcntDtl;
-import com.tcdt.qlnvhang.table.QlnvQdLcntHdr;
+import com.tcdt.qlnvhang.table.HhDchinhDxKhLcntDtl;
 
 public class QlnvQdLcntSpecification {
 	@SuppressWarnings("serial")
-	public static Specification<QlnvQdLcntHdr> buildSearchQuery(final QlnvQdLcntHdrSearchReq objReq) {
-		return new Specification<QlnvQdLcntHdr>() {
+	public static Specification<HhDxuatKhLcntHdr> buildSearchQuery(final QlnvQdLcntHdrSearchReq objReq) {
+		return new Specification<HhDxuatKhLcntHdr>() {
 			@Override
-			public Predicate toPredicate(Root<QlnvQdLcntHdr> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
+			public Predicate toPredicate(Root<HhDxuatKhLcntHdr> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
 				Predicate predicate = builder.conjunction();
 				if (ObjectUtils.isEmpty(objReq))
 					return predicate;
@@ -83,15 +83,15 @@ public class QlnvQdLcntSpecification {
 		};
 	}
 
-	public static Specification<QlnvQdLcntHdr> buildSearchChildQuery(final QlnvQdLcntHdrSearchReq objReq) {
-		return new Specification<QlnvQdLcntHdr>() {
+	public static Specification<HhDxuatKhLcntHdr> buildSearchChildQuery(final QlnvQdLcntHdrSearchReq objReq) {
+		return new Specification<HhDxuatKhLcntHdr>() {
 			/**
 			 * 
 			 */
 			private static final long serialVersionUID = -3711358892840221715L;
 
 			@Override
-			public Predicate toPredicate(Root<QlnvQdLcntHdr> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
+			public Predicate toPredicate(Root<HhDxuatKhLcntHdr> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
 				Predicate predicate = builder.conjunction();
 				if (ObjectUtils.isEmpty(objReq))
 					return predicate;
@@ -108,7 +108,7 @@ public class QlnvQdLcntSpecification {
 				String maDvi = objReq.getMaDvi();
 
 				root.fetch("detailList", JoinType.LEFT);
-				Join<QlnvQdLcntHdr, QlnvQdLcntDtl> joinQuerry = root.join("detailList");
+				Join<HhDxuatKhLcntHdr, HhDchinhDxKhLcntDtl> joinQuerry = root.join("detailList");
 				
 				if (StringUtils.isNotEmpty(loaiQd))
 					predicate.getExpressions().add(builder.and(builder.equal(root.get("loaiQd"), loaiQd)));
@@ -152,8 +152,8 @@ public class QlnvQdLcntSpecification {
 		};
 	}
 	
-	public static Specification<QlnvQdLcntHdr> buildFindByIdQuery(final @Valid IdSearchReq objReq) {
-		return new Specification<QlnvQdLcntHdr>() {
+	public static Specification<HhDxuatKhLcntHdr> buildFindByIdQuery(final @Valid IdSearchReq objReq) {
+		return new Specification<HhDxuatKhLcntHdr>() {
 
 			/**
 			 * 
@@ -161,7 +161,7 @@ public class QlnvQdLcntSpecification {
 			private static final long serialVersionUID = -8090749144493370224L;
 
 			@Override
-			public Predicate toPredicate(Root<QlnvQdLcntHdr> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
+			public Predicate toPredicate(Root<HhDxuatKhLcntHdr> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
 				Predicate predicate = builder.conjunction();
 				if (ObjectUtils.isEmpty(objReq))
 					return predicate;
@@ -170,7 +170,7 @@ public class QlnvQdLcntSpecification {
 				String maDvi = objReq.getMaDvi();
 
 				root.fetch("detailList", JoinType.LEFT);
-				Join<QlnvQdLcntHdr, QlnvQdLcntDtl> joinQuerry = root.join("detailList");
+				Join<HhDxuatKhLcntHdr, HhDchinhDxKhLcntDtl> joinQuerry = root.join("detailList");
 
 				predicate.getExpressions().add(builder.and(builder.equal(root.get("id"), id)));
 				if (StringUtils.isNotBlank(maDvi))
@@ -181,15 +181,15 @@ public class QlnvQdLcntSpecification {
 		};
 	}
 	
-	public static Specification<QlnvQdLcntHdr> buildSearchQuery(final QlnvQdLcntHdrDChinhSearchReq objReq) {
-		return new Specification<QlnvQdLcntHdr>() {
+	public static Specification<HhDxuatKhLcntHdr> buildSearchQuery(final QlnvQdLcntHdrDChinhSearchReq objReq) {
+		return new Specification<HhDxuatKhLcntHdr>() {
 			/**
 			 * 
 			 */
 			private static final long serialVersionUID = -2386244598818116955L;
 
 			@Override
-			public Predicate toPredicate(Root<QlnvQdLcntHdr> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
+			public Predicate toPredicate(Root<HhDxuatKhLcntHdr> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
 				Predicate predicate = builder.conjunction();
 				if (ObjectUtils.isEmpty(objReq))
 					return predicate;

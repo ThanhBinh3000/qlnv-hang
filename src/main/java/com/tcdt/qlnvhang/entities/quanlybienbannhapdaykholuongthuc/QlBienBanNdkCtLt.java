@@ -14,12 +14,12 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "QL_BIEN_BAN_NDK_CT_LT")
+@Table(name = "NH_BB_NHAP_DAY_KHO_LT_CT")
 public class QlBienBanNdkCtLt implements Serializable {
     private static final long serialVersionUID = -6188737070007624709L;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "QL_BIEN_BAN_NDK_CT_LT_SEQ")
-    @SequenceGenerator(sequenceName = "QL_BIEN_BAN_NDK_CT_LT_SEQ", allocationSize = 1, name = "QL_BIEN_BAN_NDK_CT_LT_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BB_NHAP_DAY_KHO_LT_CT_SEQ")
+    @SequenceGenerator(sequenceName = "BB_NHAP_DAY_KHO_LT_CT_SEQ", allocationSize = 1, name = "BB_NHAP_DAY_KHO_LT_CT_SEQ")
     @Column(name = "ID")
     private Long id;
 
@@ -36,7 +36,7 @@ public class QlBienBanNdkCtLt implements Serializable {
     private String ghiChu;
 
     @Column(name = "QL_BIEN_BAN_NDK_LT_ID")
-    private Long qlBienBanNdkLtId; // QL_BIEN_BAN_NHAP_DAY_KHO_LT
+    private Long qlBienBanNdkLtId; // NH_BB_NHAP_DAY_KHO_LT
 
     @Column(name = "STT")
     private Integer stt;
