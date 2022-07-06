@@ -387,7 +387,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 	public Page<HhDxuatKhLcntHdr> timKiem(HttpServletRequest request,HhDxuatKhLcntSearchReq req) throws Exception {
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
 		Page<HhDxuatKhLcntHdr> page = hhDxuatKhLcntHdrRepository.select(req.getNamKh(),req.getSoTr(),req.getSoQd(),convertDateToString(req.getTuNgayKy()),convertDateToString(req.getDenNgayKy()),req.getLoaiVthh(),req.getTrichYeu(),req.getTrangThai(), pageable);
-		Map<String, String> mapDmucDvi = getListDanhMucDvi("3");
+		Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
 		Map<String,String> mapVthh = getListDanhMucHangHoa();
 		page.getContent().forEach(f -> {
 			f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
@@ -533,7 +533,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		}
 
 		Map<String,String> mapVthh = getListDanhMucHangHoa();
-		Map<String, String> mapDmucDvi = getListDanhMucDvi("3");
+		Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
 		Map<String,String> hashMapPthucDthau = getListDanhMucChung("PT_DTHAU");
 		Map<String,String> hashMapNguonVon = getListDanhMucChung("NGUON_VON");
 		Map<String,String> hashMapHtLcnt = getListDanhMucChung("HT_LCNT");

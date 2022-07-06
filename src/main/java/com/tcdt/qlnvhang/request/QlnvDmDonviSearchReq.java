@@ -15,5 +15,6 @@ public class QlnvDmDonviSearchReq {
 	String kieuDvi;
 	String loaiDvi;
 	String trangThai;
+	String maDviCha;
 	PaggingReq paggingReq;
 }

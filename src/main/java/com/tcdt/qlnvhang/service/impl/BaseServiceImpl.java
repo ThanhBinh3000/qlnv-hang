@@ -15,6 +15,7 @@ import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.tcdt.qlnvhang.request.QlnvDmDonviSearchReq;
 import com.tcdt.qlnvhang.request.object.HhDmDviLquanSearchReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -108,9 +109,13 @@ public class BaseServiceImpl {
 		return data;
 	}
 
-	public Map<String, String> getListDanhMucDvi(String capDvi) {
-		ResponseEntity<String> response = categoryServiceProxy.getDanhMucDviByLevel(getAuthorizationToken(request),
-				capDvi);
+	public Map<String, String> getListDanhMucDvi(String capDvi,String maDviCha,String trangThai) {
+		QlnvDmDonviSearchReq objRequest = new QlnvDmDonviSearchReq();
+		objRequest.setCapDvi(capDvi);
+		objRequest.setMaDviCha(maDviCha);
+		objRequest.setTrangThai(trangThai);
+		ResponseEntity<String> response = categoryServiceProxy.getDanhMucDvi(getAuthorizationToken(request),
+				objRequest);
 		String str = Request.getAttrFromJson(response.getBody(), "data");
 		HashMap<String, String> data = new HashMap<String, String>();
 		List<Map<String, Object>> retMap = new Gson().fromJson(str, new TypeToken<List<HashMap<String, Object>>>() {

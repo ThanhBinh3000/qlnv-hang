@@ -20,7 +20,7 @@ public interface HhDthauRepository extends CrudRepository<HhDthau, Long> {
 
 	Optional<HhDthau> findBySoQd(String soQd);
 
-	@Query("SELECT new com.tcdt.qlnvhang.response.dauthauvattu.ThongTinDauThauRes(COALESCE(HDR.id,HDRVT.id),DTL.id,DSG.id,DSG.goiThau,COALESCE(DTL.maDvi,DSG.maDvi),COALESCE(HDR.soQd,HDRVT.soQd),COALESCE(HDR.ngayQd,HDRVT.soQd),COALESCE(HDR.trichYeu,HDRVT.trichYeu),COALESCE(HDR.loaiVthh,HDRVT.loaiVthh),COALESCE(HDR.cloaiVthh,HDRVT.cloaiVthh),DSG.thanhTien,DSG.trangThai) " +
+	@Query("SELECT new com.tcdt.qlnvhang.response.dauthauvattu.ThongTinDauThauRes(COALESCE(HDR.id,HDRVT.id),DTL.id,DSG.id,DSG.goiThau,COALESCE(DTL.maDvi,DSG.maDvi),COALESCE(HDR.soQd,HDRVT.soQd),COALESCE(HDR.ngayQd,HDRVT.ngayQd),COALESCE(HDR.trichYeu,HDRVT.trichYeu),COALESCE(HDR.loaiVthh,HDRVT.loaiVthh),COALESCE(HDR.cloaiVthh,HDRVT.cloaiVthh),DSG.thanhTien,DSG.trangThai) " +
 			" FROM HhQdKhlcntDsgthau DSG " +
 			" LEFT JOIN HhQdKhlcntDtl DTL ON DTL.id = DSG.idQdDtl " +
 			" LEFT JOIN HhQdKhlcntHdr HDR ON HDR.id = DTL.idQdHdr " +
@@ -47,7 +47,5 @@ public interface HhDthauRepository extends CrudRepository<HhDthau, Long> {
 			" AND (?6 is null or  DSG.trangThai = ?6 )"
 	)
 	List<ThongTinDauThauRes> cusTomQuerySearch(Long namKh, String loaiVthh, String cloaiVthh,String soQd, String maDvi,String trangThai);
-
-
 
 }
