@@ -208,7 +208,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		}
 
 		Map<String,String> mapVthh = getListDanhMucHangHoa();
-		Map<String, String> mapDmucDvi = getMapTenDvi();
+		Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
 
 		qOptional.get().setTenVthh( StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : mapVthh.get(qOptional.get().getLoaiVthh()));
 		qOptional.get().setTenCloaiVthh( StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null :mapVthh.get(qOptional.get().getCloaiVthh()));
@@ -218,18 +218,13 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 
 
 		List<HhDxKhlcntDsgthau> dsGthauList = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcnt(qOptional.get().getId());
-		int time = 1;
 		for(HhDxKhlcntDsgthau dsG : dsGthauList){
 			dsG.setTenDvi(mapDmucDvi.get(dsG.getMaDvi()));
-			dsG.setIdVirtual(new Date().getTime()+ time);
-			time ++;
 			List<HhDxKhlcntDsgthauCtiet> listDdNhap = hhDxKhlcntDsgthauCtietRepository.findByIdGoiThau(dsG.getId());
-			for(int i = 0;i < listDdNhap.size();i++){
-				listDdNhap.get(i).setTenDvi(StringUtils.isEmpty(listDdNhap.get(i).getMaDvi())? null : mapDmucDvi.get(listDdNhap.get(i).getTenDvi()));
-				listDdNhap.get(i).setTenDiemKho(StringUtils.isEmpty(listDdNhap.get(i).getMaDiemKho())? null : mapDmucDvi.get(listDdNhap.get(i).getMaDiemKho()));
-				listDdNhap.get(i).setIdVirtual(new Date().getTime()+time);
-				time++;
-			}
+			listDdNhap.forEach( f -> {
+				f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
+				f.setTenDiemKho(StringUtils.isEmpty(f.getMaDiemKho()) ? null : mapDmucDvi.get(f.getMaDiemKho()));
+			});
 			dsG.setChildren(listDdNhap);
 		}
 		qOptional.get().setDsGtDtlList(dsGthauList);
@@ -542,7 +537,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		qOptional.get().setTenVthh( StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : mapVthh.get(qOptional.get().getLoaiVthh()));
 		qOptional.get().setTenCloaiVthh( StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null :mapVthh.get(qOptional.get().getCloaiVthh()));
 		qOptional.get().setTenVtu( StringUtils.isEmpty(qOptional.get().getMaVtu()) ? null :mapVthh.get(qOptional.get().getMaVtu()));
-		qOptional.get().setTenDvi(StringUtils.isEmpty(qOptional.get().getMaDvi())? null : mapDmucDvi.get(qOptional.get().getTenDvi()));
+		qOptional.get().setTenDvi(StringUtils.isEmpty(qOptional.get().getMaDvi())? null : mapDmucDvi.get(qOptional.get().getMaDvi()));
 
 		// Quy doi don vi kg = tan
 
@@ -558,9 +553,8 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 			dsG.setTenNguonVon( StringUtils.isEmpty(dsG.getNguonVon()) ? null :hashMapNguonVon.get(dsG.getNguonVon()));
 			List<HhDxKhlcntDsgthauCtiet> listDdNhap = hhDxKhlcntDsgthauCtietRepository.findByIdGoiThau(dsG.getId());
 			for(int i = 0;i < listDdNhap.size();i++){
-				listDdNhap.get(i).setTenDvi(StringUtils.isEmpty(listDdNhap.get(i).getMaDvi())? null : mapDmucDvi.get(listDdNhap.get(i).getTenDvi()));
+				listDdNhap.get(i).setTenDvi(StringUtils.isEmpty(listDdNhap.get(i).getMaDvi())? null : mapDmucDvi.get(listDdNhap.get(i).getMaDvi()));
 				listDdNhap.get(i).setTenDiemKho(StringUtils.isEmpty(listDdNhap.get(i).getMaDiemKho())? null : mapDmucDvi.get(listDdNhap.get(i).getMaDiemKho()));
-
 			}
 			dsG.setChildren(listDdNhap);
 		}

@@ -231,7 +231,7 @@ public class HhQdKhlcntHdrController {
 											   @Valid @RequestBody HhQdKhlcntHdrReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(service.createVatTu(objReq));
+			resp.setData(service.createVatTu2(objReq));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {

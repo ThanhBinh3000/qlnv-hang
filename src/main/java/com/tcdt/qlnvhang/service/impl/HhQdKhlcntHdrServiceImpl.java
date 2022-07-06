@@ -58,6 +58,16 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 
 	@Override
 	public HhQdKhlcntHdr create(HhQdKhlcntHdrReq objReq) throws Exception {
+		// Vật tư
+		if(objReq.getLoaiVthh().startsWith("02")){
+			return createVatTu(objReq);
+		}else{
+		// Lương thực
+			return createLuongThuc(objReq);
+		}
+	}
+
+	public HhQdKhlcntHdr createLuongThuc(HhQdKhlcntHdrReq objReq) throws Exception {
 		if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh()))
 			throw new Exception("Loại vật tư hàng hóa không phù hợp");
 
@@ -130,6 +140,55 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 					dataDdNhap.setIdGoiThau(gt.getId());
 					dataDdNhap.setThanhTien(dataDdNhap.getDonGia().multiply(dataDdNhap.getSoLuong()));
 					hhQdKhlcntDsgthauCtietRepository.save(dataDdNhap);
+				}
+			}
+		}
+		return dataMap;
+	}
+
+	private HhQdKhlcntHdr createVatTu(HhQdKhlcntHdrReq objReq) throws Exception {
+		Optional<HhQdKhlcntHdr> checkSoQd = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQd());
+		if (checkSoQd.isPresent()) {
+			throw new Exception("Số quyết định " + objReq.getSoQd() + " đã tồn tại");
+		}
+
+		// Add danh sach file dinh kem o Master
+		List<FileDKemJoinQdKhlcntHdr> fileDinhKemList = new ArrayList<FileDKemJoinQdKhlcntHdr>();
+		if (objReq.getFileDinhKems() != null) {
+			fileDinhKemList = ObjectMapperUtils.mapAll(objReq.getFileDinhKems(), FileDKemJoinQdKhlcntHdr.class);
+			fileDinhKemList.forEach(f -> {
+				f.setDataType(HhQdKhlcntHdr.TABLE_NAME);
+				f.setCreateDate(new Date());
+			});
+		}
+
+		HhQdKhlcntHdr dataMap = ObjectMapperUtils.map(objReq, HhQdKhlcntHdr.class);
+
+		dataMap.setNgayTao(getDateTimeNow());
+		dataMap.setTrangThai(Contains.TAO_MOI);
+		dataMap.setNguoiTao(getUser().getUsername());
+		dataMap.setChildren(fileDinhKemList);
+
+		hhQdKhlcntHdrRepository.save(dataMap);
+
+		HhQdKhlcntDtl qdDtl = new HhQdKhlcntDtl();
+		qdDtl.setId(null);
+		qdDtl.setIdQdHdr(dataMap.getId());
+		qdDtl.setMaDvi(getUser().getDvql());
+		hhQdKhlcntDtlRepository.save(qdDtl);
+
+		if (objReq.getDsGoiThau() != null && objReq.getDsGoiThau().size() > 0) {
+			for (HhQdKhlcntDsgthauReq dsgThau : objReq.getDsGoiThau()){
+				HhQdKhlcntDsgthau gThau = ObjectMapperUtils.map(dsgThau, HhQdKhlcntDsgthau.class);
+				gThau.setId(null);
+				gThau.setIdQdDtl(qdDtl.getId());
+				gThau.setTrangThai(Contains.CHUA_QUYET_DINH);
+				hhQdKhlcntDsgthauRepository.save(gThau);
+				for (HhDxuatKhLcntDsgthauDtlCtietReq dsDdNhap : dsgThau.getChildren()){
+					HhQdKhlcntDsgthauCtiet ddNhap = ObjectMapperUtils.map(dsDdNhap, HhQdKhlcntDsgthauCtiet.class);
+					ddNhap.setId(null);
+					ddNhap.setIdGoiThau(gThau.getId());
+					hhQdKhlcntDsgthauCtietRepository.save(ddNhap);
 				}
 			}
 		}
@@ -464,8 +523,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	}
 
 	@Override
-	public HhQdKhlcntHdr createVatTu(HhQdKhlcntHdrReq objReq) throws Exception {
-
+	public HhQdKhlcntHdr createVatTu2(HhQdKhlcntHdrReq objReq) throws Exception {
 		Optional<HhQdKhlcntHdr> checkSoQd = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQd());
 		if (checkSoQd.isPresent()) {
 			throw new Exception("Số quyết định " + objReq.getSoQd() + " đã tồn tại");
