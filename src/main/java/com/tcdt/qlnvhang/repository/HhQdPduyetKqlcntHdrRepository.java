@@ -31,9 +31,8 @@ public interface HhQdPduyetKqlcntHdrRepository extends BaseRepository<HhQdPduyet
 			"    LEFT JOIN HhDthauGthau DTGT ON DTGT.idGoiThau = DTL.idGoiThau " +
 			" WHERE (?1 is null or HDR.namKhoach = ?1 ) " +
 			" AND (?2 is null or  DTGT.loaiVthh = ?2 ) " +
-//			" AND (?5 is null or HDR.ngayQd >= ?5 )  " +
-//			" AND (?6 is null or HDR.ngayQd <= ?6 ) " +
-			" AND (?3 is null or HDR.trichYeu = ?3 ) ")
+			" AND (?3 is null or lower(HDR.trichYeu) like lower(concat(concat('%',?3),'%')))"
+			)
 	Page<HhQdPduyetKqlcntRes> customQuerySearch(String namKh, String loaiVthh, String trichYeu, Pageable pageable);
 
 
