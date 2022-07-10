@@ -27,7 +27,7 @@ public class NhBienBanChuanBiKhoRes extends SoBienBanPhieuRes {
     private LocalDate ngayNghiemThu;
     private LocalDate ngayTao;
 
-    private String thuTruongDoiVi;
+    private String thuTruongDonVi;
 
     private String keToanDonVi;
 

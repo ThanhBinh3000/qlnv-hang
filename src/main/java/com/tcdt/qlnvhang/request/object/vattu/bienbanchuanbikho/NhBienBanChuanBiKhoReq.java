@@ -25,7 +25,7 @@ public class NhBienBanChuanBiKhoReq extends SoBienBanPhieuReq {
 
     private LocalDate ngayNghiemThu;
 
-    private String thuTruongDoiVi;
+    private String thuTruongDonVi;
 
     private String keToanDonVi;
 
