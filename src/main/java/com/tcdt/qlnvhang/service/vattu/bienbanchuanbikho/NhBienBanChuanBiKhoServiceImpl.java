@@ -91,6 +91,7 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
         item.setCapDvi(userInfo.getCapDvi());
         item.setSo(getSo());
         item.setNam(LocalDate.now().getYear());
+        item.setSoBienBan(String.format("%s/%s/%s", item.getSo(), item.getNam(), "BBCBK"));
         nhBienBanChuanBiKhoRepository.save(item);
 
         List<NhBienBanChuanBiKhoCt> chiTiets = this.saveListChiTiet(item.getId(), req.getChiTiets(), new HashMap<>());
