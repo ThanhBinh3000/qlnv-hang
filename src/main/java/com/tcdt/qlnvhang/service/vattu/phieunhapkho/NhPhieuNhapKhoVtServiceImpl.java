@@ -1,11 +1,13 @@
 package com.tcdt.qlnvhang.service.vattu.phieunhapkho;
 
+import com.tcdt.qlnvhang.entities.vattu.hosokythuat.NhHoSoKyThuat;
 import com.tcdt.qlnvhang.entities.vattu.phieunhapkho.NhPhieuNhapKhoVt;
 import com.tcdt.qlnvhang.entities.vattu.phieunhapkho.NhPhieuNhapKhoVtCt;
 import com.tcdt.qlnvhang.enums.QlPhieuNhapKhoLtStatus;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
+import com.tcdt.qlnvhang.repository.vattu.hosokythuat.NhHoSoKyThuatRepository;
 import com.tcdt.qlnvhang.repository.vattu.phieunhapkho.NhPhieuNhapKhoVtCtRepository;
 import com.tcdt.qlnvhang.repository.vattu.phieunhapkho.NhPhieuNhapKhoVtRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
@@ -63,6 +65,7 @@ public class NhPhieuNhapKhoVtServiceImpl extends BaseServiceImpl implements NhPh
     private final FileDinhKemService fileDinhKemService;
     private final HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
     private final KtNganLoRepository ktNganLoRepository;
+    private final NhHoSoKyThuatRepository hoSoKyThuatRepository;
 
     private static final String SHEET_PHIEU_NHAP_KHO_VAT_TU = "Phiếu nhập kho vật tư";
     private static final String STT = "STT";
@@ -146,6 +149,14 @@ public class NhPhieuNhapKhoVtServiceImpl extends BaseServiceImpl implements NhPh
                 throw new Exception("Không tìm thấy quyết định nhập");
             }
             res.setSoQuyetDinhNhap(qdNhap.get().getSoQd());
+        }
+
+        if (item.getHoSoKyThuatId() != null) {
+            Optional<NhHoSoKyThuat> hoSoKyThuat = hoSoKyThuatRepository.findById(item.getHoSoKyThuatId());
+            if (!hoSoKyThuat.isPresent()) {
+                throw new Exception("Không tìm thấy hồ sơ kỹ thuật");
+            }
+            res.setSoHoSoKyThuat(hoSoKyThuat.get().getSoBienBan());
         }
         res.setFileDinhKems(item.getFileDinhKems());
         KtNganLo nganLo = null;

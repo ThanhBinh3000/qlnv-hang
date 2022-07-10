@@ -16,6 +16,8 @@ import java.util.List;
 public class NhPhieuNhapKhoVtRes extends SoBienBanPhieuRes {
     private Long id;
     private Long qdgnvnxId;
+    private Long hoSoKyThuatId;
+    private String soHoSoKyThuat;
     private String soQuyetDinhNhap;
     private String soPhieu;
     private LocalDate ngayNhapKho;
