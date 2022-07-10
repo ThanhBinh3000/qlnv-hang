@@ -25,6 +25,7 @@ import com.tcdt.qlnvhang.table.khotang.KtNganLo;
 import com.tcdt.qlnvhang.table.khotang.KtNhaKho;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
+import com.tcdt.qlnvhang.util.MoneyConvert;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -108,7 +109,7 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
             chiTiets.add(new NhBienBanChuanBiKhoCtRes(ct));
         }
         res.setChiTiets(chiTiets);
-
+        res.setTongSoBangChu(MoneyConvert.doctienBangChu(item.getTongSo().toString(), null));
         Set<String> maVatTus = Stream.of(item.getMaVatTu(), item.getMaVatTuCha()).collect(Collectors.toSet());
         if (!CollectionUtils.isEmpty(maVatTus)) {
             Set<QlnvDmVattu> vatTus = qlnvDmVattuRepository.findByMaIn(maVatTus.stream().filter(Objects::nonNull).collect(Collectors.toSet()));
