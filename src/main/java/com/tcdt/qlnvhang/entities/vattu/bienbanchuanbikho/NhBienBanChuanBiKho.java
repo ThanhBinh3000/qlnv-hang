@@ -37,7 +37,7 @@ public class NhBienBanChuanBiKho extends BaseEntity implements Serializable {
     @Column(name = "NGAY_NGHIEM_THU")
     private LocalDate ngayNghiemThu;
 
-    @Column(name = "THU_TRUONG_DOI_VI")
+    @Column(name = "THU_TRUONG_DON_VI")
     private String thuTruongDonVi;
 
     @Column(name = "KE_TOAN_DON_VI")
