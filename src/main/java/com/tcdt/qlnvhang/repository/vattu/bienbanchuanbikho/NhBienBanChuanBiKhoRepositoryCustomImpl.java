@@ -23,7 +23,7 @@ public class NhBienBanChuanBiKhoRepositoryCustomImpl implements NhBienBanChuanBi
         builder.append("SELECT p, nx.id, nx.soQd, vatTu.ten, vatTuCha.ten, nganLo FROM NhBienBanChuanBiKho p ");
         builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON p.qdgnvnxId = nx.id ");
         builder.append("INNER JOIN QlnvDmVattu vatTu ON p.maVatTu = vatTu.ma ");
-        builder.append("INNER JOIN QlnvDmVattu vatTuCha ON p.maVatTuCha = vatTu.ma ");
+        builder.append("INNER JOIN QlnvDmVattu vatTuCha ON p.maVatTuCha = vatTuCha.ma ");
         builder.append("LEFT JOIN KtNganLo nganLo ON p.maNganLo = nganLo.maNganlo ");
         setConditionSearch(req, builder);
         builder.append("ORDER BY p.id DESC");
@@ -78,7 +78,7 @@ public class NhBienBanChuanBiKhoRepositoryCustomImpl implements NhBienBanChuanBi
         builder.append("SELECT COUNT(DISTINCT p.id) FROM NhBienBanChuanBiKho p ");
         builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON p.qdgnvnxId = nx.id ");
         builder.append("INNER JOIN QlnvDmVattu vatTu ON p.maVatTu = vatTu.ma ");
-        builder.append("INNER JOIN QlnvDmVattu vatTuCha ON p.maVatTuCha = vatTu.ma ");
+        builder.append("INNER JOIN QlnvDmVattu vatTuCha ON p.maVatTuCha = vatTuCha.ma ");
         builder.append("LEFT JOIN KtNganLo nganLo ON p.maNganLo = nganLo.maNganlo ");
 
         this.setConditionSearch(req, builder);

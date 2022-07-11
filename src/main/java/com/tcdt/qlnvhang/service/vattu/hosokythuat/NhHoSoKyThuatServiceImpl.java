@@ -22,6 +22,7 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.HhHopDongHdr;
 import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
@@ -45,6 +46,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -64,7 +66,7 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
     private final HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
     private final HhHopDongRepository hhHopDongRepository;
     private final QlnvDmVattuRepository qlnvDmVattuRepository;
-
+    private final HttpServletRequest req;
     private static final String SHEET_HO_SO_KY_THUAT = "Hồ Sơ Kỹ Thuật";
     private static final String STT = "STT";
     private static final String SO_BIEN_BAN = "Số Biên Bản";
@@ -129,13 +131,16 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
         NhHoSoKyThuatRes res = new NhHoSoKyThuatRes();
         List<NhHoSoKyThuatCtRes> chiTiets = new ArrayList<>();
         BeanUtils.copyProperties(item, res);
+        res.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
+        res.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
         for (NhHoSoKyThuatCt ct : item.getChiTiets()) {
             chiTiets.add(new NhHoSoKyThuatCtRes(ct));
         }
         res.setChiTiets(chiTiets);
         res.setFileDinhKems(item.getFileDinhKems());
         res.setFdkCanCus(item.getFdkCanCus());
-
+        QlnvDmDonvi donvi = getDviByMa(item.getMaDvi(), req);
+        res.setTenDvi(donvi.getTenDvi());
         Set<String> maVatTus = Stream.of(item.getMaVatTu(), item.getMaVatTuCha()).collect(Collectors.toSet());
         if (!CollectionUtils.isEmpty(maVatTus)) {
             Set<QlnvDmVattu> vatTus = qlnvDmVattuRepository.findByMaIn(maVatTus.stream().filter(Objects::nonNull).collect(Collectors.toSet()));
@@ -228,6 +233,7 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
         }
         nhHoSoKyThuatCtRepository.deleteByHoSoKyThuatIdIn(Collections.singleton(item.getId()));
         nhHoSoKyThuatRepository.delete(item);
+        fileDinhKemService.delete(item.getId(), Arrays.asList(NhHoSoKyThuat.TABLE_NAME, NhHoSoKyThuat.CAN_CU));
         return true;
     }
 
@@ -317,6 +323,7 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
         UserInfo userInfo = UserUtils.getUserInfo();
         nhHoSoKyThuatCtRepository.deleteByHoSoKyThuatIdIn(req.getIds());
         nhHoSoKyThuatRepository.deleteByIdIn(req.getIds());
+        fileDinhKemService.deleteMultiple(req.getIds(), Arrays.asList(NhHoSoKyThuat.TABLE_NAME, NhHoSoKyThuat.CAN_CU));
         return true;
     }
 
