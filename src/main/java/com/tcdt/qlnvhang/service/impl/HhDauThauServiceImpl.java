@@ -158,7 +158,7 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 		Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit(), Sort.by("id").ascending());
 		Page<ThongTinDauThauRes> page = hhDthauRepository.cusTomQuerySearch(objReq.getNamKhoach(),objReq.getLoaiVthh(),objReq.getSoQd(),objReq.getMaDvi(),objReq.getTrichYeu(),pageable);
 		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
-		Map<String, String> mapDmucDvi = getMapTenDvi();
+		Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
 		page.forEach(f -> {
 			f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
 			f.setTenVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
@@ -171,13 +171,17 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 	@Override
 	public List<ThongTinDauThauRes> selectAll(HhDthauSearchReq objReq) throws Exception {
 		List<ThongTinDauThauRes> list = hhDthauRepository.cusTomQuerySearch(objReq.getNamKhoach(),objReq.getLoaiVthh(),objReq.getCloaiVthh(),objReq.getSoQd(),objReq.getMaDvi(),objReq.getTrangThai());
-//		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
-//		Map<String, String> mapDmucDvi = getMapTenDvi();
-//		list.forEach(f -> {
-//			f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
-//			f.setTenVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
-//			f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
-//		});
+		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
+		Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
+		Map<String,String> hashMapDviLquan = getListDanhMucDviLq("NT");
+		Map<String,String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
+		list.forEach(f -> {
+			f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
+			f.setTenVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
+			f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
+			f.setTenNhaThau(StringUtils.isEmpty(f.getIdNhaThau()) ? null : hashMapDviLquan.get(String.valueOf(Double.parseDouble(f.getIdNhaThau().toString()))));
+			f.setTenLoaiHdong(hashMapLoaiHdong.get(f.getLoaiHdong()));
+		});
 		return list;
 	}
 

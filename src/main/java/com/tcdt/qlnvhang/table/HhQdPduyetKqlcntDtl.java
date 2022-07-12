@@ -45,5 +45,12 @@ public class HhQdPduyetKqlcntDtl implements Serializable {
 //	BigDecimal dgiaHdSauVat;
 	Long idGoiThau;
 	Long idQdPdHdr;
+	String loaiVthh;
+	String cloaiVthh;
+	Long idNhaThau;
+	Boolean trungThau;
+	String lyDoHuy;
+	Integer tgianThienHd;
+	BigDecimal donGiaTrcVat;
 
 }
