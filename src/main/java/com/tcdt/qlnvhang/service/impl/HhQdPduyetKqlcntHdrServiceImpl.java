@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.impl;
 import java.util.*;
 
 import com.tcdt.qlnvhang.repository.*;
+import com.tcdt.qlnvhang.request.object.HhQdPduyetKqlcntDtlReq;
 import com.tcdt.qlnvhang.response.dauthauvattu.HhQdPduyetKqlcntRes;
 import com.tcdt.qlnvhang.table.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 	@Override
 	public HhQdPduyetKqlcntHdr create(HhQdPduyetKqlcntHdrReq objReq) throws Exception {
 		// Is Vật Tư
-		if (objReq.getLoaiVthh() == null){
+		if (StringUtils.isEmpty(objReq.getLoaiVthh())){
 			return createVatTu(objReq);
 		}else{
 			return createLT(objReq);
@@ -102,9 +103,6 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 	}
 
 	private HhQdPduyetKqlcntHdr createVatTu(HhQdPduyetKqlcntHdrReq objReq) throws Exception {
-		if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh())){
-			throw new Exception("Loại vật tư hàng hóa không phù hợp");
-		}
 
 		Optional<HhQdKhlcntHdr> checkSoCc = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQdPdKhlcnt());
 		if (!checkSoCc.isPresent()){
@@ -137,12 +135,14 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 
 		HhQdPduyetKqlcntHdr createCheck = hhQdPduyetKqlcntHdrRepository.save(dataMap);
 
-		Optional<HhQdKhlcntDsgthau> gt =  hhQdKhlcntDsgthauRepository.findById(objReq.getIdGoiThau());
-		HhQdPduyetKqlcntDtl dtl = ObjectMapperUtils.map(gt.get(), HhQdPduyetKqlcntDtl.class);
-		dtl.setId(null);
-		dtl.setIdQdPdHdr(dataMap.getId());
-		dtl.setIdGoiThau(objReq.getIdGoiThau());
-		hhQdPduyetKqlcntDtlRepository.save(dtl);
+		for (HhQdPduyetKqlcntDtlReq qdPdKq : objReq.getDetailList()){
+			HhQdPduyetKqlcntDtl qdPdKqDtl = ObjectMapperUtils.map(qdPdKq, HhQdPduyetKqlcntDtl.class);
+			qdPdKqDtl.setId(null);
+			qdPdKqDtl.setIdQdPdHdr(dataMap.getId());
+			qdPdKqDtl.setIdGoiThau(qdPdKq.getIdGt());
+			hhQdPduyetKqlcntDtlRepository.save(qdPdKqDtl);
+		}
+
 		return createCheck;
 	}
 
@@ -287,12 +287,23 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 	@Override
 	public Page<HhQdPduyetKqlcntRes> timKiemPageCustom(HhQdPduyetKqlcntSearchReq req) throws Exception {
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
-		Page<HhQdPduyetKqlcntRes> page =  hhQdPduyetKqlcntHdrRepository.customQuerySearch(req.getNamKhoach(),req.getLoaiVthh(),req.getTrichYeu(),pageable);
+		String cDvi = getUser().getCapDvi();
+		Page<HhQdPduyetKqlcntRes> page;
+		if(Contains.CAP_TONG_CUC.equals(cDvi)){
+			page = hhQdPduyetKqlcntHdrRepository.customQuerySearchTongCuc(req.getNamKhoach(),req.getLoaiVthh(),req.getTrichYeu(),pageable);
+		}else{
+			page = hhQdPduyetKqlcntHdrRepository.customQuerySearchCuc(req.getNamKhoach(),req.getLoaiVthh(),req.getTrichYeu(),pageable);
+		}
 		Map<String,String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
 		Map<String,String> hashMapDviLquan = getListDanhMucDviLq("NT");
+		Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
+		Map<String,String> mapVthh = getListDanhMucHangHoa();
+
 		page.forEach(f -> {
 			f.setTenHdong(StringUtils.isEmpty(f.getLoaiHdong()) ? null : hashMapLoaiHdong.get(f.getLoaiHdong()));
 			f.setTenNhaThau(StringUtils.isEmpty(f.getIdNhaThau()) ? null : hashMapDviLquan.get(String.valueOf(Double.parseDouble(f.getIdNhaThau().toString()))));
+			f.setTenDvi(mapDmucDvi.get(f.getMaDvi()));
+			f.setTenVthh(mapVthh.get(f.getLoaiVthh()));
 		});
 		return page;
 	}

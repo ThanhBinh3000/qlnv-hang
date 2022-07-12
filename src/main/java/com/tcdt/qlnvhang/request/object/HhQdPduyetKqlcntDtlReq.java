@@ -15,6 +15,8 @@ public class HhQdPduyetKqlcntDtlReq {
 
 	Long idHdr;
 
+	Long idGt;
+
 //	@NotNull(message = "Không được để trống")
 	@Size(max = 20, message = "Số hiệu gói thầu không được vượt quá 20 ký tự")
 	@ApiModelProperty(example = "01/SHGT-TCDT")
@@ -33,7 +35,7 @@ public class HhQdPduyetKqlcntDtlReq {
 	BigDecimal soLuong;
 	BigDecimal giaGthau;
 
-	@NotNull(message = "Không được để trống")
+//	@NotNull(message = "Không được để trống")
 	@Size(max = 250, message = "Tên đơn vị không được vượt quá 250 ký tự")
 	@ApiModelProperty(example = "Cục Hà Nội")
 	String tenDvi;
@@ -48,5 +50,12 @@ public class HhQdPduyetKqlcntDtlReq {
 	BigDecimal dgiaSauVat;
 	BigDecimal donGiaHd;
 	BigDecimal vatHd;
-	BigDecimal dgiaHdSauVat;
+
+	String loaiVthh;
+	String cloaiVthh;
+	Long idNhaThau;
+	Boolean trungThau;
+	String lyDoHuy;
+	Integer tgianThienHd;
+	BigDecimal donGiaTrcVat;
 }

@@ -44,6 +44,20 @@ public class HhQdPduyetKqlcntRes {
 
 	private String tenHdong;
 
+	private Integer soGoiThau;
+
+	private String maDvi;
+
+	private String tenDvi;
+
+	private Integer namKhoach;
+
+	private String loaiVthh;
+
+	private String tenVthh;
+
+	private String soQdPdKhlcnt;
+
 	public HhQdPduyetKqlcntRes(Long id, String soQd, Date ngayQd, String trichYeu, String tenGthau, String statusGthau, Long idNhaThau, String lyDoHuy, BigDecimal donGiaTrcVat, Integer vat, BigDecimal soLuong, String loaiHdong, Integer tgianThienHd, String trangThai) {
 		this.id = id;
 		this.soQd = soQd;
@@ -59,5 +73,18 @@ public class HhQdPduyetKqlcntRes {
 		this.loaiHdong = loaiHdong;
 		this.tgianThienHd = tgianThienHd;
 		this.trangThai = trangThai;
+	}
+
+	public HhQdPduyetKqlcntRes(Long id, String soQd, Date ngayQd, String trichYeu, String trangThai, Integer soGoiThau, String maDvi, Integer namKhoach, String loaiVthh,String soQdPdKhlcnt) {
+		this.id = id;
+		this.soQd = soQd;
+		this.ngayQd = ngayQd;
+		this.trichYeu = trichYeu;
+		this.trangThai = trangThai;
+		this.soGoiThau = soGoiThau;
+		this.maDvi = maDvi;
+		this.namKhoach = namKhoach;
+		this.loaiVthh = loaiVthh;
+		this.soQdPdKhlcnt = soQdPdKhlcnt;
 	}
 }

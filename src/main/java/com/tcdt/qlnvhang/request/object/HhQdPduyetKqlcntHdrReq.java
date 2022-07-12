@@ -46,7 +46,7 @@ public class HhQdPduyetKqlcntHdrReq {
 	@ApiModelProperty(example = "20/QD-TCDT")
 	String soQdPdKhlcnt;
 
-	@NotNull(message = "Không được để trống")
+//	@NotNull(message = "Không được để trống")
 	@Size(max = 20, message = "Mã đơn vị không được vượt quá 20 ký tự")
 	@ApiModelProperty(example = "0102")
 	String maDvi;
@@ -68,6 +68,7 @@ public class HhQdPduyetKqlcntHdrReq {
 	String lyDoHuy;
 
 	private List<HhQdPduyetKqlcntDtlReq> detailList;
+
 	private List<FileDinhKemReq> fileDinhKems;
 
 }
