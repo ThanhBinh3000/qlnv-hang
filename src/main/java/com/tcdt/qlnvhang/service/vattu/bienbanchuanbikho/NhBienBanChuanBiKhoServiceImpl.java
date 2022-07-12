@@ -48,6 +48,7 @@ import org.springframework.util.StringUtils;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
@@ -110,7 +111,8 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
             chiTiets.add(new NhBienBanChuanBiKhoCtRes(ct));
         }
         res.setChiTiets(chiTiets);
-        res.setTongSoBangChu(MoneyConvert.doctienBangChu(item.getTongSo().toString(), null));
+        String tongSo = Optional.ofNullable(item.getTongSo()).map(BigDecimal::toString).orElse(BigDecimal.ZERO.toString());
+        res.setTongSoBangChu(MoneyConvert.doctienBangChu(tongSo, null));
         Set<String> maVatTus = Stream.of(item.getMaVatTu(), item.getMaVatTuCha()).collect(Collectors.toSet());
         if (!CollectionUtils.isEmpty(maVatTus)) {
             Set<QlnvDmVattu> vatTus = qlnvDmVattuRepository.findByMaIn(maVatTus.stream().filter(Objects::nonNull).collect(Collectors.toSet()));

@@ -131,7 +131,7 @@ public class PathContains {
 	// Nhập kho vật tư: Phiếu nhập kho tam gui
 	public static final String PHIEU_NHAP_KHO_TAM_GUI = "/phieu-nhap-kho-tam-gui";
 
-	// Nhập kho vật tư: Phiếu nhập kho tam gui
+	// Nhập kho vật tư: Phiếu nhập kho
 	public static final String PHIEU_NHAP_KHO_VT = "/phieu-nhap-kho-vt";
 
 	// Nhập kho vật tư: Biên bản gửi hàng
@@ -142,4 +142,7 @@ public class PathContains {
 
 	// Nhập kho vật tư: Biên bản chuẩn bị kho
 	public static final String BIEN_BAN_CHUAN_BI_KHO = "/bien-ban-chuan-bi-kho";
+
+	// Nhập kho vật tư: Bảng kê vật tư
+	public static final String BANG_KE_VAT_TU = "/bang-ke-vt";
 }
