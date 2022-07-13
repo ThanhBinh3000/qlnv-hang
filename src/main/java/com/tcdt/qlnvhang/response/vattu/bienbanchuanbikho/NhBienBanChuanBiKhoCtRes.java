@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
 
+import java.math.BigDecimal;
+
 @Data
 @NoArgsConstructor
 public class NhBienBanChuanBiKhoCtRes {
@@ -12,12 +14,12 @@ public class NhBienBanChuanBiKhoCtRes {
     private Long bbChuanBiKhoId;
     private String noiDung;
     private String donViTinh;
-    private Long soLuongTrongNam;
-    private Long donGiaTrongNam;
-    private Long thanhTienTrongNam;
-    private Long soLuongQt;
-    private Long thanhTienQt;
-    private Long tongGiaTri;
+    private BigDecimal soLuongTrongNam;
+    private BigDecimal donGiaTrongNam;
+    private BigDecimal thanhTienTrongNam;
+    private BigDecimal soLuongQt;
+    private BigDecimal thanhTienQt;
+    private BigDecimal tongGiaTri;
 
     public NhBienBanChuanBiKhoCtRes(NhBienBanChuanBiKhoCt item) {
         BeanUtils.copyProperties(item, this);

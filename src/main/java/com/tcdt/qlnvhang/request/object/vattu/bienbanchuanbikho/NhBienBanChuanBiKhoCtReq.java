@@ -3,6 +3,8 @@ package com.tcdt.qlnvhang.request.object.vattu.bienbanchuanbikho;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @NoArgsConstructor
 public class NhBienBanChuanBiKhoCtReq {
@@ -10,10 +12,10 @@ public class NhBienBanChuanBiKhoCtReq {
     private Long bbChuanBiKhoId;
     private String noiDung;
     private String donViTinh;
-    private Long soLuongTrongNam;
-    private Long donGiaTrongNam;
-    private Long thanhTienTrongNam;
-    private Long soLuongQt;
-    private Long thanhTienQt;
-    private Long tongGiaTri;
+    private BigDecimal soLuongTrongNam;
+    private BigDecimal donGiaTrongNam;
+    private BigDecimal thanhTienTrongNam;
+    private BigDecimal soLuongQt;
+    private BigDecimal thanhTienQt;
+    private BigDecimal tongGiaTri;
 }
