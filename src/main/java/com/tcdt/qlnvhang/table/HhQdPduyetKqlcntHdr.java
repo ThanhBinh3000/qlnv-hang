@@ -46,7 +46,7 @@ public class HhQdPduyetKqlcntHdr implements Serializable {
 	String soQdPdKhlcnt;
 	@Temporal(TemporalType.DATE)
 	Date ngayQdPdKhlcnt;
-	Boolean trungThau;
+	Integer trungThau;
 	String maDvi;
 	String ghiChu;
 	String trangThai;

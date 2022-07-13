@@ -42,16 +42,4 @@ public interface HhQdKhlcntHdrService {
 
 	List<HhQdKhlcntHdr> getAll(HhQdKhlcntSearchReq objReq) throws Exception;
 
-	@Transactional(rollbackOn = Exception.class)
-	HhQdKhlcntHdr createVatTu2(HhQdKhlcntHdrReq objReq) throws Exception;
-
-	@Transactional(rollbackOn = Exception.class)
-	HhQdKhlcntHdr updateVatTu(HhQdKhlcntHdrReq objReq) throws Exception;
-
-	@Transactional(rollbackOn = Exception.class)
-	HhQdKhlcntHdr detailVatTu(String ids) throws Exception;
-
-	@Transactional(rollbackOn = Exception.class)
-	HhQdKhlcntHdr approveVatTu(StatusReq stReq) throws Exception;
-
 }

@@ -23,7 +23,6 @@ public class HhQdKhlcntDsgthau implements Serializable {
 	@SequenceGenerator(sequenceName = "HH_QD_KHLCNT_DSGTHAU_SEQ", allocationSize = 1, name = "HH_QD_KHLCNT_DSGTHAU_SEQ")
 	private Long id;
 	private Long idQdDtl;
-	private Long idQdHdr;
 	String goiThau;
 	BigDecimal soLuong;
 	String maDvi;

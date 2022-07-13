@@ -48,7 +48,7 @@ public class HhQdPduyetKqlcntDtl implements Serializable {
 	String loaiVthh;
 	String cloaiVthh;
 	Long idNhaThau;
-	Boolean trungThau;
+	Integer trungThau;
 	String lyDoHuy;
 	Integer tgianThienHd;
 	BigDecimal donGiaTrcVat;

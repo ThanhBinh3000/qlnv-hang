@@ -36,7 +36,7 @@ public class ThongTinDauThauRes {
 	private Long idGt;
 
 	private Long idNhaThau;
-	private String goiThau;
+	private String tenGthau;
 	private String maDvi;
 	private String soQdPdKhlcnt;
 	private Date ngayQd;
@@ -67,12 +67,12 @@ public class ThongTinDauThauRes {
 	private BigDecimal soLuong;
 
 
-	public ThongTinDauThauRes(Long idQdHdr, Long idQdDtl, Long idGt,Long idNhaThau, String goiThau, String maDvi, String soQdPdKhlcnt,Date ngayQd, String trichYeu, String loaiVthh, String cloaiVthh, BigDecimal thanhGiaGoiThau, String trangThai,String nguonVon,Integer tgianThienHd,String loaiHdong, Integer vat, BigDecimal soLuong, BigDecimal donGiaTrcVat) {
+	public ThongTinDauThauRes(Long idQdHdr, Long idQdDtl, Long idGt,Long idNhaThau, String tenGthau, String maDvi, String soQdPdKhlcnt,Date ngayQd, String trichYeu, String loaiVthh, String cloaiVthh, BigDecimal thanhGiaGoiThau, String trangThai,String nguonVon,Integer tgianThienHd,String loaiHdong, Integer vat, BigDecimal soLuong, BigDecimal donGiaTrcVat) {
 		this.idQdHdr = idQdHdr;
 		this.idQdDtl = idQdDtl;
 		this.idGt = idGt;
 		this.idNhaThau = idNhaThau;
-		this.goiThau = goiThau;
+		this.tenGthau = tenGthau;
 		this.maDvi = maDvi;
 		this.soQdPdKhlcnt = soQdPdKhlcnt;
 		this.ngayQd = ngayQd;
