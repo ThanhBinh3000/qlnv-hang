@@ -19,7 +19,7 @@ import org.springframework.stereotype.Repository;
 public interface HhDthauRepository extends CrudRepository<HhDthau, Long> {
 
 	Optional<HhDthau> findBySoQd(String soQd);
-	@Query("SELECT new com.tcdt.qlnvhang.response.dauthauvattu.ThongTinDauThauRes(HDR.id,DTL.id,DSG.id,GT.idNhaThau,DSG.goiThau,DTL.maDvi,HDR.soQd,HDR.ngayQd,HDR.trichYeu,HDR.loaiVthh,HDR.cloaiVthh,DSG.thanhTien,DSG.trangThai,GT.nguonVon,GT.tgianThienHd,GT.loaiHdong,GT.vat,GT.soLuong,GT.donGiaTrcVat) " +
+	@Query("SELECT new com.tcdt.qlnvhang.response.dauthauvattu.ThongTinDauThauRes(HDR.id,DTL.id,DSG.id,GT.idNhaThau,DSG.goiThau,DTL.maDvi,HDR.soQd,HDR.ngayQd,HDR.trichYeu,HDR.loaiVthh,COALESCE(HDR.cloaiVthh,DSG.cloaiVthh) ,DSG.thanhTien,DSG.trangThai,GT.nguonVon,GT.tgianThienHd,GT.loaiHdong,GT.vat,GT.soLuong,GT.donGiaTrcVat) " +
 			" FROM HhQdKhlcntDsgthau DSG " +
 			" LEFT JOIN HhQdKhlcntDtl DTL ON DTL.id = DSG.idQdDtl " +
 			" LEFT JOIN HhQdKhlcntHdr HDR ON HDR.id = DTL.idQdHdr " +
@@ -34,7 +34,7 @@ public interface HhDthauRepository extends CrudRepository<HhDthau, Long> {
 			" AND (?5 is null or  lower(HDR.trichYeu)like lower(concat(concat('%',?5),'%' ) ) )")
 	Page<ThongTinDauThauRes> cusTomQuerySearch(Long namKh, String loaiVthh, String soQd, String maDvi, String trichYeu,Pageable pageable);
 
-	@Query("SELECT new com.tcdt.qlnvhang.response.dauthauvattu.ThongTinDauThauRes(HDR.id,DTL.id,DSG.id,GT.idNhaThau,DSG.goiThau,DTL.maDvi,HDR.soQd,HDR.ngayQd,HDR.trichYeu,HDR.loaiVthh,HDR.cloaiVthh,DSG.thanhTien,DSG.trangThai,GT.nguonVon,GT.tgianThienHd,GT.loaiHdong,GT.vat,GT.soLuong,GT.donGiaTrcVat) " +
+	@Query("SELECT new com.tcdt.qlnvhang.response.dauthauvattu.ThongTinDauThauRes(HDR.id,DTL.id,DSG.id,GT.idNhaThau,DSG.goiThau,DTL.maDvi,HDR.soQd,HDR.ngayQd,HDR.trichYeu,HDR.loaiVthh,COALESCE(HDR.cloaiVthh,DSG.cloaiVthh),DSG.thanhTien,DSG.trangThai,GT.nguonVon,GT.tgianThienHd,GT.loaiHdong,GT.vat,GT.soLuong,GT.donGiaTrcVat) " +
 			" FROM HhQdKhlcntDsgthau DSG " +
 			" LEFT JOIN HhQdKhlcntDtl DTL ON DTL.id = DSG.idQdDtl " +
 			" LEFT JOIN HhQdKhlcntHdr HDR ON HDR.id = DTL.idQdHdr " +

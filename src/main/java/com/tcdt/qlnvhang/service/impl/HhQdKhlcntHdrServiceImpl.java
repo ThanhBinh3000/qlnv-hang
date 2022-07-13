@@ -419,6 +419,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 
 		HhQdKhlcntDsgthau dataRes = gThau.get();
 		dataRes.setTenDvi(mapDmucDvi.get(dataRes.getMaDvi()));
+		dataRes.setTenVthh(hashMapDmHh.get(dataRes.getLoaiVthh()));
+		dataRes.setTenCloaiVthh(hashMapDmHh.get(dataRes.getCloaiVthh()));
 
 		List<HhQdKhlcntDsgthauCtiet> dsgThauCtiet = hhQdKhlcntDsgthauCtietRepository.findByIdGoiThau(gThau.get().getId());
 		dsgThauCtiet.forEach(item -> {
