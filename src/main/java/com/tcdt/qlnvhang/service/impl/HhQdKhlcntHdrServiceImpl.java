@@ -263,17 +263,17 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		dataDB.setNgaySua(getDateTimeNow());
 		dataDB.setNguoiSua(getUser().getUsername());
 		dataDB.setChildren(fileDinhKemList);
-		dataMap.setIdThHdr(qOptional.get().getId());
+		dataDB.setIdThHdr(qOptional.get().getId());
 
-		hhQdKhlcntHdrRepository.save(dataMap);
+		hhQdKhlcntHdrRepository.save(dataDB);
 
 		// Update trạng thái tổng hợp dxkhclnt
-		hhQdKhlcntDtlRepository.deleteAllByIdQdHdr(dataMap.getId());
+		hhQdKhlcntDtlRepository.deleteAllByIdQdHdr(dataDB.getId());
 		for (HhQdKhlcntDtlReq dx : objReq.getDsDeXuat()){
 			HhQdKhlcntDtl qd = ObjectMapperUtils.map(dx, HhQdKhlcntDtl.class);
 			hhQdKhlcntDsgthauRepository.deleteByIdQdDtl(qd.getId());
 			qd.setId(null);
-			qd.setIdQdHdr(dataMap.getId());
+			qd.setIdQdHdr(dataDB.getId());
 			hhQdKhlcntDtlRepository.save(qd);
 			for (HhQdKhlcntDsgthauReq gtList : dx.getDsGoiThau()){
 				HhQdKhlcntDsgthau gt = ObjectMapperUtils.map(gtList, HhQdKhlcntDsgthau.class);
@@ -293,7 +293,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			}
 		}
 
-		return dataMap;
+		return dataDB;
 	}
 
 	@Transactional
@@ -333,12 +333,12 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		dataDB.setNguoiSua(getUser().getUsername());
 		dataDB.setChildren(fileDinhKemList);
 
-		hhQdKhlcntHdrRepository.save(dataMap);
+		hhQdKhlcntHdrRepository.save(dataDB);
 
 		hhQdKhlcntDtlRepository.deleteAllByIdQdHdr(dataMap.getId());
 		HhQdKhlcntDtl qdDtl = new HhQdKhlcntDtl();
 		qdDtl.setId(null);
-		qdDtl.setIdQdHdr(dataMap.getId());
+		qdDtl.setIdQdHdr(dataDB.getId());
 		qdDtl.setMaDvi(getUser().getDvql());
 		hhQdKhlcntDtlRepository.save(qdDtl);
 
@@ -357,7 +357,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				}
 			}
 		}
-		return dataMap;
+		return dataDB;
 	}
 
 	@Override

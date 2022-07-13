@@ -43,6 +43,8 @@ public class HhQdKhlcntDsgthau implements Serializable {
 	String lyDoHuy;
 	String diaDiemNhap;
 
+	String tgianBdauThien;
+
 	@Transient
 	String tenCloaiVthh;
 	@Transient

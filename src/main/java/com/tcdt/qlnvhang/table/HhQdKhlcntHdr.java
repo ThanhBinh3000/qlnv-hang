@@ -125,6 +125,8 @@ public class HhQdKhlcntHdr implements Serializable {
 	@Temporal(TemporalType.DATE)
 	Date ngayHluc;
 
+	String maTrHdr;
+
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)
 	@JoinColumn(name = "dataId")

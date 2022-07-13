@@ -56,6 +56,8 @@ public class HhQdKhlcntDsgthauReq {
 
 	String diaDiemNhap;
 
+	String tgianBdauThien;
+
 	private List<HhDxuatKhLcntDsgthauDtlCtietReq> children = new ArrayList<>();
 
 }

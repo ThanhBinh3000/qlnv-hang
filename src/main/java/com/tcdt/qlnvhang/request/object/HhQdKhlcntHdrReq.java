@@ -95,6 +95,8 @@ public class HhQdKhlcntHdrReq {
 
 	String trichYeu;
 
+	String maTrHdr;
+
 //	@NotNull(message = "Không được để trống")
 	private Long idThHdr;
 	private Long idTrHdr;

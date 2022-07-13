@@ -163,7 +163,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		for (HhDxuatKhLcntDsgtDtlReq gt : objReq.getDsGtReq()){
 			HhDxKhlcntDsgthau data = new ModelMapper().map(gt, HhDxKhlcntDsgthau.class);
 			data.setId(null);
-			data.setIdDxKhlcnt(dataMap.getId());
+			data.setIdDxKhlcnt(dataDTB.getId());
 			BigDecimal thanhTien = data.getDonGia().multiply(data.getSoLuong());
 			data.setThanhTien(thanhTien);
 			hhDxuatKhLcntDsgtDtlRepository.save(data);
@@ -178,7 +178,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		}
 
 		// Xóa tât cả các căn cứ xác định giá cũ và lưu mới
-		hhDxuatKhLcntCcxdgDtlRepository.deleteAllByIdDxKhlcnt(dataMap.getId());
+		hhDxuatKhLcntCcxdgDtlRepository.deleteAllByIdDxKhlcnt(dataDTB.getId());
 		for (HhDxuatKhLcntCcxdgDtlReq cc : objReq.getCcXdgReq()){
 			HhDxuatKhLcntCcxdgDtl data = ObjectMapperUtils.map(cc, HhDxuatKhLcntCcxdgDtl.class);
 			List<FileDKemJoinDxKhLcntCcxdg> detailChild = new ArrayList<>();
@@ -190,7 +190,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 				});
 			}
 			data.setChildren(detailChild);
-			data.setIdDxKhlcnt(dataMap.getId());
+			data.setIdDxKhlcnt(dataDTB.getId());
 
 			hhDxuatKhLcntCcxdgDtlRepository.save(data);
 		}
@@ -492,13 +492,13 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		dataDTB.setFileDinhKems(fileDinhKemList);
 
 		hhDxuatKhLcntHdrRepository.save(dataDTB);
-		hhDxuatKhLcntDsgtDtlRepository.deleteAllByIdDxKhlcnt(dataMap.getId());
+		hhDxuatKhLcntDsgtDtlRepository.deleteAllByIdDxKhlcnt(dataDTB.getId());
 		// Lưu danh sách gói thầu
 		for (HhDxuatKhLcntDsgtDtlReq gt : objReq.getDsGtReq()){
 			HhDxKhlcntDsgthau data = new ModelMapper().map(gt, HhDxKhlcntDsgthau.class);
 			hhDxKhlcntDsgthauCtietRepository.deleteAllByIdGoiThau(gt.getId());
 			data.setId(null);
-			data.setIdDxKhlcnt(dataMap.getId());
+			data.setIdDxKhlcnt(dataDTB.getId());
 			BigDecimal thanhTien = data.getDonGia().multiply(data.getSoLuong());
 			data.setThanhTien(thanhTien);
 			hhDxuatKhLcntDsgtDtlRepository.save(data);
@@ -510,7 +510,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 				hhDxKhlcntDsgthauCtietRepository.save(dataDdNhap);
 			}
 		}
-		return dataMap;
+		return dataDTB;
 	}
 
 	@Override
