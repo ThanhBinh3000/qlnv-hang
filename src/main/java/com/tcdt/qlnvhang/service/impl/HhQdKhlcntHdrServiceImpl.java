@@ -454,13 +454,33 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		}
 
 		String status = stReq.getTrangThai() + optional.get().getTrangThai();
-		switch (status) {
-		case Contains.BAN_HANH + Contains.MOI_TAO:
-			optional.get().setNguoiPduyet(getUser().getUsername());
-			optional.get().setNgayPduyet(getDateTimeNow());
-			break;
-		default:
-			throw new Exception("Phê duyệt không thành công");
+		if(optional.get().getLoaiVthh().startsWith("02")){
+			switch (status) {
+				case Contains.CHO_DUYET + Contains.MOI_TAO:
+				case Contains.CHO_DUYET + Contains.TU_CHOI:
+					optional.get().setNguoiGuiDuyet(getUser().getUsername());
+					optional.get().setNgayGuiDuyet(getDateTimeNow());
+				case Contains.TU_CHOI + Contains.CHO_DUYET:
+					optional.get().setNguoiPduyet(getUser().getUsername());
+					optional.get().setNgayPduyet(getDateTimeNow());
+					optional.get().setLdoTuchoi(stReq.getLyDo());
+				case Contains.DUYET + Contains.CHO_DUYET:
+				case Contains.BAN_HANH + Contains.DUYET:
+					optional.get().setNguoiPduyet(getUser().getUsername());
+					optional.get().setNgayPduyet(getDateTimeNow());
+					break;
+				default:
+					throw new Exception("Phê duyệt không thành công");
+			}
+		}else{
+			switch (status) {
+				case Contains.BAN_HANH + Contains.MOI_TAO:
+					optional.get().setNguoiPduyet(getUser().getUsername());
+					optional.get().setNgayPduyet(getDateTimeNow());
+					break;
+				default:
+					throw new Exception("Phê duyệt không thành công");
+			}
 		}
 		optional.get().setTrangThai(stReq.getTrangThai());
 		if (stReq.getTrangThai().equals(Contains.BAN_HANH)) {

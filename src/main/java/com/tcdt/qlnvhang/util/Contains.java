@@ -26,7 +26,7 @@ public class Contains {
 	public static final String MO_SO = "05";
 	public static final String HUY_PDUYET = "06";
 
-	// Trang thai phe duyet
+	// Trang thai tờ tr
 	public static final String TAO_MOI = "00";
 	public static final String CHO_DUYET = "01";
 	public static final String DUYET = "02";
@@ -43,10 +43,8 @@ public class Contains {
 	public static final String LANHDAO_DUYET = "10"; // Trang thai Lanh dao duyet
 
 	public static final String BAN_HANH = "11"; // Trang thai Lanh dao duyet
-
-	public static final String TT_DA_QUYET_DINH = "12"; // Trang thai Lanh dao duyet
-
 	public static final String LANHDAO_TU_CHOI = "12";
+	public static final String TT_DA_QUYET_DINH = "13"; // Trang thai Lanh dao duyet
 
 	// Trạng thái tổng hợp
 	public static final String CHUA_QUYET_DINH = "00";
