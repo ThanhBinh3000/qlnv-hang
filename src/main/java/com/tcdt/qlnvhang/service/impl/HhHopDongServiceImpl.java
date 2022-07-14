@@ -57,6 +57,57 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 
 	@Override
 	public HhHopDongHdr create(HhHopDongHdrReq objReq) throws Exception {
+		if(objReq.getLoaiVthh().startsWith("02")){
+			return createVatTu(objReq);
+		}else{
+			return createLuongThuc(objReq);
+		}
+	}
+
+	public HhHopDongHdr createVatTu(HhHopDongHdrReq objReq) throws Exception {
+
+		Optional<HhHopDongHdr> qOpHdong = hhHopDongRepository.findBySoHd(objReq.getSoHd());
+		if (qOpHdong.isPresent())
+			throw new Exception("Hợp đồng số " + objReq.getSoHd() + " đã tồn tại");
+
+		Optional<HhQdPduyetKqlcntHdr> checkSoQd = hhQdPduyetKqlcntHdrRepository.findBySoQd(objReq.getCanCu());
+		if (!checkSoQd.isPresent())
+			throw new Exception(
+					"Số quyết định phê duyệt kết quả lựa chọn nhà thầu " + objReq.getCanCu() + " không tồn tại");
+
+		UserInfo userInfo = SecurityContextService.getUser();
+		if (userInfo == null)
+			throw new Exception("Bad request.");
+
+		HhHopDongHdr dataMap = ObjectMapperUtils.map(objReq, HhHopDongHdr.class);
+
+		dataMap.setNguoiTao(getUser().getUsername());
+		dataMap.setNgayTao(getDateTimeNow());
+		dataMap.setTrangThai(Contains.TAO_MOI);
+		dataMap.setMaDvi(userInfo.getDvql());
+
+		// File dinh kem cua goi thau
+		List<FileDKemJoinHopDong> dtls2 = new ArrayList<FileDKemJoinHopDong>();
+		if (objReq.getFileDinhKems() != null) {
+			dtls2 = ObjectMapperUtils.mapAll(objReq.getFileDinhKems(), FileDKemJoinHopDong.class);
+			dtls2.forEach(f -> {
+				f.setDataType(HhHopDongHdr.TABLE_NAME);
+				f.setCreateDate(new Date());
+			});
+		}
+		dataMap.setFileDinhKems(dtls2);
+
+		hhHopDongRepository.save(dataMap);
+
+		for(HhDdiemNhapKhoReq ddNhapRq : objReq.getDiaDiemNhapKhoReq()){
+			HhHopDongDdiemNhapKho ddNhap = ObjectMapperUtils.map(ddNhapRq, HhHopDongDdiemNhapKho.class);
+			ddNhap.setIdHdongHdr(dataMap.getId());
+			hhHopDongDdiemNhapKhoRepository.save(ddNhap);
+		}
+		return dataMap;
+	}
+
+	public HhHopDongHdr createLuongThuc(HhHopDongHdrReq objReq) throws Exception {
 		if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh()))
 			throw new Exception("Loại vật tư hàng hóa không phù hợp");
 
@@ -92,13 +143,14 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 
 		hhHopDongRepository.save(dataMap);
 
-        for(HhDdiemNhapKhoReq ddNhapRq : objReq.getDiaDiemNhapKhoReq()){
+		for(HhDdiemNhapKhoReq ddNhapRq : objReq.getDiaDiemNhapKhoReq()){
 			HhHopDongDdiemNhapKho ddNhap = ObjectMapperUtils.map(ddNhapRq, HhHopDongDdiemNhapKho.class);
 			ddNhap.setIdHdongHdr(dataMap.getId());
 			hhHopDongDdiemNhapKhoRepository.save(ddNhap);
 		}
 		return dataMap;
 	}
+
 
 	@Override
 	public HhHopDongHdr update(HhHopDongHdrReq objReq) throws Exception {
