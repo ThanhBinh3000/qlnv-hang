@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class QlPhieuNhapKhoLtRes extends SoBienBanPhieuRes {
+public class NhPhieuNhapKhoRes extends SoBienBanPhieuRes {
     private Long id;
     private Long phieuKtClId;
     private String soPhieuKtCl;
@@ -54,7 +54,14 @@ public class QlPhieuNhapKhoLtRes extends SoBienBanPhieuRes {
     private BigDecimal tongSoTien;
     private String tongSoLuongBangChu;
     private String tongSoTienBangChu;
-    private List<QlPhieuNhapKhoHangHoaLtRes> hangHoaRes = new ArrayList<>();
+    private List<NhPhieuNhapKhoCtRes> hangHoaRes = new ArrayList<>();
+
+    private Long hoSoKyThuatId;
+    private String soBbHoSoKyThuat;
+    private String loaiVthh;
+    private String maDvi;
+    private String tenDvi;
+    private String maQhns;
 
     private List<FileDinhKem> chungTus;
 }

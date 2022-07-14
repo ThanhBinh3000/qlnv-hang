@@ -1,9 +1,9 @@
 package com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc;
 
-import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLt;
+import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.NhPhieuNhapKho;
 import com.tcdt.qlnvhang.enums.QlPhieuNhapKhoLtStatus;
-import com.tcdt.qlnvhang.request.search.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLtSearchReq;
-import com.tcdt.qlnvhang.response.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLtRes;
+import com.tcdt.qlnvhang.request.search.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoSearchReq;
+import com.tcdt.qlnvhang.response.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoRes;
 import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganLo;
@@ -21,20 +21,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class QlPhieuNhapKhoLtRepositoryCustomImpl implements QlPhieuNhapKhoLtRepositoryCustom {
+public class NhPhieuNhapKhoRepositoryCustomImpl implements NhPhieuNhapKhoRepositoryCustom {
 
     @PersistenceContext
     private EntityManager em;
 
     @Override
-    public Page<QlPhieuNhapKhoLtRes> search(QlPhieuNhapKhoLtSearchReq req) {
+    public Page<NhPhieuNhapKhoRes> search(NhPhieuNhapKhoSearchReq req) {
         StringBuilder builder = new StringBuilder();
-        builder.append("SELECT p, pktcl.id, pktcl.soPhieu, nganLo, nx.id, nx.soQd FROM QlPhieuNhapKhoLt p ");
+        builder.append("SELECT p, pktcl.id, pktcl.soPhieu, nganLo, nx.id, nx.soQd FROM NhPhieuNhapKho p ");
         builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON p.qdgnvnxId = nx.id ");
-        builder.append("INNER JOIN QlpktclhPhieuKtChatLuong pktcl ON p.phieuKtClId = pktcl.id ");
+        builder.append("LEFT JOIN QlpktclhPhieuKtChatLuong pktcl ON p.phieuKtClId = pktcl.id ");
         builder.append("LEFT JOIN KtNganLo nganLo ON p.maNganLo = nganLo.maNganlo ");
         setConditionSearch(req, builder);
-        builder.append("ORDER BY p.ngayLap DESC");
+        builder.append("ORDER BY p.id DESC");
 
         TypedQuery<Object[]> query = em.createQuery(builder.toString(), Object[].class);
 
@@ -47,10 +47,10 @@ public class QlPhieuNhapKhoLtRepositoryCustomImpl implements QlPhieuNhapKhoLtRep
 
         List<Object[]> data = query.getResultList();
 
-        List<QlPhieuNhapKhoLtRes> responses = new ArrayList<>();
+        List<NhPhieuNhapKhoRes> responses = new ArrayList<>();
         for (Object[] o : data) {
-            QlPhieuNhapKhoLtRes response = new QlPhieuNhapKhoLtRes();
-            QlPhieuNhapKhoLt phieu = (QlPhieuNhapKhoLt) o[0];
+            NhPhieuNhapKhoRes response = new NhPhieuNhapKhoRes();
+            NhPhieuNhapKho phieu = (NhPhieuNhapKho) o[0];
             Long pktclId = (Long) o[1];
             String soPhieuKtcl = (String) o[2];
             KtNganLo nganLo = o[3] != null ? (KtNganLo) o[3] : null;
@@ -70,7 +70,7 @@ public class QlPhieuNhapKhoLtRepositoryCustomImpl implements QlPhieuNhapKhoLtRep
         return new PageImpl<>(responses, pageable, this.count(req));
     }
 
-    private void thongTinNganLo(QlPhieuNhapKhoLtRes phieu, KtNganLo nganLo) {
+    private void thongTinNganLo(NhPhieuNhapKhoRes phieu, KtNganLo nganLo) {
         if (nganLo != null) {
             phieu.setTenNganLo(nganLo.getTenNganlo());
             KtNganKho nganKho = nganLo.getParent();
@@ -95,7 +95,7 @@ public class QlPhieuNhapKhoLtRepositoryCustomImpl implements QlPhieuNhapKhoLtRep
     }
 
 
-    private void setConditionSearch(QlPhieuNhapKhoLtSearchReq req, StringBuilder builder) {
+    private void setConditionSearch(NhPhieuNhapKhoSearchReq req, StringBuilder builder) {
         builder.append("WHERE 1 = 1 ");
 
         if (!Objects.isNull(req.getSoPhieu())) {
@@ -106,6 +106,20 @@ public class QlPhieuNhapKhoLtRepositoryCustomImpl implements QlPhieuNhapKhoLtRep
         }
         if (req.getDenNgayNhapKho() != null) {
             builder.append("AND ").append("p.ngayNhapKho <= :denNgayNhapKho ");
+        }
+
+        if (req.getTuNgayTaoPhieu() != null) {
+            builder.append("AND ").append("p.ngayTaoPhieu >= :tuNgayTaoPhieu ");
+        }
+        if (req.getDenNgayTaoPhieu() != null) {
+            builder.append("AND ").append("p.ngayTaoPhieu <= :denNgayTaoPhieu ");
+        }
+
+        if (req.getTuNgayGiaoNhan() != null) {
+            builder.append("AND ").append("p.thoiGianGiaoNhan >= :tuNgayGiaoNhan ");
+        }
+        if (req.getDenNgayGiaoNhan() != null) {
+            builder.append("AND ").append("p.thoiGianGiaoNhan <= :denNgayGiaoNhan ");
         }
 
         if (!StringUtils.isEmpty(req.getSoQdNhap())) {
@@ -119,12 +133,16 @@ public class QlPhieuNhapKhoLtRepositoryCustomImpl implements QlPhieuNhapKhoLtRep
         if (!CollectionUtils.isEmpty(req.getTrangThais())) {
             builder.append("AND ").append("p.trangThai IN :trangThais ");
         }
+
+        if (!StringUtils.isEmpty(req.getLoaiVthh())) {
+            builder.append("AND ").append("p.loaiVthh = :loaiVthh ");
+        }
     }
 
     @Override
-    public int count(QlPhieuNhapKhoLtSearchReq req) {
+    public int count(NhPhieuNhapKhoSearchReq req) {
         StringBuilder builder = new StringBuilder();
-        builder.append("SELECT COUNT(p.id) FROM QlPhieuNhapKhoLt p ");
+        builder.append("SELECT COUNT(p.id) FROM NhPhieuNhapKho p ");
         builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON p.qdgnvnxId = nx.id ");
         builder.append("INNER JOIN QlpktclhPhieuKtChatLuong pktcl ON p.phieuKtClId = pktcl.id ");
         builder.append("LEFT JOIN KtNganLo nganLo ON p.maNganLo = nganLo.maNganlo ");
@@ -135,7 +153,7 @@ public class QlPhieuNhapKhoLtRepositoryCustomImpl implements QlPhieuNhapKhoLtRep
         return query.getSingleResult().intValue();
     }
 
-    private void setParameterSearch(QlPhieuNhapKhoLtSearchReq req, Query query) {
+    private void setParameterSearch(NhPhieuNhapKhoSearchReq req, Query query) {
         if (!Objects.isNull(req.getSoPhieu())) {
             query.setParameter("soPhieu", req.getSoPhieu());
         }
@@ -156,6 +174,24 @@ public class QlPhieuNhapKhoLtRepositoryCustomImpl implements QlPhieuNhapKhoLtRep
 
         if (!CollectionUtils.isEmpty(req.getTrangThais())) {
             query.setParameter("trangThais", req.getTrangThais());
+        }
+
+        if (req.getTuNgayTaoPhieu() != null) {
+            query.setParameter("tuNgayTaoPhieu", req.getTuNgayTaoPhieu());
+        }
+        if (req.getDenNgayTaoPhieu() != null) {
+            query.setParameter("denNgayTaoPhieu", req.getDenNgayTaoPhieu());
+        }
+
+        if (req.getTuNgayGiaoNhan() != null) {
+            query.setParameter("tuNgayGiaoNhan", req.getTuNgayGiaoNhan());
+        }
+        if (req.getDenNgayGiaoNhan() != null) {
+            query.setParameter("denNgayGiaoNhan", req.getDenNgayGiaoNhan());
+        }
+
+        if (!StringUtils.isEmpty(req.getLoaiVthh())) {
+            query.setParameter("loaiVthh", req.getLoaiVthh());
         }
     }
 }

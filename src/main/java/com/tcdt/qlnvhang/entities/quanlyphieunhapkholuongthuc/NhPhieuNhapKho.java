@@ -20,13 +20,13 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = QlPhieuNhapKhoLt.TABLE_NAME)
-public class QlPhieuNhapKhoLt  extends BaseEntity implements Serializable {
+@Table(name = NhPhieuNhapKho.TABLE_NAME)
+public class NhPhieuNhapKho extends BaseEntity implements Serializable {
     private static final long serialVersionUID = -1880694858465293452L;
-    public static final String TABLE_NAME = "NH_PHIEU_NHAP_KHO_LT";
+    public static final String TABLE_NAME = "NH_PHIEU_NHAP_KHO";
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PHIEU_NHAP_KHO_LT_SEQ")
-    @SequenceGenerator(sequenceName = "PHIEU_NHAP_KHO_LT_SEQ", allocationSize = 1, name = "PHIEU_NHAP_KHO_LT_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PHIEU_NHAP_KHO_SEQ")
+    @SequenceGenerator(sequenceName = "PHIEU_NHAP_KHO_SEQ", allocationSize = 1, name = "PHIEU_NHAP_KHO_SEQ")
     @Column(name = "ID")
     private Long id;
 
@@ -48,8 +48,8 @@ public class QlPhieuNhapKhoLt  extends BaseEntity implements Serializable {
     @Column(name = "THOI_GIAN_GIAO_NHAN")
     private LocalDateTime thoiGianGiaoNhan;
 
-    @Column(name = "NGAY_LAP")
-    private LocalDate ngayLap;
+    @Column(name = "NGAY_TAO_PHIEU")
+    private LocalDate ngayTaoPhieu;
 
     @Column(name = "TAI_KHOAN_NO")
     private BigDecimal taiKhoanNo;
@@ -108,11 +108,27 @@ public class QlPhieuNhapKhoLt  extends BaseEntity implements Serializable {
     @Column(name = "LY_DO_TU_CHOI")
     private String lyDoTuChoi;
 
+    @Column(name = "SO")
     private Integer so;
+
+    @Column(name = "NAM")
     private Integer nam;
 
+    // Vat tu
+    @Column(name = "HO_SO_KY_THUAT_ID")
+    private Long hoSoKyThuatId;
+
+    @Column(name = "TONG_SO_LUONG")
+    private BigDecimal tongSoLuong;
+
+    @Column(name = "TONG_SO_TIEN")
+    private BigDecimal tongSoTien;
+
+    @Column(name = "LOAI_VTHH")
+    private String loaiVthh;
+
     @Transient
-    private List<QlPhieuNhapKhoHangHoaLt> hangHoaList = new ArrayList<>();
+    private List<NhPhieuNhapKhoCt> hangHoaList = new ArrayList<>();
 
     @Transient
     private List<FileDinhKem> chungTus = new ArrayList<>();

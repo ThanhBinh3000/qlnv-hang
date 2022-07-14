@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,13 +17,12 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class QlPhieuNhapKhoLtReq extends SoBienBanPhieuReq {
+public class NhPhieuNhapKhoReq extends SoBienBanPhieuReq {
 
     private Long id;
 
-    @NotNull(message = "Không được để trống")
     private Long phieuKtClId;
-
+    private Long hoSoKyThuatId;
     private String soPhieu;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -45,8 +45,11 @@ public class QlPhieuNhapKhoLtReq extends SoBienBanPhieuReq {
 
     @NotNull(message = "Không được để trống")
     private Long qdgnvnxId;
+    private BigDecimal tongSoLuong;
+    private BigDecimal tongSoTien;
+    private String loaiVthh;
 
-    private List<QlPhieuNhapKhoHangHoaLtReq> hangHoaList = new ArrayList<>();
+    private List<NhPhieuNhapKhoCtReq> hangHoaList = new ArrayList<>();
 
     private List<FileDinhKemReq> chungTus;
 }

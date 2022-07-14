@@ -117,7 +117,7 @@ public class PathContains {
 	public static final String QL_PHE_DUYET_KQLCNT_VT = "/ql-phe-duyet-kqlcnt-vt";
 
 	// Quản lý phiếu nhập kho lương thực
-	public static final String QL_PHIEU_NHAP_KHO_LT = "/ql-phieu-nhap-kho-lt";
+	public static final String PHIEU_NHAP_KHO = "/phieu-nhap-kho";
 
 	// Quản lý bảng kê cân hàng
 	public static final String QL_BANG_KE_CAN_HANG_LT = "/ql-bang-ke-can-hang-lt";

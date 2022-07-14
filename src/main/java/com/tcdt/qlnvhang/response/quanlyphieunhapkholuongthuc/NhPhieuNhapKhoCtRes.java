@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class QlPhieuNhapKhoHangHoaLtRes {
+public class NhPhieuNhapKhoCtRes {
     private Long id;
     private Integer stt;
     private String maVatTu;
@@ -22,5 +22,5 @@ public class QlPhieuNhapKhoHangHoaLtRes {
     private BigDecimal donGia;
     private BigDecimal thanhTien;
     private String maSo;
-
+    private String vthh;
 }

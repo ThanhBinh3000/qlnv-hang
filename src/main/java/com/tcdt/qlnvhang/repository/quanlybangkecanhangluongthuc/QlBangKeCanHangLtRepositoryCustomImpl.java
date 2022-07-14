@@ -19,7 +19,7 @@ public class QlBangKeCanHangLtRepositoryCustomImpl implements QlBangKeCanHangLtR
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT p, pnk.id, pnk.soPhieu, nganLo, nx.id, nx.soQd, vatTu.ma, vatTu.ten FROM QlBangKeCanHangLt p ");
         builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON p.qdgnvnxId = nx.id ");
-        builder.append("INNER JOIN QlPhieuNhapKhoLt pnk ON p.qlPhieuNhapKhoLtId = pnk.id ");
+        builder.append("INNER JOIN NhPhieuNhapKho pnk ON p.qlPhieuNhapKhoLtId = pnk.id ");
         builder.append("INNER JOIN QlnvDmVattu vatTu ON p.maVatTu = vatTu.ma ");
         builder.append("LEFT JOIN KtNganLo nganLo ON p.maNganLo = nganLo.maNganlo ");
         setConditionSearch(req, builder);
@@ -70,7 +70,7 @@ public class QlBangKeCanHangLtRepositoryCustomImpl implements QlBangKeCanHangLtR
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT COUNT(p.id) FROM QlBangKeCanHangLt p ");
         builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON p.qdgnvnxId = nx.id ");
-        builder.append("INNER JOIN QlPhieuNhapKhoLt pnk ON p.qlPhieuNhapKhoLtId = pnk.id ");
+        builder.append("INNER JOIN NhPhieuNhapKho pnk ON p.qlPhieuNhapKhoLtId = pnk.id ");
         builder.append("INNER JOIN QlnvDmVattu vatTu ON p.maVatTu = vatTu.ma ");
         builder.append("LEFT JOIN KtNganLo nganLo ON p.maNganLo = nganLo.maNganlo ");
         this.setConditionSearch(req, builder);

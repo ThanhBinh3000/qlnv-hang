@@ -2,7 +2,7 @@ package com.tcdt.qlnvhang.service.quanlybangkecanhangluongthuc;
 
 import com.tcdt.qlnvhang.entities.quanlybangkecanhangluongthuc.QlBangKeCanHangLt;
 import com.tcdt.qlnvhang.entities.quanlybangkecanhangluongthuc.QlBangKeChCtLt;
-import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLt;
+import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.NhPhieuNhapKho;
 import com.tcdt.qlnvhang.enums.QlPhieuNhapKhoLtStatus;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
@@ -10,7 +10,7 @@ import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.repository.quanlybangkecanhangluongthuc.QlBangKeCanHangLtRepository;
 import com.tcdt.qlnvhang.repository.quanlybangkecanhangluongthuc.QlBangKeChCtLtRepository;
-import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLtRepository;
+import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -93,7 +93,7 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
     private HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
 
     @Autowired
-    private QlPhieuNhapKhoLtRepository qlPhieuNhapKhoLtRepository;
+    private NhPhieuNhapKhoRepository nhPhieuNhapKhoRepository;
 
     @Autowired
     private QlnvDmVattuRepository qlnvDmVattuRepository;
@@ -164,7 +164,7 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
         response.setTongTrongLuongHangTruBiBangChu(MoneyConvert.docSoLuong(tongTrongLuongHangTruBi.toString(), null));
 
         if (item.getQlPhieuNhapKhoLtId() != null) {
-            QlPhieuNhapKhoLt phieuNhapKho = qlPhieuNhapKhoLtRepository.findById(item.getQlPhieuNhapKhoLtId())
+            NhPhieuNhapKho phieuNhapKho = nhPhieuNhapKhoRepository.findById(item.getQlPhieuNhapKhoLtId())
                     .orElseThrow(() -> new Exception("Không tìm thấy phiếu nhập kho"));
 
             response.setSoPhieuNhapKho(phieuNhapKho.getSoPhieu());

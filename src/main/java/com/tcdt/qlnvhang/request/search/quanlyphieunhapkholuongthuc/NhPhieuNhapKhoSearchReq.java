@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class QlPhieuNhapKhoLtSearchReq extends BaseRequest {
+public class NhPhieuNhapKhoSearchReq extends BaseRequest {
 
     private Long soPhieu;
     private String soQdNhap;
@@ -20,5 +20,15 @@ public class QlPhieuNhapKhoLtSearchReq extends BaseRequest {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate denNgayNhapKho;
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate tuNgayTaoPhieu;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate denNgayTaoPhieu;
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate tuNgayGiaoNhan;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate denNgayGiaoNhan;
+
+    private String loaiVthh;
 }

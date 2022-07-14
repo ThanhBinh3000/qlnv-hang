@@ -3,11 +3,10 @@ package com.tcdt.qlnvhang.controller.quanlyphieunhapkholuongthuc;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLtReq;
-import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongFilterRequestDto;
-import com.tcdt.qlnvhang.request.search.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLtSearchReq;
+import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoReq;
+import com.tcdt.qlnvhang.request.search.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLtService;
+import com.tcdt.qlnvhang.service.quanlyphieunhapkho.NhPhieuNhapKhoService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,19 +26,19 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping(PathContains.QL_PHIEU_NHAP_KHO_LT)
+@RequestMapping(PathContains.PHIEU_NHAP_KHO)
 @Api(tags = "Quản lý phiếu nhập kho lương thực")
-public class QlPhieuNhapKhoLtController {
+public class NhPhieuNhapKhoController {
 
     @Autowired
-    private QlPhieuNhapKhoLtService qlPhieuNhapKhoLtService;
+    private NhPhieuNhapKhoService nhPhieuNhapKhoService;
 
     @ApiOperation(value = "Tạo mới Quản lý phiếu nhập kho lương thực", response = List.class)
     @PostMapping
-    public ResponseEntity<BaseResponse> insert(@Valid @RequestBody QlPhieuNhapKhoLtReq request) {
+    public ResponseEntity<BaseResponse> insert(@Valid @RequestBody NhPhieuNhapKhoReq request) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(qlPhieuNhapKhoLtService.create(request));
+            resp.setData(nhPhieuNhapKhoService.create(request));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -52,10 +51,10 @@ public class QlPhieuNhapKhoLtController {
 
     @ApiOperation(value = "Sửa Quản lý phiếu nhập kho lương thực", response = List.class)
     @PutMapping
-    public ResponseEntity<BaseResponse> update(@Valid @RequestBody QlPhieuNhapKhoLtReq request) {
+    public ResponseEntity<BaseResponse> update(@Valid @RequestBody NhPhieuNhapKhoReq request) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(qlPhieuNhapKhoLtService.update(request));
+            resp.setData(nhPhieuNhapKhoService.update(request));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -71,7 +70,7 @@ public class QlPhieuNhapKhoLtController {
     public ResponseEntity<BaseResponse> detail(@PathVariable Long id) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(qlPhieuNhapKhoLtService.detail(id));
+            resp.setData(nhPhieuNhapKhoService.detail(id));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -87,7 +86,7 @@ public class QlPhieuNhapKhoLtController {
     public ResponseEntity<BaseResponse> delete(@PathVariable Long id) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(qlPhieuNhapKhoLtService.delete(id));
+            resp.setData(nhPhieuNhapKhoService.delete(id));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -103,7 +102,7 @@ public class QlPhieuNhapKhoLtController {
     public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody StatusReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(qlPhieuNhapKhoLtService.updateStatusQd(req));
+            resp.setData(nhPhieuNhapKhoService.updateStatusQd(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -116,10 +115,10 @@ public class QlPhieuNhapKhoLtController {
 
     @ApiOperation(value = "Tra cứu Quản lý phiếu nhập kho lương thực", response = List.class)
     @GetMapping
-    public ResponseEntity<BaseResponse> search(QlPhieuNhapKhoLtSearchReq req) {
+    public ResponseEntity<BaseResponse> search(NhPhieuNhapKhoSearchReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(qlPhieuNhapKhoLtService.search(req));
+            resp.setData(nhPhieuNhapKhoService.search(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -136,7 +135,7 @@ public class QlPhieuNhapKhoLtController {
     public final ResponseEntity<BaseResponse> deleteMultiple(@RequestBody @Valid DeleteReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(qlPhieuNhapKhoLtService.deleteMultiple(req));
+            resp.setData(nhPhieuNhapKhoService.deleteMultiple(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -153,7 +152,7 @@ public class QlPhieuNhapKhoLtController {
     public ResponseEntity<BaseResponse> count() {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(qlPhieuNhapKhoLtService.count());
+            resp.setData(nhPhieuNhapKhoService.count());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -167,7 +166,7 @@ public class QlPhieuNhapKhoLtController {
     @ApiOperation(value = "Export phiếu nhập kho lương thực", response = List.class)
     @PostMapping(value = "/export/list", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody QlPhieuNhapKhoLtSearchReq req) {
+    public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody NhPhieuNhapKhoSearchReq req) {
 
         try {
             response.setContentType("application/octet-stream");
@@ -177,7 +176,7 @@ public class QlPhieuNhapKhoLtController {
             String headerKey = "Content-Disposition";
             String headerValue = "attachment; filename=phieu_nhap_kho_luong_thuc_" + currentDateTime + ".xlsx";
             response.setHeader(headerKey, headerValue);
-            qlPhieuNhapKhoLtService.exportToExcel(req, response);
+            nhPhieuNhapKhoService.exportToExcel(req, response);
         } catch (Exception e) {
             log.error("Error can not export", e);
         }
@@ -188,7 +187,7 @@ public class QlPhieuNhapKhoLtController {
     public ResponseEntity<BaseResponse> getSo() {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(qlPhieuNhapKhoLtService.getSo());
+            resp.setData(nhPhieuNhapKhoService.getSo());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

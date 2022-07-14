@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class QlPhieuNhapKhoHangHoaLtReq {
+public class NhPhieuNhapKhoCtReq {
     private Long id;
 
     @NotNull(message = "Không được để trống")
@@ -36,4 +36,6 @@ public class QlPhieuNhapKhoHangHoaLtReq {
     private BigDecimal soThucNhap;
 
     private String maVatTu;
+
+    private String vthh;
 }

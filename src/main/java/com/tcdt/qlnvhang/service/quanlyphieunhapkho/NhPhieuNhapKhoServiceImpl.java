@@ -1,9 +1,9 @@
-package com.tcdt.qlnvhang.service.quanlyphieunhapkholuongthuc;
+package com.tcdt.qlnvhang.service.quanlyphieunhapkho;
 
 import com.google.common.collect.Sets;
 import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
-import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoHangHoaLt;
-import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLt;
+import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCt;
+import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.NhPhieuNhapKho;
 import com.tcdt.qlnvhang.enums.QdPheDuyetKqlcntVtStatus;
 import com.tcdt.qlnvhang.enums.QlPhieuNhapKhoLtStatus;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
@@ -11,24 +11,25 @@ import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhap
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongRepository;
-import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoHangHoaLtRepository;
-import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLtRepository;
+import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCtRepository;
+import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoHangHoaLtReq;
-import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLtReq;
-import com.tcdt.qlnvhang.request.search.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLtSearchReq;
+import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCtReq;
+import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoReq;
+import com.tcdt.qlnvhang.request.search.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoSearchReq;
 import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
-import com.tcdt.qlnvhang.response.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoHangHoaLtRes;
-import com.tcdt.qlnvhang.response.quanlyphieunhapkholuongthuc.QlPhieuNhapKhoLtRes;
+import com.tcdt.qlnvhang.response.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCtRes;
+import com.tcdt.qlnvhang.response.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganKho;
@@ -64,7 +65,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Log4j2
-public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPhieuNhapKhoLtService {
+public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhieuNhapKhoService {
 
     private static final String SHEET_PHIEU_NHAP_HANG_LUONG_THUC = "Phiếu nhập hàng lương thực";
     private static final String STT = "STT";
@@ -78,10 +79,10 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
     private static final String TRANG_THAI = "Ngăn Lô";
 
     @Autowired
-    private QlPhieuNhapKhoLtRepository qlPhieuNhapKhoLtRepository;
+    private NhPhieuNhapKhoRepository nhPhieuNhapKhoRepository;
 
     @Autowired
-    private QlPhieuNhapKhoHangHoaLtRepository qlPhieuNhapKhoHangHoaLtRepository;
+    private NhPhieuNhapKhoCtRepository nhPhieuNhapKhoCtRepository;
 
     @Autowired
     private QlnvDmVattuRepository qlnvDmVattuRepository;
@@ -100,7 +101,7 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public QlPhieuNhapKhoLtRes create(QlPhieuNhapKhoLtReq req) throws Exception {
+    public NhPhieuNhapKhoRes create(NhPhieuNhapKhoReq req) throws Exception {
         if (req == null)
             return null;
 
@@ -110,32 +111,32 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
 
         this.validateSoPhieu(null, req);
 
-        QlPhieuNhapKhoLt phieu = new QlPhieuNhapKhoLt();
+        NhPhieuNhapKho phieu = new NhPhieuNhapKho();
         BeanUtils.copyProperties(req, phieu, "id");
         phieu.setNgayTao(LocalDate.now());
         phieu.setNguoiTaoId(userInfo.getId());
         phieu.setTrangThai(QlPhieuNhapKhoLtStatus.DU_THAO.getId());
         phieu.setMaDvi(userInfo.getDvql());
         phieu.setCapDvi(userInfo.getCapDvi());
-        qlPhieuNhapKhoLtRepository.save(phieu);
+        nhPhieuNhapKhoRepository.save(phieu);
 
-        List<QlPhieuNhapKhoHangHoaLtReq> hangHoaReqs = req.getHangHoaList();
-        List<QlPhieuNhapKhoHangHoaLt> hangHoaList = this.saveListHangHoa(phieu.getId(), hangHoaReqs, new HashMap<>());
+        List<NhPhieuNhapKhoCtReq> hangHoaReqs = req.getHangHoaList();
+        List<NhPhieuNhapKhoCt> hangHoaList = this.saveListHangHoa(phieu.getId(), hangHoaReqs, new HashMap<>());
         phieu.setHangHoaList(hangHoaList);
 
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getChungTus(), phieu.getId(), QlPhieuNhapKhoLt.TABLE_NAME);
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getChungTus(), phieu.getId(), NhPhieuNhapKho.TABLE_NAME);
         phieu.setChungTus(fileDinhKems);
 
         return this.buildResponse(phieu);
     }
 
-    private List<QlPhieuNhapKhoHangHoaLt> saveListHangHoa(Long phieuNhapKhoId, List<QlPhieuNhapKhoHangHoaLtReq> hangHoaReqs, Map<Long, QlPhieuNhapKhoHangHoaLt> mapHangHoa) throws Exception {
-        List<QlPhieuNhapKhoHangHoaLt> hangHoaList = new ArrayList<>();
-        Set<String> maVatTus = hangHoaReqs.stream().map(QlPhieuNhapKhoHangHoaLtReq::getMaVatTu).collect(Collectors.toSet());
+    private List<NhPhieuNhapKhoCt> saveListHangHoa(Long phieuNhapKhoId, List<NhPhieuNhapKhoCtReq> hangHoaReqs, Map<Long, NhPhieuNhapKhoCt> mapHangHoa) throws Exception {
+        List<NhPhieuNhapKhoCt> hangHoaList = new ArrayList<>();
+        Set<String> maVatTus = hangHoaReqs.stream().map(NhPhieuNhapKhoCtReq::getMaVatTu).collect(Collectors.toSet());
         Set<QlnvDmVattu> qlnvDmVattus = Sets.newHashSet(qlnvDmVattuRepository.findByMaIn(maVatTus));
-        for (QlPhieuNhapKhoHangHoaLtReq req : hangHoaReqs) {
+        for (NhPhieuNhapKhoCtReq req : hangHoaReqs) {
             Long id = req.getId();
-            QlPhieuNhapKhoHangHoaLt hangHoa = new QlPhieuNhapKhoHangHoaLt();
+            NhPhieuNhapKhoCt hangHoa = new NhPhieuNhapKhoCt();
             QlnvDmVattu vatTu = qlnvDmVattus.stream().filter(v -> v.getMa().equals(req.getMaVatTu())).findFirst().orElse(null);
             if (vatTu == null)
                 throw new Exception("Hàng Hóa không tồn tại.");
@@ -148,32 +149,32 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
             }
 
             BeanUtils.copyProperties(req, hangHoa, "id");
-            hangHoa.setQlPhieuNhapKhoLtId(phieuNhapKhoId);
+            hangHoa.setPhieuNkId(phieuNhapKhoId);
             hangHoa.setMaVatTu(req.getMaVatTu());
             hangHoaList.add(hangHoa);
         }
 
         if (!CollectionUtils.isEmpty(hangHoaList))
-            qlPhieuNhapKhoHangHoaLtRepository.saveAll(hangHoaList);
+            nhPhieuNhapKhoCtRepository.saveAll(hangHoaList);
 
         return hangHoaList;
     }
 
-    private QlPhieuNhapKhoLtRes buildResponse(QlPhieuNhapKhoLt phieu) throws Exception {
-        Set<String> maVatTus = phieu.getHangHoaList().stream().map(QlPhieuNhapKhoHangHoaLt::getMaVatTu).collect(Collectors.toSet());
+    private NhPhieuNhapKhoRes buildResponse(NhPhieuNhapKho phieu) throws Exception {
+        Set<String> maVatTus = phieu.getHangHoaList().stream().map(NhPhieuNhapKhoCt::getMaVatTu).collect(Collectors.toSet());
         Set<QlnvDmVattu> qlnvDmVattus = !CollectionUtils.isEmpty(maVatTus) ? Sets.newHashSet(qlnvDmVattuRepository.findByMaIn(maVatTus)) : new HashSet<>();
 
-        QlPhieuNhapKhoLtRes response = new QlPhieuNhapKhoLtRes();
+        NhPhieuNhapKhoRes response = new NhPhieuNhapKhoRes();
         BeanUtils.copyProperties(phieu, response);
         response.setTenTrangThai(QlPhieuNhapKhoLtStatus.getTenById(phieu.getTrangThai()));
         response.setTenTrangThai(QlPhieuNhapKhoLtStatus.getTrangThaiDuyetById(phieu.getTrangThai()));
-        List<QlPhieuNhapKhoHangHoaLt> hangHoaList = phieu.getHangHoaList();
+        List<NhPhieuNhapKhoCt> hangHoaList = phieu.getHangHoaList();
 
         BigDecimal tongSoLuong = BigDecimal.ZERO;
         BigDecimal tongSoTien = BigDecimal.ZERO;
 
-        for (QlPhieuNhapKhoHangHoaLt hangHoa : hangHoaList) {
-            QlPhieuNhapKhoHangHoaLtRes hangHoaRes = new QlPhieuNhapKhoHangHoaLtRes();
+        for (NhPhieuNhapKhoCt hangHoa : hangHoaList) {
+            NhPhieuNhapKhoCtRes hangHoaRes = new NhPhieuNhapKhoCtRes();
             BeanUtils.copyProperties(hangHoa, hangHoaRes);
 
             qlnvDmVattus.stream().filter(v -> v.getMa().equals(hangHoa.getMaVatTu())).findFirst().ifPresent(t -> {
@@ -185,6 +186,14 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
             tongSoTien = tongSoTien.add(Optional.ofNullable(hangHoa.getThanhTien()).orElse(BigDecimal.ZERO));
         }
 
+        Map<String, QlnvDmDonvi> mapDmucDvi = getMapDvi();
+        QlnvDmDonvi qlnvDmDonvi = mapDmucDvi.get(phieu.getMaDvi());
+        if (qlnvDmDonvi == null)
+            throw new Exception("Bad request.");
+
+        response.setMaDvi(qlnvDmDonvi.getMaDvi());
+        response.setTenDvi(qlnvDmDonvi.getTenDvi());
+        response.setMaQhns(qlnvDmDonvi.getMaQhns());
         response.setTongSoLuong(tongSoLuong);
         response.setTongSoTien(tongSoTien);
         response.setTongSoLuongBangChu(MoneyConvert.docSoLuong(tongSoLuong.toString(), null));
@@ -211,13 +220,13 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
         }
 
         this.thongTinNganLo(response, nganLo);
-        response.setChungTus(fileDinhKemService.search(phieu.getId(), Collections.singleton(QlPhieuNhapKhoLt.TABLE_NAME)));
+        response.setChungTus(fileDinhKemService.search(phieu.getId(), Collections.singleton(NhPhieuNhapKho.TABLE_NAME)));
         return response;
     }
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public QlPhieuNhapKhoLtRes update(QlPhieuNhapKhoLtReq req) throws Exception {
+    public NhPhieuNhapKhoRes update(NhPhieuNhapKhoReq req) throws Exception {
         if (req == null)
             return null;
 
@@ -225,29 +234,29 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
         if (userInfo == null)
             throw new Exception("Bad request.");
 
-        Optional<QlPhieuNhapKhoLt> optionalQd = qlPhieuNhapKhoLtRepository.findById(req.getId());
+        Optional<NhPhieuNhapKho> optionalQd = nhPhieuNhapKhoRepository.findById(req.getId());
         if (!optionalQd.isPresent())
             throw new Exception("Phiếu nhập kho không tồn tại.");
 
         this.validateSoPhieu(optionalQd.get(), req);
 
-        QlPhieuNhapKhoLt phieu = optionalQd.get();
+        NhPhieuNhapKho phieu = optionalQd.get();
         BeanUtils.copyProperties(req, phieu, "id");
         phieu.setNgaySua(LocalDate.now());
         phieu.setNguoiSuaId(userInfo.getId());
-        qlPhieuNhapKhoLtRepository.save(phieu);
+        nhPhieuNhapKhoRepository.save(phieu);
 
-        Map<Long, QlPhieuNhapKhoHangHoaLt> mapHangHoa = qlPhieuNhapKhoHangHoaLtRepository.findAllByQlPhieuNhapKhoLtId(phieu.getId())
-                .stream().collect(Collectors.toMap(QlPhieuNhapKhoHangHoaLt::getId, Function.identity()));
+        Map<Long, NhPhieuNhapKhoCt> mapHangHoa = nhPhieuNhapKhoCtRepository.findAllByPhieuNkId(phieu.getId())
+                .stream().collect(Collectors.toMap(NhPhieuNhapKhoCt::getId, Function.identity()));
 
-        List<QlPhieuNhapKhoHangHoaLtReq> hangHoaReqs = req.getHangHoaList();
-        List<QlPhieuNhapKhoHangHoaLt> hangHoaList = this.saveListHangHoa(phieu.getId(), hangHoaReqs, mapHangHoa);
+        List<NhPhieuNhapKhoCtReq> hangHoaReqs = req.getHangHoaList();
+        List<NhPhieuNhapKhoCt> hangHoaList = this.saveListHangHoa(phieu.getId(), hangHoaReqs, mapHangHoa);
         phieu.setHangHoaList(hangHoaList);
 
         if (!CollectionUtils.isEmpty(mapHangHoa.values()))
-            qlPhieuNhapKhoHangHoaLtRepository.deleteAll(mapHangHoa.values());
+            nhPhieuNhapKhoCtRepository.deleteAll(mapHangHoa.values());
 
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getChungTus(), phieu.getId(), QlPhieuNhapKhoLt.TABLE_NAME);
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getChungTus(), phieu.getId(), NhPhieuNhapKho.TABLE_NAME);
         phieu.setChungTus(fileDinhKems);
 
         return this.buildResponse(phieu);
@@ -260,37 +269,37 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
         if (userInfo == null)
             throw new Exception("Bad request.");
 
-        Optional<QlPhieuNhapKhoLt> optional = qlPhieuNhapKhoLtRepository.findById(id);
+        Optional<NhPhieuNhapKho> optional = nhPhieuNhapKhoRepository.findById(id);
         if (!optional.isPresent())
             throw new Exception("Quyết định không tồn tại.");
 
-        QlPhieuNhapKhoLt phieu = optional.get();
+        NhPhieuNhapKho phieu = optional.get();
         if (QdPheDuyetKqlcntVtStatus.DA_DUYET.getId().equals(phieu.getTrangThai())) {
             throw new Exception("Không thể xóa quyết định đã duyệt");
         }
 
-        List<QlPhieuNhapKhoHangHoaLt> hangHoaList = qlPhieuNhapKhoHangHoaLtRepository.findAllByQlPhieuNhapKhoLtId(phieu.getId());
+        List<NhPhieuNhapKhoCt> hangHoaList = nhPhieuNhapKhoCtRepository.findAllByPhieuNkId(phieu.getId());
         if (!CollectionUtils.isEmpty(hangHoaList)) {
-            qlPhieuNhapKhoHangHoaLtRepository.deleteAll(hangHoaList);
+            nhPhieuNhapKhoCtRepository.deleteAll(hangHoaList);
         }
 
-        qlPhieuNhapKhoLtRepository.delete(phieu);
-        fileDinhKemService.delete(phieu.getId(), Collections.singleton(QlPhieuNhapKhoLt.TABLE_NAME));
+        nhPhieuNhapKhoRepository.delete(phieu);
+        fileDinhKemService.delete(phieu.getId(), Collections.singleton(NhPhieuNhapKho.TABLE_NAME));
         return true;
     }
 
     @Override
-    public QlPhieuNhapKhoLtRes detail(Long id) throws Exception {
+    public NhPhieuNhapKhoRes detail(Long id) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null)
             throw new Exception("Bad request.");
 
-        Optional<QlPhieuNhapKhoLt> optional = qlPhieuNhapKhoLtRepository.findById(id);
+        Optional<NhPhieuNhapKho> optional = nhPhieuNhapKhoRepository.findById(id);
         if (!optional.isPresent())
             throw new Exception("Quyết định không tồn tại.");
 
-        QlPhieuNhapKhoLt phieu = optional.get();
-        phieu.setHangHoaList(qlPhieuNhapKhoHangHoaLtRepository.findAllByQlPhieuNhapKhoLtId(phieu.getId()));
+        NhPhieuNhapKho phieu = optional.get();
+        phieu.setHangHoaList(nhPhieuNhapKhoCtRepository.findAllByPhieuNkId(phieu.getId()));
         return this.buildResponse(phieu);
     }
 
@@ -300,15 +309,15 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null)
             throw new Exception("Bad request.");
-        Optional<QlPhieuNhapKhoLt> optional = qlPhieuNhapKhoLtRepository.findById(req.getId());
+        Optional<NhPhieuNhapKho> optional = nhPhieuNhapKhoRepository.findById(req.getId());
         if (!optional.isPresent())
             throw new Exception("Quyết định không tồn tại.");
 
-        QlPhieuNhapKhoLt phieu = optional.get();
+        NhPhieuNhapKho phieu = optional.get();
         return this.updateStatus(req, phieu, userInfo);
     }
 
-    public boolean updateStatus(StatusReq req, QlPhieuNhapKhoLt phieu, UserInfo userInfo) throws Exception {
+    public boolean updateStatus(StatusReq req, NhPhieuNhapKho phieu, UserInfo userInfo) throws Exception {
         String trangThai = phieu.getTrangThai();
         if (QdPheDuyetKqlcntVtStatus.CHO_DUYET.getId().equals(req.getTrangThai())) {
             if (!QdPheDuyetKqlcntVtStatus.MOI_TAO.getId().equals(trangThai))
@@ -336,20 +345,20 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
             throw new Exception("Bad request.");
         }
 
-        qlPhieuNhapKhoLtRepository.save(phieu);
+        nhPhieuNhapKhoRepository.save(phieu);
         return true;
     }
 
     @Override
-    public Page<QlPhieuNhapKhoLtRes> search(QlPhieuNhapKhoLtSearchReq req) throws Exception {
+    public Page<NhPhieuNhapKhoRes> search(NhPhieuNhapKhoSearchReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null)
             throw new Exception("Bad request.");
         this.prepareSearchReq(req, userInfo, req.getCapDvis(), req.getTrangThais());
-        return qlPhieuNhapKhoLtRepository.search(req);
+        return nhPhieuNhapKhoRepository.search(req);
     }
 
-    private void thongTinNganLo(QlPhieuNhapKhoLtRes phieu, KtNganLo nganLo) {
+    private void thongTinNganLo(NhPhieuNhapKhoRes phieu, KtNganLo nganLo) {
         if (nganLo != null) {
             phieu.setTenNganLo(nganLo.getTenNganlo());
             KtNganKho nganKho = nganLo.getParent();
@@ -376,11 +385,11 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
     @Override
     public BaseNhapHangCount count() throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
-        QlPhieuNhapKhoLtSearchReq req = new QlPhieuNhapKhoLtSearchReq();
+        NhPhieuNhapKhoSearchReq req = new NhPhieuNhapKhoSearchReq();
         this.prepareSearchReq(req, userInfo, null, req.getTrangThais());
         BaseNhapHangCount count = new BaseNhapHangCount();
 
-        count.setTatCa(qlPhieuNhapKhoLtRepository.count(req));
+        count.setTatCa(nhPhieuNhapKhoRepository.count(req));
         return count;
     }
 
@@ -393,18 +402,18 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
             return false;
 
 
-        qlPhieuNhapKhoHangHoaLtRepository.deleteByQlPhieuNhapKhoLtIdIn(req.getIds());
-        qlPhieuNhapKhoLtRepository.deleteByIdIn(req.getIds());
-        fileDinhKemService.deleteMultiple(req.getIds(), Collections.singleton(QlPhieuNhapKhoLt.TABLE_NAME));
+        nhPhieuNhapKhoCtRepository.deleteByPhieuNkIdIn(req.getIds());
+        nhPhieuNhapKhoRepository.deleteByIdIn(req.getIds());
+        fileDinhKemService.deleteMultiple(req.getIds(), Collections.singleton(NhPhieuNhapKho.TABLE_NAME));
         return true;
     }
 
     @Override
-    public boolean exportToExcel(QlPhieuNhapKhoLtSearchReq objReq, HttpServletResponse response) throws Exception {
+    public boolean exportToExcel(NhPhieuNhapKhoSearchReq objReq, HttpServletResponse response) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         this.prepareSearchReq(objReq, userInfo, objReq.getCapDvis(), objReq.getTrangThais());
         objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
-        List<QlPhieuNhapKhoLtRes> list = this.search(objReq).get().collect(Collectors.toList());
+        List<NhPhieuNhapKhoRes> list = this.search(objReq).get().collect(Collectors.toList());
 
         if (CollectionUtils.isEmpty(list))
             return true;
@@ -442,7 +451,7 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
             Row row;
             int startRowIndex = 1;
 
-            for (QlPhieuNhapKhoLtRes item : list) {
+            for (NhPhieuNhapKhoRes item : list) {
                 row = sheet.createRow(startRowIndex);
                 ExportExcel.createCell(row, 0, startRowIndex, style, sheet);
                 ExportExcel.createCell(row, 1, item.getSoPhieu(), style, sheet);
@@ -467,14 +476,14 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
         return true;
     }
 
-    private void validateSoPhieu(QlPhieuNhapKhoLt update, QlPhieuNhapKhoLtReq req) throws Exception {
+    private void validateSoPhieu(NhPhieuNhapKho update, NhPhieuNhapKhoReq req) throws Exception {
         String so = req.getSoPhieu();
         if (!StringUtils.hasText(so))
             return;
 
         if (update == null || (StringUtils.hasText(update.getSoPhieu()) && !update.getSoPhieu().equalsIgnoreCase(so))) {
-            Optional<QlPhieuNhapKhoLt> optional = qlPhieuNhapKhoLtRepository.findFirstBySoPhieu(so);
-            Long updateId = Optional.ofNullable(update).map(QlPhieuNhapKhoLt::getId).orElse(null);
+            Optional<NhPhieuNhapKho> optional = nhPhieuNhapKhoRepository.findFirstBySoPhieu(so);
+            Long updateId = Optional.ofNullable(update).map(NhPhieuNhapKho::getId).orElse(null);
             if (optional.isPresent() && !optional.get().getId().equals(updateId))
                 throw new Exception("Số phiếu " + so + " đã tồn tại");
         }
@@ -483,7 +492,7 @@ public class QlPhieuNhapKhoLtServiceImpl extends BaseServiceImpl implements QlPh
     @Override
     public SoBienBanPhieuRes getSo() throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
-        Integer so = qlPhieuNhapKhoLtRepository.findMaxSo(userInfo.getDvql(), LocalDate.now().getYear());
+        Integer so = nhPhieuNhapKhoRepository.findMaxSo(userInfo.getDvql(), LocalDate.now().getYear());
         so = Optional.ofNullable(so).orElse(0);
         so = so + 1;
         return new SoBienBanPhieuRes(so, LocalDate.now().getYear());

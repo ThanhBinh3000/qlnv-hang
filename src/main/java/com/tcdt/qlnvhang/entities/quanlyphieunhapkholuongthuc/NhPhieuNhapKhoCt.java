@@ -12,20 +12,20 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "NH_PHIEU_NHAP_KHO_LT_CT")
-public class QlPhieuNhapKhoHangHoaLt implements Serializable {
+@Table(name = "NH_PHIEU_NHAP_KHO_CT")
+public class NhPhieuNhapKhoCt implements Serializable {
     private static final long serialVersionUID = 3529822360093876437L;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PHIEU_NHAP_KHO_LT_CT_SEQ")
-    @SequenceGenerator(sequenceName = "PHIEU_NHAP_KHO_LT_CT_SEQ", allocationSize = 1, name = "PHIEU_NHAP_KHO_LT_CT_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PHIEU_NHAP_KHO_CT_SEQ")
+    @SequenceGenerator(sequenceName = "PHIEU_NHAP_KHO_CT_SEQ", allocationSize = 1, name = "PHIEU_NHAP_KHO_CT_SEQ")
     @Column(name = "ID")
     private Long id;
 
     @Column(name = "STT")
     private Integer stt;
 
-    @Column(name = "QL_PHIEU_NHAP_KHO_LT_ID")
-    private Long qlPhieuNhapKhoLtId;
+    @Column(name = "PHIEU_NK_ID")
+    private Long phieuNkId;
 
     @Column(name = "MA_SO")
     private String maSo;
@@ -47,4 +47,8 @@ public class QlPhieuNhapKhoHangHoaLt implements Serializable {
 
     @Column(name = "THANH_TIEN")
     private BigDecimal thanhTien;
+
+    @Column(name = "VTHH")
+    private String vthh;
+
 }
