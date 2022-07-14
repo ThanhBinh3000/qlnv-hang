@@ -1,6 +1,7 @@
-package com.tcdt.qlnvhang.repository.vattu.bangke;
+package com.tcdt.qlnvhang.repository.vattu.bienbanketthucnhapkho;
 
 import com.tcdt.qlnvhang.request.search.vattu.bangke.NhBangKeVtSearchReq;
+import com.tcdt.qlnvhang.request.search.vattu.bienbanketthucnhapkho.NhBbKtNhapKhoVtSearchReq;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -12,18 +13,16 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-public class NhBangKeVtRepositoryCustomImpl implements NhBangKeVtRepositoryCustom {
-
+public class NhBbKtNhapKhoVtRepositoryCustomImpl implements NhBbKtNhapKhoVtRepositoryCustom{
     @PersistenceContext
     private EntityManager em;
 
     @Override
-    public List<Object[]> search(NhBangKeVtSearchReq req) {
+    public List<Object[]> search(NhBbKtNhapKhoVtSearchReq req) {
         StringBuilder builder = new StringBuilder();
-        builder.append("SELECT p, nx.id, nx.soQd, nganLo FROM NhBangKeVt p ");
+        builder.append("SELECT p, nx.id, nx.soQd, nganLo FROM NhBbKtNhapKhoVt p ");
         builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON p.qdgnvnxId = nx.id ");
-        builder.append("INNER JOIN NhPhieuNhapKhoVt phieuNhapKho ON p.phieuNhapKhoId = phieuNhapKho.id ");
-        builder.append("LEFT JOIN KtNganLo nganLo ON phieuNhapKho.maNganLo = nganLo.maNganlo ");
+        builder.append("LEFT JOIN KtNganLo nganLo ON p.maNganLo = nganLo.maNganlo ");
         setConditionSearch(req, builder);
         builder.append("ORDER BY p.id DESC");
 
@@ -40,18 +39,25 @@ public class NhBangKeVtRepositoryCustomImpl implements NhBangKeVtRepositoryCusto
     }
 
 
-    private void setConditionSearch(NhBangKeVtSearchReq req, StringBuilder builder) {
+    private void setConditionSearch(NhBbKtNhapKhoVtSearchReq req, StringBuilder builder) {
         builder.append("WHERE 1 = 1 ");
 
-        if (!StringUtils.isEmpty(req.getSoBangKe())) {
-            builder.append("AND ").append("p.soBangKe LIKE :soBangKe ");
+        if (!StringUtils.isEmpty(req.getSoBienBan())) {
+            builder.append("AND ").append("p.soBienBan LIKE :soBienBan ");
         }
 
-        if (req.getNgayTaoBangKeTu() != null) {
-            builder.append("AND ").append("p.ngayTao >= :ngayTaoBangKeTu ");
+        if (req.getNgayNhapDayKhoTu() != null) {
+            builder.append("AND ").append("p.ngayNhapDayKho >= :ngayNhapDayKhoTu ");
         }
-        if (req.getNgayTaoBangKeDen() != null) {
-            builder.append("AND ").append("p.ngayTao <= :ngayTaoBangKeDen ");
+        if (req.getNgayNhapDayKhoDen() != null) {
+            builder.append("AND ").append("p.ngayNhapDayKho <= :ngayNhapDayKhoDen ");
+        }
+
+        if (req.getNgayKetThucTu() != null) {
+            builder.append("AND ").append("p.ngayKetThucNhap >= :ngayKetThucTu ");
+        }
+        if (req.getNgayKetThucDen() != null) {
+            builder.append("AND ").append("p.ngayKetThucNhap <= :ngayKetThucDen ");
         }
 
         if (!StringUtils.isEmpty(req.getSoQdNhap())) {
@@ -72,12 +78,11 @@ public class NhBangKeVtRepositoryCustomImpl implements NhBangKeVtRepositoryCusto
     }
 
     @Override
-    public int count(NhBangKeVtSearchReq req) {
+    public int count(NhBbKtNhapKhoVtSearchReq req) {
         StringBuilder builder = new StringBuilder();
-        builder.append("SELECT COUNT(DISTINCT p.id) FROM NhBangKeVt p ");
+        builder.append("SELECT COUNT(DISTINCT p.id) FROM NhBbKtNhapKhoVt p ");
         builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON p.qdgnvnxId = nx.id ");
-        builder.append("INNER JOIN NhPhieuNhapKhoVt phieuNhapKho ON p.phieuNhapKhoId = phieuNhapKho.id ");
-        builder.append("LEFT JOIN KtNganLo nganLo ON phieuNhapKho.maNganLo = nganLo.maNganlo ");
+        builder.append("LEFT JOIN KtNganLo nganLo ON p.maNganLo = nganLo.maNganlo ");
 
         this.setConditionSearch(req, builder);
         TypedQuery<Long> query = em.createQuery(builder.toString(), Long.class);
@@ -85,17 +90,25 @@ public class NhBangKeVtRepositoryCustomImpl implements NhBangKeVtRepositoryCusto
         return query.getSingleResult().intValue();
     }
 
-    private void setParameterSearch(NhBangKeVtSearchReq req, Query query) {
-        if (!StringUtils.isEmpty(req.getSoBangKe())) {
-            query.setParameter("soBangKe", "%" + req.getSoBangKe() + "%");
+    private void setParameterSearch(NhBbKtNhapKhoVtSearchReq req, Query query) {
+        if (!StringUtils.isEmpty(req.getSoBienBan())) {
+            query.setParameter("soBienBan", "%" + req.getSoBienBan() + "%");
         }
 
-        if (req.getNgayTaoBangKeTu() != null) {
-            query.setParameter("ngayTaoBangKeTu", req.getNgayTaoBangKeTu());
+        if (req.getNgayNhapDayKhoTu() != null) {
+            query.setParameter("ngayNhapDayKhoTu", req.getNgayNhapDayKhoTu());
         }
 
-        if (req.getNgayTaoBangKeDen() != null) {
-            query.setParameter("ngayTaoBangKeDen", req.getNgayTaoBangKeDen());
+        if (req.getNgayNhapDayKhoDen() != null) {
+            query.setParameter("ngayNhapDayKhoDen", req.getNgayNhapDayKhoDen());
+        }
+
+        if (req.getNgayNhapDayKhoTu() != null) {
+            query.setParameter("ngayKetThucTu", req.getNgayKetThucTu());
+        }
+
+        if (req.getNgayKetThucDen() != null) {
+            query.setParameter("ngayKetThucDen", req.getNgayKetThucDen());
         }
 
         if (!StringUtils.isEmpty(req.getSoQdNhap())) {
