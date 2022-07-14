@@ -48,7 +48,7 @@ public class BienBanBanGiaoMau extends BaseEntity implements Serializable {
 
 	private Integer so;
 	private Integer nam;
-
+	private String loaiVthh;
 	@Transient
 	private List<BienBanBanGiaoMauCt> chiTiets = new ArrayList<>();
 }

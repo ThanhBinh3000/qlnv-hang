@@ -17,4 +17,5 @@ public class BienBanBanGiaoMauSearchReq extends BaseRequest {
 	private String soBienBan;
 	private String soHopDong;
 	private String maVatTuCha;
+	private String loaiVthh;
 }

@@ -289,7 +289,7 @@ public class BienBanBanGiaoMauServiceImpl extends BaseServiceImpl implements Bie
 		QlnvDmDonvi donvi = getDviByMa(item.getMaDvi(), req);
 		res.setMaDvi(donvi.getMaDvi());
 		res.setTenDvi(donvi.getTenDvi());
-
+		res.setMaQhns(donvi.getMaQhns());
 		Set<String> maVatTus = Stream.of(item.getMaVatTu(), item.getMaVatTuCha()).collect(Collectors.toSet());
 		if (!CollectionUtils.isEmpty(maVatTus)) {
 			Set<QlnvDmVattu> vatTus = qlnvDmVattuRepository.findByMaIn(maVatTus.stream().filter(Objects::nonNull).collect(Collectors.toSet()));
