@@ -22,7 +22,7 @@ public class NhBangKeVtRepositoryCustomImpl implements NhBangKeVtRepositoryCusto
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT p, nx.id, nx.soQd, nganLo FROM NhBangKeVt p ");
         builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON p.qdgnvnxId = nx.id ");
-        builder.append("INNER JOIN NhPhieuNhapKhoVt phieuNhapKho ON p.phieuNhapKhoId = phieuNhapKho.id ");
+        builder.append("INNER JOIN NhPhieuNhapKho phieuNhapKho ON p.phieuNhapKhoId = phieuNhapKho.id ");
         builder.append("LEFT JOIN KtNganLo nganLo ON phieuNhapKho.maNganLo = nganLo.maNganlo ");
         setConditionSearch(req, builder);
         builder.append("ORDER BY p.id DESC");
@@ -76,7 +76,7 @@ public class NhBangKeVtRepositoryCustomImpl implements NhBangKeVtRepositoryCusto
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT COUNT(DISTINCT p.id) FROM NhBangKeVt p ");
         builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON p.qdgnvnxId = nx.id ");
-        builder.append("INNER JOIN NhPhieuNhapKhoVt phieuNhapKho ON p.phieuNhapKhoId = phieuNhapKho.id ");
+        builder.append("INNER JOIN NhPhieuNhapKho phieuNhapKho ON p.phieuNhapKhoId = phieuNhapKho.id ");
         builder.append("LEFT JOIN KtNganLo nganLo ON phieuNhapKho.maNganLo = nganLo.maNganlo ");
 
         this.setConditionSearch(req, builder);

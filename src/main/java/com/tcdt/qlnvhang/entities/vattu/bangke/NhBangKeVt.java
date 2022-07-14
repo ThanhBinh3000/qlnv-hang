@@ -31,7 +31,7 @@ public class NhBangKeVt extends BaseEntity implements Serializable {
     private String soBangKe;
 
     @Column(name = "PHIEU_NHAP_KHO_ID")
-    private Long phieuNhapKhoId;// NH_PHIEU_NHAP_KHO_VT
+    private Long phieuNhapKhoId;// NH_PHIEU_NHAP_KHO
 
     @Column(name = "MA_VAT_TU_CHA")
     private String maVatTuCha;

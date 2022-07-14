@@ -1,13 +1,13 @@
 package com.tcdt.qlnvhang.service.vattu.bangke;
 
+import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.NhPhieuNhapKho;
 import com.tcdt.qlnvhang.entities.vattu.bangke.NhBangKeVt;
 import com.tcdt.qlnvhang.entities.vattu.bangke.NhBangKeVtCt;
-import com.tcdt.qlnvhang.entities.vattu.phieunhapkho.NhPhieuNhapKhoVt;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
+import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.vattu.bangke.NhBangKeVtCtRepository;
 import com.tcdt.qlnvhang.repository.vattu.bangke.NhBangKeVtRepository;
-import com.tcdt.qlnvhang.repository.vattu.phieunhapkho.NhPhieuNhapKhoVtRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -58,7 +58,7 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
     private final NhBangKeVtRepository bangKeVtRepository;
     private final NhBangKeVtCtRepository bangKeVtCtRepository;
     private final HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
-    private final NhPhieuNhapKhoVtRepository phieuNhapKhoVtRepository;
+    private final NhPhieuNhapKhoRepository phieuNhapKhoRepository;
 
     private static final String SHEET_BANG_KE_VAT_TU = "Bảng kê vật tư";
     private static final String STT = "STT";
@@ -142,11 +142,11 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
         }
 
         if (item.getPhieuNhapKhoId() != null) {
-            Optional<NhPhieuNhapKhoVt> phieuNhapKhoVt = phieuNhapKhoVtRepository.findById(item.getPhieuNhapKhoId());
-            if (!phieuNhapKhoVt.isPresent()) {
-                throw new Exception("Không tìm thấy hồ sơ kỹ thuật");
+            Optional<NhPhieuNhapKho> phieuNhapKho = phieuNhapKhoRepository.findById(item.getPhieuNhapKhoId());
+            if (!phieuNhapKho.isPresent()) {
+                throw new Exception("Không tìm thấy phiếu nhập kho");
             }
-            res.setSoPhieuNhapKho(phieuNhapKhoVt.get().getSoPhieu());
+            res.setSoPhieuNhapKho(phieuNhapKho.get().getSoPhieu());
         }
         return res;
     }

@@ -32,7 +32,7 @@ public class QlBangKeCanHangLt extends BaseEntity implements Serializable {
     private Long qdgnvnxId;
 
     @Column(name = "QL_PHIEU_NHAP_KHO_LT_ID")
-    private Long qlPhieuNhapKhoLtId;
+    private Long qlPhieuNhapKhoLtId; // NH_PHIEU_NHAP_KHO
 
     @Column(name = "SO_BANG_KE")
     private String soBangKe;
