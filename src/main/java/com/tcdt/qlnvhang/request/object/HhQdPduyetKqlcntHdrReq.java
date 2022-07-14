@@ -60,7 +60,7 @@ public class HhQdPduyetKqlcntHdrReq {
 
 	Long idGoiThau;
 
-	Boolean trungThau;
+	Integer trungThau;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayHluc;
