@@ -60,6 +60,10 @@ public class BienBanLayMau extends BaseEntity implements Serializable  {
 	private Integer so;
 	private Integer nam;
 
+	// Vat tu
+	private Long bbGuiHangId;
+	private String loaiVthh;
+
 	@Transient
 	private List<BienBanLayMauCt> chiTiets = new ArrayList<>();
 }

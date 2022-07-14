@@ -4,8 +4,8 @@ import com.google.common.collect.Sets;
 import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCt;
 import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.NhPhieuNhapKho;
+import com.tcdt.qlnvhang.entities.vattu.hosokythuat.NhHoSoKyThuat;
 import com.tcdt.qlnvhang.enums.QdPheDuyetKqlcntVtStatus;
-import com.tcdt.qlnvhang.enums.QlPhieuNhapKhoLtStatus;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
@@ -13,6 +13,7 @@ import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongRepository;
 import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCtRepository;
 import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoRepository;
+import com.tcdt.qlnvhang.repository.vattu.hosokythuat.NhHoSoKyThuatRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -99,6 +100,9 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
     @Autowired
     private HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
 
+    @Autowired
+    private NhHoSoKyThuatRepository nhHoSoKyThuatRepository;
+
     @Override
     @Transactional(rollbackOn = Exception.class)
     public NhPhieuNhapKhoRes create(NhPhieuNhapKhoReq req) throws Exception {
@@ -115,7 +119,7 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
         BeanUtils.copyProperties(req, phieu, "id");
         phieu.setNgayTao(LocalDate.now());
         phieu.setNguoiTaoId(userInfo.getId());
-        phieu.setTrangThai(QlPhieuNhapKhoLtStatus.DU_THAO.getId());
+        phieu.setTrangThai(TrangThaiEnum.DU_THAO.getId());
         phieu.setMaDvi(userInfo.getDvql());
         phieu.setCapDvi(userInfo.getCapDvi());
         nhPhieuNhapKhoRepository.save(phieu);
@@ -166,8 +170,8 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
 
         NhPhieuNhapKhoRes response = new NhPhieuNhapKhoRes();
         BeanUtils.copyProperties(phieu, response);
-        response.setTenTrangThai(QlPhieuNhapKhoLtStatus.getTenById(phieu.getTrangThai()));
-        response.setTenTrangThai(QlPhieuNhapKhoLtStatus.getTrangThaiDuyetById(phieu.getTrangThai()));
+        response.setTenTrangThai(TrangThaiEnum.getTenById(phieu.getTrangThai()));
+        response.setTenTrangThai(TrangThaiEnum.getTrangThaiDuyetById(phieu.getTrangThai()));
         List<NhPhieuNhapKhoCt> hangHoaList = phieu.getHangHoaList();
 
         BigDecimal tongSoLuong = BigDecimal.ZERO;
@@ -204,6 +208,13 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
                     .orElseThrow(() -> new Exception("Không tìm thấy phiếu kiểm tra chất lượng"));
 
             response.setSoPhieuKtCl(phieuKtChatLuong.getSoPhieu());
+        }
+
+        if (phieu.getHoSoKyThuatId() != null) {
+            NhHoSoKyThuat hskt = nhHoSoKyThuatRepository.findById(phieu.getHoSoKyThuatId())
+                    .orElseThrow(() -> new Exception("Không tìm thấy biên bản hồ sơ kỹ thuật"));
+
+            response.setSoBbHoSoKyThuat(hskt.getSoBienBan());
         }
 
         if (phieu.getQdgnvnxId() != null) {

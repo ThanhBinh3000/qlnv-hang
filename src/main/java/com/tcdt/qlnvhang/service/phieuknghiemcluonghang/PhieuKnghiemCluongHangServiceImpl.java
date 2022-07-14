@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.service.phieuknghiemcluonghang;
 
 import com.tcdt.qlnvhang.entities.bbanlaymau.BienBanBanGiaoMau;
 import com.tcdt.qlnvhang.entities.phieuknghiemcluonghang.PhieuKnghiemCluongHang;
-import com.tcdt.qlnvhang.enums.QlPhieuNhapKhoLtStatus;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.bbanbangiaomau.BienBanBanGiaoMauRepository;
@@ -125,8 +124,8 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 			LocalDate ngayBanGiaoMau = (LocalDate) o[6];
 
 			BeanUtils.copyProperties(item, response);
-			response.setTenTrangThai(QlPhieuNhapKhoLtStatus.getTenById(item.getTrangThai()));
-			response.setTrangThaiDuyet(QlPhieuNhapKhoLtStatus.getTrangThaiDuyetById(item.getTrangThai()));
+			response.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
+			response.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
 			this.thongTinNganLo(response, nganLo);
 			response.setQdgnvnxId(qdNhapId);
 			response.setSoQuyetDinhNhap(soQdNhap);

@@ -3,7 +3,6 @@ package com.tcdt.qlnvhang.service.quanlybangkecanhangluongthuc;
 import com.tcdt.qlnvhang.entities.quanlybangkecanhangluongthuc.QlBangKeCanHangLt;
 import com.tcdt.qlnvhang.entities.quanlybangkecanhangluongthuc.QlBangKeChCtLt;
 import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.NhPhieuNhapKho;
-import com.tcdt.qlnvhang.enums.QlPhieuNhapKhoLtStatus;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
@@ -359,8 +358,8 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
             String maVatTu = (String) o[6];
             String tenVatTu = (String) o[7];
             BeanUtils.copyProperties(item, response);
-            response.setTenTrangThai(QlPhieuNhapKhoLtStatus.getTenById(item.getTrangThai()));
-            response.setTrangThaiDuyet(QlPhieuNhapKhoLtStatus.getTrangThaiDuyetById(item.getTrangThai()));
+            response.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
+            response.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
             response.setQlPhieuNhapKhoLtId(pnkId);
             response.setSoPhieuNhapKho(soPnk);
             this.thongTinNganLo(response, nganLo);

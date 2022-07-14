@@ -3,8 +3,8 @@ package com.tcdt.qlnvhang.service.bbanlaymau;
 import com.tcdt.qlnvhang.entities.bbanlaymau.BienBanLayMau;
 import com.tcdt.qlnvhang.entities.bbanlaymau.BienBanLayMauCt;
 import com.tcdt.qlnvhang.entities.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLt;
+import com.tcdt.qlnvhang.entities.vattu.bienbanguihang.NhBienBanGuiHang;
 import com.tcdt.qlnvhang.enums.HhBbNghiemthuKlstStatusEnum;
-import com.tcdt.qlnvhang.enums.QlPhieuNhapKhoLtStatus;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
@@ -13,6 +13,7 @@ import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.repository.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
+import com.tcdt.qlnvhang.repository.vattu.bienbanguihang.NhBienBanGuiHangRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -103,6 +104,9 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 	@Autowired
 	private QlBienBanNhapDayKhoLtRepository qlBienBanNhapDayKhoLtRepository;
 
+	@Autowired
+	private NhBienBanGuiHangRepository nhBienBanGuiHangRepository;
+
 	@Override
 	public Page<BienBanLayMauRes> search(BienBanLayMauSearchReq req) throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
@@ -123,8 +127,8 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 			String soBbNhapDayKho = (String) o[7];
 
 			BeanUtils.copyProperties(item, response);
-			response.setTenTrangThai(QlPhieuNhapKhoLtStatus.getTenById(item.getTrangThai()));
-			response.setTrangThaiDuyet(QlPhieuNhapKhoLtStatus.getTrangThaiDuyetById(item.getTrangThai()));
+			response.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
+			response.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
 			response.setQdgnvnxId(qdNhapId);
 			response.setSoQuyetDinhNhap(soQdNhap);
 			response.setHopDongId(hopDongId);
@@ -308,7 +312,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 		QlnvDmDonvi donvi = getDviByMa(item.getMaDvi(), req);
 		res.setMaDvi(donvi.getMaDvi());
 		res.setTenDvi(donvi.getTenDvi());
-
+		res.setMaQhns(donvi.getMaQhns());
 		Set<String> maVatTus = Stream.of(item.getMaVatTu(), item.getMaVatTuCha()).collect(Collectors.toSet());
 		if (!CollectionUtils.isEmpty(maVatTus)) {
 			Set<QlnvDmVattu> vatTus = qlnvDmVattuRepository.findByMaIn(maVatTus.stream().filter(Objects::nonNull).collect(Collectors.toSet()));
@@ -347,6 +351,14 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 				KtNganLo nganLo = ktNganLoRepository.findFirstByMaNganlo(bbNhapDayKho.get().getMaNganLo());
 				this.thongTinNganLo(res, nganLo);
 			}
+		}
+
+		if (item.getBbGuiHangId() != null) {
+			Optional<NhBienBanGuiHang> bbGuiHang = nhBienBanGuiHangRepository.findById(item.getBbGuiHangId());
+			if (!bbGuiHang.isPresent())
+				throw new Exception("Biên bản gửi hàng không tồn tại");
+
+			res.setSoBbGuiHang(bbGuiHang.get().getSoBienBan());
 		}
 
 		List<BienBanLayMauCtRes> chiTiets = item.getChiTiets().stream().map(BienBanLayMauCtRes::new).collect(Collectors.toList());

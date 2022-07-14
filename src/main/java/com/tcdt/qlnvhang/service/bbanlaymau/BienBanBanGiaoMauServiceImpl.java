@@ -3,7 +3,6 @@ package com.tcdt.qlnvhang.service.bbanlaymau;
 import com.tcdt.qlnvhang.entities.bbanlaymau.BienBanBanGiaoMau;
 import com.tcdt.qlnvhang.entities.bbanlaymau.BienBanBanGiaoMauCt;
 import com.tcdt.qlnvhang.entities.bbanlaymau.BienBanLayMau;
-import com.tcdt.qlnvhang.enums.QlPhieuNhapKhoLtStatus;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.bbanbangiaomau.BienBanBanGiaoMauCtRepository;
@@ -105,8 +104,8 @@ public class BienBanBanGiaoMauServiceImpl extends BaseServiceImpl implements Bie
 			String soBbLayMau = (String) o[4];
 
 			BeanUtils.copyProperties(item, response);
-			response.setTenTrangThai(QlPhieuNhapKhoLtStatus.getTenById(item.getTrangThai()));
-			response.setTrangThaiDuyet(QlPhieuNhapKhoLtStatus.getTrangThaiDuyetById(item.getTrangThai()));
+			response.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
+			response.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
 			response.setQdgnvnxId(qdNhapId);
 			response.setSoQuyetDinhNhap(soQdNhap);
 			response.setBbLayMauId(bbLayMauId);

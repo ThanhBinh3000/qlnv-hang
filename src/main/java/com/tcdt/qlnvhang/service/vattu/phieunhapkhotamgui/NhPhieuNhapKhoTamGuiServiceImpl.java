@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.service.vattu.phieunhapkhotamgui;
 
 import com.tcdt.qlnvhang.entities.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGui;
 import com.tcdt.qlnvhang.entities.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiCt;
-import com.tcdt.qlnvhang.enums.QlPhieuNhapKhoLtStatus;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
@@ -275,8 +274,8 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
             String soQdNhap = (String) o[2];
             KtNganLo nganLo = o[3] != null ? (KtNganLo) o[3] : null;
             BeanUtils.copyProperties(item, response);
-            response.setTenTrangThai(QlPhieuNhapKhoLtStatus.getTenById(item.getTrangThai()));
-            response.setTrangThaiDuyet(QlPhieuNhapKhoLtStatus.getTrangThaiDuyetById(item.getTrangThai()));
+            response.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
+            response.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
             response.setQdgnvnxId(qdNhapId);
             response.setSoQuyetDinhNhap(soQdNhap);
             this.thongTinNganLo(response, nganLo);
