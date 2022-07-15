@@ -82,7 +82,7 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 
 		phieu.setSo(getSo());
 		phieu.setNam(LocalDate.now().getYear());
-		phieu.setSoPhieu(String.format("%s/%s/%s-%s", phieu.getSo(), phieu.getNam(), "PKTCL", userInfo.getMaPBb()));
+		phieu.setSoPhieu(String.format("%s/%s/%s-%s", phieu.getSo(), phieu.getNam(), "PKTCL", userInfo.getMaPbb()));
 		phieu = qlpktclhPhieuKtChatLuongRepo.save(phieu);
 
 		//Kết quả kiểm tra

@@ -88,7 +88,7 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
         item.setCapDvi(userInfo.getCapDvi());
         item.setSo(getSo());
         item.setNam(LocalDate.now().getYear());
-        item.setSoPhieu(String.format("%s/%s/%s-%s", item.getSo(), item.getNam(), "PTG", userInfo.getMaPBb()));
+        item.setSoPhieu(String.format("%s/%s/%s-%s", item.getSo(), item.getNam(), "PTG", userInfo.getMaPbb()));
         nhPhieuNhapKhoTamGuiRepository.save(item);
 
         List<NhPhieuNhapKhoTamGuiCt> chiTiets = this.saveListChiTiet(item.getId(), req.getChiTiets(), new HashMap<>());

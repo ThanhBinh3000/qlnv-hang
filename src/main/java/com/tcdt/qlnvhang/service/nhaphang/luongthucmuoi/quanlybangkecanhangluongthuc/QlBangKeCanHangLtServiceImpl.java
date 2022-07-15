@@ -126,7 +126,7 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
         item.setCapDvi(userInfo.getCapDvi());
         item.setSo(getSo());
         item.setNam(LocalDate.now().getYear());
-        item.setSoBangKe(String.format("%s/%s/%s-%s", item.getSo(), item.getNam(), "BKCH", userInfo.getMaPBb()));
+        item.setSoBangKe(String.format("%s/%s/%s-%s", item.getSo(), item.getNam(), "BKCH", userInfo.getMaPbb()));
         qlBangKeCanHangLtRepository.save(item);
 
         List<QlBangKeChCtLtReq> chiTietReqs = req.getChiTiets();

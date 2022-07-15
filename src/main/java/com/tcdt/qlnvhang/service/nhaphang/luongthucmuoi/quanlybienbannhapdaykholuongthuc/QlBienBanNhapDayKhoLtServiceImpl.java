@@ -113,7 +113,7 @@ public class QlBienBanNhapDayKhoLtServiceImpl extends BaseServiceImpl implements
         item.setCapDvi(userInfo.getCapDvi());
         item.setSo(getSo());
         item.setNam(LocalDate.now().getYear());
-        item.setSoBienBan(String.format("%s/%s/%s-%s", item.getSo(), item.getNam(), "BBDK", userInfo.getMaPBb()));
+        item.setSoBienBan(String.format("%s/%s/%s-%s", item.getSo(), item.getNam(), "BBDK", userInfo.getMaPbb()));
         qlBienBanNhapDayKhoLtRepository.save(item);
 
         List<QlBienBanNdkCtLt> chiTiets = this.saveListChiTiet(item.getId(), req.getChiTiets(), new HashMap<>());

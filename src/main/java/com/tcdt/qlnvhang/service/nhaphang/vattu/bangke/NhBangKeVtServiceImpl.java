@@ -85,7 +85,7 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
         item.setCapDvi(userInfo.getCapDvi());
         item.setSo(getSo());
         item.setNam(LocalDate.now().getYear());
-        item.setSoBangKe(String.format("%s/%s/%s-%s", item.getSo(), item.getNam(), "BKNVT", userInfo.getMaPBb()));
+        item.setSoBangKe(String.format("%s/%s/%s-%s", item.getSo(), item.getNam(), "BKNVT", userInfo.getMaPbb()));
         bangKeVtRepository.save(item);
 
         List<NhBangKeVtCt> chiTiets = this.saveListChiTiet(item.getId(), req.getChiTiets(), new HashMap<>());

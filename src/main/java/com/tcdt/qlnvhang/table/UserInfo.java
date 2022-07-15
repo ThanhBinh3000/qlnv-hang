@@ -50,7 +50,7 @@ public class UserInfo {
 	@Transient
 	String tenDvi;
 	@Transient
-	String maPBb;
+	String maPbb;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_roles", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {

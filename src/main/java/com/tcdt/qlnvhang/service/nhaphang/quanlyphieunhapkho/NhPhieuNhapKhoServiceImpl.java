@@ -123,7 +123,7 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
         phieu.setCapDvi(userInfo.getCapDvi());
         phieu.setSo(getSo());
         phieu.setNam(LocalDate.now().getYear());
-        phieu.setSoPhieu(String.format("%s/%s/%s-%s", phieu.getSo(), phieu.getNam(), "PN", userInfo.getMaPBb()));
+        phieu.setSoPhieu(String.format("%s/%s/%s-%s", phieu.getSo(), phieu.getNam(), "PN", userInfo.getMaPbb()));
         nhPhieuNhapKhoRepository.save(phieu);
 
         List<NhPhieuNhapKhoCtReq> hangHoaReqs = req.getHangHoaList();

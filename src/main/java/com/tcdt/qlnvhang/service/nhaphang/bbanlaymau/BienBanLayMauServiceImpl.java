@@ -157,7 +157,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 		bienBienLayMau.setCapDvi(userInfo.getCapDvi());
 		bienBienLayMau.setSo(getSo());
 		bienBienLayMau.setNam(LocalDate.now().getYear());
-		bienBienLayMau.setSoBienBan(String.format("%s/%s/%s-%s", bienBienLayMau.getSo(), bienBienLayMau.getNam(), "BBLM", userInfo.getMaPBb()));
+		bienBienLayMau.setSoBienBan(String.format("%s/%s/%s-%s", bienBienLayMau.getSo(), bienBienLayMau.getNam(), "BBLM", userInfo.getMaPbb()));
 		bienBanLayMauRepository.save(bienBienLayMau);
 
 		List<BienBanLayMauCt> chiTiets = this.saveListChiTiet(bienBienLayMau.getId(), req.getChiTiets(), new HashMap<>());

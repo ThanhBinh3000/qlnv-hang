@@ -133,7 +133,7 @@ public class BienBanBanGiaoMauServiceImpl extends BaseServiceImpl implements Bie
 		bienBienBanGiaoMau.setCapDvi(userInfo.getCapDvi());
 		bienBienBanGiaoMau.setSo(getSo());
 		bienBienBanGiaoMau.setNam(LocalDate.now().getYear());
-		bienBienBanGiaoMau.setSoBienBan(String.format("%s/%s/%s-%s", bienBienBanGiaoMau.getSo(), bienBienBanGiaoMau.getNam(), "BBBG", userInfo.getMaPBb()));
+		bienBienBanGiaoMau.setSoBienBan(String.format("%s/%s/%s-%s", bienBienBanGiaoMau.getSo(), bienBienBanGiaoMau.getNam(), "BBBG", userInfo.getMaPbb()));
 
 		bienBanBanGiaoMauRepository.save(bienBienBanGiaoMau);
 
