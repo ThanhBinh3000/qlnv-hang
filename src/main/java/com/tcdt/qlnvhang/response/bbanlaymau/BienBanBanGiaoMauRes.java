@@ -31,11 +31,12 @@ public class BienBanBanGiaoMauRes extends SoBienBanPhieuRes {
 
 	private String maDvi;
 	private String tenDvi;
+	private String maQhns;
 
 	private String lyDoTuChoi;
 	private String trangThai;
 	private String tenTrangThai;
 	private String trangThaiDuyet;
-
+	private String loaiVthh;
 	private List<BienBanBanGiaoMauCtRes> chiTiets = new ArrayList<>();
 }

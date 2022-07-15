@@ -24,6 +24,6 @@ public class BienBanBanGiaoMauReq extends SoBienBanPhieuReq {
 	private String chiTieuKiemTra;
 	private String ttNiemPhongMauHang;
 	private String diaDiemBanGiao;
-
+	private String loaiVthh;
 	private List<BienBanLayMauCtReq> chiTiets = new ArrayList<>();
 }

@@ -14,6 +14,7 @@ public class BienBanLayMauReq extends SoBienBanPhieuReq {
 	private Long id;
 	private Long qdgnvnxId;
 	private Long bbNhapDayKhoId;
+	private Long bbGuiHangId;
 	private String soBienBan;
 	private Long hopDongId;
 	private LocalDate ngayHopDong;
@@ -34,6 +35,7 @@ public class BienBanLayMauReq extends SoBienBanPhieuReq {
 	private String ppLayMau;
 	private String chiTieuKiemTra;
 	private String ketQuaNiemPhong;
+	private String loaiVthh;
 
 	private List<BienBanLayMauCtReq> chiTiets = new ArrayList<>();
 }

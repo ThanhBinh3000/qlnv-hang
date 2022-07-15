@@ -22,7 +22,7 @@ public class NhBangKeVtRepositoryCustomImpl implements NhBangKeVtRepositoryCusto
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT p, nx.id, nx.soQd, nganLo FROM NhBangKeVt p ");
         builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON p.qdgnvnxId = nx.id ");
-        builder.append("INNER JOIN NhPhieuNhapKhoVt phieuNhapKho ON p.phieuNhapKhoId = phieuNhapKho.id ");
+        builder.append("INNER JOIN NhPhieuNhapKho phieuNhapKho ON p.phieuNhapKhoId = phieuNhapKho.id ");
         builder.append("LEFT JOIN KtNganLo nganLo ON phieuNhapKho.maNganLo = nganLo.maNganlo ");
         setConditionSearch(req, builder);
         builder.append("ORDER BY p.id DESC");
@@ -44,7 +44,7 @@ public class NhBangKeVtRepositoryCustomImpl implements NhBangKeVtRepositoryCusto
         builder.append("WHERE 1 = 1 ");
 
         if (!StringUtils.isEmpty(req.getSoBangKe())) {
-            builder.append("AND ").append("p.soBienBan LIKE :soBienBan ");
+            builder.append("AND ").append("p.soBangKe LIKE :soBangKe ");
         }
 
         if (req.getNgayTaoBangKeTu() != null) {
@@ -76,7 +76,7 @@ public class NhBangKeVtRepositoryCustomImpl implements NhBangKeVtRepositoryCusto
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT COUNT(DISTINCT p.id) FROM NhBangKeVt p ");
         builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON p.qdgnvnxId = nx.id ");
-        builder.append("INNER JOIN NhPhieuNhapKhoVt phieuNhapKho ON p.phieuNhapKhoId = phieuNhapKho.id ");
+        builder.append("INNER JOIN NhPhieuNhapKho phieuNhapKho ON p.phieuNhapKhoId = phieuNhapKho.id ");
         builder.append("LEFT JOIN KtNganLo nganLo ON phieuNhapKho.maNganLo = nganLo.maNganlo ");
 
         this.setConditionSearch(req, builder);
@@ -87,7 +87,7 @@ public class NhBangKeVtRepositoryCustomImpl implements NhBangKeVtRepositoryCusto
 
     private void setParameterSearch(NhBangKeVtSearchReq req, Query query) {
         if (!StringUtils.isEmpty(req.getSoBangKe())) {
-            query.setParameter("soBienBan", "%" + req.getSoBangKe() + "%");
+            query.setParameter("soBangKe", "%" + req.getSoBangKe() + "%");
         }
 
         if (req.getNgayTaoBangKeTu() != null) {

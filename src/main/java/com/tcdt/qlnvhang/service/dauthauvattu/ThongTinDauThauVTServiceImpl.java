@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.service.dauthauvattu;
 
 import com.tcdt.qlnvhang.entities.dauthauvattu.ThongTinDauThauVT;
 import com.tcdt.qlnvhang.enums.HhBbNghiemthuKlstStatusEnum;
-import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.dauthauvattu.ThongTinDauThauVTRepository;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.dauthauvattu.ThongTinDauThauVTReq;

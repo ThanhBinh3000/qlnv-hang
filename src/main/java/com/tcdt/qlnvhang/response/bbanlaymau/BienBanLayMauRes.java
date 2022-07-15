@@ -14,6 +14,8 @@ public class BienBanLayMauRes extends SoBienBanPhieuRes {
 	private String soQuyetDinhNhap;
 	private Long bbNhapDayKhoId;
 	private String soBbNhapDayKho;
+	private Long bbGuiHangId;
+	private String soBbGuiHang;
 	private String soBienBan;
 	private Long hopDongId;
 	private String soHopDong;
@@ -48,6 +50,8 @@ public class BienBanLayMauRes extends SoBienBanPhieuRes {
 	private String lyDoTuChoi;
 	private String maDvi;
 	private String tenDvi;
+	private String maQhns;
+	private String loaiVthh;
 
 	private List<BienBanLayMauCtRes> chiTiets = new ArrayList<>();
 }

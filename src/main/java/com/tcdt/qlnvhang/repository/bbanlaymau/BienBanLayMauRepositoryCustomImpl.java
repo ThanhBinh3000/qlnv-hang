@@ -20,7 +20,6 @@ public class BienBanLayMauRepositoryCustomImpl implements BienBanLayMauRepositor
 		builder.append("SELECT bb, nx.id, nx.soQd, hopDong.id, hopDong.soHd, nganLo, bbNhapDayKho.id, bbNhapDayKho.soBienBan FROM BienBanLayMau bb ");
 		builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON bb.qdgnvnxId = nx.id ");
 		builder.append("INNER JOIN HhHopDongHdr hopDong ON bb.hopDongId = hopDong.id ");
-		builder.append("INNER JOIN QlBienBanNhapDayKhoLt bbNhapDayKho ON bb.bbNhapDayKhoId = bbNhapDayKho.id ");
 		builder.append("LEFT JOIN KtNganLo nganLo ON bbNhapDayKho.maNganLo = nganLo.maNganlo ");
 		setConditionSearchCtkhn(req, builder);
 
@@ -71,6 +70,10 @@ public class BienBanLayMauRepositoryCustomImpl implements BienBanLayMauRepositor
 		if (!CollectionUtils.isEmpty(req.getTrangThais())) {
 			builder.append("AND ").append("bb.trangThai IN :trangThais ");
 		}
+
+		if (!StringUtils.isEmpty(req.getLoaiVthh())) {
+			builder.append("AND ").append("bb.loaiVthh = :loaiVthh ");
+		}
 	}
 
 	@Override
@@ -115,6 +118,10 @@ public class BienBanLayMauRepositoryCustomImpl implements BienBanLayMauRepositor
 
 		if (!CollectionUtils.isEmpty(req.getTrangThais())) {
 			query.setParameter("trangThais", req.getTrangThais());
+		}
+
+		if (!StringUtils.isEmpty(req.getLoaiVthh())) {
+			query.setParameter("loaiVthh", req.getLoaiVthh());
 		}
 	}
 }

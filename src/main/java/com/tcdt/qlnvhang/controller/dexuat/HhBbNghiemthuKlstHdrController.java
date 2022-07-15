@@ -28,7 +28,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.HhBbNghiemthuKlstHdrReq;
 import com.tcdt.qlnvhang.request.search.HhBbNghiemthuKlstSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.HhBbNghiemthuKlstHdrService;
+import com.tcdt.qlnvhang.service.nhaphang.HhBbNghiemthuKlstHdrService;
 import com.tcdt.qlnvhang.util.PathContains;
 
 import io.swagger.annotations.Api;
