@@ -16,4 +16,6 @@ public interface NhPhieuNhapKhoCtRepository extends BaseRepository<NhPhieuNhapKh
     @Transactional
     @Modifying
     void deleteByPhieuNkIdIn(Collection<Long> phieuNhapKhoIds);
+
+    NhPhieuNhapKhoCt findFirstByPhieuNkIdAndMaVatTu(Long phieuNhapKhoId, String maVatTu);
 }

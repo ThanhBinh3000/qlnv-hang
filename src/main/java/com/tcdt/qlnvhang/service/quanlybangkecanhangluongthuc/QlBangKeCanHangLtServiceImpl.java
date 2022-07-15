@@ -3,7 +3,9 @@ package com.tcdt.qlnvhang.service.quanlybangkecanhangluongthuc;
 import com.tcdt.qlnvhang.entities.quanlybangkecanhangluongthuc.QlBangKeCanHangLt;
 import com.tcdt.qlnvhang.entities.quanlybangkecanhangluongthuc.QlBangKeChCtLt;
 import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.NhPhieuNhapKho;
+import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCt;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
+import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCtRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
@@ -17,7 +19,6 @@ import com.tcdt.qlnvhang.request.object.quanlybangkecanhangluongthuc.QlBangKeCan
 import com.tcdt.qlnvhang.request.object.quanlybangkecanhangluongthuc.QlBangKeChCtLtReq;
 import com.tcdt.qlnvhang.request.search.quanlybangkecanhangluongthuc.QlBangKeCanHangLtSearchReq;
 import com.tcdt.qlnvhang.response.BaseNhapHangCount;
-import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
 import com.tcdt.qlnvhang.response.quanlybangkecanhangluongthuc.QlBangKeCanHangLtRes;
 import com.tcdt.qlnvhang.response.quanlybangkecanhangluongthuc.QlBangKeChCtLtRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
@@ -95,6 +96,9 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
     private NhPhieuNhapKhoRepository nhPhieuNhapKhoRepository;
 
     @Autowired
+    private NhPhieuNhapKhoCtRepository nhPhieuNhapKhoCtRepository;
+
+    @Autowired
     private QlnvDmVattuRepository qlnvDmVattuRepository;
 
     @Autowired
@@ -109,6 +113,8 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null)
             throw new Exception("Bad request.");
+
+
 
         this.validateSoBb(null, req);
         QlBangKeCanHangLt item = new QlBangKeCanHangLt();
@@ -127,9 +133,31 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
         List<QlBangKeChCtLt> chiTiets = this.saveListChiTiet(item.getId(), chiTietReqs, new HashMap<>());
         item.setChiTiets(chiTiets);
 
+        this.updateThucNhapPnk(item);
         return this.buildResponse(item);
     }
 
+    /*
+     * Update số lượng thực nhập vào phiếu nhập kho
+     */
+    private void updateThucNhapPnk(QlBangKeCanHangLt item) throws Exception {
+        Long pnkId = item.getQlPhieuNhapKhoLtId();
+        NhPhieuNhapKho phieuNhapKho = null;
+        if (pnkId != null) {
+            phieuNhapKho = nhPhieuNhapKhoRepository.findById(pnkId)
+                    .orElseThrow(() -> new Exception("Không tìm thấy phiếu nhập kho"));
+        }
+
+        String maVatTu = item.getMaVatTu();
+        if (phieuNhapKho == null || !StringUtils.hasText(maVatTu))
+            return;
+
+        NhPhieuNhapKhoCt pnkCt = nhPhieuNhapKhoCtRepository.findFirstByPhieuNkIdAndMaVatTu(phieuNhapKho.getId(), maVatTu);
+        if (pnkCt != null) {
+            pnkCt.setSoLuongThucNhap(item.getTongTrongLuongBaoBi());
+            nhPhieuNhapKhoCtRepository.save(pnkCt);
+        }
+    }
     private QlBangKeCanHangLtRes buildResponse(QlBangKeCanHangLt item) throws Exception {
 
         QlBangKeCanHangLtRes response = new QlBangKeCanHangLtRes();
@@ -244,6 +272,7 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
         if (!CollectionUtils.isEmpty(map.values()))
             qlBangKeChCtLtRepository.deleteAll(map.values());
 
+        this.updateThucNhapPnk(item);
         return this.buildResponse(item);
     }
 
