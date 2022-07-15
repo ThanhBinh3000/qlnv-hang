@@ -7,7 +7,7 @@ import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanBanGiaoMauReq;
 import com.tcdt.qlnvhang.request.search.BienBanBanGiaoMauSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.response.bbanlaymau.BienBanBanGiaoMauRes;
-import com.tcdt.qlnvhang.service.bbanlaymau.BienBanBanGiaoMauService;
+import com.tcdt.qlnvhang.service.nhaphang.bbanlaymau.BienBanBanGiaoMauService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
