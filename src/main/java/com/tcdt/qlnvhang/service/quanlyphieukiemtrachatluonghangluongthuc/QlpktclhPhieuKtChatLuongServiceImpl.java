@@ -74,16 +74,20 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 
 		this.validateSoPhieu(null, req);
 		//Quản lý thông tin chủ đầu tư
-		QlpktclhPhieuKtChatLuong qlpktclhPhieuKtChatLuong = dataUtils.toObject(req, QlpktclhPhieuKtChatLuong.class);
-		qlpktclhPhieuKtChatLuong.setNgayTao(LocalDate.now());
-		qlpktclhPhieuKtChatLuong.setNguoiTaoId(userInfo.getId());
-		qlpktclhPhieuKtChatLuong.setMaDvi(userInfo.getDvql());
-		qlpktclhPhieuKtChatLuong.setTrangThai(QlpktclhPhieuKtChatLuongStatusEnum.DU_THAO.getId());
-		qlpktclhPhieuKtChatLuong.setCapDvi(userInfo.getCapDvi());
-		qlpktclhPhieuKtChatLuong = qlpktclhPhieuKtChatLuongRepo.save(qlpktclhPhieuKtChatLuong);
+		QlpktclhPhieuKtChatLuong phieu = dataUtils.toObject(req, QlpktclhPhieuKtChatLuong.class);
+		phieu.setNgayTao(LocalDate.now());
+		phieu.setNguoiTaoId(userInfo.getId());
+		phieu.setMaDvi(userInfo.getDvql());
+		phieu.setTrangThai(QlpktclhPhieuKtChatLuongStatusEnum.DU_THAO.getId());
+		phieu.setCapDvi(userInfo.getCapDvi());
+
+		phieu.setSo(getSo());
+		phieu.setNam(LocalDate.now().getYear());
+		phieu.setSoPhieu(String.format("%s/%s/%s-%s", phieu.getSo(), phieu.getNam(), "PKTCL", userInfo.getMaPBb()));
+		phieu = qlpktclhPhieuKtChatLuongRepo.save(phieu);
 
 		//Kết quả kiểm tra
-		Long phieuKiemTraChatLuongId = qlpktclhPhieuKtChatLuong.getId();
+		Long phieuKiemTraChatLuongId = phieu.getId();
 
 		List<QlpktclhKetQuaKiemTra> ketQuaKiemTras = new ArrayList<>();
 		req.getKetQuaKiemTra().forEach(item -> {
@@ -92,9 +96,9 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 			ketQuaKiemTra = qlpktclhKetQuaKiemTraRepo.save(ketQuaKiemTra);
 			ketQuaKiemTras.add(ketQuaKiemTra);
 		});
-		qlpktclhPhieuKtChatLuong.setKetQuaKiemTra(ketQuaKiemTras);
+		phieu.setKetQuaKiemTra(ketQuaKiemTras);
 
-		return this.buildResponse(qlpktclhPhieuKtChatLuong);
+		return this.buildResponse(phieu);
 	}
 
 	@Override
@@ -374,11 +378,11 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 	}
 
 	@Override
-	public SoBienBanPhieuRes getSo() throws Exception {
+	public Integer getSo() throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
 		Integer so = qlpktclhPhieuKtChatLuongRepo.findMaxSo(userInfo.getDvql(), LocalDate.now().getYear());
 		so = Optional.ofNullable(so).orElse(0);
 		so = so + 1;
-		return new SoBienBanPhieuRes(so, LocalDate.now().getYear());
+		return so;
 	}
 }

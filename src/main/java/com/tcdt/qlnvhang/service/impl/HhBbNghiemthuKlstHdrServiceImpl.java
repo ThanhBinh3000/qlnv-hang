@@ -114,6 +114,11 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 		dataMap.setNam(qdNxOptional.get().getNamNhap());
 		dataMap.setMaDvi(userInfo.getDvql());
 		dataMap.setCapDvi(userInfo.getCapDvi());
+
+		dataMap.setSo(getSo());
+		dataMap.setNam(LocalDate.now().getYear());
+		dataMap.setSoBb(String.format("%s/%s/%s-%s", dataMap.getSo(), dataMap.getNam(), "BBNTBQ", userInfo.getMaPBb()));
+
 		hhBbNghiemthuKlstRepository.save(dataMap);
 
 		return this.buildResponse(dataMap);
@@ -165,6 +170,8 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 
 		HhBbNghiemthuKlstHdr dataDTB = qOptional.get();
 		HhBbNghiemthuKlstHdr dataMap = ObjectMapperUtils.map(objReq, HhBbNghiemthuKlstHdr.class);
+		dataMap.setSo(dataDTB.getSo());
+		dataMap.setNam(dataDTB.getNam());
 
 		updateObjectToObject(dataDTB, dataMap);
 
@@ -476,11 +483,11 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 	}
 
 	@Override
-	public SoBienBanPhieuRes getSo() throws Exception {
+	public Integer getSo() throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
 		Integer so = hhBbNghiemthuKlstRepository.findMaxSo(userInfo.getDvql(), LocalDate.now().getYear());
 		so = Optional.ofNullable(so).orElse(0);
 		so = so + 1;
-		return new SoBienBanPhieuRes(so, LocalDate.now().getYear());
+		return so;
 	}
 }

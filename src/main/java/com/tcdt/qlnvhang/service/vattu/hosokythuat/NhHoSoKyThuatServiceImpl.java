@@ -90,6 +90,9 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
         item.setTrangThai(TrangThaiEnum.DU_THAO.getId());
         item.setMaDvi(userInfo.getDvql());
         item.setCapDvi(userInfo.getCapDvi());
+        item.setSo(getSo());
+        item.setNam(LocalDate.now().getYear());
+        item.setSoBienBan(String.format("%s/%s/%s-%s", item.getSo(), item.getNam(), "HSKT", userInfo.getMaPBb()));
         nhHoSoKyThuatRepository.save(item);
 
         List<NhHoSoKyThuatCt> chiTiets = this.saveListChiTiet(item.getId(), req.getChiTiets(), new HashMap<>());
@@ -406,11 +409,11 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
     }
 
     @Override
-    public SoBienBanPhieuRes getSo() throws Exception {
+    public Integer getSo() throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         Integer so = nhHoSoKyThuatRepository.findMaxSo(userInfo.getDvql(), LocalDate.now().getYear());
         so = Optional.ofNullable(so).orElse(0);
         so = so + 1;
-        return new SoBienBanPhieuRes(so, LocalDate.now().getYear());
+        return so;
     }
 }

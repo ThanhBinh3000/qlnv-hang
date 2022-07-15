@@ -20,7 +20,6 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauCtReq;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauReq;
 import com.tcdt.qlnvhang.request.search.BienBanLayMauSearchReq;
-import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
 import com.tcdt.qlnvhang.response.bbanlaymau.BienBanLayMauCtRes;
 import com.tcdt.qlnvhang.response.bbanlaymau.BienBanLayMauRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
@@ -156,6 +155,9 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 		bienBienLayMau.setNgayTao(LocalDate.now());
 		bienBienLayMau.setMaDvi(userInfo.getDvql());
 		bienBienLayMau.setCapDvi(userInfo.getCapDvi());
+		bienBienLayMau.setSo(getSo());
+		bienBienLayMau.setNam(LocalDate.now().getYear());
+		bienBienLayMau.setSoBienBan(String.format("%s/%s/%s-%s", bienBienLayMau.getSo(), bienBienLayMau.getNam(), "BBLM", userInfo.getMaPBb()));
 		bienBanLayMauRepository.save(bienBienLayMau);
 
 		List<BienBanLayMauCt> chiTiets = this.saveListChiTiet(bienBienLayMau.getId(), req.getChiTiets(), new HashMap<>());
@@ -487,11 +489,11 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 	}
 
 	@Override
-	public SoBienBanPhieuRes getSo() throws Exception {
+	public Integer getSo() throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
 		Integer so = bienBanLayMauRepository.findMaxSo(userInfo.getDvql(), LocalDate.now().getYear());
 		so = Optional.ofNullable(so).orElse(0);
 		so = so + 1;
-		return new SoBienBanPhieuRes(so, LocalDate.now().getYear());
+		return so;
 	}
 }

@@ -161,6 +161,9 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 		phieuKnclh.setMaDvi(userInfo.getDvql());
 		phieuKnclh.setCapDvi(userInfo.getCapDvi());
 		phieuKnclh.setTrangThai(TrangThaiEnum.DU_THAO.getId());
+		phieuKnclh.setSo(getSo());
+		phieuKnclh.setNam(LocalDate.now().getYear());
+		phieuKnclh.setSoPhieu(String.format("%s/%s/%s-%s", phieuKnclh.getSo(), phieuKnclh.getNam(), "PKNCL", userInfo.getMaPBb()));
 		phieuKnghiemCluongHangRepository.save(phieuKnclh);
 		kquaKnghiemService.update(phieuKnclh.getId(), req.getKquaKnghiem());
 
@@ -450,11 +453,11 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 	}
 
 	@Override
-	public SoBienBanPhieuRes getSo() throws Exception {
+	public Integer getSo() throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
 		Integer so = phieuKnghiemCluongHangRepository.findMaxSo(userInfo.getDvql(), LocalDate.now().getYear());
 		so = Optional.ofNullable(so).orElse(0);
 		so = so + 1;
-		return new SoBienBanPhieuRes(so, LocalDate.now().getYear());
+		return so;
 	}
 }

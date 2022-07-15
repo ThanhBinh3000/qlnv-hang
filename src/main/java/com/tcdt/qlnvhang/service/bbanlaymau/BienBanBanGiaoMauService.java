@@ -4,7 +4,6 @@ import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanBanGiaoMauReq;
 import com.tcdt.qlnvhang.request.search.BienBanBanGiaoMauSearchReq;
-import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
 import com.tcdt.qlnvhang.response.bbanlaymau.BienBanBanGiaoMauRes;
 import org.springframework.data.domain.Page;
 
@@ -24,5 +23,5 @@ public interface BienBanBanGiaoMauService {
 
     boolean exportToExcel(BienBanBanGiaoMauSearchReq objReq, HttpServletResponse response) throws Exception;
 
-    SoBienBanPhieuRes getSo() throws Exception;
+	Integer getSo() throws Exception;
 }

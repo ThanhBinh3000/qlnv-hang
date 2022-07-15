@@ -5,7 +5,6 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoReq;
 import com.tcdt.qlnvhang.request.search.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoSearchReq;
 import com.tcdt.qlnvhang.response.BaseNhapHangCount;
-import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
 import com.tcdt.qlnvhang.response.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoRes;
 import org.springframework.data.domain.Page;
 
@@ -28,5 +27,5 @@ public interface NhPhieuNhapKhoService {
 
     boolean exportToExcel(NhPhieuNhapKhoSearchReq objReq, HttpServletResponse response) throws Exception;
 
-    SoBienBanPhieuRes getSo() throws Exception;
+    Integer getSo() throws Exception;
 }

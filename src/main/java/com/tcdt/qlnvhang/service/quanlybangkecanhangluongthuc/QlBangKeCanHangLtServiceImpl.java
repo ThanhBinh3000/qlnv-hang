@@ -118,6 +118,9 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
         item.setTrangThai(TrangThaiEnum.DU_THAO.getId());
         item.setMaDvi(userInfo.getDvql());
         item.setCapDvi(userInfo.getCapDvi());
+        item.setSo(getSo());
+        item.setNam(LocalDate.now().getYear());
+        item.setSoBangKe(String.format("%s/%s/%s-%s", item.getSo(), item.getNam(), "BKCH", userInfo.getMaPBb()));
         qlBangKeCanHangLtRepository.save(item);
 
         List<QlBangKeChCtLtReq> chiTietReqs = req.getChiTiets();
@@ -505,11 +508,11 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
     }
 
     @Override
-    public SoBienBanPhieuRes getSo() throws Exception {
+    public Integer getSo() throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         Integer so = qlBangKeCanHangLtRepository.findMaxSo(userInfo.getDvql(), LocalDate.now().getYear());
         so = Optional.ofNullable(so).orElse(0);
         so = so + 1;
-        return new SoBienBanPhieuRes(so, LocalDate.now().getYear());
+        return so;
     }
 }

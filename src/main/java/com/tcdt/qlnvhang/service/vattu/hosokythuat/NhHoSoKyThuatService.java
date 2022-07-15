@@ -4,7 +4,6 @@ import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.vattu.hosokythuat.NhHoSoKyThuatReq;
 import com.tcdt.qlnvhang.request.search.vattu.hosokythuat.NhHoSoKyThuatSearchReq;
-import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
 import com.tcdt.qlnvhang.response.vattu.hosokythuat.NhHoSoKyThuatRes;
 import org.springframework.data.domain.Page;
 
@@ -31,5 +30,5 @@ public interface NhHoSoKyThuatService {
 
     boolean exportToExcel(NhHoSoKyThuatSearchReq objReq, HttpServletResponse response) throws Exception;
 
-    SoBienBanPhieuRes getSo() throws Exception;
+    Integer getSo() throws Exception;
 }

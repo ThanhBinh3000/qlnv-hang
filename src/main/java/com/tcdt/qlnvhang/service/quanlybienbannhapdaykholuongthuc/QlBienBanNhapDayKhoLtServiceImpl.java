@@ -112,6 +112,9 @@ public class QlBienBanNhapDayKhoLtServiceImpl extends BaseServiceImpl implements
         item.setTrangThai(TrangThaiEnum.DU_THAO.getId());
         item.setMaDvi(userInfo.getDvql());
         item.setCapDvi(userInfo.getCapDvi());
+        item.setSo(getSo());
+        item.setNam(LocalDate.now().getYear());
+        item.setSoBienBan(String.format("%s/%s/%s-%s", item.getSo(), item.getNam(), "BBDK", userInfo.getMaPBb()));
         qlBienBanNhapDayKhoLtRepository.save(item);
 
         List<QlBienBanNdkCtLt> chiTiets = this.saveListChiTiet(item.getId(), req.getChiTiets(), new HashMap<>());
@@ -479,11 +482,11 @@ public class QlBienBanNhapDayKhoLtServiceImpl extends BaseServiceImpl implements
     }
 
     @Override
-    public SoBienBanPhieuRes getSo() throws Exception {
+    public Integer getSo() throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         Integer so = qlBienBanNhapDayKhoLtRepository.findMaxSo(userInfo.getDvql(), LocalDate.now().getYear());
         so = Optional.ofNullable(so).orElse(0);
         so = so + 1;
-        return new SoBienBanPhieuRes(so, LocalDate.now().getYear());
+        return so;
     }
 }

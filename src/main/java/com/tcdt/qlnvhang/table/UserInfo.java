@@ -49,6 +49,9 @@ public class UserInfo {
 	String capDvi;
 	@Transient
 	String tenDvi;
+	@Transient
+	String maPBb;
+
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_roles", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "role_id") })

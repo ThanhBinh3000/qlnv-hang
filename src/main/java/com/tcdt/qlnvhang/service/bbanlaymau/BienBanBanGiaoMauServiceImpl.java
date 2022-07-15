@@ -132,6 +132,10 @@ public class BienBanBanGiaoMauServiceImpl extends BaseServiceImpl implements Bie
 		bienBienBanGiaoMau.setNgayTao(LocalDate.now());
 		bienBienBanGiaoMau.setMaDvi(userInfo.getDvql());
 		bienBienBanGiaoMau.setCapDvi(userInfo.getCapDvi());
+		bienBienBanGiaoMau.setSo(getSo());
+		bienBienBanGiaoMau.setNam(LocalDate.now().getYear());
+		bienBienBanGiaoMau.setSoBienBan(String.format("%s/%s/%s-%s", bienBienBanGiaoMau.getSo(), bienBienBanGiaoMau.getNam(), "BBBG", userInfo.getMaPBb()));
+
 		bienBanBanGiaoMauRepository.save(bienBienBanGiaoMau);
 
 		List<BienBanBanGiaoMauCt> chiTiets = this.saveListChiTiet(bienBienBanGiaoMau.getId(), req.getChiTiets(), new HashMap<>());
@@ -416,11 +420,11 @@ public class BienBanBanGiaoMauServiceImpl extends BaseServiceImpl implements Bie
 	}
 
 	@Override
-	public SoBienBanPhieuRes getSo() throws Exception {
+	public Integer getSo() throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
 		Integer so = bienBanBanGiaoMauRepository.findMaxSo(userInfo.getDvql(), LocalDate.now().getYear());
 		so = Optional.ofNullable(so).orElse(0);
 		so = so + 1;
-		return new SoBienBanPhieuRes(so, LocalDate.now().getYear());
+		return so;
 	}
 }

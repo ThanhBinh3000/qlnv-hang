@@ -21,7 +21,6 @@ import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.NhPhieuNhapK
 import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoReq;
 import com.tcdt.qlnvhang.request.search.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoSearchReq;
 import com.tcdt.qlnvhang.response.BaseNhapHangCount;
-import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
 import com.tcdt.qlnvhang.response.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCtRes;
 import com.tcdt.qlnvhang.response.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
@@ -122,6 +121,9 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
         phieu.setTrangThai(TrangThaiEnum.DU_THAO.getId());
         phieu.setMaDvi(userInfo.getDvql());
         phieu.setCapDvi(userInfo.getCapDvi());
+        phieu.setSo(getSo());
+        phieu.setNam(LocalDate.now().getYear());
+        phieu.setSoPhieu(String.format("%s/%s/%s-%s", phieu.getSo(), phieu.getNam(), "PN", userInfo.getMaPBb()));
         nhPhieuNhapKhoRepository.save(phieu);
 
         List<NhPhieuNhapKhoCtReq> hangHoaReqs = req.getHangHoaList();
@@ -501,11 +503,11 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
     }
 
     @Override
-    public SoBienBanPhieuRes getSo() throws Exception {
+    public Integer getSo() throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         Integer so = nhPhieuNhapKhoRepository.findMaxSo(userInfo.getDvql(), LocalDate.now().getYear());
         so = Optional.ofNullable(so).orElse(0);
         so = so + 1;
-        return new SoBienBanPhieuRes(so, LocalDate.now().getYear());
+        return so;
     }
 }

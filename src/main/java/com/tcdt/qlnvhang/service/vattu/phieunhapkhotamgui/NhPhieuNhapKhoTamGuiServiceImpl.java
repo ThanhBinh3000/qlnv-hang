@@ -87,6 +87,9 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
         item.setTrangThai(TrangThaiEnum.DU_THAO.getId());
         item.setMaDvi(userInfo.getDvql());
         item.setCapDvi(userInfo.getCapDvi());
+        item.setSo(getSo());
+        item.setNam(LocalDate.now().getYear());
+        item.setSoPhieu(String.format("%s/%s/%s-%s", item.getSo(), item.getNam(), "PTG", userInfo.getMaPBb()));
         nhPhieuNhapKhoTamGuiRepository.save(item);
 
         List<NhPhieuNhapKhoTamGuiCt> chiTiets = this.saveListChiTiet(item.getId(), req.getChiTiets(), new HashMap<>());
@@ -400,11 +403,11 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
     }
 
     @Override
-    public SoBienBanPhieuRes getSo() throws Exception {
+    public Integer getSo() throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         Integer so = nhPhieuNhapKhoTamGuiRepository.findMaxSo(userInfo.getDvql(), LocalDate.now().getYear());
         so = Optional.ofNullable(so).orElse(0);
         so = so + 1;
-        return new SoBienBanPhieuRes(so, LocalDate.now().getYear());
+        return so;
     }
 }

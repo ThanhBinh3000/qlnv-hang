@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
 import com.tcdt.qlnvhang.request.DeleteReq;
-import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
 import org.springframework.data.domain.Page;
 
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -37,5 +36,5 @@ public interface HhBbNghiemthuKlstHdrService {
     @org.springframework.transaction.annotation.Transactional
     boolean deleteMultiple(DeleteReq req) throws Exception;
 
-    SoBienBanPhieuRes getSo() throws Exception;
+	Integer getSo() throws Exception;
 }

@@ -98,7 +98,7 @@ public class NhBbKtNhapKhoVtServiceImpl extends BaseServiceImpl implements NhBbK
         item.setCapDvi(userInfo.getCapDvi());
         item.setSo(getSo());
         item.setNam(LocalDate.now().getYear());
-        item.setSoBienBan(String.format("%s/%s/%s", item.getSo(), item.getNam(), "BBKTNK"));
+        item.setSoBienBan(String.format("%s/%s/%s-%s", item.getSo(), item.getNam(), "BBKTNK", userInfo.getMaPBb()));
         nhBbKtNhapKhoVtRepository.save(item);
 
         List<NhBbKtNhapKhoVtCt> chiTiets = this.saveListChiTiet(item.getId(), req.getChiTiets(), new HashMap<>());

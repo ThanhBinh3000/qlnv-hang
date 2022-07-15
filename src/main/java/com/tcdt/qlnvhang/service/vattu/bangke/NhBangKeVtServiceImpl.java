@@ -60,7 +60,7 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
     private final HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
     private final NhPhieuNhapKhoRepository phieuNhapKhoRepository;
 
-    private static final String SHEET_BANG_KE_VAT_TU = "Bảng kê vật tư";
+    private static final String SHEET_BANG_KE_NHAP_VAT_TU = "Bảng kê nhập vật tư";
     private static final String STT = "STT";
     private static final String SO_PHIEU = "Số Bảng Kê";
     private static final String SO_QUYET_DINH_NHAP = "Số Quyết Định Nhập";
@@ -85,8 +85,7 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
         item.setCapDvi(userInfo.getCapDvi());
         item.setSo(getSo());
         item.setNam(LocalDate.now().getYear());
-        // TODO : mã bang ke
-        item.setSoBangKe(String.format("%s/%s/%s", item.getSo(), item.getNam(), "BKVT"));
+        item.setSoBangKe(String.format("%s/%s/%s-%s", item.getSo(), item.getNam(), "BKNVT", userInfo.getMaPBb()));
         bangKeVtRepository.save(item);
 
         List<NhBangKeVtCt> chiTiets = this.saveListChiTiet(item.getId(), req.getChiTiets(), new HashMap<>());
@@ -309,7 +308,7 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
             style.setFont(font);
             style.setAlignment(HorizontalAlignment.CENTER);
             style.setVerticalAlignment(VerticalAlignment.CENTER);
-            XSSFSheet sheet = workbook.createSheet(SHEET_BANG_KE_VAT_TU);
+            XSSFSheet sheet = workbook.createSheet(SHEET_BANG_KE_NHAP_VAT_TU);
             Row row0 = sheet.createRow(0);
             //STT
 
