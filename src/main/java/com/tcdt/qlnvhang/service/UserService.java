@@ -44,7 +44,7 @@ public class UserService implements UserDetailsService {
 		user.setMaTckt(dvi.getMaTckt());
 		user.setCapDvi(dvi.getCapDvi());
 		user.setTenDvi(dvi.getTenDvi());
-		user.setMaPBb(dvi.getMaPBb());
+		user.setMaPbb(dvi.getMaPbb());
 		return new CustomUserDetails(user);
 	}
 

@@ -161,7 +161,7 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 		phieuKnclh.setTrangThai(TrangThaiEnum.DU_THAO.getId());
 		phieuKnclh.setSo(getSo());
 		phieuKnclh.setNam(LocalDate.now().getYear());
-		phieuKnclh.setSoPhieu(String.format("%s/%s/%s-%s", phieuKnclh.getSo(), phieuKnclh.getNam(), "PKNCL", userInfo.getMaPBb()));
+		phieuKnclh.setSoPhieu(String.format("%s/%s/%s-%s", phieuKnclh.getSo(), phieuKnclh.getNam(), "PKNCL", userInfo.getMaPbb()));
 		phieuKnghiemCluongHangRepository.save(phieuKnclh);
 		kquaKnghiemService.update(phieuKnclh.getId(), req.getKquaKnghiem());
 

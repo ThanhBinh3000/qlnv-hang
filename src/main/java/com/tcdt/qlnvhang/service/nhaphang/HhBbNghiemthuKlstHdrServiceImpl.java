@@ -48,7 +48,6 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.HhBbNghiemthuKlstHdrReq;
 import com.tcdt.qlnvhang.request.search.HhBbNghiemthuKlstSearchReq;
 import com.tcdt.qlnvhang.secification.HhBbNghiemthuKlstSpecification;
-import com.tcdt.qlnvhang.service.nhaphang.HhBbNghiemthuKlstHdrService;
 import com.tcdt.qlnvhang.table.HhBbNghiemthuKlstDtl;
 import com.tcdt.qlnvhang.table.HhBbNghiemthuKlstHdr;
 
@@ -117,7 +116,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 
 		dataMap.setSo(getSo());
 		dataMap.setNam(LocalDate.now().getYear());
-		dataMap.setSoBb(String.format("%s/%s/%s-%s", dataMap.getSo(), dataMap.getNam(), "BBNTBQ", userInfo.getMaPBb()));
+		dataMap.setSoBb(String.format("%s/%s/%s-%s", dataMap.getSo(), dataMap.getNam(), "BBNTBQ", userInfo.getMaPbb()));
 
 		hhBbNghiemthuKlstRepository.save(dataMap);
 

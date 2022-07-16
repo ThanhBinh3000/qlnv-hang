@@ -91,7 +91,7 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
         item.setCapDvi(userInfo.getCapDvi());
         item.setSo(getSo());
         item.setNam(LocalDate.now().getYear());
-        item.setSoBienBan(String.format("%s/%s/%s-%s", item.getSo(), item.getNam(), "HSKT", userInfo.getMaPBb()));
+        item.setSoBienBan(String.format("%s/%s/%s-%s", item.getSo(), item.getNam(), "HSKT", userInfo.getMaPbb()));
         nhHoSoKyThuatRepository.save(item);
 
         List<NhHoSoKyThuatCt> chiTiets = this.saveListChiTiet(item.getId(), req.getChiTiets(), new HashMap<>());
