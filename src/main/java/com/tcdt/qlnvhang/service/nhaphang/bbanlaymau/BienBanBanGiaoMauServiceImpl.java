@@ -261,7 +261,7 @@ public class BienBanBanGiaoMauServiceImpl extends BaseServiceImpl implements Bie
 			Long id = req.getId();
 			BienBanBanGiaoMauCt chiTiet = new BienBanBanGiaoMauCt();
 
-			if (id != null) {
+			if (id != null && id > 0) {
 				chiTiet = mapChiTiet.get(id);
 				if (chiTiet == null)
 					throw new Exception("Biên bản bàn giao mẫu chi tiết không tồn tại.");

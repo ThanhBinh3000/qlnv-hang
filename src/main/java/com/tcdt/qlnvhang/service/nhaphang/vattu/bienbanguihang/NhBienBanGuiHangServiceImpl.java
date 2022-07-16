@@ -130,7 +130,7 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
             Long id = req.getId();
             NhBienBanGuiHangCt chiTiet = new NhBienBanGuiHangCt();
 
-            if (id != null) {
+            if (id != null && id > 0) {
                 chiTiet = mapChiTiet.get(id);
                 if (chiTiet == null)
                     throw new Exception("Biên bản gửi hàng chi tiết không tồn tại.");

@@ -23,6 +23,7 @@ public class NhBangKeVtRes {
     private String donViTinh;
     private String diaChiNguoiGiao;
     private Long hopDongId;
+    private String soHopDong;
     private LocalDate ngayNhap;
     private LocalDate ngayTaoBangKe;
     private String trangThai;

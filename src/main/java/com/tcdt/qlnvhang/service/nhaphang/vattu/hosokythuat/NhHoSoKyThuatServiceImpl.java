@@ -111,7 +111,7 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
             Long id = req.getId();
             NhHoSoKyThuatCt chiTiet = new NhHoSoKyThuatCt();
 
-            if (id != null) {
+            if (id != null && id > 0) {
                 chiTiet = mapChiTiet.get(id);
                 if (chiTiet == null)
                     throw new Exception("Biên bản gửi hàng chi tiết không tồn tại.");

@@ -177,7 +177,7 @@ public class QlBienBanNhapDayKhoLtServiceImpl extends BaseServiceImpl implements
             Long id = req.getId();
             QlBienBanNdkCtLt chiTiet = new QlBienBanNdkCtLt();
 
-            if (id != null) {
+            if (id != null && id > 0) {
                 chiTiet = mapChiTiet.get(id);
                 if (chiTiet == null)
                     throw new Exception("Biên bản chi tiết hàng Hóa không tồn tại.");

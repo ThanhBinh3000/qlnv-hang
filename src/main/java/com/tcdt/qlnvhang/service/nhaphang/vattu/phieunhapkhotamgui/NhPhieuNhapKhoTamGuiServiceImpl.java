@@ -107,7 +107,7 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
             Long id = req.getId();
             NhPhieuNhapKhoTamGuiCt chiTiet = new NhPhieuNhapKhoTamGuiCt();
 
-            if (id != null) {
+            if (id != null && id > 0) {
                 chiTiet = mapChiTiet.get(id);
                 if (chiTiet == null)
                     throw new Exception("Phiếu nhập kho tạm gửi chi tiết không tồn tại.");

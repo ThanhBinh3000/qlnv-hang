@@ -142,7 +142,7 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
             Long id = req.getId();
             NhBienBanChuanBiKhoCt chiTiet = new NhBienBanChuanBiKhoCt();
 
-            if (id != null) {
+            if (id != null && id > 0) {
                 chiTiet = mapChiTiet.get(id);
                 if (chiTiet == null)
                     throw new Exception("Biên bản chuẩn bị kho chi tiết không tồn tại.");

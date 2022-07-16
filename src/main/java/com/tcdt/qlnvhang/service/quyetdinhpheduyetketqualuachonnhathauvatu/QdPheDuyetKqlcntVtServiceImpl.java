@@ -92,7 +92,7 @@ public class QdPheDuyetKqlcntVtServiceImpl implements QdPheDuyetKqlcntVtService 
         Long id = goiThauReq.getId();
         QdKqlcntGoiThauVt goiThau = new QdKqlcntGoiThauVt();
 
-        if (id != null) {
+        if (id != null && id > 0) {
             goiThau = mapGoiThau.get(id);
             if (goiThau == null)
                 throw new Exception("Gói thầu không tồn tại.");

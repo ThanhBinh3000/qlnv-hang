@@ -147,7 +147,7 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
             if (vatTu == null)
                 throw new Exception("Hàng Hóa không tồn tại.");
 
-            if (id != null) {
+            if (id != null && id > 0) {
                 hangHoa = mapHangHoa.get(id);
                 if (hangHoa == null)
                     throw new Exception("Chi tiết hàng Hóa không tồn tại.");

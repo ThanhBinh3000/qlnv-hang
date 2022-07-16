@@ -1,9 +1,12 @@
 package com.tcdt.qlnvhang.service.nhaphang.vattu.bangke;
 
+import com.google.common.collect.Sets;
 import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.NhPhieuNhapKho;
 import com.tcdt.qlnvhang.entities.vattu.bangke.NhBangKeVt;
 import com.tcdt.qlnvhang.entities.vattu.bangke.NhBangKeVtCt;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
+import com.tcdt.qlnvhang.repository.HhHopDongRepository;
+import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.vattu.bangke.NhBangKeVtCtRepository;
@@ -11,14 +14,17 @@ import com.tcdt.qlnvhang.repository.vattu.bangke.NhBangKeVtRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.bangke.NhBangKeVtCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.bangke.NhBangKeVtReq;
 import com.tcdt.qlnvhang.request.search.vattu.bangke.NhBangKeVtSearchReq;
 import com.tcdt.qlnvhang.response.vattu.bangke.NhBangKeVtCtRes;
 import com.tcdt.qlnvhang.response.vattu.bangke.NhBangKeVtRes;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.HhHopDongHdr;
 import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganLo;
@@ -36,6 +42,7 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -50,6 +57,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Log4j2
@@ -59,6 +67,8 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
     private final NhBangKeVtCtRepository bangKeVtCtRepository;
     private final HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
     private final NhPhieuNhapKhoRepository phieuNhapKhoRepository;
+    private final QlnvDmVattuRepository qlnvDmVattuRepository;
+    private final HhHopDongRepository hhHopDongRepository;
 
     private static final String SHEET_BANG_KE_NHAP_VAT_TU = "Bảng kê nhập vật tư";
     private static final String STT = "STT";
@@ -102,7 +112,7 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
             Long id = req.getId();
             NhBangKeVtCt chiTiet = new NhBangKeVtCt();
 
-            if (id != null) {
+            if (id != null && id > 0) {
                 chiTiet = mapChiTiet.get(id);
                 if (chiTiet == null)
                     throw new Exception("Phiếu nhập kho vật tư chi tiết không tồn tại.");
@@ -132,6 +142,17 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
         }
         res.setChiTiets(chiTiets);
 
+        Set<String> maVatTus = Stream.of(item.getMaVatTu(), item.getMaVatTuCha()).filter(Objects::nonNull).collect(Collectors.toSet());
+        Set<QlnvDmVattu> vatTus = Sets.newHashSet(qlnvDmVattuRepository.findByMaIn(maVatTus));
+
+        if (CollectionUtils.isEmpty(vatTus))
+            throw new Exception("Không tìm thấy vật tư");
+
+        vatTus.stream().filter(v -> v.getMa().equalsIgnoreCase(item.getMaVatTu())).findFirst()
+                .ifPresent(v -> res.setTenVatTu(v.getTen()));
+        vatTus.stream().filter(v -> v.getMa().equalsIgnoreCase(item.getMaVatTuCha())).findFirst()
+                .ifPresent(v -> res.setTenVatTuCha(v.getTen()));
+
         if (item.getQdgnvnxId() != null) {
             Optional<HhQdGiaoNvuNhapxuatHdr> qdNhap = hhQdGiaoNvuNhapxuatRepository.findById(item.getQdgnvnxId());
             if (!qdNhap.isPresent()) {
@@ -147,6 +168,15 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
             }
             res.setSoPhieuNhapKho(phieuNhapKho.get().getSoPhieu());
         }
+
+        if (item.getHopDongId() != null) {
+            Optional<HhHopDongHdr> qOpHdong = hhHopDongRepository.findById(item.getHopDongId());
+            if (!qOpHdong.isPresent())
+                throw new Exception("Hợp đồng không tồn tại");
+
+            res.setSoHopDong(qOpHdong.get().getSoHd());
+        }
+
         return res;
     }
 

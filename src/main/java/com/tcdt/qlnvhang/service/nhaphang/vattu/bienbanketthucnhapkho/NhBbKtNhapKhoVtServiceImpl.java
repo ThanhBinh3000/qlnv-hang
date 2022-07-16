@@ -159,7 +159,7 @@ public class NhBbKtNhapKhoVtServiceImpl extends BaseServiceImpl implements NhBbK
             Long id = req.getId();
             NhBbKtNhapKhoVtCt chiTiet = new NhBbKtNhapKhoVtCt();
 
-            if (id != null) {
+            if (id != null && id > 0) {
                 chiTiet = mapChiTiet.get(id);
                 if (chiTiet == null)
                     throw new Exception("Biên bản chuẩn bị kho chi tiết không tồn tại.");

@@ -172,7 +172,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 			Long id = req.getId();
 			BienBanLayMauCt chiTiet = new BienBanLayMauCt();
 
-			if (id != null) {
+			if (id != null && id > 0) {
 				chiTiet = mapChiTiet.get(id);
 				if (chiTiet == null)
 					throw new Exception("Biên bản lấy mẫu chi tiết không tồn tại.");

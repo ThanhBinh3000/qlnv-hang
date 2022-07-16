@@ -223,7 +223,7 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
             Long id = req.getId();
             QlBangKeChCtLt chiTiet = new QlBangKeChCtLt();
 
-            if (id != null) {
+            if (id != null && id > 0) {
                 chiTiet = mapChiTiet.get(id);
                 if (chiTiet == null)
                     throw new Exception("Bảng kê chi tiết hàng Hóa không tồn tại.");
