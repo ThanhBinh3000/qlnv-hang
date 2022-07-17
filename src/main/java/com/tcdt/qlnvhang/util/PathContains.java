@@ -147,4 +147,6 @@ public class PathContains {
 	public static final String BANG_KE_VAT_TU = "/bang-ke-vt";
 
 	public static final String BIEN_BAN_KET_THUC_NHAP_KHO_VT = "/bien-ban-ket-thuc-nhap-kho-vt";
+
+	public static final String BIEN_BAN_BAN_GIAO_MAU_VT = "/bien-ban-ban-giao-mau-vt";
 }
