@@ -23,10 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -138,8 +135,9 @@ public class KeHoachBanDauGiaServiceImpl implements KeHoachBanDauGiaService {
 		if (!CollectionUtils.isEmpty(req.getPhanLoTaiSanList())) {
 			//Clean data
 			List<BhDgKhPhanLoTaiSan> phanLoTaiSanListExisted = phanLoTaiSanRepository.findByBhDgKehoachId(keHoachDauGia.getId());
-			if (!CollectionUtils.isEmpty(phanLoTaiSanListExisted))
+			if (!CollectionUtils.isEmpty(phanLoTaiSanListExisted)) {
 				phanLoTaiSanRepository.deleteAll(phanLoTaiSanListExisted);
+			}
 
 			List<BhDgKhPhanLoTaiSan> phanLoTaiSanList = req.getPhanLoTaiSanList().stream().map(it -> {
 				BhDgKhPhanLoTaiSan phanLoTaiSan = phanLoTaiSanRequestMapper.toEntity(it);
@@ -152,5 +150,32 @@ public class KeHoachBanDauGiaServiceImpl implements KeHoachBanDauGiaService {
 		}
 
 		return kehoachResponseMapper.toDto(keHoachDauGia);
+	}
+
+	@Override
+	public boolean delete(Long id) throws Exception {
+		if (id == null) throw new Exception("Bad request.");
+		Optional<BhDgKehoach> optional = bhDgKehoachRepository.findById(id);
+		if (!optional.isPresent())
+			throw new Exception("Kế hoạch bán đấu giá không tồn tại");
+		BhDgKehoach keHoachDauGia = optional.get();
+
+		log.info("Delete file dinh kem");
+		fileDinhKemService.delete(keHoachDauGia.getId(), Collections.singleton(BhDgKehoach.TABLE_NAME));
+		log.info("Delete địa điểm giao nhận");
+		List<BhDgKhDiaDiemGiaoNhan> diaDiemGiaoNhanList = diaDiemGiaoNhanRepository.findByBhDgKehoachId(keHoachDauGia.getId());
+		if (!CollectionUtils.isEmpty(diaDiemGiaoNhanList)) {
+			diaDiemGiaoNhanRepository.deleteAll(diaDiemGiaoNhanList);
+		}
+
+		log.info("Delete phan lo tai san");
+		List<BhDgKhPhanLoTaiSan> phanLoTaiSanListExisted = phanLoTaiSanRepository.findByBhDgKehoachId(keHoachDauGia.getId());
+		if (!CollectionUtils.isEmpty(phanLoTaiSanListExisted)) {
+			phanLoTaiSanRepository.deleteAll(phanLoTaiSanListExisted);
+		}
+
+		log.info("Delete ke hoach ban dau gia");
+		bhDgKehoachRepository.delete(keHoachDauGia);
+		return true;
 	}
 }

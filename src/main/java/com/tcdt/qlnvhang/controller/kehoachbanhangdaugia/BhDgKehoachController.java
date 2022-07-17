@@ -7,10 +7,12 @@ import com.tcdt.qlnvhang.request.kehoachbanhangdaugia.BhDgKehoachReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.response.kehoachbanhangdaugia.BhDgKehoachRes;
 import com.tcdt.qlnvhang.service.kehoachbanhangdaugia.KeHoachBanDauGiaService;
+import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,6 +49,23 @@ public class BhDgKehoachController extends BaseController {
 		BaseResponse resp = new BaseResponse();
 		try {
 			BhDgKehoachRes res = keHoachBanDauGiaService.update(req);
+			resp.setData(res);
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error(e.getMessage());
+		}
+		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Xoá thông tin kế hoạch bán đấu giá hàng hóa", response = Boolean.class)
+	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<BaseResponse> delete(@PathVariable("id") Long id) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			Boolean res = keHoachBanDauGiaService.delete(id);
 			resp.setData(res);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());

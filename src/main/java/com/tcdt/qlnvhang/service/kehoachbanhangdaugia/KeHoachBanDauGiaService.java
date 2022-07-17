@@ -6,4 +6,5 @@ import com.tcdt.qlnvhang.response.kehoachbanhangdaugia.BhDgKehoachRes;
 public interface KeHoachBanDauGiaService {
 	BhDgKehoachRes create (BhDgKehoachReq req) throws Exception;
 	BhDgKehoachRes update (BhDgKehoachReq req) throws Exception;
+	boolean delete (Long id) throws Exception;
 }
