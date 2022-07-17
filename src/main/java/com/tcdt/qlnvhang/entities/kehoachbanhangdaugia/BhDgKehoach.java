@@ -94,18 +94,6 @@ public class BhDgKehoach extends BaseEntity implements Serializable {
 	@Column(name = "CAP_DV")
 	private String capDv;
 
-	@Column(name = "NGAY_TAO")
-	private LocalDate ngayTao;
-
-	@Column(name = "NGUOI_TAO")
-	private Long nguoiTao;
-
-	@Column(name = "NGAY_SUA")
-	private LocalDate ngaySua;
-
-	@Column(name = "NGUOI_SUA")
-	private Long nguoiSua;
-
 	@Column(name = "LOAI_VAT_TU_HANG_HOA")
 	private String loaiVatTuHangHoa;
 
