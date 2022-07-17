@@ -2,7 +2,7 @@ package com.tcdt.qlnvhang.service.nhaphang.luongthucmuoi.quanlyphieukiemtrachatl
 
 import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhKetQuaKiemTra;
 import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
-import com.tcdt.qlnvhang.enums.QlpktclhPhieuKtChatLuongStatusEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhKetQuaKiemTraRepository;
@@ -19,16 +19,10 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.HhHopDongHdr;
 import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.util.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.xssf.usermodel.XSSFFont;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,7 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -54,14 +48,21 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 	private static final String SHEET_PHIEU_KIEM_TRA_CHAT_LUONG_HANG = "Phiếu kiểm tra chất lượng hàng";
 	private static final String STT = "STT";
 	private static final String SO_PHIEU = "Số Phiếu";
-	private static final String KET_QUA_DANH_GIA = "Kết Quả Đánh Giá";
+	private static final String SO_QUYET_DINH_NHAP = "Số Quyết Định Nhập";
+	private static final String DIEM_KHO = "Điểm Kho";
+	private static final String NHA_KHO = "Nhà Kho";
+	private static final String NGAN_KHO = "Ngăn Kho";
+	private static final String NGAN_LO = "Ngăn Lô";
 	private static final String NGAY_GIAM_DINH = "Ngày Giám Định";
+	private static final String KET_QUA_DANH_GIA = "Kết Quả Đánh Giá";
 	private static final String TRANG_THAI = "Trạng Thái";
+
 	private final QlpktclhPhieuKtChatLuongRepository qlpktclhPhieuKtChatLuongRepo;
 	private final QlpktclhKetQuaKiemTraRepository qlpktclhKetQuaKiemTraRepo;
 	private final DataUtils dataUtils;
 	private final HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
 	private final HhHopDongRepository hhHopDongRepository;
+	private final HttpServletRequest req;
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -77,7 +78,7 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 		phieu.setNgayTao(LocalDate.now());
 		phieu.setNguoiTaoId(userInfo.getId());
 		phieu.setMaDvi(userInfo.getDvql());
-		phieu.setTrangThai(QlpktclhPhieuKtChatLuongStatusEnum.DU_THAO.getId());
+		phieu.setTrangThai(TrangThaiEnum.DU_THAO.getId());
 		phieu.setCapDvi(userInfo.getCapDvi());
 
 		phieu.setSo(getSo());
@@ -166,7 +167,7 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 
 	private QlpktclhPhieuKtChatLuongResponseDto buildResponse(QlpktclhPhieuKtChatLuong qlpktclhPhieuKtChatLuong) throws Exception {
 		QlpktclhPhieuKtChatLuongResponseDto response = dataUtils.toObject(qlpktclhPhieuKtChatLuong, QlpktclhPhieuKtChatLuongResponseDto.class);
-		response.setTenTrangThai(QlpktclhPhieuKtChatLuongStatusEnum.getTenById(qlpktclhPhieuKtChatLuong.getTrangThai()));
+		response.setTenTrangThai(TrangThaiEnum.getTenById(qlpktclhPhieuKtChatLuong.getTrangThai()));
 		List<QlpktclhKetQuaKiemTraResponseDto> ketQuaKiemTraRes = qlpktclhPhieuKtChatLuong.getKetQuaKiemTra().stream()
 						.map(item -> dataUtils.toObject(item, QlpktclhKetQuaKiemTraResponseDto.class))
 						.collect(Collectors.toList());
@@ -192,7 +193,12 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 		}
 
 		response.setKetQuaKiemTra(ketQuaKiemTraRes);
-		response.setTenTrangThai(QlpktclhPhieuKtChatLuongStatusEnum.getTenById(qlpktclhPhieuKtChatLuong.getTrangThai()));
+		response.setTenTrangThai(TrangThaiEnum.getTenById(qlpktclhPhieuKtChatLuong.getTrangThai()));
+		response.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(qlpktclhPhieuKtChatLuong.getTrangThai()));
+		QlnvDmDonvi donvi = getDviByMa(qlpktclhPhieuKtChatLuong.getMaDvi(), req);
+		response.setMaDvi(donvi.getMaDvi());
+		response.setTenDvi(donvi.getTenDvi());
+		response.setMaQhns(donvi.getMaQhns());
 		return response;
 	}
 
@@ -227,32 +233,32 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 
 		QlpktclhPhieuKtChatLuong phieu = optional.get();
 		String trangThai = phieu.getTrangThai();
-		if (QlpktclhPhieuKtChatLuongStatusEnum.DU_THAO_TRINH_DUYET.getId().equals(req.getTrangThai())) {
-			if (!QlpktclhPhieuKtChatLuongStatusEnum.DU_THAO.getId().equals(trangThai))
+		if (TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(req.getTrangThai())) {
+			if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
 				return false;
 
-			phieu.setTrangThai(QlpktclhPhieuKtChatLuongStatusEnum.DU_THAO_TRINH_DUYET.getId());
+			phieu.setTrangThai(TrangThaiEnum.DU_THAO_TRINH_DUYET.getId());
 			phieu.setNguoiGuiDuyetId(userInfo.getId());
 			phieu.setNgayGuiDuyet(LocalDate.now());
 
-		} else if (QlpktclhPhieuKtChatLuongStatusEnum.LANH_DAO_DUYET.getId().equals(req.getTrangThai())) {
-			if (!QlpktclhPhieuKtChatLuongStatusEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
+		} else if (TrangThaiEnum.LANH_DAO_DUYET.getId().equals(req.getTrangThai())) {
+			if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
 				return false;
-			phieu.setTrangThai(QlpktclhPhieuKtChatLuongStatusEnum.LANH_DAO_DUYET.getId());
+			phieu.setTrangThai(TrangThaiEnum.LANH_DAO_DUYET.getId());
 			phieu.setNguoiPheDuyetId(userInfo.getId());
 			phieu.setNgayPheDuyet(LocalDate.now());
-		} else if (QlpktclhPhieuKtChatLuongStatusEnum.BAN_HANH.getId().equals(req.getTrangThai())) {
-			if (!QlpktclhPhieuKtChatLuongStatusEnum.LANH_DAO_DUYET.getId().equals(trangThai))
+		} else if (TrangThaiEnum.BAN_HANH.getId().equals(req.getTrangThai())) {
+			if (!TrangThaiEnum.LANH_DAO_DUYET.getId().equals(trangThai))
 				return false;
 
-			phieu.setTrangThai(QlpktclhPhieuKtChatLuongStatusEnum.BAN_HANH.getId());
+			phieu.setTrangThai(TrangThaiEnum.BAN_HANH.getId());
 			phieu.setNguoiPheDuyetId(userInfo.getId());
 			phieu.setNgayPheDuyet(LocalDate.now());
-		} else if (QlpktclhPhieuKtChatLuongStatusEnum.TU_CHOI.getId().equals(req.getTrangThai())) {
-			if (!QlpktclhPhieuKtChatLuongStatusEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
+		} else if (TrangThaiEnum.TU_CHOI.getId().equals(req.getTrangThai())) {
+			if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
 				return false;
 
-			phieu.setTrangThai(QlpktclhPhieuKtChatLuongStatusEnum.TU_CHOI.getId());
+			phieu.setTrangThai(TrangThaiEnum.TU_CHOI.getId());
 			phieu.setNguoiPheDuyetId(userInfo.getId());
 			phieu.setNgayPheDuyet(LocalDate.now());
 			phieu.setLyDoTuChoi(req.getLyDo());
@@ -278,9 +284,9 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 
 		QlpktclhPhieuKtChatLuong phieu = optional.get();
 
-		if (QlpktclhPhieuKtChatLuongStatusEnum.BAN_HANH.getId().equals(phieu.getTrangThai())) {
+		if (TrangThaiEnum.BAN_HANH.getId().equals(phieu.getTrangThai())) {
 			throw new Exception("Không thể xóa đề xuất điều chỉnh đã ban hành");
-		} else if (QlpktclhPhieuKtChatLuongStatusEnum.DU_THAO_TRINH_DUYET.getId().equals(phieu.getTrangThai())) {
+		} else if (TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(phieu.getTrangThai())) {
 			throw new Exception("Không thể xóa đề xuất điều chỉnh trình duyệt");
 		}
 
@@ -300,49 +306,32 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 		if (CollectionUtils.isEmpty(list))
 			return true;
 
+		String[] rowsName = new String[] { STT, SO_PHIEU, SO_QUYET_DINH_NHAP, DIEM_KHO, NHA_KHO, NGAN_KHO, NGAN_LO,
+				NGAY_GIAM_DINH, KET_QUA_DANH_GIA, TRANG_THAI};
+		String filename = "Danh_sach_phieu_kiem_tra_chat_luong_hang.xlsx";
+
+		List<Object[]> dataList = new ArrayList<Object[]>();
+		Object[] objs = null;
+
 		try {
-			XSSFWorkbook workbook = new XSSFWorkbook();
-
-			//STYLE
-			CellStyle style = workbook.createCellStyle();
-			XSSFFont font = workbook.createFont();
-			font.setFontHeight(11);
-			font.setBold(true);
-			style.setFont(font);
-			style.setAlignment(HorizontalAlignment.CENTER);
-			style.setVerticalAlignment(VerticalAlignment.CENTER);
-			XSSFSheet sheet = workbook.createSheet(SHEET_PHIEU_KIEM_TRA_CHAT_LUONG_HANG);
-			Row row0 = sheet.createRow(0);
-			//STT
-
-			ExportExcel.createCell(row0, 0, STT, style, sheet);
-			ExportExcel.createCell(row0, 1, SO_PHIEU, style, sheet);
-			ExportExcel.createCell(row0, 2, NGAY_GIAM_DINH, style, sheet);
-			ExportExcel.createCell(row0, 3, KET_QUA_DANH_GIA, style, sheet);
-			ExportExcel.createCell(row0, 4, TRANG_THAI, style, sheet);
-
-			style = workbook.createCellStyle();
-			font = workbook.createFont();
-			font.setFontHeight(11);
-			style.setFont(font);
-
-			Row row;
-			int startRowIndex = 1;
-
-			for (QlpktclhPhieuKtChatLuongResponseDto item : list) {
-				row = sheet.createRow(startRowIndex);
-				ExportExcel.createCell(row, 0, startRowIndex, style, sheet);
-				ExportExcel.createCell(row, 1, item.getSoPhieu(), style, sheet);
-				ExportExcel.createCell(row, 2, LocalDateTimeUtils.localDateToString(item.getNgayGdinh()), style, sheet);
-				ExportExcel.createCell(row, 3, item.getKetLuan(), style, sheet);
-				ExportExcel.createCell(row, 4, QlpktclhPhieuKtChatLuongStatusEnum.getTenById(item.getTrangThai()), style, sheet);
-				startRowIndex++;
+			for (int i = 0; i < list.size(); i++) {
+				QlpktclhPhieuKtChatLuongResponseDto item = list.get(i);
+				objs = new Object[rowsName.length];
+				objs[0] = i;
+				objs[1] = item.getSoPhieu();
+				objs[2] = item.getSoQuyetDinhNhap();
+				objs[3] = item.getTenDiemKho();
+				objs[4] = item.getTenNhaKho();
+				objs[5] = item.getTenNganKho();
+				objs[6] = item.getTenNganLo();
+				objs[7] = LocalDateTimeUtils.localDateToString(item.getNgayGdinh());
+				objs[8] = item.getKqDanhGia();
+				objs[9] = TrangThaiEnum.getTenById(item.getTrangThai());
+				dataList.add(objs);
 			}
 
-			ServletOutputStream outputStream = response.getOutputStream();
-			workbook.write(outputStream);
-			workbook.close();
-			outputStream.close();
+			ExportExcel ex = new ExportExcel(SHEET_PHIEU_KIEM_TRA_CHAT_LUONG_HANG, filename, rowsName, dataList, response);
+			ex.export();
 		} catch (Exception e) {
 			log.error("Error export", e);
 			return false;

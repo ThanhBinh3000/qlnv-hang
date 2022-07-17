@@ -48,9 +48,8 @@ public class QlpktclhPhieuKtChatLuongRequestDto extends SoBienBanPhieuReq {
 	private String tenNhaKho;
 
 	@NotNull
-	private String maHangHoa;
-
-	private String tenHangHoa;
+	private String maVatTu;
+	private String maVatTuCha;
 
 	@NotNull
 	private Double khoiLuong;
@@ -79,8 +78,8 @@ public class QlpktclhPhieuKtChatLuongRequestDto extends SoBienBanPhieuReq {
 
 	private String trangThai;
 
-	@NotNull
 	private String ketLuan;
+	private String kqDanhGia;
 
 	private String lyDoTuChoi;
 

@@ -3,9 +3,11 @@ package com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,9 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class QlpktclhPhieuKtChatLuong extends BaseEntity {
+@EqualsAndHashCode(callSuper = false)
+public class QlpktclhPhieuKtChatLuong extends BaseEntity implements Serializable {
+	private static final long serialVersionUID = -5114185021472069821L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PHIEU_KT_CHAT_LUONG_SEQ")
 	@SequenceGenerator(sequenceName = "PHIEU_KT_CHAT_LUONG_SEQ", allocationSize = 1, name = "PHIEU_KT_CHAT_LUONG_SEQ")
@@ -43,11 +47,11 @@ public class QlpktclhPhieuKtChatLuong extends BaseEntity {
 	@Column(name = "QUYET_DINH_NHAP_ID")
 	private Long quyetDinhNhapId;
 
-	@Column(name = "MA_HANG_HOA")
-	private String maHangHoa;
+	@Column(name = "MA_VAT_TU")
+	private String maVatTu;
 
-	@Column(name = "TEN_HANG_HOA")
-	private String tenHangHoa;
+	@Column(name = "MA_VAT_TU_CHA")
+	private String maVatTuCha;
 
 	@Column(name = "SO_PHIEU_AN_TOAN_THUC_PHAM")
 	private String soPhieuAnToanThucPham;
@@ -120,6 +124,9 @@ public class QlpktclhPhieuKtChatLuong extends BaseEntity {
 
 	@Column(name = "KET_LUAN")
 	private String ketLuan;
+
+	@Column(name = "KQ_DANH_GIA")
+	private String kqDanhGia;
 
 	@Column(name = "LOAI_VTHH")
 	private String loaiVthh;

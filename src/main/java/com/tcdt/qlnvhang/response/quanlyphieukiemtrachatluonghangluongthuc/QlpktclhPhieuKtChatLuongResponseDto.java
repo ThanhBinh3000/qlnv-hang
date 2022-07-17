@@ -33,9 +33,11 @@ public class QlpktclhPhieuKtChatLuongResponseDto extends SoBienBanPhieuRes {
 
 	private String soQuyetDinhNhap;
 
-	private Long maHangHoa;
+	private String maVatTu;
+	private String maVatTuCha;
 
-	private String tenHangHoa;
+	private String tenVatTu;
+	private String tenVatTuCha;
 
 	private Double khoiLuong;
 
@@ -46,14 +48,17 @@ public class QlpktclhPhieuKtChatLuongResponseDto extends SoBienBanPhieuRes {
 	private String soPhieuAnToanThucPham;
 
 	private String maDvi;
+	private String tenDvi;
+	private String maQhns;
 
 	private String ketLuan;
-
+	private String kqDanhGia;
 	private String lyDoTuChoi;
 
 	private String trangThai;
 
 	private String tenTrangThai;
+	private String trangThaiDuyet;
 
 	private String maNganKho;
 

@@ -1,8 +1,7 @@
 package com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc;
 
 import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
-import com.tcdt.qlnvhang.enums.QdPheDuyetKqlcntVtStatus;
-import com.tcdt.qlnvhang.enums.QlpktclhPhieuKtChatLuongStatusEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongFilterRequestDto;
@@ -51,7 +50,8 @@ public class QlpktclhPhieuKtChatLuongRepositoryCustomImpl implements QlpktclhPhi
 			Long quyetDinhNhapId = (Long) o[1];
 			String soQdNhap = (String) o[2];
 			QlpktclhPhieuKtChatLuongResponseDto response = dataUtils.toObject(qd, QlpktclhPhieuKtChatLuongResponseDto.class);
-			response.setTenTrangThai(QlpktclhPhieuKtChatLuongStatusEnum.getTenById(qd.getTrangThai()));
+			response.setTenTrangThai(TrangThaiEnum.getTenById(qd.getTrangThai()));
+			response.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(qd.getTrangThai()));
 			response.setQuyetDinhNhapId(quyetDinhNhapId);
 			response.setSoQuyetDinhNhap(soQdNhap);
 			response.setMaDiemKho(qd.getMaDiemKho());
@@ -86,8 +86,8 @@ public class QlpktclhPhieuKtChatLuongRepositoryCustomImpl implements QlpktclhPhi
 		if (StringUtils.hasText(req.getMaNganKho())) {
 			builder.append("AND ").append("qd.maNganKho = :maNganKho ");
 		}
-		if (StringUtils.hasText(req.getMaHangHoa())) {
-			builder.append("AND ").append("qd.maHangHoa = :maHangHoa ");
+		if (StringUtils.hasText(req.getMaVatTu())) {
+			builder.append("AND ").append("qd.maVatTu = :maVatTu ");
 		}
 
 		if (StringUtils.hasText(req.getLoaiVthh())) {
@@ -100,6 +100,10 @@ public class QlpktclhPhieuKtChatLuongRepositoryCustomImpl implements QlpktclhPhi
 
 		if (!CollectionUtils.isEmpty(req.getTrangThais())) {
 			builder.append("AND ").append("qd.trangThai IN :trangThais ");
+		}
+
+		if (StringUtils.hasText(req.getKqDanhGia())) {
+			builder.append("AND ").append("LOWER(qd.kqDanhGia) LIKE :kqDanhGia ");
 		}
 	}
 
@@ -143,8 +147,8 @@ public class QlpktclhPhieuKtChatLuongRepositoryCustomImpl implements QlpktclhPhi
 		if (StringUtils.hasText(req.getMaNganKho())) {
 			query.setParameter("maNganKho", req.getMaNganKho());
 		}
-		if (StringUtils.hasText(req.getMaHangHoa())) {
-			query.setParameter("maHangHoa", req.getMaHangHoa());
+		if (StringUtils.hasText(req.getMaVatTu())) {
+			query.setParameter("maVatTu", req.getMaVatTu());
 		}
 
 		if (StringUtils.hasText(req.getLoaiVthh())) {
@@ -157,6 +161,10 @@ public class QlpktclhPhieuKtChatLuongRepositoryCustomImpl implements QlpktclhPhi
 
 		if (!CollectionUtils.isEmpty(req.getTrangThais())) {
 			query.setParameter("trangThais", req.getTrangThais());
+		}
+
+		if (StringUtils.hasText(req.getKqDanhGia())) {
+			query.setParameter("kqDanhGia", "%" + req.getKqDanhGia().toLowerCase() + "%");
 		}
 	}
 }

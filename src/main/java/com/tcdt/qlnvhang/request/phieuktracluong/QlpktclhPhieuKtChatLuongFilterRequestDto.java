@@ -32,11 +32,11 @@ public class QlpktclhPhieuKtChatLuongFilterRequestDto extends BaseRequest {
 
 	private String maNganKho;
 
-	private String maHangHoa;
+	private String maVatTu;
 
 	private String tenNguoiGiao;
 
-	private String ketLuan;
+	private String kqDanhGia;
 
 	private String soQd;
 
