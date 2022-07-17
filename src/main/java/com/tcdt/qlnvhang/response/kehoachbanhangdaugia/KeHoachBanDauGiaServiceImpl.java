@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.response.kehoachbanhangdaugia;
 
 import com.tcdt.qlnvhang.entities.kehoachbanhangdaugia.BhDgKehoach;
+import com.tcdt.qlnvhang.entities.kehoachbanhangdaugia.BhDgKehoach_;
 import com.tcdt.qlnvhang.entities.kehoachbanhangdaugia.BhDgKhDiaDiemGiaoNhan;
 import com.tcdt.qlnvhang.entities.kehoachbanhangdaugia.BhDgKhPhanLoTaiSan;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
@@ -9,6 +10,7 @@ import com.tcdt.qlnvhang.repository.kehoachbanhangdaugia.BhDgKehoachRepository;
 import com.tcdt.qlnvhang.repository.kehoachbanhangdaugia.BhDgKhDiaDiemGiaoNhanRepository;
 import com.tcdt.qlnvhang.repository.kehoachbanhangdaugia.BhDgKhPhanLoTaiSanRepository;
 import com.tcdt.qlnvhang.request.kehoachbanhangdaugia.BhDgKehoachReq;
+import com.tcdt.qlnvhang.request.kehoachbanhangdaugia.BhDgKehoachSearchReq;
 import com.tcdt.qlnvhang.request.kehoachbanhangdaugia.BhDgKhDiaDiemGiaoNhanReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -16,8 +18,12 @@ import com.tcdt.qlnvhang.service.kehoachbanhangdaugia.KeHoachBanDauGiaService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
+import com.tcdt.qlnvhang.util.SpecUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -177,5 +183,55 @@ public class KeHoachBanDauGiaServiceImpl implements KeHoachBanDauGiaService {
 		log.info("Delete ke hoach ban dau gia");
 		bhDgKehoachRepository.delete(keHoachDauGia);
 		return true;
+	}
+
+	@Override
+	public Page<BhDgKehoachRes> search(BhDgKehoachSearchReq req) throws Exception {
+		Specification<BhDgKehoach> specs = SpecUtils.build(BhDgKehoach.class);
+		if (Objects.nonNull(req.getNamKeHoach())) {
+			specs.and(SpecUtils.equal(BhDgKehoach_.NAM_KE_HOACH, req.getNamKeHoach()));
+		}
+		if (Objects.nonNull(req.getSoKeHoach())) {
+			specs.and(SpecUtils.like(BhDgKehoach_.SO_KE_HOACH, req.getSoKeHoach()));
+		}
+		if (Objects.nonNull(req.getTrichYeu())) {
+			specs.and(SpecUtils.like(BhDgKehoach_.TRICH_YEU, req.getTrichYeu()));
+		}
+		if (Objects.nonNull(req.getNgayKyTuNgay())) {
+			specs.and(SpecUtils.greaterThanOrEqualTo(BhDgKehoach_.NGAY_KY, req.getNgayKyTuNgay()));
+		}
+		if (Objects.nonNull(req.getNgayKyTuNgay())) {
+			specs.and(SpecUtils.lessThanOrEqualTo(BhDgKehoach_.NGAY_KY, req.getNgayKyDenNgay()));
+		}
+		Page<BhDgKehoach> page = bhDgKehoachRepository.findAll(specs, req.getPageable());
+
+		List<BhDgKehoach> response = page.get().collect(Collectors.toList());
+
+		if (CollectionUtils.isEmpty(response)) page.map(kehoachResponseMapper::toDto);
+
+		List<Long> ids = response.stream().map(BhDgKehoach::getId).collect(Collectors.toList());
+
+		List<BhDgKhDiaDiemGiaoNhan> diaDiemGiaoNhanList = diaDiemGiaoNhanRepository.findByBhDgKehoachIdIn(ids);
+		//Map: Key-value = BhDgKehoachId-list BhDgKhDiaDiemGiaoNhan
+		Map<Long, List<BhDgKhDiaDiemGiaoNhan>> diaDiemGiaoNhanMap = diaDiemGiaoNhanList.stream()
+				.collect(Collectors.groupingBy(BhDgKhDiaDiemGiaoNhan::getBhDgKehoachId));
+
+		////Map: Key-value = BhDgKehoachId- list BhDgKhPhanLoTaiSan
+		List<BhDgKhPhanLoTaiSan> phanLoTaiSanList = phanLoTaiSanRepository.findByBhDgKehoachIdIn(ids);
+		Map<Long, List<BhDgKhPhanLoTaiSan>> phanLoTaiSanMap = phanLoTaiSanList.stream()
+				.collect(Collectors.groupingBy(BhDgKhPhanLoTaiSan::getBhDgKehoachId));
+
+		List<BhDgKehoachRes> responseDto = response.stream().map(it -> {
+			if (Objects.nonNull(diaDiemGiaoNhanMap.get(it.getId()))) {
+				it.setDiaDiemGiaoNhanList(diaDiemGiaoNhanMap.get(it.getId()));
+			}
+
+			if (Objects.nonNull(phanLoTaiSanMap.get(it.getId()))) {
+				it.setPhanLoTaiSanList(phanLoTaiSanMap.get(it.getId()));
+			}
+			return kehoachResponseMapper.toDto(it);
+		}).collect(Collectors.toList());
+
+		return new PageImpl<>(responseDto);
 	}
 }
