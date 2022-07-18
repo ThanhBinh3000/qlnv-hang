@@ -77,6 +77,19 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		}
 		dataMap.setChildren(dtls);
 
+		List<Long> hopDongIds = objReq.getHopDongIds();
+		List<HhQdGiaoNvuNhapxuatDtl1> dtls1 = new ArrayList<HhQdGiaoNvuNhapxuatDtl1>();
+		if (!CollectionUtils.isEmpty(hopDongIds)) {
+			List<HhHopDongHdr> hhHopDongHdrs = hhHopDongRepository.findAllById(hopDongIds);
+			hhHopDongHdrs.forEach(hopDong -> {
+				HhQdGiaoNvuNhapxuatDtl1 dtl1 = new HhQdGiaoNvuNhapxuatDtl1();
+				dtl1.setParent(dataMap);
+				dtl1.setHopDong(hopDong);
+				dtls1.add(dtl1);
+			}) ;
+		}
+		dataMap.setChildren1(dtls1);
+
 		// File dinh kem cua goi thau
 		List<FileDKemJoinQdNhapxuat> dtls2 = new ArrayList<FileDKemJoinQdNhapxuat>();
 		if (objReq.getFileDinhKems() != null) {
@@ -94,7 +107,6 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		dataMap.setTenTrangThai(TrangThaiEnum.getTenById(dataMap.getTrangThai()));
 		dataMap.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(dataMap.getTrangThai()));
 		this.setTenDvi(dataMap);
-		this.setHopDong(dataMap);
 		return dataMap;
 	}
 
@@ -129,6 +141,19 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		}
 		dataDB.setChildren(dtls);
 
+		List<Long> hopDongIds = objReq.getHopDongIds();
+		List<HhQdGiaoNvuNhapxuatDtl1> dtls1 = new ArrayList<HhQdGiaoNvuNhapxuatDtl1>();
+		if (!CollectionUtils.isEmpty(hopDongIds)) {
+			List<HhHopDongHdr> hhHopDongHdrs = hhHopDongRepository.findAllById(hopDongIds);
+			hhHopDongHdrs.forEach(hopDong -> {
+				HhQdGiaoNvuNhapxuatDtl1 dtl1 = new HhQdGiaoNvuNhapxuatDtl1();
+				dtl1.setParent(dataDB);
+				dtl1.setHopDong(hopDong);
+				dtls1.add(dtl1);
+			}) ;
+		}
+		dataDB.setChildren1(dtls1);
+
 		// File dinh kem cua goi thau
 		List<FileDKemJoinQdNhapxuat> dtls2 = new ArrayList<FileDKemJoinQdNhapxuat>();
 		if (objReq.getFileDinhKems() != null) {
@@ -144,7 +169,6 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		dataDB.setTenTrangThai(TrangThaiEnum.getTenById(dataDB.getTrangThai()));
 		dataDB.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(dataDB.getTrangThai()));
 		this.setTenDvi(dataDB);
-		this.setHopDong(dataDB);
 		return dataDB;
 	}
 
@@ -156,16 +180,6 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			String a = mapDmucDvi.get(c.getMaDvi());
 			c.setTenDvi(mapDmucDvi.get(c.getMaDvi()));
 		});
-	}
-
-	private void setHopDong(HhQdGiaoNvuNhapxuatHdr data) throws Exception {
-		if (StringUtils.hasText(data.getSoHd())) {
-			Optional<HhHopDongHdr> qOpHdong = hhHopDongRepository.findBySoHd(data.getSoHd());
-			if (!qOpHdong.isPresent())
-				throw new Exception("Hợp đồng không tồn tại");
-
-			data.setHdId(qOpHdong.get().getId());
-		}
 	}
 
 	@Override
@@ -187,7 +201,6 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		data.setTenTrangThai(TrangThaiEnum.getTenById(data.getTrangThai()));
 		data.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(data.getTrangThai()));
 		this.setTenDvi(data);
-		this.setHopDong(data);
 
 		return data;
 	}

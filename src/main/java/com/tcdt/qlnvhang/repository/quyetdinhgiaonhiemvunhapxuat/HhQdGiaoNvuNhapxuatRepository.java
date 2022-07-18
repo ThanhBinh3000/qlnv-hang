@@ -17,8 +17,6 @@ import javax.transaction.Transactional;
 @Repository
 public interface HhQdGiaoNvuNhapxuatRepository extends BaseRepository<HhQdGiaoNvuNhapxuatHdr, Long>, HhQdGiaoNvuNhapxuatRepositoryCustom {
 
-	Optional<HhQdGiaoNvuNhapxuatHdr> findBySoHd(String soHd);
-
 	Optional<HhQdGiaoNvuNhapxuatHdr> findFirstBySoQd(String soQd);
 
 	@Query(

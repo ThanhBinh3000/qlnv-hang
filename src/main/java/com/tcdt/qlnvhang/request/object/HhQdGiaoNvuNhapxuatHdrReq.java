@@ -34,10 +34,6 @@ public class HhQdGiaoNvuNhapxuatHdrReq {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayHluc;
 
-	@Size(max = 20, message = "Số hợp đồng được vượt quá 20 ký tự")
-	@ApiModelProperty(example = "20/HD-TCDT")
-	String soHd;
-
 	String maDvi;
 
 	@Size(max = 2, message = "Loại quyết định được vượt quá 20 ký tự")
@@ -68,4 +64,5 @@ public class HhQdGiaoNvuNhapxuatHdrReq {
 
 	private List<FileDinhKemReq> fileDinhKems;
 
+	private List<Long> hopDongIds;
 }

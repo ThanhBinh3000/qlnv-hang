@@ -19,8 +19,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tcdt.qlnvhang.util.Contains;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Where;
@@ -52,7 +50,6 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 
 	@Temporal(TemporalType.DATE)
 	Date ngayHluc;
-	String soHd;
 	String maDvi;
 	String loaiQd;
 	String trangThai;
@@ -107,6 +104,24 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 	public void addChild(HhQdGiaoNvuNhapxuatDtl child) {
 		child.setParent(this);
 		this.children.add(child);
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "id_hdr")
+	@JsonManagedReference
+	private List<HhQdGiaoNvuNhapxuatDtl1> children1 = new ArrayList<>();
+
+	public void setChildren1(List<HhQdGiaoNvuNhapxuatDtl1> children) {
+		this.children1.clear();
+		for (HhQdGiaoNvuNhapxuatDtl1 child : children) {
+			child.setParent(this);
+		}
+		this.children1.addAll(children);
+	}
+
+	public void addChild1(HhQdGiaoNvuNhapxuatDtl1 child) {
+		child.setParent(this);
+		this.children1.add(child);
 	}
 
 	/*@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
