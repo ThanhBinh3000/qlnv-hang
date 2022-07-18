@@ -351,7 +351,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 	@Override
 	public void exportDsKhlcnt(HhDxuatKhLcntSearchReq searchReq, HttpServletResponse response) throws Exception {
 		PaggingReq paggingReq = new PaggingReq();
-		paggingReq.setPage(1);
+		paggingReq.setPage(0);
 		paggingReq.setLimit(Integer.MAX_VALUE);
 		searchReq.setPaggingReq(paggingReq);
 		Page<HhDxuatKhLcntHdr> page = this.colection(searchReq, null);

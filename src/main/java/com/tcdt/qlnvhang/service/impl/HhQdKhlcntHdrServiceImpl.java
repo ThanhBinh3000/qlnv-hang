@@ -1,12 +1,12 @@
 package com.tcdt.qlnvhang.service.impl;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
 import com.tcdt.qlnvhang.repository.*;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.object.HhDxuatKhLcntDsgthauDtlCtietReq;
 import com.tcdt.qlnvhang.request.object.HhQdKhlcntDsgthauReq;
 import com.tcdt.qlnvhang.table.*;
@@ -25,7 +25,6 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.HhQdKhlcntDtlReq;
 import com.tcdt.qlnvhang.request.object.HhQdKhlcntHdrReq;
 import com.tcdt.qlnvhang.request.search.HhQdKhlcntSearchReq;
-import com.tcdt.qlnvhang.secification.HhQdKhlcntSpecification;
 import com.tcdt.qlnvhang.service.HhQdKhlcntHdrService;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -549,7 +548,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	}
 
 	@Override
-	public Page<HhQdKhlcntHdr> colection(HhQdKhlcntSearchReq objReq) throws Exception {
+	public Page<HhQdKhlcntHdr> colection(HhQdKhlcntSearchReq objReq, HttpServletResponse response) throws Exception {
 		int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
 		int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
 		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
@@ -569,49 +568,49 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		return dataPage;
 	}
 
-	@Override
-	public void exportToExcel(HhQdKhlcntSearchReq searchReq, HttpServletResponse response) throws Exception {
-		// Tao form excel
-		String title = "Danh sách QĐ phê duyệt KHLCNT";
-		String[] rowsName = new String[] { "STT", "Số quyết định", "Ngày QĐ", "Về việc", "Số QĐ giao chỉ tiêu",
-				"Loại hàng DTQG", "Tên loại hàng", "Tiêu chuẩn chất lượng", "Nguồn vốn", "Trạng thái" };
-		List<HhQdKhlcntHdr> dsgtDtls = null;
+//	@Override
+//	public void exportToExcel(HhQdKhlcntSearchReq searchReq, HttpServletResponse response) throws Exception {
+//		// Tao form excel
+//		String title = "Danh sách QĐ phê duyệt KHLCNT";
+//		String[] rowsName = new String[] { "STT", "Số quyết định", "Ngày QĐ", "Về việc", "Số QĐ giao chỉ tiêu",
+//				"Loại hàng DTQG", "Tên loại hàng", "Tiêu chuẩn chất lượng", "Nguồn vốn", "Trạng thái" };
+//		List<HhQdKhlcntHdr> dsgtDtls = null;
+////
+////		List<HhQdKhlcntHdr> dsgtDtls = hhQdKhlcntHdrRepository
+////				.findAll(HhQdKhlcntSpecification.buildSearchQuery(searchReq));
 //
-//		List<HhQdKhlcntHdr> dsgtDtls = hhQdKhlcntHdrRepository
-//				.findAll(HhQdKhlcntSpecification.buildSearchQuery(searchReq));
-
-		if (dsgtDtls.isEmpty())
-			throw new UnsupportedOperationException("Không tìm thấy dữ liệu");
-
-		String filename = "Quyetdinhkehoachlcnt.xlsx";
-
-		// Lay danh muc dung chung
-		Map<String, String> mapDmuc = getMapCategory();
-
-		List<Object[]> dataList = new ArrayList<Object[]>();
-		Object[] objs = null;
-		for (int i = 0; i < dsgtDtls.size(); i++) {
-			HhQdKhlcntHdr dsgtDtl = dsgtDtls.get(i);
-			objs = new Object[rowsName.length];
-			objs[0] = i;
-			objs[1] = dsgtDtl.getSoQd();
-			objs[2] = convertDateToString(dsgtDtl.getNgayQd());
-//			objs[3] = dsgtDtl.getVeViec();
-			objs[4] = "01/QD-TCDT";// TODO: lam min lai
-			objs[5] = mapDmuc.get(dsgtDtl.getLoaiVthh());
-			objs[6] = "Tiêu chuẩn chất lượng";
-			objs[7] = mapDmuc.get(dsgtDtl.getNguonVon());
-			objs[7] = mapDmuc.get(dsgtDtl.getTrangThai());
-
-			dataList.add(objs);
-		}
-
-		ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
-		ex.export();
-	}
+//		if (dsgtDtls.isEmpty())
+//			throw new UnsupportedOperationException("Không tìm thấy dữ liệu");
+//
+//		String filename = "Quyetdinhkehoachlcnt.xlsx";
+//
+//		// Lay danh muc dung chung
+//		Map<String, String> mapDmuc = getMapCategory();
+//
+//		List<Object[]> dataList = new ArrayList<Object[]>();
+//		Object[] objs = null;
+//		for (int i = 0; i < dsgtDtls.size(); i++) {
+//			HhQdKhlcntHdr dsgtDtl = dsgtDtls.get(i);
+//			objs = new Object[rowsName.length];
+//			objs[0] = i;
+//			objs[1] = dsgtDtl.getSoQd();
+//			objs[2] = convertDateToString(dsgtDtl.getNgayQd());
+////			objs[3] = dsgtDtl.getVeViec();
+//			objs[4] = "01/QD-TCDT";// TODO: lam min lai
+//			objs[5] = mapDmuc.get(dsgtDtl.getLoaiVthh());
+//			objs[6] = "Tiêu chuẩn chất lượng";
+//			objs[7] = mapDmuc.get(dsgtDtl.getNguonVon());
+//			objs[7] = mapDmuc.get(dsgtDtl.getTrangThai());
+//
+//			dataList.add(objs);
+//		}
+//
+//		ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+//		ex.export();
+//	}
 
 	@Override
-	public Page<HhQdKhlcntHdr> getAllPage(HhQdKhlcntSearchReq req) throws Exception {
+	public Page<HhQdKhlcntHdr> getAllPage(HhQdKhlcntSearchReq req,HttpServletResponse response) throws Exception {
 		int page = req.getPaggingReq().getPage();
 		int limit = req.getPaggingReq().getLimit();
 		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
@@ -633,6 +632,43 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
 		});
 		return listData;
+	}
+	@Override
+	public void exportToExcel(HhQdKhlcntSearchReq searchReq, HttpServletResponse response) throws Exception {
+
+		PaggingReq paggingReq = new PaggingReq();
+		paggingReq.setPage(0);
+		paggingReq.setLimit(Integer.MAX_VALUE);
+		searchReq.setPaggingReq(paggingReq);
+		Page<HhQdKhlcntHdr> page = this.getAllPage(searchReq,response);
+		List<HhQdKhlcntHdr> data = page.getContent();
+
+		// Tao form excel
+		String title = "Danh sách QĐ phê duyệt KHLCNT";
+		String[] rowsName = new String[] { "STT", "Số quyết định", "Ngày QĐ", "Trích yếu", "Năm kế hoạch",
+				"Loại hàng hóa", "Chủng loại hàng hóa" };
+
+
+		String filename = "Quyet_dinh_ke_hoach_lcnt.xlsx";
+
+		// Lay danh muc dung chung
+		List<Object[]> dataList = new ArrayList<Object[]>();
+		Object[] objs = null;
+		for (int i = 0; i < data.size(); i++) {
+			HhQdKhlcntHdr qd = data.get(i);
+			objs = new Object[rowsName.length];
+			objs[0] = i;
+			objs[1] = qd.getSoQd();
+			objs[2] = qd.getNgayQd();
+			objs[3] = qd.getTrichYeu();
+			objs[4] = qd.getNamKhoach();
+			objs[5] = qd.getLoaiVthh();
+			objs[6] = qd.getCloaiVthh();
+			dataList.add(objs);
+		}
+
+		ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+		ex.export();
 	}
 
 }

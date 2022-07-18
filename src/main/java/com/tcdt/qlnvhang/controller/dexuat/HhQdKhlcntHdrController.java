@@ -80,10 +80,10 @@ public class HhQdKhlcntHdrController {
 	@PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<BaseResponse> colection(HttpServletRequest request,
-			@Valid @RequestBody HhQdKhlcntSearchReq objReq) {
+			@Valid @RequestBody HhQdKhlcntSearchReq objReq, HttpServletResponse response) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(service.getAllPage(objReq));
+			resp.setData(service.getAllPage(objReq,response));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
