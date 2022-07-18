@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
@@ -32,7 +33,8 @@ public interface HhHopDongService {
 
 	HhHopDongHdr findBySoHd(StrSearchReq strSearchReq) throws Exception;
 
-	Page<HhHopDongHdr> selectPage(HhHopDongSearchReq objReq, HttpServletRequest req) throws Exception;
+	Page<HhHopDongHdr> selectPage(HhHopDongSearchReq objReq, HttpServletResponse response) throws Exception;
 
 
+	void exportList(HhHopDongSearchReq objReq, HttpServletResponse response) throws Exception;
 }

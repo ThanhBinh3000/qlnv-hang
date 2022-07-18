@@ -387,7 +387,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		List<HhQdPduyetKqlcntRes> data=page.getContent();
 
 		String title="Quyết định phê duyệt kết quả lựa chọn nhà thầu";
-		String[] rowsName=new String[]{"STT","Số QĐ","Ngày QĐ","Trích yếu","Tên gói thầu","Trúng/hủy thầu","Tên đơn vị trúng thầu","Lý do hủy thầu","Giá gói thầu (đồng)","Loại hợp đồng","Thời gian thực hiện hợp đồng (ngày)\t","Trạng thái"};
+		String[] rowsName=new String[]{"STT","Số QĐ","Ngày QĐ","Trích yếu","Tên gói thầu","Trúng/hủy thầu","Tên đơn vị trúng thầu","Lý do hủy thầu","Giá gói thầu (đồng)","Loại hợp đồng","Thời gian thực hiện hợp đồng (ngày)","Trạng thái"};
 		String fileName="danh-sach-phe-duyet-tt-lcnt.xlsx";
 		List<Object[]> dataList = new ArrayList<Object[]>();
 		Object[] objs=null;

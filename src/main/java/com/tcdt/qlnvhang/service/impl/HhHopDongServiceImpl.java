@@ -7,12 +7,14 @@ import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.tcdt.qlnvhang.repository.HhHopDongDdiemNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.HhPhuLucRepository;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.table.*;
-import org.checkerframework.checker.units.qual.A;
+import com.tcdt.qlnvhang.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,15 +30,10 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.StrSearchReq;
 import com.tcdt.qlnvhang.request.object.HhDdiemNhapKhoReq;
-import com.tcdt.qlnvhang.request.object.HhHopDongDtlReq;
 import com.tcdt.qlnvhang.request.object.HhHopDongHdrReq;
 import com.tcdt.qlnvhang.request.search.HhHopDongSearchReq;
 import com.tcdt.qlnvhang.secification.HhHopDongSpecification;
 import com.tcdt.qlnvhang.service.HhHopDongService;
-import com.tcdt.qlnvhang.util.Contains;
-import com.tcdt.qlnvhang.util.ObjectMapperUtils;
-import com.tcdt.qlnvhang.util.PaginationSet;
-import com.tcdt.qlnvhang.util.UnitScaler;
 
 @Service
 public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongService {
@@ -270,7 +267,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 	}
 
 	@Override
-	public Page<HhHopDongHdr> selectPage(HhHopDongSearchReq req, HttpServletRequest request) throws Exception {
+	public Page<HhHopDongHdr> selectPage(HhHopDongSearchReq req, HttpServletResponse response) throws Exception {
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
 		Page<HhHopDongHdr> page = hhHopDongRepository.select(req.getLoaiVthh(),req.getSoHd(),req.getTenHd(),req.getNhaCcap(),convertDateToString(req.getTuNgayKy()),convertDateToString(req.getDenNgayKy()),req.getTrangThai(), pageable);
 		return page;
@@ -342,6 +339,40 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 
 		hhHopDongRepository.delete(optional.get());
 
+	}
+
+	@Override
+	public  void exportList(HhHopDongSearchReq objReq, HttpServletResponse response) throws Exception{
+		PaggingReq paggingReq=new PaggingReq();
+		paggingReq.setPage(0);
+		paggingReq.setLimit(Integer.MAX_VALUE);
+		objReq.setPaggingReq(paggingReq);
+		Page<HhHopDongHdr> page=this.selectPage(objReq,response);
+		List<HhHopDongHdr> data= page.getContent();
+
+		String title="Danh sách hợp đồng mua";
+		String[] rowsName=new String[]{"STT","Số HĐ","Tên hợp đồng","Ngày ký","Loại hàng hóa","Chủng loại hàng hóa","Chủ đầu tư","Nhà cung cấp","Giá trị hợp đồng","Trạng thái"};
+		String fileName="danh-sach-hop-dong.xlsx";
+		List<Object[]> dataList=new ArrayList<Object[]>();
+		Object[] objs=null;
+		for (int i=0;i<data.size();i++){
+			HhHopDongHdr hd=data.get(i);
+			objs=new Object[rowsName.length];
+			objs[0]=i;
+			objs[1]=hd.getSoHd();
+			objs[2]=hd.getTenHd();
+			objs[3]=hd.getNgayKy();
+			objs[4]=hd.getLoaiVthh();
+			objs[5]=hd.getCloaiVthh();
+			objs[6]=hd.getMaDvi();
+			objs[7]=hd.getIdNthau();
+			objs[8]=hd.getGtriHdSauVat();
+			objs[9]=hd.getTrangThai();
+			dataList.add(objs);
+
+		}
+		ExportExcel ex =new ExportExcel(title,fileName,rowsName,dataList,response);
+		ex.export();
 	}
 
 }
