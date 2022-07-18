@@ -26,7 +26,7 @@ public interface HhQdKhlcntHdrService {
 
 	HhQdKhlcntDsgthau detailGoiThau(String ids) throws Exception;
 
-	Page<HhQdKhlcntHdr> colection(HhQdKhlcntSearchReq objReq) throws Exception;
+//	Page<HhQdKhlcntHdr> colection(HhQdKhlcntSearchReq objReq) throws Exception;
 
 	@Transactional(rollbackOn = Exception.class)
 	HhQdKhlcntHdr approve(StatusReq stReq) throws Exception;
@@ -36,9 +36,11 @@ public interface HhQdKhlcntHdrService {
 
 	HhQdKhlcntHdr detailNumber(String soQd) throws Exception;
 
+	Page<HhQdKhlcntHdr> colection(HhQdKhlcntSearchReq objReq, HttpServletResponse response) throws Exception;
+
 	void exportToExcel(HhQdKhlcntSearchReq searchReq, HttpServletResponse response) throws Exception;
 
-	Page<HhQdKhlcntHdr> getAllPage(HhQdKhlcntSearchReq objReq) throws Exception;
+	Page<HhQdKhlcntHdr> getAllPage(HhQdKhlcntSearchReq objReq, HttpServletResponse response) throws Exception;
 
 	List<HhQdKhlcntHdr> getAll(HhQdKhlcntSearchReq objReq) throws Exception;
 

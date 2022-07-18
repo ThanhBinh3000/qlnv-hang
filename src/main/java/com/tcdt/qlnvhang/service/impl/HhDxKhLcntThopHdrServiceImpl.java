@@ -314,7 +314,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 	@Override
 	public void exportDsThDxKhLcnt(HhDxKhLcntThopSearchReq searchReq, HttpServletResponse response) throws Exception {
 		PaggingReq paggingReq = new PaggingReq();
-		paggingReq.setPage(1);
+		paggingReq.setPage(0);
 		paggingReq.setLimit(Integer.MAX_VALUE);
 		searchReq.setPaggingReq(paggingReq);
 		Page<HhDxKhLcntThopHdr> page = this.colection(searchReq);
