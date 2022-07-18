@@ -3,9 +3,11 @@ package com.tcdt.qlnvhang.service.impl;
 import java.util.*;
 
 import com.tcdt.qlnvhang.repository.*;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.object.HhQdPduyetKqlcntDtlReq;
 import com.tcdt.qlnvhang.response.dauthauvattu.HhQdPduyetKqlcntRes;
 import com.tcdt.qlnvhang.table.*;
+import com.tcdt.qlnvhang.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,7 +16,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.tcdt.qlnvhang.entities.FileDKemJoinKquaLcnt;
 import com.tcdt.qlnvhang.entities.FileDKemJoinKquaLcntHdr;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -22,12 +23,10 @@ import com.tcdt.qlnvhang.request.object.HhQdPduyetKqlcntHdrReq;
 import com.tcdt.qlnvhang.request.search.HhQdPduyetKqlcntSearchReq;
 import com.tcdt.qlnvhang.secification.HhQdPduyetKqlcntSpecification;
 import com.tcdt.qlnvhang.service.HhQdPduyetKqlcntHdrService;
-import com.tcdt.qlnvhang.util.Contains;
-import com.tcdt.qlnvhang.util.ObjectMapperUtils;
-import com.tcdt.qlnvhang.util.PaginationSet;
-import com.tcdt.qlnvhang.util.UnitScaler;
+import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @Service
 public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements HhQdPduyetKqlcntHdrService {
@@ -341,15 +340,16 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		hhQdPduyetKqlcntHdrRepository.delete(optional.get());
 	}
 
+
 	@Override
-	public Page<HhQdPduyetKqlcntHdr> timKiemPage(HhQdPduyetKqlcntSearchReq req) throws Exception {
+	public Page<HhQdPduyetKqlcntHdr> timKiemPage(HhQdPduyetKqlcntSearchReq req, HttpServletResponse response) throws Exception {
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
 		return hhQdPduyetKqlcntHdrRepository.selectPage(req.getNamKhoach(),req.getLoaiVthh(),convertDateToString(req.getTuNgayQd()),convertDateToString(req.getDenNgayQd()),req.getSoQd(),req.getTrangThai(), pageable);
 
 	}
 
 	@Override
-	public Page<HhQdPduyetKqlcntRes> timKiemPageCustom(HhQdPduyetKqlcntSearchReq req) throws Exception {
+	public Page<HhQdPduyetKqlcntRes> timKiemPageCustom(HhQdPduyetKqlcntSearchReq req, HttpServletResponse response) throws Exception {
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
 		String cDvi = getUser().getCapDvi();
 		Page<HhQdPduyetKqlcntRes> page;
@@ -375,6 +375,43 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 	@Override
 	public List<HhQdPduyetKqlcntHdr> timKiemAll(HhQdPduyetKqlcntSearchReq req) throws Exception {
 		return hhQdPduyetKqlcntHdrRepository.selectAll(req.getNamKhoach(),req.getLoaiVthh(),convertDateToString(req.getTuNgayQd()),convertDateToString(req.getDenNgayQd()),req.getSoQd(), req.getTrangThai());
+	}
+
+	@Override
+	public void exportList(@Valid @RequestBody HhQdPduyetKqlcntSearchReq objReq, HttpServletResponse response) throws  Exception{
+		PaggingReq paggingReq=new PaggingReq();
+		paggingReq.setPage(0);
+		paggingReq.setLimit(Integer.MAX_VALUE);
+		objReq.setPaggingReq(paggingReq);
+		Page<HhQdPduyetKqlcntRes> page=this.timKiemPageCustom(objReq,response);
+		List<HhQdPduyetKqlcntRes> data=page.getContent();
+
+		String title="Quyết định phê duyệt kết quả lựa chọn nhà thầu";
+		String[] rowsName=new String[]{"STT","Số QĐ","Ngày QĐ","Trích yếu","Tên gói thầu","Trúng/hủy thầu","Tên đơn vị trúng thầu","Lý do hủy thầu","Giá gói thầu (đồng)","Loại hợp đồng","Thời gian thực hiện hợp đồng (ngày)\t","Trạng thái"};
+		String fileName="danh-sach-phe-duyet-tt-lcnt.xlsx";
+		List<Object[]> dataList = new ArrayList<Object[]>();
+		Object[] objs=null;
+		for (int i=0;i<data.size();i++){
+			HhQdPduyetKqlcntRes dx=data.get(i);
+			objs=new Object[rowsName.length];
+			objs[0]=i;
+			objs[1]=dx.getSoQd();
+			objs[2]=dx.getNgayQd();
+			objs[3]=dx.getTrichYeu();
+			objs[4]=dx.getTenGthau();
+			objs[5]=dx.getStatusGthau();
+			objs[6]=dx.getIdNhaThau();
+			objs[7]=dx.getLyDoHuy();
+			objs[8]=dx.getDonGiaTrcVat();
+			objs[9]=dx.getLoaiHdong();
+			objs[10]=dx.getTgianThienHd();
+			objs[11]=dx.getTrangThai();
+			dataList.add(objs);
+
+		}
+		ExportExcel ex =new ExportExcel(title,fileName,rowsName,dataList,response);
+		ex.export();
+
 	}
 
 }

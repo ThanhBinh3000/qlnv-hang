@@ -1,15 +1,17 @@
 package com.tcdt.qlnvhang.service.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.search.HhDthauSearchReq;
 import com.tcdt.qlnvhang.response.dauthauvattu.ThongTinDauThauRes;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,15 +21,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.tcdt.qlnvhang.entities.FileDKemJoinGoiThau;
-import com.tcdt.qlnvhang.entities.FileDKemJoinHsoKthuat;
-import com.tcdt.qlnvhang.entities.FileDKemJoinTthaoHdong;
 import com.tcdt.qlnvhang.repository.HhDthauRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.HhDthauGthauReq;
-import com.tcdt.qlnvhang.request.object.HhDthauHsoKthuatReq;
 import com.tcdt.qlnvhang.request.object.HhDthauReq;
-import com.tcdt.qlnvhang.request.object.HhDthauTthaoHdongReq;
 import com.tcdt.qlnvhang.service.HhDauThauService;
 import com.tcdt.qlnvhang.table.HhDthau;
 import com.tcdt.qlnvhang.table.HhDthauGthau;
@@ -38,8 +36,8 @@ import com.tcdt.qlnvhang.table.HhDthauNthauDuthau;
 import com.tcdt.qlnvhang.table.HhDthauTthaoHdong;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
-import com.tcdt.qlnvhang.util.PaginationSet;
 import com.tcdt.qlnvhang.util.UnitScaler;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauService {
@@ -371,6 +369,43 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 			throw new Exception("Chỉ thực hiện xóa thông tin đấu thầu ở trạng thái bản nháp hoặc từ chối");
 
 		hhDthauRepository.delete(optional.get());
+
+	}
+	@Override
+	public  void exportList( @Valid @RequestBody HhDthauSearchReq objReq,HttpServletResponse response) throws  Exception{
+		PaggingReq paggingReq=new PaggingReq();
+		paggingReq.setPage(0);
+		paggingReq.setLimit(Integer.MAX_VALUE);
+		objReq.setPaggingReq(paggingReq);
+		Page<ThongTinDauThauRes> page=this.selectPage(objReq);
+		List<ThongTinDauThauRes> data=page.getContent();
+
+		String title="Danh sách thông tin đấu thầu";
+		String[] rowsName=new String[]{"STT","Tên gói thầu","Đơn vị","Số QĐ PDKHLCNT","Ngày QĐ","Trích yếu","Loại hàng hóa","Chủng loại hàng hóa","Giá gói thầu (đồng)","Trạng thái"};
+		String fileName="danh-sach-thong-tin-dau-thau.xlsx";
+		List<Object[]> dataList = new ArrayList<Object[]>();
+		Object[] objs=null;
+		for (int i=0;i<data.size();i++){
+			ThongTinDauThauRes dx=data.get(i);
+			objs=new Object[rowsName.length];
+			objs[0]=i;
+			objs[1]=dx.getTenGthau();
+			objs[2]=dx.getMaDvi();
+			objs[3]=dx.getSoQdPdKhlcnt();
+			objs[4]=dx.getNgayQd();
+			objs[5]=dx.getTrichYeu();
+			objs[6]=dx.getLoaiVthh();
+			objs[7]=dx.getCloaiVthh();
+			objs[8]=dx.getThanhGiaGoiThau();
+			objs[9]=dx.getTrangThai();
+			dataList.add(objs);
+
+		}
+		ExportExcel ex =new ExportExcel(title,fileName,rowsName,dataList,response);
+		ex.export();
+
+
+
 
 	}
 
