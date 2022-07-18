@@ -26,14 +26,14 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping(PathContains.BIEN_BAN_BAN_GIAO_MAU_VT)
-@Api(tags = "Quản lý Biên bản bàn giao mẫu vật tư ")
+@RequestMapping(PathContains.BIEN_BAN_GIAO_NHAN_VT)
+@Api(tags = "Quản lý Biên bản giao nhận vật tư ")
 public class NhBbGiaoNhanVtController {
 
     @Autowired
     private NhBbGiaoNhanVtService service;
 
-    @ApiOperation(value = "Tạo mới Quản lý Biên bản bàn giao mẫu vật tư", response = List.class)
+    @ApiOperation(value = "Tạo mới Quản lý Biên bản giao nhận vật tư", response = List.class)
     @PostMapping
     public ResponseEntity<BaseResponse> insert(@Valid @RequestBody NhBbGiaoNhanVtReq request) {
         BaseResponse resp = new BaseResponse();
@@ -44,12 +44,12 @@ public class NhBbGiaoNhanVtController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Tạo mới Quản lý Biên bản bàn giao mẫu vật tư lỗi: {}", e);
+            log.error("Tạo mới Quản lý Biên bản giao nhận vật tư lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Sửa Quản lý Biên bản bàn giao mẫu vật tư", response = List.class)
+    @ApiOperation(value = "Sửa Quản lý Biên bản giao nhận vật tư", response = List.class)
     @PutMapping
     public ResponseEntity<BaseResponse> update(@Valid @RequestBody NhBbGiaoNhanVtReq request) {
         BaseResponse resp = new BaseResponse();
@@ -60,12 +60,12 @@ public class NhBbGiaoNhanVtController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Sửa Quản lý Biên bản bàn giao mẫu vật tư lỗi: {}", e);
+            log.error("Sửa Quản lý Biên bản giao nhận vật tư lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Chi tiết Quản lý Biên bản bàn giao mẫu vật tư", response = List.class)
+    @ApiOperation(value = "Chi tiết Quản lý Biên bản giao nhận vật tư", response = List.class)
     @GetMapping("/{id}")
     public ResponseEntity<BaseResponse> detail(@PathVariable Long id) {
         BaseResponse resp = new BaseResponse();
@@ -76,12 +76,12 @@ public class NhBbGiaoNhanVtController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Chi tiết Quản lý Biên bản bàn giao mẫu vật tư lỗi: {}", e);
+            log.error("Chi tiết Quản lý Biên bản giao nhận vật tư lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xóa Quản lý Biên bản bàn giao mẫu vật tư", response = List.class)
+    @ApiOperation(value = "Xóa Quản lý Biên bản giao nhận vật tư", response = List.class)
     @DeleteMapping("/{id}")
     public ResponseEntity<BaseResponse> delete(@PathVariable Long id) {
         BaseResponse resp = new BaseResponse();
@@ -92,12 +92,12 @@ public class NhBbGiaoNhanVtController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Xóa Quản lý Biên bản bàn giao mẫu vật tư lỗi: {}", e);
+            log.error("Xóa Quản lý Biên bản giao nhận vật tư lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Phê duyệt/ từ chối Quản lý Biên bản bàn giao mẫu vật tư", response = List.class)
+    @ApiOperation(value = "Phê duyệt/ từ chối Quản lý Biên bản giao nhận vật tư", response = List.class)
     @PutMapping("/status")
     public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody StatusReq req) {
         BaseResponse resp = new BaseResponse();
@@ -108,12 +108,12 @@ public class NhBbGiaoNhanVtController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Phê duyệt/ từ chối Quản lý Biên bản bàn giao mẫu vật tư lỗi: {}", e);
+            log.error("Phê duyệt/ từ chối Quản lý Biên bản giao nhận vật tư lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Tra cứu Quản lý Biên bản bàn giao mẫu vật tư", response = List.class)
+    @ApiOperation(value = "Tra cứu Quản lý Biên bản giao nhận vật tư", response = List.class)
     @GetMapping()
     public ResponseEntity<BaseResponse> search(NhBbGiaoNhanVtSearchReq req) {
         BaseResponse resp = new BaseResponse();
@@ -124,12 +124,12 @@ public class NhBbGiaoNhanVtController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Tra cứu Quản lý Biên bản bàn giao mẫu vật tư lỗi: {}", e);
+            log.error("Tra cứu Quản lý Biên bản giao nhận vật tư lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Delete multiple Biên bản bàn giao mẫu vật tư", response = List.class)
+    @ApiOperation(value = "Delete multiple Biên bản giao nhận vật tư", response = List.class)
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/delete/multiple")
     public final ResponseEntity<BaseResponse> deleteMultiple(@RequestBody @Valid DeleteReq req) {
@@ -142,12 +142,12 @@ public class NhBbGiaoNhanVtController {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
             resp.setMsg(e.getMessage());
-            log.error("Delete multiple Biên bản bàn giao mẫu vật tư lỗi ", e);
+            log.error("Delete multiple Biên bản giao nhận vật tư lỗi ", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Export Biên bản bàn giao mẫu vật tư", response = List.class)
+    @ApiOperation(value = "Export Biên bản giao nhận vật tư", response = List.class)
     @PostMapping(value = "/export/list", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody NhBbGiaoNhanVtSearchReq req) {

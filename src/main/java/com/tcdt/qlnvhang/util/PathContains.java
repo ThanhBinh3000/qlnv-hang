@@ -148,5 +148,5 @@ public class PathContains {
 
 	public static final String BIEN_BAN_KET_THUC_NHAP_KHO_VT = "/bien-ban-ket-thuc-nhap-kho-vt";
 
-	public static final String BIEN_BAN_BAN_GIAO_MAU_VT = "/bien-ban-ban-giao-mau-vt";
+	public static final String BIEN_BAN_GIAO_NHAN_VT = "/bien-ban-giao-nhan-vt";
 }
