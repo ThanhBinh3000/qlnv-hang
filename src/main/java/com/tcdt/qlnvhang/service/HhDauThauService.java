@@ -1,7 +1,9 @@
 package com.tcdt.qlnvhang.service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import com.tcdt.qlnvhang.response.dauthauvattu.ThongTinDauThauRes;
 import org.springframework.data.domain.Page;
@@ -11,6 +13,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.HhDthauReq;
 import com.tcdt.qlnvhang.request.search.HhDthauSearchReq;
 import com.tcdt.qlnvhang.table.HhDthau;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -36,4 +39,5 @@ public interface HhDauThauService {
 	@Transactional(rollbackOn = Exception.class)
 	void delete(IdSearchReq idSearchReq) throws Exception;
 
+	void exportList(@Valid @RequestBody HhDthauSearchReq objReq, HttpServletResponse response) throws  Exception;
 }

@@ -20,11 +20,13 @@ public interface QlpktclhPhieuKtChatLuongRepository extends BaseRepository<Qlpkt
     @Query(
         value = "SELECT * FROM NH_PHIEU_KT_CHAT_LUONG PKTCL " +
                 "WHERE (:soPhieu IS NULL OR PKTCL.SO_PHIEU = TO_NUMBER(:soPhieu)) " +
+//                "AND (:soQd IS NULL OR LOWER(PKTCL.SO_QD) LIKE LOWER(CONCAT(CONCAT('%',:soQd),'%')))"+
+//                "AND (:ketLuan IS NULL OR PKTCL.KET_LUAN=:ketLuan)"+
                 "AND (:ngayLPhieu IS NULL OR TO_CHAR(PKTCL.NGAY_TAO,'yyyy-MM-dd') = :ngayLPhieu) " +
                 "AND (:nguoiGiaoHang IS NULL OR LOWER(PKTCL.NGUOI_GIAO_HANG) " +
                 "LIKE LOWER(CONCAT(CONCAT('%', :nguoiGiaoHang), '%')))",
             nativeQuery = true)
-    Page<QlpktclhPhieuKtChatLuong> select(String soPhieu, String ngayLPhieu, String nguoiGiaoHang, Pageable pageable);
+    Page<QlpktclhPhieuKtChatLuong> select( String soPhieu, String ngayLPhieu, String nguoiGiaoHang, Pageable pageable);
 
     @Transactional
     @Modifying

@@ -110,7 +110,7 @@ public class ExportExcel {
 			// Let the column width automatically adapt to the exported column length
 			for (int colNum = 0; colNum < columnNum; colNum++) {
 				int columnWidth = sheet.getColumnWidth(colNum) / 256;
-				for (int rowNum = 0; rowNum < sheet.getLastRowNum(); rowNum++) {
+				for (int rowNum = 2; rowNum < sheet.getLastRowNum(); rowNum++) {
 					XSSFRow currentRow;
 					// The current row has not been used
 					if (sheet.getRow(rowNum) == null) {

@@ -1,10 +1,14 @@
 package com.tcdt.qlnvhang.controller.dexuat;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.service.HhQdKhlcntHdrService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -171,6 +175,28 @@ public class HhDauThauController {
 		}
 
 		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Kết xuất danh sách thông tin đấu thầu", response = List.class)
+	@PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public void exportList( @Valid @RequestBody HhDthauSearchReq objReq,HttpServletResponse response) throws Exception{
+		try {
+			service.exportList(objReq,response);
+
+		} catch (Exception e) {
+			log.error("Kết xuất danh sách  thông tin đấu thầu trace: {}", e);
+			final Map<String, Object> body = new HashMap<>();
+			body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			body.put("msg", e.getMessage());
+
+			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+			response.setCharacterEncoding("UTF-8");
+
+			final ObjectMapper mapper = new ObjectMapper();
+			mapper.writeValue(response.getOutputStream(), body);
+
+		}
 	}
 
 }

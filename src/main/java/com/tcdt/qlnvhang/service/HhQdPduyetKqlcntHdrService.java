@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.service;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import com.tcdt.qlnvhang.response.dauthauvattu.HhQdPduyetKqlcntRes;
 import org.springframework.data.domain.Page;
@@ -10,6 +12,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.HhQdPduyetKqlcntHdrReq;
 import com.tcdt.qlnvhang.request.search.HhQdPduyetKqlcntSearchReq;
 import com.tcdt.qlnvhang.table.HhQdPduyetKqlcntHdr;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -31,11 +34,14 @@ public interface HhQdPduyetKqlcntHdrService {
 	@Transactional(rollbackOn = Exception.class)
 	void delete(IdSearchReq idSearchReq) throws Exception;
 
-	Page<HhQdPduyetKqlcntHdr> timKiemPage(HhQdPduyetKqlcntSearchReq objReq) throws Exception;
+	Page<HhQdPduyetKqlcntHdr> timKiemPage(HhQdPduyetKqlcntSearchReq req, HttpServletResponse response) throws Exception;
 
-	Page<HhQdPduyetKqlcntRes> timKiemPageCustom(HhQdPduyetKqlcntSearchReq objReq) throws Exception;
-
-	List<HhQdPduyetKqlcntHdr> timKiemAll(HhQdPduyetKqlcntSearchReq objReq) throws Exception;
+//	Page<HhQdPduyetKqlcntRes> timKiemPageCustom(HhQdPduyetKqlcntSearchReq objReq) throws Exception;
 
 
+	Page<HhQdPduyetKqlcntRes> timKiemPageCustom(HhQdPduyetKqlcntSearchReq req, HttpServletResponse response) throws Exception;
+
+	List<HhQdPduyetKqlcntHdr> timKiemAll(HhQdPduyetKqlcntSearchReq req) throws Exception;
+
+	void exportList(@Valid @RequestBody HhQdPduyetKqlcntSearchReq req, HttpServletResponse response) throws  Exception;
 }

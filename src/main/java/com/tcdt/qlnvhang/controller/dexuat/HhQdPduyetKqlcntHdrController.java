@@ -1,10 +1,15 @@
 package com.tcdt.qlnvhang.controller.dexuat;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tcdt.qlnvhang.request.search.HhDthauSearchReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -128,10 +133,10 @@ public class HhQdPduyetKqlcntHdrController extends BaseController {
 	@PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<BaseResponse> colection(HttpServletRequest request,
-			@Valid @RequestBody HhQdPduyetKqlcntSearchReq objReq) {
+			@Valid @RequestBody HhQdPduyetKqlcntSearchReq objReq, HttpServletResponse response) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(service.timKiemPageCustom(objReq));
+			resp.setData(service.timKiemPageCustom(objReq,response));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (
@@ -165,5 +170,28 @@ public class HhQdPduyetKqlcntHdrController extends BaseController {
 
 		return ResponseEntity.ok(resp);
 	}
+
+	@ApiOperation(value = "Kết xuất danh sách Quyết định phê duyệt kết quả lựa chọn nhà thầu", response = List.class)
+	@PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public void exportList(@Valid @RequestBody HhQdPduyetKqlcntSearchReq objReq, HttpServletResponse response) throws Exception{
+		try {
+			service.exportList(objReq,response);
+
+		} catch (Exception e) {
+			log.error("Kết xuất danh sách Quyết định phê duyệt kết quả lựa chọn nhà thầu trace: {}", e);
+			final Map<String, Object> body = new HashMap<>();
+			body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			body.put("msg", e.getMessage());
+
+			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+			response.setCharacterEncoding("UTF-8");
+
+			final ObjectMapper mapper = new ObjectMapper();
+			mapper.writeValue(response.getOutputStream(), body);
+
+		}
+	}
+
 
 }
