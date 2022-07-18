@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.response.quanlyphieunhapkholuongthuc;
 
+import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCt1;
 import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.AllArgsConstructor;
@@ -55,7 +56,7 @@ public class NhPhieuNhapKhoRes extends SoBienBanPhieuRes {
     private String tongSoLuongBangChu;
     private String tongSoTienBangChu;
     private List<NhPhieuNhapKhoCtRes> hangHoaRes = new ArrayList<>();
-
+    private List<NhPhieuNhapKhoCt1> chiTiet1s = new ArrayList<>();
     private Long hoSoKyThuatId;
     private String soBbHoSoKyThuat;
     private String loaiVthh;

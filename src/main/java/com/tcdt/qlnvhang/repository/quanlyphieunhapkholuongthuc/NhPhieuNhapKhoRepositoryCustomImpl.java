@@ -29,9 +29,8 @@ public class NhPhieuNhapKhoRepositoryCustomImpl implements NhPhieuNhapKhoReposit
     @Override
     public Page<NhPhieuNhapKhoRes> search(NhPhieuNhapKhoSearchReq req) {
         StringBuilder builder = new StringBuilder();
-        builder.append("SELECT p, pktcl.id, pktcl.soPhieu, nganLo, nx.id, nx.soQd FROM NhPhieuNhapKho p ");
+        builder.append("SELECT p, nganLo, nx.id, nx.soQd FROM NhPhieuNhapKho p ");
         builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON p.qdgnvnxId = nx.id ");
-        builder.append("LEFT JOIN QlpktclhPhieuKtChatLuong pktcl ON p.phieuKtClId = pktcl.id ");
         builder.append("LEFT JOIN KtNganLo nganLo ON p.maNganLo = nganLo.maNganlo ");
         setConditionSearch(req, builder);
         builder.append("ORDER BY p.id DESC");
@@ -51,16 +50,12 @@ public class NhPhieuNhapKhoRepositoryCustomImpl implements NhPhieuNhapKhoReposit
         for (Object[] o : data) {
             NhPhieuNhapKhoRes response = new NhPhieuNhapKhoRes();
             NhPhieuNhapKho phieu = (NhPhieuNhapKho) o[0];
-            Long pktclId = (Long) o[1];
-            String soPhieuKtcl = (String) o[2];
-            KtNganLo nganLo = o[3] != null ? (KtNganLo) o[3] : null;
-            Long qdNhapId = (Long) o[4];
-            String soQdNhap = (String) o[5];
+            KtNganLo nganLo = o[1] != null ? (KtNganLo) o[1] : null;
+            Long qdNhapId = (Long) o[2];
+            String soQdNhap = (String) o[3];
             BeanUtils.copyProperties(phieu, response);
             response.setTenTrangThai(TrangThaiEnum.getTenById(phieu.getTrangThai()));
             response.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(phieu.getTrangThai()));
-            response.setPhieuKtClId(pktclId);
-            response.setSoPhieuKtCl(soPhieuKtcl);
             this.thongTinNganLo(response, nganLo);
             response.setQdgnvnxId(qdNhapId);
             response.setSoQuyetDinhNhap(soQdNhap);
@@ -144,7 +139,6 @@ public class NhPhieuNhapKhoRepositoryCustomImpl implements NhPhieuNhapKhoReposit
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT COUNT(p.id) FROM NhPhieuNhapKho p ");
         builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON p.qdgnvnxId = nx.id ");
-        builder.append("INNER JOIN QlpktclhPhieuKtChatLuong pktcl ON p.phieuKtClId = pktcl.id ");
         builder.append("LEFT JOIN KtNganLo nganLo ON p.maNganLo = nganLo.maNganlo ");
         this.setConditionSearch(req, builder);
 

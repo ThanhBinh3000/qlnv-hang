@@ -132,4 +132,7 @@ public class NhPhieuNhapKho extends BaseEntity implements Serializable {
 
     @Transient
     private List<FileDinhKem> chungTus = new ArrayList<>();
+
+    @Transient
+    private List<NhPhieuNhapKhoCt1> chiTiet1s = new ArrayList<>();
 }

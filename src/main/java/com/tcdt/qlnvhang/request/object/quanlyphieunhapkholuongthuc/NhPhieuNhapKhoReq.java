@@ -21,7 +21,7 @@ public class NhPhieuNhapKhoReq extends SoBienBanPhieuReq {
 
     private Long id;
 
-    private Long phieuKtClId;
+    private List<Long> phieuKtClIds = new ArrayList<>();
     private Long hoSoKyThuatId;
     private String soPhieu;
 

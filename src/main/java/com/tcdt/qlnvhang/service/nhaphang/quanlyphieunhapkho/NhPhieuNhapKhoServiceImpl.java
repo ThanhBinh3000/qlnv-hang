@@ -4,9 +4,11 @@ import com.google.common.collect.Sets;
 import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCt;
 import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.NhPhieuNhapKho;
+import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCt1;
 import com.tcdt.qlnvhang.entities.vattu.hosokythuat.NhHoSoKyThuat;
 import com.tcdt.qlnvhang.enums.QdPheDuyetKqlcntVtStatus;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
+import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCt1Repository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
@@ -102,6 +104,9 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
     @Autowired
     private NhHoSoKyThuatRepository nhHoSoKyThuatRepository;
 
+    @Autowired
+    private NhPhieuNhapKhoCt1Repository nhPhieuNhapKhoCt1Repository;
+
     @Override
     @Transactional(rollbackOn = Exception.class)
     public NhPhieuNhapKhoRes create(NhPhieuNhapKhoReq req) throws Exception {
@@ -130,10 +135,30 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
         List<NhPhieuNhapKhoCt> hangHoaList = this.saveListHangHoa(phieu.getId(), hangHoaReqs, new HashMap<>());
         phieu.setHangHoaList(hangHoaList);
 
+        List<NhPhieuNhapKhoCt1> ct1List = this.saveCt1(phieu.getId(), req.getPhieuKtClIds());
+        phieu.setChiTiet1s(ct1List);
+
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getChungTus(), phieu.getId(), NhPhieuNhapKho.TABLE_NAME);
         phieu.setChungTus(fileDinhKems);
 
         return this.buildResponse(phieu);
+    }
+
+    private List<NhPhieuNhapKhoCt1> saveCt1(Long phieuNhapKhoId, List<Long> phieuKtClIds) {
+        nhPhieuNhapKhoCt1Repository.deleteByPhieuNkIdIn(Collections.singleton(phieuNhapKhoId));
+
+        List<NhPhieuNhapKhoCt1> ct1List = new ArrayList<>();
+        for (Long phieuKtClId : phieuKtClIds) {
+            NhPhieuNhapKhoCt1 ct1 = new NhPhieuNhapKhoCt1();
+            ct1.setPhieuNkId(phieuNhapKhoId);
+            ct1.setPhieuKtclId(phieuKtClId);
+            ct1List.add(ct1);
+        }
+
+        if (!CollectionUtils.isEmpty(ct1List))
+            nhPhieuNhapKhoCt1Repository.saveAll(ct1List);
+
+        return ct1List;
     }
 
     private List<NhPhieuNhapKhoCt> saveListHangHoa(Long phieuNhapKhoId, List<NhPhieuNhapKhoCtReq> hangHoaReqs, Map<Long, NhPhieuNhapKhoCt> mapHangHoa) throws Exception {
@@ -205,11 +230,20 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
         response.setTongSoLuongBangChu(MoneyConvert.docSoLuong(tongSoLuong.toString(), null));
         response.setTongSoTienBangChu(MoneyConvert.doctienBangChu(tongSoTien.toString(), null));
 
-        if (phieu.getPhieuKtClId() != null) {
-            QlpktclhPhieuKtChatLuong phieuKtChatLuong = phieuKtChatLuongRepository.findById(phieu.getPhieuKtClId())
-                    .orElseThrow(() -> new Exception("Không tìm thấy phiếu kiểm tra chất lượng"));
+        if (!CollectionUtils.isEmpty(phieu.getChiTiet1s())) {
+            List<Long> phieuCtClIds = phieu.getChiTiet1s().stream()
+                    .map(NhPhieuNhapKhoCt1::getPhieuKtclId)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
 
-            response.setSoPhieuKtCl(phieuKtChatLuong.getSoPhieu());
+            if (!CollectionUtils.isEmpty(phieuCtClIds)) {
+                List<QlpktclhPhieuKtChatLuong> phieuKtChatLuongs = phieuKtChatLuongRepository.findByIdIn(phieuCtClIds);
+                for (NhPhieuNhapKhoCt1 ct1 : phieu.getChiTiet1s()) {
+                    phieuKtChatLuongs.stream().filter(p -> p.getId().equals(ct1.getPhieuKtclId()))
+                            .findFirst().ifPresent(p -> ct1.setSoPhieuKtCl(p.getSoPhieu()));
+                }
+            }
+            response.setChiTiet1s(phieu.getChiTiet1s());
         }
 
         if (phieu.getHoSoKyThuatId() != null) {

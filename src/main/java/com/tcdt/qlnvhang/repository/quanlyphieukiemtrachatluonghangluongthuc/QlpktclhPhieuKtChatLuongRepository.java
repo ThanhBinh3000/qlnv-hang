@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -33,4 +34,6 @@ public interface QlpktclhPhieuKtChatLuongRepository extends BaseRepository<Qlpkt
     void deleteByIdIn(Collection<Long> ids);
 
     Optional<QlpktclhPhieuKtChatLuong> findFirstBySoPhieu(String soPhieu);
+
+    List<QlpktclhPhieuKtChatLuong> findByIdIn(Collection<Long> ids);
 }
