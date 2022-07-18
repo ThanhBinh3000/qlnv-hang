@@ -358,7 +358,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		List<HhDxuatKhLcntHdr> data = page.getContent();
 
 		String title = "Danh sách kế hoạch đề xuất lựa chọn nhà thầu";
-		String[] rowsName = new String[] { "STT", "Số đề xuất", "Đơn vị xuất", "Trích yếu", "Trạng thái" };
+		String[] rowsName = new String[] { "STT", "Số tờ trình", "Ngày đề xuất", "Trích yếu","Số QĐ giao chỉ tiêu","Năm kế hoạch","Hàng hóa","Chủng loại hàng hóa","Trạng thái của đề xuất" };
 		String filename = "Danh_sach_ke_hoach_de_xuat_lua_chon_nha_thau.xlsx";
 
 		List<Object[]> dataList = new ArrayList<Object[]>();
@@ -368,9 +368,13 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 			objs = new Object[rowsName.length];
 			objs[0] = i;
 			objs[1] = dx.getSoDxuat();
-			objs[2] = dx.getTenDvi();
+			objs[2] = dx.getNgayGuiDuyet();
 			objs[3] = dx.getTrichYeu();
-			objs[4] = Contains.mapTrangThaiPheDuyet.get(dx.getTrangThai());
+			objs[4] = dx.getSoQd();
+			objs[5] = dx.getNamKhoach();
+			objs[6] = dx.getLoaiVthh();
+			objs[7] = dx.getCloaiVthh();
+			objs[8] = dx.getTrangThai();
 			dataList.add(objs);
 		}
 
