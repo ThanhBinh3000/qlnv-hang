@@ -48,4 +48,5 @@ public class BhDgKehoachRes {
 	private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 	private List<BhDgKhDiaDiemGiaoNhanRes> diaDiemGiaoNhanList = new ArrayList<>();
 	private List<BhDgKhPhanLoTaiSanRes> phanLoTaiSanList = new ArrayList<>();
+	private String tenTrangThai;
 }

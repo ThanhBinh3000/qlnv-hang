@@ -35,5 +35,5 @@ public class BhDgKehoachSearchReq extends BaseRequest {
 	@JsonFormat(pattern = LocalDateTimeUtils.DATE_FORMAT, shape = JsonFormat.Shape.STRING)
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate ngayKyDenNgay;
-
+	private String loaiVatTuHangHoa;
 }

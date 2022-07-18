@@ -4,6 +4,8 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -42,6 +44,14 @@ public final class SpecUtils {
 		};
 	}
 
+	public static <T> Specification<T> in(final String field, final Collection<String> value) {
+		return (root, query, builder) -> {
+			if (Objects.isNull(value)) return null;
+
+			return root.get(field).in(value);
+		};
+	}
+
 
 	public static <T> Specification<T> le(final String field, final Integer value) {
 		return (root, query, builder) -> {
@@ -60,6 +70,14 @@ public final class SpecUtils {
 	}
 
 	public static <T> Specification<T> equal(final String field, final String value) {
+		return (root, query, builder) -> {
+			if (Objects.isNull(value)) return null;
+
+			return builder.equal(root.get(field), value);
+		};
+	}
+
+	public static <T> Specification<T> equal(final String field, final Long value) {
 		return (root, query, builder) -> {
 			if (Objects.isNull(value)) return null;
 
