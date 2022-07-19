@@ -98,6 +98,8 @@ public class HhDxuatKhLcntHdr implements Serializable {
 
 	@Transient
 	private List<HhDxKhlcntDsgthau> dsGtDtlList = new ArrayList<>();
+	@Transient
+	private Long soGoiThau;
 
 	@Transient
 	private List<HhDxuatKhLcntCcxdgDtl> ccXdgDtlList = new ArrayList<>();

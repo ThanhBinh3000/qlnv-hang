@@ -82,7 +82,7 @@ public class HhDxuatKhLcntHdrController {
 			@RequestBody HhDxuatKhLcntSearchReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(service.timKiem(request,objReq));
+			resp.setData(service.timKiem(objReq));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {

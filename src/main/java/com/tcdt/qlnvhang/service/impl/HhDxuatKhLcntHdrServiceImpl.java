@@ -3,7 +3,6 @@ package com.tcdt.qlnvhang.service.impl;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -349,16 +348,16 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 	}
 
 	@Override
-	public void exportDsKhlcnt(HhDxuatKhLcntSearchReq searchReq, HttpServletResponse response) throws Exception {
+	public void exportDsKhlcnt( HhDxuatKhLcntSearchReq req,HttpServletResponse response) throws Exception {
 		PaggingReq paggingReq = new PaggingReq();
 		paggingReq.setPage(0);
 		paggingReq.setLimit(Integer.MAX_VALUE);
-		searchReq.setPaggingReq(paggingReq);
-		Page<HhDxuatKhLcntHdr> page = this.colection(searchReq, null);
+		req.setPaggingReq(paggingReq);
+		Page<HhDxuatKhLcntHdr> page = this.timKiem(req);
 		List<HhDxuatKhLcntHdr> data = page.getContent();
 
 		String title = "Danh sách kế hoạch đề xuất lựa chọn nhà thầu";
-		String[] rowsName = new String[] { "STT", "Số đề xuất", "Đơn vị xuất", "Trích yếu", "Trạng thái" };
+		String[] rowsName = new String[] { "STT", "Số tờ trình", "Ngày đề xuất", "Trích yếu","Số QĐ giao chỉ tiêu","Năm kế hoạch","Hàng hóa","Chủng loại hàng hóa","Số gói thầu","Trạng thái của đề xuất" };
 		String filename = "Danh_sach_ke_hoach_de_xuat_lua_chon_nha_thau.xlsx";
 
 		List<Object[]> dataList = new ArrayList<Object[]>();
@@ -368,9 +367,14 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 			objs = new Object[rowsName.length];
 			objs[0] = i;
 			objs[1] = dx.getSoDxuat();
-			objs[2] = dx.getTenDvi();
+			objs[2] = dx.getNgayGuiDuyet();
 			objs[3] = dx.getTrichYeu();
-			objs[4] = Contains.mapTrangThaiPheDuyet.get(dx.getTrangThai());
+			objs[4] = dx.getSoQd();
+			objs[5] = dx.getNamKhoach();
+			objs[6] = dx.getLoaiVthh();
+			objs[7] = dx.getCloaiVthh();
+			objs[8] = dx.getSoGoiThau();
+			objs[9] = dx.getTrangThai();
 			dataList.add(objs);
 		}
 
@@ -379,12 +383,14 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 	}
 
 	@Override
-	public Page<HhDxuatKhLcntHdr> timKiem(HttpServletRequest request,HhDxuatKhLcntSearchReq req) throws Exception {
+	public Page<HhDxuatKhLcntHdr> timKiem(HhDxuatKhLcntSearchReq req) throws Exception {
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
 		Page<HhDxuatKhLcntHdr> page = hhDxuatKhLcntHdrRepository.select(req.getNamKh(),req.getSoTr(),req.getSoQd(),convertDateToString(req.getTuNgayKy()),convertDateToString(req.getDenNgayKy()),req.getLoaiVthh(),req.getTrichYeu(),req.getTrangThai(), pageable);
 		Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
 		Map<String,String> mapVthh = getListDanhMucHangHoa();
+
 		page.getContent().forEach(f -> {
+			f.setSoGoiThau ( hhDxuatKhLcntDsgtDtlRepository.countByIdDxKhlcnt(f.getId()));
 			f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
 			f.setTenVthh( StringUtils.isEmpty(f.getLoaiVthh()) ? null : mapVthh.get(f.getLoaiVthh()));
 			f.setTenCloaiVthh( StringUtils.isEmpty(f.getCloaiVthh()) ? null :mapVthh.get(f.getCloaiVthh()));
