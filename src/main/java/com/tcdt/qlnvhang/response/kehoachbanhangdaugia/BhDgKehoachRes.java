@@ -49,4 +49,6 @@ public class BhDgKehoachRes {
 	private List<BhDgKhDiaDiemGiaoNhanRes> diaDiemGiaoNhanList = new ArrayList<>();
 	private List<BhDgKhPhanLoTaiSanRes> phanLoTaiSanList = new ArrayList<>();
 	private String tenTrangThai;
+	private String soQuyetDinhGiaoChiTieu;
+	private String soQuyetDinhPheDuyet;
 }

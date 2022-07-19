@@ -97,6 +97,13 @@ public class BhDgKehoach extends BaseEntity implements Serializable {
 	@Column(name = "LOAI_VAT_TU_HANG_HOA")
 	private String loaiVatTuHangHoa;
 
+	@Column(name = "SO_QD_PHE_DUYET")
+	private String soQuyetDinhPheDuyet;
+
+
+	@Transient
+	private String soQuyetDinhGiaoChiTieu;
+
 	@Transient
 	private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 

@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface BhDgKehoachRepository extends BaseRepository<BhDgKehoach, Long> {
 	List<BhDgKehoach> findByIdIn(Collection<Long> ids);
+
+	void deleteAllByIdIn(List<Long> ids);
 }

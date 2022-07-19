@@ -1,19 +1,24 @@
 package com.tcdt.qlnvhang.response.kehoachbanhangdaugia;
 
+import com.tcdt.qlnvhang.entities.chitieukehoachnam.ChiTieuKeHoachNam;
 import com.tcdt.qlnvhang.entities.kehoachbanhangdaugia.BhDgKehoach;
 import com.tcdt.qlnvhang.entities.kehoachbanhangdaugia.BhDgKehoach_;
 import com.tcdt.qlnvhang.entities.kehoachbanhangdaugia.BhDgKhDiaDiemGiaoNhan;
 import com.tcdt.qlnvhang.entities.kehoachbanhangdaugia.BhDgKhPhanLoTaiSan;
-import com.tcdt.qlnvhang.enums.QlpktclhPhieuKtChatLuongStatusEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
-import com.tcdt.qlnvhang.mapper.*;
+import com.tcdt.qlnvhang.mapper.chitieukehoachnam.ChiTieuKeHoachNamResponseMapper;
+import com.tcdt.qlnvhang.mapper.kehoachbandaugia.BhDgKehoachRequestMapper;
+import com.tcdt.qlnvhang.mapper.kehoachbandaugia.BhDgKehoachResponseMapper;
+import com.tcdt.qlnvhang.mapper.kehoachbandaugia.BhDgKhDiaDiemGiaoNhanRequestMapper;
+import com.tcdt.qlnvhang.mapper.kehoachbandaugia.BhDgKhPhanLoTaiSanRequestMapper;
+import com.tcdt.qlnvhang.repository.chitieukehoachnam.ChiTieuKeHoachNamRepository;
 import com.tcdt.qlnvhang.repository.kehoachbanhangdaugia.BhDgKehoachRepository;
 import com.tcdt.qlnvhang.repository.kehoachbanhangdaugia.BhDgKhDiaDiemGiaoNhanRepository;
 import com.tcdt.qlnvhang.repository.kehoachbanhangdaugia.BhDgKhPhanLoTaiSanRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.kehoachbanhangdaugia.BhDgKehoachReq;
 import com.tcdt.qlnvhang.request.kehoachbanhangdaugia.BhDgKehoachSearchReq;
-import com.tcdt.qlnvhang.response.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongResponseDto;
+import com.tcdt.qlnvhang.response.chitieukehoachnam.ChiTieuKeHoachNamRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -40,8 +45,10 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.print.Book;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -57,6 +64,8 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 	private final BhDgKehoachResponseMapper kehoachResponseMapper;
 	private final BhDgKhDiaDiemGiaoNhanRequestMapper diaDiemGiaoNhanRequestMapper;
 	private final BhDgKhPhanLoTaiSanRequestMapper phanLoTaiSanRequestMapper;
+	private final ChiTieuKeHoachNamResponseMapper chiTieuKeHoachNamResponseMapper;
+	private final ChiTieuKeHoachNamRepository chiTieuKeHoachNamRepository;
 	private static final String SHEET_NAME = "Danh sách kế hoạch bán đấu giá";
 	private static final String STT = "STT";
 	private static final String SO_KE_HOACH = "Số kế hoạch";
@@ -253,16 +262,23 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 		if (CollectionUtils.isEmpty(response)) page.map(kehoachResponseMapper::toDto);
 
 		List<Long> ids = response.stream().map(BhDgKehoach::getId).collect(Collectors.toList());
-
+		log.info("Địa điểm giao nhận");
 		List<BhDgKhDiaDiemGiaoNhan> diaDiemGiaoNhanList = diaDiemGiaoNhanRepository.findByBhDgKehoachIdIn(ids);
 		//Map: Key-value = BhDgKehoachId-list BhDgKhDiaDiemGiaoNhan
 		Map<Long, List<BhDgKhDiaDiemGiaoNhan>> diaDiemGiaoNhanMap = diaDiemGiaoNhanList.stream()
 				.collect(Collectors.groupingBy(BhDgKhDiaDiemGiaoNhan::getBhDgKehoachId));
 
 		//Map: Key-value = BhDgKehoachId- list BhDgKhPhanLoTaiSan
+		log.info("Phân lô tài sản");
 		List<BhDgKhPhanLoTaiSan> phanLoTaiSanList = phanLoTaiSanRepository.findByBhDgKehoachIdIn(ids);
 		Map<Long, List<BhDgKhPhanLoTaiSan>> phanLoTaiSanMap = phanLoTaiSanList.stream()
 				.collect(Collectors.groupingBy(BhDgKhPhanLoTaiSan::getBhDgKehoachId));
+		log.info("Chỉ tiêu kế hoạch năm");
+		List<Long> chiTieuKeHoachNamIds = response.stream().map(BhDgKehoach::getQdGiaoChiTieuId).collect(Collectors.toList());
+		List<ChiTieuKeHoachNam> chiTieuKeHoachNamList = chiTieuKeHoachNamRepository.findByIdIn(chiTieuKeHoachNamIds);
+		Map<Long, ChiTieuKeHoachNam> chiTieuKeHoachNamMap = chiTieuKeHoachNamList.stream().collect(Collectors.toMap(ChiTieuKeHoachNam::getId, Function.identity(),
+				(existing, replacement) -> existing));
+
 
 		List<BhDgKehoachRes> responseDto = response.stream().map(it -> {
 			if (Objects.nonNull(diaDiemGiaoNhanMap.get(it.getId()))) {
@@ -271,6 +287,10 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 
 			if (Objects.nonNull(phanLoTaiSanMap.get(it.getId()))) {
 				it.setPhanLoTaiSanList(phanLoTaiSanMap.get(it.getId()));
+			}
+
+			if (Objects.nonNull(chiTieuKeHoachNamMap.get(it.getQdGiaoChiTieuId()))) {
+				it.setSoQuyetDinhGiaoChiTieu(chiTieuKeHoachNamMap.get(it.getQdGiaoChiTieuId()).getSoQuyetDinh());
 			}
 			return kehoachResponseMapper.toDto(it);
 		}).collect(Collectors.toList());
@@ -345,10 +365,10 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 				ExportExcel.createCell(row, 2, LocalDateTimeUtils.localDateToString(item.getNgayLapKeHoach()), style, sheet);
 				ExportExcel.createCell(row, 3, LocalDateTimeUtils.localDateToString(item.getNgayKy()), style, sheet);
 				ExportExcel.createCell(row, 4, item.getTrichYeu(), style, sheet);
-				ExportExcel.createCell(row, 5, item.getLoaiVatTuHangHoa(), style, sheet);
+				ExportExcel.createCell(row, 5, Optional.ofNullable(Contains.mpLoaiVthh.get(item.getLoaiVatTuHangHoa())).orElse(""), style, sheet);
 				ExportExcel.createCell(row, 6, item.getQdGiaoChiTieuId(), style, sheet);
-//				ExportExcel.createCell(row, 7, item.getTrichYeu(), style, sheet);
-				ExportExcel.createCell(row, 8, item.getNamKeHoach(), style, sheet);
+				ExportExcel.createCell(row, 7, item.getSoQuyetDinhGiaoChiTieu(), style, sheet);
+				ExportExcel.createCell(row, 8, item.getSoQuyetDinhPheDuyet(), style, sheet);
 				ExportExcel.createCell(row, 9, item.getTenTrangThai(), style, sheet);
 				ExportExcel.createCell(row, 10, item.getTrichYeu(), style, sheet);
 				startRowIndex++;
@@ -367,29 +387,21 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 
 	@Override
 	public boolean deleteMultiple(List<Long> ids) throws Exception {
-//		UserInfo userInfo = SecurityContextService.getUser();
-//		if (userInfo == null) throw new Exception("Bad request.");
-//
-//		if (CollectionUtils.isEmpty(ids)) throw new Exception("Bad request.");
-//		List<BhDgKehoach> kehoachList = bhDgKehoachRepository.findByIdIn(ids);
-//		if (CollectionUtils.isEmpty(kehoachList)) throw new Exception("Kế hoạch bán đấu giá không tồn tại");
-//
-//		log.info("Delete file dinh kem");
-//		fileDinhKemService.delete(keHoachDauGia.getId(), Collections.singleton(BhDgKehoach.TABLE_NAME));
-//		log.info("Delete địa điểm giao nhận");
-//		List<BhDgKhDiaDiemGiaoNhan> diaDiemGiaoNhanList = diaDiemGiaoNhanRepository.findByBhDgKehoachId(keHoachDauGia.getId());
-//		if (!CollectionUtils.isEmpty(diaDiemGiaoNhanList)) {
-//			diaDiemGiaoNhanRepository.deleteAll(diaDiemGiaoNhanList);
-//		}
-//
-//		log.info("Delete phan lo tai san");
-//		List<BhDgKhPhanLoTaiSan> phanLoTaiSanListExisted = phanLoTaiSanRepository.findByBhDgKehoachId(keHoachDauGia.getId());
-//		if (!CollectionUtils.isEmpty(phanLoTaiSanListExisted)) {
-//			phanLoTaiSanRepository.deleteAll(phanLoTaiSanListExisted);
-//		}
-//
-//		log.info("Delete ke hoach ban dau gia");
-//		bhDgKehoachRepository.delete(keHoachDauGia);
+		UserInfo userInfo = SecurityContextService.getUser();
+		if (userInfo == null) throw new Exception("Bad request.");
+
+		if (CollectionUtils.isEmpty(ids)) throw new Exception("Bad request.");
+		log.info("Delete file dinh kem");
+		fileDinhKemService.deleteMultiple(ids, Collections.singleton(BhDgKehoach.TABLE_NAME));
+		log.info("Delete địa điểm giao nhận");
+		diaDiemGiaoNhanRepository.deleteAllByBhDgKehoachIdIn(ids);
+
+		log.info("Delete phan lo tai san");
+		phanLoTaiSanRepository.deleteAllByBhDgKehoachIdIn(ids);
+
+
+		log.info("Delete ke hoach ban dau gia");
+		bhDgKehoachRepository.deleteAllByIdIn(ids);
 		return true;
 	}
 }

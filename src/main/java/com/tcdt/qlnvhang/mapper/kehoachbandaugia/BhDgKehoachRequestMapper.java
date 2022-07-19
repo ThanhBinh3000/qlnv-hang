@@ -1,6 +1,7 @@
-package com.tcdt.qlnvhang.mapper;
+package com.tcdt.qlnvhang.mapper.kehoachbandaugia;
 
 import com.tcdt.qlnvhang.entities.kehoachbanhangdaugia.BhDgKehoach;
+import com.tcdt.qlnvhang.mapper.AbstractMapper;
 import com.tcdt.qlnvhang.request.kehoachbanhangdaugia.BhDgKehoachReq;
 import org.mapstruct.Mapper;
 

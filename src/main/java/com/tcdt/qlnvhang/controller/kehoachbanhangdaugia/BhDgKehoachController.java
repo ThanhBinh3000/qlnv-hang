@@ -86,6 +86,23 @@ public class BhDgKehoachController extends BaseController {
 		return ResponseEntity.ok(resp);
 	}
 
+	@ApiOperation(value = "Xoá danh sách thông tin kế hoạch bán đấu giá hàng hóa", response = Boolean.class)
+	@DeleteMapping()
+	public ResponseEntity<BaseResponse> deleteMultiple(@RequestParam List<Long> ids) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			Boolean res = keHoachBanDauGiaService.deleteMultiple(ids);
+			resp.setData(res);
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error(e.getMessage());
+		}
+		return ResponseEntity.ok(resp);
+	}
+
 	@ApiOperation(value = "Search thông tin kế hoạch bán đấu giá hàng hóa", response = Page.class)
 	@GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> search(BhDgKehoachSearchReq req) {

@@ -1,7 +1,8 @@
-package com.tcdt.qlnvhang.mapper;
+package com.tcdt.qlnvhang.mapper.kehoachbandaugia;
 
 import com.tcdt.qlnvhang.entities.kehoachbanhangdaugia.BhDgKehoach;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
+import com.tcdt.qlnvhang.mapper.AbstractMapper;
 import com.tcdt.qlnvhang.response.kehoachbanhangdaugia.BhDgKehoachRes;
 import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.AfterMapping;
