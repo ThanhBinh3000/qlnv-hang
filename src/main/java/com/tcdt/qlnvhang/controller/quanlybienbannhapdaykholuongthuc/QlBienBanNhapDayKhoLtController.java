@@ -19,9 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -168,13 +165,6 @@ public class QlBienBanNhapDayKhoLtController {
     public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody QlBienBanNhapDayKhoLtSearchReq req) {
 
         try {
-            response.setContentType("application/octet-stream");
-            DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-            String currentDateTime = dateFormatter.format(new Date());
-
-            String headerKey = "Content-Disposition";
-            String headerValue = "attachment; filename=bien_ban_nhap_day_kho_luong_thuc_" + currentDateTime + ".xlsx";
-            response.setHeader(headerKey, headerValue);
             qlBienBanNhapDayKhoLtService.exportToExcel(req, response);
         } catch (Exception e) {
             log.error("Error can not export", e);
