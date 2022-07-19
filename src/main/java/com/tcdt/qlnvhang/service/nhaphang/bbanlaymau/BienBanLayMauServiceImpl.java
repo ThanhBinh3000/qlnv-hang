@@ -121,9 +121,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 			String soQdNhap = (String) o[2];
 			Long hopDongId = (Long) o[3];
 			String soHopDong = (String) o[4];
-			KtNganLo nganLo = o[5] != null ? (KtNganLo) o[5] : null;
-			Long bbNhapDayKhoId = (Long) o[6];
-			String soBbNhapDayKho = (String) o[7];
+			KtNganLo nganLo = o[5] != null ? (KtNganLo) o[5] : o[6] != null ? (KtNganLo) o[6] : null;
 
 			BeanUtils.copyProperties(item, response);
 			response.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
@@ -132,8 +130,6 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 			response.setSoQuyetDinhNhap(soQdNhap);
 			response.setHopDongId(hopDongId);
 			response.setSoHopDong(soHopDong);
-			response.setBbNhapDayKhoId(bbNhapDayKhoId);
-			response.setSoBbNhapDayKho(soBbNhapDayKho);
 			this.thongTinNganLo(response, nganLo);
 			responses.add(response);
 		}
