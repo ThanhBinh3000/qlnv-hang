@@ -96,6 +96,9 @@ public class HhBbNghiemthuKlstHdrReq extends SoBienBanPhieuReq {
 	@ApiModelProperty(example = "Lý do từ chối")
 	String ldoTuchoi;
 
+	String maVatTu;
+	String maVatTuCha;
+
 	private List<HhBbNghiemthuKlstDtlReq> detail;
 
 	private List<FileDinhKemReq> fileDinhKems;
