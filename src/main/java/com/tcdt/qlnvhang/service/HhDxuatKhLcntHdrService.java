@@ -33,9 +33,14 @@ public interface HhDxuatKhLcntHdrService {
 
 	void exportToExcel(IdSearchReq searchReq, HttpServletResponse response) throws Exception;
 
-	void exportDsKhlcnt(HhDxuatKhLcntSearchReq searchReq, HttpServletResponse response) throws Exception;
+//	void exportDsKhlcnt(HhDxuatKhLcntSearchReq searchReq, HttpServletResponse response) throws Exception;
 
-	Page<HhDxuatKhLcntHdr> timKiem (HttpServletRequest request,HhDxuatKhLcntSearchReq objReq) throws Exception;
+
+//    Page<HhDxuatKhLcntHdr> timKiem (HttpServletRequest request, HhDxuatKhLcntSearchReq objReq) throws Exception;
+
+	void exportDsKhlcnt(HhDxuatKhLcntSearchReq req, HttpServletResponse response) throws Exception;
+
+	Page<HhDxuatKhLcntHdr> timKiem(HhDxuatKhLcntSearchReq req) throws Exception;
 
 	@Transactional(rollbackOn = Exception.class)
 	HhDxuatKhLcntHdr createVatTu(HhDxuatKhLcntHdrReq objReq) throws Exception;

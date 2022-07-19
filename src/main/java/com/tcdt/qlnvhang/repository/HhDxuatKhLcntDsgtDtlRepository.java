@@ -13,4 +13,6 @@ public interface HhDxuatKhLcntDsgtDtlRepository extends BaseRepository<HhDxKhlcn
 
 	void deleteAllByIdDxKhlcnt(Long idDxKhlcnt);
 
+	long countByIdDxKhlcnt(Long idDxKhlcnt);
+
 }
