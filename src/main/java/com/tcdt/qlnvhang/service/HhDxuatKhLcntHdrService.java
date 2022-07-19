@@ -40,6 +40,8 @@ public interface HhDxuatKhLcntHdrService {
 
 	void exportDsKhlcnt(HhDxuatKhLcntSearchReq req, HttpServletResponse response) throws Exception;
 
+	void exportList(HhDxuatKhLcntSearchReq objReq, HttpServletResponse response) throws Exception;
+
 	Page<HhDxuatKhLcntHdr> timKiem(HhDxuatKhLcntSearchReq req) throws Exception;
 
 	@Transactional(rollbackOn = Exception.class)

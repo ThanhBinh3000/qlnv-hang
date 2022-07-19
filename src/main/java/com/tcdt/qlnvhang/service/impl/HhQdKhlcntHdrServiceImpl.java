@@ -634,6 +634,91 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		return listData;
 	}
 	@Override
+	public void exportList(HhQdKhlcntSearchReq searchReq, HttpServletResponse response) throws Exception {
+
+		String cDvi = getUser().getCapDvi();
+		if(Contains.CAP_TONG_CUC.equals(cDvi)){
+			this.exportToExcelTongCuc(searchReq,response);
+		}else{
+			this.exportToExcelCuc(searchReq,response);
+		}
+	}
+	public void exportToExcelTongCuc(HhQdKhlcntSearchReq searchReq, HttpServletResponse response) throws Exception {
+		PaggingReq paggingReq = new PaggingReq();
+		paggingReq.setPage(0);
+		paggingReq.setLimit(Integer.MAX_VALUE);
+		searchReq.setPaggingReq(paggingReq);
+		Page<HhQdKhlcntHdr> page = this.getAllPage(searchReq,response);
+		List<HhQdKhlcntHdr> data = page.getContent();
+
+		// Tao form excel
+		String title = "Danh sách QĐ phê duyệt KHLCNT";
+		String[] rowsName = new String[] { "STT", "Số quyết định", "Ngày QĐ", "Trích yếu","Mã tổng hợp","Mã tờ trình", "Năm kế hoạch",
+				"Loại hàng hóa", "Chủng loại hàng hóa","Trạng thái" };
+
+
+		String filename = "Quyet_dinh_ke_hoach_lcnt-tong-cuc.xlsx";
+
+		// Lay danh muc dung chung
+		List<Object[]> dataList = new ArrayList<Object[]>();
+		Object[] objs = null;
+		for (int i = 0; i < data.size(); i++) {
+			HhQdKhlcntHdr qd = data.get(i);
+			objs = new Object[rowsName.length];
+			objs[0] = i;
+			objs[1] = qd.getSoQd();
+			objs[2] = qd.getNgayQd();
+			objs[3] = qd.getTrichYeu();
+			objs[4] = qd.getIdThHdr();
+			objs[5] = qd.getMaTrHdr();
+			objs[6] = qd.getNamKhoach();
+			objs[7] = qd.getLoaiVthh();
+			objs[8] = qd.getCloaiVthh();
+			objs[9] = qd.getTrangThai();
+			dataList.add(objs);
+		}
+
+		ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+		ex.export();
+	}
+
+	public void exportToExcelCuc(HhQdKhlcntSearchReq searchReq, HttpServletResponse response) throws Exception {
+
+		PaggingReq paggingReq = new PaggingReq();
+		paggingReq.setPage(0);
+		paggingReq.setLimit(Integer.MAX_VALUE);
+		searchReq.setPaggingReq(paggingReq);
+		Page<HhQdKhlcntHdr> page = this.getAllPage(searchReq,response);
+		List<HhQdKhlcntHdr> data = page.getContent();
+
+		// Tao form excel
+		String title = "Danh sách QĐ phê duyệt KHLCNT";
+		String[] rowsName = new String[] { "STT", "Số quyết định", "Ngày QĐ", "Trích yếu", "Năm kế hoạch",
+				"Loại hàng hóa", "Chủng loại hàng hóa" };
+
+
+		String filename = "Quyet_dinh_ke_hoach_lcnt-cuc.xlsx";
+
+		// Lay danh muc dung chung
+		List<Object[]> dataList = new ArrayList<Object[]>();
+		Object[] objs = null;
+		for (int i = 0; i < data.size(); i++) {
+			HhQdKhlcntHdr qd = data.get(i);
+			objs = new Object[rowsName.length];
+			objs[0] = i;
+			objs[1] = qd.getSoQd();
+			objs[2] = qd.getNgayQd();
+			objs[3] = qd.getTrichYeu();
+			objs[4] = qd.getNamKhoach();
+			objs[5] = qd.getLoaiVthh();
+			objs[6] = qd.getCloaiVthh();
+			dataList.add(objs);
+		}
+
+		ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+		ex.export();
+	}
+	@Override
 	public void exportToExcel(HhQdKhlcntSearchReq searchReq, HttpServletResponse response) throws Exception {
 
 		PaggingReq paggingReq = new PaggingReq();

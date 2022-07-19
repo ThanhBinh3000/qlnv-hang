@@ -190,7 +190,7 @@ public class HhQdKhlcntHdrController {
 	public void exportToExcel(@Valid @RequestBody HhQdKhlcntSearchReq objReq, HttpServletResponse response)
 			throws Exception {
 		try {
-			service.exportToExcel(objReq, response);
+			service.exportList(objReq, response);
 		} catch (Exception e) {
 			// TODO: handle exception
 			log.error("Kết xuất danh sách gói thầu trace: {}", e);
