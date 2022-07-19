@@ -381,6 +381,83 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
 		ex.export();
 	}
+	@Override
+	public void exportList(HhDxuatKhLcntSearchReq objReq,HttpServletResponse response) throws Exception {
+
+		String cDvi = getUser().getCapDvi();
+		if(Contains.CAP_TONG_CUC.equals(cDvi)){
+			this.exportToExcelTongCuc(objReq,response);
+		}else{
+			this.exportToExcelCuc(objReq,response);
+		}
+	}
+	public void exportToExcelTongCuc(HhDxuatKhLcntSearchReq objReq,HttpServletResponse response) throws Exception {
+		PaggingReq paggingReq = new PaggingReq();
+		paggingReq.setPage(0);
+		paggingReq.setLimit(Integer.MAX_VALUE);
+		objReq.setPaggingReq(paggingReq);
+		Page<HhDxuatKhLcntHdr> page = this.timKiem(objReq);
+		List<HhDxuatKhLcntHdr> data = page.getContent();
+
+		String title = "Danh sách kế hoạch đề xuất lựa chọn nhà thầu";
+		String[] rowsName = new String[] { "STT", "Số tờ trình", "Đơn vị", "Ngày đề xuất","Trích yếu","Số QĐ giao chỉ tiêu","Năm kế hoạch","Hàng hóa","Trạng thái của đề xuất" };
+		String filename = "Danh_sach_ke_hoach_de_xuat_lua_chon_nha_thau_tong_cuc.xlsx";
+
+		List<Object[]> dataList = new ArrayList<Object[]>();
+		Object[] objs = null;
+		for (int i = 0; i < data.size(); i++) {
+			HhDxuatKhLcntHdr dx = data.get(i);
+			objs = new Object[rowsName.length];
+			objs[0] = i;
+			objs[1] = dx.getSoDxuat();
+			objs[2] = dx.getTenDvi();
+			objs[3] = dx.getNgayGuiDuyet();
+			objs[4] = dx.getTrichYeu();
+			objs[5] = dx.getSoQd();
+			objs[6] = dx.getNamKhoach();
+			objs[7] = dx.getLoaiVthh();
+			objs[8] = dx.getTrangThai();
+			dataList.add(objs);
+		}
+
+		ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+		ex.export();
+	}
+
+	public void exportToExcelCuc(HhDxuatKhLcntSearchReq objReq,HttpServletResponse response) throws Exception {
+
+		PaggingReq paggingReq = new PaggingReq();
+		paggingReq.setPage(0);
+		paggingReq.setLimit(Integer.MAX_VALUE);
+		objReq.setPaggingReq(paggingReq);
+		Page<HhDxuatKhLcntHdr> page = this.timKiem(objReq);
+		List<HhDxuatKhLcntHdr> data = page.getContent();
+
+		String title = "Danh sách kế hoạch đề xuất lựa chọn nhà thầu";
+		String[] rowsName = new String[] { "STT", "Số tờ trình", "Ngày đề xuất", "Trích yếu","Số QĐ giao chỉ tiêu","Năm kế hoạch","Hàng hóa","Chủng loại hàng hóa","Số gói thầu","Trạng thái của đề xuất" };
+		String filename = "Danh_sach_ke_hoach_de_xuat_lua_chon_nha_thau_cuc.xlsx";
+
+		List<Object[]> dataList = new ArrayList<Object[]>();
+		Object[] objs = null;
+		for (int i = 0; i < data.size(); i++) {
+			HhDxuatKhLcntHdr dx = data.get(i);
+			objs = new Object[rowsName.length];
+			objs[0] = i;
+			objs[1] = dx.getSoDxuat();
+			objs[2] = dx.getNgayGuiDuyet();
+			objs[3] = dx.getTrichYeu();
+			objs[4] = dx.getSoQd();
+			objs[5] = dx.getNamKhoach();
+			objs[6] = dx.getLoaiVthh();
+			objs[7] = dx.getCloaiVthh();
+			objs[8] = dx.getSoGoiThau();
+			objs[9] = dx.getTrangThai();
+			dataList.add(objs);
+		}
+
+		ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+		ex.export();
+	}
 
 	@Override
 	public Page<HhDxuatKhLcntHdr> timKiem(HhDxuatKhLcntSearchReq req) throws Exception {

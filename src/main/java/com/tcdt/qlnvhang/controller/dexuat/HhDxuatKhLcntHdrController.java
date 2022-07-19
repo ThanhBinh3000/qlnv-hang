@@ -176,7 +176,7 @@ public class HhDxuatKhLcntHdrController {
 	public void exportDsKhlcnt(@Valid @RequestBody HhDxuatKhLcntSearchReq searchReq, HttpServletResponse response)
 			throws Exception {
 		try {
-			service.exportDsKhlcnt(searchReq, response);
+			service.exportList(searchReq, response);
 		} catch (Exception e) {
 			// TODO: handle exception
 			log.error("Kết xuất danh sách đề xuất kế hoạch lựa chọn nhà thầu trace: {}", e);

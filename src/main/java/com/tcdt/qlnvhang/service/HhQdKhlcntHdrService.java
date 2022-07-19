@@ -38,6 +38,8 @@ public interface HhQdKhlcntHdrService {
 
 	Page<HhQdKhlcntHdr> colection(HhQdKhlcntSearchReq objReq, HttpServletResponse response) throws Exception;
 
+	void exportList(HhQdKhlcntSearchReq searchReq, HttpServletResponse response) throws Exception;
+
 	void exportToExcel(HhQdKhlcntSearchReq searchReq, HttpServletResponse response) throws Exception;
 
 	Page<HhQdKhlcntHdr> getAllPage(HhQdKhlcntSearchReq objReq, HttpServletResponse response) throws Exception;

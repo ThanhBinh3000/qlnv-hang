@@ -379,39 +379,80 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 
 	@Override
 	public void exportList(@Valid @RequestBody HhQdPduyetKqlcntSearchReq objReq, HttpServletResponse response) throws  Exception{
-		PaggingReq paggingReq=new PaggingReq();
+		String cDvi= getUser().getCapDvi();
+		if(Contains.CAP_TONG_CUC.equals(cDvi)){
+			this.exportToExcelTongCuc(objReq,response);
+		}else {
+			this.exportToExcelCuc(objReq,response);
+		}
+
+	}
+	public void exportToExcelTongCuc(@Valid @RequestBody HhQdPduyetKqlcntSearchReq objReq, HttpServletResponse response) throws  Exception {
+		PaggingReq paggingReq = new PaggingReq();
 		paggingReq.setPage(0);
 		paggingReq.setLimit(Integer.MAX_VALUE);
 		objReq.setPaggingReq(paggingReq);
-		Page<HhQdPduyetKqlcntRes> page=this.timKiemPageCustom(objReq,response);
-		List<HhQdPduyetKqlcntRes> data=page.getContent();
+		Page<HhQdPduyetKqlcntRes> page = this.timKiemPageCustom(objReq, response);
+		List<HhQdPduyetKqlcntRes> data = page.getContent();
 
-		String title="Quyết định phê duyệt kết quả lựa chọn nhà thầu";
-		String[] rowsName=new String[]{"STT","Số QĐ","Ngày QĐ","Trích yếu","Tên gói thầu","Trúng/hủy thầu","Tên đơn vị trúng thầu","Lý do hủy thầu","Giá gói thầu (đồng)","Loại hợp đồng","Thời gian thực hiện hợp đồng (ngày)","Trạng thái"};
-		String fileName="danh-sach-phe-duyet-tt-lcnt.xlsx";
+		String title = "Quyết định phê duyệt kết quả lựa chọn nhà thầu";
+		String[] rowsName = new String[]{"STT", "Số QĐ", "Đơn vị", "Ngày QĐ", "Năm kế hoạch", "Trích yếu", "Số QD PD KHLCNT", "Loại hàng hóa", "Số gói thầu", "Trạng thái"};
+		String fileName = "danh-sach-phe-duyet-tt-lcnt-tong-cuc.xlsx";
 		List<Object[]> dataList = new ArrayList<Object[]>();
-		Object[] objs=null;
-		for (int i=0;i<data.size();i++){
-			HhQdPduyetKqlcntRes dx=data.get(i);
-			objs=new Object[rowsName.length];
-			objs[0]=i;
-			objs[1]=dx.getSoQd();
-			objs[2]=dx.getNgayQd();
-			objs[3]=dx.getTrichYeu();
-			objs[4]=dx.getTenGthau();
-			objs[5]=dx.getStatusGthau();
-			objs[6]=dx.getIdNhaThau();
-			objs[7]=dx.getLyDoHuy();
-			objs[8]=dx.getDonGiaTrcVat();
-			objs[9]=dx.getLoaiHdong();
-			objs[10]=dx.getTgianThienHd();
-			objs[11]=dx.getTrangThai();
+		Object[] objs = null;
+		for (int i = 0; i < data.size(); i++) {
+			HhQdPduyetKqlcntRes dx = data.get(i);
+			objs = new Object[rowsName.length];
+			objs[0] = i;
+			objs[1] = dx.getSoQd();
+			objs[2] = dx.getMaDvi();
+			objs[3] = dx.getNgayQd();
+			objs[4] = dx.getNamKhoach();
+			objs[5] = dx.getTrichYeu();
+			objs[6] = dx.getSoQdPdKhlcnt();
+			objs[7] = dx.getLoaiVthh();
+			objs[8] = dx.getSoGoiThau();
+			objs[9] = dx.getTrangThai();
 			dataList.add(objs);
 
 		}
-		ExportExcel ex =new ExportExcel(title,fileName,rowsName,dataList,response);
+		ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
 		ex.export();
 
 	}
+	public void exportToExcelCuc( @Valid @RequestBody HhQdPduyetKqlcntSearchReq objReq, HttpServletResponse response) throws  Exception {
+		PaggingReq paggingReq = new PaggingReq();
+		paggingReq.setPage(0);
+		paggingReq.setLimit(Integer.MAX_VALUE);
+		objReq.setPaggingReq(paggingReq);
+		Page<HhQdPduyetKqlcntRes> page = this.timKiemPageCustom(objReq, response);
+		List<HhQdPduyetKqlcntRes> data = page.getContent();
 
-}
+		String title = "Quyết định phê duyệt kết quả lựa chọn nhà thầu";
+		String[] rowsName = new String[]{"STT", "Số QĐ", "Ngày QĐ", "Trích yếu", "Tên gói thầu", "Trúng/hủy thầu", "Tên đơn vị trúng thầu", "Lý do hủy thầu", "Giá gói thầu (đồng)", "Loại hợp đồng", "Thời gian thực hiện hợp đồng (ngày)", "Trạng thái"};
+		String fileName = "danh-sach-phe-duyet-tt-lcnt-cuc.xlsx";
+		List<Object[]> dataList = new ArrayList<Object[]>();
+		Object[] objs = null;
+		for (int i = 0; i < data.size(); i++) {
+			HhQdPduyetKqlcntRes dx = data.get(i);
+			objs = new Object[rowsName.length];
+			objs[0] = i;
+			objs[1] = dx.getSoQd();
+			objs[2] = dx.getNgayQd();
+			objs[3] = dx.getTrichYeu();
+			objs[4] = dx.getTenGthau();
+			objs[5] = dx.getStatusGthau();
+			objs[6] = dx.getIdNhaThau();
+			objs[7] = dx.getLyDoHuy();
+			objs[8] = dx.getDonGiaTrcVat();
+			objs[9] = dx.getLoaiHdong();
+			objs[10] = dx.getTgianThienHd();
+			objs[11] = dx.getTrangThai();
+			dataList.add(objs);
+
+		}
+		ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
+		ex.export();
+
+	}
+	}
