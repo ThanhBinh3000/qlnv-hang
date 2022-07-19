@@ -26,6 +26,7 @@ import com.tcdt.qlnvhang.table.khotang.KtNganKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganLo;
 import com.tcdt.qlnvhang.table.khotang.KtNhaKho;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
@@ -386,7 +387,7 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 				objs[0] = i;
 				objs[1] = item.getSoPhieu();
 				objs[2] = item.getSoQuyetDinhNhap();
-				objs[3] = convertDateToString(item.getNgayBanGiaoMau());
+				objs[3] = LocalDateTimeUtils.localDateToString(item.getNgayBanGiaoMau());
 				objs[4] = item.getTenDviCha();
 				objs[5] = item.getTenDvi();
 				objs[6] = item.getSoLuongMauHangKt();

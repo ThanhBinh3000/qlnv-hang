@@ -32,6 +32,7 @@ import com.tcdt.qlnvhang.table.khotang.KtNganKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganLo;
 import com.tcdt.qlnvhang.table.khotang.KtNhaKho;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
 import com.tcdt.qlnvhang.util.MoneyConvert;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.extern.log4j.Log4j2;
@@ -470,7 +471,7 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
                 objs[1] = item.getSoBangKe();
                 objs[2] = item.getSoQuyetDinhNhap();
                 objs[3] = item.getSoPhieuNhapKho();
-                objs[4] = convertDateToString(item.getNgayNhap());
+                objs[4] = LocalDateTimeUtils.localDateToString(item.getNgayNhap());
                 objs[5] = item.getTenDiemKho();
                 objs[6] = item.getTenNhaKho();
                 objs[7] = item.getTenNganKho();

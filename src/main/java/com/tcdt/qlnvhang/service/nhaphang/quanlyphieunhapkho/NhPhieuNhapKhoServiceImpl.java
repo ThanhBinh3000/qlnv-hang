@@ -38,6 +38,7 @@ import com.tcdt.qlnvhang.table.khotang.KtNganKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganLo;
 import com.tcdt.qlnvhang.table.khotang.KtNhaKho;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
 import com.tcdt.qlnvhang.util.MoneyConvert;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.extern.log4j.Log4j2;
@@ -470,7 +471,7 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
                 objs[0] = i;
                 objs[1] = item.getSoPhieu();
                 objs[2] = item.getSoQuyetDinhNhap();
-                objs[3] = convertDateToString(item.getNgayNhapKho());
+                objs[3] = LocalDateTimeUtils.localDateToString(item.getNgayNhapKho());
                 objs[4] = item.getTenDiemKho();
                 objs[5] = item.getTenNhaKho();
                 objs[6] = item.getTenNganKho();

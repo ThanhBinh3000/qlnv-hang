@@ -29,6 +29,7 @@ import com.tcdt.qlnvhang.table.khotang.KtNganKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganLo;
 import com.tcdt.qlnvhang.table.khotang.KtNhaKho;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -330,7 +331,7 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
                 objs[0] = i;
                 objs[1] = item.getSoBangKe();
                 objs[2] = item.getSoQuyetDinhNhap();
-                objs[3] = convertDateToString(item.getNgayTaoBangKe());
+                objs[3] = LocalDateTimeUtils.localDateToString(item.getNgayTaoBangKe());
                 objs[4] = item.getTenDiemKho();
                 objs[5] = item.getTenNhaKho();
                 objs[6] = item.getTenNganKho();

@@ -24,6 +24,7 @@ import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
@@ -356,7 +357,7 @@ public class BienBanBanGiaoMauServiceImpl extends BaseServiceImpl implements Bie
 				objs[0] = i;
 				objs[1] = item.getSoBienBan();
 				objs[2] = item.getSoQuyetDinhNhap();
-				objs[3] = convertDateToString(item.getNgayBanGiaoMau());
+				objs[3] = LocalDateTimeUtils.localDateToString(item.getNgayBanGiaoMau());
 				objs[4] = item.getTenDvi();
 				objs[5] = item.getTenDviBenNhan();
 				objs[6] = item.getSoLuongMau();

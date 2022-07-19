@@ -34,6 +34,7 @@ import com.tcdt.qlnvhang.table.khotang.KtNganKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganLo;
 import com.tcdt.qlnvhang.table.khotang.KtNhaKho;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
@@ -417,7 +418,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 				objs[0] = i;
 				objs[1] = item.getSoBienBan();
 				objs[2] = item.getSoQuyetDinhNhap();
-				objs[3] = convertDateToString(item.getNgayLayMau());
+				objs[3] = LocalDateTimeUtils.localDateToString(item.getNgayLayMau());
 				objs[4] = item.getSoHopDong();
 				objs[5] = item.getTenDiemKho();
 				objs[6] = item.getTenNhaKho();
