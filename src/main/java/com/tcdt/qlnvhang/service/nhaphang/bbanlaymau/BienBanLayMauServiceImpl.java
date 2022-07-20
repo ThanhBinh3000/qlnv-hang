@@ -37,13 +37,6 @@ import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.extern.log4j.Log4j2;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.xssf.usermodel.XSSFFont;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -54,7 +47,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
@@ -121,9 +113,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 			String soQdNhap = (String) o[2];
 			Long hopDongId = (Long) o[3];
 			String soHopDong = (String) o[4];
-			KtNganLo nganLo = o[5] != null ? (KtNganLo) o[5] : null;
-			Long bbNhapDayKhoId = (Long) o[6];
-			String soBbNhapDayKho = (String) o[7];
+			KtNganLo nganLo = o[5] != null ? (KtNganLo) o[5] : o[6] != null ? (KtNganLo) o[6] : null;
 
 			BeanUtils.copyProperties(item, response);
 			response.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
@@ -132,8 +122,6 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 			response.setSoQuyetDinhNhap(soQdNhap);
 			response.setHopDongId(hopDongId);
 			response.setSoHopDong(soHopDong);
-			response.setBbNhapDayKhoId(bbNhapDayKhoId);
-			response.setSoBbNhapDayKho(soBbNhapDayKho);
 			this.thongTinNganLo(response, nganLo);
 			responses.add(response);
 		}
@@ -416,63 +404,37 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 		if (CollectionUtils.isEmpty(list))
 			return true;
 
+		String[] rowsName = new String[] { STT, SO_BIEN_BAN, SO_QUYET_DINH_NHAP, NGAY_LAY_MAU, SO_HOP_DONG,
+				DIEM_KHO, NHA_KHO, NGAN_KHO, NGAN_LO, TRANG_THAI};
+		String filename = "Danh_sach_bien_ban_lay_mau.xlsx";
+
+		List<Object[]> dataList = new ArrayList<Object[]>();
+		Object[] objs = null;
+
 		try {
-			XSSFWorkbook workbook = new XSSFWorkbook();
-
-			//STYLE
-			CellStyle style = workbook.createCellStyle();
-			XSSFFont font = workbook.createFont();
-			font.setFontHeight(11);
-			font.setBold(true);
-			style.setFont(font);
-			style.setAlignment(HorizontalAlignment.CENTER);
-			style.setVerticalAlignment(VerticalAlignment.CENTER);
-			XSSFSheet sheet = workbook.createSheet(SHEET_BIEN_BAN_LAY_MAU);
-			Row row0 = sheet.createRow(0);
-			//STT
-
-			ExportExcel.createCell(row0, 0, STT, style, sheet);
-			ExportExcel.createCell(row0, 1, SO_BIEN_BAN, style, sheet);
-			ExportExcel.createCell(row0, 2, SO_QUYET_DINH_NHAP, style, sheet);
-			ExportExcel.createCell(row0, 3, NGAY_LAY_MAU, style, sheet);
-			ExportExcel.createCell(row0, 4, SO_HOP_DONG, style, sheet);
-			ExportExcel.createCell(row0, 5, DIEM_KHO, style, sheet);
-			ExportExcel.createCell(row0, 6, NHA_KHO, style, sheet);
-			ExportExcel.createCell(row0, 7, NGAN_KHO, style, sheet);
-			ExportExcel.createCell(row0, 8, NGAN_LO, style, sheet);
-			ExportExcel.createCell(row0, 9, TRANG_THAI, style, sheet);
-
-			style = workbook.createCellStyle();
-			font = workbook.createFont();
-			font.setFontHeight(11);
-			style.setFont(font);
-
-			Row row;
-			int startRowIndex = 1;
-
-			for (BienBanLayMauRes item : list) {
-				row = sheet.createRow(startRowIndex);
-				ExportExcel.createCell(row, 0, startRowIndex, style, sheet);
-				ExportExcel.createCell(row, 1, item.getSoBienBan(), style, sheet);
-				ExportExcel.createCell(row, 2, item.getSoQuyetDinhNhap(), style, sheet);
-				ExportExcel.createCell(row, 3, item.getSoHopDong(), style, sheet);
-				ExportExcel.createCell(row, 4, LocalDateTimeUtils.localDateToString(item.getNgayLayMau()), style, sheet);
-				ExportExcel.createCell(row, 5, item.getTenDiemKho(), style, sheet);
-				ExportExcel.createCell(row, 6, item.getTenNhaKho(), style, sheet);
-				ExportExcel.createCell(row, 7, item.getTenNganKho(), style, sheet);
-				ExportExcel.createCell(row, 8, item.getTenNganLo(), style, sheet);
-				ExportExcel.createCell(row, 9, TrangThaiEnum.getTenById(item.getTrangThai()), style, sheet);
-				startRowIndex++;
+			for (int i = 0; i < list.size(); i++) {
+				BienBanLayMauRes item = list.get(i);
+				objs = new Object[rowsName.length];
+				objs[0] = i;
+				objs[1] = item.getSoBienBan();
+				objs[2] = item.getSoQuyetDinhNhap();
+				objs[3] = LocalDateTimeUtils.localDateToString(item.getNgayLayMau());
+				objs[4] = item.getSoHopDong();
+				objs[5] = item.getTenDiemKho();
+				objs[6] = item.getTenNhaKho();
+				objs[7] = item.getTenNganKho();
+				objs[8] = item.getTenNganLo();
+				objs[9] = TrangThaiEnum.getTenById(item.getTrangThai());
+				dataList.add(objs);
 			}
 
-			ServletOutputStream outputStream = response.getOutputStream();
-			workbook.write(outputStream);
-			workbook.close();
-			outputStream.close();
+			ExportExcel ex = new ExportExcel(SHEET_BIEN_BAN_LAY_MAU, filename, rowsName, dataList, response);
+			ex.export();
 		} catch (Exception e) {
 			log.error("Error export", e);
 			return false;
 		}
+
 		return true;
 	}
 

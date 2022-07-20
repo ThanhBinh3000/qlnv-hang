@@ -66,6 +66,8 @@ public class HhBbNghiemthuKlstHdr implements Serializable {
 	String maDvi;
 	Integer nam;
 	String loaiVthh;
+	String maVatTu;
+	String maVatTuCha;
 
 	Date ngayTao;
 	String nguoiTao;
@@ -129,6 +131,15 @@ public class HhBbNghiemthuKlstHdr implements Serializable {
 
 	@Transient
 	String soQuyetDinhNhap;
+
+	@Transient
+	String tenVatTu;
+
+	@Transient
+	String tenVatTuCha;
+
+	@Transient
+	String maQhns;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "id_hdr")

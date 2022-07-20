@@ -11,13 +11,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.tcdt.qlnvhang.enums.HhBbNghiemthuKlstStatusEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.response.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongResponseDto;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganLo;
@@ -77,6 +80,9 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 
 	@Autowired
 	private KtNganLoRepository ktNganLoRepository;
+
+	@Autowired
+	private HttpServletRequest req;
 
 	@Override
 	public HhBbNghiemthuKlstHdr create(HhBbNghiemthuKlstHdrReq objReq) throws Exception {
@@ -330,63 +336,34 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 		if (CollectionUtils.isEmpty(list))
 			return true;
 
+		String[] rowsName = new String[] { STT, SO_BIEN_BAN, SO_QUYET_DINH_NHAP, NGAY_NGHIEM_THU, DIEM_KHO, NHA_KHO, NGAN_KHO, NGAN_LO,
+				CHI_PHI_THUC_HIEN_TRONG_NAM, CHI_PHI_THUC_HIEN_NAM_TRUOC, TONG_GIA_TRI, TRANG_THAI};
+		String filename = "Danh_sach_bien_ban_nghiem_thu_bao_quan_lan_dau.xlsx";
+
+		List<Object[]> dataList = new ArrayList<Object[]>();
+		Object[] objs = null;
+
 		try {
-			XSSFWorkbook workbook = new XSSFWorkbook();
-
-			//STYLE
-			CellStyle style = workbook.createCellStyle();
-			XSSFFont font = workbook.createFont();
-			font.setFontHeight(11);
-			font.setBold(true);
-			style.setFont(font);
-			style.setAlignment(HorizontalAlignment.CENTER);
-			style.setVerticalAlignment(VerticalAlignment.CENTER);
-			XSSFSheet sheet = workbook.createSheet(SHEET_BIEN_BAN_NGHIEM_THU_BAO_QUAN_LAN_DAU_NHAP);
-			Row row0 = sheet.createRow(0);
-			//STT
-
-			ExportExcel.createCell(row0, 0, STT, style, sheet);
-			ExportExcel.createCell(row0, 1, SO_BIEN_BAN, style, sheet);
-			ExportExcel.createCell(row0, 2, SO_QUYET_DINH_NHAP, style, sheet);
-			ExportExcel.createCell(row0, 3, NGAY_NGHIEM_THU, style, sheet);
-			ExportExcel.createCell(row0, 4, DIEM_KHO, style, sheet);
-			ExportExcel.createCell(row0, 5, NHA_KHO, style, sheet);
-			ExportExcel.createCell(row0, 6, NGAN_KHO, style, sheet);
-			ExportExcel.createCell(row0, 7, NGAN_LO, style, sheet);
-			ExportExcel.createCell(row0, 8, CHI_PHI_THUC_HIEN_TRONG_NAM, style, sheet);
-			ExportExcel.createCell(row0, 9, CHI_PHI_THUC_HIEN_NAM_TRUOC, style, sheet);
-			ExportExcel.createCell(row0, 10, TONG_GIA_TRI, style, sheet);
-			ExportExcel.createCell(row0, 11, TRANG_THAI, style, sheet);
-
-			style = workbook.createCellStyle();
-			font = workbook.createFont();
-			font.setFontHeight(11);
-			style.setFont(font);
-
-			Row row;
-			int startRowIndex = 1;
-
-			for (HhBbNghiemthuKlstHdr item : list) {
-				row = sheet.createRow(startRowIndex);
-				ExportExcel.createCell(row, 0, startRowIndex, style, sheet);
-				ExportExcel.createCell(row, 1, item.getSoBb(), style, sheet);
-				ExportExcel.createCell(row, 2, item.getSoQuyetDinhNhap(), style, sheet);
-				ExportExcel.createCell(row, 3, convertDateToString(item.getNgayNghiemThu()), style, sheet);
-				ExportExcel.createCell(row, 4, item.getTenDiemkho(), style, sheet);
-				ExportExcel.createCell(row, 5, item.getTenNhakho(), style, sheet);
-				ExportExcel.createCell(row, 6, item.getTenNgankho(), style, sheet);
-				ExportExcel.createCell(row, 7, item.getTenNganlo(), style, sheet);
-				ExportExcel.createCell(row, 8,  Optional.ofNullable(item.getChiPhiThucHienTrongNam()).orElse(BigDecimal.valueOf(0D)), style, sheet);
-				ExportExcel.createCell(row, 9, Optional.ofNullable(item.getChiPhiThucHienNamTruoc()).orElse(BigDecimal.valueOf(0D)), style, sheet);
-				ExportExcel.createCell(row, 10, item.getTongGiaTri(), style, sheet);
-				ExportExcel.createCell(row, 11, HhBbNghiemthuKlstStatusEnum.getTenById(item.getTrangThai()), style, sheet);
-				startRowIndex++;
+			for (int i = 0; i < list.size(); i++) {
+				HhBbNghiemthuKlstHdr item = list.get(i);
+				objs = new Object[rowsName.length];
+				objs[0] = i;
+				objs[1] = item.getSoBb();
+				objs[2] = item.getSoQuyetDinhNhap();
+				objs[3] = convertDateToString(item.getNgayNghiemThu());
+				objs[4] = item.getTenDiemkho();
+				objs[5] = item.getTenNhakho();
+				objs[6] = item.getTenNgankho();
+				objs[7] = item.getTenNganlo();
+				objs[8] = Optional.ofNullable(item.getChiPhiThucHienTrongNam()).orElse(BigDecimal.valueOf(0D));
+				objs[9] = Optional.ofNullable(item.getChiPhiThucHienNamTruoc()).orElse(BigDecimal.valueOf(0D));
+				objs[10] = item.getTongGiaTri();
+				objs[11] = TrangThaiEnum.getTenById(item.getTrangThai());
+				dataList.add(objs);
 			}
 
-			ServletOutputStream outputStream = response.getOutputStream();
-			workbook.write(outputStream);
-			workbook.close();
-			outputStream.close();
+			ExportExcel ex = new ExportExcel(SHEET_BIEN_BAN_NGHIEM_THU_BAO_QUAN_LAN_DAU_NHAP, filename, rowsName, dataList, response);
+			ex.export();
 		} catch (Exception e) {
 			log.error("Error export", e);
 			return false;
@@ -419,6 +396,10 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 
 		KtNganLo nganLo = ktNganLoRepository.findFirstByMaNganlo(bb.getMaNganlo());
 		this.thongTinNganLo(bb, nganLo);
+		QlnvDmDonvi donvi = getDviByMa(bb.getMaDvi(), req);
+		bb.setMaDvi(donvi.getMaDvi());
+		bb.setTenDvi(donvi.getTenDvi());
+		bb.setMaQhns(donvi.getMaQhns());
 		return bb;
 	}
 

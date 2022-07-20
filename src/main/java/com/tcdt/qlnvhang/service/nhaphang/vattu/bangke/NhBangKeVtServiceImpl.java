@@ -14,7 +14,6 @@ import com.tcdt.qlnvhang.repository.vattu.bangke.NhBangKeVtRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.bangke.NhBangKeVtCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.bangke.NhBangKeVtReq;
 import com.tcdt.qlnvhang.request.search.vattu.bangke.NhBangKeVtSearchReq;
@@ -34,15 +33,7 @@ import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.xssf.usermodel.XSSFFont;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -51,7 +42,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.util.*;
@@ -72,7 +62,7 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
 
     private static final String SHEET_BANG_KE_NHAP_VAT_TU = "Bảng kê nhập vật tư";
     private static final String STT = "STT";
-    private static final String SO_PHIEU = "Số Bảng Kê";
+    private static final String SO_BANG_KE = "Số Bảng Kê";
     private static final String SO_QUYET_DINH_NHAP = "Số Quyết Định Nhập";
     private static final String NGAY_TAO_BANG_KE = "Ngày Tạo Bảng Kê";
     private static final String DIEM_KHO = "Điểm Kho";
@@ -327,61 +317,36 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
         if (CollectionUtils.isEmpty(list))
             return true;
 
+        String[] rowsName = new String[] { STT, SO_BANG_KE, SO_QUYET_DINH_NHAP, NGAY_TAO_BANG_KE,
+                DIEM_KHO, NHA_KHO, NGAN_KHO, NGAN_LO, TRANG_THAI};
+        String filename = "Danh_sach_bang_ke_nhap_vat_tu.xlsx";
+
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+
         try {
-            XSSFWorkbook workbook = new XSSFWorkbook();
-
-            //STYLE
-            CellStyle style = workbook.createCellStyle();
-            XSSFFont font = workbook.createFont();
-            font.setFontHeight(11);
-            font.setBold(true);
-            style.setFont(font);
-            style.setAlignment(HorizontalAlignment.CENTER);
-            style.setVerticalAlignment(VerticalAlignment.CENTER);
-            XSSFSheet sheet = workbook.createSheet(SHEET_BANG_KE_NHAP_VAT_TU);
-            Row row0 = sheet.createRow(0);
-            //STT
-
-            ExportExcel.createCell(row0, 0, STT, style, sheet);
-            ExportExcel.createCell(row0, 1, SO_PHIEU, style, sheet);
-            ExportExcel.createCell(row0, 2, SO_QUYET_DINH_NHAP, style, sheet);
-            ExportExcel.createCell(row0, 3, NGAY_TAO_BANG_KE, style, sheet);
-            ExportExcel.createCell(row0, 4, DIEM_KHO, style, sheet);
-            ExportExcel.createCell(row0, 5, NHA_KHO, style, sheet);
-            ExportExcel.createCell(row0, 6, NGAN_KHO, style, sheet);
-            ExportExcel.createCell(row0, 7, NGAN_LO, style, sheet);
-            ExportExcel.createCell(row0, 8, TRANG_THAI, style, sheet);
-
-            style = workbook.createCellStyle();
-            font = workbook.createFont();
-            font.setFontHeight(11);
-            style.setFont(font);
-
-            Row row;
-            int startRowIndex = 1;
-
-            for (NhBangKeVtRes item : list) {
-                row = sheet.createRow(startRowIndex);
-                ExportExcel.createCell(row, 0, startRowIndex, style, sheet);
-                ExportExcel.createCell(row, 1, item.getSoBangKe(), style, sheet);
-                ExportExcel.createCell(row, 2, item.getSoQuyetDinhNhap(), style, sheet);
-                ExportExcel.createCell(row, 3, LocalDateTimeUtils.localDateToString(item.getNgayTaoBangKe()), style, sheet);
-                ExportExcel.createCell(row, 4, item.getTenDiemKho(), style, sheet);
-                ExportExcel.createCell(row, 5, item.getTenNhaKho(), style, sheet);
-                ExportExcel.createCell(row, 6, item.getTenNganKho(), style, sheet);
-                ExportExcel.createCell(row, 7, item.getTenNganLo(), style, sheet);
-                ExportExcel.createCell(row, 8, TrangThaiEnum.getTenById(item.getTrangThai()), style, sheet);
-                startRowIndex++;
+            for (int i = 0; i < list.size(); i++) {
+                NhBangKeVtRes item = list.get(i);
+                objs = new Object[rowsName.length];
+                objs[0] = i;
+                objs[1] = item.getSoBangKe();
+                objs[2] = item.getSoQuyetDinhNhap();
+                objs[3] = LocalDateTimeUtils.localDateToString(item.getNgayTaoBangKe());
+                objs[4] = item.getTenDiemKho();
+                objs[5] = item.getTenNhaKho();
+                objs[6] = item.getTenNganKho();
+                objs[7] = item.getTenNganLo();
+                objs[8] = TrangThaiEnum.getTenById(item.getTrangThai());
+                dataList.add(objs);
             }
 
-            ServletOutputStream outputStream = response.getOutputStream();
-            workbook.write(outputStream);
-            workbook.close();
-            outputStream.close();
+            ExportExcel ex = new ExportExcel(SHEET_BANG_KE_NHAP_VAT_TU, filename, rowsName, dataList, response);
+            ex.export();
         } catch (Exception e) {
             log.error("Error export", e);
             return false;
         }
+
         return true;
     }
 

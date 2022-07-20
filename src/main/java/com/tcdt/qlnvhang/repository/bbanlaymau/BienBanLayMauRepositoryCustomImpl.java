@@ -17,10 +17,17 @@ public class BienBanLayMauRepositoryCustomImpl implements BienBanLayMauRepositor
 	@Override
 	public List<Object[]> search(BienBanLayMauSearchReq req, Pageable pageable) {
 		StringBuilder builder = new StringBuilder();
-		builder.append("SELECT bb, nx.id, nx.soQd, hopDong.id, hopDong.soHd, nganLo, bbNhapDayKho.id, bbNhapDayKho.soBienBan FROM BienBanLayMau bb ");
+		builder.append("SELECT bb, " +
+				"nx.id, nx.soQd, hopDong.id, " +
+				"hopDong.soHd, " +
+				"nganLo1, nganLo2 FROM BienBanLayMau bb ");
 		builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON bb.qdgnvnxId = nx.id ");
 		builder.append("INNER JOIN HhHopDongHdr hopDong ON bb.hopDongId = hopDong.id ");
-		builder.append("LEFT JOIN KtNganLo nganLo ON bbNhapDayKho.maNganLo = nganLo.maNganlo ");
+		builder.append("LEFT JOIN QlBienBanNhapDayKhoLt bbNhapDayKho ON bb.bbNhapDayKhoId = bbNhapDayKho.id ");
+		builder.append("LEFT JOIN KtNganLo nganLo1 ON bbNhapDayKho.maNganLo = nganLo1.maNganlo ");
+		builder.append("LEFT JOIN NhBienBanGuiHang bbGh ON bb.bbGuiHangId = bbGh.id ");
+		builder.append("LEFT JOIN NhPhieuNhapKhoTamGui phieuNkTg ON bbGh.phieuNkTgId = phieuNkTg.id ");
+		builder.append("LEFT JOIN KtNganLo nganLo2 ON phieuNkTg.maNganLo = nganLo2.maNganlo ");
 		setConditionSearchCtkhn(req, builder);
 
 		//Sort
@@ -83,7 +90,11 @@ public class BienBanLayMauRepositoryCustomImpl implements BienBanLayMauRepositor
 		builder.append("SELECT COUNT(DISTINCT bb.id) FROM BienBanLayMau bb ");
 		builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON bb.qdgnvnxId = nx.id ");
 		builder.append("INNER JOIN HhHopDongHdr hopDong ON bb.hopDongId = hopDong.id ");
-		builder.append("LEFT JOIN KtNganLo nganLo ON bb.maNganLo = nganLo.maNganlo ");
+		builder.append("LEFT JOIN QlBienBanNhapDayKhoLt bbNhapDayKho ON bb.bbNhapDayKhoId = bbNhapDayKho.id ");
+		builder.append("LEFT JOIN KtNganLo nganLo1 ON bbNhapDayKho.maNganLo = nganLo1.maNganlo ");
+		builder.append("LEFT JOIN NhBienBanGuiHang bbGh ON bb.bbGuiHangId = bbGh.id ");
+		builder.append("LEFT JOIN NhPhieuNhapKhoTamGui phieuNkTg ON bbGh.phieuNkTgId = phieuNkTg.id ");
+		builder.append("LEFT JOIN KtNganLo nganLo2 ON phieuNkTg.maNganLo = nganLo2.maNganlo ");
 		this.setConditionSearchCtkhn(req, builder);
 
 		TypedQuery<Long> query = em.createQuery(builder.toString(), Long.class);
