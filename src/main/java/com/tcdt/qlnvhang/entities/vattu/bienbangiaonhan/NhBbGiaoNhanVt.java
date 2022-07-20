@@ -21,6 +21,7 @@ import java.util.List;
 public class NhBbGiaoNhanVt extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 9043465194089068380L;
     public static final String TABLE_NAME = "NH_BB_GIAO_NHAN_VT";
+    public static final String CAN_CU = TABLE_NAME + "_CAN_CU";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BB_GIAO_NHAN_VT_SEQ")
@@ -119,4 +120,7 @@ public class NhBbGiaoNhanVt extends BaseEntity implements Serializable {
     private List<NhBbGiaoNhanVtCt> chiTiets = new ArrayList<>();
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
+
+    @Transient
+    private List<FileDinhKem> canCus = new ArrayList<>();
 }

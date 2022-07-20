@@ -19,10 +19,6 @@ public class NhBbGiaoNhanVtReq {
 
     private Long bbKtNhapKhoId;
 
-    private String maDvi;
-
-    private String capDvi;
-
     private String soBienBan;
 
     private LocalDate ngayKy;
@@ -49,10 +45,7 @@ public class NhBbGiaoNhanVtReq {
 
     private String ketLuan;
 
-    private String trangThai;
-
-    private String lyDoTuChoi;
-
     private List<NhBbGiaoNhanVtCtReq> chiTiets = new ArrayList<>();
     private List<FileDinhKemReq> fileDinhKemReqs = new ArrayList<>();
+    private List<FileDinhKemReq> canCus = new ArrayList<>();
 }

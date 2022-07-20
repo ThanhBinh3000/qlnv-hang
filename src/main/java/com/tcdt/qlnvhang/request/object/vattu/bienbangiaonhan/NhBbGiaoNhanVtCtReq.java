@@ -20,4 +20,8 @@ public class NhBbGiaoNhanVtCtReq {
     private Integer stt;
 
     private String chucVu;
+
+    private String maDvi;
+
+    private String tenDvi;
 }

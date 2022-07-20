@@ -108,6 +108,7 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
         List<NhBbGiaoNhanVtCt> chiTiets = this.saveListChiTiet(item.getId(), req.getChiTiets(), new HashMap<>());
         item.setChiTiets(chiTiets);
         item.setFileDinhKems(fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReqs(), item.getId(), NhBbGiaoNhanVt.TABLE_NAME));
+        item.setCanCus(fileDinhKemService.saveListFileDinhKem(req.getCanCus(), item.getId(), NhBbGiaoNhanVt.CAN_CU));
         return this.buildResponse(item);
     }
 
@@ -162,12 +163,12 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
             res.setSoBbGh(bbGh.get().getSoBienBan());
         }
 
-        if (item.getBbGuiHangId() != null) {
-            Optional<NhHoSoKyThuat> bbGh = nhHoSoKyThuatRepository.findById(item.getBbGuiHangId());
-            if (!bbGh.isPresent()) {
+        if (item.getHoSKyThuatId() != null) {
+            Optional<NhHoSoKyThuat> hskt = nhHoSoKyThuatRepository.findById(item.getHoSKyThuatId());
+            if (!hskt.isPresent()) {
                 throw new Exception("Không tìm thấy hồ sơ kỹ thuật");
             }
-            res.setSoBbGh(bbGh.get().getSoBienBan());
+            res.setSoBbGh(hskt.get().getSoBienBan());
         }
 
         if (item.getBbKtNhapKhoId() != null) {
@@ -177,7 +178,8 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
             }
             res.setSoBbKtNk(bbKtNk.get().getSoBienBan());
         }
-        item.setFileDinhKems(fileDinhKemService.search(item.getId(), Collections.singleton(NhBbGiaoNhanVt.TABLE_NAME)));
+        res.setFileDinhKems(fileDinhKemService.search(item.getId(), Collections.singleton(NhBbGiaoNhanVt.TABLE_NAME)));
+        res.setCanCus(fileDinhKemService.search(item.getId(), Collections.singleton(NhBbGiaoNhanVt.CAN_CU)));
         return res;
     }
 
@@ -232,7 +234,7 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
         if (!CollectionUtils.isEmpty(mapChiTiet.values()))
             nhBbGiaoNhanVtCtRepository.deleteAll(mapChiTiet.values());
         item.setFileDinhKems(fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReqs(), item.getId(), NhBbGiaoNhanVt.TABLE_NAME));
-
+        item.setCanCus(fileDinhKemService.saveListFileDinhKem(req.getCanCus(), item.getId(), NhBbGiaoNhanVt.CAN_CU));
         return this.buildResponse(item);
     }
 
@@ -264,6 +266,7 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
         nhBbGiaoNhanVtCtRepository.deleteByBbGiaoNhanVtIdIn(Collections.singleton(item.getId()));
         nhBbGiaoNhanVtRepository.delete(item);
         fileDinhKemService.delete(item.getId(), Collections.singleton(NhBbGiaoNhanVt.TABLE_NAME));
+        fileDinhKemService.delete(item.getId(), Collections.singleton(NhBbGiaoNhanVt.CAN_CU));
         return true;
     }
 
@@ -363,6 +366,7 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
         UserInfo userInfo = UserUtils.getUserInfo();
         nhBbGiaoNhanVtCtRepository.deleteByBbGiaoNhanVtIdIn(req.getIds());
         nhBbGiaoNhanVtRepository.deleteByIdIn(req.getIds());
+        fileDinhKemService.deleteMultiple(req.getIds(), Arrays.asList(NhBbGiaoNhanVt.TABLE_NAME, NhBbGiaoNhanVt.CAN_CU));
         return true;
     }
 

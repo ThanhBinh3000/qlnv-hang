@@ -64,4 +64,5 @@ public class NhBbGiaoNhanVtRes extends SoBienBanPhieuRes {
     private List<NhBbGiaoNhanVtCtRes> chiTiets = new ArrayList<>();
 
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
+    private List<FileDinhKem> canCus = new ArrayList<>();
 }

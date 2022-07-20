@@ -21,6 +21,9 @@ public class NhBbGiaoNhanVtCtRes {
 
     private String chucVu;
 
+    private String maDvi;
+
+    private String tenDvi;
     public NhBbGiaoNhanVtCtRes(NhBbGiaoNhanVtCt item) {
         BeanUtils.copyProperties(item, this);
     }

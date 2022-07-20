@@ -32,4 +32,10 @@ public class NhBbGiaoNhanVtCt implements Serializable {
 
     @Column(name = "CHUC_VU")
     private String chucVu;
+
+    @Column(name = "MA_DVI")
+    private String maDvi;
+
+    @Column(name = "TEN_DVI")
+    private String tenDvi;
 }
