@@ -24,6 +24,7 @@ import com.tcdt.qlnvhang.table.khotang.KtNganKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganLo;
 import com.tcdt.qlnvhang.table.khotang.KtNhaKho;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
 import com.tcdt.qlnvhang.util.MoneyConvert;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
@@ -317,7 +318,7 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
                 objs[0] = i;
                 objs[1] = item.getSoBienBan();
                 objs[2] = item.getSoQuyetDinhNhap();
-                objs[3] = convertDateToString(item.getNgayTao());
+                objs[3] = LocalDateTimeUtils.localDateToString(item.getNgayTao());
                 objs[4] = item.getTenVatTuCha();
                 objs[5] = item.getTenVatTu();
                 objs[6] = item.getTenDiemKho();

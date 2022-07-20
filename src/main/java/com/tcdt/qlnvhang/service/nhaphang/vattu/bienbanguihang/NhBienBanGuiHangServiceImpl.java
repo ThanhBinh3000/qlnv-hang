@@ -20,6 +20,7 @@ import com.tcdt.qlnvhang.table.HhHopDongHdr;
 import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -301,7 +302,7 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
                 objs[1] = item.getSoBienBan();
                 objs[2] = item.getSoQuyetDinhNhap();
                 objs[3] = Optional.ofNullable(item.getThoiGian()).map(LocalDateTime::getYear).orElse(LocalDate.now().getYear());
-                objs[4] = convertDateToString(item.getNgayGui());
+                objs[4] = LocalDateTimeUtils.localDateToString(item.getNgayGui());
                 objs[5] = item.getBenNhan();
                 objs[6] = item.getBenGiao();
                 objs[7] = TrangThaiEnum.getTenById(item.getTrangThai());
