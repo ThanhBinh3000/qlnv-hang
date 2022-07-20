@@ -29,13 +29,6 @@ import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.xssf.usermodel.XSSFFont;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -45,7 +38,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -307,61 +299,36 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
         if (CollectionUtils.isEmpty(list))
             return true;
 
+        String[] rowsName = new String[] { STT, SO_PHIEU, SO_QUYET_DINH_NHAP, NGAY_NHAP_KHO,
+                DIEM_KHO, NHA_KHO, NGAN_KHO, NGAN_LO, TRANG_THAI};
+        String filename = "Danh_sach_ho_so_ky_thuat.xlsx";
+
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+
         try {
-            XSSFWorkbook workbook = new XSSFWorkbook();
-
-            //STYLE
-            CellStyle style = workbook.createCellStyle();
-            XSSFFont font = workbook.createFont();
-            font.setFontHeight(11);
-            font.setBold(true);
-            style.setFont(font);
-            style.setAlignment(HorizontalAlignment.CENTER);
-            style.setVerticalAlignment(VerticalAlignment.CENTER);
-            XSSFSheet sheet = workbook.createSheet(SHEET_PHIEU_NHAP_KHO_TAM_GUI);
-            Row row0 = sheet.createRow(0);
-            //STT
-
-            ExportExcel.createCell(row0, 0, STT, style, sheet);
-            ExportExcel.createCell(row0, 1, SO_PHIEU, style, sheet);
-            ExportExcel.createCell(row0, 2, SO_QUYET_DINH_NHAP, style, sheet);
-            ExportExcel.createCell(row0, 3, NGAY_NHAP_KHO, style, sheet);
-            ExportExcel.createCell(row0, 4, DIEM_KHO, style, sheet);
-            ExportExcel.createCell(row0, 5, NHA_KHO, style, sheet);
-            ExportExcel.createCell(row0, 6, NGAN_KHO, style, sheet);
-            ExportExcel.createCell(row0, 7, NGAN_LO, style, sheet);
-            ExportExcel.createCell(row0, 8, TRANG_THAI, style, sheet);
-
-            style = workbook.createCellStyle();
-            font = workbook.createFont();
-            font.setFontHeight(11);
-            style.setFont(font);
-
-            Row row;
-            int startRowIndex = 1;
-
-            for (NhPhieuNhapKhoTamGuiRes item : list) {
-                row = sheet.createRow(startRowIndex);
-                ExportExcel.createCell(row, 0, startRowIndex, style, sheet);
-                ExportExcel.createCell(row, 1, item.getSoPhieu(), style, sheet);
-                ExportExcel.createCell(row, 2, item.getSoQuyetDinhNhap(), style, sheet);
-                ExportExcel.createCell(row, 3, LocalDateTimeUtils.localDateToString(item.getNgayNhapKho()), style, sheet);
-                ExportExcel.createCell(row, 4, item.getTenDiemKho(), style, sheet);
-                ExportExcel.createCell(row, 5, item.getTenNhaKho(), style, sheet);
-                ExportExcel.createCell(row, 6, item.getTenNganKho(), style, sheet);
-                ExportExcel.createCell(row, 7, item.getTenNganLo(), style, sheet);
-                ExportExcel.createCell(row, 8, TrangThaiEnum.getTenById(item.getTrangThai()), style, sheet);
-                startRowIndex++;
+            for (int i = 0; i < list.size(); i++) {
+                NhPhieuNhapKhoTamGuiRes item = list.get(i);
+                objs = new Object[rowsName.length];
+                objs[0] = i;
+                objs[1] = item.getSoPhieu();
+                objs[2] = item.getSoQuyetDinhNhap();
+                objs[3] = LocalDateTimeUtils.localDateToString(item.getNgayNhapKho());
+                objs[4] = item.getTenDiemKho();
+                objs[5] = item.getTenNhaKho();
+                objs[6] = item.getTenNganKho();
+                objs[7] = item.getTenNganLo();
+                objs[8] = TrangThaiEnum.getTenById(item.getTrangThai());
+                dataList.add(objs);
             }
 
-            ServletOutputStream outputStream = response.getOutputStream();
-            workbook.write(outputStream);
-            workbook.close();
-            outputStream.close();
+            ExportExcel ex = new ExportExcel(SHEET_PHIEU_NHAP_KHO_TAM_GUI, filename, rowsName, dataList, response);
+            ex.export();
         } catch (Exception e) {
             log.error("Error export", e);
             return false;
         }
+
         return true;
     }
 

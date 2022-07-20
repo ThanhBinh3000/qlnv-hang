@@ -35,13 +35,6 @@ import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.xssf.usermodel.XSSFFont;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -51,7 +44,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
@@ -380,58 +372,35 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
         if (CollectionUtils.isEmpty(list))
             return true;
 
+        String[] rowsName = new String[] { STT, SO_BIEN_BAN, SO_QUYET_DINH_NHAP, NAM_NHAP,
+                NGAY_BIEN_BAN, SO_HOP_DONG, BEN_GIAO, TRANG_THAI};
+        String filename = "Danh_sach_bien_giao_nhan.xlsx";
+
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+
         try {
-            XSSFWorkbook workbook = new XSSFWorkbook();
-
-            //STYLE
-            CellStyle style = workbook.createCellStyle();
-            XSSFFont font = workbook.createFont();
-            font.setFontHeight(11);
-            font.setBold(true);
-            style.setFont(font);
-            style.setAlignment(HorizontalAlignment.CENTER);
-            style.setVerticalAlignment(VerticalAlignment.CENTER);
-            XSSFSheet sheet = workbook.createSheet(SHEET_BIEN_BAN_GIAO_NHAN_VAT_TU);
-            Row row0 = sheet.createRow(0);
-
-            ExportExcel.createCell(row0, 0, STT, style, sheet);
-            ExportExcel.createCell(row0, 1, SO_BIEN_BAN, style, sheet);
-            ExportExcel.createCell(row0, 2, SO_QUYET_DINH_NHAP, style, sheet);
-            ExportExcel.createCell(row0, 3, NAM_NHAP, style, sheet);
-            ExportExcel.createCell(row0, 4, NGAY_BIEN_BAN, style, sheet);
-            ExportExcel.createCell(row0, 5, SO_HOP_DONG, style, sheet);
-            ExportExcel.createCell(row0, 6, BEN_GIAO, style, sheet);
-            ExportExcel.createCell(row0, 7, TRANG_THAI, style, sheet);
-
-            style = workbook.createCellStyle();
-            font = workbook.createFont();
-            font.setFontHeight(11);
-            style.setFont(font);
-
-            Row row;
-            int startRowIndex = 1;
-
-            for (NhBbGiaoNhanVtRes item : list) {
-                row = sheet.createRow(startRowIndex);
-                ExportExcel.createCell(row, 0, startRowIndex, style, sheet);
-                ExportExcel.createCell(row, 1, item.getSoBienBan(), style, sheet);
-                ExportExcel.createCell(row, 2, item.getSoQuyetDinhNhap(), style, sheet);
-                ExportExcel.createCell(row, 3, item.getNam(), style, sheet);
-                ExportExcel.createCell(row, 4, LocalDateTimeUtils.localDateToString(item.getNgayKy()), style, sheet);
-                ExportExcel.createCell(row, 5, item.getSoHopDong(), style, sheet);
-                ExportExcel.createCell(row, 6, item.getBenGiao(), style, sheet);
-                ExportExcel.createCell(row, 7, TrangThaiEnum.getTenById(item.getTrangThai()), style, sheet);
-                startRowIndex++;
+            for (int i = 0; i < list.size(); i++) {
+                NhBbGiaoNhanVtRes item = list.get(i);
+                objs = new Object[rowsName.length];
+                objs[0] = i;
+                objs[1] = item.getSoBienBan();
+                objs[2] = item.getSoQuyetDinhNhap();
+                objs[3] = item.getNam();
+                objs[4] = LocalDateTimeUtils.localDateToString(item.getNgayKy());
+                objs[5] = item.getSoHopDong();
+                objs[6] = item.getBenGiao();
+                objs[7] = TrangThaiEnum.getTenById(item.getTrangThai());
+                dataList.add(objs);
             }
 
-            ServletOutputStream outputStream = response.getOutputStream();
-            workbook.write(outputStream);
-            workbook.close();
-            outputStream.close();
+            ExportExcel ex = new ExportExcel(SHEET_BIEN_BAN_GIAO_NHAN_VAT_TU, filename, rowsName, dataList, response);
+            ex.export();
         } catch (Exception e) {
             log.error("Error export", e);
             return false;
         }
+
         return true;
     }
 
