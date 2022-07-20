@@ -9,4 +9,7 @@ import java.util.List;
 @Repository
 public interface BhDgKhDiaDiemGiaoNhanRepository extends BaseRepository<BhDgKhDiaDiemGiaoNhan, Long> {
 	List<BhDgKhDiaDiemGiaoNhan> findByBhDgKehoachId(Long id);
+	List<BhDgKhDiaDiemGiaoNhan> findByBhDgKehoachIdIn(List<Long> id);
+
+	void deleteAllByBhDgKehoachIdIn(List<Long> ids);
 }

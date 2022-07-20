@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface BhDgKhPhanLoTaiSanRepository extends BaseRepository<BhDgKhPhanLoTaiSan, Long> {
 	List<BhDgKhPhanLoTaiSan> findByBhDgKehoachId(Long id);
+	List<BhDgKhPhanLoTaiSan> findByBhDgKehoachIdIn(List<Long> id);
+	void deleteAllByBhDgKehoachIdIn(List<Long> ids);
 }

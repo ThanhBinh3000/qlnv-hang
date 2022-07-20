@@ -1,6 +1,9 @@
 package com.tcdt.qlnvhang.request;
 
 import lombok.Data;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
 import java.util.HashSet;
@@ -38,5 +41,9 @@ public class BaseRequest {
 			this.trangThais.add(trangThai);
 		}
 		return this.trangThais;
+	}
+
+	public Pageable getPageable() {
+		return PageRequest.of(this.getPaggingReq().page, this.getPaggingReq().limit);
 	}
 }
