@@ -46,10 +46,10 @@ public class NhBbGiaoNhanVtRepositoryCustomImpl implements NhBbGiaoNhanVtReposit
         }
 
         if (req.getNgayHopDongTu() != null) {
-            builder.append("AND ").append("hopDong.ngayKy >= :ngayHopDongTu ");
+            builder.append("AND ").append("p.ngayHopDong >= :ngayHopDongTu ");
         }
         if (req.getNgayHopDongDen() != null) {
-            builder.append("AND ").append("hopDong.ngayKy <= :ngayHopDongDen ");
+            builder.append("AND ").append("p.ngayHopDong <= :ngayHopDongDen ");
         }
 
         if (!StringUtils.isEmpty(req.getSoQdNhap())) {
@@ -70,6 +70,10 @@ public class NhBbGiaoNhanVtRepositoryCustomImpl implements NhBbGiaoNhanVtReposit
 
         if (!CollectionUtils.isEmpty(req.getTrangThais())) {
             builder.append("AND ").append("p.trangThai IN :trangThais ");
+        }
+
+        if (req.getNam() != null) {
+            builder.append("AND ").append("p.nam = :nam ");
         }
     }
 
@@ -117,6 +121,10 @@ public class NhBbGiaoNhanVtRepositoryCustomImpl implements NhBbGiaoNhanVtReposit
 
         if (!CollectionUtils.isEmpty(req.getTrangThais())) {
             query.setParameter("trangThais", req.getTrangThais());
+        }
+
+        if (req.getNam() != null) {
+            query.setParameter("nam", req.getNam());
         }
     }
 }
