@@ -1,0 +1,12 @@
+# Spring
+spring:
+  application:
+    name: qlnv-hang
+  profiles:
+    active: prod
+  cloud:
+    config:
+      uri: http://192.168.1.80:30004
+      label: latest
+      username: admin
+      password: admin123
