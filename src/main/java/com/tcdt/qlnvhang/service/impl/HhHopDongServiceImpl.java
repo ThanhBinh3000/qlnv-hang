@@ -99,6 +99,8 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 			ddNhap.setIdHdongHdr(dataMap.getId());
 			hhHopDongDdiemNhapKhoRepository.save(ddNhap);
 		}
+		Map<String,String> mapVthh = getListDanhMucHangHoa();
+		dataMap.setDonViTinh(StringUtils.isEmpty(dataMap.getLoaiVthh()) ? null : mapVthh.get(dataMap.getDonViTinh()));
 		return dataMap;
 	}
 
@@ -143,6 +145,9 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 			ddNhap.setIdHdongHdr(dataMap.getId());
 			hhHopDongDdiemNhapKhoRepository.save(ddNhap);
 		}
+
+		Map<String,String> mapVthh = getListDanhMucHangHoa();
+		dataMap.setDonViTinh(StringUtils.isEmpty(dataMap.getLoaiVthh()) ? null : mapVthh.get(dataMap.getDonViTinh()));
 		return dataMap;
 	}
 
@@ -213,7 +218,10 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 
 //		UnitScaler.reverseFormatList(dataMap.getChildren(), Contains.DVT_TAN);
 
-		return hhHopDongRepository.save(dataDB);
+		hhHopDongRepository.save(dataDB);
+		Map<String,String> mapVthh = getListDanhMucHangHoa();
+		dataDB.setDonViTinh(StringUtils.isEmpty(dataDB.getLoaiVthh()) ? null : mapVthh.get(dataDB.getDonViTinh()));
+		return dataDB;
 	}
 
 	@Override
@@ -238,7 +246,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 		qOptional.get().setTenVthh( StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : mapVthh.get(qOptional.get().getLoaiVthh()));
 		qOptional.get().setTenCloaiVthh( StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null :mapVthh.get(qOptional.get().getCloaiVthh()));
 		qOptional.get().setTenDvi(StringUtils.isEmpty(qOptional.get().getMaDvi()) ? null :mapDmucDvi.get(qOptional.get().getMaDvi()));
-
+		qOptional.get().setDonViTinh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : mapVthh.get(qOptional.get().getDonViTinh()));
 		qOptional.get().setHhPhuLucHdongList(hhPhuLucRepository.findBySoHd(qOptional.get().getSoHd()));
 		qOptional.get().setHhDdiemNhapKhoList(hhHopDongDdiemNhapKhoRepository.findAllByIdHdongHdr(Long.parseLong(ids)));
 		qOptional.get().setTenNthau(hashMapDviLquan.get(String.valueOf(Double.parseDouble(qOptional.get().getIdNthau().toString()))));
@@ -262,6 +270,9 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 //			UnitScaler.formatList(dtl.getChildren(), Contains.DVT_TAN);
 //		}
 
+		HhHopDongHdr dataDB = qOptional.get();
+		Map<String,String> mapVthh = getListDanhMucHangHoa();
+		dataDB.setDonViTinh(StringUtils.isEmpty(dataDB.getLoaiVthh()) ? null : mapVthh.get(dataDB.getDonViTinh()));
 		return this.detail(qOptional.get().getId().toString());
 	}
 
@@ -275,6 +286,9 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 		Set<Long> hopDongIds = page.getContent().stream().map(HhHopDongHdr::getId).collect(Collectors.toSet());
 		Map<Long, List<HhHopDongDdiemNhapKho>> diaDiemNhapKhoMap = hhHopDongDdiemNhapKhoRepository.findAllByIdHdongHdrIn(hopDongIds)
 				.stream().collect(Collectors.groupingBy(HhHopDongDdiemNhapKho::getIdHdongHdr));
+
+		Map<String,String> mapVthh = getListDanhMucHangHoa();
+
 		page.forEach(f -> {
 			f.setTenDvi( mapDmucDvi.get(f.getMaDvi()));
 			f.setTenVthh(mapDmucHh.get(f.getLoaiVthh()));
@@ -286,6 +300,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 				});
 				f.setHhDdiemNhapKhoList(diaDiemNhapKhos);
 			}
+			f.setDonViTinh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : mapVthh.get(f.getDonViTinh()));
 		});
 		return page;
 	}

@@ -98,6 +98,7 @@ public class HhBbNghiemthuKlstHdrReq extends SoBienBanPhieuReq {
 
 	String maVatTu;
 	String maVatTuCha;
+	Integer hopDongId;
 
 	private List<HhBbNghiemthuKlstDtlReq> detail;
 
