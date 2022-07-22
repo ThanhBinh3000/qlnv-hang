@@ -90,7 +90,7 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
         item.setChiTiets(chiTiets);
 
         item.setFileDinhKems(fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReqs(), item.getId(), NhHoSoKyThuat.TABLE_NAME));
-        item.setFdkCanCus(fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReqs(), item.getId(), NhHoSoKyThuat.CAN_CU));
+        item.setFdkCanCus(fileDinhKemService.saveListFileDinhKem(req.getFdkCanCus(), item.getId(), NhHoSoKyThuat.CAN_CU));
 
         return this.buildResponse(item);
     }
@@ -194,7 +194,7 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
             nhHoSoKyThuatCtRepository.deleteAll(mapChiTiet.values());
 
         item.setFileDinhKems(fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReqs(), item.getId(), NhHoSoKyThuat.TABLE_NAME));
-        item.setFdkCanCus(fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReqs(), item.getId(), NhHoSoKyThuat.CAN_CU));
+        item.setFdkCanCus(fileDinhKemService.saveListFileDinhKem(req.getFdkCanCus(), item.getId(), NhHoSoKyThuat.CAN_CU));
         return this.buildResponse(item);
     }
 
