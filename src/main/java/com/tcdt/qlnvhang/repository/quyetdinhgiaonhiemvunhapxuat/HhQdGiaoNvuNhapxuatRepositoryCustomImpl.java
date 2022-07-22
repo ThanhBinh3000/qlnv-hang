@@ -19,16 +19,17 @@ public class HhQdGiaoNvuNhapxuatRepositoryCustomImpl implements HhQdGiaoNvuNhapx
     private EntityManager em;
 
     @Override
-    public List<HhQdGiaoNvuNhapxuatHdr> search(HhQdNhapxuatSearchReq req, String capDvi) {
+    public List<Object[]> search(HhQdNhapxuatSearchReq req, String capDvi) {
         StringBuilder builder = new StringBuilder();
-        builder.append("SELECT qd FROM HhQdGiaoNvuNhapxuatHdr qd ");
+        builder.append("SELECT qd.id, qd.soQd, qd.ngayQdinh, qd.namNhap, qd.trichYeu, qd.trangThai FROM HhQdGiaoNvuNhapxuatHdr qd ");
         if (Contains.CAP_CHI_CUC.equalsIgnoreCase(capDvi)) {
             builder.append("INNER JOIN HhQdGiaoNvuNhapxuatDtl qdCt ON qdCt.parent = qd ");
         }
         setConditionSearch(req, builder, capDvi);
+        builder.append("GROUP BY qd.id, qd.soQd, qd.ngayQdinh, qd.namNhap, qd.trichYeu, qd.trangThai ");
         builder.append("ORDER BY qd.id DESC");
 
-        TypedQuery<HhQdGiaoNvuNhapxuatHdr> query = em.createQuery(builder.toString(), HhQdGiaoNvuNhapxuatHdr.class);
+        TypedQuery<Object[]> query = em.createQuery(builder.toString(), Object[].class);
 
         //Set params
         this.setParameterSearch(req, query);

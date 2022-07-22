@@ -3,15 +3,7 @@ package com.tcdt.qlnvhang.table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -36,4 +28,7 @@ public class HhHopDongDdiemNhapKho implements Serializable {
 	BigDecimal soLuong;
 	BigDecimal donGia;
 	String dviTinh;
+
+	@Transient
+	String tenDvi;
 }
