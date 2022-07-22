@@ -114,6 +114,9 @@ public class HhHopDongHdr implements Serializable {
 
 	String idNthau;
 
+	@Transient
+	String tenNthau;
+
 	@Temporal(TemporalType.DATE)
 	Date tgianNkho;
 

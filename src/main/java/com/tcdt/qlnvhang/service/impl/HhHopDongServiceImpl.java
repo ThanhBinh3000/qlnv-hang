@@ -234,6 +234,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 //			UnitScaler.formatList(dtl.getChildren(), Contains.DVT_TAN);
 //		}
 		Map<String, String> mapDmucDvi = getMapTenDvi();
+		Map<String,String> hashMapDviLquan = getListDanhMucDviLq("NT");
 
 		Map<String,String> mapVthh = getListDanhMucHangHoa();
 		qOptional.get().setTenVthh( StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : mapVthh.get(qOptional.get().getLoaiVthh()));
@@ -242,7 +243,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 
 		qOptional.get().setHhPhuLucHdongList(hhPhuLucRepository.findBySoHd(qOptional.get().getSoHd()));
 		qOptional.get().setHhDdiemNhapKhoList(hhHopDongDdiemNhapKhoRepository.findAllByIdHdongHdr(Long.parseLong(ids)));
-
+		qOptional.get().setTenNthau(hashMapDviLquan.get(String.valueOf(Double.parseDouble(qOptional.get().getIdNthau().toString()))));
 
 		return qOptional.get();
 	}
@@ -270,6 +271,13 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 	public Page<HhHopDongHdr> selectPage(HhHopDongSearchReq req, HttpServletResponse response) throws Exception {
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
 		Page<HhHopDongHdr> page = hhHopDongRepository.select(req.getLoaiVthh(),req.getSoHd(),req.getTenHd(),req.getNhaCcap(),convertDateToString(req.getTuNgayKy()),convertDateToString(req.getDenNgayKy()),req.getTrangThai(), pageable);
+		Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
+		Map<String, String> mapDmucHh = getListDanhMucHangHoa();
+		page.forEach(f -> {
+			f.setTenDvi( mapDmucDvi.get(f.getMaDvi()));
+			f.setTenVthh(mapDmucHh.get(f.getLoaiVthh()));
+			f.setTenCloaiVthh( mapDmucHh.get(f.getCloaiVthh()));
+		});
 		return page;
 	}
 
