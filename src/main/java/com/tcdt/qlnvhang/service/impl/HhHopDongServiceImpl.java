@@ -296,7 +296,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 			List<HhHopDongDdiemNhapKho> diaDiemNhapKhos = diaDiemNhapKhoMap.get(f.getId()) != null ? diaDiemNhapKhoMap.get(f.getId()) : new ArrayList<>();
 			if (!CollectionUtils.isEmpty(diaDiemNhapKhos)) {
 				diaDiemNhapKhos.forEach(d ->  {
-					d.setTenDvi(mapDmucDvi.get(f.getMaDvi()));
+					d.setTenDvi(mapDmucDvi.get(d.getMaDvi()));
 				});
 				f.setHhDdiemNhapKhoList(diaDiemNhapKhos);
 			}

@@ -118,6 +118,9 @@ public class NhBienBanChuanBiKho extends BaseEntity implements Serializable {
     @Column(name = "LOAI_VTHH")
     private String loaiVthh;
 
+    @Column(name = "HOP_DONG_ID")
+    private Long hopDongId;
+
     @Transient
     private List<NhBienBanChuanBiKhoCt> chiTiets = new ArrayList<>();
 }

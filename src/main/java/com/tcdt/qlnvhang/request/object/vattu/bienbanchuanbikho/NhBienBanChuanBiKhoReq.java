@@ -57,6 +57,8 @@ public class NhBienBanChuanBiKhoReq extends SoBienBanPhieuReq {
 
     private BigDecimal tongSo;
 
+    private Long hopDongId;
+
     private List<NhBienBanChuanBiKhoCtReq> chiTiets = new ArrayList<>();
 }
 

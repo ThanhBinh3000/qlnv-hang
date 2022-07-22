@@ -20,10 +20,11 @@ public class NhBienBanChuanBiKhoRepositoryCustomImpl implements NhBienBanChuanBi
     @Override
     public List<Object[]> search(NhBienBanChuanBiKhoSearchReq req) {
         StringBuilder builder = new StringBuilder();
-        builder.append("SELECT p, nx.id, nx.soQd, vatTu.ten, vatTuCha.ten, nganLo FROM NhBienBanChuanBiKho p ");
+        builder.append("SELECT p, nx.id, nx.soQd, vatTu.ten, vatTuCha.ten, nganLo, hopDong.id, hopDong.soHd FROM NhBienBanChuanBiKho p ");
         builder.append("INNER JOIN HhQdGiaoNvuNhapxuatHdr nx ON p.qdgnvnxId = nx.id ");
         builder.append("INNER JOIN QlnvDmVattu vatTu ON p.maVatTu = vatTu.ma ");
         builder.append("INNER JOIN QlnvDmVattu vatTuCha ON p.maVatTuCha = vatTuCha.ma ");
+        builder.append("LEFT JOIN HhHopDongHdr hopDong ON p.hopDongId = hopDong.id ");
         builder.append("LEFT JOIN KtNganLo nganLo ON p.maNganLo = nganLo.maNganlo ");
         setConditionSearch(req, builder);
         builder.append("ORDER BY p.id DESC");
