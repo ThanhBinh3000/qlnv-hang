@@ -20,6 +20,7 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.HhHopDongHdr;
 import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganKho;
@@ -41,6 +42,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
@@ -59,6 +61,7 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
     private final HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
     private final QlnvDmVattuRepository qlnvDmVattuRepository;
     private final HhHopDongRepository hhHopDongRepository;
+    private final HttpServletRequest req;
 
     private static final String SHEET_BIEN_BAN_CHUAN_BI_KHO = "Biên bản chuẩn bị kho";
     private static final String STT = "STT";
@@ -135,6 +138,11 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
             }
             res.setSoHopDong(hopDong.get().getSoHd());
         }
+
+        QlnvDmDonvi donvi = getDviByMa(item.getMaDvi(), req);
+        res.setMaDvi(donvi.getMaDvi());
+        res.setTenDvi(donvi.getTenDvi());
+        res.setMaQhns(donvi.getMaQhns());
         return res;
     }
 

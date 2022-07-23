@@ -68,6 +68,9 @@ public class NhBienBanChuanBiKhoRes extends SoBienBanPhieuRes {
     private String lyDoTuChoi;
     private Long hopDongId;
     private String soHopDong;
+    private String maDvi;
+    private String tenDvi;
+    private String maQhns;
     private List<NhBienBanChuanBiKhoCtRes> chiTiets = new ArrayList<>();
 }
 
