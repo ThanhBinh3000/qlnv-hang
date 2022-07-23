@@ -6,7 +6,6 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,7 +16,6 @@ import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhap
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
-import com.tcdt.qlnvhang.response.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongResponseDto;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
@@ -27,13 +25,6 @@ import com.tcdt.qlnvhang.table.khotang.KtNganLo;
 import com.tcdt.qlnvhang.table.khotang.KtNhaKho;
 import com.tcdt.qlnvhang.util.*;
 import lombok.extern.log4j.Log4j2;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.xssf.usermodel.XSSFFont;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -249,7 +240,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 
 		// Ngan lo
 		Set<String> maNganLos = data.stream()
-				.map(HhBbNghiemthuKlstHdr::getMaNganlo)
+				.map(HhBbNghiemthuKlstHdr::getMaNganLo)
 				.filter(Objects::nonNull)
 				.collect(Collectors.toSet());
 		Map<String, KtNganLo> mapNganLo = new HashMap<>();
@@ -271,7 +262,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 
 		for (HhBbNghiemthuKlstHdr hdr : data) {
 			HhQdGiaoNvuNhapxuatHdr qdNhap = hdr.getQdgnvnxId() != null ? mapQdNhap.get(hdr.getQdgnvnxId()) : null;
-			KtNganLo nganLo = StringUtils.hasText(hdr.getMaNganlo()) ? mapNganLo.get(hdr.getMaNganlo()) : null;
+			KtNganLo nganLo = StringUtils.hasText(hdr.getMaNganLo()) ? mapNganLo.get(hdr.getMaNganLo()) : null;
 			HhHopDongHdr hopDong = hdr.getHopDongId() != null ? mapHopDong.get(hdr.getHopDongId()) : null;
 			this.buildResponseForList(hdr, qdNhap, nganLo, hopDong);
 		}
@@ -370,10 +361,10 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 				objs[1] = item.getSoBb();
 				objs[2] = item.getSoQuyetDinhNhap();
 				objs[3] = convertDateToString(item.getNgayNghiemThu());
-				objs[4] = item.getTenDiemkho();
-				objs[5] = item.getTenNhakho();
-				objs[6] = item.getTenNgankho();
-				objs[7] = item.getTenNganlo();
+				objs[4] = item.getTenDiemKho();
+				objs[5] = item.getTenNhaKho();
+				objs[6] = item.getTenNganKho();
+				objs[7] = item.getTenNganLo();
 				objs[8] = Optional.ofNullable(item.getChiPhiThucHienTrongNam()).orElse(BigDecimal.valueOf(0D));
 				objs[9] = Optional.ofNullable(item.getChiPhiThucHienNamTruoc()).orElse(BigDecimal.valueOf(0D));
 				objs[10] = item.getTongGiaTri();
@@ -422,15 +413,16 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 			bb.setSoHopDong(hopDong.get().getSoHd());
 		}
 
-		if (!StringUtils.hasText(bb.getMaNganlo()))
-			return bb;
-
-		KtNganLo nganLo = ktNganLoRepository.findFirstByMaNganlo(bb.getMaNganlo());
-		this.thongTinNganLo(bb, nganLo);
 		QlnvDmDonvi donvi = getDviByMa(bb.getMaDvi(), req);
 		bb.setMaDvi(donvi.getMaDvi());
 		bb.setTenDvi(donvi.getTenDvi());
 		bb.setMaQhns(donvi.getMaQhns());
+
+		if (!StringUtils.hasText(bb.getMaNganLo()))
+			return bb;
+
+		KtNganLo nganLo = ktNganLoRepository.findFirstByMaNganlo(bb.getMaNganLo());
+		this.thongTinNganLo(bb, nganLo);
 		return bb;
 	}
 
@@ -460,25 +452,25 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 
 	private void thongTinNganLo(HhBbNghiemthuKlstHdr bb, KtNganLo nganLo) {
 		if (nganLo != null) {
-			bb.setTenNganlo(nganLo.getTenNganlo());
+			bb.setTenNganLo(nganLo.getTenNganlo());
 			KtNganKho nganKho = nganLo.getParent();
 			if (nganKho == null)
 				return;
 
-			bb.setTenNgankho(nganKho.getTenNgankho());
-			bb.setMaNgankho(nganKho.getMaNgankho());
+			bb.setTenNganKho(nganKho.getTenNgankho());
+			bb.setMaNganKho(nganKho.getMaNgankho());
 			KtNhaKho nhaKho = nganKho.getParent();
 			if (nhaKho == null)
 				return;
 
-			bb.setTenNhakho(nhaKho.getTenNhakho());
-			bb.setMaNhakho(nhaKho.getMaNhakho());
+			bb.setTenNhaKho(nhaKho.getTenNhakho());
+			bb.setMaNhaKho(nhaKho.getMaNhakho());
 			KtDiemKho diemKho = nhaKho.getParent();
 			if (diemKho == null)
 				return;
 
-			bb.setTenDiemkho(diemKho.getTenDiemkho());
-			bb.setMaDiemkho(diemKho.getMaDiemkho());
+			bb.setTenDiemKho(diemKho.getTenDiemkho());
+			bb.setMaDiemKho(diemKho.getMaDiemkho());
 		}
 	}
 

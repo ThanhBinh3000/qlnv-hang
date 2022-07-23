@@ -52,7 +52,7 @@ public class HhBbNghiemthuKlstHdr implements Serializable {
 	String keToan;
 	String kyThuatVien;
 	String thuKho;
-	String maNganlo;
+
 	String lhKho;
 	Double slThucNhap;
 	Double tichLuong;
@@ -97,23 +97,21 @@ public class HhBbNghiemthuKlstHdr implements Serializable {
 	@Transient
 	String tenDvi;
 
+	String maDiemKho;
 	@Transient
-	String maDiemkho;
-	@Transient
-	String tenDiemkho;
+	String tenDiemKho;
 
+	String maNhaKho;
 	@Transient
-	String maNhakho;
-	@Transient
-	String tenNhakho;
+	String tenNhaKho;
 
+	String maNganKho;
 	@Transient
-	String maNgankho;
-	@Transient
-	String tenNgankho;
+	String tenNganKho;
 
+	String maNganLo;
 	@Transient
-	String tenNganlo;
+	String tenNganLo;
 
 	@Transient
 	BigDecimal chiPhiThucHienTrongNam;

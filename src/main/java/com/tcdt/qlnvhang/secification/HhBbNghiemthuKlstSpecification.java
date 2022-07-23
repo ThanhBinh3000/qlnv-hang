@@ -55,7 +55,7 @@ public class HhBbNghiemthuKlstSpecification {
 					predicate.getExpressions().add(builder.and(root.get("maDvi").in(maDvis)));
 
 				if (StringUtils.isNotEmpty(maNganlo))
-					predicate.getExpressions().add(builder.and(builder.equal(root.get("maNganlo"), maNganlo)));
+					predicate.getExpressions().add(builder.and(builder.equal(root.get("maNganLo"), maNganlo)));
 
 				if (StringUtils.isNotEmpty(loaiVthh))
 					predicate.getExpressions().add(builder.and(builder.equal(root.get("loaiVthh"), loaiVthh)));
