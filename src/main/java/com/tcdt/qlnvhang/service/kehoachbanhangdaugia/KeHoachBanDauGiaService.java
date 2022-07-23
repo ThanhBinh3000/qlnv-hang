@@ -1,22 +1,21 @@
 package com.tcdt.qlnvhang.service.kehoachbanhangdaugia;
 
-import com.tcdt.qlnvhang.request.kehoachbanhangdaugia.BhDgKehoachReq;
-import com.tcdt.qlnvhang.request.kehoachbanhangdaugia.BhDgKehoachSearchReq;
-import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongFilterRequestDto;
-import com.tcdt.qlnvhang.response.kehoachbanhangdaugia.BhDgKehoachRes;
+import com.tcdt.qlnvhang.request.bandaugia.kehoachbanhangdaugia.KehoachBanDauGiaRequest;
+import com.tcdt.qlnvhang.request.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGiaSearchRequest;
+import com.tcdt.qlnvhang.response.banhangdaugia.kehoachbanhangdaugia.BhDgKehoachResponse;
 import org.springframework.data.domain.Page;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface KeHoachBanDauGiaService {
-	BhDgKehoachRes create (BhDgKehoachReq req) throws Exception;
-	BhDgKehoachRes update (BhDgKehoachReq req) throws Exception;
+	BhDgKehoachResponse create (KehoachBanDauGiaRequest req) throws Exception;
+	BhDgKehoachResponse update (KehoachBanDauGiaRequest req) throws Exception;
 	boolean delete (Long id) throws Exception;
-	Page<BhDgKehoachRes> search(BhDgKehoachSearchReq req) throws Exception;
-	BhDgKehoachRes updateTrangThai(Long id, String trangThaiId) throws Exception;
+	Page<BhDgKehoachResponse> search(KeHoachBanDauGiaSearchRequest req) throws Exception;
+	BhDgKehoachResponse updateTrangThai(Long id, String trangThaiId) throws Exception;
 
-	boolean exportToExcel(BhDgKehoachSearchReq req, HttpServletResponse response) throws Exception;
+	boolean exportToExcel(KeHoachBanDauGiaSearchRequest req, HttpServletResponse response) throws Exception;
 
 	boolean deleteMultiple (List<Long> ids) throws Exception;
 

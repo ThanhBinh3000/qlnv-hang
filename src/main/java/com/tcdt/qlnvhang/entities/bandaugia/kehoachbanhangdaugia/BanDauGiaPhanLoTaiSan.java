@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.entities.kehoachbanhangdaugia;
+package com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,12 +9,12 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = BhDgKhPhanLoTaiSan.TABLE_NAME)
+@Table(name = BanDauGiaPhanLoTaiSan.TABLE_NAME)
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BhDgKhPhanLoTaiSan {
+public class BanDauGiaPhanLoTaiSan {
 	public static final String TABLE_NAME = "BH_DG_KH_PHAN_LO_TAI_SAN";
 
 	@Id

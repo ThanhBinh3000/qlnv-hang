@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.response.kehoachbanhangdaugia;
+package com.tcdt.qlnvhang.response.banhangdaugia.kehoachbanhangdaugia;
 
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.AllArgsConstructor;
@@ -16,7 +16,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BhDgKehoachRes {
+public class BhDgKehoachResponse {
 	private Long id;
 	private String trangThai;
 	private Integer namKeHoach;
@@ -46,8 +46,8 @@ public class BhDgKehoachRes {
 	private String capDv;
 	private String loaiVatTuHangHoa;
 	private List<FileDinhKem> fileDinhKems = new ArrayList<>();
-	private List<BhDgKhDiaDiemGiaoNhanRes> diaDiemGiaoNhanList = new ArrayList<>();
-	private List<BhDgKhPhanLoTaiSanRes> phanLoTaiSanList = new ArrayList<>();
+	private List<BhDgKhDiaDiemGiaoNhanResponse> diaDiemGiaoNhanList = new ArrayList<>();
+	private List<BhDgKhPhanLoTaiSanResponse> phanLoTaiSanList = new ArrayList<>();
 	private String tenTrangThai;
 	private String soQuyetDinhGiaoChiTieu;
 	private String soQuyetDinhPheDuyet;

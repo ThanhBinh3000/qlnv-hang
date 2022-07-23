@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.entities.kehoachbanhangdaugia;
+package com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,12 +10,12 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = BhDgKhDiaDiemGiaoNhan.TABLE_NAME)
+@Table(name = BanDauGiaDiaDiemGiaoNhan.TABLE_NAME)
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BhDgKhDiaDiemGiaoNhan implements Serializable {
+public class BanDauGiaDiaDiemGiaoNhan implements Serializable {
 	public static final String TABLE_NAME = "BH_DG_KH_DIA_DIEM_GIAO_NHAN";
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BH_DG_KH_DD_GIAO_NHAN_SEQ")

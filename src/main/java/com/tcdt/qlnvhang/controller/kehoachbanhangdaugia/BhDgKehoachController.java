@@ -4,14 +4,11 @@ package com.tcdt.qlnvhang.controller.kehoachbanhangdaugia;
 import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.DeleteReq;
-import com.tcdt.qlnvhang.request.kehoachbanhangdaugia.BhDgKehoachReq;
-import com.tcdt.qlnvhang.request.kehoachbanhangdaugia.BhDgKehoachSearchReq;
-import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongFilterRequestDto;
-import com.tcdt.qlnvhang.request.search.vattu.bangke.NhBangKeVtSearchReq;
+import com.tcdt.qlnvhang.request.bandaugia.kehoachbanhangdaugia.KehoachBanDauGiaRequest;
+import com.tcdt.qlnvhang.request.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGiaSearchRequest;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.response.kehoachbanhangdaugia.BhDgKehoachRes;
+import com.tcdt.qlnvhang.response.banhangdaugia.kehoachbanhangdaugia.BhDgKehoachResponse;
 import com.tcdt.qlnvhang.service.kehoachbanhangdaugia.KeHoachBanDauGiaService;
-import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +21,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -37,12 +31,12 @@ import java.util.List;
 public class BhDgKehoachController extends BaseController {
 	private final KeHoachBanDauGiaService keHoachBanDauGiaService;
 
-	@ApiOperation(value = "Tạo mới kế hoạch bán đấu giá hàng hóa", response = BhDgKehoachRes.class)
+	@ApiOperation(value = "Tạo mới kế hoạch bán đấu giá hàng hóa", response = BhDgKehoachResponse.class)
 	@PostMapping()
-	public ResponseEntity<BaseResponse> create(@Valid @RequestBody BhDgKehoachReq req) {
+	public ResponseEntity<BaseResponse> create(@Valid @RequestBody KehoachBanDauGiaRequest req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			BhDgKehoachRes res = keHoachBanDauGiaService.create(req);
+			BhDgKehoachResponse res = keHoachBanDauGiaService.create(req);
 			resp.setData(res);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
@@ -54,12 +48,12 @@ public class BhDgKehoachController extends BaseController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Sửa thông tin kế hoạch bán đấu giá hàng hóa", response = BhDgKehoachRes.class)
+	@ApiOperation(value = "Sửa thông tin kế hoạch bán đấu giá hàng hóa", response = BhDgKehoachResponse.class)
 	@PutMapping()
-	public ResponseEntity<BaseResponse> update(@Valid @RequestBody BhDgKehoachReq req) {
+	public ResponseEntity<BaseResponse> update(@Valid @RequestBody KehoachBanDauGiaRequest req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			BhDgKehoachRes res = keHoachBanDauGiaService.update(req);
+			BhDgKehoachResponse res = keHoachBanDauGiaService.update(req);
 			resp.setData(res);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
@@ -107,10 +101,10 @@ public class BhDgKehoachController extends BaseController {
 
 	@ApiOperation(value = "Search thông tin kế hoạch bán đấu giá hàng hóa", response = Page.class)
 	@GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> search(BhDgKehoachSearchReq req) {
+	public ResponseEntity<BaseResponse> search(KeHoachBanDauGiaSearchRequest req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			Page<BhDgKehoachRes> res = keHoachBanDauGiaService.search(req);
+			Page<BhDgKehoachResponse> res = keHoachBanDauGiaService.search(req);
 			resp.setData(res);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
@@ -128,7 +122,7 @@ public class BhDgKehoachController extends BaseController {
 														@RequestParam String trangThaiId) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			BhDgKehoachRes res = keHoachBanDauGiaService.updateTrangThai(id, trangThaiId);
+			BhDgKehoachResponse res = keHoachBanDauGiaService.updateTrangThai(id, trangThaiId);
 			resp.setData(res);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
@@ -143,7 +137,7 @@ public class BhDgKehoachController extends BaseController {
 	@ApiOperation(value = "Export kế hoạch bán đấu giá hàng hóa", response = List.class)
 	@PostMapping(value = "/export/list", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public void exportToExcel(HttpServletResponse response, @RequestBody BhDgKehoachSearchReq req) {
+	public void exportToExcel(HttpServletResponse response, @RequestBody KeHoachBanDauGiaSearchRequest req) {
 
 		try {
 			keHoachBanDauGiaService.exportToExcel(req, response);

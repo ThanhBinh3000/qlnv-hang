@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.response.kehoachbanhangdaugia;
+package com.tcdt.qlnvhang.response.banhangdaugia.kehoachbanhangdaugia;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BhDgKhDiaDiemGiaoNhanRes {
+public class BhDgKhDiaDiemGiaoNhanResponse {
 	private Long id;
 	private Long bhDgKehoachId;
 	private Long stt;

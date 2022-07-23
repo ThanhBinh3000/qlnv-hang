@@ -1,5 +1,6 @@
-package com.tcdt.qlnvhang.response.kehoachbanhangdaugia;
-
+package com.tcdt.qlnvhang.request.bandaugia.kehoachbanhangdaugia;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +11,9 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BhDgKhPhanLoTaiSanRes {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class BanDauGiaPhanLoTaiSanRequest {
 	private Long id;
 	private Long stt;
 	private String diemKho;

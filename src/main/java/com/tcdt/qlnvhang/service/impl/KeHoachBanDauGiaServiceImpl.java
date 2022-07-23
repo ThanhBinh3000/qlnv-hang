@@ -1,41 +1,32 @@
-package com.tcdt.qlnvhang.response.kehoachbanhangdaugia;
+package com.tcdt.qlnvhang.service.impl;
 
+import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.BanDauGiaDiaDiemGiaoNhan;
+import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.BanDauGiaPhanLoTaiSan;
+import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGia;
+import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGia_;
 import com.tcdt.qlnvhang.entities.chitieukehoachnam.ChiTieuKeHoachNam;
-import com.tcdt.qlnvhang.entities.kehoachbanhangdaugia.BhDgKehoach;
-import com.tcdt.qlnvhang.entities.kehoachbanhangdaugia.BhDgKehoach_;
-import com.tcdt.qlnvhang.entities.kehoachbanhangdaugia.BhDgKhDiaDiemGiaoNhan;
-import com.tcdt.qlnvhang.entities.kehoachbanhangdaugia.BhDgKhPhanLoTaiSan;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
+import com.tcdt.qlnvhang.mapper.bandaugia.kehoachbandaugia.BhDgKehoachRequestMapper;
+import com.tcdt.qlnvhang.mapper.bandaugia.kehoachbandaugia.BhDgKehoachResponseMapper;
+import com.tcdt.qlnvhang.mapper.bandaugia.kehoachbandaugia.BhDgKhDiaDiemGiaoNhanRequestMapper;
+import com.tcdt.qlnvhang.mapper.bandaugia.kehoachbandaugia.BhDgKhPhanLoTaiSanRequestMapper;
 import com.tcdt.qlnvhang.mapper.chitieukehoachnam.ChiTieuKeHoachNamResponseMapper;
-import com.tcdt.qlnvhang.mapper.kehoachbandaugia.BhDgKehoachRequestMapper;
-import com.tcdt.qlnvhang.mapper.kehoachbandaugia.BhDgKehoachResponseMapper;
-import com.tcdt.qlnvhang.mapper.kehoachbandaugia.BhDgKhDiaDiemGiaoNhanRequestMapper;
-import com.tcdt.qlnvhang.mapper.kehoachbandaugia.BhDgKhPhanLoTaiSanRequestMapper;
 import com.tcdt.qlnvhang.repository.chitieukehoachnam.ChiTieuKeHoachNamRepository;
 import com.tcdt.qlnvhang.repository.kehoachbanhangdaugia.BhDgKehoachRepository;
 import com.tcdt.qlnvhang.repository.kehoachbanhangdaugia.BhDgKhDiaDiemGiaoNhanRepository;
 import com.tcdt.qlnvhang.repository.kehoachbanhangdaugia.BhDgKhPhanLoTaiSanRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
-import com.tcdt.qlnvhang.request.kehoachbanhangdaugia.BhDgKehoachReq;
-import com.tcdt.qlnvhang.request.kehoachbanhangdaugia.BhDgKehoachSearchReq;
-import com.tcdt.qlnvhang.response.chitieukehoachnam.ChiTieuKeHoachNamRes;
-import com.tcdt.qlnvhang.response.vattu.bangke.NhBangKeVtRes;
+import com.tcdt.qlnvhang.request.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGiaSearchRequest;
+import com.tcdt.qlnvhang.request.bandaugia.kehoachbanhangdaugia.KehoachBanDauGiaRequest;
+import com.tcdt.qlnvhang.response.banhangdaugia.kehoachbanhangdaugia.BhDgKehoachResponse;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
-import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.kehoachbanhangdaugia.KeHoachBanDauGiaService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.xssf.usermodel.XSSFFont;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.domain.Specification;
@@ -44,9 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.print.Book;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
@@ -82,13 +71,13 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 
 
 	@Override
-	public BhDgKehoachRes create(BhDgKehoachReq req) throws Exception {
+	public BhDgKehoachResponse create(KehoachBanDauGiaRequest req) throws Exception {
 		if (req == null) return null;
 
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null) throw new Exception("Bad request.");
 		log.info("Save ke hoach ban dau gia");
-		BhDgKehoach keHoachDauGia = kehoachRequestMapper.toEntity(req);
+		KeHoachBanDauGia keHoachDauGia = kehoachRequestMapper.toEntity(req);
 		keHoachDauGia.setTrangThai(TrangThaiEnum.DU_THAO.getId());
 		keHoachDauGia.setNgayTao(LocalDate.now());
 		keHoachDauGia.setNguoiTaoId(userInfo.getId());
@@ -97,13 +86,13 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 		keHoachDauGia = bhDgKehoachRepository.save(keHoachDauGia);
 
 		log.info("Save file dinh kem");
-		List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), keHoachDauGia.getId(), BhDgKehoach.TABLE_NAME);
+		List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), keHoachDauGia.getId(), KeHoachBanDauGia.TABLE_NAME);
 		keHoachDauGia.setFileDinhKems(fileDinhKems);
 
 		log.info("Save dia diem giao nhan");
-		BhDgKehoach finalKeHoachDauGia = keHoachDauGia;
-		List<BhDgKhDiaDiemGiaoNhan> diaDiemGiaoNhanList = req.getDiaDiemGiaoNhanList().stream().map(it -> {
-			BhDgKhDiaDiemGiaoNhan dgKhDiaDiemGiaoNhan = diaDiemGiaoNhanRequestMapper.toEntity(it);
+		KeHoachBanDauGia finalKeHoachDauGia = keHoachDauGia;
+		List<BanDauGiaDiaDiemGiaoNhan> diaDiemGiaoNhanList = req.getDiaDiemGiaoNhanList().stream().map(it -> {
+			BanDauGiaDiaDiemGiaoNhan dgKhDiaDiemGiaoNhan = diaDiemGiaoNhanRequestMapper.toEntity(it);
 			dgKhDiaDiemGiaoNhan.setBhDgKehoachId(finalKeHoachDauGia.getId());
 			return dgKhDiaDiemGiaoNhan;
 		}).collect(Collectors.toList());
@@ -112,8 +101,8 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 
 
 		log.info("Save phan lo tai san");
-		List<BhDgKhPhanLoTaiSan> phanLoTaiSanList = req.getPhanLoTaiSanList().stream().map(it -> {
-			BhDgKhPhanLoTaiSan phanLoTaiSan = phanLoTaiSanRequestMapper.toEntity(it);
+		List<BanDauGiaPhanLoTaiSan> phanLoTaiSanList = req.getPhanLoTaiSanList().stream().map(it -> {
+			BanDauGiaPhanLoTaiSan phanLoTaiSan = phanLoTaiSanRequestMapper.toEntity(it);
 			phanLoTaiSan.setBhDgKehoachId(finalKeHoachDauGia.getId());
 			return phanLoTaiSan;
 		}).collect(Collectors.toList());
@@ -125,16 +114,16 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 	}
 
 	@Override
-	public BhDgKehoachRes update(BhDgKehoachReq req) throws Exception {
+	public BhDgKehoachResponse update(KehoachBanDauGiaRequest req) throws Exception {
 		if (req == null) return null;
 
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null) throw new Exception("Bad request.");
 
-		Optional<BhDgKehoach> optional = bhDgKehoachRepository.findById(req.getId());
+		Optional<KeHoachBanDauGia> optional = bhDgKehoachRepository.findById(req.getId());
 		if (!optional.isPresent())
 			throw new Exception("Kế hoạch bán đấu giá không tồn tại");
-		BhDgKehoach keHoachDauGia = optional.get();
+		KeHoachBanDauGia keHoachDauGia = optional.get();
 
 		log.info("Update ke hoach ban dau gia");
 		kehoachRequestMapper.partialUpdate(keHoachDauGia, req);
@@ -143,23 +132,23 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 		keHoachDauGia.setNguoiSuaId(userInfo.getId());
 		keHoachDauGia = bhDgKehoachRepository.save(keHoachDauGia);
 
-		BhDgKehoach finalKeHoachDauGia = keHoachDauGia;
+		KeHoachBanDauGia finalKeHoachDauGia = keHoachDauGia;
 
 		log.info("Update file dinh kem");
-		List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), keHoachDauGia.getId(), BhDgKehoach.TABLE_NAME);
+		List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), keHoachDauGia.getId(), KeHoachBanDauGia.TABLE_NAME);
 		keHoachDauGia.setFileDinhKems(fileDinhKems);
 
 
 		log.info("Update dia diem giao nhan");
 		if (!CollectionUtils.isEmpty(req.getDiaDiemGiaoNhanList())) {
 			//Clean data
-			List<BhDgKhDiaDiemGiaoNhan> diaDiemGiaoNhanList = diaDiemGiaoNhanRepository.findByBhDgKehoachId(keHoachDauGia.getId());
+			List<BanDauGiaDiaDiemGiaoNhan> diaDiemGiaoNhanList = diaDiemGiaoNhanRepository.findByBhDgKehoachId(keHoachDauGia.getId());
 			if (!CollectionUtils.isEmpty(diaDiemGiaoNhanList)) {
 				diaDiemGiaoNhanRepository.deleteAll(diaDiemGiaoNhanList);
 			}
 			//Save data
 			diaDiemGiaoNhanList = req.getDiaDiemGiaoNhanList().stream().map(it -> {
-				BhDgKhDiaDiemGiaoNhan dgKhDiaDiemGiaoNhan = diaDiemGiaoNhanRequestMapper.toEntity(it);
+				BanDauGiaDiaDiemGiaoNhan dgKhDiaDiemGiaoNhan = diaDiemGiaoNhanRequestMapper.toEntity(it);
 				dgKhDiaDiemGiaoNhan.setBhDgKehoachId(finalKeHoachDauGia.getId());
 				return dgKhDiaDiemGiaoNhan;
 			}).collect(Collectors.toList());
@@ -170,13 +159,13 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 		log.info("Update phan lo tai san");
 		if (!CollectionUtils.isEmpty(req.getPhanLoTaiSanList())) {
 			//Clean data
-			List<BhDgKhPhanLoTaiSan> phanLoTaiSanListExisted = phanLoTaiSanRepository.findByBhDgKehoachId(keHoachDauGia.getId());
+			List<BanDauGiaPhanLoTaiSan> phanLoTaiSanListExisted = phanLoTaiSanRepository.findByBhDgKehoachId(keHoachDauGia.getId());
 			if (!CollectionUtils.isEmpty(phanLoTaiSanListExisted)) {
 				phanLoTaiSanRepository.deleteAll(phanLoTaiSanListExisted);
 			}
 
-			List<BhDgKhPhanLoTaiSan> phanLoTaiSanList = req.getPhanLoTaiSanList().stream().map(it -> {
-				BhDgKhPhanLoTaiSan phanLoTaiSan = phanLoTaiSanRequestMapper.toEntity(it);
+			List<BanDauGiaPhanLoTaiSan> phanLoTaiSanList = req.getPhanLoTaiSanList().stream().map(it -> {
+				BanDauGiaPhanLoTaiSan phanLoTaiSan = phanLoTaiSanRequestMapper.toEntity(it);
 				phanLoTaiSan.setBhDgKehoachId(finalKeHoachDauGia.getId());
 				return phanLoTaiSan;
 			}).collect(Collectors.toList());
@@ -194,21 +183,21 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 		if (userInfo == null) throw new Exception("Bad request.");
 
 		if (id == null) throw new Exception("Bad request.");
-		Optional<BhDgKehoach> optional = bhDgKehoachRepository.findById(id);
+		Optional<KeHoachBanDauGia> optional = bhDgKehoachRepository.findById(id);
 		if (!optional.isPresent())
 			throw new Exception("Kế hoạch bán đấu giá không tồn tại");
-		BhDgKehoach keHoachDauGia = optional.get();
+		KeHoachBanDauGia keHoachDauGia = optional.get();
 
 		log.info("Delete file dinh kem");
-		fileDinhKemService.delete(keHoachDauGia.getId(), Collections.singleton(BhDgKehoach.TABLE_NAME));
+		fileDinhKemService.delete(keHoachDauGia.getId(), Collections.singleton(KeHoachBanDauGia.TABLE_NAME));
 		log.info("Delete địa điểm giao nhận");
-		List<BhDgKhDiaDiemGiaoNhan> diaDiemGiaoNhanList = diaDiemGiaoNhanRepository.findByBhDgKehoachId(keHoachDauGia.getId());
+		List<BanDauGiaDiaDiemGiaoNhan> diaDiemGiaoNhanList = diaDiemGiaoNhanRepository.findByBhDgKehoachId(keHoachDauGia.getId());
 		if (!CollectionUtils.isEmpty(diaDiemGiaoNhanList)) {
 			diaDiemGiaoNhanRepository.deleteAll(diaDiemGiaoNhanList);
 		}
 
 		log.info("Delete phan lo tai san");
-		List<BhDgKhPhanLoTaiSan> phanLoTaiSanListExisted = phanLoTaiSanRepository.findByBhDgKehoachId(keHoachDauGia.getId());
+		List<BanDauGiaPhanLoTaiSan> phanLoTaiSanListExisted = phanLoTaiSanRepository.findByBhDgKehoachId(keHoachDauGia.getId());
 		if (!CollectionUtils.isEmpty(phanLoTaiSanListExisted)) {
 			phanLoTaiSanRepository.deleteAll(phanLoTaiSanListExisted);
 		}
@@ -219,69 +208,69 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 	}
 
 	@Override
-	public Page<BhDgKehoachRes> search(BhDgKehoachSearchReq req) throws Exception {
+	public Page<BhDgKehoachResponse> search(KeHoachBanDauGiaSearchRequest req) throws Exception {
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null) throw new Exception("Bad request.");
 
-		Specification<BhDgKehoach> specs = SpecUtils.build(BhDgKehoach.class);
-		specs.and(SpecUtils.ge(BhDgKehoach_.ID, 0));
+		Specification<KeHoachBanDauGia> specs = SpecUtils.build(KeHoachBanDauGia.class);
+		specs.and(SpecUtils.ge(KeHoachBanDauGia_.ID, 0));
 		if (Objects.nonNull(req.getId())) {
-			specs.and(SpecUtils.equal(BhDgKehoach_.ID, req.getId()));
+			specs.and(SpecUtils.equal(KeHoachBanDauGia_.ID, req.getId()));
 		}
 
 		if (Objects.nonNull(req.getNamKeHoach())) {
-			specs.and(SpecUtils.equal(BhDgKehoach_.NAM_KE_HOACH, req.getNamKeHoach()));
+			specs.and(SpecUtils.equal(KeHoachBanDauGia_.NAM_KE_HOACH, req.getNamKeHoach()));
 		}
 		if (Objects.nonNull(req.getSoKeHoach())) {
-			specs.and(SpecUtils.like(BhDgKehoach_.SO_KE_HOACH, req.getSoKeHoach()));
+			specs.and(SpecUtils.like(KeHoachBanDauGia_.SO_KE_HOACH, req.getSoKeHoach()));
 		}
 		if (Objects.nonNull(req.getTrichYeu())) {
-			specs.and(SpecUtils.like(BhDgKehoach_.TRICH_YEU, req.getTrichYeu()));
+			specs.and(SpecUtils.like(KeHoachBanDauGia_.TRICH_YEU, req.getTrichYeu()));
 		}
 		if (Objects.nonNull(req.getNgayKyTuNgay())) {
-			specs.and(SpecUtils.greaterThanOrEqualTo(BhDgKehoach_.NGAY_KY, req.getNgayKyTuNgay()));
+			specs.and(SpecUtils.greaterThanOrEqualTo(KeHoachBanDauGia_.NGAY_KY, req.getNgayKyTuNgay()));
 		}
 		if (Objects.nonNull(req.getNgayKyTuNgay())) {
-			specs.and(SpecUtils.lessThanOrEqualTo(BhDgKehoach_.NGAY_KY, req.getNgayKyDenNgay()));
+			specs.and(SpecUtils.lessThanOrEqualTo(KeHoachBanDauGia_.NGAY_KY, req.getNgayKyDenNgay()));
 		}
 		if (!CollectionUtils.isEmpty(req.getCapDvis())) {
-			specs.and(SpecUtils.in(BhDgKehoach_.CAP_DV, req.getCapDvis()));
+			specs.and(SpecUtils.in(KeHoachBanDauGia_.CAP_DV, req.getCapDvis()));
 		}
 
 		if (!CollectionUtils.isEmpty(req.getMaDvis())) {
-			specs.and(SpecUtils.in(BhDgKehoach_.MA_DV, req.getMaDvis()));
+			specs.and(SpecUtils.in(KeHoachBanDauGia_.MA_DV, req.getMaDvis()));
 		}
 
 		if (!CollectionUtils.isEmpty(req.getLoaiVatTuHangHoa())) {
-			specs.and(SpecUtils.in(BhDgKehoach_.LOAI_VAT_TU_HANG_HOA, req.getLoaiVatTuHangHoa()));
+			specs.and(SpecUtils.in(KeHoachBanDauGia_.LOAI_VAT_TU_HANG_HOA, req.getLoaiVatTuHangHoa()));
 		}
 
-		Page<BhDgKehoach> page = bhDgKehoachRepository.findAll(specs, req.getPageable());
+		Page<KeHoachBanDauGia> page = bhDgKehoachRepository.findAll(specs, req.getPageable());
 
-		List<BhDgKehoach> response = page.get().collect(Collectors.toList());
+		List<KeHoachBanDauGia> response = page.get().collect(Collectors.toList());
 
 		if (CollectionUtils.isEmpty(response)) page.map(kehoachResponseMapper::toDto);
 
-		List<Long> ids = response.stream().map(BhDgKehoach::getId).collect(Collectors.toList());
+		List<Long> ids = response.stream().map(KeHoachBanDauGia::getId).collect(Collectors.toList());
 		log.info("Địa điểm giao nhận");
-		List<BhDgKhDiaDiemGiaoNhan> diaDiemGiaoNhanList = diaDiemGiaoNhanRepository.findByBhDgKehoachIdIn(ids);
+		List<BanDauGiaDiaDiemGiaoNhan> diaDiemGiaoNhanList = diaDiemGiaoNhanRepository.findByBhDgKehoachIdIn(ids);
 		//Map: Key-value = BhDgKehoachId-list BhDgKhDiaDiemGiaoNhan
-		Map<Long, List<BhDgKhDiaDiemGiaoNhan>> diaDiemGiaoNhanMap = diaDiemGiaoNhanList.stream()
-				.collect(Collectors.groupingBy(BhDgKhDiaDiemGiaoNhan::getBhDgKehoachId));
+		Map<Long, List<BanDauGiaDiaDiemGiaoNhan>> diaDiemGiaoNhanMap = diaDiemGiaoNhanList.stream()
+				.collect(Collectors.groupingBy(BanDauGiaDiaDiemGiaoNhan::getBhDgKehoachId));
 
 		//Map: Key-value = BhDgKehoachId- list BhDgKhPhanLoTaiSan
 		log.info("Phân lô tài sản");
-		List<BhDgKhPhanLoTaiSan> phanLoTaiSanList = phanLoTaiSanRepository.findByBhDgKehoachIdIn(ids);
-		Map<Long, List<BhDgKhPhanLoTaiSan>> phanLoTaiSanMap = phanLoTaiSanList.stream()
-				.collect(Collectors.groupingBy(BhDgKhPhanLoTaiSan::getBhDgKehoachId));
+		List<BanDauGiaPhanLoTaiSan> phanLoTaiSanList = phanLoTaiSanRepository.findByBhDgKehoachIdIn(ids);
+		Map<Long, List<BanDauGiaPhanLoTaiSan>> phanLoTaiSanMap = phanLoTaiSanList.stream()
+				.collect(Collectors.groupingBy(BanDauGiaPhanLoTaiSan::getBhDgKehoachId));
 		log.info("Chỉ tiêu kế hoạch năm");
-		List<Long> chiTieuKeHoachNamIds = response.stream().map(BhDgKehoach::getQdGiaoChiTieuId).collect(Collectors.toList());
+		List<Long> chiTieuKeHoachNamIds = response.stream().map(KeHoachBanDauGia::getQdGiaoChiTieuId).collect(Collectors.toList());
 		List<ChiTieuKeHoachNam> chiTieuKeHoachNamList = chiTieuKeHoachNamRepository.findByIdIn(chiTieuKeHoachNamIds);
 		Map<Long, ChiTieuKeHoachNam> chiTieuKeHoachNamMap = chiTieuKeHoachNamList.stream().collect(Collectors.toMap(ChiTieuKeHoachNam::getId, Function.identity(),
 				(existing, replacement) -> existing));
 
 
-		List<BhDgKehoachRes> responseDto = response.stream().map(it -> {
+		List<BhDgKehoachResponse> responseDto = response.stream().map(it -> {
 			if (Objects.nonNull(diaDiemGiaoNhanMap.get(it.getId()))) {
 				it.setDiaDiemGiaoNhanList(diaDiemGiaoNhanMap.get(it.getId()));
 			}
@@ -299,15 +288,15 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 		return new PageImpl<>(responseDto);
 	}
 	@Override
-	public BhDgKehoachRes updateTrangThai(Long id, String trangThaiId) throws Exception {
+	public BhDgKehoachResponse updateTrangThai(Long id, String trangThaiId) throws Exception {
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null) throw new Exception("Bad request.");
 		if (StringUtils.isEmpty(trangThaiId)) throw new Exception("trangThaiId không được để trống");
 
-		Optional<BhDgKehoach> optional = bhDgKehoachRepository.findById(id);
+		Optional<KeHoachBanDauGia> optional = bhDgKehoachRepository.findById(id);
 		if (!optional.isPresent())
 			throw new Exception("Kế hoạch bán đấu giá không tồn tại");
-		BhDgKehoach keHoachDauGia = optional.get();
+		KeHoachBanDauGia keHoachDauGia = optional.get();
 		//validate Trạng Thái
 		String trangThai = TrangThaiEnum.getTrangThaiDuyetById(trangThaiId);
 		if (StringUtils.isEmpty(trangThai)) throw new Exception("Trạng thái không tồn tại");
@@ -317,11 +306,11 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 	}
 
 	@Override
-	public boolean exportToExcel(BhDgKehoachSearchReq req, HttpServletResponse response) throws Exception {
+	public boolean exportToExcel(KeHoachBanDauGiaSearchRequest req, HttpServletResponse response) throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
 		this.prepareSearchReq(req, userInfo, req.getCapDvis(), req.getTrangThais());
 		req.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
-		List<BhDgKehoachRes> list = this.search(req).get().collect(Collectors.toList());
+		List<BhDgKehoachResponse> list = this.search(req).get().collect(Collectors.toList());
 
 		if (CollectionUtils.isEmpty(list))
 			return true;
@@ -335,7 +324,7 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 
 		try {
 			for (int i = 0; i < list.size(); i++) {
-				BhDgKehoachRes item = list.get(i);
+				BhDgKehoachResponse item = list.get(i);
 				objs = new Object[rowsName.length];
 				objs[0] = i;
 				objs[1] = item.getSoKeHoach();
@@ -366,7 +355,7 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 
 		if (CollectionUtils.isEmpty(ids)) throw new Exception("Bad request.");
 		log.info("Delete file dinh kem");
-		fileDinhKemService.deleteMultiple(ids, Collections.singleton(BhDgKehoach.TABLE_NAME));
+		fileDinhKemService.deleteMultiple(ids, Collections.singleton(KeHoachBanDauGia.TABLE_NAME));
 		log.info("Delete địa điểm giao nhận");
 		diaDiemGiaoNhanRepository.deleteAllByBhDgKehoachIdIn(ids);
 

@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.entities.kehoachbanhangdaugia;
+package com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -13,12 +13,12 @@ import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = BhDgKehoach.TABLE_NAME)
+@Table(name = KeHoachBanDauGia.TABLE_NAME)
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BhDgKehoach extends BaseEntity implements Serializable {
+public class KeHoachBanDauGia extends BaseEntity implements Serializable {
 	private static final long serialVersionUID = 1059131210401729547L;
 	public static final String TABLE_NAME = "BH_DG_KEHOACH";
 
@@ -108,10 +108,10 @@ public class BhDgKehoach extends BaseEntity implements Serializable {
 	private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
 	@Transient
-	private List<BhDgKhDiaDiemGiaoNhan> diaDiemGiaoNhanList = new ArrayList<>();
+	private List<BanDauGiaDiaDiemGiaoNhan> diaDiemGiaoNhanList = new ArrayList<>();
 
 	@Transient
-	private List<BhDgKhPhanLoTaiSan> phanLoTaiSanList = new ArrayList<>();
+	private List<BanDauGiaPhanLoTaiSan> phanLoTaiSanList = new ArrayList<>();
 
 	@Column(name = "THOI_GIAN_KY_HD_GC")
 	private String thoiGianKyHopDongGhiChu;

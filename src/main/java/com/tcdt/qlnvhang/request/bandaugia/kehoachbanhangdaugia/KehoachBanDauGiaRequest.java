@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.request.kehoachbanhangdaugia;
+package com.tcdt.qlnvhang.request.bandaugia.kehoachbanhangdaugia;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -11,7 +11,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -23,7 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class BhDgKehoachReq {
+public class KehoachBanDauGiaRequest {
 	private Long id;
 	private String trangThai;
 	private Integer namKeHoach;
@@ -57,8 +56,8 @@ public class BhDgKehoachReq {
 	private String capDv;
 	private String loaiVatTuHangHoa;
 	private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
-	private List<BhDgKhDiaDiemGiaoNhanReq> diaDiemGiaoNhanList = new ArrayList<>();
-	private List<BhDgKhPhanLoTaiSanReq> phanLoTaiSanList = new ArrayList<>();
+	private List<BanDauGiaDiaDiemGiaoNhanRequest> diaDiemGiaoNhanList = new ArrayList<>();
+	private List<BanDauGiaPhanLoTaiSanRequest> phanLoTaiSanList = new ArrayList<>();
 	private String thoiGianKyHopDongGhiChu;
 	private String thoiHanThanhToanGhiChu;
 	private String ThoiHanGiaoNhanGhiChu;
