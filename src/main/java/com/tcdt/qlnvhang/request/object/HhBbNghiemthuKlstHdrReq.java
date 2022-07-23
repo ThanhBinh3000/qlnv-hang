@@ -46,7 +46,10 @@ public class HhBbNghiemthuKlstHdrReq extends SoBienBanPhieuReq {
 
 	@Size(max = 20, message = "Mã ngăn lô được vượt quá 20 ký tự")
 	@ApiModelProperty(example = "010201010101")
-	String maNganlo;
+	String maNganLo;
+	String maDiemKho;
+	String maNhaKho;
+	String maNganKho;
 
 	/*@Size(max = 250, message = "Ông bà được vượt quá 250 ký tự")
 	String ongBa;
