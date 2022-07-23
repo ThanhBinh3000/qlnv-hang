@@ -41,9 +41,6 @@ public class BhDgKhPhanLoTaiSan {
 	@Column(name = "MA_DV_TAI_SAN")
 	private String maDvTaiSan;
 
-	@Column(name = "TON_KHO")
-	private BigDecimal tonKho;
-
 	@Column(name = "SO_LUONG")
 	private BigDecimal soLuong;
 
@@ -55,4 +52,14 @@ public class BhDgKhPhanLoTaiSan {
 
 	@Column(name = "BH_DG_KEHOACH_ID")
 	private Long bhDgKehoachId;
+
+	@Column(name = "GIA_KHOI_DIEM")
+	private BigDecimal giaKhoiDiem;
+
+	@Column(name = "SO_TIEN_DAT_TRUOC")
+	private BigDecimal soTienDatTruoc;
+
+	@Column(name = "DON_VI_TINH")
+	private String donViTinh;
+
 }

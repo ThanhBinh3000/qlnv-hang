@@ -23,4 +23,7 @@ public class BhDgKhPhanLoTaiSanRes {
 	private BigDecimal donGia;
 	private String chiCuc;
 	private Long bhDgKehoachId;
+	private BigDecimal giaKhoiDiem;
+	private BigDecimal soTienDatTruoc;
+	private String donViTinh;
 }

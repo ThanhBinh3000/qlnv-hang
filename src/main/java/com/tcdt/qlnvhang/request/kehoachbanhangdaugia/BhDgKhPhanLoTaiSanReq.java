@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.Column;
 import java.math.BigDecimal;
 @Data
 @Builder
@@ -25,4 +27,7 @@ public class BhDgKhPhanLoTaiSanReq {
 	private BigDecimal donGia;
 	private String chiCuc;
 	private Long bhDgKehoachId;
+	private BigDecimal giaKhoiDiem;
+	private BigDecimal soTienDatTruoc;
+	private String donViTinh;
 }
