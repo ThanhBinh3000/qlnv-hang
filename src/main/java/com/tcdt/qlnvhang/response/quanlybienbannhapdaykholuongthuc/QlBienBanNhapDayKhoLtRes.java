@@ -49,6 +49,9 @@ public class QlBienBanNhapDayKhoLtRes extends SoBienBanPhieuRes {
     private String trangThaiDuyet;
     private Long qdgnvnxId;
     private String soQuyetDinhNhap;
+
+    private Long bbNghiemThuId;
+    private String soBbNghiemThu;
     private String maDvi;
     private String tenDvi;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

@@ -23,6 +23,7 @@ public class QlBienBanNhapDayKhoLtReq extends SoBienBanPhieuReq {
 
     @NotNull(message = "Không được để trống")
     private Long qdgnvnxId;
+    private Long bbNghiemThuId;
     private String soBienBan;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate ngayNhapDayKho;
