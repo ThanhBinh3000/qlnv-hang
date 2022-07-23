@@ -1,11 +1,14 @@
 package com.tcdt.qlnvhang.entities.bandaugia.tochuctrienkhaikehoachbandaugia;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -134,4 +137,7 @@ public class ThongBaoBanDauGia extends BaseEntity implements Serializable {
 
 	@Column(name = "TRANG_THAI")
 	private String trangThai;
+
+	@Transient
+	private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 }

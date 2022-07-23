@@ -1,12 +1,16 @@
 package com.tcdt.qlnvhang.request.bandaugia.tochuctrienkhaikehoachbandaugia;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -52,4 +56,5 @@ public class ThongBaoBanDauGiaRequest {
 	private String phuongThucDauGia;
 	private Long ghiChu;
 	private String trangThai;
+	private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 }

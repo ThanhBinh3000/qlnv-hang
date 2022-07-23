@@ -6,5 +6,5 @@ import com.tcdt.qlnvhang.request.bandaugia.kehoachbanhangdaugia.BanDauGiaPhanLoT
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring", uses = {})
-public interface BhDgKhPhanLoTaiSanRequestMapper extends AbstractMapper<BanDauGiaPhanLoTaiSan, BanDauGiaPhanLoTaiSanRequest> {
+public interface BanDauGiaPhanLoTaiSanRequestMapper extends AbstractMapper<BanDauGiaPhanLoTaiSan, BanDauGiaPhanLoTaiSanRequest> {
 }

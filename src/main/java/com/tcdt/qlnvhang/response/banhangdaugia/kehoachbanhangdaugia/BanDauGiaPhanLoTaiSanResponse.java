@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BhDgKhPhanLoTaiSanResponse {
+public class BanDauGiaPhanLoTaiSanResponse {
 	private Long id;
 	private Long stt;
 	private String diemKho;

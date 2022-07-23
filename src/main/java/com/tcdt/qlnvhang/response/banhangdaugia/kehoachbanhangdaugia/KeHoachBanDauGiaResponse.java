@@ -16,7 +16,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BhDgKehoachResponse {
+public class KeHoachBanDauGiaResponse {
 	private Long id;
 	private String trangThai;
 	private Integer namKeHoach;
@@ -46,8 +46,8 @@ public class BhDgKehoachResponse {
 	private String capDv;
 	private String loaiVatTuHangHoa;
 	private List<FileDinhKem> fileDinhKems = new ArrayList<>();
-	private List<BhDgKhDiaDiemGiaoNhanResponse> diaDiemGiaoNhanList = new ArrayList<>();
-	private List<BhDgKhPhanLoTaiSanResponse> phanLoTaiSanList = new ArrayList<>();
+	private List<BanDauGiaDiaDiemGiaoNhanResponse> diaDiemGiaoNhanList = new ArrayList<>();
+	private List<BanDauGiaPhanLoTaiSanResponse> phanLoTaiSanList = new ArrayList<>();
 	private String tenTrangThai;
 	private String soQuyetDinhGiaoChiTieu;
 	private String soQuyetDinhPheDuyet;
