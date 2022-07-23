@@ -19,6 +19,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.util.Contains;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Where;
@@ -27,6 +29,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tcdt.qlnvhang.entities.FileDKemJoinQdNhapxuat;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = HhQdGiaoNvuNhapxuatHdr.TABLE_NAME)
@@ -45,21 +48,28 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 
 	String soQd;
 	String veViec;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	@Temporal(TemporalType.DATE)
 	Date ngayKy;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	@Temporal(TemporalType.DATE)
 	Date ngayHluc;
 	String maDvi;
 	String loaiQd;
 	String trangThai;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayTao;
 	String nguoiTao;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngaySua;
 	String nguoiSua;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayGuiDuyet;
 	String nguoiGuiDuyet;
 	String ldoTuchoi;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayPduyet;
 	String nguoiPduyet;
 	String ghiChu;
@@ -67,8 +77,10 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 	String loaiVthh;
 	String trichYeu;
 	Integer namNhap;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayQdinh;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	@Temporal(TemporalType.DATE)
 	Date tgNhapKhoMuonNhat;
 

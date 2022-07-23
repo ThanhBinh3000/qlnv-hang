@@ -26,4 +26,8 @@ public class HhQdGiaoNvuNhapxuatDtl1 implements Serializable {
     @ManyToOne
     @JoinColumn(name = "HOP_DONG_ID")
     private HhHopDongHdr hopDong;
+
+    public Long getParentId() {
+        return this.parent.getId();
+    }
 }

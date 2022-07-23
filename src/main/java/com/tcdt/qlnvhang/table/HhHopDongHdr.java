@@ -121,6 +121,9 @@ public class HhHopDongHdr implements Serializable {
 	Date tgianNkho;
 
 	@Transient
+	String donViTinh;
+
+	@Transient
 	private List<HhHopDongDdiemNhapKho> hhDdiemNhapKhoList = new ArrayList<>();
 
 	@Transient

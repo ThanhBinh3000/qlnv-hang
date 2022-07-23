@@ -1,21 +1,26 @@
 package com.tcdt.qlnvhang.service.impl;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
+import com.tcdt.qlnvhang.entities.vattu.bangke.NhBangKeVt;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatDtlLoaiNx;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatHdrLoaiQd;
 import com.tcdt.qlnvhang.repository.HhDviThuchienQdinhRepository;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
+import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatDtl1Repository;
 import com.tcdt.qlnvhang.request.*;
 import com.tcdt.qlnvhang.response.BaseNhapHangCount;
+import com.tcdt.qlnvhang.response.vattu.bangke.NhBangKeVtRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
+import com.tcdt.qlnvhang.table.khotang.KtNganLo;
 import com.tcdt.qlnvhang.util.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +46,9 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 	@Autowired
 	private HhHopDongRepository hhHopDongRepository;
+
+	@Autowired
+	private HhQdGiaoNvuNhapxuatDtl1Repository hhQdGiaoNvuNhapxuatDtl1Repository;
 
 	@Autowired
 	private HttpServletRequest req;
@@ -377,12 +385,34 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			return new PageImpl<>(new ArrayList<>(), pageable, 0);
 		}
 
-		List<HhQdGiaoNvuNhapxuatHdr> data = hhQdGiaoNvuNhapxuatRepository.search(req, capDvi);
-		for (HhQdGiaoNvuNhapxuatHdr qd : data) {
-			qd.setTenTrangThai(TrangThaiEnum.getTenById(qd.getTrangThai()));
-			qd.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(qd.getTrangThai()));
+		List<HhQdGiaoNvuNhapxuatHdr> qds = new ArrayList<>();
+		List<Object[]> data = hhQdGiaoNvuNhapxuatRepository.search(req, capDvi);
+		Set<Long> qdIds = data.stream().map(o -> (Long) o[0]).collect(Collectors.toSet());
+		Map<Long, List<HhQdGiaoNvuNhapxuatDtl1>> dtl1Map = hhQdGiaoNvuNhapxuatDtl1Repository.findByParentIdIn(qdIds)
+				.stream().collect(Collectors.groupingBy(HhQdGiaoNvuNhapxuatDtl1::getParentId));
+
+		for (Object[] o : data) {
+			HhQdGiaoNvuNhapxuatHdr qd = new HhQdGiaoNvuNhapxuatHdr();
+			Long qdId = (Long) o[0];
+			String soQdNhap = o[1] != null ? (String) o[1] : null;
+			Date ngayQdinh = o[2] != null ? (Date) o[2] : null;
+			Integer namNhap = o[3] != null ? (Integer) o[3] : null;
+			String trichYeu = o[4] != null ? (String) o[4] : null;
+			String trangThai = o[5] != null ? (String) o[5] : null;
+			qd.setId(qdId);
+			qd.setSoQd(soQdNhap);
+			qd.setNgayQdinh(ngayQdinh);
+			qd.setNamNhap(namNhap);
+			qd.setTrichYeu(trichYeu);
+			qd.setTrangThai(trangThai);
+			qd.setTenTrangThai(TrangThaiEnum.getTenById(trangThai));
+			qd.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(trangThai));
+			if (!CollectionUtils.isEmpty(dtl1Map.get(qd.getId()))) {
+				qd.setChildren1(dtl1Map.get(qd.getId()));
+			}
+			qds.add(qd);
 		}
-		return new PageImpl<>(data, pageable, hhQdGiaoNvuNhapxuatRepository.count(req, capDvi));
+		return new PageImpl<>(qds, pageable, hhQdGiaoNvuNhapxuatRepository.count(req, capDvi));
 	}
 
 	@Override

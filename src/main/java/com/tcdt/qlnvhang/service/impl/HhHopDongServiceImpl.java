@@ -1,10 +1,7 @@
 package com.tcdt.qlnvhang.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import com.tcdt.qlnvhang.entities.FileDKemJoinHopDong;
@@ -101,6 +99,8 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 			ddNhap.setIdHdongHdr(dataMap.getId());
 			hhHopDongDdiemNhapKhoRepository.save(ddNhap);
 		}
+		Map<String,String> mapVthh = getListDanhMucHangHoa();
+		dataMap.setDonViTinh(StringUtils.isEmpty(dataMap.getLoaiVthh()) ? null : mapVthh.get(dataMap.getDonViTinh()));
 		return dataMap;
 	}
 
@@ -145,6 +145,9 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 			ddNhap.setIdHdongHdr(dataMap.getId());
 			hhHopDongDdiemNhapKhoRepository.save(ddNhap);
 		}
+
+		Map<String,String> mapVthh = getListDanhMucHangHoa();
+		dataMap.setDonViTinh(StringUtils.isEmpty(dataMap.getLoaiVthh()) ? null : mapVthh.get(dataMap.getDonViTinh()));
 		return dataMap;
 	}
 
@@ -215,7 +218,10 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 
 //		UnitScaler.reverseFormatList(dataMap.getChildren(), Contains.DVT_TAN);
 
-		return hhHopDongRepository.save(dataDB);
+		hhHopDongRepository.save(dataDB);
+		Map<String,String> mapVthh = getListDanhMucHangHoa();
+		dataDB.setDonViTinh(StringUtils.isEmpty(dataDB.getLoaiVthh()) ? null : mapVthh.get(dataDB.getDonViTinh()));
+		return dataDB;
 	}
 
 	@Override
@@ -240,7 +246,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 		qOptional.get().setTenVthh( StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : mapVthh.get(qOptional.get().getLoaiVthh()));
 		qOptional.get().setTenCloaiVthh( StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null :mapVthh.get(qOptional.get().getCloaiVthh()));
 		qOptional.get().setTenDvi(StringUtils.isEmpty(qOptional.get().getMaDvi()) ? null :mapDmucDvi.get(qOptional.get().getMaDvi()));
-
+		qOptional.get().setDonViTinh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : mapVthh.get(qOptional.get().getDonViTinh()));
 		qOptional.get().setHhPhuLucHdongList(hhPhuLucRepository.findBySoHd(qOptional.get().getSoHd()));
 		qOptional.get().setHhDdiemNhapKhoList(hhHopDongDdiemNhapKhoRepository.findAllByIdHdongHdr(Long.parseLong(ids)));
 		qOptional.get().setTenNthau(hashMapDviLquan.get(String.valueOf(Double.parseDouble(qOptional.get().getIdNthau().toString()))));
@@ -264,6 +270,9 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 //			UnitScaler.formatList(dtl.getChildren(), Contains.DVT_TAN);
 //		}
 
+		HhHopDongHdr dataDB = qOptional.get();
+		Map<String,String> mapVthh = getListDanhMucHangHoa();
+		dataDB.setDonViTinh(StringUtils.isEmpty(dataDB.getLoaiVthh()) ? null : mapVthh.get(dataDB.getDonViTinh()));
 		return this.detail(qOptional.get().getId().toString());
 	}
 
@@ -273,10 +282,25 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 		Page<HhHopDongHdr> page = hhHopDongRepository.select(req.getLoaiVthh(),req.getSoHd(),req.getTenHd(),req.getNhaCcap(),convertDateToString(req.getTuNgayKy()),convertDateToString(req.getDenNgayKy()),req.getTrangThai(), pageable);
 		Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
 		Map<String, String> mapDmucHh = getListDanhMucHangHoa();
+
+		Set<Long> hopDongIds = page.getContent().stream().map(HhHopDongHdr::getId).collect(Collectors.toSet());
+		Map<Long, List<HhHopDongDdiemNhapKho>> diaDiemNhapKhoMap = hhHopDongDdiemNhapKhoRepository.findAllByIdHdongHdrIn(hopDongIds)
+				.stream().collect(Collectors.groupingBy(HhHopDongDdiemNhapKho::getIdHdongHdr));
+
+		Map<String,String> mapVthh = getListDanhMucHangHoa();
+
 		page.forEach(f -> {
 			f.setTenDvi( mapDmucDvi.get(f.getMaDvi()));
 			f.setTenVthh(mapDmucHh.get(f.getLoaiVthh()));
 			f.setTenCloaiVthh( mapDmucHh.get(f.getCloaiVthh()));
+			List<HhHopDongDdiemNhapKho> diaDiemNhapKhos = diaDiemNhapKhoMap.get(f.getId()) != null ? diaDiemNhapKhoMap.get(f.getId()) : new ArrayList<>();
+			if (!CollectionUtils.isEmpty(diaDiemNhapKhos)) {
+				diaDiemNhapKhos.forEach(d ->  {
+					d.setTenDvi(mapDmucDvi.get(d.getMaDvi()));
+				});
+				f.setHhDdiemNhapKhoList(diaDiemNhapKhos);
+			}
+			f.setDonViTinh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : mapVthh.get(f.getDonViTinh()));
 		});
 		return page;
 	}
@@ -290,10 +314,18 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 		Page<HhHopDongHdr> dataPage = hhHopDongRepository.findAll(HhHopDongSpecification.buildSearchQuery(objReq),
 				pageable);
 
+		Set<Long> hopDongIds = dataPage.getContent().stream().map(HhHopDongHdr::getId).collect(Collectors.toSet());
+		if (CollectionUtils.isEmpty(hopDongIds))
+			return dataPage;
+
+		Map<Long, List<HhHopDongDdiemNhapKho>> diaDiemNhapKhoMap = hhHopDongDdiemNhapKhoRepository.findAllByIdHdongHdrIn(hopDongIds)
+				.stream().collect(Collectors.groupingBy(HhHopDongDdiemNhapKho::getIdHdongHdr));
+
 		// Lay danh muc dung chung
 		Map<String, String> mapDmucDvi = getMapTenDvi();
 		for (HhHopDongHdr hdr : dataPage.getContent()) {
 			hdr.setTenDvi(mapDmucDvi.get(hdr.getMaDvi()));
+			hdr.setHhDdiemNhapKhoList(diaDiemNhapKhoMap.get(hdr.getId()));
 		}
 		return dataPage;
 	}

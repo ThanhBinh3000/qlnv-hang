@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.nhaphang.vattu.bienbanchuanbikho;
 import com.tcdt.qlnvhang.entities.vattu.bienbanchuanbikho.NhBienBanChuanBiKho;
 import com.tcdt.qlnvhang.entities.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoCt;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
+import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoCtRepository;
@@ -16,6 +17,7 @@ import com.tcdt.qlnvhang.request.search.vattu.bienbanchuanbikho.NhBienBanChuanBi
 import com.tcdt.qlnvhang.response.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoCtRes;
 import com.tcdt.qlnvhang.response.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoRes;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.HhHopDongHdr;
 import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
@@ -30,6 +32,7 @@ import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -55,6 +58,7 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
     private final NhBienBanChuanBiKhoCtRepository nhBienBanChuanBiKhoCtRepository;
     private final HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
     private final QlnvDmVattuRepository qlnvDmVattuRepository;
+    private final HhHopDongRepository hhHopDongRepository;
 
     private static final String SHEET_BIEN_BAN_CHUAN_BI_KHO = "Biên bản chuẩn bị kho";
     private static final String STT = "STT";
@@ -122,6 +126,14 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
                 throw new Exception("Không tìm thấy quyết định nhập");
             }
             res.setSoQuyetDinhNhap(qdNhap.get().getSoQd());
+        }
+
+        if (item.getHopDongId() != null) {
+            Optional<HhHopDongHdr> hopDong = hhHopDongRepository.findById(item.getHopDongId());
+            if (!hopDong.isPresent()) {
+                throw new Exception("Không tìm thấy hợp đồng");
+            }
+            res.setSoHopDong(hopDong.get().getSoHd());
         }
         return res;
     }
@@ -271,6 +283,8 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
             String tenVatTu = (String) o[3];
             String tenVatTuCha = (String) o[4];
             KtNganLo nganLo = (KtNganLo) o[5];
+            Long hopDongId = o[6] != null ? (Long) o[6] : null;
+            String soHopDong = o[7] != null ? (String) o[7] : null;
             BeanUtils.copyProperties(item, response);
             response.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
             response.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
@@ -278,6 +292,8 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
             response.setSoQuyetDinhNhap(soQdNhap);
             response.setTenVatTu(tenVatTu);
             response.setTenVatTuCha(tenVatTuCha);
+            response.setHopDongId(hopDongId);
+            response.setSoHopDong(soHopDong);
             this.thongTinNganLo(response, nganLo);
             responses.add(response);
         }

@@ -12,14 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.tcdt.qlnvhang.enums.HhBbNghiemthuKlstStatusEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
+import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.response.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongResponseDto;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
-import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganKho;
@@ -51,8 +51,6 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.HhBbNghiemthuKlstHdrReq;
 import com.tcdt.qlnvhang.request.search.HhBbNghiemthuKlstSearchReq;
 import com.tcdt.qlnvhang.secification.HhBbNghiemthuKlstSpecification;
-import com.tcdt.qlnvhang.table.HhBbNghiemthuKlstDtl;
-import com.tcdt.qlnvhang.table.HhBbNghiemthuKlstHdr;
 
 @Service
 @Log4j2
@@ -80,6 +78,9 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 
 	@Autowired
 	private KtNganLoRepository ktNganLoRepository;
+
+	@Autowired
+	private HhHopDongRepository hhHopDongRepository;
 
 	@Autowired
 	private HttpServletRequest req;
@@ -236,7 +237,10 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 			return qhKho;
 
 		// Quyet dinh giao nhiem vu nhap hang
-		Set<Long> qdNhapIds = data.stream().map(HhBbNghiemthuKlstHdr::getQdgnvnxId).collect(Collectors.toSet());
+		Set<Long> qdNhapIds = data.stream()
+				.map(HhBbNghiemthuKlstHdr::getQdgnvnxId)
+				.filter(Objects::nonNull)
+				.collect(Collectors.toSet());
 		Map<Long, HhQdGiaoNvuNhapxuatHdr> mapQdNhap = new HashMap<>();
 		if (!CollectionUtils.isEmpty(qdNhapIds)) {
 			mapQdNhap = hhQdGiaoNvuNhapxuatRepository.findByIdIn(qdNhapIds)
@@ -244,17 +248,32 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 		}
 
 		// Ngan lo
-		Set<String> maNganLos = data.stream().map(HhBbNghiemthuKlstHdr::getMaNganlo).collect(Collectors.toSet());
+		Set<String> maNganLos = data.stream()
+				.map(HhBbNghiemthuKlstHdr::getMaNganlo)
+				.filter(Objects::nonNull)
+				.collect(Collectors.toSet());
 		Map<String, KtNganLo> mapNganLo = new HashMap<>();
 		if (!CollectionUtils.isEmpty(maNganLos)) {
 			mapNganLo = ktNganLoRepository.findByMaNganloIn(maNganLos)
 					.stream().collect(Collectors.toMap(KtNganLo::getMaNganlo, Function.identity()));
 		}
 
+		Set<Long> hopDongIds = data.stream()
+				.map(HhBbNghiemthuKlstHdr::getHopDongId)
+				.filter(Objects::nonNull)
+				.collect(Collectors.toSet());
+
+		Map<Long, HhHopDongHdr> mapHopDong = new HashMap<>();
+		if (!CollectionUtils.isEmpty(hopDongIds)) {
+			mapHopDong = hhHopDongRepository.findByIdIn(hopDongIds)
+					.stream().collect(Collectors.toMap(HhHopDongHdr::getId, Function.identity()));
+		}
+
 		for (HhBbNghiemthuKlstHdr hdr : data) {
 			HhQdGiaoNvuNhapxuatHdr qdNhap = hdr.getQdgnvnxId() != null ? mapQdNhap.get(hdr.getQdgnvnxId()) : null;
 			KtNganLo nganLo = StringUtils.hasText(hdr.getMaNganlo()) ? mapNganLo.get(hdr.getMaNganlo()) : null;
-			this.buildResponseForList(hdr, qdNhap, nganLo);
+			HhHopDongHdr hopDong = hdr.getHopDongId() != null ? mapHopDong.get(hdr.getHopDongId()) : null;
+			this.buildResponseForList(hdr, qdNhap, nganLo, hopDong);
 		}
 
 		return qhKho;
@@ -371,12 +390,16 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 		return true;
 	}
 
-	private void buildResponseForList(HhBbNghiemthuKlstHdr bb, HhQdGiaoNvuNhapxuatHdr qdNhap, KtNganLo ktNganLo) {
+	private void buildResponseForList(HhBbNghiemthuKlstHdr bb, HhQdGiaoNvuNhapxuatHdr qdNhap,
+									  KtNganLo ktNganLo, HhHopDongHdr hopDong) {
 		this.baseResponse(bb);
 		if (qdNhap != null) {
 			bb.setSoQuyetDinhNhap(qdNhap.getSoQd());
 		}
 		this.thongTinNganLo(bb, ktNganLo);
+		if (hopDong != null) {
+			bb.setSoHopDong(hopDong.getSoHd());
+		}
 
 	}
 
@@ -389,6 +412,14 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 				throw new Exception("Không tìm thấy quyết định nhập");
 			}
 			bb.setSoQuyetDinhNhap(qdNhap.get().getSoQd());
+		}
+
+		if (bb.getHopDongId() != null) {
+			Optional<HhHopDongHdr> hopDong = hhHopDongRepository.findById(bb.getHopDongId());
+			if (!hopDong.isPresent()) {
+				throw new Exception("Không tìm thấy hợp đồng");
+			}
+			bb.setSoHopDong(hopDong.get().getSoHd());
 		}
 
 		if (!StringUtils.hasText(bb.getMaNganlo()))

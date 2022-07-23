@@ -79,6 +79,7 @@ public class HhBbNghiemthuKlstHdr implements Serializable {
 	String nguoiPduyet;
 	private Integer so;
 
+	private Long hopDongId;
 //	String ongBa;
 //	String chucVu;
 //	String maVthh;
@@ -89,6 +90,9 @@ public class HhBbNghiemthuKlstHdr implements Serializable {
 
 //	@Temporal(TemporalType.DATE)
 //	Date ngayKthuc;
+
+	@Transient
+	String soHopDong;
 
 	@Transient
 	String tenDvi;
