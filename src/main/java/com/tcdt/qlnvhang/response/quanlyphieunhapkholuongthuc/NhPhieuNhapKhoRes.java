@@ -13,13 +13,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class NhPhieuNhapKhoRes extends SoBienBanPhieuRes {
     private Long id;
-    private Long phieuKtClId;
+    private List<Long> phieuKtClIds = new ArrayList<>();
     private String soPhieuKtCl;
     private Long qdgnvnxId;
     private String soQuyetDinhNhap;
