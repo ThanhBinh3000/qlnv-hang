@@ -30,8 +30,8 @@ public class NhPhieuNhapKhoRes extends SoBienBanPhieuRes {
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime thoiGianGiaoNhan;
-    private String taiKhoanNo;
-    private String taiKhoanCo;
+    private BigDecimal taiKhoanNo;
+    private BigDecimal taiKhoanCo;
 
     private String trangThai;
     private String tenTrangThai;
