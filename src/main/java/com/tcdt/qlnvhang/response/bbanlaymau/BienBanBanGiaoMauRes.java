@@ -38,5 +38,7 @@ public class BienBanBanGiaoMauRes extends SoBienBanPhieuRes {
 	private String tenTrangThai;
 	private String trangThaiDuyet;
 	private String loaiVthh;
+	private Long hopDongId;
+	private String soHopDong;
 	private List<BienBanBanGiaoMauCtRes> chiTiets = new ArrayList<>();
 }

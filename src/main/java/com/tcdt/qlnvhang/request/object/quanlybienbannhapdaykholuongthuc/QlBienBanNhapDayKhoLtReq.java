@@ -41,7 +41,7 @@ public class QlBienBanNhapDayKhoLtReq extends SoBienBanPhieuReq {
     private String maNhaKho;
     private String maNganKho;
     private String maNganLo;
-
+    private Long hopDongId;
     private List<QlBienBanNdkCtLtReq> chiTiets = new ArrayList<>();
 
     private List<FileDinhKemReq> fileDinhKems;

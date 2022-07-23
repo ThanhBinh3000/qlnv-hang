@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.entities.bbanlaymau.BienBanBanGiaoMau;
 import com.tcdt.qlnvhang.entities.bbanlaymau.BienBanBanGiaoMauCt;
 import com.tcdt.qlnvhang.entities.bbanlaymau.BienBanLayMau;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
+import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.bbanbangiaomau.BienBanBanGiaoMauCtRepository;
 import com.tcdt.qlnvhang.repository.bbanbangiaomau.BienBanBanGiaoMauRepository;
@@ -19,6 +20,7 @@ import com.tcdt.qlnvhang.response.bbanlaymau.BienBanBanGiaoMauCtRes;
 import com.tcdt.qlnvhang.response.bbanlaymau.BienBanBanGiaoMauRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.HhHopDongHdr;
 import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
@@ -74,6 +76,9 @@ public class BienBanBanGiaoMauServiceImpl extends BaseServiceImpl implements Bie
 
 	@Autowired
 	private BienBanLayMauRepository bienBanLayMauRepository;
+
+	@Autowired
+	private HhHopDongRepository hhHopDongRepository;
 
 	@Autowired
 	private HttpServletRequest req;
@@ -311,6 +316,14 @@ public class BienBanBanGiaoMauServiceImpl extends BaseServiceImpl implements Bie
 				throw new Exception("Không tìm thấy biên bản lấy mẫu");
 			}
 			res.setSoBbLayMau(bbLayMau.get().getSoBienBan());
+		}
+
+		if (item.getHopDongId() != null) {
+			Optional<HhHopDongHdr> hopDong = hhHopDongRepository.findById(item.getHopDongId());
+			if (!hopDong.isPresent()) {
+				throw new Exception("Không tìm thấy hợp đồng");
+			}
+			res.setSoHopDong(hopDong.get().getSoHd());
 		}
 
 		List<BienBanBanGiaoMauCtRes> chiTiets = item.getChiTiets().stream().map(BienBanBanGiaoMauCtRes::new).collect(Collectors.toList());

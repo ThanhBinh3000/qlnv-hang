@@ -52,8 +52,12 @@ public class QlBienBanNhapDayKhoLtRes extends SoBienBanPhieuRes {
 
     private Long bbNghiemThuId;
     private String soBbNghiemThu;
+    private Long hopDongId;
+    private String soHopDong;
+
     private String maDvi;
     private String tenDvi;
+    private String maQhns;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate ngayNhapDayKho;
     private List<QlBienBanNdkCtLtRes> chiTiets = new ArrayList<>();

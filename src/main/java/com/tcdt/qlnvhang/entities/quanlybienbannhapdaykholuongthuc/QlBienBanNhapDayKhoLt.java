@@ -34,6 +34,9 @@ public class QlBienBanNhapDayKhoLt extends BaseEntity implements Serializable {
     @Column(name = "BB_NGHIEM_THU_ID")
     private Long bbNghiemThuId; // HhBbNghiemthuKlstHdr
 
+    @Column(name = "HOP_DONG_ID")
+    private Long hopDongId;
+
     @Column(name = "SO_BIEN_BAN")
     private String soBienBan;
 
