@@ -112,4 +112,13 @@ public class BhDgKehoach extends BaseEntity implements Serializable {
 
 	@Transient
 	private List<BhDgKhPhanLoTaiSan> phanLoTaiSanList = new ArrayList<>();
+
+	@Column(name = "THOI_GIAN_KY_HD_GC")
+	private String thoiGianKyHopDongGhiChu;
+
+	@Column(name = "THOI_HAN_THANH_TOAN_GC")
+	private String thoiHanThanhToanGhiChu;
+
+	@Column(name = "THOI_HAN_GIAO_NHAN_GC")
+	private String ThoiHanGiaoNhanGhiChu;
 }

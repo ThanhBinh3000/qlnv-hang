@@ -51,4 +51,7 @@ public class BhDgKehoachRes {
 	private String tenTrangThai;
 	private String soQuyetDinhGiaoChiTieu;
 	private String soQuyetDinhPheDuyet;
+	private String thoiGianKyHopDongGhiChu;
+	private String thoiHanThanhToanGhiChu;
+	private String ThoiHanGiaoNhanGhiChu;
 }

@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.Column;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -58,4 +59,7 @@ public class BhDgKehoachReq {
 	private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 	private List<BhDgKhDiaDiemGiaoNhanReq> diaDiemGiaoNhanList = new ArrayList<>();
 	private List<BhDgKhPhanLoTaiSanReq> phanLoTaiSanList = new ArrayList<>();
+	private String thoiGianKyHopDongGhiChu;
+	private String thoiHanThanhToanGhiChu;
+	private String ThoiHanGiaoNhanGhiChu;
 }
