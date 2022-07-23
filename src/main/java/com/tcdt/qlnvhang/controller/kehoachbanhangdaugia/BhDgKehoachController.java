@@ -3,9 +3,11 @@ package com.tcdt.qlnvhang.controller.kehoachbanhangdaugia;
 
 import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
+import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.kehoachbanhangdaugia.BhDgKehoachReq;
 import com.tcdt.qlnvhang.request.kehoachbanhangdaugia.BhDgKehoachSearchReq;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongFilterRequestDto;
+import com.tcdt.qlnvhang.request.search.vattu.bangke.NhBangKeVtSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.response.kehoachbanhangdaugia.BhDgKehoachRes;
 import com.tcdt.qlnvhang.service.kehoachbanhangdaugia.KeHoachBanDauGiaService;
@@ -88,10 +90,10 @@ public class BhDgKehoachController extends BaseController {
 
 	@ApiOperation(value = "Xoá danh sách thông tin kế hoạch bán đấu giá hàng hóa", response = Boolean.class)
 	@DeleteMapping()
-	public ResponseEntity<BaseResponse> deleteMultiple(@RequestParam List<Long> ids) {
+	public ResponseEntity<BaseResponse> deleteMultiple(@RequestBody @Valid DeleteReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			Boolean res = keHoachBanDauGiaService.deleteMultiple(ids);
+			Boolean res = keHoachBanDauGiaService.deleteMultiple(req.getIds());
 			resp.setData(res);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
@@ -144,13 +146,6 @@ public class BhDgKehoachController extends BaseController {
 	public void exportToExcel(HttpServletResponse response, @RequestBody BhDgKehoachSearchReq req) {
 
 		try {
-			response.setContentType("application/octet-stream");
-			DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-			String currentDateTime = dateFormatter.format(new Date());
-
-			String headerKey = "Content-Disposition";
-			String headerValue = "attachment; filename=ke_hoach_ban_dau_gia_hang_hoa_" + currentDateTime + ".xlsx";
-			response.setHeader(headerKey, headerValue);
 			keHoachBanDauGiaService.exportToExcel(req, response);
 		} catch (Exception e) {
 			log.error("Error can not export", e);

@@ -19,6 +19,7 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.kehoachbanhangdaugia.BhDgKehoachReq;
 import com.tcdt.qlnvhang.request.kehoachbanhangdaugia.BhDgKehoachSearchReq;
 import com.tcdt.qlnvhang.response.chitieukehoachnam.ChiTieuKeHoachNamRes;
+import com.tcdt.qlnvhang.response.vattu.bangke.NhBangKeVtRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -54,6 +55,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Log4j2
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHoachBanDauGiaService {
 	private final BhDgKehoachRepository bhDgKehoachRepository;
 	private final BhDgKhDiaDiemGiaoNhanRepository diaDiemGiaoNhanRepository;
@@ -80,7 +82,6 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 
 
 	@Override
-	@Transactional(rollbackFor = Exception.class)
 	public BhDgKehoachRes create(BhDgKehoachReq req) throws Exception {
 		if (req == null) return null;
 
@@ -251,8 +252,8 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 			specs.and(SpecUtils.in(BhDgKehoach_.MA_DV, req.getMaDvis()));
 		}
 
-		if (Objects.nonNull(req.getLoaiVatTuHangHoa())) {
-			specs.and(SpecUtils.equal(BhDgKehoach_.LOAI_VAT_TU_HANG_HOA, req.getLoaiVatTuHangHoa()));
+		if (!CollectionUtils.isEmpty(req.getLoaiVatTuHangHoa())) {
+			specs.and(SpecUtils.in(BhDgKehoach_.LOAI_VAT_TU_HANG_HOA, req.getLoaiVatTuHangHoa()));
 		}
 
 		Page<BhDgKehoach> page = bhDgKehoachRepository.findAll(specs, req.getPageable());
@@ -325,59 +326,32 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 		if (CollectionUtils.isEmpty(list))
 			return true;
 
+		String[] rowsName = new String[] { STT, SO_KE_HOACH, NGAY_LAP_KE_HOACH, NGAY_KY,
+				TRICH_YEU, LOAI_HANG_HOA, SO_QD_GIAO_CHI_TIEU, SO_QD_PHE_DUYET_KH_BAN_DAU_GIA,NAM_KE_HOACH, TRANG_THAI};
+		String filename = "ke_hoach_ban_dau_gia_hang_hoa.xlsx";
+
+		List<Object[]> dataList = new ArrayList<Object[]>();
+		Object[] objs = null;
+
 		try {
-			XSSFWorkbook workbook = new XSSFWorkbook();
-
-			//STYLE
-			CellStyle style = workbook.createCellStyle();
-			XSSFFont font = workbook.createFont();
-			font.setFontHeight(11);
-			font.setBold(true);
-			style.setFont(font);
-			style.setAlignment(HorizontalAlignment.CENTER);
-			style.setVerticalAlignment(VerticalAlignment.CENTER);
-			XSSFSheet sheet = workbook.createSheet(SHEET_NAME);
-			Row row0 = sheet.createRow(0);
-
-			ExportExcel.createCell(row0, 0, STT, style, sheet);
-			ExportExcel.createCell(row0, 1, SO_KE_HOACH, style, sheet);
-			ExportExcel.createCell(row0, 2, NGAY_LAP_KE_HOACH, style, sheet);
-			ExportExcel.createCell(row0, 3, NGAY_KY, style, sheet);
-			ExportExcel.createCell(row0, 5, TRICH_YEU, style, sheet);
-			ExportExcel.createCell(row0, 6, LOAI_HANG_HOA, style, sheet);
-			ExportExcel.createCell(row0, 7, SO_QD_GIAO_CHI_TIEU, style, sheet);
-			ExportExcel.createCell(row0, 8, SO_QD_PHE_DUYET_KH_BAN_DAU_GIA, style, sheet);
-			ExportExcel.createCell(row0, 9, NAM_KE_HOACH, style, sheet);
-			ExportExcel.createCell(row0, 10, TRANG_THAI, style, sheet);
-
-			style = workbook.createCellStyle();
-			font = workbook.createFont();
-			font.setFontHeight(11);
-			style.setFont(font);
-
-			Row row;
-			int startRowIndex = 1;
-
-			for (BhDgKehoachRes item : list) {
-				row = sheet.createRow(startRowIndex);
-				ExportExcel.createCell(row, 0, startRowIndex, style, sheet);
-				ExportExcel.createCell(row, 1, item.getSoKeHoach(), style, sheet);
-				ExportExcel.createCell(row, 2, LocalDateTimeUtils.localDateToString(item.getNgayLapKeHoach()), style, sheet);
-				ExportExcel.createCell(row, 3, LocalDateTimeUtils.localDateToString(item.getNgayKy()), style, sheet);
-				ExportExcel.createCell(row, 4, item.getTrichYeu(), style, sheet);
-				ExportExcel.createCell(row, 5, Optional.ofNullable(Contains.mpLoaiVthh.get(item.getLoaiVatTuHangHoa())).orElse(""), style, sheet);
-				ExportExcel.createCell(row, 6, item.getQdGiaoChiTieuId(), style, sheet);
-				ExportExcel.createCell(row, 7, item.getSoQuyetDinhGiaoChiTieu(), style, sheet);
-				ExportExcel.createCell(row, 8, item.getSoQuyetDinhPheDuyet(), style, sheet);
-				ExportExcel.createCell(row, 9, item.getTenTrangThai(), style, sheet);
-				ExportExcel.createCell(row, 10, item.getTrichYeu(), style, sheet);
-				startRowIndex++;
+			for (int i = 0; i < list.size(); i++) {
+				BhDgKehoachRes item = list.get(i);
+				objs = new Object[rowsName.length];
+				objs[0] = i;
+				objs[1] = item.getSoKeHoach();
+				objs[2] = LocalDateTimeUtils.localDateToString(item.getNgayLapKeHoach());
+				objs[3] = LocalDateTimeUtils.localDateToString(item.getNgayKy());
+				objs[4] = item.getTrichYeu();
+				objs[5] = Optional.ofNullable(Contains.mpLoaiVthh.get(item.getLoaiVatTuHangHoa())).orElse("");
+				objs[6] = item.getSoQuyetDinhGiaoChiTieu();
+				objs[7] = item.getSoQuyetDinhPheDuyet();
+				objs[8] = item.getTenTrangThai();
+				objs[9] = item.getTrichYeu();
+				dataList.add(objs);
 			}
 
-			ServletOutputStream outputStream = response.getOutputStream();
-			workbook.write(outputStream);
-			workbook.close();
-			outputStream.close();
+			ExportExcel ex = new ExportExcel(SHEET_NAME, filename, rowsName, dataList, response);
+			ex.export();
 		} catch (Exception e) {
 			log.error("Error export", e);
 			return false;
