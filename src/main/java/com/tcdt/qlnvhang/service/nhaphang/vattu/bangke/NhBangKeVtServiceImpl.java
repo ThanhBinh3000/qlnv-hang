@@ -43,6 +43,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
@@ -72,6 +73,7 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
     private static final String TRANG_THAI = "Trạng Thái";
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public NhBangKeVtRes create(NhBangKeVtReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         this.validateSoPhieu(null, req);
@@ -105,7 +107,7 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
             if (id != null && id > 0) {
                 chiTiet = mapChiTiet.get(id);
                 if (chiTiet == null)
-                    throw new Exception("Phiếu nhập kho vật tư chi tiết không tồn tại.");
+                    throw new Exception("Bảng kê vật tư chi tiết không tồn tại.");
                 mapChiTiet.remove(id);
             }
 
@@ -154,7 +156,7 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
         if (item.getPhieuNhapKhoId() != null) {
             Optional<NhPhieuNhapKho> phieuNhapKho = phieuNhapKhoRepository.findById(item.getPhieuNhapKhoId());
             if (!phieuNhapKho.isPresent()) {
-                throw new Exception("Không tìm thấy phiếu nhập kho");
+                throw new Exception("Không tìm thấy Bảng kê");
             }
             res.setSoPhieuNhapKho(phieuNhapKho.get().getSoPhieu());
         }
@@ -171,12 +173,13 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public NhBangKeVtRes update(NhBangKeVtReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
 
         Optional<NhBangKeVt> optional = bangKeVtRepository.findById(req.getId());
         if (!optional.isPresent())
-            throw new Exception("Phiếu nhập kho vật tư không tồn tại.");
+            throw new Exception("Bảng kê vật tư không tồn tại.");
 
         this.validateSoPhieu(optional.get(), req);
 
@@ -204,7 +207,7 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
         UserInfo userInfo = UserUtils.getUserInfo();
         Optional<NhBangKeVt> optional = bangKeVtRepository.findById(id);
         if (!optional.isPresent())
-            throw new Exception("Phiếu nhập kho vật tư không tồn tại.");
+            throw new Exception("Bảng kê vật tư không tồn tại.");
 
         NhBangKeVt item = optional.get();
         item.setChiTiets(bangKeVtCtRepository.findByBangKeVtIdIn(Collections.singleton(item.getId())));
@@ -212,11 +215,12 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public boolean delete(Long id) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         Optional<NhBangKeVt> optional = bangKeVtRepository.findById(id);
         if (!optional.isPresent())
-            throw new Exception("Phiếu nhập kho vật tư không tồn tại.");
+            throw new Exception("Bảng kê vật tư không tồn tại.");
 
         NhBangKeVt item = optional.get();
         if (TrangThaiEnum.BAN_HANH.getId().equals(item.getTrangThai())) {
@@ -228,11 +232,12 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public boolean updateStatusQd(StatusReq stReq) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         Optional<NhBangKeVt> optional = bangKeVtRepository.findById(stReq.getId());
         if (!optional.isPresent())
-            throw new Exception("Phiếu nhập kho vật tư không tồn tại.");
+            throw new Exception("Bảng kê vật tư không tồn tại.");
 
         NhBangKeVt phieu = optional.get();
 
@@ -300,6 +305,7 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public boolean deleteMultiple(DeleteReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         bangKeVtCtRepository.deleteByBangKeVtIdIn(req.getIds());

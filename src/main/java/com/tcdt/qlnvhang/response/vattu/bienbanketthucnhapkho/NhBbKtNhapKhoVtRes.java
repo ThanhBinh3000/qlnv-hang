@@ -1,7 +1,7 @@
 package com.tcdt.qlnvhang.response.vattu.bienbanketthucnhapkho;
 
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
+import com.tcdt.qlnvhang.response.CommonResponse;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class NhBbKtNhapKhoVtRes extends SoBienBanPhieuRes {
+public class NhBbKtNhapKhoVtRes extends CommonResponse {
     private Long id;
     private Long qdgnvnxId;
     private String soQuyetDinhNhap;

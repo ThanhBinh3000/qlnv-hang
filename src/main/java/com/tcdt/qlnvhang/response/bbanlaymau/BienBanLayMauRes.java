@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.response.bbanlaymau;
 
-import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
+import com.tcdt.qlnvhang.response.CommonResponse;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class BienBanLayMauRes extends SoBienBanPhieuRes {
+public class BienBanLayMauRes extends CommonResponse {
 	private Long id;
 	private Long qdgnvnxId;
 	private String soQuyetDinhNhap;

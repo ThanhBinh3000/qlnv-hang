@@ -62,4 +62,18 @@ public class BanDauGiaPhanLoTaiSan {
 	@Column(name = "DON_VI_TINH")
 	private String donViTinh;
 
+	@Column(name = "BB_BAN_DAU_GIA_ID")
+	private Long bbBanDauGiaId;
+
+	@Column(name = "SO_LAN_TRA_GIA")
+	private Integer soLanTraGia;
+
+	@Column(name = "DON_GIA_CAO_NHAT")
+	private BigDecimal donGiaCaoNhat;
+
+	@Column(name = "THANH_TIEN")
+	private BigDecimal thanhTien;
+
+	@Column(name = "TRA_GIA_CAO_NHAT")
+	private String traGiaCaoNhat;
 }

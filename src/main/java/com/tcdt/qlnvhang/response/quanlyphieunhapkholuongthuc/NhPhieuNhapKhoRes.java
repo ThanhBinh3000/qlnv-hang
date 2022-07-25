@@ -1,7 +1,7 @@
 package com.tcdt.qlnvhang.response.quanlyphieunhapkholuongthuc;
 
 import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCt1;
-import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
+import com.tcdt.qlnvhang.response.CommonResponse;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class NhPhieuNhapKhoRes extends SoBienBanPhieuRes {
+public class NhPhieuNhapKhoRes extends CommonResponse {
     private Long id;
     private List<Long> phieuKtClIds = new ArrayList<>();
     private String soPhieuKtCl;

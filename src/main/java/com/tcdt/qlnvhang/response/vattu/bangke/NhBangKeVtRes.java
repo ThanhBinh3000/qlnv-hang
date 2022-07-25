@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.response.vattu.bangke;
 
+import com.tcdt.qlnvhang.response.CommonResponse;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
@@ -9,7 +11,8 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class NhBangKeVtRes {
+@EqualsAndHashCode(callSuper = false)
+public class NhBangKeVtRes extends CommonResponse {
     private Long id;
     private Long qdgnvnxId;
     private String soQuyetDinhNhap;
@@ -26,10 +29,6 @@ public class NhBangKeVtRes {
     private String soHopDong;
     private LocalDate ngayNhap;
     private LocalDate ngayTaoBangKe;
-    private String trangThai;
-    private String tenTrangThai;
-    private String trangThaiDuyet;
-    private String lyDoTuChoi;
 
     private String tenDiemKho;
     private String maDiemKho;
