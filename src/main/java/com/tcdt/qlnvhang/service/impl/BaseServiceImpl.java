@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.tcdt.qlnvhang.request.QlnvDmDonviSearchReq;
 import com.tcdt.qlnvhang.request.object.HhDmDviLquanSearchReq;
+import com.tcdt.qlnvhang.response.CommonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -363,6 +364,13 @@ public class BaseServiceImpl {
 			req.setMaDvis(Collections.singleton(userInfo.getDvql()));
 		}
 		req.setTrangThais(trangThais);
+	}
+
+	public <T extends CommonResponse> void setThongTinDonVi(T res, String maDvi) throws Exception {
+		QlnvDmDonvi donvi = getDviByMa(maDvi, request);
+		res.setMaDvi(donvi.getMaDvi());
+		res.setTenDvi(donvi.getTenDvi());
+		res.setMaQhns(donvi.getMaQhns());
 	}
 }
 
