@@ -19,4 +19,7 @@ public interface KeHoachBanDauGiaService {
 
 	boolean deleteMultiple (List<Long> ids) throws Exception;
 
+	KeHoachBanDauGiaResponse detail(Long id) throws Exception;
+
+
 }

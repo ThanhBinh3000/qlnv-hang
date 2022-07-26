@@ -145,4 +145,21 @@ public class KeHoachBanDauGiaController extends BaseController {
 			log.error("Error can not export", e);
 		}
 	}
+
+	@ApiOperation(value = "Thông tin chi tiết kế hoạch bán đấu giá hàng hóa", response = Boolean.class)
+	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<BaseResponse> detail(@PathVariable("id") Long id) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			KeHoachBanDauGiaResponse res = keHoachBanDauGiaService.detail(id);
+			resp.setData(res);
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error(e.getMessage());
+		}
+		return ResponseEntity.ok(resp);
+	}
 }

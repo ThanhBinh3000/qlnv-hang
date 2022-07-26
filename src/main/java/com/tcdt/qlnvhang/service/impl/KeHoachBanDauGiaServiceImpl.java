@@ -287,6 +287,7 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 
 		return new PageImpl<>(responseDto);
 	}
+
 	@Override
 	public KeHoachBanDauGiaResponse updateTrangThai(Long id, String trangThaiId) throws Exception {
 		UserInfo userInfo = SecurityContextService.getUser();
@@ -315,8 +316,8 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 		if (CollectionUtils.isEmpty(list))
 			return true;
 
-		String[] rowsName = new String[] { STT, SO_KE_HOACH, NGAY_LAP_KE_HOACH, NGAY_KY,
-				TRICH_YEU, LOAI_HANG_HOA, SO_QD_GIAO_CHI_TIEU, SO_QD_PHE_DUYET_KH_BAN_DAU_GIA,NAM_KE_HOACH, TRANG_THAI};
+		String[] rowsName = new String[]{STT, SO_KE_HOACH, NGAY_LAP_KE_HOACH, NGAY_KY,
+				TRICH_YEU, LOAI_HANG_HOA, SO_QD_GIAO_CHI_TIEU, SO_QD_PHE_DUYET_KH_BAN_DAU_GIA, NAM_KE_HOACH, TRANG_THAI};
 		String filename = "ke_hoach_ban_dau_gia_hang_hoa.xlsx";
 
 		List<Object[]> dataList = new ArrayList<Object[]>();
@@ -366,5 +367,17 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 		log.info("Delete ke hoach ban dau gia");
 		keHoachBanDauGiaRepository.deleteAllByIdIn(ids);
 		return true;
+	}
+
+	@Override
+	public KeHoachBanDauGiaResponse detail(Long id) throws Exception {
+		UserInfo userInfo = SecurityContextService.getUser();
+		if (userInfo == null) throw new Exception("Bad request.");
+
+		Optional<KeHoachBanDauGia> optional = keHoachBanDauGiaRepository.findById(id);
+		if (!optional.isPresent())
+			throw new Exception("Kế hoạch bán đấu giá không tồn tại");
+		KeHoachBanDauGia keHoachDauGia = optional.get();
+		return kehoachResponseMapper.toDto(keHoachDauGia);
 	}
 }
