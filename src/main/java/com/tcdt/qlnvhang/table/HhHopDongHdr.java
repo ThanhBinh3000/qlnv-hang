@@ -102,6 +102,8 @@ public class HhHopDongHdr implements Serializable {
 
 	String diaChi;
 
+	Integer tgianBhanh;
+
 	String mst;
 
 	String sdt;

@@ -99,6 +99,8 @@ public class HhHopDongHdrReq {
 	@ApiModelProperty(example = "2022")
 	Long namKh;
 
+	Integer tgianBhanh;
+
 	//Thông tin chủ đầu tư
 
 	String maDvi;
