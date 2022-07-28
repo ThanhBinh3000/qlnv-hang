@@ -1,8 +1,8 @@
 package com.tcdt.qlnvhang.response.banhangdaugia.bienbanbandaugia;
 
 import com.tcdt.qlnvhang.response.CommonResponse;
-import com.tcdt.qlnvhang.response.CommonResponse;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
@@ -11,6 +11,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class BhBbBanDauGiaRes extends CommonResponse {
     private Long id;
     private String soBienBan;
@@ -33,6 +34,6 @@ public class BhBbBanDauGiaRes extends CommonResponse {
 
     private String hinhThucDauGia;
     private String phuongThucDauGia;
-    private List<BhBbBanDauGiaCtRes> ct = new ArrayList<>();
-    private List<BhBbBanDauGiaCt1Res> ct1 = new ArrayList<>();
+    private List<BhBbBanDauGiaCtRes> cts = new ArrayList<>();
+    private List<BhBbBanDauGiaCt1Res> ct1s = new ArrayList<>();
 }

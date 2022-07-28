@@ -16,6 +16,7 @@ import com.tcdt.qlnvhang.request.bandaugia.bienbanbandaugia.BhBbBanDauGiaCt1Req;
 import com.tcdt.qlnvhang.request.bandaugia.bienbanbandaugia.BhBbBanDauGiaCtReq;
 import com.tcdt.qlnvhang.request.bandaugia.bienbanbandaugia.BhBbBanDauGiaReq;
 import com.tcdt.qlnvhang.request.bandaugia.bienbanbandaugia.BhBbBanDauGiaSearchReq;
+import com.tcdt.qlnvhang.response.banhangdaugia.bienbanbandaugia.BhBbBanDauGiaCt1Res;
 import com.tcdt.qlnvhang.response.banhangdaugia.bienbanbandaugia.BhBbBanDauGiaCtRes;
 import com.tcdt.qlnvhang.response.banhangdaugia.bienbanbandaugia.BhBbBanDauGiaRes;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -154,11 +155,8 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
         BeanUtils.copyProperties(item, res);
         res.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
         res.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
-        for (BhBbBanDauGiaCt ct : item.getCts()) {
-            chiTiets.add(new BhBbBanDauGiaCtRes(ct));
-        }
-        res.setCt(chiTiets);
-
+        res.setCts(item.getCts().stream().map(BhBbBanDauGiaCtRes::new).collect(Collectors.toList()));
+        res.setCt1s(item.getCt1s().stream().map(BhBbBanDauGiaCt1Res::new).collect(Collectors.toList()));
         Set<String> maVatTus = Collections.singleton(item.getMaVatTuCha());
         Set<QlnvDmVattu> vatTus = Sets.newHashSet(qlnvDmVattuRepository.findByMaIn(maVatTus));
 
@@ -217,6 +215,7 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
 
         BhBbBanDauGia item = optional.get();
         item.setCts(bhBbBanDauGiaCtRepository.findByBbBanDauGiaIdIn(Collections.singleton(item.getId())));
+        item.setCt1s(banDauGiaPhanLoTaiSanRepository.findByBbBanDauGiaIdIn(Collections.singleton(item.getId())));
         return this.buildResponse(item);
     }
 

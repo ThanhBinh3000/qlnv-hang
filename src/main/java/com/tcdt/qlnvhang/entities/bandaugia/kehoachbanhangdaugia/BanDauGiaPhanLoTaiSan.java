@@ -62,6 +62,7 @@ public class BanDauGiaPhanLoTaiSan {
 	@Column(name = "DON_VI_TINH")
 	private String donViTinh;
 
+	// Bien ban ban dau gia
 	@Column(name = "BB_BAN_DAU_GIA_ID")
 	private Long bbBanDauGiaId;
 
@@ -76,4 +77,16 @@ public class BanDauGiaPhanLoTaiSan {
 
 	@Column(name = "TRA_GIA_CAO_NHAT")
 	private String traGiaCaoNhat;
+
+	// Quyet dinh Phe duyet ket qua ban dau gia
+	@Column(name = "TRA_GIA_CAO_NHAT")
+	private BigDecimal donGiaTrungDauGia;
+
+	@Column(name = "TRA_GIA_CAO_NHAT")
+	private String trungDauGia;
+
+	@Column(name = "QD_PHE_DUYET_KQBDG_ID")
+	private String qdPheDuyetKqbdgId;
+
+
 }
