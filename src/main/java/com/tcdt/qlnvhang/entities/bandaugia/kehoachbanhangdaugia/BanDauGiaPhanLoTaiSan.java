@@ -79,10 +79,10 @@ public class BanDauGiaPhanLoTaiSan {
 	private String traGiaCaoNhat;
 
 	// Quyet dinh Phe duyet ket qua ban dau gia
-	@Column(name = "TRA_GIA_CAO_NHAT")
+	@Column(name = "DON_GIA_TRUNG_DAU_GIA")
 	private BigDecimal donGiaTrungDauGia;
 
-	@Column(name = "TRA_GIA_CAO_NHAT")
+	@Column(name = "TRUNG_DAU_GIA")
 	private String trungDauGia;
 
 	@Column(name = "QD_PHE_DUYET_KQBDG_ID")

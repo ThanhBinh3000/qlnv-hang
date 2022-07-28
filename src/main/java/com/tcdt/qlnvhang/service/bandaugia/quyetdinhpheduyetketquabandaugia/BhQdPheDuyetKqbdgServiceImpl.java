@@ -1,24 +1,21 @@
-package com.tcdt.qlnvhang.service.bandaugia.bienbanbandaugia;
+package com.tcdt.qlnvhang.service.bandaugia.quyetdinhpheduyetketquabandaugia;
 
 import com.google.common.collect.Sets;
-import com.tcdt.qlnvhang.entities.bandaugia.bienbanbandaugia.BhBbBanDauGia;
-import com.tcdt.qlnvhang.entities.bandaugia.bienbanbandaugia.BhBbBanDauGiaCt;
 import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.BanDauGiaPhanLoTaiSan;
+import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetketquabandaugia.BhQdPheDuyetKqbdg;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
-import com.tcdt.qlnvhang.repository.bandaugia.bienbanbandaugia.BhBbBanDauGiaCtRepository;
-import com.tcdt.qlnvhang.repository.bandaugia.bienbanbandaugia.BhBbBanDauGiaRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.kehoachbanhangdaugia.BanDauGiaPhanLoTaiSanRepository;
+import com.tcdt.qlnvhang.repository.bandaugia.quyetdinhpheduyetketquabandaugia.BhQdPheDuyetKqbdgRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.bandaugia.bienbanbandaugia.BhBbBanDauGiaCt1Req;
-import com.tcdt.qlnvhang.request.bandaugia.bienbanbandaugia.BhBbBanDauGiaCtReq;
-import com.tcdt.qlnvhang.request.bandaugia.bienbanbandaugia.BhBbBanDauGiaReq;
-import com.tcdt.qlnvhang.request.bandaugia.bienbanbandaugia.BhBbBanDauGiaSearchReq;
-import com.tcdt.qlnvhang.response.banhangdaugia.bienbanbandaugia.BhBbBanDauGiaCt1Res;
-import com.tcdt.qlnvhang.response.banhangdaugia.bienbanbandaugia.BhBbBanDauGiaCtRes;
-import com.tcdt.qlnvhang.response.banhangdaugia.bienbanbandaugia.BhBbBanDauGiaRes;
+import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetketquabandaugia.BhQdPheDuyetKqbdgCtReq;
+import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetketquabandaugia.BhQdPheDuyetKqbdgReq;
+import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetketquabandaugia.BhQdPheDuyetKqbdgSearchReq;
+import com.tcdt.qlnvhang.response.banhangdaugia.quyetdinhpheduyetketquabandaugia.BhQdPheDuyetKqbdgCtRes;
+import com.tcdt.qlnvhang.response.banhangdaugia.quyetdinhpheduyetketquabandaugia.BhQdPheDuyetKqbdgRes;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
@@ -46,84 +43,55 @@ import java.util.stream.Collectors;
 @Service
 @Log4j2
 @RequiredArgsConstructor
-public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBanDauGiaService {
-    private final BhBbBanDauGiaRepository bhBbBanDauGiaRepository;
-    private final BhBbBanDauGiaCtRepository bhBbBanDauGiaCtRepository;
+public class BhQdPheDuyetKqbdgServiceImpl extends BaseServiceImpl implements BhQdPheDuyetKqbdgService {
+    private final BhQdPheDuyetKqbdgRepository bhQdPheDuyetKqbdgRepository;
     private final QlnvDmVattuRepository qlnvDmVattuRepository;
     private final BanDauGiaPhanLoTaiSanRepository banDauGiaPhanLoTaiSanRepository;
+    private final FileDinhKemService fileDinhKemService;
 
-    private static final String SHEET_BIEN_BAN_BAN_DAU_GIA = "Biên bản bán đấu giá";
+    private static final String SHEET_QUYET_DINH_PHE_DUYET_KET_QUA_BAN_DAU_GIA = "Quyết định phê duyệt kết quả bán đấu giá";
     private static final String STT = "STT";
-    private static final String SO_BIEN_BAN_BDG = "Số Biên bản BĐG";
-    private static final String DON_VI = "Đơn Vị";
-    private static final String NGAY_TO_CHUC_BDG = "Ngày Tổ Chức BĐG";
+    private static final String SO_QD_PHE_DUYET_KQ_BDG = "Số QĐ Phê Duyệt KQ BĐG";
+    private static final String NGAY_KY = "Ngày Ký";
     private static final String TRICH_YEU = "Trích Yếu";
+    private static final String NGAY_TO_CHUC_BDG = "Ngày Tổ Chức BĐG";
     private static final String SO_QD_PHE_DUYET_KH_BDG = "Số QĐ Phê Duyệt KH BĐG";
     private static final String MA_THONG_BAO_BDG = "Mã Thông Báo BĐG";
     private static final String HINH_THUC_DAU_GIA = "Hình Thức Đấu Giá";
     private static final String PHUONG_THUC_DAU_GIA = "Phương Thức Đấu Giá";
     private static final String LOAI_HANG_HOA = "Loại Hàng Hóa";
     private static final String NAM_KE_HOACH = "Năm Kế Hoạch";
-    private static final String SO_QD_PHE_DUYET_KQ_BDG = "Số QĐ Phê Duyệt KQ BĐG";
+    private static final String SO_TB_DAU_GIA_KHONG_THANH = "Số TB Đấu Giá Không Thành";
+    private static final String SO_BIEN_BAN_DAU_GIA = "Số Biên Bản Đấu Giá";
     private static final String TRANG_THAI = "Trạng Thái";
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public BhBbBanDauGiaRes create(BhBbBanDauGiaReq req) throws Exception {
+    public BhQdPheDuyetKqbdgRes create(BhQdPheDuyetKqbdgReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
-        this.validateSoPhieu(null, req);
+        this.validateSoQd(null, req);
 
-        BhBbBanDauGia item = new BhBbBanDauGia();
+        BhQdPheDuyetKqbdg item = new BhQdPheDuyetKqbdg();
         BeanUtils.copyProperties(req, item, "id");
         item.setNgayTao(LocalDate.now());
         item.setNguoiTaoId(userInfo.getId());
         item.setTrangThai(TrangThaiEnum.DU_THAO.getId());
         item.setMaDvi(userInfo.getDvql());
         item.setCapDvi(userInfo.getCapDvi());
-        item.setSo(getSo());
         item.setNam(LocalDate.now().getYear());
-        item.setSoBienBan(String.format("%s/%s/%s-%s", item.getSo(), item.getNam(), "BDG", userInfo.getMaPbb()));
-        bhBbBanDauGiaRepository.save(item);
+        bhQdPheDuyetKqbdgRepository.save(item);
 
-        List<BhBbBanDauGiaCt> chiTiets = this.saveListChiTiet(item.getId(), req.getCts(), new HashMap<>());
-        item.setCts(chiTiets);
-
-        List<BanDauGiaPhanLoTaiSan> ct1s = this.saveListChiTiet1(item.getId(), req.getCt1s(), new HashMap<>());
-        item.setCt1s(ct1s);
+        List<BanDauGiaPhanLoTaiSan> cts = this.saveListChiTiet1(item.getId(), req.getCts(), new HashMap<>());
+        item.setCts(cts);
+        item.setFileDinhKems(fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReqs(), item.getId(), BhQdPheDuyetKqbdg.TABLE_NAME));
         return this.buildResponse(item);
     }
 
-    private List<BhBbBanDauGiaCt> saveListChiTiet(Long parentId,
-                                               List<BhBbBanDauGiaCtReq> chiTietReqs,
-                                               Map<Long, BhBbBanDauGiaCt> mapChiTiet) throws Exception {
-        List<BhBbBanDauGiaCt> chiTiets = new ArrayList<>();
-        for (BhBbBanDauGiaCtReq req : chiTietReqs) {
-            Long id = req.getId();
-            BhBbBanDauGiaCt chiTiet = new BhBbBanDauGiaCt();
-
-            if (id != null && id > 0) {
-                chiTiet = mapChiTiet.get(id);
-                if (chiTiet == null)
-                    throw new Exception("Biên bản bán đấu giá chi tiết không tồn tại.");
-                mapChiTiet.remove(id);
-            }
-
-            BeanUtils.copyProperties(req, chiTiet, "id");
-            chiTiet.setBbBanDauGiaId(parentId);
-            chiTiets.add(chiTiet);
-        }
-
-        if (!CollectionUtils.isEmpty(chiTiets))
-            bhBbBanDauGiaCtRepository.saveAll(chiTiets);
-
-        return chiTiets;
-    }
-
     private List<BanDauGiaPhanLoTaiSan> saveListChiTiet1(Long parentId,
-                                                  List<BhBbBanDauGiaCt1Req> chiTietReqs,
+                                                  List<BhQdPheDuyetKqbdgCtReq> chiTietReqs,
                                                   Map<Long, BanDauGiaPhanLoTaiSan> mapChiTiet) throws Exception {
         List<BanDauGiaPhanLoTaiSan> chiTiets = new ArrayList<>();
-        for (BhBbBanDauGiaCt1Req req : chiTietReqs) {
+        for (BhQdPheDuyetKqbdgCtReq req : chiTietReqs) {
             Long id = req.getId();
             BanDauGiaPhanLoTaiSan chiTiet = new BanDauGiaPhanLoTaiSan();
 
@@ -135,10 +103,8 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
             }
 
             chiTiet.setBbBanDauGiaId(parentId);
-            chiTiet.setSoLanTraGia(req.getSoLanTraGia());
-            chiTiet.setDonGiaCaoNhat(req.getDonGiaCaoNhat());
-            chiTiet.setThanhTien(req.getThanhTien());
-            chiTiet.setTraGiaCaoNhat(req.getTraGiaCaoNhat());
+            chiTiet.setDonGiaTrungDauGia(req.getDonGiaTrungDauGia());
+            chiTiet.setTrungDauGia(req.getTrungDauGia());
             chiTiets.add(chiTiet);
         }
 
@@ -149,14 +115,12 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
     }
 
 
-    private BhBbBanDauGiaRes buildResponse(BhBbBanDauGia item) throws Exception {
-        BhBbBanDauGiaRes res = new BhBbBanDauGiaRes();
-        List<BhBbBanDauGiaCtRes> chiTiets = new ArrayList<>();
+    private BhQdPheDuyetKqbdgRes buildResponse(BhQdPheDuyetKqbdg item) throws Exception {
+        BhQdPheDuyetKqbdgRes res = new BhQdPheDuyetKqbdgRes();
         BeanUtils.copyProperties(item, res);
         res.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
         res.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
-        res.setCts(item.getCts().stream().map(BhBbBanDauGiaCtRes::new).collect(Collectors.toList()));
-        res.setCt1s(item.getCt1s().stream().map(BhBbBanDauGiaCt1Res::new).collect(Collectors.toList()));
+        res.setCts(item.getCts().stream().map(BhQdPheDuyetKqbdgCtRes::new).collect(Collectors.toList()));
         Set<String> maVatTus = Collections.singleton(item.getMaVatTuCha());
         Set<QlnvDmVattu> vatTus = Sets.newHashSet(qlnvDmVattuRepository.findByMaIn(maVatTus));
 
@@ -172,50 +136,42 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public BhBbBanDauGiaRes update(BhBbBanDauGiaReq req) throws Exception {
+    public BhQdPheDuyetKqbdgRes update(BhQdPheDuyetKqbdgReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
 
-        Optional<BhBbBanDauGia> optional = bhBbBanDauGiaRepository.findById(req.getId());
+        Optional<BhQdPheDuyetKqbdg> optional = bhQdPheDuyetKqbdgRepository.findById(req.getId());
         if (!optional.isPresent())
             throw new Exception("Biên bản bán đấu giá không tồn tại.");
 
-        this.validateSoPhieu(optional.get(), req);
+        this.validateSoQd(optional.get(), req);
 
-        BhBbBanDauGia item = optional.get();
+        BhQdPheDuyetKqbdg item = optional.get();
         BeanUtils.copyProperties(req, item, "id", "so", "nam");
         item.setNgaySua(LocalDate.now());
         item.setNguoiSuaId(userInfo.getId());
 
-        bhBbBanDauGiaRepository.save(item);
-        Map<Long, BhBbBanDauGiaCt> mapChiTiet = bhBbBanDauGiaCtRepository.findByBbBanDauGiaIdIn(Collections.singleton(item.getId()))
-                .stream().collect(Collectors.toMap(BhBbBanDauGiaCt::getId, Function.identity()));
-
-        List<BhBbBanDauGiaCt> chiTiets = this.saveListChiTiet(item.getId(), req.getCts(), mapChiTiet);
-        item.setCts(chiTiets);
-
-        if (!CollectionUtils.isEmpty(mapChiTiet.values()))
-            bhBbBanDauGiaCtRepository.deleteAll(mapChiTiet.values());
+        bhQdPheDuyetKqbdgRepository.save(item);
 
         Map<Long, BanDauGiaPhanLoTaiSan> mapChiTiet1 = banDauGiaPhanLoTaiSanRepository.findByBbBanDauGiaIdIn(Collections.singleton(item.getId()))
                 .stream().collect(Collectors.toMap(BanDauGiaPhanLoTaiSan::getId, Function.identity()));
 
         // Bien ban phan lo
-        List<BanDauGiaPhanLoTaiSan> chiTiet1s = this.saveListChiTiet1(item.getId(), req.getCt1s(), mapChiTiet1);
-        item.setCt1s(chiTiet1s);
-
+        List<BanDauGiaPhanLoTaiSan> chiTiets = this.saveListChiTiet1(item.getId(), req.getCts(), mapChiTiet1);
+        item.setCts(chiTiets);
+        item.setFileDinhKems(fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReqs(), item.getId(), BhQdPheDuyetKqbdg.TABLE_NAME));
         return this.buildResponse(item);
     }
 
     @Override
-    public BhBbBanDauGiaRes detail(Long id) throws Exception {
+    public BhQdPheDuyetKqbdgRes detail(Long id) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
-        Optional<BhBbBanDauGia> optional = bhBbBanDauGiaRepository.findById(id);
+        Optional<BhQdPheDuyetKqbdg> optional = bhQdPheDuyetKqbdgRepository.findById(id);
         if (!optional.isPresent())
             throw new Exception("Biên bản bán đấu giá không tồn tại.");
 
-        BhBbBanDauGia item = optional.get();
-        item.setCts(bhBbBanDauGiaCtRepository.findByBbBanDauGiaIdIn(Collections.singleton(item.getId())));
-        item.setCt1s(banDauGiaPhanLoTaiSanRepository.findByBbBanDauGiaIdIn(Collections.singleton(item.getId())));
+        BhQdPheDuyetKqbdg item = optional.get();
+        item.setCts(banDauGiaPhanLoTaiSanRepository.findByBbBanDauGiaIdIn(Collections.singleton(item.getId())));
+        item.setFileDinhKems(fileDinhKemService.search(item.getId(), Collections.singleton(BhQdPheDuyetKqbdg.TABLE_NAME)));
         return this.buildResponse(item);
     }
 
@@ -223,16 +179,17 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
     @Transactional(rollbackOn = Exception.class)
     public boolean delete(Long id) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
-        Optional<BhBbBanDauGia> optional = bhBbBanDauGiaRepository.findById(id);
+        Optional<BhQdPheDuyetKqbdg> optional = bhQdPheDuyetKqbdgRepository.findById(id);
         if (!optional.isPresent())
             throw new Exception("Biên bản bán đấu giá không tồn tại.");
 
-        BhBbBanDauGia item = optional.get();
+        BhQdPheDuyetKqbdg item = optional.get();
         if (TrangThaiEnum.BAN_HANH.getId().equals(item.getTrangThai())) {
             throw new Exception("Không thể xóa Biên bản bán đấu giá đã ban hành");
         }
-        bhBbBanDauGiaCtRepository.deleteByBbBanDauGiaIdIn(Collections.singleton(item.getId()));
-        bhBbBanDauGiaRepository.delete(item);
+        fileDinhKemService.delete(item.getId(), Collections.singleton(BhQdPheDuyetKqbdg.TABLE_NAME));
+        bhQdPheDuyetKqbdgRepository.delete(item);
+
         return true;
     }
 
@@ -240,11 +197,11 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
     @Transactional(rollbackOn = Exception.class)
     public boolean updateStatusQd(StatusReq stReq) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
-        Optional<BhBbBanDauGia> optional = bhBbBanDauGiaRepository.findById(stReq.getId());
+        Optional<BhQdPheDuyetKqbdg> optional = bhQdPheDuyetKqbdgRepository.findById(stReq.getId());
         if (!optional.isPresent())
             throw new Exception("Biên bản bán đấu giá không tồn tại.");
 
-        BhBbBanDauGia phieu = optional.get();
+        BhQdPheDuyetKqbdg phieu = optional.get();
 
         String trangThai = phieu.getTrangThai();
         if (TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(stReq.getTrangThai())) {
@@ -279,77 +236,78 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
             throw new Exception("Bad request.");
         }
 
-        bhBbBanDauGiaRepository.save(phieu);
+        bhQdPheDuyetKqbdgRepository.save(phieu);
         return true;
     }
 
     @Override
-    public Page<BhBbBanDauGiaRes> search(BhBbBanDauGiaSearchReq req) throws Exception {
+    public Page<BhQdPheDuyetKqbdgRes> search(BhQdPheDuyetKqbdgSearchReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
 
         this.prepareSearchReq(req, userInfo, req.getCapDvis(), req.getTrangThais());
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        List<Object[]> data = bhBbBanDauGiaRepository.search(req, pageable);
-        List<BhBbBanDauGiaRes> responses = new ArrayList<>();
+        List<Object[]> data = bhQdPheDuyetKqbdgRepository.search(req, pageable);
+        List<BhQdPheDuyetKqbdgRes> responses = new ArrayList<>();
         for (Object[] o : data) {
-            BhBbBanDauGiaRes response = new BhBbBanDauGiaRes();
-            BhBbBanDauGia item = (BhBbBanDauGia) o[0];
+            BhQdPheDuyetKqbdgRes response = new BhQdPheDuyetKqbdgRes();
+            BhQdPheDuyetKqbdg item = (BhQdPheDuyetKqbdg) o[0];
             Long thongBaoBdgId = o[1] != null ? (Long) o[1] : null;
             String maThongBaoBdg = o[2] != null ? (String) o[2] : null;
             String hinhThucDauGia = o[3] != null ? (String) o[3] : null;
             String phuongThucDauGia = o[4] != null ? (String) o[4] : null;
-            String maVatTuCha = o[5] != null ? (String) o[5] : null;
-            String tenVatTuCha = o[6] != null ? (String) o[6] : null;
-            Long qdPdKhBdgId = o[7] != null ? (Long) o[7] : null;
-            String soQdPdKhBdg = o[8] != null ? (String) o[8] : null;
-            Long qdPdKqBdgId = o[9] != null ? (Long) o[9] : null;
-            String soQdPdKqBdg = o[10] != null ? (String) o[10] : null;
+            Long bbBanDauGiaId = o[5] != null ? (Long) o[5] : null;
+            String soBienBanDauGia = o[6] != null ? (String) o[6] : null;
+            LocalDate ngayToChuc = o[7] != null ? (LocalDate) o[7] : null;
+            String maVatTuCha = o[8] != null ? (String) o[8] : null;
+            String tenVatTuCha = o[9] != null ? (String) o[9] : null;
+            Long qdPdKhBdgId = o[10] != null ? (Long) o[10] : null;
+            String soQdPdKhBdg = o[11] != null ? (String) o[11] : null;
 
             BeanUtils.copyProperties(item, response);
-
             response.setThongBaoBdgId(thongBaoBdgId);
             response.setMaThongBaoBdg(maThongBaoBdg);
             response.setHinhThucDauGia(hinhThucDauGia);
             response.setPhuongThucDauGia(phuongThucDauGia);
-
+            response.setBienBanBdgId(bbBanDauGiaId);
+            response.setSoBienBanBdg(soBienBanDauGia);
+            response.setNgayToChuc(ngayToChuc);
             response.setMaVatTuCha(maVatTuCha);
             response.setTenVatTuCha(tenVatTuCha);
-
-            response.setQdPdKhBdgId(qdPdKhBdgId);
-            response.setSoQdPdKhBdg(soQdPdKhBdg);
-
-            response.setQdPdKqBdgId(qdPdKqBdgId);
-            response.setSoQdPdKqBdg(soQdPdKqBdg);
+            response.setQdPheDuyetKhBdgId(qdPdKhBdgId);
+            response.setSoQdPheDuyetKhBdg(soQdPdKhBdg);
             response.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
             response.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
             responses.add(response);
         }
 
-        return new PageImpl<>(responses, pageable, bhBbBanDauGiaRepository.count(req));
+        return new PageImpl<>(responses, pageable, bhQdPheDuyetKqbdgRepository.count(req));
     }
 
     @Override
     @Transactional(rollbackOn = Exception.class)
     public boolean deleteMultiple(DeleteReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
-        bhBbBanDauGiaCtRepository.deleteByBbBanDauGiaIdIn(req.getIds());
-        bhBbBanDauGiaRepository.deleteByIdIn(req.getIds());
+        if (CollectionUtils.isEmpty(req.getIds()))
+            return false;
+
+        fileDinhKemService.deleteMultiple(req.getIds(), Collections.singleton(BhQdPheDuyetKqbdg.TABLE_NAME));
+        bhQdPheDuyetKqbdgRepository.deleteByIdIn(req.getIds());
         return true;
     }
 
     @Override
-    public boolean exportToExcel(BhBbBanDauGiaSearchReq objReq, HttpServletResponse response) throws Exception {
+    public boolean exportToExcel(BhQdPheDuyetKqbdgSearchReq objReq, HttpServletResponse response) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         this.prepareSearchReq(objReq, userInfo, objReq.getCapDvis(), objReq.getTrangThais());
         objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
-        List<BhBbBanDauGiaRes> list = this.search(objReq).get().collect(Collectors.toList());
+        List<BhQdPheDuyetKqbdgRes> list = this.search(objReq).get().collect(Collectors.toList());
 
         if (CollectionUtils.isEmpty(list))
             return true;
 
-        String[] rowsName = new String[] { STT, SO_BIEN_BAN_BDG, DON_VI, NGAY_TO_CHUC_BDG,
-                TRICH_YEU, SO_QD_PHE_DUYET_KH_BDG, MA_THONG_BAO_BDG, HINH_THUC_DAU_GIA, PHUONG_THUC_DAU_GIA,
-                LOAI_HANG_HOA, NAM_KE_HOACH, SO_QD_PHE_DUYET_KQ_BDG, TRANG_THAI};
+        String[] rowsName = new String[] { STT, SO_QD_PHE_DUYET_KQ_BDG, NGAY_KY, TRICH_YEU, NGAY_TO_CHUC_BDG,
+                SO_QD_PHE_DUYET_KH_BDG, MA_THONG_BAO_BDG, HINH_THUC_DAU_GIA, PHUONG_THUC_DAU_GIA,
+                LOAI_HANG_HOA, NAM_KE_HOACH, SO_TB_DAU_GIA_KHONG_THANH, SO_BIEN_BAN_DAU_GIA, TRANG_THAI};
         String filename = "Danh_sach_bien_ban_ban_dau_gia.xlsx";
 
         List<Object[]> dataList = new ArrayList<Object[]>();
@@ -357,25 +315,26 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
 
         try {
             for (int i = 0; i < list.size(); i++) {
-                BhBbBanDauGiaRes item = list.get(i);
+                BhQdPheDuyetKqbdgRes item = list.get(i);
                 objs = new Object[rowsName.length];
                 objs[0] = i;
-                objs[1] = item.getSoBienBan();
-                objs[2] = item.getTenDvi();
-                objs[3] = LocalDateTimeUtils.localDateToString(item.getNgayToChuc());
-                objs[4] = item.getTrichYeu();
-                objs[5] = item.getSoQdPdKhBdg();
+                objs[1] = item.getSoQuyetDinh();
+                objs[2] = LocalDateTimeUtils.localDateToString(item.getNgayKy());
+                objs[3] = item.getTrichYeu();
+                objs[4] = LocalDateTimeUtils.localDateToString(item.getNgayToChuc());
+                objs[5] = item.getSoQdPheDuyetKhBdg();
                 objs[6] = item.getMaThongBaoBdg();
                 objs[7] = item.getHinhThucDauGia();
                 objs[8] = item.getPhuongThucDauGia();
                 objs[9] = item.getTenVatTuCha();
                 objs[10] = item.getNam();
-                objs[11] = item.getSoQdPdKqBdg();
-                objs[12] = TrangThaiEnum.getTenById(item.getTrangThai());
+                objs[11] = item.getMaThongBaoBdgKt();
+                objs[12] = item.getSoBienBanBdg();
+                objs[13] = TrangThaiEnum.getTenById(item.getTrangThai());
                 dataList.add(objs);
             }
 
-            ExportExcel ex = new ExportExcel(SHEET_BIEN_BAN_BAN_DAU_GIA, filename, rowsName, dataList, response);
+            ExportExcel ex = new ExportExcel(SHEET_QUYET_DINH_PHE_DUYET_KET_QUA_BAN_DAU_GIA, filename, rowsName, dataList, response);
             ex.export();
         } catch (Exception e) {
             log.error("Error export", e);
@@ -385,23 +344,15 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
         return true;
     }
 
-    public Integer getSo() throws Exception {
-        UserInfo userInfo = UserUtils.getUserInfo();
-        Integer so = bhBbBanDauGiaRepository.findMaxSo(userInfo.getDvql(), LocalDate.now().getYear());
-        so = Optional.ofNullable(so).orElse(0);
-        so = so + 1;
-        return so;
-    }
-
-    private void validateSoPhieu(BhBbBanDauGia update, BhBbBanDauGiaReq req) throws Exception {
-        String so = req.getSoBienBan();
-        if (!StringUtils.hasText(so))
+    private void validateSoQd(BhQdPheDuyetKqbdg update, BhQdPheDuyetKqbdgReq req) throws Exception {
+        String soQd = req.getSoQuyetDinh();
+        if (!StringUtils.hasText(soQd))
             return;
-        if (update == null || (StringUtils.hasText(update.getSoBienBan()) && !update.getSoBienBan().equalsIgnoreCase(so))) {
-            Optional<BhBbBanDauGia> optional = bhBbBanDauGiaRepository.findFirstBySoBienBan(so);
-            Long updateId = Optional.ofNullable(update).map(BhBbBanDauGia::getId).orElse(null);
+        if (update == null || (StringUtils.hasText(update.getSoQuyetDinh()) && !update.getSoQuyetDinh().equalsIgnoreCase(soQd))) {
+            Optional<BhQdPheDuyetKqbdg> optional = bhQdPheDuyetKqbdgRepository.findFirstBySoQuyetDinh(soQd);
+            Long updateId = Optional.ofNullable(update).map(BhQdPheDuyetKqbdg::getId).orElse(null);
             if (optional.isPresent() && !optional.get().getId().equals(updateId))
-                throw new Exception("Số Biên bản bán đấu giá " + so + " đã tồn tại");
+                throw new Exception("Số quyết định " + soQd + " đã tồn tại");
         }
     }
 }

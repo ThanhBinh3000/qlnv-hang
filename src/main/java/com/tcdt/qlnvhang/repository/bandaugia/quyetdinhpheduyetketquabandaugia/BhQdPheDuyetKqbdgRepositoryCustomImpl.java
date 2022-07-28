@@ -1,37 +1,33 @@
-package com.tcdt.qlnvhang.repository.bandaugia.bienbanbandaugia;
+package com.tcdt.qlnvhang.repository.bandaugia.quyetdinhpheduyetketquabandaugia;
 
-import com.tcdt.qlnvhang.request.bandaugia.bienbanbandaugia.BhBbBanDauGiaSearchReq;
-import com.tcdt.qlnvhang.request.search.BienBanLayMauSearchReq;
+import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetketquabandaugia.BhQdPheDuyetKqbdgSearchReq;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BhBbBanDauGiaRepositoryCustomImpl implements BhBbBanDauGiaRepositoryCustom {
+public class BhQdPheDuyetKqbdgRepositoryCustomImpl implements BhQdPheDuyetKqbdgRepositoryCustom {
 
     @PersistenceContext
     private EntityManager em;
 
     @Override
-    public List<Object[]> search(BhBbBanDauGiaSearchReq req, Pageable pageable) {
+    public List<Object[]> search(BhQdPheDuyetKqbdgSearchReq req, Pageable pageable) {
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT bb, " +
-                "tbBanDauGia.id, tbBanDauGia.maThongBao, tbBanDauGia.hinhThucDauGia, tbBanDauGia.phuongThucDauGia " +
+                "tbBanDauGia.id, tbBanDauGia.maThongBao, tbBanDauGia.hinhThucDauGia, tbBanDauGia.phuongThucDauGia, " +
+                "bbBanDauGia.id, bbBanDauGia.soBienBan, bbBanDauGia.ngayToChuc, " +
                 "vatTuCha.ma, vatTuCha.ten," +
                 "qdPdKhBdg.id, qdPdKhBdg.soQuyetDinh " +
-                "qdPdKqBdg.id, qdPdKqBdg.soQuyetDinh " +
-                "FROM BhBbBanDauGia bb ");
+                "FROM BhQdPheDuyetKqbdg bb ");
         builder.append("INNER JOIN QlnvDmVattu vatTuCha ON bb.maVatTuCha = vatTuCha.ma ");
         builder.append("LEFT JOIN ThongBaoBanDauGia tbBanDauGia ON bb.thongBaoBdgId = tbBanDauGia.id ");
         builder.append("LEFT JOIN BhQdPheDuyetKhbdg qdPdKhBdg ON tbBanDauGia.qdPheDuyetKhBdgId = qdPdKhBdg.id ");
-        builder.append("LEFT JOIN BhQdPheDuyetKqbdg qdPdKqBdg ON qdPdKqBdg.bienBanBdgId = qdPdKhBdg.id ");
+        builder.append("LEFT JOIN BhBbBanDauGia bbBanDauGia ON bb.bienBanBdgId = bbBanDauGia.id ");
 
         setConditionSearchCtkhn(req, builder);
 
@@ -53,19 +49,19 @@ public class BhBbBanDauGiaRepositoryCustomImpl implements BhBbBanDauGiaRepositor
     }
 
 
-    private void setConditionSearchCtkhn(BhBbBanDauGiaSearchReq req, StringBuilder builder) {
+    private void setConditionSearchCtkhn(BhQdPheDuyetKqbdgSearchReq req, StringBuilder builder) {
         builder.append("WHERE 1 = 1 ");
 
 
-        if (!StringUtils.isEmpty(req.getSoBienBan())) {
-            builder.append("AND ").append("LOWER(bb.soBienBan) LIKE :soBienBan ");
+        if (!StringUtils.isEmpty(req.getSoQuyetDinh())) {
+            builder.append("AND ").append("LOWER(bb.soQuyetDinh) LIKE :soQuyetDinh ");
         }
 
-        if (req.getNgayToChucBdgTu() != null) {
-            builder.append("AND ").append("bb.ngayToChuc >= :ngayToChucBdgTu ");
+        if (req.getNgayKyTu() != null) {
+            builder.append("AND ").append("bb.ngayKy >= :ngayKyTu ");
         }
-        if (req.getNgayToChucBdgDen() != null) {
-            builder.append("AND ").append("bb.ngayToChuc <= :ngayToChucBdgDen ");
+        if (req.getNgayKyDen() != null) {
+            builder.append("AND ").append("bb.ngayKy <= :ngayKyDen ");
         }
 
         if (!StringUtils.isEmpty(req.getMaVatTuCha())) {
@@ -92,9 +88,6 @@ public class BhBbBanDauGiaRepositoryCustomImpl implements BhBbBanDauGiaRepositor
             builder.append("AND ").append("bb.nam = :nam ");
         }
 
-        if (!StringUtils.isEmpty(req.getMaThongBaoBdg())) {
-            builder.append("AND ").append("LOWER(tbBanDauGia.maThongBao) LIKE :maThongBaoBdg ");
-        }
 
         if (!StringUtils.isEmpty(req.getTrichYeu())) {
             builder.append("AND ").append("LOWER(bb.trichYeu) LIKE :trichYeu ");
@@ -102,11 +95,14 @@ public class BhBbBanDauGiaRepositoryCustomImpl implements BhBbBanDauGiaRepositor
     }
 
     @Override
-    public int count(BhBbBanDauGiaSearchReq req) {
+    public int count(BhQdPheDuyetKqbdgSearchReq req) {
         int total = 0;
         StringBuilder builder = new StringBuilder();
-        builder.append("SELECT COUNT(DISTINCT bb.id) FROM BhBbBanDauGia bb ");
+        builder.append("SELECT COUNT(DISTINCT bb.id) FROM BhQdPheDuyetKqbdg bb ");
+        builder.append("INNER JOIN QlnvDmVattu vatTuCha ON bb.maVatTuCha = vatTuCha.ma ");
         builder.append("LEFT JOIN ThongBaoBanDauGia tbBanDauGia ON bb.thongBaoBdgId = tbBanDauGia.id ");
+        builder.append("LEFT JOIN BhQdPheDuyetKhBdg qdPdKhBdg ON tbBanDauGia.qdPheDuyetKhBdgId = qdPdKhBdg.id ");
+        builder.append("LEFT JOIN BhBbBanDauGia bbBanDauGia ON bb.bienBanBdgId = bbBanDauGia.id ");
         this.setConditionSearchCtkhn(req, builder);
 
         TypedQuery<Long> query = em.createQuery(builder.toString(), Long.class);
@@ -115,17 +111,17 @@ public class BhBbBanDauGiaRepositoryCustomImpl implements BhBbBanDauGiaRepositor
         return query.getSingleResult().intValue();
     }
 
-    private void setParameterSearchCtkhn(BhBbBanDauGiaSearchReq req, Query query) {
+    private void setParameterSearchCtkhn(BhQdPheDuyetKqbdgSearchReq req, Query query) {
 
-        if (!StringUtils.isEmpty(req.getSoBienBan())) {
-            query.setParameter("soBienBan", "%" + req.getSoBienBan() + "%");
+        if (!StringUtils.isEmpty(req.getSoQuyetDinh())) {
+            query.setParameter("soQuyetDinh", "%" + req.getSoQuyetDinh() + "%");
         }
 
-        if (req.getNgayToChucBdgTu() != null) {
-            query.setParameter("ngayToChucBdgTu", req.getNgayToChucBdgTu());
+        if (req.getNgayKyTu() != null) {
+            query.setParameter("ngayKyTu", req.getNgayKyTu());
         }
-        if (req.getNgayToChucBdgDen() != null) {
-            query.setParameter("ngayToChucBdgDen", req.getNgayToChucBdgDen());
+        if (req.getNgayKyDen() != null) {
+            query.setParameter("ngayKyDen", req.getNgayKyDen());
         }
 
         if (!StringUtils.isEmpty(req.getMaVatTuCha())) {
@@ -150,10 +146,6 @@ public class BhBbBanDauGiaRepositoryCustomImpl implements BhBbBanDauGiaRepositor
 
         if (req.getNam() != null) {
             query.setParameter("nam", req.getNam());
-        }
-
-        if (!StringUtils.isEmpty(req.getMaThongBaoBdg())) {
-            query.setParameter("maThongBaoBdg", "%" + req.getMaThongBaoBdg().toLowerCase() + "%");
         }
 
         if (!StringUtils.isEmpty(req.getTrichYeu())) {
