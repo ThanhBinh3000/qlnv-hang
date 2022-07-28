@@ -2,7 +2,7 @@ package com.tcdt.qlnvhang.response.quanlybienbannhapdaykholuongthuc;
 
 
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
+import com.tcdt.qlnvhang.response.CommonResponse;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class QlBienBanNhapDayKhoLtRes extends SoBienBanPhieuRes {
+public class QlBienBanNhapDayKhoLtRes extends CommonResponse {
     private Long id;
     private String soBienBan;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -49,8 +49,15 @@ public class QlBienBanNhapDayKhoLtRes extends SoBienBanPhieuRes {
     private String trangThaiDuyet;
     private Long qdgnvnxId;
     private String soQuyetDinhNhap;
+
+    private Long bbNghiemThuId;
+    private String soBbNghiemThu;
+    private Long hopDongId;
+    private String soHopDong;
+
     private String maDvi;
     private String tenDvi;
+    private String maQhns;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate ngayNhapDayKho;
     private List<QlBienBanNdkCtLtRes> chiTiets = new ArrayList<>();

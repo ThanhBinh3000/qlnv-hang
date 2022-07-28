@@ -1,7 +1,7 @@
 package com.tcdt.qlnvhang.response.quanlybangkecanhangluongthuc;
 
 import com.tcdt.qlnvhang.request.object.SoBienBanPhieuReq;
-import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
+import com.tcdt.qlnvhang.response.CommonResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class QlBangKeCanHangLtRes extends SoBienBanPhieuRes {
+public class QlBangKeCanHangLtRes extends CommonResponse {
     private Long id;
     private String soBangKe;
     private Long qdgnvnxId;

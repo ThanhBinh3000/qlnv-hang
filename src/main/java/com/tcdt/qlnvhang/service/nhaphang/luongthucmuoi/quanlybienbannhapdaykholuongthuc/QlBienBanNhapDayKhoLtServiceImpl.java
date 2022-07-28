@@ -3,6 +3,8 @@ package com.tcdt.qlnvhang.service.nhaphang.luongthucmuoi.quanlybienbannhapdaykho
 import com.tcdt.qlnvhang.entities.quanlybienbannhapdaykholuongthuc.QlBienBanNdkCtLt;
 import com.tcdt.qlnvhang.entities.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLt;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
+import com.tcdt.qlnvhang.repository.HhBbNghiemthuKlstRepository;
+import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.repository.quanlybienbannhapdaykholuongthuc.QlBienBanNdkCtLtRepository;
@@ -20,9 +22,7 @@ import com.tcdt.qlnvhang.response.quanlybienbannhapdaykholuongthuc.QlBienBanNhap
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
-import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
@@ -80,6 +80,12 @@ public class QlBienBanNhapDayKhoLtServiceImpl extends BaseServiceImpl implements
     private HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
 
     @Autowired
+    private HhBbNghiemthuKlstRepository hhBbNghiemthuKlstRepository;
+
+    @Autowired
+    private HhHopDongRepository hhHopDongRepository;
+
+    @Autowired
     private FileDinhKemService fileDinhKemService;
 
     @Autowired
@@ -125,6 +131,7 @@ public class QlBienBanNhapDayKhoLtServiceImpl extends BaseServiceImpl implements
         QlnvDmDonvi donvi = getDviByMa(item.getMaDvi(), req);
         response.setMaDvi(donvi.getMaDvi());
         response.setTenDvi(donvi.getTenDvi());
+        response.setMaQhns(donvi.getMaQhns());
 
         Set<String> maVatTus = Stream.of(item.getMaVatTu(), item.getMaVatTuCha()).collect(Collectors.toSet());
         if (!CollectionUtils.isEmpty(maVatTus)) {
@@ -151,6 +158,22 @@ public class QlBienBanNhapDayKhoLtServiceImpl extends BaseServiceImpl implements
                 throw new Exception("Không tìm thấy quyết định nhập");
             }
             response.setSoQuyetDinhNhap(qdNhap.get().getSoQd());
+        }
+
+        if (item.getBbNghiemThuId() != null) {
+            Optional<HhBbNghiemthuKlstHdr> bbNghiemThu = hhBbNghiemthuKlstRepository.findById(item.getBbNghiemThuId());
+            if (!bbNghiemThu.isPresent()) {
+                throw new Exception("Không tìm thấy biên bản nghiệm thu");
+            }
+            response.setSoBbNghiemThu(bbNghiemThu.get().getSoBb());
+        }
+
+        if (item.getHopDongId() != null) {
+            Optional<HhHopDongHdr> hopDong = hhHopDongRepository.findById(item.getHopDongId());
+            if (!hopDong.isPresent()) {
+                throw new Exception("Không tìm thấy hợp đồng");
+            }
+            response.setSoHopDong(hopDong.get().getSoHd());
         }
 
         KtNganLo nganLo = null;

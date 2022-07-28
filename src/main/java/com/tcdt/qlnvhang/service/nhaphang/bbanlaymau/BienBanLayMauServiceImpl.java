@@ -336,7 +336,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 			if (!bbNhapDayKho.isPresent())
 				throw new Exception("Biên bản nhập đầy kho không tồn tại");
 
-			res.setSoBienBan(bbNhapDayKho.get().getSoBienBan());
+			res.setSoBbNhapDayKho(bbNhapDayKho.get().getSoBienBan());
 			if (StringUtils.hasText(bbNhapDayKho.get().getMaNganLo())) {
 				KtNganLo nganLo = ktNganLoRepository.findFirstByMaNganlo(bbNhapDayKho.get().getMaNganLo());
 				this.thongTinNganLo(res, nganLo);

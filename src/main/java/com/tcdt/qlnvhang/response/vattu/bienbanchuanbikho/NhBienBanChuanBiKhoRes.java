@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.response.vattu.bienbanchuanbikho;
 
-import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
+import com.tcdt.qlnvhang.response.CommonResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class NhBienBanChuanBiKhoRes extends SoBienBanPhieuRes {
+public class NhBienBanChuanBiKhoRes extends CommonResponse {
 
     private Long id;
 
@@ -61,13 +61,10 @@ public class NhBienBanChuanBiKhoRes extends SoBienBanPhieuRes {
 
     private BigDecimal tongSo;
     private String tongSoBangChu;
-    private String trangThai;
-    private String tenTrangThai;
-    private String trangThaiDuyet;
-
-    private String lyDoTuChoi;
+    
     private Long hopDongId;
     private String soHopDong;
+
     private List<NhBienBanChuanBiKhoCtRes> chiTiets = new ArrayList<>();
 }
 

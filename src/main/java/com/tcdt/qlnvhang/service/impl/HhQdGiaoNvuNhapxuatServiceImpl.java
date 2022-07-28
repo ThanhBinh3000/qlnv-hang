@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.impl;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,7 @@ import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatDtlLoaiNx;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatHdrLoaiQd;
 import com.tcdt.qlnvhang.repository.HhDviThuchienQdinhRepository;
+import com.tcdt.qlnvhang.repository.HhHopDongDdiemNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatDtl1Repository;
 import com.tcdt.qlnvhang.request.*;
@@ -49,6 +51,9 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 	@Autowired
 	private HhQdGiaoNvuNhapxuatDtl1Repository hhQdGiaoNvuNhapxuatDtl1Repository;
+
+	@Autowired
+	private HhHopDongDdiemNhapKhoRepository hhHopDongDdiemNhapKhoRepository;
 
 	@Autowired
 	private HttpServletRequest req;
@@ -209,6 +214,20 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		data.setTenTrangThai(TrangThaiEnum.getTenById(data.getTrangThai()));
 		data.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(data.getTrangThai()));
 		this.setTenDvi(data);
+		Set<Long> hopDongIds = data.getChildren1().stream().map(HhQdGiaoNvuNhapxuatDtl1::getHopDong)
+				.filter(Objects::nonNull)
+				.map(HhHopDongHdr::getId)
+				.collect(Collectors.toSet());
+
+
+		if (!CollectionUtils.isEmpty(hopDongIds)) {
+			Map<Long, List<HhHopDongDdiemNhapKho>> mapDiaDiaNhapKho = hhHopDongDdiemNhapKhoRepository.findAllByIdHdongHdrIn(hopDongIds)
+					.stream().collect(Collectors.groupingBy(HhHopDongDdiemNhapKho::getIdHdongHdr));
+
+			for (HhQdGiaoNvuNhapxuatDtl1 dtl1 : data.getChildren1()) {
+				dtl1.getHopDong().setHhDdiemNhapKhoList(mapDiaDiaNhapKho.get(dtl1.getHopDong().getId()));
+			}
+		}
 
 		return data;
 	}

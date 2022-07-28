@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.response.vattu.bienbanguihang;
 
-import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
+import com.tcdt.qlnvhang.response.CommonResponse;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +11,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class NhBienBanGuiHangRes extends SoBienBanPhieuRes {
+public class NhBienBanGuiHangRes extends CommonResponse {
     private Long id;
     private String maDvi;
     private String tenDvi;

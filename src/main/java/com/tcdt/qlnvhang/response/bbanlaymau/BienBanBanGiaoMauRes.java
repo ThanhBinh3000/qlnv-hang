@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.response.bbanlaymau;
 
-import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
+import com.tcdt.qlnvhang.response.CommonResponse;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class BienBanBanGiaoMauRes extends SoBienBanPhieuRes {
+public class BienBanBanGiaoMauRes extends CommonResponse {
 	private Long id;
 	private Long qdgnvnxId;
 	private String soQuyetDinhNhap;
@@ -38,5 +38,7 @@ public class BienBanBanGiaoMauRes extends SoBienBanPhieuRes {
 	private String tenTrangThai;
 	private String trangThaiDuyet;
 	private String loaiVthh;
+	private Long hopDongId;
+	private String soHopDong;
 	private List<BienBanBanGiaoMauCtRes> chiTiets = new ArrayList<>();
 }

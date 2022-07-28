@@ -23,6 +23,7 @@ public class QlBienBanNhapDayKhoLtReq extends SoBienBanPhieuReq {
 
     @NotNull(message = "Không được để trống")
     private Long qdgnvnxId;
+    private Long bbNghiemThuId;
     private String soBienBan;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate ngayNhapDayKho;
@@ -40,7 +41,7 @@ public class QlBienBanNhapDayKhoLtReq extends SoBienBanPhieuReq {
     private String maNhaKho;
     private String maNganKho;
     private String maNganLo;
-
+    private Long hopDongId;
     private List<QlBienBanNdkCtLtReq> chiTiets = new ArrayList<>();
 
     private List<FileDinhKemReq> fileDinhKems;

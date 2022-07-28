@@ -1,7 +1,7 @@
 package com.tcdt.qlnvhang.response.quanlyphieunhapkholuongthuc;
 
 import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCt1;
-import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
+import com.tcdt.qlnvhang.response.CommonResponse;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,13 +13,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class NhPhieuNhapKhoRes extends SoBienBanPhieuRes {
+public class NhPhieuNhapKhoRes extends CommonResponse {
     private Long id;
-    private Long phieuKtClId;
+    private List<Long> phieuKtClIds = new ArrayList<>();
     private String soPhieuKtCl;
     private Long qdgnvnxId;
     private String soQuyetDinhNhap;
@@ -30,8 +31,8 @@ public class NhPhieuNhapKhoRes extends SoBienBanPhieuRes {
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime thoiGianGiaoNhan;
-    private String taiKhoanNo;
-    private String taiKhoanCo;
+    private BigDecimal taiKhoanNo;
+    private BigDecimal taiKhoanCo;
 
     private String trangThai;
     private String tenTrangThai;

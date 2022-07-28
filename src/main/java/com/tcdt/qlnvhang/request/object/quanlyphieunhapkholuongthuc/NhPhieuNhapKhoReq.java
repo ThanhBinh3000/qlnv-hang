@@ -35,8 +35,8 @@ public class NhPhieuNhapKhoReq extends SoBienBanPhieuReq {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime thoiGianGiaoNhan;
 
-    private String taiKhoanNo;
-    private String taiKhoanCo;
+    private BigDecimal taiKhoanNo;
+    private BigDecimal taiKhoanCo;
     private String maDiemKho;
     private String maNhaKho;
     private String maNganKho;

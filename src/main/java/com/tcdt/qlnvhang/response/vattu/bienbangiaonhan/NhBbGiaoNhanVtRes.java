@@ -1,9 +1,9 @@
 package com.tcdt.qlnvhang.response.vattu.bienbangiaonhan;
 
-import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import com.tcdt.qlnvhang.response.SoBienBanPhieuRes;
+import com.tcdt.qlnvhang.response.CommonResponse;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
@@ -13,7 +13,8 @@ import java.util.List;
 
 @NoArgsConstructor
 @Data
-public class NhBbGiaoNhanVtRes extends SoBienBanPhieuRes {
+@EqualsAndHashCode(callSuper = false)
+public class NhBbGiaoNhanVtRes extends CommonResponse {
 
     private Long id;
 
