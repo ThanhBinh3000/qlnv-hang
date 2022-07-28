@@ -20,7 +20,7 @@ public class ThongBaoBanDauGiaResponse {
 	private String capDonVi;
 	private Integer namKeHoach;
 	private Long loaiHangHoa;
-	private Long soQuyetDinhPheDuyetBanDauGia;
+	private Long qdPheDuyetKhBdgId;
 	private String maThongBao;
 	private String trichYeu;
 	private String tenToChucDauGia;

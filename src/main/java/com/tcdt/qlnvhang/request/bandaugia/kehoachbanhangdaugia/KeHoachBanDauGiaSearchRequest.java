@@ -1,10 +1,8 @@
 package com.tcdt.qlnvhang.request.bandaugia.kehoachbanhangdaugia;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.tcdt.qlnvhang.request.BaseRequest;
-import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,11 +23,8 @@ public class KeHoachBanDauGiaSearchRequest extends BaseRequest {
 	private Integer namKeHoach;
 	private String soKeHoach;
 	private String trichYeu;
-	@JsonFormat(pattern = LocalDateTimeUtils.DATE_FORMAT, shape = JsonFormat.Shape.STRING)
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate ngayKyTuNgay;
-
-	@JsonFormat(pattern = LocalDateTimeUtils.DATE_FORMAT, shape = JsonFormat.Shape.STRING)
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate ngayKyDenNgay;
 	//Thóc, Gạo, Muối, Vật tư

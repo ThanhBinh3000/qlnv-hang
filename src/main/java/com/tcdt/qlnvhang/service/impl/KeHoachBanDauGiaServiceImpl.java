@@ -6,24 +6,25 @@ import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGi
 import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGia_;
 import com.tcdt.qlnvhang.entities.chitieukehoachnam.ChiTieuKeHoachNam;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
+import com.tcdt.qlnvhang.mapper.bandaugia.kehoachbandaugia.BanDauGiaDiaDiemGiaoNhanRequestMapper;
 import com.tcdt.qlnvhang.mapper.bandaugia.kehoachbandaugia.BanDauGiaPhanLoTaiSanRequestMapper;
 import com.tcdt.qlnvhang.mapper.bandaugia.kehoachbandaugia.KeHoachBanDauGiaRequestMapper;
 import com.tcdt.qlnvhang.mapper.bandaugia.kehoachbandaugia.KeHoachBanDauGiaResponseMapper;
-import com.tcdt.qlnvhang.mapper.bandaugia.kehoachbandaugia.BanDauGiaDiaDiemGiaoNhanRequestMapper;
-import com.tcdt.qlnvhang.mapper.chitieukehoachnam.ChiTieuKeHoachNamResponseMapper;
-import com.tcdt.qlnvhang.repository.chitieukehoachnam.ChiTieuKeHoachNamRepository;
-import com.tcdt.qlnvhang.repository.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGiaRepository;
+import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.kehoachbanhangdaugia.BanDauGiaDiaDiemGiaoNhanRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.kehoachbanhangdaugia.BanDauGiaPhanLoTaiSanRepository;
+import com.tcdt.qlnvhang.repository.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGiaRepository;
+import com.tcdt.qlnvhang.repository.chitieukehoachnam.ChiTieuKeHoachNamRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGiaSearchRequest;
 import com.tcdt.qlnvhang.request.bandaugia.kehoachbanhangdaugia.KehoachBanDauGiaRequest;
 import com.tcdt.qlnvhang.response.banhangdaugia.kehoachbanhangdaugia.KeHoachBanDauGiaResponse;
 import com.tcdt.qlnvhang.service.SecurityContextService;
-import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGiaService;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import com.tcdt.qlnvhang.util.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -55,8 +56,8 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 	private final KeHoachBanDauGiaResponseMapper kehoachResponseMapper;
 	private final BanDauGiaDiaDiemGiaoNhanRequestMapper diaDiemGiaoNhanRequestMapper;
 	private final BanDauGiaPhanLoTaiSanRequestMapper phanLoTaiSanRequestMapper;
-	private final ChiTieuKeHoachNamResponseMapper chiTieuKeHoachNamResponseMapper;
 	private final ChiTieuKeHoachNamRepository chiTieuKeHoachNamRepository;
+	private final QlnvDmVattuRepository qlnvDmVattuRepository;
 	private static final String SHEET_NAME = "Danh sách kế hoạch bán đấu giá";
 	private static final String STT = "STT";
 	private static final String SO_KE_HOACH = "Số kế hoạch";
@@ -269,7 +270,18 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 		Map<Long, ChiTieuKeHoachNam> chiTieuKeHoachNamMap = chiTieuKeHoachNamList.stream().collect(Collectors.toMap(ChiTieuKeHoachNam::getId, Function.identity(),
 				(existing, replacement) -> existing));
 
+		log.info("Vật tư hàng hóa");
+		Set<String> maVatTuHangHoa = response.stream().map(KeHoachBanDauGia::getLoaiHangHoa).collect(Collectors.toSet());
+		//Key-vaule = mã vật tư hàng hóa - vật tư hàng hóa
+		Map<String, QlnvDmVattu> vatTuHangHoaMap = new HashMap<>();
+		if (!CollectionUtils.isEmpty(maVatTuHangHoa)) {
+			Set<QlnvDmVattu> vatTus = qlnvDmVattuRepository.findByMaIn(maVatTuHangHoa);
+			vatTuHangHoaMap = vatTus.stream().collect(Collectors
+					.toMap(QlnvDmVattu::getMa, Function.identity(), (existing, replacement) -> existing));
+		}
 
+
+		Map<String, QlnvDmVattu> finalVatTuHangHoaMap = vatTuHangHoaMap;
 		List<KeHoachBanDauGiaResponse> responseDto = response.stream().map(it -> {
 			if (Objects.nonNull(diaDiemGiaoNhanMap.get(it.getId()))) {
 				it.setDiaDiemGiaoNhanList(diaDiemGiaoNhanMap.get(it.getId()));
@@ -281,6 +293,9 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 
 			if (Objects.nonNull(chiTieuKeHoachNamMap.get(it.getQdGiaoChiTieuId()))) {
 				it.setSoQuyetDinhGiaoChiTieu(chiTieuKeHoachNamMap.get(it.getQdGiaoChiTieuId()).getSoQuyetDinh());
+			}
+			if (Objects.nonNull(finalVatTuHangHoaMap.get(it.getLoaiHangHoa()))) {
+				it.setTenHangHoa(finalVatTuHangHoaMap.get(it.getLoaiHangHoa()).getTen());
 			}
 			return kehoachResponseMapper.toDto(it);
 		}).collect(Collectors.toList());
@@ -335,8 +350,8 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 				objs[5] = Optional.ofNullable(Contains.mpLoaiVthh.get(item.getLoaiVatTuHangHoa())).orElse("");
 				objs[6] = item.getSoQuyetDinhGiaoChiTieu();
 				objs[7] = item.getSoQuyetDinhPheDuyet();
-				objs[8] = item.getTenTrangThai();
-				objs[9] = item.getTrichYeu();
+				objs[8] = item.getNamKeHoach();
+				objs[9] = item.getTenTrangThai();
 				dataList.add(objs);
 			}
 

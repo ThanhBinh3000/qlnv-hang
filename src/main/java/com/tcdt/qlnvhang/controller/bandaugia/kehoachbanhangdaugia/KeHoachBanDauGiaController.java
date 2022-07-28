@@ -147,7 +147,7 @@ public class KeHoachBanDauGiaController extends BaseController {
 	}
 
 	@ApiOperation(value = "Thông tin chi tiết kế hoạch bán đấu giá hàng hóa", response = Boolean.class)
-	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> detail(@PathVariable("id") Long id) {
 		BaseResponse resp = new BaseResponse();
 		try {

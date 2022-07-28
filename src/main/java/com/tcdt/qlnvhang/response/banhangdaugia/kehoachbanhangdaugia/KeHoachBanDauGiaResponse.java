@@ -54,4 +54,5 @@ public class KeHoachBanDauGiaResponse {
 	private String thoiGianKyHopDongGhiChu;
 	private String thoiHanThanhToanGhiChu;
 	private String ThoiHanGiaoNhanGhiChu;
+	private String tenHangHoa;
 }

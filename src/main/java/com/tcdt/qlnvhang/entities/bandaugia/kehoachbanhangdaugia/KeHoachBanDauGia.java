@@ -121,4 +121,7 @@ public class KeHoachBanDauGia extends BaseEntity implements Serializable {
 
 	@Column(name = "THOI_HAN_GIAO_NHAN_GC")
 	private String ThoiHanGiaoNhanGhiChu;
+
+	@Transient
+	private String tenHangHoa;
 }

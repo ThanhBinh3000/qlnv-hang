@@ -39,8 +39,8 @@ public class ThongBaoBanDauGia extends BaseEntity implements Serializable {
 	@Column(name = "LOAI_HANG_HOA")
 	private Long loaiHangHoa;
 
-	@Column(name = "SO_QD_PHE_DUYET_KHBDG")
-	private Long soQuyetDinhPheDuyetBanDauGia;
+	@Column(name = "QD_PHE_DUYET_KHBDG_ID")
+	private Long qdPheDuyetKhBdgId;
 
 	@Column(name = "MA_THONG_BAO")
 	private String maThongBao;
