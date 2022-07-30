@@ -1,9 +1,9 @@
 package com.tcdt.qlnvhang.service.nhaphang.bbanlaymau;
 
-import com.tcdt.qlnvhang.entities.bbanlaymau.BienBanBanGiaoMau;
-import com.tcdt.qlnvhang.entities.bbanlaymau.BienBanBanGiaoMauCt;
-import com.tcdt.qlnvhang.entities.bbanlaymau.BienBanLayMau;
-import com.tcdt.qlnvhang.enums.TrangThaiEnum;
+import com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau.BienBanBanGiaoMau;
+import com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau.BienBanBanGiaoMauCt;
+import com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau.BienBanLayMau;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.bbanbangiaomau.BienBanBanGiaoMauCtRepository;
@@ -100,8 +100,8 @@ public class BienBanBanGiaoMauServiceImpl extends BaseServiceImpl implements Bie
 			String soBbLayMau = (String) o[4];
 
 			BeanUtils.copyProperties(item, response);
-			response.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
-			response.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
+			response.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+			response.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
 			response.setQdgnvnxId(qdNhapId);
 			response.setSoQuyetDinhNhap(soQdNhap);
 			response.setBbLayMauId(bbLayMauId);
@@ -123,7 +123,7 @@ public class BienBanBanGiaoMauServiceImpl extends BaseServiceImpl implements Bie
 		this.validateSoBb(null, req);
 		BienBanBanGiaoMau bienBienBanGiaoMau = new BienBanBanGiaoMau();
 		BeanUtils.copyProperties(req, bienBienBanGiaoMau, "id");
-		bienBienBanGiaoMau.setTrangThai(TrangThaiEnum.DU_THAO.getId());
+		bienBienBanGiaoMau.setTrangThai(NhapXuatHangTrangThaiEnum.DU_THAO.getId());
 		bienBienBanGiaoMau.setNguoiTaoId(userInfo.getId());
 		bienBienBanGiaoMau.setNgayTao(LocalDate.now());
 		bienBienBanGiaoMau.setMaDvi(userInfo.getDvql());
@@ -183,41 +183,11 @@ public class BienBanBanGiaoMauServiceImpl extends BaseServiceImpl implements Bie
 		}
 
 		BienBanBanGiaoMau bb = optional.get();
-		String trangThai = bb.getTrangThai();
-		if (TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(stReq.getTrangThai())) {
-			if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
-				return false;
+		boolean success = this.updateStatus(bb, stReq, userInfo);
+		if (success)
+			bienBanBanGiaoMauRepository.save(bb);
 
-			bb.setTrangThai(TrangThaiEnum.DU_THAO_TRINH_DUYET.getId());
-			bb.setNguoiGuiDuyetId(userInfo.getId());
-			bb.setNgayGuiDuyet(LocalDate.now());
-		} else if (TrangThaiEnum.LANH_DAO_DUYET.getId().equals(stReq.getTrangThai())) {
-			if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
-				return false;
-			bb.setTrangThai(TrangThaiEnum.LANH_DAO_DUYET.getId());
-			bb.setNguoiPduyetId(userInfo.getId());
-			bb.setNgayPduyet(LocalDate.now());
-		} else if (TrangThaiEnum.BAN_HANH.getId().equals(stReq.getTrangThai())) {
-			if (!TrangThaiEnum.LANH_DAO_DUYET.getId().equals(trangThai))
-				return false;
-
-			bb.setTrangThai(TrangThaiEnum.BAN_HANH.getId());
-			bb.setNguoiPduyetId(userInfo.getId());
-			bb.setNgayPduyet(LocalDate.now());
-		} else if (TrangThaiEnum.TU_CHOI.getId().equals(stReq.getTrangThai())) {
-			if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
-				return false;
-
-			bb.setTrangThai(TrangThaiEnum.TU_CHOI.getId());
-			bb.setNguoiPduyetId(userInfo.getId());
-			bb.setNgayPduyet(LocalDate.now());
-			bb.setLdoTchoi(stReq.getLyDo());
-		}  else {
-			throw new Exception("Bad request.");
-		}
-
-		bienBanBanGiaoMauRepository.save(bb);
-		return false;
+		return success;
 	}
 
 	@Override
@@ -242,8 +212,8 @@ public class BienBanBanGiaoMauServiceImpl extends BaseServiceImpl implements Bie
 
 		BienBanBanGiaoMau bb = optional.get();
 
-		if (TrangThaiEnum.BAN_HANH.getId().equals(bb.getTrangThai())) {
-			throw new Exception("Không thể xóa đề xuất điều chỉnh đã ban hành");
+		if (NhapXuatHangTrangThaiEnum.DA_DUYET.getId().equals(bb.getTrangThai())) {
+			throw new Exception("Không thể xóa đề xuất điều chỉnh đã đã duyệt");
 		}
 		bienBanBanGiaoMauCtRepository.deleteByBbBanGiaoMauIdIn(Collections.singleton(bb.getId()));
 		bienBanBanGiaoMauRepository.deleteById(id);
@@ -283,9 +253,8 @@ public class BienBanBanGiaoMauServiceImpl extends BaseServiceImpl implements Bie
 
 		BienBanBanGiaoMauRes res = new BienBanBanGiaoMauRes();
 		BeanUtils.copyProperties(item, res);
-
-		res.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
-		res.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
+		res.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+		res.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
 		QlnvDmDonvi donvi = getDviByMa(item.getMaDvi(), req);
 		res.setMaDvi(donvi.getMaDvi());
 		res.setTenDvi(donvi.getTenDvi());
@@ -374,7 +343,7 @@ public class BienBanBanGiaoMauServiceImpl extends BaseServiceImpl implements Bie
 				objs[4] = item.getTenDvi();
 				objs[5] = item.getTenDviBenNhan();
 				objs[6] = item.getSoLuongMau();
-				objs[7] = TrangThaiEnum.getTenById(item.getTrangThai());
+				objs[7] = NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai());
 				dataList.add(objs);
 			}
 

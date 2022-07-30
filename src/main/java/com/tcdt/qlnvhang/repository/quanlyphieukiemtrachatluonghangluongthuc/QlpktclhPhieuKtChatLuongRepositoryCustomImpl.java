@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc;
 
-import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
+import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.PaggingReq;

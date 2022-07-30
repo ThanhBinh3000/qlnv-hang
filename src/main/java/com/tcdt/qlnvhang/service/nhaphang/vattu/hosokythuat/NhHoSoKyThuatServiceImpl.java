@@ -1,8 +1,8 @@
 package com.tcdt.qlnvhang.service.nhaphang.vattu.hosokythuat;
 
-import com.tcdt.qlnvhang.entities.vattu.hosokythuat.NhHoSoKyThuat;
-import com.tcdt.qlnvhang.entities.vattu.hosokythuat.NhHoSoKyThuatCt;
-import com.tcdt.qlnvhang.enums.TrangThaiEnum;
+import com.tcdt.qlnvhang.entities.nhaphang.vattu.hosokythuat.NhHoSoKyThuat;
+import com.tcdt.qlnvhang.entities.nhaphang.vattu.hosokythuat.NhHoSoKyThuatCt;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
@@ -78,7 +78,7 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
         BeanUtils.copyProperties(req, item, "id");
         item.setNgayTao(LocalDate.now());
         item.setNguoiTaoId(userInfo.getId());
-        item.setTrangThai(TrangThaiEnum.DU_THAO.getId());
+        item.setTrangThai(NhapXuatHangTrangThaiEnum.DU_THAO.getId());
         item.setMaDvi(userInfo.getDvql());
         item.setCapDvi(userInfo.getCapDvi());
         item.setSo(getSo());
@@ -125,8 +125,8 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
         NhHoSoKyThuatRes res = new NhHoSoKyThuatRes();
         List<NhHoSoKyThuatCtRes> chiTiets = new ArrayList<>();
         BeanUtils.copyProperties(item, res);
-        res.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
-        res.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
+        res.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+        res.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
         for (NhHoSoKyThuatCt ct : item.getChiTiets()) {
             chiTiets.add(new NhHoSoKyThuatCtRes(ct));
         }
@@ -222,8 +222,8 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
             throw new Exception("Hồ sơ kỹ thuật không tồn tại.");
 
         NhHoSoKyThuat item = optional.get();
-        if (TrangThaiEnum.BAN_HANH.getId().equals(item.getTrangThai())) {
-            throw new Exception("Không thể xóa biên bản đã ban hành");
+        if (NhapXuatHangTrangThaiEnum.DA_DUYET.getId().equals(item.getTrangThai())) {
+            throw new Exception("Không thể xóa biên bản đã đã duyệt");
         }
         nhHoSoKyThuatCtRepository.deleteByHoSoKyThuatIdIn(Collections.singleton(item.getId()));
         nhHoSoKyThuatRepository.delete(item);
@@ -240,42 +240,11 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
             throw new Exception("Hồ sơ kỹ thuật không tồn tại.");
 
         NhHoSoKyThuat phieu = optional.get();
+        boolean success = this.updateStatus(phieu, stReq, userInfo);
+        if (success)
+            nhHoSoKyThuatRepository.save(phieu);
 
-        String trangThai = phieu.getTrangThai();
-        if (TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(stReq.getTrangThai())) {
-            if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
-                return false;
-
-            phieu.setTrangThai(TrangThaiEnum.DU_THAO_TRINH_DUYET.getId());
-            phieu.setNguoiGuiDuyetId(userInfo.getId());
-            phieu.setNgayGuiDuyet(LocalDate.now());
-        } else if (TrangThaiEnum.LANH_DAO_DUYET.getId().equals(stReq.getTrangThai())) {
-            if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
-                return false;
-            phieu.setTrangThai(TrangThaiEnum.LANH_DAO_DUYET.getId());
-            phieu.setNguoiPduyetId(userInfo.getId());
-            phieu.setNgayPduyet(LocalDate.now());
-        } else if (TrangThaiEnum.BAN_HANH.getId().equals(stReq.getTrangThai())) {
-            if (!TrangThaiEnum.LANH_DAO_DUYET.getId().equals(trangThai))
-                return false;
-
-            phieu.setTrangThai(TrangThaiEnum.BAN_HANH.getId());
-            phieu.setNguoiPduyetId(userInfo.getId());
-            phieu.setNgayPduyet(LocalDate.now());
-        } else if (TrangThaiEnum.TU_CHOI.getId().equals(stReq.getTrangThai())) {
-            if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
-                return false;
-
-            phieu.setTrangThai(TrangThaiEnum.TU_CHOI.getId());
-            phieu.setNguoiPduyetId(userInfo.getId());
-            phieu.setNgayPduyet(LocalDate.now());
-            phieu.setLyDoTuChoi(stReq.getLyDo());
-        }  else {
-            throw new Exception("Bad request.");
-        }
-
-        nhHoSoKyThuatRepository.save(phieu);
-        return true;
+        return success;
     }
 
     @Override
@@ -297,8 +266,8 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
             String maVatTuCha = (String) o[5];
             String tenVatTuCha = (String) o[6];
             BeanUtils.copyProperties(item, response);
-            response.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
-            response.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
+            response.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+            response.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
             response.setQdgnvnxId(qdNhapId);
             response.setSoQuyetDinhNhap(soQdNhap);
             response.setMaVatTu(maVatTu);
@@ -349,7 +318,7 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
                 objs[4] = item.getTenVatTuCha();
                 objs[5] = item.getTenVatTu();
                 objs[6] = item.getKetLuan();
-                objs[7] = TrangThaiEnum.getTenById(item.getTrangThai());
+                objs[7] = NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai());
                 dataList.add(objs);
             }
 

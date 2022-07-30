@@ -1,8 +1,8 @@
 package com.tcdt.qlnvhang.service.nhaphang.luongthucmuoi.quanlyphieukiemtrachatluonghangluongthuc;
 
-import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhKetQuaKiemTra;
-import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
-import com.tcdt.qlnvhang.enums.TrangThaiEnum;
+import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhKetQuaKiemTra;
+import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhKetQuaKiemTraRepository;
@@ -78,7 +78,7 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 		phieu.setNgayTao(LocalDate.now());
 		phieu.setNguoiTaoId(userInfo.getId());
 		phieu.setMaDvi(userInfo.getDvql());
-		phieu.setTrangThai(TrangThaiEnum.DU_THAO.getId());
+		phieu.setTrangThai(NhapXuatHangTrangThaiEnum.DU_THAO.getId());
 		phieu.setCapDvi(userInfo.getCapDvi());
 
 		phieu.setSo(getSo());
@@ -167,7 +167,7 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 
 	private QlpktclhPhieuKtChatLuongResponseDto buildResponse(QlpktclhPhieuKtChatLuong qlpktclhPhieuKtChatLuong) throws Exception {
 		QlpktclhPhieuKtChatLuongResponseDto response = dataUtils.toObject(qlpktclhPhieuKtChatLuong, QlpktclhPhieuKtChatLuongResponseDto.class);
-		response.setTenTrangThai(TrangThaiEnum.getTenById(qlpktclhPhieuKtChatLuong.getTrangThai()));
+		response.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qlpktclhPhieuKtChatLuong.getTrangThai()));
 		List<QlpktclhKetQuaKiemTraResponseDto> ketQuaKiemTraRes = qlpktclhPhieuKtChatLuong.getKetQuaKiemTra().stream()
 						.map(item -> dataUtils.toObject(item, QlpktclhKetQuaKiemTraResponseDto.class))
 						.collect(Collectors.toList());
@@ -193,8 +193,8 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 		}
 
 		response.setKetQuaKiemTra(ketQuaKiemTraRes);
-		response.setTenTrangThai(TrangThaiEnum.getTenById(qlpktclhPhieuKtChatLuong.getTrangThai()));
-		response.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(qlpktclhPhieuKtChatLuong.getTrangThai()));
+		response.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qlpktclhPhieuKtChatLuong.getTrangThai()));
+		response.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(qlpktclhPhieuKtChatLuong.getTrangThai()));
 		QlnvDmDonvi donvi = getDviByMa(qlpktclhPhieuKtChatLuong.getMaDvi(), req);
 		response.setMaDvi(donvi.getMaDvi());
 		response.setTenDvi(donvi.getTenDvi());
@@ -232,43 +232,12 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 			throw new Exception("Không tìm thấy dữ liệu");
 
 		QlpktclhPhieuKtChatLuong phieu = optional.get();
-		String trangThai = phieu.getTrangThai();
-		if (TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(req.getTrangThai())) {
-			if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
-				return false;
 
-			phieu.setTrangThai(TrangThaiEnum.DU_THAO_TRINH_DUYET.getId());
-			phieu.setNguoiGuiDuyetId(userInfo.getId());
-			phieu.setNgayGuiDuyet(LocalDate.now());
+		boolean success = this.updateStatus(phieu, req, userInfo);
+		if (success)
+			qlpktclhPhieuKtChatLuongRepo.save(phieu);
 
-		} else if (TrangThaiEnum.LANH_DAO_DUYET.getId().equals(req.getTrangThai())) {
-			if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
-				return false;
-			phieu.setTrangThai(TrangThaiEnum.LANH_DAO_DUYET.getId());
-			phieu.setNguoiPheDuyetId(userInfo.getId());
-			phieu.setNgayPheDuyet(LocalDate.now());
-		} else if (TrangThaiEnum.BAN_HANH.getId().equals(req.getTrangThai())) {
-			if (!TrangThaiEnum.LANH_DAO_DUYET.getId().equals(trangThai))
-				return false;
-
-			phieu.setTrangThai(TrangThaiEnum.BAN_HANH.getId());
-			phieu.setNguoiPheDuyetId(userInfo.getId());
-			phieu.setNgayPheDuyet(LocalDate.now());
-		} else if (TrangThaiEnum.TU_CHOI.getId().equals(req.getTrangThai())) {
-			if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
-				return false;
-
-			phieu.setTrangThai(TrangThaiEnum.TU_CHOI.getId());
-			phieu.setNguoiPheDuyetId(userInfo.getId());
-			phieu.setNgayPheDuyet(LocalDate.now());
-			phieu.setLyDoTuChoi(req.getLyDo());
-		}  else {
-			throw new Exception("Bad request.");
-		}
-
-		qlpktclhPhieuKtChatLuongRepo.save(phieu);
-
-		return true;
+		return success;
 	}
 
 	@Transactional(rollbackFor = Exception.class)
@@ -284,10 +253,8 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 
 		QlpktclhPhieuKtChatLuong phieu = optional.get();
 
-		if (TrangThaiEnum.BAN_HANH.getId().equals(phieu.getTrangThai())) {
-			throw new Exception("Không thể xóa đề xuất điều chỉnh đã ban hành");
-		} else if (TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(phieu.getTrangThai())) {
-			throw new Exception("Không thể xóa đề xuất điều chỉnh trình duyệt");
+		if (NhapXuatHangTrangThaiEnum.DA_DUYET.getId().equals(phieu.getTrangThai())) {
+			throw new Exception("Không thể xóa đề xuất điều chỉnh đã đã duyệt");
 		}
 
 		Long phieuKiemTraChatLuongId = phieu.getId();
@@ -326,7 +293,7 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 				objs[6] = item.getTenNganLo();
 				objs[7] = LocalDateTimeUtils.localDateToString(item.getNgayGdinh());
 				objs[8] = item.getKqDanhGia();
-				objs[9] = TrangThaiEnum.getTenById(item.getTrangThai());
+				objs[9] = NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai());
 				dataList.add(objs);
 			}
 

@@ -15,9 +15,15 @@ import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
+import com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau.BienBanBanGiaoMau;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.request.QlnvDmDonviSearchReq;
+import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.HhDmDviLquanSearchReq;
 import com.tcdt.qlnvhang.response.CommonResponse;
+import com.tcdt.qlnvhang.service.SecurityContextService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -371,6 +377,52 @@ public class BaseServiceImpl {
 		res.setMaDvi(donvi.getMaDvi());
 		res.setTenDvi(donvi.getTenDvi());
 		res.setMaQhns(donvi.getMaQhns());
+	}
+
+
+	public <T extends TrangThaiBaseEntity> boolean updateStatus(T t, StatusReq stReq, UserInfo userInfo) throws Exception {
+		String trangThai = t.getTrangThai();
+		if (NhapXuatHangTrangThaiEnum.CHO_DUYET_TP.getId().equals(stReq.getTrangThai())) {
+			if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
+				return false;
+
+			t.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_TP.getId());
+			t.setNguoiGuiDuyetId(userInfo.getId());
+			t.setNgayGuiDuyet(LocalDate.now());
+		} else if (NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CUC.getId().equals(stReq.getTrangThai())) {
+			if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_TP.getId().equals(trangThai))
+				return false;
+			t.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CUC.getId());
+			t.setNguoiPduyetId(userInfo.getId());
+			t.setNgayPduyet(LocalDate.now());
+		} else if (NhapXuatHangTrangThaiEnum.DA_DUYET.getId().equals(stReq.getTrangThai())) {
+			if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CUC.getId().equals(trangThai))
+				return false;
+
+			t.setTrangThai(NhapXuatHangTrangThaiEnum.DA_DUYET.getId());
+			t.setNguoiPduyetId(userInfo.getId());
+			t.setNgayPduyet(LocalDate.now());
+		} else if (NhapXuatHangTrangThaiEnum.TU_CHOI_TP.getId().equals(stReq.getTrangThai())) {
+			if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_TP.getId().equals(trangThai))
+				return false;
+
+			t.setTrangThai(NhapXuatHangTrangThaiEnum.TU_CHOI_TP.getId());
+			t.setNguoiPduyetId(userInfo.getId());
+			t.setNgayPduyet(LocalDate.now());
+			t.setLyDoTuChoi(stReq.getLyDo());
+		} else if (NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CUC.getId().equals(stReq.getTrangThai())) {
+			if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CUC.getId().equals(trangThai))
+				return false;
+
+			t.setTrangThai(NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CUC.getId());
+			t.setNguoiPduyetId(userInfo.getId());
+			t.setNgayPduyet(LocalDate.now());
+			t.setLyDoTuChoi(stReq.getLyDo());
+		} else {
+			throw new Exception("Bad request.");
+		}
+
+		return false;
 	}
 }
 

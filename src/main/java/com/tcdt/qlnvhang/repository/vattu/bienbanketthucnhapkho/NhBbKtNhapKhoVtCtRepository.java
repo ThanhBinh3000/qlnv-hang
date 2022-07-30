@@ -1,8 +1,6 @@
 package com.tcdt.qlnvhang.repository.vattu.bienbanketthucnhapkho;
 
-import com.tcdt.qlnvhang.entities.vattu.bangke.NhBangKeVtCt;
-import com.tcdt.qlnvhang.entities.vattu.bienbanketthucnhapkho.NhBbKtNhapKhoVt;
-import com.tcdt.qlnvhang.entities.vattu.bienbanketthucnhapkho.NhBbKtNhapKhoVtCt;
+import com.tcdt.qlnvhang.entities.nhaphang.vattu.bienbanketthucnhapkho.NhBbKtNhapKhoVtCt;
 import com.tcdt.qlnvhang.repository.BaseRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
@@ -10,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface NhBbKtNhapKhoVtCtRepository extends BaseRepository<NhBbKtNhapKhoVtCt, Long> {

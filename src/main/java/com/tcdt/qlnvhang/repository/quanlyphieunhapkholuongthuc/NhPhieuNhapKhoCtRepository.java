@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc;
 
-import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCt;
+import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCt;
 import com.tcdt.qlnvhang.repository.BaseRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;

@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.repository.quanlybangkecanhangluongthuc;
 
-import com.tcdt.qlnvhang.entities.quanlybangkecanhangluongthuc.QlBangKeCanHangLt;
+import com.tcdt.qlnvhang.entities.nhaphang.quanlybangkecanhangluongthuc.QlBangKeCanHangLt;
 import com.tcdt.qlnvhang.repository.BaseRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;

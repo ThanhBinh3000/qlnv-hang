@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.repository.bbanbangiaomau;
 
-import com.tcdt.qlnvhang.entities.bbanlaymau.BienBanBanGiaoMauCt;
+import com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau.BienBanBanGiaoMauCt;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

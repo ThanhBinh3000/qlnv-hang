@@ -1,11 +1,9 @@
 package com.tcdt.qlnvhang.response.vattu.phieunhapkhotamgui;
 
-import com.tcdt.qlnvhang.entities.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGui;
 import com.tcdt.qlnvhang.response.CommonResponse;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
