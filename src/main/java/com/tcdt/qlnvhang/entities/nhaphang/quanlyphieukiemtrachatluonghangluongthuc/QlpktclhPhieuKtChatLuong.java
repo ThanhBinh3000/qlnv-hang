@@ -60,18 +60,6 @@ public class QlpktclhPhieuKtChatLuong extends TrangThaiBaseEntity implements Ser
 	@Column(name = "MA_DVI")
 	private String maDvi;
 
-	@Column(name = "NGUOI_PHE_DUYET_ID")
-	private Long nguoiPheDuyetId;
-
-	@Column(name = "NGAY_PHE_DUYET")
-	private LocalDate ngayPheDuyet;
-
-	@Column(name = "NGUOI_GUI_DUYET_ID")
-	private Long nguoiGuiDuyetId;
-
-	@Column(name = "NGAY_GUI_DUYET")
-	private LocalDate ngayGuiDuyet;
-
 	@Column(name = "MA_NGAN_KHO")
 	private String maNganKho;
 
