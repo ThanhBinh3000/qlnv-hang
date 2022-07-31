@@ -404,6 +404,9 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 		List<FileDinhKem> fileDinhKemList = fileDinhKemService.search(keHoachDauGia.getId(), Collections.singleton(KeHoachBanDauGia.TABLE_NAME));
 		if (!CollectionUtils.isEmpty(fileDinhKemList)) keHoachDauGia.setFileDinhKems(fileDinhKemList);
 
+		Optional<ChiTieuKeHoachNam> chiTieuKeHoachNamOpt = chiTieuKeHoachNamRepository.findById(keHoachDauGia.getQdGiaoChiTieuId());
+		chiTieuKeHoachNamOpt.ifPresent(chiTieuKeHoachNam -> keHoachDauGia.setSoQuyetDinhGiaoChiTieu(chiTieuKeHoachNam.getSoQuyetDinh()));
+
 		return kehoachResponseMapper.toDto(keHoachDauGia);
 	}
 }
