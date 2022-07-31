@@ -7,6 +7,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieunhapkholuongthuc.NhPhieuNh
 import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCt1;
 import com.tcdt.qlnvhang.entities.nhaphang.vattu.hosokythuat.NhHoSoKyThuat;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCt1Repository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
@@ -345,20 +346,42 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public boolean updateStatusQd(StatusReq req) throws Exception {
+    public boolean updateStatusQd(StatusReq stReq) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null)
             throw new Exception("Bad request.");
-        Optional<NhPhieuNhapKho> optional = nhPhieuNhapKhoRepository.findById(req.getId());
+        Optional<NhPhieuNhapKho> optional = nhPhieuNhapKhoRepository.findById(stReq.getId());
         if (!optional.isPresent())
             throw new Exception("Quyết định không tồn tại.");
 
         NhPhieuNhapKho phieu = optional.get();
-        boolean success = this.updateStatus(phieu, req, userInfo);
-        if (success)
-            nhPhieuNhapKhoRepository.save(phieu);
 
-        return success;
+        String trangThai = phieu.getTrangThai();
+        if (NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
+            if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
+                return false;
+
+            phieu.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId());
+            phieu.setNguoiGuiDuyetId(userInfo.getId());
+            phieu.setNgayGuiDuyet(LocalDate.now());
+        } else if (NhapXuatHangTrangThaiEnum.DA_DUYET.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(trangThai))
+                return false;
+            phieu.setTrangThai(NhapXuatHangTrangThaiEnum.DA_DUYET.getId());
+            phieu.setNguoiPduyetId(userInfo.getId());
+            phieu.setNgayPduyet(LocalDate.now());
+        } else if (NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(trangThai))
+                return false;
+
+            phieu.setTrangThai(NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CHI_CUC.getId());
+            phieu.setNguoiPduyetId(userInfo.getId());
+            phieu.setNgayPduyet(LocalDate.now());
+        } else {
+            throw new Exception("Bad request.");
+        }
+
+        return true;
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.nhaphang.luongthucmuoi.quanlybienbannhapdaykho
 import com.tcdt.qlnvhang.entities.nhaphang.quanlybienbannhapdaykholuongthuc.QlBienBanNdkCtLt;
 import com.tcdt.qlnvhang.entities.nhaphang.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhBbNghiemthuKlstRepository;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
@@ -316,21 +317,74 @@ public class QlBienBanNhapDayKhoLtServiceImpl extends BaseServiceImpl implements
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public boolean updateStatusQd(StatusReq req) throws Exception {
+    public boolean updateStatusQd(StatusReq stReq) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null)
             throw new Exception("Bad request.");
-        Optional<QlBienBanNhapDayKhoLt> optional = qlBienBanNhapDayKhoLtRepository.findById(req.getId());
+        Optional<QlBienBanNhapDayKhoLt> optional = qlBienBanNhapDayKhoLtRepository.findById(stReq.getId());
         if (!optional.isPresent())
             throw new Exception("Biên bản không tồn tại.");
 
-        QlBienBanNhapDayKhoLt bangKe = optional.get();
+        QlBienBanNhapDayKhoLt bienBan = optional.get();
 
-        boolean success = this.updateStatus(bangKe, req, userInfo);
-        if (success)
-            qlBienBanNhapDayKhoLtRepository.save(bangKe);
+        String trangThai = bienBan.getTrangThai();
+        if (NhapXuatHangTrangThaiEnum.CHO_DUYET_KTV_BAO_QUAN.getId().equals(stReq.getTrangThai())) {
+            if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
+                return false;
 
-        return success;
+            bienBan.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_KTV_BAO_QUAN.getId());
+            bienBan.setNguoiGuiDuyetId(userInfo.getId());
+            bienBan.setNgayGuiDuyet(LocalDate.now());
+        } else if (NhapXuatHangTrangThaiEnum.CHO_DUYET_CAN_BO_KE_TOAN.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_KTV_BAO_QUAN.getId().equals(trangThai))
+                return false;
+            bienBan.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_CAN_BO_KE_TOAN.getId());
+            bienBan.setNguoiGuiDuyetId(userInfo.getId());
+            bienBan.setNgayGuiDuyet(LocalDate.now());
+        } else if (NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_CAN_BO_KE_TOAN.getId().equals(trangThai))
+                return false;
+
+            bienBan.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId());
+            bienBan.setNguoiGuiDuyetId(userInfo.getId());
+            bienBan.setNgayGuiDuyet(LocalDate.now());
+        } else if (NhapXuatHangTrangThaiEnum.DA_DUYET.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(trangThai))
+                return false;
+
+            bienBan.setTrangThai(NhapXuatHangTrangThaiEnum.DA_DUYET.getId());
+            bienBan.setNguoiPduyetId(userInfo.getId());
+            bienBan.setNgayPduyet(LocalDate.now());
+            bienBan.setLyDoTuChoi(stReq.getLyDo());
+        } else if (NhapXuatHangTrangThaiEnum.TU_CHOI_KTV_BAO_QUAN.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_KTV_BAO_QUAN.getId().equals(trangThai))
+                return false;
+
+            bienBan.setTrangThai(NhapXuatHangTrangThaiEnum.TU_CHOI_KTV_BAO_QUAN.getId());
+            bienBan.setNguoiPduyetId(userInfo.getId());
+            bienBan.setNgayPduyet(LocalDate.now());
+            bienBan.setLyDoTuChoi(stReq.getLyDo());
+        } else if (NhapXuatHangTrangThaiEnum.TU_CHOI_CAN_BO_KE_TOAN.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_CAN_BO_KE_TOAN.getId().equals(trangThai))
+                return false;
+
+            bienBan.setTrangThai(NhapXuatHangTrangThaiEnum.TU_CHOI_CAN_BO_KE_TOAN.getId());
+            bienBan.setNguoiPduyetId(userInfo.getId());
+            bienBan.setNgayPduyet(LocalDate.now());
+            bienBan.setLyDoTuChoi(stReq.getLyDo());
+        } else if (NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(trangThai))
+                return false;
+
+            bienBan.setTrangThai(NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CHI_CUC.getId());
+            bienBan.setNguoiPduyetId(userInfo.getId());
+            bienBan.setNgayPduyet(LocalDate.now());
+            bienBan.setLyDoTuChoi(stReq.getLyDo());
+        } else {
+            throw new Exception("Bad request.");
+        }
+
+        return true;
     }
 
     private void thongTinNganLo(QlBienBanNhapDayKhoLtRes item, KtNganLo nganLo) {

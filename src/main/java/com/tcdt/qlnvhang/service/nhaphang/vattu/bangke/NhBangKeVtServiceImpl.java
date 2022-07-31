@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieunhapkholuongthuc.NhPhieuNh
 import com.tcdt.qlnvhang.entities.nhaphang.vattu.bangke.NhBangKeVt;
 import com.tcdt.qlnvhang.entities.nhaphang.vattu.bangke.NhBangKeVtCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoRepository;
@@ -239,13 +240,33 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
         if (!optional.isPresent())
             throw new Exception("Bảng kê vật tư không tồn tại.");
 
-        NhBangKeVt phieu = optional.get();
+        NhBangKeVt item = optional.get();
+        String trangThai = item.getTrangThai();
+        if (NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
+            if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
+                return false;
 
-        boolean success = this.updateStatus(phieu, stReq, userInfo);
-        if (success)
-            bangKeVtRepository.save(phieu);
+            item.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId());
+            item.setNguoiGuiDuyetId(userInfo.getId());
+            item.setNgayGuiDuyet(LocalDate.now());
+        } else if (NhapXuatHangTrangThaiEnum.DA_DUYET.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(trangThai))
+                return false;
+            item.setTrangThai(NhapXuatHangTrangThaiEnum.DA_DUYET.getId());
+            item.setNguoiPduyetId(userInfo.getId());
+            item.setNgayPduyet(LocalDate.now());
+        } else if (NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(trangThai))
+                return false;
 
-        return success;
+            item.setTrangThai(NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CHI_CUC.getId());
+            item.setNguoiPduyetId(userInfo.getId());
+            item.setNgayPduyet(LocalDate.now());
+        } else {
+            throw new Exception("Bad request.");
+        }
+
+        return true;
     }
 
     @Override

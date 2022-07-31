@@ -46,9 +46,6 @@ public class HhQdGiaoNvuNhapxuatHdrReq {
 	@Size(max = 2000, message = "Ghi chú không được vượt quá 2000 ký tự")
 	String ghiChu;
 
-	/**
-	 * @link QdGiaoNvNhapXuatLoaiHangHoaEnum
-	 */
 	String loaiVthh;
 
 	String trichYeu;

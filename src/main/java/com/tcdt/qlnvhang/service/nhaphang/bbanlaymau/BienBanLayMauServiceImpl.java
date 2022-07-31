@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau.BienBanLayMauCt;
 import com.tcdt.qlnvhang.entities.nhaphang.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLt;
 import com.tcdt.qlnvhang.entities.nhaphang.vattu.bienbanguihang.NhBienBanGuiHang;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauCtRepository;
@@ -221,12 +222,32 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 		}
 
 		BienBanLayMau bb = optional.get();
+		String trangThai = bb.getTrangThai();
+		if (NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
+			if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
+				return false;
 
-		boolean success = this.updateStatus(bb, stReq, userInfo);
-		if (success)
-			bienBanLayMauRepository.save(bb);
+			bb.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId());
+			bb.setNguoiGuiDuyetId(userInfo.getId());
+			bb.setNgayGuiDuyet(LocalDate.now());
+		} else if (NhapXuatHangTrangThaiEnum.DA_DUYET.getId().equals(stReq.getTrangThai())) {
+			if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(trangThai))
+				return false;
+			bb.setTrangThai(NhapXuatHangTrangThaiEnum.DA_DUYET.getId());
+			bb.setNguoiPduyetId(userInfo.getId());
+			bb.setNgayPduyet(LocalDate.now());
+		} else if (NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
+			if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(trangThai))
+				return false;
 
-		return success;
+			bb.setTrangThai(NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CHI_CUC.getId());
+			bb.setNguoiPduyetId(userInfo.getId());
+			bb.setNgayPduyet(LocalDate.now());
+		} else {
+			throw new Exception("Bad request.");
+		}
+
+		return true;
 	}
 
 	@Override

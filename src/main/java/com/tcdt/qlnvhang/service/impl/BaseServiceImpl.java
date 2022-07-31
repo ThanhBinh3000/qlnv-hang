@@ -16,14 +16,12 @@ import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
-import com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau.BienBanBanGiaoMau;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.request.QlnvDmDonviSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.HhDmDviLquanSearchReq;
 import com.tcdt.qlnvhang.response.CommonResponse;
-import com.tcdt.qlnvhang.service.SecurityContextService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -389,14 +387,14 @@ public class BaseServiceImpl {
 			t.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_TP.getId());
 			t.setNguoiGuiDuyetId(userInfo.getId());
 			t.setNgayGuiDuyet(LocalDate.now());
-		} else if (NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CUC.getId().equals(stReq.getTrangThai())) {
+		} else if (NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
 			if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_TP.getId().equals(trangThai))
 				return false;
-			t.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CUC.getId());
+			t.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId());
 			t.setNguoiPduyetId(userInfo.getId());
 			t.setNgayPduyet(LocalDate.now());
 		} else if (NhapXuatHangTrangThaiEnum.DA_DUYET.getId().equals(stReq.getTrangThai())) {
-			if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CUC.getId().equals(trangThai))
+			if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(trangThai))
 				return false;
 
 			t.setTrangThai(NhapXuatHangTrangThaiEnum.DA_DUYET.getId());
@@ -410,11 +408,11 @@ public class BaseServiceImpl {
 			t.setNguoiPduyetId(userInfo.getId());
 			t.setNgayPduyet(LocalDate.now());
 			t.setLyDoTuChoi(stReq.getLyDo());
-		} else if (NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CUC.getId().equals(stReq.getTrangThai())) {
-			if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CUC.getId().equals(trangThai))
+		} else if (NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
+			if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(trangThai))
 				return false;
 
-			t.setTrangThai(NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CUC.getId());
+			t.setTrangThai(NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CHI_CUC.getId());
 			t.setNguoiPduyetId(userInfo.getId());
 			t.setNgayPduyet(LocalDate.now());
 			t.setLyDoTuChoi(stReq.getLyDo());
@@ -422,7 +420,7 @@ public class BaseServiceImpl {
 			throw new Exception("Bad request.");
 		}
 
-		return false;
+		return true;
 	}
 }
 

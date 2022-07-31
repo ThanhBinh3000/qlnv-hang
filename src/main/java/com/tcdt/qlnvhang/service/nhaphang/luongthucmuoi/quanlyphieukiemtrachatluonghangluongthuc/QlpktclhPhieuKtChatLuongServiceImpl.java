@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.nhaphang.luongthucmuoi.quanlyphieukiemtrachatl
 import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhKetQuaKiemTra;
 import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhKetQuaKiemTraRepository;
@@ -217,27 +218,48 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public boolean approve(StatusReq req) throws Exception {
+	public boolean approve(StatusReq stReq) throws Exception {
 
 		UserInfo userInfo = UserUtils.getUserInfo();
 
 		if (!Contains.CAP_CHI_CUC.equals(userInfo.getCapDvi()))
 			throw new Exception("Bad Request");
 
-		if (StringUtils.isEmpty(req.getId()))
+		if (StringUtils.isEmpty(stReq.getId()))
 			throw new Exception("Không tìm thấy dữ liệu");
 
-		Optional<QlpktclhPhieuKtChatLuong> optional = qlpktclhPhieuKtChatLuongRepo.findById(req.getId());
+		Optional<QlpktclhPhieuKtChatLuong> optional = qlpktclhPhieuKtChatLuongRepo.findById(stReq.getId());
 		if (!optional.isPresent())
 			throw new Exception("Không tìm thấy dữ liệu");
 
 		QlpktclhPhieuKtChatLuong phieu = optional.get();
 
-		boolean success = this.updateStatus(phieu, req, userInfo);
-		if (success)
-			qlpktclhPhieuKtChatLuongRepo.save(phieu);
+		String trangThai = phieu.getTrangThai();
+		if (NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
+			if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
+				return false;
 
-		return success;
+			phieu.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId());
+			phieu.setNguoiGuiDuyetId(userInfo.getId());
+			phieu.setNgayGuiDuyet(LocalDate.now());
+		} else if (NhapXuatHangTrangThaiEnum.DA_DUYET.getId().equals(stReq.getTrangThai())) {
+			if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(trangThai))
+				return false;
+			phieu.setTrangThai(NhapXuatHangTrangThaiEnum.DA_DUYET.getId());
+			phieu.setNguoiPduyetId(userInfo.getId());
+			phieu.setNgayPduyet(LocalDate.now());
+		} else if (NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
+			if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(trangThai))
+				return false;
+
+			phieu.setTrangThai(NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CHI_CUC.getId());
+			phieu.setNguoiPduyetId(userInfo.getId());
+			phieu.setNgayPduyet(LocalDate.now());
+		} else {
+			throw new Exception("Bad request.");
+		}
+
+		return true;
 	}
 
 	@Transactional(rollbackFor = Exception.class)

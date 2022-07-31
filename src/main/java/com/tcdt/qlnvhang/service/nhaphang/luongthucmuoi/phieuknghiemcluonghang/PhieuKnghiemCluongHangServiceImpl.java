@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.nhaphang.luongthucmuoi.phieuknghiemcluonghang;
 import com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau.BienBanBanGiaoMau;
 import com.tcdt.qlnvhang.entities.nhaphang.phieuknghiemcluonghang.PhieuKnghiemCluongHang;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.bbanbangiaomau.BienBanBanGiaoMauRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
@@ -194,12 +195,46 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 			throw new Exception("Không tìm thấy dữ liệu.");
 		}
 
-		PhieuKnghiemCluongHang phieu = optional.get();
-		boolean success = this.updateStatus(phieu, stReq, userInfo);
-		if (success)
-			phieuKnghiemCluongHangRepository.save(phieu);
+		PhieuKnghiemCluongHang item = optional.get();
+		String trangThai = item.getTrangThai();
+		if (NhapXuatHangTrangThaiEnum.CHO_DUYET_TP_KTBQ.getId().equals(stReq.getTrangThai())) {
+			if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
+				return false;
 
-		return success;
+			item.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_TP_KTBQ.getId());
+			item.setNguoiGuiDuyetId(userInfo.getId());
+			item.setNgayGuiDuyet(LocalDate.now());
+		} else if (NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CUC.getId().equals(stReq.getTrangThai())) {
+			if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_TP_KTBQ.getId().equals(trangThai))
+				return false;
+			item.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CUC.getId());
+			item.setNguoiGuiDuyetId(userInfo.getId());
+			item.setNgayGuiDuyet(LocalDate.now());
+		} else if (NhapXuatHangTrangThaiEnum.DA_DUYET.getId().equals(stReq.getTrangThai())) {
+			if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CUC.getId().equals(trangThai))
+				return false;
+			item.setTrangThai(NhapXuatHangTrangThaiEnum.DA_DUYET.getId());
+			item.setNguoiPduyetId(userInfo.getId());
+			item.setNgayPduyet(LocalDate.now());
+		} else if (NhapXuatHangTrangThaiEnum.TU_CHOI_TP_KTBQ.getId().equals(stReq.getTrangThai())) {
+			if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_TP_KTBQ.getId().equals(trangThai))
+				return false;
+
+			item.setTrangThai(NhapXuatHangTrangThaiEnum.TU_CHOI_TP_KTBQ.getId());
+			item.setNguoiPduyetId(userInfo.getId());
+			item.setNgayPduyet(LocalDate.now());
+		} else if (NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CUC.getId().equals(stReq.getTrangThai())) {
+			if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CUC.getId().equals(trangThai))
+				return false;
+
+			item.setTrangThai(NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CUC.getId());
+			item.setNguoiPduyetId(userInfo.getId());
+			item.setNgayPduyet(LocalDate.now());
+		} else {
+			throw new Exception("Bad request.");
+		}
+
+		return true;
 	}
 
 	@Override
