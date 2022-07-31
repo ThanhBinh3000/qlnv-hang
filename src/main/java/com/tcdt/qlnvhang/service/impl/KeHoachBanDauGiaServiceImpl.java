@@ -389,10 +389,21 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null) throw new Exception("Bad request.");
 
+
 		Optional<KeHoachBanDauGia> optional = keHoachBanDauGiaRepository.findById(id);
 		if (!optional.isPresent())
 			throw new Exception("Kế hoạch bán đấu giá không tồn tại");
 		KeHoachBanDauGia keHoachDauGia = optional.get();
+
+		List<BanDauGiaPhanLoTaiSan> phanLoTaiSanList = phanLoTaiSanRepository.findByBhDgKehoachId(id);
+		if (!CollectionUtils.isEmpty(phanLoTaiSanList)) keHoachDauGia.setPhanLoTaiSanList(phanLoTaiSanList);
+
+		List<BanDauGiaDiaDiemGiaoNhan> diaDiemGiaoNhanList = diaDiemGiaoNhanRepository.findByBhDgKehoachId(id);
+		if (!CollectionUtils.isEmpty(diaDiemGiaoNhanList)) keHoachDauGia.setDiaDiemGiaoNhanList(diaDiemGiaoNhanList);
+
+		List<FileDinhKem> fileDinhKemList = fileDinhKemService.search(keHoachDauGia.getId(), Collections.singleton(KeHoachBanDauGia.TABLE_NAME));
+		if (!CollectionUtils.isEmpty(fileDinhKemList)) keHoachDauGia.setFileDinhKems(fileDinhKemList);
+
 		return kehoachResponseMapper.toDto(keHoachDauGia);
 	}
 }
