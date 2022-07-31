@@ -86,18 +86,6 @@ public class QlBienBanNhapDayKhoLt extends TrangThaiBaseEntity implements Serial
     @Column(name = "CAP_DVI")
     private String capDvi;
 
-    @Column(name = "NGAY_GUI_DUYET")
-    private LocalDate ngayGuiDuyet;
-
-    @Column(name = "NGUOI_GUI_DUYET_ID")
-    private Long nguoiGuiDuyetId;
-
-    @Column(name = "NGAY_PHE_DUYET")
-    private LocalDate ngayPheDuyet;
-
-    @Column(name = "NGUOI_PHE_DUYET_ID")
-    private Long nguoiPheDuyetId;
-
     private Integer so;
     private Integer nam;
 

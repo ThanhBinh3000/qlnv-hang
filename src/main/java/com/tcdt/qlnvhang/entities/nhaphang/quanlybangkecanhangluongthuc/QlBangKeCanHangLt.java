@@ -83,18 +83,6 @@ public class QlBangKeCanHangLt extends TrangThaiBaseEntity implements Serializab
     @Column(name = "CAP_DVI")
     private String capDvi;
 
-    @Column(name = "NGAY_GUI_DUYET")
-    private LocalDate ngayGuiDuyet;
-
-    @Column(name = "NGUOI_GUI_DUYET_ID")
-    private Long nguoiGuiDuyetId;
-
-    @Column(name = "NGAY_PHE_DUYET")
-    private LocalDate ngayPheDuyet;
-
-    @Column(name = "NGUOI_PHE_DUYET_ID")
-    private Long nguoiPheDuyetId;
-
     @Column(name = "TONG_TRONG_LUONG_BAO_BI")
     private BigDecimal tongTrongLuongBaoBi;
 
