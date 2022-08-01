@@ -1,10 +1,10 @@
 package com.tcdt.qlnvhang.service.nhaphang.bbanlaymau;
 
-import com.tcdt.qlnvhang.entities.bbanlaymau.BienBanLayMau;
-import com.tcdt.qlnvhang.entities.bbanlaymau.BienBanLayMauCt;
-import com.tcdt.qlnvhang.entities.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLt;
-import com.tcdt.qlnvhang.entities.vattu.bienbanguihang.NhBienBanGuiHang;
-import com.tcdt.qlnvhang.enums.HhBbNghiemthuKlstStatusEnum;
+import com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau.BienBanLayMau;
+import com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau.BienBanLayMauCt;
+import com.tcdt.qlnvhang.entities.nhaphang.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLt;
+import com.tcdt.qlnvhang.entities.nhaphang.vattu.bienbanguihang.NhBienBanGuiHang;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
@@ -116,8 +116,8 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 			KtNganLo nganLo = o[5] != null ? (KtNganLo) o[5] : o[6] != null ? (KtNganLo) o[6] : null;
 
 			BeanUtils.copyProperties(item, response);
-			response.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
-			response.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
+			response.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+			response.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
 			response.setQdgnvnxId(qdNhapId);
 			response.setSoQuyetDinhNhap(soQdNhap);
 			response.setHopDongId(hopDongId);
@@ -138,7 +138,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 		this.validateSoBb(null, req);
 		BienBanLayMau bienBienLayMau = new BienBanLayMau();
 		BeanUtils.copyProperties(req, bienBienLayMau, "id");
-		bienBienLayMau.setTrangThai(TrangThaiEnum.DU_THAO.getId());
+		bienBienLayMau.setTrangThai(NhapXuatHangTrangThaiEnum.DU_THAO.getId());
 		bienBienLayMau.setNguoiTaoId(userInfo.getId());
 		bienBienLayMau.setNgayTao(LocalDate.now());
 		bienBienLayMau.setMaDvi(userInfo.getDvql());
@@ -223,40 +223,31 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 
 		BienBanLayMau bb = optional.get();
 		String trangThai = bb.getTrangThai();
-		if (TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(stReq.getTrangThai())) {
-			if (!HhBbNghiemthuKlstStatusEnum.DU_THAO.getId().equals(trangThai))
+		if (NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
+			if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
 				return false;
 
-			bb.setTrangThai(TrangThaiEnum.DU_THAO_TRINH_DUYET.getId());
+			bb.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId());
 			bb.setNguoiGuiDuyetId(userInfo.getId());
 			bb.setNgayGuiDuyet(LocalDate.now());
-		} else if (TrangThaiEnum.LANH_DAO_DUYET.getId().equals(stReq.getTrangThai())) {
-			if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
+		} else if (NhapXuatHangTrangThaiEnum.DA_DUYET.getId().equals(stReq.getTrangThai())) {
+			if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(trangThai))
 				return false;
-			bb.setTrangThai(TrangThaiEnum.LANH_DAO_DUYET.getId());
+			bb.setTrangThai(NhapXuatHangTrangThaiEnum.DA_DUYET.getId());
 			bb.setNguoiPduyetId(userInfo.getId());
 			bb.setNgayPduyet(LocalDate.now());
-		} else if (TrangThaiEnum.BAN_HANH.getId().equals(stReq.getTrangThai())) {
-			if (!TrangThaiEnum.LANH_DAO_DUYET.getId().equals(trangThai))
-				return false;
-
-			bb.setTrangThai(TrangThaiEnum.BAN_HANH.getId());
-			bb.setNguoiPduyetId(userInfo.getId());
-			bb.setNgayPduyet(LocalDate.now());
-		} else if (TrangThaiEnum.TU_CHOI.getId().equals(stReq.getTrangThai())) {
-			if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
+		} else if (NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
+			if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(trangThai))
 				return false;
 
-			bb.setTrangThai(TrangThaiEnum.TU_CHOI.getId());
+			bb.setTrangThai(NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CHI_CUC.getId());
 			bb.setNguoiPduyetId(userInfo.getId());
 			bb.setNgayPduyet(LocalDate.now());
-			bb.setLyDoTuChoi(stReq.getLyDo());
-		}  else {
+		} else {
 			throw new Exception("Bad request.");
 		}
 
-		bienBanLayMauRepository.save(bb);
-		return false;
+		return true;
 	}
 
 	@Override
@@ -281,8 +272,8 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 
 		BienBanLayMau bb = optional.get();
 
-		if (TrangThaiEnum.BAN_HANH.getId().equals(bb.getTrangThai())) {
-			throw new Exception("Không thể xóa đề xuất điều chỉnh đã ban hành");
+		if (NhapXuatHangTrangThaiEnum.DA_DUYET.getId().equals(bb.getTrangThai())) {
+			throw new Exception("Không thể xóa đề xuất điều chỉnh đã đã duyệt");
 		}
 		bienBanLayMauCtRepository.deleteByBbLayMauIdIn(Collections.singleton(bb.getId()));
 		bienBanLayMauRepository.deleteById(id);
@@ -297,8 +288,8 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 		BienBanLayMauRes res = new BienBanLayMauRes();
 		BeanUtils.copyProperties(item, res);
 
-		res.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
-		res.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
+		res.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+		res.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
 		QlnvDmDonvi donvi = getDviByMa(item.getMaDvi(), req);
 		res.setMaDvi(donvi.getMaDvi());
 		res.setTenDvi(donvi.getTenDvi());
@@ -424,7 +415,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 				objs[6] = item.getTenNhaKho();
 				objs[7] = item.getTenNganKho();
 				objs[8] = item.getTenNganLo();
-				objs[9] = TrangThaiEnum.getTenById(item.getTrangThai());
+				objs[9] = NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai());
 				dataList.add(objs);
 			}
 

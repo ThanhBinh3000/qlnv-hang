@@ -1,12 +1,12 @@
 package com.tcdt.qlnvhang.service.nhaphang.vattu.bienbaogiaonhan;
 
-import com.tcdt.qlnvhang.entities.vattu.bienbangiaonhan.NhBbGiaoNhanVt;
-import com.tcdt.qlnvhang.entities.vattu.bienbangiaonhan.NhBbGiaoNhanVtCt;
-import com.tcdt.qlnvhang.entities.vattu.bienbanguihang.NhBienBanGuiHang;
-import com.tcdt.qlnvhang.entities.vattu.bienbanketthucnhapkho.NhBbKtNhapKhoVt;
-import com.tcdt.qlnvhang.entities.vattu.hosokythuat.NhHoSoKyThuat;
+import com.tcdt.qlnvhang.entities.nhaphang.vattu.bienbangiaonhan.NhBbGiaoNhanVt;
+import com.tcdt.qlnvhang.entities.nhaphang.vattu.bienbangiaonhan.NhBbGiaoNhanVtCt;
+import com.tcdt.qlnvhang.entities.nhaphang.vattu.bienbanguihang.NhBienBanGuiHang;
+import com.tcdt.qlnvhang.entities.nhaphang.vattu.bienbanketthucnhapkho.NhBbKtNhapKhoVt;
+import com.tcdt.qlnvhang.entities.nhaphang.vattu.hosokythuat.NhHoSoKyThuat;
 import com.tcdt.qlnvhang.enums.LoaiDaiDienEnum;
-import com.tcdt.qlnvhang.enums.TrangThaiEnum;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
@@ -89,7 +89,7 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
         BeanUtils.copyProperties(req, item, "id");
         item.setNgayTao(LocalDate.now());
         item.setNguoiTaoId(userInfo.getId());
-        item.setTrangThai(TrangThaiEnum.DU_THAO.getId());
+        item.setTrangThai(NhapXuatHangTrangThaiEnum.DU_THAO.getId());
         item.setMaDvi(userInfo.getDvql());
         item.setCapDvi(userInfo.getCapDvi());
         item.setSo(getSo());
@@ -108,8 +108,8 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
         NhBbGiaoNhanVtRes res = new NhBbGiaoNhanVtRes();
         List<NhBbGiaoNhanVtCtRes> chiTiets = new ArrayList<>();
         BeanUtils.copyProperties(item, res);
-        res.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
-        res.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
+        res.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+        res.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
         for (NhBbGiaoNhanVtCt ct : item.getChiTiets()) {
             chiTiets.add(new NhBbGiaoNhanVtCtRes(ct));
         }
@@ -252,8 +252,8 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
             throw new Exception("Biên bản giao nhận không tồn tại.");
 
         NhBbGiaoNhanVt item = optional.get();
-        if (TrangThaiEnum.BAN_HANH.getId().equals(item.getTrangThai())) {
-            throw new Exception("Không thể xóa biên bản đã ban hành");
+        if (NhapXuatHangTrangThaiEnum.DA_DUYET.getId().equals(item.getTrangThai())) {
+            throw new Exception("Không thể xóa biên bản đã đã duyệt");
         }
         nhBbGiaoNhanVtCtRepository.deleteByBbGiaoNhanVtIdIn(Collections.singleton(item.getId()));
         nhBbGiaoNhanVtRepository.delete(item);
@@ -271,42 +271,11 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
             throw new Exception("Biên bản giao nhận không tồn tại.");
 
         NhBbGiaoNhanVt phieu = optional.get();
+        boolean success = this.updateStatus(phieu, stReq, userInfo);
+        if (success)
+            nhBbGiaoNhanVtRepository.save(phieu);
 
-        String trangThai = phieu.getTrangThai();
-        if (TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(stReq.getTrangThai())) {
-            if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
-                return false;
-
-            phieu.setTrangThai(TrangThaiEnum.DU_THAO_TRINH_DUYET.getId());
-            phieu.setNguoiGuiDuyetId(userInfo.getId());
-            phieu.setNgayGuiDuyet(LocalDate.now());
-        } else if (TrangThaiEnum.LANH_DAO_DUYET.getId().equals(stReq.getTrangThai())) {
-            if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
-                return false;
-            phieu.setTrangThai(TrangThaiEnum.LANH_DAO_DUYET.getId());
-            phieu.setNguoiPduyetId(userInfo.getId());
-            phieu.setNgayPduyet(LocalDate.now());
-        } else if (TrangThaiEnum.BAN_HANH.getId().equals(stReq.getTrangThai())) {
-            if (!TrangThaiEnum.LANH_DAO_DUYET.getId().equals(trangThai))
-                return false;
-
-            phieu.setTrangThai(TrangThaiEnum.BAN_HANH.getId());
-            phieu.setNguoiPduyetId(userInfo.getId());
-            phieu.setNgayPduyet(LocalDate.now());
-        } else if (TrangThaiEnum.TU_CHOI.getId().equals(stReq.getTrangThai())) {
-            if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
-                return false;
-
-            phieu.setTrangThai(TrangThaiEnum.TU_CHOI.getId());
-            phieu.setNguoiPduyetId(userInfo.getId());
-            phieu.setNgayPduyet(LocalDate.now());
-            phieu.setLyDoTuChoi(stReq.getLyDo());
-        }  else {
-            throw new Exception("Bad request.");
-        }
-
-        nhBbGiaoNhanVtRepository.save(phieu);
-        return true;
+        return success;
     }
 
     @Override
@@ -337,8 +306,8 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
             String soHd = (String) o[4];
             NhBbGiaoNhanVtCt daiDienBenGiao = mapCt.get(item.getId());
             BeanUtils.copyProperties(item, response);
-            response.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
-            response.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
+            response.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+            response.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
             response.setQdgnvnxId(qdNhapId);
             response.setSoQuyetDinhNhap(soQdNhap);
             response.setHopDongId(hopDongId);
@@ -390,7 +359,7 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
                 objs[4] = LocalDateTimeUtils.localDateToString(item.getNgayKy());
                 objs[5] = item.getSoHopDong();
                 objs[6] = item.getBenGiao();
-                objs[7] = TrangThaiEnum.getTenById(item.getTrangThai());
+                objs[7] = NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai());
                 dataList.add(objs);
             }
 

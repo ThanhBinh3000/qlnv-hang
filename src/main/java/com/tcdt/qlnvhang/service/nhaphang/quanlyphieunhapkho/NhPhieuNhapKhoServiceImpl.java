@@ -1,12 +1,12 @@
 package com.tcdt.qlnvhang.service.nhaphang.quanlyphieunhapkho;
 
 import com.google.common.collect.Sets;
-import com.tcdt.qlnvhang.entities.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
-import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCt;
-import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.NhPhieuNhapKho;
-import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCt1;
-import com.tcdt.qlnvhang.entities.vattu.hosokythuat.NhHoSoKyThuat;
-import com.tcdt.qlnvhang.enums.TrangThaiEnum;
+import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
+import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCt;
+import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieunhapkholuongthuc.NhPhieuNhapKho;
+import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCt1;
+import com.tcdt.qlnvhang.entities.nhaphang.vattu.hosokythuat.NhHoSoKyThuat;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCt1Repository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
@@ -115,7 +115,7 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
         BeanUtils.copyProperties(req, phieu, "id");
         phieu.setNgayTao(LocalDate.now());
         phieu.setNguoiTaoId(userInfo.getId());
-        phieu.setTrangThai(TrangThaiEnum.DU_THAO.getId());
+        phieu.setTrangThai(NhapXuatHangTrangThaiEnum.DU_THAO.getId());
         phieu.setMaDvi(userInfo.getDvql());
         phieu.setCapDvi(userInfo.getCapDvi());
         phieu.setSo(getSo());
@@ -189,8 +189,8 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
 
         NhPhieuNhapKhoRes response = new NhPhieuNhapKhoRes();
         BeanUtils.copyProperties(phieu, response);
-        response.setTenTrangThai(TrangThaiEnum.getTenById(phieu.getTrangThai()));
-        response.setTenTrangThai(TrangThaiEnum.getTrangThaiDuyetById(phieu.getTrangThai()));
+        response.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(phieu.getTrangThai()));
+        response.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(phieu.getTrangThai()));
         List<NhPhieuNhapKhoCt> hangHoaList = phieu.getHangHoaList();
 
         BigDecimal tongSoLuong = BigDecimal.ZERO;
@@ -314,7 +314,7 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
             throw new Exception("Quyết định không tồn tại.");
 
         NhPhieuNhapKho phieu = optional.get();
-        if (TrangThaiEnum.BAN_HANH.getId().equals(phieu.getTrangThai())) {
+        if (NhapXuatHangTrangThaiEnum.DA_DUYET.getId().equals(phieu.getTrangThai())) {
             throw new Exception("Không thể xóa quyết định đã duyệt");
         }
 
@@ -346,53 +346,41 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public boolean updateStatusQd(StatusReq req) throws Exception {
+    public boolean updateStatusQd(StatusReq stReq) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null)
             throw new Exception("Bad request.");
-        Optional<NhPhieuNhapKho> optional = nhPhieuNhapKhoRepository.findById(req.getId());
+        Optional<NhPhieuNhapKho> optional = nhPhieuNhapKhoRepository.findById(stReq.getId());
         if (!optional.isPresent())
             throw new Exception("Quyết định không tồn tại.");
 
         NhPhieuNhapKho phieu = optional.get();
-        return this.updateStatus(req, phieu, userInfo);
-    }
 
-    public boolean updateStatus(StatusReq stReq, NhPhieuNhapKho phieu, UserInfo userInfo) throws Exception {
         String trangThai = phieu.getTrangThai();
-        if (TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(stReq.getTrangThai())) {
+        if (NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
             if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
                 return false;
 
-            phieu.setTrangThai(TrangThaiEnum.DU_THAO_TRINH_DUYET.getId());
+            phieu.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId());
             phieu.setNguoiGuiDuyetId(userInfo.getId());
             phieu.setNgayGuiDuyet(LocalDate.now());
-        } else if (TrangThaiEnum.LANH_DAO_DUYET.getId().equals(stReq.getTrangThai())) {
-            if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
+        } else if (NhapXuatHangTrangThaiEnum.DA_DUYET.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(trangThai))
                 return false;
-            phieu.setTrangThai(TrangThaiEnum.LANH_DAO_DUYET.getId());
-            phieu.setNguoiPheDuyetId(userInfo.getId());
-            phieu.setNgayPheDuyet(LocalDate.now());
-        } else if (TrangThaiEnum.BAN_HANH.getId().equals(stReq.getTrangThai())) {
-            if (!TrangThaiEnum.LANH_DAO_DUYET.getId().equals(trangThai))
-                return false;
-
-            phieu.setTrangThai(TrangThaiEnum.BAN_HANH.getId());
-            phieu.setNguoiPheDuyetId(userInfo.getId());
-            phieu.setNgayPheDuyet(LocalDate.now());
-        } else if (TrangThaiEnum.TU_CHOI.getId().equals(stReq.getTrangThai())) {
-            if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
+            phieu.setTrangThai(NhapXuatHangTrangThaiEnum.DA_DUYET.getId());
+            phieu.setNguoiPduyetId(userInfo.getId());
+            phieu.setNgayPduyet(LocalDate.now());
+        } else if (NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(trangThai))
                 return false;
 
-            phieu.setTrangThai(TrangThaiEnum.TU_CHOI.getId());
-            phieu.setNguoiPheDuyetId(userInfo.getId());
-            phieu.setNgayPheDuyet(LocalDate.now());
-            phieu.setLyDoTuChoi(stReq.getLyDo());
-        }  else {
+            phieu.setTrangThai(NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CHI_CUC.getId());
+            phieu.setNguoiPduyetId(userInfo.getId());
+            phieu.setNgayPduyet(LocalDate.now());
+        } else {
             throw new Exception("Bad request.");
         }
 
-        nhPhieuNhapKhoRepository.save(phieu);
         return true;
     }
 
@@ -484,7 +472,7 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
                 objs[5] = item.getTenNhaKho();
                 objs[6] = item.getTenNganKho();
                 objs[7] = item.getTenNganLo();
-                objs[8] = TrangThaiEnum.getTenById(item.getTrangThai());
+                objs[8] = NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai());
                 dataList.add(objs);
             }
 

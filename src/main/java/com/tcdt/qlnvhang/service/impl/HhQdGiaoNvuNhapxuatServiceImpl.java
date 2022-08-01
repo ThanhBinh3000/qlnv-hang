@@ -1,14 +1,13 @@
 package com.tcdt.qlnvhang.service.impl;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
-import com.tcdt.qlnvhang.entities.vattu.bangke.NhBangKeVt;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatDtlLoaiNx;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatHdrLoaiQd;
@@ -18,11 +17,9 @@ import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatDtl1Repository;
 import com.tcdt.qlnvhang.request.*;
 import com.tcdt.qlnvhang.response.BaseNhapHangCount;
-import com.tcdt.qlnvhang.response.vattu.bangke.NhBangKeVtRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
-import com.tcdt.qlnvhang.table.khotang.KtNganLo;
 import com.tcdt.qlnvhang.util.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -253,7 +250,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 	@Transactional(rollbackOn = Exception.class)
 	@Override
-	public boolean updateStatus(StatusReq req) throws Exception {
+	public boolean updateStatus(StatusReq stReq) throws Exception {
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null)
 			throw new Exception("Bad request.");
@@ -261,44 +258,70 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		if (!Contains.CAP_CUC.equalsIgnoreCase(userInfo.getCapDvi()))
 			throw new Exception("Bad request.");
 
-		Optional<HhQdGiaoNvuNhapxuatHdr> optional = hhQdGiaoNvuNhapxuatRepository.findById(Long.valueOf(req.getId()));
+		Optional<HhQdGiaoNvuNhapxuatHdr> optional = hhQdGiaoNvuNhapxuatRepository.findById(Long.valueOf(stReq.getId()));
 		if (!optional.isPresent())
 			throw new Exception("Không tìm thấy dữ liệu.");
 
 		HhQdGiaoNvuNhapxuatHdr item = optional.get();
 
 		String trangThai = item.getTrangThai();
-		if (TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(req.getTrangThai())) {
-			if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
-				return false;
 
-			item.setTrangThai(TrangThaiEnum.DU_THAO_TRINH_DUYET.getId());
-			item.setNguoiGuiDuyet(userInfo.getUsername());
-			item.setNgayGuiDuyet(getDateTimeNow());
+		if (Contains.LOAI_VTHH_VATTU.equals(item.getLoaiVthh())) {
+			if (NhapXuatHangTrangThaiEnum.CHO_DUYET_TP_KH_QLHDT.getId().equals(stReq.getTrangThai())) {
+				if (!NhapXuatHangTrangThaiEnum.DU_THAO.getId().equals(trangThai))
+					return false;
 
-		} else if (TrangThaiEnum.LANH_DAO_DUYET.getId().equals(req.getTrangThai())) {
-			if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
-				return false;
-			item.setTrangThai(TrangThaiEnum.LANH_DAO_DUYET.getId());
-			item.setNguoiPduyet(userInfo.getUsername());
-			item.setNgayPduyet(getDateTimeNow());
-		} else if (TrangThaiEnum.BAN_HANH.getId().equals(req.getTrangThai())) {
-			if (!TrangThaiEnum.LANH_DAO_DUYET.getId().equals(trangThai))
-				return false;
+				item.setTrangThai(NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
+				item.setNguoiPduyet(userInfo.getUsername());
+				item.setNgayPduyet(getDateTimeNow());
 
-			item.setTrangThai(TrangThaiEnum.BAN_HANH.getId());
-			item.setNguoiPduyet(userInfo.getUsername());
-			item.setNgayPduyet(getDateTimeNow());
-		} else if (TrangThaiEnum.TU_CHOI.getId().equals(req.getTrangThai())) {
-			if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
-				return false;
+			} else if (NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CUC.getId().equals(stReq.getTrangThai())) {
+				if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_TP_KH_QLHDT.getId().equals(trangThai))
+					return false;
 
-			item.setTrangThai(TrangThaiEnum.TU_CHOI.getId());
-			item.setNguoiPduyet(userInfo.getUsername());
-			item.setNgayPduyet(getDateTimeNow());
-			item.setLdoTuchoi(req.getLyDo());
-		}  else {
-			throw new Exception("Bad request.");
+				item.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CUC.getId());
+				item.setNguoiPduyet(userInfo.getUsername());
+				item.setNgayPduyet(getDateTimeNow());
+
+			} else if (NhapXuatHangTrangThaiEnum.BAN_HANH.getId().equals(stReq.getTrangThai())) {
+				if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CUC.getId().equals(trangThai))
+					return false;
+
+				item.setTrangThai(NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
+				item.setNguoiPduyet(userInfo.getUsername());
+				item.setNgayPduyet(getDateTimeNow());
+
+			} else if (NhapXuatHangTrangThaiEnum.TU_CHOI_TP_KH_QLHDT.getId().equals(stReq.getTrangThai())) {
+				if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_TP_KH_QLHDT.getId().equals(trangThai))
+					return false;
+
+				item.setTrangThai(NhapXuatHangTrangThaiEnum.TU_CHOI_TP_KH_QLHDT.getId());
+				item.setNguoiPduyet(userInfo.getUsername());
+				item.setNgayPduyet(getDateTimeNow());
+
+			} else if (NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CUC.getId().equals(stReq.getTrangThai())) {
+				if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CUC.getId().equals(trangThai))
+					return false;
+
+				item.setTrangThai(NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CUC.getId());
+				item.setNguoiPduyet(userInfo.getUsername());
+				item.setNgayPduyet(getDateTimeNow());
+
+			} else {
+				throw new Exception("Bad request.");
+			}
+		} else {
+			if (NhapXuatHangTrangThaiEnum.BAN_HANH.getId().equals(stReq.getTrangThai())) {
+				if (!NhapXuatHangTrangThaiEnum.DU_THAO.getId().equals(trangThai))
+					return false;
+
+				item.setTrangThai(NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
+				item.setNguoiPduyet(userInfo.getUsername());
+				item.setNgayPduyet(getDateTimeNow());
+
+			} else {
+				throw new Exception("Bad request.");
+			}
 		}
 
 		hhQdGiaoNvuNhapxuatRepository.save(item);

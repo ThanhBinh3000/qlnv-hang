@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.repository.phieuknghiemcluonghang;
 
-import com.tcdt.qlnvhang.entities.phieuknghiemcluonghang.KquaKnghiem;
+import com.tcdt.qlnvhang.entities.nhaphang.phieuknghiemcluonghang.KquaKnghiem;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;

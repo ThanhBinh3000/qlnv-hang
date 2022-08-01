@@ -1,9 +1,10 @@
 package com.tcdt.qlnvhang.service.nhaphang.vattu.bangke;
 
 import com.google.common.collect.Sets;
-import com.tcdt.qlnvhang.entities.quanlyphieunhapkholuongthuc.NhPhieuNhapKho;
-import com.tcdt.qlnvhang.entities.vattu.bangke.NhBangKeVt;
-import com.tcdt.qlnvhang.entities.vattu.bangke.NhBangKeVtCt;
+import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieunhapkholuongthuc.NhPhieuNhapKho;
+import com.tcdt.qlnvhang.entities.nhaphang.vattu.bangke.NhBangKeVt;
+import com.tcdt.qlnvhang.entities.nhaphang.vattu.bangke.NhBangKeVtCt;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
@@ -82,7 +83,7 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
         BeanUtils.copyProperties(req, item, "id");
         item.setNgayTao(LocalDate.now());
         item.setNguoiTaoId(userInfo.getId());
-        item.setTrangThai(TrangThaiEnum.DU_THAO.getId());
+        item.setTrangThai(NhapXuatHangTrangThaiEnum.DU_THAO.getId());
         item.setMaDvi(userInfo.getDvql());
         item.setCapDvi(userInfo.getCapDvi());
         item.setSo(getSo());
@@ -127,8 +128,8 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
         NhBangKeVtRes res = new NhBangKeVtRes();
         List<NhBangKeVtCtRes> chiTiets = new ArrayList<>();
         BeanUtils.copyProperties(item, res);
-        res.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
-        res.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
+        res.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+        res.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
         for (NhBangKeVtCt ct : item.getChiTiets()) {
             chiTiets.add(new NhBangKeVtCtRes(ct));
         }
@@ -223,8 +224,8 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
             throw new Exception("Bảng kê vật tư không tồn tại.");
 
         NhBangKeVt item = optional.get();
-        if (TrangThaiEnum.BAN_HANH.getId().equals(item.getTrangThai())) {
-            throw new Exception("Không thể xóa bảng kê đã ban hành");
+        if (NhapXuatHangTrangThaiEnum.DA_DUYET.getId().equals(item.getTrangThai())) {
+            throw new Exception("Không thể xóa bảng kê đã đã duyệt");
         }
         bangKeVtCtRepository.deleteByBangKeVtIdIn(Collections.singleton(item.getId()));
         bangKeVtRepository.delete(item);
@@ -239,42 +240,32 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
         if (!optional.isPresent())
             throw new Exception("Bảng kê vật tư không tồn tại.");
 
-        NhBangKeVt phieu = optional.get();
-
-        String trangThai = phieu.getTrangThai();
-        if (TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(stReq.getTrangThai())) {
+        NhBangKeVt item = optional.get();
+        String trangThai = item.getTrangThai();
+        if (NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
             if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
                 return false;
 
-            phieu.setTrangThai(TrangThaiEnum.DU_THAO_TRINH_DUYET.getId());
-            phieu.setNguoiGuiDuyetId(userInfo.getId());
-            phieu.setNgayGuiDuyet(LocalDate.now());
-        } else if (TrangThaiEnum.LANH_DAO_DUYET.getId().equals(stReq.getTrangThai())) {
-            if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
+            item.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId());
+            item.setNguoiGuiDuyetId(userInfo.getId());
+            item.setNgayGuiDuyet(LocalDate.now());
+        } else if (NhapXuatHangTrangThaiEnum.DA_DUYET.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(trangThai))
                 return false;
-            phieu.setTrangThai(TrangThaiEnum.LANH_DAO_DUYET.getId());
-            phieu.setNguoiPduyetId(userInfo.getId());
-            phieu.setNgayPduyet(LocalDate.now());
-        } else if (TrangThaiEnum.BAN_HANH.getId().equals(stReq.getTrangThai())) {
-            if (!TrangThaiEnum.LANH_DAO_DUYET.getId().equals(trangThai))
-                return false;
-
-            phieu.setTrangThai(TrangThaiEnum.BAN_HANH.getId());
-            phieu.setNguoiPduyetId(userInfo.getId());
-            phieu.setNgayPduyet(LocalDate.now());
-        } else if (TrangThaiEnum.TU_CHOI.getId().equals(stReq.getTrangThai())) {
-            if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
+            item.setTrangThai(NhapXuatHangTrangThaiEnum.DA_DUYET.getId());
+            item.setNguoiPduyetId(userInfo.getId());
+            item.setNgayPduyet(LocalDate.now());
+        } else if (NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(trangThai))
                 return false;
 
-            phieu.setTrangThai(TrangThaiEnum.TU_CHOI.getId());
-            phieu.setNguoiPduyetId(userInfo.getId());
-            phieu.setNgayPduyet(LocalDate.now());
-            phieu.setLyDoTuChoi(stReq.getLyDo());
-        }  else {
+            item.setTrangThai(NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CHI_CUC.getId());
+            item.setNguoiPduyetId(userInfo.getId());
+            item.setNgayPduyet(LocalDate.now());
+        } else {
             throw new Exception("Bad request.");
         }
 
-        bangKeVtRepository.save(phieu);
         return true;
     }
 
@@ -293,8 +284,8 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
             String soQdNhap = (String) o[2];
             KtNganLo nganLo = o[3] != null ? (KtNganLo) o[3] : null;
             BeanUtils.copyProperties(item, response);
-            response.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
-            response.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
+            response.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+            response.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
             response.setQdgnvnxId(qdNhapId);
             response.setSoQuyetDinhNhap(soQdNhap);
             this.thongTinNganLo(response, nganLo);
@@ -342,7 +333,7 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
                 objs[5] = item.getTenNhaKho();
                 objs[6] = item.getTenNganKho();
                 objs[7] = item.getTenNganLo();
-                objs[8] = TrangThaiEnum.getTenById(item.getTrangThai());
+                objs[8] = NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai());
                 dataList.add(objs);
             }
 

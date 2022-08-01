@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.repository.vattu.bangke;
 
-import com.tcdt.qlnvhang.entities.vattu.bangke.NhBangKeVt;
+import com.tcdt.qlnvhang.entities.nhaphang.vattu.bangke.NhBangKeVt;
 import com.tcdt.qlnvhang.repository.BaseRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
