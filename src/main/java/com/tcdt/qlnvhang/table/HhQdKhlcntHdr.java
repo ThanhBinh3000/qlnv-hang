@@ -45,6 +45,7 @@ public class HhQdKhlcntHdr implements Serializable {
 
 	String soQd;
 
+	@Temporal(TemporalType.DATE)
 	Date ngayQd;
 
 	Long idThHdr;

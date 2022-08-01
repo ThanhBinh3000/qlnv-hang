@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 
 @Repository
-public interface BhTongHopDeXuatKhbdgRepository extends BaseRepository<BhTongHopDeXuatKhbdg, Long> {
+public interface BhTongHopDeXuatKhbdgRepository extends BaseRepository<BhTongHopDeXuatKhbdg, Long>, BhTongHopDeXuatKhbdgRepositoryCustom {
 	void deleteAllByIdIn(Collection<Long> ids);
 }

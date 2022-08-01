@@ -99,6 +99,6 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null) throw new Exception("Bad request.");
 
-		return null;
+		return deXuatKhbdgRepository.search(req, req.getPageable());
 	}
 }
