@@ -351,8 +351,9 @@ public class BaseServiceImpl {
 		return qlnvDmDonviRepository.findMaDviByMaDviChaAndTrangThai(maDviCha, Contains.HOAT_DONG);
 	}
 
-	public <T extends BaseRequest> void prepareSearchReq(T req, UserInfo userInfo, Set<String> capDviReqs, Set<String> trangThais) {
+	public <T extends BaseRequest> void prepareSearchReq(T req, UserInfo userInfo, Set<String> capDviReqs, Set<String> trangThais) throws Exception {
 		String userCapDvi = userInfo.getCapDvi();
+
 		if (!CollectionUtils.isEmpty(capDviReqs)) {
 			Set<String> maDvis = new HashSet<>();
 			if ((Contains.CAP_TONG_CUC.equals(userCapDvi) && capDviReqs.contains(Contains.CAP_TONG_CUC))
@@ -363,6 +364,12 @@ public class BaseServiceImpl {
 					(Contains.CAP_CUC.equals(userCapDvi) && capDviReqs.contains(Contains.CAP_CHI_CUC))) {
 				maDvis.addAll(this.getMaDviCon(userInfo.getDvql()));
 			}
+
+			if ((Contains.CAP_CUC.equals(userCapDvi) && capDviReqs.contains(Contains.CAP_TONG_CUC))
+					|| Contains.CAP_CHI_CUC.equals(userCapDvi) && capDviReqs.contains(Contains.CAP_CUC)) {
+				maDvis.addAll(qlnvDmDonviRepository.findMaDviChaByMaDviAndTrangThai(userInfo.getDvql(), Contains.HOAT_DONG));
+			}
+
 			req.setMaDvis(maDvis);
 		} else {
 			req.setMaDvis(Collections.singleton(userInfo.getDvql()));
@@ -378,44 +385,29 @@ public class BaseServiceImpl {
 	}
 
 
-	public <T extends TrangThaiBaseEntity> boolean updateStatus(T t, StatusReq stReq, UserInfo userInfo) throws Exception {
-		String trangThai = t.getTrangThai();
-		if (NhapXuatHangTrangThaiEnum.CHO_DUYET_TP.getId().equals(stReq.getTrangThai())) {
+	public <T extends TrangThaiBaseEntity> boolean updateStatus(T item, StatusReq stReq, UserInfo userInfo) throws Exception {
+
+		String trangThai = item.getTrangThai();
+		if (NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
 			if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
 				return false;
 
-			t.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_TP.getId());
-			t.setNguoiGuiDuyetId(userInfo.getId());
-			t.setNgayGuiDuyet(LocalDate.now());
-		} else if (NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
-			if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_TP.getId().equals(trangThai))
-				return false;
-			t.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId());
-			t.setNguoiPduyetId(userInfo.getId());
-			t.setNgayPduyet(LocalDate.now());
+			item.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId());
+			item.setNguoiGuiDuyetId(userInfo.getId());
+			item.setNgayGuiDuyet(LocalDate.now());
 		} else if (NhapXuatHangTrangThaiEnum.DA_DUYET.getId().equals(stReq.getTrangThai())) {
 			if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(trangThai))
 				return false;
-
-			t.setTrangThai(NhapXuatHangTrangThaiEnum.DA_DUYET.getId());
-			t.setNguoiPduyetId(userInfo.getId());
-			t.setNgayPduyet(LocalDate.now());
-		} else if (NhapXuatHangTrangThaiEnum.TU_CHOI_TP.getId().equals(stReq.getTrangThai())) {
-			if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_TP.getId().equals(trangThai))
-				return false;
-
-			t.setTrangThai(NhapXuatHangTrangThaiEnum.TU_CHOI_TP.getId());
-			t.setNguoiPduyetId(userInfo.getId());
-			t.setNgayPduyet(LocalDate.now());
-			t.setLyDoTuChoi(stReq.getLyDo());
+			item.setTrangThai(NhapXuatHangTrangThaiEnum.DA_DUYET.getId());
+			item.setNguoiPduyetId(userInfo.getId());
+			item.setNgayPduyet(LocalDate.now());
 		} else if (NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
 			if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(trangThai))
 				return false;
 
-			t.setTrangThai(NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CHI_CUC.getId());
-			t.setNguoiPduyetId(userInfo.getId());
-			t.setNgayPduyet(LocalDate.now());
-			t.setLyDoTuChoi(stReq.getLyDo());
+			item.setTrangThai(NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CHI_CUC.getId());
+			item.setNguoiPduyetId(userInfo.getId());
+			item.setNgayPduyet(LocalDate.now());
 		} else {
 			throw new Exception("Bad request.");
 		}
