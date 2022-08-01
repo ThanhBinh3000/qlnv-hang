@@ -58,10 +58,6 @@ public class NhBangKeVtRepositoryCustomImpl implements NhBangKeVtRepositoryCusto
             builder.append("AND ").append("nx.soQd LIKE :soQdNhap ");
         }
 
-        if (!StringUtils.isEmpty(req.getLoaiVthh())) {
-            builder.append("AND ").append("p.loaiVthh = :loaiVthh ");
-        }
-
         if (!CollectionUtils.isEmpty(req.getMaDvis())) {
             builder.append("AND ").append("p.maDvi IN :maDvis ");
         }
@@ -100,10 +96,6 @@ public class NhBangKeVtRepositoryCustomImpl implements NhBangKeVtRepositoryCusto
 
         if (!StringUtils.isEmpty(req.getSoQdNhap())) {
             query.setParameter("soQdNhap", "%" + req.getSoQdNhap() + "%");
-        }
-
-        if (!StringUtils.isEmpty(req.getLoaiVthh())) {
-            query.setParameter("loaiVthh", req.getLoaiVthh());
         }
 
         if (!CollectionUtils.isEmpty(req.getMaDvis())) {
