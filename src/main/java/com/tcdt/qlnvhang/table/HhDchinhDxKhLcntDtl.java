@@ -3,11 +3,10 @@ package com.tcdt.qlnvhang.table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.*;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
@@ -43,8 +42,31 @@ public class HhDchinhDxKhLcntDtl implements Serializable {
 	Integer tgianThienHd;
 	private Long idHdr;
 
+	@Transient
+	private List<HhDchinhDxKhLcntDsgthauCtiet> danhSachDiaDiepNhap = new ArrayList<>();
+
+	private Long idDxDcHdr;
 
 	@Transient
-	private List<HhDchinhDxKhLcntDtlCtiet> danhSachDiaDiepNhap = new ArrayList<>();
+	String tenDvi;
+
+	String soDxuat;
+
+	@Temporal(TemporalType.DATE)
+	Date ngayDxuat;
+
+	String tenDuAn;
+
+	BigDecimal tongTien;
+
+	Long soGthau;
+
+	Long namKhoach;
+
+	@Transient
+	private HhQdKhlcntHdr hhQdKhlcntHdr;
+
+	@Transient
+	private List<HhDchinhDxKhLcntDsgthau> dsGoiThau = new ArrayList<>();
 
 }

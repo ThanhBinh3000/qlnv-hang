@@ -1,28 +1,25 @@
 package com.tcdt.qlnvhang.table;
 
+import lombok.Data;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.*;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
-import lombok.Data;
-
 @Entity
-@Table(name = "HH_QD_KHLCNT_DSGTHAU")
+@Table(name = "HH_DC_DX_LCNT_DSGTHAU")
 @Data
-public class HhQdKhlcntDsgthau implements Serializable {
+public class HhDchinhDxKhLcntDsgthau implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_QD_KHLCNT_DSGTHAU_SEQ")
-	@SequenceGenerator(sequenceName = "HH_QD_KHLCNT_DSGTHAU_SEQ", allocationSize = 1, name = "HH_QD_KHLCNT_DSGTHAU_SEQ")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_DC_DX_LCNT_DSGTHAU_SEQ")
+	@SequenceGenerator(sequenceName = "HH_DC_DX_LCNT_DSGTHAU_SEQ", allocationSize = 1, name = "HH_DC_DX_LCNT_DSGTHAU_SEQ")
 	private Long id;
-	private Long idQdDtl;
+	private Long idDxDcDtl;
 	String goiThau;
 	BigDecimal soLuong;
 	String maDvi;

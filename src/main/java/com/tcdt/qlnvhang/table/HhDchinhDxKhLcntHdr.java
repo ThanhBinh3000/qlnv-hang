@@ -6,7 +6,13 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.tcdt.qlnvhang.entities.FileDKemJoinHhDchinhDxKhLcntHdr;
+import com.tcdt.qlnvhang.entities.FileDKemJoinQdKhlcntHdr;
 import lombok.Data;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "HH_DC_DX_LCNT_HDR")
@@ -66,5 +72,56 @@ public class HhDchinhDxKhLcntHdr implements Serializable {
 
 	@Transient
 	private List<HhDchinhDxKhLcntDtl> listDieuChinh = new ArrayList<>();
+
+	String soQd;
+
+	String soQdGoc;
+
+	Long idQdGoc;
+
+	@Transient
+	String tenVthh;
+
+	@Transient
+	String tenCloaiVthh;
+
+	@Transient
+	String tenHthucLcnt;
+
+	@Transient
+	String tenPthucLcnt;
+
+	@Transient
+	String tenLoaiHdong;
+
+	@Transient
+	String tenNguonVon;
+
+	@Temporal(TemporalType.DATE)
+	Date tgianBdauTchuc;
+
+	Long namKhoach;
+
+	Integer tgianThienHd;
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@Fetch(value = FetchMode.SUBSELECT)
+	@JoinColumn(name = "dataId")
+	@JsonManagedReference
+	@Where(clause = "data_type='" + HhQdKhlcntHdr.TABLE_NAME + "'")
+	private List<FileDKemJoinHhDchinhDxKhLcntHdr> fileDinhKem = new ArrayList<>();
+
+	public void setFileDinhKem(List<FileDKemJoinHhDchinhDxKhLcntHdr> children) {
+		this.fileDinhKem.clear();
+		for (FileDKemJoinHhDchinhDxKhLcntHdr child : children) {
+			child.setParent(this);
+		}
+		this.fileDinhKem.addAll(children);
+	}
+
+
+
+	@Transient
+	private List<HhDchinhDxKhLcntDtl> hhQdKhlcntDtlList = new ArrayList<>();
 
 }

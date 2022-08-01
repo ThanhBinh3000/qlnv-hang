@@ -99,4 +99,46 @@ public class DchinhDxKhLcntHdrReq {
 	private List<FileDinhKemReq> fileDinhKem =  new ArrayList<>();
 
 	private List<DchinhDxKhLcntDtlReq> detail;
+
+	//	@NotNull(message = "Không được để trống")
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date tgianBdauTchuc;
+
+	//	@NotNull(message = "Không được để trống")
+	@Size(max = 250, message = "Về việc không được vượt quá 20 ký tự")
+	@ApiModelProperty(example = "Nội dung về việc")
+	String veViec;
+
+	//	@NotNull(message = "Không được để trống")
+	@Size(max = 4, message = "Năm kế hoạch không được vượt quá 4 ký tự")
+	@ApiModelProperty(example = "2022")
+	String namKhoach;
+
+	//	@NotNull(message = "Không được để trống")
+	@Size(max = 20, message = "Căn cứ quyết định giao chỉ tiêu không được vượt quá 20 ký tự")
+	@ApiModelProperty(example = "20-QD/TCDT")
+	String soQdGoc;
+
+	Long idSoQd;
+
+	@NotNull(message = "Không được để trống")
+	@Size(max = 20, message = "Số quyết định không được vượt quá 20 ký tự")
+	@ApiModelProperty(example = "20-QD/TCDT")
+	String soQd;
+
+
+	@Size(max = 500, message = "Ghi chú không được vượt quá 500 ký tự")
+	@ApiModelProperty(example = "Ghi chú")
+	String ghiChu;
+
+	//	@Size(max = 200, message = "Bảo lãnh dự thầu không được vượt quá 200 ký tự")
+	@ApiModelProperty(example = "Số tiền bảo lãnh dự thầu")
+	String blanhDthau;
+
+	String maTrHdr;
+
+	private List<HhQdKhlcntDtlReq> dsDeXuat;
+	private List<FileDinhKemReq> fileDinhKems;
+	private List<HhQdKhlcntDsgthauReq> dsGoiThau;
 }
