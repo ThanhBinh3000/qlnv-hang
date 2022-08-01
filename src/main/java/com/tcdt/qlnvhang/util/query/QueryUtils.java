@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.util.query;
 
+import com.tcdt.qlnvhang.enums.Operator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Sort;
 
 import javax.persistence.Query;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Data
@@ -35,6 +37,9 @@ public class QueryUtils {
 	}
 
 	public String getField(String field) {
+		return String.format(" %s.%s", this.alias, field);
+	}
+	public String selectField(String field) {
 		return String.format(" , %s.%s", this.alias, field);
 	}
 
@@ -43,54 +48,54 @@ public class QueryUtils {
 	}
 
 	public static String buildLeftJoin(QueryUtils left, QueryUtils right, String leftField, String rightField) {
-		return String.format("LEFT JOIN %s ON %s = %s ", left.buildAliasString(), left.getField(leftField), right.getField(rightField));
+		return String.format(" LEFT JOIN %s ON %s = %s ", right.buildAliasString(), left.getField(leftField), right.getField(rightField));
 	}
 
 	public static String buildInnerJoin(QueryUtils left, QueryUtils right, String leftField, String rightField) {
-		return String.format("INNER JOIN %s ON %s = %s ", left.buildAliasString(), left.getField(leftField), right.getField(rightField));
+		return String.format(" INNER JOIN %s ON %s = %s ", right.buildAliasString(), left.getField(leftField), right.getField(rightField));
 	}
 
 	public String like(String field) {
 		return String.format(" %s LIKE :%s", this.getField(field), field);
 	}
 
-	public void eq(String field, Object req, StringBuilder builder) {
+	public void eq(Operator operator, String field, Object req, StringBuilder builder) {
 		if (Objects.nonNull(req)) {
-			builder.append(String.format(" %s = :%s ", this.getField(field), field));
+			builder.append(String.format(" %s %s = :%s ", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field));
 		}
 	}
 
-	public String le(String field, Object req) {
+	public String le(Operator operator, String field, Object req) {
 		if (Objects.nonNull(req)) {
-			return String.format(" %s <= :%s", this.getField(field), field);
-		}
-		return "";
-	}
-
-	public String lt(String field, Object req) {
-		if (Objects.nonNull(req)) {
-			return String.format(" %s < :%s", this.getField(field), field);
+			return String.format(" %s %s <= :%s", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field);
 		}
 		return "";
 	}
 
-	public String ge(String field, Object req) {
+	public String lt(Operator operator, String field, Object req) {
 		if (Objects.nonNull(req)) {
-			return String.format(" %s >= :%s", this.getField(field), field);
+			return String.format(" %s %s < :%s", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field);
 		}
 		return "";
 	}
 
-	public String gt(String field, Object req) {
+	public String ge(Operator operator, String field, Object req) {
 		if (Objects.nonNull(req)) {
-			return String.format(" %s > :%s", this.getField(field), field);
+			return String.format(" %s %s >= :%s", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field);
 		}
 		return "";
 	}
 
-	public String inLst(String field, Object req) {
+	public String gt(Operator operator, String field, Object req) {
 		if (Objects.nonNull(req)) {
-			return String.format(" %s IN :%s", this.getField(field), field);
+			return String.format(" %s %s > :%s", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field);
+		}
+		return "";
+	}
+
+	public String inLst(Operator operator, String field, Object req) {
+		if (Objects.nonNull(req)) {
+			return String.format(" %s %s IN :%s", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field);
 		}
 		return "";
 	}
@@ -126,6 +131,14 @@ public class QueryUtils {
 		if (Objects.nonNull(value)) {
 			query.setParameter(paramName, buildLikeParam(value));
 		}
+	}
+
+	public static void buildWhereClause(StringBuilder builder) {
+		builder.append(QueryUtils.WHERE).append(QueryUtils.DEFAULT_CONDITION);
+	}
+
+	public static String buildQuery(StringBuilder builder) {
+		return builder.toString().replace("SELECT  ,", SELECT);
 	}
 
 }
