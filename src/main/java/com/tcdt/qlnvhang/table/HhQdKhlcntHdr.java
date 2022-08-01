@@ -150,6 +150,4 @@ public class HhQdKhlcntHdr implements Serializable {
 	@Transient
 	private List<HhQdKhlcntDtl> hhQdKhlcntDtlList = new ArrayList<>();
 
-	@Transient
-	private List<HhQdKhlcntDsgthau> dsGoiThau = new ArrayList<>();
 }
