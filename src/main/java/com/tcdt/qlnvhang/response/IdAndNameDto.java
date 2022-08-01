@@ -16,4 +16,5 @@ import lombok.NoArgsConstructor;
 public class IdAndNameDto {
 	private Long id;
 	private String name;
+	private String ma;
 }

@@ -26,14 +26,14 @@ public class BanDauGiaPhanLoTaiSan {
 	@Column(name = "STT")
 	private Long stt;
 
-	@Column(name = "DIEM_KHO")
-	private String diemKho;
+	@Column(name = "MA_DIEM_KHO")
+	private String maDiemKho;
 
-	@Column(name = "NGAN_KHO")
-	private String nganKho;
+	@Column(name = "MA_NGAN_KHO")
+	private String maNganKho;
 
-	@Column(name = "LO_KHO")
-	private String loKho;
+	@Column(name = "MA_LO_KHO")
+	private String maLoKho;
 
 	@Column(name = "CHUNG_LOAI_HH")
 	private String chungLoaiHh;
@@ -47,8 +47,8 @@ public class BanDauGiaPhanLoTaiSan {
 	@Column(name = "DON_GIA")
 	private BigDecimal donGia;
 
-	@Column(name = "CHI_CUC")
-	private String chiCuc;
+	@Column(name = "MA_CHI_CUC")
+	private String maChiCuc;
 
 	@Column(name = "BH_DG_KEHOACH_ID")
 	private Long bhDgKehoachId;
@@ -87,6 +87,9 @@ public class BanDauGiaPhanLoTaiSan {
 
 	@Column(name = "QD_PHE_DUYET_KQBDG_ID")
 	private String qdPheDuyetKqbdgId;
+
+	@Column(name = "MA_NHA_KHO")
+	private String maNhaKho;
 
 
 }

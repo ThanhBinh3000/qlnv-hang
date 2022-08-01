@@ -10,21 +10,30 @@ import com.tcdt.qlnvhang.mapper.bandaugia.kehoachbandaugia.BanDauGiaDiaDiemGiaoN
 import com.tcdt.qlnvhang.mapper.bandaugia.kehoachbandaugia.BanDauGiaPhanLoTaiSanRequestMapper;
 import com.tcdt.qlnvhang.mapper.bandaugia.kehoachbandaugia.KeHoachBanDauGiaRequestMapper;
 import com.tcdt.qlnvhang.mapper.bandaugia.kehoachbandaugia.KeHoachBanDauGiaResponseMapper;
+import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.kehoachbanhangdaugia.BanDauGiaDiaDiemGiaoNhanRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.kehoachbanhangdaugia.BanDauGiaPhanLoTaiSanRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGiaRepository;
 import com.tcdt.qlnvhang.repository.chitieukehoachnam.ChiTieuKeHoachNamRepository;
+import com.tcdt.qlnvhang.repository.khotang.KtDiemKhoRepository;
+import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
+import com.tcdt.qlnvhang.repository.khotang.KtNhaKhoRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGiaSearchRequest;
 import com.tcdt.qlnvhang.request.bandaugia.kehoachbanhangdaugia.KehoachBanDauGiaRequest;
+import com.tcdt.qlnvhang.response.banhangdaugia.kehoachbanhangdaugia.BanDauGiaPhanLoTaiSanResponse;
 import com.tcdt.qlnvhang.response.banhangdaugia.kehoachbanhangdaugia.KeHoachBanDauGiaResponse;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGiaService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
+import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
+import com.tcdt.qlnvhang.table.khotang.KtNganLo;
+import com.tcdt.qlnvhang.table.khotang.KtNhaKho;
 import com.tcdt.qlnvhang.util.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -58,6 +67,12 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 	private final BanDauGiaPhanLoTaiSanRequestMapper phanLoTaiSanRequestMapper;
 	private final ChiTieuKeHoachNamRepository chiTieuKeHoachNamRepository;
 	private final QlnvDmVattuRepository qlnvDmVattuRepository;
+
+	private final KtNganLoRepository ktNganLoRepository;
+	private final KtDiemKhoRepository ktDiemKhoRepository;
+	private final KtNhaKhoRepository ktNhaKhoRepository;
+	private final QlnvDmDonviRepository dmDonviRepository;
+
 	private static final String SHEET_NAME = "Danh sách kế hoạch bán đấu giá";
 	private static final String STT = "STT";
 	private static final String SO_KE_HOACH = "Số kế hoạch";
@@ -111,7 +126,11 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 		phanLoTaiSanList = phanLoTaiSanRepository.saveAll(phanLoTaiSanList);
 		keHoachDauGia.setPhanLoTaiSanList(phanLoTaiSanList);
 
-		return kehoachResponseMapper.toDto(keHoachDauGia);
+		KeHoachBanDauGiaResponse response = kehoachResponseMapper.toDto(keHoachDauGia);
+
+		this.buildThongTinKho(response.getPhanLoTaiSanList());
+
+		return response;
 	}
 
 	@Override
@@ -175,7 +194,11 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 			keHoachDauGia.setPhanLoTaiSanList(phanLoTaiSanList);
 		}
 
-		return kehoachResponseMapper.toDto(keHoachDauGia);
+		KeHoachBanDauGiaResponse response = kehoachResponseMapper.toDto(keHoachDauGia);
+
+		this.buildThongTinKho(response.getPhanLoTaiSanList());
+
+		return response;
 	}
 
 	@Override
@@ -297,7 +320,11 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 			if (Objects.nonNull(finalVatTuHangHoaMap.get(it.getLoaiHangHoa()))) {
 				it.setTenHangHoa(finalVatTuHangHoaMap.get(it.getLoaiHangHoa()).getTen());
 			}
-			return kehoachResponseMapper.toDto(it);
+
+			KeHoachBanDauGiaResponse result = kehoachResponseMapper.toDto(it);
+
+			this.buildThongTinKho(result.getPhanLoTaiSanList());
+			return result;
 		}).collect(Collectors.toList());
 
 		return new PageImpl<>(responseDto);
@@ -407,6 +434,43 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 		Optional<ChiTieuKeHoachNam> chiTieuKeHoachNamOpt = chiTieuKeHoachNamRepository.findById(keHoachDauGia.getQdGiaoChiTieuId());
 		chiTieuKeHoachNamOpt.ifPresent(chiTieuKeHoachNam -> keHoachDauGia.setSoQuyetDinhGiaoChiTieu(chiTieuKeHoachNam.getSoQuyetDinh()));
 
-		return kehoachResponseMapper.toDto(keHoachDauGia);
+		KeHoachBanDauGiaResponse response = kehoachResponseMapper.toDto(keHoachDauGia);
+
+		this.buildThongTinKho(response.getPhanLoTaiSanList());
+
+		return response;
 	}
+
+	private void buildThongTinKho(List<BanDauGiaPhanLoTaiSanResponse> responses) {
+		if (CollectionUtils.isEmpty(responses)) return;
+		List<String> maLoKhoList = responses.stream().map(BanDauGiaPhanLoTaiSanResponse::getMaLoKho).collect(Collectors.toList());
+		List<String> maNhaKhoList = responses.stream().map(BanDauGiaPhanLoTaiSanResponse::getMaNhaKho).collect(Collectors.toList());
+		List<String> maDiemKhoList = responses.stream().map(BanDauGiaPhanLoTaiSanResponse::getMaDiemKho).collect(Collectors.toList());
+		Set<String> maChiCucList = responses.stream().map(BanDauGiaPhanLoTaiSanResponse::getMaChiCuc).collect(Collectors.toSet());
+
+
+		Map<String, KtNganLo> mapNganLo = ktNganLoRepository.findByMaNganloIn(maLoKhoList)
+				.stream().collect(Collectors.toMap(KtNganLo::getMaNganlo, Function.identity()));
+
+		Map<String, KtDiemKho> mapDiemKho = ktDiemKhoRepository.findByMaDiemkhoIn(maDiemKhoList)
+				.stream().collect(Collectors.toMap(KtDiemKho::getMaDiemkho, Function.identity()));
+
+		Map<String, KtNhaKho> mapNhaKho = ktNhaKhoRepository.findByMaNhakhoIn(maNhaKhoList)
+				.stream().collect(Collectors.toMap(KtNhaKho::getMaNhakho, Function.identity()));
+
+		Map<String, QlnvDmDonvi> mapChiCuc = dmDonviRepository.findByMaDviIn(maChiCucList)
+				.stream().collect(Collectors.toMap(QlnvDmDonvi::getMaDvi, Function.identity()));
+
+		for (BanDauGiaPhanLoTaiSanResponse item : responses) {
+			KtNganLo nganLo = mapNganLo.get(item.getMaLoKho());
+			KtNhaKho nhaKho = mapNhaKho.get(item.getMaNhaKho());
+			KtDiemKho diemKho = mapDiemKho.get(item.getMaDiemKho());
+			QlnvDmDonvi chiCuc = mapChiCuc.get(item.getMaChiCuc());
+			if (nganLo != null) item.setTenLoKho(nganLo.getTenNganlo());
+			if (nhaKho != null) item.setTenNhaKho(nhaKho.getTenNhakho());
+			if (diemKho != null) item.setTenDiemKho(diemKho.getTenDiemkho());
+			if (chiCuc != null) item.setTenChiCuc(chiCuc.getTenDvi());
+		}
+	}
+
 }
