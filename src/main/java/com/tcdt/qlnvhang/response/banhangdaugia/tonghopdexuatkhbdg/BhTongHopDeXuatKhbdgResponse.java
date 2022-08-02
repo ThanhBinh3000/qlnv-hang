@@ -32,4 +32,6 @@ public class BhTongHopDeXuatKhbdgResponse {
 	private String trangThai;
 	private String maTongHop;
 	private IdAndNameDto qdPheDuyetKhbdg;
+	private String maVatTu;
+	private String maVatTuCha;
 }

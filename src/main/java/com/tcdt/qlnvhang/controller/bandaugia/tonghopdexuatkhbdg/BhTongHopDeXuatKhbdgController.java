@@ -15,11 +15,14 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/tong-hop-de-xuat-ke-hoach-ban-dau-gia")
@@ -114,5 +117,51 @@ public class BhTongHopDeXuatKhbdgController extends BaseController {
 		return ResponseEntity.ok(resp);
 	}
 
+	@ApiOperation(value = "Chi tiết thông tin tổng hợp đề xuất kế hoạch bán đấu giá hàng hóa", response = Page.class)
+	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<BaseResponse> detail(Long id) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			BhTongHopDeXuatKhbdgResponse res = tongHopDeXuatKhbdgService.detail(id);
+			resp.setData(res);
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error(e.getMessage());
+		}
+		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Export thông tin tổng hợp đề xuất kế hoạch bán đấu giá hàng hóa", response = List.class)
+	@PostMapping(value = "/export/list", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public void exportToExcel(HttpServletResponse response, @RequestBody BhTongHopDeXuatKhbdgSearchRequest req) {
+
+		try {
+			tongHopDeXuatKhbdgService.exportToExcel(req, response);
+		} catch (Exception e) {
+			log.error("Error can not export", e);
+		}
+	}
+
+	@ApiOperation(value = "Update trạng thái tổng hợp đề xuất kế hoạch bán đấu giá hàng hóa", response = Page.class)
+	@PutMapping(value = "/trang-thai", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<BaseResponse> updateTrangThai(@RequestParam Long id,
+														@RequestParam String trangThaiId) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			BhTongHopDeXuatKhbdgResponse res = tongHopDeXuatKhbdgService.updateTrangThai(id, trangThaiId);
+			resp.setData(res);
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error(e.getMessage());
+		}
+		return ResponseEntity.ok(resp);
+	}
 
 }

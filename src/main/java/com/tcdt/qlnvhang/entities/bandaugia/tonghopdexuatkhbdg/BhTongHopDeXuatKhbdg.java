@@ -26,8 +26,11 @@ public class BhTongHopDeXuatKhbdg extends BaseEntity implements Serializable {
 	@Column(name = "NAM_KE_HOACH")
 	private Integer namKeHoach;
 
-	@Column(name = "LOAI_HANG_HOA")
-	private String loaiHangHoa;
+	@Column(name = "MA_VAT_TU_CHA")
+	private String maVatTuCha;
+
+	@Column(name = "MA_VAT_TU")
+	private String maVatTu;
 
 	@Column(name = "NGAY_KY_TU_NGAY")
 	private LocalDate ngayKyTuNgay;

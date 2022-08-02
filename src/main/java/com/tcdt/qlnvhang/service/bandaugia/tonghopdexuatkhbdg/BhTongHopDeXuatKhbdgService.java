@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.response.banhangdaugia.tonghopdexuatkhbdg.BhTongHopDeXu
 import com.tcdt.qlnvhang.response.banhangdaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgSearchResponse;
 import org.springframework.data.domain.Page;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface BhTongHopDeXuatKhbdgService {
@@ -13,13 +14,11 @@ public interface BhTongHopDeXuatKhbdgService {
 	BhTongHopDeXuatKhbdgResponse update (BhTongHopDeXuatKhbdgRequest req) throws Exception;
 	boolean delete (Long id) throws Exception;
 	Page<BhTongHopDeXuatKhbdgSearchResponse> search(BhTongHopDeXuatKhbdgSearchRequest req) throws Exception;
-//	KeHoachBanDauGiaResponse updateTrangThai(Long id, String trangThaiId) throws Exception;
-//
-//	boolean exportToExcel(KeHoachBanDauGiaSearchRequest req, HttpServletResponse response) throws Exception;
-//
+	BhTongHopDeXuatKhbdgResponse updateTrangThai(Long id, String trangThaiId) throws Exception;
+
+	boolean exportToExcel(BhTongHopDeXuatKhbdgSearchRequest req, HttpServletResponse response) throws Exception;
 	boolean deleteMultiple (List<Long> ids) throws Exception;
-//
-//	KeHoachBanDauGiaResponse detail(Long id) throws Exception;
+BhTongHopDeXuatKhbdgResponse detail(Long id) throws Exception;
 
 
 }
