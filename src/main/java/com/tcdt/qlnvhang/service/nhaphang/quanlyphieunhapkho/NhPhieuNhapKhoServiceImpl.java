@@ -70,7 +70,7 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
     private static final String NHA_KHO = "Nhà Kho";
     private static final String NGAN_KHO = "Ngăn Kho";
     private static final String NGAN_LO = "Ngăn Lô";
-    private static final String TRANG_THAI = "Ngăn Lô";
+    private static final String TRANG_THAI = "Trạng Thái";
 
     @Autowired
     private NhPhieuNhapKhoRepository nhPhieuNhapKhoRepository;
