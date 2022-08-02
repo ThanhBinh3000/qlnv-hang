@@ -32,4 +32,5 @@ public class BanDauGiaPhanLoTaiSanResponse {
 	private BigDecimal giaKhoiDiem;
 	private BigDecimal soTienDatTruoc;
 	private String donViTinh;
+	private String ghiChu;
 }

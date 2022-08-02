@@ -91,5 +91,8 @@ public class BanDauGiaPhanLoTaiSan {
 	@Column(name = "MA_NHA_KHO")
 	private String maNhaKho;
 
+	@Column(name = "GHI_CHU")
+	private String ghiChu;
+
 
 }
