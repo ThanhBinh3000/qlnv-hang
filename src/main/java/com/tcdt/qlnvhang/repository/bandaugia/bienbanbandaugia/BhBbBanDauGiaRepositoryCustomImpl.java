@@ -23,9 +23,9 @@ public class BhBbBanDauGiaRepositoryCustomImpl implements BhBbBanDauGiaRepositor
     public List<Object[]> search(BhBbBanDauGiaSearchReq req, Pageable pageable) {
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT bb, " +
-                "tbBanDauGia.id, tbBanDauGia.maThongBao, tbBanDauGia.hinhThucDauGia, tbBanDauGia.phuongThucDauGia " +
+                "tbBanDauGia.id, tbBanDauGia.maThongBao, tbBanDauGia.hinhThucDauGia, tbBanDauGia.phuongThucDauGia, " +
                 "vatTuCha.ma, vatTuCha.ten," +
-                "qdPdKhBdg.id, qdPdKhBdg.soQuyetDinh " +
+                "qdPdKhBdg.id, qdPdKhBdg.soQuyetDinh, " +
                 "qdPdKqBdg.id, qdPdKqBdg.soQuyetDinh " +
                 "FROM BhBbBanDauGia bb ");
         builder.append("INNER JOIN QlnvDmVattu vatTuCha ON bb.maVatTuCha = vatTuCha.ma ");
