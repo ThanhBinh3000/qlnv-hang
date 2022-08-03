@@ -31,7 +31,6 @@ public class HhDchinhDxKhLcntHdr implements Serializable {
 	String soQdinh;
 	String soQdinhGoc;
 
-
 	@Temporal(TemporalType.DATE)
 	Date ngayQd;
 	String loaiVthh;
@@ -118,8 +117,6 @@ public class HhDchinhDxKhLcntHdr implements Serializable {
 		}
 		this.fileDinhKem.addAll(children);
 	}
-
-
 
 	@Transient
 	private List<HhDchinhDxKhLcntDtl> hhQdKhlcntDtlList = new ArrayList<>();

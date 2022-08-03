@@ -20,11 +20,6 @@ public class DchinhDxKhLcntHdrReq {
 
 	private String namKh;
 
-	@NotNull(message = "Không được để trống")
-	@Size(max = 50, message = "Số quyết định không được vượt quá 50 ký tự")
-	@ApiModelProperty(example = "SHD001")
-	String soQdinh;
-
 	String trichYeu;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
@@ -32,8 +27,6 @@ public class DchinhDxKhLcntHdrReq {
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayHluc;
-
-	String soQdinhGoc;
 
 	@NotNull(message = "Không được để trống")
 	@Size(max = 50, message = "Loại hàng hóa không được vượt quá 50 ký tự")
@@ -61,18 +54,6 @@ public class DchinhDxKhLcntHdrReq {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date tgianNhang;
 
-	
-//	@NotNull(message = "Không được để trống")
-	@Size(max = 50, message = "Mã hàng hóa không được vượt quá 50 ký tự")
-	@ApiModelProperty(example = "MHH001")
-	String maHanghoa;
-	
-//	@NotNull(message = "Không được để trống")
-	@Size(max = 50, message = "Nguồn vốn không được vượt quá 50 ký tự")
-	String nguonvon;
-	
-
-	
 	@Size(max = 50, message = "Lý do từ chối không được vượt quá 50 ký tự")
 	String ldoTuchoi;
 	
