@@ -6,7 +6,6 @@ import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.mapper.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaRequestMapper;
 import com.tcdt.qlnvhang.mapper.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaResponseMapper;
 import com.tcdt.qlnvhang.repository.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaRepository;
-import com.tcdt.qlnvhang.request.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGiaSearchRequest;
 import com.tcdt.qlnvhang.request.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaRequest;
 import com.tcdt.qlnvhang.request.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaSearchRequest;
 import com.tcdt.qlnvhang.response.banhangdaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaResponse;
@@ -110,5 +109,18 @@ public class ThongBaoBanDauGiaServiceImpl extends BaseServiceImpl implements Tho
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null) throw new Exception("Bad request.");
 		return thongBaoBanDauGiaRepository.search(req, req.getPageable());
+	}
+
+	@Override
+	public ThongBaoBanDauGiaResponse detail(Long id) throws Exception {
+		UserInfo userInfo = SecurityContextService.getUser();
+		if (userInfo == null) throw new Exception("Bad request.");
+
+
+		Optional<ThongBaoBanDauGia> optional = thongBaoBanDauGiaRepository.findById(id);
+		if (!optional.isPresent())
+			throw new Exception("Thông báo bán đấu giá không tồn tại");
+		ThongBaoBanDauGia thongBaoBanDauGia = optional.get();
+		return null;
 	}
 }

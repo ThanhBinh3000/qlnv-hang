@@ -114,33 +114,23 @@ public class ThongBaoBanDauGiaController extends BaseController {
 		return ResponseEntity.ok(resp);
 	}
 
-//	@ApiOperation(value = "Update trạng thái kế hoạch bán đấu giá hàng hóa", response = Page.class)
-//	@PutMapping(value = "/trang-thai", produces = MediaType.APPLICATION_JSON_VALUE)
-//	public ResponseEntity<BaseResponse> updateTrangThai(@RequestParam Long id,
-//														@RequestParam String trangThaiId) {
-//		BaseResponse resp = new BaseResponse();
-//		try {
-//			KeHoachBanDauGiaResponse res = keHoachBanDauGiaService.updateTrangThai(id, trangThaiId);
-//			resp.setData(res);
-//			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-//			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-//		} catch (Exception e) {
-//			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-//			resp.setMsg(e.getMessage());
-//			log.error(e.getMessage());
-//		}
-//		return ResponseEntity.ok(resp);
-//	}
-//
-//	@ApiOperation(value = "Export kế hoạch bán đấu giá hàng hóa", response = List.class)
-//	@PostMapping(value = "/export/list", produces = MediaType.APPLICATION_JSON_VALUE)
-//	@ResponseStatus(HttpStatus.OK)
-//	public void exportToExcel(HttpServletResponse response, @RequestBody KeHoachBanDauGiaSearchRequest req) {
-//
-//		try {
-//			keHoachBanDauGiaService.exportToExcel(req, response);
-//		} catch (Exception e) {
-//			log.error("Error can not export", e);
-//		}
-//	}
+	@ApiOperation(value = "Thông tin chi tiết thông báo bán đấu giá", response = Boolean.class)
+	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<BaseResponse> detail(@PathVariable("id") Long id) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			ThongBaoBanDauGiaResponse res = thongBaoBanDauGiaService.detail(id);
+			resp.setData(res);
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error(e.getMessage());
+		}
+		return ResponseEntity.ok(resp);
+	}
 }
+
+
+

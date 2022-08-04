@@ -14,6 +14,9 @@ public interface ThongBaoBanDauGiaService {
 	boolean delete (Long id) throws Exception;
 	boolean deleteMultiple (List<Long> ids) throws Exception;
 	Page<ThongBaoBanDauGiaSearchResponse> search(ThongBaoBanDauGiaSearchRequest req) throws Exception;
+
+	ThongBaoBanDauGiaResponse detail(Long id) throws Exception;
+
 //	KeHoachBanDauGiaResponse updateTrangThai(Long id, String trangThaiId) throws Exception;
 //
 //	boolean exportToExcel(KeHoachBanDauGiaSearchRequest req, HttpServletResponse response) throws Exception;
