@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 
 @Repository
-public interface ThongBaoBanDauGiaRepository extends BaseRepository<ThongBaoBanDauGia, Long> {
+public interface ThongBaoBanDauGiaRepository extends BaseRepository<ThongBaoBanDauGia, Long>, ThongBaoBanDauGiaRepositoryCustom {
 	void deleteAllByIdIn(Collection<Long> ids);
 }

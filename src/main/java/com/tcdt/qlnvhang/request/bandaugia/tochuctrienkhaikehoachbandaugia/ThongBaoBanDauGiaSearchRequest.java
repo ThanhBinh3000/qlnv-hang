@@ -22,7 +22,7 @@ import java.time.LocalDate;
 public class ThongBaoBanDauGiaSearchRequest extends BaseRequest {
 	private Long id;
 	private Integer namKeHoach;
-	private String loaiHangHoa;
+	private String maVatTuCha;
 	private String soQuyetDinhPheDuyetKHBDG;
 	private String maThongBaoBDG;
 	private String trichYeu;
