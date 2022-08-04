@@ -266,7 +266,6 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 
 		hhQdKhlcntHdrRepository.save(dataDB);
 
-		// Update trạng thái tổng hợp dxkhclnt
 		hhQdKhlcntDtlRepository.deleteAllByIdQdHdr(dataDB.getId());
 		for (HhQdKhlcntDtlReq dx : objReq.getDsDeXuat()){
 			HhQdKhlcntDtl qd = ObjectMapperUtils.map(dx, HhQdKhlcntDtl.class);

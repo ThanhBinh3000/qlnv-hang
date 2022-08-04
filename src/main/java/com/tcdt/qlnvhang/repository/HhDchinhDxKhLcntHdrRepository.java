@@ -9,8 +9,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface HhDchinhDxKhLcntHdrRepository extends CrudRepository<HhDchinhDxKhLcntHdr, Long> {
+
+    Optional<HhDchinhDxKhLcntHdr> findBySoQd(String soQd);
 
 
     @Query(value = " SELECT * FROM HH_DC_DX_LCNT_HDR  "+
