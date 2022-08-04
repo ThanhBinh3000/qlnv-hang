@@ -26,7 +26,7 @@ public interface HhDthauRepository extends CrudRepository<HhDthau, Long> {
 			" LEFT JOIN HhDthauGthau GT ON GT.idGoiThau = DSG.id " +
 			" WHERE HDR.trangThai = '11' " +
 			" AND (?1 is null or HDR.namKhoach = ?1 )" +
-			" AND (?2 is null or  HDR.loaiVthh = ?2 )" +
+			" AND (?2 is null or  lower(HDR.loaiVthh) like lower(concat(?2,'%' ) ) )" +
 			" AND (?3 is null or lower(HDR.soQd) like lower(concat(concat('%',?3),'%') ) )" +
 			" AND (?4 is null or  DTL.maDvi = ?4 )" +
 //			" AND (?5 is null or HDR.ngayQd >= ?5 ) " +
