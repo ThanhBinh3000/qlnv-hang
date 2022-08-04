@@ -3,7 +3,6 @@ package com.tcdt.qlnvhang.service.nhaphang.luongthucmuoi.quanlyphieukiemtrachatl
 import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhKetQuaKiemTra;
 import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhKetQuaKiemTraRepository;
@@ -236,7 +235,7 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 
 		String trangThai = phieu.getTrangThai();
 		if (NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
-			if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
+			if (!NhapXuatHangTrangThaiEnum.DU_THAO.getId().equals(trangThai))
 				return false;
 
 			phieu.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId());

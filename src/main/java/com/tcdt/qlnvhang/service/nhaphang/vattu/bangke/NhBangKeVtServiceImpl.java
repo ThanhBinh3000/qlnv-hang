@@ -5,7 +5,6 @@ import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieunhapkholuongthuc.NhPhieuNh
 import com.tcdt.qlnvhang.entities.nhaphang.vattu.bangke.NhBangKeVt;
 import com.tcdt.qlnvhang.entities.nhaphang.vattu.bangke.NhBangKeVtCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoRepository;
@@ -243,7 +242,7 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
         NhBangKeVt item = optional.get();
         String trangThai = item.getTrangThai();
         if (NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
-            if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
+            if (!NhapXuatHangTrangThaiEnum.DU_THAO.getId().equals(trangThai))
                 return false;
 
             item.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId());

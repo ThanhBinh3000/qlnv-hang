@@ -3,7 +3,6 @@ package com.tcdt.qlnvhang.service.nhaphang.luongthucmuoi.phieuknghiemcluonghang;
 import com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau.BienBanBanGiaoMau;
 import com.tcdt.qlnvhang.entities.nhaphang.phieuknghiemcluonghang.PhieuKnghiemCluongHang;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.bbanbangiaomau.BienBanBanGiaoMauRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
@@ -198,7 +197,7 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 		PhieuKnghiemCluongHang item = optional.get();
 		String trangThai = item.getTrangThai();
 		if (NhapXuatHangTrangThaiEnum.CHO_DUYET_TP_KTBQ.getId().equals(stReq.getTrangThai())) {
-			if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
+			if (!NhapXuatHangTrangThaiEnum.DU_THAO.getId().equals(trangThai))
 				return false;
 
 			item.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_TP_KTBQ.getId());

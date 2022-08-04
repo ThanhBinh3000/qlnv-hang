@@ -9,9 +9,7 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.tcdt.qlnvhang.enums.HhBbNghiemthuKlstStatusEnum;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
@@ -101,7 +99,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 
 		HhBbNghiemthuKlstHdr dataMap = new ModelMapper().map(objReq, HhBbNghiemthuKlstHdr.class);
 		dataMap.setNgayTao(getDateTimeNow());
-		dataMap.setTrangThai(HhBbNghiemthuKlstStatusEnum.DU_THAO.getId());
+		dataMap.setTrangThai(NhapXuatHangTrangThaiEnum.DU_THAO.getId());
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setChildren1(fileDinhKemList);
 
@@ -287,7 +285,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 
 		String trangThai = bb.getTrangThai();
 		if (NhapXuatHangTrangThaiEnum.CHO_DUYET_THU_KHO.getId().equals(stReq.getTrangThai())) {
-			if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
+			if (!NhapXuatHangTrangThaiEnum.DU_THAO.getId().equals(trangThai))
 				return false;
 
 			bb.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_THU_KHO.getId());
@@ -394,7 +392,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 				objs[8] = Optional.ofNullable(item.getChiPhiThucHienTrongNam()).orElse(BigDecimal.valueOf(0D));
 				objs[9] = Optional.ofNullable(item.getChiPhiThucHienNamTruoc()).orElse(BigDecimal.valueOf(0D));
 				objs[10] = item.getTongGiaTri();
-				objs[11] = TrangThaiEnum.getTenById(item.getTrangThai());
+				objs[11] = NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai());
 				dataList.add(objs);
 			}
 
@@ -453,8 +451,8 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 	}
 
 	private void baseResponse(HhBbNghiemthuKlstHdr bb) {
-		bb.setTenTrangThai(HhBbNghiemthuKlstStatusEnum.getTenById(bb.getTrangThai()));
-		bb.setTrangThaiDuyet(HhBbNghiemthuKlstStatusEnum.getTrangThaiDuyetById(bb.getTrangThai()));
+		bb.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(bb.getTrangThai()));
+		bb.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(bb.getTrangThai()));
 		BigDecimal chiPhiTn = bb.getChildren().stream()
 				.map(HhBbNghiemthuKlstDtl::getThanhTienTn)
 				.filter(Objects::nonNull)

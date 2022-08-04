@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatDtlLoaiNx;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatHdrLoaiQd;
 import com.tcdt.qlnvhang.repository.HhDviThuchienQdinhRepository;
@@ -77,7 +76,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 		dataMap.setNguoiTao(userInfo.getUsername());
 		dataMap.setNgayTao(getDateTimeNow());
-		dataMap.setTrangThai(TrangThaiEnum.DU_THAO.getId());
+		dataMap.setTrangThai(NhapXuatHangTrangThaiEnum.DU_THAO.getId());
 		dataMap.setMaDvi(userInfo.getDvql());
 		dataMap.setCapDvi(userInfo.getCapDvi());
 		// add thong tin chi tiet
@@ -114,8 +113,8 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		UnitScaler.reverseFormatList(dataMap.getChildren(), Contains.DVT_TAN);
 		hhQdGiaoNvuNhapxuatRepository.save(dataMap);
 
-		dataMap.setTenTrangThai(TrangThaiEnum.getTenById(dataMap.getTrangThai()));
-		dataMap.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(dataMap.getTrangThai()));
+		dataMap.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dataMap.getTrangThai()));
+		dataMap.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(dataMap.getTrangThai()));
 		this.setTenDvi(dataMap);
 		return dataMap;
 	}
@@ -176,8 +175,8 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		dataDB.setChildren2(dtls2);
 
 		hhQdGiaoNvuNhapxuatRepository.save(dataDB);
-		dataDB.setTenTrangThai(TrangThaiEnum.getTenById(dataDB.getTrangThai()));
-		dataDB.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(dataDB.getTrangThai()));
+		dataDB.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dataDB.getTrangThai()));
+		dataDB.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(dataDB.getTrangThai()));
 		this.setTenDvi(dataDB);
 		return dataDB;
 	}
@@ -208,8 +207,8 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		Map<String, String> mapDmucDvi = getMapTenDvi();
 		data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
 
-		data.setTenTrangThai(TrangThaiEnum.getTenById(data.getTrangThai()));
-		data.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(data.getTrangThai()));
+		data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
+		data.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(data.getTrangThai()));
 		this.setTenDvi(data);
 		Set<Long> hopDongIds = data.getChildren1().stream().map(HhQdGiaoNvuNhapxuatDtl1::getHopDong)
 				.filter(Objects::nonNull)
@@ -408,7 +407,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			objs[2] = convertDateToString(qd.getNgayQdinh());
 			objs[3] = qd.getNamNhap();
 			objs[4] = qd.getTrichYeu();
-			objs[5] = TrangThaiEnum.getTenById(qd.getTrangThai());
+			objs[5] = NhapXuatHangTrangThaiEnum.getTenById(qd.getTrangThai());
 			dataList.add(objs);
 		}
 

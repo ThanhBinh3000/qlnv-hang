@@ -5,7 +5,6 @@ import com.tcdt.qlnvhang.entities.nhaphang.quanlybangkecanhangluongthuc.QlBangKe
 import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieunhapkholuongthuc.NhPhieuNhapKho;
 import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCtRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
@@ -323,7 +322,7 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
 
         String trangThai = bangKe.getTrangThai();
         if (NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
-            if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
+            if (!NhapXuatHangTrangThaiEnum.DU_THAO.getId().equals(trangThai))
                 return false;
 
             bangKe.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId());
