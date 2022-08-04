@@ -447,8 +447,8 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			qd.setNamNhap(namNhap);
 			qd.setTrichYeu(trichYeu);
 			qd.setTrangThai(trangThai);
-			qd.setTenTrangThai(TrangThaiEnum.getTenById(trangThai));
-			qd.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(trangThai));
+			qd.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(trangThai));
+			qd.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(trangThai));
 			if (!CollectionUtils.isEmpty(dtl1Map.get(qd.getId()))) {
 				qd.setChildren1(dtl1Map.get(qd.getId()));
 			}

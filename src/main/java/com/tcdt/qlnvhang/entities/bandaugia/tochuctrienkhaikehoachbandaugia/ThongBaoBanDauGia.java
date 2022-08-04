@@ -23,8 +23,8 @@ public class ThongBaoBanDauGia extends BaseEntity implements Serializable {
 	private static final long serialVersionUID = 2279843539381075274L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BH_DG_THONG_BAO_BAN_DAU_GIA_SEQ")
-	@SequenceGenerator(sequenceName = "BH_DG_THONG_BAO_BAN_DAU_GIA_SEQ", allocationSize = 1, name = "BH_DG_THONG_BAO_BAN_DAU_GIA_SEQ")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BH_DG_THONG_BAO_BDG_SEQ")
+	@SequenceGenerator(sequenceName = "BH_DG_THONG_BAO_BDG_SEQ", allocationSize = 1, name = "BH_DG_THONG_BAO_BDG_SEQ")
 	@Column(name = "ID")
 	private Long id;
 	@Column(name = "MA_DON_VI")
