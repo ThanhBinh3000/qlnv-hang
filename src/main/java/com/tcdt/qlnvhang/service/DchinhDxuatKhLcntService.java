@@ -154,7 +154,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		dataDB.setFileDinhKem(fileDinhKemList);
 
 		hdrRepository.save(dataDB);
-		this.deleteDataOld(objReq);
+		this.deleteDataOld(objReq,false);
 		this.saveCtietVatTu(dataMap.getId(),objReq);
 		return dataMap;
 	}
@@ -183,7 +183,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		dataDB.setFileDinhKem(fileDinhKemList);
 
 		hdrRepository.save(dataDB);
-		this.deleteDataOld(objReq);
+		this.deleteDataOld(objReq,true);
 		this.saveCtietLT(dataMap.getId(),objReq);
 		return dataMap;
 	}
@@ -213,15 +213,24 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		return hdrData.get();
 	}
 
-	public void deleteDataOld(DchinhDxKhLcntHdrReq objReq){
+	public void deleteDataOld(DchinhDxKhLcntHdrReq objReq, Boolean isLuongThuc){
 		dtlRepository.deleteAllByIdDxDcHdr(objReq.getId());
-		for (HhQdKhlcntDtlReq dx : objReq.getDsDeXuat()) {
-			if(!ObjectUtils.isEmpty(dx.getId()) ){
-				gThauRepository.deleteAllByIdDcDxDtl(dx.getId());
+		if(isLuongThuc){
+			for (HhQdKhlcntDtlReq dx : objReq.getDsDeXuat()) {
+				if(!ObjectUtils.isEmpty(dx.getId()) ){
+					gThauRepository.deleteAllByIdDcDxDtl(dx.getId());
+				}
+				for (HhQdKhlcntDsgthauReq gt : dx.getDsGoiThau()) {
+					if(!ObjectUtils.isEmpty(gt.getId()) ){
+						gThauCietRepository.deleteAllByIdGoiThau(gt.getId());
+					}
+				}
 			}
-			for (HhQdKhlcntDsgthauReq gt : dx.getDsGoiThau()) {
-				if(!ObjectUtils.isEmpty(gt.getId()) ){
-					gThauCietRepository.deleteAllByIdGoiThau(gt.getId());
+		}else{
+			for (HhQdKhlcntDsgthauReq dx : objReq.getDsGoiThau()) {
+				gThauRepository.deleteById(dx.getId());
+				if(!ObjectUtils.isEmpty(dx.getId()) ){
+					gThauCietRepository.deleteAllByIdGoiThau(dx.getId());
 				}
 			}
 		}
