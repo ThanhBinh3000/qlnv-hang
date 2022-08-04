@@ -44,7 +44,7 @@ public class NhBangKeVtRepositoryCustomImpl implements NhBangKeVtRepositoryCusto
         builder.append("WHERE 1 = 1 ");
 
         if (!StringUtils.isEmpty(req.getSoBangKe())) {
-            builder.append("AND ").append("p.soBangKe LIKE :soBangKe ");
+            builder.append("AND ").append("LOWER(p.soBangKe) LIKE :soBangKe ");
         }
 
         if (req.getNgayTaoBangKeTu() != null) {
@@ -83,7 +83,7 @@ public class NhBangKeVtRepositoryCustomImpl implements NhBangKeVtRepositoryCusto
 
     private void setParameterSearch(NhBangKeVtSearchReq req, Query query) {
         if (!StringUtils.isEmpty(req.getSoBangKe())) {
-            query.setParameter("soBangKe", "%" + req.getSoBangKe() + "%");
+            query.setParameter("soBangKe", "%" + req.getSoBangKe().toLowerCase() + "%");
         }
 
         if (req.getNgayTaoBangKeTu() != null) {
