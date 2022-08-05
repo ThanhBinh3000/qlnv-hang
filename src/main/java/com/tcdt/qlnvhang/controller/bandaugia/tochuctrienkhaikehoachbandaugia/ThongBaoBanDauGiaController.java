@@ -5,13 +5,16 @@ import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaRequest;
+import com.tcdt.qlnvhang.request.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaSearchRequest;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.response.banhangdaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaResponse;
+import com.tcdt.qlnvhang.response.banhangdaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaSearchResponse;
 import com.tcdt.qlnvhang.service.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -94,23 +97,23 @@ public class ThongBaoBanDauGiaController extends BaseController {
 		return ResponseEntity.ok(resp);
 	}
 
-//	@ApiOperation(value = "Search thông báo bán đấu giá", response = Page.class)
-//	@GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
-//	public ResponseEntity<BaseResponse> search(KeHoachBanDauGiaSearchRequest req) {
-//		BaseResponse resp = new BaseResponse();
-//		try {
-//			Page<KeHoachBanDauGiaResponse> res = thongBaoBanDauGiaService.search(req);
-//			resp.setData(res);
-//			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-//			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-//		} catch (Exception e) {
-//			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-//			resp.setMsg(e.getMessage());
-//			log.error(e.getMessage());
-//		}
-//		return ResponseEntity.ok(resp);
-//	}
-//
+	@ApiOperation(value = "Search thông báo bán đấu giá", response = Page.class)
+	@GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<BaseResponse> search(ThongBaoBanDauGiaSearchRequest req) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			Page<ThongBaoBanDauGiaSearchResponse> res = thongBaoBanDauGiaService.search(req);
+			resp.setData(res);
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error(e.getMessage());
+		}
+		return ResponseEntity.ok(resp);
+	}
+
 //	@ApiOperation(value = "Update trạng thái kế hoạch bán đấu giá hàng hóa", response = Page.class)
 //	@PutMapping(value = "/trang-thai", produces = MediaType.APPLICATION_JSON_VALUE)
 //	public ResponseEntity<BaseResponse> updateTrangThai(@RequestParam Long id,

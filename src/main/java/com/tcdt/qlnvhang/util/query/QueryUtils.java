@@ -55,8 +55,10 @@ public class QueryUtils {
 		return String.format(" INNER JOIN %s ON %s = %s ", right.buildAliasString(), left.getField(leftField), right.getField(rightField));
 	}
 
-	public String like(String field) {
-		return String.format(" %s LIKE :%s", this.getField(field), field);
+	public void like(Operator operator, String field, Object req, StringBuilder builder) {
+		if (Objects.nonNull(req)) {
+			builder.append(String.format(" %s %s LIKE :%s ", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field));
+		}
 	}
 
 	public void eq(Operator operator, String field, Object req, StringBuilder builder) {

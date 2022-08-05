@@ -7,7 +7,6 @@ import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieunhapkholuongthuc.NhPhieuNh
 import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCt1;
 import com.tcdt.qlnvhang.entities.nhaphang.vattu.hosokythuat.NhHoSoKyThuat;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCt1Repository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
@@ -358,7 +357,7 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
 
         String trangThai = phieu.getTrangThai();
         if (NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
-            if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
+            if (!NhapXuatHangTrangThaiEnum.DU_THAO.getId().equals(trangThai))
                 return false;
 
             phieu.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId());

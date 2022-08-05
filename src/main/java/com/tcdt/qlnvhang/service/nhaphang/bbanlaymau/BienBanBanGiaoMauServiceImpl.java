@@ -4,7 +4,6 @@ import com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau.BienBanBanGiaoMau;
 import com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau.BienBanBanGiaoMauCt;
 import com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau.BienBanLayMau;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.bbanbangiaomau.BienBanBanGiaoMauCtRepository;
@@ -186,7 +185,7 @@ public class BienBanBanGiaoMauServiceImpl extends BaseServiceImpl implements Bie
 		BienBanBanGiaoMau bb = optional.get();
 		String trangThai = bb.getTrangThai();
 		if (NhapXuatHangTrangThaiEnum.CHO_DUYET_TP_KTBQ.getId().equals(stReq.getTrangThai())) {
-			if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
+			if (!NhapXuatHangTrangThaiEnum.DU_THAO.getId().equals(trangThai))
 				return false;
 
 			bb.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_TP_KTBQ.getId());

@@ -3,7 +3,6 @@ package com.tcdt.qlnvhang.service.nhaphang.luongthucmuoi.quanlybienbannhapdaykho
 import com.tcdt.qlnvhang.entities.nhaphang.quanlybienbannhapdaykholuongthuc.QlBienBanNdkCtLt;
 import com.tcdt.qlnvhang.entities.nhaphang.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhBbNghiemthuKlstRepository;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
@@ -329,7 +328,7 @@ public class QlBienBanNhapDayKhoLtServiceImpl extends BaseServiceImpl implements
 
         String trangThai = bienBan.getTrangThai();
         if (NhapXuatHangTrangThaiEnum.CHO_DUYET_KTV_BAO_QUAN.getId().equals(stReq.getTrangThai())) {
-            if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
+            if (!NhapXuatHangTrangThaiEnum.DU_THAO.getId().equals(trangThai))
                 return false;
 
             bienBan.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_KTV_BAO_QUAN.getId());

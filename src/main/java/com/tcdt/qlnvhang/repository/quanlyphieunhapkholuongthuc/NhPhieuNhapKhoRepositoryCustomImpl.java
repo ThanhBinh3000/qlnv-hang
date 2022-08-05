@@ -1,7 +1,7 @@
 package com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc;
 
 import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieunhapkholuongthuc.NhPhieuNhapKho;
-import com.tcdt.qlnvhang.enums.TrangThaiEnum;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.request.search.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoSearchReq;
 import com.tcdt.qlnvhang.response.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoRes;
 import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
@@ -54,8 +54,8 @@ public class NhPhieuNhapKhoRepositoryCustomImpl implements NhPhieuNhapKhoReposit
             Long qdNhapId = (Long) o[2];
             String soQdNhap = (String) o[3];
             BeanUtils.copyProperties(phieu, response);
-            response.setTenTrangThai(TrangThaiEnum.getTenById(phieu.getTrangThai()));
-            response.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(phieu.getTrangThai()));
+            response.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(phieu.getTrangThai()));
+            response.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(phieu.getTrangThai()));
             this.thongTinNganLo(response, nganLo);
             response.setQdgnvnxId(qdNhapId);
             response.setSoQuyetDinhNhap(soQdNhap);

@@ -1,7 +1,7 @@
 package com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc;
 
 import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
-import com.tcdt.qlnvhang.enums.TrangThaiEnum;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongFilterRequestDto;
@@ -50,8 +50,8 @@ public class QlpktclhPhieuKtChatLuongRepositoryCustomImpl implements QlpktclhPhi
 			Long quyetDinhNhapId = (Long) o[1];
 			String soQdNhap = (String) o[2];
 			QlpktclhPhieuKtChatLuongResponseDto response = dataUtils.toObject(qd, QlpktclhPhieuKtChatLuongResponseDto.class);
-			response.setTenTrangThai(TrangThaiEnum.getTenById(qd.getTrangThai()));
-			response.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(qd.getTrangThai()));
+			response.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qd.getTrangThai()));
+			response.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(qd.getTrangThai()));
 			response.setQuyetDinhNhapId(quyetDinhNhapId);
 			response.setSoQuyetDinhNhap(soQdNhap);
 			response.setMaDiemKho(qd.getMaDiemKho());

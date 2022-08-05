@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.request.QlnvDmDonviSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.HhDmDviLquanSearchReq;
@@ -389,7 +388,7 @@ public class BaseServiceImpl {
 
 		String trangThai = item.getTrangThai();
 		if (NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
-			if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
+			if (!NhapXuatHangTrangThaiEnum.DU_THAO.getId().equals(trangThai))
 				return false;
 
 			item.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId());
