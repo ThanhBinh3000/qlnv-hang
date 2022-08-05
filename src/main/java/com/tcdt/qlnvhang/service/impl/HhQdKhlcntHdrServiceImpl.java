@@ -480,14 +480,14 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		dataDB.setTrangThai(stReq.getTrangThai());
 		if (stReq.getTrangThai().equals(Contains.BAN_HANH)) {
 			Optional<HhDxuatKhLcntHdr> qOptional = hhDxuatKhLcntHdrRepository.findById(dataDB.getIdTrHdr());
-//			if(qOptional.isPresent()){
-//				if(qOptional.get().getTrangThai().equals(Contains.TT_DA_QUYET_DINH)){
-//					throw new Exception("Đề xuất này đã được quyết định");
-//				}
-//				hhDxuatKhLcntHdrRepository.updateStatus(dataDB.getIdTrHdr() , Contains.TT_DA_QUYET_DINH);
-//			}else{
-//				throw new Exception("Số tờ trình kế hoạch không được tìm thấy");
-//			}
+			if(qOptional.isPresent()){
+				if(qOptional.get().getTrangThai().equals(Contains.TT_DA_QUYET_DINH)){
+					throw new Exception("Đề xuất này đã được quyết định");
+				}
+				hhDxuatKhLcntHdrRepository.updateStatus(dataDB.getIdTrHdr() , Contains.TT_DA_QUYET_DINH);
+			}else{
+				throw new Exception("Số tờ trình kế hoạch không được tìm thấy");
+			}
 			this.cloneProject(dataDB.getId(),true);
 		}
 		HhQdKhlcntHdr createCheck = hhQdKhlcntHdrRepository.save(dataDB);
@@ -559,9 +559,9 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				hhQdKhlcntDtlRepository.save(dxClone);
 				for (HhQdKhlcntDsgthau gthau : dx.getDsGoiThau()){
 					HhQdKhlcntDsgthau gThauClone = new HhQdKhlcntDsgthau();
-					BeanUtils.copyProperties(gthau, hdrClone);
+					BeanUtils.copyProperties(gthau, gThauClone);
 					gThauClone.setId(null);
-					gThauClone.setIdQdDtl(dx.getId());
+					gThauClone.setIdQdDtl(dxClone.getId());
 					hhQdKhlcntDsgthauRepository.save(gThauClone);
 					for (HhQdKhlcntDsgthauCtiet dsDdNhap : gThauClone.getChildren()){
 						HhQdKhlcntDsgthauCtiet dsDdNhapClone = new HhQdKhlcntDsgthauCtiet();
