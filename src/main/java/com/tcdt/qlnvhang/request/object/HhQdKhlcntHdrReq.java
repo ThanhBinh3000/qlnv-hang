@@ -97,6 +97,8 @@ public class HhQdKhlcntHdrReq {
 
 	String maTrHdr;
 
+	Boolean lastest = false;
+
 //	@NotNull(message = "Không được để trống")
 	private Long idThHdr;
 	private Long idTrHdr;
