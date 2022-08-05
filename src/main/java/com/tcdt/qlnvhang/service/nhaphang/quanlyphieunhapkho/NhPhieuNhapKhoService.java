@@ -20,7 +20,7 @@ public interface NhPhieuNhapKhoService {
 
     Page<NhPhieuNhapKhoRes> search(NhPhieuNhapKhoSearchReq req) throws Exception;
 
-    BaseNhapHangCount count() throws Exception;
+    BaseNhapHangCount count(NhPhieuNhapKhoSearchReq req) throws Exception;
 
     @Transactional(rollbackOn = Exception.class)
     boolean deleteMultiple(DeleteReq req) throws Exception;

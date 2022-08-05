@@ -80,7 +80,7 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 		phieu.setMaDvi(userInfo.getDvql());
 		phieu.setTrangThai(NhapXuatHangTrangThaiEnum.DU_THAO.getId());
 		phieu.setCapDvi(userInfo.getCapDvi());
-
+		phieu.setLoaiVthh(req.getMaVatTuCha());
 		phieu.setSo(getSo());
 		phieu.setNam(LocalDate.now().getYear());
 		phieu.setSoPhieu(String.format("%s/%s/%s-%s", phieu.getSo(), phieu.getNam(), "PKTCL", userInfo.getMaPbb()));
@@ -119,7 +119,7 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 
 		this.validateSoPhieu(qlpktclhPhieuKtChatLuong, req);
 		qlpktclhPhieuKtChatLuong = dataUtils.toObject(req, QlpktclhPhieuKtChatLuong.class);
-
+		qlpktclhPhieuKtChatLuong.setLoaiVthh(req.getMaVatTuCha());
 		qlpktclhPhieuKtChatLuong.setNgaySua(LocalDate.now());
 		qlpktclhPhieuKtChatLuong.setNguoiSuaId(userInfo.getId());
 		qlpktclhPhieuKtChatLuong.setMaDvi(userInfo.getDvql());
@@ -148,16 +148,6 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 		return qlpktclhPhieuKtChatLuongRepo.filter(req);
 	}
 
-	@Override
-	public BaseNhapHangCount count() throws Exception {
-		UserInfo userInfo = UserUtils.getUserInfo();
-		QlpktclhPhieuKtChatLuongFilterRequestDto req = new QlpktclhPhieuKtChatLuongFilterRequestDto();
-		this.prepareSearchReq(req, userInfo, null, req.getTrangThais());
-		BaseNhapHangCount count = new BaseNhapHangCount();
-
-		count.setTatCa(qlpktclhPhieuKtChatLuongRepo.countPhieuKiemTraChatLuong(req));
-		return count;
-	}
 
 	@Override
 	public Page<QlpktclhPhieuKtChatLuong> search(QlpktclhPhieuKtChatLuongFilterRequestDto req) {
@@ -361,4 +351,25 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 		so = so + 1;
 		return so;
 	}
+
+	@Override
+	public BaseNhapHangCount count(QlpktclhPhieuKtChatLuongFilterRequestDto req) throws Exception {
+		UserInfo userInfo = UserUtils.getUserInfo();
+		QlpktclhPhieuKtChatLuongFilterRequestDto countReq = new QlpktclhPhieuKtChatLuongFilterRequestDto();
+		countReq.setCapDvis(req.getCapDvis());
+		this.prepareSearchReq(countReq, userInfo, countReq.getCapDvis(), req.getTrangThais());
+		BaseNhapHangCount count = new BaseNhapHangCount();
+
+		count.setTatCa(qlpktclhPhieuKtChatLuongRepo.countPhieuKiemTraChatLuong(countReq));
+		countReq.setLoaiVthh(Contains.LOAI_VTHH_THOC);
+		count.setThoc(qlpktclhPhieuKtChatLuongRepo.countPhieuKiemTraChatLuong(countReq));
+		countReq.setLoaiVthh(Contains.LOAI_VTHH_GAO);
+		count.setGao(qlpktclhPhieuKtChatLuongRepo.countPhieuKiemTraChatLuong(countReq));
+		countReq.setLoaiVthh(Contains.LOAI_VTHH_MUOI);
+		count.setMuoi(qlpktclhPhieuKtChatLuongRepo.countPhieuKiemTraChatLuong(countReq));
+		countReq.setLoaiVthh(Contains.LOAI_VTHH_VATTU);
+		count.setVatTu(qlpktclhPhieuKtChatLuongRepo.countPhieuKiemTraChatLuong(countReq));
+		return count;
+	}
+
 }

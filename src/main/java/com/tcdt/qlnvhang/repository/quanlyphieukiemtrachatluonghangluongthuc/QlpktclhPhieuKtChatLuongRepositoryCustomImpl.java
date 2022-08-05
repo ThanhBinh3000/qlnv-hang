@@ -90,6 +90,9 @@ public class QlpktclhPhieuKtChatLuongRepositoryCustomImpl implements QlpktclhPhi
 			builder.append("AND ").append("qd.maVatTu = :maVatTu ");
 		}
 
+		if (StringUtils.hasText(req.getMaVatTuCha())) {
+			builder.append("AND ").append("qd.maVatTuCha = :maVatTuCha ");
+		}
 		if (StringUtils.hasText(req.getLoaiVthh())) {
 			builder.append("AND ").append("qd.loaiVthh = :loaiVthh ");
 		}
@@ -149,6 +152,9 @@ public class QlpktclhPhieuKtChatLuongRepositoryCustomImpl implements QlpktclhPhi
 		}
 		if (StringUtils.hasText(req.getMaVatTu())) {
 			query.setParameter("maVatTu", req.getMaVatTu());
+		}
+		if (StringUtils.hasText(req.getMaVatTuCha())) {
+			query.setParameter("maVatTuCha", req.getMaVatTuCha());
 		}
 
 		if (StringUtils.hasText(req.getLoaiVthh())) {
