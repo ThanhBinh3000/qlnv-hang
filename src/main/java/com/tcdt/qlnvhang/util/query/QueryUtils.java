@@ -9,10 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,9 +21,6 @@ import java.util.stream.Collectors;
 public class QueryUtils {
 	private Class clazz;
 	private String alias;
-
-	@PersistenceContext
-	private EntityManager em;
 
 	public static final String COUNT_ALL = " COUNT(*) ";
 	public static final String SELECT = " SELECT ";
@@ -150,13 +144,6 @@ public class QueryUtils {
 	public static String buildQuery(StringBuilder builder) {
 		return builder.toString().replace("SELECT  ,", SELECT);
 	}
-
-	public TypedQuery<Object[]> createQuery(StringBuilder queryBuilder, Pageable pageable) {
-		TypedQuery<Object[]> query = em.createQuery(QueryUtils.buildQuery(queryBuilder), Object[].class);
-		query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize()).setMaxResults(pageable.getPageSize());
-		return query;
-	}
-
 	public static void selectFields(StringBuilder builder, QueryUtils qU, String field) {
 		builder.append(qU.selectField(field));
 	}

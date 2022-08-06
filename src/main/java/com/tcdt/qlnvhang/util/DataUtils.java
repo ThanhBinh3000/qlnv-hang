@@ -58,7 +58,7 @@ public class DataUtils {
 	}
 
 	public static String toStringValue (Object obj) {
-		return Optional.ofNullable(obj.toString()).orElse("");
+		return Optional.ofNullable(obj).map(Object::toString).orElse("");
 	}
 
 }

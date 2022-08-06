@@ -50,7 +50,7 @@ public class ThongBaoBanDauGiaSearchResponse {
 	public Object[] toExcel(String[] rowsName, Integer stt) {
 		Object[] objs = new Object[rowsName.length];
 		objs[0] = stt;
-		objs[1] = this.maThongBao;
+		objs[1] = DataUtils.toStringValue(this.maThongBao);
 		objs[2] = DataUtils.toStringValue(this.qdPheDuyetKhbdg);
 		objs[3] = DataUtils.toStringValue(LocalDateTimeUtils.localDateToString(this.ngayToChuc));
 		objs[4] = DataUtils.toStringValue(this.trichYeu);

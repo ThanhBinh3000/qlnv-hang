@@ -72,10 +72,11 @@ public class ThongBaoBanDauGiaRepositoryCustomImpl implements ThongBaoBanDauGiaR
 		QueryUtils.buildSort(pageable, builder);
 
 		log.debug("Create query");
-		TypedQuery<Object[]> query = thongBaoBDG.createQuery(builder, pageable);
+		TypedQuery<Object[]> query = em.createQuery(QueryUtils.buildQuery(builder), Object[].class);
 
 		log.debug("Set params");
 		this.setParameterSearch(req, query);
+		query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize()).setMaxResults(pageable.getPageSize());
 
 		log.info("Build response");
 		List<Object[]> result = query.getResultList();
