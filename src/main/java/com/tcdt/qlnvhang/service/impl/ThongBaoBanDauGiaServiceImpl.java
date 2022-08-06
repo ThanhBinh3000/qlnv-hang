@@ -1,10 +1,13 @@
 package com.tcdt.qlnvhang.service.impl;
 
 import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGia;
+import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdg;
 import com.tcdt.qlnvhang.entities.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGia;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.mapper.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaRequestMapper;
 import com.tcdt.qlnvhang.mapper.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaResponseMapper;
+import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
+import com.tcdt.qlnvhang.repository.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaRepository;
 import com.tcdt.qlnvhang.request.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaRequest;
 import com.tcdt.qlnvhang.request.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaSearchRequest;
@@ -15,6 +18,7 @@ import com.tcdt.qlnvhang.service.bandaugia.tochuctrienkhaikehoachbandaugia.Thong
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -36,7 +40,10 @@ public class ThongBaoBanDauGiaServiceImpl extends BaseServiceImpl implements Tho
 	private final ThongBaoBanDauGiaRequestMapper thongBaoBanDauGiaRequestMapper;
 	private final ThongBaoBanDauGiaResponseMapper thongBaoBanDauGiaResponseMapper;
 
+	private final BhQdPheDuyetKhbdgRepository qdPheDuyetKhbdgRepository;
+
 	private final FileDinhKemService fileDinhKemService;
+	private final QlnvDmVattuRepository dmVattuRepository;
 
 	private static final String SHEET_NAME = "Danh sách kế hoạch bán đấu giá";
 
@@ -121,6 +128,17 @@ public class ThongBaoBanDauGiaServiceImpl extends BaseServiceImpl implements Tho
 		if (!optional.isPresent())
 			throw new Exception("Thông báo bán đấu giá không tồn tại");
 		ThongBaoBanDauGia thongBaoBanDauGia = optional.get();
-		return null;
+		ThongBaoBanDauGiaResponse response = thongBaoBanDauGiaResponseMapper.toDto(thongBaoBanDauGia);
+		QlnvDmVattu dmVattu = dmVattuRepository.findByMa(thongBaoBanDauGia.getMaVatTuCha());
+		if (dmVattu != null) {
+			response.setTenVatTuCha(dmVattu.getTen());
+		}
+		if (thongBaoBanDauGia.getQdPheDuyetKhBdgId() != null) {
+			Optional<BhQdPheDuyetKhbdg> qdPheDuyetKhbdgOptional = qdPheDuyetKhbdgRepository.findById(thongBaoBanDauGia.getQdPheDuyetKhBdgId());
+			qdPheDuyetKhbdgOptional.ifPresent(entry -> {
+				response.setTenQdPheDuyetKhBd(qdPheDuyetKhbdgOptional.get().getSoQuyetDinh());
+			});
+		}
+		return response;
 	}
 }
