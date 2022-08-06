@@ -11,6 +11,7 @@ import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,6 +41,18 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 
 	@Autowired
 	private HhQdKhlcntHdrRepository hhQdKhlcntHdrRepository;
+
+	@Autowired
+	private HhQdKhlcntHdrService hhQdKhlcntHdrService;
+
+	@Autowired
+	private HhQdKhlcntDtlRepository hhQdKhlcntDtlRepository;
+
+	@Autowired
+	private HhQdKhlcntDsgthauRepository hhQdKhlcntDsgthauRepository;
+
+	@Autowired
+	private HhQdKhlcntDsgthauCtietRepository hhQdKhlcntDsgthauCtietRepository;
 
 	public Page<HhDchinhDxKhLcntHdr> getAllPage(QlnvQdLcntHdrDChinhSearchReq objReq) throws Exception {
 		int page = objReq.getPaggingReq().getPage();
@@ -288,41 +301,84 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 	public HhDchinhDxKhLcntHdr approve (StatusReq stReq) throws Exception {
 		if (StringUtils.isEmpty(stReq.getId()))
 			throw new Exception("Không tìm thấy dữ liệu");
-		Optional<HhDchinhDxKhLcntHdr> qdLcnt = hdrRepository.findById(Long.valueOf(stReq.getId()));
-		if (!qdLcnt.isPresent()){
-			throw new Exception("Không tìm thấy dữ liệu");
-		}
-		qdLcnt.get().setTrangThai(stReq.getTrangThai());
-		String status = stReq.getTrangThai() + qdLcnt.get().getTrangThai();
+		HhDchinhDxKhLcntHdr qdLcnt = this.detail(stReq.getId().toString());
+
+		qdLcnt.setTrangThai(stReq.getTrangThai());
+		String status = stReq.getTrangThai() + qdLcnt.getTrangThai();
 		switch(status) {
 			case Contains.CHO_DUYET + Contains.MOI_TAO:
 			case Contains.CHO_DUYET + Contains.TU_CHOI:
-				qdLcnt.get().setNguoiGuiDuyet(getUser().getUsername());
-				qdLcnt.get().setNgayGuiDuyet(getDateTimeNow());
+				qdLcnt.setNguoiGuiDuyet(getUser().getUsername());
+				qdLcnt.setNgayGuiDuyet(getDateTimeNow());
 				break;
 			case Contains.TU_CHOI + Contains.CHO_DUYET:
-				qdLcnt.get().setLdoTuchoi(stReq.getLyDo());
+				qdLcnt.setLdoTuchoi(stReq.getLyDo());
 				break;
 			case Contains.DUYET + Contains.CHO_DUYET:
-				qdLcnt.get().setNguoiPduyet(getUser().getUsername());
-				qdLcnt.get().setNgayPduyet(getDateTimeNow());
+				qdLcnt.setNguoiPduyet(getUser().getUsername());
+				qdLcnt.setNgayPduyet(getDateTimeNow());
 			case Contains.BAN_HANH + Contains.DUYET:
-				qdLcnt.get().setNguoiPduyet(getUser().getUsername());
-				qdLcnt.get().setNgayPduyet(getDateTimeNow());
+				qdLcnt.setNguoiPduyet(getUser().getUsername());
+				qdLcnt.setNgayPduyet(getDateTimeNow());
 				break;
 			default:
-				break;
+				throw new Exception("Phê duyệt không thành công");
 		}
-//		if (stReq.getTrangThai().equals(Contains.BAN_HANH)) {
-//			Optional<HhDxuatKhLcntHdr> dXuat = hhQdKhlcntHdrRepository.findBySoDxuat(qdLcnt.get().getSoQdinhGoc());
-//			dXuat.get().setLastest(false);
-//			hhDxuatKhLcntHdrRepository.save(dXuat.get());
-//			HhDxuatKhLcntHdr dXuatNew = new ModelMapper().map(qdLcnt.get(), HhDxuatKhLcntHdr.class);
-//			dXuatNew.setLastest(true);
-//			dXuatNew.setId(null);
-//			hhDxuatKhLcntHdrRepository.save(dXuatNew);
-//		}
-		return hdrRepository.save(qdLcnt.get());
+		if (stReq.getTrangThai().equals(Contains.BAN_HANH)) {
+			this.updateDataQdGoc(qdLcnt);
+		}
+		return hdrRepository.save(qdLcnt);
+	}
+
+	private void updateDataQdGoc(HhDchinhDxKhLcntHdr qdDieuChinh) throws Exception {
+		HhQdKhlcntHdr hdr = hhQdKhlcntHdrService.detail(qdDieuChinh.getIdQdGoc().toString());
+		BeanUtils.copyProperties(qdDieuChinh,hdr,"id","soQd");
+		hhQdKhlcntHdrRepository.save(hdr);
+		hhQdKhlcntDtlRepository.deleteAllByIdQdHdr(hdr.getId());
+		//Is vật tư
+		if(hdr.getLoaiVthh().startsWith("02")){
+			HhQdKhlcntDtl qdDtl = new HhQdKhlcntDtl();
+			qdDtl.setIdQdHdr(hdr.getId());
+			qdDtl.setMaDvi(getUser().getDvql());
+			hhQdKhlcntDtlRepository.save(qdDtl);
+			if (qdDieuChinh.getHhQdKhlcntDtlList().get(0).getDsGoiThau() != null && qdDieuChinh.getHhQdKhlcntDtlList().get(0).getDsGoiThau().size() > 0) {
+				for (HhDchinhDxKhLcntDsgthau dsgThau : qdDieuChinh.getHhQdKhlcntDtlList().get(0).getDsGoiThau()){
+					HhQdKhlcntDsgthau gThau = new HhQdKhlcntDsgthau();
+					BeanUtils.copyProperties(dsgThau,gThau,"id");
+					gThau.setIdQdDtl(qdDtl.getId());
+					gThau.setTrangThai(Contains.CHUA_QUYET_DINH);
+					hhQdKhlcntDsgthauRepository.save(gThau);
+					for (HhDchinhDxKhLcntDsgthauCtiet dsDdNhap : dsgThau.getChildren()){
+						HhQdKhlcntDsgthauCtiet ddNhap = new HhQdKhlcntDsgthauCtiet();
+						BeanUtils.copyProperties(dsDdNhap,ddNhap,"id");
+						ddNhap.setIdGoiThau(gThau.getId());
+						hhQdKhlcntDsgthauCtietRepository.save(ddNhap);
+					}
+				}
+			}
+		}else{
+			for(HhDchinhDxKhLcntDtl dtl : qdDieuChinh.getHhQdKhlcntDtlList()){
+				HhQdKhlcntDtl qdDtl = new HhQdKhlcntDtl();
+				BeanUtils.copyProperties(dtl,qdDtl,"id");
+				qdDtl.setIdQdHdr(hdr.getId());
+				hhQdKhlcntDtlRepository.save(qdDtl);
+				if (dtl.getDsGoiThau() != null && dtl.getDsGoiThau().size() > 0) {
+					for (HhDchinhDxKhLcntDsgthau dsgThau : dtl.getDsGoiThau()){
+						HhQdKhlcntDsgthau gThau = new HhQdKhlcntDsgthau();
+						BeanUtils.copyProperties(dsgThau,gThau,"id");
+						gThau.setIdQdDtl(qdDtl.getId());
+						gThau.setTrangThai(Contains.CHUA_QUYET_DINH);
+						hhQdKhlcntDsgthauRepository.save(gThau);
+						for (HhDchinhDxKhLcntDsgthauCtiet dsDdNhap : dsgThau.getChildren()){
+							HhQdKhlcntDsgthauCtiet ddNhap = new HhQdKhlcntDsgthauCtiet();
+							BeanUtils.copyProperties(dsDdNhap,ddNhap,"id");
+							ddNhap.setIdGoiThau(gThau.getId());
+							hhQdKhlcntDsgthauCtietRepository.save(ddNhap);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	public HhDchinhDxKhLcntHdr  detail(String ids){
