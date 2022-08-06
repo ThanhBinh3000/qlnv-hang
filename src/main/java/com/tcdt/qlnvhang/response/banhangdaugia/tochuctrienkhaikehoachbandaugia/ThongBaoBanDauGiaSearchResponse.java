@@ -2,6 +2,8 @@ package com.tcdt.qlnvhang.response.banhangdaugia.tochuctrienkhaikehoachbandaugia
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.tcdt.qlnvhang.util.DataUtils;
+import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -48,6 +50,18 @@ public class ThongBaoBanDauGiaSearchResponse {
 	public Object[] toExcel(String[] rowsName, Integer stt) {
 		Object[] objs = new Object[rowsName.length];
 		objs[0] = stt;
+		objs[1] = this.maThongBao;
+		objs[2] = DataUtils.toStringValue(this.qdPheDuyetKhbdg);
+		objs[3] = DataUtils.toStringValue(LocalDateTimeUtils.localDateToString(this.ngayToChuc));
+		objs[4] = DataUtils.toStringValue(this.trichYeu);
+		objs[5] = DataUtils.toStringValue(this.hinhThucDauGia);
+		objs[6] = DataUtils.toStringValue(this.phuongThucDauGia);
+		objs[7] = DataUtils.toStringValue(this.loaiHangHoa);
+		objs[8] = DataUtils.toStringValue(this.namKeHoach);
+		objs[9] = DataUtils.toStringValue(this.thongBaoDGKhongThanhCong);
+		objs[10] = DataUtils.toStringValue(this.bienBanBDG);
+		objs[11] = DataUtils.toStringValue(this.qdPheDuyetKQBdg);
+		objs[12] = DataUtils.toStringValue(this.trangThai);
 		return objs;
 	}
 }

@@ -57,4 +57,8 @@ public class DataUtils {
 		return entities;
 	}
 
+	public static String toStringValue (Object obj) {
+		return Optional.ofNullable(obj.toString()).orElse("");
+	}
+
 }
