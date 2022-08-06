@@ -9,4 +9,13 @@ public interface ExcelHeaderConst {
 	String SO_QD_PHE_DUYET_KH_BDG = "Số QĐ phê duyệt KH BĐG";
 	String LOAI_HANG_HOA = "Loại hàng hóa";
 	String TRANG_THAI = "Trạng thái";
+	String MA_THONG_BAO_BDG = "Mã thông báo BĐG";
+	String NGAY_TO_CHUC_BDG = "Ngày tổ chức BĐG";
+	String HINH_THUC_DAU_GIA = "Hình thức đấu giá";
+	String THONG_BAO_DAU_GIA_KHONG_THANH = "Thông báo đấu giá không thành";
+	String BIEN_BAN_BDG = "Biên bản BĐG";
+	String SO_QD_PHE_DUYET_KQ_BDG = "Số QĐ phê duyệt KH BĐG";
+	String TRICH_YEU = "Trích yếu";
+	String PHUONG_THUC_DG = "Phương thức đấu giá";
+
 }

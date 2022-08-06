@@ -39,20 +39,21 @@ public class QueryUtils {
 	public String getField(String field) {
 		return String.format(" %s.%s", this.alias, field);
 	}
+
 	public String selectField(String field) {
 		return String.format(" , %s.%s", this.alias, field);
 	}
 
-	public String buildAliasString() {
+	public String buildAliasName() {
 		return String.format("%s %s", this.getClassName(), this.alias);
 	}
 
 	public static String buildLeftJoin(QueryUtils left, QueryUtils right, String leftField, String rightField) {
-		return String.format(" LEFT JOIN %s ON %s = %s ", right.buildAliasString(), left.getField(leftField), right.getField(rightField));
+		return String.format(" LEFT JOIN %s ON %s = %s ", right.buildAliasName(), left.getField(leftField), right.getField(rightField));
 	}
 
 	public static String buildInnerJoin(QueryUtils left, QueryUtils right, String leftField, String rightField) {
-		return String.format(" INNER JOIN %s ON %s = %s ", right.buildAliasString(), left.getField(leftField), right.getField(rightField));
+		return String.format(" INNER JOIN %s ON %s = %s ", right.buildAliasName(), left.getField(leftField), right.getField(rightField));
 	}
 
 	public void like(Operator operator, String field, Object req, StringBuilder builder) {
@@ -115,8 +116,9 @@ public class QueryUtils {
 
 	}
 
-	public String countBy(String filed) {
-		return String.format("SELECT COUNT(DISTINCT %s) FROM %s ", this.getField(filed), this.buildAliasString());
+	public StringBuilder countBy(String filed) {
+		StringBuilder builder = new StringBuilder();
+		return builder.append(String.format("SELECT COUNT(DISTINCT %s) FROM %s ", this.getField(filed), this.buildAliasName()));
 	}
 
 	public static void setParam(Query query, String paramName, Object value) {
@@ -141,6 +143,9 @@ public class QueryUtils {
 
 	public static String buildQuery(StringBuilder builder) {
 		return builder.toString().replace("SELECT  ,", SELECT);
+	}
+	public static void selectFields(StringBuilder builder, QueryUtils qU, String field) {
+		builder.append(qU.selectField(field));
 	}
 
 }
