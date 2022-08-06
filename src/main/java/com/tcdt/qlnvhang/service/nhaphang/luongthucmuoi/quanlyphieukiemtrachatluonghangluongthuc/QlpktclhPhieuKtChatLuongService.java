@@ -19,7 +19,7 @@ public interface QlpktclhPhieuKtChatLuongService {
 
 	Page<QlpktclhPhieuKtChatLuongResponseDto> filter (QlpktclhPhieuKtChatLuongFilterRequestDto req) throws Exception;
 
-    BaseNhapHangCount count() throws Exception;
+    BaseNhapHangCount count(QlpktclhPhieuKtChatLuongFilterRequestDto req) throws Exception;
 
     Page<QlpktclhPhieuKtChatLuong> search (QlpktclhPhieuKtChatLuongFilterRequestDto req) throws Exception;
 

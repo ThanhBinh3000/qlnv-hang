@@ -36,10 +36,7 @@ import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganLo;
 import com.tcdt.qlnvhang.table.khotang.KtNhaKho;
-import com.tcdt.qlnvhang.util.ExportExcel;
-import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
-import com.tcdt.qlnvhang.util.MoneyConvert;
-import com.tcdt.qlnvhang.util.UserUtils;
+import com.tcdt.qlnvhang.util.*;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -417,13 +414,22 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
     }
 
     @Override
-    public BaseNhapHangCount count() throws Exception {
+    public BaseNhapHangCount count(NhPhieuNhapKhoSearchReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
-        NhPhieuNhapKhoSearchReq req = new NhPhieuNhapKhoSearchReq();
-        this.prepareSearchReq(req, userInfo, null, req.getTrangThais());
+        NhPhieuNhapKhoSearchReq countReq = new NhPhieuNhapKhoSearchReq();
+        countReq.setCapDvis(req.getCapDvis());
+        this.prepareSearchReq(countReq, userInfo, countReq.getCapDvis(), req.getTrangThais());
         BaseNhapHangCount count = new BaseNhapHangCount();
 
-        count.setTatCa(nhPhieuNhapKhoRepository.count(req));
+        count.setTatCa(nhPhieuNhapKhoRepository.count(countReq));
+        countReq.setLoaiVthh(Contains.LOAI_VTHH_THOC);
+        count.setThoc(nhPhieuNhapKhoRepository.count(countReq));
+        countReq.setLoaiVthh(Contains.LOAI_VTHH_GAO);
+        count.setGao(nhPhieuNhapKhoRepository.count(countReq));
+        countReq.setLoaiVthh(Contains.LOAI_VTHH_MUOI);
+        count.setMuoi(nhPhieuNhapKhoRepository.count(countReq));
+        countReq.setLoaiVthh(Contains.LOAI_VTHH_VATTU);
+        count.setVatTu(nhPhieuNhapKhoRepository.count(countReq));
         return count;
     }
 

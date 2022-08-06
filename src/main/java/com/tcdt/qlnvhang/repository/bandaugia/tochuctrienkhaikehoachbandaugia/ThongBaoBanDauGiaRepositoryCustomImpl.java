@@ -41,43 +41,45 @@ public class ThongBaoBanDauGiaRepositoryCustomImpl implements ThongBaoBanDauGiaR
 		QueryUtils qdPheDuyetKetQuaBdg = QueryUtils.builder().clazz(BhQdPheDuyetKqbdg.class).alias("qdPheDuyetKqBdg").build();
 		QueryUtils vatTuHangHoa = QueryUtils.builder().clazz(QlnvDmVattu.class).alias("vtc").build();
 		QueryUtils bienBanBDG = QueryUtils.builder().clazz(BhBbBanDauGia.class).alias("bbBdg").build();
+
 		log.debug("Build select query");
-		builder.append(QueryUtils.SELECT)
-				.append(thongBaoBDG.selectField(ThongBaoBanDauGia_.ID))
-				.append(thongBaoBDG.selectField(ThongBaoBanDauGia_.MA_THONG_BAO))
-				.append(qdPheDuyetKeHoachBdg.selectField(BhQdPheDuyetKhbdg_.SO_QUYET_DINH))
-				.append(thongBaoBDG.selectField(ThongBaoBanDauGia_.THOI_GIAN_TO_CHUC_DAU_GIA_TU_NGAY))
-				.append(thongBaoBDG.selectField(ThongBaoBanDauGia_.TRICH_YEU))
-				.append(thongBaoBDG.selectField(ThongBaoBanDauGia_.HINH_THUC_DAU_GIA))
-				.append(thongBaoBDG.selectField(ThongBaoBanDauGia_.NAM_KE_HOACH))
-				.append(thongBaoBDG.selectField(ThongBaoBanDauGia_.TRANG_THAI))
-				.append(qdPheDuyetKetQuaBdg.selectField(BhQdPheDuyetKqbdg_.SO_QUYET_DINH))
-				.append(vatTuHangHoa.selectField(QlnvDmVattu_.TEN))
-				.append(bienBanBDG.selectField(BhBbBanDauGia_.SO_BIEN_BAN));
+		builder.append(QueryUtils.SELECT);
+		QueryUtils.selectFields(builder, thongBaoBDG, ThongBaoBanDauGia_.ID);
+		QueryUtils.selectFields(builder, thongBaoBDG, ThongBaoBanDauGia_.MA_THONG_BAO);
+		QueryUtils.selectFields(builder, qdPheDuyetKeHoachBdg, BhQdPheDuyetKhbdg_.SO_QUYET_DINH);
+		QueryUtils.selectFields(builder, thongBaoBDG, ThongBaoBanDauGia_.THOI_GIAN_TO_CHUC_DAU_GIA_TU_NGAY);
+		QueryUtils.selectFields(builder, thongBaoBDG, ThongBaoBanDauGia_.TRICH_YEU);
+		QueryUtils.selectFields(builder, thongBaoBDG, ThongBaoBanDauGia_.HINH_THUC_DAU_GIA);
+		QueryUtils.selectFields(builder, thongBaoBDG, ThongBaoBanDauGia_.NAM_KE_HOACH);
+		QueryUtils.selectFields(builder, thongBaoBDG, ThongBaoBanDauGia_.TRANG_THAI);
+		QueryUtils.selectFields(builder, qdPheDuyetKetQuaBdg, BhQdPheDuyetKqbdg_.SO_QUYET_DINH);
+		QueryUtils.selectFields(builder, vatTuHangHoa, QlnvDmVattu_.TEN);
+		QueryUtils.selectFields(builder, bienBanBDG, BhBbBanDauGia_.SO_BIEN_BAN);
 		//TODO: Thông báo đấu giá không thành
 
-
 		builder.append(QueryUtils.FROM)
-				.append(thongBaoBDG.buildAliasString())
+				.append(thongBaoBDG.buildAliasName())
 				.append(QueryUtils.buildInnerJoin(thongBaoBDG, vatTuHangHoa, ThongBaoBanDauGia_.MA_VAT_TU_CHA, QlnvDmVattu_.MA))
 				.append(QueryUtils.buildLeftJoin(thongBaoBDG, qdPheDuyetKeHoachBdg, ThongBaoBanDauGia_.QD_PHE_DUYET_KH_BDG_ID, BhQdPheDuyetKhbdg_.ID))
 				//TODO: Left join Thông báo đấu giá không thành
 				.append(QueryUtils.buildLeftJoin(thongBaoBDG, bienBanBDG, ThongBaoBanDauGia_.BIEN_BAN_BDG_ID, BhBbBanDauGia_.ID))
 				.append(QueryUtils.buildLeftJoin(thongBaoBDG, qdPheDuyetKetQuaBdg, ThongBaoBanDauGia_.QD_PHE_DUYET_KET_QUA_BD_GID, BhQdPheDuyetKqbdg_.ID));
 
-		setConditionSearch(req, builder, thongBaoBDG);
+		log.debug("Set Condition search");
+		this.setConditionSearch(req, builder, thongBaoBDG);
+
 		log.debug("Set sort");
 		QueryUtils.buildSort(pageable, builder);
 
+		log.debug("Create query");
 		TypedQuery<Object[]> query = em.createQuery(QueryUtils.buildQuery(builder), Object[].class);
 
 		log.debug("Set params");
 		this.setParameterSearch(req, query);
-
-		log.info("Set pageable");
 		query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize()).setMaxResults(pageable.getPageSize());
-		List<Object[]> result = query.getResultList();
 
+		log.info("Build response");
+		List<Object[]> result = query.getResultList();
 		List<ThongBaoBanDauGiaSearchResponse> responses = result.stream()
 				.map(ThongBaoBanDauGiaSearchResponse::new).collect(Collectors.toList());
 
@@ -95,13 +97,18 @@ public class ThongBaoBanDauGiaRepositoryCustomImpl implements ThongBaoBanDauGiaR
 	}
 
 	private int count(ThongBaoBanDauGiaSearchRequest req, QueryUtils thongBaoBDG) {
-		StringBuilder builder = new StringBuilder();
-		builder.append(thongBaoBDG.countBy(BhTongHopDeXuatKhbdg_.ID));
-		setConditionSearch(req, builder, thongBaoBDG);
+		log.debug("Build count query");
+		StringBuilder builder = thongBaoBDG.countBy(BhTongHopDeXuatKhbdg_.ID);
 
+		log.debug("Set condition search");
+		this.setConditionSearch(req, builder, thongBaoBDG);
+
+		log.debug("Create query");
 		TypedQuery<Long> query = em.createQuery(builder.toString(), Long.class);
 
+		log.debug("Set parameter");
 		this.setParameterSearch(req, query);
+
 		return query.getSingleResult().intValue();
 	}
 
@@ -111,6 +118,5 @@ public class ThongBaoBanDauGiaRepositoryCustomImpl implements ThongBaoBanDauGiaR
 		QueryUtils.setParam(query, BhQdPheDuyetKhbdg_.SO_QUYET_DINH, req.getSoQuyetDinhPheDuyetKHBDG());
 		QueryUtils.setParam(query, ThongBaoBanDauGia_.MA_THONG_BAO, req.getMaThongBaoBDG());
 		QueryUtils.setLikeParam(query, ThongBaoBanDauGia_.TRICH_YEU, req.getTrichYeu());
-
 	}
 }
