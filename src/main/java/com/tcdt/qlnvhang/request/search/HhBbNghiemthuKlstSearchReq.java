@@ -28,5 +28,5 @@ public class HhBbNghiemthuKlstSearchReq extends BaseRequest {
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date denNgayNghiemThu;
-
+	private String maVatTuCha;
 }

@@ -42,7 +42,7 @@ public class QlBangKeCanHangLtRepositoryCustomImpl implements QlBangKeCanHangLtR
         builder.append("WHERE 1 = 1 ");
 
         if (!StringUtils.isEmpty(req.getSoBangKe())) {
-            builder.append("AND ").append("p.soBangKe LIKE :soBangKe ");
+            builder.append("AND ").append("LOWER(p.soBangKe) LIKE :soBangKe ");
         }
         if (req.getTuNgayNhap() != null) {
             builder.append("AND ").append("p.ngayNhap >= :tuNgayNhap ");
@@ -52,7 +52,7 @@ public class QlBangKeCanHangLtRepositoryCustomImpl implements QlBangKeCanHangLtR
         }
 
         if (!StringUtils.isEmpty(req.getSoQdNhap())) {
-            builder.append("AND ").append("nx.soQd LIKE :soQdNhap ");
+            builder.append("AND ").append("LOWER(nx.soQd) LIKE :soQdNhap ");
         }
 
         if (!CollectionUtils.isEmpty(req.getMaDvis())) {
@@ -62,6 +62,11 @@ public class QlBangKeCanHangLtRepositoryCustomImpl implements QlBangKeCanHangLtR
         if (!CollectionUtils.isEmpty(req.getTrangThais())) {
             builder.append("AND ").append("p.trangThai IN :trangThais ");
         }
+
+        if (!StringUtils.isEmpty(req.getMaVatTuCha())) {
+            builder.append("AND ").append("p.maVatTuCha = :maVatTuCha ");
+        }
+
     }
 
     @Override
@@ -82,7 +87,7 @@ public class QlBangKeCanHangLtRepositoryCustomImpl implements QlBangKeCanHangLtR
 
     private void setParameterSearch(QlBangKeCanHangLtSearchReq req, Query query) {
         if (!StringUtils.isEmpty(req.getSoBangKe())) {
-            query.setParameter("soBangKe", "%" + req.getSoBangKe() + "%");
+            query.setParameter("soBangKe", "%" + req.getSoBangKe().toLowerCase() + "%");
         }
         if (req.getTuNgayNhap() != null) {
             query.setParameter("tuNgayNhap", req.getTuNgayNhap());
@@ -92,7 +97,7 @@ public class QlBangKeCanHangLtRepositoryCustomImpl implements QlBangKeCanHangLtR
         }
 
         if (!StringUtils.isEmpty(req.getSoQdNhap())) {
-            query.setParameter("soQdNhap", "%" + req.getSoQdNhap() + "%");
+            query.setParameter("soQdNhap", "%" + req.getSoQdNhap().toLowerCase() + "%");
         }
 
         if (!CollectionUtils.isEmpty(req.getMaDvis())) {
@@ -101,6 +106,10 @@ public class QlBangKeCanHangLtRepositoryCustomImpl implements QlBangKeCanHangLtR
 
         if (!CollectionUtils.isEmpty(req.getTrangThais())) {
             query.setParameter("trangThais", req.getTrangThais());
+        }
+
+        if (!StringUtils.isEmpty(req.getMaVatTuCha())) {
+            query.setParameter("maVatTuCha", req.getMaVatTuCha());
         }
     }
 }
