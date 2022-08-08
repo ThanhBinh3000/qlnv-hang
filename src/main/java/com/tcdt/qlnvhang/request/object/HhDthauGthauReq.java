@@ -40,19 +40,10 @@ public class HhDthauGthauReq {
 
 	BigDecimal tongTien;
 
-//	@NotNull(message = "Không được để trống")
-//	@Size(max = 20, message = "Nguồn vốn không được vượt quá 20 ký tự")
-//	@ApiModelProperty(example = "NGV01")
 	String nguonVon;
 
-//	@NotNull(message = "Không được để trống")
-//	@Size(max = 20, message = "Hình thức lựa chọn nhà thầu không được vượt quá 20 ký tự")
-//	@ApiModelProperty(example = "HLC01")
 	String hthucLcnt;
 
-//	@NotNull(message = "Không được để trống")
-//	@Size(max = 20, message = "Phương thức lựa chọn nhà thầu không được vượt quá 20 ký tự")
-//	@ApiModelProperty(example = "HLC01")
 	String pthucLcnt;
 
 	String loaiHdong;
@@ -63,10 +54,10 @@ public class HhDthauGthauReq {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date tgianNhang;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
 	Date tgianMthau;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
 	Date tgianDthau;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
@@ -87,14 +78,6 @@ public class HhDthauGthauReq {
 	private List<HhDthauNthauDuthauReq> nthauDuThauList = new ArrayList<>();
 
 	private List<HhDxuatKhLcntDsgthauDtlCtietReq> diaDiemNhap = new ArrayList<>();
-
-//	private List<HhDthauHsoKthuatReq> hsoKthuatList;
-//
-//	private List<HhDthauHsoTchinhReq> hsoTchinhLinh;
-
-//	private HhDthauTthaoHdongReq tthaoHdong;
-
-//	private HhDthauKquaLcntReq kquaLcnt;
 
 	private String trangThaiLuu;
 
