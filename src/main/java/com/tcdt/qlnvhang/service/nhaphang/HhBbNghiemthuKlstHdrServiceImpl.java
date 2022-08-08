@@ -15,6 +15,7 @@ import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhap
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
@@ -219,6 +220,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 		int limit = objReq.getPaggingReq().getLimit();
 		Pageable pageable = PageRequest.of(page, limit);
 		this.prepareSearchReq(objReq, userInfo, objReq.getCapDvis(), objReq.getTrangThais());
+
 		Page<HhBbNghiemthuKlstHdr> qhKho = hhBbNghiemthuKlstRepository
 				.findAll(HhBbNghiemthuKlstSpecification.buildSearchQuery(objReq), pageable);
 
@@ -516,5 +518,20 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 		so = Optional.ofNullable(so).orElse(0);
 		so = so + 1;
 		return so;
+	}
+
+	@Override
+	public BaseNhapHangCount count(Set<String> maDvis) {
+		HhBbNghiemthuKlstSearchReq countReq = new HhBbNghiemthuKlstSearchReq();
+		countReq.setMaDvis(maDvis);
+		BaseNhapHangCount count = new BaseNhapHangCount();
+
+		countReq.setLoaiVthh(Contains.LOAI_VTHH_THOC);
+		count.setThoc((int) hhBbNghiemthuKlstRepository.count(HhBbNghiemthuKlstSpecification.buildSearchQuery(countReq)));
+		countReq.setLoaiVthh(Contains.LOAI_VTHH_GAO);
+		count.setGao((int) hhBbNghiemthuKlstRepository.count(HhBbNghiemthuKlstSpecification.buildSearchQuery(countReq)));
+		countReq.setLoaiVthh(Contains.LOAI_VTHH_MUOI);
+		count.setMuoi((int) hhBbNghiemthuKlstRepository.count(HhBbNghiemthuKlstSpecification.buildSearchQuery(countReq)));
+		return count;
 	}
 }

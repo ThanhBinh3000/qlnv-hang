@@ -365,7 +365,7 @@ public class BaseServiceImpl {
 			}
 
 			if ((Contains.CAP_CUC.equals(userCapDvi) && capDviReqs.contains(Contains.CAP_TONG_CUC))
-					|| Contains.CAP_CHI_CUC.equals(userCapDvi) && capDviReqs.contains(Contains.CAP_CUC)) {
+					|| (Contains.CAP_CHI_CUC.equals(userCapDvi) && capDviReqs.contains(Contains.CAP_CUC))) {
 				maDvis.addAll(qlnvDmDonviRepository.findMaDviChaByMaDviAndTrangThai(userInfo.getDvql(), Contains.HOAT_DONG));
 			}
 
@@ -373,6 +373,10 @@ public class BaseServiceImpl {
 		} else {
 			req.setMaDvis(Collections.singleton(userInfo.getDvql()));
 		}
+
+		if (CollectionUtils.isEmpty(req.getMaDvis()))
+			req.setMaDvis(Collections.singleton(userInfo.getDvql()));
+
 		req.setTrangThais(trangThais);
 	}
 

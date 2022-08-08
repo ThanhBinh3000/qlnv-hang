@@ -18,13 +18,13 @@ public class HhBbNghiemthuKlstSpecification {
 	public static Specification<HhBbNghiemthuKlstHdr> buildSearchQuery(final HhBbNghiemthuKlstSearchReq objReq) {
 		return new Specification<HhBbNghiemthuKlstHdr>() {
 			/**
-			 * 
+			 *
 			 */
 			private static final long serialVersionUID = 3571167956165654062L;
 
 			@Override
 			public Predicate toPredicate(Root<HhBbNghiemthuKlstHdr> root, CriteriaQuery<?> query,
-					CriteriaBuilder builder) {
+										 CriteriaBuilder builder) {
 				Predicate predicate = builder.conjunction();
 				if (ObjectUtils.isEmpty(objReq))
 					return predicate;
@@ -36,7 +36,7 @@ public class HhBbNghiemthuKlstSpecification {
 				String soBb = objReq.getSoBb();
 				Set<String> maDvis = objReq.getMaDvis();
 				String maNganlo = objReq.getMaNganlo();
-
+				String maVatTuCha = objReq.getMaVatTuCha();
 				if (StringUtils.isNotEmpty(soBb))
 					predicate.getExpressions().add(builder.and(builder.equal(root.get("soBb"), soBb)));
 
@@ -57,8 +57,11 @@ public class HhBbNghiemthuKlstSpecification {
 				if (StringUtils.isNotEmpty(maNganlo))
 					predicate.getExpressions().add(builder.and(builder.equal(root.get("maNganLo"), maNganlo)));
 
-				if (StringUtils.isNotEmpty(loaiVthh))
+				if (StringUtils.isNotEmpty(loaiVthh)) {
 					predicate.getExpressions().add(builder.and(builder.equal(root.get("loaiVthh"), loaiVthh)));
+				} else if (StringUtils.isNotEmpty(maVatTuCha)) {
+					predicate.getExpressions().add(builder.and(builder.equal(root.get("maVatTuCha"), maVatTuCha)));
+				}
 
 				return predicate;
 			}

@@ -19,4 +19,5 @@ public class QlBangKeCanHangLtSearchReq extends BaseRequest {
     private LocalDate tuNgayNhap;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate denNgayNhap;
+    private String maVatTuCha;
 }

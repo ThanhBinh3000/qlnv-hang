@@ -61,7 +61,7 @@ public class BienBanBanGiaoMauRepositoryCustomImpl implements BienBanBanGiaoMauR
 		}
 
 		if (!StringUtils.isEmpty(req.getMaVatTuCha())) {
-			builder.append("AND ").append("bb.maVatTuCha <= :maVatTuCha ");
+			builder.append("AND ").append("bb.maVatTuCha = :maVatTuCha ");
 		}
 
 		if (!CollectionUtils.isEmpty(req.getMaDvis())) {
