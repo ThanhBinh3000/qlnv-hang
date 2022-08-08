@@ -92,12 +92,21 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 
 		HhQdPduyetKqlcntHdr createCheck = hhQdPduyetKqlcntHdrRepository.save(dataMap);
 
-		Optional<HhQdKhlcntDsgthau> gt = hhQdKhlcntDsgthauRepository.findById(objReq.getIdGoiThau());
-		HhQdPduyetKqlcntDtl dtl = ObjectMapperUtils.map(gt.get(), HhQdPduyetKqlcntDtl.class);
-		dtl.setId(null);
-		dtl.setIdQdPdHdr(dataMap.getId());
-		dtl.setIdGoiThau(objReq.getIdGoiThau());
-		hhQdPduyetKqlcntDtlRepository.save(dtl);
+//		Optional<HhQdKhlcntDsgthau> gt = hhQdKhlcntDsgthauRepository.findById(objReq.getIdGoiThau());
+//		HhQdPduyetKqlcntDtl dtl = ObjectMapperUtils.map(gt.get(), HhQdPduyetKqlcntDtl.class);
+//		dtl.setId(null);
+//		dtl.setIdQdPdHdr(dataMap.getId());
+//		dtl.setIdGoiThau(objReq.getIdGoiThau());
+//		hhQdPduyetKqlcntDtlRepository.save(dtl);
+
+		for (HhQdPduyetKqlcntDtlReq qdPdKq : objReq.getDetailList()){
+			HhQdPduyetKqlcntDtl qdPdKqDtl = ObjectMapperUtils.map(qdPdKq, HhQdPduyetKqlcntDtl.class);
+			qdPdKqDtl.setId(null);
+			qdPdKqDtl.setIdQdPdHdr(dataMap.getId());
+			qdPdKqDtl.setIdGoiThau(qdPdKq.getIdGt());
+			hhQdPduyetKqlcntDtlRepository.save(qdPdKqDtl);
+		}
+
 		return createCheck;
 	}
 
