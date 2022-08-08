@@ -122,8 +122,8 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 	}
 
 	private void validateCreate (DchinhDxKhLcntHdrReq objReq) throws Exception {
-		Optional<HhQdKhlcntHdr> checkSoQdGoc = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQdGoc());
-		if (!checkSoQdGoc.isPresent()){
+		List<HhQdKhlcntHdr> checkSoQdGoc = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQdGoc());
+		if (checkSoQdGoc.isEmpty()){
 			throw new Exception("Không tìm thấy số đề xuất để điều chỉnh kế hoạch lựa chọn nhà thầu");
 		}
 
@@ -211,8 +211,8 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 			throw new Exception("Không tìm thấy dữ liệu cần sửa");
 		}
 
-		Optional<HhQdKhlcntHdr> checkSoQdGoc = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQdGoc());
-		if (!checkSoQdGoc.isPresent()){
+		List<HhQdKhlcntHdr> checkSoQdGoc = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQdGoc());
+		if (checkSoQdGoc.isEmpty()){
 			throw new Exception("Không tìm thấy số đề xuất để điều chỉnh kế hoạch lựa chọn nhà thầu");
 		}
 

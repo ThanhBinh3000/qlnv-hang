@@ -61,8 +61,8 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 			throw new Exception("Loại vật tư hàng hóa không phù hợp");
 		}
 
-		Optional<HhQdKhlcntHdr> checkSoCc = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQdPdKhlcnt());
-		if (!checkSoCc.isPresent()){
+		List<HhQdKhlcntHdr> checkSoCc = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQdPdKhlcnt());
+		if (checkSoCc.isEmpty()){
 			throw new Exception(
 					"Số quyết định phê duyệt kế hoạch lựa chọn nhà thầu " + objReq.getSoQdPdKhlcnt() + " không tồn tại");
 		}
@@ -103,8 +103,8 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 
 	private HhQdPduyetKqlcntHdr createVatTu(HhQdPduyetKqlcntHdrReq objReq) throws Exception {
 
-		Optional<HhQdKhlcntHdr> checkSoCc = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQdPdKhlcnt());
-		if (!checkSoCc.isPresent()){
+		List<HhQdKhlcntHdr> checkSoCc = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQdPdKhlcnt());
+		if (checkSoCc.isEmpty()){
 			throw new Exception(
 					"Số quyết định phê duyệt kế hoạch lựa chọn nhà thầu " + objReq.getSoQdPdKhlcnt() + " không tồn tại");
 		}

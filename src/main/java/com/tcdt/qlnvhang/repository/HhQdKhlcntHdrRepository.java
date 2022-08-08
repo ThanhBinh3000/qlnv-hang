@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface HhQdKhlcntHdrRepository extends BaseRepository<HhQdKhlcntHdr, Long> {
 
 
-	Optional<HhQdKhlcntHdr> findBySoQd(String soQd);
+	List<HhQdKhlcntHdr> findBySoQd(String soQd);
 
 	@Query(value = " SELECT * FROM HH_QD_KHLCNT_HDR  QD_HDR WHERE (:namKh IS NULL OR QD_HDR.NAM_KHOACH = TO_NUMBER(:namKh)) "+
 			" AND (:loaiVthh IS NULL OR QD_HDR.LOAI_VTHH = :loaiVthh) "+
