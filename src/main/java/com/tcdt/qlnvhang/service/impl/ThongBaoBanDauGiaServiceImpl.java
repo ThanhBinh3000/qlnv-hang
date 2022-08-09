@@ -1,12 +1,15 @@
 package com.tcdt.qlnvhang.service.impl;
 
+import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.BanDauGiaPhanLoTaiSan;
 import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGia;
 import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdg;
 import com.tcdt.qlnvhang.entities.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGia;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
+import com.tcdt.qlnvhang.mapper.bandaugia.kehoachbandaugia.BanDauGiaPhanLoTaiSanResponseMapper;
 import com.tcdt.qlnvhang.mapper.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaRequestMapper;
 import com.tcdt.qlnvhang.mapper.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaResponseMapper;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
+import com.tcdt.qlnvhang.repository.bandaugia.kehoachbanhangdaugia.BanDauGiaPhanLoTaiSanRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -52,6 +55,9 @@ public class ThongBaoBanDauGiaServiceImpl extends BaseServiceImpl implements Tho
 
 	private final FileDinhKemService fileDinhKemService;
 	private final QlnvDmVattuRepository dmVattuRepository;
+	private final BanDauGiaPhanLoTaiSanRepository phanLoTaiSanRepository;
+
+	private final BanDauGiaPhanLoTaiSanResponseMapper phanLoTaiSanResponseMapper;
 
 	private static final String SHEET_NAME = "Danh sách thông báo bán đấu giá";
 
@@ -109,13 +115,17 @@ public class ThongBaoBanDauGiaServiceImpl extends BaseServiceImpl implements Tho
 	public boolean deleteMultiple(List<Long> ids) throws Exception {
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null) throw new Exception("Bad request.");
+		List<ThongBaoBanDauGia> thongBaoBanDauGiaList = thongBaoBanDauGiaRepository.findByIdIn(ids);
+		if (CollectionUtils.isEmpty(thongBaoBanDauGiaList)) {
+			throw new Exception("Kế hoạch bán đấu giá không tồn tại");
+		}
 
 		if (CollectionUtils.isEmpty(ids)) throw new Exception("Bad request.");
 		log.info("Delete file dinh kem");
 		fileDinhKemService.deleteMultiple(ids, Collections.singleton(KeHoachBanDauGia.TABLE_NAME));
 
 		log.info("Delete ke hoach ban dau gia");
-		thongBaoBanDauGiaRepository.deleteAllByIdIn(ids);
+		thongBaoBanDauGiaRepository.deleteAll(thongBaoBanDauGiaList);
 		return true;
 	}
 
@@ -146,6 +156,10 @@ public class ThongBaoBanDauGiaServiceImpl extends BaseServiceImpl implements Tho
 			qdPheDuyetKhbdgOptional.ifPresent(entry -> {
 				response.setTenQdPheDuyetKhBd(qdPheDuyetKhbdgOptional.get().getSoQuyetDinh());
 			});
+		}
+		List<BanDauGiaPhanLoTaiSan> phanLoTaiSanList = phanLoTaiSanRepository.findByBhDgKehoachId(thongBaoBanDauGia.getQdPheDuyetKhBdgId());
+		if (!CollectionUtils.isEmpty(phanLoTaiSanList)) {
+			response.setThongTinTaiSan(phanLoTaiSanResponseMapper.toDto(phanLoTaiSanList));
 		}
 		return response;
 	}

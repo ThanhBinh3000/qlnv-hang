@@ -2,12 +2,14 @@ package com.tcdt.qlnvhang.response.banhangdaugia.tochuctrienkhaikehoachbandaugia
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -42,6 +44,10 @@ public class ThongBaoBanDauGiaSearchResponse {
 		if (Objects.nonNull(rawData[5])) this.hinhThucDauGia = (String) rawData[5];
 		if (Objects.nonNull(rawData[6])) this.namKeHoach = (Integer) rawData[6];
 		if (Objects.nonNull(rawData[7])) this.trangThai = (String) rawData[7];
+		String trangThaiId = (String) rawData[7];
+		if (!StringUtils.isEmpty(trangThaiId)) {
+			this.trangThai = TrangThaiEnum.getTenById(trangThaiId);
+		}
 		if (Objects.nonNull(rawData[8])) this.qdPheDuyetKQBdg = (String) rawData[8];
 		if (Objects.nonNull(rawData[9])) this.loaiHangHoa = (String) rawData[9];
 		if (Objects.nonNull(rawData[10])) this.bienBanBDG = (String) rawData[10];
