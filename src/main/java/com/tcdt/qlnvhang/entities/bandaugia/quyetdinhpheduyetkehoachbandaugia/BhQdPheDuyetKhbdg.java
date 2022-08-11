@@ -42,11 +42,8 @@ public class BhQdPheDuyetKhbdg extends BaseEntity implements Serializable {
     @Column(name = "NGAY_HIEU_LUC")
     private LocalDate ngayHieuLuc;
 
-    @Column(name = "LOAI_HANG_HOA")
-    private String loaiHangHoa;
-
-    @Column(name = "MA_TONG_HOP")
-    private String maTongHop;
+    @Column(name = "TONG_HOP_DE_XUAT_KHBDG_ID")
+    private Long tongHopDeXuatKhbdgId;
 
     @Column(name = "THOI_HAN_TC_BDG")
     private LocalDate thoiHanTcBdg;
@@ -62,4 +59,14 @@ public class BhQdPheDuyetKhbdg extends BaseEntity implements Serializable {
 
     @Column(name = "NGUOI_PHE_DUYET_ID")
     private Long nguoiPheDuyetId;
+
+    @Column(name = "LOAI_VTHH")
+    private String loaiVthh;
+
+    @Column(name = "MA_VAT_TU_CHA")
+    private String maVatTuCha;
+
+    @Column(name = "MA_VAT_TU")
+    private String maVatTu;
+
 }
