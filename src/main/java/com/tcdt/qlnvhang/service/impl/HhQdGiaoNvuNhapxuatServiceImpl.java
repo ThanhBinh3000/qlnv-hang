@@ -7,10 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
-import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.enums.TrangThaiEnum;
-import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatDtlLoaiNx;
-import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatHdrLoaiQd;
+import com.tcdt.qlnvhang.enums.*;
 import com.tcdt.qlnvhang.repository.HhDviThuchienQdinhRepository;
 import com.tcdt.qlnvhang.repository.HhHopDongDdiemNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
@@ -447,8 +444,8 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			qd.setNamNhap(namNhap);
 			qd.setTrichYeu(trichYeu);
 			qd.setTrangThai(trangThai);
-			qd.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(trangThai));
-			qd.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(trangThai));
+			qd.setTenTrangThai(QdGiaoNvNhapHangEnum.getTenById(trangThai));
+			qd.setTrangThaiDuyet(QdGiaoNvNhapHangEnum.getTrangThaiDuyetById(trangThai));
 			if (!CollectionUtils.isEmpty(dtl1Map.get(qd.getId()))) {
 				qd.setChildren1(dtl1Map.get(qd.getId()));
 			}
@@ -502,5 +499,68 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			if (optional.isPresent() && !optional.get().getId().equals(updateId))
 				throw new Exception("Số quyết định " + soQd + " đã tồn tại");
 		}
+	}
+
+	public HhQdGiaoNvuNhapxuatHdr approve(StatusReq stReq) throws Exception {
+		UserInfo userInfo = SecurityContextService.getUser();
+		if (StringUtils.isEmpty(stReq.getId())) {
+			throw new Exception("Không tìm thấy dữ liệu");
+		}
+		if (!Contains.CAP_CUC.equalsIgnoreCase(userInfo.getCapDvi()))
+			throw new Exception("Bad request.");
+
+		Optional<HhQdGiaoNvuNhapxuatHdr> optional = hhQdGiaoNvuNhapxuatRepository.findById(Long.valueOf(stReq.getId()));
+		if (!optional.isPresent()) {
+			throw new Exception("Không tìm thấy dữ liệu");
+		}
+		HhQdGiaoNvuNhapxuatHdr item = optional.get();
+		if (Contains.LOAI_VTHH_VATTU.equals(item.getLoaiVthh())) {
+			String status = optional.get().getTrangThai()+stReq.getTrangThai();
+			switch (status) {
+				case Contains.DU_THAO + Contains.CHO_DUYET_TP:
+					optional.get().setNguoiPduyet(userInfo.getUsername());
+					optional.get().setNgayPduyet(new Date());
+					break;
+				case Contains.DU_THAO + Contains.CHO_DUYET_LD_C:
+					optional.get().setNguoiPduyet(userInfo.getUsername());
+					optional.get().setNgayPduyet(new Date());
+					break;
+				case Contains.CHO_DUYET_TP + Contains.DA_DUYET:
+					optional.get().setNguoiPduyet(userInfo.getUsername());
+					optional.get().setNgayPduyet(new Date());
+					break;
+				case Contains.CHO_DUYET_LD_C + Contains.DA_DUYET:
+					optional.get().setNguoiPduyet(userInfo.getUsername());
+					optional.get().setNgayPduyet(new Date());
+					break;
+				case Contains.CHO_DUYET_TP+ Contains.TU_CHOI_TP :
+					optional.get().setNguoiPduyet(userInfo.getUsername());
+					optional.get().setNgayPduyet(new Date());
+					break;
+				case Contains.CHO_DUYET_LD_C + Contains.TU_CHOI_LD_C:
+					optional.get().setNguoiPduyet(userInfo.getUsername());
+					optional.get().setNgayPduyet(new Date());
+					break;
+				default:
+					throw new Exception("Phê duyệt không thành công");
+			}
+
+		} else {
+			String status = optional.get().getTrangThai()+stReq.getTrangThai();
+			switch (status) {
+				case Contains.DU_THAO + Contains.BAN_HANH :
+					optional.get().setNguoiPduyet(userInfo.getUsername());
+					optional.get().setNgayPduyet(new Date());
+					break;
+				default:
+					throw new Exception("Phê duyệt không thành công");
+			}
+		}
+		optional.get().setTrangThai(stReq.getTrangThai());
+
+		HhQdGiaoNvuNhapxuatHdr createCheck = hhQdGiaoNvuNhapxuatRepository.save(optional.get());
+
+		return createCheck;
+
 	}
 }

@@ -10,6 +10,13 @@ public class Contains {
 	public static final String NGUOI_DUNG_BEN_NGOAI = "FE";
 
 	public static final String TAT_CA = "ALL";
+	//Nhập vật tư
+	public static final String DU_THAO = "00";
+	public static final String CHO_DUYET_TP = "01";
+	public static final String CHO_DUYET_LD_C = "02";
+	public static final String DA_DUYET = "03";
+	public static final String TU_CHOI_TP = "04";
+	public static final String TU_CHOI_LD_C = "05";
 
 	// Trang thai
 	public static final String MOI_TAO = "00";

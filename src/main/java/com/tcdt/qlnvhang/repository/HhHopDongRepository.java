@@ -3,7 +3,9 @@ package com.tcdt.qlnvhang.repository;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Queue;
 
+import com.tcdt.qlnvhang.request.search.ListHdSearhReq;
 import com.tcdt.qlnvhang.table.HhHopDongHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,4 +29,7 @@ public interface HhHopDongRepository extends BaseRepository<HhHopDongHdr, Long> 
 	Page<HhHopDongHdr> select(String loaiVthh, String soHd, String tenHd, String nhaCcap,String tuNgayKy,String denNgayKy, String trangThai, Pageable pageable);
 
 	List<HhHopDongHdr> findByIdIn(Collection<Long> ids);
+
+	List<HhHopDongHdr> findAllByMaDviAndLoaiVthhAndTrangThai(String maDvi,String loaiVthh, String trangThai);
+
 }
