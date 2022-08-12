@@ -128,6 +128,8 @@ public class HhQdKhlcntHdr implements Serializable {
 
 	String maTrHdr;
 
+	Boolean lastest;
+
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)
 	@JoinColumn(name = "dataId")

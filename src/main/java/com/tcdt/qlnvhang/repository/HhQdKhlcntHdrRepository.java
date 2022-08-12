@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface HhQdKhlcntHdrRepository extends BaseRepository<HhQdKhlcntHdr, Long> {
 
 
-	Optional<HhQdKhlcntHdr> findBySoQd(String soQd);
+	List<HhQdKhlcntHdr> findBySoQd(String soQd);
 
 	@Query(value = " SELECT * FROM HH_QD_KHLCNT_HDR  QD_HDR WHERE (:namKh IS NULL OR QD_HDR.NAM_KHOACH = TO_NUMBER(:namKh)) "+
 			" AND (:loaiVthh IS NULL OR QD_HDR.LOAI_VTHH = :loaiVthh) "+
@@ -19,16 +19,18 @@ public interface HhQdKhlcntHdrRepository extends BaseRepository<HhQdKhlcntHdr, L
 			" AND (:trichYeu IS NULL OR LOWER(QD_HDR.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%'))) "+
 			" AND (:tuNgayQd IS NULL OR QD_HDR.NGAY_QD >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) "+
 			" AND (:denNgayQd IS NULL OR QD_HDR.NGAY_QD <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) "+
-			" AND (:trangThai IS NULL OR QD_HDR.TRANG_THAI = :trangThai) ",
+			" AND (:trangThai IS NULL OR QD_HDR.TRANG_THAI = :trangThai)" +
+			" AND (:lastest IS NULL OR QD_HDR.LASTEST = :lastest) ",
 			countQuery = " SELECT COUNT(1) FROM HH_QD_KHLCNT_HDR  QD_HDR WHERE (:namKh IS NULL OR QD_HDR.NAM_KHOACH = TO_NUMBER(:namKh)) "+
 					" AND (:loaiVthh IS NULL OR QD_HDR.LOAI_VTHH = :loaiVthh) "+
 					" AND (:soQd IS NULL OR LOWER(QD_HDR.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQd),'%'))) "+
 					" AND (:trichYeu IS NULL OR LOWER(QD_HDR.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%'))) "+
 					" AND (:tuNgayQd IS NULL OR QD_HDR.NGAY_QD >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) "+
 					" AND (:denNgayQd IS NULL OR QD_HDR.NGAY_QD <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) "+
-					" AND (:trangThai IS NULL OR QD_HDR.TRANG_THAI = :trangThai) ",
+					" AND (:trangThai IS NULL OR QD_HDR.TRANG_THAI = :trangThai) " +
+					" AND (:lastest IS NULL OR QD_HDR.LASTEST = :lastest)",
 			nativeQuery = true)
-	Page<HhQdKhlcntHdr> selectPage(String namKh, String loaiVthh, String soQd,String trichYeu, String tuNgayQd, String denNgayQd,String trangThai, Pageable pageable);
+	Page<HhQdKhlcntHdr> selectPage(String namKh, String loaiVthh, String soQd,String trichYeu, String tuNgayQd, String denNgayQd,String trangThai,Integer lastest, Pageable pageable);
 
 	@Query(value = "SELECT * FROM HH_QD_KHLCNT_HDR QDKHLCNT " +
 			" WHERE (:namKh IS NULL OR QDKHLCNT.NAM_KHOACH = TO_NUMBER(:namKh)) "+

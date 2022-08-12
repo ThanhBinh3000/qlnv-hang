@@ -145,11 +145,11 @@ public class NhPhieuNhapKhoController {
     }
 
     @ApiOperation(value = "Count phiếu nhập kho lương thực", response = List.class)
-    @PostMapping("/count")
-    public ResponseEntity<BaseResponse> count() {
+    @GetMapping("/count")
+    public ResponseEntity<BaseResponse> count(NhPhieuNhapKhoSearchReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(nhPhieuNhapKhoService.count());
+            resp.setData(nhPhieuNhapKhoService.count(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

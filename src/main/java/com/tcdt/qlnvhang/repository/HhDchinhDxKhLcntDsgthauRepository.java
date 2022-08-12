@@ -11,4 +11,6 @@ public interface HhDchinhDxKhLcntDsgthauRepository extends CrudRepository<HhDchi
 
     List<HhDchinhDxKhLcntDsgthau> findAllByIdDcDxDtl(Long idDcDxDtl);
 
+    void deleteAllByIdDcDxDtl(Long idDcDxDtl);
+
 }

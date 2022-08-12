@@ -101,7 +101,7 @@ public class BhQdPheDuyetKqbdgRepositoryCustomImpl implements BhQdPheDuyetKqbdgR
         builder.append("SELECT COUNT(DISTINCT bb.id) FROM BhQdPheDuyetKqbdg bb ");
         builder.append("INNER JOIN QlnvDmVattu vatTuCha ON bb.maVatTuCha = vatTuCha.ma ");
         builder.append("LEFT JOIN ThongBaoBanDauGia tbBanDauGia ON bb.thongBaoBdgId = tbBanDauGia.id ");
-        builder.append("LEFT JOIN BhQdPheDuyetKhBdg qdPdKhBdg ON tbBanDauGia.qdPheDuyetKhBdgId = qdPdKhBdg.id ");
+        builder.append("LEFT JOIN BhQdPheDuyetKhbdg qdPdKhBdg ON tbBanDauGia.qdPheDuyetKhBdgId = qdPdKhBdg.id ");
         builder.append("LEFT JOIN BhBbBanDauGia bbBanDauGia ON bb.bienBanBdgId = bbBanDauGia.id ");
         this.setConditionSearchCtkhn(req, builder);
 

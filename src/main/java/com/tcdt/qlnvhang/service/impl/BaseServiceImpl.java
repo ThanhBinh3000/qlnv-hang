@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.request.QlnvDmDonviSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.HhDmDviLquanSearchReq;
@@ -366,7 +365,7 @@ public class BaseServiceImpl {
 			}
 
 			if ((Contains.CAP_CUC.equals(userCapDvi) && capDviReqs.contains(Contains.CAP_TONG_CUC))
-					|| Contains.CAP_CHI_CUC.equals(userCapDvi) && capDviReqs.contains(Contains.CAP_CUC)) {
+					|| (Contains.CAP_CHI_CUC.equals(userCapDvi) && capDviReqs.contains(Contains.CAP_CUC))) {
 				maDvis.addAll(qlnvDmDonviRepository.findMaDviChaByMaDviAndTrangThai(userInfo.getDvql(), Contains.HOAT_DONG));
 			}
 
@@ -374,6 +373,10 @@ public class BaseServiceImpl {
 		} else {
 			req.setMaDvis(Collections.singleton(userInfo.getDvql()));
 		}
+
+		if (CollectionUtils.isEmpty(req.getMaDvis()))
+			req.setMaDvis(Collections.singleton(userInfo.getDvql()));
+
 		req.setTrangThais(trangThais);
 	}
 
@@ -389,7 +392,7 @@ public class BaseServiceImpl {
 
 		String trangThai = item.getTrangThai();
 		if (NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
-			if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
+			if (!NhapXuatHangTrangThaiEnum.DU_THAO.getId().equals(trangThai))
 				return false;
 
 			item.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId());

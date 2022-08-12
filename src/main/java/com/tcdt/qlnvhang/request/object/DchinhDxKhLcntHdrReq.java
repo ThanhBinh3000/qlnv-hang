@@ -101,7 +101,7 @@ public class DchinhDxKhLcntHdrReq {
 	@ApiModelProperty(example = "20-QD/TCDT")
 	String soQdGoc;
 
-	Long idSoQd;
+	Long idQdGoc;
 
 	@NotNull(message = "Không được để trống")
 	@Size(max = 20, message = "Số quyết định không được vượt quá 20 ký tự")
