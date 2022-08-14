@@ -69,8 +69,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh()))
 			throw new Exception("Loại vật tư hàng hóa không phù hợp");
 
-		Optional<HhQdKhlcntHdr> checkSoQd = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQd());
-		if (checkSoQd.isPresent()) {
+		List<HhQdKhlcntHdr> checkSoQd = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQd());
+		if (!checkSoQd.isEmpty()) {
 			throw new Exception("Số quyết định " + objReq.getSoQd() + " đã tồn tại");
 		}
 
@@ -146,8 +146,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	}
 
 	private HhQdKhlcntHdr createVatTu(HhQdKhlcntHdrReq objReq) throws Exception {
-		Optional<HhQdKhlcntHdr> checkSoQd = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQd());
-		if (checkSoQd.isPresent()) {
+		List<HhQdKhlcntHdr> checkSoQd = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQd());
+		if (!checkSoQd.isEmpty()) {
 			throw new Exception("Số quyết định " + objReq.getSoQd() + " đã tồn tại");
 		}
 
@@ -218,8 +218,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		}
 
 		if (!qOptional.get().getSoQd().equals(objReq.getSoQd())) {
-			Optional<HhQdKhlcntHdr> checkSoQd = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQd());
-			if (checkSoQd.isPresent()){
+			List<HhQdKhlcntHdr> checkSoQd = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQd());
+			if (!checkSoQd.isEmpty()) {
 				throw new Exception("Số quyết định " + objReq.getSoQd() + " đã tồn tại");
 			}
 		}
@@ -305,8 +305,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		}
 
 		if (!qOptional.get().getSoQd().equals(objReq.getSoQd())) {
-			Optional<HhQdKhlcntHdr> checkSoQd = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQd());
-			if (checkSoQd.isPresent()){
+			List<HhQdKhlcntHdr> checkSoQd = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQd());
+			if (!checkSoQd.isEmpty()) {
 				throw new Exception("Số quyết định " + objReq.getSoQd() + " đã tồn tại");
 			}
 		}
@@ -596,18 +596,18 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	public HhQdKhlcntHdr detailNumber(String soQd) throws Exception {
 		if (StringUtils.isEmpty(soQd))
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
-
-		Optional<HhQdKhlcntHdr> qOptional = hhQdKhlcntHdrRepository.findBySoQd(soQd);
-
-		if (!qOptional.isPresent())
-			throw new UnsupportedOperationException("Không tồn tại bản ghi");
+//
+//		Optional<HhQdKhlcntHdr> qOptional = hhQdKhlcntHdrRepository.findBySoQd(soQd);
+//
+//		if (!qOptional.isPresent())
+//			throw new UnsupportedOperationException("Không tồn tại bản ghi");
 
 		// Quy doi don vi kg = tan
 //		List<HhQdKhlcntDtl> dtls2 = ObjectMapperUtils.mapAll(qOptional.get().getChildren1(), HhQdKhlcntDtl.class);
 //		for (HhQdKhlcntDtl dtl : dtls2) {
 //			UnitScaler.formatList(dtl.getChildren(), Contains.DVT_TAN);
 //		}
-		return qOptional.get();
+		return null;
 	}
 
 	@Override

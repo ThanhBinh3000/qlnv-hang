@@ -61,8 +61,8 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 			throw new Exception("Loại vật tư hàng hóa không phù hợp");
 		}
 
-		Optional<HhQdKhlcntHdr> checkSoCc = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQdPdKhlcnt());
-		if (!checkSoCc.isPresent()){
+		List<HhQdKhlcntHdr> checkSoCc = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQdPdKhlcnt());
+		if (checkSoCc.isEmpty()){
 			throw new Exception(
 					"Số quyết định phê duyệt kế hoạch lựa chọn nhà thầu " + objReq.getSoQdPdKhlcnt() + " không tồn tại");
 		}
@@ -92,19 +92,28 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 
 		HhQdPduyetKqlcntHdr createCheck = hhQdPduyetKqlcntHdrRepository.save(dataMap);
 
-		Optional<HhQdKhlcntDsgthau> gt = hhQdKhlcntDsgthauRepository.findById(objReq.getIdGoiThau());
-		HhQdPduyetKqlcntDtl dtl = ObjectMapperUtils.map(gt.get(), HhQdPduyetKqlcntDtl.class);
-		dtl.setId(null);
-		dtl.setIdQdPdHdr(dataMap.getId());
-		dtl.setIdGoiThau(objReq.getIdGoiThau());
-		hhQdPduyetKqlcntDtlRepository.save(dtl);
+//		Optional<HhQdKhlcntDsgthau> gt = hhQdKhlcntDsgthauRepository.findById(objReq.getIdGoiThau());
+//		HhQdPduyetKqlcntDtl dtl = ObjectMapperUtils.map(gt.get(), HhQdPduyetKqlcntDtl.class);
+//		dtl.setId(null);
+//		dtl.setIdQdPdHdr(dataMap.getId());
+//		dtl.setIdGoiThau(objReq.getIdGoiThau());
+//		hhQdPduyetKqlcntDtlRepository.save(dtl);
+
+		for (HhQdPduyetKqlcntDtlReq qdPdKq : objReq.getDetailList()){
+			HhQdPduyetKqlcntDtl qdPdKqDtl = ObjectMapperUtils.map(qdPdKq, HhQdPduyetKqlcntDtl.class);
+			qdPdKqDtl.setId(null);
+			qdPdKqDtl.setIdQdPdHdr(dataMap.getId());
+			qdPdKqDtl.setIdGoiThau(qdPdKq.getIdGt());
+			hhQdPduyetKqlcntDtlRepository.save(qdPdKqDtl);
+		}
+
 		return createCheck;
 	}
 
 	private HhQdPduyetKqlcntHdr createVatTu(HhQdPduyetKqlcntHdrReq objReq) throws Exception {
 
-		Optional<HhQdKhlcntHdr> checkSoCc = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQdPdKhlcnt());
-		if (!checkSoCc.isPresent()){
+		List<HhQdKhlcntHdr> checkSoCc = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQdPdKhlcnt());
+		if (checkSoCc.isEmpty()){
 			throw new Exception(
 					"Số quyết định phê duyệt kế hoạch lựa chọn nhà thầu " + objReq.getSoQdPdKhlcnt() + " không tồn tại");
 		}

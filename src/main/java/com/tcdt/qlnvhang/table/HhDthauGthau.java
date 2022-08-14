@@ -8,6 +8,8 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.util.Contains;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Where;
@@ -36,7 +38,10 @@ public class HhDthauGthau implements Serializable {
 
 	Long idGoiThau;
 	String soQdPdKhlcnt;
+
+	@Temporal(TemporalType.DATE)
 	Date ngayQdPdKhlcnt;
+
 	String tenGthau;
 	String loaiVthh;
 	@Transient
@@ -54,10 +59,17 @@ public class HhDthauGthau implements Serializable {
 	String pthucLcnt;
 	String loaiHdong;
 	Integer tgianThienHd;
+
+	@Temporal(TemporalType.DATE)
 	Date tgianNhang;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
 	Date tgianMthau;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
 	Date tgianDthau;
 
+	@Temporal(TemporalType.DATE)
 	Date ngayKyBban;
 	Long idNhaThau;
 	BigDecimal donGiaTrcVat;

@@ -323,6 +323,8 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 
 			KeHoachBanDauGiaResponse result = kehoachResponseMapper.toDto(it);
 
+			result.setTenDonVi(this.getMapTenDvi().get(result.getMaDv()));
+
 			this.buildThongTinKho(result.getPhanLoTaiSanList());
 			return result;
 		}).collect(Collectors.toList());
@@ -435,7 +437,7 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 		chiTieuKeHoachNamOpt.ifPresent(chiTieuKeHoachNam -> keHoachDauGia.setSoQuyetDinhGiaoChiTieu(chiTieuKeHoachNam.getSoQuyetDinh()));
 
 		KeHoachBanDauGiaResponse response = kehoachResponseMapper.toDto(keHoachDauGia);
-
+		response.setTenDonVi(this.getMapTenDvi().get(response.getMaDv()));
 		this.buildThongTinKho(response.getPhanLoTaiSanList());
 
 		return response;

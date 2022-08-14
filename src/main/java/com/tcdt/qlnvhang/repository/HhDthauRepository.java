@@ -24,7 +24,7 @@ public interface HhDthauRepository extends CrudRepository<HhDthau, Long> {
 			" LEFT JOIN HhQdKhlcntDtl DTL ON DTL.id = DSG.idQdDtl " +
 			" LEFT JOIN HhQdKhlcntHdr HDR ON HDR.id = DTL.idQdHdr " +
 			" LEFT JOIN HhDthauGthau GT ON GT.idGoiThau = DSG.id " +
-			" WHERE HDR.trangThai = '11' " +
+			" WHERE HDR.trangThai = '11' AND HDR.lastest = true " +
 			" AND (?1 is null or HDR.namKhoach = ?1 )" +
 			" AND (?2 is null or  lower(HDR.loaiVthh) like lower(concat(?2,'%' ) ) )" +
 			" AND (?3 is null or lower(HDR.soQd) like lower(concat(concat('%',?3),'%') ) )" +
@@ -39,7 +39,7 @@ public interface HhDthauRepository extends CrudRepository<HhDthau, Long> {
 			" LEFT JOIN HhQdKhlcntDtl DTL ON DTL.id = DSG.idQdDtl " +
 			" LEFT JOIN HhQdKhlcntHdr HDR ON HDR.id = DTL.idQdHdr " +
 			" LEFT JOIN HhDthauGthau GT ON GT.idGoiThau = DSG.id " +
-			" WHERE HDR.trangThai = '11' " +
+			" WHERE HDR.trangThai = '11' AND HDR.lastest = true  " +
 			" AND (?1 is null or HDR.namKhoach = ?1 )" +
 			" AND (?2 is null or  HDR.loaiVthh = ?2 )" +
 			" AND (?3 is null or  HDR.cloaiVthh = ?3 )" +

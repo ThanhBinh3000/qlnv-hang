@@ -29,8 +29,6 @@ public class KeHoachBanDauGiaResponse {
 	private String loaiHangHoa;
 	private Long qdGiaoChiTieuId;
 	private String tieuChuanChatLuong;
-	private BigDecimal soLuong;
-	private BigDecimal khoanTienDatTruoc;
 	private String loaiHopDong;
 	private String thoiGianKyHd;
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -55,4 +53,8 @@ public class KeHoachBanDauGiaResponse {
 	private String thoiHanThanhToanGhiChu;
 	private String ThoiHanGiaoNhanGhiChu;
 	private String tenHangHoa;
+	private BigDecimal tongSoLuongDonViTaiSan;
+	private BigDecimal tongGiaKhoiDiem;
+	private BigDecimal tongKhoanTienDatTruoc;
+	private String tenDonVi;
 }
