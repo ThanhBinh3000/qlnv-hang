@@ -31,8 +31,8 @@ public class QueryUtils {
 	public static final String AND = " AND ";
 	public static final String DEFAULT_CONDITION = " 1=1 ";
 	public static final String WHERE = " WHERE ";
-	public static final String TU_NGAY = "TN";
-	public static final String DEN_NGAY = "DN";
+	public static final String START = "Start";
+	public static final String END = "End";
 
 	public String getClassName() {
 		return this.clazz.getSimpleName() + SPACE;
@@ -76,15 +76,15 @@ public class QueryUtils {
 		}
 	}
 
-	public void tuNgay(Operator operator, String field, Object req, StringBuilder builder) {
+	public void start(Operator operator, String field, Object req, StringBuilder builder) {
 		if (Objects.nonNull(req)) {
-			builder.append(String.format(" %s %s >= :%s ", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field + TU_NGAY));
+			builder.append(String.format(" %s %s >= :%s ", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field + START));
 		}
 	}
 
-	public void denNGay(Operator operator, String field, Object req, StringBuilder builder) {
+	public void end(Operator operator, String field, Object req, StringBuilder builder) {
 		if (Objects.nonNull(req)) {
-			builder.append(String.format(" %s %s <= :%s ", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field + DEN_NGAY));
+			builder.append(String.format(" %s %s <= :%s ", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field + END));
 		}
 	}
 
@@ -139,15 +139,15 @@ public class QueryUtils {
 		}
 	}
 
-	public static void setParamTuNgay(Query query, String paramName, Object value) {
+	public static void setParamStart(Query query, String paramName, Object value) {
 		if (StringUtils.isEmpty(paramName)) return;
-		paramName = paramName + TU_NGAY;
+		paramName = paramName + START;
 		QueryUtils.setParam(query, paramName, value);
 	}
 
-	public static void setParamDenNgay(Query query, String paramName, Object value) {
+	public static void setParamEnd(Query query, String paramName, Object value) {
 		if (StringUtils.isEmpty(paramName)) return;
-		paramName = paramName + DEN_NGAY;
+		paramName = paramName + END;
 		QueryUtils.setParam(query, paramName, value);
 	}
 
