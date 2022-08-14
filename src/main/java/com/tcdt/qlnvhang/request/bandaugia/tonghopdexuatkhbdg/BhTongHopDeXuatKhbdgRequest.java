@@ -17,7 +17,6 @@ import java.time.LocalDate;
 public class BhTongHopDeXuatKhbdgRequest {
 	private Long id;
 	private Integer namKeHoach;
-	private String loaiHangHoa;
 	private LocalDate ngayKyTuNgay;
 	private LocalDate ngayKyDenNgay;
 	private LocalDate ngayTongHop;
@@ -29,4 +28,7 @@ public class BhTongHopDeXuatKhbdgRequest {
 	private String capDonVi;
 	private String trangThai;
 	private String maTongHop;
+	private String maVatTu;
+	private String maVatTuCha;
+	private String loaiVthh;
 }

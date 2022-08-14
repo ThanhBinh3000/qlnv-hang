@@ -31,6 +31,8 @@ public class QueryUtils {
 	public static final String AND = " AND ";
 	public static final String DEFAULT_CONDITION = " 1=1 ";
 	public static final String WHERE = " WHERE ";
+	public static final String TU_NGAY = "TN";
+	public static final String DEN_NGAY = "DN";
 
 	public String getClassName() {
 		return this.clazz.getSimpleName() + SPACE;
@@ -71,6 +73,18 @@ public class QueryUtils {
 	public void ge(Operator operator, String field, Object req, StringBuilder builder) {
 		if (Objects.nonNull(req)) {
 			builder.append(String.format(" %s %s >= :%s ", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field));
+		}
+	}
+
+	public void tuNgay(Operator operator, String field, Object req, StringBuilder builder) {
+		if (Objects.nonNull(req)) {
+			builder.append(String.format(" %s %s >= :%s ", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field + TU_NGAY));
+		}
+	}
+
+	public void denNGay(Operator operator, String field, Object req, StringBuilder builder) {
+		if (Objects.nonNull(req)) {
+			builder.append(String.format(" %s %s <= :%s ", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field + DEN_NGAY));
 		}
 	}
 
@@ -125,6 +139,18 @@ public class QueryUtils {
 		}
 	}
 
+	public static void setParamTuNgay(Query query, String paramName, Object value) {
+		if (StringUtils.isEmpty(paramName)) return;
+		paramName = paramName + TU_NGAY;
+		QueryUtils.setParam(query, paramName, value);
+	}
+
+	public static void setParamDenNgay(Query query, String paramName, Object value) {
+		if (StringUtils.isEmpty(paramName)) return;
+		paramName = paramName + DEN_NGAY;
+		QueryUtils.setParam(query, paramName, value);
+	}
+
 	public static void setLikeParam(Query query, String paramName, String value) {
 		if (StringUtils.isEmpty(paramName)) return;
 
@@ -140,6 +166,7 @@ public class QueryUtils {
 	public static String buildQuery(StringBuilder builder) {
 		return builder.toString().replace("SELECT  ,", SELECT);
 	}
+
 	public static void selectFields(StringBuilder builder, QueryUtils qU, String field) {
 		builder.append(qU.selectField(field));
 	}

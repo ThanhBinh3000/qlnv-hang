@@ -118,6 +118,9 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 
 		if (CollectionUtils.isEmpty(ids)) throw new Exception("Bad request.");
 
+		log.info("Delete file dinh kem");
+		fileDinhKemService.deleteMultiple(ids, Collections.singleton(BhQdPheDuyetKhbdg.TABLE_NAME));
+
 		log.info("Delete quyết định phê duyệt kế hoạch bán đấu giá");
 		qdPheDuyetKhbdgRepository.deleteAllByIdIn(ids);
 		return true;

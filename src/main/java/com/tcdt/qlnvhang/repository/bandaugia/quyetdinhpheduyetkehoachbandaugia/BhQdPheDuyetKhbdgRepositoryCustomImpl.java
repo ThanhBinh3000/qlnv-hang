@@ -73,8 +73,8 @@ public class BhQdPheDuyetKhbdgRepositoryCustomImpl implements BhQdPheDuyetKhbdgR
 		qdPheDuyet.eq(Operator.AND, BhQdPheDuyetKhbdg_.NAM_KE_HOACH, req.getNamKeHoach(), builder);
 		qdPheDuyet.eq(Operator.AND, BhQdPheDuyetKhbdg_.SO_QUYET_DINH, req.getSoQuyetDinh(), builder);
 		qdPheDuyet.like(Operator.AND, BhQdPheDuyetKhbdg_.TRICH_YEU, req.getTrichYeu(), builder);
-		qdPheDuyet.ge(Operator.AND, BhQdPheDuyetKhbdg_.NGAY_KY, req.getNgayKyTuNgay(), builder);
-		qdPheDuyet.le(Operator.AND, BhQdPheDuyetKhbdg_.NGAY_KY, req.getNgayKyDenNgay(), builder);
+		qdPheDuyet.tuNgay(Operator.AND, BhQdPheDuyetKhbdg_.NGAY_KY, req.getNgayKyTuNgay(), builder);
+		qdPheDuyet.denNGay(Operator.AND, BhQdPheDuyetKhbdg_.NGAY_KY, req.getNgayKyDenNgay(), builder);
 	}
 
 	private int count(BhQdPheDuyetKhbdgSearchRequest req, QueryUtils qdPheDuyet) {
@@ -92,7 +92,7 @@ public class BhQdPheDuyetKhbdgRepositoryCustomImpl implements BhQdPheDuyetKhbdgR
 		QueryUtils.setParam(query, BhQdPheDuyetKhbdg_.NAM_KE_HOACH, req.getNamKeHoach());
 		QueryUtils.setParam(query, BhQdPheDuyetKhbdg_.SO_QUYET_DINH, req.getSoQuyetDinh());
 		QueryUtils.setLikeParam(query, BhQdPheDuyetKhbdg_.TRICH_YEU, req.getTrichYeu());
-		QueryUtils.setParam(query, BhQdPheDuyetKhbdg_.NGAY_KY, req.getNgayKyTuNgay());
-		QueryUtils.setParam(query, BhQdPheDuyetKhbdg_.NGAY_KY, req.getNgayKyDenNgay());
+		QueryUtils.setParamTuNgay(query, BhQdPheDuyetKhbdg_.NGAY_KY, req.getNgayKyTuNgay());
+		QueryUtils.setParamDenNgay(query, BhQdPheDuyetKhbdg_.NGAY_KY, req.getNgayKyDenNgay());
 	}
 }

@@ -19,7 +19,6 @@ import java.time.LocalDate;
 public class BhTongHopDeXuatKhbdgResponse {
 	private Long id;
 	private Integer namKeHoach;
-	private String loaiHangHoa;
 	private LocalDate ngayKyTuNgay;
 	private LocalDate ngayKyDenNgay;
 	private LocalDate ngayTongHop;
@@ -34,4 +33,6 @@ public class BhTongHopDeXuatKhbdgResponse {
 	private IdAndNameDto qdPheDuyetKhbdg;
 	private String maVatTu;
 	private String maVatTuCha;
+	private String tenVatTuCha;
+	private String loaiVthh;
 }

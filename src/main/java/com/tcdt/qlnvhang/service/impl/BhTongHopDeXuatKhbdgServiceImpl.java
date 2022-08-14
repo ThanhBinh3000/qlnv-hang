@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKh
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.mapper.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgRequestMapper;
 import com.tcdt.qlnvhang.mapper.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgResponseMapper;
+import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgRequest;
@@ -13,6 +14,7 @@ import com.tcdt.qlnvhang.response.banhangdaugia.tonghopdexuatkhbdg.BhTongHopDeXu
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgService;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import com.tcdt.qlnvhang.util.ExcelHeaderConst;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -38,6 +40,9 @@ import java.util.stream.Collectors;
 @Transactional(rollbackFor = Exception.class)
 public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements BhTongHopDeXuatKhbdgService {
 	private final BhTongHopDeXuatKhbdgRepository deXuatKhbdgRepository;
+
+	private final QlnvDmVattuRepository dmVattuRepository;
+
 
 	private static final String SHEET_NAME = "Danh sách tổng hợp đề xuất KHBDG";
 
@@ -123,7 +128,13 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 		if (!optional.isPresent()) throw new Exception("Tổng hợp đề xuất kế hoạch bán đấu giá không tồn tại");
 		BhTongHopDeXuatKhbdg deXuatKhbdg = optional.get();
 
-		return tongHopDeXuatKhbdgResponseMapper.toDto(deXuatKhbdg);
+		BhTongHopDeXuatKhbdgResponse response = tongHopDeXuatKhbdgResponseMapper.toDto(deXuatKhbdg);
+
+		QlnvDmVattu dmVattu = dmVattuRepository.findByMa(deXuatKhbdg.getMaVatTuCha());
+		if (dmVattu != null) {
+			response.setTenVatTuCha(dmVattu.getTen());
+		}
+		return response;
 	}
 
 	@Override
