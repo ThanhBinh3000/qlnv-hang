@@ -2,6 +2,8 @@ package com.tcdt.qlnvhang.repository.bandaugia.quyetdinhpheduyetkehoachbandaugia
 
 import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdg;
 import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdg_;
+import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdg;
+import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdg_;
 import com.tcdt.qlnvhang.enums.Operator;
 import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetkehochbandaugia.BhQdPheDuyetKhbdgSearchRequest;
 import com.tcdt.qlnvhang.response.banhangdaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgSearchResponse;
@@ -29,26 +31,24 @@ public class BhQdPheDuyetKhbdgRepositoryCustomImpl implements BhQdPheDuyetKhbdgR
 	@Override
 	public Page<BhQdPheDuyetKhbdgSearchResponse> search(BhQdPheDuyetKhbdgSearchRequest req, Pageable pageable) {
 		StringBuilder builder = new StringBuilder();
-		QueryUtils qdPheDuyetKhbdg = QueryUtils.builder().clazz(BhQdPheDuyetKhbdg.class).alias("qdPheDuyetKhbdg").build();
 		QueryUtils qdPheDuyet = QueryUtils.builder().clazz(BhQdPheDuyetKhbdg.class).alias("qdPheDuyetKHBDG").build();
 		QueryUtils vatTuHangHoa = QueryUtils.builder().clazz(QlnvDmVattu.class).alias("vatTuCha").build();
+		QueryUtils tongHopDeXuat = QueryUtils.builder().clazz(BhTongHopDeXuatKhbdg.class).alias("tongHopDeXuat").build();
 		log.debug("Build select query");
 		builder.append(QueryUtils.SELECT)
-				.append(qdPheDuyetKhbdg.selectField(BhQdPheDuyetKhbdg_.ID))
-				.append(qdPheDuyetKhbdg.selectField(BhQdPheDuyetKhbdg_.MA_TONG_HOP))
-				.append(qdPheDuyetKhbdg.selectField(BhQdPheDuyetKhbdg_.NGAY_TONG_HOP))
-				.append(qdPheDuyetKhbdg.selectField(BhQdPheDuyetKhbdg_.NOI_DUNG_TONG_HOP))
-				.append(qdPheDuyetKhbdg.selectField(BhQdPheDuyetKhbdg_.NAM_KE_HOACH))
-				.append(qdPheDuyetKhbdg.selectField(BhQdPheDuyetKhbdg_.TRANG_THAI))
-				.append(qdPheDuyet.selectField(BhQdPheDuyetKhbdg_.ID))
 				.append(qdPheDuyet.selectField(BhQdPheDuyetKhbdg_.SO_QUYET_DINH))
-				.append(vatTuHangHoa.selectField(QlnvDmVattu_.TEN));
+				.append(qdPheDuyet.selectField(BhQdPheDuyetKhbdg_.NGAY_KY))
+				.append(qdPheDuyet.selectField(BhQdPheDuyetKhbdg_.TRICH_YEU))
+				.append(tongHopDeXuat.selectField(BhTongHopDeXuatKhbdg_.MA_TONG_HOP))
+				.append(qdPheDuyet.selectField(BhQdPheDuyetKhbdg_.NAM_KE_HOACH))
+				.append(vatTuHangHoa.selectField(QlnvDmVattu_.TEN))
+				.append(vatTuHangHoa.selectField(QlnvDmVattu_.TRANG_THAI));
 		builder.append(QueryUtils.FROM)
-				.append(qdPheDuyetKhbdg.buildAliasName())
-				.append(QueryUtils.buildInnerJoin(qdPheDuyetKhbdg, vatTuHangHoa, BhQdPheDuyetKhbdg_.MA_VAT_TU_CHA, QlnvDmVattu_.MA))
-				.append(QueryUtils.buildLeftJoin(qdPheDuyetKhbdg, qdPheDuyet, BhQdPheDuyetKhbdg_.QD_PHE_DUYET_KHBDG_ID, BhQdPheDuyetKhbdg_.ID));
+				.append(qdPheDuyet.buildAliasName())
+				.append(QueryUtils.buildInnerJoin(qdPheDuyet, vatTuHangHoa, BhQdPheDuyetKhbdg_.MA_VAT_TU_CHA, QlnvDmVattu_.MA))
+				.append(QueryUtils.buildLeftJoin(qdPheDuyet, tongHopDeXuat, BhQdPheDuyetKhbdg_.TONG_HOP_DE_XUAT_KHBDG_ID, BhTongHopDeXuatKhbdg_.ID));
 
-		setConditionSearch(req, builder, qdPheDuyetKhbdg);
+		this.setConditionSearch(req, builder, qdPheDuyet);
 		log.debug("Set sort");
 		QueryUtils.buildSort(pageable, builder);
 
@@ -64,21 +64,23 @@ public class BhQdPheDuyetKhbdgRepositoryCustomImpl implements BhQdPheDuyetKhbdgR
 		List<BhQdPheDuyetKhbdgSearchResponse> responses = result.stream()
 				.map(BhQdPheDuyetKhbdgSearchResponse::new).collect(Collectors.toList());
 
-		return new PageImpl<>(responses, pageable, this.count(req, qdPheDuyetKhbdg));
+		return new PageImpl<>(responses, pageable, this.count(req, qdPheDuyet));
 	}
 
 
-	private void setConditionSearch(BhQdPheDuyetKhbdgSearchRequest req, StringBuilder builder, QueryUtils tongHopDeXuat) {
+	private void setConditionSearch(BhQdPheDuyetKhbdgSearchRequest req, StringBuilder builder, QueryUtils qdPheDuyet) {
 		QueryUtils.buildWhereClause(builder);
-		tongHopDeXuat.eq(Operator.AND, BhQdPheDuyetKhbdg_.NAM_KE_HOACH, req.getNamKeHoach(), builder);
-		tongHopDeXuat.eq(Operator.AND, BhQdPheDuyetKhbdg_.MA_VAT_TU_CHA, req.getMaVatTuCha(), builder);
-		tongHopDeXuat.eq(Operator.AND, BhQdPheDuyetKhbdg_.NOI_DUNG_TONG_HOP, req.getNoiDungTongHop(), builder);
+		qdPheDuyet.eq(Operator.AND, BhQdPheDuyetKhbdg_.NAM_KE_HOACH, req.getNamKeHoach(), builder);
+		qdPheDuyet.eq(Operator.AND, BhQdPheDuyetKhbdg_.SO_QUYET_DINH, req.getSoQuyetDinh(), builder);
+		qdPheDuyet.like(Operator.AND, BhQdPheDuyetKhbdg_.TRICH_YEU, req.getTrichYeu(), builder);
+		qdPheDuyet.ge(Operator.AND, BhQdPheDuyetKhbdg_.NGAY_KY, req.getNgayKyTuNgay(), builder);
+		qdPheDuyet.le(Operator.AND, BhQdPheDuyetKhbdg_.NGAY_KY, req.getNgayKyDenNgay(), builder);
 	}
 
-	private int count(BhQdPheDuyetKhbdgSearchRequest req, QueryUtils tongHopDeXuat) {
+	private int count(BhQdPheDuyetKhbdgSearchRequest req, QueryUtils qdPheDuyet) {
 		StringBuilder builder = new StringBuilder();
-		builder.append(tongHopDeXuat.countBy(BhQdPheDuyetKhbdg_.ID));
-		setConditionSearch(req, builder, tongHopDeXuat);
+		builder.append(qdPheDuyet.countBy(BhQdPheDuyetKhbdg_.ID));
+		setConditionSearch(req, builder, qdPheDuyet);
 
 		TypedQuery<Long> query = em.createQuery(builder.toString(), Long.class);
 
@@ -88,7 +90,9 @@ public class BhQdPheDuyetKhbdgRepositoryCustomImpl implements BhQdPheDuyetKhbdgR
 
 	private void setParameterSearch(BhQdPheDuyetKhbdgSearchRequest req, Query query) {
 		QueryUtils.setParam(query, BhQdPheDuyetKhbdg_.NAM_KE_HOACH, req.getNamKeHoach());
-		QueryUtils.setParam(query, BhQdPheDuyetKhbdg_.MA_VAT_TU_CHA, req.getMaVatTuCha());
-		QueryUtils.setLikeParam(query, BhQdPheDuyetKhbdg_.NOI_DUNG_TONG_HOP, req.getNoiDungTongHop());
+		QueryUtils.setParam(query, BhQdPheDuyetKhbdg_.SO_QUYET_DINH, req.getSoQuyetDinh());
+		QueryUtils.setLikeParam(query, BhQdPheDuyetKhbdg_.TRICH_YEU, req.getTrichYeu());
+		QueryUtils.setParam(query, BhQdPheDuyetKhbdg_.NGAY_KY, req.getNgayKyTuNgay());
+		QueryUtils.setParam(query, BhQdPheDuyetKhbdg_.NGAY_KY, req.getNgayKyDenNgay());
 	}
 }

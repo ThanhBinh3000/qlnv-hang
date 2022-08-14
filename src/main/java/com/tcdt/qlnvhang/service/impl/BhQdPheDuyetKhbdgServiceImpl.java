@@ -2,10 +2,13 @@ package com.tcdt.qlnvhang.service.impl;
 
 
 import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdg;
+import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdg;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.mapper.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgRequestMapper;
 import com.tcdt.qlnvhang.mapper.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgResponseMapper;
+import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgRepository;
+import com.tcdt.qlnvhang.repository.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetkehochbandaugia.BhQdPheDuyetKhbdgRequest;
 import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetkehochbandaugia.BhQdPheDuyetKhbdgSearchRequest;
@@ -13,7 +16,10 @@ import com.tcdt.qlnvhang.response.banhangdaugia.quyetdinhpheduyetkehoachbandaugi
 import com.tcdt.qlnvhang.response.banhangdaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgSearchResponse;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgService;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import com.tcdt.qlnvhang.util.ExcelHeaderConst;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -25,6 +31,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -40,10 +47,16 @@ import java.util.stream.Collectors;
 public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQdPheDuyetKhbdgService {
 	private final BhQdPheDuyetKhbdgRepository qdPheDuyetKhbdgRepository;
 
+	private final FileDinhKemService fileDinhKemService;
 	private static final String SHEET_NAME = "Quyết định phê duyệt kế hoạch bán đấu giá";
 
 	private final BhQdPheDuyetKhbdgResponseMapper qdPheduyetKhbdgResponseMapper;
 	private final BhQdPheDuyetKhbdgRequestMapper qdPheduyetKhbdgRequestMapper;
+
+	private final BhTongHopDeXuatKhbdgRepository tongHopDeXuatKhbdgRepository;
+
+	private final QlnvDmVattuRepository dmVattuRepository;
+
 
 	@Override
 	public BhQdPheDuyetKhbdgResponse create(BhQdPheDuyetKhbdgRequest req) throws Exception {
@@ -58,6 +71,10 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 		theEntity.setMaDonVi(userInfo.getDvql());
 		theEntity.setCapDonVi(userInfo.getCapDvi());
 		theEntity = qdPheDuyetKhbdgRepository.save(theEntity);
+
+		log.info("Save file dinh kem");
+		List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), theEntity.getId(), BhQdPheDuyetKhbdg.TABLE_NAME);
+		theEntity.setFileDinhKems(fileDinhKems);
 
 		return qdPheduyetKhbdgResponseMapper.toDto(theEntity);
 	}
@@ -110,6 +127,7 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 	public Page<BhQdPheDuyetKhbdgSearchResponse> search(BhQdPheDuyetKhbdgSearchRequest req) throws Exception {
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null) throw new Exception("Bad request.");
+		this.prepareSearchReq(req, userInfo, req.getCapDvis(), req.getTrangThais());
 
 		return qdPheDuyetKhbdgRepository.search(req, req.getPageable());
 	}
@@ -122,9 +140,23 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 
 		Optional<BhQdPheDuyetKhbdg> optional = qdPheDuyetKhbdgRepository.findById(id);
 		if (!optional.isPresent()) throw new Exception("quyết định phê duyệt kế hoạch bán đấu giá không tồn tại");
-		BhQdPheDuyetKhbdg deXuatKhbdg = optional.get();
+		BhQdPheDuyetKhbdg theEntity = optional.get();
 
-		return qdPheduyetKhbdgResponseMapper.toDto(deXuatKhbdg);
+		BhQdPheDuyetKhbdgResponse response = qdPheduyetKhbdgResponseMapper.toDto(theEntity);
+
+
+		Optional<BhTongHopDeXuatKhbdg> tongHopDeXuatOpt = tongHopDeXuatKhbdgRepository.findById(theEntity.getTongHopDeXuatKhbdgId());
+		if (!tongHopDeXuatOpt.isPresent()) {
+			throw new EntityNotFoundException("Tổng hợp đề xuất kế hoạch bán đấu giá không tồn tại");
+		}
+		response.setMaTongHopDeXuatkhbdg(tongHopDeXuatOpt.get().getMaTongHop());
+
+		QlnvDmVattu dmVattu = dmVattuRepository.findByMa(theEntity.getMaVatTuCha());
+		if (dmVattu != null) {
+			response.setTenVatTuCha(dmVattu.getTen());
+		}
+
+		return response;
 	}
 
 	@Override

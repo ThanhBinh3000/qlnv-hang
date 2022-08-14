@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -8,15 +9,19 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "BH_QD_PHE_DUYET_KHBDG")
+@Table(name = BhQdPheDuyetKhbdg.TABLE_NAME)
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class BhQdPheDuyetKhbdg extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 2873038243045535881L;
+
+    public static final String TABLE_NAME = "BH_QD_PHE_DUYET_KHBDG";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "QD_PHE_DUYET_KHBDG_SEQ")
@@ -31,7 +36,7 @@ public class BhQdPheDuyetKhbdg extends BaseEntity implements Serializable {
     private String capDonVi;
 
     @Column(name = "NAM_KE_HOACH")
-    private Long namKeHoach;
+    private Integer namKeHoach;
 
     @Column(name = "SO_QUYET_DINH")
     private String soQuyetDinh;
@@ -68,5 +73,8 @@ public class BhQdPheDuyetKhbdg extends BaseEntity implements Serializable {
 
     @Column(name = "MA_VAT_TU")
     private String maVatTu;
+
+    @Transient
+    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
 }

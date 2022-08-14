@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetkehochbandaugia;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,6 +9,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -33,4 +37,5 @@ public class BhQdPheDuyetKhbdgRequest {
     private String loaiVthh;
     private String maVatTuCha;
     private String maVatTu;
+    private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 }

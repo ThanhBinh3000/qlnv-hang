@@ -68,32 +68,28 @@ public class QueryUtils {
 		}
 	}
 
-	public String le(Operator operator, String field, Object req) {
+	public void ge(Operator operator, String field, Object req, StringBuilder builder) {
 		if (Objects.nonNull(req)) {
-			return String.format(" %s %s <= :%s", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field);
+			builder.append(String.format(" %s %s >= :%s ", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field));
 		}
-		return "";
 	}
 
-	public String lt(Operator operator, String field, Object req) {
+	public void le(Operator operator, String field, Object req, StringBuilder builder) {
 		if (Objects.nonNull(req)) {
-			return String.format(" %s %s < :%s", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field);
+			builder.append(String.format(" %s %s <= :%s ", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field));
 		}
-		return "";
 	}
 
-	public String ge(Operator operator, String field, Object req) {
+	public void lt(Operator operator, String field, Object req, StringBuilder builder) {
 		if (Objects.nonNull(req)) {
-			return String.format(" %s %s >= :%s", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field);
+			builder.append(String.format(" %s %s < :%s ", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field));
 		}
-		return "";
 	}
 
-	public String gt(Operator operator, String field, Object req) {
+	public void gt(Operator operator, String field, Object req, StringBuilder builder) {
 		if (Objects.nonNull(req)) {
-			return String.format(" %s %s > :%s", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field);
+			builder.append(String.format(" %s %s > :%s ", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field));
 		}
-		return "";
 	}
 
 	public String inLst(Operator operator, String field, Object req) {
