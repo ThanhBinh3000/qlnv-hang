@@ -119,7 +119,7 @@ public class BhQdPheDuyetKhbdgController extends BaseController {
 
 	@ApiOperation(value = "Chi tiết thông tin quyết định phê duyệt kế hoạch bán đấu giá hàng hóa", response = Page.class)
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> detail(Long id) {
+	public ResponseEntity<BaseResponse> detail(@PathVariable Long id) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			BhQdPheDuyetKhbdgResponse res = qdPheDuyetKhbdgService.detail(id);
