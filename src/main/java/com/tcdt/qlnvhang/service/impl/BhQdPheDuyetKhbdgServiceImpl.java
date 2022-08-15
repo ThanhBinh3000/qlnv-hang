@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.impl;
 
 import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdg;
 import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdg;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.mapper.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgRequestMapper;
 import com.tcdt.qlnvhang.mapper.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgResponseMapper;
@@ -207,7 +208,7 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 			throw new Exception("Kế hoạch bán đấu giá không tồn tại");
 		BhQdPheDuyetKhbdg qdPheduyetKhbdg = optional.get();
 		//validate Trạng Thái
-		String trangThai = TrangThaiEnum.getTrangThaiDuyetById(trangThaiId);
+		String trangThai = NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(trangThaiId);
 		if (StringUtils.isEmpty(trangThai)) throw new Exception("Trạng thái không tồn tại");
 		qdPheduyetKhbdg.setTrangThai(trangThaiId);
 		qdPheduyetKhbdg = qdPheDuyetKhbdgRepository.save(qdPheduyetKhbdg);

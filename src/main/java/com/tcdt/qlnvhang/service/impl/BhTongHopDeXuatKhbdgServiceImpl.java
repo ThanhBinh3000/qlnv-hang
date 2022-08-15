@@ -1,12 +1,14 @@
 package com.tcdt.qlnvhang.service.impl;
 
 import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdg;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.mapper.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgRequestMapper;
 import com.tcdt.qlnvhang.mapper.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgResponseMapper;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgRequest;
 import com.tcdt.qlnvhang.request.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgSearchRequest;
 import com.tcdt.qlnvhang.response.banhangdaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgResponse;
@@ -169,21 +171,23 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 		}
 		return true;
 	}
-	@Override
-	public BhTongHopDeXuatKhbdgResponse updateTrangThai(Long id, String trangThaiId) throws Exception {
-		UserInfo userInfo = SecurityContextService.getUser();
-		if (userInfo == null) throw new Exception("Bad request.");
-		if (StringUtils.isEmpty(trangThaiId)) throw new Exception("trangThaiId không được để trống");
 
-		Optional<BhTongHopDeXuatKhbdg> optional = deXuatKhbdgRepository.findById(id);
+	public boolean updateStatusQd(StatusReq stReq) throws Exception {
+		UserInfo userInfo = UserUtils.getUserInfo();
+		Optional<BhTongHopDeXuatKhbdg> optional = deXuatKhbdgRepository.findById(stReq.getId());
 		if (!optional.isPresent())
-			throw new Exception("Kế hoạch bán đấu giá không tồn tại");
-		BhTongHopDeXuatKhbdg tongHopDeXuatKhbdg = optional.get();
-		//validate Trạng Thái
-		String trangThai = TrangThaiEnum.getTrangThaiDuyetById(trangThaiId);
+			throw new Exception("Biên bản bán đấu giá không tồn tại.");
+
+		BhTongHopDeXuatKhbdg theEntity = optional.get();
+
+		String trangThai = NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(stReq.getTrangThai());
 		if (StringUtils.isEmpty(trangThai)) throw new Exception("Trạng thái không tồn tại");
-		tongHopDeXuatKhbdg.setTrangThai(trangThaiId);
-		tongHopDeXuatKhbdg = deXuatKhbdgRepository.save(tongHopDeXuatKhbdg);
-		return tongHopDeXuatKhbdgResponseMapper.toDto(tongHopDeXuatKhbdg);
+
+		theEntity.setTrangThai(stReq.getTrangThai());
+		theEntity.setNguoiPduyetId(userInfo.getId());
+		theEntity.setNgayPduyet(LocalDate.now());
+		theEntity.setLyDoTuChoi(stReq.getLyDo());
+		deXuatKhbdgRepository.save(theEntity);
+		return true;
 	}
 }

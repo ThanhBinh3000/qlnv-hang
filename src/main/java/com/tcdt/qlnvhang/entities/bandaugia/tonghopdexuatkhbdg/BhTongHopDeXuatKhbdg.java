@@ -70,4 +70,19 @@ public class BhTongHopDeXuatKhbdg extends BaseEntity implements Serializable {
 
 	@Column(name = "LOAI_VTHH")
 	private String loaiVthh;
+
+	@Column(name = "NGUOI_GUI_DUYET_ID")
+	private Long nguoiGuiDuyetId;
+
+	@Column(name = "NGAY_GUI_DUYET")
+	private LocalDate ngayGuiDuyet;
+
+	@Column(name = "NGUOI_PDUYET_ID")
+	private Long nguoiPduyetId;
+
+	@Column(name = "NGAY_PDUYET")
+	private LocalDate ngayPduyet;
+
+	@Column(name = "LY_DO_TU_CHOI")
+	private String lyDoTuChoi;
 }
