@@ -96,6 +96,8 @@ public class PathContains {
 	public static final String PHU_LUC = "/phu-luc";
 	public static final String NHAP_XUAT = "/nhap-xuat";
 	public static final String BB_NGHIEMTHU_KLST = "/bb-nghiemthu-klst";
+	public static final String BAN_HANG="/ban-hang";
+	public static final String DAU_THAU = "/dau-thau";
 
 	// Dau thau vat tu
 	public static final String KH_LCNT_VT = "/kh-lcnt/vat-tu";
