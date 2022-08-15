@@ -85,7 +85,7 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
         BeanUtils.copyProperties(req, item, "id");
         item.setNgayTao(LocalDate.now());
         item.setNguoiTaoId(userInfo.getId());
-        item.setTrangThai(NhapXuatHangTrangThaiEnum.DU_THAO.getId());
+        item.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         item.setMaDvi(userInfo.getDvql());
         item.setCapDvi(userInfo.getCapDvi());
         item.setSo(getSo());
@@ -219,7 +219,7 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
             throw new Exception("Biên bản chuẩn bị kho không tồn tại.");
 
         NhBienBanChuanBiKho item = optional.get();
-        if (NhapXuatHangTrangThaiEnum.DA_DUYET.getId().equals(item.getTrangThai())) {
+        if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(item.getTrangThai())) {
             throw new Exception("Không thể xóa biên bản đã đã duyệt");
         }
         nhBienBanChuanBiKhoCtRepository.deleteByBbChuanBiKhoIdIn(Collections.singleton(item.getId()));

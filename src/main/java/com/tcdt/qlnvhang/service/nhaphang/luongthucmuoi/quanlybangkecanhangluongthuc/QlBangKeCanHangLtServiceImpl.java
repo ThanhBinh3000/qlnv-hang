@@ -113,7 +113,7 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
         BeanUtils.copyProperties(req, item, "id");
         item.setNgayTao(LocalDate.now());
         item.setNguoiTaoId(userInfo.getId());
-        item.setTrangThai(NhapXuatHangTrangThaiEnum.DU_THAO.getId());
+        item.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         item.setMaDvi(userInfo.getDvql());
         item.setCapDvi(userInfo.getCapDvi());
         item.setSo(getSo());
@@ -295,7 +295,7 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
             throw new Exception("Bảng kê không tồn tại.");
 
         QlBangKeCanHangLt item = optional.get();
-        if (NhapXuatHangTrangThaiEnum.DA_DUYET.getId().equals(item.getTrangThai())) {
+        if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(item.getTrangThai())) {
             throw new Exception("Không thể xóa bảng kê đã đã duyệt");
         }
 
@@ -321,24 +321,24 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
         QlBangKeCanHangLt bangKe = optional.get();
 
         String trangThai = bangKe.getTrangThai();
-        if (NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
-            if (!NhapXuatHangTrangThaiEnum.DU_THAO.getId().equals(trangThai))
+        if (NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
                 return false;
 
-            bangKe.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId());
+            bangKe.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId());
             bangKe.setNguoiGuiDuyetId(userInfo.getId());
             bangKe.setNgayGuiDuyet(LocalDate.now());
-        } else if (NhapXuatHangTrangThaiEnum.DA_DUYET.getId().equals(stReq.getTrangThai())) {
-            if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(trangThai))
+        } else if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
                 return false;
-            bangKe.setTrangThai(NhapXuatHangTrangThaiEnum.DA_DUYET.getId());
+            bangKe.setTrangThai(NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId());
             bangKe.setNguoiPduyetId(userInfo.getId());
             bangKe.setNgayPduyet(LocalDate.now());
-        } else if (NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
-            if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(trangThai))
+        } else if (NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
                 return false;
 
-            bangKe.setTrangThai(NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CHI_CUC.getId());
+            bangKe.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId());
             bangKe.setNguoiPduyetId(userInfo.getId());
             bangKe.setNgayPduyet(LocalDate.now());
         } else {

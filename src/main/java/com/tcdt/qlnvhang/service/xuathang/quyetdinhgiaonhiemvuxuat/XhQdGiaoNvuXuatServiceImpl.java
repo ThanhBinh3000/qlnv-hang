@@ -75,7 +75,7 @@ public class XhQdGiaoNvuXuatServiceImpl extends BaseServiceImpl implements XhQdG
         BeanUtils.copyProperties(req, item, "id");
         item.setNgayTao(LocalDate.now());
         item.setNguoiTaoId(userInfo.getId());
-        item.setTrangThai(NhapXuatHangTrangThaiEnum.DU_THAO.getId());
+        item.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         item.setMaDvi(userInfo.getDvql());
         item.setCapDvi(userInfo.getCapDvi());
         xhQdGiaoNvuXuatRepository.save(item);
@@ -216,7 +216,7 @@ public class XhQdGiaoNvuXuatServiceImpl extends BaseServiceImpl implements XhQdG
             throw new Exception("Quyết định giao nhiệm vụ xuất không tồn tại.");
 
         XhQdGiaoNvuXuat item = optional.get();
-        if (NhapXuatHangTrangThaiEnum.DA_DUYET.getId().equals(item.getTrangThai())) {
+        if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(item.getTrangThai())) {
             throw new Exception("Không thể xóa Quyết định giao nhiệm vụ xuất đã đã duyệt");
         }
         xhQdGiaoNvuXuatCtRepository.deleteByQdgnvxIdIn(Collections.singleton(item.getId()));
@@ -235,24 +235,24 @@ public class XhQdGiaoNvuXuatServiceImpl extends BaseServiceImpl implements XhQdG
 
         XhQdGiaoNvuXuat item = optional.get();
         String trangThai = item.getTrangThai();
-        if (NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
-            if (!NhapXuatHangTrangThaiEnum.DU_THAO.getId().equals(trangThai))
+        if (NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
                 return false;
 
-            item.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId());
+            item.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId());
             item.setNguoiGuiDuyetId(userInfo.getId());
             item.setNgayGuiDuyet(LocalDate.now());
-        } else if (NhapXuatHangTrangThaiEnum.DA_DUYET.getId().equals(stReq.getTrangThai())) {
-            if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(trangThai))
+        } else if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
                 return false;
-            item.setTrangThai(NhapXuatHangTrangThaiEnum.DA_DUYET.getId());
+            item.setTrangThai(NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId());
             item.setNguoiPduyetId(userInfo.getId());
             item.setNgayPduyet(LocalDate.now());
-        } else if (NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
-            if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(trangThai))
+        } else if (NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
                 return false;
 
-            item.setTrangThai(NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CHI_CUC.getId());
+            item.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId());
             item.setNguoiPduyetId(userInfo.getId());
             item.setNgayPduyet(LocalDate.now());
         } else {

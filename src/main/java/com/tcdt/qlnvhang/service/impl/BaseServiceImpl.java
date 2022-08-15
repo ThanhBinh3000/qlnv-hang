@@ -391,24 +391,24 @@ public class BaseServiceImpl {
 	public <T extends TrangThaiBaseEntity> boolean updateStatus(T item, StatusReq stReq, UserInfo userInfo) throws Exception {
 
 		String trangThai = item.getTrangThai();
-		if (NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
-			if (!NhapXuatHangTrangThaiEnum.DU_THAO.getId().equals(trangThai))
+		if (NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(stReq.getTrangThai())) {
+			if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
 				return false;
 
-			item.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId());
+			item.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId());
 			item.setNguoiGuiDuyetId(userInfo.getId());
 			item.setNgayGuiDuyet(LocalDate.now());
-		} else if (NhapXuatHangTrangThaiEnum.DA_DUYET.getId().equals(stReq.getTrangThai())) {
-			if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(trangThai))
+		} else if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(stReq.getTrangThai())) {
+			if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
 				return false;
-			item.setTrangThai(NhapXuatHangTrangThaiEnum.DA_DUYET.getId());
+			item.setTrangThai(NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId());
 			item.setNguoiPduyetId(userInfo.getId());
 			item.setNgayPduyet(LocalDate.now());
-		} else if (NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
-			if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(trangThai))
+		} else if (NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId().equals(stReq.getTrangThai())) {
+			if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
 				return false;
 
-			item.setTrangThai(NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CHI_CUC.getId());
+			item.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId());
 			item.setNguoiPduyetId(userInfo.getId());
 			item.setNgayPduyet(LocalDate.now());
 		} else {
