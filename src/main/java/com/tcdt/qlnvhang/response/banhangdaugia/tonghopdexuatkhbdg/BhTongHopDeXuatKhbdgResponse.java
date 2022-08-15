@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.response.banhangdaugia.tonghopdexuatkhbdg;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.tcdt.qlnvhang.response.CommonResponse;
 import com.tcdt.qlnvhang.response.IdAndNameDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +17,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class BhTongHopDeXuatKhbdgResponse {
+public class BhTongHopDeXuatKhbdgResponse  extends CommonResponse {
 	private Long id;
 	private Integer namKeHoach;
 	private LocalDate ngayKyTuNgay;

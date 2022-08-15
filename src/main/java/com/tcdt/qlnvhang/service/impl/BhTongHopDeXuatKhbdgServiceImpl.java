@@ -28,10 +28,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -61,6 +58,7 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 		theEntity.setNguoiTaoId(userInfo.getId());
 		theEntity.setMaDonVi(userInfo.getDvql());
 		theEntity.setCapDonVi(userInfo.getCapDvi());
+		theEntity.setMaTongHop(UUID.randomUUID().toString());
 		theEntity = deXuatKhbdgRepository.save(theEntity);
 
 		return tongHopDeXuatKhbdgResponseMapper.toDto(theEntity);
