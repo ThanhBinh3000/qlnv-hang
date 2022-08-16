@@ -74,7 +74,10 @@ public class BhTongHopDeXuatKhbdgRepositoryCustomImpl implements BhTongHopDeXuat
 		QueryUtils.buildWhereClause(builder);
 		tongHopDeXuat.eq(Operator.AND, BhTongHopDeXuatKhbdg_.NAM_KE_HOACH, req.getNamKeHoach(), builder);
 		tongHopDeXuat.eq(Operator.AND, BhTongHopDeXuatKhbdg_.MA_VAT_TU_CHA, req.getMaVatTuCha(), builder);
-		tongHopDeXuat.eq(Operator.AND, BhTongHopDeXuatKhbdg_.NOI_DUNG_TONG_HOP, req.getNoiDungTongHop(), builder);
+		tongHopDeXuat.like(Operator.AND, BhTongHopDeXuatKhbdg_.NOI_DUNG_TONG_HOP, req.getNoiDungTongHop(), builder);
+		tongHopDeXuat.start(Operator.AND, BhTongHopDeXuatKhbdg_.NGAY_TONG_HOP, req.getNgayTongHopTuNgay(), builder);
+		tongHopDeXuat.end(Operator.AND, BhTongHopDeXuatKhbdg_.NGAY_TONG_HOP, req.getNgayTongHopDenNgay(), builder);
+
 	}
 
 	private int count(BhTongHopDeXuatKhbdgSearchRequest req, QueryUtils tongHopDeXuat) {
@@ -92,5 +95,7 @@ public class BhTongHopDeXuatKhbdgRepositoryCustomImpl implements BhTongHopDeXuat
 		QueryUtils.setParam(query, BhTongHopDeXuatKhbdg_.NAM_KE_HOACH, req.getNamKeHoach());
 		QueryUtils.setParam(query, BhTongHopDeXuatKhbdg_.MA_VAT_TU_CHA, req.getMaVatTuCha());
 		QueryUtils.setLikeParam(query, BhTongHopDeXuatKhbdg_.NOI_DUNG_TONG_HOP, req.getNoiDungTongHop());
+		QueryUtils.setParamStart(query, BhTongHopDeXuatKhbdg_.NGAY_TONG_HOP, req.getNgayTongHopTuNgay());
+		QueryUtils.setParamEnd(query, BhTongHopDeXuatKhbdg_.NGAY_TONG_HOP, req.getNgayTongHopDenNgay());
 	}
 }

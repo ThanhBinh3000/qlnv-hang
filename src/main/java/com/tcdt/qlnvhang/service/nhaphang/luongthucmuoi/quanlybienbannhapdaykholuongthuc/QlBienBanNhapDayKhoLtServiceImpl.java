@@ -106,7 +106,7 @@ public class QlBienBanNhapDayKhoLtServiceImpl extends BaseServiceImpl implements
         BeanUtils.copyProperties(req, item, "id");
         item.setNgayTao(LocalDate.now());
         item.setNguoiTaoId(userInfo.getId());
-        item.setTrangThai(NhapXuatHangTrangThaiEnum.DU_THAO.getId());
+        item.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         item.setMaDvi(userInfo.getDvql());
         item.setCapDvi(userInfo.getCapDvi());
         item.setSo(getSo());
@@ -269,7 +269,7 @@ public class QlBienBanNhapDayKhoLtServiceImpl extends BaseServiceImpl implements
             throw new Exception("Bảng kê không tồn tại.");
 
         QlBienBanNhapDayKhoLt item = optional.get();
-        if (NhapXuatHangTrangThaiEnum.DA_DUYET.getId().equals(item.getTrangThai())) {
+        if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(item.getTrangThai())) {
             throw new Exception("Không thể xóa bảng kê đã đã duyệt");
         }
 
@@ -327,55 +327,55 @@ public class QlBienBanNhapDayKhoLtServiceImpl extends BaseServiceImpl implements
         QlBienBanNhapDayKhoLt bienBan = optional.get();
 
         String trangThai = bienBan.getTrangThai();
-        if (NhapXuatHangTrangThaiEnum.CHO_DUYET_KTV_BAO_QUAN.getId().equals(stReq.getTrangThai())) {
-            if (!NhapXuatHangTrangThaiEnum.DU_THAO.getId().equals(trangThai))
+        if (NhapXuatHangTrangThaiEnum.CHODUYET_KTVBQ.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
                 return false;
 
-            bienBan.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_KTV_BAO_QUAN.getId());
+            bienBan.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_KTVBQ.getId());
             bienBan.setNguoiGuiDuyetId(userInfo.getId());
             bienBan.setNgayGuiDuyet(LocalDate.now());
-        } else if (NhapXuatHangTrangThaiEnum.CHO_DUYET_CAN_BO_KE_TOAN.getId().equals(stReq.getTrangThai())) {
-            if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_KTV_BAO_QUAN.getId().equals(trangThai))
+        } else if (NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_KTVBQ.getId().equals(trangThai))
                 return false;
-            bienBan.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_CAN_BO_KE_TOAN.getId());
+            bienBan.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId());
             bienBan.setNguoiGuiDuyetId(userInfo.getId());
             bienBan.setNgayGuiDuyet(LocalDate.now());
-        } else if (NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
-            if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_CAN_BO_KE_TOAN.getId().equals(trangThai))
-                return false;
-
-            bienBan.setTrangThai(NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId());
-            bienBan.setNguoiGuiDuyetId(userInfo.getId());
-            bienBan.setNgayGuiDuyet(LocalDate.now());
-        } else if (NhapXuatHangTrangThaiEnum.DA_DUYET.getId().equals(stReq.getTrangThai())) {
-            if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(trangThai))
+        } else if (NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId().equals(trangThai))
                 return false;
 
-            bienBan.setTrangThai(NhapXuatHangTrangThaiEnum.DA_DUYET.getId());
+            bienBan.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId());
+            bienBan.setNguoiGuiDuyetId(userInfo.getId());
+            bienBan.setNgayGuiDuyet(LocalDate.now());
+        } else if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
+                return false;
+
+            bienBan.setTrangThai(NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId());
             bienBan.setNguoiPduyetId(userInfo.getId());
             bienBan.setNgayPduyet(LocalDate.now());
             bienBan.setLyDoTuChoi(stReq.getLyDo());
-        } else if (NhapXuatHangTrangThaiEnum.TU_CHOI_KTV_BAO_QUAN.getId().equals(stReq.getTrangThai())) {
-            if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_KTV_BAO_QUAN.getId().equals(trangThai))
+        } else if (NhapXuatHangTrangThaiEnum.TUCHOI_KTVBQ.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_KTVBQ.getId().equals(trangThai))
                 return false;
 
-            bienBan.setTrangThai(NhapXuatHangTrangThaiEnum.TU_CHOI_KTV_BAO_QUAN.getId());
+            bienBan.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_KTVBQ.getId());
             bienBan.setNguoiPduyetId(userInfo.getId());
             bienBan.setNgayPduyet(LocalDate.now());
             bienBan.setLyDoTuChoi(stReq.getLyDo());
-        } else if (NhapXuatHangTrangThaiEnum.TU_CHOI_CAN_BO_KE_TOAN.getId().equals(stReq.getTrangThai())) {
-            if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_CAN_BO_KE_TOAN.getId().equals(trangThai))
+        } else if (NhapXuatHangTrangThaiEnum.TUCHOI_KT.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.TUCHOI_KT.getId().equals(trangThai))
                 return false;
 
-            bienBan.setTrangThai(NhapXuatHangTrangThaiEnum.TU_CHOI_CAN_BO_KE_TOAN.getId());
+            bienBan.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_KT.getId());
             bienBan.setNguoiPduyetId(userInfo.getId());
             bienBan.setNgayPduyet(LocalDate.now());
             bienBan.setLyDoTuChoi(stReq.getLyDo());
-        } else if (NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CHI_CUC.getId().equals(stReq.getTrangThai())) {
-            if (!NhapXuatHangTrangThaiEnum.CHO_DUYET_LD_CHI_CUC.getId().equals(trangThai))
+        } else if (NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
                 return false;
 
-            bienBan.setTrangThai(NhapXuatHangTrangThaiEnum.TU_CHOI_LD_CHI_CUC.getId());
+            bienBan.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId());
             bienBan.setNguoiPduyetId(userInfo.getId());
             bienBan.setNgayPduyet(LocalDate.now());
             bienBan.setLyDoTuChoi(stReq.getLyDo());

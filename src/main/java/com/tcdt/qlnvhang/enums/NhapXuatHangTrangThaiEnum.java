@@ -1,27 +1,44 @@
 package com.tcdt.qlnvhang.enums;
 
 public enum NhapXuatHangTrangThaiEnum {
-	DU_THAO("00", "Dự Thảo", "Dự Thảo"),
-	CHO_DUYET_TP("01", "Chờ Duyệt - TP", "Chờ Duyệt"),
-	CHO_DUYET_THU_KHO("02", "Chờ Duyệt - Thủ Kho", "Chờ Duyệt"),
-	CHO_DUYET_KE_TOAN("03", "Chờ Duyệt - Kế Toán", "Chờ Duyệt"),
-	CHO_DUYET_KTV_BAO_QUAN("04", "Chờ Duyệt - KTV Bảo Quản", "Chờ Duyệt"),
-	CHO_DUYET_CAN_BO_KE_TOAN("05", "Chờ Duyệt - Cán Bộ Kế Toán", "Chờ Duyệt"),
-	CHO_DUYET_TP_KTBQ("06", "Chờ Duyệt - TP KTBQ", "Chờ Duyệt"),
-	CHO_DUYET_LD_CHI_CUC("07", "Chờ Duyệt - LĐ Chi Cục", "Chờ Duyệt"),
-	CHO_DUYET_TP_KH_QLHDT("08", "Chờ Duyệt - TP KH&QLHDT", "Chờ Duyệt"),
-	CHO_DUYET_LD_CUC("09", "Chờ Duyệt - LĐ Cục", "Chờ Duyệt"),
-	TU_CHOI_TP("10", "Từ Chối - TP", "Từ Chối"),
-	TU_CHOI_THU_KHO("11", "Từ Chối - Thủ Kho", "Từ Chối"),
-	TU_CHOI_KE_TOAN("12", "Từ Chối - Kế Toán", "Từ Chối"),
-	TU_CHOI_KTV_BAO_QUAN("13", "Từ Chối - KTV Bảo Quản", "Từ Chối"),
-	TU_CHOI_CAN_BO_KE_TOAN("14", "Từ Chối - KTV Bảo Quản", "Từ Chối"),
-	TU_CHOI_TP_KTBQ("15", "Từ Chối - TP KTBQ", "Từ Chối"),
-	TU_CHOI_LD_CHI_CUC("16", "Từ Chối - LĐ Chi Cục", "Từ Chối"),
-	TU_CHOI_TP_KH_QLHDT("17", "Từ Chối - TP KH&QLHDT", "Từ Chối"),
-	TU_CHOI_LD_CUC("18", "Từ Chối - LĐ Cục", "Từ Chối"),
-	DA_DUYET("19", "Đã Duyệt", "Đã Duyệt"),
-	BAN_HANH("20", "Ban Hành", "Ban Hành");
+	DUTHAO("00", "Dự Thảo", "Dự Thảo"),
+	CHODUYET_TP("01", "Chờ Duyệt - TP", "Chờ Duyệt"),
+	TUCHOI_TP("02", "Từ Chối - TP", "Từ Chối"),
+
+	CHODUYET_LDC("03", "Chờ Duyệt - LĐ Cục", "Chờ Duyệt"),
+	TUCHOI_LDC("04", "Từ Chối - LĐ Cục", "Từ Chối"),
+	DADUYET_LDC("05", "Đã Duyệt - LĐ Cục", "Đã Duyệt"),
+
+	CHODUYET_TK("06", "Chờ Duyệt - Thủ Kho", "Chờ Duyệt"),
+	CHODUYET_KTVBQ("07", "Chờ Duyệt - KTV Bảo Quản", "Chờ Duyệt"),
+	CHODUYET_KT("08", "Chờ Duyệt - Kế Toán", "Chờ Duyệt"),
+
+	TUCHOI_TK("09", "Từ Chối - Thủ Kho", "Từ Chối"),
+	TUCHOI_KTVBQ("10", "Từ Chối - KTV Bảo Quản", "Từ Chối"),
+	TUCHOI_KT("11", "Từ Chối - Kế Toán", "Từ Chối"),
+
+	DADUYET_TK("12", "Đã Duyệt - Thủ Kho", "Đã Duyệt"),
+	DADUYET_KTVBQ("13", "Đã Duyệt - KTV Bảo Quản", "Đã Duyệt"),
+	DADUYET_KT("14", "Đã Duyệt - Kế Toán", "Đã Duyệt"),
+
+	CHODUYET_LDCC("15", "Chờ Duyệt - LĐ Chi Cục", "Chờ Duyệt"),
+	TUCHOI_LDCC("16", "Từ Chối - LĐ Chi Cục", "Từ Chối"),
+	DADUYET_LDCC("17", "Đã Duyệt - LĐ Chi Cục", "Đã Duyệt"),
+
+	CHODUYET_LDV("18", "Chờ Duyệt - LĐ Vụ", "Chờ Duyệt"),
+	TUCHOI_LDV("19", "Từ Chối - LĐ Vụ", "Từ Chối"),
+	DADUYET_LDV("20", "Đã Duyệt - LĐ Vụ", "Đã Duyệt"),
+
+	CHODUYET_LDTC("21", "Chờ Duyệt - LĐ Tổng Cục", "Chờ Duyệt"),
+	TUCHOI_LDTC("22", "Từ Chối - LĐ Tổng Cục", "Từ Chối"),
+	DADUYET_LDTC("23", "Đã Duyệt - LĐ Tổng Cục", "Đã Duyệt"),
+
+	DATONGHOP("24", "Đã Tổng Hợp", "Đã Tổng Hợp"),
+	CHUATAO_QD("25", "Chưa Tạo QĐ", "Chưa Tạo QĐ"),
+	DADUTHAO_QD("26", "Đã Dự Thảo QĐ", "Đã Dự Thảo QĐ"),
+	DABANHANH_QD("27", "Đã Ban Hành QĐ", "Đã Ban Hành QĐ"),
+
+	BAN_HANH("28", "Ban Hành", "Ban Hành");
 
 	private final String id;
 	private final String ten;

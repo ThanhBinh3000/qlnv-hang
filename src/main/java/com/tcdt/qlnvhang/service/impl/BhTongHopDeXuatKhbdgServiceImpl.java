@@ -1,11 +1,14 @@
 package com.tcdt.qlnvhang.service.impl;
 
 import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdg;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.mapper.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgRequestMapper;
 import com.tcdt.qlnvhang.mapper.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgResponseMapper;
+import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgRequest;
 import com.tcdt.qlnvhang.request.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgSearchRequest;
 import com.tcdt.qlnvhang.response.banhangdaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgResponse;
@@ -13,6 +16,7 @@ import com.tcdt.qlnvhang.response.banhangdaugia.tonghopdexuatkhbdg.BhTongHopDeXu
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgService;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import com.tcdt.qlnvhang.util.ExcelHeaderConst;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -26,10 +30,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -38,6 +39,9 @@ import java.util.stream.Collectors;
 @Transactional(rollbackFor = Exception.class)
 public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements BhTongHopDeXuatKhbdgService {
 	private final BhTongHopDeXuatKhbdgRepository deXuatKhbdgRepository;
+
+	private final QlnvDmVattuRepository dmVattuRepository;
+
 
 	private static final String SHEET_NAME = "Danh sách tổng hợp đề xuất KHBDG";
 
@@ -56,6 +60,7 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 		theEntity.setNguoiTaoId(userInfo.getId());
 		theEntity.setMaDonVi(userInfo.getDvql());
 		theEntity.setCapDonVi(userInfo.getCapDvi());
+		theEntity.setMaTongHop(UUID.randomUUID().toString());
 		theEntity = deXuatKhbdgRepository.save(theEntity);
 
 		return tongHopDeXuatKhbdgResponseMapper.toDto(theEntity);
@@ -123,7 +128,13 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 		if (!optional.isPresent()) throw new Exception("Tổng hợp đề xuất kế hoạch bán đấu giá không tồn tại");
 		BhTongHopDeXuatKhbdg deXuatKhbdg = optional.get();
 
-		return tongHopDeXuatKhbdgResponseMapper.toDto(deXuatKhbdg);
+		BhTongHopDeXuatKhbdgResponse response = tongHopDeXuatKhbdgResponseMapper.toDto(deXuatKhbdg);
+
+		QlnvDmVattu dmVattu = dmVattuRepository.findByMa(deXuatKhbdg.getMaVatTuCha());
+		if (dmVattu != null) {
+			response.setTenVatTuCha(dmVattu.getTen());
+		}
+		return response;
 	}
 
 	@Override
@@ -160,21 +171,23 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 		}
 		return true;
 	}
-	@Override
-	public BhTongHopDeXuatKhbdgResponse updateTrangThai(Long id, String trangThaiId) throws Exception {
-		UserInfo userInfo = SecurityContextService.getUser();
-		if (userInfo == null) throw new Exception("Bad request.");
-		if (StringUtils.isEmpty(trangThaiId)) throw new Exception("trangThaiId không được để trống");
 
-		Optional<BhTongHopDeXuatKhbdg> optional = deXuatKhbdgRepository.findById(id);
+	public boolean updateStatusQd(StatusReq stReq) throws Exception {
+		UserInfo userInfo = UserUtils.getUserInfo();
+		Optional<BhTongHopDeXuatKhbdg> optional = deXuatKhbdgRepository.findById(stReq.getId());
 		if (!optional.isPresent())
-			throw new Exception("Kế hoạch bán đấu giá không tồn tại");
-		BhTongHopDeXuatKhbdg tongHopDeXuatKhbdg = optional.get();
-		//validate Trạng Thái
-		String trangThai = TrangThaiEnum.getTrangThaiDuyetById(trangThaiId);
+			throw new Exception("Biên bản bán đấu giá không tồn tại.");
+
+		BhTongHopDeXuatKhbdg theEntity = optional.get();
+
+		String trangThai = NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(stReq.getTrangThai());
 		if (StringUtils.isEmpty(trangThai)) throw new Exception("Trạng thái không tồn tại");
-		tongHopDeXuatKhbdg.setTrangThai(trangThaiId);
-		tongHopDeXuatKhbdg = deXuatKhbdgRepository.save(tongHopDeXuatKhbdg);
-		return tongHopDeXuatKhbdgResponseMapper.toDto(tongHopDeXuatKhbdg);
+
+		theEntity.setTrangThai(stReq.getTrangThai());
+		theEntity.setNguoiPduyetId(userInfo.getId());
+		theEntity.setNgayPduyet(LocalDate.now());
+		theEntity.setLyDoTuChoi(stReq.getLyDo());
+		deXuatKhbdgRepository.save(theEntity);
+		return true;
 	}
 }

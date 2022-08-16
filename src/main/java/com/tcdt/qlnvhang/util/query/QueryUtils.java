@@ -31,6 +31,8 @@ public class QueryUtils {
 	public static final String AND = " AND ";
 	public static final String DEFAULT_CONDITION = " 1=1 ";
 	public static final String WHERE = " WHERE ";
+	public static final String START = "Start";
+	public static final String END = "End";
 
 	public String getClassName() {
 		return this.clazz.getSimpleName() + SPACE;
@@ -68,32 +70,40 @@ public class QueryUtils {
 		}
 	}
 
-	public String le(Operator operator, String field, Object req) {
+	public void ge(Operator operator, String field, Object req, StringBuilder builder) {
 		if (Objects.nonNull(req)) {
-			return String.format(" %s %s <= :%s", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field);
+			builder.append(String.format(" %s %s >= :%s ", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field));
 		}
-		return "";
 	}
 
-	public String lt(Operator operator, String field, Object req) {
+	public void start(Operator operator, String field, Object req, StringBuilder builder) {
 		if (Objects.nonNull(req)) {
-			return String.format(" %s %s < :%s", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field);
+			builder.append(String.format(" %s %s >= :%s ", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field + START));
 		}
-		return "";
 	}
 
-	public String ge(Operator operator, String field, Object req) {
+	public void end(Operator operator, String field, Object req, StringBuilder builder) {
 		if (Objects.nonNull(req)) {
-			return String.format(" %s %s >= :%s", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field);
+			builder.append(String.format(" %s %s <= :%s ", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field + END));
 		}
-		return "";
 	}
 
-	public String gt(Operator operator, String field, Object req) {
+	public void le(Operator operator, String field, Object req, StringBuilder builder) {
 		if (Objects.nonNull(req)) {
-			return String.format(" %s %s > :%s", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field);
+			builder.append(String.format(" %s %s <= :%s ", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field));
 		}
-		return "";
+	}
+
+	public void lt(Operator operator, String field, Object req, StringBuilder builder) {
+		if (Objects.nonNull(req)) {
+			builder.append(String.format(" %s %s < :%s ", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field));
+		}
+	}
+
+	public void gt(Operator operator, String field, Object req, StringBuilder builder) {
+		if (Objects.nonNull(req)) {
+			builder.append(String.format(" %s %s > :%s ", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field));
+		}
 	}
 
 	public String inLst(Operator operator, String field, Object req) {
@@ -129,6 +139,18 @@ public class QueryUtils {
 		}
 	}
 
+	public static void setParamStart(Query query, String paramName, Object value) {
+		if (StringUtils.isEmpty(paramName)) return;
+		paramName = paramName + START;
+		QueryUtils.setParam(query, paramName, value);
+	}
+
+	public static void setParamEnd(Query query, String paramName, Object value) {
+		if (StringUtils.isEmpty(paramName)) return;
+		paramName = paramName + END;
+		QueryUtils.setParam(query, paramName, value);
+	}
+
 	public static void setLikeParam(Query query, String paramName, String value) {
 		if (StringUtils.isEmpty(paramName)) return;
 
@@ -144,6 +166,7 @@ public class QueryUtils {
 	public static String buildQuery(StringBuilder builder) {
 		return builder.toString().replace("SELECT  ,", SELECT);
 	}
+
 	public static void selectFields(StringBuilder builder, QueryUtils qU, String field) {
 		builder.append(qU.selectField(field));
 	}

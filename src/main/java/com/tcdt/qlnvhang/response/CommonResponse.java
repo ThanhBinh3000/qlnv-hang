@@ -17,4 +17,10 @@ public class CommonResponse {
 
     private Integer so;
     private Integer nam;
+
+    private String maVatTuCha;
+    private String maVatTu;
+
+    private String tenVatTuCha;
+    private String tenVatTu;
 }
