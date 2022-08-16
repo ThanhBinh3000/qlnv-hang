@@ -4,11 +4,13 @@ import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauReq;
 import com.tcdt.qlnvhang.request.search.BienBanLayMauSearchReq;
+import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.response.bbanlaymau.BienBanLayMauRes;
 import org.springframework.data.domain.Page;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.util.Set;
 
 public interface BienBanLayMauService {
 	Page<BienBanLayMauRes> search(BienBanLayMauSearchReq req) throws Exception;
@@ -24,4 +26,6 @@ public interface BienBanLayMauService {
 	boolean exportToExcel(BienBanLayMauSearchReq objReq, HttpServletResponse response) throws Exception;
 
 	Integer getSo() throws Exception;
+
+	BaseNhapHangCount count(Set<String> maDvis) throws Exception;
 }

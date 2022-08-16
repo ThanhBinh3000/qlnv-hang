@@ -40,7 +40,7 @@ public class QlBienBanNhapDayKhoLtRepositoryCustomImpl implements QlBienBanNhapD
         builder.append("WHERE 1 = 1 ");
 
         if (!StringUtils.isEmpty(req.getSoBienBan())) {
-            builder.append("AND ").append("p.soBienBan LIKE :soBienBan ");
+            builder.append("AND ").append("LOWER(p.soBienBan) LIKE :soBienBan ");
         }
         if (req.getNgayNhapDayKhoTu() != null) {
             builder.append("AND ").append("p.ngayNhapDayKho >= :ngayNhapDayKhoTu ");
@@ -57,7 +57,7 @@ public class QlBienBanNhapDayKhoLtRepositoryCustomImpl implements QlBienBanNhapD
         }
 
         if (!StringUtils.isEmpty(req.getSoQdNhap())) {
-            builder.append("AND ").append("nx.soQd LIKE :soQdNhap ");
+            builder.append("AND ").append("LOWER(nx.soQd) LIKE :soQdNhap ");
         }
 
         if (!StringUtils.isEmpty(req.getMaVatTuCha())) {
@@ -89,7 +89,7 @@ public class QlBienBanNhapDayKhoLtRepositoryCustomImpl implements QlBienBanNhapD
 
     private void setParameterSearch(QlBienBanNhapDayKhoLtSearchReq req, Query query) {
         if (!StringUtils.isEmpty(req.getSoBienBan())) {
-            query.setParameter("soBienBan", "%" + req.getSoBienBan() + "%");
+            query.setParameter("soBienBan", "%" + req.getSoBienBan().toLowerCase() + "%");
         }
 
         if (req.getNgayNhapDayKhoTu() != null) {
@@ -107,7 +107,7 @@ public class QlBienBanNhapDayKhoLtRepositoryCustomImpl implements QlBienBanNhapD
         }
 
         if (!StringUtils.isEmpty(req.getSoQdNhap())) {
-            query.setParameter("soQdNhap", "%" + req.getSoQdNhap() + "%");
+            query.setParameter("soQdNhap", "%" + req.getSoQdNhap().toLowerCase() + "%");
         }
 
         if (!StringUtils.isEmpty(req.getMaVatTuCha())) {

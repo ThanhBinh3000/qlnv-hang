@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.util.Set;
 
 public interface NhPhieuNhapKhoService {
     NhPhieuNhapKhoRes create(NhPhieuNhapKhoReq req) throws Exception;
@@ -20,7 +21,7 @@ public interface NhPhieuNhapKhoService {
 
     Page<NhPhieuNhapKhoRes> search(NhPhieuNhapKhoSearchReq req) throws Exception;
 
-    BaseNhapHangCount count(NhPhieuNhapKhoSearchReq req) throws Exception;
+    BaseNhapHangCount count(Set<String> maDvis) throws Exception;
 
     @Transactional(rollbackOn = Exception.class)
     boolean deleteMultiple(DeleteReq req) throws Exception;

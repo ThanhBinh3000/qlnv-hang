@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.util.Set;
 
 public interface QlBangKeCanHangLtService {
 
@@ -35,4 +36,6 @@ public interface QlBangKeCanHangLtService {
     boolean exportToExcel(QlBangKeCanHangLtSearchReq objReq, HttpServletResponse response) throws Exception;
 
     Integer getSo() throws Exception;
+
+    BaseNhapHangCount count(Set<String> maDvis) throws Exception;
 }

@@ -4,11 +4,13 @@ import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.vattu.hosokythuat.NhHoSoKyThuatReq;
 import com.tcdt.qlnvhang.request.search.vattu.hosokythuat.NhHoSoKyThuatSearchReq;
+import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.response.vattu.hosokythuat.NhHoSoKyThuatRes;
 import org.springframework.data.domain.Page;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.util.Set;
 
 public interface NhHoSoKyThuatService {
     NhHoSoKyThuatRes create(NhHoSoKyThuatReq req) throws Exception;
@@ -31,4 +33,6 @@ public interface NhHoSoKyThuatService {
     boolean exportToExcel(NhHoSoKyThuatSearchReq objReq, HttpServletResponse response) throws Exception;
 
     Integer getSo() throws Exception;
+
+    BaseNhapHangCount count(Set<String> maDvis) throws Exception;
 }

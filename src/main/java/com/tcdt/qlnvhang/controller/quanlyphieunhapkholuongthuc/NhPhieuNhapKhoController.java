@@ -144,22 +144,6 @@ public class NhPhieuNhapKhoController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Count phiếu nhập kho lương thực", response = List.class)
-    @GetMapping("/count")
-    public ResponseEntity<BaseResponse> count(NhPhieuNhapKhoSearchReq req) {
-        BaseResponse resp = new BaseResponse();
-        try {
-            resp.setData(nhPhieuNhapKhoService.count(req));
-            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-        } catch (Exception e) {
-            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-            resp.setMsg(e.getMessage());
-            log.error("Count phiếu nhập kho lương thực lỗi", e);
-        }
-        return ResponseEntity.ok(resp);
-    }
-
     @ApiOperation(value = "Export phiếu nhập kho lương thực", response = List.class)
     @PostMapping(value = "/export/list", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)

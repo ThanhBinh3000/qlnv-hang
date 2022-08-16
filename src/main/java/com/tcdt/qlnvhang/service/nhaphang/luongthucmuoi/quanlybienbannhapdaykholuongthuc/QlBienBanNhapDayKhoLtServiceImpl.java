@@ -15,6 +15,7 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.quanlybienbannhapdaykholuongthuc.QlBienBanNdkCtLtReq;
 import com.tcdt.qlnvhang.request.object.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtReq;
+import com.tcdt.qlnvhang.request.search.quanlybangkecanhangluongthuc.QlBangKeCanHangLtSearchReq;
 import com.tcdt.qlnvhang.request.search.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtSearchReq;
 import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.response.quanlybienbannhapdaykholuongthuc.QlBienBanNdkCtLtRes;
@@ -29,6 +30,7 @@ import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganLo;
 import com.tcdt.qlnvhang.table.khotang.KtNhaKho;
+import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -497,5 +499,20 @@ public class QlBienBanNhapDayKhoLtServiceImpl extends BaseServiceImpl implements
         so = Optional.ofNullable(so).orElse(0);
         so = so + 1;
         return so;
+    }
+
+    @Override
+    public BaseNhapHangCount count(Set<String> maDvis) throws Exception {
+        QlBienBanNhapDayKhoLtSearchReq countReq = new QlBienBanNhapDayKhoLtSearchReq();
+        countReq.setMaDvis(maDvis);
+        BaseNhapHangCount count = new BaseNhapHangCount();
+
+        countReq.setMaVatTuCha(Contains.LOAI_VTHH_THOC);
+        count.setThoc(qlBienBanNhapDayKhoLtRepository.count(countReq));
+        countReq.setMaVatTuCha(Contains.LOAI_VTHH_GAO);
+        count.setGao(qlBienBanNhapDayKhoLtRepository.count(countReq));
+        countReq.setMaVatTuCha(Contains.LOAI_VTHH_MUOI);
+        count.setMuoi(qlBienBanNhapDayKhoLtRepository.count(countReq));
+        return count;
     }
 }

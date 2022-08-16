@@ -13,6 +13,8 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanguihang.NhBienBanGuiHangCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanguihang.NhBienBanGuiHangReq;
 import com.tcdt.qlnvhang.request.search.vattu.bienbanguihang.NhBienBanGuiHangSearchReq;
+import com.tcdt.qlnvhang.request.search.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiSearchReq;
+import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.response.vattu.bienbanguihang.NhBienBanGuiHangCtRes;
 import com.tcdt.qlnvhang.response.vattu.bienbanguihang.NhBienBanGuiHangRes;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -310,4 +312,13 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
         return so;
     }
 
+    @Override
+    public BaseNhapHangCount count(Set<String> maDvis) throws Exception {
+        NhBienBanGuiHangSearchReq countReq = new NhBienBanGuiHangSearchReq();
+        countReq.setMaDvis(maDvis);
+        BaseNhapHangCount count = new BaseNhapHangCount();
+
+        count.setVatTu(bienBanGuiHangRepository.count(countReq));
+        return count;
+    }
 }

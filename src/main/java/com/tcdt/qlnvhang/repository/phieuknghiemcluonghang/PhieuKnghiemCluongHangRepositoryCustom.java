@@ -8,5 +8,5 @@ import java.util.List;
 public interface PhieuKnghiemCluongHangRepositoryCustom {
 	List<Object[]> search(PhieuKnghiemCluongHangSearchReq req, Pageable pageable);
 
-	int countCtkhn(PhieuKnghiemCluongHangSearchReq req);
+	int count(PhieuKnghiemCluongHangSearchReq req);
 }

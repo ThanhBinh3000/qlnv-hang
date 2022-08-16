@@ -45,10 +45,10 @@ public class PhieuKnghiemCluongHangRepositoryCustomImpl implements PhieuKnghiemC
 		builder.append("WHERE 1 = 1 ");
 
 		if (!StringUtils.isEmpty(req.getSoBbBanGiao())) {
-			builder.append("AND ").append("bbBanGiao.soBienBan LIKE :soBbBanGiao ");
+			builder.append("AND ").append("LOWER(bbBanGiao.soBienBan) LIKE :soBbBanGiao ");
 		}
 		if (!StringUtils.isEmpty(req.getSoPhieu())) {
-			builder.append("AND ").append("phieu.soPhieu LIKE :soPhieu ");
+			builder.append("AND ").append("LOWER(phieu.soPhieu) LIKE :soPhieu ");
 		}
 
 		if (req.getNgayBanGiaoMauTu() != null) {
@@ -61,7 +61,7 @@ public class PhieuKnghiemCluongHangRepositoryCustomImpl implements PhieuKnghiemC
 
 
 		if (!StringUtils.isEmpty(req.getSoQdNhap())) {
-			builder.append("AND ").append("nx.soQd LIKE :soQdNhap ");
+			builder.append("AND ").append("LOWER(nx.soQd) LIKE :soQdNhap ");
 		}
 
 		if (!StringUtils.isEmpty(req.getMaVatTuCha())) {
@@ -78,7 +78,7 @@ public class PhieuKnghiemCluongHangRepositoryCustomImpl implements PhieuKnghiemC
 	}
 
 	@Override
-	public int countCtkhn(PhieuKnghiemCluongHangSearchReq req) {
+	public int count(PhieuKnghiemCluongHangSearchReq req) {
 		int total = 0;
 		StringBuilder builder = new StringBuilder();
 		builder.append("SELECT COUNT(1) FROM PhieuKnghiemCluongHang phieu ");
@@ -96,11 +96,11 @@ public class PhieuKnghiemCluongHangRepositoryCustomImpl implements PhieuKnghiemC
 	private void setParameterSearchCtkhn(PhieuKnghiemCluongHangSearchReq req, Query query) {
 
 		if (!StringUtils.isEmpty(req.getSoBbBanGiao())) {
-			query.setParameter("soBbBanGiao", "%" + req.getSoBbBanGiao() + "%");
+			query.setParameter("soBbBanGiao", "%" + req.getSoBbBanGiao().toLowerCase() + "%");
 		}
 
 		if (!StringUtils.isEmpty(req.getSoPhieu())) {
-			query.setParameter("soPhieu", "%" + req.getSoPhieu() + "%");
+			query.setParameter("soPhieu", "%" + req.getSoPhieu().toLowerCase() + "%");
 		}
 
 		if (req.getNgayBanGiaoMauTu() != null) {
@@ -112,7 +112,7 @@ public class PhieuKnghiemCluongHangRepositoryCustomImpl implements PhieuKnghiemC
 		}
 
 		if (!StringUtils.isEmpty(req.getSoQdNhap())) {
-			query.setParameter("soQdNhap", "%" + req.getSoQdNhap() + "%");
+			query.setParameter("soQdNhap", "%" + req.getSoQdNhap().toLowerCase() + "%");
 		}
 
 		if (!StringUtils.isEmpty(req.getMaVatTuCha())) {

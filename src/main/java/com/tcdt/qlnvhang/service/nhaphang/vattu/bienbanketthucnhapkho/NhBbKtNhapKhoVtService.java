@@ -4,11 +4,13 @@ import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanketthucnhapkho.NhBbKtNhapKhoVtReq;
 import com.tcdt.qlnvhang.request.search.vattu.bienbanketthucnhapkho.NhBbKtNhapKhoVtSearchReq;
+import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.response.vattu.bienbanketthucnhapkho.NhBbKtNhapKhoVtRes;
 import org.springframework.data.domain.Page;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.util.Set;
 
 public interface NhBbKtNhapKhoVtService {
     NhBbKtNhapKhoVtRes create(NhBbKtNhapKhoVtReq req) throws Exception;
@@ -29,4 +31,6 @@ public interface NhBbKtNhapKhoVtService {
     boolean deleteMultiple(DeleteReq req) throws Exception;
 
     boolean exportToExcel(NhBbKtNhapKhoVtSearchReq objReq, HttpServletResponse response) throws Exception;
+
+    BaseNhapHangCount count(Set<String> maDvis) throws Exception;
 }

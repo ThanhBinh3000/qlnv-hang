@@ -16,6 +16,8 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanBanGiaoMauReq;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauCtReq;
 import com.tcdt.qlnvhang.request.search.BienBanBanGiaoMauSearchReq;
+import com.tcdt.qlnvhang.request.search.BienBanLayMauSearchReq;
+import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.response.bbanlaymau.BienBanBanGiaoMauCtRes;
 import com.tcdt.qlnvhang.response.bbanlaymau.BienBanBanGiaoMauRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
@@ -25,6 +27,7 @@ import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
+import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -403,5 +406,22 @@ public class BienBanBanGiaoMauServiceImpl extends BaseServiceImpl implements Bie
 		so = Optional.ofNullable(so).orElse(0);
 		so = so + 1;
 		return so;
+	}
+
+	@Override
+	public BaseNhapHangCount count(Set<String> maDvis) throws Exception {
+		BienBanBanGiaoMauSearchReq countReq = new BienBanBanGiaoMauSearchReq();
+		countReq.setMaDvis(maDvis);
+		BaseNhapHangCount count = new BaseNhapHangCount();
+
+		countReq.setMaVatTuCha(Contains.LOAI_VTHH_THOC);
+		count.setThoc(bienBanBanGiaoMauRepository.countBienBan(countReq));
+		countReq.setMaVatTuCha(Contains.LOAI_VTHH_GAO);
+		count.setGao(bienBanBanGiaoMauRepository.countBienBan(countReq));
+		countReq.setMaVatTuCha(Contains.LOAI_VTHH_MUOI);
+		count.setMuoi(bienBanBanGiaoMauRepository.countBienBan(countReq));
+		countReq.setMaVatTuCha(Contains.LOAI_VTHH_VATTU);
+		count.setVatTu(bienBanBanGiaoMauRepository.countBienBan(countReq));
+		return count;
 	}
 }

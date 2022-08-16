@@ -164,22 +164,6 @@ public class QlpktclhPhieuKtChatLuongController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Count phiếu kiểm tra chất lượng hàng lương thực", response = List.class)
-	@GetMapping("/count")
-	public ResponseEntity<BaseResponse> count(QlpktclhPhieuKtChatLuongFilterRequestDto req) {
-		BaseResponse resp = new BaseResponse();
-		try {
-			resp.setData(service.count(req));
-			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-		} catch (Exception e) {
-			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-			resp.setMsg(e.getMessage());
-			log.error("Count phiếu kiểm tra chất lượng hàng lương thực", e);
-		}
-		return ResponseEntity.ok(resp);
-	}
-
 	@ApiOperation(value = "Get số phiếu kiểm tra chất lượng hàng lương thực", response = List.class)
 	@GetMapping("/so")
 	public ResponseEntity<BaseResponse> getSo() {

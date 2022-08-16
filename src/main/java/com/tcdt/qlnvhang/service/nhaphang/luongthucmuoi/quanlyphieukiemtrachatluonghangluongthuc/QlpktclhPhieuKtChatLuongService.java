@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Set;
 
 public interface QlpktclhPhieuKtChatLuongService {
 	QlpktclhPhieuKtChatLuongResponseDto create (QlpktclhPhieuKtChatLuongRequestDto req) throws Exception;
@@ -19,7 +20,7 @@ public interface QlpktclhPhieuKtChatLuongService {
 
 	Page<QlpktclhPhieuKtChatLuongResponseDto> filter (QlpktclhPhieuKtChatLuongFilterRequestDto req) throws Exception;
 
-    BaseNhapHangCount count(QlpktclhPhieuKtChatLuongFilterRequestDto req) throws Exception;
+    BaseNhapHangCount count(Set<String> maDvis) throws Exception;
 
     Page<QlpktclhPhieuKtChatLuong> search (QlpktclhPhieuKtChatLuongFilterRequestDto req) throws Exception;
 
