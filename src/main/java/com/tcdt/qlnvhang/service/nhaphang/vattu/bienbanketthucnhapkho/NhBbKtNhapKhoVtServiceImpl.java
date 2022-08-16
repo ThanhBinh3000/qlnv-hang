@@ -239,13 +239,67 @@ public class NhBbKtNhapKhoVtServiceImpl extends BaseServiceImpl implements NhBbK
         if (!optional.isPresent())
             throw new Exception("Biên bản kết thúc nhập kho không tồn tại.");
 
-        NhBbKtNhapKhoVt phieu = optional.get();
+        NhBbKtNhapKhoVt bb = optional.get();
 
-        boolean success = this.updateStatus(phieu, stReq, userInfo);
-        if (success)
-            nhBbKtNhapKhoVtRepository.save(phieu);
+        String trangThai = bb.getTrangThai();
+        if (NhapXuatHangTrangThaiEnum.CHODUYET_KTVBQ.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
+                return false;
 
-        return success;
+            bb.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_KTVBQ.getId());
+            bb.setNguoiGuiDuyetId(userInfo.getId());
+            bb.setNgayGuiDuyet(LocalDate.now());
+
+        } else if (NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_KTVBQ.getId().equals(trangThai))
+                return false;
+
+            bb.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId());
+            bb.setNguoiGuiDuyetId(userInfo.getId());
+            bb.setNgayGuiDuyet(LocalDate.now());
+        } else if (NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId().equals(trangThai))
+                return false;
+
+            bb.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId());
+            bb.setNguoiPduyetId(userInfo.getId());
+            bb.setNgayPduyet(LocalDate.now());
+        } else if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
+                return false;
+
+            bb.setTrangThai(NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId());
+            bb.setNguoiPduyetId(userInfo.getId());
+            bb.setNgayPduyet(LocalDate.now());
+        } else if (NhapXuatHangTrangThaiEnum.TUCHOI_KTVBQ.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_KTVBQ.getId().equals(trangThai))
+                return false;
+
+            bb.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_KTVBQ.getId());
+            bb.setNguoiPduyetId(userInfo.getId());
+            bb.setNgayPduyet(LocalDate.now());
+            bb.setLyDoTuChoi(stReq.getLyDo());
+        } else if (NhapXuatHangTrangThaiEnum.TUCHOI_KT.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId().equals(trangThai))
+                return false;
+
+            bb.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_KT.getId());
+            bb.setNguoiPduyetId(userInfo.getId());
+            bb.setNgayPduyet(LocalDate.now());
+            bb.setLyDoTuChoi(stReq.getLyDo());
+        } else if (NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
+                return false;
+
+            bb.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId());
+            bb.setNguoiPduyetId(userInfo.getId());
+            bb.setNgayPduyet(LocalDate.now());
+            bb.setLyDoTuChoi(stReq.getLyDo());
+        } else {
+            throw new Exception("Bad request.");
+        }
+        nhBbKtNhapKhoVtRepository.save(bb);
+        return true;
     }
 
     @Override

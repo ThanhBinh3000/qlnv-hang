@@ -243,19 +243,33 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
 
         NhBangKeVt item = optional.get();
         String trangThai = item.getTrangThai();
-        if (NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(stReq.getTrangThai())) {
+        if (NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
                 return false;
 
-            item.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId());
+            item.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId());
             item.setNguoiGuiDuyetId(userInfo.getId());
             item.setNgayGuiDuyet(LocalDate.now());
+        } else if (NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId().equals(trangThai))
+                return false;
+            item.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId());
+            item.setNguoiPduyetId(userInfo.getId());
+            item.setNgayPduyet(LocalDate.now());
         } else if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
                 return false;
             item.setTrangThai(NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId());
             item.setNguoiPduyetId(userInfo.getId());
             item.setNgayPduyet(LocalDate.now());
+        } else if (NhapXuatHangTrangThaiEnum.TUCHOI_KT.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId().equals(trangThai))
+                return false;
+
+            item.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_KT.getId());
+            item.setNguoiPduyetId(userInfo.getId());
+            item.setNgayPduyet(LocalDate.now());
+            item.setLyDoTuChoi(stReq.getLyDo());
         } else if (NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
                 return false;
@@ -263,6 +277,7 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
             item.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId());
             item.setNguoiPduyetId(userInfo.getId());
             item.setNgayPduyet(LocalDate.now());
+            item.setLyDoTuChoi(stReq.getLyDo());
         } else {
             throw new Exception("Bad request.");
         }

@@ -237,13 +237,54 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
         if (!optional.isPresent())
             throw new Exception("Biên bản chuẩn bị kho không tồn tại.");
 
-        NhBienBanChuanBiKho phieu = optional.get();
+        NhBienBanChuanBiKho bb = optional.get();
 
-        boolean success = this.updateStatus(phieu, stReq, userInfo);
-        if (success)
-            nhBienBanChuanBiKhoRepository.save(phieu);
+        String trangThai = bb.getTrangThai();
+        if (NhapXuatHangTrangThaiEnum.CHODUYET_TK.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
+                return false;
 
-        return success;
+            bb.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_TK.getId());
+            bb.setNguoiGuiDuyetId(userInfo.getId());
+            bb.setNgayGuiDuyet(LocalDate.now());
+
+        } else if (NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId().equals(trangThai))
+                return false;
+
+            bb.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId());
+            bb.setNguoiGuiDuyetId(userInfo.getId());
+            bb.setNgayGuiDuyet(LocalDate.now());
+        } else if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
+                return false;
+
+            bb.setTrangThai(NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId());
+            bb.setNguoiPduyetId(userInfo.getId());
+            bb.setNgayPduyet(LocalDate.now());
+        } else if (NhapXuatHangTrangThaiEnum.TUCHOI_TK.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_TK.getId().equals(trangThai))
+                return false;
+
+            bb.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_TK.getId());
+            bb.setNguoiPduyetId(userInfo.getId());
+            bb.setNgayPduyet(LocalDate.now());
+            bb.setLyDoTuChoi(stReq.getLyDo());
+        } else if (NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
+                return false;
+
+            bb.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId());
+            bb.setNguoiPduyetId(userInfo.getId());
+            bb.setNgayPduyet(LocalDate.now());
+            bb.setLyDoTuChoi(stReq.getLyDo());
+        } else {
+            throw new Exception("Bad request.");
+        }
+
+        nhBienBanChuanBiKhoRepository.save(bb);
+
+        return true;
     }
 
     @Override
