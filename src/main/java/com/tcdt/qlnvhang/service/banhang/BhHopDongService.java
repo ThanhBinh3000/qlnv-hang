@@ -1,7 +1,7 @@
 package com.tcdt.qlnvhang.service.banhang;
 
+import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.FileDKemJoinBhHopDong;
-import com.tcdt.qlnvhang.entities.FileDKemJoinHopDong;
 import com.tcdt.qlnvhang.repository.HhPhuLucRepository;
 import com.tcdt.qlnvhang.repository.HhQdPduyetKqlcntHdrRepository;
 import com.tcdt.qlnvhang.repository.banhang.BhHopDongDdiemNhapKhoRepository;
@@ -17,6 +17,7 @@ import com.tcdt.qlnvhang.request.object.banhang.BhHopDongHdrReq;
 import com.tcdt.qlnvhang.request.search.banhang.BhHopDongSearchReq;
 import com.tcdt.qlnvhang.secification.BhHopDongSpecification;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.util.Contains;
@@ -57,6 +58,9 @@ public class BhHopDongService extends BaseServiceImpl {
 
     @Autowired
     private HttpServletRequest req;
+
+    @Autowired
+    private FileDinhKemService fileDinhKemService;
 
     public BhHopDongHdr create(BhHopDongHdrReq objReq) throws Exception {
         if(objReq.getLoaiVthh().startsWith("02")){
@@ -100,6 +104,14 @@ public class BhHopDongService extends BaseServiceImpl {
         dataMap.setFileDinhKems(dtls2);
 
         bhHopDongRepository.save(dataMap);
+
+        for (BhHopDongDtlReq cTietReq :objReq.getDetail()){
+            BhHopDongDtl cTiet=new ModelMapper().map(cTietReq,BhHopDongDtl.class);
+            cTiet.setId(null);
+            cTiet.setIdHdr(dataMap.getId());
+            bhHopDongDtlRepository.save(cTiet);
+        }
+
 
         for(BhDdiemNhapKhoReq ddNhapRq : objReq.getDiaDiemNhapKhoReq()){
             BhHopDongDdiemNhapKho ddNhap = ObjectMapperUtils.map(ddNhapRq, BhHopDongDdiemNhapKho.class);
@@ -195,29 +207,6 @@ public class BhHopDongService extends BaseServiceImpl {
 
         dataDB.setNgaySua(getDateTimeNow());
         dataDB.setNguoiSua(getUser().getUsername());
-
-		// add thong tin detail
-		List<BhHopDongDtlReq> dtlReqList = objReq.getDetail();
-		List<BhHopDongDtl> details = new ArrayList<>();
-		if (dtlReqList != null) {
-			List<BhHopDongDdiemNhapKho> detailChild;
-			for (BhHopDongDtlReq dtlReq : dtlReqList) {
-				List<BhDdiemNhapKhoReq> cTietReq = dtlReq.getDetail();
-				BhHopDongDtl detail = ObjectMapperUtils.map(dtlReq, BhHopDongDtl.class);
-				detail.setType(Contains.HOP_DONG);
-				detailChild = new ArrayList<BhHopDongDdiemNhapKho>();
-				if (cTietReq != null)
-					detailChild = ObjectMapperUtils.mapAll(cTietReq, BhHopDongDdiemNhapKho.class);
-				detail.setChildren(detailChild);
-				details.add(detail);
-			}
-			dataDB.setBhHopDongDtlList(details);
-		}
-
-		// add thong tin don vi lien quan
-		List<HhDviLquan> dtls1 = ObjectMapperUtils.mapAll(dtlReqList, HhDviLquan.class);
-		dataDB.setHhDviLquanList(dtls1);
-
         // File dinh kem cua goi thau
         List<FileDKemJoinBhHopDong> dtls2 = new ArrayList<FileDKemJoinBhHopDong>();
         if (objReq.getFileDinhKems() != null) {
@@ -232,6 +221,16 @@ public class BhHopDongService extends BaseServiceImpl {
 //		UnitScaler.reverseFormatList(dataMap.getChildren(), Contains.DVT_TAN);
 
         bhHopDongRepository.save(dataDB);
+        bhHopDongDtlRepository.deleteAllByIdHdr(dataDB.getId());
+        for (BhHopDongDtlReq cTietReq :objReq.getDetail()){
+            BhHopDongDtl cTiet=new ModelMapper().map(cTietReq,BhHopDongDtl.class);
+            cTiet.setId(null);
+            cTiet.setIdHdr(dataDB.getId());
+            bhHopDongDtlRepository.save(cTiet);
+        }
+        List<BhHopDongDtlReq> dtlReqList = objReq.getDetail();
+        List<HhDviLquan> dtls1 = ObjectMapperUtils.mapAll(dtlReqList, HhDviLquan.class);
+    	dataDB.setHhDviLquanList(dtls1);
         Map<String,String> mapVthh = getListDanhMucHangHoa();
         dataDB.setDonViTinh(StringUtils.isEmpty(dataDB.getLoaiVthh()) ? null : mapVthh.get(dataDB.getDonViTinh()));
         return dataDB;
@@ -421,6 +420,12 @@ public class BhHopDongService extends BaseServiceImpl {
         }
         ExportExcel ex =new ExportExcel(title,fileName,rowsName,dataList,response);
         ex.export();
+    }
+
+    public void deleteListId(List<Long> listId){
+        bhHopDongDtlRepository.deleteAllByIdHdrIn(listId);
+        fileDinhKemService.deleteMultiple(listId, Lists.newArrayList("BH_HOP_DONG_HDR"));
+        bhHopDongRepository.deleteAllByIdIn(listId);
     }
 
 

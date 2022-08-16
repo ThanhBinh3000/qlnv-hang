@@ -5,9 +5,11 @@ import com.tcdt.qlnvhang.table.BhHopDongHdr;
 import com.tcdt.qlnvhang.table.HhHopDongHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +33,8 @@ public interface BhHopDongRepository extends BaseRepository<BhHopDongHdr,Long> {
 
     List<BhHopDongHdr> findByIdIn(Collection<Long> ids);
 
+    @Transactional
+    void deleteAllByIdIn(List<Long> ids);
 
 
 }

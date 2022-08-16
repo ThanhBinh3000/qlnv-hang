@@ -122,6 +122,23 @@ public class BhHopDongController {
         return ResponseEntity.ok(resp);
     }
 
+    @ApiOperation(value = "Xoá danh sách thông tin hợp đồng", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            bhHopDongService.deleteListId(idSearchReq.getIdList());
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Xoá thông tin hợp đồng trace: {}", e);
+        }
+
+        return ResponseEntity.ok(resp);
+    }
     @ApiOperation(value = "Lấy chi tiết thông tin hợp đồng theo số hợp đồng", response = List.class)
     @PostMapping(value = PathContains.URL_CHI_TIET + "/so-hd", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)

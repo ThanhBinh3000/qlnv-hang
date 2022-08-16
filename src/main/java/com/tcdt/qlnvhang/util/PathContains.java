@@ -5,6 +5,7 @@ public class PathContains {
 	public static final String URL_TAO_MOI = "/them-moi";
 	public static final String URL_CAP_NHAT = "/cap-nhat";
 	public static final String URL_XOA = "/xoa";
+	public static final String URL_XOA_MULTI = "/xoa/multi";
 	public static final String URL_TRA_CUU = "/tra-cuu";
 	public static final String URL_TAT_CA = "/tat-ca";
 	public static final String URL_CHI_TIET = "/chi-tiet";
