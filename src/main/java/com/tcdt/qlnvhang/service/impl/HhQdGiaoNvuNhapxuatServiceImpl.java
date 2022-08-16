@@ -270,7 +270,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 				if (!DanhMucTrangThaiDcEnum.DU_THAO.getId().equals(trangThai))
 					return false;
 
-				item.setTrangThai(DanhMucTrangThaiDcEnum.BAN_HANH.getId());
+				item.setTrangThai(DanhMucTrangThaiDcEnum.CHO_DUYET_TP.getId());
 				item.setNguoiPduyet(userInfo.getUsername());
 				item.setNgayPduyet(getDateTimeNow());
 
@@ -282,15 +282,15 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 				item.setNguoiPduyet(userInfo.getUsername());
 				item.setNgayPduyet(getDateTimeNow());
 
-			} else if (DanhMucTrangThaiDcEnum.BAN_HANH.getId().equals(stReq.getTrangThai())) {
+			} else if (DanhMucTrangThaiDcEnum.DA_DUYET_LDC.getId().equals(stReq.getTrangThai())) {
 				if (!DanhMucTrangThaiDcEnum.CHO_DUYET_LDC.getId().equals(trangThai))
 					return false;
 
-				item.setTrangThai(DanhMucTrangThaiDcEnum.BAN_HANH.getId());
+				item.setTrangThai(DanhMucTrangThaiDcEnum.DA_DUYET_LDC.getId());
 				item.setNguoiPduyet(userInfo.getUsername());
 				item.setNgayPduyet(getDateTimeNow());
 
-			} else if (DanhMucTrangThaiDcEnum.TU_CHOI_TP.getId().equals(stReq.getTrangThai())) {
+			}else if (DanhMucTrangThaiDcEnum.TU_CHOI_TP.getId().equals(stReq.getTrangThai())) {
 				if (!DanhMucTrangThaiDcEnum.CHO_DUYET_TP.getId().equals(trangThai))
 					return false;
 

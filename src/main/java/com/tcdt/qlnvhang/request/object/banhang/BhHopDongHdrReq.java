@@ -6,9 +6,9 @@ import com.tcdt.qlnvhang.request.object.HhDviLquanReq;
 import com.tcdt.qlnvhang.util.Contains;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -122,11 +122,11 @@ public class BhHopDongHdrReq {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     Date tgianNkho;
 
-    private List<BhDdiemNhapKhoReq> diaDiemNhapKhoReq;
+    private List<BhDdiemNhapKhoReq> bhDdiemNhapKhoReqList=new ArrayList<>();
 
-    private List<BhHopDongDtlReq> detail;
+    private List<BhHopDongDtlReq> bhHopDongDtlReqList=new ArrayList<>();
 
-    private List<HhDviLquanReq> detail1;
+    private List<HhDviLquanReq> hhDviLquanReqList=new ArrayList<>();
 
     private List<FileDinhKemReq> fileDinhKems;
 }
