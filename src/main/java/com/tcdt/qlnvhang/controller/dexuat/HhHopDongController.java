@@ -176,13 +176,13 @@ public class HhHopDongController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "list hơp đồng", response = List.class)
+	@ApiOperation(value = "list hơp đồng select quyet dinh", response = List.class)
 	@PostMapping(value = PathContains.LIST_HD, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<BaseResponse> listHd(@Valid @RequestBody ListHdSearhReq obj ) {
 			BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(hhHopDongService.listHopDong(obj.getMaDvi(),obj.getLoaiVthh(),"02"));
+			resp.setData(hhHopDongService.listHopDong(obj.getMaDvi(),obj.getLoaiVthh()));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (

@@ -3,11 +3,11 @@ package com.tcdt.qlnvhang.enums;
 public enum QdGiaoNvNhapHangEnum  {
     DU_THAO("00", "Dự Thảo", "Dự Thảo"),
     BAN_HANH("11", "Ban Hành", "Ban Hành"),
-    CHO_DUYET_TP("01", "Chờ Duyệt - TP", "Chờ Duyệt - TP"),
-    CHO_DUYET_LD_C("02", "Chờ Duyệt - LĐ Cục", "Chờ Duyệt - LĐ Cục"),
+    CHO_DUYET_TP("01", "Chờ Duyệt - TP", "Chờ Duyệt"),
+    CHO_DUYET_LD_C("02", "Chờ Duyệt - LĐ Cục", "Chờ Duyệt"),
     DA_DUYET("03", "Đã Duyệt", "Đã Duyệt"),
-    TU_CHOI_TP("04", "Từ Chối – TP", "Từ Chối – TP"),
-    TU_CHOI_LD_C("05", "Từ Chối – LĐ Cục", "Từ Chối – LĐ Cục"),
+    TU_CHOI_TP("04", "Từ Chối – TP", "Từ Chối"),
+    TU_CHOI_LD_C("05", "Từ Chối – LĐ Cục", "Từ Chối"),
     ;
 
     private final String id;

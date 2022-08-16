@@ -418,8 +418,8 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 	}
 
 
-	public List<HhHopDongHdr> listHopDong(String maDvi,String loaiVthh,String trangThai) throws Exception {
-		return hhHopDongRepository.findAllByMaDviAndLoaiVthhAndTrangThai(maDvi,loaiVthh,trangThai);
+	public List<HhHopDongHdr> listHopDong(String maDvi,String loaiVthh) throws Exception {
+		return hhHopDongRepository.ListHdTheoDk(maDvi,loaiVthh);
 	}
 
 }

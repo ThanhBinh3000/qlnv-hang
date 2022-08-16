@@ -109,7 +109,7 @@ public class HhQdGiaoNvuNhapxuatController {
 	public ResponseEntity<BaseResponse> updateStatus(@Valid HttpServletRequest req, @RequestBody StatusReq stReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			service.updateStatus(stReq);
+			resp.setData(service.updateStatus(stReq));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
