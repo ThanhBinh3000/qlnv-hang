@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 public class BhBbBanDauGiaReq {
     private Long id;
-    private Long nam;
+    private Integer nam;
     private String soBienBan;
     private String trichYeu;
     private LocalDate ngayKy;

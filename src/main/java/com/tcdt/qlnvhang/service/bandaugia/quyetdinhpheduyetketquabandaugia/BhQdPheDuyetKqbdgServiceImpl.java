@@ -81,7 +81,10 @@ public class BhQdPheDuyetKqbdgServiceImpl extends BaseServiceImpl implements BhQ
         item.setNam(LocalDate.now().getYear());
         bhQdPheDuyetKqbdgRepository.save(item);
 
-        List<BanDauGiaPhanLoTaiSan> cts = this.saveListChiTiet1(item.getId(), req.getCts(), new HashMap<>());
+        Map<Long, BanDauGiaPhanLoTaiSan> mapChiTiet1 = banDauGiaPhanLoTaiSanRepository.findByThongBaoBdgIdIn(Collections.singleton(item.getThongBaoBdgId()))
+                .stream().collect(Collectors.toMap(BanDauGiaPhanLoTaiSan::getId, Function.identity()));
+
+        List<BanDauGiaPhanLoTaiSan> cts = this.saveListChiTiet1(item.getId(), req.getCts(), mapChiTiet1);
         item.setCts(cts);
         item.setFileDinhKems(fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReqs(), item.getId(), BhQdPheDuyetKqbdg.TABLE_NAME));
         return this.buildResponse(item);
@@ -93,19 +96,16 @@ public class BhQdPheDuyetKqbdgServiceImpl extends BaseServiceImpl implements BhQ
         List<BanDauGiaPhanLoTaiSan> chiTiets = new ArrayList<>();
         for (BhQdPheDuyetKqbdgCtReq req : chiTietReqs) {
             Long id = req.getId();
-            BanDauGiaPhanLoTaiSan chiTiet = new BanDauGiaPhanLoTaiSan();
-
             if (id != null && id > 0) {
-                chiTiet = mapChiTiet.get(id);
+                BanDauGiaPhanLoTaiSan chiTiet = mapChiTiet.get(id);
                 if (chiTiet == null)
                     throw new Exception("Phân lô tài sản không tồn tại.");
                 mapChiTiet.remove(id);
+                chiTiet.setBbBanDauGiaId(parentId);
+                chiTiet.setDonGiaTrungDauGia(req.getDonGiaTrungDauGia());
+                chiTiet.setTrungDauGia(req.getTrungDauGia());
+                chiTiets.add(chiTiet);
             }
-
-            chiTiet.setBbBanDauGiaId(parentId);
-            chiTiet.setDonGiaTrungDauGia(req.getDonGiaTrungDauGia());
-            chiTiet.setTrungDauGia(req.getTrungDauGia());
-            chiTiets.add(chiTiet);
         }
 
         if (!CollectionUtils.isEmpty(chiTiets))
@@ -152,7 +152,7 @@ public class BhQdPheDuyetKqbdgServiceImpl extends BaseServiceImpl implements BhQ
 
         bhQdPheDuyetKqbdgRepository.save(item);
 
-        Map<Long, BanDauGiaPhanLoTaiSan> mapChiTiet1 = banDauGiaPhanLoTaiSanRepository.findByBbBanDauGiaIdIn(Collections.singleton(item.getId()))
+        Map<Long, BanDauGiaPhanLoTaiSan> mapChiTiet1 = banDauGiaPhanLoTaiSanRepository.findByThongBaoBdgIdIn(Collections.singleton(item.getThongBaoBdgId()))
                 .stream().collect(Collectors.toMap(BanDauGiaPhanLoTaiSan::getId, Function.identity()));
 
         // Bien ban phan lo
@@ -170,7 +170,7 @@ public class BhQdPheDuyetKqbdgServiceImpl extends BaseServiceImpl implements BhQ
             throw new Exception("Biên bản bán đấu giá không tồn tại.");
 
         BhQdPheDuyetKqbdg item = optional.get();
-        item.setCts(banDauGiaPhanLoTaiSanRepository.findByBbBanDauGiaIdIn(Collections.singleton(item.getId())));
+        item.setCts(banDauGiaPhanLoTaiSanRepository.findByQdPheDuyetKqbdgIdIn(Collections.singleton(item.getId())));
         item.setFileDinhKems(fileDinhKemService.search(item.getId(), Collections.singleton(BhQdPheDuyetKqbdg.TABLE_NAME)));
         return this.buildResponse(item);
     }
@@ -187,6 +187,10 @@ public class BhQdPheDuyetKqbdgServiceImpl extends BaseServiceImpl implements BhQ
         if (TrangThaiEnum.BAN_HANH.getId().equals(item.getTrangThai())) {
             throw new Exception("Không thể xóa Biên bản bán đấu giá đã ban hành");
         }
+        banDauGiaPhanLoTaiSanRepository.findByQdPheDuyetKqbdgIdIn(Collections.singleton(item.getId())).forEach(p -> {
+            p.setQdPheDuyetKqbdgId(null);
+            banDauGiaPhanLoTaiSanRepository.save(p);
+        });
         fileDinhKemService.delete(item.getId(), Collections.singleton(BhQdPheDuyetKqbdg.TABLE_NAME));
         bhQdPheDuyetKqbdgRepository.delete(item);
 
@@ -290,6 +294,10 @@ public class BhQdPheDuyetKqbdgServiceImpl extends BaseServiceImpl implements BhQ
         if (CollectionUtils.isEmpty(req.getIds()))
             return false;
 
+        banDauGiaPhanLoTaiSanRepository.findByQdPheDuyetKqbdgIdIn(req.getIds()).forEach(p -> {
+            p.setQdPheDuyetKqbdgId(null);
+            banDauGiaPhanLoTaiSanRepository.save(p);
+        });
         fileDinhKemService.deleteMultiple(req.getIds(), Collections.singleton(BhQdPheDuyetKqbdg.TABLE_NAME));
         bhQdPheDuyetKqbdgRepository.deleteByIdIn(req.getIds());
         return true;

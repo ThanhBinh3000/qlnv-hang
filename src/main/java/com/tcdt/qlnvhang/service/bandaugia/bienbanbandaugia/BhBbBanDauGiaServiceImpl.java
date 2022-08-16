@@ -88,7 +88,10 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
         List<BhBbBanDauGiaCt> chiTiets = this.saveListChiTiet(item.getId(), req.getCts(), new HashMap<>());
         item.setCts(chiTiets);
 
-        List<BanDauGiaPhanLoTaiSan> ct1s = this.saveListChiTiet1(item.getId(), req.getCt1s(), new HashMap<>());
+        Map<Long, BanDauGiaPhanLoTaiSan> mapChiTiet1 = banDauGiaPhanLoTaiSanRepository.findByThongBaoBdgIdIn(Collections.singleton(item.getThongBaoBdgId()))
+                .stream().collect(Collectors.toMap(BanDauGiaPhanLoTaiSan::getId, Function.identity()));
+
+        List<BanDauGiaPhanLoTaiSan> ct1s = this.saveListChiTiet1(item.getId(), req.getCt1s(), mapChiTiet1);
         item.setCt1s(ct1s);
         return this.buildResponse(item);
     }
@@ -125,21 +128,18 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
         List<BanDauGiaPhanLoTaiSan> chiTiets = new ArrayList<>();
         for (BhBbBanDauGiaCt1Req req : chiTietReqs) {
             Long id = req.getId();
-            BanDauGiaPhanLoTaiSan chiTiet = new BanDauGiaPhanLoTaiSan();
-
             if (id != null && id > 0) {
-                chiTiet = mapChiTiet.get(id);
+                BanDauGiaPhanLoTaiSan chiTiet = mapChiTiet.get(id);
                 if (chiTiet == null)
                     throw new Exception("Phân lô tài sản không tồn tại.");
                 mapChiTiet.remove(id);
+                chiTiet.setBbBanDauGiaId(parentId);
+                chiTiet.setSoLanTraGia(req.getSoLanTraGia());
+                chiTiet.setDonGiaCaoNhat(req.getDonGiaCaoNhat());
+                chiTiet.setThanhTien(req.getThanhTien());
+                chiTiet.setTraGiaCaoNhat(req.getTraGiaCaoNhat());
+                chiTiets.add(chiTiet);
             }
-
-            chiTiet.setBbBanDauGiaId(parentId);
-            chiTiet.setSoLanTraGia(req.getSoLanTraGia());
-            chiTiet.setDonGiaCaoNhat(req.getDonGiaCaoNhat());
-            chiTiet.setThanhTien(req.getThanhTien());
-            chiTiet.setTraGiaCaoNhat(req.getTraGiaCaoNhat());
-            chiTiets.add(chiTiet);
         }
 
         if (!CollectionUtils.isEmpty(chiTiets))
@@ -196,7 +196,7 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
         if (!CollectionUtils.isEmpty(mapChiTiet.values()))
             bhBbBanDauGiaCtRepository.deleteAll(mapChiTiet.values());
 
-        Map<Long, BanDauGiaPhanLoTaiSan> mapChiTiet1 = banDauGiaPhanLoTaiSanRepository.findByBbBanDauGiaIdIn(Collections.singleton(item.getId()))
+        Map<Long, BanDauGiaPhanLoTaiSan> mapChiTiet1 = banDauGiaPhanLoTaiSanRepository.findByThongBaoBdgIdIn(Collections.singleton(item.getThongBaoBdgId()))
                 .stream().collect(Collectors.toMap(BanDauGiaPhanLoTaiSan::getId, Function.identity()));
 
         // Bien ban phan lo
@@ -232,6 +232,10 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
             throw new Exception("Không thể xóa Biên bản bán đấu giá đã ban hành");
         }
         bhBbBanDauGiaCtRepository.deleteByBbBanDauGiaIdIn(Collections.singleton(item.getId()));
+        banDauGiaPhanLoTaiSanRepository.findByBbBanDauGiaIdIn(Collections.singleton(item.getId())).forEach(p -> {
+            p.setBbBanDauGiaId(null);
+            banDauGiaPhanLoTaiSanRepository.save(p);
+        });
         bhBbBanDauGiaRepository.delete(item);
         return true;
     }
@@ -333,6 +337,10 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
     public boolean deleteMultiple(DeleteReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         bhBbBanDauGiaCtRepository.deleteByBbBanDauGiaIdIn(req.getIds());
+        banDauGiaPhanLoTaiSanRepository.findByBbBanDauGiaIdIn(req.getIds()).forEach(p -> {
+            p.setBbBanDauGiaId(null);
+            banDauGiaPhanLoTaiSanRepository.save(p);
+        });
         bhBbBanDauGiaRepository.deleteByIdIn(req.getIds());
         return true;
     }

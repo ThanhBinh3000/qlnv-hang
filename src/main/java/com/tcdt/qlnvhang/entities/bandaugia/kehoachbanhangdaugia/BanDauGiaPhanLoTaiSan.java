@@ -94,5 +94,6 @@ public class BanDauGiaPhanLoTaiSan {
 	@Column(name = "GHI_CHU")
 	private String ghiChu;
 
-
+	@Column(name = "THONG_BAO_BDG_ID")
+	private Long thongBaoBdgId;
 }
