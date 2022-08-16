@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.search.HhDxKhLcntThopSearchReq;
+import com.tcdt.qlnvhang.service.impl.HhQdGiaoNvuNhapxuatServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -47,6 +48,8 @@ public class HhQdGiaoNvuNhapxuatController {
 
 	@Autowired
 	private HhQdGiaoNvuNhapxuatService service;
+	@Autowired
+	private HhQdGiaoNvuNhapxuatServiceImpl hhQdGiaoNvuNhapxuatService;
 
 	@ApiOperation(value = "Tạo mới thông tin quyết định giao nhiệm vụ nhập xuất", response = List.class)
 	@PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -106,7 +109,7 @@ public class HhQdGiaoNvuNhapxuatController {
 	public ResponseEntity<BaseResponse> updateStatus(@Valid HttpServletRequest req, @RequestBody StatusReq stReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			service.updateStatus(stReq);
+			resp.setData(service.updateStatus(stReq));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {

@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.tcdt.qlnvhang.repository.HhHopDongDdiemNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.HhPhuLucRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.search.ListHdSearhReq;
+import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.util.*;
@@ -413,6 +415,11 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 		}
 		ExportExcel ex =new ExportExcel(title,fileName,rowsName,dataList,response);
 		ex.export();
+	}
+
+
+	public List<HhHopDongHdr> listHopDong(String maDvi,String loaiVthh) throws Exception {
+		return hhHopDongRepository.ListHdTheoDk(maDvi,loaiVthh);
 	}
 
 }

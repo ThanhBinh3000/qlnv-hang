@@ -10,6 +10,8 @@ import javax.validation.Valid;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.request.search.HhQdPduyetKqlcntSearchReq;
+import com.tcdt.qlnvhang.request.search.ListHdSearhReq;
+import com.tcdt.qlnvhang.service.impl.HhHopDongServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -47,6 +49,9 @@ public class HhHopDongController {
 
 	@Autowired
 	private HhHopDongService service;
+
+	@Autowired
+	private HhHopDongServiceImpl hhHopDongService;
 
 	@ApiOperation(value = "Tạo mới thông tin hợp đồng", response = List.class)
 	@PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -163,6 +168,27 @@ public class HhHopDongController {
 		} catch (
 
 		Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Tra cứu thông tin hợp đồng trace: {}", e);
+		}
+
+		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "list hơp đồng select quyet dinh", response = List.class)
+	@PostMapping(value = PathContains.LIST_HD, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> listHd(@Valid @RequestBody ListHdSearhReq obj ) {
+			BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(hhHopDongService.listHopDong(obj.getMaDvi(),obj.getLoaiVthh()));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (
+
+				Exception e) {
+			e.printStackTrace();
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
 			log.error("Tra cứu thông tin hợp đồng trace: {}", e);

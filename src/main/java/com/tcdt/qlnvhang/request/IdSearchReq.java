@@ -4,9 +4,11 @@ import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class IdSearchReq {
-	@NotNull(message = "Không được để trống")
 	Long id;
 	String maDvi;
+	List<Long> idList;
 }

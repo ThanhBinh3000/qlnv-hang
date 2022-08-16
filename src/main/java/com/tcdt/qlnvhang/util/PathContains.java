@@ -5,6 +5,7 @@ public class PathContains {
 	public static final String URL_TAO_MOI = "/them-moi";
 	public static final String URL_CAP_NHAT = "/cap-nhat";
 	public static final String URL_XOA = "/xoa";
+	public static final String URL_XOA_MULTI = "/xoa/multi";
 	public static final String URL_TRA_CUU = "/tra-cuu";
 	public static final String URL_TAT_CA = "/tat-ca";
 	public static final String URL_CHI_TIET = "/chi-tiet";
@@ -35,6 +36,7 @@ public class PathContains {
 
 	// 5.3 Quan ly hop dong nhap/xuat hang DTQG
 	public static final String QL_HOP_DONG = "/ql-hdong-hang";
+	public static final String LIST_HD = "/list-hd";
 
 	// 5.4 Quan ly hop dong nhap/xuat hang DTQG
 	public static final String QL_NXUAT_HANG = "/ql-nxuat-hang";
@@ -95,6 +97,8 @@ public class PathContains {
 	public static final String PHU_LUC = "/phu-luc";
 	public static final String NHAP_XUAT = "/nhap-xuat";
 	public static final String BB_NGHIEMTHU_KLST = "/bb-nghiemthu-klst";
+	public static final String BAN_HANG="/ban-hang";
+	public static final String DAU_THAU = "/dau-thau";
 
 	// Dau thau vat tu
 	public static final String KH_LCNT_VT = "/kh-lcnt/vat-tu";
