@@ -17,7 +17,6 @@ public class BhHopDongSearchReq extends BaseRequest {
 
     String tenHd;
 
-    @NotNull(message = "Không được để trống")
     @ApiModelProperty(example = Contains.LOAI_VTHH_GAO)
     String loaiVthh;
 

@@ -105,7 +105,7 @@ public class BhHopDongService extends BaseServiceImpl {
 
         bhHopDongRepository.save(dataMap);
 
-        for (BhHopDongDtlReq cTietReq :objReq.getDetail()){
+        for (BhHopDongDtlReq cTietReq :objReq.getBhHopDongDtlReqList()){
             BhHopDongDtl cTiet=new ModelMapper().map(cTietReq,BhHopDongDtl.class);
             cTiet.setId(null);
             cTiet.setIdHdr(dataMap.getId());
@@ -113,7 +113,7 @@ public class BhHopDongService extends BaseServiceImpl {
         }
 
 
-        for(BhDdiemNhapKhoReq ddNhapRq : objReq.getDiaDiemNhapKhoReq()){
+        for(BhDdiemNhapKhoReq ddNhapRq : objReq.getBhDdiemNhapKhoReqList()){
             BhHopDongDdiemNhapKho ddNhap = ObjectMapperUtils.map(ddNhapRq, BhHopDongDdiemNhapKho.class);
             ddNhap.setIdHdongHdr(dataMap.getId());
             bhHopDongDdiemNhapKhoRepository.save(ddNhap);
@@ -159,14 +159,14 @@ public class BhHopDongService extends BaseServiceImpl {
 
         bhHopDongRepository.save(dataMap);
 
-        for (BhHopDongDtlReq cTietReq :objReq.getDetail()){
+        for (BhHopDongDtlReq cTietReq :objReq.getBhHopDongDtlReqList()){
             BhHopDongDtl cTiet=new ModelMapper().map(cTietReq,BhHopDongDtl.class);
             cTiet.setId(null);
             cTiet.setIdHdr(dataMap.getId());
             bhHopDongDtlRepository.save(cTiet);
         }
 
-        for(BhDdiemNhapKhoReq ddNhapRq : objReq.getDiaDiemNhapKhoReq()){
+        for(BhDdiemNhapKhoReq ddNhapRq : objReq.getBhDdiemNhapKhoReqList()){
             BhHopDongDdiemNhapKho ddNhap = ObjectMapperUtils.map(ddNhapRq, BhHopDongDdiemNhapKho.class);
             ddNhap.setIdHdongHdr(dataMap.getId());
             bhHopDongDdiemNhapKhoRepository.save(ddNhap);
@@ -222,13 +222,13 @@ public class BhHopDongService extends BaseServiceImpl {
 
         bhHopDongRepository.save(dataDB);
         bhHopDongDtlRepository.deleteAllByIdHdr(dataDB.getId());
-        for (BhHopDongDtlReq cTietReq :objReq.getDetail()){
+        for (BhHopDongDtlReq cTietReq :objReq.getBhHopDongDtlReqList()){
             BhHopDongDtl cTiet=new ModelMapper().map(cTietReq,BhHopDongDtl.class);
             cTiet.setId(null);
             cTiet.setIdHdr(dataDB.getId());
             bhHopDongDtlRepository.save(cTiet);
         }
-        List<BhHopDongDtlReq> dtlReqList = objReq.getDetail();
+        List<BhHopDongDtlReq> dtlReqList = objReq.getBhHopDongDtlReqList();
         List<HhDviLquan> dtls1 = ObjectMapperUtils.mapAll(dtlReqList, HhDviLquan.class);
     	dataDB.setHhDviLquanList(dtls1);
         Map<String,String> mapVthh = getListDanhMucHangHoa();
@@ -260,6 +260,7 @@ public class BhHopDongService extends BaseServiceImpl {
         qOptional.get().setDonViTinh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : mapVthh.get(qOptional.get().getDonViTinh()));
         qOptional.get().setHhPhuLucHdongList(hhPhuLucRepository.findBySoHd(qOptional.get().getSoHd()));
         qOptional.get().setBhDdiemNhapKhoList(bhHopDongDdiemNhapKhoRepository.findAllByIdHdongHdr(Long.parseLong(ids)));
+        qOptional.get().setBhHopDongDtlList(bhHopDongDtlRepository.findAllByIdHdr(Long.parseLong(ids)));
         qOptional.get().setTenNthau(hashMapDviLquan.get(String.valueOf(Double.parseDouble(qOptional.get().getIdNthau().toString()))));
 
         return qOptional.get();
@@ -288,7 +289,15 @@ public class BhHopDongService extends BaseServiceImpl {
 
     public Page<BhHopDongHdr> selectPage(BhHopDongSearchReq req, HttpServletResponse response) throws Exception {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
-        Page<BhHopDongHdr> page = bhHopDongRepository.select(req.getLoaiVthh(),req.getSoHd(),req.getTenHd(),req.getNhaCcap(),convertDateToString(req.getTuNgayKy()),convertDateToString(req.getDenNgayKy()),req.getTrangThai(), pageable);
+        Page<BhHopDongHdr> page = bhHopDongRepository.select(
+                req.getLoaiVthh(),
+                req.getSoHd(),
+                req.getTenHd(),
+                req.getNhaCcap(),
+                convertDateToString(req.getTuNgayKy()),
+                convertDateToString(req.getDenNgayKy()),
+                req.getTrangThai(),
+                pageable);
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
         Map<String, String> mapDmucHh = getListDanhMucHangHoa();
 
@@ -296,18 +305,23 @@ public class BhHopDongService extends BaseServiceImpl {
         Map<Long, List<BhHopDongDdiemNhapKho>> diaDiemNhapKhoMap = bhHopDongDdiemNhapKhoRepository.findAllByIdHdongHdrIn(hopDongIds)
                 .stream().collect(Collectors.groupingBy(BhHopDongDdiemNhapKho::getIdHdongHdr));
 
+        Map<Long, List<BhHopDongDtl>> bhHdDtls = bhHopDongDtlRepository.findAllByIdHdrIn(hopDongIds)
+                .stream().collect(Collectors.groupingBy(BhHopDongDtl::getIdHdr));
+
         Map<String,String> mapVthh = getListDanhMucHangHoa();
 
-        page.forEach(f -> {
+        page.getContent().forEach(f -> {
             f.setTenDvi( mapDmucDvi.get(f.getMaDvi()));
             f.setTenVthh(mapDmucHh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh( mapDmucHh.get(f.getCloaiVthh()));
             List<BhHopDongDdiemNhapKho> diaDiemNhapKhos = diaDiemNhapKhoMap.get(f.getId()) != null ? diaDiemNhapKhoMap.get(f.getId()) : new ArrayList<>();
+            List<BhHopDongDtl> bhHopDongDtls = bhHdDtls.get(f.getId());
             if (!CollectionUtils.isEmpty(diaDiemNhapKhos)) {
                 diaDiemNhapKhos.forEach(d ->  {
                     d.setTenDvi(mapDmucDvi.get(d.getMaDvi()));
                 });
                 f.setBhDdiemNhapKhoList(diaDiemNhapKhos);
+                f.setBhHopDongDtlList(bhHopDongDtls);
             }
             f.setDonViTinh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : mapVthh.get(f.getDonViTinh()));
         });

@@ -27,8 +27,4 @@ public class BhHopDongDtl {
     BigDecimal giaSauVat;
     String type;
 
-    @Transient
-    private List<BhHopDongDdiemNhapKho> children = new ArrayList<>();
-
-
 }

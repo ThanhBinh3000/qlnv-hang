@@ -31,7 +31,4 @@ public class BhHopDongDtlReq {
     Long vat;
     BigDecimal giaTruocVat;
     BigDecimal giaSauVat;
-
-    private List<BhDdiemNhapKhoReq> detail;
-
 }
