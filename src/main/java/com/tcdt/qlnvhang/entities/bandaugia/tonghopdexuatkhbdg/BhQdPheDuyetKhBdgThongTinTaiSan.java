@@ -86,7 +86,7 @@ public class BhQdPheDuyetKhBdgThongTinTaiSan {
 	private String trungDauGia;
 
 	@Column(name = "QD_PHE_DUYET_KQBDG_ID")
-	private String qdPheDuyetKqbdgId;
+	private Long qdPheDuyetKqbdgId;
 
 	@Column(name = "MA_NHA_KHO")
 	private String maNhaKho;
@@ -95,5 +95,11 @@ public class BhQdPheDuyetKhBdgThongTinTaiSan {
 	private String ghiChu;
 
 	@Column(name = "TONG_HOP_DE_XUAT_ID")
-	private String tongHopDeXuatId;
+	private Long tongHopDeXuatId;
+
+	@Column(name = "THONG_BAO_BDG_ID")
+	private Long thongBaoBdgId;
+
+	@Column(name = "THONG_BAO_BDG_KT_ID")
+	private Long thongBaoBdgKtId;
 }

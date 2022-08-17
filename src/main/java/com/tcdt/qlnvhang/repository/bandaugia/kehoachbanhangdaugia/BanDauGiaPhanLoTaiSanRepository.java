@@ -14,5 +14,4 @@ public interface BanDauGiaPhanLoTaiSanRepository extends BaseRepository<BanDauGi
 	void deleteAllByBhDgKehoachIdIn(List<Long> ids);
 	List<BanDauGiaPhanLoTaiSan> findByBbBanDauGiaIdIn(Collection<Long> bbBdgIds);
 	List<BanDauGiaPhanLoTaiSan> findByThongBaoBdgIdIn(Collection<Long> ids);
-	List<BanDauGiaPhanLoTaiSan> findByQdPheDuyetKqbdgIdIn(Collection<Long> bbBdgIds);
 }
