@@ -206,12 +206,22 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
         if (!optional.isPresent())
             throw new Exception("Biên bản gửi hàng không tồn tại.");
 
-        NhBienBanGuiHang phieu = optional.get();
-        boolean success = this.updateStatus(phieu, stReq, userInfo);
-        if (success)
-            bienBanGuiHangRepository.save(phieu);
+        NhBienBanGuiHang item = optional.get();
+        String trangThai = item.getTrangThai();
 
-        return success;
+        if (NhapXuatHangTrangThaiEnum.DAKY.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
+                return false;
+
+            item.setTrangThai(NhapXuatHangTrangThaiEnum.DAKY.getId());
+            item.setNguoiPduyetId(userInfo.getId());
+            item.setNgayPduyet(LocalDate.now());
+        } else {
+            throw new Exception("Bad request.");
+        }
+        bienBanGuiHangRepository.save(item);
+
+        return true;
 
     }
 

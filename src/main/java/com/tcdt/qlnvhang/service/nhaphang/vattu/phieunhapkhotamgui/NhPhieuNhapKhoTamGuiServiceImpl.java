@@ -215,12 +215,22 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
         if (!optional.isPresent())
             throw new Exception("Phiếu nhập kho tạm gửi không tồn tại.");
 
-        NhPhieuNhapKhoTamGui phieu = optional.get();
-        boolean success = this.updateStatus(phieu, stReq, userInfo);
-        if (success)
-            nhPhieuNhapKhoTamGuiRepository.save(phieu);
+        NhPhieuNhapKhoTamGui item = optional.get();
+        String trangThai = item.getTrangThai();
 
-        return success;
+        if (NhapXuatHangTrangThaiEnum.DAKY.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
+                return false;
+
+            item.setTrangThai(NhapXuatHangTrangThaiEnum.DAKY.getId());
+            item.setNguoiPduyetId(userInfo.getId());
+            item.setNgayPduyet(LocalDate.now());
+        } else {
+            throw new Exception("Bad request.");
+        }
+        nhPhieuNhapKhoTamGuiRepository.save(item);
+
+        return true;
     }
 
     @Override

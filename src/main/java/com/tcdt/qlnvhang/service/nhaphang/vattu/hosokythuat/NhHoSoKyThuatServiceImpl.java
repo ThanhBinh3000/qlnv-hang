@@ -242,12 +242,22 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
         if (!optional.isPresent())
             throw new Exception("Hồ sơ kỹ thuật không tồn tại.");
 
-        NhHoSoKyThuat phieu = optional.get();
-        boolean success = this.updateStatus(phieu, stReq, userInfo);
-        if (success)
-            nhHoSoKyThuatRepository.save(phieu);
+        NhHoSoKyThuat item = optional.get();
+        String trangThai = item.getTrangThai();
 
-        return success;
+        if (NhapXuatHangTrangThaiEnum.DAKY.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
+                return false;
+
+            item.setTrangThai(NhapXuatHangTrangThaiEnum.DAKY.getId());
+            item.setNguoiPduyetId(userInfo.getId());
+            item.setNgayPduyet(LocalDate.now());
+        } else {
+            throw new Exception("Bad request.");
+        }
+        nhHoSoKyThuatRepository.save(item);
+
+        return true;
     }
 
     @Override

@@ -25,12 +25,15 @@ public enum DanhMucTrangThaiDcEnum {
     CHODUYET_LDTC("21", "Chờ duyệt – LĐ Tổng cục", "Chờ duyệt"),
     TUCHOI_LDTC("22", "Từ chối – LĐ Tổng cục", "Từ chối"),
     DADUYET_LDTC("23", "Đã duyệt – LĐ Tổng cục", "Đã duyệt"),
-    DATONGHOP("24", "Đã tổng hợp", "Đã tổng hợp"),
-    CHUATAO_QD("25", "Chưa tạo QĐ", "Chưa tạo QĐ"),
-    DADUTHAO_QD("26", "Đã dự thảo QĐ", "Đã dự thảo QĐ"),
-    DABANHANH_QD("27", "Đã ban hành QĐ", "Đã ban hành QĐ"),
-    BAN_HANH("28", "Ban hành", "Ban hành"),
-
+    CHUATONGHOP("24", "Chưa Tổng Hợp", "Chưa Tổng Hợp"),
+    DATONGHOP("25", "Đã Tổng Hợp", "Đã Tổng Hợp"),
+    CHUATAO_QD("26", "Chưa Tạo QĐ", "Chưa Tạo QĐ"),
+    DADUTHAO_QD("27", "Đã Dự Thảo QĐ", "Đã Dự Thảo QĐ"),
+    DABANHANH_QD("28", "Đã Ban Hành QĐ", "Đã Ban Hành QĐ"),
+    BAN_HANH("29", "Ban Hành", "Ban Hành"),
+    DAKY("30", "Đã Ký", "Đã Ký"),
+    CHUATAOTOTRINH("31", "Chưa Tạo Tờ Trình", "Chưa Tạo Tờ Trình"),
+    DATAOTOTRINH("32", "Đã Tạo Tờ Trình", "Đã Tạo Tờ Trình"),
 
     ;
 
