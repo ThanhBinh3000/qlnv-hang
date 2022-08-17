@@ -9,17 +9,17 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = BhTongHopDeXuatKhbdgCt.TABLE_NAME)
+@Table(name = BhQdPheDuyetKhBdgThongTinTaiSan.TABLE_NAME)
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BhTongHopDeXuatKhbdgCt {
-	public static final String TABLE_NAME = "BH_TONG_HOP_DE_XUAT_KHBDG_CT";
+public class BhQdPheDuyetKhBdgThongTinTaiSan {
+	public static final String TABLE_NAME = "BH_QD_PD_KH_BDG_TT_TAI_SAN";
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BH_TH_DX_KHBDG_CT_SEQ")
-	@SequenceGenerator(sequenceName = "BH_TH_DX_KHBDG_CT_SEQ", allocationSize = 1, name = "BH_TH_DX_KHBDG_CT_SEQ")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BH_QD_PD_KH_BDG_TT_TAI_SAN_SEQ")
+	@SequenceGenerator(sequenceName = "BH_QD_PD_KH_BDG_TT_TAI_SAN_SEQ", allocationSize = 1, name = "BH_QD_PD_KH_BDG_TT_TAI_SAN_SEQ")
 	@Column(name = "ID")
 	private Long id;
 

@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BhTongHopDeXuatKhbdgCtResponse {
+public class BhQdPheDuyetKhBdgThongTinTaiSanResponse {
 	private Long id;
 	private Long stt;
 	private String maDiemKho;

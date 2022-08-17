@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class BhTongHopDeXuatKhbdgCtRequest {
+public class BhQdPheDuyetKhBdgThongTinTaiSanRequest {
 	private Long id;
 	private Long stt;
 	private String maDiemKho;
