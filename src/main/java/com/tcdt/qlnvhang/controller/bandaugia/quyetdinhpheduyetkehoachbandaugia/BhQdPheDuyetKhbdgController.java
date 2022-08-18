@@ -7,6 +7,7 @@ import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetkehochbandaugia.BhQdPheDuyetKhbdgRequest;
 import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetkehochbandaugia.BhQdPheDuyetKhbdgSearchRequest;
 import com.tcdt.qlnvhang.response.BaseResponse;
+import com.tcdt.qlnvhang.response.banhangdaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgCtResponse;
 import com.tcdt.qlnvhang.response.banhangdaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgResponse;
 import com.tcdt.qlnvhang.response.banhangdaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgSearchResponse;
 import com.tcdt.qlnvhang.service.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgService;
@@ -153,6 +154,23 @@ public class BhQdPheDuyetKhbdgController extends BaseController {
 		BaseResponse resp = new BaseResponse();
 		try {
 			BhQdPheDuyetKhbdgResponse res = qdPheDuyetKhbdgService.updateTrangThai(id, trangThaiId);
+			resp.setData(res);
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error(e.getMessage());
+		}
+		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Thông tin phụ lục quyết định phê duyệt kế hoạch bán đấu giá", response = Page.class)
+	@GetMapping(value = "/phu-luc", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<BaseResponse> getPhuLuc(@RequestParam Long bhTongHopDeXuatId) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			List<BhQdPheDuyetKhbdgCtResponse> res = qdPheDuyetKhbdgService.getThongTinPhuLuc(bhTongHopDeXuatId);
 			resp.setData(res);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());

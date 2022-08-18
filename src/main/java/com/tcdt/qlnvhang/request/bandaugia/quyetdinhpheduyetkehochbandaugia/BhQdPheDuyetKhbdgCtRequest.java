@@ -1,13 +1,15 @@
 package com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetkehochbandaugia;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.tcdt.qlnvhang.request.bandaugia.tonghopdexuatkhbdg.BhQdPheDuyetKhBdgThongTinTaiSanRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -17,12 +19,7 @@ import java.time.LocalDate;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BhQdPheDuyetKhbdgCtRequest {
     private Long id;
-    private Long maDonVi;
     private Long bhDgKeHoachId;
-    private LocalDate ngayKy;
-    private String trichYeu;
-    private BigDecimal soLuongDvTaiSan;
-    private BigDecimal giaKhoiDiem;
-    private BigDecimal khoanTienDatTruoc;
-    private Long bhTongHopDeXuatId;
+    private Long quyetDinhPheDuyetId;
+    List<BhQdPheDuyetKhBdgThongTinTaiSanRequest> thongTinTaiSans = new ArrayList<>();
 }

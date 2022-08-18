@@ -34,5 +34,5 @@ public class BhQdPheDuyetKhBdgThongTinTaiSanResponse {
 	private BigDecimal soTienDatTruoc;
 	private String donViTinh;
 	private String ghiChu;
-	private String tongHopDeXuatId;
+	private Long qdPheDuyetKhbdgChiTietId;
 }

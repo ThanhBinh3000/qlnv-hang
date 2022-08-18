@@ -1,11 +1,15 @@
 package com.tcdt.qlnvhang.service.impl;
 
+import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatCt;
 import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdg;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
+import com.tcdt.qlnvhang.mapper.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatCtRequestMapper;
+import com.tcdt.qlnvhang.mapper.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatCtResponseMapper;
 import com.tcdt.qlnvhang.mapper.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgRequestMapper;
 import com.tcdt.qlnvhang.mapper.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgResponseMapper;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
+import com.tcdt.qlnvhang.repository.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatCtRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -30,7 +34,10 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -39,6 +46,7 @@ import java.util.stream.Collectors;
 @Transactional(rollbackFor = Exception.class)
 public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements BhTongHopDeXuatKhbdgService {
 	private final BhTongHopDeXuatKhbdgRepository deXuatKhbdgRepository;
+	private final BhTongHopDeXuatCtRepository chiTietRepository;
 
 	private final QlnvDmVattuRepository dmVattuRepository;
 
@@ -47,6 +55,9 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 
 	private final BhTongHopDeXuatKhbdgResponseMapper tongHopDeXuatKhbdgResponseMapper;
 	private final BhTongHopDeXuatKhbdgRequestMapper tongHopDeXuatKhbdgRequestMapper;
+
+	private final BhTongHopDeXuatCtResponseMapper chiTietResponseMapper;
+	private final BhTongHopDeXuatCtRequestMapper chiTietRequestMapper;
 
 	@Override
 	public BhTongHopDeXuatKhbdgResponse create(BhTongHopDeXuatKhbdgRequest req) throws Exception {
@@ -60,9 +71,17 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 		theEntity.setNguoiTaoId(userInfo.getId());
 		theEntity.setMaDonVi(userInfo.getDvql());
 		theEntity.setCapDonVi(userInfo.getCapDvi());
-		theEntity.setMaTongHop(UUID.randomUUID().toString());
+		theEntity = deXuatKhbdgRepository.save(theEntity);
+		theEntity.setMaTongHop(theEntity.getId().toString());
 		theEntity = deXuatKhbdgRepository.save(theEntity);
 
+		log.debug("Create chi tiết");
+		List<BhTongHopDeXuatCt> chiTietList = null;
+		if (!CollectionUtils.isEmpty(req.getChiTietList())) {
+			chiTietList = chiTietRequestMapper.toEntity(req.getChiTietList());
+			chiTietList = chiTietRepository.saveAll(chiTietList);
+			theEntity.setChiTietList(chiTietList);
+		}
 		return tongHopDeXuatKhbdgResponseMapper.toDto(theEntity);
 	}
 
@@ -85,6 +104,14 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 		theEntity.setNguoiSuaId(userInfo.getId());
 		theEntity = deXuatKhbdgRepository.save(theEntity);
 
+		chiTietRepository.deleteAllByBhTongHopDeXuatId(theEntity.getId());
+
+		List<BhTongHopDeXuatCt> chiTietList = null;
+		if (!CollectionUtils.isEmpty(req.getChiTietList())) {
+			chiTietList = chiTietRequestMapper.toEntity(req.getChiTietList());
+			chiTietList = chiTietRepository.saveAll(chiTietList);
+			theEntity.setChiTietList(chiTietList);
+		}
 		return tongHopDeXuatKhbdgResponseMapper.toDto(theEntity);
 	}
 
@@ -104,6 +131,9 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 		if (userInfo == null) throw new Exception("Bad request.");
 
 		if (CollectionUtils.isEmpty(ids)) throw new Exception("Bad request.");
+
+		log.info("Delete info");
+		chiTietRepository.deleteAllByBhTongHopDeXuatIdIn(ids);
 
 		log.info("Delete tổng hợp đề xuất kế hoạch bán đấu giá");
 		deXuatKhbdgRepository.deleteAllByIdIn(ids);
@@ -128,15 +158,26 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 		if (!optional.isPresent()) throw new Exception("Tổng hợp đề xuất kế hoạch bán đấu giá không tồn tại");
 		BhTongHopDeXuatKhbdg deXuatKhbdg = optional.get();
 
+		List<BhTongHopDeXuatCt> chiTietList = chiTietRepository.findByBhTongHopDeXuatId(deXuatKhbdg.getId());
+
+		if (!CollectionUtils.isEmpty(chiTietList)) {
+			deXuatKhbdg.setChiTietList(chiTietList);
+		}
+
 		BhTongHopDeXuatKhbdgResponse response = tongHopDeXuatKhbdgResponseMapper.toDto(deXuatKhbdg);
 
 		QlnvDmVattu dmVattu = dmVattuRepository.findByMa(deXuatKhbdg.getMaVatTuCha());
 		if (dmVattu != null) {
 			response.setTenVatTuCha(dmVattu.getTen());
 		}
+
+		response.getChiTietList().forEach(entry -> {
+			if (entry.getMaDonVi() == null) return;
+			entry.setTenDonVi(this.getMapTenDvi().get(entry.getMaDonVi()));
+		});
+
 		return response;
 	}
-
 	@Override
 	public boolean exportToExcel(BhTongHopDeXuatKhbdgSearchRequest req, HttpServletResponse response) throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();

@@ -77,4 +77,10 @@ public class BhQdPheDuyetKhbdg extends BaseEntity implements Serializable {
 	@Transient
 	private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
+	@Transient
+	private List<BhQdPheDuyetKhbdgCt> chiTietList;
+
+	@Column(name = "LY_DO_TU_CHOI")
+	private String lyDoTuChoi;
+
 }

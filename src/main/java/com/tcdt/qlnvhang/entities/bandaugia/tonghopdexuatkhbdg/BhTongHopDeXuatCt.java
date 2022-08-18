@@ -24,7 +24,7 @@ public class BhTongHopDeXuatCt {
     private Long id;
 
     @Column(name = "MA_DON_VI")
-    private Long maDonVi;
+    private String maDonVi;
 
     @Column(name = "BH_DG_KE_HOACH_ID")
     private Long bhDgKeHoachId;

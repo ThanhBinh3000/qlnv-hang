@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BhTongHopDeXuatCtResponse {
     private Long id;
-    private Long maDonVi;
+    private String maDonVi;
     private Long bhDgKeHoachId;
     private LocalDate ngayKy;
     private String trichYeu;

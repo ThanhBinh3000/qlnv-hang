@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -33,5 +34,5 @@ public class BhTongHopDeXuatKhbdgRequest {
 	private String maVatTu;
 	private String maVatTuCha;
 	private String loaiVthh;
-	private List<Long> bhDgKehoachIdList;
+	private List<BhTongHopDeXuatCtRequest> chiTietList = new ArrayList<>();
 }
