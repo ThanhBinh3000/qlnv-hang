@@ -3,12 +3,12 @@ package com.tcdt.qlnvhang.service.bandaugia.bienbanbandaugia;
 import com.google.common.collect.Sets;
 import com.tcdt.qlnvhang.entities.bandaugia.bienbanbandaugia.BhBbBanDauGia;
 import com.tcdt.qlnvhang.entities.bandaugia.bienbanbandaugia.BhBbBanDauGiaCt;
-import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.BanDauGiaPhanLoTaiSan;
+import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhQdPheDuyetKhBdgThongTinTaiSan;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.bienbanbandaugia.BhBbBanDauGiaCtRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.bienbanbandaugia.BhBbBanDauGiaRepository;
-import com.tcdt.qlnvhang.repository.bandaugia.kehoachbanhangdaugia.BanDauGiaPhanLoTaiSanRepository;
+import com.tcdt.qlnvhang.repository.bandaugia.tonghopdexuatkhbdg.BhQdPheDuyetKhBdgThongTinTaiSanRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -50,7 +50,7 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
     private final BhBbBanDauGiaRepository bhBbBanDauGiaRepository;
     private final BhBbBanDauGiaCtRepository bhBbBanDauGiaCtRepository;
     private final QlnvDmVattuRepository qlnvDmVattuRepository;
-    private final BanDauGiaPhanLoTaiSanRepository banDauGiaPhanLoTaiSanRepository;
+    private final BhQdPheDuyetKhBdgThongTinTaiSanRepository bhQdPheDuyetKhBdgThongTinTaiSanRepository;
 
     private static final String SHEET_BIEN_BAN_BAN_DAU_GIA = "Biên bản bán đấu giá";
     private static final String STT = "STT";
@@ -88,10 +88,10 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
         List<BhBbBanDauGiaCt> chiTiets = this.saveListChiTiet(item.getId(), req.getCts(), new HashMap<>());
         item.setCts(chiTiets);
 
-        Map<Long, BanDauGiaPhanLoTaiSan> mapChiTiet1 = banDauGiaPhanLoTaiSanRepository.findByThongBaoBdgIdIn(Collections.singleton(item.getThongBaoBdgId()))
-                .stream().collect(Collectors.toMap(BanDauGiaPhanLoTaiSan::getId, Function.identity()));
+        Map<Long, BhQdPheDuyetKhBdgThongTinTaiSan> mapChiTiet1 = bhQdPheDuyetKhBdgThongTinTaiSanRepository.findByThongBaoBdgIdIn(Collections.singleton(item.getThongBaoBdgId()))
+                .stream().collect(Collectors.toMap(BhQdPheDuyetKhBdgThongTinTaiSan::getId, Function.identity()));
 
-        List<BanDauGiaPhanLoTaiSan> ct1s = this.saveListChiTiet1(item.getId(), req.getCt1s(), mapChiTiet1);
+        List<BhQdPheDuyetKhBdgThongTinTaiSan> ct1s = this.saveListChiTiet1(item.getId(), req.getCt1s(), mapChiTiet1);
         item.setCt1s(ct1s);
         return this.buildResponse(item);
     }
@@ -122,14 +122,14 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
         return chiTiets;
     }
 
-    private List<BanDauGiaPhanLoTaiSan> saveListChiTiet1(Long parentId,
+    private List<BhQdPheDuyetKhBdgThongTinTaiSan> saveListChiTiet1(Long parentId,
                                                   List<BhBbBanDauGiaCt1Req> chiTietReqs,
-                                                  Map<Long, BanDauGiaPhanLoTaiSan> mapChiTiet) throws Exception {
-        List<BanDauGiaPhanLoTaiSan> chiTiets = new ArrayList<>();
+                                                  Map<Long, BhQdPheDuyetKhBdgThongTinTaiSan> mapChiTiet) throws Exception {
+        List<BhQdPheDuyetKhBdgThongTinTaiSan> chiTiets = new ArrayList<>();
         for (BhBbBanDauGiaCt1Req req : chiTietReqs) {
             Long id = req.getId();
             if (id != null && id > 0) {
-                BanDauGiaPhanLoTaiSan chiTiet = mapChiTiet.get(id);
+                BhQdPheDuyetKhBdgThongTinTaiSan chiTiet = mapChiTiet.get(id);
                 if (chiTiet == null)
                     throw new Exception("Phân lô tài sản không tồn tại.");
                 mapChiTiet.remove(id);
@@ -143,7 +143,7 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
         }
 
         if (!CollectionUtils.isEmpty(chiTiets))
-            banDauGiaPhanLoTaiSanRepository.saveAll(chiTiets);
+            bhQdPheDuyetKhBdgThongTinTaiSanRepository.saveAll(chiTiets);
 
         return chiTiets;
     }
@@ -196,11 +196,11 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
         if (!CollectionUtils.isEmpty(mapChiTiet.values()))
             bhBbBanDauGiaCtRepository.deleteAll(mapChiTiet.values());
 
-        Map<Long, BanDauGiaPhanLoTaiSan> mapChiTiet1 = banDauGiaPhanLoTaiSanRepository.findByThongBaoBdgIdIn(Collections.singleton(item.getThongBaoBdgId()))
-                .stream().collect(Collectors.toMap(BanDauGiaPhanLoTaiSan::getId, Function.identity()));
+        Map<Long, BhQdPheDuyetKhBdgThongTinTaiSan> mapChiTiet1 = bhQdPheDuyetKhBdgThongTinTaiSanRepository.findByThongBaoBdgIdIn(Collections.singleton(item.getThongBaoBdgId()))
+                .stream().collect(Collectors.toMap(BhQdPheDuyetKhBdgThongTinTaiSan::getId, Function.identity()));
 
         // Bien ban phan lo
-        List<BanDauGiaPhanLoTaiSan> chiTiet1s = this.saveListChiTiet1(item.getId(), req.getCt1s(), mapChiTiet1);
+        List<BhQdPheDuyetKhBdgThongTinTaiSan> chiTiet1s = this.saveListChiTiet1(item.getId(), req.getCt1s(), mapChiTiet1);
         item.setCt1s(chiTiet1s);
 
         return this.buildResponse(item);
@@ -215,7 +215,7 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
 
         BhBbBanDauGia item = optional.get();
         item.setCts(bhBbBanDauGiaCtRepository.findByBbBanDauGiaIdIn(Collections.singleton(item.getId())));
-        item.setCt1s(banDauGiaPhanLoTaiSanRepository.findByBbBanDauGiaIdIn(Collections.singleton(item.getId())));
+        item.setCt1s(bhQdPheDuyetKhBdgThongTinTaiSanRepository.findByBbBanDauGiaIdIn(Collections.singleton(item.getId())));
         return this.buildResponse(item);
     }
 
@@ -232,9 +232,9 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
             throw new Exception("Không thể xóa Biên bản bán đấu giá đã ban hành");
         }
         bhBbBanDauGiaCtRepository.deleteByBbBanDauGiaIdIn(Collections.singleton(item.getId()));
-        banDauGiaPhanLoTaiSanRepository.findByBbBanDauGiaIdIn(Collections.singleton(item.getId())).forEach(p -> {
+        bhQdPheDuyetKhBdgThongTinTaiSanRepository.findByBbBanDauGiaIdIn(Collections.singleton(item.getId())).forEach(p -> {
             p.setBbBanDauGiaId(null);
-            banDauGiaPhanLoTaiSanRepository.save(p);
+            bhQdPheDuyetKhBdgThongTinTaiSanRepository.save(p);
         });
         bhBbBanDauGiaRepository.delete(item);
         return true;
@@ -337,9 +337,9 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
     public boolean deleteMultiple(DeleteReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         bhBbBanDauGiaCtRepository.deleteByBbBanDauGiaIdIn(req.getIds());
-        banDauGiaPhanLoTaiSanRepository.findByBbBanDauGiaIdIn(req.getIds()).forEach(p -> {
+        bhQdPheDuyetKhBdgThongTinTaiSanRepository.findByBbBanDauGiaIdIn(req.getIds()).forEach(p -> {
             p.setBbBanDauGiaId(null);
-            banDauGiaPhanLoTaiSanRepository.save(p);
+            bhQdPheDuyetKhBdgThongTinTaiSanRepository.save(p);
         });
         bhBbBanDauGiaRepository.deleteByIdIn(req.getIds());
         return true;

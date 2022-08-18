@@ -15,6 +15,6 @@ public interface BhQdPheDuyetKhBdgThongTinTaiSanRepository extends BaseRepositor
 	List<BhQdPheDuyetKhBdgThongTinTaiSan> findByBhDgKehoachIdIn(List<Long> id);
 	void deleteAllByBhDgKehoachIdIn(List<Long> ids);
 	List<BhQdPheDuyetKhBdgThongTinTaiSan> findByBbBanDauGiaIdIn(Collection<Long> bbBdgIds);
-	List<BhQdPheDuyetKhBdgThongTinTaiSan> findByThongBaoBdgIdIn(Collection<Long> ids);
-	List<BhQdPheDuyetKhBdgThongTinTaiSan> findByQdPheDuyetKqbdgIdIn(Collection<Long> bbBdgIds);
+	List<BhQdPheDuyetKhBdgThongTinTaiSan> findByThongBaoBdgIdIn(Collection<Long> tbBdgIds);
+	List<BhQdPheDuyetKhBdgThongTinTaiSan> findByQdPheDuyetKqbdgIdIn(Collection<Long> qdPdKqBdgIds);
 }
