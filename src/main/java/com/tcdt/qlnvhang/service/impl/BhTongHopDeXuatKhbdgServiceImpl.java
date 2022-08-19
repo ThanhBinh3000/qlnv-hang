@@ -79,6 +79,10 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 		List<BhTongHopDeXuatCt> chiTietList = null;
 		if (!CollectionUtils.isEmpty(req.getChiTietList())) {
 			chiTietList = chiTietRequestMapper.toEntity(req.getChiTietList());
+
+			for (BhTongHopDeXuatCt entry : chiTietList) {
+				entry.setBhTongHopDeXuatId(theEntity.getId());
+			}
 			chiTietList = chiTietRepository.saveAll(chiTietList);
 			theEntity.setChiTietList(chiTietList);
 		}
@@ -170,6 +174,7 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 		if (dmVattu != null) {
 			response.setTenVatTuCha(dmVattu.getTen());
 		}
+		if (CollectionUtils.isEmpty(response.getChiTietList())) return response;
 
 		response.getChiTietList().forEach(entry -> {
 			if (entry.getMaDonVi() == null) return;
