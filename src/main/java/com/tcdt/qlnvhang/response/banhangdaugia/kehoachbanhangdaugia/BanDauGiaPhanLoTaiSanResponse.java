@@ -1,9 +1,11 @@
 package com.tcdt.qlnvhang.response.banhangdaugia.kehoachbanhangdaugia;
 
+import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.BanDauGiaPhanLoTaiSan;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
 @Data
@@ -33,4 +35,8 @@ public class BanDauGiaPhanLoTaiSanResponse {
 	private BigDecimal soTienDatTruoc;
 	private String donViTinh;
 	private String ghiChu;
+
+	public BanDauGiaPhanLoTaiSanResponse(BanDauGiaPhanLoTaiSan item) {
+		BeanUtils.copyProperties(item, this);
+	}
 }

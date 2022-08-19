@@ -4,11 +4,13 @@ import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.phieuknghiemcluonghang.PhieuKnghiemCluongHangReq;
 import com.tcdt.qlnvhang.request.search.PhieuKnghiemCluongHangSearchReq;
+import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.response.phieuknghiemcluonghang.PhieuKnghiemCluongHangRes;
 import org.springframework.data.domain.Page;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.util.Set;
 
 public interface PhieuKnghiemCluongHangService {
 	Page<PhieuKnghiemCluongHangRes> search(PhieuKnghiemCluongHangSearchReq req) throws Exception;
@@ -24,4 +26,6 @@ public interface PhieuKnghiemCluongHangService {
     boolean exportToExcel(PhieuKnghiemCluongHangSearchReq objReq, HttpServletResponse response) throws Exception;
 
 	Integer getSo() throws Exception;
+
+	BaseNhapHangCount count(Set<String> maDvis) throws Exception;
 }

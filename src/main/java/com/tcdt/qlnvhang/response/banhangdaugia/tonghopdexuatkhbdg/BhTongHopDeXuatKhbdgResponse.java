@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Builder
@@ -41,4 +42,6 @@ public class BhTongHopDeXuatKhbdgResponse  extends CommonResponse {
 	private Long nguoiPduyetId;
 	private LocalDate ngayPduyet;
 	private String lyDoTuChoi;
+	private List<BhTongHopDeXuatCtResponse> chiTietList;
+
 }

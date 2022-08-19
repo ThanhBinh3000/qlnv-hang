@@ -38,6 +38,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -352,22 +353,17 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 	}
 
 	@Override
-	public BaseNhapHangCount count(QlpktclhPhieuKtChatLuongFilterRequestDto req) throws Exception {
-		UserInfo userInfo = UserUtils.getUserInfo();
+	public BaseNhapHangCount count(Set<String> maDvis) throws Exception {
 		QlpktclhPhieuKtChatLuongFilterRequestDto countReq = new QlpktclhPhieuKtChatLuongFilterRequestDto();
-		countReq.setCapDvis(req.getCapDvis());
-		this.prepareSearchReq(countReq, userInfo, countReq.getCapDvis(), req.getTrangThais());
+		countReq.setMaDvis(maDvis);
 		BaseNhapHangCount count = new BaseNhapHangCount();
 
-		count.setTatCa(qlpktclhPhieuKtChatLuongRepo.countPhieuKiemTraChatLuong(countReq));
 		countReq.setLoaiVthh(Contains.LOAI_VTHH_THOC);
 		count.setThoc(qlpktclhPhieuKtChatLuongRepo.countPhieuKiemTraChatLuong(countReq));
 		countReq.setLoaiVthh(Contains.LOAI_VTHH_GAO);
 		count.setGao(qlpktclhPhieuKtChatLuongRepo.countPhieuKiemTraChatLuong(countReq));
 		countReq.setLoaiVthh(Contains.LOAI_VTHH_MUOI);
 		count.setMuoi(qlpktclhPhieuKtChatLuongRepo.countPhieuKiemTraChatLuong(countReq));
-		countReq.setLoaiVthh(Contains.LOAI_VTHH_VATTU);
-		count.setVatTu(qlpktclhPhieuKtChatLuongRepo.countPhieuKiemTraChatLuong(countReq));
 		return count;
 	}
 

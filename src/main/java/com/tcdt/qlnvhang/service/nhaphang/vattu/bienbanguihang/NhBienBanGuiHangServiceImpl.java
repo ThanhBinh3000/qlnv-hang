@@ -13,6 +13,8 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanguihang.NhBienBanGuiHangCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanguihang.NhBienBanGuiHangReq;
 import com.tcdt.qlnvhang.request.search.vattu.bienbanguihang.NhBienBanGuiHangSearchReq;
+import com.tcdt.qlnvhang.request.search.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiSearchReq;
+import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.response.vattu.bienbanguihang.NhBienBanGuiHangCtRes;
 import com.tcdt.qlnvhang.response.vattu.bienbanguihang.NhBienBanGuiHangRes;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -204,12 +206,22 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
         if (!optional.isPresent())
             throw new Exception("Biên bản gửi hàng không tồn tại.");
 
-        NhBienBanGuiHang phieu = optional.get();
-        boolean success = this.updateStatus(phieu, stReq, userInfo);
-        if (success)
-            bienBanGuiHangRepository.save(phieu);
+        NhBienBanGuiHang item = optional.get();
+        String trangThai = item.getTrangThai();
 
-        return success;
+        if (NhapXuatHangTrangThaiEnum.DAKY.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
+                return false;
+
+            item.setTrangThai(NhapXuatHangTrangThaiEnum.DAKY.getId());
+            item.setNguoiPduyetId(userInfo.getId());
+            item.setNgayPduyet(LocalDate.now());
+        } else {
+            throw new Exception("Bad request.");
+        }
+        bienBanGuiHangRepository.save(item);
+
+        return true;
 
     }
 
@@ -310,4 +322,13 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
         return so;
     }
 
+    @Override
+    public BaseNhapHangCount count(Set<String> maDvis) throws Exception {
+        NhBienBanGuiHangSearchReq countReq = new NhBienBanGuiHangSearchReq();
+        countReq.setMaDvis(maDvis);
+        BaseNhapHangCount count = new BaseNhapHangCount();
+
+        count.setVatTu(bienBanGuiHangRepository.count(countReq));
+        return count;
+    }
 }

@@ -1,12 +1,12 @@
 package com.tcdt.qlnvhang.service.bandaugia.quyetdinhpheduyetketquabandaugia;
 
 import com.google.common.collect.Sets;
-import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.BanDauGiaPhanLoTaiSan;
 import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetketquabandaugia.BhQdPheDuyetKqbdg;
+import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhQdPheDuyetKhBdgThongTinTaiSan;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
-import com.tcdt.qlnvhang.repository.bandaugia.kehoachbanhangdaugia.BanDauGiaPhanLoTaiSanRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.quyetdinhpheduyetketquabandaugia.BhQdPheDuyetKqbdgRepository;
+import com.tcdt.qlnvhang.repository.bandaugia.tonghopdexuatkhbdg.BhQdPheDuyetKhBdgThongTinTaiSanRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
 public class BhQdPheDuyetKqbdgServiceImpl extends BaseServiceImpl implements BhQdPheDuyetKqbdgService {
     private final BhQdPheDuyetKqbdgRepository bhQdPheDuyetKqbdgRepository;
     private final QlnvDmVattuRepository qlnvDmVattuRepository;
-    private final BanDauGiaPhanLoTaiSanRepository banDauGiaPhanLoTaiSanRepository;
+    private final BhQdPheDuyetKhBdgThongTinTaiSanRepository bhQdPheDuyetKhBdgThongTinTaiSanRepository;
     private final FileDinhKemService fileDinhKemService;
 
     private static final String SHEET_QUYET_DINH_PHE_DUYET_KET_QUA_BAN_DAU_GIA = "Quyết định phê duyệt kết quả bán đấu giá";
@@ -81,35 +81,35 @@ public class BhQdPheDuyetKqbdgServiceImpl extends BaseServiceImpl implements BhQ
         item.setNam(LocalDate.now().getYear());
         bhQdPheDuyetKqbdgRepository.save(item);
 
-        List<BanDauGiaPhanLoTaiSan> cts = this.saveListChiTiet1(item.getId(), req.getCts(), new HashMap<>());
+        Map<Long, BhQdPheDuyetKhBdgThongTinTaiSan> mapChiTiet1 = bhQdPheDuyetKhBdgThongTinTaiSanRepository.findByThongBaoBdgIdIn(Collections.singleton(item.getThongBaoBdgId()))
+                .stream().collect(Collectors.toMap(BhQdPheDuyetKhBdgThongTinTaiSan::getId, Function.identity()));
+
+        List<BhQdPheDuyetKhBdgThongTinTaiSan> cts = this.saveListChiTiet1(item.getId(), req.getCts(), mapChiTiet1);
         item.setCts(cts);
         item.setFileDinhKems(fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReqs(), item.getId(), BhQdPheDuyetKqbdg.TABLE_NAME));
         return this.buildResponse(item);
     }
 
-    private List<BanDauGiaPhanLoTaiSan> saveListChiTiet1(Long parentId,
+    private List<BhQdPheDuyetKhBdgThongTinTaiSan> saveListChiTiet1(Long parentId,
                                                   List<BhQdPheDuyetKqbdgCtReq> chiTietReqs,
-                                                  Map<Long, BanDauGiaPhanLoTaiSan> mapChiTiet) throws Exception {
-        List<BanDauGiaPhanLoTaiSan> chiTiets = new ArrayList<>();
+                                                  Map<Long, BhQdPheDuyetKhBdgThongTinTaiSan> mapChiTiet) throws Exception {
+        List<BhQdPheDuyetKhBdgThongTinTaiSan> chiTiets = new ArrayList<>();
         for (BhQdPheDuyetKqbdgCtReq req : chiTietReqs) {
             Long id = req.getId();
-            BanDauGiaPhanLoTaiSan chiTiet = new BanDauGiaPhanLoTaiSan();
-
             if (id != null && id > 0) {
-                chiTiet = mapChiTiet.get(id);
+                BhQdPheDuyetKhBdgThongTinTaiSan chiTiet = mapChiTiet.get(id);
                 if (chiTiet == null)
                     throw new Exception("Phân lô tài sản không tồn tại.");
                 mapChiTiet.remove(id);
+                chiTiet.setBbBanDauGiaId(parentId);
+                chiTiet.setDonGiaTrungDauGia(req.getDonGiaTrungDauGia());
+                chiTiet.setTrungDauGia(req.getTrungDauGia());
+                chiTiets.add(chiTiet);
             }
-
-            chiTiet.setBbBanDauGiaId(parentId);
-            chiTiet.setDonGiaTrungDauGia(req.getDonGiaTrungDauGia());
-            chiTiet.setTrungDauGia(req.getTrungDauGia());
-            chiTiets.add(chiTiet);
         }
 
         if (!CollectionUtils.isEmpty(chiTiets))
-            banDauGiaPhanLoTaiSanRepository.saveAll(chiTiets);
+            bhQdPheDuyetKhBdgThongTinTaiSanRepository.saveAll(chiTiets);
 
         return chiTiets;
     }
@@ -152,11 +152,11 @@ public class BhQdPheDuyetKqbdgServiceImpl extends BaseServiceImpl implements BhQ
 
         bhQdPheDuyetKqbdgRepository.save(item);
 
-        Map<Long, BanDauGiaPhanLoTaiSan> mapChiTiet1 = banDauGiaPhanLoTaiSanRepository.findByBbBanDauGiaIdIn(Collections.singleton(item.getId()))
-                .stream().collect(Collectors.toMap(BanDauGiaPhanLoTaiSan::getId, Function.identity()));
+        Map<Long, BhQdPheDuyetKhBdgThongTinTaiSan> mapChiTiet1 = bhQdPheDuyetKhBdgThongTinTaiSanRepository.findByThongBaoBdgIdIn(Collections.singleton(item.getThongBaoBdgId()))
+                .stream().collect(Collectors.toMap(BhQdPheDuyetKhBdgThongTinTaiSan::getId, Function.identity()));
 
         // Bien ban phan lo
-        List<BanDauGiaPhanLoTaiSan> chiTiets = this.saveListChiTiet1(item.getId(), req.getCts(), mapChiTiet1);
+        List<BhQdPheDuyetKhBdgThongTinTaiSan> chiTiets = this.saveListChiTiet1(item.getId(), req.getCts(), mapChiTiet1);
         item.setCts(chiTiets);
         item.setFileDinhKems(fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReqs(), item.getId(), BhQdPheDuyetKqbdg.TABLE_NAME));
         return this.buildResponse(item);
@@ -170,7 +170,7 @@ public class BhQdPheDuyetKqbdgServiceImpl extends BaseServiceImpl implements BhQ
             throw new Exception("Biên bản bán đấu giá không tồn tại.");
 
         BhQdPheDuyetKqbdg item = optional.get();
-        item.setCts(banDauGiaPhanLoTaiSanRepository.findByBbBanDauGiaIdIn(Collections.singleton(item.getId())));
+        item.setCts(bhQdPheDuyetKhBdgThongTinTaiSanRepository.findByQdPheDuyetKqbdgIdIn(Collections.singleton(item.getId())));
         item.setFileDinhKems(fileDinhKemService.search(item.getId(), Collections.singleton(BhQdPheDuyetKqbdg.TABLE_NAME)));
         return this.buildResponse(item);
     }
@@ -187,6 +187,10 @@ public class BhQdPheDuyetKqbdgServiceImpl extends BaseServiceImpl implements BhQ
         if (TrangThaiEnum.BAN_HANH.getId().equals(item.getTrangThai())) {
             throw new Exception("Không thể xóa Biên bản bán đấu giá đã ban hành");
         }
+        bhQdPheDuyetKhBdgThongTinTaiSanRepository.findByQdPheDuyetKqbdgIdIn(Collections.singleton(item.getId())).forEach(p -> {
+            p.setQdPheDuyetKqbdgId(null);
+            bhQdPheDuyetKhBdgThongTinTaiSanRepository.save(p);
+        });
         fileDinhKemService.delete(item.getId(), Collections.singleton(BhQdPheDuyetKqbdg.TABLE_NAME));
         bhQdPheDuyetKqbdgRepository.delete(item);
 
@@ -290,6 +294,10 @@ public class BhQdPheDuyetKqbdgServiceImpl extends BaseServiceImpl implements BhQ
         if (CollectionUtils.isEmpty(req.getIds()))
             return false;
 
+        bhQdPheDuyetKhBdgThongTinTaiSanRepository.findByQdPheDuyetKqbdgIdIn(req.getIds()).forEach(p -> {
+            p.setQdPheDuyetKqbdgId(null);
+            bhQdPheDuyetKhBdgThongTinTaiSanRepository.save(p);
+        });
         fileDinhKemService.deleteMultiple(req.getIds(), Collections.singleton(BhQdPheDuyetKqbdg.TABLE_NAME));
         bhQdPheDuyetKqbdgRepository.deleteByIdIn(req.getIds());
         return true;

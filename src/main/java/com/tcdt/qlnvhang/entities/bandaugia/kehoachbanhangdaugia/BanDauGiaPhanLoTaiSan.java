@@ -86,7 +86,7 @@ public class BanDauGiaPhanLoTaiSan {
 	private String trungDauGia;
 
 	@Column(name = "QD_PHE_DUYET_KQBDG_ID")
-	private String qdPheDuyetKqbdgId;
+	private Long qdPheDuyetKqbdgId;
 
 	@Column(name = "MA_NHA_KHO")
 	private String maNhaKho;
@@ -94,5 +94,6 @@ public class BanDauGiaPhanLoTaiSan {
 	@Column(name = "GHI_CHU")
 	private String ghiChu;
 
-
+	@Column(name = "THONG_BAO_BDG_ID")
+	private Long thongBaoBdgId;
 }

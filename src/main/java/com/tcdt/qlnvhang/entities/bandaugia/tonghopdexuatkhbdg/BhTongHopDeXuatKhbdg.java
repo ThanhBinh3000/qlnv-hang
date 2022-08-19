@@ -6,6 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -85,4 +86,7 @@ public class BhTongHopDeXuatKhbdg extends BaseEntity implements Serializable {
 
 	@Column(name = "LY_DO_TU_CHOI")
 	private String lyDoTuChoi;
+
+	@Transient
+	private List<BhTongHopDeXuatCt> chiTietList;
 }

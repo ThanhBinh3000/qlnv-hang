@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetketquabandaugia;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.bandaugia.bienbanbandaugia.BhBbBanDauGiaCt;
 import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.BanDauGiaPhanLoTaiSan;
+import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhQdPheDuyetKhBdgThongTinTaiSan;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -93,5 +94,5 @@ public class BhQdPheDuyetKqbdg extends BaseEntity implements Serializable {
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
     @Transient
-    private List<BanDauGiaPhanLoTaiSan> cts = new ArrayList<>();
+    private List<BhQdPheDuyetKhBdgThongTinTaiSan> cts = new ArrayList<>();
 }

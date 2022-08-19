@@ -18,6 +18,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.quanlybangkecanhangluongthuc.QlBangKeCanHangLtReq;
 import com.tcdt.qlnvhang.request.object.quanlybangkecanhangluongthuc.QlBangKeChCtLtReq;
 import com.tcdt.qlnvhang.request.search.quanlybangkecanhangluongthuc.QlBangKeCanHangLtSearchReq;
+import com.tcdt.qlnvhang.request.search.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoSearchReq;
 import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.response.quanlybangkecanhangluongthuc.QlBangKeCanHangLtRes;
 import com.tcdt.qlnvhang.response.quanlybangkecanhangluongthuc.QlBangKeChCtLtRes;
@@ -31,10 +32,7 @@ import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganLo;
 import com.tcdt.qlnvhang.table.khotang.KtNhaKho;
-import com.tcdt.qlnvhang.util.ExportExcel;
-import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
-import com.tcdt.qlnvhang.util.MoneyConvert;
-import com.tcdt.qlnvhang.util.UserUtils;
+import com.tcdt.qlnvhang.util.*;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -497,5 +495,20 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
         so = Optional.ofNullable(so).orElse(0);
         so = so + 1;
         return so;
+    }
+
+    @Override
+    public BaseNhapHangCount count(Set<String> maDvis) throws Exception {
+        QlBangKeCanHangLtSearchReq countReq = new QlBangKeCanHangLtSearchReq();
+        countReq.setMaDvis(maDvis);
+        BaseNhapHangCount count = new BaseNhapHangCount();
+
+        countReq.setMaVatTuCha(Contains.LOAI_VTHH_THOC);
+        count.setThoc(qlBangKeCanHangLtRepository.count(countReq));
+        countReq.setMaVatTuCha(Contains.LOAI_VTHH_GAO);
+        count.setGao(qlBangKeCanHangLtRepository.count(countReq));
+        countReq.setMaVatTuCha(Contains.LOAI_VTHH_MUOI);
+        count.setMuoi(qlBangKeCanHangLtRepository.count(countReq));
+        return count;
     }
 }

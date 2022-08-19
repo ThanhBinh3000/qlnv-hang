@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.repository.bandaugia.bienbanbandaugia;
 
 import com.tcdt.qlnvhang.request.bandaugia.bienbanbandaugia.BhBbBanDauGiaSearchReq;
-import com.tcdt.qlnvhang.request.search.BienBanLayMauSearchReq;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;

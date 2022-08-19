@@ -13,7 +13,9 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.vattu.hosokythuat.NhHoSoKyThuatCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.hosokythuat.NhHoSoKyThuatReq;
+import com.tcdt.qlnvhang.request.search.PhieuKnghiemCluongHangSearchReq;
 import com.tcdt.qlnvhang.request.search.vattu.hosokythuat.NhHoSoKyThuatSearchReq;
+import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.response.vattu.hosokythuat.NhHoSoKyThuatCtRes;
 import com.tcdt.qlnvhang.response.vattu.hosokythuat.NhHoSoKyThuatRes;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -23,6 +25,7 @@ import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
+import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -239,12 +242,22 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
         if (!optional.isPresent())
             throw new Exception("Hồ sơ kỹ thuật không tồn tại.");
 
-        NhHoSoKyThuat phieu = optional.get();
-        boolean success = this.updateStatus(phieu, stReq, userInfo);
-        if (success)
-            nhHoSoKyThuatRepository.save(phieu);
+        NhHoSoKyThuat item = optional.get();
+        String trangThai = item.getTrangThai();
 
-        return success;
+        if (NhapXuatHangTrangThaiEnum.DAKY.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
+                return false;
+
+            item.setTrangThai(NhapXuatHangTrangThaiEnum.DAKY.getId());
+            item.setNguoiPduyetId(userInfo.getId());
+            item.setNgayPduyet(LocalDate.now());
+        } else {
+            throw new Exception("Bad request.");
+        }
+        nhHoSoKyThuatRepository.save(item);
+
+        return true;
     }
 
     @Override
@@ -351,5 +364,15 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
         so = Optional.ofNullable(so).orElse(0);
         so = so + 1;
         return so;
+    }
+
+    @Override
+    public BaseNhapHangCount count(Set<String> maDvis) throws Exception {
+        NhHoSoKyThuatSearchReq countReq = new NhHoSoKyThuatSearchReq();
+        countReq.setMaDvis(maDvis);
+        BaseNhapHangCount count = new BaseNhapHangCount();
+
+        count.setVatTu(nhHoSoKyThuatRepository.count(countReq));
+        return count;
     }
 }

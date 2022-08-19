@@ -13,6 +13,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiReq;
 import com.tcdt.qlnvhang.request.search.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiSearchReq;
+import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.response.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiCtRes;
 import com.tcdt.qlnvhang.response.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiRes;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -214,12 +215,22 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
         if (!optional.isPresent())
             throw new Exception("Phiếu nhập kho tạm gửi không tồn tại.");
 
-        NhPhieuNhapKhoTamGui phieu = optional.get();
-        boolean success = this.updateStatus(phieu, stReq, userInfo);
-        if (success)
-            nhPhieuNhapKhoTamGuiRepository.save(phieu);
+        NhPhieuNhapKhoTamGui item = optional.get();
+        String trangThai = item.getTrangThai();
 
-        return success;
+        if (NhapXuatHangTrangThaiEnum.DAKY.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
+                return false;
+
+            item.setTrangThai(NhapXuatHangTrangThaiEnum.DAKY.getId());
+            item.setNguoiPduyetId(userInfo.getId());
+            item.setNgayPduyet(LocalDate.now());
+        } else {
+            throw new Exception("Bad request.");
+        }
+        nhPhieuNhapKhoTamGuiRepository.save(item);
+
+        return true;
     }
 
     @Override
@@ -344,5 +355,15 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
         so = Optional.ofNullable(so).orElse(0);
         so = so + 1;
         return so;
+    }
+
+    @Override
+    public BaseNhapHangCount count(Set<String> maDvis) throws Exception {
+        NhPhieuNhapKhoTamGuiSearchReq countReq = new NhPhieuNhapKhoTamGuiSearchReq();
+        countReq.setMaDvis(maDvis);
+        BaseNhapHangCount count = new BaseNhapHangCount();
+
+        count.setVatTu(nhPhieuNhapKhoTamGuiRepository.count(countReq));
+        return count;
     }
 }

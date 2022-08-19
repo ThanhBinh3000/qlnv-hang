@@ -14,7 +14,9 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanketthucnhapkho.NhBbKtNhapKhoVtCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanketthucnhapkho.NhBbKtNhapKhoVtReq;
+import com.tcdt.qlnvhang.request.search.vattu.bangke.NhBangKeVtSearchReq;
 import com.tcdt.qlnvhang.request.search.vattu.bienbanketthucnhapkho.NhBbKtNhapKhoVtSearchReq;
+import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.response.vattu.bienbanketthucnhapkho.NhBbKtNhapKhoVtCtRes;
 import com.tcdt.qlnvhang.response.vattu.bienbanketthucnhapkho.NhBbKtNhapKhoVtRes;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -237,13 +239,67 @@ public class NhBbKtNhapKhoVtServiceImpl extends BaseServiceImpl implements NhBbK
         if (!optional.isPresent())
             throw new Exception("Biên bản kết thúc nhập kho không tồn tại.");
 
-        NhBbKtNhapKhoVt phieu = optional.get();
+        NhBbKtNhapKhoVt bb = optional.get();
 
-        boolean success = this.updateStatus(phieu, stReq, userInfo);
-        if (success)
-            nhBbKtNhapKhoVtRepository.save(phieu);
+        String trangThai = bb.getTrangThai();
+        if (NhapXuatHangTrangThaiEnum.CHODUYET_KTVBQ.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
+                return false;
 
-        return success;
+            bb.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_KTVBQ.getId());
+            bb.setNguoiGuiDuyetId(userInfo.getId());
+            bb.setNgayGuiDuyet(LocalDate.now());
+
+        } else if (NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_KTVBQ.getId().equals(trangThai))
+                return false;
+
+            bb.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId());
+            bb.setNguoiGuiDuyetId(userInfo.getId());
+            bb.setNgayGuiDuyet(LocalDate.now());
+        } else if (NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId().equals(trangThai))
+                return false;
+
+            bb.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId());
+            bb.setNguoiPduyetId(userInfo.getId());
+            bb.setNgayPduyet(LocalDate.now());
+        } else if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
+                return false;
+
+            bb.setTrangThai(NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId());
+            bb.setNguoiPduyetId(userInfo.getId());
+            bb.setNgayPduyet(LocalDate.now());
+        } else if (NhapXuatHangTrangThaiEnum.TUCHOI_KTVBQ.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_KTVBQ.getId().equals(trangThai))
+                return false;
+
+            bb.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_KTVBQ.getId());
+            bb.setNguoiPduyetId(userInfo.getId());
+            bb.setNgayPduyet(LocalDate.now());
+            bb.setLyDoTuChoi(stReq.getLyDo());
+        } else if (NhapXuatHangTrangThaiEnum.TUCHOI_KT.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId().equals(trangThai))
+                return false;
+
+            bb.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_KT.getId());
+            bb.setNguoiPduyetId(userInfo.getId());
+            bb.setNgayPduyet(LocalDate.now());
+            bb.setLyDoTuChoi(stReq.getLyDo());
+        } else if (NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
+                return false;
+
+            bb.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId());
+            bb.setNguoiPduyetId(userInfo.getId());
+            bb.setNgayPduyet(LocalDate.now());
+            bb.setLyDoTuChoi(stReq.getLyDo());
+        } else {
+            throw new Exception("Bad request.");
+        }
+        nhBbKtNhapKhoVtRepository.save(bb);
+        return true;
     }
 
     @Override
@@ -365,5 +421,15 @@ public class NhBbKtNhapKhoVtServiceImpl extends BaseServiceImpl implements NhBbK
             item.setTenDiemKho(diemKho.getTenDiemkho());
             item.setMaDiemKho(diemKho.getMaDiemkho());
         }
+    }
+
+    @Override
+    public BaseNhapHangCount count(Set<String> maDvis) throws Exception {
+        NhBbKtNhapKhoVtSearchReq countReq = new NhBbKtNhapKhoVtSearchReq();
+        countReq.setMaDvis(maDvis);
+        BaseNhapHangCount count = new BaseNhapHangCount();
+
+        count.setVatTu(nhBbKtNhapKhoVtRepository.count(countReq));
+        return count;
     }
 }

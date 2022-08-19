@@ -1,7 +1,7 @@
 package com.tcdt.qlnvhang.entities.bandaugia.bienbanbandaugia;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
-import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.BanDauGiaPhanLoTaiSan;
+import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhQdPheDuyetKhBdgThongTinTaiSan;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -90,5 +90,5 @@ public class BhBbBanDauGia extends BaseEntity implements Serializable {
     private List<BhBbBanDauGiaCt> cts = new ArrayList<>();
 
     @Transient
-    private List<BanDauGiaPhanLoTaiSan> ct1s = new ArrayList<>();
+    private List<BhQdPheDuyetKhBdgThongTinTaiSan> ct1s = new ArrayList<>();
 }

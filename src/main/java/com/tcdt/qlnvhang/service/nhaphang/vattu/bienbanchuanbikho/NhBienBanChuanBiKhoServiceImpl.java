@@ -14,6 +14,8 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoReq;
 import com.tcdt.qlnvhang.request.search.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoSearchReq;
+import com.tcdt.qlnvhang.request.search.vattu.hosokythuat.NhHoSoKyThuatSearchReq;
+import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.response.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoCtRes;
 import com.tcdt.qlnvhang.response.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoRes;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -235,13 +237,54 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
         if (!optional.isPresent())
             throw new Exception("Biên bản chuẩn bị kho không tồn tại.");
 
-        NhBienBanChuanBiKho phieu = optional.get();
+        NhBienBanChuanBiKho bb = optional.get();
 
-        boolean success = this.updateStatus(phieu, stReq, userInfo);
-        if (success)
-            nhBienBanChuanBiKhoRepository.save(phieu);
+        String trangThai = bb.getTrangThai();
+        if (NhapXuatHangTrangThaiEnum.CHODUYET_TK.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
+                return false;
 
-        return success;
+            bb.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_TK.getId());
+            bb.setNguoiGuiDuyetId(userInfo.getId());
+            bb.setNgayGuiDuyet(LocalDate.now());
+
+        } else if (NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId().equals(trangThai))
+                return false;
+
+            bb.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId());
+            bb.setNguoiGuiDuyetId(userInfo.getId());
+            bb.setNgayGuiDuyet(LocalDate.now());
+        } else if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
+                return false;
+
+            bb.setTrangThai(NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId());
+            bb.setNguoiPduyetId(userInfo.getId());
+            bb.setNgayPduyet(LocalDate.now());
+        } else if (NhapXuatHangTrangThaiEnum.TUCHOI_TK.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_TK.getId().equals(trangThai))
+                return false;
+
+            bb.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_TK.getId());
+            bb.setNguoiPduyetId(userInfo.getId());
+            bb.setNgayPduyet(LocalDate.now());
+            bb.setLyDoTuChoi(stReq.getLyDo());
+        } else if (NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
+                return false;
+
+            bb.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId());
+            bb.setNguoiPduyetId(userInfo.getId());
+            bb.setNgayPduyet(LocalDate.now());
+            bb.setLyDoTuChoi(stReq.getLyDo());
+        } else {
+            throw new Exception("Bad request.");
+        }
+
+        nhBienBanChuanBiKhoRepository.save(bb);
+
+        return true;
     }
 
     @Override
@@ -374,5 +417,15 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
             item.setTenDiemKho(diemKho.getTenDiemkho());
             item.setMaDiemKho(diemKho.getMaDiemkho());
         }
+    }
+
+    @Override
+    public BaseNhapHangCount count(Set<String> maDvis) throws Exception {
+        NhBienBanChuanBiKhoSearchReq countReq = new NhBienBanChuanBiKhoSearchReq();
+        countReq.setMaDvis(maDvis);
+        BaseNhapHangCount count = new BaseNhapHangCount();
+
+        count.setVatTu(nhBienBanChuanBiKhoRepository.count(countReq));
+        return count;
     }
 }

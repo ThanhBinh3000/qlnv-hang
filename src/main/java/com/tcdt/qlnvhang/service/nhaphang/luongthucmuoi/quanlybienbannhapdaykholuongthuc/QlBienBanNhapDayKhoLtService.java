@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.util.Set;
 
 public interface QlBienBanNhapDayKhoLtService {
     QlBienBanNhapDayKhoLtRes create(QlBienBanNhapDayKhoLtReq req) throws Exception;
@@ -29,4 +30,6 @@ public interface QlBienBanNhapDayKhoLtService {
     boolean exportToExcel(QlBienBanNhapDayKhoLtSearchReq objReq, HttpServletResponse response) throws Exception;
 
     Integer getSo() throws Exception;
+
+    BaseNhapHangCount count(Set<String> maDvis) throws Exception;
 }

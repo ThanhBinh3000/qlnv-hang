@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.bandaugia.quyetdinhpheduyetkehoachbandaugia;
 
 import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetkehochbandaugia.BhQdPheDuyetKhbdgRequest;
 import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetkehochbandaugia.BhQdPheDuyetKhbdgSearchRequest;
+import com.tcdt.qlnvhang.response.banhangdaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgCtResponse;
 import com.tcdt.qlnvhang.response.banhangdaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgResponse;
 import com.tcdt.qlnvhang.response.banhangdaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgSearchResponse;
 import org.springframework.data.domain.Page;
@@ -26,6 +27,8 @@ public interface BhQdPheDuyetKhbdgService {
 	boolean deleteMultiple(List<Long> ids) throws Exception;
 
 	BhQdPheDuyetKhbdgResponse detail(Long id) throws Exception;
+
+	List<BhQdPheDuyetKhbdgCtResponse> getThongTinPhuLuc(Long bhTongHopDeXuatId) throws Exception;
 
 
 }

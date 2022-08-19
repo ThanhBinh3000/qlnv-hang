@@ -13,6 +13,7 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.phieuknghiemcluonghang.PhieuKnghiemCluongHangReq;
 import com.tcdt.qlnvhang.request.search.PhieuKnghiemCluongHangSearchReq;
+import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.response.phieuknghiemcluonghang.KquaKnghiemRes;
 import com.tcdt.qlnvhang.response.phieuknghiemcluonghang.PhieuKnghiemCluongHangRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
@@ -25,6 +26,7 @@ import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganLo;
 import com.tcdt.qlnvhang.table.khotang.KtNhaKho;
+import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -133,7 +135,7 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 			response.setSoLuongMauHangKt(mapCount.get(item.getId()));
 			responses.add(response);
 		}
-		return new PageImpl<>(responses, pageable, phieuKnghiemCluongHangRepository.countCtkhn(req));
+		return new PageImpl<>(responses, pageable, phieuKnghiemCluongHangRepository.count(req));
 	}
 
 	@Override
@@ -429,5 +431,20 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 		so = Optional.ofNullable(so).orElse(0);
 		so = so + 1;
 		return so;
+	}
+
+	@Override
+	public BaseNhapHangCount count(Set<String> maDvis) throws Exception {
+		PhieuKnghiemCluongHangSearchReq countReq = new PhieuKnghiemCluongHangSearchReq();
+		countReq.setMaDvis(maDvis);
+		BaseNhapHangCount count = new BaseNhapHangCount();
+
+		countReq.setMaVatTuCha(Contains.LOAI_VTHH_THOC);
+		count.setThoc(phieuKnghiemCluongHangRepository.count(countReq));
+		countReq.setMaVatTuCha(Contains.LOAI_VTHH_GAO);
+		count.setGao(phieuKnghiemCluongHangRepository.count(countReq));
+		countReq.setMaVatTuCha(Contains.LOAI_VTHH_MUOI);
+		count.setMuoi(phieuKnghiemCluongHangRepository.count(countReq));
+		return count;
 	}
 }

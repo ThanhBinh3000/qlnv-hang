@@ -414,14 +414,11 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
     }
 
     @Override
-    public BaseNhapHangCount count(NhPhieuNhapKhoSearchReq req) throws Exception {
-        UserInfo userInfo = UserUtils.getUserInfo();
+    public BaseNhapHangCount count(Set<String> maDvis) throws Exception {
         NhPhieuNhapKhoSearchReq countReq = new NhPhieuNhapKhoSearchReq();
-        countReq.setCapDvis(req.getCapDvis());
-        this.prepareSearchReq(countReq, userInfo, countReq.getCapDvis(), req.getTrangThais());
+        countReq.setMaDvis(maDvis);
         BaseNhapHangCount count = new BaseNhapHangCount();
 
-        count.setTatCa(nhPhieuNhapKhoRepository.count(countReq));
         countReq.setLoaiVthh(Contains.LOAI_VTHH_THOC);
         count.setThoc(nhPhieuNhapKhoRepository.count(countReq));
         countReq.setLoaiVthh(Contains.LOAI_VTHH_GAO);

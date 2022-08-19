@@ -21,6 +21,8 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbangiaonhan.NhBbGiaoNhanVtCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbangiaonhan.NhBbGiaoNhanVtReq;
 import com.tcdt.qlnvhang.request.search.vattu.bienbangiaonhan.NhBbGiaoNhanVtSearchReq;
+import com.tcdt.qlnvhang.request.search.vattu.bienbanketthucnhapkho.NhBbKtNhapKhoVtSearchReq;
+import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.response.vattu.bienbangiaonhan.NhBbGiaoNhanVtCtRes;
 import com.tcdt.qlnvhang.response.vattu.bienbangiaonhan.NhBbGiaoNhanVtRes;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -270,12 +272,36 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
         if (!optional.isPresent())
             throw new Exception("Biên bản giao nhận không tồn tại.");
 
-        NhBbGiaoNhanVt phieu = optional.get();
-        boolean success = this.updateStatus(phieu, stReq, userInfo);
-        if (success)
-            nhBbGiaoNhanVtRepository.save(phieu);
+        NhBbGiaoNhanVt item = optional.get();
 
-        return success;
+        String trangThai = item.getTrangThai();
+        if (NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
+                return false;
+
+            item.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId());
+            item.setNguoiGuiDuyetId(userInfo.getId());
+            item.setNgayGuiDuyet(LocalDate.now());
+        } else if (NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId().equals(trangThai))
+                return false;
+            item.setTrangThai(NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId());
+            item.setNguoiPduyetId(userInfo.getId());
+            item.setNgayPduyet(LocalDate.now());
+        } else if (NhapXuatHangTrangThaiEnum.TUCHOI_LDC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId().equals(trangThai))
+                return false;
+
+            item.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_LDC.getId());
+            item.setNguoiPduyetId(userInfo.getId());
+            item.setNgayPduyet(LocalDate.now());
+            item.setLyDoTuChoi(stReq.getLyDo());
+        } else {
+            throw new Exception("Bad request.");
+        }
+        nhBbGiaoNhanVtRepository.save(item);
+
+        return true;
     }
 
     @Override
@@ -391,5 +417,15 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
             if (optional.isPresent() && !optional.get().getId().equals(updateId))
                 throw new Exception("Số biên bản " + so + " đã tồn tại");
         }
+    }
+
+    @Override
+    public BaseNhapHangCount count(Set<String> maDvis) throws Exception {
+        NhBbGiaoNhanVtSearchReq countReq = new NhBbGiaoNhanVtSearchReq();
+        countReq.setMaDvis(maDvis);
+        BaseNhapHangCount count = new BaseNhapHangCount();
+
+        count.setVatTu(nhBbGiaoNhanVtRepository.count(countReq));
+        return count;
     }
 }
