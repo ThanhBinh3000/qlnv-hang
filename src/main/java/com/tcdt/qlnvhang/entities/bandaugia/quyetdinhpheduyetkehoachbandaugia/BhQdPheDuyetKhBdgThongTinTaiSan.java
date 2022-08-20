@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg;
+package com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -96,9 +96,6 @@ public class BhQdPheDuyetKhBdgThongTinTaiSan {
 
 	@Column(name = "QD_PD_KHBDG_CHI_TIET_ID")
 	private Long qdPheDuyetKhbdgChiTietId;
-
-	@Column(name = "TONG_HOP_DE_XUAT_ID")
-	private Long tongHopDeXuatId;
 
 	@Column(name = "THONG_BAO_BDG_ID")
 	private Long thongBaoBdgId;

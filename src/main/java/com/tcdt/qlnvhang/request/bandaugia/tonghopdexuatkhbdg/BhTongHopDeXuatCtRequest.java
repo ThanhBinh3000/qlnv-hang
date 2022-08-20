@@ -24,4 +24,5 @@ public class BhTongHopDeXuatCtRequest {
     private BigDecimal giaKhoiDiem;
     private BigDecimal khoanTienDatTruoc;
     private Long bhTongHopDeXuatId;
+    private String soKeHoach;
 }

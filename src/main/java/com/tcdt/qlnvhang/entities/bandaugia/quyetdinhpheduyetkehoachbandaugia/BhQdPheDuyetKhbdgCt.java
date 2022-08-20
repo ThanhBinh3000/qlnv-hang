@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia;
 
-import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhQdPheDuyetKhBdgThongTinTaiSan;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

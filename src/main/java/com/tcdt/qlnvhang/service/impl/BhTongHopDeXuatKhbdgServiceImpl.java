@@ -98,10 +98,10 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 
 		Optional<BhTongHopDeXuatKhbdg> optional = deXuatKhbdgRepository.findById(req.getId());
 		if (!optional.isPresent())
-			throw new Exception("Kế hoạch bán đấu giá không tồn tại");
+			throw new Exception("Tổng hợp đề xuất ban dau gia");
 		BhTongHopDeXuatKhbdg theEntity = optional.get();
 
-		log.info("Update ke hoach ban dau gia");
+		log.info("Update Tổng hợp đề xuất ban dau gia");
 		tongHopDeXuatKhbdgRequestMapper.partialUpdate(theEntity, req);
 
 		theEntity.setNgaySua(LocalDate.now());

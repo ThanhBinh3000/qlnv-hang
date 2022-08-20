@@ -26,4 +26,5 @@ public class BhTongHopDeXuatCtResponse {
     private BigDecimal khoanTienDatTruoc;
     private Long bhTongHopDeXuatId;
     private String tenDonVi;
+    private String soKeHoach;
 }

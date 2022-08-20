@@ -4,7 +4,7 @@ package com.tcdt.qlnvhang.service.impl;
 import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.BanDauGiaPhanLoTaiSan;
 import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdg;
 import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgCt;
-import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhQdPheDuyetKhBdgThongTinTaiSan;
+import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhBdgThongTinTaiSan;
 import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdg;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
@@ -16,8 +16,10 @@ import com.tcdt.qlnvhang.repository.bandaugia.quyetdinhpheduyetkehoachbandaugia.
 import com.tcdt.qlnvhang.repository.bandaugia.tonghopdexuatkhbdg.BhQdPheDuyetKhBdgThongTinTaiSanRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetkehochbandaugia.BhQdPheDuyetKhbdgCtRequest;
 import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetkehochbandaugia.BhQdPheDuyetKhbdgRequest;
 import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetkehochbandaugia.BhQdPheDuyetKhbdgSearchRequest;
+import com.tcdt.qlnvhang.request.bandaugia.tonghopdexuatkhbdg.BhQdPheDuyetKhBdgThongTinTaiSanRequest;
 import com.tcdt.qlnvhang.response.banhangdaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgCtResponse;
 import com.tcdt.qlnvhang.response.banhangdaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgResponse;
 import com.tcdt.qlnvhang.response.banhangdaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgSearchResponse;
@@ -77,9 +79,10 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 
 	private final KhPhanLoTaiSanToQdPheDuyetKhBdgThongTinTaiSanMapper taiSanBdgMapper;
 
-	private final BhQdPheDuyetKhBdgThongTinTaiSanResponseMapper qdPheDuyetKhBdgThongTinTaiSanResponseMapper;
+	private final BhQdPheDuyetKhBdgThongTinTaiSanResponseMapper thongTinTaiSanResponseMapper;
+	private final BhQdPheDuyetKhBdgThongTinTaiSanRequestMapper thongTinTaiSanRequestMapper;
 
-	private final BhQdPheDuyetKhBdgThongTinTaiSanRepository pheDuyetKhBdgThongTinTaiSanRepository;
+	private final BhQdPheDuyetKhBdgThongTinTaiSanRepository thongTinTaiSanRepository;
 
 	@Override
 	public BhQdPheDuyetKhbdgResponse create(BhQdPheDuyetKhbdgRequest req) throws Exception {
@@ -99,14 +102,34 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 		List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), theEntity.getId(), BhQdPheDuyetKhbdg.TABLE_NAME);
 		theEntity.setFileDinhKems(fileDinhKems);
 
+		if (CollectionUtils.isEmpty(req.getChiTietList())) return qdPheduyetKhbdgResponseMapper.toDto(theEntity);
 		log.debug("Create chi tiết");
-		List<BhQdPheDuyetKhbdgCt> chiTietList = null;
 		if (!CollectionUtils.isEmpty(req.getChiTietList())) {
-			chiTietList = chiTietRequestMapper.toEntity(req.getChiTietList());
-			chiTietList = chiTietRepository.saveAll(chiTietList);
+			List<BhQdPheDuyetKhbdgCt> chiTietList = createChiTietQd(req);
 			theEntity.setChiTietList(chiTietList);
+
 		}
 		return qdPheduyetKhbdgResponseMapper.toDto(theEntity);
+	}
+
+	private List<BhQdPheDuyetKhbdgCt> createChiTietQd(BhQdPheDuyetKhbdgRequest req) {
+		List<BhQdPheDuyetKhbdgCt> chiTietList = new ArrayList<>();
+		for (BhQdPheDuyetKhbdgCtRequest chiTietRequest : req.getChiTietList()) {
+			//1. Save chi tiết
+			BhQdPheDuyetKhbdgCt chiTiet = chiTietRequestMapper.toEntity(chiTietRequest);
+			chiTiet = chiTietRepository.save(chiTiet);
+			//2. Save thông tin tài sản
+			List<BhQdPheDuyetKhBdgThongTinTaiSan> thongTinTaiSanList = thongTinTaiSanRequestMapper.toEntity(chiTietRequest.getThongTinTaiSans());
+			for (BhQdPheDuyetKhBdgThongTinTaiSanRequest thongTinTaiSan : chiTietRequest.getThongTinTaiSans()) {
+				thongTinTaiSan.setQdPheDuyetKhbdgChiTietId(chiTiet.getId());
+			}
+			thongTinTaiSanList = thongTinTaiSanRepository.saveAll(thongTinTaiSanList);
+			chiTiet.setThongTinTaiSans(thongTinTaiSanList);
+			chiTietList.add(chiTiet);
+		}
+		chiTietList = chiTietRepository.saveAll(chiTietList);
+
+		return chiTietList;
 	}
 
 	@Override
@@ -118,23 +141,26 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 
 		Optional<BhQdPheDuyetKhbdg> optional = qdPheDuyetKhbdgRepository.findById(req.getId());
 		if (!optional.isPresent())
-			throw new Exception("Kế hoạch bán đấu giá không tồn tại");
+			throw new Exception("Quyết định phê duyệt kế hoạch bán đấu giá không tồn tại");
 		BhQdPheDuyetKhbdg theEntity = optional.get();
 
-		log.info("Update ke hoach ban dau gia");
+		log.info("Update qdpd ke hoach ban dau gia");
 		qdPheduyetKhbdgRequestMapper.partialUpdate(theEntity, req);
 
 		theEntity.setNgaySua(LocalDate.now());
 		theEntity.setNguoiSuaId(userInfo.getId());
 		theEntity = qdPheDuyetKhbdgRepository.save(theEntity);
 
-		List<BhQdPheDuyetKhbdgCt> chiTietList = null;
-		if (!CollectionUtils.isEmpty(req.getChiTietList())) {
-			chiTietList = chiTietRequestMapper.toEntity(req.getChiTietList());
-			chiTietList = chiTietRepository.saveAll(chiTietList);
+		Set<Long> chiTietIds = req.getChiTietList().stream().map(BhQdPheDuyetKhbdgCtRequest::getId).collect(Collectors.toSet());
+		if (!CollectionUtils.isEmpty(chiTietIds)) {
+			//Clean thông tin tài sản
+			thongTinTaiSanRepository.deleteAllByQdPheDuyetKhbdgChiTietIdIn(chiTietIds);
+			//Clean Chi tiết
+			chiTietRepository.deleteAllByIdIn(chiTietIds);
+			//Create chi tiết
+			List<BhQdPheDuyetKhbdgCt> chiTietList = createChiTietQd(req);
 			theEntity.setChiTietList(chiTietList);
 		}
-
 		return qdPheduyetKhbdgResponseMapper.toDto(theEntity);
 	}
 
@@ -155,9 +181,27 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 
 		if (CollectionUtils.isEmpty(ids)) throw new Exception("Bad request.");
 
+		List<BhQdPheDuyetKhbdg> entityList = qdPheDuyetKhbdgRepository.findByIdIn(ids);
+
+		if (CollectionUtils.isEmpty(entityList)) throw new Exception("Bad request.");
+
+
 		log.info("Delete file dinh kem");
 		fileDinhKemService.deleteMultiple(ids, Collections.singleton(BhQdPheDuyetKhbdg.TABLE_NAME));
+		Set<Long> chiTietIds = entityList.stream().map(BhQdPheDuyetKhbdg::getId).collect(Collectors.toSet());
+		if (CollectionUtils.isEmpty(chiTietIds)) return true;
 
+		List<BhQdPheDuyetKhbdgCt> chiTietList = chiTietRepository.findByIdIn(chiTietIds);
+
+		//Clean thông tin tài sản
+		List<BhQdPheDuyetKhBdgThongTinTaiSan> thongTinTaiSanList = thongTinTaiSanRepository.findByQdPheDuyetKhbdgChiTietIdIn(chiTietIds);
+		if (!CollectionUtils.isEmpty(thongTinTaiSanList)) {
+			thongTinTaiSanRepository.deleteAll(thongTinTaiSanList);
+		}
+		//Clean Chi tiết
+		if (!CollectionUtils.isEmpty(chiTietList)) {
+			chiTietRepository.deleteAll(chiTietList);
+		}
 		log.info("Delete quyết định phê duyệt kế hoạch bán đấu giá");
 		qdPheDuyetKhbdgRepository.deleteAllByIdIn(ids);
 		return true;
@@ -269,16 +313,15 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 
 		List<BhQdPheDuyetKhbdgCtResponse> responseList = chiTietList.stream().map(BhQdPheDuyetKhbdgCtResponse::new).collect(Collectors.toList());
 
-		log.info("Lấy thông tin tài sản của đề xuất kế hoạch bán đấu giá và lưu vào bảng thông tin tài sản của quyết định phê duyệt kế hoạch bán đấu giá");
+		log.info("Lấy thông tin tài sản của đề xuất kế hoạch bán đấu giá");
 		List<Long> bhDgKeHoachIdList = chiTietList.stream().map(BhTongHopDeXuatCtResponse::getBhDgKeHoachId).collect(Collectors.toList());
 		if (CollectionUtils.isEmpty(bhDgKeHoachIdList)) return responseList;
 
 		List<BanDauGiaPhanLoTaiSan> phanLoTaiSanList = phanLoTaiSanRepository.findByBhDgKehoachIdIn(bhDgKeHoachIdList);
 
 		List<BhQdPheDuyetKhBdgThongTinTaiSan> qdPheDuyetKhBdgThongTinTaiSanList = taiSanBdgMapper.toEntity(phanLoTaiSanList);
-		qdPheDuyetKhBdgThongTinTaiSanList = pheDuyetKhBdgThongTinTaiSanRepository.saveAll(qdPheDuyetKhBdgThongTinTaiSanList);
 
-		List<BhQdPheDuyetKhBdgThongTinTaiSanResponse> taiSanResponseList = qdPheDuyetKhBdgThongTinTaiSanResponseMapper.toDto(qdPheDuyetKhBdgThongTinTaiSanList);
+		List<BhQdPheDuyetKhBdgThongTinTaiSanResponse> taiSanResponseList = thongTinTaiSanResponseMapper.toDto(qdPheDuyetKhBdgThongTinTaiSanList);
 
 		log.info("Group tài sản theo bhKeHoachBdgId để trả về trong response");
 		//key = bhKeHoachBdgId, value = List BhQdPheDuyetKhBdgThongTinTaiSanResponse;

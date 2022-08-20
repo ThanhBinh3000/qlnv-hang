@@ -46,4 +46,7 @@ public class BhTongHopDeXuatCt {
 
     @Column(name = "BH_TONG_HOP_DE_XUAT_ID")
     private Long bhTongHopDeXuatId;
+
+    @Column(name = "SO_KE_HOACH")
+    private String soKeHoach;
 }

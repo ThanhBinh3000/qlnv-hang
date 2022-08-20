@@ -1,7 +1,7 @@
 package com.tcdt.qlnvhang.repository.bandaugia.tonghopdexuatkhbdg;
 
 
-import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhQdPheDuyetKhBdgThongTinTaiSan;
+import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhBdgThongTinTaiSan;
 import com.tcdt.qlnvhang.repository.BaseRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,4 +17,9 @@ public interface BhQdPheDuyetKhBdgThongTinTaiSanRepository extends BaseRepositor
 	List<BhQdPheDuyetKhBdgThongTinTaiSan> findByBbBanDauGiaIdIn(Collection<Long> bbBdgIds);
 	List<BhQdPheDuyetKhBdgThongTinTaiSan> findByThongBaoBdgIdIn(Collection<Long> tbBdgIds);
 	List<BhQdPheDuyetKhBdgThongTinTaiSan> findByQdPheDuyetKqbdgIdIn(Collection<Long> qdPdKqBdgIds);
+
+	void deleteAllByQdPheDuyetKhbdgChiTietIdIn(Collection<Long> chiTietIdList);
+
+	List<BhQdPheDuyetKhBdgThongTinTaiSan> findByQdPheDuyetKhbdgChiTietIdIn(Collection<Long> qdPdKhBdgCtIds);
+
 }
