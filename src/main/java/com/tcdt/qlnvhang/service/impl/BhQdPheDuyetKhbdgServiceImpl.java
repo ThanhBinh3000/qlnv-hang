@@ -33,6 +33,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
+import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExcelHeaderConst;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -302,11 +303,14 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 
 		if (userInfo == null) throw new Exception("Bad request.");
 
+		if (!Contains.CAP_TONG_CUC.equalsIgnoreCase(userInfo.getCapDvi()))
+			throw new Exception("Bad request.");
+
 		if (Objects.isNull(bhTongHopDeXuatId)) throw new Exception("bhTongHopDeXuatId không được để trống");
 
 		BhTongHopDeXuatKhbdgResponse tongHopDeXuatKhbdgResponse = bhTongHopDeXuatKhbdgService.detail(bhTongHopDeXuatId);
 
-		log.info("Lấy thông tin chi tiết đề xuất kế hoạch bán đấu giá");
+		log.info("Lấy thông tin chi tiết tổng hợp đề xuất kế hoạch bán đấu giá");
 		List<BhTongHopDeXuatCtResponse> chiTietList = tongHopDeXuatKhbdgResponse.getChiTietList();
 
 		if (CollectionUtils.isEmpty(chiTietList)) return Collections.emptyList();

@@ -25,7 +25,7 @@ public class BhQdPheDuyetKhbdgCtResponse {
 	private Long id;
 	private Long bhDgKeHoachId;
 	private Long quyetDinhPheDuyetId;
-	private Long maDonVi;
+	private String maDonVi;
 	private LocalDate ngayKy;
 	private String trichYeu;
 	private BigDecimal soLuongDvTaiSan;
