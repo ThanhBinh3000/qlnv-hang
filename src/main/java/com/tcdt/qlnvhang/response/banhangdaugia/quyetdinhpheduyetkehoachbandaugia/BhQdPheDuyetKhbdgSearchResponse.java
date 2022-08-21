@@ -19,6 +19,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BhQdPheDuyetKhbdgSearchResponse {
+	private Long id;
 	private String soQuyetDinh;
 	private LocalDate ngayKy;
 	private String trichYeu;
@@ -40,6 +41,7 @@ public class BhQdPheDuyetKhbdgSearchResponse {
 			String trangThaiId = (String) rawData[6];
 			this.trangThai = TrangThaiEnum.getTenById(trangThaiId);
 		}
+		this.id = (Long) rawData[7];
 	}
 
 	public Object[] toExcel(String[] rowsName, Integer stt) {

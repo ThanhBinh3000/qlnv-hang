@@ -33,6 +33,7 @@ public class BhQdPheDuyetKhbdgCtResponse {
 	private BigDecimal khoanTienDatTruoc;
 	private Long bhTongHopDeXuatId;
 	private String tenDonVi;
+	private String soKeHoach;
 	List<BhQdPheDuyetKhBdgThongTinTaiSanResponse> thongTinTaiSans = new ArrayList<>();
 	public BhQdPheDuyetKhbdgCtResponse(BhTongHopDeXuatCtResponse entry) {
 		BeanUtils.copyProperties(entry, this, "id");

@@ -42,7 +42,8 @@ public class BhQdPheDuyetKhbdgRepositoryCustomImpl implements BhQdPheDuyetKhbdgR
 				.append(tongHopDeXuat.selectField(BhTongHopDeXuatKhbdg_.MA_TONG_HOP))
 				.append(qdPheDuyet.selectField(BhQdPheDuyetKhbdg_.NAM_KE_HOACH))
 				.append(vatTuHangHoa.selectField(QlnvDmVattu_.TEN))
-				.append(vatTuHangHoa.selectField(QlnvDmVattu_.TRANG_THAI));
+				.append(vatTuHangHoa.selectField(QlnvDmVattu_.TRANG_THAI))
+				.append(qdPheDuyet.selectField(BhQdPheDuyetKhbdg_.ID));
 		builder.append(QueryUtils.FROM)
 				.append(qdPheDuyet.buildAliasName())
 				.append(QueryUtils.buildInnerJoin(qdPheDuyet, vatTuHangHoa, BhQdPheDuyetKhbdg_.MA_VAT_TU_CHA, QlnvDmVattu_.MA))
