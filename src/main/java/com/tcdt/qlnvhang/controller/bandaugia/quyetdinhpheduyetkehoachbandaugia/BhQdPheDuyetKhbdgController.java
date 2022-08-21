@@ -4,6 +4,7 @@ package com.tcdt.qlnvhang.controller.bandaugia.quyetdinhpheduyetkehoachbandaugia
 import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.DeleteReq;
+import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetkehochbandaugia.BhQdPheDuyetKhbdgRequest;
 import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetkehochbandaugia.BhQdPheDuyetKhbdgSearchRequest;
 import com.tcdt.qlnvhang.response.BaseResponse;
@@ -147,23 +148,22 @@ public class BhQdPheDuyetKhbdgController extends BaseController {
 		}
 	}
 
-	@ApiOperation(value = "Update trạng thái quyết định phê duyệt kế hoạch bán đấu giá hàng hóa", response = Page.class)
-	@PutMapping(value = "/trang-thai", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> updateTrangThai(@RequestParam Long id,
-														@RequestParam String trangThaiId) {
+	@ApiOperation(value = "Phê duyệt/ từ chối Quản lý Quyết định phê duyệt kế hoạch bán đấu giá", response = List.class)
+	@PutMapping("/trang-thai")
+	public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody StatusReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			BhQdPheDuyetKhbdgResponse res = qdPheDuyetKhbdgService.updateTrangThai(id, trangThaiId);
-			resp.setData(res);
+			resp.setData(qdPheDuyetKhbdgService.updateStatusQd(req));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error(e.getMessage());
+			log.error("Phê duyệt/ từ chối Tổng hợp đề xuất kế hoạch bán đấu giá: {}", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
+
 
 	@ApiOperation(value = "Thông tin phụ lục quyết định phê duyệt kế hoạch bán đấu giá", response = Page.class)
 	@GetMapping(value = "/phu-luc", produces = MediaType.APPLICATION_JSON_VALUE)

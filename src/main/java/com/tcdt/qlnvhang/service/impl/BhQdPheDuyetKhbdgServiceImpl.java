@@ -2,9 +2,9 @@ package com.tcdt.qlnvhang.service.impl;
 
 
 import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.BanDauGiaPhanLoTaiSan;
+import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhBdgThongTinTaiSan;
 import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdg;
 import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgCt;
-import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhBdgThongTinTaiSan;
 import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdg;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
@@ -16,6 +16,7 @@ import com.tcdt.qlnvhang.repository.bandaugia.quyetdinhpheduyetkehoachbandaugia.
 import com.tcdt.qlnvhang.repository.bandaugia.tonghopdexuatkhbdg.BhQdPheDuyetKhBdgThongTinTaiSanRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetkehochbandaugia.BhQdPheDuyetKhbdgCtRequest;
 import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetkehochbandaugia.BhQdPheDuyetKhbdgRequest;
 import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetkehochbandaugia.BhQdPheDuyetKhbdgSearchRequest;
@@ -40,7 +41,6 @@ import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -280,24 +280,6 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 	}
 
 	@Override
-	public BhQdPheDuyetKhbdgResponse updateTrangThai(Long id, String trangThaiId) throws Exception {
-		UserInfo userInfo = SecurityContextService.getUser();
-		if (userInfo == null) throw new Exception("Bad request.");
-		if (StringUtils.isEmpty(trangThaiId)) throw new Exception("trangThaiId không được để trống");
-
-		Optional<BhQdPheDuyetKhbdg> optional = qdPheDuyetKhbdgRepository.findById(id);
-		if (!optional.isPresent())
-			throw new Exception("Kế hoạch bán đấu giá không tồn tại");
-		BhQdPheDuyetKhbdg qdPheduyetKhbdg = optional.get();
-		//validate Trạng Thái
-		String trangThai = NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(trangThaiId);
-		if (StringUtils.isEmpty(trangThai)) throw new Exception("Trạng thái không tồn tại");
-		qdPheduyetKhbdg.setTrangThai(trangThaiId);
-		qdPheduyetKhbdg = qdPheDuyetKhbdgRepository.save(qdPheduyetKhbdg);
-		return qdPheduyetKhbdgResponseMapper.toDto(qdPheduyetKhbdg);
-	}
-
-	@Override
 	public List<BhQdPheDuyetKhbdgCtResponse> getThongTinPhuLuc(Long bhTongHopDeXuatId) throws Exception {
 		UserInfo userInfo = SecurityContextService.getUser();
 
@@ -337,5 +319,25 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 		});
 
 		return responseList;
+	}
+
+	@Override
+	public boolean updateStatusQd(StatusReq stReq) throws Exception {
+		UserInfo userInfo = UserUtils.getUserInfo();
+		Optional<BhQdPheDuyetKhbdg> optional = qdPheDuyetKhbdgRepository.findById(stReq.getId());
+		if (!optional.isPresent())
+			throw new Exception("Biên bản bán đấu giá không tồn tại.");
+
+		BhQdPheDuyetKhbdg theEntity = optional.get();
+
+		String trangThai = NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(stReq.getTrangThai());
+		if (org.springframework.util.StringUtils.isEmpty(trangThai)) throw new Exception("Trạng thái không tồn tại");
+
+		theEntity.setTrangThai(stReq.getTrangThai());
+		theEntity.setNguoiPheDuyetId(userInfo.getId());
+		theEntity.setNgayPduyet(LocalDate.now());
+		theEntity.setLyDoTuChoi(stReq.getLyDo());
+		qdPheDuyetKhbdgRepository.save(theEntity);
+		return true;
 	}
 }

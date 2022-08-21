@@ -83,4 +83,7 @@ public class BhQdPheDuyetKhbdg extends BaseEntity implements Serializable {
 	@Column(name = "LY_DO_TU_CHOI")
 	private String lyDoTuChoi;
 
+	@Column(name = "NGAY_PDUYET")
+	private LocalDate ngayPduyet;
+
 }

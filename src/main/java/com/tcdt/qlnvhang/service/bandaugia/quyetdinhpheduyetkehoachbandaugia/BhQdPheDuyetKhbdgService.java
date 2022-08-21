@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.bandaugia.quyetdinhpheduyetkehoachbandaugia;
 
 
+import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetkehochbandaugia.BhQdPheDuyetKhbdgRequest;
 import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetkehochbandaugia.BhQdPheDuyetKhbdgSearchRequest;
 import com.tcdt.qlnvhang.response.banhangdaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgCtResponse;
@@ -19,9 +20,6 @@ public interface BhQdPheDuyetKhbdgService {
 	boolean delete(Long id) throws Exception;
 
 	Page<BhQdPheDuyetKhbdgSearchResponse> search(BhQdPheDuyetKhbdgSearchRequest req) throws Exception;
-
-	BhQdPheDuyetKhbdgResponse updateTrangThai(Long id, String trangThaiId) throws Exception;
-
 	boolean exportToExcel(BhQdPheDuyetKhbdgSearchRequest req, HttpServletResponse response) throws Exception;
 
 	boolean deleteMultiple(List<Long> ids) throws Exception;
@@ -29,6 +27,9 @@ public interface BhQdPheDuyetKhbdgService {
 	BhQdPheDuyetKhbdgResponse detail(Long id) throws Exception;
 
 	List<BhQdPheDuyetKhbdgCtResponse> getThongTinPhuLuc(Long bhTongHopDeXuatId) throws Exception;
+
+	boolean updateStatusQd(StatusReq stReq) throws Exception;
+
 
 
 }

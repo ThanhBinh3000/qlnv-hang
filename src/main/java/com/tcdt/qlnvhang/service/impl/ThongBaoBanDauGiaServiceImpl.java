@@ -1,17 +1,19 @@
 package com.tcdt.qlnvhang.service.impl;
 
-import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.BanDauGiaPhanLoTaiSan;
 import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGia;
+import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhBdgThongTinTaiSan;
 import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdg;
 import com.tcdt.qlnvhang.entities.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGia;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.mapper.bandaugia.kehoachbandaugia.BanDauGiaPhanLoTaiSanResponseMapper;
+import com.tcdt.qlnvhang.mapper.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhBdgThongTinTaiSanResponseMapper;
 import com.tcdt.qlnvhang.mapper.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaRequestMapper;
 import com.tcdt.qlnvhang.mapper.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaResponseMapper;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.kehoachbanhangdaugia.BanDauGiaPhanLoTaiSanRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaRepository;
+import com.tcdt.qlnvhang.repository.bandaugia.tonghopdexuatkhbdg.BhQdPheDuyetKhBdgThongTinTaiSanRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaRequest;
 import com.tcdt.qlnvhang.request.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaSearchRequest;
@@ -52,6 +54,10 @@ public class ThongBaoBanDauGiaServiceImpl extends BaseServiceImpl implements Tho
 	private final ThongBaoBanDauGiaResponseMapper thongBaoBanDauGiaResponseMapper;
 
 	private final BhQdPheDuyetKhbdgRepository qdPheDuyetKhbdgRepository;
+
+	private final BhQdPheDuyetKhBdgThongTinTaiSanRepository taiSanRepository;
+
+	private final BhQdPheDuyetKhBdgThongTinTaiSanResponseMapper taiSanResponseMapper;
 
 	private final FileDinhKemService fileDinhKemService;
 	private final QlnvDmVattuRepository dmVattuRepository;
@@ -151,16 +157,20 @@ public class ThongBaoBanDauGiaServiceImpl extends BaseServiceImpl implements Tho
 		if (dmVattu != null) {
 			response.setTenVatTuCha(dmVattu.getTen());
 		}
-		if (thongBaoBanDauGia.getQdPheDuyetKhBdgId() != null) {
-			Optional<BhQdPheDuyetKhbdg> qdPheDuyetKhbdgOptional = qdPheDuyetKhbdgRepository.findById(thongBaoBanDauGia.getQdPheDuyetKhBdgId());
-			qdPheDuyetKhbdgOptional.ifPresent(entry -> {
-				response.setTenQdPheDuyetKhBd(qdPheDuyetKhbdgOptional.get().getSoQuyetDinh());
-			});
+		if (thongBaoBanDauGia.getQdPheDuyetKhBdgId() == null)
+			throw new Exception("Quyết định phê duyệt kế hoạch bán đấu giá không tồn tại");
+		Optional<BhQdPheDuyetKhbdg> qdPheDuyetKhbdgOptional = qdPheDuyetKhbdgRepository.findById(thongBaoBanDauGia.getQdPheDuyetKhBdgId());
+		if (!qdPheDuyetKhbdgOptional.isPresent())
+			throw new Exception("Quyết định phê duyệt kế hoạch bán đấu giá không tồn tại");
+
+		response.setTenQdPheDuyetKhBd(qdPheDuyetKhbdgOptional.get().getSoQuyetDinh());
+
+		List<BhQdPheDuyetKhBdgThongTinTaiSan> taiSanList = taiSanRepository.findTaiSanBdgCuc(qdPheDuyetKhbdgOptional.get().getId(), thongBaoBanDauGia.getMaDonVi());
+
+		if (!CollectionUtils.isEmpty(taiSanList)) {
+			response.setTaiSanBdgList(taiSanResponseMapper.toDto(taiSanList));
 		}
-		List<BanDauGiaPhanLoTaiSan> phanLoTaiSanList = phanLoTaiSanRepository.findByBhDgKehoachId(thongBaoBanDauGia.getQdPheDuyetKhBdgId());
-		if (!CollectionUtils.isEmpty(phanLoTaiSanList)) {
-			response.setThongTinTaiSan(phanLoTaiSanResponseMapper.toDto(phanLoTaiSanList));
-		}
+
 		return response;
 	}
 
