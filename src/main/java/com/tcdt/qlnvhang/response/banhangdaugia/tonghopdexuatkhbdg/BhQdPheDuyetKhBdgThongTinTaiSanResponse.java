@@ -1,9 +1,11 @@
 package com.tcdt.qlnvhang.response.banhangdaugia.tonghopdexuatkhbdg;
 
+import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhBdgThongTinTaiSan;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
 
@@ -35,4 +37,9 @@ public class BhQdPheDuyetKhBdgThongTinTaiSanResponse {
 	private String donViTinh;
 	private String ghiChu;
 	private Long qdPheDuyetKhbdgChiTietId;
+	private String tongHopDeXuatId;
+
+	public BhQdPheDuyetKhBdgThongTinTaiSanResponse(BhQdPheDuyetKhBdgThongTinTaiSan item) {
+		BeanUtils.copyProperties(item, this);
+	}
 }

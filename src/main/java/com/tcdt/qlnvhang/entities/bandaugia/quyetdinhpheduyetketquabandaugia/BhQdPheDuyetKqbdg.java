@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetketquabandaugia;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhBdgThongTinTaiSan;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
@@ -18,7 +19,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class BhQdPheDuyetKqbdg extends BaseEntity implements Serializable {
+public class BhQdPheDuyetKqbdg extends TrangThaiBaseEntity implements Serializable {
     
     public static final String TABLE_NAME = "BH_QD_PHE_DUYET_KQBDG";
     private static final long serialVersionUID = 2536708001250297716L;
@@ -63,24 +64,6 @@ public class BhQdPheDuyetKqbdg extends BaseEntity implements Serializable {
 
     @Column(name = "GHI_CHU")
     private String ghiChu;
-
-    @Column(name = "NGUOI_GUI_DUYET_ID")
-    private Long nguoiGuiDuyetId;
-
-    @Column(name = "NGAY_GUI_DUYET")
-    private LocalDate ngayGuiDuyet;
-
-    @Column(name = "NGUOI_PDUYET_ID")
-    private Long nguoiPduyetId;
-
-    @Column(name = "NGAY_PDUYET")
-    private LocalDate ngayPduyet;
-
-    @Column(name = "TRANG_THAI")
-    private String trangThai;
-
-    @Column(name = "LY_DO_TU_CHOI")
-    private String lyDoTuChoi;
 
     @Column(name = "MA_DVI")
     private String maDvi;

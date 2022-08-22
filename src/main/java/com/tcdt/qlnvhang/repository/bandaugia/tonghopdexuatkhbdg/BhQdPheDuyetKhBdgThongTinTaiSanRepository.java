@@ -36,4 +36,5 @@ public interface BhQdPheDuyetKhBdgThongTinTaiSanRepository extends BaseRepositor
 			"where kh.maDv = :maDonVi and ct.quyetDinhPheDuyetId = :qdPdKhBdgId ")
 	List<BhQdPheDuyetKhBdgThongTinTaiSan> findTaiSanBdgCuc(@Param("qdPdKhBdgId") Long qdPdKhBdgId, @Param("maDonVi") String maDonVi);
 
+	List<BhQdPheDuyetKhBdgThongTinTaiSan> findByThongBaoBdgKtIdIn(Collection<Long> tbBdgKtIds);
 }

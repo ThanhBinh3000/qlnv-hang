@@ -96,4 +96,7 @@ public class BanDauGiaPhanLoTaiSan {
 
 	@Column(name = "THONG_BAO_BDG_ID")
 	private Long thongBaoBdgId;
+
+	@Column(name = "THONG_BAO_BDG_KT_ID")
+	private Long thongBaoBdgKtId;
 }

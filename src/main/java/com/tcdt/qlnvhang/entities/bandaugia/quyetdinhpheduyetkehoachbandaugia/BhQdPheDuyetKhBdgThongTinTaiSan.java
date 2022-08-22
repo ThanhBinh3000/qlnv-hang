@@ -86,7 +86,7 @@ public class BhQdPheDuyetKhBdgThongTinTaiSan {
 	private String trungDauGia;
 
 	@Column(name = "QD_PHE_DUYET_KQBDG_ID")
-	private String qdPheDuyetKqbdgId;
+	private Long qdPheDuyetKqbdgId;
 
 	@Column(name = "MA_NHA_KHO")
 	private String maNhaKho;
