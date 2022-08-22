@@ -20,7 +20,6 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetkehochbandaugia.BhQdPheDuyetKhbdgCtRequest;
 import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetkehochbandaugia.BhQdPheDuyetKhbdgRequest;
 import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetkehochbandaugia.BhQdPheDuyetKhbdgSearchRequest;
-import com.tcdt.qlnvhang.request.bandaugia.tonghopdexuatkhbdg.BhQdPheDuyetKhBdgThongTinTaiSanRequest;
 import com.tcdt.qlnvhang.response.banhangdaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgCtResponse;
 import com.tcdt.qlnvhang.response.banhangdaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgResponse;
 import com.tcdt.qlnvhang.response.banhangdaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgSearchResponse;
@@ -106,22 +105,23 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 		if (CollectionUtils.isEmpty(req.getChiTietList())) return qdPheduyetKhbdgResponseMapper.toDto(theEntity);
 		log.debug("Create chi tiết");
 		if (!CollectionUtils.isEmpty(req.getChiTietList())) {
-			List<BhQdPheDuyetKhbdgCt> chiTietList = createChiTietQd(req);
+			List<BhQdPheDuyetKhbdgCt> chiTietList = createChiTietQd(req, theEntity);
 			theEntity.setChiTietList(chiTietList);
 
 		}
 		return qdPheduyetKhbdgResponseMapper.toDto(theEntity);
 	}
 
-	private List<BhQdPheDuyetKhbdgCt> createChiTietQd(BhQdPheDuyetKhbdgRequest req) {
+	private List<BhQdPheDuyetKhbdgCt> createChiTietQd(BhQdPheDuyetKhbdgRequest req, BhQdPheDuyetKhbdg theEntity) {
 		List<BhQdPheDuyetKhbdgCt> chiTietList = new ArrayList<>();
 		for (BhQdPheDuyetKhbdgCtRequest chiTietRequest : req.getChiTietList()) {
 			//1. Save chi tiết
 			BhQdPheDuyetKhbdgCt chiTiet = chiTietRequestMapper.toEntity(chiTietRequest);
+			chiTiet.setQuyetDinhPheDuyetId(theEntity.getId());
 			chiTiet = chiTietRepository.save(chiTiet);
 			//2. Save thông tin tài sản
 			List<BhQdPheDuyetKhBdgThongTinTaiSan> thongTinTaiSanList = thongTinTaiSanRequestMapper.toEntity(chiTietRequest.getThongTinTaiSans());
-			for (BhQdPheDuyetKhBdgThongTinTaiSanRequest thongTinTaiSan : chiTietRequest.getThongTinTaiSans()) {
+			for (BhQdPheDuyetKhBdgThongTinTaiSan thongTinTaiSan : thongTinTaiSanList) {
 				thongTinTaiSan.setQdPheDuyetKhbdgChiTietId(chiTiet.getId());
 			}
 			thongTinTaiSanList = thongTinTaiSanRepository.saveAll(thongTinTaiSanList);
@@ -159,7 +159,7 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 			//Clean Chi tiết
 			chiTietRepository.deleteAllByIdIn(chiTietIds);
 			//Create chi tiết
-			List<BhQdPheDuyetKhbdgCt> chiTietList = createChiTietQd(req);
+			List<BhQdPheDuyetKhbdgCt> chiTietList = createChiTietQd(req, theEntity);
 			theEntity.setChiTietList(chiTietList);
 		}
 		return qdPheduyetKhbdgResponseMapper.toDto(theEntity);

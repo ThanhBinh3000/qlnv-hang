@@ -75,7 +75,7 @@ public class ThongBaoBanDauGiaRepositoryCustomImpl implements ThongBaoBanDauGiaR
 		TypedQuery<Object[]> query = em.createQuery(QueryUtils.buildQuery(builder), Object[].class);
 
 		log.debug("Set params");
-		this.setParameterSearch(req, query);
+		this.setParameterSearch(req, query, thongBaoBDG);
 		query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize()).setMaxResults(pageable.getPageSize());
 
 		log.info("Build response");
@@ -107,16 +107,16 @@ public class ThongBaoBanDauGiaRepositoryCustomImpl implements ThongBaoBanDauGiaR
 		TypedQuery<Long> query = em.createQuery(builder.toString(), Long.class);
 
 		log.debug("Set parameter");
-		this.setParameterSearch(req, query);
+		this.setParameterSearch(req, query, thongBaoBDG);
 
 		return query.getSingleResult().intValue();
 	}
 
-	private void setParameterSearch(ThongBaoBanDauGiaSearchRequest req, Query query) {
-		QueryUtils.setParam(query, ThongBaoBanDauGia_.NAM_KE_HOACH, req.getNamKeHoach());
-		QueryUtils.setParam(query, ThongBaoBanDauGia_.MA_VAT_TU_CHA, req.getMaVatTuCha());
-		QueryUtils.setParam(query, BhQdPheDuyetKhbdg_.SO_QUYET_DINH, req.getSoQuyetDinhPheDuyetKHBDG());
-		QueryUtils.setParam(query, ThongBaoBanDauGia_.MA_THONG_BAO, req.getMaThongBaoBDG());
-		QueryUtils.setLikeParam(query, ThongBaoBanDauGia_.TRICH_YEU, req.getTrichYeu());
+	private void setParameterSearch(ThongBaoBanDauGiaSearchRequest req, Query query, QueryUtils thongBaoBDG) {
+		thongBaoBDG.setParam(query, ThongBaoBanDauGia_.NAM_KE_HOACH, req.getNamKeHoach());
+		thongBaoBDG.setParam(query, ThongBaoBanDauGia_.MA_VAT_TU_CHA, req.getMaVatTuCha());
+		thongBaoBDG.setParam(query, BhQdPheDuyetKhbdg_.SO_QUYET_DINH, req.getSoQuyetDinhPheDuyetKHBDG());
+		thongBaoBDG.setParam(query, ThongBaoBanDauGia_.MA_THONG_BAO, req.getMaThongBaoBDG());
+		thongBaoBDG.setLikeParam(query, ThongBaoBanDauGia_.TRICH_YEU, req.getTrichYeu());
 	}
 }

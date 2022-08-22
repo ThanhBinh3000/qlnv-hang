@@ -84,6 +84,29 @@ public class ThongBaoBanDauGiaServiceImpl extends BaseServiceImpl implements Tho
 		log.info("Save file dinh kem");
 		List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), thongBaoBanDauGia.getId(), ThongBaoBanDauGia.TABLE_NAME);
 		thongBaoBanDauGia.setFileDinhKems(fileDinhKems);
+
+		ThongBaoBanDauGiaResponse response = thongBaoBanDauGiaResponseMapper.toDto(thongBaoBanDauGia);
+
+		if (thongBaoBanDauGia.getQdPheDuyetKhBdgId() == null)
+			throw new Exception("Quyết định phê duyệt kế hoạch bán đấu giá không tồn tại");
+		Optional<BhQdPheDuyetKhbdg> qdPheDuyetKhbdgOptional = qdPheDuyetKhbdgRepository.findById(thongBaoBanDauGia.getQdPheDuyetKhBdgId());
+		if (!qdPheDuyetKhbdgOptional.isPresent())
+			throw new Exception("Quyết định phê duyệt kế hoạch bán đấu giá không tồn tại");
+
+		response.setTenQdPheDuyetKhBd(qdPheDuyetKhbdgOptional.get().getSoQuyetDinh());
+		if (!CollectionUtils.isEmpty(req.getTaiSanIdList())) {
+			List<BhQdPheDuyetKhBdgThongTinTaiSan> taiSanList = taiSanRepository.findByIdIn(req.getTaiSanIdList());
+
+			for (BhQdPheDuyetKhBdgThongTinTaiSan taiSan : taiSanList) {
+				taiSan.setThongBaoBdgId(thongBaoBanDauGia.getId());
+			}
+			taiSanList = taiSanRepository.saveAll(taiSanList);
+
+			if (!CollectionUtils.isEmpty(taiSanList)) {
+				response.setTaiSanBdgList(taiSanResponseMapper.toDto(taiSanList));
+			}
+		}
+
 		return thongBaoBanDauGiaResponseMapper.toDto(thongBaoBanDauGia);
 	}
 
@@ -165,7 +188,8 @@ public class ThongBaoBanDauGiaServiceImpl extends BaseServiceImpl implements Tho
 
 		response.setTenQdPheDuyetKhBd(qdPheDuyetKhbdgOptional.get().getSoQuyetDinh());
 
-		List<BhQdPheDuyetKhBdgThongTinTaiSan> taiSanList = taiSanRepository.findTaiSanBdgCuc(qdPheDuyetKhbdgOptional.get().getId(), thongBaoBanDauGia.getMaDonVi());
+		log.info("Lấy thông tin tài sản bán đấu giá");
+		List<BhQdPheDuyetKhBdgThongTinTaiSan> taiSanList = taiSanRepository.findByThongBaoBdgIdIn(Collections.singleton(thongBaoBanDauGia.getId()));
 
 		if (!CollectionUtils.isEmpty(taiSanList)) {
 			response.setTaiSanBdgList(taiSanResponseMapper.toDto(taiSanList));

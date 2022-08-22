@@ -2,7 +2,7 @@ package com.tcdt.qlnvhang.response.banhangdaugia.quyetdinhpheduyetkehoachbandaug
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.tcdt.qlnvhang.enums.TrangThaiEnum;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +25,6 @@ public class BhQdPheDuyetKhbdgSearchResponse {
 	private String trichYeu;
 	private Integer namKeHoach;
 	private String maTongHop;
-
 	private String loaiHangHoa;
 	private String trangThai;
 
@@ -39,7 +38,7 @@ public class BhQdPheDuyetKhbdgSearchResponse {
 		if (Objects.nonNull(rawData[5])) this.loaiHangHoa = (String) rawData[5];
 		if (Objects.nonNull(rawData[6])) {
 			String trangThaiId = (String) rawData[6];
-			this.trangThai = TrangThaiEnum.getTenById(trangThaiId);
+			this.trangThai = NhapXuatHangTrangThaiEnum.getTenById(trangThaiId);
 		}
 		this.id = (Long) rawData[7];
 	}

@@ -34,6 +34,8 @@ public class QueryUtils {
 	public static final String START = "Start";
 	public static final String END = "End";
 
+	public static final String PARAM_PATTERN = "";
+
 	public String getClassName() {
 		return this.clazz.getSimpleName() + SPACE;
 	}
@@ -66,8 +68,12 @@ public class QueryUtils {
 
 	public void eq(Operator operator, String field, Object req, StringBuilder builder) {
 		if (Objects.nonNull(req)) {
-			builder.append(String.format(" %s %s = :%s ", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field));
+			builder.append(String.format(" %s %s = :%s ", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), this.getParamName(field)));
 		}
+	}
+
+	private String getParamName(String field) {
+		return field + "_" + this.alias;
 	}
 
 	public void ge(Operator operator, String field, Object req, StringBuilder builder) {
@@ -78,13 +84,13 @@ public class QueryUtils {
 
 	public void start(Operator operator, String field, Object req, StringBuilder builder) {
 		if (Objects.nonNull(req)) {
-			builder.append(String.format(" %s %s >= :%s ", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field + START));
+			builder.append(String.format(" %s %s >= :%s ", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), this.getParamNameStart(field)));
 		}
 	}
 
 	public void end(Operator operator, String field, Object req, StringBuilder builder) {
 		if (Objects.nonNull(req)) {
-			builder.append(String.format(" %s %s <= :%s ", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field + END));
+			builder.append(String.format(" %s %s <= :%s ", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), this.getParamNameEnd(field)));
 		}
 	}
 
@@ -113,8 +119,8 @@ public class QueryUtils {
 		return "";
 	}
 
-	public static String buildLikeParam(String filed) {
-		return "%" + filed + "%";
+	public static String buildLikeParam(String value) {
+		return "%" + value + "%";
 	}
 
 	public static void buildSort(Pageable pageable, StringBuilder builder) {
@@ -131,31 +137,42 @@ public class QueryUtils {
 		return builder.append(String.format("SELECT COUNT(DISTINCT %s) FROM %s ", this.getField(filed), this.buildAliasName()));
 	}
 
-	public static void setParam(Query query, String paramName, Object value) {
-		if (StringUtils.isEmpty(paramName)) return;
+	public void setParam(Query query, String field, Object value) {
+		if (StringUtils.isEmpty(field)) return;
 
 		if (Objects.nonNull(value)) {
-			query.setParameter(paramName, value);
+			query.setParameter(this.getParamName(field), value);
 		}
 	}
 
-	public static void setParamStart(Query query, String paramName, Object value) {
-		if (StringUtils.isEmpty(paramName)) return;
-		paramName = paramName + START;
-		QueryUtils.setParam(query, paramName, value);
+	public void setParamStart(Query query, String field, Object value) {
+		if (StringUtils.isEmpty(field)) return;
+		if (Objects.nonNull(value)) {
+			query.setParameter(this.getParamNameStart(field), value);
+
+		}
 	}
 
-	public static void setParamEnd(Query query, String paramName, Object value) {
-		if (StringUtils.isEmpty(paramName)) return;
-		paramName = paramName + END;
-		QueryUtils.setParam(query, paramName, value);
+	private String getParamNameStart(String field) {
+		return this.getParamName(field) + "_" + START;
 	}
 
-	public static void setLikeParam(Query query, String paramName, String value) {
-		if (StringUtils.isEmpty(paramName)) return;
+	private String getParamNameEnd(String field) {
+		return this.getParamName(field) + "_" + END;
+	}
+
+	public void setParamEnd(Query query, String field, Object value) {
+		if (StringUtils.isEmpty(field)) return;
+		if (Objects.nonNull(value)) {
+			query.setParameter(this.getParamNameEnd(field), value);
+		}
+	}
+
+	public void setLikeParam(Query query, String filed, String value) {
+		if (StringUtils.isEmpty(filed)) return;
 
 		if (Objects.nonNull(value)) {
-			query.setParameter(paramName, buildLikeParam(value));
+			query.setParameter(this.getParamName(filed), buildLikeParam(value));
 		}
 	}
 

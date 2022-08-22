@@ -46,7 +46,7 @@ public class BhQdPheDuyetKhbdgController extends BaseController {
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error(e.getMessage());
+			log.error("Create error", e);
 		}
 		return ResponseEntity.ok(resp);
 	}

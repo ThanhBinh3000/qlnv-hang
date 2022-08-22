@@ -23,4 +23,7 @@ public class BhQdPheDuyetKhbdgSearchRequest extends BaseRequest {
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate ngayKyDenNgay;
 	private String trichYeu;
+	private String maVatTuCha;
+	private String maDonVi;
+	private String maDonViCuc;
 }

@@ -57,4 +57,5 @@ public class ThongBaoBanDauGiaRequest {
 	private Long ghiChu;
 	private String trangThai;
 	private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
+	private List<Long> taiSanIdList;
 }

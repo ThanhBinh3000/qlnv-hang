@@ -57,7 +57,7 @@ public class BhTongHopDeXuatKhbdgRepositoryCustomImpl implements BhTongHopDeXuat
 		TypedQuery<Object[]> query = em.createQuery(QueryUtils.buildQuery(builder), Object[].class);
 
 		log.debug("Set params");
-		this.setParameterSearch(req, query);
+		this.setParameterSearch(req, query, tongHopDeXuat);
 
 		log.info("Set pageable");
 		query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize()).setMaxResults(pageable.getPageSize());
@@ -87,15 +87,15 @@ public class BhTongHopDeXuatKhbdgRepositoryCustomImpl implements BhTongHopDeXuat
 
 		TypedQuery<Long> query = em.createQuery(builder.toString(), Long.class);
 
-		this.setParameterSearch(req, query);
+		this.setParameterSearch(req, query, tongHopDeXuat);
 		return query.getSingleResult().intValue();
 	}
 
-	private void setParameterSearch(BhTongHopDeXuatKhbdgSearchRequest req, Query query) {
-		QueryUtils.setParam(query, BhTongHopDeXuatKhbdg_.NAM_KE_HOACH, req.getNamKeHoach());
-		QueryUtils.setParam(query, BhTongHopDeXuatKhbdg_.MA_VAT_TU_CHA, req.getMaVatTuCha());
-		QueryUtils.setLikeParam(query, BhTongHopDeXuatKhbdg_.NOI_DUNG_TONG_HOP, req.getNoiDungTongHop());
-		QueryUtils.setParamStart(query, BhTongHopDeXuatKhbdg_.NGAY_TONG_HOP, req.getNgayTongHopTuNgay());
-		QueryUtils.setParamEnd(query, BhTongHopDeXuatKhbdg_.NGAY_TONG_HOP, req.getNgayTongHopDenNgay());
+	private void setParameterSearch(BhTongHopDeXuatKhbdgSearchRequest req, Query query, QueryUtils tongHopDeXuat) {
+		tongHopDeXuat.setParam(query, BhTongHopDeXuatKhbdg_.NAM_KE_HOACH, req.getNamKeHoach());
+		tongHopDeXuat.setParam(query, BhTongHopDeXuatKhbdg_.MA_VAT_TU_CHA, req.getMaVatTuCha());
+		tongHopDeXuat.setLikeParam(query, BhTongHopDeXuatKhbdg_.NOI_DUNG_TONG_HOP, req.getNoiDungTongHop());
+		tongHopDeXuat.setParamStart(query, BhTongHopDeXuatKhbdg_.NGAY_TONG_HOP, req.getNgayTongHopTuNgay());
+		tongHopDeXuat.setParamEnd(query, BhTongHopDeXuatKhbdg_.NGAY_TONG_HOP, req.getNgayTongHopDenNgay());
 	}
 }
