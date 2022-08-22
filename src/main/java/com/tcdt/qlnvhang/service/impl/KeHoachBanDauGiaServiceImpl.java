@@ -329,7 +329,7 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 			return result;
 		}).collect(Collectors.toList());
 
-		return new PageImpl<>(responseDto);
+		return new PageImpl<>(responseDto, req.getPageable(), page.getTotalElements());
 	}
 
 	@Override
