@@ -62,8 +62,8 @@ public class ThongBaoBanDauGiaRepositoryCustomImpl implements ThongBaoBanDauGiaR
 				.append(QueryUtils.buildInnerJoin(thongBaoBDG, vatTuHangHoa, ThongBaoBanDauGia_.MA_VAT_TU_CHA, QlnvDmVattu_.MA))
 				.append(QueryUtils.buildLeftJoin(thongBaoBDG, qdPheDuyetKeHoachBdg, ThongBaoBanDauGia_.QD_PHE_DUYET_KH_BDG_ID, BhQdPheDuyetKhbdg_.ID))
 				//TODO: Left join Thông báo đấu giá không thành
-				.append(QueryUtils.buildLeftJoin(thongBaoBDG, bienBanBDG, BhBbBanDauGia_.THONG_BAO_BDG_ID, ThongBaoBanDauGia_.ID))
-				.append(QueryUtils.buildLeftJoin(thongBaoBDG, qdPheDuyetKetQuaBdg, BhQdPheDuyetKqbdg_.THONG_BAO_BDG_ID, ThongBaoBanDauGia_.ID));
+				.append(QueryUtils.buildLeftJoin(thongBaoBDG, bienBanBDG, ThongBaoBanDauGia_.ID, BhBbBanDauGia_.THONG_BAO_BDG_ID))
+				.append(QueryUtils.buildLeftJoin(thongBaoBDG, qdPheDuyetKetQuaBdg, ThongBaoBanDauGia_.ID, BhQdPheDuyetKqbdg_.THONG_BAO_BDG_ID));
 
 		log.debug("Set Condition search");
 		this.setConditionSearch(req, builder, thongBaoBDG);
