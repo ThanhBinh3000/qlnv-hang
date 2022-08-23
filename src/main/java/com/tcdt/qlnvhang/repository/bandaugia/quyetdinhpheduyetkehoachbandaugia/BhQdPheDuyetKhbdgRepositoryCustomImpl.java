@@ -45,7 +45,7 @@ public class BhQdPheDuyetKhbdgRepositoryCustomImpl implements BhQdPheDuyetKhbdgR
 				.append(tongHopDeXuat.selectField(BhTongHopDeXuatKhbdg_.MA_TONG_HOP))
 				.append(qdPheDuyet.selectField(BhQdPheDuyetKhbdg_.NAM_KE_HOACH))
 				.append(vatTuCha.selectField(QlnvDmVattu_.TEN))
-				.append(vatTuCha.selectField(QlnvDmVattu_.TRANG_THAI))
+				.append(qdPheDuyet.selectField(QlnvDmVattu_.TRANG_THAI))
 				.append(qdPheDuyet.selectField(BhQdPheDuyetKhbdg_.ID))
 				.append(qdPheDuyet.selectField(BhTongHopDeXuatCt_.MA_DON_VI));
 		builder.append(QueryUtils.FROM)
