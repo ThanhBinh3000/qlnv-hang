@@ -3,9 +3,11 @@ package com.tcdt.qlnvhang.response.banhangdaugia.quyetdinhpheduyetkehoachbandaug
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.tcdt.qlnvhang.response.CommonResponse;
+import com.tcdt.qlnvhang.response.banhangdaugia.tonghopdexuatkhbdg.BhQdPheDuyetKhBdgThongTinTaiSanResponse;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -35,4 +37,7 @@ public class BhQdPheDuyetKhbdgResponse extends CommonResponse {
 	private String maVatTu;
 	private String lyDoTuChoi;
 	private List<BhQdPheDuyetKhbdgCtResponse> chiTietList;
+
+	// Dung cho cuc
+	private List<BhQdPheDuyetKhBdgThongTinTaiSanResponse> thongTinTaiSanCucs = new ArrayList<>();
 }

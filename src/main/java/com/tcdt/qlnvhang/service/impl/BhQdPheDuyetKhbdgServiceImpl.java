@@ -43,6 +43,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
@@ -83,6 +84,7 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 	private final BhQdPheDuyetKhBdgThongTinTaiSanRequestMapper thongTinTaiSanRequestMapper;
 
 	private final BhQdPheDuyetKhBdgThongTinTaiSanRepository thongTinTaiSanRepository;
+	private final BhQdPheDuyetKhBdgThongTinTaiSanRepository bhQdPheDuyetKhBdgThongTinTaiSanRepository;
 
 	@Override
 	public BhQdPheDuyetKhbdgResponse create(BhQdPheDuyetKhbdgRequest req) throws Exception {
@@ -222,13 +224,11 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null) throw new Exception("Bad request.");
 
-
 		Optional<BhQdPheDuyetKhbdg> optional = qdPheDuyetKhbdgRepository.findById(id);
 		if (!optional.isPresent()) throw new Exception("quyết định phê duyệt kế hoạch bán đấu giá không tồn tại");
 		BhQdPheDuyetKhbdg theEntity = optional.get();
 
 		BhQdPheDuyetKhbdgResponse response = qdPheduyetKhbdgResponseMapper.toDto(theEntity);
-
 
 		Optional<BhTongHopDeXuatKhbdg> tongHopDeXuatOpt = tongHopDeXuatKhbdgRepository.findById(theEntity.getTongHopDeXuatKhbdgId());
 		if (!tongHopDeXuatOpt.isPresent()) {
@@ -241,6 +241,10 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 			response.setTenVatTuCha(dmVattu.getTen());
 		}
 
+		if (Contains.CAP_CUC.equalsIgnoreCase(userInfo.getCapDvi())) {
+			List<BhQdPheDuyetKhBdgThongTinTaiSan> taiSanBdgCuc = bhQdPheDuyetKhBdgThongTinTaiSanRepository.findTaiSanBdgCuc(theEntity.getTongHopDeXuatKhbdgId(), userInfo.getDvql());
+			response.setThongTinTaiSanCucs(thongTinTaiSanResponseMapper.toDto(taiSanBdgCuc));
+		}
 		return response;
 	}
 
@@ -284,7 +288,6 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 		UserInfo userInfo = SecurityContextService.getUser();
 
 		if (userInfo == null) throw new Exception("Bad request.");
-
 		if (!Contains.CAP_TONG_CUC.equalsIgnoreCase(userInfo.getCapDvi()))
 			throw new Exception("Bad request.");
 
@@ -300,7 +303,10 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 		List<BhQdPheDuyetKhbdgCtResponse> responseList = chiTietList.stream().map(BhQdPheDuyetKhbdgCtResponse::new).collect(Collectors.toList());
 
 		log.info("Lấy thông tin tài sản của đề xuất kế hoạch bán đấu giá");
-		List<Long> bhDgKeHoachIdList = chiTietList.stream().map(BhTongHopDeXuatCtResponse::getBhDgKeHoachId).collect(Collectors.toList());
+		List<Long> bhDgKeHoachIdList = chiTietList.stream()
+				.map(BhTongHopDeXuatCtResponse::getBhDgKeHoachId)
+				.collect(Collectors.toList());;
+
 		if (CollectionUtils.isEmpty(bhDgKeHoachIdList)) return responseList;
 
 		List<BanDauGiaPhanLoTaiSan> phanLoTaiSanList = phanLoTaiSanRepository.findByBhDgKehoachIdIn(bhDgKeHoachIdList);
