@@ -34,7 +34,7 @@ public class ThongBaoBanDauGiaController extends BaseController {
 
 	@ApiOperation(value = "Tạo mới thông báo bán đấu giá", response = ThongBaoBanDauGiaResponse.class)
 	@PostMapping()
-	public ResponseEntity<BaseResponse> create(@Valid @RequestBody ThongBaoBanDauGiaRequest req) {
+	public ResponseEntity<BaseResponse> create(@RequestBody ThongBaoBanDauGiaRequest req) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			ThongBaoBanDauGiaResponse res = thongBaoBanDauGiaService.create(req);

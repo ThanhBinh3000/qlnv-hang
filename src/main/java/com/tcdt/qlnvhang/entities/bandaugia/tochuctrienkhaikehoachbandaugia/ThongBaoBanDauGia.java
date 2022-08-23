@@ -136,7 +136,7 @@ public class ThongBaoBanDauGia extends BaseEntity implements Serializable {
 	private String phuongThucDauGia;
 
 	@Column(name = "GHI_CHU")
-	private Long ghiChu;
+	private String ghiChu;
 
 	@Column(name = "TRANG_THAI")
 	private String trangThai;

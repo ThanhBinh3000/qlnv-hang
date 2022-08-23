@@ -54,7 +54,7 @@ public class ThongBaoBanDauGiaRequest {
 	private String diaDiemToChucDauGia;
 	private String hinhThucDauGia;
 	private String phuongThucDauGia;
-	private Long ghiChu;
+	private String ghiChu;
 	private String trangThai;
 	private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 	private List<Long> taiSanIdList;

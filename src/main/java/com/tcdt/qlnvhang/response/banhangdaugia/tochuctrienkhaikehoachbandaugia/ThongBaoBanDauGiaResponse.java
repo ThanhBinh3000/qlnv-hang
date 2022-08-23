@@ -53,7 +53,7 @@ public class ThongBaoBanDauGiaResponse {
 	private String diaDiemToChucDauGia;
 	private String hinhThucDauGia;
 	private String phuongThucDauGia;
-	private Long ghiChu;
+	private String ghiChu;
 	private String trangThai;
 	private String maVatTuCha;
 	private String tenVatTuCha;
