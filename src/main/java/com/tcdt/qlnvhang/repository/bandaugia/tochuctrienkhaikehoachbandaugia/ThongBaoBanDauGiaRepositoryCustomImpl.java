@@ -53,8 +53,12 @@ public class ThongBaoBanDauGiaRepositoryCustomImpl implements ThongBaoBanDauGiaR
 		QueryUtils.selectFields(builder, thongBaoBDG, ThongBaoBanDauGia_.NAM_KE_HOACH);
 		QueryUtils.selectFields(builder, thongBaoBDG, ThongBaoBanDauGia_.TRANG_THAI);
 		QueryUtils.selectFields(builder, qdPheDuyetKetQuaBdg, BhQdPheDuyetKqbdg_.SO_QUYET_DINH);
-		QueryUtils.selectFields(builder, vatTuHangHoa, QlnvDmVattu_.TEN);
+		QueryUtils.selectFields(builder, vatTuHangHoa, QlnvDmVattu_.MA);
 		QueryUtils.selectFields(builder, bienBanBDG, BhBbBanDauGia_.SO_BIEN_BAN);
+		QueryUtils.selectFields(builder, thongBaoBDG, ThongBaoBanDauGia_.PHUONG_THUC_DAU_GIA);
+		QueryUtils.selectFields(builder, thongBaoBDG, ThongBaoBanDauGia_.THOI_GIAN_TO_CHUC_DAU_GIA_DEN_NGAY);
+		QueryUtils.selectFields(builder, thongBaoBDG, ThongBaoBanDauGia_.LOAI_VTHH);
+		QueryUtils.selectFields(builder, vatTuHangHoa, QlnvDmVattu_.TEN);
 		//TODO: Thông báo đấu giá không thành
 
 		builder.append(QueryUtils.FROM)

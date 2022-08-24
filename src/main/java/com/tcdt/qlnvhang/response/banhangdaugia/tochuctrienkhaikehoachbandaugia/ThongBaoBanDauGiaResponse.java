@@ -59,5 +59,6 @@ public class ThongBaoBanDauGiaResponse {
 	private String tenVatTuCha;
 	private String tenQdPheDuyetKhBd;
 	private String tenTrangThai;
+	private String trangThaiDuyet;
 	private List<BhQdPheDuyetKhBdgThongTinTaiSanResponse> taiSanBdgList;
 }

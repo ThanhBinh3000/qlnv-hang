@@ -4,7 +4,7 @@ import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGi
 import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhBdgThongTinTaiSan;
 import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdg;
 import com.tcdt.qlnvhang.entities.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGia;
-import com.tcdt.qlnvhang.enums.TrangThaiEnum;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.mapper.bandaugia.kehoachbandaugia.BanDauGiaPhanLoTaiSanResponseMapper;
 import com.tcdt.qlnvhang.mapper.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhBdgThongTinTaiSanResponseMapper;
 import com.tcdt.qlnvhang.mapper.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaRequestMapper;
@@ -74,7 +74,7 @@ public class ThongBaoBanDauGiaServiceImpl extends BaseServiceImpl implements Tho
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null) throw new Exception("Bad request.");
 		ThongBaoBanDauGia thongBaoBanDauGia = thongBaoBanDauGiaRequestMapper.toEntity(req);
-		thongBaoBanDauGia.setTrangThai(TrangThaiEnum.DU_THAO.getId());
+		thongBaoBanDauGia.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
 		thongBaoBanDauGia.setNgayTao(LocalDate.now());
 		thongBaoBanDauGia.setNguoiTaoId(userInfo.getId());
 		thongBaoBanDauGia.setMaDonVi(userInfo.getDvql());
@@ -176,6 +176,8 @@ public class ThongBaoBanDauGiaServiceImpl extends BaseServiceImpl implements Tho
 			throw new Exception("Thông báo bán đấu giá không tồn tại");
 		ThongBaoBanDauGia thongBaoBanDauGia = optional.get();
 		ThongBaoBanDauGiaResponse response = thongBaoBanDauGiaResponseMapper.toDto(thongBaoBanDauGia);
+		response.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(thongBaoBanDauGia.getTrangThai()));
+		response.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(thongBaoBanDauGia.getTrangThai()));
 		QlnvDmVattu dmVattu = dmVattuRepository.findByMa(thongBaoBanDauGia.getMaVatTuCha());
 		if (dmVattu != null) {
 			response.setTenVatTuCha(dmVattu.getTen());
@@ -209,7 +211,7 @@ public class ThongBaoBanDauGiaServiceImpl extends BaseServiceImpl implements Tho
 			throw new Exception("Kế hoạch bán đấu giá không tồn tại");
 		ThongBaoBanDauGia thongBaoBanDauGia = optional.get();
 		//validate Trạng Thái
-		String trangThai = TrangThaiEnum.getTrangThaiDuyetById(trangThaiId);
+		String trangThai = NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(trangThaiId);
 		if (StringUtils.isEmpty(trangThai)) throw new Exception("Trạng thái không tồn tại");
 		thongBaoBanDauGia.setTrangThai(trangThaiId);
 		thongBaoBanDauGia = thongBaoBanDauGiaRepository.save(thongBaoBanDauGia);
