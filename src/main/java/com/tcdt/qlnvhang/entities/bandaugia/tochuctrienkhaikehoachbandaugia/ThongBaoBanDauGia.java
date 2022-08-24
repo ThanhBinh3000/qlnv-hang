@@ -141,6 +141,9 @@ public class ThongBaoBanDauGia extends BaseEntity implements Serializable {
 	@Column(name = "TRANG_THAI")
 	private String trangThai;
 
+	@Column(name = "LOAI_VTHH")
+	private String loaiVthh;
+
 	@Transient
 	private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 }

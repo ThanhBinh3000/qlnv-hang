@@ -94,6 +94,7 @@ public class ThongBaoBanDauGiaRepositoryCustomImpl implements ThongBaoBanDauGiaR
 		thongBaoBDG.eq(Operator.AND, BhQdPheDuyetKhbdg_.SO_QUYET_DINH, req.getSoQuyetDinhPheDuyetKHBDG(), builder);
 		thongBaoBDG.eq(Operator.AND, ThongBaoBanDauGia_.MA_THONG_BAO, req.getMaThongBaoBDG(), builder);
 		thongBaoBDG.like(Operator.AND, ThongBaoBanDauGia_.TRICH_YEU, req.getTrichYeu(), builder);
+		thongBaoBDG.eq(Operator.AND, ThongBaoBanDauGia_.LOAI_VTHH, req.getLoaiVthh(), builder);
 	}
 
 	private int count(ThongBaoBanDauGiaSearchRequest req, QueryUtils thongBaoBDG) {
@@ -118,5 +119,6 @@ public class ThongBaoBanDauGiaRepositoryCustomImpl implements ThongBaoBanDauGiaR
 		thongBaoBDG.setParam(query, BhQdPheDuyetKhbdg_.SO_QUYET_DINH, req.getSoQuyetDinhPheDuyetKHBDG());
 		thongBaoBDG.setParam(query, ThongBaoBanDauGia_.MA_THONG_BAO, req.getMaThongBaoBDG());
 		thongBaoBDG.setLikeParam(query, ThongBaoBanDauGia_.TRICH_YEU, req.getTrichYeu());
+		thongBaoBDG.setParam(query, ThongBaoBanDauGia_.LOAI_VTHH, req.getLoaiVthh());
 	}
 }

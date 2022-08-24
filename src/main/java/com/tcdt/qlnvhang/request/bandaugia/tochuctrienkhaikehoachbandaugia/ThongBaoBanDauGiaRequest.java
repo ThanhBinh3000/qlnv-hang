@@ -22,7 +22,7 @@ public class ThongBaoBanDauGiaRequest {
 	private String maDonVi;
 	private String capDonVi;
 	private Integer namKeHoach;
-	private Long loaiHangHoa;
+	private String loaiVthh;
 	private Long qdPheDuyetKhBdgId;
 	private String maThongBao;
 	private String trichYeu;
@@ -54,6 +54,9 @@ public class ThongBaoBanDauGiaRequest {
 	private String diaDiemToChucDauGia;
 	private String hinhThucDauGia;
 	private String phuongThucDauGia;
+	private String maVatTuCha;
+	private String maVatTu;
+
 	private String ghiChu;
 	private String trangThai;
 	private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
