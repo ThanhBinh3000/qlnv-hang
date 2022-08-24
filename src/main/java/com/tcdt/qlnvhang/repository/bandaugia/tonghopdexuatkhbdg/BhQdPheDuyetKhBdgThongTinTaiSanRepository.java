@@ -40,4 +40,10 @@ public interface BhQdPheDuyetKhBdgThongTinTaiSanRepository extends BaseRepositor
 	List<BhQdPheDuyetKhBdgThongTinTaiSan> findByIdIn(Collection<Long> ids);
 
 	List<BhQdPheDuyetKhBdgThongTinTaiSan> findByThongBaoBdgKtIdIn(Collection<Long> tbBdgKtIds);
+
+	@Query("select item from BhQdPheDuyetKhBdgThongTinTaiSan item " +
+			"inner join BhQdPheDuyetKhbdgCt ct on ct.id = item.qdPheDuyetKhbdgChiTietId " +
+			"inner join KeHoachBanDauGia kh on kh.id = ct.bhDgKeHoachId " +
+			"where ct.quyetDinhPheDuyetId = :qdPdKhBdgId")
+	List<BhQdPheDuyetKhBdgThongTinTaiSan> findTaiSanBdgTongCuc(@Param("qdPdKhBdgId") Long qdPdKhBdgId);
 }

@@ -27,6 +27,7 @@ public class BhQdPheDuyetKhbdgSearchResponse {
 	private String maTongHop;
 	private String loaiHangHoa;
 	private String trangThai;
+	private String tenTrangThai;
 
 
 	public BhQdPheDuyetKhbdgSearchResponse(Object[] rawData) {
@@ -38,7 +39,8 @@ public class BhQdPheDuyetKhbdgSearchResponse {
 		if (Objects.nonNull(rawData[5])) this.loaiHangHoa = (String) rawData[5];
 		if (Objects.nonNull(rawData[6])) {
 			String trangThaiId = (String) rawData[6];
-			this.trangThai = NhapXuatHangTrangThaiEnum.getTenById(trangThaiId);
+			this.trangThai = trangThaiId;
+			this.tenTrangThai = NhapXuatHangTrangThaiEnum.getTenById(trangThaiId);
 		}
 		this.id = (Long) rawData[7];
 	}
@@ -52,7 +54,7 @@ public class BhQdPheDuyetKhbdgSearchResponse {
 		objs[4] = this.maTongHop;
 		objs[5] = this.namKeHoach;
 		objs[6] = this.loaiHangHoa;
-		objs[7] = this.trangThai;
+		objs[7] = this.tenTrangThai;
 		return objs;
 	}
 

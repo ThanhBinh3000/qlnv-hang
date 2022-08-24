@@ -43,7 +43,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
@@ -222,7 +221,11 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 	@Override
 	public BhQdPheDuyetKhbdgResponse detail(Long id) throws Exception {
 		UserInfo userInfo = SecurityContextService.getUser();
+
 		if (userInfo == null) throw new Exception("Bad request.");
+
+		if (!(Contains.CAP_TONG_CUC.equalsIgnoreCase(userInfo.getCapDvi()) || Contains.CAP_CUC.equalsIgnoreCase(userInfo.getCapDvi())))
+			throw new Exception("Không được phép truy cập");
 
 		Optional<BhQdPheDuyetKhbdg> optional = qdPheDuyetKhbdgRepository.findById(id);
 		if (!optional.isPresent()) throw new Exception("quyết định phê duyệt kế hoạch bán đấu giá không tồn tại");
@@ -244,8 +247,28 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 		if (Contains.CAP_CUC.equalsIgnoreCase(userInfo.getCapDvi())) {
 			List<BhQdPheDuyetKhBdgThongTinTaiSan> taiSanBdgCuc = bhQdPheDuyetKhBdgThongTinTaiSanRepository.findTaiSanBdgCuc(theEntity.getTongHopDeXuatKhbdgId(), userInfo.getDvql());
 			response.setThongTinTaiSanCucs(thongTinTaiSanResponseMapper.toDto(taiSanBdgCuc));
+		} else if (Contains.CAP_TONG_CUC.equalsIgnoreCase(userInfo.getCapDvi())) {
+			response.setChiTietList(chiTietResponseMapper.toDto(this.getThongTinTaiSanTongCuc(theEntity.getId())));
 		}
 		return response;
+	}
+
+	private List<BhQdPheDuyetKhbdgCt> getThongTinTaiSanTongCuc(Long qdPdKhbdgId) {
+		List<BhQdPheDuyetKhbdgCt> qdPheDuyetKhbdgCtList = chiTietRepository.findByQuyetDinhPheDuyetIdIn(Collections.singleton(qdPdKhbdgId));
+
+		if (CollectionUtils.isEmpty(qdPheDuyetKhbdgCtList)) return Collections.emptyList();
+
+		Set<Long> chiTietIds = qdPheDuyetKhbdgCtList.stream().map(BhQdPheDuyetKhbdgCt::getId).collect(Collectors.toSet());
+
+		List<BhQdPheDuyetKhBdgThongTinTaiSan> thongTinTaiSanList = thongTinTaiSanRepository.findByQdPheDuyetKhbdgChiTietIdIn(chiTietIds);
+
+		Map<Long, List<BhQdPheDuyetKhBdgThongTinTaiSan>> taiSanMap = thongTinTaiSanList.stream()
+				.collect(groupingBy(BhQdPheDuyetKhBdgThongTinTaiSan::getBhDgKehoachId));
+
+		qdPheDuyetKhbdgCtList.forEach(entry -> {
+			entry.setThongTinTaiSans(taiSanMap.get(entry.getBhDgKeHoachId()));
+		});
+		return qdPheDuyetKhbdgCtList;
 	}
 
 	@Override
@@ -305,7 +328,8 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 		log.info("Lấy thông tin tài sản của đề xuất kế hoạch bán đấu giá");
 		List<Long> bhDgKeHoachIdList = chiTietList.stream()
 				.map(BhTongHopDeXuatCtResponse::getBhDgKeHoachId)
-				.collect(Collectors.toList());;
+				.collect(Collectors.toList());
+		;
 
 		if (CollectionUtils.isEmpty(bhDgKeHoachIdList)) return responseList;
 

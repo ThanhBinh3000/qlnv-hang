@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.repository.bandaugia.quyetdinhpheduyetkehoachbandaugia
 
 import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdg;
 import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdg_;
-import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatCt;
 import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatCt_;
 import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdg;
 import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdg_;
@@ -36,7 +35,6 @@ public class BhQdPheDuyetKhbdgRepositoryCustomImpl implements BhQdPheDuyetKhbdgR
 		QueryUtils qdPheDuyet = QueryUtils.builder().clazz(BhQdPheDuyetKhbdg.class).alias("qdPheDuyetKHBDG").build();
 		QueryUtils vatTuCha = QueryUtils.builder().clazz(QlnvDmVattu.class).alias("vatTuCha").build();
 		QueryUtils tongHopDeXuat = QueryUtils.builder().clazz(BhTongHopDeXuatKhbdg.class).alias("tongHopDeXuat").build();
-		QueryUtils tongHopDeXuatCt = QueryUtils.builder().clazz(BhTongHopDeXuatCt.class).alias("tongHopDeXuatCt").build();
 		log.debug("Build select query");
 		builder.append(QueryUtils.SELECT)
 				.append(qdPheDuyet.selectField(BhQdPheDuyetKhbdg_.SO_QUYET_DINH))
@@ -51,17 +49,16 @@ public class BhQdPheDuyetKhbdgRepositoryCustomImpl implements BhQdPheDuyetKhbdgR
 		builder.append(QueryUtils.FROM)
 				.append(qdPheDuyet.buildAliasName())
 				.append(QueryUtils.buildInnerJoin(qdPheDuyet, vatTuCha, BhQdPheDuyetKhbdg_.MA_VAT_TU_CHA, QlnvDmVattu_.MA))
-				.append(QueryUtils.buildLeftJoin(qdPheDuyet, tongHopDeXuat, BhQdPheDuyetKhbdg_.TONG_HOP_DE_XUAT_KHBDG_ID, BhTongHopDeXuatKhbdg_.ID))
-				.append(QueryUtils.buildLeftJoin(tongHopDeXuat, tongHopDeXuatCt, BhTongHopDeXuatKhbdg_.ID, BhTongHopDeXuatCt_.BH_TONG_HOP_DE_XUAT_ID));
+				.append(QueryUtils.buildLeftJoin(qdPheDuyet, tongHopDeXuat, BhQdPheDuyetKhbdg_.TONG_HOP_DE_XUAT_KHBDG_ID, BhTongHopDeXuatKhbdg_.ID));
 
-		this.setConditionSearch(req, builder, qdPheDuyet, tongHopDeXuatCt);
+		this.setConditionSearch(req, builder, qdPheDuyet);
 		log.debug("Set sort");
 		QueryUtils.buildSort(pageable, builder);
 
 		TypedQuery<Object[]> query = em.createQuery(QueryUtils.buildQuery(builder), Object[].class);
 
 		log.debug("Set params");
-		this.setParameterSearch(req, query, qdPheDuyet, tongHopDeXuatCt);
+		this.setParameterSearch(req, query, qdPheDuyet);
 
 		log.info("Set pageable");
 		query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize()).setMaxResults(pageable.getPageSize());
@@ -70,40 +67,37 @@ public class BhQdPheDuyetKhbdgRepositoryCustomImpl implements BhQdPheDuyetKhbdgR
 		List<BhQdPheDuyetKhbdgSearchResponse> responses = result.stream()
 				.map(BhQdPheDuyetKhbdgSearchResponse::new).collect(Collectors.toList());
 
-		return new PageImpl<>(responses, pageable, this.count(req, qdPheDuyet, tongHopDeXuatCt));
+		return new PageImpl<>(responses, pageable, this.count(req, qdPheDuyet));
 	}
 
 
-	private void setConditionSearch(BhQdPheDuyetKhbdgSearchRequest req, StringBuilder builder, QueryUtils qdPheDuyet, QueryUtils tongHopDeXuatCt) {
+	private void setConditionSearch(BhQdPheDuyetKhbdgSearchRequest req, StringBuilder builder, QueryUtils qdPheDuyet) {
 		QueryUtils.buildWhereClause(builder);
 		qdPheDuyet.eq(Operator.AND, BhQdPheDuyetKhbdg_.NAM_KE_HOACH, req.getNamKeHoach(), builder);
 		qdPheDuyet.eq(Operator.AND, BhQdPheDuyetKhbdg_.SO_QUYET_DINH, req.getSoQuyetDinh(), builder);
 		qdPheDuyet.like(Operator.AND, BhQdPheDuyetKhbdg_.TRICH_YEU, req.getTrichYeu(), builder);
 		qdPheDuyet.start(Operator.AND, BhQdPheDuyetKhbdg_.NGAY_KY, req.getNgayKyTuNgay(), builder);
 		qdPheDuyet.end(Operator.AND, BhQdPheDuyetKhbdg_.NGAY_KY, req.getNgayKyDenNgay(), builder);
-		qdPheDuyet.eq(Operator.AND, BhQdPheDuyetKhbdg_.MA_VAT_TU_CHA, req.getMaVatTuCha(), builder);
 		qdPheDuyet.eq(Operator.AND, BhQdPheDuyetKhbdg_.MA_DON_VI, req.getMaDonVi(), builder);
-		tongHopDeXuatCt.eq(Operator.AND, BhTongHopDeXuatCt_.MA_DON_VI, req.getMaDonViCuc(), builder);
 	}
 
-	private int count(BhQdPheDuyetKhbdgSearchRequest req, QueryUtils qdPheDuyet, QueryUtils tongHopDeXuatCt) {
+	private int count(BhQdPheDuyetKhbdgSearchRequest req, QueryUtils qdPheDuyet) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(qdPheDuyet.countBy(BhQdPheDuyetKhbdg_.ID));
-		setConditionSearch(req, builder, qdPheDuyet, tongHopDeXuatCt);
+		setConditionSearch(req, builder, qdPheDuyet);
 
 		TypedQuery<Long> query = em.createQuery(builder.toString(), Long.class);
 
-		this.setParameterSearch(req, query, qdPheDuyet, tongHopDeXuatCt);
+		this.setParameterSearch(req, query, qdPheDuyet);
 		return query.getSingleResult().intValue();
 	}
 
-	private void setParameterSearch(BhQdPheDuyetKhbdgSearchRequest req, Query query, QueryUtils qdPheDuyet, QueryUtils tongHopDeXuatCt) {
+	private void setParameterSearch(BhQdPheDuyetKhbdgSearchRequest req, Query query, QueryUtils qdPheDuyet) {
 		qdPheDuyet.setParam(query, BhQdPheDuyetKhbdg_.NAM_KE_HOACH, req.getNamKeHoach());
 		qdPheDuyet.setParam(query, BhQdPheDuyetKhbdg_.SO_QUYET_DINH, req.getSoQuyetDinh());
 		qdPheDuyet.setLikeParam(query, BhQdPheDuyetKhbdg_.TRICH_YEU, req.getTrichYeu());
 		qdPheDuyet.setParamStart(query, BhQdPheDuyetKhbdg_.NGAY_KY, req.getNgayKyTuNgay());
 		qdPheDuyet.setParamEnd(query, BhQdPheDuyetKhbdg_.NGAY_KY, req.getNgayKyDenNgay());
-		qdPheDuyet.setParam(query, BhQdPheDuyetKhbdg_.MA_VAT_TU_CHA, req.getMaVatTuCha());
-		tongHopDeXuatCt.setParam(query, BhQdPheDuyetKhbdg_.MA_VAT_TU_CHA, req.getMaVatTuCha());
+		qdPheDuyet.setParam(query, BhQdPheDuyetKhbdg_.MA_DON_VI, req.getMaDonVi());
 	}
 }
