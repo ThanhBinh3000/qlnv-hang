@@ -88,7 +88,7 @@ public class ThongBaoBanDauGiaSearchResponse {
 		objs[9] = DataUtils.toStringValue(this.thongBaoDGKhongThanhCong);
 		objs[10] = DataUtils.toStringValue(this.bienBanBDG);
 		objs[11] = DataUtils.toStringValue(this.qdPheDuyetKQBdg);
-		objs[12] = DataUtils.toStringValue(this.trangThai);
+		objs[12] = DataUtils.toStringValue(NhapXuatHangTrangThaiEnum.getTenById(this.trangThai));
 		return objs;
 	}
 }
