@@ -9,12 +9,16 @@ import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKh
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.mapper.bandaugia.quyetdinhpheduyetkehoachbandaugia.*;
+import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.kehoachbanhangdaugia.BanDauGiaPhanLoTaiSanRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgCtRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.tonghopdexuatkhbdg.BhQdPheDuyetKhBdgThongTinTaiSanRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgRepository;
+import com.tcdt.qlnvhang.repository.khotang.KtDiemKhoRepository;
+import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
+import com.tcdt.qlnvhang.repository.khotang.KtNhaKhoRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetkehochbandaugia.BhQdPheDuyetKhbdgCtRequest;
@@ -32,7 +36,11 @@ import com.tcdt.qlnvhang.service.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhb
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
+import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
+import com.tcdt.qlnvhang.table.khotang.KtNganLo;
+import com.tcdt.qlnvhang.table.khotang.KtNhaKho;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExcelHeaderConst;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -48,6 +56,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
@@ -84,6 +93,10 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 
 	private final BhQdPheDuyetKhBdgThongTinTaiSanRepository thongTinTaiSanRepository;
 	private final BhQdPheDuyetKhBdgThongTinTaiSanRepository bhQdPheDuyetKhBdgThongTinTaiSanRepository;
+	private final KtNganLoRepository ktNganLoRepository;
+	private final KtDiemKhoRepository ktDiemKhoRepository;
+	private final KtNhaKhoRepository ktNhaKhoRepository;
+	private final QlnvDmDonviRepository dmDonviRepository;
 
 	@Override
 	public BhQdPheDuyetKhbdgResponse create(BhQdPheDuyetKhbdgRequest req) throws Exception {
@@ -246,14 +259,16 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 
 		if (Contains.CAP_CUC.equalsIgnoreCase(userInfo.getCapDvi())) {
 			List<BhQdPheDuyetKhBdgThongTinTaiSan> taiSanBdgCuc = bhQdPheDuyetKhBdgThongTinTaiSanRepository.findTaiSanBdgCuc(theEntity.getTongHopDeXuatKhbdgId(), userInfo.getDvql());
-			response.setThongTinTaiSanCucs(thongTinTaiSanResponseMapper.toDto(taiSanBdgCuc));
+			List<BhQdPheDuyetKhBdgThongTinTaiSanResponse> taiSanCucRes = thongTinTaiSanResponseMapper.toDto(taiSanBdgCuc);
+			this.buildThongTinKho(taiSanCucRes);
+			response.setThongTinTaiSanCucs(taiSanCucRes);
 		} else if (Contains.CAP_TONG_CUC.equalsIgnoreCase(userInfo.getCapDvi())) {
-			response.setChiTietList(chiTietResponseMapper.toDto(this.getThongTinTaiSanTongCuc(theEntity.getId())));
+			response.setChiTietList(this.getThongTinTaiSanTongCuc(theEntity.getId()));
 		}
 		return response;
 	}
 
-	private List<BhQdPheDuyetKhbdgCt> getThongTinTaiSanTongCuc(Long qdPdKhbdgId) {
+	private List<BhQdPheDuyetKhbdgCtResponse> getThongTinTaiSanTongCuc(Long qdPdKhbdgId) {
 		List<BhQdPheDuyetKhbdgCt> qdPheDuyetKhbdgCtList = chiTietRepository.findByQuyetDinhPheDuyetIdIn(Collections.singleton(qdPdKhbdgId));
 
 		if (CollectionUtils.isEmpty(qdPheDuyetKhbdgCtList)) return Collections.emptyList();
@@ -262,13 +277,21 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 
 		List<BhQdPheDuyetKhBdgThongTinTaiSan> thongTinTaiSanList = thongTinTaiSanRepository.findByQdPheDuyetKhbdgChiTietIdIn(chiTietIds);
 
+
+
 		Map<Long, List<BhQdPheDuyetKhBdgThongTinTaiSan>> taiSanMap = thongTinTaiSanList.stream()
 				.collect(groupingBy(BhQdPheDuyetKhBdgThongTinTaiSan::getBhDgKehoachId));
 
-		qdPheDuyetKhbdgCtList.forEach(entry -> {
-			entry.setThongTinTaiSans(taiSanMap.get(entry.getBhDgKeHoachId()));
-		});
-		return qdPheDuyetKhbdgCtList;
+		List<BhQdPheDuyetKhbdgCtResponse> responseList = qdPheDuyetKhbdgCtList.stream().map(entry -> {
+			BhQdPheDuyetKhbdgCtResponse chiTiet = chiTietResponseMapper.toDto(entry);
+			if (taiSanMap.get(entry.getBhDgKeHoachId()) == null) return chiTiet;
+			List<BhQdPheDuyetKhBdgThongTinTaiSanResponse> taiSanList = thongTinTaiSanResponseMapper.toDto(taiSanMap.get(entry.getBhDgKeHoachId()));
+			this.buildThongTinKho(taiSanList);
+			chiTiet.setThongTinTaiSans(taiSanList);
+			return chiTiet;
+		}).collect(Collectors.toList());
+
+		return responseList;
 	}
 
 	@Override
@@ -345,7 +368,9 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 				.collect(groupingBy(BhQdPheDuyetKhBdgThongTinTaiSanResponse::getBhDgKehoachId));
 
 		responseList.forEach(entry -> {
-			entry.setThongTinTaiSans(taiSanMap.get(entry.getBhDgKeHoachId()));
+			List<BhQdPheDuyetKhBdgThongTinTaiSanResponse> res = taiSanMap.get(entry.getBhDgKeHoachId());
+			this.buildThongTinKho(res);
+			entry.setThongTinTaiSans(res);
 		});
 
 		return responseList;
@@ -369,5 +394,37 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 		theEntity.setLyDoTuChoi(stReq.getLyDo());
 		qdPheDuyetKhbdgRepository.save(theEntity);
 		return true;
+	}
+
+	private void buildThongTinKho(List<BhQdPheDuyetKhBdgThongTinTaiSanResponse> responses) {
+		if (org.springframework.util.CollectionUtils.isEmpty(responses)) return;
+		List<String> maLoKhoList = responses.stream().map(BhQdPheDuyetKhBdgThongTinTaiSanResponse::getMaLoKho).collect(Collectors.toList());
+		List<String> maNhaKhoList = responses.stream().map(BhQdPheDuyetKhBdgThongTinTaiSanResponse::getMaNhaKho).collect(Collectors.toList());
+		List<String> maDiemKhoList = responses.stream().map(BhQdPheDuyetKhBdgThongTinTaiSanResponse::getMaDiemKho).collect(Collectors.toList());
+		Set<String> maChiCucList = responses.stream().map(BhQdPheDuyetKhBdgThongTinTaiSanResponse::getMaChiCuc).collect(Collectors.toSet());
+
+
+		Map<String, KtNganLo> mapNganLo = ktNganLoRepository.findByMaNganloIn(maLoKhoList)
+				.stream().collect(Collectors.toMap(KtNganLo::getMaNganlo, Function.identity()));
+
+		Map<String, KtDiemKho> mapDiemKho = ktDiemKhoRepository.findByMaDiemkhoIn(maDiemKhoList)
+				.stream().collect(Collectors.toMap(KtDiemKho::getMaDiemkho, Function.identity()));
+
+		Map<String, KtNhaKho> mapNhaKho = ktNhaKhoRepository.findByMaNhakhoIn(maNhaKhoList)
+				.stream().collect(Collectors.toMap(KtNhaKho::getMaNhakho, Function.identity()));
+
+		Map<String, QlnvDmDonvi> mapChiCuc = dmDonviRepository.findByMaDviIn(maChiCucList)
+				.stream().collect(Collectors.toMap(QlnvDmDonvi::getMaDvi, Function.identity()));
+
+		for (BhQdPheDuyetKhBdgThongTinTaiSanResponse item : responses) {
+			KtNganLo nganLo = mapNganLo.get(item.getMaLoKho());
+			KtNhaKho nhaKho = mapNhaKho.get(item.getMaNhaKho());
+			KtDiemKho diemKho = mapDiemKho.get(item.getMaDiemKho());
+			QlnvDmDonvi chiCuc = mapChiCuc.get(item.getMaChiCuc());
+			if (nganLo != null) item.setTenLoKho(nganLo.getTenNganlo());
+			if (nhaKho != null) item.setTenNhaKho(nhaKho.getTenNhakho());
+			if (diemKho != null) item.setTenDiemKho(diemKho.getTenDiemkho());
+			if (chiCuc != null) item.setTenChiCuc(chiCuc.getTenDvi());
+		}
 	}
 }
