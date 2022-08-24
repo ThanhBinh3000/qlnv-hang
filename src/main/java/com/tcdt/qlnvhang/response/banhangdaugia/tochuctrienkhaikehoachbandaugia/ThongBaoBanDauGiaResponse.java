@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.response.banhangdaugia.tochuctrienkhaikehoachbandaugia
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.tcdt.qlnvhang.response.banhangdaugia.tonghopdexuatkhbdg.BhQdPheDuyetKhBdgThongTinTaiSanResponse;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -61,4 +62,5 @@ public class ThongBaoBanDauGiaResponse {
 	private String tenTrangThai;
 	private String trangThaiDuyet;
 	private List<BhQdPheDuyetKhBdgThongTinTaiSanResponse> taiSanBdgList;
+	private List<FileDinhKem> fileDinhKems;
 }

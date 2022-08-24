@@ -196,6 +196,7 @@ public class ThongBaoBanDauGiaServiceImpl extends BaseServiceImpl implements Tho
 		if (!CollectionUtils.isEmpty(taiSanList)) {
 			response.setTaiSanBdgList(taiSanResponseMapper.toDto(taiSanList));
 		}
+		response.setFileDinhKems(fileDinhKemService.search(thongBaoBanDauGia.getId(), Collections.singleton(ThongBaoBanDauGia.TABLE_NAME)));
 
 		return response;
 	}
