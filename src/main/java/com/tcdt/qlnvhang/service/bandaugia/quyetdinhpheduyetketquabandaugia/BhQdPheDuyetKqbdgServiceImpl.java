@@ -101,7 +101,7 @@ public class BhQdPheDuyetKqbdgServiceImpl extends BaseServiceImpl implements BhQ
                 if (chiTiet == null)
                     throw new Exception("Phân lô tài sản không tồn tại.");
                 mapChiTiet.remove(id);
-                chiTiet.setBbBanDauGiaId(parentId);
+                chiTiet.setQdPheDuyetKqbdgId(parentId);
                 chiTiet.setDonGiaTrungDauGia(req.getDonGiaTrungDauGia());
                 chiTiet.setTrungDauGia(req.getTrungDauGia());
                 chiTiets.add(chiTiet);
