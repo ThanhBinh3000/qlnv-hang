@@ -96,9 +96,11 @@ public class ThongBaoBanDauGiaRepositoryCustomImpl implements ThongBaoBanDauGiaR
 		thongBaoBDG.eq(Operator.AND, ThongBaoBanDauGia_.NAM_KE_HOACH, req.getNamKeHoach(), builder);
 		thongBaoBDG.eq(Operator.AND, ThongBaoBanDauGia_.MA_VAT_TU_CHA, req.getMaVatTuCha(), builder);
 		thongBaoBDG.eq(Operator.AND, BhQdPheDuyetKhbdg_.SO_QUYET_DINH, req.getSoQuyetDinhPheDuyetKHBDG(), builder);
-		thongBaoBDG.eq(Operator.AND, ThongBaoBanDauGia_.MA_THONG_BAO, req.getMaThongBaoBDG(), builder);
+		thongBaoBDG.like(Operator.AND, ThongBaoBanDauGia_.MA_THONG_BAO, req.getMaThongBaoBDG(), builder);
 		thongBaoBDG.like(Operator.AND, ThongBaoBanDauGia_.TRICH_YEU, req.getTrichYeu(), builder);
 		thongBaoBDG.eq(Operator.AND, ThongBaoBanDauGia_.LOAI_VTHH, req.getLoaiVthh(), builder);
+		thongBaoBDG.start(Operator.AND, ThongBaoBanDauGia_.THOI_GIAN_TO_CHUC_DAU_GIA_TU_NGAY, req.getNgayToChucBDGTuNgay(), builder);
+		thongBaoBDG.end(Operator.AND, ThongBaoBanDauGia_.THOI_GIAN_TO_CHUC_DAU_GIA_DEN_NGAY, req.getNgayToChucBDGDenNgay(), builder);
 	}
 
 	private int count(ThongBaoBanDauGiaSearchRequest req, QueryUtils thongBaoBDG) {
@@ -121,8 +123,10 @@ public class ThongBaoBanDauGiaRepositoryCustomImpl implements ThongBaoBanDauGiaR
 		thongBaoBDG.setParam(query, ThongBaoBanDauGia_.NAM_KE_HOACH, req.getNamKeHoach());
 		thongBaoBDG.setParam(query, ThongBaoBanDauGia_.MA_VAT_TU_CHA, req.getMaVatTuCha());
 		thongBaoBDG.setParam(query, BhQdPheDuyetKhbdg_.SO_QUYET_DINH, req.getSoQuyetDinhPheDuyetKHBDG());
-		thongBaoBDG.setParam(query, ThongBaoBanDauGia_.MA_THONG_BAO, req.getMaThongBaoBDG());
+		thongBaoBDG.setLikeParam(query, ThongBaoBanDauGia_.MA_THONG_BAO, req.getMaThongBaoBDG());
 		thongBaoBDG.setLikeParam(query, ThongBaoBanDauGia_.TRICH_YEU, req.getTrichYeu());
 		thongBaoBDG.setParam(query, ThongBaoBanDauGia_.LOAI_VTHH, req.getLoaiVthh());
+		thongBaoBDG.setParamStart(query, ThongBaoBanDauGia_.THOI_GIAN_TO_CHUC_DAU_GIA_TU_NGAY, req.getNgayToChucBDGTuNgay());
+		thongBaoBDG.setParamEnd(query, ThongBaoBanDauGia_.THOI_GIAN_TO_CHUC_DAU_GIA_DEN_NGAY, req.getNgayToChucBDGDenNgay());
 	}
 }

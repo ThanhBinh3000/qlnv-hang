@@ -62,7 +62,7 @@ public class QueryUtils {
 
 	public void like(Operator operator, String field, Object req, StringBuilder builder) {
 		if (Objects.nonNull(req)) {
-			builder.append(String.format(" %s %s LIKE :%s ", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), field));
+			builder.append(String.format(" %s %s LIKE :%s ", Optional.ofNullable(operator).map(Enum::toString).orElse(""), this.getField(field), this.getParamName(field)));
 		}
 	}
 
