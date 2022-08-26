@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.impl;
 
 
 import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.BanDauGiaPhanLoTaiSan;
+import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGia;
 import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhBdgThongTinTaiSan;
 import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdg;
 import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgCt;
@@ -12,6 +13,7 @@ import com.tcdt.qlnvhang.mapper.bandaugia.quyetdinhpheduyetkehoachbandaugia.*;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.kehoachbanhangdaugia.BanDauGiaPhanLoTaiSanRepository;
+import com.tcdt.qlnvhang.repository.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGiaRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgCtRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.tonghopdexuatkhbdg.BhQdPheDuyetKhBdgThongTinTaiSanRepository;
@@ -98,9 +100,12 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 	private final KtNhaKhoRepository ktNhaKhoRepository;
 	private final QlnvDmDonviRepository dmDonviRepository;
 
+	private final KeHoachBanDauGiaRepository keHoachBanDauGiaRepository;
+
 	@Override
 	public BhQdPheDuyetKhbdgResponse create(BhQdPheDuyetKhbdgRequest req) throws Exception {
 		if (req == null) return null;
+		this.validateRequest(req);
 
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null) throw new Exception("Bad request.");
@@ -124,6 +129,17 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 
 		}
 		return qdPheduyetKhbdgResponseMapper.toDto(theEntity);
+	}
+
+	private void validateRequest(BhQdPheDuyetKhbdgRequest request) throws Exception {
+		if (!CollectionUtils.isEmpty(request.getChiTietList())) {
+			Set<Long> bhDgKeHoachIdList = request.getChiTietList().stream().map(BhQdPheDuyetKhbdgCtRequest::getBhDgKeHoachId).collect(Collectors.toSet());
+			List<KeHoachBanDauGia> keHoachBanDauGiaList = keHoachBanDauGiaRepository.findByIdIn(bhDgKeHoachIdList);
+			Map<Long, KeHoachBanDauGia> keHoachBanDauGiaMap = keHoachBanDauGiaList.stream().collect(Collectors.toMap(KeHoachBanDauGia::getId, Function.identity(),
+					(existing, replacement) -> existing));
+			Set<Long> bhDgKeHoachIdListNotExist = bhDgKeHoachIdList.stream().filter(entry -> keHoachBanDauGiaMap.get(entry) == null).collect(Collectors.toSet());
+			if (!CollectionUtils.isEmpty(bhDgKeHoachIdListNotExist)) throw new Exception("Kế hoạch bán đấu giá không tồn tại " + bhDgKeHoachIdListNotExist);
+		}
 	}
 
 	private List<BhQdPheDuyetKhbdgCt> createChiTietQd(BhQdPheDuyetKhbdgRequest req, BhQdPheDuyetKhbdg theEntity) {
@@ -150,6 +166,7 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 	@Override
 	public BhQdPheDuyetKhbdgResponse update(BhQdPheDuyetKhbdgRequest req) throws Exception {
 		if (req == null) return null;
+		this.validateRequest(req);
 
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null) throw new Exception("Bad request.");
@@ -278,7 +295,6 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 		List<BhQdPheDuyetKhBdgThongTinTaiSan> thongTinTaiSanList = thongTinTaiSanRepository.findByQdPheDuyetKhbdgChiTietIdIn(chiTietIds);
 
 
-
 		Map<Long, List<BhQdPheDuyetKhBdgThongTinTaiSan>> taiSanMap = thongTinTaiSanList.stream()
 				.collect(groupingBy(BhQdPheDuyetKhBdgThongTinTaiSan::getBhDgKehoachId));
 
@@ -305,13 +321,14 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 			return true;
 
 		String[] rowsName = new String[]{ExcelHeaderConst.STT,
-				ExcelHeaderConst.NGAY_TONG_HOP,
-				ExcelHeaderConst.NOI_DUNG_TONG_HOP,
+				ExcelHeaderConst.SO_QUYET_DINH,
+				ExcelHeaderConst.NGAY_KY,
+				ExcelHeaderConst.TRICH_YEU,
+				ExcelHeaderConst.MA_TONG_HOP,
 				ExcelHeaderConst.NAM_KE_HOACH,
-				ExcelHeaderConst.SO_QD_PHE_DUYET_KH_BDG,
 				ExcelHeaderConst.LOAI_HANG_HOA,
 				ExcelHeaderConst.TRANG_THAI};
-		String filename = "tong_hop_de_xuat_kh_bdg.xlsx";
+		String filename = "Quyet_dinh_phe_duyet_ke_hoach_ban_dau_gia.xlsx";
 
 		List<Object[]> dataList = new ArrayList<>();
 
@@ -367,11 +384,13 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 		Map<Long, List<BhQdPheDuyetKhBdgThongTinTaiSanResponse>> taiSanMap = taiSanResponseList.stream()
 				.collect(groupingBy(BhQdPheDuyetKhBdgThongTinTaiSanResponse::getBhDgKehoachId));
 
-		responseList.forEach(entry -> {
+		for (int i = 0; i < responseList.size(); i++) {
+			BhQdPheDuyetKhbdgCtResponse entry = responseList.get(i);
 			List<BhQdPheDuyetKhBdgThongTinTaiSanResponse> res = taiSanMap.get(entry.getBhDgKeHoachId());
+			if (res == null) responseList.remove(i);
 			this.buildThongTinKho(res);
 			entry.setThongTinTaiSans(res);
-		});
+		}
 
 		return responseList;
 	}

@@ -18,4 +18,8 @@ public interface ExcelHeaderConst {
 	String TRICH_YEU = "Trích yếu";
 	String PHUONG_THUC_DG = "Phương thức đấu giá";
 
+	String SO_QUYET_DINH = "Số quyết định";
+	String NGAY_KY = "Ngày Ký";
+
+
 }

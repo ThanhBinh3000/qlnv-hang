@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,7 @@ public class BhQdPheDuyetKhbdgRequest {
 	private String maVatTuCha;
 	private String maVatTu;
 	private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
+	@Valid
 	List<BhQdPheDuyetKhbdgCtRequest> chiTietList = new ArrayList<>();
 	private String lyDoTuChoi;
 
