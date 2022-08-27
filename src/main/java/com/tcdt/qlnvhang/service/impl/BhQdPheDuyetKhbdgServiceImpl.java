@@ -113,6 +113,7 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null) throw new Exception("Bad request.");
+		req.setId(null);
 		BhQdPheDuyetKhbdg theEntity = qdPheduyetKhbdgRequestMapper.toEntity(req);
 		theEntity.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
 		theEntity.setNgayTao(LocalDate.now());
@@ -304,6 +305,11 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 
 		List<BhQdPheDuyetKhBdgThongTinTaiSan> thongTinTaiSanList = thongTinTaiSanRepository.findByQdPheDuyetKhbdgChiTietIdIn(chiTietIds);
 
+		Set<String> maChungLoaiHHList = thongTinTaiSanList.stream().map(BhQdPheDuyetKhBdgThongTinTaiSan::getChungLoaiHh).collect(Collectors.toSet());
+		Set<QlnvDmVattu> dmVattuList = dmVattuRepository.findByMaIn(maChungLoaiHHList);
+
+		Map<String, QlnvDmVattu> vattuMap = dmVattuList.stream().collect(Collectors.toMap(QlnvDmVattu::getMa, Function.identity(), (ex1, ex2) -> ex1));
+
 
 		Map<Long, List<BhQdPheDuyetKhBdgThongTinTaiSan>> taiSanMap = thongTinTaiSanList.stream()
 				.collect(groupingBy(BhQdPheDuyetKhBdgThongTinTaiSan::getBhDgKehoachId));
@@ -311,7 +317,13 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 		List<BhQdPheDuyetKhbdgCtResponse> responseList = qdPheDuyetKhbdgCtList.stream().map(entry -> {
 			BhQdPheDuyetKhbdgCtResponse chiTiet = chiTietResponseMapper.toDto(entry);
 			if (taiSanMap.get(entry.getBhDgKeHoachId()) == null) return chiTiet;
-			List<BhQdPheDuyetKhBdgThongTinTaiSanResponse> taiSanList = thongTinTaiSanResponseMapper.toDto(taiSanMap.get(entry.getBhDgKeHoachId()));
+			//Build thông tin tài sản
+			List<BhQdPheDuyetKhBdgThongTinTaiSanResponse> taiSanList = Optional.ofNullable(taiSanMap.get(entry.getBhDgKeHoachId())).map(ts -> {
+				List<BhQdPheDuyetKhBdgThongTinTaiSanResponse> entryList = thongTinTaiSanResponseMapper.toDto(ts);
+				entryList.forEach(item -> item.setTenChungLoaiHh(Optional.ofNullable(vattuMap.get(item.getChungLoaiHh())).map(QlnvDmVattu::getTen).orElse(null)));
+				return entryList;
+			}).orElse(null);
+
 			this.buildThongTinKho(taiSanList);
 			chiTiet.setThongTinTaiSans(taiSanList);
 			return chiTiet;

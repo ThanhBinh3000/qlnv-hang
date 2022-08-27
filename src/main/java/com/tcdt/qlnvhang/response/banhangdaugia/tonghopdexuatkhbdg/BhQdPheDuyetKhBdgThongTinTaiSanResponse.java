@@ -25,6 +25,7 @@ public class BhQdPheDuyetKhBdgThongTinTaiSanResponse {
 	private String maNhaKho;
 	private String tenNhaKho;
 	private String chungLoaiHh;
+	private String tenChungLoaiHh;
 	private String maDvTaiSan;
 	private BigDecimal tonKho;
 	private BigDecimal soLuong;
