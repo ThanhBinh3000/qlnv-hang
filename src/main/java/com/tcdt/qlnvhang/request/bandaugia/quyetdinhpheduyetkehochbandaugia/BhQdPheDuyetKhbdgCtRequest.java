@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,10 +21,20 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BhQdPheDuyetKhbdgCtRequest {
-    private Long id;
-    @NotNull
-    private Long bhDgKeHoachId;
-    @NotNull
-    private Long quyetDinhPheDuyetId;
-    List<BhQdPheDuyetKhBdgThongTinTaiSanRequest> thongTinTaiSans = new ArrayList<>();
+	private Long id;
+	@NotNull
+	private Long bhDgKeHoachId;
+	@NotNull
+	private Long quyetDinhPheDuyetId;
+	private String maDonVi;
+	private LocalDate ngayKy;
+	private String trichYeu;
+	private BigDecimal soLuongDvTaiSan;
+	private BigDecimal giaKhoiDiem;
+	private BigDecimal khoanTienDatTruoc;
+	private Long bhTongHopDeXuatId;
+	private String tenDonVi;
+	private String soKeHoach;
+
+	List<BhQdPheDuyetKhBdgThongTinTaiSanRequest> thongTinTaiSans = new ArrayList<>();
 }

@@ -37,7 +37,6 @@ public class BhQdPheDuyetKhBdgThongTinTaiSanResponse {
 	private String donViTinh;
 	private String ghiChu;
 	private Long qdPheDuyetKhbdgChiTietId;
-	private String tongHopDeXuatId;
 
 	public BhQdPheDuyetKhBdgThongTinTaiSanResponse(BhQdPheDuyetKhBdgThongTinTaiSan item) {
 		BeanUtils.copyProperties(item, this);

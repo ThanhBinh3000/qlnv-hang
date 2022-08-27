@@ -5,7 +5,7 @@ import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.BanDauGiaPhanLo
 import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGia;
 import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGia_;
 import com.tcdt.qlnvhang.entities.chitieukehoachnam.ChiTieuKeHoachNam;
-import com.tcdt.qlnvhang.enums.TrangThaiEnum;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.mapper.bandaugia.kehoachbandaugia.BanDauGiaDiaDiemGiaoNhanRequestMapper;
 import com.tcdt.qlnvhang.mapper.bandaugia.kehoachbandaugia.BanDauGiaPhanLoTaiSanRequestMapper;
 import com.tcdt.qlnvhang.mapper.bandaugia.kehoachbandaugia.KeHoachBanDauGiaRequestMapper;
@@ -94,7 +94,7 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 		if (userInfo == null) throw new Exception("Bad request.");
 		log.info("Save ke hoach ban dau gia");
 		KeHoachBanDauGia keHoachDauGia = kehoachRequestMapper.toEntity(req);
-		keHoachDauGia.setTrangThai(TrangThaiEnum.DU_THAO.getId());
+		keHoachDauGia.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
 		keHoachDauGia.setNgayTao(LocalDate.now());
 		keHoachDauGia.setNguoiTaoId(userInfo.getId());
 		keHoachDauGia.setMaDv(userInfo.getDvql());
@@ -343,7 +343,7 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 			throw new Exception("Kế hoạch bán đấu giá không tồn tại");
 		KeHoachBanDauGia keHoachDauGia = optional.get();
 		//validate Trạng Thái
-		String trangThai = TrangThaiEnum.getTrangThaiDuyetById(trangThaiId);
+		String trangThai = NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(trangThaiId);
 		if (StringUtils.isEmpty(trangThai)) throw new Exception("Trạng thái không tồn tại");
 		keHoachDauGia.setTrangThai(trangThaiId);
 		keHoachDauGia = keHoachBanDauGiaRepository.save(keHoachDauGia);

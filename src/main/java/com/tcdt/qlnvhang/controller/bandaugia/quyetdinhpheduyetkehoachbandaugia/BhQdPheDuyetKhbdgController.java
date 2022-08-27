@@ -80,7 +80,7 @@ public class BhQdPheDuyetKhbdgController extends BaseController {
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error(e.getMessage());
+			log.error("Delete error ", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
@@ -97,7 +97,7 @@ public class BhQdPheDuyetKhbdgController extends BaseController {
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error(e.getMessage());
+			log.error("Delete error ", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
@@ -114,7 +114,7 @@ public class BhQdPheDuyetKhbdgController extends BaseController {
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error(e.getMessage());
+			log.error("Search error ", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
@@ -131,7 +131,7 @@ public class BhQdPheDuyetKhbdgController extends BaseController {
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error(e.getMessage());
+			log.error("Detail error ", e);
 		}
 		return ResponseEntity.ok(resp);
 	}

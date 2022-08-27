@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -27,6 +29,27 @@ public class BhQdPheDuyetKhbdgCt {
 
 	@Column(name = "BH_QD_PHE_DUYET_KHBDG_ID")
 	private Long quyetDinhPheDuyetId;
+
+	@Column(name = "MA_DON_VI")
+	private String maDonVi;
+
+	@Column(name = "NGAY_KY")
+	private LocalDate ngayKy;
+
+	@Column(name = "TRICH_YEU")
+	private String trichYeu;
+
+	@Column(name = "SO_LUONG_DV_TAI_SAN")
+	private BigDecimal soLuongDvTaiSan;
+
+	@Column(name = "GIA_KHOI_DIEM")
+	private BigDecimal giaKhoiDiem;
+
+	@Column(name = "KHOAN_TIEN_DAT_TRUOC")
+	private BigDecimal khoanTienDatTruoc;
+
+	@Column(name = "SO_KE_HOACH")
+	private String soKeHoach;
 
 	@Transient
 	List<BhQdPheDuyetKhBdgThongTinTaiSan> thongTinTaiSans;

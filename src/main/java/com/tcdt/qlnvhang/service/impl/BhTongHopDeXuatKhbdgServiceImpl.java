@@ -3,7 +3,6 @@ package com.tcdt.qlnvhang.service.impl;
 import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatCt;
 import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdg;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.mapper.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatCtRequestMapper;
 import com.tcdt.qlnvhang.mapper.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatCtResponseMapper;
 import com.tcdt.qlnvhang.mapper.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgRequestMapper;
@@ -66,7 +65,7 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null) throw new Exception("Bad request.");
 		BhTongHopDeXuatKhbdg theEntity = tongHopDeXuatKhbdgRequestMapper.toEntity(req);
-		theEntity.setTrangThai(TrangThaiEnum.DU_THAO.getId());
+		theEntity.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
 		theEntity.setNgayTao(LocalDate.now());
 		theEntity.setNguoiTaoId(userInfo.getId());
 		theEntity.setMaDonVi(userInfo.getDvql());

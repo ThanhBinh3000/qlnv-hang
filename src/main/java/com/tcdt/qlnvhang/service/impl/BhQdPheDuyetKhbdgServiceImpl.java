@@ -8,7 +8,6 @@ import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.Bh
 import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgCt;
 import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdg;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.mapper.bandaugia.quyetdinhpheduyetkehoachbandaugia.*;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
@@ -110,7 +109,7 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null) throw new Exception("Bad request.");
 		BhQdPheDuyetKhbdg theEntity = qdPheduyetKhbdgRequestMapper.toEntity(req);
-		theEntity.setTrangThai(TrangThaiEnum.DU_THAO.getId());
+		theEntity.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
 		theEntity.setNgayTao(LocalDate.now());
 		theEntity.setNguoiTaoId(userInfo.getId());
 		theEntity.setMaDonVi(userInfo.getDvql());
@@ -138,7 +137,8 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 			Map<Long, KeHoachBanDauGia> keHoachBanDauGiaMap = keHoachBanDauGiaList.stream().collect(Collectors.toMap(KeHoachBanDauGia::getId, Function.identity(),
 					(existing, replacement) -> existing));
 			Set<Long> bhDgKeHoachIdListNotExist = bhDgKeHoachIdList.stream().filter(entry -> keHoachBanDauGiaMap.get(entry) == null).collect(Collectors.toSet());
-			if (!CollectionUtils.isEmpty(bhDgKeHoachIdListNotExist)) throw new Exception("Kế hoạch bán đấu giá không tồn tại " + bhDgKeHoachIdListNotExist);
+			if (!CollectionUtils.isEmpty(bhDgKeHoachIdListNotExist))
+				throw new Exception("Kế hoạch bán đấu giá không tồn tại " + bhDgKeHoachIdListNotExist);
 		}
 	}
 
@@ -220,10 +220,12 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 
 		log.info("Delete file dinh kem");
 		fileDinhKemService.deleteMultiple(ids, Collections.singleton(BhQdPheDuyetKhbdg.TABLE_NAME));
-		Set<Long> chiTietIds = entityList.stream().map(BhQdPheDuyetKhbdg::getId).collect(Collectors.toSet());
-		if (CollectionUtils.isEmpty(chiTietIds)) return true;
+		Set<Long> idList = entityList.stream().map(BhQdPheDuyetKhbdg::getId).collect(Collectors.toSet());
+		if (CollectionUtils.isEmpty(idList)) return true;
 
-		List<BhQdPheDuyetKhbdgCt> chiTietList = chiTietRepository.findByIdIn(chiTietIds);
+		List<BhQdPheDuyetKhbdgCt> chiTietList = chiTietRepository.findByQuyetDinhPheDuyetIdIn(idList);
+
+		Set<Long> chiTietIds = chiTietList.stream().map(BhQdPheDuyetKhbdgCt::getId).collect(Collectors.toSet());
 
 		//Clean thông tin tài sản
 		List<BhQdPheDuyetKhBdgThongTinTaiSan> thongTinTaiSanList = thongTinTaiSanRepository.findByQdPheDuyetKhbdgChiTietIdIn(chiTietIds);
@@ -235,7 +237,7 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 			chiTietRepository.deleteAll(chiTietList);
 		}
 		log.info("Delete quyết định phê duyệt kế hoạch bán đấu giá");
-		qdPheDuyetKhbdgRepository.deleteAllByIdIn(ids);
+		qdPheDuyetKhbdgRepository.deleteAll(entityList);
 		return true;
 	}
 
@@ -369,9 +371,13 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 		List<Long> bhDgKeHoachIdList = chiTietList.stream()
 				.map(BhTongHopDeXuatCtResponse::getBhDgKeHoachId)
 				.collect(Collectors.toList());
-		;
 
 		if (CollectionUtils.isEmpty(bhDgKeHoachIdList)) return responseList;
+
+		List<KeHoachBanDauGia> keHoachBanDauGiaList = keHoachBanDauGiaRepository.findByIdIn(bhDgKeHoachIdList);
+		//key= id, vlue = kế hoạch
+		Map<Long, KeHoachBanDauGia> keHoachBdgMap = keHoachBanDauGiaList.stream().collect(Collectors.toMap(KeHoachBanDauGia::getId, Function.identity(),
+				(existing, replacement) -> existing));
 
 		List<BanDauGiaPhanLoTaiSan> phanLoTaiSanList = phanLoTaiSanRepository.findByBhDgKehoachIdIn(bhDgKeHoachIdList);
 
@@ -384,12 +390,13 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 		Map<Long, List<BhQdPheDuyetKhBdgThongTinTaiSanResponse>> taiSanMap = taiSanResponseList.stream()
 				.collect(groupingBy(BhQdPheDuyetKhBdgThongTinTaiSanResponse::getBhDgKehoachId));
 
-		for (int i = 0; i < responseList.size(); i++) {
-			BhQdPheDuyetKhbdgCtResponse entry = responseList.get(i);
+		responseList = responseList.stream().filter(entry -> keHoachBdgMap.get(entry.getBhDgKeHoachId()) != null).collect(Collectors.toList());
+
+		for (BhQdPheDuyetKhbdgCtResponse entry : responseList) {
 			List<BhQdPheDuyetKhBdgThongTinTaiSanResponse> res = taiSanMap.get(entry.getBhDgKeHoachId());
-			if (res == null) responseList.remove(i);
 			this.buildThongTinKho(res);
 			entry.setThongTinTaiSans(res);
+			entry.setSoKeHoach(keHoachBdgMap.get(entry.getBhDgKeHoachId()).getSoKeHoach());
 		}
 
 		return responseList;
@@ -416,7 +423,7 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 	}
 
 	private void buildThongTinKho(List<BhQdPheDuyetKhBdgThongTinTaiSanResponse> responses) {
-		if (org.springframework.util.CollectionUtils.isEmpty(responses)) return;
+		if (CollectionUtils.isEmpty(responses)) return;
 		List<String> maLoKhoList = responses.stream().map(BhQdPheDuyetKhBdgThongTinTaiSanResponse::getMaLoKho).collect(Collectors.toList());
 		List<String> maNhaKhoList = responses.stream().map(BhQdPheDuyetKhBdgThongTinTaiSanResponse::getMaNhaKho).collect(Collectors.toList());
 		List<String> maDiemKhoList = responses.stream().map(BhQdPheDuyetKhBdgThongTinTaiSanResponse::getMaDiemKho).collect(Collectors.toList());
