@@ -18,6 +18,7 @@ import com.tcdt.qlnvhang.repository.bandaugia.quyetdinhpheduyetkehoachbandaugia.
 import com.tcdt.qlnvhang.repository.bandaugia.tonghopdexuatkhbdg.BhQdPheDuyetKhBdgThongTinTaiSanRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtDiemKhoRepository;
+import com.tcdt.qlnvhang.repository.khotang.KtNganKhoRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNhaKhoRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -40,6 +41,7 @@ import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
+import com.tcdt.qlnvhang.table.khotang.KtNganKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganLo;
 import com.tcdt.qlnvhang.table.khotang.KtNhaKho;
 import com.tcdt.qlnvhang.util.Contains;
@@ -98,6 +100,9 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 	private final KtDiemKhoRepository ktDiemKhoRepository;
 	private final KtNhaKhoRepository ktNhaKhoRepository;
 	private final QlnvDmDonviRepository dmDonviRepository;
+
+	private final KtNganKhoRepository ktNganKhoRepository;
+
 
 	private final KeHoachBanDauGiaRepository keHoachBanDauGiaRepository;
 
@@ -262,6 +267,9 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 		Optional<BhQdPheDuyetKhbdg> optional = qdPheDuyetKhbdgRepository.findById(id);
 		if (!optional.isPresent()) throw new Exception("quyết định phê duyệt kế hoạch bán đấu giá không tồn tại");
 		BhQdPheDuyetKhbdg theEntity = optional.get();
+
+		List<FileDinhKem> fileDinhKemList = fileDinhKemService.search(theEntity.getId(), Collections.singleton(BhQdPheDuyetKhbdg.TABLE_NAME));
+		if (!CollectionUtils.isEmpty(fileDinhKemList)) theEntity.setFileDinhKems(fileDinhKemList);
 
 		BhQdPheDuyetKhbdgResponse response = qdPheduyetKhbdgResponseMapper.toDto(theEntity);
 
@@ -428,6 +436,7 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 		List<String> maNhaKhoList = responses.stream().map(BhQdPheDuyetKhBdgThongTinTaiSanResponse::getMaNhaKho).collect(Collectors.toList());
 		List<String> maDiemKhoList = responses.stream().map(BhQdPheDuyetKhBdgThongTinTaiSanResponse::getMaDiemKho).collect(Collectors.toList());
 		Set<String> maChiCucList = responses.stream().map(BhQdPheDuyetKhBdgThongTinTaiSanResponse::getMaChiCuc).collect(Collectors.toSet());
+		Set<String> maNganKhoList = responses.stream().map(BhQdPheDuyetKhBdgThongTinTaiSanResponse::getMaNganKho).collect(Collectors.toSet());
 
 
 		Map<String, KtNganLo> mapNganLo = ktNganLoRepository.findByMaNganloIn(maLoKhoList)
@@ -442,15 +451,20 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 		Map<String, QlnvDmDonvi> mapChiCuc = dmDonviRepository.findByMaDviIn(maChiCucList)
 				.stream().collect(Collectors.toMap(QlnvDmDonvi::getMaDvi, Function.identity()));
 
+		Map<String, KtNganKho> mapNganKho = ktNganKhoRepository.findByMaNgankhoIn(maNganKhoList)
+				.stream().collect(Collectors.toMap(KtNganKho::getMaNgankho, Function.identity()));
+
 		for (BhQdPheDuyetKhBdgThongTinTaiSanResponse item : responses) {
 			KtNganLo nganLo = mapNganLo.get(item.getMaLoKho());
 			KtNhaKho nhaKho = mapNhaKho.get(item.getMaNhaKho());
 			KtDiemKho diemKho = mapDiemKho.get(item.getMaDiemKho());
 			QlnvDmDonvi chiCuc = mapChiCuc.get(item.getMaChiCuc());
+			KtNganKho nganKho = mapNganKho.get(item.getMaNganKho());
 			if (nganLo != null) item.setTenLoKho(nganLo.getTenNganlo());
 			if (nhaKho != null) item.setTenNhaKho(nhaKho.getTenNhakho());
 			if (diemKho != null) item.setTenDiemKho(diemKho.getTenDiemkho());
 			if (chiCuc != null) item.setTenChiCuc(chiCuc.getTenDvi());
+			if (nganKho != null) item.setTenNganKho(nganKho.getTenNgankho());
 		}
 	}
 }
