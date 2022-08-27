@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.response.xuathang.quyetdinhgiaonhiemvuxuat;
 
 import com.tcdt.qlnvhang.response.CommonResponse;
+import com.tcdt.qlnvhang.response.IdAndNameDto;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,7 +30,7 @@ public class XhQdGiaoNvuXuatRes extends CommonResponse {
     private String loaiVthh;
     
     private List<XhQdGiaoNvuXuatCtRes> cts = new ArrayList<>();
-
+    private List<IdAndNameDto> hopDongs = new ArrayList<>();
     private List<Long> hopDongIds = new ArrayList<>();
 
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();

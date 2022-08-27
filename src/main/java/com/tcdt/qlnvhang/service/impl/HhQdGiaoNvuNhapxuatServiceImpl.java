@@ -269,8 +269,8 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 					return false;
 
 				item.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId());
-				item.setNguoiPduyet(userInfo.getUsername());
-				item.setNgayPduyet(getDateTimeNow());
+				item.setNguoiGuiDuyet(userInfo.getUsername());
+				item.setNgayGuiDuyet(getDateTimeNow());
 
 			} else if (NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId().equals(stReq.getTrangThai())) {
 				if (!NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId().equals(trangThai))

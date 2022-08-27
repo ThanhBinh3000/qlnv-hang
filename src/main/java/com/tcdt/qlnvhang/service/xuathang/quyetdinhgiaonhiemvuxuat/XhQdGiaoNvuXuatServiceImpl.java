@@ -4,7 +4,7 @@ import com.tcdt.qlnvhang.entities.xuathang.XhQdGiaoNvuXuat;
 import com.tcdt.qlnvhang.entities.xuathang.XhQdGiaoNvuXuatCt;
 import com.tcdt.qlnvhang.entities.xuathang.XhQdGiaoNvuXuatCt1;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.repository.HhHopDongRepository;
+import com.tcdt.qlnvhang.repository.banhang.BhHopDongRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.quyetdinhgiaonhiemvuxuat.XhQdGiaoNvuXuatCt1Repository;
 import com.tcdt.qlnvhang.repository.xuathang.quyetdinhgiaonhiemvuxuat.XhQdGiaoNvuXuatCtRepository;
@@ -15,16 +15,19 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.search.xuathang.XhQdGiaoNvuXuatSearchReq;
 import com.tcdt.qlnvhang.request.xuathang.quyetdinhgiaonhiemvuxuat.XhQdGiaoNvuXuatCtReq;
 import com.tcdt.qlnvhang.request.xuathang.quyetdinhgiaonhiemvuxuat.XhQdGiaoNvuXuatReq;
+import com.tcdt.qlnvhang.response.IdAndNameDto;
 import com.tcdt.qlnvhang.response.xuathang.quyetdinhgiaonhiemvuxuat.XhQdGiaoNvuXuatCtRes;
 import com.tcdt.qlnvhang.response.xuathang.quyetdinhgiaonhiemvuxuat.XhQdGiaoNvuXuatRes;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.BhHopDongHdr;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganLo;
 import com.tcdt.qlnvhang.table.khotang.KtNhaKho;
+import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -53,7 +56,7 @@ public class XhQdGiaoNvuXuatServiceImpl extends BaseServiceImpl implements XhQdG
     private final XhQdGiaoNvuXuatRepository xhQdGiaoNvuXuatRepository;
     private final XhQdGiaoNvuXuatCtRepository xhQdGiaoNvuXuatCtRepository;
     private final XhQdGiaoNvuXuatCt1Repository xhQdGiaoNvuXuatCt1Repository;
-    private final HhHopDongRepository hhHopDongRepository;
+    private final BhHopDongRepository hopDongRepository;
     private final FileDinhKemService fileDinhKemService;
     private final KtNganLoRepository ktNganLoRepository;
 
@@ -149,15 +152,19 @@ public class XhQdGiaoNvuXuatServiceImpl extends BaseServiceImpl implements XhQdG
         Map<String,String> mapVthh = getListDanhMucHangHoa();
         for (XhQdGiaoNvuXuatCt ct : item.getCts()) {
             XhQdGiaoNvuXuatCtRes xhQdGiaoNvuXuatCtRes = new XhQdGiaoNvuXuatCtRes(ct);
-            xhQdGiaoNvuXuatCtRes.setMaVatTuCha(mapVthh.get(ct.getMaVatTuCha()));
-            xhQdGiaoNvuXuatCtRes.setMaVatTu(mapVthh.get(ct.getMaVatTu()));
+            xhQdGiaoNvuXuatCtRes.setTenVatTuCha(mapVthh.get(ct.getMaVatTuCha()));
+            xhQdGiaoNvuXuatCtRes.setTenVatTu(mapVthh.get(ct.getMaVatTu()));
+            xhQdGiaoNvuXuatCtRes.setMaVatTuCha(ct.getMaVatTuCha());
+            xhQdGiaoNvuXuatCtRes.setMaVatTu(ct.getMaVatTu());
             this.thongTinNganLo(xhQdGiaoNvuXuatCtRes, mapNganLo.get(ct.getMaNganLo()));
             chiTiets.add(xhQdGiaoNvuXuatCtRes);
         }
         res.setCts(chiTiets);
         this.setThongTinDonVi(res, item.getMaDvi());
-        //TODO: Hop Dong
 
+        res.setHopDongIds(item.getCt1s().stream().map(XhQdGiaoNvuXuatCt1::getHopDongId).collect(Collectors.toList()));
+        List<BhHopDongHdr> hopDongs = hopDongRepository.findAllById(res.getHopDongIds());
+        res.setHopDongs(hopDongs.stream().map(h -> new IdAndNameDto(h.getId(), h.getSoHd())).collect(Collectors.toList()));
         return res;
     }
 
@@ -235,28 +242,62 @@ public class XhQdGiaoNvuXuatServiceImpl extends BaseServiceImpl implements XhQdG
 
         XhQdGiaoNvuXuat item = optional.get();
         String trangThai = item.getTrangThai();
-        if (NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(stReq.getTrangThai())) {
-            if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
-                return false;
+        if (Contains.LOAI_VTHH_VATTU.equals(item.getLoaiVthh())) {
+            if (NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId().equals(stReq.getTrangThai())) {
+                if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
+                    return false;
 
-            item.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId());
-            item.setNguoiGuiDuyetId(userInfo.getId());
-            item.setNgayGuiDuyet(LocalDate.now());
-        } else if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(stReq.getTrangThai())) {
-            if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
-                return false;
-            item.setTrangThai(NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId());
-            item.setNguoiPduyetId(userInfo.getId());
-            item.setNgayPduyet(LocalDate.now());
-        } else if (NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId().equals(stReq.getTrangThai())) {
-            if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
-                return false;
+                item.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId());
+                item.setNguoiGuiDuyetId(userInfo.getId());
+                item.setNgayGuiDuyet(LocalDate.now());
 
-            item.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId());
-            item.setNguoiPduyetId(userInfo.getId());
-            item.setNgayPduyet(LocalDate.now());
+            } else if (NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId().equals(stReq.getTrangThai())) {
+                if (!NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId().equals(trangThai))
+                    return false;
+
+                item.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId());
+                item.setNguoiPduyetId(userInfo.getId());
+                item.setNgayPduyet(LocalDate.now());
+
+            } else if (NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId().equals(stReq.getTrangThai())) {
+                if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId().equals(trangThai))
+                    return false;
+
+                item.setTrangThai(NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId());
+                item.setNguoiPduyetId(userInfo.getId());
+                item.setNgayPduyet(LocalDate.now());
+
+            }else if (NhapXuatHangTrangThaiEnum.TUCHOI_TP.getId().equals(stReq.getTrangThai())) {
+                if (!NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId().equals(trangThai))
+                    return false;
+
+                item.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_TP.getId());
+                item.setNguoiPduyetId(userInfo.getId());
+                item.setNgayPduyet(LocalDate.now());
+
+            } else if (NhapXuatHangTrangThaiEnum.TUCHOI_LDC.getId().equals(stReq.getTrangThai())) {
+                if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId().equals(trangThai))
+                    return false;
+
+                item.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_LDC.getId());
+                item.setNguoiPduyetId(userInfo.getId());
+                item.setNgayPduyet(LocalDate.now());
+
+            } else {
+                throw new Exception("Bad request.");
+            }
         } else {
-            throw new Exception("Bad request.");
+            if (NhapXuatHangTrangThaiEnum.BAN_HANH.getId().equals(stReq.getTrangThai())) {
+                if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
+                    return false;
+
+                item.setTrangThai(NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
+                item.setNguoiPduyetId(userInfo.getId());
+                item.setNgayPduyet(LocalDate.now());
+
+            } else {
+                throw new Exception("Bad request.");
+            }
         }
 
         return true;
