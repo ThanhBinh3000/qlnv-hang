@@ -189,17 +189,31 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 		theEntity.setNguoiSuaId(userInfo.getId());
 		theEntity = qdPheDuyetKhbdgRepository.save(theEntity);
 
-		Set<Long> chiTietIds = req.getChiTietList().stream().map(BhQdPheDuyetKhbdgCtRequest::getId).collect(Collectors.toSet());
-		if (!CollectionUtils.isEmpty(chiTietIds)) {
-			//Clean thông tin tài sản
-			thongTinTaiSanRepository.deleteAllByQdPheDuyetKhbdgChiTietIdIn(chiTietIds);
-			//Clean Chi tiết
-			chiTietRepository.deleteAllByIdIn(chiTietIds);
+		if (!CollectionUtils.isEmpty(req.getChiTietList())) {
+			this.cleanDataBeforeUpdate(theEntity);
 			//Create chi tiết
 			List<BhQdPheDuyetKhbdgCt> chiTietList = createChiTietQd(req, theEntity);
 			theEntity.setChiTietList(chiTietList);
 		}
+
 		return qdPheduyetKhbdgResponseMapper.toDto(theEntity);
+	}
+
+	private void cleanDataBeforeUpdate(BhQdPheDuyetKhbdg theEntity) {
+		List<BhQdPheDuyetKhbdgCt> chiTietList = chiTietRepository.findByQuyetDinhPheDuyetIdIn(Collections.singleton(theEntity.getId()));
+		if (CollectionUtils.isEmpty(chiTietList)) return;
+		Set<Long> chiTietIds = chiTietList.stream().map(BhQdPheDuyetKhbdgCt::getId).collect(Collectors.toSet());
+		List<BhQdPheDuyetKhBdgThongTinTaiSan> taiSanList = thongTinTaiSanRepository.findByQdPheDuyetKhbdgChiTietIdIn(chiTietIds);
+
+		//Clean thông tin tài sản
+		if (!CollectionUtils.isEmpty(taiSanList)) {
+			thongTinTaiSanRepository.deleteAll(taiSanList);
+		}
+
+		//Clean chi tiết
+		if (!CollectionUtils.isEmpty(chiTietList)) {
+			chiTietRepository.deleteAll(chiTietList);
+		}
 	}
 
 	@Override
@@ -316,6 +330,10 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 
 		List<BhQdPheDuyetKhbdgCtResponse> responseList = qdPheDuyetKhbdgCtList.stream().map(entry -> {
 			BhQdPheDuyetKhbdgCtResponse chiTiet = chiTietResponseMapper.toDto(entry);
+			//Tên đon vị
+			if (chiTiet.getMaDonVi() != null) {
+				chiTiet.setTenDonVi(this.getMapTenDvi().get(chiTiet.getMaDonVi()));
+			}
 			if (taiSanMap.get(entry.getBhDgKeHoachId()) == null) return chiTiet;
 			//Build thông tin tài sản
 			List<BhQdPheDuyetKhBdgThongTinTaiSanResponse> taiSanList = Optional.ofNullable(taiSanMap.get(entry.getBhDgKeHoachId())).map(ts -> {
