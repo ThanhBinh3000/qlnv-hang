@@ -189,6 +189,10 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 		theEntity.setNguoiSuaId(userInfo.getId());
 		theEntity = qdPheDuyetKhbdgRepository.save(theEntity);
 
+		log.info("Save file dinh kem");
+		List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), theEntity.getId(), BhQdPheDuyetKhbdg.TABLE_NAME);
+		theEntity.setFileDinhKems(fileDinhKems);
+
 		if (!CollectionUtils.isEmpty(req.getChiTietList())) {
 			this.cleanDataBeforeUpdate(theEntity);
 			//Create chi tiết
