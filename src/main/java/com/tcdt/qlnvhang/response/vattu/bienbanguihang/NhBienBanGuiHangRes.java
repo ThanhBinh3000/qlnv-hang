@@ -31,6 +31,8 @@ public class NhBienBanGuiHangRes extends CommonResponse {
     private String donViCungCap;
     private LocalDate ngayGui;
     private String loaiVthh;
+    private String cloaiVthh;
+    private String moTaHangHoa;
     private String tenVatTuCha;
     private String maVatTuCha;
     private String tenVatTu;

@@ -43,6 +43,8 @@ public class HhDxuatKhLcntHdrReq {
 	@Size(max = 20, message = "Chủng loại vật tư hàng hóa không được vượt quá 20 ký tự")
 	String cloaiVthh;
 
+	String moTaHangHoa;
+
 	String maVtu;
 
 	@Size(max = 250, message = "Lý do từ chối không được vượt quá 250 ký tự")

@@ -34,6 +34,8 @@ public class DchinhDxKhLcntHdrReq {
 
 	String cloaiVthh;
 
+	String moTaHangHoa;
+
 	String hthucLcnt;
 
 	String pthucLcnt;

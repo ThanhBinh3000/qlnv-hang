@@ -57,5 +57,8 @@ public class QlBangKeCanHangLtRes extends CommonResponse {
 
     private String maDvi;
     private String tenDvi;
+    private String loaiVthh;
+    private String cloaiVthh;
+    private String moTaHangHoa;
     private List<QlBangKeChCtLtRes> chiTiets = new ArrayList<>();
 }

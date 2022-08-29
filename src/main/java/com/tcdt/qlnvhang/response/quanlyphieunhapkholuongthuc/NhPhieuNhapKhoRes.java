@@ -60,6 +60,8 @@ public class NhPhieuNhapKhoRes extends CommonResponse {
     private Long hoSoKyThuatId;
     private String soBbHoSoKyThuat;
     private String loaiVthh;
+    private String cloaiVthh;
+    private String moTaHangHoa;
     private String maDvi;
     private String tenDvi;
     private String maQhns;

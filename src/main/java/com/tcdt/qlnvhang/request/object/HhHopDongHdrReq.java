@@ -78,6 +78,7 @@ public class HhHopDongHdrReq {
 	@Size(max = 20, message = "Loại vật tư hàng hóa không được vượt quá 20 ký tự")
 	@ApiModelProperty(example = "00")
 	String cloaiVthh;
+	String moTaHangHoa;
 
 //	@NotNull(message = "Không được để trống")
 //	@Size(max = 20, message = "Loại hợp đồng không được vượt quá 20 ký tự")

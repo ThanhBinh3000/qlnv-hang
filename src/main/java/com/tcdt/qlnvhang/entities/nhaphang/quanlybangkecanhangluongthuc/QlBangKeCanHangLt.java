@@ -88,6 +88,15 @@ public class QlBangKeCanHangLt extends TrangThaiBaseEntity implements Serializab
 
     private Integer so;
     private Integer nam;
+    private String loaiVthh;
+    @Transient
+    private String tenVthh;
+
+    private String cloaiVthh;
+    @Transient
+    private String tenCloaiVthh;
+
+    private String moTaHangHoa;
 
     @Transient
     private List<QlBangKeChCtLt> chiTiets = new ArrayList<>();

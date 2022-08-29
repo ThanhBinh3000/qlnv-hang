@@ -38,6 +38,7 @@ public class HhDxuatKhLcntDsgtDtlReq {
 
 	String loaiVthh;
 	String cloaiVthh;
+	String moTaHangHoa;
 	String dviTinh;
 
 	@Size(max = 50, message = "Hình thức lựa chọn nhà thầu không được vượt quá 50 ký tự")

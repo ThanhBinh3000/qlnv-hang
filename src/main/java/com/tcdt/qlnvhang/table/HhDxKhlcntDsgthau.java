@@ -48,6 +48,8 @@ public class HhDxKhlcntDsgthau implements Serializable {
 	@Transient
 	private String tenCloaiVthh;
 
+	private String moTaHangHoa;
+
 	private String dviTinh;
 
 	private String hthucLcnt;

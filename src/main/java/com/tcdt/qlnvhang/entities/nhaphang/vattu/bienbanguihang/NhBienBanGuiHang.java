@@ -109,6 +109,14 @@ public class NhBienBanGuiHang extends TrangThaiBaseEntity implements Serializabl
 
     private Integer so;
     private Integer nam;
+    @Transient
+    private String tenVthh;
+
+    private String cloaiVthh;
+    @Transient
+    private String tenCloaiVthh;
+
+    private String moTaHangHoa;
 
     @Transient
     private List<NhBienBanGuiHangCt> chiTiets = new ArrayList<>();

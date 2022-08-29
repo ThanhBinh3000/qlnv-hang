@@ -66,6 +66,10 @@ public class HhBbNghiemthuKlstHdr implements Serializable {
 	String maDvi;
 	Integer nam;
 	String loaiVthh;
+	String cloaiVthh;
+	@Transient
+	String tenCloaiVthh;
+	String moTaHangHoa;
 	String maVatTu;
 	String maVatTuCha;
 

@@ -35,6 +35,7 @@ public class HhDchinhDxKhLcntHdr implements Serializable {
 	Date ngayQd;
 	String loaiVthh;
 	String cloaiVthh;
+	String moTaHangHoa;
 	String trichYeu;
 	@Temporal(TemporalType.DATE)
 	Date ngayHluc;

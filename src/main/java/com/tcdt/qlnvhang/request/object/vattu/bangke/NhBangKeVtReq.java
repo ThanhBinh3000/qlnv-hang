@@ -23,6 +23,9 @@ public class NhBangKeVtReq {
     private LocalDate ngayTaoBangKe;
     private String trangThai;
     private String lyDoTuChoi;
+    private String loaiVthh;
+    private String cloaiVthh;
+    private String moTaHangHoa;
 
     private List<NhBangKeVtCtReq> chiTiets = new ArrayList<>();
 }
