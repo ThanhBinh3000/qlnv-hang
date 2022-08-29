@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.request.object;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -65,6 +66,8 @@ public class HhBbNghiemthuKlstHdrReq extends SoBienBanPhieuReq {
 	@Size(max = 20, message = "Loại vật tư hàng hóa không được vượt quá 20 ký tự")
 	@ApiModelProperty(example = "00")
 	String loaiVthh;
+	String cloaiVthh;
+	String moTaHangHoa;
 
 	@Size(max = 20, message = "Phương thức bảo quản được vượt quá 20 ký tự")
 	String pthucBquan;

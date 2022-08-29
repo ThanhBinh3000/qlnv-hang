@@ -37,6 +37,9 @@ public class NhBbKtNhapKhoVtReq {
     private String lyDoTuChoi;
     private Integer so;
     private Integer nam;
+    private String loaiVthh;
+    private String cloaiVthh;
+    private String moTaHangHoa;
 
     private List<NhBbKtNhapKhoVtCtReq> chiTiets = new ArrayList<>();
     private List<FileDinhKemReq> fileDinhKemReqs = new ArrayList<>();

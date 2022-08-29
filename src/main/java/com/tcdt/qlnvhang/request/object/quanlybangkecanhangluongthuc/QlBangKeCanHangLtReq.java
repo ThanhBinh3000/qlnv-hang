@@ -40,5 +40,8 @@ public class QlBangKeCanHangLtReq extends SoBienBanPhieuReq {
     private String soHd;
     private String diaDiem;
     private BigDecimal tongTrongLuongBaoBi;
+    private String loaiVthh;
+    private String cloaiVthh;
+    private String moTaHangHoa;
     private List<QlBangKeChCtLtReq> chiTiets = new ArrayList<>();
 }

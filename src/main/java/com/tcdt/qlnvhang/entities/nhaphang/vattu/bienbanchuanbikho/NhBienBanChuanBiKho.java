@@ -112,6 +112,14 @@ public class NhBienBanChuanBiKho extends TrangThaiBaseEntity implements Serializ
 
     @Column(name = "LOAI_VTHH")
     private String loaiVthh;
+    @Transient
+    String tenVthh;
+
+    private String cloaiVthh;
+    @Transient
+    private String tenCloaiVthh;
+
+    private String moTaHangHoa;
 
     @Column(name = "HOP_DONG_ID")
     private Long hopDongId;

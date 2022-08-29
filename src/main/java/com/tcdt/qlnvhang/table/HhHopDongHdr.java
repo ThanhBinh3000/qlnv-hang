@@ -79,6 +79,7 @@ public class HhHopDongHdr implements Serializable {
 	String cloaiVthh;
 	@Transient
 	String tenCloaiVthh;
+	String moTaHangHoa;
 	String loaiHd;
 
 	@Temporal(TemporalType.DATE)

@@ -103,6 +103,14 @@ public class NhHoSoKyThuat extends TrangThaiBaseEntity implements Serializable {
 
     @Column(name = "LOAI_VTHH")
     private String loaiVthh;
+    @Transient
+    String tenVthh;
+
+    private String cloaiVthh;
+    @Transient
+    private String tenCloaiVthh;
+
+    private String moTaHangHoa;
 
     private Integer so;
     private Integer nam;

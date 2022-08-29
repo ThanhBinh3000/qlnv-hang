@@ -57,6 +57,7 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	String cloaiVthh;
 	@Transient
 	String tenCloaiVthh;
+	String moTaHangHoa;
 	String maVtu;
 	@Transient
 	String tenVtu;

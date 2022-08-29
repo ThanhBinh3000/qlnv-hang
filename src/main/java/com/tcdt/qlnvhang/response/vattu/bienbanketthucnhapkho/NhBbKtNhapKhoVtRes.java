@@ -51,6 +51,9 @@ public class NhBbKtNhapKhoVtRes extends CommonResponse {
     private String lyDoTuChoi;
     private Integer so;
     private Integer nam;
+    private String loaiVthh;
+    private String cloaiVthh;
+    private String moTaHangHoa;
 
     private List<NhBbKtNhapKhoVtCtRes> chiTiets = new ArrayList<>();
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();

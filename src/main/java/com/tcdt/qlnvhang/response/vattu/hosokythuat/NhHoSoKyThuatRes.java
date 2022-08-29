@@ -41,6 +41,8 @@ public class NhHoSoKyThuatRes extends CommonResponse {
     private LocalDate tgBsTruocNgay;
     private LocalDate tgHtTruocNgay;
     private String loaiVthh;
+    private String cloaiVthh;
+    private String moTaHangHoa;
     private String trangThai;
     private String tenTrangThai;
     private String trangThaiDuyet;

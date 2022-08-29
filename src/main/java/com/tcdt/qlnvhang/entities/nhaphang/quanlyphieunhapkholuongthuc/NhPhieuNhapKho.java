@@ -109,6 +109,14 @@ public class NhPhieuNhapKho extends TrangThaiBaseEntity implements Serializable 
 
     @Column(name = "LOAI_VTHH")
     private String loaiVthh;
+    @Transient
+    private String tenVthh;
+
+    private String cloaiVthh;
+    @Transient
+    private String tenCloaiVthh;
+
+    private String moTaHangHoa;
 
     @Transient
     private List<NhPhieuNhapKhoCt> hangHoaList = new ArrayList<>();

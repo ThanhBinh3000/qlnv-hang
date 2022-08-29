@@ -101,6 +101,16 @@ public class NhBbKtNhapKhoVt extends TrangThaiBaseEntity implements Serializable
     @Column(name = "NAM")
     private Integer nam;
 
+    private String loaiVthh;
+    @Transient
+    private String tenVthh;
+
+    private String cloaiVthh;
+    @Transient
+    private String tenCloaiVthh;
+
+    private String moTaHangHoa;
+
     @Transient
     private List<NhBbKtNhapKhoVtCt> chiTiets = new ArrayList<>();
 

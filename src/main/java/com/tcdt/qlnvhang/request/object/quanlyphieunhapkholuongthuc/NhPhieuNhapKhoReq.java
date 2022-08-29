@@ -48,6 +48,8 @@ public class NhPhieuNhapKhoReq extends SoBienBanPhieuReq {
     private BigDecimal tongSoLuong;
     private BigDecimal tongSoTien;
     private String loaiVthh;
+    private String cloaiVthh;
+    private String moTaHangHoa;
 
     private List<NhPhieuNhapKhoCtReq> hangHoaList = new ArrayList<>();
 

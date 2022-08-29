@@ -38,6 +38,9 @@ public class NhBangKeVtRes extends CommonResponse {
     private String maNganKho;
     private String tenNganLo;
     private String maNganLo;
+    private String loaiVthh;
+    private String cloaiVthh;
+    private String moTaHangHoa;
 
     private List<NhBangKeVtCtRes> chiTiets = new ArrayList<>();
 }

@@ -34,6 +34,8 @@ public class NhHoSoKyThuatReq extends SoBienBanPhieuReq {
     private LocalDate tgBsTruocNgay;
     private LocalDate tgHtTruocNgay;
     private String loaiVthh;
+    private String cloaiVthh;
+    private String moTaHangHoa;
 
     private List<NhHoSoKyThuatCtReq> chiTiets = new ArrayList<>();
 

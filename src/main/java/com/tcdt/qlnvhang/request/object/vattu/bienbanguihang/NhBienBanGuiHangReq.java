@@ -27,6 +27,8 @@ public class NhBienBanGuiHangReq extends SoBienBanPhieuReq {
     private String donViCungCap;
     private LocalDate ngayGui;
     private String loaiVthh;
+    private String cloaiVthh;
+    private String moTaHangHoa;
     private String maVatTuCha;
     private String maVatTu;
     private Long soLuong;

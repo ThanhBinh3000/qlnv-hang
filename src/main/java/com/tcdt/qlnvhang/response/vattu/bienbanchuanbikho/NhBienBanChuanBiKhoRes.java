@@ -64,6 +64,9 @@ public class NhBienBanChuanBiKhoRes extends CommonResponse {
     
     private Long hopDongId;
     private String soHopDong;
+    private String loaiVthh;
+    private String cloaiVthh;
+    private String moTaHangHoa;
 
     private List<NhBienBanChuanBiKhoCtRes> chiTiets = new ArrayList<>();
 }
