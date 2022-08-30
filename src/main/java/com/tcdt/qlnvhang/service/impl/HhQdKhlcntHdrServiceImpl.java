@@ -110,7 +110,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		HhQdKhlcntHdr dataMap = ObjectMapperUtils.map(objReq, HhQdKhlcntHdr.class);
 
 		dataMap.setNgayTao(getDateTimeNow());
-		dataMap.setTrangThai(Contains.TAO_MOI);
+		dataMap.setTrangThai(Contains.DUTHAO);
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setChildren(fileDinhKemList);
 		dataMap.setIdThHdr(qOptional.get().getId());
@@ -119,7 +119,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		hhQdKhlcntHdrRepository.save(dataMap);
 
 		// Update trạng thái tổng hợp dxkhclnt
-		hhDxKhLcntThopHdrRepository.updateTrangThai(dataMap.getIdThHdr(), Contains.DU_THAO_QD);
+		hhDxKhLcntThopHdrRepository.updateTrangThai(dataMap.getIdThHdr(), Contains.DADUTHAO_QD);
 
 		for (HhQdKhlcntDtlReq dx : objReq.getDsDeXuat()){
 			HhQdKhlcntDtl qd = ObjectMapperUtils.map(dx, HhQdKhlcntDtl.class);
@@ -164,7 +164,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		HhQdKhlcntHdr dataMap = ObjectMapperUtils.map(objReq, HhQdKhlcntHdr.class);
 
 		dataMap.setNgayTao(getDateTimeNow());
-		dataMap.setTrangThai(Contains.TAO_MOI);
+		dataMap.setTrangThai(Contains.DUTHAO);
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setChildren(fileDinhKemList);
 		dataMap.setLastest(objReq.getLastest());
@@ -461,16 +461,16 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	private HhQdKhlcntHdr approveVatTu(StatusReq stReq,HhQdKhlcntHdr dataDB) throws Exception {
 		String status = stReq.getTrangThai() + dataDB.getTrangThai();
 		switch (status) {
-			case Contains.CHO_DUYET + Contains.MOI_TAO:
-			case Contains.CHO_DUYET + Contains.TU_CHOI:
+			case Contains.CHODUYET_LDV + Contains.DUTHAO:
+			case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
 				dataDB.setNguoiGuiDuyet(getUser().getUsername());
 				dataDB.setNgayGuiDuyet(getDateTimeNow());
-			case Contains.TU_CHOI + Contains.CHO_DUYET:
+			case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
 				dataDB.setNguoiPduyet(getUser().getUsername());
 				dataDB.setNgayPduyet(getDateTimeNow());
 				dataDB.setLdoTuchoi(stReq.getLyDo());
-			case Contains.DUYET + Contains.CHO_DUYET:
-			case Contains.BAN_HANH + Contains.DUYET:
+			case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
+			case Contains.BAN_HANH + Contains.DADUYET_LDV:
 				dataDB.setNguoiPduyet(getUser().getUsername());
 				dataDB.setNgayPduyet(getDateTimeNow());
 				break;
@@ -481,10 +481,10 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		if (stReq.getTrangThai().equals(Contains.BAN_HANH)) {
 			Optional<HhDxuatKhLcntHdr> qOptional = hhDxuatKhLcntHdrRepository.findById(dataDB.getIdTrHdr());
 			if(qOptional.isPresent()){
-				if(qOptional.get().getTrangThai().equals(Contains.TT_DA_QUYET_DINH)){
+				if(qOptional.get().getTrangThai().equals(Contains.DABANHANH_QD)){
 					throw new Exception("Đề xuất này đã được quyết định");
 				}
-				hhDxuatKhLcntHdrRepository.updateStatus(dataDB.getIdTrHdr() , Contains.TT_DA_QUYET_DINH);
+				hhDxuatKhLcntHdrRepository.updateStatus(dataDB.getIdTrHdr() , Contains.DABANHANH_QD);
 			}else{
 				throw new Exception("Số tờ trình kế hoạch không được tìm thấy");
 			}
@@ -497,7 +497,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	private HhQdKhlcntHdr approveLT(StatusReq stReq,HhQdKhlcntHdr dataDB) throws Exception{
 		String status = stReq.getTrangThai() + dataDB.getTrangThai();
 		switch (status) {
-			case Contains.BAN_HANH + Contains.MOI_TAO:
+			case Contains.BAN_HANH + Contains.DUTHAO:
 				dataDB.setNguoiPduyet(getUser().getUsername());
 				dataDB.setNgayPduyet(getDateTimeNow());
 				break;
@@ -508,10 +508,10 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		if (stReq.getTrangThai().equals(Contains.BAN_HANH)) {
 			Optional<HhDxKhLcntThopHdr> qOptional = hhDxKhLcntThopHdrRepository.findById(dataDB.getIdThHdr());
 			if(qOptional.isPresent()){
-				if(qOptional.get().getTrangThai().equals(Contains.DA_QUYET_DINH)){
+				if(qOptional.get().getTrangThai().equals(Contains.DABANHANH_QD)){
 					throw new Exception("Tổng hợp kế hoạch này đã được quyết định");
 				}
-				hhDxKhLcntThopHdrRepository.updateTrangThai(dataDB.getIdThHdr(), Contains.DA_QUYET_DINH);
+				hhDxKhLcntThopHdrRepository.updateTrangThai(dataDB.getIdThHdr(), Contains.DABANHANH_QD);
 			}else{
 				throw new Exception("Tổng hợp kế hoạch không được tìm thấy");
 			}
@@ -584,8 +584,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		if (!optional.isPresent())
 			throw new Exception("Không tìm thấy dữ liệu cần xoá");
 
-		if (!optional.get().getTrangThai().equals(Contains.TAO_MOI)
-				&& !optional.get().getTrangThai().equals(Contains.TU_CHOI))
+		if (!optional.get().getTrangThai().equals(Contains.DUTHAO)
+				&& !optional.get().getTrangThai().equals(Contains.TUCHOI_LDV))
 			throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối");
 
 		hhQdKhlcntHdrRepository.delete(optional.get());
@@ -638,12 +638,19 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
 		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 		Page<HhQdKhlcntHdr> pageContet = hhQdKhlcntHdrRepository.selectPage(req.getNamKhoach(),req.getLoaiVthh(), req.getSoQd(),req.getTrichYeu(), convertDateToString(req.getTuNgayQd()),convertDateToString(req.getDenNgayQd()), req.getTrangThai(), req.getLastest(),pageable);
-		pageContet.getContent().forEach(f -> {
+		for (HhQdKhlcntHdr f : pageContet.getContent()) {
 			f.setTenVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
 			f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
-		});
+			List<HhQdKhlcntDtl> detail = (hhQdKhlcntDtlRepository.findAllByIdQdHdr(f.getId()));
+			for (HhQdKhlcntDtl data : detail) {
+				f.setSoGthau(data.getSoGthau());
+				f.setTongTien(data.getTongTien());
+			}
+			continue;
+		}
 		return pageContet;
 	}
+
 
 	@Override
 	public List<HhQdKhlcntHdr> getAll(HhQdKhlcntSearchReq req) throws Exception {

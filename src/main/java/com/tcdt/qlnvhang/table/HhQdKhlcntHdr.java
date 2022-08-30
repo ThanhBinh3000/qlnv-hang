@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -152,5 +153,8 @@ public class HhQdKhlcntHdr implements Serializable {
 
 	@Transient
 	private List<HhQdKhlcntDtl> hhQdKhlcntDtlList = new ArrayList<>();
-
+	@Transient
+	BigDecimal tongTien;
+	@Transient
+	Long soGthau;
 }
