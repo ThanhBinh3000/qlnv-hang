@@ -48,7 +48,7 @@ public class BhTongHopDeXuatKhbdgRepositoryCustomImpl implements BhTongHopDeXuat
 		builder.append(QueryUtils.FROM)
 				.append(tongHopDeXuat.buildAliasName())
 				.append(QueryUtils.buildInnerJoin(tongHopDeXuat, vatTuHangHoa, BhTongHopDeXuatKhbdg_.MA_VAT_TU_CHA, QlnvDmVattu_.MA))
-				.append(QueryUtils.buildLeftJoin(tongHopDeXuat, qdPheDuyet, BhTongHopDeXuatKhbdg_.QD_PHE_DUYET_KHBDG_ID, BhQdPheDuyetKhbdg_.ID));
+				.append(QueryUtils.buildLeftJoin(tongHopDeXuat, qdPheDuyet, BhTongHopDeXuatKhbdg_.ID, BhQdPheDuyetKhbdg_.TONG_HOP_DE_XUAT_KHBDG_ID));
 
 		setConditionSearch(req, builder, tongHopDeXuat);
 		log.debug("Set sort");

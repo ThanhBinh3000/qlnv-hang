@@ -46,7 +46,7 @@ public class BhTongHopDeXuatKhbdgSearchResponse {
 		}
 
 		if (Objects.nonNull(rawData[6])) this.qdPheDuyetKhbdg.setId((Long) rawData[6]);
-		if (Objects.nonNull(rawData[7])) this.qdPheDuyetKhbdg.setName((String) rawData[7]);
+		if (Objects.nonNull(rawData[7])) this.qdPheDuyetKhbdg.setSoQuyetDinh((String) rawData[7]);
 		if (Objects.nonNull(rawData[8])) this.vatTuCha.setName((String) rawData[8]);
 	}
 
@@ -56,7 +56,7 @@ public class BhTongHopDeXuatKhbdgSearchResponse {
 		objs[1] = LocalDateTimeUtils.localDateToString(this.ngayTongHop);
 		objs[2] = this.noiDungTongHop;
 		objs[3] = this.namKeHoach;
-		objs[4] = Optional.ofNullable(this.qdPheDuyetKhbdg).map(IdAndNameDto::getName).orElse("");
+		objs[4] = Optional.ofNullable(this.qdPheDuyetKhbdg).map(IdAndNameDto::getSoQuyetDinh).orElse("");
 		objs[5] =Optional.ofNullable(this.vatTuCha).map(IdAndNameDto::getName).orElse("");
 		objs[6] =Optional.ofNullable(this.trangThai).map(IdAndNameDto::getName).orElse("");
 		return objs;

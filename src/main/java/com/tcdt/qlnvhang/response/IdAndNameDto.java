@@ -17,6 +17,7 @@ public class IdAndNameDto {
 	private Long id;
 	private String name;
 	private String ma;
+	private String soQuyetDinh;
 
 	public IdAndNameDto(Long id, String name) {
 		this.id = id;
