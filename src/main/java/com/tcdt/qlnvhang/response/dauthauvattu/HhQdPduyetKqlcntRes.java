@@ -3,10 +3,9 @@ package com.tcdt.qlnvhang.response.dauthauvattu;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Transient;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Date;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -57,6 +56,8 @@ public class HhQdPduyetKqlcntRes {
 	private String tenVthh;
 
 	private String soQdPdKhlcnt;
+	@Transient
+	private String tenTrangThai;
 
 	public HhQdPduyetKqlcntRes(Long id, String soQd, Date ngayQd, String trichYeu, String tenGthau, String statusGthau, Long idNhaThau, String lyDoHuy, BigDecimal donGiaTrcVat, Integer vat, BigDecimal soLuong, String loaiHdong, Integer tgianThienHd, String trangThai) {
 		this.id = id;

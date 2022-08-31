@@ -87,6 +87,11 @@ public class Contains {
 	public static final String DAKY = "30";
 	public static final String CHUATAOTOTRINH = "31";
 	public static final String DATAOTOTRINH = "32";
+	public static final String CHUACAPNHAT = "33";
+	public static final String DANGCAPNHAT = "34";
+	public static final String HOANTHANHCAPNHAT = "35";
+	public static final String HUYTHAU = "36";
+	public static final String TRUNGTHAU = "37";
 
 	// Trạng thái tổng hợp
 	public static final String CHUA_QUYET_DINH = "00";

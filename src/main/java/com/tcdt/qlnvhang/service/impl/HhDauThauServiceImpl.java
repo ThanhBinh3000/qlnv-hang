@@ -8,6 +8,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.search.HhDthauSearchReq;
 import com.tcdt.qlnvhang.response.dauthauvattu.ThongTinDauThauRes;
@@ -53,7 +54,7 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setNgayTao(getDateTimeNow());
-		dataMap.setTrangThai(Contains.TAO_MOI);
+		dataMap.setTrangThai(Contains.DUTHAO);
 
 		// Them thong tin chi tiet thong tin dau thau
 		if (objReq.getDetail() != null) {
@@ -161,6 +162,7 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 			f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
 			f.setTenVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
 			f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
+			f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
 		});
 
 		return page;
