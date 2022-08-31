@@ -49,9 +49,44 @@ public class Contains {
 	public static final String TPHONG_DUYET = "09"; // Trang thai Truong phong duyet
 	public static final String LANHDAO_DUYET = "10"; // Trang thai Lanh dao duyet
 
-	public static final String BAN_HANH = "11"; // Trang thai Lanh dao duyet
+//	public static final String BAN_HANH = "11"; // Trang thai Lanh dao duyet
 	public static final String LANHDAO_TU_CHOI = "12";
 	public static final String TT_DA_QUYET_DINH = "13"; // Trang thai Lanh dao duyet
+
+	//Trạng thái dùng chung
+	public static final String DUTHAO = "00";
+	public static final String CHODUYET_TP = "01";
+	public static final String TUCHOI_TP = "02";
+	public static final String CHODUYET_LDC = "03";
+	public static final String TUCHOI_LDC = "04";
+	public static final String DADUYET_LDC = "05";
+	public static final String CHODUYET_TK = "06";
+	public static final String CHODUYET_KTVBQ = "07";
+	public static final String CHODUYET_KT = "08";
+	public static final String TUCHOI_TK = "09";
+	public static final String TUCHOI_KTVBQ = "10";
+	public static final String TUCHOI_KT = "11";
+	public static final String DADUYET_TK = "12";
+	public static final String DADUYET_KTVBQ = "13";
+	public static final String DADUYET_KT = "14";
+	public static final String CHODUYET_LDCC = "15";
+	public static final String TUCHOI_LDCC = "16";
+	public static final String DADUYET_LDCC = "17";
+	public static final String CHODUYET_LDV = "18";
+	public static final String TUCHOI_LDV = "19";
+	public static final String DADUYET_LDV = "20";
+	public static final String CHODUYET_LDTC = "21";
+	public static final String TUCHOI_LDTC = "22";
+	public static final String DADUYET_LDTC = "23";
+	public static final String CHUATONGHOP = "24";
+	public static final String DATONGHOP = "25";
+	public static final String CHUATAO_QD = "26";
+	public static final String DADUTHAO_QD = "27";
+	public static final String DABANHANH_QD = "28";
+	public static final String BAN_HANH = "29";
+	public static final String DAKY = "30";
+	public static final String CHUATAOTOTRINH = "31";
+	public static final String DATAOTOTRINH = "32";
 
 	// Trạng thái tổng hợp
 	public static final String CHUA_QUYET_DINH = "00";

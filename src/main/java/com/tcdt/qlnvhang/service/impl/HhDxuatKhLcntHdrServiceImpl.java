@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhDxuatKhLcntCcxdgDtlRepository;
 import com.tcdt.qlnvhang.repository.HhDxKhlcntDsgthauCtietRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -76,7 +77,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		}
 		HhDxuatKhLcntHdr dataMap = new ModelMapper().map(objReq, HhDxuatKhLcntHdr.class);
 		dataMap.setNgayTao(getDateTimeNow());
-		dataMap.setTrangThai(Contains.TAO_MOI);
+		dataMap.setTrangThai(Contains.DUTHAO);
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setFileDinhKems(fileDinhKemList);
 		dataMap.setLastest(false);
@@ -247,7 +248,6 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 
 		return qhKho;
 	}
-
 	@Override
 	public HhDxuatKhLcntHdr approve(StatusReq stReq) throws Exception {
 		if (StringUtils.isEmpty(stReq.getId()))
@@ -259,21 +259,20 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 
 		String status = stReq.getTrangThai() + optional.get().getTrangThai();
 		switch (status) {
-			case Contains.CHO_DUYET + Contains.TU_CHOI:
-			case Contains.CHO_DUYET + Contains.MOI_TAO:
-			case Contains.CHO_DUYET + Contains.LANHDAO_TU_CHOI:
+			case Contains.CHODUYET_TP + Contains.DUTHAO:
+			case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
+			case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+			case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
 				optional.get().setNguoiGuiDuyet(getUser().getUsername());
 				optional.get().setNgayGuiDuyet(getDateTimeNow());
 				break;
-			case Contains.TU_CHOI + Contains.CHO_DUYET:
-			case Contains.TU_CHOI + Contains.TPHONG_DUYET:
-			case Contains.LANHDAO_TU_CHOI + Contains.TPHONG_DUYET:
+			case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
+			case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
 				optional.get().setNguoiPduyet(getUser().getUsername());
 				optional.get().setNgayPduyet(getDateTimeNow());
 				optional.get().setLdoTuchoi(stReq.getLyDo());
 				break;
-			case Contains.TPHONG_DUYET + Contains.CHO_DUYET:
-			case Contains.DUYET + Contains.TPHONG_DUYET:
+			case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
 				optional.get().setNguoiPduyet(getUser().getUsername());
 				optional.get().setNgayPduyet(getDateTimeNow());
 				break;
@@ -282,7 +281,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		}
 
 		optional.get().setTrangThai(stReq.getTrangThai());
-		if (stReq.getTrangThai().equals(Contains.DUYET)) {
+		if (stReq.getTrangThai().equals(Contains.DADUYET_LDC)) {
 			optional.get().setLastest(true);
 		}
 		return hhDxuatKhLcntHdrRepository.save(optional.get());
@@ -400,7 +399,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		List<HhDxuatKhLcntHdr> data = page.getContent();
 
 		String title = "Danh sách kế hoạch đề xuất lựa chọn nhà thầu";
-		String[] rowsName = new String[] { "STT", "Số tờ trình", "Đơn vị", "Ngày đề xuất","Trích yếu","Số QĐ giao chỉ tiêu","Năm kế hoạch","Hàng hóa","Trạng thái của đề xuất" };
+		String[] rowsName = new String[] { "STT", "Số tờ trình", "Đơn vị", "Ngày đề xuất","Trích yếu","Số QĐ giao chỉ tiêu","Năm kế hoạch","Hàng hóa","Số gói thầu","Trạng thái" };
 		String filename = "Danh_sach_ke_hoach_de_xuat_lua_chon_nha_thau_tong_cuc.xlsx";
 
 		List<Object[]> dataList = new ArrayList<Object[]>();
@@ -415,8 +414,9 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 			objs[4] = dx.getTrichYeu();
 			objs[5] = dx.getSoQd();
 			objs[6] = dx.getNamKhoach();
-			objs[7] = dx.getLoaiVthh();
-			objs[8] = dx.getTrangThai();
+			objs[7] = dx.getTenVthh();
+			objs[8] = dx.getSoGoiThau();
+			objs[9] = dx.getTenTrangThai();
 			dataList.add(objs);
 		}
 
@@ -434,7 +434,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		List<HhDxuatKhLcntHdr> data = page.getContent();
 
 		String title = "Danh sách kế hoạch đề xuất lựa chọn nhà thầu";
-		String[] rowsName = new String[] { "STT", "Số tờ trình", "Ngày đề xuất", "Trích yếu","Số QĐ giao chỉ tiêu","Năm kế hoạch","Hàng hóa","Chủng loại hàng hóa","Số gói thầu","Trạng thái của đề xuất" };
+		String[] rowsName = new String[] { "STT", "Số tờ trình", "Ngày ký", "Trích yếu","Số QĐ giao chỉ tiêu","Năm kế hoạch","Hàng hóa","Chủng loại hàng hóa","Số gói thầu","Trạng thái" };
 		String filename = "Danh_sach_ke_hoach_de_xuat_lua_chon_nha_thau_cuc.xlsx";
 
 		List<Object[]> dataList = new ArrayList<Object[]>();
@@ -451,7 +451,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 			objs[6] = dx.getLoaiVthh();
 			objs[7] = dx.getCloaiVthh();
 			objs[8] = dx.getSoGoiThau();
-			objs[9] = dx.getTrangThai();
+			objs[9] = dx.getTenTrangThai();
 			dataList.add(objs);
 		}
 
@@ -472,6 +472,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 			f.setTenVthh( StringUtils.isEmpty(f.getLoaiVthh()) ? null : mapVthh.get(f.getLoaiVthh()));
 			f.setTenCloaiVthh( StringUtils.isEmpty(f.getCloaiVthh()) ? null :mapVthh.get(f.getCloaiVthh()));
 			f.setMaVtu( StringUtils.isEmpty(f.getMaVtu()) ? null :mapVthh.get(f.getMaVtu()));
+			f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(f.getTrangThai()));
 		});
 		return page;
 	}
@@ -655,17 +656,17 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 
 		String status = stReq.getTrangThai() + optional.get().getTrangThai();
 		switch (status) {
-			case Contains.CHO_DUYET + Contains.TU_CHOI:
-			case Contains.CHO_DUYET + Contains.MOI_TAO:
+			case Contains.CHODUYET_LDV + Contains.DUTHAO:
+			case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
 				optional.get().setNguoiGuiDuyet(getUser().getUsername());
 				optional.get().setNgayGuiDuyet(getDateTimeNow());
 				break;
-			case Contains.TU_CHOI + Contains.CHO_DUYET:
+			case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
 				optional.get().setNguoiPduyet(getUser().getUsername());
 				optional.get().setNgayPduyet(getDateTimeNow());
 				optional.get().setLdoTuchoi(stReq.getLyDo());
 				break;
-			case Contains.DUYET + Contains.CHO_DUYET:
+			case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
 				optional.get().setNguoiPduyet(getUser().getUsername());
 				optional.get().setNgayPduyet(getDateTimeNow());
 				break;

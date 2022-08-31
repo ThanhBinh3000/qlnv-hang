@@ -51,6 +51,6 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 			" AND KHLCNT.PTHUC_LCNT = :pthucLcnt \n" +
 			" AND KHLCNT.LOAI_HDONG = :loaiHdong \n" +
 			" AND KHLCNT.NGUON_VON = :nguonVon " +
-			" AND KHLCNT.TRANG_THAI = '02' ", nativeQuery = true)
+			" AND KHLCNT.TRANG_THAI = '05' ", nativeQuery = true)
 	List<HhDxuatKhLcntHdr> listTongHop(String loaiVthh,String cloaiVthh,String namKh, String hthucLcnt,String pthucLcnt, String loaiHdong,String nguonVon);
 }

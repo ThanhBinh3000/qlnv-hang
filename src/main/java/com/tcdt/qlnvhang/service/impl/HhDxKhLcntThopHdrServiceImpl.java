@@ -151,7 +151,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		thopHdr.setNgayTao(getDateTimeNow());
 		thopHdr.setNguoiTao(getUser().getUsername());
 		thopHdr.setNoiDung(objReq.getNoiDung());
-		thopHdr.setTrangThai(Contains.CHUA_QUYET_DINH);
+		thopHdr.setTrangThai(Contains.CHUATAO_QD);
 		thopHdr.setNgayThop(new Date());
 		thopHdr.setGhiChu(objReq.getGhiChu());
 		hhDxKhLcntThopHdrRepository.save(thopHdr);
@@ -162,7 +162,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		if (thopHdr.getId() > 0 && thopHdr.getHhDxKhLcntThopDtlList().size() > 0) {
 			List<String> soDxuatList = thopHdr.getHhDxKhLcntThopDtlList().stream().map(HhDxKhLcntThopDtl::getSoDxuat)
 					.collect(Collectors.toList());
-			hhDxuatKhLcntHdrRepository.updateTongHop(soDxuatList, Contains.TONG_HOP);
+			hhDxuatKhLcntHdrRepository.updateTongHop(soDxuatList, Contains.DATONGHOP);
 		}
 		return thopHdr;
 	}
