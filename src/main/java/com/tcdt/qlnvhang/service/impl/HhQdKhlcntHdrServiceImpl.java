@@ -131,7 +131,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				gt.setId(null);
 				gt.setIdQdDtl(qd.getId());
 				gt.setThanhTien(gt.getDonGia().multiply(gt.getSoLuong()));
-				gt.setTrangThai(Contains.CHUA_QUYET_DINH);
+				gt.setTrangThai(Contains.CHUATAO_QD);
 				hhQdKhlcntDsgthauRepository.save(gt);
 				for (HhDxuatKhLcntDsgthauDtlCtietReq ddNhap : gtList.getChildren()){
 					HhQdKhlcntDsgthauCtiet dataDdNhap = new ModelMapper().map(ddNhap, HhQdKhlcntDsgthauCtiet.class);
@@ -181,7 +181,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				HhQdKhlcntDsgthau gThau = ObjectMapperUtils.map(dsgThau, HhQdKhlcntDsgthau.class);
 				gThau.setId(null);
 				gThau.setIdQdDtl(qdDtl.getId());
-				gThau.setTrangThai(Contains.CHUA_QUYET_DINH);
+				gThau.setTrangThai(Contains.CHUATAO_QD);
 				hhQdKhlcntDsgthauRepository.save(gThau);
 				for (HhDxuatKhLcntDsgthauDtlCtietReq dsDdNhap : dsgThau.getChildren()){
 					HhQdKhlcntDsgthauCtiet ddNhap = ObjectMapperUtils.map(dsDdNhap, HhQdKhlcntDsgthauCtiet.class);
@@ -278,7 +278,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				gt.setId(null);
 				gt.setIdQdDtl(qd.getId());
 				gt.setThanhTien(gt.getDonGia().multiply(gt.getSoLuong()));
-				gt.setTrangThai(Contains.CHUA_QUYET_DINH);
+				gt.setTrangThai(Contains.CHUATAO_QD);
 				hhQdKhlcntDsgthauRepository.save(gt);
 				for (HhDxuatKhLcntDsgthauDtlCtietReq ddNhap : gtList.getChildren()){
 					HhQdKhlcntDsgthauCtiet dataDdNhap = new ModelMapper().map(ddNhap, HhQdKhlcntDsgthauCtiet.class);
@@ -344,7 +344,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				HhQdKhlcntDsgthau gThau = ObjectMapperUtils.map(dsgThau, HhQdKhlcntDsgthau.class);
 				gThau.setId(null);
 				gThau.setIdQdDtl(qdDtl.getId());
-				gThau.setTrangThai(Contains.CHUA_QUYET_DINH);
+				gThau.setTrangThai(Contains.CHUATAO_QD);
 				hhQdKhlcntDsgthauRepository.save(gThau);
 				for (HhDxuatKhLcntDsgthauDtlCtietReq dsDdNhap : dsgThau.getChildren()){
 					HhQdKhlcntDsgthauCtiet ddNhap = ObjectMapperUtils.map(dsDdNhap, HhQdKhlcntDsgthauCtiet.class);
@@ -722,8 +722,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 
 		// Tao form excel
 		String title = "Danh sách QĐ phê duyệt KHLCNT";
-		String[] rowsName = new String[] { "STT", "Số quyết định", "Ngày QĐ", "Trích yếu", "Năm kế hoạch",
-				"Loại hàng hóa", "Chủng loại hàng hóa" };
+		String[] rowsName = new String[] { "STT", "Số quyết định", "Ngày quyết định", "Trích yếu", "Năm kế hoạch",
+				"Loại hàng hóa", "Chủng loại hàng hóa","Số gói thầu","Tổng tiền(đồng)" };
 
 
 		String filename = "Quyet_dinh_ke_hoach_lcnt-cuc.xlsx";
@@ -741,6 +741,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			objs[4] = qd.getNamKhoach();
 			objs[5] = qd.getLoaiVthh();
 			objs[6] = qd.getCloaiVthh();
+			objs[7] = qd.getSoGthau();
+			objs[8] = qd.getTongTien();
 			dataList.add(objs);
 		}
 

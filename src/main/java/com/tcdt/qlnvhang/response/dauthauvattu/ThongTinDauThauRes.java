@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.response.dauthauvattu;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
@@ -65,6 +66,8 @@ public class ThongTinDauThauRes {
 	private Integer vat;
 
 	private BigDecimal soLuong;
+	@Transient
+	private String tenTrangThai;
 
 
 	public ThongTinDauThauRes(Long idQdHdr, Long idQdDtl, Long idGt,Long idNhaThau, String tenGthau, String maDvi, String soQdPdKhlcnt,Date ngayQd, String trichYeu, String loaiVthh, String cloaiVthh, BigDecimal thanhGiaGoiThau, String trangThai,String nguonVon,Integer tgianThienHd,String loaiHdong, Integer vat, BigDecimal soLuong, BigDecimal donGiaTrcVat) {

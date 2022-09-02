@@ -42,7 +42,13 @@ public enum NhapXuatHangTrangThaiEnum {
 	BAN_HANH("29", "Ban Hành", "Ban Hành"),
 	DAKY("30", "Đã Ký", "Đã Ký"),
 	CHUATAOTOTRINH("31", "Chưa Tạo Tờ Trình", "Chưa Tạo Tờ Trình"),
-	DATAOTOTRINH("32", "Đã Tạo Tờ Trình", "Đã Tạo Tờ Trình");
+	DATAOTOTRINH("32", "Đã Tạo Tờ Trình", "Đã Tạo Tờ Trình"),
+	CHUACAPNHAT("33", "Chưa cập nhật", "Chưa cập nhật"),
+	DANGCAPNHAT("34", "Đang cập nhật", "Đang cập nhật"),
+	HOANTHANHCAPNHAT("35", "Hoan thành cập nhật", "Hoan thành cập nhật"),
+	HUYTHAU("36", "Hủy thầu", "Hủy thầu"),
+	TRUNGTHAU("37", "Trúng thầu", "Trúng thầu");
+
 
 	private final String id;
 	private final String ten;
