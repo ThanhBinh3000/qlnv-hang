@@ -379,6 +379,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 			f.setTenDvi(mapDmucDvi.get(f.getMaDvi()));
 			f.setTenVthh(mapVthh.get(f.getLoaiVthh()));
 			f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(f.getTrangThai()));
+			f.setSoGoiThau(hhQdPduyetKqlcntDtlRepository.countByIdQdPdHdr(f.getId()));
 		});
 		return page;
 	}

@@ -40,7 +40,8 @@ public class HhDchinhDxKhLcntHdr implements Serializable {
 	@Temporal(TemporalType.DATE)
 	Date ngayHluc;
 	String trangThai;
-
+	@Transient
+	String tenTrangThai;
 	Date ngayTao;
 	String nguoiTao;
 	@Temporal(TemporalType.DATE)
@@ -121,5 +122,7 @@ public class HhDchinhDxKhLcntHdr implements Serializable {
 
 	@Transient
 	private List<HhDchinhDxKhLcntDtl> hhQdKhlcntDtlList = new ArrayList<>();
+	@Transient
+	private Long soGoiThau;
 
 }

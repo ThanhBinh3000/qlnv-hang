@@ -43,7 +43,7 @@ public class HhQdPduyetKqlcntRes {
 
 	private String tenHdong;
 
-	private Integer soGoiThau;
+	private Long soGoiThau;
 
 	private String maDvi;
 
@@ -76,13 +76,12 @@ public class HhQdPduyetKqlcntRes {
 		this.trangThai = trangThai;
 	}
 
-	public HhQdPduyetKqlcntRes(Long id, String soQd, Date ngayQd, String trichYeu, String trangThai, Integer soGoiThau, String maDvi, Integer namKhoach, String loaiVthh,String soQdPdKhlcnt) {
+	public HhQdPduyetKqlcntRes(Long id, String soQd, Date ngayQd, String trichYeu, String trangThai,String maDvi, Integer namKhoach, String loaiVthh,String soQdPdKhlcnt) {
 		this.id = id;
 		this.soQd = soQd;
 		this.ngayQd = ngayQd;
 		this.trichYeu = trichYeu;
 		this.trangThai = trangThai;
-		this.soGoiThau = soGoiThau;
 		this.maDvi = maDvi;
 		this.namKhoach = namKhoach;
 		this.loaiVthh = loaiVthh;
