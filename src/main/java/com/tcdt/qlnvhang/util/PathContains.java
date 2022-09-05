@@ -162,4 +162,6 @@ public class PathContains {
 	public static final String QD_PHE_DUYET_KQBDG = "/qd-phe-duyet-kqbdg";
 
 	public static final String QD_GIAO_NVU_XUAT_HANG = "/qd-giao-nvu-xuat-hang";
+
+	public static final String XH_BIEN_BAN_TINH_KHO = "/xh-bb-tinh-kho";
 }
