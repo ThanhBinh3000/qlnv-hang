@@ -13,6 +13,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetketquabandaugia.BhQdPheDuyetKqbdgCtReq;
 import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetketquabandaugia.BhQdPheDuyetKqbdgReq;
 import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetketquabandaugia.BhQdPheDuyetKqbdgSearchReq;
+import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetketquabandaugia.BhQdPheDuyetKqbdgSearchReqExt;
 import com.tcdt.qlnvhang.response.banhangdaugia.quyetdinhpheduyetketquabandaugia.BhQdPheDuyetKqbdgCtRes;
 import com.tcdt.qlnvhang.response.banhangdaugia.quyetdinhpheduyetketquabandaugia.BhQdPheDuyetKqbdgRes;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -331,5 +332,12 @@ public class BhQdPheDuyetKqbdgServiceImpl extends BaseServiceImpl implements BhQ
             if (optional.isPresent() && !optional.get().getId().equals(updateId))
                 throw new Exception("Số quyết định " + soQd + " đã tồn tại");
         }
+    }
+    @Override
+    public Page<BhQdPheDuyetKqbdg> listData(BhQdPheDuyetKqbdgSearchReqExt reqExt, Pageable pageable) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        reqExt.setDvql(userInfo.getDvql());
+        reqExt.toString();
+        return bhQdPheDuyetKqbdgRepository.search(reqExt, pageable);
     }
 }

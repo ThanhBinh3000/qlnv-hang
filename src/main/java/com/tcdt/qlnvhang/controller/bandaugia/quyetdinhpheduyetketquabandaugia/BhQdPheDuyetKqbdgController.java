@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetketquabandaugia.BhQdPheDuyetKqbdgReq;
 import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetketquabandaugia.BhQdPheDuyetKqbdgSearchReq;
+import com.tcdt.qlnvhang.request.bandaugia.quyetdinhpheduyetketquabandaugia.BhQdPheDuyetKqbdgSearchReqExt;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.bandaugia.quyetdinhpheduyetketquabandaugia.BhQdPheDuyetKqbdgService;
 import com.tcdt.qlnvhang.util.PathContains;
@@ -12,6 +13,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -154,5 +157,23 @@ public class BhQdPheDuyetKqbdgController {
         } catch (Exception e) {
             log.error("Error can not export", e);
         }
+    }
+
+    @ApiOperation(value = "Danh sách chọn Quản lý Quyết định phê duyệt kết quả bán đấu giá", response = List.class)
+    @PostMapping(value = "/listData", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> listData(@RequestBody BhQdPheDuyetKqbdgSearchReqExt reqExt) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            Pageable pageable = PageRequest.of(reqExt.getPaggingReq().getPage(),
+                reqExt.getPaggingReq().getLimit());
+            resp.setData(service.listData(reqExt, pageable));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tra cứu Quản lý Quyết định phê duyệt kết quả bán đấu giá lỗi: {}", e);
+        }
+        return ResponseEntity.ok(resp);
     }
 }
