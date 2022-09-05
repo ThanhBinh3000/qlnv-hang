@@ -1,14 +1,16 @@
 package com.tcdt.qlnvhang.service;
 
-import com.tcdt.qlnvhang.entities.FileDKemJoinDxKhLcntHdr;
 import com.tcdt.qlnvhang.entities.FileDKemJoinHhDchinhDxKhLcntHdr;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.*;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.*;
 import com.tcdt.qlnvhang.request.search.QlnvQdLcntHdrDChinhSearchReq;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.util.*;
 
@@ -58,7 +61,16 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		int page = objReq.getPaggingReq().getPage();
 		int limit = objReq.getPaggingReq().getLimit();
 		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
-		return hdrRepository.selectPage(objReq.getNamKh(),objReq.getSoQdinh(), objReq.getTrichYeu(), convertDateToString(objReq.getTuNgayQd()),convertDateToString(objReq.getDenNgayQd()), pageable);
+
+		Page<HhDchinhDxKhLcntHdr> data= hdrRepository.selectPage(objReq.getNamKh(),objReq.getSoQdinh(), objReq.getTrichYeu(),
+				convertDateToString(objReq.getTuNgayQd()),
+				convertDateToString(objReq.getDenNgayQd()),
+				pageable);
+		data.getContent().forEach( f -> {
+			f.setSoGoiThau (gThauRepository.countByIdDcDxDtl(f.getId()));
+			f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(f.getTrangThai()));
+		});
+		return data;
 	}
 
 	@Transactional(rollbackOn = Exception.class)
@@ -87,7 +99,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 
 		HhDchinhDxKhLcntHdr dataMap = new ModelMapper().map(objReq, HhDchinhDxKhLcntHdr.class);
 		dataMap.setNgayTao(getDateTimeNow());
-		dataMap.setTrangThai(Contains.TAO_MOI);
+		dataMap.setTrangThai(Contains.DUTHAO);
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setFileDinhKem(fileDinhKemList);
 
@@ -112,7 +124,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 
 		HhDchinhDxKhLcntHdr dataMap = new ModelMapper().map(objReq, HhDchinhDxKhLcntHdr.class);
 		dataMap.setNgayTao(getDateTimeNow());
-		dataMap.setTrangThai(Contains.TAO_MOI);
+		dataMap.setTrangThai(Contains.DUTHAO);
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setFileDinhKem(fileDinhKemList);
 
@@ -260,7 +272,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 				gt.setId(null);
 				gt.setIdDcDxDtl(qd.getId());
 				gt.setThanhTien(gt.getDonGia().multiply(gt.getSoLuong()));
-				gt.setTrangThai(Contains.CHUA_QUYET_DINH);
+				gt.setTrangThai(Contains.CHUATAO_QD);
 				gThauRepository.save(gt);
 				for (HhDxuatKhLcntDsgthauDtlCtietReq ddNhap : gtList.getChildren()){
 					HhDchinhDxKhLcntDsgthauCtiet dataDdNhap = new ModelMapper().map(ddNhap, HhDchinhDxKhLcntDsgthauCtiet.class);
@@ -285,7 +297,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 				HhDchinhDxKhLcntDsgthau gThau = ObjectMapperUtils.map(dsgThau, HhDchinhDxKhLcntDsgthau.class);
 				gThau.setId(null);
 				gThau.setIdDcDxDtl(qdDtl.getId());
-				gThau.setTrangThai(Contains.CHUA_QUYET_DINH);
+				gThau.setTrangThai(Contains.CHUATAO_QD);
 				gThauRepository.save(gThau);
 				for (HhDxuatKhLcntDsgthauDtlCtietReq dsDdNhap : dsgThau.getChildren()){
 					HhDchinhDxKhLcntDsgthauCtiet ddNhap = ObjectMapperUtils.map(dsDdNhap, HhDchinhDxKhLcntDsgthauCtiet.class);
@@ -306,18 +318,18 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		qdLcnt.setTrangThai(stReq.getTrangThai());
 		String status = stReq.getTrangThai() + qdLcnt.getTrangThai();
 		switch(status) {
-			case Contains.CHO_DUYET + Contains.MOI_TAO:
-			case Contains.CHO_DUYET + Contains.TU_CHOI:
+			case Contains.CHODUYET_LDV + Contains.DUTHAO:
+			case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
 				qdLcnt.setNguoiGuiDuyet(getUser().getUsername());
 				qdLcnt.setNgayGuiDuyet(getDateTimeNow());
 				break;
-			case Contains.TU_CHOI + Contains.CHO_DUYET:
+			case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
 				qdLcnt.setLdoTuchoi(stReq.getLyDo());
 				break;
-			case Contains.DUYET + Contains.CHO_DUYET:
+			case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
 				qdLcnt.setNguoiPduyet(getUser().getUsername());
 				qdLcnt.setNgayPduyet(getDateTimeNow());
-			case Contains.BAN_HANH + Contains.DUYET:
+			case Contains.BAN_HANH + Contains.DADUYET_LDV:
 				qdLcnt.setNguoiPduyet(getUser().getUsername());
 				qdLcnt.setNgayPduyet(getDateTimeNow());
 				break;
@@ -346,7 +358,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 					HhQdKhlcntDsgthau gThau = new HhQdKhlcntDsgthau();
 					BeanUtils.copyProperties(dsgThau,gThau,"id");
 					gThau.setIdQdDtl(qdDtl.getId());
-					gThau.setTrangThai(Contains.CHUA_QUYET_DINH);
+					gThau.setTrangThai(Contains.CHUATAO_QD);
 					hhQdKhlcntDsgthauRepository.save(gThau);
 					for (HhDchinhDxKhLcntDsgthauCtiet dsDdNhap : dsgThau.getChildren()){
 						HhQdKhlcntDsgthauCtiet ddNhap = new HhQdKhlcntDsgthauCtiet();
@@ -367,7 +379,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 						HhQdKhlcntDsgthau gThau = new HhQdKhlcntDsgthau();
 						BeanUtils.copyProperties(dsgThau,gThau,"id");
 						gThau.setIdQdDtl(qdDtl.getId());
-						gThau.setTrangThai(Contains.CHUA_QUYET_DINH);
+						gThau.setTrangThai(Contains.CHUATAO_QD);
 						hhQdKhlcntDsgthauRepository.save(gThau);
 						for (HhDchinhDxKhLcntDsgthauCtiet dsDdNhap : dsgThau.getChildren()){
 							HhQdKhlcntDsgthauCtiet ddNhap = new HhQdKhlcntDsgthauCtiet();
@@ -426,6 +438,37 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 
 		return qOptional.get();
 	}
+
+	public  void export(QlnvQdLcntHdrDChinhSearchReq objReq, HttpServletResponse response) throws Exception{
+		PaggingReq paggingReq = new PaggingReq();
+		paggingReq.setPage(0);
+		paggingReq.setLimit(Integer.MAX_VALUE);
+		objReq.setPaggingReq(paggingReq);
+		Page<HhDchinhDxKhLcntHdr> page=this.getAllPage(objReq);
+		List<HhDchinhDxKhLcntHdr> data=page.getContent();
+
+		String title="Danh sách quyết định điều chỉnh kế hoạch lựa chọn nhà thầu";
+		String[] rowsName=new String[]{"STT","Số quyết định điều chỉnh KH LCNT","Ngày ký","Trích yếu","Số QĐ duyệt KHLCNT","Năm kế hoạch","Loại hàng hóa","Trạng thái"};
+		String fileName="danh-sach-qd-dieu-chinh-khlcnt.xlsx";
+		List<Object[]> dataList = new ArrayList<Object[]>();
+		Object[] objs=null;
+		for (int i=0;i<data.size();i++){
+			HhDchinhDxKhLcntHdr dx=data.get(i);
+			objs=new Object[rowsName.length];
+			objs[0]=i;
+			objs[1]=dx.getSoQd();
+			objs[2]=dx.getNgayQd();
+			objs[3]=dx.getTrichYeu();
+			objs[4]=dx.getSoQdGoc();
+			objs[5]=dx.getNamKh();
+			objs[6]=dx.getLoaiVthh();
+			objs[6]=dx.getTenTrangThai();
+			dataList.add(objs);
+		}
+		ExportExcel ex =new ExportExcel(title,fileName,rowsName,dataList,response);
+		ex.export();
+	}
+
 
 
 

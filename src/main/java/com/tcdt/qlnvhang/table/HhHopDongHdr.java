@@ -86,6 +86,8 @@ public class HhHopDongHdr implements Serializable {
 	Date ngayKy;
 
 	String trangThai;
+	@Transient
+	String tenTrangThai;
 	Date ngayTao;
 	String nguoiTao;
 	Date ngaySua;

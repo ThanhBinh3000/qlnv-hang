@@ -6,11 +6,10 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhHopDongDdiemNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.HhPhuLucRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
-import com.tcdt.qlnvhang.request.search.ListHdSearhReq;
-import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.util.*;
@@ -22,7 +21,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-
 import com.tcdt.qlnvhang.entities.FileDKemJoinHopDong;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.HhQdPduyetKqlcntHdrRepository;
@@ -80,7 +78,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setNgayTao(getDateTimeNow());
-		dataMap.setTrangThai(Contains.TAO_MOI);
+		dataMap.setTrangThai(Contains.DUTHAO);
 		dataMap.setMaDvi(userInfo.getDvql());
 
 		// File dinh kem cua goi thau
@@ -126,7 +124,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setNgayTao(getDateTimeNow());
-		dataMap.setTrangThai(Contains.TAO_MOI);
+		dataMap.setTrangThai(Contains.DUTHAO);
 		dataMap.setMaDvi(userInfo.getDvql());
 
 		// File dinh kem cua goi thau
@@ -303,6 +301,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 				f.setHhDdiemNhapKhoList(diaDiemNhapKhos);
 			}
 			f.setDonViTinh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : mapVthh.get(f.getDonViTinh()));
+			f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
 		});
 		return page;
 	}
@@ -352,7 +351,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 //				optional.get().setNgayPduyet(getDateTimeNow());
 //				optional.get().setLdoTuchoi(stReq.getLyDo());
 //				break;
-			case Contains.DUYET + Contains.MOI_TAO:
+			case Contains.DAKY + Contains.DUTHAO:
 				optional.get().setNguoiPduyet(getUser().getUsername());
 				optional.get().setNgayPduyet(getDateTimeNow());
 				break;
@@ -375,8 +374,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 		if (!optional.isPresent())
 			throw new Exception("Không tìm thấy dữ liệu cần xoá");
 
-		if (!optional.get().getTrangThai().equals(Contains.TAO_MOI)
-				&& !optional.get().getTrangThai().equals(Contains.TU_CHOI))
+		if (!optional.get().getTrangThai().equals(Contains.DUTHAO))
 			throw new Exception("Chỉ thực hiện xóa thông tin đấu thầu ở trạng thái bản nháp hoặc từ chối");
 
 		hhHopDongRepository.delete(optional.get());
