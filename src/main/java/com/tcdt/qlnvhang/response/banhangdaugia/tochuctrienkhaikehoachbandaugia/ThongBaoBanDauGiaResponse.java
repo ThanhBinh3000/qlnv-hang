@@ -61,6 +61,13 @@ public class ThongBaoBanDauGiaResponse {
 	private String tenQdPheDuyetKhBd;
 	private String tenTrangThai;
 	private String trangThaiDuyet;
+
+	private Long tbBdgKtId;
+	private String maTbBdgKt;
+
+	private Long bbBdgId;
+	private String soBbBdg;
+
 	private List<BhQdPheDuyetKhBdgThongTinTaiSanResponse> taiSanBdgList;
 	private List<FileDinhKem> fileDinhKems;
 }
