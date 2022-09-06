@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.impl;
 import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGia;
 import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhBdgThongTinTaiSan;
 import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdg;
+import com.tcdt.qlnvhang.entities.bandaugia.thongbaobandaugiakhongthanh.BhThongBaoBdgKt;
 import com.tcdt.qlnvhang.entities.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGia;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.mapper.bandaugia.kehoachbandaugia.BanDauGiaPhanLoTaiSanResponseMapper;
@@ -10,8 +11,10 @@ import com.tcdt.qlnvhang.mapper.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQd
 import com.tcdt.qlnvhang.mapper.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaRequestMapper;
 import com.tcdt.qlnvhang.mapper.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaResponseMapper;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
+import com.tcdt.qlnvhang.repository.bandaugia.bienbanbandaugia.BhBbBanDauGiaRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.kehoachbanhangdaugia.BanDauGiaPhanLoTaiSanRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgRepository;
+import com.tcdt.qlnvhang.repository.bandaugia.thongbaobandaugiakhongthanh.BhThongBaoBdgKtRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.tonghopdexuatkhbdg.BhQdPheDuyetKhBdgThongTinTaiSanRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -58,6 +61,8 @@ public class ThongBaoBanDauGiaServiceImpl extends BaseServiceImpl implements Tho
 	private final BhQdPheDuyetKhBdgThongTinTaiSanRepository taiSanRepository;
 
 	private final BhQdPheDuyetKhBdgThongTinTaiSanResponseMapper taiSanResponseMapper;
+	private final BhThongBaoBdgKtRepository thongBaoBdgKtRepository;
+	private final BhBbBanDauGiaRepository bhBbBanDauGiaRepository;
 
 	private final FileDinhKemService fileDinhKemService;
 	private final QlnvDmVattuRepository dmVattuRepository;
@@ -197,7 +202,17 @@ public class ThongBaoBanDauGiaServiceImpl extends BaseServiceImpl implements Tho
 			response.setTaiSanBdgList(taiSanResponseMapper.toDto(taiSanList));
 		}
 		response.setFileDinhKems(fileDinhKemService.search(thongBaoBanDauGia.getId(), Collections.singleton(ThongBaoBanDauGia.TABLE_NAME)));
+		thongBaoBdgKtRepository.findFirstByThongBaoBdgId(thongBaoBanDauGia.getId())
+				.ifPresent(t -> {
+					response.setTbBdgKtId(t.getId());
+					response.setMaTbBdgKt(t.getMaThongBao());
+				});
 
+		bhBbBanDauGiaRepository.findFirstByThongBaoBdgId(thongBaoBanDauGia.getId())
+				.ifPresent(t -> {
+					response.setBbBdgId(t.getId());
+					response.setSoBbBdg(t.getSoBienBan());
+				});
 		return response;
 	}
 

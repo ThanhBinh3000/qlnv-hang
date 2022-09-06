@@ -16,4 +16,6 @@ public interface BhThongBaoBdgKtRepository extends BaseRepository<BhThongBaoBdgK
     void deleteByIdIn(Collection<Long> ids);
 
     Optional<BhThongBaoBdgKt> findFirstByMaThongBao(String soBienBan);
+
+    Optional<BhThongBaoBdgKt> findFirstByThongBaoBdgId(Long tbBdgId);
 }
