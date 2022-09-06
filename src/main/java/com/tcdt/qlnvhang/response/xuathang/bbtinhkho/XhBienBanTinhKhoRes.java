@@ -24,14 +24,17 @@ public class XhBienBanTinhKhoRes {
     private String nganKho;
     private String loKho;
     private String soBienBan;
-    private int soLuongNhap;
-    private int soLuongXuat;
-    private int slConlaiSosach;
-    private int slConlaiXuatcuoi;
-    private int slThuaConlai;
-    private int slThieuConlai;
+    private double soLuongNhap;
+    private double soLuongXuat;
+    private double slConlaiSosach;
+    private double slConlaiXuatcuoi;
+    private double slThuaConlai;
+    private double slThieuConlai;
     private String nguyenNhan;
     private String kienNghi;
     private LocalDate ngayLapPhieu;
+    private String trangThai;
+    private String tenTrangThai;
+    private String trangThaiDuyet;
     private List<XhBienBanTinhKhoCtRes> ds = new ArrayList<>();
 }

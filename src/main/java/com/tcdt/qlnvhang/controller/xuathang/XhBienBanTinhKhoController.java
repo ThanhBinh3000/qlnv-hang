@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.controller.xuathang;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.xuathang.bbtinhkho.XhBienBanTinhKhoReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.xuathang.bbtinhkho.XhBienBanTinhKhoService;
 import com.tcdt.qlnvhang.util.PathContains;
@@ -25,6 +26,38 @@ public class XhBienBanTinhKhoController {
 
     @Autowired
     XhBienBanTinhKhoService service;
+
+    @ApiOperation(value = "Tạo mới Biên bản tịnh kho", response = List.class)
+    @PostMapping
+    public ResponseEntity<BaseResponse> insert(@Valid @RequestBody XhBienBanTinhKhoReq request) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(service.create(request));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tạo mới Biên bản tịnh kho lỗi: {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Sửa Biên bản tịnh kho", response = List.class)
+    @PutMapping
+    public ResponseEntity<BaseResponse> update(@Valid @RequestBody XhBienBanTinhKhoReq request) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(service.update(request));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Sửa Biên bản tịnh kho lỗi: {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
 
     @ApiOperation(value = "Xóa Biên bản tịnh kho", response = List.class)
     @DeleteMapping("/{id}")

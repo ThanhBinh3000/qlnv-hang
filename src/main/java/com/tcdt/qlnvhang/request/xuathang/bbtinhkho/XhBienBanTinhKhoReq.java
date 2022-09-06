@@ -11,7 +11,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class XhBienBanTinhKhoReq {
-    private String qdId;
+    private Long id;
+    private Long qdId;
     private String loaiHangHoa;
     private String chungLoaiHangHoa;
     private String maDvi;
@@ -20,8 +21,8 @@ public class XhBienBanTinhKhoReq {
     private String maNhakho;
     private String maNgankho;
     private String maNganlo;
-    private int soLuongXuat;
-    private int soLuongThucTeConLai;
+    private double soLuongXuat;
+    private double soLuongThucTeConLai;
     private String nguyenNhan;
     private String kienNghi;
     List<XhBienBanTinhKhoCtReq> ds = new ArrayList<>();
