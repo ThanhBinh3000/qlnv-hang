@@ -11,4 +11,6 @@ import java.util.List;
 public interface KtNganKhoRepository extends CrudRepository<KtNganKho, Long>, KtNganKhoRepositoryCustom {
 	List<KtNganKho> findByMaNgankhoIn(Collection<String> maNganKhoList);
 
+	KtNganKho findByMaNgankho(String ma);
+
 }
