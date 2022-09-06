@@ -3,7 +3,6 @@ package com.tcdt.qlnvhang.repository;
 import java.util.List;
 import java.util.Optional;
 
-import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
@@ -53,4 +52,10 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 			" AND KHLCNT.NGUON_VON = :nguonVon " +
 			" AND KHLCNT.TRANG_THAI = '05' ", nativeQuery = true)
 	List<HhDxuatKhLcntHdr> listTongHop(String loaiVthh,String cloaiVthh,String namKh, String hthucLcnt,String pthucLcnt, String loaiHdong,String nguonVon);
+
+	List<HhDxuatKhLcntHdr> findByIdIn(List<Long> id);
+
+	@Transactional
+	void deleteAllByIdIn(List<Long> ids);
+
 }

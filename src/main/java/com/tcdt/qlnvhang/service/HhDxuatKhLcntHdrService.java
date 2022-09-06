@@ -31,6 +31,8 @@ public interface HhDxuatKhLcntHdrService {
 	@Transactional(rollbackOn = Exception.class)
 	void delete(IdSearchReq idSearchReq) throws Exception;
 
+	void deleteMulti(IdSearchReq idSearchReq) throws Exception;
+
 	void exportToExcel(IdSearchReq searchReq, HttpServletResponse response) throws Exception;
 
 //	void exportDsKhlcnt(HhDxuatKhLcntSearchReq searchReq, HttpServletResponse response) throws Exception;
