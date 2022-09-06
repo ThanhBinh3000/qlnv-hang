@@ -131,6 +131,25 @@ public class HhDxuatKhLcntHdrController {
 		return ResponseEntity.ok(resp);
 	}
 
+	@ApiOperation(value = "Xoá danh sách đề xuất kế hoạch lựa chọn nhà thầu lương thực", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> deleteMulti(@RequestBody IdSearchReq idSearchReq) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			service.deleteMulti(idSearchReq);
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			// TODO: handle exception
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Xoá đề xuất kế hoạch lựa chọn nhà thầu lương thực trace: {}", e);
+		}
+
+		return ResponseEntity.ok(resp);
+	}
+
 	@ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03/Xoá-04 đề xuất kế hoạch lựa chọn nhà thầu lương thực", response = List.class)
 	@PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> updateStatus(@Valid HttpServletRequest req, @RequestBody StatusReq stReq) {

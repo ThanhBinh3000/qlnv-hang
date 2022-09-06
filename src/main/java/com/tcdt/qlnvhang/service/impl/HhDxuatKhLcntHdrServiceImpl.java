@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.impl;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -296,19 +297,51 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		if (!optional.isPresent()){
 			throw new Exception("Không tìm thấy dữ liệu cần xoá");
 		}
-
-		if (!optional.get().getTrangThai().equals(Contains.TAO_MOI) && !optional.get().getTrangThai().equals(Contains.TU_CHOI)){
+		if (!optional.get().getTrangThai().equals(Contains.DUTHAO)
+				&& !optional.get().getTrangThai().equals(Contains.TUCHOI_LDV)
+				&& !optional.get().getTrangThai().equals(Contains.TUCHOI_TP)
+				&& !optional.get().getTrangThai().equals(Contains.TUCHOI_LDC)){
 			throw new Exception("Chỉ thực hiện xóa với kế hoạch ở trạng thái bản nháp hoặc từ chối");
 		}
-
-		for(HhDxKhlcntDsgthau dsgThau :  hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcnt(idSearchReq.getId())){
-			hhDxKhlcntDsgthauCtietRepository.deleteAllByIdGoiThau(dsgThau.getId());
+		List<HhDxKhlcntDsgthau> goiThau = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcnt(idSearchReq.getId());
+		if(goiThau != null && goiThau.size() > 0){
+			for (HhDxKhlcntDsgthau ct : goiThau) {
+				List<HhDxKhlcntDsgthauCtiet> dsCtiet=hhDxKhlcntDsgthauCtietRepository.findByIdGoiThau(ct.getId());
+				hhDxKhlcntDsgthauCtietRepository.deleteAll(dsCtiet);
+			}
+			hhDxuatKhLcntDsgtDtlRepository.deleteAll(goiThau);
 		}
 		hhDxuatKhLcntDsgtDtlRepository.deleteAllByIdDxKhlcnt(idSearchReq.getId());
-		for(HhDxuatKhLcntCcxdgDtl cCu : hhDxuatKhLcntCcxdgDtlRepository.findByIdDxKhlcnt(idSearchReq.getId())){
-			hhDxuatKhLcntCcxdgDtlRepository.deleteAllByIdDxKhlcnt(cCu.getId());
+		List<HhDxuatKhLcntCcxdgDtl> cc=hhDxuatKhLcntCcxdgDtlRepository.findByIdDxKhlcnt(idSearchReq.getId());
+		if (cc != null && cc.size() > 0){
+			hhDxuatKhLcntCcxdgDtlRepository.deleteAll(cc);
 		}
 		hhDxuatKhLcntHdrRepository.delete(optional.get());
+	}
+
+	@Override
+	public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
+		if (StringUtils.isEmpty(idSearchReq.getIdList()))
+			throw new Exception("Xoá thất bại, không tìm thấy dữ liệu");
+		List<HhDxuatKhLcntHdr> listDx = hhDxuatKhLcntHdrRepository.findByIdIn(idSearchReq.getIdList());
+		if (listDx.isEmpty()){
+			throw new Exception("Không tìm thấy dữ liệu cần xoá");
+		}
+		for (HhDxuatKhLcntHdr dx:listDx) {
+			if (!dx.getTrangThai().equals(Contains.DUTHAO)
+					&& !dx.getTrangThai().equals(Contains.TUCHOI_LDV)
+					&& !dx.getTrangThai().equals(Contains.TUCHOI_TP)
+					&& !dx.getTrangThai().equals(Contains.TUCHOI_LDC)){
+				throw new Exception("Chỉ thực hiện xóa với kế hoạch ở trạng thái bản nháp hoặc từ chối");
+			}
+			List<HhDxKhlcntDsgthau> goiThau = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcnt(dx.getId());
+			List<Long> listGoiThau = goiThau.stream().map(HhDxKhlcntDsgthau::getId).collect(Collectors.toList());
+			hhDxKhlcntDsgthauCtietRepository.deleteAllByIdGoiThauIn(listGoiThau);
+		}
+		hhDxuatKhLcntDsgtDtlRepository.deleteAllByIdDxKhlcntIn(idSearchReq.getIdList());
+		hhDxuatKhLcntCcxdgDtlRepository.deleteAllByIdDxKhlcntIn(idSearchReq.getIdList());
+		hhDxuatKhLcntHdrRepository.deleteAllByIdIn(idSearchReq.getIdList());
+
 	}
 
 	@Override

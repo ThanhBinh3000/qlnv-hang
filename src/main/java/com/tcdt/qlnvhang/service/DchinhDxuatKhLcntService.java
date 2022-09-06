@@ -26,6 +26,7 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
@@ -61,15 +62,20 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		int page = objReq.getPaggingReq().getPage();
 		int limit = objReq.getPaggingReq().getLimit();
 		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
-
-		Page<HhDchinhDxKhLcntHdr> data= hdrRepository.selectPage(objReq.getNamKh(),objReq.getSoQdinh(), objReq.getTrichYeu(),
+		Page<HhDchinhDxKhLcntHdr> data = hdrRepository.selectPage(objReq.getNamKh(),objReq.getSoQdinh(), objReq.getTrichYeu(),
 				convertDateToString(objReq.getTuNgayQd()),
 				convertDateToString(objReq.getDenNgayQd()),
 				pageable);
-		data.getContent().forEach( f -> {
-			f.setSoGoiThau (gThauRepository.countByIdDcDxDtl(f.getId()));
-			f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(f.getTrangThai()));
-		});
+		List<Long> ids = data.getContent().stream().map(HhDchinhDxKhLcntHdr::getId).collect(Collectors.toList());
+		List<Object[]> abcd = dtlRepository.countAllByDcHdr(ids);
+		Map<String,String> cdse = new HashMap<>();
+		for (Object[] it: abcd) {
+			cdse.put(it[0].toString(),it[1].toString());
+		}
+		for (HhDchinhDxKhLcntHdr hdr:data.getContent()) {
+			hdr.setSoGoiThau(Long.parseLong(cdse.get(hdr.getId().toString())));
+			hdr.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(hdr.getTrangThai()));
+		}
 		return data;
 	}
 
