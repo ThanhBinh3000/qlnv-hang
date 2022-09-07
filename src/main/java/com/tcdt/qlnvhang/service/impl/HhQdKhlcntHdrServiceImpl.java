@@ -133,7 +133,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				gt.setId(null);
 				gt.setIdQdDtl(qd.getId());
 				gt.setThanhTien(gt.getDonGia().multiply(gt.getSoLuong()));
-				gt.setTrangThai(Contains.CHUATAO_QD);
+				gt.setTrangThai(Contains.CHUACAPNHAT);
 				hhQdKhlcntDsgthauRepository.save(gt);
 				for (HhDxuatKhLcntDsgthauDtlCtietReq ddNhap : gtList.getChildren()){
 					HhQdKhlcntDsgthauCtiet dataDdNhap = new ModelMapper().map(ddNhap, HhQdKhlcntDsgthauCtiet.class);
@@ -183,7 +183,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				HhQdKhlcntDsgthau gThau = ObjectMapperUtils.map(dsgThau, HhQdKhlcntDsgthau.class);
 				gThau.setId(null);
 				gThau.setIdQdDtl(qdDtl.getId());
-				gThau.setTrangThai(Contains.CHUATAO_QD);
+				gThau.setTrangThai(Contains.CHUACAPNHAT);
 				hhQdKhlcntDsgthauRepository.save(gThau);
 				for (HhDxuatKhLcntDsgthauDtlCtietReq dsDdNhap : dsgThau.getChildren()){
 					HhQdKhlcntDsgthauCtiet ddNhap = ObjectMapperUtils.map(dsDdNhap, HhQdKhlcntDsgthauCtiet.class);
@@ -280,7 +280,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				gt.setId(null);
 				gt.setIdQdDtl(qd.getId());
 				gt.setThanhTien(gt.getDonGia().multiply(gt.getSoLuong()));
-				gt.setTrangThai(Contains.CHUATAO_QD);
+				gt.setTrangThai(Contains.CHUACAPNHAT);
 				hhQdKhlcntDsgthauRepository.save(gt);
 				for (HhDxuatKhLcntDsgthauDtlCtietReq ddNhap : gtList.getChildren()){
 					HhQdKhlcntDsgthauCtiet dataDdNhap = new ModelMapper().map(ddNhap, HhQdKhlcntDsgthauCtiet.class);
@@ -346,7 +346,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				HhQdKhlcntDsgthau gThau = ObjectMapperUtils.map(dsgThau, HhQdKhlcntDsgthau.class);
 				gThau.setId(null);
 				gThau.setIdQdDtl(qdDtl.getId());
-				gThau.setTrangThai(Contains.CHUATAO_QD);
+				gThau.setTrangThai(Contains.CHUACAPNHAT);
 				hhQdKhlcntDsgthauRepository.save(gThau);
 				for (HhDxuatKhLcntDsgthauDtlCtietReq dsDdNhap : dsgThau.getChildren()){
 					HhQdKhlcntDsgthauCtiet ddNhap = ObjectMapperUtils.map(dsDdNhap, HhQdKhlcntDsgthauCtiet.class);

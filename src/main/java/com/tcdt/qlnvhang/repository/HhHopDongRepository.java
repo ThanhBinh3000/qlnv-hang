@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.tcdt.qlnvhang.table.HhHopDongHdr;
+import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -32,7 +33,7 @@ public interface HhHopDongRepository extends BaseRepository<HhHopDongHdr, Long> 
 	@Query(
 			value = " SELECT DISTINCT * " +
 					" FROM HH_HOP_DONG_HDR HD " +
-					" WHERE HD.TRANG_THAI = '02'"+
+					" WHERE HD.TRANG_THAI = "+ Contains.BAN_HANH +" "+
 					" AND NOT EXISTS(SELECT NX.ID +" +
 					        " FROM NH_QD_GIAO_NVU_NHAPXUAT NX"+
 			                " LEFT JOIN NH_QD_GIAO_NVU_NHAPXUAT_CT1 CT ON CT.ID_HDR = NX.ID"+
