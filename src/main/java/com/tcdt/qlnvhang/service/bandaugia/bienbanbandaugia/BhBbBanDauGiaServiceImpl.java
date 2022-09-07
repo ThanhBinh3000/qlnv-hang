@@ -370,7 +370,7 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
                 objs[0] = i;
                 objs[1] = item.getSoBienBan();
                 objs[2] = item.getTenDvi();
-                objs[3] = LocalDateTimeUtils.localDateToString(item.getNgayToChuc());
+                objs[3] = LocalDateTimeUtils.localDateToString(item.getNgayToChucTu());
                 objs[4] = item.getTrichYeu();
                 objs[5] = item.getSoQdPdKhBdg();
                 objs[6] = item.getMaThongBaoBdg();
