@@ -74,7 +74,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		}
 		for (HhDchinhDxKhLcntHdr hdr:data.getContent()) {
 			hdr.setSoGoiThau(Long.parseLong(soGthau.get(hdr.getId().toString())));
-			hdr.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(hdr.getTrangThai()));
+			hdr.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(hdr.getTrangThai()));
 		}
 		return data;
 	}
