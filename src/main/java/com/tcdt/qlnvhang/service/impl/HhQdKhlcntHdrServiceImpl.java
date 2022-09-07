@@ -1,10 +1,12 @@
 package com.tcdt.qlnvhang.service.impl;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.*;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.object.HhDxuatKhLcntDsgthauDtlCtietReq;
@@ -637,18 +639,30 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		int limit = req.getPaggingReq().getLimit();
 		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
 		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
-		Page<HhQdKhlcntHdr> pageContet = hhQdKhlcntHdrRepository.selectPage(req.getNamKhoach(),req.getLoaiVthh(), req.getSoQd(),req.getTrichYeu(), convertDateToString(req.getTuNgayQd()),convertDateToString(req.getDenNgayQd()), req.getTrangThai(), req.getLastest(),pageable);
-		for (HhQdKhlcntHdr f : pageContet.getContent()) {
+		Page<HhQdKhlcntHdr> data = hhQdKhlcntHdrRepository.selectPage(req.getNamKhoach(), req.getLoaiVthh(), req.getSoQd(), req.getTrichYeu(),
+				convertDateToString(req.getTuNgayQd()),
+				convertDateToString(req.getDenNgayQd()),
+				req.getTrangThai(), req.getLastest(),
+				pageable);
+		List<Long> ids = data.getContent().stream().map(HhQdKhlcntHdr::getId).collect(Collectors.toList());
+		List<Object[]> listGthau = hhQdKhlcntDtlRepository.countAllBySoGthau(ids);
+		Map<String,String> soGthau = new HashMap<>();
+		for (HhQdKhlcntHdr f : data.getContent()) {
 			f.setTenVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
 			f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
 			List<HhQdKhlcntDtl> detail = (hhQdKhlcntDtlRepository.findAllByIdQdHdr(f.getId()));
-			for (HhQdKhlcntDtl data : detail) {
-				f.setSoGthau(data.getSoGthau());
-				f.setTongTien(data.getTongTien());
+			for (HhQdKhlcntDtl tongTien : detail) {
+				f.setTongTien(tongTien.getTongTien());
 			}
-			continue;
 		}
-		return pageContet;
+		for (Object[] it: listGthau) {
+			soGthau.put(it[0].toString(),it[1].toString());
+		}
+		for (HhQdKhlcntHdr qd:data.getContent()) {
+			qd.setSoGthau(Long.parseLong(soGthau.get(qd.getId().toString())));
+			qd.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qd.getTrangThai()));
+		}
+		return data;
 	}
 
 

@@ -1,11 +1,10 @@
 package com.tcdt.qlnvhang.repository;
 
+import java.beans.Transient;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.Queue;
 
-import com.tcdt.qlnvhang.request.search.ListHdSearhReq;
 import com.tcdt.qlnvhang.table.HhHopDongHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,5 +42,9 @@ public interface HhHopDongRepository extends BaseRepository<HhHopDongHdr, Long> 
 					"  AND (:loaiVthh IS NULL OR HD.LOAI_VTHH = :loaiVthh) ",
 			nativeQuery = true)
 	List<HhHopDongHdr> ListHdTheoDk(String maDvi,String loaiVthh);
+
+	List<HhHopDongHdr> findByIdIn(List<Long> ids);
+	@Transient
+	void deleteByIdIn(List<Long> ids);
 
 }
