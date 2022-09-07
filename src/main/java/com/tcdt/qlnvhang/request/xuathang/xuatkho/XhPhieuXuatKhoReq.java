@@ -34,8 +34,7 @@ public class XhPhieuXuatKhoReq {
     private String maLoaiHangHoa;
     private String maChungLoaiHangHoa;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate xuatHang;
+    private String xuatHang;
     private String lyDoXuatKho;
     private String trangThai;
     private Integer so;

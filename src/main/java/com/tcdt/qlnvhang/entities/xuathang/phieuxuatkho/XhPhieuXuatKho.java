@@ -58,7 +58,7 @@ public class XhPhieuXuatKho extends TrangThaiBaseEntity implements Serializable 
 
 
     @Column(name = "XUAT_HANG")
-    private DateTime xuatHang;
+    private String xuatHang;
     @Column(name = "LY_DO_XUAT_KHO")
     private String lyDoXuatKho;
     @Column(name = "TRANG_THAI")
@@ -69,22 +69,22 @@ public class XhPhieuXuatKho extends TrangThaiBaseEntity implements Serializable 
     private Integer nam;
 
 
-    @Column(name = "NGAY_TAO")
-    private LocalDate ngayTao;
-    @Column(name = "NGUOI_TAO_ID")
-    private Long nguoiTaoId;
-    @Column(name = "NGAY_SUA")
-    private LocalDate ngaySua;
-    @Column(name = "NGUOI_SUA_ID")
-    private Long nguoiSuaId;
-    @Column(name = "NGUOI_GUI_DUYET_ID")
-    private Long nguoiGuiDuyetId;
-    @Column(name = "NGAY_GUI_DUYET")
-    private LocalDate ngayGuiDuyet;
-    @Column(name = "NGUOI_PDUYET_ID")
-    private Long nguoiPduyetId;
-    @Column(name = "NGAY_PDUYET")
-    private LocalDate ngayPduyet;
+//    @Column(name = "NGAY_TAO")
+//    private LocalDate ngayTao;
+//    @Column(name = "NGUOI_TAO_ID")
+//    private Long nguoiTaoId;
+//    @Column(name = "NGAY_SUA")
+//    private LocalDate ngaySua;
+//    @Column(name = "NGUOI_SUA_ID")
+//    private Long nguoiSuaId;
+//    @Column(name = "NGUOI_GUI_DUYET_ID")
+//    private Long nguoiGuiDuyetId;
+//    @Column(name = "NGAY_GUI_DUYET")
+//    private LocalDate ngayGuiDuyet;
+//    @Column(name = "NGUOI_PDUYET_ID")
+//    private Long nguoiPduyetId;
+//    @Column(name = "NGAY_PDUYET")
+//    private LocalDate ngayPduyet;
 
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();

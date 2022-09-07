@@ -14,15 +14,17 @@ import com.tcdt.qlnvhang.request.search.xuathang.XhPhieuXuatKhoSearchReq;
 import com.tcdt.qlnvhang.request.xuathang.quyetdinhgiaonhiemvuxuat.XhQdGiaoNvuXuatCtReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatkho.XhPhieuXuatKhoCtReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatkho.XhPhieuXuatKhoReq;
+import com.tcdt.qlnvhang.response.xuathang.phieuxuatkho.XhPhieuXuatKhoCtRes;
 import com.tcdt.qlnvhang.response.xuathang.phieuxuatkho.XhPhieuXuatKhoRes;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.UserUtils;
+import org.joda.time.DateTime;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-
+import org.modelmapper.ModelMapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -58,16 +60,22 @@ public class XhPhieuXuatKhoServiceImpl implements XhPhieuXuatKhoService {
                     return d;
                 })
                 .map(d -> {
-                    XhPhieuXuatKhoCt dsHangThanhLyCt = new XhPhieuXuatKhoCt();
-                    BeanUtils.copyProperties(d, dsHangThanhLyCt, "id");
-                    return dsHangThanhLyCt;
+                    XhPhieuXuatKhoCt xuatKhoCt = new XhPhieuXuatKhoCt();
+                    BeanUtils.copyProperties(d, xuatKhoCt, "id");
+                    return xuatKhoCt;
                 })
                 .collect(Collectors.toList());
 
         xuatKhoCtRepo.saveAll(ds);
         XhPhieuXuatKhoRes result = new XhPhieuXuatKhoRes();
         BeanUtils.copyProperties(item, result, "id");
-       // result.setDs(req.getDs());
+
+        List<XhPhieuXuatKhoCtRes> dsRes = ds
+                .stream()
+                .map(user -> new ModelMapper().map(user, XhPhieuXuatKhoCtRes.class))
+                .collect(Collectors.toList());
+
+        result.setDs(dsRes);
 
         return result;
 

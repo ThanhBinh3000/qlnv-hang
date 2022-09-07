@@ -33,7 +33,7 @@ public class XhPhieuXuatKhoRes {
     private String maChungLoaiHangHoa;
 
 
-    private DateTime xuatHang;
+    private String xuatHang;
     private String lyDoXuatKho;
     private String trangThai;
     private Integer so;
