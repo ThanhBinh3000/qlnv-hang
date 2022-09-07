@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.repository.bandaugia.bienbanbandaugia;
 
 import com.tcdt.qlnvhang.entities.bandaugia.bienbanbandaugia.BhBbBanDauGia;
+import com.tcdt.qlnvhang.entities.bandaugia.thongbaobandaugiakhongthanh.BhThongBaoBdgKt;
 import com.tcdt.qlnvhang.repository.BaseRepository;
 import org.springframework.data.jpa.repository.Modifying;
 
@@ -14,4 +15,6 @@ public interface BhBbBanDauGiaRepository extends BaseRepository<BhBbBanDauGia, L
     void deleteByIdIn(Collection<Long> ids);
 
     Optional<BhBbBanDauGia> findFirstBySoBienBan(String soBienBan);
+
+    Optional<BhBbBanDauGia> findFirstByThongBaoBdgId(Long tbBdgId);
 }
