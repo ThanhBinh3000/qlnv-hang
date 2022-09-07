@@ -13,52 +13,65 @@ import com.tcdt.qlnvhang.repository.xuathang.bbtinhkho.XhBienBanTinhKhoCtReposit
 import com.tcdt.qlnvhang.repository.xuathang.bbtinhkho.XhBienBanTinhKhoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.quyetdinhgiaonhiemvuxuat.XhQdGiaoNvuXuatRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.search.xuathang.XhBienBanTinhKhoSearchReq;
 import com.tcdt.qlnvhang.request.xuathang.bbtinhkho.XhBienBanTinhKhoReq;
 import com.tcdt.qlnvhang.response.xuathang.bbtinhkho.XhBienBanTinhKhoCtRes;
 import com.tcdt.qlnvhang.response.xuathang.bbtinhkho.XhBienBanTinhKhoRes;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.util.ExportExcel;
+import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Log4j2
 public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
 
+    private static final String SHEET_BIEN_BAN_TINH_KHO = "Biên bản tịnh kho lỗi";
+    private static final String STT = "STT";
+    private static final String SO_QUYET_DINH = "Số Quyết Định Xuất";
+    private static final String SO_BIEN_BAN = "Số Biên Bản";
+    private static final String NGAY_BIEN_BAN = "Ngày Biên Bản";
+    private static final String DIEM_KHO = "Điểm Kho";
+    private static final String NHA_KHO = "Nhà Kho";
+    private static final String NGAN_KHO = "Ngăn Kho";
+    private static final String LO_KHO = "Lô Kho";
+    private static final String TRANG_THAI = "Trạng Thái";
     private final String MA_DS = "/BBTK-CCDTVP";
     @Autowired
     XhBienBanTinhKhoRepository xhBienBanTinhKhoRepository;
-
     @Autowired
     XhBienBanTinhKhoCtRepository xhBienBanTinhKhoCtRepository;
-
     @Autowired
     XhQdGiaoNvuXuatRepository xhQdGiaoNvuXuatRepository;
-
     @Autowired
     KtDiemKhoRepository ktDiemKho;
-
     @Autowired
     KtNhaKhoRepository ktNhaKho;
-
     @Autowired
     KtNganKhoRepository ktNganKho;
-
     @Autowired
     KtNganLoRepository ktNganLo;
-
     @Autowired
     QlnvDmVattuRepository qlnvDmVattuRepository;
 
@@ -274,12 +287,58 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
 
     @Override
     public Page<XhBienBanTinhKhoRes> search(XhBienBanTinhKhoSearchReq req) throws Exception {
-        return null;
+        UserInfo userInfo = UserUtils.getUserInfo();
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
+
+        List<XhBienBanTinhKhoRes> responses = new ArrayList<>();
+        xhBienBanTinhKhoRepository.search(req).forEach(item -> {
+            XhBienBanTinhKhoRes response = this.buildResponse(item);
+            responses.add(response);
+        });
+
+        return new PageImpl<>(responses, pageable, xhBienBanTinhKhoRepository.count(req));
     }
 
     @Override
     public boolean exportToExcel(XhBienBanTinhKhoSearchReq objReq, HttpServletResponse response) throws Exception {
-        return false;
+        UserInfo userInfo = UserUtils.getUserInfo();
+        objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
+        List<XhBienBanTinhKhoRes> list = this.search(objReq).get().collect(Collectors.toList());
+
+        if (CollectionUtils.isEmpty(list))
+            return true;
+
+        String[] rowsName = new String[]{STT, SO_BIEN_BAN, SO_QUYET_DINH, NGAY_BIEN_BAN, DIEM_KHO
+                , NHA_KHO, NGAN_KHO, LO_KHO, TRANG_THAI};
+        String filename = "Danh_sach_bien_ban_tinh_kho_khi_xuat_doc_kho.xlsx";
+
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+
+        try {
+            for (int i = 0; i < list.size(); i++) {
+                XhBienBanTinhKhoRes item = list.get(i);
+                objs = new Object[rowsName.length];
+                objs[0] = i;
+                objs[1] = item.getSoBienBan();
+                objs[2] = item.getSoQd();
+                objs[3] = LocalDateTimeUtils.localDateToString(item.getNgayLapPhieu());
+                objs[4] = item.getDiemKho();
+                objs[5] = item.getNhaKho();
+                objs[6] = item.getNganKho();
+                objs[7] = item.getLoKho();
+                objs[8] = NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai());
+                dataList.add(objs);
+            }
+
+            ExportExcel ex = new ExportExcel(SHEET_BIEN_BAN_TINH_KHO, filename, rowsName, dataList, response);
+            ex.export();
+        } catch (Exception e) {
+            log.error("Error export", e);
+            return false;
+        }
+
+        return true;
     }
 
     private XhBienBanTinhKhoRes buildResponse(XhBienBanTinhKho xhBienBanTinhKho) {
@@ -291,9 +350,9 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
         xhBienBanTinhKhoRes.setTenDvi(xhBienBanTinhKho.getCapDvi());
         xhBienBanTinhKhoRes.setMaDvi(xhBienBanTinhKho.getMaDvi());
         xhBienBanTinhKhoRes.setDiemKho(ktDiemKho.findByMaDiemkhoIn(Collections.singleton(xhBienBanTinhKho.getMaDiemkho())).get(0).getTenDiemkho());
-        xhBienBanTinhKhoRes.setDiemKho(ktNhaKho.findByMaNhakhoIn(Collections.singleton(xhBienBanTinhKho.getMaNhakho())).get(0).getTenNhakho());
-        xhBienBanTinhKhoRes.setDiemKho(ktNganKho.findByMaNgankhoIn(Collections.singleton(xhBienBanTinhKho.getMaNgankho())).get(0).getTenNgankho());
-        xhBienBanTinhKhoRes.setDiemKho(ktNganLo.findByMaNganloIn(Collections.singleton(xhBienBanTinhKho.getMaLokho())).get(0).getTenNganlo());
+        xhBienBanTinhKhoRes.setNhaKho(ktNhaKho.findByMaNhakhoIn(Collections.singleton(xhBienBanTinhKho.getMaNhakho())).get(0).getTenNhakho());
+        xhBienBanTinhKhoRes.setNganKho(ktNganKho.findByMaNgankhoIn(Collections.singleton(xhBienBanTinhKho.getMaNgankho())).get(0).getTenNgankho());
+        xhBienBanTinhKhoRes.setLoKho(ktNganLo.findByMaNganloIn(Collections.singleton(xhBienBanTinhKho.getMaLokho())).get(0).getTenNganlo());
         xhBienBanTinhKhoRes.setSoBienBan(xhBienBanTinhKho.getSoBienBan());
         xhBienBanTinhKhoRes.setSoLuongNhap(xhBienBanTinhKho.getSoLuongNhap());
         xhBienBanTinhKhoRes.setSoLuongXuat(xhBienBanTinhKho.getSoLuongXuat());
