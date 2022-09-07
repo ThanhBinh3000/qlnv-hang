@@ -44,7 +44,7 @@ public class XhBbLayMauController extends BaseController {
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error(e.getMessage());
+			log.error("Create error", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
@@ -61,7 +61,7 @@ public class XhBbLayMauController extends BaseController {
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error(e.getMessage());
+			log.error("Update error", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
@@ -112,7 +112,7 @@ public class XhBbLayMauController extends BaseController {
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error(e.getMessage());
+			log.error("Search Error", e);
 		}
 		return ResponseEntity.ok(resp);
 	}

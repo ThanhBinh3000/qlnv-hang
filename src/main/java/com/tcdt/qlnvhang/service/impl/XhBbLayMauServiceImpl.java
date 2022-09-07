@@ -184,6 +184,13 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl implements XhBbLayMau
 		if (!optional.isPresent())
 			throw new Exception("Biên bản lấy mẫu không tồn tại");
 		XhBbLayMau xhBbLayMau = optional.get();
+
+		//Chi tiết
+		List<XhBbLayMauCt> ctList = ctRepository.findByXhBbLayMauIdIn(Collections.singleton(xhBbLayMau.getId()));
+		if (!CollectionUtils.isEmpty(ctList)) {
+			xhBbLayMau.setChiTietList(ctList);
+		}
+
 		XhBbLayMauResponse response = xhBbLayMauResponseMapper.toDto(xhBbLayMau);
 		//Trạng thái
 		response.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(xhBbLayMau.getTrangThai()));
@@ -207,6 +214,7 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl implements XhBbLayMau
 
 		//Build thông tin kho
 		this.buildThongTinKho(response);
+
 
 		return response;
 	}
