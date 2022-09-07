@@ -20,7 +20,7 @@ public class BhQdPheDuyetKqbdgRepositoryCustomImpl implements BhQdPheDuyetKqbdgR
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT bb, " +
                 "tbBanDauGia.id, tbBanDauGia.maThongBao, tbBanDauGia.hinhThucDauGia, tbBanDauGia.phuongThucDauGia, " +
-                "bbBanDauGia.id, bbBanDauGia.soBienBan, bbBanDauGia.ngayToChuc, " +
+                "bbBanDauGia.id, bbBanDauGia.soBienBan, bbBanDauGia.ngayToChucTu, " +
                 "vatTuCha.ma, vatTuCha.ten," +
                 "qdPdKhBdg.id, qdPdKhBdg.soQuyetDinh " +
                 "FROM BhQdPheDuyetKqbdg bb ");
