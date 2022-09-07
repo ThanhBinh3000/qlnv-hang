@@ -157,4 +157,6 @@ public class HhQdKhlcntHdr implements Serializable {
 	BigDecimal tongTien;
 	@Transient
 	Long soGthau;
+	@Transient
+	String tenTrangThai;
 }

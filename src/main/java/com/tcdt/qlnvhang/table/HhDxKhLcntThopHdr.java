@@ -92,6 +92,8 @@ public class HhDxKhLcntThopHdr implements Serializable {
 	String nguoiTao;
 	String namKhoach;
 	String trangThai;
+	@Transient
+	String tenTrangThai;
 	String tchuanCluong;
 
 	@Transient
