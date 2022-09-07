@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.response.banhangdaugia.tochuctrienkhaikehoachbandaugia
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.tcdt.qlnvhang.response.CommonResponse;
 import com.tcdt.qlnvhang.response.banhangdaugia.tonghopdexuatkhbdg.BhQdPheDuyetKhBdgThongTinTaiSanResponse;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ThongBaoBanDauGiaResponse {
+public class ThongBaoBanDauGiaResponse extends CommonResponse {
 	private Long id;
 	private String maDonVi;
 	private String capDonVi;

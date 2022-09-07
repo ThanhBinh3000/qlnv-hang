@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.repository.khotang;
 
-import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
 import com.tcdt.qlnvhang.table.khotang.KtNhaKho;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,4 +18,6 @@ public interface KtNhaKhoRepository extends CrudRepository<KtNhaKho, Long> {
     Page<KtNhaKho> selectParams(@Param("ma") String ma, @Param("ten") String ten, @Param("id") Long id, Pageable pageable);
 
     List<KtNhaKho> findByMaNhakhoIn(Collection<String> mas);
+
+    KtNhaKho findByMaNhakho(String ma);
 }
