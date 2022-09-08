@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.repository;
 import java.util.List;
 import java.util.Optional;
 
+import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
@@ -17,8 +18,8 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 
 	@Transactional()
 	@Modifying
-	@Query(value = "UPDATE HH_DX_KHLCNT_HDR SET TRANG_THAI=:trangThai WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
-	void updateTongHop(List<String> soDxuatList, String trangThai);
+	@Query(value = "UPDATE HH_DX_KHLCNT_HDR SET TRANG_THAI_TH=:trangThaiTh WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
+	void updateTongHop(List<String> soDxuatList, String trangThaiTh);
 
 	@Transactional()
 	@Modifying
@@ -50,7 +51,8 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 			" AND KHLCNT.PTHUC_LCNT = :pthucLcnt \n" +
 			" AND KHLCNT.LOAI_HDONG = :loaiHdong \n" +
 			" AND KHLCNT.NGUON_VON = :nguonVon " +
-			" AND KHLCNT.TRANG_THAI = '05' ", nativeQuery = true)
+			" AND KHLCNT.TRANG_THAI = '"+ Contains.DADUYET_LDC + "'" +
+			" AND KHLCNT.TRANG_THAI_TH = '"+ Contains.CHUATONGHOP+ "' ", nativeQuery = true)
 	List<HhDxuatKhLcntHdr> listTongHop(String loaiVthh,String cloaiVthh,String namKh, String hthucLcnt,String pthucLcnt, String loaiHdong,String nguonVon);
 
 	List<HhDxuatKhLcntHdr> findByIdIn(List<Long> id);
