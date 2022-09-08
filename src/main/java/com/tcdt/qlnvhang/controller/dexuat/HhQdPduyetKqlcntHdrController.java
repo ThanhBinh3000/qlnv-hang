@@ -10,6 +10,8 @@ import javax.validation.Valid;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.request.search.HhDthauSearchReq;
+import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.util.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -157,6 +159,8 @@ public class HhQdPduyetKqlcntHdrController extends BaseController {
 												  @Valid @RequestBody HhQdPduyetKqlcntSearchReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
+			UserInfo userInfo = UserUtils.getUserInfo();
+			objReq.setMaDvi(userInfo.getDvql());
 			resp.setData(service.timKiemAll(objReq));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());

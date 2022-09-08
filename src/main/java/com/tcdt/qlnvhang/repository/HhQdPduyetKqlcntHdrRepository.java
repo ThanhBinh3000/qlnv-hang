@@ -51,8 +51,9 @@ public interface HhQdPduyetKqlcntHdrRepository extends BaseRepository<HhQdPduyet
 			" AND (:soQd IS NULL OR QDPD.SO_QD = :soQd) "+
 			" AND (:tuNgayQd IS NULL OR QDPD.NGAY_QD >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) "+
 			" AND (:denNgayQd IS NULL OR QDPD.NGAY_QD <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) " +
+			" AND (:maDvi IS NULL OR QDPD.MA_DVI LIKE CONCAT(:maDvi,'%')) " +
 			" AND (:trangThai IS NULL OR QDPD.TRANG_THAI = :trangThai) ",
 			nativeQuery = true)
-	List<HhQdPduyetKqlcntHdr> selectAll(String namKh, String loaiVthh, String soQd, String tuNgayQd, String denNgayQd, String trangThai);
+	List<HhQdPduyetKqlcntHdr> selectAll(String namKh, String loaiVthh, String soQd, String tuNgayQd, String denNgayQd, String trangThai,String maDvi);
 
 }
