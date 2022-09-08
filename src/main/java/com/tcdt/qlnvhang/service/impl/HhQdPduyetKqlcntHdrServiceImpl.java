@@ -89,6 +89,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setNgayTao(getDateTimeNow());
 		dataMap.setTrangThai(Contains.DUTHAO);
+		dataMap.setMaDvi(getUser().getDvql());
 		dataMap.setChildren(fileDinhKemList);
 
 		HhQdPduyetKqlcntHdr createCheck = hhQdPduyetKqlcntHdrRepository.save(dataMap);
@@ -209,12 +210,14 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 
 		HhQdPduyetKqlcntHdr createCheck = hhQdPduyetKqlcntHdrRepository.save(dataDB);
 
-		Optional<HhQdKhlcntDsgthau> gt = hhQdKhlcntDsgthauRepository.findById(objReq.getIdGoiThau());
-		HhQdPduyetKqlcntDtl dtl = ObjectMapperUtils.map(gt.get(), HhQdPduyetKqlcntDtl.class);
-		dtl.setId(null);
-		dtl.setIdQdPdHdr(dataMap.getId());
-		dtl.setIdGoiThau(objReq.getIdGoiThau());
-		hhQdPduyetKqlcntDtlRepository.save(dtl);
+		hhQdPduyetKqlcntDtlRepository.deleteAllByIdQdPdHdr(objReq.getId());
+		for (HhQdPduyetKqlcntDtlReq qdPdKq : objReq.getDetailList()){
+			HhQdPduyetKqlcntDtl qdPdKqDtl = ObjectMapperUtils.map(qdPdKq, HhQdPduyetKqlcntDtl.class);
+			qdPdKqDtl.setId(null);
+			qdPdKqDtl.setIdQdPdHdr(dataMap.getId());
+			qdPdKqDtl.setIdGoiThau(qdPdKq.getIdGt());
+			hhQdPduyetKqlcntDtlRepository.save(qdPdKqDtl);
+		}
 
 		return createCheck;
 	}
@@ -318,14 +321,14 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		optional.get().setTrangThai(stReq.getTrangThai());
 		if(stReq.getTrangThai().equals(Contains.BAN_HANH)){
 			// IS VẬT TƯ
-			if(optional.get().getLoaiVthh().startsWith("02")){
+//			if(optional.get().getLoaiVthh().startsWith("02")){
 				List<HhQdPduyetKqlcntDtl> qdPdKqLcntList = hhQdPduyetKqlcntDtlRepository.findByIdQdPdHdr(optional.get().getId());
 				for(HhQdPduyetKqlcntDtl kqLcnt : qdPdKqLcntList){
 					hhQdKhlcntDsgthauRepository.updateGoiThau(kqLcnt.getIdGoiThau(),kqLcnt.getTrungThau() == 1 ? Contains.TRUNGTHAU : Contains.HUYTHAU,kqLcnt.getLyDoHuy());
 				}
-			}else{
-				hhQdKhlcntDsgthauRepository.updateGoiThau(optional.get().getIdGoiThau(),optional.get().getTrungThau() == 1 ? Contains.TRUNGTHAU : Contains.HUYTHAU,optional.get().getLyDoHuy());
-			}
+//			}else{
+//				hhQdKhlcntDsgthauRepository.updateGoiThau(optional.get().getIdGoiThau(),optional.get().getTrungThau() == 1 ? Contains.TRUNGTHAU : Contains.HUYTHAU,optional.get().getLyDoHuy());
+//			}
 		}
 
 		HhQdPduyetKqlcntHdr createCheck = hhQdPduyetKqlcntHdrRepository.save(optional.get());
