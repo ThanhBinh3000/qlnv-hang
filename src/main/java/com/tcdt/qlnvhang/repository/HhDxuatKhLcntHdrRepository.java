@@ -40,10 +40,11 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 					"  AND (:loaiVthh IS NULL OR KHLCNT.LOAI_VTHH = :loaiVthh) " +
 					"  AND (:trichYeu IS NULL OR LOWER(KHLCNT.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%')))" +
 					"  AND (:trangThai IS NULL OR KHLCNT.TRANG_THAI = :trangThai) "+
-					"  AND (:trangThaiTh IS NULL OR KHLCNT.TRANG_THAI_TH = :trangThaiTh) "
+					"  AND (:trangThaiTh IS NULL OR KHLCNT.TRANG_THAI_TH = :trangThaiTh) " +
+					"  AND (:maDvi IS NULL OR KHLCNT.MA_DVI = :maDvi) "
 			,nativeQuery = true)
 
-	Page<HhDxuatKhLcntHdr> select(String namKh, String soTr,String soQd, String ngayKyTu,String ngayKyDen,String loaiVthh,String trichYeu,String trangThai,String trangThaiTh, Pageable pageable);
+	Page<HhDxuatKhLcntHdr> select(String namKh, String soTr,String soQd, String ngayKyTu,String ngayKyDen,String loaiVthh,String trichYeu,String trangThai,String trangThaiTh,String maDvi, Pageable pageable);
 
 	@Query(value = " SELECT KHLCNT.* \n" +
 			"FROM HH_DX_KHLCNT_HDR KHLCNT \n" +

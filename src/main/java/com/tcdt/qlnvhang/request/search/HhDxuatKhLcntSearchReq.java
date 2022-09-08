@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.search;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -45,6 +46,8 @@ public class HhDxuatKhLcntSearchReq extends BaseRequest {
 	String loaiVthh;
 
 	String maDvi;
+
+//	List<String> maDvis;
 
 	private String namKh;
 
