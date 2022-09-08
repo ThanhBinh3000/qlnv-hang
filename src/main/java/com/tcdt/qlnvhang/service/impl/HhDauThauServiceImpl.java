@@ -155,7 +155,10 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 	@Override
 	public Page<ThongTinDauThauRes> selectPage(HhDthauSearchReq objReq) throws Exception {
 		Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit(), Sort.by("id").ascending());
-		Page<ThongTinDauThauRes> page = hhDthauRepository.cusTomQuerySearch(objReq.getNamKhoach(),objReq.getLoaiVthh(),objReq.getSoQd(),objReq.getMaDvi(),objReq.getTrichYeu(),pageable);
+		Page<ThongTinDauThauRes> page = hhDthauRepository.cusTomQuerySearch(objReq.getNamKhoach(),objReq.getLoaiVthh(),objReq.getSoQd(),objReq.getMaDvi(),
+//				Contains.convertDateToString(objReq.getNgayQdTu()),
+//				Contains.convertDateToString(objReq.getNgayQdDen()),
+				objReq.getTrichYeu(),pageable);
 		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 		Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
 		page.forEach(f -> {
