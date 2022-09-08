@@ -23,7 +23,8 @@ public class BhBbBanDauGiaRes extends CommonResponse {
     private Long thongBaoBdgId;
     private String maThongBaoBdg;
     private String donViThongBao;
-    private LocalDate ngayToChuc;
+    private LocalDate ngayToChucTu;
+    private LocalDate ngayToChucDen;
     private String diaDiem;
 
     private Long qdPdKhBdgId;

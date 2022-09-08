@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.*;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.table.*;
@@ -321,8 +322,8 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		List<HhDxKhLcntThopHdr> data = page.getContent();
 
 		String title = "Tổng hợp đề xuất kế hoạch lựa chọn nhà thầu";
-		String[] rowsName = new String[] { "STT", "Ngày tạo phương án", "Năm kế hoạch", "Hình thức LCNT",
-		"Phương thức LCNT", "Loại hợp đồng", "Nguồn vốn", "Tiêu chuẩn chất lượng"};
+		String[] rowsName = new String[] { "STT", "Mã tổng hợp", "Ngày tổng hợp", "Nội dung tổng hợp",
+		"Năm kế hoạch", "Loại hàng hóa", "Chủng loại hàng hóa", "Hình thức LCNT","Phương thức LCNT","Loại hợp đồng","Nguồn vốn","Trạng thái"};
 		String filename = "Tong_hop_de_xuat_ke_hoach_lua_chon_nha_thau.xlsx";
 
 		List<Object[]> dataList = new ArrayList<Object[]>();
@@ -331,12 +332,16 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 			HhDxKhLcntThopHdr dx = data.get(i);
 			objs = new Object[rowsName.length];
 			objs[0] = i;
-			objs[1] = dx.getNgayTao();
-			objs[2] = dx.getNamKhoach();
-			objs[3] = dx.getTenHthucLcnt();
-			objs[4] = dx.getTenPthucLcnt();
-			objs[5] = dx.getTenLoaiHdong();
-			objs[6] = dx.getNguonVon();
+			objs[1] = dx.getId();
+			objs[2] = dx.getNgayThop();
+			objs[3] = dx.getNoiDung();
+			objs[4] = dx.getNamKhoach();
+			objs[5] = dx.getTenVthh();
+			objs[6] = dx.getTenCloaiVthh();
+			objs[7] = dx.getTenHthucLcnt();
+			objs[8] = dx.getTenPthucLcnt();
+			objs[9] = dx.getTenLoaiHdong();
+			objs[10] = dx.getTenTrangThai();
 			dataList.add(objs);
 		}
 
@@ -361,6 +366,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 			f.setTenPthucLcnt( StringUtils.isEmpty(f.getPthucLcnt()) ? null :hashMapPthucDthau.get(f.getPthucLcnt()));
 			f.setTenLoaiHdong( StringUtils.isEmpty(f.getLoaiHdong()) ? null :hashMapLoaiHdong.get(f.getLoaiHdong()));
 			f.setTenNguonVon( StringUtils.isEmpty(f.getNguonVon()) ? null :hashMapNguonVon.get(f.getNguonVon()));
+			f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
 		});
 		return page;
 	}

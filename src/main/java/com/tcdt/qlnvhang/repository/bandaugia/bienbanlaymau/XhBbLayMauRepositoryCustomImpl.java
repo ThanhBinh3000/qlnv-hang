@@ -48,11 +48,12 @@ public class XhBbLayMauRepositoryCustomImpl implements XhBbLayMauRepositoryCusto
 		QueryUtils.selectFields(builder, nganKho, KtNganKho_.TEN_NGANKHO);
 		QueryUtils.selectFields(builder, nganLo, KtNganLo_.MA_NGANLO);
 		QueryUtils.selectFields(builder, nganLo, KtNganLo_.TEN_NGANLO);
+		QueryUtils.selectFields(builder, xhBbLayMau, XhBbLayMau_.TRANG_THAI);
 
 		builder.append(QueryUtils.FROM)
 				.append(xhBbLayMau.buildAliasName())
 				.append(QueryUtils.buildInnerJoin(xhBbLayMau, diemKho, XhBbLayMau_.MA_DIEM_KHO, KtDiemKho_.MA_DIEMKHO))
-				.append(QueryUtils.buildInnerJoin(xhBbLayMau, nhaKho, XhBbLayMau_.MA_NHA_KHO, KtDiemKho_.MA_DIEMKHO))
+				.append(QueryUtils.buildInnerJoin(xhBbLayMau, nhaKho, XhBbLayMau_.MA_NHA_KHO, KtNhaKho_.MA_NHAKHO))
 				.append(QueryUtils.buildInnerJoin(xhBbLayMau, nganKho, XhBbLayMau_.MA_NGAN_KHO, KtNganKho_.MA_NGANKHO))
 				.append(QueryUtils.buildInnerJoin(xhBbLayMau, nganLo, XhBbLayMau_.MA_NGAN_LO, KtNganLo_.MA_NGANLO));
 

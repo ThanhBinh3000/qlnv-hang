@@ -61,10 +61,10 @@ public class BhBbBanDauGiaRepositoryCustomImpl implements BhBbBanDauGiaRepositor
         }
 
         if (req.getNgayToChucBdgTu() != null) {
-            builder.append("AND ").append("bb.ngayToChuc >= :ngayToChucBdgTu ");
+            builder.append("AND ").append("bb.ngayToChucTu >= :ngayToChucBdgTu ");
         }
         if (req.getNgayToChucBdgDen() != null) {
-            builder.append("AND ").append("bb.ngayToChuc <= :ngayToChucBdgDen ");
+            builder.append("AND ").append("bb.ngayToChucDen <= :ngayToChucBdgDen ");
         }
 
         if (!StringUtils.isEmpty(req.getMaVatTuCha())) {

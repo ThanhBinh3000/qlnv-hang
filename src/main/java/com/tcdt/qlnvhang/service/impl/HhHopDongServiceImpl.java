@@ -382,6 +382,20 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 	}
 
 	@Override
+	public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
+		if (StringUtils.isEmpty(idSearchReq.getIdList()))
+			throw new Exception("Xoá thất bại, không tìm thấy dữ liệu");
+
+		List<HhHopDongHdr> optional = hhHopDongRepository.findByIdIn(idSearchReq.getIdList());
+		if (!optional.isEmpty())
+			throw new Exception("Không tìm thấy dữ liệu cần xoá");
+		for (HhHopDongHdr hd:optional){
+			if (!hd.getTrangThai().equals(Contains.DUTHAO))
+				throw new Exception("Chỉ thực hiện xóa thông tin đấu thầu ở trạng thái bản nháp hoặc từ chối");
+		}
+		hhHopDongRepository.deleteByIdIn(idSearchReq.getIdList());
+	}
+	@Override
 	public  void exportList(HhHopDongSearchReq objReq, HttpServletResponse response) throws Exception{
 		PaggingReq paggingReq=new PaggingReq();
 		paggingReq.setPage(0);

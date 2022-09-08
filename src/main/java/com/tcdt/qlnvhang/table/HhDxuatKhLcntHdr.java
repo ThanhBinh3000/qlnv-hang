@@ -83,6 +83,7 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	Integer gtriDthau;
 	Integer gtriHdong;
 	String dienGiai;
+	String trangThaiTh;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)

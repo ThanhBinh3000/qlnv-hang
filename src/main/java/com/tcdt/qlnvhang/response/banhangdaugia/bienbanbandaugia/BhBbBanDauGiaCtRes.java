@@ -15,6 +15,8 @@ public class BhBbBanDauGiaCtRes {
     private String noiCongTac;
     private String loaiTptg;
     private Long bbBanDauGiaId;
+    private String mstCmtndCccdHoChieu;
+    private String diaChi;
 
     public BhBbBanDauGiaCtRes(BhBbBanDauGiaCt ct) {
         BeanUtils.copyProperties(ct, this);

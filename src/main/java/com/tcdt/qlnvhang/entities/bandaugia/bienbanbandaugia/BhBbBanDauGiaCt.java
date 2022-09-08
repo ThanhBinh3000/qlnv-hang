@@ -35,4 +35,10 @@ public class BhBbBanDauGiaCt implements Serializable {
 
     @Column(name = "BB_BAN_DAU_GIA_ID")
     private Long bbBanDauGiaId;
+
+    @Column(name = "MST_CMTND_CCCD_HO_CHIEU")
+    private String mstCmtndCccdHoChieu;
+
+    @Column(name = "DIA_CHI")
+    private String diaChi;
 }

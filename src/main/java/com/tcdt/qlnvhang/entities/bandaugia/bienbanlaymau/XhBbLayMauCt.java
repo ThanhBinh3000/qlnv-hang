@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.entities.bandaugia.bienbanlaymau;
 
-import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -13,7 +12,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class XhBbLayMauCt extends TrangThaiBaseEntity implements Serializable {
+public class XhBbLayMauCt implements Serializable {
 
 	public static final String TABLE_NAME = "XH_BB_LAY_MAU_CT";
 	private static final long serialVersionUID = 5219010961728948644L;
