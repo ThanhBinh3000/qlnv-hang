@@ -711,7 +711,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		}
 
 		optional.get().setTrangThai(stReq.getTrangThai());
-		if (stReq.getTrangThai().equals(Contains.DUYET)) {
+		if (stReq.getTrangThai().equals(Contains.DADUYET_LDV)) {
 			optional.get().setLastest(true);
 		}
 		return hhDxuatKhLcntHdrRepository.save(optional.get());
