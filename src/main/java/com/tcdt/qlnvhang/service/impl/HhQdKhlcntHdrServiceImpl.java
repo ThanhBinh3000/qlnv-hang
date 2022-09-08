@@ -178,6 +178,11 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		qdDtl.setMaDvi(getUser().getDvql());
 		hhQdKhlcntDtlRepository.save(qdDtl);
 
+		// Update trạng thái tờ trình
+		hhDxuatKhLcntHdrRepository.updateTongHop(Arrays.asList(objReq.getMaTrHdr()), Contains.DADUTHAO_QD);
+
+//		 .updateTrangThai(dataMap.getIdThHdr(), Contains.DADUTHAO_QD);
+
 		if (objReq.getDsGoiThau() != null && objReq.getDsGoiThau().size() > 0) {
 			for (HhQdKhlcntDsgthauReq dsgThau : objReq.getDsGoiThau()){
 				HhQdKhlcntDsgthau gThau = ObjectMapperUtils.map(dsgThau, HhQdKhlcntDsgthau.class);
@@ -486,7 +491,9 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				if(qOptional.get().getTrangThai().equals(Contains.DABANHANH_QD)){
 					throw new Exception("Đề xuất này đã được quyết định");
 				}
-				hhDxuatKhLcntHdrRepository.updateStatus(dataDB.getIdTrHdr() , Contains.DABANHANH_QD);
+				// Update trạng thái tờ trình
+				hhDxuatKhLcntHdrRepository.updateTongHop(Arrays.asList(dataDB.getMaTrHdr()), Contains.DADUTHAO_QD);
+//				hhDxuatKhLcntHdrRepository.updateStatus(dataDB.getIdTrHdr() , Contains.DABANHANH_QD);
 			}else{
 				throw new Exception("Số tờ trình kế hoạch không được tìm thấy");
 			}
