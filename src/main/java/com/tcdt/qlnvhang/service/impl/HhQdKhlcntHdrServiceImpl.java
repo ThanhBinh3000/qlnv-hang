@@ -407,6 +407,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		}
 
 		qOptional.get().setHhQdKhlcntDtlList(hhQdKhlcntDtlList);
+		qOptional.get().setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qOptional.get().getTrangThai()));
 
 		return qOptional.get();
 	}
@@ -445,6 +446,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 
 
 		dataRes.setHhQdKhlcntDtl(dataDtl.get());
+		dataHdr.get().setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dataHdr.get().getTrangThai()));
 		return gThau.get();
 	}
 

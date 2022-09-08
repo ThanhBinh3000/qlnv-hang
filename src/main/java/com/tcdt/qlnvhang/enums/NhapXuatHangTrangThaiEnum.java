@@ -45,7 +45,7 @@ public enum NhapXuatHangTrangThaiEnum {
 	DATAOTOTRINH("32", "Đã Tạo Tờ Trình", "Đã Tạo Tờ Trình"),
 	CHUACAPNHAT("33", "Chưa cập nhật", "Chưa cập nhật"),
 	DANGCAPNHAT("34", "Đang cập nhật", "Đang cập nhật"),
-	HOANTHANHCAPNHAT("35", "Hoan thành cập nhật", "Hoan thành cập nhật"),
+	HOANTHANHCAPNHAT("35", "Hoan thành cập nhật", "Hoàn thành cập nhật"),
 	HUYTHAU("36", "Hủy thầu", "Hủy thầu"),
 	TRUNGTHAU("37", "Trúng thầu", "Trúng thầu");
 
