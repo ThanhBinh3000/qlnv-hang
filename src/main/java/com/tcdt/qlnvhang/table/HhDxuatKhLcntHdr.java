@@ -43,6 +43,8 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	String trangThai;
 	@Transient
 	String tenTrangThai;
+	@Transient
+	String tenTrangThaiTh;
 	Date ngayTao;
 	String nguoiTao;
 	Date ngaySua;

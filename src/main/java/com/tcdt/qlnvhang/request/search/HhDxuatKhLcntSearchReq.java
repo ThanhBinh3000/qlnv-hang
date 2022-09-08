@@ -38,6 +38,7 @@ public class HhDxuatKhLcntSearchReq extends BaseRequest {
 	@Size(max = 2, message = "Trạng thái không được vượt quá 2 ký tự")
 	@ApiModelProperty(example = Contains.MOI_TAO)
 	String trangThai;
+	String TrangThaiTh;
 
 	@Size(max = 2, message = "Loại vật tư hàng hóa không được vượt quá 2 ký tự")
 	@ApiModelProperty(example = Contains.LOAI_VTHH_GAO)

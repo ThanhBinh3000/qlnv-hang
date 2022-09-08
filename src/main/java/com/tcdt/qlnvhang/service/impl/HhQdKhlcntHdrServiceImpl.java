@@ -76,8 +76,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			throw new Exception("Số quyết định " + objReq.getSoQd() + " đã tồn tại");
 		}
 
-		Optional<HhDxKhLcntThopHdr> qOptional = hhDxKhLcntThopHdrRepository.findById(objReq.getIdThHdr());
-		if (!qOptional.isPresent()){
+		Optional<HhDxKhLcntThopHdr> qOptionalTh = hhDxKhLcntThopHdrRepository.findById(objReq.getIdThHdr());
+		if (!qOptionalTh.isPresent()){
 			throw new Exception("Không tìm thấy tổng hợp kế hoạch lựa chọn nhà thầu");
 		}
 
@@ -115,7 +115,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		dataMap.setTrangThai(Contains.DUTHAO);
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setChildren(fileDinhKemList);
-		dataMap.setIdThHdr(qOptional.get().getId());
+		dataMap.setIdThHdr(qOptionalTh.get().getId());
 		dataMap.setLastest(objReq.getLastest());
 
 		hhQdKhlcntHdrRepository.save(dataMap);
@@ -177,6 +177,11 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		qdDtl.setIdQdHdr(dataMap.getId());
 		qdDtl.setMaDvi(getUser().getDvql());
 		hhQdKhlcntDtlRepository.save(qdDtl);
+
+		// Update trạng thái tờ trình
+		hhDxuatKhLcntHdrRepository.updateTongHop(Arrays.asList(objReq.getMaTrHdr()), Contains.DADUTHAO_QD);
+
+//		 .updateTrangThai(dataMap.getIdThHdr(), Contains.DADUTHAO_QD);
 
 		if (objReq.getDsGoiThau() != null && objReq.getDsGoiThau().size() > 0) {
 			for (HhQdKhlcntDsgthauReq dsgThau : objReq.getDsGoiThau()){
@@ -263,7 +268,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		dataDB.setNgaySua(getDateTimeNow());
 		dataDB.setNguoiSua(getUser().getUsername());
 		dataDB.setChildren(fileDinhKemList);
-		dataDB.setIdThHdr(qOptional.get().getId());
+		dataDB.setIdThHdr(qOptionalTh.get().getId());
 
 		hhQdKhlcntHdrRepository.save(dataDB);
 
@@ -444,7 +449,6 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	}
 
 	@Override
-	@Transactional
 	public HhQdKhlcntHdr approve(StatusReq stReq) throws Exception {
 		if (StringUtils.isEmpty(stReq.getId())){
 			throw new Exception("Không tìm thấy dữ liệu");
@@ -460,7 +464,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		}
 	}
 
-	private HhQdKhlcntHdr approveVatTu(StatusReq stReq,HhQdKhlcntHdr dataDB) throws Exception {
+	@Transactional(rollbackOn = Exception.class)
+	HhQdKhlcntHdr approveVatTu(StatusReq stReq,HhQdKhlcntHdr dataDB) throws Exception {
 		String status = stReq.getTrangThai() + dataDB.getTrangThai();
 		switch (status) {
 			case Contains.CHODUYET_LDV + Contains.DUTHAO:
@@ -486,7 +491,9 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				if(qOptional.get().getTrangThai().equals(Contains.DABANHANH_QD)){
 					throw new Exception("Đề xuất này đã được quyết định");
 				}
-				hhDxuatKhLcntHdrRepository.updateStatus(dataDB.getIdTrHdr() , Contains.DABANHANH_QD);
+				// Update trạng thái tờ trình
+				hhDxuatKhLcntHdrRepository.updateTongHop(Arrays.asList(dataDB.getMaTrHdr()), Contains.DADUTHAO_QD);
+//				hhDxuatKhLcntHdrRepository.updateStatus(dataDB.getIdTrHdr() , Contains.DABANHANH_QD);
 			}else{
 				throw new Exception("Số tờ trình kế hoạch không được tìm thấy");
 			}
@@ -496,7 +503,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		return createCheck;
 	}
 
-	private HhQdKhlcntHdr approveLT(StatusReq stReq,HhQdKhlcntHdr dataDB) throws Exception{
+	@Transactional(rollbackOn = Exception.class)
+	HhQdKhlcntHdr approveLT(StatusReq stReq, HhQdKhlcntHdr dataDB) throws Exception{
 		String status = stReq.getTrangThai() + dataDB.getTrangThai();
 		switch (status) {
 			case Contains.BAN_HANH + Contains.DUTHAO:
