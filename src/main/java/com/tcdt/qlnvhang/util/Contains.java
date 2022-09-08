@@ -1,7 +1,11 @@
 package com.tcdt.qlnvhang.util;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 
 public class Contains {
 	public static final String FORMAT_DATE_STR = "yyyy-MM-dd";
@@ -280,5 +284,13 @@ public class Contains {
 				.put(Contains.TPHONG_DUYET, "Trưởng phòng duyệt")
 				.put(Contains.LANHDAO_DUYET, "Lãnh đạo duyệt")
 				.get();
+	}
+
+	public static String convertDateToString(Date date) throws Exception {
+		if (Objects.isNull(date)) {
+			return null;
+		}
+		DateFormat df = new SimpleDateFormat(Contains.FORMAT_DATE_STR);
+		return df.format(date);
 	}
 }
