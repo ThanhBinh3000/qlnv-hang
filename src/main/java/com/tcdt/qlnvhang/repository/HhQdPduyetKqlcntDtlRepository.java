@@ -10,4 +10,6 @@ public interface HhQdPduyetKqlcntDtlRepository extends BaseRepository<HhQdPduyet
 
     long countByIdQdPdHdr(Long idQdPdHdr);
 
+    void deleteAllByIdQdPdHdr(Long idQdPdHdr);
+
 }

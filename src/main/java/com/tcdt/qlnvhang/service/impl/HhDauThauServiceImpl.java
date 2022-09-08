@@ -395,14 +395,14 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 			objs=new Object[rowsName.length];
 			objs[0]=i;
 			objs[1]=dx.getTenGthau();
-			objs[2]=dx.getMaDvi();
+			objs[2]=dx.getTenDvi();
 			objs[3]=dx.getSoQdPdKhlcnt();
 			objs[4]=dx.getNgayQd();
 			objs[5]=dx.getTrichYeu();
-			objs[6]=dx.getLoaiVthh();
-			objs[7]=dx.getCloaiVthh();
+			objs[6]=dx.getTenVthh();
+			objs[7]=dx.getTenCloaiVthh();
 			objs[8]=dx.getThanhGiaGoiThau();
-			objs[9]=dx.getTrangThai();
+			objs[9]=dx.getTenTrangThai();
 			dataList.add(objs);
 
 		}

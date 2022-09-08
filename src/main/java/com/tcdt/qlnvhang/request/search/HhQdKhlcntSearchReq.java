@@ -35,4 +35,6 @@ public class HhQdKhlcntSearchReq extends BaseRequest {
 	String trichYeu;
 
 	Integer lastest;
+
+	String maDvi;
 }
