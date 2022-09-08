@@ -50,6 +50,8 @@ public class HhQdPduyetKqlcntHdr implements Serializable {
 	String maDvi;
 	String ghiChu;
 	String trangThai;
+	@Transient
+	String TenTrangThai;
 	Date ngayTao;
 	String nguoiTao;
 	Date ngaySua;
