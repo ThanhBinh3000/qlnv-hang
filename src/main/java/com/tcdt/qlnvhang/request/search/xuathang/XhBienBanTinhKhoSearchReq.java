@@ -1,12 +1,16 @@
 package com.tcdt.qlnvhang.request.search.xuathang;
 
 import com.tcdt.qlnvhang.request.PaggingReq;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class XhBienBanTinhKhoSearchReq{
     public static final int DEFAULT_PAGE = 0;
     public static final int DEFAULT_LIMIT = 10;
