@@ -665,6 +665,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			for (HhQdKhlcntDtl tongTien : detail) {
 				f.setTongTien(tongTien.getTongTien());
 			}
+			f.setNamKhoach(f.getNamKhoach());
 		}
 		for (Object[] it: listGthau) {
 			soGthau.put(it[0].toString(),it[1].toString());

@@ -59,7 +59,7 @@ public class HhQdPduyetKqlcntRes {
 	@Transient
 	private String tenTrangThai;
 
-	public HhQdPduyetKqlcntRes(Long id, String soQd, Date ngayQd, String trichYeu, String tenGthau, String statusGthau, Long idNhaThau, String lyDoHuy, BigDecimal donGiaTrcVat, Integer vat, BigDecimal soLuong, String loaiHdong, Integer tgianThienHd, String trangThai) {
+	public HhQdPduyetKqlcntRes(Long id, String soQd, Date ngayQd, String trichYeu, String tenGthau, String statusGthau, Long idNhaThau, String lyDoHuy, BigDecimal donGiaTrcVat, Integer vat, BigDecimal soLuong, String loaiHdong, Integer tgianThienHd, String trangThai, Integer namKhoach, String loaiVthh) {
 		this.id = id;
 		this.soQd = soQd;
 		this.ngayQd = ngayQd;
@@ -74,6 +74,8 @@ public class HhQdPduyetKqlcntRes {
 		this.loaiHdong = loaiHdong;
 		this.tgianThienHd = tgianThienHd;
 		this.trangThai = trangThai;
+		this.namKhoach = namKhoach;
+		this.loaiVthh = loaiVthh;
 	}
 
 	public HhQdPduyetKqlcntRes(Long id, String soQd, Date ngayQd, String trichYeu, String trangThai,String maDvi, Integer namKhoach, String loaiVthh,String soQdPdKhlcnt) {

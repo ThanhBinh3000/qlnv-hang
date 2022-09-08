@@ -279,6 +279,8 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 
 		qOptional.get().setHhQdPduyetKqlcntDtlList(hhQdPduyetKqlcntDtlRepository.findByIdQdPdHdr(Long.parseLong(ids)));
 
+		qOptional.get().setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qOptional.get().getTrangThai()));
+
 		// Quy doi don vi kg = tan
 //		UnitScaler.formatList(qOptional.get().getChildren1(), Contains.DVT_TAN);
 
@@ -367,7 +369,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		String cDvi = getUser().getCapDvi();
 		Page<HhQdPduyetKqlcntRes> page;
 		if(Contains.CAP_TONG_CUC.equals(cDvi)){
-			page = hhQdPduyetKqlcntHdrRepository.customQuerySearchTongCuc(req.getNamKhoach(),req.getLoaiVthh(),req.getTrichYeu(),pageable);
+			page = hhQdPduyetKqlcntHdrRepository.customQuerySearchTongCuc(req.getNamKhoach(),req.getLoaiVthh(),req.getTrichYeu(),req.getMaDvi(),pageable);
 		}else{
 			page = hhQdPduyetKqlcntHdrRepository.customQuerySearchCuc(req.getNamKhoach(),req.getLoaiVthh(),req.getTrichYeu(),req.getMaDvi(),pageable);
 		}
