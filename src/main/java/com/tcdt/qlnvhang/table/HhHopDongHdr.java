@@ -50,6 +50,7 @@ public class HhHopDongHdr implements Serializable {
 	String soHd;
 	String tenHd;
 	String canCu;
+	private Long canCuId;
 //	String dviTrungThau;
 
 	@Temporal(TemporalType.DATE)

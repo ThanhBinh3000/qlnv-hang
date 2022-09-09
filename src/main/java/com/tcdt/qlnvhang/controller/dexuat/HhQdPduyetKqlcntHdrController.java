@@ -138,6 +138,8 @@ public class HhQdPduyetKqlcntHdrController extends BaseController {
 			@Valid @RequestBody HhQdPduyetKqlcntSearchReq objReq, HttpServletResponse response) {
 		BaseResponse resp = new BaseResponse();
 		try {
+			UserInfo userInfo = UserUtils.getUserInfo();
+			objReq.setMaDvi(userInfo.getDvql());
 			resp.setData(service.timKiemPageCustom(objReq,response));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
