@@ -109,9 +109,4 @@ public class XhPhieuXuatKhoRepositoryCustomImpl implements XhPhieuXuatKhoReposit
         }
     }
 
-    @Override
-    public int count(XhPhieuXuatKhoSearchReq req) {
-        return 1230;
-    }
-
 }

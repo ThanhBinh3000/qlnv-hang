@@ -10,5 +10,4 @@ public class XhPhieuXuatKhoCtReq {
     private Long pxuatKhoId;
     private String chungTu;
     private String tenFile;
-    private String ghiChu;
 }

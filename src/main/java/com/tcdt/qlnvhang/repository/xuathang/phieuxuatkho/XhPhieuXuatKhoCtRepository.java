@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Repository
-public interface XhPhieuXuatKhoCtRepository extends BaseRepository<XhPhieuXuatKhoCt, Long>,XhPhieuXuatKhoCtCustomRepository {
+public interface XhPhieuXuatKhoCtRepository extends BaseRepository<XhPhieuXuatKhoCt, Long> {
     void deleteAllByPxuatKhoId(Long id);
 
     void deleteByPxuatKhoIdIn(List<Long> id);

@@ -20,7 +20,5 @@ public class XhPhieuXuatKhoCt {
     private String chungTu;
     @Column(name = "TEN_FILE")
     private String tenFile;
-    @Column(name = "GHI_CHU")
-    private String ghiChu;
 
 }
