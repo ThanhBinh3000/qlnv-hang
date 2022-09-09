@@ -324,12 +324,10 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 					hhQdKhlcntDsgthauRepository.updateGoiThau(kqLcnt.getIdGoiThau(),kqLcnt.getTrungThau() == 1 ? Contains.TRUNGTHAU : Contains.HUYTHAU,kqLcnt.getLyDoHuy());
 				}
 			}else{
-				hhQdKhlcntDsgthauRepository.updateGoiThau(optional.get().getIdGoiThau(),optional.get().getTrungThau() == 1 ? Contains.TRUNGTHAU : Contains.HUYTHAU,optional.get().getLyDoHuy());
+				hhQdKhlcntDsgthauRepository.updateGoiThau(optional.get().getId(),optional.get().getTrungThau() == 1 ? Contains.TRUNGTHAU : Contains.HUYTHAU, optional.get().getLyDoHuy());
 			}
 		}
-
 		HhQdPduyetKqlcntHdr createCheck = hhQdPduyetKqlcntHdrRepository.save(optional.get());
-
 		return createCheck;
 	}
 
@@ -364,9 +362,9 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		String cDvi = getUser().getCapDvi();
 		Page<HhQdPduyetKqlcntRes> page;
 		if(Contains.CAP_TONG_CUC.equals(cDvi)){
-			page = hhQdPduyetKqlcntHdrRepository.customQuerySearchTongCuc(req.getNamKhoach(),req.getLoaiVthh(),req.getTrichYeu(),pageable);
+			page = hhQdPduyetKqlcntHdrRepository.customQuerySearchTongCuc(req.getNamKhoach(),req.getLoaiVthh(),req.getTrichYeu(),req.getSoQdPdKhlcnt(),pageable);
 		}else{
-			page = hhQdPduyetKqlcntHdrRepository.customQuerySearchCuc(req.getNamKhoach(),req.getLoaiVthh(),req.getTrichYeu(),pageable);
+			page = hhQdPduyetKqlcntHdrRepository.customQuerySearchCuc(req.getNamKhoach(),req.getLoaiVthh(),req.getTrichYeu(),req.getSoQdPdKhlcnt(),pageable);
 		}
 		Map<String,String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
 		Map<String,String> hashMapDviLquan = getListDanhMucDviLq("NT");
