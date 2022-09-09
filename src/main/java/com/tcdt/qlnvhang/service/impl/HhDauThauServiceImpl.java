@@ -155,7 +155,10 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 	@Override
 	public Page<ThongTinDauThauRes> selectPage(HhDthauSearchReq objReq) throws Exception {
 		Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit(), Sort.by("id").ascending());
-		Page<ThongTinDauThauRes> page = hhDthauRepository.cusTomQuerySearch(objReq.getNamKhoach(),objReq.getLoaiVthh(),objReq.getSoQd(),objReq.getMaDvi(),objReq.getTrichYeu(),pageable);
+		Page<ThongTinDauThauRes> page = hhDthauRepository.cusTomQuerySearch(objReq.getNamKhoach(),objReq.getLoaiVthh(),objReq.getSoQd(),objReq.getMaDvi(),
+//				Contains.convertDateToString(objReq.getNgayQdTu()),
+//				Contains.convertDateToString(objReq.getNgayQdDen()),
+				objReq.getTrichYeu(),pageable);
 		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 		Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
 		page.forEach(f -> {
@@ -392,14 +395,14 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 			objs=new Object[rowsName.length];
 			objs[0]=i;
 			objs[1]=dx.getTenGthau();
-			objs[2]=dx.getMaDvi();
+			objs[2]=dx.getTenDvi();
 			objs[3]=dx.getSoQdPdKhlcnt();
 			objs[4]=dx.getNgayQd();
 			objs[5]=dx.getTrichYeu();
-			objs[6]=dx.getLoaiVthh();
-			objs[7]=dx.getCloaiVthh();
+			objs[6]=dx.getTenVthh();
+			objs[7]=dx.getTenCloaiVthh();
 			objs[8]=dx.getThanhGiaGoiThau();
-			objs[9]=dx.getTrangThai();
+			objs[9]=dx.getTenTrangThai();
 			dataList.add(objs);
 
 		}

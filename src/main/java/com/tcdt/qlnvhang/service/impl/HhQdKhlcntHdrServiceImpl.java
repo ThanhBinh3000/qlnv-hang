@@ -407,6 +407,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		}
 
 		qOptional.get().setHhQdKhlcntDtlList(hhQdKhlcntDtlList);
+		qOptional.get().setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qOptional.get().getTrangThai()));
 
 		return qOptional.get();
 	}
@@ -445,6 +446,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 
 
 		dataRes.setHhQdKhlcntDtl(dataDtl.get());
+		dataHdr.get().setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dataHdr.get().getTrangThai()));
 		return gThau.get();
 	}
 
@@ -651,6 +653,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				convertDateToString(req.getTuNgayQd()),
 				convertDateToString(req.getDenNgayQd()),
 				req.getTrangThai(), req.getLastest(),
+				req.getMaDvi(),
 				pageable);
 		List<Long> ids = data.getContent().stream().map(HhQdKhlcntHdr::getId).collect(Collectors.toList());
 		List<Object[]> listGthau = hhQdKhlcntDtlRepository.countAllBySoGthau(ids);
@@ -662,6 +665,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			for (HhQdKhlcntDtl tongTien : detail) {
 				f.setTongTien(tongTien.getTongTien());
 			}
+			f.setNamKhoach(f.getNamKhoach());
 		}
 		for (Object[] it: listGthau) {
 			soGthau.put(it[0].toString(),it[1].toString());

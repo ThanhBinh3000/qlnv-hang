@@ -34,7 +34,7 @@ public interface HhQdPduyetKqlcntHdrRepository extends BaseRepository<HhQdPduyet
 			" AND (?3 is null or lower(HDR.trichYeu) like lower(concat(concat('%',?3),'%')))" +
 			" AND (?4 is null or lower(HDR.soQdPdKhlcnt) like lower(concat(concat('%',?4),'%')))"
 			)
-	Page<HhQdPduyetKqlcntRes> customQuerySearchCuc(String namKh, String loaiVthh, String trichYeu,String qdPdKhlcnt, Pageable pageable);
+	Page<HhQdPduyetKqlcntRes> customQuerySearchCuc(String namKh, String loaiVthh, String trichYeu, Pageable pageable);
 
 	@Query(" SELECT new com.tcdt.qlnvhang.response.dauthauvattu.HhQdPduyetKqlcntRes(HDR.id,HDR.soQd,HDR.ngayQd,HDR.trichYeu,HDR.trangThai,HDR.maDvi,HDR.namKhoach,HDR.loaiVthh,HDR.soQdPdKhlcnt) " +
 			" FROM HhQdPduyetKqlcntHdr HDR " +
@@ -43,7 +43,7 @@ public interface HhQdPduyetKqlcntHdrRepository extends BaseRepository<HhQdPduyet
 			" AND (?3 is null or lower(HDR.trichYeu) like lower(concat(concat('%',?3),'%')))"+
 			" AND (?4 is null or lower(HDR.soQdPdKhlcnt) like lower(concat(concat('%',?4),'%')))"
 	)
-	Page<HhQdPduyetKqlcntRes> customQuerySearchTongCuc(String namKh, String loaiVthh, String trichYeu,String soQdPdKhlcnt, Pageable pageable);
+	Page<HhQdPduyetKqlcntRes> customQuerySearchTongCuc(String namKh, String loaiVthh, String trichYeu, Pageable pageable);
 
 
 	@Query(value = "SELECT * FROM HH_QD_PDUYET_KQLCNT_HDR QDPD " +

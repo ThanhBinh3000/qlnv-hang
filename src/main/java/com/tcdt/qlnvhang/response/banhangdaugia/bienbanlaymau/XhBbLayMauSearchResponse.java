@@ -61,9 +61,8 @@ public class XhBbLayMauSearchResponse {
 		objs[3] = DataUtils.toStringValue(this.tenDiemKho);
 		objs[4] = DataUtils.toStringValue(this.tenNhaKho);
 		objs[5] = DataUtils.toStringValue(this.tenNganKho);
-		objs[6] = DataUtils.toStringValue(this.tenNganKho);
-		objs[7] = DataUtils.toStringValue(this.tenNganLo);
-		objs[8] = DataUtils.toStringValue(this.tenTrangThai);
+		objs[6] = DataUtils.toStringValue(this.tenNganLo);
+		objs[7] = DataUtils.toStringValue(this.tenTrangThai);
 
 		return objs;
 	}

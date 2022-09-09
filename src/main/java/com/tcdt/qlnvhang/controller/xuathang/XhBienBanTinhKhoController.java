@@ -114,7 +114,7 @@ public class XhBienBanTinhKhoController {
 
     @ApiOperation(value = "Tra cứu Biên bản tịnh kho", response = List.class)
     @GetMapping()
-    public ResponseEntity<BaseResponse> search(XhBienBanTinhKhoSearchReq req) {
+    public ResponseEntity<BaseResponse> search(@RequestBody XhBienBanTinhKhoSearchReq req) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(service.search(req));

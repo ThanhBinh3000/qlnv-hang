@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.search;
 
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.util.Contains;
 
@@ -20,9 +21,11 @@ public class HhDthauSearchReq extends BaseRequest {
 
 	String soQd;
 
-	Date tuNgayQd;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date ngayQdTu;
 
-	Date denNgayQd;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date ngayQdDen;
 
 	@ApiModelProperty(example = Contains.LOAI_VTHH_GAO)
 	String loaiVthh;

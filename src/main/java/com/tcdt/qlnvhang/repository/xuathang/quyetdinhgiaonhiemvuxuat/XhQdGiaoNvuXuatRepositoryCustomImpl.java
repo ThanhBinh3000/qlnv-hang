@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.repository.xuathang.quyetdinhgiaonhiemvuxuat;
 
 import com.tcdt.qlnvhang.entities.xuathang.XhQdGiaoNvuXuat;
 import com.tcdt.qlnvhang.request.search.xuathang.XhQdGiaoNvuXuatSearchReq;
+import com.tcdt.qlnvhang.util.Contains;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,10 +20,13 @@ public class XhQdGiaoNvuXuatRepositoryCustomImpl implements XhQdGiaoNvuXuatRepos
     private EntityManager em;
 
     @Override
-    public List<XhQdGiaoNvuXuat> search(XhQdGiaoNvuXuatSearchReq req) {
+    public List<XhQdGiaoNvuXuat> search(XhQdGiaoNvuXuatSearchReq req, String capDvi) {
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT p FROM XhQdGiaoNvuXuat p ");
-        setConditionSearch(req, builder);
+        if (Contains.CAP_CHI_CUC.equalsIgnoreCase(capDvi)) {
+            builder.append("INNER JOIN XhQdGiaoNvuXuatCt ct ON ct.qdgnvxId = p.id ");
+        }
+        setConditionSearch(req, builder, capDvi);
         builder.append("ORDER BY p.id DESC");
 
         TypedQuery<XhQdGiaoNvuXuat> query = em.createQuery(builder.toString(), XhQdGiaoNvuXuat.class);
@@ -38,7 +42,7 @@ public class XhQdGiaoNvuXuatRepositoryCustomImpl implements XhQdGiaoNvuXuatRepos
     }
 
 
-    private void setConditionSearch(XhQdGiaoNvuXuatSearchReq req, StringBuilder builder) {
+    private void setConditionSearch(XhQdGiaoNvuXuatSearchReq req, StringBuilder builder, String capDvi) {
         builder.append("WHERE 1 = 1 ");
 
         if (!StringUtils.isEmpty(req.getSoQuyetDinh())) {
@@ -57,7 +61,11 @@ public class XhQdGiaoNvuXuatRepositoryCustomImpl implements XhQdGiaoNvuXuatRepos
         }
 
         if (!CollectionUtils.isEmpty(req.getMaDvis())) {
-            builder.append("AND ").append("p.maDvi IN :maDvis ");
+            if (Contains.CAP_CHI_CUC.equalsIgnoreCase(capDvi)) {
+                builder.append("AND ").append("ct.maDvi IN :maDvis ");
+            } else {
+                builder.append("AND ").append("p.maDvi IN :maDvis ");
+            }
         }
 
         if (!CollectionUtils.isEmpty(req.getTrangThais())) {
@@ -74,11 +82,13 @@ public class XhQdGiaoNvuXuatRepositoryCustomImpl implements XhQdGiaoNvuXuatRepos
     }
 
     @Override
-    public int count(XhQdGiaoNvuXuatSearchReq req) {
+    public int count(XhQdGiaoNvuXuatSearchReq req, String capDvi) {
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT COUNT(DISTINCT p.id) FROM XhQdGiaoNvuXuat p ");
-
-        this.setConditionSearch(req, builder);
+        if (Contains.CAP_CHI_CUC.equalsIgnoreCase(capDvi)) {
+            builder.append("INNER JOIN XhQdGiaoNvuXuatCt ct ON ct.qdgnvxId = p.id ");
+        }
+        this.setConditionSearch(req, builder, capDvi);
         TypedQuery<Long> query = em.createQuery(builder.toString(), Long.class);
         this.setParameterSearch(req, query);
         return query.getSingleResult().intValue();
