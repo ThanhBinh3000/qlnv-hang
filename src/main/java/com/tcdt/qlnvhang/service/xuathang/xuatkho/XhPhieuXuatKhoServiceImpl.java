@@ -1,7 +1,5 @@
 package com.tcdt.qlnvhang.service.xuathang.xuatkho;
 
-import com.tcdt.qlnvhang.entities.xuathang.XhQdGiaoNvuXuat;
-import com.tcdt.qlnvhang.entities.xuathang.XhQdGiaoNvuXuatCt;
 import com.tcdt.qlnvhang.entities.xuathang.phieuxuatkho.XhPhieuXuatKho;
 import com.tcdt.qlnvhang.entities.xuathang.phieuxuatkho.XhPhieuXuatKhoCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
@@ -9,14 +7,12 @@ import com.tcdt.qlnvhang.repository.khotang.KtDiemKhoRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganKhoRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNhaKhoRepository;
-import com.tcdt.qlnvhang.repository.xuathang.bbtinhkho.XhBienBanTinhKhoCtRepository;
 import com.tcdt.qlnvhang.repository.xuathang.phieuxuatkho.XhPhieuXuatKhoCtRepository;
 import com.tcdt.qlnvhang.repository.xuathang.phieuxuatkho.XhPhieuXuatKhoRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.search.xuathang.XhPhieuXuatKhoSearchReq;
-import com.tcdt.qlnvhang.request.xuathang.quyetdinhgiaonhiemvuxuat.XhQdGiaoNvuXuatCtReq;
-import com.tcdt.qlnvhang.request.xuathang.quyetdinhgiaonhiemvuxuat.XhQdGiaoNvuXuatReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatkho.XhPhieuXuatKhoCtReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatkho.XhPhieuXuatKhoReq;
 import com.tcdt.qlnvhang.response.xuathang.phieuxuatkho.XhPhieuXuatKhoCtRes;
@@ -24,8 +20,10 @@ import com.tcdt.qlnvhang.response.xuathang.phieuxuatkho.XhPhieuXuatKhoRes;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
-import org.joda.time.DateTime;
+import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,7 +32,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.modelmapper.ModelMapper;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
@@ -42,15 +39,14 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+@Log4j2
 @Service
 public class XhPhieuXuatKhoServiceImpl implements XhPhieuXuatKhoService {
+
+    private static final String SHEET_PHIEU_XUAT_KHO = "Phiếu xuất kho";
 
     @Autowired
     XhPhieuXuatKhoRepository xuatKhoRepo;
@@ -109,35 +105,62 @@ public class XhPhieuXuatKhoServiceImpl implements XhPhieuXuatKhoService {
 
     }
 
-
     @Override
     public XhPhieuXuatKhoRes update(XhPhieuXuatKhoReq req) throws Exception {
-//        UserInfo userInfo = UserUtils.getUserInfo();
-//
-//        Optional<XhPhieuXuatKho> optional = xuatKhoRepo.findById(req.getId());
-//        if (!optional.isPresent())
-//            throw new Exception("Phiếu xuất kho không tồn tại.");
-//
-//        this.validateSoQuyetDinh(optional.get(), req);
-//
-//        XhPhieuXuatKho item = optional.get();
-//        BeanUtils.copyProperties(req, item, "id", "so", "nam");
-//        item.setNgaySua(LocalDate.now());
-//        item.setNguoiSuaId(userInfo.getId());
-//        xuatKhoRepo.save(item);
-//
-//        Map<Long, XhPhieuXuatKhoCt> mapChiTiet = xuatKhoCtRepo.findByPxuatKhoIdIn(Collections.singleton(item.getId()))
-//                .stream().collect(Collectors.toMap(XhPhieuXuatKhoCt::getId, Function.identity()));
-//
-//        List<XhPhieuXuatKhoCt> chiTiets = this.saveListChiTiet(item.getId(), req.getCts(), mapChiTiet);
-//        item.setCts(chiTiets);
-//        if (!CollectionUtils.isEmpty(mapChiTiet.values()))
-//            xhQdGiaoNvuXuatCtRepository.deleteAll(mapChiTiet.values());
-//
-//        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), item.getId(), XhQdGiaoNvuXuat.TABLE_NAME);
-//        item.setFileDinhKems(fileDinhKems);
-//        return this.buildResponse(item);
-       return null;
+        UserInfo userInfo = UserUtils.getUserInfo();
+
+        Optional<XhPhieuXuatKho> optional = xuatKhoRepo.findById(req.getId());
+        if (!optional.isPresent())
+            throw new Exception("Phiếu xuất kho không tồn tại.");
+
+        this.validateSoQuyetDinh(optional.get(), req);
+
+        XhPhieuXuatKho item = optional.get();
+        BeanUtils.copyProperties(req, item, "id", "so", "nam");
+        item.setNgaySua(LocalDate.now());
+        item.setNguoiSuaId(userInfo.getId());
+        xuatKhoRepo.save(item);
+
+        Map<Long, XhPhieuXuatKhoCt> mapChiTiet = xuatKhoCtRepo.findByPxuatKhoIdIn(Collections.singleton(item.getId()))
+                .stream().collect(Collectors.toMap(XhPhieuXuatKhoCt::getId, Function.identity()));
+
+        List<XhPhieuXuatKhoCt> chiTiets = this.saveListChiTiet(item.getId(), req.getDs(), mapChiTiet);
+        item.setDs(chiTiets);
+        if (!CollectionUtils.isEmpty(mapChiTiet.values()))
+            xuatKhoCtRepo.deleteAll(mapChiTiet.values());
+
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), item.getId(), XhPhieuXuatKho.TABLE_NAME);
+        item.setFileDinhKems(fileDinhKems);
+        XhPhieuXuatKhoRes res = new XhPhieuXuatKhoRes();
+        BeanUtils.copyProperties(item, res);
+
+        return res;
+    }
+
+    private List<XhPhieuXuatKhoCt> saveListChiTiet(Long parentId,
+                                                   List<XhPhieuXuatKhoCtReq> chiTietReqs,
+                                                   Map<Long, XhPhieuXuatKhoCt> mapChiTiet) throws Exception {
+        List<XhPhieuXuatKhoCt> chiTiets = new ArrayList<>();
+        for (XhPhieuXuatKhoCtReq req : chiTietReqs) {
+            Long id = req.getId();
+            XhPhieuXuatKhoCt chiTiet = new XhPhieuXuatKhoCt();
+
+            if (id != null && id > 0) {
+                chiTiet = mapChiTiet.get(id);
+                if (chiTiet == null)
+                    throw new Exception("Phiếu xuất kho chi tiết không tồn tại.");
+                mapChiTiet.remove(id);
+            }
+
+            BeanUtils.copyProperties(req, chiTiet, "id");
+            chiTiet.setPxuatKhoId(parentId);
+            chiTiets.add(chiTiet);
+        }
+
+        if (!CollectionUtils.isEmpty(chiTiets))
+            xuatKhoCtRepo.saveAll(chiTiets);
+
+        return chiTiets;
     }
 
     private void validateSoQuyetDinh(XhPhieuXuatKho update, XhPhieuXuatKhoReq req) throws Exception {
@@ -155,12 +178,12 @@ public class XhPhieuXuatKhoServiceImpl implements XhPhieuXuatKhoService {
 
     @Override
     public XhPhieuXuatKhoRes detail(Long id) throws Exception {
-        XhPhieuXuatKho dsHangTieuHuy = xuatKhoRepo.findById(id).get();
-        if (dsHangTieuHuy == null)
+        XhPhieuXuatKho phieuXuatKho = xuatKhoRepo.findById(id).get();
+        if (phieuXuatKho == null)
             throw new Exception("Không tìm thấy dữ liệu.");
 
         XhPhieuXuatKhoRes item = new XhPhieuXuatKhoRes();
-        BeanUtils.copyProperties(dsHangTieuHuy, item, "id");
+        BeanUtils.copyProperties(phieuXuatKho, item, "id");
         item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
         // chưa tìm ngăn kho lô kho các giá trị tên
         item.setTenNhakho(ktNhaKhoRepository.findByMaNhakho(item.getMaNhakho()).getTenNhakho());
@@ -279,49 +302,45 @@ public class XhPhieuXuatKhoServiceImpl implements XhPhieuXuatKhoService {
 
     @Override
     public boolean exportToExcel(XhPhieuXuatKhoSearchReq objReq, HttpServletResponse response) throws Exception {
-        return false;
+        UserInfo userInfo = UserUtils.getUserInfo();
 
-//        objReq.setLimit((int) hangTieuHuyRepository.count());
-//        objReq.setPage(0);
-//        List<DsHangThanhLyRes> list = hangTieuHuyRepository.search(objReq).stream().map(d -> {
-//            DsHangThanhLyRes ds = new DsHangThanhLyRes();
-//            ds.setId((Long) d[4]);
-//            ds.setMaDanhSach(String.valueOf(d[0]));
-//            ds.setTenDonvi(hangTieuHuyRepository.getTk((String) d[1]));
-//            ds.setNgayTao(LocalDate.parse(d[2].toString()));
-//            ds.setTrangThaiXuLy(String.valueOf(d[3]));
-//            return ds;
-//        }).collect(Collectors.toList());
-//        System.out.println(list);
-//
-//        if (CollectionUtils.isEmpty(list))
-//            return true;
-//
-//        String[] rowsName = new String[]{"STT", "Mã danh sách", "Tên đơn vị", "Ngày tạo",
-//                "Trạng thái xử lý"};
-//        String filename = "Danh_sach_hang_tieu_huy.xlsx";
-//
-//        List<Object[]> dataList = new ArrayList<Object[]>();
-//        Object[] objs = null;
-//
-//        try {
-//            for (int i = 0; i < list.size(); i++) {
-//                DsHangThanhLyRes item = list.get(i);
-//                objs = new Object[rowsName.length];
-//                objs[0] = i;
-//                objs[1] = item.getMaDanhSach();
-//                objs[2] = item.getTenDonvi();
-//                objs[3] = item.getNgayTao().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-//                objs[4] = item.getTrangThaiXuLy();
-//                dataList.add(objs);
-//            }
-//
-//            ExportExcel ex = new ExportExcel("Danh sách hàng tiêu hủy", filename, rowsName, dataList, response);
-//            ex.export();
-//        } catch (Exception e) {
-//            log.error("Error export", e);
-//            return false;
-//        }
-//        return true;
+        objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
+        List<XhPhieuXuatKhoRes> list = this.search(objReq).get().collect(Collectors.toList());
+
+        if (CollectionUtils.isEmpty(list))
+            return true;
+
+        String[] rowsName = new String[]{"STT", "Số phiếu xuất", "Số quyết định xuất", "Số hợp đồng",
+                "Ngày xuất kho", "Điểm kho", "Nhà kho", "Ngăn kho", "Lô kho", "Trạng thái"};
+        String filename = "Danh_sach_phieu_xuat_kho.xlsx";
+
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+
+        try {
+            for (int i = 0; i < list.size(); i++) {
+                XhPhieuXuatKhoRes item = list.get(i);
+                objs = new Object[rowsName.length];
+                objs[0] = i;
+                objs[1] = item.getSpXuatKho();
+                objs[2] = item.getTenSqdx();
+                objs[3] = item.getSoHd();
+                objs[4] = item.getXuatKho().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+                objs[5] = item.getTenDiemkho();
+                objs[6] = item.getTenNhakho();
+                objs[7] = item.getTenNgankho();
+                objs[8] = item.getTenNganlo();
+                objs[9] = NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai());
+                dataList.add(objs);
+            }
+
+            ExportExcel ex = new ExportExcel(SHEET_PHIEU_XUAT_KHO, filename, rowsName, dataList, response);
+            ex.export();
+        } catch (Exception e) {
+            log.error("Error export", e);
+            return false;
+        }
+
+        return true;
     }
 }
