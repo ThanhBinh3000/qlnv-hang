@@ -272,12 +272,17 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
 
 		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
-
+		Map<String,String> hashMapDmNhaThau = getListDanhMucChung("NHA_THAU");
 
 		qOptional.get().setTenVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getLoaiVthh()));
 		qOptional.get().setTenCloaiVthh(StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getCloaiVthh()));
-
-		qOptional.get().setHhQdPduyetKqlcntDtlList(hhQdPduyetKqlcntDtlRepository.findByIdQdPdHdr(Long.parseLong(ids)));
+		List<HhQdPduyetKqlcntDtl> byIdQdPdHdr = hhQdPduyetKqlcntDtlRepository.findByIdQdPdHdr(Long.parseLong(ids));
+		byIdQdPdHdr.forEach( item -> {
+			item.setTenLoaiVthh(hashMapDmHh.get(item.getLoaiVthh()));
+			item.setTenCloaiVthh(hashMapDmHh.get(item.getCloaiVthh()));
+//			item.setTenNhaThau(hashMapDmNhaThau.get(item.getCloaiVthh()));
+		});
+		qOptional.get().setHhQdPduyetKqlcntDtlList(byIdQdPdHdr);
 
 		qOptional.get().setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qOptional.get().getTrangThai()));
 
