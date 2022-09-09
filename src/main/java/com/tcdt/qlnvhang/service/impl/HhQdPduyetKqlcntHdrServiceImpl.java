@@ -210,14 +210,12 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 
 		HhQdPduyetKqlcntHdr createCheck = hhQdPduyetKqlcntHdrRepository.save(dataDB);
 
-		hhQdPduyetKqlcntDtlRepository.deleteAllByIdQdPdHdr(objReq.getId());
-		for (HhQdPduyetKqlcntDtlReq qdPdKq : objReq.getDetailList()){
-			HhQdPduyetKqlcntDtl qdPdKqDtl = ObjectMapperUtils.map(qdPdKq, HhQdPduyetKqlcntDtl.class);
-			qdPdKqDtl.setId(null);
-			qdPdKqDtl.setIdQdPdHdr(dataMap.getId());
-			qdPdKqDtl.setIdGoiThau(qdPdKq.getIdGt());
-			hhQdPduyetKqlcntDtlRepository.save(qdPdKqDtl);
-		}
+		Optional<HhQdKhlcntDsgthau> gt = hhQdKhlcntDsgthauRepository.findById(objReq.getIdGoiThau());
+		HhQdPduyetKqlcntDtl dtl = ObjectMapperUtils.map(gt.get(), HhQdPduyetKqlcntDtl.class);
+		dtl.setId(null);
+		dtl.setIdQdPdHdr(dataMap.getId());
+		dtl.setIdGoiThau(objReq.getIdGoiThau());
+		hhQdPduyetKqlcntDtlRepository.save(dtl);
 
 		return createCheck;
 	}
@@ -272,19 +270,12 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
 
 		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
-		Map<String,String> hashMapDmNhaThau = getListDanhMucChung("NHA_THAU");
+
 
 		qOptional.get().setTenVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getLoaiVthh()));
 		qOptional.get().setTenCloaiVthh(StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getCloaiVthh()));
-		List<HhQdPduyetKqlcntDtl> byIdQdPdHdr = hhQdPduyetKqlcntDtlRepository.findByIdQdPdHdr(Long.parseLong(ids));
-		byIdQdPdHdr.forEach( item -> {
-			item.setTenLoaiVthh(hashMapDmHh.get(item.getLoaiVthh()));
-			item.setTenCloaiVthh(hashMapDmHh.get(item.getCloaiVthh()));
-//			item.setTenNhaThau(hashMapDmNhaThau.get(item.getCloaiVthh()));
-		});
-		qOptional.get().setHhQdPduyetKqlcntDtlList(byIdQdPdHdr);
 
-		qOptional.get().setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qOptional.get().getTrangThai()));
+		qOptional.get().setHhQdPduyetKqlcntDtlList(hhQdPduyetKqlcntDtlRepository.findByIdQdPdHdr(Long.parseLong(ids)));
 
 		// Quy doi don vi kg = tan
 //		UnitScaler.formatList(qOptional.get().getChildren1(), Contains.DVT_TAN);
@@ -328,14 +319,14 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		optional.get().setTrangThai(stReq.getTrangThai());
 		if(stReq.getTrangThai().equals(Contains.BAN_HANH)){
 			// IS VẬT TƯ
-//			if(optional.get().getLoaiVthh().startsWith("02")){
+			if(optional.get().getLoaiVthh().startsWith("02")){
 				List<HhQdPduyetKqlcntDtl> qdPdKqLcntList = hhQdPduyetKqlcntDtlRepository.findByIdQdPdHdr(optional.get().getId());
 				for(HhQdPduyetKqlcntDtl kqLcnt : qdPdKqLcntList){
 					hhQdKhlcntDsgthauRepository.updateGoiThau(kqLcnt.getIdGoiThau(),kqLcnt.getTrungThau() == 1 ? Contains.TRUNGTHAU : Contains.HUYTHAU,kqLcnt.getLyDoHuy());
 				}
-//			}else{
-//				hhQdKhlcntDsgthauRepository.updateGoiThau(optional.get().getIdGoiThau(),optional.get().getTrungThau() == 1 ? Contains.TRUNGTHAU : Contains.HUYTHAU,optional.get().getLyDoHuy());
-//			}
+			}else{
+				hhQdKhlcntDsgthauRepository.updateGoiThau(optional.get().getIdGoiThau(),optional.get().getTrungThau() == 1 ? Contains.TRUNGTHAU : Contains.HUYTHAU,optional.get().getLyDoHuy());
+			}
 		}
 
 		HhQdPduyetKqlcntHdr createCheck = hhQdPduyetKqlcntHdrRepository.save(optional.get());
@@ -374,9 +365,9 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		String cDvi = getUser().getCapDvi();
 		Page<HhQdPduyetKqlcntRes> page;
 		if(Contains.CAP_TONG_CUC.equals(cDvi)){
-			page = hhQdPduyetKqlcntHdrRepository.customQuerySearchTongCuc(req.getNamKhoach(),req.getLoaiVthh(),req.getTrichYeu(),req.getMaDvi(),pageable);
+			page = hhQdPduyetKqlcntHdrRepository.customQuerySearchTongCuc(req.getNamKhoach(),req.getLoaiVthh(),req.getTrichYeu(),req.getSoQdPdKhlcnt(),getUser().getDvql(), pageable);
 		}else{
-			page = hhQdPduyetKqlcntHdrRepository.customQuerySearchCuc(req.getNamKhoach(),req.getLoaiVthh(),req.getTrichYeu(),req.getMaDvi(),pageable);
+			page = hhQdPduyetKqlcntHdrRepository.customQuerySearchCuc(req.getNamKhoach(),req.getLoaiVthh(),req.getTrichYeu(),req.getSoQdPdKhlcnt(),getUser().getDvql(), pageable);
 		}
 		Map<String,String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
 		Map<String,String> hashMapDviLquan = getListDanhMucDviLq("NT");
@@ -427,14 +418,14 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 			objs = new Object[rowsName.length];
 			objs[0] = i;
 			objs[1] = dx.getSoQd();
-			objs[2] = dx.getTenDvi();
+			objs[2] = dx.getMaDvi();
 			objs[3] = dx.getNgayQd();
 			objs[4] = dx.getNamKhoach();
 			objs[5] = dx.getTrichYeu();
 			objs[6] = dx.getSoQdPdKhlcnt();
-			objs[7] = dx.getTenVthh();
+			objs[7] = dx.getLoaiVthh();
 			objs[8] = dx.getSoGoiThau();
-			objs[9] = dx.getTenTrangThai();
+			objs[9] = dx.getTrangThai();
 			dataList.add(objs);
 
 		}
@@ -469,7 +460,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 			objs[8] = dx.getDonGiaTrcVat();
 			objs[9] = dx.getLoaiHdong();
 			objs[10] = dx.getTgianThienHd();
-			objs[11] = dx.getTenTrangThai();
+			objs[11] = dx.getTrangThai();
 			dataList.add(objs);
 
 		}
