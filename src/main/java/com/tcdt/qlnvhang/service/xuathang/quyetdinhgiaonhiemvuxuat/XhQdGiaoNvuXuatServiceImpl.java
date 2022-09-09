@@ -295,9 +295,8 @@ public class XhQdGiaoNvuXuatServiceImpl extends BaseServiceImpl implements XhQdG
 
         this.prepareSearchReq(req, userInfo, req.getCapDvis(), req.getTrangThais());
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-
         List<XhQdGiaoNvuXuatRes> responses = new ArrayList<>();
-        xhQdGiaoNvuXuatRepository.search(req).forEach(item -> {
+        xhQdGiaoNvuXuatRepository.search(req, userInfo.getCapDvi()).forEach(item -> {
             XhQdGiaoNvuXuatRes response = new XhQdGiaoNvuXuatRes();
             BeanUtils.copyProperties(item, response);
             response.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
@@ -305,7 +304,7 @@ public class XhQdGiaoNvuXuatServiceImpl extends BaseServiceImpl implements XhQdG
             responses.add(response);
         });
 
-        return new PageImpl<>(responses, pageable, xhQdGiaoNvuXuatRepository.count(req));
+        return new PageImpl<>(responses, pageable, xhQdGiaoNvuXuatRepository.count(req, userInfo.getCapDvi()));
     }
 
     @Override

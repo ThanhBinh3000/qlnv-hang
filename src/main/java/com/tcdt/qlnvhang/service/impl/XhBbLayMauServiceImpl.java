@@ -267,20 +267,15 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl implements XhBbLayMau
 			return true;
 
 		String[] rowsName = new String[]{ExcelHeaderConst.STT,
-				ExcelHeaderConst.MA_THONG_BAO_BDG,
-				ExcelHeaderConst.SO_QD_PHE_DUYET_KH_BDG,
-				ExcelHeaderConst.NGAY_TO_CHUC_BDG,
-				ExcelHeaderConst.TRICH_YEU,
-				ExcelHeaderConst.HINH_THUC_DAU_GIA,
-				ExcelHeaderConst.PHUONG_THUC_DG,
-				ExcelHeaderConst.LOAI_HANG_HOA,
-				ExcelHeaderConst.NAM_KE_HOACH,
-				ExcelHeaderConst.THONG_BAO_DAU_GIA_KHONG_THANH,
-				ExcelHeaderConst.BIEN_BAN_BDG,
-				ExcelHeaderConst.SO_QD_PHE_DUYET_KQ_BDG,
-				ExcelHeaderConst.TRANG_THAI,
+				ExcelHeaderConst.SO_BIEN_BAN,
+				ExcelHeaderConst.NGAY_LAY_MAU,
+				ExcelHeaderConst.DIEM_KHO,
+				ExcelHeaderConst.NHA_KHO,
+				ExcelHeaderConst.NGAN_KHO,
+				ExcelHeaderConst.LO_KHO,
+				ExcelHeaderConst.TRANG_THAI
 		};
-		String filename = "thong_bao_bdg.xlsx";
+		String filename = "bien_ban_lay_mau.xlsx";
 
 		List<Object[]> dataList = new ArrayList<>();
 
