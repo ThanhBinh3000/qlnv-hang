@@ -16,8 +16,6 @@ public class XhBienBanTinhKhoCt {
     private Long bbTinhKhoId;
     private String daiDien;
     private int stt;
-    private String chuVu;
-    private String maDvi;
-    private String tenDvi;
+    private String chucVu;
 
 }

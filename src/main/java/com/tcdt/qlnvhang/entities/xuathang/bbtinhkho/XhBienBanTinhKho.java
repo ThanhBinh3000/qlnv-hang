@@ -22,18 +22,19 @@ public class XhBienBanTinhKho extends TrangThaiBaseEntity implements Serializabl
     @SequenceGenerator(sequenceName = "XH_BB_TINH_KHO_SEQ", allocationSize = 1, name = "XH_BB_TINH_KHO_SEQ")
     private Long id;
     private Long qdgnvnxId;
+    private String soBienBan;
     private String maDiemkho;
     private String maNhakho;
     private String maNgankho;
-    private String maNganlo;
+    private String maLokho;
     private String maLoaiHangHoa;
     private String maChungLoaiHangHoa;
-    private BigDecimal soLuongNhap;
-    private BigDecimal soLuongXuat;
-    private BigDecimal slConlaiSosach;
-    private BigDecimal slConlaiXuatcuoi;
-    private BigDecimal slThuaConlai;
-    private BigDecimal slThieuConlai;
+    private double soLuongNhap;
+    private double soLuongXuat;
+    private double slConlaiSosach;
+    private double slConlaiXuatcuoi;
+    private double slThuaConlai;
+    private double slThieuConlai;
     private String maDvi;
     private String capDvi;
     private String nguyenNhan;

@@ -213,6 +213,8 @@ public class ThongBaoBanDauGiaServiceImpl extends BaseServiceImpl implements Tho
 					response.setBbBdgId(t.getId());
 					response.setSoBbBdg(t.getSoBienBan());
 				});
+
+		this.setThongTinDonVi(response, thongBaoBanDauGia.getMaDonVi());
 		return response;
 	}
 

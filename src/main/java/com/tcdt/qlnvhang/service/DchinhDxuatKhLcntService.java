@@ -67,14 +67,14 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 				convertDateToString(objReq.getDenNgayQd()),
 				pageable);
 		List<Long> ids = data.getContent().stream().map(HhDchinhDxKhLcntHdr::getId).collect(Collectors.toList());
-		List<Object[]> abcd = dtlRepository.countAllByDcHdr(ids);
-		Map<String,String> cdse = new HashMap<>();
-		for (Object[] it: abcd) {
-			cdse.put(it[0].toString(),it[1].toString());
+		List<Object[]> listGthau = dtlRepository.countAllByDcHdr(ids);
+		Map<String,String> soGthau = new HashMap<>();
+		for (Object[] it: listGthau) {
+			soGthau.put(it[0].toString(),it[1].toString());
 		}
 		for (HhDchinhDxKhLcntHdr hdr:data.getContent()) {
-			hdr.setSoGoiThau(Long.parseLong(cdse.get(hdr.getId().toString())));
-			hdr.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(hdr.getTrangThai()));
+			hdr.setSoGoiThau(Long.parseLong(soGthau.get(hdr.getId().toString())));
+			hdr.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(hdr.getTrangThai()));
 		}
 		return data;
 	}

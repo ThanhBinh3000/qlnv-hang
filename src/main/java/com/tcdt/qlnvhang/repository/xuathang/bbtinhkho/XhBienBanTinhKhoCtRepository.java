@@ -11,4 +11,6 @@ public interface XhBienBanTinhKhoCtRepository extends BaseRepository<XhBienBanTi
     void deleteAllByBbTinhKhoId(Long id);
 
     void deleteByBbTinhKhoIdIn(List<Long> id);
+
+    List<XhBienBanTinhKhoCt> findAllByBbTinhKhoId(Long id);
 }

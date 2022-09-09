@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.object;
 
 import java.math.BigDecimal;
 
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -43,7 +44,8 @@ public class HhQdPduyetKqlcntDtlReq {
 	@NotNull(message = "Không được để trống")
 	@Size(max = 20, message = "Loại hợp đồng không được vượt quá 20 ký tự")
 	@ApiModelProperty(example = "LHD01")
-	String loaiHd;
+	String loaiHdong;
+
 
 	BigDecimal donGia;
 	BigDecimal vat;

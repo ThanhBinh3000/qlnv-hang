@@ -32,6 +32,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -109,6 +113,7 @@ public class XhPhieuXuatKhoServiceImpl implements XhPhieuXuatKhoService {
 
         return item;
     }
+
     @Override
     public boolean delete(Long id) throws Exception {
         Optional<XhPhieuXuatKho> optional = xuatKhoRepo.findById(id);

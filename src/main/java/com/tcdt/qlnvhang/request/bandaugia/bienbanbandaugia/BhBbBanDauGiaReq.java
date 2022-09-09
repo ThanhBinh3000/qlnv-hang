@@ -19,7 +19,8 @@ public class BhBbBanDauGiaReq {
     private String maVatTuCha;
     private Long thongBaoBdgId;
     private String donViThongBao;
-    private LocalDate ngayToChuc;
+    private LocalDate ngayToChucTu;
+    private LocalDate ngayToChucDen;
     private String diaDiem;
 
     private List<BhBbBanDauGiaCtReq> cts = new ArrayList<>();

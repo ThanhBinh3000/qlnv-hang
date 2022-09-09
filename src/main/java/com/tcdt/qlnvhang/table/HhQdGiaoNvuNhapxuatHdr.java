@@ -98,6 +98,15 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 	String trangThaiDuyet;
 
 	@Transient
+	String TenVthh;
+
+	String cloaiVthh;
+
+	@Transient
+	String TenCloaiVthh;
+
+
+	@Transient
 	Long hdId;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)

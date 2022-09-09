@@ -15,4 +15,5 @@ public interface XhPhieuXuatKhoCtRepository extends BaseRepository<XhPhieuXuatKh
     void deleteByPxuatKhoIdIn(List<Long> id);
 
     List<XhPhieuXuatKhoCt> findByPxuatKhoIdIn(Collection<Long> ids);
+
 }

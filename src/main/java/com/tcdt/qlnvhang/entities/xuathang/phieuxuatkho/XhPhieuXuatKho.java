@@ -58,7 +58,6 @@ public class XhPhieuXuatKho extends TrangThaiBaseEntity implements Serializable 
     @Column(name = "MA_CHUNG_LOAI_HANG_HOA")
     private String maChungLoaiHangHoa;
 
-
     @Column(name = "XUAT_KHO")
     private LocalDate xuatKho;
     @Column(name = "LY_DO_XUAT_KHO")

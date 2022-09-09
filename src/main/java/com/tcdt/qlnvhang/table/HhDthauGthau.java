@@ -86,7 +86,6 @@ public class HhDthauGthau implements Serializable {
 //	String soQd;
 //	Date ngayKy;
 
-
 	@Transient
 	private List<HhDthauNthauDuthau> nthauDuThauList = new ArrayList<>();
 

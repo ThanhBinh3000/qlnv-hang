@@ -391,7 +391,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		List<HhQdGiaoNvuNhapxuatHdr> data = page.getContent();
 
 		String title = "Danh sách quyết định giao nhiệm vụ nhập xuất";
-		String[] rowsName = new String[] { "STT", "Số QĐ", "Ngày QĐ", "Năm Nhập",
+		String[] rowsName = new String[] { "STT", "Số quyết định", "Ngày quyết định", "Năm Nhập","Loại hàng hóa","Chủng loại hàng hóa",
 				"Trích Yếu Quyết Định", "Trạng thái"};
 		String filename = "Danh_sach_quyet_dinh_giao_nhiem_vu_nhap_xuat.xlsx";
 
@@ -404,8 +404,10 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			objs[1] = qd.getSoQd();
 			objs[2] = convertDateToString(qd.getNgayQdinh());
 			objs[3] = qd.getNamNhap();
-			objs[4] = qd.getTrichYeu();
-			objs[5] = NhapXuatHangTrangThaiEnum.getTenById(qd.getTrangThai());
+			objs[4] = qd.getTenVthh();
+			objs[5] = qd.getTenCloaiVthh();
+			objs[6] = qd.getTrichYeu();
+			objs[7] = NhapXuatHangTrangThaiEnum.getTenById(qd.getTrangThai());
 			dataList.add(objs);
 		}
 
@@ -429,6 +431,9 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		Set<Long> qdIds = data.stream().map(o -> (Long) o[0]).collect(Collectors.toSet());
 		Map<Long, List<HhQdGiaoNvuNhapxuatDtl1>> dtl1Map = hhQdGiaoNvuNhapxuatDtl1Repository.findByParentIdIn(qdIds)
 				.stream().collect(Collectors.groupingBy(HhQdGiaoNvuNhapxuatDtl1::getParentId));
+		List<HhQdGiaoNvuNhapxuatDtl1> dtl1s = hhQdGiaoNvuNhapxuatDtl1Repository.findByParentIdIn(qdIds);
+
+		Map<String, String> mapDmucHh = getListDanhMucHangHoa();
 
 		for (Object[] o : data) {
 			HhQdGiaoNvuNhapxuatHdr qd = new HhQdGiaoNvuNhapxuatHdr();
@@ -448,6 +453,12 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			qd.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(trangThai));
 			if (!CollectionUtils.isEmpty(dtl1Map.get(qd.getId()))) {
 				qd.setChildren1(dtl1Map.get(qd.getId()));
+			}
+
+			for (HhQdGiaoNvuNhapxuatDtl1 dtl:dtl1s) {
+				Optional<HhHopDongHdr> hd =hhHopDongRepository.findById(dtl.getHopDong().getId());
+				qd.setTenVthh(mapDmucHh.get(hd.get().getLoaiVthh()));
+				qd.setTenCloaiVthh(mapDmucHh.get(hd.get().getCloaiVthh()));
 			}
 			qds.add(qd);
 		}

@@ -18,4 +18,6 @@ public interface KtDiemKhoRepository extends CrudRepository<KtDiemKho, Long> {
     Page<KtDiemKho> selectParams(@Param("ma") String ma, @Param("ten") String ten, @Param("id") Long id, Pageable pageable);
 
     List<KtDiemKho> findByMaDiemkhoIn(Collection<String> mas);
+
+    KtDiemKho findByMaDiemkho(String mas);
 }

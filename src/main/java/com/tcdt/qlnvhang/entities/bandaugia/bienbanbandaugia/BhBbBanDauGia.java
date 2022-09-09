@@ -53,8 +53,11 @@ public class BhBbBanDauGia extends BaseEntity implements Serializable {
     @Column(name = "DON_VI_THONG_BAO")
     private String donViThongBao;
 
-    @Column(name = "NGAY_TO_CHUC")
-    private LocalDate ngayToChuc;
+    @Column(name = "NGAY_TO_CHUC_TU")
+    private LocalDate ngayToChucTu;
+
+    @Column(name = "NGAY_TO_CHUC_DEN")
+    private LocalDate ngayToChucDen;
 
     @Column(name = "DIA_DIEM")
     private String diaDiem;

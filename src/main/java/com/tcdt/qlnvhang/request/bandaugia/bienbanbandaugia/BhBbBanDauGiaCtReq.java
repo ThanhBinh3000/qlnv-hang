@@ -3,6 +3,8 @@ package com.tcdt.qlnvhang.request.bandaugia.bienbanbandaugia;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
+
 @Data
 @NoArgsConstructor
 public class BhBbBanDauGiaCtReq {
@@ -13,4 +15,6 @@ public class BhBbBanDauGiaCtReq {
     private String noiCongTac;
     private String loaiTptg;
     private Long bbBanDauGiaId;
+    private String mstCmtndCccdHoChieu;
+    private String diaChi;
 }

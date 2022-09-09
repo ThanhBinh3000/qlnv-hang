@@ -24,24 +24,26 @@ public interface HhQdPduyetKqlcntHdrRepository extends BaseRepository<HhQdPduyet
 			nativeQuery = true)
 	Page<HhQdPduyetKqlcntHdr> selectPage(String namKh, String loaiVthh, String soQd, String tuNgayQd, String denNgayQd, String trangThai, Pageable pageable);
 
-	@Query(" SELECT new com.tcdt.qlnvhang.response.dauthauvattu.HhQdPduyetKqlcntRes(HDR.id,HDR.soQd,HDR.ngayQd,HDR.trichYeu,DSG.goiThau,DSG.trangThai,DTGT.idNhaThau,DSG.lyDoHuy,DTGT.donGiaTrcVat,DTGT.vat,DTGT.soLuong,DTGT.loaiHdong,DTGT.tgianThienHd,HDR.trangThai) " +
+	@Query(" SELECT new com.tcdt.qlnvhang.response.dauthauvattu.HhQdPduyetKqlcntRes(HDR.id,HDR.soQd,HDR.ngayQd,HDR.trichYeu,DSG.goiThau,DSG.trangThai,DTGT.idNhaThau,DSG.lyDoHuy,DTGT.donGiaTrcVat,DTGT.vat,DTGT.soLuong,DTGT.loaiHdong,DTGT.tgianThienHd,HDR.trangThai,HDR.namKhoach,DTL.loaiVthh) " +
 			"    FROM HhQdPduyetKqlcntHdr HDR " +
 			"    LEFT JOIN HhQdPduyetKqlcntDtl DTL ON HDR.id = DTL.idQdPdHdr " +
 			"    LEFT JOIN HhQdKhlcntDsgthau DSG ON DTL.idGoiThau = DSG.id " +
 			"    LEFT JOIN HhDthauGthau DTGT ON DTGT.idGoiThau = DTL.idGoiThau " +
 			" WHERE (?1 is null or HDR.namKhoach = ?1 ) " +
 			" AND (?2 is null or  DTGT.loaiVthh = ?2 ) " +
-			" AND (?3 is null or lower(HDR.trichYeu) like lower(concat(concat('%',?3),'%')))"
+			" AND (?3 is null or lower(HDR.trichYeu) like lower(concat(concat('%',?3),'%'))) " +
+			" AND (?4 is null or HDR.maDvi = ?4)"
 			)
-	Page<HhQdPduyetKqlcntRes> customQuerySearchCuc(String namKh, String loaiVthh, String trichYeu, Pageable pageable);
+	Page<HhQdPduyetKqlcntRes> customQuerySearchCuc(String namKh, String loaiVthh, String trichYeu,String maDvi, Pageable pageable);
 
 	@Query(" SELECT new com.tcdt.qlnvhang.response.dauthauvattu.HhQdPduyetKqlcntRes(HDR.id,HDR.soQd,HDR.ngayQd,HDR.trichYeu,HDR.trangThai,HDR.maDvi,HDR.namKhoach,HDR.loaiVthh,HDR.soQdPdKhlcnt) " +
 			" FROM HhQdPduyetKqlcntHdr HDR " +
 			"WHERE (?1 is null or HDR.namKhoach = ?1 ) " +
 			" AND (?2 is null or  HDR.loaiVthh = ?2 ) " +
-			" AND (?3 is null or lower(HDR.trichYeu) like lower(concat(concat('%',?3),'%')))"
+			" AND (?3 is null or lower(HDR.trichYeu) like lower(concat(concat('%',?3),'%')))"+
+			" AND (?4 is null or HDR.maDvi = ?4)"
 	)
-	Page<HhQdPduyetKqlcntRes> customQuerySearchTongCuc(String namKh, String loaiVthh, String trichYeu, Pageable pageable);
+	Page<HhQdPduyetKqlcntRes> customQuerySearchTongCuc(String namKh, String loaiVthh, String trichYeu,String maDvi, Pageable pageable);
 
 
 	@Query(value = "SELECT * FROM HH_QD_PDUYET_KQLCNT_HDR QDPD " +

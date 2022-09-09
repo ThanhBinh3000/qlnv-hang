@@ -43,6 +43,8 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	String trangThai;
 	@Transient
 	String tenTrangThai;
+	@Transient
+	String tenTrangThaiTh;
 	Date ngayTao;
 	String nguoiTao;
 	Date ngaySua;
@@ -83,6 +85,7 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	Integer gtriDthau;
 	Integer gtriHdong;
 	String dienGiai;
+	String trangThaiTh;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)

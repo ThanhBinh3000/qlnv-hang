@@ -4,7 +4,7 @@ import com.google.common.collect.Sets;
 import com.tcdt.qlnvhang.entities.bandaugia.bienbanbandaugia.BhBbBanDauGia;
 import com.tcdt.qlnvhang.entities.bandaugia.bienbanbandaugia.BhBbBanDauGiaCt;
 import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhBdgThongTinTaiSan;
-import com.tcdt.qlnvhang.enums.TrangThaiEnum;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.bienbanbandaugia.BhBbBanDauGiaCtRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.bienbanbandaugia.BhBbBanDauGiaRepository;
@@ -77,7 +77,7 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
         BeanUtils.copyProperties(req, item, "id");
         item.setNgayTao(LocalDate.now());
         item.setNguoiTaoId(userInfo.getId());
-        item.setTrangThai(TrangThaiEnum.DU_THAO.getId());
+        item.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         item.setMaDvi(userInfo.getDvql());
         item.setCapDvi(userInfo.getCapDvi());
         item.setSo(getSo());
@@ -153,8 +153,8 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
         BhBbBanDauGiaRes res = new BhBbBanDauGiaRes();
         List<BhBbBanDauGiaCtRes> chiTiets = new ArrayList<>();
         BeanUtils.copyProperties(item, res);
-        res.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
-        res.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
+        res.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+        res.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
         res.setCts(item.getCts().stream().map(BhBbBanDauGiaCtRes::new).collect(Collectors.toList()));
         res.setCt1s(item.getCt1s().stream().map(BhBbBanDauGiaCt1Res::new).collect(Collectors.toList()));
         Set<String> maVatTus = Collections.singleton(item.getMaVatTuCha());
@@ -228,7 +228,7 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
             throw new Exception("Biên bản bán đấu giá không tồn tại.");
 
         BhBbBanDauGia item = optional.get();
-        if (TrangThaiEnum.BAN_HANH.getId().equals(item.getTrangThai())) {
+        if (NhapXuatHangTrangThaiEnum.BAN_HANH.getId().equals(item.getTrangThai())) {
             throw new Exception("Không thể xóa Biên bản bán đấu giá đã ban hành");
         }
         bhBbBanDauGiaCtRepository.deleteByBbBanDauGiaIdIn(Collections.singleton(item.getId()));
@@ -251,31 +251,18 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
         BhBbBanDauGia phieu = optional.get();
 
         String trangThai = phieu.getTrangThai();
-        if (TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(stReq.getTrangThai())) {
-            if (!TrangThaiEnum.DU_THAO.getId().equals(trangThai))
+        if (NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
                 return false;
 
-            phieu.setTrangThai(TrangThaiEnum.DU_THAO_TRINH_DUYET.getId());
+            phieu.setTrangThai(NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
             phieu.setNguoiGuiDuyetId(userInfo.getId());
             phieu.setNgayGuiDuyet(LocalDate.now());
-        } else if (TrangThaiEnum.LANH_DAO_DUYET.getId().equals(stReq.getTrangThai())) {
-            if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
-                return false;
-            phieu.setTrangThai(TrangThaiEnum.LANH_DAO_DUYET.getId());
-            phieu.setNguoiPduyetId(userInfo.getId());
-            phieu.setNgayPduyet(LocalDate.now());
-        } else if (TrangThaiEnum.BAN_HANH.getId().equals(stReq.getTrangThai())) {
-            if (!TrangThaiEnum.LANH_DAO_DUYET.getId().equals(trangThai))
+        } else if (NhapXuatHangTrangThaiEnum.TUCHOI_LDC.getId().equals(stReq.getTrangThai())) {
+            if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
                 return false;
 
-            phieu.setTrangThai(TrangThaiEnum.BAN_HANH.getId());
-            phieu.setNguoiPduyetId(userInfo.getId());
-            phieu.setNgayPduyet(LocalDate.now());
-        } else if (TrangThaiEnum.TU_CHOI.getId().equals(stReq.getTrangThai())) {
-            if (!TrangThaiEnum.DU_THAO_TRINH_DUYET.getId().equals(trangThai))
-                return false;
-
-            phieu.setTrangThai(TrangThaiEnum.TU_CHOI.getId());
+            phieu.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_LDC.getId());
             phieu.setNguoiPduyetId(userInfo.getId());
             phieu.setNgayPduyet(LocalDate.now());
             phieu.setLyDoTuChoi(stReq.getLyDo());
@@ -324,8 +311,8 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
 
             response.setQdPdKqBdgId(qdPdKqBdgId);
             response.setSoQdPdKqBdg(soQdPdKqBdg);
-            response.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
-            response.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
+            response.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+            response.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
             responses.add(response);
         }
 
@@ -370,7 +357,7 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
                 objs[0] = i;
                 objs[1] = item.getSoBienBan();
                 objs[2] = item.getTenDvi();
-                objs[3] = LocalDateTimeUtils.localDateToString(item.getNgayToChuc());
+                objs[3] = LocalDateTimeUtils.localDateToString(item.getNgayToChucTu());
                 objs[4] = item.getTrichYeu();
                 objs[5] = item.getSoQdPdKhBdg();
                 objs[6] = item.getMaThongBaoBdg();
@@ -379,7 +366,7 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
                 objs[9] = item.getTenVatTuCha();
                 objs[10] = item.getNam();
                 objs[11] = item.getSoQdPdKqBdg();
-                objs[12] = TrangThaiEnum.getTenById(item.getTrangThai());
+                objs[12] = NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai());
                 dataList.add(objs);
             }
 
