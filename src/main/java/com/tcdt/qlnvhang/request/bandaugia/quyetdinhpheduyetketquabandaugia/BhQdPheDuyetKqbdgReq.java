@@ -24,8 +24,6 @@ public class BhQdPheDuyetKqbdgReq {
     private Long bienBanBdgId;
     private Long thongBaoBdgKtId;
     private String ghiChu;
-    private String trangThai;
-    private String lyDoTuChoi;
 
     private List<BhQdPheDuyetKqbdgCtReq> cts = new ArrayList<>();
     private List<FileDinhKemReq> fileDinhKemReqs = new ArrayList<>();

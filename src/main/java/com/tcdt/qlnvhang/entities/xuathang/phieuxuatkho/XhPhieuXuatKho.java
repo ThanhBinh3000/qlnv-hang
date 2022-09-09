@@ -4,7 +4,6 @@ import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -77,4 +76,6 @@ public class XhPhieuXuatKho extends TrangThaiBaseEntity implements Serializable 
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
+    @Transient
+    private List<XhPhieuXuatKhoCt> ds = new ArrayList<>();
 }

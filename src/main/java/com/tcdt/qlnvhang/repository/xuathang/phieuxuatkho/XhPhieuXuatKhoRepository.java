@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.repository.xuathang.phieuxuatkho;
 
-import com.tcdt.qlnvhang.entities.xuathang.XhQdGiaoNvuXuat;
 import com.tcdt.qlnvhang.entities.xuathang.phieuxuatkho.XhPhieuXuatKho;
 import com.tcdt.qlnvhang.repository.BaseRepository;
 import org.springframework.data.jpa.repository.Modifying;
