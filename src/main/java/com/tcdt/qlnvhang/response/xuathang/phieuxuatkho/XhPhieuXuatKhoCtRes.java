@@ -12,5 +12,5 @@ public class XhPhieuXuatKhoCtRes {
     private Long pxuatKhoId;
     private String chungTu;
     private String tenFile;
-    private String ghiChu;
+
 }

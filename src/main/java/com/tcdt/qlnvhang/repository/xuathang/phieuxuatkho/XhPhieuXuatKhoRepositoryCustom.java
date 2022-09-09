@@ -8,6 +8,4 @@ import java.util.List;
 
 public interface XhPhieuXuatKhoRepositoryCustom {
     List<XhPhieuXuatKhoRes> search(XhPhieuXuatKhoSearchReq req);
-
-    int count(XhPhieuXuatKhoSearchReq req);
 }

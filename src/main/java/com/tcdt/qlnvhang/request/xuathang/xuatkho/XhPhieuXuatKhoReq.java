@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.request.xuathang.xuatkho;
 
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.exolab.castor.types.DateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.Transient;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,8 +23,9 @@ public class XhPhieuXuatKhoReq {
     private Long pknclId;
     private String maDvi;
     private String maQHNS;
+    private String soHd;
 
-    private Integer spXuatKho;
+    private String spXuatKho;
     private String nguoiNhanHang;
     private String boPhan;
 
@@ -34,7 +37,7 @@ public class XhPhieuXuatKhoReq {
     private String maLoaiHangHoa;
     private String maChungLoaiHangHoa;
 
-    private String xuatHang;
+    private LocalDate xuatKho;
     private String lyDoXuatKho;
     private String trangThai;
     private Integer so;
@@ -49,7 +52,10 @@ public class XhPhieuXuatKhoReq {
     private LocalDate ngayGuiDuyet;
     private Long nguoiPduyetId;
     private LocalDate ngayPduyet;
+    private String ghiChu;
+    private String tongTien;
 
     private List<XhPhieuXuatKhoCtReq> ds = new ArrayList<>();
-    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
+    private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
+
 }

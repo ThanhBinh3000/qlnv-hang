@@ -1,10 +1,12 @@
 package com.tcdt.qlnvhang.request.search.xuathang;
 
 import com.tcdt.qlnvhang.request.PaggingReq;
+import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
+@Data
 public class XhPhieuXuatKhoSearchReq {
     private String soQuyetDinh;
     private String soPhieu;
@@ -12,7 +14,7 @@ public class XhPhieuXuatKhoSearchReq {
     private LocalDate tuNgay;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate denNgay;
-    private String soHD;
+    private String soHd;
 
     public static final int DEFAULT_PAGE = 0;
     public static final int DEFAULT_LIMIT = 10;

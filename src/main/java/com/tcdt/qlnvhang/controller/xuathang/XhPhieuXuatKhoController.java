@@ -27,7 +27,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("phieu-kho")
+@RequestMapping(PathContains.XH_PHIEU_XUAT_KHO)
 @Api(tags = "Quản lý Phiếu xuất kho")
 public class XhPhieuXuatKhoController {
 
@@ -66,6 +66,22 @@ public class XhPhieuXuatKhoController {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
             log.error("Tạo mới phiếu xuất kho lỗi: {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Chi tiết phiếu xuất kho", response = List.class)
+    @GetMapping("/{id}")
+    public ResponseEntity<BaseResponse> detail(@PathVariable Long id) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(service.detail(id));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Chi tiết phiếu xuất kho lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
