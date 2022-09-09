@@ -21,6 +21,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import com.tcdt.qlnvhang.entities.FileDKemJoinQdKhlcntHdr;
@@ -597,12 +598,19 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		if (!optional.isPresent())
 			throw new Exception("Không tìm thấy dữ liệu cần xoá");
 
-		if (!optional.get().getTrangThai().equals(Contains.DUTHAO)
-				&& !optional.get().getTrangThai().equals(Contains.TUCHOI_LDV))
+		if (!optional.get().getTrangThai().equals(Contains.DUTHAO) && !optional.get().getTrangThai().equals(Contains.TUCHOI_LDV)){
 			throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối");
-
+		}
+		/**
+		 * XÓA DETAIL
+		 */
+		List<HhQdKhlcntDtl> hhQdKhlcntDtl = hhQdKhlcntDtlRepository.findAllByIdQdHdr(optional.get().getId());
+		if(!CollectionUtils.isEmpty(hhQdKhlcntDtl)){
+			hhQdKhlcntDtlRepository.deleteAll(hhQdKhlcntDtl);
+		}
+//		hhQdKhlcntDtlRepository.deleteAllByIdQdHdr(optional.get().getId());
+		//Xóa header
 		hhQdKhlcntHdrRepository.delete(optional.get());
-
 	}
 
 	@Override
