@@ -24,7 +24,7 @@ public interface HhQdPduyetKqlcntHdrRepository extends BaseRepository<HhQdPduyet
 			nativeQuery = true)
 	Page<HhQdPduyetKqlcntHdr> selectPage(String namKh, String loaiVthh, String soQd, String tuNgayQd, String denNgayQd, String trangThai, Pageable pageable);
 
-	@Query(" SELECT new com.tcdt.qlnvhang.response.dauthauvattu.HhQdPduyetKqlcntRes(HDR.id,HDR.soQd,HDR.ngayQd,HDR.trichYeu,DSG.goiThau,DSG.trangThai,DTGT.idNhaThau,DSG.lyDoHuy,DTGT.donGiaTrcVat,DTGT.vat,DTGT.soLuong,DTGT.loaiHdong,DTGT.tgianThienHd,HDR.trangThai) " +
+	@Query(" SELECT new com.tcdt.qlnvhang.response.dauthauvattu.HhQdPduyetKqlcntRes(HDR.id,HDR.soQd,HDR.ngayQd,HDR.trichYeu,DSG.goiThau,DSG.trangThai,DTGT.idNhaThau,DSG.lyDoHuy,DTGT.donGiaTrcVat,DTGT.vat,DTGT.soLuong,DTGT.loaiHdong,DTGT.tgianThienHd,HDR.trangThai,HDR.namKhoach,HDR.loaiVthh) " +
 			"    FROM HhQdPduyetKqlcntHdr HDR " +
 			"    LEFT JOIN HhQdPduyetKqlcntDtl DTL ON HDR.id = DTL.idQdPdHdr " +
 			"    LEFT JOIN HhQdKhlcntDsgthau DSG ON DTL.idGoiThau = DSG.id " +
