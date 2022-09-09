@@ -6,7 +6,7 @@ import com.tcdt.qlnvhang.request.search.xuathang.XhQdGiaoNvuXuatSearchReq;
 import java.util.List;
 
 public interface XhQdGiaoNvuXuatRepositoryCustom {
-    List<XhQdGiaoNvuXuat> search(XhQdGiaoNvuXuatSearchReq req);
+    List<XhQdGiaoNvuXuat> search(XhQdGiaoNvuXuatSearchReq req, String capDvi);
 
-    int count(XhQdGiaoNvuXuatSearchReq req);
+    int count(XhQdGiaoNvuXuatSearchReq req, String capDvi);
 }

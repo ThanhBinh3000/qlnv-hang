@@ -20,6 +20,13 @@ public interface ExcelHeaderConst {
 
 	String SO_QUYET_DINH = "Số quyết định";
 	String NGAY_KY = "Ngày Ký";
+	String SO_BIEN_BAN = "Số biên bản";
+	String NGAY_LAY_MAU = "Ngày lấy mẫu";
+	String DIEM_KHO = "Điểm kho";
+	String NHA_KHO = "Nhà kho";
+	String NGAN_KHO = "Ngăn kho";
+	String LO_KHO = "Lô kho";
+
 
 
 }
