@@ -272,7 +272,8 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
 
 		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
-		Map<String,String> hashMapDmNhaThau = getListDanhMucChung("NHA_THAU");
+		Map<String,String> hashMapDviLquan = getListDanhMucDviLq("NT");
+		Map<String,String> hashMapDmHdong = getListDanhMucChung("LOAI_HDONG");
 
 		qOptional.get().setTenVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getLoaiVthh()));
 		qOptional.get().setTenCloaiVthh(StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getCloaiVthh()));
@@ -280,7 +281,8 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		byIdQdPdHdr.forEach( item -> {
 			item.setTenLoaiVthh(hashMapDmHh.get(item.getLoaiVthh()));
 			item.setTenCloaiVthh(hashMapDmHh.get(item.getCloaiVthh()));
-//			item.setTenNhaThau(hashMapDmNhaThau.get(item.getCloaiVthh()));
+			item.setTenNhaThau(hashMapDviLquan.get(item.getIdNhaThau()));
+			item.setTenLoaiHdong(hashMapDmHdong.get(item.getLoaiHdong()));
 		});
 		qOptional.get().setHhQdPduyetKqlcntDtlList(byIdQdPdHdr);
 
@@ -374,9 +376,9 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		String cDvi = getUser().getCapDvi();
 		Page<HhQdPduyetKqlcntRes> page;
 		if(Contains.CAP_TONG_CUC.equals(cDvi)){
-			page = hhQdPduyetKqlcntHdrRepository.customQuerySearchTongCuc(req.getNamKhoach(),req.getLoaiVthh(),req.getTrichYeu(),req.getMaDvi(),pageable);
+			page = hhQdPduyetKqlcntHdrRepository.customQuerySearchTongCuc(req.getNamKhoach(),req.getLoaiVthh(),req.getTrichYeu(),req.getSoQdPdKhlcnt(),getUser().getDvql(), pageable);
 		}else{
-			page = hhQdPduyetKqlcntHdrRepository.customQuerySearchCuc(req.getNamKhoach(),req.getLoaiVthh(),req.getTrichYeu(),req.getMaDvi(),pageable);
+			page = hhQdPduyetKqlcntHdrRepository.customQuerySearchCuc(req.getNamKhoach(),req.getLoaiVthh(),req.getTrichYeu(),req.getSoQdPdKhlcnt(),getUser().getDvql(), pageable);
 		}
 		Map<String,String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
 		Map<String,String> hashMapDviLquan = getListDanhMucDviLq("NT");
@@ -396,7 +398,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 
 	@Override
 	public List<HhQdPduyetKqlcntHdr> timKiemAll(HhQdPduyetKqlcntSearchReq req) throws Exception {
-		return hhQdPduyetKqlcntHdrRepository.selectAll(req.getNamKhoach(),req.getLoaiVthh(),convertDateToString(req.getTuNgayQd()),convertDateToString(req.getDenNgayQd()),req.getSoQd(), req.getTrangThai());
+		return hhQdPduyetKqlcntHdrRepository.selectAll(req.getNamKhoach(),req.getLoaiVthh(),convertDateToString(req.getTuNgayQd()),convertDateToString(req.getDenNgayQd()),req.getSoQd(), req.getTrangThai(),req.getMaDvi());
 	}
 
 	@Override

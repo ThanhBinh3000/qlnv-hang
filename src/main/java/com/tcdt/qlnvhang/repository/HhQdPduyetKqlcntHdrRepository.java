@@ -24,26 +24,28 @@ public interface HhQdPduyetKqlcntHdrRepository extends BaseRepository<HhQdPduyet
 			nativeQuery = true)
 	Page<HhQdPduyetKqlcntHdr> selectPage(String namKh, String loaiVthh, String soQd, String tuNgayQd, String denNgayQd, String trangThai, Pageable pageable);
 
-	@Query(" SELECT new com.tcdt.qlnvhang.response.dauthauvattu.HhQdPduyetKqlcntRes(HDR.id,HDR.soQd,HDR.ngayQd,HDR.trichYeu,DSG.goiThau,DSG.trangThai,DTGT.idNhaThau,DSG.lyDoHuy,DTGT.donGiaTrcVat,DTGT.vat,DTGT.soLuong,DTGT.loaiHdong,DTGT.tgianThienHd,HDR.trangThai,HDR.namKhoach,DTL.loaiVthh) " +
+	@Query(" SELECT new com.tcdt.qlnvhang.response.dauthauvattu.HhQdPduyetKqlcntRes(HDR.id,HDR.soQd,HDR.ngayQd,HDR.trichYeu,DSG.goiThau,DSG.trangThai,DTGT.idNhaThau,DSG.lyDoHuy,DTGT.donGiaTrcVat,DTGT.vat,DTGT.soLuong,DTGT.loaiHdong,DTGT.tgianThienHd,HDR.trangThai,HDR.namKhoach,HDR.loaiVthh) " +
 			"    FROM HhQdPduyetKqlcntHdr HDR " +
 			"    LEFT JOIN HhQdPduyetKqlcntDtl DTL ON HDR.id = DTL.idQdPdHdr " +
 			"    LEFT JOIN HhQdKhlcntDsgthau DSG ON DTL.idGoiThau = DSG.id " +
 			"    LEFT JOIN HhDthauGthau DTGT ON DTGT.idGoiThau = DTL.idGoiThau " +
 			" WHERE (?1 is null or HDR.namKhoach = ?1 ) " +
 			" AND (?2 is null or  DTGT.loaiVthh = ?2 ) " +
-			" AND (?3 is null or lower(HDR.trichYeu) like lower(concat(concat('%',?3),'%'))) " +
-			" AND (?4 is null or HDR.maDvi = ?4)"
+			" AND (?3 is null or lower(HDR.trichYeu) like lower(concat(concat('%',?3),'%')))" +
+			" AND (?4 is null or lower(HDR.soQdPdKhlcnt) like lower(concat(concat('%',?4),'%')))" +
+			" AND (?5 is null or  HDR.maDvi = ?5 ) "
 			)
-	Page<HhQdPduyetKqlcntRes> customQuerySearchCuc(String namKh, String loaiVthh, String trichYeu,String maDvi, Pageable pageable);
+	Page<HhQdPduyetKqlcntRes> customQuerySearchCuc(String namKh, String loaiVthh, String trichYeu,String soQdPdKhlcnt,String maDvi,  Pageable pageable);
 
 	@Query(" SELECT new com.tcdt.qlnvhang.response.dauthauvattu.HhQdPduyetKqlcntRes(HDR.id,HDR.soQd,HDR.ngayQd,HDR.trichYeu,HDR.trangThai,HDR.maDvi,HDR.namKhoach,HDR.loaiVthh,HDR.soQdPdKhlcnt) " +
 			" FROM HhQdPduyetKqlcntHdr HDR " +
 			"WHERE (?1 is null or HDR.namKhoach = ?1 ) " +
 			" AND (?2 is null or  HDR.loaiVthh = ?2 ) " +
 			" AND (?3 is null or lower(HDR.trichYeu) like lower(concat(concat('%',?3),'%')))"+
-			" AND (?4 is null or HDR.maDvi = ?4)"
+			" AND (?4 is null or lower(HDR.soQdPdKhlcnt) like lower(concat(concat('%',?4),'%')))"+
+			" AND (?5 is null or  HDR.maDvi = ?5 ) "
 	)
-	Page<HhQdPduyetKqlcntRes> customQuerySearchTongCuc(String namKh, String loaiVthh, String trichYeu,String maDvi, Pageable pageable);
+	Page<HhQdPduyetKqlcntRes> customQuerySearchTongCuc(String namKh, String loaiVthh, String trichYeu,String soQdPdKhlcnt,String maDvi, Pageable pageable);
 
 
 	@Query(value = "SELECT * FROM HH_QD_PDUYET_KQLCNT_HDR QDPD " +
@@ -52,8 +54,9 @@ public interface HhQdPduyetKqlcntHdrRepository extends BaseRepository<HhQdPduyet
 			" AND (:soQd IS NULL OR QDPD.SO_QD = :soQd) "+
 			" AND (:tuNgayQd IS NULL OR QDPD.NGAY_QD >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) "+
 			" AND (:denNgayQd IS NULL OR QDPD.NGAY_QD <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) " +
+			" AND (:maDvi IS NULL OR QDPD.MA_DVI LIKE CONCAT(:maDvi,'%')) " +
 			" AND (:trangThai IS NULL OR QDPD.TRANG_THAI = :trangThai) ",
 			nativeQuery = true)
-	List<HhQdPduyetKqlcntHdr> selectAll(String namKh, String loaiVthh, String soQd, String tuNgayQd, String denNgayQd, String trangThai);
+	List<HhQdPduyetKqlcntHdr> selectAll(String namKh, String loaiVthh, String soQd, String tuNgayQd, String denNgayQd, String trangThai,String maDvi);
 
 }

@@ -44,7 +44,7 @@ public class ThongTinDauThauRes {
 	private String trichYeu;
 	private String loaiVthh;
 	private String cloaiVthh;
-	private String tenVthh;
+	private String tenLoaiVthh;
 	private String tenCloaiVthh;
 	private BigDecimal thanhGiaGoiThau;
 	private String trangThai;
