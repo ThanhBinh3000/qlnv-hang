@@ -365,9 +365,9 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		String cDvi = getUser().getCapDvi();
 		Page<HhQdPduyetKqlcntRes> page;
 		if(Contains.CAP_TONG_CUC.equals(cDvi)){
-			page = hhQdPduyetKqlcntHdrRepository.customQuerySearchTongCuc(req.getNamKhoach(),req.getLoaiVthh(),req.getTrichYeu(),pageable);
+			page = hhQdPduyetKqlcntHdrRepository.customQuerySearchTongCuc(req.getNamKhoach(),req.getLoaiVthh(),req.getTrichYeu(),req.getSoQdPdKhlcnt(),getUser().getDvql(), pageable);
 		}else{
-			page = hhQdPduyetKqlcntHdrRepository.customQuerySearchCuc(req.getNamKhoach(),req.getLoaiVthh(),req.getTrichYeu(),pageable);
+			page = hhQdPduyetKqlcntHdrRepository.customQuerySearchCuc(req.getNamKhoach(),req.getLoaiVthh(),req.getTrichYeu(),req.getSoQdPdKhlcnt(),getUser().getDvql(), pageable);
 		}
 		Map<String,String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
 		Map<String,String> hashMapDviLquan = getListDanhMucDviLq("NT");
