@@ -10,7 +10,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class HhDxKhLcntTChiThopReq {
+public class  HhDxKhLcntTChiThopReq {
 	@NotNull(message = "Không được để trống")
 	@ApiModelProperty(example = "2022")
 	String namKhoach;

@@ -27,7 +27,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping(PathContains.XH_PHIEU_XUAT_KHO)
+@RequestMapping("phieu-kho")
 @Api(tags = "Quản lý Phiếu xuất kho")
 public class XhPhieuXuatKhoController {
 
