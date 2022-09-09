@@ -116,43 +116,41 @@ public class XhPhieuXuatKhoServiceImpl implements XhPhieuXuatKhoService {
 //
 //        Optional<XhPhieuXuatKho> optional = xuatKhoRepo.findById(req.getId());
 //        if (!optional.isPresent())
-//            throw new Exception("Quyết định giao nhiệm vụ xuất không tồn tại.");
+//            throw new Exception("Phiếu xuất kho không tồn tại.");
 //
 //        this.validateSoQuyetDinh(optional.get(), req);
 //
-//        XhQdGiaoNvuXuat item = optional.get();
+//        XhPhieuXuatKho item = optional.get();
 //        BeanUtils.copyProperties(req, item, "id", "so", "nam");
 //        item.setNgaySua(LocalDate.now());
 //        item.setNguoiSuaId(userInfo.getId());
-//        xhQdGiaoNvuXuatRepository.save(item);
+//        xuatKhoRepo.save(item);
 //
-//        Map<Long, XhQdGiaoNvuXuatCt> mapChiTiet = xhQdGiaoNvuXuatCtRepository.findByQdgnvxIdIn(Collections.singleton(item.getId()))
-//                .stream().collect(Collectors.toMap(XhQdGiaoNvuXuatCt::getId, Function.identity()));
+//        Map<Long, XhPhieuXuatKhoCt> mapChiTiet = xuatKhoCtRepo.findByPxuatKhoIdIn(Collections.singleton(item.getId()))
+//                .stream().collect(Collectors.toMap(XhPhieuXuatKhoCt::getId, Function.identity()));
 //
-//        List<XhQdGiaoNvuXuatCt> chiTiets = this.saveListChiTiet(item.getId(), req.getCts(), mapChiTiet);
+//        List<XhPhieuXuatKhoCt> chiTiets = this.saveListChiTiet(item.getId(), req.getCts(), mapChiTiet);
 //        item.setCts(chiTiets);
 //        if (!CollectionUtils.isEmpty(mapChiTiet.values()))
 //            xhQdGiaoNvuXuatCtRepository.deleteAll(mapChiTiet.values());
 //
-//        item.setCt1s(this.saveListChiTiet1(item.getId(), req.getHopDongIds()));
-//
 //        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), item.getId(), XhQdGiaoNvuXuat.TABLE_NAME);
 //        item.setFileDinhKems(fileDinhKems);
 //        return this.buildResponse(item);
-        return null;
+       return null;
     }
 
-//    private void validateSoQuyetDinh(XhQdGiaoNvuXuat update, XhQdGiaoNvuXuatReq req) throws Exception {
-//        String so = req.getSoQuyetDinh();
-//        if (!StringUtils.hasText(so))
-//            return;
-//        if (update == null || (StringUtils.hasText(update.getSoQuyetDinh()) && !update.getSoQuyetDinh().equalsIgnoreCase(so))) {
-//            Optional<XhQdGiaoNvuXuat> optional = xuatKhoRepo.findFirstBySoQuyetDinh(so);
-//            Long updateId = Optional.ofNullable(update).map(XhQdGiaoNvuXuat::getId).orElse(null);
-//            if (optional.isPresent() && !optional.get().getId().equals(updateId))
-//                throw new Exception("Số Quyết định giao nhiệm vụ xuất " + so + " đã tồn tại");
-//        }
-//    }
+    private void validateSoQuyetDinh(XhPhieuXuatKho update, XhPhieuXuatKhoReq req) throws Exception {
+        String so = req.getSoHd();
+        if (!StringUtils.hasText(so))
+            return;
+        if (update == null || (StringUtils.hasText(update.getSoHd()) && !update.getSoHd().equalsIgnoreCase(so))) {
+            Optional<XhPhieuXuatKho> optional = xuatKhoRepo.findFirstBySoHd(so);
+            Long updateId = Optional.ofNullable(update).map(XhPhieuXuatKho::getId).orElse(null);
+            if (optional.isPresent() && !optional.get().getId().equals(updateId))
+                throw new Exception("Số Hợp đồng " + so + " đã tồn tại");
+        }
+    }
 
 
     @Override

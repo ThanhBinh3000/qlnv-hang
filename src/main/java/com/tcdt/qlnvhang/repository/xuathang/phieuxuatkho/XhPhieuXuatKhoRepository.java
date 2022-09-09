@@ -16,5 +16,5 @@ public interface XhPhieuXuatKhoRepository extends BaseRepository<XhPhieuXuatKho,
     @Modifying
     void deleteByIdIn(List<Long> ids);
 
-   // Optional<XhQdGiaoNvuXuat> findFirstBySoQuyetDinh(String soQd);
+    Optional<XhPhieuXuatKho> findFirstBySoHd(String so);
 }
