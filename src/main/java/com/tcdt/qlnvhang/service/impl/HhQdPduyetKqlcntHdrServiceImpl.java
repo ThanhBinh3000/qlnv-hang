@@ -210,12 +210,14 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 
 		HhQdPduyetKqlcntHdr createCheck = hhQdPduyetKqlcntHdrRepository.save(dataDB);
 
-		Optional<HhQdKhlcntDsgthau> gt = hhQdKhlcntDsgthauRepository.findById(objReq.getIdGoiThau());
-		HhQdPduyetKqlcntDtl dtl = ObjectMapperUtils.map(gt.get(), HhQdPduyetKqlcntDtl.class);
-		dtl.setId(null);
-		dtl.setIdQdPdHdr(dataMap.getId());
-		dtl.setIdGoiThau(objReq.getIdGoiThau());
-		hhQdPduyetKqlcntDtlRepository.save(dtl);
+		hhQdPduyetKqlcntDtlRepository.deleteAllByIdQdPdHdr(objReq.getId());
+		for (HhQdPduyetKqlcntDtlReq qdPdKq : objReq.getDetailList()){
+			HhQdPduyetKqlcntDtl qdPdKqDtl = ObjectMapperUtils.map(qdPdKq, HhQdPduyetKqlcntDtl.class);
+			qdPdKqDtl.setId(null);
+			qdPdKqDtl.setIdQdPdHdr(dataMap.getId());
+			qdPdKqDtl.setIdGoiThau(qdPdKq.getIdGt());
+			hhQdPduyetKqlcntDtlRepository.save(qdPdKqDtl);
+		}
 
 		return createCheck;
 	}
@@ -270,12 +272,21 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
 
 		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
-
+		Map<String,String> hashMapDviLquan = getListDanhMucDviLq("NT");
+		Map<String,String> hashMapDmHdong = getListDanhMucChung("LOAI_HDONG");
 
 		qOptional.get().setTenVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getLoaiVthh()));
 		qOptional.get().setTenCloaiVthh(StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getCloaiVthh()));
+		List<HhQdPduyetKqlcntDtl> byIdQdPdHdr = hhQdPduyetKqlcntDtlRepository.findByIdQdPdHdr(Long.parseLong(ids));
+		byIdQdPdHdr.forEach( item -> {
+			item.setTenLoaiVthh(hashMapDmHh.get(item.getLoaiVthh()));
+			item.setTenCloaiVthh(hashMapDmHh.get(item.getCloaiVthh()));
+			item.setTenNhaThau(hashMapDviLquan.get(item.getIdNhaThau()));
+			item.setTenLoaiHdong(hashMapDmHdong.get(item.getLoaiHdong()));
+		});
+		qOptional.get().setHhQdPduyetKqlcntDtlList(byIdQdPdHdr);
 
-		qOptional.get().setHhQdPduyetKqlcntDtlList(hhQdPduyetKqlcntDtlRepository.findByIdQdPdHdr(Long.parseLong(ids)));
+		qOptional.get().setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qOptional.get().getTrangThai()));
 
 		// Quy doi don vi kg = tan
 //		UnitScaler.formatList(qOptional.get().getChildren1(), Contains.DVT_TAN);
@@ -319,14 +330,14 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		optional.get().setTrangThai(stReq.getTrangThai());
 		if(stReq.getTrangThai().equals(Contains.BAN_HANH)){
 			// IS VẬT TƯ
-			if(optional.get().getLoaiVthh().startsWith("02")){
+//			if(optional.get().getLoaiVthh().startsWith("02")){
 				List<HhQdPduyetKqlcntDtl> qdPdKqLcntList = hhQdPduyetKqlcntDtlRepository.findByIdQdPdHdr(optional.get().getId());
 				for(HhQdPduyetKqlcntDtl kqLcnt : qdPdKqLcntList){
 					hhQdKhlcntDsgthauRepository.updateGoiThau(kqLcnt.getIdGoiThau(),kqLcnt.getTrungThau() == 1 ? Contains.TRUNGTHAU : Contains.HUYTHAU,kqLcnt.getLyDoHuy());
 				}
-			}else{
-				hhQdKhlcntDsgthauRepository.updateGoiThau(optional.get().getIdGoiThau(),optional.get().getTrungThau() == 1 ? Contains.TRUNGTHAU : Contains.HUYTHAU,optional.get().getLyDoHuy());
-			}
+//			}else{
+//				hhQdKhlcntDsgthauRepository.updateGoiThau(optional.get().getIdGoiThau(),optional.get().getTrungThau() == 1 ? Contains.TRUNGTHAU : Contains.HUYTHAU,optional.get().getLyDoHuy());
+//			}
 		}
 
 		HhQdPduyetKqlcntHdr createCheck = hhQdPduyetKqlcntHdrRepository.save(optional.get());

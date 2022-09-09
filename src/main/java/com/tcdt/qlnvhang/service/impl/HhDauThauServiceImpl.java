@@ -163,7 +163,7 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 		Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
 		page.forEach(f -> {
 			f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
-			f.setTenVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
+			f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
 			f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
 			f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
 		});
@@ -180,7 +180,7 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 		Map<String,String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
 		list.forEach(f -> {
 			f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
-			f.setTenVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
+			f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
 			f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
 			f.setTenNhaThau(StringUtils.isEmpty(f.getIdNhaThau()) ? null : hashMapDviLquan.get(String.valueOf(Double.parseDouble(f.getIdNhaThau().toString()))));
 			f.setTenLoaiHdong(hashMapLoaiHdong.get(f.getLoaiHdong()));
@@ -399,7 +399,7 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 			objs[3]=dx.getSoQdPdKhlcnt();
 			objs[4]=dx.getNgayQd();
 			objs[5]=dx.getTrichYeu();
-			objs[6]=dx.getTenVthh();
+			objs[6]=dx.getTenLoaiVthh();
 			objs[7]=dx.getTenCloaiVthh();
 			objs[8]=dx.getThanhGiaGoiThau();
 			objs[9]=dx.getTenTrangThai();

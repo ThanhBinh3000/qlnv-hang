@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.impl;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -657,14 +658,22 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				pageable);
 		List<Long> ids = data.getContent().stream().map(HhQdKhlcntHdr::getId).collect(Collectors.toList());
 		List<Object[]> listGthau = hhQdKhlcntDtlRepository.countAllBySoGthau(ids);
+		List<Object[]> listSum = hhQdKhlcntDtlRepository.sumTongTienByIdHdr(ids);
+		Map<String,String> hashMapSum = new HashMap<>();
+		for (Object[] it: listSum) {
+			hashMapSum.put(it[0].toString(),it[1].toString());
+		}
 		Map<String,String> soGthau = new HashMap<>();
 		for (HhQdKhlcntHdr f : data.getContent()) {
 			f.setTenVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
 			f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
-			List<HhQdKhlcntDtl> detail = (hhQdKhlcntDtlRepository.findAllByIdQdHdr(f.getId()));
-			for (HhQdKhlcntDtl tongTien : detail) {
-				f.setTongTien(tongTien.getTongTien());
+			if(f.getLoaiVthh().startsWith("02")){
+				HhQdKhlcntDtl detail = hhQdKhlcntDtlRepository.findByIdQdHdr(f.getId());
+				f.setTongTien(hhQdKhlcntDsgthauRepository.sumTotalPriceByIdQdDtl(detail.getId()));
+			}else{
+				f.setTongTien(BigDecimal.valueOf(Long.parseLong(hashMapSum.get(f.getId().toString()))));
 			}
+
 			f.setNamKhoach(f.getNamKhoach());
 		}
 		for (Object[] it: listGthau) {
