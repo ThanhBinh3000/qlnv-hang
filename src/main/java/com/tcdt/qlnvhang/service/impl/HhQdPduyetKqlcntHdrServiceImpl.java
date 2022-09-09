@@ -427,14 +427,14 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 			objs = new Object[rowsName.length];
 			objs[0] = i;
 			objs[1] = dx.getSoQd();
-			objs[2] = dx.getMaDvi();
+			objs[2] = dx.getTenDvi();
 			objs[3] = dx.getNgayQd();
 			objs[4] = dx.getNamKhoach();
 			objs[5] = dx.getTrichYeu();
 			objs[6] = dx.getSoQdPdKhlcnt();
-			objs[7] = dx.getLoaiVthh();
+			objs[7] = dx.getTenVthh();
 			objs[8] = dx.getSoGoiThau();
-			objs[9] = dx.getTrangThai();
+			objs[9] = dx.getTenTrangThai();
 			dataList.add(objs);
 
 		}
@@ -469,7 +469,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 			objs[8] = dx.getDonGiaTrcVat();
 			objs[9] = dx.getLoaiHdong();
 			objs[10] = dx.getTgianThienHd();
-			objs[11] = dx.getTrangThai();
+			objs[11] = dx.getTenTrangThai();
 			dataList.add(objs);
 
 		}
