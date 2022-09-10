@@ -4,7 +4,6 @@ import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -34,9 +33,11 @@ public class XhPhieuXuatKho extends TrangThaiBaseEntity implements Serializable 
     private String maDvi;
     @Column(name = "MA_QHNS")
     private String maQHNS;
+    @Column(name = "SO_HOP_DONG")
+    private String soHd;
 
     @Column(name = "SO_PHIEU_XUAT_KHO")
-    private Integer spXuatKho;
+    private String spXuatKho;
     @Column(name = "NGUOI_NHAN_HANG")
     private String nguoiNhanHang;
     @Column(name = "BO_PHAN")
@@ -56,9 +57,8 @@ public class XhPhieuXuatKho extends TrangThaiBaseEntity implements Serializable 
     @Column(name = "MA_CHUNG_LOAI_HANG_HOA")
     private String maChungLoaiHangHoa;
 
-
-    @Column(name = "XUAT_HANG")
-    private String xuatHang;
+    @Column(name = "XUAT_KHO")
+    private LocalDate xuatKho;
     @Column(name = "LY_DO_XUAT_KHO")
     private String lyDoXuatKho;
     @Column(name = "TRANG_THAI")
@@ -68,25 +68,14 @@ public class XhPhieuXuatKho extends TrangThaiBaseEntity implements Serializable 
     @Column(name = "NAM")
     private Integer nam;
 
-
-//    @Column(name = "NGAY_TAO")
-//    private LocalDate ngayTao;
-//    @Column(name = "NGUOI_TAO_ID")
-//    private Long nguoiTaoId;
-//    @Column(name = "NGAY_SUA")
-//    private LocalDate ngaySua;
-//    @Column(name = "NGUOI_SUA_ID")
-//    private Long nguoiSuaId;
-//    @Column(name = "NGUOI_GUI_DUYET_ID")
-//    private Long nguoiGuiDuyetId;
-//    @Column(name = "NGAY_GUI_DUYET")
-//    private LocalDate ngayGuiDuyet;
-//    @Column(name = "NGUOI_PDUYET_ID")
-//    private Long nguoiPduyetId;
-//    @Column(name = "NGAY_PDUYET")
-//    private LocalDate ngayPduyet;
+    @Column(name = "GHI_CHU")
+    private String ghiChu;
+    @Column(name = "TONG_TIEN")
+    private String tongTien;
 
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
+    @Transient
+    private List<XhPhieuXuatKhoCt> ds = new ArrayList<>();
 }

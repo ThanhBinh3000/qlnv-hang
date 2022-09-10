@@ -6,9 +6,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.search.xuathang.XhPhieuXuatKhoSearchReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatkho.XhPhieuXuatKhoReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.response.xuathang.bbtinhkho.XhBienBanTinhKhoRes;
 import com.tcdt.qlnvhang.response.xuathang.phieuxuatkho.XhPhieuXuatKhoRes;
-import com.tcdt.qlnvhang.service.xuathang.bbtinhkho.XhBienBanTinhKhoService;
 import com.tcdt.qlnvhang.service.xuathang.xuatkho.XhPhieuXuatKhoService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
@@ -22,12 +20,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("phieu-kho")
+@RequestMapping(PathContains.XH_PHIEU_XUAT_KHO)
 @Api(tags = "Quản lý Phiếu xuất kho")
 public class XhPhieuXuatKhoController {
 
@@ -66,6 +65,22 @@ public class XhPhieuXuatKhoController {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
             log.error("Tạo mới phiếu xuất kho lỗi: {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Chi tiết phiếu xuất kho", response = List.class)
+    @GetMapping("/{id}")
+    public ResponseEntity<BaseResponse> detail(@PathVariable Long id) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(service.detail(id));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Chi tiết phiếu xuất kho lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
@@ -118,5 +133,32 @@ public class XhPhieuXuatKhoController {
             log.error("Delete multiple phiếu xuất kho lỗi ", e);
         }
         return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Sửa phiếu xuất kho xuất hàng", response = List.class)
+    @PutMapping
+    public ResponseEntity<BaseResponse> update(@Valid @RequestBody XhPhieuXuatKhoReq request) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(service.update(request));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Sửa phiếu xuất kho lỗi: {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Export phiếu xuất kho", response = List.class)
+    @PostMapping(value = "/export/list", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public void exportToExcel(HttpServletResponse response, @RequestBody XhPhieuXuatKhoSearchReq req) {
+        try {
+            service.exportToExcel(req, response);
+        } catch (Exception e) {
+            log.error("Error can not export", e);
+        }
     }
 }
