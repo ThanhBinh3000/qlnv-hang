@@ -302,7 +302,6 @@ public class XhPhieuXuatKhoServiceImpl implements XhPhieuXuatKhoService {
 
     @Override
     public boolean exportToExcel(XhPhieuXuatKhoSearchReq objReq, HttpServletResponse response) throws Exception {
-        UserInfo userInfo = UserUtils.getUserInfo();
 
         objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
         List<XhPhieuXuatKhoRes> list = this.search(objReq).get().collect(Collectors.toList());

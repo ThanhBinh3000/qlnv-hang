@@ -1,14 +1,16 @@
 package com.tcdt.qlnvhang.request.xuathang.xuatkho;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.exolab.castor.types.DateTime;
+import org.joda.time.DateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Transient;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -36,8 +38,8 @@ public class XhPhieuXuatKhoReq {
     private String maNganlo;
     private String maLoaiHangHoa;
     private String maChungLoaiHangHoa;
-
-    private LocalDate xuatKho;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private  LocalDateTime xuatKho;
     private String lyDoXuatKho;
     private String trangThai;
     private Integer so;
