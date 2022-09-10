@@ -10,7 +10,12 @@ import lombok.NoArgsConstructor;
 public class XhPhieuXuatKhoCtRes {
     private Long id;
     private Long pxuatKhoId;
-    private String chungTu;
-    private String tenFile;
+    private String ten;
+    private String maSo;
+    private String dvTinh;
+    private Integer slYeuCau;
+    private Integer slThucXuat;
+    private Integer donGia;
+    private Integer thanhTien;
 
 }

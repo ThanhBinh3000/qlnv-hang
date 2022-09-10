@@ -1,11 +1,13 @@
 package com.tcdt.qlnvhang.response.xuathang.phieuxuatkho;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.exolab.castor.types.DateTime;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -42,8 +44,8 @@ public class XhPhieuXuatKhoRes {
     private String maChungLoaiHangHoa;
     private String tenChungLoaiHangHoa;
 
-
-    private LocalDate xuatKho;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime xuatKho;
     private String lyDoXuatKho;
     private String trangThai;
     private String tenTrangThai;
