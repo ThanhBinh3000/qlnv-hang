@@ -59,5 +59,5 @@ public class XhBbLayMauResponse extends CommonResponse {
 	private String loaiVthh;
 	private List<XhBbLayMauCtResponse> chiTietList = new ArrayList<>();
 	private List<FileDinhKem> fileDinhKems;
-
+	private Long hopDongId;
 }

@@ -53,4 +53,5 @@ public class XhBbLayMauRequest {
 	private String loaiVthh;
 	private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 	private List<XhBbLayMauCtRequest> chiTietList;
+	private Long hopDongId;
 }

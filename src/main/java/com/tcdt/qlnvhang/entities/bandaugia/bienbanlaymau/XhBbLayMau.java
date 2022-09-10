@@ -88,6 +88,10 @@ public class XhBbLayMau extends TrangThaiBaseEntity implements Serializable {
 	@Column(name = "LOAI_VTHH")
 	private String loaiVthh;
 
+	@Column(name = "HOP_DONG_ID")
+	private Long hopDongId;
+
+
 	@Transient
 	private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
