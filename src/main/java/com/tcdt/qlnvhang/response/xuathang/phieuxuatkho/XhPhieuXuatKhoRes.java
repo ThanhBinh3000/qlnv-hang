@@ -51,18 +51,6 @@ public class XhPhieuXuatKhoRes {
     private String tenTrangThai;
     private String ghiChu;
     private String tongTien;
-//    private Integer so;
-//    private Integer nam;
-//
-//
-//    private LocalDate ngayTao;
-//    private Long nguoiTaoId;
-//    private LocalDate ngaySua;
-//    private Long nguoiSuaId;
-//    private Long nguoiGuiDuyetId;
-//    private LocalDate ngayGuiDuyet;
-//    private Long nguoiPduyetId;
-//    private LocalDate ngayPduyet;
+
     private List<XhPhieuXuatKhoCtRes> ds = new ArrayList<>();
-    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 }
