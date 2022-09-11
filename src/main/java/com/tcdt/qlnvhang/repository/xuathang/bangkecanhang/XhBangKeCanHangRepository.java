@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.entities.xuathang.bangkecanhang.XhBangKeCanHang;
 import com.tcdt.qlnvhang.entities.xuathang.phieuxuatkho.XhPhieuXuatKho;
 import com.tcdt.qlnvhang.repository.BaseRepository;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
@@ -17,4 +18,7 @@ public interface XhBangKeCanHangRepository extends BaseRepository<XhBangKeCanHan
     void deleteByIdIn(List<Long> ids);
 
     Optional<XhBangKeCanHang> findFirstBySoBangKe(String so);
+
+    @Query(value = "select max(id) from XhBangKeCanHang")
+    Long getMaxId();
 }

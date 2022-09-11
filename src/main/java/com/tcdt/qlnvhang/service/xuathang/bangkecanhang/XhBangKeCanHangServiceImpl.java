@@ -47,6 +47,7 @@ public class XhBangKeCanHangServiceImpl implements XhBangKeCanHangService {
 
     private static final String SHEET_BANG_KE_CAN_HANG = "Bảng kê cân hàng";
 
+    private final String MA_DS = "/BKCH-CCDTVP";
     @Autowired
     XhBangKeCanHangRepository bangKeCanHangRepository;
 
@@ -62,14 +63,17 @@ public class XhBangKeCanHangServiceImpl implements XhBangKeCanHangService {
     @Autowired
     KtNhaKhoRepository ktNhaKhoRepository;
 
-   @Autowired
-   QlnvDmDonviRepository qlnvDmDonviRepository;
+    @Autowired
+    QlnvDmDonviRepository qlnvDmDonviRepository;
 
     @Override
     @Transactional(rollbackOn = Exception.class)
     public XhBangKeCanHangRes create(XhBangKeCanHangReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         XhBangKeCanHang item = new XhBangKeCanHang();
+        Long count = bangKeCanHangRepository.getMaxId();
+        if (count == null) count = 1L;
+        item.setSoBangKe(count.intValue() + 1 + "/" + LocalDate.now().getYear() + MA_DS);
         BeanUtils.copyProperties(req, item, "id");
         item.setNgayTao(LocalDate.now());
         item.setNguoiTaoId(userInfo.getId());
@@ -114,7 +118,7 @@ public class XhBangKeCanHangServiceImpl implements XhBangKeCanHangService {
         this.validateSoQuyetDinh(optional.get(), req);
 
         XhBangKeCanHang item = optional.get();
-        BeanUtils.copyProperties(req, item, "id", "so", "nam","trangThai");
+        BeanUtils.copyProperties(req, item, "id", "so", "nam", "trangThai");
         item.setNgaySua(LocalDate.now());
         item.setNguoiSuaId(userInfo.getId());
         bangKeCanHangRepository.save(item);
