@@ -169,4 +169,6 @@ public class PathContains {
 	public static final String XH_PHIEU_XUAT_KHO = "/xh-phieu-xuat-kho";
 	public static final String XH_BANG_KE_CAN_HANG= "/xh-bang-ke-can-hang";
 
+	public static final String XH_BIEN_BAN_HAO_DOI = "/xh-bb-hao-doi";
+
 }
