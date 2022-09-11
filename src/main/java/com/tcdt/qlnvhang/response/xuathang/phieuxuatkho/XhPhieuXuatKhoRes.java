@@ -23,6 +23,7 @@ public class XhPhieuXuatKhoRes {
     private String tenSqdx;
     private Long pknclId;
     private String maDvi;
+    private String tenDvi;
     private String maQHNS;
     private String soHd;
 
@@ -53,4 +54,5 @@ public class XhPhieuXuatKhoRes {
     private String tongTien;
 
     private List<XhPhieuXuatKhoCtRes> ds = new ArrayList<>();
+    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 }

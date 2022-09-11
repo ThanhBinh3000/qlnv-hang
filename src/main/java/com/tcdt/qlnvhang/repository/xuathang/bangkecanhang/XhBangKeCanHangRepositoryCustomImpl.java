@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.repository.xuathang.bangkecanhang;
 
 import com.tcdt.qlnvhang.request.search.xuathang.XhBangKeCanHangSearchReq;
 import com.tcdt.qlnvhang.response.xuathang.bangkecanhang.XhBangKeCanHangRes;
-import org.joda.time.LocalDate;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
@@ -12,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.Tuple;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +25,7 @@ public class XhBangKeCanHangRepositoryCustomImpl implements XhBangKeCanHangRepos
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT d.id,d.SO_BANG_KE,n.SO_QUYET_DINH,k.SO_PHIEU_XUAT_KHO,d.NGAY_NHAP,d.MA_DIEMKHO,d.MA_NHAKHO,d.MA_NGANKHO,d.MA_LOKHO,d.TRANG_THAI, ");
         builder.append("dk.TEN_DIEMKHO,nk.TEN_NHAKHO,ngk.TEN_NGANKHO,l.TEN_NGANLO ");
-        builder.append(" FROM XH_PHIEU_XUAT_KHO d ");
+        builder.append(" FROM XH_BANG_KE_CAN_HANG d ");
         builder.append("INNER JOIN XH_QD_GIAO_NVU_XUAT n ON n.ID = d.SO_QD_XUAT_ID ");
         builder.append("INNER JOIN XH_PHIEU_XUAT_KHO k ON k.ID = d.PHIEU_XUAT_KHO_ID ");
         builder.append("inner join KT_DIEM_KHO dk on dk.MA_DIEMKHO = d.MA_DIEMKHO ");

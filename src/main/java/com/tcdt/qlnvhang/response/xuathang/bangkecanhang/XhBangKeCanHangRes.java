@@ -3,8 +3,9 @@ package com.tcdt.qlnvhang.response.xuathang.bangkecanhang;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.joda.time.LocalDate;
 
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class XhBangKeCanHangRes {
     private String soPhieuXuatKho;
 
     private String maDvi;
+    private String tenDvi;
     private String maQHNS;
     private String soBangKe;
     private String thuKhoId;
@@ -39,6 +41,7 @@ public class XhBangKeCanHangRes {
 
     private String diaDiem;
     private String trangThai;
+    private String tenTrangThai;
 
     private Integer nam;
     private String lyDoTuChoi;

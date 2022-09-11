@@ -1,27 +1,26 @@
-package com.tcdt.qlnvhang.service.xuathang.xuatkho;
+package com.tcdt.qlnvhang.service.xuathang.bangkecanhang;
 
-import com.tcdt.qlnvhang.entities.xuathang.phieuxuatkho.XhPhieuXuatKho;
-import com.tcdt.qlnvhang.entities.xuathang.phieuxuatkho.XhPhieuXuatKhoCt;
+import com.tcdt.qlnvhang.entities.xuathang.bangkecanhang.XhBangKeCanHang;
+import com.tcdt.qlnvhang.entities.xuathang.bangkecanhang.XhBangKeCanHangCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtDiemKhoRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganKhoRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNhaKhoRepository;
-import com.tcdt.qlnvhang.repository.xuathang.phieuxuatkho.XhPhieuXuatKhoCtRepository;
-import com.tcdt.qlnvhang.repository.xuathang.phieuxuatkho.XhPhieuXuatKhoRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bangkecanhang.XhBangKeCanHangCtRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bangkecanhang.XhBangKeCanHangRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.search.xuathang.XhPhieuXuatKhoSearchReq;
-import com.tcdt.qlnvhang.request.xuathang.xuatkho.XhPhieuXuatKhoCtReq;
-import com.tcdt.qlnvhang.request.xuathang.xuatkho.XhPhieuXuatKhoReq;
-import com.tcdt.qlnvhang.response.xuathang.phieuxuatkho.XhPhieuXuatKhoCtRes;
-import com.tcdt.qlnvhang.response.xuathang.phieuxuatkho.XhPhieuXuatKhoRes;
-import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
-import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.request.search.xuathang.XhBangKeCanHangSearchReq;
+import com.tcdt.qlnvhang.request.xuathang.bangkecanhang.XhBangKeCanHangCtReq;
+import com.tcdt.qlnvhang.request.xuathang.bangkecanhang.XhBangKeCanHangReq;
+import com.tcdt.qlnvhang.response.xuathang.bangkecanhang.XhBangKeCanHangCtRes;
+import com.tcdt.qlnvhang.response.xuathang.bangkecanhang.XhBangKeCanHangRes;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -38,25 +37,22 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Log4j2
 @Service
-public class XhPhieuXuatKhoServiceImpl implements XhPhieuXuatKhoService {
+public class XhBangKeCanHangServiceImpl implements XhBangKeCanHangService {
 
-    private static final String SHEET_PHIEU_XUAT_KHO = "Phiếu xuất kho";
-
-    @Autowired
-    XhPhieuXuatKhoRepository xuatKhoRepo;
+    private static final String SHEET_BANG_KE_CAN_HANG = "Bảng kê cân hàng";
 
     @Autowired
-    XhPhieuXuatKhoCtRepository xuatKhoCtRepo;
+    XhBangKeCanHangRepository bangKeCanHangRepository;
 
     @Autowired
-    FileDinhKemService fileDinhKemService;
+    XhBangKeCanHangCtRepository xhBangKeCanHangCtRepository;
+
     @Autowired
     KtNganLoRepository ktNganLoRepository;
     @Autowired
@@ -65,114 +61,111 @@ public class XhPhieuXuatKhoServiceImpl implements XhPhieuXuatKhoService {
     KtNganKhoRepository ktNganKhoRepository;
     @Autowired
     KtNhaKhoRepository ktNhaKhoRepository;
-    @Autowired
-    QlnvDmDonviRepository qlnvDmDonviRepository;
+
+   @Autowired
+   QlnvDmDonviRepository qlnvDmDonviRepository;
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public XhPhieuXuatKhoRes create(XhPhieuXuatKhoReq req) throws Exception {
+    public XhBangKeCanHangRes create(XhBangKeCanHangReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
-        XhPhieuXuatKho item = new XhPhieuXuatKho();
+        XhBangKeCanHang item = new XhBangKeCanHang();
         BeanUtils.copyProperties(req, item, "id");
         item.setNgayTao(LocalDate.now());
         item.setNguoiTaoId(userInfo.getId());
         item.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
-        xuatKhoRepo.save(item);
+        bangKeCanHangRepository.save(item);
 
-        List<XhPhieuXuatKhoCt> ds = req.getDs().stream()
+        List<XhBangKeCanHangCt> ds = req.getDs().stream()
                 .map(d -> {
-                    d.setPxuatKhoId(item.getId());
+                    d.setBkCanHangID(item.getId());
                     return d;
                 })
                 .map(d -> {
-                    XhPhieuXuatKhoCt xuatKhoCt = new XhPhieuXuatKhoCt();
+                    XhBangKeCanHangCt xuatKhoCt = new XhBangKeCanHangCt();
                     BeanUtils.copyProperties(d, xuatKhoCt, "id");
                     return xuatKhoCt;
                 })
                 .collect(Collectors.toList());
 
-        xuatKhoCtRepo.saveAll(ds);
-        XhPhieuXuatKhoRes result = new XhPhieuXuatKhoRes();
+        xhBangKeCanHangCtRepository.saveAll(ds);
+        XhBangKeCanHangRes result = new XhBangKeCanHangRes();
         BeanUtils.copyProperties(item, result, "id");
 
-        List<XhPhieuXuatKhoCtRes> dsRes = ds
+        List<XhBangKeCanHangCtRes> dsRes = ds
                 .stream()
-                .map(user -> new ModelMapper().map(user, XhPhieuXuatKhoCtRes.class))
+                .map(user -> new ModelMapper().map(user, XhBangKeCanHangCtRes.class))
                 .collect(Collectors.toList());
 
         result.setDs(dsRes);
 
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), item.getId(), XhPhieuXuatKho.TABLE_NAME);
-        item.setFileDinhKems(fileDinhKems);
         return result;
 
     }
 
     @Override
-    public XhPhieuXuatKhoRes update(XhPhieuXuatKhoReq req) throws Exception {
+    public XhBangKeCanHangRes update(XhBangKeCanHangReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
 
-        Optional<XhPhieuXuatKho> optional = xuatKhoRepo.findById(req.getId());
+        Optional<XhBangKeCanHang> optional = bangKeCanHangRepository.findById(req.getId());
         if (!optional.isPresent())
-            throw new Exception("Phiếu xuất kho không tồn tại.");
+            throw new Exception("Bảng kê cân hàng không tồn tại.");
 
         this.validateSoQuyetDinh(optional.get(), req);
 
-        XhPhieuXuatKho item = optional.get();
+        XhBangKeCanHang item = optional.get();
         BeanUtils.copyProperties(req, item, "id", "so", "nam");
         item.setNgaySua(LocalDate.now());
         item.setNguoiSuaId(userInfo.getId());
-        xuatKhoRepo.save(item);
+        bangKeCanHangRepository.save(item);
 
-        Map<Long, XhPhieuXuatKhoCt> mapChiTiet = xuatKhoCtRepo.findByPxuatKhoIdIn(Collections.singleton(item.getId()))
-                .stream().collect(Collectors.toMap(XhPhieuXuatKhoCt::getId, Function.identity()));
+        Map<Long, XhBangKeCanHangCt> mapChiTiet = xhBangKeCanHangCtRepository.findByBkCanHangIDIn(Collections.singleton(item.getId()))
+                .stream().collect(Collectors.toMap(XhBangKeCanHangCt::getId, Function.identity()));
 
-        List<XhPhieuXuatKhoCt> chiTiets = this.saveListChiTiet(item.getId(), req.getDs(), mapChiTiet);
+        List<XhBangKeCanHangCt> chiTiets = this.saveListChiTiet(item.getId(), req.getDs(), mapChiTiet);
         item.setDs(chiTiets);
         if (!CollectionUtils.isEmpty(mapChiTiet.values()))
-            xuatKhoCtRepo.deleteAll(mapChiTiet.values());
+            xhBangKeCanHangCtRepository.deleteAll(mapChiTiet.values());
 
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), item.getId(), XhPhieuXuatKho.TABLE_NAME);
-        item.setFileDinhKems(fileDinhKems);
-        XhPhieuXuatKhoRes res = new XhPhieuXuatKhoRes();
+        XhBangKeCanHangRes res = new XhBangKeCanHangRes();
         BeanUtils.copyProperties(item, res);
 
         return res;
     }
 
-    private List<XhPhieuXuatKhoCt> saveListChiTiet(Long parentId,
-                                                   List<XhPhieuXuatKhoCtReq> chiTietReqs,
-                                                   Map<Long, XhPhieuXuatKhoCt> mapChiTiet) throws Exception {
-        List<XhPhieuXuatKhoCt> chiTiets = new ArrayList<>();
-        for (XhPhieuXuatKhoCtReq req : chiTietReqs) {
+    private List<XhBangKeCanHangCt> saveListChiTiet(Long parentId,
+                                                    List<XhBangKeCanHangCtReq> chiTietReqs,
+                                                    Map<Long, XhBangKeCanHangCt> mapChiTiet) throws Exception {
+        List<XhBangKeCanHangCt> chiTiets = new ArrayList<>();
+        for (XhBangKeCanHangCtReq req : chiTietReqs) {
             Long id = req.getId();
-            XhPhieuXuatKhoCt chiTiet = new XhPhieuXuatKhoCt();
+            XhBangKeCanHangCt chiTiet = new XhBangKeCanHangCt();
 
             if (id != null && id > 0) {
                 chiTiet = mapChiTiet.get(id);
                 if (chiTiet == null)
-                    throw new Exception("Phiếu xuất kho chi tiết không tồn tại.");
+                    throw new Exception("Bảng kê cân hàng chi tiết không tồn tại.");
                 mapChiTiet.remove(id);
             }
 
             BeanUtils.copyProperties(req, chiTiet, "id");
-            chiTiet.setPxuatKhoId(parentId);
+            chiTiet.setBkCanHangID(parentId);
             chiTiets.add(chiTiet);
         }
 
         if (!CollectionUtils.isEmpty(chiTiets))
-            xuatKhoCtRepo.saveAll(chiTiets);
+            xhBangKeCanHangCtRepository.saveAll(chiTiets);
 
         return chiTiets;
     }
 
-    private void validateSoQuyetDinh(XhPhieuXuatKho update, XhPhieuXuatKhoReq req) throws Exception {
-        String so = req.getSoHd();
+    private void validateSoQuyetDinh(XhBangKeCanHang update, XhBangKeCanHangReq req) throws Exception {
+        String so = req.getSoBangKe();
         if (!StringUtils.hasText(so))
             return;
-        if (update == null || (StringUtils.hasText(update.getSoHd()) && !update.getSoHd().equalsIgnoreCase(so))) {
-            Optional<XhPhieuXuatKho> optional = xuatKhoRepo.findFirstBySoHd(so);
-            Long updateId = Optional.ofNullable(update).map(XhPhieuXuatKho::getId).orElse(null);
+        if (update == null || (StringUtils.hasText(update.getSoBangKe()) && !update.getSoBangKe().equalsIgnoreCase(so))) {
+            Optional<XhBangKeCanHang> optional = bangKeCanHangRepository.findFirstBySoBangKe(so);
+            Long updateId = Optional.ofNullable(update).map(XhBangKeCanHang::getId).orElse(null);
             if (optional.isPresent() && !optional.get().getId().equals(updateId))
                 throw new Exception("Số Hợp đồng " + so + " đã tồn tại");
         }
@@ -180,12 +173,12 @@ public class XhPhieuXuatKhoServiceImpl implements XhPhieuXuatKhoService {
 
 
     @Override
-    public XhPhieuXuatKhoRes detail(Long id) throws Exception {
-        XhPhieuXuatKho phieuXuatKho = xuatKhoRepo.findById(id).get();
+    public XhBangKeCanHangRes detail(Long id) throws Exception {
+        XhBangKeCanHang phieuXuatKho = bangKeCanHangRepository.findById(id).get();
         if (phieuXuatKho == null)
             throw new Exception("Không tìm thấy dữ liệu.");
 
-        XhPhieuXuatKhoRes item = new XhPhieuXuatKhoRes();
+        XhBangKeCanHangRes item = new XhBangKeCanHangRes();
         BeanUtils.copyProperties(phieuXuatKho, item, "id");
         item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
         // chưa tìm ngăn kho lô kho các giá trị tên
@@ -196,38 +189,36 @@ public class XhPhieuXuatKhoServiceImpl implements XhPhieuXuatKhoService {
         item.setTenDvi(qlnvDmDonviRepository.findByMaDvi(item.getMaDvi()).getTenDvi());
         item.setDs(findXuatKhoCtResByPxuatKho(id));
 
-        item.setFileDinhKems(fileDinhKemService.search(id, Collections.singleton(XhPhieuXuatKho.TABLE_NAME)));
-
         return item;
     }
 
-    public List<XhPhieuXuatKhoCtRes> findXuatKhoCtResByPxuatKho(Long id) {
-        List<XhPhieuXuatKhoCt> lstDs = xuatKhoCtRepo.findByPxuatKhoIdIn(Collections.singleton(id));
+    public List<XhBangKeCanHangCtRes> findXuatKhoCtResByPxuatKho(Long id) {
+        List<XhBangKeCanHangCt> lstDs = xhBangKeCanHangCtRepository.findByBkCanHangIDIn(Collections.singleton(id));
 
         return lstDs.stream()
-                .map(user -> new ModelMapper().map(user, XhPhieuXuatKhoCtRes.class))
+                .map(user -> new ModelMapper().map(user, XhBangKeCanHangCtRes.class))
                 .collect(Collectors.toList());
     }
 
     @Override
     public boolean delete(Long id) throws Exception {
-        Optional<XhPhieuXuatKho> optional = xuatKhoRepo.findById(id);
+        Optional<XhBangKeCanHang> optional = bangKeCanHangRepository.findById(id);
         if (!optional.isPresent())
-            throw new Exception("Phiếu xuất kho không tồn tại.");
+            throw new Exception("Bảng kê cân hàng không tồn tại.");
 
-        XhPhieuXuatKho item = optional.get();
+        XhBangKeCanHang item = optional.get();
         if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(item.getTrangThai())) {
-            throw new Exception("Không thể xóa phiếu xuất kho đã đã duyệt");
+            throw new Exception("Không thể xóa Bảng kê cân hàng đã đã duyệt");
         }
-        xuatKhoCtRepo.deleteAllByPxuatKhoId(item.getId());
-        xuatKhoRepo.delete(item);
+        xhBangKeCanHangCtRepository.deleteAllByBkCanHangID(item.getId());
+        bangKeCanHangRepository.delete(item);
         return true;
     }
 
     @Override
     public boolean deleteMultiple(DeleteReq req) throws Exception {
-        xuatKhoCtRepo.deleteByPxuatKhoIdIn(req.getIds());
-        xuatKhoRepo.deleteByIdIn(req.getIds());
+        xhBangKeCanHangCtRepository.deleteByBkCanHangIDIn(req.getIds());
+        bangKeCanHangRepository.deleteByIdIn(req.getIds());
         return true;
     }
 
@@ -235,11 +226,11 @@ public class XhPhieuXuatKhoServiceImpl implements XhPhieuXuatKhoService {
     @Transactional(rollbackOn = Exception.class)
     public boolean updateStatus(StatusReq stReq) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
-        Optional<XhPhieuXuatKho> optional = xuatKhoRepo.findById(stReq.getId());
+        Optional<XhBangKeCanHang> optional = bangKeCanHangRepository.findById(stReq.getId());
         if (!optional.isPresent())
-            throw new Exception("Phiếu xuất kho không tồn tại.");
+            throw new Exception("Bảng kê cân hàng không tồn tại.");
 
-        XhPhieuXuatKho item = optional.get();
+        XhBangKeCanHang item = optional.get();
         String trangThai = item.getTrangThai();
         if (NhapXuatHangTrangThaiEnum.CHODUYET_KTVBQ.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
@@ -291,44 +282,43 @@ public class XhPhieuXuatKhoServiceImpl implements XhPhieuXuatKhoService {
     }
 
     @Override
-    public Page<XhPhieuXuatKhoRes> search(XhPhieuXuatKhoSearchReq req) throws Exception {
+    public Page<XhBangKeCanHangRes> search(XhBangKeCanHangSearchReq req) throws Exception {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        List<XhPhieuXuatKhoRes> list = xuatKhoRepo.search(req);
+        List<XhBangKeCanHangRes> list = bangKeCanHangRepository.search(req);
         list.forEach(item -> {
             item.setDs(findXuatKhoCtResByPxuatKho(item.getId()));
-            item.setFileDinhKems(fileDinhKemService.search(item.getId(), Collections.singleton(XhPhieuXuatKho.TABLE_NAME)));
             item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
         });
-        Page<XhPhieuXuatKhoRes> page = new PageImpl<>(list, pageable, list.size());
+        Page<XhBangKeCanHangRes> page = new PageImpl<>(list, pageable, list.size());
 
         return page;
     }
 
     @Override
-    public boolean exportToExcel(XhPhieuXuatKhoSearchReq objReq, HttpServletResponse response) throws Exception {
+    public boolean exportToExcel(XhBangKeCanHangSearchReq objReq, HttpServletResponse response) throws Exception {
 
         objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
-        List<XhPhieuXuatKhoRes> list = this.search(objReq).get().collect(Collectors.toList());
+        List<XhBangKeCanHangRes> list = this.search(objReq).get().collect(Collectors.toList());
 
         if (CollectionUtils.isEmpty(list))
             return true;
 
-        String[] rowsName = new String[]{"STT", "Số phiếu xuất", "Số quyết định xuất", "Số hợp đồng",
-                "Ngày xuất kho", "Điểm kho", "Nhà kho", "Ngăn kho", "Lô kho", "Trạng thái"};
-        String filename = "Danh_sach_phieu_xuat_kho.xlsx";
+        String[] rowsName = new String[]{"STT", "Số bảng kê", "Số quyết định xuất", "Số phiếu xuất",
+                "Ngày nhập kho", "Điểm kho", "Nhà kho", "Ngăn kho", "Lô kho", "Trạng thái"};
+        String filename = "Danh_bang_ke_can_hang.xlsx";
 
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
 
         try {
             for (int i = 0; i < list.size(); i++) {
-                XhPhieuXuatKhoRes item = list.get(i);
+                XhBangKeCanHangRes item = list.get(i);
                 objs = new Object[rowsName.length];
                 objs[0] = i;
-                objs[1] = item.getSpXuatKho();
-                objs[2] = item.getTenSqdx();
-                objs[3] = item.getSoHd();
-                objs[4] = item.getXuatKho().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+                objs[1] = item.getSoBangKe();
+                objs[2] = item.getSoSqdx();
+                objs[3] = item.getSoPhieuXuatKho();
+                objs[4] = LocalDateTimeUtils.localDateToString(item.getNgayNhap());
                 objs[5] = item.getTenDiemkho();
                 objs[6] = item.getTenNhakho();
                 objs[7] = item.getTenNgankho();
@@ -337,7 +327,7 @@ public class XhPhieuXuatKhoServiceImpl implements XhPhieuXuatKhoService {
                 dataList.add(objs);
             }
 
-            ExportExcel ex = new ExportExcel(SHEET_PHIEU_XUAT_KHO, filename, rowsName, dataList, response);
+            ExportExcel ex = new ExportExcel(SHEET_BANG_KE_CAN_HANG, filename, rowsName, dataList, response);
             ex.export();
         } catch (Exception e) {
             log.error("Error export", e);
