@@ -119,7 +119,7 @@ public class XhPhieuXuatKhoServiceImpl implements XhPhieuXuatKhoService {
         this.validateSoQuyetDinh(optional.get(), req);
 
         XhPhieuXuatKho item = optional.get();
-        BeanUtils.copyProperties(req, item, "id", "so", "nam");
+        BeanUtils.copyProperties(req, item, "id", "so", "nam", "trangThai");
         item.setNgaySua(LocalDate.now());
         item.setNguoiSuaId(userInfo.getId());
         xuatKhoRepo.save(item);

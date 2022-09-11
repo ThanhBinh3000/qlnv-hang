@@ -114,7 +114,7 @@ public class XhBangKeCanHangServiceImpl implements XhBangKeCanHangService {
         this.validateSoQuyetDinh(optional.get(), req);
 
         XhBangKeCanHang item = optional.get();
-        BeanUtils.copyProperties(req, item, "id", "so", "nam");
+        BeanUtils.copyProperties(req, item, "id", "so", "nam","trangThai");
         item.setNgaySua(LocalDate.now());
         item.setNguoiSuaId(userInfo.getId());
         bangKeCanHangRepository.save(item);
