@@ -5,10 +5,7 @@ import com.tcdt.qlnvhang.entities.xuathang.bbtinhkho.XhBienBanTinhKhoCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
-import com.tcdt.qlnvhang.repository.khotang.KtDiemKhoRepository;
-import com.tcdt.qlnvhang.repository.khotang.KtNganKhoRepository;
-import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
-import com.tcdt.qlnvhang.repository.khotang.KtNhaKhoRepository;
+import com.tcdt.qlnvhang.repository.khotang.*;
 import com.tcdt.qlnvhang.repository.xuathang.bbtinhkho.XhBienBanTinhKhoCtRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bbtinhkho.XhBienBanTinhKhoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.quyetdinhgiaonhiemvuxuat.XhQdGiaoNvuXuatRepository;
@@ -75,6 +72,8 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
     KtNganLoRepository ktNganLo;
     @Autowired
     QlnvDmVattuRepository qlnvDmVattuRepository;
+    @Autowired
+    KtTongKhoRepository ktTongKhoRepository;
 
     @Override
     @Transactional(rollbackOn = Exception.class)
@@ -84,7 +83,7 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
         XhBienBanTinhKho item = new XhBienBanTinhKho();
         item.setQdgnvnxId(req.getQdId());
         item.setMaDvi(req.getMaDvi());
-        item.setCapDvi(req.getCapDvi());
+        item.setCapDvi(ktTongKhoRepository.findByMaTongKho(item.getMaDvi()).get().getTenTongKho());
         Long count = xhBienBanTinhKhoRepository.getMaxId();
         if (count == null) count = 1L;
         item.setSoBienBan(count.intValue() + 1 + "/" + LocalDate.now().getYear() + MA_DS);
@@ -148,7 +147,7 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
         XhBienBanTinhKho item = xhBienBanTinhKhoRepository.findById(req.getId()).get();
         item.setQdgnvnxId(req.getQdId());
         item.setMaDvi(req.getMaDvi());
-        item.setCapDvi(req.getCapDvi());
+        item.setCapDvi(ktTongKhoRepository.findByMaTongKho(item.getMaDvi()).get().getTenTongKho());
         item.setSoLuongXuat(req.getSoLuongXuat());
         item.setSlConlaiXuatcuoi(req.getSoLuongThucTeConLai());
         item.setMaDiemkho(req.getMaDiemkho());
@@ -367,8 +366,8 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
         xhBienBanTinhKhoRes.setKienNghi(xhBienBanTinhKho.getKienNghi());
         xhBienBanTinhKhoRes.setNgayLapPhieu(xhBienBanTinhKho.getNgayTao());
         xhBienBanTinhKhoRes.setTrangThai(xhBienBanTinhKho.getTrangThai());
-        xhBienBanTinhKhoRes.setTenTrangThai(TrangThaiEnum.getTenById(xhBienBanTinhKhoRes.getTrangThai()));
-        xhBienBanTinhKhoRes.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(xhBienBanTinhKhoRes.getTrangThai()));
+        xhBienBanTinhKhoRes.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(xhBienBanTinhKhoRes.getTrangThai()));
+        xhBienBanTinhKhoRes.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(xhBienBanTinhKhoRes.getTrangThai()));
         return xhBienBanTinhKhoRes;
     }
 
