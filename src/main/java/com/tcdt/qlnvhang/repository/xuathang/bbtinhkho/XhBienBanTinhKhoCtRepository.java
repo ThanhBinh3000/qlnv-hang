@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface XhBienBanTinhKhoCtRepository extends BaseRepository<XhBienBanTinhKhoCt, Long> {
-    void deleteAllByBbTinhKhoId(Long id);
+    void deleteByBbTinhKhoId(Long id);
 
     void deleteByBbTinhKhoIdIn(List<Long> id);
 
