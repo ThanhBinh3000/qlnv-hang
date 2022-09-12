@@ -7,7 +7,9 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +60,7 @@ public class XhPhieuXuatKho extends TrangThaiBaseEntity implements Serializable 
     private String maChungLoaiHangHoa;
 
     @Column(name = "XUAT_KHO")
-    private LocalDate xuatKho;
+    private LocalDateTime xuatKho;
     @Column(name = "LY_DO_XUAT_KHO")
     private String lyDoXuatKho;
     @Column(name = "TRANG_THAI")

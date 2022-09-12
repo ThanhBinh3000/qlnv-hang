@@ -39,7 +39,6 @@ public class BhQdPheDuyetKhbdgResponse extends CommonResponse {
 	private String lyDoTuChoi;
 	private List<BhQdPheDuyetKhbdgCtResponse> chiTietList;
 	private List<FileDinhKem> fileDinhKems = new ArrayList<>();
-
 	// Dung cho cuc
 	private List<BhQdPheDuyetKhBdgThongTinTaiSanResponse> thongTinTaiSanCucs = new ArrayList<>();
 }

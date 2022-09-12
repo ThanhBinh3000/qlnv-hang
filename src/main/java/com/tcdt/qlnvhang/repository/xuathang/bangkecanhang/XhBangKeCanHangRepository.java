@@ -1,5 +1,6 @@
-package com.tcdt.qlnvhang.repository.xuathang.phieuxuatkho;
+package com.tcdt.qlnvhang.repository.xuathang.bangkecanhang;
 
+import com.tcdt.qlnvhang.entities.xuathang.bangkecanhang.XhBangKeCanHang;
 import com.tcdt.qlnvhang.entities.xuathang.phieuxuatkho.XhPhieuXuatKho;
 import com.tcdt.qlnvhang.repository.BaseRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -11,13 +12,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface XhPhieuXuatKhoRepository extends BaseRepository<XhPhieuXuatKho, Long>, XhPhieuXuatKhoRepositoryCustom {
+public interface XhBangKeCanHangRepository extends BaseRepository<XhBangKeCanHang, Long>, XhBangKeCanHangRepositoryCustom {
     @Transactional
     @Modifying
     void deleteByIdIn(List<Long> ids);
 
-    Optional<XhPhieuXuatKho> findFirstBySoHd(String so);
+    Optional<XhBangKeCanHang> findFirstBySoBangKe(String so);
 
-    @Query(value = "select max(id) from XhPhieuXuatKho")
+    @Query(value = "select max(id) from XhBangKeCanHang")
     Long getMaxId();
 }

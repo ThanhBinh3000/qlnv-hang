@@ -16,9 +16,19 @@ public class XhPhieuXuatKhoCt {
     private Long id;
     @Column(name = "PHIEU_XUAT_KHO_ID")
     private Long pxuatKhoId;
-    @Column(name = "CHUNG_TU")
-    private String chungTu;
-    @Column(name = "TEN_FILE")
-    private String tenFile;
 
+    @Column(name = "TEN")
+    private String ten;
+    @Column(name = "MA_SO")
+    private String maSo;
+    @Column(name = "DON_VI_TINH")
+    private String dvTinh;
+    @Column(name = "SL_YEU_CAU")
+    private Integer slYeuCau;
+    @Column(name = "SL_THUC_XUAT")
+    private Integer slThucXuat;
+    @Column(name = "DON_GIA")
+    private Integer donGia;
+    @Column(name = "THANH_TIEN")
+    private Integer thanhTien;
 }

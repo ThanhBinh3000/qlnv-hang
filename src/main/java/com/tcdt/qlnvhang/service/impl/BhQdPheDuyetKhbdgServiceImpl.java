@@ -311,6 +311,7 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 		} else if (Contains.CAP_TONG_CUC.equalsIgnoreCase(userInfo.getCapDvi())) {
 			response.setChiTietList(this.getThongTinTaiSanTongCuc(theEntity.getId()));
 		}
+
 		return response;
 	}
 

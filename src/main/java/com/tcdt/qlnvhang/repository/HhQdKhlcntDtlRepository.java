@@ -1,13 +1,14 @@
 package com.tcdt.qlnvhang.repository;
 
 import com.tcdt.qlnvhang.table.HhQdKhlcntDtl;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 
-public interface HhQdKhlcntDtlRepository extends BaseRepository<HhQdKhlcntDtl, Long> {
+public interface HhQdKhlcntDtlRepository extends JpaRepository<HhQdKhlcntDtl, Long> {
 
     void deleteAllByIdQdHdr(Long idQdHdr);
 

@@ -1,11 +1,13 @@
 package com.tcdt.qlnvhang.response.xuathang.phieuxuatkho;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.exolab.castor.types.DateTime;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ public class XhPhieuXuatKhoRes {
     private String tenSqdx;
     private Long pknclId;
     private String maDvi;
+    private String tenDvi;
     private String maQHNS;
     private String soHd;
 
@@ -42,25 +45,14 @@ public class XhPhieuXuatKhoRes {
     private String maChungLoaiHangHoa;
     private String tenChungLoaiHangHoa;
 
-
-    private LocalDate xuatKho;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime xuatKho;
     private String lyDoXuatKho;
     private String trangThai;
     private String tenTrangThai;
     private String ghiChu;
     private String tongTien;
-//    private Integer so;
-//    private Integer nam;
-//
-//
-//    private LocalDate ngayTao;
-//    private Long nguoiTaoId;
-//    private LocalDate ngaySua;
-//    private Long nguoiSuaId;
-//    private Long nguoiGuiDuyetId;
-//    private LocalDate ngayGuiDuyet;
-//    private Long nguoiPduyetId;
-//    private LocalDate ngayPduyet;
+
     private List<XhPhieuXuatKhoCtRes> ds = new ArrayList<>();
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 }
