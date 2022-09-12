@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
 public class XhPhieuXuatKhoServiceImpl implements XhPhieuXuatKhoService {
 
     private static final String SHEET_PHIEU_XUAT_KHO = "Phiếu xuất kho";
-
+    private final String MA_DS = "/PXK-CCDTVP";
     @Autowired
     XhPhieuXuatKhoRepository xuatKhoRepo;
 
@@ -74,6 +74,9 @@ public class XhPhieuXuatKhoServiceImpl implements XhPhieuXuatKhoService {
         UserInfo userInfo = UserUtils.getUserInfo();
         XhPhieuXuatKho item = new XhPhieuXuatKho();
         BeanUtils.copyProperties(req, item, "id");
+        Long count = xuatKhoRepo.getMaxId();
+        if (count == null) count = 1L;
+        item.setSpXuatKho(count.intValue() + 1 + "/" + LocalDate.now().getYear() + MA_DS);
         item.setNgayTao(LocalDate.now());
         item.setNguoiTaoId(userInfo.getId());
         item.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
@@ -241,21 +244,13 @@ public class XhPhieuXuatKhoServiceImpl implements XhPhieuXuatKhoService {
 
         XhPhieuXuatKho item = optional.get();
         String trangThai = item.getTrangThai();
-        if (NhapXuatHangTrangThaiEnum.CHODUYET_KTVBQ.getId().equals(stReq.getTrangThai())) {
+        if (NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
                 return false;
 
-            item.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_KTVBQ.getId());
+            item.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId());
             item.setNguoiGuiDuyetId(userInfo.getId());
             item.setNgayGuiDuyet(LocalDate.now());
-
-        } else if (NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(stReq.getTrangThai())) {
-            if (!NhapXuatHangTrangThaiEnum.CHODUYET_KTVBQ.getId().equals(trangThai))
-                return false;
-
-            item.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId());
-            item.setNguoiPduyetId(userInfo.getId());
-            item.setNgayPduyet(LocalDate.now());
 
         } else if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
@@ -264,15 +259,6 @@ public class XhPhieuXuatKhoServiceImpl implements XhPhieuXuatKhoService {
             item.setTrangThai(NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId());
             item.setNguoiPduyetId(userInfo.getId());
             item.setNgayPduyet(LocalDate.now());
-
-        } else if (NhapXuatHangTrangThaiEnum.TUCHOI_KTVBQ.getId().equals(stReq.getTrangThai())) {
-            if (!NhapXuatHangTrangThaiEnum.CHODUYET_KTVBQ.getId().equals(trangThai))
-                return false;
-
-            item.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_KTVBQ.getId());
-            item.setNguoiPduyetId(userInfo.getId());
-            item.setNgayPduyet(LocalDate.now());
-            item.setLyDoTuChoi(stReq.getLyDo());
 
         } else if (NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))

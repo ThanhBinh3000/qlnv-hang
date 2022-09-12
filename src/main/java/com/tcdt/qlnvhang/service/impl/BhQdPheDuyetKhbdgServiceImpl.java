@@ -303,13 +303,14 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 			response.setTenVatTuCha(dmVattu.getTen());
 		}
 
-		List<BhQdPheDuyetKhbdgCtResponse> chiTietList = this.getThongTinTaiSanTongCuc(theEntity.getId());
-
 		if (Contains.CAP_CUC.equalsIgnoreCase(userInfo.getCapDvi())) {
-			chiTietList = chiTietList.stream().filter(item -> Objects.nonNull(item.getMaDonVi()))
-					.filter(item -> userInfo.getDvql().equals(item.getMaDonVi())).collect(Collectors.toList());
+			List<BhQdPheDuyetKhBdgThongTinTaiSan> taiSanBdgCuc = bhQdPheDuyetKhBdgThongTinTaiSanRepository.findTaiSanBdgCuc(theEntity.getTongHopDeXuatKhbdgId(), userInfo.getDvql());
+			List<BhQdPheDuyetKhBdgThongTinTaiSanResponse> taiSanCucRes = thongTinTaiSanResponseMapper.toDto(taiSanBdgCuc);
+			this.buildThongTinKho(taiSanCucRes);
+			response.setThongTinTaiSanCucs(taiSanCucRes);
+		} else if (Contains.CAP_TONG_CUC.equalsIgnoreCase(userInfo.getCapDvi())) {
+			response.setChiTietList(this.getThongTinTaiSanTongCuc(theEntity.getId()));
 		}
-		response.setChiTietList(chiTietList);
 
 		return response;
 	}

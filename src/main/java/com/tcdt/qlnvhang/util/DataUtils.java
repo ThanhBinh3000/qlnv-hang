@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.util;
 
+import com.ctc.wstx.util.DataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.repository.quyetdinhpheduyetketqualuachonnhathauvatu.GenericRepository;
 import lombok.extern.log4j.Log4j2;
@@ -7,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -61,4 +64,103 @@ public class DataUtils {
 		return Optional.ofNullable(obj).map(Object::toString).orElse("");
 	}
 
+	public static Long safeToLong(Object obj1) {
+		return safeToLong(obj1, 0L);
+	}
+
+	public static Long safeToLong(Object obj1, Long defaultValue) {
+		Long result = defaultValue;
+		if (obj1 != null) {
+			if (obj1 instanceof BigDecimal) {
+				return ((BigDecimal) obj1).longValue();
+			}
+			if (obj1 instanceof BigInteger) {
+				return ((BigInteger) obj1).longValue();
+			}
+			try {
+				result = Long.parseLong(obj1.toString());
+			} catch (Exception ignored) {
+			}
+		}
+
+		return result;
+	}
+
+	public static int safeToInt(Object obj1) {
+		return safeToInt(obj1, 0);
+	}
+
+	public static int safeToInt(Object obj1, int defaultValue) {
+		int result = defaultValue;
+		if (obj1 != null) {
+			try {
+				result = Integer.parseInt(obj1.toString());
+			} catch (Exception ignored) {
+			}
+		}
+
+		return result;
+	}
+
+	public static boolean isNullOrEmpty(final Collection<?> collection) {
+		return collection == null || collection.isEmpty();
+	}
+
+	public static boolean isNullOrEmpty(String st) {
+		return st == null || st.isEmpty() || st.equals("null");
+	}
+
+	public static boolean isNull(String s) {
+		return s == null || s.equals("null");
+	}
+
+	public static boolean isEmpty(String s) {
+		return s.equals("");
+	}
+
+	public static boolean isNullObject(Object obj1) {
+		if (obj1 == null) {
+			return true;
+		}
+		if (obj1 instanceof String) {
+			return isNullOrEmpty(obj1.toString());
+		}
+		return false;
+	}
+
+	public static String safeToString(Object obj1, String defaultValue) {
+		if (obj1 == null) {
+			return defaultValue;
+		}
+
+		return obj1.toString();
+	}
+
+	public static boolean isNotBlank(Object st) {
+		return !DataUtils.isNullObject(st);
+	}
+
+	public static String trim(String st) {
+		return st.trim();
+	}
+
+	public static String safeToString(Object obj1) {
+		return safeToString(obj1, "");
+	}
+
+	public static Double safeToDouble(Object obj1, Double defaultValue) {
+		Double result = defaultValue;
+		if (obj1 != null) {
+			try {
+				result = Double.parseDouble(obj1.toString());
+			} catch (Exception ignored) {
+			}
+		}
+
+		return result;
+	}
+
+	public static Double safeToDouble(Object obj1) {
+		return safeToDouble(obj1, 0.0);
+	}
 }

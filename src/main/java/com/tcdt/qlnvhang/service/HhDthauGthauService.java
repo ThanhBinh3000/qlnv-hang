@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -78,11 +79,16 @@ public class HhDthauGthauService extends BaseServiceImpl {
 		Map<String,String> mapVthh = getListDanhMucHangHoa();
 		optional.get().setTenVthh( StringUtils.isEmpty(optional.get().getLoaiVthh()) ? null : mapVthh.get(optional.get().getLoaiVthh()));
 		optional.get().setTenCloaiVthh( StringUtils.isEmpty(optional.get().getCloaiVthh()) ? null :mapVthh.get(optional.get().getCloaiVthh()));
-
+		Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
 
 		optional.get().setNthauDuThauList(hhDthauNthauDuthauRepository.findByIdDtGt(optional.get().getIdGoiThau()));
 		optional.get().setDiaDiemNhapList(hhDthauDdiemNhapRepository.findByIdDtGt(optional.get().getIdGoiThau()));
-
+		List<HhDthauDdiemNhap> dDiemNhap = hhDthauDdiemNhapRepository.findByIdDtGt(optional.get().getIdGoiThau());
+		dDiemNhap.forEach(s->{
+			s.setTenDvi(mapDmucDvi.get(s.getMaDvi()));
+			s.setTenDiemKho(mapDmucDvi.get(s.getMaDiemKho()));
+		});
+		optional.get().setDiaDiemNhapList(dDiemNhap);
 		return optional.get();
 	}
 
