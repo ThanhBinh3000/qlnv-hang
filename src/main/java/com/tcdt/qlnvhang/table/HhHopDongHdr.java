@@ -19,6 +19,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import com.tcdt.qlnvhang.entities.BaseEntity;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Where;
@@ -32,7 +33,7 @@ import lombok.Data;
 @Entity
 @Table(name = HhHopDongHdr.TABLE_NAME)
 @Data
-public class HhHopDongHdr implements Serializable {
+public class HhHopDongHdr extends BaseEntity implements Serializable  {
 	/**
 	 * 
 	 */
@@ -89,10 +90,7 @@ public class HhHopDongHdr implements Serializable {
 	String trangThai;
 	@Transient
 	String tenTrangThai;
-	Date ngayTao;
-	String nguoiTao;
-	Date ngaySua;
-	String nguoiSua;
+
 	String ldoTuchoi;
 	Date ngayGuiDuyet;
 	String nguoiGuiDuyet;

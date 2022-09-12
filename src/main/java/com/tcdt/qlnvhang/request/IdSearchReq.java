@@ -11,4 +11,5 @@ public class IdSearchReq {
 	Long id;
 	String maDvi;
 	List<Long> idList;
+	List<Long> ids;
 }

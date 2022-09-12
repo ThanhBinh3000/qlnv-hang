@@ -19,14 +19,15 @@ public interface HhHopDongRepository extends BaseRepository<HhHopDongHdr, Long> 
 			value = "SELECT * " +
 					"FROM HH_HOP_DONG_HDR  HDR" +
 					" WHERE (:loaiVthh IS NULL OR HDR.LOAI_VTHH = :loaiVthh) " +
-					"  AND (:soHd IS NULL OR HDR.SO_HD = :soHd) " +
-					"  AND (:tenHd IS NULL OR HDR.TEN_HD = :tenHd) " +
+					"  AND (:soHd IS NULL OR HDR.SO_HD LIKE CONCAT(CONCAT('%',:soHd),'%')) " +
+					"  AND (:tenHd IS NULL OR LOWER(HDR.TEN_HD) LIKE LOWER(CONCAT(CONCAT('%',:tenHd),'%'))) " +
 					"  AND (:nhaCcap IS NULL OR HDR.SO_HD = :nhaCcap) " +
 					"  AND (:tuNgayKy IS NULL OR HDR.NGAY_KY >= TO_DATE(:tuNgayKy, 'yyyy-MM-dd')) " +
 					"  AND (:denNgayKy IS NULL OR HDR.NGAY_KY <= TO_DATE(:denNgayKy, 'yyyy-MM-dd')) " +
+					"  AND (:maDvi IS NULL OR HDR.MA_DVI LIKE CONCAT(:maDvi,'%')) " +
 					"  AND (:trangThai IS NULL OR HDR.TRANG_THAI = :trangThai) ",
 			nativeQuery = true)
-	Page<HhHopDongHdr> select(String loaiVthh, String soHd, String tenHd, String nhaCcap,String tuNgayKy,String denNgayKy, String trangThai, Pageable pageable);
+	Page<HhHopDongHdr> select(String loaiVthh, String soHd, String tenHd, String nhaCcap,String tuNgayKy,String denNgayKy, String trangThai,String maDvi, Pageable pageable);
 
 	List<HhHopDongHdr> findByIdIn(Collection<Long> ids);
 
