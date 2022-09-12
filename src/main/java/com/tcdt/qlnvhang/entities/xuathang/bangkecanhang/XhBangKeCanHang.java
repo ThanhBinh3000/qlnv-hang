@@ -3,10 +3,10 @@ package com.tcdt.qlnvhang.entities.xuathang.bangkecanhang;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.joda.time.LocalDate;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 

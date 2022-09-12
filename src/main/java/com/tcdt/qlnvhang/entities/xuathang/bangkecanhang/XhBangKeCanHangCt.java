@@ -1,9 +1,9 @@
 package com.tcdt.qlnvhang.entities.xuathang.bangkecanhang;
 
 import lombok.Data;
-import org.joda.time.LocalDate;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = XhBangKeCanHangCt.TABLE_NAME)

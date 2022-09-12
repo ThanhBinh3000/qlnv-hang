@@ -3,11 +3,8 @@ package com.tcdt.qlnvhang.service.xuathang.bangkecanhang;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.search.xuathang.XhBangKeCanHangSearchReq;
-import com.tcdt.qlnvhang.request.search.xuathang.XhPhieuXuatKhoSearchReq;
 import com.tcdt.qlnvhang.request.xuathang.bangkecanhang.XhBangKeCanHangReq;
-import com.tcdt.qlnvhang.request.xuathang.xuatkho.XhPhieuXuatKhoReq;
 import com.tcdt.qlnvhang.response.xuathang.bangkecanhang.XhBangKeCanHangRes;
-import com.tcdt.qlnvhang.response.xuathang.phieuxuatkho.XhPhieuXuatKhoRes;
 import org.springframework.data.domain.Page;
 
 import javax.servlet.http.HttpServletResponse;

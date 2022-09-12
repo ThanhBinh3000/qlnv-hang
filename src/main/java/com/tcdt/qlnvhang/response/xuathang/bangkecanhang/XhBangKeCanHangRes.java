@@ -3,7 +3,7 @@ package com.tcdt.qlnvhang.response.xuathang.bangkecanhang;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -32,8 +32,8 @@ public class XhBangKeCanHangRes {
     private String tenNhakho;
     private String maNgankho;
     private String tenNgankho;
-    private String maNganlo;
-    private String tenNganlo;
+    private String maLokho;
+    private String tenLokho;
     private String maLoaiHangHoa;
     private String tenLoaiHangHoa;
     private String maChungLoaiHangHoa;
@@ -46,6 +46,7 @@ public class XhBangKeCanHangRes {
     private Integer nam;
     private String lyDoTuChoi;
     private String soHopDong;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate ngayNhap;
     private String dviTinhId;
     // trọng lượng bao bì

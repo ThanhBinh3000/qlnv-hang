@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.repository.xuathang.bangkecanhang;
 
 import com.tcdt.qlnvhang.entities.xuathang.bangkecanhang.XhBangKeCanHangCt;
-import com.tcdt.qlnvhang.entities.xuathang.phieuxuatkho.XhPhieuXuatKhoCt;
 import com.tcdt.qlnvhang.repository.BaseRepository;
 import org.springframework.stereotype.Repository;
 

@@ -3,8 +3,9 @@ package com.tcdt.qlnvhang.request.xuathang.bangkecanhang;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.joda.time.LocalDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +44,7 @@ public class XhBangKeCanHangReq {
     private Integer nam;
     private String lyDoTuChoi;
     private String soHopDong;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate ngayNhap;
     private String dviTinhId;
     // trọng lượng bao bì
