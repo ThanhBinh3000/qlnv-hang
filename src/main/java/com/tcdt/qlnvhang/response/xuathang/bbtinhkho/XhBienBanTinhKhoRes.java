@@ -23,6 +23,10 @@ public class XhBienBanTinhKhoRes {
     private String nhaKho;
     private String nganKho;
     private String loKho;
+    private String maDiemKho;
+    private String maNhaKho;
+    private String maNganKho;
+    private String maLoKho;
     private String soBienBan;
     private double soLuongNhap;
     private double soLuongXuat;

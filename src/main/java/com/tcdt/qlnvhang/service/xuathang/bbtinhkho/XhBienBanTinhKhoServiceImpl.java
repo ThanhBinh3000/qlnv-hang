@@ -87,8 +87,6 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
         Long count = xhBienBanTinhKhoRepository.getMaxId();
         if (count == null) count = 1L;
         item.setSoBienBan(count.intValue() + 1 + "/" + LocalDate.now().getYear() + MA_DS);
-        item.setSoLuongXuat(req.getSoLuongXuat());
-        item.setSlConlaiXuatcuoi(req.getSoLuongThucTeConLai());
         item.setMaDiemkho(req.getMaDiemkho());
         item.setMaNhakho(req.getMaNhakho());
         item.setMaNgankho(req.getMaNgankho());
@@ -109,22 +107,27 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
         //cần lấy tỉ lệ hao dôi từ biên bản hao dôi
 
         //tính số lượng
-        Object[] data = xhBienBanTinhKhoRepository.getHangTrongKho(item.getMaLokho(), item.getMaChungLoaiHangHoa()).get(0);
-        if (data != null || data.length > 0) {
-            slNhap = ((BigDecimal) data[10]).doubleValue();
-            slSoSach = ((BigDecimal) data[3]).doubleValue();
-            if (slSoSach > item.getSlConlaiXuatcuoi()) {
-                slThuaConLaiXuatCuoi = slSoSach - item.getSlConlaiXuatcuoi();
-                slThieuConLaiXuatCuoi = 0;
-            } else {
-                slThuaConLaiXuatCuoi = 0;
-                slThieuConLaiXuatCuoi = item.getSlConlaiXuatcuoi() - slSoSach;
+        List<Object[]> fromDb = xhBienBanTinhKhoRepository.getHangTrongKho(item.getMaLokho(), item.getMaChungLoaiHangHoa());
+        if(null!=fromDb&&!fromDb.isEmpty()){
+            Object[] data = fromDb.get(0);
+            item.setSoLuongXuat(req.getSoLuongXuat());
+            item.setSlConlaiXuatcuoi(req.getSoLuongThucTeConLai());
+            if (data != null || data.length > 0) {
+                slNhap = ((BigDecimal) data[10]).doubleValue();
+                slSoSach = ((BigDecimal) data[3]).doubleValue();
+                if (slSoSach > item.getSlConlaiXuatcuoi()) {
+                    slThuaConLaiXuatCuoi = slSoSach - item.getSlConlaiXuatcuoi();
+                    slThieuConLaiXuatCuoi = 0;
+                } else {
+                    slThuaConLaiXuatCuoi = 0;
+                    slThieuConLaiXuatCuoi = item.getSlConlaiXuatcuoi() - slSoSach;
+                }
             }
+            item.setSoLuongNhap(slNhap);
+            item.setSlConlaiSosach(slSoSach);
+            item.setSlThuaConlai(slThuaConLaiXuatCuoi);
+            item.setSlThieuConlai(slThieuConLaiXuatCuoi);
         }
-        item.setSoLuongNhap(slNhap);
-        item.setSlConlaiSosach(slSoSach);
-        item.setSlThuaConlai(slThuaConLaiXuatCuoi);
-        item.setSlThieuConlai(slThieuConLaiXuatCuoi);
 
         xhBienBanTinhKhoRepository.save(item);
         List<XhBienBanTinhKhoCt> ds = req.getDs().stream().map(q -> {
@@ -298,7 +301,7 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
             responses.add(response);
         });
 
-        return new PageImpl<>(responses, pageable, responses.size());
+        return new PageImpl<>(responses, pageable, xhBienBanTinhKhoRepository.count(req));
     }
 
     @Override
@@ -351,6 +354,10 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
         xhBienBanTinhKhoRes.setChungLoaiHH(qlnvDmVattuRepository.findByMa(xhBienBanTinhKho.getMaChungLoaiHangHoa()).getTen());
         xhBienBanTinhKhoRes.setTenDvi(xhBienBanTinhKho.getCapDvi());
         xhBienBanTinhKhoRes.setMaDvi(xhBienBanTinhKho.getMaDvi());
+        xhBienBanTinhKhoRes.setMaDiemKho(xhBienBanTinhKho.getMaDiemkho());
+        xhBienBanTinhKhoRes.setMaNhaKho(xhBienBanTinhKho.getMaNhakho());
+        xhBienBanTinhKhoRes.setMaNganKho(xhBienBanTinhKho.getMaNgankho());
+        xhBienBanTinhKhoRes.setMaLoKho(xhBienBanTinhKho.getMaLokho());
         xhBienBanTinhKhoRes.setDiemKho(ktDiemKho.findByMaDiemkhoIn(Collections.singleton(xhBienBanTinhKho.getMaDiemkho())).get(0).getTenDiemkho());
         xhBienBanTinhKhoRes.setNhaKho(ktNhaKho.findByMaNhakhoIn(Collections.singleton(xhBienBanTinhKho.getMaNhakho())).get(0).getTenNhakho());
         xhBienBanTinhKhoRes.setNganKho(ktNganKho.findByMaNgankhoIn(Collections.singleton(xhBienBanTinhKho.getMaNgankho())).get(0).getTenNgankho());
