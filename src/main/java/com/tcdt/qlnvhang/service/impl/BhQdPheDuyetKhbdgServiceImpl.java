@@ -304,7 +304,7 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 		}
 
 		if (Contains.CAP_CUC.equalsIgnoreCase(userInfo.getCapDvi())) {
-			List<BhQdPheDuyetKhBdgThongTinTaiSan> taiSanBdgCuc = bhQdPheDuyetKhBdgThongTinTaiSanRepository.findTaiSanBdgCuc(theEntity.getTongHopDeXuatKhbdgId(), userInfo.getDvql());
+			List<BhQdPheDuyetKhBdgThongTinTaiSan> taiSanBdgCuc = bhQdPheDuyetKhBdgThongTinTaiSanRepository.findTaiSanBdgCuc(theEntity.getId(), userInfo.getDvql());
 			List<BhQdPheDuyetKhBdgThongTinTaiSanResponse> taiSanCucRes = thongTinTaiSanResponseMapper.toDto(taiSanBdgCuc);
 			this.buildThongTinKho(taiSanCucRes);
 			response.setThongTinTaiSanCucs(taiSanCucRes);
