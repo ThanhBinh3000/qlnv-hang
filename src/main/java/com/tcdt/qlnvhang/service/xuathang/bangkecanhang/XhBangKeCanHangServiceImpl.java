@@ -1,15 +1,20 @@
 package com.tcdt.qlnvhang.service.xuathang.bangkecanhang;
 
+import com.tcdt.qlnvhang.entities.xuathang.XhQdGiaoNvuXuat;
 import com.tcdt.qlnvhang.entities.xuathang.bangkecanhang.XhBangKeCanHang;
 import com.tcdt.qlnvhang.entities.xuathang.bangkecanhang.XhBangKeCanHangCt;
+import com.tcdt.qlnvhang.entities.xuathang.phieuxuatkho.XhPhieuXuatKho;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
+import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtDiemKhoRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganKhoRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNhaKhoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bangkecanhang.XhBangKeCanHangCtRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bangkecanhang.XhBangKeCanHangRepository;
+import com.tcdt.qlnvhang.repository.xuathang.phieuxuatkho.XhPhieuXuatKhoRepository;
+import com.tcdt.qlnvhang.repository.xuathang.quyetdinhgiaonhiemvuxuat.XhQdGiaoNvuXuatRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -62,19 +67,26 @@ public class XhBangKeCanHangServiceImpl implements XhBangKeCanHangService {
     KtNganKhoRepository ktNganKhoRepository;
     @Autowired
     KtNhaKhoRepository ktNhaKhoRepository;
-
     @Autowired
     QlnvDmDonviRepository qlnvDmDonviRepository;
+    @Autowired
+    XhQdGiaoNvuXuatRepository xhQdGiaoNvuXuatRepository;
+    @Autowired
+    XhPhieuXuatKhoRepository xuatKhoRepo;
+    @Autowired
+    QlnvDmVattuRepository dmVattuRepository;
 
     @Override
     @Transactional(rollbackOn = Exception.class)
     public XhBangKeCanHangRes create(XhBangKeCanHangReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         XhBangKeCanHang item = new XhBangKeCanHang();
+
+        BeanUtils.copyProperties(req, item, "id");
         Long count = bangKeCanHangRepository.getMaxId();
         if (count == null) count = 1L;
         item.setSoBangKe(count.intValue() + 1 + "/" + LocalDate.now().getYear() + MA_DS);
-        BeanUtils.copyProperties(req, item, "id");
+
         item.setNgayTao(LocalDate.now());
         item.setNguoiTaoId(userInfo.getId());
         item.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
@@ -88,6 +100,8 @@ public class XhBangKeCanHangServiceImpl implements XhBangKeCanHangService {
                 .map(d -> {
                     XhBangKeCanHangCt xuatKhoCt = new XhBangKeCanHangCt();
                     BeanUtils.copyProperties(d, xuatKhoCt, "id");
+                    xuatKhoCt.setNgayTao(LocalDate.now());
+                    xuatKhoCt.setNguoiTaoId(userInfo.getId());
                     return xuatKhoCt;
                 })
                 .collect(Collectors.toList());
@@ -140,6 +154,7 @@ public class XhBangKeCanHangServiceImpl implements XhBangKeCanHangService {
     private List<XhBangKeCanHangCt> saveListChiTiet(Long parentId,
                                                     List<XhBangKeCanHangCtReq> chiTietReqs,
                                                     Map<Long, XhBangKeCanHangCt> mapChiTiet) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
         List<XhBangKeCanHangCt> chiTiets = new ArrayList<>();
         for (XhBangKeCanHangCtReq req : chiTietReqs) {
             Long id = req.getId();
@@ -154,6 +169,8 @@ public class XhBangKeCanHangServiceImpl implements XhBangKeCanHangService {
 
             BeanUtils.copyProperties(req, chiTiet, "id");
             chiTiet.setBkCanHangID(parentId);
+            chiTiet.setNgaySua(LocalDate.now());
+            chiTiet.setNguoiSuaId(userInfo.getId());
             chiTiets.add(chiTiet);
         }
 
@@ -178,19 +195,25 @@ public class XhBangKeCanHangServiceImpl implements XhBangKeCanHangService {
 
     @Override
     public XhBangKeCanHangRes detail(Long id) throws Exception {
-        XhBangKeCanHang phieuXuatKho = bangKeCanHangRepository.findById(id).get();
-        if (phieuXuatKho == null)
+        XhBangKeCanHang bangKeCanHang = bangKeCanHangRepository.findById(id).get();
+        if (bangKeCanHang == null)
             throw new Exception("Không tìm thấy dữ liệu.");
 
         XhBangKeCanHangRes item = new XhBangKeCanHangRes();
-        BeanUtils.copyProperties(phieuXuatKho, item, "id");
+        BeanUtils.copyProperties(bangKeCanHang, item);
         item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
         // chưa tìm ngăn kho lô kho các giá trị tên
         item.setTenNhakho(ktNhaKhoRepository.findByMaNhakho(item.getMaNhakho()).getTenNhakho());
         item.setTenDiemkho(ktDiemKhoRepository.findByMaDiemkho(item.getMaDiemkho()).getTenDiemkho());
         item.setTenNgankho(ktNganKhoRepository.findByMaNgankho(item.getMaNgankho()).getTenNgankho());
-        item.setTenNganlo(ktNganLoRepository.findFirstByMaNganlo(item.getMaNganlo()).getTenNganlo());
+        item.setTenLokho(ktNganLoRepository.findByMaNganlo(item.getMaLokho()).getTenNganlo());
         item.setTenDvi(qlnvDmDonviRepository.findByMaDvi(item.getMaDvi()).getTenDvi());
+        Optional<XhQdGiaoNvuXuat> nvuXuat = xhQdGiaoNvuXuatRepository.findById(item.getSqdxId());
+        item.setSoSqdx(nvuXuat.get().getSoQuyetDinh());
+        Optional<XhPhieuXuatKho> xuatKho = xuatKhoRepo.findById(item.getPhieuXuatKhoId());
+        item.setSoPhieuXuatKho(xuatKho.get().getSpXuatKho());
+        item.setTenLoaiHangHoa(dmVattuRepository.findByMa(item.getMaLoaiHangHoa()).getTen());
+        item.setTenChungLoaiHangHoa(dmVattuRepository.findByMa(item.getMaChungLoaiHangHoa()).getTen());
         item.setDs(findXuatKhoCtResByPxuatKho(id));
 
         return item;
@@ -290,7 +313,6 @@ public class XhBangKeCanHangServiceImpl implements XhBangKeCanHangService {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         List<XhBangKeCanHangRes> list = bangKeCanHangRepository.search(req);
         list.forEach(item -> {
-            item.setDs(findXuatKhoCtResByPxuatKho(item.getId()));
             item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
         });
         Page<XhBangKeCanHangRes> page = new PageImpl<>(list, pageable, list.size());
@@ -326,7 +348,7 @@ public class XhBangKeCanHangServiceImpl implements XhBangKeCanHangService {
                 objs[5] = item.getTenDiemkho();
                 objs[6] = item.getTenNhakho();
                 objs[7] = item.getTenNgankho();
-                objs[8] = item.getTenNganlo();
+                objs[8] = item.getMaLokho();
                 objs[9] = NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai());
                 dataList.add(objs);
             }

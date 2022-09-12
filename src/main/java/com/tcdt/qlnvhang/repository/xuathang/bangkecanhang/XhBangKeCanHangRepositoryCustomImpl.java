@@ -11,7 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.Tuple;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,7 +50,8 @@ public class XhBangKeCanHangRepositoryCustomImpl implements XhBangKeCanHangRepos
 
             kh.setSoPhieuXuatKho(item.get("SO_PHIEU_XUAT_KHO", String.class));
 
-            kh.setNgayNhap(item.get("NGAY_NHAP", LocalDate.class));
+            Timestamp xuatkho = item.get("NGAY_NHAP", Timestamp.class);
+            kh.setNgayNhap(xuatkho.toLocalDateTime().toLocalDate());
 
             kh.setMaDiemkho(item.get("MA_DIEMKHO", String.class));
             kh.setTenDiemkho(item.get("TEN_DIEMKHO", String.class));
@@ -58,8 +59,8 @@ public class XhBangKeCanHangRepositoryCustomImpl implements XhBangKeCanHangRepos
             kh.setTenNhakho(item.get("TEN_NHAKHO", String.class));
             kh.setMaNgankho(item.get("MA_NGANKHO", String.class));
             kh.setTenNgankho(item.get("TEN_NGANKHO", String.class));
-            kh.setMaNganlo(item.get("MA_LOKHO", String.class));
-            kh.setTenNganlo(item.get("TEN_NGANLO", String.class));
+            kh.setMaLokho(item.get("MA_LOKHO", String.class));
+            kh.setTenLokho(item.get("TEN_NGANLO", String.class));
             kh.setTrangThai(item.get("TRANG_THAI", String.class));
             return kh;
         }).collect(Collectors.toList());
