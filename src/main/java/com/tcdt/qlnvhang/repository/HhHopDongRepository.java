@@ -18,7 +18,7 @@ public interface HhHopDongRepository extends BaseRepository<HhHopDongHdr, Long> 
 	@Query(
 			value = "SELECT * " +
 					"FROM HH_HOP_DONG_HDR  HDR" +
-					" WHERE (:loaiVthh IS NULL OR HDR.LOAI_VTHH = :loaiVthh) " +
+					" WHERE (:loaiVthh IS NULL OR HDR.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) " +
 					"  AND (:soHd IS NULL OR HDR.SO_HD LIKE CONCAT(CONCAT('%',:soHd),'%')) " +
 					"  AND (:tenHd IS NULL OR LOWER(HDR.TEN_HD) LIKE LOWER(CONCAT(CONCAT('%',:tenHd),'%'))) " +
 					"  AND (:nhaCcap IS NULL OR HDR.SO_HD = :nhaCcap) " +

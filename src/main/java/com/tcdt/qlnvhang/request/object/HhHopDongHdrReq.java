@@ -32,6 +32,8 @@ public class HhHopDongHdrReq {
 	@ApiModelProperty(example = "20/QD-TCDT")
 	String canCu;
 
+	Long canCuId;
+
 	String idGoiThau;
 
 //	String dviTrungThau;
