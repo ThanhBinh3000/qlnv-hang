@@ -145,7 +145,7 @@ public class HhQdGiaoNvuNhapxuatController {
 			@Valid @RequestBody HhQdNhapxuatSearchReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(service.timKiem(objReq));
+			resp.setData(service.searchPage(objReq));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (

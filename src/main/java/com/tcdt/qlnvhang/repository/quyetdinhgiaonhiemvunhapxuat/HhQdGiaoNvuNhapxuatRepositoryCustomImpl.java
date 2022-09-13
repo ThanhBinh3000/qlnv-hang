@@ -46,8 +46,13 @@ public class HhQdGiaoNvuNhapxuatRepositoryCustomImpl implements HhQdGiaoNvuNhapx
         builder.append("WHERE 1 = 1 ");
 
         if (!StringUtils.isEmpty(req.getLoaiVthh())) {
-            builder.append("AND ").append("qd.loaiVthh = :loaiVthh ");
+            if(req.getLoaiVthh().equalsIgnoreCase("02")){
+                builder.append("AND ").append("qd.loaiVthh LIKE :loaiVthh");
+            }else{
+                builder.append("AND ").append("qd.loaiVthh = :loaiVthh ");
+            }
         }
+
 
         if (req.getNamNhap() != null) {
             builder.append("AND ").append("qd.namNhap = :namNhap ");
@@ -126,7 +131,11 @@ public class HhQdGiaoNvuNhapxuatRepositoryCustomImpl implements HhQdGiaoNvuNhapx
         }
 
         if (!StringUtils.isEmpty(req.getLoaiVthh())) {
-            query.setParameter("loaiVthh", req.getLoaiVthh());
+            if(req.getLoaiVthh().equalsIgnoreCase("02")) {
+                query.setParameter("loaiVthh", req.getLoaiVthh() + "%");
+            }else{
+                query.setParameter("loaiVthh", req.getLoaiVthh());
+            }
         }
 
         if (!CollectionUtils.isEmpty(req.getTrangThais())) {

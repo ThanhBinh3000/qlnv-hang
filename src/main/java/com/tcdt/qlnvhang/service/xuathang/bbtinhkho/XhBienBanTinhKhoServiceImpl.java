@@ -5,10 +5,7 @@ import com.tcdt.qlnvhang.entities.xuathang.bbtinhkho.XhBienBanTinhKhoCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
-import com.tcdt.qlnvhang.repository.khotang.KtDiemKhoRepository;
-import com.tcdt.qlnvhang.repository.khotang.KtNganKhoRepository;
-import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
-import com.tcdt.qlnvhang.repository.khotang.KtNhaKhoRepository;
+import com.tcdt.qlnvhang.repository.khotang.*;
 import com.tcdt.qlnvhang.repository.xuathang.bbtinhkho.XhBienBanTinhKhoCtRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bbtinhkho.XhBienBanTinhKhoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.quyetdinhgiaonhiemvuxuat.XhQdGiaoNvuXuatRepository;
@@ -75,6 +72,8 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
     KtNganLoRepository ktNganLo;
     @Autowired
     QlnvDmVattuRepository qlnvDmVattuRepository;
+    @Autowired
+    KtTongKhoRepository ktTongKhoRepository;
 
     @Override
     @Transactional(rollbackOn = Exception.class)
@@ -84,12 +83,10 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
         XhBienBanTinhKho item = new XhBienBanTinhKho();
         item.setQdgnvnxId(req.getQdId());
         item.setMaDvi(req.getMaDvi());
-        item.setCapDvi(req.getCapDvi());
+        item.setCapDvi(ktTongKhoRepository.findByMaTongKho(item.getMaDvi()).get().getTenTongKho());
         Long count = xhBienBanTinhKhoRepository.getMaxId();
         if (count == null) count = 1L;
         item.setSoBienBan(count.intValue() + 1 + "/" + LocalDate.now().getYear() + MA_DS);
-        item.setSoLuongXuat(req.getSoLuongXuat());
-        item.setSlConlaiXuatcuoi(req.getSoLuongThucTeConLai());
         item.setMaDiemkho(req.getMaDiemkho());
         item.setMaNhakho(req.getMaNhakho());
         item.setMaNgankho(req.getMaNgankho());
@@ -110,22 +107,27 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
         //cần lấy tỉ lệ hao dôi từ biên bản hao dôi
 
         //tính số lượng
-        Object[] data = xhBienBanTinhKhoRepository.getHangTrongKho(item.getMaLokho(), item.getMaChungLoaiHangHoa()).get(0);
-        if (data != null || data.length > 0) {
-            slNhap = ((BigDecimal) data[10]).doubleValue();
-            slSoSach = ((BigDecimal) data[3]).doubleValue();
-            if (slSoSach > item.getSlConlaiXuatcuoi()) {
-                slThuaConLaiXuatCuoi = slSoSach - item.getSlConlaiXuatcuoi();
-                slThieuConLaiXuatCuoi = 0;
-            } else {
-                slThuaConLaiXuatCuoi = 0;
-                slThieuConLaiXuatCuoi = item.getSlConlaiXuatcuoi() - slSoSach;
+        List<Object[]> fromDb = xhBienBanTinhKhoRepository.getHangTrongKho(item.getMaLokho(), item.getMaChungLoaiHangHoa());
+        if (null != fromDb && !fromDb.isEmpty()) {
+            Object[] data = fromDb.get(0);
+            item.setSoLuongXuat(req.getSoLuongXuat());
+            item.setSlConlaiXuatcuoi(req.getSoLuongThucTeConLai());
+            if (data != null || data.length > 0) {
+                slNhap = ((BigDecimal) data[10]).doubleValue();
+                slSoSach = ((BigDecimal) data[3]).doubleValue();
+                if (slSoSach > item.getSlConlaiXuatcuoi()) {
+                    slThuaConLaiXuatCuoi = slSoSach - item.getSlConlaiXuatcuoi();
+                    slThieuConLaiXuatCuoi = 0;
+                } else {
+                    slThuaConLaiXuatCuoi = 0;
+                    slThieuConLaiXuatCuoi = item.getSlConlaiXuatcuoi() - slSoSach;
+                }
             }
+            item.setSoLuongNhap(slNhap);
+            item.setSlConlaiSosach(slSoSach);
+            item.setSlThuaConlai(slThuaConLaiXuatCuoi);
+            item.setSlThieuConlai(slThieuConLaiXuatCuoi);
         }
-        item.setSoLuongNhap(slNhap);
-        item.setSlConlaiSosach(slSoSach);
-        item.setSlThuaConlai(slThuaConLaiXuatCuoi);
-        item.setSlThieuConlai(slThieuConLaiXuatCuoi);
 
         xhBienBanTinhKhoRepository.save(item);
         List<XhBienBanTinhKhoCt> ds = req.getDs().stream().map(q -> {
@@ -142,13 +144,14 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public XhBienBanTinhKhoRes update(XhBienBanTinhKhoReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
 
         XhBienBanTinhKho item = xhBienBanTinhKhoRepository.findById(req.getId()).get();
         item.setQdgnvnxId(req.getQdId());
         item.setMaDvi(req.getMaDvi());
-        item.setCapDvi(req.getCapDvi());
+        item.setCapDvi(ktTongKhoRepository.findByMaTongKho(item.getMaDvi()).get().getTenTongKho());
         item.setSoLuongXuat(req.getSoLuongXuat());
         item.setSlConlaiXuatcuoi(req.getSoLuongThucTeConLai());
         item.setMaDiemkho(req.getMaDiemkho());
@@ -206,6 +209,7 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public boolean delete(Long id) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         Optional<XhBienBanTinhKho> optional = xhBienBanTinhKhoRepository.findById(id);
@@ -216,12 +220,13 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
         if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(item.getTrangThai())) {
             throw new Exception("Không thể xóa Biên bản tịnh kho đã đã duyệt");
         }
-        xhBienBanTinhKhoCtRepository.deleteAllByBbTinhKhoId(item.getId());
+        xhBienBanTinhKhoCtRepository.deleteByBbTinhKhoId(item.getId());
         xhBienBanTinhKhoRepository.delete(item);
         return true;
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public boolean deleteMultiple(DeleteReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         xhBienBanTinhKhoCtRepository.deleteByBbTinhKhoIdIn(req.getIds());
@@ -299,7 +304,7 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
             responses.add(response);
         });
 
-        return new PageImpl<>(responses, pageable, responses.size());
+        return new PageImpl<>(responses, pageable, xhBienBanTinhKhoRepository.count(req));
     }
 
     @Override
@@ -352,6 +357,10 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
         xhBienBanTinhKhoRes.setChungLoaiHH(qlnvDmVattuRepository.findByMa(xhBienBanTinhKho.getMaChungLoaiHangHoa()).getTen());
         xhBienBanTinhKhoRes.setTenDvi(xhBienBanTinhKho.getCapDvi());
         xhBienBanTinhKhoRes.setMaDvi(xhBienBanTinhKho.getMaDvi());
+        xhBienBanTinhKhoRes.setMaDiemKho(xhBienBanTinhKho.getMaDiemkho());
+        xhBienBanTinhKhoRes.setMaNhaKho(xhBienBanTinhKho.getMaNhakho());
+        xhBienBanTinhKhoRes.setMaNganKho(xhBienBanTinhKho.getMaNgankho());
+        xhBienBanTinhKhoRes.setMaLoKho(xhBienBanTinhKho.getMaLokho());
         xhBienBanTinhKhoRes.setDiemKho(ktDiemKho.findByMaDiemkhoIn(Collections.singleton(xhBienBanTinhKho.getMaDiemkho())).get(0).getTenDiemkho());
         xhBienBanTinhKhoRes.setNhaKho(ktNhaKho.findByMaNhakhoIn(Collections.singleton(xhBienBanTinhKho.getMaNhakho())).get(0).getTenNhakho());
         xhBienBanTinhKhoRes.setNganKho(ktNganKho.findByMaNgankhoIn(Collections.singleton(xhBienBanTinhKho.getMaNgankho())).get(0).getTenNgankho());
@@ -367,8 +376,8 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
         xhBienBanTinhKhoRes.setKienNghi(xhBienBanTinhKho.getKienNghi());
         xhBienBanTinhKhoRes.setNgayLapPhieu(xhBienBanTinhKho.getNgayTao());
         xhBienBanTinhKhoRes.setTrangThai(xhBienBanTinhKho.getTrangThai());
-        xhBienBanTinhKhoRes.setTenTrangThai(TrangThaiEnum.getTenById(xhBienBanTinhKhoRes.getTrangThai()));
-        xhBienBanTinhKhoRes.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(xhBienBanTinhKhoRes.getTrangThai()));
+        xhBienBanTinhKhoRes.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(xhBienBanTinhKhoRes.getTrangThai()));
+        xhBienBanTinhKhoRes.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(xhBienBanTinhKhoRes.getTrangThai()));
         return xhBienBanTinhKhoRes;
     }
 
@@ -378,40 +387,44 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
         return xhBienBanTinhKhoCtRes;
     }
 
-    private XhBienBanTinhKho convertObject(Object[] o){
+    private XhBienBanTinhKho convertObject(Object[] o) {
         XhBienBanTinhKho xhBienBanTinhKho = new XhBienBanTinhKho();
 
-        xhBienBanTinhKho.setId(((BigDecimal)o[0]).longValue());
-        xhBienBanTinhKho.setQdgnvnxId(((BigDecimal)o[1]).longValue());
-        if(o[2]!=null)xhBienBanTinhKho.setMaDvi(o[2].toString());
-        if(o[3]!=null)xhBienBanTinhKho.setCapDvi(o[3].toString());
-        if(o[4]!=null)xhBienBanTinhKho.setSoBienBan(o[4].toString());
-        if(o[5]!=null)xhBienBanTinhKho.setSoLuongNhap(((BigDecimal)o[5]).doubleValue());
-        if(o[6]!=null)xhBienBanTinhKho.setSoLuongXuat(((BigDecimal)o[6]).doubleValue());
-        if(o[7]!=null)xhBienBanTinhKho.setMaLokho(o[7].toString());
-        if(o[8]!=null)xhBienBanTinhKho.setMaNgankho(o[8].toString());
-        if(o[9]!=null)xhBienBanTinhKho.setMaNhakho(o[9].toString());
-        if(o[10]!=null)xhBienBanTinhKho.setMaDiemkho(o[10].toString());
-        if(o[11]!=null)xhBienBanTinhKho.setMaChungLoaiHangHoa(o[11].toString());
-        if(o[12]!=null)xhBienBanTinhKho.setMaLoaiHangHoa(o[12].toString());
-        if(o[13]!=null)xhBienBanTinhKho.setKienNghi(o[13].toString());
-        if(o[14]!=null)xhBienBanTinhKho.setNguyenNhan(o[14].toString());
-        if(o[15]!=null)xhBienBanTinhKho.setTrangThai(o[15].toString());
-        if(o[16]!=null)xhBienBanTinhKho.setLyDoTuChoi(o[16].toString());
-        if(o[17]!=null)xhBienBanTinhKho.setNguoiTaoId(((BigDecimal)o[17]).longValue());
-        if(o[18]!=null)xhBienBanTinhKho.setNgayTao(LocalDate.parse(o[18].toString().split(" ")[0], DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        if(o[19]!=null)xhBienBanTinhKho.setNguoiSuaId(((BigDecimal)o[19]).longValue());
-        if(o[20]!=null)xhBienBanTinhKho.setNgaySua(LocalDate.parse(o[20].toString().split(" ")[0], DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        if(o[21]!=null)xhBienBanTinhKho.setNguoiGuiDuyetId(((BigDecimal)o[21]).longValue());
-        if(o[22]!=null)xhBienBanTinhKho.setNgayGuiDuyet(LocalDate.parse(o[22].toString().split(" ")[0], DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        if(o[23]!=null)xhBienBanTinhKho.setNguoiPduyetId(((BigDecimal)o[23]).longValue());
-        if(o[24]!=null)xhBienBanTinhKho.setNgayPduyet(LocalDate.parse(o[24].toString().split(" ")[0], DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        if(o[25]!=null)xhBienBanTinhKho.setSo(((BigDecimal)o[25]).intValue());
-        if(o[26]!=null)xhBienBanTinhKho.setNam(((BigDecimal)o[26]).intValue());
-        if(o[27]!=null)xhBienBanTinhKho.setSlConlaiSosach(((BigDecimal)o[27]).doubleValue());
-        if(o[28]!=null)xhBienBanTinhKho.setSlConlaiXuatcuoi(((BigDecimal)o[28]).doubleValue());
-        if(o[29]!=null)xhBienBanTinhKho.setSlThuaConlai(((BigDecimal)o[29]).doubleValue());
-        if(o[30]!=null)xhBienBanTinhKho.setSlThieuConlai(((BigDecimal)o[30]).doubleValue());
+        xhBienBanTinhKho.setId(((BigDecimal) o[0]).longValue());
+        xhBienBanTinhKho.setQdgnvnxId(((BigDecimal) o[1]).longValue());
+        if (o[2] != null) xhBienBanTinhKho.setMaDvi(o[2].toString());
+        if (o[3] != null) xhBienBanTinhKho.setCapDvi(o[3].toString());
+        if (o[4] != null) xhBienBanTinhKho.setSoBienBan(o[4].toString());
+        if (o[5] != null) xhBienBanTinhKho.setSoLuongNhap(((BigDecimal) o[5]).doubleValue());
+        if (o[6] != null) xhBienBanTinhKho.setSoLuongXuat(((BigDecimal) o[6]).doubleValue());
+        if (o[7] != null) xhBienBanTinhKho.setMaLokho(o[7].toString());
+        if (o[8] != null) xhBienBanTinhKho.setMaNgankho(o[8].toString());
+        if (o[9] != null) xhBienBanTinhKho.setMaNhakho(o[9].toString());
+        if (o[10] != null) xhBienBanTinhKho.setMaDiemkho(o[10].toString());
+        if (o[11] != null) xhBienBanTinhKho.setMaChungLoaiHangHoa(o[11].toString());
+        if (o[12] != null) xhBienBanTinhKho.setMaLoaiHangHoa(o[12].toString());
+        if (o[13] != null) xhBienBanTinhKho.setKienNghi(o[13].toString());
+        if (o[14] != null) xhBienBanTinhKho.setNguyenNhan(o[14].toString());
+        if (o[15] != null) xhBienBanTinhKho.setTrangThai(o[15].toString());
+        if (o[16] != null) xhBienBanTinhKho.setLyDoTuChoi(o[16].toString());
+        if (o[17] != null) xhBienBanTinhKho.setNguoiTaoId(((BigDecimal) o[17]).longValue());
+        if (o[18] != null)
+            xhBienBanTinhKho.setNgayTao(LocalDate.parse(o[18].toString().split(" ")[0], DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        if (o[19] != null) xhBienBanTinhKho.setNguoiSuaId(((BigDecimal) o[19]).longValue());
+        if (o[20] != null)
+            xhBienBanTinhKho.setNgaySua(LocalDate.parse(o[20].toString().split(" ")[0], DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        if (o[21] != null) xhBienBanTinhKho.setNguoiGuiDuyetId(((BigDecimal) o[21]).longValue());
+        if (o[22] != null)
+            xhBienBanTinhKho.setNgayGuiDuyet(LocalDate.parse(o[22].toString().split(" ")[0], DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        if (o[23] != null) xhBienBanTinhKho.setNguoiPduyetId(((BigDecimal) o[23]).longValue());
+        if (o[24] != null)
+            xhBienBanTinhKho.setNgayPduyet(LocalDate.parse(o[24].toString().split(" ")[0], DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        if (o[25] != null) xhBienBanTinhKho.setSo(((BigDecimal) o[25]).intValue());
+        if (o[26] != null) xhBienBanTinhKho.setNam(((BigDecimal) o[26]).intValue());
+        if (o[27] != null) xhBienBanTinhKho.setSlConlaiSosach(((BigDecimal) o[27]).doubleValue());
+        if (o[28] != null) xhBienBanTinhKho.setSlConlaiXuatcuoi(((BigDecimal) o[28]).doubleValue());
+        if (o[29] != null) xhBienBanTinhKho.setSlThuaConlai(((BigDecimal) o[29]).doubleValue());
+        if (o[30] != null) xhBienBanTinhKho.setSlThieuConlai(((BigDecimal) o[30]).doubleValue());
 
         return xhBienBanTinhKho;
     }

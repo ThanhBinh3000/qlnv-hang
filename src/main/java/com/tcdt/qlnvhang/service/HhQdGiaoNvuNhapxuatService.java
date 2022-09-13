@@ -49,4 +49,6 @@ public interface HhQdGiaoNvuNhapxuatService {
 
 	@Transactional(rollbackOn = Exception.class)
 	boolean deleteMultiple(DeleteReq req) throws Exception;
+
+	Page<HhQdGiaoNvuNhapxuatHdr> searchPage(HhQdNhapxuatSearchReq req) throws Exception;
 }
