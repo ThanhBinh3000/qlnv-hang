@@ -258,7 +258,7 @@ public class XhBienBanHaoDoiServiceImpl implements XhBienBanHaoDoiService {
             responses.add(response);
         });
 
-        return new PageImpl<>(responses, pageable, responses.size());
+        return new PageImpl<>(responses, pageable, xhBienBanHaoDoiRepository.count(req));
     }
 
     @Override
