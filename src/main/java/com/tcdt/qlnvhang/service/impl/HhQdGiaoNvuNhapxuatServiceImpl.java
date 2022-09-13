@@ -88,12 +88,23 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		List<HhQdGiaoNvuNhapxuatDtl1> dtls1 = new ArrayList<HhQdGiaoNvuNhapxuatDtl1>();
 		if (!CollectionUtils.isEmpty(hopDongIds)) {
 			List<HhHopDongHdr> hhHopDongHdrs = hhHopDongRepository.findAllById(hopDongIds);
-			hhHopDongHdrs.forEach(hopDong -> {
+			for (HhHopDongHdr idHd : hhHopDongHdrs) {
+				if (idHd.getTrangThai().equals(Contains.DABANHANH_QD)) {
+					throw new Exception("Số hợp đồng " + idHd.getSoHd() + "Đã được quyết định giao nhiệm vụ nhập hàng ban hành ");
+				}
 				HhQdGiaoNvuNhapxuatDtl1 dtl1 = new HhQdGiaoNvuNhapxuatDtl1();
 				dtl1.setParent(dataMap);
-				dtl1.setHopDong(hopDong);
+				dtl1.setHopDong(idHd);
 				dtls1.add(dtl1);
-			}) ;
+				dataMap.setTenVthh(idHd.getLoaiVthh());
+				dataMap.setTenCloaiVthh(idHd.getCloaiVthh());
+			}
+//			hhHopDongHdrs.forEach(hopDong -> {
+//				HhQdGiaoNvuNhapxuatDtl1 dtl1 = new HhQdGiaoNvuNhapxuatDtl1();
+//				dtl1.setParent(dataMap);
+//				dtl1.setHopDong(hopDong);
+//				dtls1.add(dtl1);
+//			}) ;
 		}
 		dataMap.setChildren1(dtls1);
 
@@ -157,7 +168,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 				dtl1.setParent(dataDB);
 				dtl1.setHopDong(hopDong);
 				dtls1.add(dtl1);
-			}) ;
+			});
 		}
 		dataDB.setChildren1(dtls1);
 
@@ -261,66 +272,43 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 		HhQdGiaoNvuNhapxuatHdr item = optional.get();
 
-		String trangThai = item.getTrangThai();
-
 		if (Contains.LOAI_VTHH_VATTU.equals(item.getLoaiVthh())) {
-			if (NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId().equals(stReq.getTrangThai())) {
-				if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
-					return false;
-
-				item.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId());
-				item.setNguoiGuiDuyet(userInfo.getUsername());
-				item.setNgayGuiDuyet(getDateTimeNow());
-
-			} else if (NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId().equals(stReq.getTrangThai())) {
-				if (!NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId().equals(trangThai))
-					return false;
-
-				item.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId());
-				item.setNguoiPduyet(userInfo.getUsername());
-				item.setNgayPduyet(getDateTimeNow());
-
-			} else if (NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId().equals(stReq.getTrangThai())) {
-				if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId().equals(trangThai))
-					return false;
-
-				item.setTrangThai(NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId());
-				item.setNguoiPduyet(userInfo.getUsername());
-				item.setNgayPduyet(getDateTimeNow());
-
-			}else if (NhapXuatHangTrangThaiEnum.TUCHOI_TP.getId().equals(stReq.getTrangThai())) {
-				if (!NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId().equals(trangThai))
-					return false;
-
-				item.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_TP.getId());
-				item.setNguoiPduyet(userInfo.getUsername());
-				item.setNgayPduyet(getDateTimeNow());
-
-			} else if (NhapXuatHangTrangThaiEnum.TUCHOI_LDC.getId().equals(stReq.getTrangThai())) {
-				if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId().equals(trangThai))
-					return false;
-
-				item.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_LDC.getId());
-				item.setNguoiPduyet(userInfo.getUsername());
-				item.setNgayPduyet(getDateTimeNow());
-
-			} else {
-				throw new Exception("Bad request.");
+			String status = stReq.getTrangThai() + optional.get().getTrangThai();
+			switch (status) {
+				case Contains.CHODUYET_TP + Contains.DUTHAO:
+				case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+				case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
+				case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
+					optional.get().setNguoiGuiDuyet(getUser().getUsername());
+					optional.get().setNgayGuiDuyet(getDateTimeNow());
+					break;
+				case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
+				case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
+					optional.get().setNguoiPduyet(getUser().getUsername());
+					optional.get().setNgayPduyet(getDateTimeNow());
+					optional.get().setLdoTuchoi(stReq.getLyDo());
+					break;
+				case Contains.BAN_HANH + Contains.CHODUYET_LDC:
+					optional.get().setNguoiPduyet(getUser().getUsername());
+					optional.get().setNgayPduyet(getDateTimeNow());
+					break;
+				default:
+					throw new Exception("Phê duyệt không thành công");
 			}
 		} else {
-			if (NhapXuatHangTrangThaiEnum.BAN_HANH.getId().equals(stReq.getTrangThai())) {
-				if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
-					return false;
-
-				item.setTrangThai(NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
-				item.setNguoiPduyet(userInfo.getUsername());
-				item.setNgayPduyet(getDateTimeNow());
-
-			} else {
-				throw new Exception("Bad request.");
+			String status = stReq.getTrangThai() + optional.get().getTrangThai();
+			switch (status) {
+				case Contains.BAN_HANH + Contains.DUTHAO:
+					optional.get().setNguoiPduyet(getUser().getUsername());
+					optional.get().setNgayPduyet(getDateTimeNow());
+					break;
+				default:
+					throw new Exception("Phê duyệt không thành công");
 			}
 		}
-
+		if (item.getTrangThai().equals(Contains.BAN_HANH)) {
+			hhHopDongRepository.updateTongHop(Contains.DABANHANH_QD);
+		}
 		hhQdGiaoNvuNhapxuatRepository.save(item);
 		return true;
 	}
@@ -391,7 +379,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		List<HhQdGiaoNvuNhapxuatHdr> data = page.getContent();
 
 		String title = "Danh sách quyết định giao nhiệm vụ nhập xuất";
-		String[] rowsName = new String[] { "STT", "Số quyết định", "Ngày quyết định", "Năm Nhập","Loại hàng hóa","Chủng loại hàng hóa",
+		String[] rowsName = new String[]{"STT", "Số quyết định", "Ngày quyết định", "Năm Nhập", "Loại hàng hóa", "Chủng loại hàng hóa",
 				"Trích Yếu Quyết Định", "Trạng thái"};
 		String filename = "Danh_sach_quyet_dinh_giao_nhiem_vu_nhap_xuat.xlsx";
 
@@ -455,8 +443,8 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 				qd.setChildren1(dtl1Map.get(qd.getId()));
 			}
 
-			for (HhQdGiaoNvuNhapxuatDtl1 dtl:dtl1s) {
-				Optional<HhHopDongHdr> hd =hhHopDongRepository.findById(dtl.getHopDong().getId());
+			for (HhQdGiaoNvuNhapxuatDtl1 dtl : dtl1s) {
+				Optional<HhHopDongHdr> hd = hhHopDongRepository.findById(dtl.getHopDong().getId());
 				qd.setTenVthh(mapDmucHh.get(hd.get().getLoaiVthh()));
 				qd.setTenCloaiVthh(mapDmucHh.get(hd.get().getCloaiVthh()));
 			}
@@ -477,7 +465,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			count.setGao(hhQdGiaoNvuNhapxuatRepository.countQdCuc(dvql, Contains.LOAI_VTHH_GAO));
 			count.setVatTu(hhQdGiaoNvuNhapxuatRepository.countQdCuc(dvql, Contains.LOAI_VTHH_VATTU));
 			count.setMuoi(hhQdGiaoNvuNhapxuatRepository.countQdCuc(dvql, Contains.LOAI_VTHH_MUOI));
-		} else if (Contains.CAP_CHI_CUC.equalsIgnoreCase(userInfo.getCapDvi())){
+		} else if (Contains.CAP_CHI_CUC.equalsIgnoreCase(userInfo.getCapDvi())) {
 			count.setTatCa(hhQdGiaoNvuNhapxuatRepository.countQdChiCuc(dvql, null));
 			count.setThoc(hhQdGiaoNvuNhapxuatRepository.countQdChiCuc(dvql, Contains.LOAI_VTHH_THOC));
 			count.setGao(hhQdGiaoNvuNhapxuatRepository.countQdChiCuc(dvql, Contains.LOAI_VTHH_GAO));
@@ -512,5 +500,46 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		}
 	}
 
-
+	@Override
+	public Page<HhQdGiaoNvuNhapxuatHdr> searchPage(HhQdNhapxuatSearchReq req) throws Exception {
+		UserInfo userInfo = SecurityContextService.getUser();
+		if (userInfo == null) throw new Exception("Bad request.");
+		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),
+				req.getPaggingReq().getLimit(), Sort.by("id").ascending());
+		Page<HhQdGiaoNvuNhapxuatHdr> data = null;
+		if (userInfo.getCapDvi().equalsIgnoreCase(Contains.CAP_CUC)) {
+			data = hhQdGiaoNvuNhapxuatRepository.selectPageCuc(
+					req.getNamNhap(),
+					req.getSoQd(),
+					req.getLoaiVthh(),
+					req.getTrichYeu(),
+					Contains.convertDateToString(req.getTuNgayQd()),
+					Contains.convertDateToString(req.getDenNgayQd()),
+					userInfo.getDvql(),
+					pageable);
+		}else {
+			data = hhQdGiaoNvuNhapxuatRepository.selectPageChiCuc(
+					req.getNamNhap(),
+					req.getSoQd(),
+					req.getLoaiVthh(),
+					req.getTrichYeu(),
+					Contains.convertDateToString(req.getTuNgayQd()),
+					Contains.convertDateToString(req.getDenNgayQd()),
+					userInfo.getDvql(),
+					pageable);
+		}
+			Map<String, String> mapDmucHh = getListDanhMucHangHoa();
+			List<Long> listId = data.getContent().stream().map(HhQdGiaoNvuNhapxuatHdr::getId).collect(Collectors.toList());
+			List<HhQdGiaoNvuNhapxuatDtl1> dtl1s = hhQdGiaoNvuNhapxuatDtl1Repository.findByParentIdIn(listId);
+			data.getContent().forEach(f -> {
+				f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+				for (HhQdGiaoNvuNhapxuatDtl1 dtl : dtl1s) {
+					Optional<HhHopDongHdr> hd = hhHopDongRepository.findById(dtl.getHopDong().getId());
+					f.setTenVthh(mapDmucHh.get(hd.get().getLoaiVthh()));
+					f.setTenCloaiVthh(mapDmucHh.get(hd.get().getCloaiVthh()));
+				}
+				f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+			});
+			return data;
+	}
 }
