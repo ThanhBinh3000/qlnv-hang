@@ -1,10 +1,13 @@
 package com.tcdt.qlnvhang.table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.tcdt.qlnvhang.entities.kehoachluachonnhathau.DiaDiemNhap;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "NH_QD_GIAO_NVU_NHAPXUAT_CT1")
@@ -23,5 +26,8 @@ public class HhQdGiaoNvuNhapxuatDtl1 implements Serializable {
 
     @Column(name = "HOP_DONG_ID")
     private Long hopDongId;
+
+    @Transient
+    List<HhHopDongDdiemNhapKho> dongDdiemNhapKhos =new ArrayList<>();
 
 }
