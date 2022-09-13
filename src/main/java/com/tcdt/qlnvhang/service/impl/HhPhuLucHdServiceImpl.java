@@ -46,7 +46,7 @@ public class HhPhuLucHdServiceImpl extends BaseServiceImpl implements HhPhuLucHd
 	@Override
 	public HhPhuLucHd create(HhPhuLucHdReq objReq) throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
-		if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh()))
+		if (objReq.getLoaiVthh() == null)
 			throw new Exception("Loại vật tư hàng hóa không phù hợp");
 
 		Optional<HhHopDongHdr> qOpHdong = hhHopDongRepository.findBySoHd(objReq.getSoHd());
