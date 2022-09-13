@@ -90,7 +90,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			List<HhHopDongHdr> hhHopDongHdrs = hhHopDongRepository.findAllById(hopDongIds);
 			for (HhHopDongHdr idHd : hhHopDongHdrs) {
 				if (idHd.getTrangThai().equals(Contains.DABANHANH_QD)) {
-					throw new Exception("Số hợp đồng " + idHd.getSoHd() + "Đã được quyết định giao nhiệm vụ nhập hàng ban hành ");
+					throw new Exception("Số hợp đồng " + idHd.getSoHd() + " đã được quyết định giao nhiệm vụ nhập hàng ban hành ");
 				}
 				HhQdGiaoNvuNhapxuatDtl1 dtl1 = new HhQdGiaoNvuNhapxuatDtl1();
 				dtl1.setParent(dataMap);
@@ -392,7 +392,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			objs[1] = qd.getSoQd();
 			objs[2] = convertDateToString(qd.getNgayQdinh());
 			objs[3] = qd.getNamNhap();
-			objs[4] = qd.getTenVthh();
+			objs[4] = qd.getTenLoaiVthh();
 			objs[5] = qd.getTenCloaiVthh();
 			objs[6] = qd.getTrichYeu();
 			objs[7] = NhapXuatHangTrangThaiEnum.getTenById(qd.getTrangThai());
@@ -535,7 +535,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 				f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
 				for (HhQdGiaoNvuNhapxuatDtl1 dtl : dtl1s) {
 					Optional<HhHopDongHdr> hd = hhHopDongRepository.findById(dtl.getHopDong().getId());
-					f.setTenVthh(mapDmucHh.get(hd.get().getLoaiVthh()));
+					f.setTenLoaiVthh(mapDmucHh.get(hd.get().getLoaiVthh()));
 					f.setTenCloaiVthh(mapDmucHh.get(hd.get().getCloaiVthh()));
 				}
 				f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));

@@ -28,7 +28,6 @@ public class HhQdGiaoNvuNhapxuatDtl implements Serializable {
 	Date denNgayThien;
 	Double soLuong;
 	String maDvi;
-
 	String donViTinh;
 
 	@Transient
@@ -37,9 +36,5 @@ public class HhQdGiaoNvuNhapxuatDtl implements Serializable {
 	@Transient
 	String tenDvi;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_hdr")
-	@JsonBackReference
-	private HhQdGiaoNvuNhapxuatHdr parent;
 
 }

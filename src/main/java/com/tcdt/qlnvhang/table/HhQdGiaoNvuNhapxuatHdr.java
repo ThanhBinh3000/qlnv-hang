@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.transaction.Transactional;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.util.Contains;
@@ -47,17 +48,16 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 	private Long id;
 
 	String soQd;
-	String veViec;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-	@Temporal(TemporalType.DATE)
-	Date ngayKy;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-	@Temporal(TemporalType.DATE)
-	Date ngayHluc;
+	Date ngayQdinh;
+
 	String maDvi;
+
 	String loaiQd;
+
 	String trangThai;
+
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayTao;
 	String nguoiTao;
@@ -65,25 +65,26 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngaySua;
 	String nguoiSua;
+
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayGuiDuyet;
 	String nguoiGuiDuyet;
+
 	String ldoTuchoi;
+
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayPduyet;
 	String nguoiPduyet;
+
 	String ghiChu;
+
 	String capDvi;
+
 	String loaiVthh;
+
 	String trichYeu;
+
 	Integer namNhap;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-	Date ngayQdinh;
-
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-	@Temporal(TemporalType.DATE)
-	Date tgNhapKhoMuonNhat;
-
 
 	@Transient
 	String tenDvi;
@@ -98,70 +99,16 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 	String trangThaiDuyet;
 
 	@Transient
-	String TenVthh;
-
-	String cloaiVthh;
+	String tenLoaiVthh;
 
 	@Transient
-	String TenCloaiVthh;
-
+	private List<HhQdGiaoNvuNhapxuatDtl> dtlList = new ArrayList<>();
 
 	@Transient
-	Long hdId;
+	private List<HhQdGiaoNvuNhapxuatDtl1> hopDongList = new ArrayList<>();
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "id_hdr")
-	@JsonManagedReference
-	private List<HhQdGiaoNvuNhapxuatDtl> children = new ArrayList<>();
-
-	public void setChildren(List<HhQdGiaoNvuNhapxuatDtl> children) {
-		this.children.clear();
-		for (HhQdGiaoNvuNhapxuatDtl child : children) {
-			child.setParent(this);
-		}
-		this.children.addAll(children);
-	}
-
-	public void addChild(HhQdGiaoNvuNhapxuatDtl child) {
-		child.setParent(this);
-		this.children.add(child);
-	}
-
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "id_hdr")
-	@JsonManagedReference
-	private List<HhQdGiaoNvuNhapxuatDtl1> children1 = new ArrayList<>();
-
-	public void setChildren1(List<HhQdGiaoNvuNhapxuatDtl1> children) {
-		this.children1.clear();
-		for (HhQdGiaoNvuNhapxuatDtl1 child : children) {
-			child.setParent(this);
-		}
-		this.children1.addAll(children);
-	}
-
-	public void addChild1(HhQdGiaoNvuNhapxuatDtl1 child) {
-		child.setParent(this);
-		this.children1.add(child);
-	}
-
-	/*@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "id_hdr")
-	@JsonManagedReference
-	private List<HhDviThuchienQdinh> children1 = new ArrayList<>();*/
-
-	/*public void setChildren1(List<HhDviThuchienQdinh> children1) {
-		this.children1.clear();
-		for (HhDviThuchienQdinh child1 : children1) {
-			child1.setParent(this);
-		}
-		this.children1.addAll(children1);
-	}
-
-	public void addChild1(HhDviThuchienQdinh child1) {
-		child1.setParent(this);
-		this.children1.add(child1);
-	}*/
+	@Transient
+	private List<Long> hopDongIds = new ArrayList<>();
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)
