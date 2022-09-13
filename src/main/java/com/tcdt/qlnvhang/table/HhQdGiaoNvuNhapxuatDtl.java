@@ -6,8 +6,6 @@ import java.util.Date;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import lombok.Data;
 
 @Entity
@@ -30,9 +28,14 @@ public class HhQdGiaoNvuNhapxuatDtl implements Serializable {
 
 	@Column(name = "LOAI_VTHH")
 	String loaiVthh;
+	@Transient
+	String tenLoaiVthh;
 
 	@Column(name = "CLOAI_VTHH")
 	String cloaiVthh;
+	@Transient
+	String tenCloaiVthh;
+
 
 	@Column(name = "DON_VI_TINH")
 	String donViTinh;

@@ -193,14 +193,24 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		HhQdGiaoNvuNhapxuatHdr data = qOptional.get();
 
 		data.setTenLoaiQd(HhQdGiaoNvuNhapxuatHdrLoaiQd.getTenById(data.getLoaiQd()));
-		Map<String, String> mapDmucDvi = getMapTenDvi();
-		data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
-
 		data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
 		data.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(data.getTrangThai()));
 //		this.setTenDvi(data);
 		List<HhQdGiaoNvuNhapxuatDtl1> cTiet = hhQdGiaoNvuNhapxuatDtl1Repository.findAllByIdHdr(data.getId());
 		List<Long> listIdHd = cTiet.stream().map(HhQdGiaoNvuNhapxuatDtl1::getHopDongId).collect(Collectors.toList());
+		Map<String, String> tenLoaiVthh = getListDanhMucChung("LOAI_HHOA");
+		Map<String, String> tenCloaiVthh = getListDanhMucHangHoa();
+		Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+		List<HhQdGiaoNvuNhapxuatDtl> hhQdGiaoNvuNhapxuatDtl= dtlRepository.findAllByIdHdr(data.getId());
+		for (HhQdGiaoNvuNhapxuatDtl dtl:hhQdGiaoNvuNhapxuatDtl){
+			dtl.setTenLoaiVthh(tenLoaiVthh.get(dtl.getLoaiVthh()));
+			dtl.setCloaiVthh(tenCloaiVthh.get(dtl.getCloaiVthh()));
+			dtl.setTenDvi(mapDmucDvi.get(dtl.getMaDvi()));
+		}
+		data.setDtlList(hhQdGiaoNvuNhapxuatDtl);
+		data.setHopDongList(hhQdGiaoNvuNhapxuatDtl1Repository.findAllByIdHdr(data.getId()));
+		data.setHopDongIds(listIdHd);
+		data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
 
 		if (!CollectionUtils.isEmpty(listIdHd)) {
 			Map<Long, List<HhHopDongDdiemNhapKho>> mapDiaDiaNhapKho = hhHopDongDdiemNhapKhoRepository.findAllByIdHdongHdrIn(listIdHd)
@@ -208,6 +218,10 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 			for (HhQdGiaoNvuNhapxuatDtl1 dtl1 : data.getHopDongList()) {
 				dtl1.setDongDdiemNhapKhos(mapDiaDiaNhapKho.get(dtl1.getHopDongId()));
+				dtl1.getDongDdiemNhapKhos().forEach( item -> {
+					item.setTenDiemKho(mapDmucDvi.get(item.getMaDiemKho()));
+					item.setTenDvi(mapDmucDvi.get(item.getMaDvi()));
+				});
 			}
 		}
 

@@ -31,4 +31,6 @@ public class HhHopDongDdiemNhapKho implements Serializable {
 
 	@Transient
 	String tenDvi;
+	@Transient
+	String tenDiemKho;
 }
