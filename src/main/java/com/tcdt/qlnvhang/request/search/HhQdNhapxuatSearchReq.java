@@ -22,13 +22,10 @@ public class HhQdNhapxuatSearchReq extends BaseRequest {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date denNgayQd;
 
-	String soHd;
-
 	String maDvi;
 	String maVthh;
 	String loaiQd;
 	Long namNhap;
-	String veViec;
 	String loaiVthh;
 	String trichYeu;
 }

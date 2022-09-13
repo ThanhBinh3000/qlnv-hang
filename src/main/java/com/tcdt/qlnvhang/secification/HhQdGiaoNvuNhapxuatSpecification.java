@@ -30,11 +30,11 @@ public class HhQdGiaoNvuNhapxuatSpecification {
 					String maDvi = req.getMaDvi();
 					Date ngayQd = req.getNgayQd();
 					String soQd = req.getSoQd();
-					String soHd = req.getSoHd();
+//					String soHd = req.getSoHd();
 					String maVthh = req.getMaVthh();
 					String loaiQd = req.getLoaiQd();
 //					Integer namNhap = Integer.valueOf(req.getNamNhap());
-					String veViec = req.getVeViec();
+//					String veViec = req.getVeViec();
 
 					Join<HhQdGiaoNvuNhapxuatHdr, HhQdGiaoNvuNhapxuatDtl> joinQuerry = root.join("children");
 
@@ -54,8 +54,8 @@ public class HhQdGiaoNvuNhapxuatSpecification {
 					if (StringUtils.isNotBlank(soQd))
 						predicate.getExpressions().add(builder.and(builder.equal(root.get("soQd"), soQd)));
 
-					if (StringUtils.isNotBlank(soHd))
-						predicate.getExpressions().add(builder.and(builder.equal(root.get("soHd"), soHd)));
+//					if (StringUtils.isNotBlank(soHd))
+//						predicate.getExpressions().add(builder.and(builder.equal(root.get("soHd"), soHd)));
 
 					if (StringUtils.isNotBlank(maVthh))
 						predicate.getExpressions().add(builder.and(builder.equal(joinQuerry.get("maVthh"), maVthh)));
@@ -66,8 +66,8 @@ public class HhQdGiaoNvuNhapxuatSpecification {
 //					if (!Objects.isNull(namNhap))
 //						predicate.getExpressions().add(builder.and(builder.equal(root.get("namNhap"), namNhap)));
 
-					if (!Objects.isNull(veViec))
-						predicate.getExpressions().add(builder.and(builder.equal(root.get("veViec"), veViec)));
+//					if (!Objects.isNull(veViec))
+//						predicate.getExpressions().add(builder.and(builder.equal(root.get("veViec"), veViec)));
 
 				}
 				return predicate;

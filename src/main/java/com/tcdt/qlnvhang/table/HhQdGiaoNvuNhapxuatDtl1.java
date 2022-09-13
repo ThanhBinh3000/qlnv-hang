@@ -1,10 +1,13 @@
 package com.tcdt.qlnvhang.table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.tcdt.qlnvhang.entities.kehoachluachonnhathau.DiaDiemNhap;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "NH_QD_GIAO_NVU_NHAPXUAT_CT1")
@@ -18,16 +21,13 @@ public class HhQdGiaoNvuNhapxuatDtl1 implements Serializable {
     @SequenceGenerator(sequenceName = "QD_GIAO_NVU_NHAPXUAT_CT1_SEQ", allocationSize = 1, name = "QD_GIAO_NVU_NHAPXUAT_CT1_SEQ")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_hdr")
-    @JsonBackReference
-    private HhQdGiaoNvuNhapxuatHdr parent;
+    @Column(name = "id_hdr")
+    private Long idHdr;
 
-    @ManyToOne
-    @JoinColumn(name = "HOP_DONG_ID")
-    private HhHopDongHdr hopDong;
+    @Column(name = "HOP_DONG_ID")
+    private Long hopDongId;
 
-    public Long getParentId() {
-        return this.parent.getId();
-    }
+    @Transient
+    List<HhHopDongDdiemNhapKho> dongDdiemNhapKhos =new ArrayList<>();
+
 }

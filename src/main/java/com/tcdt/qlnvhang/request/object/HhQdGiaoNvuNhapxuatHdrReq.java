@@ -20,19 +20,9 @@ public class HhQdGiaoNvuNhapxuatHdrReq {
 	@ApiModelProperty(example = "20/QD-TCDT")
 	String soQd;
 
-	@Size(max = 250, message = "Về việc không được vượt quá 250 ký tự")
-	String veViec;
-
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-	@ApiModelProperty(example = "2022-09-05")
-	Date ngayKy;
-
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	@ApiModelProperty(example = "2022-09-05")
 	Date ngayQdinh;
-
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-	Date ngayHluc;
 
 	String maDvi;
 
@@ -55,9 +45,7 @@ public class HhQdGiaoNvuNhapxuatHdrReq {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date tgNhapKhoMuonNhat;
 
-	private List<HhQdGiaoNvuNhapxuatDtlReq> detail;
-
-	/*private List<HhDviThuhienQdinhReq> detail1;*/
+	private List<HhQdGiaoNvuNhapxuatDtlReq> detailList;
 
 	private List<FileDinhKemReq> fileDinhKems;
 

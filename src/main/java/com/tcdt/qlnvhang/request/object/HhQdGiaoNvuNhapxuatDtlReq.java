@@ -23,6 +23,13 @@ public class HhQdGiaoNvuNhapxuatDtlReq {
 	@ApiModelProperty(example = "MVT01")
 	String maVthh;
 
+	String loaiVthh;
+
+	String cloaiVthh;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date tgianNkho;
+
 	@NotNull(message = "Không được để trống")
 	@Size(max = 300, message = "Tên vật tư hàng hóa không được vượt quá 300 ký tự")
 	@ApiModelProperty(example = "Cục Hà Nội")
@@ -48,4 +55,6 @@ public class HhQdGiaoNvuNhapxuatDtlReq {
 	String donViTinh;
 
 	String maDvi;
+
+
 }
