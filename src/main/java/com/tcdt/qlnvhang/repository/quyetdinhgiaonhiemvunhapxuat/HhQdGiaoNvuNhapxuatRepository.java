@@ -87,7 +87,7 @@ public interface HhQdGiaoNvuNhapxuatRepository extends BaseRepository<HhQdGiaoNv
 	@Query(
 			value = " SELECT NX.* " +
 					" FROM NH_QD_GIAO_NVU_NHAPXUAT NX " +
-					" WHERE (:namNhap IS NULL OR NX.NAM_NHAP = :namNhap) " +
+					" WHERE (:namNhap IS NULL OR NX.NAM_NHAP = TO_NUMBER(:namNhap)) " +
 					"  AND (:soQd IS NULL OR LOWER(NX.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQd),'%'))) " +
 					"  AND (:loaiVthh IS NULL OR NX.LOAI_VTHH LIKE LOWER(:loaiVthh)) " +
 					"  AND (:trichYeu IS NULL OR LOWER(NX.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%'))) " +
@@ -96,7 +96,7 @@ public interface HhQdGiaoNvuNhapxuatRepository extends BaseRepository<HhQdGiaoNv
 					" AND ( NX.MA_DVI = :maDvi)  ",
 			countQuery = " SELECT COUNT(1) " +
 					" FROM NH_QD_GIAO_NVU_NHAPXUAT NX " +
-					" WHERE (:namNhap IS NULL OR NX.NAM_NHAP = :namNhap) " +
+					" WHERE 1 = 1 AND (:namNhap IS NULL OR NX.NAM_NHAP = TO_NUMBER(:namNhap)) " +
 					"  AND (:soQd IS NULL OR LOWER(NX.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQd),'%'))) " +
 					"  AND (:loaiVthh IS NULL OR NX.LOAI_VTHH LIKE LOWER(:loaiVthh)) " +
 					"  AND (:trichYeu IS NULL OR LOWER(NX.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%'))) " +
@@ -104,12 +104,12 @@ public interface HhQdGiaoNvuNhapxuatRepository extends BaseRepository<HhQdGiaoNv
 					"  AND (:denNgayQD IS NULL OR NX.NGAY_QDINH <= TO_DATE(:denNgayQD, 'yyyy-MM-dd')) " +
 					"  AND ( NX.MA_DVI = :maDvi) "
 			, nativeQuery = true)
-	Page<HhQdGiaoNvuNhapxuatHdr> selectPageCuc(Integer namNhap, String soQd, String loaiVthh, String trichYeu, String tuNgayQD, String denNgayQD, String maDvi, Pageable pageable);
+	Page<HhQdGiaoNvuNhapxuatHdr> selectPageCuc(Long namNhap, String soQd, String loaiVthh, String trichYeu, String tuNgayQD, String denNgayQD, String maDvi, Pageable pageable);
 
 	@Query(
 			value = " SELECT NX.* " +
 					" FROM NH_QD_GIAO_NVU_NHAPXUAT NX,NH_QD_GIAO_NVU_NHAPXUAT_CT NX_DTL " +
-					" WHERE (:namNhap IS NULL OR NX.NAM_NHAP = :namNhap) " +
+					" WHERE 1 = 1 AND (:namNhap IS NULL OR NX.NAM_NHAP = TO_NUMBER(:namNhap)) " +
 					"  AND (NX.ID = NX_DTL.ID_HDR) " +
 					"  AND (:soQd IS NULL OR LOWER(NX.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQd),'%'))) " +
 					"  AND (:loaiVthh IS NULL OR NX.LOAI_VTHH LIKE LOWER(:loaiVthh)) " +
@@ -118,8 +118,8 @@ public interface HhQdGiaoNvuNhapxuatRepository extends BaseRepository<HhQdGiaoNv
 					"  AND (:denNgayQD IS NULL OR NX.NGAY_QDINH <= TO_DATE(:denNgayQD, 'yyyy-MM-dd')) " +
 					"  AND ( NX_DTL.MA_DVI = :maDvi) ",
 			countQuery = " SELECT COUNT(1) " +
-					" FROM NH_QD_GIAO_NVU_NHAPXUAT NX ,NH_QD_GIAO_NVU_NHAPXUAT_CT NX_DTL" +
-					" WHERE (:namNhap IS NULL OR NX.NAM_NHAP = :namNhap) " +
+					" FROM NH_QD_GIAO_NVU_NHAPXUAT NX , NH_QD_GIAO_NVU_NHAPXUAT_CT NX_DTL " +
+					" WHERE 1 = 1 AND (:namNhap IS NULL OR NX.NAM_NHAP = TO_NUMBER(:namNhap)) " +
 					"  AND (NX.ID = NX_DTL.ID_HDR) " +
 					"  AND (:soQd IS NULL OR LOWER(NX.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQd),'%'))) " +
 					"  AND (:loaiVthh IS NULL OR NX.LOAI_VTHH LIKE LOWER(:loaiVthh)) " +
@@ -128,5 +128,5 @@ public interface HhQdGiaoNvuNhapxuatRepository extends BaseRepository<HhQdGiaoNv
 					"  AND (:denNgayQD IS NULL OR NX.NGAY_QDINH <= TO_DATE(:denNgayQD, 'yyyy-MM-dd')) " +
 					"   AND ( NX_DTL.MA_DVI = :maDvi) "
 			, nativeQuery = true)
-	Page<HhQdGiaoNvuNhapxuatHdr> selectPageChiCuc(Integer namNhap, String soQd, String loaiVthh, String trichYeu, String tuNgayQD, String denNgayQD, String maDvi, Pageable pageable);
+	Page<HhQdGiaoNvuNhapxuatHdr> selectPageChiCuc(Long namNhap, String soQd, String loaiVthh, String trichYeu, String tuNgayQD, String denNgayQD, String maDvi, Pageable pageable);
 }

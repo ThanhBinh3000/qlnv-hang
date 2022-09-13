@@ -33,7 +33,7 @@ public class HhQdGiaoNvuNhapxuatSpecification {
 					String soHd = req.getSoHd();
 					String maVthh = req.getMaVthh();
 					String loaiQd = req.getLoaiQd();
-					Integer namNhap = Integer.valueOf(req.getNamNhap());
+//					Integer namNhap = Integer.valueOf(req.getNamNhap());
 					String veViec = req.getVeViec();
 
 					Join<HhQdGiaoNvuNhapxuatHdr, HhQdGiaoNvuNhapxuatDtl> joinQuerry = root.join("children");
@@ -63,8 +63,8 @@ public class HhQdGiaoNvuNhapxuatSpecification {
 					if (StringUtils.isNotBlank(loaiQd))
 						predicate.getExpressions().add(builder.and(builder.equal(root.get("loaiQd"), loaiQd)));
 
-					if (!Objects.isNull(namNhap))
-						predicate.getExpressions().add(builder.and(builder.equal(root.get("namNhap"), namNhap)));
+//					if (!Objects.isNull(namNhap))
+//						predicate.getExpressions().add(builder.and(builder.equal(root.get("namNhap"), namNhap)));
 
 					if (!Objects.isNull(veViec))
 						predicate.getExpressions().add(builder.and(builder.equal(root.get("veViec"), veViec)));
