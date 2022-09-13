@@ -26,10 +26,24 @@ public interface HhHopDongRepository extends BaseRepository<HhHopDongHdr, Long> 
 					"  AND (:nhaCcap IS NULL OR HDR.SO_HD = :nhaCcap) " +
 					"  AND (:tuNgayKy IS NULL OR HDR.NGAY_KY >= TO_DATE(:tuNgayKy, 'yyyy-MM-dd')) " +
 					"  AND (:denNgayKy IS NULL OR HDR.NGAY_KY <= TO_DATE(:denNgayKy, 'yyyy-MM-dd')) " +
-					"  AND (:maDvi IS NULL OR HDR.MA_DVI LIKE CONCAT(:maDvi,'%')) " +
+					"  AND (:maDvi IS NULL OR HDR.MA_DVI = :maDvi) " +
 					"  AND (:trangThai IS NULL OR HDR.TRANG_THAI = :trangThai) ",
 			nativeQuery = true)
 	Page<HhHopDongHdr> select(String loaiVthh, String soHd, String tenHd, String nhaCcap,String tuNgayKy,String denNgayKy, String trangThai,String maDvi, Pageable pageable);
+
+	@Query(
+			value = "SELECT * " +
+					"FROM HH_HOP_DONG_HDR  HDR" +
+					" WHERE (:loaiVthh IS NULL OR HDR.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) " +
+					"  AND (:soHd IS NULL OR HDR.SO_HD LIKE CONCAT(CONCAT('%',:soHd),'%')) " +
+					"  AND (:tenHd IS NULL OR LOWER(HDR.TEN_HD) LIKE LOWER(CONCAT(CONCAT('%',:tenHd),'%'))) " +
+					"  AND (:nhaCcap IS NULL OR HDR.SO_HD = :nhaCcap) " +
+					"  AND (:tuNgayKy IS NULL OR HDR.NGAY_KY >= TO_DATE(:tuNgayKy, 'yyyy-MM-dd')) " +
+					"  AND (:denNgayKy IS NULL OR HDR.NGAY_KY <= TO_DATE(:denNgayKy, 'yyyy-MM-dd')) " +
+					"  AND (:maDvi IS NULL OR HDR.MA_DVI LIKE CONCAT(:maDvi,'%')) " +
+					"  AND (:trangThai IS NULL OR HDR.TRANG_THAI = :trangThai) ",
+			nativeQuery = true)
+	Page<HhHopDongHdr> selectAll(String loaiVthh, String soHd, String tenHd, String nhaCcap,String tuNgayKy,String denNgayKy, String trangThai,String maDvi, Pageable pageable);
 
 	List<HhHopDongHdr> findByIdIn(Collection<Long> ids);
 
