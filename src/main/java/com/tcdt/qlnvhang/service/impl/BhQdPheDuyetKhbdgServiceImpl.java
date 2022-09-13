@@ -307,6 +307,15 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 			List<BhQdPheDuyetKhBdgThongTinTaiSan> taiSanBdgCuc = bhQdPheDuyetKhBdgThongTinTaiSanRepository.findTaiSanBdgCuc(theEntity.getId(), userInfo.getDvql());
 			List<BhQdPheDuyetKhBdgThongTinTaiSanResponse> taiSanCucRes = thongTinTaiSanResponseMapper.toDto(taiSanBdgCuc);
 			this.buildThongTinKho(taiSanCucRes);
+
+			Set<String> maChungLoaiHHList = taiSanBdgCuc.stream().map(BhQdPheDuyetKhBdgThongTinTaiSan::getChungLoaiHh).collect(Collectors.toSet());
+			Set<QlnvDmVattu> dmVattuList = dmVattuRepository.findByMaIn(maChungLoaiHHList);
+			Map<String, QlnvDmVattu> vattuMap = dmVattuList.stream().collect(Collectors.toMap(QlnvDmVattu::getMa, Function.identity(), (ex1, ex2) -> ex1));
+
+			taiSanCucRes.forEach(item -> {
+				item.setTenChungLoaiHh(Optional.ofNullable(vattuMap.get(item.getChungLoaiHh())).map(QlnvDmVattu::getTen).orElse(null));
+			});
+
 			response.setThongTinTaiSanCucs(taiSanCucRes);
 		} else if (Contains.CAP_TONG_CUC.equalsIgnoreCase(userInfo.getCapDvi())) {
 			response.setChiTietList(this.getThongTinTaiSanTongCuc(theEntity.getId()));
@@ -465,7 +474,7 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 		return true;
 	}
 
-	private void buildThongTinKho(List<BhQdPheDuyetKhBdgThongTinTaiSanResponse> responses) {
+	public void buildThongTinKho(List<BhQdPheDuyetKhBdgThongTinTaiSanResponse> responses) {
 		if (CollectionUtils.isEmpty(responses)) return;
 		List<String> maLoKhoList = responses.stream().map(BhQdPheDuyetKhBdgThongTinTaiSanResponse::getMaLoKho).collect(Collectors.toList());
 		List<String> maNhaKhoList = responses.stream().map(BhQdPheDuyetKhBdgThongTinTaiSanResponse::getMaNhaKho).collect(Collectors.toList());
