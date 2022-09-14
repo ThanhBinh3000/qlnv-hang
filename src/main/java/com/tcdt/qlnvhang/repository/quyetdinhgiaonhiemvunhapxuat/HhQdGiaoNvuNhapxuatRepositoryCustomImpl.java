@@ -58,35 +58,35 @@ public class HhQdGiaoNvuNhapxuatRepositoryCustomImpl implements HhQdGiaoNvuNhapx
             builder.append("AND ").append("qd.namNhap = :namNhap ");
         }
 
-        if (!StringUtils.isEmpty(req.getVeViec())) {
-            builder.append("AND ").append("qd.veViec LIKE :veViec ");
-        }
-        if (!StringUtils.isEmpty(req.getSoQd())) {
-            builder.append("AND ").append("qd.soQd LIKE :soQd ");
-        }
-
-        if (req.getTuNgayQd() != null) {
-            builder.append("AND ").append("qd.ngayQdinh >= :tuNgayQd ");
-        }
-        if (req.getDenNgayQd() != null) {
-            builder.append("AND ").append("qd.ngayQdinh <= :denNgayQd ");
-        }
-
-        if (!CollectionUtils.isEmpty(req.getTrangThais())) {
-            builder.append("AND ").append("qd.trangThai IN :trangThais ");
-        }
-
-        if (!StringUtils.isEmpty(req.getTrichYeu())) {
-            builder.append("AND ").append("qd.trichYeu LIKE :trichYeu ");
-        }
-
-        if (!StringUtils.isEmpty(req.getMaDvi())) {
-            if (Contains.CAP_CHI_CUC.equalsIgnoreCase(capDvi)) {
-                builder.append("AND ").append("qdCt.maDvi = :maDvi ");
-            } else {
-                builder.append("AND ").append("qd.maDvi = :maDvi ");
-            }
-        }
+////        if (!StringUtils.isEmpty(req.getVeViec())) {
+//            builder.append("AND ").append("qd.veViec LIKE :veViec ");
+//        }
+//        if (!StringUtils.isEmpty(req.getSoQd())) {
+//            builder.append("AND ").append("qd.soQd LIKE :soQd ");
+//        }
+//
+//        if (req.getTuNgayQd() != null) {
+//            builder.append("AND ").append("qd.ngayQdinh >= :tuNgayQd ");
+//        }
+//        if (req.getDenNgayQd() != null) {
+//            builder.append("AND ").append("qd.ngayQdinh <= :denNgayQd ");
+//        }
+//
+//        if (!CollectionUtils.isEmpty(req.getTrangThais())) {
+//            builder.append("AND ").append("qd.trangThai IN :trangThais ");
+//        }
+//
+//        if (!StringUtils.isEmpty(req.getTrichYeu())) {
+//            builder.append("AND ").append("qd.trichYeu LIKE :trichYeu ");
+//        }
+//
+//        if (!StringUtils.isEmpty(req.getMaDvi())) {
+//            if (Contains.CAP_CHI_CUC.equalsIgnoreCase(capDvi)) {
+//                builder.append("AND ").append("qdCt.maDvi = :maDvi ");
+//            } else {
+//                builder.append("AND ").append("qd.maDvi = :maDvi ");
+//            }
+//        }
     }
 
     @Override
@@ -107,9 +107,9 @@ public class HhQdGiaoNvuNhapxuatRepositoryCustomImpl implements HhQdGiaoNvuNhapx
             query.setParameter("namNhap", req.getNamNhap());
         }
 
-        if (!StringUtils.isEmpty(req.getVeViec())) {
-            query.setParameter("veViec", "%" + req.getVeViec() + "%");
-        }
+//        if (!StringUtils.isEmpty(req.getVeViec())) {
+//            query.setParameter("veViec", "%" + req.getVeViec() + "%");
+//        }
         if (!StringUtils.isEmpty(req.getSoQd())) {
             query.setParameter("soQd", "%" + req.getSoQd() + "%");
         }

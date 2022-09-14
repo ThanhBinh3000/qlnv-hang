@@ -27,6 +27,7 @@ import com.tcdt.qlnvhang.service.HhQdPduyetKqlcntHdrService;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 @Service
@@ -158,6 +159,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 	}
 
 	@Override
+	@Transactional
 	public HhQdPduyetKqlcntHdr update(HhQdPduyetKqlcntHdrReq objReq) throws Exception {
 		// Is Vật Tư
 		if (objReq.getLoaiVthh().startsWith("02")){
@@ -281,7 +283,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		byIdQdPdHdr.forEach( item -> {
 			item.setTenLoaiVthh(hashMapDmHh.get(item.getLoaiVthh()));
 			item.setTenCloaiVthh(hashMapDmHh.get(item.getCloaiVthh()));
-			item.setTenNhaThau(hashMapDviLquan.get(item.getIdNhaThau()));
+			item.setTenNhaThau(hashMapDviLquan.get(String.valueOf(Double.parseDouble(item.getIdNhaThau().toString()))));
 			item.setTenLoaiHdong(hashMapDmHdong.get(item.getLoaiHdong()));
 		});
 		qOptional.get().setHhQdPduyetKqlcntDtlList(byIdQdPdHdr);

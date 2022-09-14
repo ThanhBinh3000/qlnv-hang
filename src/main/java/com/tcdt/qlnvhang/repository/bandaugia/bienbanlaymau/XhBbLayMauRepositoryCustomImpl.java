@@ -75,7 +75,7 @@ public class XhBbLayMauRepositoryCustomImpl implements XhBbLayMauRepositoryCusto
 		List<XhBbLayMauSearchResponse> responses = result.stream()
 				.map(XhBbLayMauSearchResponse::new).collect(Collectors.toList());
 
-		return new PageImpl<>(responses, pageable, this.count(req, xhBbLayMau));
+		return new PageImpl<>(responses, pageable, this.count(req, xhBbLayMau, diemKho, nhaKho, nganKho, nganLo));
 	}
 
 
@@ -90,9 +90,14 @@ public class XhBbLayMauRepositoryCustomImpl implements XhBbLayMauRepositoryCusto
 		xhBbLayMau.eq(Operator.AND, XhBbLayMau_.MA_NGAN_LO, req.getMaNganLo(), builder);
 	}
 
-	private int count(XhBbLayMauSearchRequest req, QueryUtils xhBbLayMau) {
+	private int count(XhBbLayMauSearchRequest req, QueryUtils xhBbLayMau, QueryUtils diemKho, QueryUtils nhaKho, QueryUtils nganKho, QueryUtils nganLo) {
 		log.debug("Build count query");
 		StringBuilder builder = xhBbLayMau.countBy(XhBbLayMau_.ID);
+
+		builder.append(QueryUtils.buildInnerJoin(xhBbLayMau, diemKho, XhBbLayMau_.MA_DIEM_KHO, KtDiemKho_.MA_DIEMKHO))
+				.append(QueryUtils.buildInnerJoin(xhBbLayMau, nhaKho, XhBbLayMau_.MA_NHA_KHO, KtNhaKho_.MA_NHAKHO))
+				.append(QueryUtils.buildInnerJoin(xhBbLayMau, nganKho, XhBbLayMau_.MA_NGAN_KHO, KtNganKho_.MA_NGANKHO))
+				.append(QueryUtils.buildInnerJoin(xhBbLayMau, nganLo, XhBbLayMau_.MA_NGAN_LO, KtNganLo_.MA_NGANLO));
 
 		log.debug("Set condition search");
 		this.setConditionSearch(req, builder, xhBbLayMau);

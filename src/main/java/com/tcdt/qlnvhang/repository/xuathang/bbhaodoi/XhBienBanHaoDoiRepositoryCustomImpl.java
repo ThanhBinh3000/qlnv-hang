@@ -1,7 +1,10 @@
 package com.tcdt.qlnvhang.repository.xuathang.bbhaodoi;
 
 import com.tcdt.qlnvhang.entities.xuathang.bbhaodoi.XhBienBanHaoDoi;
+import com.tcdt.qlnvhang.repository.xuathang.quyetdinhgiaonhiemvuxuat.XhQdGiaoNvuXuatRepository;
 import com.tcdt.qlnvhang.request.search.xuathang.XhBienBanHaoDoiSearchReq;
+import com.tcdt.qlnvhang.request.search.xuathang.XhBienBanTinhKhoSearchReq;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
@@ -15,6 +18,9 @@ import java.util.List;
 public class XhBienBanHaoDoiRepositoryCustomImpl implements XhBienBanHaoDoiRepositoryCustom {
     @PersistenceContext
     private EntityManager em;
+
+    @Autowired
+    XhQdGiaoNvuXuatRepository xhQdGiaoNvuXuatRepository;
 
     @Override
     public List<XhBienBanHaoDoi> search(XhBienBanHaoDoiSearchReq req) {
@@ -31,10 +37,21 @@ public class XhBienBanHaoDoiRepositoryCustomImpl implements XhBienBanHaoDoiRepos
         return query.getResultList();
     }
 
+    @Override
+    public int count(XhBienBanHaoDoiSearchReq req) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("SELECT count(x.id) from XhBienBanHaoDoi x ");
+        builder.append("inner join XhBienBanTinhKho t on t.id = x.bbTinhkhoId ");
+        setConditionSearch(builder, req);
+        TypedQuery<Long> query = em.createQuery(builder.toString(), Long.class);
+        setParameterSearch(req, query);
+        return query.getSingleResult().intValue();
+    }
+
     private void setConditionSearch(StringBuilder builder, XhBienBanHaoDoiSearchReq req) {
         builder.append("WHERE 1 = 1 ");
 
-        if (!StringUtils.isEmpty(req.getQuyetDinhId())) {
+        if (!StringUtils.isEmpty(req.getSoQuyetDinh())) {
             builder.append("AND ").append("t.qdgnvnxId LIKE :qdId ");
         }
         if (!StringUtils.isEmpty(req.getSoBienBan())) {
@@ -49,8 +66,8 @@ public class XhBienBanHaoDoiRepositoryCustomImpl implements XhBienBanHaoDoiRepos
     }
 
     private void setParameterSearch(XhBienBanHaoDoiSearchReq req, Query query) {
-        if (!StringUtils.isEmpty(req.getQuyetDinhId())) {
-            query.setParameter("qdId", req.getQuyetDinhId());
+        if (!StringUtils.isEmpty(req.getSoQuyetDinh())) {
+            query.setParameter("qdId", xhQdGiaoNvuXuatRepository.findFirstBySoQuyetDinh(req.getSoQuyetDinh()));
         }
         if (!StringUtils.isEmpty(req.getSoBienBan())) {
             query.setParameter("soBienBan", req.getSoBienBan());

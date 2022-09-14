@@ -3,7 +3,6 @@ package com.tcdt.qlnvhang.service.impl;
 import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGia;
 import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhBdgThongTinTaiSan;
 import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdg;
-import com.tcdt.qlnvhang.entities.bandaugia.thongbaobandaugiakhongthanh.BhThongBaoBdgKt;
 import com.tcdt.qlnvhang.entities.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGia;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.mapper.bandaugia.kehoachbandaugia.BanDauGiaPhanLoTaiSanResponseMapper;
@@ -22,7 +21,9 @@ import com.tcdt.qlnvhang.request.bandaugia.tochuctrienkhaikehoachbandaugia.Thong
 import com.tcdt.qlnvhang.request.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaSearchRequest;
 import com.tcdt.qlnvhang.response.banhangdaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaResponse;
 import com.tcdt.qlnvhang.response.banhangdaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaSearchResponse;
+import com.tcdt.qlnvhang.response.banhangdaugia.tonghopdexuatkhbdg.BhQdPheDuyetKhBdgThongTinTaiSanResponse;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgService;
 import com.tcdt.qlnvhang.service.bandaugia.tochuctrienkhaikehoachbandaugia.ThongBaoBanDauGiaService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -41,10 +42,8 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -69,6 +68,8 @@ public class ThongBaoBanDauGiaServiceImpl extends BaseServiceImpl implements Tho
 	private final BanDauGiaPhanLoTaiSanRepository phanLoTaiSanRepository;
 
 	private final BanDauGiaPhanLoTaiSanResponseMapper phanLoTaiSanResponseMapper;
+
+	private final BhQdPheDuyetKhbdgService bhQdPheDuyetKhbdgService;
 
 	private static final String SHEET_NAME = "Danh sách thông báo bán đấu giá";
 
@@ -199,7 +200,16 @@ public class ThongBaoBanDauGiaServiceImpl extends BaseServiceImpl implements Tho
 		List<BhQdPheDuyetKhBdgThongTinTaiSan> taiSanList = taiSanRepository.findByThongBaoBdgIdIn(Collections.singleton(thongBaoBanDauGia.getId()));
 
 		if (!CollectionUtils.isEmpty(taiSanList)) {
-			response.setTaiSanBdgList(taiSanResponseMapper.toDto(taiSanList));
+			List<BhQdPheDuyetKhBdgThongTinTaiSanResponse> taiSanResponseList = taiSanResponseMapper.toDto(taiSanList);
+			bhQdPheDuyetKhbdgService.buildThongTinKho(taiSanResponseList);
+			Set<String> maChungLoaiHHList = taiSanList.stream().map(BhQdPheDuyetKhBdgThongTinTaiSan::getChungLoaiHh).collect(Collectors.toSet());
+			Set<QlnvDmVattu> dmVattuList = dmVattuRepository.findByMaIn(maChungLoaiHHList);
+			Map<String, QlnvDmVattu> vattuMap = dmVattuList.stream().collect(Collectors.toMap(QlnvDmVattu::getMa, Function.identity(), (ex1, ex2) -> ex1));
+
+			taiSanResponseList.forEach(item -> {
+				item.setTenChungLoaiHh(Optional.ofNullable(vattuMap.get(item.getChungLoaiHh())).map(QlnvDmVattu::getTen).orElse(null));
+			});
+			response.setTaiSanBdgList(taiSanResponseList);
 		}
 		response.setFileDinhKems(fileDinhKemService.search(thongBaoBanDauGia.getId(), Collections.singleton(ThongBaoBanDauGia.TABLE_NAME)));
 		thongBaoBdgKtRepository.findFirstByThongBaoBdgId(thongBaoBanDauGia.getId())

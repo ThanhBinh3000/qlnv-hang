@@ -19,7 +19,7 @@ public class XhBienBanHaoDoiSearchReq {
 
     public static final String ORDER_TYPE = "asc";
     private PaggingReq paggingReq;
-    private String quyetDinhId;
+    private String soQuyetDinh;
     private String soBienBan;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate ngayBienBanTu;

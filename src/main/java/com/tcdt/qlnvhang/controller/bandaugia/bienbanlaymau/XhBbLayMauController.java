@@ -27,7 +27,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/bien-ban-lay-mau")
 @Slf4j
-@Api(tags = "Biên bản lấy mẫu")
+@Api(tags = "Xuất hàng Biên bản lấy mẫu")
 @RequiredArgsConstructor
 public class XhBbLayMauController extends BaseController {
 	private final XhBbLayMauService xhBbLayMauService;

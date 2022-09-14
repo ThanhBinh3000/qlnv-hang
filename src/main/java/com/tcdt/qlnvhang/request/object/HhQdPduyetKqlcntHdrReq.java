@@ -32,6 +32,8 @@ public class HhQdPduyetKqlcntHdrReq {
 
 	String cloaiVthh;
 
+	String moTaHangHoa;
+
 	@Size(max = 500, message = "Về việc không được vượt quá 500 ký tự")
 	@ApiModelProperty(example = "Nội dung về việc")
 	String trichYeu;
