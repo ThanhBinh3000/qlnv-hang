@@ -269,7 +269,7 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
         BhBbBanDauGia phieu = optional.get();
 
         String trangThai = phieu.getTrangThai();
-        if (NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(stReq.getTrangThai())) {
+        if (NhapXuatHangTrangThaiEnum.BAN_HANH.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
                 return false;
 
