@@ -316,9 +316,18 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		if (!optional.isPresent())
 			throw new Exception("Không tìm thấy dữ liệu cần xoá");
 
-		if (!optional.get().getTrangThai().equals(Contains.TAO_MOI)
+		if (!optional.get().getTrangThai().equals(Contains.DUTHAO)
 				&& !optional.get().getTrangThai().equals(Contains.TU_CHOI))
 			throw new Exception("Chỉ thực hiện xóa thông tin đấu thầu ở trạng thái bản nháp hoặc từ chối");
+
+		List<HhQdGiaoNvuNhapxuatDtl> listDtl  = dtlRepository.findAllByIdHdr(idSearchReq.getId());
+		if(!CollectionUtils.isEmpty(listDtl)){
+			dtlRepository.deleteAll(listDtl);
+		}
+		List<HhQdGiaoNvuNhapxuatDtl1> listDtl1=hhQdGiaoNvuNhapxuatDtl1Repository.findAllByIdHdr(idSearchReq.getId());
+		if (!CollectionUtils.isEmpty(listDtl1)){
+			hhQdGiaoNvuNhapxuatDtl1Repository.deleteAll(listDtl1);
+		}
 
 		hhQdGiaoNvuNhapxuatRepository.delete(optional.get());
 

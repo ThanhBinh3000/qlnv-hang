@@ -13,5 +13,5 @@ import java.util.List;
 public interface HhQdGiaoNvuNhapxuatDtlRepository extends BaseRepository<HhQdGiaoNvuNhapxuatDtl, Long> {
 
     void deleteAllByIdHdr(Long idHdr);
-    List<HhQdGiaoNvuNhapxuatDtl> findAllByIdHdr(Long ididHdr);
+    List<HhQdGiaoNvuNhapxuatDtl> findAllByIdHdr(Long idHdr);
 }
