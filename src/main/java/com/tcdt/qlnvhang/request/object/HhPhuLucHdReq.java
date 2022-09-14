@@ -36,14 +36,14 @@ public class HhPhuLucHdReq {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date tuNgayHlucTrc;
 
-	@NotNull(message = "Không được để trống")
+//	@NotNull(message = "Không được để trống")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date tuNgayHlucDc;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date denNgayHlucTrc;
 
-	@NotNull(message = "Không được để trống")
+//	@NotNull(message = "Không được để trống")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date denNgayHlucDc;
 
@@ -53,8 +53,8 @@ public class HhPhuLucHdReq {
 
 	String tenHd;
 
-	@NotNull(message = "Không được để trống")
-	@Size(max = 20, message = "Nội dung điều chỉnh không được vượt quá 20 ký tự")
+//	@NotNull(message = "Không được để trống")
+	@Size(max = 200, message = "Nội dung điều chỉnh không được vượt quá 200 ký tự")
 	String noiDung;
 
 	@NotNull(message = "Không được để trống")

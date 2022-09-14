@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Where;
@@ -70,7 +71,8 @@ public class HhPhuLucHd implements Serializable {
 
 	@Transient
 	private List<HhPhuLucHdDtl> HhPhuLucHdDtl = new ArrayList<>();
-
+	@Transient
+	String tenTrangThai;
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)
 	@JoinColumn(name = "dataId")
@@ -86,5 +88,8 @@ public class HhPhuLucHd implements Serializable {
 		this.fileDinhKems.addAll(children1);
 	}
 
+	public String getTenTrangThai() {
+		return TrangThaiAllEnum.getLabelById(trangThai);
+	}
 
 }
