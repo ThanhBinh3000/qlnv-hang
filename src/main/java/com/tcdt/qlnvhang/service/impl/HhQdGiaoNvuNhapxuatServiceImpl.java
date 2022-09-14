@@ -198,23 +198,23 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 //		this.setTenDvi(data);
 		List<HhQdGiaoNvuNhapxuatDtl1> cTiet = hhQdGiaoNvuNhapxuatDtl1Repository.findAllByIdHdr(data.getId());
 		List<Long> listIdHd = cTiet.stream().map(HhQdGiaoNvuNhapxuatDtl1::getHopDongId).collect(Collectors.toList());
-		Map<String, String> tenLoaiVthh = getListDanhMucChung("LOAI_HHOA");
 		Map<String, String> tenCloaiVthh = getListDanhMucHangHoa();
 		Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
 		List<HhQdGiaoNvuNhapxuatDtl> hhQdGiaoNvuNhapxuatDtl= dtlRepository.findAllByIdHdr(data.getId());
 		for (HhQdGiaoNvuNhapxuatDtl dtl:hhQdGiaoNvuNhapxuatDtl){
-			dtl.setTenLoaiVthh(tenLoaiVthh.get(dtl.getLoaiVthh()));
-			dtl.setCloaiVthh(tenCloaiVthh.get(dtl.getCloaiVthh()));
+			dtl.setTenLoaiVthh(tenCloaiVthh.get(dtl.getLoaiVthh()));
+			dtl.setTenCloaiVthh(tenCloaiVthh.get(dtl.getCloaiVthh()));
 			dtl.setTenDvi(mapDmucDvi.get(dtl.getMaDvi()));
 		}
 		data.setDtlList(hhQdGiaoNvuNhapxuatDtl);
-		data.setHopDongList(hhQdGiaoNvuNhapxuatDtl1Repository.findAllByIdHdr(data.getId()));
+		data.setHopDongList(cTiet);
 		data.setHopDongIds(listIdHd);
 		data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
 
 		if (!CollectionUtils.isEmpty(listIdHd)) {
 			Map<Long, List<HhHopDongDdiemNhapKho>> mapDiaDiaNhapKho = hhHopDongDdiemNhapKhoRepository.findAllByIdHdongHdrIn(listIdHd)
 					.stream().collect(Collectors.groupingBy(HhHopDongDdiemNhapKho::getIdHdongHdr));
+			Map<Long, List<HhHopDongHdr>> collect = hhHopDongRepository.findByIdIn(listIdHd).stream().collect(Collectors.groupingBy(HhHopDongHdr::getId));
 
 			for (HhQdGiaoNvuNhapxuatDtl1 dtl1 : data.getHopDongList()) {
 				dtl1.setDongDdiemNhapKhos(mapDiaDiaNhapKho.get(dtl1.getHopDongId()));
@@ -222,6 +222,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 					item.setTenDiemKho(mapDmucDvi.get(item.getMaDiemKho()));
 					item.setTenDvi(mapDmucDvi.get(item.getMaDvi()));
 				});
+				dtl1.setSoHd(collect.get(dtl1.getHopDongId()).get(0).getSoHd());
 			}
 		}
 
@@ -268,8 +269,10 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			switch (status) {
 				case Contains.CHODUYET_TP + Contains.DUTHAO:
 				case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+				case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
+					optional.get().setNguoiGuiDuyet(getUser().getUsername());
+					optional.get().setNgayGuiDuyet(getDateTimeNow());
 				case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
-				case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
 					optional.get().setNguoiGuiDuyet(getUser().getUsername());
 					optional.get().setNgayGuiDuyet(getDateTimeNow());
 					break;

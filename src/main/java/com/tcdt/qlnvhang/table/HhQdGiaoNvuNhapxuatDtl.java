@@ -6,6 +6,8 @@ import java.util.Date;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
 @Entity
@@ -36,7 +38,6 @@ public class HhQdGiaoNvuNhapxuatDtl implements Serializable {
 	@Transient
 	String tenCloaiVthh;
 
-
 	@Column(name = "DON_VI_TINH")
 	String donViTinh;
 
@@ -44,6 +45,8 @@ public class HhQdGiaoNvuNhapxuatDtl implements Serializable {
 	BigDecimal soLuong;
 
 	@Column(name = "TGIAN_NKHO")
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date tgianNkho;
 
 	String loaiNx;

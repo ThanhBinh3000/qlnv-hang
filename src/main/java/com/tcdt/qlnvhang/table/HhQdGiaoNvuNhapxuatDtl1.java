@@ -28,6 +28,9 @@ public class HhQdGiaoNvuNhapxuatDtl1 implements Serializable {
     private Long hopDongId;
 
     @Transient
+    private String soHd;
+
+    @Transient
     List<HhHopDongDdiemNhapKho> dongDdiemNhapKhos =new ArrayList<>();
 
 }
