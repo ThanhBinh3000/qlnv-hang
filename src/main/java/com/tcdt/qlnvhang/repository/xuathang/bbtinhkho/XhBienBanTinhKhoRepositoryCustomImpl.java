@@ -15,7 +15,7 @@ public class XhBienBanTinhKhoRepositoryCustomImpl implements XhBienBanTinhKhoRep
     private EntityManager em;
 
     @Override
-    public List<Object> search(XhBienBanTinhKhoSearchReq req) {
+    public List<Object[]> search(XhBienBanTinhKhoSearchReq req) {
 
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT x.id from xh_bb_tinh_kho x ");

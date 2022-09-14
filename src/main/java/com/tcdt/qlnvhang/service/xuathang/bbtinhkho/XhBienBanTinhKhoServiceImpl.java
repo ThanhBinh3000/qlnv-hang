@@ -303,7 +303,7 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
 
         List<XhBienBanTinhKhoRes> responses = new ArrayList<>();
         xhBienBanTinhKhoRepository.search(req).forEach(item -> {
-            XhBienBanTinhKhoRes response = this.buildResponse(convertObject(((BigDecimal) item).longValue()));
+            XhBienBanTinhKhoRes response = this.buildResponse(convertObject(((BigDecimal) item[0]).longValue()));
             responses.add(response);
         });
 
