@@ -67,8 +67,8 @@ public interface HhHopDongRepository extends BaseRepository<HhHopDongHdr, Long> 
 
 	@Transactional()
 	@Modifying
-	@Query(value = "UPDATE HH_HOP_DONG_HDR SET TRANG_THAI=:trangThai ", nativeQuery = true)
-	void updateTongHop(String trangThai);
+	@Query(value = "UPDATE HH_HOP_DONG_HDR HD SET HD.TRANG_THAI=:trangThai WHERE HD.ID IN :listId ", nativeQuery = true)
+	void updateTongHop(List<Long> listId, String trangThai);
 
 
 
