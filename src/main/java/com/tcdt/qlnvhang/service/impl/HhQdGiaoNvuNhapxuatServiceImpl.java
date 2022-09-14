@@ -297,9 +297,12 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 					throw new Exception("Phê duyệt không thành công");
 			}
 		}
-		if (item.getTrangThai().equals(Contains.BAN_HANH)) {
-			hhHopDongRepository.updateTongHop(Contains.DABANHANH_QD);
+		if (stReq.getTrangThai().equals(Contains.BAN_HANH)) {
+			List<HhQdGiaoNvuNhapxuatDtl1> cTiet = hhQdGiaoNvuNhapxuatDtl1Repository.findAllByIdHdr(item.getId());
+			List<Long> listId = cTiet.stream().map(HhQdGiaoNvuNhapxuatDtl1::getHopDongId).collect(Collectors.toList());
+			hhHopDongRepository.updateTongHop(listId,Contains.DABANHANH_QD);
 		}
+		optional.get().setTrangThai(stReq.getTrangThai());
 		hhQdGiaoNvuNhapxuatRepository.save(item);
 		return true;
 	}
@@ -375,7 +378,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		paggingReq.setLimit(Integer.MAX_VALUE);
 		searchReq.setPaggingReq(paggingReq);
 		searchReq.setMaDvi(userInfo.getDvql());
-		Page<HhQdGiaoNvuNhapxuatHdr> page = this.timKiem(searchReq);
+		Page<HhQdGiaoNvuNhapxuatHdr> page = this.searchPage(searchReq);
 		List<HhQdGiaoNvuNhapxuatHdr> data = page.getContent();
 
 		String title = "Danh sách quyết định giao nhiệm vụ nhập xuất";
