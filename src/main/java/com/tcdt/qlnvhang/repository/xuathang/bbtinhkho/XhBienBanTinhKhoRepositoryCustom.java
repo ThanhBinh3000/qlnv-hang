@@ -7,6 +7,6 @@ import com.tcdt.qlnvhang.request.search.xuathang.XhQdGiaoNvuXuatSearchReq;
 import java.util.List;
 
 public interface XhBienBanTinhKhoRepositoryCustom {
-    List<Object[]> search(XhBienBanTinhKhoSearchReq req);
+    List<Object> search(XhBienBanTinhKhoSearchReq req);
     int count(XhBienBanTinhKhoSearchReq req);
 }
