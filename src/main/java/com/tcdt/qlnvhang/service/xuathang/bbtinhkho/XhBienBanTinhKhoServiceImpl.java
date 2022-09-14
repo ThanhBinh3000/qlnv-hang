@@ -34,7 +34,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -166,21 +165,25 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
         item.setNgaySua(LocalDate.now());
         item.setNguoiSuaId(userInfo.getId());
 
-        //tinh lai so luong
-        Object[] data = xhBienBanTinhKhoRepository.getHangTrongKho(item.getMaLokho(), item.getMaChungLoaiHangHoa()).get(0);
-        if (data != null || data.length > 0) {
-            item.setSoLuongNhap(((BigDecimal) data[10]).doubleValue());
-            item.setSlConlaiSosach(((BigDecimal) data[3]).doubleValue());
-            if (item.getSlConlaiSosach() > item.getSlConlaiXuatcuoi()) {
-                item.setSlThuaConlai(item.getSlConlaiSosach() - item.getSlConlaiXuatcuoi());
-                item.setSlThieuConlai(0);
-            } else {
-                item.setSlThuaConlai(0);
-                item.setSlThieuConlai(item.getSlConlaiXuatcuoi() - item.getSlConlaiSosach());
+        List<Object[]> fromDb = xhBienBanTinhKhoRepository.getHangTrongKho(item.getMaLokho(), item.getMaChungLoaiHangHoa());
+        if (null != fromDb && !fromDb.isEmpty()) {
+            Object[] data = fromDb.get(0);
+            if (data != null || data.length > 0) {
+                item.setSoLuongNhap(((BigDecimal) data[10]).doubleValue());
+                item.setSlConlaiSosach(((BigDecimal) data[3]).doubleValue());
+                if (item.getSlConlaiSosach() > item.getSlConlaiXuatcuoi()) {
+                    item.setSlThuaConlai(item.getSlConlaiSosach() - item.getSlConlaiXuatcuoi());
+                    item.setSlThieuConlai(0);
+                } else {
+                    item.setSlThuaConlai(0);
+                    item.setSlThieuConlai(item.getSlConlaiXuatcuoi() - item.getSlConlaiSosach());
+                }
             }
         }
 
         xhBienBanTinhKhoRepository.save(item);
+
+        xhBienBanTinhKhoCtRepository.deleteByBbTinhKhoId(item.getId());
         List<XhBienBanTinhKhoCt> ds = req.getDs().stream().map(q -> {
             XhBienBanTinhKhoCt xhBienBanTinhKhoCt = new XhBienBanTinhKhoCt();
             BeanUtils.copyProperties(q, xhBienBanTinhKhoCt, "id");
@@ -300,7 +303,7 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
 
         List<XhBienBanTinhKhoRes> responses = new ArrayList<>();
         xhBienBanTinhKhoRepository.search(req).forEach(item -> {
-            XhBienBanTinhKhoRes response = this.buildResponse(convertObject(item));
+            XhBienBanTinhKhoRes response = this.buildResponse(convertObject(((BigDecimal) item).longValue()));
             responses.add(response);
         });
 
@@ -387,44 +390,44 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
         return xhBienBanTinhKhoCtRes;
     }
 
-    private XhBienBanTinhKho convertObject(Object[] o) {
-        XhBienBanTinhKho xhBienBanTinhKho = new XhBienBanTinhKho();
+    private XhBienBanTinhKho convertObject(Long o) {
+        XhBienBanTinhKho xhBienBanTinhKho = xhBienBanTinhKhoRepository.findById(o).get();
 
-        xhBienBanTinhKho.setId(((BigDecimal) o[0]).longValue());
-        xhBienBanTinhKho.setQdgnvnxId(((BigDecimal) o[1]).longValue());
-        if (o[2] != null) xhBienBanTinhKho.setMaDvi(o[2].toString());
-        if (o[3] != null) xhBienBanTinhKho.setCapDvi(o[3].toString());
-        if (o[4] != null) xhBienBanTinhKho.setSoBienBan(o[4].toString());
-        if (o[5] != null) xhBienBanTinhKho.setSoLuongNhap(((BigDecimal) o[5]).doubleValue());
-        if (o[6] != null) xhBienBanTinhKho.setSoLuongXuat(((BigDecimal) o[6]).doubleValue());
-        if (o[7] != null) xhBienBanTinhKho.setMaLokho(o[7].toString());
-        if (o[8] != null) xhBienBanTinhKho.setMaNgankho(o[8].toString());
-        if (o[9] != null) xhBienBanTinhKho.setMaNhakho(o[9].toString());
-        if (o[10] != null) xhBienBanTinhKho.setMaDiemkho(o[10].toString());
-        if (o[11] != null) xhBienBanTinhKho.setMaChungLoaiHangHoa(o[11].toString());
-        if (o[12] != null) xhBienBanTinhKho.setMaLoaiHangHoa(o[12].toString());
-        if (o[13] != null) xhBienBanTinhKho.setKienNghi(o[13].toString());
-        if (o[14] != null) xhBienBanTinhKho.setNguyenNhan(o[14].toString());
-        if (o[15] != null) xhBienBanTinhKho.setTrangThai(o[15].toString());
-        if (o[16] != null) xhBienBanTinhKho.setLyDoTuChoi(o[16].toString());
-        if (o[17] != null) xhBienBanTinhKho.setNguoiTaoId(((BigDecimal) o[17]).longValue());
-        if (o[18] != null)
-            xhBienBanTinhKho.setNgayTao(LocalDate.parse(o[18].toString().split(" ")[0], DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        if (o[19] != null) xhBienBanTinhKho.setNguoiSuaId(((BigDecimal) o[19]).longValue());
-        if (o[20] != null)
-            xhBienBanTinhKho.setNgaySua(LocalDate.parse(o[20].toString().split(" ")[0], DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        if (o[21] != null) xhBienBanTinhKho.setNguoiGuiDuyetId(((BigDecimal) o[21]).longValue());
-        if (o[22] != null)
-            xhBienBanTinhKho.setNgayGuiDuyet(LocalDate.parse(o[22].toString().split(" ")[0], DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        if (o[23] != null) xhBienBanTinhKho.setNguoiPduyetId(((BigDecimal) o[23]).longValue());
-        if (o[24] != null)
-            xhBienBanTinhKho.setNgayPduyet(LocalDate.parse(o[24].toString().split(" ")[0], DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        if (o[25] != null) xhBienBanTinhKho.setSo(((BigDecimal) o[25]).intValue());
-        if (o[26] != null) xhBienBanTinhKho.setNam(((BigDecimal) o[26]).intValue());
-        if (o[27] != null) xhBienBanTinhKho.setSlConlaiSosach(((BigDecimal) o[27]).doubleValue());
-        if (o[28] != null) xhBienBanTinhKho.setSlConlaiXuatcuoi(((BigDecimal) o[28]).doubleValue());
-        if (o[29] != null) xhBienBanTinhKho.setSlThuaConlai(((BigDecimal) o[29]).doubleValue());
-        if (o[30] != null) xhBienBanTinhKho.setSlThieuConlai(((BigDecimal) o[30]).doubleValue());
+//        xhBienBanTinhKho.setId(((BigDecimal) o[0]).longValue());
+//        xhBienBanTinhKho.setQdgnvnxId(((BigDecimal) o[1]).longValue());
+//        if (o[2] != null) xhBienBanTinhKho.setMaDvi(o[2].toString());
+//        if (o[3] != null) xhBienBanTinhKho.setCapDvi(o[3].toString());
+//        if (o[4] != null) xhBienBanTinhKho.setSoBienBan(o[4].toString());
+//        if (o[5] != null) xhBienBanTinhKho.setSoLuongNhap(((BigDecimal) o[5]).doubleValue());
+//        if (o[6] != null) xhBienBanTinhKho.setSoLuongXuat(((BigDecimal) o[6]).doubleValue());
+//        if (o[7] != null) xhBienBanTinhKho.setMaLokho(o[7].toString());
+//        if (o[8] != null) xhBienBanTinhKho.setMaNgankho(o[8].toString());
+//        if (o[9] != null) xhBienBanTinhKho.setMaNhakho(o[9].toString());
+//        if (o[10] != null) xhBienBanTinhKho.setMaDiemkho(o[10].toString());
+//        if (o[11] != null) xhBienBanTinhKho.setMaChungLoaiHangHoa(o[11].toString());
+//        if (o[12] != null) xhBienBanTinhKho.setMaLoaiHangHoa(o[12].toString());
+//        if (o[13] != null) xhBienBanTinhKho.setKienNghi(o[13].toString());
+//        if (o[14] != null) xhBienBanTinhKho.setNguyenNhan(o[14].toString());
+//        if (o[15] != null) xhBienBanTinhKho.setTrangThai(o[15].toString());
+//        if (o[16] != null) xhBienBanTinhKho.setLyDoTuChoi(o[16].toString());
+//        if (o[17] != null) xhBienBanTinhKho.setNguoiTaoId(((BigDecimal) o[17]).longValue());
+//        if (o[18] != null)
+//            xhBienBanTinhKho.setNgayTao(LocalDate.parse(o[18].toString().split(" ")[0], DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+//        if (o[19] != null) xhBienBanTinhKho.setNguoiSuaId(((BigDecimal) o[19]).longValue());
+//        if (o[20] != null)
+//            xhBienBanTinhKho.setNgaySua(LocalDate.parse(o[20].toString().split(" ")[0], DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+//        if (o[21] != null) xhBienBanTinhKho.setNguoiGuiDuyetId(((BigDecimal) o[21]).longValue());
+//        if (o[22] != null)
+//            xhBienBanTinhKho.setNgayGuiDuyet(LocalDate.parse(o[22].toString().split(" ")[0], DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+//        if (o[23] != null) xhBienBanTinhKho.setNguoiPduyetId(((BigDecimal) o[23]).longValue());
+//        if (o[24] != null)
+//            xhBienBanTinhKho.setNgayPduyet(LocalDate.parse(o[24].toString().split(" ")[0], DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+//        if (o[25] != null) xhBienBanTinhKho.setSo(((BigDecimal) o[25]).intValue());
+//        if (o[26] != null) xhBienBanTinhKho.setNam(((BigDecimal) o[26]).intValue());
+//        if (o[27] != null) xhBienBanTinhKho.setSlConlaiSosach(((BigDecimal) o[27]).doubleValue());
+//        if (o[28] != null) xhBienBanTinhKho.setSlConlaiXuatcuoi(((BigDecimal) o[28]).doubleValue());
+//        if (o[29] != null) xhBienBanTinhKho.setSlThuaConlai(((BigDecimal) o[29]).doubleValue());
+//        if (o[30] != null) xhBienBanTinhKho.setSlThieuConlai(((BigDecimal) o[30]).doubleValue());
 
         return xhBienBanTinhKho;
     }
