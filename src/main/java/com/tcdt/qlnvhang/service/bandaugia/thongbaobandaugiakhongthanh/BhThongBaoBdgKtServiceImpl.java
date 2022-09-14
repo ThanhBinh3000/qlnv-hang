@@ -175,7 +175,7 @@ public class BhThongBaoBdgKtServiceImpl extends BaseServiceImpl implements BhTho
         BhThongBaoBdgKt phieu = optional.get();
 
         String trangThai = phieu.getTrangThai();
-        if (NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(stReq.getTrangThai())) {
+        if (NhapXuatHangTrangThaiEnum.BAN_HANH.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
                 return false;
 
