@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.entities.bandaugia.thongbaobandaugiakhongthanh;
 
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhBdgThongTinTaiSan;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -68,4 +69,7 @@ public class BhThongBaoBdgKt extends TrangThaiBaseEntity implements Serializable
 
     @Transient
     private List<BhQdPheDuyetKhBdgThongTinTaiSan> cts = new ArrayList<>();
+
+    @Transient
+    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 }

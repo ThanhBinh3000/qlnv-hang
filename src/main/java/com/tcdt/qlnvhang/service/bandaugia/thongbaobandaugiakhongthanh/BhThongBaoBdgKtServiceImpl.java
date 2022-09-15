@@ -3,7 +3,6 @@ package com.tcdt.qlnvhang.service.bandaugia.thongbaobandaugiakhongthanh;
 import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhBdgThongTinTaiSan;
 import com.tcdt.qlnvhang.entities.bandaugia.thongbaobandaugiakhongthanh.BhThongBaoBdgKt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.repository.bandaugia.thongbaobandaugiakhongthanh.BhThongBaoBdgKtRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.tonghopdexuatkhbdg.BhQdPheDuyetKhBdgThongTinTaiSanRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
@@ -13,6 +12,7 @@ import com.tcdt.qlnvhang.request.bandaugia.thongbaobandaugiakhongthanh.BhThongBa
 import com.tcdt.qlnvhang.request.bandaugia.thongbaobandaugiakhongthanh.BhThongBaoBdgKtSearchReq;
 import com.tcdt.qlnvhang.response.banhangdaugia.thongbaobandaugiakhongthanh.BhThongBaoBdgKtRes;
 import com.tcdt.qlnvhang.response.banhangdaugia.tonghopdexuatkhbdg.BhQdPheDuyetKhBdgThongTinTaiSanResponse;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -41,6 +41,7 @@ import java.util.stream.Collectors;
 public class BhThongBaoBdgKtServiceImpl extends BaseServiceImpl implements BhThongBaoBdgKtService {
     private final BhThongBaoBdgKtRepository bhThongBaoBdgKtRepository;
     private final BhQdPheDuyetKhBdgThongTinTaiSanRepository bhQdPheDuyetKhBdgThongTinTaiSanRepository;
+    private final FileDinhKemService fileDinhKemService;
 
     private static final String SHEET_THONG_BAO_BAN_DAU_GIA_KHONG_THANH = "Thông báo bán đấu giá không thành";
     private static final String STT = "STT";
@@ -74,6 +75,8 @@ public class BhThongBaoBdgKtServiceImpl extends BaseServiceImpl implements BhTho
 
         List<BhQdPheDuyetKhBdgThongTinTaiSan> cts = this.saveCts(item.getId(), item.getThongBaoBdgId());
         item.setCts(cts);
+
+        item.setFileDinhKems(fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReqs(), item.getId(), BhThongBaoBdgKt.TABLE_NAME));
         return this.buildResponse(item);
     }
 
@@ -128,7 +131,7 @@ public class BhThongBaoBdgKtServiceImpl extends BaseServiceImpl implements BhTho
         // Bien ban phan lo tai san
         List<BhQdPheDuyetKhBdgThongTinTaiSan> cts = this.saveCts(item.getId(), item.getThongBaoBdgId());
         item.setCts(cts);
-
+        item.setFileDinhKems(fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReqs(), item.getId(), BhThongBaoBdgKt.TABLE_NAME));
         return this.buildResponse(item);
     }
 
@@ -156,6 +159,8 @@ public class BhThongBaoBdgKtServiceImpl extends BaseServiceImpl implements BhTho
         if (NhapXuatHangTrangThaiEnum.BAN_HANH.getId().equals(item.getTrangThai())) {
             throw new Exception("Không thể xóa Thông báo bán đấu giá không thành đã ban hành");
         }
+
+        fileDinhKemService.delete(item.getId(), Collections.singleton(BhThongBaoBdgKt.TABLE_NAME));
         bhQdPheDuyetKhBdgThongTinTaiSanRepository.findByThongBaoBdgKtIdIn(Collections.singleton(item.getId())).forEach(p -> {
                     p.setThongBaoBdgKtId(null);
             bhQdPheDuyetKhBdgThongTinTaiSanRepository.save(p);
@@ -235,8 +240,8 @@ public class BhThongBaoBdgKtServiceImpl extends BaseServiceImpl implements BhTho
 
             response.setQdPdKqBdgId(qdPdKqBdgId);
             response.setSoQdPdKqBdg(soQdPdKqBdg);
-            response.setTenTrangThai(TrangThaiEnum.getTenById(item.getTrangThai()));
-            response.setTrangThaiDuyet(TrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
+            response.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+            response.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
             responses.add(response);
         }
 
@@ -247,6 +252,7 @@ public class BhThongBaoBdgKtServiceImpl extends BaseServiceImpl implements BhTho
     @Transactional(rollbackOn = Exception.class)
     public boolean deleteMultiple(DeleteReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
+        fileDinhKemService.deleteMultiple(req.getIds(), Collections.singleton(BhThongBaoBdgKt.TABLE_NAME));
         bhQdPheDuyetKhBdgThongTinTaiSanRepository.findByThongBaoBdgKtIdIn(req.getIds()).forEach(p -> {
             p.setThongBaoBdgKtId(null);
             bhQdPheDuyetKhBdgThongTinTaiSanRepository.save(p);
@@ -288,7 +294,7 @@ public class BhThongBaoBdgKtServiceImpl extends BaseServiceImpl implements BhTho
                 objs[8] = item.getTenVatTuCha();
                 objs[9] = item.getNam();
                 objs[10] = item.getSoQdPdKqBdg();
-                objs[11] = TrangThaiEnum.getTenById(item.getTrangThai());
+                objs[11] = NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai());
                 dataList.add(objs);
             }
 

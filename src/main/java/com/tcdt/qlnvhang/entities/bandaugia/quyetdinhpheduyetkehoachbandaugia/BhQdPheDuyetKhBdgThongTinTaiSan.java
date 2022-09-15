@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
@@ -14,8 +15,9 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BhQdPheDuyetKhBdgThongTinTaiSan {
+public class BhQdPheDuyetKhBdgThongTinTaiSan implements Serializable {
 	public static final String TABLE_NAME = "BH_QD_PD_KH_BDG_TT_TAI_SAN";
+	private static final long serialVersionUID = 471290314456427399L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BH_QD_PD_KH_BDG_TT_TAI_SAN_SEQ")
