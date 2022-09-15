@@ -146,6 +146,7 @@ public class BhThongBaoBdgKtServiceImpl extends BaseServiceImpl implements BhTho
 
         BhThongBaoBdgKt item = optional.get();
         item.setCts(bhQdPheDuyetKhBdgThongTinTaiSanRepository.findByThongBaoBdgKtIdIn(Collections.singleton(item.getId())));
+        item.setFileDinhKems(fileDinhKemService.search(item.getId(), Collections.singleton(BhThongBaoBdgKt.TABLE_NAME)));
         return this.buildResponse(item);
     }
 
