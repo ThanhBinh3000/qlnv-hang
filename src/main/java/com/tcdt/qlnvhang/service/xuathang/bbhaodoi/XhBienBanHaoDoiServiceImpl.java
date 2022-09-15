@@ -137,6 +137,8 @@ public class XhBienBanHaoDoiServiceImpl implements XhBienBanHaoDoiService {
 
 
         xhBienBanHaoDoiRepository.save(item);
+
+        xhBienBanHaoDoiCtRepository.deleteAllByBbHaoDoiId(item.getId());
         List<XhBienBanHaoDoiCt> ds = req.getDs().stream().map(q -> {
             XhBienBanHaoDoiCt xhBienBanHaoDoiCt = new XhBienBanHaoDoiCt();
             BeanUtils.copyProperties(q, xhBienBanHaoDoiCt, "id");
@@ -158,9 +160,9 @@ public class XhBienBanHaoDoiServiceImpl implements XhBienBanHaoDoiService {
             throw new Exception("Biên bản hao dôi không tồn tại.");
 
         XhBienBanHaoDoi item = optional.get();
-        List<XhBienBanHaoDoiCtRes> ds = xhBienBanHaoDoiCtRepository.findAllByBbHaoDoiId(item.getId()).stream().map(p -> this.buildResponseCt(p)).collect(Collectors.toList());
+//        List<XhBienBanHaoDoiCtRes> ds = xhBienBanHaoDoiCtRepository.findAllByBbHaoDoiId(item.getId()).stream().map(p -> this.buildResponseCt(p)).collect(Collectors.toList());
         XhBienBanHaoDoiRes result = this.buildResponse(item);
-        result.setDs(ds);
+//        result.setDs(ds);
         return result;
     }
 

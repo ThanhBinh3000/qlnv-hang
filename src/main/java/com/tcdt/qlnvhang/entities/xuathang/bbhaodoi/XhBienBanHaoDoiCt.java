@@ -16,7 +16,7 @@ public class XhBienBanHaoDoiCt {
     private Long id;
     private Long bbHaoDoiId;
     private String thoigianBaoquan;
-    private double slBaoQuan;
+    private double slBaoquan;
     private double slHaoHut;
     private double DinhMucHaoHut;
 }
