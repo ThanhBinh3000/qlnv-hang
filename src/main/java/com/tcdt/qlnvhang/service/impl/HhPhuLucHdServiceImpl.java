@@ -162,7 +162,7 @@ public class HhPhuLucHdServiceImpl extends BaseServiceImpl implements HhPhuLucHd
 				f.setCreateDate(new Date());
 			});
 		}
-//		dataDB.setChildren1(dtls1);
+		dataDB.setFileDinhKems(dtls1);
 
 		return hhPhuLucHdRepository.save(dataDB);
 	}
@@ -189,7 +189,7 @@ public class HhPhuLucHdServiceImpl extends BaseServiceImpl implements HhPhuLucHd
 		if (!optional.isPresent())
 			throw new Exception("Không tìm thấy dữ liệu");
 
-		String status = stReq.getTrangThai() + optional.get().getTrangThai();
+		/*String status = stReq.getTrangThai() + optional.get().getTrangThai();
 		switch (status) {
 		case Contains.CHO_DUYET + Contains.MOI_TAO:
 			optional.get().setNguoiGuiDuyet(getUser().getUsername());
@@ -206,7 +206,7 @@ public class HhPhuLucHdServiceImpl extends BaseServiceImpl implements HhPhuLucHd
 			break;
 		default:
 			throw new Exception("Phê duyệt không thành công");
-		}
+		}*/
 
 		optional.get().setTrangThai(stReq.getTrangThai());
 		return hhPhuLucHdRepository.save(optional.get());
