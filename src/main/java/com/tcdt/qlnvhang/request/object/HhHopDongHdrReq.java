@@ -100,7 +100,7 @@ public class HhHopDongHdrReq {
 
 	@NotNull(message = "Không được để trống")
 	@ApiModelProperty(example = "2022")
-	Long namKh;
+	Long namHd;
 
 	Integer tgianBhanh;
 
