@@ -27,5 +27,8 @@ public interface XhBbLayMauService {
 
 	boolean exportToExcel(XhBbLayMauSearchRequest req, HttpServletResponse response) throws Exception;
 
+	Integer getSo() throws Exception;
+
+
 
 }

@@ -18,12 +18,13 @@ public class XhBienBanTinhKhoRepositoryCustomImpl implements XhBienBanTinhKhoRep
     public List<Object[]> search(XhBienBanTinhKhoSearchReq req) {
 
         StringBuilder builder = new StringBuilder();
-        builder.append("SELECT * from xh_bb_tinh_kho x ");
+        builder.append("SELECT x.id from xh_bb_tinh_kho x ");
         if (checkDateReq(req)) {
-            builder.append("inner join ( SELECT ngay_pduyet as tuNgay, ngay_pduyet as denNgay, ma_lokho as lokho, ma_chung_loai_hang_hoa as clh from xh_phieu_xuat_kho order by id fetch first 1 rows only ) pn ");
-            builder.append("on pn.lokho = x.ma_lokho and pn.clh = x.ma_chung_loai_hang_hoa ");
+            builder.append("inner join xh_phieu_xuat_kho pn ");
+            builder.append("on pn.ma_lokho = x.ma_lokho and pn.ma_chung_loai_hang_hoa = x.ma_chung_loai_hang_hoa ");
         }
         setConditionSearch(builder, req);
+        builder.append("GROUP BY x.id");
         Query query = em.createNativeQuery(builder.toString());
         setParameterSearch(req, query);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
@@ -37,8 +38,8 @@ public class XhBienBanTinhKhoRepositoryCustomImpl implements XhBienBanTinhKhoRep
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT COUNT(DISTINCT x.id) from xh_bb_tinh_kho x ");
         if (checkDateReq(req)) {
-            builder.append("inner join ( SELECT ngay_pduyet as tuNgay, ngay_pduyet as denNgay, ma_lokho as lokho, ma_chung_loai_hang_hoa as clh from xh_phieu_xuat_kho order by id fetch first 1 rows only ) pn ");
-            builder.append("on pn.lokho = x.ma_lokho and pn.clh = x.ma_chung_loai_hang_hoa ");
+            builder.append("inner join xh_phieu_xuat_kho pn ");
+            builder.append("on pn.ma_lokho = x.ma_lokho and pn.ma_chung_loai_hang_hoa = x.ma_chung_loai_hang_hoa ");
         }
         setConditionSearch(builder, req);
         Query query = em.createNativeQuery(builder.toString());
@@ -56,8 +57,8 @@ public class XhBienBanTinhKhoRepositoryCustomImpl implements XhBienBanTinhKhoRep
             builder.append("AND ").append("x.so_bien_ban LIKE :soBienBan ");
         }
         if (checkDateReq(req)) {
-            builder.append("AND ").append("pn.tuNgay > :tuNgay ");
-            builder.append("AND ").append("pn.denNgay < :denNgay ");
+            builder.append("AND ").append("pn.ngay_pduyet > :tuNgay ");
+            builder.append("AND ").append("pn.ngay_pduyet < :denNgay ");
         }
     }
 

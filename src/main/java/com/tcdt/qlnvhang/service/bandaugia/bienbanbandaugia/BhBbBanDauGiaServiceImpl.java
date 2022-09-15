@@ -5,10 +5,15 @@ import com.tcdt.qlnvhang.entities.bandaugia.bienbanbandaugia.BhBbBanDauGia;
 import com.tcdt.qlnvhang.entities.bandaugia.bienbanbandaugia.BhBbBanDauGiaCt;
 import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhBdgThongTinTaiSan;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.bienbanbandaugia.BhBbBanDauGiaCtRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.bienbanbandaugia.BhBbBanDauGiaRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.tonghopdexuatkhbdg.BhQdPheDuyetKhBdgThongTinTaiSanRepository;
+import com.tcdt.qlnvhang.repository.khotang.KtDiemKhoRepository;
+import com.tcdt.qlnvhang.repository.khotang.KtNganKhoRepository;
+import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
+import com.tcdt.qlnvhang.repository.khotang.KtNhaKhoRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -19,9 +24,15 @@ import com.tcdt.qlnvhang.request.bandaugia.bienbanbandaugia.BhBbBanDauGiaSearchR
 import com.tcdt.qlnvhang.response.banhangdaugia.bienbanbandaugia.BhBbBanDauGiaCt1Res;
 import com.tcdt.qlnvhang.response.banhangdaugia.bienbanbandaugia.BhBbBanDauGiaCtRes;
 import com.tcdt.qlnvhang.response.banhangdaugia.bienbanbandaugia.BhBbBanDauGiaRes;
+import com.tcdt.qlnvhang.response.banhangdaugia.tonghopdexuatkhbdg.BhQdPheDuyetKhBdgThongTinTaiSanResponse;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
+import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
+import com.tcdt.qlnvhang.table.khotang.KtNganKho;
+import com.tcdt.qlnvhang.table.khotang.KtNganLo;
+import com.tcdt.qlnvhang.table.khotang.KtNhaKho;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -51,6 +62,12 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
     private final BhBbBanDauGiaCtRepository bhBbBanDauGiaCtRepository;
     private final QlnvDmVattuRepository qlnvDmVattuRepository;
     private final BhQdPheDuyetKhBdgThongTinTaiSanRepository bhQdPheDuyetKhBdgThongTinTaiSanRepository;
+    private final KtNganLoRepository ktNganLoRepository;
+    private final KtDiemKhoRepository ktDiemKhoRepository;
+    private final KtNhaKhoRepository ktNhaKhoRepository;
+    private final QlnvDmDonviRepository dmDonviRepository;
+
+    private final KtNganKhoRepository ktNganKhoRepository;
 
     private static final String SHEET_BIEN_BAN_BAN_DAU_GIA = "Biên bản bán đấu giá";
     private static final String STT = "STT";
@@ -151,12 +168,13 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
 
     private BhBbBanDauGiaRes buildResponse(BhBbBanDauGia item) throws Exception {
         BhBbBanDauGiaRes res = new BhBbBanDauGiaRes();
-        List<BhBbBanDauGiaCtRes> chiTiets = new ArrayList<>();
         BeanUtils.copyProperties(item, res);
         res.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
         res.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
         res.setCts(item.getCts().stream().map(BhBbBanDauGiaCtRes::new).collect(Collectors.toList()));
-        res.setCt1s(item.getCt1s().stream().map(BhBbBanDauGiaCt1Res::new).collect(Collectors.toList()));
+        List<BhBbBanDauGiaCt1Res> ct1s = item.getCt1s().stream().map(BhBbBanDauGiaCt1Res::new).collect(Collectors.toList());
+        this.buildThongTinKho(ct1s);
+        res.setCt1s(ct1s);
         Set<String> maVatTus = Collections.singleton(item.getMaVatTuCha());
         Set<QlnvDmVattu> vatTus = Sets.newHashSet(qlnvDmVattuRepository.findByMaIn(maVatTus));
 
@@ -251,7 +269,7 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
         BhBbBanDauGia phieu = optional.get();
 
         String trangThai = phieu.getTrangThai();
-        if (NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(stReq.getTrangThai())) {
+        if (NhapXuatHangTrangThaiEnum.BAN_HANH.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
                 return false;
 
@@ -397,6 +415,44 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
             Long updateId = Optional.ofNullable(update).map(BhBbBanDauGia::getId).orElse(null);
             if (optional.isPresent() && !optional.get().getId().equals(updateId))
                 throw new Exception("Số Biên bản bán đấu giá " + so + " đã tồn tại");
+        }
+    }
+
+    private void buildThongTinKho(List<BhBbBanDauGiaCt1Res> responses) {
+        if (org.apache.commons.collections.CollectionUtils.isEmpty(responses)) return;
+        List<String> maLoKhoList = responses.stream().map(BhQdPheDuyetKhBdgThongTinTaiSanResponse::getMaLoKho).collect(Collectors.toList());
+        List<String> maNhaKhoList = responses.stream().map(BhQdPheDuyetKhBdgThongTinTaiSanResponse::getMaNhaKho).collect(Collectors.toList());
+        List<String> maDiemKhoList = responses.stream().map(BhQdPheDuyetKhBdgThongTinTaiSanResponse::getMaDiemKho).collect(Collectors.toList());
+        Set<String> maChiCucList = responses.stream().map(BhQdPheDuyetKhBdgThongTinTaiSanResponse::getMaChiCuc).collect(Collectors.toSet());
+        Set<String> maNganKhoList = responses.stream().map(BhQdPheDuyetKhBdgThongTinTaiSanResponse::getMaNganKho).collect(Collectors.toSet());
+
+
+        Map<String, KtNganLo> mapNganLo = ktNganLoRepository.findByMaNganloIn(maLoKhoList)
+                .stream().collect(Collectors.toMap(KtNganLo::getMaNganlo, Function.identity()));
+
+        Map<String, KtDiemKho> mapDiemKho = ktDiemKhoRepository.findByMaDiemkhoIn(maDiemKhoList)
+                .stream().collect(Collectors.toMap(KtDiemKho::getMaDiemkho, Function.identity()));
+
+        Map<String, KtNhaKho> mapNhaKho = ktNhaKhoRepository.findByMaNhakhoIn(maNhaKhoList)
+                .stream().collect(Collectors.toMap(KtNhaKho::getMaNhakho, Function.identity()));
+
+        Map<String, QlnvDmDonvi> mapChiCuc = dmDonviRepository.findByMaDviIn(maChiCucList)
+                .stream().collect(Collectors.toMap(QlnvDmDonvi::getMaDvi, Function.identity()));
+
+        Map<String, KtNganKho> mapNganKho = ktNganKhoRepository.findByMaNgankhoIn(maNganKhoList)
+                .stream().collect(Collectors.toMap(KtNganKho::getMaNgankho, Function.identity()));
+
+        for (BhQdPheDuyetKhBdgThongTinTaiSanResponse item : responses) {
+            KtNganLo nganLo = mapNganLo.get(item.getMaLoKho());
+            KtNhaKho nhaKho = mapNhaKho.get(item.getMaNhaKho());
+            KtDiemKho diemKho = mapDiemKho.get(item.getMaDiemKho());
+            QlnvDmDonvi chiCuc = mapChiCuc.get(item.getMaChiCuc());
+            KtNganKho nganKho = mapNganKho.get(item.getMaNganKho());
+            if (nganLo != null) item.setTenLoKho(nganLo.getTenNganlo());
+            if (nhaKho != null) item.setTenNhaKho(nhaKho.getTenNhakho());
+            if (diemKho != null) item.setTenDiemKho(diemKho.getTenDiemkho());
+            if (chiCuc != null) item.setTenChiCuc(chiCuc.getTenDvi());
+            if (nganKho != null) item.setTenNganKho(nganKho.getTenNgankho());
         }
     }
 }

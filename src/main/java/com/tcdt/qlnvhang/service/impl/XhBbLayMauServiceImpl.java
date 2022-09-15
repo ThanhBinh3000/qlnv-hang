@@ -78,6 +78,9 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl implements XhBbLayMau
 		theEntity.setNguoiTaoId(userInfo.getId());
 		theEntity.setMaDvi(userInfo.getDvql());
 		theEntity.setCapDvi(userInfo.getCapDvi());
+		theEntity.setSo(getSo());
+		theEntity.setSoBienBan(String.format("%s/%s/%s-%s", theEntity.getSo(), theEntity.getNam(), "BBLM", userInfo.getMaPbb()));
+
 		theEntity = xhBbLayMauRepository.save(theEntity);
 
 		log.info("Save file dinh kem");
@@ -291,5 +294,14 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl implements XhBbLayMau
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public Integer getSo() throws Exception {
+		UserInfo userInfo = UserUtils.getUserInfo();
+		Integer so = xhBbLayMauRepository.findMaxSo(userInfo.getDvql(), LocalDate.now().getYear());
+		so = Optional.ofNullable(so).orElse(0);
+		so = so + 1;
+		return so;
 	}
 }
