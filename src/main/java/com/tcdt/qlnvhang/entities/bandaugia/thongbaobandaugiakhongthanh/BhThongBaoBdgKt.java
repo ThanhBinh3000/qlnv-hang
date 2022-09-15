@@ -67,6 +67,9 @@ public class BhThongBaoBdgKt extends TrangThaiBaseEntity implements Serializable
     @Column(name = "CAP_DVI")
     private String capDvi;
 
+    @Column(name = "SO")
+    private Integer so;
+
     @Transient
     private List<BhQdPheDuyetKhBdgThongTinTaiSan> cts = new ArrayList<>();
 

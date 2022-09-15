@@ -71,6 +71,8 @@ public class BhThongBaoBdgKtServiceImpl extends BaseServiceImpl implements BhTho
         item.setMaDvi(userInfo.getDvql());
         item.setCapDvi(userInfo.getCapDvi());
         item.setNam(LocalDate.now().getYear());
+        item.setSo(getSo());
+        item.setMaThongBao(String.format("%s/%s/%s-%s", item.getSo(), item.getNam(), "BDGKT", userInfo.getMaPbb()));
         bhThongBaoBdgKtRepository.save(item);
 
         List<BhQdPheDuyetKhBdgThongTinTaiSan> cts = this.saveCts(item.getId(), item.getThongBaoBdgId());
@@ -318,5 +320,13 @@ public class BhThongBaoBdgKtServiceImpl extends BaseServiceImpl implements BhTho
             if (optional.isPresent() && !optional.get().getId().equals(updateId))
                 throw new Exception("Mã thông báo " + maThongBao + " đã tồn tại");
         }
+    }
+
+    public Integer getSo() throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        Integer so = bhThongBaoBdgKtRepository.findMaxSo(userInfo.getDvql(), LocalDate.now().getYear());
+        so = Optional.ofNullable(so).orElse(0);
+        so = so + 1;
+        return so;
     }
 }
