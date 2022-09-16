@@ -30,6 +30,8 @@ public class KeHoachBanDauGia extends BaseEntity implements Serializable {
 
 	@Column(name = "TRANG_THAI")
 	private String trangThai;
+	@Transient
+	private String tenTrangThai;
 
 	@Column(name = "NAM_KE_HOACH")
 	private Integer namKeHoach;
@@ -46,8 +48,15 @@ public class KeHoachBanDauGia extends BaseEntity implements Serializable {
 	@Column(name = "NGAY_KY")
 	private LocalDate ngayKy;
 
-	@Column(name = "LOAI_HANG_HOA")
-	private String loaiHangHoa;
+	@Column(name = "LOAI_VTHH")
+	private String loaiVthh;
+	@Transient
+	private String tenLoaiVthh;
+
+	@Column(name = "CLOAI_VTHH")
+	private String cloaiVthh;
+	@Transient
+	private String tenCloaiVthh;
 
 	@Column(name = "QD_GIAO_CHI_TIEU_ID")
 	private Long qdGiaoChiTieuId;
@@ -90,12 +99,12 @@ public class KeHoachBanDauGia extends BaseEntity implements Serializable {
 
 	@Column(name = "MA_DV")
 	private String maDv;
+	@Transient
+	private String tenDonVi;
 
 	@Column(name = "CAP_DV")
 	private String capDv;
 
-	@Column(name = "LOAI_VAT_TU_HANG_HOA")
-	private String loaiVatTuHangHoa;
 
 	@Column(name = "SO_QD_PHE_DUYET")
 	private String soQuyetDinhPheDuyet;
@@ -121,7 +130,7 @@ public class KeHoachBanDauGia extends BaseEntity implements Serializable {
 
 	@Column(name = "THOI_HAN_GIAO_NHAN_GC")
 	private String ThoiHanGiaoNhanGhiChu;
-
-	@Transient
-	private String tenHangHoa;
+//
+//	@Transient
+//	private String tenHangHoa;
 }
