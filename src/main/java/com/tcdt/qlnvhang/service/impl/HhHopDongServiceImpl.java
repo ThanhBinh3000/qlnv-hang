@@ -100,6 +100,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
     for (HhDdiemNhapKhoReq ddNhapRq : objReq.getDiaDiemNhapKhoReq()) {
       HhHopDongDdiemNhapKho ddNhap = ObjectMapperUtils.map(ddNhapRq, HhHopDongDdiemNhapKho.class);
       ddNhap.setIdHdongHdr(dataMap.getId());
+      ddNhap.setTrangThai(TrangThaiAllEnum.CHUA_TAO_QD.getId());
       hhHopDongDdiemNhapKhoRepository.save(ddNhap);
     }
     Map<String, String> mapVthh = getListDanhMucHangHoa();
@@ -146,6 +147,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
     for (HhDdiemNhapKhoReq ddNhapRq : objReq.getDiaDiemNhapKhoReq()) {
       HhHopDongDdiemNhapKho ddNhap = ObjectMapperUtils.map(ddNhapRq, HhHopDongDdiemNhapKho.class);
       ddNhap.setIdHdongHdr(dataMap.getId());
+      ddNhap.setTrangThai(TrangThaiAllEnum.CHUA_TAO_QD.getId());
       hhHopDongDdiemNhapKhoRepository.save(ddNhap);
     }
 
