@@ -10,6 +10,7 @@ import javax.validation.Valid;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.request.DeleteReq;
+import com.tcdt.qlnvhang.request.object.HhQdGiaoNvuNhapxuatDtlReq;
 import com.tcdt.qlnvhang.request.search.HhDxKhLcntThopSearchReq;
 import com.tcdt.qlnvhang.service.impl.HhQdGiaoNvuNhapxuatServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +49,6 @@ public class HhQdGiaoNvuNhapxuatController {
 
 	@Autowired
 	private HhQdGiaoNvuNhapxuatService service;
-	@Autowired
-	private HhQdGiaoNvuNhapxuatServiceImpl hhQdGiaoNvuNhapxuatService;
 
 	@ApiOperation(value = "Tạo mới thông tin quyết định giao nhiệm vụ nhập xuất", response = List.class)
 	@PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -245,6 +244,24 @@ public class HhQdGiaoNvuNhapxuatController {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg("Xóa quyết định giao nhiệm vụ nhập hàng lỗi.");
 			log.error("Delete multiple quyết định nhập xuất lỗi ", e);
+		}
+		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Tạo mới thông tin quyết định giao nhiệm vụ nhập xuất", response = List.class)
+	@PostMapping(value = "cap-nhat-ddiem-nhap", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<BaseResponse> updateDdiemNhap(
+			@RequestBody HhQdGiaoNvuNhapxuatHdrReq objReq ) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			service.updateDdiemNhap(objReq);
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Tạo mới thông tin quyết định giao nhiệm vụ nhập xuất trace: {}", e);
 		}
 		return ResponseEntity.ok(resp);
 	}

@@ -77,7 +77,7 @@ public class HhHopDongHdr extends BaseEntity implements Serializable  {
 	Double gtriHdSauVat;
 	String loaiVthh;
 	@Transient
-	String tenVthh;
+	String tenLoaiVthh;
 	String cloaiVthh;
 	@Transient
 	String tenCloaiVthh;

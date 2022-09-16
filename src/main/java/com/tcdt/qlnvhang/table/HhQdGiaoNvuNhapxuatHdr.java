@@ -82,9 +82,22 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 
 	String loaiVthh;
 
+	String cloaiVthh;
+
 	String trichYeu;
 
 	Integer namNhap;
+
+	Long idHd;
+
+	String soHd;
+
+	String donViTinh;
+
+	Long soLuong;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date tgianNkho;
 
 	@Transient
 	String tenDvi;
@@ -102,13 +115,10 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 	String tenLoaiVthh;
 
 	@Transient
+	String tenCloaiVthh;
+
+	@Transient
 	private List<HhQdGiaoNvuNhapxuatDtl> dtlList = new ArrayList<>();
-
-	@Transient
-	private List<HhQdGiaoNvuNhapxuatDtl1> hopDongList = new ArrayList<>();
-
-	@Transient
-	private List<Long> hopDongIds = new ArrayList<>();
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)

@@ -38,16 +38,26 @@ public class HhQdGiaoNvuNhapxuatHdrReq {
 
 	String loaiVthh;
 
+	String cloaiVthh;
+
+
 	String trichYeu;
 
 	Integer namNhap;
 
+	Long idHd;
+
+	String soHd;
+
+	String donViTinh;
+
+	Long soLuong;
+
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-	Date tgNhapKhoMuonNhat;
+	Date tgianNkho;
 
 	private List<HhQdGiaoNvuNhapxuatDtlReq> detailList;
 
 	private List<FileDinhKemReq> fileDinhKems;
 
-	private List<Long> hopDongIds;
 }

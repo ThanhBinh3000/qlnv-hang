@@ -2,7 +2,9 @@ package com.tcdt.qlnvhang.table;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -55,11 +57,18 @@ public class HhQdGiaoNvuNhapxuatDtl implements Serializable {
 
 	Date denNgayThien;
 
+	String trangThai;
+
+	@Transient
+	String tenTrangThai;
+
 	@Transient
 	String tenLoaiNx;
 
 	@Transient
 	String tenDvi;
 
+	@Transient
+	List<HhQdGiaoNvuNxDdiem> diaDiemNhapList = new ArrayList<>();
 
 }

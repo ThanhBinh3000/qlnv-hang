@@ -68,10 +68,11 @@ public interface HhHopDongRepository extends BaseRepository<HhHopDongHdr, Long> 
   @Transient
   void deleteByIdIn(List<Long> ids);
 
-  @Transactional()
-  @Modifying
-  @Query(value = "UPDATE HH_HOP_DONG_HDR HD SET HD.TRANG_THAI=:trangThai WHERE HD.ID IN :listId ", nativeQuery = true)
-  void updateTongHop(List<Long> listId, String trangThai);
+	@Transactional()
+	@Modifying
+	@Query(value = "UPDATE HH_HOP_DONG_HDR HD SET HD.TRANG_THAI=:trangThai WHERE HD.ID = :idHopDong ", nativeQuery = true)
+	void updateHopDong(Long idHopDong, String trangThai);
+
 
 
 }

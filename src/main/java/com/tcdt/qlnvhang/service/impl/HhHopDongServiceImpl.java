@@ -248,7 +248,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
     Map<String, String> hashMapDviLquan = getListDanhMucDviLq("NT");
 
     Map<String, String> mapVthh = getListDanhMucHangHoa();
-    qOptional.get().setTenVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : mapVthh.get(qOptional.get().getLoaiVthh()));
+    qOptional.get().setTenLoaiVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : mapVthh.get(qOptional.get().getLoaiVthh()));
     qOptional.get().setTenCloaiVthh(StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null : mapVthh.get(qOptional.get().getCloaiVthh()));
     qOptional.get().setTenDvi(StringUtils.isEmpty(qOptional.get().getMaDvi()) ? null : mapDmucDvi.get(qOptional.get().getMaDvi()));
     qOptional.get().setDonViTinh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : mapVthh.get(qOptional.get().getDonViTinh()));
@@ -302,7 +302,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 
     page.forEach(f -> {
       f.setTenDvi(mapDmucDvi.get(f.getMaDvi()));
-      f.setTenVthh(mapVthh.get(f.getLoaiVthh()));
+      f.setTenLoaiVthh(mapVthh.get(f.getLoaiVthh()));
       f.setTenCloaiVthh(mapVthh.get(f.getCloaiVthh()));
       f.setTenNthau(hashMapDviLquan.get(DataUtils.safeToDouble(f.getIdNthau()).toString()));
       List<HhHopDongDdiemNhapKho> diaDiemNhapKhos = diaDiemNhapKhoMap.get(f.getId()) != null ? diaDiemNhapKhoMap.get(f.getId()) : new ArrayList<>();

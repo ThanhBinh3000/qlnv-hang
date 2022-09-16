@@ -51,4 +51,6 @@ public interface HhQdGiaoNvuNhapxuatService {
 	boolean deleteMultiple(DeleteReq req) throws Exception;
 
 	Page<HhQdGiaoNvuNhapxuatHdr> searchPage(HhQdNhapxuatSearchReq req) throws Exception;
+
+	void updateDdiemNhap(HhQdGiaoNvuNhapxuatHdrReq req) throws Exception;
 }

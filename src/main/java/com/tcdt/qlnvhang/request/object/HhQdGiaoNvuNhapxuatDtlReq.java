@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.object;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -56,5 +57,8 @@ public class HhQdGiaoNvuNhapxuatDtlReq {
 
 	String maDvi;
 
+	String trangThai;
+
+	private List<HhQdGiaoNvuNhapxuatDdNhapReq> diaDiemNhapList;
 
 }
