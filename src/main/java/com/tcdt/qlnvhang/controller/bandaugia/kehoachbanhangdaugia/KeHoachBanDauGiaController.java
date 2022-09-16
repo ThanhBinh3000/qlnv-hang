@@ -164,7 +164,7 @@ public class KeHoachBanDauGiaController extends BaseController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Tra cứu đề xuất phương án giá", response = List.class)
+	@ApiOperation(value = "Tra cứu đề xuất  kế họach bán đấu giá", response = List.class)
 	@PostMapping(value=  PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody KeHoachBanDauGiaSearchRequest objReq) {
@@ -176,7 +176,7 @@ public class KeHoachBanDauGiaController extends BaseController {
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			log.error(e.getMessage());
-			log.error("Tra cứu thông tin đấu thầu gạo trace: {}", e);
+			log.error("Tra cứu thông tin kế họach bán đấu giá : {}", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
