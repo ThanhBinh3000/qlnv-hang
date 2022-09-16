@@ -37,8 +37,7 @@ import com.tcdt.qlnvhang.table.khotang.KtNhaKho;
 import com.tcdt.qlnvhang.util.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,6 +49,8 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
 
 @RequiredArgsConstructor
 @Log4j2
@@ -106,10 +107,12 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 		keHoachDauGia.setFileDinhKems(fileDinhKems);
 
 		log.info("Save dia diem giao nhan");
+		Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
 		KeHoachBanDauGia finalKeHoachDauGia = keHoachDauGia;
 		List<BanDauGiaDiaDiemGiaoNhan> diaDiemGiaoNhanList = req.getDiaDiemGiaoNhanList().stream().map(it -> {
 			BanDauGiaDiaDiemGiaoNhan dgKhDiaDiemGiaoNhan = diaDiemGiaoNhanRequestMapper.toEntity(it);
 			dgKhDiaDiemGiaoNhan.setBhDgKehoachId(finalKeHoachDauGia.getId());
+			dgKhDiaDiemGiaoNhan.setDiaChi(mapDmucDvi.get(finalKeHoachDauGia.getMaDv()));
 			return dgKhDiaDiemGiaoNhan;
 		}).collect(Collectors.toList());
 		diaDiemGiaoNhanList = diaDiemGiaoNhanRepository.saveAll(diaDiemGiaoNhanList);
@@ -252,10 +255,10 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 			specs.and(SpecUtils.like(KeHoachBanDauGia_.TRICH_YEU, req.getTrichYeu()));
 		}
 		if (Objects.nonNull(req.getNgayKyTuNgay())) {
-			specs.and(SpecUtils.greaterThanOrEqualTo(KeHoachBanDauGia_.NGAY_KY, req.getNgayKyTuNgay()));
+//			specs.and(SpecUtils.greaterThanOrEqualTo(KeHoachBanDauGia_.NGAY_KY, req.getNgayKyTuNgay()));
 		}
 		if (Objects.nonNull(req.getNgayKyTuNgay())) {
-			specs.and(SpecUtils.lessThanOrEqualTo(KeHoachBanDauGia_.NGAY_KY, req.getNgayKyDenNgay()));
+//			specs.and(SpecUtils.lessThanOrEqualTo(KeHoachBanDauGia_.NGAY_KY, req.getNgayKyDenNgay()));
 		}
 		if (!CollectionUtils.isEmpty(req.getCapDvis())) {
 			specs.and(SpecUtils.in(KeHoachBanDauGia_.CAP_DV, req.getCapDvis()));
@@ -265,8 +268,8 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 			specs.and(SpecUtils.in(KeHoachBanDauGia_.MA_DV, req.getMaDvis()));
 		}
 
-		if (!CollectionUtils.isEmpty(req.getLoaiVatTuHangHoa())) {
-			specs.and(SpecUtils.in(KeHoachBanDauGia_.LOAI_VAT_TU_HANG_HOA, req.getLoaiVatTuHangHoa()));
+		if (!CollectionUtils.isEmpty(Collections.singleton(req.getLoaiVthh()))) {
+//			specs.and(SpecUtils.in(KeHoachBanDauGia_.LOAI_VAT_TU_HANG_HOA, req.getLoaiVatTuHangHoa()));
 		}
 
 		Page<KeHoachBanDauGia> page = keHoachBanDauGiaRepository.findAll(specs, req.getPageable());
@@ -280,13 +283,13 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 		List<BanDauGiaDiaDiemGiaoNhan> diaDiemGiaoNhanList = diaDiemGiaoNhanRepository.findByBhDgKehoachIdIn(ids);
 		//Map: Key-value = BhDgKehoachId-list BhDgKhDiaDiemGiaoNhan
 		Map<Long, List<BanDauGiaDiaDiemGiaoNhan>> diaDiemGiaoNhanMap = diaDiemGiaoNhanList.stream()
-				.collect(Collectors.groupingBy(BanDauGiaDiaDiemGiaoNhan::getBhDgKehoachId));
+				.collect(groupingBy(BanDauGiaDiaDiemGiaoNhan::getBhDgKehoachId));
 
 		//Map: Key-value = BhDgKehoachId- list BhDgKhPhanLoTaiSan
 		log.info("Phân lô tài sản");
 		List<BanDauGiaPhanLoTaiSan> phanLoTaiSanList = phanLoTaiSanRepository.findByBhDgKehoachIdIn(ids);
 		Map<Long, List<BanDauGiaPhanLoTaiSan>> phanLoTaiSanMap = phanLoTaiSanList.stream()
-				.collect(Collectors.groupingBy(BanDauGiaPhanLoTaiSan::getBhDgKehoachId));
+				.collect(groupingBy(BanDauGiaPhanLoTaiSan::getBhDgKehoachId));
 		log.info("Chỉ tiêu kế hoạch năm");
 		List<Long> chiTieuKeHoachNamIds = response.stream().map(KeHoachBanDauGia::getQdGiaoChiTieuId).collect(Collectors.toList());
 		List<ChiTieuKeHoachNam> chiTieuKeHoachNamList = chiTieuKeHoachNamRepository.findByIdIn(chiTieuKeHoachNamIds);
@@ -294,7 +297,7 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 				(existing, replacement) -> existing));
 
 		log.info("Vật tư hàng hóa");
-		Set<String> maVatTuHangHoa = response.stream().map(KeHoachBanDauGia::getLoaiHangHoa).collect(Collectors.toSet());
+		Set<String> maVatTuHangHoa = response.stream().map(KeHoachBanDauGia::getLoaiVthh).collect(Collectors.toSet());
 		//Key-vaule = mã vật tư hàng hóa - vật tư hàng hóa
 		Map<String, QlnvDmVattu> vatTuHangHoaMap = new HashMap<>();
 		if (!CollectionUtils.isEmpty(maVatTuHangHoa)) {
@@ -317,8 +320,8 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 			if (Objects.nonNull(chiTieuKeHoachNamMap.get(it.getQdGiaoChiTieuId()))) {
 				it.setSoQuyetDinhGiaoChiTieu(chiTieuKeHoachNamMap.get(it.getQdGiaoChiTieuId()).getSoQuyetDinh());
 			}
-			if (Objects.nonNull(finalVatTuHangHoaMap.get(it.getLoaiHangHoa()))) {
-				it.setTenHangHoa(finalVatTuHangHoaMap.get(it.getLoaiHangHoa()).getTen());
+			if (Objects.nonNull(finalVatTuHangHoaMap.get(it.getLoaiVthh()))) {
+//				it.setTenHangHoa(finalVatTuHangHoaMap.get(it.getLoaiVthh()).getTen());
 			}
 
 			KeHoachBanDauGiaResponse result = kehoachResponseMapper.toDto(it);
@@ -473,6 +476,42 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 			if (diemKho != null) item.setTenDiemKho(diemKho.getTenDiemkho());
 			if (chiCuc != null) item.setTenChiCuc(chiCuc.getTenDvi());
 		}
+	}
+
+	@Override
+	public Page<KeHoachBanDauGia> searchPage(KeHoachBanDauGiaSearchRequest objReq) throws Exception{
+		Pageable pageable= PageRequest.of(objReq.getPaggingReq().getPage(),objReq.getPaggingReq().getLimit(), Sort.by("id").ascending());
+		Page<KeHoachBanDauGia> data=keHoachBanDauGiaRepository.selectPage(
+				objReq.getNamKeHoach(),
+				objReq.getSoKeHoach(),
+				objReq.getTrichYeu(),
+				Contains.convertDateToString(objReq.getNgayKyTuNgay()),
+				Contains.convertDateToString(objReq.getNgayKyDenNgay()),
+				objReq.getLoaiVthh(),
+				pageable);
+		Map<String, String> mapHangHoa = getListDanhMucHangHoa();
+		Map<String, String> mapDonvi = getListDanhMucDvi(null,null,"01");
+		List<Long> listId = data.getContent().stream().map(KeHoachBanDauGia::getId).collect(Collectors.toList());
+
+		List<BanDauGiaDiaDiemGiaoNhan> diaDiemGiaoNhanList=diaDiemGiaoNhanRepository.findByBhDgKehoachIdIn(listId);
+		List<BanDauGiaPhanLoTaiSan> phanLoTaiSanList=phanLoTaiSanRepository.findByBhDgKehoachIdIn(listId);
+
+		Map<Long,List<BanDauGiaDiaDiemGiaoNhan>> mapGiaoNhan = diaDiemGiaoNhanList.stream()
+				.collect(groupingBy(BanDauGiaDiaDiemGiaoNhan::getBhDgKehoachId));
+
+		Map<Long,List<BanDauGiaPhanLoTaiSan>> mapPhanLo = phanLoTaiSanList.stream()
+				.collect(groupingBy(BanDauGiaPhanLoTaiSan::getBhDgKehoachId));
+
+		data.getContent().forEach(f->{
+			f.setTenLoaiVthh(mapHangHoa.get(f.getLoaiVthh()));
+			f.setTenCloaiVthh(mapHangHoa.get(f.getCloaiVthh()));
+			f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+			f.setTenDonVi(mapDonvi.get(f.getMaDv()));
+			f.setDiaDiemGiaoNhanList(mapGiaoNhan.get(f.getId()));
+			f.setPhanLoTaiSanList(mapPhanLo.get(f.getId()));
+		});
+
+		return data;
 	}
 
 }

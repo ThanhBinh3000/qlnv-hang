@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.bandaugia.kehoachbanhangdaugia;
 
+import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGia;
 import com.tcdt.qlnvhang.request.bandaugia.kehoachbanhangdaugia.KehoachBanDauGiaRequest;
 import com.tcdt.qlnvhang.request.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGiaSearchRequest;
 import com.tcdt.qlnvhang.response.banhangdaugia.kehoachbanhangdaugia.KeHoachBanDauGiaResponse;
@@ -22,4 +23,5 @@ public interface KeHoachBanDauGiaService {
 	KeHoachBanDauGiaResponse detail(Long id) throws Exception;
 
 
+	Page<KeHoachBanDauGia> searchPage(KeHoachBanDauGiaSearchRequest objReq) throws Exception;
 }

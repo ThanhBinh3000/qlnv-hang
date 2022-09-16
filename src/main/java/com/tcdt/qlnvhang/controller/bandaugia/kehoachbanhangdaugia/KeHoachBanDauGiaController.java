@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.tcdt.qlnvhang.util.PathContains;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -159,6 +160,23 @@ public class KeHoachBanDauGiaController extends BaseController {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
 			log.error(e.getMessage());
+		}
+		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Tra cứu đề xuất  kế họach bán đấu giá", response = List.class)
+	@PostMapping(value=  PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody KeHoachBanDauGiaSearchRequest objReq) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(keHoachBanDauGiaService.searchPage(objReq));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			log.error(e.getMessage());
+			log.error("Tra cứu thông tin kế họach bán đấu giá : {}", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
