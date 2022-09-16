@@ -34,4 +34,6 @@ public class HhHopDongSearchReq extends BaseRequest {
 
 	String maDvi;
 
+	String namHd;
+
 }
