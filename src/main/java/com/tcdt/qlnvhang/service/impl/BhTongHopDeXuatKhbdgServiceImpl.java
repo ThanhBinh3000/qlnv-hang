@@ -169,7 +169,7 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 
 		BhTongHopDeXuatKhbdgResponse response = tongHopDeXuatKhbdgResponseMapper.toDto(deXuatKhbdg);
 
-		QlnvDmVattu dmVattu = dmVattuRepository.findByMa(deXuatKhbdg.getMaVatTuCha());
+		QlnvDmVattu dmVattu = dmVattuRepository.findByMa(deXuatKhbdg.getLoaiVthh());
 		if (dmVattu != null) {
 			response.setTenVatTuCha(dmVattu.getTen());
 		}

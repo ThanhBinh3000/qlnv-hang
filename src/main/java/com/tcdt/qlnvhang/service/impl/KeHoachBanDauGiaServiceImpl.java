@@ -480,6 +480,7 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 
 	@Override
 	public Page<KeHoachBanDauGia> searchPage(KeHoachBanDauGiaSearchRequest objReq) throws Exception{
+		UserInfo userInfo = SecurityContextService.getUser();
 		Pageable pageable= PageRequest.of(objReq.getPaggingReq().getPage(),objReq.getPaggingReq().getLimit(), Sort.by("id").ascending());
 		Page<KeHoachBanDauGia> data=keHoachBanDauGiaRepository.selectPage(
 				objReq.getNamKeHoach(),
@@ -488,19 +489,26 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 				Contains.convertDateToString(objReq.getNgayKyTuNgay()),
 				Contains.convertDateToString(objReq.getNgayKyDenNgay()),
 				objReq.getLoaiVthh(),
+				userInfo.getDvql(),
+				objReq.getTrangThai(),
 				pageable);
 		Map<String, String> mapHangHoa = getListDanhMucHangHoa();
 		Map<String, String> mapDonvi = getListDanhMucDvi(null,null,"01");
 		List<Long> listId = data.getContent().stream().map(KeHoachBanDauGia::getId).collect(Collectors.toList());
+		List<Long> listIdChiTieu = data.getContent().stream().map(KeHoachBanDauGia::getQdGiaoChiTieuId).collect(Collectors.toList());
 
 		List<BanDauGiaDiaDiemGiaoNhan> diaDiemGiaoNhanList=diaDiemGiaoNhanRepository.findByBhDgKehoachIdIn(listId);
 		List<BanDauGiaPhanLoTaiSan> phanLoTaiSanList=phanLoTaiSanRepository.findByBhDgKehoachIdIn(listId);
+		List<ChiTieuKeHoachNam> chiTieuKeHoachNamList=chiTieuKeHoachNamRepository.findByIdIn(listIdChiTieu);
 
 		Map<Long,List<BanDauGiaDiaDiemGiaoNhan>> mapGiaoNhan = diaDiemGiaoNhanList.stream()
 				.collect(groupingBy(BanDauGiaDiaDiemGiaoNhan::getBhDgKehoachId));
 
 		Map<Long,List<BanDauGiaPhanLoTaiSan>> mapPhanLo = phanLoTaiSanList.stream()
 				.collect(groupingBy(BanDauGiaPhanLoTaiSan::getBhDgKehoachId));
+
+		Map<Long, ChiTieuKeHoachNam> mapChiTieu = chiTieuKeHoachNamList.stream()
+				.collect(Collectors.toMap(ChiTieuKeHoachNam::getId, Function.identity(), (existing, replacement) -> existing));
 
 		data.getContent().forEach(f->{
 			f.setTenLoaiVthh(mapHangHoa.get(f.getLoaiVthh()));
@@ -509,6 +517,7 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 			f.setTenDonVi(mapDonvi.get(f.getMaDv()));
 			f.setDiaDiemGiaoNhanList(mapGiaoNhan.get(f.getId()));
 			f.setPhanLoTaiSanList(mapPhanLo.get(f.getId()));
+			f.setSoQuyetDinhGiaoChiTieu(mapChiTieu.get(f.getQdGiaoChiTieuId()).getSoQuyetDinh());
 		});
 
 		return data;

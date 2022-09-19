@@ -18,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -247,15 +248,43 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		Optional<HhDxKhLcntThopHdr> optional = hhDxKhLcntThopHdrRepository.findById(idSearchReq.getId());
 		if (!optional.isPresent())
 			throw new Exception("Không tìm thấy dữ liệu cần xoá");
-
-//		if (optional.get().getPhuongAn().equals(Contains.ACTIVE))
-//			throw new Exception("Tổng hợp đã được lập phương án trình Tổng cục, không được phép xóa");
-
+		List<HhDxKhLcntThopDtl> listDls= hhDxKhLcntThopDtlRepository.findByIdThopHdr(optional.get().getId());
+		if(!CollectionUtils.isEmpty(listDls)){
+			List<Long> idDxList = listDls.stream().map(HhDxKhLcntThopDtl::getIdDxHdr).collect(Collectors.toList());
+			List<HhDxuatKhLcntHdr> listDxHdr = hhDxuatKhLcntHdrRepository.findByIdIn(idDxList);
+			if(!CollectionUtils.isEmpty(listDxHdr)){
+				listDxHdr.stream().map(item ->{
+					item.setTrangThaiTh(Contains.CHUATONGHOP);
+					return item;
+				}).collect(Collectors.toList());
+			}
+			hhDxuatKhLcntHdrRepository.saveAll(listDxHdr);
+		}
+		hhDxKhLcntThopDtlRepository.deleteAll(listDls);
 		hhDxKhLcntThopHdrRepository.delete(optional.get());
-//		List<String> soDxuatList = optional.get().getChildren().stream().map(HhDxKhLcntThopDtl::getSoDxuat)
-//				.collect(Collectors.toList());
-//		hhDxuatKhLcntHdrRepository.updateTongHop(soDxuatList, Contains.DUYET);
+	}
 
+	@Override
+	public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
+		if (StringUtils.isEmpty(idSearchReq.getIdList()))
+			throw new Exception("Xoá thất bại, không tìm thấy dữ liệu");
+		List<HhDxKhLcntThopHdr> listThop= hhDxKhLcntThopHdrRepository.findAllByIdIn(idSearchReq.getIdList());
+		for (HhDxKhLcntThopHdr thopHdr: listThop){
+			List<HhDxKhLcntThopDtl> listDls= hhDxKhLcntThopDtlRepository.findByIdThopHdr(thopHdr.getId());
+			if(!CollectionUtils.isEmpty(listDls)){
+				List<Long> idDxList = listDls.stream().map(HhDxKhLcntThopDtl::getIdDxHdr).collect(Collectors.toList());
+				List<HhDxuatKhLcntHdr> listDxHdr = hhDxuatKhLcntHdrRepository.findByIdIn(idDxList);
+				if(!CollectionUtils.isEmpty(listDxHdr)){
+					listDxHdr.stream().map(item ->{
+						item.setTrangThaiTh(Contains.CHUATONGHOP);
+						return item;
+					}).collect(Collectors.toList());
+				}
+				hhDxuatKhLcntHdrRepository.saveAll(listDxHdr);
+			}
+			hhDxKhLcntThopDtlRepository.deleteAllByIdIn(listDls);
+		}
+		hhDxKhLcntThopHdrRepository.deleteAllByIdIn(idSearchReq.getIdList());
 	}
 
 	@Override

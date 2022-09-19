@@ -21,8 +21,10 @@ public interface KeHoachBanDauGiaRepository extends BaseRepository<KeHoachBanDau
 			"AND (:trichYeu IS NULL OR LOWER(KH.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%',:trichYeu),'%')))" +
 			"AND (:ngayKyTu IS NULL OR KH.NGAY_KY >=  TO_DATE(:ngayKyTu,'yyyy-MM-dd'))"+
 			"AND (:ngayKyDen IS NULL OR KH.NGAY_KY <= TO_DATE(:ngayKyDen,'yyyy-MM-dd'))"+
-			"AND (:loaiVthh IS NULL OR KH.LOAI_VTHH = :loaiVthh) "
+			"AND (:loaiVthh IS NULL OR KH.LOAI_VTHH = :loaiVthh) "+
+			"AND ( KH.MA_DVI = :maDvi) " +
+			"AND (:trangThai IS NULL OR QD.TRANG_THAI = :trangThai )"
 			, nativeQuery = true)
-	Page<KeHoachBanDauGia> selectPage(Integer namKh, String soKh, String trichYeu, String ngayKyTu, String ngayKyDen, String loaiVthh, Pageable pageable);
+	Page<KeHoachBanDauGia> selectPage(Integer namKh, String soKh, String trichYeu, String ngayKyTu, String ngayKyDen, String loaiVthh, String maDvi, String trangThai, Pageable pageable);
 
 }

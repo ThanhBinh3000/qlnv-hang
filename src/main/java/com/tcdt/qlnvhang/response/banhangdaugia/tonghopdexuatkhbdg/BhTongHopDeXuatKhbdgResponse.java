@@ -34,15 +34,13 @@ public class BhTongHopDeXuatKhbdgResponse  extends CommonResponse {
 	private String trangThai;
 	private String maTongHop;
 	private IdAndNameDto qdPheDuyetKhbdg;
-	private String maVatTu;
-	private String maVatTuCha;
-	private String tenVatTuCha;
-	private String loaiVthh;
 	private Long nguoiGuiDuyetId;
 	private LocalDate ngayGuiDuyet;
 	private Long nguoiPduyetId;
 	private LocalDate ngayPduyet;
 	private String lyDoTuChoi;
+	private String loaiVthh;
+	private String cloaiVthh;
 	private List<BhTongHopDeXuatCtResponse> chiTietList = new ArrayList<>();
 
 }

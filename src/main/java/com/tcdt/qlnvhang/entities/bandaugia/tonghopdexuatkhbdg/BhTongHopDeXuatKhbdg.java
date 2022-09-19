@@ -27,11 +27,15 @@ public class BhTongHopDeXuatKhbdg extends BaseEntity implements Serializable {
 	@Column(name = "NAM_KE_HOACH")
 	private Integer namKeHoach;
 
-	@Column(name = "MA_VAT_TU_CHA")
-	private String maVatTuCha;
+	@Column(name = "LOAI_VTHH")
+	private String loaiVthh;
+	@Transient
+	private String tenLoaiVthh;
 
-	@Column(name = "MA_VAT_TU")
-	private String maVatTu;
+	@Column(name = "CLOAI_VTHH")
+	private String cloaiVthh;
+	@Transient
+	private String tenCloaiVthh;
 
 	@Column(name = "NGAY_KY_TU_NGAY")
 	private LocalDate ngayKyTuNgay;
@@ -69,8 +73,6 @@ public class BhTongHopDeXuatKhbdg extends BaseEntity implements Serializable {
 	@Column(name = "QD_PHE_DUYET_KHBDG_ID")
 	private Long qdPheDuyetKhbdgId;
 
-	@Column(name = "LOAI_VTHH")
-	private String loaiVthh;
 
 	@Column(name = "NGUOI_GUI_DUYET_ID")
 	private Long nguoiGuiDuyetId;

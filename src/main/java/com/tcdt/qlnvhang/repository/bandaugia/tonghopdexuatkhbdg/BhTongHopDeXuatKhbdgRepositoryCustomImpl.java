@@ -33,7 +33,7 @@ public class BhTongHopDeXuatKhbdgRepositoryCustomImpl implements BhTongHopDeXuat
 		StringBuilder builder = new StringBuilder();
 		QueryUtils tongHopDeXuat = QueryUtils.builder().clazz(BhTongHopDeXuatKhbdg.class).alias("tongHopDeXuatKHBDG").build();
 		QueryUtils qdPheDuyet = QueryUtils.builder().clazz(BhQdPheDuyetKhbdg.class).alias("qdPheDuyetKHBDG").build();
-		QueryUtils vatTuHangHoa = QueryUtils.builder().clazz(QlnvDmVattu.class).alias("vatTuCha").build();
+		QueryUtils loaiVthh = QueryUtils.builder().clazz(QlnvDmVattu.class).alias("loaiVthh").build();
 		log.debug("Build select query");
 		builder.append(QueryUtils.SELECT)
 				.append(tongHopDeXuat.selectField(BhTongHopDeXuatKhbdg_.ID))
@@ -44,10 +44,10 @@ public class BhTongHopDeXuatKhbdgRepositoryCustomImpl implements BhTongHopDeXuat
 				.append(tongHopDeXuat.selectField(BhTongHopDeXuatKhbdg_.TRANG_THAI))
 				.append(qdPheDuyet.selectField(BhQdPheDuyetKhbdg_.ID))
 				.append(qdPheDuyet.selectField(BhQdPheDuyetKhbdg_.SO_QUYET_DINH))
-				.append(vatTuHangHoa.selectField(QlnvDmVattu_.TEN));
+				.append(loaiVthh.selectField(QlnvDmVattu_.TEN));
 		builder.append(QueryUtils.FROM)
 				.append(tongHopDeXuat.buildAliasName())
-				.append(QueryUtils.buildInnerJoin(tongHopDeXuat, vatTuHangHoa, BhTongHopDeXuatKhbdg_.MA_VAT_TU_CHA, QlnvDmVattu_.MA))
+				.append(QueryUtils.buildInnerJoin(tongHopDeXuat, loaiVthh, BhTongHopDeXuatKhbdg_.LOAI_VTHH, QlnvDmVattu_.MA))
 				.append(QueryUtils.buildLeftJoin(tongHopDeXuat, qdPheDuyet, BhTongHopDeXuatKhbdg_.ID, BhQdPheDuyetKhbdg_.TONG_HOP_DE_XUAT_KHBDG_ID));
 
 		setConditionSearch(req, builder, tongHopDeXuat);
@@ -73,7 +73,7 @@ public class BhTongHopDeXuatKhbdgRepositoryCustomImpl implements BhTongHopDeXuat
 	private void setConditionSearch(BhTongHopDeXuatKhbdgSearchRequest req, StringBuilder builder, QueryUtils tongHopDeXuat) {
 		QueryUtils.buildWhereClause(builder);
 		tongHopDeXuat.eq(Operator.AND, BhTongHopDeXuatKhbdg_.NAM_KE_HOACH, req.getNamKeHoach(), builder);
-		tongHopDeXuat.eq(Operator.AND, BhTongHopDeXuatKhbdg_.MA_VAT_TU_CHA, req.getMaVatTuCha(), builder);
+		tongHopDeXuat.eq(Operator.AND, BhTongHopDeXuatKhbdg_.LOAI_VTHH, req.getLoaiVthh(), builder);
 		tongHopDeXuat.like(Operator.AND, BhTongHopDeXuatKhbdg_.NOI_DUNG_TONG_HOP, req.getNoiDungTongHop(), builder);
 		tongHopDeXuat.start(Operator.AND, BhTongHopDeXuatKhbdg_.NGAY_TONG_HOP, req.getNgayTongHopTuNgay(), builder);
 		tongHopDeXuat.end(Operator.AND, BhTongHopDeXuatKhbdg_.NGAY_TONG_HOP, req.getNgayTongHopDenNgay(), builder);
@@ -93,7 +93,7 @@ public class BhTongHopDeXuatKhbdgRepositoryCustomImpl implements BhTongHopDeXuat
 
 	private void setParameterSearch(BhTongHopDeXuatKhbdgSearchRequest req, Query query, QueryUtils tongHopDeXuat) {
 		tongHopDeXuat.setParam(query, BhTongHopDeXuatKhbdg_.NAM_KE_HOACH, req.getNamKeHoach());
-		tongHopDeXuat.setParam(query, BhTongHopDeXuatKhbdg_.MA_VAT_TU_CHA, req.getMaVatTuCha());
+		tongHopDeXuat.setParam(query, BhTongHopDeXuatKhbdg_.LOAI_VTHH, req.getLoaiVthh());
 		tongHopDeXuat.setLikeParam(query, BhTongHopDeXuatKhbdg_.NOI_DUNG_TONG_HOP, req.getNoiDungTongHop());
 		tongHopDeXuat.setParamStart(query, BhTongHopDeXuatKhbdg_.NGAY_TONG_HOP, req.getNgayTongHopTuNgay());
 		tongHopDeXuat.setParamEnd(query, BhTongHopDeXuatKhbdg_.NGAY_TONG_HOP, req.getNgayTongHopDenNgay());

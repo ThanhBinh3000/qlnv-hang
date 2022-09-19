@@ -29,7 +29,9 @@ public class KehoachBanDauGiaRequest {
 	
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate ngayKy;
-	private String loaiHangHoa;
+	private String loaiVthh;
+	private String cloaiVthh;
+	private String moTaHangHoa;
 	private Long qdGiaoChiTieuId;
 	private String tieuChuanChatLuong;
 	private BigDecimal soLuong;
@@ -49,7 +51,6 @@ public class KehoachBanDauGiaRequest {
 	private BigDecimal thoiHanGiaoNhan;
 	private String maDv;
 	private String capDv;
-	private String loaiVatTuHangHoa;
 	private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 	private List<BanDauGiaDiaDiemGiaoNhanRequest> diaDiemGiaoNhanList = new ArrayList<>();
 	private List<BanDauGiaPhanLoTaiSanRequest> phanLoTaiSanList = new ArrayList<>();
