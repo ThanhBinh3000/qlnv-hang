@@ -20,7 +20,8 @@ import java.time.LocalDate;
 public class BhTongHopDeXuatKhbdgSearchRequest extends BaseRequest {
 	private Long id;
 	private Integer namKeHoach;
-	private String maVatTuCha;
+	private String loaiVthh;
+	private String cloaiVthh;
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate ngayTongHopTuNgay;
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

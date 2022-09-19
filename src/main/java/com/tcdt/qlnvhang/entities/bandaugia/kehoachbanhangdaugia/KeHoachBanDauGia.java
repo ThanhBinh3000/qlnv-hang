@@ -58,6 +58,8 @@ public class KeHoachBanDauGia extends BaseEntity implements Serializable {
 	@Transient
 	private String tenCloaiVthh;
 
+	private String moTaHangHoa;
+
 	@Column(name = "QD_GIAO_CHI_TIEU_ID")
 	private Long qdGiaoChiTieuId;
 

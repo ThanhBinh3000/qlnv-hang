@@ -98,5 +98,4 @@ public class HhDxKhLcntThopHdr implements Serializable {
 
 	@Transient
 	private List<HhDxKhLcntThopDtl> hhDxKhLcntThopDtlList = new ArrayList<>();
-
 }

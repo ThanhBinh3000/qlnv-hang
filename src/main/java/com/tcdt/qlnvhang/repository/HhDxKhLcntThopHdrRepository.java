@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.repository;
 
-import com.tcdt.qlnvhang.table.HhDxuatKhLcntHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
@@ -47,4 +46,10 @@ public interface HhDxKhLcntThopHdrRepository extends BaseRepository<HhDxKhLcntTh
 					"  AND (:trangThai IS NULL OR HH_DX_KHLCNT_THOP_HDR.TRANG_THAI = :trangThai) ",
 			nativeQuery = true)
 	List<HhDxKhLcntThopHdr> selectAll(String namKh, String loaiVthh,String cloaiVthh, String tuNgayThop, String denNgayThop, String trangThai);
+
+	@Transactional
+	@Modifying
+	void deleteAllByIdIn(List<Long> ids);
+
+	List<HhDxKhLcntThopHdr> findAllByIdIn(List<Long> ids);
 }

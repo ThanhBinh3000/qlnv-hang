@@ -33,6 +33,8 @@ public interface HhDxKhLcntThopHdrService {
 	@Transactional(rollbackOn = Exception.class)
 	void delete(IdSearchReq idSearchReq) throws Exception;
 
+	void deleteMulti(IdSearchReq idSearchReq) throws Exception;
+
 	List<HhDxKhLcntThopDtl> findByStatus(HhDxKhLcntDsChuaThReq objReq, HttpServletRequest req) throws Exception;
 
 	void exportDsThDxKhLcnt(HhDxKhLcntThopSearchReq searchReq, HttpServletResponse response) throws Exception;

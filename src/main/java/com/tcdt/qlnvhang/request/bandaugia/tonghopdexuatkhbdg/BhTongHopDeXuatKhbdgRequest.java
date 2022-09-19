@@ -31,8 +31,7 @@ public class BhTongHopDeXuatKhbdgRequest {
 	private String capDonVi;
 	private String trangThai;
 	private String maTongHop;
-	private String maVatTu;
-	private String maVatTuCha;
 	private String loaiVthh;
+	private String cloaiVthh;
 	private List<BhTongHopDeXuatCtRequest> chiTietList = new ArrayList<>();
 }
