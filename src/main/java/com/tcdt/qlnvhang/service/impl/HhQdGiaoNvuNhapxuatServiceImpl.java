@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatDtlLoaiNx;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatHdrLoaiQd;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.HhDviThuchienQdinhRepository;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNxDdiemRepository;
@@ -157,6 +158,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		for (HhQdGiaoNvuNhapxuatDtl dtl : dtls) {
 			dtl.setId(null);
 			dtl.setIdHdr(main.getId());
+			dtl.setTrangThai(TrangThaiAllEnum.CHUA_CAP_NHAT.getId());
 			dtlRepository.save(dtl);
 		}
 
@@ -242,7 +244,8 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 		HhQdGiaoNvuNhapxuatHdr item = optional.get();
 
-		if (Contains.LOAI_VTHH_VATTU.equals(item.getLoaiVthh())) {
+		// Is vật tư
+		if (item.getLoaiVthh().startsWith("02")) {
 			String status = stReq.getTrangThai() + optional.get().getTrangThai();
 			switch (status) {
 				case Contains.CHODUYET_TP + Contains.DUTHAO:

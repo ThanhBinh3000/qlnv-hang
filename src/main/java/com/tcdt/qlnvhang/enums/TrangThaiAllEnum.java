@@ -33,7 +33,11 @@ public enum TrangThaiAllEnum {
   BAN_HANH("29", "Ban hành"),
   DA_KY("30", "Đã ký"),
   CHUA_TAO_TO_TRINH("31", "Chưa tạo tờ trình"),
-  DA_TAO_TO_TRINH("32", "Đã tạo tờ trình");
+  DA_TAO_TO_TRINH("32", "Đã tạo tờ trình"),
+//   CHUA_CAP_NHAT("32", "Đã tạo tờ trình");
+  CHUA_CAP_NHAT("33", "Chưa cập nhật"),
+  DANG_CAP_NHAT("34", "Đang cập nhật"),
+  HOAN_THANH_CAP_NHAT("35", "Hoàn thành cập nhật");
 
   private final String id;
   private final String ten;
