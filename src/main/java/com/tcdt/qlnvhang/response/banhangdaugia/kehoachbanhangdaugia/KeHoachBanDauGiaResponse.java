@@ -19,6 +19,7 @@ import java.util.List;
 public class KeHoachBanDauGiaResponse {
 	private Long id;
 	private String trangThai;
+	private String trangThaiTh;
 	private Integer namKeHoach;
 	private String soKeHoach;
 	private String trichYeu;
@@ -26,7 +27,9 @@ public class KeHoachBanDauGiaResponse {
 	private LocalDate ngayLapKeHoach;
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate ngayKy;
-	private String loaiHangHoa;
+	private String loaiVthh;
+	private String cloaiVthh;
+	private String moTaHangHoa;
 	private Long qdGiaoChiTieuId;
 	private String tieuChuanChatLuong;
 	private String loaiHopDong;
@@ -42,17 +45,16 @@ public class KeHoachBanDauGiaResponse {
 	private BigDecimal thoiHanGiaoNhan;
 	private String maDv;
 	private String capDv;
-	private String loaiVatTuHangHoa;
 	private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 	private List<BanDauGiaDiaDiemGiaoNhanResponse> diaDiemGiaoNhanList = new ArrayList<>();
 	private List<BanDauGiaPhanLoTaiSanResponse> phanLoTaiSanList = new ArrayList<>();
 	private String tenTrangThai;
+	private String tenTrangThaiTh;
 	private String soQuyetDinhGiaoChiTieu;
 	private String soQuyetDinhPheDuyet;
 	private String thoiGianKyHopDongGhiChu;
 	private String thoiHanThanhToanGhiChu;
 	private String ThoiHanGiaoNhanGhiChu;
-	private String tenHangHoa;
 	private BigDecimal tongSoLuongDonViTaiSan;
 	private BigDecimal tongGiaKhoiDiem;
 	private BigDecimal tongKhoanTienDatTruoc;

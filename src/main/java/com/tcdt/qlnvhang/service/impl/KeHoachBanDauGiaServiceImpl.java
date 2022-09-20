@@ -95,11 +95,12 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 		if (userInfo == null) throw new Exception("Bad request.");
 		log.info("Save ke hoach ban dau gia");
 		KeHoachBanDauGia keHoachDauGia = kehoachRequestMapper.toEntity(req);
-		keHoachDauGia.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
+		keHoachDauGia.setTrangThai(Contains.DUTHAO);
 		keHoachDauGia.setNgayTao(LocalDate.now());
 		keHoachDauGia.setNguoiTaoId(userInfo.getId());
 		keHoachDauGia.setMaDv(userInfo.getDvql());
 		keHoachDauGia.setCapDv(userInfo.getCapDvi());
+		keHoachDauGia.setTrangThaiTh(Contains.CHUATONGHOP);
 		keHoachDauGia = keHoachBanDauGiaRepository.save(keHoachDauGia);
 
 		log.info("Save file dinh kem");
@@ -359,7 +360,8 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 		this.prepareSearchReq(req, userInfo, req.getCapDvis(), req.getTrangThais());
 		req.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
 		List<KeHoachBanDauGiaResponse> list = this.search(req).get().collect(Collectors.toList());
-
+		Page<KeHoachBanDauGia> page = this.searchPage(req);
+		List<KeHoachBanDauGia> data = page.getContent();
 		if (CollectionUtils.isEmpty(list))
 			return true;
 
@@ -379,7 +381,7 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 				objs[2] = LocalDateTimeUtils.localDateToString(item.getNgayLapKeHoach());
 				objs[3] = LocalDateTimeUtils.localDateToString(item.getNgayKy());
 				objs[4] = item.getTrichYeu();
-				objs[5] = Optional.ofNullable(Contains.mpLoaiVthh.get(item.getLoaiVatTuHangHoa())).orElse("");
+				objs[5] = Optional.ofNullable(Contains.mpLoaiVthh.get(item.getLoaiVthh())).orElse("");
 				objs[6] = item.getSoQuyetDinhGiaoChiTieu();
 				objs[7] = item.getSoQuyetDinhPheDuyet();
 				objs[8] = item.getNamKeHoach();

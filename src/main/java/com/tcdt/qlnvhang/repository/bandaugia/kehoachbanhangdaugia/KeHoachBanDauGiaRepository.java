@@ -4,8 +4,10 @@ import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGi
 import com.tcdt.qlnvhang.repository.BaseRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
@@ -22,9 +24,14 @@ public interface KeHoachBanDauGiaRepository extends BaseRepository<KeHoachBanDau
 			"AND (:ngayKyTu IS NULL OR KH.NGAY_KY >=  TO_DATE(:ngayKyTu,'yyyy-MM-dd'))"+
 			"AND (:ngayKyDen IS NULL OR KH.NGAY_KY <= TO_DATE(:ngayKyDen,'yyyy-MM-dd'))"+
 			"AND (:loaiVthh IS NULL OR KH.LOAI_VTHH = :loaiVthh) "+
-			"AND ( KH.MA_DV = :maDvi) " +
+			"AND (:maDvi IS NULL OR  LOWER(KH.MA_DV) LIKE(CONCAT(:maDvi,'%'))) " +
 			"AND (:trangThai IS NULL OR KH.TRANG_THAI = :trangThai )"
 			, nativeQuery = true)
 	Page<KeHoachBanDauGia> selectPage(Integer namKh, String soKh, String trichYeu, String ngayKyTu, String ngayKyDen, String loaiVthh, String maDvi, String trangThai, Pageable pageable);
+
+	@Transactional()
+	@Modifying
+	@Query(value = "UPDATE BH_DG_KEHOACH SET TRANG_THAI_TH=:trangThaiTh WHERE SO_KE_HOACH IN :soKhList", nativeQuery = true)
+	void updateTongHop(List<String> soKhList, String trangThaiTh);
 
 }
