@@ -19,7 +19,6 @@ import com.tcdt.qlnvhang.response.banhangdaugia.tonghopdexuatkhbdg.BhTongHopDeXu
 import com.tcdt.qlnvhang.response.banhangdaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgSearchResponse;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgService;
-import com.tcdt.qlnvhang.table.HhDxKhLcntThopDtl;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import com.tcdt.qlnvhang.util.Contains;
@@ -29,18 +28,21 @@ import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
 
 @RequiredArgsConstructor
 @Log4j2
@@ -244,5 +246,31 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 		theEntity.setLyDoTuChoi(stReq.getLyDo());
 		deXuatKhbdgRepository.save(theEntity);
 		return true;
+	}
+
+	@Override
+	public Page<BhTongHopDeXuatKhbdg> searchPage(HttpServletRequest request, BhTongHopDeXuatKhbdgSearchRequest req) throws Exception {
+		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
+		Page<BhTongHopDeXuatKhbdg> page = deXuatKhbdgRepository.select(
+				req.getNamKeHoach(),
+				req.getLoaiVthh(),
+				req.getCloaiVthh(),
+				convertDateToString(req.getNgayTongHopTuNgay()),
+				convertDateToString(req.getNgayTongHopDenNgay()),
+				req.getNoiDungTongHop(),
+				req.getTrangThai(),
+				pageable);
+		List<Long>listId=page.getContent().stream().map(BhTongHopDeXuatKhbdg::getId).collect(Collectors.toList());
+		List<BhTongHopDeXuatCt> tongHopDeXuatCtMap=chiTietRepository.findByBhTongHopDeXuatIdIn(listId);
+		Map<Long, List<BhTongHopDeXuatCt>> mapChiTiet=tongHopDeXuatCtMap.stream()
+				.collect(groupingBy(BhTongHopDeXuatCt::getBhTongHopDeXuatId));
+		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
+		page.getContent().forEach(f -> {
+			f.setTenCloaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
+			f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
+			f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+			f.setChiTietList(mapChiTiet.get(f.getId()));
+		});
+		return page;
 	}
 }

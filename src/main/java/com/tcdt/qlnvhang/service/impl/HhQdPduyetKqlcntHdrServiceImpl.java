@@ -7,6 +7,7 @@ import com.tcdt.qlnvhang.repository.*;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.object.HhQdPduyetKqlcntDtlReq;
 import com.tcdt.qlnvhang.response.dauthauvattu.HhQdPduyetKqlcntRes;
+import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -310,6 +311,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 
 	@Override
 	public HhQdPduyetKqlcntHdr approve(StatusReq stReq) throws Exception {
+		UserInfo userInfo = SecurityContextService.getUser();
 		if (StringUtils.isEmpty(stReq.getId())){
 			throw new Exception("Không tìm thấy dữ liệu");
 		}
@@ -322,27 +324,22 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		String status = stReq.getTrangThai() + optional.get().getTrangThai();
 		switch (status) {
 			case Contains.BAN_HANH + Contains.DUTHAO:
-				optional.get().setNguoiPduyet(getUser().getUsername());
-				optional.get().setNgayPduyet(getDateTimeNow());
+				optional.get().setNguoiPduyet(userInfo.getUsername());
+				optional.get().setNgayPduyet(new Date());
 				break;
-		default:
-			throw new Exception("Phê duyệt không thành công");
+			default:
+				throw new Exception("Phê duyệt không thành công");
 		}
 
 		optional.get().setTrangThai(stReq.getTrangThai());
+		HhQdPduyetKqlcntHdr createCheck = hhQdPduyetKqlcntHdrRepository.save(optional.get());
 		if(stReq.getTrangThai().equals(Contains.BAN_HANH)){
-			// IS VẬT TƯ
-//			if(optional.get().getLoaiVthh().startsWith("02")){
+
 				List<HhQdPduyetKqlcntDtl> qdPdKqLcntList = hhQdPduyetKqlcntDtlRepository.findByIdQdPdHdr(optional.get().getId());
 				for(HhQdPduyetKqlcntDtl kqLcnt : qdPdKqLcntList){
 					hhQdKhlcntDsgthauRepository.updateGoiThau(kqLcnt.getIdGoiThau(),kqLcnt.getTrungThau() == 1 ? Contains.TRUNGTHAU : Contains.HUYTHAU,kqLcnt.getLyDoHuy());
 				}
-//			}else{
-//				hhQdKhlcntDsgthauRepository.updateGoiThau(optional.get().getIdGoiThau(),optional.get().getTrungThau() == 1 ? Contains.TRUNGTHAU : Contains.HUYTHAU,optional.get().getLyDoHuy());
-//			}
 		}
-
-		HhQdPduyetKqlcntHdr createCheck = hhQdPduyetKqlcntHdrRepository.save(optional.get());
 
 		return createCheck;
 	}

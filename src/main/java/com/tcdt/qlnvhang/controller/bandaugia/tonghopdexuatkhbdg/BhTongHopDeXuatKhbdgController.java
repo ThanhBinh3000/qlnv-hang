@@ -7,10 +7,12 @@ import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgRequest;
 import com.tcdt.qlnvhang.request.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgSearchRequest;
+import com.tcdt.qlnvhang.request.search.HhDxKhLcntThopSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.response.banhangdaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgResponse;
 import com.tcdt.qlnvhang.response.banhangdaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgSearchResponse;
 import com.tcdt.qlnvhang.service.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgService;
+import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
@@ -161,6 +164,24 @@ public class BhTongHopDeXuatKhbdgController extends BaseController {
 			resp.setMsg(e.getMessage());
 			log.error("Phê duyệt/ từ chối Tổng hợp đề xuất kế hoạch bán đấu giá: {}", e);
 		}
+		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Tra cứu danh sách tổng hợp đề xuất kế hoạch bán đấu giá", response = List.class)
+	@PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> searchPage(HttpServletRequest request, @RequestBody BhTongHopDeXuatKhbdgSearchRequest objReq) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(tongHopDeXuatKhbdgService.searchPage(request,objReq));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Tra cứu danh sách tổng hợp đề xuất kế hoạch lựa chọn nhà thầu gạo trace: {}", e);
+		}
+
 		return ResponseEntity.ok(resp);
 	}
 
