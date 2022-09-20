@@ -20,6 +20,7 @@ import java.util.List;
 public class KehoachBanDauGiaRequest {
 	private Long id;
 	private String trangThai;
+	private String trangThaiTh;
 	private Integer namKeHoach;
 	private String soKeHoach;
 	private String trichYeu;

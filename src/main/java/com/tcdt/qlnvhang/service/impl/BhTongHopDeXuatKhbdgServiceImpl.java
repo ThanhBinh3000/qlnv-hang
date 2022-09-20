@@ -8,6 +8,7 @@ import com.tcdt.qlnvhang.mapper.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatCtRe
 import com.tcdt.qlnvhang.mapper.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgRequestMapper;
 import com.tcdt.qlnvhang.mapper.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgResponseMapper;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
+import com.tcdt.qlnvhang.repository.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGiaRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatCtRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -18,8 +19,10 @@ import com.tcdt.qlnvhang.response.banhangdaugia.tonghopdexuatkhbdg.BhTongHopDeXu
 import com.tcdt.qlnvhang.response.banhangdaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgSearchResponse;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgService;
+import com.tcdt.qlnvhang.table.HhDxKhLcntThopDtl;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
+import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExcelHeaderConst;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -48,6 +51,8 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 	private final BhTongHopDeXuatCtRepository chiTietRepository;
 
 	private final QlnvDmVattuRepository dmVattuRepository;
+
+	private KeHoachBanDauGiaRepository keHoachBanDauGiaRepository;
 
 
 	private static final String SHEET_NAME = "Danh sách tổng hợp đề xuất KHBDG";
@@ -84,6 +89,11 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 			}
 			chiTietList = chiTietRepository.saveAll(chiTietList);
 			theEntity.setChiTietList(chiTietList);
+		}
+		if(theEntity.getId() > 0 && theEntity.getChiTietList().size() > 0){
+			List<String> soKhList = theEntity.getChiTietList().stream().map(BhTongHopDeXuatCt::getSoKeHoach)
+					.collect(Collectors.toList());
+			keHoachBanDauGiaRepository.updateTongHop(soKhList, Contains.DATONGHOP);
 		}
 		return tongHopDeXuatKhbdgResponseMapper.toDto(theEntity);
 	}
