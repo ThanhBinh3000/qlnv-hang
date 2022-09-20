@@ -33,4 +33,7 @@ public class KeHoachBanDauGiaSearchRequest extends BaseRequest {
 	//Thóc, Gạo, Muối, Vật tư
 //	private List<String> loaiVatTuHangHoa;
 	private String loaiVthh;
+	private String trangThai;
+	private String maDvi;
+
 }
