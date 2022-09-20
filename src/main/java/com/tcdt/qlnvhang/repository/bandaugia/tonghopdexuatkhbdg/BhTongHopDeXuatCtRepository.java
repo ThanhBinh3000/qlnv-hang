@@ -16,4 +16,6 @@ public interface BhTongHopDeXuatCtRepository extends BaseRepository<BhTongHopDeX
 	void deleteAllByBhTongHopDeXuatIdIn(List<Long> ids);
 
 	List<BhTongHopDeXuatCt> findByBhTongHopDeXuatId(Long id);
+
+	List<BhTongHopDeXuatCt> findByBhTongHopDeXuatIdIn(List<Long> ids);
 }
