@@ -1,12 +1,15 @@
 package com.tcdt.qlnvhang.service;
 
+import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.FileDKemJoinHhDchinhDxKhLcntHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.*;
+import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.*;
 import com.tcdt.qlnvhang.request.search.QlnvQdLcntHdrDChinhSearchReq;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.util.Contains;
@@ -23,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.util.*;
@@ -58,6 +62,9 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 	@Autowired
 	private HhQdKhlcntDsgthauCtietRepository hhQdKhlcntDsgthauCtietRepository;
 
+	@Autowired
+	private FileDinhKemService fileDinhKemService;
+
 	public Page<HhDchinhDxKhLcntHdr> getAllPage(QlnvQdLcntHdrDChinhSearchReq objReq) throws Exception {
 		int page = objReq.getPaggingReq().getPage();
 		int limit = objReq.getPaggingReq().getLimit();
@@ -66,6 +73,10 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 				convertDateToString(objReq.getTuNgayQd()),
 				convertDateToString(objReq.getDenNgayQd()),
 				pageable);
+		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
+		data.getContent().forEach(f->{
+			f.setTenloaiVthh(hashMapDmHh.get(f.getLoaiVthh()));
+		});
 		List<Long> ids = data.getContent().stream().map(HhDchinhDxKhLcntHdr::getId).collect(Collectors.toList());
 		List<Object[]> listGthau = dtlRepository.countAllByDcHdr(ids);
 		Map<String,String> soGthau = new HashMap<>();
@@ -415,7 +426,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		Map<String,String> hashMapHtLcnt = getListDanhMucChung("HT_LCNT");
 		Map<String,String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
 
-		qOptional.get().setTenVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getLoaiVthh()));
+		qOptional.get().setTenloaiVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getLoaiVthh()));
 		qOptional.get().setTenCloaiVthh(StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getCloaiVthh()));
 
 		List<HhDchinhDxKhLcntDtl> dtlList = new ArrayList<>();
@@ -454,7 +465,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		List<HhDchinhDxKhLcntHdr> data=page.getContent();
 
 		String title="Danh sách quyết định điều chỉnh kế hoạch lựa chọn nhà thầu";
-		String[] rowsName=new String[]{"STT","Số quyết định điều chỉnh KH LCNT","Ngày ký","Trích yếu","Số QĐ duyệt KHLCNT","Năm kế hoạch","Loại hàng hóa","Trạng thái"};
+		String[] rowsName=new String[]{"STT","Số quyết định điều chỉnh KH LCNT","Ngày ký","Trích yếu","Số QĐ duyệt KHLCNT","Năm kế hoạch","Loại hàng hóa","số gói thầu","Trạng thái"};
 		String fileName="danh-sach-qd-dieu-chinh-khlcnt.xlsx";
 		List<Object[]> dataList = new ArrayList<Object[]>();
 		Object[] objs=null;
@@ -466,15 +477,56 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 			objs[2]=dx.getNgayQd();
 			objs[3]=dx.getTrichYeu();
 			objs[4]=dx.getSoQdGoc();
-			objs[5]=dx.getNamKh();
-			objs[6]=dx.getLoaiVthh();
-			objs[6]=dx.getTenTrangThai();
+			objs[5]=dx.getNamKhoach();
+			objs[6]=dx.getTenloaiVthh();
+			objs[7]=dx.getSoGoiThau();
+			objs[8]=dx.getTenTrangThai();
 			dataList.add(objs);
 		}
 		ExportExcel ex =new ExportExcel(title,fileName,rowsName,dataList,response);
 		ex.export();
 	}
 
+	@Transient
+	public void delete(IdSearchReq idSearchReq) throws Exception{
+		Optional<HhDchinhDxKhLcntHdr> optional= hdrRepository.findById(idSearchReq.getId());
+		if (!optional.isPresent()){
+			throw new Exception("Bản ghi không tồn tại");
+		}
+		if (!optional.get().getTrangThai().equals(Contains.DUTHAO)){
+			throw new Exception("Chỉ cho phép xóa bản ghi ở trạng thái dự thảo");
+		}
+		List<HhDchinhDxKhLcntDtl> listDtl=dtlRepository.findAllByIdDxDcHdr(optional.get().getId());
+		List<Long> idListDtl=listDtl.stream().map(HhDchinhDxKhLcntDtl::getId).collect(Collectors.toList());
+		List<HhDchinhDxKhLcntDsgthau>  listGthau = gThauRepository.findAllByIdDcDxDtlIn(idListDtl);
+		List<Long> idListGthau=listGthau.stream().map(HhDchinhDxKhLcntDsgthau::getId).collect(Collectors.toList());
+		List<HhDchinhDxKhLcntDsgthauCtiet> listGthauCtiet=gThauCietRepository.findAllByIdGoiThauIn(idListGthau);
+		dtlRepository.deleteAll(listDtl);
+		gThauRepository.deleteAll(listGthau);
+		gThauCietRepository.deleteAll(listGthauCtiet);
+		fileDinhKemService.delete(optional.get().getId(),  Lists.newArrayList("HH_DC_DX_LCNT_HDR"));
+		hdrRepository.delete(optional.get());
+	}
+
+	@Transient
+	public void deleteMulti(IdSearchReq idSearchReq) throws Exception{
+		if (StringUtils.isEmpty(idSearchReq.getIdList()))
+			throw new Exception("Xoá thất bại, không tìm thấy dữ liệu");
+		List<HhDchinhDxKhLcntHdr> listDchinh= hdrRepository.findAllByIdIn(idSearchReq.getIdList());
+		for (HhDchinhDxKhLcntHdr listDtls : listDchinh) {
+			List<HhDchinhDxKhLcntDtl> listDtl = dtlRepository.findAllByIdDxDcHdr(listDtls.getId());
+			List<Long> idListDtl = listDtl.stream().map(HhDchinhDxKhLcntDtl::getId).collect(Collectors.toList());
+			List<HhDchinhDxKhLcntDsgthau> listGthau = gThauRepository.findAllByIdDcDxDtlIn(idListDtl);
+			List<Long> idListGthau = listGthau.stream().map(HhDchinhDxKhLcntDsgthau::getId).collect(Collectors.toList());
+			List<HhDchinhDxKhLcntDsgthauCtiet> listGthauCtiet = gThauCietRepository.findAllByIdGoiThauIn(idListGthau);
+			dtlRepository.deleteAll(listDtl);
+			gThauRepository.deleteAll(listGthau);
+			gThauCietRepository.deleteAll(listGthauCtiet);
+			fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList("HH_DC_DX_LCNT_HDR"));
+		}
+		hdrRepository.deleteAllByIdIn(idSearchReq.getIdList());
+
+	}
 
 
 

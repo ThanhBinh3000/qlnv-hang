@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.DchinhDxKhLcntHdrReq;
 import com.tcdt.qlnvhang.service.DchinhDxuatKhLcntService;
@@ -133,18 +134,12 @@ public class DchinhDxuatKhLcntController extends BaseController {
 	}
 
 	@ApiOperation(value = "Xoá thông tin Quyết định điều chỉnh qđ phê duyệt KHLCNT", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
-	@PostMapping(value = PathContains.URL_XOA + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<BaseResponse> delete(@ApiParam(value = "ID kế hoạch lựa chọn nhà thầu", example = "1", required = true) @PathVariable("ids") String ids) {
+	public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			if (StringUtils.isEmpty(ids))
-				throw new UnsupportedOperationException("Không tồn tại bản ghi");
-//			Optional<HhQdKhlcntHdr> QlnvQdLcntHdr = qlnvQdLcntHdrRepository.findById(Long.parseLong(ids));
-//			if (!QlnvQdLcntHdr.isPresent())
-//				throw new Exception("Không tìm thấy dữ liệu cần xoá");
-//			qlnvQdLcntHdrRepository.delete(QlnvQdLcntHdr.get());
-
+			dchinhDxuatKhLcntService.delete(idSearchReq);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -152,6 +147,25 @@ public class DchinhDxuatKhLcntController extends BaseController {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
 			log.error(e.getMessage());
+		}
+
+		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Xoá danh sách thông tin Quyết định điều chỉnh qđ phê duyệt KHLCNT", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> deleteMultiple(@Valid @RequestBody IdSearchReq idSearchReq) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			dchinhDxuatKhLcntService.deleteMulti(idSearchReq);
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			// TODO: handle exception
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Xoá đề xuất kế hoạch lựa chọn nhà thầu gạo trace: {}", e);
 		}
 
 		return ResponseEntity.ok(resp);

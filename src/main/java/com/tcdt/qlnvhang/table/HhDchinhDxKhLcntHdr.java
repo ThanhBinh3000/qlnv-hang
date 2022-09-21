@@ -28,9 +28,6 @@ public class HhDchinhDxKhLcntHdr implements Serializable {
 	@SequenceGenerator(sequenceName = "QLNV_QD_LCNT_HDR_SEQ", allocationSize = 1, name = "QLNV_QD_LCNT_HDR_SEQ")
 	private Long id;
 	Long namKh;
-	String soQdinh;
-	String soQdinhGoc;
-
 	@Temporal(TemporalType.DATE)
 	Date ngayQd;
 	String loaiVthh;
@@ -81,7 +78,7 @@ public class HhDchinhDxKhLcntHdr implements Serializable {
 	Long idQdGoc;
 
 	@Transient
-	String tenVthh;
+	String tenloaiVthh;
 
 	@Transient
 	String tenCloaiVthh;
