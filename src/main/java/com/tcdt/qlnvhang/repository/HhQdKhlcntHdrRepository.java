@@ -12,6 +12,7 @@ public interface HhQdKhlcntHdrRepository extends BaseRepository<HhQdKhlcntHdr, L
 
 
 	List<HhQdKhlcntHdr> findBySoQd(String soQd);
+	List<HhQdKhlcntHdr> findAllByIdIn(List<Long> ids);
 
 	@Query(value = " SELECT * FROM HH_QD_KHLCNT_HDR QD_HDR " +
 			" LEFT JOIN HH_QD_KHLCNT_DTL QD_DTL ON QD_HDR.ID = QD_DTL.ID_QD_HDR " +

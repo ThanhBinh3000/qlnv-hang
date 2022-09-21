@@ -34,6 +34,8 @@ public interface HhQdKhlcntHdrService {
 	@Transactional(rollbackOn = Exception.class)
 	void delete(IdSearchReq idSearchReq) throws Exception;
 
+	void deleteMulti(IdSearchReq idSearchReq) throws Exception;
+
 	HhQdKhlcntHdr detailNumber(String soQd) throws Exception;
 
 	Page<HhQdKhlcntHdr> colection(HhQdKhlcntSearchReq objReq, HttpServletResponse response) throws Exception;
