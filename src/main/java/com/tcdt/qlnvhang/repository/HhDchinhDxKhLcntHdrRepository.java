@@ -2,11 +2,14 @@ package com.tcdt.qlnvhang.repository;
 
 
 import com.tcdt.qlnvhang.table.HhDchinhDxKhLcntHdr;
+import com.tcdt.qlnvhang.table.HhDxKhLcntThopHdr;
 import com.tcdt.qlnvhang.table.HhQdKhlcntHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +17,12 @@ import java.util.Optional;
 public interface HhDchinhDxKhLcntHdrRepository extends CrudRepository<HhDchinhDxKhLcntHdr, Long> {
 
     Optional<HhDchinhDxKhLcntHdr> findBySoQd(String soQd);
+
+    List<HhDchinhDxKhLcntHdr> findAllByIdIn (List<Long> ids);
+
+    @Transactional
+    @Modifying
+    void deleteAllByIdIn(List<Long> ids);
 
 
     @Query(value = " SELECT * FROM HH_DC_DX_LCNT_HDR  HDR"+

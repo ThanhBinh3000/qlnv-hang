@@ -9,6 +9,7 @@ import java.util.List;
 public interface HhDchinhDxKhLcntDsgthauRepository extends CrudRepository<HhDchinhDxKhLcntDsgthau, Long> {
 
     List<HhDchinhDxKhLcntDsgthau> findAllByIdDcDxDtl(Long idDcDxDtl);
+    List<HhDchinhDxKhLcntDsgthau> findAllByIdDcDxDtlIn(List<Long> ids);
 
     void deleteAllByIdDcDxDtl(Long idDcDxDtl);
 
