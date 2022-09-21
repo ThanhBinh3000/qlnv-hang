@@ -73,6 +73,10 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 				convertDateToString(objReq.getTuNgayQd()),
 				convertDateToString(objReq.getDenNgayQd()),
 				pageable);
+		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
+		data.getContent().forEach(f->{
+			f.setTenloaiVthh(hashMapDmHh.get(f.getLoaiVthh()));
+		});
 		List<Long> ids = data.getContent().stream().map(HhDchinhDxKhLcntHdr::getId).collect(Collectors.toList());
 		List<Object[]> listGthau = dtlRepository.countAllByDcHdr(ids);
 		Map<String,String> soGthau = new HashMap<>();
@@ -422,7 +426,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		Map<String,String> hashMapHtLcnt = getListDanhMucChung("HT_LCNT");
 		Map<String,String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
 
-		qOptional.get().setTenVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getLoaiVthh()));
+		qOptional.get().setTenloaiVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getLoaiVthh()));
 		qOptional.get().setTenCloaiVthh(StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getCloaiVthh()));
 
 		List<HhDchinhDxKhLcntDtl> dtlList = new ArrayList<>();
@@ -461,7 +465,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		List<HhDchinhDxKhLcntHdr> data=page.getContent();
 
 		String title="Danh sách quyết định điều chỉnh kế hoạch lựa chọn nhà thầu";
-		String[] rowsName=new String[]{"STT","Số quyết định điều chỉnh KH LCNT","Ngày ký","Trích yếu","Số QĐ duyệt KHLCNT","Năm kế hoạch","Loại hàng hóa","Trạng thái"};
+		String[] rowsName=new String[]{"STT","Số quyết định điều chỉnh KH LCNT","Ngày ký","Trích yếu","Số QĐ duyệt KHLCNT","Năm kế hoạch","Loại hàng hóa","số gói thầu","Trạng thái"};
 		String fileName="danh-sach-qd-dieu-chinh-khlcnt.xlsx";
 		List<Object[]> dataList = new ArrayList<Object[]>();
 		Object[] objs=null;
@@ -473,9 +477,10 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 			objs[2]=dx.getNgayQd();
 			objs[3]=dx.getTrichYeu();
 			objs[4]=dx.getSoQdGoc();
-			objs[5]=dx.getNamKh();
-			objs[6]=dx.getLoaiVthh();
-			objs[6]=dx.getTenTrangThai();
+			objs[5]=dx.getNamKhoach();
+			objs[6]=dx.getTenloaiVthh();
+			objs[7]=dx.getSoGoiThau();
+			objs[8]=dx.getTenTrangThai();
 			dataList.add(objs);
 		}
 		ExportExcel ex =new ExportExcel(title,fileName,rowsName,dataList,response);

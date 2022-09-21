@@ -78,7 +78,7 @@ public class HhDchinhDxKhLcntHdr implements Serializable {
 	Long idQdGoc;
 
 	@Transient
-	String tenVthh;
+	String tenloaiVthh;
 
 	@Transient
 	String tenCloaiVthh;
