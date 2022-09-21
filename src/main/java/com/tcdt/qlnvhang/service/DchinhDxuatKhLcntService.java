@@ -330,33 +330,37 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 	public HhDchinhDxKhLcntHdr approve (StatusReq stReq) throws Exception {
 		if (StringUtils.isEmpty(stReq.getId()))
 			throw new Exception("Không tìm thấy dữ liệu");
-		HhDchinhDxKhLcntHdr qdLcnt = this.detail(stReq.getId().toString());
-
-		qdLcnt.setTrangThai(stReq.getTrangThai());
-		String status = stReq.getTrangThai() + qdLcnt.getTrangThai();
+//		HhDchinhDxKhLcntHdr qdLcnt = this.detail(stReq.getId().toString());
+		Optional<HhDchinhDxKhLcntHdr>optional=hdrRepository.findById(stReq.getId());
+		if (!optional.isPresent()){
+			throw new Exception("Không tìm thấy dữ liệu");
+		}
+//		qdLcnt.setTrangThai(stReq.getTrangThai());
+		String status = stReq.getTrangThai() + optional.get().getTrangThai();
 		switch(status) {
 			case Contains.CHODUYET_LDV + Contains.DUTHAO:
 			case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
-				qdLcnt.setNguoiGuiDuyet(getUser().getUsername());
-				qdLcnt.setNgayGuiDuyet(getDateTimeNow());
+				optional.get().setNguoiGuiDuyet(getUser().getUsername());
+				optional.get().setNgayGuiDuyet(getDateTimeNow());
 				break;
 			case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
-				qdLcnt.setLdoTuchoi(stReq.getLyDo());
+				optional.get().setLdoTuchoi(stReq.getLyDo());
 				break;
 			case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
-				qdLcnt.setNguoiPduyet(getUser().getUsername());
-				qdLcnt.setNgayPduyet(getDateTimeNow());
+				optional.get().setNguoiPduyet(getUser().getUsername());
+				optional.get().setNgayPduyet(getDateTimeNow());
 			case Contains.BAN_HANH + Contains.DADUYET_LDV:
-				qdLcnt.setNguoiPduyet(getUser().getUsername());
-				qdLcnt.setNgayPduyet(getDateTimeNow());
+				optional.get().setNguoiPduyet(getUser().getUsername());
+				optional.get().setNgayPduyet(getDateTimeNow());
 				break;
 			default:
 				throw new Exception("Phê duyệt không thành công");
 		}
 		if (stReq.getTrangThai().equals(Contains.BAN_HANH)) {
-			this.updateDataQdGoc(qdLcnt);
+			this.updateDataQdGoc(optional.get());
 		}
-		return hdrRepository.save(qdLcnt);
+		optional.get().setTrangThai(stReq.getTrangThai());
+		return hdrRepository.save(optional.get());
 	}
 
 	private void updateDataQdGoc(HhDchinhDxKhLcntHdr qdDieuChinh) throws Exception {
