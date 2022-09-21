@@ -614,6 +614,19 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	}
 
 	@Override
+	public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
+		if (StringUtils.isEmpty(idSearchReq.getIdList()))
+			throw new Exception("Xoá thất bại, không tìm thấy dữ liệu");
+
+		List<HhQdKhlcntHdr> listHdr = hhQdKhlcntHdrRepository.findAllByIdIn(idSearchReq.getIdList());
+		List<Long> idList=listHdr.stream().map(HhQdKhlcntHdr::getId).collect(Collectors.toList());
+		List<HhQdKhlcntDtl> hhQdKhlcntDtl = hhQdKhlcntDtlRepository.findAllByIdQdHdrIn(idList);
+
+		hhQdKhlcntDtlRepository.deleteAll(hhQdKhlcntDtl);
+		hhQdKhlcntHdrRepository.deleteAll(listHdr);
+	}
+
+	@Override
 	public HhQdKhlcntHdr detailNumber(String soQd) throws Exception {
 		if (StringUtils.isEmpty(soQd))
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
