@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface KeHoachBanDauGiaRepository extends BaseRepository<KeHoachBanDauGia, Long> {
@@ -34,4 +35,5 @@ public interface KeHoachBanDauGiaRepository extends BaseRepository<KeHoachBanDau
 	@Query(value = "UPDATE BH_DG_KEHOACH SET TRANG_THAI_TH=:trangThaiTh WHERE SO_KE_HOACH IN :soKhList", nativeQuery = true)
 	void updateTongHop(List<String> soKhList, String trangThaiTh);
 
+	Optional<KeHoachBanDauGia> findBySoKeHoach(String soKeHoach);
 }
