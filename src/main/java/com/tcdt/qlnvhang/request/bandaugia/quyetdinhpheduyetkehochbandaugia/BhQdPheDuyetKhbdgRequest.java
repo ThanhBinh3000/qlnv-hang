@@ -37,6 +37,7 @@ public class BhQdPheDuyetKhbdgRequest {
 	private Long nguoiGuiDuyetId;
 	private Long nguoiPheDuyetId;
 	private String loaiVthh;
+	private String cloaiVthh;
 	private String maVatTuCha;
 	private String maVatTu;
 	private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
