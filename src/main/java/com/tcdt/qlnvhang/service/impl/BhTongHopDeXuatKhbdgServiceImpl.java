@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.impl;
 
+import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGia;
 import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatCt;
 import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdg;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
@@ -27,6 +28,7 @@ import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -49,11 +51,15 @@ import static java.util.stream.Collectors.groupingBy;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements BhTongHopDeXuatKhbdgService {
-	private final BhTongHopDeXuatKhbdgRepository deXuatKhbdgRepository;
-	private final BhTongHopDeXuatCtRepository chiTietRepository;
 
-	private final QlnvDmVattuRepository dmVattuRepository;
+	@Autowired
+	private  BhTongHopDeXuatKhbdgRepository deXuatKhbdgRepository;
+	@Autowired
+	private  BhTongHopDeXuatCtRepository chiTietRepository;
+	@Autowired
+	private  QlnvDmVattuRepository dmVattuRepository;
 
+	@Autowired
 	private KeHoachBanDauGiaRepository keHoachBanDauGiaRepository;
 
 
@@ -93,9 +99,9 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 			theEntity.setChiTietList(chiTietList);
 		}
 		if(theEntity.getId() > 0 && theEntity.getChiTietList().size() > 0){
-			List<String> soKhList = theEntity.getChiTietList().stream().map(BhTongHopDeXuatCt::getSoKeHoach)
-					.collect(Collectors.toList());
-			keHoachBanDauGiaRepository.updateTongHop(soKhList, Contains.DATONGHOP);
+				List<String> listIdKhBdg = theEntity.getChiTietList().stream().map(BhTongHopDeXuatCt::getSoKeHoach)
+						.collect(Collectors.toList());
+				keHoachBanDauGiaRepository.updateTongHop(listIdKhBdg,Contains.DATONGHOP);
 		}
 		return tongHopDeXuatKhbdgResponseMapper.toDto(theEntity);
 	}

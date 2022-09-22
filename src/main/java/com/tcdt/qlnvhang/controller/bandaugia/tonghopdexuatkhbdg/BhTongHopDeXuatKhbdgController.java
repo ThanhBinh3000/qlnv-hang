@@ -17,6 +17,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -34,6 +35,7 @@ import java.util.List;
 @Api(tags = "Tổng hợp đề xuất kế hoạch bán đấu giá")
 @RequiredArgsConstructor
 public class BhTongHopDeXuatKhbdgController extends BaseController {
+	@Autowired
 	private final BhTongHopDeXuatKhbdgService tongHopDeXuatKhbdgService;
 
 	@ApiOperation(value = "Tạo mới tổng hợp đề xuất kế hoạch bán đấu giá", response = BhTongHopDeXuatKhbdgResponse.class)
@@ -46,6 +48,7 @@ public class BhTongHopDeXuatKhbdgController extends BaseController {
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
+			e.printStackTrace();
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
 			log.error(e.getMessage());
