@@ -31,7 +31,7 @@ public interface KeHoachBanDauGiaRepository extends BaseRepository<KeHoachBanDau
 
 	@Transactional()
 	@Modifying
-	@Query(value = "UPDATE BH_DG_KEHOACH SET TRANG_THAI_TH=:trangThaiTh WHERE SO_KE_HOACH IN :soKhList", nativeQuery = true)
+	@Query(value = "UPDATE BH_DG_KEHOACH SET TRANG_THAI_TH=:trangThaiTh WHERE SO_KE_HOACH IN (:soKhList)", nativeQuery = true)
 	void updateTongHop(List<String> soKhList, String trangThaiTh);
 
 }
