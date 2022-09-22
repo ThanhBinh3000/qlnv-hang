@@ -35,8 +35,9 @@ public class KeHoachBanDauGia extends BaseEntity implements Serializable {
 
 	@Column(name = "TRANG_THAI_TH")
 	private String trangThaiTh;
+
 	@Transient
-	private String tenTrangThaTh;
+	private String tenTrangThaiTh;
 
 	@Column(name = "NAM_KE_HOACH")
 	private Integer namKeHoach;

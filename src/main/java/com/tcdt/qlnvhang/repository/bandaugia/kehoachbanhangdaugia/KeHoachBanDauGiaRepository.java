@@ -29,7 +29,7 @@ public interface KeHoachBanDauGiaRepository extends BaseRepository<KeHoachBanDau
 			"AND (:trangThai IS NULL OR KH.TRANG_THAI = :trangThai )" +
 			"AND (:trangThaiTh IS NULL OR KH.TRANG_THAI_TH = :trangThaiTh )"
 			, nativeQuery = true)
-	Page<KeHoachBanDauGia> selectPage(Integer namKh, String soKh, String trichYeu, String ngayKyTu, String ngayKyDen, String loaiVthh, String maDvi, String trangThai,String trangthaiTh, Pageable pageable);
+	Page<KeHoachBanDauGia> selectPage(Integer namKh, String soKh, String trichYeu, String ngayKyTu, String ngayKyDen, String loaiVthh, String maDvi, String trangThai,String trangThaiTh, Pageable pageable);
 
 	@Transactional()
 	@Modifying
