@@ -531,6 +531,7 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 			f.setTenLoaiVthh(mapHangHoa.get(f.getLoaiVthh()));
 			f.setTenCloaiVthh(mapHangHoa.get(f.getCloaiVthh()));
 			f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+			f.setTenTrangThaiTh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiTh()));
 			f.setTenDonVi(mapDonvi.get(f.getMaDv()));
 			f.setDiaDiemGiaoNhanList(mapGiaoNhan.get(f.getId()));
 			f.setPhanLoTaiSanList(mapPhanLo.get(f.getId()));
