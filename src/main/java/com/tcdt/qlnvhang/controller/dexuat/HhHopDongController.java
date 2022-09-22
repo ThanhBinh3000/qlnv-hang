@@ -47,194 +47,215 @@ import lombok.extern.slf4j.Slf4j;
 @Api(tags = "Thông tin hợp đồng")
 public class HhHopDongController {
 
-	@Autowired
-	private HhHopDongService service;
+  @Autowired
+  private HhHopDongService service;
 
-	@Autowired
-	private HhHopDongServiceImpl hhHopDongService;
+  @Autowired
+  private HhHopDongServiceImpl hhHopDongService;
 
-	@ApiOperation(value = "Tạo mới thông tin hợp đồng", response = List.class)
-	@PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<BaseResponse> insert(HttpServletRequest request, @Valid @RequestBody HhHopDongHdrReq objReq) {
-		BaseResponse resp = new BaseResponse();
-		try {
-			resp.setData(service.create(objReq));
-			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-		} catch (Exception e) {
-			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-			resp.setMsg(e.getMessage());
-			log.error("Tạo mới thông tin hợp đồng trace: {}", e);
-		}
-		return ResponseEntity.ok(resp);
-	}
+  @ApiOperation(value = "Tạo mới thông tin hợp đồng", response = List.class)
+  @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.CREATED)
+  public ResponseEntity<BaseResponse> insert(HttpServletRequest request, @Valid @RequestBody HhHopDongHdrReq objReq) {
+    BaseResponse resp = new BaseResponse();
+    try {
+      resp.setData(service.create(objReq));
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (Exception e) {
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Tạo mới thông tin hợp đồng trace: {}", e);
+    }
+    return ResponseEntity.ok(resp);
+  }
 
-	@ApiOperation(value = "Cập nhật thông tin hợp đồng", response = List.class)
-	@PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> update(HttpServletRequest request, @Valid @RequestBody HhHopDongHdrReq objReq) {
-		BaseResponse resp = new BaseResponse();
-		try {
-			resp.setData(service.update(objReq));
-			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-		} catch (Exception e) {
-			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-			resp.setMsg(e.getMessage());
-			log.error("Cập nhật thông tin hợp đồng trace: {}", e);
-		}
-		return ResponseEntity.ok(resp);
-	}
+  @ApiOperation(value = "Cập nhật thông tin hợp đồng", response = List.class)
+  @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<BaseResponse> update(HttpServletRequest request, @Valid @RequestBody HhHopDongHdrReq objReq) {
+    BaseResponse resp = new BaseResponse();
+    try {
+      resp.setData(service.update(objReq));
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (Exception e) {
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Cập nhật thông tin hợp đồng trace: {}", e);
+    }
+    return ResponseEntity.ok(resp);
+  }
 
-	@ApiOperation(value = "Lấy chi tiết thông tin hợp đồng", response = List.class)
-	@GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<BaseResponse> detail(
-			@ApiParam(value = "ID thông tin hợp đồng", example = "1", required = true) @PathVariable("ids") String ids) {
-		BaseResponse resp = new BaseResponse();
-		try {
-			resp.setData(service.detail(ids));
-			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-		} catch (Exception e) {
-			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-			resp.setMsg(e.getMessage());
-			log.error("Lấy chi tiết thông tin hợp đồng trace: {}", e);
-		}
-		return ResponseEntity.ok(resp);
-	}
+  @ApiOperation(value = "Lấy chi tiết thông tin hợp đồng", response = List.class)
+  @GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<BaseResponse> detail(
+      @ApiParam(value = "ID thông tin hợp đồng", example = "1", required = true) @PathVariable("ids") String ids) {
+    BaseResponse resp = new BaseResponse();
+    try {
+      resp.setData(service.detail(ids));
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (Exception e) {
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Lấy chi tiết thông tin hợp đồng trace: {}", e);
+    }
+    return ResponseEntity.ok(resp);
+  }
 
-	@ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 thông tin hợp đồng", response = List.class)
-	@PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> updateStatus(@Valid HttpServletRequest req, @RequestBody StatusReq stReq) {
-		BaseResponse resp = new BaseResponse();
-		try {
-			service.approve(stReq);
-			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-		} catch (Exception e) {
-			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-			resp.setMsg(e.getMessage());
-			log.error("Phê duyệt thông tin hợp đồng trace: {}", e);
-		}
-		return ResponseEntity.ok(resp);
-	}
+  @ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 thông tin hợp đồng", response = List.class)
+  @PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<BaseResponse> updateStatus(@Valid HttpServletRequest req, @RequestBody StatusReq stReq) {
+    BaseResponse resp = new BaseResponse();
+    try {
+      service.approve(stReq);
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (Exception e) {
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Phê duyệt thông tin hợp đồng trace: {}", e);
+    }
+    return ResponseEntity.ok(resp);
+  }
 
-	@ApiOperation(value = "Xoá thông tin hợp đồng", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
-	@PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
-		BaseResponse resp = new BaseResponse();
-		try {
-			service.delete(idSearchReq);
-			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-		} catch (Exception e) {
-			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-			resp.setMsg(e.getMessage());
-			log.error("Xoá thông tin hợp đồng trace: {}", e);
-		}
+  @ApiOperation(value = "Xoá thông tin hợp đồng", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
+    BaseResponse resp = new BaseResponse();
+    try {
+      service.delete(idSearchReq);
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (Exception e) {
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Xoá thông tin hợp đồng trace: {}", e);
+    }
 
-		return ResponseEntity.ok(resp);
-	}
+    return ResponseEntity.ok(resp);
+  }
 
-	@ApiOperation(value = "Xoá danh sách thông tin hợp đồng", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
-	@PostMapping(value = PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
-		BaseResponse resp = new BaseResponse();
-		try {
-			service.deleteMulti(idSearchReq);
-			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-		} catch (Exception e) {
-			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-			resp.setMsg(e.getMessage());
-			log.error("Xoá thông tin hợp đồng trace: {}", e);
-		}
+  @ApiOperation(value = "Xoá danh sách thông tin hợp đồng", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(value = PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
+    BaseResponse resp = new BaseResponse();
+    try {
+      service.deleteMulti(idSearchReq);
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (Exception e) {
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Xoá thông tin hợp đồng trace: {}", e);
+    }
 
-		return ResponseEntity.ok(resp);
-	}
-	@ApiOperation(value = "Lấy chi tiết thông tin hợp đồng theo số hợp đồng", response = List.class)
-	@PostMapping(value = PathContains.URL_CHI_TIET + "/so-hd", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<BaseResponse> findBySoHd(@Valid @RequestBody StrSearchReq strSearchReq) {
-		BaseResponse resp = new BaseResponse();
-		try {
-			resp.setData(service.findBySoHd(strSearchReq));
-			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-		} catch (Exception e) {
-			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-			resp.setMsg(e.getMessage());
-			log.error("Lấy chi tiết thông tin hợp đồng trace: {}", e);
-		}
-		return ResponseEntity.ok(resp);
-	}
+    return ResponseEntity.ok(resp);
+  }
 
-	@ApiOperation(value = "Tra cứu thông tin hợp đồng", response = List.class)
-	@PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<BaseResponse> colection( HttpServletResponse response,
-			@Valid @RequestBody HhHopDongSearchReq objReq) {
-		BaseResponse resp = new BaseResponse();
-		try {
-			resp.setData(service.selectPage(objReq, response));
-			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-		} catch (
+  @ApiOperation(value = "Lấy chi tiết thông tin hợp đồng theo số hợp đồng", response = List.class)
+  @PostMapping(value = PathContains.URL_CHI_TIET + "/so-hd", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<BaseResponse> findBySoHd(@Valid @RequestBody StrSearchReq strSearchReq) {
+    BaseResponse resp = new BaseResponse();
+    try {
+      resp.setData(service.findBySoHd(strSearchReq));
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (Exception e) {
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Lấy chi tiết thông tin hợp đồng trace: {}", e);
+    }
+    return ResponseEntity.ok(resp);
+  }
 
-		Exception e) {
-			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-			resp.setMsg(e.getMessage());
-			log.error("Tra cứu thông tin hợp đồng trace: {}", e);
-		}
+  @ApiOperation(value = "Tra cứu thông tin hợp đồng", response = List.class)
+  @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<BaseResponse> colection(HttpServletResponse response,
+                                                @Valid @RequestBody HhHopDongSearchReq objReq) {
+    BaseResponse resp = new BaseResponse();
+    try {
+      resp.setData(service.selectPage(objReq, response));
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (
 
-		return ResponseEntity.ok(resp);
-	}
+        Exception e) {
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Tra cứu thông tin hợp đồng trace: {}", e);
+    }
 
-	@ApiOperation(value = "list hơp đồng select quyet dinh", response = List.class)
-	@PostMapping(value = PathContains.LIST_HD, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<BaseResponse> listHd(@Valid @RequestBody ListHdSearhReq obj ) {
-			BaseResponse resp = new BaseResponse();
-		try {
-			resp.setData(hhHopDongService.listHopDong(obj.getMaDvi(),obj.getLoaiVthh()));
-			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-		} catch (
+    return ResponseEntity.ok(resp);
+  }
 
-				Exception e) {
-			e.printStackTrace();
-			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-			resp.setMsg(e.getMessage());
-			log.error("Tra cứu thông tin hợp đồng trace: {}", e);
-		}
+  @ApiOperation(value = "list hơp đồng select quyet dinh", response = List.class)
+  @PostMapping(value = PathContains.LIST_HD, produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<BaseResponse> listHd(@Valid @RequestBody ListHdSearhReq obj) {
+    BaseResponse resp = new BaseResponse();
+    try {
+      resp.setData(hhHopDongService.listHopDong(obj.getMaDvi(), obj.getLoaiVthh()));
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (
 
-		return ResponseEntity.ok(resp);
-	}
+        Exception e) {
+      e.printStackTrace();
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Tra cứu thông tin hợp đồng trace: {}", e);
+    }
 
-	@ApiOperation(value = "Kết xuất danh sách hợp đồng mua", response = List.class)
-	@PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseStatus(HttpStatus.OK)
-	public void exportList(@Valid @RequestBody HhHopDongSearchReq objReq, HttpServletResponse response) throws Exception{
-		try {
-			service.exportList(objReq,response);
+    return ResponseEntity.ok(resp);
+  }
 
-		} catch (Exception e) {
-			log.error("Kết xuất danh sách dánh sách hợp đồng mua trace: {}", e);
-			final Map<String, Object> body = new HashMap<>();
-			body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			body.put("msg", e.getMessage());
+  @ApiOperation(value = "Kết xuất danh sách hợp đồng mua", response = List.class)
+  @PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public void exportList(@Valid @RequestBody HhHopDongSearchReq objReq, HttpServletResponse response) throws Exception {
+    try {
+      service.exportList(objReq, response);
 
-			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-			response.setCharacterEncoding("UTF-8");
+    } catch (Exception e) {
+      log.error("Kết xuất danh sách dánh sách hợp đồng mua trace: {}", e);
+      final Map<String, Object> body = new HashMap<>();
+      body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      body.put("msg", e.getMessage());
 
-			final ObjectMapper mapper = new ObjectMapper();
-			mapper.writeValue(response.getOutputStream(), body);
+      response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+      response.setCharacterEncoding("UTF-8");
 
-		}
-	}
+      final ObjectMapper mapper = new ObjectMapper();
+      mapper.writeValue(response.getOutputStream(), body);
 
+    }
+  }
+
+  @ApiOperation(value = "Danh sách chọn hợp đồng", response = List.class)
+  @PostMapping(value = "danh-sach-chon", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<BaseResponse> lookupData(HttpServletResponse response,
+                                                 @Valid @RequestBody HhHopDongSearchReq objReq) {
+    BaseResponse resp = new BaseResponse();
+    try {
+      resp.setData(service.lookupData(objReq, response));
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (
+
+        Exception e) {
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Tra cứu thông tin hợp đồng trace: {}", e);
+    }
+
+    return ResponseEntity.ok(resp);
+  }
 
 }

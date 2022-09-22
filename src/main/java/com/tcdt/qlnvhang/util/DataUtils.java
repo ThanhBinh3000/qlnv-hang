@@ -4,10 +4,14 @@ import com.ctc.wstx.util.DataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.repository.quyetdinhpheduyetketqualuachonnhathauvatu.GenericRepository;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.beans.PropertyDescriptor;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
@@ -162,5 +166,22 @@ public class DataUtils {
 
 	public static Double safeToDouble(Object obj1) {
 		return safeToDouble(obj1, 0.0);
+	}
+
+	public static void copyProperties(Object src, Object target,String... ignore) {
+		BeanUtils.copyProperties(src, target, getNullPropertyNames(src,ignore));
+	}
+	public static String[] getNullPropertyNames(Object source,String... ignore) {
+		final BeanWrapper src = new BeanWrapperImpl(source);
+		PropertyDescriptor[] pds = src.getPropertyDescriptors();
+		Set<String> emptyNames = new HashSet<String>();
+		Collections.addAll(emptyNames, ignore);
+		for (PropertyDescriptor pd : pds) {
+			Object srcValue = src.getPropertyValue(pd.getName());
+			if (srcValue == null)
+				emptyNames.add(pd.getName());
+		}
+		String[] result = new String[emptyNames.size()];
+		return emptyNames.toArray(result);
 	}
 }
