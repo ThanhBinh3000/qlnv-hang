@@ -78,7 +78,7 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null) throw new Exception("Bad request.");
 		BhTongHopDeXuatKhbdg theEntity = tongHopDeXuatKhbdgRequestMapper.toEntity(req);
-		theEntity.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
+		theEntity.setTrangThai(NhapXuatHangTrangThaiEnum.CHUATAO_QD.getId());
 		theEntity.setNgayTao(LocalDate.now());
 		theEntity.setNguoiTaoId(userInfo.getId());
 		theEntity.setMaDonVi(userInfo.getDvql());

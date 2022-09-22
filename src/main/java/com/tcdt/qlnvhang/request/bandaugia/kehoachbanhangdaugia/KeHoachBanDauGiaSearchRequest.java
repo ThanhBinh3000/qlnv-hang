@@ -34,6 +34,7 @@ public class KeHoachBanDauGiaSearchRequest extends BaseRequest {
 //	private List<String> loaiVatTuHangHoa;
 	private String loaiVthh;
 	private String trangThai;
+	private String trangThaiTh;
 	private String maDvi;
 
 }
