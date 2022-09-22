@@ -496,6 +496,7 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 				objReq.getLoaiVthh(),
 				userInfo.getDvql(),
 				objReq.getTrangThai(),
+				objReq.getTrangThaiTh(),
 				pageable);
 		Map<String, String> mapHangHoa = getListDanhMucHangHoa();
 		Map<String, String> mapDonvi = getListDanhMucDvi(null,null,"01");
