@@ -132,7 +132,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 
 	@Override
 	@Transactional(rollbackOn = Exception.class)
-	public BienBanLayMauRes create(BienBanLayMauReq req) throws Exception {
+	public BienBanLayMau create(BienBanLayMauReq req) throws Exception {
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null)
 			throw new Exception("Bad request.");
@@ -144,30 +144,26 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 		bienBienLayMau.setNguoiTaoId(userInfo.getId());
 		bienBienLayMau.setNgayTao(LocalDate.now());
 		bienBienLayMau.setMaDvi(userInfo.getDvql());
-		bienBienLayMau.setCapDvi(userInfo.getCapDvi());
-		bienBienLayMau.setSo(getSo());
-		bienBienLayMau.setNam(LocalDate.now().getYear());
-		bienBienLayMau.setSoBienBan(String.format("%s/%s/%s-%s", bienBienLayMau.getSo(), bienBienLayMau.getNam(), "BBLM", userInfo.getMaPbb()));
 		bienBanLayMauRepository.save(bienBienLayMau);
 
 		List<BienBanLayMauCt> chiTiets = this.saveListChiTiet(bienBienLayMau.getId(), req.getChiTiets(), new HashMap<>());
 		bienBienLayMau.setChiTiets(chiTiets);
 
-		return this.toResponse(bienBienLayMau);
+		return bienBienLayMau;
 	}
 
 	private List<BienBanLayMauCt> saveListChiTiet(Long parentId, List<BienBanLayMauCtReq> chiTietReqs, Map<Long, BienBanLayMauCt> mapChiTiet) throws Exception {
 		List<BienBanLayMauCt> chiTiets = new ArrayList<>();
 		for (BienBanLayMauCtReq req : chiTietReqs) {
-			Long id = req.getId();
+//			Long id = req.getId();
 			BienBanLayMauCt chiTiet = new BienBanLayMauCt();
 
-			if (id != null && id > 0) {
-				chiTiet = mapChiTiet.get(id);
-				if (chiTiet == null)
-					throw new Exception("Biên bản lấy mẫu chi tiết không tồn tại.");
-				mapChiTiet.remove(id);
-			}
+//			if (id != null && id > 0) {
+//				chiTiet = mapChiTiet.get(id);
+//				if (chiTiet == null)
+//					throw new Exception("Biên bản lấy mẫu chi tiết không tồn tại.");
+//				mapChiTiet.remove(id);
+//			}
 
 			BeanUtils.copyProperties(req, chiTiet, "id");
 			chiTiet.setBbLayMauId(parentId);
@@ -182,7 +178,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 
 	@Override
 	@Transactional(rollbackOn = Exception.class)
-	public BienBanLayMauRes update(BienBanLayMauReq req) throws Exception {
+	public BienBanLayMau update(BienBanLayMauReq req) throws Exception {
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null)
 			throw new Exception("Bad request.");
@@ -208,7 +204,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 		if (!CollectionUtils.isEmpty(mapChiTiet.values()))
 			bienBanLayMauCtRepository.deleteAll(mapChiTiet.values());
 
-		return this.toResponse(bienBienLayMau);
+		return bienBienLayMau;
 	}
 
 	@Override
@@ -253,7 +249,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 	}
 
 	@Override
-	public BienBanLayMauRes detail(Long id) throws Exception {
+	public BienBanLayMau detail(Long id) throws Exception {
 		Optional<BienBanLayMau> optional = bienBanLayMauRepository.findById(id);
 		if (!optional.isPresent())
 			throw new Exception("Không tìm thấy dữ liệu.");
@@ -261,7 +257,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 		BienBanLayMau item = optional.get();
 		item.setChiTiets(bienBanLayMauCtRepository.findByBbLayMauIdIn(Collections.singleton(item.getId())));
 
-		return this.toResponse(optional.get());
+		return optional.get();
 	}
 
 	@Override
@@ -283,71 +279,71 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 	}
 
 
-	private BienBanLayMauRes toResponse(BienBanLayMau item) throws Exception {
-		if (item == null)
-			return null;
-
-		BienBanLayMauRes res = new BienBanLayMauRes();
-		BeanUtils.copyProperties(item, res);
-
-		res.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
-		res.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
-		QlnvDmDonvi donvi = getDviByMa(item.getMaDvi(), req);
-		res.setMaDvi(donvi.getMaDvi());
-		res.setTenDvi(donvi.getTenDvi());
-		res.setMaQhns(donvi.getMaQhns());
-		Set<String> maVatTus = Stream.of(item.getMaVatTu(), item.getMaVatTuCha()).collect(Collectors.toSet());
-		if (!CollectionUtils.isEmpty(maVatTus)) {
-			Set<QlnvDmVattu> vatTus = qlnvDmVattuRepository.findByMaIn(maVatTus.stream().filter(Objects::nonNull).collect(Collectors.toSet()));
-			if (CollectionUtils.isEmpty(vatTus))
-				throw new Exception("Không tìm thấy vật tư");
-			vatTus.stream().filter(v -> v.getMa().equalsIgnoreCase(item.getMaVatTu())).findFirst()
-					.ifPresent(v -> res.setTenVatTu(v.getTen()));
-			vatTus.stream().filter(v -> v.getMa().equalsIgnoreCase(item.getMaVatTuCha())).findFirst()
-					.ifPresent(v -> res.setTenVatTuCha(v.getTen()));
-		}
-
-
-		if (item.getQdgnvnxId() != null) {
-			Optional<HhQdGiaoNvuNhapxuatHdr> qdNhap = hhQdGiaoNvuNhapxuatRepository.findById(item.getQdgnvnxId());
-			if (!qdNhap.isPresent()) {
-				throw new Exception("Không tìm thấy quyết định nhập");
-			}
-			res.setSoQuyetDinhNhap(qdNhap.get().getSoQd());
-		}
-
-		if (item.getHopDongId() != null) {
-			Optional<HhHopDongHdr> qOpHdong = hhHopDongRepository.findById(item.getHopDongId());
-			if (!qOpHdong.isPresent())
-				throw new Exception("Hợp đồng không tồn tại");
-
-			res.setSoHopDong(qOpHdong.get().getSoHd());
-		}
-
-		if (item.getBbNhapDayKhoId() != null) {
-			Optional<QlBienBanNhapDayKhoLt> bbNhapDayKho = qlBienBanNhapDayKhoLtRepository.findById(item.getBbNhapDayKhoId());
-			if (!bbNhapDayKho.isPresent())
-				throw new Exception("Biên bản nhập đầy kho không tồn tại");
-
-			res.setSoBbNhapDayKho(bbNhapDayKho.get().getSoBienBan());
-			if (StringUtils.hasText(bbNhapDayKho.get().getMaNganLo())) {
-				KtNganLo nganLo = ktNganLoRepository.findFirstByMaNganlo(bbNhapDayKho.get().getMaNganLo());
-				this.thongTinNganLo(res, nganLo);
-			}
-		}
-
-		if (item.getBbGuiHangId() != null) {
-			Optional<NhBienBanGuiHang> bbGuiHang = nhBienBanGuiHangRepository.findById(item.getBbGuiHangId());
-			if (!bbGuiHang.isPresent())
-				throw new Exception("Biên bản gửi hàng không tồn tại");
-
-			res.setSoBbGuiHang(bbGuiHang.get().getSoBienBan());
-		}
-
-		List<BienBanLayMauCtRes> chiTiets = item.getChiTiets().stream().map(BienBanLayMauCtRes::new).collect(Collectors.toList());
-		res.setChiTiets(chiTiets);
-		return res;
-	}
+//	private BienBanLayMauRes toResponse(BienBanLayMau item) throws Exception {
+//		if (item == null)
+//			return null;
+//
+//		BienBanLayMauRes res = new BienBanLayMauRes();
+//		BeanUtils.copyProperties(item, res);
+//
+//		res.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+//		res.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
+//		QlnvDmDonvi donvi = getDviByMa(item.getMaDvi(), req);
+//		res.setMaDvi(donvi.getMaDvi());
+//		res.setTenDvi(donvi.getTenDvi());
+//		res.setMaQhns(donvi.getMaQhns());
+//		Set<String> maVatTus = Stream.of(item.getMaVatTu(), item.getMaVatTuCha()).collect(Collectors.toSet());
+//		if (!CollectionUtils.isEmpty(maVatTus)) {
+//			Set<QlnvDmVattu> vatTus = qlnvDmVattuRepository.findByMaIn(maVatTus.stream().filter(Objects::nonNull).collect(Collectors.toSet()));
+//			if (CollectionUtils.isEmpty(vatTus))
+//				throw new Exception("Không tìm thấy vật tư");
+//			vatTus.stream().filter(v -> v.getMa().equalsIgnoreCase(item.getMaVatTu())).findFirst()
+//					.ifPresent(v -> res.setTenVatTu(v.getTen()));
+//			vatTus.stream().filter(v -> v.getMa().equalsIgnoreCase(item.getMaVatTuCha())).findFirst()
+//					.ifPresent(v -> res.setTenVatTuCha(v.getTen()));
+//		}
+//
+//
+//		if (item.getQdgnvnxId() != null) {
+//			Optional<HhQdGiaoNvuNhapxuatHdr> qdNhap = hhQdGiaoNvuNhapxuatRepository.findById(item.getQdgnvnxId());
+//			if (!qdNhap.isPresent()) {
+//				throw new Exception("Không tìm thấy quyết định nhập");
+//			}
+//			res.setSoQuyetDinhNhap(qdNhap.get().getSoQd());
+//		}
+//
+//		if (item.getHopDongId() != null) {
+//			Optional<HhHopDongHdr> qOpHdong = hhHopDongRepository.findById(item.getHopDongId());
+//			if (!qOpHdong.isPresent())
+//				throw new Exception("Hợp đồng không tồn tại");
+//
+//			res.setSoHopDong(qOpHdong.get().getSoHd());
+//		}
+//
+//		if (item.getBbNhapDayKhoId() != null) {
+//			Optional<QlBienBanNhapDayKhoLt> bbNhapDayKho = qlBienBanNhapDayKhoLtRepository.findById(item.getBbNhapDayKhoId());
+//			if (!bbNhapDayKho.isPresent())
+//				throw new Exception("Biên bản nhập đầy kho không tồn tại");
+//
+//			res.setSoBbNhapDayKho(bbNhapDayKho.get().getSoBienBan());
+//			if (StringUtils.hasText(bbNhapDayKho.get().getMaNganLo())) {
+//				KtNganLo nganLo = ktNganLoRepository.findFirstByMaNganlo(bbNhapDayKho.get().getMaNganLo());
+//				this.thongTinNganLo(res, nganLo);
+//			}
+//		}
+//
+//		if (item.getBbGuiHangId() != null) {
+//			Optional<NhBienBanGuiHang> bbGuiHang = nhBienBanGuiHangRepository.findById(item.getBbGuiHangId());
+//			if (!bbGuiHang.isPresent())
+//				throw new Exception("Biên bản gửi hàng không tồn tại");
+//
+//			res.setSoBbGuiHang(bbGuiHang.get().getSoBienBan());
+//		}
+//
+//		List<BienBanLayMauCtRes> chiTiets = item.getChiTiets().stream().map(BienBanLayMauCtRes::new).collect(Collectors.toList());
+//		res.setChiTiets(chiTiets);
+//		return res;
+//	}
 
 	private void thongTinNganLo(BienBanLayMauRes item, KtNganLo nganLo) {
 		if (nganLo != null) {

@@ -11,7 +11,9 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class BienBanLayMauReq extends SoBienBanPhieuReq {
+
 	private Long id;
+
 	private Long qdgnvnxId;
 	private Long bbNhapDayKhoId;
 	private Long bbGuiHangId;
@@ -34,7 +36,7 @@ public class BienBanLayMauReq extends SoBienBanPhieuReq {
 	private Integer soLuongMau;
 	private String ppLayMau;
 	private String chiTieuKiemTra;
-	private String ketQuaNiemPhong;
+	private boolean ketQuaNiemPhong;
 	private String loaiVthh;
 
 	private List<BienBanLayMauCtReq> chiTiets = new ArrayList<>();

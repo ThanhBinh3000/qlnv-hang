@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.nhaphang.bbanlaymau;
 
+import com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau.BienBanLayMau;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauReq;
@@ -14,10 +15,10 @@ import java.util.Set;
 
 public interface BienBanLayMauService {
 	Page<BienBanLayMauRes> search(BienBanLayMauSearchReq req) throws Exception;
-	BienBanLayMauRes create(BienBanLayMauReq req) throws Exception;
-	BienBanLayMauRes update(BienBanLayMauReq req) throws Exception;
+	BienBanLayMau create(BienBanLayMauReq req) throws Exception;
+	BienBanLayMau update(BienBanLayMauReq req) throws Exception;
 	boolean updateStatus(StatusReq req) throws Exception;
-	BienBanLayMauRes detail(Long id) throws Exception;
+	BienBanLayMau detail(Long id) throws Exception;
 	boolean delete(Long id) throws Exception;
 
 	@Transactional(rollbackOn = Exception.class)

@@ -255,15 +255,15 @@ public class BienBanBanGiaoMauServiceImpl extends BaseServiceImpl implements Bie
 													  Map<Long, BienBanBanGiaoMauCt> mapChiTiet) throws Exception {
 		List<BienBanBanGiaoMauCt> chiTiets = new ArrayList<>();
 		for (BienBanLayMauCtReq req : chiTietReqs) {
-			Long id = req.getId();
+//			Long id = req.getId();
 			BienBanBanGiaoMauCt chiTiet = new BienBanBanGiaoMauCt();
 
-			if (id != null && id > 0) {
-				chiTiet = mapChiTiet.get(id);
-				if (chiTiet == null)
-					throw new Exception("Biên bản bàn giao mẫu chi tiết không tồn tại.");
-				mapChiTiet.remove(id);
-			}
+//			if (id != null && id > 0) {
+//				chiTiet = mapChiTiet.get(id);
+//				if (chiTiet == null)
+//					throw new Exception("Biên bản bàn giao mẫu chi tiết không tồn tại.");
+//				mapChiTiet.remove(id);
+//			}
 
 			BeanUtils.copyProperties(req, chiTiet, "id");
 			chiTiet.setBbBanGiaoMauId(parentId);
