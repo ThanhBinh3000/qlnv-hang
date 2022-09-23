@@ -272,7 +272,7 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 				.collect(groupingBy(BhTongHopDeXuatCt::getBhTongHopDeXuatId));
 		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 		page.getContent().forEach(f -> {
-			f.setTenCloaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
+			f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
 			f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
 			f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
 			f.setChiTietList(mapChiTiet.get(f.getId()));
