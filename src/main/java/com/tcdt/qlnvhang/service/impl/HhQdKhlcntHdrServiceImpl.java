@@ -692,7 +692,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				HhQdKhlcntDtl detail = hhQdKhlcntDtlRepository.findByIdQdHdr(f.getId());
 				f.setTongTien(hhQdKhlcntDsgthauRepository.sumTotalPriceByIdQdDtl(detail.getId()));
 			}else{
-				f.setTongTien(BigDecimal.valueOf(Long.parseLong(hashMapSum.get(f.getId().toString()))));
+				f.setTongTien(StringUtils.isEmpty(hashMapSum.get(f.getId().toString())) ? BigDecimal.valueOf(0) : BigDecimal.valueOf(Long.parseLong(hashMapSum.get(f.getId().toString()))));
 			}
 
 			f.setNamKhoach(f.getNamKhoach());
@@ -701,7 +701,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			soGthau.put(it[0].toString(),it[1].toString());
 		}
 		for (HhQdKhlcntHdr qd:data.getContent()) {
-			qd.setSoGthau(Long.parseLong(soGthau.get(qd.getId().toString())));
+			qd.setSoGthau(StringUtils.isEmpty(soGthau.get(qd.getId().toString())) ? 0 : Long.parseLong(soGthau.get(qd.getId().toString())));
 			qd.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qd.getTrangThai()));
 		}
 		return data;
