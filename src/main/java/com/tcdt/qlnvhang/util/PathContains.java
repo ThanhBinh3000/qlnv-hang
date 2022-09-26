@@ -47,6 +47,8 @@ public class PathContains {
 	public static final String QL_BKE_NHAPVTU = "/bke-nhap-vtu";
 	public static final String QL_BBAN_NHANVTU = "/bban-nhan-vtu";
 
+	public static final String DX_KH_MUATT = "/dx-kh-muatt";
+
 	// 5.6 Lua chon don vi mua hang
 	public static final String QL_LCDVBH = "/ql-lcbh";
 	public static final String QL_DXKH_BANHANG = "/qldxkh-banhang";
@@ -88,6 +90,10 @@ public class PathContains {
 	// De xuat ke hoach lua chon nha thau
 	public static final String DX_KH = "/dx-kh";// TODO: doi ten thanh dau-thau
 	public static final String DX_KH_LCNT = "/lcnt";
+
+
+	public static final String QD_PD_MTT = "/qd-pd-mtt";
+	public static final String DX_KH_MTT = "/mtt";
 	public static final String PA_LCNT = "/pan-lcnt";
 	public static final String QD_LCNT = "/qd-lcnt";
 	public static final String TTIN_DTHAU = "/ttin-dthau";
