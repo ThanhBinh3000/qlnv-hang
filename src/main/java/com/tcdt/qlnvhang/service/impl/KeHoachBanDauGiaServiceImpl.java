@@ -93,6 +93,11 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null) throw new Exception("Bad request.");
+
+		Optional<KeHoachBanDauGia> optional=keHoachBanDauGiaRepository.findBySoKeHoach(req.getSoKeHoach());
+		if (optional.isPresent()){
+			throw new Exception("số kế hoạch đã tồn tại");
+		}
 		log.info("Save ke hoach ban dau gia");
 		KeHoachBanDauGia keHoachDauGia = kehoachRequestMapper.toEntity(req);
 		keHoachDauGia.setTrangThai(Contains.DUTHAO);
@@ -148,6 +153,12 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 		if (!optional.isPresent())
 			throw new Exception("Kế hoạch bán đấu giá không tồn tại");
 		KeHoachBanDauGia keHoachDauGia = optional.get();
+		Optional<KeHoachBanDauGia> optional1=keHoachBanDauGiaRepository.findBySoKeHoach(req.getSoKeHoach());
+		if (optional.isPresent()){
+			if (!optional1.get().getId().equals(req.getId())){
+				throw new Exception("số kế hoạch đã tồn tại");
+			}
+		}
 
 		log.info("Update ke hoach ban dau gia");
 		kehoachRequestMapper.partialUpdate(keHoachDauGia, req);

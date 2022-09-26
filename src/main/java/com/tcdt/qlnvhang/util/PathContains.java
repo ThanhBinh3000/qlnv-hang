@@ -106,6 +106,10 @@ public class PathContains {
 	public static final String BAN_HANG="/ban-hang";
 	public static final String DAU_THAU = "/dau-thau";
 
+	// bán hàng Nhập theo phương thức mua trực tiếp
+	public static final String DX_MUA_TT = "/dx-kh-mtt";
+
+
 	// Dau thau vat tu
 	public static final String KH_LCNT_VT = "/kh-lcnt/vat-tu";
 	public static final String DAU_THAU_VAT_TU = "/dau-thau-vt";
