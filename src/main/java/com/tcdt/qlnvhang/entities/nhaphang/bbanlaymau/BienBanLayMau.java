@@ -11,6 +11,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
@@ -25,18 +26,21 @@ public class BienBanLayMau extends TrangThaiBaseEntity implements Serializable  
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BB_LAY_MAU_SEQ")
 	@SequenceGenerator(sequenceName = "BB_LAY_MAU_SEQ", allocationSize = 1, name = "BB_LAY_MAU_SEQ")
 	private Long id;
-	private Long qdgnvnxId;
+
+	private Long idQdGiaoNvNx;
+	private String soQdGiaoNvNx;
+	private String soBbNhapDayKho;
+	private Long idBbNhapDayKho;
+
+	private String soHd;
+	private Date ngayQdGiaoNvNx;
+	private String loaiVthh;
+	private String cloaiVthh;
 	private Long bbNhapDayKhoId;
 	private String soBienBan;
-	private Long hopDongId;
-	private LocalDate ngayHopDong;
-	private String donViCungCap;
-	private LocalDate ngayLayMau;
+	private Date ngayLayMau;
+	private String dviKiemNghiem;
 	private String diaDiemLayMau;
-	private String diaDiemBanGiao;
-
-	private String maVatTuCha;
-	private String maVatTu;
 
 	private String maDiemKho;
 	private String maNhaKho;
@@ -46,23 +50,18 @@ public class BienBanLayMau extends TrangThaiBaseEntity implements Serializable  
 	private Integer soLuongMau;
 	private String ppLayMau;
 	private String chiTieuKiemTra;
-	private String ketQuaNiemPhong;
+	private Boolean ketQuaNiemPhong;
 
 	private String trangThai;
 	private String maDvi;
-	private String capDvi;
 
-	private Long nguoiGuiDuyetId;
-	private LocalDate ngayGuiDuyet;
-	private Long nguoiPduyetId;
-	private LocalDate ngayPduyet;
+//	private Long nguoiGuiDuyetId;
+//	private LocalDate ngayGuiDuyet;
+//	private Long nguoiPduyetId;
+//	private LocalDate ngayPduyet;
 
-	private Integer so;
 	private Integer nam;
 
-	// Vat tu
-	private Long bbGuiHangId;
-	private String loaiVthh;
 
 	@Transient
 	private List<BienBanLayMauCt> chiTiets = new ArrayList<>();

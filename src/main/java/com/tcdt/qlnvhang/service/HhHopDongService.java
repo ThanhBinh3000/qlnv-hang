@@ -39,4 +39,6 @@ public interface HhHopDongService {
 	void deleteMulti(IdSearchReq idSearchReq) throws Exception;
 
 	void exportList(HhHopDongSearchReq objReq, HttpServletResponse response) throws Exception;
+
+	Page<HhHopDongHdr> lookupData(HhHopDongSearchReq req, HttpServletResponse response) throws Exception;
 }

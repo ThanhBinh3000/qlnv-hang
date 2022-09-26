@@ -383,7 +383,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		Map<String,String> hashMapHtLcnt = getListDanhMucChung("HT_LCNT");
 		Map<String,String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
 
-		qOptional.get().setTenVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getLoaiVthh()));
+		qOptional.get().setTenLoaiVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getLoaiVthh()));
 		qOptional.get().setTenCloaiVthh(StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getCloaiVthh()));
 
 		List<HhQdKhlcntDtl> hhQdKhlcntDtlList = new ArrayList<>();
@@ -440,7 +440,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		Optional<HhQdKhlcntDtl> dataDtl = hhQdKhlcntDtlRepository.findById(dataRes.getIdQdDtl());
 		Optional<HhQdKhlcntHdr> dataHdr = hhQdKhlcntHdrRepository.findById(dataDtl.get().getIdQdHdr());
 
-		dataHdr.get().setTenVthh(hashMapDmHh.get(dataHdr.get().getLoaiVthh()));
+		dataHdr.get().setTenLoaiVthh(hashMapDmHh.get(dataHdr.get().getLoaiVthh()));
 		dataHdr.get().setTenCloaiVthh(hashMapDmHh.get(dataHdr.get().getCloaiVthh()));
 
 		dataDtl.get().setHhQdKhlcntHdr(dataHdr.get());
@@ -686,13 +686,13 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		}
 		Map<String,String> soGthau = new HashMap<>();
 		for (HhQdKhlcntHdr f : data.getContent()) {
-			f.setTenVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
+			f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
 			f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
 			if(f.getLoaiVthh().startsWith("02")){
 				HhQdKhlcntDtl detail = hhQdKhlcntDtlRepository.findByIdQdHdr(f.getId());
 				f.setTongTien(hhQdKhlcntDsgthauRepository.sumTotalPriceByIdQdDtl(detail.getId()));
 			}else{
-				f.setTongTien(BigDecimal.valueOf(Long.parseLong(hashMapSum.get(f.getId().toString()))));
+				f.setTongTien(StringUtils.isEmpty(hashMapSum.get(f.getId().toString())) ? BigDecimal.valueOf(0) : BigDecimal.valueOf(Long.parseLong(hashMapSum.get(f.getId().toString()))));
 			}
 
 			f.setNamKhoach(f.getNamKhoach());
@@ -701,7 +701,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			soGthau.put(it[0].toString(),it[1].toString());
 		}
 		for (HhQdKhlcntHdr qd:data.getContent()) {
-			qd.setSoGthau(Long.parseLong(soGthau.get(qd.getId().toString())));
+			qd.setSoGthau(StringUtils.isEmpty(soGthau.get(qd.getId().toString())) ? 0 : Long.parseLong(soGthau.get(qd.getId().toString())));
 			qd.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qd.getTrangThai()));
 		}
 		return data;
@@ -713,7 +713,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		List<HhQdKhlcntHdr> listData =  hhQdKhlcntHdrRepository.selectAll(req.getNamKhoach(),req.getLoaiVthh(),req.getCloaiVthh(), req.getSoQd(), convertDateToString(req.getTuNgayQd()),convertDateToString(req.getDenNgayQd()),req.getTrangThai());
 		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 		listData.forEach(f -> {
-			f.setTenVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
+			f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
 			f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
 		});
 		return listData;
