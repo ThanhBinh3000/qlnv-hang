@@ -59,7 +59,7 @@ public class BhQdPheDuyetKhbdgRepositoryCustomImpl implements BhQdPheDuyetKhbdgR
 
 		log.debug("Set params");
 		this.setParameterSearch(req, query, qdPheDuyet);
-		System.out.println("hahaa:" + query);
+//		System.out.println("hahaa:" + query);
 		log.info("Set pageable");
 		query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize()).setMaxResults(pageable.getPageSize());
 		List<Object[]> result = query.getResultList();

@@ -78,7 +78,8 @@ public class BhTongHopDeXuatKhbdg extends BaseEntity implements Serializable {
 
 	@Column(name = "QD_PHE_DUYET_KHBDG_ID")
 	private Long qdPheDuyetKhbdgId;
-
+	@Transient
+	private String soQdPheDuyetKhbdg;
 
 	@Column(name = "NGUOI_GUI_DUYET_ID")
 	private Long nguoiGuiDuyetId;
