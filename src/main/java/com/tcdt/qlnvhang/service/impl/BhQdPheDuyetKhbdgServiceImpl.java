@@ -297,7 +297,9 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 		if (!CollectionUtils.isEmpty(fileDinhKemList)) theEntity.setFileDinhKems(fileDinhKemList);
 
 		BhQdPheDuyetKhbdgResponse response = qdPheduyetKhbdgResponseMapper.toDto(theEntity);
-
+		if(theEntity.getTongHopDeXuatKhbdgId() == null){
+			throw new EntityNotFoundException("Tổng hợp đề xuất kế hoạch bán đấu giá không tồn tại");
+		}
 		Optional<BhTongHopDeXuatKhbdg> tongHopDeXuatOpt = tongHopDeXuatKhbdgRepository.findById(theEntity.getTongHopDeXuatKhbdgId());
 		if (!tongHopDeXuatOpt.isPresent()) {
 			throw new EntityNotFoundException("Tổng hợp đề xuất kế hoạch bán đấu giá không tồn tại");
