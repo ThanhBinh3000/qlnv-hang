@@ -58,5 +58,6 @@ public class KeHoachBanDauGiaResponse {
 	private BigDecimal tongSoLuongDonViTaiSan;
 	private BigDecimal tongGiaKhoiDiem;
 	private BigDecimal tongKhoanTienDatTruoc;
+	private BigDecimal khoanTienDatTruoc;
 	private String tenDonVi;
 }
