@@ -48,7 +48,7 @@ public class BhQdPheDuyetKhbdgRepositoryCustomImpl implements BhQdPheDuyetKhbdgR
 				.append(qdPheDuyet.selectField(BhTongHopDeXuatCt_.MA_DON_VI));
 		builder.append(QueryUtils.FROM)
 				.append(qdPheDuyet.buildAliasName())
-				.append(QueryUtils.buildInnerJoin(qdPheDuyet, vatTuCha, BhQdPheDuyetKhbdg_.MA_VAT_TU_CHA, QlnvDmVattu_.MA))
+				.append(QueryUtils.buildInnerJoin(qdPheDuyet, vatTuCha, BhQdPheDuyetKhbdg_.LOAI_VTHH, QlnvDmVattu_.MA))
 				.append(QueryUtils.buildLeftJoin(qdPheDuyet, tongHopDeXuat, BhQdPheDuyetKhbdg_.TONG_HOP_DE_XUAT_KHBDG_ID, BhTongHopDeXuatKhbdg_.ID));
 
 		this.setConditionSearch(req, builder, qdPheDuyet);
@@ -59,7 +59,7 @@ public class BhQdPheDuyetKhbdgRepositoryCustomImpl implements BhQdPheDuyetKhbdgR
 
 		log.debug("Set params");
 		this.setParameterSearch(req, query, qdPheDuyet);
-
+		System.out.println("hahaa:" + query);
 		log.info("Set pageable");
 		query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize()).setMaxResults(pageable.getPageSize());
 		List<Object[]> result = query.getResultList();
