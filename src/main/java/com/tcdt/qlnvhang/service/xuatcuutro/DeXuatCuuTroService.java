@@ -78,7 +78,7 @@ public class DeXuatCuuTroService extends BaseServiceImpl {
   public Page<XhDxCuuTroHdr> searchPage(CustomUserDetails currentUser, XhDxCuuTroHdrSearchReq req) throws Exception {
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<XhDxCuuTroHdr> search = deXuatCuuTroRepository.search(req, pageable);
-    //Map<String, String> mapLoaiGia = qlnvDmService.getListDanhMucChung("LOAI_GIA");
+    Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
     Map<String, String> mapVthh = getListDanhMucHangHoa();
     search.getContent().forEach(s -> {
@@ -90,6 +90,9 @@ public class DeXuatCuuTroService extends BaseServiceImpl {
       }
       if (mapVthh.get((s.getCloaiVthh())) != null) {
         s.setTenCloaiVthh(mapVthh.get(s.getCloaiVthh()));
+      }
+      if (mapLoaiHinhNx.get((s.getLoaiHinhNhapXuat())) != null) {
+        s.setTenLoaiHinhNhapXuat(mapLoaiHinhNx.get(s.getLoaiHinhNhapXuat()));
       }
     });
     return search;
@@ -104,8 +107,8 @@ public class DeXuatCuuTroService extends BaseServiceImpl {
       List<XhDxCuuTroDtl> dataDtl = deXuatCuuTroDtlRepository.findByIdDxuat(data.getId());
       List<XhDxCuuTroKho> dataKho = deXuatCuuTroKhoRepository.findByIdDxuat(data.getId());
       buildThongTinKho(dataKho);
-      data.setThongTinChiTiet(DataUtils.isNullOrEmpty(dataDtl) ? null : dataDtl);
-      data.setPhuongAnXuat(DataUtils.isNullOrEmpty(dataKho) ? null : dataKho);
+      data.setThongTinChiTiet(DataUtils.isNullOrEmpty(dataDtl) ? new ArrayList<>() : dataDtl);
+      data.setPhuongAnXuat(DataUtils.isNullOrEmpty(dataKho) ? new ArrayList<>() : dataKho);
       Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
       Map<String, String> mapVthh = getListDanhMucHangHoa();
       data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
@@ -144,7 +147,11 @@ public class DeXuatCuuTroService extends BaseServiceImpl {
     }
     XhDxCuuTroHdr newRow = new XhDxCuuTroHdr();
     BeanUtils.copyProperties(req, newRow, "id", "fileDinhKem");
-    newRow.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
+    if (req.getTrangThai().equals(TrangThaiAllEnum.CHO_DUYET_TP.getId())) {
+      newRow.setTrangThai(TrangThaiAllEnum.CHO_DUYET_TP.getId());
+    } else {
+      newRow.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
+    }
     newRow.setTrangThaiTh(TrangThaiAllEnum.CHUA_TONG_HOP.getId());
     newRow.setMaDvi(currentUser.getDvql());
 //    newRow.setCapDvi(currentUser.getUser().getCapDvi());
@@ -197,7 +204,7 @@ public class DeXuatCuuTroService extends BaseServiceImpl {
     if (!DataUtils.isNullObject(validateRow) && currentRow.getId() != req.getId()) {
       throw new Exception(MessageFormat.format("Số đề xuất {0} đã tồn tại", req.getSoDxuat()));
     }
-    DataUtils.copyProperties(req, currentRow, "id", "trangThai", "trangThaiTh", "fileDinhKem", "thongTinChiTiet", "phuongAnXuat");
+    DataUtils.copyProperties(req, currentRow, "id", "trangThaiTh", "fileDinhKem", "thongTinChiTiet", "phuongAnXuat");
     if (DataUtils.isNullOrEmpty(currentRow.getLoaiHinhNhapXuat())) {
       throw new Exception("Loại hình nhập xuất thiếu hoặc không hợp lệ.");
     }
@@ -239,8 +246,8 @@ public class DeXuatCuuTroService extends BaseServiceImpl {
 
     //luu nhap kho
     List<XhDxCuuTroKho> phuongAnXuat = new ArrayList();
-    if (!DataUtils.isNullOrEmpty(req.getThongTinChiTiet())) {
-      phuongAnXuat = ObjectMapperUtils.mapAll(req.getThongTinChiTiet(), XhDxCuuTroKho.class);
+    if (!DataUtils.isNullOrEmpty(req.getPhuongAnXuat())) {
+      phuongAnXuat = ObjectMapperUtils.mapAll(req.getPhuongAnXuat(), XhDxCuuTroKho.class);
       XhDxCuuTroHdr finalNewRow = currentRow;
       phuongAnXuat.forEach(s -> {
         s.setIdDxuat(finalNewRow.getId());
