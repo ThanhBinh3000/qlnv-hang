@@ -282,7 +282,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 				}
 				hhDxuatKhLcntHdrRepository.saveAll(listDxHdr);
 			}
-			hhDxKhLcntThopDtlRepository.deleteAllByIdIn(listDls);
+			hhDxKhLcntThopDtlRepository.deleteAll(listDls);
 		}
 		hhDxKhLcntThopHdrRepository.deleteAllByIdIn(idSearchReq.getIdList());
 	}

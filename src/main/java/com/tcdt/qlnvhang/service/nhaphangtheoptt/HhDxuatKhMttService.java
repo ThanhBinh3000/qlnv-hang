@@ -12,7 +12,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhDxuatKhMttCcxdgReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhDxuatKhMttHdrReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhDxuatKhMttSlddReq;
-import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhDxKhMttHsrReq;
+import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhDxKhMttHdrReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -59,7 +59,7 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
 
 
 
-    public Page<HhDxuatKhMttHdr> searchPage(SearchHhDxKhMttHsrReq objReq)throws Exception{
+    public Page<HhDxuatKhMttHdr> searchPage(SearchHhDxKhMttHdrReq objReq)throws Exception{
         UserInfo userInfo= SecurityContextService.getUser();
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),
                 objReq.getPaggingReq().getLimit(), Sort.by("id").ascending());
@@ -256,7 +256,7 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
         hhDxuatKhMttRepository.deleteAll(list);
     }
 
-    public  void export(SearchHhDxKhMttHsrReq objReq, HttpServletResponse response) throws Exception{
+    public  void export(SearchHhDxKhMttHdrReq objReq, HttpServletResponse response) throws Exception{
         PaggingReq paggingReq = new PaggingReq();
         paggingReq.setPage(0);
         paggingReq.setLimit(Integer.MAX_VALUE);
