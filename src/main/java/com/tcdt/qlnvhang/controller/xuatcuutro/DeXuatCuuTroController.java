@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.QlnvDxkhXuatKhacHdrRepository;
+import com.tcdt.qlnvhang.repository.xuatcuutro.DeXuatCuuTroRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.QlnvDxkhXuatKhacDtlReq;
@@ -47,7 +48,7 @@ import java.util.Optional;
 @Api(tags = "Quản lý Đề xuất xuất cứu trợ viện trợ")
 public class DeXuatCuuTroController extends BaseController {
   @Autowired
-  private QlnvDxkhXuatKhacHdrRepository qlnvDxkhXuatKhacHdrRepository;
+  private DeXuatCuuTroRepository deXuatCuuTroRepository;
   @Autowired
   private DeXuatCuuTroService deXuatCuuTroService;
 
@@ -114,11 +115,11 @@ public class DeXuatCuuTroController extends BaseController {
       if (StringUtils.isEmpty(idSearchReq.getId()))
         throw new Exception("Xoá thất bại, không tìm thấy dữ liệu");
 
-      Optional<QlnvDxkhXuatKhacHdr> qOptional = qlnvDxkhXuatKhacHdrRepository.findById(idSearchReq.getId());
-      if (!qOptional.isPresent())
+      Optional<XhDxCuuTroHdr> byId = deXuatCuuTroRepository.findById(idSearchReq.getId());
+      if (!byId.isPresent())
         throw new Exception("Không tìm thấy dữ liệu cần xoá");
 
-      qlnvDxkhXuatKhacHdrRepository.delete(qOptional.get());
+      deXuatCuuTroRepository.delete(byId.get());
 
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
@@ -159,35 +160,6 @@ public class DeXuatCuuTroController extends BaseController {
   public ResponseEntity<BaseResponse> approve(HttpServletRequest request, @Valid @RequestBody StatusReq stReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      if (StringUtils.isEmpty(stReq.getId()))
-        throw new Exception("Không tìm thấy dữ liệu");
-
-      Optional<QlnvDxkhXuatKhacHdr> qOptional = qlnvDxkhXuatKhacHdrRepository.findById(Long.valueOf(stReq.getId()));
-      if (!qOptional.isPresent())
-        throw new Exception("Không tìm thấy dữ liệu");
-
-      String status = stReq.getTrangThai();
-      switch (status) {
-        case Contains.CHO_DUYET:
-          qOptional.get().setNguoiGuiDuyet(getUserName(request));
-          qOptional.get().setNgayGuiDuyet(getDateTimeNow());
-          break;
-        case Contains.DUYET:
-          qOptional.get().setNguoiPduyet(getUserName(request));
-          qOptional.get().setNgayPduyet(getDateTimeNow());
-          break;
-        case Contains.TU_CHOI:
-          qOptional.get().setLdoTuchoi(stReq.getLyDo());
-          break;
-        default:
-          break;
-      }
-
-      qOptional.get().setTrangThai(stReq.getTrangThai());
-      qlnvDxkhXuatKhacHdrRepository.save(qOptional.get());
-
-      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
       resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
       resp.setMsg(e.getMessage());

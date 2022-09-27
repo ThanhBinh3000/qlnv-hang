@@ -82,6 +82,8 @@ public class XhDxCuuTroHdr extends BaseEntity implements Serializable {
   @Transient
   private String tenTrangThaiTh;
   @Transient
+  private String tenLoaiHinhNhapXuat;
+  @Transient
   private List<XhDxCuuTroDtl> thongTinChiTiet = new ArrayList<>();
   @Transient
   private List<XhDxCuuTroKho> phuongAnXuat = new ArrayList<>();
