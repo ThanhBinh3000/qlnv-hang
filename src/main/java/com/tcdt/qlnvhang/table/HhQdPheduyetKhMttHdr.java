@@ -14,7 +14,7 @@ import java.util.List;
 @Table(name = "HH_QD_PHE_DUYET_KHMTT_HDR")
 @Data
 public class HhQdPheduyetKhMttHdr implements Serializable {
-    private static final long serialVersionUID = 1;
+    private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "HH_QD_PHE_DUYET_KHMTT_HDR";
 
     @Id
