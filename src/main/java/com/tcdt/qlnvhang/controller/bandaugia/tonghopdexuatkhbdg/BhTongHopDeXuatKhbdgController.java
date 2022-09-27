@@ -17,6 +17,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -34,6 +35,7 @@ import java.util.List;
 @Api(tags = "Tổng hợp đề xuất kế hoạch bán đấu giá")
 @RequiredArgsConstructor
 public class BhTongHopDeXuatKhbdgController extends BaseController {
+	@Autowired
 	private final BhTongHopDeXuatKhbdgService tongHopDeXuatKhbdgService;
 
 	@ApiOperation(value = "Tạo mới tổng hợp đề xuất kế hoạch bán đấu giá", response = BhTongHopDeXuatKhbdgResponse.class)
@@ -103,23 +105,23 @@ public class BhTongHopDeXuatKhbdgController extends BaseController {
 		}
 		return ResponseEntity.ok(resp);
 	}
-
-	@ApiOperation(value = "Search thông tin tổng hợp đề xuất kế hoạch bán đấu giá hàng hóa", response = Page.class)
-	@GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> search(BhTongHopDeXuatKhbdgSearchRequest req) {
-		BaseResponse resp = new BaseResponse();
-		try {
-			Page<BhTongHopDeXuatKhbdgSearchResponse> res = tongHopDeXuatKhbdgService.search(req);
-			resp.setData(res);
-			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-		} catch (Exception e) {
-			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-			resp.setMsg(e.getMessage());
-			log.error(e.getMessage());
-		}
-		return ResponseEntity.ok(resp);
-	}
+//
+//	@ApiOperation(value = "Search thông tin tổng hợp đề xuất kế hoạch bán đấu giá hàng hóa", response = Page.class)
+//	@GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
+//	public ResponseEntity<BaseResponse> search(BhTongHopDeXuatKhbdgSearchRequest req) {
+//		BaseResponse resp = new BaseResponse();
+//		try {
+//			Page<BhTongHopDeXuatKhbdgSearchResponse> res = tongHopDeXuatKhbdgService.search(req);
+//			resp.setData(res);
+//			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+//			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+//		} catch (Exception e) {
+//			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+//			resp.setMsg(e.getMessage());
+//			log.error(e.getMessage());
+//		}
+//		return ResponseEntity.ok(resp);
+//	}
 
 	@ApiOperation(value = "Chi tiết thông tin tổng hợp đề xuất kế hoạch bán đấu giá hàng hóa", response = Page.class)
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -142,7 +144,6 @@ public class BhTongHopDeXuatKhbdgController extends BaseController {
 	@PostMapping(value = "/export/list", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public void exportToExcel(HttpServletResponse response, @RequestBody BhTongHopDeXuatKhbdgSearchRequest req) {
-
 		try {
 			tongHopDeXuatKhbdgService.exportToExcel(req, response);
 		} catch (Exception e) {
@@ -173,10 +174,11 @@ public class BhTongHopDeXuatKhbdgController extends BaseController {
 	public ResponseEntity<BaseResponse> searchPage(HttpServletRequest request, @RequestBody BhTongHopDeXuatKhbdgSearchRequest objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(tongHopDeXuatKhbdgService.searchPage(request,objReq));
+			resp.setData(tongHopDeXuatKhbdgService.searchPage(objReq));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
+			e.printStackTrace();
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
 			log.error("Tra cứu danh sách tổng hợp đề xuất kế hoạch lựa chọn nhà thầu gạo trace: {}", e);

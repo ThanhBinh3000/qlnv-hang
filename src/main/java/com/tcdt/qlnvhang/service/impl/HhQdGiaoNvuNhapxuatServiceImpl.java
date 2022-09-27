@@ -11,6 +11,7 @@ import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatDtlLoaiNx;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatHdrLoaiQd;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.HhDviThuchienQdinhRepository;
+import com.tcdt.qlnvhang.repository.HhHopDongDdiemNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNxDdiemRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatDtlRepository;
@@ -51,6 +52,9 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 	private HhHopDongRepository hhHopDongRepository;
 
 	@Autowired
+	private HhHopDongDdiemNhapKhoRepository hhHopDongDdiemNhapKhoRepository;
+
+	@Autowired
 	private HttpServletRequest req;
 
 	@Override
@@ -87,6 +91,18 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		dataMap.setChildren2(dtls2);
 
 		hhQdGiaoNvuNhapxuatRepository.save(dataMap);
+
+		if(dataMap.getLoaiVthh().startsWith("02")){
+			List<HhHopDongDdiemNhapKho> allByIdHdongHdr = hhHopDongDdiemNhapKhoRepository.findAllByIdHdongHdr(dataMap.getId());
+			List<HhHopDongDdiemNhapKho> collect = allByIdHdongHdr.stream().filter(item -> item.getMaDvi().equalsIgnoreCase(userInfo.getDvql())).collect(Collectors.toList());
+			collect.forEach(item -> {
+				item.setTrangThai(Contains.DADUTHAO_QD);
+			});
+			hhHopDongDdiemNhapKhoRepository.saveAll(collect);
+		}else{
+			hhHopDongRepository.updateHopDong(dataMap.getIdHd(),Contains.DADUTHAO_QD);
+		}
+
 
 		this.saveDetail(dataMap,objReq,false);
 
@@ -270,6 +286,14 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 				default:
 					throw new Exception("Phê duyệt không thành công");
 			}
+			if (stReq.getTrangThai().equals(Contains.BAN_HANH)) {
+				List<HhHopDongDdiemNhapKho> allByIdHdongHdr = hhHopDongDdiemNhapKhoRepository.findAllByIdHdongHdr(optional.get().getIdHd());
+				List<HhHopDongDdiemNhapKho> collect = allByIdHdongHdr.stream().filter( x -> x.getMaDvi().equalsIgnoreCase(userInfo.getDvql())).collect(Collectors.toList());
+				collect.forEach(x -> {
+					x.setTrangThai(Contains.DABANHANH_QD);
+				});
+				hhHopDongDdiemNhapKhoRepository.saveAll(collect);
+			}
 		} else {
 			String status = stReq.getTrangThai() + optional.get().getTrangThai();
 			switch (status) {
@@ -280,10 +304,11 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 				default:
 					throw new Exception("Phê duyệt không thành công");
 			}
+			if (stReq.getTrangThai().equals(Contains.BAN_HANH)) {
+				hhHopDongRepository.updateHopDong(optional.get().getIdHd(),Contains.DABANHANH_QD);
+			}
 		}
-		if (stReq.getTrangThai().equals(Contains.BAN_HANH)) {
-			hhHopDongRepository.updateHopDong(optional.get().getIdHd(),Contains.DABANHANH_QD);
-		}
+
 		optional.get().setTrangThai(stReq.getTrangThai());
 		hhQdGiaoNvuNhapxuatRepository.save(item);
 		return true;

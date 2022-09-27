@@ -44,6 +44,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.util.*;
@@ -256,12 +259,12 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 		if (Objects.nonNull(req.getId())) {
 			specs.and(SpecUtils.equal(KeHoachBanDauGia_.ID, req.getId()));
 		}
-
 		if (Objects.nonNull(req.getNamKeHoach())) {
-			specs.and(SpecUtils.equal(KeHoachBanDauGia_.NAM_KE_HOACH, req.getNamKeHoach()));
+//			specs.and(SpecUtils.equal(KeHoachBanDauGia_.NAM_KE_HOACH, req.getNamKeHoach()));
 		}
 		if (Objects.nonNull(req.getSoKeHoach())) {
-			specs.and(SpecUtils.like(KeHoachBanDauGia_.SO_KE_HOACH, req.getSoKeHoach()));
+			specs.and((Root<KeHoachBanDauGia> root, CriteriaQuery<?> query, CriteriaBuilder builder) ->
+					builder.equal(root.get(KeHoachBanDauGia_.SO_KE_HOACH), req.getSoKeHoach()));
 		}
 		if (Objects.nonNull(req.getTrichYeu())) {
 			specs.and(SpecUtils.like(KeHoachBanDauGia_.TRICH_YEU, req.getTrichYeu()));
@@ -504,6 +507,7 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 				objReq.getLoaiVthh(),
 				userInfo.getDvql(),
 				objReq.getTrangThai(),
+				objReq.getTrangThaiTh(),
 				pageable);
 		Map<String, String> mapHangHoa = getListDanhMucHangHoa();
 		Map<String, String> mapDonvi = getListDanhMucDvi(null,null,"01");
@@ -527,6 +531,7 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 			f.setTenLoaiVthh(mapHangHoa.get(f.getLoaiVthh()));
 			f.setTenCloaiVthh(mapHangHoa.get(f.getCloaiVthh()));
 			f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+			f.setTenTrangThaiTh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiTh()));
 			f.setTenDonVi(mapDonvi.get(f.getMaDv()));
 			f.setDiaDiemGiaoNhanList(mapGiaoNhan.get(f.getId()));
 			f.setPhanLoTaiSanList(mapPhanLo.get(f.getId()));

@@ -28,46 +28,46 @@ public class BhTongHopDeXuatKhbdgRepositoryCustomImpl implements BhTongHopDeXuat
 	@PersistenceContext
 	private EntityManager em;
 
-	@Override
-	public Page<BhTongHopDeXuatKhbdgSearchResponse> search(BhTongHopDeXuatKhbdgSearchRequest req, Pageable pageable) {
-		StringBuilder builder = new StringBuilder();
-		QueryUtils tongHopDeXuat = QueryUtils.builder().clazz(BhTongHopDeXuatKhbdg.class).alias("tongHopDeXuatKHBDG").build();
-		QueryUtils qdPheDuyet = QueryUtils.builder().clazz(BhQdPheDuyetKhbdg.class).alias("qdPheDuyetKHBDG").build();
-		QueryUtils loaiVthh = QueryUtils.builder().clazz(QlnvDmVattu.class).alias("loaiVthh").build();
-		log.debug("Build select query");
-		builder.append(QueryUtils.SELECT)
-				.append(tongHopDeXuat.selectField(BhTongHopDeXuatKhbdg_.ID))
-				.append(tongHopDeXuat.selectField(BhTongHopDeXuatKhbdg_.MA_TONG_HOP))
-				.append(tongHopDeXuat.selectField(BhTongHopDeXuatKhbdg_.NGAY_TONG_HOP))
-				.append(tongHopDeXuat.selectField(BhTongHopDeXuatKhbdg_.NOI_DUNG_TONG_HOP))
-				.append(tongHopDeXuat.selectField(BhTongHopDeXuatKhbdg_.NAM_KE_HOACH))
-				.append(tongHopDeXuat.selectField(BhTongHopDeXuatKhbdg_.TRANG_THAI))
-				.append(qdPheDuyet.selectField(BhQdPheDuyetKhbdg_.ID))
-				.append(qdPheDuyet.selectField(BhQdPheDuyetKhbdg_.SO_QUYET_DINH))
-				.append(loaiVthh.selectField(QlnvDmVattu_.TEN));
-		builder.append(QueryUtils.FROM)
-				.append(tongHopDeXuat.buildAliasName())
-				.append(QueryUtils.buildInnerJoin(tongHopDeXuat, loaiVthh, BhTongHopDeXuatKhbdg_.LOAI_VTHH, QlnvDmVattu_.MA))
-				.append(QueryUtils.buildLeftJoin(tongHopDeXuat, qdPheDuyet, BhTongHopDeXuatKhbdg_.ID, BhQdPheDuyetKhbdg_.TONG_HOP_DE_XUAT_KHBDG_ID));
-
-		setConditionSearch(req, builder, tongHopDeXuat);
-		log.debug("Set sort");
-		QueryUtils.buildSort(pageable, builder);
-
-		TypedQuery<Object[]> query = em.createQuery(QueryUtils.buildQuery(builder), Object[].class);
-
-		log.debug("Set params");
-		this.setParameterSearch(req, query, tongHopDeXuat);
-
-		log.info("Set pageable");
-		query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize()).setMaxResults(pageable.getPageSize());
-		List<Object[]> result = query.getResultList();
-
-		List<BhTongHopDeXuatKhbdgSearchResponse> responses = result.stream()
-				.map(BhTongHopDeXuatKhbdgSearchResponse::new).collect(Collectors.toList());
-
-		return new PageImpl<>(responses, pageable, this.count(req, tongHopDeXuat));
-	}
+//	@Override
+//	public Page<BhTongHopDeXuatKhbdgSearchResponse> search(BhTongHopDeXuatKhbdgSearchRequest req, Pageable pageable) {
+//		StringBuilder builder = new StringBuilder();
+//		QueryUtils tongHopDeXuat = QueryUtils.builder().clazz(BhTongHopDeXuatKhbdg.class).alias("tongHopDeXuatKHBDG").build();
+//		QueryUtils qdPheDuyet = QueryUtils.builder().clazz(BhQdPheDuyetKhbdg.class).alias("qdPheDuyetKHBDG").build();
+//		QueryUtils loaiVthh = QueryUtils.builder().clazz(QlnvDmVattu.class).alias("loaiVthh").build();
+//		log.debug("Build select query");
+//		builder.append(QueryUtils.SELECT)
+//				.append(tongHopDeXuat.selectField(BhTongHopDeXuatKhbdg_.ID))
+//				.append(tongHopDeXuat.selectField(BhTongHopDeXuatKhbdg_.MA_TONG_HOP))
+//				.append(tongHopDeXuat.selectField(BhTongHopDeXuatKhbdg_.NGAY_TONG_HOP))
+//				.append(tongHopDeXuat.selectField(BhTongHopDeXuatKhbdg_.NOI_DUNG_TONG_HOP))
+//				.append(tongHopDeXuat.selectField(BhTongHopDeXuatKhbdg_.NAM_KE_HOACH))
+//				.append(tongHopDeXuat.selectField(BhTongHopDeXuatKhbdg_.TRANG_THAI))
+//				.append(qdPheDuyet.selectField(BhQdPheDuyetKhbdg_.ID))
+//				.append(qdPheDuyet.selectField(BhQdPheDuyetKhbdg_.SO_QUYET_DINH))
+//				.append(loaiVthh.selectField(QlnvDmVattu_.TEN));
+//		builder.append(QueryUtils.FROM)
+//				.append(tongHopDeXuat.buildAliasName())
+//				.append(QueryUtils.buildInnerJoin(tongHopDeXuat, loaiVthh, BhTongHopDeXuatKhbdg_.LOAI_VTHH, QlnvDmVattu_.MA))
+//				.append(QueryUtils.buildLeftJoin(tongHopDeXuat, qdPheDuyet, BhTongHopDeXuatKhbdg_.ID, BhQdPheDuyetKhbdg_.TONG_HOP_DE_XUAT_KHBDG_ID));
+//
+//		setConditionSearch(req, builder, tongHopDeXuat);
+//		log.debug("Set sort");
+//		QueryUtils.buildSort(pageable, builder);
+//
+//		TypedQuery<Object[]> query = em.createQuery(QueryUtils.buildQuery(builder), Object[].class);
+//
+//		log.debug("Set params");
+//		this.setParameterSearch(req, query, tongHopDeXuat);
+//
+//		log.info("Set pageable");
+//		query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize()).setMaxResults(pageable.getPageSize());
+//		List<Object[]> result = query.getResultList();
+//
+//		List<BhTongHopDeXuatKhbdgSearchResponse> responses = result.stream()
+//				.map(BhTongHopDeXuatKhbdgSearchResponse::new).collect(Collectors.toList());
+//
+//		return new PageImpl<>(responses, pageable, this.count(req, tongHopDeXuat));
+//	}
 
 
 	private void setConditionSearch(BhTongHopDeXuatKhbdgSearchRequest req, StringBuilder builder, QueryUtils tongHopDeXuat) {

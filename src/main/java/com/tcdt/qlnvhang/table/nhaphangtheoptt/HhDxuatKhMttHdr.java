@@ -65,6 +65,8 @@ public class HhDxuatKhMttHdr  implements Serializable {
     private String ghiChu;
     private BigDecimal tongMucDt;
     private BigDecimal tongSoLuong;
+    private String nguonVon;
+    private String tenChuDt;
 
 
     @Transient

@@ -10,4 +10,7 @@ public interface BhQdPheDuyetKhbdgRepository extends BaseRepository<BhQdPheDuyet
 	void deleteAllByIdIn(List<Long> ids);
 
 	List<BhQdPheDuyetKhbdg> findByIdIn(Collection<Long> ids);
+
+
+	List<BhQdPheDuyetKhbdg> findAllByTongHopDeXuatKhbdgIdIn(Collection<Long> tongHopDeXuatKhbdgIdIn);
 }

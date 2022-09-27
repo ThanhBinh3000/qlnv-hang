@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.FileDKemJoinHhDchinhDxKhLcntHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -75,7 +76,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 				pageable);
 		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 		data.getContent().forEach(f->{
-			f.setTenloaiVthh(hashMapDmHh.get(f.getLoaiVthh()));
+			f.setTenLoaiVthh(hashMapDmHh.get(f.getLoaiVthh()));
 		});
 		List<Long> ids = data.getContent().stream().map(HhDchinhDxKhLcntHdr::getId).collect(Collectors.toList());
 		List<Object[]> listGthau = dtlRepository.countAllByDcHdr(ids);
@@ -337,35 +338,48 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		}
 //		qdLcnt.setTrangThai(stReq.getTrangThai());
 		String status = stReq.getTrangThai() + optional.get().getTrangThai();
-		switch(status) {
-			case Contains.CHODUYET_LDV + Contains.DUTHAO:
-			case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
-				optional.get().setNguoiGuiDuyet(getUser().getUsername());
-				optional.get().setNgayGuiDuyet(getDateTimeNow());
-				break;
-			case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
-				optional.get().setLdoTuchoi(stReq.getLyDo());
-				break;
-			case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
+		if(optional.get().getLoaiVthh().startsWith("02")){
+			switch(status) {
+				case Contains.CHODUYET_LDV + Contains.DUTHAO:
+				case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
+					optional.get().setNguoiGuiDuyet(getUser().getUsername());
+					optional.get().setNgayGuiDuyet(getDateTimeNow());
+					break;
+				case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
+					optional.get().setLdoTuchoi(stReq.getLyDo());
+					break;
+				case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
+					optional.get().setNguoiPduyet(getUser().getUsername());
+					optional.get().setNgayPduyet(getDateTimeNow());
+				case Contains.BAN_HANH + Contains.DADUYET_LDV:
+					optional.get().setNguoiPduyet(getUser().getUsername());
+					optional.get().setNgayPduyet(getDateTimeNow());
+					break;
+				default:
+					throw new Exception("Phê duyệt không thành công");
+			}
+		}else{
+			if ((Contains.BAN_HANH + Contains.DUTHAO).equals(status)) {
 				optional.get().setNguoiPduyet(getUser().getUsername());
 				optional.get().setNgayPduyet(getDateTimeNow());
-			case Contains.BAN_HANH + Contains.DADUYET_LDV:
-				optional.get().setNguoiPduyet(getUser().getUsername());
-				optional.get().setNgayPduyet(getDateTimeNow());
-				break;
-			default:
+			} else {
 				throw new Exception("Phê duyệt không thành công");
+			}
 		}
+
+		optional.get().setTrangThai(stReq.getTrangThai());
+		hdrRepository.save(optional.get());
 		if (stReq.getTrangThai().equals(Contains.BAN_HANH)) {
 			this.updateDataQdGoc(optional.get());
 		}
-		optional.get().setTrangThai(stReq.getTrangThai());
-		return hdrRepository.save(optional.get());
+
+		return optional.get();
 	}
 
 	private void updateDataQdGoc(HhDchinhDxKhLcntHdr qdDieuChinh) throws Exception {
 		HhQdKhlcntHdr hdr = hhQdKhlcntHdrService.detail(qdDieuChinh.getIdQdGoc().toString());
-		BeanUtils.copyProperties(qdDieuChinh,hdr,"id","soQd");
+		HhDchinhDxKhLcntHdr dchinh = detail(qdDieuChinh.getId().toString());
+		BeanUtils.copyProperties(dchinh,hdr,"id","soQd");
 		hhQdKhlcntHdrRepository.save(hdr);
 		hhQdKhlcntDtlRepository.deleteAllByIdQdHdr(hdr.getId());
 		//Is vật tư
@@ -374,8 +388,8 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 			qdDtl.setIdQdHdr(hdr.getId());
 			qdDtl.setMaDvi(getUser().getDvql());
 			hhQdKhlcntDtlRepository.save(qdDtl);
-			if (qdDieuChinh.getHhQdKhlcntDtlList().get(0).getDsGoiThau() != null && qdDieuChinh.getHhQdKhlcntDtlList().get(0).getDsGoiThau().size() > 0) {
-				for (HhDchinhDxKhLcntDsgthau dsgThau : qdDieuChinh.getHhQdKhlcntDtlList().get(0).getDsGoiThau()){
+			if (dchinh.getHhQdKhlcntDtlList().get(0).getDsGoiThau() != null && dchinh.getHhQdKhlcntDtlList().get(0).getDsGoiThau().size() > 0) {
+				for (HhDchinhDxKhLcntDsgthau dsgThau : dchinh.getHhQdKhlcntDtlList().get(0).getDsGoiThau()){
 					HhQdKhlcntDsgthau gThau = new HhQdKhlcntDsgthau();
 					BeanUtils.copyProperties(dsgThau,gThau,"id");
 					gThau.setIdQdDtl(qdDtl.getId());
@@ -390,7 +404,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 				}
 			}
 		}else{
-			for(HhDchinhDxKhLcntDtl dtl : qdDieuChinh.getHhQdKhlcntDtlList()){
+			for(HhDchinhDxKhLcntDtl dtl : dchinh.getHhQdKhlcntDtlList()){
 				HhQdKhlcntDtl qdDtl = new HhQdKhlcntDtl();
 				BeanUtils.copyProperties(dtl,qdDtl,"id");
 				qdDtl.setIdQdHdr(hdr.getId());
@@ -414,7 +428,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		}
 	}
 
-	public HhDchinhDxKhLcntHdr  detail(String ids){
+	public HhDchinhDxKhLcntHdr detail(String ids){
 		if (StringUtils.isEmpty(ids))
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
 
@@ -430,9 +444,9 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		Map<String,String> hashMapHtLcnt = getListDanhMucChung("HT_LCNT");
 		Map<String,String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
 
-		qOptional.get().setTenloaiVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getLoaiVthh()));
+		qOptional.get().setTenLoaiVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getLoaiVthh()));
 		qOptional.get().setTenCloaiVthh(StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getCloaiVthh()));
-
+		qOptional.get().setTenTrangThai(TrangThaiAllEnum.getLabelById(qOptional.get().getTrangThai()));
 		List<HhDchinhDxKhLcntDtl> dtlList = new ArrayList<>();
 		for(HhDchinhDxKhLcntDtl dtl : dtlRepository.findAllByIdDxDcHdr(Long.parseLong(ids))){
 			List<HhDchinhDxKhLcntDsgthau> gThauList = new ArrayList<>();
@@ -482,7 +496,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 			objs[3]=dx.getTrichYeu();
 			objs[4]=dx.getSoQdGoc();
 			objs[5]=dx.getNamKhoach();
-			objs[6]=dx.getTenloaiVthh();
+			objs[6]=dx.getTenLoaiVthh();
 			objs[7]=dx.getSoGoiThau();
 			objs[8]=dx.getTenTrangThai();
 			dataList.add(objs);

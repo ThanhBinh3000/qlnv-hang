@@ -107,6 +107,7 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 	private final KeHoachBanDauGiaRepository keHoachBanDauGiaRepository;
 
 	@Override
+	@Transactional
 	public BhQdPheDuyetKhbdgResponse create(BhQdPheDuyetKhbdgRequest req) throws Exception {
 		if (req == null) return null;
 		this.validateRequest(req);
@@ -131,7 +132,12 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 		if (!CollectionUtils.isEmpty(req.getChiTietList())) {
 			List<BhQdPheDuyetKhbdgCt> chiTietList = createChiTietQd(req, theEntity);
 			theEntity.setChiTietList(chiTietList);
-
+		}
+		//save lại trạng thái bản ghi tổng hợp thành dự thảo qd
+		Optional<BhTongHopDeXuatKhbdg> bhTongHopDeXuatKhbdg = tongHopDeXuatKhbdgRepository.findById(theEntity.getTongHopDeXuatKhbdgId());
+		if(bhTongHopDeXuatKhbdg.isPresent()){
+			bhTongHopDeXuatKhbdg.get().setTrangThai(Contains.DADUTHAO_QD);
+			tongHopDeXuatKhbdgRepository.save(bhTongHopDeXuatKhbdg.get());
 		}
 		return qdPheduyetKhbdgResponseMapper.toDto(theEntity);
 	}
@@ -291,7 +297,9 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 		if (!CollectionUtils.isEmpty(fileDinhKemList)) theEntity.setFileDinhKems(fileDinhKemList);
 
 		BhQdPheDuyetKhbdgResponse response = qdPheduyetKhbdgResponseMapper.toDto(theEntity);
-
+		if(theEntity.getTongHopDeXuatKhbdgId() == null){
+			throw new EntityNotFoundException("Tổng hợp đề xuất kế hoạch bán đấu giá không tồn tại");
+		}
 		Optional<BhTongHopDeXuatKhbdg> tongHopDeXuatOpt = tongHopDeXuatKhbdgRepository.findById(theEntity.getTongHopDeXuatKhbdgId());
 		if (!tongHopDeXuatOpt.isPresent()) {
 			throw new EntityNotFoundException("Tổng hợp đề xuất kế hoạch bán đấu giá không tồn tại");
@@ -455,6 +463,7 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 	}
 
 	@Override
+	@Transactional
 	public boolean updateStatusQd(StatusReq stReq) throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
 		Optional<BhQdPheDuyetKhbdg> optional = qdPheDuyetKhbdgRepository.findById(stReq.getId());
@@ -471,6 +480,11 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 		theEntity.setNgayPduyet(LocalDate.now());
 		theEntity.setLyDoTuChoi(stReq.getLyDo());
 		qdPheDuyetKhbdgRepository.save(theEntity);
+		Optional<BhTongHopDeXuatKhbdg> bhTongHopDeXuatKhbdg=  tongHopDeXuatKhbdgRepository.findById(theEntity.getTongHopDeXuatKhbdgId());
+		if(bhTongHopDeXuatKhbdg.isPresent()){
+			bhTongHopDeXuatKhbdg.get().setTrangThai(Contains.DABANHANH_QD);
+			tongHopDeXuatKhbdgRepository.save(bhTongHopDeXuatKhbdg.get());
+		}
 		return true;
 	}
 

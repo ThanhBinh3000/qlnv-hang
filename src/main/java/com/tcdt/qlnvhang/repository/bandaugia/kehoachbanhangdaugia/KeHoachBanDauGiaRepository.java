@@ -26,13 +26,14 @@ public interface KeHoachBanDauGiaRepository extends BaseRepository<KeHoachBanDau
 			"AND (:ngayKyDen IS NULL OR KH.NGAY_KY <= TO_DATE(:ngayKyDen,'yyyy-MM-dd'))"+
 			"AND (:loaiVthh IS NULL OR KH.LOAI_VTHH = :loaiVthh) "+
 			"AND (:maDvi IS NULL OR  LOWER(KH.MA_DV) LIKE(CONCAT(:maDvi,'%'))) " +
-			"AND (:trangThai IS NULL OR KH.TRANG_THAI = :trangThai )"
+			"AND (:trangThai IS NULL OR KH.TRANG_THAI = :trangThai )" +
+			"AND (:trangThaiTh IS NULL OR KH.TRANG_THAI_TH = :trangThaiTh )"
 			, nativeQuery = true)
-	Page<KeHoachBanDauGia> selectPage(Integer namKh, String soKh, String trichYeu, String ngayKyTu, String ngayKyDen, String loaiVthh, String maDvi, String trangThai, Pageable pageable);
+	Page<KeHoachBanDauGia> selectPage(Integer namKh, String soKh, String trichYeu, String ngayKyTu, String ngayKyDen, String loaiVthh, String maDvi, String trangThai,String trangThaiTh, Pageable pageable);
 
 	@Transactional()
 	@Modifying
-	@Query(value = "UPDATE BH_DG_KEHOACH SET TRANG_THAI_TH=:trangThaiTh WHERE SO_KE_HOACH IN :soKhList", nativeQuery = true)
+	@Query(value = "UPDATE BH_DG_KEHOACH SET TRANG_THAI_TH=:trangThaiTh WHERE SO_KE_HOACH IN (:soKhList)", nativeQuery = true)
 	void updateTongHop(List<String> soKhList, String trangThaiTh);
 
 	Optional<KeHoachBanDauGia> findBySoKeHoach(String soKeHoach);

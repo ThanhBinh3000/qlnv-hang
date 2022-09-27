@@ -6,8 +6,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class BienBanLayMauCtReq {
-    private Long id;
-    private Long bbLayMauId;
     private String loaiDaiDien;
     private String daiDien;
 }

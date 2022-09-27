@@ -68,6 +68,9 @@ public class BhQdPheDuyetKhbdg extends BaseEntity implements Serializable {
 	@Column(name = "LOAI_VTHH")
 	private String loaiVthh;
 
+	@Column(name = "CLOAI_VTHH")
+	private String cloaiVthh;
+
 	@Column(name = "MA_VAT_TU_CHA")
 	private String maVatTuCha;
 

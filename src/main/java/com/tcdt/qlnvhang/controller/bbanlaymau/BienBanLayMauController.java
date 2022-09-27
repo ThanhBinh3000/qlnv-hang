@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.controller.bbanlaymau;
 
+import com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau.BienBanLayMau;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -36,7 +37,7 @@ public class BienBanLayMauController {
 	public ResponseEntity<BaseResponse> create(@Valid @RequestBody BienBanLayMauReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			BienBanLayMauRes res = bienBanLayMauService.create(req);
+			BienBanLayMau res = bienBanLayMauService.create(req);
 			resp.setData(res);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
@@ -53,7 +54,7 @@ public class BienBanLayMauController {
 	public ResponseEntity<BaseResponse> update(@Valid @RequestBody BienBanLayMauReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			BienBanLayMauRes res = bienBanLayMauService.update(req);
+			BienBanLayMau res = bienBanLayMauService.update(req);
 			resp.setData(res);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
@@ -87,7 +88,7 @@ public class BienBanLayMauController {
 	public ResponseEntity<BaseResponse> detail(@RequestParam("id") Long id) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			BienBanLayMauRes res = bienBanLayMauService.detail(id);
+			BienBanLayMau res = bienBanLayMauService.detail(id);
 			resp.setData(res);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
