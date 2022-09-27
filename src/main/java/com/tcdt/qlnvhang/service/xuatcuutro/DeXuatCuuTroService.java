@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.xuatcuutro;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.FileDKemJoinDxuatCuuTro;
 import com.tcdt.qlnvhang.entities.FileDKemJoinHopDong;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
@@ -277,24 +278,25 @@ public class DeXuatCuuTroService extends BaseServiceImpl {
     req.setPaggingReq(paggingReq);
     Page<XhDxCuuTroHdr> page = this.searchPage(currentUser, req);
     List<XhDxCuuTroHdr> data = page.getContent();
-
-    String title = "Danh sách Quyết định giá mua tối đa, giá bán tối thiểu của BTC";
-    String[] rowsName = new String[]{"STT", "Số quyết định", "Ngày ký", "Trích yếu", "Năm kế hoạch", "Loại giá", "Loại hàng hóa", "Trạng thái"};
-    String fileName = "danh-sach-qd-gia-mua-toi-da-ban-toi-thieu-cua-btc.xlsx";
+    String title = "Danh sách Đề xuất phương án xuất cứu trợ, viện trợ";
+    String[] rowsName = new String[]{"STT", "Loại hình nhập xuất", "Số công văn/đề xuất", "Đơn vị đề xuất", "Ngày đề xuất", "Loại hàng hoá", "Chủng loại hàng hóa","Tổng SL xuất viện trợ, cứu trợ (kg)","Trích yếu","Trạng thái đề xuất", "Trạng thái tổng hợp"};
+    String fileName = "danh-sach-de-xuat-phuong-an-xuat-cuu-tro-vien-tro.xlsx";
     List<Object[]> dataList = new ArrayList<Object[]>();
     Object[] objs = null;
     for (int i = 0; i < data.size(); i++) {
       XhDxCuuTroHdr dx = data.get(i);
       objs = new Object[rowsName.length];
       objs[0] = i;
-      /*objs[1] = dx.getSoQd();
-      objs[2] = dx.getNgayKy();
-      objs[3] = dx.getTrichYeu();
-      objs[4] = dx.getNamKeHoach();
-      objs[5] = dx.getTenLoaiGia();*/
-      objs[6] = dx.getTenLoaiVthh();
-      objs[7] = TrangThaiAllEnum.getLabelById(dx.getTrangThai());
-      objs[8] = TrangThaiAllEnum.getLabelById(dx.getTrangThaiTh());
+      objs[1] = dx.getTenLoaiHinhNhapXuat();
+      objs[2] = dx.getSoDxuat();
+      objs[3] = dx.getTenDvi();
+      objs[4] = dx.getNgayDxuat();
+      objs[5] = dx.getTenLoaiVthh();
+      objs[6] = dx.getTenCloaiVthh();
+      objs[7] = dx.getTongSoLuong();
+      objs[8] = dx.getTrichYeu();
+      objs[9] = dx.getTenTrangThai();
+      objs[10] = dx.getTenTrangThaiTh();
       dataList.add(objs);
     }
     ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
@@ -354,5 +356,17 @@ public class DeXuatCuuTroService extends BaseServiceImpl {
         if (nganKho != null) item.setTenNganKho(nganKho.getTenNgankho());
       }
     }
+  }
+
+  @Transactional(rollbackFor = Exception.class)
+  public void deleteListId(List<Long> listId) {
+    deXuatCuuTroDtlRepository.deleteAllByIdDxuatIn(listId);
+    deXuatCuuTroKhoRepository.deleteAllByIdDxuatIn(listId);
+    deXuatCuuTroRepository.deleteAllByIdIn(listId);
+    fileDinhKemService.deleteMultiple(listId, Lists.newArrayList(XhDxCuuTroHdr.TABLE_NAME));
+  }
+
+  public void exportToExcel(CustomUserDetails currentUser, XhDxCuuTroHdrSearchReq objReq) {
+
   }
 }
