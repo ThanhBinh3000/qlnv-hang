@@ -54,7 +54,8 @@ public class HhDxuatKhMttHdrReq {
     private String ghiChu;
     private BigDecimal tongMucDt;
     private BigDecimal tongSoLuong;
-
+    private String nguonVon;
+    private String tenChuDt;
 
     private List<FileDinhKemReq> fileDinhkems =new ArrayList<>();
 
