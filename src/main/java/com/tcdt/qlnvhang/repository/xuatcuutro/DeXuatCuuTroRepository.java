@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -17,6 +18,7 @@ public interface DeXuatCuuTroRepository extends JpaRepository<XhDxCuuTroHdr, Lon
    /*    "AND (:#{#param.pagTypeLT} IS NULL OR c.loaiVthh NOT LIKE CONCAT('02','%')) " +
        "AND (:#{#param.pagTypeVT} IS NULL OR c.loaiVthh LIKE CONCAT('02','%')) " +*/
       "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
+      "AND (:#{#param.maDvi} IS NULL OR c.maDvi = :#{#param.maDvi}) " +
       "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
       "AND (:#{#param.soDxuat}  IS NULL OR LOWER(c.soDxuat) LIKE CONCAT('%',LOWER(:#{#param.soDxuat}),'%')) " +
 //       "AND (:#{#param.trichYeu}  IS NULL OR LOWER(c.trichYeu) LIKE CONCAT('%',LOWER(:#{#param.trichYeu}),'%')) " +
@@ -27,4 +29,6 @@ public interface DeXuatCuuTroRepository extends JpaRepository<XhDxCuuTroHdr, Lon
   Page<XhDxCuuTroHdr> search(@Param("param") XhDxCuuTroHdrSearchReq param, Pageable pageable);
 
   Optional<XhDxCuuTroHdr> findFirstBySoDxuatAndNam(String soDxuat, int nam);
+
+  void deleteAllByIdIn(List<Long> listId);
 }

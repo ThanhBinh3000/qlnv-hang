@@ -11,4 +11,6 @@ import java.util.Optional;
 @Repository
 public interface DeXuatCuuTroDtlRepository extends JpaRepository<XhDxCuuTroDtl, Long> {
   List<XhDxCuuTroDtl> findByIdDxuat(Long idDeXuat);
+
+  void deleteAllByIdDxuatIn(List<Long> listId);
 }
