@@ -21,14 +21,14 @@ public interface BhTongHopDeXuatKhbdgService {
 
 	boolean delete(Long id) throws Exception;
 
-	Page<BhTongHopDeXuatKhbdgSearchResponse> search(BhTongHopDeXuatKhbdgSearchRequest req) throws Exception;
+//	Page<BhTongHopDeXuatKhbdgSearchResponse> search(BhTongHopDeXuatKhbdgSearchRequest req) throws Exception;
 
-	boolean exportToExcel(BhTongHopDeXuatKhbdgSearchRequest req, HttpServletResponse response) throws Exception;
+	void exportToExcel(BhTongHopDeXuatKhbdgSearchRequest req, HttpServletResponse response) throws Exception;
 
 	boolean deleteMultiple(List<Long> ids) throws Exception;
 
 	BhTongHopDeXuatKhbdgResponse detail(Long id) throws Exception;
 	boolean updateStatusQd(StatusReq stReq) throws Exception;
 
-	Page<BhTongHopDeXuatKhbdg> searchPage(HttpServletRequest request, BhTongHopDeXuatKhbdgSearchRequest req) throws Exception;
+	Page<BhTongHopDeXuatKhbdg> searchPage(BhTongHopDeXuatKhbdgSearchRequest req) throws Exception;
 }

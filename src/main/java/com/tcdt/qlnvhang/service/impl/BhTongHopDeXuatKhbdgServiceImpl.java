@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.impl;
 
 import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGia;
+import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdg;
 import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatCt;
 import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdg;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
@@ -10,6 +11,7 @@ import com.tcdt.qlnvhang.mapper.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbd
 import com.tcdt.qlnvhang.mapper.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgResponseMapper;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGiaRepository;
+import com.tcdt.qlnvhang.repository.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatCtRepository;
 import com.tcdt.qlnvhang.repository.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatKhbdgRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -42,6 +44,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
@@ -58,9 +61,10 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 	private  BhTongHopDeXuatCtRepository chiTietRepository;
 	@Autowired
 	private  QlnvDmVattuRepository dmVattuRepository;
-
 	@Autowired
 	private KeHoachBanDauGiaRepository keHoachBanDauGiaRepository;
+	@Autowired
+	private BhQdPheDuyetKhbdgRepository qdPheDuyetKhbdgRepository;
 
 
 	private static final String SHEET_NAME = "Danh sách tổng hợp đề xuất KHBDG";
@@ -161,13 +165,13 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 		return true;
 	}
 
-	@Override
-	public Page<BhTongHopDeXuatKhbdgSearchResponse> search(BhTongHopDeXuatKhbdgSearchRequest req) throws Exception {
-		UserInfo userInfo = SecurityContextService.getUser();
-		if (userInfo == null) throw new Exception("Bad request.");
-
-		return deXuatKhbdgRepository.search(req, req.getPageable());
-	}
+//	@Override
+//	public Page<BhTongHopDeXuatKhbdgSearchResponse> search(BhTongHopDeXuatKhbdgSearchRequest req) throws Exception {
+//		UserInfo userInfo = SecurityContextService.getUser();
+//		if (userInfo == null) throw new Exception("Bad request.");
+//
+//		return deXuatKhbdgRepository.search(req, req.getPageable());
+//	}
 
 	@Override
 	public BhTongHopDeXuatKhbdgResponse detail(Long id) throws Exception {
@@ -200,40 +204,70 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 
 		return response;
 	}
-	@Override
-	public boolean exportToExcel(BhTongHopDeXuatKhbdgSearchRequest req, HttpServletResponse response) throws Exception {
-		UserInfo userInfo = UserUtils.getUserInfo();
-		this.prepareSearchReq(req, userInfo, req.getCapDvis(), req.getTrangThais());
-		req.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
-		List<BhTongHopDeXuatKhbdgSearchResponse> list = this.search(req).get().collect(Collectors.toList());
 
-		if (CollectionUtils.isEmpty(list))
-			return true;
-
-		String[] rowsName = new String[]{ExcelHeaderConst.STT,
-				ExcelHeaderConst.NGAY_TONG_HOP,
-				ExcelHeaderConst.NOI_DUNG_TONG_HOP,
-				ExcelHeaderConst.NAM_KE_HOACH,
-				ExcelHeaderConst.SO_QD_PHE_DUYET_KH_BDG,
-				ExcelHeaderConst.LOAI_HANG_HOA,
-				ExcelHeaderConst.TRANG_THAI};
-		String filename = "tong_hop_de_xuat_kh_bdg.xlsx";
-
-		List<Object[]> dataList = new ArrayList<>();
-
-		try {
-			for (int i = 0; i < list.size(); i++) {
-				dataList.add(list.get(i).toExcel(rowsName, i));
+	public void exportToExcel(BhTongHopDeXuatKhbdgSearchRequest objReq, HttpServletResponse response) throws Exception {
+		PaggingReq paggingReq = new PaggingReq();
+		paggingReq.setPage(0);
+		paggingReq.setLimit(Integer.MAX_VALUE);
+		objReq.setPaggingReq(paggingReq);
+		Page<BhTongHopDeXuatKhbdg> page = this.searchPage(objReq);
+		List<BhTongHopDeXuatKhbdg> data = page.getContent();
+		String title = "Danh sách tổng hợp kế hoạch bán đấu giá";
+		String[] rowsName = new String[]{"STT", "Mã tổng hợp", "Ngày tổng hợp", "Nội dung tổng hợp", "Năm kế hoạch", "Số QĐ phê duyệt KH BĐG", "Loại hàng hóa", "Trạng thái"};
+		String fileName = "danh-sach-de-xuat-phuong-an-gia.xlsx";
+		List<Object[]> dataList = new ArrayList<Object[]>();
+		Object[] objs = null;
+			for (int i = 0; i < data.size(); i++) {
+				BhTongHopDeXuatKhbdg dx = data.get(i);
+				objs = new Object[rowsName.length];
+				objs[0] = i;
+				objs[1] = dx.getId();
+				objs[2] = dx.getNgayTongHop();
+				objs[3] = dx.getNoiDungTongHop();
+				objs[4] = dx.getNamKeHoach();
+				objs[5] = dx.getSoQdPheDuyetKhbdg();
+				objs[6] = dx.getTenLoaiVthh();
+				objs[7] = dx.getTenTrangThai();
+				dataList.add(objs);
 			}
-
-			ExportExcel ex = new ExportExcel(SHEET_NAME, filename, rowsName, dataList, response);
-			ex.export();
-		} catch (Exception e) {
-			log.error("Error export", e);
-			return false;
-		}
-		return true;
+		ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
+		ex.export();
 	}
+
+
+
+//	@Override
+//	public boolean exportToExcel(BhTongHopDeXuatKhbdgSearchRequest req, HttpServletResponse response) throws Exception {
+//		UserInfo userInfo = UserUtils.getUserInfo();
+//		this.prepareSearchReq(req, userInfo, req.getCapDvis(), req.getTrangThais());
+//		req.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
+//		List<BhTongHopDeXuatKhbdgSearchResponse> list = this.searchPage(req).getContent();
+//
+//		if (CollectionUtils.isEmpty(list))
+//			return true;
+//
+//		String[] rowsName = new String[]{ExcelHeaderConst.STT,
+//				ExcelHeaderConst.NGAY_TONG_HOP,
+//				ExcelHeaderConst.NOI_DUNG_TONG_HOP,
+//				ExcelHeaderConst.NAM_KE_HOACH,
+//				ExcelHeaderConst.SO_QD_PHE_DUYET_KH_BDG,
+//				ExcelHeaderConst.LOAI_HANG_HOA,
+//				ExcelHeaderConst.TRANG_THAI};
+//		String filename = "tong_hop_de_xuat_kh_bdg.xlsx";
+//
+//		List<Object[]> dataList = new ArrayList<>();
+//		try {
+//			for (int i = 0; i < list.size(); i++) {
+//				dataList.add(list.get(i).toExcel(rowsName, i));
+//			}
+//			ExportExcel ex = new ExportExcel(SHEET_NAME, filename, rowsName, dataList, response);
+//			ex.export();
+//		} catch (Exception e) {
+//			log.error("Error export", e);
+//			return false;
+//		}
+//		return true;
+//	}
 
 	public boolean updateStatusQd(StatusReq stReq) throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
@@ -255,7 +289,7 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 	}
 
 	@Override
-	public Page<BhTongHopDeXuatKhbdg> searchPage(HttpServletRequest request, BhTongHopDeXuatKhbdgSearchRequest req) throws Exception {
+	public Page<BhTongHopDeXuatKhbdg> searchPage(BhTongHopDeXuatKhbdgSearchRequest req) throws Exception {
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
 		Page<BhTongHopDeXuatKhbdg> page = deXuatKhbdgRepository.select(
 				req.getNamKeHoach(),
@@ -270,12 +304,17 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 		List<BhTongHopDeXuatCt> tongHopDeXuatCtMap=chiTietRepository.findByBhTongHopDeXuatIdIn(listId);
 		Map<Long, List<BhTongHopDeXuatCt>> mapChiTiet=tongHopDeXuatCtMap.stream()
 				.collect(groupingBy(BhTongHopDeXuatCt::getBhTongHopDeXuatId));
+		List<BhQdPheDuyetKhbdg> listQdPheDuyet = qdPheDuyetKhbdgRepository.findAllByTongHopDeXuatKhbdgIdIn(listId);
+		Map<Long, BhQdPheDuyetKhbdg> mapQdPheDuyet=listQdPheDuyet.stream()
+				.collect(Collectors.toMap(BhQdPheDuyetKhbdg::getTongHopDeXuatKhbdgId, Function.identity()));
+
 		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 		page.getContent().forEach(f -> {
 			f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
 			f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
 			f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
 			f.setChiTietList(mapChiTiet.get(f.getId()));
+			f.setSoQdPheDuyetKhbdg(mapQdPheDuyet != null &&  mapQdPheDuyet.get(f.getId()) != null ?  mapQdPheDuyet.get(f.getId()).getSoQuyetDinh() : null);
 		});
 		return page;
 	}

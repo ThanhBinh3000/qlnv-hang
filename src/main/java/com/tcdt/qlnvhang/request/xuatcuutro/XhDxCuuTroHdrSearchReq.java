@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.XhDxCuuTroDtl;
 import com.tcdt.qlnvhang.table.XhDxCuuTroKho;
 import lombok.Data;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,6 +19,8 @@ public class XhDxCuuTroHdrSearchReq extends BaseRequest {
   private String soDxuat;
   private String maDvi;
   private LocalDate ngayDxuat;
+  private LocalDate tuNgayDxuat;
+  private LocalDate denNgayDxuat;
   private String loaiVthh;
   private String cloaiVthh;
   private String tenVthh;
@@ -28,6 +31,8 @@ public class XhDxCuuTroHdrSearchReq extends BaseRequest {
   private String loaiHinhNhapXuat;
   private String kieuNhapXuat;
   private LocalDate thoiGianThucHien;
+  private LocalDate tuThoiGianThucHien;
+  private LocalDate denThoiGianThucHien;
   private String noiDung;
   private int nam;
   private String dvql;
