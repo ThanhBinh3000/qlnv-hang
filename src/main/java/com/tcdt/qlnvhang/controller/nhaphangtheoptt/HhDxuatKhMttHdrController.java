@@ -6,7 +6,7 @@ import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhDxuatKhMttHdrReq;
-import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhDxKhMttHsrReq;
+import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhDxKhMttHdrReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.nhaphangtheoptt.HhDxuatKhMttService;
 import com.tcdt.qlnvhang.util.PathContains;
@@ -38,7 +38,7 @@ public class HhDxuatKhMttHdrController extends BaseController {
 
     @ApiOperation(value = "Tra cứu đề xuất kế hoạch mưa trực tiếp", response = List.class)
     @PostMapping(value=  PathContains.DX_MUA_TT + PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody SearchHhDxKhMttHsrReq objReq) {
+    public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody SearchHhDxKhMttHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhDxuatKhMttService.searchPage(objReq));
@@ -137,7 +137,7 @@ public class HhDxuatKhMttHdrController extends BaseController {
     @ApiOperation(value = "Kết xuất danh sách đề xuất kế hoạch mưa trực tiếp", response = List.class)
     @PostMapping(value= PathContains.DX_MUA_TT + PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void exportListQdBtcBnToExcel(@Valid @RequestBody SearchHhDxKhMttHsrReq objReq, HttpServletResponse response) throws Exception{
+    public void exportListQdBtcBnToExcel(@Valid @RequestBody SearchHhDxKhMttHdrReq objReq, HttpServletResponse response) throws Exception{
 
         try {
             hhDxuatKhMttService.export(objReq,response);

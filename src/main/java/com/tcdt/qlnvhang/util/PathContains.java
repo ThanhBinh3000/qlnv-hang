@@ -109,6 +109,8 @@ public class PathContains {
 	// bán hàng Nhập theo phương thức mua trực tiếp
 	public static final String DX_MUA_TT = "/dx-kh-mtt";
 
+	public static final String TH_MUA_TT = "/thop-kh-mtt";
+
 
 	// Dau thau vat tu
 	public static final String KH_LCNT_VT = "/kh-lcnt/vat-tu";
