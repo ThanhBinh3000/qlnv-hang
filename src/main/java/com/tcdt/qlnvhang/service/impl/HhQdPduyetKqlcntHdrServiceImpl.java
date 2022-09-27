@@ -260,6 +260,15 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		}
 
 		HhQdPduyetKqlcntHdr createCheck = hhQdPduyetKqlcntHdrRepository.save(dataDB);
+		hhQdPduyetKqlcntDtlRepository.deleteAllByIdQdPdHdr(createCheck.getId());
+
+		for (HhQdPduyetKqlcntDtlReq qdPdKq : objReq.getDetailList()){
+			HhQdPduyetKqlcntDtl qdPdKqDtl = ObjectMapperUtils.map(qdPdKq, HhQdPduyetKqlcntDtl.class);
+			qdPdKqDtl.setId(null);
+			qdPdKqDtl.setIdQdPdHdr(createCheck.getId());
+			qdPdKqDtl.setIdGoiThau(qdPdKq.getIdGt());
+			hhQdPduyetKqlcntDtlRepository.save(qdPdKqDtl);
+		}
 
 		return createCheck;
 	}
@@ -310,6 +319,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 	}
 
 	@Override
+	@Transactional(rollbackOn = Exception.class)
 	public HhQdPduyetKqlcntHdr approve(StatusReq stReq) throws Exception {
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (StringUtils.isEmpty(stReq.getId())){
@@ -334,11 +344,19 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		optional.get().setTrangThai(stReq.getTrangThai());
 		HhQdPduyetKqlcntHdr createCheck = hhQdPduyetKqlcntHdrRepository.save(optional.get());
 		if(stReq.getTrangThai().equals(Contains.BAN_HANH)){
-
-				List<HhQdPduyetKqlcntDtl> qdPdKqLcntList = hhQdPduyetKqlcntDtlRepository.findByIdQdPdHdr(optional.get().getId());
-				for(HhQdPduyetKqlcntDtl kqLcnt : qdPdKqLcntList){
-					hhQdKhlcntDsgthauRepository.updateGoiThau(kqLcnt.getIdGoiThau(),kqLcnt.getTrungThau() == 1 ? Contains.TRUNGTHAU : Contains.HUYTHAU,kqLcnt.getLyDoHuy());
+			List<HhQdPduyetKqlcntDtl> qdPdKqLcntList = hhQdPduyetKqlcntDtlRepository.findByIdQdPdHdr(optional.get().getId());
+			for(HhQdPduyetKqlcntDtl kqLcnt : qdPdKqLcntList){
+				Optional<HhQdKhlcntDsgthau> byId = hhQdKhlcntDsgthauRepository.findById(kqLcnt.getIdGoiThau());
+				if(byId.isPresent()){
+					if(byId.get().getTrangThai().equals(Contains.HOANTHANHCAPNHAT)){
+						hhQdKhlcntDsgthauRepository.updateGoiThau(kqLcnt.getIdGoiThau(),kqLcnt.getTrungThau() == 1 ? Contains.TRUNGTHAU : Contains.HUYTHAU,kqLcnt.getLyDoHuy());
+					}else{
+						throw new Exception ("Gói thầu này đã được quyết định phê duyệt kết quả");
+					}
+				}else{
+					throw new Exception ("Không tìm thấy gói thầu");
 				}
+			}
 		}
 
 		return createCheck;
@@ -359,6 +377,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		}
 
 		hhQdPduyetKqlcntHdrRepository.delete(optional.get());
+		hhQdPduyetKqlcntDtlRepository.deleteAllByIdQdPdHdr(optional.get().getId());
 	}
 
 
