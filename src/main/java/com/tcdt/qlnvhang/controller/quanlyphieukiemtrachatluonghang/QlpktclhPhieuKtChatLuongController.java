@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.controller.quanlyphieukiemtrachatluonghang;
 
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.DeleteReq;
+import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongFilterRequestDto;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongRequestDto;
@@ -50,7 +51,7 @@ public class QlpktclhPhieuKtChatLuongController {
 	}
 
 	@ApiOperation(value = "Sửa phiếu kiểm tra chất lượng hàng lương thực", response = List.class)
-	@PutMapping
+	@PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> update(@Valid @RequestBody QlpktclhPhieuKtChatLuongRequestDto request) {
 		BaseResponse resp = new BaseResponse();
 		try {
@@ -67,10 +68,10 @@ public class QlpktclhPhieuKtChatLuongController {
 
 	@ApiOperation(value = "Tra cứu phiếu kiểm tra chất lượng hàng lương thực", response = List.class)
 	@PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> search(@RequestBody QlpktclhPhieuKtChatLuongFilterRequestDto req) {
+	public ResponseEntity<BaseResponse> search(@RequestBody QlpktclhPhieuKtChatLuongRequestDto req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(service.filter(req));
+			resp.setData(service.searchPage(req));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -82,7 +83,7 @@ public class QlpktclhPhieuKtChatLuongController {
 	}
 
 	@ApiOperation(value = "Chi tiết phiếu kiểm tra chất lượng hàng lương thực", response = List.class)
-	@GetMapping("/{id}")
+	@GetMapping(PathContains.URL_CHI_TIET + "/{id}")
 	public final ResponseEntity<BaseResponse> getDetail(@PathVariable("id") Long id) {
 		BaseResponse resp = new BaseResponse();
 		try {
@@ -99,8 +100,8 @@ public class QlpktclhPhieuKtChatLuongController {
 	}
 
 	@ApiOperation(value = "Gửi duyệt/Phê duyệt/Từ chối phiếu kiểm tra chất lượng hàng lương thực", response = List.class)
-	@PutMapping("/status")
-	public final ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody StatusReq req) {
+	@PostMapping(PathContains.URL_PHE_DUYET)
+	public final ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody QlpktclhPhieuKtChatLuongRequestDto req) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			resp.setData(service.approve(req));
@@ -116,12 +117,12 @@ public class QlpktclhPhieuKtChatLuongController {
 	}
 
 	@ApiOperation(value = "Xóa phiếu kiểm tra chất lượng hàng lương thực", response = List.class)
-	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<BaseResponse> deleteQd(@PathVariable("id") Long id) {
+	public ResponseEntity<BaseResponse> deleteQd(@Valid @RequestBody IdSearchReq idSearchReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(service.delete(id));
+			service.delete(idSearchReq.getId());
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -136,10 +137,10 @@ public class QlpktclhPhieuKtChatLuongController {
 	@ApiOperation(value = "Export phiếu kiểm tra chất lượng hàng lương thực", response = List.class)
 	@PostMapping(value = "/export/list", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody QlpktclhPhieuKtChatLuongFilterRequestDto req) {
+	public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody QlpktclhPhieuKtChatLuongRequestDto req) {
 
 		try {
-			service.exportToExcel(req, response);
+			service.export(req);
 		} catch (Exception e) {
 			log.error("Error can not export", e);
 		}
@@ -152,7 +153,7 @@ public class QlpktclhPhieuKtChatLuongController {
 	public final ResponseEntity<BaseResponse> deleteMultiple(@RequestBody @Valid DeleteReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(service.deleteMultiple(req));
+			service.deleteMulti(req.getIds());
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -164,19 +165,19 @@ public class QlpktclhPhieuKtChatLuongController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Get số phiếu kiểm tra chất lượng hàng lương thực", response = List.class)
-	@GetMapping("/so")
-	public ResponseEntity<BaseResponse> getSo() {
-		BaseResponse resp = new BaseResponse();
-		try {
-			resp.setData(service.getSo());
-			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-		} catch (Exception e) {
-			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-			resp.setMsg(e.getMessage());
-			log.error("Get số phiếu kiểm tra chất lượng hàng lương thực lỗi", e);
-		}
-		return ResponseEntity.ok(resp);
-	}
+//	@ApiOperation(value = "Get số phiếu kiểm tra chất lượng hàng lương thực", response = List.class)
+//	@GetMapping("/so")
+//	public ResponseEntity<BaseResponse> getSo() {
+//		BaseResponse resp = new BaseResponse();
+//		try {
+//			resp.setData(service.getSo());
+//			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+//			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+//		} catch (Exception e) {
+//			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+//			resp.setMsg(e.getMessage());
+//			log.error("Get số phiếu kiểm tra chất lượng hàng lương thực lỗi", e);
+//		}
+//		return ResponseEntity.ok(resp);
+//	}
 }

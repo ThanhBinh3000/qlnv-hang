@@ -10,17 +10,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class QlpktclhKetQuaKiemTraRequestDto {
+
 	private Long id;
 
-	private Long stt;
+	private String tenTchuan;
 
-	private String tenChiTieu;
-
-	private String tieuChuan;
+	private String chiSoNhap;
 
 	private String ketQuaKiemTra;
 
-	private String phuongPhapXacDinh;
+	private String phuongPhap;
+
+	private String kieu;
 
 	private String trangThai;
 

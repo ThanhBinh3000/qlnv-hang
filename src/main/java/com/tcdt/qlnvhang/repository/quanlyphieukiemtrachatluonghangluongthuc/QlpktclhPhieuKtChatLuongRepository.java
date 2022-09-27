@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface QlpktclhPhieuKtChatLuongRepository extends BaseRepository<QlpktclhPhieuKtChatLuong, Long>, QlpktclhPhieuKtChatLuongRepositoryCustom {
+public interface QlpktclhPhieuKtChatLuongRepository extends BaseRepository<QlpktclhPhieuKtChatLuong, Long> {
 
     @Query(
         value = "SELECT * FROM NH_PHIEU_KT_CHAT_LUONG PKTCL " +
@@ -25,7 +25,7 @@ public interface QlpktclhPhieuKtChatLuongRepository extends BaseRepository<Qlpkt
                 "AND (:nguoiGiaoHang IS NULL OR LOWER(PKTCL.NGUOI_GIAO_HANG) " +
                 "LIKE LOWER(CONCAT(CONCAT('%', :nguoiGiaoHang), '%')))",
             nativeQuery = true)
-    Page<QlpktclhPhieuKtChatLuong> select( String soPhieu, String ngayLPhieu, String nguoiGiaoHang, Pageable pageable);
+    Page<QlpktclhPhieuKtChatLuong> selectPage( String soPhieu, String ngayLPhieu, String nguoiGiaoHang, Pageable pageable);
 
     @Transactional
     @Modifying

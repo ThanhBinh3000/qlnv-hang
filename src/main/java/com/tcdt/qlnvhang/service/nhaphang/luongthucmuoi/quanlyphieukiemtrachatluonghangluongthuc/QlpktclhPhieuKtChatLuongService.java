@@ -7,35 +7,39 @@ import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongFilterR
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongRequestDto;
 import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.response.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongResponseDto;
+import com.tcdt.qlnvhang.service.BaseService;
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Set;
 
-public interface QlpktclhPhieuKtChatLuongService {
-	QlpktclhPhieuKtChatLuongResponseDto create (QlpktclhPhieuKtChatLuongRequestDto req) throws Exception;
-
-	QlpktclhPhieuKtChatLuongResponseDto update (QlpktclhPhieuKtChatLuongRequestDto req) throws Exception;
-
-	Page<QlpktclhPhieuKtChatLuongResponseDto> filter (QlpktclhPhieuKtChatLuongFilterRequestDto req) throws Exception;
-
-    BaseNhapHangCount count(Set<String> maDvis) throws Exception;
-
-    Page<QlpktclhPhieuKtChatLuong> search (QlpktclhPhieuKtChatLuongFilterRequestDto req) throws Exception;
+public interface QlpktclhPhieuKtChatLuongService extends BaseService<QlpktclhPhieuKtChatLuong,QlpktclhPhieuKtChatLuongRequestDto,Long> {
 
 
-    QlpktclhPhieuKtChatLuongResponseDto detail(Long id) throws Exception;
-
-	boolean approve(StatusReq req) throws Exception;
-
-	@Transactional(rollbackFor = Exception.class)
-	boolean delete(Long id) throws Exception;
-
-    boolean exportToExcel(QlpktclhPhieuKtChatLuongFilterRequestDto objReq, HttpServletResponse response) throws Exception;
-
-	@Transactional
-	boolean deleteMultiple(DeleteReq req) throws Exception;
-
-	Integer getSo() throws Exception;
+//    boolean export(QlpktclhPhieuKtChatLuongFilterRequestDto objReq) throws Exception;
+//	QlpktclhPhieuKtChatLuong create (QlpktclhPhieuKtChatLuongRequestDto req) throws Exception;
+//
+//	QlpktclhPhieuKtChatLuong update (QlpktclhPhieuKtChatLuongRequestDto req) throws Exception;
+//
+//	Page<QlpktclhPhieuKtChatLuongResponseDto> filter (QlpktclhPhieuKtChatLuongFilterRequestDto req) throws Exception;
+//
+//    BaseNhapHangCount count(Set<String> maDvis) throws Exception;
+//
+//    Page<QlpktclhPhieuKtChatLuong> search (QlpktclhPhieuKtChatLuongFilterRequestDto req) throws Exception;
+//
+//
+//    QlpktclhPhieuKtChatLuong detail(Long id) throws Exception;
+//
+//	boolean approve(StatusReq req) throws Exception;
+//
+//	@Transactional(rollbackFor = Exception.class)
+//	void delete(Long id) throws Exception;
+//
+//    boolean exportToExcel(QlpktclhPhieuKtChatLuongFilterRequestDto objReq, HttpServletResponse response) throws Exception;
+//
+//	@Transactional
+//	boolean deleteMultiple(DeleteReq req) throws Exception;
+//
+//	Integer getSo() throws Exception;
 }

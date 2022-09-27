@@ -22,10 +22,19 @@ import java.util.List;
 public class QlpktclhPhieuKtChatLuong extends TrangThaiBaseEntity implements Serializable {
 	private static final long serialVersionUID = -5114185021472069821L;
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PHIEU_KT_CHAT_LUONG_SEQ")
-	@SequenceGenerator(sequenceName = "PHIEU_KT_CHAT_LUONG_SEQ", allocationSize = 1, name = "PHIEU_KT_CHAT_LUONG_SEQ")
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PHIEU_KT_CHAT_LUONG_SEQ")
+//	@SequenceGenerator(sequenceName = "PHIEU_KT_CHAT_LUONG_SEQ", allocationSize = 1, name = "PHIEU_KT_CHAT_LUONG_SEQ")
 	@Column(name = "ID")
 	private Long id;
+
+	@Column(name = "NAM")
+	private Integer nam;
+
+	@Column(name = "MA_DVI")
+	private String maDvi;
+
+	@Transient
+	private String tenDvi;
 
 	@Column(name = "SO_PHIEU")
 	private String soPhieu;
@@ -33,89 +42,92 @@ public class QlpktclhPhieuKtChatLuong extends TrangThaiBaseEntity implements Ser
 	@Column(name = "MA_QHNS")
 	private String maQhns;
 
-	@Column(name = "NGAY_KIEM_TRA")
-	private LocalDate ngayKiemTra;
+	@Column(name = "ID_QD_GIAO_NV_NH")
+	private String idQdGiaoNvNh;
 
-	@Column(name = "NGUOI_GIAO_HANG")
-	private String nguoiGiaoHang;
+	@Column(name = "SO_QD_GIAO_NV_NH")
+	private String soQdGiaoNvNh;
 
-	@Column(name = "DIA_CHI")
-	private String diaChi;
+	@Column(name = "NGAY_QD_GIAO_NV_NH")
+	private LocalDate ngayQdGiaoNvNh;
 
-	@Column(name = "HOP_DONG_ID")
-	private Long hopDongId;
+	@Column(name = "LOAI_VTHH")
+	private String loaiVthh;
 
-	@Column(name = "QUYET_DINH_NHAP_ID")
-	private Long quyetDinhNhapId;
+	@Transient
+	private String tenLoaiVthh;
 
-	@Column(name = "MA_VAT_TU")
-	private String maVatTu;
+	@Column(name = "CLOAI_VTHH")
+	private String cloaiVthh;
 
-	@Column(name = "MA_VAT_TU_CHA")
-	private String maVatTuCha;
+	@Transient
+	private String tenCloaiVthh;
 
-	@Column(name = "SO_PHIEU_AN_TOAN_THUC_PHAM")
-	private String soPhieuAnToanThucPham;
+	@Column(name = "MO_TA_HANG_HOA")
+	private String moTaHangHoa;
 
-	@Column(name = "MA_DVI")
-	private String maDvi;
-
-	@Column(name = "MA_NGAN_KHO")
-	private String maNganKho;
-
-	@Column(name = "TEN_NGAN_KHO")
-	private String tenNganKho;
-
-	@Column(name = "MA_NGAN_LO")
-	private String maNganLo;
-
-	@Column(name = "TEN_NGAN_LO")
-	private String tenNganLo;
+	@Column(name = "SO_HD")
+	private String soHd;
 
 	@Column(name = "MA_DIEM_KHO")
 	private String maDiemKho;
 
-	@Column(name = "TEN_DIEM_KHO")
+	@Transient
 	private String tenDiemKho;
 
 	@Column(name = "MA_NHA_KHO")
 	private String maNhaKho;
 
-	@Column(name = "TEN_NHA_KHO")
+	@Transient
 	private String tenNhaKho;
 
-	@Column(name = "CAP_DVI")
-	private String capDvi;
+	@Column(name = "MA_NGAN_KHO")
+	private String maNganKho;
 
-	@Column(name = "KHOI_LUONG_DE_NGHI_KT")
-	private Double khoiLuongDeNghiKt;
+	@Transient
+	private String tenNganKho;
 
-	@Column(name = "KHOI_LUONG")
-	private Double khoiLuong;
+	@Column(name = "MA_LO_KHO")
+	private String maLoKho;
+
+	@Transient
+	private String tenLoKho;
+
+	@Column(name = "NGUOI_GIAO_HANG")
+	private String nguoiGiaoHang;
+
+	@Column(name = "CMT_NGUOI_GIAO_HANG")
+	private String cmtNguoiGiaoHang;
+
+	@Column(name = "DON_VI_GIAO_HANG")
+	private String donViGiaoHang;
+
+	@Column(name = "DIA_CHI")
+	private String diaChi;
+
+	@Column(name = "BIEN_SO_XE")
+	private String bienSoXe;
+
+	@Column(name = "SO_LUONG_DE_NGHI_KT")
+	private Double soLuongDeNghiKt;
+
+	@Column(name = "SO_LUONG_NHAP_KHO")
+	private Double soLuongNhapKho;
 
 	@Column(name = "SO_CHUNG_THU_GIAM_DINH")
 	private String soChungThuGiamDinh;
 
-	@Column(name = "TCHUC_GDINH")
-	private String tchucGdinh;
-
 	@Column(name = "NGAY_GDINH")
 	private LocalDate ngayGdinh;
 
-	@Column(name = "BIEN_SO_XE")
-	private String bienSoXe;
+	@Column(name = "TCHUC_GDINH")
+	private String tchucGdinh;
 
 	@Column(name = "KET_LUAN")
 	private String ketLuan;
 
 	@Column(name = "KQ_DANH_GIA")
 	private String kqDanhGia;
-
-	@Column(name = "LOAI_VTHH")
-	private String loaiVthh;
-
-	private Integer so;
-	private Integer nam;
 
 	@Transient
 	private List<QlpktclhKetQuaKiemTra> ketQuaKiemTra = new ArrayList<>();

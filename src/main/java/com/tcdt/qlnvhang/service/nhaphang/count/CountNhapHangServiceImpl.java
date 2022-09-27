@@ -55,7 +55,7 @@ public class CountNhapHangServiceImpl extends BaseServiceImpl implements CountNh
         List<BaseNhapHangCount> counts = new ArrayList<>();
 
         // Kiem tra chat luong
-        counts.add(qlpktclhPhieuKtChatLuongService.count(req.getMaDvis()));
+//        counts.add(qlpktclhPhieuKtChatLuongService.count(req.getMaDvis()));
         counts.add(hhBbNghiemthuKlstHdrService.count(req.getMaDvis()));
         counts.add(bienBanLayMauService.count(req.getMaDvis()));
         counts.add(bienBanBanGiaoMauService.count(req.getMaDvis()));

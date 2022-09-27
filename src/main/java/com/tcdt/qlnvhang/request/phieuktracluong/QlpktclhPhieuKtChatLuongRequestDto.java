@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.request.phieuktracluong;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhKetQuaKiemTra;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.object.SoBienBanPhieuReq;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +10,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.Column;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Builder
@@ -17,67 +25,76 @@ import java.util.List;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class QlpktclhPhieuKtChatLuongRequestDto extends SoBienBanPhieuReq {
+
 	private Long id;
 
-	private String soPhieu;
-
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-	private LocalDate ngayKiemTra;
-
-	private String nguoiGiaoHang;
-
-	private String diaChi;
-
-	private Long hopDongId;
-
-	private Long quyetDinhNhapId;
-
-	private String maNganKho;
-	private String tenNganKho;
-	private String maNganLo;
-	private String tenNganLo;
-	private String maDiemKho;
-	private String tenDiemKho;
-
-	private String maNhaKho;
-
-	private String tenNhaKho;
-
-	private String maVatTu;
-	private String maVatTuCha;
-
-	private Double khoiLuong;
-
-	private String soChungThuGiamDinh;
-
-	private String bienSoXe;
-
-	private String soPhieuAnToanThucPham;
+	private Integer nam;
 
 	private String maDvi;
 
+	private String tenDvi;
+
+	private String soPhieu;
+
 	private String maQhns;
+
+	private String idQdGiaoNvNh;
+
+	private String soQdGiaoNvNh;
+
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+	private LocalDate ngayQdGiaoNvNh;
+
+	private String loaiVthh;
+
+	private String tenLoaiVthh;
+
+	private String cloaiVthh;
+
+	private String moTaHangHoa;
+
+	private String soHd;
+
+	private String maDiemKho;
+
+	private String maNhaKho;
+
+	private String maNganKho;
+
+	private String maLoKho;
+
+	private String nguoiGiaoHang;
+
+	private String cmtNguoiGiaoHang;
+
+	private String donViGiaoHang;
+
+	private String diaChi;
+
+	private String bienSoXe;
+
+	private Double soLuongDeNghiKt;
+
+	private Double soLuongNhapKho;
+
+	private String soChungThuGiamDinh;
 
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate ngayGdinh;
 
 	private String tchucGdinh;
 
-	private Long nguoiPheDuyet;
-
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-	private LocalDate ngayPheDuyet;
-
-	private String trangThai;
-
 	private String ketLuan;
+
 	private String kqDanhGia;
 
-	private String lyDoTuChoi;
-
-	private String loaiVthh;
-
-	private Double khoiLuongDeNghiKt;
-
 	private List<QlpktclhKetQuaKiemTraRequestDto> ketQuaKiemTra;
+
+	private PaggingReq paggingReq;
+
+	String trangThai;
+
+	String lyDoTuChoi;
+
+	private List<Long> ids = new ArrayList<>();
 }
