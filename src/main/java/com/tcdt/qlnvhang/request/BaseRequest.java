@@ -6,7 +6,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -23,11 +25,12 @@ public class BaseRequest {
 	PaggingReq paggingReq;
 	String trangThai;
 	String str;
-	String orderBy;
-	String orderDirection;
 	Set<String> maDvis = new HashSet<>();
 	Set<String> trangThais = new HashSet<>();
 	Set<String> capDvis = new HashSet<>();
+	String lyDoTuChoi;
+
+	private List<Long> ids = new ArrayList<>();
 
 	public PaggingReq getPaggingReq() {
 		if (this.paggingReq == null) {

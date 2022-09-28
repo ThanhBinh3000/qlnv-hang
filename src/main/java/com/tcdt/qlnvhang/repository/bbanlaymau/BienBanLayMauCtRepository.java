@@ -17,4 +17,8 @@ public interface BienBanLayMauCtRepository extends CrudRepository<BienBanLayMauC
     @Transactional
     @Modifying
     void deleteByBbLayMauIdIn(Collection<Long> bbLayMauIds);
+
+    @Transactional
+    @Modifying
+    void deleteByBbLayMauId(Long bbLayMauId);
 }

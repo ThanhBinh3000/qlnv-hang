@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.phieuktracluong;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhKetQuaKiemTra;
+import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.object.SoBienBanPhieuReq;
 import lombok.AllArgsConstructor;
@@ -24,7 +25,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class QlpktclhPhieuKtChatLuongRequestDto extends SoBienBanPhieuReq {
+public class QlpktclhPhieuKtChatLuongRequestDto extends BaseRequest {
 
 	private Long id;
 
@@ -90,11 +91,5 @@ public class QlpktclhPhieuKtChatLuongRequestDto extends SoBienBanPhieuReq {
 
 	private List<QlpktclhKetQuaKiemTraRequestDto> ketQuaKiemTra;
 
-	private PaggingReq paggingReq;
 
-	String trangThai;
-
-	String lyDoTuChoi;
-
-	private List<Long> ids = new ArrayList<>();
 }

@@ -23,45 +23,110 @@ import java.util.List;
 public class BienBanLayMau extends TrangThaiBaseEntity implements Serializable  {
 	private static final long serialVersionUID = 6093365068005372524L;
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BB_LAY_MAU_SEQ")
-	@SequenceGenerator(sequenceName = "BB_LAY_MAU_SEQ", allocationSize = 1, name = "BB_LAY_MAU_SEQ")
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BB_LAY_MAU_SEQ")
+//	@SequenceGenerator(sequenceName = "BB_LAY_MAU_SEQ", allocationSize = 1, name = "BB_LAY_MAU_SEQ")
 	private Long id;
 
-	private Long idQdGiaoNvNx;
-	private String soQdGiaoNvNx;
-	private String soBbNhapDayKho;
-	private Long idBbNhapDayKho;
-
-	private String soHd;
-	private Date ngayQdGiaoNvNx;
-	private String loaiVthh;
-	private String cloaiVthh;
-	private Long bbNhapDayKhoId;
-	private String soBienBan;
-	private Date ngayLayMau;
-	private String dviKiemNghiem;
-	private String diaDiemLayMau;
-
-	private String maDiemKho;
-	private String maNhaKho;
-	private String maNganKho;
-	private String maNganLo;
-
-	private Integer soLuongMau;
-	private String ppLayMau;
-	private String chiTieuKiemTra;
-	private Boolean ketQuaNiemPhong;
-
-	private String trangThai;
-	private String maDvi;
-
-//	private Long nguoiGuiDuyetId;
-//	private LocalDate ngayGuiDuyet;
-//	private Long nguoiPduyetId;
-//	private LocalDate ngayPduyet;
-
+	@Column(name = "NAM")
 	private Integer nam;
 
+	@Column(name = "MA_DVI")
+	private String maDvi;
+
+	@Transient
+	private String tenDvi;
+
+	@Column(name = "SO_BIEN_BAN")
+	private String soBienBan;
+
+	@Column(name = "MA_QHNS")
+	private String maQhns;
+
+	@Column(name = "ID_QD_GIAO_NV_NH")
+	private Long idQdGiaoNvNh;
+
+	@Column(name = "SO_QD_GIAO_NV_NH")
+	private String soQdGiaoNvNh;
+
+	@Column(name = "NGAY_QD_GIAO_NV_NH")
+	@Temporal(TemporalType.DATE)
+	private Date ngayQdGiaoNvNh;
+
+	@Column(name = "SO_HD")
+	private String soHd;
+
+	@Column(name = "SO_BB_NHAP_DAY_KHO")
+	private String soBbNhapDayKho;
+
+	@Column(name = "ID_BB_NHAP_DAY_KHO")
+	private Long idBbNhapDayKho;
+
+	@Column(name = "LOAI_VTHH")
+	private String loaiVthh;
+
+	@Transient
+	private String tenLoaiVthh;
+
+	@Column(name = "CLOAI_VTHH")
+	private String cloaiVthh;
+
+	@Transient
+	private String tenCloaiVthh;
+
+	@Column(name = "MO_TA_HANG_HOA")
+	private String moTaHangHoa;
+
+	@Column(name = "NGAY_LAY_MAU")
+	@Temporal(TemporalType.DATE)
+	private Date ngayLayMau;
+
+	@Column(name = "DVI_KIEM_NGHIEM")
+	private String dviKiemNghiem;
+
+	@Column(name = "DIA_DIEM_LAY_MAU")
+	private String diaDiemLayMau;
+
+	@Column(name = "MA_DIEM_KHO")
+	private String maDiemKho;
+
+	@Transient
+	private String tenDiemKho;
+
+	@Column(name = "MA_NHA_KHO")
+	private String maNhaKho;
+
+	@Transient
+	private String tenNhaKho;
+
+	@Column(name = "MA_NGAN_KHO")
+	private String maNganKho;
+
+	@Transient
+	private String tenNganKho;
+
+	@Column(name = "MA_LO_KHO")
+	private String maLoKho;
+
+	@Transient
+	private String tenLoKho;
+
+	@Column(name = "SO_LUONG_MAU")
+	private Integer soLuongMau;
+
+	@Column(name = "PP_LAY_MAU")
+	private String ppLayMau;
+
+	@Column(name = "CHI_TIEU_KIEM_TRA")
+	private String chiTieuKiemTra;
+
+	@Column(name = "KET_QUA_NIEM_PHONG")
+	private Boolean ketQuaNiemPhong;
+
+	@Column(name = "TRANG_THAI")
+	private String trangThai;
+
+	@Column(name = "LOAI_BIEN_BAN")
+	private String loaiBienBan;
 
 	@Transient
 	private List<BienBanLayMauCt> chiTiets = new ArrayList<>();
