@@ -111,6 +111,8 @@ public class PathContains {
 
 	public static final String TH_MUA_TT = "/thop-kh-mtt";
 
+	public static final String TKHAI_MTT = "/tkhai-mtt";
+
 
 	// Dau thau vat tu
 	public static final String KH_LCNT_VT = "/kh-lcnt/vat-tu";

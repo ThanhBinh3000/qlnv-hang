@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.controller;
+package com.tcdt.qlnvhang.controller.nhaphangtheoptt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.enums.EnumResponse;
@@ -6,10 +6,8 @@ import com.tcdt.qlnvhang.request.HhQdPheduyetKhMttHdrReq;
 import com.tcdt.qlnvhang.request.HhQdPheduyetKhMttHdrSearchReq;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.search.HhQdKhlcntSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.nhaptheophuongthucmuatructiep.HhQdPheduyetKhMttHdrService;
-import com.tcdt.qlnvhang.table.HhQdPheduyetKhMttHdr;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

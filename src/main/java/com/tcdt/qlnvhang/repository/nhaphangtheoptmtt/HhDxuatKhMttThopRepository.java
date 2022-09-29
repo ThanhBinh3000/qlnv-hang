@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.repository.nhaphangtheoptt;
+package com.tcdt.qlnvhang.repository.nhaphangtheoptmtt;
 
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDxKhMttThopHdr;
 import org.springframework.data.domain.Page;
@@ -31,5 +31,10 @@ public interface HhDxuatKhMttThopRepository extends JpaRepository<HhDxKhMttThopH
     @Transactional
     @Modifying
     void deleteAllByIdIn(List<Long> ids);
+
+    @Transactional()
+    @Modifying
+    @Query(value = "UPDATE HH_DX_KHMTT_THOP_HDR SET TRANG_THAI =:trangThai WHERE ID = :maTh", nativeQuery = true)
+    void updateTrangThai(String maTh, String trangThai);
 
 }

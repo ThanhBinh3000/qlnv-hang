@@ -10,14 +10,14 @@ public class HhQdPheduyetKhMttSLDDReq {
 
     @ApiModelProperty(notes = "bắt buộc set phải đối với updata")
     private Long id;
-    Long idQdKhmtt;
+    private Long idDxKhmtt;
     private String maDvi;
     private String tenDvi;
-    private  String maDiemKho;
+    private String maDiemKho;
     private String diaDiemKho;
-    private BigDecimal slChitieuKh;
-    private BigDecimal slTheoKhdd;
-    private BigDecimal slDxMuatt;
+    private BigDecimal soLuongCtieu;
+    private BigDecimal soLuongKhDd;
+    private BigDecimal soLuongDxmtt;
+    private BigDecimal donGiaVat;
     private BigDecimal thanhTien;
-    private  BigDecimal tongSl;
 }

@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.repository.nhaphangtheoptt;
+package com.tcdt.qlnvhang.repository.nhaphangtheoptmtt;
 
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDxuatKhMttSldd;
 import org.springframework.data.jpa.repository.JpaRepository;

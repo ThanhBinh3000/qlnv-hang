@@ -1,15 +1,13 @@
 package com.tcdt.qlnvhang.table;
 
-import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.BanDauGiaDiaDiemGiaoNhan;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "HH_QD_PHE_DUYET_KHMTT_DX")
@@ -22,26 +20,32 @@ public class HhQdPheduyetKhMttDx implements Serializable {
     @SequenceGenerator(sequenceName = "HH_QD_PHE_DUYET_KHMTT_DX_SEQ", allocationSize = 1, name = "HH_QD_PHE_DUYET_KHMTT_DX_SEQ")
 
     private Long id;
-
-    private Long idQdKhmtt;
-
+    private Long idDxuat;
+    private Long idPduyetHdr;
     private String maDvi;
-
-    private String tenDvi;
-
-    private String diaChi;
-
-    private String soKhoach;
-
+    private String loaiVthh;
+    @Transient
+    private String tenLoaiVthh;
+    private String cloaiVthh;
+    @Transient
+    private String tenCloaiVthh;
+    private String moTaHangHoa;
+    private String ptMua;
+    private String tchuanCluong;
+    private BigDecimal giaMua;
+    private BigDecimal giaChuaThue;
+    private BigDecimal giaCoThue;
+    private BigDecimal thueGtgt;
     @Temporal(TemporalType.DATE)
-    private Date ngayKy;
+    private Date tgianMkho;
+    @Temporal(TemporalType.DATE)
+    private Date tgianKthuc;
+    private String ghiChu;
+    private BigDecimal tongMucDt;
+    private BigDecimal tongSoLuong;
+    private String nguonVon;
+    private String tenChuDt;
 
-    private  String trichYeu;
-
-    private  String tenDuAn;
-
-    private BigDecimal soLuong;
-
-    private BigDecimal tongTien;
-
+    @Transient
+    private List<HhQdPheduyetKhMttSLDD> hhQdPheduyetKhMttSLDDList = new ArrayList<>();
 }

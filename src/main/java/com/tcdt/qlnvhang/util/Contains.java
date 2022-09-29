@@ -225,6 +225,12 @@ public class Contains {
 	public static final String ACTIVE = "Y";
 	public static final String DISABLE = "N";
 
+	// Phương thức tổ chức triển khai mua trực tiếp
+	public static final String CHAO_GIA = "CG";
+	public static final String UY_QUYEN = "UQ";
+	public static final String MUA_LE = "ML";
+
+
 	public static final Map<String, String> mappingLoaiDx;
 	static {
 		mappingLoaiDx = Maps.<String, String>buildMap().put(Contains.DX_THANH_LY, "Thanh lý")
