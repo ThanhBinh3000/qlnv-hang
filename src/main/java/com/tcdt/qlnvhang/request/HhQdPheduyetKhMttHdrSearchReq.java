@@ -27,8 +27,6 @@ public class HhQdPheduyetKhMttHdrSearchReq extends BaseRequest {
 
    private  String trangThai;
 
-   private String trangThaiTh;
-
    private  String maDvi;
 
 }

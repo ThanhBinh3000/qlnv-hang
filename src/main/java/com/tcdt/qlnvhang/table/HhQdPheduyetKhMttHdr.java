@@ -1,7 +1,7 @@
 package com.tcdt.qlnvhang.table;
 
 
-import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.KeHoachBanDauGia;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhChiTietTTinChaoGia;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,114 +23,42 @@ public class HhQdPheduyetKhMttHdr implements Serializable {
 
     private Long id;
     private Integer namKh;
-    private String soQd;
+    private String soQdPduyet;
+    private Long idDxuat;
     private String soDxuat;
+    private Long idThop;
+    private String maThop;
+    private String maDvi;
+    @Transient
+    private String tenDvi;
     @Temporal(TemporalType.DATE)
-    private Date ngayKyQd;
+    private Date ngayKy;
     @Temporal(TemporalType.DATE)
     private Date ngayHluc;
+    private String trichYeu;
+
     @Temporal(TemporalType.DATE)
     private Date ngayTao;
-
-
     private String nguoiTao;
-
 
     @Temporal(TemporalType.DATE)
     private Date ngaySua;
-
-
     private String nguoiSua;
 
-
-    private String lyDoTuChoi;
-
-
     @Temporal(TemporalType.DATE)
-    private Date ngayGuiDuyet;
-
-
-
-    private  String nguoiGuiDuyet;
-
-
-    @Temporal(TemporalType.DATE)
-    private Date ngayPduyet;
-
-
-    private String nguoiPduyet;
-
-
-    private String maTongHop;
-
-
-    private String trichYeu;
-
-
-    private String loaiVthh;
-    @Transient
-    private String tenLoaiVthh;
-
-
-    private String cloaiVthh;
-    @Transient
-    private  String tenCloaiVthh;
-
-
-    private String moTaHhoa;
-
-
-    private String PhuongThucMua;
-
-
-    private String tieuChuanCl;
-
-
-    private Long giaMua;
-
-
-    private Long giaChuaVat;
-
-
-    private Long thueGtgt;
-
-
-    private  Long giaDaVat;
-
-
-    @Temporal(TemporalType.DATE)
-    private Date thoiDiemMoCuaKho;
-
-
-    @Temporal(TemporalType.DATE)
-    private  Date thoiDiemMuaThoc;
-
-
-    private String ghiChu;
-
-
-    private  String maDvi;
-
-    private String tenDvi;
-
-
-    private  Long tongMucDt;
-
-
-    private  Long tongSlMuaTt;
-
-
-    private String nguonVon;
-
+    private Date ngayDuyet;
+    private String nguoiDuyet;
 
     private String trangThai;
     @Transient
     private String tenTrangThai;
 
-
-    private String trangThaiTh;
+    private String trangThaiTkhai;
     @Transient
-    private String tenTrangThaiTh;
+    private String tenTrangThaiTkhai;
+
+    @Transient
+    private String pthucMuatt;
 
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
@@ -138,6 +66,13 @@ public class HhQdPheduyetKhMttHdr implements Serializable {
     @Transient
     private List<HhQdPheduyetKhMttDx> hhQdPheduyetKhMttDxList = new ArrayList<>();
 
+
     @Transient
-    private List<HhQdPheduyetKhMttSLDD> hhQdPheduyetKhMttSLDDList = new ArrayList<>();
+    private List<HhChiTietTTinChaoGia> hhChiTietTTinChaoGiaList = new ArrayList<>();
+
+    @Transient
+    private List<FileDinhKem> fileDinhKemUyQuyen = new ArrayList<>();
+
+    @Transient
+    private List<FileDinhKem> fileDinhKemMuaLe = new ArrayList<>();
 }
