@@ -1,8 +1,8 @@
-package com.tcdt.qlnvhang.service.nhaphangtheoptt;
+package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.repository.nhaphangtheoptt.*;
+import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhDxKhMttTChiThopReq;

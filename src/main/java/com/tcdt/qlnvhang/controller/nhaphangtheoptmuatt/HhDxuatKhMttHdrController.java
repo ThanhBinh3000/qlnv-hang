@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.controller.nhaphangtheoptt;
+package com.tcdt.qlnvhang.controller.nhaphangtheoptmuatt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.controller.BaseController;
@@ -8,7 +8,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhDxuatKhMttHdrReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhDxKhMttHdrReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.nhaphangtheoptt.HhDxuatKhMttService;
+import com.tcdt.qlnvhang.service.nhaphangtheoptmuatt.HhDxuatKhMttService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

@@ -1,11 +1,11 @@
-package com.tcdt.qlnvhang.service.nhaphangtheoptt;
+package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
-import com.tcdt.qlnvhang.repository.nhaphangtheoptt.HhDxuatKhMttCcxdgRepository;
-import com.tcdt.qlnvhang.repository.nhaphangtheoptt.HhDxuatKhMttRepository;
-import com.tcdt.qlnvhang.repository.nhaphangtheoptt.HhDxuatKhMttSlddRepository;
+import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhDxuatKhMttCcxdgRepository;
+import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhDxuatKhMttRepository;
+import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhDxuatKhMttSlddRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -81,7 +81,7 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
         data.getContent().forEach(f->{
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenTrangThaiTh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiTh()));
-            f.setTenloaiVthh(StringUtils.isEmpty(f.getLoaiVthh())?null:hashMapDmhh.get(f.getLoaiVthh()));
+            f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh())?null:hashMapDmhh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh())?null:hashMapDmhh.get(f.getCloaiVthh()));
         });
         return data;
@@ -106,7 +106,7 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
         Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
         data.setTenDvi(StringUtils.isEmpty(userInfo.getDvql()) ? null : hashMapDmdv.get(userInfo.getDvql()));
         data.setMaDvi(userInfo.getDvql());
-        data.setTenloaiVthh(StringUtils.isEmpty(data.getLoaiVthh()) ? null : hashMapDmHh.get(data.getLoaiVthh()));
+        data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh()) ? null : hashMapDmHh.get(data.getLoaiVthh()));
         HhDxuatKhMttHdr created=hhDxuatKhMttRepository.save(data);
 
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),data.getId(),"HH_DX_KHMTT_HDR");
@@ -124,6 +124,7 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
             HhDxuatKhMttSldd sldd =ObjectMapperUtils.map(listSlDd,HhDxuatKhMttSldd.class);
                 sldd.setIdDxKhmtt(data.getId());
                 sldd.setMaDiemKho(userInfo.getDvql());
+                sldd.setDonGiaVat(data.getGiaCoThue());
                 BigDecimal thanhTien = sldd.getDonGiaVat().multiply(sldd.getSoLuongDxmtt());
                 sldd.setThanhTien(thanhTien);
                 hhDxuatKhMttSlddRepository.save(sldd);
@@ -187,7 +188,7 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
         Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
 
 
-        data.setTenloaiVthh(StringUtils.isEmpty(data.getLoaiVthh())?null:hashMapDmhh.get(data.getLoaiVthh()));
+        data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh())?null:hashMapDmhh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh())?null:hashMapDmhh.get(data.getCloaiVthh()));
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
         data.setTenTrangThaiTh(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiTh()));
@@ -240,9 +241,9 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
             throw new Exception("Bản ghi không tồn tại");
         }
         for (HhDxuatKhMttHdr dxuatKhMttHdr : list){
-            if (dxuatKhMttHdr.getTrangThai().equals(Contains.DUTHAO)
-                    && dxuatKhMttHdr.getTrangThai().equals(Contains.TUCHOI_TP)
-                    && dxuatKhMttHdr.getTrangThai().equals(Contains.TUCHOI_LDC)){
+            if (!dxuatKhMttHdr.getTrangThai().equals(Contains.DUTHAO)
+                    && !dxuatKhMttHdr.getTrangThai().equals(Contains.TUCHOI_TP)
+                    && !dxuatKhMttHdr.getTrangThai().equals(Contains.TUCHOI_LDC)){
                 throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối");
             }
         }
@@ -280,7 +281,7 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
             objs[4]=dx.getNgayPduyet();
             objs[5]=dx.getTrichYeu();
             objs[6]=dx.getSoQd();
-            objs[7]=dx.getTenloaiVthh();
+            objs[7]=dx.getTenLoaiVthh();
             objs[8]=dx.getTenCloaiVthh();
             objs[9]=dx.getTongSoLuong();
             objs[10]=dx.getTenTrangThai();

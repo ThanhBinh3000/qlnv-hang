@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.repository.nhaphangtheoptt;
+package com.tcdt.qlnvhang.repository.nhaphangtheoptmtt;
 
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDxuatKhMttHdr;
 import com.tcdt.qlnvhang.util.Contains;
@@ -51,4 +51,9 @@ public interface HhDxuatKhMttRepository extends JpaRepository<HhDxuatKhMttHdr, L
     void updateTongHop(List<String> soDxuatList, String trangThaiTh);
 
     List<HhDxuatKhMttHdr> findByIdIn(List<Long> id);
+
+    @Transactional()
+    @Modifying
+    @Query(value = "UPDATE HH_DX_KHMTT_HDR SET SO_QD_PDUYET =:soQdPd WHERE SO_DXUAT = :soDxuat", nativeQuery = true)
+    void updateSoQdPduyet(String soDxuat, String soQdPd);
 }

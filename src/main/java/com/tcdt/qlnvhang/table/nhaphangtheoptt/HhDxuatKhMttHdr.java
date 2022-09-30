@@ -47,7 +47,7 @@ public class HhDxuatKhMttHdr  implements Serializable {
     private String nguoiPduyet;
     private String loaiVthh;
     @Transient
-    private String tenloaiVthh;
+    private String tenLoaiVthh;
     private String cloaiVthh;
     @Transient
     private String tenCloaiVthh;
@@ -56,7 +56,7 @@ public class HhDxuatKhMttHdr  implements Serializable {
     private String tchuanCluong;
     private String giaMua;
     private String giaChuaThue;
-    private String giaCoThue;
+    private BigDecimal giaCoThue;
     private String thueGtgt;
     @Temporal(TemporalType.DATE)
     private Date tgianMkho;
@@ -67,6 +67,7 @@ public class HhDxuatKhMttHdr  implements Serializable {
     private BigDecimal tongSoLuong;
     private String nguonVon;
     private String tenChuDt;
+    private String soQdPduyet;
 
 
     @Transient

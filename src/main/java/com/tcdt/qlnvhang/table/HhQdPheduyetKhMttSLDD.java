@@ -20,14 +20,14 @@ public class HhQdPheduyetKhMttSLDD implements Serializable {
     @SequenceGenerator(sequenceName = "HH_QD_PHE_DUYET_KHMTT_SLDD_SEQ", allocationSize = 1, name = "HH_QD_PHE_DUYET_KHMTT_SLDD_SEQ")
 
     private Long id;
-    private Long idQdKhmtt;
+    private Long idDxKhmtt;
     private String maDvi;
     private String tenDvi;
     private String maDiemKho;
     private String diaDiemKho;
-    private BigDecimal slChitieuKh;
-    private BigDecimal slTheoKhdd;
-    private BigDecimal slDxMuatt;
+    private BigDecimal soLuongCtieu;
+    private BigDecimal soLuongKhDd;
+    private BigDecimal soLuongDxmtt;
+    private BigDecimal donGiaVat;
     private BigDecimal thanhTien;
-    private  BigDecimal tongSl;
 }
