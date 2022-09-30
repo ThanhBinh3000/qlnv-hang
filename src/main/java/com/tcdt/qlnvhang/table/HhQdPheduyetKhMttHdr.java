@@ -57,8 +57,17 @@ public class HhQdPheduyetKhMttHdr implements Serializable {
     @Transient
     private String tenTrangThaiTkhai;
 
-    @Transient
     private String pthucMuatt;
+
+    private String diaDiemCgia;
+
+    private String loaiVthh;
+    @Transient
+    private String tenLoaiVthh;
+    private String cloaiVthh;
+    @Transient
+    private String tenCloaiVthh;
+    private String moTaHangHoa;
 
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();

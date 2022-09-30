@@ -113,6 +113,8 @@ public class PathContains {
 
 	public static final String TKHAI_MTT = "/tkhai-mtt";
 
+	public static final String QD_PD_KQCG = "/qd-pd-kqcg";
+
 
 	// Dau thau vat tu
 	public static final String KH_LCNT_VT = "/kh-lcnt/vat-tu";
