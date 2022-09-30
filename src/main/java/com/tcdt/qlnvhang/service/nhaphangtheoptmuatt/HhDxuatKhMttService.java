@@ -241,9 +241,9 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
             throw new Exception("Bản ghi không tồn tại");
         }
         for (HhDxuatKhMttHdr dxuatKhMttHdr : list){
-            if (dxuatKhMttHdr.getTrangThai().equals(Contains.DUTHAO)
-                    && dxuatKhMttHdr.getTrangThai().equals(Contains.TUCHOI_TP)
-                    && dxuatKhMttHdr.getTrangThai().equals(Contains.TUCHOI_LDC)){
+            if (!dxuatKhMttHdr.getTrangThai().equals(Contains.DUTHAO)
+                    && !dxuatKhMttHdr.getTrangThai().equals(Contains.TUCHOI_TP)
+                    && !dxuatKhMttHdr.getTrangThai().equals(Contains.TUCHOI_LDC)){
                 throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối");
             }
         }

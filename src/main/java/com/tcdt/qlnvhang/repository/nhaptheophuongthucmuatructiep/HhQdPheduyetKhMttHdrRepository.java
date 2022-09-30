@@ -34,14 +34,15 @@ public interface HhQdPheduyetKhMttHdrRepository extends JpaRepository<HhQdPheduy
 
     @Query(value = "select * from HH_QD_PHE_DUYET_KHMTT_HDR MTT " +
             "LEFT JOIN HH_CTIET_TTIN_CHAO_GIA DTL ON MTT.ID=DTL.ID_SO_QD_PDUYET_CGIA"+
-            "where (:namKh IS NULL OR MTT.NAM_KH = TO_NUMBER(:namKh)) " +
-            "AND (:ngayCgiaTu IS NULL OR MTT.NGAY_HLUC >=  TO_DATE(:ngayCgiaTu,'yyyy-MM-dd')) " +
-            "AND (:ngayCgiadDen IS NULL OR MTT.NGAY_HLUC <= TO_DATE(:ngayCgiadDen,'yyyy-MM-dd'))" +
-            "AND (MTT.TRANG_THAI = " + Contains.BAN_HANH +")" +
-            "AND (:maDvi IS NULL OR LOWER(MTT.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "+
-            "AND (:ctyCgia IS NULL OR LOWER(DTL.CANHAN_TOCHUC) LIKE LOWER(CONCAT(CONCAT('%', :ctyCgia),'%'))) "
+            " where (:namKh IS NULL OR MTT.NAM_KH = TO_NUMBER(:namKh)) " +
+            " AND (:ngayCgiaTu IS NULL OR MTT.NGAY_HLUC >=  TO_DATE(:ngayCgiaTu,'yyyy-MM-dd')) " +
+            " AND (:ngayCgiadDen IS NULL OR MTT.NGAY_HLUC <= TO_DATE(:ngayCgiadDen,'yyyy-MM-dd'))" +
+            " AND (MTT.TRANG_THAI = " + Contains.BAN_HANH +")" +
+            " AND (:maDvi IS NULL OR LOWER(MTT.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "+
+            " AND (:ctyCgia IS NULL OR LOWER(DTL.CANHAN_TOCHUC) LIKE LOWER(CONCAT(CONCAT('%', :ctyCgia),'%'))) "+
+            " AND (:pthucMuatt IS NULL OR MTT.PTHUC_MUATT =:pthucMuatt)"
             ,nativeQuery = true)
-    Page<HhQdPheduyetKhMttHdr> searchPageTkhai(Integer namKh, String ngayCgiaTu, String ngayCgiadDen, String maDvi, String ctyCgia, Pageable pageable);
+    Page<HhQdPheduyetKhMttHdr> searchPageTkhai(Integer namKh, String ngayCgiaTu, String ngayCgiadDen, String maDvi, String ctyCgia, String pthucMuatt, Pageable pageable);
 
 
 

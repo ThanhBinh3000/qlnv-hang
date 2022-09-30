@@ -21,6 +21,11 @@ public class HhQdPheduyetKhMttHdrReq {
     private String trichYeu;
     private String trangThai;
     private String trangThaiTkhai;
+    private String pthucMuatt;
+    private String diaDiemCgia;
+    private String loaiVthh;
+    private String cloaiVthh;
+    private String moTaHangHoa;
 
     private List<FileDinhKemReq> fileDinhkems =new ArrayList<>();
 
