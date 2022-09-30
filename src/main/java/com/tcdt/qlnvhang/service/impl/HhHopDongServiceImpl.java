@@ -251,6 +251,11 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
     qOptional.get().setTenDvi(StringUtils.isEmpty(qOptional.get().getMaDvi()) ? null : mapDmucDvi.get(qOptional.get().getMaDvi()));
     qOptional.get().setDonViTinh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : mapVthh.get(qOptional.get().getDonViTinh()));
     qOptional.get().setHhPhuLucHdongList(hhPhuLucRepository.findBySoHd(qOptional.get().getSoHd()));
+    List<HhHopDongDdiemNhapKho> ddiemNhapKhos = hhHopDongDdiemNhapKhoRepository.findAllByIdHdongHdr(Long.parseLong(ids));
+    ddiemNhapKhos.forEach(s->{
+      s.setTenDvi((StringUtils.isEmpty(s.getMaDvi()) ? null : mapDmucDvi.get(s.getMaDvi())));
+      s.setTenDiemKho((StringUtils.isEmpty(s.getMaDiemKho()) ? null : mapDmucDvi.get(s.getMaDiemKho())));
+    });
     qOptional.get().setHhDdiemNhapKhoList(hhHopDongDdiemNhapKhoRepository.findAllByIdHdongHdr(Long.parseLong(ids)));
     qOptional.get().setTenNthau(hashMapDviLquan.get(String.valueOf(Double.parseDouble(qOptional.get().getIdNthau().toString()))));
 
