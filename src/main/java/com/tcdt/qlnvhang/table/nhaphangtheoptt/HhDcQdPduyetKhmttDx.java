@@ -1,27 +1,32 @@
-package com.tcdt.qlnvhang.request;
+package com.tcdt.qlnvhang.table.nhaphangtheoptt;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tcdt.qlnvhang.util.Contains;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
+import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Entity
+@Table(name = "HH_DC_QD_PDUYET_KHMTT_DX")
 @Data
-public class HhQdPheduyetKhMttDxReq {
-    @ApiModelProperty(notes = "bắt buộc set phải đối với updata")
+public class HhDcQdPduyetKhmttDx implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_DC_QD_PDUYET_KHMTT_DX_SEQ")
+    @SequenceGenerator(sequenceName = "HH_DC_QD_PDUYET_KHMTT_DX_SEQ", allocationSize = 1, name = "HH_DC_QD_PDUYET_KHMTT_DX_SEQ ")
+
     private Long id;
     private Long idDxuat;
     private Long idPduyetHdr;
     private String maDvi;
     private String loaiVthh;
+    @Transient
+    private String tenLoaiVthh;
     private String cloaiVthh;
+    @Transient
+    private String tenCloaiVthh;
     private String moTaHangHoa;
     private String ptMua;
     private String tchuanCluong;
@@ -29,15 +34,17 @@ public class HhQdPheduyetKhMttDxReq {
     private BigDecimal giaChuaThue;
     private BigDecimal giaCoThue;
     private BigDecimal thueGtgt;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    @Temporal(TemporalType.DATE)
     private Date tgianMkho;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    @Temporal(TemporalType.DATE)
     private Date tgianKthuc;
     private String ghiChu;
     private BigDecimal tongMucDt;
     private BigDecimal tongSoLuong;
     private String nguonVon;
     private String tenChuDt;
-    private List<HhQdPheduyetKhMttSLDDReq> hhQdPheduyetKhMttSLDDList = new ArrayList<>();
+
+    @Transient
+    private  List<HhDcQdPduyetKhmttSldd> hhDcQdPduyetKhmttSlddList=new ArrayList<>();
 
 }

@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.request.nhaphangtheoptt;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.util.Contains;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -29,15 +31,6 @@ public class HhDxuatKhMttHdrReq {
     private String soQd;
     private String trangThai;
     private String trangThaiTh;
-    private Date ngayTao;
-    private String nguoiTao;
-    private Date ngaySua;
-    private  String nguoiSua;
-    private String ldoTuchoi;
-    private Date ngayGuiDuyet;
-    private String nguoiGuiDuyet;
-    private Date ngayPduyet;
-    private String nguoiPduyet;
     private String loaiVthh;
     private String cloaiVthh;
     private String moTaHangHoa;
@@ -47,9 +40,9 @@ public class HhDxuatKhMttHdrReq {
     private String giaChuaThue;
     private String giaCoThue;
     private String thueGtgt;
-    @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date tgianMkho;
-    @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date tgianKthuc;
     private String ghiChu;
     private BigDecimal tongMucDt;

@@ -1,5 +1,7 @@
 package com.tcdt.qlnvhang.request.nhaphangtheoptt;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.util.Contains;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -15,7 +17,7 @@ public class HhDxKhMttThopDtlReq {
     private Long idThopHdr;
     private Long idDxHdr;
     private String maDvi;
-    @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayDxuat;
     private String tenDuAn;
     private BigDecimal soLuong;
