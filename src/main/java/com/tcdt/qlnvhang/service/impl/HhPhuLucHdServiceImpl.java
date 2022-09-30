@@ -46,6 +46,7 @@ public class HhPhuLucHdServiceImpl extends BaseServiceImpl implements HhPhuLucHd
 	@Override
 	public HhPhuLucHd create(HhPhuLucHdReq objReq) throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
+		System.out.println(objReq.getLoaiVthh()+"@@@@@@@@@@");
 		if (objReq.getLoaiVthh() == null)
 			throw new Exception("Loại vật tư hàng hóa không phù hợp");
 
@@ -101,7 +102,7 @@ public class HhPhuLucHdServiceImpl extends BaseServiceImpl implements HhPhuLucHd
 
 	@Override
 	public HhPhuLucHd update(HhPhuLucHdReq objReq) throws Exception {
-		if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh()))
+		if (objReq.getLoaiVthh() == null)
 			throw new Exception("Loại vật tư hàng hóa không phù hợp");
 
 		if (StringUtils.isEmpty(objReq.getId()))
