@@ -35,7 +35,10 @@ public class XhThCuuTroDtl extends BaseEntity implements Serializable {
   private LocalDate thoiGianThucHien;
 
   @Transient
+  private List<XhThCuuTroKho> phuongAnXuat = new ArrayList<>();
+  @Transient
   private String tenDvi;
   @Transient
   private String soDxuat;
+
 }

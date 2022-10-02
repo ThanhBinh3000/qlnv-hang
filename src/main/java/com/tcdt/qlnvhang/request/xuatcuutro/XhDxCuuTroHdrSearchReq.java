@@ -39,4 +39,5 @@ public class XhDxCuuTroHdrSearchReq extends BaseRequest {
   private List<FileDinhKemReq> fileDinhKem = new ArrayList<>();
   private List<XhDxCuuTroDtl> thongTinChiTiet = new ArrayList<>();
   private List<XhDxCuuTroKho> phuongAnXuat = new ArrayList<>();
+  private List<Long> ids;
 }

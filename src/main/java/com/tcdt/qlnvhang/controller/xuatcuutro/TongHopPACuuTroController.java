@@ -222,4 +222,24 @@ public class TongHopPACuuTroController extends BaseController {
     }
     return ResponseEntity.ok(resp);
   }
+
+  @ApiOperation(value = "Danh sách phương án theo chi tiết đề xuất", response = List.class)
+  @PostMapping(value = "/ds-phuong-an", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<BaseResponse> listPhuongAn(@CurrentUser CustomUserDetails currentUser, @RequestBody XhDxCuuTroHdrSearchReq objReq) {
+    BaseResponse resp = new BaseResponse();
+    try {
+//      Page<XhDxCuuTroHdr> dataPage = deXuatCuuTroService.listPhuongAn(currentUser, objReq);
+
+//      resp.setData(dataPage);
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (Exception e) {
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error(e.getMessage());
+    }
+
+    return ResponseEntity.ok(resp);
+  }
 }

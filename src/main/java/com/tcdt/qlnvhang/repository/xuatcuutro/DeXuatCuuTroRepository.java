@@ -18,11 +18,12 @@ public interface DeXuatCuuTroRepository extends JpaRepository<XhDxCuuTroHdr, Lon
    /*    "AND (:#{#param.pagTypeLT} IS NULL OR c.loaiVthh NOT LIKE CONCAT('02','%')) " +
        "AND (:#{#param.pagTypeVT} IS NULL OR c.loaiVthh LIKE CONCAT('02','%')) " +*/
       "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
-      "AND (:#{#param.maDvi} IS NULL OR c.maDvi = :#{#param.maDvi}) " +
+//      "AND (:#{#param.maDvi} IS NULL OR c.maDvi = :#{#param.maDvi}) " +
       "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
       "AND (:#{#param.soDxuat}  IS NULL OR LOWER(c.soDxuat) LIKE CONCAT('%',LOWER(:#{#param.soDxuat}),'%')) " +
       "AND (:#{#param.loaiVthh}  IS NULL OR LOWER(c.loaiVthh) =:#{#param.loaiVthh}) " +
       "AND (:#{#param.cloaiVthh}  IS NULL OR LOWER(c.cloaiVthh) =:#{#param.cloaiVthh}) " +
+      "AND (:#{#param.loaiHinhNhapXuat}  IS NULL OR LOWER(c.loaiHinhNhapXuat) =:#{#param.loaiHinhNhapXuat}) " +
 //       "AND (:#{#param.trichYeu}  IS NULL OR LOWER(c.trichYeu) LIKE CONCAT('%',LOWER(:#{#param.trichYeu}),'%')) " +
       "AND ((:#{#param.tuThoiGianThucHien}  IS NULL OR c.thoiGianThucHien >= :#{#param.tuThoiGianThucHien}) AND (:#{#param.denThoiGianThucHien}  IS NULL OR c.thoiGianThucHien <= :#{#param.denThoiGianThucHien}) ) " +
       "AND ((:#{#param.tuNgayDxuat}  IS NULL OR c.ngayDxuat >= :#{#param.tuNgayDxuat}) AND (:#{#param.denNgayDxuat}  IS NULL OR c.ngayDxuat <= :#{#param.denNgayDxuat}) ) " +
