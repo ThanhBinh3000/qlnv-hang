@@ -174,11 +174,15 @@ public class DeXuatCuuTroController extends BaseController {
     return ResponseEntity.ok(resp);
   }
 
-  @ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03/Xoá-04 Đề xuất kế hoạch xuất khác", response = List.class)
+  @ApiOperation(value = "Cập nhật trạng thái phê duyệt", response = List.class)
   @PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<BaseResponse> approve(HttpServletRequest request, @Valid @RequestBody StatusReq stReq) {
+  public ResponseEntity<BaseResponse> updateStatus(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody StatusReq stReq) {
     BaseResponse resp = new BaseResponse();
     try {
+      XhDxCuuTroHdr xhDxCuuTroHdr = deXuatCuuTroService.updateStatus(currentUser, stReq);
+      resp.setData(xhDxCuuTroHdr);
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
       resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
       resp.setMsg(e.getMessage());
@@ -208,4 +212,26 @@ public class DeXuatCuuTroController extends BaseController {
       mapper.writeValue(response.getOutputStream(), body);
     }
   }
+  @ApiOperation(value = "Danh sách phương án theo chi tiết đề xuất", response = List.class)
+  @PostMapping(value = "/ds-phuong-an", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<BaseResponse> listPhuongAn(@CurrentUser CustomUserDetails currentUser, @RequestBody XhDxCuuTroHdrSearchReq objReq) {
+    BaseResponse resp = new BaseResponse();
+    try {
+//      Page<XhDxCuuTroHdr> dataPage = deXuatCuuTroService.listPhuongAn(currentUser, objReq);
+
+//      resp.setData(dataPage);
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (
+
+        Exception e) {
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error(e.getMessage());
+    }
+
+    return ResponseEntity.ok(resp);
+  }
+
 }

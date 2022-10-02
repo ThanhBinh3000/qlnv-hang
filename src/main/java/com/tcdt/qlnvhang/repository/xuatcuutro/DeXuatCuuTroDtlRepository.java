@@ -13,4 +13,5 @@ public interface DeXuatCuuTroDtlRepository extends JpaRepository<XhDxCuuTroDtl, 
   List<XhDxCuuTroDtl> findByIdDxuat(Long idDeXuat);
 
   void deleteAllByIdDxuatIn(List<Long> listId);
+  void deleteAllByIdIn(List<Long> listId);
 }

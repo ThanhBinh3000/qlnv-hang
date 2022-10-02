@@ -7,6 +7,8 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = XhDxCuuTroDtl.TABLE_NAME)
@@ -27,4 +29,6 @@ public class XhDxCuuTroDtl extends BaseEntity implements Serializable {
   private String soDxuat;
   private String noiDung;
   private Long soLuong;
+  @Transient
+  private List<XhDxCuuTroKho> phuongAnXuat = new ArrayList<>();
 }

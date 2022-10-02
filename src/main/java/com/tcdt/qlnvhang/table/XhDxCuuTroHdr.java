@@ -85,8 +85,6 @@ public class XhDxCuuTroHdr extends BaseEntity implements Serializable {
   private String tenLoaiHinhNhapXuat;
   @Transient
   private List<XhDxCuuTroDtl> thongTinChiTiet = new ArrayList<>();
-  @Transient
-  private List<XhDxCuuTroKho> phuongAnXuat = new ArrayList<>();
 
   public String getTenTrangThai() {
     return TrangThaiAllEnum.getLabelById(trangThai);

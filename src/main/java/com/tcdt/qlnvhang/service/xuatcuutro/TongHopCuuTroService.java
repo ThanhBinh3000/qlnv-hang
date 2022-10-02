@@ -22,6 +22,7 @@ import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganLo;
 import com.tcdt.qlnvhang.table.khotang.KtNhaKho;
+import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
@@ -103,10 +104,13 @@ public class TongHopCuuTroService extends BaseServiceImpl {
     if (currentHdr.isPresent()) {
       XhDxCuuTroHdr data = currentHdr.get();
       List<XhDxCuuTroDtl> dataDtl = deXuatCuuTroDtlRepository.findByIdDxuat(data.getId());
-      List<XhDxCuuTroKho> dataKho = deXuatCuuTroKhoRepository.findByIdDxuat(data.getId());
-      buildThongTinKho(dataKho);
+      dataDtl.forEach(s -> {
+        List<XhDxCuuTroKho> dataKho = deXuatCuuTroKhoRepository.findByIdDxuatDtl(s.getId());
+        buildThongTinKho(dataKho);
+        s.setPhuongAnXuat(DataUtils.isNullOrEmpty(dataKho) ? new ArrayList<>() : dataKho);
+      });
       data.setThongTinChiTiet(DataUtils.isNullOrEmpty(dataDtl) ? new ArrayList<>() : dataDtl);
-      data.setPhuongAnXuat(DataUtils.isNullOrEmpty(dataKho) ? new ArrayList<>() : dataKho);
+      //data.setPhuongAnXuat(DataUtils.isNullOrEmpty(dataKho) ? new ArrayList<>() : dataKho);
       Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
       Map<String, String> mapVthh = getListDanhMucHangHoa();
       data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
@@ -312,7 +316,9 @@ public class TongHopCuuTroService extends BaseServiceImpl {
       log.error(req);
       throw new Exception("Tham số không hợp lệ.");
     }
-
+    //if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
+    req.setDvql(currentUser.getDvql());
+    //}
     PaggingReq paggingReq = new PaggingReq();
     paggingReq.setPage(0);
     paggingReq.setLimit(Integer.MAX_VALUE);
