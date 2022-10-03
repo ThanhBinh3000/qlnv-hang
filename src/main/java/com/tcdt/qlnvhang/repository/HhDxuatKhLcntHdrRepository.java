@@ -57,7 +57,7 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 			" AND KHLCNT.NGUON_VON = :nguonVon " +
 			" AND KHLCNT.TRANG_THAI = '"+ Contains.DADUYET_LDC + "'" +
 			" AND KHLCNT.TRANG_THAI_TH = '"+ Contains.CHUATONGHOP+ "' ", nativeQuery = true)
-	List<HhDxuatKhLcntHdr> listTongHop(String loaiVthh,String cloaiVthh,String namKh, String hthucLcnt,String pthucLcnt, String loaiHdong,String nguonVon);
+	List<HhDxuatKhLcntHdr> listTongHop(String loaiVthh,String cloaiVthh,Integer namKh, String hthucLcnt,String pthucLcnt, String loaiHdong,String nguonVon);
 
 	List<HhDxuatKhLcntHdr> findByIdIn(List<Long> id);
 

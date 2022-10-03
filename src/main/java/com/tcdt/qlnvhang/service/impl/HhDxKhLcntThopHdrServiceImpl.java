@@ -61,9 +61,14 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		// Lay danh muc dung chung
 		Map<String, String> mapDmuc = getMapCategory();
 
+		Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
+
 		thopHdr.setNamKhoach(objReq.getNamKhoach());
 		thopHdr.setLoaiVthh(objReq.getLoaiVthh());
+		thopHdr.setTenLoaiVthh(listDanhMucHangHoa.get(objReq.getLoaiVthh()));
 		thopHdr.setCloaiVthh(objReq.getCloaiVthh());
+		thopHdr.setTenCloaiVthh(listDanhMucHangHoa.get(objReq.getCloaiVthh()));
+
 		thopHdr.setHthucLcnt(objReq.getHthucLcnt());
 		thopHdr.setPthucLcnt(objReq.getPthucLcnt());
 		thopHdr.setLoaiHdong(objReq.getLoaiHdong());

@@ -82,7 +82,6 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		dataMap.setTrangThaiTh(Contains.CHUATONGHOP);
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setFileDinhKems(fileDinhKemList);
-		dataMap.setLastest(false);
 		hhDxuatKhLcntHdrRepository.save(dataMap);
 
 		// Lưu danh sách gói thầu
@@ -212,9 +211,8 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		Map<String,String> mapVthh = getListDanhMucHangHoa();
 		Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
 
-		qOptional.get().setTenVthh( StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : mapVthh.get(qOptional.get().getLoaiVthh()));
+		qOptional.get().setTenLoaiVthh( StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : mapVthh.get(qOptional.get().getLoaiVthh()));
 		qOptional.get().setTenCloaiVthh( StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null :mapVthh.get(qOptional.get().getCloaiVthh()));
-		qOptional.get().setTenVtu( StringUtils.isEmpty(qOptional.get().getMaVtu()) ? null :mapVthh.get(qOptional.get().getMaVtu()));
 		qOptional.get().setTenDvi(mapDmucDvi.get(qOptional.get().getMaDvi()));
 		qOptional.get().setCcXdgDtlList(hhDxuatKhLcntCcxdgDtlRepository.findByIdDxKhlcnt(qOptional.get().getId()));
 		qOptional.get().setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qOptional.get().getTrangThai()));
@@ -262,18 +260,17 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		String status = stReq.getTrangThai() + optional.get().getTrangThai();
 		switch (status) {
 			case Contains.CHODUYET_TP + Contains.DUTHAO:
-			case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
 			case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
-			case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
+			case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
 				optional.get().setNguoiGuiDuyet(getUser().getUsername());
 				optional.get().setNgayGuiDuyet(getDateTimeNow());
-				break;
 			case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
 			case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
 				optional.get().setNguoiPduyet(getUser().getUsername());
 				optional.get().setNgayPduyet(getDateTimeNow());
 				optional.get().setLdoTuchoi(stReq.getLyDo());
 				break;
+			case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
 			case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
 				optional.get().setNguoiPduyet(getUser().getUsername());
 				optional.get().setNgayPduyet(getDateTimeNow());
@@ -283,9 +280,6 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		}
 
 		optional.get().setTrangThai(stReq.getTrangThai());
-		if (stReq.getTrangThai().equals(Contains.DADUYET_LDC)) {
-			optional.get().setLastest(true);
-		}
 		return hhDxuatKhLcntHdrRepository.save(optional.get());
 	}
 
@@ -448,7 +442,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 			objs[4] = dx.getTrichYeu();
 			objs[5] = dx.getSoQd();
 			objs[6] = dx.getNamKhoach();
-			objs[7] = dx.getTenVthh();
+			objs[7] = dx.getTenLoaiVthh();
 			objs[8] = dx.getSoGoiThau();
 			objs[9] = dx.getTenTrangThai();
 			dataList.add(objs);
@@ -502,9 +496,8 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		page.getContent().forEach(f -> {
 			f.setSoGoiThau ( hhDxuatKhLcntDsgtDtlRepository.countByIdDxKhlcnt(f.getId()));
 			f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
-			f.setTenVthh( StringUtils.isEmpty(f.getLoaiVthh()) ? null : mapVthh.get(f.getLoaiVthh()));
+			f.setTenLoaiVthh( StringUtils.isEmpty(f.getLoaiVthh()) ? null : mapVthh.get(f.getLoaiVthh()));
 			f.setTenCloaiVthh( StringUtils.isEmpty(f.getCloaiVthh()) ? null :mapVthh.get(f.getCloaiVthh()));
-			f.setMaVtu( StringUtils.isEmpty(f.getMaVtu()) ? null :mapVthh.get(f.getMaVtu()));
 			f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
 			f.setTenTrangThaiTh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiTh()));
 		});
@@ -535,7 +528,6 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		dataMap.setTrangThai(Contains.TAO_MOI);
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setFileDinhKems(fileDinhKemList);
-		dataMap.setLastest(false);
 		dataMap.setTrangThaiTh(Contains.CHUATAO_QD);
 
 		hhDxuatKhLcntHdrRepository.save(dataMap);
@@ -651,9 +643,8 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		Map<String,String> hashMapHtLcnt = getListDanhMucChung("HT_LCNT");
 		Map<String,String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
 
-		qOptional.get().setTenVthh( StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : mapVthh.get(qOptional.get().getLoaiVthh()));
+		qOptional.get().setTenLoaiVthh( StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : mapVthh.get(qOptional.get().getLoaiVthh()));
 		qOptional.get().setTenCloaiVthh( StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null :mapVthh.get(qOptional.get().getCloaiVthh()));
-		qOptional.get().setTenVtu( StringUtils.isEmpty(qOptional.get().getMaVtu()) ? null :mapVthh.get(qOptional.get().getMaVtu()));
 		qOptional.get().setTenDvi(StringUtils.isEmpty(qOptional.get().getMaDvi())? null : mapDmucDvi.get(qOptional.get().getMaDvi()));
 		qOptional.get().setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qOptional.get().getTrangThai()));
 
@@ -711,9 +702,6 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		}
 
 		optional.get().setTrangThai(stReq.getTrangThai());
-		if (stReq.getTrangThai().equals(Contains.DADUYET_LDV)) {
-			optional.get().setLastest(true);
-		}
 		return hhDxuatKhLcntHdrRepository.save(optional.get());
 	}
 }
