@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.request.nhaphangtheoptt;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDcQdPduyetKhmttSldd;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
@@ -14,7 +13,7 @@ import java.util.List;
 public class HhDcQdPduyetKhmttDxReq {
     private Long id;
     private Long idDxuat;
-    private Long idPduyetHdr;
+    private Long idDcHdr;
     private String maDvi;
     private String loaiVthh;
     private String cloaiVthh;

@@ -58,6 +58,8 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
                 objReq.getNoiDung(),
                 Contains.convertDateToString(objReq.getNgayThopTu()),
                 Contains.convertDateToString(objReq.getNgayThopDen()),
+                Contains.convertDateToString(objReq.getNgayKyQdTu()),
+                Contains.convertDateToString(objReq.getNgayKyQdDen()),
                 objReq.getTrangThai(),
                 userInfo.getDvql(),
                 pageable);

@@ -53,8 +53,8 @@ public class HhDcQdPduyetKhmttHdr implements Serializable {
     private Date ngayGduyet;
     private String nguoiGduyet;
     @Temporal(TemporalType.DATE)
-    private Date ngayDuyet;
-    private String nguoiDuyet;
+    private Date ngayPduyet;
+    private String nguoiPduyet;
     private String ldoTchoi;
 
     @Transient

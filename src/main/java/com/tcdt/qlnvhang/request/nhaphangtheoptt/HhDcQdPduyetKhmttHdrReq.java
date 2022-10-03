@@ -2,8 +2,6 @@ package com.tcdt.qlnvhang.request.nhaphangtheoptt;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDcQdPduyetKhmttDx;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 import java.time.LocalDate;

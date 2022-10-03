@@ -92,7 +92,7 @@ public class PathContains {
 	public static final String DX_KH_LCNT = "/lcnt";
 
 
-	public static final String QD_PD_MTT = "/qd-pd-mtt";
+
 	public static final String DX_KH_MTT = "/mtt";
 	public static final String PA_LCNT = "/pan-lcnt";
 	public static final String QD_LCNT = "/qd-lcnt";
@@ -111,9 +111,13 @@ public class PathContains {
 
 	public static final String TH_MUA_TT = "/thop-kh-mtt";
 
+	public static final String QD_PD_MTT = "/qd-pd-mtt";
+
 	public static final String TKHAI_MTT = "/tkhai-mtt";
 
 	public static final String QD_PD_KQCG = "/qd-pd-kqcg";
+
+	public static final String DC_QD_PD = "/dc-qd-pd";
 
 
 	// Dau thau vat tu

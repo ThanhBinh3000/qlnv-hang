@@ -15,11 +15,11 @@ import java.util.List;
 public class HhDcQdPduyetKhmttDx implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_DC_QD_PDUYET_KHMTT_DX_SEQ")
-    @SequenceGenerator(sequenceName = "HH_DC_QD_PDUYET_KHMTT_DX_SEQ", allocationSize = 1, name = "HH_DC_QD_PDUYET_KHMTT_DX_SEQ ")
+    @SequenceGenerator(sequenceName = "HH_DC_QD_PDUYET_KHMTT_DX_SEQ", allocationSize = 1, name = "HH_DC_QD_PDUYET_KHMTT_DX_SEQ")
 
     private Long id;
     private Long idDxuat;
-    private Long idPduyetHdr;
+    private Long idDcHdr;
     private String maDvi;
     private String loaiVthh;
     @Transient
