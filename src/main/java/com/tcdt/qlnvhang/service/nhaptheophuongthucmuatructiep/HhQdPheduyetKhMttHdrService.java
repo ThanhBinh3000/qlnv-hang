@@ -125,16 +125,16 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
     }
 
    @Transactional
-    public HhQdPheduyetKhMttHdr updata(HhQdPheduyetKhMttHdrReq objReq) throws Exception{
+    public HhQdPheduyetKhMttHdr update(HhQdPheduyetKhMttHdrReq objReq) throws Exception{
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null){
             throw new Exception(" Bar request.");
         }
         Optional<HhQdPheduyetKhMttHdr> optional = hhQdPheduyetKhMttHdrRepository.findById(objReq.getId());
-        Optional<HhQdPheduyetKhMttHdr> optional1 = hhQdPheduyetKhMttHdrRepository.findBySoQdPduyet(objReq.getSoQdPduyet());
-         if (optional1.isPresent()){
-             if (optional1.isPresent()){
-                 if (!optional1.get().getId().equals(objReq.getId())){
+        Optional<HhQdPheduyetKhMttHdr> soQdPduyet = hhQdPheduyetKhMttHdrRepository.findBySoQdPduyet(objReq.getSoQdPduyet());
+         if (soQdPduyet.isPresent()){
+             if (soQdPduyet.isPresent()){
+                 if (!soQdPduyet.get().getId().equals(objReq.getId())){
                      throw new Exception("Số quyết định đã tồn tại");
                  }
              }
@@ -186,6 +186,9 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         HhQdPheduyetKhMttHdr data = optional.get();
         Map<String, String> hashMapDmHh = getListDanhMucHangHoa();
         Map<String, String> hashMapDmdv = getListDanhMucDvi(null, null, "01");
+       data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
+       data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh()) ? null : hashMapDmHh.get(data.getLoaiVthh()));
+       data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh()) ? null : hashMapDmHh.get(data.getCloaiVthh()));
         List<HhQdPheduyetKhMttDx> listdx=hhQdPheduyetKhMttDxRepository.findAllByIdPduyetHdr(data.getId());
         for (HhQdPheduyetKhMttDx pduyetDx :listdx){
             pduyetDx.setTenLoaiVthh(StringUtils.isEmpty(pduyetDx.getLoaiVthh()) ? null : hashMapDmHh.get(pduyetDx.getLoaiVthh()));
@@ -269,7 +272,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
             objs[5]=pduyet.getMaThop();
             objs[6]=pduyet.getNamKh();
             objs[7]=pduyet.getPthucMuatt();
-            objs[8]=pduyet.getTrangThai();
+            objs[8]=pduyet.getTenTrangThai();
             dataList.add(objs);
      }
      ExportExcel ex =new ExportExcel(title,fileName,rowsName,dataList,response);

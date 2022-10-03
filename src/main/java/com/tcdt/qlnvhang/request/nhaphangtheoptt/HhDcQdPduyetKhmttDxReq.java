@@ -1,12 +1,8 @@
-package com.tcdt.qlnvhang.request;
+package com.tcdt.qlnvhang.request.nhaphangtheoptt;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.util.Contains;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -14,11 +10,10 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-public class HhQdPheduyetKhMttDxReq {
-    @ApiModelProperty(notes = "bắt buộc set phải đối với updata")
+public class HhDcQdPduyetKhmttDxReq {
     private Long id;
     private Long idDxuat;
-    private Long idPduyetHdr;
+    private Long idDcHdr;
     private String maDvi;
     private String loaiVthh;
     private String cloaiVthh;
@@ -38,6 +33,8 @@ public class HhQdPheduyetKhMttDxReq {
     private BigDecimal tongSoLuong;
     private String nguonVon;
     private String tenChuDt;
-    private List<HhQdPheduyetKhMttSLDDReq> hhQdPheduyetKhMttSLDDList = new ArrayList<>();
+
+    private List<HhDcQdPduyetKhmttSlddReq> hhDcQdPduyetKhmttSlddList =new ArrayList<>();
+
 
 }
