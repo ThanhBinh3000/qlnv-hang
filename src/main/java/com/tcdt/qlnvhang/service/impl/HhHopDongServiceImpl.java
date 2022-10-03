@@ -252,7 +252,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
     qOptional.get().setDonViTinh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : mapVthh.get(qOptional.get().getDonViTinh()));
     qOptional.get().setHhPhuLucHdongList(hhPhuLucRepository.findBySoHd(qOptional.get().getSoHd()));
     List<HhHopDongDdiemNhapKho> ddiemNhapKhos = hhHopDongDdiemNhapKhoRepository.findAllByIdHdongHdr(Long.parseLong(ids));
-    ddiemNhapKhos.forEach(s->{
+    ddiemNhapKhos.forEach(s -> {
       s.setTenDvi((StringUtils.isEmpty(s.getMaDvi()) ? null : mapDmucDvi.get(s.getMaDvi())));
       s.setTenDiemKho((StringUtils.isEmpty(s.getMaDiemKho()) ? null : mapDmucDvi.get(s.getMaDiemKho())));
     });
@@ -458,10 +458,11 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
     Page<HhHopDongHdr> page;
     if (req.getTrangThai() != null && req.getTrangThai().equals(TrangThaiAllEnum.DA_KY.getId())) {
       dvql = userInfo.getDvql().substring(0, 4);
-      page = hhHopDongRepository.selectAll(req.getLoaiVthh(), req.getSoHd(), req.getTenHd(), req.getNhaCcap(), convertDateToString(req.getTuNgayKy()), convertDateToString(req.getDenNgayKy()), req.getTrangThai(), dvql, req.getNamHd(), pageable);
+//      page = hhHopDongRepository.selectAll(req.getLoaiVthh(), req.getSoHd(), req.getTenHd(), req.getNhaCcap(), convertDateToString(req.getTuNgayKy()), convertDateToString(req.getDenNgayKy()), req.getTrangThai(), dvql, req.getNamHd(), pageable);
     } else {
-      page = hhHopDongRepository.lookupData(req.getLoaiVthh(), req.getSoHd(), req.getTenHd(), req.getNhaCcap(), convertDateToString(req.getTuNgayKy()), convertDateToString(req.getDenNgayKy()), req.getTrangThai(), dvql,userInfo.getDvql(), req.getNamHd(), pageable);
+//      page = hhHopDongRepository.lookupData(req.getLoaiVthh(), req.getSoHd(), req.getTenHd(), req.getNhaCcap(), convertDateToString(req.getTuNgayKy()), convertDateToString(req.getDenNgayKy()), req.getTrangThai(), dvql, req.getNamHd(),userInfo.getDvql(), pageable);
     }
+    page = hhHopDongRepository.lookupData(req.getLoaiVthh(), req.getSoHd(), req.getTenHd(), req.getNhaCcap(), convertDateToString(req.getTuNgayKy()), convertDateToString(req.getDenNgayKy()), req.getTrangThai(), dvql, req.getNamHd(), userInfo.getDvql(), pageable);
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
     Map<String, String> hashMapDviLquan = getListDanhMucDviLq("NT");
     Map<String, String> mapVthh = getListDanhMucHangHoa();
