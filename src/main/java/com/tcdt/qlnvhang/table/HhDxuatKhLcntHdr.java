@@ -8,6 +8,8 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.util.Contains;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Where;
@@ -34,7 +36,7 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	String soDxuat;
 	String loaiVthh;
 	@Transient
-	String tenVthh;
+	String tenLoaiVthh;
 	String soQd;
 	String trichYeu;
 	String maDvi;
@@ -62,10 +64,6 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	@Transient
 	String tenCloaiVthh;
 	String moTaHangHoa;
-	String maVtu;
-	@Transient
-	String tenVtu;
-	boolean lastest;
 	String tenDuAn;
 	BigDecimal tongMucDt;
 	String loaiHdong;
@@ -75,9 +73,9 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	String pthucLcnt;
 	@Temporal(TemporalType.DATE)
 	Date tgianBdauTchuc;
-	@Temporal(TemporalType.DATE)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
 	Date tgianMthau;
-	@Temporal(TemporalType.DATE)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
 	Date tgianDthau;
 	Integer tgianThienHd;
 	@Temporal(TemporalType.DATE)
@@ -86,6 +84,9 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	Integer gtriHdong;
 	String dienGiai;
 	String trangThaiTh;
+	String loaiHinhNx;
+	String kieuNx;
+	String diaChiDvi;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)

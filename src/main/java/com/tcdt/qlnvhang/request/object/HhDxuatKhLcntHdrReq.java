@@ -93,11 +93,11 @@ public class HhDxuatKhLcntHdrReq {
 	Date tgianBdauTchuc;
 
 	//	@NotNull(message = "Không được để trống")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
 	Date tgianDthau;
 
 	//	@NotNull(message = "Không được để trống")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
 	Date tgianMthau;
 
 	@Size(max = 20, message = "Loại hợp đồng không được vượt quá 20 ký tự")
@@ -122,6 +122,12 @@ public class HhDxuatKhLcntHdrReq {
 	String ghiChu;
 
 	String dienGiai;
+
+	String loaiHinhNx;
+
+	String kieuNx;
+
+	String diaChiDvi;
 
 	private List<FileDinhKemReq> fileDinhKemReq =  new ArrayList<>();
 

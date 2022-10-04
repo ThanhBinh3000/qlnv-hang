@@ -34,8 +34,8 @@ public class HhDxKhLcntThopHdr implements Serializable {
 	public static final String TABLE_NAME = "HH_DX_KHLCNT_THOP_HDR";
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_DX_KHLCNT_THOP_HDR_SEQ")
-	@SequenceGenerator(sequenceName = "HH_DX_KHLCNT_THOP_HDR_SEQ", allocationSize = 1, name = "HH_DX_KHLCNT_THOP_HDR_SEQ")
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_DX_KHLCNT_THOP_HDR_SEQ")
+//	@SequenceGenerator(sequenceName = "HH_DX_KHLCNT_THOP_HDR_SEQ", allocationSize = 1, name = "HH_DX_KHLCNT_THOP_HDR_SEQ")
 	private Long id;
 
 	@Temporal(TemporalType.DATE)
@@ -90,7 +90,7 @@ public class HhDxKhLcntThopHdr implements Serializable {
 	String noiDung;
 	String ghiChu;
 	String nguoiTao;
-	String namKhoach;
+	Integer namKhoach;
 	String trangThai;
 	@Transient
 	String tenTrangThai;
