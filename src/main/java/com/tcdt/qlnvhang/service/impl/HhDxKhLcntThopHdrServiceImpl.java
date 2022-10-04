@@ -171,7 +171,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		if (thopHdr.getId() > 0 && thopHdr.getHhDxKhLcntThopDtlList().size() > 0) {
 			List<String> soDxuatList = thopHdr.getHhDxKhLcntThopDtlList().stream().map(HhDxKhLcntThopDtl::getSoDxuat)
 					.collect(Collectors.toList());
-			hhDxuatKhLcntHdrRepository.updateTongHop(soDxuatList, Contains.DATONGHOP);
+			hhDxuatKhLcntHdrRepository.updateStatusInList(soDxuatList, Contains.DATONGHOP);
 		}
 		return thopHdr;
 	}
