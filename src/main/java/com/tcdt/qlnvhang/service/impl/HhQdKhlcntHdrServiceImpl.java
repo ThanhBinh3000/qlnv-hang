@@ -181,7 +181,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		hhQdKhlcntDtlRepository.save(qdDtl);
 
 		// Update trạng thái tờ trình
-		hhDxuatKhLcntHdrRepository.updateTongHop(Arrays.asList(objReq.getMaTrHdr()), Contains.DADUTHAO_QD);
+		hhDxuatKhLcntHdrRepository.updateStatusInList(Arrays.asList(objReq.getMaTrHdr()), Contains.DADUTHAO_QD);
 
 //		 .updateTrangThai(dataMap.getIdThHdr(), Contains.DADUTHAO_QD);
 
@@ -496,7 +496,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 					throw new Exception("Đề xuất này đã được quyết định");
 				}
 				// Update trạng thái tờ trình
-				hhDxuatKhLcntHdrRepository.updateTongHop(Arrays.asList(dataDB.getMaTrHdr()), Contains.DADUTHAO_QD);
+				hhDxuatKhLcntHdrRepository.updateStatusInList(Arrays.asList(dataDB.getMaTrHdr()), Contains.DADUTHAO_QD);
 //				hhDxuatKhLcntHdrRepository.updateStatus(dataDB.getIdTrHdr() , Contains.DABANHANH_QD);
 			}else{
 				throw new Exception("Số tờ trình kế hoạch không được tìm thấy");

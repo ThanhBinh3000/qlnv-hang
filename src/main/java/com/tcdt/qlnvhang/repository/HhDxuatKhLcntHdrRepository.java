@@ -19,7 +19,7 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 	@Transactional()
 	@Modifying
 	@Query(value = "UPDATE HH_DX_KHLCNT_HDR SET TRANG_THAI_TH=:trangThaiTh WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
-	void updateTongHop(List<String> soDxuatList, String trangThaiTh);
+	void updateStatusInList(List<String> soDxuatList, String trangThaiTh);
 
 	@Transactional()
 	@Modifying
@@ -43,8 +43,18 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 					"  AND (:trangThaiTh IS NULL OR KHLCNT.TRANG_THAI_TH = :trangThaiTh) " +
 					"  AND (:maDvi IS NULL OR KHLCNT.MA_DVI = :maDvi) "
 			,nativeQuery = true)
-
 	Page<HhDxuatKhLcntHdr> select(String namKh, String soTr,String soQd, String ngayKyTu,String ngayKyDen,String loaiVthh,String trichYeu,String trangThai,String trangThaiTh,String maDvi, Pageable pageable);
+
+	@Query(
+			value = "SELECT * " +
+					"FROM HH_DX_KHLCNT_HDR KHLCNT " +
+					" WHERE (:namKh IS NULL OR KHLCNT.NAM_KHOACH = TO_NUMBER(:namKh)) " +
+					"  AND (:maDvi IS NULL OR KHLCNT.MA_DVI = :maDvi) " +
+					"  AND ( KHLCNT.TRANG_THAI IN :trangThaiList ) " +
+					"  AND ( KHLCNT.TRANG_THAI_TH IN :trangThaiThList ) "
+			,nativeQuery = true)
+	Page<HhDxuatKhLcntHdr> selectDropdown(String namKh, String maDvi,List<String> trangThaiList,List<String> trangThaiThList, Pageable pageable);
+
 
 	@Query(value = " SELECT KHLCNT.* \n" +
 			"FROM HH_DX_KHLCNT_HDR KHLCNT \n" +
