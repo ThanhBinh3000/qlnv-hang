@@ -44,11 +44,11 @@ public class BhQdPheDuyetKqbdg extends TrangThaiBaseEntity implements Serializab
     @Column(name = "NGAY_KY")
     private LocalDate ngayKy;
 
-    @Column(name = "MA_VAT_TU_CHA")
-    private String maVatTuCha;
+//    @Column(name = "MA_VAT_TU_CHA")
+//    private String maVatTuCha;
 
-    @Column(name = "MA_VAT_TU")
-    private String maVatTu;
+//    @Column(name = "MA_VAT_TU")
+//    private String maVatTu;
 
     @Column(name = "LOAI_VTHH")
     private String loaiVthh;

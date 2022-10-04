@@ -20,12 +20,13 @@ public interface BhTongHopDeXuatKhbdgRepository extends BaseRepository<BhTongHop
 					"FROM BH_TONG_HOP_DE_XUAT_KHBDG TH " +
 					" WHERE (:namKh IS NULL OR TH.NAM_KE_HOACH = TO_NUMBER(:namKh))  " +
 					"  AND (:loaiVthh IS NULL OR TH.LOAI_VTHH = :loaiVthh) " +
+					"  AND (:flagQd IS NULL OR TH.QD_PHE_DUYET_KHBDG_ID IS NULL) " +
 					"  AND (:cloaiVthh IS NULL OR TH.CLOAI_VTHH = :cloaiVthh) " +
 					"  AND (:tuNgayThop IS NULL OR TH.NGAY_TONG_HOP >= TO_DATE(:tuNgayThop, 'yyyy-MM-dd')) " +
 					"  AND (:denNgayThop IS NULL OR TH.NGAY_TONG_HOP <= TO_DATE(:denNgayThop, 'yyyy-MM-dd')) " +
 					"  AND (:noiDung IS NULL OR LOWER(TH.NOI_DUNG_TONG_HOP) LIKE LOWER(CONCAT(CONCAT('%', :noiDung),'%'))) " +
 					"  AND (:trangThai IS NULL OR TH.TRANG_THAI = :trangThai) ",
 			nativeQuery = true)
-	Page<BhTongHopDeXuatKhbdg> select(Integer namKh, String loaiVthh, String cloaiVthh, String tuNgayThop, String denNgayThop, String noiDung, String trangThai, Pageable pageable);
+	Page<BhTongHopDeXuatKhbdg> select(Integer namKh, String loaiVthh, String cloaiVthh, String tuNgayThop, String denNgayThop, String noiDung, String trangThai,String flagQd, Pageable pageable);
 
 }

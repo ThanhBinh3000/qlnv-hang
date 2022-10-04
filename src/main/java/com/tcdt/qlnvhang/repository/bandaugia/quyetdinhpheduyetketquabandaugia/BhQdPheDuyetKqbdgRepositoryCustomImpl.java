@@ -24,7 +24,7 @@ public class BhQdPheDuyetKqbdgRepositoryCustomImpl implements BhQdPheDuyetKqbdgR
                 "vatTuCha.ma, vatTuCha.ten," +
                 "qdPdKhBdg.id, qdPdKhBdg.soQuyetDinh " +
                 "FROM BhQdPheDuyetKqbdg bb ");
-        builder.append("INNER JOIN QlnvDmVattu vatTuCha ON bb.maVatTuCha = vatTuCha.ma ");
+        builder.append("INNER JOIN QlnvDmVattu vatTuCha ON bb.loaiVthh = vatTuCha.ma ");
         builder.append("LEFT JOIN ThongBaoBanDauGia tbBanDauGia ON bb.thongBaoBdgId = tbBanDauGia.id ");
         builder.append("LEFT JOIN BhQdPheDuyetKhbdg qdPdKhBdg ON tbBanDauGia.qdPheDuyetKhBdgId = qdPdKhBdg.id ");
         builder.append("LEFT JOIN BhBbBanDauGia bbBanDauGia ON bb.bienBanBdgId = bbBanDauGia.id ");
@@ -64,13 +64,13 @@ public class BhQdPheDuyetKqbdgRepositoryCustomImpl implements BhQdPheDuyetKqbdgR
             builder.append("AND ").append("bb.ngayKy <= :ngayKyDen ");
         }
 
-        if (!StringUtils.isEmpty(req.getMaVatTuCha())) {
-            builder.append("AND ").append("bb.maVatTuCha = :maVatTuCha ");
-        }
+//        if (!StringUtils.isEmpty(req.getMaVatTuCha())) {
+//            builder.append("AND ").append("bb.loaiVthh = :maVatTuCha ");
+//        }
 
-        if (!StringUtils.isEmpty(req.getMaVatTu())) {
-            builder.append("AND ").append("bb.maVatTu = :maVatTu ");
-        }
+//        if (!StringUtils.isEmpty(req.getMaVatTu())) {
+//            builder.append("AND ").append("bb.maVatTu = :maVatTu ");
+//        }
 
         if (!CollectionUtils.isEmpty(req.getMaDvis())) {
             builder.append("AND ").append("bb.maDvi IN :maDvis ");
@@ -99,7 +99,7 @@ public class BhQdPheDuyetKqbdgRepositoryCustomImpl implements BhQdPheDuyetKqbdgR
         int total = 0;
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT COUNT(DISTINCT bb.id) FROM BhQdPheDuyetKqbdg bb ");
-        builder.append("INNER JOIN QlnvDmVattu vatTuCha ON bb.maVatTuCha = vatTuCha.ma ");
+        builder.append("INNER JOIN QlnvDmVattu vatTuCha ON bb.loaiVthh = vatTuCha.ma ");
         builder.append("LEFT JOIN ThongBaoBanDauGia tbBanDauGia ON bb.thongBaoBdgId = tbBanDauGia.id ");
         builder.append("LEFT JOIN BhQdPheDuyetKhbdg qdPdKhBdg ON tbBanDauGia.qdPheDuyetKhBdgId = qdPdKhBdg.id ");
         builder.append("LEFT JOIN BhBbBanDauGia bbBanDauGia ON bb.bienBanBdgId = bbBanDauGia.id ");
@@ -123,14 +123,14 @@ public class BhQdPheDuyetKqbdgRepositoryCustomImpl implements BhQdPheDuyetKqbdgR
         if (req.getNgayKyDen() != null) {
             query.setParameter("ngayKyDen", req.getNgayKyDen());
         }
+//
+//        if (!StringUtils.isEmpty(req.getMaVatTuCha())) {
+//            query.setParameter("maVatTuCha", req.getMaVatTuCha());
+//        }
 
-        if (!StringUtils.isEmpty(req.getMaVatTuCha())) {
-            query.setParameter("maVatTuCha", req.getMaVatTuCha());
-        }
-
-        if (!StringUtils.isEmpty(req.getMaVatTu())) {
-            query.setParameter("maVatTu", req.getMaVatTu());
-        }
+//        if (!StringUtils.isEmpty(req.getMaVatTu())) {
+//            query.setParameter("maVatTu", req.getMaVatTu());
+//        }
 
         if (!CollectionUtils.isEmpty(req.getMaDvis())) {
             query.setParameter("maDvis", req.getMaDvis());
