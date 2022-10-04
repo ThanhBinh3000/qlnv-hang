@@ -299,6 +299,7 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 				convertDateToString(req.getNgayTongHopDenNgay()),
 				req.getNoiDungTongHop(),
 				req.getTrangThai(),
+				req.getFlagQd(),
 				pageable);
 		List<Long>listId=page.getContent().stream().map(BhTongHopDeXuatKhbdg::getId).collect(Collectors.toList());
 		List<BhTongHopDeXuatCt> tongHopDeXuatCtMap=chiTietRepository.findByBhTongHopDeXuatIdIn(listId);
