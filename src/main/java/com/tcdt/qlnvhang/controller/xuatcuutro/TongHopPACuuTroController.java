@@ -86,13 +86,13 @@ public class TongHopPACuuTroController extends BaseController {
     return ResponseEntity.ok(resp);
   }
 
-  /*@ApiOperation(value = "Chi tiết Đề xuất xuất cứu trợ viện trợ", response = List.class)
+  @ApiOperation(value = "Chi tiết Đề xuất xuất cứu trợ viện trợ", response = List.class)
   @GetMapping(value = PathContains.URL_CHI_TIET + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   public final ResponseEntity<BaseResponse> detail(@CurrentUser CustomUserDetails currentUser, @PathVariable("id") Long id) {
     BaseResponse resp = new BaseResponse();
     try {
-      XhDxCuuTroHdr data = deXuatCuuTroService.detail(currentUser, id);
+      XhThCuuTroHdr data = tongHopCuuTroService.detail(currentUser, id);
       resp.setData(data);
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
@@ -102,7 +102,7 @@ public class TongHopPACuuTroController extends BaseController {
       log.error(e.getMessage());
     }
     return ResponseEntity.ok(resp);
-  }*/
+  }
 
   @ApiOperation(value = "Xoá thông tin Đề xuất kế hoạch xuất khác", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
   @PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)

@@ -47,6 +47,7 @@ public class XhThCuuTroHdr extends BaseEntity implements Serializable {
 //  private String kieuNhapXuat;
 //  private LocalDate thoiGianThucHien;
   private String noiDung;
+  private Long idQuyetDinh;
 
 
   @Transient
