@@ -21,8 +21,8 @@ public class XhThCuuTroKho extends BaseEntity implements Serializable {
   @SequenceGenerator(sequenceName = XhThCuuTroKho.TABLE_NAME
       + "_SEQ", allocationSize = 1, name = XhThCuuTroKho.TABLE_NAME + "_SEQ")
   private Long id;
-  private Long idDxuat;
-  private Long idDxuatDtl;
+  private Long idTongHop;
+  private Long idTongHopDtl;
   private String maDvi;
   //  private String loaiVthh;
   private String maChiCuc;

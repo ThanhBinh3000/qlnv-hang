@@ -142,13 +142,13 @@ public class BhQdPheDuyetKqbdgServiceImpl extends BaseServiceImpl implements BhQ
         List<BhQdPheDuyetKqbdgCtRes> cts = item.getCts().stream().map(BhQdPheDuyetKqbdgCtRes::new).collect(Collectors.toList());
         this.buildThongTinKho(cts);
         res.setCts(cts);
-        Set<String> maVatTus = Collections.singleton(item.getMaVatTuCha());
+        Set<String> maVatTus = Collections.singleton(item.getLoaiVthh());
         Set<QlnvDmVattu> vatTus = Sets.newHashSet(qlnvDmVattuRepository.findByMaIn(maVatTus));
 
         if (CollectionUtils.isEmpty(vatTus))
             throw new Exception("Không tìm thấy vật tư");
 
-        vatTus.stream().filter(v -> v.getMa().equalsIgnoreCase(item.getMaVatTuCha())).findFirst()
+        vatTus.stream().filter(v -> v.getMa().equalsIgnoreCase(item.getLoaiVthh())).findFirst()
                 .ifPresent(v -> res.setTenVatTuCha(v.getTen()));
 
         this.setThongTinDonVi(res, item.getMaDvi());

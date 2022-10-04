@@ -27,4 +27,5 @@ public class BhTongHopDeXuatKhbdgSearchRequest extends BaseRequest {
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate ngayTongHopDenNgay;
 	private String noiDungTongHop;
+	private String flagQd;
 }

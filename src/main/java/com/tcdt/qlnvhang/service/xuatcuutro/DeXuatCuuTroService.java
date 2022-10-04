@@ -334,15 +334,20 @@ public class DeXuatCuuTroService extends BaseServiceImpl {
     } else if (capDvi.equals(CAP_CUC)) {
       //gui duyet
       if (condition.equals(TrangThaiAllEnum.DU_THAO.getId() + TrangThaiAllEnum.CHO_DUYET_LDTC.getId())) {
+        trangThai = TrangThaiAllEnum.CHO_DUYET_TP.getId();
+      } else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_TP.getId() + TrangThaiAllEnum.CHO_DUYET_LDTC.getId())) {
         trangThai = TrangThaiAllEnum.CHO_DUYET_LDC.getId();
-      } else if (condition.equals(TrangThaiAllEnum.DA_DUYET_LDC.getId() + TrangThaiAllEnum.CHO_DUYET_LDTC.getId())) {
-        trangThai = TrangThaiAllEnum.CHO_DUYET_LDTC.getId();
       }
       //duyet
-      else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_LDTC.getId() + TrangThaiAllEnum.DA_DUYET_LDTC.getId())) {
+      else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_TP.getId() + TrangThaiAllEnum.DA_DUYET_LDTC.getId())) {
+        trangThai = TrangThaiAllEnum.DA_DUYET_LDC.getId();
+      } else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_LDC.getId() + TrangThaiAllEnum.DA_DUYET_LDTC.getId())) {
         trangThai = TrangThaiAllEnum.DA_DUYET_LDC.getId();
       }
       //tu choi
+      else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_TP.getId() + TrangThaiAllEnum.TU_CHOI_TP.getId())) {
+        trangThai = TrangThaiAllEnum.TU_CHOI_TP.getId();
+      }
       else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_LDTC.getId() + TrangThaiAllEnum.TU_CHOI_LDTC.getId())) {
         trangThai = TrangThaiAllEnum.TU_CHOI_LDC.getId();
       }

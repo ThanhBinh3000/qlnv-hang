@@ -139,6 +139,16 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 			bhTongHopDeXuatKhbdg.get().setTrangThai(Contains.DADUTHAO_QD);
 			tongHopDeXuatKhbdgRepository.save(bhTongHopDeXuatKhbdg.get());
 		}
+		//Cập nhật số qd phê duyệt vào bản ghi đề xuất
+		List<Long> idsDexuat = theEntity.getChiTietList().stream().map(BhQdPheDuyetKhbdgCt::getBhDgKeHoachId).collect(Collectors.toList());
+		List<KeHoachBanDauGia> listDx = keHoachBanDauGiaRepository.findByIdIn(idsDexuat);
+		if(!CollectionUtils.isEmpty(listDx)){
+			listDx.stream().map(item->{
+				item.setSoQuyetDinhPheDuyet(req.getSoQuyetDinh());
+				return item;
+			});
+			keHoachBanDauGiaRepository.saveAll(listDx);
+		}
 		return qdPheduyetKhbdgResponseMapper.toDto(theEntity);
 	}
 
@@ -261,6 +271,16 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 		List<BhQdPheDuyetKhBdgThongTinTaiSan> thongTinTaiSanList = thongTinTaiSanRepository.findByQdPheDuyetKhbdgChiTietIdIn(chiTietIds);
 		if (!CollectionUtils.isEmpty(thongTinTaiSanList)) {
 			thongTinTaiSanRepository.deleteAll(thongTinTaiSanList);
+		}
+		//set lại soqd = null cho bản ghi dexuat
+		List<Long> idsKeHoach = chiTietList.stream().map(BhQdPheDuyetKhbdgCt::getBhDgKeHoachId).collect(Collectors.toList());
+		List<KeHoachBanDauGia> listKeHoach = keHoachBanDauGiaRepository.findByIdIn(idsKeHoach);
+		if(!CollectionUtils.isEmpty(listKeHoach)){
+			listKeHoach.stream().map(item->{
+				item.setSoQuyetDinhPheDuyet(null);
+				return item;
+			});
+			keHoachBanDauGiaRepository.saveAll(listKeHoach);
 		}
 		//Clean Chi tiết
 		if (!CollectionUtils.isEmpty(chiTietList)) {
