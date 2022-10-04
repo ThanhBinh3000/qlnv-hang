@@ -1,12 +1,10 @@
 package com.tcdt.qlnvhang.table;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
-import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 
 @Entity
 @Table(name = XhDxCuuTroKho.TABLE_NAME)

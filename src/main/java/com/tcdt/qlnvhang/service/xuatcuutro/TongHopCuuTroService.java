@@ -72,6 +72,8 @@ public class TongHopCuuTroService extends BaseServiceImpl {
   private TongHopCuuTroRepository tongHopCuuTroRepository;
   @Autowired
   private TongHopCuuTroDtlRepository tongHopCuuTroDtlRepository;
+  @Autowired
+  private TongHopCuuTroKhoRepository tongHopCuuTroKhoRepository;
 
 
   public Page<XhThCuuTroHdr> searchPage(CustomUserDetails currentUser, XhThCuuTroHdrSearchReq req) throws Exception {
@@ -131,19 +133,19 @@ public class TongHopCuuTroService extends BaseServiceImpl {
     if (DataUtils.isNullOrEmpty(req.getLoaiHinhNhapXuat())) {
       throw new Exception("Loại hình nhập xuất thiếu hoặc không hợp lệ.");
     }
-    if (DataUtils.isNullOrEmpty(req.getMaTongHop())) {
+    /*if (DataUtils.isNullOrEmpty(req.getMaTongHop())) {
       throw new Exception("Mã tổng hợp thiếu hoặc không hợp lệ.");
-    }
+    }*/
     if (DataUtils.isNullOrEmpty(req.getLoaiVthh())) {
       throw new Exception("Loại hàng hóa thiếu hoặc không hợp lệ.");
     }
     if (DataUtils.isNullOrEmpty(req.getCloaiVthh())) {
       throw new Exception("Chủng loại hàng hóa thiếu hoặc không hợp lệ.");
     }
-    Optional<XhThCuuTroHdr> optional = tongHopCuuTroRepository.findFirstByMaTongHopAndNam(req.getMaTongHop(), req.getNam());
+    /*Optional<XhThCuuTroHdr> optional = tongHopCuuTroRepository.findFirstByMaTongHopAndNam(req.getMaTongHop(), req.getNam());
     if (optional.isPresent()) {
       throw new Exception(MessageFormat.format("Mã tổng hợp {0} đã tồn tại", req.getSoDxuat()));
-    }
+    }*/
     XhThCuuTroHdr newRow = new XhThCuuTroHdr();
     BeanUtils.copyProperties(req, newRow, "id");
     newRow.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
@@ -158,8 +160,18 @@ public class TongHopCuuTroService extends BaseServiceImpl {
       XhThCuuTroHdr finalNewRow = newRow;
       thongTinChiTiet.forEach(s -> {
         s.setIdTongHop(finalNewRow.getId());
+        XhThCuuTroDtl newRowDtl = tongHopCuuTroDtlRepository.save(s);
+        //luu nhap kho
+        List<XhThCuuTroKho> phuongAnXuat = new ArrayList();
+        if (!DataUtils.isNullOrEmpty(s.getPhuongAnXuat())) {
+          phuongAnXuat = ObjectMapperUtils.mapAll(s.getPhuongAnXuat(), XhThCuuTroKho.class);
+          phuongAnXuat.forEach(s1 -> {
+            s1.setIdTongHop(finalNewRow.getId());
+            s1.setIdTongHopDtl(newRowDtl.getId());
+          });
+          tongHopCuuTroKhoRepository.saveAll(phuongAnXuat);
+        }
       });
-      tongHopCuuTroDtlRepository.saveAll(thongTinChiTiet);
     }
     return newRow;
   }
@@ -169,6 +181,9 @@ public class TongHopCuuTroService extends BaseServiceImpl {
     if (DataUtils.isNullObject(req.getId()))
       throw new Exception("Tham số không hợp lệ.");
     XhThCuuTroHdr currentRow = tongHopCuuTroRepository.findById(req.getId()).orElse(null);
+
+    System.out.println(req);
+    System.out.println(currentRow);
     if (DataUtils.isNullObject(currentRow))
       throw new Exception("Không tìm thấy dữ liệu.");
     XhThCuuTroHdr validateRow = tongHopCuuTroRepository.findFirstByMaTongHopAndNam(currentRow.getMaTongHop(), currentRow.getNam()).get();
@@ -191,12 +206,32 @@ public class TongHopCuuTroService extends BaseServiceImpl {
     //luu thong tin chi tiet
     List<XhThCuuTroDtl> thongTinChiTiet = new ArrayList();
     if (!DataUtils.isNullOrEmpty(req.getThongTinTongHop())) {
+      List<Long> listDtlReq = req.getThongTinTongHop().stream().map(XhThCuuTroDtl::getId).collect(Collectors.toList());
+      List<XhThCuuTroDtl> listDtlCur = tongHopCuuTroDtlRepository.findByIdTongHop(currentRow.getId());
+      List<Long> listRemoveId = listDtlCur.stream().map(XhThCuuTroDtl::getId).collect(Collectors.toList());
+      listRemoveId.removeAll(listDtlReq);
+      tongHopCuuTroDtlRepository.deleteAllByIdIn(listRemoveId);
+      tongHopCuuTroKhoRepository.deleteAllByIdTongHopDtlIn(listRemoveId);
+
       thongTinChiTiet = ObjectMapperUtils.mapAll(req.getThongTinTongHop(), XhThCuuTroDtl.class);
       XhThCuuTroHdr finalNewRow = currentRow;
       thongTinChiTiet.forEach(s -> {
+        List<XhThCuuTroKho> listRemoveKho = tongHopCuuTroKhoRepository.findByIdTongHopDtl(s.getId());
+//        List<Long> listRemoveKhoId = listRemoveKho.stream().map(XhDxCuuTroKho::getId).collect(Collectors.toList());
         s.setIdTongHop(finalNewRow.getId());
+        XhThCuuTroDtl newRowDtl = tongHopCuuTroDtlRepository.save(s);
+        //luu nhap kho
+        List<XhThCuuTroKho> phuongAnXuat = new ArrayList();
+        if (!DataUtils.isNullOrEmpty(s.getPhuongAnXuat())) {
+          phuongAnXuat = ObjectMapperUtils.mapAll(s.getPhuongAnXuat(), XhThCuuTroKho.class);
+          phuongAnXuat.forEach(s1 -> {
+            listRemoveKho.remove(s1);
+            s1.setIdTongHop(finalNewRow.getId());
+            s1.setIdTongHopDtl(newRowDtl.getId());
+          });
+          tongHopCuuTroKhoRepository.saveAll(phuongAnXuat);
+        }
       });
-      tongHopCuuTroDtlRepository.saveAll(thongTinChiTiet);
     }
     return currentRow;
   }
