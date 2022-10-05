@@ -95,7 +95,9 @@ public class HhQdKhlcntHdrReq {
 
 	String trichYeu;
 
-	String maTrHdr;
+	String soTrHdr;
+
+	String phanLoai;
 
 	Boolean lastest = false;
 
