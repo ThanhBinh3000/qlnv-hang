@@ -163,6 +163,8 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		thopHdr.setTrangThai(Contains.CHUATAO_QD);
 		thopHdr.setNgayThop(new Date());
 		thopHdr.setGhiChu(objReq.getGhiChu());
+		thopHdr.setId(objReq.getId());
+		thopHdr.setSoQdCc(objReq.getSoQdCc());
 		hhDxKhLcntThopHdrRepository.save(thopHdr);
 		for (HhDxKhLcntThopDtl dtl : thopHdr.getHhDxKhLcntThopDtlList()){
 			dtl.setIdThopHdr(thopHdr.getId());

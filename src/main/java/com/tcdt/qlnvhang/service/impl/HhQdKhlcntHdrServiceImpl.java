@@ -57,7 +57,6 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	@Autowired
 	private HhDxuatKhLcntHdrRepository hhDxuatKhLcntHdrRepository;
 
-
 	@Override
 	public HhQdKhlcntHdr create(HhQdKhlcntHdrReq objReq) throws Exception {
 		// Vật tư
@@ -181,7 +180,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		hhQdKhlcntDtlRepository.save(qdDtl);
 
 		// Update trạng thái tờ trình
-		hhDxuatKhLcntHdrRepository.updateStatusInList(Arrays.asList(objReq.getMaTrHdr()), Contains.DADUTHAO_QD);
+		hhDxuatKhLcntHdrRepository.updateStatusInList(Arrays.asList(objReq.getSoTrHdr()), Contains.DADUTHAO_QD);
 
 //		 .updateTrangThai(dataMap.getIdThHdr(), Contains.DADUTHAO_QD);
 
@@ -395,6 +394,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 					f.setTenDvi(mapDmucDvi.get(f.getMaDvi()));
 					f.setTenDiemKho(mapDmucDvi.get(f.getMaDiemKho()));
 				});
+				dsg.setTenDvi(mapDmucDvi.get(dsg.getMaDvi()));
 				dsg.setTenCloaiVthh(hashMapDmHh.get(dsg.getCloaiVthh()));
 				dsg.setTenLoaiHdong(hashMapLoaiHdong.get(dsg.getLoaiHdong()));
 				dsg.setTenNguonVon(hashMapNguonVon.get(dsg.getNguonVon()));
@@ -496,7 +496,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 					throw new Exception("Đề xuất này đã được quyết định");
 				}
 				// Update trạng thái tờ trình
-				hhDxuatKhLcntHdrRepository.updateStatusInList(Arrays.asList(dataDB.getMaTrHdr()), Contains.DADUTHAO_QD);
+				hhDxuatKhLcntHdrRepository.updateStatusInList(Arrays.asList(dataDB.getSoTrHdr()), Contains.DADUTHAO_QD);
 //				hhDxuatKhLcntHdrRepository.updateStatus(dataDB.getIdTrHdr() , Contains.DABANHANH_QD);
 			}else{
 				throw new Exception("Số tờ trình kế hoạch không được tìm thấy");
@@ -755,7 +755,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			objs[2] = qd.getNgayQd();
 			objs[3] = qd.getTrichYeu();
 			objs[4] = qd.getIdThHdr();
-			objs[5] = qd.getMaTrHdr();
+			objs[5] = qd.getSoTrHdr();
 			objs[6] = qd.getNamKhoach();
 			objs[7] = qd.getLoaiVthh();
 			objs[8] = qd.getCloaiVthh();

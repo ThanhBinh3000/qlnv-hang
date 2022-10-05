@@ -37,6 +37,7 @@ public class HhQdKhlcntDtl implements Serializable {
 	BigDecimal tongTien;
 	Long soGthau;
 	String namKhoach;
+	Long idDxHdr;
 
 	@Transient
 	private HhQdKhlcntHdr hhQdKhlcntHdr;

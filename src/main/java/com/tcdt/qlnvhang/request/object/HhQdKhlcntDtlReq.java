@@ -54,5 +54,7 @@ public class HhQdKhlcntDtlReq {
 	@ApiModelProperty(example = "2022")
 	String namKhoach;
 
+	Long idDxHdr;
+
 	private List<HhQdKhlcntDsgthauReq> dsGoiThau;
 }
