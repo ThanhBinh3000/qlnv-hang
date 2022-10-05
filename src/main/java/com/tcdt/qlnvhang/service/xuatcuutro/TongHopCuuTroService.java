@@ -99,25 +99,36 @@ public class TongHopCuuTroService extends BaseServiceImpl {
     return search;
   }
 
-  public XhDxCuuTroHdr detail(CustomUserDetails currentUser, Long id) throws Exception {
+  public XhThCuuTroHdr detail(CustomUserDetails currentUser, Long id) throws Exception {
     if (DataUtils.isNullObject(id))
       throw new Exception("Tham số không hợp lệ.");
-    Optional<XhDxCuuTroHdr> currentHdr = deXuatCuuTroRepository.findById(id);
+    Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+    Map<String, String> mapVthh = getListDanhMucHangHoa();
+
+    //set thong tin de xuat
+    Optional<XhThCuuTroHdr> currentHdr = tongHopCuuTroRepository.findById(id);
     if (currentHdr.isPresent()) {
-      XhDxCuuTroHdr data = currentHdr.get();
-      List<XhDxCuuTroDtl> dataDtl = deXuatCuuTroDtlRepository.findByIdDxuat(data.getId());
-      dataDtl.forEach(s -> {
-        List<XhDxCuuTroKho> dataKho = deXuatCuuTroKhoRepository.findByIdDxuatDtl(s.getId());
-        buildThongTinKho(dataKho);
-        s.setPhuongAnXuat(DataUtils.isNullOrEmpty(dataKho) ? new ArrayList<>() : dataKho);
+      XhThCuuTroHdr data = currentHdr.get();
+      List<XhDxCuuTroHdr> dxuatHdr = deXuatCuuTroRepository.findIdByIdTongHop(data.getId());
+      dxuatHdr.forEach(s -> {
+        List<XhDxCuuTroDtl> dataDtl = deXuatCuuTroDtlRepository.findByIdDxuat(s.getId());
+       /* dataDtl.forEach(s -> {
+          List<XhDxCuuTroKho> dataKho = deXuatCuuTroKhoRepository.findByIdDxuatDtl(s.getId());
+          buildThongTinKho(dataKho);
+          s.setPhuongAnXuat(DataUtils.isNullOrEmpty(dataKho) ? new ArrayList<>() : dataKho);
+        });*/
+        s.setThongTinChiTiet(DataUtils.isNullOrEmpty(dataDtl) ? new ArrayList<>() : dataDtl);
+        s.setTenDvi(mapDmucDvi.get(s.getMaDvi()));
+        s.setTenLoaiVthh(mapVthh.get(s.getLoaiVthh()));
+        s.setTenCloaiVthh(mapVthh.get(s.getCloaiVthh()));
       });
-      data.setThongTinChiTiet(DataUtils.isNullOrEmpty(dataDtl) ? new ArrayList<>() : dataDtl);
-      //data.setPhuongAnXuat(DataUtils.isNullOrEmpty(dataKho) ? new ArrayList<>() : dataKho);
-      Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-      Map<String, String> mapVthh = getListDanhMucHangHoa();
-      data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
-      data.setTenLoaiVthh(mapVthh.get(data.getLoaiVthh()));
-      data.setTenCloaiVthh(mapVthh.get(data.getCloaiVthh()));
+      data.setThongTinDeXuat(dxuatHdr);
+
+      //set thong tin tong hop
+      List<XhThCuuTroDtl> tongHopDtl = tongHopCuuTroDtlRepository.findByIdTongHop(id);
+      if (!DataUtils.isNullOrEmpty(tongHopDtl)) {
+        data.setThongTinTongHop(tongHopDtl);
+      }
       return data;
     }
 
@@ -173,6 +184,15 @@ public class TongHopCuuTroService extends BaseServiceImpl {
         }
       });
     }
+    // update id tong hop vao bang de xuat
+    List<Long> idDxuat = req.getThongTinDeXuat().stream().map(XhDxCuuTroHdr::getId).collect(Collectors.toList());
+    List<XhDxCuuTroHdr> listDxuat = deXuatCuuTroRepository.findAllById(idDxuat);
+    XhThCuuTroHdr finalNewRow = newRow;
+    listDxuat.forEach(s -> {
+      s.setIdTongHop(finalNewRow.getId());
+      s.setTrangThaiTh(TrangThaiAllEnum.DA_TONG_HOP.getId());
+    });
+    deXuatCuuTroRepository.saveAll(listDxuat);
     return newRow;
   }
 

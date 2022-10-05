@@ -34,4 +34,6 @@ public interface DeXuatCuuTroRepository extends JpaRepository<XhDxCuuTroHdr, Lon
   Optional<XhDxCuuTroHdr> findFirstBySoDxuatAndNam(String soDxuat, int nam);
 
   void deleteAllByIdIn(List<Long> listId);
+
+  List<XhDxCuuTroHdr> findIdByIdTongHop(Long id);
 }

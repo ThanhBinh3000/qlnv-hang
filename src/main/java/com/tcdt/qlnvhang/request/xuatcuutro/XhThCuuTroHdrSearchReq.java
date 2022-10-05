@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.request.xuatcuutro;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.XhDxCuuTroDtl;
+import com.tcdt.qlnvhang.table.XhDxCuuTroHdr;
 import com.tcdt.qlnvhang.table.XhDxCuuTroKho;
 import com.tcdt.qlnvhang.table.XhThCuuTroDtl;
 import lombok.Data;
@@ -41,4 +42,5 @@ public class XhThCuuTroHdrSearchReq extends BaseRequest {
   private String dvql;
   private String maTongHop;
   private List<XhThCuuTroDtl> thongTinTongHop = new ArrayList<>();
+  private List<XhDxCuuTroHdr> thongTinDeXuat = new ArrayList<>();
 }
