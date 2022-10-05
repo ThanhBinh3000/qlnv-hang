@@ -34,7 +34,7 @@ public class XhThCuuTroHdrSearchReq extends BaseRequest {
   private LocalDate thoiGianThucHien;
   private LocalDate tuThoiGianThucHien;
   private LocalDate denThoiGianThucHien;
-  private LocalDate thoiGianTongHop;
+  private LocalDate ngayTongHop;
   private LocalDate tuNgayTongHop;
   private LocalDate denNgayTongHop;
   private String noiDung;
