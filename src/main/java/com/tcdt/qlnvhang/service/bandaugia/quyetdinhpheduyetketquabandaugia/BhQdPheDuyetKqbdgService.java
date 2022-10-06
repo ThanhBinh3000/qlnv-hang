@@ -26,7 +26,7 @@ public interface BhQdPheDuyetKqbdgService {
     boolean delete(Long id) throws Exception;
 
     @Transactional(rollbackOn = Exception.class)
-    boolean updateStatusQd(StatusReq stReq) throws Exception;
+    BhQdPheDuyetKqbdg updateStatusQd(StatusReq stReq) throws Exception;
 
    //Page<BhQdPheDuyetKqbdgRes> search(BhQdPheDuyetKqbdgSearchReq req) throws Exception;
 

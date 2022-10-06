@@ -31,6 +31,7 @@ import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganLo;
 import com.tcdt.qlnvhang.table.khotang.KtNhaKho;
+import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -220,54 +221,38 @@ public class BhQdPheDuyetKqbdgServiceImpl extends BaseServiceImpl implements BhQ
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public boolean updateStatusQd(StatusReq stReq) throws Exception {
+    public BhQdPheDuyetKqbdg updateStatusQd(StatusReq stReq) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         Optional<BhQdPheDuyetKqbdg> optional = bhQdPheDuyetKqbdgRepository.findById(stReq.getId());
         if (!optional.isPresent())
             throw new Exception("Biên bản bán đấu giá không tồn tại.");
 
-        BhQdPheDuyetKqbdg phieu = optional.get();
-        String trangThai = phieu.getTrangThai();
-
-        if (NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId().equals(stReq.getTrangThai())) {
-            if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
-                return false;
-
-            phieu.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId());
-            phieu.setNguoiGuiDuyetId(userInfo.getId());
-            phieu.setNgayGuiDuyet(LocalDate.now());
-        } else if (NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId().equals(stReq.getTrangThai())) {
-            if (!NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId().equals(trangThai))
-                return false;
-            phieu.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId());
-            phieu.setNguoiPduyetId(userInfo.getId());
-            phieu.setNgayPduyet(LocalDate.now());
-        } else if (NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId().equals(stReq.getTrangThai())) {
-            if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId().equals(trangThai))
-                return false;
-            phieu.setTrangThai(NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId());
-            phieu.setNguoiPduyetId(userInfo.getId());
-            phieu.setNgayPduyet(LocalDate.now());
-        } else if (NhapXuatHangTrangThaiEnum.TUCHOI_TP.getId().equals(stReq.getTrangThai())) {
-            if (!NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId().equals(trangThai))
-                return false;
-
-            phieu.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_TP.getId());
-            phieu.setNguoiPduyetId(userInfo.getId());
-            phieu.setNgayPduyet(LocalDate.now());
-            phieu.setLyDoTuChoi(stReq.getLyDo());
-        } else if (NhapXuatHangTrangThaiEnum.TUCHOI_LDC.getId().equals(stReq.getTrangThai())) {
-            if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId().equals(trangThai))
-                return false;
-
-            phieu.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_LDC.getId());
-            phieu.setNguoiPduyetId(userInfo.getId());
-            phieu.setNgayPduyet(LocalDate.now());
-            phieu.setLyDoTuChoi(stReq.getLyDo());
-        } else {
-            throw new Exception("Bad request.");
+        String status= stReq.getTrangThai()+optional.get().getTrangThai();
+        switch (status){
+            case Contains.CHO_DUYET_TP + Contains.DUTHAO:
+            case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
+            case Contains.CHO_DUYET_TP + Contains.TUCHOI_TP:
+            case Contains.CHO_DUYET_TP + Contains.TUCHOI_LDC:
+                optional.get().setNguoiGuiDuyetId(userInfo.getId());
+                optional.get().setNgayGuiDuyet(LocalDate.now());
+                break;
+            case Contains.TUCHOI_TP + Contains.CHO_DUYET_TP:
+            case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
+                optional.get().setNguoiPduyetId(getUser().getId());
+                optional.get().setNgayPduyet(LocalDate.now());
+                optional.get().setLyDoTuChoi(stReq.getLyDo());
+                break;
+            case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
+                optional.get().setNguoiPduyetId(getUser().getId());
+                optional.get().setNgayPduyet(LocalDate.now());
+                break;
+            default:
+                throw new Exception("Phê duyệt không thành công");
         }
-        return false;
+        optional.get().setTrangThai(stReq.getTrangThai());
+        BhQdPheDuyetKqbdg created = bhQdPheDuyetKqbdgRepository.save(optional.get());
+
+        return created;
     }
 
     @Override

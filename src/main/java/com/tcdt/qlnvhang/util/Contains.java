@@ -230,6 +230,10 @@ public class Contains {
 	public static final String UY_QUYEN = "UQ";
 	public static final String MUA_LE = "ML";
 
+	public static final String DAU_TU = "DT";
+
+	public static final String CUNG_CAP = "CC";
+
 
 	public static final Map<String, String> mappingLoaiDx;
 	static {
