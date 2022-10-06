@@ -47,7 +47,10 @@ public enum NhapXuatHangTrangThaiEnum {
 	DANGCAPNHAT("34", "Đang cập nhật", "Đang cập nhật"),
 	HOANTHANHCAPNHAT("35", "Hoàn thành cập nhật", "Hoàn thành cập nhật"),
 	HUYTHAU("36", "Hủy thầu", "Hủy thầu"),
-	TRUNGTHAU("37", "Trúng thầu", "Trúng thầu");
+	TRUNGTHAU("37", "Trúng thầu", "Trúng thầu"),
+	THANH_CONG("40", "Thành công", "Thành công"),
+	THAT_BAI("41", "Thất bại", "Thất bại"),
+	TRUOT_THAU("42", "Trượt thầu", "Trượt thầu");
 
 
 	private final String id;

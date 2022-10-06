@@ -128,6 +128,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			HhQdKhlcntDtl qd = ObjectMapperUtils.map(dx, HhQdKhlcntDtl.class);
 			qd.setId(null);
 			qd.setIdQdHdr(dataMap.getId());
+			qd.setTrangThai(Contains.CHUACAPNHAT);
 			hhQdKhlcntDtlRepository.save(qd);
 			for (HhQdKhlcntDsgthauReq gtList : dx.getDsGoiThau()){
 				HhQdKhlcntDsgthau gt = ObjectMapperUtils.map(gtList, HhQdKhlcntDsgthau.class);
@@ -177,6 +178,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		qdDtl.setId(null);
 		qdDtl.setIdQdHdr(dataMap.getId());
 		qdDtl.setMaDvi(getUser().getDvql());
+		qdDtl.setTrangThai(Contains.CHUACAPNHAT);
+
 		hhQdKhlcntDtlRepository.save(qdDtl);
 
 		// Update trạng thái tờ trình
@@ -279,6 +282,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			hhQdKhlcntDsgthauRepository.deleteByIdQdDtl(qd.getId());
 			qd.setId(null);
 			qd.setIdQdHdr(dataDB.getId());
+			qd.setTrangThai(Contains.CHUACAPNHAT);
 			hhQdKhlcntDtlRepository.save(qd);
 			for (HhQdKhlcntDsgthauReq gtList : dx.getDsGoiThau()){
 				HhQdKhlcntDsgthau gt = ObjectMapperUtils.map(gtList, HhQdKhlcntDsgthau.class);
@@ -345,6 +349,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		qdDtl.setId(null);
 		qdDtl.setIdQdHdr(dataDB.getId());
 		qdDtl.setMaDvi(getUser().getDvql());
+		qdDtl.setTrangThai(Contains.CHUACAPNHAT);
 		hhQdKhlcntDtlRepository.save(qdDtl);
 
 		if (objReq.getDsGoiThau() != null && objReq.getDsGoiThau().size() > 0) {
@@ -400,11 +405,14 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				dsg.setTenNguonVon(hashMapNguonVon.get(dsg.getNguonVon()));
 				dsg.setTenPthucLcnt(hashMapPthucDthau.get(dsg.getPthucLcnt()));
 				dsg.setTenHthucLcnt(hashMapHtLcnt.get(dsg.getHthucLcnt()));
+				dsg.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dsg.getTrangThai()));
 				dsg.setChildren(listGtCtiet);
 				hhQdKhlcntDsgthauList.add(dsg);
 			};
 			dtl.setTenDvi(StringUtils.isEmpty(dtl.getMaDvi()) ? null : mapDmucDvi.get(dtl.getMaDvi()));
 			dtl.setDsGoiThau(hhQdKhlcntDsgthauList);
+			dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThai()));
+
 			hhQdKhlcntDtlList.add(dtl);
 		}
 
