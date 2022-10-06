@@ -119,6 +119,10 @@ public class PathContains {
 
 	public static final String DC_QD_PD = "/dc-qd-pd";
 
+	public static final String HD_BK_PMH = "/hd-bk-pmh";
+
+	public static final String HD_PL_MTT = "/hd-pl-mtt";
+
 
 	// Dau thau vat tu
 	public static final String KH_LCNT_VT = "/kh-lcnt/vat-tu";
