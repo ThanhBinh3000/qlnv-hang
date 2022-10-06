@@ -117,7 +117,7 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
             ccxdg =  ObjectMapperUtils.map(listCc, HhDxuatKhMttCcxdg.class);
             ccxdg.setIdDxKhmtt(data.getId());
             ccxdg =  hhDxuatKhMttCcxdgRepository.save(ccxdg);
-            List<FileDinhKem> ccFildeDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),ccxdg.getId(),"HH_DX_KHMTT_CCXDG");
+            List<FileDinhKem> ccFildeDinhKems = fileDinhKemService.saveListFileDinhKem(listCc.getCcFileDinhkems(),ccxdg.getId(),"HH_DX_KHMTT_CCXDG");
             ccxdg.setCcFileDinhKems(ccFildeDinhKems);
             }
         for (HhDxuatKhMttSlddReq listSlDd : objReq.getSoLuongDiaDiemList()){
@@ -266,7 +266,7 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
         Page<HhDxuatKhMttHdr> page=this.searchPage(objReq);
         List<HhDxuatKhMttHdr> data=page.getContent();
 
-        String title="Danh sách quyết định điều chỉnh kế hoạch lựa chọn nhà thầu";
+        String title="Danh sách đề xuất kế hoạch mua trực tiếp";
         String[] rowsName=new String[]{"STT","Số kế hoạch/đề xuất","Năm tạo","Ngày tạo","Ngày duyệt","Trích yếu","Số QĐ giao chỉ tiêu","Loại hàng hóa","Chủng loại hàng hóa","Số lượng(tấn)","Trạng thái đề xuất","Mã tổng hợp"};
         String fileName="danh-sach-dx-kh-mua-truc-tiep.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
