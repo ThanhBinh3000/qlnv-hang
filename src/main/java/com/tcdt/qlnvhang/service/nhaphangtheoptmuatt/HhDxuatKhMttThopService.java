@@ -172,6 +172,13 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
         hdrThop.setTenCloaiVthh(hashMapDmHh.get(hdrThop.getCloaiVthh()));
 
         List<HhDxKhMttThopDtl> listTh = hhDxuatKhMttThopDtlRepository.findByIdThopHdr(hdrThop.getId());
+        List<Long> idDxuat=listTh.stream().map(HhDxKhMttThopDtl::getIdDxHdr).collect(Collectors.toList());
+        List<HhDxuatKhMttHdr> lisDxuat=hhDxuatKhMttRepository.findAllByIdIn(idDxuat);
+        for (HhDxKhMttThopDtl dtl : listTh){
+            for(HhDxuatKhMttHdr dxuatKhMttHdr: lisDxuat ){
+                dtl.setListDxuatHdr(dxuatKhMttHdr);
+            }
+        }
         Map<String, String> mapDmucDvi = getMapTenDvi();
         listTh.forEach(f -> {
             f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
