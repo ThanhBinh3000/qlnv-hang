@@ -71,10 +71,10 @@ public class TongHopPACuuTroController extends BaseController {
   @ApiOperation(value = "Cập nhật Tổng hợp phương án xuất cứu trợ viện trợ", response = List.class)
   @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public final ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhDxCuuTroHdrSearchReq req) {
+  public final ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhThCuuTroHdrSearchReq req) {
     BaseResponse resp = new BaseResponse();
     try {
-      XhDxCuuTroHdr data = deXuatCuuTroService.update(currentUser, req);
+      XhThCuuTroHdr data = tongHopCuuTroService.update(currentUser, req);
       resp.setData(data);
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());

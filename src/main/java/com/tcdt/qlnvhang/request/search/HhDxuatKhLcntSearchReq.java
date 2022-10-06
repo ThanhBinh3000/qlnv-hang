@@ -55,4 +55,9 @@ public class HhDxuatKhLcntSearchReq extends BaseRequest {
 
 	private String soQd;
 
+	private List<String> listTrangThai;
+
+	private List<String> listTrangThaiTh;
+
+
 }

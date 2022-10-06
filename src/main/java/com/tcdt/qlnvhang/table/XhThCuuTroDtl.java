@@ -39,6 +39,6 @@ public class XhThCuuTroDtl extends BaseEntity implements Serializable {
   @Transient
   private String tenDvi;
   @Transient
-  private String soDxuat;
+  private String soTongHop;
 
 }

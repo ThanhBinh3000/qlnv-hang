@@ -56,5 +56,6 @@ public interface HhDxuatKhLcntHdrService {
 
 	@Transactional(rollbackOn = Exception.class)
 	HhDxuatKhLcntHdr approveVatTu(StatusReq stReq) throws Exception;
+	Page<HhDxuatKhLcntHdr> selectDropdown(HhDxuatKhLcntSearchReq req) throws Exception;
 
 }

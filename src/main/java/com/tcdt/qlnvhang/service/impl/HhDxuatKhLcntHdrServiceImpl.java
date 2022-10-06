@@ -704,4 +704,21 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		optional.get().setTrangThai(stReq.getTrangThai());
 		return hhDxuatKhLcntHdrRepository.save(optional.get());
 	}
+
+	@Override
+	public Page<HhDxuatKhLcntHdr> selectDropdown(HhDxuatKhLcntSearchReq req) {
+		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
+		Page<HhDxuatKhLcntHdr> page = hhDxuatKhLcntHdrRepository.selectDropdown(req.getNamKh(),req.getMaDvi(),req.getListTrangThai(),req.getListTrangThaiTh(),pageable);
+		Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
+		Map<String,String> mapVthh = getListDanhMucHangHoa();
+		page.getContent().forEach(f -> {
+			f.setSoGoiThau ( hhDxuatKhLcntDsgtDtlRepository.countByIdDxKhlcnt(f.getId()));
+			f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
+			f.setTenLoaiVthh( StringUtils.isEmpty(f.getLoaiVthh()) ? null : mapVthh.get(f.getLoaiVthh()));
+			f.setTenCloaiVthh( StringUtils.isEmpty(f.getCloaiVthh()) ? null :mapVthh.get(f.getCloaiVthh()));
+			f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+			f.setTenTrangThaiTh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiTh()));
+		});
+		return page;
+	}
 }
