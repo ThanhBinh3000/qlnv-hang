@@ -30,7 +30,7 @@ public class XhThCuuTroHdr extends BaseEntity implements Serializable {
   @SequenceGenerator(sequenceName = XhThCuuTroHdr.TABLE_NAME
       + "_SEQ", allocationSize = 1, name = XhThCuuTroHdr.TABLE_NAME + "_SEQ")
   private Long id;
-//  private String loaiNhapXuat;
+  //  private String loaiNhapXuat;
 //  private String soDxuat;
   private String maDvi;
   private String maTongHop;
@@ -38,15 +38,17 @@ public class XhThCuuTroHdr extends BaseEntity implements Serializable {
   private LocalDate ngayTongHop;
   private String loaiVthh;
   private String cloaiVthh;
-//  private String tenVthh;
+  //  private String tenVthh;
   private Long tongSoLuong;
-//  private String trichYeu;
+  //  private String trichYeu;
   private String trangThai;
-//  private String trangThaiTh;
+  //  private String trangThaiTh;
   private String loaiHinhNhapXuat;
-//  private String kieuNhapXuat;
+  //  private String kieuNhapXuat;
 //  private LocalDate thoiGianThucHien;
   private String noiDung;
+  private String lyDoTuChoi;
+  private Long idQuyetDinh;
 
 
   @Transient

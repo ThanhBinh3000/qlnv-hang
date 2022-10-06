@@ -42,8 +42,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.tcdt.qlnvhang.util.Contains.CAP_CHI_CUC;
-import static com.tcdt.qlnvhang.util.Contains.CAP_CUC;
+import static com.tcdt.qlnvhang.util.Contains.*;
 
 @Service
 @Log4j2
@@ -99,25 +98,42 @@ public class TongHopCuuTroService extends BaseServiceImpl {
     return search;
   }
 
-  public XhDxCuuTroHdr detail(CustomUserDetails currentUser, Long id) throws Exception {
+  public XhThCuuTroHdr detail(CustomUserDetails currentUser, Long id) throws Exception {
     if (DataUtils.isNullObject(id))
       throw new Exception("Tham số không hợp lệ.");
-    Optional<XhDxCuuTroHdr> currentHdr = deXuatCuuTroRepository.findById(id);
+    Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+    Map<String, String> mapVthh = getListDanhMucHangHoa();
+
+    //set thong tin de xuat
+    Optional<XhThCuuTroHdr> currentHdr = tongHopCuuTroRepository.findById(id);
     if (currentHdr.isPresent()) {
-      XhDxCuuTroHdr data = currentHdr.get();
-      List<XhDxCuuTroDtl> dataDtl = deXuatCuuTroDtlRepository.findByIdDxuat(data.getId());
-      dataDtl.forEach(s -> {
-        List<XhDxCuuTroKho> dataKho = deXuatCuuTroKhoRepository.findByIdDxuatDtl(s.getId());
-        buildThongTinKho(dataKho);
-        s.setPhuongAnXuat(DataUtils.isNullOrEmpty(dataKho) ? new ArrayList<>() : dataKho);
+      XhThCuuTroHdr data = currentHdr.get();
+      List<XhDxCuuTroHdr> dxuatHdr = deXuatCuuTroRepository.findIdByIdTongHop(data.getId());
+      dxuatHdr.forEach(s -> {
+        List<XhDxCuuTroDtl> dataDtl = deXuatCuuTroDtlRepository.findByIdDxuat(s.getId());
+       /* dataDtl.forEach(s -> {
+          List<XhDxCuuTroKho> dataKho = deXuatCuuTroKhoRepository.findByIdDxuatDtl(s.getId());
+          buildThongTinKho(dataKho);
+          s.setPhuongAnXuat(DataUtils.isNullOrEmpty(dataKho) ? new ArrayList<>() : dataKho);
+        });*/
+        s.setThongTinChiTiet(DataUtils.isNullOrEmpty(dataDtl) ? new ArrayList<>() : dataDtl);
+        s.setTenDvi(mapDmucDvi.get(s.getMaDvi()));
+        s.setTenLoaiVthh(mapVthh.get(s.getLoaiVthh()));
+        s.setTenCloaiVthh(mapVthh.get(s.getCloaiVthh()));
       });
-      data.setThongTinChiTiet(DataUtils.isNullOrEmpty(dataDtl) ? new ArrayList<>() : dataDtl);
-      //data.setPhuongAnXuat(DataUtils.isNullOrEmpty(dataKho) ? new ArrayList<>() : dataKho);
-      Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-      Map<String, String> mapVthh = getListDanhMucHangHoa();
+      data.setThongTinDeXuat(dxuatHdr);
+
+      //set thong tin tong hop
+      List<XhThCuuTroDtl> tongHopDtl = tongHopCuuTroDtlRepository.findByIdTongHop(id);
+      if (!DataUtils.isNullOrEmpty(tongHopDtl)) {
+        tongHopDtl.forEach(s -> {
+          s.setTenDvi(mapDmucDvi.get(s.getMaDvi()));
+        });
+        data.setThongTinTongHop(tongHopDtl);
+      }
       data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
       data.setTenLoaiVthh(mapVthh.get(data.getLoaiVthh()));
-      data.setTenCloaiVthh(mapVthh.get(data.getCloaiVthh()));
+      data.setTenCloaiVthh(mapVthh.get(data.getLoaiVthh()));
       return data;
     }
 
@@ -173,6 +189,15 @@ public class TongHopCuuTroService extends BaseServiceImpl {
         }
       });
     }
+    // update id tong hop vao bang de xuat
+    List<Long> idDxuat = req.getThongTinDeXuat().stream().map(XhDxCuuTroHdr::getId).collect(Collectors.toList());
+    List<XhDxCuuTroHdr> listDxuat = deXuatCuuTroRepository.findAllById(idDxuat);
+    XhThCuuTroHdr finalNewRow = newRow;
+    listDxuat.forEach(s -> {
+      s.setIdTongHop(finalNewRow.getId());
+      s.setTrangThaiTh(TrangThaiAllEnum.DA_TONG_HOP.getId());
+    });
+    deXuatCuuTroRepository.saveAll(listDxuat);
     return newRow;
   }
 
@@ -280,22 +305,6 @@ public class TongHopCuuTroService extends BaseServiceImpl {
     ex.export();
   }
 
-  @Transactional(rollbackFor = Exception.class)
-  public XhDxCuuTroHdr updateStatus(CustomUserDetails currentUser, StatusReq req) throws Exception {
-    Optional<XhDxCuuTroHdr> currentRow = deXuatCuuTroRepository.findById(req.getId());
-    if (!currentRow.isPresent())
-      throw new Exception("Không tìm thấy dữ liệu.");
-    if (currentUser.getUser().getCapDvi().equals(CAP_CUC) ||
-        (currentUser.getUser().getCapDvi().equals(CAP_CHI_CUC))) {
-      List<String> statusAllow = Arrays.asList(TrangThaiAllEnum.CHO_DUYET_TP.getId());
-      if (!statusAllow.containsAll(statusAllow))
-        throw new Exception("Tài khoản không có quyền thực hiện.");
-      currentRow.get().setTrangThai(req.getTrangThai());
-      deXuatCuuTroRepository.save(currentRow.get());
-    }
-    return currentRow.get();
-  }
-
   private void buildThongTinKho(List<XhDxCuuTroKho> responses) {
     if (!DataUtils.isNullOrEmpty(responses)) {
       Set<String> maChiCucList = responses.stream().map(XhDxCuuTroKho::getMaChiCuc).collect(Collectors.toSet());
@@ -369,5 +378,65 @@ public class TongHopCuuTroService extends BaseServiceImpl {
       xhThCuuTroHdr.setThongTinDeXuat(dexuatHdr);
       return xhThCuuTroHdr;
     }
+  }
+
+
+  @Transactional(rollbackFor = Exception.class)
+  public XhThCuuTroHdr updateStatus(CustomUserDetails currentUser, StatusReq req) throws Exception {
+    Optional<XhThCuuTroHdr> currentRow = tongHopCuuTroRepository.findById(req.getId());
+    if (!currentRow.isPresent())
+      throw new Exception("Không tìm thấy dữ liệu.");
+    /*if (currentUser.getUser().getCapDvi().equals(CAP_CUC) ||
+        (currentUser.getUser().getCapDvi().equals(CAP_CHI_CUC))) {
+      List<String> statusAllow = Arrays.asList(TrangThaiAllEnum.CHO_DUYET_TP.getId());
+      if (!statusAllow.containsAll(statusAllow))
+        throw new Exception("Tài khoản không có quyền thực hiện.");
+    }*/
+    String trangThai = TrangThaiAllEnum.DU_THAO.getId();
+    String capDvi = currentUser.getUser().getCapDvi();
+    String condition = currentRow.get().getTrangThai() + req.getTrangThai();
+    if (capDvi.equals(CAP_TONG_CUC)) {
+      //gui duyet
+      if (condition.equals(TrangThaiAllEnum.DU_THAO.getId() + TrangThaiAllEnum.CHO_DUYET_LDV.getId())) {
+        trangThai = TrangThaiAllEnum.CHO_DUYET_LDV.getId();
+      } else if (condition.equals(TrangThaiAllEnum.TU_CHOI_LDV.getId() + TrangThaiAllEnum.CHO_DUYET_LDV.getId())) {
+        trangThai = TrangThaiAllEnum.CHO_DUYET_LDV.getId();
+      }
+      //duyet
+      else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_LDV.getId() + TrangThaiAllEnum.DA_DUYET_LDV.getId())) {
+        trangThai = TrangThaiAllEnum.DA_DUYET_LDV.getId();
+      }
+      //tu choi
+      else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_LDV.getId() + TrangThaiAllEnum.TU_CHOI_LDV.getId())) {
+        trangThai = TrangThaiAllEnum.TU_CHOI_LDV.getId();
+      }
+    }
+    /*else if (capDvi.equals(CAP_CUC)) {
+      //gui duyet
+      if (condition.equals(TrangThaiAllEnum.DU_THAO.getId() + TrangThaiAllEnum.CHO_DUYET_LDTC.getId())) {
+        trangThai = TrangThaiAllEnum.CHO_DUYET_TP.getId();
+      } else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_TP.getId() + TrangThaiAllEnum.CHO_DUYET_LDTC.getId())) {
+        trangThai = TrangThaiAllEnum.CHO_DUYET_LDC.getId();
+      }
+      //duyet
+      else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_TP.getId() + TrangThaiAllEnum.DA_DUYET_LDTC.getId())) {
+        trangThai = TrangThaiAllEnum.DA_DUYET_LDC.getId();
+      } else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_LDC.getId() + TrangThaiAllEnum.DA_DUYET_LDTC.getId())) {
+        trangThai = TrangThaiAllEnum.DA_DUYET_LDC.getId();
+      }
+      //tu choi
+      else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_TP.getId() + TrangThaiAllEnum.TU_CHOI_TP.getId())) {
+        trangThai = TrangThaiAllEnum.TU_CHOI_TP.getId();
+      }
+      else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_LDTC.getId() + TrangThaiAllEnum.TU_CHOI_LDTC.getId())) {
+        trangThai = TrangThaiAllEnum.TU_CHOI_LDC.getId();
+      }
+    }*/
+
+    currentRow.get().setTrangThai(trangThai);
+    currentRow.get().setLyDoTuChoi(DataUtils.safeToString(req.getLyDo()));
+
+    tongHopCuuTroRepository.save(currentRow.get());
+    return currentRow.get();
   }
 }

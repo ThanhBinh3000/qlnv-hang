@@ -63,7 +63,9 @@ public class XhDxCuuTroHdr extends BaseEntity implements Serializable {
   private String kieuNhapXuat;
   private LocalDate thoiGianThucHien;
   private String noiDung;
+  private String lyDoTuChoi;
   private int nam;
+  private Long idTongHop;
   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   @Fetch(value = FetchMode.SUBSELECT)
   @JoinColumn(name = "dataId")

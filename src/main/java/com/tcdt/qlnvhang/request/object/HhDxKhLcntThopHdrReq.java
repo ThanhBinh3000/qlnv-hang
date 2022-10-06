@@ -22,6 +22,6 @@ public class HhDxKhLcntThopHdrReq extends HhDxKhLcntTChiThopReq {
 
 	String ghiChu;
 
-	String soQd;
+	String soQdCc;
 
 }
