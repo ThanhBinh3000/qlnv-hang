@@ -27,6 +27,8 @@ import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.time.DateUtils;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -171,8 +173,8 @@ public class TongHopCuuTroService extends BaseServiceImpl {
 
     //luu thong tin chi tiet
     List<XhThCuuTroDtl> thongTinChiTiet = new ArrayList();
-    if (!DataUtils.isNullOrEmpty(req.getThongTinTongHop())) {
-      thongTinChiTiet = ObjectMapperUtils.mapAll(req.getThongTinTongHop(), XhThCuuTroDtl.class);
+    if (!DataUtils.isNullOrEmpty(req.getThongTinDeXuat())) {
+      thongTinChiTiet = ObjectMapperUtils.mapAll(req.getThongTinDeXuat(), XhThCuuTroDtl.class);
       XhThCuuTroHdr finalNewRow = newRow;
       thongTinChiTiet.forEach(s -> {
         s.setIdTongHop(finalNewRow.getId());
