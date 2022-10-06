@@ -38,6 +38,10 @@ public class HhQdPheduyetKhMttDxReq {
     private BigDecimal tongSoLuong;
     private String nguonVon;
     private String tenChuDt;
+    private String trichYeu;
+    private String tenDuAn;
+    @Temporal(TemporalType.DATE)
+    private Date ngayKy;
     private List<HhQdPheduyetKhMttSLDDReq> hhQdPheduyetKhMttSLDDList = new ArrayList<>();
 
 }
