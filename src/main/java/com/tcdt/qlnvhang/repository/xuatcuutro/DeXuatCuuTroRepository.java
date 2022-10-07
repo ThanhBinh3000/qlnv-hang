@@ -24,6 +24,8 @@ public interface DeXuatCuuTroRepository extends JpaRepository<XhDxCuuTroHdr, Lon
       "AND (:#{#param.loaiVthh}  IS NULL OR LOWER(c.loaiVthh) =:#{#param.loaiVthh}) " +
       "AND (:#{#param.cloaiVthh}  IS NULL OR LOWER(c.cloaiVthh) =:#{#param.cloaiVthh}) " +
       "AND (:#{#param.loaiHinhNhapXuat}  IS NULL OR LOWER(c.loaiHinhNhapXuat) =:#{#param.loaiHinhNhapXuat}) " +
+      "AND (:#{#param.listTrangThai == null} = true OR c.trangThai in :#{#param.listTrangThai}) " +
+      "AND (:#{#param.listTrangThaiTh == null} = true OR c.trangThaiTh in :#{#param.listTrangThaiTh}) " +
 //       "AND (:#{#param.trichYeu}  IS NULL OR LOWER(c.trichYeu) LIKE CONCAT('%',LOWER(:#{#param.trichYeu}),'%')) " +
       "AND ((:#{#param.tuThoiGianThucHien}  IS NULL OR c.thoiGianThucHien >= :#{#param.tuThoiGianThucHien}) AND (:#{#param.denThoiGianThucHien}  IS NULL OR c.thoiGianThucHien <= :#{#param.denThoiGianThucHien}) ) " +
       "AND ((:#{#param.tuNgayDxuat}  IS NULL OR c.ngayDxuat >= :#{#param.tuNgayDxuat}) AND (:#{#param.denNgayDxuat}  IS NULL OR c.ngayDxuat <= :#{#param.denNgayDxuat}) ) " +

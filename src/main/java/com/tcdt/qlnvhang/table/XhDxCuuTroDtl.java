@@ -29,6 +29,7 @@ public class XhDxCuuTroDtl extends BaseEntity implements Serializable {
   private String soDxuat;
   private String noiDung;
   private Long soLuong;
+  private Long thanhTien;
   @Transient
   private List<XhDxCuuTroKho> phuongAnXuat = new ArrayList<>();
 }

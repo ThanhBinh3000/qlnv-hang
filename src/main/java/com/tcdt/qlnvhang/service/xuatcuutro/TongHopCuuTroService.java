@@ -172,15 +172,23 @@ public class TongHopCuuTroService extends BaseServiceImpl {
     newRow = tongHopCuuTroRepository.save(newRow);
 
     //luu thong tin chi tiet
-    List<XhThCuuTroDtl> thongTinChiTiet = new ArrayList();
+    List<XhDxCuuTroHdr> listDxHdr = new ArrayList();
     if (!DataUtils.isNullOrEmpty(req.getThongTinDeXuat())) {
-      thongTinChiTiet = ObjectMapperUtils.mapAll(req.getThongTinDeXuat(), XhThCuuTroDtl.class);
+      listDxHdr = ObjectMapperUtils.mapAll(req.getThongTinDeXuat(), XhDxCuuTroHdr.class);
       XhThCuuTroHdr finalNewRow = newRow;
-      thongTinChiTiet.forEach(s -> {
-        s.setIdTongHop(finalNewRow.getId());
-        XhThCuuTroDtl newRowDtl = tongHopCuuTroDtlRepository.save(s);
+      listDxHdr.forEach(s -> {
+        s.getThongTinChiTiet().forEach(s1 -> {
+          XhThCuuTroDtl newRowDtl = new XhThCuuTroDtl();
+          BeanUtils.copyProperties(s1, newRowDtl);
+          newRowDtl.setIdTongHop(finalNewRow.getId());
+          newRowDtl.setMaDvi(finalNewRow.getMaDvi());
+          newRowDtl.setNgayDxuat(s.getNgayDxuat());
+          newRowDtl.setThoiGianThucHien(s.getThoiGianThucHien());
+          tongHopCuuTroDtlRepository.save(newRowDtl);
+        });
+
         //luu nhap kho
-        List<XhThCuuTroKho> phuongAnXuat = new ArrayList();
+        /*List<XhThCuuTroKho> phuongAnXuat = new ArrayList();
         if (!DataUtils.isNullOrEmpty(s.getPhuongAnXuat())) {
           phuongAnXuat = ObjectMapperUtils.mapAll(s.getPhuongAnXuat(), XhThCuuTroKho.class);
           phuongAnXuat.forEach(s1 -> {
@@ -188,7 +196,7 @@ public class TongHopCuuTroService extends BaseServiceImpl {
             s1.setIdTongHopDtl(newRowDtl.getId());
           });
           tongHopCuuTroKhoRepository.saveAll(phuongAnXuat);
-        }
+        }*/
       });
     }
     // update id tong hop vao bang de xuat
@@ -362,19 +370,22 @@ public class TongHopCuuTroService extends BaseServiceImpl {
       log.error(req);
       throw new Exception("Tham số không hợp lệ.");
     }
-    //if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
-    req.setDvql(currentUser.getDvql());
-    //}
+    if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
+      req.setDvql(currentUser.getDvql());
+    }
+    req.setListTrangThai(Arrays.asList(TrangThaiAllEnum.DA_DUYET_LDC.getId(), TrangThaiAllEnum.DA_DUYET_LDTC.getId()));
+    req.setListTrangThaiTh(Arrays.asList(TrangThaiAllEnum.CHUA_TONG_HOP.getId()));
     PaggingReq paggingReq = new PaggingReq();
     paggingReq.setPage(0);
     paggingReq.setLimit(Integer.MAX_VALUE);
     req.setPaggingReq(paggingReq);
     Page<XhDxCuuTroHdr> page = deXuatCuuTroRepository.search(req, req.getPageable());
 
-    XhThCuuTroHdr xhThCuuTroHdr = new XhThCuuTroHdr();
+
     if (page.isEmpty()) {
       throw new Exception("Không tìm thấy đề xuất cần tổng hợp.");
     } else {
+      XhThCuuTroHdr xhThCuuTroHdr = new XhThCuuTroHdr();
       List<Long> listId = page.getContent().stream().map(XhDxCuuTroHdr::getId).collect(Collectors.toList());
       List<XhDxCuuTroHdr> dexuatHdr = deXuatCuuTroService.detail(currentUser, listId);
       xhThCuuTroHdr.setThongTinDeXuat(dexuatHdr);
