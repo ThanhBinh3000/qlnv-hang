@@ -45,6 +45,10 @@ public class HhQdPheduyetKhMttDx implements Serializable {
     private BigDecimal tongSoLuong;
     private String nguonVon;
     private String tenChuDt;
+    private String trichYeu;
+    private String tenDuAn;
+    @Temporal(TemporalType.DATE)
+    private Date ngayKy;
 
     @Transient
     private List<HhQdPheduyetKhMttSLDD> hhQdPheduyetKhMttSLDDList = new ArrayList<>();

@@ -46,6 +46,8 @@ public class HhPhuLucHopDongMtt implements Serializable {
     private String tenTrangThai;
     private Date ngayTao;
     private String nguoiTao;
+    private Date ngaySua;
+    private String nguoiSua;
     private Date ngayKy;
     private String nguoiKy;
 

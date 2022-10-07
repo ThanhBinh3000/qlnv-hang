@@ -684,6 +684,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				convertDateToString(req.getDenNgayQd()),
 				req.getTrangThai(), req.getLastest(),
 				req.getMaDvi(),
+				req.getTrangThaiDtl(),
 				pageable);
 		List<Long> ids = data.getContent().stream().map(HhQdKhlcntHdr::getId).collect(Collectors.toList());
 		List<Object[]> listGthau = hhQdKhlcntDtlRepository.countAllBySoGthau(ids);

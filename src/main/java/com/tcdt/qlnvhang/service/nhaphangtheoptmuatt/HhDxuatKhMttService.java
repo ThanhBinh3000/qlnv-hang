@@ -139,13 +139,11 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
             throw new Exception("Bad request.");
         Optional<HhDxuatKhMttHdr> optional = hhDxuatKhMttRepository.findById(objReq.getId());
 
-        Optional<HhDxuatKhMttHdr> optional1 = hhDxuatKhMttRepository.findBySoDxuat(objReq.getSoDxuat());
-        if(optional1.isPresent()){
-            if (optional1.isPresent()){
-                if (!optional1.get().getId().equals(objReq.getId())){
+        Optional<HhDxuatKhMttHdr> soDxuat = hhDxuatKhMttRepository.findBySoDxuat(objReq.getSoDxuat());
+            if (soDxuat.isPresent()){
+                if (!soDxuat.get().getId().equals(objReq.getId())){
                     throw new Exception("số đề xuất đã tồn tại");
                 }
-            }
         }
         HhDxuatKhMttHdr data = optional.get();
         HhDxuatKhMttHdr dataMap = new ModelMapper().map(objReq,HhDxuatKhMttHdr.class);

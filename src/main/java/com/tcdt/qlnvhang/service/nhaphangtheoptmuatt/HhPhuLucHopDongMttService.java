@@ -89,23 +89,24 @@ public class HhPhuLucHopDongMttService extends BaseServiceImpl {
         if (userInfo == null){
             throw new Exception("Bad request.");
         }
-        Optional<HhPhuLucHopDongMtt> optional=hhPhuLucHopDongMttRepository.findAllByPhuLucSo(objReq.getPhuLucSo());
-        if (optional.isPresent()){
-            throw new Exception("Phụ lục số "+objReq.getPhuLucSo()+"đã tồn tại");
+        Optional<HhPhuLucHopDongMtt> optional=hhPhuLucHopDongMttRepository.findById(objReq.getId());
+        Optional<HhPhuLucHopDongMtt> soPluc=hhPhuLucHopDongMttRepository.findAllByPhuLucSo(objReq.getPhuLucSo());
+        if (soPluc.isPresent()){
+            if (soPluc.get().getId().equals(objReq.getId())){
+                throw new Exception("Phụ lục số "+objReq.getPhuLucSo()+"đã tồn tại");
+            }
         }
-        HhPhuLucHopDongMtt data= new ModelMapper().map(objReq,HhPhuLucHopDongMtt.class);
-        Optional<HhHdongBkePmuahangHdr> hd =hhHdongBkePmuahangRepository.findById(objReq.getIdHdHdr());
-
-        data.setTenHdong(hd.get().getTenHdong());
-        data.setSoHdong(hd.get().getSoHdong());
-        data.setNgayTao(new Date());
-        data.setNguoiTao(userInfo.getUsername());
-        data.setTrangThai(Contains.DUTHAO);
+        HhPhuLucHopDongMtt data = optional.get();
+        HhPhuLucHopDongMtt dataMap= new ModelMapper().map(objReq,HhPhuLucHopDongMtt.class);
+        updateObjectToObject(data,dataMap);
+        data.setNguoiSua(userInfo.getUsername());
+        data.setNgaySua(new Date());
         HhPhuLucHopDongMtt created=hhPhuLucHopDongMttRepository.save(data);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),data.getId(),"HH_PHU_LUC_HOP_DONG_MTT");
         created.setFileDinhKems(fileDinhKems);
         List<HhDCDiaDiemGiaoNhanHang> listDdNh=hhDcDiaDiemGiaoNhanHangRepository.findAllByIdHdPluc(objReq.getId());
         hhDcDiaDiemGiaoNhanHangRepository.deleteAll(listDdNh);
+
         for (HhDcDiaDiemGiaoNhanHangReq req : objReq.getDcDiaDiemGiaoNhanHangList()){
             HhDCDiaDiemGiaoNhanHang dcDdNh=new ModelMapper().map(req,HhDCDiaDiemGiaoNhanHang.class);
             dcDdNh.setId(null);
