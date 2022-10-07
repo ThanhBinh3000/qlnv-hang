@@ -337,6 +337,8 @@ public class DeXuatCuuTroService extends BaseServiceImpl {
         trangThai = TrangThaiAllEnum.CHO_DUYET_TP.getId();
       } else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_TP.getId() + TrangThaiAllEnum.CHO_DUYET_LDTC.getId())) {
         trangThai = TrangThaiAllEnum.CHO_DUYET_LDC.getId();
+      } else if (condition.equals(TrangThaiAllEnum.TU_CHOI_TP.getId() + TrangThaiAllEnum.CHO_DUYET_LDTC.getId())) {
+        trangThai = TrangThaiAllEnum.CHO_DUYET_TP.getId();
       }
       //duyet
       else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_TP.getId() + TrangThaiAllEnum.DA_DUYET_LDTC.getId())) {
@@ -345,15 +347,15 @@ public class DeXuatCuuTroService extends BaseServiceImpl {
         trangThai = TrangThaiAllEnum.DA_DUYET_LDC.getId();
       }
       //tu choi
-      else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_TP.getId() + TrangThaiAllEnum.TU_CHOI_TP.getId())) {
+      else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_TP.getId() + TrangThaiAllEnum.TU_CHOI_LDTC.getId())) {
         trangThai = TrangThaiAllEnum.TU_CHOI_TP.getId();
-      }
-      else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_LDTC.getId() + TrangThaiAllEnum.TU_CHOI_LDTC.getId())) {
+      } else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_LDC.getId() + TrangThaiAllEnum.TU_CHOI_LDTC.getId())) {
         trangThai = TrangThaiAllEnum.TU_CHOI_LDC.getId();
       }
     }
 
     currentRow.get().setTrangThai(trangThai);
+    currentRow.get().setLyDoTuChoi(DataUtils.safeToString(req.getLyDo()));
     deXuatCuuTroRepository.save(currentRow.get());
     return currentRow.get();
   }
