@@ -38,6 +38,9 @@ public class HhQdKhlcntDtl implements Serializable {
 	Long soGthau;
 	String namKhoach;
 	Long idDxHdr;
+	String trangThai;
+	@Transient
+	String tenTrangThai;
 
 	@Transient
 	private HhQdKhlcntHdr hhQdKhlcntHdr;

@@ -6,6 +6,8 @@ import javax.validation.constraints.Size;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class HhDthauNthauDuthauReq {
 	@ApiModelProperty(notes = "Bắt buộc set đối với update")
@@ -16,7 +18,7 @@ public class HhDthauNthauDuthauReq {
 	@NotNull(message = "Không được để trống")
 	@Size(max = 250, message = "Tên nhà thầu không được vượt quá 250 ký tự")
 	@ApiModelProperty(example = "Tên nhà thầu")
-	String tenDvi;
+	String tenNhaThau;
 
 	String mst;
 
@@ -28,7 +30,13 @@ public class HhDthauNthauDuthauReq {
 	@ApiModelProperty(example = "0999999999")
 	String sdt;
 
-	private Long version;
+	BigDecimal soLuong;
+
+	BigDecimal donGia;
+
+	String trangThai;
+
+	String lyDo;
 
 	Long idGtHdr;
 }
