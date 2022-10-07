@@ -102,8 +102,8 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         HhQdPheduyetKhMttHdr created=hhQdPheduyetKhMttHdrRepository.save(data);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),data.getId(),"HH_QD_PHE_DUYET_KHMTT_HDR");
         created.setFileDinhKems(fileDinhKems);
-        if (!created.getMaThop().isEmpty()){
-            hhDxuatKhMttThopRepository.updateTrangThai(created.getMaThop(),Contains.DADUTHAO_QD);
+        if (created.getIdThop() != null){
+            hhDxuatKhMttThopRepository.updateTrangThai(created.getIdThop(),Contains.DADUTHAO_QD);
         }
         for (HhQdPheduyetKhMttDxReq listDx :objReq.getHhQdPheduyetKhMttDxList()){
             HhQdPheduyetKhMttDx dx =ObjectMapperUtils.map(listDx, HhQdPheduyetKhMttDx.class);
@@ -302,11 +302,11 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         optional.get().setTrangThaiTkhai(Contains.CHUACAPNHAT);
         HhQdPheduyetKhMttHdr created = hhQdPheduyetKhMttHdrRepository.save(optional.get());
         if (created.getTrangThai().equals(Contains.BAN_HANH)){
-            if (!created.getSoDxuat().isEmpty()){
-                hhDxuatKhMttRepository.updateSoQdPduyet(created.getSoDxuat(),created.getSoQdPduyet());
+            if (created.getIdDxuat()!=null){
+                hhDxuatKhMttRepository.updateSoQdPduyet(created.getIdDxuat(),created.getSoQdPduyet());
             }
-            if (!created.getMaThop().isEmpty()){
-                hhDxuatKhMttThopRepository.updateTrangThai(created.getMaThop(),Contains.DABANHANH_QD);
+            if (created.getId()!=null){
+                hhDxuatKhMttThopRepository.updateTrangThai(created.getIdThop(),Contains.DABANHANH_QD);
             }
         }
         return created;

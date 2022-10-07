@@ -54,6 +54,6 @@ public interface HhDxuatKhMttRepository extends JpaRepository<HhDxuatKhMttHdr, L
 
     @Transactional()
     @Modifying
-    @Query(value = "UPDATE HH_DX_KHMTT_HDR SET SO_QD_PDUYET =:soQdPd WHERE SO_DXUAT = :soDxuat", nativeQuery = true)
-    void updateSoQdPduyet(String soDxuat, String soQdPd);
+    @Query(value = "UPDATE HH_DX_KHMTT_HDR SET SO_QD_PDUYET =:soQdPd WHERE ID = :id", nativeQuery = true)
+    void updateSoQdPduyet(Long id, String soQdPd);
 }
