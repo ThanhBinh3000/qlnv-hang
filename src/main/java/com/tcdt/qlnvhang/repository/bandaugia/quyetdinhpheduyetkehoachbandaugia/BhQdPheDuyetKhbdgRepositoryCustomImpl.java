@@ -99,5 +99,6 @@ public class BhQdPheDuyetKhbdgRepositoryCustomImpl implements BhQdPheDuyetKhbdgR
 		qdPheDuyet.setParamStart(query, BhQdPheDuyetKhbdg_.NGAY_KY, req.getNgayKyTuNgay());
 		qdPheDuyet.setParamEnd(query, BhQdPheDuyetKhbdg_.NGAY_KY, req.getNgayKyDenNgay());
 		qdPheDuyet.setParam(query, BhQdPheDuyetKhbdg_.MA_DON_VI, req.getMaDonVi());
+		qdPheDuyet.setParam(query, BhQdPheDuyetKhbdg_.TRANG_THAI, req.getTrangThai());
 	}
 }

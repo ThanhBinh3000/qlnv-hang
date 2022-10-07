@@ -63,9 +63,9 @@ public class ThongBaoBanDauGiaRepositoryCustomImpl implements ThongBaoBanDauGiaR
 		builder.append(QueryUtils.FROM)
 				.append(thongBaoBDG.buildAliasName())
 				.append(QueryUtils.buildInnerJoin(thongBaoBDG, vatTuHangHoa, ThongBaoBanDauGia_.MA_VAT_TU_CHA, QlnvDmVattu_.MA))
-				.append(QueryUtils.buildLeftJoin(thongBaoBDG, qdPheDuyetKeHoachBdg, ThongBaoBanDauGia_.QD_PHE_DUYET_KH_BDG_ID, BhQdPheDuyetKhbdg_.ID))
-				.append(QueryUtils.buildLeftJoin(thongBaoBDG, bienBanBDG, ThongBaoBanDauGia_.ID, BhBbBanDauGia_.THONG_BAO_BDG_ID))
-				.append(QueryUtils.buildLeftJoin(thongBaoBDG, qdPheDuyetKetQuaBdg, ThongBaoBanDauGia_.ID, BhQdPheDuyetKqbdg_.THONG_BAO_BDG_ID));
+				.append(QueryUtils.buildInnerJoin(thongBaoBDG, qdPheDuyetKeHoachBdg, ThongBaoBanDauGia_.QD_PHE_DUYET_KH_BDG_ID, BhQdPheDuyetKhbdg_.ID))
+				.append(QueryUtils.buildInnerJoin(thongBaoBDG, bienBanBDG, ThongBaoBanDauGia_.ID, BhBbBanDauGia_.THONG_BAO_BDG_ID))
+				.append(QueryUtils.buildInnerJoin(thongBaoBDG, qdPheDuyetKetQuaBdg, ThongBaoBanDauGia_.ID, BhQdPheDuyetKqbdg_.THONG_BAO_BDG_ID));
 
 		log.debug("Set Condition search");
 		this.setConditionSearch(req, builder, thongBaoBDG);
@@ -93,6 +93,7 @@ public class ThongBaoBanDauGiaRepositoryCustomImpl implements ThongBaoBanDauGiaR
 		QueryUtils.buildWhereClause(builder);
 		thongBaoBDG.eq(Operator.AND, ThongBaoBanDauGia_.NAM_KE_HOACH, req.getNamKeHoach(), builder);
 		thongBaoBDG.eq(Operator.AND, ThongBaoBanDauGia_.MA_VAT_TU_CHA, req.getMaVatTuCha(), builder);
+		thongBaoBDG.eq(Operator.AND, ThongBaoBanDauGia_.TRANG_THAI, req.getTrangThai(), builder);
 		thongBaoBDG.eq(Operator.AND, BhQdPheDuyetKhbdg_.SO_QUYET_DINH, req.getSoQuyetDinhPheDuyetKHBDG(), builder);
 		thongBaoBDG.like(Operator.AND, ThongBaoBanDauGia_.MA_THONG_BAO, req.getMaThongBaoBDG(), builder);
 		thongBaoBDG.like(Operator.AND, ThongBaoBanDauGia_.TRICH_YEU, req.getTrichYeu(), builder);
@@ -124,6 +125,7 @@ public class ThongBaoBanDauGiaRepositoryCustomImpl implements ThongBaoBanDauGiaR
 		thongBaoBDG.setLikeParam(query, ThongBaoBanDauGia_.MA_THONG_BAO, req.getMaThongBaoBDG());
 		thongBaoBDG.setLikeParam(query, ThongBaoBanDauGia_.TRICH_YEU, req.getTrichYeu());
 		thongBaoBDG.setParam(query, ThongBaoBanDauGia_.LOAI_VTHH, req.getLoaiVthh());
+		thongBaoBDG.setParam(query, ThongBaoBanDauGia_.TRANG_THAI, req.getTrangThai());
 		thongBaoBDG.setParamStart(query, ThongBaoBanDauGia_.THOI_GIAN_TO_CHUC_DAU_GIA_TU_NGAY, req.getNgayToChucBDGTuNgay());
 		thongBaoBDG.setParamEnd(query, ThongBaoBanDauGia_.THOI_GIAN_TO_CHUC_DAU_GIA_DEN_NGAY, req.getNgayToChucBDGDenNgay());
 	}
