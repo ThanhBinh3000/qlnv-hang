@@ -18,9 +18,16 @@ public interface HhQdPduyetKqlcntHdrRepository extends BaseRepository<HhQdPduyet
 			" WHERE (:namKh IS NULL OR QDPD.NAM_KHOACH = TO_NUMBER(:namKh)) "+
 			" AND (:loaiVthh IS NULL OR QDPD.LOAI_VTHH = :loaiVthh) "+
 			" AND (:soQd IS NULL OR QDPD.SO_QD = :soQd) "+
-			" AND (:tuNgayQd IS NULL OR QDPD.NGAY_QD >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) "+
-			" AND (:denNgayQd IS NULL OR QDPD.NGAY_QD <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) "+
+			" AND (:tuNgayQd IS NULL OR QDPD.NGAY_TAO >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) "+
+			" AND (:denNgayQd IS NULL OR QDPD.NGAY_TAO <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) "+
 			" AND (:trangThai IS NULL OR QDPD.TRANG_THAI = :trangThai) ",
+		countQuery = " SELECT COUNT(1) FROM HH_QD_PDUYET_KQLCNT_HDR QDPD "+
+				" WHERE (:namKh IS NULL OR QDPD.NAM_KHOACH = TO_NUMBER(:namKh)) "+
+				" AND (:loaiVthh IS NULL OR QDPD.LOAI_VTHH = :loaiVthh) "+
+				" AND (:soQd IS NULL OR QDPD.SO_QD = :soQd) "+
+				" AND (:tuNgayQd IS NULL OR QDPD.NGAY_TAO >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) "+
+				" AND (:denNgayQd IS NULL OR QDPD.NGAY_TAO <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) "+
+				" AND (:trangThai IS NULL OR QDPD.TRANG_THAI = :trangThai) ",
 			nativeQuery = true)
 	Page<HhQdPduyetKqlcntHdr> selectPage(String namKh, String loaiVthh, String soQd, String tuNgayQd, String denNgayQd, String trangThai, Pageable pageable);
 
@@ -36,23 +43,23 @@ public interface HhQdPduyetKqlcntHdrRepository extends BaseRepository<HhQdPduyet
 //			)
 //	Page<HhQdPduyetKqlcntRes> customQuerySearchCuc(String namKh, String loaiVthh, String trichYeu,String soQdPdKhlcnt,String maDvi,  Pageable pageable);
 
-	@Query(" SELECT new com.tcdt.qlnvhang.response.dauthauvattu.HhQdPduyetKqlcntRes(HDR.id,HDR.soQd,HDR.ngayQd,HDR.trichYeu,HDR.trangThai,HDR.maDvi,HDR.namKhoach,HDR.loaiVthh,HDR.soQdPdKhlcnt) " +
-			" FROM HhQdPduyetKqlcntHdr HDR " +
-			"WHERE (?1 is null or HDR.namKhoach = ?1 ) " +
-			" AND (?2 is null or  HDR.loaiVthh = ?2 ) " +
-			" AND (?3 is null or lower(HDR.trichYeu) like lower(concat(concat('%',?3),'%')))"+
-			" AND (?4 is null or lower(HDR.soQdPdKhlcnt) like lower(concat(concat('%',?4),'%')))"+
-			" AND (?5 is null or  HDR.maDvi = ?5 ) "
-	)
-	Page<HhQdPduyetKqlcntRes> customQuerySearchTongCuc(String namKh, String loaiVthh, String trichYeu,String soQdPdKhlcnt,String maDvi, Pageable pageable);
+//	@Query(" SELECT new com.tcdt.qlnvhang.response.dauthauvattu.HhQdPduyetKqlcntRes(HDR.id,HDR.soQd,HDR.ngayQd,HDR.trichYeu,HDR.trangThai,HDR.maDvi,HDR.namKhoach,HDR.loaiVthh,HDR.soQdPdKhlcnt) " +
+//			" FROM HhQdPduyetKqlcntHdr HDR " +
+//			"WHERE (?1 is null or HDR.namKhoach = ?1 ) " +
+//			" AND (?2 is null or  HDR.loaiVthh = ?2 ) " +
+//			" AND (?3 is null or lower(HDR.trichYeu) like lower(concat(concat('%',?3),'%')))"+
+//			" AND (?4 is null or lower(HDR.soQdPdKhlcnt) like lower(concat(concat('%',?4),'%')))"+
+//			" AND (?5 is null or  HDR.maDvi = ?5 ) "
+//	)
+//	Page<HhQdPduyetKqlcntRes> customQuerySearchTongCuc(String namKh, String loaiVthh, String trichYeu,String soQdPdKhlcnt,String maDvi, Pageable pageable);
 
 
 	@Query(value = "SELECT * FROM HH_QD_PDUYET_KQLCNT_HDR QDPD " +
 			" WHERE (:namKh IS NULL OR QDPD.NAM_KHOACH = TO_NUMBER(:namKh)) "+
 			" AND (:loaiVthh IS NULL OR QDPD.LOAI_VTHH = :loaiVthh) "+
 			" AND (:soQd IS NULL OR QDPD.SO_QD = :soQd) "+
-			" AND (:tuNgayQd IS NULL OR QDPD.NGAY_QD >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) "+
-			" AND (:denNgayQd IS NULL OR QDPD.NGAY_QD <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) " +
+			" AND (:tuNgayQd IS NULL OR QDPD.NGAY_TAO >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) "+
+			" AND (:denNgayQd IS NULL OR QDPD.NGAY_TAO <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) " +
 			" AND (:maDvi IS NULL OR QDPD.MA_DVI = :maDvi) " +
 			" AND (:trangThai IS NULL OR QDPD.TRANG_THAI = :trangThai) ",
 			nativeQuery = true)

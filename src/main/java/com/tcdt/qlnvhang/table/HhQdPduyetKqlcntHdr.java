@@ -32,43 +32,40 @@ public class HhQdPduyetKqlcntHdr implements Serializable {
 			+ "_SEQ", allocationSize = 1, name = HhQdPduyetKqlcntHdr.TABLE_NAME + "_SEQ")
 	private Long id;
 
+	Integer namKhoach;
 	String soQd;
 	@Temporal(TemporalType.DATE)
-	Date ngayQd;
-	String loaiVthh;
-	@Transient
-	String tenVthh;
-	String cloaiVthh;
-	@Transient
-	String tenCloaiVthh;
-	Integer namKhoach;
+	Date ngayHluc;
 	String trichYeu;
 	String soQdPdKhlcnt;
-	@Temporal(TemporalType.DATE)
-	Date ngayQdPdKhlcnt;
-	Integer trungThau;
+	Long idQdPdKhlcnt;
+
 	String maDvi;
+	@Transient
+	String tenDvi;
 	String ghiChu;
 	String trangThai;
 	@Transient
 	String TenTrangThai;
+
+	@Temporal(TemporalType.DATE)
 	Date ngayTao;
 	String nguoiTao;
+
+	@Temporal(TemporalType.DATE)
 	Date ngaySua;
 	String nguoiSua;
-	String ldoTuchoi;
+
+	@Temporal(TemporalType.DATE)
 	Date ngayGuiDuyet;
 	String nguoiGuiDuyet;
+
+	@Temporal(TemporalType.DATE)
 	Date ngayPduyet;
 	String nguoiPduyet;
-	Long idGoiThau;
-	String lyDoHuy;
-	@Temporal(TemporalType.DATE)
-	Date ngayHluc;
-	String moTaHangHoa;
 
 	@Transient
-	private List<HhQdPduyetKqlcntDtl> hhQdPduyetKqlcntDtlList = new ArrayList<>();
+	HhQdKhlcntHdr qdKhlcnt;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)
