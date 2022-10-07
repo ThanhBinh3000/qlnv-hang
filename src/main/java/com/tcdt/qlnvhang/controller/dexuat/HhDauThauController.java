@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tcdt.qlnvhang.service.HhDauThauService;
 import com.tcdt.qlnvhang.service.HhQdKhlcntHdrService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,6 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.HhDthauReq;
 import com.tcdt.qlnvhang.request.search.HhDthauSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.HhDauThauService;
 import com.tcdt.qlnvhang.util.PathContains;
 
 import io.swagger.annotations.Api;
@@ -63,22 +63,6 @@ public class HhDauThauController {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
 			log.error("Tạo mới thông tin đấu thầu gạo trace: {}", e);
-		}
-		return ResponseEntity.ok(resp);
-	}
-
-	@ApiOperation(value = "Cập nhật thông tin đấu thầu gạo", response = List.class)
-	@PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> update(HttpServletRequest request, @Valid @RequestBody HhDthauReq objReq) {
-		BaseResponse resp = new BaseResponse();
-		try {
-			resp.setData(service.update(objReq));
-			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-		} catch (Exception e) {
-			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-			resp.setMsg(e.getMessage());
-			log.error("Cập nhật thông tin đấu thầu gạo trace: {}", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
@@ -123,7 +107,7 @@ public class HhDauThauController {
 	public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			service.delete(idSearchReq);
+//			service.delete(idSearchReq);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -142,7 +126,7 @@ public class HhDauThauController {
 			@Valid @RequestBody HhDthauSearchReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(service.selectPage(objReq));
+//			resp.setData(service.selectPage(objReq));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (
@@ -163,7 +147,7 @@ public class HhDauThauController {
 												  @Valid @RequestBody HhDthauSearchReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(service.selectAll(objReq));
+//			resp.setData(service.selectAll(objReq));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (
@@ -182,7 +166,7 @@ public class HhDauThauController {
 	@ResponseStatus(HttpStatus.OK)
 	public void exportList( @Valid @RequestBody HhDthauSearchReq objReq,HttpServletResponse response) throws Exception{
 		try {
-			service.exportList(objReq,response);
+//			service.exportList(objReq,response);
 
 		} catch (Exception e) {
 			log.error("Kết xuất danh sách  thông tin đấu thầu trace: {}", e);
