@@ -321,7 +321,7 @@ public class DeXuatCuuTroService extends BaseServiceImpl {
     if (capDvi.equals(CAP_TONG_CUC)) {
       //gui duyet
       if (condition.equals(TrangThaiAllEnum.DU_THAO.getId() + TrangThaiAllEnum.CHO_DUYET_LDTC.getId())) {
-        trangThai = TrangThaiAllEnum.DA_DUYET_LDTC.getId();
+        trangThai = TrangThaiAllEnum.CHO_DUYET_LDTC.getId();
       }
       //duyet
       else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_LDTC.getId() + TrangThaiAllEnum.DA_DUYET_LDTC.getId())) {
