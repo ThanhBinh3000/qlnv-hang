@@ -54,8 +54,8 @@ public interface HhDxuatKhLcntHdrService {
 
 	HhDxuatKhLcntHdr detailVatTu(String ids) throws Exception;
 
-	@Transactional(rollbackOn = Exception.class)
-	HhDxuatKhLcntHdr approveVatTu(StatusReq stReq) throws Exception;
+//	@Transactional(rollbackOn = Exception.class)
+//	HhDxuatKhLcntHdr approveVatTu(StatusReq stReq) throws Exception;
 	Page<HhDxuatKhLcntHdr> selectDropdown(HhDxuatKhLcntSearchReq req) throws Exception;
 
 }
