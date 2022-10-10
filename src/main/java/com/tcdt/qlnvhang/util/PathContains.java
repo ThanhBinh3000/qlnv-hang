@@ -125,6 +125,8 @@ public class PathContains {
 
 	public static final String QD_NV_NH = "/qd-nv-nh";
 
+	public static final String PKT_CL = "/pkt-cl";
+
 
 	// Dau thau vat tu
 	public static final String KH_LCNT_VT = "/kh-lcnt/vat-tu";
