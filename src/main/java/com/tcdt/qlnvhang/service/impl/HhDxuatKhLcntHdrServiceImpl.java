@@ -59,10 +59,6 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 	@Override
 	@Transactional
 	public HhDxuatKhLcntHdr create(HhDxuatKhLcntHdrReq objReq) throws Exception {
-		if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh())){
-			throw new Exception("Loại vật tư hàng hóa không phù hợp");
-		}
-
 		Optional<HhDxuatKhLcntHdr> qOptional = hhDxuatKhLcntHdrRepository.findBySoDxuat(objReq.getSoDxuat());
 		if (qOptional.isPresent()){
 			throw new Exception("Số đề xuất " + objReq.getSoDxuat() + " đã tồn tại");
@@ -127,9 +123,6 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		Optional<HhDxuatKhLcntHdr> qOptional = hhDxuatKhLcntHdrRepository.findById(Long.valueOf(objReq.getId()));
 		if (!qOptional.isPresent())
 			throw new Exception("Không tìm thấy dữ liệu cần sửa");
-
-		if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh()))
-			throw new Exception("Loại vật tư hàng hóa không phù hợp");
 
 		Optional<HhDxuatKhLcntHdr> deXuat = hhDxuatKhLcntHdrRepository.findBySoDxuat(objReq.getSoDxuat());
 		if (deXuat.isPresent()){
@@ -220,6 +213,8 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		List<HhDxKhlcntDsgthau> dsGthauList = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcnt(qOptional.get().getId());
 		for(HhDxKhlcntDsgthau dsG : dsGthauList){
 			dsG.setTenDvi(mapDmucDvi.get(dsG.getMaDvi()));
+			dsG.setTenCloaiVthh(mapVthh.get(dsG.getCloaiVthh()));
+
 			List<HhDxKhlcntDsgthauCtiet> listDdNhap = hhDxKhlcntDsgthauCtietRepository.findByIdGoiThau(dsG.getId());
 			listDdNhap.forEach( f -> {
 				f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
@@ -254,29 +249,52 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 			throw new Exception("Không tìm thấy dữ liệu");
 
 		Optional<HhDxuatKhLcntHdr> optional = hhDxuatKhLcntHdrRepository.findById(Long.valueOf(stReq.getId()));
+
 		if (!optional.isPresent())
 			throw new Exception("Không tìm thấy dữ liệu");
 
-		String status = stReq.getTrangThai() + optional.get().getTrangThai();
-		switch (status) {
-			case Contains.CHODUYET_TP + Contains.DUTHAO:
-			case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
-			case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
-				optional.get().setNguoiGuiDuyet(getUser().getUsername());
-				optional.get().setNgayGuiDuyet(getDateTimeNow());
-			case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
-			case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
-				optional.get().setNguoiPduyet(getUser().getUsername());
-				optional.get().setNgayPduyet(getDateTimeNow());
-				optional.get().setLdoTuchoi(stReq.getLyDo());
-				break;
-			case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
-			case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
-				optional.get().setNguoiPduyet(getUser().getUsername());
-				optional.get().setNgayPduyet(getDateTimeNow());
-				break;
-		default:
-			throw new Exception("Phê duyệt không thành công");
+		if(optional.get().getLoaiVthh().startsWith("02")){
+			String status = stReq.getTrangThai() + optional.get().getTrangThai();
+			switch (status) {
+				case Contains.CHODUYET_LDV + Contains.DUTHAO:
+				case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
+					optional.get().setNguoiGuiDuyet(getUser().getUsername());
+					optional.get().setNgayGuiDuyet(getDateTimeNow());
+					break;
+				case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
+					optional.get().setNguoiPduyet(getUser().getUsername());
+					optional.get().setNgayPduyet(getDateTimeNow());
+					optional.get().setLdoTuchoi(stReq.getLyDo());
+					break;
+				case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
+					optional.get().setNguoiPduyet(getUser().getUsername());
+					optional.get().setNgayPduyet(getDateTimeNow());
+					break;
+				default:
+					throw new Exception("Phê duyệt không thành công");
+			}
+		}else{
+			String status = stReq.getTrangThai() + optional.get().getTrangThai();
+			switch (status) {
+				case Contains.CHODUYET_TP + Contains.DUTHAO:
+				case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+				case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
+					optional.get().setNguoiGuiDuyet(getUser().getUsername());
+					optional.get().setNgayGuiDuyet(getDateTimeNow());
+				case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
+				case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
+					optional.get().setNguoiPduyet(getUser().getUsername());
+					optional.get().setNgayPduyet(getDateTimeNow());
+					optional.get().setLdoTuchoi(stReq.getLyDo());
+					break;
+				case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
+				case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
+					optional.get().setNguoiPduyet(getUser().getUsername());
+					optional.get().setNgayPduyet(getDateTimeNow());
+					break;
+				default:
+					throw new Exception("Phê duyệt không thành công");
+			}
 		}
 
 		optional.get().setTrangThai(stReq.getTrangThai());
@@ -670,39 +688,6 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		qOptional.get().setDsGtDtlList(dsGthauList);
 
 		return qOptional.get();
-	}
-
-	@Override
-	public HhDxuatKhLcntHdr approveVatTu(StatusReq stReq) throws Exception {
-		if (StringUtils.isEmpty(stReq.getId()))
-			throw new Exception("Không tìm thấy dữ liệu");
-
-		Optional<HhDxuatKhLcntHdr> optional = hhDxuatKhLcntHdrRepository.findById(Long.valueOf(stReq.getId()));
-		if (!optional.isPresent())
-			throw new Exception("Không tìm thấy dữ liệu");
-
-		String status = stReq.getTrangThai() + optional.get().getTrangThai();
-		switch (status) {
-			case Contains.CHODUYET_LDV + Contains.DUTHAO:
-			case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
-				optional.get().setNguoiGuiDuyet(getUser().getUsername());
-				optional.get().setNgayGuiDuyet(getDateTimeNow());
-				break;
-			case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
-				optional.get().setNguoiPduyet(getUser().getUsername());
-				optional.get().setNgayPduyet(getDateTimeNow());
-				optional.get().setLdoTuchoi(stReq.getLyDo());
-				break;
-			case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
-				optional.get().setNguoiPduyet(getUser().getUsername());
-				optional.get().setNgayPduyet(getDateTimeNow());
-				break;
-			default:
-				throw new Exception("Phê duyệt không thành công");
-		}
-
-		optional.get().setTrangThai(stReq.getTrangThai());
-		return hhDxuatKhLcntHdrRepository.save(optional.get());
 	}
 
 	@Override
