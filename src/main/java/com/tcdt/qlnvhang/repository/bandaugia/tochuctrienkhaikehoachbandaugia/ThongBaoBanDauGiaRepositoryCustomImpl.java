@@ -43,29 +43,27 @@ public class ThongBaoBanDauGiaRepositoryCustomImpl implements ThongBaoBanDauGiaR
 		QueryUtils bienBanBDG = QueryUtils.builder().clazz(BhBbBanDauGia.class).alias("bbBdg").build();
 
 		log.debug("Build select query");
-		builder.append(QueryUtils.SELECT);
-		QueryUtils.selectFields(builder, thongBaoBDG, ThongBaoBanDauGia_.ID);
-		QueryUtils.selectFields(builder, thongBaoBDG, ThongBaoBanDauGia_.MA_THONG_BAO);
-		QueryUtils.selectFields(builder, qdPheDuyetKeHoachBdg, BhQdPheDuyetKhbdg_.SO_QUYET_DINH);
-		QueryUtils.selectFields(builder, thongBaoBDG, ThongBaoBanDauGia_.THOI_GIAN_TO_CHUC_DAU_GIA_TU_NGAY);
-		QueryUtils.selectFields(builder, thongBaoBDG, ThongBaoBanDauGia_.TRICH_YEU);
-		QueryUtils.selectFields(builder, thongBaoBDG, ThongBaoBanDauGia_.HINH_THUC_DAU_GIA);
-		QueryUtils.selectFields(builder, thongBaoBDG, ThongBaoBanDauGia_.NAM_KE_HOACH);
-		QueryUtils.selectFields(builder, thongBaoBDG, ThongBaoBanDauGia_.TRANG_THAI);
-		QueryUtils.selectFields(builder, qdPheDuyetKetQuaBdg, BhQdPheDuyetKqbdg_.SO_QUYET_DINH);
-		QueryUtils.selectFields(builder, vatTuHangHoa, QlnvDmVattu_.MA);
-		QueryUtils.selectFields(builder, bienBanBDG, BhBbBanDauGia_.SO_BIEN_BAN);
-		QueryUtils.selectFields(builder, thongBaoBDG, ThongBaoBanDauGia_.PHUONG_THUC_DAU_GIA);
-		QueryUtils.selectFields(builder, thongBaoBDG, ThongBaoBanDauGia_.THOI_GIAN_TO_CHUC_DAU_GIA_DEN_NGAY);
-		QueryUtils.selectFields(builder, thongBaoBDG, ThongBaoBanDauGia_.LOAI_VTHH);
-		QueryUtils.selectFields(builder, vatTuHangHoa, QlnvDmVattu_.TEN);
-
+		builder.append(QueryUtils.SELECT).append(thongBaoBDG.selectField(ThongBaoBanDauGia_.ID))
+				.append(thongBaoBDG.selectField(ThongBaoBanDauGia_.MA_THONG_BAO))
+				.append(qdPheDuyetKeHoachBdg.selectField(BhQdPheDuyetKhbdg_.SO_QUYET_DINH))
+				.append(thongBaoBDG.selectField(ThongBaoBanDauGia_.THOI_GIAN_TO_CHUC_DAU_GIA_TU_NGAY))
+				.append(thongBaoBDG.selectField(ThongBaoBanDauGia_.TRICH_YEU))
+				.append(thongBaoBDG.selectField(ThongBaoBanDauGia_.HINH_THUC_DAU_GIA))
+				.append(thongBaoBDG.selectField(ThongBaoBanDauGia_.NAM_KE_HOACH))
+				.append(thongBaoBDG.selectField(ThongBaoBanDauGia_.TRANG_THAI))
+				.append(qdPheDuyetKetQuaBdg.selectField(BhQdPheDuyetKqbdg_.SO_QUYET_DINH))
+				.append(vatTuHangHoa.selectField(QlnvDmVattu_.MA))
+				.append(bienBanBDG.selectField(BhBbBanDauGia_.SO_BIEN_BAN))
+				.append(thongBaoBDG.selectField(ThongBaoBanDauGia_.PHUONG_THUC_DAU_GIA))
+				.append(thongBaoBDG.selectField(ThongBaoBanDauGia_.THOI_GIAN_TO_CHUC_DAU_GIA_DEN_NGAY))
+				.append(thongBaoBDG.selectField(ThongBaoBanDauGia_.LOAI_VTHH))
+				.append(vatTuHangHoa.selectField(QlnvDmVattu_.TEN));
 		builder.append(QueryUtils.FROM)
 				.append(thongBaoBDG.buildAliasName())
 				.append(QueryUtils.buildInnerJoin(thongBaoBDG, vatTuHangHoa, ThongBaoBanDauGia_.MA_VAT_TU_CHA, QlnvDmVattu_.MA))
-				.append(QueryUtils.buildInnerJoin(thongBaoBDG, qdPheDuyetKeHoachBdg, ThongBaoBanDauGia_.QD_PHE_DUYET_KH_BDG_ID, BhQdPheDuyetKhbdg_.ID))
-				.append(QueryUtils.buildInnerJoin(thongBaoBDG, bienBanBDG, ThongBaoBanDauGia_.ID, BhBbBanDauGia_.THONG_BAO_BDG_ID))
-				.append(QueryUtils.buildInnerJoin(thongBaoBDG, qdPheDuyetKetQuaBdg, ThongBaoBanDauGia_.ID, BhQdPheDuyetKqbdg_.THONG_BAO_BDG_ID));
+				.append(QueryUtils.buildLeftJoin(thongBaoBDG, qdPheDuyetKeHoachBdg, ThongBaoBanDauGia_.QD_PHE_DUYET_KH_BDG_ID, BhQdPheDuyetKhbdg_.ID))
+				.append(QueryUtils.buildLeftJoin(thongBaoBDG, bienBanBDG, ThongBaoBanDauGia_.ID, BhBbBanDauGia_.THONG_BAO_BDG_ID))
+				.append(QueryUtils.buildLeftJoin(thongBaoBDG, qdPheDuyetKetQuaBdg, ThongBaoBanDauGia_.ID, BhQdPheDuyetKqbdg_.THONG_BAO_BDG_ID));
 
 		log.debug("Set Condition search");
 		this.setConditionSearch(req, builder, thongBaoBDG);
