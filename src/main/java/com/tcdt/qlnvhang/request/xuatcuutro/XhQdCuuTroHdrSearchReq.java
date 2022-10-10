@@ -1,10 +1,8 @@
 package com.tcdt.qlnvhang.request.xuatcuutro;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
-import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import com.tcdt.qlnvhang.table.XhDxCuuTroDtl;
 import com.tcdt.qlnvhang.table.XhDxCuuTroHdr;
-import com.tcdt.qlnvhang.table.XhDxCuuTroKho;
+import com.tcdt.qlnvhang.table.XhQdCuuTroDtl;
 import com.tcdt.qlnvhang.table.XhThCuuTroDtl;
 import lombok.Data;
 
@@ -13,11 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class XhThCuuTroHdrSearchReq extends BaseRequest {
+public class XhQdCuuTroHdrSearchReq extends BaseRequest {
   private Long id;
   private String loaiNhapXuat;
   private Long idDxuat;
   private String soDxuat;
+  private String soQd;
   private String maDvi;
   private LocalDate ngayDxuat;
   private LocalDate tuNgayDxuat;
@@ -37,13 +36,11 @@ public class XhThCuuTroHdrSearchReq extends BaseRequest {
   private LocalDate ngayTongHop;
   private LocalDate tuNgayTongHop;
   private LocalDate denNgayTongHop;
-  private LocalDate ngayKy;
-  private LocalDate tuNgayKy;
-  private LocalDate denNgayKy;
   private String noiDung;
   private int nam;
   private String dvql;
   private String maTongHop;
-  private List<XhThCuuTroDtl> thongTinTongHop = new ArrayList<>();
   private List<XhDxCuuTroHdr> thongTinDeXuat = new ArrayList<>();
+  private List<XhThCuuTroDtl> thongTinTongHop = new ArrayList<>();
+  private List<XhQdCuuTroDtl> thongTinQuyetDinh = new ArrayList<>();
 }
