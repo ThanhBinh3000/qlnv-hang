@@ -27,7 +27,9 @@ public class XhDxCuuTroHdrSearchReq extends BaseRequest {
   private Long tongSoLuong;
   private String trichYeu;
   private String trangThai;
+  private List<String> listTrangThai;
   private String trangThaiTh;
+  private List<String> listTrangThaiTh;
   private String loaiHinhNhapXuat;
   private String kieuNhapXuat;
   private LocalDate thoiGianThucHien;

@@ -105,7 +105,7 @@ public class HhDxuatKhLcntHdrReq {
 	String loaiHdong;
 
 	@NotNull(message = "Không được để trống")
-	Integer tgianThienHd;
+	Integer tgianThien;
 
 	//	@NotNull(message = "Không được để trống")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)

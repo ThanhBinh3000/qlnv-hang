@@ -281,21 +281,4 @@ public class HhDxuatKhLcntHdrController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03/Xoá-04 đề xuất kế hoạch lựa chọn nhà thầu lương thực", response = List.class)
-	@PostMapping(value = PathContains.VAT_TU+PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> updateStatusVatTu(@Valid HttpServletRequest req, @RequestBody StatusReq stReq) {
-		BaseResponse resp = new BaseResponse();
-		try {
-			resp.setData(service.approveVatTu(stReq));
-			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-		} catch (Exception e) {
-			// TODO: handle exception
-			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-			resp.setMsg(e.getMessage());
-			log.error("Phê duyệt đề xuất kế hoạch lựa chọn nhà thầu lương thực trace: {}", e);
-		}
-		return ResponseEntity.ok(resp);
-	}
-
 }
