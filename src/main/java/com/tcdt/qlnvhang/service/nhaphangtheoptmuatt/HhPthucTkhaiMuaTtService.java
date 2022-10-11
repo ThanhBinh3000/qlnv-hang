@@ -2,8 +2,8 @@ package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhCtietTtinCgiaRepository;
-import com.tcdt.qlnvhang.repository.nhaptheophuongthucmuatructiep.HhQdPheduyetKhMttDxRepository;
-import com.tcdt.qlnvhang.repository.nhaptheophuongthucmuatructiep.HhQdPheduyetKhMttHdrRepository;
+import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhQdPheduyetKhMttDxRepository;
+import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhQdPheduyetKhMttHdrRepository;
 import com.tcdt.qlnvhang.request.HhQdPheduyetKhMttHdrReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.*;
 import com.tcdt.qlnvhang.service.SecurityContextService;

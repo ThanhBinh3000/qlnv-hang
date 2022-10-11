@@ -51,5 +51,5 @@ public class HhQdPheduyetKhMttDx implements Serializable {
     private Date ngayKy;
 
     @Transient
-    private List<HhQdPheduyetKhMttSLDD> hhQdPheduyetKhMttSLDDList = new ArrayList<>();
+    private List<HhQdPheduyetKhMttSLDD> soLuongDiaDiemList = new ArrayList<>();
 }

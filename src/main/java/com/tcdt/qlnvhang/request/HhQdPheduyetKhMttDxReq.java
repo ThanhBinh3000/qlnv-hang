@@ -42,6 +42,6 @@ public class HhQdPheduyetKhMttDxReq {
     private String tenDuAn;
     @Temporal(TemporalType.DATE)
     private Date ngayKy;
-    private List<HhQdPheduyetKhMttSLDDReq> hhQdPheduyetKhMttSLDDList = new ArrayList<>();
+    private List<HhQdPheduyetKhMttSLDDReq> soLuongDiaDiemList = new ArrayList<>();
 
 }
