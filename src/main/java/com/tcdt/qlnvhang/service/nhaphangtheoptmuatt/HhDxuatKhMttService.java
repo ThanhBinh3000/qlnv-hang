@@ -101,7 +101,6 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
         data.setNguoiTao(userInfo.getUsername());
         data.setTrangThai(Contains.DUTHAO);
         data.setTrangThaiTh(Contains.CHUATONGHOP);
-        data.setMaDvi(userInfo.getDvql());
         Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
         Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
         data.setTenDvi(StringUtils.isEmpty(userInfo.getDvql()) ? null : hashMapDmdv.get(userInfo.getDvql()));

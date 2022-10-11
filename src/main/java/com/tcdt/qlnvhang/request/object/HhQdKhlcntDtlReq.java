@@ -57,4 +57,7 @@ public class HhQdKhlcntDtlReq {
 	Long idDxHdr;
 
 	private List<HhQdKhlcntDsgthauReq> dsGoiThau;
+
+	private List<HhQdKhlcntDsgthauReq> dsGtDtlList;
+
 }
