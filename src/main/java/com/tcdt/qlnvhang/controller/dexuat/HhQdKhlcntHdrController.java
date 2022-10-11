@@ -82,7 +82,7 @@ public class HhQdKhlcntHdrController {
 			@Valid @RequestBody HhQdKhlcntSearchReq objReq, HttpServletResponse response) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(service.getAllPage(objReq,response));
+			resp.setData(service.getAllPage(objReq));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {

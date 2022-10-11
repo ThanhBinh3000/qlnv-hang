@@ -9,9 +9,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tcdt.qlnvhang.request.search.HhQdKhlcntSearchReq;
 import com.tcdt.qlnvhang.service.HhDauThauService;
 import com.tcdt.qlnvhang.service.HhQdKhlcntHdrService;
+import com.tcdt.qlnvhang.table.HhQdKhlcntHdr;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -123,10 +126,10 @@ public class HhDauThauController {
 	@PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<BaseResponse> colection(HttpServletRequest request,
-			@Valid @RequestBody HhDthauSearchReq objReq) {
+			@Valid @RequestBody HhQdKhlcntSearchReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-//			resp.setData(service.selectPage(objReq));
+			resp.setData(service.selectPage(objReq));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (

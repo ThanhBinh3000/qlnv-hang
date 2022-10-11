@@ -44,7 +44,7 @@ public interface HhQdKhlcntHdrService {
 
 	void exportToExcel(HhQdKhlcntSearchReq searchReq, HttpServletResponse response) throws Exception;
 
-	Page<HhQdKhlcntHdr> getAllPage(HhQdKhlcntSearchReq objReq, HttpServletResponse response) throws Exception;
+	Page<HhQdKhlcntHdr> getAllPage(HhQdKhlcntSearchReq objReq) throws Exception;
 
 	List<HhQdKhlcntHdr> getAll(HhQdKhlcntSearchReq objReq) throws Exception;
 

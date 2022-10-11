@@ -554,6 +554,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			qdDtl.setId(null);
 			qdDtl.setIdQdHdr(hdrClone.getId());
 			qdDtl.setMaDvi(getUser().getDvql());
+			qdDtl.setTrangThai(NhapXuatHangTrangThaiEnum.CHUACAPNHAT.getId());
 			hhQdKhlcntDtlRepository.save(qdDtl);
 			List<HhQdKhlcntDsgthau> dsGoiThauClone = hdr.getHhQdKhlcntDtlList().get(0).getDsGoiThau();
 			for (HhQdKhlcntDsgthau gthau : dsGoiThauClone){
@@ -672,7 +673,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	}
 
 	@Override
-	public Page<HhQdKhlcntHdr> getAllPage(HhQdKhlcntSearchReq req,HttpServletResponse response) throws Exception {
+	public Page<HhQdKhlcntHdr> getAllPage(HhQdKhlcntSearchReq req) throws Exception {
 		int page = req.getPaggingReq().getPage();
 		int limit = req.getPaggingReq().getLimit();
 		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
@@ -740,7 +741,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		paggingReq.setPage(0);
 		paggingReq.setLimit(Integer.MAX_VALUE);
 		searchReq.setPaggingReq(paggingReq);
-		Page<HhQdKhlcntHdr> page = this.getAllPage(searchReq,response);
+		Page<HhQdKhlcntHdr> page = this.getAllPage(searchReq);
 		List<HhQdKhlcntHdr> data = page.getContent();
 
 		// Tao form excel
@@ -780,7 +781,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		paggingReq.setPage(0);
 		paggingReq.setLimit(Integer.MAX_VALUE);
 		searchReq.setPaggingReq(paggingReq);
-		Page<HhQdKhlcntHdr> page = this.getAllPage(searchReq,response);
+		Page<HhQdKhlcntHdr> page = this.getAllPage(searchReq);
 		List<HhQdKhlcntHdr> data = page.getContent();
 
 		// Tao form excel
@@ -819,7 +820,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		paggingReq.setPage(0);
 		paggingReq.setLimit(Integer.MAX_VALUE);
 		searchReq.setPaggingReq(paggingReq);
-		Page<HhQdKhlcntHdr> page = this.getAllPage(searchReq,response);
+		Page<HhQdKhlcntHdr> page = this.getAllPage(searchReq);
 		List<HhQdKhlcntHdr> data = page.getContent();
 
 		// Tao form excel
