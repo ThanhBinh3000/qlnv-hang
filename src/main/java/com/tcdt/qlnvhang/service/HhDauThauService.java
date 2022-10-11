@@ -5,9 +5,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import com.tcdt.qlnvhang.request.search.HhQdKhlcntSearchReq;
 import com.tcdt.qlnvhang.response.dauthauvattu.ThongTinDauThauRes;
 import com.tcdt.qlnvhang.table.HhDthauNthauDuthau;
 import com.tcdt.qlnvhang.table.HhQdKhlcntDtl;
+import com.tcdt.qlnvhang.table.HhQdKhlcntHdr;
 import org.springframework.data.domain.Page;
 
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -23,7 +25,7 @@ public interface HhDauThauService {
 	@Transactional(rollbackOn = Exception.class)
     List<HhDthauNthauDuthau> create(HhDthauReq objReq) throws Exception;
 //
-//	Page<ThongTinDauThauRes> selectPage(HhDthauSearchReq objReq) throws Exception;
+	Page<HhQdKhlcntHdr> selectPage(HhQdKhlcntSearchReq objReq) throws Exception;
 //
 //	List<ThongTinDauThauRes> selectAll(HhDthauSearchReq objReq) throws Exception;
 //

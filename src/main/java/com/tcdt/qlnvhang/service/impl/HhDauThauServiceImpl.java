@@ -7,20 +7,26 @@ import com.tcdt.qlnvhang.repository.HhQdKhlcntDtlRepository;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.HhDthauNthauDuthauReq;
 import com.tcdt.qlnvhang.request.object.HhDthauReq;
+import com.tcdt.qlnvhang.request.search.HhQdKhlcntSearchReq;
 import com.tcdt.qlnvhang.service.HhDauThauService;
+import com.tcdt.qlnvhang.service.HhQdKhlcntHdrService;
 import com.tcdt.qlnvhang.table.HhDthauNthauDuthau;
 import com.tcdt.qlnvhang.table.HhQdKhlcntDsgthau;
 import com.tcdt.qlnvhang.table.HhQdKhlcntDtl;
+import com.tcdt.qlnvhang.table.HhQdKhlcntHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauService {
@@ -32,6 +38,11 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 
     @Autowired
     HhDthauNthauDuthauRepository nhaThauDuthauRepository;
+
+    @Autowired
+    HhQdKhlcntHdrService hhQdKhlcntHdrService;
+
+
     @Override
     @Transactional
     public List<HhDthauNthauDuthau> create(HhDthauReq objReq) throws Exception {
@@ -71,6 +82,20 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
         }
         goiThauRepository.save(hhQdKhlcntDsgthau);
         return listDuThau;
+    }
+
+    @Override
+    public Page<HhQdKhlcntHdr> selectPage(HhQdKhlcntSearchReq objReq) throws Exception {
+        Page<HhQdKhlcntHdr> allPage = hhQdKhlcntHdrService.getAllPage(objReq);
+
+        allPage.getContent().forEach(item ->{
+            List<HhQdKhlcntDtl> allByIdQdHdr = dtlRepository.findAllByIdQdHdr(item.getId());
+            List<HhQdKhlcntDtl> collect = allByIdQdHdr.stream().filter(x -> x.getMaDvi().equals(objReq.getMaDvi())).collect(Collectors.toList());
+            if(!ObjectUtils.isEmpty(collect)){
+                item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(collect.get(0).getTrangThai()));
+            }
+        });
+        return allPage;
     }
 
     @Override
