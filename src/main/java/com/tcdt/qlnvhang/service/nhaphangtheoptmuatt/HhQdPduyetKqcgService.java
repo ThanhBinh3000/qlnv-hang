@@ -18,6 +18,7 @@ import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -89,6 +90,9 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),data.getId(),"HH_QD_PDUYET_KQCG_HDR");
         created.setFileDinhKems(fileDinhKems);
         for (HhChiTietTTinChaoGiaReq chiTietTTinChaoGia:objReq.getHhChiTietTTinChaoGiaReqList()){
+            HhChiTietTTinChaoGia tTin = ObjectMapperUtils.map(chiTietTTinChaoGia,HhChiTietTTinChaoGia.class);
+            tTin.setId(null);
+            tTin.setIdSoQdPduyetCgia(data.getId());
             hhCtietTtinCgiaRepository.updateLcPd(chiTietTTinChaoGia.getId(),chiTietTTinChaoGia.getLuaChonPduyet());
         }
         return created;
@@ -101,11 +105,11 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
             throw new Exception("Bad request.");
         Optional<HhQdPduyetKqcgHdr> optional = hhQdPduyetKqcgRepository.findById(objReq.getId());
 
-        Optional<HhQdPduyetKqcgHdr> optional1 = hhQdPduyetKqcgRepository.findAllBySoQdPdCg(objReq.getSoQdPdCg());
-        if(optional1.isPresent()){
-            if (optional1.isPresent()){
-                if (!optional1.get().getId().equals(objReq.getId())){
-                    throw new Exception("số đề xuất đã tồn tại");
+        Optional<HhQdPduyetKqcgHdr> soQdPdCg = hhQdPduyetKqcgRepository.findAllBySoQdPdCg(objReq.getSoQdPdCg());
+        if(soQdPdCg.isPresent()){
+            if (soQdPdCg.isPresent()){
+                if (!soQdPdCg.get().getId().equals(objReq.getId())){
+                    throw new Exception("số quyết định phê duyệt đã tồn tại");
                 }
             }
         }
@@ -119,7 +123,12 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
 //        fileDinhKemService.deleteAll(listfileDinhKem);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),data.getId(),"HH_QD_PDUYET_KQCG_HDR");
         created.setFileDinhKems(fileDinhKems);
+        List<HhChiTietTTinChaoGia> listTtin= hhCtietTtinCgiaRepository.findAllByIdSoQdPduyetCgia(data.getId());
+        hhCtietTtinCgiaRepository.deleteAll(listTtin);
         for (HhChiTietTTinChaoGiaReq chiTietTTinChaoGia:objReq.getHhChiTietTTinChaoGiaReqList()){
+            HhChiTietTTinChaoGia tTin = ObjectMapperUtils.map(chiTietTTinChaoGia,HhChiTietTTinChaoGia.class);
+            tTin.setId(null);
+            tTin.setIdSoQdPduyetCgia(data.getId());
             hhCtietTtinCgiaRepository.updateLcPd(chiTietTTinChaoGia.getId(),chiTietTTinChaoGia.getLuaChonPduyet());
         }
         return created;

@@ -86,7 +86,12 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		dataMap.setChildren(fileDinhKemList);
 
 		HhQdPduyetKqlcntHdr createCheck = hhQdPduyetKqlcntHdrRepository.save(dataMap);
-
+		HhQdKhlcntHdr hhQdKhlcntHdr = checkSoCc.stream().filter(HhQdKhlcntHdr::getLastest).findAny()
+				.orElse(null);
+		if(!Objects.isNull(hhQdKhlcntHdr)){
+			hhQdKhlcntHdr.setSoQdPdKqlcnt(createCheck.getSoQd());
+			hhQdKhlcntHdrRepository.save(hhQdKhlcntHdr);
+		}
 		return createCheck;
 	}
 
@@ -160,8 +165,29 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 	}
 
 	@Override
+	@Transactional(rollbackOn = Exception.class)
 	public HhQdPduyetKqlcntHdr approve(StatusReq stReq) throws Exception {
-		return null;
+		UserInfo userInfo = SecurityContextService.getUser();
+		if (StringUtils.isEmpty(stReq.getId())){
+			throw new Exception("Không tìm thấy dữ liệu");
+		}
+
+		Optional<HhQdPduyetKqlcntHdr> optional = hhQdPduyetKqlcntHdrRepository.findById(Long.valueOf(stReq.getId()));
+		if (!optional.isPresent()){
+			throw new Exception("Không tìm thấy dữ liệu");
+		}
+
+		String status = stReq.getTrangThai() + optional.get().getTrangThai();
+		if ((Contains.BAN_HANH + Contains.DUTHAO).equals(status)) {
+			optional.get().setNguoiPduyet(userInfo.getUsername());
+			optional.get().setNgayPduyet(new Date());
+		} else {
+			throw new Exception("Phê duyệt không thành công");
+		}
+
+		optional.get().setTrangThai(stReq.getTrangThai());
+		HhQdPduyetKqlcntHdr createCheck = hhQdPduyetKqlcntHdrRepository.save(optional.get());
+		return createCheck;
 	}
 
 	@Override
@@ -172,7 +198,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 	@Override
 	public Page<HhQdPduyetKqlcntHdr> timKiemPage(HhQdPduyetKqlcntSearchReq req, HttpServletResponse response) throws Exception {
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
-		Page<HhQdPduyetKqlcntHdr> hhQdPduyetKqlcntHdrs = hhQdPduyetKqlcntHdrRepository.selectPage(req.getNamKhoach(), req.getLoaiVthh(), convertDateToString(req.getTuNgayQd()), convertDateToString(req.getDenNgayQd()), req.getSoQd(), req.getTrangThai(), pageable);
+		Page<HhQdPduyetKqlcntHdr> hhQdPduyetKqlcntHdrs = hhQdPduyetKqlcntHdrRepository.selectPage(req.getNamKhoach(), req.getLoaiVthh(), convertDateToString(req.getTuNgayQd()), convertDateToString(req.getDenNgayQd()), req.getSoQd(),req.getMaDvi(), req.getTrangThai(), pageable);
 		Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
 		hhQdPduyetKqlcntHdrs.forEach( item -> {
 			try {

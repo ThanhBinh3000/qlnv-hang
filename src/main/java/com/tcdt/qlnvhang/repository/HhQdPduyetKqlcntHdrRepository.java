@@ -20,6 +20,7 @@ public interface HhQdPduyetKqlcntHdrRepository extends BaseRepository<HhQdPduyet
 			" AND (:soQd IS NULL OR QDPD.SO_QD = :soQd) "+
 			" AND (:tuNgayQd IS NULL OR QDPD.NGAY_TAO >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) "+
 			" AND (:denNgayQd IS NULL OR QDPD.NGAY_TAO <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) "+
+			" AND (:maDvi IS NULL OR QDPD.MA_DVI = :maDvi) "+
 			" AND (:trangThai IS NULL OR QDPD.TRANG_THAI = :trangThai) ",
 		countQuery = " SELECT COUNT(1) FROM HH_QD_PDUYET_KQLCNT_HDR QDPD "+
 				" WHERE (:namKh IS NULL OR QDPD.NAM_KHOACH = TO_NUMBER(:namKh)) "+
@@ -27,9 +28,11 @@ public interface HhQdPduyetKqlcntHdrRepository extends BaseRepository<HhQdPduyet
 				" AND (:soQd IS NULL OR QDPD.SO_QD = :soQd) "+
 				" AND (:tuNgayQd IS NULL OR QDPD.NGAY_TAO >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) "+
 				" AND (:denNgayQd IS NULL OR QDPD.NGAY_TAO <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) "+
+				" AND (:maDvi IS NULL OR QDPD.MA_DVI = :maDvi) "+
+				" AND (:soQd IS NULL OR QDPD.SO_QD = :soQd) "+
 				" AND (:trangThai IS NULL OR QDPD.TRANG_THAI = :trangThai) ",
 			nativeQuery = true)
-	Page<HhQdPduyetKqlcntHdr> selectPage(String namKh, String loaiVthh, String soQd, String tuNgayQd, String denNgayQd, String trangThai, Pageable pageable);
+	Page<HhQdPduyetKqlcntHdr> selectPage(String namKh, String loaiVthh, String soQd, String tuNgayQd, String denNgayQd,String maDvi, String trangThai, Pageable pageable);
 
 //	@Query(" SELECT new com.tcdt.qlnvhang.response.dauthauvattu.HhQdPduyetKqlcntRes(HDR.id,HDR.soQd,HDR.ngayQd,HDR.trichYeu,DSG.goiThau,DSG.trangThai,DTGT.idNhaThau,DSG.lyDoHuy,DTGT.donGiaTrcVat,DTGT.vat,DTGT.soLuong,DTGT.loaiHdong,DTGT.tgianThienHd,HDR.trangThai,HDR.namKhoach,HDR.loaiVthh) " +
 //			"    FROM HhQdPduyetKqlcntHdr HDR " +
