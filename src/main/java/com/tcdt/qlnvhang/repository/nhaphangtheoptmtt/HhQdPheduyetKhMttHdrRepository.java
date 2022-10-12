@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.repository.nhaptheophuongthucmuatructiep;
+package com.tcdt.qlnvhang.repository.nhaphangtheoptmtt;
 
 import com.tcdt.qlnvhang.table.HhQdPheduyetKhMttHdr;
 import com.tcdt.qlnvhang.util.Contains;
