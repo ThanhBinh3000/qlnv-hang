@@ -47,8 +47,8 @@ public interface HhDxuatKhMttRepository extends JpaRepository<HhDxuatKhMttHdr, L
 
     @Transactional()
     @Modifying
-    @Query(value = "UPDATE HH_DX_KHMTT_HDR SET TRANG_THAI_TH=:trangThaiTh WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
-    void updateTongHop(List<String> soDxuatList, String trangThaiTh);
+    @Query(value = "UPDATE HH_DX_KHMTT_HDR SET MA_THOP=:maThop WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
+    void updateTongHop(List<String> soDxuatList, String maThop);
 
     List<HhDxuatKhMttHdr> findByIdIn(List<Long> id);
 
