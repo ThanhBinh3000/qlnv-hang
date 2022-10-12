@@ -17,13 +17,15 @@ import java.util.Optional;
 @Repository
 public interface HhQdPheduyetKhMttHdrRepository extends JpaRepository<HhQdPheduyetKhMttHdr, Long> {
 
-    @Query(value = "select * from HH_QD_PHE_DUYET_KHMTT_HDR MTT where (:namKh IS NULL OR MTT.NAM_KH = TO_NUMBER(:namKh)) " +
+    @Query(value = "select * from HH_QD_PHE_DUYET_KHMTT_HDR MTT " +
+            " LEFT JOIN HH_QD_PHE_DUYET_KHMTT_DX DX ON DX.ID_PDUYET_HDR=MTT.ID"+
+            " where (:namKh IS NULL OR MTT.NAM_KH = TO_NUMBER(:namKh)) " +
             "AND (:soQd IS NULL OR LOWER(MTT.SO_QD_PDUYET) LIKE LOWER(CONCAT(CONCAT('%',:soQd),'%' ) ) )" +
             "AND (:trichYeu IS NULL OR LOWER(MTT.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%',:trichYeu),'%')))" +
             "AND (:ngayKyQdTu IS NULL OR MTT.NGAY_KY >=  TO_DATE(:ngayKyQdTu,'yyyy-MM-dd')) " +
             "AND (:ngayKyQdDen IS NULL OR MTT.NGAY_KY <= TO_DATE(:ngayKyQdDen,'yyyy-MM-dd'))" +
             "AND (:trangThai IS NULL OR MTT.TRANG_THAI = :trangThai)" +
-            "AND (:maDvi IS NULL OR LOWER(MTT.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "
+            "AND (:maDvi IS NULL OR LOWER(DX.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "
             ,nativeQuery = true)
     Page<HhQdPheduyetKhMttHdr> searchPage(Integer namKh, String soQd, String trichYeu, String ngayKyQdTu, String ngayKyQdDen, String maDvi, String trangThai,  Pageable pageable);
 
@@ -33,12 +35,13 @@ public interface HhQdPheduyetKhMttHdrRepository extends JpaRepository<HhQdPheduy
     List <HhQdPheduyetKhMttHdr>findAllByIdIn(List<Long> listId);
 
     @Query(value = "select * from HH_QD_PHE_DUYET_KHMTT_HDR MTT " +
-            "LEFT JOIN HH_CTIET_TTIN_CHAO_GIA DTL ON MTT.ID=DTL.ID_SO_QD_PDUYET_CGIA"+
+            " LEFT JOIN HH_CTIET_TTIN_CHAO_GIA DTL ON MTT.ID=DTL.ID_SO_QD_PDUYET_CGIA"+
+            " LEFT JOIN HH_QD_PHE_DUYET_KHMTT_DX DX ON DX.ID_PDUYET_HDR=MTT.ID"+
             " where (:namKh IS NULL OR MTT.NAM_KH = TO_NUMBER(:namKh)) " +
             " AND (:ngayCgiaTu IS NULL OR MTT.NGAY_HLUC >=  TO_DATE(:ngayCgiaTu,'yyyy-MM-dd')) " +
             " AND (:ngayCgiadDen IS NULL OR MTT.NGAY_HLUC <= TO_DATE(:ngayCgiadDen,'yyyy-MM-dd'))" +
             " AND (MTT.TRANG_THAI = " + Contains.BAN_HANH +")" +
-            " AND (:maDvi IS NULL OR LOWER(MTT.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "+
+            " AND (:maDvi IS NULL OR LOWER(DX.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "+
             " AND (:ctyCgia IS NULL OR LOWER(DTL.CANHAN_TOCHUC) LIKE LOWER(CONCAT(CONCAT('%', :ctyCgia),'%'))) "+
             " AND (:pthucMuatt IS NULL OR MTT.PTHUC_MUATT =:pthucMuatt)"
             ,nativeQuery = true)
