@@ -176,7 +176,7 @@ public class QuyetDinhCuuTroService extends BaseServiceImpl {
     if (!DataUtils.isNullOrEmpty(req.getCanCu())) {
       fileDinhKemService.saveListFileDinhKem(req.getCanCu(), newRow.getId(), XhQdCuuTroHdr.TABLE_NAME + "_CAN_CU");
     }
-    if (!DataUtils.isNullOrEmpty(req.getCanCu())) {
+    if (!DataUtils.isNullObject(req.getFileDinhKem())) {
       fileDinhKemService.saveListFileDinhKem(Arrays.asList(req.getFileDinhKem()), newRow.getId(), XhQdCuuTroHdr.TABLE_NAME);
     }
     //luu thong tin chi tiet
@@ -235,7 +235,7 @@ public class QuyetDinhCuuTroService extends BaseServiceImpl {
     if (!DataUtils.isNullOrEmpty(req.getCanCu())) {
       fileDinhKemService.saveListFileDinhKem(req.getCanCu(), currentRow.getId(), XhQdCuuTroHdr.TABLE_NAME + "_CAN_CU");
     }
-    if (!DataUtils.isNullOrEmpty(req.getCanCu())) {
+    if (!DataUtils.isNullObject(req.getFileDinhKem())) {
       fileDinhKemService.saveListFileDinhKem(Arrays.asList(req.getFileDinhKem()), currentRow.getId(), XhQdCuuTroHdr.TABLE_NAME);
     }
     //luu thong tin chi tiet
@@ -356,23 +356,28 @@ public class QuyetDinhCuuTroService extends BaseServiceImpl {
       if (!statusAllow.containsAll(statusAllow))
         throw new Exception("Tài khoản không có quyền thực hiện.");
     }*/
-    String trangThai = TrangThaiAllEnum.DU_THAO.getId();
+    String trangThai = "";
     String capDvi = currentUser.getUser().getCapDvi();
     String condition = currentRow.get().getTrangThai() + req.getTrangThai();
     if (capDvi.equals(CAP_TONG_CUC)) {
+
       //gui duyet
-      if (condition.equals(TrangThaiAllEnum.DU_THAO.getId() + TrangThaiAllEnum.CHO_DUYET_LDV.getId())) {
-        trangThai = TrangThaiAllEnum.CHO_DUYET_LDV.getId();
-      } else if (condition.equals(TrangThaiAllEnum.TU_CHOI_LDV.getId() + TrangThaiAllEnum.CHO_DUYET_LDV.getId())) {
-        trangThai = TrangThaiAllEnum.CHO_DUYET_LDV.getId();
+      if (condition.equals(TrangThaiAllEnum.DU_THAO.getId() + TrangThaiAllEnum.CHO_DUYET_LDTC.getId())) {
+        trangThai = TrangThaiAllEnum.CHO_DUYET_LDTC.getId();
+      } else if (condition.equals(TrangThaiAllEnum.TU_CHOI_LDTC.getId() + TrangThaiAllEnum.CHO_DUYET_LDTC.getId())) {
+        trangThai = TrangThaiAllEnum.CHO_DUYET_LDTC.getId();
       }
       //duyet
-      else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_LDV.getId() + TrangThaiAllEnum.DA_DUYET_LDV.getId())) {
-        trangThai = TrangThaiAllEnum.DA_DUYET_LDV.getId();
+      else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_LDTC.getId() + TrangThaiAllEnum.DA_DUYET_LDTC.getId())) {
+        trangThai = TrangThaiAllEnum.DA_DUYET_LDTC.getId();
       }
       //tu choi
-      else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_LDV.getId() + TrangThaiAllEnum.TU_CHOI_LDV.getId())) {
-        trangThai = TrangThaiAllEnum.TU_CHOI_LDV.getId();
+      else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_LDTC.getId() + TrangThaiAllEnum.TU_CHOI_LDTC.getId())) {
+        trangThai = TrangThaiAllEnum.TU_CHOI_LDTC.getId();
+      }
+      //ban hanh
+      if (condition.equals(TrangThaiAllEnum.DA_DUYET_LDTC.getId() + TrangThaiAllEnum.BAN_HANH.getId())) {
+        trangThai = TrangThaiAllEnum.BAN_HANH.getId();
       }
     }
     /*else if (capDvi.equals(CAP_CUC)) {
@@ -396,7 +401,9 @@ public class QuyetDinhCuuTroService extends BaseServiceImpl {
         trangThai = TrangThaiAllEnum.TU_CHOI_LDC.getId();
       }
     }*/
-
+    if (DataUtils.isNullOrEmpty(trangThai)) {
+      throw new Exception("Quy trình phê duyệt không hợp lệ.");
+    }
     currentRow.get().setTrangThai(trangThai);
     currentRow.get().setLyDoTuChoi(DataUtils.safeToString(req.getLyDo()));
 
