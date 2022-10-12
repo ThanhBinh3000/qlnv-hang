@@ -88,7 +88,7 @@ public class HhDxuatKhMttHdrController extends BaseController {
     @GetMapping(value =PathContains.DX_MUA_TT+ PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> detail(
-            @ApiParam(value = "ID Quyết định điều chỉnh qđ phê duyệt KHLCNT", example = "1", required = true) @PathVariable("ids") String ids) {
+            @ApiParam(value = "ID đề xuất kế hoạch mưa trực tiếp", example = "1", required = true) @PathVariable("ids") String ids) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhDxuatKhMttService.detail(ids));

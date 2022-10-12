@@ -129,6 +129,8 @@ public class PathContains {
 
 	public static final String BB_NT = "/bb-nt";
 
+	public static final String BB_LM = "/bb-lm";
+
 
 	// Dau thau vat tu
 	public static final String KH_LCNT_VT = "/kh-lcnt/vat-tu";

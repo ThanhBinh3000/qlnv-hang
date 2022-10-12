@@ -70,7 +70,7 @@ public class HhQdPduyetKqcgController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Tạo mới quyết định phê duyệt kết quả chào giá", response = List.class)
+    @ApiOperation(value = "Cập nhật quyết định phê duyệt kết quả chào giá", response = List.class)
     @PostMapping(value=PathContains.QD_PD_KQCG+ PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> update(@Valid @RequestBody HhQdPduyetKqcgHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
@@ -90,7 +90,7 @@ public class HhQdPduyetKqcgController extends BaseController {
     @GetMapping(value =PathContains.QD_PD_KQCG+ PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> detail(
-            @ApiParam(value = "ID Quyết định điều chỉnh qđ phê duyệt KHLCNT", example = "1", required = true) @PathVariable("ids") String ids) {
+            @ApiParam(value = "ID quyết định phê duyệt kết quả chào giá\"", example = "1", required = true) @PathVariable("ids") String ids) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhQdPduyetKqcgService.detail(ids));
@@ -144,7 +144,7 @@ public class HhQdPduyetKqcgController extends BaseController {
             hhQdPduyetKqcgService.export(objReq,response);
         } catch (Exception e) {
 
-            log.error("Kết xuất danh sách đề xuất kế hoạch mua trực tiếp: {}", e);
+            log.error("quyết định phê duyệt kết quả chào giá: {}", e);
             final Map<String, Object> body = new HashMap<>();
             body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             body.put("msg", e.getMessage());
@@ -158,7 +158,7 @@ public class HhQdPduyetKqcgController extends BaseController {
 
     }
 
-    @ApiOperation(value = "Phê duyêt đề xuất kế hoạch mưa trực tiếp ", response = List.class)
+    @ApiOperation(value = "Phê duyêt quyết định phê duyệt kết quả chào giá", response = List.class)
     @PostMapping(value=PathContains.QD_PD_KQCG + PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> updateStatusUbtvqh(@Valid @RequestBody StatusReq statusReq, HttpServletRequest req) {
         BaseResponse resp = new BaseResponse();

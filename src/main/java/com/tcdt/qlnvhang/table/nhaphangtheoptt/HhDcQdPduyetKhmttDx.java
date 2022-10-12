@@ -13,6 +13,8 @@ import java.util.List;
 @Table(name = "HH_DC_QD_PDUYET_KHMTT_DX")
 @Data
 public class HhDcQdPduyetKhmttDx implements Serializable {
+    private static final long serialVersionUID = 1L;
+    public static final String TABLE_NAME = "HH_DC_QD_PDUYET_KHMTT_DX";
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_DC_QD_PDUYET_KHMTT_DX_SEQ")
     @SequenceGenerator(sequenceName = "HH_DC_QD_PDUYET_KHMTT_DX_SEQ", allocationSize = 1, name = "HH_DC_QD_PDUYET_KHMTT_DX_SEQ")

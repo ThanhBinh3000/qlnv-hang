@@ -142,7 +142,7 @@ public class HhHdongBkePmuahangController extends BaseController {
             hhHdongBkePmuahangService.export(objReq,response);
         } catch (Exception e) {
 
-            log.error("Kết xuất danh sách đề xuất kế hoạch mua trực tiếp: {}", e);
+            log.error("Kết xuất danh sách hợp đồng mua trực tiếp: {}", e);
             final Map<String, Object> body = new HashMap<>();
             body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             body.put("msg", e.getMessage());
