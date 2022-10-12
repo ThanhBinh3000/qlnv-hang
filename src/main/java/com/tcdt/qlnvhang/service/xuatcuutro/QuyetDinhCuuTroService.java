@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.service.xuatcuutro;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.FileDKemJoinDxuatCuuTro;
+import com.tcdt.qlnvhang.entities.FileDKemJoinQdCuuTro;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
@@ -121,6 +123,14 @@ public class QuyetDinhCuuTroService extends BaseServiceImpl {
         data.setThongTinTongHop(tongHopDtl);
       }
 
+      //set file dinh kem va can cu
+      List<FileDinhKem> fileDinhKem = fileDinhKemService.search(id, Arrays.asList(XhQdCuuTroHdr.TABLE_NAME));
+      if (!DataUtils.isNullOrEmpty(fileDinhKem)) {
+        data.setFileDinhKem(fileDinhKem.get(0));
+      }
+      List<FileDinhKem> canCu = fileDinhKemService.search(id, Arrays.asList(XhQdCuuTroHdr.TABLE_NAME + "_CAN_CU"));
+      data.setCanCu(canCu);
+
       //set thong tin quyet dinh
       List<XhQdCuuTroDtl> quyetDinhDtl = quyetDinhCuuTroDtlRepository.findByIdQd(id);
       data.setThongTinQuyetDinh(quyetDinhDtl);
@@ -162,6 +172,13 @@ public class QuyetDinhCuuTroService extends BaseServiceImpl {
 //    newRow.setCapDvi(currentUser.getUser().getCapDvi());
     newRow = quyetDinhCuuTroRepository.save(newRow);
 
+    //luu can cu dinh kem
+    if (!DataUtils.isNullOrEmpty(req.getCanCu())) {
+      fileDinhKemService.saveListFileDinhKem(req.getCanCu(), newRow.getId(), XhQdCuuTroHdr.TABLE_NAME + "_CAN_CU");
+    }
+    if (!DataUtils.isNullOrEmpty(req.getCanCu())) {
+      fileDinhKemService.saveListFileDinhKem(Arrays.asList(req.getFileDinhKem()), newRow.getId(), XhQdCuuTroHdr.TABLE_NAME);
+    }
     //luu thong tin chi tiet
     List<XhQdCuuTroDtl> listDxHdr = new ArrayList();
     if (!DataUtils.isNullOrEmpty(req.getThongTinTongHop())) {
@@ -171,6 +188,7 @@ public class QuyetDinhCuuTroService extends BaseServiceImpl {
         s.setIdQd(finalNewRow.getId());
         s.setMaDvi(finalNewRow.getMaDvi());
       });
+      quyetDinhCuuTroDtlRepository.saveAll(listDxHdr);
       //luu nhap kho
         /*List<XhThCuuTroKho> phuongAnXuat = new ArrayList();
         if (!DataUtils.isNullOrEmpty(s.getPhuongAnXuat())) {
@@ -184,9 +202,9 @@ public class QuyetDinhCuuTroService extends BaseServiceImpl {
 
     }
     // update trang thai cho bang tong hop
-    Optional<XhThCuuTroHdr> tongHopHdr = tongHopCuuTroRepository.findById(req.getId());
+    Optional<XhThCuuTroHdr> tongHopHdr = tongHopCuuTroRepository.findById(newRow.getId());
     if (tongHopHdr.isPresent()) {
-      tongHopHdr.get().setTrangThai(TrangThaiAllEnum.DA_TONG_HOP.getId());
+      tongHopHdr.get().setTrangThai(TrangThaiAllEnum.DA_DU_THAO_QD.getId());
       tongHopCuuTroRepository.save(tongHopHdr.get());
     }
     return newRow;
@@ -213,6 +231,13 @@ public class QuyetDinhCuuTroService extends BaseServiceImpl {
     }
     currentRow = quyetDinhCuuTroRepository.save(currentRow);
 
+    //luu can cu dinh kem
+    if (!DataUtils.isNullOrEmpty(req.getCanCu())) {
+      fileDinhKemService.saveListFileDinhKem(req.getCanCu(), currentRow.getId(), XhQdCuuTroHdr.TABLE_NAME + "_CAN_CU");
+    }
+    if (!DataUtils.isNullOrEmpty(req.getCanCu())) {
+      fileDinhKemService.saveListFileDinhKem(Arrays.asList(req.getFileDinhKem()), currentRow.getId(), XhQdCuuTroHdr.TABLE_NAME);
+    }
     //luu thong tin chi tiet
     List<XhQdCuuTroDtl> thongTinChiTiet = new ArrayList();
     if (!DataUtils.isNullOrEmpty(req.getThongTinQuyetDinh())) {

@@ -42,7 +42,7 @@ public class XhThCuuTroHdr extends BaseEntity implements Serializable {
   private Long tongSoLuong;
   //  private String trichYeu;
   private String trangThai;
-  //  private String trangThaiTh;
+    private String trangThaiQd;
   private String loaiHinhNhapXuat;
   //  private String kieuNhapXuat;
 //  private LocalDate thoiGianThucHien;
@@ -60,7 +60,7 @@ public class XhThCuuTroHdr extends BaseEntity implements Serializable {
   @Transient
   private String tenTrangThai;
   @Transient
-  private String tenTrangThaiTh;
+  private String tenTrangThaiQd;
   @Transient
   private String tenLoaiHinhNhapXuat;
   @Transient
@@ -70,6 +70,9 @@ public class XhThCuuTroHdr extends BaseEntity implements Serializable {
 
   public String getTenTrangThai() {
     return TrangThaiAllEnum.getLabelById(trangThai);
+  }
+  public String getTenTrangThaiQd() {
+    return TrangThaiAllEnum.getLabelById(trangThaiQd);
   }
 
 }
