@@ -86,7 +86,12 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		dataMap.setChildren(fileDinhKemList);
 
 		HhQdPduyetKqlcntHdr createCheck = hhQdPduyetKqlcntHdrRepository.save(dataMap);
-
+		HhQdKhlcntHdr hhQdKhlcntHdr = checkSoCc.stream().filter(HhQdKhlcntHdr::getLastest).findAny()
+				.orElse(null);
+		if(!Objects.isNull(hhQdKhlcntHdr)){
+			hhQdKhlcntHdr.setSoQdPdKqlcnt(createCheck.getSoQd());
+			hhQdKhlcntHdrRepository.save(hhQdKhlcntHdr);
+		}
 		return createCheck;
 	}
 
