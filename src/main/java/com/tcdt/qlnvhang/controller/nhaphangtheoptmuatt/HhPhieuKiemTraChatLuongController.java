@@ -83,11 +83,11 @@ public class HhPhieuKiemTraChatLuongController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Lấy chi tiết thông tin đề xuất kế hoạch mua trực tiếp", response = List.class)
+    @ApiOperation(value = "Lấy chi tiết thông tin phiếu kiểm tra chất lượng", response = List.class)
     @GetMapping(value =PathContains.PKT_CL+ PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> detail(
-            @ApiParam(value = "ID Quyết định điều chỉnh qđ phê duyệt KHLCNT", example = "1", required = true) @PathVariable("ids") String ids) {
+            @ApiParam(value = "ID phiếu kiểm tra chất lượng", example = "1", required = true) @PathVariable("ids") String ids) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhPhieuKiemTraChatLuongService.detail(ids));
@@ -142,7 +142,7 @@ public class HhPhieuKiemTraChatLuongController extends BaseController {
             hhPhieuKiemTraChatLuongService.export(objReq,response);
         } catch (Exception e) {
 
-            log.error("Kết xuất danh sách đề xuất kế hoạch mua trực tiếp: {}", e);
+            log.error("Kết xuất danh sách phiếu kiểm tra chất lượng: {}", e);
             final Map<String, Object> body = new HashMap<>();
             body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             body.put("msg", e.getMessage());

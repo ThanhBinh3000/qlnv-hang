@@ -10,6 +10,8 @@ import java.math.BigDecimal;
 @Table(name ="HH_DC_QD_PDUYET_KHMTT_SLDD")
 @Data
 public class HhDcQdPduyetKhmttSldd implements Serializable {
+    private static final long serialVersionUID = 1L;
+    public static final String TABLE_NAME = "HH_DC_QD_PDUYET_KHMTT_SLDD";
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_DC_QD_PDUYET_KHMTT_SLDD_SEQ")
     @SequenceGenerator(sequenceName = "HH_DC_QD_PDUYET_KHMTT_SLDD_SEQ", allocationSize = 1, name = "HH_DC_QD_PDUYET_KHMTT_SLDD_SEQ")

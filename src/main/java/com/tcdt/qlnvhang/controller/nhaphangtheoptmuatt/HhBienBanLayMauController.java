@@ -5,10 +5,10 @@ import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhBienBanNghiemThuReq;
-import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhBbNghiemThu;
+import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhBienBanLayMauReq;
+import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhBbanLayMau;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.nhaphangtheoptmuatt.HhBienBanNghiemThuService;
+import com.tcdt.qlnvhang.service.nhaphangtheoptmuatt.HhBienBanLayMauService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,18 +30,18 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/mua-truc-tiep")
 @Slf4j
-@Api(tags = "Biên bản nghiệm thu bảo quản lần đầu")
-public class HhBienBanNghiemThuController extends BaseController {
-
+@Api(tags = "Biên bản lấy mẫu bàn giao")
+public class HhBienBanLayMauController extends BaseController {
     @Autowired
-    private HhBienBanNghiemThuService hhBienBanNghiemThuService;
+    private HhBienBanLayMauService hhBienBanLayMauService;
 
-    @ApiOperation(value = "Tra cứu biên bản nghiệm thu bảo quản lần đầu", response = List.class)
-    @PostMapping(value=  PathContains.BB_NT + PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody SearchHhBbNghiemThu objReq) {
+
+    @ApiOperation(value = "Tra cứu biên bản lấy mẫu bàn giao", response = List.class)
+    @PostMapping(value=  PathContains.BB_LM + PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
+    public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody SearchHhBbanLayMau objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(hhBienBanNghiemThuService.searchPage(objReq));
+            resp.setData(hhBienBanLayMauService.searchPage(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -52,12 +52,12 @@ public class HhBienBanNghiemThuController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Tạo mới biên bản nghiệm thu bảo quản lần đầu", response = List.class)
-    @PostMapping(value=  PathContains.BB_NT + PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> save(@Valid @RequestBody HhBienBanNghiemThuReq objReq) {
+    @ApiOperation(value = "Tạo mới biên bản lấy mẫu bàn giao", response = List.class)
+    @PostMapping(value=  PathContains.BB_LM + PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
+    public final ResponseEntity<BaseResponse> save(@Valid @RequestBody HhBienBanLayMauReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(hhBienBanNghiemThuService.save(objReq));
+            resp.setData(hhBienBanLayMauService.save(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -68,12 +68,12 @@ public class HhBienBanNghiemThuController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Sửa biên bản nghiệm thu bảo quản lần đầu", response = List.class)
-    @PostMapping(value=  PathContains.BB_NT + PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> update(@Valid @RequestBody HhBienBanNghiemThuReq objReq) {
+    @ApiOperation(value = "Sửa biên bản lấy mẫu bàn giao", response = List.class)
+    @PostMapping(value=  PathContains.BB_LM + PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
+    public final ResponseEntity<BaseResponse> update(@Valid @RequestBody HhBienBanLayMauReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(hhBienBanNghiemThuService.update(objReq));
+            resp.setData(hhBienBanLayMauService.update(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -84,14 +84,14 @@ public class HhBienBanNghiemThuController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Lấy chi tiết thông tin biên bản nghiệm thu bảo quản lần đầu", response = List.class)
-    @GetMapping(value =PathContains.BB_NT+ PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Lấy chi tiết thông tin biên bản lấy mẫu bàn giao", response = List.class)
+    @GetMapping(value =PathContains.BB_LM+ PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> detail(
-            @ApiParam(value = "ID biên bản nghiệm thu bảo quản lần đầu", example = "1", required = true) @PathVariable("ids") String ids) {
+            @ApiParam(value = "ID biên bản lấy mẫu bàn giao", example = "1", required = true) @PathVariable("ids") String ids) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(hhBienBanNghiemThuService.detail(ids));
+            resp.setData(hhBienBanLayMauService.detail(ids));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -102,12 +102,12 @@ public class HhBienBanNghiemThuController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xóa biên bản nghiệm thu bảo quản lần đầu", response = List.class)
-    @PostMapping(value=  PathContains.BB_NT + PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Xóa biên bản lấy mẫu bàn giao", response = List.class)
+    @PostMapping(value=  PathContains.BB_LM + PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            hhBienBanNghiemThuService.delete(idSearchReq);
+            hhBienBanLayMauService.delete(idSearchReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -118,12 +118,12 @@ public class HhBienBanNghiemThuController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xóa dánh sách biên bản nghiệm thu bảo quản lần đầu", response = List.class)
-    @PostMapping(value=  PathContains.BB_NT + PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Xóa dánh sách biên bản lấy mẫu bàn giao", response = List.class)
+    @PostMapping(value=  PathContains.BB_LM + PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            hhBienBanNghiemThuService.deleteMulti(idSearchReq);
+            hhBienBanLayMauService.deleteMulti(idSearchReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -134,16 +134,16 @@ public class HhBienBanNghiemThuController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Kết xuất danh sách biên bản nghiệm thu bảo quản lần đầu", response = List.class)
-    @PostMapping(value= PathContains.BB_NT + PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Kết xuất danh sách biên bản lấy mẫu bàn giao", response = List.class)
+    @PostMapping(value= PathContains.BB_LM + PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void exportListQdBtcBnToExcel(@Valid @RequestBody SearchHhBbNghiemThu objReq, HttpServletResponse response) throws Exception{
+    public void exportListQdBtcBnToExcel(@Valid @RequestBody SearchHhBbanLayMau objReq, HttpServletResponse response) throws Exception{
 
         try {
-            hhBienBanNghiemThuService.export(objReq,response);
+            hhBienBanLayMauService.export(objReq,response);
         } catch (Exception e) {
 
-            log.error("Kết xuất danh sách biên bản nghiệm thu bảo quản lần đầu: {}", e);
+            log.error("Kết xuất danh sách biên bản lấy mẫu bàn giao: {}", e);
             final Map<String, Object> body = new HashMap<>();
             body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             body.put("msg", e.getMessage());
@@ -157,12 +157,12 @@ public class HhBienBanNghiemThuController extends BaseController {
 
     }
 
-    @ApiOperation(value = "Phê duyêt biên bản nghiệm thu bảo quản lần đầu ", response = List.class)
-    @PostMapping(value=PathContains.BB_NT + PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Phê duyêt biên bản lấy mẫu bàn giao ", response = List.class)
+    @PostMapping(value=PathContains.BB_LM + PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> updateStatusUbtvqh(@Valid @RequestBody StatusReq statusReq, HttpServletRequest req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(hhBienBanNghiemThuService.approve(statusReq));
+            resp.setData(hhBienBanLayMauService.approve(statusReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
