@@ -14,6 +14,8 @@ import java.util.List;
 @Data
 
 public class HhQdPheduyetKhMttDx implements Serializable {
+    private static final long serialVersionUID = 1L;
+    public static final String TABLE_NAME = "HH_QD_PHE_DUYET_KHMTT_DX";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_QD_PHE_DUYET_KHMTT_DX_SEQ")
