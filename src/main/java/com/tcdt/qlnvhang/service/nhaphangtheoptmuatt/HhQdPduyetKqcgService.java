@@ -109,7 +109,7 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
         if(soQdPdCg.isPresent()){
             if (soQdPdCg.isPresent()){
                 if (!soQdPdCg.get().getId().equals(objReq.getId())){
-                    throw new Exception("số đề xuất đã tồn tại");
+                    throw new Exception("số quyết định phê duyệt đã tồn tại");
                 }
             }
         }

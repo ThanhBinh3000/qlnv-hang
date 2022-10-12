@@ -154,10 +154,10 @@ public class HhPhieuKiemTraChatLuongService extends BaseServiceImpl {
         data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh())?null:hashMapDmhh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh())?null:hashMapDmhh.get(data.getCloaiVthh()));
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
-        data.setTenDiemKho(StringUtils.isEmpty(data.getTenDiemKho())?null:hashMapDmdv.get(data.getMaDiemKho()));
-        data.setTenNhaKho(StringUtils.isEmpty(data.getTenNhaKho())?null:hashMapDmdv.get(data.getMaNhaKho()));
-        data.setTenNganKho(StringUtils.isEmpty(data.getTenNganKho())?null:hashMapDmdv.get(data.getMaNganKho()));
-        data.setTenLoKho(StringUtils.isEmpty(data.getTenLoKho())?null:hashMapDmdv.get(data.getMaLoKho()));
+        data.setTenDiemKho(StringUtils.isEmpty(data.getMaDiemKho())?null:hashMapDmdv.get(data.getMaDiemKho()));
+        data.setTenNhaKho(StringUtils.isEmpty(data.getMaNhaKho())?null:hashMapDmdv.get(data.getMaNhaKho()));
+        data.setTenNganKho(StringUtils.isEmpty(data.getMaNganKho())?null:hashMapDmdv.get(data.getMaNganKho()));
+        data.setTenLoKho(StringUtils.isEmpty(data.getMaLoKho())?null:hashMapDmdv.get(data.getMaLoKho()));
         List<HhPhieuKiemTraChatLuongDtl> listDtl=hhPhieuKiemTraCluongDtlRepository.findAllByIdHdr(data.getId());
         data.setPhieuKiemTraChatLuongDtlList(listDtl);
         return data;
