@@ -69,7 +69,7 @@ public class HhQdGiaoNvNhapHangController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Tạo mới quyết định giao nhiệm vụ nhập hàng", response = List.class)
+    @ApiOperation(value = "Cập nhật quyết định giao nhiệm vụ nhập hàng", response = List.class)
     @PostMapping(value=PathContains.QD_NV_NH+ PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> update(@Valid @RequestBody HhQdGiaoNvNhapHangReq objReq) {
         BaseResponse resp = new BaseResponse();
@@ -143,7 +143,7 @@ public class HhQdGiaoNvNhapHangController {
             hhQdGiaoNvNhapHangService.export(objReq,response);
         } catch (Exception e) {
 
-            log.error("Kết xuất danh sách đề xuất kế hoạch mua trực tiếp: {}", e);
+            log.error("Kết xuất danh sách quyết định giao nhiệm vụ nhập hàng: {}", e);
             final Map<String, Object> body = new HashMap<>();
             body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             body.put("msg", e.getMessage());

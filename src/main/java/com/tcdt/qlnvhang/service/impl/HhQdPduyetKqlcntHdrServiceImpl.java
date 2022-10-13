@@ -33,6 +33,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import static com.sun.xml.internal.ws.api.model.wsdl.WSDLBoundOperation.ANONYMOUS.optional;
+
 
 @Service
 public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements HhQdPduyetKqlcntHdrService {
@@ -51,6 +53,9 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 
 	@Autowired
 	private HhQdKhlcntHdrServiceImpl qdKhLcntService;
+
+	@Autowired
+	private HhHopDongRepository hhHopDongRepository;
 
 	@Override
 	public HhQdPduyetKqlcntHdr create(HhQdPduyetKqlcntHdrReq objReq) throws Exception {
@@ -153,9 +158,16 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		if (!qOptional.isPresent()){
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
 		}
+		Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
 
 		qOptional.get().setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qOptional.get().getTrangThai()));
-
+		qOptional.get().setQdKhlcnt(Objects.isNull(qOptional.get().getIdQdPdKhlcnt()) ? null : qdKhLcntService.detail(qOptional.get().getIdQdPdKhlcnt().toString()));
+		qOptional.get().setTenDvi(listDanhMucDvi.get(qOptional.get().getMaDvi()));
+		List<HhHopDongHdr> allByIdQdKqLcnt = hhHopDongRepository.findAllByIdQdKqLcnt(qOptional.get().getId());
+		allByIdQdKqLcnt.forEach(item -> {
+			item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+		});
+		qOptional.get().setListHopDong(allByIdQdKqLcnt);
 		return qOptional.get();
 	}
 

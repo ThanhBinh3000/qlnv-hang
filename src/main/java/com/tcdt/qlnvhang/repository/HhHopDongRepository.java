@@ -17,6 +17,8 @@ public interface HhHopDongRepository extends BaseRepository<HhHopDongHdr, Long> 
 
   Optional<HhHopDongHdr> findBySoHd(String soHd);
 
+  List<HhHopDongHdr> findAllByIdQdKqLcnt(Long idQdKqLcnt);
+
   @Query(
       value = "SELECT * " +
           "FROM HH_HOP_DONG_HDR  HDR" +

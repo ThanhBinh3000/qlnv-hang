@@ -342,7 +342,7 @@ public class DeXuatCuuTroService extends BaseServiceImpl {
       }
       //duyet
       else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_TP.getId() + TrangThaiAllEnum.DA_DUYET_LDTC.getId())) {
-        trangThai = TrangThaiAllEnum.DA_DUYET_LDC.getId();
+        trangThai = TrangThaiAllEnum.CHO_DUYET_LDC.getId();
       } else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_LDC.getId() + TrangThaiAllEnum.DA_DUYET_LDTC.getId())) {
         trangThai = TrangThaiAllEnum.DA_DUYET_LDC.getId();
       }

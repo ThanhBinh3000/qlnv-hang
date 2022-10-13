@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.tcdt.qlnvhang.repository.HhHopDongDtlRepository;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;

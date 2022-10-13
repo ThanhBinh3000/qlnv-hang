@@ -58,7 +58,7 @@ public class HhPthucTkhaiMuaTtController extends BaseController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Tạo mới thông tin đấu thầu gạo trace: {}", e);
+            log.error("Tạo mới: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
@@ -76,7 +76,7 @@ public class HhPthucTkhaiMuaTtController extends BaseController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Lấy chi tiết thông tin đấu thầu gạo trace: {}", e);
+            log.error("Chi tiết: {}", e);
         }
         return ResponseEntity.ok(resp);
     }

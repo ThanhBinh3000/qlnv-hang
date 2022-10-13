@@ -38,4 +38,6 @@ public interface DeXuatCuuTroRepository extends JpaRepository<XhDxCuuTroHdr, Lon
   void deleteAllByIdIn(List<Long> listId);
 
   List<XhDxCuuTroHdr> findIdByIdTongHop(Long id);
+
+  List<XhDxCuuTroHdr> findByIdIn(List<Long> idDxuat);
 }

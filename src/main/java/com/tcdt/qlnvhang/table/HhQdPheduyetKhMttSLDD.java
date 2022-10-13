@@ -15,6 +15,9 @@ import java.math.BigDecimal;
 @Data
 
 public class HhQdPheduyetKhMttSLDD implements Serializable {
+    private static final long serialVersionUID = 1L;
+    public static final String TABLE_NAME = "HH_QD_PHE_DUYET_KHMTT_SLDD";
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_QD_PHE_DUYET_KHMTT_SLDD_SEQ")
     @SequenceGenerator(sequenceName = "HH_QD_PHE_DUYET_KHMTT_SLDD_SEQ", allocationSize = 1, name = "HH_QD_PHE_DUYET_KHMTT_SLDD_SEQ")

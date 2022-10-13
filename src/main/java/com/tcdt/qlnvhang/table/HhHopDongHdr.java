@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -45,102 +46,74 @@ public class HhHopDongHdr extends BaseEntity implements Serializable  {
 	@SequenceGenerator(sequenceName = HhHopDongHdr.TABLE_NAME
 			+ "_SEQ", allocationSize = 1, name = HhHopDongHdr.TABLE_NAME + "_SEQ")
 	private Long id;
+	private Integer namHd;
+	private String soQdKqLcnt;
+	@Temporal(TemporalType.DATE)
+	Date ngayQdKqLcnt;
+	private Long idQdKqLcnt;
+	private String soQdPdKhlcnt;
+	private String tenGoiThau;
 	private Long idGoiThau;
-	private Long namKh;
-	private Long donGiaVat;
+	@Temporal(TemporalType.DATE)
+	Date tgianNkho;
 	String soHd;
 	String tenHd;
-	String canCu;
-	private Long canCuId;
-//	String dviTrungThau;
-
 	@Temporal(TemporalType.DATE)
-	Date tuNgayHluc;
+	Date ngayKy;
+	String ghiChuNgayKy;
+	String loaiHdong;
+	String ghiChuLoaiHdong;
+	Integer soNgayThien;
+	Integer tgianBhanh;
 
-	@Temporal(TemporalType.DATE)
-	Date denNgayHluc;
+	String maDvi;
+	@Transient
+	String tenDvi;
+	String diaChi;
+	String mst;
+	String tenNguoiDdien;
+	String chucVu;
+	String sdt;
+	String stk;
 
-	Double soNgayThien;
+	String tenNhaThau;
+	String diaChiNhaThau;
+	String mstNhaThau;
+	String tenNguoiDdienNhaThau;
+	String chucVuNhaThau;
+	String sdtNhaThau;
+	String stkNhaThau;
 
-	@Temporal(TemporalType.DATE)
-	Date tuNgayTdo;
-
-	@Temporal(TemporalType.DATE)
-	Date denNgayTdo;
-
-	Double soNgayTdo;
-	String nuocSxuat;
-	String tieuChuanCl;
-	Double soLuong;
-	Double gtriHdTrcVat;
-	Double vat;
-	Double gtriHdSauVat;
 	String loaiVthh;
 	@Transient
 	String tenLoaiVthh;
-	@Transient
-	String tenVthh;
 	String cloaiVthh;
 	@Transient
 	String tenCloaiVthh;
 	String moTaHangHoa;
-	String loaiHd;
 
-	@Temporal(TemporalType.DATE)
-	Date ngayKy;
+	Double soLuong;
+	Double donGia;
 
 	String trangThai;
 	@Transient
 	String tenTrangThai;
 
-	String ldoTuchoi;
 	Date ngayGuiDuyet;
 	String nguoiGuiDuyet;
 	Date ngayPduyet;
 	String nguoiPduyet;
 	String ghiChu;
 	String namKhoach;
-	String namHd;
-	String maDvi;
-	@Transient
-	String tenDvi;
-
-	String diaChi;
-
-	Integer tgianBhanh;
-
-	String mst;
-
-	String sdt;
-
-	String stk;
-
-	String tenNguoiDdien;
-
-	String chucVu;
-
-	String idNthau;
-
-	@Transient
-	String tenNthau;
-
-	@Temporal(TemporalType.DATE)
-	Date tgianNkho;
 
 	@Transient
 	String donViTinh;
 
 	@Transient
-	private List<HhHopDongDdiemNhapKho> hhDdiemNhapKhoList = new ArrayList<>();
+	private List<HhHopDongDtl> details;
 
 	@Transient
 	private List<HhPhuLucHd> hhPhuLucHdongList = new ArrayList<>();
-
-	@Transient
-	private List<HhHopDongDtl> hhHopDongDtlList = new ArrayList<>();
-
-	@Transient
-	private List<HhDviLquan> hhDviLquanList = new ArrayList<>();
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)

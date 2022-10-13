@@ -49,6 +49,7 @@ public class HhDxuatKhMttHdrReq {
     private BigDecimal tongSoLuong;
     private String nguonVon;
     private String tenChuDt;
+    private String maThop;
 
     private List<FileDinhKemReq> fileDinhkems =new ArrayList<>();
 

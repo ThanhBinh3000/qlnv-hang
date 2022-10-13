@@ -68,6 +68,7 @@ public class HhDxuatKhMttHdr  implements Serializable {
     private String nguonVon;
     private String tenChuDt;
     private String soQdPduyet;
+    private String maThop;
 
 
     @Transient

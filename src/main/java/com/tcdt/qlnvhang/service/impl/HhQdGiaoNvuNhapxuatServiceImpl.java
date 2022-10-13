@@ -93,12 +93,12 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		hhQdGiaoNvuNhapxuatRepository.save(dataMap);
 
 		if(dataMap.getLoaiVthh().startsWith("02")){
-			List<HhHopDongDdiemNhapKho> allByIdHdongHdr = hhHopDongDdiemNhapKhoRepository.findAllByIdHdongHdr(dataMap.getId());
-			List<HhHopDongDdiemNhapKho> collect = allByIdHdongHdr.stream().filter(item -> item.getMaDvi().equalsIgnoreCase(userInfo.getDvql())).collect(Collectors.toList());
-			collect.forEach(item -> {
-				item.setTrangThai(Contains.DADUTHAO_QD);
-			});
-			hhHopDongDdiemNhapKhoRepository.saveAll(collect);
+//			List<HhHopDongDdiemNhapKho> allByIdHdongHdr = hhHopDongDdiemNhapKhoRepository.findAllByIdHdongHdr(dataMap.getId());
+//			List<HhHopDongDdiemNhapKho> collect = allByIdHdongHdr.stream().filter(item -> item.getMaDvi().equalsIgnoreCase(userInfo.getDvql())).collect(Collectors.toList());
+//			collect.forEach(item -> {
+//				item.setTrangThai(Contains.DADUTHAO_QD);
+//			});
+//			hhHopDongDdiemNhapKhoRepository.saveAll(collect);
 		}else{
 			hhHopDongRepository.updateHopDong(dataMap.getIdHd(),Contains.DADUTHAO_QD);
 		}
@@ -287,12 +287,12 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 					throw new Exception("Phê duyệt không thành công");
 			}
 			if (stReq.getTrangThai().equals(Contains.BAN_HANH)) {
-				List<HhHopDongDdiemNhapKho> allByIdHdongHdr = hhHopDongDdiemNhapKhoRepository.findAllByIdHdongHdr(optional.get().getIdHd());
-				List<HhHopDongDdiemNhapKho> collect = allByIdHdongHdr.stream().filter( x -> x.getMaDvi().equalsIgnoreCase(userInfo.getDvql())).collect(Collectors.toList());
-				collect.forEach(x -> {
-					x.setTrangThai(Contains.DABANHANH_QD);
-				});
-				hhHopDongDdiemNhapKhoRepository.saveAll(collect);
+//				List<HhHopDongDdiemNhapKho> allByIdHdongHdr = hhHopDongDdiemNhapKhoRepository.findAllByIdHdongHdr(optional.get().getIdHd());
+//				List<HhHopDongDdiemNhapKho> collect = allByIdHdongHdr.stream().filter( x -> x.getMaDvi().equalsIgnoreCase(userInfo.getDvql())).collect(Collectors.toList());
+//				collect.forEach(x -> {
+//					x.setTrangThai(Contains.DABANHANH_QD);
+//				});
+//				hhHopDongDdiemNhapKhoRepository.saveAll(collect);
 			}
 		} else {
 			String status = stReq.getTrangThai() + optional.get().getTrangThai();
