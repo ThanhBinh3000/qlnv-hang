@@ -32,6 +32,13 @@ public class HhHopDongDtlReq {
 	BigDecimal giaTruocVat;
 	BigDecimal giaSauVat;
 
+	String maDvi;
+
+	String diaDiemNhap;
+
 	private List<HhDdiemNhapKhoReq> detail;
+
+	private List<HhDdiemNhapKhoReq> children;
+
 
 }

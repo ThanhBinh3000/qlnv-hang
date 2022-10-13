@@ -63,9 +63,11 @@ public class HhQdPduyetKqlcntHdr implements Serializable {
 	@Temporal(TemporalType.DATE)
 	Date ngayPduyet;
 	String nguoiPduyet;
-
 	@Transient
 	HhQdKhlcntHdr qdKhlcnt;
+
+	@Transient
+	List<HhHopDongHdr> listHopDong;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)

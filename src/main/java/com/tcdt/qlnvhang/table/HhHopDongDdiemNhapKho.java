@@ -22,7 +22,7 @@ public class HhHopDongDdiemNhapKho implements Serializable {
   @SequenceGenerator(sequenceName = "HH_DDIEM_NHAP_KHO_SEQ", allocationSize = 1, name = "HH_DDIEM_NHAP_KHO_SEQ")
   private Long id;
   String type;
-  Long idHdongHdr;
+  Long idHdongDtl;
 
   String maDvi;
   String maDiemKho;
