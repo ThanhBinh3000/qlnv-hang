@@ -5,40 +5,25 @@ import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
-import com.tcdt.qlnvhang.repository.QlnvDxkhXuatKhacHdrRepository;
 import com.tcdt.qlnvhang.repository.xuatcuutro.DeXuatCuuTroRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.object.QlnvDxkhXuatKhacDtlReq;
-import com.tcdt.qlnvhang.request.object.QlnvDxkhXuatKhacHdrReq;
-import com.tcdt.qlnvhang.request.search.QlnvDxkhXuatKhacSearchReq;
 import com.tcdt.qlnvhang.request.xuatcuutro.XhDxCuuTroHdrSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.secification.QlnvDxkhXuatKhacSpecification;
 import com.tcdt.qlnvhang.service.xuatcuutro.DeXuatCuuTroService;
-import com.tcdt.qlnvhang.table.QlnvDxkhXuatKhacDtl;
-import com.tcdt.qlnvhang.table.QlnvDxkhXuatKhacHdr;
 import com.tcdt.qlnvhang.table.XhDxCuuTroHdr;
-import com.tcdt.qlnvhang.util.Contains;
-import com.tcdt.qlnvhang.util.ObjectMapperUtils;
-import com.tcdt.qlnvhang.util.PaginationSet;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.*;
@@ -212,6 +197,7 @@ public class DeXuatCuuTroController extends BaseController {
       mapper.writeValue(response.getOutputStream(), body);
     }
   }
+
   @ApiOperation(value = "Danh sách phương án theo chi tiết đề xuất", response = List.class)
   @PostMapping(value = "/ds-phuong-an", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
@@ -223,9 +209,7 @@ public class DeXuatCuuTroController extends BaseController {
 //      resp.setData(dataPage);
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-    } catch (
-
-        Exception e) {
+    } catch (Exception e) {
       resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
       resp.setMsg(e.getMessage());
       log.error(e.getMessage());
