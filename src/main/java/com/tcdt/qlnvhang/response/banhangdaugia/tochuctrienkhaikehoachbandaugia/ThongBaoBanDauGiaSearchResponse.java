@@ -44,6 +44,8 @@ public class ThongBaoBanDauGiaSearchResponse {
 	private String maVatTuCha;
 	private String tenVatTuCha;
 
+	private String tenDonVi;
+
 	public ThongBaoBanDauGiaSearchResponse(Object[] rawData) {
 		if (Objects.nonNull(rawData[0])) this.id = (Long) rawData[0];
 		if (Objects.nonNull(rawData[1])) this.maThongBao = (String) rawData[1];
@@ -72,6 +74,7 @@ public class ThongBaoBanDauGiaSearchResponse {
 		if (Objects.nonNull(rawData[13])) this.loaiVthh = (String) rawData[13];
 		if (Objects.nonNull(rawData[14])) this.tenVatTuCha = (String) rawData[14];
 		if (Objects.nonNull(rawData[14])) this.loaiHangHoa = (String) rawData[14];
+		if (Objects.nonNull(rawData[15])) this.tenDonVi = (String) rawData[15];
 	}
 
 	public Object[] toExcel(String[] rowsName, Integer stt) {

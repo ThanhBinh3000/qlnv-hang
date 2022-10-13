@@ -133,10 +133,11 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 			List<BhQdPheDuyetKhbdgCt> chiTietList = createChiTietQd(req, theEntity);
 			theEntity.setChiTietList(chiTietList);
 		}
-		//save lại trạng thái bản ghi tổng hợp thành dự thảo qd
+		//save lại trạng thái bản ghi tổng hợp thành dự thảo qd,cập nhật số qd vào bảng tổng hợp
 		Optional<BhTongHopDeXuatKhbdg> bhTongHopDeXuatKhbdg = tongHopDeXuatKhbdgRepository.findById(theEntity.getTongHopDeXuatKhbdgId());
 		if(bhTongHopDeXuatKhbdg.isPresent()){
 			bhTongHopDeXuatKhbdg.get().setTrangThai(Contains.DADUTHAO_QD);
+			bhTongHopDeXuatKhbdg.get().setSoQdPheDuyetKhbdg(theEntity.getSoQuyetDinh());
 			tongHopDeXuatKhbdgRepository.save(bhTongHopDeXuatKhbdg.get());
 		}
 		//Cập nhật số qd phê duyệt vào bản ghi đề xuất
@@ -149,6 +150,8 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 			});
 			keHoachBanDauGiaRepository.saveAll(listDx);
 		}
+		//Cập nhật số qd phê duyệt vào bản ghi Tổng hợp đề xuất
+
 		return qdPheduyetKhbdgResponseMapper.toDto(theEntity);
 	}
 
