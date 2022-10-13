@@ -199,15 +199,6 @@ public class TongHopCuuTroService extends BaseServiceImpl {
         }*/
       });
     }
-    // update id tong hop vao bang de xuat
-    List<Long> idDxuat = req.getThongTinDeXuat().stream().map(XhDxCuuTroHdr::getId).collect(Collectors.toList());
-    List<XhDxCuuTroHdr> listDxuat = deXuatCuuTroRepository.findAllById(idDxuat);
-    XhThCuuTroHdr finalNewRow = newRow;
-    listDxuat.forEach(s -> {
-      s.setIdTongHop(finalNewRow.getId());
-      s.setTrangThaiTh(TrangThaiAllEnum.DA_TONG_HOP.getId());
-    });
-    deXuatCuuTroRepository.saveAll(listDxuat);
     return newRow;
   }
 
@@ -450,6 +441,18 @@ public class TongHopCuuTroService extends BaseServiceImpl {
     currentRow.get().setLyDoTuChoi(DataUtils.safeToString(req.getLyDo()));
 
     tongHopCuuTroRepository.save(currentRow.get());
+
+    // update id tong hop vao bang de xuat
+    if (trangThai.equals(TrangThaiAllEnum.DA_DUYET_LDV.getId())) {
+      List<XhThCuuTroDtl> tongHopDtl = tongHopCuuTroDtlRepository.findByIdTongHop(currentRow.get().getId());
+      List<Long> idDxuat = tongHopDtl.stream().map(XhThCuuTroDtl::getIdDxuat).collect(Collectors.toList());
+      List<XhDxCuuTroHdr> listDxuat = deXuatCuuTroRepository.findByIdIn(idDxuat);
+      listDxuat.forEach(s -> {
+        s.setIdTongHop(currentRow.get().getId());
+        s.setTrangThaiTh(TrangThaiAllEnum.DA_TONG_HOP.getId());
+      });
+      deXuatCuuTroRepository.saveAll(listDxuat);
+    }
     return currentRow.get();
   }
 }
