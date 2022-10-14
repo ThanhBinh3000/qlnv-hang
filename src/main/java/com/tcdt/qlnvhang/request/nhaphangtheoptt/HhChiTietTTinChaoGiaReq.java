@@ -26,9 +26,9 @@ public class HhChiTietTTinChaoGiaReq {
     private BigDecimal dgiaChuaThue;
     private BigDecimal thueGtgt;
     private BigDecimal thanhTien;
-    private Integer luaChon;
-    private Integer luaChonPduyet;
+    private Boolean luaChon;
+    private Boolean luaChonPduyet;
     private Long idSoQdPduyetCgia;
 
-    private List<FileDinhKemReq> fileDinhkems =new ArrayList<>();
+    private FileDinhKemReq fileDinhKems ;
 }

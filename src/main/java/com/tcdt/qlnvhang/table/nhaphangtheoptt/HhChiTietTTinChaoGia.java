@@ -32,9 +32,9 @@ public class HhChiTietTTinChaoGia implements Serializable {
     private BigDecimal dgiaChuaThue;
     private BigDecimal thueGtgt;
     private BigDecimal thanhTien;
-    private Integer luaChon;
-    private Integer luaChonPduyet;
+    private Boolean luaChon;
+    private Boolean luaChonPduyet;
     private Long idSoQdPduyetCgia;
     @Transient
-    private List<FileDinhKem> fileDinhKems =new ArrayList<>();
+    private FileDinhKem fileDinhKems ;
 }
