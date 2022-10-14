@@ -168,7 +168,7 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
         // Lay danh muc dung chung
         Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 
-        hdrThop.setTenCloaiVthh(StringUtils.isEmpty(hdrThop.getLoaiVthh()) ? null : hashMapDmHh.get(hdrThop.getLoaiVthh()));
+        hdrThop.setTenLoaiVthh(StringUtils.isEmpty(hdrThop.getLoaiVthh()) ? null : hashMapDmHh.get(hdrThop.getLoaiVthh()));
         hdrThop.setTenCloaiVthh(hashMapDmHh.get(hdrThop.getCloaiVthh()));
 
         List<HhDxKhMttThopDtl> listTh = hhDxuatKhMttThopDtlRepository.findByIdThopHdr(hdrThop.getId());
