@@ -16,7 +16,7 @@ public interface HhCtietTtinCgiaRepository extends JpaRepository<HhChiTietTTinCh
     @Transactional
     @Modifying
     @Query(value = "UPDATE HH_CTIET_TTIN_CHAO_GIA SET LUA_CHON_PDUYET =:luaChonPduyet where ID=:id",nativeQuery = true)
-    void updateLcPd(Long id,Integer luaChonPduyet);
+    void updateLcPd(Long id,Boolean luaChonPduyet);
 
 
 }

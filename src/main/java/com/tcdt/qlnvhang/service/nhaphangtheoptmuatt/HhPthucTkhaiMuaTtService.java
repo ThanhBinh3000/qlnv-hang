@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhQdPheduyetKhMttDxReposit
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhQdPheduyetKhMttHdrRepository;
 import com.tcdt.qlnvhang.request.HhQdPheduyetKhMttHdrReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.*;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -26,9 +27,8 @@ import org.springframework.util.StringUtils;
 
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.math.BigDecimal;
+import java.util.*;
 
 @Service
 public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
@@ -92,8 +92,12 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
                 HhChiTietTTinChaoGia cTietCgia =new ModelMapper().map(chiTietTTinChaoGia,HhChiTietTTinChaoGia.class);
                 cTietCgia.setIdSoQdPduyetCgia(dataMap.getId());
                 cTietCgia.setLuaChonPduyet(chiTietTTinChaoGia.getLuaChon());
+                BigDecimal thanhTien= cTietCgia.getSoLuong().multiply(cTietCgia.getDgiaChuaThue());
+                cTietCgia.setThanhTien(thanhTien);
                 hhCtietTtinCgiaRepository.save(cTietCgia);
-                List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),cTietCgia.getId(),"HH_DX_KHMTT_HDR");
+                List<FileDinhKemReq> listFile = new ArrayList<>();
+                listFile.add(chiTietTTinChaoGia.getFileDinhKems());
+                FileDinhKem fileDinhKems = fileDinhKemService.saveListFileDinhKem(listFile, cTietCgia.getId(), "HH_CTIET_TTIN_CHAO_GIA").get(0);
                 cTietCgia.setFileDinhKems(fileDinhKems);
             }
         }
@@ -106,6 +110,11 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
         HhQdPheduyetKhMttHdr data=optional.get();
         Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
         List<HhChiTietTTinChaoGia> cTietCgia =hhCtietTtinCgiaRepository.findAllByIdSoQdPduyetCgia(Long.valueOf(id));
+        for (HhChiTietTTinChaoGia dtl : cTietCgia){
+            List<FileDinhKem> fileDinhKems = fileDinhKemService.search(dtl.getId(), Collections.singleton("HH_CTIET_TTIN_CHAO_GIA"));
+            dtl.setFileDinhKems(fileDinhKems.get(0));
+        }
+
         data.setHhChiTietTTinChaoGiaList(cTietCgia);
         data.setTenTrangThaiTkhai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiTkhai()));
         data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh()) ? null : hashMapDmHh.get(data.getLoaiVthh()));
