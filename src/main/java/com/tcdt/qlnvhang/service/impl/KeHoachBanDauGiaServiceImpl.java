@@ -505,7 +505,7 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 				Contains.convertDateToString(objReq.getNgayKyTuNgay()),
 				Contains.convertDateToString(objReq.getNgayKyDenNgay()),
 				objReq.getLoaiVthh(),
-				userInfo.getDvql(),
+			 	StringUtils.isEmpty(objReq.getMaDvi())	 ? userInfo.getDvql() : objReq.getMaDvi(),
 				objReq.getTrangThai(),
 				objReq.getTrangThaiTh(),
 				pageable);
