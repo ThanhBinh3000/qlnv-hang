@@ -186,6 +186,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         Map<String, String> hashMapDmHh = getListDanhMucHangHoa();
         Map<String, String> hashMapDmdv = getListDanhMucDvi(null, null, "01");
        data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
+       data.setTenTrangThaiTkhai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiTkhai()));
        data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh()) ? null : hashMapDmHh.get(data.getLoaiVthh()));
        data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh()) ? null : hashMapDmHh.get(data.getCloaiVthh()));
         List<HhQdPheduyetKhMttDx> listdx=hhQdPheduyetKhMttDxRepository.findAllByIdPduyetHdr(data.getId());
