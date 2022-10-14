@@ -60,8 +60,8 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         Page<HhDcQdPduyetKhmttHdr> data = hhDcQdPduyetKhMttRepository.searchPage(
                 objReq.getNamKh(),
                 objReq.getSoQdDc(),
-                Contains.convertDateToString(objReq.getNgayKyQdTu()),
-                Contains.convertDateToString(objReq.getNgayKyQdDen()),
+                Contains.convertDateToString(objReq.getNgayKyDcTu()),
+                Contains.convertDateToString(objReq.getNgayKyDcDen()),
                 objReq.getTrichYeu(),
                 objReq.getTrangThai(),
                 userInfo.getDvql(),

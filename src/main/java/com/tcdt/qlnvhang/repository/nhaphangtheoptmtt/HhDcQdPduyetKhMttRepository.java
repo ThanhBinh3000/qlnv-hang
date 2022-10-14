@@ -16,12 +16,12 @@ public interface HhDcQdPduyetKhMttRepository extends JpaRepository<HhDcQdPduyetK
     @Query(value = "select * from HH_DC_QD_PDUYET_KHMTT_HDR DC where (:namKh IS NULL OR DC.NAM_KH =TO_NUMBER(:namKh))" +
             " AND (:soQdDc IS NULL OR LOWER(DC.SO_QD_DC) LIKE LOWER(CONCAT(CONCAT('%', :soQdDc),'%'))) "+
             " AND (:trichYeu IS NULL OR LOWER(DC.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%'))) "+
-            " AND (:ngayKyQdTu IS NULL OR DC.NGAY_KY_QD_GOC >=  TO_DATE(:ngayKyQdTu,'yyyy-MM-dd')) " +
-            " AND (:ngayKyQdDen IS NULL OR DC.NGAY_KY_QD_GOC <= TO_DATE(:ngayKyQdDen,'yyyy-MM-dd'))" +
+            " AND (:ngayKyDcTu IS NULL OR DC.NGAY_KY_DC >=  TO_DATE(:ngayKyDcTu,'yyyy-MM-dd')) " +
+            " AND (:ngayKyDcDen IS NULL OR DC.NGAY_KY_DC <= TO_DATE(:ngayKyDcDen,'yyyy-MM-dd'))" +
             " AND (:trangThai IS NULL OR DC.TRANG_THAI = :trangThai) " +
             " AND (:maDvi IS NULL OR LOWER(DC.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "
             ,nativeQuery = true)
-    Page<HhDcQdPduyetKhmttHdr> searchPage(Integer namKh, String soQdDc, String trichYeu, String ngayKyQdTu, String ngayKyQdDen, String trangThai, String maDvi, Pageable pageable);
+    Page<HhDcQdPduyetKhmttHdr> searchPage(Integer namKh, String soQdDc, String trichYeu, String ngayKyDcTu, String ngayKyDcDen, String trangThai, String maDvi, Pageable pageable);
 
     Optional<HhDcQdPduyetKhmttHdr> findBySoQdDc(String soQdDc);
 

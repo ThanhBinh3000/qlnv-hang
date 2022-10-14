@@ -12,9 +12,9 @@ public class SearchHhDcQdPduyetKhMttReq extends BaseRequest {
     private Integer namKh;
     private String SoQdDc;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    Date ngayKyQdTu;
+    Date ngayKyDcTu;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    Date ngayKyQdDen;
+    Date ngayKyDcDen;
     private String trichYeu;
     private String trangThai;
     private String maDvi;
