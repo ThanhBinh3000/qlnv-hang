@@ -17,7 +17,9 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuatcuutro.XhDxCuuTroHdrSearchReq;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.table.*;
+import com.tcdt.qlnvhang.table.XhDxCuuTroDtl;
+import com.tcdt.qlnvhang.table.XhDxCuuTroHdr;
+import com.tcdt.qlnvhang.table.XhDxCuuTroKho;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganKho;
@@ -41,9 +43,9 @@ import java.text.MessageFormat;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static com.tcdt.qlnvhang.util.Contains.*;
+import static com.tcdt.qlnvhang.util.Contains.CAP_CUC;
+import static com.tcdt.qlnvhang.util.Contains.CAP_TONG_CUC;
 
 @Service
 @Log4j2
@@ -251,7 +253,9 @@ public class DeXuatCuuTroService extends BaseServiceImpl {
             listRemoveKho.remove(s1);
             s1.setIdDxuat(finalNewRow.getId());
             s1.setIdDxuatDtl(newRowDtl.getId());
+
           });
+          deXuatCuuTroKhoRepository.deleteAll(listRemoveKho);
           deXuatCuuTroKhoRepository.saveAll(phuongAnXuat);
         }
       });
@@ -321,15 +325,17 @@ public class DeXuatCuuTroService extends BaseServiceImpl {
     if (capDvi.equals(CAP_TONG_CUC)) {
       //gui duyet
       if (condition.equals(TrangThaiAllEnum.DU_THAO.getId() + TrangThaiAllEnum.CHO_DUYET_LDTC.getId())) {
-        trangThai = TrangThaiAllEnum.CHO_DUYET_LDTC.getId();
+        trangThai = TrangThaiAllEnum.CHO_DUYET_LDV.getId();
+      } else if (condition.equals(TrangThaiAllEnum.TU_CHOI_LDV.getId() + TrangThaiAllEnum.CHO_DUYET_LDTC.getId())) {
+        trangThai = TrangThaiAllEnum.CHO_DUYET_LDV.getId();
       }
       //duyet
-      else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_LDTC.getId() + TrangThaiAllEnum.DA_DUYET_LDTC.getId())) {
-        trangThai = TrangThaiAllEnum.DA_DUYET_LDTC.getId();
+      else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_LDV.getId() + TrangThaiAllEnum.DA_DUYET_LDTC.getId())) {
+        trangThai = TrangThaiAllEnum.DA_DUYET_LDV.getId();
       }
       //tu choi
-      else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_LDTC.getId() + TrangThaiAllEnum.TU_CHOI_LDTC.getId())) {
-        trangThai = TrangThaiAllEnum.TU_CHOI_LDTC.getId();
+      else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_LDV.getId() + TrangThaiAllEnum.TU_CHOI_LDTC.getId())) {
+        trangThai = TrangThaiAllEnum.TU_CHOI_LDV.getId();
       }
     } else if (capDvi.equals(CAP_CUC)) {
       //gui duyet
@@ -338,6 +344,8 @@ public class DeXuatCuuTroService extends BaseServiceImpl {
       } else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_TP.getId() + TrangThaiAllEnum.CHO_DUYET_LDTC.getId())) {
         trangThai = TrangThaiAllEnum.CHO_DUYET_LDC.getId();
       } else if (condition.equals(TrangThaiAllEnum.TU_CHOI_TP.getId() + TrangThaiAllEnum.CHO_DUYET_LDTC.getId())) {
+        trangThai = TrangThaiAllEnum.CHO_DUYET_TP.getId();
+      } else if (condition.equals(TrangThaiAllEnum.TU_CHOI_LDC.getId() + TrangThaiAllEnum.CHO_DUYET_LDTC.getId())) {
         trangThai = TrangThaiAllEnum.CHO_DUYET_TP.getId();
       }
       //duyet
@@ -355,7 +363,11 @@ public class DeXuatCuuTroService extends BaseServiceImpl {
     }
 
     currentRow.get().setTrangThai(trangThai);
-    currentRow.get().setLyDoTuChoi(DataUtils.safeToString(req.getLyDo()));
+    if (trangThai.equals(TrangThaiAllEnum.TU_CHOI_TP.getId()) ||
+        trangThai.equals(TrangThaiAllEnum.TU_CHOI_LDC.getId()) ||
+        trangThai.equals(TrangThaiAllEnum.TU_CHOI_LDV.getId())) {
+      currentRow.get().setLyDoTuChoi(DataUtils.safeToString(req.getLyDo()));
+    }
     deXuatCuuTroRepository.save(currentRow.get());
     return currentRow.get();
   }
