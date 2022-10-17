@@ -61,6 +61,8 @@ public class HhQdPheduyetKhMttHdr implements Serializable {
 
     private String diaDiemCgia;
 
+    private String ghiChu;
+
     private String loaiVthh;
     @Transient
     private String tenLoaiVthh;
