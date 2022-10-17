@@ -26,6 +26,7 @@ public class HhQdPheduyetKhMttHdrReq {
     private String loaiVthh;
     private String cloaiVthh;
     private String moTaHangHoa;
+    private String ghiChu;
 
     private List<FileDinhKemReq> fileDinhkems =new ArrayList<>();
 

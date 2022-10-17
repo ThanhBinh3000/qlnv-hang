@@ -170,6 +170,7 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
 
         hdrThop.setTenLoaiVthh(StringUtils.isEmpty(hdrThop.getLoaiVthh()) ? null : hashMapDmHh.get(hdrThop.getLoaiVthh()));
         hdrThop.setTenCloaiVthh(hashMapDmHh.get(hdrThop.getCloaiVthh()));
+        hdrThop.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(hdrThop.getTrangThai()));
 
         List<HhDxKhMttThopDtl> listTh = hhDxuatKhMttThopDtlRepository.findByIdThopHdr(hdrThop.getId());
         List<Long> idDxuat=listTh.stream().map(HhDxKhMttThopDtl::getIdDxHdr).collect(Collectors.toList());
