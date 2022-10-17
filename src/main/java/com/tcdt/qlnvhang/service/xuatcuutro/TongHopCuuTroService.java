@@ -364,7 +364,7 @@ public class TongHopCuuTroService extends BaseServiceImpl {
     if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
       req.setDvql(currentUser.getDvql());
     }
-    req.setListTrangThai(Arrays.asList(TrangThaiAllEnum.DA_DUYET_LDC.getId(), TrangThaiAllEnum.DA_DUYET_LDTC.getId()));
+    req.setListTrangThai(Arrays.asList(TrangThaiAllEnum.DA_DUYET_LDC.getId(), TrangThaiAllEnum.DA_DUYET_LDV.getId()));
     req.setListTrangThaiTh(Arrays.asList(TrangThaiAllEnum.CHUA_TONG_HOP.getId()));
     PaggingReq paggingReq = new PaggingReq();
     paggingReq.setPage(0);
