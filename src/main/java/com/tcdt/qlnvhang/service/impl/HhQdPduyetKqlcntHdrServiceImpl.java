@@ -83,6 +83,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setNgayTao(getDateTimeNow());
 		dataMap.setTrangThai(Contains.DUTHAO);
+		dataMap.setTrangThaiHd(NhapXuatHangTrangThaiEnum.CHUACAPNHAT.getId());
 		dataMap.setMaDvi(getUser().getDvql());
 		dataMap.setChildren(fileDinhKemList);
 
@@ -186,14 +187,20 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		}
 
 		String status = stReq.getTrangThai() + optional.get().getTrangThai();
-		if ((Contains.BAN_HANH + Contains.DUTHAO).equals(status)) {
-			optional.get().setNguoiPduyet(userInfo.getUsername());
-			optional.get().setNgayPduyet(new Date());
-		} else {
-			throw new Exception("Phê duyệt không thành công");
+		switch (status) {
+			case Contains.BAN_HANH + Contains.DUTHAO:
+				optional.get().setNguoiPduyet(userInfo.getUsername());
+				optional.get().setNgayPduyet(new Date());
+				optional.get().setTrangThai(stReq.getTrangThai());
+
+				break;
+			case Contains.HOANTHANHCAPNHAT + Contains.BAN_HANH:
+				optional.get().setTrangThaiHd(stReq.getTrangThai());
+				break;
+			default:
+				throw new Exception("Phê duyệt không thành công");
 		}
 
-		optional.get().setTrangThai(stReq.getTrangThai());
 		HhQdPduyetKqlcntHdr createCheck = hhQdPduyetKqlcntHdrRepository.save(optional.get());
 		return createCheck;
 	}
@@ -210,6 +217,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
 		hhQdPduyetKqlcntHdrs.forEach( item -> {
 			try {
+				item.setListHopDong(hhHopDongRepository.findAllByIdQdKqLcnt(item.getId()));
 				item.setQdKhlcnt(Objects.isNull(item.getIdQdPdKhlcnt()) ? null : qdKhLcntService.detail(item.getIdQdPdKhlcnt().toString()));
 				item.setTenDvi(listDanhMucDvi.get(item.getMaDvi()));
 				item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));

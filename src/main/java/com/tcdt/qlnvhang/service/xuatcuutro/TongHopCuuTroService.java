@@ -438,7 +438,9 @@ public class TongHopCuuTroService extends BaseServiceImpl {
     }*/
 
     currentRow.get().setTrangThai(trangThai);
-    currentRow.get().setLyDoTuChoi(DataUtils.safeToString(req.getLyDo()));
+    if (trangThai.equals(TrangThaiAllEnum.TU_CHOI_LDV.getId())) {
+      currentRow.get().setLyDoTuChoi(DataUtils.safeToString(req.getLyDo()));
+    }
 
     tongHopCuuTroRepository.save(currentRow.get());
 

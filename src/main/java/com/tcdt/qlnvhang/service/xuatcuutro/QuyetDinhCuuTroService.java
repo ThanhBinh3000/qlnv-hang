@@ -398,16 +398,20 @@ public class QuyetDinhCuuTroService extends BaseServiceImpl {
     if (DataUtils.isNullOrEmpty(trangThai)) {
       throw new Exception("Quy trình phê duyệt không hợp lệ.");
     }
-    // update trang thai cho bang tong hop
-    if(trangThai.equals(TrangThaiAllEnum.BAN_HANH.getId())){}
+
     Optional<XhThCuuTroHdr> tongHopHdr = tongHopCuuTroRepository.findById(currentRow.get().getIdTongHop());
     if (tongHopHdr.isPresent()) {
       tongHopHdr.get().setTrangThai(TrangThaiAllEnum.DA_DU_THAO_QD.getId());
+      // update trang thai cho bang tong hop
+      if (trangThai.equals(TrangThaiAllEnum.BAN_HANH.getId())) {
+        tongHopHdr.get().setIdQuyetDinh(currentRow.get().getId());
+      }
       tongHopCuuTroRepository.save(tongHopHdr.get());
     }
     currentRow.get().setTrangThai(trangThai);
-    currentRow.get().setLyDoTuChoi(DataUtils.safeToString(req.getLyDo()));
-
+    if (trangThai.equals(TrangThaiAllEnum.TU_CHOI_LDTC.getId())) {
+      currentRow.get().setLyDoTuChoi(DataUtils.safeToString(req.getLyDo()));
+    }
     quyetDinhCuuTroRepository.save(currentRow.get());
     return currentRow.get();
   }
