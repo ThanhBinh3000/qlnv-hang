@@ -24,7 +24,7 @@ public interface TongHopCuuTroRepository extends JpaRepository<XhThCuuTroHdr, Lo
 //      "AND (:#{#param.soDxuat}  IS NULL OR LOWER(c.soDxuat) LIKE CONCAT('%',LOWER(:#{#param.soDxuat}),'%')) " +
       "AND (:#{#param.loaiVthh}  IS NULL OR LOWER(c.loaiVthh) =:#{#param.loaiVthh}) " +
       "AND (:#{#param.cloaiVthh}  IS NULL OR LOWER(c.cloaiVthh) =:#{#param.cloaiVthh}) " +
-//       "AND (:#{#param.trichYeu}  IS NULL OR LOWER(c.trichYeu) LIKE CONCAT('%',LOWER(:#{#param.trichYeu}),'%')) " +
+      "AND (:#{#param.listTrangThai == null} = true OR c.trangThai in :#{#param.listTrangThai}) " +
       "AND ((:#{#param.tuNgayTongHop}  IS NULL OR c.ngayTongHop >= :#{#param.tuNgayTongHop}) AND (:#{#param.denNgayTongHop}  IS NULL OR c.ngayTongHop <= :#{#param.denNgayTongHop}) ) " +
       "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
