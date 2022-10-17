@@ -289,11 +289,8 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
       page = hhHopDongRepository.select(req.getLoaiVthh(), req.getSoHd(), req.getTenHd(), req.getNhaCcap(), convertDateToString(req.getTuNgayKy()), convertDateToString(req.getDenNgayKy()), req.getTrangThai(), dvql, req.getNamHd(), pageable);
     }
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-    Map<String, String> hashMapDviLquan = getListDanhMucDviLq("NT");
     Map<String, String> mapVthh = getListDanhMucHangHoa();
-    Set<Long> hopDongIds = page.getContent().stream().map(HhHopDongHdr::getId).collect(Collectors.toSet());
-//    Map<Long, List<HhHopDongDdiemNhapKho>> diaDiemNhapKhoMap = hhHopDongDdiemNhapKhoRepository.findAllByIdHdongHdrIn(hopDongIds)
-//        .stream().collect(Collectors.groupingBy(HhHopDongDdiemNhapKho::getIdHdongHdr));
+
 
     page.forEach(f -> {
       f.setTenDvi(mapDmucDvi.get(f.getMaDvi()));
@@ -309,6 +306,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 //      }
       f.setDonViTinh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : mapVthh.get(f.getDonViTinh()));
       f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+
     });
     return page;
   }
