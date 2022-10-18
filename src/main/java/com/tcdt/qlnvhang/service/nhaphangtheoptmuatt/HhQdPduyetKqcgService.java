@@ -63,7 +63,7 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmhh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmhh.get(f.getCloaiVthh()));
-            f.setTenDvi(StringUtils.isEmpty(f.getTenDvi()) ? null : hashMapDmdv.get(userInfo.getTenDvi()));
+            f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : hashMapDmdv.get(userInfo.getTenDvi()));
         });
 
         return data;
@@ -75,7 +75,7 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
         if (userInfo == null){
             throw new Exception("Bad request.");
         }
-        Optional<HhQdPduyetKqcgHdr> optional =hhQdPduyetKqcgRepository.findAllBySoQdPdCg(objReq.getSoQdPdCg());
+        Optional<HhQdPduyetKqcgHdr> optional =hhQdPduyetKqcgRepository.findAllBySoQdPdKq(objReq.getSoQdPdKq());
         if(optional.isPresent()){
             throw new Exception("Số quyết định phê duyệt đã tồn tại");
         }
@@ -105,7 +105,7 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
             throw new Exception("Bad request.");
         Optional<HhQdPduyetKqcgHdr> optional = hhQdPduyetKqcgRepository.findById(objReq.getId());
 
-        Optional<HhQdPduyetKqcgHdr> soQdPdCg = hhQdPduyetKqcgRepository.findAllBySoQdPdCg(objReq.getSoQdPdCg());
+        Optional<HhQdPduyetKqcgHdr> soQdPdCg = hhQdPduyetKqcgRepository.findAllBySoQdPdKq(objReq.getSoQdPdKq());
         if(soQdPdCg.isPresent()){
             if (soQdPdCg.isPresent()){
                 if (!soQdPdCg.get().getId().equals(objReq.getId())){
@@ -148,7 +148,7 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
         Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
         data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh())?null:hashMapDmhh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh())?null:hashMapDmhh.get(data.getCloaiVthh()));
-        data.setTenDvi(StringUtils.isEmpty(userInfo.getTenDvi()) ? null : hashMapDmdv.get(userInfo.getTenDvi()));
+        data.setTenDvi(StringUtils.isEmpty(data.getMaDvi()) ? null : hashMapDmdv.get(userInfo.getTenDvi()));
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
         data.setFileDinhKems(data.getFileDinhKems());
         List<HhChiTietTTinChaoGia> hhChiTietTTinChaoGias = hhCtietTtinCgiaRepository.findAllByIdSoQdPduyetCgia(data.getIdPdKq());
