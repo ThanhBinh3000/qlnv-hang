@@ -75,7 +75,7 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
         if (userInfo == null){
             throw new Exception("Bad request.");
         }
-        Optional<HhQdPduyetKqcgHdr> optional =hhQdPduyetKqcgRepository.findAllBySoQdPdCg(objReq.getSoQdPdCg());
+        Optional<HhQdPduyetKqcgHdr> optional =hhQdPduyetKqcgRepository.findAllBySoQdPdKq(objReq.getSoQdPdKq());
         if(optional.isPresent()){
             throw new Exception("Số quyết định phê duyệt đã tồn tại");
         }
@@ -105,7 +105,7 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
             throw new Exception("Bad request.");
         Optional<HhQdPduyetKqcgHdr> optional = hhQdPduyetKqcgRepository.findById(objReq.getId());
 
-        Optional<HhQdPduyetKqcgHdr> soQdPdCg = hhQdPduyetKqcgRepository.findAllBySoQdPdCg(objReq.getSoQdPdCg());
+        Optional<HhQdPduyetKqcgHdr> soQdPdCg = hhQdPduyetKqcgRepository.findAllBySoQdPdKq(objReq.getSoQdPdKq());
         if(soQdPdCg.isPresent()){
             if (soQdPdCg.isPresent()){
                 if (!soQdPdCg.get().getId().equals(objReq.getId())){
