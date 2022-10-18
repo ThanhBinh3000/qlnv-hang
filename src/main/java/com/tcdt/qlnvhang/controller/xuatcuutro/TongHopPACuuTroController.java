@@ -173,13 +173,13 @@ public class TongHopPACuuTroController extends BaseController {
   @ApiOperation(value = "Kết xuất danh sách đề xuất cứu trợ", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
   @PostMapping(PathContains.URL_KET_XUAT)
   @ResponseStatus(HttpStatus.OK)
-  public void exportToExcel(@CurrentUser CustomUserDetails currentUser, @RequestBody XhDxCuuTroHdrSearchReq objReq, HttpServletResponse response)
+  public void exportToExcel(@CurrentUser CustomUserDetails currentUser, @RequestBody XhThCuuTroHdrSearchReq objReq, HttpServletResponse response)
       throws Exception {
     try {
-      deXuatCuuTroService.export(currentUser, objReq, response);
+      tongHopCuuTroService.export(currentUser, objReq, response);
     } catch (Exception e) {
       // TODO: handle exception
-      log.error("Kết xuất danh sách gói thầu trace: {}", e);
+      log.error("Tổng hợp phương án cứu trợ trace: {}", e);
       final Map<String, Object> body = new HashMap<>();
       body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       body.put("msg", e.getMessage());

@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.service.xuatcuutro;
 
 import com.google.common.collect.Lists;
-import com.tcdt.qlnvhang.entities.FileDKemJoinDxuatCuuTro;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
@@ -27,8 +26,6 @@ import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.lang3.time.DateUtils;
-import org.apache.poi.ss.usermodel.DateUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -44,7 +41,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.tcdt.qlnvhang.util.Contains.*;
+import static com.tcdt.qlnvhang.util.Contains.CAP_TONG_CUC;
 
 @Service
 @Log4j2
@@ -208,8 +205,6 @@ public class TongHopCuuTroService extends BaseServiceImpl {
       throw new Exception("Tham số không hợp lệ.");
     XhThCuuTroHdr currentRow = tongHopCuuTroRepository.findById(req.getId()).orElse(null);
 
-    System.out.println(req);
-    System.out.println(currentRow);
     if (DataUtils.isNullObject(currentRow))
       throw new Exception("Không tìm thấy dữ liệu.");
     XhThCuuTroHdr validateRow = tongHopCuuTroRepository.findFirstByMaTongHopAndNam(currentRow.getMaTongHop(), currentRow.getNam()).get();
@@ -281,25 +276,23 @@ public class TongHopCuuTroService extends BaseServiceImpl {
     req.setPaggingReq(paggingReq);
     Page<XhThCuuTroHdr> page = this.searchPage(currentUser, req);
     List<XhThCuuTroHdr> data = page.getContent();
-    String title = "Danh sách Đề xuất phương án xuất cứu trợ, viện trợ";
-    String[] rowsName = new String[]{"STT", "Loại hình nhập xuất", "Số công văn/đề xuất", "Đơn vị đề xuất", "Ngày đề xuất", "Loại hàng hoá", "Chủng loại hàng hóa", "Tổng SL xuất viện trợ, cứu trợ (kg)", "Trích yếu", "Trạng thái đề xuất", "Trạng thái tổng hợp"};
-    String fileName = "danh-sach-de-xuat-phuong-an-xuat-cuu-tro-vien-tro.xlsx";
+    String title = "Danh sách Tổng hợp phương án xuất cứu trợ, viện trợ";
+    String[] rowsName = new String[]{"STT", "Loại hình nhập xuất", "Mã tổng hợp", "Ngày tổng hợp", "Loại hàng hóa", "Chủng loại hàng hóa", "Tổng SL xuất viện trợ, cứu trợ (kg)", "Nội dung tổng hợp", "Trạng thái"};
+    String fileName = "danh-sach-tong-hop-phuong-an-xuat-cuu-tro-vien-tro.xlsx";
     List<Object[]> dataList = new ArrayList<Object[]>();
     Object[] objs = null;
     for (int i = 0; i < data.size(); i++) {
       XhThCuuTroHdr dx = data.get(i);
       objs = new Object[rowsName.length];
       objs[0] = i;
-    /*  objs[1] = dx.getTenLoaiHinhNhapXuat();
-      objs[2] = dx.getSoDxuat();
-      objs[3] = dx.getTenDvi();
-      objs[4] = dx.getNgayDxuat();
-      objs[5] = dx.getTenLoaiVthh();
+      objs[1] = dx.getTenLoaiHinhNhapXuat();
+      objs[2] = dx.getMaTongHop();
+      objs[3] = dx.getNgayTongHop();
+      objs[4] = dx.getTenLoaiVthh();
       objs[6] = dx.getTenCloaiVthh();
       objs[7] = dx.getTongSoLuong();
-      objs[8] = dx.getTrichYeu();
+      objs[8] = dx.getNoiDung();
       objs[9] = dx.getTenTrangThai();
-      objs[10] = dx.getTenTrangThaiTh();*/
       dataList.add(objs);
     }
     ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
