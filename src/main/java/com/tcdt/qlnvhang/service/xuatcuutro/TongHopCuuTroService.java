@@ -340,10 +340,9 @@ public class TongHopCuuTroService extends BaseServiceImpl {
 
   @Transactional(rollbackFor = Exception.class)
   public void deleteListId(List<Long> listId) {
-    deXuatCuuTroDtlRepository.deleteAllByIdDxuatIn(listId);
-    deXuatCuuTroKhoRepository.deleteAllByIdDxuatIn(listId);
-    deXuatCuuTroRepository.deleteAllByIdIn(listId);
-    fileDinhKemService.deleteMultiple(listId, Lists.newArrayList(XhDxCuuTroHdr.TABLE_NAME));
+    tongHopCuuTroDtlRepository.deleteAllByIdTongHopIn(listId);
+    tongHopCuuTroRepository.deleteAllByIdIn(listId);
+    fileDinhKemService.deleteMultiple(listId, Lists.newArrayList(XhQdCuuTroHdr.TABLE_NAME));
   }
 
   public XhThCuuTroHdr synthetic(CustomUserDetails currentUser, XhDxCuuTroHdrSearchReq req) throws Exception {

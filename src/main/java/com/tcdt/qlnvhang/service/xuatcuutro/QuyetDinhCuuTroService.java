@@ -337,10 +337,9 @@ public class QuyetDinhCuuTroService extends BaseServiceImpl {
 
   @Transactional(rollbackFor = Exception.class)
   public void deleteListId(List<Long> listId) {
-    deXuatCuuTroDtlRepository.deleteAllByIdDxuatIn(listId);
-    deXuatCuuTroKhoRepository.deleteAllByIdDxuatIn(listId);
-    deXuatCuuTroRepository.deleteAllByIdIn(listId);
-    fileDinhKemService.deleteMultiple(listId, Lists.newArrayList(XhDxCuuTroHdr.TABLE_NAME));
+    quyetDinhCuuTroDtlRepository.deleteAllByIdQdIn(listId);
+    quyetDinhCuuTroRepository.deleteAllByIdIn(listId);
+    fileDinhKemService.deleteMultiple(listId, Lists.newArrayList(XhQdCuuTroHdr.TABLE_NAME));
   }
 
 
