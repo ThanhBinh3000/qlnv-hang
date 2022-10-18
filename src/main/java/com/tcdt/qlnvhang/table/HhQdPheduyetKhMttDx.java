@@ -23,8 +23,12 @@ public class HhQdPheduyetKhMttDx implements Serializable {
 
     private Long id;
     private Long idDxuat;
+    private String soDxuat;
     private Long idPduyetHdr;
     private String maDvi;
+    @Transient
+    private String tenDvi;
+    private String diaChiDvi;
     private String loaiVthh;
     @Transient
     private String tenLoaiVthh;
