@@ -434,35 +434,13 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
   public Page<HhHopDongHdr> lookupData(HhHopDongSearchReq req, HttpServletResponse response) throws Exception {
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("ngay_sua", "ngay_tao").descending());
     UserInfo userInfo = UserUtils.getUserInfo();
-    String dvql = userInfo.getDvql();
-    Page<HhHopDongHdr> page;
-    if (req.getTrangThai() != null && req.getTrangThai().equals(TrangThaiAllEnum.DA_KY.getId())) {
-      dvql = userInfo.getDvql().substring(0, 4);
-//      page = hhHopDongRepository.selectAll(req.getLoaiVthh(), req.getSoHd(), req.getTenHd(), req.getNhaCcap(), convertDateToString(req.getTuNgayKy()), convertDateToString(req.getDenNgayKy()), req.getTrangThai(), dvql, req.getNamHd(), pageable);
-    } else {
-//      page = hhHopDongRepository.lookupData(req.getLoaiVthh(), req.getSoHd(), req.getTenHd(), req.getNhaCcap(), convertDateToString(req.getTuNgayKy()), convertDateToString(req.getDenNgayKy()), req.getTrangThai(), dvql, req.getNamHd(),userInfo.getDvql(), pageable);
-    }
-    page = hhHopDongRepository.lookupData(req.getLoaiVthh(), req.getSoHd(), req.getTenHd(), req.getNhaCcap(), convertDateToString(req.getTuNgayKy()), convertDateToString(req.getDenNgayKy()), req.getTrangThai(), dvql, req.getNamHd(), userInfo.getDvql(), pageable);
+    Page<HhHopDongHdr> page = hhHopDongRepository.lookupData(req.getLoaiVthh(), req.getNamHd(), userInfo.getDvql(), req.getTrangThai(), pageable);
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-    Map<String, String> hashMapDviLquan = getListDanhMucDviLq("NT");
     Map<String, String> mapVthh = getListDanhMucHangHoa();
-    Set<Long> hopDongIds = page.getContent().stream().map(HhHopDongHdr::getId).collect(Collectors.toSet());
-//    Map<Long, List<HhHopDongDdiemNhapKho>> diaDiemNhapKhoMap = hhHopDongDdiemNhapKhoRepository.findAllByIdHdongHdrIn(hopDongIds)
-//        .stream().collect(Collectors.groupingBy(HhHopDongDdiemNhapKho::getIdHdongHdr));
-
     page.forEach(f -> {
       f.setTenDvi(mapDmucDvi.get(f.getMaDvi()));
-//      f.setTenVthh(mapVthh.get(f.getLoaiVthh()));
       f.setTenLoaiVthh(mapVthh.get(f.getLoaiVthh()));
       f.setTenCloaiVthh(mapVthh.get(f.getCloaiVthh()));
-//      f.setTenNthau(hashMapDviLquan.get(DataUtils.safeToDouble(f.getIdNthau()).toString()));
-//      List<HhHopDongDdiemNhapKho> diaDiemNhapKhos = diaDiemNhapKhoMap.get(f.getId()) != null ? diaDiemNhapKhoMap.get(f.getId()) : new ArrayList<>();
-//      if (!CollectionUtils.isEmpty(diaDiemNhapKhos)) {
-//        diaDiemNhapKhos.forEach(d -> {
-//          d.setTenDvi(mapDmucDvi.get(d.getMaDvi()));
-//        });
-//        f.setHhDdiemNhapKhoList(diaDiemNhapKhos);
-//      }
       f.setDonViTinh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : mapVthh.get(f.getDonViTinh()));
       f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
     });

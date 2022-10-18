@@ -238,7 +238,7 @@ public class HhHopDongController {
   }
 
   @ApiOperation(value = "Danh sách chọn hợp đồng", response = List.class)
-  @PostMapping(value = "danh-sach-chon", produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(value = "/ds-qd-giao-nv-nh", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   public ResponseEntity<BaseResponse> lookupData(HttpServletResponse response,
                                                  @Valid @RequestBody HhHopDongSearchReq objReq) {

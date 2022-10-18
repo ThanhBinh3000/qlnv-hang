@@ -69,6 +69,6 @@ public class HhQdGiaoNvuNhapxuatDtl implements Serializable {
 	String tenDvi;
 
 	@Transient
-	List<HhQdGiaoNvuNxDdiem> diaDiemNhapList = new ArrayList<>();
+	List<HhQdGiaoNvuNxDdiem> children = new ArrayList<>();
 
 }

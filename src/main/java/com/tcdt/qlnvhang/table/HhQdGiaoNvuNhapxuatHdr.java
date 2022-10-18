@@ -21,6 +21,8 @@ import javax.persistence.Transient;
 import javax.transaction.Transactional;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuKiemTraChatLuong;
 import com.tcdt.qlnvhang.util.Contains;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -92,6 +94,8 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 
 	String soHd;
 
+	String tenGoiThau;
+
 	String donViTinh;
 
 	Long soLuong;
@@ -116,6 +120,9 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 
 	@Transient
 	String tenCloaiVthh;
+
+	@Transient
+	List<QlpktclhPhieuKtChatLuong> listPhieuKtraCl = new ArrayList<>();
 
 	@Transient
 	private List<HhQdGiaoNvuNhapxuatDtl> dtlList = new ArrayList<>();

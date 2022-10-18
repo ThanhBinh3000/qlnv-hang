@@ -89,6 +89,8 @@ public class QlpktclhPhieuKtChatLuongRequestDto extends BaseRequest {
 
 	private String kqDanhGia;
 
+	private Long idDdiemGiaoNvNh;
+
 	private List<QlpktclhKetQuaKiemTraRequestDto> ketQuaKiemTra;
 
 
