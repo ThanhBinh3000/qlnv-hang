@@ -1,8 +1,6 @@
 package com.tcdt.qlnvhang.service.xuatcuutro;
 
 import com.google.common.collect.Lists;
-import com.tcdt.qlnvhang.entities.FileDKemJoinDxuatCuuTro;
-import com.tcdt.qlnvhang.entities.FileDKemJoinQdCuuTro;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
@@ -13,9 +11,7 @@ import com.tcdt.qlnvhang.repository.khotang.KtNhaKhoRepository;
 import com.tcdt.qlnvhang.repository.xuatcuutro.*;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.xuatcuutro.XhDxCuuTroHdrSearchReq;
 import com.tcdt.qlnvhang.request.xuatcuutro.XhQdCuuTroHdrSearchReq;
-import com.tcdt.qlnvhang.request.xuatcuutro.XhThCuuTroHdrSearchReq;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
@@ -24,7 +20,6 @@ import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganLo;
 import com.tcdt.qlnvhang.table.khotang.KtNhaKho;
-import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
@@ -165,10 +160,16 @@ public class QuyetDinhCuuTroService extends BaseServiceImpl {
     if (optional.isPresent()) {
       throw new Exception(MessageFormat.format("Số quyết định {0} đã tồn tại", req.getSoQd()));
     }
+    XhThCuuTroHdr xhThCuuTroHdr = tongHopCuuTroRepository.findById(req.getIdTongHop()).get();
     XhQdCuuTroHdr newRow = new XhQdCuuTroHdr();
     BeanUtils.copyProperties(req, newRow, "id");
     newRow.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
     newRow.setMaDvi(currentUser.getDvql());
+    if (DataUtils.isNullObject(xhThCuuTroHdr)) {
+      newRow.setIdTongHop(xhThCuuTroHdr.getId());
+      newRow.setNgayTongHop(xhThCuuTroHdr.getNgayTongHop());
+      newRow.setMaTongHop(xhThCuuTroHdr.getMaTongHop());
+    }
 //    newRow.setCapDvi(currentUser.getUser().getCapDvi());
     newRow = quyetDinhCuuTroRepository.save(newRow);
 
@@ -215,8 +216,13 @@ public class QuyetDinhCuuTroService extends BaseServiceImpl {
     if (!DataUtils.isNullObject(validateRow) && currentRow.getId() != req.getId()) {
       throw new Exception(MessageFormat.format("Số đề xuất {0} đã tồn tại", req.getSoDxuat()));
     }
+    XhThCuuTroHdr xhThCuuTroHdr = tongHopCuuTroRepository.findById(req.getIdTongHop()).get();
     DataUtils.copyProperties(req, currentRow, "id", "trangThaiTh", "fileDinhKem", "thongTinChiTiet", "phuongAnXuat");
-
+    if (DataUtils.isNullObject(xhThCuuTroHdr)) {
+      currentRow.setIdTongHop(xhThCuuTroHdr.getId());
+      currentRow.setNgayTongHop(xhThCuuTroHdr.getNgayTongHop());
+      currentRow.setMaTongHop(xhThCuuTroHdr.getMaTongHop());
+    }
     if (DataUtils.isNullOrEmpty(currentRow.getLoaiVthh())) {
       throw new Exception("Loại hàng hóa thiếu hoặc không hợp lệ.");
     }
@@ -266,25 +272,24 @@ public class QuyetDinhCuuTroService extends BaseServiceImpl {
     req.setPaggingReq(paggingReq);
     Page<XhQdCuuTroHdr> page = this.searchPage(currentUser, req);
     List<XhQdCuuTroHdr> data = page.getContent();
-    String title = "Danh sách Đề xuất phương án xuất cứu trợ, viện trợ";
-    String[] rowsName = new String[]{"STT", "Loại hình nhập xuất", "Số công văn/đề xuất", "Đơn vị đề xuất", "Ngày đề xuất", "Loại hàng hoá", "Chủng loại hàng hóa", "Tổng SL xuất viện trợ, cứu trợ (kg)", "Trích yếu", "Trạng thái đề xuất", "Trạng thái tổng hợp"};
-    String fileName = "danh-sach-de-xuat-phuong-an-xuat-cuu-tro-vien-tro.xlsx";
+    String title = "Danh sách Quyết định phê duyệt phương án xuất cứu trợ, viện trợ";
+    String[] rowsName = new String[]{"STT", "Số quyết định", "Ngày ký quyết định", "Mã tổng hợp", "Ngày tổng hợp", "Loại hàng hoá", "Chủng loại hàng hóa", "Tổng SL xuất viện trợ, cứu trợ (kg)", "Trích yếu", "Trạng thái"};
+    String fileName = "danh-sach-quyet-dinh-phe-duyet-phuong-an-xuat-cuu-tro-vien-tro.xlsx";
     List<Object[]> dataList = new ArrayList<Object[]>();
     Object[] objs = null;
     for (int i = 0; i < data.size(); i++) {
       XhQdCuuTroHdr dx = data.get(i);
       objs = new Object[rowsName.length];
       objs[0] = i;
-    /*  objs[1] = dx.getTenLoaiHinhNhapXuat();
-      objs[2] = dx.getSoDxuat();
-      objs[3] = dx.getTenDvi();
-      objs[4] = dx.getNgayDxuat();
+      objs[1] = dx.getSoQd();
+      objs[2] = dx.getNgayKy();
+      objs[3] = dx.getMaTongHop();
+      objs[4] = dx.getNgayTongHop();
       objs[5] = dx.getTenLoaiVthh();
       objs[6] = dx.getTenCloaiVthh();
       objs[7] = dx.getTongSoLuong();
       objs[8] = dx.getTrichYeu();
       objs[9] = dx.getTenTrangThai();
-      objs[10] = dx.getTenTrangThaiTh();*/
       dataList.add(objs);
     }
     ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
@@ -370,7 +375,7 @@ public class QuyetDinhCuuTroService extends BaseServiceImpl {
         trangThai = TrangThaiAllEnum.TU_CHOI_LDTC.getId();
       }
       //ban hanh
-      if (condition.equals(TrangThaiAllEnum.DA_DUYET_LDTC.getId() + TrangThaiAllEnum.BAN_HANH.getId())) {
+      if (condition.equals(TrangThaiAllEnum.DU_THAO.getId() + TrangThaiAllEnum.BAN_HANH.getId())) {
         trangThai = TrangThaiAllEnum.BAN_HANH.getId();
       }
     }
