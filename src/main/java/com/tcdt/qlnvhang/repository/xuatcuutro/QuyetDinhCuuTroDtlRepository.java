@@ -17,4 +17,6 @@ public interface QuyetDinhCuuTroDtlRepository extends JpaRepository<XhQdCuuTroDt
 
 
   List<XhQdCuuTroDtl> findByIdQd(Long id);
+
+  void deleteAllByIdQdIn(List<Long> listId);
 }

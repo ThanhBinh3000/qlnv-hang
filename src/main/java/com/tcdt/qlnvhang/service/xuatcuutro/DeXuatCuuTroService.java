@@ -247,7 +247,7 @@ public class DeXuatCuuTroService extends BaseServiceImpl {
         XhDxCuuTroDtl newRowDtl = deXuatCuuTroDtlRepository.save(s);
         //luu nhap kho
         List<XhDxCuuTroKho> phuongAnXuat = new ArrayList();
-        if (!DataUtils.isNullOrEmpty(s.getPhuongAnXuat())) {
+        if (!DataUtils.isNullObject(s.getPhuongAnXuat())) {
           phuongAnXuat = ObjectMapperUtils.mapAll(s.getPhuongAnXuat(), XhDxCuuTroKho.class);
           phuongAnXuat.forEach(s1 -> {
             listRemoveKho.remove(s1);
