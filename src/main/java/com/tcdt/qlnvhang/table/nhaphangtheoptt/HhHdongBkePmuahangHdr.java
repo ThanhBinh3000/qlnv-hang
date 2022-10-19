@@ -77,6 +77,8 @@ public class HhHdongBkePmuahangHdr implements Serializable {
     private String benMua;
     @Transient
     private BigDecimal giaTriHd;
+    @Transient
+    private String dDiemBmua;
 
     @Transient
     private List<FileDinhKem> FileDinhKems =new ArrayList<>();

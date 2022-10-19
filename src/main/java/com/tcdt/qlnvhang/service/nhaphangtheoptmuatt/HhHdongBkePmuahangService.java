@@ -81,6 +81,7 @@ public class HhHdongBkePmuahangService extends BaseServiceImpl {
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmhh.get(f.getCloaiVthh()));
             for (HhThongTinDviDtuCcap dviDtu :listTtDtu){
                 f.setBenMua(dviDtu.getTenDvi());
+                f.setDDiemBmua(dviDtu.getDiaChi());
             }
             for (HhThongTinDviDtuCcap dviCcap :listTtCc){
                 f.setBenBan(dviCcap.getTenDvi());
@@ -101,7 +102,7 @@ public class HhHdongBkePmuahangService extends BaseServiceImpl {
         }
         Optional<HhHdongBkePmuahangHdr> optional =hhHdongBkePmuahangRepository.findAllBySoHdong(objReq.getSoHdong());
         if(optional.isPresent()){
-            throw new Exception("Số quyết định phê duyệt đã tồn tại");
+            throw new Exception("Số hợp đồng đã tồn tại");
         }
         Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
         HhHdongBkePmuahangHdr data = new ModelMapper().map(objReq,HhHdongBkePmuahangHdr.class);
@@ -156,7 +157,7 @@ public class HhHdongBkePmuahangService extends BaseServiceImpl {
         Optional<HhHdongBkePmuahangHdr> soHdong =hhHdongBkePmuahangRepository.findAllBySoHdong(objReq.getSoHdong());
         if(soHdong.isPresent()){
             if(!soHdong.get().getId().equals(objReq.getId())) {
-                throw new Exception("Số quyết định phê duyệt đã tồn tại");
+                throw new Exception("Số hợp đồng đã tồn tại");
             }
         }
         HhHdongBkePmuahangHdr data=optional.get();
