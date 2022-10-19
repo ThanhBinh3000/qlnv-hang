@@ -67,6 +67,7 @@ public class HhHdongBkePmuahangService extends BaseServiceImpl {
                 userInfo.getDvql(),
                 pageable);
         Map<String,String> hashMapDmhh = getListDanhMucHangHoa();
+        Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
         List<HhHdongBkePmuahangHdr> hhHdr=data.getContent();
         hhHdr.forEach(f -> {
             List<HhThongTinDviDtuCcap> listTtCc=hhThongTinDviDtuCcapRepository.findAllByIdHdrAndType(f.getId(),Contains.CUNG_CAP);
@@ -78,6 +79,17 @@ public class HhHdongBkePmuahangService extends BaseServiceImpl {
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmhh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmhh.get(f.getCloaiVthh()));
+            for (HhThongTinDviDtuCcap dviDtu :listTtDtu){
+                f.setBenMua(dviDtu.getTenDvi());
+                f.setDDiemBmua(dviDtu.getDiaChi());
+            }
+            for (HhThongTinDviDtuCcap dviCcap :listTtCc){
+                f.setBenBan(dviCcap.getTenDvi());
+            }
+            for (HhDiaDiemGiaoNhanHang giaTri :listDdNh){
+                f.setGiaTriHd(giaTri.getThanhTien());
+            }
+
         });
         return data;
     }
@@ -90,7 +102,7 @@ public class HhHdongBkePmuahangService extends BaseServiceImpl {
         }
         Optional<HhHdongBkePmuahangHdr> optional =hhHdongBkePmuahangRepository.findAllBySoHdong(objReq.getSoHdong());
         if(optional.isPresent()){
-            throw new Exception("Số quyết định phê duyệt đã tồn tại");
+            throw new Exception("Số hợp đồng đã tồn tại");
         }
         Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
         HhHdongBkePmuahangHdr data = new ModelMapper().map(objReq,HhHdongBkePmuahangHdr.class);
@@ -145,7 +157,7 @@ public class HhHdongBkePmuahangService extends BaseServiceImpl {
         Optional<HhHdongBkePmuahangHdr> soHdong =hhHdongBkePmuahangRepository.findAllBySoHdong(objReq.getSoHdong());
         if(soHdong.isPresent()){
             if(!soHdong.get().getId().equals(objReq.getId())) {
-                throw new Exception("Số quyết định phê duyệt đã tồn tại");
+                throw new Exception("Số hợp đồng đã tồn tại");
             }
         }
         HhHdongBkePmuahangHdr data=optional.get();

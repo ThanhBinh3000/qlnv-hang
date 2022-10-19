@@ -53,6 +53,8 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
                 objReq.getNamKh(),
                 Contains.convertDateToString(objReq.getNgayCgiaTu()),
                 Contains.convertDateToString(objReq.getNgayCgiadDen()),
+                objReq.getTrangThai(),
+                objReq.getTrangThaiTk(),
                 userInfo.getDvql(),
                 objReq.getCtyCgia(),
                 objReq.getPthucMuatt(),

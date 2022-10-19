@@ -40,12 +40,13 @@ public interface HhQdPheduyetKhMttHdrRepository extends JpaRepository<HhQdPheduy
             " where (:namKh IS NULL OR MTT.NAM_KH = TO_NUMBER(:namKh)) " +
             " AND (:ngayCgiaTu IS NULL OR MTT.NGAY_HLUC >=  TO_DATE(:ngayCgiaTu,'yyyy-MM-dd')) " +
             " AND (:ngayCgiadDen IS NULL OR MTT.NGAY_HLUC <= TO_DATE(:ngayCgiadDen,'yyyy-MM-dd'))" +
-            " AND (MTT.TRANG_THAI = " + Contains.BAN_HANH +")" +
+            " AND (:trangThai IS NULL OR MTT.TRANG_THAI=:trangThai)" +
+            " AND (:trangThaiTk IS NULL OR MTT.TRANG_THAI_TKHAI=:trangThaiTk )" +
             " AND (:maDvi IS NULL OR LOWER(DX.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "+
             " AND (:ctyCgia IS NULL OR LOWER(DTL.CANHAN_TOCHUC) LIKE LOWER(CONCAT(CONCAT('%', :ctyCgia),'%'))) "+
             " AND (:pthucMuatt IS NULL OR MTT.PTHUC_MUATT =:pthucMuatt)"
             ,nativeQuery = true)
-    Page<HhQdPheduyetKhMttHdr> searchPageTkhai(Integer namKh, String ngayCgiaTu, String ngayCgiadDen, String maDvi, String ctyCgia, String pthucMuatt, Pageable pageable);
+    Page<HhQdPheduyetKhMttHdr> searchPageTkhai(Integer namKh, String ngayCgiaTu, String ngayCgiadDen,String trangThai,String trangThaiTk, String maDvi, String ctyCgia, String pthucMuatt, Pageable pageable);
 
 
 
