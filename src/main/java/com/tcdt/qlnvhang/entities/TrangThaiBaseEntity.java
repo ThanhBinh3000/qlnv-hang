@@ -13,16 +13,33 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @MappedSuperclass
 public class TrangThaiBaseEntity {
+
 	private String trangThai;
+
 	@Transient
 	private String tenTrangThai;
+
 	private LocalDate ngayTao;
+
 	private Long nguoiTaoId;
+
+	@Transient
+	private String tenNguoiTao;
+
 	private LocalDate ngaySua;
+
 	private Long nguoiSuaId;
+
 	private Long nguoiGuiDuyetId;
+
 	private LocalDate ngayGuiDuyet;
+
 	private Long nguoiPduyetId;
+
+	@Transient
+	private String tenNguoiPduyet;
+
 	private LocalDate ngayPduyet;
+
 	private String lyDoTuChoi;
 }

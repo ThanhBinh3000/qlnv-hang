@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.table;
 
-import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
+import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieukiemtrachatluonghangluongthuc.NhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieunhapkholuongthuc.NhPhieuNhapKho;
 import lombok.Data;
 
@@ -63,7 +63,7 @@ public class HhQdGiaoNvuNxDdiem implements Serializable {
 	private BigDecimal soLuong;
 
 	@Transient
-	QlpktclhPhieuKtChatLuong phieuKtraCl;
+    NhPhieuKtChatLuong phieuKtraCl;
 
 	@Transient
 	NhPhieuNhapKho phieuNhapKho;

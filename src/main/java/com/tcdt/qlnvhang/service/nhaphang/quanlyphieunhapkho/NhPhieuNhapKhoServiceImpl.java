@@ -1,57 +1,41 @@
 package com.tcdt.qlnvhang.service.nhaphang.quanlyphieunhapkho;
 
-import com.google.common.collect.Sets;
-import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
-import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCt;
+import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieukiemtrachatluonghangluongthuc.NhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieunhapkholuongthuc.NhPhieuNhapKho;
-import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCt1;
-import com.tcdt.qlnvhang.entities.nhaphang.vattu.hosokythuat.NhHoSoKyThuat;
+import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCt1Repository;
-import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
+import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
-import com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongRepository;
+import com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc.NhPhieuKtChatLuongRepository;
+import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCt1Repository;
 import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCtRepository;
 import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoRepository;
+import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.vattu.hosokythuat.NhHoSoKyThuatRepository;
-import com.tcdt.qlnvhang.request.DeleteReq;
-import com.tcdt.qlnvhang.request.PaggingReq;
-import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCtReq;
 import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoReq;
-import com.tcdt.qlnvhang.request.search.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoSearchReq;
-import com.tcdt.qlnvhang.response.BaseNhapHangCount;
-import com.tcdt.qlnvhang.response.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCtRes;
-import com.tcdt.qlnvhang.response.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
-import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
-import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
-import com.tcdt.qlnvhang.table.khotang.KtNganKho;
-import com.tcdt.qlnvhang.table.khotang.KtNganLo;
-import com.tcdt.qlnvhang.table.khotang.KtNhaKho;
-import com.tcdt.qlnvhang.util.*;
+import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 @Log4j2
@@ -75,6 +59,13 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
     private NhPhieuNhapKhoCtRepository nhPhieuNhapKhoCtRepository;
 
     @Autowired
+    private UserInfoRepository userInfoRepository;
+
+    @Autowired
+    private NhPhieuKtChatLuongRepository phieuKtraRepo;
+
+
+    @Autowired
     private QlnvDmVattuRepository qlnvDmVattuRepository;
 
     @Autowired
@@ -84,7 +75,7 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
     private FileDinhKemService fileDinhKemService;
 
     @Autowired
-    private QlpktclhPhieuKtChatLuongRepository phieuKtChatLuongRepository;
+    private NhPhieuKtChatLuongRepository phieuKtChatLuongRepository;
 
     @Autowired
     private HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
@@ -106,6 +97,7 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
     }
 
     @Override
+    @Transactional()
     public NhPhieuNhapKho create(NhPhieuNhapKhoReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null){
@@ -119,30 +111,150 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
         phieu.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         phieu.setMaDvi(userInfo.getDvql());
         phieu.setNam(LocalDate.now().getYear());
-        phieu.setId(Long.valueOf(phieu.getSoPhieuKtraCl().split("/")[0]));
+        phieu.setId(Long.valueOf(phieu.getSoPhieuNhapKho().split("/")[0]));
         nhPhieuNhapKhoRepository.save(phieu);
-
+        this.saveCtiet(phieu.getId(),req);
         return phieu;
     }
 
     @Override
+    @Transactional()
     public NhPhieuNhapKho update(NhPhieuNhapKhoReq req) throws Exception {
-        return null;
+        if (req == null){
+            return null;
+        }
+
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null){
+            throw new Exception("Bad request.");
+        }
+
+        Optional<NhPhieuNhapKho> optionalQd = nhPhieuNhapKhoRepository.findById(req.getId());
+        if (!optionalQd.isPresent())
+            throw new Exception("Phiếu nhập kho không tồn tại.");
+
+        NhPhieuNhapKho phieu = optionalQd.get();
+        BeanUtils.copyProperties(req, phieu, "id");
+        phieu.setNgaySua(LocalDate.now());
+        phieu.setNguoiSuaId(userInfo.getId());
+        nhPhieuNhapKhoRepository.save(phieu);
+        this.saveCtiet(phieu.getId(),req);
+        return phieu;
+    }
+
+    @Transactional()
+    void saveCtiet(Long idHdr , NhPhieuNhapKhoReq req){
+        nhPhieuNhapKhoCtRepository.deleteAllByIdPhieuNkHdr(idHdr);
+        if(!ObjectUtils.isEmpty(req.getHangHoaList())){
+            for(NhPhieuNhapKhoCtReq obj : req.getHangHoaList()){
+                NhPhieuNhapKhoCt data = new NhPhieuNhapKhoCt();
+                BeanUtils.copyProperties(obj,data,"id");
+                data.setIdPhieuNkHdr(idHdr);
+                nhPhieuNhapKhoCtRepository.save(data);
+            }
+        }
     }
 
     @Override
     public NhPhieuNhapKho detail(Long id) throws Exception {
-        return null;
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null){
+            throw new Exception("Bad request.");
+
+        }
+
+        Optional<NhPhieuNhapKho> optional = nhPhieuNhapKhoRepository.findById(id);
+        if (!optional.isPresent()){
+            throw new Exception("Quyết định không tồn tại.");
+        }
+
+        Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
+        Map<String, String> listDanhMucDvi = getListDanhMucDvi("", "", "01");
+
+        NhPhieuNhapKho data = optional.get();
+//        data.setKetQuaKiemTra(qlpktclhKetQuaKiemTraRepo.findAllByPhieuKtChatLuongId(data.getId()));
+        data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
+        data.setTenLoaiVthh(listDanhMucHangHoa.get(data.getLoaiVthh()));
+        data.setTenCloaiVthh(listDanhMucHangHoa.get(data.getCloaiVthh()));
+        data.setTenDvi(listDanhMucDvi.get(data.getMaDvi()));
+        data.setTenDiemKho(listDanhMucDvi.get(data.getMaDiemKho()));
+        data.setTenNhaKho(listDanhMucDvi.get(data.getMaNhaKho()));
+        data.setTenNganKho(listDanhMucDvi.get(data.getMaNganKho()));
+        data.setTenLoKho(listDanhMucDvi.get(data.getMaLoKho()));
+        data.setTenNguoiTao(ObjectUtils.isEmpty(data.getNguoiTaoId()) ? null : userInfoRepository.findById(data.getNguoiTaoId()).get().getFullName());
+        data.setTenNguoiPduyet(ObjectUtils.isEmpty(data.getNguoiPduyetId()) ? null : userInfoRepository.findById(data.getNguoiPduyetId()).get().getFullName());
+        data.setHangHoaList(nhPhieuNhapKhoCtRepository.findAllByIdPhieuNkHdr(data.getId()));
+        return data;
     }
 
     @Override
     public NhPhieuNhapKho approve(NhPhieuNhapKhoReq req) throws Exception {
-        return null;
+        UserInfo userInfo = UserUtils.getUserInfo();
+
+        if (!Contains.CAP_CHI_CUC.equals(userInfo.getCapDvi())){
+            throw new Exception("Bad Request");
+        }
+
+        if (StringUtils.isEmpty(req.getId())){
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+
+        Optional<NhPhieuNhapKho> optional = nhPhieuNhapKhoRepository.findById(req.getId());
+        if (!optional.isPresent()){
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+
+        NhPhieuNhapKho phieu = optional.get();
+
+        String status = req.getTrangThai() + phieu.getTrangThai();
+        switch (status) {
+            case Contains.CHODUYET_LDCC + Contains.DUTHAO:
+            case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
+                phieu.setNguoiGuiDuyetId(userInfo.getId());
+                phieu.setNgayGuiDuyet(LocalDate.now());
+                break;
+            case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
+                phieu.setNguoiPduyetId(userInfo.getId());
+                phieu.setNgayPduyet(LocalDate.now());
+                phieu.setLyDoTuChoi(req.getLyDoTuChoi());
+                break;
+            case Contains.DADUYET_LDCC + Contains.CHODUYET_LDCC:
+                phieu.setNguoiPduyetId(userInfo.getId());
+                phieu.setNgayPduyet(LocalDate.now());
+                break;
+            default:
+                throw new Exception("Phê duyệt không thành công");
+        }
+        phieu.setTrangThai(req.getTrangThai());
+        nhPhieuNhapKhoRepository.save(phieu);
+        return phieu;
     }
 
     @Override
+    @Transactional()
     public void delete(Long id) throws Exception {
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null){
+            throw new Exception("Bad request.");
+        }
 
+        Optional<NhPhieuNhapKho> optional = nhPhieuNhapKhoRepository.findById(id);
+        if (!optional.isPresent()){
+            throw new Exception("Quyết định không tồn tại.");
+        }
+
+        NhPhieuNhapKho phieu = optional.get();
+        if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(phieu.getTrangThai())) {
+            throw new Exception("Không thể xóa quyết định đã duyệt");
+        }
+
+        List<NhPhieuNhapKhoCt> hangHoaList = nhPhieuNhapKhoCtRepository.findAllByIdPhieuNkHdr(phieu.getId());
+        if (!CollectionUtils.isEmpty(hangHoaList)) {
+            nhPhieuNhapKhoCtRepository.deleteAll(hangHoaList);
+        }
+
+        nhPhieuNhapKhoRepository.delete(phieu);
+        fileDinhKemService.delete(phieu.getId(), Collections.singleton(NhPhieuNhapKho.TABLE_NAME));
     }
 
     @Override

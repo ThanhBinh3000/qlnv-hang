@@ -1,11 +1,11 @@
 package com.tcdt.qlnvhang.service.nhaphang.luongthucmuoi.quanlyphieukiemtrachatluonghangluongthuc;
 
+import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieukiemtrachatluonghangluongthuc.NhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhKetQuaKiemTra;
-import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhKetQuaKiemTraRepository;
-import com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongRepository;
+import com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc.NhPhieuKtChatLuongRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongRequestDto;
 import com.tcdt.qlnvhang.response.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhKetQuaKiemTraResponseDto;
@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 @Log4j2
 @Service
 @RequiredArgsConstructor
-public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl implements QlpktclhPhieuKtChatLuongService {
+public class NhPhieuKtChatLuongServiceServiceImpl extends BaseServiceImpl implements NhPhieuKtChatLuongService {
 
 	private static final String SHEET_PHIEU_KIEM_TRA_CHAT_LUONG_HANG = "Phiếu kiểm tra chất lượng hàng";
 	private static final String STT = "STT";
@@ -52,7 +52,7 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 	private static final String TRANG_THAI = "Trạng Thái";
 
 	@Autowired
-	private final QlpktclhPhieuKtChatLuongRepository qlpktclhPhieuKtChatLuongRepo;
+	private final NhPhieuKtChatLuongRepository qlpktclhPhieuKtChatLuongRepo;
 	@Autowired
 	private final QlpktclhKetQuaKiemTraRepository qlpktclhKetQuaKiemTraRepo;
 	@Autowired
@@ -100,9 +100,9 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 //	}
 
 	@Override
-	public Page<QlpktclhPhieuKtChatLuong> searchPage(QlpktclhPhieuKtChatLuongRequestDto objReq) {
+	public Page<NhPhieuKtChatLuong> searchPage(QlpktclhPhieuKtChatLuongRequestDto objReq) {
 		Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),objReq.getPaggingReq().getLimit(), Sort.by("id").ascending());
-		Page<QlpktclhPhieuKtChatLuong> qlpktclhPhieuKtChatLuongs = qlpktclhPhieuKtChatLuongRepo.selectPage(objReq.getSoPhieu(), objReq.getBienSoXe(), objReq.getNguoiGiaoHang(), pageable);
+		Page<NhPhieuKtChatLuong> qlpktclhPhieuKtChatLuongs = qlpktclhPhieuKtChatLuongRepo.selectPage(objReq.getSoPhieu(), objReq.getBienSoXe(), objReq.getNguoiGiaoHang(), pageable);
 		qlpktclhPhieuKtChatLuongs.getContent().forEach(x -> {
 			x.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(x.getTrangThai()));
 		});
@@ -110,18 +110,18 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 	}
 
 	@Override
-	public List<QlpktclhPhieuKtChatLuong> searchAll(QlpktclhPhieuKtChatLuongRequestDto req) {
+	public List<NhPhieuKtChatLuong> searchAll(QlpktclhPhieuKtChatLuongRequestDto req) {
 		return null;
 	}
 
 	@Override
-	public QlpktclhPhieuKtChatLuong create(QlpktclhPhieuKtChatLuongRequestDto req) throws Exception {
+	public NhPhieuKtChatLuong create(QlpktclhPhieuKtChatLuongRequestDto req) throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
 
 		if (!Contains.CAP_CHI_CUC.equals(userInfo.getCapDvi()))
 			throw new Exception("Bad Request");
 
-		QlpktclhPhieuKtChatLuong phieu = dataUtils.toObject(req, QlpktclhPhieuKtChatLuong.class);
+		NhPhieuKtChatLuong phieu = dataUtils.toObject(req, NhPhieuKtChatLuong.class);
 		phieu.setNgayTao(LocalDate.now());
 		phieu.setNguoiTaoId(userInfo.getId());
 		phieu.setMaDvi(userInfo.getDvql());
@@ -144,7 +144,7 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 	}
 
 	@Override
-	public QlpktclhPhieuKtChatLuong update(QlpktclhPhieuKtChatLuongRequestDto req) throws Exception {
+	public NhPhieuKtChatLuong update(QlpktclhPhieuKtChatLuongRequestDto req) throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
 
 		if (!Contains.CAP_CHI_CUC.equals(userInfo.getCapDvi())){
@@ -155,22 +155,22 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 			throw new Exception("Id is required in update");
 		}
 
-		Optional<QlpktclhPhieuKtChatLuong> qlpktclhPhieuKtChatLuongOpt = qlpktclhPhieuKtChatLuongRepo.findById(req.getId());
+		Optional<NhPhieuKtChatLuong> qlpktclhPhieuKtChatLuongOpt = qlpktclhPhieuKtChatLuongRepo.findById(req.getId());
 
 		if (!qlpktclhPhieuKtChatLuongOpt.isPresent()){
 			throw new Exception("Entity can not be found");
 		}
 
-		QlpktclhPhieuKtChatLuong qlpktclhPhieuKtChatLuong = qlpktclhPhieuKtChatLuongOpt.get();
+		NhPhieuKtChatLuong nhPhieuKtChatLuong = qlpktclhPhieuKtChatLuongOpt.get();
 
-		BeanUtils.copyProperties(req, qlpktclhPhieuKtChatLuong);
-		qlpktclhPhieuKtChatLuong.setNgaySua(LocalDate.now());
-		qlpktclhPhieuKtChatLuong.setNguoiSuaId(userInfo.getId());
-		qlpktclhPhieuKtChatLuong.setMaDvi(userInfo.getDvql());
-		qlpktclhPhieuKtChatLuong = qlpktclhPhieuKtChatLuongRepo.save(qlpktclhPhieuKtChatLuong);
+		BeanUtils.copyProperties(req, nhPhieuKtChatLuong);
+		nhPhieuKtChatLuong.setNgaySua(LocalDate.now());
+		nhPhieuKtChatLuong.setNguoiSuaId(userInfo.getId());
+		nhPhieuKtChatLuong.setMaDvi(userInfo.getDvql());
+		nhPhieuKtChatLuong = qlpktclhPhieuKtChatLuongRepo.save(nhPhieuKtChatLuong);
 
 		//Update kết quả kiểm tra
-		Long phieuKiemTraChatLuongId = qlpktclhPhieuKtChatLuong.getId();
+		Long phieuKiemTraChatLuongId = nhPhieuKtChatLuong.getId();
 		qlpktclhKetQuaKiemTraRepo.deleteByPhieuKtChatLuongId(phieuKiemTraChatLuongId);
 
 		List<QlpktclhKetQuaKiemTra> ketQuaKiemTras = new ArrayList<>();
@@ -181,18 +181,18 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 			ketQuaKiemTras.add(ketQuaKiemTra);
 		});
 		qlpktclhKetQuaKiemTraRepo.saveAll(ketQuaKiemTras);
-		qlpktclhPhieuKtChatLuong.setKetQuaKiemTra(ketQuaKiemTras);
-		return qlpktclhPhieuKtChatLuong;
+		nhPhieuKtChatLuong.setKetQuaKiemTra(ketQuaKiemTras);
+		return nhPhieuKtChatLuong;
 	}
 
 	@Override
-	public QlpktclhPhieuKtChatLuong detail(Long id) throws Exception {
+	public NhPhieuKtChatLuong detail(Long id) throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
 		if (id == null){
 			throw new Exception("Id is required in update");
 		}
 
-		Optional<QlpktclhPhieuKtChatLuong> qlpktclhPhieuKtChatLuongOpt = qlpktclhPhieuKtChatLuongRepo.findById(id);
+		Optional<NhPhieuKtChatLuong> qlpktclhPhieuKtChatLuongOpt = qlpktclhPhieuKtChatLuongRepo.findById(id);
 
 		if (!qlpktclhPhieuKtChatLuongOpt.isPresent()){
 			throw new Exception("Entity can not be found");
@@ -200,7 +200,7 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 		Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
 		Map<String, String> listDanhMucDvi = getListDanhMucDvi("", "", "01");
 
-		QlpktclhPhieuKtChatLuong data = qlpktclhPhieuKtChatLuongOpt.get();
+		NhPhieuKtChatLuong data = qlpktclhPhieuKtChatLuongOpt.get();
 		data.setKetQuaKiemTra(qlpktclhKetQuaKiemTraRepo.findAllByPhieuKtChatLuongId(data.getId()));
 		data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
 		data.setTenLoaiVthh(listDanhMucHangHoa.get(data.getLoaiVthh()));
@@ -214,7 +214,7 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 	}
 
 	@Override
-	public QlpktclhPhieuKtChatLuong approve(QlpktclhPhieuKtChatLuongRequestDto req) throws Exception {
+	public NhPhieuKtChatLuong approve(QlpktclhPhieuKtChatLuongRequestDto req) throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
 
 		if (!Contains.CAP_CHI_CUC.equals(userInfo.getCapDvi())){
@@ -225,12 +225,12 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 			throw new Exception("Không tìm thấy dữ liệu");
 		}
 
-		Optional<QlpktclhPhieuKtChatLuong> optional = qlpktclhPhieuKtChatLuongRepo.findById(req.getId());
+		Optional<NhPhieuKtChatLuong> optional = qlpktclhPhieuKtChatLuongRepo.findById(req.getId());
 		if (!optional.isPresent()){
 			throw new Exception("Không tìm thấy dữ liệu");
 		}
 
-		QlpktclhPhieuKtChatLuong phieu = optional.get();
+		NhPhieuKtChatLuong phieu = optional.get();
 
 		String status = req.getTrangThai() + phieu.getTrangThai();
 		switch (status) {
@@ -262,11 +262,11 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 		if (!Contains.CAP_CHI_CUC.equals(userInfo.getCapDvi()))
 			throw new Exception("Bad Request");
 
-		Optional<QlpktclhPhieuKtChatLuong> optional = qlpktclhPhieuKtChatLuongRepo.findById(id);
+		Optional<NhPhieuKtChatLuong> optional = qlpktclhPhieuKtChatLuongRepo.findById(id);
 		if (!optional.isPresent())
 			throw new Exception("Phiếu kiểm tra chất lượng không tồn tại");
 
-		QlpktclhPhieuKtChatLuong phieu = optional.get();
+		NhPhieuKtChatLuong phieu = optional.get();
 
 		if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(phieu.getTrangThai())) {
 			throw new Exception("Không thể xóa đề xuất điều chỉnh đã đã duyệt");
@@ -327,10 +327,10 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 //		return qlpktclhPhieuKtChatLuongRepo.select(req.getSoPhieu(),req.getNgayLapPhieu(),req.getTenNguoiGiao(), pageable);
 //	}
 
-	private QlpktclhPhieuKtChatLuongResponseDto buildResponse(QlpktclhPhieuKtChatLuong qlpktclhPhieuKtChatLuong) throws Exception {
-		QlpktclhPhieuKtChatLuongResponseDto response = dataUtils.toObject(qlpktclhPhieuKtChatLuong, QlpktclhPhieuKtChatLuongResponseDto.class);
-		response.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qlpktclhPhieuKtChatLuong.getTrangThai()));
-		List<QlpktclhKetQuaKiemTraResponseDto> ketQuaKiemTraRes = qlpktclhPhieuKtChatLuong.getKetQuaKiemTra().stream()
+	private QlpktclhPhieuKtChatLuongResponseDto buildResponse(NhPhieuKtChatLuong nhPhieuKtChatLuong) throws Exception {
+		QlpktclhPhieuKtChatLuongResponseDto response = dataUtils.toObject(nhPhieuKtChatLuong, QlpktclhPhieuKtChatLuongResponseDto.class);
+		response.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(nhPhieuKtChatLuong.getTrangThai()));
+		List<QlpktclhKetQuaKiemTraResponseDto> ketQuaKiemTraRes = nhPhieuKtChatLuong.getKetQuaKiemTra().stream()
 						.map(item -> dataUtils.toObject(item, QlpktclhKetQuaKiemTraResponseDto.class))
 						.collect(Collectors.toList());
 
@@ -355,8 +355,8 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 //		}
 
 		response.setKetQuaKiemTra(ketQuaKiemTraRes);
-		response.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qlpktclhPhieuKtChatLuong.getTrangThai()));
-		response.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(qlpktclhPhieuKtChatLuong.getTrangThai()));
+		response.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(nhPhieuKtChatLuong.getTrangThai()));
+		response.setTrangThaiDuyet(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(nhPhieuKtChatLuong.getTrangThai()));
 //		QlnvDmDonvi donvi = getDviByMa(qlpktclhPhieuKtChatLuong.getMaDvi(), req);
 //		response.setMaDvi(donvi.getMaDvi());
 //		response.setTenDvi(donvi.getTenDvi());
@@ -513,13 +513,13 @@ public class QlpktclhPhieuKtChatLuongServiceImpl extends BaseServiceImpl impleme
 //		return true;
 //	}
 
-	private void validateSoPhieu(QlpktclhPhieuKtChatLuong update, QlpktclhPhieuKtChatLuongRequestDto req) throws Exception {
+	private void validateSoPhieu(NhPhieuKtChatLuong update, QlpktclhPhieuKtChatLuongRequestDto req) throws Exception {
 		String so = req.getSoPhieu();
 		if (!StringUtils.hasText(so))
 			return;
 		if (update == null || (StringUtils.hasText(update.getSoPhieu()) && !update.getSoPhieu().equalsIgnoreCase(so))) {
-			Optional<QlpktclhPhieuKtChatLuong> optional = qlpktclhPhieuKtChatLuongRepo.findFirstBySoPhieu(so);
-			Long updateId = Optional.ofNullable(update).map(QlpktclhPhieuKtChatLuong::getId).orElse(null);
+			Optional<NhPhieuKtChatLuong> optional = qlpktclhPhieuKtChatLuongRepo.findFirstBySoPhieu(so);
+			Long updateId = Optional.ofNullable(update).map(NhPhieuKtChatLuong::getId).orElse(null);
 			if (optional.isPresent() && !optional.get().getId().equals(updateId))
 				throw new Exception("Số phiếu " + so + " đã tồn tại");
 		}
