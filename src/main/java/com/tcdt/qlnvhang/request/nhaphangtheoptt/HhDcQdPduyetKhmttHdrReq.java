@@ -7,6 +7,7 @@ import lombok.Data;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -14,9 +15,9 @@ public class HhDcQdPduyetKhmttHdrReq {
     private Long id;
     private String soQdDc;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private LocalDate ngayKyDc;
+    private Date ngayKyDc;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private LocalDate ngayHluc;
+    private Date ngayHluc;
     private String trichYeu;
     private Long idQdGoc;
     private String soQdGoc;
