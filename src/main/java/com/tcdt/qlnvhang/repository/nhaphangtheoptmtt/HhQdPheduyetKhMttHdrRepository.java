@@ -41,7 +41,7 @@ public interface HhQdPheduyetKhMttHdrRepository extends JpaRepository<HhQdPheduy
             " AND (:ngayCgiaTu IS NULL OR MTT.NGAY_HLUC >=  TO_DATE(:ngayCgiaTu,'yyyy-MM-dd')) " +
             " AND (:ngayCgiadDen IS NULL OR MTT.NGAY_HLUC <= TO_DATE(:ngayCgiadDen,'yyyy-MM-dd'))" +
             " AND (:trangThai IS NULL OR MTT.TRANG_THAI=:trangThai)" +
-            " AND (:trangThaiTk IS NULL OR MTT.TRANG_THAI_TK=:trangThaiTk )" +
+            " AND (:trangThaiTk IS NULL OR MTT.TRANG_THAI_TKHAI=:trangThaiTk )" +
             " AND (:maDvi IS NULL OR LOWER(DX.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "+
             " AND (:ctyCgia IS NULL OR LOWER(DTL.CANHAN_TOCHUC) LIKE LOWER(CONCAT(CONCAT('%', :ctyCgia),'%'))) "+
             " AND (:pthucMuatt IS NULL OR MTT.PTHUC_MUATT =:pthucMuatt)"
