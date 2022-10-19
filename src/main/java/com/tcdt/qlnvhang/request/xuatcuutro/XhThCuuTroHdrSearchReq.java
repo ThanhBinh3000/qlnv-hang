@@ -45,6 +45,7 @@ public class XhThCuuTroHdrSearchReq extends BaseRequest {
   private int nam;
   private String dvql;
   private String maTongHop;
+  private Long idTongHop;
   private List<XhThCuuTroDtl> thongTinTongHop = new ArrayList<>();
   private List<XhDxCuuTroHdr> thongTinDeXuat = new ArrayList<>();
 }
