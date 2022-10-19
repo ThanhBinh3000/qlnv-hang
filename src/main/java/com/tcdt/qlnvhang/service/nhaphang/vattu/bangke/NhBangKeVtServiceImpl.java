@@ -160,7 +160,7 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
             if (!phieuNhapKho.isPresent()) {
                 throw new Exception("Không tìm thấy Bảng kê");
             }
-            res.setSoPhieuNhapKho(phieuNhapKho.get().getSoPhieu());
+//            res.setSoPhieuNhapKho(phieuNhapKho.get().getSoPhieu());
         }
 
         if (item.getHopDongId() != null) {
