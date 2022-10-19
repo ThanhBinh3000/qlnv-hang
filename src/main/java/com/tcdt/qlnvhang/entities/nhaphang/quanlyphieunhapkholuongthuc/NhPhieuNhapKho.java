@@ -26,19 +26,28 @@ public class NhPhieuNhapKho extends TrangThaiBaseEntity implements Serializable 
     private static final long serialVersionUID = -1880694858465293452L;
     public static final String TABLE_NAME = "NH_PHIEU_NHAP_KHO";
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PHIEU_NHAP_KHO_SEQ")
-    @SequenceGenerator(sequenceName = "PHIEU_NHAP_KHO_SEQ", allocationSize = 1, name = "PHIEU_NHAP_KHO_SEQ")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PHIEU_NHAP_KHO_SEQ")
+//    @SequenceGenerator(sequenceName = "PHIEU_NHAP_KHO_SEQ", allocationSize = 1, name = "PHIEU_NHAP_KHO_SEQ")
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "PHIEU_KT_CL_ID")
-    private Long phieuKtClId;
+    @Column(name = "SO_PHIEU_KTRA_CL")
+    private String soPhieuKtraCl;
 
-    @Column(name = "QDGNVNX_ID")
-    private Long qdgnvnxId; // HhQdGiaoNvuNhapxuatHdr
+    @Column(name = "SO_QD_GIAO_NV_NH")
+    private String soQdGiaoNvNh; // HhQdGiaoNvuNhapxuatHdr
 
-    @Column(name = "SO_PHIEU")
-    private String soPhieu;
+    @Column(name = "ID_QD_GIAO_NV_NH")
+    private Long idQdGiaoNvNh; // HhQdGiaoNvuNhapxuatHdr
+
+    @Column(name = "SO_PHIEU_NHAP_KHO")
+    private String soPhieuNhapKho;
+
+    @Column(name = "SO_HD")
+    private String soHd;
+
+    @Column(name = "NGAY_HD")
+    private LocalDate ngayHd;
 
     @Column(name = "NGAY_NHAP_KHO")
     private LocalDate ngayNhapKho;
@@ -73,6 +82,9 @@ public class NhPhieuNhapKho extends TrangThaiBaseEntity implements Serializable 
     @Column(name = "NGUOI_SUA_ID")
     private Long nguoiSuaId;
 
+    @Column(name = "ID_DDIEM_GIAO_NV_NH")
+    private Long idDdiemGiaoNvNh;
+
     @Column(name = "MA_DIEM_KHO")
     private String maDiemKho;
 
@@ -82,11 +94,17 @@ public class NhPhieuNhapKho extends TrangThaiBaseEntity implements Serializable 
     @Column(name = "MA_NGAN_KHO")
     private String maNganKho;
 
-    @Column(name = "MA_NGAN_LO")
-    private String maNganLo;
+    @Column(name = "MA_LO_KHO")
+    private String maLoKho;
 
     @Column(name = "MA_DVI")
     private String maDvi;
+
+    @Transient
+    private String tenDvi;
+
+    @Column(name = "MA_QHNS")
+    private String maQhns;
 
     @Column(name = "CAP_DVI")
     private String capDvi;
@@ -109,20 +127,46 @@ public class NhPhieuNhapKho extends TrangThaiBaseEntity implements Serializable 
 
     @Column(name = "LOAI_VTHH")
     private String loaiVthh;
+
     @Transient
     private String tenVthh;
 
+    @Column(name = "CLOAI_VTHH")
     private String cloaiVthh;
+
     @Transient
     private String tenCloaiVthh;
 
+    @Column(name = "MO_TA_HANG_HOA")
     private String moTaHangHoa;
+
+    @Column(name = "SO_NO")
+    private Integer soNo; // Số nợ
+
+     @Column(name = "SO_CO")
+    private Integer soCo; // Số có
+
+    @Column(name = "CMT_NGUOI_GIAO_HANG")
+    private String cmtNguoiGiaoHang;
+
+    @Column(name = "DON_VI_GIAO_HANG")
+    private String donViGiaoHang;
+
+    @Column(name = "DIA_CHI")
+    private String diaChi;
+
+    @Column(name = "KE_TOAN_TRUONG")
+    private String keToanTruong;
+
+    @Column(name = "GHI_CHU")
+    private String ghiChu;
+
 
     @Transient
     private List<NhPhieuNhapKhoCt> hangHoaList = new ArrayList<>();
 
     @Transient
-    private List<FileDinhKem> chungTus = new ArrayList<>();
+    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
     @Transient
     private List<NhPhieuNhapKhoCt1> chiTiet1s = new ArrayList<>();

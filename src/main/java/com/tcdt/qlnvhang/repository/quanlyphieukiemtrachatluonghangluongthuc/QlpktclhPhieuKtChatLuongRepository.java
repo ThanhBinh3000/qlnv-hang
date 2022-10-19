@@ -37,4 +37,6 @@ public interface QlpktclhPhieuKtChatLuongRepository extends BaseRepository<Qlpkt
 
     List<QlpktclhPhieuKtChatLuong> findAllByIdQdGiaoNvNh(Long idQdGiaoNvNh);
 
+    QlpktclhPhieuKtChatLuong findByIdDdiemGiaoNvNh(Long idDdiemGiaoNvNh);
+
 }

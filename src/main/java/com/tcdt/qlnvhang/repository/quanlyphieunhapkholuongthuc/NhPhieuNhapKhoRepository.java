@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc;
 
+import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieunhapkholuongthuc.NhPhieuNhapKho;
 import com.tcdt.qlnvhang.repository.BaseRepository;
 import org.springframework.data.domain.Page;
@@ -32,5 +33,7 @@ public interface NhPhieuNhapKhoRepository extends BaseRepository<NhPhieuNhapKho,
     @Modifying
     void deleteByIdIn(Collection<Long> ids);
 
-    Optional<NhPhieuNhapKho> findFirstBySoPhieu(String soPhieu);
+//    Optional<NhPhieuNhapKho> findFirstBySoPhieu(String soPhieu);
+
+    NhPhieuNhapKho findByIdDdiemGiaoNvNh(Long idDdiemGiaoNvNh);
 }

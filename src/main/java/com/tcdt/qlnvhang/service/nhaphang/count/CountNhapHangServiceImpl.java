@@ -77,7 +77,7 @@ public class CountNhapHangServiceImpl extends BaseServiceImpl implements CountNh
         this.prepareSearchReq(req, userInfo, req.getCapDvis(), req.getTrangThais());
         List<BaseNhapHangCount> counts = new ArrayList<>();
 
-        counts.add(nhPhieuNhapKhoService.count(req.getMaDvis()));
+//        counts.add(nhPhieuNhapKhoService.count(req.getMaDvis()));
         counts.add(bangKeCanHangLtService.count(req.getMaDvis()));
         counts.add(bienBanNhapDayKhoLtService.count(req.getMaDvis()));
         counts.add(phieuNhapKhoTamGuiService.count(req.getMaDvis()));

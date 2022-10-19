@@ -1,5 +1,7 @@
 package com.tcdt.qlnvhang.table;
 
+import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
+import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieunhapkholuongthuc.NhPhieuNhapKho;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -59,4 +61,10 @@ public class HhQdGiaoNvuNxDdiem implements Serializable {
 
 	@Column(name="SO_LUONG")
 	private BigDecimal soLuong;
+
+	@Transient
+	QlpktclhPhieuKtChatLuong phieuKtraCl;
+
+	@Transient
+	NhPhieuNhapKho phieuNhapKho;
 }

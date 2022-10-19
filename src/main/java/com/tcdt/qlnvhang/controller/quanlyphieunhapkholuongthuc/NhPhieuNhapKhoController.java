@@ -24,14 +24,14 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping(PathContains.PHIEU_NHAP_KHO)
-@Api(tags = "Quản lý phiếu nhập kho lương thực")
+@Api(tags = "Nhập hàng - Đấu thầu - Phiếu nhập kho")
 public class NhPhieuNhapKhoController {
 
     @Autowired
     private NhPhieuNhapKhoService nhPhieuNhapKhoService;
 
     @ApiOperation(value = "Tạo mới Quản lý phiếu nhập kho lương thực", response = List.class)
-    @PostMapping
+    @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> insert(@Valid @RequestBody NhPhieuNhapKhoReq request) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -83,7 +83,7 @@ public class NhPhieuNhapKhoController {
     public ResponseEntity<BaseResponse> delete(@PathVariable Long id) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(nhPhieuNhapKhoService.delete(id));
+//            resp.setData(nhPhieuNhapKhoService.delete(id));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -99,7 +99,7 @@ public class NhPhieuNhapKhoController {
     public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody StatusReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(nhPhieuNhapKhoService.updateStatusQd(req));
+//            resp.setData(nhPhieuNhapKhoService.updateStatusQd(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -115,7 +115,7 @@ public class NhPhieuNhapKhoController {
     public ResponseEntity<BaseResponse> search(NhPhieuNhapKhoSearchReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(nhPhieuNhapKhoService.search(req));
+//            resp.setData(nhPhieuNhapKhoService.search(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -132,7 +132,7 @@ public class NhPhieuNhapKhoController {
     public final ResponseEntity<BaseResponse> deleteMultiple(@RequestBody @Valid DeleteReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(nhPhieuNhapKhoService.deleteMultiple(req));
+//            resp.setData(nhPhieuNhapKhoService.deleteMultiple(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -150,7 +150,7 @@ public class NhPhieuNhapKhoController {
     public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody NhPhieuNhapKhoSearchReq req) {
 
         try {
-            nhPhieuNhapKhoService.exportToExcel(req, response);
+//            nhPhieuNhapKhoService.exportToExcel(req, response);
         } catch (Exception e) {
             log.error("Error can not export", e);
         }
@@ -161,7 +161,7 @@ public class NhPhieuNhapKhoController {
     public ResponseEntity<BaseResponse> getSo() {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(nhPhieuNhapKhoService.getSo());
+//            resp.setData(nhPhieuNhapKhoService.getSo());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

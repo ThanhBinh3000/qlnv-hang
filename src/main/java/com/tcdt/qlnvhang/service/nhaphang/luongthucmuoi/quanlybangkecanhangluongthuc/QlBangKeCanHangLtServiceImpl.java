@@ -187,7 +187,7 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
             NhPhieuNhapKho phieuNhapKho = nhPhieuNhapKhoRepository.findById(item.getQlPhieuNhapKhoLtId())
                     .orElseThrow(() -> new Exception("Không tìm thấy phiếu nhập kho"));
 
-            response.setSoPhieuNhapKho(phieuNhapKho.getSoPhieu());
+//            response.setSoPhieuNhapKho(phieuNhapKho.getSoPhieu());
         }
 
         if (item.getQdgnvnxId() != null) {
