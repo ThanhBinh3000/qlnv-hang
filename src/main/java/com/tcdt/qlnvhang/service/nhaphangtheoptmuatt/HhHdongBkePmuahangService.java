@@ -67,6 +67,7 @@ public class HhHdongBkePmuahangService extends BaseServiceImpl {
                 userInfo.getDvql(),
                 pageable);
         Map<String,String> hashMapDmhh = getListDanhMucHangHoa();
+        Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
         List<HhHdongBkePmuahangHdr> hhHdr=data.getContent();
         hhHdr.forEach(f -> {
             List<HhThongTinDviDtuCcap> listTtCc=hhThongTinDviDtuCcapRepository.findAllByIdHdrAndType(f.getId(),Contains.CUNG_CAP);
@@ -78,6 +79,16 @@ public class HhHdongBkePmuahangService extends BaseServiceImpl {
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmhh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmhh.get(f.getCloaiVthh()));
+            for (HhThongTinDviDtuCcap dviDtu :listTtDtu){
+                f.setBenMua(dviDtu.getTenDvi());
+            }
+            for (HhThongTinDviDtuCcap dviCcap :listTtCc){
+                f.setBenBan(dviCcap.getTenDvi());
+            }
+            for (HhDiaDiemGiaoNhanHang giaTri :listDdNh){
+                f.setGiaTriHd(giaTri.getThanhTien());
+            }
+
         });
         return data;
     }
