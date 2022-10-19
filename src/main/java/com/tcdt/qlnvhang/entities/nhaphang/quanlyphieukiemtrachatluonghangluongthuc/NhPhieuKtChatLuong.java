@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.entities.nhaphang.quanlyphieukiemtrachatluonghangluongthuc;
 
-import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class QlpktclhPhieuKtChatLuong extends TrangThaiBaseEntity implements Serializable {
+public class NhPhieuKtChatLuong extends TrangThaiBaseEntity implements Serializable {
 	private static final long serialVersionUID = -5114185021472069821L;
 	@Id
 //	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PHIEU_KT_CHAT_LUONG_SEQ")

@@ -13,29 +13,20 @@ import java.math.BigDecimal;
 public class NhPhieuNhapKhoCtReq {
     private Long id;
 
-    @NotNull(message = "Không được để trống")
-    private Integer stt;
+    private String loaiVthh;
 
-    @NotNull(message = "Không được để trống")
+    private String cloaiVthh;
+
+    private String moTaHangHoa;
+
     private String donViTinh;
 
-    @NotNull(message = "Không được để trống")
-    private BigDecimal soLuongTrenCt;
+    private BigDecimal soLuongChungTu;
 
-    @NotNull(message = "Không được để trống")
-    private BigDecimal soLuongThuc;
+    private BigDecimal soLuongThucNhap;
 
-    @NotNull(message = "Không được để trống")
     private BigDecimal donGia;
 
-    @NotNull(message = "Không được để trống")
-    private BigDecimal thanhTien;
+    private String maSo;
 
-    private BigDecimal soChungTu;
-
-    private BigDecimal soThucNhap;
-
-    private String maVatTu;
-
-    private String vthh;
 }

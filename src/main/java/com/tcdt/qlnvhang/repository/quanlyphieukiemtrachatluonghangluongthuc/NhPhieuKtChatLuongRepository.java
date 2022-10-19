@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc;
 
-import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
+import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieukiemtrachatluonghangluongthuc.NhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.repository.BaseRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface QlpktclhPhieuKtChatLuongRepository extends BaseRepository<QlpktclhPhieuKtChatLuong, Long> {
+public interface NhPhieuKtChatLuongRepository extends BaseRepository<NhPhieuKtChatLuong, Long> {
 
     @Query(
         value = "SELECT * FROM NH_PHIEU_KT_CHAT_LUONG PKTCL " +
@@ -25,18 +25,18 @@ public interface QlpktclhPhieuKtChatLuongRepository extends BaseRepository<Qlpkt
                 "AND (:nguoiGiaoHang IS NULL OR LOWER(PKTCL.NGUOI_GIAO_HANG) " +
                 "LIKE LOWER(CONCAT(CONCAT('%', :nguoiGiaoHang), '%')))",
             nativeQuery = true)
-    Page<QlpktclhPhieuKtChatLuong> selectPage( String soPhieu, String ngayLPhieu, String nguoiGiaoHang, Pageable pageable);
+    Page<NhPhieuKtChatLuong> selectPage(String soPhieu, String ngayLPhieu, String nguoiGiaoHang, Pageable pageable);
 
     @Transactional
     @Modifying
     void deleteByIdIn(Collection<Long> ids);
 
-    Optional<QlpktclhPhieuKtChatLuong> findFirstBySoPhieu(String soPhieu);
+    Optional<NhPhieuKtChatLuong> findFirstBySoPhieu(String soPhieu);
 
-    List<QlpktclhPhieuKtChatLuong> findByIdIn(Collection<Long> ids);
+    List<NhPhieuKtChatLuong> findByIdIn(Collection<Long> ids);
 
-    List<QlpktclhPhieuKtChatLuong> findAllByIdQdGiaoNvNh(Long idQdGiaoNvNh);
+    List<NhPhieuKtChatLuong> findAllByIdQdGiaoNvNh(Long idQdGiaoNvNh);
 
-    QlpktclhPhieuKtChatLuong findByIdDdiemGiaoNvNh(Long idDdiemGiaoNvNh);
+    NhPhieuKtChatLuong findByIdDdiemGiaoNvNh(Long idDdiemGiaoNvNh);
 
 }

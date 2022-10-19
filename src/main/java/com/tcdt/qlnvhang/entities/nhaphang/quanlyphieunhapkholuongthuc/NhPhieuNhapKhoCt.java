@@ -21,23 +21,23 @@ public class NhPhieuNhapKhoCt implements Serializable {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "STT")
-    private Integer stt;
+    @Column(name = "ID_PHIEU_NK_HDR")
+    private Long idPhieuNkHdr;
 
-    @Column(name = "PHIEU_NK_ID")
-    private Long phieuNkId;
+    @Column(name = "LOAI_VTHH")
+    private String loaiVthh;
 
-    @Column(name = "MA_SO")
-    private String maSo;
+    @Column(name = "CLOAI_VTHH")
+    private String cloaiVthh;
 
-    @Column(name = "MA_VAT_TU")
-    private String maVatTu;
+    @Column(name = "MO_TA_HANG_HOA")
+    private String moTaHangHoa;
 
     @Column(name = "DON_VI_TINH")
     private String donViTinh;
 
-    @Column(name = "SO_LUONG_TREN_CT")
-    private BigDecimal soLuongTrenCt;
+    @Column(name = "SO_LUONG_CHUNG_TU")
+    private BigDecimal soLuongChungTu;
 
     @Column(name = "SO_LUONG_THUC_NHAP")
     private BigDecimal soLuongThucNhap;
@@ -45,10 +45,7 @@ public class NhPhieuNhapKhoCt implements Serializable {
     @Column(name = "DON_GIA")
     private BigDecimal donGia;
 
-    @Column(name = "THANH_TIEN")
-    private BigDecimal thanhTien;
-
-    @Column(name = "VTHH")
-    private String vthh;
+    @Column(name = "MA_SO")
+    private String maSo;
 
 }
