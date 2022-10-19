@@ -80,7 +80,7 @@ public class HhHdongBkePmuahangService extends BaseServiceImpl {
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmhh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmhh.get(f.getCloaiVthh()));
             for (HhThongTinDviDtuCcap dviDtu :listTtDtu){
-                f.setBenMua(StringUtils.isEmpty(dviDtu.getMaDvi()) ? null : hashMapDmdv.get(dviDtu.getTenDvi()));
+                f.setBenMua(dviDtu.getTenDvi());
             }
             for (HhThongTinDviDtuCcap dviCcap :listTtCc){
                 f.setBenBan(dviCcap.getTenDvi());
