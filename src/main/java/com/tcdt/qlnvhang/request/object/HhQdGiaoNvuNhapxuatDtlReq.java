@@ -59,6 +59,6 @@ public class HhQdGiaoNvuNhapxuatDtlReq {
 
 	String trangThai;
 
-	private List<HhQdGiaoNvuNhapxuatDdNhapReq> diaDiemNhapList;
+	private List<HhQdGiaoNvuNhapxuatDdNhapReq> children;
 
 }

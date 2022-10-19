@@ -34,4 +34,7 @@ public interface QlpktclhPhieuKtChatLuongRepository extends BaseRepository<Qlpkt
     Optional<QlpktclhPhieuKtChatLuong> findFirstBySoPhieu(String soPhieu);
 
     List<QlpktclhPhieuKtChatLuong> findByIdIn(Collection<Long> ids);
+
+    List<QlpktclhPhieuKtChatLuong> findAllByIdQdGiaoNvNh(Long idQdGiaoNvNh);
+
 }

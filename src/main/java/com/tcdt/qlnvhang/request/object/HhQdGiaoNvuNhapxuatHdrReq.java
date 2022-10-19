@@ -40,6 +40,7 @@ public class HhQdGiaoNvuNhapxuatHdrReq {
 
 	String cloaiVthh;
 
+	String moTaHangHoa;
 
 	String trichYeu;
 
@@ -48,6 +49,8 @@ public class HhQdGiaoNvuNhapxuatHdrReq {
 	Long idHd;
 
 	String soHd;
+
+	String tenGoiThau;
 
 	String donViTinh;
 

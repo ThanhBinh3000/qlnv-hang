@@ -18,8 +18,10 @@ public class HhQdPheduyetKhMttDxReq {
     @ApiModelProperty(notes = "bắt buộc set phải đối với updata")
     private Long id;
     private Long idDxuat;
+    private String soDxuat;
     private Long idPduyetHdr;
     private String maDvi;
+    private String diaChiDvi;
     private String loaiVthh;
     private String cloaiVthh;
     private String moTaHangHoa;

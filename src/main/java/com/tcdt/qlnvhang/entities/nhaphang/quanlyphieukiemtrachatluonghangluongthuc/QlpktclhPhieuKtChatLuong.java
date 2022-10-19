@@ -43,7 +43,7 @@ public class QlpktclhPhieuKtChatLuong extends TrangThaiBaseEntity implements Ser
 	private String maQhns;
 
 	@Column(name = "ID_QD_GIAO_NV_NH")
-	private String idQdGiaoNvNh;
+	private Long idQdGiaoNvNh;
 
 	@Column(name = "SO_QD_GIAO_NV_NH")
 	private String soQdGiaoNvNh;
@@ -128,6 +128,9 @@ public class QlpktclhPhieuKtChatLuong extends TrangThaiBaseEntity implements Ser
 
 	@Column(name = "KQ_DANH_GIA")
 	private String kqDanhGia;
+
+	@Column(name = "ID_DDIEM_GIAO_NV_NH")
+	private Long idDdiemGiaoNvNh;
 
 	@Transient
 	private List<QlpktclhKetQuaKiemTra> ketQuaKiemTra = new ArrayList<>();

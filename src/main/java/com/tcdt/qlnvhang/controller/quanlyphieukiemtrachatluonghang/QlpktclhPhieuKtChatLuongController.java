@@ -28,7 +28,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping(PathContains.QL_PHIEU_KIEM_TRA_CHAT_LUONG_HANG_LT)
-@Api(tags = "Quản lý phiếu kiểm tra chất lượng hàng lương thực")
+@Api(tags = "Nhập hàng - Đấu Thầu - Phiếu kiểm tra chất lượng")
 public class QlpktclhPhieuKtChatLuongController {
 
 	@Autowired

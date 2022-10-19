@@ -71,8 +71,11 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
                 userInfo.getDvql(),
                 objReq.getTrangThai(),
                 pageable);
+        Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
         data.getContent().forEach(f->{
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+            f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
+            f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
         });
         return data;
     }
@@ -107,6 +110,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         for (HhQdPheduyetKhMttDxReq listDx :objReq.getHhQdPheduyetKhMttDxList()){
             HhQdPheduyetKhMttDx dx =ObjectMapperUtils.map(listDx, HhQdPheduyetKhMttDx.class);
             dx.setIdDxuat(listDx.getIdDxuat());
+            dx.setSoDxuat(listDx.getSoDxuat());
             dx.setIdPduyetHdr(data.getId());
             dx.setTenLoaiVthh(StringUtils.isEmpty(dx.getLoaiVthh()) ? null : hashMapDmHh.get(dx.getLoaiVthh()));
             dx.setTenCloaiVthh(StringUtils.isEmpty(dx.getCloaiVthh()) ? null : hashMapDmHh.get(dx.getCloaiVthh()));
@@ -194,6 +198,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
             pduyetDx.setTenLoaiVthh(StringUtils.isEmpty(pduyetDx.getLoaiVthh()) ? null : hashMapDmHh.get(pduyetDx.getLoaiVthh()));
             pduyetDx.setTenCloaiVthh(StringUtils.isEmpty(pduyetDx.getCloaiVthh()) ? null : hashMapDmHh.get(pduyetDx.getCloaiVthh()));
             pduyetDx.setTenChuDt(StringUtils.isEmpty(pduyetDx.getMaDvi()) ? null : hashMapDmdv.get(userInfo.getTenDvi()));
+            pduyetDx.setTenDvi(StringUtils.isEmpty(pduyetDx.getMaDvi()) ? null : hashMapDmdv.get(pduyetDx.getMaDvi()));
             List<Long> idDx=listdx.stream().map(HhQdPheduyetKhMttDx::getId).collect(Collectors.toList());
             List<HhQdPheduyetKhMttSLDD> listSlDd =hhQdPheduyetKhMttSLDDRepository.findAllByIdDxKhmttIn(idDx);
             for (HhQdPheduyetKhMttSLDD sldd:listSlDd){

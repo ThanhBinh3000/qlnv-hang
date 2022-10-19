@@ -35,6 +35,7 @@ public class XhQdCuuTroHdr extends BaseEntity implements Serializable {
   private String maDvi;
   private Long idTongHop;
   private String maTongHop;
+  private LocalDate ngayTongHop;
   private int nam;
   private LocalDate ngayKy;
   private String loaiVthh;
