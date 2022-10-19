@@ -122,9 +122,6 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 	String tenCloaiVthh;
 
 	@Transient
-	List<QlpktclhPhieuKtChatLuong> listPhieuKtraCl = new ArrayList<>();
-
-	@Transient
 	private List<HhQdGiaoNvuNhapxuatDtl> dtlList = new ArrayList<>();
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
