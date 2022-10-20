@@ -20,8 +20,8 @@ public class HhQdPduyetKqcgHdrReq  {
     private Integer namKh;
     private String soQdPdCg;
 
-    private Long idPdKq;
-    private String soQdPdKq;
+    private Long idPdKh;
+    private String soQdPdKh;
     private String trichYeu;
     private String ghiChu;
     private String maDvi;
