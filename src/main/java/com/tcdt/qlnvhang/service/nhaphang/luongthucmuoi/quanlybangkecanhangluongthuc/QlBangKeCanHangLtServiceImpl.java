@@ -142,7 +142,7 @@ public class QlBangKeCanHangLtServiceImpl extends BaseServiceImpl implements QlB
         if (phieuNhapKho == null || !StringUtils.hasText(maVatTu))
             return;
 
-        NhPhieuNhapKhoCt pnkCt = nhPhieuNhapKhoCtRepository.findFirstByPhieuNkIdAndMaVatTu(phieuNhapKho.getId(), maVatTu);
+        NhPhieuNhapKhoCt pnkCt = null;
         if (pnkCt != null) {
             pnkCt.setSoLuongThucNhap(item.getTongTrongLuongBaoBi());
             nhPhieuNhapKhoCtRepository.save(pnkCt);

@@ -11,11 +11,16 @@ import java.util.List;
 
 @Repository
 public interface NhPhieuNhapKhoCtRepository extends BaseRepository<NhPhieuNhapKhoCt, Long> {
-    List<NhPhieuNhapKhoCt> findAllByPhieuNkId(Long phieuNhapKhoId);
+//    List<NhPhieuNhapKhoCt> findAllByPhieuNkId(Long phieuNhapKhoId);
+//
+//    @Transactional
+//    @Modifying
+//    void deleteByPhieuNkIdIn(Collection<Long> phieuNhapKhoIds);
+//
+//    NhPhieuNhapKhoCt findFirstByPhieuNkIdAndMaVatTu(Long phieuNhapKhoId, String maVatTu);
 
-    @Transactional
-    @Modifying
-    void deleteByPhieuNkIdIn(Collection<Long> phieuNhapKhoIds);
+    void deleteAllByIdPhieuNkHdr(Long idPhieuNKHdr);
 
-    NhPhieuNhapKhoCt findFirstByPhieuNkIdAndMaVatTu(Long phieuNhapKhoId, String maVatTu);
+    List<NhPhieuNhapKhoCt> findAllByIdPhieuNkHdr(Long idPhieuNkHdr);
+
 }

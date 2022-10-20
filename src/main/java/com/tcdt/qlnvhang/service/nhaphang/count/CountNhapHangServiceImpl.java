@@ -9,7 +9,7 @@ import com.tcdt.qlnvhang.service.nhaphang.bbanlaymau.BienBanLayMauService;
 import com.tcdt.qlnvhang.service.nhaphang.luongthucmuoi.phieuknghiemcluonghang.PhieuKnghiemCluongHangService;
 import com.tcdt.qlnvhang.service.nhaphang.luongthucmuoi.quanlybangkecanhangluongthuc.QlBangKeCanHangLtService;
 import com.tcdt.qlnvhang.service.nhaphang.luongthucmuoi.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtService;
-import com.tcdt.qlnvhang.service.nhaphang.luongthucmuoi.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongService;
+import com.tcdt.qlnvhang.service.nhaphang.luongthucmuoi.quanlyphieukiemtrachatluonghangluongthuc.NhPhieuKtChatLuongService;
 import com.tcdt.qlnvhang.service.nhaphang.quanlyphieunhapkho.NhPhieuNhapKhoService;
 import com.tcdt.qlnvhang.service.nhaphang.vattu.bangke.NhBangKeVtService;
 import com.tcdt.qlnvhang.service.nhaphang.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoService;
@@ -33,7 +33,7 @@ import java.util.List;
 public class CountNhapHangServiceImpl extends BaseServiceImpl implements CountNhapHangService {
 
     private final NhPhieuNhapKhoService nhPhieuNhapKhoService;
-    private final QlpktclhPhieuKtChatLuongService qlpktclhPhieuKtChatLuongService;
+    private final NhPhieuKtChatLuongService nhPhieuKtChatLuongService;
     private final HhBbNghiemthuKlstHdrService hhBbNghiemthuKlstHdrService;
     private final BienBanLayMauService bienBanLayMauService;
     private final BienBanBanGiaoMauService bienBanBanGiaoMauService;

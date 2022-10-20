@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
-import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
+import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieukiemtrachatluonghangluongthuc.NhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieunhapkholuongthuc.NhPhieuNhapKho;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatDtlLoaiNx;
@@ -16,8 +16,7 @@ import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.HhDviThuchienQdinhRepository;
 import com.tcdt.qlnvhang.repository.HhHopDongDdiemNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
-import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhPhieuKiemTraChatLuongRepository;
-import com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuongRepository;
+import com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc.NhPhieuKtChatLuongRepository;
 import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNxDdiemRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatDtlRepository;
@@ -66,7 +65,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 
 	@Autowired
-	private QlpktclhPhieuKtChatLuongRepository nHPhieuKtraCluongRepo;
+	private NhPhieuKtChatLuongRepository nHPhieuKtraCluongRepo;
 
 	@Autowired
 	private NhPhieuNhapKhoRepository nhPhieuNhapKhoRepository;
@@ -243,6 +242,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			dtl.setChildren(allByIdCt);
 		}
 		data.setDtlList(hhQdGiaoNvuNhapxuatDtl);
+		data.setHopDong(hhHopDongRepository.findById(data.getIdHd()).get());
 
 		return data;
 	}
@@ -580,7 +580,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 	}
 
 	void setDataPhieu(HhQdGiaoNvuNxDdiem item){
-		QlpktclhPhieuKtChatLuong byIdDdiemGiaoNvNh = nHPhieuKtraCluongRepo.findByIdDdiemGiaoNvNh(item.getId());
+		NhPhieuKtChatLuong byIdDdiemGiaoNvNh = nHPhieuKtraCluongRepo.findByIdDdiemGiaoNvNh(item.getId());
 		if(!ObjectUtils.isEmpty(byIdDdiemGiaoNvNh)){
 			byIdDdiemGiaoNvNh.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(byIdDdiemGiaoNvNh.getTrangThai()));
 			item.setPhieuKtraCl(byIdDdiemGiaoNvNh);

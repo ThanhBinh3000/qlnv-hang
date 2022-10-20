@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.controller.quanlyphieunhapkholuongthuc;
 
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.DeleteReq;
+import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoReq;
 import com.tcdt.qlnvhang.request.search.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoSearchReq;
@@ -47,7 +48,7 @@ public class NhPhieuNhapKhoController {
     }
 
     @ApiOperation(value = "Sửa Quản lý phiếu nhập kho lương thực", response = List.class)
-    @PutMapping
+    @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> update(@Valid @RequestBody NhPhieuNhapKhoReq request) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -63,11 +64,11 @@ public class NhPhieuNhapKhoController {
     }
 
     @ApiOperation(value = "Chi tiết Quản lý phiếu nhập kho lương thực", response = List.class)
-    @GetMapping("/{id}")
-    public ResponseEntity<BaseResponse> detail(@PathVariable Long id) {
+    @GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> detail(@PathVariable Long ids) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(nhPhieuNhapKhoService.detail(id));
+            resp.setData(nhPhieuNhapKhoService.detail(ids));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -79,11 +80,11 @@ public class NhPhieuNhapKhoController {
     }
 
     @ApiOperation(value = "Xóa Quản lý phiếu nhập kho lương thực", response = List.class)
-    @DeleteMapping("/{id}")
-    public ResponseEntity<BaseResponse> delete(@PathVariable Long id) {
+    @PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-//            resp.setData(nhPhieuNhapKhoService.delete(id));
+            nhPhieuNhapKhoService.delete(idSearchReq.getId());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -95,11 +96,11 @@ public class NhPhieuNhapKhoController {
     }
 
     @ApiOperation(value = "Phê duyệt/ từ chối Quản lý phiếu nhập kho lương thực", response = List.class)
-    @PutMapping("/status")
-    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody StatusReq req) {
+    @PostMapping(PathContains.URL_PHE_DUYET)
+    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody NhPhieuNhapKhoReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-//            resp.setData(nhPhieuNhapKhoService.updateStatusQd(req));
+            resp.setData(nhPhieuNhapKhoService.approve(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

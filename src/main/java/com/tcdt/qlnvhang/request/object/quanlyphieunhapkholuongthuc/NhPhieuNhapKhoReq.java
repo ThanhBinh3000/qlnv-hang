@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc;
 
 import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCt;
 import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCt1;
+import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.request.object.SoBienBanPhieuReq;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -22,7 +23,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class NhPhieuNhapKhoReq extends SoBienBanPhieuReq {
+public class NhPhieuNhapKhoReq extends BaseRequest {
 
 
     private List<Long> phieuKtClIds = new ArrayList<>();
@@ -58,7 +59,6 @@ public class NhPhieuNhapKhoReq extends SoBienBanPhieuReq {
 
     private String nguoiGiaoHang;
 
-
     private LocalDate ngayTaoPhieu;
 
     private BigDecimal taiKhoanNo;
@@ -66,14 +66,6 @@ public class NhPhieuNhapKhoReq extends SoBienBanPhieuReq {
     private BigDecimal taiKhoanCo;
 
     private String loaiHinhNhap;
-
-    private LocalDate ngayTao;
-
-    private Long nguoiTaoId;
-
-    private LocalDate ngaySua;
-
-    private Long nguoiSuaId;
 
     private String maDiemKho;
 
