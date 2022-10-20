@@ -70,6 +70,7 @@ public class HhQdPheduyetKhMttHdr implements Serializable {
     @Transient
     private String tenCloaiVthh;
     private String moTaHangHoa;
+    private String soQdPdCg;
 
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();

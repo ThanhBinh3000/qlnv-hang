@@ -189,6 +189,8 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
         data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh())?null:hashMapDmhh.get(data.getCloaiVthh()));
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
         data.setTenTrangThaiTh(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiTh()));
+        List<FileDinhKem> fdk=fileDinhKemRepository.findByDataIdAndDataTypeIn(data.getId(),Collections.singleton("HH_DX_KHMTT_HDR"));
+        data.setFileDinhKems(fdk);
 
         List<HhDxuatKhMttCcxdg> listCcXdg = hhDxuatKhMttCcxdgRepository.findAllByIdDxKhmtt(data.getId());
         List<Long> listIdCcXd=listCcXdg.stream().map(HhDxuatKhMttCcxdg::getId).collect(Collectors.toList());

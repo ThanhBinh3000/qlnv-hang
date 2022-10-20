@@ -21,8 +21,12 @@ public class HhDcQdPduyetKhmttDx implements Serializable {
 
     private Long id;
     private Long idDxuat;
+    private String soDxuat;
     private Long idDcHdr;
     private String maDvi;
+    @Transient
+    private String tenDvi;
+    private String diaChiDvi;
     private String loaiVthh;
     @Transient
     private String tenLoaiVthh;
@@ -45,6 +49,8 @@ public class HhDcQdPduyetKhmttDx implements Serializable {
     private BigDecimal tongSoLuong;
     private String nguonVon;
     private String tenChuDt;
+    @Temporal(TemporalType.DATE)
+    private Date ngayKy;
 
     @Transient
     private  List<HhDcQdPduyetKhmttSldd> hhDcQdPduyetKhmttSlddList=new ArrayList<>();
