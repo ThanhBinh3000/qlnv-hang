@@ -36,13 +36,17 @@ public class HhDxuatKhMttHdr  implements Serializable {
     private String trangThaiTh;
     @Transient
     private String tenTrangThaiTh;
+    @Temporal(TemporalType.DATE)
     private Date ngayTao;
     private String nguoiTao;
+    @Temporal(TemporalType.DATE)
     private Date ngaySua;
     private  String nguoiSua;
     private String ldoTuchoi;
+    @Temporal(TemporalType.DATE)
     private Date ngayGuiDuyet;
     private String nguoiGuiDuyet;
+    @Temporal(TemporalType.DATE)
     private Date ngayPduyet;
     private String nguoiPduyet;
     private String loaiVthh;

@@ -27,7 +27,7 @@ public class HhQdPheduyetKhMttHdrReq {
     private String cloaiVthh;
     private String moTaHangHoa;
     private String ghiChu;
-
+    private String soQdPdCg;
     private List<FileDinhKemReq> fileDinhkems =new ArrayList<>();
 
     private List<HhQdPheduyetKhMttDxReq> hhQdPheduyetKhMttDxList = new ArrayList<>();
