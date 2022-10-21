@@ -26,8 +26,8 @@ public class HhQdPduyetKqcgHdr implements Serializable {
     private Date ngayKy;
     @Temporal(TemporalType.DATE)
     private Date ngayHluc;
-    private Long idPdKq;
-    private String soQdPdKq;
+    private Long idQdPdKh;
+    private String soQdPdKh;
     private String trichYeu;
     private String ghiChu;
     private String maDvi;

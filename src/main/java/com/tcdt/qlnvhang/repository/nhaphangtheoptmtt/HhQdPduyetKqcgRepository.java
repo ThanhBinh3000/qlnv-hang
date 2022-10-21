@@ -21,7 +21,7 @@ public interface HhQdPduyetKqcgRepository extends JpaRepository<HhQdPduyetKqcgHd
             ,nativeQuery = true)
     Page<HhQdPduyetKqcgHdr> searchPage(Integer namKh, String ngayCgiaTu, String ngayCgiaDen, String trangThai, String maDvi, Pageable pageable);
 
-    Optional<HhQdPduyetKqcgHdr> findAllBySoQdPdKq(String soQdPdKq);
+    Optional<HhQdPduyetKqcgHdr> findAllBySoQdPdCg(String soQdPdCg);
 
     List<HhQdPduyetKqcgHdr> findAllByIdIn(List<Long> ids);
 

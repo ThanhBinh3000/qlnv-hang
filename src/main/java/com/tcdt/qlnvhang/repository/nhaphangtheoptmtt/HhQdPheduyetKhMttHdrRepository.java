@@ -48,6 +48,11 @@ public interface HhQdPheduyetKhMttHdrRepository extends JpaRepository<HhQdPheduy
             ,nativeQuery = true)
     Page<HhQdPheduyetKhMttHdr> searchPageTkhai(Integer namKh, String ngayCgiaTu, String ngayCgiadDen,String trangThai,String trangThaiTk, String maDvi, String ctyCgia, String pthucMuatt, Pageable pageable);
 
+    @Transactional()
+    @Modifying
+    @Query(value = "update HH_QD_PHE_DUYET_KHMTT_HDR PD set PD.SO_QD_PD_CG=:soQdPdCg  where PD.SO_QD_PDUYET=:soQdPd ",nativeQuery = true)
+    void updateSoQdPdCg(String soQdPd,String soQdPdCg);
+
 
 
     @Transactional()
