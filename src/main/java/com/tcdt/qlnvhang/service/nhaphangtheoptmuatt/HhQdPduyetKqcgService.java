@@ -260,12 +260,12 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
             case Contains.TUCHOI_TP + Contains.CHO_DUYET_TP:
             case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
                 optional.get().setNguoiPduyet(getUser().getUsername());
-                optional.get().setNgayPduyet(getDateTimeNow());
+                optional.get().setNgayPheDuyet(getDateTimeNow());
                 optional.get().setLdoTuchoi(statusReq.getLyDo());
                 break;
             case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
                 optional.get().setNguoiPduyet(getUser().getUsername());
-                optional.get().setNgayPduyet(getDateTimeNow());
+                optional.get().setNgayPheDuyet(getDateTimeNow());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
