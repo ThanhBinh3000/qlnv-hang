@@ -29,6 +29,7 @@ public class HhChiTietTTinChaoGiaReq {
     private Boolean luaChon;
     private Boolean luaChonPduyet;
     private Long idSoQdPduyetCgia;
+    private Long idTkhaiKh;
 
     private FileDinhKemReq fileDinhKems ;
 }

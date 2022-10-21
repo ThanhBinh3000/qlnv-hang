@@ -37,6 +37,6 @@ public class HhQdPduyetKqcgHdrReq  {
     private String trangThai;
 
     private List<FileDinhKemReq> fileDinhkems =new ArrayList<>();
-    @Transient
+
     private List<HhChiTietTTinChaoGiaReq> hhChiTietTTinChaoGiaReqList = new ArrayList<>();
 }
