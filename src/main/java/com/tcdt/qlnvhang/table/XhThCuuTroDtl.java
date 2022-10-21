@@ -27,6 +27,7 @@ public class XhThCuuTroDtl extends BaseEntity implements Serializable {
   private Long id;
   private Long idTongHop;
   private Long idDxuat;
+  private String maDviDxuat;
   private String maDvi;
   private String noiDung;
   private Long soLuong;

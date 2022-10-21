@@ -18,6 +18,7 @@ public class XhDxCuuTroHdrSearchReq extends BaseRequest {
   private String loaiNhapXuat;
   private String soDxuat;
   private String maDvi;
+  private String maDviDxuat;
   private LocalDate ngayDxuat;
   private LocalDate tuNgayDxuat;
   private LocalDate denNgayDxuat;
