@@ -169,15 +169,20 @@ public class TongHopCuuTroService extends BaseServiceImpl {
     newRow = tongHopCuuTroRepository.save(newRow);
 
     //luu thong tin chi tiet
+    Set<String> maDviDxuat = new HashSet<>();
     List<XhDxCuuTroHdr> listDxHdr = new ArrayList();
     if (!DataUtils.isNullOrEmpty(req.getThongTinDeXuat())) {
       listDxHdr = ObjectMapperUtils.mapAll(req.getThongTinDeXuat(), XhDxCuuTroHdr.class);
       XhThCuuTroHdr finalNewRow = newRow;
+
       listDxHdr.forEach(s -> {
+        maDviDxuat.add(s.getMaDvi());
         s.getThongTinChiTiet().forEach(s1 -> {
           XhThCuuTroDtl newRowDtl = new XhThCuuTroDtl();
           BeanUtils.copyProperties(s1, newRowDtl);
           newRowDtl.setIdTongHop(finalNewRow.getId());
+          newRowDtl.setIdDxuat(s.getId());
+          newRowDtl.setMaDviDxuat(s.getMaDvi());
           newRowDtl.setMaDvi(finalNewRow.getMaDvi());
           newRowDtl.setNgayDxuat(s.getNgayDxuat());
           newRowDtl.setThoiGianThucHien(s.getThoiGianThucHien());
@@ -196,6 +201,18 @@ public class TongHopCuuTroService extends BaseServiceImpl {
         }*/
       });
     }
+    // update id tong hop vao bang de xuat
+    List<Long> idDxuat = req.getThongTinDeXuat().stream().map(XhDxCuuTroHdr::getId).collect(Collectors.toList());
+    List<XhDxCuuTroHdr> listDxuat = deXuatCuuTroRepository.findAllById(idDxuat);
+    XhThCuuTroHdr finalNewRow = newRow;
+    listDxuat.forEach(s -> {
+      s.setIdTongHop(finalNewRow.getId());
+//      s.setTrangThaiTh(TrangThaiAllEnum.DA_TONG_HOP.getId());
+    });
+    deXuatCuuTroRepository.saveAll(listDxuat);
+
+    //update madvidexuat vao th hdr
+    newRow.setMaDviDxuat(String.join(",", maDviDxuat));
     return newRow;
   }
 
@@ -225,6 +242,7 @@ public class TongHopCuuTroService extends BaseServiceImpl {
     currentRow = tongHopCuuTroRepository.save(currentRow);
 
     //luu thong tin chi tiet
+    Set<String> maDviDxuat = new HashSet<>();
     List<XhThCuuTroDtl> thongTinChiTiet = new ArrayList();
     if (!DataUtils.isNullOrEmpty(req.getThongTinTongHop())) {
       List<Long> listDtlReq = req.getThongTinTongHop().stream().map(XhThCuuTroDtl::getId).collect(Collectors.toList());
@@ -237,6 +255,7 @@ public class TongHopCuuTroService extends BaseServiceImpl {
       thongTinChiTiet = ObjectMapperUtils.mapAll(req.getThongTinTongHop(), XhThCuuTroDtl.class);
       XhThCuuTroHdr finalNewRow = currentRow;
       thongTinChiTiet.forEach(s -> {
+        maDviDxuat.add(s.getMaDviDxuat());
         List<XhThCuuTroKho> listRemoveKho = tongHopCuuTroKhoRepository.findByIdTongHopDtl(s.getId());
 //        List<Long> listRemoveKhoId = listRemoveKho.stream().map(XhDxCuuTroKho::getId).collect(Collectors.toList());
         s.setIdTongHop(finalNewRow.getId());
@@ -254,6 +273,8 @@ public class TongHopCuuTroService extends BaseServiceImpl {
         }
       });
     }
+    //update madvidexuat vao th hdr
+    currentRow.setMaDviDxuat(String.join(",", maDviDxuat));
     return currentRow;
   }
 

@@ -18,6 +18,7 @@ public interface QuyetDinhCuuTroRepository extends JpaRepository<XhQdCuuTroHdr, 
   @Query("SELECT c FROM XhQdCuuTroHdr c WHERE 1=1 " +
    /*    "AND (:#{#param.pagTypeLT} IS NULL OR c.loaiVthh NOT LIKE CONCAT('02','%')) " +
        "AND (:#{#param.pagTypeVT} IS NULL OR c.loaiVthh LIKE CONCAT('02','%')) " +*/
+      "AND (:#{#param.maDviDxuat}  IS NULL OR LOWER(c.maDviDxuat) LIKE CONCAT('%',LOWER(:#{#param.maDviDxuat}),'%')) " +
       "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
       "AND (:#{#param.maDvi} IS NULL OR c.maDvi = :#{#param.maDvi}) " +
       "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +

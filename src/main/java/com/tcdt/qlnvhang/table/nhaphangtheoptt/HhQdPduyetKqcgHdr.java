@@ -2,6 +2,8 @@ package com.tcdt.qlnvhang.table.nhaphangtheoptt;
 
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,7 +13,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "HH_QD_PDUYET_KQCG_HDR")
-@Data
+@Getter
+@Setter
 public class HhQdPduyetKqcgHdr implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "HH_QD_PDUYET_KQCG_HDR";
@@ -58,7 +61,8 @@ public class HhQdPduyetKqcgHdr implements Serializable {
     private Date ngayGduyet;
     private String nguoiGduyet;
     @Temporal(TemporalType.DATE)
-    private Date ngayPduyet;
+    @Column(name="ngayPduyet")
+    private Date ngayPheDuyet;
     private String nguoiPduyet;
 
     @Transient
