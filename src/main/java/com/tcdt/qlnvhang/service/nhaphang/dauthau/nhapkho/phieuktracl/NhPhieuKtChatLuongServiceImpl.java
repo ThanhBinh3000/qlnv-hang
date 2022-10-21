@@ -486,12 +486,7 @@ public class NhPhieuKtChatLuongServiceImpl extends BaseServiceImpl implements Nh
 	}
 
 	List<NhPhieuKtChatLuong> setDetailList(List<NhPhieuKtChatLuong> list){
-		Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
 		list.forEach( item -> {
-			item.setTenDiemKho(listDanhMucDvi.get(item.getMaDiemKho()));
-			item.setTenNhaKho(listDanhMucDvi.get(item.getMaNhaKho()));
-			item.setTenNganKho(listDanhMucDvi.get(item.getMaNganKho()));
-			item.setTenLoKho(listDanhMucDvi.get(item.getMaLoKho()));
 			item.setPhieuNhapKho(nhPhieuNhapKhoRepository.findBySoPhieuKtraCl(item.getSoPhieu()));
 		});
 		return list;
