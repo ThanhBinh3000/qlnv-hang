@@ -93,12 +93,18 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
         HhQdPduyetKqcgHdr created= hhQdPduyetKqcgRepository.save(data);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),data.getId(),"HH_QD_PDUYET_KQCG_HDR");
         created.setFileDinhKems(fileDinhKems);
-        for (HhChiTietTTinChaoGiaReq chiTietTTinChaoGia:objReq.getHhChiTietTTinChaoGiaReqList()){
-            HhChiTietTTinChaoGia tTin = ObjectMapperUtils.map(chiTietTTinChaoGia,HhChiTietTTinChaoGia.class);
-            tTin.setId(null);
-            tTin.setIdSoQdPduyetCgia(data.getId());
-            hhCtietTtinCgiaRepository.updateLcPd(chiTietTTinChaoGia.getId(),chiTietTTinChaoGia.getLuaChonPduyet());
+        List<HhChiTietTTinChaoGia> chiTietTTinChaoGia= hhCtietTtinCgiaRepository.findAllByIdTkhaiKh(objReq.getIdPdKh());
+        for (HhChiTietTTinChaoGia cTiet: chiTietTTinChaoGia){
+            cTiet.setIdSoQdPduyetCgia(data.getId());
+            cTiet.setLuaChonPduyet(cTiet.getLuaChonPduyet());
+            hhCtietTtinCgiaRepository.save(cTiet);
         }
+//        for (HhChiTietTTinChaoGiaReq chiTietTTinChaoGia:objReq.getHhChiTietTTinChaoGiaReqList()){
+//            HhChiTietTTinChaoGia tTin = ObjectMapperUtils.map(chiTietTTinChaoGia,HhChiTietTTinChaoGia.class);
+//            tTin.setId(null);
+//            tTin.setIdSoQdPduyetCgia(data.getId());
+//            hhCtietTtinCgiaRepository.updateLcPd(chiTietTTinChaoGia.getId(),chiTietTTinChaoGia.getLuaChonPduyet());
+//        }
         return created;
     }
 
@@ -155,7 +161,7 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
         data.setTenDvi(StringUtils.isEmpty(data.getMaDvi()) ? null : hashMapDmdv.get(userInfo.getTenDvi()));
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
         data.setFileDinhKems(data.getFileDinhKems());
-        List<HhChiTietTTinChaoGia> hhChiTietTTinChaoGias = hhCtietTtinCgiaRepository.findAllByIdSoQdPduyetCgia(data.getIdQdPdKh());
+        List<HhChiTietTTinChaoGia> hhChiTietTTinChaoGias = hhCtietTtinCgiaRepository.findAllByIdSoQdPduyetCgia(data.getId());
         data.setHhChiTietTTinChaoGiaList(hhChiTietTTinChaoGias);
         return data;
     }

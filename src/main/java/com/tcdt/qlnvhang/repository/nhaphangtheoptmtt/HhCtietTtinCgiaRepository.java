@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface HhCtietTtinCgiaRepository extends JpaRepository<HhChiTietTTinChaoGia,Long> {
     List<HhChiTietTTinChaoGia> findAllByIdSoQdPduyetCgia(Long idSoQdPduyetCgia);
+    List<HhChiTietTTinChaoGia> findAllByIdTkhaiKh(Long idTkhaiKh);
 
     List<HhChiTietTTinChaoGia> findAllByIdSoQdPduyetCgiaIn(List<Long> ids);
 
