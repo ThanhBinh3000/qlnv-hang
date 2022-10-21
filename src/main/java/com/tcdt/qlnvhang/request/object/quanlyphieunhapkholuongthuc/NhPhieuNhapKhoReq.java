@@ -1,19 +1,15 @@
 package com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc;
 
-import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCt;
-import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCt1;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoCt1;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import com.tcdt.qlnvhang.request.object.SoBienBanPhieuReq;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,7 +20,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NhPhieuNhapKhoReq extends BaseRequest {
-
 
     private List<Long> phieuKtClIds = new ArrayList<>();
     private String soPhieu;
@@ -104,7 +99,7 @@ public class NhPhieuNhapKhoReq extends BaseRequest {
 
     private String donViGiaoHang;
 
-    private String diaChi;
+    private String diaChiNguoiGiao;
 
     private String keToanTruong;
 

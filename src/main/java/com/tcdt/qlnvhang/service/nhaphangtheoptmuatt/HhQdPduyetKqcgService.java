@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhCtietTtinCgiaRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhQdPduyetKqcgRepository;
+import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhQdPheduyetKhMttHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -46,6 +47,9 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
     @Autowired
     HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
 
+    @Autowired
+    HhQdPheduyetKhMttHdrRepository hhQdPheduyetKhMttHdrRepository;
+
     public Page<HhQdPduyetKqcgHdr> searchPage(SearchHhQdPduyetKqcg objReq) throws Exception{
         UserInfo userInfo= SecurityContextService.getUser();
         Pageable pageable= PageRequest.of(objReq.getPaggingReq().getPage(),
@@ -75,7 +79,7 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
         if (userInfo == null){
             throw new Exception("Bad request.");
         }
-        Optional<HhQdPduyetKqcgHdr> optional =hhQdPduyetKqcgRepository.findAllBySoQdPdKq(objReq.getSoQdPdKq());
+        Optional<HhQdPduyetKqcgHdr> optional =hhQdPduyetKqcgRepository.findAllBySoQdPdCg(objReq.getSoQdPdCg());
         if(optional.isPresent()){
             throw new Exception("Số quyết định phê duyệt đã tồn tại");
         }
@@ -105,7 +109,7 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
             throw new Exception("Bad request.");
         Optional<HhQdPduyetKqcgHdr> optional = hhQdPduyetKqcgRepository.findById(objReq.getId());
 
-        Optional<HhQdPduyetKqcgHdr> soQdPdCg = hhQdPduyetKqcgRepository.findAllBySoQdPdKq(objReq.getSoQdPdKq());
+        Optional<HhQdPduyetKqcgHdr> soQdPdCg = hhQdPduyetKqcgRepository.findAllBySoQdPdCg(objReq.getSoQdPdCg());
         if(soQdPdCg.isPresent()){
             if (soQdPdCg.isPresent()){
                 if (!soQdPdCg.get().getId().equals(objReq.getId())){
@@ -151,7 +155,7 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
         data.setTenDvi(StringUtils.isEmpty(data.getMaDvi()) ? null : hashMapDmdv.get(userInfo.getTenDvi()));
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
         data.setFileDinhKems(data.getFileDinhKems());
-        List<HhChiTietTTinChaoGia> hhChiTietTTinChaoGias = hhCtietTtinCgiaRepository.findAllByIdSoQdPduyetCgia(data.getIdPdKq());
+        List<HhChiTietTTinChaoGia> hhChiTietTTinChaoGias = hhCtietTtinCgiaRepository.findAllByIdSoQdPduyetCgia(data.getIdQdPdKh());
         data.setHhChiTietTTinChaoGiaList(hhChiTietTTinChaoGias);
         return data;
     }
@@ -168,7 +172,7 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
             throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối");
         }
         HhQdPduyetKqcgHdr data = optional.get();
-        List<HhChiTietTTinChaoGia>  listSlDd = hhCtietTtinCgiaRepository.findAllByIdSoQdPduyetCgia(data.getIdPdKq());
+        List<HhChiTietTTinChaoGia>  listSlDd = hhCtietTtinCgiaRepository.findAllByIdSoQdPduyetCgia(data.getIdQdPdKh());
         fileDinhKemService.delete(data.getId(),  Lists.newArrayList("HH_QD_PDUYET_KQCG_HDR"));
         for (HhChiTietTTinChaoGia chiTietTTinChaoGia : listSlDd){
             hhCtietTtinCgiaRepository.updateLcPd(chiTietTTinChaoGia.getId(),chiTietTTinChaoGia.getLuaChon());
@@ -218,7 +222,7 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
             objs[1]=dx.getSoQdPdCg();
             objs[2]=dx.getNgayKy();
             objs[3]=dx.getTenDvi();
-            objs[4]=dx.getSoQdPdKq();
+            objs[4]=dx.getSoQdPdKh();
             objs[5]=dx.getTenLoaiVthh();
             objs[6]=dx.getTenCloaiVthh();
             objs[7]=dx.getTenTrangThai();

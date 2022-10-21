@@ -13,17 +13,10 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 public class QlBangKeChCtLtReq {
-    private Long id;
 
-    @NotNull(message = "Không được để trống")
-    private Integer stt;
-
-    @NotNull(message = "Không được để trống")
     private String maCan;
 
-    @NotNull(message = "Không được để trống")
-    private BigDecimal soBaoBi;
+    private BigDecimal trongLuongBaoBi;
 
-    @NotNull(message = "Không được để trống")
-    private BigDecimal trongLuongCaBi;
+    private BigDecimal trongLuongCaBaoBi;
 }

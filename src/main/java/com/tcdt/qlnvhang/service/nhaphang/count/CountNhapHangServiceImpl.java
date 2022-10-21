@@ -7,10 +7,10 @@ import com.tcdt.qlnvhang.service.nhaphang.HhBbNghiemthuKlstHdrService;
 import com.tcdt.qlnvhang.service.nhaphang.bbanlaymau.BienBanBanGiaoMauService;
 import com.tcdt.qlnvhang.service.nhaphang.bbanlaymau.BienBanLayMauService;
 import com.tcdt.qlnvhang.service.nhaphang.luongthucmuoi.phieuknghiemcluonghang.PhieuKnghiemCluongHangService;
-import com.tcdt.qlnvhang.service.nhaphang.luongthucmuoi.quanlybangkecanhangluongthuc.QlBangKeCanHangLtService;
+import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHangService;
 import com.tcdt.qlnvhang.service.nhaphang.luongthucmuoi.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtService;
-import com.tcdt.qlnvhang.service.nhaphang.luongthucmuoi.quanlyphieukiemtrachatluonghangluongthuc.NhPhieuKtChatLuongService;
-import com.tcdt.qlnvhang.service.nhaphang.quanlyphieunhapkho.NhPhieuNhapKhoService;
+import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.phieuktracl.NhPhieuKtChatLuongService;
+import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoService;
 import com.tcdt.qlnvhang.service.nhaphang.vattu.bangke.NhBangKeVtService;
 import com.tcdt.qlnvhang.service.nhaphang.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoService;
 import com.tcdt.qlnvhang.service.nhaphang.vattu.bienbanguihang.NhBienBanGuiHangService;
@@ -40,7 +40,7 @@ public class CountNhapHangServiceImpl extends BaseServiceImpl implements CountNh
     private final PhieuKnghiemCluongHangService phieuKnghiemCluongHangService;
     private final NhHoSoKyThuatService hoSoKyThuatService;
     private final NhBienBanChuanBiKhoService bienBanChuanBiKhoService;
-    private final QlBangKeCanHangLtService bangKeCanHangLtService;
+    private final NhBangKeCanHangService bangKeCanHangLtService;
     private final QlBienBanNhapDayKhoLtService bienBanNhapDayKhoLtService;
     private final NhPhieuNhapKhoTamGuiService phieuNhapKhoTamGuiService;
     private final NhBienBanGuiHangService bienBanGuiHangService;
@@ -78,7 +78,7 @@ public class CountNhapHangServiceImpl extends BaseServiceImpl implements CountNh
         List<BaseNhapHangCount> counts = new ArrayList<>();
 
 //        counts.add(nhPhieuNhapKhoService.count(req.getMaDvis()));
-        counts.add(bangKeCanHangLtService.count(req.getMaDvis()));
+//        counts.add(bangKeCanHangLtService.count(req.getMaDvis()));
         counts.add(bienBanNhapDayKhoLtService.count(req.getMaDvis()));
         counts.add(phieuNhapKhoTamGuiService.count(req.getMaDvis()));
         counts.add(bienBanGuiHangService.count(req.getMaDvis()));
