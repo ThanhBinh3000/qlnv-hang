@@ -27,6 +27,8 @@ public class ThongBaoBanDauGiaSearchRequest extends BaseRequest {
 	private String maThongBaoBDG;
 	private String trichYeu;
 	private String loaiVthh;
+	private String trangThai;
+	private String maDvi;
 	@JsonFormat(pattern = LocalDateTimeUtils.DATE_FORMAT, shape = JsonFormat.Shape.STRING)
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate ngayToChucBDGTuNgay;

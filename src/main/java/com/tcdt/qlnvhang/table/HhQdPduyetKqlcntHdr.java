@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Where;
@@ -63,9 +64,21 @@ public class HhQdPduyetKqlcntHdr implements Serializable {
 	@Temporal(TemporalType.DATE)
 	Date ngayPduyet;
 	String nguoiPduyet;
-
 	@Transient
 	HhQdKhlcntHdr qdKhlcnt;
+
+	@Transient
+	List<HhHopDongHdr> listHopDong;
+
+	String trangThaiHd;
+
+	@Transient
+	String tenTrangThaiHd;
+
+
+	public String getTenTrangThaiHd() {
+		return NhapXuatHangTrangThaiEnum.getTenById(trangThaiHd);
+	}
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)

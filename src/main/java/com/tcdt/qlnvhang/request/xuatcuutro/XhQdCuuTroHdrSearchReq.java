@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.xuatcuutro;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.XhDxCuuTroHdr;
 import com.tcdt.qlnvhang.table.XhQdCuuTroDtl;
 import com.tcdt.qlnvhang.table.XhThCuuTroDtl;
@@ -16,6 +17,8 @@ public class XhQdCuuTroHdrSearchReq extends BaseRequest {
   private String loaiNhapXuat;
   private Long idDxuat;
   private String soDxuat;
+  private Long idTongHop;
+  private String maTongHop;
   private String soQd;
   private String maDvi;
   private LocalDate ngayDxuat;
@@ -36,10 +39,14 @@ public class XhQdCuuTroHdrSearchReq extends BaseRequest {
   private LocalDate ngayTongHop;
   private LocalDate tuNgayTongHop;
   private LocalDate denNgayTongHop;
+  private LocalDate ngayKy;
+  private LocalDate tuNgayKy;
+  private LocalDate denNgayKy;
   private String noiDung;
   private int nam;
   private String dvql;
-  private String maTongHop;
+  private List<FileDinhKemReq> canCu = new ArrayList<>();
+  private FileDinhKemReq fileDinhKem;
   private List<XhDxCuuTroHdr> thongTinDeXuat = new ArrayList<>();
   private List<XhThCuuTroDtl> thongTinTongHop = new ArrayList<>();
   private List<XhQdCuuTroDtl> thongTinQuyetDinh = new ArrayList<>();

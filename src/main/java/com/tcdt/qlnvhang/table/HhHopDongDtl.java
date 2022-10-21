@@ -26,7 +26,7 @@ public class HhHopDongDtl implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_HOP_DONG_DTL_SEQ")
 	@SequenceGenerator(sequenceName = "HH_HOP_DONG_DTL_SEQ", allocationSize = 1, name = "HH_HOP_DONG_DTL_SEQ")
 	private Long id;
-
+	Long idHdr;
 	String shgt;
 	String tenGthau;
 	BigDecimal soLuong;
@@ -35,6 +35,11 @@ public class HhHopDongDtl implements Serializable {
 	BigDecimal giaTruocVat;
 	BigDecimal giaSauVat;
 	String type;
+	String maDvi;
+	@Transient
+	String tenDvi;
+	String diaDiemNhap;
+	String trangThai;
 
 	@Transient
 	private List<HhHopDongDdiemNhapKho> children = new ArrayList<>();

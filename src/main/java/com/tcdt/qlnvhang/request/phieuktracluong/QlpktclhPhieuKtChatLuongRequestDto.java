@@ -1,23 +1,14 @@
 package com.tcdt.qlnvhang.request.phieuktracluong;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhKetQuaKiemTra;
 import com.tcdt.qlnvhang.request.BaseRequest;
-import com.tcdt.qlnvhang.request.PaggingReq;
-import com.tcdt.qlnvhang.request.object.SoBienBanPhieuReq;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Builder
@@ -88,6 +79,8 @@ public class QlpktclhPhieuKtChatLuongRequestDto extends BaseRequest {
 	private String ketLuan;
 
 	private String kqDanhGia;
+
+	private Long idDdiemGiaoNvNh;
 
 	private List<QlpktclhKetQuaKiemTraRequestDto> ketQuaKiemTra;
 

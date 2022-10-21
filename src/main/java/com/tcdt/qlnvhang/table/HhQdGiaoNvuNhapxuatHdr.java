@@ -15,10 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-import javax.transaction.Transactional;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.util.Contains;
@@ -30,7 +27,6 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tcdt.qlnvhang.entities.FileDKemJoinQdNhapxuat;
 
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = HhQdGiaoNvuNhapxuatHdr.TABLE_NAME)
@@ -92,6 +88,8 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 
 	String soHd;
 
+	String tenGoiThau;
+
 	String donViTinh;
 
 	Long soLuong;
@@ -119,6 +117,9 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 
 	@Transient
 	private List<HhQdGiaoNvuNhapxuatDtl> dtlList = new ArrayList<>();
+
+	@Transient
+	private HhHopDongHdr hopDong;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)

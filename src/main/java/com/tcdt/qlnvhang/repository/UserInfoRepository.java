@@ -9,12 +9,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.tcdt.qlnvhang.table.UserInfo;
 
+import java.util.Optional;
+
 @Repository
 public interface UserInfoRepository extends CrudRepository<UserInfo, Long> {
 
 	UserInfo findByUsername(String username);
 
 	UserInfo findByToken(String token);
+
+	Optional<UserInfo> findById(Long id);
 
 	@Transactional()
 	@Modifying

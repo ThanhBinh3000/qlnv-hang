@@ -28,6 +28,7 @@ public class BhHopDongHdrReq {
     String tenHd;
 
     @NotNull(message = "Không được để trống")
+
     @Size(max = 20, message = "Số quyết định phê duyệt kết quả lcnt được vượt quá 20 ký tự")
     @ApiModelProperty(example = "20/QD-TCDT")
     String canCu;

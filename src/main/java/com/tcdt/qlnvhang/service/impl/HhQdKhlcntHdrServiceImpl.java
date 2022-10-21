@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import com.tcdt.qlnvhang.entities.FileDKemJoinQdKhlcntHdr;
@@ -58,6 +59,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	private HhDxuatKhLcntHdrRepository hhDxuatKhLcntHdrRepository;
 
 	@Override
+	@Transactional
 	public HhQdKhlcntHdr create(HhQdKhlcntHdrReq objReq) throws Exception {
 		// Vật tư
 		if(objReq.getLoaiVthh().startsWith("02")){
@@ -77,29 +79,17 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			throw new Exception("Số quyết định " + objReq.getSoQd() + " đã tồn tại");
 		}
 
-		Optional<HhDxKhLcntThopHdr> qOptionalTh = hhDxKhLcntThopHdrRepository.findById(objReq.getIdThHdr());
-		if (!qOptionalTh.isPresent()){
-			throw new Exception("Không tìm thấy tổng hợp kế hoạch lựa chọn nhà thầu");
+		if(objReq.getPhanLoai().equals("TH")){
+			Optional<HhDxKhLcntThopHdr> qOptionalTh = hhDxKhLcntThopHdrRepository.findById(objReq.getIdThHdr());
+			if (!qOptionalTh.isPresent()){
+				throw new Exception("Không tìm thấy tổng hợp kế hoạch lựa chọn nhà thầu");
+			}
+		}else{
+			Optional<HhDxuatKhLcntHdr> byId = hhDxuatKhLcntHdrRepository.findById(objReq.getIdTrHdr());
+			if(!byId.isPresent()){
+				throw new Exception("Không tìm thấy đề xuất kế hoạch lựa chọn nhà thầu");
+			}
 		}
-
-		// Lay danh muc dung chung
-		Map<String, String> mapDmuc = getMapCategory();
-		if (objReq.getHthucLcnt() == null || !mapDmuc.containsKey(objReq.getHthucLcnt())){
-			throw new Exception("Hình thức lựa chọn nhà thầu không phù hợp");
-		}
-
-		if (objReq.getPthucLcnt() == null || !mapDmuc.containsKey(objReq.getPthucLcnt())){
-			throw new Exception("Phương thức đấu thầu không phù hợp");
-		}
-
-		if (objReq.getLoaiHdong() == null || !mapDmuc.containsKey(objReq.getLoaiHdong())){
-			throw new Exception("Loại hợp đồng không phù hợp");
-		}
-
-		if (objReq.getNguonVon() == null || !mapDmuc.containsKey(objReq.getNguonVon())){
-			throw new Exception("Nguồn vốn không phù hợp");
-		}
-
 		// Add danh sach file dinh kem o Master
 		List<FileDKemJoinQdKhlcntHdr> fileDinhKemList = new ArrayList<FileDKemJoinQdKhlcntHdr>();
 		if (objReq.getFileDinhKems() != null) {
@@ -116,13 +106,16 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		dataMap.setTrangThai(Contains.DUTHAO);
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setChildren(fileDinhKemList);
-		dataMap.setIdThHdr(qOptionalTh.get().getId());
 		dataMap.setLastest(objReq.getLastest());
 
 		hhQdKhlcntHdrRepository.save(dataMap);
 
 		// Update trạng thái tổng hợp dxkhclnt
-		hhDxKhLcntThopHdrRepository.updateTrangThai(dataMap.getIdThHdr(), Contains.DADUTHAO_QD);
+		if(objReq.getPhanLoai().equals("TH")){
+			hhDxKhLcntThopHdrRepository.updateTrangThai(dataMap.getIdThHdr(), Contains.DADUTHAO_QD);
+		}else{
+			hhDxuatKhLcntHdrRepository.updateStatusInList(Arrays.asList(objReq.getSoTrHdr()), Contains.DADUTHAO_QD);
+		}
 
 		for (HhQdKhlcntDtlReq dx : objReq.getDsDeXuat()){
 			HhQdKhlcntDtl qd = ObjectMapperUtils.map(dx, HhQdKhlcntDtl.class);
@@ -130,7 +123,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			qd.setIdQdHdr(dataMap.getId());
 			qd.setTrangThai(Contains.CHUACAPNHAT);
 			hhQdKhlcntDtlRepository.save(qd);
-			for (HhQdKhlcntDsgthauReq gtList : dx.getDsGoiThau()){
+			for (HhQdKhlcntDsgthauReq gtList : ObjectUtils.isEmpty(dx.getDsGoiThau()) ? dx.getDsGtDtlList() : dx.getDsGoiThau()){
 				HhQdKhlcntDsgthau gt = ObjectMapperUtils.map(gtList, HhQdKhlcntDsgthau.class);
 				gt.setId(null);
 				gt.setIdQdDtl(qd.getId());
@@ -235,24 +228,17 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			}
 		}
 
-		Optional<HhDxKhLcntThopHdr> qOptionalTh = hhDxKhLcntThopHdrRepository.findById(objReq.getIdThHdr());
-		if (!qOptionalTh.isPresent()){
-			throw new Exception("Không tìm thấy tổng hợp kế hoạch lựa chọn nhà thầu");
+		if(objReq.getPhanLoai().equals("TH")){
+			Optional<HhDxKhLcntThopHdr> qOptionalTh = hhDxKhLcntThopHdrRepository.findById(objReq.getIdThHdr());
+			if (!qOptionalTh.isPresent()){
+				throw new Exception("Không tìm thấy tổng hợp kế hoạch lựa chọn nhà thầu");
+			}
+		}else{
+			Optional<HhDxuatKhLcntHdr> byId = hhDxuatKhLcntHdrRepository.findById(objReq.getIdTrHdr());
+			if(!byId.isPresent()){
+				throw new Exception("Không tìm thấy đề xuất kế hoạch lựa chọn nhà thầu");
+			}
 		}
-
-		// Lay danh muc dung chung
-		Map<String, String> mapDmuc = getMapCategory();
-		if (objReq.getHthucLcnt() == null || !mapDmuc.containsKey(objReq.getHthucLcnt()))
-			throw new Exception("Hình thức lựa chọn nhà thầu không phù hợp");
-
-		if (objReq.getPthucLcnt() == null || !mapDmuc.containsKey(objReq.getPthucLcnt()))
-			throw new Exception("Phương thức đấu thầu không phù hợp");
-
-		if (objReq.getLoaiHdong() == null || !mapDmuc.containsKey(objReq.getLoaiHdong()))
-			throw new Exception("Loại hợp đồng không phù hợp");
-
-		if (objReq.getNguonVon() == null || !mapDmuc.containsKey(objReq.getNguonVon()))
-			throw new Exception("Nguồn vốn không phù hợp");
 
 		// Add danh sach file dinh kem o Master
 		List<FileDKemJoinQdKhlcntHdr> fileDinhKemList = new ArrayList<FileDKemJoinQdKhlcntHdr>();
@@ -272,7 +258,6 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		dataDB.setNgaySua(getDateTimeNow());
 		dataDB.setNguoiSua(getUser().getUsername());
 		dataDB.setChildren(fileDinhKemList);
-		dataDB.setIdThHdr(qOptionalTh.get().getId());
 
 		hhQdKhlcntHdrRepository.save(dataDB);
 
@@ -284,7 +269,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			qd.setIdQdHdr(dataDB.getId());
 			qd.setTrangThai(Contains.CHUACAPNHAT);
 			hhQdKhlcntDtlRepository.save(qd);
-			for (HhQdKhlcntDsgthauReq gtList : dx.getDsGoiThau()){
+			for (HhQdKhlcntDsgthauReq gtList : ObjectUtils.isEmpty(dx.getDsGoiThau()) ? dx.getDsGtDtlList() : dx.getDsGoiThau()){
 				HhQdKhlcntDsgthau gt = ObjectMapperUtils.map(gtList, HhQdKhlcntDsgthau.class);
 				hhQdKhlcntDsgthauCtietRepository.deleteAllByIdGoiThau(gt.getId());
 				gt.setId(null);
@@ -504,8 +489,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 					throw new Exception("Đề xuất này đã được quyết định");
 				}
 				// Update trạng thái tờ trình
-				hhDxuatKhLcntHdrRepository.updateStatusInList(Arrays.asList(dataDB.getSoTrHdr()), Contains.DADUTHAO_QD);
-//				hhDxuatKhLcntHdrRepository.updateStatus(dataDB.getIdTrHdr() , Contains.DABANHANH_QD);
+				hhDxuatKhLcntHdrRepository.updateStatusInList(Arrays.asList(dataDB.getSoTrHdr()), Contains.DABANHANH_QD);
 			}else{
 				throw new Exception("Số tờ trình kế hoạch không được tìm thấy");
 			}
@@ -528,15 +512,29 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		}
 		dataDB.setTrangThai(stReq.getTrangThai());
 		if (stReq.getTrangThai().equals(Contains.BAN_HANH)) {
-			Optional<HhDxKhLcntThopHdr> qOptional = hhDxKhLcntThopHdrRepository.findById(dataDB.getIdThHdr());
-			if(qOptional.isPresent()){
-				if(qOptional.get().getTrangThai().equals(Contains.DABANHANH_QD)){
-					throw new Exception("Tổng hợp kế hoạch này đã được quyết định");
+			if(dataDB.getPhanLoai().equals("TH")){
+				Optional<HhDxKhLcntThopHdr> qOptional = hhDxKhLcntThopHdrRepository.findById(dataDB.getIdThHdr());
+				if(qOptional.isPresent()){
+					if(qOptional.get().getTrangThai().equals(Contains.DABANHANH_QD)){
+						throw new Exception("Tổng hợp kế hoạch này đã được quyết định");
+					}
+					hhDxKhLcntThopHdrRepository.updateTrangThai(dataDB.getIdThHdr(), Contains.DABANHANH_QD);
+				}else{
+					throw new Exception("Tổng hợp kế hoạch không được tìm thấy");
 				}
-				hhDxKhLcntThopHdrRepository.updateTrangThai(dataDB.getIdThHdr(), Contains.DABANHANH_QD);
 			}else{
-				throw new Exception("Tổng hợp kế hoạch không được tìm thấy");
+				Optional<HhDxuatKhLcntHdr> qOptional = hhDxuatKhLcntHdrRepository.findById(dataDB.getIdTrHdr());
+				if(qOptional.isPresent()){
+					if(qOptional.get().getTrangThai().equals(Contains.DABANHANH_QD)){
+						throw new Exception("Đề xuất này đã được quyết định");
+					}
+					// Update trạng thái tờ trình
+					hhDxuatKhLcntHdrRepository.updateStatusInList(Arrays.asList(dataDB.getSoTrHdr()), Contains.DABANHANH_QD);
+				}else{
+					throw new Exception("Số tờ trình kế hoạch không được tìm thấy");
+				}
 			}
+
 			this.cloneProject(dataDB.getId(),false);
 		}
 		HhQdKhlcntHdr createCheck = hhQdKhlcntHdrRepository.save(dataDB);
@@ -556,6 +554,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			qdDtl.setId(null);
 			qdDtl.setIdQdHdr(hdrClone.getId());
 			qdDtl.setMaDvi(getUser().getDvql());
+			qdDtl.setTrangThai(NhapXuatHangTrangThaiEnum.CHUACAPNHAT.getId());
 			hhQdKhlcntDtlRepository.save(qdDtl);
 			List<HhQdKhlcntDsgthau> dsGoiThauClone = hdr.getHhQdKhlcntDtlList().get(0).getDsGoiThau();
 			for (HhQdKhlcntDsgthau gthau : dsGoiThauClone){
@@ -674,7 +673,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	}
 
 	@Override
-	public Page<HhQdKhlcntHdr> getAllPage(HhQdKhlcntSearchReq req,HttpServletResponse response) throws Exception {
+	public Page<HhQdKhlcntHdr> getAllPage(HhQdKhlcntSearchReq req) throws Exception {
 		int page = req.getPaggingReq().getPage();
 		int limit = req.getPaggingReq().getLimit();
 		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
@@ -742,7 +741,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		paggingReq.setPage(0);
 		paggingReq.setLimit(Integer.MAX_VALUE);
 		searchReq.setPaggingReq(paggingReq);
-		Page<HhQdKhlcntHdr> page = this.getAllPage(searchReq,response);
+		Page<HhQdKhlcntHdr> page = this.getAllPage(searchReq);
 		List<HhQdKhlcntHdr> data = page.getContent();
 
 		// Tao form excel
@@ -782,7 +781,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		paggingReq.setPage(0);
 		paggingReq.setLimit(Integer.MAX_VALUE);
 		searchReq.setPaggingReq(paggingReq);
-		Page<HhQdKhlcntHdr> page = this.getAllPage(searchReq,response);
+		Page<HhQdKhlcntHdr> page = this.getAllPage(searchReq);
 		List<HhQdKhlcntHdr> data = page.getContent();
 
 		// Tao form excel
@@ -821,7 +820,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		paggingReq.setPage(0);
 		paggingReq.setLimit(Integer.MAX_VALUE);
 		searchReq.setPaggingReq(paggingReq);
-		Page<HhQdKhlcntHdr> page = this.getAllPage(searchReq,response);
+		Page<HhQdKhlcntHdr> page = this.getAllPage(searchReq);
 		List<HhQdKhlcntHdr> data = page.getContent();
 
 		// Tao form excel

@@ -28,6 +28,7 @@ public class XhThCuuTroHdrSearchReq extends BaseRequest {
   private Long tongSoLuong;
   private String trichYeu;
   private String trangThai;
+  private List<String> listTrangThai;
   private String trangThaiTh;
   private String loaiHinhNhapXuat;
   private String kieuNhapXuat;
@@ -44,6 +45,7 @@ public class XhThCuuTroHdrSearchReq extends BaseRequest {
   private int nam;
   private String dvql;
   private String maTongHop;
+  private Long idTongHop;
   private List<XhThCuuTroDtl> thongTinTongHop = new ArrayList<>();
   private List<XhDxCuuTroHdr> thongTinDeXuat = new ArrayList<>();
 }

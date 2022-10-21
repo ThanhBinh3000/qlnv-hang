@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatDtlLoaiNx;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatHdrLoaiQd;
@@ -13,12 +14,19 @@ import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.HhDviThuchienQdinhRepository;
 import com.tcdt.qlnvhang.repository.HhHopDongDdiemNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuongRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHangRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNxDdiemRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatDtlRepository;
 import com.tcdt.qlnvhang.request.*;
 import com.tcdt.qlnvhang.request.object.HhQdGiaoNvuNhapxuatDtlReq;
 import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHangService;
+import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.phieuktracl.NhPhieuKtChatLuongService;
+import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.phieuktracl.NhPhieuKtChatLuongServiceImpl;
+import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoService;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.util.*;
 import org.springframework.beans.BeanUtils;
@@ -26,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import com.tcdt.qlnvhang.entities.FileDKemJoinQdNhapxuat;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
@@ -52,10 +61,13 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 	private HhHopDongRepository hhHopDongRepository;
 
 	@Autowired
-	private HhHopDongDdiemNhapKhoRepository hhHopDongDdiemNhapKhoRepository;
+	private NhPhieuKtChatLuongService nhPhieuKtChatLuongService;
 
 	@Autowired
-	private HttpServletRequest req;
+	private NhPhieuNhapKhoService nhPhieuNhapKhoService;
+
+	@Autowired
+	private NhBangKeCanHangService nhBangKeCanHangService;
 
 	@Override
 	@Transactional
@@ -93,12 +105,12 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		hhQdGiaoNvuNhapxuatRepository.save(dataMap);
 
 		if(dataMap.getLoaiVthh().startsWith("02")){
-			List<HhHopDongDdiemNhapKho> allByIdHdongHdr = hhHopDongDdiemNhapKhoRepository.findAllByIdHdongHdr(dataMap.getId());
-			List<HhHopDongDdiemNhapKho> collect = allByIdHdongHdr.stream().filter(item -> item.getMaDvi().equalsIgnoreCase(userInfo.getDvql())).collect(Collectors.toList());
-			collect.forEach(item -> {
-				item.setTrangThai(Contains.DADUTHAO_QD);
-			});
-			hhHopDongDdiemNhapKhoRepository.saveAll(collect);
+//			List<HhHopDongDdiemNhapKho> allByIdHdongHdr = hhHopDongDdiemNhapKhoRepository.findAllByIdHdongHdr(dataMap.getId());
+//			List<HhHopDongDdiemNhapKho> collect = allByIdHdongHdr.stream().filter(item -> item.getMaDvi().equalsIgnoreCase(userInfo.getDvql())).collect(Collectors.toList());
+//			collect.forEach(item -> {
+//				item.setTrangThai(Contains.DADUTHAO_QD);
+//			});
+//			hhHopDongDdiemNhapKhoRepository.saveAll(collect);
 		}else{
 			hhHopDongRepository.updateHopDong(dataMap.getIdHd(),Contains.DADUTHAO_QD);
 		}
@@ -172,12 +184,19 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		}
 		List<HhQdGiaoNvuNhapxuatDtl> dtls = ObjectMapperUtils.mapAll(objReq.getDetailList(), HhQdGiaoNvuNhapxuatDtl.class);
 		for (HhQdGiaoNvuNhapxuatDtl dtl : dtls) {
+			ddiemNhapRepository.deleteAllByIdCt(dtl.getId());
 			dtl.setId(null);
 			dtl.setIdHdr(main.getId());
 			dtl.setTrangThai(TrangThaiAllEnum.CHUA_CAP_NHAT.getId());
 			dtlRepository.save(dtl);
+			if(!ObjectUtils.isEmpty(dtl.getChildren())){
+				List<HhQdGiaoNvuNxDdiem> ddNhap = ObjectMapperUtils.mapAll(dtl.getChildren(), HhQdGiaoNvuNxDdiem.class);
+				ddNhap.forEach( item -> {
+					item.setIdCt(dtl.getId());
+				});
+				ddiemNhapRepository.saveAll(ddNhap);
+			}
 		}
-
 	}
 
 	@Override
@@ -217,10 +236,12 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 				item.setTenNhaKho(mapDmucDvi.get(item.getMaNhaKho()));
 				item.setTenNganKho(mapDmucDvi.get(item.getMaNganKho()));
 				item.setTenLoKho(mapDmucDvi.get(item.getMaLoKho()));
+				this.setDataPhieu(null,item);
 			});
-			dtl.setDiaDiemNhapList(allByIdCt);
+			dtl.setChildren(allByIdCt);
 		}
 		data.setDtlList(hhQdGiaoNvuNhapxuatDtl);
+		data.setHopDong(hhHopDongRepository.findById(data.getIdHd()).get());
 
 		return data;
 	}
@@ -261,54 +282,54 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		HhQdGiaoNvuNhapxuatHdr item = optional.get();
 
 		// Is vật tư
-		if (item.getLoaiVthh().startsWith("02")) {
-			String status = stReq.getTrangThai() + optional.get().getTrangThai();
-			switch (status) {
-				case Contains.CHODUYET_TP + Contains.DUTHAO:
-				case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
-				case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
-					optional.get().setNguoiGuiDuyet(getUser().getUsername());
-					optional.get().setNgayGuiDuyet(getDateTimeNow());
-				case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
-					optional.get().setNguoiGuiDuyet(getUser().getUsername());
-					optional.get().setNgayGuiDuyet(getDateTimeNow());
-					break;
-				case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
-				case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
-					optional.get().setNguoiPduyet(getUser().getUsername());
-					optional.get().setNgayPduyet(getDateTimeNow());
-					optional.get().setLdoTuchoi(stReq.getLyDo());
-					break;
-				case Contains.BAN_HANH + Contains.CHODUYET_LDC:
-					optional.get().setNguoiPduyet(getUser().getUsername());
-					optional.get().setNgayPduyet(getDateTimeNow());
-					break;
-				default:
-					throw new Exception("Phê duyệt không thành công");
-			}
-			if (stReq.getTrangThai().equals(Contains.BAN_HANH)) {
-				List<HhHopDongDdiemNhapKho> allByIdHdongHdr = hhHopDongDdiemNhapKhoRepository.findAllByIdHdongHdr(optional.get().getIdHd());
-				List<HhHopDongDdiemNhapKho> collect = allByIdHdongHdr.stream().filter( x -> x.getMaDvi().equalsIgnoreCase(userInfo.getDvql())).collect(Collectors.toList());
-				collect.forEach(x -> {
-					x.setTrangThai(Contains.DABANHANH_QD);
-				});
-				hhHopDongDdiemNhapKhoRepository.saveAll(collect);
-			}
-		} else {
-			String status = stReq.getTrangThai() + optional.get().getTrangThai();
-			switch (status) {
-				case Contains.BAN_HANH + Contains.DUTHAO:
-					optional.get().setNguoiPduyet(getUser().getUsername());
-					optional.get().setNgayPduyet(getDateTimeNow());
-					break;
-				default:
-					throw new Exception("Phê duyệt không thành công");
-			}
-			if (stReq.getTrangThai().equals(Contains.BAN_HANH)) {
-				hhHopDongRepository.updateHopDong(optional.get().getIdHd(),Contains.DABANHANH_QD);
-			}
+//		if (item.getLoaiVthh().startsWith("02")) {
+		String status = stReq.getTrangThai() + optional.get().getTrangThai();
+		switch (status) {
+			case Contains.CHODUYET_TP + Contains.DUTHAO:
+			case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+			case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
+				optional.get().setNguoiGuiDuyet(getUser().getUsername());
+				optional.get().setNgayGuiDuyet(getDateTimeNow());
+			case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
+				optional.get().setNguoiGuiDuyet(getUser().getUsername());
+				optional.get().setNgayGuiDuyet(getDateTimeNow());
+				break;
+			case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
+			case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
+				optional.get().setNguoiPduyet(getUser().getUsername());
+				optional.get().setNgayPduyet(getDateTimeNow());
+				optional.get().setLdoTuchoi(stReq.getLyDo());
+				break;
+			case Contains.BAN_HANH + Contains.CHODUYET_LDC:
+				optional.get().setNguoiPduyet(getUser().getUsername());
+				optional.get().setNgayPduyet(getDateTimeNow());
+				break;
+			default:
+				throw new Exception("Phê duyệt không thành công");
 		}
+//			if (stReq.getTrangThai().equals(Contains.BAN_HANH)) {
+//				List<HhHopDongDdiemNhapKho> allByIdHdongHdr = hhHopDongDdiemNhapKhoRepository.findAllByIdHdongHdr(optional.get().getIdHd());
+//				List<HhHopDongDdiemNhapKho> collect = allByIdHdongHdr.stream().filter( x -> x.getMaDvi().equalsIgnoreCase(userInfo.getDvql())).collect(Collectors.toList());
+//				collect.forEach(x -> {
+//					x.setTrangThai(Contains.DABANHANH_QD);
+//				});
+//				hhHopDongDdiemNhapKhoRepository.saveAll(collect);
+//			}
+//		} else {
+//			String status = stReq.getTrangThai() + optional.get().getTrangThai();
+//			switch (status) {
+//				case Contains.BAN_HANH + Contains.DUTHAO:
+//					optional.get().setNguoiPduyet(getUser().getUsername());
+//					optional.get().setNgayPduyet(getDateTimeNow());
+//					break;
+//				default:
+//					throw new Exception("Phê duyệt không thành công");
+//			}
 
+//		}
+		if (stReq.getTrangThai().equals(Contains.BAN_HANH)) {
+			hhHopDongRepository.updateHopDong(optional.get().getIdHd(),Contains.DABANHANH_QD);
+		}
 		optional.get().setTrangThai(stReq.getTrangThai());
 		hhQdGiaoNvuNhapxuatRepository.save(item);
 		return true;
@@ -512,7 +533,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 					Contains.convertDateToString(req.getDenNgayQd()),
 					userInfo.getDvql(),
 					pageable);
-		}else {
+		} else {
 			data = hhQdGiaoNvuNhapxuatRepository.selectPageChiCuc(
 					req.getNamNhap(),
 					req.getSoQd(),
@@ -523,14 +544,52 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 					userInfo.getDvql(),
 					pageable);
 		}
-			Map<String, String> mapDmucHh = getListDanhMucHangHoa();
-			List<Long> listId = data.getContent().stream().map(HhQdGiaoNvuNhapxuatHdr::getId).collect(Collectors.toList());
-			data.getContent().forEach(f -> {
-				f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
-				f.setTenLoaiVthh(mapDmucHh.get(f.getLoaiVthh()));
-				f.setTenCloaiVthh(mapDmucHh.get(f.getCloaiVthh()));
-			});
-			return data;
+		Map<String, String> mapDmucHh = getListDanhMucHangHoa();
+		Map<String, String> mapDmucDvi = getMapTenDvi();
+		Map<String, String> tenCloaiVthh = getListDanhMucHangHoa();
+		List<Long> listId = data.getContent().stream().map(HhQdGiaoNvuNhapxuatHdr::getId).collect(Collectors.toList());
+		data.getContent().forEach(f -> {
+			f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+			f.setTenLoaiVthh(mapDmucHh.get(f.getLoaiVthh()));
+			f.setTenCloaiVthh(mapDmucHh.get(f.getCloaiVthh()));
+
+			List<HhQdGiaoNvuNhapxuatDtl> hhQdGiaoNvuNhapxuatDtl= dtlRepository.findAllByIdHdr(f.getId());
+			for (HhQdGiaoNvuNhapxuatDtl dtl:hhQdGiaoNvuNhapxuatDtl){
+				dtl.setTenLoaiVthh(tenCloaiVthh.get(dtl.getLoaiVthh()));
+				dtl.setTenCloaiVthh(tenCloaiVthh.get(dtl.getCloaiVthh()));
+				dtl.setTenDvi(mapDmucDvi.get(dtl.getMaDvi()));
+				dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThai()));
+
+				List<HhQdGiaoNvuNxDdiem> allByIdCt = ddiemNhapRepository.findAllByIdCt(dtl.getId());
+				allByIdCt.forEach(item->{
+					item.setTenCuc(mapDmucDvi.get(item.getMaCuc()));
+					item.setTenChiCuc(mapDmucDvi.get(item.getMaChiCuc()));
+					item.setTenDiemKho(mapDmucDvi.get(item.getMaDiemKho()));
+					item.setTenNhaKho(mapDmucDvi.get(item.getMaNhaKho()));
+					item.setTenNganKho(mapDmucDvi.get(item.getMaNganKho()));
+					item.setTenLoKho(mapDmucDvi.get(item.getMaLoKho()));
+					this.setDataPhieu(null,item);
+
+				});
+				dtl.setChildren(allByIdCt);
+//				this.setDataPhieu(dtl,null);
+			}
+			f.setDtlList(hhQdGiaoNvuNhapxuatDtl);
+		});
+		return data;
+	}
+
+
+	void setDataPhieu(HhQdGiaoNvuNhapxuatDtl dtl , HhQdGiaoNvuNxDdiem ddNhap){
+		if(dtl != null){
+			dtl.setListPhieuKtraCl(nhPhieuKtChatLuongService.findAllByIdQdGiaoNvNh(dtl.getIdHdr()));
+			dtl.setListPhieuNhapKho(nhPhieuNhapKhoService.findAllByIdQdGiaoNvNh(dtl.getIdHdr()));
+			dtl.setListBangKeCanHang(nhBangKeCanHangService.findAllByIdQdGiaoNvNh(dtl.getIdHdr()));
+		}else{
+			ddNhap.setListPhieuKtraCl(nhPhieuKtChatLuongService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
+			ddNhap.setListPhieuNhapKho(nhPhieuNhapKhoService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
+			ddNhap.setListBangKeCanHang(nhBangKeCanHangService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
+		}
 	}
 
 	@Override
@@ -542,7 +601,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			if(!allByIdCt.isEmpty()){
 				ddiemNhapRepository.deleteAll(allByIdCt);
 			}
-			List<HhQdGiaoNvuNxDdiem> dtls = ObjectMapperUtils.mapAll(dtl.getDiaDiemNhapList(), HhQdGiaoNvuNxDdiem.class);
+			List<HhQdGiaoNvuNxDdiem> dtls = ObjectMapperUtils.mapAll(dtl.getChildren(), HhQdGiaoNvuNxDdiem.class);
 			dtls.forEach( item -> {
 				item.setIdCt(dtl.getId());
 			});

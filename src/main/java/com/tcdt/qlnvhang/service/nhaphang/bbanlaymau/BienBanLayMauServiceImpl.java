@@ -2,9 +2,6 @@ package com.tcdt.qlnvhang.service.nhaphang.bbanlaymau;
 
 import com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau.BienBanLayMau;
 import com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau.BienBanLayMauCt;
-import com.tcdt.qlnvhang.entities.nhaphang.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLt;
-import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieukiemtrachatluonghangluongthuc.QlpktclhPhieuKtChatLuong;
-import com.tcdt.qlnvhang.entities.nhaphang.vattu.bienbanguihang.NhBienBanGuiHang;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
@@ -14,30 +11,12 @@ import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.repository.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.vattu.bienbanguihang.NhBienBanGuiHangRepository;
-import com.tcdt.qlnvhang.request.DeleteReq;
-import com.tcdt.qlnvhang.request.PaggingReq;
-import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauCtReq;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauReq;
-import com.tcdt.qlnvhang.request.search.BienBanLayMauSearchReq;
-import com.tcdt.qlnvhang.request.search.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoSearchReq;
-import com.tcdt.qlnvhang.response.BaseNhapHangCount;
-import com.tcdt.qlnvhang.response.bbanlaymau.BienBanLayMauCtRes;
-import com.tcdt.qlnvhang.response.bbanlaymau.BienBanLayMauRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.table.HhHopDongHdr;
-import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
-import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
-import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
-import com.tcdt.qlnvhang.table.khotang.KtNganKho;
-import com.tcdt.qlnvhang.table.khotang.KtNganLo;
-import com.tcdt.qlnvhang.table.khotang.KtNhaKho;
 import com.tcdt.qlnvhang.util.Contains;
-import com.tcdt.qlnvhang.util.ExportExcel;
-import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
@@ -48,13 +27,8 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @Log4j2

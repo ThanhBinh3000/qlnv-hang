@@ -12,8 +12,11 @@ import java.util.Optional;
 
 public interface HhHopDongDdiemNhapKhoRepository extends BaseRepository<HhHopDongDdiemNhapKho, Long> {
 
-	List<HhHopDongDdiemNhapKho> findAllByIdHdongHdr(Long idHdongHdr);
+	List<HhHopDongDdiemNhapKho> findAllByIdHdongDtl(Long idHdongDtl);
 
-	List<HhHopDongDdiemNhapKho> findAllByIdHdongHdrIn(Collection<Long> idHdongHdrs);
+//	List<HhHopDongDdiemNhapKho> findAllByIdHdongHdrIn(Collection<Long> idHdongHdrs);
+
+	void deleteAllByIdHdongDtl(Long idHdongDtl);
+
 
 }

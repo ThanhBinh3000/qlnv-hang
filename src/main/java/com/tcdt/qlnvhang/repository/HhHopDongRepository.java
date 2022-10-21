@@ -17,6 +17,8 @@ public interface HhHopDongRepository extends BaseRepository<HhHopDongHdr, Long> 
 
   Optional<HhHopDongHdr> findBySoHd(String soHd);
 
+  List<HhHopDongHdr> findAllByIdQdKqLcnt(Long idQdKqLcnt);
+
   @Query(
       value = "SELECT * " +
           "FROM HH_HOP_DONG_HDR  HDR" +
@@ -76,16 +78,11 @@ public interface HhHopDongRepository extends BaseRepository<HhHopDongHdr, Long> 
 
   @Query(
       value = "SELECT HDR.* " +
-          "FROM HH_HOP_DONG_HDR HDR JOIN HH_HOP_DONG_DDIEM_NHAP_KHO KHO ON HDR.ID = KHO.ID_HDONG_HDR" +
+          "FROM HH_HOP_DONG_HDR HDR JOIN HH_HOP_DONG_DTL DTL ON HDR.ID = DTL.ID_HDR" +
           " WHERE (:loaiVthh IS NULL OR HDR.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) " +
-          "  AND (:soHd IS NULL OR HDR.SO_HD LIKE CONCAT(CONCAT('%',:soHd),'%')) " +
-          "  AND (:tenHd IS NULL OR LOWER(HDR.TEN_HD) LIKE LOWER(CONCAT(CONCAT('%',:tenHd),'%'))) " +
-          "  AND (:nhaCcap IS NULL OR HDR.SO_HD = :nhaCcap) " +
           "  AND (:namHd IS NULL OR HDR.NAM_HD = :namHd) " +
-          "  AND (:tuNgayKy IS NULL OR HDR.NGAY_KY >= TO_DATE(:tuNgayKy, 'yyyy-MM-dd')) " +
-          "  AND (:denNgayKy IS NULL OR HDR.NGAY_KY <= TO_DATE(:denNgayKy, 'yyyy-MM-dd')) " +
-          "  AND (:maDvi IS NULL OR (HDR.MA_DVI LIKE CONCAT(:maDvi,'%') AND KHO.MA_DVI = :maDviKho)) " +
+          "  AND (:maDvi IS NULL OR ( HDR.MA_DVI = :maDvi OR DTL.MA_DVI = :maDvi ))" +
           "  AND (:trangThai IS NULL OR HDR.TRANG_THAI = :trangThai) ",
       nativeQuery = true)
-  Page<HhHopDongHdr> lookupData(String loaiVthh, String soHd, String tenHd, String nhaCcap, String tuNgayKy, String denNgayKy, String trangThai, String maDvi, String namHd,String maDviKho, Pageable pageable);
+  Page<HhHopDongHdr> lookupData(String loaiVthh,String namHd,  String maDvi, String trangThai, Pageable pageable);
 }

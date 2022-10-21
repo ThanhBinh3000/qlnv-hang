@@ -35,20 +35,21 @@ public class XhQdCuuTroHdr extends BaseEntity implements Serializable {
   private String maDvi;
   private Long idTongHop;
   private String maTongHop;
+  private LocalDate ngayTongHop;
   private int nam;
   private LocalDate ngayKy;
   private String loaiVthh;
   private String cloaiVthh;
   private Long tongSoLuong;
   private String trangThai;
-  private String noiDung;
+  private String trichYeu;
   private String lyDoTuChoi;
-  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-  @Fetch(value = FetchMode.SUBSELECT)
-  @JoinColumn(name = "dataId")
-  @JsonManagedReference
-  @Where(clause = "data_type='" + XhQdCuuTroHdr.TABLE_NAME + "'")
-  private List<FileDKemJoinQdCuuTro> fileDinhKem = new ArrayList<>();
+
+
+  @Transient
+  private FileDinhKem fileDinhKem;
+  @Transient
+  private List<FileDinhKem> canCu = new ArrayList<>();
   @Transient
   private String tenDvi;
   @Transient

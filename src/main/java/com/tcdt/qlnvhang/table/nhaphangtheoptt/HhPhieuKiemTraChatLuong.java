@@ -26,7 +26,7 @@ public class HhPhieuKiemTraChatLuong implements Serializable {
     private String tenDvi;
     private String soPhieu;
     private String maQhns;
-    private String idQdGiaoNvNh;
+    private Long idQdGiaoNvNh;
     private String soQdGiaoNvNh;
     @Temporal(TemporalType.DATE)
     private Date ngayQdGiaoNvNh;

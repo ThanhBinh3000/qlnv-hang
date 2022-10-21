@@ -26,6 +26,7 @@ public class FileDKemJoinDxuatCuuTro implements Serializable {
 	String fileUrl;
 	String fileType;
 	String dataType;
+	String noiDung;
 	@JsonFormat(pattern="dd/MM/yyyy HH:mm:ss")
 	Date createDate;
 

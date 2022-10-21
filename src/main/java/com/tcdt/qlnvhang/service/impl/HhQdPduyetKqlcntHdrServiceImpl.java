@@ -27,11 +27,9 @@ import com.tcdt.qlnvhang.request.object.HhQdPduyetKqlcntHdrReq;
 import com.tcdt.qlnvhang.request.search.HhQdPduyetKqlcntSearchReq;
 import com.tcdt.qlnvhang.secification.HhQdPduyetKqlcntSpecification;
 import com.tcdt.qlnvhang.service.HhQdPduyetKqlcntHdrService;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-import javax.validation.Valid;
 
 
 @Service
@@ -51,6 +49,9 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 
 	@Autowired
 	private HhQdKhlcntHdrServiceImpl qdKhLcntService;
+
+	@Autowired
+	private HhHopDongRepository hhHopDongRepository;
 
 	@Override
 	public HhQdPduyetKqlcntHdr create(HhQdPduyetKqlcntHdrReq objReq) throws Exception {
@@ -82,11 +83,17 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setNgayTao(getDateTimeNow());
 		dataMap.setTrangThai(Contains.DUTHAO);
+		dataMap.setTrangThaiHd(NhapXuatHangTrangThaiEnum.CHUACAPNHAT.getId());
 		dataMap.setMaDvi(getUser().getDvql());
 		dataMap.setChildren(fileDinhKemList);
 
 		HhQdPduyetKqlcntHdr createCheck = hhQdPduyetKqlcntHdrRepository.save(dataMap);
-
+		HhQdKhlcntHdr hhQdKhlcntHdr = checkSoCc.stream().filter(HhQdKhlcntHdr::getLastest).findAny()
+				.orElse(null);
+		if(!Objects.isNull(hhQdKhlcntHdr)){
+			hhQdKhlcntHdr.setSoQdPdKqlcnt(createCheck.getSoQd());
+			hhQdKhlcntHdrRepository.save(hhQdKhlcntHdr);
+		}
 		return createCheck;
 	}
 
@@ -148,9 +155,16 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		if (!qOptional.isPresent()){
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
 		}
+		Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
 
 		qOptional.get().setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qOptional.get().getTrangThai()));
-
+		qOptional.get().setQdKhlcnt(Objects.isNull(qOptional.get().getIdQdPdKhlcnt()) ? null : qdKhLcntService.detail(qOptional.get().getIdQdPdKhlcnt().toString()));
+		qOptional.get().setTenDvi(listDanhMucDvi.get(qOptional.get().getMaDvi()));
+		List<HhHopDongHdr> allByIdQdKqLcnt = hhHopDongRepository.findAllByIdQdKqLcnt(qOptional.get().getId());
+		allByIdQdKqLcnt.forEach(item -> {
+			item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+		});
+		qOptional.get().setListHopDong(allByIdQdKqLcnt);
 		return qOptional.get();
 	}
 
@@ -160,8 +174,35 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 	}
 
 	@Override
+	@Transactional(rollbackOn = Exception.class)
 	public HhQdPduyetKqlcntHdr approve(StatusReq stReq) throws Exception {
-		return null;
+		UserInfo userInfo = SecurityContextService.getUser();
+		if (StringUtils.isEmpty(stReq.getId())){
+			throw new Exception("Không tìm thấy dữ liệu");
+		}
+
+		Optional<HhQdPduyetKqlcntHdr> optional = hhQdPduyetKqlcntHdrRepository.findById(Long.valueOf(stReq.getId()));
+		if (!optional.isPresent()){
+			throw new Exception("Không tìm thấy dữ liệu");
+		}
+
+		String status = stReq.getTrangThai() + optional.get().getTrangThai();
+		switch (status) {
+			case Contains.BAN_HANH + Contains.DUTHAO:
+				optional.get().setNguoiPduyet(userInfo.getUsername());
+				optional.get().setNgayPduyet(new Date());
+				optional.get().setTrangThai(stReq.getTrangThai());
+
+				break;
+			case Contains.HOANTHANHCAPNHAT + Contains.BAN_HANH:
+				optional.get().setTrangThaiHd(stReq.getTrangThai());
+				break;
+			default:
+				throw new Exception("Phê duyệt không thành công");
+		}
+
+		HhQdPduyetKqlcntHdr createCheck = hhQdPduyetKqlcntHdrRepository.save(optional.get());
+		return createCheck;
 	}
 
 	@Override
@@ -172,10 +213,11 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 	@Override
 	public Page<HhQdPduyetKqlcntHdr> timKiemPage(HhQdPduyetKqlcntSearchReq req, HttpServletResponse response) throws Exception {
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
-		Page<HhQdPduyetKqlcntHdr> hhQdPduyetKqlcntHdrs = hhQdPduyetKqlcntHdrRepository.selectPage(req.getNamKhoach(), req.getLoaiVthh(), convertDateToString(req.getTuNgayQd()), convertDateToString(req.getDenNgayQd()), req.getSoQd(), req.getTrangThai(), pageable);
+		Page<HhQdPduyetKqlcntHdr> hhQdPduyetKqlcntHdrs = hhQdPduyetKqlcntHdrRepository.selectPage(req.getNamKhoach(), req.getLoaiVthh(), convertDateToString(req.getTuNgayQd()), convertDateToString(req.getDenNgayQd()), req.getSoQd(),req.getMaDvi(), req.getTrangThai(), pageable);
 		Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
 		hhQdPduyetKqlcntHdrs.forEach( item -> {
 			try {
+				item.setListHopDong(hhHopDongRepository.findAllByIdQdKqLcnt(item.getId()));
 				item.setQdKhlcnt(Objects.isNull(item.getIdQdPdKhlcnt()) ? null : qdKhLcntService.detail(item.getIdQdPdKhlcnt().toString()));
 				item.setTenDvi(listDanhMucDvi.get(item.getMaDvi()));
 				item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));

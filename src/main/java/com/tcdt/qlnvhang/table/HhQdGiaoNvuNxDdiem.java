@@ -1,10 +1,14 @@
 package com.tcdt.qlnvhang.table;
 
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuong;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHang;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKho;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "NH_QD_GIAO_NVU_NX_DDIEM")
@@ -59,4 +63,13 @@ public class HhQdGiaoNvuNxDdiem implements Serializable {
 
 	@Column(name="SO_LUONG")
 	private BigDecimal soLuong;
+
+	@Transient
+	List<NhPhieuKtChatLuong> listPhieuKtraCl;
+
+	@Transient
+	List<NhPhieuNhapKho> listPhieuNhapKho;
+
+	@Transient
+	List<NhBangKeCanHang> listBangKeCanHang;
 }
