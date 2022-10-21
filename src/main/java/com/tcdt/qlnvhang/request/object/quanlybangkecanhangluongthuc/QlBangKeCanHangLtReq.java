@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.request.object.quanlybangkecanhangluongthuc;
 
+import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.SoBienBanPhieuReq;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,29 +20,22 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class QlBangKeCanHangLtReq extends SoBienBanPhieuReq {
+public class QlBangKeCanHangLtReq extends BaseRequest {
+
     private Long id;
 
     private String soBangKe;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate ngayNhap;
-    private String thuKho;
-    private Long qlPhieuNhapKhoLtId;
-    private Long qdgnvnxId;
-    private String maVatTu;// Chung loai hang hoa
-    private String maVatTuCha;// Loai Hang
-    private String donViTinh;
-    private String tenNguoiGiaoHang;
-    private String diaChiNguoiGiao;
-    private String maDiemKho;
-    private String maNhaKho;
-    private String maNganKho;
-    private String maNganLo;
-    private String soHd;
-    private String diaDiem;
-    private BigDecimal tongTrongLuongBaoBi;
-    private String loaiVthh;
-    private String cloaiVthh;
-    private String moTaHangHoa;
+
+    private String soQdGiaoNvNh; // HhQdGiaoNvuNhapxuatHdr
+
+    private Long idQdGiaoNvNh; // HhQdGiaoNvuNhapxuatHdr
+
+    private Long idDdiemGiaoNvNh;
+
+    private String maDvi;
+
+    private Integer nam;
+
     private List<QlBangKeChCtLtReq> chiTiets = new ArrayList<>();
+
 }

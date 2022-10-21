@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.entities;
 
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -42,4 +43,8 @@ public class TrangThaiBaseEntity {
 	private LocalDate ngayPduyet;
 
 	private String lyDoTuChoi;
+
+	public String getTenTrangThai() {
+		return NhapXuatHangTrangThaiEnum.getTenById(trangThai);
+	}
 }

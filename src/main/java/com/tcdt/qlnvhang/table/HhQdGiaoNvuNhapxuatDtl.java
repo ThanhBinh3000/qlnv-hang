@@ -9,6 +9,9 @@ import java.util.List;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuong;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHang;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKho;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
@@ -70,5 +73,14 @@ public class HhQdGiaoNvuNhapxuatDtl implements Serializable {
 
 	@Transient
 	List<HhQdGiaoNvuNxDdiem> children = new ArrayList<>();
+
+	@Transient
+	List<NhPhieuKtChatLuong> listPhieuKtraCl;
+
+	@Transient
+	List<NhPhieuNhapKho> listPhieuNhapKho;
+
+	@Transient
+	List<NhBangKeCanHang> listBangKeCanHang;
 
 }
