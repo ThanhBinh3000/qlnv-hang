@@ -7,8 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
-import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieukiemtrachatluonghangluongthuc.NhPhieuKtChatLuong;
-import com.tcdt.qlnvhang.entities.nhaphang.quanlyphieunhapkholuongthuc.NhPhieuNhapKho;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatDtlLoaiNx;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatHdrLoaiQd;
@@ -16,14 +14,19 @@ import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.HhDviThuchienQdinhRepository;
 import com.tcdt.qlnvhang.repository.HhHopDongDdiemNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
-import com.tcdt.qlnvhang.repository.quanlyphieukiemtrachatluonghangluongthuc.NhPhieuKtChatLuongRepository;
-import com.tcdt.qlnvhang.repository.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuongRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHangRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNxDdiemRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatDtlRepository;
 import com.tcdt.qlnvhang.request.*;
 import com.tcdt.qlnvhang.request.object.HhQdGiaoNvuNhapxuatDtlReq;
 import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHangService;
+import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.phieuktracl.NhPhieuKtChatLuongService;
+import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.phieuktracl.NhPhieuKtChatLuongServiceImpl;
+import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoService;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.util.*;
 import org.springframework.beans.BeanUtils;
@@ -58,17 +61,13 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 	private HhHopDongRepository hhHopDongRepository;
 
 	@Autowired
-	private HhHopDongDdiemNhapKhoRepository hhHopDongDdiemNhapKhoRepository;
+	private NhPhieuKtChatLuongService nhPhieuKtChatLuongService;
 
 	@Autowired
-	private HttpServletRequest req;
-
-
-	@Autowired
-	private NhPhieuKtChatLuongRepository nHPhieuKtraCluongRepo;
+	private NhPhieuNhapKhoService nhPhieuNhapKhoService;
 
 	@Autowired
-	private NhPhieuNhapKhoRepository nhPhieuNhapKhoRepository;
+	private NhBangKeCanHangService nhBangKeCanHangService;
 
 	@Override
 	@Transactional
@@ -237,7 +236,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 				item.setTenNhaKho(mapDmucDvi.get(item.getMaNhaKho()));
 				item.setTenNganKho(mapDmucDvi.get(item.getMaNganKho()));
 				item.setTenLoKho(mapDmucDvi.get(item.getMaLoKho()));
-				this.setDataPhieu(item);
+				this.setDataPhieu(null,item);
 			});
 			dtl.setChildren(allByIdCt);
 		}
@@ -569,26 +568,27 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 					item.setTenNhaKho(mapDmucDvi.get(item.getMaNhaKho()));
 					item.setTenNganKho(mapDmucDvi.get(item.getMaNganKho()));
 					item.setTenLoKho(mapDmucDvi.get(item.getMaLoKho()));
-					this.setDataPhieu(item);
+					this.setDataPhieu(null,item);
+
 				});
 				dtl.setChildren(allByIdCt);
+//				this.setDataPhieu(dtl,null);
 			}
 			f.setDtlList(hhQdGiaoNvuNhapxuatDtl);
-//			f.setListPhieuKtraCl(nHPhieuKtraCluongRepo.findAllByIdQdGiaoNvNh(f.getId()));
 		});
 		return data;
 	}
 
-	void setDataPhieu(HhQdGiaoNvuNxDdiem item){
-		NhPhieuKtChatLuong byIdDdiemGiaoNvNh = nHPhieuKtraCluongRepo.findByIdDdiemGiaoNvNh(item.getId());
-		if(!ObjectUtils.isEmpty(byIdDdiemGiaoNvNh)){
-			byIdDdiemGiaoNvNh.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(byIdDdiemGiaoNvNh.getTrangThai()));
-			item.setPhieuKtraCl(byIdDdiemGiaoNvNh);
-		}
-		NhPhieuNhapKho byIdDdiemGiaoNvNh1 = nhPhieuNhapKhoRepository.findByIdDdiemGiaoNvNh(item.getId());
-		if(!ObjectUtils.isEmpty(byIdDdiemGiaoNvNh1)){
-			byIdDdiemGiaoNvNh1.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(byIdDdiemGiaoNvNh1.getTrangThai()));
-			item.setPhieuNhapKho(byIdDdiemGiaoNvNh1);
+
+	void setDataPhieu(HhQdGiaoNvuNhapxuatDtl dtl , HhQdGiaoNvuNxDdiem ddNhap){
+		if(dtl != null){
+			dtl.setListPhieuKtraCl(nhPhieuKtChatLuongService.findAllByIdQdGiaoNvNh(dtl.getIdHdr()));
+			dtl.setListPhieuNhapKho(nhPhieuNhapKhoService.findAllByIdQdGiaoNvNh(dtl.getIdHdr()));
+			dtl.setListBangKeCanHang(nhBangKeCanHangService.findAllByIdQdGiaoNvNh(dtl.getIdHdr()));
+		}else{
+			ddNhap.setListPhieuKtraCl(nhPhieuKtChatLuongService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
+			ddNhap.setListPhieuNhapKho(nhPhieuNhapKhoService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
+			ddNhap.setListBangKeCanHang(nhBangKeCanHangService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
 		}
 	}
 
