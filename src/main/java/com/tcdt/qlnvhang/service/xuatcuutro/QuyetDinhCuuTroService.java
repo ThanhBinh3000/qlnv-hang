@@ -77,7 +77,10 @@ public class QuyetDinhCuuTroService extends BaseServiceImpl {
 
   public Page<XhQdCuuTroHdr> searchPage(CustomUserDetails currentUser, XhQdCuuTroHdrSearchReq req) throws Exception {
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-    req.setDvql(currentUser.getDvql());
+//   / req.setDvql(currentUser.getDvql());
+    if (!currentUser.getUser().getCapDvi().equals(CAP_TONG_CUC)) {
+      req.setMaDviDxuat(currentUser.getDvql());
+    }
     Page<XhQdCuuTroHdr> search = quyetDinhCuuTroRepository.search(req, pageable);
 //    Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
