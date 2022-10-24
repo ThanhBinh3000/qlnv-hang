@@ -81,8 +81,6 @@ public class ThongBaoBanDauGiaServiceImpl extends BaseServiceImpl implements Tho
 		if (userInfo == null) throw new Exception("Bad request.");
 		ThongBaoBanDauGia thongBaoBanDauGia = thongBaoBanDauGiaRequestMapper.toEntity(req);
 		thongBaoBanDauGia.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
-		thongBaoBanDauGia.setNgayTao(LocalDate.now());
-		thongBaoBanDauGia.setNguoiTaoId(userInfo.getId());
 		thongBaoBanDauGia.setMaDonVi(userInfo.getDvql());
 		thongBaoBanDauGia.setCapDonVi(userInfo.getCapDvi());
 		thongBaoBanDauGia = thongBaoBanDauGiaRepository.save(thongBaoBanDauGia);
@@ -131,8 +129,6 @@ public class ThongBaoBanDauGiaServiceImpl extends BaseServiceImpl implements Tho
 		log.info("Update ke hoach ban dau gia");
 		thongBaoBanDauGiaRequestMapper.partialUpdate(thongBaoBanDauGia, req);
 
-		thongBaoBanDauGia.setNgaySua(LocalDate.now());
-		thongBaoBanDauGia.setNguoiSuaId(userInfo.getId());
 		thongBaoBanDauGia = thongBaoBanDauGiaRepository.save(thongBaoBanDauGia);
 
 		log.info("Save file dinh kem");

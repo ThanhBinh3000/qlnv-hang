@@ -72,8 +72,6 @@ public class HhSoKhoHdrController extends BaseController {
 		try {
 			UserInfo userInfo = UserUtils.getUserInfo();
 			HhSoKhoHdr dataMap = new ModelMapper().map(objReq, HhSoKhoHdr.class);
-			dataMap.setNgayTao(LocalDate.now());
-			dataMap.setNguoiTaoId(userInfo.getId());
 			qlnvSoKhoRepository.save(dataMap);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
@@ -149,8 +147,6 @@ public class HhSoKhoHdrController extends BaseController {
 			HhSoKhoHdr dataDTB = QlnvTtinHdongHdr.get();
 			HhSoKhoHdr dataMap = new ModelMapper().map(objReq, HhSoKhoHdr.class);
 			updateObjectToObject(dataDTB, dataMap);
-			dataDTB.setNgaySua(LocalDate.now());
-			dataDTB.setNguoiSuaId(userInfo.getId());
 			qlnvSoKhoRepository.save(dataDTB);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
