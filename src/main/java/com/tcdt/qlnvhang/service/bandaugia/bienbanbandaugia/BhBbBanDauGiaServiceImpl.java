@@ -92,8 +92,6 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
 
         BhBbBanDauGia item = new BhBbBanDauGia();
         BeanUtils.copyProperties(req, item, "id");
-        item.setNgayTao(LocalDate.now());
-        item.setNguoiTaoId(userInfo.getId());
         item.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         item.setMaDvi(userInfo.getDvql());
         item.setCapDvi(userInfo.getCapDvi());
@@ -201,8 +199,6 @@ public class BhBbBanDauGiaServiceImpl extends BaseServiceImpl implements BhBbBan
 
         BhBbBanDauGia item = optional.get();
         BeanUtils.copyProperties(req, item, "id", "so", "nam");
-        item.setNgaySua(LocalDate.now());
-        item.setNguoiSuaId(userInfo.getId());
 
         bhBbBanDauGiaRepository.save(item);
         Map<Long, BhBbBanDauGiaCt> mapChiTiet = bhBbBanDauGiaCtRepository.findByBbBanDauGiaIdIn(Collections.singleton(item.getId()))

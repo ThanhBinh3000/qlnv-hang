@@ -45,8 +45,6 @@ public class QuyetDinhKHLCNTGoiThauVatTuServiceImpl implements QuyetDinhKHLCNTGo
 		UserInfo userInfo = UserUtils.getUserInfo();
 
 		QuyetDinhKHLCNTVatTu quyetDinh = dataUtils.toObject(req, QuyetDinhKHLCNTVatTu.class);
-		quyetDinh.setNgayTao(LocalDate.now());
-		quyetDinh.setNguoiTaoId(userInfo.getId());
 
 		quyetDinh = quyetDinhKHLCNTVatTuRepo.save(quyetDinh);
 
@@ -56,8 +54,6 @@ public class QuyetDinhKHLCNTGoiThauVatTuServiceImpl implements QuyetDinhKHLCNTGo
 
 		List<QuyetDinhKHLCNTGoiThauVatTu> goiThauVatTuList = req.getGoiThau().stream().map(item -> {
 			QuyetDinhKHLCNTGoiThauVatTu goiThauVatTu = dataUtils.toObject(item, QuyetDinhKHLCNTGoiThauVatTu.class);
-			goiThauVatTu.setNguoiTaoId(userInfo.getId());
-			goiThauVatTu.setNgayTao(LocalDate.now());
 			return goiThauVatTu;
 		}).collect(Collectors.toList());
 
@@ -86,9 +82,6 @@ public class QuyetDinhKHLCNTGoiThauVatTuServiceImpl implements QuyetDinhKHLCNTGo
 		QuyetDinhKHLCNTVatTu quyetDinh = quyetDinhOpt.get();
 
 		BeanUtils.copyProperties(req, quyetDinh);
-
-		quyetDinh.setNguoiSuaId(userInfo.getId());
-		quyetDinh.setNgaySua(LocalDate.now());
 
 		quyetDinh = quyetDinhKHLCNTVatTuRepo.save(quyetDinh);
 
