@@ -74,8 +74,8 @@ public class KhLuaChonNhaThauRepositoryCustomImpl implements KhLuaChonNhaThauRep
 					kh.setQchuanKthuat(item.get("qchuanKthuat", String.class));
 					kh.setTgianThienDuAn(item.get("tgianThienDuAn", String.class));
 					kh.setTongMucDtu(item.get("tongMucDtu", Double.class));
-					kh.setNguoiTaoId(item.get("nguoiTaoId", Long.class));
-					kh.setNgayTao(item.get("ngayTao", LocalDate.class));
+//					kh.setNguoiTaoId(item.get("nguoiTaoId", Long.class));
+//					kh.setNgayTao(item.get("ngayTao", LocalDate.class));
 					kh.setTrangThai(item.get("trangThai", String.class));
 					kh.setLdoTchoi(item.get("ldoTchoi", String.class));
 					kh.setNgayGuiDuyet(item.get("ngayGuiDuyet", LocalDate.class));

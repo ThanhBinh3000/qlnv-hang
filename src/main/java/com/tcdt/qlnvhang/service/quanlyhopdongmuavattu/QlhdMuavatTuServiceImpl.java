@@ -71,8 +71,6 @@ public class QlhdMuavatTuServiceImpl implements QlhdMuavatTuService {
 
 		//Thông tin chung bao gồm: thông tin chung, thông tin chủ đầu tư, thông tin đơn vị cung cấp
 		QlhdmvtThongTinChung thongTinChung = dataUtils.toObject(request.getThongTinChung(), QlhdmvtThongTinChung.class);
-		thongTinChung.setNgayTao(LocalDate.now());
-		thongTinChung.setNguoiTaoId(userInfo.getId());
 		thongTinChung.setChuDauTuId(thongTinChuDauTu.getId());
 		thongTinChung.setDvCungCapId(thongTinDonViCungCap.getId());
 		thongTinChung = qlhdmvtThongTinChungRepository.save(thongTinChung);
@@ -192,8 +190,6 @@ public class QlhdMuavatTuServiceImpl implements QlhdMuavatTuService {
 		dataUtils.validateExits(qlhdmvtThongTinChungRepository, request.getThongTinChung().getId(), false);
 
 		QlhdmvtThongTinChung thongTinChung = dataUtils.toObject(request.getThongTinChung(), QlhdmvtThongTinChung.class);
-		thongTinChung.setNgaySua(LocalDate.now());
-		thongTinChung.setNguoiSuaId(userInfo.getId());
 		thongTinChung = qlhdmvtThongTinChungRepository.save(thongTinChung);
 
 		//Update danh sách gói thầu
@@ -251,8 +247,6 @@ public class QlhdMuavatTuServiceImpl implements QlhdMuavatTuService {
 		dataUtils.validateExits(qlhdMuaVatTuRepository, request.getId(), false);
 
 		QlhdMuaVatTu qlhdMuaVatTu = dataUtils.toObject(request, QlhdMuaVatTu.class);
-		qlhdMuaVatTu.setNgaySua(LocalDate.now());
-		qlhdMuaVatTu.setNguoiSuaId(userInfo.getId());
 		qlhdMuaVatTu = qlhdMuaVatTuRepository.save(qlhdMuaVatTu);
 
 		qlhdMuaVatTu.setPhuLucHopDongList(phuLucList);

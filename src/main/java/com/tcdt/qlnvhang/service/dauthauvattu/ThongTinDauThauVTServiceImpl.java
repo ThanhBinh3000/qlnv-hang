@@ -47,8 +47,6 @@ public class ThongTinDauThauVTServiceImpl implements ThongTinDauThauVTService {
 
 		ThongTinDauThauVT thongTinDauThauVT = new ThongTinDauThauVT();
 		updateEntity(req, thongTinDauThauVT);
-		thongTinDauThauVT.setNgayTao(LocalDate.now());
-		thongTinDauThauVT.setNguoiTaoId(userInfo.getId());
 		thongTinDauThauVT.setMaDonVi(userInfo.getDvql());
 		thongTinDauThauVT.setCapDonVi(qlnvDmDonViService.getCapDviByMa(userInfo.getDvql()));
 		thongTinDauThauVTRepository.save(thongTinDauThauVT);
@@ -70,8 +68,6 @@ public class ThongTinDauThauVTServiceImpl implements ThongTinDauThauVTService {
 		ThongTinDauThauVT thongTinDauThauVT = thongTinDauThauVTOptional.get();
 
 		updateEntity(req, thongTinDauThauVT);
-		thongTinDauThauVT.setNgaySua(LocalDate.now());
-		thongTinDauThauVT.setNguoiSuaId(userInfo.getId());
 		thongTinDauThauVTRepository.save(thongTinDauThauVT);
 
 		dtVatTuGoiThauVTService.update(req.getGoiThau(), thongTinDauThauVT.getId());
