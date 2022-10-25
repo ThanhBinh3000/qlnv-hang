@@ -1,13 +1,8 @@
 package com.tcdt.qlnvhang.table;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tcdt.qlnvhang.entities.BaseEntity;
-import com.tcdt.qlnvhang.entities.FileDKemJoinDxuatCuuTro;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import lombok.Data;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -33,6 +28,7 @@ public class XhThCuuTroHdr extends BaseEntity implements Serializable {
   //  private String loaiNhapXuat;
 //  private String soDxuat;
   private String maDvi;
+  private String maDviDxuat;
   private String maTongHop;
   private int nam;
   private LocalDate ngayTongHop;
@@ -42,12 +38,13 @@ public class XhThCuuTroHdr extends BaseEntity implements Serializable {
   private Long tongSoLuong;
   //  private String trichYeu;
   private String trangThai;
-    private String trangThaiQd;
+  private String trangThaiQd;
   private String loaiHinhNhapXuat;
   //  private String kieuNhapXuat;
 //  private LocalDate thoiGianThucHien;
   private String noiDung;
   private String lyDoTuChoi;
+
   private Long idQuyetDinh;
 
 
@@ -71,6 +68,7 @@ public class XhThCuuTroHdr extends BaseEntity implements Serializable {
   public String getTenTrangThai() {
     return TrangThaiAllEnum.getLabelById(trangThai);
   }
+
   public String getTenTrangThaiQd() {
     return TrangThaiAllEnum.getLabelById(trangThaiQd);
   }

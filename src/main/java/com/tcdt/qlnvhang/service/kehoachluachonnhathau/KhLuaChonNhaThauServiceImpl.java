@@ -55,8 +55,6 @@ public class KhLuaChonNhaThauServiceImpl implements KhLuaChonNhaThauService{
 
 		KhLuaChonNhaThau khLuaChonNhaThau = new KhLuaChonNhaThau();
 		this.updateEntity(req, khLuaChonNhaThau);
-		khLuaChonNhaThau.setNgayTao(LocalDate.now());
-		khLuaChonNhaThau.setNguoiTaoId(userInfo.getId());
 		khLuaChonNhaThau.setTrangThai(Contains.TAO_MOI);
 		khLuaChonNhaThau.setMaDonVi(userInfo.getDvql());
 		khLuaChonNhaThau.setCapDonVi(qlnvDmDonViService.getCapDviByMa(userInfo.getDvql()));

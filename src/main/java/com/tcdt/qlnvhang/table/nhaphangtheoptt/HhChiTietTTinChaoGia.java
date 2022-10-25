@@ -35,6 +35,7 @@ public class HhChiTietTTinChaoGia implements Serializable {
     private Boolean luaChon;
     private Boolean luaChonPduyet;
     private Long idSoQdPduyetCgia;
+    private Long idTkhaiKh;
     @Transient
     private FileDinhKem fileDinhKems ;
 }

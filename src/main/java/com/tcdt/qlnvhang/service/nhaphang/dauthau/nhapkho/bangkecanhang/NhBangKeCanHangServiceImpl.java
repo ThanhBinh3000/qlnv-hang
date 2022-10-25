@@ -207,21 +207,18 @@ public class NhBangKeCanHangServiceImpl extends BaseServiceImpl implements NhBan
 
     @Override
     public List<NhBangKeCanHang> findAllByIdQdGiaoNvNh(Long idQdGiaoNvNh) {
-        return null;
+        return setDetailList(nhBangKeCanHangRepository.findAllByIdQdGiaoNvNh(idQdGiaoNvNh));
+
     }
 
     @Override
     public List<NhBangKeCanHang> findAllByIdDdiemGiaoNvNh(Long idDdiemGiaoNvNh) {
-        return null;
+        return setDetailList(nhBangKeCanHangRepository.findByIdDdiemGiaoNvNh(idDdiemGiaoNvNh));
     }
 
     List<NhBangKeCanHang> setDetailList(List<NhBangKeCanHang> list){
-        Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
         list.forEach( item -> {
-//            item.setTenDiemKho(listDanhMucDvi.get(item.getMaDiemKho()));
-//            item.setTenNhaKho(listDanhMucDvi.get(item.getMaNhaKho()));
-//            item.setTenNganKho(listDanhMucDvi.get(item.getMaNganKho()));
-//            item.setTenLoKho(listDanhMucDvi.get(item.getMaLoKho()));
+//            item.setPhieuNhapKho(StringUtils.isEmpty(item.getPhieuNhapKho()) ? null : nhPhieuNhapKhoRepository.getOne(Long.valueOf(item.getSoPhieuNhapKho().split("/")[0])));
         });
         return list;
     }

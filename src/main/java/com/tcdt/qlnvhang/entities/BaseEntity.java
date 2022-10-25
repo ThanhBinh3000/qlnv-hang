@@ -12,6 +12,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -20,11 +21,11 @@ import java.time.LocalDate;
 @EntityListeners(AuditingEntityListener.class)
 public class BaseEntity {
 	@CreatedDate
-	private LocalDate ngayTao;
+	private LocalDateTime ngayTao;
 	@CreatedBy
 	private Long nguoiTaoId;
 	@LastModifiedDate
-	private LocalDate ngaySua;
+	private LocalDateTime ngaySua;
 	@LastModifiedBy
 	private Long nguoiSuaId;
 }

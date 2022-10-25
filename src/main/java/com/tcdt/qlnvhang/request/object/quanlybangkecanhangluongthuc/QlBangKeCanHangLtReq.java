@@ -36,6 +36,8 @@ public class QlBangKeCanHangLtReq extends BaseRequest {
 
     private Integer nam;
 
+    private String soPhieuNhapKho;
+
     private List<QlBangKeChCtLtReq> chiTiets = new ArrayList<>();
 
 }

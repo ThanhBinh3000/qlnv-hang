@@ -109,6 +109,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         }
         for (HhQdPheduyetKhMttDxReq listDx :objReq.getHhQdPheduyetKhMttDxList()){
             HhQdPheduyetKhMttDx dx =ObjectMapperUtils.map(listDx, HhQdPheduyetKhMttDx.class);
+            dx.setId(null);
             dx.setIdDxuat(listDx.getIdDxuat());
             dx.setSoDxuat(listDx.getSoDxuat());
             dx.setIdPduyetHdr(data.getId());
@@ -117,6 +118,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
             hhQdPheduyetKhMttDxRepository.save(dx);
             for (HhQdPheduyetKhMttSLDDReq listSLDD : listDx.getSoLuongDiaDiemList()){
                 HhQdPheduyetKhMttSLDD slDd =ObjectMapperUtils.map(listSLDD, HhQdPheduyetKhMttSLDD.class);
+                slDd.setId(null);
                 slDd.setIdDxKhmtt(dx.getId());
                 slDd.setMaDiemKho(userInfo.getDvql());
                 slDd.setDonGiaVat(dx.getGiaCoThue());

@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangkecanhang;
 
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKho;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -39,6 +40,9 @@ public class NhBangKeCanHang extends TrangThaiBaseEntity implements Serializable
 
     @Column(name = "ID_DDIEM_GIAO_NV_NH")
     private Long idDdiemGiaoNvNh;
+
+    @Column(name ="SO_PHIEU_NHAP_KHO")
+    private String soPhieuNhapKho;
 
     @Column(name = "MA_DVI")
     private String maDvi;

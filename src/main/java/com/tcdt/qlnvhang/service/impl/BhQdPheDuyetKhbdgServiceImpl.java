@@ -117,8 +117,6 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 		req.setId(null);
 		BhQdPheDuyetKhbdg theEntity = qdPheduyetKhbdgRequestMapper.toEntity(req);
 		theEntity.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
-		theEntity.setNgayTao(LocalDate.now());
-		theEntity.setNguoiTaoId(userInfo.getId());
 		theEntity.setMaDonVi(userInfo.getDvql());
 		theEntity.setCapDonVi(userInfo.getCapDvi());
 		theEntity = qdPheDuyetKhbdgRepository.save(theEntity);
@@ -203,9 +201,6 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 
 		log.info("Update qdpd ke hoach ban dau gia");
 		qdPheduyetKhbdgRequestMapper.partialUpdate(theEntity, req);
-
-		theEntity.setNgaySua(LocalDate.now());
-		theEntity.setNguoiSuaId(userInfo.getId());
 		theEntity = qdPheDuyetKhbdgRepository.save(theEntity);
 
 		log.info("Save file dinh kem");

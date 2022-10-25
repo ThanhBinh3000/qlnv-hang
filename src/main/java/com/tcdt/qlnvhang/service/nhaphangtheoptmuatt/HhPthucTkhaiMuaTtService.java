@@ -92,7 +92,7 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
         if(dataMap.getPthucMuatt().equals(Contains.CHAO_GIA)){
             for (HhChiTietTTinChaoGiaReq chiTietTTinChaoGia:objReq.getHhChiTietTTinChaoGiaReqList()){
                 HhChiTietTTinChaoGia cTietCgia =new ModelMapper().map(chiTietTTinChaoGia,HhChiTietTTinChaoGia.class);
-                cTietCgia.setIdSoQdPduyetCgia(dataMap.getId());
+                cTietCgia.setIdTkhaiKh(dataMap.getId());
                 cTietCgia.setLuaChonPduyet(chiTietTTinChaoGia.getLuaChon());
                 BigDecimal thanhTien= cTietCgia.getSoLuong().multiply(cTietCgia.getDgiaChuaThue());
                 cTietCgia.setThanhTien(thanhTien);

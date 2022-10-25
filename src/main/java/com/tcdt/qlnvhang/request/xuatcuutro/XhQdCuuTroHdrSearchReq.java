@@ -21,6 +21,7 @@ public class XhQdCuuTroHdrSearchReq extends BaseRequest {
   private String maTongHop;
   private String soQd;
   private String maDvi;
+  private String maDviDxuat;
   private LocalDate ngayDxuat;
   private LocalDate tuNgayDxuat;
   private LocalDate denNgayDxuat;
