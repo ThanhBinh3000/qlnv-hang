@@ -133,7 +133,7 @@ public class NhPhieuKtChatLuong extends TrangThaiBaseEntity implements Serializa
 	private Long idDdiemGiaoNvNh;
 
 	@Transient
-	private List<QlpktclhKetQuaKiemTra> ketQuaKiemTra = new ArrayList<>();
+	private List<NhPhieuKtChatLuongCt> ketQuaKiemTra = new ArrayList<>();
 
 	@Transient
 	private NhPhieuNhapKho phieuNhapKho;

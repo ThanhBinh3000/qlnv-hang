@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.repository.nhaphang.dauthau.kiemtracl.phieuktracl;
 
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.QlpktclhKetQuaKiemTra;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuongCt;
 import com.tcdt.qlnvhang.repository.BaseRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
@@ -10,12 +10,12 @@ import java.util.Collection;
 import java.util.List;
 
 @Repository
-public interface QlpktclhKetQuaKiemTraRepository extends BaseRepository<QlpktclhKetQuaKiemTra, Long> {
+public interface QlpktclhKetQuaKiemTraRepository extends BaseRepository<NhPhieuKtChatLuongCt, Long> {
     @Transactional
     @Modifying
     void deleteByPhieuKtChatLuongId(Long phieuKtChatLuongId);
 
-    List<QlpktclhKetQuaKiemTra> findAllByPhieuKtChatLuongId(Long phieuKtChatLuongId);
+    List<NhPhieuKtChatLuongCt> findAllByPhieuKtChatLuongId(Long phieuKtChatLuongId);
 
     @Transactional
     @Modifying

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -15,17 +16,13 @@ import java.math.BigDecimal;
 public class QlBienBanNdkCtLtReq {
     private Long id;
 
-    @NotNull(message = "Không được để trống")
+    private String soPhieuKtraCl;
+
+    private String phieuNhapKho;
+
+    private String soBangKe;
+
+    private LocalDate ngayNhap;
+
     private BigDecimal soLuong;
-
-    @NotNull(message = "Không được để trống")
-    private BigDecimal donGia;
-
-    @NotNull(message = "Không được để trống")
-    private BigDecimal thanhTien;
-
-    private String ghiChu;
-
-    @NotNull(message = "Không được để trống")
-    private Integer stt;
 }
