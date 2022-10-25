@@ -53,7 +53,6 @@ public class NhPhieuNhapKho extends TrangThaiBaseEntity implements Serializable 
     @Column(name = "NGAY_NHAP_KHO")
     private LocalDate ngayNhapKho;
 
-
     @Column(name = "THOI_GIAN_GIAO_NHAN")
     private LocalDateTime thoiGianGiaoNhan;
 
