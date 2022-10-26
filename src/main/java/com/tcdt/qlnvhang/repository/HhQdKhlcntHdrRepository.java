@@ -50,4 +50,9 @@ public interface HhQdKhlcntHdrRepository extends BaseRepository<HhQdKhlcntHdr, L
 			nativeQuery = true)
 	List<HhQdKhlcntHdr> selectAll(String namKh, String loaiVthh, String cloaiVthh, String soQd, String tuNgayQd, String denNgayQd,String trangThai);
 
+
+
+	@Query(value = "select sum(so_luong) from HH_DX_KHLCNT_DSGTHAU dtl,HH_DX_KHLCNT_HDR hdr where dtl.id_dx_khlcnt = hdr.id and hdr.nam_khoach = :namKh and dtl.ma_dvi = :maDvi and hdr.loai_vthh = :loaiVthh ",
+			nativeQuery = true)
+	Long countSLDalenKh(Integer namKh, String loaiVthh, String maDvi);
 }

@@ -243,6 +243,7 @@ public class BhQdPheDuyetKqbdgServiceImpl extends BaseServiceImpl implements BhQ
                 optional.get().setLyDoTuChoi(stReq.getLyDo());
                 break;
             case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
+            case Contains.BAN_HANH + Contains.DADUYET_LDC:
                 optional.get().setNguoiPduyetId(getUser().getId());
                 optional.get().setNgayPduyet(LocalDate.now());
                 break;
