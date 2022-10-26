@@ -84,6 +84,7 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         if(optional.isPresent()){
             throw new Exception("số quyết định đã tồn tại");
         }
+        Map<String, String> hashMapDmdv = getListDanhMucDvi(null, null, "01");
         HhDcQdPduyetKhmttHdr data = new ModelMapper().map(objReq,HhDcQdPduyetKhmttHdr.class);
         data.setNgayTao(new Date());
         data.setNguoiTao(userInfo.getUsername());
@@ -98,6 +99,7 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
             HhDcQdPduyetKhmttDx dx = ObjectMapperUtils.map(listDx, HhDcQdPduyetKhmttDx.class);
             dx.setIdDxuat(listDx.getIdDxuat());
             dx.setIdDcHdr(data.getId());
+            dx.setTenDvi(StringUtils.isEmpty(dx.getMaDvi()) ? null : hashMapDmdv.get(userInfo.getTenDvi()));
             hhDcQdPduyetKhMttDxRepository.save(dx);
             for (HhDcQdPduyetKhmttSlddReq listSLDD : listDx.getHhDcQdPduyetKhmttSlddList()){
                 HhDcQdPduyetKhmttSldd slDd =ObjectMapperUtils.map(listSLDD, HhDcQdPduyetKhmttSldd.class);

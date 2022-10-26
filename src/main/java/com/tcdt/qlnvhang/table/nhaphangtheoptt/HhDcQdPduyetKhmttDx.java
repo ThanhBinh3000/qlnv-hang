@@ -51,6 +51,8 @@ public class HhDcQdPduyetKhmttDx implements Serializable {
     private String tenChuDt;
     @Temporal(TemporalType.DATE)
     private Date ngayKy;
+    private String trichYeu;
+    private String tenDuAn;
 
     @Transient
     private  List<HhDcQdPduyetKhmttSldd> hhDcQdPduyetKhmttSlddList=new ArrayList<>();
