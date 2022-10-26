@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,10 +14,18 @@ import java.util.List;
 public class HhDcQdPduyetKhmttDxReq {
     private Long id;
     private Long idDxuat;
+    private String soDxuat;
     private Long idDcHdr;
     private String maDvi;
+    @Transient
+    private String tenDvi;
+    private String diaChiDvi;
     private String loaiVthh;
+    @Transient
+    private String tenLoaiVthh;
     private String cloaiVthh;
+    @Transient
+    private String tenCloaiVthh;
     private String moTaHangHoa;
     private String ptMua;
     private String tchuanCluong;
@@ -33,6 +42,9 @@ public class HhDcQdPduyetKhmttDxReq {
     private BigDecimal tongSoLuong;
     private String nguonVon;
     private String tenChuDt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayKy;
+
 
     private List<HhDcQdPduyetKhmttSlddReq> hhDcQdPduyetKhmttSlddList =new ArrayList<>();
 

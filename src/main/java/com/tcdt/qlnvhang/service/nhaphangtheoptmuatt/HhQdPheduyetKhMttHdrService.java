@@ -13,6 +13,7 @@ import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDxuatKhMttHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
@@ -106,6 +107,10 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         created.setFileDinhKems(fileDinhKems);
         if (created.getIdThop() != null){
             hhDxuatKhMttThopRepository.updateTrangThai(created.getIdThop(),Contains.DADUTHAO_QD);
+        }else if (created.getSoDxuat() !=null){
+            Optional<HhDxuatKhMttHdr> soDxuat= hhDxuatKhMttRepository.findBySoDxuat(created.getSoDxuat());
+            soDxuat.get().setSoQdPduyet(created.getSoQdPduyet());
+            hhDxuatKhMttRepository.save(soDxuat.get());
         }
         for (HhQdPheduyetKhMttDxReq listDx :objReq.getHhQdPheduyetKhMttDxList()){
             HhQdPheduyetKhMttDx dx =ObjectMapperUtils.map(listDx, HhQdPheduyetKhMttDx.class);
@@ -224,6 +229,13 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
             throw new Exception("Chỉ thực hieenh xóa bản nghi ở trạng thái bản nháp hoặc từ chối");
         }
         HhQdPheduyetKhMttHdr data = optional.get();
+       if (data.getIdThop() != null){
+           hhDxuatKhMttThopRepository.updateTrangThai(data.getIdThop(),Contains.DADUTHAO_QD);
+       }else if (data.getSoDxuat() !=null){
+           Optional<HhDxuatKhMttHdr> soDxuat= hhDxuatKhMttRepository.findBySoDxuat(data.getSoDxuat());
+           soDxuat.get().setSoQdPduyet(data.getSoQdPduyet());
+           hhDxuatKhMttRepository.save(soDxuat.get());
+       }
         List<HhQdPheduyetKhMttDx> hhQdPheduyetKhMttDxList=hhQdPheduyetKhMttDxRepository.findAllByIdPduyetHdr(data.getId());
         List<Long>  listIdDx=hhQdPheduyetKhMttDxList.stream().map(HhQdPheduyetKhMttDx::getId).collect(Collectors.toList());
         List<HhQdPheduyetKhMttSLDD> listSlDd=hhQdPheduyetKhMttSLDDRepository.findAllByIdDxKhmttIn(listIdDx);
@@ -244,6 +256,13 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         for (HhQdPheduyetKhMttHdr qdPheduyetKhMttHdr : list){
             if (!qdPheduyetKhMttHdr.getTrangThai().equals(Contains.DUTHAO)){
                 throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối");
+            }
+            if (qdPheduyetKhMttHdr.getIdThop() != null){
+                hhDxuatKhMttThopRepository.updateTrangThai(qdPheduyetKhMttHdr.getIdThop(),Contains.DADUTHAO_QD);
+            }else if (qdPheduyetKhMttHdr.getSoDxuat() !=null){
+                Optional<HhDxuatKhMttHdr> soDxuat= hhDxuatKhMttRepository.findBySoDxuat(qdPheduyetKhMttHdr.getSoDxuat());
+                soDxuat.get().setSoQdPduyet(qdPheduyetKhMttHdr.getSoQdPduyet());
+                hhDxuatKhMttRepository.save(soDxuat.get());
             }
         }
         List<Long> listId=list.stream().map(HhQdPheduyetKhMttHdr::getId).collect(Collectors.toList());

@@ -42,6 +42,7 @@ public interface HhDxuatKhMttRepository extends JpaRepository<HhDxuatKhMttHdr, L
             " AND MTT.TRANG_THAI = '"+ Contains.DADUYET_LDC+"'" +
             " AND MTT.TRANG_THAI_TH = '"+ Contains.CHUATONGHOP+"'" +
             " AND MTT.MA_THOP is null "+
+            " AND MTT.SO_QD_PDUYET is null "+
             " AND (:maDvi IS NULL OR LOWER(MTT.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "
             ,nativeQuery = true)
     List<HhDxuatKhMttHdr> listTongHop(Integer namKh, String loaiVthh, String cloaiVthh, String maDvi);
