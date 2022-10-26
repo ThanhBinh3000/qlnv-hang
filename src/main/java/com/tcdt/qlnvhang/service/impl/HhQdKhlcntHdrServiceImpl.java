@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.*;
+import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.object.HhDxuatKhLcntDsgthauDtlCtietReq;
 import com.tcdt.qlnvhang.request.object.HhQdKhlcntDsgthauReq;
@@ -849,6 +850,12 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 
 		ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
 		ex.export();
+	}
+
+
+	@Override
+	public Long countSoLuongKeHoachNam(CountKhlcntSlReq req) throws Exception {
+		return hhQdKhlcntHdrRepository.countSLDalenKh(req.getYear(),req.getLoaiVthh(), req.getMaDvi());
 	}
 
 }
