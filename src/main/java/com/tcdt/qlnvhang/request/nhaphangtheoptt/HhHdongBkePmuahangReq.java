@@ -19,7 +19,7 @@ public class HhHdongBkePmuahangReq {
     private Long idQdCgia;
     private String soQdCgia;
     private String dviCcap;
-    private String idQdMtt;
+    private Long idQdMtt;
     private String soQdMtt;
     private String soHdong;
     private String tenHdong;
@@ -37,7 +37,8 @@ public class HhHdongBkePmuahangReq {
     private String noiDung;
     private String dieuKien;
     private String maDvi;
-    private String trangThai;
+    private String trangThaiHd;
+    private String trangThaiNh;
     private String loaiVthh;
     private String cloaiVthh;
     private String moTaHangHoa;

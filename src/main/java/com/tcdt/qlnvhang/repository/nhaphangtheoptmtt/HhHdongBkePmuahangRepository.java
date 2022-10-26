@@ -22,10 +22,11 @@ public interface HhHdongBkePmuahangRepository extends JpaRepository<HhHdongBkePm
             " AND (:tenHdong IS NULL OR LOWER(HD.TEN_HDONG) LIKE LOWER(CONCAT(CONCAT('%',:tenHdong),'%')))" +
             " AND (:ngayKyHdTu IS NULL OR HD.NGAY_HLUC <= TO_DATE(:ngayKyHdTu,'yyyy-MM-dd'))" +
             " AND (:ngayKyHdDen IS NULL OR HD.NGAY_HLUC >=  TO_DATE(:ngayKyHdDen,'yyyy-MM-dd')) " +
-            " AND (:trangThai IS NULL OR HD.TRANG_THAI = :trangThai)" +
+            " AND (:trangThaiHd IS NULL OR HD.TRANG_THAI_HD = :trangThaiHd)" +
+            "AND (:trangThaiNh IS NULL OR HD.TRANG_THAI_NH = :trangThaiNh)" +
             " AND (:maDvi IS NULL OR LOWER(HD.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "
             ,nativeQuery = true)
-    Page<HhHdongBkePmuahangHdr> searchPage (Integer namHd, String soHdong ,String dviMua,String tenHdong, String ngayKyHdTu, String ngayKyHdDen,  String trangThai, String maDvi, Pageable pageable);
+    Page<HhHdongBkePmuahangHdr> searchPage (Integer namHd, String soHdong ,String dviMua,String tenHdong, String ngayKyHdTu, String ngayKyHdDen,  String trangThaiHd, String trangThaiNh, String maDvi, Pageable pageable);
 
     Optional<HhHdongBkePmuahangHdr> findAllBySoHdong(String soHdong);
 

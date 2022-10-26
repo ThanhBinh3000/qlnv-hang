@@ -63,7 +63,8 @@ public class HhHdongBkePmuahangService extends BaseServiceImpl {
                 objReq.getTenHdong(),
                 Contains.convertDateToString(objReq.getNgayKyHdTu()),
                 Contains.convertDateToString(objReq.getNgayKyHdDen()),
-                objReq.getTrangThai(),
+                objReq.getTrangThaiHd(),
+                objReq.getTrangThaiNh(),
                 userInfo.getDvql(),
                 pageable);
         Map<String,String> hashMapDmhh = getListDanhMucHangHoa();
@@ -76,7 +77,9 @@ public class HhHdongBkePmuahangService extends BaseServiceImpl {
             f.setThongTinDviCungCap(listTtCc);
             f.setThongTinChuDauTu(listTtDtu);
             f.setDiaDiemGiaoNhanHangList(listDdNh);
-            f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+            f.setTrangThaiHd(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiHd()));
+            f.setTrangThaiNh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiNh()));
+            f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : hashMapDmdv.get(f.getMaDvi()));
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmhh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmhh.get(f.getCloaiVthh()));
             for (HhThongTinDviDtuCcap dviDtu :listTtDtu){
@@ -104,11 +107,13 @@ public class HhHdongBkePmuahangService extends BaseServiceImpl {
         if(optional.isPresent()){
             throw new Exception("Số hợp đồng đã tồn tại");
         }
-        Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
         HhHdongBkePmuahangHdr data = new ModelMapper().map(objReq,HhHdongBkePmuahangHdr.class);
         data.setNgayTao(new Date());
         data.setNguoiTao(userInfo.getUsername());
-        data.setTrangThai(Contains.DUTHAO);
+        data.setTrangThaiHd(Contains.DUTHAO);
+        data.setTrangThaiNh(Contains.DUTHAO);
+        Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
+        data.setTenDvi(StringUtils.isEmpty(userInfo.getDvql()) ? null : hashMapDmdv.get(userInfo.getDvql()));
         data.setMaDvi(userInfo.getDvql());
         HhHdongBkePmuahangHdr created= hhHdongBkePmuahangRepository.save(data);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),data.getId(),"HH_HDONG_BKE_PMUAHANG_HDR");
@@ -184,8 +189,9 @@ public class HhHdongBkePmuahangService extends BaseServiceImpl {
         Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
         data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh())?null:hashMapDmhh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh())?null:hashMapDmhh.get(data.getCloaiVthh()));
-        data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
-
+        data.setTenTrangThaiHd(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiHd()));
+        data.setTentrangThaiNh(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiNh()));
+        data.setTenDvi(StringUtils.isEmpty(data.getMaDvi()) ? null : hashMapDmdv.get(data.getMaDvi()));
         List<HhThongTinDviDtuCcap> listTtCc=hhThongTinDviDtuCcapRepository.findAllByIdHdrAndType(data.getId(),Contains.CUNG_CAP);
         List<HhThongTinDviDtuCcap> listTtDtu=hhThongTinDviDtuCcapRepository.findAllByIdHdrAndType(data.getId(), Contains.DAU_TU);
         List<HhDiaDiemGiaoNhanHang> listDdNh=hhDiaDiemGiaoNhanHangRepository.findAllByIdHdr(data.getId());
@@ -202,7 +208,10 @@ public class HhHdongBkePmuahangService extends BaseServiceImpl {
         if (!optional.isPresent()){
             throw new Exception("Bản ghi không tồn tại");
         }
-        if (!optional.get().getTrangThai().equals(Contains.DUTHAO)){
+        if (!optional.get().getTrangThaiHd().equals(Contains.DUTHAO)){
+            throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối");
+        }
+        if (!optional.get().getTrangThaiNh().equals(Contains.DUTHAO)){
             throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối");
         }
         HhHdongBkePmuahangHdr data = optional.get();
@@ -224,8 +233,13 @@ public class HhHdongBkePmuahangService extends BaseServiceImpl {
             throw new Exception("Bản ghi không tồn tại");
         }
         for (HhHdongBkePmuahangHdr bkePmuahangHdr:list){
-            if (!bkePmuahangHdr.getTrangThai().equals(Contains.DUTHAO)){
+            if (!bkePmuahangHdr.getTrangThaiHd().equals(Contains.DUTHAO)){
                 throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối");
+            }
+        }
+        for (HhHdongBkePmuahangHdr bkePmuahangHdr  : list){
+            if (!bkePmuahangHdr.getTrangThaiNh().equals(Contains.DUTHAO)){
+                throw new Exception("Chỉ thực hiên xóa với quyết định trạng thái bản nháp hoặc từ chối");
             }
         }
         List<Long> listIdHdr=list.stream().map(HhHdongBkePmuahangHdr::getId).collect(Collectors.toList());
@@ -271,7 +285,7 @@ public class HhHdongBkePmuahangService extends BaseServiceImpl {
                 objs[8]=cc.getTenDvi();
                 objs[9]=cc.getDiaChi();
             }
-            objs[10]=dx.getTenTrangThai();
+            objs[10]=dx.getTenTrangThaiHd();
             dataList.add(objs);
         }
         ExportExcel ex =new ExportExcel(title,fileName,rowsName,dataList,response);
@@ -288,7 +302,7 @@ public class HhHdongBkePmuahangService extends BaseServiceImpl {
             throw new Exception("Không tìm thấy dữ liệu");
         }
 
-        String status= statusReq.getTrangThai()+optional.get().getTrangThai();
+        String status= statusReq.getTrangThai()+optional.get().getTenTrangThaiHd();
         switch (status){
             case Contains.DAKY + Contains.DUTHAO:
                 optional.get().setNguoiKy(getUser().getUsername());
@@ -297,7 +311,7 @@ public class HhHdongBkePmuahangService extends BaseServiceImpl {
             default:
                 throw new Exception("Phê duyệt không thành công");
         }
-        optional.get().setTrangThai(statusReq.getTrangThai());
+        optional.get().setTrangThaiHd(statusReq.getTrangThai());
         HhHdongBkePmuahangHdr created = hhHdongBkePmuahangRepository.save(optional.get());
         return created;
     }

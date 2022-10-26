@@ -47,16 +47,24 @@ public class HhHdongBkePmuahangHdr implements Serializable {
     private String ghiChuNhanHang;
     private String noiDung;
     private String dieuKien;
+    @Temporal(TemporalType.DATE)
     private Date ngayTao;
     private String nguoiTao;
     private Date ngaySua;
     private  String nguoiSua;
+    @Temporal(TemporalType.DATE)
     private Date ngayKy;
     private  String nguoiKy;
     private String maDvi;
-    private String trangThai;
     @Transient
-    private String tenTrangThai;
+    private String tenDvi;
+
+    private String trangThaiHd;
+    @Transient
+    private String tenTrangThaiHd;
+    private String trangThaiNh;
+    @Transient
+    private String tentrangThaiNh;
     private String loaiVthh;
     @Transient
     private String tenLoaiVthh;
