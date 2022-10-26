@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 public class HhDcQdPduyetKhmttSlddReq {
     private Long id;
     private Long idDxKhmtt;
+    private Long idDcKhmtt;
     private String maDvi;
     private String tenDvi;
     private String maDiemKho;

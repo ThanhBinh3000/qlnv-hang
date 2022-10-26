@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface HhDcQdPduyetKhmttSlddRepository extends JpaRepository<HhDcQdPduyetKhmttSldd,Long> {
-    List<HhDcQdPduyetKhmttSldd> findAllByIdDxKhmttIn(List<Long> idDxKhmtt);
+    List<HhDcQdPduyetKhmttSldd> findAllByIdDcKhmttIn(List<Long> idDcKhmtt);
 }
