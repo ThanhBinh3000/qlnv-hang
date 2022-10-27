@@ -52,7 +52,7 @@ public interface HhQdKhlcntHdrRepository extends BaseRepository<HhQdKhlcntHdr, L
 
 
 
-	@Query(value = "select sum(so_luong) from HH_DX_KHLCNT_DSGTHAU dtl,HH_DX_KHLCNT_HDR hdr where dtl.id_dx_khlcnt = hdr.id and hdr.nam_khoach = :namKh and dtl.ma_dvi = :maDvi and hdr.loai_vthh = :loaiVthh ",
+	@Query(value = "select nvl(sum(so_luong),0) from HH_DX_KHLCNT_DSGTHAU dtl,HH_DX_KHLCNT_HDR hdr where dtl.id_dx_khlcnt = hdr.id and hdr.nam_khoach = :namKh and dtl.ma_dvi = :maDvi and hdr.loai_vthh = :loaiVthh  and hdr.TRANG_THAI = '05' ",
 			nativeQuery = true)
 	Long countSLDalenKh(Integer namKh, String loaiVthh, String maDvi);
 }

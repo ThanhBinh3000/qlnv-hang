@@ -45,8 +45,7 @@ public class HhPhuLucHdController {
 	private HhPhuLucHdService service;
 
 
-	@Autowired
-	private HhQdKhlcntHdrService hhQdKhlcntHdrService;
+
 
 	@ApiOperation(value = "Tạo mới thông tin phụ lục hợp đồng", response = List.class)
 	@PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -171,22 +170,6 @@ public class HhPhuLucHdController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Lấy tổng số lượng đã lên kế hoạch trong năm theo đơn vị, loại vật tư  hàng hóa", response = List.class)
-	@PostMapping(value = "/count-sl-kh", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<BaseResponse> getCountSl(HttpServletRequest request,
-												   @Valid @RequestBody CountKhlcntSlReq objReq) {
-		BaseResponse resp = new BaseResponse();
-		try {
-			resp.setData(hhQdKhlcntHdrService.countSoLuongKeHoachNam(objReq));
-			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-		} catch (Exception e) {
-			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-			resp.setMsg(e.getMessage());
-			log.error("Lấy tổng số lượng đã lên kế hoạch trong năm theo đơn vị, loại vật tư  hàng hóa: {}", e);
-		}
-		return ResponseEntity.ok(resp);
-	}
+
 
 }
