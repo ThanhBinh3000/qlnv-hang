@@ -53,6 +53,7 @@ public interface HhDxuatKhMttRepository extends JpaRepository<HhDxuatKhMttHdr, L
     void updateTongHop(List<String> soDxuatList, String maThop);
 
     List<HhDxuatKhMttHdr> findByIdIn(List<Long> id);
+    List<HhDxuatKhMttHdr> findAllById(Long id);
 
     @Transactional()
     @Modifying
