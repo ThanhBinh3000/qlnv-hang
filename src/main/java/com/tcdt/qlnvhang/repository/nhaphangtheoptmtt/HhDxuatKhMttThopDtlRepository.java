@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface HhDxuatKhMttThopDtlRepository extends JpaRepository<HhDxKhMttThopDtl,Long> {
     List<HhDxKhMttThopDtl> findByIdThopHdr(Long idThopHdr);
+    List<HhDxKhMttThopDtl> findByIdThopHdrIn(List<Long> idThopHdr);
 
     @Transactional
     @Modifying

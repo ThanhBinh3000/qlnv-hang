@@ -4,6 +4,8 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "HH_DX_KHMTT_THOP_DTL")
@@ -24,7 +26,7 @@ public class HhDxKhMttThopDtl implements Serializable {
     String tenDvi;
 
     @Transient
-    private HhDxuatKhMttHdr listDxuatHdr= new HhDxuatKhMttHdr();
+    private List<HhDxuatKhMttHdr> listDxuatHdr= new ArrayList<>();
 
 
 }
