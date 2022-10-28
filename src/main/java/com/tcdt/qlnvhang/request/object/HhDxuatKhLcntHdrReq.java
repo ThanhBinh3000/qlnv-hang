@@ -129,6 +129,8 @@ public class HhDxuatKhLcntHdrReq {
 
 	String diaChiDvi;
 
+	BigDecimal donGiaVat;
+
 	private List<FileDinhKemReq> fileDinhKemReq =  new ArrayList<>();
 
 	private List<HhDxuatKhLcntDsgtDtlReq> dsGtReq =  new ArrayList<>();
