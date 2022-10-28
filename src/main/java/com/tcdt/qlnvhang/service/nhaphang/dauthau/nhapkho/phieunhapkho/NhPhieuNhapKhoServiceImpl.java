@@ -8,6 +8,7 @@ import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuongRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHangRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoCt1Repository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoCtRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoRepository;
@@ -51,29 +52,10 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
     private UserInfoRepository userInfoRepository;
 
     @Autowired
-    private NhPhieuKtChatLuongRepository phieuKtraRepo;
-
-
-    @Autowired
-    private QlnvDmVattuRepository qlnvDmVattuRepository;
-
-    @Autowired
-    private KtNganLoRepository ktNganLoRepository;
+    private NhBangKeCanHangRepository nhBangKeCanHangRepository;
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
-
-    @Autowired
-    private NhPhieuKtChatLuongRepository phieuKtChatLuongRepository;
-
-    @Autowired
-    private HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
-
-    @Autowired
-    private NhHoSoKyThuatRepository nhHoSoKyThuatRepository;
-
-    @Autowired
-    private NhPhieuNhapKhoCt1Repository nhPhieuNhapKhoCt1Repository;
 
     @Override
     public Page<NhPhieuNhapKho> searchPage(NhPhieuNhapKhoReq req) {
@@ -267,12 +249,8 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
     }
 
     List<NhPhieuNhapKho> setDetailList(List<NhPhieuNhapKho> list){
-        Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
         list.forEach( item -> {
-            item.setTenDiemKho(listDanhMucDvi.get(item.getMaDiemKho()));
-            item.setTenNhaKho(listDanhMucDvi.get(item.getMaNhaKho()));
-            item.setTenNganKho(listDanhMucDvi.get(item.getMaNganKho()));
-            item.setTenLoKho(listDanhMucDvi.get(item.getMaLoKho()));
+            item.setBangKeCanHang(nhBangKeCanHangRepository.findBySoPhieuNhapKho(item.getSoPhieuNhapKho()));
         });
         return list;
     }

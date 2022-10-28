@@ -32,4 +32,6 @@ public interface HhPhuLucHdService {
 
 	Page<HhPhuLucHd> colection(HhPhuLucHdSearchReq objReq) throws Exception;
 
+
+
 }

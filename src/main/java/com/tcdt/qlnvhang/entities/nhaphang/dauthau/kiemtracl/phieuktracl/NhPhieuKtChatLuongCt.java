@@ -13,7 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 @Table(name = "NH_PHIEU_KT_CHAT_LUONG_CT")
-public class QlpktclhKetQuaKiemTra {
+public class NhPhieuKtChatLuongCt {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PHIEU_KT_CHAT_LUONG_CT_SEQ")
 	@SequenceGenerator(sequenceName = "PHIEU_KT_CHAT_LUONG_CT_SEQ", allocationSize = 1, name = "PHIEU_KT_CHAT_LUONG_CT_SEQ")

@@ -68,8 +68,6 @@ public class QdPheDuyetKqlcntVtServiceImpl implements QdPheDuyetKqlcntVtService 
 
         QdPheDuyetKqlcntVt qd = new QdPheDuyetKqlcntVt();
         BeanUtils.copyProperties(req, qd, "id");
-        qd.setNgayTao(LocalDate.now());
-        qd.setNguoiTaoId(userInfo.getId());
         qd.setTrangThai(QdPheDuyetKqlcntVtStatus.MOI_TAO.getId());
         qd.setMaDonVi(userInfo.getDvql());
         qd.setCapDonVi(qlnvDmDonViService.getCapDviByMa(userInfo.getDvql()));
@@ -150,8 +148,6 @@ public class QdPheDuyetKqlcntVtServiceImpl implements QdPheDuyetKqlcntVtService 
 
         QdPheDuyetKqlcntVt qd = optionalQd.get();
         BeanUtils.copyProperties(req, qd, "id");
-        qd.setNgaySua(LocalDate.now());
-        qd.setNguoiSuaId(userInfo.getId());
         qdPheDuyetKqlcntVtRepo.save(qd);
 
         Map<Long, QdKqlcntGoiThauVt> mapGoiThau = qdKqlcntGoiThauVtRepo.findAllByQdPdKhlcntId(qd.getId())

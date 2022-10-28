@@ -24,4 +24,6 @@ public interface NhBangKeCanHangRepository extends BaseRepository<NhBangKeCanHan
 
     List<NhBangKeCanHang> findByIdDdiemGiaoNvNh(Long idDdiemGiaoNvNh);
 
+    NhBangKeCanHang findBySoPhieuNhapKho(String soPhieuNhapKho);
+
 }

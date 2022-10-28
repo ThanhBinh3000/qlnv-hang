@@ -83,8 +83,6 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 		if (userInfo == null) throw new Exception("Bad request.");
 		BhTongHopDeXuatKhbdg theEntity = tongHopDeXuatKhbdgRequestMapper.toEntity(req);
 		theEntity.setTrangThai(NhapXuatHangTrangThaiEnum.CHUATAO_QD.getId());
-		theEntity.setNgayTao(LocalDate.now());
-		theEntity.setNguoiTaoId(userInfo.getId());
 		theEntity.setMaDonVi(userInfo.getDvql());
 		theEntity.setCapDonVi(userInfo.getCapDvi());
 		theEntity = deXuatKhbdgRepository.save(theEntity);
@@ -124,9 +122,6 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 
 		log.info("Update Tổng hợp đề xuất ban dau gia");
 		tongHopDeXuatKhbdgRequestMapper.partialUpdate(theEntity, req);
-
-		theEntity.setNgaySua(LocalDate.now());
-		theEntity.setNguoiSuaId(userInfo.getId());
 		theEntity = deXuatKhbdgRepository.save(theEntity);
 
 		chiTietRepository.deleteAllByBhTongHopDeXuatId(theEntity.getId());

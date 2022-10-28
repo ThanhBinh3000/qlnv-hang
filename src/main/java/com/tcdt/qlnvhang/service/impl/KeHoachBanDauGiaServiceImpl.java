@@ -104,8 +104,6 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 		log.info("Save ke hoach ban dau gia");
 		KeHoachBanDauGia keHoachDauGia = kehoachRequestMapper.toEntity(req);
 		keHoachDauGia.setTrangThai(Contains.DUTHAO);
-		keHoachDauGia.setNgayTao(LocalDate.now());
-		keHoachDauGia.setNguoiTaoId(userInfo.getId());
 		keHoachDauGia.setMaDv(userInfo.getDvql());
 		keHoachDauGia.setCapDv(userInfo.getCapDvi());
 		keHoachDauGia.setTrangThaiTh(Contains.CHUATONGHOP);
@@ -166,8 +164,6 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 		log.info("Update ke hoach ban dau gia");
 		kehoachRequestMapper.partialUpdate(keHoachDauGia, req);
 
-		keHoachDauGia.setNgaySua(LocalDate.now());
-		keHoachDauGia.setNguoiSuaId(userInfo.getId());
 		keHoachDauGia = keHoachBanDauGiaRepository.save(keHoachDauGia);
 
 		KeHoachBanDauGia finalKeHoachDauGia = keHoachDauGia;
@@ -505,7 +501,7 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 				Contains.convertDateToString(objReq.getNgayKyTuNgay()),
 				Contains.convertDateToString(objReq.getNgayKyDenNgay()),
 				objReq.getLoaiVthh(),
-				userInfo.getDvql(),
+			 	StringUtils.isEmpty(objReq.getMaDvi())	 ? userInfo.getDvql() : objReq.getMaDvi(),
 				objReq.getTrangThai(),
 				objReq.getTrangThaiTh(),
 				pageable);

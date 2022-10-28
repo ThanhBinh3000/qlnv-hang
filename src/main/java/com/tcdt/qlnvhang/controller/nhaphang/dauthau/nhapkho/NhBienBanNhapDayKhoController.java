@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.controller.quanlybienbannhapdaykholuongthuc;
+package com.tcdt.qlnvhang.controller.nhaphang.dauthau.nhapkho;
 
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.DeleteReq;
@@ -24,8 +24,8 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping(PathContains.QL_BIEN_BAN_NHAP_DAY_KHO_LT)
-@Api(tags = "Quản lý biên bản nhập đầy kho lương thực ")
-public class QlBienBanNhapDayKhoLtController {
+@Api(tags = "Nhập hàng - Đấu Thầu - Biên bản nhập đầy kho")
+public class NhBienBanNhapDayKhoController {
 
     @Autowired
     private QlBienBanNhapDayKhoLtService qlBienBanNhapDayKhoLtService;
@@ -83,7 +83,7 @@ public class QlBienBanNhapDayKhoLtController {
     public ResponseEntity<BaseResponse> delete(@PathVariable Long id) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(qlBienBanNhapDayKhoLtService.delete(id));
+//            resp.setData(qlBienBanNhapDayKhoLtService.delete(id));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -99,7 +99,7 @@ public class QlBienBanNhapDayKhoLtController {
     public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody StatusReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(qlBienBanNhapDayKhoLtService.updateStatusQd(req));
+//            resp.setData(qlBienBanNhapDayKhoLtService.updateStatusQd(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -115,7 +115,7 @@ public class QlBienBanNhapDayKhoLtController {
     public ResponseEntity<BaseResponse> search(QlBienBanNhapDayKhoLtSearchReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(qlBienBanNhapDayKhoLtService.search(req));
+//            resp.setData(qlBienBanNhapDayKhoLtService.search(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -132,7 +132,7 @@ public class QlBienBanNhapDayKhoLtController {
     public final ResponseEntity<BaseResponse> deleteMultiple(@RequestBody @Valid DeleteReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(qlBienBanNhapDayKhoLtService.deleteMultiple(req));
+//            resp.setData(qlBienBanNhapDayKhoLtService.deleteMultiple(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -148,7 +148,7 @@ public class QlBienBanNhapDayKhoLtController {
     public ResponseEntity<BaseResponse> count() {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(qlBienBanNhapDayKhoLtService.count());
+//            resp.setData(qlBienBanNhapDayKhoLtService.count());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -165,7 +165,7 @@ public class QlBienBanNhapDayKhoLtController {
     public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody QlBienBanNhapDayKhoLtSearchReq req) {
 
         try {
-            qlBienBanNhapDayKhoLtService.exportToExcel(req, response);
+//            qlBienBanNhapDayKhoLtService.exportToExcel(req, response);
         } catch (Exception e) {
             log.error("Error can not export", e);
         }
@@ -177,7 +177,7 @@ public class QlBienBanNhapDayKhoLtController {
     public ResponseEntity<BaseResponse> getSo() {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(qlBienBanNhapDayKhoLtService.getSo());
+//            resp.setData(qlBienBanNhapDayKhoLtService.getSo());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

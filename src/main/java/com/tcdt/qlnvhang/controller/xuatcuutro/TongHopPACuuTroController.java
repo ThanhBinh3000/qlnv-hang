@@ -136,7 +136,7 @@ public class TongHopPACuuTroController extends BaseController {
   public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      deXuatCuuTroService.deleteListId(idSearchReq.getIds());
+      tongHopCuuTroService.deleteListId(idSearchReq.getIds());
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {

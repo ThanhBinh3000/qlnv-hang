@@ -8,7 +8,7 @@ import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauCtRepository;
 import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
-import com.tcdt.qlnvhang.repository.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKhoRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.vattu.bienbanguihang.NhBienBanGuiHangRepository;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauCtReq;
@@ -67,7 +67,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 	private HhHopDongRepository hhHopDongRepository;
 
 	@Autowired
-	private QlBienBanNhapDayKhoLtRepository qlBienBanNhapDayKhoLtRepository;
+	private NhBbNhapDayKhoRepository qlBienBanNhapDayKhoLtRepository;
 
 	@Autowired
 	private NhBienBanGuiHangRepository nhBienBanGuiHangRepository;

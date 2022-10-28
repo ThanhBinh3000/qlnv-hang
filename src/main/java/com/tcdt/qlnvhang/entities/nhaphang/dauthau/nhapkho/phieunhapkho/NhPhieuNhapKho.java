@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho;
 
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuong;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHang;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -50,7 +52,6 @@ public class NhPhieuNhapKho extends TrangThaiBaseEntity implements Serializable 
 
     @Column(name = "NGAY_NHAP_KHO")
     private LocalDate ngayNhapKho;
-
 
     @Column(name = "THOI_GIAN_GIAO_NHAN")
     private LocalDateTime thoiGianGiaoNhan;
@@ -186,5 +187,5 @@ public class NhPhieuNhapKho extends TrangThaiBaseEntity implements Serializable 
     private List<NhPhieuNhapKhoCt1> chiTiet1s = new ArrayList<>();
 
     @Transient
-    private NhPhieuNhapKho phieuNhapKho;
+    private NhBangKeCanHang bangKeCanHang;
 }

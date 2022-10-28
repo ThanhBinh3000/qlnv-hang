@@ -1,7 +1,7 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.phieuktracl;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuong;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.QlpktclhKetQuaKiemTra;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuongCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kiemtracl.phieuktracl.QlpktclhKetQuaKiemTraRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuongRepository;
@@ -81,9 +81,9 @@ public class NhPhieuKtChatLuongServiceImpl extends BaseServiceImpl implements Nh
 		//Kết quả kiểm tra
 		Long phieuKiemTraChatLuongId = phieu.getId();
 
-		List<QlpktclhKetQuaKiemTra> ketQuaKiemTras = new ArrayList<>();
+		List<NhPhieuKtChatLuongCt> ketQuaKiemTras = new ArrayList<>();
 		req.getKetQuaKiemTra().forEach(item -> {
-			QlpktclhKetQuaKiemTra ketQuaKiemTra = dataUtils.toObject(item, QlpktclhKetQuaKiemTra.class);
+			NhPhieuKtChatLuongCt ketQuaKiemTra = dataUtils.toObject(item, NhPhieuKtChatLuongCt.class);
 			ketQuaKiemTra.setPhieuKtChatLuongId(phieuKiemTraChatLuongId);
 			ketQuaKiemTras.add(ketQuaKiemTra);
 		});
@@ -121,9 +121,9 @@ public class NhPhieuKtChatLuongServiceImpl extends BaseServiceImpl implements Nh
 		Long phieuKiemTraChatLuongId = nhPhieuKtChatLuong.getId();
 		qlpktclhKetQuaKiemTraRepo.deleteByPhieuKtChatLuongId(phieuKiemTraChatLuongId);
 
-		List<QlpktclhKetQuaKiemTra> ketQuaKiemTras = new ArrayList<>();
+		List<NhPhieuKtChatLuongCt> ketQuaKiemTras = new ArrayList<>();
 		req.getKetQuaKiemTra().forEach(item -> {
-			QlpktclhKetQuaKiemTra ketQuaKiemTra = new QlpktclhKetQuaKiemTra();
+			NhPhieuKtChatLuongCt ketQuaKiemTra = new NhPhieuKtChatLuongCt();
 			BeanUtils.copyProperties(item, ketQuaKiemTra, "id");
 			ketQuaKiemTra.setPhieuKtChatLuongId(phieuKiemTraChatLuongId);
 			ketQuaKiemTras.add(ketQuaKiemTra);
@@ -486,12 +486,7 @@ public class NhPhieuKtChatLuongServiceImpl extends BaseServiceImpl implements Nh
 	}
 
 	List<NhPhieuKtChatLuong> setDetailList(List<NhPhieuKtChatLuong> list){
-		Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
 		list.forEach( item -> {
-			item.setTenDiemKho(listDanhMucDvi.get(item.getMaDiemKho()));
-			item.setTenNhaKho(listDanhMucDvi.get(item.getMaNhaKho()));
-			item.setTenNganKho(listDanhMucDvi.get(item.getMaNganKho()));
-			item.setTenLoKho(listDanhMucDvi.get(item.getMaLoKho()));
 			item.setPhieuNhapKho(nhPhieuNhapKhoRepository.findBySoPhieuKtraCl(item.getSoPhieu()));
 		});
 		return list;
