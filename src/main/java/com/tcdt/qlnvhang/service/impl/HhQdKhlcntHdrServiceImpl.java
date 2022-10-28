@@ -852,9 +852,5 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		ex.export();
 	}
 
-	@Override
-	public Long countSoLuongKeHoachNam(CountKhlcntSlReq req) throws Exception {
-		return hhQdKhlcntHdrRepository.countSLDalenKh(req.getYear(),req.getLoaiVthh(), req.getMaDvi());
-	}
 
 }

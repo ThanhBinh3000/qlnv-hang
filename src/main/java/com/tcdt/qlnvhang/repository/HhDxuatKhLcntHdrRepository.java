@@ -1,8 +1,10 @@
 package com.tcdt.qlnvhang.repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
+import com.tcdt.qlnvhang.table.HhQdKhlcntHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -73,5 +75,22 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 
 	@Transactional
 	void deleteAllByIdIn(List<Long> ids);
+
+	@Query(value = "SELECT * FROM HH_QD_KHLCNT_HDR QDKHLCNT " +
+			" WHERE (:namKh IS NULL OR QDKHLCNT.NAM_KHOACH = TO_NUMBER(:namKh)) "+
+			" AND (:loaiVthh IS NULL OR QDKHLCNT.LOAI_VTHH = :loaiVthh) "+
+			" AND (:cloaiVthh IS NULL OR QDKHLCNT.CLOAI_VTHH = :cloaiVthh) "+
+			" AND (:soQd IS NULL OR QDKHLCNT.SO_QD = :soQd) "+
+			" AND (:tuNgayQd IS NULL OR QDKHLCNT.NGAY_QD >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) "+
+			" AND (:denNgayQd IS NULL OR QDKHLCNT.NGAY_QD <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) " +
+			" AND (:trangThai IS NULL OR QDKHLCNT.TRANG_THAI = :trangThai) ",
+			nativeQuery = true)
+	List<HhQdKhlcntHdr> selectAll(String namKh, String loaiVthh, String cloaiVthh, String soQd, String tuNgayQd, String denNgayQd, String trangThai);
+
+	@Query(value = "select nvl(sum(so_luong),0) from HH_DX_KHLCNT_DSGTHAU dtl,HH_DX_KHLCNT_HDR hdr where dtl.id_dx_khlcnt = hdr.id and hdr.nam_khoach = :namKh and dtl.ma_dvi = :maDvi and hdr.loai_vthh = :loaiVthh  and hdr.TRANG_THAI = '05' ",
+			nativeQuery = true)
+	BigDecimal countSLDalenKh(Integer namKh, String loaiVthh, String maDvi);
+
+	HhDxuatKhLcntHdr findAllByLoaiVthhAndCloaiVthhAndNamKhoachAndMaDviAndTrangThaiNot(String loaiVthh,String cloaiVthh,Integer namKhoach,String maDvi,String trangThai);
 
 }

@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.request.object;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -104,6 +105,8 @@ public class HhQdKhlcntHdrReq {
 //	@NotNull(message = "Không được để trống")
 	private Long idThHdr;
 	private Long idTrHdr;
+
+	private BigDecimal donGiaVat;
 
 	private List<HhQdKhlcntDtlReq> dsDeXuat;
 	private List<FileDinhKemReq> fileDinhKems;

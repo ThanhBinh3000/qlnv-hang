@@ -49,6 +49,5 @@ public interface HhQdKhlcntHdrService {
 
 	List<HhQdKhlcntHdr> getAll(HhQdKhlcntSearchReq objReq) throws Exception;
 
-	Long countSoLuongKeHoachNam(CountKhlcntSlReq objReq) throws Exception;
 
 }

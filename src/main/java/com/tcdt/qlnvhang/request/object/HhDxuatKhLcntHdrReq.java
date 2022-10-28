@@ -58,7 +58,7 @@ public class HhDxuatKhLcntHdrReq {
 	@ApiModelProperty(example = "HNO")
 	String maDvi;
 
-	Long namKhoach;
+	Integer namKhoach;
 
 	@NotNull(message = "Không được để trống")
 	@Size(max = 500, message = "Tên dự án không được vượt quá 500 ký tự")

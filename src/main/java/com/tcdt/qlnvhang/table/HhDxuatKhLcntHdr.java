@@ -58,7 +58,7 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	String nguoiPduyet;
 	@Temporal(TemporalType.DATE)
 	Date ngayKy;
-	Long namKhoach;
+	Integer namKhoach;
 	String ghiChu;
 	String cloaiVthh;
 	@Transient
@@ -87,6 +87,7 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	String loaiHinhNx;
 	String kieuNx;
 	String diaChiDvi;
+	BigDecimal donGiaVat;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)
