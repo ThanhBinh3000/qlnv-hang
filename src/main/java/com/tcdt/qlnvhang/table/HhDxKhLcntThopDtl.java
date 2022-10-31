@@ -8,6 +8,8 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
 @Entity
@@ -28,19 +30,16 @@ public class HhDxKhLcntThopDtl implements Serializable {
 	@Transient
 	String tenDvi;
 	String soDxuat;
-	@Temporal(TemporalType.DATE)
-	Date ngayDxuat;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date ngayTao;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date ngayPduyet;
 	String tenDuAn;
 	BigDecimal soLuong;
-	BigDecimal donGia;
-	BigDecimal tongTien;
 	Long soGthau;
 	String namKhoach;
-	@Transient
 	String trichYeu;
-	@Transient
-	Integer gtriDthau;
-	@Transient
-	Integer gtriHdong;
+	String diaChiDvi;
+	BigDecimal donGiaVat;
 
 }

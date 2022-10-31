@@ -9,8 +9,10 @@ import java.util.List;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
 @Entity
@@ -29,18 +31,21 @@ public class HhQdKhlcntDtl implements Serializable {
 	@Transient
 	String tenDvi;
 	String soDxuat;
-	@Temporal(TemporalType.DATE)
-	Date ngayDxuat;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date ngayTao;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date ngayPduyet;
 	String tenDuAn;
 	BigDecimal soLuong;
-	BigDecimal donGia;
-	BigDecimal tongTien;
+	BigDecimal donGiaVat;
 	Long soGthau;
 	String namKhoach;
 	Long idDxHdr;
 	String trangThai;
 	@Transient
 	String tenTrangThai;
+	String diaChiDvi;
+	String trichYeu;
 
 	@Transient
 	private HhQdKhlcntHdr hhQdKhlcntHdr;

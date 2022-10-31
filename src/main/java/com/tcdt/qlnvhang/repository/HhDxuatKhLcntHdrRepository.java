@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.table.HhQdKhlcntHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.data.domain.Page;
@@ -87,9 +88,12 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 			nativeQuery = true)
 	List<HhQdKhlcntHdr> selectAll(String namKh, String loaiVthh, String cloaiVthh, String soQd, String tuNgayQd, String denNgayQd, String trangThai);
 
-	@Query(value = "select nvl(sum(so_luong),0) from HH_DX_KHLCNT_DSGTHAU dtl,HH_DX_KHLCNT_HDR hdr where dtl.id_dx_khlcnt = hdr.id and hdr.nam_khoach = :namKh and dtl.ma_dvi = :maDvi and hdr.loai_vthh = :loaiVthh  and hdr.TRANG_THAI = '05' ",
+	@Query(value = " SELECT NVL(SUM(DSG.SO_LUONG),0) FROM HH_QD_KHLCNT_HDR HDR " +
+			" INNER JOIN HH_QD_KHLCNT_DTL DTL on HDR.ID = DTL.ID_QD_HDR " +
+			" LEFT JOIN HH_QD_KHLCNT_DSGTHAU DSG ON DSG.ID_QD_DTL = DTL.ID " +
+			"WHERE HDR.NAM_KHOACH = :namKh AND HDR.LOAI_VTHH = :loaiVthh AND DSG.MA_DVI = :maDvi AND HDR.TRANG_THAI = :trangThai ",
 			nativeQuery = true)
-	BigDecimal countSLDalenKh(Integer namKh, String loaiVthh, String maDvi);
+	BigDecimal countSLDalenKh(Integer namKh, String loaiVthh, String maDvi,String trangThai);
 
 	HhDxuatKhLcntHdr findAllByLoaiVthhAndCloaiVthhAndNamKhoachAndMaDviAndTrangThaiNot(String loaiVthh,String cloaiVthh,Integer namKhoach,String maDvi,String trangThai);
 
