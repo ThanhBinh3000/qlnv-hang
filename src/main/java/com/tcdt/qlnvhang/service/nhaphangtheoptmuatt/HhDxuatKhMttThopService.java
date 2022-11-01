@@ -119,7 +119,6 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
         thopHdr.setCloaiVthh(objReq.getCloaiVthh());
         thopHdr.setNgayTao(getDateTimeNow());
         thopHdr.setNguoiTao(getUser().getUsername());
-        thopHdr.setNoiDung(objReq.getNoiDung());
         thopHdr.setTrangThai(Contains.CHUATAO_QD);
         thopHdr.setNgayThop(new Date());
         thopHdr.setNoiDung(objReq.getNoiDung());
@@ -134,6 +133,11 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
             List<String> soDxuatList = thopHdr.getHhDxKhMttThopDtls().stream().map(HhDxKhMttThopDtl::getSoDxuat)
                     .collect(Collectors.toList());
             hhDxuatKhMttRepository.updateTongHop(soDxuatList, String.valueOf(thopHdr.getId()));
+            List<HhDxuatKhMttHdr> list = hhDxuatKhMttRepository.findBySoDxuatIn(soDxuatList);
+            for (HhDxuatKhMttHdr soDxuat : list){
+                soDxuat.setNoiDungTh(thopHdr.getNoiDung());
+                hhDxuatKhMttRepository.save(soDxuat);
+            }
         }
         return thopHdr;
     }

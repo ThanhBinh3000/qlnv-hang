@@ -53,6 +53,7 @@ public class HhDxuatKhMttHdrReq {
     private String tenChuDt;
     private String maThop;
     private String diaChiDvi;
+    private String noiDungTh;
 
     private List<FileDinhKemReq> fileDinhkems =new ArrayList<>();
 
