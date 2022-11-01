@@ -5,6 +5,7 @@ import javax.transaction.Transactional;
 
 import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
 import com.tcdt.qlnvhang.table.HhQdKhlcntDsgthau;
+import com.tcdt.qlnvhang.table.HhQdKhlcntDtl;
 import org.springframework.data.domain.Page;
 
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -24,6 +25,8 @@ public interface HhQdKhlcntHdrService {
 	HhQdKhlcntHdr update(HhQdKhlcntHdrReq objReq) throws Exception;
 
 	HhQdKhlcntHdr detail(String ids) throws Exception;
+
+	HhQdKhlcntDtl detailDtl(Long ids) throws Exception;
 
 	HhQdKhlcntDsgthau detailGoiThau(String ids) throws Exception;
 

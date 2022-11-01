@@ -1,9 +1,7 @@
 package com.tcdt.qlnvhang.service.impl;
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.repository.HhDthauNthauDuthauRepository;
-import com.tcdt.qlnvhang.repository.HhQdKhlcntDsgthauRepository;
-import com.tcdt.qlnvhang.repository.HhQdKhlcntDtlRepository;
+import com.tcdt.qlnvhang.repository.*;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.HhDthauNthauDuthauReq;
 import com.tcdt.qlnvhang.request.object.HhDthauReq;
@@ -18,12 +16,16 @@ import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -41,6 +43,12 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 
     @Autowired
     HhQdKhlcntHdrService hhQdKhlcntHdrService;
+
+    @Autowired
+    HhQdKhlcntHdrRepository hhQdKhlcntHdrRepository;
+
+    @Autowired
+    HhDxuatKhLcntHdrRepository hhDxuatKhLcntHdrRepository;
 
 
     @Override
@@ -85,17 +93,32 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
     }
 
     @Override
-    public Page<HhQdKhlcntHdr> selectPage(HhQdKhlcntSearchReq objReq) throws Exception {
-        Page<HhQdKhlcntHdr> allPage = hhQdKhlcntHdrService.getAllPage(objReq);
+    public Page<HhQdKhlcntDtl> selectPage(HhQdKhlcntSearchReq objReq) throws Exception {
+        Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit(), Sort.by("id").ascending());
+        Page<HhQdKhlcntDtl> hhQdKhlcntDtls = dtlRepository.selectPage(objReq.getNamKhoach(), objReq.getLoaiVthh(), objReq.getMaDvi(), NhapXuatHangTrangThaiEnum.BAN_HANH.getId(),pageable);
+        Map<String,String> hashMapPthucDthau = getListDanhMucChung("PT_DTHAU");
+        Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 
-        allPage.getContent().forEach(item ->{
-            List<HhQdKhlcntDtl> allByIdQdHdr = dtlRepository.findAllByIdQdHdr(item.getId());
-            List<HhQdKhlcntDtl> collect = allByIdQdHdr.stream().filter(x -> x.getMaDvi().equals(objReq.getMaDvi())).collect(Collectors.toList());
-            if(!ObjectUtils.isEmpty(collect)){
-                item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(collect.get(0).getTrangThai()));
+        hhQdKhlcntDtls.getContent().forEach(item ->{
+            try {
+                // Set Hdr
+                HhQdKhlcntHdr hhQdKhlcntHdr = hhQdKhlcntHdrRepository.findById(item.getIdQdHdr()).get();
+                hhQdKhlcntHdr.setTenPthucLcnt(hashMapPthucDthau.get(hhQdKhlcntHdr.getPthucLcnt()));
+                hhQdKhlcntHdr.setTenCloaiVthh(hashMapDmHh.get(hhQdKhlcntHdr.getCloaiVthh()));
+                hhQdKhlcntHdr.setTenLoaiVthh(hashMapDmHh.get(hhQdKhlcntHdr.getLoaiVthh()));
+                item.setHhQdKhlcntHdr(hhQdKhlcntHdr);
+                List<HhQdKhlcntDsgthau> byIdQdDtl = goiThauRepository.findByIdQdDtl(item.getId());
+                long countThanhCong = byIdQdDtl.stream().filter(x -> x.getTrangThai().equals(NhapXuatHangTrangThaiEnum.THANH_CONG.getId())).count();
+                long countThatBai = byIdQdDtl.stream().filter(x -> x.getTrangThai().equals(NhapXuatHangTrangThaiEnum.THAT_BAI.getId())).count();
+                item.setSoGthauTrung(countThanhCong);
+                item.setSoGthauTruot(countThatBai);
+                item.setDxuatKhLcntHdr(hhDxuatKhLcntHdrRepository.findBySoDxuat(item.getSoDxuat()).get());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
+            item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
         });
-        return allPage;
+        return hhQdKhlcntDtls;
     }
 
     @Override
