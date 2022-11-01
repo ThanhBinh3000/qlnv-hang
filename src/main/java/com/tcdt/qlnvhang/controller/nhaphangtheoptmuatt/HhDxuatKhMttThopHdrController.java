@@ -31,7 +31,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/mua-truc-tiep")
 @Slf4j
-@Api(tags = "Tổng hợp đề xuất kế hoạch mua trực tiếp")
+@Api(tags = " Nhập hàng - Trực tiếp - Kế hoạch mưa trực tiếp - Tổng hợp đề xuất kế hoạch mua trực tiếp")
 public class HhDxuatKhMttThopHdrController  extends BaseController {
 
     @Autowired

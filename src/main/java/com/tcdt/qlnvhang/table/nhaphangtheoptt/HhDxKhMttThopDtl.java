@@ -24,7 +24,7 @@ public class HhDxKhMttThopDtl implements Serializable {
     String tenDvi;
 
     @Transient
-    private HhDxuatKhMttHdr listDxuatHdr= new HhDxuatKhMttHdr();
+    private HhDxuatKhMttHdr dxuatHdr= new HhDxuatKhMttHdr();
 
 
 }
