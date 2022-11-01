@@ -62,6 +62,10 @@ public class HhDxuatKhLcntDsgtDtlReq {
 	@NotNull(message = "Không được để trống")
 	Integer tgianThienHd;
 
+	BigDecimal soLuongChiTieu;
+
+	BigDecimal soLuongDaMua;
+
 	private List<HhDxuatKhLcntDsgthauDtlCtietReq> children = new ArrayList<>();
 
 }

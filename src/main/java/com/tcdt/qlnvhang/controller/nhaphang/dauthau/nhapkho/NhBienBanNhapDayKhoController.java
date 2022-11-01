@@ -31,7 +31,7 @@ public class NhBienBanNhapDayKhoController {
     private QlBienBanNhapDayKhoLtService qlBienBanNhapDayKhoLtService;
 
     @ApiOperation(value = "Tạo mới Quản lý biên bản nhập đầy kho lương thực", response = List.class)
-    @PostMapping
+    @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> insert(@Valid @RequestBody QlBienBanNhapDayKhoLtReq request) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -47,7 +47,7 @@ public class NhBienBanNhapDayKhoController {
     }
 
     @ApiOperation(value = "Sửa Quản lý biên bản nhập đầy kho lương thực", response = List.class)
-    @PutMapping
+    @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> update(@Valid @RequestBody QlBienBanNhapDayKhoLtReq request) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -63,11 +63,11 @@ public class NhBienBanNhapDayKhoController {
     }
 
     @ApiOperation(value = "Chi tiết Quản lý biên bản nhập đầy kho lương thực", response = List.class)
-    @GetMapping("/{id}")
-    public ResponseEntity<BaseResponse> detail(@PathVariable Long id) {
+    @GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> detail(@PathVariable Long ids) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(qlBienBanNhapDayKhoLtService.detail(id));
+            resp.setData(qlBienBanNhapDayKhoLtService.detail(ids));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

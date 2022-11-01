@@ -30,5 +30,6 @@ public class HhThongTinDviDtuCcap implements Serializable {
     private String moTai;
     private String giayUq;
     private String type;
+    private String mst;
 
 }

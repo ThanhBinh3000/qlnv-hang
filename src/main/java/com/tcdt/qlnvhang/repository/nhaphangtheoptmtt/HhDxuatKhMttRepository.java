@@ -24,15 +24,17 @@ public interface HhDxuatKhMttRepository extends JpaRepository<HhDxuatKhMttHdr, L
             "AND (:ngayDuyetTu IS NULL OR MTT.NGAY_PDUYET >=  TO_DATE(:ngayDuyetTu,'yyyy-MM-dd')) " +
             "AND (:ngayDuyetDen IS NULL OR MTT.NGAY_PDUYET <= TO_DATE(:ngayDuyetDen,'yyyy-MM-dd'))" +
             "AND (:trichYeu IS NULL OR LOWER(MTT.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%',:trichYeu),'%' ) ) )" +
+            "AND (:noiDungTh IS NULL OR LOWER(MTT.NOI_DUNG_TH) LIKE LOWER(CONCAT(CONCAT('%',:noiDungTh),'%' ) ) )" +
             "AND (:loaiVthh IS NULL OR MTT.LOAI_VTHH = :loaiVthh) " +
             "AND (:trangThai IS NULL OR MTT.TRANG_THAI = :trangThai)" +
             "AND (:trangThaiTh IS NULL OR MTT.TRANG_THAI_TH = :trangThaiTh) " +
             "AND (:maDvi IS NULL OR LOWER(MTT.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "
             ,nativeQuery = true)
-    Page<HhDxuatKhMttHdr> searchPage(Integer namKh, String soDxuat, String ngayTaoTu, String ngayTaoDen,String ngayDuyetTu, String ngayDuyetDen, String trichYeu, String loaiVthh, String trangThai, String trangThaiTh, String maDvi, Pageable pageable);
+    Page<HhDxuatKhMttHdr> searchPage(Integer namKh, String soDxuat, String ngayTaoTu, String ngayTaoDen,String ngayDuyetTu, String ngayDuyetDen, String trichYeu,String noiDungTh, String loaiVthh, String trangThai, String trangThaiTh, String maDvi, Pageable pageable);
 
 
     Optional<HhDxuatKhMttHdr> findBySoDxuat(String soDxuat);
+    List<HhDxuatKhMttHdr> findBySoDxuatIn (List<String> list);
 
     List <HhDxuatKhMttHdr>findAllByIdIn(List<Long> listId);
 
@@ -53,6 +55,7 @@ public interface HhDxuatKhMttRepository extends JpaRepository<HhDxuatKhMttHdr, L
     void updateTongHop(List<String> soDxuatList, String maThop);
 
     List<HhDxuatKhMttHdr> findByIdIn(List<Long> id);
+    List<HhDxuatKhMttHdr> findAllById(Long id);
 
     @Transactional()
     @Modifying

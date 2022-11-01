@@ -122,11 +122,12 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 			thopDtl.setMaDvi(dxuat.getMaDvi());
 			thopDtl.setTenDvi(getDviByMa(dxuat.getMaDvi(), req).getTenDvi());
 			thopDtl.setSoDxuat(dxuat.getSoDxuat());
-			thopDtl.setNgayDxuat(dxuat.getNgayKy());
+			thopDtl.setNgayTao(dxuat.getNgayTao());
+			thopDtl.setNgayPduyet(dxuat.getNgayPduyet());
+			thopDtl.setDiaChiDvi(dxuat.getDiaChiDvi());
 			thopDtl.setTenDuAn(dxuat.getTenDuAn());
 			thopDtl.setTrichYeu(dxuat.getTrichYeu());
-			thopDtl.setGtriDthau(dxuat.getGtriDthau());
-			thopDtl.setGtriHdong(dxuat.getGtriHdong());
+			thopDtl.setDonGiaVat(dxuat.getDonGiaVat());
 			// Add danh sach goi thau
 			List<HhDxKhlcntDsgthau> dtlsGThau = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcnt(dxuat.getId());
 			BigDecimal soLuong = BigDecimal.ZERO;
@@ -137,7 +138,6 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 				tongTien = tongTien.add(gthauDtl.getThanhTien() == null ? BigDecimal.ZERO : gthauDtl.getThanhTien());
 			}
 			thopDtl.setSoLuong(soLuong);
-			thopDtl.setTongTien(tongTien);
 			thopDtl.setSoGthau(Long.valueOf(soGthau));
 			tChuanCluong = tChuanCluong.concat(dxuat.getTchuanCluong()+",");
 			thopDtls.add(thopDtl);
@@ -319,7 +319,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 			thopDtl.setMaDvi(dxuat.getMaDvi());
 			thopDtl.setTenDvi(getDviByMa(dxuat.getMaDvi(), req).getTenDvi());
 			thopDtl.setSoDxuat(dxuat.getSoDxuat());
-			thopDtl.setNgayDxuat(dxuat.getNgayKy());
+//			thopDtl.setNgayDxuat(dxuat.getNgayKy());
 //			thopDtl.setTenDuAn(dtlsGao.getTenDuAn());
 
 			// Add danh sach goi thau
@@ -332,7 +332,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 //				tongTien = tongTien.add(gthauDtl.getThanhTien());
 //			}
 			thopDtl.setSoLuong(soLuong);
-			thopDtl.setTongTien(tongTien);
+//			thopDtl.setTongTien(tongTien);
 //			thopDtl.setSoGthau(Long.valueOf(soGthau));
 			thopDtl.setNamKhoach(dxuatList.get(0).getNamKhoach().toString());
 

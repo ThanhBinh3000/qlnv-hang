@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
+import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
 import org.springframework.data.domain.Page;
 
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -11,6 +12,8 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.HhDxuatKhLcntHdrReq;
 import com.tcdt.qlnvhang.request.search.HhDxuatKhLcntSearchReq;
 import com.tcdt.qlnvhang.table.HhDxuatKhLcntHdr;
+
+import java.math.BigDecimal;
 
 public interface HhDxuatKhLcntHdrService {
 
@@ -56,5 +59,8 @@ public interface HhDxuatKhLcntHdrService {
 //	@Transactional(rollbackOn = Exception.class)
 //	HhDxuatKhLcntHdr approveVatTu(StatusReq stReq) throws Exception;
 	Page<HhDxuatKhLcntHdr> selectDropdown(HhDxuatKhLcntSearchReq req) throws Exception;
+
+	BigDecimal countSoLuongKeHoachNam(CountKhlcntSlReq objReq) throws Exception;
+
 
 }

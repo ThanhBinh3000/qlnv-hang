@@ -29,6 +29,10 @@ public class HhDxKhlcntDsgthau implements Serializable {
 
 	private BigDecimal soLuong;
 
+	private BigDecimal soLuongChiTieu;
+
+	private BigDecimal soLuongDaMua;
+
 	private String maDvi;
 
 	@Transient

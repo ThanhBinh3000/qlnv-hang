@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
+import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
 import com.tcdt.qlnvhang.service.HhQdKhlcntHdrService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,7 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = PathContains.DX_KH + PathContains.DX_KH_LCNT)
-@Api(tags = "Đề xuất kế hoạch lựa chọn nhà thầu lương thực và vật tư")
+@Api(tags = "Nhập hàng - Đấu thầu - Đề xuất kế hoạch lựa chọn nhà thầu lương thực và vật tư")
 public class HhDxuatKhLcntHdrController {
 
 	@Autowired
@@ -286,7 +287,6 @@ public class HhDxuatKhLcntHdrController {
 		return ResponseEntity.ok(resp);
 	}
 
-
 	@ApiOperation(value = "Lấy tổng số lượng đã lên kế hoạch trong năm theo đơn vị, loại vật tư  hàng hóa", response = List.class)
 	@PostMapping(value = "/count-sl-kh", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
@@ -294,7 +294,7 @@ public class HhDxuatKhLcntHdrController {
 												   @Valid @RequestBody CountKhlcntSlReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(hhQdKhlcntHdrService.countSoLuongKeHoachNam(objReq));
+			resp.setData(service.countSoLuongKeHoachNam(objReq));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -304,4 +304,5 @@ public class HhDxuatKhLcntHdrController {
 		}
 		return ResponseEntity.ok(resp);
 	}
+
 }

@@ -95,11 +95,7 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
             thopDtl.setIdDxHdr(dxuat.getId());
             thopDtl.setSoDxuat(dxuat.getSoDxuat());
             Optional<HhDxuatKhMttHdr> dx = hhDxuatKhMttRepository.findById(dxuat.getId());
-            thopDtl.setListDxuatHdr(dx.get());
-            List<HhDxuatKhMttSldd> hhDxuatKhMttSldds= hhDxuatKhMttSlddRepository.findAllByIdDxKhmtt(dx.get().getId());
-            List<HhDxuatKhMttCcxdg> hhDxuatKhMttCcxdgs= hhDxuatKhMttCcxdgRepository.findAllByIdDxKhmtt(dx.get().getId());
-            dxuat.setSoLuongDiaDiemList(hhDxuatKhMttSldds);
-            dxuat.setCcXdgList(hhDxuatKhMttCcxdgs);
+            thopDtl.setDxuatHdr(dx.get());
 
             thopDtls.add(thopDtl);
         }
@@ -119,7 +115,6 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
         thopHdr.setCloaiVthh(objReq.getCloaiVthh());
         thopHdr.setNgayTao(getDateTimeNow());
         thopHdr.setNguoiTao(getUser().getUsername());
-        thopHdr.setNoiDung(objReq.getNoiDung());
         thopHdr.setTrangThai(Contains.CHUATAO_QD);
         thopHdr.setNgayThop(new Date());
         thopHdr.setNoiDung(objReq.getNoiDung());
@@ -134,6 +129,11 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
             List<String> soDxuatList = thopHdr.getHhDxKhMttThopDtls().stream().map(HhDxKhMttThopDtl::getSoDxuat)
                     .collect(Collectors.toList());
             hhDxuatKhMttRepository.updateTongHop(soDxuatList, String.valueOf(thopHdr.getId()));
+            List<HhDxuatKhMttHdr> list = hhDxuatKhMttRepository.findBySoDxuatIn(soDxuatList);
+            for (HhDxuatKhMttHdr soDxuat : list){
+                soDxuat.setNoiDungTh(thopHdr.getNoiDung());
+                hhDxuatKhMttRepository.save(soDxuat);
+            }
         }
         return thopHdr;
     }
@@ -177,7 +177,7 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
         List<HhDxuatKhMttHdr> lisDxuat=hhDxuatKhMttRepository.findAllByIdIn(idDxuat);
         for (HhDxKhMttThopDtl dtl : listTh){
             for(HhDxuatKhMttHdr dxuatKhMttHdr: lisDxuat ){
-                dtl.setListDxuatHdr(dxuatKhMttHdr);
+                dtl.setDxuatHdr(dxuatKhMttHdr);
             }
         }
         Map<String, String> mapDmucDvi = getMapTenDvi();
