@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
+import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
 import com.tcdt.qlnvhang.table.HhQdKhlcntDsgthau;
 import org.springframework.data.domain.Page;
 
@@ -47,5 +48,6 @@ public interface HhQdKhlcntHdrService {
 	Page<HhQdKhlcntHdr> getAllPage(HhQdKhlcntSearchReq objReq) throws Exception;
 
 	List<HhQdKhlcntHdr> getAll(HhQdKhlcntSearchReq objReq) throws Exception;
+
 
 }

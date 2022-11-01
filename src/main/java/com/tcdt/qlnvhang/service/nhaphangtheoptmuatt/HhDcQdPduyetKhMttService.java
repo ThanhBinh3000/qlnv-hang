@@ -84,6 +84,7 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         if(optional.isPresent()){
             throw new Exception("số quyết định đã tồn tại");
         }
+        Map<String, String> hashMapDmdv = getListDanhMucDvi(null, null, "01");
         HhDcQdPduyetKhmttHdr data = new ModelMapper().map(objReq,HhDcQdPduyetKhmttHdr.class);
         data.setNgayTao(new Date());
         data.setNguoiTao(userInfo.getUsername());
@@ -101,7 +102,8 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
             hhDcQdPduyetKhMttDxRepository.save(dx);
             for (HhDcQdPduyetKhmttSlddReq listSLDD : listDx.getHhDcQdPduyetKhmttSlddList()){
                 HhDcQdPduyetKhmttSldd slDd =ObjectMapperUtils.map(listSLDD, HhDcQdPduyetKhmttSldd.class);
-                slDd.setIdDxKhmtt(dx.getId());
+                slDd.setIdDxKhmtt(dx.getIdDxuat());
+                slDd.setIdDcKhmtt(dx.getId());
                 slDd.setMaDiemKho(userInfo.getDvql());
                 slDd.setDonGiaVat(dx.getGiaCoThue());
                 slDd.setThanhTien(slDd.getDonGiaVat().multiply(slDd.getSoLuongDxmtt()));
@@ -135,7 +137,7 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
 
         List<HhDcQdPduyetKhmttDx> dcQdPduyetKhmttDxList=hhDcQdPduyetKhMttDxRepository.findAllByIdDcHdr(data.getId());
         List<Long>  listIdDx=dcQdPduyetKhmttDxList.stream().map(HhDcQdPduyetKhmttDx::getId).collect(Collectors.toList());
-        List<HhDcQdPduyetKhmttSldd> listSlDd=hhDcQdPduyetKhmttSlddRepository.findAllByIdDxKhmttIn(listIdDx);
+        List<HhDcQdPduyetKhmttSldd> listSlDd=hhDcQdPduyetKhmttSlddRepository.findAllByIdDcKhmttIn(listIdDx);
         hhDcQdPduyetKhMttDxRepository.deleteAll(dcQdPduyetKhmttDxList);
         for (HhDcQdPduyetKhmttDxReq listDx :objReq.getHhDcQdPduyetKhmttDxList()){
             HhDcQdPduyetKhmttDx dx = ObjectMapperUtils.map(listDx, HhDcQdPduyetKhmttDx.class);
@@ -146,7 +148,8 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
             hhDcQdPduyetKhmttSlddRepository.deleteAll(listSlDd);
             for (HhDcQdPduyetKhmttSlddReq listSLDD : listDx.getHhDcQdPduyetKhmttSlddList()){
                 HhDcQdPduyetKhmttSldd slDd =ObjectMapperUtils.map(listSLDD, HhDcQdPduyetKhmttSldd.class);
-                slDd.setIdDxKhmtt(dx.getId());
+                slDd.setIdDxKhmtt(dx.getIdDxuat());
+                slDd.setIdDcKhmtt(dx.getId());
                 slDd.setMaDiemKho(userInfo.getDvql());
                 slDd.setDonGiaVat(dx.getGiaCoThue());
                 slDd.setThanhTien(slDd.getDonGiaVat().multiply(slDd.getSoLuongDxmtt()));
@@ -177,10 +180,11 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
             pduyetDx.setTenLoaiVthh(StringUtils.isEmpty(pduyetDx.getLoaiVthh()) ? null : hashMapDmHh.get(pduyetDx.getLoaiVthh()));
             pduyetDx.setTenCloaiVthh(StringUtils.isEmpty(pduyetDx.getCloaiVthh()) ? null : hashMapDmHh.get(pduyetDx.getCloaiVthh()));
             pduyetDx.setTenChuDt(StringUtils.isEmpty(pduyetDx.getMaDvi()) ? null : hashMapDmdv.get(userInfo.getTenDvi()));
+            pduyetDx.setTenDvi(StringUtils.isEmpty(pduyetDx.getMaDvi()) ? null : hashMapDmdv.get(pduyetDx.getMaDvi()));
             List<Long> idDx=listdx.stream().map(HhDcQdPduyetKhmttDx::getId).collect(Collectors.toList());
-            List<HhDcQdPduyetKhmttSldd> listSlDd =hhDcQdPduyetKhmttSlddRepository.findAllByIdDxKhmttIn(idDx);
+            List<HhDcQdPduyetKhmttSldd> listSlDd =hhDcQdPduyetKhmttSlddRepository.findAllByIdDcKhmttIn(idDx);
             for (HhDcQdPduyetKhmttSldd sldd:listSlDd){
-                sldd.setTenDvi(StringUtils.isEmpty(sldd.getMaDvi()) ? null : hashMapDmdv.get(userInfo.getTenDvi()));
+                sldd.setTenDvi(StringUtils.isEmpty(sldd.getMaDvi()) ? null : hashMapDmdv.get(sldd.getMaDvi()));
             }
             pduyetDx.setHhDcQdPduyetKhmttSlddList(listSlDd);
         }
@@ -202,7 +206,7 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         HhDcQdPduyetKhmttHdr data = optional.get();
         List<HhDcQdPduyetKhmttDx> dcQdPduyetKhmttDxList =hhDcQdPduyetKhMttDxRepository.findAllByIdDcHdr(data.getId());
         List<Long>  listIdDx=dcQdPduyetKhmttDxList.stream().map(HhDcQdPduyetKhmttDx::getId).collect(Collectors.toList());
-        List<HhDcQdPduyetKhmttSldd> listSlDd=hhDcQdPduyetKhmttSlddRepository.findAllByIdDxKhmttIn(listIdDx);
+        List<HhDcQdPduyetKhmttSldd> listSlDd=hhDcQdPduyetKhmttSlddRepository.findAllByIdDcKhmttIn(listIdDx);
         hhDcQdPduyetKhMttDxRepository.deleteAll(dcQdPduyetKhmttDxList);
         hhDcQdPduyetKhmttSlddRepository.deleteAll(listSlDd);
         fileDinhKemService.delete(data.getId(),  Lists.newArrayList("HH_QD_PHE_DUYET_KHMTT_HDR"));
@@ -225,7 +229,7 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         List<Long> listId=list.stream().map(HhDcQdPduyetKhmttHdr::getId).collect(Collectors.toList());
         List<HhDcQdPduyetKhmttDx> listPduyet=hhDcQdPduyetKhMttDxRepository.findAllByIdDcHdrIn(listId);
         List<Long> listIdDx=listPduyet.stream().map(HhDcQdPduyetKhmttDx::getId).collect(Collectors.toList());
-        List<HhDcQdPduyetKhmttSldd> listSlDd=hhDcQdPduyetKhmttSlddRepository.findAllByIdDxKhmttIn(listIdDx);
+        List<HhDcQdPduyetKhmttSldd> listSlDd=hhDcQdPduyetKhmttSlddRepository.findAllByIdDcKhmttIn(listIdDx);
 
         hhDcQdPduyetKhMttDxRepository.deleteAll(listPduyet);
         hhDcQdPduyetKhmttSlddRepository.deleteAll(listSlDd);

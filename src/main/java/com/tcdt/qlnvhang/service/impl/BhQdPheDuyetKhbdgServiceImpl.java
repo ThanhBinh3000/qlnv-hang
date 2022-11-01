@@ -149,7 +149,6 @@ public class BhQdPheDuyetKhbdgServiceImpl extends BaseServiceImpl implements BhQ
 			keHoachBanDauGiaRepository.saveAll(listDx);
 		}
 		//Cập nhật số qd phê duyệt vào bản ghi Tổng hợp đề xuất
-
 		return qdPheduyetKhbdgResponseMapper.toDto(theEntity);
 	}
 

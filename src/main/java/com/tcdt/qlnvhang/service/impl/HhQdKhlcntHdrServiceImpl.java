@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.*;
+import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.object.HhDxuatKhLcntDsgthauDtlCtietReq;
 import com.tcdt.qlnvhang.request.object.HhQdKhlcntDsgthauReq;
@@ -74,9 +75,11 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh()))
 			throw new Exception("Loại vật tư hàng hóa không phù hợp");
 
-		List<HhQdKhlcntHdr> checkSoQd = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQd());
-		if (!checkSoQd.isEmpty()) {
-			throw new Exception("Số quyết định " + objReq.getSoQd() + " đã tồn tại");
+		if(!StringUtils.isEmpty(objReq.getSoQd())){
+			List<HhQdKhlcntHdr> checkSoQd = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQd());
+			if (!checkSoQd.isEmpty()) {
+				throw new Exception("Số quyết định " + objReq.getSoQd() + " đã tồn tại");
+			}
 		}
 
 		if(objReq.getPhanLoai().equals("TH")){
@@ -221,10 +224,12 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			throw new Exception("Không tìm thấy dữ liệu cần sửa");
 		}
 
-		if (!qOptional.get().getSoQd().equals(objReq.getSoQd())) {
-			List<HhQdKhlcntHdr> checkSoQd = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQd());
-			if (!checkSoQd.isEmpty()) {
-				throw new Exception("Số quyết định " + objReq.getSoQd() + " đã tồn tại");
+		if(!StringUtils.isEmpty(objReq.getSoQd())){
+			if (!objReq.getSoQd().equals(qOptional.get().getSoQd())) {
+				List<HhQdKhlcntHdr> checkSoQd = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQd());
+				if (!checkSoQd.isEmpty()) {
+					throw new Exception("Số quyết định " + objReq.getSoQd() + " đã tồn tại");
+				}
 			}
 		}
 
@@ -618,6 +623,12 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 //		hhQdKhlcntDtlRepository.deleteAllByIdQdHdr(optional.get().getId());
 		//Xóa header
 		hhQdKhlcntHdrRepository.delete(optional.get());
+		// Update trạng thái tổng hợp dxkhclnt
+		if(optional.get().getPhanLoai().equals("TH")){
+			hhDxKhLcntThopHdrRepository.updateTrangThai(optional.get().getIdThHdr(), NhapXuatHangTrangThaiEnum.CHUATAO_QD.getId());
+		}else{
+			hhDxuatKhLcntHdrRepository.updateStatusInList(Arrays.asList(optional.get().getSoTrHdr()), NhapXuatHangTrangThaiEnum.CHUATAO_QD.getId());
+		}
 	}
 
 	@Override
@@ -850,5 +861,6 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
 		ex.export();
 	}
+
 
 }

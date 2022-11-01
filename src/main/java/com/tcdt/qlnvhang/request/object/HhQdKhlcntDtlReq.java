@@ -37,7 +37,11 @@ public class HhQdKhlcntDtlReq {
 
 	@NotNull(message = "Không được để trống")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-	Date ngayDxuat;
+	Date ngayTao;
+
+	@NotNull(message = "Không được để trống")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date ngayPduyet;
 
 	@NotNull(message = "Không được để trống")
 	@Size(max = 250, message = "Tên dự án không được vượt quá 250 ký tự")
@@ -45,7 +49,7 @@ public class HhQdKhlcntDtlReq {
 	String tenDuAn;
 
 	BigDecimal soLuong;
-	BigDecimal donGia;
+	BigDecimal donGiaVat;
 	BigDecimal tongTien;
 	Long soGthau;
 
@@ -55,6 +59,9 @@ public class HhQdKhlcntDtlReq {
 	String namKhoach;
 
 	Long idDxHdr;
+
+	String diaChiDvi;
+	String trichYeu;
 
 	private List<HhQdKhlcntDsgthauReq> dsGoiThau;
 

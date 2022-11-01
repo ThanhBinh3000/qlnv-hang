@@ -5,6 +5,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
+import com.tcdt.qlnvhang.service.HhQdKhlcntHdrService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -41,6 +43,10 @@ public class HhPhuLucHdController {
 
 	@Autowired
 	private HhPhuLucHdService service;
+
+
+	@Autowired
+	private HhQdKhlcntHdrService hhQdKhlcntHdrService;
 
 	@ApiOperation(value = "Tạo mới thông tin phụ lục hợp đồng", response = List.class)
 	@PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -164,5 +170,7 @@ public class HhPhuLucHdController {
 
 		return ResponseEntity.ok(resp);
 	}
+
+
 
 }

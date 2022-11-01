@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -34,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = PathContains.DX_KH + PathContains.QD_LCNT)
-@Api(tags = "Quyết định phê duyệt kế hoạch lựa chọn nhà thầu lương thực và vật tư")
+@Api(tags = "Nhập hàng - Đấu thầu - Kế hoạch lcnt - Quyết định phê duyệt kế hoạch lựa chọn nhà thầu")
 public class HhQdKhlcntHdrController {
 
 	@Autowired
