@@ -71,6 +71,7 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
                 Contains.convertDateToString(objReq.getNgayDuyetTu()),
                 Contains.convertDateToString(objReq.getNgayDuyetDen()),
                 objReq.getTrichYeu(),
+                objReq.getNoiDungTh(),
                 objReq.getLoaiVthh(),
                 objReq.getTrangThai(),
                 objReq.getTrangThaiTh(),

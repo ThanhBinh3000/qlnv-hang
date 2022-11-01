@@ -94,14 +94,9 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
             HhDxKhMttThopDtl thopDtl = new HhDxKhMttThopDtl();
             thopDtl.setIdDxHdr(dxuat.getId());
             thopDtl.setSoDxuat(dxuat.getSoDxuat());
-            List<HhDxuatKhMttHdr> dx = hhDxuatKhMttRepository.findAllByIdIn(Collections.singletonList(dxuat.getId()));
-            thopDtl.setListDxuatHdr(dx);
-            for (HhDxuatKhMttHdr deXuat : dx){
-                List<HhDxuatKhMttSldd> hhDxuatKhMttSldds= hhDxuatKhMttSlddRepository.findAllByIdDxKhmtt(deXuat.getId());
-                List<HhDxuatKhMttCcxdg> hhDxuatKhMttCcxdgs= hhDxuatKhMttCcxdgRepository.findAllByIdDxKhmtt(deXuat.getId());
-                dxuat.setSoLuongDiaDiemList(hhDxuatKhMttSldds);
-                dxuat.setCcXdgList(hhDxuatKhMttCcxdgs);
-            }
+            Optional<HhDxuatKhMttHdr> dx = hhDxuatKhMttRepository.findById(dxuat.getId());
+            thopDtl.setDxuatHdr(dx.get());
+
             thopDtls.add(thopDtl);
         }
         thopHdr.setHhDxKhMttThopDtls(thopDtls);
@@ -120,7 +115,6 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
         thopHdr.setCloaiVthh(objReq.getCloaiVthh());
         thopHdr.setNgayTao(getDateTimeNow());
         thopHdr.setNguoiTao(getUser().getUsername());
-        thopHdr.setNoiDung(objReq.getNoiDung());
         thopHdr.setTrangThai(Contains.CHUATAO_QD);
         thopHdr.setNgayThop(new Date());
         thopHdr.setNoiDung(objReq.getNoiDung());
@@ -135,6 +129,11 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
             List<String> soDxuatList = thopHdr.getHhDxKhMttThopDtls().stream().map(HhDxKhMttThopDtl::getSoDxuat)
                     .collect(Collectors.toList());
             hhDxuatKhMttRepository.updateTongHop(soDxuatList, String.valueOf(thopHdr.getId()));
+            List<HhDxuatKhMttHdr> list = hhDxuatKhMttRepository.findBySoDxuatIn(soDxuatList);
+            for (HhDxuatKhMttHdr soDxuat : list){
+                soDxuat.setNoiDungTh(thopHdr.getNoiDung());
+                hhDxuatKhMttRepository.save(soDxuat);
+            }
         }
         return thopHdr;
     }
@@ -175,18 +174,17 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
 
         List<HhDxKhMttThopDtl> listTh = hhDxuatKhMttThopDtlRepository.findByIdThopHdr(hdrThop.getId());
         List<Long> idDxuat=listTh.stream().map(HhDxKhMttThopDtl::getIdDxHdr).collect(Collectors.toList());
-        for (Long idDx :idDxuat){
-            Optional<HhDxuatKhMttHdr> deXuat = hhDxuatKhMttRepository.findById(idDx);
-        }
+        List<HhDxuatKhMttHdr> lisDxuat=hhDxuatKhMttRepository.findAllByIdIn(idDxuat);
         for (HhDxKhMttThopDtl dtl : listTh){
-            List<HhDxuatKhMttHdr> deXuat = hhDxuatKhMttRepository.findAllById(dtl.getIdDxHdr());
-            dtl.setListDxuatHdr(deXuat);
+            for(HhDxuatKhMttHdr dxuatKhMttHdr: lisDxuat ){
+                dtl.setDxuatHdr(dxuatKhMttHdr);
+            }
         }
-        hdrThop.setHhDxKhMttThopDtls(listTh);
         Map<String, String> mapDmucDvi = getMapTenDvi();
         listTh.forEach(f -> {
             f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
         });
+        hdrThop.setHhDxKhMttThopDtls(listTh);
 
         return hdrThop;
     }
