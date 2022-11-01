@@ -65,7 +65,7 @@ public class HhQdKhlcntHdrReq {
 //	@NotNull(message = "Không được để trống")
 	@Size(max = 4, message = "Năm kế hoạch không được vượt quá 4 ký tự")
 	@ApiModelProperty(example = "2022")
-	String namKhoach;
+	Integer namKhoach;
 
 //	@NotNull(message = "Không được để trống")
 	@Size(max = 20, message = "Căn cứ quyết định giao chỉ tiêu không được vượt quá 20 ký tự")

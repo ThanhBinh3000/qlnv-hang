@@ -20,6 +20,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Where;
@@ -122,7 +123,7 @@ public class HhQdKhlcntHdr implements Serializable {
 
 	String trichYeu;
 
-	Long namKhoach;
+	Integer namKhoach;
 
 	Integer tgianThienHd;
 
@@ -159,6 +160,7 @@ public class HhQdKhlcntHdr implements Serializable {
 
 	@Transient
 	private List<HhQdKhlcntDtl> hhQdKhlcntDtlList = new ArrayList<>();
+
 	@Transient
 	BigDecimal tongTien;
 	@Transient

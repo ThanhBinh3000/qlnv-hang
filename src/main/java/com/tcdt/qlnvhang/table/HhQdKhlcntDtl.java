@@ -10,6 +10,7 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import com.tcdt.qlnvhang.util.Contains;
@@ -39,6 +40,12 @@ public class HhQdKhlcntDtl implements Serializable {
 	BigDecimal soLuong;
 	BigDecimal donGiaVat;
 	Long soGthau;
+
+	@Transient
+	Long soGthauTrung;
+
+	@Transient
+	Long soGthauTruot;
 	String namKhoach;
 	Long idDxHdr;
 	String trangThai;
@@ -49,6 +56,9 @@ public class HhQdKhlcntDtl implements Serializable {
 
 	@Transient
 	private HhQdKhlcntHdr hhQdKhlcntHdr;
+
+	@Transient
+	private HhDxuatKhLcntHdr dxuatKhLcntHdr;
 
 	@Transient
 	private List<HhQdKhlcntDsgthau> dsGoiThau = new ArrayList<>();

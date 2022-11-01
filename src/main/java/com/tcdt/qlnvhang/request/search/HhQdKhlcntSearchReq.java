@@ -17,7 +17,7 @@ import lombok.Setter;
 public class HhQdKhlcntSearchReq extends BaseRequest {
 
 	@ApiModelProperty(example = "2022")
-	String namKhoach;
+	Integer namKhoach;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date tuNgayQd;

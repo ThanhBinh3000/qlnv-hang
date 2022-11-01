@@ -209,7 +209,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
             List<Long> idDx=listdx.stream().map(HhQdPheduyetKhMttDx::getId).collect(Collectors.toList());
             List<HhQdPheduyetKhMttSLDD> listSlDd =hhQdPheduyetKhMttSLDDRepository.findAllByIdDxKhmttIn(idDx);
             for (HhQdPheduyetKhMttSLDD sldd:listSlDd){
-                sldd.setTenDvi(StringUtils.isEmpty(sldd.getMaDvi()) ? null : hashMapDmdv.get(userInfo.getTenDvi()));
+                sldd.setTenDvi(StringUtils.isEmpty(sldd.getMaDvi()) ? null : hashMapDmdv.get(sldd.getMaDvi()));
             }
             pduyetDx.setSoLuongDiaDiemList(listSlDd);
         }
