@@ -298,7 +298,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                 optional.get().setNgayPduyet(getDateTimeNow());
                 optional.get().setLdoTuchoi(statusReq.getLyDo());
                 break;
-            case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
+            case Contains.BAN_HANH + Contains.CHODUYET_LDC:
                 optional.get().setNguoiPduyet(getUser().getUsername());
                 optional.get().setNgayPduyet(getDateTimeNow());
                 break;
