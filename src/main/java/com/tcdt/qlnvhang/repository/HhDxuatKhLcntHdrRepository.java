@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.repository;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -97,4 +98,13 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 
 	HhDxuatKhLcntHdr findAllByLoaiVthhAndCloaiVthhAndNamKhoachAndMaDviAndTrangThaiNot(String loaiVthh,String cloaiVthh,Integer namKhoach,String maDvi,String trangThai);
 
+	@Query(value = "SELECT DX_HDR.ID AS A,QD_HDR.ID,QD_HDR.SO_QD," +
+			"       NVL((SELECT COUNT(QD_GT.ID)  FROM  HH_QD_KHLCNT_DSGTHAU QD_GT WHERE (:trangThai is null or QD_GT.TRANG_THAI = :trangThai) AND QD_GT.ID_QD_DTL = QD_DTL.ID GROUP BY QD_DTL.ID),0) AS C " +
+			" FROM HH_DX_KHLCNT_HDR DX_HDR , HH_QD_KHLCNT_DTL QD_DTL , HH_QD_KHLCNT_HDR QD_HDR " +
+			" WHERE DX_HDR.ID = QD_DTL.ID_DX_HDR " +
+			" AND QD_HDR.ID = QD_DTL.ID_QD_HDR " +
+			" AND QD_HDR.LASTEST = 1 " +
+			" AND DX_HDR.ID IN (:dxIds) "
+			, nativeQuery = true)
+	List<Object[]> getQdPdKhLcnt(Collection<Long> dxIds, String trangThai);
 }

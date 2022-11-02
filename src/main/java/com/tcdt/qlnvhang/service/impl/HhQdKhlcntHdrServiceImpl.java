@@ -622,6 +622,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		BeanUtils.copyProperties(hdr, hdrClone);
 		hdrClone.setId(null);
 		hdrClone.setLastest(true);
+		hdrClone.setIdGoc(hdr.getId());
 		hhQdKhlcntHdrRepository.save(hdrClone);
 
 		if(isVatTu){
@@ -767,13 +768,15 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				req.getTrangThaiDtl(),
 				pageable);
 		List<Long> ids = data.getContent().stream().map(HhQdKhlcntHdr::getId).collect(Collectors.toList());
-		List<Object[]> listGthau = hhQdKhlcntDtlRepository.countAllBySoGthau(ids);
+		List<Object[]> listGthau = hhQdKhlcntDtlRepository.countAllBySoGthau(ids,null);
+		List<Object[]> listGthau2 = hhQdKhlcntDtlRepository.countAllBySoGthau(ids,NhapXuatHangTrangThaiEnum.THANH_CONG.getId());
 		List<Object[]> listSum = hhQdKhlcntDtlRepository.sumTongTienByIdHdr(ids);
 		Map<String,String> hashMapSum = new HashMap<>();
 		for (Object[] it: listSum) {
 			hashMapSum.put(it[0].toString(),it[1].toString());
 		}
 		Map<String,String> soGthau = new HashMap<>();
+		Map<String,String> soGthau2 = new HashMap<>();
 		for (HhQdKhlcntHdr f : data.getContent()) {
 			f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
 			f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
@@ -789,9 +792,13 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		for (Object[] it: listGthau) {
 			soGthau.put(it[0].toString(),it[1].toString());
 		}
+		for (Object[] it: listGthau2) {
+			soGthau2.put(it[0].toString(),it[1].toString());
+		}
 		for (HhQdKhlcntHdr qd:data.getContent()) {
 			qd.setSoGthau(StringUtils.isEmpty(soGthau.get(qd.getId().toString())) ? 0 : Long.parseLong(soGthau.get(qd.getId().toString())));
 			qd.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qd.getTrangThai()));
+			qd.setSoGthauTrung(StringUtils.isEmpty(soGthau2.get(qd.getId().toString())) ? 0 : Long.parseLong(soGthau2.get(qd.getId().toString())));
 		}
 		return data;
 	}

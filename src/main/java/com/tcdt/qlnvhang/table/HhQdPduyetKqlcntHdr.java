@@ -40,6 +40,9 @@ public class HhQdPduyetKqlcntHdr implements Serializable {
 	String trichYeu;
 	String soQdPdKhlcnt;
 	Long idQdPdKhlcnt;
+	Long idQdPdKhlcntDtl;
+	@Temporal(TemporalType.DATE)
+	Date ngayKy;
 
 	String maDvi;
 	@Transient
@@ -74,6 +77,9 @@ public class HhQdPduyetKqlcntHdr implements Serializable {
 
 	@Transient
 	String tenTrangThaiHd;
+
+	@Transient
+	Integer soGthau;
 
 
 	public String getTenTrangThaiHd() {

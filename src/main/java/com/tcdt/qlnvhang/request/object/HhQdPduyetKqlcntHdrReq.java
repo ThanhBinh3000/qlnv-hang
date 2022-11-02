@@ -24,7 +24,6 @@ public class HhQdPduyetKqlcntHdrReq {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayHluc;
 
-	@NotNull(message = "Không được để trống")
 	@Size(max = 20, message = "Số quyết định không được vượt quá 20 ký tự")
 	@ApiModelProperty(example = "20/QD-TCDT")
 	String soQd;
@@ -39,6 +38,11 @@ public class HhQdPduyetKqlcntHdrReq {
 	String soQdPdKhlcnt;
 
 	Long idQdPdKhlcnt;
+
+	Long idQdPdKhlcntDtl;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date ngayKy;
 
 	@Size(max = 500, message = "Ghi chú không được vượt quá 500 ký tự")
 	@ApiModelProperty(example = "00")

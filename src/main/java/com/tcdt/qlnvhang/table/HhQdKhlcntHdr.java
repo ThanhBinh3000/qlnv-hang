@@ -138,6 +138,8 @@ public class HhQdKhlcntHdr implements Serializable {
 
 	String phanLoai;
 
+	Long idGoc;
+
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)
 	@JoinColumn(name = "dataId")
@@ -165,6 +167,8 @@ public class HhQdKhlcntHdr implements Serializable {
 	BigDecimal tongTien;
 	@Transient
 	Long soGthau;
+	@Transient
+	Long soGthauTrung;
 	@Transient
 	String tenTrangThai;
 }
