@@ -13,6 +13,7 @@ import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.object.HhDxuatKhLcntDsgthauDtlCtietReq;
 import com.tcdt.qlnvhang.request.object.HhQdKhlcntDsgthauReq;
+import com.tcdt.qlnvhang.service.feign.KeHoachService;
 import com.tcdt.qlnvhang.table.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
@@ -58,6 +59,9 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 
 	@Autowired
 	private HhDxKhLcntThopHdrRepository hhDxKhLcntThopHdrRepository;
+
+	@Autowired
+	private KeHoachService keHoachService;
 
 	@Override
 	@Transactional
@@ -110,7 +114,6 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setChildren(fileDinhKemList);
 		dataMap.setLastest(objReq.getLastest());
-		this.validateData(dataMap);
 		hhQdKhlcntHdrRepository.save(dataMap);
 
 		// Update trạng thái tổng hợp dxkhclnt
@@ -206,27 +209,12 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			for(HhQdKhlcntDsgthau dsgthau : dtl.getDsGoiThau()){
 				BigDecimal aLong = hhDxuatKhLcntHdrRepository.countSLDalenKh(objHdr.getNamKhoach(), objHdr.getLoaiVthh(), dsgthau.getMaDvi(),NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
 				BigDecimal soLuongTotal = aLong.add(dsgthau.getSoLuong());
-//				if(soLuongTotal.compareTo(chiCuc.getSoLuongChiTieu()) > 0){
-//					throw new Exception(dsgthau.getTenDvi() + " đã nhập quá số lượng chi tiêu, vui lòng nhập lại");
-//				}
+				BigDecimal nhap = keHoachService.getChiTieuNhapXuat(objHdr.getNamKhoach(), objHdr.getLoaiVthh(), dsgthau.getMaDvi(), "NHAP");
+				if(soLuongTotal.compareTo(nhap) > 0){
+					throw new Exception(dsgthau.getTenDvi() + " đã nhập quá số lượng chi tiêu, vui lòng nhập lại");
+				}
 			}
 		}
-
-//		if(trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.DUTHAO.getId())){
-//			HhDxuatKhLcntHdr dXuat = hhDxuatKhLcntHdrRepository.findAllByLoaiVthhAndCloaiVthhAndNamKhoachAndMaDviAndTrangThaiNot(objHdr.getLoaiVthh(), objHdr.getCloaiVthh(), objHdr.getNamKhoach(), objHdr.getMaDvi(),NhapXuatHangTrangThaiEnum.DUTHAO.getId());
-//			if(!ObjectUtils.isEmpty(dXuat) && !dXuat.getId().equals(objHdr.getId())){
-//				throw new Exception("Chủng loại hàng hóa đã được tạo và gửi duyệt, xin vui lòng chọn lại chủng loại hàng hóa khác");
-//			}
-//		}
-//		if(trangThai.equals(NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId())) {
-//			for(HhDxKhlcntDsgthau chiCuc : objHdr.getDsGtDtlList()){
-//				BigDecimal aLong = hhDxuatKhLcntHdrRepository.countSLDalenKh(objHdr.getNamKhoach(), objHdr.getLoaiVthh(), chiCuc.getMaDvi(),NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
-//				BigDecimal soLuongTotal = aLong.add(chiCuc.getSoLuong());
-//				if(soLuongTotal.compareTo(chiCuc.getSoLuongChiTieu()) > 0){
-//					throw new Exception(chiCuc.getTenDvi() + " đã nhập quá số lượng chi tiêu, vui lòng nhập lại");
-//				}
-//			}
-//		}
 	}
 
 	@Override
@@ -395,6 +383,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 
 		Optional<HhQdKhlcntHdr> qOptional = hhQdKhlcntHdrRepository.findById(Long.parseLong(ids));
 
+
 		if (!qOptional.isPresent())
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
 
@@ -539,14 +528,11 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		if (StringUtils.isEmpty(stReq.getId())){
 			throw new Exception("Không tìm thấy dữ liệu");
 		}
-		Optional<HhQdKhlcntHdr> optional = hhQdKhlcntHdrRepository.findById(Long.valueOf(stReq.getId()));
-		if (!optional.isPresent()){
-			throw new Exception("Không tìm thấy dữ liệu");
-		}
-		if(optional.get().getLoaiVthh().startsWith("02")){
-			return this.approveVatTu(stReq,optional.get());
+		HhQdKhlcntHdr detail = detail(String.valueOf(stReq.getId()));
+		if(detail.getLoaiVthh().startsWith("02")){
+			return this.approveVatTu(stReq,detail);
 		}else{
-			return this.approveLT(stReq,optional.get());
+			return this.approveLT(stReq,detail);
 		}
 	}
 
