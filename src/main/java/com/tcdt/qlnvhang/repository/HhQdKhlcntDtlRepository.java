@@ -19,6 +19,15 @@ public interface HhQdKhlcntDtlRepository extends JpaRepository<HhQdKhlcntDtl, Lo
 
     HhQdKhlcntDtl findByIdQdHdr(Long idQdHdr);
 
+    @Query(value = "SELECT HDR.ID,COUNT(GT.ID) AS C " +
+            " FROM HH_QD_KHLCNT_HDR HDR , HH_QD_KHLCNT_DTL DTL , HH_QD_KHLCNT_DSGTHAU GT " +
+            "  WHERE GT.ID_QD_DTL = DTL.ID " +
+            "  AND HDR.ID = DTL.ID_QD_HDR " +
+            "  AND HDR.ID IN (:qdIds) " +
+            "  AND HDR.LASTEST = 0 GROUP BY HDR.ID "
+            , nativeQuery = true)
+    List<Object[]> countAllBySoGthau(Collection<Long> qdIds);
+
     @Query(value = "SELECT HDR.ID_GOC,COUNT(GT.ID) AS C " +
             "    FROM HH_QD_KHLCNT_HDR HDR , HH_QD_KHLCNT_DTL DTL , HH_QD_KHLCNT_DSGTHAU GT " +
             "    WHERE GT.ID_QD_DTL = DTL.ID" +
@@ -27,7 +36,7 @@ public interface HhQdKhlcntDtlRepository extends JpaRepository<HhQdKhlcntDtl, Lo
             "      AND HDR.LASTEST = 1 " +
             "      AND (:trangThai is null or GT.TRANG_THAI = :trangThai) GROUP BY HDR.ID_GOC"
             , nativeQuery = true)
-    List<Object[]> countAllBySoGthau(Collection<Long> qdIds,String trangThai);
+    List<Object[]> countAllBySoGthauStatus(Collection<Long> qdIds,String trangThai);
 
     @Query(value = "SELECT ID_QD_HDR,NVL(SUM(DTL.TONG_TIEN),0) FROM HH_QD_KHLCNT_DTL DTL WHERE ID_QD_HDR in (:qdIds) group by ID_QD_HDR ",
             nativeQuery = true)

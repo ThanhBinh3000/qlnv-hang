@@ -689,9 +689,15 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		 */
 		List<HhQdKhlcntDtl> hhQdKhlcntDtl = hhQdKhlcntDtlRepository.findAllByIdQdHdr(optional.get().getId());
 		if(!CollectionUtils.isEmpty(hhQdKhlcntDtl)){
+			for (HhQdKhlcntDtl dtl:hhQdKhlcntDtl) {
+				List<HhQdKhlcntDsgthau> byIdQdDtl = hhQdKhlcntDsgthauRepository.findByIdQdDtl(dtl.getId());
+				for (HhQdKhlcntDsgthau gThau :byIdQdDtl) {
+					hhQdKhlcntDsgthauCtietRepository.deleteAllByIdGoiThau(gThau.getId());
+				}
+				hhQdKhlcntDsgthauRepository.deleteByIdQdDtl(dtl.getId());
+			}
 			hhQdKhlcntDtlRepository.deleteAll(hhQdKhlcntDtl);
 		}
-//		hhQdKhlcntDtlRepository.deleteAllByIdQdHdr(optional.get().getId());
 		//Xóa header
 		hhQdKhlcntHdrRepository.delete(optional.get());
 		// Update trạng thái tổng hợp dxkhclnt
@@ -768,8 +774,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				req.getTrangThaiDtl(),
 				pageable);
 		List<Long> ids = data.getContent().stream().map(HhQdKhlcntHdr::getId).collect(Collectors.toList());
-		List<Object[]> listGthau = hhQdKhlcntDtlRepository.countAllBySoGthau(ids,null);
-		List<Object[]> listGthau2 = hhQdKhlcntDtlRepository.countAllBySoGthau(ids,NhapXuatHangTrangThaiEnum.THANH_CONG.getId());
+		List<Object[]> listGthau = hhQdKhlcntDtlRepository.countAllBySoGthau(ids);
+		List<Object[]> listGthau2 = hhQdKhlcntDtlRepository.countAllBySoGthauStatus(ids,NhapXuatHangTrangThaiEnum.THANH_CONG.getId());
 		List<Object[]> listSum = hhQdKhlcntDtlRepository.sumTongTienByIdHdr(ids);
 		Map<String,String> hashMapSum = new HashMap<>();
 		for (Object[] it: listSum) {
@@ -799,6 +805,13 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			qd.setSoGthau(StringUtils.isEmpty(soGthau.get(qd.getId().toString())) ? 0 : Long.parseLong(soGthau.get(qd.getId().toString())));
 			qd.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qd.getTrangThai()));
 			qd.setSoGthauTrung(StringUtils.isEmpty(soGthau2.get(qd.getId().toString())) ? 0 : Long.parseLong(soGthau2.get(qd.getId().toString())));
+			if(!ObjectUtils.isEmpty(qd.getIdTrHdr())){
+				Optional<HhDxuatKhLcntHdr> byId = hhDxuatKhLcntHdrRepository.findById(qd.getIdTrHdr());
+				byId.ifPresent(hhDxuatKhLcntHdr -> {
+					qd.setTgianNhang(hhDxuatKhLcntHdr.getTgianNhang());
+					qd.setTgianThien(hhDxuatKhLcntHdr.getTgianThien());
+				});
+			}
 		}
 		return data;
 	}

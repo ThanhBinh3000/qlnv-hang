@@ -171,4 +171,9 @@ public class HhQdKhlcntHdr implements Serializable {
 	Long soGthauTrung;
 	@Transient
 	String tenTrangThai;
+	@Transient
+	String soDxuatKhlcnt;
+	@Transient
+	Integer tgianThien;
+
 }
