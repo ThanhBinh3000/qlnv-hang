@@ -118,6 +118,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
             dx.setIdDxuat(listDx.getIdDxuat());
             dx.setSoDxuat(listDx.getSoDxuat());
             dx.setIdPduyetHdr(data.getId());
+            dx.setIdDxuat(data.getIdDxuat());
             dx.setTenLoaiVthh(StringUtils.isEmpty(dx.getLoaiVthh()) ? null : hashMapDmHh.get(dx.getLoaiVthh()));
             dx.setTenCloaiVthh(StringUtils.isEmpty(dx.getCloaiVthh()) ? null : hashMapDmHh.get(dx.getCloaiVthh()));
             hhQdPheduyetKhMttDxRepository.save(dx);
