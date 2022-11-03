@@ -1,8 +1,12 @@
 package com.tcdt.qlnvhang.repository;
 
+import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.table.HhQdKhlcntHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -74,4 +78,33 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 	@Transactional
 	void deleteAllByIdIn(List<Long> ids);
 
+	@Query(value = "SELECT * FROM HH_QD_KHLCNT_HDR QDKHLCNT " +
+			" WHERE (:namKh IS NULL OR QDKHLCNT.NAM_KHOACH = TO_NUMBER(:namKh)) "+
+			" AND (:loaiVthh IS NULL OR QDKHLCNT.LOAI_VTHH = :loaiVthh) "+
+			" AND (:cloaiVthh IS NULL OR QDKHLCNT.CLOAI_VTHH = :cloaiVthh) "+
+			" AND (:soQd IS NULL OR QDKHLCNT.SO_QD = :soQd) "+
+			" AND (:tuNgayQd IS NULL OR QDKHLCNT.NGAY_QD >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) "+
+			" AND (:denNgayQd IS NULL OR QDKHLCNT.NGAY_QD <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) " +
+			" AND (:trangThai IS NULL OR QDKHLCNT.TRANG_THAI = :trangThai) ",
+			nativeQuery = true)
+	List<HhQdKhlcntHdr> selectAll(String namKh, String loaiVthh, String cloaiVthh, String soQd, String tuNgayQd, String denNgayQd, String trangThai);
+
+	@Query(value = " SELECT NVL(SUM(DSG.SO_LUONG),0) FROM HH_QD_KHLCNT_HDR HDR " +
+			" INNER JOIN HH_QD_KHLCNT_DTL DTL on HDR.ID = DTL.ID_QD_HDR " +
+			" LEFT JOIN HH_QD_KHLCNT_DSGTHAU DSG ON DSG.ID_QD_DTL = DTL.ID " +
+			"WHERE HDR.NAM_KHOACH = :namKh AND HDR.LOAI_VTHH = :loaiVthh AND DSG.MA_DVI = :maDvi AND HDR.TRANG_THAI = :trangThai AND HDR.LASTEST = 1",
+			nativeQuery = true)
+	BigDecimal countSLDalenKh(Integer namKh, String loaiVthh, String maDvi,String trangThai);
+
+	HhDxuatKhLcntHdr findAllByLoaiVthhAndCloaiVthhAndNamKhoachAndMaDviAndTrangThaiNot(String loaiVthh,String cloaiVthh,Integer namKhoach,String maDvi,String trangThai);
+
+	@Query(value = "SELECT DX_HDR.ID AS A,QD_HDR.ID,QD_HDR.SO_QD," +
+			"       NVL((SELECT COUNT(QD_GT.ID)  FROM  HH_QD_KHLCNT_DSGTHAU QD_GT WHERE (:trangThai is null or QD_GT.TRANG_THAI = :trangThai) AND QD_GT.ID_QD_DTL = QD_DTL.ID GROUP BY QD_DTL.ID),0) AS C " +
+			" FROM HH_DX_KHLCNT_HDR DX_HDR , HH_QD_KHLCNT_DTL QD_DTL , HH_QD_KHLCNT_HDR QD_HDR " +
+			" WHERE DX_HDR.ID = QD_DTL.ID_DX_HDR " +
+			" AND QD_HDR.ID = QD_DTL.ID_QD_HDR " +
+			" AND QD_HDR.LASTEST = 1 " +
+			" AND DX_HDR.ID IN (:dxIds) "
+			, nativeQuery = true)
+	List<Object[]> getQdPdKhLcnt(Collection<Long> dxIds, String trangThai);
 }

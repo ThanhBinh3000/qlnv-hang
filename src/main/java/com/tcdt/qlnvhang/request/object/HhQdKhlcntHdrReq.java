@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.request.object;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -62,9 +63,8 @@ public class HhQdKhlcntHdrReq {
 	String veViec;
 
 //	@NotNull(message = "Không được để trống")
-	@Size(max = 4, message = "Năm kế hoạch không được vượt quá 4 ký tự")
 	@ApiModelProperty(example = "2022")
-	String namKhoach;
+	Integer namKhoach;
 
 //	@NotNull(message = "Không được để trống")
 	@Size(max = 20, message = "Căn cứ quyết định giao chỉ tiêu không được vượt quá 20 ký tự")
@@ -74,7 +74,7 @@ public class HhQdKhlcntHdrReq {
 	@ApiModelProperty(notes = "Id của phương án đề xuất kế hoạch lựa chọn nhà thầu (nếu có)")
 	private Long idPaHdr;
 
-	@NotNull(message = "Không được để trống")
+//	@NotNull(message = "Không được để trống")
 	@Size(max = 20, message = "Số quyết định không được vượt quá 20 ký tự")
 	@ApiModelProperty(example = "20-QD/TCDT")
 	String soQd;
@@ -105,8 +105,12 @@ public class HhQdKhlcntHdrReq {
 	private Long idThHdr;
 	private Long idTrHdr;
 
+	private BigDecimal donGiaVat;
+
+	// Lương thực
 	private List<HhQdKhlcntDtlReq> dsDeXuat;
 	private List<FileDinhKemReq> fileDinhKems;
+	// Vật tư
 	private List<HhQdKhlcntDsgthauReq> dsGoiThau;
 
 }

@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.repository;
 
 import com.tcdt.qlnvhang.table.HhQdKhlcntDtl;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -17,13 +19,37 @@ public interface HhQdKhlcntDtlRepository extends JpaRepository<HhQdKhlcntDtl, Lo
 
     HhQdKhlcntDtl findByIdQdHdr(Long idQdHdr);
 
-    @Query(value = "SELECT ID_QD_HDR,count(*) as c  from HH_QD_KHLCNT_DTL where ID_QD_HDR in (:qdIds) group by ID_QD_HDR",
-            nativeQuery = true)
+    @Query(value = "SELECT HDR.ID,COUNT(GT.ID) AS C " +
+            " FROM HH_QD_KHLCNT_HDR HDR , HH_QD_KHLCNT_DTL DTL , HH_QD_KHLCNT_DSGTHAU GT " +
+            "  WHERE GT.ID_QD_DTL = DTL.ID " +
+            "  AND HDR.ID = DTL.ID_QD_HDR " +
+            "  AND HDR.ID IN (:qdIds) " +
+            "  AND HDR.LASTEST = 0 GROUP BY HDR.ID "
+            , nativeQuery = true)
     List<Object[]> countAllBySoGthau(Collection<Long> qdIds);
+
+    @Query(value = "SELECT HDR.ID_GOC,COUNT(GT.ID) AS C " +
+            "    FROM HH_QD_KHLCNT_HDR HDR , HH_QD_KHLCNT_DTL DTL , HH_QD_KHLCNT_DSGTHAU GT " +
+            "    WHERE GT.ID_QD_DTL = DTL.ID" +
+            "      AND HDR.ID = DTL.ID_QD_HDR " +
+            "      AND HDR.ID_GOC IN (:qdIds) " +
+            "      AND HDR.LASTEST = 1 " +
+            "      AND (:trangThai is null or GT.TRANG_THAI = :trangThai) GROUP BY HDR.ID_GOC"
+            , nativeQuery = true)
+    List<Object[]> countAllBySoGthauStatus(Collection<Long> qdIds,String trangThai);
 
     @Query(value = "SELECT ID_QD_HDR,NVL(SUM(DTL.TONG_TIEN),0) FROM HH_QD_KHLCNT_DTL DTL WHERE ID_QD_HDR in (:qdIds) group by ID_QD_HDR ",
             nativeQuery = true)
     List<Object[]> sumTongTienByIdHdr(Collection<Long> qdIds);
+
+    @Query(value = " SELECT DTL.* FROM HH_QD_KHLCNT_DTL DTL " +
+            " LEFT JOIN HH_QD_KHLCNT_HDR HDR ON HDR.ID = DTL.ID_QD_HDR " +
+            " WHERE (:namKh IS NULL OR HDR.NAM_KHOACH = TO_NUMBER(:namKh)) " +
+            " AND (:loaiVthh IS NULL OR HDR.LOAI_VTHH = :loaiVthh) " +
+            " AND (:maDvi IS NULL OR DTL.MA_DVI = :maDvi)" +
+            " AND (:trangThaiCuc IS NULL OR DTL.TRANG_THAI = :trangThaiCuc)" +
+            " AND HDR.TRANG_THAI = :trangThai AND HDR.LASTEST = 1 ",nativeQuery = true)
+    Page<HhQdKhlcntDtl> selectPage(Integer namKh , String loaiVthh, String maDvi, String trangThai,String trangThaiCuc, Pageable pageable);
 
 
 }

@@ -37,7 +37,7 @@ public interface HhQdKhlcntHdrRepository extends BaseRepository<HhQdKhlcntHdr, L
 					" AND (:maDvi IS NULL OR QD_DTL.MA_DVI = :maDvi) " +
 					" AND (:trangThaiDtl IS NULL OR QD_DTL.TRANG_THAI = :trangThaiDtl) "
 			, nativeQuery = true)
-	Page<HhQdKhlcntHdr> selectPage(String namKh, String loaiVthh, String soQd,String trichYeu, String tuNgayQd, String denNgayQd,String trangThai,Integer lastest,String maDvi,String trangThaiDtl, Pageable pageable);
+	Page<HhQdKhlcntHdr> selectPage(Integer namKh, String loaiVthh, String soQd,String trichYeu, String tuNgayQd, String denNgayQd,String trangThai,Integer lastest,String maDvi,String trangThaiDtl, Pageable pageable);
 
 	@Query(value = "SELECT * FROM HH_QD_KHLCNT_HDR QDKHLCNT " +
 			" WHERE (:namKh IS NULL OR QDKHLCNT.NAM_KHOACH = TO_NUMBER(:namKh)) "+
@@ -48,9 +48,6 @@ public interface HhQdKhlcntHdrRepository extends BaseRepository<HhQdKhlcntHdr, L
 			" AND (:denNgayQd IS NULL OR QDKHLCNT.NGAY_QD <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) " +
 			" AND (:trangThai IS NULL OR QDKHLCNT.TRANG_THAI = :trangThai) ",
 			nativeQuery = true)
-	List<HhQdKhlcntHdr> selectAll(String namKh, String loaiVthh, String cloaiVthh, String soQd, String tuNgayQd, String denNgayQd,String trangThai);
+	List<HhQdKhlcntHdr> selectAll(Integer namKh, String loaiVthh, String cloaiVthh, String soQd, String tuNgayQd, String denNgayQd,String trangThai);
 
-	@Query(value = "select nvl(sum(so_luong),0) from HH_DX_KHLCNT_DSGTHAU dtl,HH_DX_KHLCNT_HDR hdr where dtl.id_dx_khlcnt = hdr.id and hdr.nam_khoach = :namKh and dtl.ma_dvi = :maDvi and hdr.loai_vthh = :loaiVthh  and hdr.TRANG_THAI = '05' ",
-			nativeQuery = true)
-	Long countSLDalenKh(Integer namKh, String loaiVthh, String maDvi);
 }

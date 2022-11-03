@@ -44,7 +44,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = PathContains.DX_KH + PathContains.TTIN_DTHAU)
-@Api(tags = "Thông tin đấu thầu ")
+@Api(tags = "Nhập hàng - Đấu thầu - Tổ chức triển khai KH LCNT - Thông tin đấu thầu ")
 public class HhDauThauController {
 
 	@Autowired

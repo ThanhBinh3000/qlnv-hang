@@ -47,6 +47,7 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	String tenTrangThai;
 	@Transient
 	String tenTrangThaiTh;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayTao;
 	String nguoiTao;
 	Date ngaySua;
@@ -54,11 +55,12 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	String ldoTuchoi;
 	Date ngayGuiDuyet;
 	String nguoiGuiDuyet;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayPduyet;
 	String nguoiPduyet;
 	@Temporal(TemporalType.DATE)
 	Date ngayKy;
-	Long namKhoach;
+	Integer namKhoach;
 	String ghiChu;
 	String cloaiVthh;
 	@Transient
@@ -87,6 +89,13 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	String loaiHinhNx;
 	String kieuNx;
 	String diaChiDvi;
+	BigDecimal donGiaVat;
+	@Transient
+	String soQdPdKqLcnt;
+	@Transient
+	Long idQdPdKqLcnt;
+	@Transient
+	Integer soGthauTrung;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)
