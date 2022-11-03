@@ -58,5 +58,5 @@ public interface HhDxuatKhMttRepository extends JpaRepository<HhDxuatKhMttHdr, L
     void updateSoQdPduyet(Long id, String soQdPd);
 
 
-    HhDxuatKhMttHdr findAllByLoaiVthhAndCloaiVthhAndNamKhAndMaDviAndTrangThaiNot(String loaiVthh,String cloaiVthh,Integer namKhoach,String maDvi,String trangThai);
+    HhDxuatKhMttHdr findAllByLoaiVthhAndCloaiVthhAndNamKhAndMaDviAndTrangThaiNot(String loaiVthh,String cloaiVthh,Integer namKh,String maDvi,String trangThai);
 }
