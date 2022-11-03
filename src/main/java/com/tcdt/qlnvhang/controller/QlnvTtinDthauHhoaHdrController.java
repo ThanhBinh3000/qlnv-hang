@@ -232,7 +232,7 @@ public class QlnvTtinDthauHhoaHdrController extends BaseController {
 		try {
 			int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
 			int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
-			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
+			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").descending());
 			Page<QlnvDmDonviEntity> data = qDmDonviEntityRepository.selectParams(objReq.getMaDvi(), objReq.getTenDvi(),
 					objReq.getTrangThai(), objReq.getMaTinh(), objReq.getMaQuan(), objReq.getMaPhuong(),
 					objReq.getCapDvi(), objReq.getKieuDvi(), objReq.getLoaiDvi(), pageable);

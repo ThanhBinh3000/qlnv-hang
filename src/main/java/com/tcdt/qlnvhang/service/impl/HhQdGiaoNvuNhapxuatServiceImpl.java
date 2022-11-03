@@ -251,7 +251,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			throws Exception {
 		int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
 		int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
-		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
+		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").descending());
 
 		Page<HhQdGiaoNvuNhapxuatHdr> dataPage = hhQdGiaoNvuNhapxuatRepository
 				.findAll(HhQdGiaoNvuNhapxuatSpecification.buildSearchQuery(objReq), pageable);
@@ -431,7 +431,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 	@Override
 	public Page<HhQdGiaoNvuNhapxuatHdr> timKiem(HhQdNhapxuatSearchReq req) throws Exception {
-//		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
+//		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").descending());
 //		UserInfo userInfo = UserUtils.getUserInfo();
 //		String dvql = userInfo.getDvql();
 //		req.setMaDvi(dvql);
@@ -521,7 +521,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null) throw new Exception("Bad request.");
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),
-				req.getPaggingReq().getLimit(), Sort.by("id").ascending());
+				req.getPaggingReq().getLimit(), Sort.by("id").descending());
 		Page<HhQdGiaoNvuNhapxuatHdr> data = null;
 		if (userInfo.getCapDvi().equalsIgnoreCase(Contains.CAP_CUC)) {
 			data = hhQdGiaoNvuNhapxuatRepository.selectPageCuc(

@@ -52,7 +52,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
     public Page<HhQdGiaoNvNhapHang> searchPage(SearchHhQdGiaoNvNhReq objReq) throws Exception{
         UserInfo userInfo= SecurityContextService.getUser();
         Pageable pageable= PageRequest.of(objReq.getPaggingReq().getPage(),
-                objReq.getPaggingReq().getLimit(), Sort.by("id").ascending());
+                objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<HhQdGiaoNvNhapHang> data = hhQdGiaoNvNhapHangRepository.searchPage(
                 objReq.getNamNhap(),
                 objReq.getSoQd(),

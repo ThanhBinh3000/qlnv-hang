@@ -69,7 +69,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 	public Page<HhDchinhDxKhLcntHdr> getAllPage(QlnvQdLcntHdrDChinhSearchReq objReq) throws Exception {
 		int page = objReq.getPaggingReq().getPage();
 		int limit = objReq.getPaggingReq().getLimit();
-		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
+		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").descending());
 		Page<HhDchinhDxKhLcntHdr> data = hdrRepository.selectPage(objReq.getNamKh(),objReq.getSoQdinh(), objReq.getTrichYeu(),
 				convertDateToString(objReq.getTuNgayQd()),
 				convertDateToString(objReq.getDenNgayQd()),

@@ -730,7 +730,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 
 	@Override
 	public Page<HhDxuatKhLcntHdr> selectDropdown(HhDxuatKhLcntSearchReq req) {
-		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
+		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").descending());
 		Page<HhDxuatKhLcntHdr> page = hhDxuatKhLcntHdrRepository.selectDropdown(req.getNamKh(),req.getMaDvi(),req.getListTrangThai(),req.getListTrangThaiTh(),pageable);
 		Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
 		Map<String,String> mapVthh = getListDanhMucHangHoa();

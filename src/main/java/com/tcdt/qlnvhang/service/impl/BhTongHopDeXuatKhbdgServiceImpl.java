@@ -285,7 +285,7 @@ public class BhTongHopDeXuatKhbdgServiceImpl extends BaseServiceImpl implements 
 
 	@Override
 	public Page<BhTongHopDeXuatKhbdg> searchPage(BhTongHopDeXuatKhbdgSearchRequest req) throws Exception {
-		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
+		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").descending());
 		Page<BhTongHopDeXuatKhbdg> page = deXuatKhbdgRepository.select(
 				req.getNamKeHoach(),
 				req.getLoaiVthh(),

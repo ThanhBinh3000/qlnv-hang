@@ -49,7 +49,7 @@ public class NhPhieuKtChatLuongServiceImpl extends BaseServiceImpl implements Nh
 
 	@Override
 	public Page<NhPhieuKtChatLuong> searchPage(QlpktclhPhieuKtChatLuongRequestDto objReq) {
-		Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),objReq.getPaggingReq().getLimit(), Sort.by("id").ascending());
+		Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
 		Page<NhPhieuKtChatLuong> qlpktclhPhieuKtChatLuongs = qlpktclhPhieuKtChatLuongRepo.selectPage(objReq.getSoPhieu(), objReq.getBienSoXe(), objReq.getNguoiGiaoHang(), pageable);
 		qlpktclhPhieuKtChatLuongs.getContent().forEach(x -> {
 			x.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(x.getTrangThai()));
@@ -271,7 +271,7 @@ public class NhPhieuKtChatLuongServiceImpl extends BaseServiceImpl implements Nh
 
 
 //	public Page<QlpktclhPhieuKtChatLuong> search(QlpktclhPhieuKtChatLuongFilterRequestDto req) {
-//		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
+//		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").descending());
 //		return qlpktclhPhieuKtChatLuongRepo.select(req.getSoPhieu(),req.getNgayLapPhieu(),req.getTenNguoiGiao(), pageable);
 //	}
 

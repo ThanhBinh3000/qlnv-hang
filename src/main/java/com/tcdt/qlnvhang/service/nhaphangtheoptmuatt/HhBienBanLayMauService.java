@@ -49,7 +49,7 @@ public class HhBienBanLayMauService extends BaseServiceImpl {
     public Page<HhBienBanLayMau> searchPage(SearchHhBbanLayMau objReq)throws Exception{
         UserInfo userInfo= SecurityContextService.getUser();
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),
-                objReq.getPaggingReq().getLimit(), Sort.by("id").ascending());
+                objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<HhBienBanLayMau> data = hhBienBanLayMauRepository.searchPage(
                 objReq.getNamKh(),
                 objReq.getSoBb(),

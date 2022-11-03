@@ -161,7 +161,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
 
 		qOptional.get().setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qOptional.get().getTrangThai()));
-		qOptional.get().setQdKhlcnt(Objects.isNull(qOptional.get().getIdQdPdKhlcnt()) ? null : qdKhLcntService.detail(qOptional.get().getIdQdPdKhlcnt().toString()));
+		qOptional.get().setQdKhlcntDtl(Objects.isNull(qOptional.get().getIdQdPdKhlcntDtl()) ? null : qdKhLcntService.detailDtl(qOptional.get().getIdQdPdKhlcntDtl()));
 		qOptional.get().setTenDvi(listDanhMucDvi.get(qOptional.get().getMaDvi()));
 		List<HhHopDongHdr> allByIdQdKqLcnt = hhHopDongRepository.findAllByIdQdKqLcnt(qOptional.get().getId());
 		allByIdQdKqLcnt.forEach(item -> {
@@ -227,13 +227,15 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 
 	@Override
 	public Page<HhQdPduyetKqlcntHdr> timKiemPage(HhQdPduyetKqlcntSearchReq req, HttpServletResponse response) throws Exception {
-		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
+		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").descending());
 		Page<HhQdPduyetKqlcntHdr> hhQdPduyetKqlcntHdrs = hhQdPduyetKqlcntHdrRepository.selectPage(req.getNamKhoach(), req.getLoaiVthh(), convertDateToString(req.getTuNgayQd()), convertDateToString(req.getDenNgayQd()), req.getSoQd(),req.getMaDvi(), req.getTrangThai(), pageable);
 		Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
 		hhQdPduyetKqlcntHdrs.forEach( item -> {
 			try {
 				item.setListHopDong(hhHopDongRepository.findAllByIdQdKqLcnt(item.getId()));
-				item.setQdKhlcnt(Objects.isNull(item.getIdQdPdKhlcnt()) ? null : qdKhLcntService.detail(item.getIdQdPdKhlcnt().toString()));
+//				item.setQdKhlcnt(Objects.isNull(item.getIdQdPdKhlcnt()) ? null : qdKhLcntService.detail(item.getIdQdPdKhlcnt().toString()));
+				item.setQdKhlcntDtl(Objects.isNull(item.getIdQdPdKhlcntDtl()) ? null : qdKhLcntService.detailDtl(item.getIdQdPdKhlcntDtl()));
+
 				item.setTenDvi(listDanhMucDvi.get(item.getMaDvi()));
 				item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
 
@@ -251,7 +253,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 
 	@Override
 	public Page<HhQdPduyetKqlcntRes> timKiemPageCustom(HhQdPduyetKqlcntSearchReq req, HttpServletResponse response) throws Exception {
-//		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
+//		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").descending());
 //		String cDvi = getUser().getCapDvi();
 //		Page<HhQdPduyetKqlcntRes> page;
 //		if(Contains.CAP_TONG_CUC.equals(cDvi)){
@@ -549,7 +551,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 //	public Page<HhQdPduyetKqlcntHdr> colection(HhQdPduyetKqlcntSearchReq objReq) throws Exception {
 //		int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
 //		int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
-//		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
+//		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").descending());
 //
 //		Page<HhQdPduyetKqlcntHdr> dataPage = hhQdPduyetKqlcntHdrRepository
 //				.findAll(HhQdPduyetKqlcntSpecification.buildSearchQuery(objReq), pageable);
@@ -622,14 +624,14 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 //
 //	@Override
 //	public Page<HhQdPduyetKqlcntHdr> timKiemPage(HhQdPduyetKqlcntSearchReq req, HttpServletResponse response) throws Exception {
-//		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
+//		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").descending());
 //		return hhQdPduyetKqlcntHdrRepository.selectPage(req.getNamKhoach(),req.getLoaiVthh(),convertDateToString(req.getTuNgayQd()),convertDateToString(req.getDenNgayQd()),req.getSoQd(),req.getTrangThai(), pageable);
 //
 //	}
 //
 //	@Override
 //	public Page<HhQdPduyetKqlcntRes> timKiemPageCustom(HhQdPduyetKqlcntSearchReq req, HttpServletResponse response) throws Exception {
-//		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
+//		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").descending());
 //		String cDvi = getUser().getCapDvi();
 //		Page<HhQdPduyetKqlcntRes> page;
 //		if(Contains.CAP_TONG_CUC.equals(cDvi)){

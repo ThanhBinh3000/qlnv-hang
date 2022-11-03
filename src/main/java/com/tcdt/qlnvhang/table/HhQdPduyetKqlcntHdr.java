@@ -69,6 +69,8 @@ public class HhQdPduyetKqlcntHdr implements Serializable {
 	String nguoiPduyet;
 	@Transient
 	HhQdKhlcntHdr qdKhlcnt;
+	@Transient
+	HhQdKhlcntDtl qdKhlcntDtl;
 
 	@Transient
 	List<HhHopDongHdr> listHopDong;

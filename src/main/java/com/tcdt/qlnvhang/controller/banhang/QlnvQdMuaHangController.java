@@ -277,7 +277,7 @@ public class QlnvQdMuaHangController extends BaseController {
 		try {
 			int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
 			int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
-			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
+			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").descending());
 
 			Page<QlnvQdMuaHangHdr> dataPage = qdMuaHangHdrRepository
 					.findAll(QDinhMuaHangSpecification.buildSearchQuery(objReq), pageable);
@@ -373,7 +373,7 @@ public class QlnvQdMuaHangController extends BaseController {
 		try {
 			int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
 			int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
-			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
+			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").descending());
 			Page<QlnvQdMuaHangHdr> dataPage = qdMuaHangHdrRepository
 					.findAll(QDinhMuaHangSpecification.buildSearchQueryAjust(objReq), pageable);
 			resp.setData(dataPage);
@@ -537,7 +537,7 @@ public class QlnvQdMuaHangController extends BaseController {
 		try {
 			int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
 			int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
-			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
+			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").descending());
 
 			// Lay thong tin don vi quan ly
 			QlnvDmDonvi objDvi = getDvi(request);

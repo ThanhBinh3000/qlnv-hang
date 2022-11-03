@@ -105,9 +105,11 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 
   public HhHopDongHdr createLuongThuc(HhHopDongHdrReq objReq) throws Exception {
 
-    Optional<HhHopDongHdr> qOpHdong = hhHopDongRepository.findBySoHd(objReq.getSoHd());
-    if (qOpHdong.isPresent()){
-      throw new Exception("Hợp đồng số " + objReq.getSoHd() + " đã tồn tại");
+    if(!StringUtils.isEmpty(objReq.getSoHd())){
+      Optional<HhHopDongHdr> qOpHdong = hhHopDongRepository.findBySoHd(objReq.getSoHd());
+      if (qOpHdong.isPresent()){
+        throw new Exception("Hợp đồng số " + objReq.getSoHd() + " đã tồn tại");
+      }
     }
 
     Optional<HhQdPduyetKqlcntHdr> checkSoQd = hhQdPduyetKqlcntHdrRepository.findBySoQd(objReq.getSoQdKqLcnt());
@@ -176,10 +178,12 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
     if (!qOptional.isPresent())
       throw new Exception("Không tìm thấy dữ liệu cần sửa");
 
-    if (!qOptional.get().getSoHd().equals(objReq.getSoHd())) {
-      Optional<HhHopDongHdr> qOpHdong = hhHopDongRepository.findBySoHd(objReq.getSoHd());
-      if (qOpHdong.isPresent())
-        throw new Exception("Hợp đồng số " + objReq.getSoHd() + " đã tồn tại");
+    if(!StringUtils.isEmpty(objReq.getSoHd())){
+      if (!objReq.getSoHd().equals(qOptional.get().getSoHd())) {
+        Optional<HhHopDongHdr> qOpHdong = hhHopDongRepository.findBySoHd(objReq.getSoHd());
+        if (qOpHdong.isPresent())
+          throw new Exception("Hợp đồng số " + objReq.getSoHd() + " đã tồn tại");
+      }
     }
 
     if (!qOptional.get().getSoQdKqLcnt().equals(objReq.getSoQdKqLcnt())) {
@@ -315,7 +319,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
   public Page<HhHopDongHdr> colection(HhHopDongSearchReq objReq, HttpServletRequest req) throws Exception {
     int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
     int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
-    Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
+    Pageable pageable = PageRequest.of(page, limit, Sort.by("id").descending());
 
     Page<HhHopDongHdr> dataPage = hhHopDongRepository.findAll(HhHopDongSpecification.buildSearchQuery(objReq),
         pageable);

@@ -288,7 +288,7 @@ public class BhHopDongService extends BaseServiceImpl {
     }
 
     public Page<BhHopDongHdr> selectPage(BhHopDongSearchReq req, HttpServletResponse response) throws Exception {
-        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<BhHopDongHdr> page = bhHopDongRepository.select(
                 req.getLoaiVthh(),
                 req.getSoHd(),
@@ -332,7 +332,7 @@ public class BhHopDongService extends BaseServiceImpl {
     public Page<BhHopDongHdr> colection(BhHopDongSearchReq objReq, HttpServletRequest req) throws Exception {
         int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
         int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
-        Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
+        Pageable pageable = PageRequest.of(page, limit, Sort.by("id").descending());
 
         Page<BhHopDongHdr> dataPage = bhHopDongRepository.findAll(BhHopDongSpecification.buildSearchQuery(objReq),
                 pageable);

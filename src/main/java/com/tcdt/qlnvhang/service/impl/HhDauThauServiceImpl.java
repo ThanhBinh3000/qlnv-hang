@@ -94,7 +94,7 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 
     @Override
     public Page<HhQdKhlcntDtl> selectPage(HhQdKhlcntSearchReq objReq) throws Exception {
-        Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit(), Sort.by("id").ascending());
+        Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<HhQdKhlcntDtl> hhQdKhlcntDtls = dtlRepository.selectPage(objReq.getNamKhoach(), objReq.getLoaiVthh(), objReq.getMaDvi(), NhapXuatHangTrangThaiEnum.BAN_HANH.getId(),objReq.getTrangThaiDtl(),pageable);
         Map<String,String> hashMapPthucDthau = getListDanhMucChung("PT_DTHAU");
         Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
@@ -271,7 +271,7 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 //
 //	@Override
 //	public Page<ThongTinDauThauRes> selectPage(HhDthauSearchReq objReq) throws Exception {
-//		Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit(), Sort.by("id").ascending());
+//		Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
 //		Page<ThongTinDauThauRes> page = hhDthauRepository.cusTomQuerySearch(objReq.getNamKhoach(),objReq.getLoaiVthh(),objReq.getSoQd(),objReq.getMaDvi(),
 ////				Contains.convertDateToString(objReq.getNgayQdTu()),
 ////				Contains.convertDateToString(objReq.getNgayQdDen()),
@@ -434,7 +434,7 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 ////	public Page<HhDthau2> colection(HhDthauSearchReq objReq, HttpServletRequest req) throws Exception {
 ////		int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
 ////		int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
-////		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
+////		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").descending());
 ////
 ////		Page<HhDthau2> dataPage = hhDthau2Repository.findAll(HhDthau2Specification.buildSearchQuery(objReq), pageable);
 ////
