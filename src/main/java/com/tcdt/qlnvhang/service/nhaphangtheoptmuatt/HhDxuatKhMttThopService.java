@@ -128,10 +128,10 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
         if (thopHdr.getId() > 0 && thopHdr.getHhDxKhMttThopDtls().size() > 0) {
             List<String> soDxuatList = thopHdr.getHhDxKhMttThopDtls().stream().map(HhDxKhMttThopDtl::getSoDxuat)
                     .collect(Collectors.toList());
-            hhDxuatKhMttRepository.updateTongHop(soDxuatList, String.valueOf(thopHdr.getId()));
             List<HhDxuatKhMttHdr> list = hhDxuatKhMttRepository.findBySoDxuatIn(soDxuatList);
             for (HhDxuatKhMttHdr soDxuat : list){
                 soDxuat.setNoiDungTh(thopHdr.getNoiDung());
+                soDxuat.setMaThop(String.valueOf(thopHdr.getId()));
                 hhDxuatKhMttRepository.save(soDxuat);
             }
         }
@@ -176,9 +176,11 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
         List<Long> idDxuat=listTh.stream().map(HhDxKhMttThopDtl::getIdDxHdr).collect(Collectors.toList());
         List<HhDxuatKhMttHdr> lisDxuat=hhDxuatKhMttRepository.findAllByIdIn(idDxuat);
         for (HhDxKhMttThopDtl dtl : listTh){
-            for(HhDxuatKhMttHdr dxuatKhMttHdr: lisDxuat ){
-                dtl.setDxuatHdr(dxuatKhMttHdr);
-            }
+            HhDxuatKhMttHdr deXuat = hhDxuatKhMttRepository.findAllById(dtl.getIdDxHdr());
+            dtl.setDxuatHdr(deXuat);
+//            for(HhDxuatKhMttHdr dxuatKhMttHdr: lisDxuat ){
+//                dtl.setDxuatHdr(dxuatKhMttHdr);
+//            }
         }
         Map<String, String> mapDmucDvi = getMapTenDvi();
         listTh.forEach(f -> {
