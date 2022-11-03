@@ -2,9 +2,7 @@ package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhQdGiaoNvNhDdiemRepository;
-import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhQdGiaoNvNhangDtlRepository;
-import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhQdGiaoNvNhapHangRepository;
+import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -14,10 +12,9 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhQdGiaoNvNhapHang;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhQdGiaoNvNhDdiem;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhQdGiaoNvNhangDtl;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +42,12 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
 
     @Autowired
     private HhQdGiaoNvNhDdiemRepository hhQdGiaoNvNhDdiemRepository;
+
+    @Autowired
+    private HhQdPduyetKqcgRepository hhQdPduyetKqcgRepository;
+
+    @Autowired
+    private HhHdongBkePmuahangRepository hhHdongBkePmuahangRepository;
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
@@ -94,6 +97,16 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
         HhQdGiaoNvNhapHang created= hhQdGiaoNvNhapHangRepository.save(data);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),data.getId(),"HH_QD_GIAO_NV_NHAP_HANG");
         created.setFileDinhKems(fileDinhKems);
+        if (!DataUtils.isNullObject(data.getIdHdong())){
+            HhHdongBkePmuahangHdr update = hhHdongBkePmuahangRepository.findAllById(data.getIdHdong());
+            update.setTrangThaiNh(data.getTenTrangThai());
+            hhHdongBkePmuahangRepository.save(update);
+        }else if (!DataUtils.isNullObject(data.getIdQdPduyet())){
+            HhQdPduyetKqcgHdr update= hhQdPduyetKqcgRepository.findAllById(data.getIdQdPduyet());
+            update.setTrangThaiNh(data.getTrangThai());
+            hhQdPduyetKqcgRepository.save(update);
+        }
+
         this.saveCtiet(data,objReq);
         return created;
     }
