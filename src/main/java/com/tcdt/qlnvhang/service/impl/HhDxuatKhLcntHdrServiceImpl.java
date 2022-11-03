@@ -533,6 +533,16 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		Page<HhDxuatKhLcntHdr> page = hhDxuatKhLcntHdrRepository.select(req.getNamKh(),req.getSoTr(),req.getSoQd(),convertDateToString(req.getTuNgayKy()),convertDateToString(req.getDenNgayKy()),req.getLoaiVthh(),req.getTrichYeu(),req.getTrangThai(),req.getTrangThaiTh(),req.getMaDvi(), pageable);
 		Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
 		Map<String,String> mapVthh = getListDanhMucHangHoa();
+		List<Long> ids = page.getContent().stream().map(HhDxuatKhLcntHdr::getId).collect(Collectors.toList());
+		List<Object[]> listGthau = hhDxuatKhLcntHdrRepository.getQdPdKhLcnt(ids,NhapXuatHangTrangThaiEnum.THANH_CONG.getId());
+		Map<Long,Map<String,String>> hhDxKhlcnt = new HashMap<>();
+		for (Object[] it: listGthau) {
+			Map<String,String> dataQd = new HashMap<>();
+			dataQd.put("idQdPdKqLcnt",it[1].toString());
+			dataQd.put("soQdPdKqLcnt",it[2].toString());
+			dataQd.put("soGthauTrung",it[3].toString());
+			hhDxKhlcnt.put(Long.parseLong(it[0].toString()),dataQd);
+		}
 		page.getContent().forEach(f -> {
 			f.setSoGoiThau ( hhDxuatKhLcntDsgtDtlRepository.countByIdDxKhlcnt(f.getId()));
 			f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
@@ -540,6 +550,12 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 			f.setTenCloaiVthh( StringUtils.isEmpty(f.getCloaiVthh()) ? null :mapVthh.get(f.getCloaiVthh()));
 			f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
 			f.setTenTrangThaiTh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiTh()));
+			Map<String, String> stringStringMap = hhDxKhlcnt.get(f.getId());
+			if(!ObjectUtils.isEmpty(stringStringMap)){
+				f.setIdQdPdKqLcnt(Long.parseLong(stringStringMap.get("idQdPdKqLcnt")));
+				f.setSoQdPdKqLcnt(stringStringMap.get("soQdPdKqLcnt"));
+				f.setSoGthauTrung(Integer.valueOf(stringStringMap.get("soGthauTrung")));
+			}
 		});
 		return page;
 	}

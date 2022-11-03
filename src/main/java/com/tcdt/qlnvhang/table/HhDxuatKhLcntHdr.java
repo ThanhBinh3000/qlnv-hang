@@ -90,6 +90,12 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	String kieuNx;
 	String diaChiDvi;
 	BigDecimal donGiaVat;
+	@Transient
+	String soQdPdKqLcnt;
+	@Transient
+	Long idQdPdKqLcnt;
+	@Transient
+	Integer soGthauTrung;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)

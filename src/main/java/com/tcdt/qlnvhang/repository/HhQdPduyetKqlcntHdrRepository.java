@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface HhQdPduyetKqlcntHdrRepository extends BaseRepository<HhQdPduyetKqlcntHdr, Long> {
 
-	Optional<HhQdPduyetKqlcntHdr> findBySoQd(String canCu);
+	Optional<HhQdPduyetKqlcntHdr> findBySoQd(String soQd);
 
 	@Query(value = " SELECT * FROM HH_QD_PDUYET_KQLCNT_HDR QDPD "+
 			" WHERE (:namKh IS NULL OR QDPD.NAM_KHOACH = TO_NUMBER(:namKh)) "+

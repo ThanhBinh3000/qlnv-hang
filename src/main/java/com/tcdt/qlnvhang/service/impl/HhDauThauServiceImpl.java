@@ -8,10 +8,7 @@ import com.tcdt.qlnvhang.request.object.HhDthauReq;
 import com.tcdt.qlnvhang.request.search.HhQdKhlcntSearchReq;
 import com.tcdt.qlnvhang.service.HhDauThauService;
 import com.tcdt.qlnvhang.service.HhQdKhlcntHdrService;
-import com.tcdt.qlnvhang.table.HhDthauNthauDuthau;
-import com.tcdt.qlnvhang.table.HhQdKhlcntDsgthau;
-import com.tcdt.qlnvhang.table.HhQdKhlcntDtl;
-import com.tcdt.qlnvhang.table.HhQdKhlcntHdr;
+import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +46,9 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 
     @Autowired
     HhDxuatKhLcntHdrRepository hhDxuatKhLcntHdrRepository;
+
+    @Autowired
+    HhQdPduyetKqlcntHdrRepository hhQdPduyetKqlcntHdrRepository;
 
 
     @Override
@@ -95,7 +95,7 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
     @Override
     public Page<HhQdKhlcntDtl> selectPage(HhQdKhlcntSearchReq objReq) throws Exception {
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit(), Sort.by("id").ascending());
-        Page<HhQdKhlcntDtl> hhQdKhlcntDtls = dtlRepository.selectPage(objReq.getNamKhoach(), objReq.getLoaiVthh(), objReq.getMaDvi(), NhapXuatHangTrangThaiEnum.BAN_HANH.getId(),pageable);
+        Page<HhQdKhlcntDtl> hhQdKhlcntDtls = dtlRepository.selectPage(objReq.getNamKhoach(), objReq.getLoaiVthh(), objReq.getMaDvi(), NhapXuatHangTrangThaiEnum.BAN_HANH.getId(),objReq.getTrangThaiDtl(),pageable);
         Map<String,String> hashMapPthucDthau = getListDanhMucChung("PT_DTHAU");
         Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 
@@ -112,7 +112,10 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
                 long countThatBai = byIdQdDtl.stream().filter(x -> x.getTrangThai().equals(NhapXuatHangTrangThaiEnum.THAT_BAI.getId())).count();
                 item.setSoGthauTrung(countThanhCong);
                 item.setSoGthauTruot(countThatBai);
-                item.setDxuatKhLcntHdr(hhDxuatKhLcntHdrRepository.findBySoDxuat(item.getSoDxuat()).get());
+                Optional<HhDxuatKhLcntHdr> bySoDxuat = hhDxuatKhLcntHdrRepository.findBySoDxuat(item.getSoDxuat());
+                bySoDxuat.ifPresent(item::setDxuatKhLcntHdr);
+                Optional<HhQdPduyetKqlcntHdr> bySoQd = hhQdPduyetKqlcntHdrRepository.findBySoQd(item.getSoQdPdKqLcnt());
+                bySoQd.ifPresent(item::setHhQdPduyetKqlcntHdr);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

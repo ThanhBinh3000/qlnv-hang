@@ -54,11 +54,17 @@ public class HhQdKhlcntDtl implements Serializable {
 	String diaChiDvi;
 	String trichYeu;
 
+	@Column(name="SO_QD_PD_KQ_LCNT")
+	String soQdPdKqLcnt;
+
 	@Transient
 	private HhQdKhlcntHdr hhQdKhlcntHdr;
 
 	@Transient
 	private HhDxuatKhLcntHdr dxuatKhLcntHdr;
+
+	@Transient
+	private HhQdPduyetKqlcntHdr hhQdPduyetKqlcntHdr;
 
 	@Transient
 	private List<HhQdKhlcntDsgthau> dsGoiThau = new ArrayList<>();
