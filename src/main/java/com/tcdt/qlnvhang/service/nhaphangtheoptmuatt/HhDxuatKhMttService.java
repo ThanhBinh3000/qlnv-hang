@@ -30,6 +30,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.Transient;
@@ -106,12 +107,11 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
         Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
         data.setTenDvi(StringUtils.isEmpty(userInfo.getDvql()) ? null : hashMapDmdv.get(userInfo.getDvql()));
         data.setMaDvi(userInfo.getDvql());
+        this.validateData(data, data.getTrangThai());
         data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh()) ? null : hashMapDmHh.get(data.getLoaiVthh()));
         HhDxuatKhMttHdr created=hhDxuatKhMttRepository.save(data);
-
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),data.getId(),"HH_DX_KHMTT_HDR");
         created.setFileDinhKems(fileDinhKems);
-
         for (HhDxuatKhMttCcxdgReq listCc : objReq.getCcXdgList()){
             HhDxuatKhMttCcxdg ccxdg = new HhDxuatKhMttCcxdg();
             ccxdg =  ObjectMapperUtils.map(listCc, HhDxuatKhMttCcxdg.class);
@@ -308,6 +308,7 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
             case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
             case Contains.CHO_DUYET_TP + Contains.TUCHOI_TP:
             case Contains.CHO_DUYET_TP + Contains.TUCHOI_LDC:
+                this.validateData(optional.get(),Contains.CHODUYET_TP);
                 optional.get().setNguoiGuiDuyet(userInfo.getUsername());
                 optional.get().setNgayGuiDuyet(getDateTimeNow());
                 break;
@@ -318,6 +319,7 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
                 optional.get().setLdoTuchoi(statusReq.getLyDo());
                 break;
             case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
+                this.validateData(optional.get(),statusReq.getTrangThai());
                 optional.get().setNguoiPduyet(getUser().getUsername());
                 optional.get().setNgayPduyet(getDateTimeNow());
                 break;
@@ -329,4 +331,12 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
         return created;
     }
 
+    public void validateData(HhDxuatKhMttHdr objHdr,String trangThai) throws Exception {
+        if(trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.DUTHAO.getId())){
+            HhDxuatKhMttHdr dXuat = hhDxuatKhMttRepository.findAllByLoaiVthhAndCloaiVthhAndNamKhAndMaDviAndTrangThaiNot(objHdr.getLoaiVthh(), objHdr.getCloaiVthh(), objHdr.getNamKh(), objHdr.getMaDvi(),NhapXuatHangTrangThaiEnum.DUTHAO.getId());
+            if(!ObjectUtils.isEmpty(dXuat) && !dXuat.getId().equals(objHdr.getId())){
+                throw new Exception("Chủng loại hàng hóa đã được tạo và gửi duyệt, xin vui lòng chọn lại chủng loại hàng hóa khác");
+            }
+        }
+    }
 }
