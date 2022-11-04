@@ -97,6 +97,8 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date tgianNkho;
 
+	String moTaHangHoa;
+
 	@Transient
 	String tenDvi;
 

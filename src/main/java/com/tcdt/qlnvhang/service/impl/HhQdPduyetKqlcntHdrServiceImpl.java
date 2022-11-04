@@ -85,7 +85,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setNgayTao(getDateTimeNow());
 		dataMap.setTrangThai(Contains.DUTHAO);
-		dataMap.setTrangThaiHd(NhapXuatHangTrangThaiEnum.CHUACAPNHAT.getId());
+		dataMap.setTrangThaiHd(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
 		dataMap.setMaDvi(getUser().getDvql());
 		dataMap.setChildren(fileDinhKemList);
 
@@ -209,7 +209,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 				optional.get().setNgayPduyet(new Date());
 				optional.get().setTrangThai(stReq.getTrangThai());
 				break;
-			case Contains.HOANTHANHCAPNHAT + Contains.BAN_HANH:
+			case Contains.DA_HOAN_THANH + Contains.BAN_HANH:
 				optional.get().setTrangThaiHd(stReq.getTrangThai());
 				break;
 			default:

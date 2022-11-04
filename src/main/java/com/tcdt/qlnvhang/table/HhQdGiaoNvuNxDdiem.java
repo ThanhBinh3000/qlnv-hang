@@ -64,6 +64,9 @@ public class HhQdGiaoNvuNxDdiem implements Serializable {
 	@Column(name="SO_LUONG")
 	private BigDecimal soLuong;
 
+	@Column(name = "SO_LUONG_DIEM_KHO")
+	BigDecimal soLuongDiemKho;
+
 	@Transient
 	List<NhPhieuKtChatLuong> listPhieuKtraCl;
 

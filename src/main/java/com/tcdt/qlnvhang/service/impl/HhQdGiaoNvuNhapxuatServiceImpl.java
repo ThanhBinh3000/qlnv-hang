@@ -167,6 +167,22 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 	private void validateSoQd(HhQdGiaoNvuNhapxuatHdr update, HhQdGiaoNvuNhapxuatHdrReq req) throws Exception {
 		String soQd = req.getSoQd();
+		if(!StringUtils.isEmpty(soQd)){
+			if(update == null){
+				Optional<HhQdGiaoNvuNhapxuatHdr> optional = hhQdGiaoNvuNhapxuatRepository.findFirstBySoQd(soQd);
+				if(optional.isPresent()){
+					throw new Exception("Số quyết định " + soQd + " đã tồn tại");
+				}
+			}else{
+				if(!req.getSoQd().equals(update.getSoQd())){
+					Optional<HhQdGiaoNvuNhapxuatHdr> optional = hhQdGiaoNvuNhapxuatRepository.findFirstBySoQd(soQd);
+					if(optional.isPresent()){
+						throw new Exception("Số quyết định " + soQd + " đã tồn tại");
+					}
+				}
+			}
+		}
+
 		if (!StringUtils.hasText(soQd))
 			return;
 		if (update == null || (StringUtils.hasText(update.getSoQd()) && !update.getSoQd().equalsIgnoreCase(soQd))) {
@@ -355,7 +371,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		if(!CollectionUtils.isEmpty(listDtl)){
 			dtlRepository.deleteAll(listDtl);
 		}
-
+		hhHopDongRepository.updateHopDong(optional.get().getIdHd(),NhapXuatHangTrangThaiEnum.DAKY.getId());
 		hhQdGiaoNvuNhapxuatRepository.delete(optional.get());
 
 	}
@@ -523,17 +539,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),
 				req.getPaggingReq().getLimit(), Sort.by("id").descending());
 		Page<HhQdGiaoNvuNhapxuatHdr> data = null;
-		if (userInfo.getCapDvi().equalsIgnoreCase(Contains.CAP_CUC)) {
-			data = hhQdGiaoNvuNhapxuatRepository.selectPageCuc(
-					req.getNamNhap(),
-					req.getSoQd(),
-					req.getLoaiVthh(),
-					req.getTrichYeu(),
-					Contains.convertDateToString(req.getTuNgayQd()),
-					Contains.convertDateToString(req.getDenNgayQd()),
-					userInfo.getDvql(),
-					pageable);
-		} else {
+		if (userInfo.getCapDvi().equalsIgnoreCase(Contains.CAP_CHI_CUC)) {
 			data = hhQdGiaoNvuNhapxuatRepository.selectPageChiCuc(
 					req.getNamNhap(),
 					req.getSoQd(),
@@ -543,9 +549,20 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 					Contains.convertDateToString(req.getDenNgayQd()),
 					userInfo.getDvql(),
 					pageable);
+		} else {
+			// Cục or Tổng cục
+			data = hhQdGiaoNvuNhapxuatRepository.selectPageCuc(
+					req.getNamNhap(),
+					req.getSoQd(),
+					req.getLoaiVthh(),
+					req.getTrichYeu(),
+					Contains.convertDateToString(req.getTuNgayQd()),
+					Contains.convertDateToString(req.getDenNgayQd()),
+					req.getMaDvi(),
+					pageable);
 		}
 		Map<String, String> mapDmucHh = getListDanhMucHangHoa();
-		Map<String, String> mapDmucDvi = getMapTenDvi();
+		Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
 		Map<String, String> tenCloaiVthh = getListDanhMucHangHoa();
 		List<Long> listId = data.getContent().stream().map(HhQdGiaoNvuNhapxuatHdr::getId).collect(Collectors.toList());
 		data.getContent().forEach(f -> {
@@ -569,7 +586,6 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 					item.setTenNganKho(mapDmucDvi.get(item.getMaNganKho()));
 					item.setTenLoKho(mapDmucDvi.get(item.getMaLoKho()));
 					this.setDataPhieu(null,item);
-
 				});
 				dtl.setChildren(allByIdCt);
 //				this.setDataPhieu(dtl,null);

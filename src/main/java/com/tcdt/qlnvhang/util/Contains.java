@@ -53,9 +53,8 @@ public class Contains {
 	public static final String TPHONG_DUYET = "09"; // Trang thai Truong phong duyet
 	public static final String LANHDAO_DUYET = "10"; // Trang thai Lanh dao duyet
 
-//	public static final String BAN_HANH = "11"; // Trang thai Lanh dao duyet
-	public static final String LANHDAO_TU_CHOI = "12";
-	public static final String TT_DA_QUYET_DINH = "13"; // Trang thai Lanh dao duyet
+	public static final String DA_HOAN_THANH = "45";
+
 
 	//Trạng thái dùng chung
 	public static final String DUTHAO = "00";

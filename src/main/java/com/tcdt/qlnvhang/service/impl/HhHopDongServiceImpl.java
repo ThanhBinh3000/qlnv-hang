@@ -143,8 +143,12 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 
     this.saveDataChildren(dataMap,objReq);
 
-    Map<String, String> mapVthh = getListDanhMucHangHoa();
-    dataMap.setDonViTinh(StringUtils.isEmpty(dataMap.getLoaiVthh()) ? null : mapVthh.get(dataMap.getDonViTinh()));
+    Optional<HhQdPduyetKqlcntHdr> bySoQd = hhQdPduyetKqlcntHdrRepository.findById(dataMap.getIdQdKqLcnt());
+    if(bySoQd.isPresent()){
+      bySoQd.get().setTrangThaiHd(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
+      hhQdPduyetKqlcntHdrRepository.save(bySoQd.get());
+    }
+
     return dataMap;
   }
 
