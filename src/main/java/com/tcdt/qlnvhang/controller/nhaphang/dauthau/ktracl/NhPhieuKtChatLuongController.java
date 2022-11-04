@@ -144,6 +144,23 @@ public class NhPhieuKtChatLuongController {
 
 	@ApiOperation(value = "Delete multiple phiếu kiểm tra chất lượng hàng lương thực", response = List.class)
 	@ResponseStatus(HttpStatus.OK)
+	@PostMapping("so-luong-nhap-kho")
+	public final ResponseEntity<BaseResponse> deleteMultiple(@RequestBody QlpktclhPhieuKtChatLuongRequestDto req) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.getSoLuongNhapKho(req));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			resp.setMsg(e.getMessage());
+			log.error("Delete multiple phiếu kiểm tra chất lượng hàng lương thực lỗi ", e);
+		}
+		return ResponseEntity.ok(resp);
+	}
+
+	@ResponseStatus(HttpStatus.OK)
 	@PostMapping("/delete/multiple")
 	public final ResponseEntity<BaseResponse> deleteMultiple(@RequestBody @Valid DeleteReq req) {
 		BaseResponse resp = new BaseResponse();

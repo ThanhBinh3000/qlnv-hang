@@ -25,6 +25,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -483,6 +484,12 @@ public class NhPhieuKtChatLuongServiceImpl extends BaseServiceImpl implements Nh
 	public List<NhPhieuKtChatLuong> findAllByIdDdiemGiaoNvNh(Long idDdiemGiaoNvNh) {
 		List<NhPhieuKtChatLuong> list = qlpktclhPhieuKtChatLuongRepo.findByIdDdiemGiaoNvNhOrderById(idDdiemGiaoNvNh);
 		return setDetailList(list);
+	}
+
+	@Override
+	public BigDecimal getSoLuongNhapKho(QlpktclhPhieuKtChatLuongRequestDto requestDto) {
+		BigDecimal bigDecimal = qlpktclhPhieuKtChatLuongRepo.soLuongNhapKho(requestDto.getIdDdiemGiaoNvNh(),NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId());
+		return bigDecimal;
 	}
 
 	List<NhPhieuKtChatLuong> setDetailList(List<NhPhieuKtChatLuong> list){
