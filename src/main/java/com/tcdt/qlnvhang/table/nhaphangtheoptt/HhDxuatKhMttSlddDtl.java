@@ -22,8 +22,11 @@ public class HhDxuatKhMttSlddDtl implements Serializable {
     @Transient
     private String tenDvi;
     private String maDiemKho;
+    @Transient
+    private String tenDiemKho;
+
     private String diaDiemKho;
-    private BigDecimal soLuong;
-    private BigDecimal donGia;
-    private BigDecimal thanhTien;
+    private BigDecimal soLuongDxmtt;
+    private BigDecimal donGiaVat;
+
 }
