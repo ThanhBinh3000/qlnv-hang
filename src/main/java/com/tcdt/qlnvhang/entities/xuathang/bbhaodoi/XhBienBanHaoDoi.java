@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table(name = XhBienBanHaoDoi.TABLE_NAME)
@@ -22,8 +23,8 @@ public class XhBienBanHaoDoi extends TrangThaiBaseEntity implements Serializable
     private Long id;
     private Long bbTinhkhoId;
     private String soBienBan;
-    private LocalDate ngayNhap;
-    private LocalDate ngayXuat;
+    private Date ngayNhap;
+    private Date ngayXuat;
     private double slHaoThanhly;
     private double slHaoThucte;
     private double tileThucte;
@@ -39,9 +40,7 @@ public class XhBienBanHaoDoi extends TrangThaiBaseEntity implements Serializable
     private String nguyenNhan;
     private String kienNghi;
     private Long nguoiGuiDuyetId;
-    private LocalDate ngayGuiDuyet;
     private Long nguoiPduyetId;
-    private LocalDate ngayPduyet;
     private String trangThai;
     private String lyDoTuChoi;
     private Integer so;

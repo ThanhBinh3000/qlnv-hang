@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -36,7 +37,7 @@ public class XhBienBanTinhKhoRes {
     private double slThieuConlai;
     private String nguyenNhan;
     private String kienNghi;
-    private LocalDate ngayLapPhieu;
+    private Date ngayLapPhieu;
     private String trangThai;
     private String tenTrangThai;
     private String trangThaiDuyet;

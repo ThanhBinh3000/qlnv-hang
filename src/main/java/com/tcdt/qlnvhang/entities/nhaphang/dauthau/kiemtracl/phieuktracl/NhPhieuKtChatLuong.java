@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -109,10 +110,10 @@ public class NhPhieuKtChatLuong extends TrangThaiBaseEntity implements Serializa
 	private String bienSoXe;
 
 	@Column(name = "SO_LUONG_DE_NGHI_KT")
-	private Double soLuongDeNghiKt;
+	private BigDecimal soLuongDeNghiKt;
 
 	@Column(name = "SO_LUONG_NHAP_KHO")
-	private Double soLuongNhapKho;
+	private BigDecimal soLuongNhapKho;
 
 	@Column(name = "SO_CHUNG_THU_GIAM_DINH")
 	private String soChungThuGiamDinh;

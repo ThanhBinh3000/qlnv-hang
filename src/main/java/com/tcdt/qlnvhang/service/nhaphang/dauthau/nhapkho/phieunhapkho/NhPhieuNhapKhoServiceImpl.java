@@ -33,10 +33,7 @@ import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Log4j2
@@ -77,7 +74,7 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
         }
         NhPhieuNhapKho phieu = new NhPhieuNhapKho();
         BeanUtils.copyProperties(req, phieu, "id");
-        phieu.setNgayTao(LocalDate.now());
+        phieu.setNgayTao(new Date());
         phieu.setNguoiTaoId(userInfo.getId());
         phieu.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         phieu.setMaDvi(userInfo.getDvql());
@@ -106,7 +103,7 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
 
         NhPhieuNhapKho phieu = optionalQd.get();
         BeanUtils.copyProperties(req, phieu, "id");
-        phieu.setNgaySua(LocalDate.now());
+        phieu.setNgaySua(new Date());
         phieu.setNguoiSuaId(userInfo.getId());
         nhPhieuNhapKhoRepository.save(phieu);
         this.saveCtiet(phieu.getId(),req);
@@ -182,16 +179,16 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
             case Contains.CHODUYET_LDCC + Contains.DUTHAO:
             case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
                 phieu.setNguoiGuiDuyetId(userInfo.getId());
-                phieu.setNgayGuiDuyet(LocalDate.now());
+                phieu.setNgayGuiDuyet(new Date());
                 break;
             case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
                 phieu.setNguoiPduyetId(userInfo.getId());
-                phieu.setNgayPduyet(LocalDate.now());
+                phieu.setNgayPduyet(new Date());
                 phieu.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
             case Contains.DADUYET_LDCC + Contains.CHODUYET_LDCC:
                 phieu.setNguoiPduyetId(userInfo.getId());
-                phieu.setNgayPduyet(LocalDate.now());
+                phieu.setNgayPduyet(new Date());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");

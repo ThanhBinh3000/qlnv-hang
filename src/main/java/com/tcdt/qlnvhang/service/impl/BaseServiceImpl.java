@@ -397,20 +397,20 @@ public class BaseServiceImpl {
 
 			item.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId());
 			item.setNguoiGuiDuyetId(userInfo.getId());
-			item.setNgayGuiDuyet(LocalDate.now());
+			item.setNgayGuiDuyet(new Date());
 		} else if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(stReq.getTrangThai())) {
 			if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
 				return false;
 			item.setTrangThai(NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId());
 			item.setNguoiPduyetId(userInfo.getId());
-			item.setNgayPduyet(LocalDate.now());
+			item.setNgayPduyet(new Date());
 		} else if (NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId().equals(stReq.getTrangThai())) {
 			if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
 				return false;
 
 			item.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId());
 			item.setNguoiPduyetId(userInfo.getId());
-			item.setNgayPduyet(LocalDate.now());
+			item.setNgayPduyet(new Date());
 		} else {
 			throw new Exception("Bad request.");
 		}

@@ -77,7 +77,7 @@ public class XhPhieuXuatKhoServiceImpl implements XhPhieuXuatKhoService {
         Long count = xuatKhoRepo.getMaxId();
         if (count == null) count = 1L;
         item.setSpXuatKho(count.intValue() + 1 + "/" + LocalDate.now().getYear() + MA_DS);
-        item.setNgayTao(LocalDate.now());
+        item.setNgayTao(new Date());
         item.setNguoiTaoId(userInfo.getId());
         item.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         xuatKhoRepo.save(item);
@@ -123,7 +123,7 @@ public class XhPhieuXuatKhoServiceImpl implements XhPhieuXuatKhoService {
 
         XhPhieuXuatKho item = optional.get();
         BeanUtils.copyProperties(req, item, "id", "so", "nam", "trangThai");
-        item.setNgaySua(LocalDate.now());
+        item.setNgaySua(new Date());
         item.setNguoiSuaId(userInfo.getId());
         xuatKhoRepo.save(item);
 
@@ -250,7 +250,7 @@ public class XhPhieuXuatKhoServiceImpl implements XhPhieuXuatKhoService {
 
             item.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId());
             item.setNguoiGuiDuyetId(userInfo.getId());
-            item.setNgayGuiDuyet(LocalDate.now());
+            item.setNgayGuiDuyet(new Date());
 
         } else if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
@@ -258,7 +258,7 @@ public class XhPhieuXuatKhoServiceImpl implements XhPhieuXuatKhoService {
 
             item.setTrangThai(NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId());
             item.setNguoiPduyetId(userInfo.getId());
-            item.setNgayPduyet(LocalDate.now());
+            item.setNgayPduyet(new Date());
 
         } else if (NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
@@ -266,7 +266,7 @@ public class XhPhieuXuatKhoServiceImpl implements XhPhieuXuatKhoService {
 
             item.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId());
             item.setNguoiPduyetId(userInfo.getId());
-            item.setNgayPduyet(LocalDate.now());
+            item.setNgayPduyet(new Date());
             item.setLyDoTuChoi(stReq.getLyDo());
 
         } else {

@@ -85,7 +85,7 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
 
         NhBienBanChuanBiKho item = new NhBienBanChuanBiKho();
         BeanUtils.copyProperties(req, item, "id");
-        item.setNgayTao(LocalDate.now());
+        item.setNgayTao(new Date());
         item.setNguoiTaoId(userInfo.getId());
         item.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         item.setMaDvi(userInfo.getDvql());
@@ -186,7 +186,7 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
 
         NhBienBanChuanBiKho item = optional.get();
         BeanUtils.copyProperties(req, item, "id", "so", "nam");
-        item.setNgaySua(LocalDate.now());
+        item.setNgaySua(new Date());
         item.setNguoiSuaId(userInfo.getId());
         nhBienBanChuanBiKhoRepository.save(item);
         Map<Long, NhBienBanChuanBiKhoCt> mapChiTiet = nhBienBanChuanBiKhoCtRepository.findByBbChuanBiKhoIdIn(Collections.singleton(item.getId()))
@@ -246,7 +246,7 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
 
             bb.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_TK.getId());
             bb.setNguoiGuiDuyetId(userInfo.getId());
-            bb.setNgayGuiDuyet(LocalDate.now());
+            bb.setNgayGuiDuyet(new Date());
 
         } else if (NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId().equals(trangThai))
@@ -254,21 +254,21 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
 
             bb.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId());
             bb.setNguoiGuiDuyetId(userInfo.getId());
-            bb.setNgayGuiDuyet(LocalDate.now());
+            bb.setNgayGuiDuyet(new Date());
         } else if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
                 return false;
 
             bb.setTrangThai(NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId());
             bb.setNguoiPduyetId(userInfo.getId());
-            bb.setNgayPduyet(LocalDate.now());
+            bb.setNgayPduyet(new Date());
         } else if (NhapXuatHangTrangThaiEnum.TUCHOI_TK.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.CHODUYET_TK.getId().equals(trangThai))
                 return false;
 
             bb.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_TK.getId());
             bb.setNguoiPduyetId(userInfo.getId());
-            bb.setNgayPduyet(LocalDate.now());
+            bb.setNgayPduyet(new Date());
             bb.setLyDoTuChoi(stReq.getLyDo());
         } else if (NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
@@ -276,7 +276,7 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
 
             bb.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId());
             bb.setNguoiPduyetId(userInfo.getId());
-            bb.setNgayPduyet(LocalDate.now());
+            bb.setNgayPduyet(new Date());
             bb.setLyDoTuChoi(stReq.getLyDo());
         } else {
             throw new Exception("Bad request.");

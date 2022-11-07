@@ -81,7 +81,7 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
 
         NhBangKeVt item = new NhBangKeVt();
         BeanUtils.copyProperties(req, item, "id");
-        item.setNgayTao(LocalDate.now());
+        item.setNgayTao(new Date());
         item.setNguoiTaoId(userInfo.getId());
         item.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         item.setMaDvi(userInfo.getDvql());
@@ -186,7 +186,7 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
 
         NhBangKeVt item = optional.get();
         BeanUtils.copyProperties(req, item, "id", "so", "nam");
-        item.setNgaySua(LocalDate.now());
+        item.setNgaySua(new Date());
         item.setNguoiSuaId(userInfo.getId());
 
         bangKeVtRepository.save(item);
@@ -248,26 +248,26 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
 
             item.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId());
             item.setNguoiGuiDuyetId(userInfo.getId());
-            item.setNgayGuiDuyet(LocalDate.now());
+            item.setNgayGuiDuyet(new Date());
         } else if (NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId().equals(trangThai))
                 return false;
             item.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId());
             item.setNguoiPduyetId(userInfo.getId());
-            item.setNgayPduyet(LocalDate.now());
+            item.setNgayPduyet(new Date());
         } else if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
                 return false;
             item.setTrangThai(NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId());
             item.setNguoiPduyetId(userInfo.getId());
-            item.setNgayPduyet(LocalDate.now());
+            item.setNgayPduyet(new Date());
         } else if (NhapXuatHangTrangThaiEnum.TUCHOI_KT.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId().equals(trangThai))
                 return false;
 
             item.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_KT.getId());
             item.setNguoiPduyetId(userInfo.getId());
-            item.setNgayPduyet(LocalDate.now());
+            item.setNgayPduyet(new Date());
             item.setLyDoTuChoi(stReq.getLyDo());
         } else if (NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
@@ -275,7 +275,7 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
 
             item.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId());
             item.setNguoiPduyetId(userInfo.getId());
-            item.setNgayPduyet(LocalDate.now());
+            item.setNgayPduyet(new Date());
             item.setLyDoTuChoi(stReq.getLyDo());
         } else {
             throw new Exception("Bad request.");

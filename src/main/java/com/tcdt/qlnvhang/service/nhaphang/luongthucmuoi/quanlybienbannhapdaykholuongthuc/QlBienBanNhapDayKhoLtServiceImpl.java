@@ -83,7 +83,7 @@ public class QlBienBanNhapDayKhoLtServiceImpl extends BaseServiceImpl implements
         }
         NhBbNhapDayKho item = new NhBbNhapDayKho();
         BeanUtils.copyProperties(req, item, "id");
-        item.setNgayTao(LocalDate.now());
+        item.setNgayTao(new Date());
         item.setNguoiTaoId(userInfo.getId());
         item.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         item.setMaDvi(userInfo.getDvql());
@@ -132,7 +132,7 @@ public class QlBienBanNhapDayKhoLtServiceImpl extends BaseServiceImpl implements
 
         NhBbNhapDayKho item = optional.get();
         BeanUtils.copyProperties(req, item, "id");
-        item.setNgaySua(LocalDate.now());
+        item.setNgaySua(new Date());
         item.setNguoiSuaId(userInfo.getId());
         nhBbNhapDayKhoRepository.save(item);
 

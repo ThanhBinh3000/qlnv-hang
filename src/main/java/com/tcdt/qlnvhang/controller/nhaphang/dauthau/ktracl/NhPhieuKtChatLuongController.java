@@ -29,7 +29,7 @@ public class NhPhieuKtChatLuongController {
 	@Autowired
 	private NhPhieuKtChatLuongService service;
 
-	@ApiOperation(value = "Tạo mới phiếu kiểm tra chất lượng hàng lương thực", response = List.class)
+	@ApiOperation(value = "Tạo mới", response = List.class)
 	@PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> insert(@Valid @RequestBody QlpktclhPhieuKtChatLuongRequestDto request) {
 		BaseResponse resp = new BaseResponse();
@@ -40,12 +40,12 @@ public class NhPhieuKtChatLuongController {
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error("Tạo mới phiếu kiểm tra chất lượng hàng lương thực", e);
+			log.error("Tạo mới", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Sửa phiếu kiểm tra chất lượng hàng lương thực", response = List.class)
+	@ApiOperation(value = "Sửa", response = List.class)
 	@PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> update(@Valid @RequestBody QlpktclhPhieuKtChatLuongRequestDto request) {
 		BaseResponse resp = new BaseResponse();
@@ -56,12 +56,12 @@ public class NhPhieuKtChatLuongController {
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error("Sửa phiếu kiểm tra chất lượng hàng lương thực", e);
+			log.error("Sửa", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Tra cứu phiếu kiểm tra chất lượng hàng lương thực", response = List.class)
+	@ApiOperation(value = "Tra cứu", response = List.class)
 	@PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> search(@RequestBody QlpktclhPhieuKtChatLuongRequestDto req) {
 		BaseResponse resp = new BaseResponse();
@@ -72,12 +72,12 @@ public class NhPhieuKtChatLuongController {
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error("Tra cứu phiếu kiểm tra chất lượng hàng lương thực", e);
+			log.error("Tra cứu", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Chi tiết phiếu kiểm tra chất lượng hàng lương thực", response = List.class)
+	@ApiOperation(value = "Chi tiết", response = List.class)
 	@GetMapping(PathContains.URL_CHI_TIET + "/{id}")
 	public final ResponseEntity<BaseResponse> getDetail(@PathVariable("id") Long id) {
 		BaseResponse resp = new BaseResponse();
@@ -89,12 +89,12 @@ public class NhPhieuKtChatLuongController {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
 			log.error(e.getMessage());
-			log.error("Chi tiết phiếu kiểm tra chất lượng hàng lương thực error", e);
+			log.error("Chi tiết error", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Gửi duyệt/Phê duyệt/Từ chối phiếu kiểm tra chất lượng hàng lương thực", response = List.class)
+	@ApiOperation(value = "Gửi duyệt/Phê duyệt/Từ chối", response = List.class)
 	@PostMapping(PathContains.URL_PHE_DUYET)
 	public final ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody QlpktclhPhieuKtChatLuongRequestDto req) {
 		BaseResponse resp = new BaseResponse();
@@ -106,12 +106,12 @@ public class NhPhieuKtChatLuongController {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
 			log.error(e.getMessage());
-			log.error("Gửi duyệt/Phê duyệt/Từ chối phiếu kiểm tra chất lượng hàng lương thực error", e);
+			log.error("Gửi duyệt/Phê duyệt/Từ chối error", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Xóa phiếu kiểm tra chất lượng hàng lương thực", response = List.class)
+	@ApiOperation(value = "Xóa", response = List.class)
 	@PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<BaseResponse> deleteQd(@Valid @RequestBody IdSearchReq idSearchReq) {
@@ -124,12 +124,12 @@ public class NhPhieuKtChatLuongController {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
 			log.error(e.getMessage());
-			log.error("Xóa phiếu kiểm tra chất lượng hàng lương thực error", e);
+			log.error("Xóa error", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Export phiếu kiểm tra chất lượng hàng lương thực", response = List.class)
+	@ApiOperation(value = "Export", response = List.class)
 	@PostMapping(value = "/export/list", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody QlpktclhPhieuKtChatLuongRequestDto req) {
@@ -142,20 +142,20 @@ public class NhPhieuKtChatLuongController {
 
 	}
 
-	@ApiOperation(value = "Delete multiple phiếu kiểm tra chất lượng hàng lương thực", response = List.class)
+	@ApiOperation(value = "Delete multiple", response = List.class)
 	@ResponseStatus(HttpStatus.OK)
 	@PostMapping("so-luong-nhap-kho")
 	public final ResponseEntity<BaseResponse> deleteMultiple(@RequestBody QlpktclhPhieuKtChatLuongRequestDto req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(service.getSoLuongNhapKho(req));
+			resp.setData(service.getSoLuongNhapKho(req.getIdDdiemGiaoNvNh()));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
 			resp.setMsg(e.getMessage());
-			log.error("Delete multiple phiếu kiểm tra chất lượng hàng lương thực lỗi ", e);
+			log.error("Delete multiple lỗi ", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
@@ -172,12 +172,12 @@ public class NhPhieuKtChatLuongController {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
 			resp.setMsg(e.getMessage());
-			log.error("Delete multiple phiếu kiểm tra chất lượng hàng lương thực lỗi ", e);
+			log.error("Delete multiple lỗi ", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
 
-//	@ApiOperation(value = "Get số phiếu kiểm tra chất lượng hàng lương thực", response = List.class)
+//	@ApiOperation(value = "Get số", response = List.class)
 //	@GetMapping("/so")
 //	public ResponseEntity<BaseResponse> getSo() {
 //		BaseResponse resp = new BaseResponse();
@@ -188,7 +188,7 @@ public class NhPhieuKtChatLuongController {
 //		} catch (Exception e) {
 //			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 //			resp.setMsg(e.getMessage());
-//			log.error("Get số phiếu kiểm tra chất lượng hàng lương thực lỗi", e);
+//			log.error("Get số lỗi", e);
 //		}
 //		return ResponseEntity.ok(resp);
 //	}

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -20,27 +21,27 @@ public class TrangThaiBaseEntity {
 	@Transient
 	private String tenTrangThai;
 
-	private LocalDate ngayTao;
+	private Date ngayTao;
 
 	private Long nguoiTaoId;
 
 	@Transient
 	private String tenNguoiTao;
 
-	private LocalDate ngaySua;
+	private Date ngaySua;
 
 	private Long nguoiSuaId;
 
 	private Long nguoiGuiDuyetId;
 
-	private LocalDate ngayGuiDuyet;
+	private Date ngayGuiDuyet;
 
 	private Long nguoiPduyetId;
 
 	@Transient
 	private String tenNguoiPduyet;
 
-	private LocalDate ngayPduyet;
+	private Date ngayPduyet;
 
 	private String lyDoTuChoi;
 

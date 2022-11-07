@@ -74,13 +74,13 @@ public class HhQdGiaoNvuNhapxuatDtl implements Serializable {
 	@Transient
 	List<HhQdGiaoNvuNxDdiem> children = new ArrayList<>();
 
-	@Transient
-	List<NhPhieuKtChatLuong> listPhieuKtraCl;
-
-	@Transient
-	List<NhPhieuNhapKho> listPhieuNhapKho;
-
-	@Transient
-	List<NhBangKeCanHang> listBangKeCanHang;
+//	@Transient
+//	List<NhPhieuKtChatLuong> listPhieuKtraCl;
+//
+//	@Transient
+//	List<NhPhieuNhapKho> listPhieuNhapKho;
+//
+//	@Transient
+//	List<NhBangKeCanHang> listBangKeCanHang;
 
 }

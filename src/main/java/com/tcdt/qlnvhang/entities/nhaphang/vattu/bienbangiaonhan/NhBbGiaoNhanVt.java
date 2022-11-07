@@ -84,26 +84,14 @@ public class NhBbGiaoNhanVt extends TrangThaiBaseEntity implements Serializable 
     @Column(name = "NGUOI_TAO_ID")
     private Long nguoiTaoId;
 
-    @Column(name = "NGAY_TAO")
-    private LocalDate ngayTao;
-
     @Column(name = "NGUOI_SUA_ID")
     private Long nguoiSuaId;
-
-    @Column(name = "NGAY_SUA")
-    private LocalDate ngaySua;
 
     @Column(name = "NGUOI_GUI_DUYET_ID")
     private Long nguoiGuiDuyetId;
 
-    @Column(name = "NGAY_GUI_DUYET")
-    private LocalDate ngayGuiDuyet;
-
     @Column(name = "NGUOI_PDUYET_ID")
     private Long nguoiPduyetId;
-
-    @Column(name = "NGAY_PDUYET")
-    private LocalDate ngayPduyet;
 
     @Column(name = "SO")
     private Integer so;

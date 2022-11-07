@@ -34,10 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -95,7 +92,7 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
         item.setKienNghi(req.getKienNghi());
         item.setNguyenNhan(req.getNguyenNhan());
         item.setNam(LocalDate.now().getYear());
-        item.setNgayTao(LocalDate.now());
+        item.setNgayTao(new Date());
         item.setNguoiTaoId(userInfo.getId());
         item.setTrangThai(TrangThaiEnum.DU_THAO.getId());
 
@@ -162,7 +159,7 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
         item.setKienNghi(req.getKienNghi());
         item.setNguyenNhan(req.getNguyenNhan());
         item.setNam(LocalDate.now().getYear());
-        item.setNgaySua(LocalDate.now());
+        item.setNgaySua(new Date());
         item.setNguoiSuaId(userInfo.getId());
 
         List<Object[]> fromDb = xhBienBanTinhKhoRepository.getHangTrongKho(item.getMaLokho(), item.getMaChungLoaiHangHoa());
@@ -253,7 +250,7 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
 
             item.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_KTVBQ.getId());
             item.setNguoiGuiDuyetId(userInfo.getId());
-            item.setNgayGuiDuyet(LocalDate.now());
+            item.setNgayGuiDuyet(new Date());
 
         } else if (NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.CHODUYET_KTVBQ.getId().equals(trangThai))
@@ -261,7 +258,7 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
 
             item.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId());
             item.setNguoiPduyetId(userInfo.getId());
-            item.setNgayPduyet(LocalDate.now());
+            item.setNgayPduyet(new Date());
 
         } else if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
@@ -269,7 +266,7 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
 
             item.setTrangThai(NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId());
             item.setNguoiPduyetId(userInfo.getId());
-            item.setNgayPduyet(LocalDate.now());
+            item.setNgayPduyet(new Date());
 
         } else if (NhapXuatHangTrangThaiEnum.TUCHOI_KTVBQ.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.CHODUYET_KTVBQ.getId().equals(trangThai))
@@ -277,7 +274,7 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
 
             item.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_KTVBQ.getId());
             item.setNguoiPduyetId(userInfo.getId());
-            item.setNgayPduyet(LocalDate.now());
+            item.setNgayPduyet(new Date());
             item.setLyDoTuChoi(stReq.getLyDo());
 
         } else if (NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId().equals(stReq.getTrangThai())) {
@@ -286,7 +283,7 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
 
             item.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId());
             item.setNguoiPduyetId(userInfo.getId());
-            item.setNgayPduyet(LocalDate.now());
+            item.setNgayPduyet(new Date());
             item.setLyDoTuChoi(stReq.getLyDo());
 
         } else {
@@ -333,7 +330,7 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
                 objs[0] = i;
                 objs[1] = item.getSoBienBan();
                 objs[2] = item.getSoQd();
-                objs[3] = LocalDateTimeUtils.localDateToString(item.getNgayLapPhieu());
+                objs[3] = item.getNgayLapPhieu();
                 objs[4] = item.getDiemKho();
                 objs[5] = item.getNhaKho();
                 objs[6] = item.getNganKho();

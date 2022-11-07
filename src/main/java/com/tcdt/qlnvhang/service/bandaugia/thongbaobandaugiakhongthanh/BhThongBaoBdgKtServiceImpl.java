@@ -65,7 +65,7 @@ public class BhThongBaoBdgKtServiceImpl extends BaseServiceImpl implements BhTho
 
         BhThongBaoBdgKt item = new BhThongBaoBdgKt();
         BeanUtils.copyProperties(req, item, "id");
-        item.setNgayTao(LocalDate.now());
+        item.setNgayTao(new Date());
         item.setNguoiTaoId(userInfo.getId());
         item.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         item.setMaDvi(userInfo.getDvql());
@@ -125,7 +125,7 @@ public class BhThongBaoBdgKtServiceImpl extends BaseServiceImpl implements BhTho
 
         BhThongBaoBdgKt item = optional.get();
         BeanUtils.copyProperties(req, item, "id", "so", "nam");
-        item.setNgaySua(LocalDate.now());
+        item.setNgaySua(new Date());
         item.setNguoiSuaId(userInfo.getId());
 
         bhThongBaoBdgKtRepository.save(item);
@@ -189,14 +189,14 @@ public class BhThongBaoBdgKtServiceImpl extends BaseServiceImpl implements BhTho
 
             phieu.setTrangThai(NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
             phieu.setNguoiGuiDuyetId(userInfo.getId());
-            phieu.setNgayGuiDuyet(LocalDate.now());
+            phieu.setNgayGuiDuyet(new Date());
         } else if (NhapXuatHangTrangThaiEnum.TUCHOI_LDC.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
                 return false;
 
             phieu.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_LDC.getId());
             phieu.setNguoiPduyetId(userInfo.getId());
-            phieu.setNgayPduyet(LocalDate.now());
+            phieu.setNgayPduyet(new Date());
             phieu.setLyDoTuChoi(stReq.getLyDo());
         }  else {
             throw new Exception("Bad request.");

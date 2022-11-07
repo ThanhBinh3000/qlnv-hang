@@ -70,7 +70,7 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
 
         NhBienBanGuiHang item = new NhBienBanGuiHang();
         BeanUtils.copyProperties(req, item, "id");
-        item.setNgayTao(LocalDate.now());
+        item.setNgayTao(new Date());
         item.setNguoiTaoId(userInfo.getId());
         item.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         item.setMaDvi(userInfo.getDvql());
@@ -155,7 +155,7 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
 
         NhBienBanGuiHang item = optional.get();
         BeanUtils.copyProperties(req, item, "id");
-        item.setNgaySua(LocalDate.now());
+        item.setNgaySua(new Date());
         item.setNguoiSuaId(userInfo.getId());
         bienBanGuiHangRepository.save(item);
         Map<Long, NhBienBanGuiHangCt> mapChiTiet = bienBanGuiHangCtRepository.findByBienBanGuiHangIdIn(Collections.singleton(item.getId()))
@@ -215,7 +215,7 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
 
             item.setTrangThai(NhapXuatHangTrangThaiEnum.DAKY.getId());
             item.setNguoiPduyetId(userInfo.getId());
-            item.setNgayPduyet(LocalDate.now());
+            item.setNgayPduyet(new Date());
         } else {
             throw new Exception("Bad request.");
         }

@@ -30,7 +30,7 @@ public class NhPhieuNhapKhoController {
     @Autowired
     private NhPhieuNhapKhoService nhPhieuNhapKhoService;
 
-    @ApiOperation(value = "Tạo mới Quản lý phiếu nhập kho lương thực", response = List.class)
+    @ApiOperation(value = "Tạo mới Quản lý lương thực", response = List.class)
     @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> insert(@Valid @RequestBody NhPhieuNhapKhoReq request) {
         BaseResponse resp = new BaseResponse();
@@ -41,12 +41,12 @@ public class NhPhieuNhapKhoController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Tạo mới Quản lý phiếu nhập kho lương thực lỗi: {}", e);
+            log.error("Tạo mới Quản lý lương thực lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Sửa Quản lý phiếu nhập kho lương thực", response = List.class)
+    @ApiOperation(value = "Sửa Quản lý lương thực", response = List.class)
     @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> update(@Valid @RequestBody NhPhieuNhapKhoReq request) {
         BaseResponse resp = new BaseResponse();
@@ -57,12 +57,12 @@ public class NhPhieuNhapKhoController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Sửa Quản lý phiếu nhập kho lương thực lỗi: {}", e);
+            log.error("Sửa Quản lý lương thực lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Chi tiết Quản lý phiếu nhập kho lương thực", response = List.class)
+    @ApiOperation(value = "Chi tiết Quản lý lương thực", response = List.class)
     @GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> detail(@PathVariable Long ids) {
         BaseResponse resp = new BaseResponse();
@@ -73,12 +73,12 @@ public class NhPhieuNhapKhoController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Chi tiết Quản lý phiếu nhập kho lương thực lỗi: {}", e);
+            log.error("Chi tiết Quản lý lương thực lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xóa Quản lý phiếu nhập kho lương thực", response = List.class)
+    @ApiOperation(value = "Xóa Quản lý lương thực", response = List.class)
     @PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
@@ -89,12 +89,12 @@ public class NhPhieuNhapKhoController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Xóa Quản lý phiếu nhập kho lương thực lỗi: {}", e);
+            log.error("Xóa Quản lý lương thực lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Phê duyệt/ từ chối Quản lý phiếu nhập kho lương thực", response = List.class)
+    @ApiOperation(value = "Phê duyệt/ từ chối Quản lý lương thực", response = List.class)
     @PostMapping(PathContains.URL_PHE_DUYET)
     public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody NhPhieuNhapKhoReq req) {
         BaseResponse resp = new BaseResponse();
@@ -105,12 +105,12 @@ public class NhPhieuNhapKhoController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Phê duyệt/ từ chối Quản lý phiếu nhập kho lương thực lỗi: {}", e);
+            log.error("Phê duyệt/ từ chối Quản lý lương thực lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Tra cứu Quản lý phiếu nhập kho lương thực", response = List.class)
+    @ApiOperation(value = "Tra cứu Quản lý lương thực", response = List.class)
     @GetMapping
     public ResponseEntity<BaseResponse> search(NhPhieuNhapKhoSearchReq req) {
         BaseResponse resp = new BaseResponse();
@@ -121,12 +121,12 @@ public class NhPhieuNhapKhoController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Tra cứu Quản lý phiếu nhập kho lương thực lỗi: {}", e);
+            log.error("Tra cứu Quản lý lương thực lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Delete multiple phiếu nhập kho lương thực", response = List.class)
+    @ApiOperation(value = "Delete multiple lương thực", response = List.class)
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/delete/multiple")
     public final ResponseEntity<BaseResponse> deleteMultiple(@RequestBody @Valid DeleteReq req) {
@@ -139,12 +139,12 @@ public class NhPhieuNhapKhoController {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
             resp.setMsg(e.getMessage());
-            log.error("Delete multiple phiếu nhập kho lương thực lỗi ", e);
+            log.error("Delete multiple lương thực lỗi ", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Export phiếu nhập kho lương thực", response = List.class)
+    @ApiOperation(value = "Export lương thực", response = List.class)
     @PostMapping(value = "/export/list", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody NhPhieuNhapKhoSearchReq req) {
@@ -156,7 +156,7 @@ public class NhPhieuNhapKhoController {
         }
     }
 
-    @ApiOperation(value = "Get số phiếu nhập kho lương thực", response = List.class)
+    @ApiOperation(value = "Get số lương thực", response = List.class)
     @GetMapping("/so")
     public ResponseEntity<BaseResponse> getSo() {
         BaseResponse resp = new BaseResponse();
@@ -167,7 +167,7 @@ public class NhPhieuNhapKhoController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Get số phiếu nhập kho lương thực lỗi", e);
+            log.error("Get số lương thực lỗi", e);
         }
         return ResponseEntity.ok(resp);
     }
