@@ -118,7 +118,7 @@ public class QlnvQdDChuyenHangController extends BaseController {
 		try {
 			int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
 			int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
-			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
+			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").descending());
 
 			Page<QlnvQdDChuyenHangHdr> dataPage = qlnvQdDChuyenHangHdrRepository
 					.findAll(QdinhDChuyenHangSpecification.buildSearchQuery(objReq), pageable);

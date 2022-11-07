@@ -104,7 +104,7 @@ public class QlnvSoTheoDoiController extends BaseController {
 		try {
 			int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
 			int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
-			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
+			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").descending());
 
 			Page<QlnvSoTheoDoi> soTheoDoi = qlnvSoTheoDoiRepository.selectParams(objReq.getSoTheodoi(), objReq.getMaDvi(),
 					objReq.getMaKho(), objReq.getTuNgayLap(), objReq.getDenNgayLap(), pageable);

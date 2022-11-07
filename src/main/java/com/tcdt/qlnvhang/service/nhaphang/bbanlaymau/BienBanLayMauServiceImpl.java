@@ -74,7 +74,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 
 	@Override
 	public Page<BienBanLayMau> searchPage(BienBanLayMauReq objReq) {
-		Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),objReq.getPaggingReq().getLimit(), Sort.by("id").ascending());
+		Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
 		Page<BienBanLayMau> bienBanLayMaus = bienBanLayMauRepository.selectPage(pageable);
 		Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
 		Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");

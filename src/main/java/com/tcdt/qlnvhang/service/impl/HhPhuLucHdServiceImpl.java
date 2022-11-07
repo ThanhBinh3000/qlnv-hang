@@ -241,7 +241,7 @@ public class HhPhuLucHdServiceImpl extends BaseServiceImpl implements HhPhuLucHd
 	public Page<HhPhuLucHd> colection(HhPhuLucHdSearchReq objReq) throws Exception {
 		int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
 		int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
-		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
+		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").descending());
 
 		Page<HhPhuLucHd> dataPage = hhPhuLucHdRepository.findAll(HhPhuLucHdSpecification.buildSearchQuery(objReq),
 				pageable);

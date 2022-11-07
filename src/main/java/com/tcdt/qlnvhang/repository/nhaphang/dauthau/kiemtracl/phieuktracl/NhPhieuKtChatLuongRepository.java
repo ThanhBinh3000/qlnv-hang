@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -38,5 +39,9 @@ public interface NhPhieuKtChatLuongRepository extends BaseRepository<NhPhieuKtCh
     List<NhPhieuKtChatLuong> findAllByIdQdGiaoNvNhOrderById(Long idQdGiaoNvNh);
 
     List<NhPhieuKtChatLuong> findByIdDdiemGiaoNvNhOrderById(Long idDdiemGiaoNvNh);
+
+    @Query(value = " SELECT NVL(SUM(KT.SO_LUONG_NHAP_KHO),0) as C FROM NH_PHIEU_KT_CHAT_LUONG KT " +
+            " WHERE KT.ID_DDIEM_GIAO_NV_NH = :idDdiemNhap AND KT.TRANG_THAI = :trangThai",nativeQuery = true)
+    BigDecimal soLuongNhapKho(Long idDdiemNhap,String trangThai);
 
 }

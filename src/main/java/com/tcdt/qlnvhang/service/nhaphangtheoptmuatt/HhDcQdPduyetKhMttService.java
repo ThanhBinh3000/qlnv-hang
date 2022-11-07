@@ -56,7 +56,7 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
     public Page<HhDcQdPduyetKhmttHdr> searchPage(SearchHhDcQdPduyetKhMttReq objReq) throws Exception{
         UserInfo userInfo = SecurityContextService.getUser();
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),
-                objReq.getPaggingReq().getLimit(), Sort.by("id").ascending());
+                objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<HhDcQdPduyetKhmttHdr> data = hhDcQdPduyetKhMttRepository.searchPage(
                 objReq.getNamKh(),
                 objReq.getSoQdDc(),

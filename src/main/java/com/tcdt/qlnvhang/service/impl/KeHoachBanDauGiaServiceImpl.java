@@ -493,7 +493,7 @@ public class KeHoachBanDauGiaServiceImpl extends BaseServiceImpl implements KeHo
 	@Override
 	public Page<KeHoachBanDauGia> searchPage(KeHoachBanDauGiaSearchRequest objReq) throws Exception{
 		UserInfo userInfo = SecurityContextService.getUser();
-		Pageable pageable= PageRequest.of(objReq.getPaggingReq().getPage(),objReq.getPaggingReq().getLimit(), Sort.by("id").ascending());
+		Pageable pageable= PageRequest.of(objReq.getPaggingReq().getPage(),objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
 		Page<KeHoachBanDauGia> data=keHoachBanDauGiaRepository.selectPage(
 				objReq.getNamKeHoach(),
 				objReq.getSoKeHoach(),

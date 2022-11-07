@@ -104,7 +104,7 @@ public class HhSoKhoDtlController extends BaseController {
 		try {
 			int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
 			int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
-			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
+			Pageable pageable = PageRequest.of(page, limit, Sort.by("id").descending());
 
 			Page<HhSoKhoDtl> qhKho = qlnvSoKhoDtlRepository.selectParams(objReq.getIdHdr(), objReq.getTuNgayGhi(),
 					objReq.getDenNgayGhi(),objReq.getTuNgayChungTu(),objReq.getDenNgayChungTu(),

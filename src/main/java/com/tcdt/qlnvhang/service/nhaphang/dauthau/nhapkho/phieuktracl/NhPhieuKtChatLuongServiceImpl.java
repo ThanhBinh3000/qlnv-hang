@@ -25,6 +25,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,7 @@ public class NhPhieuKtChatLuongServiceImpl extends BaseServiceImpl implements Nh
 
 	@Override
 	public Page<NhPhieuKtChatLuong> searchPage(QlpktclhPhieuKtChatLuongRequestDto objReq) {
-		Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),objReq.getPaggingReq().getLimit(), Sort.by("id").ascending());
+		Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
 		Page<NhPhieuKtChatLuong> qlpktclhPhieuKtChatLuongs = qlpktclhPhieuKtChatLuongRepo.selectPage(objReq.getSoPhieu(), objReq.getBienSoXe(), objReq.getNguoiGiaoHang(), pageable);
 		qlpktclhPhieuKtChatLuongs.getContent().forEach(x -> {
 			x.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(x.getTrangThai()));
@@ -271,7 +272,7 @@ public class NhPhieuKtChatLuongServiceImpl extends BaseServiceImpl implements Nh
 
 
 //	public Page<QlpktclhPhieuKtChatLuong> search(QlpktclhPhieuKtChatLuongFilterRequestDto req) {
-//		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").ascending());
+//		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").descending());
 //		return qlpktclhPhieuKtChatLuongRepo.select(req.getSoPhieu(),req.getNgayLapPhieu(),req.getTenNguoiGiao(), pageable);
 //	}
 
@@ -483,6 +484,12 @@ public class NhPhieuKtChatLuongServiceImpl extends BaseServiceImpl implements Nh
 	public List<NhPhieuKtChatLuong> findAllByIdDdiemGiaoNvNh(Long idDdiemGiaoNvNh) {
 		List<NhPhieuKtChatLuong> list = qlpktclhPhieuKtChatLuongRepo.findByIdDdiemGiaoNvNhOrderById(idDdiemGiaoNvNh);
 		return setDetailList(list);
+	}
+
+	@Override
+	public BigDecimal getSoLuongNhapKho(QlpktclhPhieuKtChatLuongRequestDto requestDto) {
+		BigDecimal bigDecimal = qlpktclhPhieuKtChatLuongRepo.soLuongNhapKho(requestDto.getIdDdiemGiaoNvNh(),NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId());
+		return bigDecimal;
 	}
 
 	List<NhPhieuKtChatLuong> setDetailList(List<NhPhieuKtChatLuong> list){

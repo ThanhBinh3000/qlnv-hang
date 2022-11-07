@@ -420,6 +420,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			dtl.setDsGoiThau(hhQdKhlcntDsgthauList);
 			dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThai()));
 
+
 			hhQdKhlcntDtlList.add(dtl);
 		}
 
@@ -479,7 +480,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		long countThatBai = byIdQdDtl.stream().filter(x -> x.getTrangThai().equals(NhapXuatHangTrangThaiEnum.THAT_BAI.getId())).count();
 		dtl.setSoGthauTrung(countThanhCong);
 		dtl.setSoGthauTruot(countThatBai);
-		dtl.setDxuatKhLcntHdr(hhDxuatKhLcntHdrRepository.findBySoDxuat(dtl.getSoDxuat()).get());
+		Optional<HhDxuatKhLcntHdr> bySoDxuat = hhDxuatKhLcntHdrRepository.findBySoDxuat(dtl.getSoDxuat());
+		bySoDxuat.ifPresent(dtl::setDxuatKhLcntHdr);
 		dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(dtl.getTrangThai()));
 		dtl.setTenDvi(hashMapDvi.get(dtl.getMaDvi()));
 		return dtl;
@@ -743,7 +745,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	public Page<HhQdKhlcntHdr> colection(HhQdKhlcntSearchReq objReq, HttpServletResponse response) throws Exception {
 		int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
 		int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
-		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
+		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").descending());
 
 		Page<HhQdKhlcntHdr> dataPage = null;
 
@@ -764,7 +766,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	public Page<HhQdKhlcntHdr> getAllPage(HhQdKhlcntSearchReq req) throws Exception {
 		int page = req.getPaggingReq().getPage();
 		int limit = req.getPaggingReq().getLimit();
-		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
+		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").descending());
 		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 		Page<HhQdKhlcntHdr> data = hhQdKhlcntHdrRepository.selectPage(req.getNamKhoach(), req.getLoaiVthh(), req.getSoQd(), req.getTrichYeu(),
 				convertDateToString(req.getTuNgayQd()),
