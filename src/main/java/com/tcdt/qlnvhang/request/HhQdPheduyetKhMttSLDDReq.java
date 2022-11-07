@@ -1,9 +1,12 @@
 package com.tcdt.qlnvhang.request;
 
+import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhQdPdKhMttSlddDtlReq;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class HhQdPheduyetKhMttSLDDReq {
@@ -20,4 +23,6 @@ public class HhQdPheduyetKhMttSLDDReq {
     private BigDecimal soLuongDxmtt;
     private BigDecimal donGiaVat;
     private BigDecimal thanhTien;
+
+    List<HhQdPdKhMttSlddDtlReq> listQdPdSlddDtl = new ArrayList<>();
 }

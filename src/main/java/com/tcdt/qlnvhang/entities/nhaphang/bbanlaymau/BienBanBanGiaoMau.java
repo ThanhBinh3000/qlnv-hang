@@ -39,9 +39,7 @@ public class BienBanBanGiaoMau extends TrangThaiBaseEntity implements Serializab
 	private String diaDiemBanGiao;
 
 	private Long nguoiGuiDuyetId;
-	private LocalDate ngayGuiDuyet;
 	private Long nguoiPduyetId;
-	private LocalDate ngayPduyet;
 	private String trangThai;
 	private String maDvi;
 	private String capDvi;

@@ -77,7 +77,7 @@ public class NhBangKeCanHangServiceImpl extends BaseServiceImpl implements NhBan
 
         NhBangKeCanHang item = new NhBangKeCanHang();
         BeanUtils.copyProperties(req, item, "id");
-        item.setNgayTao(LocalDate.now());
+        item.setNgayTao(new Date());
         item.setNguoiTaoId(userInfo.getId());
         item.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         item.setMaDvi(userInfo.getDvql());
@@ -119,7 +119,7 @@ public class NhBangKeCanHangServiceImpl extends BaseServiceImpl implements NhBan
 
         NhBangKeCanHang item = optional.get();
         BeanUtils.copyProperties(req, item, "id");
-        item.setNgaySua(LocalDate.now());
+        item.setNgaySua(new Date());
         item.setNguoiSuaId(userInfo.getId());
         nhBangKeCanHangRepository.save(item);
         this.saveCtiet(item.getId(),req);
@@ -171,16 +171,16 @@ public class NhBangKeCanHangServiceImpl extends BaseServiceImpl implements NhBan
             case Contains.CHODUYET_LDCC + Contains.DUTHAO:
             case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
                 phieu.setNguoiGuiDuyetId(userInfo.getId());
-                phieu.setNgayGuiDuyet(LocalDate.now());
+                phieu.setNgayGuiDuyet(new Date());
                 break;
             case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
                 phieu.setNguoiPduyetId(userInfo.getId());
-                phieu.setNgayPduyet(LocalDate.now());
+                phieu.setNgayPduyet(new Date());
                 phieu.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
             case Contains.DADUYET_LDCC + Contains.CHODUYET_LDCC:
                 phieu.setNguoiPduyetId(userInfo.getId());
-                phieu.setNgayPduyet(LocalDate.now());
+                phieu.setNgayPduyet(new Date());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");

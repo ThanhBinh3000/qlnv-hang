@@ -74,7 +74,7 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
 
         NhPhieuNhapKhoTamGui item = new NhPhieuNhapKhoTamGui();
         BeanUtils.copyProperties(req, item, "id");
-        item.setNgayTao(LocalDate.now());
+        item.setNgayTao(new Date());
         item.setNguoiTaoId(userInfo.getId());
         item.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         item.setMaDvi(userInfo.getDvql());
@@ -160,7 +160,7 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
 
         NhPhieuNhapKhoTamGui item = optional.get();
         BeanUtils.copyProperties(req, item, "id");
-        item.setNgaySua(LocalDate.now());
+        item.setNgaySua(new Date());
         item.setNguoiSuaId(userInfo.getId());
 
         nhPhieuNhapKhoTamGuiRepository.save(item);
@@ -224,7 +224,7 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
 
             item.setTrangThai(NhapXuatHangTrangThaiEnum.DAKY.getId());
             item.setNguoiPduyetId(userInfo.getId());
-            item.setNgayPduyet(LocalDate.now());
+            item.setNgayPduyet(new Date());
         } else {
             throw new Exception("Bad request.");
         }

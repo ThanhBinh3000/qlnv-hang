@@ -13,6 +13,6 @@ public interface NhPhieuKtChatLuongService extends BaseService<NhPhieuKtChatLuon
 
     List<NhPhieuKtChatLuong> findAllByIdDdiemGiaoNvNh(Long idDdiemGiaoNvNh);
 
-    BigDecimal getSoLuongNhapKho(QlpktclhPhieuKtChatLuongRequestDto requestDto);
+    BigDecimal getSoLuongNhapKho(Long idDdiemGiaoNvNh);
 
 }

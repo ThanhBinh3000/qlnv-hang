@@ -79,7 +79,7 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
 
         NhHoSoKyThuat item = new NhHoSoKyThuat();
         BeanUtils.copyProperties(req, item, "id");
-        item.setNgayTao(LocalDate.now());
+        item.setNgayTao(new Date());
         item.setNguoiTaoId(userInfo.getId());
         item.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         item.setMaDvi(userInfo.getDvql());
@@ -184,7 +184,7 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
 
         NhHoSoKyThuat item = optional.get();
         BeanUtils.copyProperties(req, item, "id");
-        item.setNgaySua(LocalDate.now());
+        item.setNgaySua(new Date());
         item.setNguoiSuaId(userInfo.getId());
         nhHoSoKyThuatRepository.save(item);
         Map<Long, NhHoSoKyThuatCt> mapChiTiet = nhHoSoKyThuatCtRepository.findByHoSoKyThuatIdIn(Collections.singleton(item.getId()))
@@ -251,7 +251,7 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
 
             item.setTrangThai(NhapXuatHangTrangThaiEnum.DAKY.getId());
             item.setNguoiPduyetId(userInfo.getId());
-            item.setNgayPduyet(LocalDate.now());
+            item.setNgayPduyet(new Date());
         } else {
             throw new Exception("Bad request.");
         }

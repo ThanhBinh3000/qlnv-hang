@@ -76,9 +76,7 @@ public class NhPhieuNhapKhoTamGui extends TrangThaiBaseEntity implements Seriali
     private String loaiVthh;
 
     private Long nguoiGuiDuyetId;
-    private LocalDate ngayGuiDuyet;
     private Long nguoiPduyetId;
-    private LocalDate ngayPduyet;
     private String maDvi;
     private String capDvi;
     private Integer so;

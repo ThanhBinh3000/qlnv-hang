@@ -93,7 +93,7 @@ public class BhQdPheDuyetKqbdgServiceImpl extends BaseServiceImpl implements BhQ
 
         BhQdPheDuyetKqbdg item = new BhQdPheDuyetKqbdg();
         BeanUtils.copyProperties(req, item, "id");
-        item.setNgayTao(LocalDate.now());
+        item.setNgayTao(new Date());
         item.setNguoiTaoId(userInfo.getId());
         item.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         item.setMaDvi(userInfo.getDvql());
@@ -169,7 +169,7 @@ public class BhQdPheDuyetKqbdgServiceImpl extends BaseServiceImpl implements BhQ
 
         BhQdPheDuyetKqbdg item = optional.get();
         BeanUtils.copyProperties(req, item, "id", "so", "nam");
-        item.setNgaySua(LocalDate.now());
+        item.setNgaySua(new Date());
         item.setNguoiSuaId(userInfo.getId());
 
         bhQdPheDuyetKqbdgRepository.save(item);
@@ -234,18 +234,18 @@ public class BhQdPheDuyetKqbdgServiceImpl extends BaseServiceImpl implements BhQ
             case Contains.CHO_DUYET_TP + Contains.TUCHOI_TP:
             case Contains.CHO_DUYET_TP + Contains.TUCHOI_LDC:
                 optional.get().setNguoiGuiDuyetId(userInfo.getId());
-                optional.get().setNgayGuiDuyet(LocalDate.now());
+                optional.get().setNgayGuiDuyet(new Date());
                 break;
             case Contains.TUCHOI_TP + Contains.CHO_DUYET_TP:
             case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
                 optional.get().setNguoiPduyetId(getUser().getId());
-                optional.get().setNgayPduyet(LocalDate.now());
+                optional.get().setNgayPduyet(new Date());
                 optional.get().setLyDoTuChoi(stReq.getLyDo());
                 break;
             case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
             case Contains.BAN_HANH + Contains.DADUYET_LDC:
                 optional.get().setNguoiPduyetId(getUser().getId());
-                optional.get().setNgayPduyet(LocalDate.now());
+                optional.get().setNgayPduyet(new Date());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");

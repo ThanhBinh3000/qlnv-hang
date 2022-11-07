@@ -107,7 +107,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 		BeanUtils.copyProperties(req, bienBienLayMau, "id");
 		bienBienLayMau.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
 		bienBienLayMau.setNguoiTaoId(userInfo.getId());
-		bienBienLayMau.setNgayTao(LocalDate.now());
+		bienBienLayMau.setNgayTao(new Date());
 		bienBienLayMau.setMaDvi(userInfo.getDvql());
 		bienBienLayMau.setId(Long.valueOf(req.getSoBienBan().split("/")[0]));
 		bienBanLayMauRepository.save(bienBienLayMau);
@@ -132,7 +132,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 		BienBanLayMau bienBienLayMau = optional.get();
 		BeanUtils.copyProperties(req, bienBienLayMau, "id");
 		bienBienLayMau.setNguoiSuaId(userInfo.getId());
-		bienBienLayMau.setNgaySua(LocalDate.now());
+		bienBienLayMau.setNgaySua(new Date());
 		bienBanLayMauRepository.save(bienBienLayMau);
 
 
@@ -187,16 +187,16 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 			case Contains.CHODUYET_LDCC + Contains.DUTHAO:
 			case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
 				phieu.setNguoiGuiDuyetId(userInfo.getId());
-				phieu.setNgayGuiDuyet(LocalDate.now());
+				phieu.setNgayGuiDuyet(new Date());
 				break;
 			case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
 				phieu.setNguoiPduyetId(userInfo.getId());
-				phieu.setNgayPduyet(LocalDate.now());
+				phieu.setNgayPduyet(new Date());
 				phieu.setLyDoTuChoi(req.getLyDoTuChoi());
 				break;
 			case Contains.DADUYET_LDCC + Contains.CHODUYET_LDCC:
 				phieu.setNguoiPduyetId(userInfo.getId());
-				phieu.setNgayPduyet(LocalDate.now());
+				phieu.setNgayPduyet(new Date());
 				break;
 			default:
 				throw new Exception("Phê duyệt không thành công");

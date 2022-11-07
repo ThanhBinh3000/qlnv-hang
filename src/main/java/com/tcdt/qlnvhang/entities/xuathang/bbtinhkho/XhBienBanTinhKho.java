@@ -40,9 +40,7 @@ public class XhBienBanTinhKho extends TrangThaiBaseEntity implements Serializabl
     private String nguyenNhan;
     private String kienNghi;
     private Long nguoiGuiDuyetId;
-    private LocalDate ngayGuiDuyet;
     private Long nguoiPduyetId;
-    private LocalDate ngayPduyet;
     private String trangThai;
     private String lyDoTuChoi;
     private Integer so;
