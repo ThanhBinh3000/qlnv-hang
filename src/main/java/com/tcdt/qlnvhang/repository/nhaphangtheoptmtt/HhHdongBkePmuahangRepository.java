@@ -31,4 +31,6 @@ public interface HhHdongBkePmuahangRepository extends JpaRepository<HhHdongBkePm
     Optional<HhHdongBkePmuahangHdr> findAllBySoHdong(String soHdong);
 
     List<HhHdongBkePmuahangHdr> findAllByIdIn(List<Long> ids);
+
+    HhHdongBkePmuahangHdr findAllById(Long id);
 }

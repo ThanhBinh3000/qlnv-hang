@@ -111,7 +111,7 @@ public class HhHdongBkePmuahangService extends BaseServiceImpl {
         data.setNgayTao(new Date());
         data.setNguoiTao(userInfo.getUsername());
         data.setTrangThaiHd(Contains.DUTHAO);
-        data.setTrangThaiNh(Contains.DUTHAO);
+        data.setTrangThaiNh(null);
         Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
         data.setTenDvi(StringUtils.isEmpty(userInfo.getDvql()) ? null : hashMapDmdv.get(userInfo.getDvql()));
         data.setMaDvi(userInfo.getDvql());

@@ -23,8 +23,8 @@ public class HhQdPduyetKqcgHdrReq  {
     private Date ngayKy;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayHluc;
-  private Long idPdKh;
-  /*    private String soQdPdKh;
+    private Long idPdKh;
+    private String soQdPdKh;
     private String trichYeu;
     private String ghiChu;
     private String maDvi;
@@ -37,7 +37,7 @@ public class HhQdPduyetKqcgHdrReq  {
     private String loaiVthh;
     private String cloaiVthh;
     private String moTaHangHoa;
-    private String trangThai;*/
+    private String trangThai;
 
     private List<FileDinhKemReq> fileDinhkems =new ArrayList<>();
 

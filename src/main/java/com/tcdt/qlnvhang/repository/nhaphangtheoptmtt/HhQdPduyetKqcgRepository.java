@@ -25,4 +25,6 @@ public interface HhQdPduyetKqcgRepository extends JpaRepository<HhQdPduyetKqcgHd
 
     List<HhQdPduyetKqcgHdr> findAllByIdIn(List<Long> ids);
 
+    HhQdPduyetKqcgHdr findAllById(Long id);
+
 }

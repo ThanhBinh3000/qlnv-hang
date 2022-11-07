@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table;
 
 import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.BanDauGiaDiaDiemGiaoNhan;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhQdPdKhMttSlddDtl;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +10,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name ="HH_QD_PHE_DUYET_KHMTT_SLDD")
@@ -33,4 +36,7 @@ public class HhQdPheduyetKhMttSLDD implements Serializable {
     private BigDecimal soLuongDxmtt;
     private BigDecimal donGiaVat;
     private BigDecimal thanhTien;
+
+    @Transient
+    List<HhQdPdKhMttSlddDtl> listQdPdSldDtl= new ArrayList<>();
 }

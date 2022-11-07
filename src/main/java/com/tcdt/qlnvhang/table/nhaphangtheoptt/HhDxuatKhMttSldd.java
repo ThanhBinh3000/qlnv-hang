@@ -5,6 +5,8 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "HH_DX_KHMTT_SLDD")
@@ -27,4 +29,7 @@ public class HhDxuatKhMttSldd implements Serializable {
     private BigDecimal soLuongDxmtt;
     private BigDecimal donGiaVat;
     private BigDecimal thanhTien;
+
+    @Transient
+    private List<HhDxuatKhMttSlddDtl> ListSlddDtl = new ArrayList<>();
 }
