@@ -48,6 +48,7 @@ public class HhQdPduyetKqcgHdr implements Serializable {
     private String tenCloaiVthh;
     private String moTaHangHoa;
     private String trangThai;
+    private String trangThaiNh;
     @Transient
     private String tenTrangThai;
     @Temporal(TemporalType.DATE)
