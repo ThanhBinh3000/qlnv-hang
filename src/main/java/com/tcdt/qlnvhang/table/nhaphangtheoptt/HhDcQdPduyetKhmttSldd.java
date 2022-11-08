@@ -1,10 +1,13 @@
 package com.tcdt.qlnvhang.table.nhaphangtheoptt;
 
+import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhDcQdPdKhmttSlddDtlReq;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name ="HH_DC_QD_PDUYET_KHMTT_SLDD")
@@ -28,4 +31,6 @@ public class HhDcQdPduyetKhmttSldd implements Serializable {
     private BigDecimal soLuongDxmtt;
     private BigDecimal donGiaVat;
     private BigDecimal thanhTien;
+    @Transient
+    List<HhDcQdPdKhmttSlddDtlReq> listDcQdPdSldDtl= new ArrayList<>();
 }
