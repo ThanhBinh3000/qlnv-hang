@@ -7,6 +7,7 @@ import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhDxuatKhMttCcxdgRepositor
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhDxuatKhMttRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhDxuatKhMttSlddDtlRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhDxuatKhMttSlddRepository;
+import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -218,13 +219,13 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
             sldd.setTenDvi(StringUtils.isEmpty(sldd.getMaDvi())? null:hashMapDmdv.get(sldd.getMaDvi()));
             sldd.setDiaDiemKho(StringUtils.isEmpty(sldd.getMaDiemKho()) ? null : hashMapDmdv.get(sldd.getMaDiemKho()));
             List<HhDxuatKhMttSlddDtl> listSlddDtl= hhDxuatKhMttSlddDtlRepository.findAllByIdSldd(sldd.getId());
-            for (HhDxuatKhMttSlddDtl slddDtl :listSlddDtl){
-                slddDtl.setTenDvi(StringUtils.isEmpty(slddDtl.getMaDvi())? null:hashMapDmdv.get(slddDtl.getMaDvi()));
-                slddDtl.setDiaDiemKho(StringUtils.isEmpty(slddDtl.getMaDiemKho()) ? null : hashMapDmdv.get(slddDtl.getMaDiemKho()));
-            }
+           listSlddDtl.forEach( f -> {
+               f.setTenDvi(StringUtils.isEmpty(f.getMaDvi())? null : hashMapDmdv.get(f.getMaDvi()));
+               f.setTenDiemKho(StringUtils.isEmpty(f.getMaDiemKho())? null : hashMapDmdv.get(f.getMaDiemKho()));
+           });
+           sldd.setListSlddDtl(listSlddDtl);
         }
         data.setSoLuongDiaDiemList(listSlDd);
-
         return data;
     }
 
@@ -361,5 +362,18 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
                 throw new Exception("Chủng loại hàng hóa đã được tạo và gửi duyệt, xin vui lòng chọn lại chủng loại hàng hóa khác");
             }
         }
+        if(trangThai.equals(NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId())){
+            for (HhDxuatKhMttSldd chiCuc : objHdr.getSoLuongDiaDiemList()){
+                BigDecimal along = hhDxuatKhMttRepository.countSLDalenKh(objHdr.getNamKh(), objHdr.getLoaiVthh(), chiCuc.getMaDvi(), NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
+                BigDecimal soLuongTotal = along.add(chiCuc.getSoLuongDxmtt());
+                if (soLuongTotal.compareTo(chiCuc.getSoLuongCtieu()) > 0){
+                    throw new Exception(chiCuc.getTenDvi() + "Đã nhập quá số lượng chỉ tiêu vui lòng nhập lại ");
+                }
+            }
+        }
+    }
+
+    public BigDecimal countSoLuongKeHoachNam(CountKhMttSlReq req) throws Exception {
+        return hhDxuatKhMttRepository.countSLDalenKh(req.getYear(),req.getLoaiVthh(), req.getMaDvi(),NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
     }
 }
