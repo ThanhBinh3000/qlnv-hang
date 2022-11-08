@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -114,8 +115,10 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
                 item.setSoGthauTruot(countThatBai);
                 Optional<HhDxuatKhLcntHdr> bySoDxuat = hhDxuatKhLcntHdrRepository.findBySoDxuat(item.getSoDxuat());
                 bySoDxuat.ifPresent(item::setDxuatKhLcntHdr);
-                Optional<HhQdPduyetKqlcntHdr> bySoQd = hhQdPduyetKqlcntHdrRepository.findBySoQd(item.getSoQdPdKqLcnt());
-                bySoQd.ifPresent(item::setHhQdPduyetKqlcntHdr);
+                if(!StringUtils.isEmpty(item.getSoQdPdKqLcnt())){
+                    Optional<HhQdPduyetKqlcntHdr> bySoQd = hhQdPduyetKqlcntHdrRepository.findBySoQd(item.getSoQdPdKqLcnt());
+                    bySoQd.ifPresent(item::setHhQdPduyetKqlcntHdr);
+                }
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

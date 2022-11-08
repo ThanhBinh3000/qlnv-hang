@@ -95,6 +95,9 @@ public class NhBbNhapDayKho extends TrangThaiBaseEntity implements Serializable 
     @Column(name = "MA_DVI")
     private String maDvi;
 
+    @Transient
+    private String tenDvi;
+
     @Column(name = "NAM")
     private Integer nam;
 

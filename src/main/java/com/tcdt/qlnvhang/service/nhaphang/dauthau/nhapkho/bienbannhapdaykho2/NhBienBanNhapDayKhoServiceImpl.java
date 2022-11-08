@@ -114,7 +114,20 @@ public class NhBienBanNhapDayKhoServiceImpl extends BaseServiceImpl implements N
 
     @Override
     public NhBbNhapDayKho detail(Long id) throws Exception {
-        return null;
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null)
+            throw new Exception("Bad request.");
+
+        Optional<NhBbNhapDayKho> optional = nhBbNhapDayKhoRepository.findById(id);
+        if (!optional.isPresent())
+            throw new Exception("Biên bản không tồn tại.");
+
+        NhBbNhapDayKho item = optional.get();
+        Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
+        item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
+        item.setTenDvi(listDanhMucDvi.get(item.getMaDvi()));
+        item.setChiTiets(nhBbNhapDayKhoCtRepository.findAllByIdBbNhapDayKho(item.getId()));
+        return item;
     }
 
     @Override
