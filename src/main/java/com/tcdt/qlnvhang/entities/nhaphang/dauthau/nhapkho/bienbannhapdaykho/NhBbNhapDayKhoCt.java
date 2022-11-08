@@ -1,5 +1,7 @@
 package com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.util.Contains;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -38,6 +40,7 @@ public class NhBbNhapDayKhoCt implements Serializable {
     private String soBangKe;
 
     @Column(name = "NGAY_NHAP")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayNhap;
 
     @Column(name = "SO_LUONG")

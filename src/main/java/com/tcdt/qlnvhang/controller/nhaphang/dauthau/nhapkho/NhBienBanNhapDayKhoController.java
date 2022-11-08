@@ -96,11 +96,11 @@ public class NhBienBanNhapDayKhoController {
     }
 
     @ApiOperation(value = "Phê duyệt/ từ chối Quản lý lương thực", response = List.class)
-    @PutMapping("/status")
-    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody StatusReq req) {
+    @PostMapping(PathContains.URL_PHE_DUYET)
+    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody QlBienBanNhapDayKhoLtReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-//            resp.setData(service.updateStatusQd(req));
+            resp.setData(service.approve(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

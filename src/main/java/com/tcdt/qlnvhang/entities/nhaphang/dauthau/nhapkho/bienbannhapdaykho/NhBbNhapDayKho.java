@@ -51,8 +51,14 @@ public class NhBbNhapDayKho extends TrangThaiBaseEntity implements Serializable 
     @Column(name = "ID_KE_TOAN")
     private Long idKeToan;
 
+    @Transient
+    private String tenKeToan;
+
     @Column(name = "ID_KY_THUAT_VIEN")
     private Long idKyThuatVien;
+
+    @Transient
+    private String tenKyThuatVien;
 
     @Column(name = "NGAY_BAT_DAU_NHAP")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
