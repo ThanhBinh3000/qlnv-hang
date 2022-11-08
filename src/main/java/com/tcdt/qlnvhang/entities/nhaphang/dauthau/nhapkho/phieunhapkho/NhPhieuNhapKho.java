@@ -1,9 +1,11 @@
 package com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHang;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.util.Contains;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -49,15 +51,19 @@ public class NhPhieuNhapKho extends TrangThaiBaseEntity implements Serializable 
     private String soHd;
 
     @Column(name = "NGAY_HD")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayHd;
 
     @Column(name = "NGAY_NHAP_KHO")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayNhapKho;
 
     @Column(name = "THOI_GIAN_GIAO_NHAN")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
     private Date thoiGianGiaoNhan;
 
     @Column(name = "NGAY_TAO_PHIEU")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayTaoPhieu;
 
     @Column(name = "TAI_KHOAN_NO")

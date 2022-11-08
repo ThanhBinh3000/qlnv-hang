@@ -31,7 +31,7 @@ public class NhBangKeCanHangController {
     @Autowired
     private NhBangKeCanHangService nhBangKeCanHangService;
 
-    @ApiOperation(value = "Tạo mới Quản lý bảng kê cân hàng lương thực", response = List.class)
+    @ApiOperation(value = "Tạo mới Quản lý lương thực", response = List.class)
     @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> insert(@Valid @RequestBody QlBangKeCanHangLtReq request) {
         BaseResponse resp = new BaseResponse();
@@ -42,12 +42,12 @@ public class NhBangKeCanHangController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Tạo mới Quản lý bảng kê cân hàng lương thực lỗi: {}", e);
+            log.error("Tạo mới Quản lý lương thực lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Sửa Quản lý bảng kê cân hàng lương thực", response = List.class)
+    @ApiOperation(value = "Sửa Quản lý lương thực", response = List.class)
     @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> update(@Valid @RequestBody QlBangKeCanHangLtReq request) {
         BaseResponse resp = new BaseResponse();
@@ -58,12 +58,12 @@ public class NhBangKeCanHangController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Sửa Quản lý bảng kê cân hàng lương thực lỗi: {}", e);
+            log.error("Sửa Quản lý lương thực lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Chi tiết Quản lý bảng kê cân hàng lương thực", response = List.class)
+    @ApiOperation(value = "Chi tiết Quản lý lương thực", response = List.class)
     @GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> detail(@PathVariable Long ids) {
         BaseResponse resp = new BaseResponse();
@@ -74,12 +74,12 @@ public class NhBangKeCanHangController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Chi tiết Quản lý bảng kê cân hàng lương thực lỗi: {}", e);
+            log.error("Chi tiết Quản lý lương thực lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xóa Quản lý bảng kê cân hàng lương thực", response = List.class)
+    @ApiOperation(value = "Xóa Quản lý lương thực", response = List.class)
     @PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> delete(@PathVariable Long id) {
         BaseResponse resp = new BaseResponse();
@@ -90,12 +90,12 @@ public class NhBangKeCanHangController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Xóa Quản lý bảng kê cân hàng lương thực lỗi: {}", e);
+            log.error("Xóa Quản lý lương thực lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Phê duyệt/ từ chối Quản lý bảng kê cân hàng lương thực", response = List.class)
+    @ApiOperation(value = "Phê duyệt/ từ chối Quản lý lương thực", response = List.class)
     @PostMapping(PathContains.URL_PHE_DUYET)
     public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody QlBangKeCanHangLtReq req) {
         BaseResponse resp = new BaseResponse();
@@ -106,12 +106,12 @@ public class NhBangKeCanHangController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Phê duyệt/ từ chối Quản lý bảng kê cân hàng lương thực lỗi: {}", e);
+            log.error("Phê duyệt/ từ chối Quản lý lương thực lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Tra cứu Quản lý bảng kê cân hàng lương thực", response = List.class)
+    @ApiOperation(value = "Tra cứu Quản lý lương thực", response = List.class)
     @GetMapping()
     public ResponseEntity<BaseResponse> search(QlBangKeCanHangLtSearchReq req) {
         BaseResponse resp = new BaseResponse();
@@ -122,12 +122,12 @@ public class NhBangKeCanHangController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Tra cứu Quản lý bảng kê cân hàng lương thực lỗi: {}", e);
+            log.error("Tra cứu Quản lý lương thực lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Delete multiple bảng kê cân hàng lương thực", response = List.class)
+    @ApiOperation(value = "Delete multiple lương thực", response = List.class)
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/delete/multiple")
     public final ResponseEntity<BaseResponse> deleteMultiple(@RequestBody @Valid DeleteReq req) {
@@ -140,12 +140,12 @@ public class NhBangKeCanHangController {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
             resp.setMsg(e.getMessage());
-            log.error("Delete multiple bảng kê cân hàng lương thực lỗi ", e);
+            log.error("Delete multiple lương thực lỗi ", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Count bảng kê cân hàng lương thực", response = List.class)
+    @ApiOperation(value = "Count lương thực", response = List.class)
     @PostMapping("/count")
     public ResponseEntity<BaseResponse> count() {
         BaseResponse resp = new BaseResponse();
@@ -156,12 +156,12 @@ public class NhBangKeCanHangController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Count bảng kê cân hàng lương thực lỗi", e);
+            log.error("Count lương thực lỗi", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Export bảng kê cân hàng lương thực", response = List.class)
+    @ApiOperation(value = "Export lương thực", response = List.class)
     @PostMapping(value = "/export/list", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody QlBangKeCanHangLtSearchReq req) {
@@ -174,7 +174,7 @@ public class NhBangKeCanHangController {
 
     }
 
-    @ApiOperation(value = "Get số bảng kê cân hàng lương thực", response = List.class)
+    @ApiOperation(value = "Get số lương thực", response = List.class)
     @GetMapping("/so")
     public ResponseEntity<BaseResponse> getSo() {
         BaseResponse resp = new BaseResponse();
@@ -185,7 +185,7 @@ public class NhBangKeCanHangController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Get số bảng kê cân hàng lương thực lỗi", e);
+            log.error("Get số lương thực lỗi", e);
         }
         return ResponseEntity.ok(resp);
     }

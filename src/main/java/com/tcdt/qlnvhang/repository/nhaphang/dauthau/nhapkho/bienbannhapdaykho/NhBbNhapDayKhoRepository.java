@@ -4,6 +4,8 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhB
 import com.tcdt.qlnvhang.repository.BaseRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface NhBbNhapDayKhoRepository extends BaseRepository<NhBbNhapDayKho, Long> {
 
@@ -27,4 +29,6 @@ public interface NhBbNhapDayKhoRepository extends BaseRepository<NhBbNhapDayKho,
 //    void deleteByIdIn(Collection<Long> ids);
 //
 //    Optional<NhBbNhapDayKho> findFirstBySoBienBan(String soBb);
+
+    List<NhBbNhapDayKho> findByIdQdGiaoNvNhAndMaDvi(Long idQdGiaoNvNh,String maDvi);
 }

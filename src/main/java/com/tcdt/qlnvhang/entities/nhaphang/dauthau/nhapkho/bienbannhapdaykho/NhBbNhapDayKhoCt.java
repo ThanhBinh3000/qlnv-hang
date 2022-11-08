@@ -30,8 +30,8 @@ public class NhBbNhapDayKhoCt implements Serializable {
     @Column(name = "SO_PHIEU_KTRA_CL")
     private String soPhieuKtraCl;
 
-    @Column(name = "PHIEU_NHAP_KHO")
-    private String phieuNhapKho;
+    @Column(name = "SO_PHIEU_NHAP_KHO")
+    private String soPhieuNhapKho;
 
     @Column(name = "SO_BANG_KE")
     private String soBangKe;
