@@ -1,7 +1,9 @@
 package com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.util.Contains;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +14,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -24,8 +27,8 @@ public class NhBbNhapDayKho extends TrangThaiBaseEntity implements Serializable 
     private static final long serialVersionUID = -5271141998400379431L;
     public static final String TABLE_NAME = "NH_BB_NHAP_DAY_KHO";
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BB_NHAP_DAY_KHO_LT_SEQ")
-    @SequenceGenerator(sequenceName = "BB_NHAP_DAY_KHO_LT_SEQ", allocationSize = 1, name = "BB_NHAP_DAY_KHO_LT_SEQ")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BB_NHAP_DAY_KHO_LT_SEQ")
+//    @SequenceGenerator(sequenceName = "BB_NHAP_DAY_KHO_LT_SEQ", allocationSize = 1, name = "BB_NHAP_DAY_KHO_LT_SEQ")
     @Column(name = "ID")
     private Long id;
 
@@ -42,19 +45,28 @@ public class NhBbNhapDayKho extends TrangThaiBaseEntity implements Serializable 
     private String soHd;
 
     @Column(name = "NGAY_HD")
-    private LocalDate ngayHd;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayHd;
 
     @Column(name = "ID_KE_TOAN")
     private Long idKeToan;
 
+    @Transient
+    private String tenKeToan;
+
     @Column(name = "ID_KY_THUAT_VIEN")
     private Long idKyThuatVien;
 
+    @Transient
+    private String tenKyThuatVien;
+
     @Column(name = "NGAY_BAT_DAU_NHAP")
-    private LocalDate ngayBatDauNhap;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayBatDauNhap;
 
     @Column(name = "NGAY_KET_THUC_NHAP")
-    private LocalDate ngayKetThucNhap;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayKetThucNhap;
 
     @Column(name = "ID_DDIEM_GIAO_NV_NH")
     private Long idDdiemGiaoNvNh;
@@ -88,6 +100,9 @@ public class NhBbNhapDayKho extends TrangThaiBaseEntity implements Serializable 
 
     @Column(name = "MA_DVI")
     private String maDvi;
+
+    @Transient
+    private String tenDvi;
 
     @Column(name = "NAM")
     private Integer nam;

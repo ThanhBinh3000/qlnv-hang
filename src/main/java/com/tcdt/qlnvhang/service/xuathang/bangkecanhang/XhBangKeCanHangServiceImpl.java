@@ -87,7 +87,7 @@ public class XhBangKeCanHangServiceImpl implements XhBangKeCanHangService {
         if (count == null) count = 1L;
         item.setSoBangKe(count.intValue() + 1 + "/" + LocalDate.now().getYear() + MA_DS);
 
-        item.setNgayTao(LocalDate.now());
+        item.setNgayTao(new Date());
         item.setNguoiTaoId(userInfo.getId());
         item.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         bangKeCanHangRepository.save(item);
@@ -133,7 +133,7 @@ public class XhBangKeCanHangServiceImpl implements XhBangKeCanHangService {
 
         XhBangKeCanHang item = optional.get();
         BeanUtils.copyProperties(req, item, "id", "so", "nam", "trangThai");
-        item.setNgaySua(LocalDate.now());
+        item.setNgaySua(new Date());
         item.setNguoiSuaId(userInfo.getId());
         bangKeCanHangRepository.save(item);
 
@@ -265,7 +265,7 @@ public class XhBangKeCanHangServiceImpl implements XhBangKeCanHangService {
 
             item.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_KTVBQ.getId());
             item.setNguoiGuiDuyetId(userInfo.getId());
-            item.setNgayGuiDuyet(LocalDate.now());
+            item.setNgayGuiDuyet(new Date());
 
         } else if (NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.CHODUYET_KTVBQ.getId().equals(trangThai))
@@ -273,7 +273,7 @@ public class XhBangKeCanHangServiceImpl implements XhBangKeCanHangService {
 
             item.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId());
             item.setNguoiPduyetId(userInfo.getId());
-            item.setNgayPduyet(LocalDate.now());
+            item.setNgayPduyet(new Date());
 
         } else if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
@@ -281,7 +281,7 @@ public class XhBangKeCanHangServiceImpl implements XhBangKeCanHangService {
 
             item.setTrangThai(NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId());
             item.setNguoiPduyetId(userInfo.getId());
-            item.setNgayPduyet(LocalDate.now());
+            item.setNgayPduyet(new Date());
 
         } else if (NhapXuatHangTrangThaiEnum.TUCHOI_KTVBQ.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.CHODUYET_KTVBQ.getId().equals(trangThai))
@@ -289,7 +289,7 @@ public class XhBangKeCanHangServiceImpl implements XhBangKeCanHangService {
 
             item.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_KTVBQ.getId());
             item.setNguoiPduyetId(userInfo.getId());
-            item.setNgayPduyet(LocalDate.now());
+            item.setNgayPduyet(new Date());
             item.setLyDoTuChoi(stReq.getLyDo());
 
         } else if (NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId().equals(stReq.getTrangThai())) {
@@ -298,7 +298,7 @@ public class XhBangKeCanHangServiceImpl implements XhBangKeCanHangService {
 
             item.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId());
             item.setNguoiPduyetId(userInfo.getId());
-            item.setNgayPduyet(LocalDate.now());
+            item.setNgayPduyet(new Date());
             item.setLyDoTuChoi(stReq.getLyDo());
 
         } else {

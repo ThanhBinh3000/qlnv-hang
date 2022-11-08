@@ -84,7 +84,7 @@ public class NhBbKtNhapKhoVtServiceImpl extends BaseServiceImpl implements NhBbK
 
         NhBbKtNhapKhoVt item = new NhBbKtNhapKhoVt();
         BeanUtils.copyProperties(req, item, "id");
-        item.setNgayTao(LocalDate.now());
+        item.setNgayTao(new Date());
         item.setNguoiTaoId(userInfo.getId());
         item.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         item.setMaDvi(userInfo.getDvql());
@@ -184,7 +184,7 @@ public class NhBbKtNhapKhoVtServiceImpl extends BaseServiceImpl implements NhBbK
 
         NhBbKtNhapKhoVt item = optional.get();
         BeanUtils.copyProperties(req, item, "id", "so", "nam");
-        item.setNgaySua(LocalDate.now());
+        item.setNgaySua(new Date());
         item.setNguoiSuaId(userInfo.getId());
         nhBbKtNhapKhoVtRepository.save(item);
         Map<Long, NhBbKtNhapKhoVtCt> mapChiTiet = nhBbKtNhapKhoVtCtRepository.findByBbKtNhapKhoIdIn(Collections.singleton(item.getId()))
@@ -248,7 +248,7 @@ public class NhBbKtNhapKhoVtServiceImpl extends BaseServiceImpl implements NhBbK
 
             bb.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_KTVBQ.getId());
             bb.setNguoiGuiDuyetId(userInfo.getId());
-            bb.setNgayGuiDuyet(LocalDate.now());
+            bb.setNgayGuiDuyet(new Date());
 
         } else if (NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.CHODUYET_KTVBQ.getId().equals(trangThai))
@@ -256,28 +256,28 @@ public class NhBbKtNhapKhoVtServiceImpl extends BaseServiceImpl implements NhBbK
 
             bb.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId());
             bb.setNguoiGuiDuyetId(userInfo.getId());
-            bb.setNgayGuiDuyet(LocalDate.now());
+            bb.setNgayGuiDuyet(new Date());
         } else if (NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId().equals(trangThai))
                 return false;
 
             bb.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId());
             bb.setNguoiPduyetId(userInfo.getId());
-            bb.setNgayPduyet(LocalDate.now());
+            bb.setNgayPduyet(new Date());
         } else if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
                 return false;
 
             bb.setTrangThai(NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId());
             bb.setNguoiPduyetId(userInfo.getId());
-            bb.setNgayPduyet(LocalDate.now());
+            bb.setNgayPduyet(new Date());
         } else if (NhapXuatHangTrangThaiEnum.TUCHOI_KTVBQ.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.CHODUYET_KTVBQ.getId().equals(trangThai))
                 return false;
 
             bb.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_KTVBQ.getId());
             bb.setNguoiPduyetId(userInfo.getId());
-            bb.setNgayPduyet(LocalDate.now());
+            bb.setNgayPduyet(new Date());
             bb.setLyDoTuChoi(stReq.getLyDo());
         } else if (NhapXuatHangTrangThaiEnum.TUCHOI_KT.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId().equals(trangThai))
@@ -285,7 +285,7 @@ public class NhBbKtNhapKhoVtServiceImpl extends BaseServiceImpl implements NhBbK
 
             bb.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_KT.getId());
             bb.setNguoiPduyetId(userInfo.getId());
-            bb.setNgayPduyet(LocalDate.now());
+            bb.setNgayPduyet(new Date());
             bb.setLyDoTuChoi(stReq.getLyDo());
         } else if (NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId().equals(stReq.getTrangThai())) {
             if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId().equals(trangThai))
@@ -293,7 +293,7 @@ public class NhBbKtNhapKhoVtServiceImpl extends BaseServiceImpl implements NhBbK
 
             bb.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId());
             bb.setNguoiPduyetId(userInfo.getId());
-            bb.setNgayPduyet(LocalDate.now());
+            bb.setNgayPduyet(new Date());
             bb.setLyDoTuChoi(stReq.getLyDo());
         } else {
             throw new Exception("Bad request.");

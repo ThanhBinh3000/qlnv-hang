@@ -1,5 +1,7 @@
 package com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.util.Contains;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +11,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -30,14 +33,15 @@ public class NhBbNhapDayKhoCt implements Serializable {
     @Column(name = "SO_PHIEU_KTRA_CL")
     private String soPhieuKtraCl;
 
-    @Column(name = "PHIEU_NHAP_KHO")
-    private String phieuNhapKho;
+    @Column(name = "SO_PHIEU_NHAP_KHO")
+    private String soPhieuNhapKho;
 
     @Column(name = "SO_BANG_KE")
     private String soBangKe;
 
     @Column(name = "NGAY_NHAP")
-    private LocalDate ngayNhap;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayNhap;
 
     @Column(name = "SO_LUONG")
     private BigDecimal soLuong;

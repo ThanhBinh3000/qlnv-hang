@@ -1,9 +1,11 @@
 package com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoCt1;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.util.Contains;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +16,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -24,11 +27,11 @@ public class NhPhieuNhapKhoReq extends BaseRequest {
     private List<Long> phieuKtClIds = new ArrayList<>();
     private String soPhieu;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate ngayLap;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayLap;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime thoiGianGiaoNhan;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
+    private Date thoiGianGiaoNhan;
 
     private Long qdgnvnxId;
 
@@ -48,13 +51,15 @@ public class NhPhieuNhapKhoReq extends BaseRequest {
 
     private String soHd;
 
-    private LocalDate ngayHd;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayHd;
 
-    private LocalDate ngayNhapKho;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayNhapKho;
 
     private String nguoiGiaoHang;
 
-    private LocalDate ngayTaoPhieu;
+    private Date ngayTaoPhieu;
 
     private BigDecimal taiKhoanNo;
 

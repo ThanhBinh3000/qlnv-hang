@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.phieunhapkho;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuong;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKho;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
@@ -33,10 +34,7 @@ import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Log4j2
@@ -77,7 +75,7 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
         }
         NhPhieuNhapKho phieu = new NhPhieuNhapKho();
         BeanUtils.copyProperties(req, phieu, "id");
-        phieu.setNgayTao(LocalDate.now());
+        phieu.setNgayTao(new Date());
         phieu.setNguoiTaoId(userInfo.getId());
         phieu.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         phieu.setMaDvi(userInfo.getDvql());
@@ -106,7 +104,7 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
 
         NhPhieuNhapKho phieu = optionalQd.get();
         BeanUtils.copyProperties(req, phieu, "id");
-        phieu.setNgaySua(LocalDate.now());
+        phieu.setNgaySua(new Date());
         phieu.setNguoiSuaId(userInfo.getId());
         nhPhieuNhapKhoRepository.save(phieu);
         this.saveCtiet(phieu.getId(),req);
@@ -178,20 +176,21 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
         NhPhieuNhapKho phieu = optional.get();
 
         String status = req.getTrangThai() + phieu.getTrangThai();
+        this.validateApprove(phieu);
         switch (status) {
             case Contains.CHODUYET_LDCC + Contains.DUTHAO:
             case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
                 phieu.setNguoiGuiDuyetId(userInfo.getId());
-                phieu.setNgayGuiDuyet(LocalDate.now());
+                phieu.setNgayGuiDuyet(new Date());
                 break;
             case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
                 phieu.setNguoiPduyetId(userInfo.getId());
-                phieu.setNgayPduyet(LocalDate.now());
+                phieu.setNgayPduyet(new Date());
                 phieu.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
             case Contains.DADUYET_LDCC + Contains.CHODUYET_LDCC:
                 phieu.setNguoiPduyetId(userInfo.getId());
-                phieu.setNgayPduyet(LocalDate.now());
+                phieu.setNgayPduyet(new Date());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
@@ -199,6 +198,18 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
         phieu.setTrangThai(req.getTrangThai());
         nhPhieuNhapKhoRepository.save(phieu);
         return phieu;
+    }
+
+
+    void validateApprove(NhPhieuNhapKho phieu) throws Exception {
+        NhBangKeCanHang bySoPhieuNhapKho = nhBangKeCanHangRepository.findBySoPhieuNhapKho(phieu.getSoPhieuNhapKho());
+        if(ObjectUtils.isEmpty(bySoPhieuNhapKho)){
+            throw new Exception("Phiếu nhập kho đang không có bảng kê cân hàng, xin vui lòng tạo bảo kê cân hàng cho phiếu nhập kho");
+        }else{
+            if(!bySoPhieuNhapKho.getTrangThai().equals(NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId())){
+                throw new Exception("Bảng kê cân hàng của Phiếu nhập kho đang chưa được duyệt, xin vui lòng duyệt bảng kê cân hàng");
+            }
+        }
     }
 
     @Override

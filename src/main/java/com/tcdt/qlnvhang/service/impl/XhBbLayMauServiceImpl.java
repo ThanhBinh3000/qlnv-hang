@@ -74,7 +74,7 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl implements XhBbLayMau
 		if (userInfo == null) throw new Exception("Bad request.");
 		XhBbLayMau theEntity = xhBbLayMauRequestMapper.toEntity(req);
 		theEntity.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
-		theEntity.setNgayTao(LocalDate.now());
+		theEntity.setNgayTao(new Date());
 		theEntity.setNguoiTaoId(userInfo.getId());
 		theEntity.setMaDvi(userInfo.getDvql());
 		theEntity.setCapDvi(userInfo.getCapDvi());
@@ -131,7 +131,7 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl implements XhBbLayMau
 		log.info("Update Biên bản lấy mẫu");
 		xhBbLayMauRequestMapper.partialUpdate(theEntity, req);
 
-		theEntity.setNgaySua(LocalDate.now());
+		theEntity.setNgaySua(new Date());
 		theEntity.setNguoiSuaId(userInfo.getId());
 		theEntity = xhBbLayMauRepository.save(theEntity);
 

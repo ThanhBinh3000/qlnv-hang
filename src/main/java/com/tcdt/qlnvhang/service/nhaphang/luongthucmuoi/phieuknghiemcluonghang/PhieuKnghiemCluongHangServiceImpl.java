@@ -149,7 +149,7 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 		PhieuKnghiemCluongHang phieuKnclh = new PhieuKnghiemCluongHang();
 		this.updateEntity(phieuKnclh, req);
 		phieuKnclh.setNguoiTaoId(userInfo.getId());
-		phieuKnclh.setNgayTao(LocalDate.now());
+		phieuKnclh.setNgayTao(new Date());
 		phieuKnclh.setMaDvi(userInfo.getDvql());
 		phieuKnclh.setCapDvi(userInfo.getCapDvi());
 		phieuKnclh.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
@@ -177,7 +177,7 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 		PhieuKnghiemCluongHang phieuKnclh = optional.get();
 		this.updateEntity(phieuKnclh, req);
 		phieuKnclh.setNguoiSuaId(userInfo.getId());
-		phieuKnclh.setNgaySua(LocalDate.now());
+		phieuKnclh.setNgaySua(new Date());
 
 		phieuKnghiemCluongHangRepository.save(phieuKnclh);
 		kquaKnghiemService.update(phieuKnclh.getId(), req.getKquaKnghiem());
@@ -204,33 +204,33 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 
 			item.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId());
 			item.setNguoiGuiDuyetId(userInfo.getId());
-			item.setNgayGuiDuyet(LocalDate.now());
+			item.setNgayGuiDuyet(new Date());
 		} else if (NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId().equals(stReq.getTrangThai())) {
 			if (!NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId().equals(trangThai))
 				return false;
 			item.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId());
 			item.setNguoiGuiDuyetId(userInfo.getId());
-			item.setNgayGuiDuyet(LocalDate.now());
+			item.setNgayGuiDuyet(new Date());
 		} else if (NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId().equals(stReq.getTrangThai())) {
 			if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId().equals(trangThai))
 				return false;
 			item.setTrangThai(NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId());
 			item.setNguoiPduyetId(userInfo.getId());
-			item.setNgayPduyet(LocalDate.now());
+			item.setNgayPduyet(new Date());
 		} else if (NhapXuatHangTrangThaiEnum.TUCHOI_TP.getId().equals(stReq.getTrangThai())) {
 			if (!NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId().equals(trangThai))
 				return false;
 
 			item.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_TP.getId());
 			item.setNguoiPduyetId(userInfo.getId());
-			item.setNgayPduyet(LocalDate.now());
+			item.setNgayPduyet(new Date());
 		} else if (NhapXuatHangTrangThaiEnum.TUCHOI_LDC.getId().equals(stReq.getTrangThai())) {
 			if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId().equals(trangThai))
 				return false;
 
 			item.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_LDC.getId());
 			item.setNguoiPduyetId(userInfo.getId());
-			item.setNgayPduyet(LocalDate.now());
+			item.setNgayPduyet(new Date());
 		} else {
 			throw new Exception("Bad request.");
 		}

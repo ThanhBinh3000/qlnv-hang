@@ -80,14 +80,8 @@ public class NhBienBanGuiHang extends TrangThaiBaseEntity implements Serializabl
     @Column(name = "NGUOI_GUI_DUYET_ID")
     private Long nguoiGuiDuyetId;
 
-    @Column(name = "NGAY_GUI_DUYET")
-    private LocalDate ngayGuiDuyet;
-
     @Column(name = "NGUOI_PDUYET_ID")
     private Long nguoiPduyetId;
-
-    @Column(name = "NGAY_PDUYET")
-    private LocalDate ngayPduyet;
 
     @Column(name = "QDGNVNX_ID")
     private Long qdgnvnxId;

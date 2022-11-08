@@ -16,4 +16,5 @@ public class HhQdPdKhMttSlddDtlReq {
     private String diaDiemKho;
     private BigDecimal soLuongDxmtt;
     private BigDecimal donGiaVat;
+
 }

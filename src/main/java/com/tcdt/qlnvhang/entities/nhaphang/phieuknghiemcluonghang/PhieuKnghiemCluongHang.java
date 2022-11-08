@@ -48,9 +48,7 @@ public class PhieuKnghiemCluongHang extends TrangThaiBaseEntity {
 	private String ketLuan;
 	private String ketQuaDanhGia;
 	private Long nguoiGuiDuyetId;
-	private LocalDate ngayGuiDuyet;
 	private Long nguoiPduyetId;
-	private LocalDate ngayPduyet;
 	private String trangThai;
 	private Integer so;
 	private Integer nam;
