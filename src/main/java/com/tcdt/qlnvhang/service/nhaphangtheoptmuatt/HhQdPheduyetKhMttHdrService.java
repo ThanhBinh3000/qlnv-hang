@@ -133,7 +133,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
                 slDd.setDonGiaVat(dx.getGiaCoThue());
                 slDd.setThanhTien(slDd.getDonGiaVat().multiply(slDd.getSoLuongDxmtt()));
                 hhQdPheduyetKhMttSLDDRepository.save(slDd);
-               for (HhQdPdKhMttSlddDtlReq slddDtlReq : listSLDD.getListQdPdSlddDtl()){
+               for (HhQdPdKhMttSlddDtlReq slddDtlReq : listSLDD.getListSlddDtl()){
                    HhQdPdKhMttSlddDtl slddDtl = ObjectMapperUtils.map(slddDtlReq,HhQdPdKhMttSlddDtl.class);
                    slddDtl.setId(null);
                    slddDtl.setIdSldd(slDd.getId());
@@ -186,7 +186,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
                slDd.setDonGiaVat(dx.getGiaCoThue());
                slDd.setThanhTien(slDd.getDonGiaVat().multiply(slDd.getSoLuongDxmtt()));
                hhQdPheduyetKhMttSLDDRepository.save(slDd);
-               for (HhQdPdKhMttSlddDtlReq slddDtlReq : hhQdPheduyetKhMttSLDDReq.getListQdPdSlddDtl()){
+               for (HhQdPdKhMttSlddDtlReq slddDtlReq : hhQdPheduyetKhMttSLDDReq.getListSlddDtl()){
                    HhQdPdKhMttSlddDtl slddDtl = ObjectMapperUtils.map(slddDtlReq,HhQdPdKhMttSlddDtl.class);
                    slddDtl.setId(null);
                    slddDtl.setIdSldd(slDd.getId());

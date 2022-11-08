@@ -94,6 +94,13 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
             HhDxKhMttThopDtl thopDtl = new HhDxKhMttThopDtl();
             thopDtl.setIdDxHdr(dxuat.getId());
             thopDtl.setSoDxuat(dxuat.getSoDxuat());
+            thopDtl.setMaDvi(dxuat.getMaDvi());
+            thopDtl.setTenDvi(getDviByMa(thopDtl.getMaDvi(),req).getTenDvi());
+            thopDtl.setNgayPduyet(dxuat.getNgayPduyet());
+            thopDtl.setTrichYeu(dxuat.getTrichYeu());
+            thopDtl.setTenDuAn(dxuat.getTenDuAn());
+            thopDtl.setTongSoLuong(dxuat.getTongSoLuong());
+            thopDtl.setGiaCoThue(dxuat.getGiaCoThue());
             Optional<HhDxuatKhMttHdr> dx = hhDxuatKhMttRepository.findById(dxuat.getId());
             thopDtl.setDxuatHdr(dx.get());
 
