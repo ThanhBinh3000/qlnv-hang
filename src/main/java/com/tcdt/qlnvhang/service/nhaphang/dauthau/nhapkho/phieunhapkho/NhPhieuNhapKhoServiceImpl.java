@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.phieunhapkho;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuong;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKho;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
@@ -175,6 +176,7 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
         NhPhieuNhapKho phieu = optional.get();
 
         String status = req.getTrangThai() + phieu.getTrangThai();
+        this.validateApprove(phieu);
         switch (status) {
             case Contains.CHODUYET_LDCC + Contains.DUTHAO:
             case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
@@ -196,6 +198,18 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
         phieu.setTrangThai(req.getTrangThai());
         nhPhieuNhapKhoRepository.save(phieu);
         return phieu;
+    }
+
+
+    void validateApprove(NhPhieuNhapKho phieu) throws Exception {
+        NhBangKeCanHang bySoPhieuNhapKho = nhBangKeCanHangRepository.findBySoPhieuNhapKho(phieu.getSoPhieuNhapKho());
+        if(ObjectUtils.isEmpty(bySoPhieuNhapKho)){
+            throw new Exception("Phiếu nhập kho đang không có bảng kê cân hàng, xin vui lòng tạo bảo kê cân hàng cho phiếu nhập kho");
+        }else{
+            if(!bySoPhieuNhapKho.getTrangThai().equals(NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId())){
+                throw new Exception("Bảng kê cân hàng của Phiếu nhập kho đang chưa được duyệt, xin vui lòng duyệt bảng kê cân hàng");
+            }
+        }
     }
 
     @Override
