@@ -93,7 +93,7 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
         HhQdPduyetKqcgHdr created= hhQdPduyetKqcgRepository.save(data);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),data.getId(),"HH_QD_PDUYET_KQCG_HDR");
         created.setFileDinhKems(fileDinhKems);
-        List<HhChiTietTTinChaoGia> chiTietTTinChaoGia= hhCtietTtinCgiaRepository.findAllByIdTkhaiKh(objReq.getIdPdKh());
+        List<HhChiTietTTinChaoGia> chiTietTTinChaoGia= hhCtietTtinCgiaRepository.findAllByIdTkhaiKh(objReq.getIdQdPdKh());
         for (HhChiTietTTinChaoGia cTiet: chiTietTTinChaoGia){
             cTiet.setIdSoQdPduyetCgia(data.getId());
             cTiet.setLuaChonPduyet(cTiet.getLuaChonPduyet());

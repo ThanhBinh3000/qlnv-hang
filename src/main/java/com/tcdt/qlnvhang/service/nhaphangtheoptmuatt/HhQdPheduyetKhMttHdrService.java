@@ -7,13 +7,11 @@ import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
 import com.tcdt.qlnvhang.request.*;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhQdPdKhMttSlddDtlReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.feign.KeHoachService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDxuatKhMttHdr;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDxuatKhMttSldd;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDxuatKhMttSlddDtl;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhQdPdKhMttSlddDtl;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
@@ -29,6 +27,7 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.beans.Transient;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -59,6 +58,8 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
     @Autowired
     HhQdPdKhMttSlddDtlRepository hhQdPdKhMttSlddDtlRepositoryl;
 
+    @Autowired
+    private KeHoachService keHoachService;
 
 
 
@@ -90,7 +91,6 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         UserInfo userInfo= SecurityContextService.getUser();
         if (userInfo == null)
             throw new Exception("Bad request.");
-
         Optional<HhQdPheduyetKhMttHdr> optional = hhQdPheduyetKhMttHdrRepository.findBySoQdPduyet(objReq.getSoQdPduyet());
         if(optional.isPresent()){
             throw new Exception("số quyết định đã tồn tại");
@@ -216,6 +216,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
        data.setTenTrangThaiTkhai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiTkhai()));
        data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh()) ? null : hashMapDmHh.get(data.getLoaiVthh()));
        data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh()) ? null : hashMapDmHh.get(data.getCloaiVthh()));
+       data.setTenDvi(StringUtils.isEmpty(data.getMaDvi())? null : hashMapDmdv.get(data.getMaDvi()));
         List<HhQdPheduyetKhMttDx> listdx=hhQdPheduyetKhMttDxRepository.findAllByIdPduyetHdr(data.getId());
         for (HhQdPheduyetKhMttDx pduyetDx :listdx){
             pduyetDx.setTenLoaiVthh(StringUtils.isEmpty(pduyetDx.getLoaiVthh()) ? null : hashMapDmHh.get(pduyetDx.getLoaiVthh()));

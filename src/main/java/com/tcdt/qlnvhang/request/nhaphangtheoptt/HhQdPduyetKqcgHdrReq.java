@@ -23,7 +23,7 @@ public class HhQdPduyetKqcgHdrReq  {
     private Date ngayKy;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayHluc;
-    private Long idPdKh;
+    private Long idQdPdKh;
     private String soQdPdKh;
     private String trichYeu;
     private String ghiChu;
