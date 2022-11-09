@@ -60,11 +60,12 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
                 objReq.getPthucMuatt(),
                 pageable);
         Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
-
+        Map<String, String> hashMapDmDv = getListDanhMucDvi(null, null, "01");
         data.getContent().forEach(f->{
             f.setTenTrangThaiTkhai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiTkhai()));
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
+            f.setTenDvi(StringUtils.isEmpty(f.getTenDvi())? null : hashMapDmDv.get(f.getMaDvi()));
         });
         return data;
     }
@@ -111,7 +112,8 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
         Optional<HhQdPheduyetKhMttHdr> optional = hhQdPheduyetKhMttHdrRepository.findById(Long.parseLong(id));
         HhQdPheduyetKhMttHdr data=optional.get();
         Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
-        List<HhChiTietTTinChaoGia> cTietCgia =hhCtietTtinCgiaRepository.findAllByIdSoQdPduyetCgia(Long.valueOf(id));
+        Map<String, String> hashMapDmDvi = getListDanhMucDvi(null, null, "01");
+        List<HhChiTietTTinChaoGia> cTietCgia =hhCtietTtinCgiaRepository.findAllByIdTkhaiKh(Long.parseLong(id));
         for (HhChiTietTTinChaoGia dtl : cTietCgia){
             List<FileDinhKem> fileDinhKems = fileDinhKemService.search(dtl.getId(), Collections.singleton("HH_CTIET_TTIN_CHAO_GIA"));
             dtl.setFileDinhKems(fileDinhKems.get(0));
@@ -121,6 +123,7 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
         data.setTenTrangThaiTkhai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiTkhai()));
         data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh()) ? null : hashMapDmHh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh()) ? null : hashMapDmHh.get(data.getCloaiVthh()));
+        data.setTenDvi(StringUtils.isEmpty(data.getMaDvi())? null: hashMapDmDvi.get(data.getMaDvi()));
         return data;
     }
 }
