@@ -24,5 +24,6 @@ public class HhQdPheduyetKhMttSLDDReq {
     private BigDecimal donGiaVat;
     private BigDecimal thanhTien;
 
-    List<HhQdPdKhMttSlddDtlReq> listQdPdSlddDtl = new ArrayList<>();
+    List<HhQdPdKhMttSlddDtlReq> listSlddDtl = new ArrayList<>();
+
 }
