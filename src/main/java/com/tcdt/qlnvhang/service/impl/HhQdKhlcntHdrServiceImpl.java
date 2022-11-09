@@ -480,8 +480,10 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		long countThatBai = byIdQdDtl.stream().filter(x -> x.getTrangThai().equals(NhapXuatHangTrangThaiEnum.THAT_BAI.getId())).count();
 		dtl.setSoGthauTrung(countThanhCong);
 		dtl.setSoGthauTruot(countThatBai);
-		Optional<HhDxuatKhLcntHdr> bySoDxuat = hhDxuatKhLcntHdrRepository.findBySoDxuat(dtl.getSoDxuat());
-		bySoDxuat.ifPresent(dtl::setDxuatKhLcntHdr);
+		if(!StringUtils.isEmpty(dtl.getSoDxuat())){
+			Optional<HhDxuatKhLcntHdr> bySoDxuat = hhDxuatKhLcntHdrRepository.findBySoDxuat(dtl.getSoDxuat());
+			bySoDxuat.ifPresent(dtl::setDxuatKhLcntHdr);
+		}
 		dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(dtl.getTrangThai()));
 		dtl.setTenDvi(hashMapDvi.get(dtl.getMaDvi()));
 		return dtl;

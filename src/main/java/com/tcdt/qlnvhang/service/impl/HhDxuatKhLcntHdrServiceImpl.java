@@ -61,9 +61,11 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 	@Override
 	@Transactional
 	public HhDxuatKhLcntHdr create(HhDxuatKhLcntHdrReq objReq) throws Exception {
-		Optional<HhDxuatKhLcntHdr> qOptional = hhDxuatKhLcntHdrRepository.findBySoDxuat(objReq.getSoDxuat());
-		if (qOptional.isPresent()){
-			throw new Exception("Số đề xuất " + objReq.getSoDxuat() + " đã tồn tại");
+		if(!StringUtils.isEmpty(objReq.getSoDxuat())){
+			Optional<HhDxuatKhLcntHdr> qOptional = hhDxuatKhLcntHdrRepository.findBySoDxuat(objReq.getSoDxuat());
+			if (qOptional.isPresent()){
+				throw new Exception("Số đề xuất " + objReq.getSoDxuat() + " đã tồn tại");
+			}
 		}
 		// Add danh sach file dinh kem o Master
 		List<FileDKemJoinDxKhLcntHdr> fileDinhKemList = new ArrayList<FileDKemJoinDxKhLcntHdr>();
@@ -146,12 +148,15 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		if (!qOptional.isPresent())
 			throw new Exception("Không tìm thấy dữ liệu cần sửa");
 
-		Optional<HhDxuatKhLcntHdr> deXuat = hhDxuatKhLcntHdrRepository.findBySoDxuat(objReq.getSoDxuat());
-		if (deXuat.isPresent()){
-			if(!deXuat.get().getId().equals(objReq.getId())){
-				throw new Exception("Số đề xuất " + objReq.getSoDxuat() + " đã tồn tại");
+		if(!StringUtils.isEmpty(objReq.getSoDxuat())) {
+			Optional<HhDxuatKhLcntHdr> deXuat = hhDxuatKhLcntHdrRepository.findBySoDxuat(objReq.getSoDxuat());
+			if (deXuat.isPresent()){
+				if(!deXuat.get().getId().equals(objReq.getId())){
+					throw new Exception("Số đề xuất " + objReq.getSoDxuat() + " đã tồn tại");
+				}
 			}
 		}
+
 
 		// Add danh sach file dinh kem o Master
 		List<FileDKemJoinDxKhLcntHdr> fileDinhKemList = new ArrayList<FileDKemJoinDxKhLcntHdr>();
@@ -564,10 +569,13 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 	@Transactional
 	public HhDxuatKhLcntHdr createVatTu(HhDxuatKhLcntHdrReq objReq) throws Exception {
 
-		Optional<HhDxuatKhLcntHdr> qOptional = hhDxuatKhLcntHdrRepository.findBySoDxuat(objReq.getSoDxuat());
-		if (qOptional.isPresent()){
-			throw new Exception("Số đề xuất " + objReq.getSoDxuat() + " đã tồn tại");
+		if(!StringUtils.isEmpty(objReq.getSoDxuat())) {
+			Optional<HhDxuatKhLcntHdr> qOptional = hhDxuatKhLcntHdrRepository.findBySoDxuat(objReq.getSoDxuat());
+			if (qOptional.isPresent()){
+				throw new Exception("Số đề xuất " + objReq.getSoDxuat() + " đã tồn tại");
+			}
 		}
+
 
 		// Add danh sach file dinh kem o Master
 		List<FileDKemJoinDxKhLcntHdr> fileDinhKemList = new ArrayList<FileDKemJoinDxKhLcntHdr>();
@@ -633,10 +641,12 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		if (!qOptional.isPresent())
 			throw new Exception("Không tìm thấy dữ liệu cần sửa");
 
-		Optional<HhDxuatKhLcntHdr> deXuat = hhDxuatKhLcntHdrRepository.findBySoDxuat(objReq.getSoDxuat());
-		if (deXuat.isPresent()){
-			if(!deXuat.get().getId().equals(objReq.getId())){
-				throw new Exception("Số đề xuất " + objReq.getSoDxuat() + " đã tồn tại");
+		if(!StringUtils.isEmpty(objReq.getSoDxuat())){
+			Optional<HhDxuatKhLcntHdr> deXuat = hhDxuatKhLcntHdrRepository.findBySoDxuat(objReq.getSoDxuat());
+			if (deXuat.isPresent()){
+				if(!deXuat.get().getId().equals(objReq.getId())){
+					throw new Exception("Số đề xuất " + objReq.getSoDxuat() + " đã tồn tại");
+				}
 			}
 		}
 
