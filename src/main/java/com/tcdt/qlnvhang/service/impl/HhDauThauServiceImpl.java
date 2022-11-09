@@ -113,8 +113,10 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
                 long countThatBai = byIdQdDtl.stream().filter(x -> x.getTrangThai().equals(NhapXuatHangTrangThaiEnum.THAT_BAI.getId())).count();
                 item.setSoGthauTrung(countThanhCong);
                 item.setSoGthauTruot(countThatBai);
-                Optional<HhDxuatKhLcntHdr> bySoDxuat = hhDxuatKhLcntHdrRepository.findBySoDxuat(item.getSoDxuat());
-                bySoDxuat.ifPresent(item::setDxuatKhLcntHdr);
+                if(!StringUtils.isEmpty(item.getSoDxuat())){
+                    Optional<HhDxuatKhLcntHdr> bySoDxuat = hhDxuatKhLcntHdrRepository.findBySoDxuat(item.getSoDxuat());
+                    bySoDxuat.ifPresent(item::setDxuatKhLcntHdr);
+                }
                 if(!StringUtils.isEmpty(item.getSoQdPdKqLcnt())){
                     Optional<HhQdPduyetKqlcntHdr> bySoQd = hhQdPduyetKqlcntHdrRepository.findBySoQd(item.getSoQdPdKqLcnt());
                     bySoQd.ifPresent(item::setHhQdPduyetKqlcntHdr);
