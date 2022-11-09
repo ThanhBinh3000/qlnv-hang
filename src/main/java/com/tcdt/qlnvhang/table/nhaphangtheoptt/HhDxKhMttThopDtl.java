@@ -1,9 +1,13 @@
 package com.tcdt.qlnvhang.table.nhaphangtheoptt;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity
 @Table(name = "HH_DX_KHMTT_THOP_DTL")
@@ -22,6 +26,13 @@ public class HhDxKhMttThopDtl implements Serializable {
     private String maDvi;
     @Transient
     String tenDvi;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayPduyet;
+    private String trichYeu;
+    private String tenDuAn;
+    private BigDecimal tongSoLuong;
+    private String diaChiDvi;
+    private BigDecimal giaCoThue;
 
     @Transient
     private HhDxuatKhMttHdr dxuatHdr= new HhDxuatKhMttHdr();

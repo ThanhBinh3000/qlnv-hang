@@ -9,8 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
-import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
-import com.tcdt.qlnvhang.service.HhQdKhlcntHdrService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -43,10 +41,7 @@ public class HhDxuatKhLcntHdrController {
 	@Autowired
 	private HhDxuatKhLcntHdrService service;
 
-	@Autowired
-	private HhQdKhlcntHdrService hhQdKhlcntHdrService;
-
-	@ApiOperation(value = "Tạo mới đề xuất kế hoạch lựa chọn nhà thầu lương thực", response = List.class)
+	@ApiOperation(value = "Tạo mới", response = List.class)
 	@PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<BaseResponse> insert(@Valid HttpServletRequest request,
@@ -59,12 +54,12 @@ public class HhDxuatKhLcntHdrController {
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error("Tạo mới đề xuất kế hoạch lựa chọn nhà thầu lương thực trace: {}", e);
+			log.error("Tạo mới trace: {}", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Cập nhật đề xuất kế hoạch lựa chọn nhà thầu lương thực", response = List.class)
+	@ApiOperation(value = "Cập nhật", response = List.class)
 	@PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> update(@Valid HttpServletRequest request,
 			@RequestBody HhDxuatKhLcntHdrReq objReq) {
@@ -76,12 +71,12 @@ public class HhDxuatKhLcntHdrController {
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error("Cập nhật đề xuất kế hoạch lựa chọn nhà thầu lương thực trace: {}", e);
+			log.error("Cập nhật trace: {}", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Tra cứu đề xuất kế hoạch lựa chọn nhà thầu lương thực", response = List.class)
+	@ApiOperation(value = "Tra cứu", response = List.class)
 	@PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<BaseResponse> selectAll(@Valid HttpServletRequest request,
@@ -94,12 +89,12 @@ public class HhDxuatKhLcntHdrController {
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error("Tra cứu đề xuất kế hoạch lựa chọn nhà thầu lương thực trace: {}", e);
+			log.error("Tra cứu trace: {}", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Tra cứu đề xuất kế hoạch lựa chọn nhà thầu lương thực from quyết định", response = List.class)
+	@ApiOperation(value = "Tra cứu from quyết định", response = List.class)
 	@PostMapping(value = "/select-dropdown", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<BaseResponse> selectDropdown( @RequestBody HhDxuatKhLcntSearchReq objReq) {
@@ -111,16 +106,16 @@ public class HhDxuatKhLcntHdrController {
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error("Tra cứu đề xuất kế hoạch lựa chọn nhà thầu lương thực trace: {}", e);
+			log.error("Tra cứu trace: {}", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Lấy chi tiết đề xuất kế hoạch lựa chọn nhà thầu lương thực", response = List.class)
+	@ApiOperation(value = "Lấy chi tiết", response = List.class)
 	@GetMapping(value = PathContains.URL_CHI_TIET + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<BaseResponse> detail(
-			@ApiParam(value = "ID đề xuất kế hoạch lựa chọn nhà thầu lương thực", example = "1", required = true) @PathVariable("id") Long id) {
+			@ApiParam(value = "ID", example = "1", required = true) @PathVariable("id") Long id) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			resp.setData(service.detail(id));
@@ -129,12 +124,12 @@ public class HhDxuatKhLcntHdrController {
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error("Lấy chi tiết đề xuất kế hoạch lựa chọn nhà thầu lương thực trace: {}", e);
+			log.error("Lấy chi tiết trace: {}", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Xoá đề xuất kế hoạch lựa chọn nhà thầu lương thực", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value = "Xoá", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
 	@PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<BaseResponse> delete(@RequestBody IdSearchReq idSearchReq) {
@@ -147,13 +142,13 @@ public class HhDxuatKhLcntHdrController {
 			// TODO: handle exception
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error("Xoá đề xuất kế hoạch lựa chọn nhà thầu lương thực trace: {}", e);
+			log.error("Xoá trace: {}", e);
 		}
 
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Xoá danh sách đề xuất kế hoạch lựa chọn nhà thầu lương thực", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value = "Xoá danh sách", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
 	@PostMapping(value = PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<BaseResponse> deleteMulti(@RequestBody IdSearchReq idSearchReq) {
@@ -166,13 +161,13 @@ public class HhDxuatKhLcntHdrController {
 			// TODO: handle exception
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error("Xoá đề xuất kế hoạch lựa chọn nhà thầu lương thực trace: {}", e);
+			log.error("Xoá trace: {}", e);
 		}
 
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03/Xoá-04 đề xuất kế hoạch lựa chọn nhà thầu lương thực", response = List.class)
+	@ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03/Xoá-04", response = List.class)
 	@PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> updateStatus(@Valid HttpServletRequest req, @RequestBody StatusReq stReq) {
 		BaseResponse resp = new BaseResponse();
@@ -184,7 +179,7 @@ public class HhDxuatKhLcntHdrController {
 			// TODO: handle exception
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error("Phê duyệt đề xuất kế hoạch lựa chọn nhà thầu lương thực trace: {}", e);
+			log.error("Phê duyệt trace: {}", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
@@ -246,7 +241,7 @@ public class HhDxuatKhLcntHdrController {
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error("Tạo mới đề xuất kế hoạch lựa chọn nhà thầu lương thực trace: {}", e);
+			log.error("Tạo mới trace: {}", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
@@ -264,7 +259,7 @@ public class HhDxuatKhLcntHdrController {
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error("Tạo mới đề xuất kế hoạch lựa chọn nhà thầu lương thực trace: {}", e);
+			log.error("Tạo mới trace: {}", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
@@ -273,7 +268,7 @@ public class HhDxuatKhLcntHdrController {
 	@GetMapping(value = PathContains.VAT_TU+PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<BaseResponse> detailVatTu(
-			@ApiParam(value = "ID đề xuất kế hoạch lựa chọn nhà thầu lương thực", example = "1", required = true) @PathVariable("ids") String ids) {
+			@ApiParam(value = "ID", example = "1", required = true) @PathVariable("ids") String ids) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			resp.setData(service.detailVatTu(ids));
@@ -282,7 +277,7 @@ public class HhDxuatKhLcntHdrController {
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error("Lấy chi tiết đề xuất kế hoạch lựa chọn nhà thầu lương thực trace: {}", e);
+			log.error("Lấy chi tiết trace: {}", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
