@@ -133,6 +133,9 @@ public class PathContains {
 
 	public static final String PKN_CL = "/pkn_cl";
 
+	// xuất hàng Nhập theo phương thức bán đấu thầu
+
+	public static final String DX_Kh_BDG = "/dx-kh-bdg";
 
 	// Dau thau vat tu
 	public static final String KH_LCNT_VT = "/kh-lcnt/vat-tu";
