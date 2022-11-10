@@ -135,7 +135,9 @@ public class PathContains {
 
 	// xuất hàng Nhập theo phương thức bán đấu thầu
 
-	public static final String DX_Kh_BDG = "/dx-kh-bdg";
+	public static final String DX_KH_BDG = "/dx-kh-bdg";
+
+	public static final String TH_KH_BDG = "/thop-kh-bdg";
 
 	// Dau thau vat tu
 	public static final String KH_LCNT_VT = "/kh-lcnt/vat-tu";

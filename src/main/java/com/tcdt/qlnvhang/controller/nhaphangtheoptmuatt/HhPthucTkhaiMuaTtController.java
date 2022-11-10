@@ -30,7 +30,7 @@ public class HhPthucTkhaiMuaTtController extends BaseController {
     @Autowired
     private HhPthucTkhaiMuaTtService hhPthucTkhaiMuaTtService;
 
-    @ApiOperation(value = "Tra cứu thông tin tổ chức triển khai mua trực tiếp", response = List.class)
+    @ApiOperation(value = "Tra cứu thông tin ", response = List.class)
     @PostMapping(value=  PathContains.TKHAI_MTT + PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody SearchHhPthucTkhaiReq objReq) {
         BaseResponse resp = new BaseResponse();
@@ -46,7 +46,7 @@ public class HhPthucTkhaiMuaTtController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Tạo mới thông tin tổ chức triển khai mua trực tiếp", response = List.class)
+    @ApiOperation(value = "Tạo mới thông tin ", response = List.class)
     @PostMapping(value = PathContains.TKHAI_MTT+ PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<BaseResponse> insert(HttpServletRequest request, @Valid @RequestBody HhQdPheduyetKhMttHdrReq objReq) {
@@ -63,7 +63,7 @@ public class HhPthucTkhaiMuaTtController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Lấy chi tiết thông tin tổ chức triển khai mua trực tiếp", response = List.class)
+    @ApiOperation(value = "Lấy chi tiết thông tin ", response = List.class)
     @GetMapping(value = PathContains.TKHAI_MTT+ PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> detail(

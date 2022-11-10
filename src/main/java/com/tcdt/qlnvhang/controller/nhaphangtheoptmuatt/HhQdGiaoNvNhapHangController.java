@@ -37,7 +37,7 @@ public class HhQdGiaoNvNhapHangController {
     private HhQdGiaoNvNhapHangService hhQdGiaoNvNhapHangService;
 
 
-    @ApiOperation(value = "Tra cứu quyết định giao nhiệm vụ nhập hàng", response = List.class)
+    @ApiOperation(value = "Tra cứu ", response = List.class)
     @PostMapping(value=  PathContains.QD_NV_NH + PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody SearchHhQdGiaoNvNhReq objReq) {
         BaseResponse resp = new BaseResponse();
@@ -53,7 +53,7 @@ public class HhQdGiaoNvNhapHangController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Tạo mới quyết định giao nhiệm vụ nhập hàng", response = List.class)
+    @ApiOperation(value = "Tạo mới ", response = List.class)
     @PostMapping(value=PathContains.QD_NV_NH+ PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> save(@Valid @RequestBody HhQdGiaoNvNhapHangReq objReq) {
         BaseResponse resp = new BaseResponse();
@@ -69,7 +69,7 @@ public class HhQdGiaoNvNhapHangController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Cập nhật quyết định giao nhiệm vụ nhập hàng", response = List.class)
+    @ApiOperation(value = "Cập nhật ", response = List.class)
     @PostMapping(value=PathContains.QD_NV_NH+ PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> update(@Valid @RequestBody HhQdGiaoNvNhapHangReq objReq) {
         BaseResponse resp = new BaseResponse();
@@ -85,11 +85,11 @@ public class HhQdGiaoNvNhapHangController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Lấy chi tiết thông tin quyết định giao nhiệm vụ nhập hàng", response = List.class)
+    @ApiOperation(value = "Lấy chi tiết thông tin ", response = List.class)
     @GetMapping(value =PathContains.QD_NV_NH+ PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> detail(
-            @ApiParam(value = "ID quyết định giao nhiệm vụ nhập hàng", example = "1", required = true) @PathVariable("ids") String ids) {
+            @ApiParam(value = "ID ", example = "1", required = true) @PathVariable("ids") String ids) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhQdGiaoNvNhapHangService.detail(ids));
@@ -103,7 +103,7 @@ public class HhQdGiaoNvNhapHangController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xóa đề xuất quyết định giao nhiệm vụ nhập hàng", response = List.class)
+    @ApiOperation(value = "Xóa đề xuất ", response = List.class)
     @PostMapping(value=  PathContains.QD_NV_NH + PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
@@ -119,7 +119,7 @@ public class HhQdGiaoNvNhapHangController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xóa dánh sách quyết định giao nhiệm vụ nhập hàng", response = List.class)
+    @ApiOperation(value = "Xóa dánh sách ", response = List.class)
     @PostMapping(value=  PathContains.QD_NV_NH + PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
@@ -134,7 +134,7 @@ public class HhQdGiaoNvNhapHangController {
         }
         return ResponseEntity.ok(resp);
     }
-    @ApiOperation(value = "Kết xuất danh sách quyết định giao nhiệm vụ nhập hàng", response = List.class)
+    @ApiOperation(value = "Kết xuất danh sách ", response = List.class)
     @PostMapping(value= PathContains.QD_NV_NH + PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void exportListQdBtcBnToExcel(@Valid @RequestBody SearchHhQdGiaoNvNhReq objReq, HttpServletResponse response) throws Exception{
@@ -143,7 +143,7 @@ public class HhQdGiaoNvNhapHangController {
             hhQdGiaoNvNhapHangService.export(objReq,response);
         } catch (Exception e) {
 
-            log.error("Kết xuất danh sách quyết định giao nhiệm vụ nhập hàng: {}", e);
+            log.error("Kết xuất danh sách : {}", e);
             final Map<String, Object> body = new HashMap<>();
             body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             body.put("msg", e.getMessage());

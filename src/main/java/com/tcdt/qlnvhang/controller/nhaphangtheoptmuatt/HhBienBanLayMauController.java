@@ -36,7 +36,7 @@ public class HhBienBanLayMauController extends BaseController {
     private HhBienBanLayMauService hhBienBanLayMauService;
 
 
-    @ApiOperation(value = "Tra cứu biên bản lấy mẫu bàn giao", response = List.class)
+    @ApiOperation(value = "Tra cứu ", response = List.class)
     @PostMapping(value=  PathContains.BB_LM + PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody SearchHhBbanLayMau objReq) {
         BaseResponse resp = new BaseResponse();
@@ -52,7 +52,7 @@ public class HhBienBanLayMauController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Tạo mới biên bản lấy mẫu bàn giao", response = List.class)
+    @ApiOperation(value = "Tạo mới ", response = List.class)
     @PostMapping(value=  PathContains.BB_LM + PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> save(@Valid @RequestBody HhBienBanLayMauReq objReq) {
         BaseResponse resp = new BaseResponse();
@@ -68,7 +68,7 @@ public class HhBienBanLayMauController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Sửa biên bản lấy mẫu bàn giao", response = List.class)
+    @ApiOperation(value = "Sửa ", response = List.class)
     @PostMapping(value=  PathContains.BB_LM + PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> update(@Valid @RequestBody HhBienBanLayMauReq objReq) {
         BaseResponse resp = new BaseResponse();
@@ -84,11 +84,11 @@ public class HhBienBanLayMauController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Lấy chi tiết thông tin biên bản lấy mẫu bàn giao", response = List.class)
+    @ApiOperation(value = "Lấy chi tiết thông tin ", response = List.class)
     @GetMapping(value =PathContains.BB_LM+ PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> detail(
-            @ApiParam(value = "ID biên bản lấy mẫu bàn giao", example = "1", required = true) @PathVariable("ids") String ids) {
+            @ApiParam(value = "ID ", example = "1", required = true) @PathVariable("ids") String ids) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhBienBanLayMauService.detail(ids));
@@ -102,7 +102,7 @@ public class HhBienBanLayMauController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xóa biên bản lấy mẫu bàn giao", response = List.class)
+    @ApiOperation(value = "Xóa ", response = List.class)
     @PostMapping(value=  PathContains.BB_LM + PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
@@ -118,7 +118,7 @@ public class HhBienBanLayMauController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xóa dánh sách biên bản lấy mẫu bàn giao", response = List.class)
+    @ApiOperation(value = "Xóa dánh sách ", response = List.class)
     @PostMapping(value=  PathContains.BB_LM + PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
@@ -134,7 +134,7 @@ public class HhBienBanLayMauController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Kết xuất danh sách biên bản lấy mẫu bàn giao", response = List.class)
+    @ApiOperation(value = "Kết xuất danh sách ", response = List.class)
     @PostMapping(value= PathContains.BB_LM + PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void exportListQdBtcBnToExcel(@Valid @RequestBody SearchHhBbanLayMau objReq, HttpServletResponse response) throws Exception{
@@ -143,7 +143,7 @@ public class HhBienBanLayMauController extends BaseController {
             hhBienBanLayMauService.export(objReq,response);
         } catch (Exception e) {
 
-            log.error("Kết xuất danh sách biên bản lấy mẫu bàn giao: {}", e);
+            log.error("Kết xuất danh sách : {}", e);
             final Map<String, Object> body = new HashMap<>();
             body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             body.put("msg", e.getMessage());
@@ -157,7 +157,7 @@ public class HhBienBanLayMauController extends BaseController {
 
     }
 
-    @ApiOperation(value = "Phê duyêt biên bản lấy mẫu bàn giao ", response = List.class)
+    @ApiOperation(value = "Phê duyêt  ", response = List.class)
     @PostMapping(value=PathContains.BB_LM + PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> updateStatusUbtvqh(@Valid @RequestBody StatusReq statusReq, HttpServletRequest req) {
         BaseResponse resp = new BaseResponse();
