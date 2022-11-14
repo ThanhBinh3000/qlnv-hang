@@ -12,6 +12,7 @@ import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatDtlLoaiNx;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatHdrLoaiQd;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
+import com.tcdt.qlnvhang.repository.HhBbNghiemthuKlstRepository;
 import com.tcdt.qlnvhang.repository.HhDviThuchienQdinhRepository;
 import com.tcdt.qlnvhang.repository.HhHopDongDdiemNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
@@ -78,6 +79,9 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 	@Autowired
 	private NhBangKeCanHangService nhBangKeCanHangService;
+
+	@Autowired
+	private HhBbNghiemthuKlstRepository hhBbNghiemthuKlstRepository;
 
 	@Override
 	@Transactional
@@ -593,6 +597,12 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 					item.setChiTiets(nhBbNhapDayKhoCtRepository.findAllByIdBbNhapDayKho(item.getId()));
 				});
 				dtl.setListBienBanNhapDayKho(byIdQdGiaoNvNh);
+
+				List<HhBbNghiemthuKlstHdr> byIdQdGiaoNvNhAndMaDvi = hhBbNghiemthuKlstRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(), dtl.getMaDvi());
+				byIdQdGiaoNvNhAndMaDvi.forEach( item ->  {
+					item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+				});
+				dtl.setListBienBanNghiemThuBq(byIdQdGiaoNvNhAndMaDvi);
 
 				dtl.setTenLoaiVthh(tenCloaiVthh.get(dtl.getLoaiVthh()));
 				dtl.setTenCloaiVthh(tenCloaiVthh.get(dtl.getCloaiVthh()));

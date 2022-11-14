@@ -3,7 +3,7 @@ package com.tcdt.qlnvhang.service.nhaphang.count;
 import com.tcdt.qlnvhang.request.CountReq;
 import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.service.nhaphang.HhBbNghiemthuKlstHdrService;
+import com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.bienbannghiemthubaoquan.HhBbNghiemthuKlstHdrService;
 import com.tcdt.qlnvhang.service.nhaphang.bbanlaymau.BienBanBanGiaoMauService;
 import com.tcdt.qlnvhang.service.nhaphang.bbanlaymau.BienBanLayMauService;
 import com.tcdt.qlnvhang.service.nhaphang.luongthucmuoi.phieuknghiemcluonghang.PhieuKnghiemCluongHangService;
@@ -54,7 +54,7 @@ public class CountNhapHangServiceImpl extends BaseServiceImpl implements CountNh
 
         // Kiem tra chat luong
 //        counts.add(qlpktclhPhieuKtChatLuongService.count(req.getMaDvis()));
-        counts.add(hhBbNghiemthuKlstHdrService.count(req.getMaDvis()));
+//        counts.add(hhBbNghiemthuKlstHdrService.count(req.getMaDvis()));
         counts.add(bienBanBanGiaoMauService.count(req.getMaDvis()));
         counts.add(phieuKnghiemCluongHangService.count(req.getMaDvis()));
         counts.add(hoSoKyThuatService.count(req.getMaDvis()));
