@@ -119,7 +119,7 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
             ccxdg =  ObjectMapperUtils.map(listCc, HhDxuatKhMttCcxdg.class);
             ccxdg.setIdDxKhmtt(data.getId());
             ccxdg =  hhDxuatKhMttCcxdgRepository.save(ccxdg);
-            List<FileDinhKem> ccFildeDinhKems = fileDinhKemService.saveListFileDinhKem(listCc.getCcFileDinhkems(),ccxdg.getId(),"HH_DX_KHMTT_CCXDG");
+            List<FileDinhKem> ccFildeDinhKems = fileDinhKemService.saveListFileDinhKem(listCc.getCcFileDinhKems(),ccxdg.getId(),"HH_DX_KHMTT_CCXDG");
             ccxdg.setCcFileDinhKems(ccFildeDinhKems);
             }
         for (HhDxuatKhMttSlddReq listSlDd : objReq.getSoLuongDiaDiemList()){

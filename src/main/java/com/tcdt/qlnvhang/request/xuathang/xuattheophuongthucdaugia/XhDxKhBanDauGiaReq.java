@@ -58,6 +58,4 @@ public class XhDxKhBanDauGiaReq {
     private List<XhDxKhBanDauGiaDtlReq> banDauGiaDtlList = new ArrayList<>();
 
 
-    private List<XhDxKhBdgDdGiaoNhanHangReq> ddGiaoNhanHangReqList = new ArrayList<>();
-
 }
