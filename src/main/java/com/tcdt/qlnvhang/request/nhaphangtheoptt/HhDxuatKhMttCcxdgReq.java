@@ -13,5 +13,5 @@ public class HhDxuatKhMttCcxdgReq {
     private Long id;
     private Long idDxKhmtt;
     private String moTa;
-    private List<FileDinhKemReq> ccFileDinhkems =new ArrayList<>();
+    private List<FileDinhKemReq> ccFileDinhKems =new ArrayList<>();
 }
