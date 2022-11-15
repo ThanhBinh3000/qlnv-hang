@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.table;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHang;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKho;
 import lombok.Data;
 
@@ -75,4 +76,7 @@ public class HhQdGiaoNvuNxDdiem implements Serializable {
 
 	@Transient
 	List<NhBangKeCanHang> listBangKeCanHang;
+
+	@Transient
+	NhBbNhapDayKho bienBanNhapDayKho;
 }

@@ -31,4 +31,6 @@ public interface NhBbNhapDayKhoRepository extends BaseRepository<NhBbNhapDayKho,
 //    Optional<NhBbNhapDayKho> findFirstBySoBienBan(String soBb);
 
     List<NhBbNhapDayKho> findByIdQdGiaoNvNhAndMaDvi(Long idQdGiaoNvNh,String maDvi);
+
+    NhBbNhapDayKho findByIdDdiemGiaoNvNh(Long idDdiemGiaoNvNh);
 }
