@@ -50,9 +50,18 @@ public class HhBbNghiemthuKlstHdr extends TrangThaiBaseEntity implements Seriali
 	@Temporal(TemporalType.DATE)
 	Date ngayNghiemThu;
 	Long idThuTruong;
+	@Transient
+	String tenThuTruong;
 	Long idKeToan;
+	@Transient
+	String tenKeToan;
 	Long idKyThuatVien;
+	@Transient
+	String tenKyThuatVien;
 	Long idThuKho;
+	@Transient
+	String tenThuKho;
+
 
 	String lhKho;
 	Double slThucNhap;

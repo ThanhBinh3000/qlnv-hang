@@ -8,10 +8,12 @@ import javax.servlet.http.HttpServletRequest;
 import com.tcdt.qlnvhang.entities.FileDKemJoinKeLot;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
+import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
+import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.extern.log4j.Log4j2;
@@ -23,104 +25,177 @@ import org.springframework.stereotype.Service;
 
 import com.tcdt.qlnvhang.repository.HhBbNghiemthuKlstRepository;
 import com.tcdt.qlnvhang.request.object.HhBbNghiemthuKlstHdrReq;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 @Service
 @Log4j2
 public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements HhBbNghiemthuKlstHdrService {
 
-	@Autowired
-	private HhBbNghiemthuKlstRepository hhBbNghiemthuKlstRepository;
+    @Autowired
+    private HhBbNghiemthuKlstRepository hhBbNghiemthuKlstRepository;
 
-	@Autowired
-	private HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
+    @Autowired
+    private HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
 
-	@Autowired
-	private KtNganLoRepository ktNganLoRepository;
+    @Autowired
+    private KtNganLoRepository ktNganLoRepository;
 
-	@Autowired
-	private HhHopDongRepository hhHopDongRepository;
+    @Autowired
+    private HhHopDongRepository hhHopDongRepository;
 
-	@Autowired
-	private HttpServletRequest req;
+    @Autowired
+    private UserInfoRepository userInfoRepository;
 
-	@Override
-	public Page<HhBbNghiemthuKlstHdr> searchPage(HhBbNghiemthuKlstHdrReq req) {
-		return null;
-	}
+    @Autowired
+    private HttpServletRequest req;
 
-	@Override
-	public List<HhBbNghiemthuKlstHdr> searchAll(HhBbNghiemthuKlstHdrReq req) {
-		return null;
-	}
+    @Override
+    public Page<HhBbNghiemthuKlstHdr> searchPage(HhBbNghiemthuKlstHdrReq req) {
+        return null;
+    }
 
-	@Override
-	public HhBbNghiemthuKlstHdr create(HhBbNghiemthuKlstHdrReq req) throws Exception {
-		UserInfo userInfo = UserUtils.getUserInfo();
+    @Override
+    public List<HhBbNghiemthuKlstHdr> searchAll(HhBbNghiemthuKlstHdrReq req) {
+        return null;
+    }
 
-		Optional<HhQdGiaoNvuNhapxuatHdr> qdNxOptional = hhQdGiaoNvuNhapxuatRepository.findById(req.getIdQdGiaoNvNh());
-		if (!qdNxOptional.isPresent())
-			throw new Exception("Quyết định giao nhiệm vụ nhập xuất không tồn tại");
+    @Override
+    public HhBbNghiemthuKlstHdr create(HhBbNghiemthuKlstHdrReq req) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
 
-		// Add danh sach file dinh kem o Master
-		List<FileDKemJoinKeLot> fileDinhKemList = new ArrayList<FileDKemJoinKeLot>();
-		if (req.getFileDinhKems() != null) {
-			fileDinhKemList = ObjectMapperUtils.mapAll(req.getFileDinhKems(), FileDKemJoinKeLot.class);
-			fileDinhKemList.forEach(f -> {
-				f.setDataType(HhBbNghiemthuKlstHdr.TABLE_NAME);
-				f.setCreateDate(new Date());
-			});
-		}
-		HhBbNghiemthuKlstHdr dataMap = new HhBbNghiemthuKlstHdr();
-		BeanUtils.copyProperties(req, dataMap);
-		dataMap.setNgayTao(getDateTimeNow());
-		dataMap.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
-		dataMap.setNguoiTaoId(getUser().getId());
-		dataMap.setChildren1(fileDinhKemList);
+        Optional<HhQdGiaoNvuNhapxuatHdr> qdNxOptional = hhQdGiaoNvuNhapxuatRepository.findById(req.getIdQdGiaoNvNh());
+        if (!qdNxOptional.isPresent())
+            throw new Exception("Quyết định giao nhiệm vụ nhập xuất không tồn tại");
 
-		// Add thong tin chung
+        // Add danh sach file dinh kem o Master
+        List<FileDKemJoinKeLot> fileDinhKemList = new ArrayList<FileDKemJoinKeLot>();
+        if (req.getFileDinhKems() != null) {
+            fileDinhKemList = ObjectMapperUtils.mapAll(req.getFileDinhKems(), FileDKemJoinKeLot.class);
+            fileDinhKemList.forEach(f -> {
+                f.setDataType(HhBbNghiemthuKlstHdr.TABLE_NAME);
+                f.setCreateDate(new Date());
+            });
+        }
+        HhBbNghiemthuKlstHdr dataMap = new HhBbNghiemthuKlstHdr();
+        BeanUtils.copyProperties(req, dataMap);
+        dataMap.setNgayTao(getDateTimeNow());
+        dataMap.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
+        dataMap.setNguoiTaoId(getUser().getId());
+        dataMap.setChildren1(fileDinhKemList);
+
+        // Add thong tin chung
 //		List<HhBbNghiemthuKlstDtl> dtls1 = ObjectMapperUtils.mapAll(req.getDetail(), HhBbNghiemthuKlstDtl.class);
 //		dataMap.setChildren(dtls1);
 
-		dataMap.setNam(qdNxOptional.get().getNamNhap());
-		dataMap.setMaDvi(userInfo.getDvql());
-		dataMap.setCapDvi(userInfo.getCapDvi());
+        dataMap.setNam(qdNxOptional.get().getNamNhap());
+        dataMap.setMaDvi(userInfo.getDvql());
+        dataMap.setCapDvi(userInfo.getCapDvi());
 
-		dataMap.setNam(LocalDate.now().getYear());
-		dataMap.setId(Long.parseLong(req.getSoBbNtBq().split("/")[0]));
+        dataMap.setNam(LocalDate.now().getYear());
+        dataMap.setId(Long.parseLong(req.getSoBbNtBq().split("/")[0]));
 
-		hhBbNghiemthuKlstRepository.save(dataMap);
-		return dataMap;
-	}
+        hhBbNghiemthuKlstRepository.save(dataMap);
+        return dataMap;
+    }
 
-	@Override
-	public HhBbNghiemthuKlstHdr update(HhBbNghiemthuKlstHdrReq req) throws Exception {
-		return null;
-	}
+    @Override
+    public HhBbNghiemthuKlstHdr update(HhBbNghiemthuKlstHdrReq objReq) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
 
-	@Override
-	public HhBbNghiemthuKlstHdr detail(Long id) throws Exception {
-		return null;
-	}
+        if (StringUtils.isEmpty(objReq.getId()))
+            throw new Exception("Sửa thất bại, không tìm thấy dữ liệu");
 
-	@Override
-	public HhBbNghiemthuKlstHdr approve(HhBbNghiemthuKlstHdrReq req) throws Exception {
-		return null;
-	}
+        Optional<HhBbNghiemthuKlstHdr> qOptional = hhBbNghiemthuKlstRepository.findById(Long.valueOf(objReq.getId()));
+        if (!qOptional.isPresent()){
+			throw new Exception("Không tìm thấy dữ liệu cần sửa");
+		}
 
-	@Override
-	public void delete(Long id) throws Exception {
 
-	}
+        Optional<HhQdGiaoNvuNhapxuatHdr> qdNxOptional = hhQdGiaoNvuNhapxuatRepository.findById(objReq.getIdQdGiaoNvNh());
+        if (!qdNxOptional.isPresent()){
+			throw new Exception("Quyết định giao nhiệm vụ nhập xuất không tồn tại");
+		}
 
-	@Override
-	public void deleteMulti(List<Long> listMulti) {
+        // Add danh sach file dinh kem o Master
+        List<FileDKemJoinKeLot> fileDinhKemList = new ArrayList<FileDKemJoinKeLot>();
+        if (objReq.getFileDinhKems() != null) {
+            fileDinhKemList = ObjectMapperUtils.mapAll(objReq.getFileDinhKems(), FileDKemJoinKeLot.class);
+            fileDinhKemList.forEach(f -> {
+                f.setDataType(HhBbNghiemthuKlstHdr.TABLE_NAME);
+                f.setCreateDate(new Date());
+            });
+        }
 
-	}
+        HhBbNghiemthuKlstHdr dataDTB = qOptional.get();
+        BeanUtils.copyProperties(objReq,dataDTB,"id");
 
-	@Override
-	public boolean export(HhBbNghiemthuKlstHdrReq req) throws Exception {
-		return false;
-	}
+        dataDTB.setNgaySua(getDateTimeNow());
+        dataDTB.setNguoiSuaId(getUser().getId());;
+        dataDTB.setChildren1(fileDinhKemList);
+
+        // Add thong tin chung
+//        List<HhBbNghiemthuKlstDtl> dtls1 = ObjectMapperUtils.mapAll(objReq.getDetail(), HhBbNghiemthuKlstDtl.class);
+//        dataDTB.setChildren(dtls1);
+
+        dataDTB.setNam(qdNxOptional.get().getNamNhap());
+        dataDTB.setMaDvi(userInfo.getDvql());
+        dataDTB.setCapDvi(userInfo.getCapDvi());
+        hhBbNghiemthuKlstRepository.save(dataDTB);
+
+		return dataDTB;
+    }
+
+    @Override
+    public HhBbNghiemthuKlstHdr detail(Long id) throws Exception {
+
+        UserInfo userInfo = UserUtils.getUserInfo();
+
+        if (ObjectUtils.isEmpty(userInfo)) {
+            throw new Exception("401 Author");
+        }
+
+        if (ObjectUtils.isEmpty(id)) {
+            throw new UnsupportedOperationException("Không tồn tại bản ghi");
+        }
+
+        Optional<HhBbNghiemthuKlstHdr> qOptional = hhBbNghiemthuKlstRepository.findById(id);
+
+        if (!qOptional.isPresent()) {
+            throw new UnsupportedOperationException("Không tồn tại bản ghi");
+        }
+
+        HhBbNghiemthuKlstHdr hhBbNghiemthuKlstHdr = qOptional.get();
+
+        Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
+        hhBbNghiemthuKlstHdr.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(hhBbNghiemthuKlstHdr.getTrangThai()));
+        hhBbNghiemthuKlstHdr.setTenDvi(listDanhMucDvi.get(hhBbNghiemthuKlstHdr.getMaDvi()));
+        hhBbNghiemthuKlstHdr.setTenNguoiTao(ObjectUtils.isEmpty(hhBbNghiemthuKlstHdr.getNguoiTaoId()) ? null : userInfoRepository.findById(hhBbNghiemthuKlstHdr.getNguoiTaoId()).get().getFullName());
+        hhBbNghiemthuKlstHdr.setTenKeToan(ObjectUtils.isEmpty(hhBbNghiemthuKlstHdr.getIdKeToan()) ? null : userInfoRepository.findById(hhBbNghiemthuKlstHdr.getIdKeToan()).get().getFullName());
+        hhBbNghiemthuKlstHdr.setTenKyThuatVien(ObjectUtils.isEmpty(hhBbNghiemthuKlstHdr.getIdKyThuatVien()) ? null : userInfoRepository.findById(hhBbNghiemthuKlstHdr.getIdKyThuatVien()).get().getFullName());
+        hhBbNghiemthuKlstHdr.setTenNguoiPduyet(ObjectUtils.isEmpty(hhBbNghiemthuKlstHdr.getNguoiPduyetId()) ? null : userInfoRepository.findById(hhBbNghiemthuKlstHdr.getNguoiPduyetId()).get().getFullName());
+        return hhBbNghiemthuKlstHdr;
+    }
+
+    @Override
+    public HhBbNghiemthuKlstHdr approve(HhBbNghiemthuKlstHdrReq req) throws Exception {
+        return null;
+    }
+
+    @Override
+    public void delete(Long id) throws Exception {
+
+    }
+
+    @Override
+    public void deleteMulti(List<Long> listMulti) {
+
+    }
+
+    @Override
+    public boolean export(HhBbNghiemthuKlstHdrReq req) throws Exception {
+        return false;
+    }
 
 //	@Override
 //	public HhBbNghiemthuKlstHdr create(HhBbNghiemthuKlstHdrReq objReq) throws Exception {
