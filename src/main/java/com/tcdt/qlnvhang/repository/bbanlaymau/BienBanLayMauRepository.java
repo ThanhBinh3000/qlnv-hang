@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.repository.bbanlaymau;
 import com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau.BienBanLayMau;
 import com.tcdt.qlnvhang.repository.BaseRepository;
 import com.tcdt.qlnvhang.table.BhHopDongHdr;
+import com.tcdt.qlnvhang.table.HhBbNghiemthuKlstHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -20,6 +22,9 @@ public interface BienBanLayMauRepository extends BaseRepository<BienBanLayMau, L
     void deleteByIdIn(Collection<Long> ids);
 
     Optional<BienBanLayMau> findFirstBySoBienBan(String soBienBan);
+
+    List<BienBanLayMau> findByIdQdGiaoNvNhAndMaDvi(Long idQdGiaoNvNh, String maDvi);
+
 
     @Query(
             value = "SELECT * FROM NH_BB_LAY_MAU  BB ",

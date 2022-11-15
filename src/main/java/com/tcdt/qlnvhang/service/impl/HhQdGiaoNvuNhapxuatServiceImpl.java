@@ -2,11 +2,13 @@ package com.tcdt.qlnvhang.service.impl;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
+import com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau.BienBanLayMau;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatDtlLoaiNx;
@@ -16,6 +18,7 @@ import com.tcdt.qlnvhang.repository.HhBbNghiemthuKlstRepository;
 import com.tcdt.qlnvhang.repository.HhDviThuchienQdinhRepository;
 import com.tcdt.qlnvhang.repository.HhHopDongDdiemNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
+import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuongRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHangRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKhoCtRepository;
@@ -82,6 +85,9 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 	@Autowired
 	private HhBbNghiemthuKlstRepository hhBbNghiemthuKlstRepository;
+	
+	@Autowired
+	private BienBanLayMauRepository bienBanLayMauRepository;
 
 	@Override
 	@Transactional
@@ -587,8 +593,8 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			for (HhQdGiaoNvuNhapxuatDtl dtl:hhQdGiaoNvuNhapxuatDtl){
 
 				// Set biên bản nhập đầy kho;
-				List<NhBbNhapDayKho> byIdQdGiaoNvNh = nhBbNhapDayKhoRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(),dtl.getMaDvi());
-				byIdQdGiaoNvNh.forEach( item -> {
+				List<NhBbNhapDayKho> bbNhapDayKho = nhBbNhapDayKhoRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(),dtl.getMaDvi());
+				bbNhapDayKho.forEach( item -> {
 					item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
 					item.setTenDiemKho(mapDmucDvi.get(item.getMaDiemKho()));
 					item.setTenNhaKho(mapDmucDvi.get(item.getMaNhaKho()));
@@ -596,22 +602,32 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 					item.setTenLoKho(mapDmucDvi.get(item.getMaLoKho()));
 					item.setChiTiets(nhBbNhapDayKhoCtRepository.findAllByIdBbNhapDayKho(item.getId()));
 				});
-				dtl.setListBienBanNhapDayKho(byIdQdGiaoNvNh);
+				dtl.setListBienBanNhapDayKho(bbNhapDayKho);
 
-				List<HhBbNghiemthuKlstHdr> byIdQdGiaoNvNhAndMaDvi = hhBbNghiemthuKlstRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(), dtl.getMaDvi());
-				byIdQdGiaoNvNhAndMaDvi.forEach( item ->  {
+				// Set biên bản nghiệm thu bảo quản
+				List<HhBbNghiemthuKlstHdr> bbNghiemThuBq = hhBbNghiemthuKlstRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(), dtl.getMaDvi());
+				bbNghiemThuBq.forEach( item ->  {
 					item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
 				});
-				dtl.setListBienBanNghiemThuBq(byIdQdGiaoNvNhAndMaDvi);
+				dtl.setListBienBanNghiemThuBq(bbNghiemThuBq);
+
+				// Set biên bản lấy mẫu/ bàn giao mẫu
+				List<BienBanLayMau> bbLayMau = bienBanLayMauRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(), dtl.getMaDvi());
+				bbLayMau.forEach( item -> {
+					item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+					item.setTenDiemKho(mapDmucDvi.get(item.getMaDiemKho()));
+					item.setTenNhaKho(mapDmucDvi.get(item.getMaNhaKho()));
+					item.setTenNganKho(mapDmucDvi.get(item.getMaNganKho()));
+					item.setTenLoKho(mapDmucDvi.get(item.getMaLoKho()));
+					NhBbNhapDayKho nhBbNhapDayKhoStream = bbNhapDayKho.stream().filter(x -> Objects.equals(x.getId(), item.getIdBbNhapDayKho())).findAny().orElse(null);
+					item.setNgayNhapDayKho(nhBbNhapDayKhoStream.getNgayKetThucNhap());
+				});
+				dtl.setListBienBanLayMau(bbLayMau);
 
 				dtl.setTenLoaiVthh(tenCloaiVthh.get(dtl.getLoaiVthh()));
 				dtl.setTenCloaiVthh(tenCloaiVthh.get(dtl.getCloaiVthh()));
 				dtl.setTenDvi(mapDmucDvi.get(dtl.getMaDvi()));
 				dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThai()));
-
-
-
-
 
 				List<HhQdGiaoNvuNxDdiem> allByIdCt = ddiemNhapRepository.findAllByIdCt(dtl.getId());
 				allByIdCt.forEach(item->{
@@ -641,6 +657,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			ddNhap.setListPhieuKtraCl(nhPhieuKtChatLuongService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
 			ddNhap.setListPhieuNhapKho(nhPhieuNhapKhoService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
 			ddNhap.setListBangKeCanHang(nhBangKeCanHangService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
+			ddNhap.setBienBanNhapDayKho(nhBbNhapDayKhoRepository.findByIdDdiemGiaoNvNh(ddNhap.getId()));
 		}
 	}
 
