@@ -36,7 +36,7 @@ public class HhHdongBkePmuahangController extends BaseController {
     HhHdongBkePmuahangService hhHdongBkePmuahangService;
 
 
-    @ApiOperation(value = "Tra cứu danh sách hợp đồng mua trực tiếp", response = List.class)
+    @ApiOperation(value = "Tra cứu ", response = List.class)
     @PostMapping(value=  PathContains.HD_BK_PMH + PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody SearchHhHdongBkePmh objReq) {
         BaseResponse resp = new BaseResponse();
@@ -52,7 +52,7 @@ public class HhHdongBkePmuahangController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Tạo mới danh sách hợp đồng mua trực tiếp", response = List.class)
+    @ApiOperation(value = "Tạo mới ", response = List.class)
     @PostMapping(value=  PathContains.HD_BK_PMH + PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> save(@Valid @RequestBody HhHdongBkePmuahangReq objReq) {
         BaseResponse resp = new BaseResponse();
@@ -68,7 +68,7 @@ public class HhHdongBkePmuahangController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Cập nhật danh sách hợp đồng mua trực tiếp", response = List.class)
+    @ApiOperation(value = "Cập nhật ", response = List.class)
     @PostMapping(value=  PathContains.HD_BK_PMH + PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> update(@Valid @RequestBody HhHdongBkePmuahangReq objReq) {
         BaseResponse resp = new BaseResponse();
@@ -84,7 +84,7 @@ public class HhHdongBkePmuahangController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Lấy chi tiết thông tin hợp đồng mua trực tiếp", response = List.class)
+    @ApiOperation(value = "Lấy chi tiết ", response = List.class)
     @GetMapping(value =PathContains.HD_BK_PMH+ PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> detail(
@@ -102,7 +102,7 @@ public class HhHdongBkePmuahangController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xóa đề xuất hợp đồng mua trực tiếp", response = List.class)
+    @ApiOperation(value = "Xóa đề xuất ", response = List.class)
     @PostMapping(value=  PathContains.HD_BK_PMH + PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
@@ -118,7 +118,7 @@ public class HhHdongBkePmuahangController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xóa dánh sách hợp đồng mua trực tiếp", response = List.class)
+    @ApiOperation(value = "Xóa dánh sách ", response = List.class)
     @PostMapping(value=  PathContains.HD_BK_PMH + PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
@@ -133,7 +133,7 @@ public class HhHdongBkePmuahangController extends BaseController {
         }
         return ResponseEntity.ok(resp);
     }
-    @ApiOperation(value = "Kết xuất danh sách hợp đồng mua trực tiếp", response = List.class)
+    @ApiOperation(value = "Kết xuất ", response = List.class)
     @PostMapping(value= PathContains.HD_BK_PMH + PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void exportListQdBtcBnToExcel(@Valid @RequestBody SearchHhHdongBkePmh objReq, HttpServletResponse response) throws Exception{
@@ -142,7 +142,7 @@ public class HhHdongBkePmuahangController extends BaseController {
             hhHdongBkePmuahangService.export(objReq,response);
         } catch (Exception e) {
 
-            log.error("Kết xuất danh sách hợp đồng mua trực tiếp: {}", e);
+            log.error("Kết xuất : {}", e);
             final Map<String, Object> body = new HashMap<>();
             body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             body.put("msg", e.getMessage());
@@ -156,7 +156,7 @@ public class HhHdongBkePmuahangController extends BaseController {
 
     }
 
-    @ApiOperation(value = "Phê duyêt danh sách hợp đồng mua trực tiếp ", response = List.class)
+    @ApiOperation(value = "Phê duyêt  ", response = List.class)
     @PostMapping(value=PathContains.HD_BK_PMH + PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> updateStatusUbtvqh(@Valid @RequestBody StatusReq statusReq, HttpServletRequest req) {
         BaseResponse resp = new BaseResponse();

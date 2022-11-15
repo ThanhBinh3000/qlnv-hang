@@ -79,8 +79,7 @@ public class XhDxKhBanDauGia extends BaseEntity implements Serializable {
     @Transient
     private List<XhDxKhBanDauGiaDtl> banDauGiaDtlList = new ArrayList<>();
 
-    @Transient
-    private List<XhDxKhBdgDdGiaoNhanHang> ddGiaoNhanHangList = new ArrayList<>();
+
 
 
 }

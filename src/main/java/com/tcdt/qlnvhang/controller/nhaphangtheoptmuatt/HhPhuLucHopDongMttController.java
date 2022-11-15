@@ -29,7 +29,7 @@ public class HhPhuLucHopDongMttController extends BaseController {
     HhPhuLucHopDongMttService hhPhuLucHopDongMttService;
 
 
-    @ApiOperation(value = "Danh sách hợp đồng phụ lục mua trực tiếp", response = List.class)
+    @ApiOperation(value = "Danh sách ", response = List.class)
     @PostMapping(value=  PathContains.HD_PL_MTT + PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody HhPhuLucHopDongMttReq objReq) {
         BaseResponse resp = new BaseResponse();
@@ -45,7 +45,7 @@ public class HhPhuLucHopDongMttController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Tạo mới danh sách hợp đồng phụ lục mua trực tiếp", response = List.class)
+    @ApiOperation(value = "Tạo mới danh sách ", response = List.class)
     @PostMapping(value=  PathContains.HD_PL_MTT + PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> save(@Valid @RequestBody HhPhuLucHopDongMttReq objReq) {
         BaseResponse resp = new BaseResponse();
@@ -61,7 +61,7 @@ public class HhPhuLucHopDongMttController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Cập nhật danh sách hợp đồng phụ lục mua trực tiếp", response = List.class)
+    @ApiOperation(value = "Cập nhật danh sách ", response = List.class)
     @PostMapping(value=  PathContains.HD_PL_MTT + PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> update(@Valid @RequestBody HhPhuLucHopDongMttReq objReq) {
         BaseResponse resp = new BaseResponse();
@@ -77,11 +77,11 @@ public class HhPhuLucHopDongMttController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Lấy chi tiết thông tin hợp đồng phụ lục mua trực tiếp", response = List.class)
+    @ApiOperation(value = "Lấy chi tiết thông tin ", response = List.class)
     @GetMapping(value =PathContains.HD_PL_MTT+ PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> detail(
-            @ApiParam(value = "ID hợp đồng phụ lục mua trực tiếp", example = "1", required = true) @PathVariable("ids") String ids) {
+            @ApiParam(value = "ID ", example = "1", required = true) @PathVariable("ids") String ids) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhPhuLucHopDongMttService.detail(ids));
@@ -95,7 +95,7 @@ public class HhPhuLucHopDongMttController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xóa đề xuất hợp đồng phụ lục mua trực tiếp", response = List.class)
+    @ApiOperation(value = "Xóa đề xuất ", response = List.class)
     @PostMapping(value=  PathContains.HD_PL_MTT + PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();

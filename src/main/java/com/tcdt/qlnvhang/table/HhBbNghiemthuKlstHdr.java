@@ -20,6 +20,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Where;
@@ -32,7 +34,7 @@ import lombok.Data;
 @Entity
 @Table(name = HhBbNghiemthuKlstHdr.TABLE_NAME)
 @Data
-public class HhBbNghiemthuKlstHdr implements Serializable {
+public class HhBbNghiemthuKlstHdr extends TrangThaiBaseEntity implements Serializable {
 	/**
 	 * 
 	 */
@@ -40,18 +42,26 @@ public class HhBbNghiemthuKlstHdr implements Serializable {
 	public static final String TABLE_NAME = "NH_BB_NGHIEM_THU";
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BB_NGHIEM_THU_SEQ")
-	@SequenceGenerator(sequenceName = "BB_NGHIEM_THU_SEQ", allocationSize = 1, name = "BB_NGHIEM_THU_SEQ")
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BB_NGHIEM_THU_SEQ")
+//	@SequenceGenerator(sequenceName = "BB_NGHIEM_THU_SEQ", allocationSize = 1, name = "BB_NGHIEM_THU_SEQ")
 	private Long id;
-	private Long qdgnvnxId; // HhQdGiaoNvuNhapxuatHdr
-	String soBb;
+//	private Long qdgnvnxId; // HhQdGiaoNvuNhapxuatHdr
+	String soBbNtBq;
 	@Temporal(TemporalType.DATE)
-//	Date ngayLap;
 	Date ngayNghiemThu;
-	String thuTruong;
-	String keToan;
-	String kyThuatVien;
-	String thuKho;
+	Long idThuTruong;
+	@Transient
+	String tenThuTruong;
+	Long idKeToan;
+	@Transient
+	String tenKeToan;
+	Long idKyThuatVien;
+	@Transient
+	String tenKyThuatVien;
+	Long idThuKho;
+	@Transient
+	String tenThuKho;
+
 
 	String lhKho;
 	Double slThucNhap;
@@ -73,27 +83,10 @@ public class HhBbNghiemthuKlstHdr implements Serializable {
 	String maVatTu;
 	String maVatTuCha;
 
-	Date ngayTao;
-	String nguoiTao;
-	Date ngaySua;
-	String nguoiSua;
-	Date ngayGuiDuyet;
-	String nguoiGuiDuyet;
-	Date ngayPduyet;
-	String nguoiPduyet;
+
 	private Integer so;
 
 	private Long hopDongId;
-//	String ongBa;
-//	String chucVu;
-//	String maVthh;
-//	String hthucKlot;
-//	String kieuKlot;
-
-//	String trangThaiNhap;
-
-//	@Temporal(TemporalType.DATE)
-//	Date ngayKthuc;
 
 	@Transient
 	String soHopDong;
@@ -113,9 +106,9 @@ public class HhBbNghiemthuKlstHdr implements Serializable {
 	@Transient
 	String tenNganKho;
 
-	String maNganLo;
+	String maLoKho;
 	@Transient
-	String tenNganLo;
+	String tenLoKho;
 
 	@Transient
 	BigDecimal chiPhiThucHienTrongNam;
@@ -146,6 +139,15 @@ public class HhBbNghiemthuKlstHdr implements Serializable {
 
 	@Transient
 	String maQhns;
+
+	Long idDdiemGiaoNvNh;
+
+	Long idQdGiaoNvNh;
+
+	String soQdGiaoNvNh;
+
+	String soPhieuNhapKho;
+
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "id_hdr")
