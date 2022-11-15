@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/ban-dau-thau")
+@RequestMapping(value = "/ban-dau-gia")
 @Slf4j
 @Api(tags = "Kế hoạch bán đấu giá")
 public class XhKhBanDauGiaController extends BaseController {
