@@ -142,7 +142,7 @@ public class NhPhieuKtChatLuongServiceImpl extends BaseServiceImpl implements Nh
 		BigDecimal soLuongNhapKho = this.getSoLuongNhapKho(obj.getIdDdiemGiaoNvNh());
 		Optional<HhQdGiaoNvuNxDdiem> byId = hhQdGiaoNvuNxDdiemRepository.findById(obj.getIdDdiemGiaoNvNh());
 		if(byId.isPresent()){
-			BigDecimal soLuong = byId.get().getSoLuong();
+			BigDecimal soLuong = byId.get().getSoLuong().multiply(new BigDecimal(1000));
 			if(soLuongNhapKho.add(obj.getSoLuongNhapKho()).compareTo(soLuong) > 0){
 				throw new Exception("Số lượng nhập kho đã vượt quá số lượng cho phép, xin vui lòng nhập lại");
 			}

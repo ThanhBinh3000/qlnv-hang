@@ -8,7 +8,6 @@ import lombok.Data;
 @Data
 public class HhDxKhMttTChiThopReq {
 
-    @ApiModelProperty(example = "2022")
     Integer namKh;
 
 

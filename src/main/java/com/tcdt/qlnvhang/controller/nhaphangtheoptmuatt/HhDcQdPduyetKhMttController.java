@@ -35,7 +35,7 @@ public class HhDcQdPduyetKhMttController {
     private HhDcQdPduyetKhMttService hhDcQdPduyetKhMttService;
     
     
-    @ApiOperation(value = "Tra cứu quyết định điều chỉnh phê duyệt kế hoạch mua trực tiếp", response = List.class)
+    @ApiOperation(value = "Tra cứu quyết định ", response = List.class)
     @PostMapping(value=  PathContains.DC_QD_PD + PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody SearchHhDcQdPduyetKhMttReq objReq) {
         BaseResponse resp = new BaseResponse();
@@ -53,7 +53,7 @@ public class HhDcQdPduyetKhMttController {
 
 
 
-    @ApiOperation(value = "Tạo mới quyết định điều chỉnh phê duyệt kế hoạch mua trực tiếp", response = List.class)
+    @ApiOperation(value = "Tạo mới quyết định ", response = List.class)
     @PostMapping(value=PathContains.DC_QD_PD+ PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> save(@Valid @RequestBody HhDcQdPduyetKhmttHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
@@ -69,7 +69,7 @@ public class HhDcQdPduyetKhMttController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Sửa quyết định điều chỉnh phê duyệt kế hoạch mua trực tiếp", response = List.class)
+    @ApiOperation(value = "Sửa quyết định ", response = List.class)
     @PostMapping(value=  PathContains.DC_QD_PD + PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> update(@Valid @RequestBody HhDcQdPduyetKhmttHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
@@ -85,11 +85,11 @@ public class HhDcQdPduyetKhMttController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Lấy chi tiết thông tin quyết định điều chỉnh phê duyệt kế hoạch mua trực tiếp", response = List.class)
+    @ApiOperation(value = "Lấy chi tiết thông tin quyết định ", response = List.class)
     @GetMapping(value =PathContains.DC_QD_PD+ PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> detail(
-            @ApiParam(value = "ID  quyết định điều chỉnh phê duyệt kế hoạch mua trực tiếp", example = "1", required = true) @PathVariable("ids") String ids) {
+            @ApiParam(value = "ID  quyết định ", example = "1", required = true) @PathVariable("ids") String ids) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhDcQdPduyetKhMttService.datail(ids));
@@ -103,7 +103,7 @@ public class HhDcQdPduyetKhMttController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xóa thông tin quyết định điều chỉnh phê duyệt kế hoạch mua trực tiếp", response = List.class)
+    @ApiOperation(value = "Xóa thông tin quyết định ", response = List.class)
     @PostMapping(value=  PathContains.DC_QD_PD + PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
@@ -119,7 +119,7 @@ public class HhDcQdPduyetKhMttController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xóa danh sách quyết định điều chỉnh phê duyệt kế hoạch mua trực tiếp", response = List.class)
+    @ApiOperation(value = "Xóa danh sách quyết định ", response = List.class)
     @PostMapping(value=  PathContains.DC_QD_PD + PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
@@ -135,7 +135,7 @@ public class HhDcQdPduyetKhMttController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Kết xuất danh sách quyết định điều chỉnh phê duyệt kế hoạch mua trực tiếp", response = List.class)
+    @ApiOperation(value = "Kết xuất danh sách quyết định ", response = List.class)
     @PostMapping(value= PathContains.DC_QD_PD + PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void exportListQdBtcBnToExcel(@Valid @RequestBody SearchHhDcQdPduyetKhMttReq objReq, HttpServletResponse response) throws Exception{
@@ -144,7 +144,7 @@ public class HhDcQdPduyetKhMttController {
             hhDcQdPduyetKhMttService.export(objReq,response);
         } catch (Exception e) {
 
-            log.error("Kết xuất danh sách quyết định điều chỉnh phê duyệt kế hoạch mua trực tiếp: {}", e);
+            log.error("Kết xuất danh sách quyết định : {}", e);
             final Map<String, Object> body = new HashMap<>();
             body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             body.put("msg", e.getMessage());

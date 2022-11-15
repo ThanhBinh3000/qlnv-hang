@@ -35,7 +35,7 @@ public class HhPhieuKngiemCluongController {
     @Autowired
     private HhPhieuKngiemCluongService hhPhieuKngiemCluongService;
 
-    @ApiOperation(value = "Tra cứu lập và ký phiếu kiểm nghiệm chất lượng", response = List.class)
+    @ApiOperation(value = "Tra cứu ", response = List.class)
     @PostMapping(value=  PathContains.PKN_CL + PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody SearchHhPhieuKnCluong objReq) {
         BaseResponse resp = new BaseResponse();
@@ -51,7 +51,7 @@ public class HhPhieuKngiemCluongController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Tạo mới lập và ký phiếu kiểm nghiệm chất lượng", response = List.class)
+    @ApiOperation(value = "Tạo mới ", response = List.class)
     @PostMapping(value=  PathContains.PKN_CL + PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> save(@Valid @RequestBody HhPhieuKngiemCluongReq objReq) {
         BaseResponse resp = new BaseResponse();
@@ -67,7 +67,7 @@ public class HhPhieuKngiemCluongController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Sửa lập và ký phiếu kiểm nghiệm chất lượng", response = List.class)
+    @ApiOperation(value = "Sửa ", response = List.class)
     @PostMapping(value=  PathContains.PKN_CL + PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> update(@Valid @RequestBody HhPhieuKngiemCluongReq objReq) {
         BaseResponse resp = new BaseResponse();
@@ -83,11 +83,11 @@ public class HhPhieuKngiemCluongController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Lấy chi tiết thông tin lập và ký phiếu kiểm nghiệm chất lượng", response = List.class)
+    @ApiOperation(value = "Lấy chi tiết thông tin ", response = List.class)
     @GetMapping(value =PathContains.PKN_CL+ PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> detail(
-            @ApiParam(value = "ID lập và ký phiếu kiểm nghiệm chất lượng", example = "1", required = true) @PathVariable("ids") String ids) {
+            @ApiParam(value = "ID ", example = "1", required = true) @PathVariable("ids") String ids) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhPhieuKngiemCluongService.detail(ids));
@@ -101,7 +101,7 @@ public class HhPhieuKngiemCluongController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xóa lập và ký phiếu kiểm nghiệm chất lượng", response = List.class)
+    @ApiOperation(value = "Xóa ", response = List.class)
     @PostMapping(value=  PathContains.PKN_CL + PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
@@ -117,7 +117,7 @@ public class HhPhieuKngiemCluongController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xóa dánh sách lập và ký phiếu kiểm nghiệm chất lượng", response = List.class)
+    @ApiOperation(value = "Xóa dánh sách ", response = List.class)
     @PostMapping(value=  PathContains.PKN_CL + PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
@@ -133,7 +133,7 @@ public class HhPhieuKngiemCluongController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Kết xuất danh sách lập và ký phiếu kiểm nghiệm chất lượng", response = List.class)
+    @ApiOperation(value = "Kết xuất danh sách ", response = List.class)
     @PostMapping(value= PathContains.PKN_CL + PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void exportListQdBtcBnToExcel(@Valid @RequestBody SearchHhPhieuKnCluong objReq, HttpServletResponse response) throws Exception{
@@ -142,7 +142,7 @@ public class HhPhieuKngiemCluongController {
             hhPhieuKngiemCluongService.export(objReq,response);
         } catch (Exception e) {
 
-            log.error("Kết xuất danh sách lập và ký phiếu kiểm nghiệm chất lượng: {}", e);
+            log.error("Kết xuất danh sách : {}", e);
             final Map<String, Object> body = new HashMap<>();
             body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             body.put("msg", e.getMessage());
@@ -156,7 +156,7 @@ public class HhPhieuKngiemCluongController {
 
     }
 
-    @ApiOperation(value = "Phê duyêt lập và ký phiếu kiểm nghiệm chất lượng ", response = List.class)
+    @ApiOperation(value = "Phê duyêt  ", response = List.class)
     @PostMapping(value=PathContains.PKN_CL + PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> updateStatusUbtvqh(@Valid @RequestBody StatusReq statusReq, HttpServletRequest req) {
         BaseResponse resp = new BaseResponse();

@@ -78,6 +78,9 @@ public class HhQdGiaoNvuNhapxuatDtl implements Serializable {
 	@Transient
 	List<NhBbNhapDayKho> listBienBanNhapDayKho;
 
+	@Transient
+	List<HhBbNghiemthuKlstHdr> listBienBanNghiemThuBq;
+
 //	@Transient
 //	List<NhPhieuKtChatLuong> listPhieuKtraCl;
 //

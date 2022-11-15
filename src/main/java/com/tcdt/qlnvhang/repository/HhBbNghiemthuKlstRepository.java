@@ -1,8 +1,10 @@
 package com.tcdt.qlnvhang.repository;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
 import com.tcdt.qlnvhang.table.HhBbNghiemthuKlstHdr;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
@@ -11,9 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface HhBbNghiemthuKlstRepository extends BaseRepository<HhBbNghiemthuKlstHdr, Long> {
 
-	Optional<HhBbNghiemthuKlstHdr> findFirstBySoBb(String soBb);
+	Optional<HhBbNghiemthuKlstHdr> findFirstBySoBbNtBq(String soBbNtBq);
 
 	Optional<HhBbNghiemthuKlstHdr> findFirstByNamAndMaDvi(Integer nam, String maDvi);
+
+	List<HhBbNghiemthuKlstHdr> findByIdQdGiaoNvNhAndMaDvi(Long idQdGiaoNvNh, String maDvi);
+
 
 	@Transactional
 	@Modifying
