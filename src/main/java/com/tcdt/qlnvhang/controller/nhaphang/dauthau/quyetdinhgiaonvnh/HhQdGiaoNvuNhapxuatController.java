@@ -50,7 +50,7 @@ public class HhQdGiaoNvuNhapxuatController {
 	@Autowired
 	private HhQdGiaoNvuNhapxuatService service;
 
-	@ApiOperation(value = "Tạo mới thông tin quyết định giao nhiệm vụ nhập xuất", response = List.class)
+	@ApiOperation(value = "Tạo mới thông tin", response = List.class)
 	@PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<BaseResponse> insert(HttpServletRequest request,
@@ -63,12 +63,12 @@ public class HhQdGiaoNvuNhapxuatController {
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error("Tạo mới thông tin quyết định giao nhiệm vụ nhập xuất trace: {}", e);
+			log.error("Tạo mới thông tin trace: {}", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Cập nhật thông tin quyết định giao nhiệm vụ nhập xuất", response = List.class)
+	@ApiOperation(value = "Cập nhật thông tin", response = List.class)
 	@PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> update(HttpServletRequest request,
 			@Valid @RequestBody HhQdGiaoNvuNhapxuatHdrReq objReq) {
@@ -80,16 +80,16 @@ public class HhQdGiaoNvuNhapxuatController {
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error("Cập nhật thông tin quyết định giao nhiệm vụ nhập xuất trace: {}", e);
+			log.error("Cập nhật thông tin trace: {}", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Lấy chi tiết thông tin quyết định giao nhiệm vụ nhập xuất", response = List.class)
+	@ApiOperation(value = "Lấy chi tiết thông tin", response = List.class)
 	@GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<BaseResponse> detail(
-			@ApiParam(value = "ID thông tin quyết định giao nhiệm vụ nhập xuất", example = "1", required = true) @PathVariable("ids") String ids) {
+			@ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids") String ids) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			resp.setData(service.detail(ids));
@@ -98,12 +98,12 @@ public class HhQdGiaoNvuNhapxuatController {
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error("Lấy chi tiết thông tin quyết định giao nhiệm vụ nhập xuất trace: {}", e);
+			log.error("Lấy chi tiết thông tin trace: {}", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 thông tin quyết định giao nhiệm vụ nhập xuất", response = List.class)
+	@ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 thông tin", response = List.class)
 	@PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> updateStatus(@Valid HttpServletRequest req, @RequestBody StatusReq stReq) {
 		BaseResponse resp = new BaseResponse();
@@ -114,12 +114,12 @@ public class HhQdGiaoNvuNhapxuatController {
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error("Phê duyệt thông tin quyết định giao nhiệm vụ nhập xuất trace: {}", e);
+			log.error("Phê duyệt thông tin trace: {}", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Xoá thông tin quyết định giao nhiệm vụ nhập xuất", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value = "Xoá thông tin", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
 	@PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
@@ -131,13 +131,13 @@ public class HhQdGiaoNvuNhapxuatController {
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error("Xoá thông tin quyết định giao nhiệm vụ nhập xuất trace: {}", e);
+			log.error("Xoá thông tin trace: {}", e);
 		}
 
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Tra cứu thông tin quyết định giao nhiệm vụ nhập xuất", response = List.class)
+	@ApiOperation(value = "Tra cứu thông tin", response = List.class)
 	@PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<BaseResponse> colection(HttpServletRequest request,
@@ -152,7 +152,7 @@ public class HhQdGiaoNvuNhapxuatController {
 		Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error("Tra cứu thông tin quyết định giao nhiệm vụ nhập xuất trace: {}", e);
+			log.error("Tra cứu thông tin trace: {}", e);
 		}
 
 		return ResponseEntity.ok(resp);
@@ -192,7 +192,7 @@ public class HhQdGiaoNvuNhapxuatController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Kết xuất Danh sách quyết định giao nhiệm vụ nhập xuất", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value = "Kết xuất Danh sách", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
 	@PostMapping(PathContains.URL_KET_XUAT)
 	@ResponseStatus(HttpStatus.OK)
 	public void exportDsQdGNvNx(@Valid @RequestBody HhQdNhapxuatSearchReq searchReq, HttpServletResponse response)
@@ -201,7 +201,7 @@ public class HhQdGiaoNvuNhapxuatController {
 			service.exportDsQdGNvNx(searchReq, response);
 		} catch (Exception e) {
 			// TODO: handle exception
-			log.error("Kết xuất Danh sách quyết định giao nhiệm vụ nhập xuất trace: {}", e);
+			log.error("Kết xuất Danh sách trace: {}", e);
 			final Map<String, Object> body = new HashMap<>();
 			body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			body.put("msg", e.getMessage());
@@ -248,7 +248,7 @@ public class HhQdGiaoNvuNhapxuatController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Tạo mới thông tin quyết định giao nhiệm vụ nhập xuất", response = List.class)
+	@ApiOperation(value = "Tạo mới thông tin", response = List.class)
 	@PostMapping(value = "cap-nhat-ddiem-nhap", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<BaseResponse> updateDdiemNhap(
@@ -261,7 +261,7 @@ public class HhQdGiaoNvuNhapxuatController {
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
-			log.error("Tạo mới thông tin quyết định giao nhiệm vụ nhập xuất trace: {}", e);
+			log.error("Tạo mới thông tin trace: {}", e);
 		}
 		return ResponseEntity.ok(resp);
 	}

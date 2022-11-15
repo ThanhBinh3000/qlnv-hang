@@ -28,12 +28,12 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping(value = PathContains.BBAN_LAY_MAU)
-@Api(tags = "Quản lý Biên bản lấy mẫu")
+@Api(tags = "Nhập hàng - Đấu thầu - Kiểm tra chất lượng - Biên bản lấy mẫu/bàn giao mẫu")
 public class BienBanLayMauController {
 	@Autowired
 	private BienBanLayMauService bienBanLayMauService;
 
-	@ApiOperation(value = "Tạo mới Biên bản lấy mẫu", response = BienBanLayMauRes.class)
+	@ApiOperation(value = "Tạo mới", response = BienBanLayMauRes.class)
 	@PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> create(@Valid @RequestBody BienBanLayMauReq req) {
 		BaseResponse resp = new BaseResponse();
@@ -50,7 +50,7 @@ public class BienBanLayMauController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Sửa thông tin Biên bản lấy mẫu", response = BienBanLayMauRes.class)
+	@ApiOperation(value = "Sửa thông tin", response = BienBanLayMauRes.class)
 	@PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> update(@Valid @RequestBody BienBanLayMauReq req) {
 		BaseResponse resp = new BaseResponse();
@@ -67,7 +67,7 @@ public class BienBanLayMauController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Xoá thông tin Biên bản lấy mẫu", response = Boolean.class)
+	@ApiOperation(value = "Xoá thông tin", response = Boolean.class)
 	@PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
 		BaseResponse resp = new BaseResponse();
@@ -83,7 +83,7 @@ public class BienBanLayMauController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Chi tiết thông tin Biên bản lấy mẫu", response = Page.class)
+	@ApiOperation(value = "Chi tiết thông tin", response = Page.class)
 	@GetMapping(value = PathContains.URL_CHI_TIET + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> detail(@PathVariable("id") Long id) {
 		BaseResponse resp = new BaseResponse();
@@ -100,7 +100,7 @@ public class BienBanLayMauController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Gửi duyệt/Duyệt/Từ chối thông tin Biên bản lấy mẫu", response = Boolean.class)
+	@ApiOperation(value = "Gửi duyệt/Duyệt/Từ chối thông tin", response = Boolean.class)
 	@PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> updateStatus(@RequestBody BienBanLayMauReq req) {
 		BaseResponse resp = new BaseResponse();
@@ -117,7 +117,7 @@ public class BienBanLayMauController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Tra cứu thông tin Biên bản lấy mẫu", response = Page.class)
+	@ApiOperation(value = "Tra cứu thông tin", response = Page.class)
 	@PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> search(@RequestBody BienBanLayMauReq req) {
 		BaseResponse resp = new BaseResponse();
@@ -134,7 +134,7 @@ public class BienBanLayMauController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Delete multiple Biên bản lấy mẫu", response = List.class)
+	@ApiOperation(value = "Delete multiple", response = List.class)
 	@ResponseStatus(HttpStatus.OK)
 	@PostMapping("/delete/multiple")
 	public final ResponseEntity<BaseResponse> deleteMultiple(@RequestBody @Valid DeleteReq req) {
@@ -145,13 +145,13 @@ public class BienBanLayMauController {
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-			resp.setMsg("Delete multiple Biên bản lấy mẫu lỗi");
-			log.error("Delete multiple Biên bản lấy mẫu lỗi", e);
+			resp.setMsg("Delete multiple lỗi");
+			log.error("Delete multiple lỗi", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Export Biên bản lấy mẫu", response = List.class)
+	@ApiOperation(value = "Export", response = List.class)
 	@PostMapping(value = "/export/list", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody BienBanLayMauReq req) {
