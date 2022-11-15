@@ -47,6 +47,9 @@ public class XhDxKhBanDauGia extends BaseEntity implements Serializable {
     private Integer tgianKyHdong;
     private Integer tgianTtoan;
     private Integer tgianGnhan;
+    private String tgianKyHdongGhiChu;
+    private String tgianTtoanGhiChu;
+    private String tgianGnhanGhiChu;
     private String thongBaoKh;
     private Integer khoanTienDatTruoc;
     private BigDecimal tongSoLuong;

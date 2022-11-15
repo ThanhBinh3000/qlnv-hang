@@ -15,16 +15,16 @@ import java.util.List;
 public interface XhThopDxKhBdgRepository extends JpaRepository<XhThopDxKhBdg,Long> {
 
     @Query(value = "select * from XH_THOP_DX_KH_BAN_DAU_GIA  TH" +
-            " where (:namKh IS NULL OR TH.NAM_KHOACH = TO_NUMBER(:namKh)) " +
+            " where (:namKh IS NULL OR TH.NAM_KH = TO_NUMBER(:namKh)) " +
             "AND (:loaiVthh IS NULL OR TH.LOAI_VTHH = :loaiVthh) " +
             "AND (:cloaiVthh IS NULL OR TH.CLOAI_VTHH = :cloaiVthh) " +
-            "AND (:noiDung IS NULL OR LOWER( TH.NOI_DUNG) LIKE LOWER(CONCAT(CONCAT('%',:noiDung),'%')))" +
+            "AND (:noiDungThop IS NULL OR LOWER( TH.NOI_DUNG_THOP) LIKE LOWER(CONCAT(CONCAT('%',:noiDungThop),'%')))" +
             "AND (:ngayThopTu IS NULL OR TH.NGAY_THOP >=  TO_DATE(:ngayThopTu,'yyyy-MM-dd')) " +
             "AND (:ngayThopDen IS NULL OR TH.NGAY_THOP <= TO_DATE(:ngayThopDen,'yyyy-MM-dd'))" +
             "AND (:trangThai IS NULL OR TH.TRANG_THAI = :trangThai) " +
             "AND (:maDvi IS NULL OR LOWER(TH.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "
             ,nativeQuery = true)
-    Page<XhThopDxKhBdg> searchPage(Integer namKh, String loaiVthh, String cloaiVthh, String noiDung, String ngayThopTu, String ngayThopDen, String trangThai, String maDvi, Pageable pageable);
+    Page<XhThopDxKhBdg> searchPage(Integer namKh, String loaiVthh, String cloaiVthh, String noiDungThop, String ngayThopTu, String ngayThopDen, String trangThai, String maDvi, Pageable pageable);
 
     List<XhThopDxKhBdg> findAllByIdIn(List<Long> ids);
 
