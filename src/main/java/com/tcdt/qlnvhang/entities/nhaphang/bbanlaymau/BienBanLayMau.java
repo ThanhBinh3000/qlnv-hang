@@ -113,6 +113,9 @@ public class BienBanLayMau extends TrangThaiBaseEntity implements Serializable  
 	@Column(name = "MA_LO_KHO")
 	private String maLoKho;
 
+	@Column(name = "ID_DDIEM_GIAO_NV_NH")
+	private Long idDdiemGiaoNvNh;
+
 	@Transient
 	private String tenLoKho;
 
