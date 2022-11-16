@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.phieuktracl;
+package com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.phieuktracl;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongRequestDto;

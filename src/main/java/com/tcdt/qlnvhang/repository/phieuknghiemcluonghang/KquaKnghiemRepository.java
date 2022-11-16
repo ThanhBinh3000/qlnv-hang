@@ -14,18 +14,18 @@ import java.util.List;
 
 @Repository
 public interface KquaKnghiemRepository extends CrudRepository<KquaKnghiem, Long> {
-	Page<KquaKnghiem> findByPhieuKnghiemIdOrderBySttAsc(Long phieuKnghiemId, Pageable pageable);
-	List<KquaKnghiem> findByPhieuKnghiemId(Long phieuKnghiemId);
-
-	@Transactional
-	@Modifying
-	void deleteByphieuKnghiemId(Long phieuKnghiemId);
-
-	@Transactional
-	@Modifying
-	void deleteByPhieuKnghiemIdIn(Collection<Long> phieuKnghiemIds);
-
-	@Query("SELECT kq.phieuKnghiemId, COUNT(kq.id) FROM KquaKnghiem kq WHERE kq.phieuKnghiemId IN ?1 " +
-			"GROUP BY kq.phieuKnghiemId")
-	List<Object[]> countByPhieuKnghiemIdIn(Collection<Long> phieuKnghiemIds);
+//	Page<KquaKnghiem> findByPhieuKnghiemIdOrderBySttAsc(Long phieuKnghiemId, Pageable pageable);
+//	List<KquaKnghiem> findByPhieuKnghiemId(Long phieuKnghiemId);
+//
+//	@Transactional
+//	@Modifying
+//	void deleteByphieuKnghiemId(Long phieuKnghiemId);
+//
+//	@Transactional
+//	@Modifying
+//	void deleteByPhieuKnghiemIdIn(Collection<Long> phieuKnghiemIds);
+//
+//	@Query("SELECT kq.phieuKnghiemId, COUNT(kq.id) FROM KquaKnghiem kq WHERE kq.phieuKnghiemId IN ?1 " +
+//			"GROUP BY kq.phieuKnghiemId")
+//	List<Object[]> countByPhieuKnghiemIdIn(Collection<Long> phieuKnghiemIds);
 }
