@@ -7,7 +7,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,8 +38,8 @@ public interface XhDxKhBanDauGiaRepository extends JpaRepository<XhDxKhBanDauGia
             " AND (:loaiVthh IS NULL OR DX.LOAI_VTHH = :loaiVthh) " +
             " AND (:cloaiVthh IS NULL OR DX.CLOAI_VTHH = :cloaiVthh) " +
             " AND (:loaiHdong IS NULL OR DX.loai = :cloaiVthh) " +
-            " AND (:ngayKyTu IS NULL OR DX.NGAY_PDUYET >=  TO_DATE(:ngayKyTu,'yyyy-MM-dd')) " +
-            " AND (:ngayKyDen IS NULL OR DX.NGAY_PDUYET <= TO_DATE(:ngayKyDen,'yyyy-MM-dd'))" +
+            " AND (:ngayKyTu IS NULL OR DX.NGAY_KY >=  TO_DATE(:ngayKyTu,'yyyy-MM-dd')) " +
+            " AND (:ngayKyDen IS NULL OR DX.NGAY_KY <= TO_DATE(:ngayKyDen,'yyyy-MM-dd'))" +
             " AND DX.TRANG_THAI = '"+ Contains.DADUYET_LDC+"'" +
             " AND DX.TRANG_THAI_TH = '"+ Contains.CHUATONGHOP+"'" +
             " AND DX.MA_THOP is null "+
@@ -51,4 +53,9 @@ public interface XhDxKhBanDauGiaRepository extends JpaRepository<XhDxKhBanDauGia
     XhDxKhBanDauGia findAllById(Long idDxuat);
 
     List<XhDxKhBanDauGia> findByIdIn(List<Long> idDxList);
+
+    @Transactional
+    void deleteAllByIdIn(List<Long> ids);
+
+
 }

@@ -18,8 +18,8 @@ public class XhThopChiTieuReq {
     String loaiHdong;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date tgianDkienTu;
+    private Date ngayKyTu;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date tgianDkienDen;
+    private Date ngayKyDen;
 }

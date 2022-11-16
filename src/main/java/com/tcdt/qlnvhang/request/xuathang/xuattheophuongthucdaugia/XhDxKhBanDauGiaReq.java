@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.XhDxKhBanDauGiaPhanLo;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
@@ -55,7 +56,7 @@ public class XhDxKhBanDauGiaReq {
     private List<FileDinhKemReq> fileDinhkems =new ArrayList<>();
 
 
-    private List<XhDxKhBanDauGiaDtlReq> banDauGiaDtlList = new ArrayList<>();
+    private List<XhDxKhBanDauGiaPhanLoReq> dsPhanLoReq = new ArrayList<>();
 
 
 }
