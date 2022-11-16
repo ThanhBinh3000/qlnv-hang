@@ -4,8 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
-import com.tcdt.qlnvhang.table.HhBbNghiemthuKlstHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstHdr;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

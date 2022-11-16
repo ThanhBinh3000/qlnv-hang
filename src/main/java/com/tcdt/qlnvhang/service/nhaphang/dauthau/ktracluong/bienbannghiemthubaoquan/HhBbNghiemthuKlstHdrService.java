@@ -1,21 +1,9 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.bienbannghiemthubaoquan;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.transaction.Transactional;
-
-import com.tcdt.qlnvhang.request.DeleteReq;
-import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.service.BaseService;
-import org.springframework.data.domain.Page;
 
-import com.tcdt.qlnvhang.request.IdSearchReq;
-import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.HhBbNghiemthuKlstHdrReq;
-import com.tcdt.qlnvhang.request.search.HhBbNghiemthuKlstSearchReq;
-import com.tcdt.qlnvhang.table.HhBbNghiemthuKlstHdr;
-
-import java.util.Set;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstHdr;
 
 public interface HhBbNghiemthuKlstHdrService extends BaseService<HhBbNghiemthuKlstHdr,HhBbNghiemthuKlstHdrReq,Long> {
 

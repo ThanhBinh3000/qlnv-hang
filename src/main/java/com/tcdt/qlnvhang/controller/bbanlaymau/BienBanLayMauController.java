@@ -1,12 +1,10 @@
 package com.tcdt.qlnvhang.controller.bbanlaymau;
 
-import com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau.BienBanLayMau;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMau;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.IdSearchReq;
-import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauReq;
-import com.tcdt.qlnvhang.request.search.BienBanLayMauSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.response.bbanlaymau.BienBanLayMauRes;
 import com.tcdt.qlnvhang.service.nhaphang.bbanlaymau.BienBanLayMauService;

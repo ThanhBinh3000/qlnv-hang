@@ -25,7 +25,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping(PathContains.QL_BIEN_BAN_NHAP_DAY_KHO_LT)
-@Api(tags = "Nhập hàng - Đấu Thầu - Biên bản nhập đầy kho")
+@Api(tags = "Nhập hàng - Đấu Thầu - Kiểm tra chất lượng - Biên bản nhập đầy kho")
 public class NhBienBanNhapDayKhoController {
 
     @Autowired

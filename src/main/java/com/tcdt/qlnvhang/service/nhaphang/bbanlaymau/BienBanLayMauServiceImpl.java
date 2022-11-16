@@ -1,7 +1,8 @@
 package com.tcdt.qlnvhang.service.nhaphang.bbanlaymau;
 
-import com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau.BienBanLayMau;
-import com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau.BienBanLayMauCt;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMau;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMauCt;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
@@ -29,7 +30,6 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -72,7 +72,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 	private HhHopDongRepository hhHopDongRepository;
 
 	@Autowired
-	private NhBbNhapDayKhoRepository qlBienBanNhapDayKhoLtRepository;
+	private NhBbNhapDayKhoRepository nhBbNhapDayKhoRepository;
 
 	@Autowired
 	private NhBienBanGuiHangRepository nhBienBanGuiHangRepository;
@@ -166,6 +166,8 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 		item.setTenLoKho(listDanhMucDvi.get(item.getMaLoKho()));
 		item.setTenNguoiTao(ObjectUtils.isEmpty(item.getNguoiTaoId()) ? null : userInfoRepository.findById(item.getNguoiTaoId()).get().getFullName());
 		item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+		Optional<NhBbNhapDayKho> byId = nhBbNhapDayKhoRepository.findById(item.getIdBbNhapDayKho());
+		byId.ifPresent(item::setBbNhapDayKho);
 		return item;
 	}
 

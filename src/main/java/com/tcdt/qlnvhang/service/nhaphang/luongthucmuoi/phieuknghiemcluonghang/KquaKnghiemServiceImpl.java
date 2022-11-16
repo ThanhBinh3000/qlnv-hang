@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.service.nhaphang.luongthucmuoi.phieuknghiemcluonghang;
 
-import com.tcdt.qlnvhang.entities.nhaphang.phieuknghiemcluonghang.KquaKnghiem;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuknghiemcl.KquaKnghiem;
 import com.tcdt.qlnvhang.repository.phieuknghiemcluonghang.KquaKnghiemRepository;
 import com.tcdt.qlnvhang.request.object.phieuknghiemcluonghang.KquaKnghiemReq;
 import com.tcdt.qlnvhang.response.phieuknghiemcluonghang.KquaKnghiemRes;

@@ -1,16 +1,11 @@
 package com.tcdt.qlnvhang.request.object.bbanlaymau;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau.BienBanLayMauCt;
 import com.tcdt.qlnvhang.request.BaseRequest;
-import com.tcdt.qlnvhang.request.object.SoBienBanPhieuReq;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Transient;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -65,6 +60,8 @@ public class BienBanLayMauReq extends BaseRequest {
 	private String maLoKho;
 
 	private String trangThai;
+
+	private Long idDdiemGiaoNvNh;
 
 	private List<BienBanLayMauCtReq> chiTiets = new ArrayList<>();
 }

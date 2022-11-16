@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.table;
+package com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

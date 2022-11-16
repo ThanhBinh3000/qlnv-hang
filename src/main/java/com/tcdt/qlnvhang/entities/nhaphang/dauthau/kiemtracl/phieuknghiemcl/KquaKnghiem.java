@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.entities.nhaphang.phieuknghiemcluonghang;
+package com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuknghiemcl;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
