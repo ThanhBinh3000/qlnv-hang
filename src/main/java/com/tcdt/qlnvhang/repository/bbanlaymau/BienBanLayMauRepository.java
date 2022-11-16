@@ -1,9 +1,7 @@
 package com.tcdt.qlnvhang.repository.bbanlaymau;
 
-import com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau.BienBanLayMau;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMau;
 import com.tcdt.qlnvhang.repository.BaseRepository;
-import com.tcdt.qlnvhang.table.BhHopDongHdr;
-import com.tcdt.qlnvhang.table.HhBbNghiemthuKlstHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
@@ -24,6 +22,8 @@ public interface BienBanLayMauRepository extends BaseRepository<BienBanLayMau, L
     Optional<BienBanLayMau> findFirstBySoBienBan(String soBienBan);
 
     List<BienBanLayMau> findByIdQdGiaoNvNhAndMaDvi(Long idQdGiaoNvNh, String maDvi);
+
+    BienBanLayMau findByIdDdiemGiaoNvNh(Long idDdiemGiaoNvNh);
 
 
     @Query(

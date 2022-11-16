@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.response.bbanlaymau;
 
 import com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau.BienBanBanGiaoMauCt;
-import com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau.BienBanLayMauCt;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;

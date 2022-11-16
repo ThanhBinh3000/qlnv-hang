@@ -1,10 +1,12 @@
 package com.tcdt.qlnvhang.service.nhaphang.bbanlaymau;
 
-import com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau.BienBanLayMau;
-import com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau.BienBanLayMauCt;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMau;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMauCt;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
+import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauCtRepository;
 import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
@@ -24,10 +26,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -55,6 +57,9 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 	private BienBanLayMauCtRepository bienBanLayMauCtRepository;
 
 	@Autowired
+	private UserInfoRepository userInfoRepository;
+
+	@Autowired
 	private HttpServletRequest req;
 
 	@Autowired
@@ -67,7 +72,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 	private HhHopDongRepository hhHopDongRepository;
 
 	@Autowired
-	private NhBbNhapDayKhoRepository qlBienBanNhapDayKhoLtRepository;
+	private NhBbNhapDayKhoRepository nhBbNhapDayKhoRepository;
 
 	@Autowired
 	private NhBienBanGuiHangRepository nhBienBanGuiHangRepository;
@@ -159,7 +164,10 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 		item.setTenNhaKho(listDanhMucDvi.get(item.getMaNhaKho()));
 		item.setTenNganKho(listDanhMucDvi.get(item.getMaNganKho()));
 		item.setTenLoKho(listDanhMucDvi.get(item.getMaLoKho()));
+		item.setTenNguoiTao(ObjectUtils.isEmpty(item.getNguoiTaoId()) ? null : userInfoRepository.findById(item.getNguoiTaoId()).get().getFullName());
 		item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+		Optional<NhBbNhapDayKho> byId = nhBbNhapDayKhoRepository.findById(item.getIdBbNhapDayKho());
+		byId.ifPresent(item::setBbNhapDayKho);
 		return item;
 	}
 
