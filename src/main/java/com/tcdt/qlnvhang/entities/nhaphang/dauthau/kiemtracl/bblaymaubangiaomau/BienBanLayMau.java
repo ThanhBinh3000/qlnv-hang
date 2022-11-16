@@ -1,8 +1,8 @@
-package com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau;
+package com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -113,6 +112,9 @@ public class BienBanLayMau extends TrangThaiBaseEntity implements Serializable  
 	@Column(name = "MA_LO_KHO")
 	private String maLoKho;
 
+	@Column(name = "ID_DDIEM_GIAO_NV_NH")
+	private Long idDdiemGiaoNvNh;
+
 	@Transient
 	private String tenLoKho;
 
@@ -133,4 +135,7 @@ public class BienBanLayMau extends TrangThaiBaseEntity implements Serializable  
 
 	@Transient
 	private List<BienBanLayMauCt> chiTiets = new ArrayList<>();
+
+	@Transient
+	private NhBbNhapDayKho bbNhapDayKho;
 }

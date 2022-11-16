@@ -11,7 +11,7 @@ import org.joda.time.DateTime;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.tcdt.qlnvhang.request.search.HhBbNghiemthuKlstSearchReq;
-import com.tcdt.qlnvhang.table.HhBbNghiemthuKlstHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstHdr;
 import org.springframework.util.CollectionUtils;
 
 public class HhBbNghiemthuKlstSpecification {

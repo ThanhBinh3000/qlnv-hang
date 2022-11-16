@@ -55,10 +55,8 @@ public class CountNhapHangServiceImpl extends BaseServiceImpl implements CountNh
         // Kiem tra chat luong
 //        counts.add(qlpktclhPhieuKtChatLuongService.count(req.getMaDvis()));
 //        counts.add(hhBbNghiemthuKlstHdrService.count(req.getMaDvis()));
-        counts.add(bienBanBanGiaoMauService.count(req.getMaDvis()));
-        counts.add(phieuKnghiemCluongHangService.count(req.getMaDvis()));
-        counts.add(hoSoKyThuatService.count(req.getMaDvis()));
-        counts.add(bienBanChuanBiKhoService.count(req.getMaDvis()));
+//        counts.add(hoSoKyThuatService.count(req.getMaDvis()));
+//        counts.add(bienBanChuanBiKhoService.count(req.getMaDvis()));
 
         BaseNhapHangCount count = new BaseNhapHangCount();
         count.setThoc(counts.stream().map(BaseNhapHangCount::getThoc).mapToInt(Integer::intValue).sum());
