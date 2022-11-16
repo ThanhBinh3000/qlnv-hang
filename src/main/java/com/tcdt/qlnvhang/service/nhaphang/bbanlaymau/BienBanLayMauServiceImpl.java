@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.bbanlaymau.BienBanLayMauCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
+import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauCtRepository;
 import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
@@ -24,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -53,6 +55,9 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 
 	@Autowired
 	private BienBanLayMauCtRepository bienBanLayMauCtRepository;
+
+	@Autowired
+	private UserInfoRepository userInfoRepository;
 
 	@Autowired
 	private HttpServletRequest req;
@@ -159,6 +164,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 		item.setTenNhaKho(listDanhMucDvi.get(item.getMaNhaKho()));
 		item.setTenNganKho(listDanhMucDvi.get(item.getMaNganKho()));
 		item.setTenLoKho(listDanhMucDvi.get(item.getMaLoKho()));
+		item.setTenNguoiTao(ObjectUtils.isEmpty(item.getNguoiTaoId()) ? null : userInfoRepository.findById(item.getNguoiTaoId()).get().getFullName());
 		item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
 		return item;
 	}

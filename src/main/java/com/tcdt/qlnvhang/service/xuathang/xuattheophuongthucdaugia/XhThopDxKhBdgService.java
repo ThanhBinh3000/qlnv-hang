@@ -74,8 +74,8 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
                 objReq.getLoaiVthh(),
                 objReq.getCloaiVthh(),
                 objReq.getLoaiHdong(),
-                Contains.convertDateToString(objReq.getTgianDkienTu()),
-                Contains.convertDateToString(objReq.getTgianDkienDen()),
+                Contains.convertDateToString(objReq.getNgayKyTu()),
+                Contains.convertDateToString(objReq.getNgayKyDen()),
                 userInfo.getDvql());
         if (khBanDauGiaList.isEmpty()){
             throw new Exception("Không tìm thấy dữ liệu để tổng hợp");

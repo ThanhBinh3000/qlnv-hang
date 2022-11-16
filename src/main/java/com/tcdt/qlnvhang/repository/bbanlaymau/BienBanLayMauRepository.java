@@ -25,6 +25,8 @@ public interface BienBanLayMauRepository extends BaseRepository<BienBanLayMau, L
 
     List<BienBanLayMau> findByIdQdGiaoNvNhAndMaDvi(Long idQdGiaoNvNh, String maDvi);
 
+    BienBanLayMau findByIdDdiemGiaoNvNh(Long idDdiemGiaoNvNh);
+
 
     @Query(
             value = "SELECT * FROM NH_BB_LAY_MAU  BB ",
