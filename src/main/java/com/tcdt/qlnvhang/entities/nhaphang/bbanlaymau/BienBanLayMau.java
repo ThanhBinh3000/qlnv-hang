@@ -128,9 +128,6 @@ public class BienBanLayMau extends TrangThaiBaseEntity implements Serializable  
 	@Column(name = "KET_QUA_NIEM_PHONG")
 	private Boolean ketQuaNiemPhong;
 
-	@Column(name = "TRANG_THAI")
-	private String trangThai;
-
 	@Column(name = "LOAI_BIEN_BAN")
 	private String loaiBienBan;
 
