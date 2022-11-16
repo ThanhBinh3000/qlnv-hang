@@ -2,12 +2,10 @@ package com.tcdt.qlnvhang.controller.nhaphang.dauthau.nhapkho;
 
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.DeleteReq;
-import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtReq;
 import com.tcdt.qlnvhang.request.search.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bienbannhapdaykho2.NhBienBanNhapDayKhoService;
-import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bienbannhapdaykho2.NhBienBanNhapDayKhoServiceImpl;
+import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBienBanNhapDayKhoService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
