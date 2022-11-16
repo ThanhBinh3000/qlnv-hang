@@ -22,5 +22,4 @@ public class XhThopChiTieuReq {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKyDen;
-    private String maDvi;
 }
