@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
@@ -14,7 +15,7 @@ import java.util.List;
 @Entity
 @Table(name = "XH_DX_KH_BAN_DAU_GIA ")
 @Data
-public class XhDxKhBanDauGia extends BaseEntity implements Serializable {
+public class XhDxKhBanDauGia  implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_DX_KH_BAN_DAU_GIA ";
 
@@ -47,41 +48,49 @@ public class XhDxKhBanDauGia extends BaseEntity implements Serializable {
     private Integer tgianKyHdong;
     private Integer tgianTtoan;
     private Integer tgianGnhan;
-    private String tgianKyHdongGhiChu;
-    private String tgianTtoanGhiChu;
-    private String tgianGnhanGhiChu;
+    private String pthucTtoan;
+    private String pthucGnhan;
     private String thongBaoKh;
-    private Integer khoanTienDatTruoc;
+    private BigDecimal khoanTienDatTruoc;
     private BigDecimal tongSoLuong;
     private BigDecimal tongTienKdiem;
     private BigDecimal tongTienDatTruoc;
     private String ghiChu;
-    private String trangThai;
-    @Transient
-    private String tenTrangThai;
-    private String trangThaiTh;
-    @Transient
-    private String tenTrangThaiTh;
-    private String maThop;
-    private String soQdPd;
+    @Temporal(TemporalType.DATE)
+    private Date ngayTao;
+    private String nguoiTaoId;
+    @Temporal(TemporalType.DATE)
+    private Date ngaySua;
+    private String nguoiSuaId;
     @Temporal(TemporalType.DATE)
     private Date ngayGduyet;
     private String nguoiGduyetId;
     @Temporal(TemporalType.DATE)
     private Date ngayPduyet;
     private String nguoiPduyetId;
+    private String trangThai;
+    @Transient
+    private String tenTrangThai;
+    private String maThop;
+    private String soQdPd;
     private Integer soDviTsan;
     private Integer slHdDaKy;
+    private String trangThaiTh;
+    @Transient
+    private String tenTrangThaiTh;
     private String ldoTuChoi;
     @Temporal(TemporalType.DATE)
     private Date ngayKy;
+    private String tgianKyHdongGhiChu;
+    private String tgianTtoanGhiChu;
+    private String TgianGnhanGhiChu;
+
 
     @Transient
     private List<FileDinhKem> fileDinhKems =new ArrayList<>();
 
     @Transient
-    private List<XhDxKhBanDauGiaDtl> banDauGiaDtlList = new ArrayList<>();
-
+    private List<XhDxKhBanDauGiaPhanLo> dsPhanLoList = new ArrayList<>();
 
 
 
