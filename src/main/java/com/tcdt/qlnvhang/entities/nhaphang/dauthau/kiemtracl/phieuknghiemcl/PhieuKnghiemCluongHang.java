@@ -37,13 +37,21 @@ public class PhieuKnghiemCluongHang extends TrangThaiBaseEntity {
 	private String soPhieuKiemNghiemCl;
 	private Long idTruongPhong;
 	private String maDiemKho;
+	@Transient
+	private String tenDiemKho;
 	private String maNhaKho;
+	@Transient
+	private String tenNhaKho;
 	private String maNganKho;
+	@Transient
+	private String tenNganKho;
 	private String maLoKho;
+	@Transient
+	private String tenLoKho;
 	private String idDdiemGiaoNvNh;
 	private String loaiVthh;
 	private String cloaiVthh;
-	private String motaHangHoa;
+	private String moTaHangHoa;
 	private String hthucBquan;
 	private BigDecimal soLuongNhapDayKho;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)

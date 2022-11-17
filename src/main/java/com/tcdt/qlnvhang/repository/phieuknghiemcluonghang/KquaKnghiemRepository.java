@@ -17,9 +17,9 @@ public interface KquaKnghiemRepository extends CrudRepository<KquaKnghiem, Long>
 //	Page<KquaKnghiem> findByPhieuKnghiemIdOrderBySttAsc(Long phieuKnghiemId, Pageable pageable);
 //	List<KquaKnghiem> findByPhieuKnghiemId(Long phieuKnghiemId);
 //
-//	@Transactional
-//	@Modifying
-//	void deleteByphieuKnghiemId(Long phieuKnghiemId);
+	@Transactional
+	@Modifying
+	void deleteByPhieuKnghiemId(Long phieuKnghiemId);
 //
 //	@Transactional
 //	@Modifying

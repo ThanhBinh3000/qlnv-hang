@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuknghiemcl.PhieuKnghiemCluongHang;
 import com.tcdt.qlnvhang.util.Contains;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -142,4 +143,7 @@ public class HhQdGiaoNvuNhapxuatHdr implements Serializable {
 		child2.setParent(this);
 		this.children2.add(child2);
 	}
+
+	@Transient
+	List<PhieuKnghiemCluongHang> listPhieuKiemNghiemCl;
 }

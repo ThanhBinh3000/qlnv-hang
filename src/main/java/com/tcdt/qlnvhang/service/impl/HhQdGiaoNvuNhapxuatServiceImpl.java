@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMau;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuknghiemcl.PhieuKnghiemCluongHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatDtlLoaiNx;
@@ -19,6 +20,7 @@ import com.tcdt.qlnvhang.repository.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKhoCtRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKhoRepository;
+import com.tcdt.qlnvhang.repository.phieuknghiemcluonghang.PhieuKnghiemCluongHangRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNxDdiemRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatDtlRepository;
 import com.tcdt.qlnvhang.request.*;
@@ -26,7 +28,7 @@ import com.tcdt.qlnvhang.request.object.HhQdGiaoNvuNhapxuatDtlReq;
 import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHangService;
-import com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.phieuktracl.NhPhieuKtChatLuongService;
+import com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.phieukiemtracl.NhPhieuKtChatLuongService;
 import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoService;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.util.*;
@@ -81,6 +83,9 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 	
 	@Autowired
 	private BienBanLayMauRepository bienBanLayMauRepository;
+
+	@Autowired
+	private PhieuKnghiemCluongHangRepository phieuKnghiemCluongHangRepository;
 
 	@Override
 	@Transactional
@@ -635,6 +640,17 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 				dtl.setChildren(allByIdCt);
 //				this.setDataPhieu(dtl,null);
 			}
+
+			// Set phiếu kiểm nghiệm chất lượng
+			List<PhieuKnghiemCluongHang> phieuKnghiemCl = phieuKnghiemCluongHangRepository.findBySoQdGiaoNvNhAndMaDvi(f.getSoQd(), f.getMaDvi());
+			phieuKnghiemCl.forEach( item -> {
+				item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+				item.setTenDiemKho(mapDmucDvi.get(item.getMaDiemKho()));
+				item.setTenNhaKho(mapDmucDvi.get(item.getMaNhaKho()));
+				item.setTenNganKho(mapDmucDvi.get(item.getMaNganKho()));
+				item.setTenLoKho(mapDmucDvi.get(item.getMaLoKho()));
+			});
+			f.setListPhieuKiemNghiemCl(phieuKnghiemCl);
 			f.setDtlList(hhQdGiaoNvuNhapxuatDtl);
 		});
 		return data;
