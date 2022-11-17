@@ -5,7 +5,7 @@ import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongRequestDto;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.phieuktracl.NhPhieuKtChatLuongService;
+import com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.phieukiemtracl.NhPhieuKtChatLuongService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

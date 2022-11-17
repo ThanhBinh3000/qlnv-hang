@@ -1,8 +1,11 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.phieukiemnghiemcl;
 
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuknghiemcl.KquaKnghiem;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuknghiemcl.PhieuKnghiemCluongHang;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.repository.phieuknghiemcluonghang.KquaKnghiemRepository;
 import com.tcdt.qlnvhang.repository.phieuknghiemcluonghang.PhieuKnghiemCluongHangRepository;
+import com.tcdt.qlnvhang.request.object.phieuknghiemcluonghang.KquaKnghiemReq;
 import com.tcdt.qlnvhang.request.object.phieuknghiemcluonghang.PhieuKnghiemCluongHangReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -25,6 +28,11 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 
 	@Autowired
 	private PhieuKnghiemCluongHangRepository phieuKnghiemCluongHangRepository;
+
+	@Autowired
+	private KquaKnghiemRepository kquaKnghiemRepository;
+
+
 	@Override
 	public Page<PhieuKnghiemCluongHang> searchPage(PhieuKnghiemCluongHangReq req) {
 		return null;
@@ -77,7 +85,14 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 	}
 
 	void saveDetail(PhieuKnghiemCluongHangReq req,Long id){
+		kquaKnghiemRepository.deleteByPhieuKnghiemId(id);
 
+		for (KquaKnghiemReq kquaReq : req.getKquaKnghiem()){
+			KquaKnghiem kq = new KquaKnghiem();
+			BeanUtils.copyProperties(kquaReq,kq,"id");
+			kq.setPhieuKnghiemId(id);
+			kquaKnghiemRepository.save(kq);
+		}
 	}
 
 	@Override
@@ -137,18 +152,18 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 
 	@Override
 	public void delete(Long id) throws Exception {
-//		UserInfo userInfo = UserUtils.getUserInfo();
-//		Optional<PhieuKnghiemCluongHang> optional = phieuKnghiemCluongHangRepository.findById(id);
-//		if (!optional.isPresent())
-//			throw new Exception("Không tìm thấy dữ liệu.");
-//
-//		PhieuKnghiemCluongHang phieu = optional.get();
-//
-//		if (NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId().equals(phieu.getTrangThai())) {
-//			throw new Exception("Không thể xóa đề xuất điều chỉnh đã đã duyệt");
-//		}
-//		kquaKnghiemService.deleteByPhieuKnghiemId(phieu.getId());
-//		phieuKnghiemCluongHangRepository.delete(phieu);
+		UserInfo userInfo = UserUtils.getUserInfo();
+		Optional<PhieuKnghiemCluongHang> optional = phieuKnghiemCluongHangRepository.findById(id);
+		if (!optional.isPresent())
+			throw new Exception("Không tìm thấy dữ liệu.");
+
+		PhieuKnghiemCluongHang phieu = optional.get();
+
+		if (NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId().equals(phieu.getTrangThai())) {
+			throw new Exception("Không thể xóa đề xuất điều chỉnh đã đã duyệt");
+		}
+		kquaKnghiemRepository.deleteByPhieuKnghiemId(phieu.getId());
+		phieuKnghiemCluongHangRepository.delete(phieu);
 	}
 
 	@Override

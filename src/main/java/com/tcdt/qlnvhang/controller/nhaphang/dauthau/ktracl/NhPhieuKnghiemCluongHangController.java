@@ -1,13 +1,14 @@
-package com.tcdt.qlnvhang.controller.bbanlaymau;
+package com.tcdt.qlnvhang.controller.nhaphang.dauthau.ktracl;
 
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMau;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuknghiemcl.PhieuKnghiemCluongHang;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.DeleteReq;
-import com.tcdt.qlnvhang.request.IdSearchReq;
-import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauReq;
+import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.object.phieuknghiemcluonghang.PhieuKnghiemCluongHangReq;
+import com.tcdt.qlnvhang.request.search.PhieuKnghiemCluongHangSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.response.bbanlaymau.BienBanLayMauRes;
-import com.tcdt.qlnvhang.service.nhaphang.bbanlaymau.BienBanLayMauService;
+import com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.phieukiemnghiemcl.PhieuKnghiemCluongHangService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,18 +26,18 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping(value = PathContains.BBAN_LAY_MAU)
-@Api(tags = "Nhập hàng - Đấu thầu - Kiểm tra chất lượng - Biên bản lấy mẫu/bàn giao mẫu")
-public class BienBanLayMauController {
+@RequestMapping(value = PathContains.KNGHIEM_CLUONG)
+@Api(tags = "Nhập hàng - Đấu thầu - Kiểm tra chất lượng - Lập và ký phiếu kiểm nghiệm chất lượng")
+public class NhPhieuKnghiemCluongHangController {
 	@Autowired
-	private BienBanLayMauService bienBanLayMauService;
+	private PhieuKnghiemCluongHangService phieuKnghiemCluongHangService;
 
-	@ApiOperation(value = "Tạo mới", response = BienBanLayMauRes.class)
+	@ApiOperation(value = "Tạo mới ", response = BienBanLayMauRes.class)
 	@PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> create(@Valid @RequestBody BienBanLayMauReq req) {
+	public ResponseEntity<BaseResponse> create(@Valid @RequestBody PhieuKnghiemCluongHangReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			BienBanLayMau res = bienBanLayMauService.create(req);
+			PhieuKnghiemCluongHang res = phieuKnghiemCluongHangService.create(req);
 			resp.setData(res);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
@@ -48,12 +49,12 @@ public class BienBanLayMauController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Sửa thông tin", response = BienBanLayMauRes.class)
+	@ApiOperation(value = "Sửa thông tin ", response = BienBanLayMauRes.class)
 	@PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> update(@Valid @RequestBody BienBanLayMauReq req) {
+	public ResponseEntity<BaseResponse> update(@Valid @RequestBody PhieuKnghiemCluongHangReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			BienBanLayMau res = bienBanLayMauService.update(req);
+			PhieuKnghiemCluongHang res = phieuKnghiemCluongHangService.update(req);
 			resp.setData(res);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
@@ -65,12 +66,13 @@ public class BienBanLayMauController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Xoá thông tin", response = Boolean.class)
+	@ApiOperation(value = "Xoá thông tin ", response = Boolean.class)
 	@PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
+	public ResponseEntity<BaseResponse> delete(@PathVariable("id") Long id) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			bienBanLayMauService.delete(idSearchReq.getId());
+//			Boolean res = phieuKnghiemCluongHangService.delete(id);
+//			resp.setData(res);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -81,13 +83,13 @@ public class BienBanLayMauController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Chi tiết thông tin", response = Page.class)
+	@ApiOperation(value = "Chi tiết ", response = Page.class)
 	@GetMapping(value = PathContains.URL_CHI_TIET + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> detail(@PathVariable("id") Long id) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			BienBanLayMau res = bienBanLayMauService.detail(id);
-			resp.setData(res);
+//			PhieuKnghiemCluongHangRes res = phieuKnghiemCluongHangService.detail(id);
+//			resp.setData(res);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -98,13 +100,13 @@ public class BienBanLayMauController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Gửi duyệt/Duyệt/Từ chối thông tin", response = Boolean.class)
+	@ApiOperation(value = "Gửi duyệt/Duyệt/Từ chối ", response = Boolean.class)
 	@PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> updateStatus(@RequestBody BienBanLayMauReq req) {
+	public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody StatusReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			BienBanLayMau res = bienBanLayMauService.approve(req);
-			resp.setData(res);
+//			Boolean res = phieuKnghiemCluongHangService.updateStatus(req);
+//			resp.setData(res);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -115,13 +117,13 @@ public class BienBanLayMauController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Tra cứu thông tin", response = Page.class)
+	@ApiOperation(value = "Tra cứu thông tin ", response = Page.class)
 	@PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> search(@RequestBody BienBanLayMauReq req) {
+	public ResponseEntity<BaseResponse> search(PhieuKnghiemCluongHangSearchReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			Page<BienBanLayMau> res = bienBanLayMauService.searchPage(req);
-			resp.setData(res);
+//			Page<PhieuKnghiemCluongHangRes> res = phieuKnghiemCluongHangService.search(req);
+//			resp.setData(res);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -132,30 +134,30 @@ public class BienBanLayMauController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Delete multiple", response = List.class)
+	@ApiOperation(value = "Delete multiple ", response = List.class)
 	@ResponseStatus(HttpStatus.OK)
 	@PostMapping("/delete/multiple")
 	public final ResponseEntity<BaseResponse> deleteMultiple(@RequestBody @Valid DeleteReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			bienBanLayMauService.deleteMulti(req.getIds());
+//			resp.setData(phieuKnghiemCluongHangService.deleteMultiple(req));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-			resp.setMsg("Delete multiple lỗi");
-			log.error("Delete multiple lỗi", e);
+			resp.setMsg("Delete multiple  lỗi");
+			log.error("Delete multiple  lỗi", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Export", response = List.class)
+	@ApiOperation(value = "Export ", response = List.class)
 	@PostMapping(value = "/export/list", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody BienBanLayMauReq req) {
+	public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody PhieuKnghiemCluongHangSearchReq req) {
 
 		try {
-			bienBanLayMauService.export(req);
+//			phieuKnghiemCluongHangService.exportToExcel(req, response);
 		} catch (Exception e) {
 			log.error("Error can not export", e);
 		}
@@ -163,4 +165,5 @@ public class BienBanLayMauController {
 	}
 
 }
+
 
