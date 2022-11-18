@@ -101,6 +101,11 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 		Optional<PhieuKnghiemCluongHang> optional = phieuKnghiemCluongHangRepository.findById(id);
 		if (!optional.isPresent())
 			throw new Exception("Không tìm thấy dữ liệu.");
+
+		PhieuKnghiemCluongHang phieuKnghiemCluongHang = optional.get();
+
+		phieuKnghiemCluongHang.setListKquaKngiem(kquaKnghiemRepository.findByPhieuKnghiemId(phieuKnghiemCluongHang.getId()));
+
 		return optional.get();
 	}
 

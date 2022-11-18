@@ -13,6 +13,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -62,4 +63,7 @@ public class PhieuKnghiemCluongHang extends TrangThaiBaseEntity {
 	private Date ngayKnghiem;
 	private String ketLuan;
 	private String ketQuaDanhGia;
+	@Transient
+	List<KquaKnghiem> listKquaKngiem;
+
 }
