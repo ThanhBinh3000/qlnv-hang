@@ -13,6 +13,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -35,7 +36,12 @@ public class PhieuKnghiemCluongHang extends TrangThaiBaseEntity {
 	private String soQdGiaoNvNh;
 	private String soBbNhapDayKho;
 	private String soPhieuKiemNghiemCl;
+	private Long idKyThuatVien;
+	@Transient
+	private String tenKyThuatVien;
 	private Long idTruongPhong;
+	@Transient
+	private String tenTruongPhong;
 	private String maDiemKho;
 	@Transient
 	private String tenDiemKho;
@@ -48,9 +54,14 @@ public class PhieuKnghiemCluongHang extends TrangThaiBaseEntity {
 	private String maLoKho;
 	@Transient
 	private String tenLoKho;
-	private String idDdiemGiaoNvNh;
+	private Long idDdiemGiaoNvNh;
+	private Long idQdGiaoNvNh;
 	private String loaiVthh;
+	@Transient
+	private String tenLoaiVthh;
 	private String cloaiVthh;
+	@Transient
+	private String tenCloaiVthh;
 	private String moTaHangHoa;
 	private String hthucBquan;
 	private BigDecimal soLuongNhapDayKho;
@@ -62,4 +73,7 @@ public class PhieuKnghiemCluongHang extends TrangThaiBaseEntity {
 	private Date ngayKnghiem;
 	private String ketLuan;
 	private String ketQuaDanhGia;
+	@Transient
+	List<KquaKnghiem> listKquaKngiem;
+
 }

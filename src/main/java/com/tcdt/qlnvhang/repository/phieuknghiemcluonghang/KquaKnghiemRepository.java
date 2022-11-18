@@ -20,6 +20,10 @@ public interface KquaKnghiemRepository extends CrudRepository<KquaKnghiem, Long>
 	@Transactional
 	@Modifying
 	void deleteByPhieuKnghiemId(Long phieuKnghiemId);
+
+	List<KquaKnghiem> findByPhieuKnghiemId(Long phieuKnghiemId);
+
+
 //
 //	@Transactional
 //	@Modifying
