@@ -100,11 +100,10 @@ public class NhPhieuKnghiemCluongHangController {
 
 	@ApiOperation(value = "Gửi duyệt/Duyệt/Từ chối ", response = Boolean.class)
 	@PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody StatusReq req) {
+	public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody PhieuKnghiemCluongHangReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-//			Boolean res = phieuKnghiemCluongHangService.updateStatus(req);
-//			resp.setData(res);
+			resp.setData(phieuKnghiemCluongHangService.approve(req));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
