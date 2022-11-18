@@ -155,8 +155,8 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
             item.setIdTruongPhong(userInfo.getId());
             item.setLyDoTuChoi(req.getLyDoTuChoi());
         } else if (
-			(NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId()).equals(trangThai) ||
-			(NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId()).equals(trangThai)
+			(NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId()).equals(trangThai) ||
+			(NhapXuatHangTrangThaiEnum.TUCHOI_LDC.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId()).equals(trangThai)
         ) {
             item.setNgayPduyet(new Date());
 			item.setNguoiPduyetId(userInfo.getId());
