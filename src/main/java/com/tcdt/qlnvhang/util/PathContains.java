@@ -23,8 +23,6 @@ public class PathContains {
 	public static final String VAT_TU = "/vat-tu";
 
 	public static final String DIEU_CHINH = "/dieu-chinh";
-	public static final String QL_QD_LCNT_VTU = "/qd-lcnt-vtu";
-	public static final String QL_TTIN_DTHAU_VTU = "/ql-ttin-dthau-vtu";
 	public static final String QL_TTIN_DTHAU_HHOA = "/ql-ttin-dthau-hhoa";
 	public static final String QL_QDKQ_LCNT = "/ql-qdkq-lcnt";
 
