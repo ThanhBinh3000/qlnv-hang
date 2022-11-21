@@ -2,7 +2,9 @@ package com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.phieukiemnghiemcl;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuknghiemcl.KquaKnghiem;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuknghiemcl.PhieuKnghiemCluongHang;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.phieuknghiemcluonghang.KquaKnghiemRepository;
 import com.tcdt.qlnvhang.repository.phieuknghiemcluonghang.PhieuKnghiemCluongHangRepository;
 import com.tcdt.qlnvhang.request.object.phieuknghiemcluonghang.KquaKnghiemReq;
@@ -16,165 +18,182 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
 @Log4j2
 public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implements PhieuKnghiemCluongHangService {
 
-	@Autowired
-	private PhieuKnghiemCluongHangRepository phieuKnghiemCluongHangRepository;
+    @Autowired
+    private PhieuKnghiemCluongHangRepository phieuKnghiemCluongHangRepository;
 
-	@Autowired
-	private KquaKnghiemRepository kquaKnghiemRepository;
+    @Autowired
+    private KquaKnghiemRepository kquaKnghiemRepository;
 
+    @Autowired
+    private UserInfoRepository userInfoRepository;
 
-	@Override
-	public Page<PhieuKnghiemCluongHang> searchPage(PhieuKnghiemCluongHangReq req) {
-		return null;
-	}
+    @Override
+    public Page<PhieuKnghiemCluongHang> searchPage(PhieuKnghiemCluongHangReq req) {
+        return null;
+    }
 
-	@Override
-	public List<PhieuKnghiemCluongHang> searchAll(PhieuKnghiemCluongHangReq req) {
-		return null;
-	}
+    @Override
+    public List<PhieuKnghiemCluongHang> searchAll(PhieuKnghiemCluongHangReq req) {
+        return null;
+    }
 
-	@Override
-	public PhieuKnghiemCluongHang create(PhieuKnghiemCluongHangReq req) throws Exception {
-				UserInfo userInfo = SecurityContextService.getUser();
-		if (userInfo == null) {
-			throw new Exception("Bad request.");
-		}
+    @Override
+    public PhieuKnghiemCluongHang create(PhieuKnghiemCluongHangReq req) throws Exception {
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null) {
+            throw new Exception("Bad request.");
+        }
 
-		PhieuKnghiemCluongHang phieuKnclh = new PhieuKnghiemCluongHang();
-		BeanUtils.copyProperties(req,phieuKnclh,"id");
-		phieuKnclh.setNguoiTaoId(userInfo.getId());
-		phieuKnclh.setNgayTao(new Date());
-		phieuKnclh.setMaDvi(userInfo.getDvql());
-		phieuKnclh.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
-		phieuKnclh.setNam(LocalDate.now().getYear());
-		phieuKnclh.setId(Long.parseLong(phieuKnclh.getSoPhieuKiemNghiemCl().split("/")[0]));
-		phieuKnghiemCluongHangRepository.save(phieuKnclh);
-		saveDetail(req,phieuKnclh.getId());
-		return phieuKnclh;
-	}
+        PhieuKnghiemCluongHang phieuKnclh = new PhieuKnghiemCluongHang();
+        BeanUtils.copyProperties(req, phieuKnclh, "id");
+        phieuKnclh.setNguoiTaoId(userInfo.getId());
+        phieuKnclh.setIdKyThuatVien(userInfo.getId());
+        phieuKnclh.setNgayTao(new Date());
+        phieuKnclh.setMaDvi(userInfo.getDvql());
+        phieuKnclh.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
+        phieuKnclh.setNam(LocalDate.now().getYear());
+        phieuKnclh.setId(Long.parseLong(phieuKnclh.getSoPhieuKiemNghiemCl().split("/")[0]));
+        phieuKnghiemCluongHangRepository.save(phieuKnclh);
+        saveDetail(req, phieuKnclh.getId());
+        return phieuKnclh;
+    }
 
-	@Override
-	public PhieuKnghiemCluongHang update(PhieuKnghiemCluongHangReq req) throws Exception {
-				UserInfo userInfo = SecurityContextService.getUser();
-		if (userInfo == null) {
-			throw new Exception("Bad request.");
-		}
+    @Override
+    public PhieuKnghiemCluongHang update(PhieuKnghiemCluongHangReq req) throws Exception {
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null) {
+            throw new Exception("Bad request.");
+        }
 
-		Optional<PhieuKnghiemCluongHang> optional = phieuKnghiemCluongHangRepository.findById(req.getId());
-		if (!optional.isPresent())
-			throw new Exception("Không tìm thấy dữ liệu.");
+        Optional<PhieuKnghiemCluongHang> optional = phieuKnghiemCluongHangRepository.findById(req.getId());
+        if (!optional.isPresent())
+            throw new Exception("Không tìm thấy dữ liệu.");
 
-		PhieuKnghiemCluongHang phieuKnclh = optional.get();
-		BeanUtils.copyProperties(req,phieuKnclh,"id");
-		phieuKnclh.setNguoiSuaId(userInfo.getId());
-		phieuKnclh.setNgaySua(new Date());
+        PhieuKnghiemCluongHang phieuKnclh = optional.get();
+        BeanUtils.copyProperties(req, phieuKnclh, "id");
+        phieuKnclh.setNguoiSuaId(userInfo.getId());
+        phieuKnclh.setNgaySua(new Date());
 
-		phieuKnghiemCluongHangRepository.save(phieuKnclh);
-		saveDetail(req,phieuKnclh.getId());
-		return null;
-	}
+        phieuKnghiemCluongHangRepository.save(phieuKnclh);
+        saveDetail(req, phieuKnclh.getId());
+        return phieuKnclh;
+    }
 
-	void saveDetail(PhieuKnghiemCluongHangReq req,Long id){
-		kquaKnghiemRepository.deleteByPhieuKnghiemId(id);
+    void saveDetail(PhieuKnghiemCluongHangReq req, Long id) {
+        kquaKnghiemRepository.deleteByPhieuKnghiemId(id);
 
-		for (KquaKnghiemReq kquaReq : req.getKquaKnghiem()){
-			KquaKnghiem kq = new KquaKnghiem();
-			BeanUtils.copyProperties(kquaReq,kq,"id");
-			kq.setPhieuKnghiemId(id);
-			kquaKnghiemRepository.save(kq);
-		}
-	}
+        for (KquaKnghiemReq kquaReq : req.getKquaKnghiem()) {
+            KquaKnghiem kq = new KquaKnghiem();
+            BeanUtils.copyProperties(kquaReq, kq, "id");
+            kq.setPhieuKnghiemId(id);
+            kquaKnghiemRepository.save(kq);
+        }
+    }
 
-	@Override
-	public PhieuKnghiemCluongHang detail(Long id) throws Exception {
-		UserInfo userInfo = UserUtils.getUserInfo();
-		Optional<PhieuKnghiemCluongHang> optional = phieuKnghiemCluongHangRepository.findById(id);
-		if (!optional.isPresent())
-			throw new Exception("Không tìm thấy dữ liệu.");
-		return optional.get();
-	}
+    @Override
+    public PhieuKnghiemCluongHang detail(Long id) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        Optional<PhieuKnghiemCluongHang> optional = phieuKnghiemCluongHangRepository.findById(id);
+        if (!optional.isPresent())
+            throw new Exception("Không tìm thấy dữ liệu.");
 
-	@Override
-	public PhieuKnghiemCluongHang approve(PhieuKnghiemCluongHangReq req) throws Exception {
-				UserInfo userInfo = SecurityContextService.getUser();
-//		if (userInfo == null)
-//			throw new Exception("Bad request.");
-//
-//		Optional<PhieuKnghiemCluongHang> optional = phieuKnghiemCluongHangRepository.findById(stReq.getId());
-//		if (!optional.isPresent()) {
-//			throw new Exception("Không tìm thấy dữ liệu.");
-//		}
-//
-//		PhieuKnghiemCluongHang item = optional.get();
-//		String trangThai = item.getTrangThai();
-//		if (NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId().equals(stReq.getTrangThai())) {
-//			if (!NhapXuatHangTrangThaiEnum.DUTHAO.getId().equals(trangThai))
-//			item.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId());
-//			item.setNguoiGuiDuyetId(userInfo.getId());
-//			item.setNgayGuiDuyet(new Date());
-//		} else if (NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId().equals(stReq.getTrangThai())) {
-//			if (!NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId().equals(trangThai))
-//			item.setTrangThai(NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId());
-//			item.setNguoiGuiDuyetId(userInfo.getId());
-//			item.setNgayGuiDuyet(new Date());
-//		} else if (NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId().equals(stReq.getTrangThai())) {
-//			if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId().equals(trangThai))
-//			item.setTrangThai(NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId());
-//			item.setNguoiPduyetId(userInfo.getId());
-//			item.setNgayPduyet(new Date());
-//		} else if (NhapXuatHangTrangThaiEnum.TUCHOI_TP.getId().equals(stReq.getTrangThai())) {
-//			if (!NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId().equals(trangThai))
-//
-//			item.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_TP.getId());
-//			item.setNguoiPduyetId(userInfo.getId());
-//			item.setNgayPduyet(new Date());
-//		} else if (NhapXuatHangTrangThaiEnum.TUCHOI_LDC.getId().equals(stReq.getTrangThai())) {
-//			if (!NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId().equals(trangThai))
-//
-//			item.setTrangThai(NhapXuatHangTrangThaiEnum.TUCHOI_LDC.getId());
-//			item.setNguoiPduyetId(userInfo.getId());
-//			item.setNgayPduyet(new Date());
-//		} else {
-//			throw new Exception("Bad request.");
-//		}
-		return null;
-	}
+        PhieuKnghiemCluongHang item = optional.get();
+        Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
+        Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
+        item.setTenLoaiVthh(listDanhMucHangHoa.get(item.getLoaiVthh()));
+        item.setTenCloaiVthh(listDanhMucHangHoa.get(item.getCloaiVthh()));
+        item.setTenDvi(listDanhMucDvi.get(item.getMaDvi()));
+        item.setTenDiemKho(listDanhMucDvi.get(item.getMaDiemKho()));
+        item.setTenNhaKho(listDanhMucDvi.get(item.getMaNhaKho()));
+        item.setTenNganKho(listDanhMucDvi.get(item.getMaNganKho()));
+        item.setTenLoKho(listDanhMucDvi.get(item.getMaLoKho()));
+        item.setTenKyThuatVien(ObjectUtils.isEmpty(item.getIdKyThuatVien()) ? null : userInfoRepository.findById(item.getIdKyThuatVien()).get().getFullName());
+        item.setTenTruongPhong(ObjectUtils.isEmpty(item.getIdTruongPhong()) ? null : userInfoRepository.findById(item.getIdTruongPhong()).get().getFullName());
 
-	@Override
-	public void delete(Long id) throws Exception {
-		UserInfo userInfo = UserUtils.getUserInfo();
-		Optional<PhieuKnghiemCluongHang> optional = phieuKnghiemCluongHangRepository.findById(id);
-		if (!optional.isPresent())
-			throw new Exception("Không tìm thấy dữ liệu.");
+        item.setListKquaKngiem(kquaKnghiemRepository.findByPhieuKnghiemId(id));
 
-		PhieuKnghiemCluongHang phieu = optional.get();
+        return item;
+    }
 
-		if (NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId().equals(phieu.getTrangThai())) {
-			throw new Exception("Không thể xóa đề xuất điều chỉnh đã đã duyệt");
-		}
-		kquaKnghiemRepository.deleteByPhieuKnghiemId(phieu.getId());
-		phieuKnghiemCluongHangRepository.delete(phieu);
-	}
+    @Override
+    public PhieuKnghiemCluongHang approve(PhieuKnghiemCluongHangReq req) throws Exception {
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null)
+            throw new Exception("Bad request.");
 
-	@Override
-	public void deleteMulti(List<Long> listMulti) {
+        Optional<PhieuKnghiemCluongHang> optional = phieuKnghiemCluongHangRepository.findById(req.getId());
+        if (!optional.isPresent()) {
+            throw new Exception("Không tìm thấy dữ liệu.");
+        }
 
-	}
+        PhieuKnghiemCluongHang item = optional.get();
+        String trangThai = req.getTrangThai() + item.getTrangThai();
 
-	@Override
-	public boolean export(PhieuKnghiemCluongHangReq req) throws Exception {
-		return false;
-	}
+        if (
+			(NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId() + NhapXuatHangTrangThaiEnum.DUTHAO.getId()).equals(trangThai) ||
+			(NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId() + NhapXuatHangTrangThaiEnum.TUCHOI_TP.getId()).equals(trangThai) ||
+			(NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId() + NhapXuatHangTrangThaiEnum.TUCHOI_LDC.getId()).equals(trangThai)
+        ) {
+            item.setNguoiGuiDuyetId(userInfo.getId());
+            item.setNgayGuiDuyet(new Date());
+        } else if (
+			(NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId()).equals(trangThai) ||
+			(NhapXuatHangTrangThaiEnum.TUCHOI_TP.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId()).equals(trangThai)
+        ) {
+            item.setIdTruongPhong(userInfo.getId());
+            item.setLyDoTuChoi(req.getLyDoTuChoi());
+        } else if (
+			(NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId()).equals(trangThai) ||
+			(NhapXuatHangTrangThaiEnum.TUCHOI_LDC.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId()).equals(trangThai)
+        ) {
+            item.setNgayPduyet(new Date());
+			item.setNguoiPduyetId(userInfo.getId());
+			item.setLyDoTuChoi(req.getLyDoTuChoi());
+		} else {
+            throw new Exception("Phê duyệt không thành công");
+        }
+        item.setTrangThai(req.getTrangThai());
+        phieuKnghiemCluongHangRepository.save(item);
+        return item;
+    }
+
+    @Override
+    public void delete(Long id) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        Optional<PhieuKnghiemCluongHang> optional = phieuKnghiemCluongHangRepository.findById(id);
+        if (!optional.isPresent())
+            throw new Exception("Không tìm thấy dữ liệu.");
+
+        PhieuKnghiemCluongHang phieu = optional.get();
+
+        if (NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId().equals(phieu.getTrangThai())) {
+            throw new Exception("Không thể xóa đề xuất điều chỉnh đã đã duyệt");
+        }
+        kquaKnghiemRepository.deleteByPhieuKnghiemId(phieu.getId());
+        phieuKnghiemCluongHangRepository.delete(phieu);
+    }
+
+    @Override
+    public void deleteMulti(List<Long> listMulti) {
+
+    }
+
+    @Override
+    public boolean export(PhieuKnghiemCluongHangReq req) throws Exception {
+        return false;
+    }
 
 
 //	@Override

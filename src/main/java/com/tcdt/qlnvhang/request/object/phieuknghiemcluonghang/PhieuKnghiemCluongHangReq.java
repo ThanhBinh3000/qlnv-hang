@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.object.phieuknghiemcluonghang;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.SoBienBanPhieuReq;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
@@ -13,7 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-public class PhieuKnghiemCluongHangReq extends SoBienBanPhieuReq {
+public class PhieuKnghiemCluongHangReq extends BaseRequest {
 	private Long id;
 	private Integer nam;
 	private String maDvi;
@@ -28,10 +29,11 @@ public class PhieuKnghiemCluongHangReq extends SoBienBanPhieuReq {
 	private String maNhaKho;
 	private String maNganKho;
 	private String maLoKho;
-	private String idDdiemGiaoNvNh;
+	private Long idDdiemGiaoNvNh;
+	private Long idQdGiaoNvNh;
 	private String loaiVthh;
 	private String cloaiVthh;
-	private String motaHangHoa;
+	private String moTaHangHoa;
 	private String hthucBquan;
 	private BigDecimal soLuongNhapDayKho;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)

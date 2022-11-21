@@ -68,11 +68,10 @@ public class NhPhieuKnghiemCluongHangController {
 
 	@ApiOperation(value = "Xoá thông tin ", response = Boolean.class)
 	@PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> delete(@PathVariable("id") Long id) {
+	public ResponseEntity<BaseResponse> delete(@RequestBody PhieuKnghiemCluongHangReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-//			Boolean res = phieuKnghiemCluongHangService.delete(id);
-//			resp.setData(res);
+			phieuKnghiemCluongHangService.delete(req.getId());
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -88,8 +87,7 @@ public class NhPhieuKnghiemCluongHangController {
 	public ResponseEntity<BaseResponse> detail(@PathVariable("id") Long id) {
 		BaseResponse resp = new BaseResponse();
 		try {
-//			PhieuKnghiemCluongHangRes res = phieuKnghiemCluongHangService.detail(id);
-//			resp.setData(res);
+			resp.setData(phieuKnghiemCluongHangService.detail(id));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -102,11 +100,10 @@ public class NhPhieuKnghiemCluongHangController {
 
 	@ApiOperation(value = "Gửi duyệt/Duyệt/Từ chối ", response = Boolean.class)
 	@PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody StatusReq req) {
+	public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody PhieuKnghiemCluongHangReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-//			Boolean res = phieuKnghiemCluongHangService.updateStatus(req);
-//			resp.setData(res);
+			resp.setData(phieuKnghiemCluongHangService.approve(req));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
