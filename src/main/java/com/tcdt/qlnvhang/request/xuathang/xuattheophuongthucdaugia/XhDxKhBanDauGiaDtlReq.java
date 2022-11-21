@@ -11,6 +11,8 @@ public class XhDxKhBanDauGiaDtlReq {
     private String maDvi;
     private String tenDvi;
     private String maDiemKho;
+    private String diaDiemKho;
+    private String maNhaKho;
     private String maNganKho;
     private String maLoKho;
     private String loaiVthh;
@@ -25,5 +27,6 @@ public class XhDxKhBanDauGiaDtlReq {
     private BigDecimal giaKhongVat;
     private BigDecimal giaKhoiDiem;
     private BigDecimal tienDatTruoc;
+    private BigDecimal duDau;
     private Long idPhanLo;
 }
