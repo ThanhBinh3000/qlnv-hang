@@ -90,14 +90,16 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		for (HhDxuatKhLcntDsgtDtlReq gt : objReq.getDsGtReq()){
 			HhDxKhlcntDsgthau data = new ModelMapper().map(gt, HhDxKhlcntDsgthau.class);
 			data.setIdDxKhlcnt(dataMap.getId());
-			BigDecimal thanhTien = data.getDonGia().multiply(data.getSoLuong());
+			BigDecimal thanhTien = data.getDonGiaVat().multiply(data.getSoLuong());
 			data.setThanhTien(thanhTien);
 			hhDxuatKhLcntDsgtDtlRepository.save(data);
 			// Lưu chi tiết danh sách gói thaauff ( địa điểm nhập )
 			for (HhDxuatKhLcntDsgthauDtlCtietReq ddNhap : gt.getChildren()){
 				HhDxKhlcntDsgthauCtiet dataDdNhap = new ModelMapper().map(ddNhap, HhDxKhlcntDsgthauCtiet.class);
 				dataDdNhap.setIdGoiThau(data.getId());
-				dataDdNhap.setThanhTien(dataDdNhap.getDonGia().multiply(dataDdNhap.getSoLuong()));
+				if(!ObjectUtils.isEmpty(dataDdNhap.getDonGia())){
+					dataDdNhap.setThanhTien(dataDdNhap.getDonGia().multiply(dataDdNhap.getSoLuong()));
+				}
 				hhDxKhlcntDsgthauCtietRepository.save(dataDdNhap);
 			}
 		}
@@ -185,7 +187,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 			HhDxKhlcntDsgthau data = new ModelMapper().map(gt, HhDxKhlcntDsgthau.class);
 			data.setId(null);
 			data.setIdDxKhlcnt(dataDTB.getId());
-			BigDecimal thanhTien = data.getDonGia().multiply(data.getSoLuong());
+			BigDecimal thanhTien = data.getDonGiaVat().multiply(data.getSoLuong());
 			data.setThanhTien(thanhTien);
 			hhDxuatKhLcntDsgtDtlRepository.save(data);
 			hhDxKhlcntDsgthauCtietRepository.deleteAllByIdGoiThau(data.getId());
@@ -409,7 +411,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 			objs[2] = dsgtDtl.getSoLuong().multiply(Contains.getDVTinh(Contains.DVT_KG))
 					.divide(Contains.getDVTinh(Contains.DVT_TAN)).setScale(0, RoundingMode.HALF_UP);
 //			objs[3] = dsgtDtl.getDiaDiemNhap();
-			objs[4] = dsgtDtl.getDonGia();
+			objs[4] = dsgtDtl.getDonGiaVat();
 			objs[5] = dsgtDtl.getThanhTien();
 			objs[6] = MoneyConvert.doctienBangChu(dsgtDtl.getThanhTien().toString(), "");
 			dataList.add(objs);
@@ -599,7 +601,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		for (HhDxuatKhLcntDsgtDtlReq gt : objReq.getDsGtReq()){
 			HhDxKhlcntDsgthau data = new ModelMapper().map(gt, HhDxKhlcntDsgthau.class);
 			data.setIdDxKhlcnt(dataMap.getId());
-			BigDecimal thanhTien = data.getDonGia().multiply(data.getSoLuong());
+			BigDecimal thanhTien = data.getDonGiaVat().multiply(data.getSoLuong());
 			data.setThanhTien(thanhTien);
 			hhDxuatKhLcntDsgtDtlRepository.save(data);
 			// Lưu chi tiết danh sách gói thaauff ( địa điểm nhập )
@@ -676,7 +678,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 			hhDxKhlcntDsgthauCtietRepository.deleteAllByIdGoiThau(gt.getId());
 			data.setId(null);
 			data.setIdDxKhlcnt(dataDTB.getId());
-			BigDecimal thanhTien = data.getDonGia().multiply(data.getSoLuong());
+			BigDecimal thanhTien = data.getDonGiaVat().multiply(data.getSoLuong());
 			data.setThanhTien(thanhTien);
 			hhDxuatKhLcntDsgtDtlRepository.save(data);
 			// Lưu chi tiết danh sách gói thaauff ( địa điểm nhập )

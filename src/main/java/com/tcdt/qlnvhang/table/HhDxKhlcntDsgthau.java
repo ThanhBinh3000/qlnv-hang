@@ -38,7 +38,9 @@ public class HhDxKhlcntDsgthau implements Serializable {
 	@Transient
 	private String tenDvi;
 
-	private BigDecimal donGia;
+	private BigDecimal donGiaVat;
+
+	private BigDecimal donGiaTamTinh;
 
 	private BigDecimal thanhTien;
 
