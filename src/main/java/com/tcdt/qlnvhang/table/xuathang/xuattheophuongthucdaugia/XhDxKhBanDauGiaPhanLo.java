@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia;
 
-import com.tcdt.qlnvhang.table.HhDxKhlcntDsgthauCtiet;
 import lombok.Data;
 
 import javax.persistence.*;
