@@ -50,6 +50,7 @@ public class HhQdKhlcntDtlReq {
 
 	BigDecimal soLuong;
 	BigDecimal donGiaVat;
+	BigDecimal donGiaTamTinh;
 	BigDecimal tongTien;
 	Long soGthau;
 
@@ -65,6 +66,6 @@ public class HhQdKhlcntDtlReq {
 
 	private List<HhQdKhlcntDsgthauReq> dsGoiThau;
 
-	private List<HhQdKhlcntDsgthauReq> dsGtDtlList;
+	private List<HhQdKhlcntDsgthauReq> children;
 
 }

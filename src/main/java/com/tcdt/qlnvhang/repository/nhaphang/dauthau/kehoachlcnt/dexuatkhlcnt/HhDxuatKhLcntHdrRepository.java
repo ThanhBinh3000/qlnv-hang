@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.tcdt.qlnvhang.repository.BaseRepository;
-import com.tcdt.qlnvhang.table.HhQdKhlcntHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -55,9 +55,11 @@ public class HhQdKhlcntHdrReq {
 	Date tgianMthau;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-	Date  tgianDthau;
+	Date tgianDthau;
 
-//	@NotNull(message = "Không được để trống")
+	Integer tgianThien;
+
+	//	@NotNull(message = "Không được để trống")
 	@Size(max = 250, message = "Về việc không được vượt quá 20 ký tự")
 	@ApiModelProperty(example = "Nội dung về việc")
 	String veViec;
@@ -107,10 +109,14 @@ public class HhQdKhlcntHdrReq {
 
 	private BigDecimal donGiaVat;
 
+	String dienGiai;
+
+	String yKien;
+
 	// Lương thực
 	private List<HhQdKhlcntDtlReq> dsDeXuat;
 	private List<FileDinhKemReq> fileDinhKems;
 	// Vật tư
-	private List<HhQdKhlcntDsgthauReq> dsGoiThau;
+//	private List<HhQdKhlcntDsgthauReq> dsGoiThau;
 
 }

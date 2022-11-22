@@ -1,5 +1,7 @@
 package com.tcdt.qlnvhang.table;
 
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDtl;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdr;
 import lombok.Data;
 
 import javax.persistence.*;
