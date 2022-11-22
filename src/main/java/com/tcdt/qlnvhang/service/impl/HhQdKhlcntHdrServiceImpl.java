@@ -354,7 +354,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 
 		qOptional.get().setTenLoaiVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getLoaiVthh()));
 		qOptional.get().setTenCloaiVthh(StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getCloaiVthh()));
-
+		qOptional.get().setTenDvi(mapDmucDvi.get(qOptional.get().getMaDvi()));
 		List<HhQdKhlcntDtl> hhQdKhlcntDtlList = new ArrayList<>();
 		for(HhQdKhlcntDtl dtl : hhQdKhlcntDtlRepository.findAllByIdQdHdr(Long.parseLong(ids))){
 			List<HhQdKhlcntDsgthau> hhQdKhlcntDsgthauList = new ArrayList<>();
@@ -635,6 +635,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	}
 
 	@Override
+	@Transactional
 	public void delete(IdSearchReq idSearchReq) throws Exception {
 		if (StringUtils.isEmpty(idSearchReq.getId()))
 			throw new Exception("Xoá thất bại, không tìm thấy dữ liệu");
@@ -666,7 +667,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		if(optional.get().getPhanLoai().equals("TH")){
 			hhDxKhLcntThopHdrRepository.updateTrangThai(optional.get().getIdThHdr(), NhapXuatHangTrangThaiEnum.CHUATAO_QD.getId());
 		}else{
-			hhDxuatKhLcntHdrRepository.updateStatusInList(Arrays.asList(optional.get().getSoTrHdr()), NhapXuatHangTrangThaiEnum.CHUATAO_QD.getId());
+			hhDxuatKhLcntHdrRepository.updateStatusInList(Arrays.asList(optional.get().getSoTrHdr()), NhapXuatHangTrangThaiEnum.CHUATONGHOP.getId());
 		}
 	}
 

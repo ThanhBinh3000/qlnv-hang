@@ -20,6 +20,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Where;
@@ -132,6 +133,7 @@ public class HhQdKhlcntHdr implements Serializable {
 
 	String dienGiai;
 
+	@JsonProperty("yKien")
 	String yKien;
 
 	@Temporal(TemporalType.DATE)
@@ -146,6 +148,11 @@ public class HhQdKhlcntHdr implements Serializable {
 	String phanLoai;
 
 	Long idGoc;
+
+	String maDvi;
+
+	@Transient
+	String tenDvi;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)

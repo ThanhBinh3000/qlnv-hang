@@ -64,6 +64,12 @@ public class HhQdKhlcntDtlReq {
 	String diaChiDvi;
 	String trichYeu;
 
+	String goiThau;
+
+	String cloaiVthh;
+
+	String loaiVthh;
+
 	private List<HhQdKhlcntDsgthauReq> dsGoiThau;
 
 	private List<HhQdKhlcntDsgthauReq> children;

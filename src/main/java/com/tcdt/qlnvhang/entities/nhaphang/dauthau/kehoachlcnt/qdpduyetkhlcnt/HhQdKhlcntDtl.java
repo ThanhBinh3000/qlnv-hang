@@ -40,6 +40,12 @@ public class HhQdKhlcntDtl implements Serializable {
 	BigDecimal donGiaVat;
 	BigDecimal donGiaTamTinh;
 
+	String goiThau;
+
+	String cloaiVthh;
+
+	String loaiVthh;
+
 	Long soGthau;
 
 	@Transient
