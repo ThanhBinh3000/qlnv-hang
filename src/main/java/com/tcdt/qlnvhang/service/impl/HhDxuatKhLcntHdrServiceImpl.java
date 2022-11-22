@@ -9,13 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.*;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.repository.HhDxuatKhLcntCcxdgDtlRepository;
-import com.tcdt.qlnvhang.repository.HhDxKhlcntDsgthauCtietRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.*;
 import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.object.*;
-import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.util.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +28,6 @@ import org.springframework.util.StringUtils;
 
 import com.tcdt.qlnvhang.entities.FileDKemJoinDxKhLcntCcxdg;
 import com.tcdt.qlnvhang.entities.FileDKemJoinDxKhLcntHdr;
-import com.tcdt.qlnvhang.repository.HhDxuatKhLcntDsgtDtlRepository;
-import com.tcdt.qlnvhang.repository.HhDxuatKhLcntHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.search.HhDxuatKhLcntSearchReq;
@@ -51,6 +48,9 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 
 	@Autowired
 	private HhDxKhlcntDsgthauCtietRepository hhDxKhlcntDsgthauCtietRepository;
+
+	@Autowired
+	private HhDxKhlcntDsgthauCtietVtRepository hhDxKhlcntDsgthauCtietVtRepository;
 
 	@Autowired
 	private HhDxuatKhLcntCcxdgDtlRepository hhDxuatKhLcntCcxdgDtlRepository;
@@ -86,14 +86,14 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		hhDxuatKhLcntHdrRepository.save(dataMap);
 
 
-		// Lưu danh sách gói thầu
+		// Lưu danh sách gói thầu gồm các Cục ( Vật tư ) và Chi cục ( Lương thực )
 		for (HhDxuatKhLcntDsgtDtlReq gt : objReq.getDsGtReq()){
 			HhDxKhlcntDsgthau data = new ModelMapper().map(gt, HhDxKhlcntDsgthau.class);
 			data.setIdDxKhlcnt(dataMap.getId());
 			BigDecimal thanhTien = data.getDonGiaVat().multiply(data.getSoLuong());
 			data.setThanhTien(thanhTien);
 			hhDxuatKhLcntDsgtDtlRepository.save(data);
-			// Lưu chi tiết danh sách gói thaauff ( địa điểm nhập )
+			// Lưu danh sách gói thầu gồm các Chi Cục ( Vật tư ) và Điểm kho ( Lương thực )
 			for (HhDxuatKhLcntDsgthauDtlCtietReq ddNhap : gt.getChildren()){
 				HhDxKhlcntDsgthauCtiet dataDdNhap = new ModelMapper().map(ddNhap, HhDxKhlcntDsgthauCtiet.class);
 				dataDdNhap.setIdGoiThau(data.getId());
@@ -101,6 +101,12 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 					dataDdNhap.setThanhTien(dataDdNhap.getDonGia().multiply(dataDdNhap.getSoLuong()));
 				}
 				hhDxKhlcntDsgthauCtietRepository.save(dataDdNhap);
+				// Lưu Điểm kho ( Lương thực )
+				for(HhDxuatKhLcntDsgthauDtlCtietVtReq vt : ddNhap.getChildren()){
+					HhDxKhlcntDsgthauCtietVt vtMap = new ModelMapper().map(vt, HhDxKhlcntDsgthauCtietVt.class);
+					vtMap.setIdGoiThauCtiet(dataDdNhap.getId());
+					hhDxKhlcntDsgthauCtietVtRepository.save(vtMap);
+				}
 			}
 		}
 		// Lưu quyết định căn cứ
@@ -197,7 +203,15 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 				dataDdNhap.setId(null);
 				dataDdNhap.setIdGoiThau(data.getId());
 				hhDxKhlcntDsgthauCtietRepository.save(dataDdNhap);
+				hhDxKhlcntDsgthauCtietVtRepository.deleteAllByIdGoiThauCtiet(ddNhap.getId());
+				// Lưu Điểm kho ( Lương thực )
+				for(HhDxuatKhLcntDsgthauDtlCtietVtReq vt : ddNhap.getChildren()){
+					HhDxKhlcntDsgthauCtietVt vtMap = new ModelMapper().map(vt, HhDxKhlcntDsgthauCtietVt.class);
+					vtMap.setIdGoiThauCtiet(dataDdNhap.getId());
+					hhDxKhlcntDsgthauCtietVtRepository.save(vtMap);
+				}
 			}
+
 		}
 
 		// Xóa tât cả các căn cứ xác định giá cũ và lưu mới
@@ -248,6 +262,11 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 			listDdNhap.forEach( f -> {
 				f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
 				f.setTenDiemKho(StringUtils.isEmpty(f.getMaDiemKho()) ? null : mapDmucDvi.get(f.getMaDiemKho()));
+				List<HhDxKhlcntDsgthauCtietVt> byIdGoiThauCtiet = hhDxKhlcntDsgthauCtietVtRepository.findByIdGoiThauCtiet(f.getId());
+				byIdGoiThauCtiet.forEach( x -> {
+					x.setTenDvi(StringUtils.isEmpty(x.getMaDvi()) ? null : mapDmucDvi.get(x.getMaDvi()));
+				});
+				f.setChildren(byIdGoiThauCtiet);
 			});
 			dsG.setChildren(listDdNhap);
 		}
