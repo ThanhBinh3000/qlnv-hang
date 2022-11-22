@@ -17,6 +17,8 @@ public class XhDxKhBanDauGiaPhanLoReq {
     private String maDvi;
     private String tenDvi;
     private String maDiemKho;
+    private String diaDiemKho;
+    private String maNhaKho;
     private String maNganKho;
     private String maLoKho;
     private String loaiVthh;
@@ -33,6 +35,7 @@ public class XhDxKhBanDauGiaPhanLoReq {
     private String tienDatTruoc;
     private BigDecimal  soLuongChiTieu;
     private BigDecimal soLuongKh;
+    private BigDecimal duDau;
 
     private List<XhDxKhBanDauGiaDtlReq> children = new ArrayList<>();
 }
