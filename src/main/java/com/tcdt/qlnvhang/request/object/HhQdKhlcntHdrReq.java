@@ -113,6 +113,12 @@ public class HhQdKhlcntHdrReq {
 
 	String yKien;
 
+	Integer gtriDthau;
+
+	Integer gtriHdong;
+
+	String maDvi;
+
 	// Lương thực
 	private List<HhQdKhlcntDtlReq> dsDeXuat;
 	private List<FileDinhKemReq> fileDinhKems;
