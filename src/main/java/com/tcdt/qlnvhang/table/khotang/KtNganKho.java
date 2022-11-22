@@ -27,9 +27,11 @@ public class KtNganKho implements Serializable {
   String tinhtrangId;
   String ngankhoHientrangId;
   BigDecimal dienTichDat;
-  BigDecimal tichLuongTk;
+  //  BigDecimal tichLuongTk;
+  BigDecimal tichLuongTkLt;
+  BigDecimal tichLuongTkVt;
   BigDecimal tichLuongChua;
-//  Long nhakhoId;
+  //  Long nhakhoId;
   Long quyhoachDuyetId;
   BigDecimal tichLuongChuaLt;
   BigDecimal tichLuongChuaVt;
@@ -44,7 +46,9 @@ public class KtNganKho implements Serializable {
   BigDecimal tichLuongChuaLtGao;
   BigDecimal tichLuongChuaLtThoc;
   BigDecimal theTichChuaVt;
-  BigDecimal theTichTk;
+  //  BigDecimal theTichTk;
+  BigDecimal theTichTkLt;
+  BigDecimal theTichTkVt;
   Long updateStatus;
   Date lastUpdate;
   String trangThai;
@@ -59,11 +63,11 @@ public class KtNganKho implements Serializable {
   String nguoiPduyet;
 
   @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY,
-          cascade = CascadeType.ALL)
+      cascade = CascadeType.ALL)
   List<KtNganLo> child;
 
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-  @JoinColumn(name = "NHAKHO_ID", referencedColumnName = "ID",updatable = false, insertable = false)
+  @JoinColumn(name = "NHAKHO_ID", referencedColumnName = "ID", updatable = false, insertable = false)
   @JsonIgnore
   KtNhaKho parent;
 }

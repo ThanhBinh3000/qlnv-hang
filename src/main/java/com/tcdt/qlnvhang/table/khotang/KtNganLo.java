@@ -26,7 +26,9 @@ public class KtNganLo implements Serializable {
   String tinhtrangId;
   String nganloHientrangId;
   BigDecimal dienTichDat;
-  BigDecimal tichLuongTk;
+//  BigDecimal tichLuongTk;
+  BigDecimal tichLuongTkLt;
+  BigDecimal tichLuongTkVt;
   BigDecimal tichLuongChua;
 //  Long ngankhoId;
   Long quyhoachDuyetId;
