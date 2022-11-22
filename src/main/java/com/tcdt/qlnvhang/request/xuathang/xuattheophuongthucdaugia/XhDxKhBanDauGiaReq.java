@@ -35,6 +35,8 @@ public class XhDxKhBanDauGiaReq {
     private Integer tgianKyHdong;
     private Integer tgianTtoan;
     private Integer tgianGnhan;
+    private String pthucTtoan;
+    private String pthucGnhan;
     private String tgianKyHdongGhiChu;
     private String tgianTtoanGhiChu;
     private String tgianGnhanGhiChu;

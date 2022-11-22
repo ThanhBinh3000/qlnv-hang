@@ -83,7 +83,7 @@ public class XhDxKhBanDauGia  implements Serializable {
     private Date ngayKy;
     private String tgianKyHdongGhiChu;
     private String tgianTtoanGhiChu;
-    private String TgianGnhanGhiChu;
+    private String tgianGnhanGhiChu;
 
 
     @Transient
