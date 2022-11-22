@@ -1,9 +1,10 @@
-package com.tcdt.qlnvhang.table;
+package com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt;
 
 import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "HH_DX_KHLCNT_DSGTHAU_CTIET")
@@ -37,4 +38,7 @@ public class HhDxKhlcntDsgthauCtiet {
 	private BigDecimal thanhTien;
 
 	private Long idGoiThau;
+
+	@Transient
+	private List<HhDxKhlcntDsgthauCtietVt> children;
 }

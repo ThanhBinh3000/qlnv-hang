@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia;
 
-import com.tcdt.qlnvhang.table.HhDxKhlcntDsgthauCtiet;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.XhDxKhBanDauGiaDtl;
 import org.springframework.data.jpa.repository.JpaRepository;
 

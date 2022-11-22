@@ -3,10 +3,13 @@ package com.tcdt.qlnvhang.request.object;
 import lombok.Data;
 
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Data
 public class HhDxuatKhLcntDsgthauDtlCtietReq {
 //	@NotNull(message = "Không được để trống")
+	Long id;
+
 	Integer soLuong;
 	
 //	@NotNull(message = "Không được để trống")
@@ -22,5 +25,7 @@ public class HhDxuatKhLcntDsgthauDtlCtietReq {
 	Integer donGia;
 
 	String diaDiemNhap;
+
+	List<HhDxuatKhLcntDsgthauDtlCtietVtReq> children;
 
 }

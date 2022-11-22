@@ -1,8 +1,9 @@
-package com.tcdt.qlnvhang.repository;
+package com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt;
 
 import java.util.List;
 
-import com.tcdt.qlnvhang.table.HhDxKhlcntDsgthau;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxKhlcntDsgthau;
+import com.tcdt.qlnvhang.repository.BaseRepository;
 
 import javax.transaction.Transactional;
 

@@ -1,6 +1,6 @@
-package com.tcdt.qlnvhang.repository;
+package com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt;
 
-import com.tcdt.qlnvhang.table.HhDxKhlcntDsgthauCtiet;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxKhlcntDsgthauCtiet;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.transaction.Transactional;
