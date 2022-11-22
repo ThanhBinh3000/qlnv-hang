@@ -1,6 +1,7 @@
-package com.tcdt.qlnvhang.repository;
+package com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt;
 
-import com.tcdt.qlnvhang.table.HhQdKhlcntDsgthauCtiet;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDsgthauCtiet;
+import com.tcdt.qlnvhang.repository.BaseRepository;
 
 import java.util.List;
 

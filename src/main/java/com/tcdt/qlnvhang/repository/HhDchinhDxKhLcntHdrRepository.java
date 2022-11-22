@@ -2,8 +2,6 @@ package com.tcdt.qlnvhang.repository;
 
 
 import com.tcdt.qlnvhang.table.HhDchinhDxKhLcntHdr;
-import com.tcdt.qlnvhang.table.HhDxKhLcntThopHdr;
-import com.tcdt.qlnvhang.table.HhQdKhlcntHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;

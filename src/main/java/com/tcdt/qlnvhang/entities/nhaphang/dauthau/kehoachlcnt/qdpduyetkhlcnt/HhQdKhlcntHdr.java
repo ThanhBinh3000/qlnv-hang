@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.table;
+package com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -20,7 +20,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Where;
@@ -125,7 +124,15 @@ public class HhQdKhlcntHdr implements Serializable {
 
 	Integer namKhoach;
 
-	Integer tgianThienHd;
+	Integer tgianThien;
+
+	Integer gtriDthau;
+
+	Integer gtriHdong;
+
+	String dienGiai;
+
+	String yKien;
 
 	@Temporal(TemporalType.DATE)
 	Date ngayHluc;
@@ -145,23 +152,23 @@ public class HhQdKhlcntHdr implements Serializable {
 	@JoinColumn(name = "dataId")
 	@JsonManagedReference
 	@Where(clause = "data_type='" + HhQdKhlcntHdr.TABLE_NAME + "'")
-	private List<FileDKemJoinQdKhlcntHdr> children = new ArrayList<>();
+	private List<FileDKemJoinQdKhlcntHdr> fileDinhKems = new ArrayList<>();
 
-	public void setChildren(List<FileDKemJoinQdKhlcntHdr> children) {
-		this.children.clear();
+	public void setFileDinhKems(List<FileDKemJoinQdKhlcntHdr> children) {
+		this.fileDinhKems.clear();
 		for (FileDKemJoinQdKhlcntHdr child : children) {
 			child.setParent(this);
 		}
-		this.children.addAll(children);
+		this.fileDinhKems.addAll(children);
 	}
 
-	public void addChild(FileDKemJoinQdKhlcntHdr child) {
+	public void addFileDinhKems(FileDKemJoinQdKhlcntHdr child) {
 		child.setParent(this);
-		this.children.add(child);
+		this.fileDinhKems.add(child);
 	}
 
 	@Transient
-	private List<HhQdKhlcntDtl> hhQdKhlcntDtlList = new ArrayList<>();
+	private List<HhQdKhlcntDtl> children = new ArrayList<>();
 
 	@Transient
 	BigDecimal tongTien;
@@ -173,7 +180,6 @@ public class HhQdKhlcntHdr implements Serializable {
 	String tenTrangThai;
 	@Transient
 	String soDxuatKhlcnt;
-	@Transient
-	Integer tgianThien;
+
 
 }

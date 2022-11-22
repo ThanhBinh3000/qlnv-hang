@@ -25,8 +25,9 @@ public class HhQdKhlcntDsgthauReq {
 	BigDecimal soLuong;
 
 	String maDvi;
-	
-	BigDecimal donGia;
+
+	BigDecimal donGiaVat;
+	BigDecimal donGiaTamTinh;
 	BigDecimal thanhTien;
 
 	String loaiVthh;

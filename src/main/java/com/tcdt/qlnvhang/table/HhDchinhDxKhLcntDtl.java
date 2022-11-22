@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdr;
 import lombok.Data;
 
 @Entity
