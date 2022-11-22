@@ -107,7 +107,7 @@ public class XhDxKhBanDauGiaService extends BaseServiceImpl {
         dataMap.setTenDvi(StringUtils.isEmpty(userInfo.getDvql()) ? null : hashMapDmdv.get(userInfo.getDvql()));
         dataMap.setMaDvi(userInfo.getDvql());
         dataMap.setTenLoaiVthh(StringUtils.isEmpty(dataMap.getLoaiVthh()) ? null : hashMapDmHh.get(dataMap.getLoaiVthh()));
-        dataMap.setCloaiVthh(StringUtils.isEmpty(dataMap.getCloaiVthh()) ? null : hashMapDmHh .get(dataMap.getCloaiVthh()));
+        dataMap.setTenCloaiVthh(StringUtils.isEmpty(dataMap.getCloaiVthh()) ? null : hashMapDmHh .get(dataMap.getCloaiVthh()));
         this.validateData(dataMap, dataMap.getTrangThai());
         XhDxKhBanDauGia created=xhDxKhBanDauGiaRepository.save(dataMap);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),dataMap.getId(),"XH_DX_KH_BAN_DAU_GIA");
@@ -125,10 +125,8 @@ public class XhDxKhBanDauGiaService extends BaseServiceImpl {
                 dataphanLoDl.setGiaKhoiDiem(dataphanLoDl.getGiaKhongVat().multiply(dataphanLoDl.getSoLuong()));
                 xhDxKhBanDauGiaDtlRepository.save(dataphanLoDl);
             }
-
         }
     return dataMap;
-
     }
 
     public void validateData(XhDxKhBanDauGia objHdr,String trangThai) throws Exception {
@@ -202,19 +200,28 @@ public class XhDxKhBanDauGiaService extends BaseServiceImpl {
         Map<String, String> hasMapDmucDvi = getListDanhMucDvi(null, null, "01");
 
         qOptional.get().setTenLoaiVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh())? null : hasMapVthh.get(qOptional.get().getLoaiVthh()));
-        qOptional.get().setCloaiVthh(StringUtils.isEmpty(qOptional.get().getCloaiVthh())? null : hasMapVthh.get(qOptional.get().getLoaiVthh()));
+        qOptional.get().setTenCloaiVthh(StringUtils.isEmpty(qOptional.get().getCloaiVthh())? null : hasMapVthh.get(qOptional.get().getCloaiVthh()));
         qOptional.get().setTenDvi(hasMapDmucDvi.get(qOptional.get().getMaDvi()));
         qOptional.get().setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qOptional.get().getTrangThai()));
+        qOptional.get().setTenTrangThaiTh(NhapXuatHangTrangThaiEnum.getTenById(qOptional.get().getTrangThaiTh()));
 
         List<XhDxKhBanDauGiaPhanLo>  dsPloList = xhDxKhBanDauGiaPhanLoRepository.findByIdDxKhbdg(qOptional.get().getId());
         for (XhDxKhBanDauGiaPhanLo dsP : dsPloList){
             dsP.setTenDvi(hasMapDmucDvi.get(dsP.getMaDvi()));
+            dsP.setTenDiemKho(hasMapDmucDvi.get(dsP.getMaDiemKho()));
+            dsP.setTenNhakho(hasMapDmucDvi.get(dsP.getMaNhaKho()));
+            dsP.setTenNganKho(hasMapDmucDvi.get(dsP.getMaNganKho()));
+            dsP.setTenLoKho(hasMapDmucDvi.get(dsP.getMaLoKho()));
             dsP.setTenCloaiVthh(hasMapVthh.get(dsP.getCloaiVthh()));
 
             List<XhDxKhBanDauGiaDtl> listDdNhap = xhDxKhBanDauGiaDtlRepository.findByIdPhanLo(dsP.getId());
             listDdNhap.forEach(f ->{
                 f.setTenDvi(StringUtils.isEmpty(f.getMaDvi())? null : hasMapDmucDvi.get(f.getMaDvi()));
                 f.setTenDiemKho(StringUtils.isEmpty(f.getMaDiemKho())? null : hasMapDmucDvi.get(f.getMaDiemKho()));
+                f.setTenNhakho(StringUtils.isEmpty(f.getMaNhaKho())?null: hasMapDmucDvi.get(f.getMaNhaKho()));
+                f.setTenNganKho(StringUtils.isEmpty(f.getMaNhaKho())?null: hasMapDmucDvi.get(f.getMaNganKho()));
+                f.setTenLoKho(StringUtils.isEmpty(f.getMaLoKho())?null:hasMapDmucDvi.get(f.getMaLoKho()));
+                f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh())?null:hasMapVthh.get(f.getCloaiVthh()));
             });
             dsP.setChildren(listDdNhap);
         }
@@ -339,6 +346,6 @@ public class XhDxKhBanDauGiaService extends BaseServiceImpl {
         }
     }
 
-   
+
 
 }
