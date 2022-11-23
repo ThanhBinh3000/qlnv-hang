@@ -6,19 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Fetch;
@@ -47,7 +35,7 @@ public class HhQdKhlcntHdr implements Serializable {
 
 	String soQd;
 
-	String soQdPdKqlcnt;
+	String soQdPdKqLcnt;
 
 	@Temporal(TemporalType.DATE)
 	Date ngayQd;
@@ -155,6 +143,7 @@ public class HhQdKhlcntHdr implements Serializable {
 
 	@Transient
 	String tenDvi;
+
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)

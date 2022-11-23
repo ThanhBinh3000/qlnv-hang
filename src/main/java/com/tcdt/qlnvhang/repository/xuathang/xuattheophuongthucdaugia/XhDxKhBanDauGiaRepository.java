@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,16 +38,15 @@ public interface XhDxKhBanDauGiaRepository extends JpaRepository<XhDxKhBanDauGia
     @Query(value = "select * from XH_DX_KH_BAN_DAU_GIA DX where (:namKh IS NULL OR DX.NAM_KH = TO_NUMBER(:namKh)) " +
             " AND (:loaiVthh IS NULL OR DX.LOAI_VTHH = :loaiVthh) " +
             " AND (:cloaiVthh IS NULL OR DX.CLOAI_VTHH = :cloaiVthh) " +
-            " AND (:loaiHdong IS NULL OR DX.LOAI_HDONG = :loaiHdong) " +
-            " AND (:ngayKyTu IS NULL OR DX.NGAY_KY >=  TO_DATE(:ngayKyTu,'yyyy-MM-dd')) " +
-            " AND (:ngayKyDen IS NULL OR DX.NGAY_KY <= TO_DATE(:ngayKyDen,'yyyy-MM-dd'))" +
+            " AND (:ngayDuyetTu IS NULL OR DX.NGAY_PDUYET >=  TO_DATE(:ngayDuyetTu,'yyyy-MM-dd')) " +
+            " AND (:ngayDuyetDen IS NULL OR DX.NGAY_PDUYET <= TO_DATE(:ngayDuyetDen,'yyyy-MM-dd'))" +
             " AND DX.TRANG_THAI = '"+ Contains.DADUYET_LDC+"'" +
             " AND DX.TRANG_THAI_TH = '"+ Contains.CHUATONGHOP+"'" +
             " AND DX.MA_THOP is null "+
-            " AND DX.SO_QD_PDUYET is null "+
+            " AND DX.SO_QD_PD is null "+
             " AND (:maDvi IS NULL OR LOWER(DX.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "
             ,nativeQuery = true)
-    List<XhDxKhBanDauGia> listTongHop(Integer namKh, String loaiVthh, String cloaiVthh,String loaiHdong,String ngayKyTu, String ngayKyDen, String maDvi);
+    List<XhDxKhBanDauGia> listTongHop(Integer namKh, String loaiVthh, String cloaiVthh,String ngayDuyetTu, String ngayDuyetDen, String maDvi);
 
     List<XhDxKhBanDauGia> findBySoDxuatIn (List<String> list);
 
@@ -56,6 +56,11 @@ public interface XhDxKhBanDauGiaRepository extends JpaRepository<XhDxKhBanDauGia
 
     @Transactional
     void deleteAllByIdIn(List<Long> ids);
+
+    @Transactional()
+    @Modifying
+    @Query(value = "UPDATE XH_DX_KH_BAN_DAU_GIA SET TRANG_THAI_TH=:trangThaiTh WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
+    void updateStatusInList(List<String> soDxuatList, String trangThaiTh);
 
 
 }

@@ -92,7 +92,7 @@ public class HhDcQdPduyetKhMttController {
             @ApiParam(value = "ID  quyết định ", example = "1", required = true) @PathVariable("ids") String ids) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(hhDcQdPduyetKhMttService.datail(ids));
+            resp.setData(hhDcQdPduyetKhMttService.detail(ids));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
