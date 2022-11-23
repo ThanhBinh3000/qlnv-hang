@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.xuathang.xuattheophuongthucdaugia;
 
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.XhDxKhBanDauGiaDtlRepository;
@@ -156,14 +157,14 @@ public class XhDxKhBanDauGiaService extends BaseServiceImpl {
 
         XhDxKhBanDauGia dataDTB = qOptional.get();
         XhDxKhBanDauGia dataMap = ObjectMapperUtils.map(objReq, XhDxKhBanDauGia.class);
-        XhDxKhBanDauGia created=xhDxKhBanDauGiaRepository.save(dataMap);
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),dataMap.getId(),"XH_DX_KH_BAN_DAU_GIA");
-        created.setFileDinhKems(fileDinhKems);
+
         updateObjectToObject(dataDTB, dataMap);
 
         dataDTB.setNgaySua(getDateTimeNow());
         dataDTB.setNguoiSuaId(getUser().getUsername());
-        dataDTB.setFileDinhKems(fileDinhKems);
+
+
+
         xhDxKhBanDauGiaRepository.save(dataDTB);
 
 //        Xóa tất cả phân lô và lưu mới
