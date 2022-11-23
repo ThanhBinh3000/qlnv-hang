@@ -64,6 +64,12 @@ public class HhQdKhlcntDtl implements Serializable {
 	@Column(name="SO_QD_PD_KQ_LCNT")
 	String soQdPdKqLcnt;
 
+	String tenNhaThau;
+
+	BigDecimal donGiaNhaThau;
+
+	Long idNhaThau;
+
 	@Transient
 	private HhQdKhlcntHdr hhQdKhlcntHdr;
 

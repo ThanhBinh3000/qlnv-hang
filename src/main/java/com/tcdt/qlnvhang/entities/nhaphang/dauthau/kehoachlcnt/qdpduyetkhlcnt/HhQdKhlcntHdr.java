@@ -151,6 +151,8 @@ public class HhQdKhlcntHdr implements Serializable {
 
 	String maDvi;
 
+	String trangThaiDt;
+
 	@Transient
 	String tenDvi;
 
@@ -185,6 +187,8 @@ public class HhQdKhlcntHdr implements Serializable {
 	Long soGthauTrung;
 	@Transient
 	String tenTrangThai;
+	@Transient
+	String tenTrangThaiDt;
 	@Transient
 	String soDxuatKhlcnt;
 
