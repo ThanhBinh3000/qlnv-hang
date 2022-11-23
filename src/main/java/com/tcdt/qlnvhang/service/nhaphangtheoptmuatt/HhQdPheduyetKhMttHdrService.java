@@ -151,12 +151,10 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         }
         Optional<HhQdPheduyetKhMttHdr> optional = hhQdPheduyetKhMttHdrRepository.findById(objReq.getId());
         Optional<HhQdPheduyetKhMttHdr> soQdPduyet = hhQdPheduyetKhMttHdrRepository.findBySoQdPduyet(objReq.getSoQdPduyet());
-         if (soQdPduyet.isPresent()){
              if (soQdPduyet.isPresent()){
                  if (!soQdPduyet.get().getId().equals(objReq.getId())){
                      throw new Exception("Số quyết định đã tồn tại");
                  }
-             }
          }
          HhQdPheduyetKhMttHdr data = optional.get();
          HhQdPheduyetKhMttHdr dataMap = new ModelMapper().map(objReq, HhQdPheduyetKhMttHdr.class);
@@ -199,7 +197,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
    }
 
 
-   public HhQdPheduyetKhMttHdr datail(String ids) throws  Exception{
+   public HhQdPheduyetKhMttHdr detail(String ids) throws  Exception{
         Optional<HhQdPheduyetKhMttHdr> optional = hhQdPheduyetKhMttHdrRepository.findById(Long.valueOf(ids));
         if (!optional.isPresent()){
             throw new Exception("Bản ghi không tồn tại");
@@ -252,7 +250,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         }
         HhQdPheduyetKhMttHdr data = optional.get();
        if (data.getIdThop() != null){
-           hhDxuatKhMttThopRepository.updateTrangThai(data.getIdThop(),Contains.DADUTHAO_QD);
+           hhDxuatKhMttThopRepository.updateTrangThai(data.getIdThop(),Contains.CHUATAO_QD);
        }else if (data.getSoDxuat() !=null){
            Optional<HhDxuatKhMttHdr> soDxuat= hhDxuatKhMttRepository.findBySoDxuat(data.getSoDxuat());
            soDxuat.get().setSoQdPduyet(data.getSoQdPduyet());
@@ -284,7 +282,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
                 throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối");
             }
             if (qdPheduyetKhMttHdr.getIdThop() != null){
-                hhDxuatKhMttThopRepository.updateTrangThai(qdPheduyetKhMttHdr.getIdThop(),Contains.DADUTHAO_QD);
+                hhDxuatKhMttThopRepository.updateTrangThai(qdPheduyetKhMttHdr.getIdThop(),Contains.CHUATAO_QD);
             }else if (qdPheduyetKhMttHdr.getSoDxuat() !=null){
                 Optional<HhDxuatKhMttHdr> soDxuat= hhDxuatKhMttRepository.findBySoDxuat(qdPheduyetKhMttHdr.getSoDxuat());
                 soDxuat.get().setSoQdPduyet(qdPheduyetKhMttHdr.getSoQdPduyet());
