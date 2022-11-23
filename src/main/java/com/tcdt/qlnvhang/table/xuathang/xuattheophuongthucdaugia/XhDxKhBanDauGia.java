@@ -1,7 +1,5 @@
 package com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
 
@@ -13,15 +11,15 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "XH_DX_KH_BAN_DAU_GIA ")
+@Table(name = "XH_DX_KH_BAN_DAU_GIA")
 @Data
 public class XhDxKhBanDauGia  implements Serializable {
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "XH_DX_KH_BAN_DAU_GIA ";
+    public static final String TABLE_NAME = "XH_DX_KH_BAN_DAU_GIA";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_DX_KH_BAN_DAU_GIA_SEQ ")
-    @SequenceGenerator(sequenceName = "XH_DX_KH_BAN_DAU_GIA_SEQ ", allocationSize = 1, name = "XH_DX_KH_BAN_DAU_GIA_SEQ ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_DX_KH_BAN_DAU_GIA_SEQ")
+    @SequenceGenerator(sequenceName = "XH_DX_KH_BAN_DAU_GIA_SEQ", allocationSize = 1, name = "XH_DX_KH_BAN_DAU_GIA_SEQ")
     private Long id;
     private String maDvi;
     private String tenDvi;

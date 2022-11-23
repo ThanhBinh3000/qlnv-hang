@@ -173,7 +173,7 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
 
         return cerated;
     }
-    public HhDcQdPduyetKhmttHdr datail(String ids) throws  Exception{
+    public HhDcQdPduyetKhmttHdr detail(String ids) throws  Exception{
         Optional<HhDcQdPduyetKhmttHdr> optional = hhDcQdPduyetKhMttRepository.findById(Long.valueOf(ids));
         if (!optional.isPresent()){
             throw new Exception("Bản ghi không tồn tại");

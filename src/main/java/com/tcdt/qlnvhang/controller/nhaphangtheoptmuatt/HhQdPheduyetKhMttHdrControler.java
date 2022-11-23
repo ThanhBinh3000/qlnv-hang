@@ -94,7 +94,7 @@ public class HhQdPheduyetKhMttHdrControler {
             @ApiParam(value = "ID  ", example = "1", required = true) @PathVariable("ids") String ids) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(hhQdPheduyetKhMttHdrService.datail(ids));
+            resp.setData(hhQdPheduyetKhMttHdrService.detail(ids));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
