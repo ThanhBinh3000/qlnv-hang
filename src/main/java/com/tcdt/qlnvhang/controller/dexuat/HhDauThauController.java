@@ -69,13 +69,12 @@ public class HhDauThauController {
 	}
 
 	@ApiOperation(value = "Lấy chi tiết thông tin đấu thầu gạo", response = List.class)
-	@GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}/{loaiVthh}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<BaseResponse> detail(
-			@ApiParam(value = "ID thông tin đấu thầu gạo", example = "1", required = true) @PathVariable("ids") String ids) {
+	public ResponseEntity<BaseResponse> detail(@PathVariable("ids") String ids, @PathVariable("loaiVthh") String loaiVthh) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(service.detail(ids));
+			resp.setData(service.detail(ids,loaiVthh));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -88,7 +87,7 @@ public class HhDauThauController {
 
 	@ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 thông tin đấu thầu gạo", response = List.class)
 	@PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> updateStatus(@Valid HttpServletRequest req, @RequestBody StatusReq stReq) {
+	public ResponseEntity<BaseResponse> updateStatus(@Valid HttpServletRequest req, @RequestBody HhDthauReq stReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			service.approve(stReq);

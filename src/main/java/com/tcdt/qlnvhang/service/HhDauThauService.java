@@ -24,12 +24,12 @@ public interface HhDauThauService {
 //	@Transactional(rollbackOn = Exception.class)
 //	HhDthau update(HhDthauReq objReq) throws Exception;
 //
-    List<HhDthauNthauDuthau> detail(String ids) throws Exception;
+    List<HhDthauNthauDuthau> detail(String ids,String loaiVthh) throws Exception;
 //
 ////	Page<HhDthau2> colection(HhDthauSearchReq objReq, HttpServletRequest req) throws Exception;
 //
 	@Transactional(rollbackOn = Exception.class)
-	void approve(StatusReq stReq) throws Exception;
+	void approve(HhDthauReq stReq) throws Exception;
 //
 //	@Transactional(rollbackOn = Exception.class)
 //	void delete(IdSearchReq idSearchReq) throws Exception;

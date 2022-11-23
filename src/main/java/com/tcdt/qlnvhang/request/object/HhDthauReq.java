@@ -17,6 +17,10 @@ public class HhDthauReq {
 
 	private Long idGoiThau;
 
+	private String loaiVthh;
+
+	private String trangThai;
+
 //	@NotNull(message = "Không được để trống")
 //	@Size(max = 20, message = "Số hợp đồng không được vượt quá 20 ký tự")
 //	@ApiModelProperty(example = "20-HĐ/VPH")
