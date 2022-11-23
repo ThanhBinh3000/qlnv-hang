@@ -39,4 +39,6 @@ public class HhQdKhlcntSearchReq extends BaseRequest {
 	String maDvi;
 
 	String trangThaiDtl;
+
+	String trangThaiDt;
 }
