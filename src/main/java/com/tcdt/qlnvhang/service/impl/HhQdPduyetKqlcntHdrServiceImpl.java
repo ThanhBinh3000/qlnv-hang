@@ -156,7 +156,11 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
 
 		qOptional.get().setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qOptional.get().getTrangThai()));
-		qOptional.get().setQdKhlcntDtl(Objects.isNull(qOptional.get().getIdQdPdKhlcntDtl()) ? null : qdKhLcntService.detailDtl(qOptional.get().getIdQdPdKhlcntDtl()));
+		if(qOptional.get().getLoaiVthh().startsWith("02")){
+			qOptional.get().setQdKhlcnt(Objects.isNull(qOptional.get().getIdQdPdKhlcnt()) ? null : qdKhLcntService.detail(String.valueOf(qOptional.get().getIdQdPdKhlcnt())));
+		}else{
+			qOptional.get().setQdKhlcntDtl(Objects.isNull(qOptional.get().getIdQdPdKhlcntDtl()) ? null : qdKhLcntService.detailDtl(qOptional.get().getIdQdPdKhlcntDtl()));
+		}
 		qOptional.get().setTenDvi(listDanhMucDvi.get(qOptional.get().getMaDvi()));
 		List<HhHopDongHdr> allByIdQdKqLcnt = hhHopDongRepository.findAllByIdQdKqLcnt(qOptional.get().getId());
 		allByIdQdKqLcnt.forEach(item -> {
