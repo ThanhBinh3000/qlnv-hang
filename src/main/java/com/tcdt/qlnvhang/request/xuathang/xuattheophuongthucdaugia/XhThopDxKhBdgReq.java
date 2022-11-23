@@ -29,7 +29,5 @@ public class XhThopDxKhBdgReq extends XhThopChiTieuReq{
     private Date tgianDkienDen;
     private String trangThai;
     private String soQdPd;
-
-    @Transient
-    List<XhThopDxKhBdgDtl> thopDxKhBdgDtlList= new ArrayList<>();
+    private String ghiChu;
 }

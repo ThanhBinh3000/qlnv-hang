@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia;
 
+import com.tcdt.qlnvhang.table.HhDxKhLcntThopDtl;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDxKhMttThopDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.XhThopDxKhBdgDtl;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,8 +13,8 @@ import java.util.List;
 @Repository
 public interface XhThopDxKhBdgDtlRepository extends JpaRepository<XhThopDxKhBdgDtl,Long> {
 
-    List<XhThopDxKhBdgDtl> findAllByIdHdr(Long idThopHdr);
 
+    List<XhThopDxKhBdgDtl> findByIdThopHdr(Long idThopHdr);
     @Transactional
     @Modifying
     void deleteAllByIdIn(List<HhDxKhMttThopDtl> ids);
