@@ -48,6 +48,10 @@ public class HhQdPduyetKqlcntHdrReq {
 	@ApiModelProperty(example = "00")
 	String ghiChu;
 
+	String loaiVthh;
+
+	String cloaiVthh;
+
 	private List<FileDinhKemReq> fileDinhKems;
 
 }

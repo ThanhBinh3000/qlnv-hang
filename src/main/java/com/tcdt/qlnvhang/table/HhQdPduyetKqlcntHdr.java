@@ -85,6 +85,10 @@ public class HhQdPduyetKqlcntHdr implements Serializable {
 	@Transient
 	Integer soGthau;
 
+	String loaiVthh;
+
+	String cloaiVthh;
+
 
 	public String getTenTrangThaiHd() {
 		return NhapXuatHangTrangThaiEnum.getTenById(trangThaiHd);
