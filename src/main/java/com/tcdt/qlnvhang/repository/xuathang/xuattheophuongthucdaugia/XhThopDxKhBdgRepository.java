@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface XhThopDxKhBdgRepository extends JpaRepository<XhThopDxKhBdg,Long> {
@@ -27,6 +28,8 @@ public interface XhThopDxKhBdgRepository extends JpaRepository<XhThopDxKhBdg,Lon
     Page<XhThopDxKhBdg> searchPage(Integer namKh, String loaiVthh, String cloaiVthh, String noiDungThop, String ngayThopTu, String ngayThopDen, String trangThai, String maDvi, Pageable pageable);
 
     List<XhThopDxKhBdg> findAllByIdIn(List<Long> ids);
+
+    Optional<XhThopDxKhBdg> findAllBySoQdPd(String soQdPd);
 
     @Transactional
     @Modifying

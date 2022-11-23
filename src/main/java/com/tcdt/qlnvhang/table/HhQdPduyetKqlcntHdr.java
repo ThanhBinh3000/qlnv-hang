@@ -8,6 +8,8 @@ import java.util.List;
 import javax.persistence.*;
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDtl;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdr;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Where;
@@ -68,9 +70,9 @@ public class HhQdPduyetKqlcntHdr implements Serializable {
 	Date ngayPduyet;
 	String nguoiPduyet;
 	@Transient
-	HhQdKhlcntHdr qdKhlcnt;
+    HhQdKhlcntHdr qdKhlcnt;
 	@Transient
-	HhQdKhlcntDtl qdKhlcntDtl;
+    HhQdKhlcntDtl qdKhlcntDtl;
 
 	@Transient
 	List<HhHopDongHdr> listHopDong;
@@ -82,6 +84,10 @@ public class HhQdPduyetKqlcntHdr implements Serializable {
 
 	@Transient
 	Integer soGthau;
+
+	String loaiVthh;
+
+	String cloaiVthh;
 
 
 	public String getTenTrangThaiHd() {

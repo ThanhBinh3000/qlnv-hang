@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.table;
+package com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -11,6 +11,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdr;
+import com.tcdt.qlnvhang.table.HhQdPduyetKqlcntHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
@@ -37,6 +38,14 @@ public class HhQdKhlcntDtl implements Serializable {
 	String tenDuAn;
 	BigDecimal soLuong;
 	BigDecimal donGiaVat;
+	BigDecimal donGiaTamTinh;
+
+	String goiThau;
+
+	String cloaiVthh;
+
+	String loaiVthh;
+
 	Long soGthau;
 
 	@Transient
@@ -55,6 +64,12 @@ public class HhQdKhlcntDtl implements Serializable {
 	@Column(name="SO_QD_PD_KQ_LCNT")
 	String soQdPdKqLcnt;
 
+	String tenNhaThau;
+
+	BigDecimal donGiaNhaThau;
+
+	Long idNhaThau;
+
 	@Transient
 	private HhQdKhlcntHdr hhQdKhlcntHdr;
 
@@ -65,6 +80,6 @@ public class HhQdKhlcntDtl implements Serializable {
 	private HhQdPduyetKqlcntHdr hhQdPduyetKqlcntHdr;
 
 	@Transient
-	private List<HhQdKhlcntDsgthau> dsGoiThau = new ArrayList<>();
+	private List<HhQdKhlcntDsgthau> children = new ArrayList<>();
 
 }

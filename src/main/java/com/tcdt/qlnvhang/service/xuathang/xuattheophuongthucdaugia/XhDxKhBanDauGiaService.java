@@ -51,9 +51,6 @@ public class XhDxKhBanDauGiaService extends BaseServiceImpl {
     @Autowired
     private FileDinhKemService fileDinhKemService;
 
-    @Autowired
-    private FileDinhKemRepository fileDinhKemRepository;
-
 
     public Page<XhDxKhBanDauGia> searchPage(SearchXhDxKhBanDauGia objReq)throws Exception{
         UserInfo userInfo= SecurityContextService.getUser();

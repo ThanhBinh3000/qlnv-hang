@@ -1,12 +1,11 @@
-package com.tcdt.qlnvhang.repository;
+package com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt;
 
-import com.tcdt.qlnvhang.table.HhQdKhlcntDtl;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDtl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 
@@ -45,11 +44,12 @@ public interface HhQdKhlcntDtlRepository extends JpaRepository<HhQdKhlcntDtl, Lo
     @Query(value = " SELECT DTL.* FROM HH_QD_KHLCNT_DTL DTL " +
             " LEFT JOIN HH_QD_KHLCNT_HDR HDR ON HDR.ID = DTL.ID_QD_HDR " +
             " WHERE (:namKh IS NULL OR HDR.NAM_KHOACH = TO_NUMBER(:namKh)) " +
-            " AND (:loaiVthh IS NULL OR HDR.LOAI_VTHH = :loaiVthh) " +
+            " AND (:loaiVthh IS NULL OR HDR.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) " +
             " AND (:maDvi IS NULL OR DTL.MA_DVI = :maDvi)" +
             " AND (:trangThaiCuc IS NULL OR DTL.TRANG_THAI = :trangThaiCuc)" +
-            " AND HDR.TRANG_THAI = :trangThai AND HDR.LASTEST = 1 ",nativeQuery = true)
-    Page<HhQdKhlcntDtl> selectPage(Integer namKh , String loaiVthh, String maDvi, String trangThai,String trangThaiCuc, Pageable pageable);
-
+            " AND HDR.TRANG_THAI = :trangThai " +
+            " AND (:trangThaiDt IS NULL OR HDR.TRANG_THAI_DT = :trangThaiDt )" +
+            " AND HDR.LASTEST = 1 ",nativeQuery = true )
+    Page<HhQdKhlcntDtl> selectPage(Integer namKh , String loaiVthh, String maDvi, String trangThai,String trangThaiCuc,String trangThaiDt, Pageable pageable);
 
 }

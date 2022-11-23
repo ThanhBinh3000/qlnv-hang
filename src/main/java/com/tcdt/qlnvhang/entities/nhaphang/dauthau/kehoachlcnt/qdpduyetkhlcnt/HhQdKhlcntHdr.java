@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.table;
+package com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -6,21 +6,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Where;
@@ -47,7 +35,7 @@ public class HhQdKhlcntHdr implements Serializable {
 
 	String soQd;
 
-	String soQdPdKqlcnt;
+	String soQdPdKqLcnt;
 
 	@Temporal(TemporalType.DATE)
 	Date ngayQd;
@@ -125,7 +113,16 @@ public class HhQdKhlcntHdr implements Serializable {
 
 	Integer namKhoach;
 
-	Integer tgianThienHd;
+	Integer tgianThien;
+
+	Integer gtriDthau;
+
+	Integer gtriHdong;
+
+	String dienGiai;
+
+	@JsonProperty("yKien")
+	String yKien;
 
 	@Temporal(TemporalType.DATE)
 	Date ngayHluc;
@@ -140,28 +137,36 @@ public class HhQdKhlcntHdr implements Serializable {
 
 	Long idGoc;
 
+	String maDvi;
+
+	String trangThaiDt;
+
+	@Transient
+	String tenDvi;
+
+
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)
 	@JoinColumn(name = "dataId")
 	@JsonManagedReference
 	@Where(clause = "data_type='" + HhQdKhlcntHdr.TABLE_NAME + "'")
-	private List<FileDKemJoinQdKhlcntHdr> children = new ArrayList<>();
+	private List<FileDKemJoinQdKhlcntHdr> fileDinhKems = new ArrayList<>();
 
-	public void setChildren(List<FileDKemJoinQdKhlcntHdr> children) {
-		this.children.clear();
+	public void setFileDinhKems(List<FileDKemJoinQdKhlcntHdr> children) {
+		this.fileDinhKems.clear();
 		for (FileDKemJoinQdKhlcntHdr child : children) {
 			child.setParent(this);
 		}
-		this.children.addAll(children);
+		this.fileDinhKems.addAll(children);
 	}
 
-	public void addChild(FileDKemJoinQdKhlcntHdr child) {
+	public void addFileDinhKems(FileDKemJoinQdKhlcntHdr child) {
 		child.setParent(this);
-		this.children.add(child);
+		this.fileDinhKems.add(child);
 	}
 
 	@Transient
-	private List<HhQdKhlcntDtl> hhQdKhlcntDtlList = new ArrayList<>();
+	private List<HhQdKhlcntDtl> children = new ArrayList<>();
 
 	@Transient
 	BigDecimal tongTien;
@@ -172,8 +177,9 @@ public class HhQdKhlcntHdr implements Serializable {
 	@Transient
 	String tenTrangThai;
 	@Transient
-	String soDxuatKhlcnt;
+	String tenTrangThaiDt;
 	@Transient
-	Integer tgianThien;
+	String soDxuatKhlcnt;
+
 
 }

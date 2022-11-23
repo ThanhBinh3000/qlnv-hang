@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.table;
+package com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.Data;
 
@@ -28,7 +26,8 @@ public class HhQdKhlcntDsgthau implements Serializable {
 	String maDvi;
 	@Transient
 	String tenDvi;
-	BigDecimal donGia;
+	BigDecimal donGiaVat;
+	BigDecimal donGiaTamTinh;
 	BigDecimal thanhTien;
 	String loaiVthh;
 	String cloaiVthh;
