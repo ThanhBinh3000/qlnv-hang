@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.IdSearchReq;
+import com.tcdt.qlnvhang.request.object.HhDxKhLcntThopHdrReq;
+import com.tcdt.qlnvhang.request.search.HhDxKhLcntTChiThopReq;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.SearchXhThopDxKhBdg;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.XhThopChiTieuReq;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.XhThopDxKhBdgReq;
@@ -30,19 +32,19 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/ban-dau-gia")
 @Slf4j
-@Api(tags = "Tổng hợp đề xuất kế hoạch bán đấu giá")
+@Api(tags = "Xuất hàng - Bán đấu giá - Kế hoạch bán đấu giá - Tổng hợp đề xuất kế hoạch bán đấu giá")
 public class XhThopDxKhBdgController extends BaseController {
 
     @Autowired
     private XhThopDxKhBdgService xhThopDxKhBdgService;
 
-    @ApiOperation(value = "Tổng hợp ", response = List.class)
+    @ApiOperation(value = "Tổng hợp đề xuất kế hoạch bán đấu giá  ", response = List.class)
     @PostMapping(value=  PathContains.TH_KH_BDG, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> sumarryData(HttpServletRequest request
             , @Valid @RequestBody XhThopChiTieuReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhThopDxKhBdgService.sumarrayDaTa(objReq,request));
+            resp.setData(xhThopDxKhBdgService.sumarryData(objReq,request));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
