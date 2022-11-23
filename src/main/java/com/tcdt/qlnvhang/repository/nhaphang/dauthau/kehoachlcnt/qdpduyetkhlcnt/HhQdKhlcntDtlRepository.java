@@ -47,8 +47,9 @@ public interface HhQdKhlcntDtlRepository extends JpaRepository<HhQdKhlcntDtl, Lo
             " AND (:loaiVthh IS NULL OR HDR.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) " +
             " AND (:maDvi IS NULL OR DTL.MA_DVI = :maDvi)" +
             " AND (:trangThaiCuc IS NULL OR DTL.TRANG_THAI = :trangThaiCuc)" +
-            " AND HDR.TRANG_THAI = :trangThai AND HDR.LASTEST = 1 ",nativeQuery = true)
-    Page<HhQdKhlcntDtl> selectPage(Integer namKh , String loaiVthh, String maDvi, String trangThai,String trangThaiCuc, Pageable pageable);
-
+            " AND HDR.TRANG_THAI = :trangThai " +
+            " AND (:trangThaiDt IS NULL OR HDR.TRANG_THAI_DT = :trangThaiDt )" +
+            " AND HDR.LASTEST = 1 ",nativeQuery = true )
+    Page<HhQdKhlcntDtl> selectPage(Integer namKh , String loaiVthh, String maDvi, String trangThai,String trangThaiCuc,String trangThaiDt, Pageable pageable);
 
 }
