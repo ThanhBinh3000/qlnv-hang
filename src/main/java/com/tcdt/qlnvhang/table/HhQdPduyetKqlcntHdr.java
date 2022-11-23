@@ -70,7 +70,7 @@ public class HhQdPduyetKqlcntHdr implements Serializable {
 	Date ngayPduyet;
 	String nguoiPduyet;
 	@Transient
-    HhQdKhlcntHdr qdKhlcnt;
+    HhQdKhlcntHdr hhQdKhlcntHdr;
 	@Transient
     HhQdKhlcntDtl qdKhlcntDtl;
 

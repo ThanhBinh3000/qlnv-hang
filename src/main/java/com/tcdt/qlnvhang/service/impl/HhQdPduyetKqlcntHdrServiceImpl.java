@@ -157,7 +157,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 
 		qOptional.get().setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qOptional.get().getTrangThai()));
 		if(qOptional.get().getLoaiVthh().startsWith("02")){
-			qOptional.get().setQdKhlcnt(Objects.isNull(qOptional.get().getIdQdPdKhlcnt()) ? null : qdKhLcntService.detail(String.valueOf(qOptional.get().getIdQdPdKhlcnt())));
+			qOptional.get().setHhQdKhlcntHdr(Objects.isNull(qOptional.get().getIdQdPdKhlcnt()) ? null : qdKhLcntService.detail(String.valueOf(qOptional.get().getIdQdPdKhlcnt())));
 		}else{
 			qOptional.get().setQdKhlcntDtl(Objects.isNull(qOptional.get().getIdQdPdKhlcntDtl()) ? null : qdKhLcntService.detailDtl(qOptional.get().getIdQdPdKhlcntDtl()));
 		}
@@ -256,8 +256,11 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		hhQdPduyetKqlcntHdrs.forEach( item -> {
 			try {
 				item.setListHopDong(hhHopDongRepository.findAllByIdQdKqLcnt(item.getId()));
-				item.setQdKhlcnt(Objects.isNull(item.getIdQdPdKhlcnt()) ? null : qdKhLcntService.detail(item.getIdQdPdKhlcnt().toString()));
-				item.setQdKhlcntDtl(Objects.isNull(item.getIdQdPdKhlcntDtl()) ? null : qdKhLcntService.detailDtl(item.getIdQdPdKhlcntDtl()));
+				if(req.getLoaiVthh().startsWith("02")){
+					item.setHhQdKhlcntHdr(Objects.isNull(item.getIdQdPdKhlcnt()) ? null : qdKhLcntService.detail(item.getIdQdPdKhlcnt().toString()));
+				}else{
+					item.setQdKhlcntDtl(Objects.isNull(item.getIdQdPdKhlcntDtl()) ? null : qdKhLcntService.detailDtl(item.getIdQdPdKhlcntDtl()));
+				}
 
 				item.setTenDvi(listDanhMucDvi.get(item.getMaDvi()));
 				item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
