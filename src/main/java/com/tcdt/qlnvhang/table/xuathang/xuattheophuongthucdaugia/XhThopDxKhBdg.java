@@ -10,15 +10,15 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "XH_THOP_DX_KH_BAN_DAU_GIA  ")
+@Table(name = "XH_THOP_DX_KH_BAN_DAU_GIA")
 @Data
 public class XhThopDxKhBdg extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "XH_THOP_DX_KH_BAN_DAU_GIA  ";
+    public static final String TABLE_NAME = "XH_THOP_DX_KH_BAN_DAU_GIA";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_THOP_DX_KH_BDG_SEQ  ")
-    @SequenceGenerator(sequenceName = "XH_THOP_DX_KH_BDG_SEQ  ", allocationSize = 1, name = "XH_THOP_DX_KH_BDG_SEQ  ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_THOP_DX_KH_BDG_SEQ")
+    @SequenceGenerator(sequenceName = "XH_THOP_DX_KH_BDG_SEQ", allocationSize = 1, name = "XH_THOP_DX_KH_BDG_SEQ")
     private Long id;
     private String maThop;
     @Temporal(TemporalType.DATE)
