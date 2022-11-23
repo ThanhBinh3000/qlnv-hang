@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "XH_THOP_DX_KH_BAN_DAU_GIA")
 @Data
-public class XhThopDxKhBdg extends BaseEntity implements Serializable {
+public class XhThopDxKhBdg implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_THOP_DX_KH_BAN_DAU_GIA";
 
@@ -20,11 +20,8 @@ public class XhThopDxKhBdg extends BaseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_THOP_DX_KH_BDG_SEQ")
     @SequenceGenerator(sequenceName = "XH_THOP_DX_KH_BDG_SEQ", allocationSize = 1, name = "XH_THOP_DX_KH_BDG_SEQ")
     private Long id;
-    private String maThop;
     @Temporal(TemporalType.DATE)
     private Date ngayThop;
-    private String maDvi;
-    private Integer namKh;
     private String loaiVthh;
     @Transient
     private String tenLoaiVthh;
@@ -33,16 +30,30 @@ public class XhThopDxKhBdg extends BaseEntity implements Serializable {
     private String tenCloaiVthh;
     private String moTaHangHoa;
     private String loaiHdong;
-    private String noiDungThop;
+    @Transient
+    private String tenLoaiHdong;
+    @Transient
+    private Long phuongAnId;
+
     @Temporal(TemporalType.DATE)
     private Date tgianDkienTu;
     @Temporal(TemporalType.DATE)
     private Date tgianDkienDen;
+
+    @Temporal(TemporalType.DATE)
+    private Date ngayTao;
+
+    private String noiDungThop;
+    private String ghiChu;
+    private String nguoiTao;
+    private Integer namKh;
     private String trangThai;
     @Transient
     private String tenTrangThai;
+    private String maDvi;
+
     private String soQdPd;
 
     @Transient
-    List<XhThopDxKhBdgDtl> thopDxKhBdgDtlList= new ArrayList<>();
+    private List<XhThopDxKhBdgDtl> thopDxKhBdgDtlList= new ArrayList<>();
 }
