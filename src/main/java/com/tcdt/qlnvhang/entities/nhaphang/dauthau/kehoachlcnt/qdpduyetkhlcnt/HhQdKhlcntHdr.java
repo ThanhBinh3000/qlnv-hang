@@ -9,6 +9,7 @@ import java.util.List;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Where;
@@ -181,5 +182,11 @@ public class HhQdKhlcntHdr implements Serializable {
 	@Transient
 	String soDxuatKhlcnt;
 
+	public String getTenTrangThai() {
+		return NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(this.getTrangThai());
+	}
 
+	public String getTenTrangThaiDt() {
+		return NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(this.getTrangThaiDt());
+	}
 }
