@@ -88,6 +88,10 @@ public class HhHopDongHdrReq {
 	String ghiChu;
 	String namKhoach;
 
+	String noiDung;
+
+	String dieuKien;
+
 //	String donViTinh;
 //
 //

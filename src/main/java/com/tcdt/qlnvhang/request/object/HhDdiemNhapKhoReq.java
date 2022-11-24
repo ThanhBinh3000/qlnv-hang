@@ -26,7 +26,7 @@ public class HhDdiemNhapKhoReq {
 
 	BigDecimal soLuong;
 
-	BigDecimal donGia;
+	BigDecimal donGiaVat;
 
 	List<HhDdiemNhapKhoVtReq> children;
 

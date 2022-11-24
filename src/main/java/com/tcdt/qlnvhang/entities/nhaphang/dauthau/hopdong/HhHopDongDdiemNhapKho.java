@@ -28,7 +28,7 @@ public class HhHopDongDdiemNhapKho implements Serializable {
   String maDvi;
   String maDiemKho;
   BigDecimal soLuong;
-  BigDecimal donGia;
+  BigDecimal donGiaVat;
   String dviTinh;
   String trangThai;
   @Transient

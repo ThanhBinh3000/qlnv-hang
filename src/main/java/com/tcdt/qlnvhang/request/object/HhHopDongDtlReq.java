@@ -27,7 +27,7 @@ public class HhHopDongDtlReq {
 	String tenGthau;
 
 	BigDecimal soLuong;
-	BigDecimal donGia;
+	BigDecimal donGiaVat;
 	Long vat;
 	BigDecimal giaTruocVat;
 	BigDecimal giaSauVat;
