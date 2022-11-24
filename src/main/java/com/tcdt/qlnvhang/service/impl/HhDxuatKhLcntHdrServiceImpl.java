@@ -53,6 +53,9 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 	private HhDxKhlcntDsgthauCtietVtRepository hhDxKhlcntDsgthauCtietVtRepository;
 
 	@Autowired
+	private HhDxKhlcntDsgthauCtietVt1Repository hhDxKhlcntDsgthauCtietVt1Repository;
+
+	@Autowired
 	private HhDxuatKhLcntCcxdgDtlRepository hhDxuatKhLcntCcxdgDtlRepository;
 
 
@@ -86,29 +89,8 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		hhDxuatKhLcntHdrRepository.save(dataMap);
 
 
-		// Lưu danh sách gói thầu gồm các Cục ( Vật tư ) và Chi cục ( Lương thực )
-		for (HhDxuatKhLcntDsgtDtlReq gt : objReq.getDsGtReq()){
-			HhDxKhlcntDsgthau data = new ModelMapper().map(gt, HhDxKhlcntDsgthau.class);
-			data.setIdDxKhlcnt(dataMap.getId());
-			BigDecimal thanhTien = data.getDonGiaVat().multiply(data.getSoLuong());
-			data.setThanhTien(thanhTien);
-			hhDxuatKhLcntDsgtDtlRepository.save(data);
-			// Lưu danh sách gói thầu gồm các Chi Cục ( Vật tư ) và Điểm kho ( Lương thực )
-			for (HhDxuatKhLcntDsgthauDtlCtietReq ddNhap : gt.getChildren()){
-				HhDxKhlcntDsgthauCtiet dataDdNhap = new ModelMapper().map(ddNhap, HhDxKhlcntDsgthauCtiet.class);
-				dataDdNhap.setIdGoiThau(data.getId());
-				if(!ObjectUtils.isEmpty(dataDdNhap.getDonGia())){
-					dataDdNhap.setThanhTien(dataDdNhap.getDonGia().multiply(dataDdNhap.getSoLuong()));
-				}
-				hhDxKhlcntDsgthauCtietRepository.save(dataDdNhap);
-				// Lưu Điểm kho ( Lương thực )
-				for(HhDxuatKhLcntDsgthauDtlCtietVtReq vt : ddNhap.getChildren()){
-					HhDxKhlcntDsgthauCtietVt vtMap = new ModelMapper().map(vt, HhDxKhlcntDsgthauCtietVt.class);
-					vtMap.setIdGoiThauCtiet(dataDdNhap.getId());
-					hhDxKhlcntDsgthauCtietVtRepository.save(vtMap);
-				}
-			}
-		}
+		this.saveDetail(objReq,dataMap.getId());
+
 		// Lưu quyết định căn cứ
 		for (HhDxuatKhLcntCcxdgDtlReq cc : objReq.getCcXdgReq()){
 			HhDxuatKhLcntCcxdgDtl data = ObjectMapperUtils.map(cc, HhDxuatKhLcntCcxdgDtl.class);
@@ -129,18 +111,60 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 	}
 
 	public void validateData(HhDxuatKhLcntHdr objHdr,String trangThai) throws Exception {
-		if(trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.DUTHAO.getId())){
-			HhDxuatKhLcntHdr dXuat = hhDxuatKhLcntHdrRepository.findAllByLoaiVthhAndCloaiVthhAndNamKhoachAndMaDviAndTrangThaiNot(objHdr.getLoaiVthh(), objHdr.getCloaiVthh(), objHdr.getNamKhoach(), objHdr.getMaDvi(),NhapXuatHangTrangThaiEnum.DUTHAO.getId());
-			if(!ObjectUtils.isEmpty(dXuat) && !dXuat.getId().equals(objHdr.getId())){
-				throw new Exception("Chủng loại hàng hóa đã được tạo và gửi duyệt, xin vui lòng chọn lại chủng loại hàng hóa khác");
+		if(objHdr.getLoaiVthh().startsWith("02")){
+
+		}else{
+			if(trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.DUTHAO.getId())){
+				HhDxuatKhLcntHdr dXuat = hhDxuatKhLcntHdrRepository.findAllByLoaiVthhAndCloaiVthhAndNamKhoachAndMaDviAndTrangThaiNot(objHdr.getLoaiVthh(), objHdr.getCloaiVthh(), objHdr.getNamKhoach(), objHdr.getMaDvi(),NhapXuatHangTrangThaiEnum.DUTHAO.getId());
+				if(!ObjectUtils.isEmpty(dXuat) && !dXuat.getId().equals(objHdr.getId())){
+					throw new Exception("Chủng loại hàng hóa đã được tạo và gửi duyệt, xin vui lòng chọn lại chủng loại hàng hóa khác");
+				}
+			}
+			if(trangThai.equals(NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId())) {
+				for(HhDxKhlcntDsgthau chiCuc : objHdr.getDsGtDtlList()){
+					BigDecimal aLong = hhDxuatKhLcntHdrRepository.countSLDalenKh(objHdr.getNamKhoach(), objHdr.getLoaiVthh(), chiCuc.getMaDvi(),NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
+					BigDecimal soLuongTotal = aLong.add(chiCuc.getSoLuong());
+					if(soLuongTotal.compareTo(chiCuc.getSoLuongChiTieu()) > 0){
+						throw new Exception(chiCuc.getTenDvi() + " đã nhập quá số lượng chi tiêu, vui lòng nhập lại");
+					}
+				}
 			}
 		}
-		if(trangThai.equals(NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId())) {
-			for(HhDxKhlcntDsgthau chiCuc : objHdr.getDsGtDtlList()){
-				BigDecimal aLong = hhDxuatKhLcntHdrRepository.countSLDalenKh(objHdr.getNamKhoach(), objHdr.getLoaiVthh(), chiCuc.getMaDvi(),NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
-				BigDecimal soLuongTotal = aLong.add(chiCuc.getSoLuong());
-				if(soLuongTotal.compareTo(chiCuc.getSoLuongChiTieu()) > 0){
-					throw new Exception(chiCuc.getTenDvi() + " đã nhập quá số lượng chi tiêu, vui lòng nhập lại");
+	}
+
+	@Transactional
+	void saveDetail(HhDxuatKhLcntHdrReq objReq,Long idHdr){
+		// Xóa tất cả các gói thầu cũ và lưu mới
+		hhDxuatKhLcntDsgtDtlRepository.deleteAllByIdDxKhlcnt(idHdr);
+		// Lưu danh sách Gói thầu (Vật tư) và Gói thầu + Chi cục ( Lương thực )
+		for (HhDxuatKhLcntDsgtDtlReq gt : objReq.getDsGtReq()){
+			HhDxKhlcntDsgthau data = new ModelMapper().map(gt, HhDxKhlcntDsgthau.class);
+			data.setId(null);
+			data.setIdDxKhlcnt(idHdr);
+			BigDecimal thanhTien = data.getDonGiaVat().multiply(data.getSoLuong());
+			data.setThanhTien(thanhTien);
+			hhDxuatKhLcntDsgtDtlRepository.save(data);
+			hhDxKhlcntDsgthauCtietRepository.deleteAllByIdGoiThau(data.getId());
+			// Lưu danh sách gói thầu Cục ( Vật tư ) và Điểm kho ( Lương thực )
+			for (HhDxuatKhLcntDsgthauDtlCtietReq ddNhap : gt.getChildren()){
+				HhDxKhlcntDsgthauCtiet dataDdNhap = new ModelMapper().map(ddNhap, HhDxKhlcntDsgthauCtiet.class);
+				dataDdNhap.setId(null);
+				dataDdNhap.setIdGoiThau(data.getId());
+				hhDxKhlcntDsgthauCtietRepository.save(dataDdNhap);
+				hhDxKhlcntDsgthauCtietVtRepository.deleteAllByIdGoiThauCtiet(ddNhap.getId());
+				// Lưu danh sách gói thầu gồm các Chi Cục ( Vật tư )
+				for(HhDxuatKhLcntDsgthauDtlCtietVtReq vt : ddNhap.getChildren()){
+					HhDxKhlcntDsgthauCtietVt vtMap = new ModelMapper().map(vt, HhDxKhlcntDsgthauCtietVt.class);
+					vtMap.setId(null);
+					vtMap.setIdGoiThauCtiet(dataDdNhap.getId());
+					hhDxKhlcntDsgthauCtietVtRepository.save(vtMap);
+					hhDxKhlcntDsgthauCtietVt1Repository.deleteAllByIdGoiThauCtietVt(vt.getId());
+					// Lưu Điểm kho ( Lương thực )
+					for(HhDxuatKhLcntDsgthauDtlCtietVt1Req dk : vt.getChildren()){
+						HhDxKhlcntDsgthauCtietVt1 dk1 = new ModelMapper().map(dk, HhDxKhlcntDsgthauCtietVt1.class);
+						dk1.setIdGoiThauCtietVt(vtMap.getId());
+						hhDxKhlcntDsgthauCtietVt1Repository.save(dk1);
+					}
 				}
 			}
 		}
@@ -187,32 +211,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 
 		hhDxuatKhLcntHdrRepository.save(dataDTB);
 
-		// Xóa tất cả các gói thầu cũ và lưu mới
-		hhDxuatKhLcntDsgtDtlRepository.deleteAllByIdDxKhlcnt(dataMap.getId());
-		for (HhDxuatKhLcntDsgtDtlReq gt : objReq.getDsGtReq()){
-			HhDxKhlcntDsgthau data = new ModelMapper().map(gt, HhDxKhlcntDsgthau.class);
-			data.setId(null);
-			data.setIdDxKhlcnt(dataDTB.getId());
-			BigDecimal thanhTien = data.getDonGiaVat().multiply(data.getSoLuong());
-			data.setThanhTien(thanhTien);
-			hhDxuatKhLcntDsgtDtlRepository.save(data);
-			hhDxKhlcntDsgthauCtietRepository.deleteAllByIdGoiThau(data.getId());
-			// Lưu chi tiết danh sách gói thaauff ( địa điểm nhập );
-			for (HhDxuatKhLcntDsgthauDtlCtietReq ddNhap : gt.getChildren()){
-				HhDxKhlcntDsgthauCtiet dataDdNhap = new ModelMapper().map(ddNhap, HhDxKhlcntDsgthauCtiet.class);
-				dataDdNhap.setId(null);
-				dataDdNhap.setIdGoiThau(data.getId());
-				hhDxKhlcntDsgthauCtietRepository.save(dataDdNhap);
-				hhDxKhlcntDsgthauCtietVtRepository.deleteAllByIdGoiThauCtiet(ddNhap.getId());
-				// Lưu Điểm kho ( Lương thực )
-				for(HhDxuatKhLcntDsgthauDtlCtietVtReq vt : ddNhap.getChildren()){
-					HhDxKhlcntDsgthauCtietVt vtMap = new ModelMapper().map(vt, HhDxKhlcntDsgthauCtietVt.class);
-					vtMap.setIdGoiThauCtiet(dataDdNhap.getId());
-					hhDxKhlcntDsgthauCtietVtRepository.save(vtMap);
-				}
-			}
-
-		}
+		this.saveDetail(objReq,dataDTB.getId());
 
 		// Xóa tât cả các căn cứ xác định giá cũ và lưu mới
 		hhDxuatKhLcntCcxdgDtlRepository.deleteAllByIdDxKhlcnt(dataDTB.getId());
@@ -265,6 +264,11 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 				List<HhDxKhlcntDsgthauCtietVt> byIdGoiThauCtiet = hhDxKhlcntDsgthauCtietVtRepository.findByIdGoiThauCtiet(f.getId());
 				byIdGoiThauCtiet.forEach( x -> {
 					x.setTenDvi(StringUtils.isEmpty(x.getMaDvi()) ? null : mapDmucDvi.get(x.getMaDvi()));
+					List<HhDxKhlcntDsgthauCtietVt1> byIdGoiThauCtiet1 = hhDxKhlcntDsgthauCtietVt1Repository.findByIdGoiThauCtietVt(x.getId());
+					byIdGoiThauCtiet1.forEach( y -> {
+						y.setTenDvi(StringUtils.isEmpty(y.getMaDvi()) ? null : mapDmucDvi.get(y.getMaDvi()));
+					});
+					x.setChildren(byIdGoiThauCtiet1);
 				});
 				f.setChildren(byIdGoiThauCtiet);
 			});
@@ -367,8 +371,15 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 		List<HhDxKhlcntDsgthau> goiThau = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcnt(idSearchReq.getId());
 		if(goiThau != null && goiThau.size() > 0){
 			for (HhDxKhlcntDsgthau ct : goiThau) {
-				List<HhDxKhlcntDsgthauCtiet> dsCtiet=hhDxKhlcntDsgthauCtietRepository.findByIdGoiThau(ct.getId());
+				List<HhDxKhlcntDsgthauCtiet> dsCtiet = hhDxKhlcntDsgthauCtietRepository.findByIdGoiThau(ct.getId());
 				hhDxKhlcntDsgthauCtietRepository.deleteAll(dsCtiet);
+				for (HhDxKhlcntDsgthauCtiet ctiet : dsCtiet ){
+					List<HhDxKhlcntDsgthauCtietVt> dsCtietVt = hhDxKhlcntDsgthauCtietVtRepository.findByIdGoiThauCtiet(ctiet.getId());
+					hhDxKhlcntDsgthauCtietVtRepository.deleteAll(dsCtietVt);
+					for (HhDxKhlcntDsgthauCtietVt ctietVt : dsCtietVt ){
+						hhDxKhlcntDsgthauCtietVt1Repository.deleteAllByIdGoiThauCtietVt(ctietVt.getId());
+					}
+				}
 			}
 			hhDxuatKhLcntDsgtDtlRepository.deleteAll(goiThau);
 		}
