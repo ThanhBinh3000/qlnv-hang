@@ -13,21 +13,10 @@ import java.util.List;
 @Data
 public class XhThopDxKhBdgReq extends XhThopChiTieuReq{
     private Long id;
-    private String maThop;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayThop;
     private String maDvi;
-    private Integer namKh;
-    private String loaiVthh;
-    private String cloaiVthh;
-    private String moTaHangHoa;
-    private String loaiHdong;
     private String noiDungThop;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date tgianDkienTu;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date tgianDkienDen;
     private String trangThai;
     private String soQdPd;
-    private String ghiChu;
 }
