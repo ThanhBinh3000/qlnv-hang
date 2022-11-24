@@ -98,6 +98,11 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		if (!Contains.CAP_CUC.equalsIgnoreCase(userInfo.getCapDvi()))
 			throw new Exception("Bad request.");
 
+		Optional<HhQdGiaoNvuNhapxuatHdr> byIdHdAndMaDviAndNamNhap = hhQdGiaoNvuNhapxuatRepository.findByIdHdAndMaDviAndNamNhap(objReq.getIdHd(), userInfo.getDvql(), objReq.getNamNhap());
+		if(byIdHdAndMaDviAndNamNhap.isPresent()){
+			throw new Exception("Đơn vị đã tạo hợp đồng, vui lòng tạo hợp đồng");
+		}
+
 		this.validateSoQd(null, objReq);
 
 		HhQdGiaoNvuNhapxuatHdr dataMap = new HhQdGiaoNvuNhapxuatHdr();

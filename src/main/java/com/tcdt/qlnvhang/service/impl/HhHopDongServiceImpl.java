@@ -79,6 +79,9 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
     if (qOpHdong.isPresent())
       throw new Exception("Hợp đồng số " + objReq.getSoHd() + " đã tồn tại");
 
+
+
+
 //    Optional<HhQdPduyetKqlcntHdr> checkSoQd = hhQdPduyetKqlcntHdrRepository.findBySoQd(objReq.getCanCu());
 //    if (!checkSoQd.isPresent())
 //      throw new Exception(
