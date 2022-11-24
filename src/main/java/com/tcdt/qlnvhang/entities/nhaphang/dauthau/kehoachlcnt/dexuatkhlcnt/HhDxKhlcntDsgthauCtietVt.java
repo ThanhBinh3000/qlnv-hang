@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "HH_DX_KHLCNT_DSGTHAU_CTIET_VT")
@@ -23,5 +24,8 @@ public class HhDxKhlcntDsgthauCtietVt {
 
 	@Transient
 	String tenDvi;
+
+	@Transient
+	List<HhDxKhlcntDsgthauCtietVt1> children;
 
 }

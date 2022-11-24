@@ -9,20 +9,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.*;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.*;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdrRepository;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDsgthau;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDsgthauCtiet;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDtl;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdr;
-import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDsgthauCtietRepository;
-import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDsgthauRepository;
-import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDtlRepository;
-import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdrRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.*;
 import com.tcdt.qlnvhang.request.PaggingReq;
-import com.tcdt.qlnvhang.request.object.HhDxuatKhLcntDsgthauDtlCtietReq;
-import com.tcdt.qlnvhang.request.object.HhQdKhlcntDsgthauReq;
+import com.tcdt.qlnvhang.request.object.*;
 import com.tcdt.qlnvhang.service.feign.KeHoachService;
 import com.tcdt.qlnvhang.table.*;
 import org.modelmapper.ModelMapper;
@@ -40,8 +33,6 @@ import org.springframework.util.StringUtils;
 import com.tcdt.qlnvhang.entities.FileDKemJoinQdKhlcntHdr;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.object.HhQdKhlcntDtlReq;
-import com.tcdt.qlnvhang.request.object.HhQdKhlcntHdrReq;
 import com.tcdt.qlnvhang.request.search.HhQdKhlcntSearchReq;
 import com.tcdt.qlnvhang.service.HhQdKhlcntHdrService;
 import com.tcdt.qlnvhang.util.Contains;
@@ -66,6 +57,9 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 
 	@Autowired
 	private HhQdKhlcntDsgthauCtietRepository hhQdKhlcntDsgthauCtietRepository;
+
+	@Autowired
+	private HhQdKhlcntDsgthauCtietVtRepository hhQdKhlcntDsgthauCtietVtRepository;
 
 	@Autowired
 	private HhDxKhLcntThopHdrRepository hhDxKhLcntThopHdrRepository;
@@ -195,6 +189,13 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 					dataDdNhap.setId(null);
 					dataDdNhap.setIdGoiThau(gt.getId());
 					hhQdKhlcntDsgthauCtietRepository.save(dataDdNhap);
+					hhQdKhlcntDsgthauCtietVtRepository.deleteAllByIdGoiThauCtiet(ddNhap.getId());
+					for(HhDxuatKhLcntDsgthauDtlCtietVtReq ctietReq : ddNhap.getChildren()){
+						HhQdKhlcntDsgthauCtietVt ctietVt = new ModelMapper().map(ctietReq,HhQdKhlcntDsgthauCtietVt.class);
+						ctietVt.setId(null);
+						ctietVt.setIdGoiThauCtiet(dataDdNhap.getId());
+						hhQdKhlcntDsgthauCtietVtRepository.save(ctietVt);
+					}
 				}
 			}
 		}
@@ -364,6 +365,11 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				listGtCtiet.forEach(f -> {
 					f.setTenDvi(mapDmucDvi.get(f.getMaDvi()));
 					f.setTenDiemKho(mapDmucDvi.get(f.getMaDiemKho()));
+					List<HhQdKhlcntDsgthauCtietVt> byIdGoiThauCtiet = hhQdKhlcntDsgthauCtietVtRepository.findByIdGoiThauCtiet(f.getId());
+					byIdGoiThauCtiet.forEach( x -> {
+						x.setTenDvi(mapDmucDvi.get(x.getMaDvi()));
+					});
+					f.setChildren(byIdGoiThauCtiet);
 				});
 				dsg.setTenDvi(mapDmucDvi.get(dsg.getMaDvi()));
 				dsg.setTenCloaiVthh(hashMapDmHh.get(dsg.getCloaiVthh()));
@@ -609,6 +615,13 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 					dsDdNhapClone.setId(null);
 					dsDdNhapClone.setIdGoiThau(gThauClone.getId());
 					hhQdKhlcntDsgthauCtietRepository.save(dsDdNhapClone);
+					for(HhQdKhlcntDsgthauCtietVt ctietVt : dsDdNhap.getChildren()){
+						HhQdKhlcntDsgthauCtietVt ctietVtClone = new HhQdKhlcntDsgthauCtietVt();
+						BeanUtils.copyProperties(ctietVt, ctietVtClone);
+						ctietVtClone.setId(null);
+						ctietVtClone.setIdGoiThauCtiet(dsDdNhapClone.getId());
+						hhQdKhlcntDsgthauCtietVtRepository.save(ctietVtClone);
+					}
 				}
 			}
 		}
@@ -715,6 +728,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				req.getTrangThai(), req.getLastest(),
 				req.getMaDvi(),
 				req.getTrangThaiDtl(),
+				req.getTrangThaiDt(),
 				pageable);
 		List<Long> ids = data.getContent().stream().map(HhQdKhlcntHdr::getId).collect(Collectors.toList());
 		List<Object[]> listGthau = hhQdKhlcntDtlRepository.countAllBySoGthau(ids);

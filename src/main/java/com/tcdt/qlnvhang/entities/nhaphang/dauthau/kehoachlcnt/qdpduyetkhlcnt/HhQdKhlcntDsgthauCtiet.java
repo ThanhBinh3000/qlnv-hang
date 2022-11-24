@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "HH_QD_KHLCNT_DSGTHAU_CTIET")
@@ -34,4 +35,7 @@ public class HhQdKhlcntDsgthauCtiet {
 	private BigDecimal thanhTien;
 
 	private Long idGoiThau;
+
+	@Transient
+	private List<HhQdKhlcntDsgthauCtietVt> children;
 }

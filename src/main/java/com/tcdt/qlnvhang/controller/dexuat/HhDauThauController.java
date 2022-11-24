@@ -126,7 +126,11 @@ public class HhDauThauController {
 			@Valid @RequestBody HhQdKhlcntSearchReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(service.selectPage(objReq));
+			if(objReq.getLoaiVthh().startsWith("02")){
+				resp.setData(hhQdKhlcntHdrService.getAllPage(objReq));
+			}else{
+				resp.setData(service.selectPage(objReq));
+			}
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (
