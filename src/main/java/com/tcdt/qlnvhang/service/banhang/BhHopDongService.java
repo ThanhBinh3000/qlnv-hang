@@ -2,7 +2,7 @@ package com.tcdt.qlnvhang.service.banhang;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.FileDKemJoinBhHopDong;
-import com.tcdt.qlnvhang.repository.HhPhuLucRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.HhPhuLucRepository;
 import com.tcdt.qlnvhang.repository.HhQdPduyetKqlcntHdrRepository;
 import com.tcdt.qlnvhang.repository.banhang.BhHopDongDdiemNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.banhang.BhHopDongDtlRepository;

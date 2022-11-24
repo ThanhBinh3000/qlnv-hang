@@ -2,10 +2,8 @@ package com.tcdt.qlnvhang.repository.banhang;
 
 import com.tcdt.qlnvhang.repository.BaseRepository;
 import com.tcdt.qlnvhang.table.BhHopDongHdr;
-import com.tcdt.qlnvhang.table.HhHopDongHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 

@@ -11,7 +11,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.StrSearchReq;
 import com.tcdt.qlnvhang.request.object.HhHopDongHdrReq;
 import com.tcdt.qlnvhang.request.search.HhHopDongSearchReq;
-import com.tcdt.qlnvhang.table.HhHopDongHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongHdr;
 
 public interface HhHopDongService {
 

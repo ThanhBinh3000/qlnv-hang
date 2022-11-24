@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.table;
+package com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -6,12 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
-
-import org.hibernate.annotations.Where;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.tcdt.qlnvhang.util.Contains;
 
 import lombok.Data;
 

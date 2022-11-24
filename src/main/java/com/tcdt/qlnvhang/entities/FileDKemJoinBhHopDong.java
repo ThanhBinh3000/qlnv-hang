@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.tcdt.qlnvhang.table.BhHopDongHdr;
-import com.tcdt.qlnvhang.table.HhHopDongHdr;
 import lombok.Data;
 
 import javax.persistence.*;
