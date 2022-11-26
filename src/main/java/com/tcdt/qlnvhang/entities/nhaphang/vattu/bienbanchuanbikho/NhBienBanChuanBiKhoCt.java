@@ -22,8 +22,8 @@ public class NhBienBanChuanBiKhoCt implements Serializable {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "BB_CHUAN_BI_KHO_ID")
-    private Long bbChuanBiKhoId;
+    @Column(name = "ID_BB_CHUAN_BI_KHO")
+    private Long idBbChuanBiKho;
 
     @Column(name = "NOI_DUNG")
     private String noiDung;
@@ -37,15 +37,10 @@ public class NhBienBanChuanBiKhoCt implements Serializable {
     @Column(name = "DON_GIA_TRONG_NAM")
     private BigDecimal donGiaTrongNam;
 
-    @Column(name = "THANH_TIEN_TRONG_NAM")
-    private BigDecimal thanhTienTrongNam;
-
     @Column(name = "SO_LUONG_QT")
     private BigDecimal soLuongQt;
 
-    @Column(name = "THANH_TIEN_QT")
+    @Column(name = "DON_GIA_QT")
     private BigDecimal thanhTienQt;
 
-    @Column(name = "TONG_GIA_TRI")
-    private BigDecimal tongGiaTri;
 }

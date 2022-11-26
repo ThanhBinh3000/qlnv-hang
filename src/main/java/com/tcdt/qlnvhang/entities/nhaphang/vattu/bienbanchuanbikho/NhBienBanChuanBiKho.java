@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -24,37 +25,25 @@ public class NhBienBanChuanBiKho extends TrangThaiBaseEntity implements Serializ
 
     private static final long serialVersionUID = 1117405412018192929L;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BIEN_BAN_CHUAN_BI_KHO_SEQ")
-    @SequenceGenerator(sequenceName = "BIEN_BAN_CHUAN_BI_KHO_SEQ", allocationSize = 1, name = "BIEN_BAN_CHUAN_BI_KHO_SEQ")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BIEN_BAN_CHUAN_BI_KHO_SEQ")
+//    @SequenceGenerator(sequenceName = "BIEN_BAN_CHUAN_BI_KHO_SEQ", allocationSize = 1, name = "BIEN_BAN_CHUAN_BI_KHO_SEQ")
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "QDGNVNX_ID")
-    private Long qdgnvnxId;
+    @Column(name = "ID_QD_GIAO_NV_NH")
+    private Long idQdGiaoNvNh;
 
     @Column(name = "SO_BIEN_BAN")
     private String soBienBan;
 
     @Column(name = "NGAY_NGHIEM_THU")
-    private LocalDate ngayNghiemThu;
+    private Date ngayNghiemThu;
 
-    @Column(name = "THU_TRUONG_DON_VI")
-    private String thuTruongDonVi;
+    @Column(name = "ID_KY_THUAT_VIEN")
+    private Long idKyThuatVien;
 
-    @Column(name = "KE_TOAN_DON_VI")
-    private String keToanDonVi;
-
-    @Column(name = "KY_THUAT_VIEN")
-    private String kyThuatVien;
-
-    @Column(name = "THU_KHO")
-    private String thuKho;
-
-    @Column(name = "MA_VAT_TU_CHA")
-    private String maVatTuCha; // Loai hang
-
-    @Column(name = "MA_VAT_TU")
-    private String maVatTu; // Chủng loại hàng
+    @Column(name = "ID_THU_KHO")
+    private Long idThuKho;
 
     @Column(name = "LOAI_HINH_KHO")
     private String loaiHinhKho;
@@ -68,56 +57,48 @@ public class NhBienBanChuanBiKho extends TrangThaiBaseEntity implements Serializ
     @Column(name = "MA_NGAN_KHO")
     private String maNganKho;
 
-    @Column(name = "MA_NGAN_LO")
-    private String maNganLo;
+    @Column(name = "MA_LO_KHO")
+    private String maLoKho;
 
-    @Column(name = "PT_BAO_QUAN")
-    private String ptBaoQuan;
+    @Column(name = "PTHUC_BQUAN")
+    private String pthucBquan;
 
     @Column(name = "THUC_NHAP")
     private String thucNhap;
 
-    @Column(name = "HT_BAO_QUAN")
-    private String htBaoQuan;
+    @Column(name = "HTHUC_BQUAN")
+    private String hthucBquan;
 
     @Column(name = "KET_LUAN")
     private String ketLuan;
 
-    @Column(name = "NGUOI_GUI_DUYET_ID")
-    private Long nguoiGuiDuyetId;
-
-    @Column(name = "NGUOI_PDUYET_ID")
-    private Long nguoiPduyetId;
-
     @Column(name = "MA_DVI")
     private String maDvi;
 
-    @Column(name = "CAP_DVI")
-    private String capDvi;
-
     @Column(name = "TONG_SO")
     private BigDecimal tongSo;
-
-    @Column(name = "SO")
-    private Integer so;
 
     @Column(name = "NAM")
     private Integer nam;
 
     @Column(name = "LOAI_VTHH")
     private String loaiVthh;
-    @Transient
-    String tenVthh;
 
+    @Transient
+    String tenLoaiVthh;
+
+    @Column(name = "CLOAI_VTHH")
     private String cloaiVthh;
+
     @Transient
     private String tenCloaiVthh;
 
-    private String moTaHangHoa;
+    @Column(name = "SO_LUONG_DDIEM_GIAO_NV_NH")
+    private BigDecimal soLuongDdiemGiaoNvNh;
 
-    @Column(name = "HOP_DONG_ID")
-    private Long hopDongId;
+    @Column(name = "ID_DDIEM_GIAO_NV_NH")
+    private Long idDdiemGiaoNvNh;
 
     @Transient
-    private List<NhBienBanChuanBiKhoCt> chiTiets = new ArrayList<>();
+    private List<NhBienBanChuanBiKhoCt> children = new ArrayList<>();
 }

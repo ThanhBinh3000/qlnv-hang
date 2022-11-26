@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.search;
 
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.BaseRequest;
@@ -28,4 +29,5 @@ public class HhQdNhapxuatSearchReq extends BaseRequest {
 	Long namNhap;
 	String loaiVthh;
 	String trichYeu;
+	List<String> bienBan;
 }

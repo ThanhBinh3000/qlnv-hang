@@ -13,6 +13,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuknghiemcl.PhieuKnghiemCluongHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
+import com.tcdt.qlnvhang.entities.nhaphang.vattu.bienbanchuanbikho.NhBienBanChuanBiKho;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
@@ -83,6 +84,9 @@ public class HhQdGiaoNvuNhapxuatDtl implements Serializable {
 
 	@Transient
 	List<BienBanLayMau> listBienBanLayMau;
+
+	@Transient
+	List<NhBienBanChuanBiKho> listBienBanChuanBiKho;
 
 
 //	@Transient

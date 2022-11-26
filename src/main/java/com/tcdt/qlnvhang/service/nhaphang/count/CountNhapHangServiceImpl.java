@@ -10,7 +10,7 @@ import com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.phieukiemnghiemcl.P
 import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHangService;
 import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoService;
 import com.tcdt.qlnvhang.service.nhaphang.vattu.bangke.NhBangKeVtService;
-import com.tcdt.qlnvhang.service.nhaphang.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoService;
+import com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.bienbancbkho.NhBienBanChuanBiKhoService;
 import com.tcdt.qlnvhang.service.nhaphang.vattu.bienbanguihang.NhBienBanGuiHangService;
 import com.tcdt.qlnvhang.service.nhaphang.vattu.bienbanketthucnhapkho.NhBbKtNhapKhoVtService;
 import com.tcdt.qlnvhang.service.nhaphang.vattu.bienbaogiaonhan.NhBbGiaoNhanVtService;
