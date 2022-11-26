@@ -24,7 +24,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping(PathContains.BIEN_BAN_CHUAN_BI_KHO)
-@Api(tags = "Quản lý Biên bản chuẩn bị kho ")
+@Api(tags = "Nhập hàng - Đấu thầu - Kiểm tra chất lượng - Biên bản chuẩn bị kho ")
 public class NhBienBanChuanBiKhoController {
 
     @Autowired
@@ -80,10 +80,10 @@ public class NhBienBanChuanBiKhoController {
 
     @ApiOperation(value = "Xóa Quản lý Biên bản chuẩn bị kho", response = List.class)
     @PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> delete(@PathVariable Long id) {
+    public ResponseEntity<BaseResponse> delete(@RequestBody NhBienBanChuanBiKhoReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-//            resp.setData(service.delete(id););
+            service.delete(req.getId());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -96,10 +96,10 @@ public class NhBienBanChuanBiKhoController {
 
     @ApiOperation(value = "Phê duyệt/ từ chối Quản lý Biên bản chuẩn bị kho", response = List.class)
     @PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody StatusReq req) {
+    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody NhBienBanChuanBiKhoReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-//            resp.setData(service.updateStatusQd(req));
+            resp.setData(service.approve(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

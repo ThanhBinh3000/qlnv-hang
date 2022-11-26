@@ -1,6 +1,9 @@
 package com.tcdt.qlnvhang.request.object.vattu.bienbanchuanbikho;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.SoBienBanPhieuReq;
+import com.tcdt.qlnvhang.util.Contains;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,14 +21,17 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class NhBienBanChuanBiKhoReq extends SoBienBanPhieuReq {
+public class NhBienBanChuanBiKhoReq extends BaseRequest {
 
     private Long id;
 
     private Long idQdGiaoNvNh;
 
+    private String soQdGiaoNvNh;
+
     private String soBienBan;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayNghiemThu;
 
     private String keToanDonVi;

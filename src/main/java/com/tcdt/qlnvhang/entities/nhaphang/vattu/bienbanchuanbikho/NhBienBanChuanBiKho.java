@@ -1,7 +1,9 @@
 package com.tcdt.qlnvhang.entities.nhaphang.vattu.bienbanchuanbikho;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
+import com.tcdt.qlnvhang.util.Contains;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -33,17 +35,27 @@ public class NhBienBanChuanBiKho extends TrangThaiBaseEntity implements Serializ
     @Column(name = "ID_QD_GIAO_NV_NH")
     private Long idQdGiaoNvNh;
 
+    @Column(name = "SO_QD_GIAO_NV_NH")
+    private String soQdGiaoNvNh;
+
     @Column(name = "SO_BIEN_BAN")
     private String soBienBan;
 
     @Column(name = "NGAY_NGHIEM_THU")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayNghiemThu;
 
     @Column(name = "ID_KY_THUAT_VIEN")
     private Long idKyThuatVien;
 
+    @Transient
+    private String tenKyThuatVien;
+
     @Column(name = "ID_THU_KHO")
     private Long idThuKho;
+
+    @Transient
+    private String tenThuKho;
 
     @Column(name = "LOAI_HINH_KHO")
     private String loaiHinhKho;
@@ -51,14 +63,26 @@ public class NhBienBanChuanBiKho extends TrangThaiBaseEntity implements Serializ
     @Column(name = "MA_DIEM_KHO")
     private String maDiemKho;
 
+    @Transient
+    private String tenDiemKho;
+
     @Column(name = "MA_NHA_KHO")
     private String maNhaKho;
+
+    @Transient
+    private String tenNhaKho;
 
     @Column(name = "MA_NGAN_KHO")
     private String maNganKho;
 
+    @Transient
+    private String tenNganKho;
+
     @Column(name = "MA_LO_KHO")
     private String maLoKho;
+
+    @Transient
+    private String tenLoKho;
 
     @Column(name = "PTHUC_BQUAN")
     private String pthucBquan;
@@ -74,6 +98,9 @@ public class NhBienBanChuanBiKho extends TrangThaiBaseEntity implements Serializ
 
     @Column(name = "MA_DVI")
     private String maDvi;
+
+    @Transient
+    private String tenDvi;
 
     @Column(name = "TONG_SO")
     private BigDecimal tongSo;

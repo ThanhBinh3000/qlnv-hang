@@ -1,13 +1,16 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.bienbancbkho;
 
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuknghiemcl.PhieuKnghiemCluongHang;
 import com.tcdt.qlnvhang.entities.nhaphang.vattu.bienbanchuanbikho.NhBienBanChuanBiKho;
 import com.tcdt.qlnvhang.entities.nhaphang.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kiemtracl.bienbanchuanbikho.NhBienBanChuanBiKhoCtRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kiemtracl.bienbanchuanbikho.NhBienBanChuanBiKhoRepository;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoReq;
+import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -17,6 +20,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -36,6 +40,9 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
 
     @Autowired
     private final HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
+
+    @Autowired
+    private final UserInfoRepository userInfoRepository;
 
     private final HttpServletRequest req;
 
@@ -109,15 +116,60 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
         if (!optional.isPresent()){
             throw new Exception("Biên bản chuẩn bị kho không tồn tại.");
         }
-
+        Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
         NhBienBanChuanBiKho item = optional.get();
         item.setChildren(nhBienBanChuanBiKhoCtRepository.findAllByIdBbChuanBiKho(item.getId()));
+        item.setTenDvi(listDanhMucDvi.get(item.getMaDvi()));
+        item.setTenDiemKho(listDanhMucDvi.get(item.getMaDiemKho()));
+        item.setTenNhaKho(listDanhMucDvi.get(item.getMaNhaKho()));
+        item.setTenNganKho(listDanhMucDvi.get(item.getMaNganKho()));
+        item.setTenLoKho(listDanhMucDvi.get(item.getMaLoKho()));
+        item.setTenKyThuatVien(ObjectUtils.isEmpty(item.getIdKyThuatVien()) ? null : userInfoRepository.findById(item.getIdKyThuatVien()).get().getFullName());
+        item.setTenThuKho(ObjectUtils.isEmpty(item.getIdThuKho()) ? null : userInfoRepository.findById(item.getIdThuKho()).get().getFullName());
+        item.setTenNguoiPduyet(ObjectUtils.isEmpty(item.getNguoiPduyetId()) ? null : userInfoRepository.findById(item.getNguoiPduyetId()).get().getFullName());
         return item;
     }
 
     @Override
     public NhBienBanChuanBiKho approve(NhBienBanChuanBiKhoReq req) throws Exception {
-        return null;
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null)
+            throw new Exception("Bad request.");
+
+        Optional<NhBienBanChuanBiKho> optional = nhBienBanChuanBiKhoRepository.findById(req.getId());
+        if (!optional.isPresent()) {
+            throw new Exception("Không tìm thấy dữ liệu.");
+        }
+
+        NhBienBanChuanBiKho item = optional.get();
+        String trangThai = req.getTrangThai() + item.getTrangThai();
+
+        if (
+            (NhapXuatHangTrangThaiEnum.CHODUYET_TK.getId() + NhapXuatHangTrangThaiEnum.DUTHAO.getId()).equals(trangThai) ||
+            (NhapXuatHangTrangThaiEnum.CHODUYET_TK.getId() + NhapXuatHangTrangThaiEnum.TUCHOI_TK.getId()).equals(trangThai) ||
+            (NhapXuatHangTrangThaiEnum.CHODUYET_TK.getId() + NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId()).equals(trangThai)
+        ) {
+            item.setNguoiGuiDuyetId(userInfo.getId());
+            item.setNgayGuiDuyet(new Date());
+        } else if (
+            (NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_TK.getId()).equals(trangThai) ||
+            (NhapXuatHangTrangThaiEnum.TUCHOI_TK.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_TK.getId()).equals(trangThai)
+        ) {
+            item.setIdThuKho(userInfo.getId());
+            item.setLyDoTuChoi(req.getLyDoTuChoi());
+        } else if (
+            (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId()).equals(trangThai) ||
+            (NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId()).equals(trangThai)
+        ) {
+            item.setNgayPduyet(new Date());
+            item.setNguoiPduyetId(userInfo.getId());
+            item.setLyDoTuChoi(req.getLyDoTuChoi());
+        } else {
+            throw new Exception("Phê duyệt không thành công");
+        }
+        item.setTrangThai(req.getTrangThai());
+        nhBienBanChuanBiKhoRepository.save(item);
+        return item;
     }
 
     @Override

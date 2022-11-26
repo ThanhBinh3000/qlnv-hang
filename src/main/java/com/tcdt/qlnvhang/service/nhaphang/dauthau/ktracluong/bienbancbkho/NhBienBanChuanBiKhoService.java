@@ -15,24 +15,5 @@ import javax.transaction.Transactional;
 import java.util.Set;
 
 public interface NhBienBanChuanBiKhoService extends BaseService<NhBienBanChuanBiKho,NhBienBanChuanBiKhoReq,Long> {
-//    NhBienBanChuanBiKhoRes create(NhBienBanChuanBiKhoReq req) throws Exception;
-//
-//    NhBienBanChuanBiKhoRes update(NhBienBanChuanBiKhoReq req) throws Exception;
-//
-//    NhBienBanChuanBiKhoRes detail(Long id) throws Exception;
-//
-//    boolean delete(Long id) throws Exception;
-//
-//
-//    @Transactional(rollbackOn = Exception.class)
-//    boolean updateStatusQd(StatusReq req) throws Exception;
-//
-//    Page<NhBienBanChuanBiKhoRes> search(NhBienBanChuanBiKhoSearchReq req) throws Exception;
-//
-//    @Transactional(rollbackOn = Exception.class)
-//    boolean deleteMultiple(DeleteReq req) throws Exception;
-//
-//    boolean exportToExcel(NhBienBanChuanBiKhoSearchReq objReq, HttpServletResponse response) throws Exception;
-//
-//    BaseNhapHangCount count(Set<String> maDvis) throws Exception;
+
 }
