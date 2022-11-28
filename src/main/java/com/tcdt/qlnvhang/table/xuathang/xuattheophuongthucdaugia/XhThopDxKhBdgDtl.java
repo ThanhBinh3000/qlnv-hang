@@ -28,11 +28,16 @@ public class XhThopDxKhBdgDtl implements Serializable {
     private String tenDvi;
     private String soDxuat;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayKy;
+    private Date ngayTao;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayPduyet;
     private String trichYeu;
     private BigDecimal soLuong;
     private Integer soDviTsan;
     private BigDecimal tongTienKdiem;
     private BigDecimal tongTienDatTruoc;
+    private String moTaHangHoa;
+    private String tchuanCluong;
+    private String diaChi;
 
 }
