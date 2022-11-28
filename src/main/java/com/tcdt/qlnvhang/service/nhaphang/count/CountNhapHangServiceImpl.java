@@ -74,11 +74,11 @@ public class CountNhapHangServiceImpl extends BaseServiceImpl implements CountNh
 //        counts.add(nhPhieuNhapKhoService.count(req.getMaDvis()));
 //        counts.add(bangKeCanHangLtService.count(req.getMaDvis()));
 //        counts.add(bienBanNhapDayKhoLtService.count(req.getMaDvis()));
-        counts.add(phieuNhapKhoTamGuiService.count(req.getMaDvis()));
-        counts.add(bienBanGuiHangService.count(req.getMaDvis()));
-        counts.add(nhBangKeVtService.count(req.getMaDvis()));
-        counts.add(nhBbKtNhapKhoVtService.count(req.getMaDvis()));
-        counts.add(bbGiaoNhanVtService.count(req.getMaDvis()));
+//        counts.add(phieuNhapKhoTamGuiService.count(req.getMaDvis()));
+//        counts.add(bienBanGuiHangService.count(req.getMaDvis()));
+//        counts.add(nhBangKeVtService.count(req.getMaDvis()));
+//        counts.add(nhBbKtNhapKhoVtService.count(req.getMaDvis()));
+//        counts.add(bbGiaoNhanVtService.count(req.getMaDvis()));
 
         BaseNhapHangCount count = new BaseNhapHangCount();
         count.setThoc(counts.stream().map(BaseNhapHangCount::getThoc).mapToInt(Integer::intValue).sum());

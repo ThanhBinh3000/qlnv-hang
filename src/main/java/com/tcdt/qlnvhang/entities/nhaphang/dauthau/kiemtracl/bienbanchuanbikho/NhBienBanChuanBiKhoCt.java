@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.entities.nhaphang.vattu.bienbanchuanbikho;
+package com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bienbanchuanbikho;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

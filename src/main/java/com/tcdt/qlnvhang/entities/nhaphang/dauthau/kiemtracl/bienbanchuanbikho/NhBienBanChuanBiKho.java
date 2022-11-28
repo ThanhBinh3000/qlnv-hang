@@ -1,7 +1,6 @@
-package com.tcdt.qlnvhang.entities.nhaphang.vattu.bienbanchuanbikho;
+package com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bienbanchuanbikho;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.AllArgsConstructor;
@@ -12,7 +11,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

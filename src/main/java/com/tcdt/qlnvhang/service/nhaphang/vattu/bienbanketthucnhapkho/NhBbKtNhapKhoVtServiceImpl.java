@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.service.nhaphang.vattu.bienbanketthucnhapkho;
 
-import com.tcdt.qlnvhang.entities.nhaphang.vattu.bienbanchuanbikho.NhBienBanChuanBiKho;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bienbanchuanbikho.NhBienBanChuanBiKho;
 import com.tcdt.qlnvhang.entities.nhaphang.vattu.bienbanketthucnhapkho.NhBbKtNhapKhoVt;
 import com.tcdt.qlnvhang.entities.nhaphang.vattu.bienbanketthucnhapkho.NhBbKtNhapKhoVtCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
