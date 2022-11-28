@@ -1,7 +1,8 @@
-package com.tcdt.qlnvhang.table;
+package com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -27,7 +28,7 @@ public class HhHopDongDdiemNhapKho implements Serializable {
   String maDvi;
   String maDiemKho;
   BigDecimal soLuong;
-  BigDecimal donGia;
+  BigDecimal donGiaVat;
   String dviTinh;
   String trangThai;
   @Transient
@@ -36,6 +37,9 @@ public class HhHopDongDdiemNhapKho implements Serializable {
   String tenDvi;
   @Transient
   String tenDiemKho;
+
+  @Transient
+  private List<HhHopDongDdiemNhapKhoVt> children;
 
   public String getTenTrangThai() {
     return TrangThaiAllEnum.getLabelById(trangThai);

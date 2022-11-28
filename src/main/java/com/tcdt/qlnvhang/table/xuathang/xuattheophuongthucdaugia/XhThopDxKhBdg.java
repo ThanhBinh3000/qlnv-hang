@@ -23,28 +23,22 @@ public class XhThopDxKhBdg implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date ngayThop;
     private String loaiVthh;
+    @Temporal(TemporalType.DATE)
+    private Date ngayDuyetTu;
+    @Temporal(TemporalType.DATE)
+    private Date ngayDuyetDen;
+
     @Transient
     private String tenLoaiVthh;
     private String cloaiVthh;
     @Transient
     private String tenCloaiVthh;
-    private String moTaHangHoa;
-    private String loaiHdong;
-    @Transient
-    private String tenLoaiHdong;
-    @Transient
-    private Long phuongAnId;
-
-    @Temporal(TemporalType.DATE)
-    private Date tgianDkienTu;
-    @Temporal(TemporalType.DATE)
-    private Date tgianDkienDen;
 
     @Temporal(TemporalType.DATE)
     private Date ngayTao;
 
     private String noiDungThop;
-    private String ghiChu;
+
     private String nguoiTao;
     private Integer namKh;
     private String trangThai;

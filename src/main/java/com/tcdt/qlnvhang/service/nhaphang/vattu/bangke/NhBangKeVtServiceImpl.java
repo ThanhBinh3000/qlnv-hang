@@ -5,7 +5,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuN
 import com.tcdt.qlnvhang.entities.nhaphang.vattu.bangke.NhBangKeVt;
 import com.tcdt.qlnvhang.entities.nhaphang.vattu.bangke.NhBangKeVtCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.repository.HhHopDongRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
@@ -21,7 +21,7 @@ import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.response.vattu.bangke.NhBangKeVtCtRes;
 import com.tcdt.qlnvhang.response.vattu.bangke.NhBangKeVtRes;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.table.HhHopDongHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongHdr;
 import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;

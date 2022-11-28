@@ -1,7 +1,8 @@
-package com.tcdt.qlnvhang.controller.vattu.phieunhapkhotamgui;
+package com.tcdt.qlnvhang.controller.nhaphang.dauthau.nhapkho;
 
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.DeleteReq;
+import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiReq;
 import com.tcdt.qlnvhang.request.search.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiSearchReq;
@@ -24,14 +25,14 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping(PathContains.PHIEU_NHAP_KHO_TAM_GUI)
-@Api(tags = "Quản lý phiếu nhập kho tạm gửi ")
+@Api(tags = "Nhập hàng - Đấu thầu - Nhập kho - Phiếu nhập kho tạm gửi")
 public class NhPhieuNhapKhoTamGuiController {
 
     @Autowired
     private NhPhieuNhapKhoTamGuiService service;
 
-    @ApiOperation(value = "Tạo mới Quản lý phiếu nhập kho tạm gửi", response = List.class)
-    @PostMapping
+    @ApiOperation(value = "Tạo mới Quản lý", response = List.class)
+    @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> insert(@Valid @RequestBody NhPhieuNhapKhoTamGuiReq request) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -41,13 +42,13 @@ public class NhPhieuNhapKhoTamGuiController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Tạo mới Quản lý phiếu nhập kho tạm gửi lỗi: {}", e);
+            log.error("Tạo mới Quản lý lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Sửa Quản lý phiếu nhập kho tạm gửi", response = List.class)
-    @PutMapping
+    @ApiOperation(value = "Sửa Quản lý", response = List.class)
+    @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> update(@Valid @RequestBody NhPhieuNhapKhoTamGuiReq request) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -57,13 +58,13 @@ public class NhPhieuNhapKhoTamGuiController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Sửa Quản lý phiếu nhập kho tạm gửi lỗi: {}", e);
+            log.error("Sửa Quản lý lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Chi tiết Quản lý phiếu nhập kho tạm gửi", response = List.class)
-    @GetMapping("/{id}")
+    @ApiOperation(value = "Chi tiết Quản lý", response = List.class)
+    @GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> detail(@PathVariable Long id) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -73,103 +74,88 @@ public class NhPhieuNhapKhoTamGuiController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Chi tiết Quản lý phiếu nhập kho tạm gửi lỗi: {}", e);
+            log.error("Chi tiết Quản lý lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xóa Quản lý phiếu nhập kho tạm gửi", response = List.class)
-    @DeleteMapping("/{id}")
-    public ResponseEntity<BaseResponse> delete(@PathVariable Long id) {
+    @ApiOperation(value = "Xóa Quản lý", response = List.class)
+    @PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> delete(@RequestBody NhPhieuNhapKhoTamGuiReq objRq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.delete(id));
+            service.delete(objRq.getId());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Xóa Quản lý phiếu nhập kho tạm gửi lỗi: {}", e);
+            log.error("Xóa Quản lý lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Phê duyệt/ từ chối Quản lý phiếu nhập kho tạm gửi", response = List.class)
-    @PutMapping("/status")
-    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody StatusReq req) {
+    @ApiOperation(value = "Phê duyệt/ từ chối Quản lý", response = List.class)
+    @PostMapping(PathContains.URL_PHE_DUYET)
+    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody NhPhieuNhapKhoTamGuiReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.updateStatusQd(req));
+            resp.setData(service.approve(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Phê duyệt/ từ chối Quản lý phiếu nhập kho tạm gửi lỗi: {}", e);
+            log.error("Phê duyệt/ từ chối Quản lý lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Tra cứu Quản lý phiếu nhập kho tạm gửi", response = List.class)
+    @ApiOperation(value = "Tra cứu Quản lý", response = List.class)
     @GetMapping()
     public ResponseEntity<BaseResponse> search(NhPhieuNhapKhoTamGuiSearchReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.search(req));
+//            resp.setData(service.search(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Tra cứu Quản lý phiếu nhập kho tạm gửi lỗi: {}", e);
+            log.error("Tra cứu Quản lý lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Delete multiple phiếu nhập kho tạm gửi", response = List.class)
+    @ApiOperation(value = "Delete multiple", response = List.class)
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/delete/multiple")
     public final ResponseEntity<BaseResponse> deleteMultiple(@RequestBody @Valid DeleteReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.deleteMultiple(req));
+//            resp.setData(service.deleteMultiple(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
             resp.setMsg(e.getMessage());
-            log.error("Delete multiple phiếu nhập kho tạm gửi lỗi ", e);
+            log.error("Delete multiple lỗi ", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Export phiếu nhập kho tạm gửi", response = List.class)
+    @ApiOperation(value = "Export", response = List.class)
     @PostMapping(value = "/export/list", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody NhPhieuNhapKhoTamGuiSearchReq req) {
 
         try {
-            service.exportToExcel(req, response);
+//            service.exportToExcel(req, response);
         } catch (Exception e) {
             log.error("Error can not export", e);
         }
 
     }
 
-    @ApiOperation(value = "Get số phiếu nhập kho tạm gửi", response = List.class)
-    @GetMapping("/so")
-    public ResponseEntity<BaseResponse> getSo() {
-        BaseResponse resp = new BaseResponse();
-        try {
-            resp.setData(service.getSo());
-            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-        } catch (Exception e) {
-            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-            resp.setMsg(e.getMessage());
-            log.error("Get số phiếu nhập kho tạm gửi lỗi", e);
-        }
-        return ResponseEntity.ok(resp);
-    }
 }

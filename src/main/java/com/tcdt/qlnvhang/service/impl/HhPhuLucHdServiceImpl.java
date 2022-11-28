@@ -7,7 +7,7 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.tcdt.qlnvhang.repository.HhHopDongDtlRepository;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongHdr;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.tcdt.qlnvhang.entities.FileDKemJoinPhuLuc;
-import com.tcdt.qlnvhang.repository.HhHopDongRepository;
-import com.tcdt.qlnvhang.repository.HhPhuLucHdRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.HhHopDongRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.HhPhuLucHdRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.HhDdiemNhapKhoReq;

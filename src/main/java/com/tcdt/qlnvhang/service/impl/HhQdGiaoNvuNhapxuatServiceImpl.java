@@ -10,19 +10,23 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuknghiemcl.PhieuKnghiemCluongHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bienbanchuanbikho.NhBienBanChuanBiKho;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkhotamgui.NhPhieuNhapKhoTamGui;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatDtlLoaiNx;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatHdrLoaiQd;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.HhBbNghiemthuKlstRepository;
 import com.tcdt.qlnvhang.repository.HhDviThuchienQdinhRepository;
-import com.tcdt.qlnvhang.repository.HhHopDongRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kiemtracl.bienbanchuanbikho.NhBienBanChuanBiKhoRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKhoCtRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKhoRepository;
 import com.tcdt.qlnvhang.repository.phieuknghiemcluonghang.PhieuKnghiemCluongHangRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNxDdiemRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatDtlRepository;
+import com.tcdt.qlnvhang.repository.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiRepository;
 import com.tcdt.qlnvhang.request.*;
 import com.tcdt.qlnvhang.request.object.HhQdGiaoNvuNhapxuatDtlReq;
 import com.tcdt.qlnvhang.response.BaseNhapHangCount;
@@ -85,7 +89,13 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 	private BienBanLayMauRepository bienBanLayMauRepository;
 
 	@Autowired
+	private NhBienBanChuanBiKhoRepository nhBienBanChuanBiKhoRepository;
+
+	@Autowired
 	private PhieuKnghiemCluongHangRepository phieuKnghiemCluongHangRepository;
+
+	@Autowired
+	private NhPhieuNhapKhoTamGuiRepository nhPhieuNhapKhoTamGuiRepository;
 
 	@Override
 	@Transactional
@@ -97,6 +107,11 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 		if (!Contains.CAP_CUC.equalsIgnoreCase(userInfo.getCapDvi()))
 			throw new Exception("Bad request.");
+
+		Optional<HhQdGiaoNvuNhapxuatHdr> byIdHdAndMaDviAndNamNhap = hhQdGiaoNvuNhapxuatRepository.findByIdHdAndMaDviAndNamNhap(objReq.getIdHd(), userInfo.getDvql(), objReq.getNamNhap());
+		if(byIdHdAndMaDviAndNamNhap.isPresent()){
+			throw new Exception("Đơn vị đã tạo hợp đồng, vui lòng tạo hợp đồng");
+		}
 
 		this.validateSoQd(null, objReq);
 
@@ -622,6 +637,15 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 				});
 				dtl.setListBienBanLayMau(bbLayMau);
 
+				// Set biên bản chuẩn bị kho
+				if(req.getBienBan().contains("bienBanChuanBiKho")){
+					List<NhBienBanChuanBiKho> bbChuanBiKho = nhBienBanChuanBiKhoRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(), dtl.getMaDvi());
+					bbChuanBiKho.forEach( item -> {
+						item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+					});
+					dtl.setListBienBanChuanBiKho(bbChuanBiKho);
+				}
+
 				dtl.setTenLoaiVthh(tenCloaiVthh.get(dtl.getLoaiVthh()));
 				dtl.setTenCloaiVthh(tenCloaiVthh.get(dtl.getCloaiVthh()));
 				dtl.setTenDvi(mapDmucDvi.get(dtl.getMaDvi()));
@@ -638,7 +662,6 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 					this.setDataPhieu(null,item);
 				});
 				dtl.setChildren(allByIdCt);
-//				this.setDataPhieu(dtl,null);
 			}
 
 			// Set phiếu kiểm nghiệm chất lượng
@@ -656,6 +679,10 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		return data;
 	}
 
+	void setBbien(HhQdNhapxuatSearchReq req,HhQdGiaoNvuNhapxuatDtl dtl){
+
+	}
+
 
 	void setDataPhieu(HhQdGiaoNvuNhapxuatDtl dtl , HhQdGiaoNvuNxDdiem ddNhap){
 		if(dtl != null){
@@ -668,6 +695,8 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			ddNhap.setListBangKeCanHang(nhBangKeCanHangService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
 			ddNhap.setBienBanNhapDayKho(nhBbNhapDayKhoRepository.findByIdDdiemGiaoNvNh(ddNhap.getId()));
 			ddNhap.setBienBanLayMau(bienBanLayMauRepository.findByIdDdiemGiaoNvNh(ddNhap.getId()));
+			ddNhap.setBienBanChuanBiKho(nhBienBanChuanBiKhoRepository.findByIdDdiemGiaoNvNh(ddNhap.getId()));
+			ddNhap.setPhieuNhapKhoTamGui(nhPhieuNhapKhoTamGuiRepository.findByIdDdiemGiaoNvNh(ddNhap.getId()));
 		}
 	}
 

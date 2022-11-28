@@ -19,6 +19,8 @@ public interface HhQdGiaoNvuNhapxuatRepository extends BaseRepository<HhQdGiaoNv
 
 	Optional<HhQdGiaoNvuNhapxuatHdr> findFirstBySoQd(String soQd);
 
+	Optional<HhQdGiaoNvuNhapxuatHdr> findByIdHdAndMaDviAndNamNhap(Long idHd,String maDvi,Integer nam);
+
 //	@Query(
 //			value = "SELECT * \n" +
 //					"FROM NH_QD_GIAO_NVU_NHAPXUAT NX " +
@@ -89,7 +91,7 @@ public interface HhQdGiaoNvuNhapxuatRepository extends BaseRepository<HhQdGiaoNv
 					" FROM NH_QD_GIAO_NVU_NHAPXUAT NX " +
 					" WHERE (:namNhap IS NULL OR NX.NAM_NHAP = TO_NUMBER(:namNhap)) " +
 					"  AND (:soQd IS NULL OR LOWER(NX.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQd),'%'))) " +
-					"  AND (:loaiVthh IS NULL OR NX.LOAI_VTHH LIKE LOWER(:loaiVthh)) " +
+					"  AND (:loaiVthh IS NULL OR NX.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) " +
 					"  AND (:trichYeu IS NULL OR LOWER(NX.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%'))) " +
 					"  AND (:tuNgayQD IS NULL OR NX.NGAY_QDINH >= TO_DATE(:tuNgayQD, 'yyyy-MM-dd')) " +
 					"  AND (:denNgayQD IS NULL OR NX.NGAY_QDINH <= TO_DATE(:denNgayQD, 'yyyy-MM-dd')) " +
@@ -98,7 +100,7 @@ public interface HhQdGiaoNvuNhapxuatRepository extends BaseRepository<HhQdGiaoNv
 					" FROM NH_QD_GIAO_NVU_NHAPXUAT NX " +
 					" WHERE 1 = 1 AND (:namNhap IS NULL OR NX.NAM_NHAP = TO_NUMBER(:namNhap)) " +
 					"  AND (:soQd IS NULL OR LOWER(NX.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQd),'%'))) " +
-					"  AND (:loaiVthh IS NULL OR NX.LOAI_VTHH LIKE LOWER(:loaiVthh)) " +
+					"  AND (:loaiVthh IS NULL OR NX.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) " +
 					"  AND (:trichYeu IS NULL OR LOWER(NX.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%'))) " +
 					"  AND (:tuNgayQD IS NULL OR NX.NGAY_QDINH >= TO_DATE(:tuNgayQD, 'yyyy-MM-dd')) " +
 					"  AND (:denNgayQD IS NULL OR NX.NGAY_QDINH <= TO_DATE(:denNgayQD, 'yyyy-MM-dd')) " +
@@ -112,7 +114,7 @@ public interface HhQdGiaoNvuNhapxuatRepository extends BaseRepository<HhQdGiaoNv
 					" WHERE 1 = 1 AND (:namNhap IS NULL OR NX.NAM_NHAP = TO_NUMBER(:namNhap)) " +
 					"  AND (NX.ID = NX_DTL.ID_HDR) " +
 					"  AND (:soQd IS NULL OR LOWER(NX.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQd),'%'))) " +
-					"  AND (:loaiVthh IS NULL OR NX.LOAI_VTHH LIKE LOWER(:loaiVthh)) " +
+					"  AND (:loaiVthh IS NULL OR NX.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) " +
 					"  AND (:trichYeu IS NULL OR LOWER(NX.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%'))) " +
 					"  AND (:tuNgayQD IS NULL OR NX.NGAY_QDINH >= TO_DATE(:tuNgayQD, 'yyyy-MM-dd')) " +
 					"  AND (:denNgayQD IS NULL OR NX.NGAY_QDINH <= TO_DATE(:denNgayQD, 'yyyy-MM-dd')) " +
@@ -122,7 +124,7 @@ public interface HhQdGiaoNvuNhapxuatRepository extends BaseRepository<HhQdGiaoNv
 					" WHERE 1 = 1 AND (:namNhap IS NULL OR NX.NAM_NHAP = TO_NUMBER(:namNhap)) " +
 					"  AND (NX.ID = NX_DTL.ID_HDR) " +
 					"  AND (:soQd IS NULL OR LOWER(NX.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQd),'%'))) " +
-					"  AND (:loaiVthh IS NULL OR NX.LOAI_VTHH LIKE LOWER(:loaiVthh)) " +
+					"  AND (:loaiVthh IS NULL OR NX.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) " +
 					"  AND (:trichYeu IS NULL OR LOWER(NX.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%'))) " +
 					"  AND (:tuNgayQD IS NULL OR NX.NGAY_QDINH >= TO_DATE(:tuNgayQD, 'yyyy-MM-dd')) " +
 					"  AND (:denNgayQD IS NULL OR NX.NGAY_QDINH <= TO_DATE(:denNgayQD, 'yyyy-MM-dd')) " +

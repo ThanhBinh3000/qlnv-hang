@@ -7,10 +7,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongDdiemNhapKhoVt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.*;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongDdiemNhapKho;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongDtl;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongHdr;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.*;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.object.HhDdiemNhapKhoVtReq;
 import com.tcdt.qlnvhang.request.object.HhHopDongDtlReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.table.*;
@@ -46,6 +52,9 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
   private HhHopDongDdiemNhapKhoRepository hhHopDongDdiemNhapKhoRepository;
 
   @Autowired
+  private HhHopDongDdiemNhapKhoVtRepository hhHopDongDdiemNhapKhoVtRepository;
+
+  @Autowired
   private HhHopDongDtlRepository hhHopDongDtlRepository;
 
   @Autowired
@@ -69,6 +78,9 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
     Optional<HhHopDongHdr> qOpHdong = hhHopDongRepository.findBySoHd(objReq.getSoHd());
     if (qOpHdong.isPresent())
       throw new Exception("Hợp đồng số " + objReq.getSoHd() + " đã tồn tại");
+
+
+
 
 //    Optional<HhQdPduyetKqlcntHdr> checkSoQd = hhQdPduyetKqlcntHdrRepository.findBySoQd(objReq.getCanCu());
 //    if (!checkSoQd.isPresent())
@@ -168,6 +180,13 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
         ddSave.setIdHdongDtl(ddNhap.getId());
         ddSave.setTrangThai(TrangThaiAllEnum.CHUA_TAO_QD.getId());
         hhHopDongDdiemNhapKhoRepository.save(ddSave);
+        hhHopDongDdiemNhapKhoVtRepository.deleteAllByIdHdongDdiemNkho(dd.getId());
+        for(HhDdiemNhapKhoVtReq vt : dd.getChildren()){
+          HhHopDongDdiemNhapKhoVt ddSaveVt = new HhHopDongDdiemNhapKhoVt();
+          BeanUtils.copyProperties(vt, ddSaveVt,"id");
+          ddSaveVt.setIdHdongDdiemNkho(ddSave.getId());
+          hhHopDongDdiemNhapKhoVtRepository.save(ddSaveVt);
+        }
       }
     }
   }
@@ -244,6 +263,11 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
       allByIdHdongDtl.forEach(s -> {
           s.setTenDvi(mapDmucDvi.get(s.getMaDvi()));
           s.setTenDiemKho(mapDmucDvi.get(s.getMaDiemKho()));
+          List<HhHopDongDdiemNhapKhoVt> allByIdHdongDdiemNkho = hhHopDongDdiemNhapKhoVtRepository.findAllByIdHdongDdiemNkho(s.getId());
+          allByIdHdongDdiemNkho.forEach( x -> {
+            x.setTenDvi(mapDmucDvi.get(x.getMaDvi()));
+          });
+          s.setChildren(allByIdHdongDdiemNkho);
       });
       item.setChildren(allByIdHdongDtl);
       item.setTenDvi(mapDmucDvi.get(item.getMaDvi()));

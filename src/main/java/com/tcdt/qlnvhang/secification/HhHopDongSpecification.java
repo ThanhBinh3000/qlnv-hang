@@ -15,7 +15,7 @@ import org.joda.time.DateTime;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.tcdt.qlnvhang.request.search.HhHopDongSearchReq;
-import com.tcdt.qlnvhang.table.HhHopDongHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongHdr;
 
 public class HhHopDongSpecification {
 	public static Specification<HhHopDongHdr> buildSearchQuery(final HhHopDongSearchReq objReq) {

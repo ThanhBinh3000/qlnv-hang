@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.object;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.validation.constraints.Size;
 
@@ -25,6 +26,8 @@ public class HhDdiemNhapKhoReq {
 
 	BigDecimal soLuong;
 
-	BigDecimal donGia;
+	BigDecimal donGiaVat;
+
+	List<HhDdiemNhapKhoVtReq> children;
 
 }

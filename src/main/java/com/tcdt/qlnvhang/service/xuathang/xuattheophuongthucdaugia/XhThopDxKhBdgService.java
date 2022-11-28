@@ -8,13 +8,17 @@ import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.XhDxKhBanD
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.XhThopDxKhBdgRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.object.HhDxKhLcntThopHdrReq;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.SearchXhThopDxKhBdg;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.XhThopChiTieuReq;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.XhThopDxKhBdgReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.HhDxKhLcntThopDtl;
+import com.tcdt.qlnvhang.table.HhDxKhLcntThopHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDxKhMttThopDtl;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDxuatKhMttHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.XhDxKhBanDauGia;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.XhDxKhBanDauGiaPhanLo;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.XhThopDxKhBdgDtl;
@@ -116,7 +120,7 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
           thopDtl.setMaDvi(dxuat.getMaDvi());
           thopDtl.setTenDvi(getDviByMa(dxuat.getMaDvi(), req).getTenDvi());
           thopDtl.setSoDxuat(dxuat.getSoDxuat());
-          thopDtl.setNgayKy(dxuat.getNgayKy());
+          thopDtl.setNgayKy(dxuat.getNgayPduyet());
           thopDtl.setTrichYeu(dxuat.getTrichYeu());
           thopDtl.setSoDviTsan(dxuat.getSoDviTsan());
           thopDtl.setTongTienKdiem(dxuat.getTongTienKdiem());
@@ -136,36 +140,46 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
       return thopHdr;
   }
 
-  @Transactional()
-    public XhThopDxKhBdg create (XhThopDxKhBdgReq objReq, HttpServletRequest req  ) throws Exception{
-      if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh())){
-          throw new Exception("Loại vật tư hàng hóa không phù hợp ");
-      }
+    @Transactional()
+    public XhThopDxKhBdg create(XhThopDxKhBdgReq objReq, HttpServletRequest req) throws Exception {
+        UserInfo userInfo =SecurityContextService.getUser();
+        if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh())){
+            throw new Exception("Loại vật tư hàng hóa không phù hợp");
+        }
+        // Set thong tin hdr tong hop
+        XhThopDxKhBdg thopHdr = sumarryData(objReq,req);
+        thopHdr.setNgayTao(getDateTimeNow());
+        thopHdr.setNguoiTao(getUser().getUsername());
+        thopHdr.setNgayDuyetTu(objReq.getNgayDuyetTu());
+        thopHdr.setNgayDuyetDen(objReq.getNgayDuyetDen());
+        thopHdr.setLoaiVthh(objReq.getLoaiVthh());
+        thopHdr.setCloaiVthh(objReq.getCloaiVthh());
+        thopHdr.setTrangThai(Contains.CHUATAO_QD);
+        thopHdr.setNgayThop(new Date());
+        thopHdr.setNoiDungThop(objReq.getNoiDungThop());
+        thopHdr.setId(objReq.getId());
+        thopHdr.setSoQdPd(objReq.getSoQdPd());
+        thopHdr.setMaDvi(userInfo.getDvql());
+        xhThopDxKhBdgRepository.save(thopHdr);
+        for (XhThopDxKhBdgDtl dtl : thopHdr.getThopDxKhBdgDtlList()){
+            dtl.setIdThopHdr(thopHdr.getId());
+            xhThopDxKhBdgDtlRepository.save(dtl);
+        }
+        if (thopHdr.getId() > 0 && thopHdr.getThopDxKhBdgDtlList().size() > 0) {
+            List<String> soDxuatList = thopHdr.getThopDxKhBdgDtlList().stream().map(XhThopDxKhBdgDtl::getSoDxuat)
+                    .collect(Collectors.toList());
+            List<XhDxKhBanDauGia> list = xhDxKhBanDauGiaRepository.findBySoDxuatIn(soDxuatList);
+            for (XhDxKhBanDauGia bdg : list){
+                bdg.setMaThop(String.valueOf(thopHdr.getId()));
+                xhDxKhBanDauGiaRepository.save(bdg);
+            }
+            xhDxKhBanDauGiaRepository.updateStatusInList(soDxuatList, Contains.DATONGHOP);
+        }
+        return thopHdr;
+    }
 
-//      Set thông tin Hdr tổng hợp
-      XhThopDxKhBdg thopHdr = sumarryData(objReq, req);
-      thopHdr.setNgayTao(getDateTimeNow());
-      thopHdr.setNguoiTao(getUser().getUsername());
-      thopHdr.setNoiDungThop(objReq.getNoiDungThop());
-      thopHdr.setTrangThai(Contains.CHUATAO_QD);
-      thopHdr.setNgayThop(new Date());
-      thopHdr.setGhiChu(objReq.getGhiChu());
-      thopHdr.setId(objReq.getId());
-      thopHdr.setSoQdPd(objReq.getSoQdPd());
-      xhThopDxKhBdgRepository.save(thopHdr);
-      for (XhThopDxKhBdgDtl dtl : thopHdr.getThopDxKhBdgDtlList()){
-          dtl .setIdThopHdr(thopHdr.getId());
-          xhThopDxKhBdgDtlRepository.save(dtl);
-      }
 
-      if (thopHdr.getId() > 0 && thopHdr.getThopDxKhBdgDtlList().size()>0){
-          List<String> soDxuatList = thopHdr.getThopDxKhBdgDtlList().stream().map(XhThopDxKhBdgDtl:: getSoDxuat).collect(Collectors.toList());
-          xhDxKhBanDauGiaRepository.updateStatusInList(soDxuatList, Contains.DATONGHOP);
-      }
-      return thopHdr;
-  }
-
-  @Transactional()
+    @Transactional()
     public XhThopDxKhBdg update (XhThopDxKhBdgReq objReq) throws Exception{
       if(StringUtils.isEmpty(objReq.getId()))
           throw new Exception(" Sửa thất bại, không tìm thấy dữ liệu");

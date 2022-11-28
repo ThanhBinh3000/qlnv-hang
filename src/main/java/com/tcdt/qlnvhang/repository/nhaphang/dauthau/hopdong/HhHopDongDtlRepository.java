@@ -1,6 +1,7 @@
-package com.tcdt.qlnvhang.repository;
+package com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong;
 
-import com.tcdt.qlnvhang.table.HhHopDongDtl;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongDtl;
+import com.tcdt.qlnvhang.repository.BaseRepository;
 
 import java.util.List;
 

@@ -1,11 +1,12 @@
-package com.tcdt.qlnvhang.repository;
+package com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong;
 
 import java.beans.Transient;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import com.tcdt.qlnvhang.table.HhHopDongHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongHdr;
+import com.tcdt.qlnvhang.repository.BaseRepository;
 import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,7 @@ public interface HhHopDongRepository extends BaseRepository<HhHopDongHdr, Long> 
   Optional<HhHopDongHdr> findBySoHd(String soHd);
 
   List<HhHopDongHdr> findAllByIdQdKqLcnt(Long idQdKqLcnt);
+
 
   @Query(
       value = "SELECT * " +

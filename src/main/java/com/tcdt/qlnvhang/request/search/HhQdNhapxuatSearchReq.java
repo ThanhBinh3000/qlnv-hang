@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.request.search;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.BaseRequest;
@@ -23,9 +25,16 @@ public class HhQdNhapxuatSearchReq extends BaseRequest {
 	Date denNgayQd;
 
 	String maDvi;
+
 	String maVthh;
+
 	String loaiQd;
+
 	Long namNhap;
+
 	String loaiVthh;
+
 	String trichYeu;
+
+	List<String> bienBan = new ArrayList<>();
 }

@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.entities.nhaphang.vattu.phieunhapkhotamgui;
+package com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkhotamgui;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,6 +23,9 @@ public class NhPhieuNhapKhoTamGuiCt implements Serializable {
     @Column(name = "PHIEU_NK_TG_ID")
     private Long phieuNkTgId;
 
+    @Column(name = "MO_TA_HANG_HOA")
+    private String moTaHangHoa;
+
     @Column(name = "MA_SO")
     private String maSo;
 
@@ -38,12 +41,6 @@ public class NhPhieuNhapKhoTamGuiCt implements Serializable {
     @Column(name = "DON_GIA")
     private BigDecimal donGia;
 
-    @Column(name = "THANH_TIEN")
-    private BigDecimal thanhTien;
 
-    @Column(name = "VTHH")
-    private String vthh;
 
-    @Column(name = "STT")
-    private Integer stt;
 }

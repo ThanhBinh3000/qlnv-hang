@@ -5,7 +5,6 @@ import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.object.HhDxKhLcntThopHdrReq;
-import com.tcdt.qlnvhang.request.search.HhDxKhLcntTChiThopReq;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.SearchXhThopDxKhBdg;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.XhThopChiTieuReq;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.XhThopDxKhBdgReq;
@@ -55,19 +54,20 @@ public class XhThopDxKhBdgController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Thêm mới tổng hợp ", response = List.class)
-    @PostMapping(value=  PathContains.TH_KH_BDG +PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> create(HttpServletRequest request
-            ,@Valid @RequestBody XhThopDxKhBdgReq objReq) {
+    @ApiOperation(value = "Tạo mới tổng hợp đề xuất kế hoạch bán đấu giá", response = List.class)
+    @PostMapping(value = PathContains.TH_KH_BDG +PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<BaseResponse> insert(HttpServletRequest request,
+                                               @Valid @RequestBody XhThopDxKhBdgReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhThopDxKhBdgService.create(objReq,request));
+            resp.setData(xhThopDxKhBdgService.create(objReq, request));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Thêm mới tổng hợp : {}", e);
+            log.error("Tạo mới tổng hợp đề xuất kế hoạch bán đấu giá trace: {}", e);
         }
         return ResponseEntity.ok(resp);
     }

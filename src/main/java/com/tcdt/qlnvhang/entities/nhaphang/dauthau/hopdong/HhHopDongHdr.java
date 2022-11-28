@@ -1,7 +1,6 @@
-package com.tcdt.qlnvhang.table;
+package com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,13 +20,13 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.table.HhPhuLucHd;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Where;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tcdt.qlnvhang.entities.FileDKemJoinHopDong;
-import com.tcdt.qlnvhang.util.Contains;
 
 import lombok.Data;
 
@@ -108,6 +107,10 @@ public class HhHopDongHdr extends BaseEntity implements Serializable  {
 
 	@Transient
 	String donViTinh;
+
+	String noiDung;
+
+	String dieuKien;
 
 	@Transient
 	private List<HhHopDongDtl> details;
