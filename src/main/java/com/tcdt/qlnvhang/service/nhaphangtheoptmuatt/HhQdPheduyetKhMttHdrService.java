@@ -112,7 +112,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
             hhDxuatKhMttThopRepository.updateTrangThai(created.getIdThop(),Contains.DADUTHAO_QD);
         }else if (created.getSoDxuat() !=null){
             Optional<HhDxuatKhMttHdr> soDxuat= hhDxuatKhMttRepository.findBySoDxuat(created.getSoDxuat());
-            soDxuat.get().setSoQdPduyet(created.getSoQdPduyet());
+            soDxuat.get().setSoDxuat(created.getSoQdPduyet());
             hhDxuatKhMttRepository.save(soDxuat.get());
         }
         for (HhQdPheduyetKhMttDxReq listDx :objReq.getHhQdPheduyetKhMttDxList()){
@@ -253,7 +253,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
            hhDxuatKhMttThopRepository.updateTrangThai(data.getIdThop(),Contains.CHUATAO_QD);
        }else if (data.getSoDxuat() !=null){
            Optional<HhDxuatKhMttHdr> soDxuat= hhDxuatKhMttRepository.findBySoDxuat(data.getSoDxuat());
-           soDxuat.get().setSoQdPduyet(data.getSoQdPduyet());
+           soDxuat.get().setSoDxuat(data.getSoQdPduyet());
            hhDxuatKhMttRepository.save(soDxuat.get());
        }
         List<HhQdPheduyetKhMttDx> hhQdPheduyetKhMttDxList=hhQdPheduyetKhMttDxRepository.findAllByIdPduyetHdr(data.getId());
@@ -285,7 +285,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
                 hhDxuatKhMttThopRepository.updateTrangThai(qdPheduyetKhMttHdr.getIdThop(),Contains.CHUATAO_QD);
             }else if (qdPheduyetKhMttHdr.getSoDxuat() !=null){
                 Optional<HhDxuatKhMttHdr> soDxuat= hhDxuatKhMttRepository.findBySoDxuat(qdPheduyetKhMttHdr.getSoDxuat());
-                soDxuat.get().setSoQdPduyet(qdPheduyetKhMttHdr.getSoQdPduyet());
+                soDxuat.get().setSoDxuat(qdPheduyetKhMttHdr.getSoQdPduyet());
                 hhDxuatKhMttRepository.save(soDxuat.get());
             }
         }

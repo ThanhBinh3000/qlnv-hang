@@ -100,7 +100,7 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
             thopDtl.setTrichYeu(dxuat.getTrichYeu());
             thopDtl.setTenDuAn(dxuat.getTenDuAn());
             thopDtl.setTongSoLuong(dxuat.getTongSoLuong());
-            thopDtl.setGiaCoThue(dxuat.getGiaCoThue());
+            thopDtl.setGiaCoThue(dxuat.getDonGiaVat());
             Optional<HhDxuatKhMttHdr> dx = hhDxuatKhMttRepository.findById(dxuat.getId());
             thopDtl.setDxuatHdr(dx.get());
 

@@ -33,7 +33,8 @@ public interface HhDxuatKhMttRepository extends JpaRepository<HhDxuatKhMttHdr, L
             ,nativeQuery = true)
     Page<HhDxuatKhMttHdr> searchPage(Integer namKh, String soDxuat, String ngayTaoTu, String ngayTaoDen,String ngayDuyetTu, String ngayDuyetDen, String trichYeu,String noiDungTh, String loaiVthh, String trangThai, String trangThaiTh, String maDvi, Pageable pageable);
 
-
+    @Transactional
+    void deleteAllByIdIn(List<Long> ids);
     Optional<HhDxuatKhMttHdr> findBySoDxuat(String soDxuat);
     List<HhDxuatKhMttHdr> findBySoDxuatIn (List<String> list);
 
