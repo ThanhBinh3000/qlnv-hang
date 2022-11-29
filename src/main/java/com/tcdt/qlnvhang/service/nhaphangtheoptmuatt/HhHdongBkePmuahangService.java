@@ -77,8 +77,8 @@ public class HhHdongBkePmuahangService extends BaseServiceImpl {
             f.setThongTinDviCungCap(listTtCc);
             f.setThongTinChuDauTu(listTtDtu);
             f.setDiaDiemGiaoNhanHangList(listDdNh);
-            f.setTrangThaiHd(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiHd()));
-            f.setTrangThaiNh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiNh()));
+            f.setTenTrangThaiHd(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiHd()));
+            f.setTenTrangThaiNh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiNh()));
             f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : hashMapDmdv.get(f.getMaDvi()));
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmhh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmhh.get(f.getCloaiVthh()));
@@ -190,7 +190,7 @@ public class HhHdongBkePmuahangService extends BaseServiceImpl {
         data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh())?null:hashMapDmhh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh())?null:hashMapDmhh.get(data.getCloaiVthh()));
         data.setTenTrangThaiHd(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiHd()));
-        data.setTentrangThaiNh(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiNh()));
+        data.setTenTrangThaiNh(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiNh()));
         data.setTenDvi(StringUtils.isEmpty(data.getMaDvi()) ? null : hashMapDmdv.get(data.getMaDvi()));
         List<HhThongTinDviDtuCcap> listTtCc=hhThongTinDviDtuCcapRepository.findAllByIdHdrAndType(data.getId(),Contains.CUNG_CAP);
         List<HhThongTinDviDtuCcap> listTtDtu=hhThongTinDviDtuCcapRepository.findAllByIdHdrAndType(data.getId(), Contains.DAU_TU);
