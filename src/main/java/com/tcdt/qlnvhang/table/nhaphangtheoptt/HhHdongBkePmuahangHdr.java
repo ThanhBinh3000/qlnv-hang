@@ -64,7 +64,7 @@ public class HhHdongBkePmuahangHdr implements Serializable {
     private String tenTrangThaiHd;
     private String trangThaiNh;
     @Transient
-    private String tentrangThaiNh;
+    private String tenTrangThaiNh;
     private String loaiVthh;
     @Transient
     private String tenLoaiVthh;
