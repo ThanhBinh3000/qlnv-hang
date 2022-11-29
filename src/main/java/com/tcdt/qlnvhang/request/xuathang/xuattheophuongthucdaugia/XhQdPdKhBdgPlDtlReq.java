@@ -7,12 +7,13 @@ import java.math.BigDecimal;
 @Data
 public class XhQdPdKhBdgPlDtlReq {
     private Long id;
-    private Long idPl;
+    private Long idPhanLo;
     private String maDvi;
     private String tenDvi;
     private String maDiemKho;
     private String maNganKho;
     private String maLoKho;
+    private String maNhaKho;
     private String maDviTsan;
     private BigDecimal soLuong;
     private String DviTinh;

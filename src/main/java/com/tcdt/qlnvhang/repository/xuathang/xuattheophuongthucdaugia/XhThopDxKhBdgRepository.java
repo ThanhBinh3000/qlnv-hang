@@ -15,6 +15,12 @@ import java.util.Optional;
 @Repository
 public interface XhThopDxKhBdgRepository extends JpaRepository<XhThopDxKhBdg,Long> {
 
+    @Transactional()
+    @Modifying
+    @Query(value = "UPDATE XH_THOP_DX_KH_BAN_DAU_GIA SET TRANG_THAI =:trangThai WHERE ID = :idThHdr", nativeQuery = true)
+    void updateTrangThai(Long idThHdr, String trangThai);
+
+
     @Query(value = "select * from XH_THOP_DX_KH_BAN_DAU_GIA  TH" +
             " where (:namKh IS NULL OR TH.NAM_KH = TO_NUMBER(:namKh)) " +
             "AND (:loaiVthh IS NULL OR TH.LOAI_VTHH = :loaiVthh) " +

@@ -17,8 +17,8 @@ public class XhThopDxKhBdg implements Serializable {
     public static final String TABLE_NAME = "XH_THOP_DX_KH_BAN_DAU_GIA";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_THOP_DX_KH_BDG_SEQ")
-    @SequenceGenerator(sequenceName = "XH_THOP_DX_KH_BDG_SEQ", allocationSize = 1, name = "XH_THOP_DX_KH_BDG_SEQ")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_THOP_DX_KH_BDG_SEQ")
+//    @SequenceGenerator(sequenceName = "XH_THOP_DX_KH_BDG_SEQ", allocationSize = 1, name = "XH_THOP_DX_KH_BDG_SEQ")
     private Long id;
     @Temporal(TemporalType.DATE)
     private Date ngayThop;
@@ -47,6 +47,10 @@ public class XhThopDxKhBdg implements Serializable {
     private String maDvi;
 
     private String soQdPd;
+
+    private String moTaHangHoa;
+
+    private String tchuanCluong;
 
     @Transient
     private List<XhThopDxKhBdgDtl> thopDxKhBdgDtlList= new ArrayList<>();

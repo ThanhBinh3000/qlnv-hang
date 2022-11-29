@@ -19,27 +19,64 @@ public class XhQdPdKhBdgPl implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_QD_PD_KH_BDG_PL_SEQ ")
     @SequenceGenerator(sequenceName = "XH_QD_PD_KH_BDG_PL_SEQ ", allocationSize = 1, name = "XH_QD_PD_KH_BDG_PL_SEQ ")
     private Long id;
-    private Long idQdPdDtl;
+    private Long idQdDtl;
     private String maDvi;
+    @Transient
     private String tenDvi;
     private String maDiemKho;
     @Transient
     private String tenDiemKho;
+
+
     private String maNganKho;
     @Transient
     private String tenNganKho;
+
     private String maLoKho;
     @Transient
     private String tenLoKho;
+
     private String maDviTsan;
-    private Integer soLuong;
+
+    private BigDecimal soLuong;
+
     private String DviTinh;
+
     private BigDecimal giaKhongVat;
+
     private BigDecimal giaKhoiDiem;
+
     private BigDecimal tienDatTruoc;
-    private Integer soLuongChiTieu;
-    private Integer soLuongKh;
+
+    private String trangThai;
+    @Transient
+    private String tenTrangThai;
+
+
+
+    private BigDecimal soLuongChiTieu;
+
+    private BigDecimal soLuongKh;
+
+    private String maNhaKho;
+    @Transient
+    private String tenNhaKho;
+
+
+
+
+    private String loaiVthh;
+   private String cloaiVthh;
+    @Transient
+   private String tenCloaiVthh;
+    @Transient
+   private String tenLoaiVthh;
+    @Transient
+    private XhQdPdKhBdgDtl xhQdPdKhBdgDtl;
 
     @Transient
-    List<XhQdPdKhBdgPlDtl> qdPdKhBdgPlDtlList =new ArrayList<>();
+    private XhQdPdKhBdg xhQdPdKhBdg;
+
+    @Transient
+    List<XhQdPdKhBdgPlDtl> children =new ArrayList<>();
 }
