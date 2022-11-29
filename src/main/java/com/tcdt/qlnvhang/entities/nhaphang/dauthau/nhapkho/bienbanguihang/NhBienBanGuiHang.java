@@ -123,5 +123,5 @@ public class NhBienBanGuiHang extends TrangThaiBaseEntity implements Serializabl
     private BigDecimal soLuongDdiemGiaoNvNh;
 
     @Transient
-    private List<NhBienBanGuiHangCt> chiTiets = new ArrayList<>();
+    private List<NhBienBanGuiHangCt> children = new ArrayList<>();
 }

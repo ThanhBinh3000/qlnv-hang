@@ -1,10 +1,13 @@
 package com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "NH_BIEN_BAN_GUI_HANG_CT")
+@Data
 public class NhBienBanGuiHangCt implements Serializable {
     private static final long serialVersionUID = -1130590655733872367L;
     @Id
@@ -25,46 +28,4 @@ public class NhBienBanGuiHangCt implements Serializable {
     @Column(name = "LOAI_BEN")
     private String loaiBen;
 
-    @Column(name = "STT")
-    private Integer stt;
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getChucVu() {
-        return this.chucVu;
-    }
-
-    public void setChucVu(String chucVu) {
-        this.chucVu = chucVu;
-    }
-
-    public String getDaiDien() {
-        return this.daiDien;
-    }
-
-    public void setDaiDien(String daiDien) {
-        this.daiDien = daiDien;
-    }
-
-    public Long getBienBanGuiHangId() {
-        return this.bienBanGuiHangId;
-    }
-
-    public void setBienBanGuiHangId(Long bienBanGuiHangId) {
-        this.bienBanGuiHangId = bienBanGuiHangId;
-    }
-
-    public String getLoaiBen() {
-        return this.loaiBen;
-    }
-
-    public void setLoaiBen(String loaiBen) {
-        this.loaiBen = loaiBen;
-    }
 }
