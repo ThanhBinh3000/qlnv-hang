@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface KhCnNghiemThuThanhLyRepository extends JpaRepository<KhCnNghiemThuThanhLy,Long> {
-    Optional<KhCnNghiemThuThanhLy> findAllByIdHdr(Long ids);
+    List<KhCnNghiemThuThanhLy> findAllByIdHdr(Long ids);
     List<KhCnNghiemThuThanhLy> findAllByIdHdrIn(List<Long> ids);
 }

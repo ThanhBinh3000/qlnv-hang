@@ -3,7 +3,6 @@ package com.tcdt.qlnvhang.service.khoahoccongnghebaoquan;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.khoahoccongnghebaoquan.KhCnCongTrinhNghienCuuRepository;
-import com.tcdt.qlnvhang.repository.khoahoccongnghebaoquan.KhCnNghiemThuThanhLyDtlRepository;
 import com.tcdt.qlnvhang.repository.khoahoccongnghebaoquan.KhCnNghiemThuThanhLyRepository;
 import com.tcdt.qlnvhang.repository.khoahoccongnghebaoquan.KhCnTienDoThucHienRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -17,7 +16,6 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.khoahoccongnghebaoquan.KhCnCongTrinhNghienCuu;
 import com.tcdt.qlnvhang.table.khoahoccongnghebaoquan.KhCnNghiemThuThanhLy;
-import com.tcdt.qlnvhang.table.khoahoccongnghebaoquan.KhCnNghiemThuThanhLyDtl;
 import com.tcdt.qlnvhang.table.khoahoccongnghebaoquan.KhCnTienDoThucHien;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -49,8 +47,6 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
     @Autowired
     private KhCnNghiemThuThanhLyRepository khCnNghiemThuThanhLyRepository;
 
-    @Autowired
-    private KhCnNghiemThuThanhLyDtlRepository khCnNghiemThuThanhLyDtlRepository;
     @Autowired
     private FileDinhKemService fileDinhKemService;
 
@@ -85,7 +81,6 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         }
         Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
         KhCnCongTrinhNghienCuu data= new ModelMapper().map(objReq,KhCnCongTrinhNghienCuu.class);
-        data.setTrangThai(Contains.DUTHAO);
         data.setMaDvi(userInfo.getDvql());
         data.setTenDvi(StringUtils.isEmpty(userInfo.getDvql()) ? null : hashMapDmdv.get(userInfo.getDvql()));
         KhCnCongTrinhNghienCuu created= khCnCongTrinhNghienCuuRepository.save(data);
@@ -114,8 +109,8 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         KhCnCongTrinhNghienCuu created= khCnCongTrinhNghienCuuRepository.save(data);
         List<KhCnTienDoThucHien> tienDoThucHien = khCnTienDoThucHienRepository.findAllByIdHdr(data.getId());
         khCnTienDoThucHienRepository.deleteAll(tienDoThucHien);
-        Optional<KhCnNghiemThuThanhLy> nghiemThuThanhLy = khCnNghiemThuThanhLyRepository.findAllByIdHdr(data.getId());
-        khCnNghiemThuThanhLyRepository.delete(nghiemThuThanhLy.get());
+        List<KhCnNghiemThuThanhLy> nghiemThuThanhLy = khCnNghiemThuThanhLyRepository.findAllByIdHdr(data.getId());
+        khCnNghiemThuThanhLyRepository.deleteAll(nghiemThuThanhLy);
         this.saveCtiet(data,objReq);
         return created;
     }
@@ -126,18 +121,12 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
             tienDoThucHien.setIdHdr(data.getId());
             khCnTienDoThucHienRepository.save(tienDoThucHien);
         }
-        KhCnNghiemThuThanhLyReq nghiemThuThanhLyReq =objReq.getNghiemThu();
+        for (KhCnNghiemThuThanhLyReq nghiemThuThanhLyReq:objReq.getChildren()){
             KhCnNghiemThuThanhLy nghiemThuThanhLy = new ModelMapper().map(nghiemThuThanhLyReq, KhCnNghiemThuThanhLy.class);
             nghiemThuThanhLy.setId(null);
             nghiemThuThanhLy.setIdHdr(data.getId());
             khCnNghiemThuThanhLyRepository.save(nghiemThuThanhLy);
-            for (KhCnNghiemThuThanhLyDtl nghiemThuThanhLyDtlReq:nghiemThuThanhLy.getChildren()){
-                KhCnNghiemThuThanhLyDtl nghiemThuThanhLyDtl = new ModelMapper().map(nghiemThuThanhLyDtlReq, KhCnNghiemThuThanhLyDtl.class);
-                nghiemThuThanhLyDtl.setId(null);
-                nghiemThuThanhLyDtl.setIdNghiemThu(data.getId());
-                khCnNghiemThuThanhLyDtlRepository.save(nghiemThuThanhLyDtl);
-            }
-
+        }
     }
 
     public KhCnCongTrinhNghienCuu detail(String ids) throws Exception{
@@ -150,12 +139,9 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         data.setTenDvi(StringUtils.isEmpty(data.getTenDvi())?null:hashMapDmhh.get(data.getMaDvi()));
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
         List<KhCnTienDoThucHien> tienDoThucHien = khCnTienDoThucHienRepository.findAllByIdHdr(data.getId());
-        Optional<KhCnNghiemThuThanhLy> nghiemThuThanhLy = khCnNghiemThuThanhLyRepository.findAllByIdHdr(data.getId());
-        KhCnNghiemThuThanhLy nghiemThu= nghiemThuThanhLy.get();
-        List<KhCnNghiemThuThanhLyDtl> listChildren=khCnNghiemThuThanhLyDtlRepository.findAllByIdNghiemThu(nghiemThu.getId());
-        nghiemThu.setChildren(listChildren);
+        List<KhCnNghiemThuThanhLy> nghiemThuThanhLy = khCnNghiemThuThanhLyRepository.findAllByIdHdr(data.getId());
+        data.setChildren(nghiemThuThanhLy);
         data.setTienDoThucHien(tienDoThucHien);
-        data.setNghiemThu(nghiemThu);
         return data;
     }
 
@@ -173,11 +159,8 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         KhCnCongTrinhNghienCuu data = optional.get();
         List<KhCnTienDoThucHien> tienDoThucHien = khCnTienDoThucHienRepository.findAllByIdHdr(data.getId());
         khCnTienDoThucHienRepository.deleteAll(tienDoThucHien);
-        Optional<KhCnNghiemThuThanhLy> nghiemThuThanhLy = khCnNghiemThuThanhLyRepository.findAllByIdHdr(data.getId());
-        KhCnNghiemThuThanhLy nghiemThu=nghiemThuThanhLy.get();
-        khCnNghiemThuThanhLyRepository.delete(nghiemThuThanhLy.get());
-        List<KhCnNghiemThuThanhLyDtl> listChildren=khCnNghiemThuThanhLyDtlRepository.findAllByIdNghiemThu(nghiemThu.getId());
-        khCnNghiemThuThanhLyDtlRepository.deleteAll(listChildren);
+        List<KhCnNghiemThuThanhLy> nghiemThuThanhLy = khCnNghiemThuThanhLyRepository.findAllByIdHdr(data.getId());
+        khCnNghiemThuThanhLyRepository.deleteAll(nghiemThuThanhLy);
         fileDinhKemService.delete(data.getId(),  Lists.newArrayList("KH_CN_CONG_TRINH_NGHIEN_CUU"));
         khCnCongTrinhNghienCuuRepository.delete(data);
 
@@ -199,9 +182,6 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         khCnTienDoThucHienRepository.deleteAll(tienDoThucHien);
         List<KhCnNghiemThuThanhLy> nghiemThuThanhLy = khCnNghiemThuThanhLyRepository.findAllByIdHdrIn(listIdHdr);
         khCnNghiemThuThanhLyRepository.deleteAll(nghiemThuThanhLy);
-        List<Long>listId=nghiemThuThanhLy.stream().map(KhCnNghiemThuThanhLy::getId).collect(Collectors.toList());
-        List<KhCnNghiemThuThanhLyDtl> listChildren=khCnNghiemThuThanhLyDtlRepository.findAllByIdNghiemThuIn(listId);
-        khCnNghiemThuThanhLyDtlRepository.deleteAll(listChildren);
         fileDinhKemService.deleteMultiple(idSearchReq.getIdList(),  Lists.newArrayList("HH_QD_GIAO_NV_NHAP_HANG"));
         khCnCongTrinhNghienCuuRepository.deleteAll(list);
 
@@ -226,7 +206,7 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
             objs[0]=i;
             objs[1]=dx.getMaDeTai();
             objs[2]=dx.getTenDeTai();
-            objs[3]=dx.getCapDetai();
+            objs[3]=dx.getCapDeTai();
             objs[4]=dx.getTuNam();
             objs[5]=dx.getDenNam();
             objs[6]=dx.getTenTrangThai();
@@ -247,27 +227,27 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         }
 
         String status= statusReq.getTrangThai()+optional.get().getTrangThai();
-//        switch (status){
-//            case Contains.CHO_DUYET_TP + Contains.DUTHAO:
-//            case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
-//            case Contains.CHO_DUYET_TP + Contains.TUCHOI_TP:
-//            case Contains.CHO_DUYET_TP + Contains.TUCHOI_LDC:
-//                optional.get().setNguoiGduyetId(userInfo.getUsername());
-//                optional.get().setNgayGduyet(getDateTimeNow());
-//                break;
-//            case Contains.TUCHOI_TP + Contains.CHO_DUYET_TP:
-//            case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
-//                optional.get().setNguoiPduyetId(getUser().getUsername());
-//                optional.get().setNgayPduyet(getDateTimeNow());
-//                    optional.get().setLdoTuchoi(statusReq.getLyDo());
-//                break;
-//            case Contains.BAN_HANH + Contains.CHODUYET_LDC:
-//                optional.get().setNguoiPduyetId(getUser().getUsername());
-//                optional.get().setNgayPduyet(getDateTimeNow());
-//                break;
-//            default:
-//                throw new Exception("Phê duyệt không thành công");
-//        }
+        switch (status){
+            case Contains.CHO_DUYET_TP + Contains.DUTHAO:
+            case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
+            case Contains.CHO_DUYET_TP + Contains.TUCHOI_TP:
+            case Contains.CHO_DUYET_TP + Contains.TUCHOI_LDC:
+                optional.get().setNguoiGduyetId(userInfo.getId());
+                optional.get().setNgayGduyet(getDateTimeNow());
+                break;
+            case Contains.TUCHOI_TP + Contains.CHO_DUYET_TP:
+            case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
+                optional.get().setNguoiPduyetId(getUser().getId());
+                optional.get().setNgayPduyet(getDateTimeNow());
+                    optional.get().setLdoTuChoi(statusReq.getLyDo());
+                break;
+            case Contains.BAN_HANH + Contains.CHODUYET_LDC:
+                optional.get().setNguoiPduyetId(getUser().getId());
+                optional.get().setNgayPduyet(getDateTimeNow());
+                break;
+            default:
+                throw new Exception("Phê duyệt không thành công");
+        }
         optional.get().setTrangThai(statusReq.getTrangThai());
         KhCnCongTrinhNghienCuu created = khCnCongTrinhNghienCuuRepository.save(optional.get());
         return created;

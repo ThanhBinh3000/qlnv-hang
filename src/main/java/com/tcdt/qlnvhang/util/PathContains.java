@@ -138,6 +138,9 @@ public class PathContains {
 	public static final String TH_KH_BDG = "/thop-kh-bdg";
 
 	public static final String QD_PD_BDG = "/qd-pd-bdg";
+	public static final String KH_CN_BQ = "/kh-cn-bq";
+
+
 
 	// Dau thau vat tu
 	public static final String KH_LCNT_VT = "/kh-lcnt/vat-tu";

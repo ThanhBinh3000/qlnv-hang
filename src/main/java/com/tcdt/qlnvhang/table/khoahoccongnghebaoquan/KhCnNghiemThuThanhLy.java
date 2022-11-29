@@ -1,13 +1,10 @@
 package com.tcdt.qlnvhang.table.khoahoccongnghebaoquan;
 
-import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+
 
 @Entity
 @Table(name = "KH_CN_NGHIEM_THU_THANH_LY")
@@ -21,16 +18,6 @@ public class KhCnNghiemThuThanhLy implements Serializable {
 
     private Long id;
     private Long idHdr;
-    @Temporal(TemporalType.DATE)
-    private Date ngayNghiemThu;
-    private String diaDiem;
     private String hoTen;
     private String donVi;
-    private String yKienDanhGia;
-    private Integer tongDiem;
-    private String xepLoai;
-    @Transient
-    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
-    @Transient
-    private  List<KhCnNghiemThuThanhLyDtl> children= new ArrayList<>();
 }

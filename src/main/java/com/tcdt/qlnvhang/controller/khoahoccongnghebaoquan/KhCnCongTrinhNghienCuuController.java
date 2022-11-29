@@ -37,7 +37,7 @@ public class KhCnCongTrinhNghienCuuController {
 
 
     @ApiOperation(value = "Tra cứu ", response = List.class)
-    @PostMapping(value=  PathContains.BB_LM + PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value=  PathContains.KH_CN_BQ + PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody SearchKhCnCtrinhNcReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -53,7 +53,7 @@ public class KhCnCongTrinhNghienCuuController {
     }
 
     @ApiOperation(value = "Tạo mới ", response = List.class)
-    @PostMapping(value=  PathContains.BB_LM + PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value=  PathContains.KH_CN_BQ + PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> save(@Valid @RequestBody KhCnCongTrinhNghienCuuReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -69,7 +69,7 @@ public class KhCnCongTrinhNghienCuuController {
     }
 
     @ApiOperation(value = "Sửa ", response = List.class)
-    @PostMapping(value=  PathContains.BB_LM + PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value=  PathContains.KH_CN_BQ + PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> update(@Valid @RequestBody KhCnCongTrinhNghienCuuReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -85,7 +85,7 @@ public class KhCnCongTrinhNghienCuuController {
     }
 
     @ApiOperation(value = "Lấy chi tiết thông tin ", response = List.class)
-    @GetMapping(value =PathContains.BB_LM+ PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value =PathContains.KH_CN_BQ+ PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> detail(
             @ApiParam(value = "ID ", example = "1", required = true) @PathVariable("ids") String ids) {
@@ -103,7 +103,7 @@ public class KhCnCongTrinhNghienCuuController {
     }
 
     @ApiOperation(value = "Xóa ", response = List.class)
-    @PostMapping(value=  PathContains.BB_LM + PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value=  PathContains.KH_CN_BQ + PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -119,7 +119,7 @@ public class KhCnCongTrinhNghienCuuController {
     }
 
     @ApiOperation(value = "Xóa dánh sách ", response = List.class)
-    @PostMapping(value=  PathContains.BB_LM + PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value=  PathContains.KH_CN_BQ + PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -135,7 +135,7 @@ public class KhCnCongTrinhNghienCuuController {
     }
 
     @ApiOperation(value = "Kết xuất danh sách ", response = List.class)
-    @PostMapping(value= PathContains.BB_LM + PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value= PathContains.KH_CN_BQ + PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void exportListQdBtcBnToExcel(@Valid @RequestBody SearchKhCnCtrinhNcReq objReq, HttpServletResponse response) throws Exception{
 
@@ -158,7 +158,7 @@ public class KhCnCongTrinhNghienCuuController {
     }
 
     @ApiOperation(value = "Phê duyêt  ", response = List.class)
-    @PostMapping(value=PathContains.BB_LM + PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value=PathContains.KH_CN_BQ + PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> updateStatusUbtvqh(@Valid @RequestBody StatusReq statusReq, HttpServletRequest req) {
         BaseResponse resp = new BaseResponse();
         try {

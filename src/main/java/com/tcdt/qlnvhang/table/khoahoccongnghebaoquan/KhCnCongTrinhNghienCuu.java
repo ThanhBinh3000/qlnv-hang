@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.khoahoccongnghebaoquan;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.request.khoahoccongnghebaoquan.KhCnNghiemThuThanhLyReq;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
 
@@ -25,7 +26,7 @@ public class KhCnCongTrinhNghienCuu extends BaseEntity implements Serializable  
 
     private String maDeTai;
     private String tenDeTai;
-    private String capDetai;
+    private String capDeTai;
     private Integer tuNam;
     private Integer denNam;
     private String chuNhiem;
@@ -40,22 +41,28 @@ public class KhCnCongTrinhNghienCuu extends BaseEntity implements Serializable  
     private BigDecimal tongChiPhi;
     @Temporal(TemporalType.DATE)
     private Date ngayGduyet;
-    private String nguoiGduyetId;
+    private Long nguoiGduyetId;
     @Temporal(TemporalType.DATE)
     private Date ngayPduyet;
-    private String nguoiPduyetId;
+    private Long nguoiPduyetId;
     private String trangThai;
     @Transient
     private String tenTrangThai;
     private String maDvi;
     @Transient
     private String tenDvi;
-
+    @Temporal(TemporalType.DATE)
+    private Date ngayNghiemThu;
+    private String diaDiem;
+    private String danhGia;
+    private Integer tongDiem;
+    private String xepLoai;
+    private String ldoTuChoi;
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
     @Transient
     private List<KhCnTienDoThucHien> tienDoThucHien = new ArrayList<>();
     @Transient
-    private KhCnNghiemThuThanhLy nghiemThu;
+    private List<KhCnNghiemThuThanhLy> children = new ArrayList<>();
 
 }
