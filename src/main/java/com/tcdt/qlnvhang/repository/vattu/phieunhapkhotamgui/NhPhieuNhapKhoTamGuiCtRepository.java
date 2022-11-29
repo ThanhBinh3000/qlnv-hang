@@ -13,6 +13,8 @@ import java.util.List;
 public interface NhPhieuNhapKhoTamGuiCtRepository extends BaseRepository<NhPhieuNhapKhoTamGuiCt, Long> {
     List<NhPhieuNhapKhoTamGuiCt> findByPhieuNkTgIdIn(Collection<Long> phieuNkTgIds);
 
+    List<NhPhieuNhapKhoTamGuiCt> findByPhieuNkTgId(Long phieuNkTgId);
+
     @Transactional
     @Modifying
     void deleteByPhieuNkTgIdIn(Collection<Long> phieuNkTgIds);
