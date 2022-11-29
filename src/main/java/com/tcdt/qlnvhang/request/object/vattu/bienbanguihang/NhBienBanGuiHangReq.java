@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.object.vattu.bienbanguihang;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.SoBienBanPhieuReq;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
@@ -18,9 +19,8 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class NhBienBanGuiHangReq extends SoBienBanPhieuReq {
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BIEN_BAN_GUI_HANG_SEQ")
-//    @SequenceGenerator(sequenceName = "BIEN_BAN_GUI_HANG_SEQ", allocationSize = 1, name = "BIEN_BAN_GUI_HANG_SEQ")
+public class NhBienBanGuiHangReq extends BaseRequest {
+
     private Long id;
 
     private String maDvi;

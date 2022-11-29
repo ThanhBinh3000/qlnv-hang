@@ -1,11 +1,13 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bienbanguihang;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHang;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHangCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHangCtRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHangRepository;
+import com.tcdt.qlnvhang.request.object.vattu.bienbanguihang.NhBienBanGuiHangCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanguihang.NhBienBanGuiHangReq;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.UserInfo;
@@ -17,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -58,6 +61,7 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
     }
 
     @Override
+    @Transactional
     public NhBienBanGuiHang create(NhBienBanGuiHangReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
 
@@ -68,17 +72,25 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
         item.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         item.setMaDvi(userInfo.getDvql());
         item.setNam(LocalDate.now().getYear());
-
+        item.setId(Long.parseLong(item.getSoBienBanGuiHang().split("/")[0]));
         bienBanGuiHangRepository.save(item);
-
+        this.saveDetail(req,item.getId());
         return item;
     }
 
+    @Transactional
     void saveDetail(NhBienBanGuiHangReq req,Long id){
-
+        bienBanGuiHangCtRepository.deleteByBienBanGuiHangId(id);
+        for(NhBienBanGuiHangCtReq ctReq : req.getChildren()){
+            NhBienBanGuiHangCt ct = new NhBienBanGuiHangCt();
+            BeanUtils.copyProperties(ctReq,ct,"id");
+            ct.setBienBanGuiHangId(id);
+            bienBanGuiHangCtRepository.save(ct);
+        }
     }
 
     @Override
+    @Transactional
     public NhBienBanGuiHang update(NhBienBanGuiHangReq req) throws Exception {
         return null;
     }
