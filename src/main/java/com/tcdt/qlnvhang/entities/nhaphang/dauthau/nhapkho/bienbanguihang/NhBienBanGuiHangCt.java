@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.entities.nhaphang.vattu.bienbanguihang;
+package com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang;
 
 import javax.persistence.*;
 import java.io.Serializable;

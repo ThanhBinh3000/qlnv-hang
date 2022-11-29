@@ -83,14 +83,26 @@ public class NhPhieuNhapKhoTamGui extends TrangThaiBaseEntity implements Seriali
     @Column(name = "MA_DIEM_KHO")
     private String maDiemKho;
 
+    @Transient
+    private String tenDiemKho;
+
     @Column(name = "MA_NHA_KHO")
     private String maNhaKho;
+
+    @Transient
+    private String tenNhaKho;
 
     @Column(name = "MA_NGAN_KHO")
     private String maNganKho;
 
+    @Transient
+    private String tenNganKho;
+
     @Column(name = "MA_LO_KHO")
     private String maLoKho;
+
+    @Transient
+    private String tenLoKho;
 
     @Column(name = "SO_LUONG_DDIEM_GIAO_NV_NH")
     private BigDecimal soLuongDdiemGiaoNvNh;
@@ -98,14 +110,26 @@ public class NhPhieuNhapKhoTamGui extends TrangThaiBaseEntity implements Seriali
     @Column(name = "LOAI_VTHH")
     private String loaiVthh;
 
+    @Transient
+    private String tenLoaiVthh;
+
     @Column(name = "CLOAI_VTHH")
     private String cloaiVthh;
+
+    @Transient
+    private String tenCloaiVthh;
 
     @Column(name = "MA_DVI")
     private String maDvi;
 
+    @Transient
+    private String tenDvi;
+
     @Column(name = "NAM")
     private Integer nam;
+
+    @Column(name = "GHI_CHU")
+    private String ghiChu;
 
     @Transient
     private List<NhPhieuNhapKhoTamGuiCt> children = new ArrayList<>();
