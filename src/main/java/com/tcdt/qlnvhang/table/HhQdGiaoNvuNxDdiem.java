@@ -5,6 +5,8 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieu
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKho;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bienbanchuanbikho.NhBienBanChuanBiKho;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkhotamgui.NhPhieuNhapKhoTamGui;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -83,4 +85,10 @@ public class HhQdGiaoNvuNxDdiem implements Serializable {
 
 	@Transient
 	BienBanLayMau bienBanLayMau;
+
+	@Transient
+	NhBienBanChuanBiKho bienBanChuanBiKho;
+
+	@Transient
+	NhPhieuNhapKhoTamGui phieuNhapKhoTamGui;
 }

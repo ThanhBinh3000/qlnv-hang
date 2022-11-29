@@ -15,7 +15,5 @@ public class NhPhieuNhapKhoTamGuiCtReq {
     private BigDecimal soLuongChungTu;
     private BigDecimal soLuongThucNhap;
     private BigDecimal donGia;
-    private BigDecimal thanhTien;
-    private String vthh;
-    private Integer stt;
+    private String moTaHangHoa;
 }

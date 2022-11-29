@@ -10,12 +10,12 @@ import com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.phieukiemnghiemcl.P
 import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHangService;
 import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoService;
 import com.tcdt.qlnvhang.service.nhaphang.vattu.bangke.NhBangKeVtService;
-import com.tcdt.qlnvhang.service.nhaphang.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoService;
-import com.tcdt.qlnvhang.service.nhaphang.vattu.bienbanguihang.NhBienBanGuiHangService;
+import com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.bienbancbkho.NhBienBanChuanBiKhoService;
+import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHangService;
 import com.tcdt.qlnvhang.service.nhaphang.vattu.bienbanketthucnhapkho.NhBbKtNhapKhoVtService;
 import com.tcdt.qlnvhang.service.nhaphang.vattu.bienbaogiaonhan.NhBbGiaoNhanVtService;
 import com.tcdt.qlnvhang.service.nhaphang.vattu.hosokythuat.NhHoSoKyThuatService;
-import com.tcdt.qlnvhang.service.nhaphang.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiService;
+import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiService;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
@@ -74,11 +74,11 @@ public class CountNhapHangServiceImpl extends BaseServiceImpl implements CountNh
 //        counts.add(nhPhieuNhapKhoService.count(req.getMaDvis()));
 //        counts.add(bangKeCanHangLtService.count(req.getMaDvis()));
 //        counts.add(bienBanNhapDayKhoLtService.count(req.getMaDvis()));
-        counts.add(phieuNhapKhoTamGuiService.count(req.getMaDvis()));
-        counts.add(bienBanGuiHangService.count(req.getMaDvis()));
-        counts.add(nhBangKeVtService.count(req.getMaDvis()));
-        counts.add(nhBbKtNhapKhoVtService.count(req.getMaDvis()));
-        counts.add(bbGiaoNhanVtService.count(req.getMaDvis()));
+//        counts.add(phieuNhapKhoTamGuiService.count(req.getMaDvis()));
+//        counts.add(bienBanGuiHangService.count(req.getMaDvis()));
+//        counts.add(nhBangKeVtService.count(req.getMaDvis()));
+//        counts.add(nhBbKtNhapKhoVtService.count(req.getMaDvis()));
+//        counts.add(bbGiaoNhanVtService.count(req.getMaDvis()));
 
         BaseNhapHangCount count = new BaseNhapHangCount();
         count.setThoc(counts.stream().map(BaseNhapHangCount::getThoc).mapToInt(Integer::intValue).sum());

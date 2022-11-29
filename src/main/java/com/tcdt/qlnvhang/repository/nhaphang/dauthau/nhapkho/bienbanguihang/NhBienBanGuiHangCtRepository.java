@@ -1,6 +1,6 @@
-package com.tcdt.qlnvhang.repository.vattu.bienbanguihang;
+package com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbanguihang;
 
-import com.tcdt.qlnvhang.entities.nhaphang.vattu.bienbanguihang.NhBienBanGuiHangCt;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHangCt;
 import com.tcdt.qlnvhang.repository.BaseRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;

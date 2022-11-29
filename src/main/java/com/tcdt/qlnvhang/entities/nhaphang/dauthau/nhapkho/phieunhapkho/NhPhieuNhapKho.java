@@ -72,14 +72,8 @@ public class NhPhieuNhapKho extends TrangThaiBaseEntity implements Serializable 
     @Column(name = "LOAI_HINH_NHAP")
     private String loaiHinhNhap;
 
-    @Column(name = "NGUOI_TAO_ID")
-    private Long nguoiTaoId;
-
     @Transient
     private String tenNguoiTao;
-
-    @Column(name = "NGUOI_SUA_ID")
-    private Long nguoiSuaId;
 
     @Column(name = "ID_DDIEM_GIAO_NV_NH")
     private Long idDdiemGiaoNvNh;

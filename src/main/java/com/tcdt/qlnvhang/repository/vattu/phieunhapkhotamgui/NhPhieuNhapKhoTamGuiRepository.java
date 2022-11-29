@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.repository.vattu.phieunhapkhotamgui;
 
-import com.tcdt.qlnvhang.entities.nhaphang.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGui;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkhotamgui.NhPhieuNhapKhoTamGui;
 import com.tcdt.qlnvhang.repository.BaseRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
@@ -15,6 +15,8 @@ public interface NhPhieuNhapKhoTamGuiRepository extends BaseRepository<NhPhieuNh
     @Modifying
     void deleteByIdIn(Collection<Long> ids);
 
-    Optional<NhPhieuNhapKhoTamGui> findFirstBySoPhieu(String soPhieu);
+//    Optional<NhPhieuNhapKhoTamGui> findFirstBySoPhieu(String soPhieu);
+
+    NhPhieuNhapKhoTamGui findByIdDdiemGiaoNvNh(Long idDdiemGiaoNvNh);
 
 }
