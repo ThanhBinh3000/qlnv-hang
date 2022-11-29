@@ -151,10 +151,8 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         if (!optional.isPresent()){
             throw new Exception("Bản ghi không tồn tại");
         }
-        if (!optional.get().getTrangThai().equals(Contains.DUTHAO)
-                && !optional.get().getTrangThai().equals(Contains.TUCHOI_TP)
-                && !optional.get().getTrangThai().equals(Contains.TUCHOI_LDC)){
-            throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối");
+        if (!optional.get().getTrangThai().equals(Contains.DUTHAO)){
+            throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản dự thảo");
         }
         KhCnCongTrinhNghienCuu data = optional.get();
         List<KhCnTienDoThucHien> tienDoThucHien = khCnTienDoThucHienRepository.findAllByIdHdr(data.getId());
