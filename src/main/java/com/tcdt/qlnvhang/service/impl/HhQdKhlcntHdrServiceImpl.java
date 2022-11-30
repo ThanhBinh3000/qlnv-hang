@@ -295,10 +295,12 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			throw new Exception("Không tìm thấy dữ liệu cần sửa");
 		}
 
-		if (!qOptional.get().getSoQd().equals(objReq.getSoQd())) {
-			List<HhQdKhlcntHdr> checkSoQd = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQd());
-			if (!checkSoQd.isEmpty()) {
-				throw new Exception("Số quyết định " + objReq.getSoQd() + " đã tồn tại");
+		if(!StringUtils.isEmpty(objReq.getSoQd())){
+			if (!objReq.getSoQd().equals(qOptional.get().getSoQd())) {
+				List<HhQdKhlcntHdr> checkSoQd = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQd());
+				if (!checkSoQd.isEmpty()) {
+					throw new Exception("Số quyết định " + objReq.getSoQd() + " đã tồn tại");
+				}
 			}
 		}
 
