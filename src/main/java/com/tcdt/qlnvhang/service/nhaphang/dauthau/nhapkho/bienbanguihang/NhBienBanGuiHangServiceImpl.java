@@ -149,7 +149,17 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
 
     @Override
     public void delete(Long id) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        Optional<NhBienBanGuiHang> optional = bienBanGuiHangRepository.findById(id);
+        if (!optional.isPresent())
+            throw new Exception("Biên bản gửi hàng không tồn tại.");
 
+        NhBienBanGuiHang item = optional.get();
+        if (NhapXuatHangTrangThaiEnum.DA_HOAN_THANH.getId().equals(item.getTrangThai())) {
+            throw new Exception("Không thể xóa biên bản đã đã duyệt");
+        }
+        bienBanGuiHangCtRepository.deleteByBienBanGuiHangIdIn(Collections.singleton(item.getId()));
+        bienBanGuiHangRepository.delete(item);
     }
 
     @Override
