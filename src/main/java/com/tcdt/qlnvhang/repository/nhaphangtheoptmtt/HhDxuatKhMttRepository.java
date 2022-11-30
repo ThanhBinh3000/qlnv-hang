@@ -16,7 +16,11 @@ import java.util.Optional;
 
 @Repository
 public interface HhDxuatKhMttRepository extends JpaRepository<HhDxuatKhMttHdr, Long> {
-    
+
+    @Transactional()
+    @Modifying
+    @Query(value = "UPDATE HH_DX_KHMTT_HDR SET TRANG_THAI_TH=:trangThaiTh WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
+    void updateStatusInList(List<String> soDxuatList, String trangThaiTh);
 
     @Query(value = "select * from HH_DX_KHMTT_HDR MTT where (:namKh IS NULL OR MTT.NAM_KH = TO_NUMBER(:namKh)) " +
             "AND (:soDxuat IS NULL OR LOWER(MTT.SO_DXUAT) LIKE LOWER(CONCAT(CONCAT('%',:soDxuat),'%' ) ) )" +
@@ -46,7 +50,7 @@ public interface HhDxuatKhMttRepository extends JpaRepository<HhDxuatKhMttHdr, L
             " AND MTT.TRANG_THAI = '"+ Contains.DADUYET_LDC+"'" +
             " AND MTT.TRANG_THAI_TH = '"+ Contains.CHUATONGHOP+"'" +
             " AND MTT.MA_THOP is null "+
-            " AND MTT.SO_QD_PDUYET is null "+
+//            " AND MTT.SO_QD_PDUYET is null "+
             " AND (:maDvi IS NULL OR LOWER(MTT.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "
             ,nativeQuery = true)
     List<HhDxuatKhMttHdr> listTongHop(Integer namKh, String loaiVthh, String cloaiVthh, String maDvi);

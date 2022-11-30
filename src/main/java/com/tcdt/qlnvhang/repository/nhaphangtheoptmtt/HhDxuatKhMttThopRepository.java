@@ -17,7 +17,7 @@ public interface HhDxuatKhMttThopRepository extends JpaRepository<HhDxKhMttThopH
 
     @Query(value = "select * from HH_DX_KHMTT_THOP_HDR TH" +
             " LEFT JOIN HH_QD_PHE_DUYET_KHMTT_HDR QDPD ON TH.ID=QDPD.ID_THOP"+
-            " where (:namKh IS NULL OR TH.NAM_KHOACH = TO_NUMBER(:namKh)) " +
+            " where (:namKh IS NULL OR TH.NAM_KH = TO_NUMBER(:namKh)) " +
             "AND (:loaiVthh IS NULL OR TH.LOAI_VTHH = :loaiVthh) " +
             "AND (:cloaiVthh IS NULL OR TH.CLOAI_VTHH = :cloaiVthh) " +
             "AND (:noiDung IS NULL OR LOWER( TH.NOI_DUNG) LIKE LOWER(CONCAT(CONCAT('%',:noiDung),'%')))" +

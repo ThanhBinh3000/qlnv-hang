@@ -7,6 +7,8 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhDxKhMttTChiThopReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhDxKhMttThopHdrReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhDxKhMttThopReq;
+import com.tcdt.qlnvhang.request.object.HhDxKhLcntThopHdrReq;
+import com.tcdt.qlnvhang.request.search.HhDxKhLcntTChiThopReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.nhaphangtheoptmuatt.HhDxuatKhMttThopService;
 import com.tcdt.qlnvhang.util.PathContains;
@@ -31,62 +33,47 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/mua-truc-tiep")
 @Slf4j
-@Api(tags = "Tổng hợp đề xuất kế hoạch mua trực tiếp")
+@Api(tags = "Nhập hàng - Mua trực tiếp - Kế hoạch mua trực tiếp - Tổng hợp đề xuất kế hoạch mua trực tiếp")
 public class HhDxuatKhMttThopHdrController  extends BaseController {
 
     @Autowired
     private HhDxuatKhMttThopService hhDxuatKhMttThopService;
 
-    @ApiOperation(value = "Tổng hợp", response = List.class)
-    @PostMapping(value=  PathContains.TH_MUA_TT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> sumarryData(HttpServletRequest request
-            ,@Valid @RequestBody HhDxKhMttTChiThopReq objReq) {
+    @ApiOperation(value = "Tổng hợp đề xuất kế hoạch mua trực tiếp", response = List.class)
+    @PostMapping(value =  PathContains.TH_MUA_TT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> sumarryData(HttpServletRequest request,
+                                                    @Valid @RequestBody HhDxKhMttTChiThopReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(hhDxuatKhMttThopService.sumarrayDaTa(objReq,request));
+            resp.setData(hhDxuatKhMttThopService.sumarryData(objReq, request));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Tổng hợp: {}", e);
+            log.error("Tổng hợp đề xuất kế hoạch lựa chọn nhà thầu Gạo trace: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Thêm mới ", response = List.class)
-    @PostMapping(value=  PathContains.TH_MUA_TT +PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> create(HttpServletRequest request
-            ,@Valid @RequestBody HhDxKhMttThopHdrReq objReq) {
+    @ApiOperation(value = "Tạo mới tổng hợp đề xuất kế hoạch mua trực tiếp", response = List.class)
+    @PostMapping(value =PathContains.TH_MUA_TT +  PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<BaseResponse> insert(HttpServletRequest request,
+                                               @Valid @RequestBody HhDxKhMttThopHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(hhDxuatKhMttThopService.create(objReq,request));
+            resp.setData(hhDxuatKhMttThopService.create(objReq, request));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Thêm mới : {}", e);
+            log.error("Tạo mới tổng hợp đề xuất kế hoạch lựa chọn nhà thầu trace: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
-
-    @ApiOperation(value = "Cập nhật ", response = List.class)
-    @PostMapping(value=  PathContains.TH_MUA_TT +PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> update(@Valid @RequestBody HhDxKhMttThopHdrReq objReq) {
-        BaseResponse resp = new BaseResponse();
-        try {
-            resp.setData(hhDxuatKhMttThopService.update(objReq));
-            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-        } catch (Exception e) {
-            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-            resp.setMsg(e.getMessage());
-            log.error("Cập nhật : {}", e);
-        }
-        return ResponseEntity.ok(resp);
-    }
-
 
     @ApiOperation(value = "Tra cứu ", response = List.class)
     @PostMapping(value = PathContains.TH_MUA_TT + PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -101,6 +88,79 @@ public class HhDxuatKhMttThopHdrController  extends BaseController {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
             log.error("Tra cứu  trace: {}", e);
+        }
+
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Lấy chi tiết đề xuất kế hoạch mua trực tiếp", response = List.class)
+    @GetMapping(value =PathContains.TH_MUA_TT + PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> detail(
+            @ApiParam(value = "ID đề xuất kế hoạch mua trực tiếp", example = "1", required = true) @PathVariable("ids") String ids) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(hhDxuatKhMttThopService.detail(ids));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Lấy chi tiết đề xuất kế hoạch mua trực tiếp trace: {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Cập nhật tổng hợp đề xuất kế hoạch mua trực tiếp", response = List.class)
+    @PostMapping(value =PathContains.TH_MUA_TT + PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> update(HttpServletRequest request,
+                                               @Valid @RequestBody HhDxKhMttThopHdrReq objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(hhDxuatKhMttThopService.update(objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Cập nhật tổng hợp đề xuất kế hoạch mua trực tiếp trace: {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Xoá đề xuất kế hoạch mua trực tiếp", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value =PathContains.TH_MUA_TT + PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            hhDxuatKhMttThopService.delete(idSearchReq);
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            // TODO: handle exception
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Xoá đề xuất kế hoạch mua trực tiếp trace: {}", e);
+        }
+
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Xoá đề xuất kế hoạch lựa chọn nhà thầu", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value =PathContains.TH_MUA_TT +  PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> deleteMultiple(@Valid @RequestBody IdSearchReq idSearchReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            hhDxuatKhMttThopService.deleteMulti(idSearchReq);
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            // TODO: handle exception
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Xoá đề xuất kế hoạch lựa chọn nhà thầu gạo trace: {}", e);
         }
 
         return ResponseEntity.ok(resp);
@@ -127,56 +187,6 @@ public class HhDxuatKhMttThopHdrController  extends BaseController {
             mapper.writeValue(response.getOutputStream(), body);
         }
 
-    }
-
-    @ApiOperation(value = "Xóa ", response = List.class)
-    @PostMapping(value=  PathContains.TH_MUA_TT + PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
-        BaseResponse resp = new BaseResponse();
-        try {
-            hhDxuatKhMttThopService.delete(idSearchReq);
-            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-        } catch (Exception e) {
-            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-            resp.setMsg(e.getMessage());
-            log.error("xóa: {}", e);
-        }
-        return ResponseEntity.ok(resp);
-    }
-
-    @ApiOperation(value = "Xóa dánh sách ", response = List.class)
-    @PostMapping(value=  PathContains.TH_MUA_TT + PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
-        BaseResponse resp = new BaseResponse();
-        try {
-            hhDxuatKhMttThopService.deleteMulti(idSearchReq);
-            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-        } catch (Exception e) {
-            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-            resp.setMsg(e.getMessage());
-            log.error("Xóa danh sách: {}", e);
-        }
-        return ResponseEntity.ok(resp);
-    }
-
-    @ApiOperation(value = "Lấy chi tiết tổng hợp đề xuất kế hoạch mua trực tiếp", response = List.class)
-    @GetMapping(value = PathContains.TH_MUA_TT + PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> detail(
-            @ApiParam(value = "ID tổng hựp đề xuất kế hoạch mua trực tiếp", example = "1", required = true) @PathVariable("ids") String ids) {
-        BaseResponse resp = new BaseResponse();
-        try {
-            resp.setData(hhDxuatKhMttThopService.detail(ids));
-            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-        } catch (Exception e) {
-            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-            resp.setMsg(e.getMessage());
-            log.error("Lấy chi tiết tổng hợp đề xuất kế hoạch mua trực tiếp trace: {}", e);
-        }
-        return ResponseEntity.ok(resp);
     }
 
 }
