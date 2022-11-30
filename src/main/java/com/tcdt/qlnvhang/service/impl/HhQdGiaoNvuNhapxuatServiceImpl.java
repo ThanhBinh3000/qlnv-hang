@@ -638,7 +638,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 					item.setTenNganKho(mapDmucDvi.get(item.getMaNganKho()));
 					item.setTenLoKho(mapDmucDvi.get(item.getMaLoKho()));
 					NhBbNhapDayKho nhBbNhapDayKhoStream = bbNhapDayKho.stream().filter(x -> Objects.equals(x.getId(), item.getIdBbNhapDayKho())).findAny().orElse(null);
-					item.setNgayNhapDayKho(nhBbNhapDayKhoStream.getNgayKetThucNhap());
+					item.setBbNhapDayKho(nhBbNhapDayKhoStream);
 				});
 				dtl.setListBienBanLayMau(bbLayMau);
 
