@@ -15,5 +15,7 @@ public interface NhBienBanGuiHangRepository extends BaseRepository<NhBienBanGuiH
     @Modifying
     void deleteByIdIn(Collection<Long> ids);
 
+    NhBienBanGuiHang findByIdDdiemGiaoNvNh(Long idDdiemGiaoNvNh);
+
 //    Optional<NhBienBanGuiHang> findFirstBySoBienBan(String soBienBan);
 }
