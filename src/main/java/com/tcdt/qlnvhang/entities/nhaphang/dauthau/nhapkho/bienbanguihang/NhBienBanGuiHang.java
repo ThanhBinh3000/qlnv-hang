@@ -34,6 +34,9 @@ public class NhBienBanGuiHang extends TrangThaiBaseEntity implements Serializabl
     @Column(name = "MA_DVI")
     private String maDvi;
 
+    @Transient
+    private String tenDvi;
+
     @Column(name = "SO_QD_GIAO_NV_NH")
     private String soQdGiaoNvNh; // HhQdGiaoNvuNhapxuatHdr
 
