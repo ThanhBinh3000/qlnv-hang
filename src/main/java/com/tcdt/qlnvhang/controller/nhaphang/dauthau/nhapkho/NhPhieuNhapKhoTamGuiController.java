@@ -2,12 +2,10 @@ package com.tcdt.qlnvhang.controller.nhaphang.dauthau.nhapkho;
 
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.DeleteReq;
-import com.tcdt.qlnvhang.request.IdSearchReq;
-import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiReq;
 import com.tcdt.qlnvhang.request.search.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.nhaphang.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiService;
+import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -65,10 +63,10 @@ public class NhPhieuNhapKhoTamGuiController {
 
     @ApiOperation(value = "Chi tiết Quản lý", response = List.class)
     @GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> detail(@PathVariable Long id) {
+    public ResponseEntity<BaseResponse> detail(@PathVariable Long ids) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.detail(id));
+            resp.setData(service.detail(ids));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

@@ -1,14 +1,17 @@
-package com.tcdt.qlnvhang.service.nhaphang.vattu.phieunhapkhotamgui;
+package com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.phieunhapkhotamgui;
 
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bienbanchuanbikho.NhBienBanChuanBiKho;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkhotamgui.NhPhieuNhapKhoTamGui;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiCtRepository;
 import com.tcdt.qlnvhang.repository.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiRepository;
 import com.tcdt.qlnvhang.request.object.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiReq;
+import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -20,6 +23,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -41,6 +45,9 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
 
     @Autowired
     private final HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
+
+    @Autowired
+    private final UserInfoRepository userInfoRepository;
 
     @Autowired
     private final KtNganLoRepository ktNganLoRepository;
@@ -89,7 +96,7 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
         phieuNhapKhoTamGuiCtRepository.deleteAllByPhieuNkTgId(id);
         for(NhPhieuNhapKhoTamGuiCtReq reqCt :req.getChildren()){
             NhPhieuNhapKhoTamGuiCt dataCt = new NhPhieuNhapKhoTamGuiCt();
-            BeanUtils.copyProperties(req,dataCt,"id");
+            BeanUtils.copyProperties(reqCt,dataCt,"id");
             dataCt.setPhieuNkTgId(id);
             phieuNhapKhoTamGuiCtRepository.save(dataCt);
         }
@@ -120,12 +127,51 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
 
     @Override
     public NhPhieuNhapKhoTamGui detail(Long id) throws Exception {
-        return null;
+        UserInfo userInfo = UserUtils.getUserInfo();
+        Optional<NhPhieuNhapKhoTamGui> optional = nhPhieuNhapKhoTamGuiRepository.findById(id);
+        if (!optional.isPresent()){
+            throw new Exception("Phiếu nhập kho tạm gửi không tồn tại.");
+        }
+        NhPhieuNhapKhoTamGui item = optional.get();
+        Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
+        Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
+        item.setTenDvi(listDanhMucDvi.get(item.getMaDvi()));
+        item.setTenDiemKho(listDanhMucDvi.get(item.getMaDiemKho()));
+        item.setTenNhaKho(listDanhMucDvi.get(item.getMaNhaKho()));
+        item.setTenNganKho(listDanhMucDvi.get(item.getMaNganKho()));
+        item.setTenLoKho(listDanhMucDvi.get(item.getMaLoKho()));
+        item.setTenNguoiTao(ObjectUtils.isEmpty(item.getNguoiTaoId()) ? null : userInfoRepository.findById(item.getNguoiTaoId()).get().getFullName());
+        item.setTenLoaiVthh(listDanhMucHangHoa.get(item.getLoaiVthh()));
+        item.setTenCloaiVthh(listDanhMucHangHoa.get(item.getCloaiVthh()));
+        item.setChildren(phieuNhapKhoTamGuiCtRepository.findByPhieuNkTgId(item.getId()));
+        item.setFileDinhKems(fileDinhKemService.search(item.getId(), Collections.singleton(NhPhieuNhapKhoTamGui.TABLE_NAME)));
+        return item;
     }
 
     @Override
     public NhPhieuNhapKhoTamGui approve(NhPhieuNhapKhoTamGuiReq req) throws Exception {
-        return null;
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null)
+            throw new Exception("Bad request.");
+
+        Optional<NhPhieuNhapKhoTamGui> optional = nhPhieuNhapKhoTamGuiRepository.findById(req.getId());
+        if (!optional.isPresent()) {
+            throw new Exception("Không tìm thấy dữ liệu.");
+        }
+
+        NhPhieuNhapKhoTamGui item = optional.get();
+        String trangThai = req.getTrangThai() + item.getTrangThai();
+        if (
+            (NhapXuatHangTrangThaiEnum.DA_HOAN_THANH.getId() + NhapXuatHangTrangThaiEnum.DUTHAO.getId()).equals(trangThai)
+        ) {
+            item.setNguoiPduyetId(userInfo.getId());
+            item.setNgayPduyet(new Date());
+        }else{
+            throw new Exception("Phê duyệt không thành công");
+        }
+        item.setTrangThai(req.getTrangThai());
+        nhPhieuNhapKhoTamGuiRepository.save(item);
+        return item;
     }
 
     @Override

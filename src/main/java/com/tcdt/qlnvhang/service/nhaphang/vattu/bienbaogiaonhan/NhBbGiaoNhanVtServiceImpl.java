@@ -2,7 +2,7 @@ package com.tcdt.qlnvhang.service.nhaphang.vattu.bienbaogiaonhan;
 
 import com.tcdt.qlnvhang.entities.nhaphang.vattu.bienbangiaonhan.NhBbGiaoNhanVt;
 import com.tcdt.qlnvhang.entities.nhaphang.vattu.bienbangiaonhan.NhBbGiaoNhanVtCt;
-import com.tcdt.qlnvhang.entities.nhaphang.vattu.bienbanguihang.NhBienBanGuiHang;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHang;
 import com.tcdt.qlnvhang.entities.nhaphang.vattu.bienbanketthucnhapkho.NhBbKtNhapKhoVt;
 import com.tcdt.qlnvhang.entities.nhaphang.vattu.hosokythuat.NhHoSoKyThuat;
 import com.tcdt.qlnvhang.enums.LoaiDaiDienEnum;
@@ -12,7 +12,7 @@ import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.vattu.bienbangiaonhan.NhBbGiaoNhanVtCtRepository;
 import com.tcdt.qlnvhang.repository.vattu.bienbangiaonhan.NhBbGiaoNhanVtRepository;
-import com.tcdt.qlnvhang.repository.vattu.bienbanguihang.NhBienBanGuiHangRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHangRepository;
 import com.tcdt.qlnvhang.repository.vattu.bienbanketthucnhapkho.NhBbKtNhapKhoVtRepository;
 import com.tcdt.qlnvhang.repository.vattu.hosokythuat.NhHoSoKyThuatRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
@@ -153,7 +153,7 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
             if (!bbGh.isPresent()) {
                 throw new Exception("Không tìm thấy biên bản gửi hàng");
             }
-            res.setSoBbGh(bbGh.get().getSoBienBan());
+//            res.setSoBbGh(bbGh.get().getSoBienBan());
         }
 
         if (item.getHoSKyThuatId() != null) {

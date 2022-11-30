@@ -75,6 +75,8 @@ public class NhPhieuNhapKhoTamGuiReq extends BaseRequest {
 
     private Integer nam;
 
+    private String ghiChu;
+
     private List<NhPhieuNhapKhoTamGuiCtReq> children = new ArrayList<>();
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 }
