@@ -34,12 +34,6 @@ public class NhBangKeVt extends BaseEntity implements Serializable {
     @Column(name = "DIA_CHI_NGUOI_GIAO")
     private String diaChiNguoiGiao;
 
-    @Column(name = "TRANG_THAI")
-    private String trangThai;
-
-    @Column(name = "LY_DO_TU_CHOI")
-    private String lyDoTuChoi;
-
     @Column(name = "NAM")
     private Long nam;
 
@@ -96,18 +90,6 @@ public class NhBangKeVt extends BaseEntity implements Serializable {
 
     @Column(name = "MA_DVI")
     private String maDvi;
-
-    @Column(name = "NGAY_GUI_DUYET")
-    private LocalDate ngayGuiDuyet;
-
-    @Column(name = "NGUOI_DUI_DUYET_ID")
-    private String nguoiGuiDuyetId;
-
-    @Column(name = "NGAY_PHE_DUYET")
-    private LocalDate ngayPheDuyet;
-
-    @Column(name = "NGUOI_PHE_DUYET_ID")
-    private String nguoiPheDuyetId;
 
 
     @Transient
