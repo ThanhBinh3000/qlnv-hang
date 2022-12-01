@@ -208,7 +208,7 @@ public class XhQdPdKhBdgService extends BaseServiceImpl {
             for (XhQdPdKhBdgPl dsgthau : dtl.getChildren()){
                 BigDecimal aLong =xhDxKhBanDauGiaRepository.countSLDalenKh(objHdr.getNamKh(), objHdr.getLoaiVthh(), dsgthau.getMaDvi(),NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
                 BigDecimal soLuongTotal = aLong.add(dsgthau.getSoLuong());
-                BigDecimal nhap = keHoachService.getChiTieuNhapXuat(objHdr.getNamKh(),objHdr.getLoaiVthh(), dsgthau.getMaDvi(), "NHAP" );
+                BigDecimal nhap = keHoachService.getChiTieuNhapXuat(objHdr.getNamKh(),objHdr.getLoaiVthh(), dsgthau.getMaDvi(), "XUAT" );
                 if (soLuongTotal.compareTo(nhap) >0){
                     throw new Exception(dsgthau.getTenDvi()+ "Đã nhập quá số lượng chỉ tiêu vui lòng nhập lại");
                 }
