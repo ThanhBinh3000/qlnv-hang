@@ -75,12 +75,12 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
         if (userInfo == null)
             throw new Exception("Bad request.");
         HhQdPheduyetKhMttHdr dataMap = new ModelMapper().map(objReq,HhQdPheduyetKhMttHdr.class);
-        List<HhQdPheduyetKhMttDx> listDx=hhQdPheduyetKhMttDxRepository.findAllByIdPduyetHdr(objReq.getId());
-        for (HhQdPheduyetKhMttDx dx :listDx){
-            dataMap.setLoaiVthh(dx.getLoaiVthh());
-            dataMap.setCloaiVthh(dx.getCloaiVthh());
-            dataMap.setMoTaHangHoa(dx.getMoTaHangHoa());
-        }
+//        List<HhQdPheduyetKhMttDx> listDx=hhQdPheduyetKhMttDxRepository.findAllByIdPduyetHdr(objReq.getId());
+//        for (HhQdPheduyetKhMttDx dx :listDx){
+//            dataMap.setLoaiVthh(dx.getLoaiVthh());
+//            dataMap.setCloaiVthh(dx.getCloaiVthh());
+//            dataMap.setMoTaHangHoa(dx.getMoTaHangHoa());
+//        }
         if(dataMap.getPthucMuatt().equals(Contains.UY_QUYEN)){
             List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),dataMap.getId(),"HH_DX_KHMTT_HDR");
             dataMap.setFileDinhKemUyQuyen(fileDinhKems);

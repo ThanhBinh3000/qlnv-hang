@@ -17,12 +17,20 @@ public class HhQdPdKhMttSlddDtl implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_QD_PD_KHMTT_SLDD_DTL_SEQ ")
     @SequenceGenerator(sequenceName = "HH_QD_PD_KHMTT_SLDD_DTL_SEQ ", allocationSize = 1, name = "HH_QD_PD_KHMTT_SLDD_DTL_SEQ ")
     private Long id;
-    private Long idSldd;
+
     private String maDvi;
     @Transient
     private String tenDvi;
+
     private String maDiemKho;
-    private String diaDiemKho;
-    private BigDecimal soLuongDxmtt;
-    private BigDecimal donGiaVat;
+
+    @Transient
+    private String tenDiemKho;
+
+    private String diaDiemNhap;
+
+    private BigDecimal soLuong;
+    private BigDecimal donGia;
+    private BigDecimal thanhTien;
+    private Long idDiaDiem;
 }

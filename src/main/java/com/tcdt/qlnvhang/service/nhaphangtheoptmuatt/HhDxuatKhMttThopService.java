@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
 
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxKhlcntDsgthau;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -10,8 +12,11 @@ import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhDxKhMttThopHdrReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhDxKhMttThopReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.HhDxKhLcntThopDtl;
+import com.tcdt.qlnvhang.table.HhDxKhLcntThopHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
+import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.XhDxKhBanDauGia;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
@@ -25,6 +30,8 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -47,11 +54,11 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
     private HhDxuatKhMttCcxdgRepository hhDxuatKhMttCcxdgRepository;
 
 
-    public Page<HhDxKhMttThopHdr> searchPage(SearchHhDxKhMttThopReq objReq) throws Exception{
-        UserInfo userInfo= SecurityContextService.getUser();
+    public Page<HhDxKhMttThopHdr> searchPage(SearchHhDxKhMttThopReq objReq) throws Exception {
+        UserInfo userInfo = SecurityContextService.getUser();
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),
                 objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
-        Page<HhDxKhMttThopHdr> data=hhDxuatKhMttThopRepository.searchPage(
+        Page<HhDxKhMttThopHdr> data = hhDxuatKhMttThopRepository.searchPage(
                 objReq.getNamKh(),
                 objReq.getLoaiVthh(),
                 objReq.getCloaiVthh(),
@@ -63,7 +70,7 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
                 objReq.getTrangThai(),
                 userInfo.getDvql(),
                 pageable);
-        Map<String,String> hashMapDmhh = getListDanhMucHangHoa();
+        Map<String, String> hashMapDmhh = getListDanhMucHangHoa();
         data.getContent().forEach(f -> {
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmhh.get(f.getLoaiVthh()));
@@ -72,63 +79,71 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
         return data;
     }
 
-    public HhDxKhMttThopHdr sumarrayDaTa(HhDxKhMttTChiThopReq objReq, HttpServletRequest req) throws Exception{
-        UserInfo userInfo= SecurityContextService.getUser();
-        List<HhDxuatKhMttHdr> dxuatKhMttHdrs=hhDxuatKhMttRepository.listTongHop(
-                objReq.getNamKh(),
-                objReq.getLoaiVthh(),
-                objReq.getCloaiVthh(),
-                userInfo.getDvql());
-        if (dxuatKhMttHdrs.isEmpty()){
+    public HhDxKhMttThopHdr sumarryData(HhDxKhMttTChiThopReq objReq, HttpServletRequest req) throws Exception {
+        UserInfo userInfo = SecurityContextService.getUser();
+        List<HhDxuatKhMttHdr> dxuatList = hhDxuatKhMttRepository.listTongHop(objReq.getNamKh(), objReq.getLoaiVthh(), objReq.getCloaiVthh(), userInfo.getDvql());
+
+        if (dxuatList.isEmpty()) {
             throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
         }
 
-        HhDxKhMttThopHdr thopHdr=new HhDxKhMttThopHdr();
-        thopHdr.setNamKhoach(objReq.getNamKh());
+        HhDxKhMttThopHdr thopHdr = new HhDxKhMttThopHdr();
+
+        Map<String, String> mapDmuc = getMapCategory();
+
+        Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
+
+        thopHdr.setNamKh(objReq.getNamKh());
         thopHdr.setLoaiVthh(objReq.getLoaiVthh());
+        thopHdr.setTenLoaiVthh(listDanhMucHangHoa.get(objReq.getLoaiVthh()));
         thopHdr.setCloaiVthh(objReq.getCloaiVthh());
+        thopHdr.setTenCloaiVthh(listDanhMucHangHoa.get(objReq.getCloaiVthh()));
 
-        List<HhDxKhMttThopDtl> thopDtls= new ArrayList<>();
-
-        for (HhDxuatKhMttHdr dxuat : dxuatKhMttHdrs) {
+        List<HhDxKhMttThopDtl> thopDtls = new ArrayList<HhDxKhMttThopDtl>();
+        String tChuanCluong = "";
+        for (HhDxuatKhMttHdr dXuat : dxuatList) {
             HhDxKhMttThopDtl thopDtl = new HhDxKhMttThopDtl();
-            thopDtl.setIdDxHdr(dxuat.getId());
-            thopDtl.setSoDxuat(dxuat.getSoDxuat());
-            thopDtl.setMaDvi(dxuat.getMaDvi());
-            thopDtl.setTenDvi(getDviByMa(thopDtl.getMaDvi(),req).getTenDvi());
-            thopDtl.setNgayPduyet(dxuat.getNgayPduyet());
-            thopDtl.setTrichYeu(dxuat.getTrichYeu());
-            thopDtl.setTenDuAn(dxuat.getTenDuAn());
-            thopDtl.setTongSoLuong(dxuat.getTongSoLuong());
-            thopDtl.setGiaCoThue(dxuat.getGiaCoThue());
-            Optional<HhDxuatKhMttHdr> dx = hhDxuatKhMttRepository.findById(dxuat.getId());
-            thopDtl.setDxuatHdr(dx.get());
+            thopDtl.setIdDxHdr(dXuat.getId());
+            thopDtl.setMaDvi(dXuat.getMaDvi());
+            thopDtl.setTenDvi(getDviByMa(dXuat.getMaDvi(), req).getTenDvi());
+            thopDtl.setSoDxuat(dXuat.getSoDxuat());
+            thopDtl.setNgayPduyet(dXuat.getNgayPduyet());
+            thopDtl.setDiaChiDvi(dXuat.getDiaChiDvi());
+            thopDtl.setTenDuAn(dXuat.getTenDuAn());
+            thopDtl.setTrichYeu(dXuat.getTrichYeu());
+            thopDtl.setDonGiaVat(dXuat.getDonGiaVat());
 
+            List<HhDxuatKhMttSldd> dtlslDd = hhDxuatKhMttSlddRepository.findAllByIdDxKhmtt(dXuat.getId());
+            BigDecimal soLuong = BigDecimal.ZERO;
+            BigDecimal tongTien = BigDecimal.ZERO;
+            for (HhDxuatKhMttSldd gthauDtl : dtlslDd) {
+                soLuong = soLuong.add(gthauDtl.getSoLuong());
+                tongTien = tongTien.add(gthauDtl.getThanhTien() == null ? BigDecimal.ZERO : gthauDtl.getThanhTien());
+            }
+            thopDtl.setSoLuong(soLuong);
+            tChuanCluong = tChuanCluong.concat(dXuat.getTchuanCluong() + "");
             thopDtls.add(thopDtl);
         }
+        thopHdr.setTchuanCluong(tChuanCluong);
         thopHdr.setHhDxKhMttThopDtls(thopDtls);
-
-
         return thopHdr;
     }
 
 
     public HhDxKhMttThopHdr create(HhDxKhMttThopHdrReq objReq, HttpServletRequest req) throws Exception {
-        UserInfo userInfo =SecurityContextService.getUser();
+        UserInfo userInfo = SecurityContextService.getUser();
 
-        // Set thong tin hdr tong hop
-        HhDxKhMttThopHdr thopHdr = sumarrayDaTa(objReq,req);
-        thopHdr.setLoaiVthh(objReq.getLoaiVthh());
-        thopHdr.setCloaiVthh(objReq.getCloaiVthh());
+        HhDxKhMttThopHdr thopHdr = sumarryData(objReq, req);
         thopHdr.setNgayTao(getDateTimeNow());
         thopHdr.setNguoiTao(getUser().getUsername());
+        thopHdr.setNoiDung(objReq.getNoiDung());
         thopHdr.setTrangThai(Contains.CHUATAO_QD);
         thopHdr.setNgayThop(new Date());
-        thopHdr.setNoiDung(objReq.getNoiDung());
+        thopHdr.setId(objReq.getId());
+        thopHdr.setSoQdCc(objReq.getSoQdCc());
         thopHdr.setMaDvi(userInfo.getDvql());
-        thopHdr.setNamKhoach(objReq.getNamKh());
         hhDxuatKhMttThopRepository.save(thopHdr);
-        for (HhDxKhMttThopDtl dtl : thopHdr.getHhDxKhMttThopDtls()){
+        for (HhDxKhMttThopDtl dtl : thopHdr.getHhDxKhMttThopDtls()) {
             dtl.setIdThopHdr(thopHdr.getId());
             hhDxuatKhMttThopDtlRepository.save(dtl);
         }
@@ -136,15 +151,16 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
             List<String> soDxuatList = thopHdr.getHhDxKhMttThopDtls().stream().map(HhDxKhMttThopDtl::getSoDxuat)
                     .collect(Collectors.toList());
             List<HhDxuatKhMttHdr> list = hhDxuatKhMttRepository.findBySoDxuatIn(soDxuatList);
-            for (HhDxuatKhMttHdr soDxuat : list){
-                soDxuat.setNoiDungTh(thopHdr.getNoiDung());
-                soDxuat.setMaThop(String.valueOf(thopHdr.getId()));
-                hhDxuatKhMttRepository.save(soDxuat);
+            for (HhDxuatKhMttHdr bdg : list){
+                bdg.setMaThop(String.valueOf(thopHdr.getId()));
+                hhDxuatKhMttRepository.save(bdg);
             }
+            hhDxuatKhMttRepository.updateStatusInList(soDxuatList, Contains.DATONGHOP);
         }
-        return thopHdr;
+return thopHdr;
     }
 
+    @Transactional()
     public HhDxKhMttThopHdr update(HhDxKhMttThopHdrReq objReq) throws Exception {
         if (StringUtils.isEmpty(objReq.getId()))
             throw new Exception("Sửa thất bại, không tìm thấy dữ liệu");
@@ -159,9 +175,10 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
         updateObjectToObject(dataDTB, dataMap);
         hhDxuatKhMttThopRepository.save(dataDTB);
         return dataDTB;
+
     }
 
-    public HhDxKhMttThopHdr detail(String ids) throws Exception {
+    public HhDxKhMttThopHdr detail (String ids) throws Exception{
         if (StringUtils.isEmpty(ids))
             throw new UnsupportedOperationException("Không tồn tại bản ghi");
 
@@ -172,23 +189,12 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
 
         HhDxKhMttThopHdr hdrThop = qOptional.get();
 
-        // Lay danh muc dung chung
         Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 
-        hdrThop.setTenLoaiVthh(StringUtils.isEmpty(hdrThop.getLoaiVthh()) ? null : hashMapDmHh.get(hdrThop.getLoaiVthh()));
+        hdrThop.setTenLoaiVthh(hashMapDmHh.get(hdrThop.getLoaiVthh()));
         hdrThop.setTenCloaiVthh(hashMapDmHh.get(hdrThop.getCloaiVthh()));
-        hdrThop.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(hdrThop.getTrangThai()));
 
         List<HhDxKhMttThopDtl> listTh = hhDxuatKhMttThopDtlRepository.findByIdThopHdr(hdrThop.getId());
-        List<Long> idDxuat=listTh.stream().map(HhDxKhMttThopDtl::getIdDxHdr).collect(Collectors.toList());
-        List<HhDxuatKhMttHdr> lisDxuat=hhDxuatKhMttRepository.findAllByIdIn(idDxuat);
-        for (HhDxKhMttThopDtl dtl : listTh){
-            HhDxuatKhMttHdr deXuat = hhDxuatKhMttRepository.findAllById(dtl.getIdDxHdr());
-            dtl.setDxuatHdr(deXuat);
-//            for(HhDxuatKhMttHdr dxuatKhMttHdr: lisDxuat ){
-//                dtl.setDxuatHdr(dxuatKhMttHdr);
-//            }
-        }
         Map<String, String> mapDmucDvi = getMapTenDvi();
         listTh.forEach(f -> {
             f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
@@ -243,7 +249,6 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
         hhDxuatKhMttThopRepository.deleteAllByIdIn(idSearchReq.getIdList());
     }
 
-
     public void export(SearchHhDxKhMttThopReq searchReq, HttpServletResponse response) throws Exception {
         PaggingReq paggingReq = new PaggingReq();
         paggingReq.setPage(0);
@@ -266,7 +271,7 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
             objs[1] = dx.getId();
             objs[2] = dx.getNgayThop();
             objs[3] = dx.getNoiDung();
-            objs[4] = dx.getNamKhoach();
+            objs[4] = dx.getNamKh();
             objs[5] = dx.getTenCloaiVthh();
             objs[6] = dx.getTenTrangThai();
             objs[7] = dx.getSoQdPduyet();
@@ -276,5 +281,7 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
         ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
         ex.export();
     }
+
+
 
 }

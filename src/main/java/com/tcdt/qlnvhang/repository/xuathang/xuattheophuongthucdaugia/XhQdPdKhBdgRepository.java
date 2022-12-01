@@ -23,9 +23,10 @@ public interface XhQdPdKhBdgRepository extends JpaRepository<XhQdPdKhBdg,Long> {
             "AND (:soTrHdr IS NULL OR LOWER(BDG.SO_TR_HDR) LIKE LOWER(CONCAT(CONCAT('%',:soTrHdr),'%' ) ) )" +
             "AND (:loaiVthh IS NULL OR LOWER(BDG.LOAI_VTHH) LIKE LOWER(CONCAT(:loaiVthh,'%' ) ) )" +
             "AND (:trangThai IS NULL OR BDG.TRANG_THAI = :trangThai)" +
+            " AND (:lastest IS NULL OR BDG.LASTEST = :lastest) " +
             "AND (:maDvi IS NULL OR LOWER(BDG.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "
             ,nativeQuery = true)
-    Page<XhQdPdKhBdg> searchPage(Integer namKh, String soQdPd, String trichYeu, String ngayKyQdTu, String ngayKyQdDen, String soTrHdr, String loaiVthh, String trangThai, String maDvi,  Pageable pageable);
+    Page<XhQdPdKhBdg> searchPage(Integer namKh, String soQdPd, String trichYeu, String ngayKyQdTu, String ngayKyQdDen, String soTrHdr, String loaiVthh, String trangThai,Integer lastest, String maDvi,  Pageable pageable);
 
 
     List<XhQdPdKhBdg> findBySoQdPd(String soQdPd);
