@@ -17,7 +17,7 @@ import java.util.List;
 @Entity
 @Table(name = "NH_BANG_KE_VT")
 @EqualsAndHashCode(callSuper = false)
-public class NhBangKeVt extends BaseEntity implements Serializable {
+public class NhBangKeVt extends TrangThaiBaseEntity implements Serializable {
     private static final long serialVersionUID = 5802077466808854815L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BANG_KE_VT_SEQ")
