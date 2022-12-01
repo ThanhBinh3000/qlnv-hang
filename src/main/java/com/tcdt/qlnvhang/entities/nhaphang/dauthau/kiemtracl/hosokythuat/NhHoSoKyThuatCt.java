@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.entities.nhaphang.vattu.hosokythuat;
+package com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,12 +25,16 @@ public class NhHoSoKyThuatCt implements Serializable {
     @Column(name = "HO_SO_KY_THUAT_ID")
     private Long hoSoKyThuatId;
 
-    @Column(name = "LOAI_DAI_DIEN")
-    private String loaiDaiDien;
+    @Column(name = "TEN_HO_SO")
+    private String tenHoSo;
 
-    @Column(name = "DAI_DIEN")
-    private String daiDien;
+    @Column(name = "LOAI_TAI_LIEU")
+    private String loaiTaiLieu;
 
-    @Column(name = "STT")
-    private Integer stt;
+    @Column(name = "SO_LUONG")
+    private Integer soLuong;
+
+    @Column(name = "GHI_CHU")
+    private String ghiChu;
+
 }

@@ -1,12 +1,13 @@
-package com.tcdt.qlnvhang.controller.vattu.hosokythuat;
+package com.tcdt.qlnvhang.controller.nhaphang.dauthau.ktracl;
 
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.DeleteReq;
+import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.vattu.hosokythuat.NhHoSoKyThuatReq;
 import com.tcdt.qlnvhang.request.search.vattu.hosokythuat.NhHoSoKyThuatSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.nhaphang.vattu.hosokythuat.NhHoSoKyThuatService;
+import com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.hosokythuat.NhHoSoKyThuatService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,7 +32,7 @@ public class NhHoSoKyThuatController {
     private NhHoSoKyThuatService service;
 
     @ApiOperation(value = "Tạo mới Quản lý Hồ sơ kỹ thuật", response = List.class)
-    @PostMapping
+    @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> insert(@Valid @RequestBody NhHoSoKyThuatReq request) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -47,7 +48,7 @@ public class NhHoSoKyThuatController {
     }
 
     @ApiOperation(value = "Sửa Quản lý Hồ sơ kỹ thuật", response = List.class)
-    @PutMapping
+    @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> update(@Valid @RequestBody NhHoSoKyThuatReq request) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -63,7 +64,7 @@ public class NhHoSoKyThuatController {
     }
 
     @ApiOperation(value = "Chi tiết Quản lý Hồ sơ kỹ thuật", response = List.class)
-    @GetMapping("/{id}")
+    @GetMapping(value = PathContains.URL_CHI_TIET + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> detail(@PathVariable Long id) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -79,11 +80,11 @@ public class NhHoSoKyThuatController {
     }
 
     @ApiOperation(value = "Xóa Quản lý Hồ sơ kỹ thuật", response = List.class)
-    @DeleteMapping("/{id}")
-    public ResponseEntity<BaseResponse> delete(@PathVariable Long id) {
+    @PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.delete(id));
+            service.delete(idSearchReq.getId());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -95,11 +96,11 @@ public class NhHoSoKyThuatController {
     }
 
     @ApiOperation(value = "Phê duyệt/ từ chối Quản lý Hồ sơ kỹ thuật", response = List.class)
-    @PutMapping("/status")
-    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody StatusReq req) {
+    @PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody NhHoSoKyThuatReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.updateStatusQd(req));
+            resp.setData(service.approve(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -111,11 +112,11 @@ public class NhHoSoKyThuatController {
     }
 
     @ApiOperation(value = "Tra cứu Quản lý Hồ sơ kỹ thuật", response = List.class)
-    @GetMapping()
-    public ResponseEntity<BaseResponse> search(NhHoSoKyThuatSearchReq req) {
+    @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> search(@RequestBody NhHoSoKyThuatReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.search(req));
+            resp.setData(service.searchPage(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -132,7 +133,7 @@ public class NhHoSoKyThuatController {
     public final ResponseEntity<BaseResponse> deleteMultiple(@RequestBody @Valid DeleteReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.deleteMultiple(req));
+//            resp.setData(service.deleteMultiple(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -150,26 +151,10 @@ public class NhHoSoKyThuatController {
     public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody NhHoSoKyThuatSearchReq req) {
 
         try {
-            service.exportToExcel(req, response);
+//            service.exportToExcel(req, response);
         } catch (Exception e) {
             log.error("Error can not export", e);
         }
 
-    }
-
-    @ApiOperation(value = "Get số Hồ sơ kỹ thuật", response = List.class)
-    @GetMapping("/so")
-    public ResponseEntity<BaseResponse> getSo() {
-        BaseResponse resp = new BaseResponse();
-        try {
-            resp.setData(service.getSo());
-            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-        } catch (Exception e) {
-            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-            resp.setMsg(e.getMessage());
-            log.error("Get số Hồ sơ kỹ thuật lỗi", e);
-        }
-        return ResponseEntity.ok(resp);
     }
 }
