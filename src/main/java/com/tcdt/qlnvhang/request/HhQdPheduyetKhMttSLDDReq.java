@@ -11,19 +11,25 @@ import java.util.List;
 @Data
 public class HhQdPheduyetKhMttSLDDReq {
 
-    @ApiModelProperty(notes = "bắt buộc set phải đối với updata")
+    @ApiModelProperty(notes = "Bắt buộc set đối với update")
     private Long id;
-    private Long idDxKhmtt;
+    private Long idHdr;
+    private BigDecimal soLuong;
+
     private String maDvi;
-    private String tenDvi;
-    private String maDiemKho;
-    private String diaDiemKho;
-    private BigDecimal soLuongCtieu;
-    private BigDecimal soLuongKhDd;
-    private BigDecimal soLuongDxmtt;
     private BigDecimal donGiaVat;
     private BigDecimal thanhTien;
+    private BigDecimal donGiaTamTinh;
 
-    List<HhQdPdKhMttSlddDtlReq> listSlddDtl = new ArrayList<>();
+    private String loaiVthh;
+    private String cloaiVthh;
+
+    private String maDiemKho;
+    private String diaDiemNhap;
+    private BigDecimal soLuongChiTieu;
+    private BigDecimal soLuongKhDd;
+
+
+    List<HhQdPdKhMttSlddDtlReq> children = new ArrayList<>();
 
 }

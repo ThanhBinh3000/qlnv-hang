@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.repository.nhaphangtheoptmtt;
 
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdr;
 import com.tcdt.qlnvhang.table.HhQdPheduyetKhMttHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.XhQdPdKhBdg;
 import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,20 +20,22 @@ import java.util.Optional;
 @Repository
 public interface HhQdPheduyetKhMttHdrRepository extends JpaRepository<HhQdPheduyetKhMttHdr, Long> {
 
+
+
     @Query(value = "select * from HH_QD_PHE_DUYET_KHMTT_HDR MTT " +
-            " LEFT JOIN HH_QD_PHE_DUYET_KHMTT_DX DX ON DX.ID_PDUYET_HDR=MTT.ID"+
             " where (:namKh IS NULL OR MTT.NAM_KH = TO_NUMBER(:namKh)) " +
-            "AND (:soQd IS NULL OR LOWER(MTT.SO_QD_PDUYET) LIKE LOWER(CONCAT(CONCAT('%',:soQd),'%' ) ) )" +
+            "AND (:soQd IS NULL OR LOWER(MTT.SO_QD) LIKE LOWER(CONCAT(CONCAT('%',:soQd),'%' ) ) )" +
             "AND (:trichYeu IS NULL OR LOWER(MTT.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%',:trichYeu),'%')))" +
-            "AND (:ngayKyQdTu IS NULL OR MTT.NGAY_KY >=  TO_DATE(:ngayKyQdTu,'yyyy-MM-dd')) " +
-            "AND (:ngayKyQdDen IS NULL OR MTT.NGAY_KY <= TO_DATE(:ngayKyQdDen,'yyyy-MM-dd'))" +
+            "AND (:ngayQdTu IS NULL OR MTT.NGAY_QD >=  TO_DATE(:ngayQdTu,'yyyy-MM-dd')) " +
+            "AND (:ngayQdDen IS NULL OR MTT.NGAY_QD <= TO_DATE(:ngayQdDen,'yyyy-MM-dd'))" +
+            "AND (:loaiVthh IS NULL OR LOWER(MTT.LOAI_VTHH) LIKE LOWER(CONCAT(:loaiVthh,'%' ) ) )" +
             "AND (:trangThai IS NULL OR MTT.TRANG_THAI = :trangThai)" +
-            "AND (:maDvi IS NULL OR LOWER(DX.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "
+            " AND (:lastest IS NULL OR MTT.LASTEST = :lastest) " +
+            "AND (:maDvi IS NULL OR LOWER(MTT.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "
             ,nativeQuery = true)
-    Page<HhQdPheduyetKhMttHdr> searchPage(Integer namKh, String soQd, String trichYeu, String ngayKyQdTu, String ngayKyQdDen, String maDvi, String trangThai,  Pageable pageable);
+    Page<HhQdPheduyetKhMttHdr> searchPage(Integer namKh, String soQd, String trichYeu, String ngayQdTu, String ngayQdDen,  String loaiVthh, String trangThai,Integer lastest, String maDvi,  Pageable pageable);
 
-
-    Optional<HhQdPheduyetKhMttHdr> findBySoQdPduyet(String soQdPduyet);
+    List<HhQdPheduyetKhMttHdr> findBySoQd(String soQd);
 
     List <HhQdPheduyetKhMttHdr>findAllByIdIn(List<Long> listId);
 
@@ -52,6 +57,13 @@ public interface HhQdPheduyetKhMttHdrRepository extends JpaRepository<HhQdPheduy
     @Modifying
     @Query(value = "update HH_QD_PHE_DUYET_KHMTT_HDR PD set PD.SO_QD_PD_CG=:soQdPdCg  where PD.SO_QD_PDUYET=:soQdPd ",nativeQuery = true)
     void updateSoQdPdCg(String soQdPd,String soQdPdCg);
+
+    @Query(value = " SELECT NVL(SUM(DSG.SO_LUONG),0) FROM HH_QD_PHE_DUYET_KHMTT_HDR HDR " +
+            " INNER JOIN HH_QD_PHE_DUYET_KHMTT_DX DTL on HDR.ID = DTL.ID_QD_HDR " +
+            " LEFT JOIN HH_QD_PHE_DUYET_KHMTT_SLDD DSG ON DSG.ID_QD_DTL = DTL.ID " +
+            "WHERE HDR.NAM_KH = :namKh AND HDR.LOAI_VTHH = :loaiVthh AND DSG.MA_DVI = :maDvi AND HDR.TRANG_THAI = :trangThai AND HDR.LASTEST = 1",
+            nativeQuery = true)
+    BigDecimal countSLDalenKh(Integer namKh, String loaiVthh, String maDvi, String trangThai);
 
 
 
