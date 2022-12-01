@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,54 +15,99 @@ import java.util.List;
 
 @Data
 public class HhDxuatKhMttHdrReq {
+
     @ApiModelProperty(notes = "Bắt buộc set đối với update")
     private Long id;
-    @NotNull(message = "Không được để trống")
-    private String loaiHinhNx;
-    @NotNull(message = "Không được để trống")
-    private String kieuNx;
-    private String tenDuAn;
-    private Integer namKh;
-    @NotNull(message = "Không được để trống")
+
+
     private String soDxuat;
-    @NotNull(message = "Không được để trống")
-    private String trichYeu;
+
+
+    private String loaiVthh;
+
+
     private String soQd;
+
+
+    private String trichYeu;
+
+
+
+    private String maDvi;
+
     private String trangThai;
     private String trangThaiTh;
-    private String loaiVthh;
+
+
+    private String ldoTuchoi;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayKy;
+
+
+    private Integer namKh;
+
+
+    private String ghiChu;
+
+
     private String cloaiVthh;
+
     private String moTaHangHoa;
-    private String ptMua;
+
+
+    private String tenDuAn;
+
+    private BigDecimal tongMucDt;
+
+
+
     private String tchuanCluong;
-    private String giaMua;
-    private String giaChuaThue;
-    private String giaCoThue;
-    private String thueGtgt;
+
+
+    private String nguonVon;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date tgianMkho;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date tgianKthuc;
+
+    private String diaChiDvi;
+
+
+    private String loaiHinhNx;
+
+    private String kieuNx;
+
+    private BigDecimal donGiaVat;
+
+    private String ptMua;
+
+    private String giaMua;
+    private String giaChuaThue;
+
+    private String thueGtgt;
+
+    private BigDecimal tongSoLuong;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayTao;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayPduyet;
-    private String ghiChu;
-    private BigDecimal tongMucDt;
-    private BigDecimal tongSoLuong;
-    private String nguonVon;
-    private String tenChuDt;
+
+
     private String maThop;
-    private String diaChiDvi;
+
     private String noiDungTh;
 
-    private List<FileDinhKemReq> fileDinhkems =new ArrayList<>();
+    private List<FileDinhKemReq> fileDinhKemReq =  new ArrayList<>();
 
 
-    private List<HhDxuatKhMttSlddReq> soLuongDiaDiemList = new ArrayList<>();
+    private List<HhDxuatKhMttSlddReq> dsSlddReq = new ArrayList<>();
 
 
-    private List<HhDxuatKhMttCcxdgReq> ccXdgList = new ArrayList<>();
+    private List<HhDxuatKhMttCcxdgReq> ccXdgReq = new ArrayList<>();
 
 
 }

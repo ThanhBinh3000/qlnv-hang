@@ -22,20 +22,18 @@ public class HhDxKhMttThopDtl implements Serializable {
     private Long id;
     private Long idThopHdr;
     private Long idDxHdr;
-    private String soDxuat;
     private String maDvi;
     @Transient
     String tenDvi;
+    private String soDxuat;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayPduyet;
-    private String trichYeu;
     private String tenDuAn;
-    private BigDecimal tongSoLuong;
+    private BigDecimal soLuong;
+    private String namKh;
+    private String trichYeu;
     private String diaChiDvi;
-    private BigDecimal giaCoThue;
-
-    @Transient
-    private HhDxuatKhMttHdr dxuatHdr= new HhDxuatKhMttHdr();
+    private BigDecimal donGiaVat;
 
 
 }

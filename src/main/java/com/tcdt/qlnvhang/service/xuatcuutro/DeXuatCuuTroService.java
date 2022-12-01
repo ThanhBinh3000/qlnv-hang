@@ -148,7 +148,7 @@ public class DeXuatCuuTroService extends BaseServiceImpl {
       newRow.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
     }
     newRow.setTrangThaiTh(TrangThaiAllEnum.CHUA_TONG_HOP.getId());
-    newRow.setMaDvi(currentUser.getDvql());
+    newRow.setMaDvi(currentUser.getUser().getDepartment());
 //    newRow.setCapDvi(currentUser.getUser().getCapDvi());
     newRow = deXuatCuuTroRepository.save(newRow);
 

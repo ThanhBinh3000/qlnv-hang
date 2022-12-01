@@ -13,20 +13,21 @@ public class HhQdPheduyetKhMttHdrSearchReq extends BaseRequest {
 
    private Integer namKh;
 
-   private  String soQd;
+   private String soQd;
 
    private String trichYeu;
 
    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-   private Date ngayKyQdTu;
+   private Date ngayQdTu;
 
    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-   private  Date ngayKyQdDen;
+   private  Date ngayQdDen;
 
-   private  String loaiVthh;
+   private String trangThai;
 
-   private  String trangThai;
+   private String maDvi;
 
-   private  String maDvi;
+   private Integer lastest;
 
+   private String loaiVthh;
 }
