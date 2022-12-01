@@ -5,8 +5,7 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+
 import javax.persistence.Transient;
 import java.util.ArrayList;
 import java.util.Date;
