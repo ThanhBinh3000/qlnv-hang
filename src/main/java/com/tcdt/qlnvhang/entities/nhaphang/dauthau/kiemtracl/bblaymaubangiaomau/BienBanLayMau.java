@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.AllArgsConstructor;
@@ -61,6 +62,12 @@ public class BienBanLayMau extends TrangThaiBaseEntity implements Serializable  
 
 	@Column(name = "ID_BB_NHAP_DAY_KHO")
 	private Long idBbNhapDayKho;
+
+	@Column(name = "SO_BB_GUI_HANG")
+	private String soBbGuiHang;
+
+	@Column(name = "ID_BB_GUI_HANG")
+	private Long idBbGuiHang;
 
 	@Transient
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
@@ -138,4 +145,7 @@ public class BienBanLayMau extends TrangThaiBaseEntity implements Serializable  
 
 	@Transient
 	private NhBbNhapDayKho bbNhapDayKho;
+
+	@Transient
+	private NhBienBanGuiHang bbGuiHang;
 }

@@ -11,6 +11,7 @@ import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbanguihang.NhBi
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHangRepository;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanguihang.NhBienBanGuiHangCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanguihang.NhBienBanGuiHangReq;
+import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
@@ -144,7 +145,28 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
 
     @Override
     public NhBienBanGuiHang approve(NhBienBanGuiHangReq req) throws Exception {
-        return null;
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null)
+            throw new Exception("Bad request.");
+
+        Optional<NhBienBanGuiHang> optional = bienBanGuiHangRepository.findById(req.getId());
+        if (!optional.isPresent()) {
+            throw new Exception("Không tìm thấy dữ liệu.");
+        }
+
+        NhBienBanGuiHang item = optional.get();
+        String trangThai = req.getTrangThai() + item.getTrangThai();
+        if (
+                (NhapXuatHangTrangThaiEnum.DA_HOAN_THANH.getId() + NhapXuatHangTrangThaiEnum.DUTHAO.getId()).equals(trangThai)
+        ) {
+            item.setNguoiPduyetId(userInfo.getId());
+            item.setNgayPduyet(new Date());
+        }else{
+            throw new Exception("Phê duyệt không thành công");
+        }
+        item.setTrangThai(req.getTrangThai());
+        bienBanGuiHangRepository.save(item);
+        return item;
     }
 
     @Override
