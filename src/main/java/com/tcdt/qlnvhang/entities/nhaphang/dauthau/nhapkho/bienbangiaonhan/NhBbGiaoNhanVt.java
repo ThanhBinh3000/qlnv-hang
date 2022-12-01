@@ -68,35 +68,15 @@ public class NhBbGiaoNhanVt extends TrangThaiBaseEntity implements Serializable 
     @Column(name = "MA_LO_KHO")
     private String maLoKho;
 
-    @Column(name = "LY_DO_TU_CHOI")
-    private String lyDoTuChoi;
-
     @Column(name = "GHI_CHU")
     private String ghiChu;
 
     @Column(name = "KET_LUAN")
     private String ketLuan;
 
-    @Column(name = "TRANG_THAI")
-    private String trangThai;
-
     @Column(name = "MA_DVI")
     private String maDvi;
 
-    @Column(name = "NGUOI_GUI_DUYET_ID")
-    private Long nguoiGuiDuyetId;
-
-    @Column(name = "NGAY_GUI_DUYET")
-    private LocalDate ngayGuiDuyet;
-
-    @Column(name = "NGUOI_PHE_DUYET_ID")
-    private Long nguoiPheDuyetId;
-
-    @Column(name = "NGAY_PHE_DUYET")
-    private LocalDate ngayPheDuyet;
-
-    @Transient
-    private String tenTrangThai;
     @Transient
     private String tenDvi;
     @Transient
