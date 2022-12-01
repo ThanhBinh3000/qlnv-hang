@@ -19,17 +19,50 @@ public class HhDxuatKhMttSldd implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_DX_KHMTT_SLDD_SEQ")
     @SequenceGenerator(sequenceName = "HH_DX_KHMTT_SLDD_SEQ", allocationSize = 1, name = "HH_DX_KHMTT_SLDD_SEQ")
     private Long id;
+    @Transient
+    private Long idVirtual;
+
     private Long idDxKhmtt;
-    private String maDvi;
-    private String tenDvi;
-    private String maDiemKho;
-    private String diaDiemKho;
-    private BigDecimal soLuongCtieu;
+
+    private BigDecimal soLuong;
+
+    private BigDecimal soLuongChiTieu;
+
     private BigDecimal soLuongKhDd;
-    private BigDecimal soLuongDxmtt;
-    private BigDecimal donGiaVat;
-    private BigDecimal thanhTien;
+
+    private String maDvi;
 
     @Transient
-    private List<HhDxuatKhMttSlddDtl> ListSlddDtl = new ArrayList<>();
+    private String tenDvi;
+
+    private BigDecimal donGia;
+
+
+    private BigDecimal donGiaTamTinh;
+
+    private BigDecimal thanhTien;
+
+    private String loaiVthh;
+
+    @Transient
+    private String tenLoaiVthh;
+
+    private String cloaiVthh;
+
+    @Transient
+    private String tenCloaiVthh;
+
+    private String moTaHangHoa;
+
+    private String nguonVon;
+
+    @Transient
+    private String tenNguonVon;
+
+    private String maDiemKho;
+
+    private String diaDiemNhap;
+
+    @Transient
+    private List<HhDxuatKhMttSlddDtl> children = new ArrayList<>();
 }

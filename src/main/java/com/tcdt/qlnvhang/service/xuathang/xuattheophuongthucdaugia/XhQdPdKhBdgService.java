@@ -82,6 +82,7 @@ public class XhQdPdKhBdgService extends BaseServiceImpl {
                 objReq.getSoTrHdr(),
                 objReq.getLoaiVthh(),
                 objReq.getTrangThai(),
+                objReq.getLastest(),
                 userInfo.getDvql(),
                 pageable);
         Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
@@ -473,7 +474,7 @@ public class XhQdPdKhBdgService extends BaseServiceImpl {
     @Transactional(rollbackOn = Exception.class)
     XhQdPdKhBdg approveLT(StatusReq stReq, XhQdPdKhBdg dataDB) throws Exception{
         String status = stReq.getTrangThai() + dataDB.getTrangThai();
-        switch (status){
+        switch (status) {
             case Contains.BAN_HANH + Contains.DUTHAO:
                 dataDB.setNguoiPduyet(getUser().getUsername());
                 dataDB.setNgayPduyet(getDateTimeNow());
@@ -512,7 +513,7 @@ public class XhQdPdKhBdgService extends BaseServiceImpl {
         return createCheck;
     }
 
-    private void cloneProject(Long idClone) throws Exception{
+    private void cloneProject(Long idClone) throws Exception {
         XhQdPdKhBdg hdr = this.detail(idClone.toString());
         XhQdPdKhBdg hdrClone = new XhQdPdKhBdg();
         BeanUtils.copyProperties(hdr, hdrClone);
@@ -526,13 +527,13 @@ public class XhQdPdKhBdgService extends BaseServiceImpl {
             dxClone.setId(null);
             dxClone.setIdQdHdr(hdrClone.getId());
             xhQdPdKhBdgDtlRepository.save(dxClone);
-            for (XhQdPdKhBdgPl phanLo: dx.getChildren()){
+            for (XhQdPdKhBdgPl phanLo : dx.getChildren()){
                 XhQdPdKhBdgPl phanLoClone = new XhQdPdKhBdgPl();
                 BeanUtils.copyProperties(phanLo, phanLoClone);
                 phanLoClone.setId(null);
                 phanLoClone.setIdQdDtl(dxClone.getId());
                 xhQdPdKhBdgPlRepository.save(phanLoClone);
-                for (XhQdPdKhBdgPlDtl dsDdNhap: phanLoClone.getChildren()){
+                for (XhQdPdKhBdgPlDtl dsDdNhap : phanLoClone.getChildren()){
                     XhQdPdKhBdgPlDtl dsDdNhapClone = new XhQdPdKhBdgPlDtl();
                     BeanUtils.copyProperties(dsDdNhap, dsDdNhapClone);
                     dsDdNhapClone.setId(null);

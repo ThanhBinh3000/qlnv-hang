@@ -17,8 +17,8 @@ public class HhDxKhMttThopHdr implements Serializable {
     public static final String TABLE_NAME = "HH_DX_KHMTT_THOP_HDR";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_DX_KHMTT_THOP_HDR_SEQ")
-    @SequenceGenerator(sequenceName = "HH_DX_KHMTT_THOP_HDR_SEQ", allocationSize = 1, name = "HH_DX_KHMTT_THOP_HDR_SEQ")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_DX_KHMTT_THOP_HDR_SEQ")
+//    @SequenceGenerator(sequenceName = "HH_DX_KHMTT_THOP_HDR_SEQ", allocationSize = 1, name = "HH_DX_KHMTT_THOP_HDR_SEQ")
     private Long id;
     @Temporal(TemporalType.DATE)
     private Date ngayThop;
@@ -29,7 +29,7 @@ public class HhDxKhMttThopHdr implements Serializable {
     @Transient
     String tenCloaiVthh;
     private String moTaHangHoa;
-    private Integer namKhoach;
+    private Integer namKh;
     private  String noiDung;
     @Temporal(TemporalType.DATE)
     private Date ngayTao;
@@ -38,13 +38,14 @@ public class HhDxKhMttThopHdr implements Serializable {
     private Date ngaySua;
     private String nguoiSua;
     private String trangThai;
+    @Transient
+    String tenTrangThai;
     private String SoQdPduyet;
     private BigDecimal tongMucDt;
     private BigDecimal tongSoLuong;
     private String maDvi;
-
-    @Transient
-    String tenTrangThai;
+    private String soQdCc;
+    private String tchuanCluong;
 
     @Transient
     List<HhDxKhMttThopDtl> hhDxKhMttThopDtls =new ArrayList<>();
