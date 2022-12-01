@@ -29,50 +29,47 @@ public class NhBbGiaoNhanVt extends TrangThaiBaseEntity implements Serializable 
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "QDGNVNX_ID")
-    private Long qdgnvnxId;
+    @Column(name = "NAM")
+    private Long nam;
 
-    @Column(name = "BB_KT_NHAP_KHO_ID")
-    private Long bbKtNhapKhoId;
+    @Column(name = "SO_BB_GIAO_NHAN")
+    private String soBbGiaoNhan;
 
-    @Column(name = "MA_DVI")
-    private String maDvi;
+    @Column(name = "SO_QD_GIAO_NV_NH")
+    private String soQdGiaoNvNh;
 
-    @Column(name = "CAP_DVI")
-    private String capDvi;
+    @Column(name = "ID_QD_GIAO_NV_NH")
+    private Long idQdGiaoNvNh;
 
-    @Column(name = "SO_BIEN_BAN")
-    private String soBienBan;
+    @Column(name = "SO_HD")
+    private String soHd;
 
-    @Column(name = "NGAY_KY")
-    private LocalDate ngayKy;
+    @Column(name = "NGAY_HD")
+    private LocalDate ngayHd;
 
-    @Column(name = "HOP_DONG_ID")
-    private Long hopDongId;
+    @Column(name = "SO_HO_SO_KY_THUAT")
+    private String soHoSoKyThuat;
 
-    @Column(name = "NGAY_HOP_DONG")
-    private LocalDate ngayHopDong;
+    @Column(name = "SO_BB_NHAP_DAY_KHO")
+    private String soBbNhapDayKho;
 
-    @Column(name = "BB_GUI_HANG_ID")
-    private Long bbGuiHangId;
+    @Column(name = "ID_DDIEM_GIAO_NV_NH")
+    private Long idDdiemGiaoNvNh;
 
-    @Column(name = "NGAY_KY_BB_GH")
-    private LocalDate ngayKyBbGh;
+    @Column(name = "MA_DIEM_KHO")
+    private String maDiemKho;
 
-    @Column(name = "HO_S_KY_THUAT_ID")
-    private Long hoSKyThuatId;
+    @Column(name = "MA_NHA_KHO")
+    private String maNhaKho;
 
-    @Column(name = "NGAY_KY_HSKT")
-    private LocalDate ngayKyHskt;
+    @Column(name = "MA_NGAN_KHO")
+    private String maNganKho;
 
-    @Column(name = "MA_VAT_TU_CHA")
-    private String maVatTuCha;
+    @Column(name = "MA_LO_KHO")
+    private String maLoKho;
 
-    @Column(name = "MA_VAT_TU")
-    private String maVatTu;
-
-    @Column(name = "SO_LUONG")
-    private BigDecimal soLuong;
+    @Column(name = "LY_DO_TU_CHOI")
+    private String lyDoTuChoi;
 
     @Column(name = "GHI_CHU")
     private String ghiChu;
@@ -80,24 +77,36 @@ public class NhBbGiaoNhanVt extends TrangThaiBaseEntity implements Serializable 
     @Column(name = "KET_LUAN")
     private String ketLuan;
 
-    @Column(name = "NGUOI_TAO_ID")
-    private Long nguoiTaoId;
+    @Column(name = "TRANG_THAI")
+    private String trangThai;
 
-    @Column(name = "NGUOI_SUA_ID")
-    private Long nguoiSuaId;
+    @Column(name = "MA_DVI")
+    private String maDvi;
 
     @Column(name = "NGUOI_GUI_DUYET_ID")
     private Long nguoiGuiDuyetId;
 
-    @Column(name = "NGUOI_PDUYET_ID")
-    private Long nguoiPduyetId;
+    @Column(name = "NGAY_GUI_DUYET")
+    private LocalDate ngayGuiDuyet;
 
-    @Column(name = "SO")
-    private Integer so;
+    @Column(name = "NGUOI_PHE_DUYET_ID")
+    private Long nguoiPheDuyetId;
 
-    @Column(name = "NAM")
-    private Integer nam;
+    @Column(name = "NGAY_PHE_DUYET")
+    private LocalDate ngayPheDuyet;
 
+    @Transient
+    private String tenTrangThai;
+    @Transient
+    private String tenDvi;
+    @Transient
+    private String tenDiemKho;
+    @Transient
+    private String tenNhaKho;
+    @Transient
+    private String tenNganKho;
+    @Transient
+    private String tenLoKho;
     @Transient
     private List<NhBbGiaoNhanVtCt> chiTiets = new ArrayList<>();
     @Transient

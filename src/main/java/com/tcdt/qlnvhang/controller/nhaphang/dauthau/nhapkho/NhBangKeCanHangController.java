@@ -84,7 +84,7 @@ public class NhBangKeCanHangController {
     public ResponseEntity<BaseResponse> delete(@PathVariable Long id) {
         BaseResponse resp = new BaseResponse();
         try {
-//            resp.setData(bangKeCanHangService.delete(id));
+            nhBangKeCanHangService.delete(id);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

@@ -31,7 +31,7 @@ public class NhBbKtNhapKhoVtController {
     private NhBbKtNhapKhoVtService service;
 
     @ApiOperation(value = "Tạo mới Quản lý Biên bản kết thục nhập kho vật tư", response = List.class)
-    @PostMapping
+    @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> insert(@Valid @RequestBody NhBbKtNhapKhoVtReq request) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -47,7 +47,7 @@ public class NhBbKtNhapKhoVtController {
     }
 
     @ApiOperation(value = "Sửa Quản lý Biên bản kết thục nhập kho vật tư", response = List.class)
-    @PutMapping
+    @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> update(@Valid @RequestBody NhBbKtNhapKhoVtReq request) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -63,7 +63,7 @@ public class NhBbKtNhapKhoVtController {
     }
 
     @ApiOperation(value = "Chi tiết Quản lý Biên bản kết thục nhập kho vật tư", response = List.class)
-    @GetMapping("/{id}")
+    @GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> detail(@PathVariable Long id) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -79,11 +79,11 @@ public class NhBbKtNhapKhoVtController {
     }
 
     @ApiOperation(value = "Xóa Quản lý Biên bản kết thục nhập kho vật tư", response = List.class)
-    @DeleteMapping("/{id}")
+    @PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> delete(@PathVariable Long id) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.delete(id));
+            service.delete(id);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -95,11 +95,11 @@ public class NhBbKtNhapKhoVtController {
     }
 
     @ApiOperation(value = "Phê duyệt/ từ chối Quản lý Biên bản kết thục nhập kho vật tư", response = List.class)
-    @PutMapping("/status")
-    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody StatusReq req) {
+    @PostMapping(PathContains.URL_PHE_DUYET)
+    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody NhBbKtNhapKhoVtReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.updateStatusQd(req));
+            resp.setData(service.approve(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -115,7 +115,7 @@ public class NhBbKtNhapKhoVtController {
     public ResponseEntity<BaseResponse> search(NhBbKtNhapKhoVtSearchReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.search(req));
+//            resp.setData(service.search(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -132,7 +132,7 @@ public class NhBbKtNhapKhoVtController {
     public final ResponseEntity<BaseResponse> deleteMultiple(@RequestBody @Valid DeleteReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.deleteMultiple(req));
+//            resp.setData(service.deleteMultiple(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -150,7 +150,7 @@ public class NhBbKtNhapKhoVtController {
     public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody NhBbKtNhapKhoVtSearchReq req) {
 
         try {
-            service.exportToExcel(req, response);
+//            service.exportToExcel(req, response);
         } catch (Exception e) {
             log.error("Error can not export", e);
         }
