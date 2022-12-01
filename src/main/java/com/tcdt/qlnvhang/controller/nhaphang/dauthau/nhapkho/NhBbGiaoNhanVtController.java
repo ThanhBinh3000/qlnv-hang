@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.controller.vattu.bienbangiaonhan;
+package com.tcdt.qlnvhang.controller.nhaphang.dauthau.nhapkho;
 
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.DeleteReq;
@@ -6,7 +6,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbangiaonhan.NhBbGiaoNhanVtReq;
 import com.tcdt.qlnvhang.request.search.vattu.bienbangiaonhan.NhBbGiaoNhanVtSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.nhaphang.vattu.bienbaogiaonhan.NhBbGiaoNhanVtService;
+import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bienbaogiaonhan.NhBbGiaoNhanVtService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,7 +24,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping(PathContains.BIEN_BAN_GIAO_NHAN_VT)
-@Api(tags = "Quản lý Biên bản giao nhận vật tư ")
+@Api(tags = "Nhập hàng - Đấu Thầu - Nhập kho - Biên bản giao nhận ")
 public class NhBbGiaoNhanVtController {
 
     @Autowired

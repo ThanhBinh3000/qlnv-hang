@@ -1,6 +1,5 @@
-package com.tcdt.qlnvhang.entities.nhaphang.vattu.bienbanketthucnhapkho;
+package com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanketthucnhapkho;
 
-import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;

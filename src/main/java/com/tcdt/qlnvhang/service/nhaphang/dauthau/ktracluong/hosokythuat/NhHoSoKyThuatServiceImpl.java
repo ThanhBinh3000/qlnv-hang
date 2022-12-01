@@ -73,11 +73,6 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
     public Page<NhHoSoKyThuat> searchPage(NhHoSoKyThuatReq objReq) {
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<NhHoSoKyThuat> nhHoSoKyThuatPage = nhHoSoKyThuatRepository.selectPage(pageable);
-        Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
-        Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
-        nhHoSoKyThuatPage.getContent().forEach(x -> {
-            x.setTenDvi(listDanhMucDvi.get(x.getMaDvi()));
-        });
         return nhHoSoKyThuatPage;
     }
 
@@ -136,8 +131,9 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
         Optional<NhHoSoKyThuat> optional = nhHoSoKyThuatRepository.findById(id);
         if (!optional.isPresent())
             throw new Exception("Hồ sơ kỹ thuật không tồn tại.");
-
+        Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
         NhHoSoKyThuat item = optional.get();
+        item.setTenDvi(listDanhMucDvi.get(item.getMaDvi()));
         item.setChildren(nhHoSoKyThuatCtRepository.findByHoSoKyThuatId(item.getId()));
         return item;
     }

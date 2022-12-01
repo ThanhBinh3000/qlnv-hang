@@ -1,6 +1,5 @@
-package com.tcdt.qlnvhang.entities.nhaphang.vattu.bangke;
+package com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangke;
 
-import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

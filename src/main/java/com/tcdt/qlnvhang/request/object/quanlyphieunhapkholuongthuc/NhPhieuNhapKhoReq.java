@@ -43,6 +43,8 @@ public class NhPhieuNhapKhoReq extends BaseRequest {
 
     private String soPhieuKtraCl;
 
+    private String soBienBanGuiHang;
+
     private String soQdGiaoNvNh; // HhQdGiaoNvuNhapxuatHdr
 
     private Long idQdGiaoNvNh; // HhQdGiaoNvuNhapxuatHdr

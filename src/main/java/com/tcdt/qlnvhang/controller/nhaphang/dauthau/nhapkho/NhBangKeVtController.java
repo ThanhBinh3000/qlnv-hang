@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.controller.vattu.bangke;
+package com.tcdt.qlnvhang.controller.nhaphang.dauthau.nhapkho;
 
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.DeleteReq;
@@ -6,7 +6,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.vattu.bangke.NhBangKeVtReq;
 import com.tcdt.qlnvhang.request.search.vattu.bangke.NhBangKeVtSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.nhaphang.vattu.bangke.NhBangKeVtService;
+import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bangke.NhBangKeVtService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,7 +24,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping(PathContains.BANG_KE_VAT_TU)
-@Api(tags = "Quản lý Bảng kê vật tư ")
+@Api(tags = "Nhập hàng - Đấu Thầu - Nhập kho - Bảng kê nhập vật tư ")
 public class NhBangKeVtController {
 
     @Autowired
