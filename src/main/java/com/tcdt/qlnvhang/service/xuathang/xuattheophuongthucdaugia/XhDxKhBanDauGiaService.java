@@ -97,15 +97,12 @@ public class XhDxKhBanDauGiaService extends BaseServiceImpl {
 
         XhDxKhBanDauGia dataMap = new ModelMapper().map(objReq, XhDxKhBanDauGia.class);
         dataMap.setNgayTao(getDateTimeNow());
-        dataMap.setNguoiTaoId(getUser().getUsername());
+        dataMap.setNguoiTaoId(userInfo.getId());
         dataMap.setTrangThai(Contains.DU_THAO);
         dataMap.setTrangThaiTh(Contains.CHUATONGHOP);
-        Map<String, String> hashMapDmHh = getListDanhMucHangHoa();
         Map<String, String> hashMapDmdv = getListDanhMucDvi(null, null, "01");
         dataMap.setTenDvi(StringUtils.isEmpty(userInfo.getDvql()) ? null : hashMapDmdv.get(userInfo.getDvql()));
-        dataMap.setMaDvi(userInfo.getDvql());
-        dataMap.setTenLoaiVthh(StringUtils.isEmpty(dataMap.getLoaiVthh()) ? null : hashMapDmHh.get(dataMap.getLoaiVthh()));
-        dataMap.setTenCloaiVthh(StringUtils.isEmpty(dataMap.getCloaiVthh()) ? null : hashMapDmHh .get(dataMap.getCloaiVthh()));
+        dataMap.setMaDvi(userInfo.getDepartment());
         this.validateData(dataMap, dataMap.getTrangThai());
         XhDxKhBanDauGia created=xhDxKhBanDauGiaRepository.save(dataMap);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),dataMap.getId(),"XH_DX_KH_BAN_DAU_GIA");
@@ -139,6 +136,11 @@ public class XhDxKhBanDauGiaService extends BaseServiceImpl {
 
     @Transactional
     public XhDxKhBanDauGia update(XhDxKhBanDauGiaReq objReq) throws Exception {
+        UserInfo userInfo= SecurityContextService.getUser();
+        if (userInfo == null)
+            throw new Exception("Bad request.");
+
+
         if (StringUtils.isEmpty(objReq.getId()))
             throw new Exception("Sửa thất bại, không tìm thấy dữu liệu");
 
@@ -161,7 +163,7 @@ public class XhDxKhBanDauGiaService extends BaseServiceImpl {
         updateObjectToObject(dataDTB, dataMap);
 
         dataDTB.setNgaySua(getDateTimeNow());
-        dataDTB.setNguoiSuaId(getUser().getUsername());
+        dataDTB.setNguoiSuaId(userInfo.getId());
 
 
 
@@ -277,7 +279,11 @@ public class XhDxKhBanDauGiaService extends BaseServiceImpl {
 
  @Transactional
  public XhDxKhBanDauGia approve (StatusReq stReq) throws Exception {
-        if (StringUtils.isEmpty(stReq.getId()))
+     UserInfo userInfo= SecurityContextService.getUser();
+     if (userInfo == null)
+         throw new Exception("Bad request.");
+
+     if (StringUtils.isEmpty(stReq.getId()))
             throw new Exception("Không tìm thấy dữ liệu");
 
         XhDxKhBanDauGia optional = this.detail(stReq.getId());
@@ -313,14 +319,14 @@ public class XhDxKhBanDauGiaService extends BaseServiceImpl {
                     optional.setNgayGduyet(getDateTimeNow());
                 case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
                 case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
-                    optional.setNguoiPduyetId(getUser().getUsername());
+                    optional.setNguoiPduyetId(userInfo.getId());
                     optional.setNgayPduyet(getDateTimeNow());
                     optional.setLdoTuChoi(stReq.getLyDo());
                     break;
                 case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
                 case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
                     this.validateData(optional,stReq.getTrangThai());
-                    optional.setNguoiPduyetId(getUser().getUsername());
+                    optional.setNguoiPduyetId(userInfo.getId());
                     optional.setNgayPduyet(getDateTimeNow());
                     break;
                 default:

@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.entities.xuathang.phieukiemnghiemchatluong;
 
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
-import com.tcdt.qlnvhang.entities.nhaphang.vattu.bangke.NhBangKeVtCt;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
