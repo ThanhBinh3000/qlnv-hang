@@ -28,4 +28,5 @@ public class XhQdPdKhBdgSearchReq extends BaseRequest {
     private  String trangThai;
 
     private  String maDvi;
+    private Integer lastest;
 }

@@ -1,6 +1,9 @@
 package com.tcdt.qlnvhang.table;
 
 import com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.BanDauGiaDiaDiemGiaoNhan;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDsgthauCtiet;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDtl;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdr;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhQdPdKhMttSlddDtl;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,17 +29,34 @@ public class HhQdPheduyetKhMttSLDD implements Serializable {
     @SequenceGenerator(sequenceName = "HH_QD_PHE_DUYET_KHMTT_SLDD_SEQ", allocationSize = 1, name = "HH_QD_PHE_DUYET_KHMTT_SLDD_SEQ")
 
     private Long id;
-    private Long idDxKhmtt;
+    private Long idQdDtl;
+    private BigDecimal soLuong;
+
     private String maDvi;
+    @Transient
     private String tenDvi;
-    private String maDiemKho;
-    private String diaDiemKho;
-    private BigDecimal soLuongCtieu;
-    private BigDecimal soLuongKhDd;
-    private BigDecimal soLuongDxmtt;
     private BigDecimal donGiaVat;
     private BigDecimal thanhTien;
+    private BigDecimal donGiaTamTinh;
+    private String loaiVthh;
+    private String cloaiVthh;
+    private String maDiemKho;
+    private String diaDiemNhap;
+    private BigDecimal soLuongChiTieu;
+    private BigDecimal soLuongKhDd;
+    private String trangThai;
+    @Transient
+    String tenTrangThai;
+    private String lyDoHuy;
 
     @Transient
-    List<HhQdPdKhMttSlddDtl> listQdPdSldDtl= new ArrayList<>();
+    private HhQdPheduyetKhMttDx hhQdPheduyetKhMttDx;
+
+    @Transient
+    private HhQdPheduyetKhMttHdr hhQdPheduyetKhMttHdr;
+
+
+    @Transient
+    private List<HhQdPdKhMttSlddDtl> children = new ArrayList<>();
+
 }

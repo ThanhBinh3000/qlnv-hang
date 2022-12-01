@@ -14,5 +14,5 @@ public interface HhDxuatKhMttSlddRepository extends JpaRepository<HhDxuatKhMttSl
     List<HhDxuatKhMttSldd> findAllByIdDxKhmttIn(List<Long> idDxKhmtt);
 
     @Transactional
-    void deleteAllByIdDxKhmttIn(List<Long> ids);
+    void deleteAllByIdDxKhmttIn(List<Long> idDxKhmtt);
 }

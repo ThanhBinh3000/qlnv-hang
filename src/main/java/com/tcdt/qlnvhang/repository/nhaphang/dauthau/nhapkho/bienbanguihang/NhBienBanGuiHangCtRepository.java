@@ -17,6 +17,8 @@ public interface NhBienBanGuiHangCtRepository extends BaseRepository<NhBienBanGu
     @Modifying
     void deleteByBienBanGuiHangIdIn(Collection<Long> bienBanGhIds);
 
+    List<NhBienBanGuiHangCt> findByBienBanGuiHangId(Long bienBanGuiHangId);
+
     @Transactional
     @Modifying
     void deleteByBienBanGuiHangId(Long bienBanGuiHangId);

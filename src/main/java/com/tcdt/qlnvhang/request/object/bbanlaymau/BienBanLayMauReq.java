@@ -45,6 +45,11 @@ public class BienBanLayMauReq extends BaseRequest {
 
 	private Long idQdGiaoNvNh;
 	private String soQdGiaoNvNh;
+
+	private Long idBbGuiHang;
+
+	private String soBbGuiHang;
+
 	private String soHd;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)

@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.repository.vattu.hosokythuat;
 
-import com.tcdt.qlnvhang.entities.nhaphang.vattu.hosokythuat.NhHoSoKyThuatCt;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoKyThuatCt;
 import com.tcdt.qlnvhang.repository.BaseRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
@@ -14,7 +14,13 @@ public interface NhHoSoKyThuatCtRepository extends BaseRepository<NhHoSoKyThuatC
 
     List<NhHoSoKyThuatCt> findByHoSoKyThuatIdIn(Collection<Long> hoSoKyThuatIds);
 
+    List<NhHoSoKyThuatCt> findByHoSoKyThuatId(Long hoSoKyThuatId);
+
     @Transactional
     @Modifying
     void deleteByHoSoKyThuatIdIn(Collection<Long> hoSoKyThuatIds);
+
+    @Transactional
+    @Modifying
+    void deleteAllByHoSoKyThuatId(Long hoSoKyThuatId);
 }

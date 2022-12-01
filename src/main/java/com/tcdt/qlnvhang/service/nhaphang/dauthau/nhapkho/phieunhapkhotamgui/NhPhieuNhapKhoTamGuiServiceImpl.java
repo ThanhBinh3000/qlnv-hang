@@ -186,7 +186,7 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
         if(!Objects.equals(item.getNguoiTaoId(), userInfo.getId())){
             throw new Exception("Bạn không có quyền thao tác trên dữ liệu này");
         }
-        if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(item.getTrangThai())) {
+        if (NhapXuatHangTrangThaiEnum.DA_HOAN_THANH.getId().equals(item.getTrangThai())) {
             throw new Exception("Không thể xóa bảng kê đã đã duyệt");
         }
 

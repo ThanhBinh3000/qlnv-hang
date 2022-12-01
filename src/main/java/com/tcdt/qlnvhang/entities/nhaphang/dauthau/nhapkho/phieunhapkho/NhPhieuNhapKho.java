@@ -35,6 +35,9 @@ public class NhPhieuNhapKho extends TrangThaiBaseEntity implements Serializable 
     @Column(name = "SO_PHIEU_KTRA_CL")
     private String soPhieuKtraCl;
 
+    @Column(name = "SO_BIEN_BAN_GUI_HANG")
+    private String soBienBanGuiHang;
+
     @Column(name = "SO_QD_GIAO_NV_NH")
     private String soQdGiaoNvNh; // HhQdGiaoNvuNhapxuatHdr
 

@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.nhaphang.bbanlaymau;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMau;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMauCt;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.HhHopDongRepository;
@@ -166,8 +167,14 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 		item.setTenLoKho(listDanhMucDvi.get(item.getMaLoKho()));
 		item.setTenNguoiTao(ObjectUtils.isEmpty(item.getNguoiTaoId()) ? null : userInfoRepository.findById(item.getNguoiTaoId()).get().getFullName());
 		item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
-		Optional<NhBbNhapDayKho> byId = nhBbNhapDayKhoRepository.findById(item.getIdBbNhapDayKho());
-		byId.ifPresent(item::setBbNhapDayKho);
+		if(!ObjectUtils.isEmpty(item.getIdBbNhapDayKho())){
+			Optional<NhBbNhapDayKho> byId = nhBbNhapDayKhoRepository.findById(item.getIdBbNhapDayKho());
+			byId.ifPresent(item::setBbNhapDayKho);
+		}
+		if(!ObjectUtils.isEmpty(item.getIdBbGuiHang())){
+			Optional<NhBienBanGuiHang> byId = nhBienBanGuiHangRepository.findById(item.getIdBbGuiHang());
+			byId.ifPresent(item::setBbGuiHang);
+		}
 		return item;
 	}
 
