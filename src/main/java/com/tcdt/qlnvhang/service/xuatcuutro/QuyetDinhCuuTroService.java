@@ -167,7 +167,7 @@ public class QuyetDinhCuuTroService extends BaseServiceImpl {
     XhQdCuuTroHdr newRow = new XhQdCuuTroHdr();
     BeanUtils.copyProperties(req, newRow, "id");
     newRow.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
-    newRow.setMaDvi(currentUser.getDvql());
+    newRow.setMaDvi(currentUser.getUser().getDepartment());
     if (DataUtils.isNullObject(xhThCuuTroHdr)) {
       newRow.setIdTongHop(xhThCuuTroHdr.getId());
       newRow.setNgayTongHop(xhThCuuTroHdr.getNgayTongHop());

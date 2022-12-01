@@ -164,7 +164,7 @@ public class TongHopCuuTroService extends BaseServiceImpl {
     XhThCuuTroHdr newRow = new XhThCuuTroHdr();
     BeanUtils.copyProperties(req, newRow, "id");
     newRow.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
-    newRow.setMaDvi(currentUser.getDvql());
+    newRow.setMaDvi(currentUser.getUser().getDepartment());
 //    newRow.setCapDvi(currentUser.getUser().getCapDvi());
     newRow = tongHopCuuTroRepository.save(newRow);
 
