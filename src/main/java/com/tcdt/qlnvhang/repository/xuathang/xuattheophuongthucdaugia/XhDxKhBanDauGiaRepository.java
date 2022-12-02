@@ -25,7 +25,7 @@ public interface XhDxKhBanDauGiaRepository extends JpaRepository<XhDxKhBanDauGia
             "AND (:loaiVthh IS NULL OR DX.LOAI_VTHH = :loaiVthh) " +
             "AND (:trangThai IS NULL OR DX.TRANG_THAI = :trangThai)" +
             "AND (:trangThaiTh IS NULL OR DX.TRANG_THAI_TH = :trangThaiTh) " +
-            "AND (:maDvi IS NULL OR LOWER(DX.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "
+            "AND (:maDvi IS NULL OR DX.MA_DVI = :maDvi) "
             ,nativeQuery = true)
     Page<XhDxKhBanDauGia> searchPage(Integer namKh, String soDxuat, String ngayTaoTu, String ngayTaoDen, String ngayDuyetTu, String ngayDuyetDen, String trichYeu, String loaiVthh, String trangThai, String trangThaiTh, String maDvi, Pageable pageable);
 
