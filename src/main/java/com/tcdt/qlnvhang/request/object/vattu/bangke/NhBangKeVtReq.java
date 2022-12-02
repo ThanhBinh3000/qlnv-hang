@@ -1,11 +1,14 @@
 package com.tcdt.qlnvhang.request.object.vattu.bangke;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -27,7 +30,8 @@ public class NhBangKeVtReq {
 
     private String cloaiVthh;
 
-    private LocalDate ngayNhapKho;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayNhapKho;
 
     private String soQdGiaoNvNh;
 
@@ -35,7 +39,8 @@ public class NhBangKeVtReq {
 
     private String soHd;
 
-    private LocalDate ngayHd;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayHd;
 
     private String soPhieuNhapKho;
 
@@ -55,10 +60,10 @@ public class NhBangKeVtReq {
 
     private String donViGiaoHang;
 
-    private LocalDate thoiGianGiaoNhan;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
+    private Date thoiGianGiaoNhan;
 
     private String maDvi;
 
-
-    private List<NhBangKeVtCtReq> chiTiets = new ArrayList<>();
+    private List<NhBangKeVtCtReq> children = new ArrayList<>();
 }

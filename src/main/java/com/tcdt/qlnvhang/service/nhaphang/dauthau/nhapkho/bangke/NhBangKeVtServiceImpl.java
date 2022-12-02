@@ -67,6 +67,7 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
         item.setNguoiTaoId(userInfo.getId());
         item.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         item.setMaDvi(userInfo.getDvql());
+        item.setId(Long.parseLong(item.getSoBangKe().split("/")[0]));
         bangKeVtRepository.save(item);
 
         this.saveCtiet(item.getId(),req);
@@ -76,7 +77,7 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
     @Transactional
     void saveCtiet(Long idHdr, NhBangKeVtReq req){
         bangKeVtCtRepository.deleteByBangKeVtId(idHdr);
-        for(NhBangKeVtCtReq objCtiet : req.getChiTiets()){
+        for(NhBangKeVtCtReq objCtiet : req.getChildren()){
             NhBangKeVtCt ctiet = new NhBangKeVtCt();
             BeanUtils.copyProperties(objCtiet,ctiet,"id");
             ctiet.setBangKeVtId(idHdr);
@@ -123,7 +124,7 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
         NhBangKeVt item = optional.get();
         Map<String, String> listDanhMucDvi = getListDanhMucDvi("", "", "01");
 
-        item.setChiTiets(bangKeVtCtRepository.findByBangKeVtId(item.getId()));
+        item.setChildren(bangKeVtCtRepository.findByBangKeVtId(item.getId()));
         item.setTenDvi(listDanhMucDvi.get(item.getMaDvi()));
         item.setTenNguoiTao(ObjectUtils.isEmpty(item.getNguoiTaoId()) ? "" : userInfoRepository.findById(item.getNguoiTaoId()).get().getFullName());
         item.setTenNguoiPduyet(ObjectUtils.isEmpty(item.getNguoiPduyetId()) ? "" :userInfoRepository.findById(item.getNguoiPduyetId()).get().getFullName());
