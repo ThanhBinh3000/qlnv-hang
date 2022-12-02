@@ -123,10 +123,18 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
 
         NhBangKeVt item = optional.get();
         Map<String, String> listDanhMucDvi = getListDanhMucDvi("", "", "01");
-
+        Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
         item.setChildren(bangKeVtCtRepository.findByBangKeVtId(item.getId()));
         item.setTenDvi(listDanhMucDvi.get(item.getMaDvi()));
+        item.setTenLoaiVthh(listDanhMucHangHoa.get(item.getLoaiVthh()));
+        item.setTenCloaiVthh(listDanhMucHangHoa.get(item.getCloaiVthh()));
+        item.setTenDvi(listDanhMucDvi.get(item.getMaDvi()));
+        item.setTenDiemKho(listDanhMucDvi.get(item.getMaDiemKho()));
+        item.setTenNhaKho(listDanhMucDvi.get(item.getMaNhaKho()));
+        item.setTenNganKho(listDanhMucDvi.get(item.getMaNganKho()));
+        item.setTenLoKho(listDanhMucDvi.get(item.getMaLoKho()));
         item.setTenNguoiTao(ObjectUtils.isEmpty(item.getNguoiTaoId()) ? "" : userInfoRepository.findById(item.getNguoiTaoId()).get().getFullName());
+        item.setTenTruongPhong(ObjectUtils.isEmpty(item.getIdTruongPhong()) ? null : userInfoRepository.findById(item.getIdTruongPhong()).get().getFullName());
         item.setTenNguoiPduyet(ObjectUtils.isEmpty(item.getNguoiPduyetId()) ? "" :userInfoRepository.findById(item.getNguoiPduyetId()).get().getFullName());
         return item;
     }
@@ -148,21 +156,35 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
             throw new Exception("Không tìm thấy dữ liệu");
         }
 
-        NhBangKeVt phieu = optional.get();
+        NhBangKeVt item = optional.get();
 
-        String status = req.getTrangThai() + phieu.getTrangThai();
-        switch (status) {
-
-            case Contains.DA_HOAN_THANH + Contains.DUTHAO:
-                phieu.setNguoiPduyetId(userInfo.getId());
-                phieu.setNgayPduyet(new Date());
-                break;
-            default:
-                throw new Exception("Phê duyệt không thành công");
+        String trangThai = req.getTrangThai() + item.getTrangThai();
+        if (
+                (NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId() + NhapXuatHangTrangThaiEnum.DUTHAO.getId()).equals(trangThai) ||
+                        (NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId() + NhapXuatHangTrangThaiEnum.TUCHOI_TP.getId()).equals(trangThai) ||
+                        (NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId() + NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId()).equals(trangThai)
+        ) {
+            item.setNguoiGuiDuyetId(userInfo.getId());
+            item.setNgayGuiDuyet(new Date());
+        } else if (
+                (NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId()).equals(trangThai) ||
+                        (NhapXuatHangTrangThaiEnum.TUCHOI_TP.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId()).equals(trangThai)
+        ) {
+            item.setIdTruongPhong(userInfo.getId());
+            item.setLyDoTuChoi(req.getLyDoTuChoi());
+        } else if (
+                (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId()).equals(trangThai) ||
+                        (NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId()).equals(trangThai)
+        ) {
+            item.setNgayPduyet(new Date());
+            item.setNguoiPduyetId(userInfo.getId());
+            item.setLyDoTuChoi(req.getLyDoTuChoi());
+        } else {
+            throw new Exception("Phê duyệt không thành công");
         }
-        phieu.setTrangThai(req.getTrangThai());
-        bangKeVtRepository.save(phieu);
-        return phieu;
+        item.setTrangThai(req.getTrangThai());
+        bangKeVtRepository.save(item);
+        return item;
     }
 
     @Override
