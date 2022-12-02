@@ -23,12 +23,17 @@ public class XhDxKhBanDauGia  implements Serializable {
     private Long id;
     private String maDvi;
     private String tenDvi;
-    private String diaChi;
     private String loaiHinhNx;
     private String kieuNx;
+    private String diaChi;
     private Integer namKh;
     private String soDxuat;
     private String trichYeu;
+    @Temporal(TemporalType.DATE)
+    private Date ngayTao;
+    private String nguoiTaoId;
+    private Date ngayPduyet;
+    private String nguoiPduyetId;
     private String soQdCtieu;
     private String loaiVthh;
     @Transient
@@ -42,21 +47,20 @@ public class XhDxKhBanDauGia  implements Serializable {
     private Date tgianDkienTu;
     @Temporal(TemporalType.DATE)
     private Date tgianDkienDen;
-    private String loaiHdong;
-    private Integer tgianKyHdong;
     private Integer tgianTtoan;
-    private Integer tgianGnhan;
+    private String tgianTtoanGhiChu;
     private String pthucTtoan;
+    private Integer tgianGnhan;
     private String pthucGnhan;
+    private String tgianGnhanGhiChu;
     private String thongBaoKh;
     private BigDecimal khoanTienDatTruoc;
     private BigDecimal tongSoLuong;
     private BigDecimal tongTienKdiem;
+    private BigDecimal tongTienKdienDonGia;
     private BigDecimal tongTienDatTruoc;
+    private BigDecimal tongTienDatTruocDonGia;
     private String ghiChu;
-    @Temporal(TemporalType.DATE)
-    private Date ngayTao;
-    private String nguoiTaoId;
     @Temporal(TemporalType.DATE)
     private Date ngaySua;
     private String nguoiSuaId;
@@ -64,8 +68,7 @@ public class XhDxKhBanDauGia  implements Serializable {
     private Date ngayGduyet;
     private String nguoiGduyetId;
     @Temporal(TemporalType.DATE)
-    private Date ngayPduyet;
-    private String nguoiPduyetId;
+
     private String trangThai;
     @Transient
     private String tenTrangThai;
@@ -79,9 +82,6 @@ public class XhDxKhBanDauGia  implements Serializable {
     private String ldoTuChoi;
     @Temporal(TemporalType.DATE)
     private Date ngayKy;
-    private String tgianKyHdongGhiChu;
-    private String tgianTtoanGhiChu;
-    private String tgianGnhanGhiChu;
 
 
     @Transient

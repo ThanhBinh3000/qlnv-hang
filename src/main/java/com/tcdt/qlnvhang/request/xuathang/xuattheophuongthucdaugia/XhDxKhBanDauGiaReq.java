@@ -32,12 +32,10 @@ public class XhDxKhBanDauGiaReq {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date tgianDkienDen;
     private String loaiHdong;
-    private Integer tgianKyHdong;
     private Integer tgianTtoan;
     private Integer tgianGnhan;
     private String pthucTtoan;
     private String pthucGnhan;
-    private String tgianKyHdongGhiChu;
     private String tgianTtoanGhiChu;
     private String tgianGnhanGhiChu;
     private String thongBaoKh;
