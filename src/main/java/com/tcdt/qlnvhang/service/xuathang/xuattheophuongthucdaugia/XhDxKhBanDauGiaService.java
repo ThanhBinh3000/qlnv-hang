@@ -54,7 +54,6 @@ public class XhDxKhBanDauGiaService extends BaseServiceImpl {
 
 
     public Page<XhDxKhBanDauGia> searchPage(SearchXhDxKhBanDauGia objReq)throws Exception{
-        UserInfo userInfo= SecurityContextService.getUser();
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),
                 objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<XhDxKhBanDauGia> data = xhDxKhBanDauGiaRepository.searchPage(
@@ -68,7 +67,7 @@ public class XhDxKhBanDauGiaService extends BaseServiceImpl {
                 objReq.getLoaiVthh(),
                 objReq.getTrangThai(),
                 objReq.getTrangThaiTh(),
-                userInfo.getDvql(),
+                objReq.getMaDvi(),
                 pageable);
         Map<String,String> hashMapDmhh = getListDanhMucHangHoa();
 
@@ -102,7 +101,7 @@ public class XhDxKhBanDauGiaService extends BaseServiceImpl {
         dataMap.setTrangThaiTh(Contains.CHUATONGHOP);
         Map<String, String> hashMapDmdv = getListDanhMucDvi(null, null, "01");
         dataMap.setTenDvi(StringUtils.isEmpty(userInfo.getDvql()) ? null : hashMapDmdv.get(userInfo.getDvql()));
-        dataMap.setMaDvi(userInfo.getDepartment());
+        dataMap.setMaDvi(userInfo.getDvql());
         this.validateData(dataMap, dataMap.getTrangThai());
         XhDxKhBanDauGia created=xhDxKhBanDauGiaRepository.save(dataMap);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),dataMap.getId(),"XH_DX_KH_BAN_DAU_GIA");
@@ -293,16 +292,16 @@ public class XhDxKhBanDauGiaService extends BaseServiceImpl {
             switch (status) {
                 case Contains.CHODUYET_LDV + Contains.DUTHAO:
                 case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
-                    optional.setNguoiGduyetId(getUser().getUsername());
+                    optional.setNguoiGduyetId(userInfo.getId());
                     optional.setNgayGduyet(getDateTimeNow());
                     break;
                 case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
-                    optional.setNguoiGduyetId(getUser().getUsername());
+                    optional.setNguoiGduyetId(userInfo.getId());
                     optional.setNgayPduyet(getDateTimeNow());
                     optional.setLdoTuChoi(stReq.getLyDo());
                     break;
                 case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
-                    optional.setNguoiGduyetId(getUser().getUsername());
+                    optional.setNguoiGduyetId(userInfo.getId());
                     optional.setNgayPduyet(getDateTimeNow());
                     break;
                 default:
@@ -315,7 +314,7 @@ public class XhDxKhBanDauGiaService extends BaseServiceImpl {
                 case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
                 case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
                     this.validateData(optional,Contains.CHODUYET_TP);
-                    optional.setNguoiGduyetId(getUser().getUsername());
+                    optional.setNguoiGduyetId(userInfo.getId());
                     optional.setNgayGduyet(getDateTimeNow());
                 case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
                 case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
