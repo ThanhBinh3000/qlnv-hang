@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.controller.nhaphang.dauthau.nhapkho;
 
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.DeleteReq;
+import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.vattu.bangke.NhBangKeVtReq;
 import com.tcdt.qlnvhang.request.search.vattu.bangke.NhBangKeVtSearchReq;
@@ -10,6 +11,7 @@ import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bangke.NhBangKeVtServi
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -64,7 +66,9 @@ public class NhBangKeVtController {
 
     @ApiOperation(value = "Chi tiết Quản lý Bảng kê vật tư", response = List.class)
     @GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> detail(@PathVariable Long id) {
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> detail(
+            @ApiParam(value = "ID ", example = "1", required = true) @PathVariable("ids") Long id) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(service.detail(id));
@@ -80,10 +84,10 @@ public class NhBangKeVtController {
 
     @ApiOperation(value = "Xóa Quản lý Bảng kê vật tư", response = List.class)
     @PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> delete(@PathVariable Long id) {
+    public final ResponseEntity<BaseResponse> delete(@Valid @RequestBody NhBangKeVtReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            service.delete(id);
+            service.delete(req.getId());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

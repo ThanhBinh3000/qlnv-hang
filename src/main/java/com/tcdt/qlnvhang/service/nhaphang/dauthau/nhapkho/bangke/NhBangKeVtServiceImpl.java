@@ -1,42 +1,43 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bangke;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangke.NhBangKeVt;
-import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.HhHopDongRepository;
-import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
-import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoRepository;
-import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangke.NhBangKeVtCt;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.vattu.bangke.NhBangKeVtCtRepository;
 import com.tcdt.qlnvhang.repository.vattu.bangke.NhBangKeVtRepository;
+import com.tcdt.qlnvhang.request.object.vattu.bangke.NhBangKeVtCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.bangke.NhBangKeVtReq;
+import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
 @Log4j2
 @RequiredArgsConstructor
 public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVtService {
+    @Autowired
     private final NhBangKeVtRepository bangKeVtRepository;
-    private final NhBangKeVtCtRepository bangKeVtCtRepository;
-    private final HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
-    private final NhPhieuNhapKhoRepository phieuNhapKhoRepository;
-    private final QlnvDmVattuRepository qlnvDmVattuRepository;
-    private final HhHopDongRepository hhHopDongRepository;
 
-    private static final String SHEET_BANG_KE_NHAP_VAT_TU = "Bảng kê nhập vật tư";
-    private static final String STT = "STT";
-    private static final String SO_BANG_KE = "Số Bảng Kê";
-    private static final String SO_QUYET_DINH_NHAP = "Số Quyết Định Nhập";
-    private static final String NGAY_TAO_BANG_KE = "Ngày Tạo Bảng Kê";
-    private static final String DIEM_KHO = "Điểm Kho";
-    private static final String NHA_KHO = "Nhà Kho";
-    private static final String NGAN_KHO = "Ngăn Kho";
-    private static final String NGAN_LO = "Ngăn Lô";
-    private static final String TRANG_THAI = "Trạng Thái";
+    @Autowired
+    private final NhBangKeVtCtRepository bangKeVtCtRepository;
+
+    @Autowired
+    private UserInfoRepository userInfoRepository;
+
 
     @Override
     public Page<NhBangKeVt> searchPage(NhBangKeVtReq req) {
@@ -50,27 +51,129 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
 
     @Override
     public NhBangKeVt create(NhBangKeVtReq req) throws Exception {
-        return null;
+        if (req == null){
+            return null;
+        }
+
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null){
+            throw new Exception("Bad request.");
+
+        }
+
+        NhBangKeVt item = new NhBangKeVt();
+        BeanUtils.copyProperties(req, item, "id");
+        item.setNgayTao(new Date());
+        item.setNguoiTaoId(userInfo.getId());
+        item.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
+        item.setMaDvi(userInfo.getDvql());
+        bangKeVtRepository.save(item);
+
+        this.saveCtiet(item.getId(),req);
+
+        return item;
+    }
+    @Transactional
+    void saveCtiet(Long idHdr, NhBangKeVtReq req){
+        bangKeVtCtRepository.deleteByBangKeVtId(idHdr);
+        for(NhBangKeVtCtReq objCtiet : req.getChiTiets()){
+            NhBangKeVtCt ctiet = new NhBangKeVtCt();
+            BeanUtils.copyProperties(objCtiet,ctiet,"id");
+            ctiet.setBangKeVtId(idHdr);
+            bangKeVtCtRepository.save(ctiet);
+        }
     }
 
     @Override
     public NhBangKeVt update(NhBangKeVtReq req) throws Exception {
-        return null;
+        if (req == null){
+            return null;
+        }
+
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null){
+            throw new Exception("Bad request.");
+        }
+
+        Optional<NhBangKeVt> optional = bangKeVtRepository.findById(req.getId());
+        if (!optional.isPresent()){
+            throw new Exception("Bảng kê không tồn tại.");
+        }
+
+        NhBangKeVt item = optional.get();
+        BeanUtils.copyProperties(req, item, "id");
+        item.setNgaySua(new Date());
+        item.setNguoiSuaId(userInfo.getId());
+        bangKeVtRepository.save(item);
+        this.saveCtiet(item.getId(),req);
+        return item;
     }
 
     @Override
     public NhBangKeVt detail(Long id) throws Exception {
-        return null;
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null){
+            throw new Exception("Bad request.");
+        }
+
+        Optional<NhBangKeVt> optional = bangKeVtRepository.findById(id);
+        if (!optional.isPresent())
+            throw new Exception("Bảng kê không tồn tại.");
+
+        NhBangKeVt item = optional.get();
+        Map<String, String> listDanhMucDvi = getListDanhMucDvi("", "", "01");
+
+        item.setChiTiets(bangKeVtCtRepository.findByBangKeVtId(item.getId()));
+        item.setTenDvi(listDanhMucDvi.get(item.getMaDvi()));
+        item.setTenNguoiTao(ObjectUtils.isEmpty(item.getNguoiTaoId()) ? "" : userInfoRepository.findById(item.getNguoiTaoId()).get().getFullName());
+        item.setTenNguoiPduyet(ObjectUtils.isEmpty(item.getNguoiPduyetId()) ? "" :userInfoRepository.findById(item.getNguoiPduyetId()).get().getFullName());
+        return item;
     }
 
     @Override
     public NhBangKeVt approve(NhBangKeVtReq req) throws Exception {
-        return null;
+        UserInfo userInfo = UserUtils.getUserInfo();
+
+        if (!Contains.CAP_CHI_CUC.equals(userInfo.getCapDvi())){
+            throw new Exception("Bad Request");
+        }
+
+        if (StringUtils.isEmpty(req.getId())){
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+
+        Optional<NhBangKeVt> optional = bangKeVtRepository.findById(req.getId());
+        if (!optional.isPresent()){
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+
+        NhBangKeVt phieu = optional.get();
+
+        String status = req.getTrangThai() + phieu.getTrangThai();
+        switch (status) {
+
+            case Contains.DA_HOAN_THANH + Contains.DUTHAO:
+                phieu.setNguoiPduyetId(userInfo.getId());
+                phieu.setNgayPduyet(new Date());
+                break;
+            default:
+                throw new Exception("Phê duyệt không thành công");
+        }
+        phieu.setTrangThai(req.getTrangThai());
+        bangKeVtRepository.save(phieu);
+        return phieu;
     }
 
     @Override
     public void delete(Long id) throws Exception {
-
+        Optional<NhBangKeVt> optional = bangKeVtRepository.findById(id);
+        if (!optional.isPresent()){
+            throw new Exception("Bản ghi không tồn tại");
+        }
+        NhBangKeVt data = optional.get();
+        List<NhBangKeVtCt> dtlList = bangKeVtCtRepository.findByBangKeVtId(data.getId());
+        bangKeVtCtRepository.deleteAll(dtlList);
+        bangKeVtRepository.delete(data);
     }
 
     @Override

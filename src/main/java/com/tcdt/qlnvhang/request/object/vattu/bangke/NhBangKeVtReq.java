@@ -55,7 +55,7 @@ public class NhBangKeVtReq {
 
     private String donViGiaoHang;
 
-    private LocalDate thoiGianGiapNhan;
+    private LocalDate thoiGianGiaoNhan;
 
     private String maDvi;
 

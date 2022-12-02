@@ -25,9 +25,6 @@ public class NhBangKeVt extends TrangThaiBaseEntity implements Serializable {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "QDGNVNX_ID")
-    private Long qdgnvnxId;
-
     @Column(name = "SO_BANG_KE")
     private String soBangKe;
 
@@ -86,7 +83,7 @@ public class NhBangKeVt extends TrangThaiBaseEntity implements Serializable {
     private String donViGiaoHang;
 
     @Column(name = "THOI_GIAN_GIAO_NHAN")
-    private LocalDate thoiGianGiapNhan;
+    private LocalDate thoiGianGiaoNhan;
 
     @Column(name = "MA_DVI")
     private String maDvi;
@@ -98,6 +95,8 @@ public class NhBangKeVt extends TrangThaiBaseEntity implements Serializable {
     private String tenCloaiVthh;
     @Transient
     private String tenTrangThai;
+    @Transient
+    private String tenDvi;
     @Transient
     private String tenDiemKho;
     @Transient

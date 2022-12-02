@@ -1,50 +1,44 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bienbaogiaonhan;
 
+
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbangiaonhan.NhBbGiaoNhanVt;
-import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.HhHopDongRepository;
-import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
-import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbangiaonhan.NhBbGiaoNhanVtCt;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.vattu.bienbangiaonhan.NhBbGiaoNhanVtCtRepository;
 import com.tcdt.qlnvhang.repository.vattu.bienbangiaonhan.NhBbGiaoNhanVtRepository;
-import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHangRepository;
-import com.tcdt.qlnvhang.repository.vattu.bienbanketthucnhapkho.NhBbKtNhapKhoVtRepository;
-import com.tcdt.qlnvhang.repository.vattu.hosokythuat.NhHoSoKyThuatRepository;
+import com.tcdt.qlnvhang.request.object.vattu.bienbangiaonhan.NhBbGiaoNhanVtCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbangiaonhan.NhBbGiaoNhanVtReq;
-import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
+import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
 @Log4j2
 @RequiredArgsConstructor
 public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGiaoNhanVtService {
-
-    private static final String SHEET_BIEN_BAN_GIAO_NHAN_VAT_TU = "Biên bản giao nhận vật tư";
-    private static final String STT = "STT";
-    private static final String SO_BIEN_BAN = "Số Biên Bản";
-    private static final String SO_QUYET_DINH_NHAP = "Số Quyết Định Nhập";
-    private static final String NAM_NHAP = "Năm Nhập";
-    private static final String NGAY_BIEN_BAN = "Ngày Biên Bản";
-    private static final String SO_HOP_DONG = "Số Hợp Đồng";
-    private static final String BEN_GIAO = "Bên Giao";
-    private static final String TRANG_THAI = "Trạng Thái";
-
+    @Autowired
     private final NhBbGiaoNhanVtRepository nhBbGiaoNhanVtRepository;
+
+    @Autowired
     private final NhBbGiaoNhanVtCtRepository nhBbGiaoNhanVtCtRepository;
-    private final HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
-    private final QlnvDmVattuRepository qlnvDmVattuRepository;
-    private final FileDinhKemService fileDinhKemService;
-    private final HhHopDongRepository hhHopDongRepository;
-    private final NhBienBanGuiHangRepository nhBienBanGuiHangRepository;
-    private final NhHoSoKyThuatRepository nhHoSoKyThuatRepository;
-    private final NhBbKtNhapKhoVtRepository bbKtNhapKhoVtRepository;
-    private final HttpServletRequest req;
+
+    @Autowired
+    private UserInfoRepository userInfoRepository;
+
 
     @Override
     public Page<NhBbGiaoNhanVt> searchPage(NhBbGiaoNhanVtReq req) {
@@ -58,27 +52,139 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
 
     @Override
     public NhBbGiaoNhanVt create(NhBbGiaoNhanVtReq req) throws Exception {
-        return null;
+        if (req == null){
+            return null;
+        }
+
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null){
+            throw new Exception("Bad request.");
+
+        }
+
+        NhBbGiaoNhanVt item = new NhBbGiaoNhanVt();
+        BeanUtils.copyProperties(req, item, "id");
+        item.setNgayTao(new Date());
+        item.setNguoiTaoId(userInfo.getId());
+        item.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
+        item.setMaDvi(userInfo.getDvql());
+        nhBbGiaoNhanVtRepository.save(item);
+
+        this.saveCtiet(item.getId(),req);
+
+        return item;
+    }
+
+    @Transactional
+    void saveCtiet(Long idHdr, NhBbGiaoNhanVtReq req){
+        nhBbGiaoNhanVtCtRepository.deleteByBbGiaoNhanVtId(idHdr);
+        for(NhBbGiaoNhanVtCtReq objCtiet : req.getChiTiets()){
+            NhBbGiaoNhanVtCt ctiet = new NhBbGiaoNhanVtCt();
+            BeanUtils.copyProperties(objCtiet,ctiet,"id");
+            ctiet.setBbGiaoNhanVtId(idHdr);
+            nhBbGiaoNhanVtCtRepository.save(ctiet);
+        }
     }
 
     @Override
     public NhBbGiaoNhanVt update(NhBbGiaoNhanVtReq req) throws Exception {
-        return null;
+        if (req == null){
+            return null;
+        }
+
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null){
+            throw new Exception("Bad request.");
+        }
+
+        Optional<NhBbGiaoNhanVt> optional = nhBbGiaoNhanVtRepository.findById(req.getId());
+        if (!optional.isPresent()){
+            throw new Exception("Bảng kê không tồn tại.");
+        }
+
+        NhBbGiaoNhanVt item = optional.get();
+        BeanUtils.copyProperties(req, item, "id");
+        item.setNgaySua(new Date());
+        item.setNguoiSuaId(userInfo.getId());
+        nhBbGiaoNhanVtRepository.save(item);
+        this.saveCtiet(item.getId(),req);
+        return item;
     }
 
     @Override
     public NhBbGiaoNhanVt detail(Long id) throws Exception {
-        return null;
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null){
+            throw new Exception("Bad request.");
+        }
+
+        Optional<NhBbGiaoNhanVt> optional = nhBbGiaoNhanVtRepository.findById(id);
+        if (!optional.isPresent())
+            throw new Exception("Bảng kê không tồn tại.");
+
+        NhBbGiaoNhanVt item = optional.get();
+        Map<String, String> listDanhMucDvi = getListDanhMucDvi("", "", "01");
+
+        item.setChiTiets(nhBbGiaoNhanVtCtRepository.findByBbGiaoNhanVtId(item.getId()));
+        item.setTenDvi(listDanhMucDvi.get(item.getMaDvi()));
+        item.setTenNguoiTao(ObjectUtils.isEmpty(item.getNguoiTaoId()) ? "" : userInfoRepository.findById(item.getNguoiTaoId()).get().getFullName());
+        item.setTenNguoiPduyet(ObjectUtils.isEmpty(item.getNguoiPduyetId()) ? "" :userInfoRepository.findById(item.getNguoiPduyetId()).get().getFullName());
+        return item;
     }
 
     @Override
     public NhBbGiaoNhanVt approve(NhBbGiaoNhanVtReq req) throws Exception {
-        return null;
+        UserInfo userInfo = UserUtils.getUserInfo();
+
+        if (!Contains.CAP_CHI_CUC.equals(userInfo.getCapDvi())){
+            throw new Exception("Bad Request");
+        }
+
+        if (StringUtils.isEmpty(req.getId())){
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+
+        Optional<NhBbGiaoNhanVt> optional = nhBbGiaoNhanVtRepository.findById(req.getId());
+        if (!optional.isPresent()){
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+
+        NhBbGiaoNhanVt phieu = optional.get();
+
+        String status = req.getTrangThai() + phieu.getTrangThai();
+        switch (status) {
+            case Contains.CHODUYET_LDCC + Contains.DUTHAO:
+            case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
+                phieu.setNguoiGuiDuyetId(userInfo.getId());
+                phieu.setNgayGuiDuyet(new Date());
+                break;
+            case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
+                phieu.setNguoiPduyetId(userInfo.getId());
+                phieu.setNgayPduyet(new Date());
+                phieu.setLyDoTuChoi(req.getLyDoTuChoi());
+                break;
+            case Contains.DADUYET_LDCC + Contains.CHODUYET_LDCC:
+                phieu.setNguoiPduyetId(userInfo.getId());
+                phieu.setNgayPduyet(new Date());
+                break;
+            default:
+                throw new Exception("Phê duyệt không thành công");
+        }
+        phieu.setTrangThai(req.getTrangThai());
+        nhBbGiaoNhanVtRepository.save(phieu);
+        return phieu;
     }
 
     @Override
     public void delete(Long id) throws Exception {
-
+        Optional<NhBbGiaoNhanVt> optional = nhBbGiaoNhanVtRepository.findById(id);
+        if (!optional.isPresent()){
+            throw new Exception("Bản ghi không tồn tại");
+        }
+        NhBbGiaoNhanVt data = optional.get();
+        List<NhBbGiaoNhanVtCt> dtlList = nhBbGiaoNhanVtCtRepository.findByBbGiaoNhanVtId(data.getId());
+        nhBbGiaoNhanVtCtRepository.deleteAll(dtlList);
+        nhBbGiaoNhanVtRepository.delete(data);
     }
 
     @Override
@@ -188,10 +294,10 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
 //    }
 //
 //    private List<NhBbGiaoNhanVtCt> saveListChiTiet(Long parentId,
-//                                                    List<NhBbGiaoNhanVtCtReq> chiTietReqs,
+//                                                    List<NhBbGiaoNhanVtCt> chiTietReqs,
 //                                                    Map<Long, NhBbGiaoNhanVtCt> mapChiTiet) throws Exception {
 //        List<NhBbGiaoNhanVtCt> chiTiets = new ArrayList<>();
-//        for (NhBbGiaoNhanVtCtReq req : chiTietReqs) {
+//        for (NhBbGiaoNhanVtCt req : chiTietReqs) {
 //            Long id = req.getId();
 //            NhBbGiaoNhanVtCt chiTiet = new NhBbGiaoNhanVtCt();
 //
