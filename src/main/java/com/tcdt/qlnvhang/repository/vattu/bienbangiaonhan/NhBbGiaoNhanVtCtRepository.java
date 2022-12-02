@@ -17,5 +17,11 @@ public interface NhBbGiaoNhanVtCtRepository extends BaseRepository<NhBbGiaoNhanV
     @Modifying
     void deleteByBbGiaoNhanVtIdIn(Collection<Long> bbGnVtIds);
 
+    @Transactional
+    @Modifying
+    void deleteByBbGiaoNhanVtId(Long bbGnVtIds);
+
+    List<NhBbGiaoNhanVtCt> findByBbGiaoNhanVtId(Long bbGnVtIds);
+
     List<NhBbGiaoNhanVtCt> findByBbGiaoNhanVtIdInAndLoaiDaiDien(Collection<Long> bbGnVtIds, String loaiDaiDien);
 }
