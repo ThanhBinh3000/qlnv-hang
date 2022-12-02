@@ -31,9 +31,9 @@ public class XhDxKhBanDauGia  implements Serializable {
     private String trichYeu;
     @Temporal(TemporalType.DATE)
     private Date ngayTao;
-    private String nguoiTaoId;
+    private Long nguoiTaoId;
     private Date ngayPduyet;
-    private String nguoiPduyetId;
+    private Long nguoiPduyetId;
     private String soQdCtieu;
     private String loaiVthh;
     @Transient
@@ -63,7 +63,7 @@ public class XhDxKhBanDauGia  implements Serializable {
     private String ghiChu;
     @Temporal(TemporalType.DATE)
     private Date ngaySua;
-    private String nguoiSuaId;
+    private Long nguoiSuaId;
     @Temporal(TemporalType.DATE)
     private Date ngayGduyet;
     private String nguoiGduyetId;

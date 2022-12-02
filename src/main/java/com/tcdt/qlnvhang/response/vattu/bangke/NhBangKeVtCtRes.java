@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.response.vattu.bangke;
 
-import com.tcdt.qlnvhang.entities.nhaphang.vattu.bangke.NhBangKeVtCt;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangke.NhBangKeVtCt;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;

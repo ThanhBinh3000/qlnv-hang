@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,35 +16,49 @@ public class NhBbGiaoNhanVtReq {
 
     private Long id;
 
-    private Long qdgnvnxId;
+    private Long nam;
 
-    private Long bbKtNhapKhoId;
+    private String soBbGiaoNhan;
 
-    private String soBienBan;
+    private String soQdGiaoNvNh;
 
-    private LocalDate ngayKy;
+    private Long idQdGiaoNvNh;
 
-    private Long hopDongId;
+    private String soHd;
 
-    private LocalDate ngayHopDong;
+    private LocalDate ngayHd;
 
-    private Long bbGuiHangId;
+    private String soHoSoKyThuat;
 
-    private LocalDate ngayKyBbGh;
+    private String soBbNhapDayKho;
 
-    private Long hoSKyThuatId;
+    private Long idDdiemGiaoNvNh;
 
-    private LocalDate ngayKyHskt;
+    private String maDiemKho;
 
-    private String maVatTuCha;
+    private String maNhaKho;
 
-    private String maVatTu;
+    private String maNganKho;
 
-    private BigDecimal soLuong;
+    private String maLoKho;
+
+    private String lyDoTuChoi;
 
     private String ghiChu;
 
     private String ketLuan;
+
+    private String trangThai;
+
+    private String maDvi;
+
+    private Long nguoiGuiDuyetId;
+
+    private LocalDate ngayGuiDuyet;
+
+    private Long nguoiPheDuyetId;
+
+    private LocalDate ngayPheDuyet;
 
     private List<NhBbGiaoNhanVtCtReq> chiTiets = new ArrayList<>();
     private List<FileDinhKemReq> fileDinhKemReqs = new ArrayList<>();
