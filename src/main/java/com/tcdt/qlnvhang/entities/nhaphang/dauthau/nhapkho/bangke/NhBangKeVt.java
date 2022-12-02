@@ -25,9 +25,6 @@ public class NhBangKeVt extends TrangThaiBaseEntity implements Serializable {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "QDGNVNX_ID")
-    private Long qdgnvnxId;
-
     @Column(name = "SO_BANG_KE")
     private String soBangKe;
 
