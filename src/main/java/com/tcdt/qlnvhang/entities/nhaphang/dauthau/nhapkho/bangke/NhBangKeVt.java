@@ -1,7 +1,9 @@
 package com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangke;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
+import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -10,6 +12,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -20,13 +23,10 @@ import java.util.List;
 public class NhBangKeVt extends TrangThaiBaseEntity implements Serializable {
     private static final long serialVersionUID = 5802077466808854815L;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BANG_KE_VT_SEQ")
-    @SequenceGenerator(sequenceName = "BANG_KE_VT_SEQ", allocationSize = 1, name = "BANG_KE_VT_SEQ")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BANG_KE_VT_SEQ")
+//    @SequenceGenerator(sequenceName = "BANG_KE_VT_SEQ", allocationSize = 1, name = "BANG_KE_VT_SEQ")
     @Column(name = "ID")
     private Long id;
-
-    @Column(name = "QDGNVNX_ID")
-    private Long qdgnvnxId;
 
     @Column(name = "SO_BANG_KE")
     private String soBangKe;
@@ -44,7 +44,8 @@ public class NhBangKeVt extends TrangThaiBaseEntity implements Serializable {
     private String cloaiVthh;
 
     @Column(name = "NGAY_NHAP_KHO")
-    private LocalDate ngayNhapKho;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayNhapKho;
 
     @Column(name = "SO_QD_GIAO_NV_NH")
     private String soQdGiaoNvNh;
@@ -56,7 +57,8 @@ public class NhBangKeVt extends TrangThaiBaseEntity implements Serializable {
     private String soHd;
 
     @Column(name = "NGAY_HD")
-    private LocalDate ngayHd;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayHd;
 
     @Column(name = "SO_PHIEU_NHAP_KHO")
     private String soPhieuNhapKho;
@@ -86,11 +88,11 @@ public class NhBangKeVt extends TrangThaiBaseEntity implements Serializable {
     private String donViGiaoHang;
 
     @Column(name = "THOI_GIAN_GIAO_NHAN")
-    private LocalDate thoiGianGiapNhan;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
+    private Date thoiGianGiaoNhan;
 
     @Column(name = "MA_DVI")
     private String maDvi;
-
 
     @Transient
     private String tenLoaiVthh;
@@ -98,6 +100,8 @@ public class NhBangKeVt extends TrangThaiBaseEntity implements Serializable {
     private String tenCloaiVthh;
     @Transient
     private String tenTrangThai;
+    @Transient
+    private String tenDvi;
     @Transient
     private String tenDiemKho;
     @Transient
@@ -108,5 +112,5 @@ public class NhBangKeVt extends TrangThaiBaseEntity implements Serializable {
     private String tenLoKho;
 
     @Transient
-    private List<NhBangKeVtCt> chiTiets = new ArrayList<>();
+    private List<NhBangKeVtCt> children = new ArrayList<>();
 }

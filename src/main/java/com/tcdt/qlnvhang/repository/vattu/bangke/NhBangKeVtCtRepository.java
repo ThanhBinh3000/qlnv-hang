@@ -13,7 +13,12 @@ import java.util.List;
 public interface NhBangKeVtCtRepository extends BaseRepository<NhBangKeVtCt, Long> {
     List<NhBangKeVtCt> findByBangKeVtIdIn(Collection<Long> bkvtIds);
 
+    List<NhBangKeVtCt> findByBangKeVtId(Long bkvtIds);
+
     @Transactional
     @Modifying
     void deleteByBangKeVtIdIn(Collection<Long> bkvtIds);
+    @Transactional
+    @Modifying
+    void deleteByBangKeVtId(Long bkvtIds);
 }
