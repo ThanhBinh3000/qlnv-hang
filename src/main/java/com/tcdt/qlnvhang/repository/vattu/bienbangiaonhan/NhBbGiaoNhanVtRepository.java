@@ -15,5 +15,5 @@ public interface NhBbGiaoNhanVtRepository extends BaseRepository<NhBbGiaoNhanVt,
     @Modifying
     void deleteByIdIn(Collection<Long> ids);
 
-    Optional<NhBbGiaoNhanVt> findFirstBySoBienBan(String soBienBan);
+//    Optional<NhBbGiaoNhanVt> findFirstBySoBienBan(String soBienBan);
 }
