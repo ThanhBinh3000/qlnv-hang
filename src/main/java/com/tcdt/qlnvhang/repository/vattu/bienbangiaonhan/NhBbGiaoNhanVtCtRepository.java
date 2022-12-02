@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.repository.vattu.bienbangiaonhan;
 
-import com.tcdt.qlnvhang.entities.nhaphang.vattu.bienbangiaonhan.NhBbGiaoNhanVtCt;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbangiaonhan.NhBbGiaoNhanVtCt;
 import com.tcdt.qlnvhang.repository.BaseRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
@@ -16,6 +16,12 @@ public interface NhBbGiaoNhanVtCtRepository extends BaseRepository<NhBbGiaoNhanV
     @Transactional
     @Modifying
     void deleteByBbGiaoNhanVtIdIn(Collection<Long> bbGnVtIds);
+
+    @Transactional
+    @Modifying
+    void deleteByBbGiaoNhanVtId(Long bbGnVtIds);
+
+    List<NhBbGiaoNhanVtCt> findByBbGiaoNhanVtId(Long bbGnVtIds);
 
     List<NhBbGiaoNhanVtCt> findByBbGiaoNhanVtIdInAndLoaiDaiDien(Collection<Long> bbGnVtIds, String loaiDaiDien);
 }

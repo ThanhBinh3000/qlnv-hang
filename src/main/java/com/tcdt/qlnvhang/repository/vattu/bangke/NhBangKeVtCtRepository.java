@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.repository.vattu.bangke;
 
-import com.tcdt.qlnvhang.entities.nhaphang.vattu.bangke.NhBangKeVtCt;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangke.NhBangKeVtCt;
 import com.tcdt.qlnvhang.repository.BaseRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
@@ -13,7 +13,12 @@ import java.util.List;
 public interface NhBangKeVtCtRepository extends BaseRepository<NhBangKeVtCt, Long> {
     List<NhBangKeVtCt> findByBangKeVtIdIn(Collection<Long> bkvtIds);
 
+    List<NhBangKeVtCt> findByBangKeVtId(Long bkvtIds);
+
     @Transactional
     @Modifying
     void deleteByBangKeVtIdIn(Collection<Long> bkvtIds);
+    @Transactional
+    @Modifying
+    void deleteByBangKeVtId(Long bkvtIds);
 }

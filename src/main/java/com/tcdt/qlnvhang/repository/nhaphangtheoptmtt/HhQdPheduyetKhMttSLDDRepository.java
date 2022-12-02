@@ -1,16 +1,20 @@
 package com.tcdt.qlnvhang.repository.nhaphangtheoptmtt;
 
 
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDsgthau;
 import com.tcdt.qlnvhang.table.HhQdPheduyetKhMttSLDD;
+import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.XhQdPdKhBdgPl;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
 public interface HhQdPheduyetKhMttSLDDRepository extends JpaRepository<HhQdPheduyetKhMttSLDD, Long> {
 
+    List<HhQdPheduyetKhMttSLDD> findAllByIdQdDtlIn (List<Long> ids);
 
-    List<HhQdPheduyetKhMttSLDD> findAllByIdDxKhmtt(Long idDxKhmtt);
-    List<HhQdPheduyetKhMttSLDD> findAllByIdDxKhmttIn(List<Long> idDxKhmtt);
+    void deleteByIdQdDtl(Long idQdDtl);
+
+    List<HhQdPheduyetKhMttSLDD> findByIdQdDtl(Long IdQdDtl);
 
 
 }

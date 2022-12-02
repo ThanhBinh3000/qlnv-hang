@@ -2,14 +2,18 @@ package com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bienbanguihang;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHangCt;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkhotamgui.NhPhieuNhapKhoTamGui;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHangCtRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHangRepository;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanguihang.NhBienBanGuiHangCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanguihang.NhBienBanGuiHangReq;
+import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +22,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -36,6 +41,9 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
 
     @Autowired
     private final HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
+
+    @Autowired
+    private final UserInfoRepository userInfoRepository;
 
     @Autowired
     private final HhHopDongRepository hhHopDongRepository;
@@ -92,22 +100,88 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
     @Override
     @Transactional
     public NhBienBanGuiHang update(NhBienBanGuiHangReq req) throws Exception {
-        return null;
+        UserInfo userInfo = UserUtils.getUserInfo();
+
+        Optional<NhBienBanGuiHang> optional = bienBanGuiHangRepository.findById(req.getId());
+        if (!optional.isPresent()){
+            throw new Exception("Biên bản gửi hàng không tồn tại.");
+        }
+
+
+        NhBienBanGuiHang item = optional.get();
+        BeanUtils.copyProperties(req, item, "id");
+        item.setNgaySua(new Date());
+        item.setNguoiSuaId(userInfo.getId());
+        bienBanGuiHangRepository.save(item);
+        this.saveDetail(req,item.getId());
+//        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.get(), item.getId(), NhPhieuNhapKhoTamGui.TABLE_NAME);
+//        item.setFileDinhKems(fileDinhKems);
+        return item;
     }
 
     @Override
     public NhBienBanGuiHang detail(Long id) throws Exception {
-        return null;
+        UserInfo userInfo = UserUtils.getUserInfo();
+        Optional<NhBienBanGuiHang> optional = bienBanGuiHangRepository.findById(id);
+        if (!optional.isPresent())
+            throw new Exception("Biên bản gửi hàng không tồn tại.");
+
+        NhBienBanGuiHang item = optional.get();
+        Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
+        Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
+        item.setTenDvi(listDanhMucDvi.get(item.getMaDvi()));
+        item.setTenDiemKho(listDanhMucDvi.get(item.getMaDiemKho()));
+        item.setTenNhaKho(listDanhMucDvi.get(item.getMaNhaKho()));
+        item.setTenNganKho(listDanhMucDvi.get(item.getMaNganKho()));
+        item.setTenLoKho(listDanhMucDvi.get(item.getMaLoKho()));
+        item.setTenNguoiTao(ObjectUtils.isEmpty(item.getNguoiTaoId()) ? null : userInfoRepository.findById(item.getNguoiTaoId()).get().getFullName());
+        item.setTenLoaiVthh(listDanhMucHangHoa.get(item.getLoaiVthh()));
+        item.setTenCloaiVthh(listDanhMucHangHoa.get(item.getCloaiVthh()));
+
+        List<NhBienBanGuiHangCt> byBienBanGuiHangId = bienBanGuiHangCtRepository.findByBienBanGuiHangId(item.getId());
+        item.setChildren(byBienBanGuiHangId);
+        return item;
     }
 
     @Override
     public NhBienBanGuiHang approve(NhBienBanGuiHangReq req) throws Exception {
-        return null;
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null)
+            throw new Exception("Bad request.");
+
+        Optional<NhBienBanGuiHang> optional = bienBanGuiHangRepository.findById(req.getId());
+        if (!optional.isPresent()) {
+            throw new Exception("Không tìm thấy dữ liệu.");
+        }
+
+        NhBienBanGuiHang item = optional.get();
+        String trangThai = req.getTrangThai() + item.getTrangThai();
+        if (
+                (NhapXuatHangTrangThaiEnum.DA_HOAN_THANH.getId() + NhapXuatHangTrangThaiEnum.DUTHAO.getId()).equals(trangThai)
+        ) {
+            item.setNguoiPduyetId(userInfo.getId());
+            item.setNgayPduyet(new Date());
+        }else{
+            throw new Exception("Phê duyệt không thành công");
+        }
+        item.setTrangThai(req.getTrangThai());
+        bienBanGuiHangRepository.save(item);
+        return item;
     }
 
     @Override
     public void delete(Long id) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        Optional<NhBienBanGuiHang> optional = bienBanGuiHangRepository.findById(id);
+        if (!optional.isPresent())
+            throw new Exception("Biên bản gửi hàng không tồn tại.");
 
+        NhBienBanGuiHang item = optional.get();
+        if (NhapXuatHangTrangThaiEnum.DA_HOAN_THANH.getId().equals(item.getTrangThai())) {
+            throw new Exception("Không thể xóa biên bản đã đã duyệt");
+        }
+        bienBanGuiHangCtRepository.deleteByBienBanGuiHangIdIn(Collections.singleton(item.getId()));
+        bienBanGuiHangRepository.delete(item);
     }
 
     @Override

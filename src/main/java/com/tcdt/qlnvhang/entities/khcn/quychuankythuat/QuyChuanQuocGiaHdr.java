@@ -15,6 +15,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -34,7 +35,7 @@ public class QuyChuanQuocGiaHdr extends BaseEntity implements Serializable {
   private String soVanBanThayThe;
   private String maDvi;
   private String loaiVthh;
-  private String cLoaiVthh;
+  private String cloaiVthh;
   private LocalDate ngayKy;
   private LocalDate ngayHieuLuc;
   private String soHieuQuyChuan;
@@ -61,10 +62,17 @@ public class QuyChuanQuocGiaHdr extends BaseEntity implements Serializable {
   private String tenTrangThaiTh;
   @Transient
   private String tenLoaiHinhNhapXuat;
+  @Temporal(TemporalType.DATE)
+  private Date ngayGduyet;
+  private Long nguoiGduyetId;
+  @Temporal(TemporalType.DATE)
+  private Date ngayPduyet;
+  private Long nguoiPduyetId;
+  private String ldoTuChoi;
   @Transient
   private List<QuyChuanQuocGiaDtl> tieuChuanKyThuat = new ArrayList<>();
   @Transient
-  private FileDinhKem fileDinhKem;
+  private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
   public String getTenTrangThai() {
     return TrangThaiAllEnum.getLabelById(trangThai);

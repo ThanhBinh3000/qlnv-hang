@@ -56,16 +56,16 @@ public class XhDxKhBanDauGia  implements Serializable {
     private String ghiChu;
     @Temporal(TemporalType.DATE)
     private Date ngayTao;
-    private String nguoiTaoId;
+    private Long nguoiTaoId;
     @Temporal(TemporalType.DATE)
     private Date ngaySua;
-    private String nguoiSuaId;
+    private Long nguoiSuaId;
     @Temporal(TemporalType.DATE)
     private Date ngayGduyet;
     private String nguoiGduyetId;
     @Temporal(TemporalType.DATE)
     private Date ngayPduyet;
-    private String nguoiPduyetId;
+    private Long nguoiPduyetId;
     private String trangThai;
     @Transient
     private String tenTrangThai;

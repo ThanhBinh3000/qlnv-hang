@@ -202,12 +202,16 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
 
 
     void validateApprove(NhPhieuNhapKho phieu) throws Exception {
-        NhBangKeCanHang bySoPhieuNhapKho = nhBangKeCanHangRepository.findBySoPhieuNhapKho(phieu.getSoPhieuNhapKho());
-        if(ObjectUtils.isEmpty(bySoPhieuNhapKho)){
-            throw new Exception("Phiếu nhập kho đang không có bảng kê cân hàng, xin vui lòng tạo bảo kê cân hàng cho phiếu nhập kho");
+        if(phieu.getLoaiVthh().startsWith("02")){
+
         }else{
-            if(!bySoPhieuNhapKho.getTrangThai().equals(NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId())){
-                throw new Exception("Bảng kê cân hàng của Phiếu nhập kho đang chưa được duyệt, xin vui lòng duyệt bảng kê cân hàng");
+            NhBangKeCanHang bySoPhieuNhapKho = nhBangKeCanHangRepository.findBySoPhieuNhapKho(phieu.getSoPhieuNhapKho());
+            if(ObjectUtils.isEmpty(bySoPhieuNhapKho)){
+                throw new Exception("Phiếu nhập kho đang không có bảng kê cân hàng, xin vui lòng tạo bảo kê cân hàng cho phiếu nhập kho");
+            }else{
+                if(!bySoPhieuNhapKho.getTrangThai().equals(NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId())){
+                    throw new Exception("Bảng kê cân hàng của Phiếu nhập kho đang chưa được duyệt, xin vui lòng duyệt bảng kê cân hàng");
+                }
             }
         }
     }

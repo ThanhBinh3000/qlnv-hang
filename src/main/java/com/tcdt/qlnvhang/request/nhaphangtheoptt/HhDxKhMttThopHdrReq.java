@@ -15,6 +15,9 @@ public class HhDxKhMttThopHdrReq extends HhDxKhMttTChiThopReq {
     @ApiModelProperty(example = "Nội dung về việc")
     String noiDung;
 
+
+    String soQdCc;
+
 }
 
 

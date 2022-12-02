@@ -295,10 +295,12 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			throw new Exception("Không tìm thấy dữ liệu cần sửa");
 		}
 
-		if (!qOptional.get().getSoQd().equals(objReq.getSoQd())) {
-			List<HhQdKhlcntHdr> checkSoQd = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQd());
-			if (!checkSoQd.isEmpty()) {
-				throw new Exception("Số quyết định " + objReq.getSoQd() + " đã tồn tại");
+		if(!StringUtils.isEmpty(objReq.getSoQd())){
+			if (!objReq.getSoQd().equals(qOptional.get().getSoQd())) {
+				List<HhQdKhlcntHdr> checkSoQd = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQd());
+				if (!checkSoQd.isEmpty()) {
+					throw new Exception("Số quyết định " + objReq.getSoQd() + " đã tồn tại");
+				}
 			}
 		}
 
@@ -743,13 +745,12 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		for (HhQdKhlcntHdr f : data.getContent()) {
 			f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
 			f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
-			if(f.getLoaiVthh().startsWith("02")){
-				HhQdKhlcntDtl detail = hhQdKhlcntDtlRepository.findByIdQdHdr(f.getId());
-				f.setTongTien(hhQdKhlcntDsgthauRepository.sumTotalPriceByIdQdDtl(detail.getId()));
-			}else{
-				f.setTongTien(StringUtils.isEmpty(hashMapSum.get(f.getId().toString())) ? BigDecimal.valueOf(0) : BigDecimal.valueOf(Long.parseLong(hashMapSum.get(f.getId().toString()))));
-			}
-
+//			if(f.getLoaiVthh().startsWith("02")){
+////				HhQdKhlcntDtl detail = hhQdKhlcntDtlRepository.findByIdQdHdr(f.getId());
+////				f.setTongTien(hhQdKhlcntDsgthauRepository.sumTotalPriceByIdQdDtl(detail.getId()));
+//			}else{
+//			}
+			f.setTongTien(StringUtils.isEmpty(hashMapSum.get(f.getId().toString())) ? BigDecimal.valueOf(0) : BigDecimal.valueOf(Long.parseLong(hashMapSum.get(f.getId().toString()))));
 			f.setNamKhoach(f.getNamKhoach());
 		}
 		for (Object[] it: listGthau) {

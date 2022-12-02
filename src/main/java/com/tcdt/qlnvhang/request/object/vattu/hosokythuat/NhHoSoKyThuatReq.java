@@ -1,10 +1,12 @@
 package com.tcdt.qlnvhang.request.object.vattu.hosokythuat;
 
+import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.request.object.SoBienBanPhieuReq;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -12,34 +14,27 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class NhHoSoKyThuatReq extends SoBienBanPhieuReq {
+public class NhHoSoKyThuatReq extends BaseRequest {
+
     private Long id;
-    private Long qdgnvnxId;
-    private String bienBanGiaoMauId;
+
+    private Long idQdGiaoNvNh;
+
+    private String soQdGiaoNvNh;
+
+    private String soBbLayMau;
+
+    private String soHd;
+
     private String maDvi;
-    private String capDvi;
-    private String soBienBan;
-    private String maVatTuCha;
-    private String maVatTu;
-    private Long hopDongId;
-    private LocalDate ngayHopDong;
-    private String donViCungCap;
-    private LocalDate ngayKiemTra;
-    private String diaDiemKiemTra;
-    private BigDecimal soLuongThucNhap;
-    private LocalDate thoiGianNhap;
-    private String ketLuan;
-    private String vbtlCanBoSung;
-    private String cbtlCanHoanThien;
-    private LocalDate tgBsTruocNgay;
-    private LocalDate tgHtTruocNgay;
-    private String loaiVthh;
-    private String cloaiVthh;
-    private String moTaHangHoa;
 
-    private List<NhHoSoKyThuatCtReq> chiTiets = new ArrayList<>();
+    private String soHoSoKyThuat;
 
-    private List<FileDinhKemReq> fileDinhKemReqs = new ArrayList<>();
+    private Integer nam;
 
-    private List<FileDinhKemReq> fdkCanCus = new ArrayList<>();
+    private List<NhHoSoKyThuatCtReq> children = new ArrayList<>();
+//
+//    private List<FileDinhKemReq> fileDinhKemReqs = new ArrayList<>();
+//
+//    private List<FileDinhKemReq> fdkCanCus = new ArrayList<>();
 }
