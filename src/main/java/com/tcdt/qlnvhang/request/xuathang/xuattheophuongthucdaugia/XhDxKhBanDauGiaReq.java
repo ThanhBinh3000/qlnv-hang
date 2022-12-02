@@ -16,12 +16,16 @@ public class XhDxKhBanDauGiaReq {
     private Long id;
     private String maDvi;
     private String tenDvi;
-    private String diaChi;
     private String loaiHinhNx;
     private String kieuNx;
+    private String diaChi;
     private Integer namKh;
     private String soDxuat;
     private String trichYeu;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayTao;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayPduyet;
     private String soQdCtieu;
     private String loaiVthh;
     private String cloaiVthh;
@@ -31,27 +35,23 @@ public class XhDxKhBanDauGiaReq {
     private Date tgianDkienTu;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date tgianDkienDen;
-    private String loaiHdong;
-    private Integer tgianKyHdong;
     private Integer tgianTtoan;
-    private Integer tgianGnhan;
-    private String pthucTtoan;
-    private String pthucGnhan;
-    private String tgianKyHdongGhiChu;
     private String tgianTtoanGhiChu;
+    private String pthucTtoan;
+    private Integer tgianGnhan;
     private String tgianGnhanGhiChu;
+    private String pthucGnhan;
     private String thongBaoKh;
     private Integer khoanTienDatTruoc;
     private BigDecimal tongSoLuong;
     private BigDecimal tongTienKdiem;
+    private BigDecimal tongTienKdienDonGia;
     private BigDecimal tongTienDatTruoc;
+    private BigDecimal tongTienDatTruocDonGia;
     private String ghiChu;
     private String maThop;
     private String soQdPd;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayTao;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayPduyet;
+
     private Integer soDviTsan;
     private Integer slHdDaKy;
     private String ldoTuChoi;
