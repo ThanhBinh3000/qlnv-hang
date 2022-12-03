@@ -135,9 +135,9 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
           List<XhDxKhBanDauGiaPhanLo> dtlsPhanLo = xhDxKhBanDauGiaPhanLoRepository.findByIdDxKhbdg(dxuat.getId());
           BigDecimal soLuong = BigDecimal.ZERO;
           for (XhDxKhBanDauGiaPhanLo phanLoDtl : dtlsPhanLo) {
-              soLuong = soLuong.add(phanLoDtl.getSoLuong());
+              soLuong = soLuong.add(phanLoDtl.getTongSoLuong());
           }
-          thopDtl.setSoLuong(soLuong);
+          thopDtl.setTongSoLuong(soLuong);
           thopDtls.add(thopDtl);
           tChuanCluong = tChuanCluong.concat(dxuat.getTchuanCluong()+",");
       }

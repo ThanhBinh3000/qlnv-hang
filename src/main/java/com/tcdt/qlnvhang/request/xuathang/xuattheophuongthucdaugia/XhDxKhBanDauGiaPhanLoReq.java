@@ -40,7 +40,9 @@ public class XhDxKhBanDauGiaPhanLoReq {
 
     private BigDecimal  soLuongChiTieu;
     private BigDecimal soLuongKh;
-
+    private BigDecimal tongSoLuong;
+    private BigDecimal tongTienDatTruoc;
+    private BigDecimal tongTienDatTruocDd;
     private String dviTinh;
 
     private List<XhDxKhBanDauGiaDtlReq> children = new ArrayList<>();
