@@ -53,6 +53,10 @@ public class XhDxKhBanDauGiaDtl implements Serializable {
     private BigDecimal  soLuongChiTieu;
     private BigDecimal soLuongKh;
     private String dviTinh;
+
+    private BigDecimal tongSoLuong;
+    private BigDecimal tongTienDatTruoc;
+    private BigDecimal tongTienDatTruocDd;
     private Long idPhanLo;
 
 }
