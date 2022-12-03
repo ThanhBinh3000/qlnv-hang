@@ -94,12 +94,16 @@ public class NhBangKeVt extends TrangThaiBaseEntity implements Serializable {
     @Column(name = "MA_DVI")
     private String maDvi;
 
+    @Column(name = "ID_TRUONG_PHONG")
+    private Long idTruongPhong;
+
+    @Transient
+    private String tenTruongPhong;
+
     @Transient
     private String tenLoaiVthh;
     @Transient
     private String tenCloaiVthh;
-    @Transient
-    private String tenTrangThai;
     @Transient
     private String tenDvi;
     @Transient
