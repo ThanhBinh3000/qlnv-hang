@@ -265,6 +265,10 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
 
     List<NhPhieuNhapKho> setDetailList(List<NhPhieuNhapKho> list){
         list.forEach( item -> {
+            List<NhPhieuNhapKhoCt> allByIdPhieuNkHdr = nhPhieuNhapKhoCtRepository.findAllByIdPhieuNkHdr(item.getId());
+            if(!allByIdPhieuNkHdr.isEmpty()){
+                item.setSoLuongNhapKho(allByIdPhieuNkHdr.get(0).getSoLuongThucNhap());
+            }
             item.setBangKeCanHang(nhBangKeCanHangRepository.findBySoPhieuNhapKho(item.getSoPhieuNhapKho()));
         });
         return list;

@@ -183,4 +183,7 @@ public class NhPhieuNhapKho extends TrangThaiBaseEntity implements Serializable 
 
     @Transient
     private NhBangKeCanHang bangKeCanHang;
+
+    @Transient
+    private BigDecimal soLuongNhapKho;
 }
