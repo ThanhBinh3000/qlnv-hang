@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.request.object.vattu.bienbangiaonhan;
 
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -61,6 +62,9 @@ public class NhBbGiaoNhanVtReq {
     private LocalDate ngayPheDuyet;
 
     private List<NhBbGiaoNhanVtCtReq> chiTiets = new ArrayList<>();
+
     private List<FileDinhKemReq> fileDinhKemReqs = new ArrayList<>();
+
     private List<FileDinhKemReq> canCus = new ArrayList<>();
+
 }

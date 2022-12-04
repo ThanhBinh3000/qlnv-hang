@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbangiaonhan;
 
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import io.swagger.models.auth.In;
 import lombok.Data;
@@ -95,4 +96,8 @@ public class NhBbGiaoNhanVt extends TrangThaiBaseEntity implements Serializable 
 
     @Transient
     private List<FileDinhKem> canCus = new ArrayList<>();
+
+    @Transient
+    private NhBbNhapDayKho bbNhapDayKho;
+
 }

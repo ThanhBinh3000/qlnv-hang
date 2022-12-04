@@ -632,8 +632,6 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 				});
 				dtl.setListBienBanNhapDayKho(bbNhapDayKho);
 
-
-
 				// Set biên bản nghiệm thu bảo quản
 				List<HhBbNghiemthuKlstHdr> bbNghiemThuBq = hhBbNghiemthuKlstRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(), dtl.getMaDvi());
 				bbNghiemThuBq.forEach( item ->  {
@@ -694,7 +692,12 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			// Set biên bản giao nhân
 			List<NhBbGiaoNhanVt> bbGiaoNhanVt = nhBbGiaoNhanVtRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(),f.getMaDvi());
 			bbGiaoNhanVt.forEach( item -> {
-
+				Optional<NhBbNhapDayKho> bbNhapDayKho = nhBbNhapDayKhoRepository.findById(Long.parseLong(item.getSoBbNhapDayKho().split("/")[0]));
+				if(bbNhapDayKho.isPresent()){
+					NhBbNhapDayKho nhBbNhapDayKho = bbNhapDayKho.get();
+					nhBbNhapDayKho.setChiTiets(nhBbNhapDayKhoCtRepository.findAllByIdBbNhapDayKho(nhBbNhapDayKho.getId()));
+					item.setBbNhapDayKho(nhBbNhapDayKho);
+				}
 			});
 			f.setListBienBanGiaoNhan(bbGiaoNhanVt);
 			f.setListPhieuKiemNghiemCl(phieuKnghiemCl);
