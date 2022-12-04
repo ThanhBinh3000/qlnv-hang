@@ -24,6 +24,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -61,13 +62,15 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
             throw new Exception("Bad request.");
 
         }
-
         NhBbGiaoNhanVt item = new NhBbGiaoNhanVt();
         BeanUtils.copyProperties(req, item, "id");
         item.setNgayTao(new Date());
         item.setNguoiTaoId(userInfo.getId());
         item.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         item.setMaDvi(userInfo.getDvql());
+        item.setNam(LocalDate.now().getYear());
+        item.setId(Long.valueOf(item.getSoBbGiaoNhan().split("/")[0]));
+
         nhBbGiaoNhanVtRepository.save(item);
 
         this.saveCtiet(item.getId(),req);

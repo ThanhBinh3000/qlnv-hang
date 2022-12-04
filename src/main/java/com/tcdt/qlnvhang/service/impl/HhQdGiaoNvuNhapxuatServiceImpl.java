@@ -10,6 +10,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuknghiemcl.PhieuKnghiemCluongHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangke.NhBangKeVt;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbangiaonhan.NhBbGiaoNhanVt;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bienbanchuanbikho.NhBienBanChuanBiKho;
@@ -30,6 +31,7 @@ import com.tcdt.qlnvhang.repository.phieuknghiemcluonghang.PhieuKnghiemCluongHan
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNxDdiemRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatDtlRepository;
 import com.tcdt.qlnvhang.repository.vattu.bangke.NhBangKeVtRepository;
+import com.tcdt.qlnvhang.repository.vattu.bienbangiaonhan.NhBbGiaoNhanVtRepository;
 import com.tcdt.qlnvhang.repository.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiRepository;
 import com.tcdt.qlnvhang.request.*;
 import com.tcdt.qlnvhang.request.object.HhQdGiaoNvuNhapxuatDtlReq;
@@ -106,6 +108,9 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 	@Autowired
 	private NhBangKeVtRepository nhBangKeVtRepository;
+
+	@Autowired
+	private NhBbGiaoNhanVtRepository nhBbGiaoNhanVtRepository;
 
 	@Override
 	@Transactional
@@ -627,6 +632,8 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 				});
 				dtl.setListBienBanNhapDayKho(bbNhapDayKho);
 
+
+
 				// Set biên bản nghiệm thu bảo quản
 				List<HhBbNghiemthuKlstHdr> bbNghiemThuBq = hhBbNghiemthuKlstRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(), dtl.getMaDvi());
 				bbNghiemThuBq.forEach( item ->  {
@@ -683,6 +690,13 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 				item.setTenNganKho(mapDmucDvi.get(item.getMaNganKho()));
 				item.setTenLoKho(mapDmucDvi.get(item.getMaLoKho()));
 			});
+
+			// Set biên bản giao nhân
+			List<NhBbGiaoNhanVt> bbGiaoNhanVt = nhBbGiaoNhanVtRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(),f.getMaDvi());
+			bbGiaoNhanVt.forEach( item -> {
+
+			});
+			f.setListBienBanGiaoNhan(bbGiaoNhanVt);
 			f.setListPhieuKiemNghiemCl(phieuKnghiemCl);
 			f.setDtlList(hhQdGiaoNvuNhapxuatDtl);
 		});

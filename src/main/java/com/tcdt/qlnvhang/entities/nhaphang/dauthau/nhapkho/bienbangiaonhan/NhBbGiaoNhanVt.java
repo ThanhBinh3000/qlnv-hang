@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbangiaonhan;
 
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import io.swagger.models.auth.In;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -24,13 +25,13 @@ public class NhBbGiaoNhanVt extends TrangThaiBaseEntity implements Serializable 
     public static final String CAN_CU = TABLE_NAME + "_CAN_CU";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BB_GIAO_NHAN_VT_SEQ")
-    @SequenceGenerator(sequenceName = "BB_GIAO_NHAN_VT_SEQ", allocationSize = 1, name = "BB_GIAO_NHAN_VT_SEQ")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BB_GIAO_NHAN_VT_SEQ")
+//    @SequenceGenerator(sequenceName = "BB_GIAO_NHAN_VT_SEQ", allocationSize = 1, name = "BB_GIAO_NHAN_VT_SEQ")
     @Column(name = "ID")
     private Long id;
 
     @Column(name = "NAM")
-    private Long nam;
+    private Integer nam;
 
     @Column(name = "SO_BB_GIAO_NHAN")
     private String soBbGiaoNhan;
