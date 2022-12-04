@@ -99,7 +99,7 @@ public class NhBbGiaoNhanVtController {
 
     @ApiOperation(value = "Phê duyệt/ từ chối Quản lý Biên bản giao nhận vật tư", response = List.class)
     @PostMapping(PathContains.URL_PHE_DUYET)
-    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody NhBbGiaoNhanVtReq req) {
+    public ResponseEntity<BaseResponse> updateStatus(@RequestBody NhBbGiaoNhanVtReq req) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(service.approve(req));
