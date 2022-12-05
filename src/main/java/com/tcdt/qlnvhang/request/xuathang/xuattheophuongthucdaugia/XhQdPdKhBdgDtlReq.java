@@ -18,6 +18,8 @@ public class XhQdPdKhBdgDtlReq {
     @ApiModelProperty(notes = "Bắt buộc set đối với update")
     private Long id;
     private Long idHdr;
+    private Long idDxHdr;
+
 
     @NotNull(message = "Không được để trống")
     @Size(max = 20, message = "Mã đơn vị không được vượt quá 20 ký tự")
@@ -44,45 +46,19 @@ public class XhQdPdKhBdgDtlReq {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     Date ngayPduyet;
 
-    @NotNull(message = "Không được để trống")
-    @Size(max = 4, message = "Năm kế hoạch không được vượt quá 4 ký tự")
-    @ApiModelProperty(example = "2022")
-    String namKh;
-
-    private Long idDxHdr;
-
-    private String diaChi;
-
     private String trichYeu;
 
-    private String loaiVthh;
-    private String cloaiVthh;
-    private String moTaHangHoa;
-    private String tchuanCluong;
-
-
-    private String soQdCtieu;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date tgianDkienTu;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date tgianDkienDen;
-    private String loaiHdong;
-    private Integer tgianKyHdong;
-    private Integer tgianTtoan;
-    private Integer tgianGnhan;
-    private String tgianKyHdongGhiChu;
-    private String tgianTtoanGhiChu;
-    private String tgianGnhanGhiChu;
-    private String thongBaoKh;
-    private BigDecimal khoanTienDatTruoc;
     private BigDecimal tongSoLuong;
-    private BigDecimal tongTienKdiem;
-    private BigDecimal tongTienDatTruoc;
-
 
     private Integer soDviTsan;
-    private Integer slHdDaKy;
+
+    private BigDecimal tongTienKdienDonGia;
+
+    private BigDecimal tongTienDatTruocDonGia;
+
+    private String moTaHangHoa;
+
+    private String diaChi;
 
 
     private List<XhQdPdKhBdgPlReq> dsGoiThau;

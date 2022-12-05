@@ -337,13 +337,15 @@ public class XhQdPdKhBdgService extends BaseServiceImpl {
                 xhQdPdKhBdgPlDtlList.forEach( f ->{
                     f.setTenDvi(mapDmucDvi.get(f.getMaDvi()));
                     f.setTenDiemKho(mapDmucDvi.get(f.getMaDiemKho()));
-                    f.setTenNhaKho(mapDmucDvi.get(f.getMaNhaKho()));
+                    f.setTenNhakho(mapDmucDvi.get(f.getMaNhaKho()));
                     f.setTenNganKho(mapDmucDvi.get(f.getMaNganKho()));
                     f.setTenLoKho(mapDmucDvi.get(f.getMaLoKho()));
+                    f.setTenLoaiVthh(hashMapDmHh.get(f.getLoaiVthh()));
+                    f.setTenCloaiVthh(hashMapDmHh.get(f.getCloaiVthh()));
                 });
                 dsg.setTenDvi(mapDmucDvi.get(dsg.getMaDvi()));
                 dsg.setTenDiemKho(mapDmucDvi.get(dsg.getMaDiemKho()));
-                dsg.setTenNhaKho(mapDmucDvi.get(dsg.getMaNhaKho()));
+                dsg.setTenNhakho(mapDmucDvi.get(dsg.getMaNhaKho()));
                 dsg.setTenNganKho(mapDmucDvi.get(dsg.getMaNganKho()));
                 dsg.setTenLoKho(mapDmucDvi.get(dsg.getMaLoKho()));
                 dsg.setTenLoaiVthh(hashMapLoaiHdong.get(dsg.getTenLoaiVthh()));

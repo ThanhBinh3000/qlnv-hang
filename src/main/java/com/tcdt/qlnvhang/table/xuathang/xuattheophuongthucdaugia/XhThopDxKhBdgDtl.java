@@ -34,8 +34,8 @@ public class XhThopDxKhBdgDtl implements Serializable {
     private String trichYeu;
     private BigDecimal tongSoLuong;
     private Integer soDviTsan;
-    private BigDecimal tongTienKdiem;
-    private BigDecimal tongTienDatTruoc;
+    private BigDecimal tongTienKdienDonGia;
+    private BigDecimal tongTienDatTruocDonGia;
     private String moTaHangHoa;
     private String tchuanCluong;
     private String diaChi;

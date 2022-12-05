@@ -27,24 +27,11 @@ public class XhQdPdKhBdgDtl implements Serializable {
 
     private Long idDxHdr;
 
-
-
-    private String soDxuat;
-
     private String maDvi;
     @Transient
     private String tenDvi;
+    private String soDxuat;
 
-
-
-    private String diaChi;
-
-    private String loaiVthh;
-    @Transient
-    private String tenLoaiVthh;
-    private String cloaiVthh;
-    @Transient
-    private String tenCloaiVthh;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayTao;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
@@ -52,54 +39,20 @@ public class XhQdPdKhBdgDtl implements Serializable {
 
     private String trichYeu;
 
-    private Integer soDviTsan;
-
     private BigDecimal tongSoLuong;
 
-    private BigDecimal tongTienDatTruoc;
+    private Integer soDviTsan;
 
-    @Temporal(TemporalType.DATE)
-    private Date tgianDkienTu;
-    @Temporal(TemporalType.DATE)
-    private Date tgianDkienDen;
+    private BigDecimal tongTienKdienDonGia;
 
-    private String loaiHdong;
+    private BigDecimal tongTienDatTruocDonGia;
 
-    private Integer tgianKyHdong;
-
-    private String tgianKyHdongGhiChu;
-
-    private Integer tgianTtoan;
-
-    private String tgianTtoanGhiChu;
-
-    private Integer tgianGnhan;
-
-    private String tgianGnhanGhiChu;
-
-    private String pthucTtoan;
-
-    private String pthucGnhan;
-
-    private String thongBaoKh;
-
-    private BigDecimal khoanTienDatTruoc;
-
-    private BigDecimal tongTienKdiem;
     private String moTaHangHoa;
 
-    private String tchuanCluong;
-
-    private String soQdCtieu;
-
-    private Integer slHdDaKy;
-
-
+    private String diaChi;
 
     @Column(name="SO_QD_PD_KQ_BDG")
     private String soQdPdKqBdg;
-
-
 
     private String trangThai;
     @Transient
