@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.khoahoccongnghebaoquan;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetketquabandaugia.BhQdPheDuyetKqbdg;
 import com.tcdt.qlnvhang.entities.khcn.quychuankythuat.QuyChuanQuocGiaDtl;
 import com.tcdt.qlnvhang.entities.khcn.quychuankythuat.QuyChuanQuocGiaHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
@@ -29,10 +30,7 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -98,7 +96,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
             }
         }
         QuyChuanQuocGiaHdr data=optional.get();
-        BeanUtils.copyProperties(objReq,data,"id");
+        BeanUtils.copyProperties(objReq,data,"id","maDvi");
         QuyChuanQuocGiaHdr created= quyChuanQuocGiaHdrRepository.save(data);
         List<QuyChuanQuocGiaDtl> dtlList = quyChuanQuocGiaDtlRepository.findAllByIdHdr(data.getId());
         quyChuanQuocGiaDtlRepository.deleteAll(dtlList);
@@ -124,7 +122,9 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         data.setTenDvi(StringUtils.isEmpty(data.getTenDvi())?null:hashMapDmhh.get(data.getMaDvi()));
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
         List<QuyChuanQuocGiaDtl> dtlList = quyChuanQuocGiaDtlRepository.findAllByIdHdr(data.getId());
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Collections.singleton(QuyChuanQuocGiaHdr.TABLE_NAME));
         data.setTieuChuanKyThuat(dtlList);
+        data.setFileDinhKems(fileDinhKems);
         return data;
     }
 
@@ -200,20 +200,17 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
 
         String status= statusReq.getTrangThai()+optional.get().getTrangThai();
         switch (status){
-            case Contains.CHO_DUYET_TP + Contains.DUTHAO:
-            case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
-            case Contains.CHO_DUYET_TP + Contains.TUCHOI_TP:
-            case Contains.CHO_DUYET_TP + Contains.TUCHOI_LDC:
+            case Contains.CHODUYET_LDV + Contains.DUTHAO:
+            case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
                 optional.get().setNguoiGduyetId(userInfo.getId());
                 optional.get().setNgayGduyet(getDateTimeNow());
                 break;
-            case Contains.TUCHOI_TP + Contains.CHO_DUYET_TP:
-            case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
+            case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
                 optional.get().setNguoiPduyetId(getUser().getId());
                 optional.get().setNgayPduyet(getDateTimeNow());
                 optional.get().setLdoTuChoi(statusReq.getLyDo());
                 break;
-            case Contains.BAN_HANH + Contains.CHODUYET_LDC:
+            case Contains.BAN_HANH + Contains.CHODUYET_LDV:
                 optional.get().setNguoiPduyetId(getUser().getId());
                 optional.get().setNgayPduyet(getDateTimeNow());
                 break;
