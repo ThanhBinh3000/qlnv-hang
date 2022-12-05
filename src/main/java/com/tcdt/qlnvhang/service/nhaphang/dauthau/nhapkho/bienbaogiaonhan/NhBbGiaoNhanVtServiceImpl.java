@@ -24,6 +24,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -61,13 +62,15 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
             throw new Exception("Bad request.");
 
         }
-
         NhBbGiaoNhanVt item = new NhBbGiaoNhanVt();
         BeanUtils.copyProperties(req, item, "id");
         item.setNgayTao(new Date());
         item.setNguoiTaoId(userInfo.getId());
         item.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         item.setMaDvi(userInfo.getDvql());
+        item.setNam(LocalDate.now().getYear());
+        item.setId(Long.valueOf(item.getSoBbGiaoNhan().split("/")[0]));
+
         nhBbGiaoNhanVtRepository.save(item);
 
         this.saveCtiet(item.getId(),req);
@@ -136,7 +139,7 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
     public NhBbGiaoNhanVt approve(NhBbGiaoNhanVtReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
 
-        if (!Contains.CAP_CHI_CUC.equals(userInfo.getCapDvi())){
+        if (!Contains.CAP_CUC.equals(userInfo.getCapDvi())){
             throw new Exception("Bad Request");
         }
 
@@ -152,23 +155,21 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
         NhBbGiaoNhanVt phieu = optional.get();
 
         String status = req.getTrangThai() + phieu.getTrangThai();
-        switch (status) {
-            case Contains.CHODUYET_LDCC + Contains.DUTHAO:
-            case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
-                phieu.setNguoiGuiDuyetId(userInfo.getId());
-                phieu.setNgayGuiDuyet(new Date());
-                break;
-            case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
-                phieu.setNguoiPduyetId(userInfo.getId());
-                phieu.setNgayPduyet(new Date());
-                phieu.setLyDoTuChoi(req.getLyDoTuChoi());
-                break;
-            case Contains.DADUYET_LDCC + Contains.CHODUYET_LDCC:
-                phieu.setNguoiPduyetId(userInfo.getId());
-                phieu.setNgayPduyet(new Date());
-                break;
-            default:
-                throw new Exception("Phê duyệt không thành công");
+        if (
+            (NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId() + NhapXuatHangTrangThaiEnum.DUTHAO.getId()).equals(status) ||
+            (NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId() + NhapXuatHangTrangThaiEnum.TUCHOI_LDC.getId()).equals(status)
+        ) {
+            phieu.setNguoiGuiDuyetId(userInfo.getId());
+            phieu.setNgayGuiDuyet(new Date());
+        } else if (
+            (NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId()).equals(status) ||
+            (NhapXuatHangTrangThaiEnum.TUCHOI_LDC.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId()).equals(status)
+        ) {
+            phieu.setNgayPduyet(new Date());
+            phieu.setNguoiPduyetId(userInfo.getId());
+            phieu.setLyDoTuChoi(req.getLyDoTuChoi());
+        } else {
+            throw new Exception("Phê duyệt không thành công");
         }
         phieu.setTrangThai(req.getTrangThai());
         nhBbGiaoNhanVtRepository.save(phieu);

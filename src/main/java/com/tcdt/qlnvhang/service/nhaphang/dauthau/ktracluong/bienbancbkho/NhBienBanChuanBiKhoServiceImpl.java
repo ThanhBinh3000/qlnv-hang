@@ -97,7 +97,7 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
         }
 
         NhBienBanChuanBiKho item = optional.get();
-        if(item.getNguoiTaoId() != userInfo.getId()){
+        if(!Objects.equals(item.getNguoiTaoId(), userInfo.getId())){
             throw new Exception("Bạn không có quyền sửa dữ liệu");
         }
         BeanUtils.copyProperties(req, item, "id", "so", "nam");
