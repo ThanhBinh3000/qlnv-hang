@@ -60,6 +60,39 @@ public class XhQdPdKhBdg  implements Serializable {
     @Transient
     private  String tenCloaiVthh;
 
+    private String  moTaHangHoa;
+
+    private String soQdCc;
+
+    private String tchuanCluong;
+
+    @Temporal(TemporalType.DATE)
+    private Date tgianDkienTu;
+    @Temporal(TemporalType.DATE)
+    private Date tgianDkienDen;
+
+    private Integer tgianTtoan;
+
+    private String tgianTtoanGhiChu;
+
+    private String pthucTtoan;
+
+    private Integer tgianGnhan;
+
+    private String tgianGnhanGhiChu;
+
+    private String pthucGnhan;
+
+    private String thongBaoKh;
+
+    private BigDecimal khoanTienDatTruoc;
+
+    private BigDecimal tongSoLuong;
+
+    private BigDecimal tongTienKdienDonGia;
+
+    private BigDecimal tongTienDatTruocDonGia;
+
     private String trangThai;
 
     @Transient
@@ -84,12 +117,6 @@ public class XhQdPdKhBdg  implements Serializable {
 
     private Integer slHdDaKy;
 
-    private String tchuanCluong;
-
-    private String  moTaHangHoa;
-
-    private String loaiHdong;
-
     private String soQdPdKqBdg;
 
     private String ldoTuchoi;
@@ -98,42 +125,11 @@ public class XhQdPdKhBdg  implements Serializable {
 
     private String nguoiPduyet;
 
-    @Transient
-    private String tenLoaiHdong;
-
-    @Temporal(TemporalType.DATE)
-    private Date tgianDkienTu;
-    @Temporal(TemporalType.DATE)
-    private Date tgianDkienDen;
-
-    private Integer tgianKyHdong;
-
-    private String tgianKyHdongGhiChu;
-
-    private Integer tgianTtoan;
-
-    private String tgianTtoanGhiChu;
-
-    private String pthucTtoan;
-
-    private Integer tgianGnhan;
-
-    private String tgianGnhanGhiChu;
-
-    private String pthucGnhan;
-
-    private String thongBaoKh;
-
     private Boolean lastest;
-
-    private String soQdCc;
 
     private String phanLoai;
 
     private Long idGoc;
-
-
-
 
 
     @Transient
