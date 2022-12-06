@@ -29,6 +29,7 @@ public class QuyChuanQuocGiaHdrReq {
     private String trangThai;
     private String trangThaiHl;
     private String ldoTuChoi;
+    private boolean apDungCloaiVthh;
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
     private List<QuyChuanQuocGiaDtlReq> tieuChuanKyThuat = new ArrayList<>();
 }
