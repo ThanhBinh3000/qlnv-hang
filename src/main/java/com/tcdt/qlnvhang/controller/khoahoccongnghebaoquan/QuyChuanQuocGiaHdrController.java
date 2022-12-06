@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.controller.khoahoccongnghebaoquan;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -30,7 +31,7 @@ import java.util.Map;
 @RequestMapping(value = PathContains.Ql_QC_KT)
 @Slf4j
 @Api(tags = "Quản lý quy chuẩn kỹ thuật,tiêu chuẩn kỹ thuật")
-public class QuyChuanQuocGiaHdrController {
+public class QuyChuanQuocGiaHdrController extends BaseController {
     @Autowired
     private QuyChuanQuocGiaHdrService quyChuanQuocGiaHdrService;
 
