@@ -24,26 +24,35 @@ public class XhQdPdKhBdgPlDtl implements Serializable {
     private String maDiemKho;
     @Transient
     private String tenDiemKho;
+    private String maNhaKho;
+    @Transient
+    private String tenNhakho;
     private String maNganKho;
     @Transient
     private String tenNganKho;
     private String maLoKho;
     @Transient
     private String tenLoKho;
-    private String maDviTsan;
-    private BigDecimal soLuong;
-    private String DviTinh;
-    private BigDecimal giaKhongVat;
-    private BigDecimal giaKhoiDiem;
-    private BigDecimal tienDatTruoc;
-
-    private String maNhaKho;
-    @Transient
-    private String tenNhaKho;
     private String loaiVthh;
+    @Transient
+    private String tenLoaiVthh;
     private String cloaiVthh;
     @Transient
     private String tenCloaiVthh;
-    @Transient
-    private String tenLoaiVthh;
+    private String maDviTsan;
+    private BigDecimal duDau;
+    private BigDecimal soLuong;
+    private BigDecimal giaKhongVat;
+    private BigDecimal giaKhoiDiem;
+    private BigDecimal donGiaVat;
+    private BigDecimal giaKhoiDiemDduyet;
+    private BigDecimal tienDatTruoc;
+    private BigDecimal tienDatTruocDduyet;
+    private BigDecimal  soLuongChiTieu;
+    private BigDecimal soLuongKh;
+    private String dviTinh;
+    private BigDecimal tongSoLuong;
+    private BigDecimal tongTienDatTruoc;
+    private BigDecimal tongTienDatTruocDd;
+
 }

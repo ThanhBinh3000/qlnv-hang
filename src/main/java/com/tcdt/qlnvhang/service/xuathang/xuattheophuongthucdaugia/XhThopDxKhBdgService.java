@@ -127,8 +127,8 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
           thopDtl.setNgayTao(dxuat.getNgayTao());
           thopDtl.setTrichYeu(dxuat.getTrichYeu());
           thopDtl.setSoDviTsan(dxuat.getSoDviTsan());
-          thopDtl.setTongTienKdiem(dxuat.getTongTienKdiem());
-          thopDtl.setTongTienDatTruoc(dxuat.getTongTienDatTruoc());
+          thopDtl.setTongTienKdienDonGia(dxuat.getTongTienKdienDonGia());
+          thopDtl.setTongTienDatTruocDonGia(dxuat.getTongTienDatTruocDonGia());
           thopDtl.setMoTaHangHoa(dxuat.getMoTaHangHoa());
           thopDtl.setTchuanCluong(dxuat.getTchuanCluong());
           thopDtl.setDiaChi(dxuat.getDiaChi());
