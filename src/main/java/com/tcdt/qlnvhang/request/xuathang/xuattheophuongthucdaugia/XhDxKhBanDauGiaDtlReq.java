@@ -22,13 +22,19 @@ public class XhDxKhBanDauGiaDtlReq {
     @Transient
     private String tenCloaiVthh;
     private String maDviTsan;
+    private BigDecimal duDau;
     private BigDecimal soLuong;
+    private BigDecimal giaKhongVat;
+    private BigDecimal giaKhoiDiem;
+    private BigDecimal donGiaVat;
+    private BigDecimal giaKhoiDiemDduyet;
+    private BigDecimal tienDatTruoc;
+    private BigDecimal tienDatTruocDduyet;
     private BigDecimal  soLuongChiTieu;
     private BigDecimal soLuongKh;
     private String dviTinh;
-    private BigDecimal giaKhongVat;
-    private BigDecimal giaKhoiDiem;
-    private BigDecimal tienDatTruoc;
-    private BigDecimal duDau;
+    private BigDecimal tongSoLuong;
+    private BigDecimal tongTienDatTruoc;
+    private BigDecimal tongTienDatTruocDd;
     private Long idPhanLo;
 }

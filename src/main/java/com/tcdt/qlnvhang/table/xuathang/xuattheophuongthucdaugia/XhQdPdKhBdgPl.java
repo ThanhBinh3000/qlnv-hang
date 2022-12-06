@@ -24,9 +24,13 @@ public class XhQdPdKhBdgPl implements Serializable {
     @Transient
     private String tenDvi;
     private String maDiemKho;
+    private String diaDiemKho;
     @Transient
     private String tenDiemKho;
 
+    private String maNhaKho;
+    @Transient
+    private String tenNhakho;
 
     private String maNganKho;
     @Transient
@@ -36,41 +40,47 @@ public class XhQdPdKhBdgPl implements Serializable {
     @Transient
     private String tenLoKho;
 
+    private String loaiVthh;
+    @Transient
+    private String tenLoaiVthh;
+    private String cloaiVthh;
+    @Transient
+    private String tenCloaiVthh;
+
     private String maDviTsan;
 
-    private BigDecimal soLuong;
+    private BigDecimal duDau;
 
-    private String DviTinh;
+    private BigDecimal soLuong;
 
     private BigDecimal giaKhongVat;
 
     private BigDecimal giaKhoiDiem;
 
+    private BigDecimal donGiaVat;
+
+    private BigDecimal giaKhoiDiemDduyet;
+
     private BigDecimal tienDatTruoc;
+
+    private BigDecimal tienDatTruocDduyet;
+
+    private BigDecimal soLuongChiTieu;
+
+    private BigDecimal soLuongKh;
+
+    private BigDecimal tongSoLuong;
+
+    private BigDecimal tongTienDatTruoc;
+
+    private BigDecimal tongTienDatTruocDd;
+    private String dviTinh;
 
     private String trangThai;
     @Transient
     private String tenTrangThai;
 
 
-
-    private BigDecimal soLuongChiTieu;
-
-    private BigDecimal soLuongKh;
-
-    private String maNhaKho;
-    @Transient
-    private String tenNhaKho;
-
-
-
-
-    private String loaiVthh;
-   private String cloaiVthh;
-    @Transient
-   private String tenCloaiVthh;
-    @Transient
-   private String tenLoaiVthh;
     @Transient
     private XhQdPdKhBdgDtl xhQdPdKhBdgDtl;
 

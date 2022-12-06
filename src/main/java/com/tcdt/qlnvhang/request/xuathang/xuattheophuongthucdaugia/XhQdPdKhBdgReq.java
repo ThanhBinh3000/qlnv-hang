@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -45,19 +46,13 @@ public class XhQdPdKhBdgReq {
 
     private String cloaiVthh;
 
-    private Integer soDviTsan;
-
-    private Integer slHdDaKy;
-
-    private String tchuanCluong;
-
     private String  moTaHangHoa;
 
+    @Size(max = 20, message = "Căn cứ quyết định giao chỉ tiêu không được vượt quá 20 ký tự")
+    @ApiModelProperty(example = "20-QD/TCDT")
+    private String soQdCc;
 
-    @Size(max = 20, message = "Loại hợp đồng không được vượt quá 20 ký tự")
-    @ApiModelProperty(example = "00")
-    private String loaiHdong;
-
+    private String tchuanCluong;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     Date tgianDkienTu;
@@ -65,15 +60,12 @@ public class XhQdPdKhBdgReq {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     Date tgianDkienDen;
 
-    private Integer tgianKyHdong;
-
-    private String tgianKyHdongGhiChu;
-
     private Integer tgianTtoan;
 
     private String tgianTtoanGhiChu;
 
     private String pthucTtoan;
+
 
     private Integer tgianGnhan;
 
@@ -83,19 +75,23 @@ public class XhQdPdKhBdgReq {
 
     private String thongBaoKh;
 
+    private BigDecimal khoanTienDatTruoc;
+
+    private BigDecimal tongSoLuong;
+
+    private BigDecimal tongTienKdienDonGia;
+
+    private BigDecimal tongTienDatTruocDonGia;
+
+    private Integer soDviTsan;
+
+    private Integer slHdDaKy;
+
+    private String ldoTuchoi;
+
     private Boolean lastest = false;
 
-    @Size(max = 20, message = "Căn cứ quyết định giao chỉ tiêu không được vượt quá 20 ký tự")
-    @ApiModelProperty(example = "20-QD/TCDT")
-    private String soQdCc;
-
    private String phanLoai;
-
-
-
-
-
-
 
     private List<XhQdPdKhBdgDtlReq> dsDeXuat;
 

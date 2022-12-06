@@ -25,7 +25,7 @@ public interface XhDxKhBanDauGiaRepository extends JpaRepository<XhDxKhBanDauGia
             "AND (:loaiVthh IS NULL OR DX.LOAI_VTHH = :loaiVthh) " +
             "AND (:trangThai IS NULL OR DX.TRANG_THAI = :trangThai)" +
             "AND (:trangThaiTh IS NULL OR DX.TRANG_THAI_TH = :trangThaiTh) " +
-            "AND (:maDvi IS NULL OR LOWER(DX.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "
+            "AND (:maDvi IS NULL OR DX.MA_DVI = :maDvi) "
             ,nativeQuery = true)
     Page<XhDxKhBanDauGia> searchPage(Integer namKh, String soDxuat, String ngayTaoTu, String ngayTaoDen, String ngayDuyetTu, String ngayDuyetDen, String trichYeu, String loaiVthh, String trangThai, String trangThaiTh, String maDvi, Pageable pageable);
 
@@ -57,7 +57,7 @@ public interface XhDxKhBanDauGiaRepository extends JpaRepository<XhDxKhBanDauGia
     @Transactional
     void deleteAllByIdIn(List<Long> ids);
 
-    @Query(value = " SELECT NVL(SUM(DSG.SO_LUONG),0) FROM XH_DX_KH_BAN_DAU_GIA HDR " +
+    @Query(value = " SELECT NVL(SUM(DSG.SO_LUONG),0) FROM XH_QD_PD_KH_BDG HDR " +
             " INNER JOIN XH_QD_PD_KH_BDG_DTL DTL on HDR.ID = DTL.ID_QD_HDR " +
             " LEFT JOIN XH_QD_PD_KH_BDG_PL DSG ON DSG.ID_QD_DTL = DTL.ID " +
             "WHERE HDR.NAM_KH = :namKh AND HDR.LOAI_VTHH = :loaiVthh AND DSG.MA_DVI = :maDvi AND HDR.TRANG_THAI = :trangThai AND HDR.LASTEST = 1",

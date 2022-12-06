@@ -23,19 +23,23 @@ public class XhDxKhBanDauGiaPhanLo implements Serializable {
     private String maDvi;
     @Transient
     private String tenDvi;
+
     private String maDiemKho;
     private String diaDiemKho;
     @Transient
     private String tenDiemKho;
+
     private String maNhaKho;
     @Transient
     private String tenNhakho;
+
     private String maNganKho;
     @Transient
     private String tenNganKho;
     private String maLoKho;
     @Transient
     private String tenLoKho;
+
     private String loaiVthh;
     @Transient
     private String tenLoaiVthh;
@@ -43,15 +47,24 @@ public class XhDxKhBanDauGiaPhanLo implements Serializable {
     @Transient
     private String tenCloaiVthh;
     private String maDviTsan;
+    private BigDecimal duDau;
     private BigDecimal soLuong;
-    private String dviTinh;
     private BigDecimal giaKhongVat;
     private BigDecimal giaKhoiDiem;
+    private BigDecimal donGiaVat;
+    private BigDecimal giaKhoiDiemDduyet;
     private BigDecimal tienDatTruoc;
-    private BigDecimal duDau;
-    private Long idDxKhbdg;
+    private BigDecimal tienDatTruocDduyet;
+
     private BigDecimal  soLuongChiTieu;
     private BigDecimal soLuongKh;
+
+    private BigDecimal tongSoLuong;
+    private BigDecimal tongTienDatTruoc;
+    private BigDecimal tongTienDatTruocDd;
+
+    private String dviTinh;
+    private Long idDxKhbdg;
 
 
     @Transient

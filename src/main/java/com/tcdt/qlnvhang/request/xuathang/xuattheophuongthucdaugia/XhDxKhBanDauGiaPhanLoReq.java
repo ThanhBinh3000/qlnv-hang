@@ -27,15 +27,23 @@ public class XhDxKhBanDauGiaPhanLoReq {
     private String cloaiVthh;
     @Transient
     private String tenCloaiVthh;
+
     private String maDviTsan;
+    private BigDecimal duDau;
     private BigDecimal soLuong;
-    private String DviTinh;
     private BigDecimal giaKhongVat;
     private BigDecimal giaKhoiDiem;
-    private String tienDatTruoc;
+    private BigDecimal donGiaVat;
+    private BigDecimal giaKhoiDiemDduyet;
+    private BigDecimal tienDatTruoc;
+    private BigDecimal tienDatTruocDduyet;
+
     private BigDecimal  soLuongChiTieu;
     private BigDecimal soLuongKh;
-    private BigDecimal duDau;
+    private BigDecimal tongSoLuong;
+    private BigDecimal tongTienDatTruoc;
+    private BigDecimal tongTienDatTruocDd;
+    private String dviTinh;
 
     private List<XhDxKhBanDauGiaDtlReq> children = new ArrayList<>();
 }

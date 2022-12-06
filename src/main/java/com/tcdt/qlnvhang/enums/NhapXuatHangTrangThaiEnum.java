@@ -53,7 +53,16 @@ public enum NhapXuatHangTrangThaiEnum {
 	TRUOT_THAU("42", "Trượt thầu", "Trượt thầu"),
 	CHUA_THUC_HIEN("43", "Chưa thực hiện", "Chưa thực hiện"),
 	DANG_THUC_HIEN("44", "Đang thực hiện", "Đang thực hiện"),
-	DA_HOAN_THANH("45", "Đã hoàn thành", "Đã hoàn thành");
+	DA_HOAN_THANH("45", "Đã hoàn thành", "Đã hoàn thành"),
+
+	DA_NGHIEM_THU("46", "Đã nghiệm thu", "Đã nghiệm thu"),
+
+	CHODUYET_TBP_KTBQ("47", "Chờ duyệt - TBP KTBQ", "Chờ duyệt - TBP KTBQ"),
+
+	TUCHOI_TBP_KTBQ("48", "Từ chối - TBP KTBQ", "Từ chối - TBP KTBQ"),
+
+	DATAO_CB_VU("49", "Đã tạo - Cán bộ Vụ", "Đã tạo - Cán bộ Vụ");
+
 
 
 	private final String id;

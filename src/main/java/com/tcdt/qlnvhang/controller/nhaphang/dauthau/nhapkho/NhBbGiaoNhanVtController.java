@@ -83,7 +83,7 @@ public class NhBbGiaoNhanVtController {
 
     @ApiOperation(value = "Xóa Quản lý Biên bản giao nhận vật tư", response = List.class)
     @PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> delete(@PathVariable NhBbGiaoNhanVtReq req) {
+    public ResponseEntity<BaseResponse> delete(@RequestBody NhBbGiaoNhanVtReq req) {
         BaseResponse resp = new BaseResponse();
         try {
             service.delete(req.getId());
@@ -99,7 +99,7 @@ public class NhBbGiaoNhanVtController {
 
     @ApiOperation(value = "Phê duyệt/ từ chối Quản lý Biên bản giao nhận vật tư", response = List.class)
     @PostMapping(PathContains.URL_PHE_DUYET)
-    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody NhBbGiaoNhanVtReq req) {
+    public ResponseEntity<BaseResponse> updateStatus(@RequestBody NhBbGiaoNhanVtReq req) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(service.approve(req));
