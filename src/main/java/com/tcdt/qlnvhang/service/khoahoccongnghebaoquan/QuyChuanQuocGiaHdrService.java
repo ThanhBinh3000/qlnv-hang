@@ -118,10 +118,16 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
             throw new Exception("Bản ghi không tồn tại");
         }
         QuyChuanQuocGiaHdr data= optional.get();
-        Map<String,String> hashMapDmhh = getListDanhMucHangHoa();
-        data.setTenDvi(StringUtils.isEmpty(data.getTenDvi())?null:hashMapDmhh.get(data.getMaDvi()));
+        Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
+        data.setTenDvi(StringUtils.isEmpty(data.getTenDvi())?null:hashMapDmHh.get(data.getMaDvi()));
+        data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh())?null:hashMapDmHh.get(data.getLoaiVthh()));
+        data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh())?null:hashMapDmHh.get(data.getCloaiVthh()));
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
         List<QuyChuanQuocGiaDtl> dtlList = quyChuanQuocGiaDtlRepository.findAllByIdHdr(data.getId());
+        for(QuyChuanQuocGiaDtl dtl: dtlList){
+            dtl.setTenLoaiVthh(StringUtils.isEmpty(dtl.getLoaiVthh()) ? null : hashMapDmHh.get(dtl.getLoaiVthh()));
+            dtl.setTenCloaiVthh(StringUtils.isEmpty(dtl.getCloaiVthh()) ? null : hashMapDmHh.get(dtl.getCloaiVthh()));
+        }
         List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Collections.singleton(QuyChuanQuocGiaHdr.TABLE_NAME));
         data.setTieuChuanKyThuat(dtlList);
         data.setFileDinhKems(fileDinhKems);
@@ -206,12 +212,12 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
                 optional.get().setNgayGduyet(getDateTimeNow());
                 break;
             case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
-                optional.get().setNguoiPduyetId(getUser().getId());
+                optional.get().setNguoiPduyetId(userInfo.getId());
                 optional.get().setNgayPduyet(getDateTimeNow());
                 optional.get().setLdoTuChoi(statusReq.getLyDo());
                 break;
             case Contains.BAN_HANH + Contains.CHODUYET_LDV:
-                optional.get().setNguoiPduyetId(getUser().getId());
+                optional.get().setNguoiPduyetId(userInfo.getId());
                 optional.get().setNgayPduyet(getDateTimeNow());
                 break;
             default:
