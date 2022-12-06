@@ -28,10 +28,9 @@ public interface XhThopDxKhBdgRepository extends JpaRepository<XhThopDxKhBdg,Lon
             "AND (:noiDungThop IS NULL OR LOWER( TH.NOI_DUNG_THOP) LIKE LOWER(CONCAT(CONCAT('%',:noiDungThop),'%')))" +
             "AND (:ngayThopTu IS NULL OR TH.NGAY_THOP >=  TO_DATE(:ngayThopTu,'yyyy-MM-dd')) " +
             "AND (:ngayThopDen IS NULL OR TH.NGAY_THOP <= TO_DATE(:ngayThopDen,'yyyy-MM-dd'))" +
-            "AND (:trangThai IS NULL OR TH.TRANG_THAI = :trangThai) " +
-            "AND (:maDvi IS NULL OR LOWER(TH.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "
+            "AND (:trangThai IS NULL OR TH.TRANG_THAI = :trangThai) "
             ,nativeQuery = true)
-    Page<XhThopDxKhBdg> searchPage(Integer namKh, String loaiVthh, String cloaiVthh, String noiDungThop, String ngayThopTu, String ngayThopDen, String trangThai, String maDvi, Pageable pageable);
+    Page<XhThopDxKhBdg> searchPage(Integer namKh, String loaiVthh, String cloaiVthh, String noiDungThop, String ngayThopTu, String ngayThopDen, String trangThai,  Pageable pageable);
 
     List<XhThopDxKhBdg> findAllByIdIn(List<Long> ids);
 
