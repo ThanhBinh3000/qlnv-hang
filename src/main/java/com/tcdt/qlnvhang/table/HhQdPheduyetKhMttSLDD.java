@@ -30,24 +30,51 @@ public class HhQdPheduyetKhMttSLDD implements Serializable {
 
     private Long id;
     private Long idQdDtl;
-    private BigDecimal soLuong;
-
     private String maDvi;
     @Transient
     private String tenDvi;
-    private BigDecimal donGiaVat;
-    private BigDecimal thanhTien;
-    private BigDecimal donGiaTamTinh;
-    private String loaiVthh;
-    private String cloaiVthh;
+
     private String maDiemKho;
+
+    @Transient
+    private String tenDiemKho;
+
     private String diaDiemNhap;
+
     private BigDecimal soLuongChiTieu;
+
     private BigDecimal soLuongKhDd;
+
+    private BigDecimal soLuong;
+
+    private BigDecimal donGia;
+
+    private BigDecimal thanhTien;
+
+    private String loaiVthh;
+
+    @Transient
+    private String tenLoaiVthh;
+
+    private String cloaiVthh;
+
+    @Transient
+    private String tenCloaiVthh;
+
+    private BigDecimal donGiaVat;
+
+    private BigDecimal thanhTienVat;
+
+    private BigDecimal tongSoLuong;
+
+    private BigDecimal tongDonGia;
+
+    private BigDecimal tongThanhTien;
+
     private String trangThai;
     @Transient
     String tenTrangThai;
-    private String lyDoHuy;
+
 
     @Transient
     private HhQdPheduyetKhMttDx hhQdPheduyetKhMttDx;
