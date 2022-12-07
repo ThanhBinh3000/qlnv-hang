@@ -45,8 +45,7 @@ public class HhPhuLucHdController {
 	private HhPhuLucHdService service;
 
 
-	@Autowired
-	private HhQdKhlcntHdrService hhQdKhlcntHdrService;
+
 
 	@ApiOperation(value = "Tạo mới thông tin phụ lục hợp đồng", response = List.class)
 	@PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
