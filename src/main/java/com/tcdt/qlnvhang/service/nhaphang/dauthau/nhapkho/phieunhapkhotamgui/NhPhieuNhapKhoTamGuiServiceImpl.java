@@ -77,6 +77,12 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
                 UserInfo userInfo = UserUtils.getUserInfo();
 
         NhPhieuNhapKhoTamGui item = new NhPhieuNhapKhoTamGui();
+
+        NhPhieuNhapKhoTamGui byIdDdiemGiaoNvNh = nhPhieuNhapKhoTamGuiRepository.findByIdDdiemGiaoNvNh(req.getIdDdiemGiaoNvNh());
+        if(!ObjectUtils.isEmpty(byIdDdiemGiaoNvNh)){
+            throw new Exception("Ngăn lô kho đã được tạo phiếu nhập kho tạm gửi, vui lòng chọn điểm kho khác");
+        }
+
         BeanUtils.copyProperties(req, item, "id");
         item.setNgayTao(new Date());
         item.setNguoiTaoId(userInfo.getId());
