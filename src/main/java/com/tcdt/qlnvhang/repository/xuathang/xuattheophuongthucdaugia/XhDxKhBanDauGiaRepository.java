@@ -43,10 +43,10 @@ public interface XhDxKhBanDauGiaRepository extends JpaRepository<XhDxKhBanDauGia
             " AND DX.TRANG_THAI = '"+ Contains.DADUYET_LDC+"'" +
             " AND DX.TRANG_THAI_TH = '"+ Contains.CHUATONGHOP+"'" +
             " AND DX.MA_THOP is null "+
-            " AND DX.SO_QD_PD is null "+
-            " AND (:maDvi IS NULL OR LOWER(DX.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "
+            " AND DX.SO_QD_PD is null "
+
             ,nativeQuery = true)
-    List<XhDxKhBanDauGia> listTongHop(Integer namKh, String loaiVthh, String cloaiVthh,String ngayDuyetTu, String ngayDuyetDen, String maDvi);
+    List<XhDxKhBanDauGia> listTongHop(Integer namKh, String loaiVthh, String cloaiVthh,String ngayDuyetTu, String ngayDuyetDen);
 
     List<XhDxKhBanDauGia> findBySoDxuatIn (List<String> list);
 

@@ -52,7 +52,7 @@ public class HhDxuatKhMttSlddDtl implements Serializable {
 
     private BigDecimal tongThanhTien;
 
-    private BigDecimal tongDongGia;
+    private BigDecimal tongDonGia;
 
     private BigDecimal thanhTienVat;
 

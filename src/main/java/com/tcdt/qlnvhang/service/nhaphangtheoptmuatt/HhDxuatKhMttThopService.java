@@ -111,16 +111,17 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
             thopDtl.setDiaChiDvi(dXuat.getDiaChiDvi());
             thopDtl.setTenDuAn(dXuat.getTenDuAn());
             thopDtl.setTrichYeu(dXuat.getTrichYeu());
-//            thopDtl.setDonGiaVat(dXuat.getDonGiaVat());
+            thopDtl.setTongSoLuong(dXuat.getTongSoLuong());
+            thopDtl.setTongTienVat(dXuat.getTongTienVat());
 
-            List<HhDxuatKhMttSldd> dtlslDd = hhDxuatKhMttSlddRepository.findAllByIdDxKhmtt(dXuat.getId());
-            BigDecimal soLuong = BigDecimal.ZERO;
-            BigDecimal tongTien = BigDecimal.ZERO;
-            for (HhDxuatKhMttSldd gthauDtl : dtlslDd) {
-                soLuong = soLuong.add(gthauDtl.getSoLuong());
-                tongTien = tongTien.add(gthauDtl.getThanhTien() == null ? BigDecimal.ZERO : gthauDtl.getThanhTien());
-            }
-            thopDtl.setSoLuong(soLuong);
+//            List<HhDxuatKhMttSldd> dtlslDd = hhDxuatKhMttSlddRepository.findAllByIdDxKhmtt(dXuat.getId());
+//            BigDecimal soLuong = BigDecimal.ZERO;
+//            BigDecimal tongTien = BigDecimal.ZERO;
+//            for (HhDxuatKhMttSldd gthauDtl : dtlslDd) {
+//                soLuong = soLuong.add(gthauDtl.getSoLuong());
+//                tongTien = tongTien.add(gthauDtl.getThanhTien() == null ? BigDecimal.ZERO : gthauDtl.getThanhTien());
+//            }
+//            thopDtl.setTongSoLuong(soLuong);
             tChuanCluong = tChuanCluong.concat(dXuat.getTchuanCluong() + "");
             thopDtls.add(thopDtl);
         }
