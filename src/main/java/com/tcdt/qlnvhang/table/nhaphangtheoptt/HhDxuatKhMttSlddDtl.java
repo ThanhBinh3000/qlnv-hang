@@ -30,13 +30,35 @@ public class HhDxuatKhMttSlddDtl implements Serializable {
 
     private String diaDiemNhap;
 
+    private BigDecimal donGiaVat;
+
+    private Long idDiaDiem;
+
     private BigDecimal soLuong;
 
     private BigDecimal donGia;
 
     private BigDecimal thanhTien;
 
-    private Long idDiaDiem;
+    private String tenGoiThau;
+
+    private BigDecimal soLuongChiTieu;
+
+    private BigDecimal soLuongKhDd;
+
+    private BigDecimal tongThanhTienVat;
+
+    private BigDecimal tongSoLuong;
+
+    private BigDecimal tongThanhTien;
+
+    private BigDecimal tongDongGia;
+
+    private BigDecimal thanhTienVat;
+
+    private String loaiVthh;
+
+    private String cloaiVthh;
 
 
 }

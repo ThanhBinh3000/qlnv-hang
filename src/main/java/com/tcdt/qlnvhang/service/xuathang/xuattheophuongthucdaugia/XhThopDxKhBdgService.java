@@ -58,7 +58,6 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
     private XhDxKhBanDauGiaPhanLoRepository xhDxKhBanDauGiaPhanLoRepository;
 
     public Page<XhThopDxKhBdg> searchPage(SearchXhThopDxKhBdg objReq) throws Exception{
-        UserInfo userInfo= SecurityContextService.getUser();
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),
                 objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<XhThopDxKhBdg> data=xhThopDxKhBdgRepository.searchPage(
@@ -69,7 +68,6 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
                 Contains.convertDateToString(objReq.getNgayThopTu()),
                 Contains.convertDateToString(objReq.getNgayThopDen()),
                 objReq.getTrangThai(),
-                userInfo.getDvql(),
                 pageable);
         Map<String,String> hashMapDmhh = getListDanhMucHangHoa();
         data.getContent().forEach(f -> {
@@ -148,7 +146,6 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
 
     @Transactional()
     public XhThopDxKhBdg create(XhThopDxKhBdgReq objReq, HttpServletRequest req) throws Exception {
-        UserInfo userInfo =SecurityContextService.getUser();
         if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh())){
             throw new Exception("Loại vật tư hàng hóa không phù hợp");
         }
@@ -165,7 +162,6 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
         thopHdr.setNgayThop(new Date());
         thopHdr.setNoiDungThop(objReq.getNoiDungThop());
         thopHdr.setSoQdPd(objReq.getSoQdPd());
-        thopHdr.setMaDvi(userInfo.getDvql());
         xhThopDxKhBdgRepository.save(thopHdr);
         for (XhThopDxKhBdgDtl dtl : thopHdr.getThopDxKhBdgDtlList()){
             dtl.setIdThopHdr(thopHdr.getId());

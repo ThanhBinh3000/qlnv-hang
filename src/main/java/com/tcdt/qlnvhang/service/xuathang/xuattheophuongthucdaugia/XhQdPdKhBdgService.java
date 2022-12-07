@@ -70,7 +70,7 @@ public class XhQdPdKhBdgService extends BaseServiceImpl {
     private KeHoachService keHoachService;
 
     public Page<XhQdPdKhBdg> searchPage(XhQdPdKhBdgSearchReq objReq)throws Exception{
-        UserInfo userInfo= SecurityContextService.getUser();
+
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),
                 objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<XhQdPdKhBdg> data = xhQdPdKhBdgRepository.searchPage(
@@ -83,7 +83,7 @@ public class XhQdPdKhBdgService extends BaseServiceImpl {
                 objReq.getLoaiVthh(),
                 objReq.getTrangThai(),
                 objReq.getLastest(),
-                userInfo.getDvql(),
+                objReq.getMaDvi(),
                 pageable);
         Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
         data.getContent().forEach(f->{
@@ -107,7 +107,6 @@ public class XhQdPdKhBdgService extends BaseServiceImpl {
 
     @Transactional
     public XhQdPdKhBdg createLuongThuc (XhQdPdKhBdgReq objReq) throws Exception{
-        UserInfo userInfo= SecurityContextService.getUser();
         if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh()))
             throw new Exception("Loại vật tư hàng hóa không phù hợp");
 
@@ -130,7 +129,6 @@ public class XhQdPdKhBdgService extends BaseServiceImpl {
             }
         }
         XhQdPdKhBdg dataMap = ObjectMapperUtils.map(objReq, XhQdPdKhBdg.class);
-        dataMap.setMaDvi(userInfo.getDvql());
         dataMap.setNgayTao(getDateTimeNow());
         dataMap.setTrangThai(Contains.DUTHAO);
         dataMap.setNguoiTao(getUser().getUsername());
@@ -152,14 +150,12 @@ public class XhQdPdKhBdgService extends BaseServiceImpl {
 
     @Transactional
     XhQdPdKhBdg createVatTu(XhQdPdKhBdgReq objReq) throws Exception{
-        UserInfo userInfo= SecurityContextService.getUser();
         List<XhQdPdKhBdg> checkSoQd = xhQdPdKhBdgRepository.findBySoQdPd(objReq.getSoQdPd());
         if (!checkSoQd.isEmpty()) {
             throw new Exception("Số quyết định " + objReq.getSoQdPd() + " đã tồn tại");
         }
 
         XhQdPdKhBdg dataMap = ObjectMapperUtils.map(objReq, XhQdPdKhBdg.class);
-        dataMap.setMaDvi(userInfo.getDvql());
         dataMap.setNgayTao(getDateTimeNow());
         dataMap.setTrangThai(Contains.DUTHAO);
         dataMap.setNguoiTao(getUser().getUsername());
@@ -208,7 +204,7 @@ public class XhQdPdKhBdgService extends BaseServiceImpl {
             for (XhQdPdKhBdgPl dsgthau : dtl.getChildren()){
                 BigDecimal aLong =xhDxKhBanDauGiaRepository.countSLDalenKh(objHdr.getNamKh(), objHdr.getLoaiVthh(), dsgthau.getMaDvi(),NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
                 BigDecimal soLuongTotal = aLong.add(dsgthau.getSoLuong());
-                BigDecimal nhap = keHoachService.getChiTieuNhapXuat(objHdr.getNamKh(),objHdr.getLoaiVthh(), dsgthau.getMaDvi(), "XUAT" );
+                BigDecimal nhap = keHoachService.getChiTieuNhapXuat(objHdr.getNamKh(),objHdr.getLoaiVthh(), dsgthau.getMaDvi(), "NHAP" );
                 if (soLuongTotal.compareTo(nhap) >0){
                     throw new Exception(dsgthau.getTenDvi()+ "Đã nhập quá số lượng chỉ tiêu vui lòng nhập lại");
                 }

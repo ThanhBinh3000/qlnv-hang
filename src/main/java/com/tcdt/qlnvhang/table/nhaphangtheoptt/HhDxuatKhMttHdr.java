@@ -32,61 +32,59 @@ public class HhDxuatKhMttHdr  implements Serializable {
     @SequenceGenerator(sequenceName = "HH_DX_KHMTT_HDR_SEQ", allocationSize = 1, name = "HH_DX_KHMTT_HDR_SEQ")
     private Long id;
     private String maDvi;
-
-    private String soDxuat;
-    private String loaiVthh;
-    @Transient
-    private String tenLoaiVthh;
-    private String soQd;
-    private String trichYeu;
     @Transient
     private String tenDvi;
-    private String trangThai;
-    @Transient
-    private String tenTrangThai;
-    private String trangThaiTh;
+
+    private String loaiHinhNx;
+    private String kieuNx;
+    private String diaChiDvi;
+    private Integer namKh;
+    private String soDxuat;
+    private String trichYeu;
     @Temporal(TemporalType.DATE)
     private Date ngayTao;
     private String nguoiTao;
     @Temporal(TemporalType.DATE)
-    private Date ngaySua;
-    private  String nguoiSua;
-    private String ldoTuchoi;
-    @Temporal(TemporalType.DATE)
-    private Date ngayGuiDuyet;
-    private String nguoiGuiDuyet;
-    @Temporal(TemporalType.DATE)
     private Date ngayPduyet;
     private String nguoiPduyet;
     @Temporal(TemporalType.DATE)
-    private Date ngayKy;
-    private Integer namKh;
-    private String ghiChu;
+    private Date ngaySua;
+    private  String nguoiSua;
+    @Temporal(TemporalType.DATE)
+    private Date ngayGuiDuyet;
+    private String nguoiGuiDuyet;
+
+    private String tenDuAn;
+    private String soQd;
+    private String loaiVthh;
+    @Transient
+    private String tenLoaiVthh;
     private String cloaiVthh;
     @Transient
     private String tenCloaiVthh;
     private String moTaHangHoa;
-
-    private String tenDuAn;
-    private BigDecimal tongMucDt;
+    private String ptMua;
     private String tchuanCluong;
-    private String nguonVon;
+    private String giaMua;
+    private String thueGtgt;
     @Temporal(TemporalType.DATE)
     private Date tgianMkho;
     @Temporal(TemporalType.DATE)
     private Date tgianKthuc;
-    private String loaiHinhNx;
-    private String kieuNx;
-    private String diaChiDvi;
+    private String ghiChu;
+    private BigDecimal tongMucDt;
+    private BigDecimal tongSoLuong;
+    private String nguonVon;
+
+    private String trangThai;
+    @Transient
+    private String tenTrangThai;
+
+    private String trangThaiTh;
     @Transient
     private String tenTrangThaiTh;
-    private BigDecimal donGiaVat;
+    private String ldoTuchoi;
 
-    private String ptMua;
-    private String giaMua;
-    private String giaChuaThue;
-    private String thueGtgt;
-    private BigDecimal tongSoLuong;
     @Transient
     private String soQdPdkqMtt;
     @Transient
