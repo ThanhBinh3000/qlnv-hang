@@ -15,22 +15,38 @@ public class HhDxuatKhMttSlddReq {
     private Long id;
 
     private Long idHdr;
-    private BigDecimal soLuong;
+
     private String maDvi;
+
     private String maDiemKho;
 
     private String diaDiemNhap;
-    private BigDecimal donGia;
-    private BigDecimal donGiaTamTinh;
-    private BigDecimal thanhTien;
-    private String loaiVthh;
-    private String cloaiVthh;
-    private String moTaHangHoa;
 
-    private String nguonVon;
     private BigDecimal soLuongChiTieu;
 
     private BigDecimal soLuongKhDd;
+
+    private BigDecimal soLuong;
+
+    private BigDecimal donGia;
+
+    private BigDecimal thanhTien;
+
+    private String loaiVthh;
+
+    private String cloaiVthh;
+
+    private BigDecimal donGiaVat;
+
+    private BigDecimal thanhTienVat;
+
+    private BigDecimal tongSoLuong;
+
+    private BigDecimal tongDonGia;
+
+    private BigDecimal tongThanhTien;
+
+
 
     List<HhDxuatKhMttSlddDtlReq> children = new ArrayList<>();
 }

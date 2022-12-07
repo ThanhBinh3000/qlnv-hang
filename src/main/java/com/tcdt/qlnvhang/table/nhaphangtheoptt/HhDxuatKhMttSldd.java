@@ -24,21 +24,25 @@ public class HhDxuatKhMttSldd implements Serializable {
 
     private Long idDxKhmtt;
 
-    private BigDecimal soLuong;
-
-    private BigDecimal soLuongChiTieu;
-
-    private BigDecimal soLuongKhDd;
-
     private String maDvi;
 
     @Transient
     private String tenDvi;
 
+    private String maDiemKho;
+
+    @Transient
+    private String tenDiemKho;
+
+    private String diaDiemNhap;
+
+    private BigDecimal soLuongChiTieu;
+
+    private BigDecimal soLuongKhDd;
+
+    private BigDecimal soLuong;
+
     private BigDecimal donGia;
-
-
-    private BigDecimal donGiaTamTinh;
 
     private BigDecimal thanhTien;
 
@@ -52,16 +56,17 @@ public class HhDxuatKhMttSldd implements Serializable {
     @Transient
     private String tenCloaiVthh;
 
-    private String moTaHangHoa;
+    private BigDecimal donGiaVat;
 
-    private String nguonVon;
+    private BigDecimal thanhTienVat;
 
-    @Transient
-    private String tenNguonVon;
+    private BigDecimal tongSoLuong;
 
-    private String maDiemKho;
+    private BigDecimal tongDonGia;
 
-    private String diaDiemNhap;
+    private BigDecimal tongThanhTien;
+
+
 
     @Transient
     private List<HhDxuatKhMttSlddDtl> children = new ArrayList<>();
