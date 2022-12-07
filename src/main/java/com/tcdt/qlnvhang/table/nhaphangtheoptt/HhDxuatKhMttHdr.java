@@ -74,6 +74,7 @@ public class HhDxuatKhMttHdr  implements Serializable {
     private String ghiChu;
     private BigDecimal tongMucDt;
     private BigDecimal tongSoLuong;
+    private BigDecimal tongTienVat;
     private String nguonVon;
 
     private String trangThai;
@@ -90,7 +91,8 @@ public class HhDxuatKhMttHdr  implements Serializable {
     @Transient
     private Long idQdPdkqMtt;
     private String maThop;
-    private String noiDungTh;
+    private BigDecimal donGia;
+    private BigDecimal donGiaVat;
 
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)

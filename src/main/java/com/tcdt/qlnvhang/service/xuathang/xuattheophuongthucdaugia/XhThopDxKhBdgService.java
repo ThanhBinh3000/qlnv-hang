@@ -80,15 +80,13 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
 
 
     public XhThopDxKhBdg sumarryData(XhThopChiTieuReq objReq, HttpServletRequest req) throws Exception{
-      UserInfo userInfo= SecurityContextService.getUser();
+
       List<XhDxKhBanDauGia> dxuatList = xhDxKhBanDauGiaRepository.listTongHop(
               objReq.getNamKh(),
               objReq.getLoaiVthh(),
               objReq.getCloaiVthh(),
               Contains.convertDateToString(objReq.getNgayDuyetTu()),
-              Contains.convertDateToString(objReq.getNgayDuyetDen()),
-              userInfo.getDvql());
-
+              Contains.convertDateToString(objReq.getNgayDuyetDen()));
       if (dxuatList.isEmpty()){
           throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
       }
@@ -119,7 +117,7 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
           // Set thong tin chung lay tu de xuat
           thopDtl.setIdDxHdr(dxuat.getId());
           thopDtl.setMaDvi(dxuat.getMaDvi());
-          thopDtl.setTenDvi(getDviByMa(dxuat.getMaDvi(), req).getTenDvi());
+          thopDtl.setTenDvi(dxuat.getTenDvi());
           thopDtl.setSoDxuat(dxuat.getSoDxuat());
           thopDtl.setNgayPduyet(dxuat.getNgayPduyet());
           thopDtl.setNgayTao(dxuat.getNgayTao());

@@ -11,20 +11,39 @@ public class HhQdPdKhMttSlddDtlReq {
     //	@NotNull(message = "Không được để trống")
     Long id;
 
-    Integer soLuong;
+    private String maDvi;
 
-    //	@NotNull(message = "Không được để trống")
-    @Size(max = 250, message = "Tên đơn vị không được vượt quá 250 ký tự")
-    String tenDvi;
+    private String maDiemKho;
 
-    //	@NotNull(message = "Không được để trống")
-    @Size(max = 50, message = "Mã đơn vị không được vượt quá 50 ký tự")
-    String maDvi;
+    private String diaDiemNhap;
 
-    String maDiemKho;
+    private BigDecimal donGiaVat;
 
-    Integer donGia;
 
-    String diaDiemNhap;
+    private BigDecimal soLuong;
+
+    private BigDecimal donGia;
+
+    private BigDecimal thanhTien;
+
+    private String tenGoiThau;
+
+    private BigDecimal soLuongChiTieu;
+
+    private BigDecimal soLuongKhDd;
+
+    private BigDecimal tongThanhTienVat;
+
+    private BigDecimal tongSoLuong;
+
+    private BigDecimal tongThanhTien;
+
+    private BigDecimal tongDonGia;
+
+    private BigDecimal thanhTienVat;
+
+    private String loaiVthh;
+
+    private String cloaiVthh;
 
 }

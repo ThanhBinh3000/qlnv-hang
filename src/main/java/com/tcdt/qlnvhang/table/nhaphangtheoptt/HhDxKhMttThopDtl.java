@@ -24,16 +24,18 @@ public class HhDxKhMttThopDtl implements Serializable {
     private Long idDxHdr;
     private String maDvi;
     @Transient
-    String tenDvi;
+    private String tenDvi;
     private String soDxuat;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayPduyet;
     private String tenDuAn;
-    private BigDecimal soLuong;
-    private String namKh;
+    private BigDecimal tongSoLuong;
+    private Integer namKh;
     private String trichYeu;
     private String diaChiDvi;
-    private BigDecimal donGiaVat;
+    private BigDecimal tongTienVat;
+
+
 
 
 }
