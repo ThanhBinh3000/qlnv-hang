@@ -74,6 +74,12 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
         UserInfo userInfo = UserUtils.getUserInfo();
 
         NhBienBanGuiHang item = new NhBienBanGuiHang();
+
+        NhBienBanGuiHang byIdDdiemGiaoNvNh = bienBanGuiHangRepository.findByIdDdiemGiaoNvNh(req.getIdDdiemGiaoNvNh());
+        if(!ObjectUtils.isEmpty(byIdDdiemGiaoNvNh)){
+            throw new Exception("Ngăn lô kho đã được tạo biên bản gửi hàng, vui lòng chọn điểm kho khác");
+        }
+
         BeanUtils.copyProperties(req, item, "id");
         item.setNgayTao(new Date());
         item.setNguoiTaoId(userInfo.getId());
