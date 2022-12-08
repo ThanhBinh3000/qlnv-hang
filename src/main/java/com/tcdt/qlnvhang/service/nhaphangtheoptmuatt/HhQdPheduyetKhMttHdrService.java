@@ -372,14 +372,14 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
     }
 
 
-    public void validateData(HhQdPheduyetKhMttHdr objHdr) throws Exception{
-        for (HhQdPheduyetKhMttDx dtl : objHdr.getChildren()){
-            for (HhQdPheduyetKhMttSLDD dsgthau : dtl.getChildren()){
-                BigDecimal aLong = hhQdPheduyetKhMttHdrRepository.countSLDalenKh(objHdr.getNamKh(), objHdr.getLoaiVthh(), dsgthau.getMaDvi(),NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
-                BigDecimal soLuongTotal =aLong.add(dsgthau.getSoLuong());
-                BigDecimal nhap = keHoachService.getChiTieuNhapXuat(objHdr.getNamKh(),objHdr.getLoaiVthh(), dsgthau.getMaDvi(), "NHAP" );
-                if (soLuongTotal.compareTo(nhap)>0){
-                    throw new Exception(dsgthau.getTenDvi()+ "Đã nhập quá số lượng chỉ tiêu vui lòng nhập lại");
+    public void validateData(HhQdPheduyetKhMttHdr objHdr) throws Exception {
+        for(HhQdPheduyetKhMttDx dtl : objHdr.getChildren()){
+            for(HhQdPheduyetKhMttSLDD dsgthau : dtl.getChildren()){
+                BigDecimal aLong = hhDxuatKhMttRepository.countSLDalenKh(objHdr.getNamKh(), objHdr.getLoaiVthh(), dsgthau.getMaDvi(),NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
+                BigDecimal soLuongTotal = aLong.add(dsgthau.getSoLuong());
+                BigDecimal nhap = keHoachService.getChiTieuNhapXuat(objHdr.getNamKh(), objHdr.getLoaiVthh(), dsgthau.getMaDvi(), "NHAP");
+                if(soLuongTotal.compareTo(nhap) > 0){
+                    throw new Exception(dsgthau.getTenDvi() + " đã nhập quá số lượng chi tiêu, vui lòng nhập lại");
                 }
             }
         }
