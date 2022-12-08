@@ -25,10 +25,9 @@ public interface HhDxuatKhMttThopRepository extends JpaRepository<HhDxKhMttThopH
             "AND (:ngayThopDen IS NULL OR TH.NGAY_THOP <= TO_DATE(:ngayThopDen,'yyyy-MM-dd'))" +
             "AND (:ngayKyQdTu IS NULL OR QDPD.NGAY_QD >=  TO_DATE(:ngayKyQdTu,'yyyy-MM-dd')) " +
             "AND (:ngayKyQdDen IS NULL OR QDPD.NGAY_QD <= TO_DATE(:ngayKyQdDen,'yyyy-MM-dd'))" +
-            "AND (:trangThai IS NULL OR TH.TRANG_THAI = :trangThai) " +
-            "AND (:maDvi IS NULL OR LOWER(TH.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "
+            "AND (:trangThai IS NULL OR TH.TRANG_THAI = :trangThai) "
             ,nativeQuery = true)
-    Page<HhDxKhMttThopHdr> searchPage(Integer namKh, String loaiVthh, String cloaiVthh, String noiDung, String ngayThopTu, String ngayThopDen, String ngayKyQdTu, String ngayKyQdDen,String trangThai, String maDvi, Pageable pageable);
+    Page<HhDxKhMttThopHdr> searchPage(Integer namKh, String loaiVthh, String cloaiVthh, String noiDung, String ngayThopTu, String ngayThopDen, String ngayKyQdTu, String ngayKyQdDen,String trangThai, Pageable pageable);
 
     List<HhDxKhMttThopHdr> findAllByIdIn(List<Long> ids);
 
@@ -40,6 +39,11 @@ public interface HhDxuatKhMttThopRepository extends JpaRepository<HhDxKhMttThopH
     @Modifying
     @Query(value = "UPDATE HH_DX_KHMTT_THOP_HDR SET TRANG_THAI =:trangThai WHERE ID = :idThHdr", nativeQuery = true)
     void updateTrangThai(Long idThHdr, String trangThai);
+
+    @Transactional()
+    @Modifying
+    @Query(value = "UPDATE HH_DX_KHMTT_THOP_HDR SET SO_QD_PDUYET =:SoQdPduyet WHERE ID = :idThHdr", nativeQuery = true)
+    void updateSoQdPduyet(Long idThHdr, String SoQdPduyet);
 
 
 }
