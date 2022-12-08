@@ -93,6 +93,7 @@ public class HhDxuatKhMttHdr  implements Serializable {
     private String maThop;
     private BigDecimal donGia;
     private BigDecimal donGiaVat;
+    private String soQdPduyet;
 
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
