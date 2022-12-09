@@ -113,10 +113,10 @@ public class NhBienBanGuiHangController {
 
     @ApiOperation(value = "Tra cứu Quản lý", response = List.class)
     @GetMapping()
-    public ResponseEntity<BaseResponse> search(NhBienBanGuiHangSearchReq req) {
+    public ResponseEntity<BaseResponse> search(NhBienBanGuiHangReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-//            resp.setData(service.search(req));
+            resp.setData(service.searchPage(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

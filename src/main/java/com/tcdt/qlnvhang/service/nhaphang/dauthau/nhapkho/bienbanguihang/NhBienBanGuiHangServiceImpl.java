@@ -21,6 +21,9 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -60,7 +63,21 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
 
     @Override
     public Page<NhBienBanGuiHang> searchPage(NhBienBanGuiHangReq req) {
-        return null;
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),req.getPaggingReq().getLimit(), Sort.by("id").descending());
+        Page<NhBienBanGuiHang> pages = bienBanGuiHangRepository.selectPage(pageable);
+        Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
+        Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
+        pages.getContent().forEach(x -> {
+            x.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(x.getTrangThai()));
+            x.setTenLoaiVthh(listDanhMucHangHoa.get(x.getLoaiVthh()));
+            x.setTenCloaiVthh(listDanhMucHangHoa.get(x.getCloaiVthh()));
+            x.setTenDvi(listDanhMucDvi.get(x.getMaDvi()));
+            x.setTenDiemKho(listDanhMucDvi.get(x.getMaDiemKho()));
+            x.setTenNhaKho(listDanhMucDvi.get(x.getMaNhaKho()));
+            x.setTenNganKho(listDanhMucDvi.get(x.getMaNganKho()));
+            x.setTenLoKho(listDanhMucDvi.get(x.getMaLoKho()));
+        });
+        return pages;
     }
 
     @Override
