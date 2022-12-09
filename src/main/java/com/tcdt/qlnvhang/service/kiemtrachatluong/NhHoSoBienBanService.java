@@ -158,9 +158,9 @@ public class NhHoSoBienBanService extends BaseServiceImpl {
 
         String status= statusReq.getTrangThai()+optional.get().getTrangThai();
         switch (status){
-            case Contains.DAKY + Contains.CHODUYET_LDV:
+            case Contains.DAKY + Contains.DUTHAO:
                 optional.get().setNguoiPduyetId(userInfo.getId());
-                optional.get().setNgayPduyet(LocalDate.now());
+                optional.get().setNgayPduyet(new Date());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");

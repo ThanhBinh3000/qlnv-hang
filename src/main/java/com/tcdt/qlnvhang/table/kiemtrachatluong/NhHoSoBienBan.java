@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.kiemtrachatluong;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
 
@@ -13,7 +14,7 @@ import java.util.List;
 @Entity
 @Table(name = "NH_HO_SO_BIEN_BAN")
 @Data
-public class NhHoSoBienBan extends BaseEntity implements Serializable {
+public class NhHoSoBienBan extends TrangThaiBaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "NH_HO_SO_BIEN_BAN";
     @Id
@@ -24,15 +25,7 @@ public class NhHoSoBienBan extends BaseEntity implements Serializable {
     private String maDvi;
     private String soBienBan;
     private String loaiBienBan;
-    private LocalDate ngayGduyet;
-    private Long nguoiGduyetId;
-    private LocalDate ngayPduyet;
-    private Long nguoiPduyetId;
-    private String trangThai;
-    private String lyDoTuChoi;
 
-    @Transient
-    private String tenTrangThai;
     @Transient
     private String tenDvi;
     @Transient
