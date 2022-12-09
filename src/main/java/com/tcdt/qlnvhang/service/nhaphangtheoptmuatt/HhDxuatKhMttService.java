@@ -77,7 +77,7 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
                 objReq.getLoaiVthh(),
                 objReq.getTrangThai(),
                 objReq.getTrangThaiTh(),
-                userInfo.getDvql(),
+                objReq.getMaDvi(),
                 pageable);
         Map<String,String> hashMapDmhh = getListDanhMucHangHoa();
 
