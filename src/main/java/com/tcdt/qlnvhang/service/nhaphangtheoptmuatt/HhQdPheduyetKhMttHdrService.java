@@ -95,7 +95,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
     }
 
     public HhQdPheduyetKhMttHdr create (HhQdPheduyetKhMttHdrReq objReq) throws Exception{
-        UserInfo userInfo= SecurityContextService.getUser();
+
         if(!StringUtils.isEmpty(objReq.getSoQd())){
             List<HhQdPheduyetKhMttHdr> checkSoQd = hhQdPheduyetKhMttHdrRepository.findBySoQd(objReq.getSoQd());
             if (!checkSoQd.isEmpty()) {
@@ -116,9 +116,9 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         }
 
         HhQdPheduyetKhMttHdr dataMap = ObjectMapperUtils.map(objReq, HhQdPheduyetKhMttHdr.class);
-        dataMap.setMaDvi(userInfo.getDvql());
         dataMap.setNgayTao(getDateTimeNow());
         dataMap.setTrangThai(Contains.DUTHAO);
+        dataMap.setTrangThaiTkhai(Contains.CHUACAPNHAT);
         dataMap.setNguoiTao(getUser().getUsername());
         dataMap.setLastest(objReq.getLastest());
         HhQdPheduyetKhMttHdr created=hhQdPheduyetKhMttHdrRepository.save(dataMap);
@@ -147,7 +147,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
             qd.setIdQdHdr(dataMap.getId());
             qd.setTrangThai(Contains.CHUACAPNHAT);
             hhQdPheduyetKhMttDxRepository.save(qd);
-            for (HhQdPheduyetKhMttSLDDReq gtList : ObjectUtils.isEmpty(dx.getDsGoiThau()) ? dx.getChildren() : dx.getDsGoiThau()){
+            for (HhQdPheduyetKhMttSLDDReq gtList : ObjectUtils.isEmpty(dx.getDsSlddDtlList()) ? dx.getChildren() : dx.getDsSlddDtlList()){
                 HhQdPheduyetKhMttSLDD gt = ObjectMapperUtils.map(gtList, HhQdPheduyetKhMttSLDD.class);
                 hhQdPdKhMttSlddDtlRepositoryl.deleteAllByIdDiaDiem(gt.getId());
                 gt.setId(null);
@@ -364,7 +364,6 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
                     throw new Exception("Số tờ trình kế hoạch không được tìm thấy");
                 }
             }
-            this.validateData(dataDB);
             this.cloneProject(dataDB.getId());
         }
         HhQdPheduyetKhMttHdr createCheck = hhQdPheduyetKhMttHdrRepository.save(dataDB);
@@ -375,7 +374,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
     public void validateData(HhQdPheduyetKhMttHdr objHdr) throws Exception {
         for(HhQdPheduyetKhMttDx dtl : objHdr.getChildren()){
             for(HhQdPheduyetKhMttSLDD dsgthau : dtl.getChildren()){
-                BigDecimal aLong = hhDxuatKhMttRepository.countSLDalenKh(objHdr.getNamKh(), objHdr.getLoaiVthh(), dsgthau.getMaDvi(),NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
+                BigDecimal aLong = hhDxuatKhMttRepository.countSLDalenKh(objHdr.getNamKh(), objHdr.getLoaiVthh(), dsgthau.getMaDvi(), NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
                 BigDecimal soLuongTotal = aLong.add(dsgthau.getSoLuong());
                 BigDecimal nhap = keHoachService.getChiTieuNhapXuat(objHdr.getNamKh(), objHdr.getLoaiVthh(), dsgthau.getMaDvi(), "NHAP");
                 if(soLuongTotal.compareTo(nhap) > 0){

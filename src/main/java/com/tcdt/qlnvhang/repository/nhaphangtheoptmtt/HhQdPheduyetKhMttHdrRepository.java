@@ -31,7 +31,7 @@ public interface HhQdPheduyetKhMttHdrRepository extends JpaRepository<HhQdPheduy
             "AND (:loaiVthh IS NULL OR LOWER(MTT.LOAI_VTHH) LIKE LOWER(CONCAT(:loaiVthh,'%' ) ) )" +
             "AND (:trangThai IS NULL OR MTT.TRANG_THAI = :trangThai)" +
             " AND (:lastest IS NULL OR MTT.LASTEST = :lastest) " +
-            "AND (:maDvi IS NULL OR LOWER(MTT.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "
+            " AND (:maDvi IS NULL OR MTT.MA_DVI = :maDvi) "
             ,nativeQuery = true)
     Page<HhQdPheduyetKhMttHdr> searchPage(Integer namKh, String soQd, String trichYeu, String ngayQdTu, String ngayQdDen,  String loaiVthh, String trangThai,Integer lastest, String maDvi,  Pageable pageable);
 
@@ -41,7 +41,7 @@ public interface HhQdPheduyetKhMttHdrRepository extends JpaRepository<HhQdPheduy
 
     @Query(value = "select * from HH_QD_PHE_DUYET_KHMTT_HDR MTT " +
             " LEFT JOIN HH_CTIET_TTIN_CHAO_GIA DTL ON MTT.ID=DTL.ID_SO_QD_PDUYET_CGIA"+
-            " LEFT JOIN HH_QD_PHE_DUYET_KHMTT_DX DX ON DX.ID_PDUYET_HDR=MTT.ID"+
+            " LEFT JOIN HH_QD_PHE_DUYET_KHMTT_DX DX ON DX.ID_QD_HDR=MTT.ID"+
             " where (:namKh IS NULL OR MTT.NAM_KH = TO_NUMBER(:namKh)) " +
             " AND (:ngayCgiaTu IS NULL OR MTT.NGAY_HLUC >=  TO_DATE(:ngayCgiaTu,'yyyy-MM-dd')) " +
             " AND (:ngayCgiadDen IS NULL OR MTT.NGAY_HLUC <= TO_DATE(:ngayCgiadDen,'yyyy-MM-dd'))" +
