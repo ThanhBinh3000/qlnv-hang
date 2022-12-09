@@ -112,8 +112,8 @@ public class NhBienBanGuiHangController {
     }
 
     @ApiOperation(value = "Tra cứu Quản lý", response = List.class)
-    @GetMapping()
-    public ResponseEntity<BaseResponse> search(NhBienBanGuiHangReq req) {
+    @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> search(@RequestBody NhBienBanGuiHangReq req) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(service.searchPage(req));
