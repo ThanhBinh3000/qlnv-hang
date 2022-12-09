@@ -29,7 +29,7 @@ public class HhChiTietTTinChaoGia implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date ngayChaoGia;
     private BigDecimal soLuong;
-    private BigDecimal dgiaChuaThue;
+    private BigDecimal donGia;
     private BigDecimal thueGtgt;
     private BigDecimal thanhTien;
     private Boolean luaChon;

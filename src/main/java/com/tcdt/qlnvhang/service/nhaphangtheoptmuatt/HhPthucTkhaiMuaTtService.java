@@ -95,7 +95,7 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
                 HhChiTietTTinChaoGia cTietCgia =new ModelMapper().map(chiTietTTinChaoGia,HhChiTietTTinChaoGia.class);
                 cTietCgia.setIdTkhaiKh(dataMap.getId());
                 cTietCgia.setLuaChonPduyet(chiTietTTinChaoGia.getLuaChon());
-                BigDecimal thanhTien= cTietCgia.getSoLuong().multiply(cTietCgia.getDgiaChuaThue());
+                BigDecimal thanhTien= cTietCgia.getSoLuong().multiply(cTietCgia.getDonGia());
                 cTietCgia.setThanhTien(thanhTien);
                 hhCtietTtinCgiaRepository.save(cTietCgia);
                 List<FileDinhKemReq> listFile = new ArrayList<>();

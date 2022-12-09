@@ -23,7 +23,7 @@ public class HhChiTietTTinChaoGiaReq {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayChaoGia;
     private BigDecimal soLuong;
-    private BigDecimal dgiaChuaThue;
+    private BigDecimal donGia;
     private BigDecimal thueGtgt;
     private BigDecimal thanhTien;
     private Boolean luaChon;
