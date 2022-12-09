@@ -170,7 +170,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         List<QuyChuanQuocGiaHdr> data=page.getContent();
 
         String title="Danh sách đề xuất kế hoạch mua trực tiếp";
-        String[] rowsName=new String[]{"STT","Số văn bản","Số hiệu quy chuẩn,tiêu chuẩn văn bản","Áp dụng tại","Loại hàng hóa","Chủng loại hang hóa","Ngày quyết dịnh","Ngày hiệu lực","Trạng thái","Hiệu lực"};
+        String[] rowsName=new String[]{"STT","Số văn bản","Số hiệu quy chuẩn,tiêu chuẩn văn bản","Áp dụng tại","Loại hàng hóa","Ngày quyết dịnh","Ngày hiệu lực","Trạng thái","Hiệu lực"};
         String fileName="danh-sach-dx-kh-mua-truc-tiep.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs=null;
@@ -181,12 +181,11 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
             objs[1]=dx.getSoVanBan();
             objs[2]=dx.getSoHieuQuyChuan();
             objs[3]=dx.getApDungTai();
-            objs[4]=dx.getTenLoaiVthh();
-            objs[5]=dx.getTenCloaiVthh();
-            objs[6]=dx.getNgayKy();
-            objs[7]=dx.getNgayHieuLuc();
-            objs[8]=dx.getTenTrangThai();
-            objs[9]=dx.isLastest();
+            objs[4]=dx.getListTenLoaiVthh();
+            objs[5]=dx.getNgayKy();
+            objs[6]=dx.getNgayHieuLuc();
+            objs[7]=dx.getTenTrangThai();
+            objs[8]=dx.getTrangThaiHl();
             dataList.add(objs);
         }
         ExportExcel ex =new ExportExcel(title,fileName,rowsName,dataList,response);
