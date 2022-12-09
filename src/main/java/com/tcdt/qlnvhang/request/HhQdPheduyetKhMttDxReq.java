@@ -54,7 +54,7 @@ public class HhQdPheduyetKhMttDxReq {
     private String diaChiDvi;
     private BigDecimal tongTienVat;
 
-    private List<HhQdPheduyetKhMttSLDDReq> dsGoiThau;
+    private List<HhQdPheduyetKhMttSLDDReq> dsSlddDtlList;
     private List<HhQdPheduyetKhMttSLDDReq> children;
 
 }

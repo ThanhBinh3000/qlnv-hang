@@ -147,7 +147,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
             qd.setIdQdHdr(dataMap.getId());
             qd.setTrangThai(Contains.CHUACAPNHAT);
             hhQdPheduyetKhMttDxRepository.save(qd);
-            for (HhQdPheduyetKhMttSLDDReq gtList : ObjectUtils.isEmpty(dx.getDsGoiThau()) ? dx.getChildren() : dx.getDsGoiThau()){
+            for (HhQdPheduyetKhMttSLDDReq gtList : ObjectUtils.isEmpty(dx.getDsSlddDtlList()) ? dx.getChildren() : dx.getDsSlddDtlList()){
                 HhQdPheduyetKhMttSLDD gt = ObjectMapperUtils.map(gtList, HhQdPheduyetKhMttSLDD.class);
                 hhQdPdKhMttSlddDtlRepositoryl.deleteAllByIdDiaDiem(gt.getId());
                 gt.setId(null);
