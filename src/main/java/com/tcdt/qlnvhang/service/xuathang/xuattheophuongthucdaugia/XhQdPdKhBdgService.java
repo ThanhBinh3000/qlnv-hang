@@ -182,7 +182,7 @@ public class XhQdPdKhBdgService extends BaseServiceImpl {
             qd.setIdQdHdr(dataMap.getId());
             qd.setTrangThai(Contains.CHUACAPNHAT);
             xhQdPdKhBdgDtlRepository.save(qd);
-            for (XhQdPdKhBdgPlReq gtList : ObjectUtils.isEmpty(dx.getDsGoiThau()) ? dx.getChildren(): dx.getDsGoiThau()){
+            for (XhQdPdKhBdgPlReq gtList : ObjectUtils.isEmpty(dx.getDsPhanLoList()) ? dx.getChildren(): dx.getDsPhanLoList()){
                 XhQdPdKhBdgPl  gt = ObjectMapperUtils.map(gtList, XhQdPdKhBdgPl.class);
                 xhQdPdKhBdgPlDtlRepository.deleteAllByIdPhanLo(gt.getId());
                 gt.setId(null);
@@ -192,6 +192,7 @@ public class XhQdPdKhBdgService extends BaseServiceImpl {
                 for (XhQdPdKhBdgPlDtlReq ddNhap : gtList.getChildren()){
                     XhQdPdKhBdgPlDtl dataDdNhap = new ModelMapper().map(ddNhap, XhQdPdKhBdgPlDtl.class);
                     dataDdNhap.setId(null);
+                    dataDdNhap.setIdQdHdr(dataMap.getId());
                     dataDdNhap.setIdPhanLo(gt.getId());
                     xhQdPdKhBdgPlDtlRepository.save(dataDdNhap);
                 }

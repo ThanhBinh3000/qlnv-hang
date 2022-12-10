@@ -130,6 +130,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
             hhDxuatKhMttThopRepository.updateTrangThai(dataMap.getIdThHdr(), Contains.DADUTHAO_QD);
         }else{
             hhDxuatKhMttRepository.updateStatusInList(Arrays.asList(objReq.getSoTrHdr()), Contains.DADUTHAO_QD);
+            hhDxuatKhMttRepository.updateSoQdPduyet(Arrays.asList(objReq.getSoTrHdr()), dataMap.getSoQd());
         }
 
         saveDetail(objReq,dataMap);
