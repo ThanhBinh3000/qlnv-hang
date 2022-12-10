@@ -90,7 +90,7 @@ public class HhDxuatKhMttHdr  implements Serializable {
     private String soQdPdkqMtt;
     @Transient
     private Long idQdPdkqMtt;
-    private String maThop;
+    private Long maThop;
     private BigDecimal donGia;
     private BigDecimal donGiaVat;
     private String soQdPduyet;

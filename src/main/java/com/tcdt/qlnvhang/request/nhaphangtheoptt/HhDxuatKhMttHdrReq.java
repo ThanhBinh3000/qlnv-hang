@@ -55,7 +55,7 @@ public class HhDxuatKhMttHdrReq {
 
     private String ldoTuchoi;
 
-    private String maThop;
+    private Long maThop;
 
     private String noiDungTh;
     private BigDecimal donGia;
