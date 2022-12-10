@@ -9,5 +9,5 @@ import java.util.List;
 public interface XhTcTtinBdgNlqRepository extends JpaRepository<XhTcTtinBdgNlq, Long> {
   List<XhTcTtinBdgNlq> findByIdTtinDtl(Long idDtl);
 
-  void deleteByIdTtin(Long id);
+  void deleteByIdTtinHdr(Long id);
 }

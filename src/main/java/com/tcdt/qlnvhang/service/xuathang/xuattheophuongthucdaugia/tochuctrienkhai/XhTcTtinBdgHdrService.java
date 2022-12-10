@@ -73,7 +73,7 @@ public class XhTcTtinBdgHdrService extends BaseServiceImpl {
     Map<String, String> mapVthh = getListDanhMucHangHoa();
     List<XhTcTtinBdgHdr> allById = xhTcTtinBdgHdrRepository.findAllById(ids);
     allById.forEach(data -> {
-      List<XhTcTtinBdgDtl> listDetail = xhTcTtinBdgDtlRepository.findByIdTtin(data.getId());
+      List<XhTcTtinBdgDtl> listDetail = xhTcTtinBdgDtlRepository.findByIdTtinHdr(data.getId());
       listDetail.forEach(s -> {
         List<FileDinhKem> canCu = fileDinhKemService.search(s.getId(), Arrays.asList(XhTcTtinBdgDtl.TABLE_NAME + "_CAN_CU"));
         s.setCanCu(canCu);
@@ -146,8 +146,8 @@ public class XhTcTtinBdgHdrService extends BaseServiceImpl {
         fileDinhKemService.saveListFileDinhKem(Arrays.asList(s.getFileDinhKem()), s.getId(), XhTcTtinBdgDtl.TABLE_NAME + "_DINH_KEM");
       }
     });
-    xhTcTtinBdgTaiSanRepository.deleteByIdTtin(req.getId());
-    xhTcTtinBdgNlqRepository.deleteByIdTtin(req.getId());
+    xhTcTtinBdgTaiSanRepository.deleteByIdTtinHdr(req.getId());
+    xhTcTtinBdgNlqRepository.deleteByIdTtinHdr(req.getId());
     return currentRow;
   }
 

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface XhTcTtinBdgDtlRepository extends JpaRepository<XhTcTtinBdgDtl, Long> {
-  List<XhTcTtinBdgDtl> findByIdTtin(Long idTtin);
+  List<XhTcTtinBdgDtl> findByIdTtinHdr(Long idTtin);
 
-  void deleteByIdTtin(Long id);
+  void deleteByIdTtinHdr(Long id);
 }
