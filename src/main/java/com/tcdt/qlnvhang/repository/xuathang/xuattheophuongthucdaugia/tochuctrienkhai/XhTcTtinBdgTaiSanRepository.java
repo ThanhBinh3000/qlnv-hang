@@ -8,5 +8,5 @@ import java.util.List;
 public interface XhTcTtinBdgTaiSanRepository extends JpaRepository<XhTcTtinBdgTaiSan, Long> {
   List<XhTcTtinBdgTaiSan> findByIdTtinDtl(Long idDtl);
 
-  void deleteByIdTtin(Long id);
+  void deleteByIdTtinHdr(Long id);
 }
