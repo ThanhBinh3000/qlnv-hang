@@ -28,11 +28,7 @@ public interface XhTcTtinBdgHdrRepository extends JpaRepository<XhTcTtinBdgHdr, 
   )
   Page<XhTcTtinBdgHdr> search(@Param("param") ThongTinDauGiaReq param, Pageable pageable);
 
-  Optional<XhTcTtinBdgHdr> findFirstBySoDxuatAndNam(String soDxuat, int nam);
-
   void deleteAllByIdIn(List<Long> listId);
 
-  List<XhTcTtinBdgHdr> findIdByIdTongHop(Long id);
-
-  List<XhTcTtinBdgHdr> findByIdIn(List<Long> idDxuat);
+  List<XhTcTtinBdgHdr> findByIdIn(List<Long> ids);
 }
