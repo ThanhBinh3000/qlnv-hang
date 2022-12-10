@@ -1,8 +1,10 @@
 package com.tcdt.qlnvhang.service.xuathang.xuattheophuongthucdaugia;
+import java.time.*;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.*;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.*;
 import com.tcdt.qlnvhang.request.*;
@@ -14,6 +16,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.*;
+import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.XhTcTtinBdgHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -59,7 +62,7 @@ public class XhQdPdKhBdgService extends BaseServiceImpl {
 
     @Autowired
     private XhDxKhBanDauGiaRepository xhDxKhBanDauGiaRepository;
-    
+
     @Autowired
     FileDinhKemService fileDinhKemService;
 
@@ -464,6 +467,7 @@ public class XhQdPdKhBdgService extends BaseServiceImpl {
                 throw new Exception("Số tờ trình kế hoạch không được tìm thấy");
             }
             this.cloneProject(dataDB.getId());
+            this.cloneForToChucBdg(dataDB);
         }
         XhQdPdKhBdg createCheck = xhQdPdKhBdgRepository.save(dataDB);
         return createCheck;
@@ -505,6 +509,7 @@ public class XhQdPdKhBdgService extends BaseServiceImpl {
                 }
             }
             this.cloneProject(dataDB.getId());
+            this.cloneForToChucBdg(dataDB);
 //            this.validateData(dataDB);
         }
         XhQdPdKhBdg createCheck = xhQdPdKhBdgRepository.save(dataDB);
@@ -575,4 +580,41 @@ public class XhQdPdKhBdgService extends BaseServiceImpl {
         ex.export();
     }
 
+  private void cloneForToChucBdg(XhQdPdKhBdg data) {
+    XhTcTtinBdgHdr hdr = new XhTcTtinBdgHdr();
+    hdr.setNam(data.getNamKh());
+    hdr.setMaDvi(data.getMaDvi());
+    hdr.setLoaiVthh(data.getLoaiVthh());
+    hdr.setCloaiVthh(data.getCloaiVthh());
+    hdr.setIdQdPdKh(data.getId());
+    hdr.setSoQdPdKh(data.getSoQdPd());
+    hdr.setIdQdDcKh(null);
+    hdr.setSoQdDcKh(null);
+    hdr.setIdQdPdKq(null);
+    hdr.setSoQdPdKq(null);
+    hdr.setIdKhDx(data.getIdTrHdr());
+    hdr.setSoKhDx(data.getSoTrHdr());
+//      hdr.setMaTh(data.getIdThHdr());
+    hdr.setNgayQdPdKqBdg(null);
+    hdr.setThoiHanGiaoNhan(data.getTgianGnhan());
+    hdr.setThoiHanThanhToan(data.getTgianTtoan());
+    hdr.setPhuongThucThanhToan(data.getPthucTtoan());
+    hdr.setPhuongThucGiaoNhan(data.getPthucGnhan());
+    hdr.setTrangThai(TrangThaiAllEnum.CHUA_CAP_NHAT.getId());
+//      hdr.setMaDviThucHien(data.);
+    hdr.setTongTienGiaKhoiDiem(DataUtils.safeToLong(data.getTongTienKdienDonGia()));
+    hdr.setTongTienDatTruoc(DataUtils.safeToLong(data.getKhoanTienDatTruoc()));
+    hdr.setTongTienDatTruocDuocDuyet(DataUtils.safeToLong(data.getTongTienDatTruocDonGia()));
+    hdr.setTongSoLuong(DataUtils.safeToLong(data.getTongSoLuong()));
+    hdr.setPhanTramDatTruoc(DataUtils.safeToInt(data.getKhoanTienDatTruoc()));
+    if (!DataUtils.isNullObject(data.getTgianDkienTu()) && !DataUtils.isNullObject(data.getTgianDkienTu())) {
+      LocalDate localDateTu = data.getTgianDkienTu().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+      LocalDate localDateDen = data.getTgianDkienDen().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+      hdr.setThoiGianToChucTu(localDateTu);
+      hdr.setThoiGianToChucDen(localDateDen);
+    }
+    hdr.setSoDviTsan(data.getSoDviTsan());
+    hdr.setSoDviTsanThanhCong(0);
+    hdr.setSoDviTsanKhongThanh(0);
+  }
 }
