@@ -149,11 +149,11 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
         if (thopHdr.getId() > 0 && thopHdr.getHhDxKhMttThopDtls().size() > 0) {
             List<String> soDxuatList = thopHdr.getHhDxKhMttThopDtls().stream().map(HhDxKhMttThopDtl::getSoDxuat)
                     .collect(Collectors.toList());
-            List<HhDxuatKhMttHdr> list = hhDxuatKhMttRepository.findBySoDxuatIn(soDxuatList);
-            for (HhDxuatKhMttHdr bdg : list){
-                bdg.setMaThop(String.valueOf(thopHdr.getId()));
-                hhDxuatKhMttRepository.save(bdg);
-            }
+//            List<HhDxuatKhMttHdr> list = hhDxuatKhMttRepository.findBySoDxuatIn(soDxuatList);
+//            for (HhDxuatKhMttHdr bdg : list){
+//                bdg.setMaThop(thopHdr.getId());
+//                hhDxuatKhMttRepository.save(bdg);
+//            }
             hhDxuatKhMttRepository.updateStatusInList(soDxuatList, Contains.DATONGHOP);
         }
 return thopHdr;

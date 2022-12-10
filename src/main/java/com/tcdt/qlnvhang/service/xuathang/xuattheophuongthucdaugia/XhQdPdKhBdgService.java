@@ -504,8 +504,8 @@ public class XhQdPdKhBdgService extends BaseServiceImpl {
                     throw new Exception("Số tờ trình kế hoạch không được tìm thấy");
                 }
             }
-            this.validateData(dataDB);
             this.cloneProject(dataDB.getId());
+//            this.validateData(dataDB);
         }
         XhQdPdKhBdg createCheck = xhQdPdKhBdgRepository.save(dataDB);
         return createCheck;
