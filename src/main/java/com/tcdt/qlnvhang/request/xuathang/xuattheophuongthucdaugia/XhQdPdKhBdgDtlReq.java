@@ -61,7 +61,7 @@ public class XhQdPdKhBdgDtlReq {
     private String diaChi;
 
 
-    private List<XhQdPdKhBdgPlReq> dsGoiThau;
+    private List<XhQdPdKhBdgPlReq> dsPhanLoList;
 
     private List<XhQdPdKhBdgPlReq> children;
 }

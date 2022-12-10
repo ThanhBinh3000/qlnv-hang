@@ -22,6 +22,11 @@ public interface HhDxuatKhMttRepository extends JpaRepository<HhDxuatKhMttHdr, L
     @Query(value = "UPDATE HH_DX_KHMTT_HDR SET TRANG_THAI_TH=:trangThaiTh WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
     void updateStatusInList(List<String> soDxuatList, String trangThaiTh);
 
+    @Transactional()
+    @Modifying
+    @Query(value = "UPDATE HH_DX_KHMTT_HDR SET SO_QD_PDUYET=:soQdPduyet WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
+    void updateSoQdPduyet(List<String> soDxuatList, String soQdPduyet);
+
 
 
     @Query(value = "select * from HH_DX_KHMTT_HDR MTT where (:namKh IS NULL OR MTT.NAM_KH = TO_NUMBER(:namKh)) " +

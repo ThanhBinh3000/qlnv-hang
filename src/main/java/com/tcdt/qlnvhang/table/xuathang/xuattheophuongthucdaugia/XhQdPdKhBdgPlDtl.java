@@ -54,5 +54,6 @@ public class XhQdPdKhBdgPlDtl implements Serializable {
     private BigDecimal tongSoLuong;
     private BigDecimal tongTienDatTruoc;
     private BigDecimal tongTienDatTruocDd;
+    private Long idQdHdr;
 
 }
