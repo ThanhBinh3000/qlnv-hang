@@ -15,6 +15,7 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
@@ -74,6 +75,12 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         QuyChuanQuocGiaHdr data= new ModelMapper().map(objReq,QuyChuanQuocGiaHdr.class);
         data.setMaDvi(userInfo.getDvql());
         data.setTrangThai(Contains.DUTHAO);
+        if(DataUtils.isNullObject(objReq.getIdVanBanThayThe())){
+            data.setIdVanBanThayThe(data.getId());
+        }else {
+            Optional<QuyChuanQuocGiaHdr> qc =quyChuanQuocGiaHdrRepository.findById(objReq.getIdVanBanThayThe());
+            qc.get().setTrangThaiHl("Hết hiệu lực");
+        }
         QuyChuanQuocGiaHdr created= quyChuanQuocGiaHdrRepository.save(data);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),data.getId(),"KHCN_QUY_CHUAN_QG_HDR");
         created.setFileDinhKems(fileDinhKems);

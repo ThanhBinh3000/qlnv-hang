@@ -37,6 +37,11 @@ public class XhQdPdKhBdgDtl implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayPduyet;
 
+    @Temporal(TemporalType.DATE)
+    private Date tgianDkienTu;
+    @Temporal(TemporalType.DATE)
+    private Date tgianDkienDen;
+
     private String trichYeu;
 
     private BigDecimal tongSoLuong;
@@ -57,6 +62,27 @@ public class XhQdPdKhBdgDtl implements Serializable {
     private String trangThai;
     @Transient
     private String tenTrangThai;
+
+
+
+
+
+    private Integer tgianTtoan;
+
+    private String tgianTtoanGhiChu;
+
+    private String pthucTtoan;
+
+    private Integer tgianGnhan;
+
+    private String tgianGnhanGhiChu;
+
+    private String pthucGnhan;
+
+    private String thongBaoKh;
+
+    private BigDecimal khoanTienDatTruoc;
+
 
 
 

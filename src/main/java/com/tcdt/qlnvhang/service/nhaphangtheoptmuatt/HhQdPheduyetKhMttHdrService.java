@@ -128,8 +128,10 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         // Update trạng thái tổng hợp dxkhclnt
         if(objReq.getPhanLoai().equals("TH")){
             hhDxuatKhMttThopRepository.updateTrangThai(dataMap.getIdThHdr(), Contains.DADUTHAO_QD);
+            hhDxuatKhMttThopRepository.updateSoQdPduyet(dataMap.getIdThHdr(),dataMap.getSoQd());
         }else{
             hhDxuatKhMttRepository.updateStatusInList(Arrays.asList(objReq.getSoTrHdr()), Contains.DADUTHAO_QD);
+            hhDxuatKhMttRepository.updateSoQdPduyet(Arrays.asList(objReq.getSoTrHdr()), dataMap.getSoQd());
         }
 
         saveDetail(objReq,dataMap);

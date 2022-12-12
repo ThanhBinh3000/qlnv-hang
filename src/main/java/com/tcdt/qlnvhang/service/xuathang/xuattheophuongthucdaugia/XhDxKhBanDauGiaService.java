@@ -356,7 +356,7 @@ public class XhDxKhBanDauGiaService extends BaseServiceImpl {
             objs[2] = dx.getSoDxuat();
             objs[3] = dx.getTenDvi();
             objs[4] = dx.getNgayTao();
-            objs[5] = dx.getNgayKy();
+            objs[5] = dx.getNgayKyQd();
             objs[6] = dx.getTrichYeu();
             objs[7] = dx.getTenLoaiVthh();
             objs[8] = dx.getTenCloaiVthh();

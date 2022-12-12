@@ -60,8 +60,31 @@ public class XhQdPdKhBdgDtlReq {
 
     private String diaChi;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    Date tgianDkienTu;
 
-    private List<XhQdPdKhBdgPlReq> dsGoiThau;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    Date tgianDkienDen;
+
+
+    private Integer tgianTtoan;
+
+    private String tgianTtoanGhiChu;
+
+    private String pthucTtoan;
+
+    private Integer tgianGnhan;
+
+    private String tgianGnhanGhiChu;
+
+    private String pthucGnhan;
+
+    private String thongBaoKh;
+
+    private BigDecimal khoanTienDatTruoc;
+
+
+    private List<XhQdPdKhBdgPlReq> dsPhanLoList;
 
     private List<XhQdPdKhBdgPlReq> children;
 }
