@@ -65,10 +65,7 @@ public interface HhDxuatKhMttRepository extends JpaRepository<HhDxuatKhMttHdr, L
     List<HhDxuatKhMttHdr> findByIdIn(List<Long> id);
     HhDxuatKhMttHdr findAllById(Long id);
 
-    @Transactional()
-    @Modifying
-    @Query(value = "UPDATE HH_DX_KHMTT_HDR SET SO_QD_PDUYET =:soQdPd WHERE ID = :id", nativeQuery = true)
-    void updateSoQdPduyet(Long id, String soQdPd);
+
 
     @Query(value = " SELECT NVL(SUM(SLDD.SO_LUONG),0) FROM HH_QD_PHE_DUYET_KHMTT_HDR HDR " +
             " INNER JOIN HH_QD_PHE_DUYET_KHMTT_DX DX on HDR.ID = DX.ID_QD_HDR " +

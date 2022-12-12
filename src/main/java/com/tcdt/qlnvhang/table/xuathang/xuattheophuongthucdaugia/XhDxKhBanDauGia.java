@@ -81,7 +81,7 @@ public class XhDxKhBanDauGia  implements Serializable {
     private String tenTrangThaiTh;
     private String ldoTuChoi;
     @Temporal(TemporalType.DATE)
-    private Date ngayKy;
+    private Date ngayKyQd;
 
 
     @Transient

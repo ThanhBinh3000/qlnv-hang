@@ -142,6 +142,8 @@ public class XhQdPdKhBdgService extends BaseServiceImpl {
             xhThopDxKhBdgRepository.updateTrangThai(dataMap.getIdThHdr(), Contains.DADUTHAO_QD);
         }else{
             xhDxKhBanDauGiaRepository.updateStatusInList(Arrays.asList(objReq.getSoTrHdr()), Contains.DADUTHAO_QD);
+            xhDxKhBanDauGiaRepository.updateSoQdPd(Arrays.asList(objReq.getSoTrHdr()),dataMap.getSoQdPd());
+            xhDxKhBanDauGiaRepository.updateNgayKyQd(Arrays.asList(objReq.getSoTrHdr()),dataMap.getNgayKyQd());
         }
 
         saveDetail(objReq,dataMap);

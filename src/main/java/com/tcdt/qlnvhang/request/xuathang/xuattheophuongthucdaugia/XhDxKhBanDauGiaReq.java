@@ -56,7 +56,7 @@ public class XhDxKhBanDauGiaReq {
     private Integer slHdDaKy;
     private String ldoTuChoi;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayKy;
+    private Date ngayKyQd;
 
     private List<FileDinhKemReq> fileDinhkems =new ArrayList<>();
 
