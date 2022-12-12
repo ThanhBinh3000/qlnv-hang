@@ -27,8 +27,6 @@ public class NhHoSoBienBan extends TrangThaiBaseEntity implements Serializable {
     public static final String TABLE_NAME = "NH_HO_SO_BIEN_BAN";
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "NH_HO_SO_BIEN_BAN_SEQ")
-//    @SequenceGenerator(sequenceName = "NH_HO_SO_BIEN_BAN_SEQ", allocationSize = 1, name = "NH_HO_SO_BIEN_BAN_SEQ")
     private Long id;
 
     @Column(name = "MA_DVI")
@@ -37,8 +35,8 @@ public class NhHoSoBienBan extends TrangThaiBaseEntity implements Serializable {
     @Column(name = "SO_BIEN_BAN ")
     private String soBienBan;
 
-    @Column(name = "LOAI_BIEN BAN")
-    private String loaiBienBan;
+    @Column(name = "LOAI_BB")
+    private String loaiBb;
 
     @Column(name = "NAM")
     private Integer nam;

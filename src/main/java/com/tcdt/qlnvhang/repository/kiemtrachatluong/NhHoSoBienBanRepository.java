@@ -11,5 +11,7 @@ public interface NhHoSoBienBanRepository extends BaseRepository<NhHoSoBienBan,Lo
 
     List<NhHoSoBienBan> findAllByIdIn(List<Long> ids);
 
+    List<NhHoSoBienBan> findAllBySoHoSoKyThuat(String soHoSoKyThuat);
+
 
 }

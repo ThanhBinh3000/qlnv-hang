@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoK
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoKyThuatCt;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHangCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.repository.kiemtrachatluong.NhHoSoBienBanRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
@@ -46,6 +47,9 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
 
     @Autowired
     private final FileDinhKemService fileDinhKemService;
+
+    @Autowired
+    private final NhHoSoBienBanRepository nhHoSoBienBanRepository;
 
     @Autowired
     private final HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
@@ -135,6 +139,8 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
         NhHoSoKyThuat item = optional.get();
         item.setTenDvi(listDanhMucDvi.get(item.getMaDvi()));
         item.setChildren(nhHoSoKyThuatCtRepository.findByHoSoKyThuatId(item.getId()));
+
+        item.setListHoSoBienBan(nhHoSoBienBanRepository.findAllBySoHoSoKyThuat(optional.get().getSoHoSoKyThuat()));
         return item;
     }
 

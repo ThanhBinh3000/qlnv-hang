@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "NH_HO_SO_BIEN_BAN_CT")
 @Data
-public class NhHoSoBienBanCt extends BaseEntity implements Serializable {
+public class NhHoSoBienBanCt implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "NH_HO_SO_BIEN_BAN_CT";
     @Id

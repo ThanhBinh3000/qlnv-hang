@@ -58,4 +58,7 @@ public class NhHoSoKyThuat extends TrangThaiBaseEntity implements Serializable {
     @Transient
     private List<NhHoSoKyThuatCt> children = new ArrayList<>();
 
+    @Transient
+    private List<NhHoSoBienBan> listHoSoBienBan = new ArrayList<>();
+
 }

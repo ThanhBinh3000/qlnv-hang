@@ -21,7 +21,7 @@ public class NhHoSoBienBanReq extends BaseRequest {
 
     private String soBienBan;
 
-    private String loaiBienBan;
+    private String loaiBb;
 
     private Integer nam;
 
