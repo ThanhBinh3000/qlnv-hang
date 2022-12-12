@@ -66,6 +66,27 @@ public class XhQdPdKhBdgDtl implements Serializable {
 
 
 
+
+    private Integer tgianTtoan;
+
+    private String tgianTtoanGhiChu;
+
+    private String pthucTtoan;
+
+    private Integer tgianGnhan;
+
+    private String tgianGnhanGhiChu;
+
+    private String pthucGnhan;
+
+    private String thongBaoKh;
+
+    private BigDecimal khoanTienDatTruoc;
+
+
+
+
+
     @Transient
     private XhQdPdKhBdg xhQdPdKhBdg;
 
