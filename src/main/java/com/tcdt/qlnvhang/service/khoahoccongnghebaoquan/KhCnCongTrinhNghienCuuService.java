@@ -142,6 +142,8 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         List<KhCnNghiemThuThanhLy> nghiemThuThanhLy = khCnNghiemThuThanhLyRepository.findAllByIdHdr(data.getId());
         data.setChildren(nghiemThuThanhLy);
         data.setTienDoThucHien(tienDoThucHien);
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Collections.singleton(KhCnCongTrinhNghienCuu.TABLE_NAME));
+        data.setFileDinhKems(fileDinhKems);
         return data;
     }
 
