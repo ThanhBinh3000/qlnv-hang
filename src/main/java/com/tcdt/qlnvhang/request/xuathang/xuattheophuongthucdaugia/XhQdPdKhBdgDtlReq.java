@@ -60,6 +60,12 @@ public class XhQdPdKhBdgDtlReq {
 
     private String diaChi;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    Date tgianDkienTu;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    Date tgianDkienDen;
+
 
     private List<XhQdPdKhBdgPlReq> dsPhanLoList;
 
