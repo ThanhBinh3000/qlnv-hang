@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,6 +70,17 @@ public interface XhDxKhBanDauGiaRepository extends JpaRepository<XhDxKhBanDauGia
     @Modifying
     @Query(value = "UPDATE XH_DX_KH_BAN_DAU_GIA SET TRANG_THAI_TH=:trangThaiTh WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
     void updateStatusInList(List<String> soDxuatList, String trangThaiTh);
+
+    @Transactional()
+    @Modifying
+    @Query(value = "UPDATE XH_DX_KH_BAN_DAU_GIA SET SO_QD_PD=:soQdPd WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
+    void updateSoQdPd(List<String> soDxuatList, String soQdPd);
+
+
+    @Transactional()
+    @Modifying
+    @Query(value = "UPDATE XH_DX_KH_BAN_DAU_GIA SET NGAY_KY_QD=:ngayKyQd WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
+    void updateNgayKyQd(List<String> soDxuatList, Date ngayKyQd);
 
 
 }
