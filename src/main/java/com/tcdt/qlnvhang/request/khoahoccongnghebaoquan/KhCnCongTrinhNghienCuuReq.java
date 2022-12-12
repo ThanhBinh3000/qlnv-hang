@@ -25,6 +25,10 @@ public class KhCnCongTrinhNghienCuuReq {
     private String chucVu;
     private String email;
     private String sdt;
+    private String dviChuTri;
+    private String dviPhoiHop;
+    private String nguonVon;
+    private String soQdPd;
     private String suCanThiet;
     private String mucTieu;
     private String phamVi;
