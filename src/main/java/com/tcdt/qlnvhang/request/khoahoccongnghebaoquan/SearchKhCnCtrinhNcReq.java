@@ -10,6 +10,8 @@ public class SearchKhCnCtrinhNcReq extends BaseRequest {
     private String tenDeTai;
     private String capDeTai;
     private String trangThai;
+    private String tuNam;
+    private String denNam;
     private String maDvi;
 
 }
