@@ -8,6 +8,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,12 +28,18 @@ public class KhCnCongTrinhNghienCuu extends BaseEntity implements Serializable  
     private String maDeTai;
     private String tenDeTai;
     private String capDeTai;
-    private Integer tuNam;
-    private Integer denNam;
+    @Temporal(TemporalType.DATE)
+    private Date ngayKyTu;
+    @Temporal(TemporalType.DATE)
+    private Date ngayKyDen;
     private String chuNhiem;
     private String chucVu;
     private String email;
     private String sdt;
+    private String dviChuTri;
+    private String dviPhoiHop;
+    private String nguonVon;
+    private String soQdPd;
     private String suCanThiet;
     private String mucTieu;
     private String phamVi;

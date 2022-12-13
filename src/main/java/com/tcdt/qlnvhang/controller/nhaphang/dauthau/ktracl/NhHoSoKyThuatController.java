@@ -25,13 +25,13 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping(PathContains.HO_SO_KY_THUAT)
-@Api(tags = "Quản lý Hồ sơ kỹ thuật ")
+@Api(tags = "Nhập hàng - Đấu thầu - Kiểm tra chất lượng - Hồ sơ kỹ thuật ")
 public class NhHoSoKyThuatController {
 
     @Autowired
     private NhHoSoKyThuatService service;
 
-    @ApiOperation(value = "Tạo mới Quản lý Hồ sơ kỹ thuật", response = List.class)
+    @ApiOperation(value = "Tạo mới ", response = List.class)
     @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> insert(@Valid @RequestBody NhHoSoKyThuatReq request) {
         BaseResponse resp = new BaseResponse();
@@ -42,12 +42,12 @@ public class NhHoSoKyThuatController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Tạo mới Quản lý Hồ sơ kỹ thuật lỗi: {}", e);
+            log.error("Tạo mới  lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Sửa Quản lý Hồ sơ kỹ thuật", response = List.class)
+    @ApiOperation(value = "Sửa ", response = List.class)
     @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> update(@Valid @RequestBody NhHoSoKyThuatReq request) {
         BaseResponse resp = new BaseResponse();
@@ -58,12 +58,12 @@ public class NhHoSoKyThuatController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Sửa Quản lý Hồ sơ kỹ thuật lỗi: {}", e);
+            log.error("Sửa  lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Chi tiết Quản lý Hồ sơ kỹ thuật", response = List.class)
+    @ApiOperation(value = "Chi tiết ", response = List.class)
     @GetMapping(value = PathContains.URL_CHI_TIET + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> detail(@PathVariable Long id) {
         BaseResponse resp = new BaseResponse();
@@ -74,12 +74,12 @@ public class NhHoSoKyThuatController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Chi tiết Quản lý Hồ sơ kỹ thuật lỗi: {}", e);
+            log.error("Chi tiết  lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xóa Quản lý Hồ sơ kỹ thuật", response = List.class)
+    @ApiOperation(value = "Xóa ", response = List.class)
     @PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
@@ -90,12 +90,12 @@ public class NhHoSoKyThuatController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Xóa Quản lý Hồ sơ kỹ thuật lỗi: {}", e);
+            log.error("Xóa  lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Phê duyệt/ từ chối Quản lý Hồ sơ kỹ thuật", response = List.class)
+    @ApiOperation(value = "Phê duyệt/ từ chối ", response = List.class)
     @PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody NhHoSoKyThuatReq req) {
         BaseResponse resp = new BaseResponse();
@@ -106,12 +106,12 @@ public class NhHoSoKyThuatController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Phê duyệt/ từ chối Quản lý Hồ sơ kỹ thuật lỗi: {}", e);
+            log.error("Phê duyệt/ từ chối  lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Tra cứu Quản lý Hồ sơ kỹ thuật", response = List.class)
+    @ApiOperation(value = "Tra cứu ", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> search(@RequestBody NhHoSoKyThuatReq req) {
         BaseResponse resp = new BaseResponse();
@@ -122,7 +122,7 @@ public class NhHoSoKyThuatController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Tra cứu Quản lý Hồ sơ kỹ thuật lỗi: {}", e);
+            log.error("Tra cứu  lỗi: {}", e);
         }
         return ResponseEntity.ok(resp);
     }

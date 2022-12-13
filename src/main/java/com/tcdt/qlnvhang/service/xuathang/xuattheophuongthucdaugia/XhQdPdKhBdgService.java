@@ -586,41 +586,45 @@ public class XhQdPdKhBdgService extends BaseServiceImpl {
     }
 
   private void cloneForToChucBdg(XhQdPdKhBdg data) {
-    XhTcTtinBdgHdr hdr = new XhTcTtinBdgHdr();
-    hdr.setNam(data.getNamKh());
-    hdr.setMaDvi(data.getMaDvi());
-    hdr.setLoaiVthh(data.getLoaiVthh());
-    hdr.setCloaiVthh(data.getCloaiVthh());
-    hdr.setIdQdPdKh(data.getId());
-    hdr.setSoQdPdKh(data.getSoQdPd());
-    hdr.setIdQdDcKh(null);
-    hdr.setSoQdDcKh(null);
-    hdr.setIdQdPdKq(null);
-    hdr.setSoQdPdKq(null);
-    hdr.setIdKhDx(data.getIdTrHdr());
-    hdr.setSoKhDx(data.getSoTrHdr());
-//      hdr.setMaTh(data.getIdThHdr());
-    hdr.setNgayQdPdKqBdg(null);
-    hdr.setThoiHanGiaoNhan(data.getTgianGnhan());
-    hdr.setThoiHanThanhToan(data.getTgianTtoan());
-    hdr.setPhuongThucThanhToan(data.getPthucTtoan());
-    hdr.setPhuongThucGiaoNhan(data.getPthucGnhan());
-    hdr.setTrangThai(TrangThaiAllEnum.CHUA_CAP_NHAT.getId());
-//      hdr.setMaDviThucHien(data.);
-    hdr.setTongTienGiaKhoiDiem(DataUtils.safeToLong(data.getTongTienKdienDonGia()));
-    hdr.setTongTienDatTruoc(DataUtils.safeToLong(data.getKhoanTienDatTruoc()));
-    hdr.setTongTienDatTruocDuocDuyet(DataUtils.safeToLong(data.getTongTienDatTruocDonGia()));
-    hdr.setTongSoLuong(DataUtils.safeToLong(data.getTongSoLuong()));
-    hdr.setPhanTramDatTruoc(DataUtils.safeToInt(data.getKhoanTienDatTruoc()));
-    if (!DataUtils.isNullObject(data.getTgianDkienTu()) && !DataUtils.isNullObject(data.getTgianDkienTu())) {
-      LocalDate localDateTu = data.getTgianDkienTu().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-      LocalDate localDateDen = data.getTgianDkienDen().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-      hdr.setThoiGianToChucTu(localDateTu);
-      hdr.setThoiGianToChucDen(localDateDen);
-    }
-    hdr.setSoDviTsan(data.getSoDviTsan());
-    hdr.setSoDviTsanThanhCong(0);
-    hdr.setSoDviTsanKhongThanh(0);
-    xhTcTtinBdgHdrRepository.save(hdr);
+    List<XhTcTtinBdgHdr> listXhTcTtinBdgHdr =new ArrayList<>();
+    data.getChildren().forEach(s->{
+        XhTcTtinBdgHdr hdr = new XhTcTtinBdgHdr();
+        hdr.setNam(data.getNamKh());
+        hdr.setMaDvi(data.getMaDvi());
+        hdr.setLoaiVthh(data.getLoaiVthh());
+        hdr.setCloaiVthh(data.getCloaiVthh());
+        hdr.setIdQdPdKh(data.getId());
+        hdr.setSoQdPdKh(data.getSoQdPd());
+        hdr.setIdQdDcKh(null);
+        hdr.setSoQdDcKh(null);
+        hdr.setIdQdPdKq(null);
+        hdr.setSoQdPdKq(null);
+        hdr.setIdKhDx(data.getIdTrHdr());
+        hdr.setSoKhDx(data.getSoTrHdr());
+//        hdr.setMaTh(data.getIdThHdr());
+        hdr.setNgayQdPdKqBdg(null);
+        hdr.setThoiHanGiaoNhan(s.getTgianGnhan());
+        hdr.setThoiHanThanhToan(s.getTgianTtoan());
+        hdr.setPhuongThucThanhToan(s.getPthucTtoan());
+        hdr.setPhuongThucGiaoNhan(s.getPthucGnhan());
+        hdr.setTrangThai(TrangThaiAllEnum.CHUA_CAP_NHAT.getId());
+        hdr.setMaDviThucHien(s.getMaDvi());
+        hdr.setTongTienGiaKhoiDiem(DataUtils.safeToLong(s.getTongTienKdienDonGia()));
+        hdr.setTongTienDatTruoc(DataUtils.safeToLong(s.getKhoanTienDatTruoc()));
+        hdr.setTongTienDatTruocDuocDuyet(DataUtils.safeToLong(s.getTongTienDatTruocDonGia()));
+        hdr.setTongSoLuong(DataUtils.safeToLong(s.getTongSoLuong()));
+        hdr.setPhanTramDatTruoc(DataUtils.safeToInt(s.getKhoanTienDatTruoc()));
+        if (!DataUtils.isNullObject(s.getTgianDkienTu()) && !DataUtils.isNullObject(s.getTgianDkienTu())) {
+            LocalDate localDateTu = s.getTgianDkienTu().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate localDateDen = s.getTgianDkienDen().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            hdr.setThoiGianToChucTu(localDateTu);
+            hdr.setThoiGianToChucDen(localDateDen);
+        }
+        hdr.setSoDviTsan(s.getSoDviTsan());
+        hdr.setSoDviTsanThanhCong(0);
+        hdr.setSoDviTsanKhongThanh(0);
+        listXhTcTtinBdgHdr.add(hdr);
+    });
+    xhTcTtinBdgHdrRepository.saveAll(listXhTcTtinBdgHdr);
   }
 }
