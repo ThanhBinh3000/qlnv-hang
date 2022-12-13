@@ -19,9 +19,11 @@ public interface KhCnCongTrinhNghienCuuRepository extends JpaRepository<KhCnCong
             "AND (:tenDeTai IS NULL OR LOWER(KHCN.TEN_DE_TAI) LIKE LOWER(CONCAT(CONCAT('%',:tenDeTai),'%' ) ) )" +
             "AND (:capDeTai IS NULL OR KHCN.CAP_DE_TAI= :capDeTai)" +
             "AND (:trangThai IS NULL OR KHCN.TRANG_THAI = :trangThai)" +
+            "AND (:tuNam IS NULL OR KHCN.NAM >=TO_NUMBER(:tuNam))" +
+            "AND (:denNam IS NULL OR KHCN.NAM <=TO_NUMBER(:denNam))" +
             "AND (:maDvi IS NULL OR LOWER(KHCN.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "
             ,nativeQuery = true)
-    Page<KhCnCongTrinhNghienCuu> searchPage(String maDeTai, String tenDeTai, String capDeTai, String trangThai,String maDvi,  Pageable pageable);
+    Page<KhCnCongTrinhNghienCuu> searchPage(String maDeTai, String tenDeTai, String capDeTai, String trangThai,String tuNam,String denNam,String maDvi,  Pageable pageable);
 
     Optional<KhCnCongTrinhNghienCuu> findAllByMaDeTai(String maDetai);
 
