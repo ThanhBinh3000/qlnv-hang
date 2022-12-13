@@ -19,64 +19,50 @@ import java.util.List;
 public class HhQdPheduyetKhMttHdrReq {
     @ApiModelProperty(notes = "Bắt buộc set đối với update")
     private Long id;
-    //	@NotNull(message = "Không được để trống")
-    @Size(max = 20, message = "Loại vật tư hàng hóa không được vượt quá 20 ký tự")
-    @ApiModelProperty(example = "00")
-    private String loaiVthh;
 
-    private String cloaiVthh;
-
-    //	@NotNull(message = "Không được để trống")
-    @ApiModelProperty(example = "2022")
     private Integer namKh;
 
-    //	@NotNull(message = "Không được để trống")
-    @Size(max = 20, message = "Số quyết định không được vượt quá 20 ký tự")
-    @ApiModelProperty(example = "20-QD/TCDT")
     private String soQd;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayQd;
 
-    @Size(max = 500, message = "Ghi chú không được vượt quá 500 ký tự")
-    @ApiModelProperty(example = "Ghi chú")
-    private String ghiChu;
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayHluc;
 
-    private String trichYeu;
+    private Long idThHdr;
+
+    private Long idTrHdr;
 
     private String soTrHdr;
 
-    private String phanLoai;
+    private String maDvi;
+
+    private String trichYeu;
+
+    private String trangThai;
+
+    private String trangThaiTkhai;
+
+    private String loaiVthh;
+
+    private String cloaiVthh;
+
+    private String tchuanCluong;
 
     private Boolean lastest = false;
 
-    private Long idThHdr;
-    private Long idTrHdr;
-
-    private BigDecimal donGiaVat;
-
-    private String maDvi;
+    private String phanLoai;
 
 
-    private String maThop;
-    private String trangThai;
-    private String trangThaiTkhai;
     private String pthucMuatt;
+
     private String diaDiemCgia;
 
-    private String moTaHangHoa;
-    private String ptMua;
-    private String giaMua;
-    private BigDecimal donGia;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date tgianMkho;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date tgianKthuc;
+    private String ghiChu;
 
-    private String soQdPdCg;
+    private String soQdPdKqCg;
+
     private List<FileDinhKemReq> fileDinhkems =new ArrayList<>();
 
     private List<HhQdPheduyetKhMttDxReq> dsDiaDiem = new ArrayList<>();

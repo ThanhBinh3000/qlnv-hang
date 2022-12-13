@@ -437,7 +437,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
             objs[2]=pduyet.getNgayTao();
             objs[3]=pduyet.getTrichYeu();
             objs[4]=pduyet.getSoTrHdr();
-            objs[5]=pduyet.getMaThop();
+            objs[5]=pduyet.getIdThHdr();
             objs[6]=pduyet.getNamKh();
             objs[7]=pduyet.getPthucMuatt();
             objs[8]=pduyet.getTenTrangThai();

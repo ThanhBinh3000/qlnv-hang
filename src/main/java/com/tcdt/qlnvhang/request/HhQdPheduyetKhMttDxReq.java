@@ -8,6 +8,7 @@ import lombok.Data;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -20,39 +21,59 @@ import java.util.List;
 public class HhQdPheduyetKhMttDxReq {
     @ApiModelProperty(notes = "Bắt buộc set đối với update")
     private Long id;
+
     private Long idHdr;
+
     private Long idDxHdr;
-    //    @NotNull(message = "Không được để trống")
-    @Size(max = 20, message = "Mã đơn vị không được vượt quá 20 ký tự")
-    @ApiModelProperty(example = "HNO")
+
     private String maDvi;
 
-//    @NotNull(message = "Không được để trống")
-    @Size(max = 250, message = "Tên đơn vị không được vượt quá 250 ký tự")
-    @ApiModelProperty(example = "Cục Hà Nội")
-    private String tenDvi;
+    private String diaChiDvi;
 
-//    @NotNull(message = "Không được để trống")
-    @Size(max = 20, message = "Số đề xuất không được vượt quá 20 ký tự")
-    @ApiModelProperty(example = "Tên dự án")
     private String soDxuat;
 
-
-//    @NotNull(message = "Không được để trống")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayPduyet;
 
-//    @NotNull(message = "Không được để trống")
-    @Size(max = 250, message = "Tên dự án không được vượt quá 250 ký tự")
-    @ApiModelProperty(example = "Tên dự án")
-    private String tenDuAn;
-    private BigDecimal tongSoLuong;
-    @Size(max = 4, message = "Năm kế hoạch không được vượt quá 4 ký tự")
-    @ApiModelProperty(example = "2022")
-    private String namKh;
     private String trichYeu;
-    private String diaChiDvi;
+
+    private String tenDuAn;
+
+    private BigDecimal tongSoLuong;
+
+    private Integer namKh;
+
     private BigDecimal tongTienVat;
+
+    private String loaiVthh;
+
+    private String cloaiVthh;
+
+    private String moTaHangHoa;
+
+    private String ptMua;
+
+    private String tchuanCluong;
+
+    private String giaMua;
+
+    private BigDecimal donGia;
+
+    private BigDecimal thueGtgt;
+
+    private BigDecimal donGiaVat;
+    private BigDecimal tongMucDt;
+
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date tgianMkho;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date tgianKthuc;
+
+    private String ghiChu;
+
+    private String nguonVon;
 
     private List<HhQdPheduyetKhMttSLDDReq> dsSlddDtlList;
     private List<HhQdPheduyetKhMttSLDDReq> children;
