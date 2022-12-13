@@ -8,6 +8,7 @@ import lombok.Data;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,8 +20,10 @@ public class KhCnCongTrinhNghienCuuReq {
     private String maDeTai;
     private String tenDeTai;
     private String capDeTai;
-    private Integer tuNam;
-    private Integer denNam;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayKyTu;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayKyDen;
     private String chuNhiem;
     private String chucVu;
     private String email;
@@ -51,7 +54,7 @@ public class KhCnCongTrinhNghienCuuReq {
     private String xepLoai;
     private String ldoTuChoi;
 
-    private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
+    private List<FileDinhKemReq> fileDinhKemReq = new ArrayList<>();
 
     private List<KhCnTienDoThucHienReq> tienDoThucHien=new ArrayList<>();
 
