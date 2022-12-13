@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 public class KhCnCongTrinhNghienCuuReq {
     private Long id;
-
+    private String nam;
     private String maDeTai;
     private String tenDeTai;
     private String capDeTai;

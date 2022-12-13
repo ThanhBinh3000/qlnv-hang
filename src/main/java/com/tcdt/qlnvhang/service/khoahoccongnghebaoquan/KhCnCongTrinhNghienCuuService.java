@@ -59,6 +59,8 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
                 objReq.getTenDeTai(),
                 objReq.getCapDeTai(),
                 objReq.getTrangThai(),
+                objReq.getTuNam(),
+                objReq.getDenNam(),
                 userInfo.getDvql(),
                 pageable);
 
