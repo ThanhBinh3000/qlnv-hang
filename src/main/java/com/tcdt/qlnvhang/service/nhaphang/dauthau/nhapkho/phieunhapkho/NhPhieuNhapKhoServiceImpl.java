@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.phieunhapkho;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHang;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKho;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
@@ -27,6 +28,9 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -57,7 +61,21 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
 
     @Override
     public Page<NhPhieuNhapKho> searchPage(NhPhieuNhapKhoReq req) {
-        return null;
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),req.getPaggingReq().getLimit(), Sort.by("id").descending());
+        Page<NhPhieuNhapKho> pages = nhPhieuNhapKhoRepository.selectPage(req.getSoPhieu(),req.getNam(),req.getMaDvi(),req.getLoaiVthh(),req.getCloaiVthh(),req.getMaDiemKho(),req.getMaNhaKho(),req.getMaNganKho(),req.getMaLoKho(),pageable);
+        Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
+        Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
+        pages.getContent().forEach(x -> {
+            x.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(x.getTrangThai()));
+            x.setTenLoaiVthh(listDanhMucHangHoa.get(x.getLoaiVthh()));
+            x.setTenCloaiVthh(listDanhMucHangHoa.get(x.getCloaiVthh()));
+            x.setTenDvi(listDanhMucDvi.get(x.getMaDvi()));
+            x.setTenDiemKho(listDanhMucDvi.get(x.getMaDiemKho()));
+            x.setTenNhaKho(listDanhMucDvi.get(x.getMaNhaKho()));
+            x.setTenNganKho(listDanhMucDvi.get(x.getMaNganKho()));
+            x.setTenLoKho(listDanhMucDvi.get(x.getMaLoKho()));
+        });
+        return pages;
     }
 
     @Override

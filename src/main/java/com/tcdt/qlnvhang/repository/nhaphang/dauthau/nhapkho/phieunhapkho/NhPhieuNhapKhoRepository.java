@@ -17,17 +17,17 @@ import java.util.List;
 public interface NhPhieuNhapKhoRepository extends BaseRepository<NhPhieuNhapKho, Long> {
 
     @Query(
-            value = "SELECT * FROM NH_PHIEU_NHAP_KHO_LT PNKLT " +
-                    "WHERE (:soPhieu IS NULL OR PNKLT.SO_PHIEU = TO_NUMBER(:soPhieu))" +
-                    "  AND (:ngayNhapKho IS NULL OR TO_CHAR(PNKLT.NGAY_PHE_DUYET,'YYYY-MM-DD') = :ngayNhapKho)" +
-                    "  AND (:maDiemKho IS NULL OR LOWER(PNKLT.MA_DIEM_KHO) = LOWER(:maDiemKho))" +
-                    "  AND (:maNganLo IS NULL OR LOWER(PNKLT.MA_NGAN_LO) = LOWER(:maNganLo))" +
-                    "  AND (:ngayTaoPhieu IS NULL OR TO_CHAR(PNKLT.NGAY_TAO,'YYYY-MM-DD') = :ngayTaoPhieu)" +
-                    "  AND (:thoiGianGiaoNhan IS NULL OR TO_CHAR(PNKLT.THOI_GIAN_GIAO_NHAN,'YYYY-MM-DD') = :thoiGianGiaoNhan)" +
-                    "  AND (:maNhaKho IS NULL OR LOWER(PNKLT.MA_NHA_KHO) = LOWER(:maNhaKho))" +
-                    "  AND (:nguoiGiaoHang IS NULL OR LOWER(PNKLT.NGUOI_GIAO_HANG) LIKE LOWER(CONCAT(CONCAT('%', :nguoiGiaoHang), '%')))",
-            nativeQuery = true)
-    Page<NhPhieuNhapKho> select(Long soPhieu, String ngayNhapKho, String maDiemKho, String maNganLo, String ngayTaoPhieu, String thoiGianGiaoNhan, String maNhaKho, String nguoiGiaoHang, Pageable pageable);
+            value = "SELECT * FROM NH_PHIEU_NHAP_KHO PNKLT " +
+                    "WHERE (:soPhieu IS NULL OR PNKLT.SO_PHIEU_NHAP_KHO = :soPhieu )" +
+                    "  AND (:nam IS NULL OR PNKLT.NAM = TO_NUMBER(:nam) ) " +
+                    "  AND (:maDvi IS NULL OR PNKLT.MA_DVI = :maDvi ) " +
+                    "  AND (:loaiVthh IS NULL OR PNKLT.LOAI_VTHH = :loaiVthh ) " +
+                    "  AND (:cloaiVthh IS NULL OR PNKLT.CLOAI_VTHH = :cloaiVthh ) " +
+                    "  AND (:maDiemKho IS NULL OR PNKLT.MA_DIEM_KHO = :maDiemKho ) " +
+                    "  AND (:maNhaKho IS NULL OR PNKLT.MA_NHA_KHO = :maNhaKho ) " +
+                    "  AND (:maNganKho IS NULL OR PNKLT.MA_NGAN_KHO = :maNganKho ) " +
+                    "  AND (:maLoKho IS NULL OR PNKLT.MA_LO_KHO = :maLoKho ) " , nativeQuery = true)
+    Page<NhPhieuNhapKho> selectPage(String soPhieu, Integer nam, String maDvi, String loaiVthh, String cloaiVthh, String maDiemKho, String maNhaKho, String maNganKho, String maLoKho, Pageable pageable);
 
     @Transactional
     @Modifying
