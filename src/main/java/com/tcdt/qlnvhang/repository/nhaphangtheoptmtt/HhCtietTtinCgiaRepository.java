@@ -14,6 +14,8 @@ public interface HhCtietTtinCgiaRepository extends JpaRepository<HhChiTietTTinCh
 
     List<HhChiTietTTinChaoGia> findAllByIdSoQdPduyetCgiaIn(List<Long> ids);
 
+    void deleteAllByIdTkhaiKh(Long idChaoGia);
+
     @Transactional
     @Modifying
     @Query(value = "UPDATE HH_CTIET_TTIN_CHAO_GIA SET LUA_CHON_PDUYET =:luaChonPduyet where ID=:id",nativeQuery = true)

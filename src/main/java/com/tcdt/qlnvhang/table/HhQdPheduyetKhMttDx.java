@@ -1,7 +1,9 @@
 package com.tcdt.qlnvhang.table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhChiTietTTinChaoGia;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDxuatKhMttHdr;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhQdPduyetKqcgHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
@@ -25,35 +27,93 @@ public class HhQdPheduyetKhMttDx implements Serializable {
     @SequenceGenerator(sequenceName = "HH_QD_PHE_DUYET_KHMTT_DX_SEQ", allocationSize = 1, name = "HH_QD_PHE_DUYET_KHMTT_DX_SEQ")
 
     private Long id;
+
     private Long idQdHdr;
+
     private Long idDxHdr;
+
     private String maDvi;
     @Transient
     private String tenDvi;
+
+    private String diaChiDvi;
+
     private String soDxuat;
+
     @Temporal(TemporalType.DATE)
     private Date ngayPduyet;
-    private String tenDuAn;
-    private BigDecimal tongSoLuong;
-    private Integer namKh;
+
     private String trichYeu;
-    private String diaChiDvi;
+
+    private String tenDuAn;
+
+    private BigDecimal tongSoLuong;
+
+    private Integer namKh;
+
     private BigDecimal tongTienVat;
+
     private String trangThai;
     @Transient
     private String tenTrangThai;
-    @Column(name="SO_QD_PD_KQ_Mtt")
-    private String soQdPdKqMtt;
 
+    private String loaiVthh;
+    @Transient
+    private String tenLoaiVthh;
 
+    private String cloaiVthh;
+    @Transient
+    private String tenCloaiVthh;
 
+    private String moTaHangHoa;
 
+    private String ptMua;
+
+    private String tchuanCluong;
+
+    private String giaMua;
+
+    private BigDecimal donGia;
+
+    private BigDecimal thueGtgt;
+
+    private BigDecimal donGiaVat;
+
+    @Temporal(TemporalType.DATE)
+    private Date tgianMkho;
+
+    @Temporal(TemporalType.DATE)
+    private Date tgianKthuc;
+
+    private String ghiChu;
+
+    private String nguonVon;
+
+    private BigDecimal tongMucDt;
+
+    @Column(name="SO_QD_PD_KQ_MTT")
+    String soQdPdKqMtt;
+
+    private String pthucMuatt;
 
     @Transient
     private HhQdPheduyetKhMttHdr hhQdPheduyetKhMttHdr;
 
     @Transient
     private HhDxuatKhMttHdr dxuatKhMttHdr;
+
+    @Transient
+    private HhQdPduyetKqcgHdr hhQdPduyetKqcgHdr;
+
+//        @Transient
+//    private List<HhChiTietTTinChaoGia> hhChiTietTTinChaoGiaList = new ArrayList<>();
+
+    @Transient
+    private List<FileDinhKem> fileDinhKemUyQuyen = new ArrayList<>();
+
+    @Transient
+    private List<FileDinhKem> fileDinhKemMuaLe = new ArrayList<>();
+
 
 
     @Transient

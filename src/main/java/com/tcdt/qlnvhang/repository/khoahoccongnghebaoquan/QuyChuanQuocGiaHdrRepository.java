@@ -18,8 +18,9 @@ public interface QuyChuanQuocGiaHdrRepository extends JpaRepository<QuyChuanQuoc
     @Query(value = "select c from QuyChuanQuocGiaHdr c WHERE 1=1 " +
             " AND (:#{#param.soVanBan} IS NULL OR LOWER(c.soVanBan) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soVanBan}),'%' ) ) ) " +
             " AND (:#{#param.soHieuQuyChuan} IS NULL OR LOWER(c.soHieuQuyChuan) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soHieuQuyChuan}),'%' ) ) )" +
-            " AND (:#{#param.loaiVthh}  IS NULL OR LOWER(c.loaiVthh) =:#{#param.loaiVthh}) " +
+            " AND (:#{#param.loaiVthh}  IS NULL OR LOWER(c.loaiVthh) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.loaiVthh}),'%' ) ) ) " +
             " AND (:#{#param.cloaiVthh}  IS NULL OR LOWER(c.cloaiVthh) =:#{#param.cloaiVthh}) " +
+            " AND (:#{#param.trichYeu}  IS NULL OR LOWER(c.trichYeu) =:#{#param.trichYeu}) " +
             " AND ((:#{#param.ngayKyTu}  IS NULL OR c.ngayKy >= :#{#param.ngayKyTu})" +
             " AND (:#{#param.ngayKyDen}  IS NULL OR c.ngayKy <= :#{#param.ngayKyDen}) ) " +
             " AND ((:#{#param.ngayHieuLucTu}  IS NULL OR c.ngayHieuLuc >= :#{#param.ngayHieuLucTu})" +

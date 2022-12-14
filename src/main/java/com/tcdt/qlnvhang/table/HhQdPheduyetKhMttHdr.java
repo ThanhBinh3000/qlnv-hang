@@ -24,18 +24,23 @@ public class HhQdPheduyetKhMttHdr implements Serializable {
     @SequenceGenerator(sequenceName = "HH_QD_PHE_DUYET_KHMTT_SEQ", allocationSize = 1, name="HH_QD_PHE_DUYET_KHMTT_SEQ")
 
     private Long id;
+
+    private Integer namKh;
+
     private String soQd;
+
     @Temporal(TemporalType.DATE)
     private Date ngayQd;
+
     @Temporal(TemporalType.DATE)
     private Date ngayHluc;
-    private Long idThHdr;
-    private Long idTrHdr;
-    private String soTrHdr;
-    private Integer namKh;
-    private String soQdPdKqMtt;
 
-    private String maThop;
+    private Long idThHdr;
+
+    private Long idTrHdr;
+
+    private String soTrHdr;
+
     private String maDvi;
     @Transient
     private String tenDvi;
@@ -54,7 +59,6 @@ public class HhQdPheduyetKhMttHdr implements Serializable {
     private Date ngayGuiDuyet;
     private String nguoiGuiDuyet;
 
-
     private String trangThai;
     @Transient
     private String tenTrangThai;
@@ -63,37 +67,33 @@ public class HhQdPheduyetKhMttHdr implements Serializable {
     @Transient
     private String tenTrangThaiTkhai;
 
-    private String ldoTuchoi;
-
     @Temporal(TemporalType.DATE)
     private Date ngayPduyet;
     private String nguoiPduyet;
-    private String ghiChu;
+
     private String loaiVthh;
     @Transient
     private String tenLoaiVthh;
+
     private String cloaiVthh;
     @Transient
     private String tenCloaiVthh;
 
+    private String tchuanCluong;
 
     private Boolean lastest;
+
     private String phanLoai;
 
     private String pthucMuatt;
 
     private String diaDiemCgia;
-    private String moTaHangHoa;
-    private String soQdPdCg;
+
+    private String ghiChu;
+
+    private String soQdPdKqCg;
+
     private Long idGoc;
-    private String ptMua;
-    private String giaMua;
-    private BigDecimal donGia;
-    private BigDecimal donGiaVat;
-    @Temporal(TemporalType.DATE)
-    private Date tgianMkho;
-    @Temporal(TemporalType.DATE)
-    private Date tgianKthuc;
 
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
@@ -102,14 +102,14 @@ public class HhQdPheduyetKhMttHdr implements Serializable {
     private List<HhQdPheduyetKhMttDx> children = new ArrayList<>();
 
 
-    @Transient
-    private List<HhChiTietTTinChaoGia> hhChiTietTTinChaoGiaList = new ArrayList<>();
-
-    @Transient
-    private List<FileDinhKem> fileDinhKemUyQuyen = new ArrayList<>();
-
-    @Transient
-    private List<FileDinhKem> fileDinhKemMuaLe = new ArrayList<>();
+//    @Transient
+//    private List<HhChiTietTTinChaoGia> hhChiTietTTinChaoGiaList = new ArrayList<>();
+//
+//    @Transient
+//    private List<FileDinhKem> fileDinhKemUyQuyen = new ArrayList<>();
+//
+//    @Transient
+//    private List<FileDinhKem> fileDinhKemMuaLe = new ArrayList<>();
 
     public String getTenTrangThai() {
         return NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(this.getTrangThai());

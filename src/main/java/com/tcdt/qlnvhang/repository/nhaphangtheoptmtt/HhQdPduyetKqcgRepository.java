@@ -13,6 +13,7 @@ import java.util.Optional;
 @Repository
 public interface HhQdPduyetKqcgRepository extends JpaRepository<HhQdPduyetKqcgHdr, Long> {
 
+
     @Query(value = "select * from HH_QD_PDUYET_KQCG_HDR PD where (:namKh IS NULL OR PD.NAM_KH = TO_NUMBER(:namKh)) " +
             " AND (:ngayCgiaTu IS NULL OR PD.NGAY_KY >=  TO_DATE(:ngayCgiaTu,'yyyy-MM-dd')) " +
             " AND (:ngayCgiaDen IS NULL OR PD.NGAY_KY <= TO_DATE(:ngayCgiaDen,'yyyy-MM-dd'))" +
