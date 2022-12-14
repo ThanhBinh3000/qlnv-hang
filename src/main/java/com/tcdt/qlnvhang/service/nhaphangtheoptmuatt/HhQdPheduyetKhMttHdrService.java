@@ -448,6 +448,38 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
     }
 
 
+    public HhQdPheduyetKhMttDx detailDtl(Long ids) throws Exception {
+        Optional<HhQdPheduyetKhMttDx> byId = hhQdPheduyetKhMttDxRepository.findById(ids);
+
+        if(!byId.isPresent()){
+            throw new Exception("Không tìm thấy dữ liệu");
+        };
+
+        HhQdPheduyetKhMttDx dtl = byId.get();
+
+
+        Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
+        Map<String,String> hashMapDvi = getListDanhMucDvi(null,null,"01");
+        // Set Hdr
+        HhQdPheduyetKhMttHdr hhQdPheduyetKhMttHdr = hhQdPheduyetKhMttHdrRepository.findById(dtl.getIdQdHdr()).get();
+        hhQdPheduyetKhMttHdr.setTenCloaiVthh(hashMapDmHh.get(hhQdPheduyetKhMttHdr.getCloaiVthh()));
+        hhQdPheduyetKhMttHdr.setTenLoaiVthh(hashMapDmHh.get(hhQdPheduyetKhMttHdr.getLoaiVthh()));
+        dtl.setHhQdPheduyetKhMttHdr(hhQdPheduyetKhMttHdr);
+
+
+//        Optional<HhDxuatKhLcntHdr> bySoDxuat;
+//        if(!StringUtils.isEmpty(dtl.getSoDxuat())){
+//            bySoDxuat = hhDxuatKhLcntHdrRepository.findBySoDxuat(dtl.getSoDxuat());
+//        }else{
+//            bySoDxuat = hhDxuatKhLcntHdrRepository.findBySoDxuat(hhQdKhlcntHdr.getSoTrHdr());
+//        }
+//        bySoDxuat.ifPresent(dtl::setDxuatKhLcntHdr);
+        dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(dtl.getTrangThai()));
+        dtl.setTenDvi(hashMapDvi.get(dtl.getMaDvi()));
+        return dtl;
+    }
+
+
 
 
 

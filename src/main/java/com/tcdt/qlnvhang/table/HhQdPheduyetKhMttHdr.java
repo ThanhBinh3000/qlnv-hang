@@ -102,14 +102,14 @@ public class HhQdPheduyetKhMttHdr implements Serializable {
     private List<HhQdPheduyetKhMttDx> children = new ArrayList<>();
 
 
-    @Transient
-    private List<HhChiTietTTinChaoGia> hhChiTietTTinChaoGiaList = new ArrayList<>();
-
-    @Transient
-    private List<FileDinhKem> fileDinhKemUyQuyen = new ArrayList<>();
-
-    @Transient
-    private List<FileDinhKem> fileDinhKemMuaLe = new ArrayList<>();
+//    @Transient
+//    private List<HhChiTietTTinChaoGia> hhChiTietTTinChaoGiaList = new ArrayList<>();
+//
+//    @Transient
+//    private List<FileDinhKem> fileDinhKemUyQuyen = new ArrayList<>();
+//
+//    @Transient
+//    private List<FileDinhKem> fileDinhKemMuaLe = new ArrayList<>();
 
     public String getTenTrangThai() {
         return NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(this.getTrangThai());

@@ -67,5 +67,5 @@ public class HhQdPheduyetKhMttHdrReq {
 
     private List<HhQdPheduyetKhMttDxReq> dsDiaDiem = new ArrayList<>();
 
-    private List<HhChiTietTTinChaoGiaReq> hhChiTietTTinChaoGiaReqList = new ArrayList<>();
+//    private List<HhChiTietTTinChaoGiaReq> hhChiTietTTinChaoGiaReqList = new ArrayList<>();
 }
