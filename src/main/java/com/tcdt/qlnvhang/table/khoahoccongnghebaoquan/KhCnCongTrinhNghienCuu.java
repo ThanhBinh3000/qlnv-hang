@@ -24,7 +24,7 @@ public class KhCnCongTrinhNghienCuu extends BaseEntity implements Serializable  
     @SequenceGenerator(sequenceName = "KH_CN_CONG_TRINH_NC_SEQ", allocationSize = 1, name = "KH_CN_CONG_TRINH_NC_SEQ")
 
     private Long id;
-
+    private String nam;
     private String maDeTai;
     private String tenDeTai;
     private String capDeTai;

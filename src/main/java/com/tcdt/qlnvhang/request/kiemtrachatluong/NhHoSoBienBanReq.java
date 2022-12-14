@@ -69,6 +69,9 @@ public class NhHoSoBienBanReq extends BaseRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date tgianKtra;
 
+    private String ketLuan;
+
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
+
     private List<NhHoSoBienBanCtReq> children = new ArrayList<>();
 }

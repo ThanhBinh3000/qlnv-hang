@@ -30,7 +30,6 @@ import java.util.stream.Collectors;
 @Service
 public class NhHoSoBienBanService extends BaseServiceImpl {
 
-
     @Autowired
     private NhHoSoBienBanRepository nhHoSoBienBanRepository;
 
@@ -103,12 +102,14 @@ public class NhHoSoBienBanService extends BaseServiceImpl {
             throw new Exception("Bản ghi không tồn tại");
         }
         NhHoSoBienBan data= optional.get();
-        Map<String,String> hashMapDmhh = getListDanhMucHangHoa();
-        data.setTenDvi(StringUtils.isEmpty(data.getTenDvi())?null:hashMapDmhh.get(data.getMaDvi()));
-        data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
+        Map<String,String> mapVthh = getListDanhMucHangHoa();
+        Map<String,String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
+        data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
+        data.setTenLoaiVthh(mapVthh.get(data.getLoaiVthh()));
+        data.setTenCloaiVthh(mapVthh.get(data.getCloaiVthh()));
         List<NhHoSoBienBanCt> dtlList = nhHoSoBienBanCtRepository.findAllByIdHoSoBienBan(data.getId());
         List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Collections.singleton(NhHoSoBienBan.TABLE_NAME));
-        data.setHoSoBienBanCtList(dtlList);
+        data.setChildren(dtlList);
         data.setFileDinhKems(fileDinhKems);
         return data;
     }
@@ -147,7 +148,7 @@ public class NhHoSoBienBanService extends BaseServiceImpl {
         if(StringUtils.isEmpty(statusReq.getId())){
             throw new Exception("Không tìm thấy dữ liệu");
         }
-        Optional<NhHoSoBienBan> optional =nhHoSoBienBanRepository.findById(Long.valueOf(statusReq.getId()));
+        Optional<NhHoSoBienBan> optional =nhHoSoBienBanRepository.findById(statusReq.getId());
         if (!optional.isPresent()){
             throw new Exception("Không tìm thấy dữ liệu");
         }

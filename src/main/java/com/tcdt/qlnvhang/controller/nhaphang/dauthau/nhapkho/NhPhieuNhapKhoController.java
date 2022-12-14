@@ -111,11 +111,11 @@ public class NhPhieuNhapKhoController {
     }
 
     @ApiOperation(value = "Tra cứu Quản lý lương thực", response = List.class)
-    @GetMapping
-    public ResponseEntity<BaseResponse> search(NhPhieuNhapKhoSearchReq req) {
+    @PostMapping(value=  PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> search(@Valid @RequestBody NhPhieuNhapKhoReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-//            resp.setData(nhPhieuNhapKhoService.search(req));
+            resp.setData(nhPhieuNhapKhoService.searchPage(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

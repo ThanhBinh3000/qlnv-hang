@@ -105,6 +105,9 @@ public class NhHoSoBienBan extends TrangThaiBaseEntity implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date tgianKtra;
 
+    @Column(name = "KET_LUAN")
+    private String ketLuan;
+
     @Transient
     private String tenDvi;
 
@@ -112,6 +115,6 @@ public class NhHoSoBienBan extends TrangThaiBaseEntity implements Serializable {
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
     @Transient
-    private List<NhHoSoBienBanCt> hoSoBienBanCtList= new ArrayList<>();
+    private List<NhHoSoBienBanCt> children = new ArrayList<>();
 
 }
