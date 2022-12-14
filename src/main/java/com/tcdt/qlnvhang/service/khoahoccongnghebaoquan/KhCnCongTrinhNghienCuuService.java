@@ -155,9 +155,6 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         if (!optional.isPresent()){
             throw new Exception("Bản ghi không tồn tại");
         }
-        if (!optional.get().getTrangThai().equals(Contains.DUTHAO)){
-            throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản dự thảo");
-        }
         KhCnCongTrinhNghienCuu data = optional.get();
         List<KhCnTienDoThucHien> tienDoThucHien = khCnTienDoThucHienRepository.findAllByIdHdr(data.getId());
         khCnTienDoThucHienRepository.deleteAll(tienDoThucHien);
@@ -173,11 +170,6 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         List<KhCnCongTrinhNghienCuu> list = khCnCongTrinhNghienCuuRepository.findAllByIdIn(idSearchReq.getIdList());
         if (list.isEmpty()){
             throw new Exception("Bản ghi không tồn tại");
-        }
-        for (KhCnCongTrinhNghienCuu nvNhapHang : list){
-            if (!nvNhapHang.getTrangThai().equals(Contains.DUTHAO)){
-                throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối");
-            }
         }
         List<Long> listIdHdr=list.stream().map(KhCnCongTrinhNghienCuu::getId).collect(Collectors.toList());
         List<KhCnTienDoThucHien> tienDoThucHien = khCnTienDoThucHienRepository.findAllByIdHdrIn(listIdHdr);
