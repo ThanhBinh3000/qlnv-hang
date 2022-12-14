@@ -39,7 +39,7 @@ public class HhDxuatKhMttHdrReq {
     private String ptMua;
     private String tchuanCluong;
     private String giaMua;
-    private String thueGtgt;
+    private BigDecimal thueGtgt;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date tgianMkho;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)

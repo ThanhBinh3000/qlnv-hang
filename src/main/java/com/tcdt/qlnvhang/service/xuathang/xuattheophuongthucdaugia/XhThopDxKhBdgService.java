@@ -159,7 +159,7 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
         thopHdr.setTrangThai(Contains.CHUATAO_QD);
         thopHdr.setNgayThop(new Date());
         thopHdr.setNoiDungThop(objReq.getNoiDungThop());
-        thopHdr.setSoQdPd(objReq.getSoQdPd());
+//        thopHdr.setSoQdPd(objReq.getSoQdPd());
         xhThopDxKhBdgRepository.save(thopHdr);
         for (XhThopDxKhBdgDtl dtl : thopHdr.getThopDxKhBdgDtlList()){
             dtl.setIdThopHdr(thopHdr.getId());
