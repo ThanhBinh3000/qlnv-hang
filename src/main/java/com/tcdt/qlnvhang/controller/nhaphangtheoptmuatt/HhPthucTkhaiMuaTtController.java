@@ -3,7 +3,10 @@ package com.tcdt.qlnvhang.controller.nhaphangtheoptmuatt;
 import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.HhQdPheduyetKhMttHdrReq;
+import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhCgiaReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhPthucTkhaiReq;
+import com.tcdt.qlnvhang.request.object.HhDthauReq;
+import com.tcdt.qlnvhang.request.search.HhQdKhlcntSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.nhaphangtheoptmuatt.HhPthucTkhaiMuaTtService;
 import com.tcdt.qlnvhang.util.PathContains;
@@ -30,44 +33,52 @@ public class HhPthucTkhaiMuaTtController extends BaseController {
     @Autowired
     private HhPthucTkhaiMuaTtService hhPthucTkhaiMuaTtService;
 
-    @ApiOperation(value = "Tra cứu thông tin ", response = List.class)
-    @PostMapping(value=  PathContains.TKHAI_MTT + PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody SearchHhPthucTkhaiReq objReq) {
-        BaseResponse resp = new BaseResponse();
-        try {
-            resp.setData(hhPthucTkhaiMuaTtService.searchPageTkhai(objReq));
-            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-        } catch (Exception e) {
-            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-            resp.setMsg(e.getMessage());
-            log.error("Tra cứu: {}", e);
-        }
-        return ResponseEntity.ok(resp);
+
+@ApiOperation(value = "Tra cứu thông tin đấu thầu ", response = List.class)
+@PostMapping(value =PathContains.TKHAI_MTT + PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
+@ResponseStatus(HttpStatus.OK)
+public ResponseEntity<BaseResponse> colection(HttpServletRequest request,
+                                              @Valid @RequestBody SearchHhPthucTkhaiReq objReq) {
+    BaseResponse resp = new BaseResponse();
+    try {
+
+            resp.setData(hhPthucTkhaiMuaTtService.selectPage(objReq));
+
+        resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+        resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (
+
+            Exception e) {
+        resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+        resp.setMsg(e.getMessage());
+        log.error("Tra cứu thông tin đấu thầu gạo trace: {}", e);
     }
 
-    @ApiOperation(value = "Tạo mới thông tin ", response = List.class)
-    @PostMapping(value = PathContains.TKHAI_MTT+ PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
+    return ResponseEntity.ok(resp);
+}
+
+
+    @ApiOperation(value = "Tạo mới thông tin đấu thầu gạo", response = List.class)
+    @PostMapping(value =PathContains.TKHAI_MTT + PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<BaseResponse> insert(HttpServletRequest request, @Valid @RequestBody HhQdPheduyetKhMttHdrReq objReq) {
+    public ResponseEntity<BaseResponse> insert(HttpServletRequest request, @Valid @RequestBody HhCgiaReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(hhPthucTkhaiMuaTtService.save(objReq));
+            resp.setData(hhPthucTkhaiMuaTtService.create(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Tạo mới: {}", e);
+            log.error("Tạo mới thông tin đấu thầu gạo trace: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Lấy chi tiết thông tin ", response = List.class)
-    @GetMapping(value = PathContains.TKHAI_MTT+ PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Lấy chi tiết thông tin đấu thầu gạo", response = List.class)
+    @GetMapping(value =PathContains.TKHAI_MTT + PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> detail(
-            @ApiParam(value = "ID thông tổ chức triển khai", example = "1", required = true) @PathVariable("ids") String ids) {
+    public ResponseEntity<BaseResponse> detail(@PathVariable("ids") String ids) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhPthucTkhaiMuaTtService.detail(ids));
@@ -76,7 +87,22 @@ public class HhPthucTkhaiMuaTtController extends BaseController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Chi tiết: {}", e);
+            log.error("Lấy chi tiết thông tin đấu thầu gạo trace: {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+    @ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 thông tin đấu thầu gạo", response = List.class)
+    @PostMapping(value =PathContains.TKHAI_MTT + PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> updateStatus(@Valid HttpServletRequest req, @RequestBody HhCgiaReq stReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            hhPthucTkhaiMuaTtService.approve(stReq);
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Phê duyệt thông tin đấu thầu gạo trace: {}", e);
         }
         return ResponseEntity.ok(resp);
     }

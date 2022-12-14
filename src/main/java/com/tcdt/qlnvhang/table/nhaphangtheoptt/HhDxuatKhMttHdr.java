@@ -66,7 +66,7 @@ public class HhDxuatKhMttHdr  implements Serializable {
     private String ptMua;
     private String tchuanCluong;
     private String giaMua;
-    private String thueGtgt;
+    private BigDecimal thueGtgt;
     @Temporal(TemporalType.DATE)
     private Date tgianMkho;
     @Temporal(TemporalType.DATE)

@@ -188,5 +188,21 @@ public class HhQdPheduyetKhMttHdrControler {
 
     }
 
+    @ApiOperation(value = "Lấy chi tiết Quyết định phê duyệt kế hoạch mua trực tiếp", response = List.class)
+    @GetMapping(value =PathContains.QD_PD_MTT + "/chi-tiet-ke-hoach/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> detailDtl( @PathVariable("ids") Long ids) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(hhQdPheduyetKhMttHdrService.detailDtl(ids));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Lấy chi tiết Quyết định phê duyệt kế hoạch lựa chọn nhà thầu trace: {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
 
 }
