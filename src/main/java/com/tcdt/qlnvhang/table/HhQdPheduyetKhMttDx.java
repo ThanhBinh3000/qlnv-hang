@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDsgthau;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhChiTietTTinChaoGia;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDxuatKhMttHdr;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhQdPduyetKqcgHdr;
@@ -105,8 +106,8 @@ public class HhQdPheduyetKhMttDx implements Serializable {
     @Transient
     private HhQdPduyetKqcgHdr hhQdPduyetKqcgHdr;
 
-//        @Transient
-//    private List<HhChiTietTTinChaoGia> hhChiTietTTinChaoGiaList = new ArrayList<>();
+    @Transient
+    private List<HhChiTietTTinChaoGia> hhChiTietTTinChaoGiaList = new ArrayList<>();
 
     @Transient
     private List<FileDinhKem> fileDinhKemUyQuyen = new ArrayList<>();

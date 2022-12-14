@@ -51,6 +51,9 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
     @Autowired
     private HhQdPheduyetKhMttSLDDRepository hhQdPheduyetKhMttSLDDRepository;
 
+@Autowired
+private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
+
     @Autowired
     FileDinhKemService fileDinhKemService;
 
@@ -466,6 +469,8 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         hhQdPheduyetKhMttHdr.setTenLoaiVthh(hashMapDmHh.get(hhQdPheduyetKhMttHdr.getLoaiVthh()));
         dtl.setHhQdPheduyetKhMttHdr(hhQdPheduyetKhMttHdr);
 
+        List<HhChiTietTTinChaoGia> byIdQdDtl = hhCtietTtinCgiaRepository.findAllByIdTkhaiKh(dtl.getId());
+        dtl.setHhChiTietTTinChaoGiaList(byIdQdDtl);
 
 //        Optional<HhDxuatKhLcntHdr> bySoDxuat;
 //        if(!StringUtils.isEmpty(dtl.getSoDxuat())){
