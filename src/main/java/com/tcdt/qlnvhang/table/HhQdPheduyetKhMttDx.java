@@ -26,50 +26,26 @@ public class HhQdPheduyetKhMttDx implements Serializable {
 
     private Long id;
     private Long idQdHdr;
+    private Long idDxHdr;
     private String maDvi;
     @Transient
     private String tenDvi;
     private String soDxuat;
     @Temporal(TemporalType.DATE)
-    private Date ngayTao;
-    @Temporal(TemporalType.DATE)
     private Date ngayPduyet;
     private String tenDuAn;
-    private BigDecimal soLuong;
-    private BigDecimal donGiaVat;
-    private BigDecimal donGiaTamTinh;
-    private String loaiVthh;
-    @Transient
-    private String tenLoaiVthh;
-    private String cloaiVthh;
-    @Transient
-    private String tenCloaiVthh;
-    private String namKh;
-    private Long idDxHdr;
+    private BigDecimal tongSoLuong;
+    private Integer namKh;
+    private String trichYeu;
+    private String diaChiDvi;
+    private BigDecimal tongTienVat;
     private String trangThai;
     @Transient
     private String tenTrangThai;
-    private String diaChiDvi;
-    private String trichYeu;
     @Column(name="SO_QD_PD_KQ_Mtt")
     private String soQdPdKqMtt;
 
-    private String moTaHangHoa;
-    private String ptMua;
-    private String tchuanCluong;
-    private BigDecimal giaMua;
-    private BigDecimal giaChuaThue;
-    private BigDecimal giaCoThue;
-    private BigDecimal thueGtgt;
-    @Temporal(TemporalType.DATE)
-    private Date tgianMkho;
-    @Temporal(TemporalType.DATE)
-    private Date tgianKthuc;
-    private String ghiChu;
-    private BigDecimal tongMucDt;
-    private BigDecimal tongSoLuong;
-    private String nguonVon;
-    private String tenChuDt;
+
 
 
 

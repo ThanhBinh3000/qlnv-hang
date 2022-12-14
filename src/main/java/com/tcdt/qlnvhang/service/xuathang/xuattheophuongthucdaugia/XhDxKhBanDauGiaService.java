@@ -102,7 +102,6 @@ public class XhDxKhBanDauGiaService extends BaseServiceImpl {
         dataMap.setTrangThaiTh(Contains.CHUATONGHOP);
         Map<String, String> hashMapDmdv = getListDanhMucDvi(null, null, "01");
         dataMap.setTenDvi(StringUtils.isEmpty(userInfo.getDvql()) ? null : hashMapDmdv.get(userInfo.getDvql()));
-        dataMap.setMaDvi(userInfo.getDvql());
         this.validateData(dataMap, dataMap.getTrangThai());
         XhDxKhBanDauGia created=xhDxKhBanDauGiaRepository.save(dataMap);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),dataMap.getId(),"XH_DX_KH_BAN_DAU_GIA");
@@ -357,7 +356,7 @@ public class XhDxKhBanDauGiaService extends BaseServiceImpl {
             objs[2] = dx.getSoDxuat();
             objs[3] = dx.getTenDvi();
             objs[4] = dx.getNgayTao();
-            objs[5] = dx.getNgayKy();
+            objs[5] = dx.getNgayKyQd();
             objs[6] = dx.getTrichYeu();
             objs[7] = dx.getTenLoaiVthh();
             objs[8] = dx.getTenCloaiVthh();

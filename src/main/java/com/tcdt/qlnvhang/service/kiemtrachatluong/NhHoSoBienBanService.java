@@ -13,8 +13,8 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.kiemtrachatluong.NhHoSoBienBan;
-import com.tcdt.qlnvhang.table.kiemtrachatluong.NhHoSoBienBanCt;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoBienBan;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoBienBanCt;
 import com.tcdt.qlnvhang.util.Contains;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
@@ -24,13 +24,11 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.Transient;
 import javax.transaction.Transactional;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class NhHoSoBienBanService extends BaseServiceImpl {
-
 
     @Autowired
     private NhHoSoBienBanRepository nhHoSoBienBanRepository;
@@ -57,18 +55,18 @@ public class NhHoSoBienBanService extends BaseServiceImpl {
         if(userInfo== null){
             throw new Exception("Bad request.");
         }
-        Optional<NhHoSoBienBan> optional = nhHoSoBienBanRepository.findAllBySoBienBan(objReq.getSoBienBan());
-        if (optional.isPresent()){
-            throw new Exception("Số biên bản đã tồn tại");
-        }
-        NhHoSoBienBan data= new ModelMapper().map(objReq,NhHoSoBienBan.class);
+        NhHoSoBienBan data = new NhHoSoBienBan();
+        BeanUtils.copyProperties(objReq,data);
         data.setMaDvi(userInfo.getDvql());
         data.setTrangThai(Contains.DUTHAO);
-        NhHoSoBienBan created= nhHoSoBienBanRepository.save(data);
+        data.setNguoiTaoId(userInfo.getId());
+        data.setNgayTao(new Date());
+        data.setId(Long.parseLong(objReq.getSoBienBan().split("/")[0]));
+        nhHoSoBienBanRepository.save(data);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),data.getId(),"NH_HO_SO_BIEN_BAN");
-        created.setFileDinhKems(fileDinhKems);
+        data.setFileDinhKems(fileDinhKems);
         this.saveCtiet(data,objReq);
-        return created;
+        return data;
     }
 
     @Transactional
@@ -78,12 +76,6 @@ public class NhHoSoBienBanService extends BaseServiceImpl {
             throw new Exception("Bad request.");
         }
         Optional<NhHoSoBienBan> optional = nhHoSoBienBanRepository.findById(objReq.getId());
-        Optional<NhHoSoBienBan> soQd = nhHoSoBienBanRepository.findAllBySoBienBan(objReq.getSoBienBan());
-        if (soQd.isPresent()){
-            if (!soQd.get().getId().equals(objReq.getId())){
-                throw new Exception("Số biên bản đã tồn tại");
-            }
-        }
         NhHoSoBienBan data=optional.get();
         BeanUtils.copyProperties(objReq,data,"id","maDvi");
         NhHoSoBienBan created= nhHoSoBienBanRepository.save(data);
@@ -92,8 +84,11 @@ public class NhHoSoBienBanService extends BaseServiceImpl {
         this.saveCtiet(data,objReq);
         return created;
     }
+
+    @Transactional
     public void saveCtiet(NhHoSoBienBan data,NhHoSoBienBanReq objReq){
-        for(NhHoSoBienBanCtReq dtlReq :objReq.getHoSoBienBanCtList()) {
+        nhHoSoBienBanCtRepository.deleteAllByIdHoSoBienBan(data.getId());
+        for(NhHoSoBienBanCtReq dtlReq :objReq.getChildren()) {
             NhHoSoBienBanCt dtl = new ModelMapper().map(dtlReq, NhHoSoBienBanCt.class);
             dtl.setId(null);
             dtl.setIdHoSoBienBan(data.getId());
@@ -107,12 +102,14 @@ public class NhHoSoBienBanService extends BaseServiceImpl {
             throw new Exception("Bản ghi không tồn tại");
         }
         NhHoSoBienBan data= optional.get();
-        Map<String,String> hashMapDmhh = getListDanhMucHangHoa();
-        data.setTenDvi(StringUtils.isEmpty(data.getTenDvi())?null:hashMapDmhh.get(data.getMaDvi()));
-        data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
+        Map<String,String> mapVthh = getListDanhMucHangHoa();
+        Map<String,String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
+        data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
+        data.setTenLoaiVthh(mapVthh.get(data.getLoaiVthh()));
+        data.setTenCloaiVthh(mapVthh.get(data.getCloaiVthh()));
         List<NhHoSoBienBanCt> dtlList = nhHoSoBienBanCtRepository.findAllByIdHoSoBienBan(data.getId());
         List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Collections.singleton(NhHoSoBienBan.TABLE_NAME));
-        data.setHoSoBienBanCtList(dtlList);
+        data.setChildren(dtlList);
         data.setFileDinhKems(fileDinhKems);
         return data;
     }
@@ -151,16 +148,16 @@ public class NhHoSoBienBanService extends BaseServiceImpl {
         if(StringUtils.isEmpty(statusReq.getId())){
             throw new Exception("Không tìm thấy dữ liệu");
         }
-        Optional<NhHoSoBienBan> optional =nhHoSoBienBanRepository.findById(Long.valueOf(statusReq.getId()));
+        Optional<NhHoSoBienBan> optional =nhHoSoBienBanRepository.findById(statusReq.getId());
         if (!optional.isPresent()){
             throw new Exception("Không tìm thấy dữ liệu");
         }
 
         String status= statusReq.getTrangThai()+optional.get().getTrangThai();
         switch (status){
-            case Contains.DAKY + Contains.CHODUYET_LDV:
+            case Contains.DAKY + Contains.DUTHAO:
                 optional.get().setNguoiPduyetId(userInfo.getId());
-                optional.get().setNgayPduyet(LocalDate.now());
+                optional.get().setNgayPduyet(new Date());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");

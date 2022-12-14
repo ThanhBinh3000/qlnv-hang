@@ -7,6 +7,8 @@ import com.tcdt.qlnvhang.util.Contains;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -66,6 +68,13 @@ public class HhQdPheduyetKhMttHdrReq {
     private String diaDiemCgia;
 
     private String moTaHangHoa;
+    private String ptMua;
+    private String giaMua;
+    private BigDecimal donGia;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date tgianMkho;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date tgianKthuc;
 
     private String soQdPdCg;
     private List<FileDinhKemReq> fileDinhkems =new ArrayList<>();

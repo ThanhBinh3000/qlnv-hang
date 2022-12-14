@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,10 +44,10 @@ public interface XhDxKhBanDauGiaRepository extends JpaRepository<XhDxKhBanDauGia
             " AND DX.TRANG_THAI = '"+ Contains.DADUYET_LDC+"'" +
             " AND DX.TRANG_THAI_TH = '"+ Contains.CHUATONGHOP+"'" +
             " AND DX.MA_THOP is null "+
-            " AND DX.SO_QD_PD is null "+
-            " AND (:maDvi IS NULL OR LOWER(DX.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "
+            " AND DX.SO_QD_PD is null "
+
             ,nativeQuery = true)
-    List<XhDxKhBanDauGia> listTongHop(Integer namKh, String loaiVthh, String cloaiVthh,String ngayDuyetTu, String ngayDuyetDen, String maDvi);
+    List<XhDxKhBanDauGia> listTongHop(Integer namKh, String loaiVthh, String cloaiVthh,String ngayDuyetTu, String ngayDuyetDen);
 
     List<XhDxKhBanDauGia> findBySoDxuatIn (List<String> list);
 
@@ -69,6 +70,17 @@ public interface XhDxKhBanDauGiaRepository extends JpaRepository<XhDxKhBanDauGia
     @Modifying
     @Query(value = "UPDATE XH_DX_KH_BAN_DAU_GIA SET TRANG_THAI_TH=:trangThaiTh WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
     void updateStatusInList(List<String> soDxuatList, String trangThaiTh);
+
+    @Transactional()
+    @Modifying
+    @Query(value = "UPDATE XH_DX_KH_BAN_DAU_GIA SET SO_QD_PD=:soQdPd WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
+    void updateSoQdPd(List<String> soDxuatList, String soQdPd);
+
+
+    @Transactional()
+    @Modifying
+    @Query(value = "UPDATE XH_DX_KH_BAN_DAU_GIA SET NGAY_KY_QD=:ngayKyQd WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
+    void updateNgayKyQd(List<String> soDxuatList, Date ngayKyQd);
 
 
 }

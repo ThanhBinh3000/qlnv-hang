@@ -26,11 +26,10 @@ import java.util.List;
 @RestController
 @RequestMapping(value = PathContains.NH_HS_BB)
 @Slf4j
-@Api(tags = "Nhập hàng hồ sơ biên bản")
+@Api(tags = "Nhập hàng - Đấu thầu - Kiểm tra chất lượng - Nhập hàng hồ sơ biên bản")
 public class NhHoSoBienBanController extends BaseController {
     @Autowired
     private NhHoSoBienBanService nhHoSoBienBanService;
-
 
     @ApiOperation(value = "Tra cứu ", response = List.class)
     @PostMapping(value=  PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)

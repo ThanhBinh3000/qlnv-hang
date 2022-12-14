@@ -77,7 +77,7 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
                 objReq.getLoaiVthh(),
                 objReq.getTrangThai(),
                 objReq.getTrangThaiTh(),
-                userInfo.getDvql(),
+                objReq.getMaDvi(),
                 pageable);
         Map<String,String> hashMapDmhh = getListDanhMucHangHoa();
 
@@ -287,7 +287,7 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
             case Contains.CHO_DUYET_TP + Contains.TUCHOI_TP:
             case Contains.CHO_DUYET_TP + Contains.TUCHOI_LDC:
                 this.validateData(optional.get(),Contains.CHODUYET_TP);
-                optional.get().setNguoiGuiDuyet(userInfo.getUsername());
+                optional.get().setNguoiGuiDuyet(getUser().getUsername());
                 optional.get().setNgayGuiDuyet(getDateTimeNow());
                 break;
             case Contains.TUCHOI_TP + Contains.CHO_DUYET_TP:

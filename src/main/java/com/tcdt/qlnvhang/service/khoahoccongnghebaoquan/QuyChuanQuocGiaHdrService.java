@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.service.khoahoccongnghebaoquan;
 
 import com.google.common.collect.Lists;
-import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetketquabandaugia.BhQdPheDuyetKqbdg;
 import com.tcdt.qlnvhang.entities.khcn.quychuankythuat.QuyChuanQuocGiaDtl;
 import com.tcdt.qlnvhang.entities.khcn.quychuankythuat.QuyChuanQuocGiaHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
@@ -16,6 +15,7 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
@@ -75,6 +75,12 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         QuyChuanQuocGiaHdr data= new ModelMapper().map(objReq,QuyChuanQuocGiaHdr.class);
         data.setMaDvi(userInfo.getDvql());
         data.setTrangThai(Contains.DUTHAO);
+        if(DataUtils.isNullObject(objReq.getIdVanBanThayThe())){
+            data.setIdVanBanThayThe(data.getId());
+        }else {
+            Optional<QuyChuanQuocGiaHdr> qc =quyChuanQuocGiaHdrRepository.findById(objReq.getIdVanBanThayThe());
+            qc.get().setTrangThaiHl("Hết hiệu lực");
+        }
         QuyChuanQuocGiaHdr created= quyChuanQuocGiaHdrRepository.save(data);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),data.getId(),"KHCN_QUY_CHUAN_QG_HDR");
         created.setFileDinhKems(fileDinhKems);
@@ -171,7 +177,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         List<QuyChuanQuocGiaHdr> data=page.getContent();
 
         String title="Danh sách đề xuất kế hoạch mua trực tiếp";
-        String[] rowsName=new String[]{"STT","Số văn bản","Số hiệu quy chuẩn,tiêu chuẩn văn bản","Áp dụng tại","Loại hàng hóa","Chủng loại hang hóa","Ngày quyết dịnh","Ngày hiệu lực","Trạng thái","Hiệu lực"};
+        String[] rowsName=new String[]{"STT","Số văn bản","Số hiệu quy chuẩn,tiêu chuẩn văn bản","Áp dụng tại","Loại hàng hóa","Ngày quyết dịnh","Ngày hiệu lực","Trạng thái","Hiệu lực"};
         String fileName="danh-sach-dx-kh-mua-truc-tiep.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs=null;
@@ -182,12 +188,11 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
             objs[1]=dx.getSoVanBan();
             objs[2]=dx.getSoHieuQuyChuan();
             objs[3]=dx.getApDungTai();
-            objs[4]=dx.getTenLoaiVthh();
-            objs[5]=dx.getTenCloaiVthh();
-            objs[6]=dx.getNgayKy();
-            objs[7]=dx.getNgayHieuLuc();
-            objs[8]=dx.getTenTrangThai();
-            objs[9]=dx.isLastest();
+            objs[4]=dx.getListTenLoaiVthh();
+            objs[5]=dx.getNgayKy();
+            objs[6]=dx.getNgayHieuLuc();
+            objs[7]=dx.getTenTrangThai();
+            objs[8]=dx.getTrangThaiHl();
             dataList.add(objs);
         }
         ExportExcel ex =new ExportExcel(title,fileName,rowsName,dataList,response);

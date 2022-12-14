@@ -59,6 +59,8 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
                 objReq.getTenDeTai(),
                 objReq.getCapDeTai(),
                 objReq.getTrangThai(),
+                objReq.getTuNam(),
+                objReq.getDenNam(),
                 userInfo.getDvql(),
                 pageable);
 
@@ -84,7 +86,7 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         data.setMaDvi(userInfo.getDvql());
         data.setTenDvi(StringUtils.isEmpty(userInfo.getDvql()) ? null : hashMapDmdv.get(userInfo.getDvql()));
         KhCnCongTrinhNghienCuu created= khCnCongTrinhNghienCuuRepository.save(data);
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),data.getId(),"KH_CN_CONG_TRINH_NGHIEN_CUU");
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(),data.getId(),"KH_CN_CONG_TRINH_NGHIEN_CUU");
         created.setFileDinhKems(fileDinhKems);
         this.saveCtiet(data,objReq);
         return created;
@@ -142,6 +144,8 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         List<KhCnNghiemThuThanhLy> nghiemThuThanhLy = khCnNghiemThuThanhLyRepository.findAllByIdHdr(data.getId());
         data.setChildren(nghiemThuThanhLy);
         data.setTienDoThucHien(tienDoThucHien);
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Collections.singleton(KhCnCongTrinhNghienCuu.TABLE_NAME));
+        data.setFileDinhKems(fileDinhKems);
         return data;
     }
 
@@ -205,8 +209,8 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
             objs[1]=dx.getMaDeTai();
             objs[2]=dx.getTenDeTai();
             objs[3]=dx.getCapDeTai();
-            objs[4]=dx.getTuNam();
-            objs[5]=dx.getDenNam();
+            objs[4]=dx.getNgayKyTu();
+            objs[5]=dx.getNgayKyDen();
             objs[6]=dx.getTenTrangThai();
             dataList.add(objs);
         }

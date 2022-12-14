@@ -55,7 +55,6 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
 
 
     public Page<HhDxKhMttThopHdr> searchPage(SearchHhDxKhMttThopReq objReq) throws Exception {
-        UserInfo userInfo = SecurityContextService.getUser();
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),
                 objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<HhDxKhMttThopHdr> data = hhDxuatKhMttThopRepository.searchPage(
@@ -65,10 +64,9 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
                 objReq.getNoiDung(),
                 Contains.convertDateToString(objReq.getNgayThopTu()),
                 Contains.convertDateToString(objReq.getNgayThopDen()),
-                Contains.convertDateToString(objReq.getNgayKyQdTu()),
-                Contains.convertDateToString(objReq.getNgayKyQdDen()),
+//                Contains.convertDateToString(objReq.getNgayKyQdTu()),
+//                Contains.convertDateToString(objReq.getNgayKyQdDen()),
                 objReq.getTrangThai(),
-                userInfo.getDvql(),
                 pageable);
         Map<String, String> hashMapDmhh = getListDanhMucHangHoa();
         data.getContent().forEach(f -> {
@@ -111,16 +109,17 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
             thopDtl.setDiaChiDvi(dXuat.getDiaChiDvi());
             thopDtl.setTenDuAn(dXuat.getTenDuAn());
             thopDtl.setTrichYeu(dXuat.getTrichYeu());
-            thopDtl.setDonGiaVat(dXuat.getDonGiaVat());
+            thopDtl.setTongSoLuong(dXuat.getTongSoLuong());
+            thopDtl.setTongTienVat(dXuat.getTongTienVat());
 
-            List<HhDxuatKhMttSldd> dtlslDd = hhDxuatKhMttSlddRepository.findAllByIdDxKhmtt(dXuat.getId());
-            BigDecimal soLuong = BigDecimal.ZERO;
-            BigDecimal tongTien = BigDecimal.ZERO;
-            for (HhDxuatKhMttSldd gthauDtl : dtlslDd) {
-                soLuong = soLuong.add(gthauDtl.getSoLuong());
-                tongTien = tongTien.add(gthauDtl.getThanhTien() == null ? BigDecimal.ZERO : gthauDtl.getThanhTien());
-            }
-            thopDtl.setSoLuong(soLuong);
+//            List<HhDxuatKhMttSldd> dtlslDd = hhDxuatKhMttSlddRepository.findAllByIdDxKhmtt(dXuat.getId());
+//            BigDecimal soLuong = BigDecimal.ZERO;
+//            BigDecimal tongTien = BigDecimal.ZERO;
+//            for (HhDxuatKhMttSldd gthauDtl : dtlslDd) {
+//                soLuong = soLuong.add(gthauDtl.getSoLuong());
+//                tongTien = tongTien.add(gthauDtl.getThanhTien() == null ? BigDecimal.ZERO : gthauDtl.getThanhTien());
+//            }
+//            thopDtl.setTongSoLuong(soLuong);
             tChuanCluong = tChuanCluong.concat(dXuat.getTchuanCluong() + "");
             thopDtls.add(thopDtl);
         }
@@ -150,11 +149,11 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
         if (thopHdr.getId() > 0 && thopHdr.getHhDxKhMttThopDtls().size() > 0) {
             List<String> soDxuatList = thopHdr.getHhDxKhMttThopDtls().stream().map(HhDxKhMttThopDtl::getSoDxuat)
                     .collect(Collectors.toList());
-            List<HhDxuatKhMttHdr> list = hhDxuatKhMttRepository.findBySoDxuatIn(soDxuatList);
-            for (HhDxuatKhMttHdr bdg : list){
-                bdg.setMaThop(String.valueOf(thopHdr.getId()));
-                hhDxuatKhMttRepository.save(bdg);
-            }
+//            List<HhDxuatKhMttHdr> list = hhDxuatKhMttRepository.findBySoDxuatIn(soDxuatList);
+//            for (HhDxuatKhMttHdr bdg : list){
+//                bdg.setMaThop(thopHdr.getId());
+//                hhDxuatKhMttRepository.save(bdg);
+//            }
             hhDxuatKhMttRepository.updateStatusInList(soDxuatList, Contains.DATONGHOP);
         }
 return thopHdr;

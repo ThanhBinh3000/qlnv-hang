@@ -7,6 +7,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -85,6 +86,14 @@ public class HhQdPheduyetKhMttHdr implements Serializable {
     private String moTaHangHoa;
     private String soQdPdCg;
     private Long idGoc;
+    private String ptMua;
+    private String giaMua;
+    private BigDecimal donGia;
+    private BigDecimal donGiaVat;
+    @Temporal(TemporalType.DATE)
+    private Date tgianMkho;
+    @Temporal(TemporalType.DATE)
+    private Date tgianKthuc;
 
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
