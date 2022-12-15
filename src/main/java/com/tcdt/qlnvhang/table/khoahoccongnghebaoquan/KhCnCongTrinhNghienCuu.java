@@ -68,6 +68,8 @@ public class KhCnCongTrinhNghienCuu extends BaseEntity implements Serializable  
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
     @Transient
+    private List<FileDinhKem> fileDinhKems1 = new ArrayList<>();
+    @Transient
     private List<KhCnTienDoThucHien> tienDoThucHien = new ArrayList<>();
     @Transient
     private List<KhCnNghiemThuThanhLy> children = new ArrayList<>();
