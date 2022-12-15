@@ -121,7 +121,6 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
         HhQdPheduyetKhMttHdr dataMap = ObjectMapperUtils.map(objReq, HhQdPheduyetKhMttHdr.class);
         dataMap.setNgayTao(getDateTimeNow());
         dataMap.setTrangThai(Contains.DUTHAO);
-        dataMap.setTrangThaiTkhai(Contains.CHUACAPNHAT);
         dataMap.setNguoiTao(getUser().getUsername());
         dataMap.setLastest(objReq.getLastest());
         HhQdPheduyetKhMttHdr created=hhQdPheduyetKhMttHdrRepository.save(dataMap);
@@ -150,7 +149,7 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
             hhQdPheduyetKhMttSLDDRepository.deleteByIdQdDtl(qd.getId());
             qd.setId(null);
             qd.setIdQdHdr(dataMap.getId());
-            qd.setTrangThai(Contains.CHUACAPNHAT);
+            qd.setTrangThaiTkhai(Contains.CHUACAPNHAT);
             hhQdPheduyetKhMttDxRepository.save(qd);
             for (HhQdPheduyetKhMttSLDDReq gtList : ObjectUtils.isEmpty(dx.getDsSlddDtlList()) ? dx.getChildren() : dx.getDsSlddDtlList()){
                 HhQdPheduyetKhMttSLDD gt = ObjectMapperUtils.map(gtList, HhQdPheduyetKhMttSLDD.class);
@@ -253,7 +252,7 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
             };
             dtl.setTenDvi(StringUtils.isEmpty(dtl.getMaDvi()) ? null : mapDmucDvi.get(dtl.getMaDvi()));
             dtl.setChildren(hhQdPheduyetKhMttSLDDList);
-            dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThai()));
+            dtl.setTrangThaiTkhai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThaiTkhai()));
 
             hhQdPheduyetKhMttDxList.add(dtl);
 
@@ -375,7 +374,6 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
         return createCheck;
     }
 
-
     public void validateData(HhQdPheduyetKhMttHdr objHdr) throws Exception {
         for(HhQdPheduyetKhMttDx dtl : objHdr.getChildren()){
             for(HhQdPheduyetKhMttSLDD dsgthau : dtl.getChildren()){
@@ -457,10 +455,7 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
         if(!byId.isPresent()){
             throw new Exception("Không tìm thấy dữ liệu");
         };
-
         HhQdPheduyetKhMttDx dtl = byId.get();
-
-
         Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
         Map<String,String> hashMapDvi = getListDanhMucDvi(null,null,"01");
         // Set Hdr
@@ -479,7 +474,7 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
 //            bySoDxuat = hhDxuatKhLcntHdrRepository.findBySoDxuat(hhQdKhlcntHdr.getSoTrHdr());
 //        }
 //        bySoDxuat.ifPresent(dtl::setDxuatKhLcntHdr);
-        dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(dtl.getTrangThai()));
+        dtl.setTenTrangThaiTkhai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(dtl.getTrangThaiTkhai()));
         dtl.setTenDvi(hashMapDvi.get(dtl.getMaDvi()));
         return dtl;
     }

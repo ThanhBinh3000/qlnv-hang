@@ -56,7 +56,6 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
     @Autowired
     private HhQdPduyetKqcgRepository hhQdPduyetKqcgRepository;
 
-
     public Page<HhQdPheduyetKhMttDx> selectPage(SearchHhPthucTkhaiReq objReq) throws Exception {
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<HhQdPheduyetKhMttDx> hhQdPheduyetKhMttDxes = hhQdPheduyetKhMttDxRepository.selectPage(
@@ -66,14 +65,12 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
                 objReq.getLoaiVthh(),
                 objReq.getMaDvi(),
                 NhapXuatHangTrangThaiEnum.BAN_HANH.getId(),
-                objReq.getTrangThaiTk(),
+                objReq.getTrangThaiTkhai(),
                 objReq.getCtyCgia(),
                 objReq.getPthucMuatt(),
                 pageable);
         Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
         Map<String,String> hashMapDmDv= getListDanhMucDvi(null, null, "01");
-
-
         hhQdPheduyetKhMttDxes.getContent().forEach(item ->{
             try {
                 // Set Hdr
@@ -88,13 +85,13 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
                     bySoDxuat.ifPresent(item::setDxuatKhMttHdr);
                 }
                 if(!StringUtils.isEmpty(item.getSoQdPdKqMtt())){
-                    Optional<HhQdPduyetKqcgHdr> bySoQd = hhQdPduyetKqcgRepository.findAllBySoQdPdCg(item.getSoQdPdKqMtt());
+                    Optional<HhQdPduyetKqcgHdr> bySoQd = hhQdPduyetKqcgRepository.findBySoQd(item.getSoQdPdKqMtt());
                     bySoQd.ifPresent(item::setHhQdPduyetKqcgHdr);
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(item.getTrangThai()));
+            item.setTenTrangThaiTkhai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(item.getTrangThaiTkhai()));
             item.setTenLoaiVthh(hashMapDmHh.get(item.getLoaiVthh()));
             item.setTenCloaiVthh(hashMapDmHh.get(item.getCloaiVthh()));
             item.setTenDvi(hashMapDmDv.get(item.getMaDvi()));
@@ -108,10 +105,9 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
         if (!byId.isPresent()){
             throw new Exception("Bản ghi không tồn tại");
         }else {
-            byId.get().setTrangThai(NhapXuatHangTrangThaiEnum.DANGCAPNHAT.getId());
+            byId.get().setTrangThaiTkhai(NhapXuatHangTrangThaiEnum.DANGCAPNHAT.getId());
             hhQdPheduyetKhMttDxRepository.save(byId.get());
         }
-
         HhQdPheduyetKhMttDx hhQdPheduyetKhMttDx = byId.get();
         hhCtietTtinCgiaRepository.deleteAllByIdTkhaiKh(objReq.getIdChaoGia());
         List<HhChiTietTTinChaoGia> listDuThau = new ArrayList<>();
@@ -130,7 +126,6 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
             List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),hhQdPheduyetKhMttDx.getId(),"HH_QD_PHE_DUYET_KHMTT_DX");
             hhQdPheduyetKhMttDx.setFileDinhKemMuaLe(fileDinhKems);
         }
-
         hhQdPheduyetKhMttDxRepository.save(hhQdPheduyetKhMttDx);
         return listDuThau;
     }
@@ -142,8 +137,6 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
             if(!byId.isPresent()){
                 throw new Exception("Gói thầu không tồn tại");
             }
-
-
         List<HhChiTietTTinChaoGia> byIdDtGt = hhCtietTtinCgiaRepository.findAllByIdTkhaiKh(Long.parseLong(ids));
         byIdDtGt.forEach(f -> {
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
@@ -157,10 +150,9 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
         if(!optional.isPresent()){
             throw new Exception("Bản nghi không tồn tại");
         }
-
-        String status = stReq.getTrangThai() + optional.get().getTrangThai();
+        String status = stReq.getTrangThaiTkhai() + optional.get().getTrangThaiTkhai();
         if ((NhapXuatHangTrangThaiEnum.HOANTHANHCAPNHAT.getId() + NhapXuatHangTrangThaiEnum.DANGCAPNHAT.getId()).equals(status)) {
-            optional.get().setTrangThai(stReq.getTrangThai());
+            optional.get().setTrangThaiTkhai(stReq.getTrangThaiTkhai());
         }else{
             throw new Exception("Cập nhật không thành công");
         }

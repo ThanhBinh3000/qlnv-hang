@@ -54,9 +54,9 @@ public class HhQdPheduyetKhMttDx implements Serializable {
 
     private BigDecimal tongTienVat;
 
-    private String trangThai;
+    private String trangThaiTkhai;
     @Transient
-    private String tenTrangThai;
+    private String tenTrangThaiTkhai;
 
     private String loaiVthh;
     @Transient
