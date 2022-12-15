@@ -427,22 +427,6 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		dtl.setHhQdKhlcntHdr(hhQdKhlcntHdr);
 
 		List<HhQdKhlcntDsgthau> byIdQdDtl = hhQdKhlcntDsgthauRepository.findByIdQdDtl(dtl.getId());
-
-		for(HhQdKhlcntDsgthau dsg : byIdQdDtl){
-			List<HhQdKhlcntDsgthauCtiet> listGtCtiet = hhQdKhlcntDsgthauCtietRepository.findByIdGoiThau(dsg.getId());
-			listGtCtiet.forEach(f -> {
-				f.setTenDvi(hashMapDvi.get(f.getMaDvi()));
-				f.setTenDiemKho(hashMapDvi.get(f.getMaDiemKho()));
-			});
-			dsg.setTenDvi(hashMapDvi.get(dsg.getMaDvi()));
-			dsg.setTenCloaiVthh(hashMapDmHh.get(dsg.getCloaiVthh()));
-			dsg.setTenLoaiHdong(hashMapLoaiHdong.get(dsg.getLoaiHdong()));
-			dsg.setTenNguonVon(hashMapNguonVon.get(dsg.getNguonVon()));
-			dsg.setTenPthucLcnt(hashMapPthucDthau.get(dsg.getPthucLcnt()));
-			dsg.setTenHthucLcnt(hashMapHtLcnt.get(dsg.getHthucLcnt()));
-			dsg.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dsg.getTrangThai()));
-			dsg.setChildren(listGtCtiet);
-		};
 		dtl.setChildren(byIdQdDtl);
 
 

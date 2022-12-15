@@ -39,5 +39,27 @@ public class XhThopDxKhBdgDtl implements Serializable {
     private String moTaHangHoa;
     private String tchuanCluong;
     private String diaChi;
+    @Temporal(TemporalType.DATE)
+    private Date tgianDkienTu;
+    @Temporal(TemporalType.DATE)
+    private Date tgianDkienDen;
+    private Integer tgianTtoan;
+
+    private String tgianTtoanGhiChu;
+
+    private String pthucTtoan;
+
+    private Integer tgianGnhan;
+
+    private String tgianGnhanGhiChu;
+
+    private String pthucGnhan;
+
+    private String thongBaoKh
+            ;
+    private BigDecimal khoanTienDatTruoc;
+
+
+
 
 }

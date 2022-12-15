@@ -51,6 +51,9 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
     @Autowired
     private HhQdPheduyetKhMttSLDDRepository hhQdPheduyetKhMttSLDDRepository;
 
+@Autowired
+private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
+
     @Autowired
     FileDinhKemService fileDinhKemService;
 
@@ -118,7 +121,6 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         HhQdPheduyetKhMttHdr dataMap = ObjectMapperUtils.map(objReq, HhQdPheduyetKhMttHdr.class);
         dataMap.setNgayTao(getDateTimeNow());
         dataMap.setTrangThai(Contains.DUTHAO);
-        dataMap.setTrangThaiTkhai(Contains.CHUACAPNHAT);
         dataMap.setNguoiTao(getUser().getUsername());
         dataMap.setLastest(objReq.getLastest());
         HhQdPheduyetKhMttHdr created=hhQdPheduyetKhMttHdrRepository.save(dataMap);
@@ -147,7 +149,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
             hhQdPheduyetKhMttSLDDRepository.deleteByIdQdDtl(qd.getId());
             qd.setId(null);
             qd.setIdQdHdr(dataMap.getId());
-            qd.setTrangThai(Contains.CHUACAPNHAT);
+            qd.setTrangThaiTkhai(Contains.CHUACAPNHAT);
             hhQdPheduyetKhMttDxRepository.save(qd);
             for (HhQdPheduyetKhMttSLDDReq gtList : ObjectUtils.isEmpty(dx.getDsSlddDtlList()) ? dx.getChildren() : dx.getDsSlddDtlList()){
                 HhQdPheduyetKhMttSLDD gt = ObjectMapperUtils.map(gtList, HhQdPheduyetKhMttSLDD.class);
@@ -250,7 +252,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
             };
             dtl.setTenDvi(StringUtils.isEmpty(dtl.getMaDvi()) ? null : mapDmucDvi.get(dtl.getMaDvi()));
             dtl.setChildren(hhQdPheduyetKhMttSLDDList);
-            dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThai()));
+            dtl.setTrangThaiTkhai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThaiTkhai()));
 
             hhQdPheduyetKhMttDxList.add(dtl);
 
@@ -372,7 +374,6 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         return createCheck;
     }
 
-
     public void validateData(HhQdPheduyetKhMttHdr objHdr) throws Exception {
         for(HhQdPheduyetKhMttDx dtl : objHdr.getChildren()){
             for(HhQdPheduyetKhMttSLDD dsgthau : dtl.getChildren()){
@@ -454,10 +455,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         if(!byId.isPresent()){
             throw new Exception("Không tìm thấy dữ liệu");
         };
-
         HhQdPheduyetKhMttDx dtl = byId.get();
-
-
         Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
         Map<String,String> hashMapDvi = getListDanhMucDvi(null,null,"01");
         // Set Hdr
@@ -466,6 +464,8 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         hhQdPheduyetKhMttHdr.setTenLoaiVthh(hashMapDmHh.get(hhQdPheduyetKhMttHdr.getLoaiVthh()));
         dtl.setHhQdPheduyetKhMttHdr(hhQdPheduyetKhMttHdr);
 
+        List<HhChiTietTTinChaoGia> byIdQdDtl = hhCtietTtinCgiaRepository.findAllByIdTkhaiKh(dtl.getId());
+        dtl.setHhChiTietTTinChaoGiaList(byIdQdDtl);
 
 //        Optional<HhDxuatKhLcntHdr> bySoDxuat;
 //        if(!StringUtils.isEmpty(dtl.getSoDxuat())){
@@ -474,7 +474,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
 //            bySoDxuat = hhDxuatKhLcntHdrRepository.findBySoDxuat(hhQdKhlcntHdr.getSoTrHdr());
 //        }
 //        bySoDxuat.ifPresent(dtl::setDxuatKhLcntHdr);
-        dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(dtl.getTrangThai()));
+        dtl.setTenTrangThaiTkhai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(dtl.getTrangThaiTkhai()));
         dtl.setTenDvi(hashMapDvi.get(dtl.getMaDvi()));
         return dtl;
     }
