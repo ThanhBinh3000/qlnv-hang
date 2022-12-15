@@ -8,17 +8,18 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.util.Contains;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-public class DchinhDxKhLcntHdrReq {
+public class DchinhDxKhLcntHdrReq extends BaseRequest {
 	@ApiModelProperty(notes = "Bắt buộc set đối với update")
 	private Long id;
 
-	private String namKh;
+	private Integer nam;
 
 	String trichYeu;
 
@@ -28,8 +29,6 @@ public class DchinhDxKhLcntHdrReq {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayHluc;
 
-	@NotNull(message = "Không được để trống")
-	@Size(max = 50, message = "Loại hàng hóa không được vượt quá 50 ký tự")
 	String loaiVthh;
 
 	String cloaiVthh;
@@ -121,7 +120,7 @@ public class DchinhDxKhLcntHdrReq {
 
 	String maTrHdr;
 
-	private List<HhQdKhlcntDtlReq> dsDeXuat;
+	private List<HhQdKhlcntDtlReq> children = new ArrayList<>();
+
 	private List<FileDinhKemReq> fileDinhKems;
-	private List<HhQdKhlcntDsgthauReq> dsGoiThau;
 }
