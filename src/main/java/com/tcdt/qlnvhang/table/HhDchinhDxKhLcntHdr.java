@@ -6,9 +6,12 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tcdt.qlnvhang.entities.FileDKemJoinHhDchinhDxKhLcntHdr;
+import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdr;
+import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -17,7 +20,7 @@ import org.hibernate.annotations.Where;
 @Entity
 @Table(name = "HH_DC_DX_LCNT_HDR")
 @Data
-public class HhDchinhDxKhLcntHdr implements Serializable {
+public class HhDchinhDxKhLcntHdr extends TrangThaiBaseEntity implements Serializable {
 	/**
 	 * 
 	 */
@@ -27,55 +30,68 @@ public class HhDchinhDxKhLcntHdr implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "QLNV_QD_LCNT_HDR_SEQ")
 	@SequenceGenerator(sequenceName = "QLNV_QD_LCNT_HDR_SEQ", allocationSize = 1, name = "QLNV_QD_LCNT_HDR_SEQ")
 	private Long id;
-	Long namKh;
-	@Temporal(TemporalType.DATE)
-	Date ngayQd;
-	String loaiVthh;
-	String cloaiVthh;
-	String moTaHangHoa;
-	String trichYeu;
-	@Temporal(TemporalType.DATE)
-	Date ngayHluc;
-	String trangThai;
-	@Transient
-	String tenTrangThai;
-	Date ngayTao;
-	String nguoiTao;
-	@Temporal(TemporalType.DATE)
-	Date ngaySua;
-	String nguoiSua;
-	String ldoTuchoi;
 
-	@Temporal(TemporalType.DATE)
-	Date ngayGuiDuyet;
-	String nguoiGuiDuyet;
-	@Temporal(TemporalType.DATE)
-	Date ngayPduyet;
-	String nguoiPduyet;
-	String loaiDieuChinh;
-
-	String hthucLcnt;
-	String pthucLcnt;
-	String loaiHdong;
-	String nguonVon;
-	@Temporal(TemporalType.DATE)
-	Date tgianBdau;
-	@Temporal(TemporalType.DATE)
-	Date tgianDthau;
-	@Temporal(TemporalType.DATE)
-	Date tgianMthau;
-	@Temporal(TemporalType.DATE)
-	Date tgianNhang;
-	String ghiChu;
-
-	@Transient
-	private List<HhDchinhDxKhLcntDtl> listDieuChinh = new ArrayList<>();
-
-	String soQd;
+	String soQdDc;
 
 	String soQdGoc;
 
 	Long idQdGoc;
+
+	Integer nam;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date ngayQd;
+
+	String loaiVthh;
+
+	String cloaiVthh;
+
+	String moTaHangHoa;
+
+	String trichYeu;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date ngayHluc;
+
+	String loaiDieuChinh;
+
+	String hthucLcnt;
+
+	String pthucLcnt;
+
+	String loaiHdong;
+
+	String nguonVon;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date tgianBdauTchuc;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
+	Date tgianDthau;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
+	Date tgianMthau;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date tgianNhang;
+
+	Integer tgianThien;
+
+	Integer gtriDthau;
+
+	Integer gtriHdong;
+
+	@Transient
+	private List<HhDchinhDxKhLcntDtl> listDieuChinh = new ArrayList<>();
+
+	@Transient
+	private List<FileDKemJoinHhDchinhDxKhLcntHdr> fileDinhKem = new ArrayList<>();
+
+	@Transient
+	private List<HhDchinhDxKhLcntDtl> hhQdKhlcntDtlList = new ArrayList<>();
+
+	@Transient
+	private Long soGoiThau;
 
 	@Transient
 	String tenLoaiVthh;
@@ -94,32 +110,5 @@ public class HhDchinhDxKhLcntHdr implements Serializable {
 
 	@Transient
 	String tenNguonVon;
-
-	@Temporal(TemporalType.DATE)
-	Date tgianBdauTchuc;
-
-	Long namKhoach;
-
-	Integer tgianThienHd;
-
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@Fetch(value = FetchMode.SUBSELECT)
-	@JoinColumn(name = "dataId")
-	@JsonManagedReference
-	@Where(clause = "data_type='" + HhQdKhlcntHdr.TABLE_NAME + "'")
-	private List<FileDKemJoinHhDchinhDxKhLcntHdr> fileDinhKem = new ArrayList<>();
-
-	public void setFileDinhKem(List<FileDKemJoinHhDchinhDxKhLcntHdr> children) {
-		this.fileDinhKem.clear();
-		for (FileDKemJoinHhDchinhDxKhLcntHdr child : children) {
-			child.setParent(this);
-		}
-		this.fileDinhKem.addAll(children);
-	}
-
-	@Transient
-	private List<HhDchinhDxKhLcntDtl> hhQdKhlcntDtlList = new ArrayList<>();
-	@Transient
-	private Long soGoiThau;
 
 }

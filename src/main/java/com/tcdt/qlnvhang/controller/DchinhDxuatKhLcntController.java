@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.DchinhDxKhLcntHdrReq;
-import com.tcdt.qlnvhang.service.DchinhDxuatKhLcntService;
+import com.tcdt.qlnvhang.service.nhaphang.dauthau.dieuchinh.DchinhDxuatKhLcntService;
 import com.tcdt.qlnvhang.table.HhDchinhDxKhLcntHdr;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import com.tcdt.qlnvhang.enums.EnumResponse;
@@ -40,13 +39,13 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = PathContains.QD_LCNT + PathContains.DIEU_CHINH)
-@Api(tags = "Điều chỉnh đề xuất kế hoạch lựa chọn nhà thầu")
+@Api(tags = "Nhập hàng - Đấu thầu - Điều chỉnh đề xuất kế hoạch lựa chọn nhà thầu")
 public class DchinhDxuatKhLcntController extends BaseController {
 
 	@Autowired
 	private DchinhDxuatKhLcntService dchinhDxuatKhLcntService;
 
-	@ApiOperation(value = "Tra cứu Quyết định điều chỉnh phê duyệt KHLCNT", response = List.class)
+	@ApiOperation(value = "Tra cứu ", response = List.class)
 	@PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<BaseResponse> selectAll(@Valid @RequestBody QlnvQdLcntHdrDChinhSearchReq objReq) {
@@ -65,7 +64,7 @@ public class DchinhDxuatKhLcntController extends BaseController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Tạo Quyết định điều chỉnh qđ phê duyệt KHLCNT", response = List.class)
+	@ApiOperation(value = "Tạo ", response = List.class)
 	@PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> createDchinh(HttpServletRequest request, @Valid @RequestBody DchinhDxKhLcntHdrReq objReq) {
 		BaseResponse resp = new BaseResponse();
@@ -82,7 +81,7 @@ public class DchinhDxuatKhLcntController extends BaseController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Cập nhật Quyết định điều chỉnh qđ phê duyệt KHLCNT", response = List.class)
+	@ApiOperation(value = "Cập nhật", response = List.class)
 	@PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> update(HttpServletRequest request,@Valid @RequestBody DchinhDxKhLcntHdrReq objReq) {
 		BaseResponse resp = new BaseResponse();
@@ -99,11 +98,11 @@ public class DchinhDxuatKhLcntController extends BaseController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Lấy chi tiết thông tin Quyết định điều chỉnh qđ phê duyệt KHLCNT", response = List.class)
+	@ApiOperation(value = "Lấy chi tiết thông tin", response = List.class)
 	@GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<BaseResponse> detail(
-			@ApiParam(value = "ID Quyết định điều chỉnh qđ phê duyệt KHLCNT", example = "1", required = true) @PathVariable("ids") String ids) {
+			@ApiParam(value = "ID", example = "1", required = true) @PathVariable("ids") String ids) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			resp.setData(dchinhDxuatKhLcntService.detail(ids));
@@ -117,7 +116,7 @@ public class DchinhDxuatKhLcntController extends BaseController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03/Xoá-04 Quyết định điều chỉnh qđ phê duyệt KHLCNT", response = List.class)
+	@ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03/Xoá-04", response = List.class)
 	@PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> updateStatus(HttpServletRequest request,@Valid  @RequestBody StatusReq stReq) {
 		BaseResponse resp = new BaseResponse();
@@ -133,7 +132,7 @@ public class DchinhDxuatKhLcntController extends BaseController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Xoá thông tin Quyết định điều chỉnh qđ phê duyệt KHLCNT", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value = "Xoá thông tin", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
 	@PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
@@ -152,7 +151,7 @@ public class DchinhDxuatKhLcntController extends BaseController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Xoá danh sách thông tin Quyết định điều chỉnh qđ phê duyệt KHLCNT", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value = "Xoá danh sách thông tin", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
 	@PostMapping(value = PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<BaseResponse> deleteMultiple(@Valid @RequestBody IdSearchReq idSearchReq) {
@@ -171,7 +170,7 @@ public class DchinhDxuatKhLcntController extends BaseController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Kết xuất danh sách điều chỉnh kh lựa chọn nhà thầu", response = List.class)
+	@ApiOperation(value = "Kết xuất danh sách ", response = List.class)
 	@PostMapping(value=PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public void exportListQdBtcBnToExcel(@Valid @RequestBody QlnvQdLcntHdrDChinhSearchReq objReq, HttpServletResponse response) throws Exception{
@@ -180,7 +179,7 @@ public class DchinhDxuatKhLcntController extends BaseController {
 			dchinhDxuatKhLcntService.export(objReq,response);
 		} catch (Exception e) {
 
-			log.error("Kết xuất danh sách điều chỉnh kh lựa chọn nhà thầu: {}", e);
+			log.error("Kết xuất danh sách : {}", e);
 			final Map<String, Object> body = new HashMap<>();
 			body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			body.put("msg", e.getMessage());
