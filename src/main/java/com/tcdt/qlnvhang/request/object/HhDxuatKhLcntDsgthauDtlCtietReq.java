@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.request.object;
 import lombok.Data;
 
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -26,6 +27,6 @@ public class HhDxuatKhLcntDsgthauDtlCtietReq {
 
 	String diaDiemNhap;
 
-	List<HhDxuatKhLcntDsgthauDtlCtietVtReq> children;
+	List<HhDxuatKhLcntDsgthauDtlCtietVtReq> children = new ArrayList<>();
 
 }

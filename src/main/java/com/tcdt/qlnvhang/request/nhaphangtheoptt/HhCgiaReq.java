@@ -18,8 +18,7 @@ public class HhCgiaReq {
 
     private String loaiVthh;
 
-    private String trangThai;
-
+    private String trangThaiTkhai;
 
     private List<FileDinhKemReq> fileDinhkems =new ArrayList<>();
 
