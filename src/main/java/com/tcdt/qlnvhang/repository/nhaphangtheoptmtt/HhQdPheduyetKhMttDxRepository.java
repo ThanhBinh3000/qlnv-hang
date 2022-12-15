@@ -29,7 +29,7 @@ public interface HhQdPheduyetKhMttDxRepository extends JpaRepository<HhQdPheduye
           " AND (:loaiVthh IS NULL OR HDR.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) " +
           " AND (:maDvi IS NULL OR DTL.MA_DVI = :maDvi)" +
           " AND HDR.TRANG_THAI = :trangThai " +
-          " AND (:trangThaiTkhai IS NULL OR HDR.TRANG_THAI_TKHAI = :trangThaiTkhai )" +
+          " AND (:trangThaiTkhai IS NULL OR DTL.TRANG_THAI_TKHAI = :trangThaiTkhai )" +
           " AND (:ctyCgia IS NULL OR LOWER(DD.CANHAN_TOCHUC) LIKE LOWER(CONCAT(CONCAT('%', :ctyCgia),'%'))) "+
           " AND (:pthucMuatt IS NULL OR DTL.PTHUC_MUATT =:pthucMuatt)"+
           " AND HDR.LASTEST = 1 ",nativeQuery = true )

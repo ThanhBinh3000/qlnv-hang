@@ -128,6 +128,16 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
           thopDtl.setMoTaHangHoa(dxuat.getMoTaHangHoa());
           thopDtl.setTchuanCluong(dxuat.getTchuanCluong());
           thopDtl.setDiaChi(dxuat.getDiaChi());
+          thopDtl.setTgianDkienTu(dxuat.getTgianDkienTu());
+          thopDtl.setTgianDkienDen(dxuat.getTgianDkienDen());
+          thopDtl.setTgianTtoan(dxuat.getTgianTtoan());
+          thopDtl.setTgianTtoanGhiChu(dxuat.getTgianTtoanGhiChu());
+          thopDtl.setPthucTtoan(dxuat.getPthucTtoan());
+          thopDtl.setTgianGnhan(dxuat.getTgianGnhan());
+          thopDtl.setTgianGnhanGhiChu(dxuat.getTgianGnhanGhiChu());
+          thopDtl.setPthucGnhan(dxuat.getPthucGnhan());
+          thopDtl.setThongBaoKh(dxuat.getThongBaoKh());
+          thopDtl.setKhoanTienDatTruoc(dxuat.getKhoanTienDatTruoc());
           List<XhDxKhBanDauGiaPhanLo> dtlsPhanLo = xhDxKhBanDauGiaPhanLoRepository.findByIdDxKhbdg(dxuat.getId());
           BigDecimal soLuong = BigDecimal.ZERO;
           for (XhDxKhBanDauGiaPhanLo phanLoDtl : dtlsPhanLo) {

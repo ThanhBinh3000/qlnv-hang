@@ -18,17 +18,15 @@ import java.util.List;
 public class HhQdPduyetKqcgHdrReq  {
     private Long id;
     private Integer namKh;
-    private String soQdPdCg;
+    private String soQd;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKy;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayHluc;
-    private Long idQdPdKh;
     private String soQdPdKh;
     private String trichYeu;
     private String ghiChu;
     private String maDvi;
-    private String tenDvi;
     private String diaChiCgia;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date tgianMkho;
@@ -38,8 +36,7 @@ public class HhQdPduyetKqcgHdrReq  {
     private String cloaiVthh;
     private String moTaHangHoa;
     private String trangThai;
-
-    private List<FileDinhKemReq> fileDinhkems =new ArrayList<>();
-
-    private List<HhChiTietTTinChaoGiaReq> hhChiTietTTinChaoGiaReqList = new ArrayList<>();
+    private Long idQdPdKh;
+    private Long idQdPdKhDtl;
+    private List<FileDinhKemReq> fileDinhKems;
 }
