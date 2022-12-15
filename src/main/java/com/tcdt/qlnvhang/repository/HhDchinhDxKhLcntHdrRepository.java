@@ -14,7 +14,7 @@ import java.util.Optional;
 
 public interface HhDchinhDxKhLcntHdrRepository extends CrudRepository<HhDchinhDxKhLcntHdr, Long> {
 
-    Optional<HhDchinhDxKhLcntHdr> findBySoQd(String soQd);
+    Optional<HhDchinhDxKhLcntHdr> findBySoQdDc(String soQd);
 
     List<HhDchinhDxKhLcntHdr> findAllByIdIn (List<Long> ids);
 
