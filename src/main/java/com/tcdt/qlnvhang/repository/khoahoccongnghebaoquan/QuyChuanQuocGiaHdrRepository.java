@@ -25,6 +25,7 @@ public interface QuyChuanQuocGiaHdrRepository extends JpaRepository<QuyChuanQuoc
             " AND (:#{#param.ngayKyDen}  IS NULL OR c.ngayKy <= :#{#param.ngayKyDen}) ) " +
             " AND ((:#{#param.ngayHieuLucTu}  IS NULL OR c.ngayHieuLuc >= :#{#param.ngayHieuLucTu})" +
             " AND (:#{#param.ngayHieuLucDen}  IS NULL OR c.ngayHieuLuc <= :#{#param.ngayHieuLucDen}) ) " +
+            " AND (:#{#param.trangThai} IS NULL OR LOWER(c.trangThai)=:#{#param.trangThai} )"+
             " AND (:#{#param.maDvi} IS NULL OR LOWER(c.maDvi) LIKE LOWER(CONCAT(:#{#param.maDvi},'%')))  "
     )
     Page<QuyChuanQuocGiaHdr> search(@Param("param") SearchQuyChuanQgReq param, Pageable pageable);

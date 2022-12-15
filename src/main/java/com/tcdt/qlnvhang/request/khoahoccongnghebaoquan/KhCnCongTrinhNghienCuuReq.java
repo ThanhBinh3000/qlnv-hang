@@ -56,6 +56,8 @@ public class KhCnCongTrinhNghienCuuReq {
 
     private List<FileDinhKemReq> fileDinhKemReq = new ArrayList<>();
 
+    private List<FileDinhKemReq> fileDinhKemReq1 = new ArrayList<>();
+
     private List<KhCnTienDoThucHienReq> tienDoThucHien=new ArrayList<>();
 
     private List<KhCnNghiemThuThanhLyReq> children = new ArrayList<>();
