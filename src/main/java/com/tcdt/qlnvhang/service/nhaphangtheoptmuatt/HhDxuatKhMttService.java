@@ -318,7 +318,7 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
         List<HhDxuatKhMttHdr> data=page.getContent();
 
         String title="Danh sách đề xuất kế hoạch mua trực tiếp";
-        String[] rowsName=new String[]{"STT","Số kế hoạch/đề xuất","Năm tạo","Ngày tạo","Ngày duyệt","Trích yếu","Số QĐ giao chỉ tiêu","Loại hàng hóa","Chủng loại hàng hóa","Số lượng(tấn)","Trạng thái đề xuất","Mã tổng hợp"};
+        String[] rowsName=new String[]{"STT","Số kế hoạch/đề xuất","Năm kế hoạch","Ngày tạo","Ngày duyệt","Trích yếu","Số QĐ giao chỉ tiêu","Loại hàng hóa","Chủng loại hàng hóa","Số lượng(tấn)","Trạng thái đề xuất","Mã tổng hợp"};
         String fileName="danh-sach-dx-kh-mua-truc-tiep.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs=null;
