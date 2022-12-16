@@ -23,6 +23,7 @@ import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.XhDxKhBanDauGia
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.XhDxKhBanDauGiaDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.XhDxKhBanDauGiaPhanLo;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -346,7 +347,7 @@ public class XhDxKhBanDauGiaService extends BaseServiceImpl {
 
         String title = "Danh sách đề xuất kế hoạch mua trực tiếp";
         String[] rowsName = new String[]{"STT", "Năm kế hoạch", "Số kế hoạch", "Đơn vị", "Ngày lập kế hoạch", "Ngày ký", "Trích yếu", "Loại hành hóa", "Chủng loại hành hóa", "Số QĐ giao chỉ tiêu", "Số QĐ phê duyệt KH bán đấu giá", "Trạng thái"};
-        String fileName = "danh-sách-đề-xuất-kế-hoạch-mua-trực-tiếp.xlsx";
+        String filename = "danh-sách-đề-xuất-kế-hoạch-mua-trực-tiếp.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
         for (int i = 0; i <data.size(); i ++){
@@ -363,7 +364,11 @@ public class XhDxKhBanDauGiaService extends BaseServiceImpl {
             objs[9] = dx.getSoQdCtieu();
             objs[10] = dx.getSoQdPd();
             objs[11] = dx.getTenTrangThai();
+            dataList.add(objs);
         }
+
+        ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+        ex.export();
     }
 
     public BigDecimal countSoLuongKeHoachNam(CountKhlcntSlReq req) throws Exception {
