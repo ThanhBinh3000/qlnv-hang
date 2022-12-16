@@ -36,7 +36,7 @@ public class XhQdDchinhKhBdgController extends BaseController {
     private XhQdPdKhBdgService xhQdPdKhBdgService;
 
     @ApiOperation(value = "Tra cứu Quyết định điều chỉnh kế hoạch bán đấu giá  ", response = List.class)
-    @PostMapping(value=  PathContains.QD_DC_BDG + PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value=   PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody XhQdPdKhBdgSearchReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -52,7 +52,7 @@ public class XhQdDchinhKhBdgController extends BaseController {
     }
 
     @ApiOperation(value = "Tạo mới Quyết định điều chỉnh kế hoạch bán đấu giá lương thực", response = List.class)
-    @PostMapping(value =PathContains.QD_DC_BDG + PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<BaseResponse> insert(HttpServletRequest request,
                                                @Valid @RequestBody XhQdPdKhBdgReq objReq) {
@@ -70,7 +70,7 @@ public class XhQdDchinhKhBdgController extends BaseController {
     }
 
     @ApiOperation(value = "Lấy chi tiết Quyết định điều chỉnh kế hoạch bán đấu giá", response = List.class)
-    @GetMapping(value = PathContains.QD_DC_BDG + PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value =  PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> detail(
             @ApiParam(value = "ID phương án kế hoạch bán đấu giá", example = "1", required = true) @PathVariable("ids") String ids) {
@@ -88,7 +88,7 @@ public class XhQdDchinhKhBdgController extends BaseController {
     }
 
     @ApiOperation(value = "Xoá quyết định điều chỉnh kế hoạch bán đấu giá", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PostMapping(value = PathContains.QD_DC_BDG + PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value =  PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
@@ -107,7 +107,7 @@ public class XhQdDchinhKhBdgController extends BaseController {
 
 
     @ApiOperation(value = "Xoá danh sách quyết định điều chỉnh kế hoạch bán đấu giá", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PostMapping(value = PathContains.QD_DC_BDG + PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value =  PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> deleteMuilti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
@@ -126,7 +126,7 @@ public class XhQdDchinhKhBdgController extends BaseController {
 
 
     @ApiOperation(value = "Cập nhật Quyết định điều chỉnh kế hoạch bán đấu giá", response = List.class)
-    @PostMapping(value =PathContains.QD_DC_BDG + PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> update(HttpServletRequest request,
                                                @Valid @RequestBody XhQdPdKhBdgReq objReq) {
         BaseResponse resp = new BaseResponse();
@@ -143,7 +143,7 @@ public class XhQdDchinhKhBdgController extends BaseController {
     }
 
     @ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 Quyết định điều chỉnh kế hoạch bán đấu giá", response = List.class)
-    @PostMapping(value = PathContains.QD_DC_BDG + PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value =  PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> updateStatus(@Valid HttpServletRequest req, @RequestBody StatusReq stReq) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -161,7 +161,7 @@ public class XhQdDchinhKhBdgController extends BaseController {
 
 
     @ApiOperation(value = "Kết xuất danh sách ", response = List.class)
-    @PostMapping(value= PathContains.QD_DC_BDG + PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value=  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void exportListQdBtcBnToExcel(@Valid @RequestBody XhQdPdKhBdgSearchReq objReq, HttpServletResponse response) throws Exception{
 
