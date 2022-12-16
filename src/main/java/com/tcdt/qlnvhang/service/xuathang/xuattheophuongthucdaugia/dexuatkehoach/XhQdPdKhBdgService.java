@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.service.xuathang.xuattheophuongthucdaugia;
+package com.tcdt.qlnvhang.service.xuathang.xuattheophuongthucdaugia.dexuatkehoach;
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
@@ -515,7 +515,6 @@ public class XhQdPdKhBdgService extends BaseServiceImpl {
             }
             this.cloneProject(dataDB.getId());
             this.cloneForToChucBdg(dataDB);
-//            this.validateData(dataDB);
         }
         XhQdPdKhBdg createCheck = xhQdPdKhBdgRepository.save(dataDB);
         return createCheck;
