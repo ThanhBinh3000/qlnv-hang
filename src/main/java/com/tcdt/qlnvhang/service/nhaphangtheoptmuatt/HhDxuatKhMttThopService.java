@@ -126,6 +126,7 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
             thopDtl.setGhiChu(dXuat.getGhiChu());
             thopDtl.setNguonVon(dXuat.getNguonVon());
             thopDtl.setTongMucDt(dXuat.getTongMucDt());
+            thopDtl.setMoTaHangHoa(dXuat.getMoTaHangHoa());
 
 //            List<HhDxuatKhMttSldd> dtlslDd = hhDxuatKhMttSlddRepository.findAllByIdDxKhmtt(dXuat.getId());
 //            BigDecimal soLuong = BigDecimal.ZERO;
