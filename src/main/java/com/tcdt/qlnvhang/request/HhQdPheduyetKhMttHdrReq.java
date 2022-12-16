@@ -42,7 +42,6 @@ public class HhQdPheduyetKhMttHdrReq {
 
     private String trangThai;
 
-    private String trangThaiTkhai;
 
     private String loaiVthh;
 
