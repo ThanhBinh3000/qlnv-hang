@@ -79,7 +79,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		int page = objReq.getPaggingReq().getPage();
 		int limit = objReq.getPaggingReq().getLimit();
 		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").descending());
-		Page<HhDchinhDxKhLcntHdr> data = hdrRepository.selectPage(objReq.getNamKh(),objReq.getSoQdinh(), objReq.getTrichYeu(),
+		Page<HhDchinhDxKhLcntHdr> data = hdrRepository.selectPage(objReq.getNam(),objReq.getSoQdinh(), objReq.getTrichYeu(),objReq.getLoaiVthh(),
 				convertDateToString(objReq.getTuNgayQd()),
 				convertDateToString(objReq.getDenNgayQd()),
 				pageable);
@@ -87,16 +87,6 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		data.getContent().forEach(f->{
 			f.setTenLoaiVthh(hashMapDmHh.get(f.getLoaiVthh()));
 		});
-		List<Long> ids = data.getContent().stream().map(HhDchinhDxKhLcntHdr::getId).collect(Collectors.toList());
-		List<Object[]> listGthau = dtlRepository.countAllByDcHdr(ids);
-		Map<String,String> soGthau = new HashMap<>();
-		for (Object[] it: listGthau) {
-			soGthau.put(it[0].toString(),it[1].toString());
-		}
-		for (HhDchinhDxKhLcntHdr hdr:data.getContent()) {
-			hdr.setSoGoiThau(Long.parseLong(soGthau.get(hdr.getId().toString())));
-			hdr.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(hdr.getTrangThai()));
-		}
 		return data;
 	}
 

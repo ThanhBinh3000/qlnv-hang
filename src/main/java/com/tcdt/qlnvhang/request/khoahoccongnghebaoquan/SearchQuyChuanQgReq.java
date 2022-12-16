@@ -14,9 +14,10 @@ public class SearchQuyChuanQgReq extends BaseRequest {
     private String cloaiVthh;
     private String trichYeu;
     private String trangThai;
+    private String apDungTai;
     private LocalDate ngayKyTu;
     private LocalDate ngayKyDen;
     private LocalDate ngayHieuLucTu;
     private LocalDate ngayHieuLucDen;
-    private String maDvi;
+//    private String maDvi;
 }
