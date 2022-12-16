@@ -27,7 +27,7 @@ public interface HhDchinhDxKhLcntHdrRepository extends CrudRepository<HhDchinhDx
             " WHERE (:nam IS NULL OR HDR.NAM = TO_NUMBER(:nam)) "+
             " AND (:soQd IS NULL OR LOWER(HDR.SO_QD_DC) LIKE LOWER(CONCAT(CONCAT('%', :soQd),'%'))) "+
             " AND (:trichYeu IS NULL OR LOWER(HDR.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%'))) "+
-            "  AND (:loaiVthh IS NULL OR HDR.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) " +
+            " AND (:loaiVthh IS NULL OR HDR.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) " +
             " AND (:tuNgayQd IS NULL OR HDR.NGAY_QD >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) "+
             " AND (:denNgayQd IS NULL OR HDR.NGAY_QD <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) ",
             nativeQuery = true)
