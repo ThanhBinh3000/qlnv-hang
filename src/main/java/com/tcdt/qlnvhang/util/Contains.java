@@ -302,4 +302,9 @@ public class Contains {
 		DateFormat df = new SimpleDateFormat(Contains.FORMAT_DATE_STR);
 		return df.format(date);
 	}
+	public static class NguoiLienQuan{
+		public static String KHACH_MOI="KM";
+		public static String DAU_GIA_VIEN="DGV";
+		public static String NGUOI_THAM_GIA="NTG";
+	}
 }
