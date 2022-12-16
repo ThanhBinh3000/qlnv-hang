@@ -48,7 +48,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
 
     public Page<QuyChuanQuocGiaHdr> searchPage(SearchQuyChuanQgReq objReq) throws Exception{
         UserInfo userInfo= SecurityContextService.getUser();
-        objReq.setMaDvi(userInfo.getDvql());
+//        objReq.setMaDvi(userInfo.getDvql());
         Pageable pageable= PageRequest.of(objReq.getPaggingReq().getPage(),
                 objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<QuyChuanQuocGiaHdr> data = quyChuanQuocGiaHdrRepository.search(objReq,pageable);
