@@ -61,7 +61,6 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
                 objReq.getTrangThai(),
                 objReq.getTuNam(),
                 objReq.getDenNam(),
-                userInfo.getDvql(),
                 pageable);
 
         data.getContent().forEach( f -> {
