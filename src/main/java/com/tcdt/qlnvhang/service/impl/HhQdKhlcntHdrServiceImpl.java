@@ -119,6 +119,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setFileDinhKems(fileDinhKemList);
 		dataMap.setLastest(objReq.getLastest());
+		dataMap.setMaDvi(getUser().getDvql());
 		hhQdKhlcntHdrRepository.save(dataMap);
 
 		// Update trạng thái tổng hợp dxkhclnt
@@ -157,6 +158,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		dataMap.setFileDinhKems(fileDinhKemList);
 		dataMap.setLastest(objReq.getLastest());
 		dataMap.setTrangThaiDt(NhapXuatHangTrangThaiEnum.CHUACAPNHAT.getId());
+		dataMap.setMaDvi(getUser().getDvql());
 		hhQdKhlcntHdrRepository.save(dataMap);
 
 		// Update trạng thái tờ trình
