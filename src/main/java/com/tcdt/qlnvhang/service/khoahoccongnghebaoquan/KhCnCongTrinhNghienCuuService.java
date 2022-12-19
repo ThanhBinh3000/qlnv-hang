@@ -148,7 +148,6 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Collections.singleton(KhCnCongTrinhNghienCuu.TABLE_NAME));
         data.setFileDinhKems(fileDinhKems);
         List<FileDinhKem> fileDinhKems1 = fileDinhKemService.search(data.getId(), Collections.singleton(KhCnNghiemThuThanhLy.TABLE_NAME));
-        data.setFileDinhKems(fileDinhKems);
         data.setFileDinhKems1(fileDinhKems1);
         return data;
     }
