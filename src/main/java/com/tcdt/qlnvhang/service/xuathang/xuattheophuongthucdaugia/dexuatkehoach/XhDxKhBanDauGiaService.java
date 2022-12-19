@@ -10,10 +10,7 @@ import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.SearchXhDxKhBanDauGia;
-import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.XhDxKhBanDauGiaDtlReq;
-import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.XhDxKhBanDauGiaPhanLoReq;
-import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.XhDxKhBanDauGiaReq;
+import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.*;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -103,32 +100,56 @@ public class XhDxKhBanDauGiaService extends BaseServiceImpl {
         dataMap.setTrangThaiTh(Contains.CHUATONGHOP);
         Map<String, String> hashMapDmdv = getListDanhMucDvi(null, null, "01");
         dataMap.setTenDvi(StringUtils.isEmpty(userInfo.getDvql()) ? null : hashMapDmdv.get(userInfo.getDvql()));
-        this.validateData(dataMap, dataMap.getTrangThai());
+        this.validateData(dataMap,dataMap.getTrangThai());
         XhDxKhBanDauGia created=xhDxKhBanDauGiaRepository.save(dataMap);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),dataMap.getId(),"XH_DX_KH_BAN_DAU_GIA");
         created.setFileDinhKems(fileDinhKems);
 
+        this.saveDetail(objReq,dataMap.getId());
+         return dataMap;
+    }
+
+
+
+    public void validateData(XhDxKhBanDauGia objHdr,String trangThai) throws Exception {
+       if (objHdr.getLoaiVthh().startsWith("02")){
+
+       }else {
+           if (trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.DUTHAO.getId())){
+               XhDxKhBanDauGia dXuat = xhDxKhBanDauGiaRepository.findAllByLoaiVthhAndCloaiVthhAndNamKhAndMaDviAndTrangThaiNot(objHdr.getLoaiVthh(), objHdr.getCloaiVthh(), objHdr.getNamKh(), objHdr.getMaDvi(),NhapXuatHangTrangThaiEnum.DUTHAO.getId());
+               if (!ObjectUtils.isEmpty(dXuat) && !dXuat.getId().equals(objHdr.getId())){
+                   throw new Exception("Chủng loại hàng hóa đã được tạo và gửi duyệt, xin vui lòng chọn lại chủng loại hàng hóa khác");
+               }
+           }
+           if (trangThai.equals(NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId())){
+               for (XhDxKhBanDauGiaPhanLo chiCuc : objHdr.getDsPhanLoList()){
+                   BigDecimal aLong = xhDxKhBanDauGiaRepository.countSLDalenKh(objHdr.getNamKh(), objHdr.getLoaiVthh(), chiCuc.getMaDvi(),NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
+                   BigDecimal soLuongTotal = aLong.add(chiCuc.getSoLuong());
+                   if (soLuongTotal.compareTo(chiCuc.getSoLuongChiTieu()) > 0){
+                       throw new Exception(chiCuc.getTenDvi() + " đã nhập quá số lượng chi tiêu, vui lòng nhập lại");
+                   }
+               }
+           }
+       }
+    }
+
+
+    @Transactional
+    void saveDetail(XhDxKhBanDauGiaReq objReq, Long idHdr) {
+//        Xoa tất cả các Dx và lưu mới
+        xhDxKhBanDauGiaPhanLoRepository.deleteAllByIdDxKhbdg(idHdr);
         for (XhDxKhBanDauGiaPhanLoReq pl : objReq.getDsPhanLoReq()){
             XhDxKhBanDauGiaPhanLo data = new ModelMapper().map(pl, XhDxKhBanDauGiaPhanLo.class);
-            data.setIdDxKhbdg(dataMap.getId());
+            data.setId(null);
+            data.setIdDxKhbdg(idHdr);
             BigDecimal giaKhoiDiem = data.getGiaKhongVat().multiply(data.getSoLuong());
             data.setGiaKhoiDiem(giaKhoiDiem);
             xhDxKhBanDauGiaPhanLoRepository.save(data);
-            for (XhDxKhBanDauGiaDtlReq phanLoDl : pl.getChildren()) {
-                XhDxKhBanDauGiaDtl dataphanLoDl = new ModelMapper().map(phanLoDl, XhDxKhBanDauGiaDtl.class);
-                dataphanLoDl.setIdPhanLo(data.getId());
-                dataphanLoDl.setGiaKhoiDiem(dataphanLoDl.getGiaKhongVat().multiply(dataphanLoDl.getSoLuong()));
-                xhDxKhBanDauGiaDtlRepository.save(dataphanLoDl);
-            }
-        }
-    return dataMap;
-    }
-
-    public void validateData(XhDxKhBanDauGia objHdr,String trangThai) throws Exception {
-        if(trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.DUTHAO.getId())){
-            XhDxKhBanDauGia dXuat = xhDxKhBanDauGiaRepository.findAllByLoaiVthhAndCloaiVthhAndNamKhAndMaDviAndTrangThaiNot(objHdr.getLoaiVthh(), objHdr.getCloaiVthh(), objHdr.getNamKh(), objHdr.getMaDvi(),NhapXuatHangTrangThaiEnum.DUTHAO.getId());
-            if(!ObjectUtils.isEmpty(dXuat) && !dXuat.getId().equals(objHdr.getId())){
-                throw new Exception("Chủng loại hàng hóa đã được tạo và gửi duyệt, xin vui lòng chọn lại chủng loại hàng hóa khác");
+            xhDxKhBanDauGiaDtlRepository.deleteAllByIdPhanLo(data.getId());
+            for (XhDxKhBanDauGiaDtlReq dtlReq : pl.getChildren()){
+                XhDxKhBanDauGiaDtl dtl = new ModelMapper().map(dtlReq, XhDxKhBanDauGiaDtl.class);
+                dtl.setIdPhanLo(data.getId());
+                xhDxKhBanDauGiaDtlRepository.save(dtl);
             }
         }
     }
@@ -166,26 +187,10 @@ public class XhDxKhBanDauGiaService extends BaseServiceImpl {
         dataDTB.setNguoiSuaId(userInfo.getId());
 
 
-
         xhDxKhBanDauGiaRepository.save(dataDTB);
 
-//        Xóa tất cả phân lô và lưu mới
-        xhDxKhBanDauGiaPhanLoRepository.deleteAllByIdDxKhbdg(dataMap.getId());
-        for (XhDxKhBanDauGiaPhanLoReq pl : objReq.getDsPhanLoReq()){
-            XhDxKhBanDauGiaPhanLo data = new ModelMapper().map(pl, XhDxKhBanDauGiaPhanLo.class);
-            data.setId(null);
-            data.setIdDxKhbdg(dataDTB.getId());
-            BigDecimal giaKhoiDiem = data.getGiaKhongVat().multiply(data.getSoLuong());
-            data.setGiaKhoiDiem(giaKhoiDiem);
-            xhDxKhBanDauGiaPhanLoRepository.save(data);
-            xhDxKhBanDauGiaDtlRepository.deleteAllByIdPhanLo(data.getId());
-            for (XhDxKhBanDauGiaDtlReq ddNhap : pl.getChildren()){
-                XhDxKhBanDauGiaDtl dataDdNhap = new ModelMapper().map(ddNhap, XhDxKhBanDauGiaDtl.class);
-                dataDdNhap.setId(null);
-                dataDdNhap.setIdPhanLo(data.getId());
-                xhDxKhBanDauGiaDtlRepository.save(dataDdNhap);
-            }
-        }
+        this.saveDetail(objReq,dataDTB.getId());
+
         return dataDTB;
     }
 

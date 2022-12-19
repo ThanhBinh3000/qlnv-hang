@@ -123,6 +123,7 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
         dataMap.setTrangThai(Contains.DUTHAO);
         dataMap.setNguoiTao(getUser().getUsername());
         dataMap.setLastest(objReq.getLastest());
+        dataMap.setMaDvi(getUser().getDvql());
         HhQdPheduyetKhMttHdr created=hhQdPheduyetKhMttHdrRepository.save(dataMap);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),dataMap.getId(),"HH_QD_PHE_DUYET_KHMTT_HDR");
         created.setFileDinhKems(fileDinhKems);
@@ -141,8 +142,8 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
     }
 
 
-    @Transactional
-    void saveDetail(HhQdPheduyetKhMttHdrReq  objReq, HhQdPheduyetKhMttHdr dataMap){
+  @Transactional
+  void saveDetail(HhQdPheduyetKhMttHdrReq objReq, HhQdPheduyetKhMttHdr dataMap){
         hhQdPheduyetKhMttDxRepository.deleteAllByIdQdHdr(dataMap.getId());
         for (HhQdPheduyetKhMttDxReq dx : objReq.getDsDiaDiem()){
             HhQdPheduyetKhMttDx qd = ObjectMapperUtils.map(dx, HhQdPheduyetKhMttDx.class);
@@ -151,23 +152,21 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
             qd.setIdQdHdr(dataMap.getId());
             qd.setTrangThaiTkhai(Contains.CHUACAPNHAT);
             hhQdPheduyetKhMttDxRepository.save(qd);
-            for (HhQdPheduyetKhMttSLDDReq gtList : ObjectUtils.isEmpty(dx.getDsSlddDtlList()) ? dx.getChildren() : dx.getDsSlddDtlList()){
-                HhQdPheduyetKhMttSLDD gt = ObjectMapperUtils.map(gtList, HhQdPheduyetKhMttSLDD.class);
-                hhQdPdKhMttSlddDtlRepositoryl.deleteAllByIdDiaDiem(gt.getId());
-                gt.setId(null);
-                gt.setIdQdDtl(qd.getId());
-                gt.setTrangThai(Contains.CHUACAPNHAT);
-                hhQdPheduyetKhMttSLDDRepository.save(gt);
-                for (HhQdPdKhMttSlddDtlReq ddNhap : gtList.getChildren()){
-                    HhQdPdKhMttSlddDtl dataDdNhap = new ModelMapper().map(ddNhap, HhQdPdKhMttSlddDtl.class);
-                    dataDdNhap.setId(null);
-                    dataDdNhap.setIdDiaDiem(gt.getId());
-                    hhQdPdKhMttSlddDtlRepositoryl.save(dataDdNhap);
-
+            for (HhQdPheduyetKhMttSLDDReq slddReq  :ObjectUtils.isEmpty(dx.getDsSlddDtlList()) ? dx.getChildren() : dx.getDsSlddDtlList()) {
+                HhQdPheduyetKhMttSLDD sldd = new ModelMapper().map(slddReq , HhQdPheduyetKhMttSLDD.class);
+                sldd.setId(null);
+                sldd.setIdQdDtl(qd.getId());
+                hhQdPheduyetKhMttSLDDRepository.save(sldd);
+                hhQdPdKhMttSlddDtlRepositoryl.deleteAllByIdDiaDiem(slddReq.getId());
+                for (HhQdPdKhMttSlddDtlReq slddDtlReq : slddReq.getChildren()){
+                    HhQdPdKhMttSlddDtl slddDtl = new ModelMapper().map(slddDtlReq,HhQdPdKhMttSlddDtl.class );
+                    slddDtl.setId(null);
+                    slddDtl.setIdDiaDiem(sldd.getId());
+                    hhQdPdKhMttSlddDtlRepositoryl.save(slddDtl);
                 }
             }
         }
-    }
+  }
 
 
     @Transactional
@@ -346,25 +345,26 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
                 throw new Exception("Phê duyệt không thành công");
         }
         dataDB.setTrangThai(stReq.getTrangThai());
-        if (stReq.getTrangThai().equals(Contains.BAN_HANH)){
-            if (dataDB.getPhanLoai().equals("TH")){
+        if (stReq.getTrangThai().equals(Contains.BAN_HANH)) {
+            if(dataDB.getPhanLoai().equals("TH")){
                 Optional<HhDxKhMttThopHdr> qOptional = hhDxuatKhMttThopRepository.findById(dataDB.getIdThHdr());
-                if (qOptional.isPresent()){
-                    if (qOptional.get().getTrangThai().equals(Contains.DABANHANH_QD)){
+                if(qOptional.isPresent()){
+                    if(qOptional.get().getTrangThai().equals(Contains.DABANHANH_QD)){
                         throw new Exception("Tổng hợp kế hoạch này đã được quyết định");
                     }
                     hhDxuatKhMttThopRepository.updateTrangThai(dataDB.getIdThHdr(), Contains.DABANHANH_QD);
-                }else {
+                }else{
                     throw new Exception("Tổng hợp kế hoạch không được tìm thấy");
                 }
-            }else {
+            }else{
                 Optional<HhDxuatKhMttHdr> qOptional = hhDxuatKhMttRepository.findById(dataDB.getIdTrHdr());
-                if (qOptional.isPresent()){
-                    if (qOptional.get().getTrangThai().equals(Contains.DABANHANH_QD)){
+                if(qOptional.isPresent()){
+                    if(qOptional.get().getTrangThai().equals(Contains.DABANHANH_QD)){
                         throw new Exception("Đề xuất này đã được quyết định");
                     }
+                    // Update trạng thái tờ trình
                     hhDxuatKhMttRepository.updateStatusInList(Arrays.asList(dataDB.getSoTrHdr()), Contains.DABANHANH_QD);
-                }else {
+                }else{
                     throw new Exception("Số tờ trình kế hoạch không được tìm thấy");
                 }
             }
@@ -387,36 +387,36 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
         }
     }
 
-    private void cloneProject(Long idClone) throws Exception {
+    private void cloneProject(Long idClone) throws Exception{
         HhQdPheduyetKhMttHdr hdr = this.detail(idClone.toString());
-            HhQdPheduyetKhMttHdr hdrClone = new HhQdPheduyetKhMttHdr();
-            BeanUtils.copyProperties(hdr, hdrClone);
-            hdrClone.setId(null);
-            hdrClone.setLastest(true);
-            hdrClone.setIdGoc(hdr.getId());
-            hhQdPheduyetKhMttHdrRepository.save(hdrClone);
-            for (HhQdPheduyetKhMttDx dx: hdr.getChildren()){
-                HhQdPheduyetKhMttDx dxClone = new HhQdPheduyetKhMttDx();
-                BeanUtils.copyProperties(dx, dxClone);
-                dxClone.setId(null);
-                dxClone.setIdQdHdr(hdrClone.getId());
-                hhQdPheduyetKhMttDxRepository.save(dxClone);
-                for (HhQdPheduyetKhMttSLDD mttSLDD : dx.getChildren()){
-                    HhQdPheduyetKhMttSLDD slddClone = new HhQdPheduyetKhMttSLDD();
-                    BeanUtils.copyProperties(mttSLDD, slddClone);
-                    slddClone.setId(null);
-                    slddClone.setIdQdDtl(dxClone.getId());
-                    hhQdPheduyetKhMttSLDDRepository.save(slddClone);
-                    for (HhQdPdKhMttSlddDtl dsDdnhap : slddClone.getChildren()){
-                        HhQdPdKhMttSlddDtl dsDdNhapClone = new HhQdPdKhMttSlddDtl();
-                        BeanUtils.copyProperties(dsDdnhap, dsDdNhapClone);
-                        dsDdNhapClone.setId(null);
-                        dsDdNhapClone.setIdDiaDiem(slddClone.getId());
-                        hhQdPdKhMttSlddDtlRepositoryl.save(dsDdNhapClone);
-                    }
+        HhQdPheduyetKhMttHdr hdrClone = new HhQdPheduyetKhMttHdr();
+        BeanUtils.copyProperties(hdr, hdrClone);
+        hdrClone.setId(null);
+        hdrClone.setLastest(true);
+        hdrClone.setIdGoc(hdr.getId());
+        hhQdPheduyetKhMttHdrRepository.save(hdrClone);
+        for (HhQdPheduyetKhMttDx dx: hdr.getChildren()){
+            HhQdPheduyetKhMttDx dxClone = new HhQdPheduyetKhMttDx();
+            BeanUtils.copyProperties(dx, dxClone);
+            dxClone.setId(null);
+            dxClone.setIdQdHdr(hdrClone.getId());
+            hhQdPheduyetKhMttDxRepository.save(dxClone);
+            for (HhQdPheduyetKhMttSLDD sldd : dxClone.getChildren()){
+                HhQdPheduyetKhMttSLDD slddClone = new HhQdPheduyetKhMttSLDD();
+                BeanUtils.copyProperties(sldd, slddClone);
+                slddClone.setId(null);
+                slddClone.setIdQdDtl(dxClone.getId());
+                hhQdPheduyetKhMttSLDDRepository.save(slddClone);
+                for (HhQdPdKhMttSlddDtl  slddDtl : sldd.getChildren()){
+                    HhQdPdKhMttSlddDtl slddDtlClone = new HhQdPdKhMttSlddDtl();
+                    BeanUtils.copyProperties(slddDtl, slddDtlClone);
+                    slddDtlClone.setId(null);
+                    slddDtlClone.setIdDiaDiem(slddClone.getId());
+                    hhQdPdKhMttSlddDtlRepositoryl.save(slddDtlClone);
                 }
             }
         }
+    }
 
     public  void  export(HhQdPheduyetKhMttHdrSearchReq objReq, HttpServletResponse response) throws Exception{
         PaggingReq paggingReq = new PaggingReq();
@@ -440,7 +440,7 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
             objs[4]=pduyet.getSoTrHdr();
             objs[5]=pduyet.getIdThHdr();
             objs[6]=pduyet.getNamKh();
-            objs[7]=pduyet.getPthucMuatt();
+            objs[7]=pduyet.getPtMua();
             objs[8]=pduyet.getTenTrangThai();
             dataList.add(objs);
         }
