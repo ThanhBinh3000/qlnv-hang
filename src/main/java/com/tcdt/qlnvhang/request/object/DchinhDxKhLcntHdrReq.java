@@ -98,12 +98,6 @@ public class DchinhDxKhLcntHdrReq extends BaseRequest {
 	@ApiModelProperty(example = "Nội dung về việc")
 	String veViec;
 
-	//	@NotNull(message = "Không được để trống")
-	@Size(max = 4, message = "Năm kế hoạch không được vượt quá 4 ký tự")
-	@ApiModelProperty(example = "2022")
-	String namKhoach;
-
-
 	@Size(max = 500, message = "Ghi chú không được vượt quá 500 ký tự")
 	@ApiModelProperty(example = "Ghi chú")
 	String ghiChu;
