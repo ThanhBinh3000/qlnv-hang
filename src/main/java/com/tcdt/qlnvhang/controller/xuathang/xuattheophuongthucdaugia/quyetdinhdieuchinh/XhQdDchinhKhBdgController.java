@@ -8,7 +8,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.XhQdPdKhBdgReq;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.XhQdPdKhBdgSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgService;
+import com.tcdt.qlnvhang.service.xuathang.xuattheophuongthucdaugia.dexuatkehoach.XhQdPdKhBdgService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,14 +33,14 @@ import java.util.Map;
 @Api(tags = "Xuất hàng - Bán đấu giá - Kế hoạch bán đấu giá - Quyết định phê duyệt KH bán đấu giá")
 public class XhQdDchinhKhBdgController extends BaseController {
     @Autowired
-    private XhQdDchinhKhBdgService xhQdDchinhKhBdgService;
+    private XhQdPdKhBdgService xhQdPdKhBdgService;
 
     @ApiOperation(value = "Tra cứu Quyết định điều chỉnh kế hoạch bán đấu giá  ", response = List.class)
     @PostMapping(value=   PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody XhQdPdKhBdgSearchReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhQdDchinhKhBdgService.searchPage(objReq));
+            resp.setData(xhQdPdKhBdgService.searchPage(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -58,7 +58,7 @@ public class XhQdDchinhKhBdgController extends BaseController {
                                                @Valid @RequestBody XhQdPdKhBdgReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhQdDchinhKhBdgService.create(objReq));
+            resp.setData(xhQdPdKhBdgService.create(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -76,7 +76,7 @@ public class XhQdDchinhKhBdgController extends BaseController {
             @ApiParam(value = "ID phương án kế hoạch bán đấu giá", example = "1", required = true) @PathVariable("ids") String ids) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhQdDchinhKhBdgService.detail(ids));
+            resp.setData(xhQdPdKhBdgService.detail(ids));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -93,7 +93,7 @@ public class XhQdDchinhKhBdgController extends BaseController {
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            xhQdDchinhKhBdgService.delete(idSearchReq);
+            xhQdPdKhBdgService.delete(idSearchReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -112,7 +112,7 @@ public class XhQdDchinhKhBdgController extends BaseController {
     public ResponseEntity<BaseResponse> deleteMuilti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            xhQdDchinhKhBdgService.deleteMulti(idSearchReq);
+            xhQdPdKhBdgService.deleteMulti(idSearchReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -131,7 +131,7 @@ public class XhQdDchinhKhBdgController extends BaseController {
                                                @Valid @RequestBody XhQdPdKhBdgReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhQdDchinhKhBdgService.update(objReq));
+            resp.setData(xhQdPdKhBdgService.update(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -147,7 +147,7 @@ public class XhQdDchinhKhBdgController extends BaseController {
     public ResponseEntity<BaseResponse> updateStatus(@Valid HttpServletRequest req, @RequestBody StatusReq stReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhQdDchinhKhBdgService.approve(stReq));
+            resp.setData(xhQdPdKhBdgService.approve(stReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -166,7 +166,7 @@ public class XhQdDchinhKhBdgController extends BaseController {
     public void exportListQdBtcBnToExcel(@Valid @RequestBody XhQdPdKhBdgSearchReq objReq, HttpServletResponse response) throws Exception{
 
         try {
-            xhQdDchinhKhBdgService.export(objReq,response);
+            xhQdPdKhBdgService.export(objReq,response);
         } catch (Exception e) {
 
             log.error("Kết xuất danh sách : {}", e);

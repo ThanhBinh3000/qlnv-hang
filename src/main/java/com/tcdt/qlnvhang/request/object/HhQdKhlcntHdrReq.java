@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.object;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -120,7 +121,8 @@ public class HhQdKhlcntHdrReq {
 	String maDvi;
 
 	// Lương thực
-	private List<HhQdKhlcntDtlReq> dsDeXuat;
+	private List<HhQdKhlcntDtlReq> children = new ArrayList<>();
+
 	private List<FileDinhKemReq> fileDinhKems;
 	// Vật tư
 //	private List<HhQdKhlcntDsgthauReq> dsGoiThau;
