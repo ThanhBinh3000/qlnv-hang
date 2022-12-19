@@ -172,7 +172,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	@Transactional
 	void saveDetail(HhQdKhlcntHdrReq objReq,HhQdKhlcntHdr dataMap){
 		hhQdKhlcntDtlRepository.deleteAllByIdQdHdr(dataMap.getId());
-		for (HhQdKhlcntDtlReq dx : objReq.getDsDeXuat()){
+		for (HhQdKhlcntDtlReq dx : objReq.getChildren()){
 			HhQdKhlcntDtl qd = ObjectMapperUtils.map(dx, HhQdKhlcntDtl.class);
 			hhQdKhlcntDsgthauRepository.deleteByIdQdDtl(qd.getId());
 			qd.setId(null);

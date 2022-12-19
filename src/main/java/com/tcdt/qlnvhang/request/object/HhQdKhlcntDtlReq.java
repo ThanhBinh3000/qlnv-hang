@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.object;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -70,8 +71,8 @@ public class HhQdKhlcntDtlReq {
 
 	String loaiVthh;
 
-	private List<HhQdKhlcntDsgthauReq> dsGoiThau;
+	private List<HhQdKhlcntDsgthauReq> dsGoiThau = new ArrayList<>();
 
-	private List<HhQdKhlcntDsgthauReq> children;
+	private List<HhQdKhlcntDsgthauReq> children = new ArrayList<>();
 
 }

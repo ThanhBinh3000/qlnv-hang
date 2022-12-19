@@ -66,7 +66,7 @@ public class DchinhDxuatKhLcntController extends BaseController {
 
 	@ApiOperation(value = "Tạo ", response = List.class)
 	@PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> createDchinh(HttpServletRequest request, @Valid @RequestBody DchinhDxKhLcntHdrReq objReq) {
+	public ResponseEntity<BaseResponse> createDchinh(@Valid @RequestBody DchinhDxKhLcntHdrReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			resp.setData(dchinhDxuatKhLcntService.save(objReq));

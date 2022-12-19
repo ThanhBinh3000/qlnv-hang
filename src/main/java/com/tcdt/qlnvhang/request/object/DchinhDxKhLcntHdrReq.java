@@ -21,13 +21,22 @@ public class DchinhDxKhLcntHdrReq extends BaseRequest {
 
 	private Integer nam;
 
-	String trichYeu;
+	String soQdDc;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayQd;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayHluc;
+
+	String soQdGoc;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date ngayQdGoc;
+
+	String idQdGoc;
+
+	String trichYeu;
 
 	String loaiVthh;
 
@@ -74,9 +83,6 @@ public class DchinhDxKhLcntHdrReq extends BaseRequest {
 	@Size(max = 2, message = "Lý do từ chối không được vượt quá 2 ký tự")
 	@ApiModelProperty(example = "01")
 	String loaiDieuChinh;
-	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-	Date ngayQdGoc;
 
 	private List<FileDinhKemReq> fileDinhKem =  new ArrayList<>();
 
@@ -91,24 +97,6 @@ public class DchinhDxKhLcntHdrReq extends BaseRequest {
 	@Size(max = 250, message = "Về việc không được vượt quá 20 ký tự")
 	@ApiModelProperty(example = "Nội dung về việc")
 	String veViec;
-
-	//	@NotNull(message = "Không được để trống")
-	@Size(max = 4, message = "Năm kế hoạch không được vượt quá 4 ký tự")
-	@ApiModelProperty(example = "2022")
-	String namKhoach;
-
-	//	@NotNull(message = "Không được để trống")
-	@Size(max = 20, message = "Căn cứ quyết định giao chỉ tiêu không được vượt quá 20 ký tự")
-	@ApiModelProperty(example = "20-QD/TCDT")
-	String soQdGoc;
-
-	Long idQdGoc;
-
-	@NotNull(message = "Không được để trống")
-	@Size(max = 20, message = "Số quyết định không được vượt quá 20 ký tự")
-	@ApiModelProperty(example = "20-QD/TCDT")
-	String soQd;
-
 
 	@Size(max = 500, message = "Ghi chú không được vượt quá 500 ký tự")
 	@ApiModelProperty(example = "Ghi chú")
