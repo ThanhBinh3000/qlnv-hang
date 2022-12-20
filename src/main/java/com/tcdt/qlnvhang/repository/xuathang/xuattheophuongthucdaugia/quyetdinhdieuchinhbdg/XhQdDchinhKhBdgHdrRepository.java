@@ -25,6 +25,6 @@ public interface XhQdDchinhKhBdgHdrRepository extends JpaRepository<XhQdDchinhKh
   Page<XhQdDchinhKhBdgHdr> searchPage(Integer namKh, String soQdPd, String trichYeu, String ngayKyQdTu, String ngayKyQdDen, String soTrHdr, String loaiVthh, String trangThai, Integer lastest, String maDvi, Pageable pageable);
 
 
-  List<XhQdDchinhKhBdgHdr> findBySoQdPd(String soQdPd);
+  List<XhQdDchinhKhBdgHdr> findBySoQdDc(String soQdDc);
   List <XhQdDchinhKhBdgHdr> findAllByIdIn(List<Long> ids);
 }
