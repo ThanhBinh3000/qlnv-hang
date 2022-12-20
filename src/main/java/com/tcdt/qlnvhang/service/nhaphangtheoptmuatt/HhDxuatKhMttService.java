@@ -1,25 +1,17 @@
 package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
-import com.google.common.collect.Lists;
-import com.tcdt.qlnvhang.entities.FileDKemJoinDxKhLcntCcxdg;
-import com.tcdt.qlnvhang.entities.FileDKemJoinDxKhLcntHdr;
 import com.tcdt.qlnvhang.entities.FileDKemJoinDxKhMttCcxdg;
 import com.tcdt.qlnvhang.entities.FileDKemJoinDxKhMttHdr;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.*;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhDxuatKhMttCcxdgRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhDxuatKhMttRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhDxuatKhMttSlddDtlRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhDxuatKhMttSlddRepository;
-import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.*;
-import com.tcdt.qlnvhang.request.object.*;
 import com.tcdt.qlnvhang.service.SecurityContextService;
-import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDxuatKhMttCcxdg;
@@ -38,8 +30,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
-
-import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
@@ -158,21 +148,25 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
   }
 
     public void validateData(HhDxuatKhMttHdr objHdr,String trangThai) throws Exception {
-        if(trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.DUTHAO.getId())){
-            HhDxuatKhMttHdr dXuat = hhDxuatKhMttRepository.findAllByLoaiVthhAndCloaiVthhAndNamKhAndMaDviAndTrangThaiNot(objHdr.getLoaiVthh(), objHdr.getCloaiVthh(), objHdr.getNamKh(), objHdr.getMaDvi(), NhapXuatHangTrangThaiEnum.DUTHAO.getId());
-            if (!ObjectUtils.isEmpty(dXuat) && !dXuat.getId().equals(objHdr.getId())){
-                throw new Exception("Chủng loại hàng hóa đã được tạo và gửi duyệt, xin vui lòng chọn lại chủng loại hàng hóa khác");
-            }
-        }
-        if(trangThai.equals(NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId())) {
-            for (HhDxuatKhMttSldd chiCuc : objHdr.getDsSlddDtlList()){
-                BigDecimal aLong = hhDxuatKhMttRepository.countSLDalenKh(objHdr.getNamKh(), objHdr.getLoaiVthh(), chiCuc.getMaDvi(), NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
-                BigDecimal soLuongTotal = aLong.add(chiCuc.getSoLuong());
-                if (soLuongTotal.compareTo(chiCuc.getSoLuongChiTieu()) >  0){
-                    throw new Exception(chiCuc.getTenDvi() + " đã nhập quá số lượng chi tiêu, vui lòng nhập lại");
+            if(trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.DUTHAO.getId())){
+                HhDxuatKhMttHdr dXuat = hhDxuatKhMttRepository.findAllByLoaiVthhAndCloaiVthhAndNamKhAndMaDviAndTrangThaiNot(objHdr.getLoaiVthh(), objHdr.getCloaiVthh(), objHdr.getNamKh(), objHdr.getMaDvi(),NhapXuatHangTrangThaiEnum.DUTHAO.getId());
+                if(!ObjectUtils.isEmpty(dXuat) && !dXuat.getId().equals(objHdr.getId())){
+                    throw new Exception("Chủng loại hàng hóa đã được tạo và gửi duyệt, xin vui lòng chọn lại chủng loại hàng hóa khác");
                 }
             }
-        }
+            if(trangThai.equals(NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId())) {
+                for(HhDxuatKhMttSldd chiCuc : objHdr.getDsSlddDtlList()){
+                    BigDecimal aLong = hhDxuatKhMttRepository.countSLDalenKh(objHdr.getNamKh(), objHdr.getLoaiVthh(), chiCuc.getMaDvi(),NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
+                    BigDecimal soLuongTotal = aLong.add(chiCuc.getSoLuong());
+                    if (chiCuc.getSoLuongChiTieu() == null){
+                        throw new Exception("Hiện chưa có số lượng chỉ tiêu kế hoạch năm, vui lòng nhập lại");
+                    }
+                    if(soLuongTotal.compareTo(chiCuc.getSoLuongChiTieu()) > 0){
+                        throw new Exception(chiCuc.getTenDvi() + " đã nhập quá số lượng chi tiêu, vui lòng nhập lại");
+                    }
+                }
+            }
+
     }
 
     @Transactional
