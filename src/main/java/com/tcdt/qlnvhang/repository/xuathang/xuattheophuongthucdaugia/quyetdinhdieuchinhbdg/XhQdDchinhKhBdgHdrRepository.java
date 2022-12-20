@@ -12,7 +12,7 @@ import java.util.List;
 public interface XhQdDchinhKhBdgHdrRepository extends JpaRepository<XhQdDchinhKhBdgHdr, Long> {
   @Query(value = "select * from XH_QD_DC_KH_BDG BDG " +
       " where (:namKh IS NULL OR BDG.NAM_KH = TO_NUMBER(:namKh)) " +
-      "AND (:soQdPd IS NULL OR LOWER(BDG.SO_QD_PD) LIKE LOWER(CONCAT(CONCAT('%',:soQdPd),'%' ) ) )" +
+      "AND (:soQdDc IS NULL OR LOWER(BDG.SO_QD_DC) LIKE LOWER(CONCAT(CONCAT('%',:soQdDc),'%' ) ) )" +
       "AND (:trichYeu IS NULL OR LOWER(BDG.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%',:trichYeu),'%')))" +
       "AND (:ngayKyQdTu IS NULL OR BDG.NGAY_KY_QD >=  TO_DATE(:ngayKyQdTu,'yyyy-MM-dd')) " +
       "AND (:ngayKyQdDen IS NULL OR BDG.NGAY_KY_QD <= TO_DATE(:ngayKyQdDen,'yyyy-MM-dd'))" +

@@ -14,6 +14,7 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.*;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinh.XhQdDchinhKhBdgReq;
+import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinh.XhQdDchinhKhBdgSearchReq;
 import com.tcdt.qlnvhang.service.feign.KeHoachService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -82,13 +83,13 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
     @Autowired
     private XhTcTtinBdgHdrRepository xhTcTtinBdgHdrRepository;
 
-    public Page<XhQdDchinhKhBdgHdr> searchPage(XhQdPdKhBdgSearchReq objReq)throws Exception{
+    public Page<XhQdDchinhKhBdgHdr> searchPage(XhQdDchinhKhBdgSearchReq objReq)throws Exception{
 
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),
                 objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<XhQdDchinhKhBdgHdr> data = xhQdDchinhKhBdgHdrRepository.searchPage(
                 objReq.getNamKh(),
-                objReq.getSoQdPd(),
+                objReq.getSoQdDc(),
                 objReq.getTrichYeu(),
                 Contains.convertDateToString(objReq.getNgayKyQdTu()),
                 Contains.convertDateToString(objReq.getNgayKyQdDen()),
@@ -550,7 +551,7 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
         }
     }
 
-    public  void  export(XhQdPdKhBdgSearchReq objReq, HttpServletResponse response) throws Exception{
+    public  void  export(XhQdDchinhKhBdgSearchReq objReq, HttpServletResponse response) throws Exception{
         PaggingReq paggingReq = new PaggingReq();
         paggingReq.setPage(0);
         paggingReq.setLimit(Integer.MAX_VALUE);
