@@ -4,6 +4,9 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "HH_THONG_TIN_DVI_DTU_CCAP")
@@ -18,18 +21,22 @@ public class HhThongTinDviDtuCcap implements Serializable {
     @SequenceGenerator(sequenceName = "HH_THONG_TIN_DVI_DTU_CCAP_SEQ", allocationSize = 1, name = "HH_THONG_TIN_DVI_DTU_CCAP_SEQ")
 
     private Long id;
-    private Long idHdr;
-    private String maDvi;
-    private String tenDvi;
-    private String diaChi;
-    private String nguoiDdien;
-    private String chucVu;
-    private String sdt;
-    private String fax;
-    private String soTkhoan;
-    private String moTai;
-    private String giayUq;
-    private String type;
-    private String mst;
+    Long idHdr;
+    String shgt;
+    String tenGthau;
+    BigDecimal soLuong;
+    BigDecimal donGiaVat;
+    Long vat;
+    BigDecimal giaTruocVat;
+    BigDecimal giaSauVat;
+    String type;
+    String maDvi;
+    @Transient
+    String tenDvi;
+    String diaDiemNhap;
+    String trangThai;
+    @Transient
+    private List<HhDiaDiemGiaoNhanHang> children=new ArrayList<>();
+
 
 }
