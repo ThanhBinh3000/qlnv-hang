@@ -118,11 +118,11 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
             HhChiTietTTinChaoGia save = hhCtietTtinCgiaRepository.save(nthauDthau);
             listDuThau.add(nthauDthau);
         }
-        if(hhQdPheduyetKhMttDx.getPthucMuatt().equals(Contains.UY_QUYEN)){
+        if(hhQdPheduyetKhMttDx.getPtMua().equals(Contains.UY_QUYEN)){
             List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),hhQdPheduyetKhMttDx.getId(),"HH_QD_PHE_DUYET_KHMTT_DX");
             hhQdPheduyetKhMttDx.setFileDinhKemUyQuyen(fileDinhKems);
         }
-        if(hhQdPheduyetKhMttDx.getPthucMuatt().equals(Contains.MUA_LE)){
+        if(hhQdPheduyetKhMttDx.getPtMua().equals(Contains.MUA_LE)){
             List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),hhQdPheduyetKhMttDx.getId(),"HH_QD_PHE_DUYET_KHMTT_DX");
             hhQdPheduyetKhMttDx.setFileDinhKemMuaLe(fileDinhKems);
         }

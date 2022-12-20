@@ -54,7 +54,7 @@ public class HhQdPheduyetKhMttHdrReq {
     private String phanLoai;
 
 
-    private String pthucMuatt;
+    private String ptMua;
 
     private String diaDiemCgia;
 

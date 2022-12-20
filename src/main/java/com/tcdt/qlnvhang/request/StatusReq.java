@@ -13,4 +13,6 @@ public class StatusReq {
 	String trangThai;
 	@Size(max = 250, message = "Lý do không được vượt quá 250 ký tự")
 	String lyDo;
+	String lyDoTuChoi;
+
 }
