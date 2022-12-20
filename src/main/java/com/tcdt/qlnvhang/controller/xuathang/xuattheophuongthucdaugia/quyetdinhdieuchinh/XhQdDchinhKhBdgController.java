@@ -166,7 +166,7 @@ public class XhQdDchinhKhBdgController extends BaseController {
     @ApiOperation(value = "Kết xuất danh sách ", response = List.class)
     @PostMapping(value=  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void exportListQdBtcBnToExcel(@Valid @RequestBody XhQdPdKhBdgSearchReq objReq, HttpServletResponse response) throws Exception{
+    public void exportListQdBtcBnToExcel(@Valid @RequestBody XhQdDchinhKhBdgSearchReq objReq, HttpServletResponse response) throws Exception{
 
         try {
             xhQdDchinhKhBdgService.export(objReq,response);
