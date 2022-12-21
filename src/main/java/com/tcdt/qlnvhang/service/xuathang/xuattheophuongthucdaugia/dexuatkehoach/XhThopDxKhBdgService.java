@@ -159,7 +159,7 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
         }
         // Set thong tin hdr tong hop
         XhThopDxKhBdg thopHdr = sumarryData(objReq,req);
-        thopHdr.setId(objReq.getId());
+        thopHdr.setId(objReq.getIdTh());
         thopHdr.setNgayTao(getDateTimeNow());
         thopHdr.setNguoiTao(getUser().getUsername());
         thopHdr.setNgayDuyetTu(objReq.getNgayDuyetTu());
@@ -169,7 +169,6 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
         thopHdr.setTrangThai(Contains.CHUATAO_QD);
         thopHdr.setNgayThop(new Date());
         thopHdr.setNoiDungThop(objReq.getNoiDungThop());
-//        thopHdr.setSoQdPd(objReq.getSoQdPd());
         xhThopDxKhBdgRepository.save(thopHdr);
         for (XhThopDxKhBdgDtl dtl : thopHdr.getThopDxKhBdgDtlList()){
             dtl.setIdThopHdr(thopHdr.getId());

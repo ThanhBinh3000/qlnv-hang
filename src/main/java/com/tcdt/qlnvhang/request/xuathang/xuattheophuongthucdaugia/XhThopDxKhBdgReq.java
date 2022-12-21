@@ -18,6 +18,7 @@ import java.util.List;
 public class XhThopDxKhBdgReq extends XhThopChiTieuReq{
     @ApiModelProperty(notes = "Bắt buộc set đối với update")
     private Long id;
+    private Long idTh;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayThop;
     private String maDvi;
