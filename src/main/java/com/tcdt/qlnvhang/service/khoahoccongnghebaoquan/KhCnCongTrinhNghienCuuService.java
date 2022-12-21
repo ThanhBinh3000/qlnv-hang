@@ -194,9 +194,9 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         Page<KhCnCongTrinhNghienCuu> page=this.searchPage(objReq);
         List<KhCnCongTrinhNghienCuu> data=page.getContent();
 
-        String title="Danh sách đề xuất kế hoạch mua trực tiếp";
+        String title="Danh sách công trình nghiên cứu";
         String[] rowsName=new String[]{"STT","Mã đề tài","Tên đề tài","Cấp đề tài","Từ năm","Đến năm","Trang Thái"};
-        String fileName="danh-sach-dx-kh-mua-truc-tiep.xlsx";
+        String fileName="danh-sach-cong-trinh-nghien-cuu.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs=null;
         for (int i=0;i<data.size();i++){
