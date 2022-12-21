@@ -83,7 +83,6 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         if(optional.isPresent()){
             throw new Exception("số quyết định đã tồn tại");
         }
-        Map<String, String> hashMapDmdv = getListDanhMucDvi(null, null, "01");
         HhDcQdPduyetKhmttHdr data = new ModelMapper().map(objReq,HhDcQdPduyetKhmttHdr.class);
         data.setNgayTao(new Date());
         data.setNguoiTao(userInfo.getUsername());
@@ -101,11 +100,11 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
             hhDcQdPduyetKhMttDxRepository.save(dx);
             for (HhDcQdPduyetKhmttSlddReq listSLDD : listDx.getHhDcQdPduyetKhmttSlddList()){
                 HhDcQdPduyetKhmttSldd slDd =ObjectMapperUtils.map(listSLDD, HhDcQdPduyetKhmttSldd.class);
-                slDd.setIdDxKhmtt(dx.getIdDxuat());
+//                slDd.setIdDxKhmtt(dx.getIdDxuat());
                 slDd.setIdDcKhmtt(dx.getId());
-                slDd.setMaDiemKho(userInfo.getDvql());
-                slDd.setDonGiaVat(dx.getGiaCoThue());
-                slDd.setThanhTien(slDd.getDonGiaVat().multiply(slDd.getSoLuongDxmtt()));
+//                slDd.setMaDiemKho(userInfo.getDvql());
+//                slDd.setDonGiaVat(dx.getGiaCoThue());
+//                slDd.setThanhTien(slDd.getDonGiaVat().multiply(slDd.getSoLuongDxmtt()));
                 hhDcQdPduyetKhmttSlddRepository.save(slDd);
                 for (HhDcQdPdKhmttSlddDtlReq slddDtlReq : slDd.getListDcQdPdSldDtl()){
                     HhDcQdPdKhmttSlddDtl slddDtl = ObjectMapperUtils.map(slddDtlReq,HhDcQdPdKhmttSlddDtl.class);
@@ -157,8 +156,8 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
                 slDd.setIdDxKhmtt(dx.getIdDxuat());
                 slDd.setIdDcKhmtt(dx.getId());
                 slDd.setMaDiemKho(userInfo.getDvql());
-                slDd.setDonGiaVat(dx.getGiaCoThue());
-                slDd.setThanhTien(slDd.getDonGiaVat().multiply(slDd.getSoLuongDxmtt()));
+//                slDd.setDonGiaVat(dx.getGiaCoThue());
+//                slDd.setThanhTien(slDd.getDonGiaVat().multiply(slDd.getSoLuongDxmtt()));
                 hhDcQdPduyetKhmttSlddRepository.save(slDd);
                 for (HhDcQdPdKhmttSlddDtlReq slddDtlReq : slDd.getListDcQdPdSldDtl()){
                     HhDcQdPdKhmttSlddDtl slddDtl = ObjectMapperUtils.map(slddDtlReq,HhDcQdPdKhmttSlddDtl.class);
@@ -219,7 +218,7 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
             throw new Exception("Không tồn tại bản ghi");
         }
         if (!optional.get().getTrangThai().equals(Contains.DUTHAO)&& !optional.get().getTrangThai().equals(Contains.TU_CHOI_TP) && !optional.get().getTrangThai().equals(Contains.TUCHOI_LDC)){
-            throw new Exception("Chỉ thực hieenh xóa bản nghi ở trạng thái bản nháp hoặc từ chối");
+            throw new Exception("Chỉ thực hiện xóa bản ghi ở trạng thái bản nháp hoặc từ chối");
         }
         HhDcQdPduyetKhmttHdr data = optional.get();
         List<HhDcQdPduyetKhmttDx> dcQdPduyetKhmttDxList =hhDcQdPduyetKhMttDxRepository.findAllByIdDcHdr(data.getId());
