@@ -34,6 +34,8 @@ public class XhQdDchinhKhBdgHdr extends BaseEntity implements Serializable {
 
   private String soQdPd;
 
+  private String soQdDc;
+
   @Temporal(TemporalType.DATE)
   private Date ngayKyQd;
 

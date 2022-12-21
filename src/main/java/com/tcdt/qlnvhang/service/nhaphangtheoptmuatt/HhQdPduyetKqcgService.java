@@ -1,8 +1,5 @@
 package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
-import com.google.common.collect.Lists;
-import com.tcdt.qlnvhang.entities.FileDKemJoinDxKhMttHdr;
-import com.tcdt.qlnvhang.entities.FileDKemJoinKquaLcntHdr;
 import com.tcdt.qlnvhang.entities.FileDKemJoinKquaMttHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhCtietTtinCgiaRepository;
@@ -12,7 +9,6 @@ import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhQdPheduyetKhMttHdrReposi
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhChiTietTTinChaoGiaReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhQdPduyetKqcgHdrReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhQdPduyetKqcg;
 import com.tcdt.qlnvhang.service.SecurityContextService;
@@ -23,7 +19,6 @@ import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,12 +27,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
-import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class HhQdPduyetKqcgService extends BaseServiceImpl {
@@ -117,7 +109,7 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
         dataMap.setNguoiTao(getUser().getUsername());
         dataMap.setNgayTao(getDateTimeNow());
         dataMap.setTrangThai(Contains.DUTHAO);
-        dataMap.setTrangThaiNh(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
+        dataMap.setTrangThaiHd(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
         dataMap.setMaDvi(getUser().getDvql());
         dataMap.setChildren(fileDinhKemList);
         return hhQdPduyetKqcgRepository.save(dataMap);
@@ -204,7 +196,7 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
                 optional.get().setTrangThai(stReq.getTrangThai());
                 break;
             case Contains.DA_HOAN_THANH + Contains.BAN_HANH:
-                optional.get().setTrangThaiNh(stReq.getTrangThai());
+                optional.get().setTrangThaiHd(stReq.getTrangThai());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
