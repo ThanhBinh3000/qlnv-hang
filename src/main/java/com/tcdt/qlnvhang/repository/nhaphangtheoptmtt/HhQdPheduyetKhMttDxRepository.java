@@ -31,8 +31,8 @@ public interface HhQdPheduyetKhMttDxRepository extends JpaRepository<HhQdPheduye
           " AND HDR.TRANG_THAI = :trangThai " +
           " AND (:trangThaiTkhai IS NULL OR DTL.TRANG_THAI_TKHAI = :trangThaiTkhai )" +
           " AND (:ctyCgia IS NULL OR LOWER(DD.CANHAN_TOCHUC) LIKE LOWER(CONCAT(CONCAT('%', :ctyCgia),'%'))) "+
-          " AND (:pthucMuatt IS NULL OR DTL.PTHUC_MUATT =:pthucMuatt)"+
+          " AND (:ptMua IS NULL OR DTL.PT_MUA =:ptMua)"+
           " AND HDR.LASTEST = 1 ",nativeQuery = true )
-  Page<HhQdPheduyetKhMttDx> selectPage(Integer namKh , String ngayCgiaTu, String ngayCgiadDen, String loaiVthh, String maDvi, String trangThai,String trangThaiTkhai, String ctyCgia, String pthucMuatt, Pageable pageable);
+  Page<HhQdPheduyetKhMttDx> selectPage(Integer namKh , String ngayCgiaTu, String ngayCgiadDen, String loaiVthh, String maDvi, String trangThai,String trangThaiTkhai, String ctyCgia, String ptMua, Pageable pageable);
 
 }

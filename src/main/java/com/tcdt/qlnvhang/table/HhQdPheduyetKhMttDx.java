@@ -95,8 +95,6 @@ public class HhQdPheduyetKhMttDx implements Serializable {
     @Column(name="SO_QD_PD_KQ_MTT")
     String soQdPdKqMtt;
 
-    private String pthucMuatt;
-
     @Transient
     private HhQdPheduyetKhMttHdr hhQdPheduyetKhMttHdr;
 
