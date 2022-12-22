@@ -1,9 +1,12 @@
 package com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.util.Contains;
 import io.swagger.models.auth.In;
 import lombok.Data;
 
@@ -18,7 +21,7 @@ import java.util.List;
 @Entity
 @Table(name = "XH_QD_PD_KH_BDG")
 @Data
-public class XhQdPdKhBdg  implements Serializable {
+public class XhQdPdKhBdg extends TrangThaiBaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_QD_PD_KH_BDG";
 
@@ -27,7 +30,7 @@ public class XhQdPdKhBdg  implements Serializable {
     @SequenceGenerator(sequenceName = "XH_QD_PD_KH_BDG_SEQ", allocationSize = 1, name = "XH_QD_PD_KH_BDG_SEQ")
     private Long id;
 
-    private  Integer namKh;
+    private  Integer nam;
 
     private String maDvi;
 
@@ -36,10 +39,10 @@ public class XhQdPdKhBdg  implements Serializable {
 
     private String soQdPd;
 
-    @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKyQd;
 
-    @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayHluc;
 
     private Long idThHdr;
@@ -62,78 +65,13 @@ public class XhQdPdKhBdg  implements Serializable {
 
     private String  moTaHangHoa;
 
-    private String soQdCc;
-
     private String tchuanCluong;
-
-    @Temporal(TemporalType.DATE)
-    private Date tgianDkienTu;
-    @Temporal(TemporalType.DATE)
-    private Date tgianDkienDen;
-
-    private Integer tgianTtoan;
-
-    private String tgianTtoanGhiChu;
-
-    private String pthucTtoan;
-
-    private Integer tgianGnhan;
-
-    private String tgianGnhanGhiChu;
-
-    private String pthucGnhan;
-
-    private String thongBaoKh;
-
-    private BigDecimal khoanTienDatTruoc;
-
-    private BigDecimal tongSoLuong;
-
-    private BigDecimal tongTienKdienDonGia;
-
-    private BigDecimal tongTienDatTruocDonGia;
-
-    private String trangThai;
-
-    @Transient
-    private String tenTrangThai;
-
-    @Temporal(TemporalType.DATE)
-    private Date ngayTao;
-
-    private String nguoiTao;
-
-    @Temporal(TemporalType.DATE)
-    private Date ngaySua;
-
-    private String nguoiSua;
-
-    @Temporal(TemporalType.DATE)
-    private Date ngayGuiDuyet;
-
-    private String nguoiGuiDuyet;
-
-    private Integer soDviTsan;
-
-    private Integer slHdDaKy;
-
-    private String soQdPdKqBdg;
-
-    private String ldoTuchoi;
-
-    private Date ngayPduyet;
-
-    private String nguoiPduyet;
 
     private Boolean lastest;
 
     private String phanLoai;
 
     private Long idGoc;
-
-
-    @Transient
-    private String soDxuatKhBdg;
 
     @Transient
     List<XhQdPdKhBdgDtl> children = new ArrayList<>();
@@ -144,8 +82,4 @@ public class XhQdPdKhBdg  implements Serializable {
     @Transient
     private List<FileDinhKem> canCuPhapLy = new ArrayList<>();
 
-
-    public String getTenTrangThai(){
-        return NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(this.getTrangThai());
-    }
 }
