@@ -285,7 +285,7 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
     @Override
     public Page<NhPhieuNhapKho> search(LkPhieuNhapKhoReq req) throws Exception {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),req.getPaggingReq().getLimit(), Sort.by("id").descending());
-        Page<NhPhieuNhapKho> pages = nhPhieuNhapKhoRepository.selectPageTheKho(req.getSoPhieu(),req.getNam(), Contains.convertDateToString(req.getTuNgay()),Contains.convertDateToString(req.getDenNgay()), req.getMaDvi(),req.getLoaiVthh(),req.getCloaiVthh(),req.getMaDiemKho(),req.getMaNhaKho(),req.getMaNganKho(),req.getMaLoKho(),pageable);
+        Page<NhPhieuNhapKho> pages = nhPhieuNhapKhoRepository.selectPageTheKho(req.getTrangThai(),req.getNam(), Contains.convertDateToString(req.getTuNgay()),Contains.convertDateToString(req.getDenNgay()), req.getMaDvi(),req.getLoaiVthh(),req.getCloaiVthh(),req.getMaDiemKho(),req.getMaNhaKho(),req.getMaNganKho(),req.getMaLoKho(),pageable);
         Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
         Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
         pages.getContent().forEach(x -> {

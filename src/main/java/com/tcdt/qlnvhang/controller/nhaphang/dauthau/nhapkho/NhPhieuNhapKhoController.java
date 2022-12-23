@@ -127,7 +127,7 @@ public class NhPhieuNhapKhoController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Tra cứu Quản lý lương thực", response = List.class)
+    @ApiOperation(value = "Tra cứu the kho", response = List.class)
     @PostMapping(value=  "/lk-the-kho", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> searchTheKho(@Valid @RequestBody LkPhieuNhapKhoReq req) {
         BaseResponse resp = new BaseResponse();
