@@ -18,7 +18,7 @@ import com.tcdt.qlnvhang.table.HhDxKhLcntThopHdr;
 
 public interface HhDxKhLcntThopHdrService {
 
-	HhDxKhLcntThopHdr sumarryData(HhDxKhLcntTChiThopReq objReq, HttpServletRequest req) throws Exception;
+	HhDxKhLcntThopHdr sumarryData(HhDxKhLcntTChiThopReq objReq) throws Exception;
 
 	@Transactional(rollbackOn = Exception.class)
 	HhDxKhLcntThopHdr create(HhDxKhLcntThopHdrReq objReq, HttpServletRequest req) throws Exception;

@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface HhDcQdPdKhmttSlddDtlRepository extends JpaRepository<HhDcQdPdKhmttSlddDtl,Long> {
-    List<HhDcQdPdKhmttSlddDtl> findAllByIdSldd (Long ids);
+    List<HhDcQdPdKhmttSlddDtl> findAllByIdDiaDiem (Long idDiaDiem);
 
-    List<HhDcQdPdKhmttSlddDtl> findAllByIdSlddIn (List<Long> ids);
+    List<HhDcQdPdKhmttSlddDtl> findAllByIdDiaDiemIn (List<Long> ids);
 }
