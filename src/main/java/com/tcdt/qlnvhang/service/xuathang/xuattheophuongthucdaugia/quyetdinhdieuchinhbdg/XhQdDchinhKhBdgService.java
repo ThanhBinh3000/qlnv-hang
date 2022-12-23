@@ -15,10 +15,12 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.*;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinh.XhQdDchinhKhBdgReq;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinh.XhQdDchinhKhBdgSearchReq;
+import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.feign.KeHoachService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.*;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgHdr;
@@ -121,6 +123,7 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
 
     @Transactional
     public XhQdDchinhKhBdgHdr createLuongThuc (XhQdDchinhKhBdgReq objReq) throws Exception{
+        UserInfo userInfo= SecurityContextService.getUser();
         if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh()))
             throw new Exception("Loại vật tư hàng hóa không phù hợp");
 
@@ -145,6 +148,7 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
         XhQdDchinhKhBdgHdr dataMap = ObjectMapperUtils.map(objReq, XhQdDchinhKhBdgHdr.class);
         dataMap.setTrangThai(Contains.DUTHAO);
         dataMap.setLastest(objReq.getLastest());
+        dataMap.setMaDvi(userInfo.getDepartment());
         XhQdDchinhKhBdgHdr created=xhQdDchinhKhBdgHdrRepository.save(dataMap);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),dataMap.getId(),"XH_DX_KH_BAN_DAU_GIA");
         created.setFileDinhKems(fileDinhKems);
@@ -164,6 +168,7 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
 
     @Transactional
     XhQdDchinhKhBdgHdr createVatTu(XhQdDchinhKhBdgReq objReq) throws Exception{
+        UserInfo userInfo= SecurityContextService.getUser();
         List<XhQdDchinhKhBdgHdr> checkSoQd = xhQdDchinhKhBdgHdrRepository.findBySoQdDc(objReq.getSoQdPd());
         if (!checkSoQd.isEmpty()) {
             throw new Exception("Số quyết định " + objReq.getSoQdPd() + " đã tồn tại");
@@ -172,6 +177,7 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
         XhQdDchinhKhBdgHdr dataMap = ObjectMapperUtils.map(objReq, XhQdDchinhKhBdgHdr.class);
         dataMap.setTrangThai(Contains.DUTHAO);
         dataMap.setLastest(objReq.getLastest());
+        dataMap.setMaDvi(userInfo.getDepartment());
         XhQdDchinhKhBdgHdr created=xhQdDchinhKhBdgHdrRepository.save(dataMap);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),dataMap.getId(),"XH_DX_KH_BAN_DAU_GIA");
         created.setFileDinhKems(fileDinhKems);
