@@ -20,6 +20,18 @@ public interface NhPhieuNhapKhoRepository extends BaseRepository<NhPhieuNhapKho,
             value = "SELECT * FROM NH_PHIEU_NHAP_KHO PNKLT " +
                     "WHERE (:soPhieu IS NULL OR PNKLT.SO_PHIEU_NHAP_KHO = :soPhieu )" +
                     "  AND (:nam IS NULL OR PNKLT.NAM = TO_NUMBER(:nam) ) " +
+                    "  AND (:maDvi IS NULL OR PNKLT.MA_DVI = :maDvi ) " +
+                    "  AND (:loaiVthh IS NULL OR PNKLT.LOAI_VTHH = :loaiVthh ) " +
+                    "  AND (:cloaiVthh IS NULL OR PNKLT.CLOAI_VTHH = :cloaiVthh ) " +
+                    "  AND (:maDiemKho IS NULL OR PNKLT.MA_DIEM_KHO = :maDiemKho ) " +
+                    "  AND (:maNhaKho IS NULL OR PNKLT.MA_NHA_KHO = :maNhaKho ) " +
+                    "  AND (:maNganKho IS NULL OR PNKLT.MA_NGAN_KHO = :maNganKho ) " +
+                    "  AND (:maLoKho IS NULL OR PNKLT.MA_LO_KHO = :maLoKho ) " , nativeQuery = true)
+    Page<NhPhieuNhapKho> selectPage(String soPhieu, Integer nam, String maDvi, String loaiVthh, String cloaiVthh, String maDiemKho, String maNhaKho, String maNganKho, String maLoKho, Pageable pageable);
+    @Query(
+            value = "SELECT * FROM NH_PHIEU_NHAP_KHO PNKLT " +
+                    "WHERE (:soPhieu IS NULL OR PNKLT.SO_PHIEU_NHAP_KHO = :soPhieu )" +
+                    "  AND (:nam IS NULL OR PNKLT.NAM = TO_NUMBER(:nam) ) " +
                     "AND (:tuNgay IS NULL OR PNKLT.NGAY_NHAP_KHO >=  TO_DATE(:tuNgay,'yyyy-MM-dd'))"+
                     "AND (:denNgay IS NULL OR PNKLT.NGAY_NHAP_KHO <=  TO_DATE(:denNgay,'yyyy-MM-dd'))"+
                     "  AND (:maDvi IS NULL OR PNKLT.MA_DVI = :maDvi ) " +
@@ -30,7 +42,7 @@ public interface NhPhieuNhapKhoRepository extends BaseRepository<NhPhieuNhapKho,
                     "  AND (:maNganKho IS NULL OR PNKLT.MA_NGAN_KHO = :maNganKho ) " +
                     "  AND (:maLoKho IS NULL OR PNKLT.MA_LO_KHO = :maLoKho ) "
             , nativeQuery = true)
-    Page<NhPhieuNhapKho> selectPage(String soPhieu, Integer nam,String tuNgay, String denNgay, String maDvi, String loaiVthh, String cloaiVthh, String maDiemKho, String maNhaKho, String maNganKho, String maLoKho, Pageable pageable);
+    Page<NhPhieuNhapKho> selectPageTheKho(String soPhieu, Integer nam,String tuNgay, String denNgay, String maDvi, String loaiVthh, String cloaiVthh, String maDiemKho, String maNhaKho, String maNganKho, String maLoKho, Pageable pageable);
 
     @Transactional
     @Modifying

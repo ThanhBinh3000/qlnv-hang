@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.phieunhapkho;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKho;
 import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoReq;
+import com.tcdt.qlnvhang.request.object.sokho.LkPhieuNhapKhoReq;
 import com.tcdt.qlnvhang.service.BaseService;
 import org.springframework.data.domain.Page;
 
@@ -14,7 +15,7 @@ public interface NhPhieuNhapKhoService extends BaseService<NhPhieuNhapKho,NhPhie
 
     List<NhPhieuNhapKho> findAllByIdDdiemGiaoNvNh(Long idDdiemGiaoNvNh);
 
-    Page<NhPhieuNhapKho> search(NhPhieuNhapKhoReq req) throws Exception;
+    Page<NhPhieuNhapKho> search(LkPhieuNhapKhoReq req) throws Exception;
 
 //    NhPhieuNhapKhoRes create(NhPhieuNhapKhoReq req) throws Exception;
 //    NhPhieuNhapKhoRes update(NhPhieuNhapKhoReq req) throws Exception;

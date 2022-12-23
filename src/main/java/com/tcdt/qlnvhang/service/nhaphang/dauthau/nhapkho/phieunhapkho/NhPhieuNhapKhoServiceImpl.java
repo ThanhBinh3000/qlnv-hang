@@ -18,6 +18,7 @@ import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhap
 import com.tcdt.qlnvhang.repository.vattu.hosokythuat.NhHoSoKyThuatRepository;
 import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCtReq;
 import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoReq;
+import com.tcdt.qlnvhang.request.object.sokho.LkPhieuNhapKhoReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -60,9 +61,9 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
     private FileDinhKemService fileDinhKemService;
 
     @Override
-    public Page<NhPhieuNhapKho> search(NhPhieuNhapKhoReq req) throws Exception {
+    public Page<NhPhieuNhapKho> searchPage(NhPhieuNhapKhoReq req){
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),req.getPaggingReq().getLimit(), Sort.by("id").descending());
-        Page<NhPhieuNhapKho> pages = nhPhieuNhapKhoRepository.selectPage(req.getSoPhieu(),req.getNam(), Contains.convertDateToString(req.getTuNgay()),Contains.convertDateToString(req.getDenNgay()), req.getMaDvi(),req.getLoaiVthh(),req.getCloaiVthh(),req.getMaDiemKho(),req.getMaNhaKho(),req.getMaNganKho(),req.getMaLoKho(),pageable);
+        Page<NhPhieuNhapKho> pages = nhPhieuNhapKhoRepository.selectPage(req.getSoPhieu(),req.getNam(), req.getMaDvi(),req.getLoaiVthh(),req.getCloaiVthh(),req.getMaDiemKho(),req.getMaNhaKho(),req.getMaNganKho(),req.getMaLoKho(),pageable);
         Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
         Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
         pages.getContent().forEach(x -> {
@@ -76,11 +77,6 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
             x.setTenLoKho(listDanhMucDvi.get(x.getMaLoKho()));
         });
         return pages;
-    }
-
-    @Override
-    public Page<NhPhieuNhapKho> searchPage(NhPhieuNhapKhoReq req) {
-        return null;
     }
 
     @Override
@@ -284,6 +280,25 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
     @Override
     public List<NhPhieuNhapKho> findAllByIdDdiemGiaoNvNh(Long idDdiemGiaoNvNh) {
         return setDetailList(nhPhieuNhapKhoRepository.findByIdDdiemGiaoNvNh(idDdiemGiaoNvNh));
+    }
+
+    @Override
+    public Page<NhPhieuNhapKho> search(LkPhieuNhapKhoReq req) throws Exception {
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),req.getPaggingReq().getLimit(), Sort.by("id").descending());
+        Page<NhPhieuNhapKho> pages = nhPhieuNhapKhoRepository.selectPageTheKho(req.getSoPhieu(),req.getNam(), Contains.convertDateToString(req.getTuNgay()),Contains.convertDateToString(req.getDenNgay()), req.getMaDvi(),req.getLoaiVthh(),req.getCloaiVthh(),req.getMaDiemKho(),req.getMaNhaKho(),req.getMaNganKho(),req.getMaLoKho(),pageable);
+        Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
+        Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
+        pages.getContent().forEach(x -> {
+            x.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(x.getTrangThai()));
+            x.setTenLoaiVthh(listDanhMucHangHoa.get(x.getLoaiVthh()));
+            x.setTenCloaiVthh(listDanhMucHangHoa.get(x.getCloaiVthh()));
+            x.setTenDvi(listDanhMucDvi.get(x.getMaDvi()));
+            x.setTenDiemKho(listDanhMucDvi.get(x.getMaDiemKho()));
+            x.setTenNhaKho(listDanhMucDvi.get(x.getMaNhaKho()));
+            x.setTenNganKho(listDanhMucDvi.get(x.getMaNganKho()));
+            x.setTenLoKho(listDanhMucDvi.get(x.getMaLoKho()));
+        });
+        return pages;
     }
 
     List<NhPhieuNhapKho> setDetailList(List<NhPhieuNhapKho> list){

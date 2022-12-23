@@ -33,11 +33,7 @@ public class NhPhieuNhapKhoReq extends BaseRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
     private Date thoiGianGiaoNhan;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
-    private Date tuNgay;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
-    private Date denNgay;
 
 
     private Long qdgnvnxId;
