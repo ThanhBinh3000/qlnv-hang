@@ -67,7 +67,7 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
                 NhapXuatHangTrangThaiEnum.BAN_HANH.getId(),
                 objReq.getTrangThaiTkhai(),
                 objReq.getCtyCgia(),
-                objReq.getPthucMuatt(),
+                objReq.getPtMua(),
                 pageable);
         Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
         Map<String,String> hashMapDmDv= getListDanhMucDvi(null, null, "01");

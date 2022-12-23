@@ -467,13 +467,13 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
         List<HhChiTietTTinChaoGia> byIdQdDtl = hhCtietTtinCgiaRepository.findAllByIdTkhaiKh(dtl.getId());
         dtl.setHhChiTietTTinChaoGiaList(byIdQdDtl);
 
-//        Optional<HhDxuatKhLcntHdr> bySoDxuat;
-//        if(!StringUtils.isEmpty(dtl.getSoDxuat())){
-//            bySoDxuat = hhDxuatKhLcntHdrRepository.findBySoDxuat(dtl.getSoDxuat());
-//        }else{
-//            bySoDxuat = hhDxuatKhLcntHdrRepository.findBySoDxuat(hhQdKhlcntHdr.getSoTrHdr());
-//        }
-//        bySoDxuat.ifPresent(dtl::setDxuatKhLcntHdr);
+        Optional<HhDxuatKhMttHdr> bySoDxuat;
+        if (!StringUtils.isEmpty(dtl.getSoDxuat())){
+            bySoDxuat = hhDxuatKhMttRepository.findBySoDxuat(dtl.getSoDxuat());
+        }else {
+            bySoDxuat = hhDxuatKhMttRepository.findBySoDxuat(hhQdPheduyetKhMttHdr.getSoTrHdr());
+        }
+        bySoDxuat.ifPresent(dtl::setDxuatKhMttHdr);
         dtl.setTenTrangThaiTkhai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(dtl.getTrangThaiTkhai()));
         dtl.setTenDvi(hashMapDvi.get(dtl.getMaDvi()));
         return dtl;
