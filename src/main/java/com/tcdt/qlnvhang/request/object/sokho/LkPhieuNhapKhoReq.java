@@ -31,5 +31,5 @@ public class LkPhieuNhapKhoReq extends BaseRequest {
 
     String maLoKho;
 
-    String soPhieu;
+    String trangThai;
 }
