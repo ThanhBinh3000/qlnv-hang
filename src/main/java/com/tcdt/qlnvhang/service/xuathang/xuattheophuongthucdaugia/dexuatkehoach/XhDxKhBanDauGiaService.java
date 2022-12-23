@@ -104,25 +104,21 @@ public class XhDxKhBanDauGiaService extends BaseServiceImpl {
     }
 
     public void validateData(XhDxKhBanDauGia objHdr,String trangThai) throws Exception {
-       if (objHdr.getLoaiVthh().startsWith("02")){
-
-       }else {
-           if (trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.DUTHAO.getId())){
-               XhDxKhBanDauGia dXuat = xhDxKhBanDauGiaRepository.findAllByLoaiVthhAndCloaiVthhAndNamKhAndMaDviAndTrangThaiNot(objHdr.getLoaiVthh(), objHdr.getCloaiVthh(), objHdr.getNamKh(), objHdr.getMaDvi(),NhapXuatHangTrangThaiEnum.DUTHAO.getId());
-               if (!ObjectUtils.isEmpty(dXuat) && !dXuat.getId().equals(objHdr.getId())){
-                   throw new Exception("Chủng loại hàng hóa đã được tạo và gửi duyệt, xin vui lòng chọn lại chủng loại hàng hóa khác");
-               }
+       if (trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.DUTHAO.getId())){
+           XhDxKhBanDauGia dXuat = xhDxKhBanDauGiaRepository.findAllByLoaiVthhAndCloaiVthhAndNamKhAndMaDviAndTrangThaiNot(objHdr.getLoaiVthh(), objHdr.getCloaiVthh(), objHdr.getNamKh(), objHdr.getMaDvi(),NhapXuatHangTrangThaiEnum.DUTHAO.getId());
+           if (!ObjectUtils.isEmpty(dXuat) && !dXuat.getId().equals(objHdr.getId())){
+               throw new Exception("Chủng loại hàng hóa đã được tạo và gửi duyệt, xin vui lòng chọn lại chủng loại hàng hóa khác");
            }
-           if (trangThai.equals(NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId())){
-               for (XhDxKhBanDauGiaPhanLo chiCuc : objHdr.getDsPhanLoList()){
-                   BigDecimal aLong = xhDxKhBanDauGiaRepository.countSLDalenKh(objHdr.getNamKh(), objHdr.getLoaiVthh(), chiCuc.getMaDvi(),NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
-                   BigDecimal soLuongTotal = aLong.add(chiCuc.getSoLuong());
-                   if (chiCuc.getSoLuongChiTieu() == null){
-                       throw new Exception("Hiện chưa có số lượng chỉ tiêu kế hoạch năm, vui lòng nhập lại");
-                   }
-                   if (soLuongTotal.compareTo(chiCuc.getSoLuongChiTieu()) > 0){
-                       throw new Exception(chiCuc.getTenDvi() + " đã nhập quá số lượng chi tiêu, vui lòng nhập lại");
-                   }
+       }
+       if (trangThai.equals(NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId())){
+           for (XhDxKhBanDauGiaPhanLo chiCuc : objHdr.getDsPhanLoList()){
+               BigDecimal aLong = xhDxKhBanDauGiaRepository.countSLDalenKh(objHdr.getNamKh(), objHdr.getLoaiVthh(), chiCuc.getMaDvi(),NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
+               BigDecimal soLuongTotal = aLong.add(chiCuc.getSoLuong());
+               if (chiCuc.getSoLuongChiTieu() == null){
+                   throw new Exception("Hiện chưa có số lượng chỉ tiêu kế hoạch năm, vui lòng nhập lại");
+               }
+               if (soLuongTotal.compareTo(chiCuc.getSoLuongChiTieu()) > 0){
+                   throw new Exception(chiCuc.getTenDvi() + " đã nhập quá số lượng chi tiêu, vui lòng nhập lại");
                }
            }
        }
