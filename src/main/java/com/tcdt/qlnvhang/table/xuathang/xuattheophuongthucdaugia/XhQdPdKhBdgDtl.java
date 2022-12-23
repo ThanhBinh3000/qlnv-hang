@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
@@ -28,17 +29,21 @@ public class XhQdPdKhBdgDtl implements Serializable {
     private Long idDxHdr;
 
     private String maDvi;
+
     @Transient
     private String tenDvi;
+
     private String soDxuat;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayTao;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayPduyet;
 
     @Temporal(TemporalType.DATE)
     private Date tgianDkienTu;
+
     @Temporal(TemporalType.DATE)
     private Date tgianDkienDen;
 
@@ -60,12 +65,9 @@ public class XhQdPdKhBdgDtl implements Serializable {
     private String soQdPdKqBdg;
 
     private String trangThai;
+
     @Transient
     private String tenTrangThai;
-
-
-
-
 
     private Integer tgianTtoan;
 
@@ -83,10 +85,6 @@ public class XhQdPdKhBdgDtl implements Serializable {
 
     private BigDecimal khoanTienDatTruoc;
 
-
-
-
-
     @Transient
     private XhQdPdKhBdg xhQdPdKhBdg;
 
@@ -96,4 +94,7 @@ public class XhQdPdKhBdgDtl implements Serializable {
     @Transient
     private List<XhQdPdKhBdgPl> children= new ArrayList<>();
 
+    public String getTenTrangThai() {
+        return NhapXuatHangTrangThaiEnum.getTenById(this.getTrangThai());
+    }
 }

@@ -44,7 +44,7 @@ public class HhQdKhlcntHdrController {
 	@ApiOperation(value = "Tạo mới Quyết định phê duyệt kế hoạch lựa chọn nhà thầu lương thực", response = List.class)
 	@PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<BaseResponse> insert(HttpServletRequest request,
+	public ResponseEntity<BaseResponse> insert(
 			@Valid @RequestBody HhQdKhlcntHdrReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
