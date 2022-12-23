@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoReq;
+import com.tcdt.qlnvhang.request.object.sokho.LkPhieuNhapKhoReq;
 import com.tcdt.qlnvhang.request.search.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoService;
@@ -116,6 +117,22 @@ public class NhPhieuNhapKhoController {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(nhPhieuNhapKhoService.searchPage(req));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tra cứu Quản lý lương thực lỗi: {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Tra cứu Quản lý lương thực", response = List.class)
+    @PostMapping(value=  "/lk-the-kho", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> searchTheKho(@Valid @RequestBody LkPhieuNhapKhoReq req) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(nhPhieuNhapKhoService.search(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
