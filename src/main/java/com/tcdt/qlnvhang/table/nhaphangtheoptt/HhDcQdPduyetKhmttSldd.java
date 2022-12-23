@@ -32,5 +32,5 @@ public class HhDcQdPduyetKhmttSldd implements Serializable {
     private BigDecimal donGiaVat;
     private BigDecimal thanhTien;
     @Transient
-    List<HhDcQdPdKhmttSlddDtlReq> listDcQdPdSldDtl= new ArrayList<>();
+    List<HhDcQdPdKhmttSlddDtlReq> children= new ArrayList<>();
 }

@@ -21,6 +21,7 @@ public class HhDcQdPduyetKhmttDx implements Serializable {
 
     private Long id;
     private Long idDxuat;
+    private Long idQdHdr;
     private String soDxuat;
     private Long idDcHdr;
     private String maDvi;
