@@ -476,8 +476,8 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
             }else {
                 throw new Exception("Số tờ trình kế hoạch không được tìm thấy");
             }
-            this.cloneProject(dataDB.getId());
-            this.cloneForToChucBdg(dataDB);
+//            this.cloneProject(dataDB.getId());
+//            this.cloneForToChucBdg(dataDB);
         }
         XhQdDchinhKhBdgHdr createCheck = xhQdDchinhKhBdgHdrRepository.save(dataDB);
         return createCheck;
@@ -518,8 +518,8 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
                     throw new Exception("Số tờ trình kế hoạch không được tìm thấy");
                 }
             }
-            this.cloneProject(dataDB.getId());
-            this.cloneForToChucBdg(dataDB);
+      /*      this.cloneProject(dataDB.getId());
+            this.cloneForToChucBdg(dataDB);*/
 //            this.validateData(dataDB);
         }
         XhQdDchinhKhBdgHdr createCheck = xhQdDchinhKhBdgHdrRepository.save(dataDB);
