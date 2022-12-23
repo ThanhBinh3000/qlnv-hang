@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieu
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKho;
 import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoReq;
 import com.tcdt.qlnvhang.service.BaseService;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -12,6 +13,8 @@ public interface NhPhieuNhapKhoService extends BaseService<NhPhieuNhapKho,NhPhie
     List<NhPhieuNhapKho> findAllByIdQdGiaoNvNh(Long idQdGiaoNvNh);
 
     List<NhPhieuNhapKho> findAllByIdDdiemGiaoNvNh(Long idDdiemGiaoNvNh);
+
+    Page<NhPhieuNhapKho> search(NhPhieuNhapKhoReq req) throws Exception;
 
 //    NhPhieuNhapKhoRes create(NhPhieuNhapKhoReq req) throws Exception;
 //    NhPhieuNhapKhoRes update(NhPhieuNhapKhoReq req) throws Exception;

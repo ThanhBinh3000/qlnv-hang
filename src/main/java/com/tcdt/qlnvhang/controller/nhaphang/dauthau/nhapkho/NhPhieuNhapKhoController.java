@@ -115,7 +115,7 @@ public class NhPhieuNhapKhoController {
     public ResponseEntity<BaseResponse> search(@Valid @RequestBody NhPhieuNhapKhoReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(nhPhieuNhapKhoService.searchPage(req));
+            resp.setData(nhPhieuNhapKhoService.search(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

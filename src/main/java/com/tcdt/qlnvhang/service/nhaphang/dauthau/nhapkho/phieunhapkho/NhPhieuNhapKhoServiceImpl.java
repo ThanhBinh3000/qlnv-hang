@@ -60,9 +60,9 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
     private FileDinhKemService fileDinhKemService;
 
     @Override
-    public Page<NhPhieuNhapKho> searchPage(NhPhieuNhapKhoReq req) {
+    public Page<NhPhieuNhapKho> search(NhPhieuNhapKhoReq req) throws Exception {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),req.getPaggingReq().getLimit(), Sort.by("id").descending());
-        Page<NhPhieuNhapKho> pages = nhPhieuNhapKhoRepository.selectPage(req.getSoPhieu(),req.getNam(),req.getMaDvi(),req.getLoaiVthh(),req.getCloaiVthh(),req.getMaDiemKho(),req.getMaNhaKho(),req.getMaNganKho(),req.getMaLoKho(),pageable);
+        Page<NhPhieuNhapKho> pages = nhPhieuNhapKhoRepository.selectPage(req.getSoPhieu(),req.getNam(), Contains.convertDateToString(req.getTuNgay()),Contains.convertDateToString(req.getDenNgay()), req.getMaDvi(),req.getLoaiVthh(),req.getCloaiVthh(),req.getMaDiemKho(),req.getMaNhaKho(),req.getMaNganKho(),req.getMaLoKho(),pageable);
         Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
         Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
         pages.getContent().forEach(x -> {
@@ -76,6 +76,11 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
             x.setTenLoKho(listDanhMucDvi.get(x.getMaLoKho()));
         });
         return pages;
+    }
+
+    @Override
+    public Page<NhPhieuNhapKho> searchPage(NhPhieuNhapKhoReq req) {
+        return null;
     }
 
     @Override
