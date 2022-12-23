@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 public class HhDcQdPduyetKhmttDxReq {
     private Long id;
-    private Long idDxuat;
+    private Long idDxHdr;
     private Long idQdHdr;
     private String soDxuat;
     private Long idDcHdr;

@@ -20,7 +20,7 @@ public class HhDcQdPduyetKhmttDx implements Serializable {
     @SequenceGenerator(sequenceName = "HH_DC_QD_PDUYET_KHMTT_DX_SEQ", allocationSize = 1, name = "HH_DC_QD_PDUYET_KHMTT_DX_SEQ")
 
     private Long id;
-    private Long idDxuat;
+    private Long idDxHdr;
     private Long idQdHdr;
     private String soDxuat;
     private Long idDcHdr;

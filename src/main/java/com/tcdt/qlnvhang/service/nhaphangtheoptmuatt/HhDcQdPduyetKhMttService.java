@@ -93,13 +93,13 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         created.setFileDinhKems(fileDinhKems);
         for (HhDcQdPduyetKhmttDxReq listDx :objReq.getHhDcQdPduyetKhmttDxList()){
             HhDcQdPduyetKhmttDx dx = ObjectMapperUtils.map(listDx, HhDcQdPduyetKhmttDx.class);
-            dx.setIdDxuat(listDx.getIdDxuat());
+            dx.setIdDxHdr(listDx.getIdDxHdr());
             dx.setIdQdHdr(listDx.getIdQdHdr());
             dx.setIdDcHdr(data.getId());
             HhDcQdPduyetKhmttDx save = hhDcQdPduyetKhMttDxRepository.save(dx);
             for (HhDcQdPduyetKhmttSlddReq listSLDD : listDx.getHhDcQdPduyetKhmttSlddList()){
                 HhDcQdPduyetKhmttSldd slDd =ObjectMapperUtils.map(listSLDD, HhDcQdPduyetKhmttSldd.class);
-                slDd.setIdDxKhmtt(save.getIdDxuat());
+                slDd.setIdDxKhmtt(save.getIdDxHdr());
                 slDd.setIdDcKhmtt(save.getId());
                 slDd.setMaDiemKho(userInfo.getDvql());
                 HhDcQdPduyetKhmttSldd saveSlDd = hhDcQdPduyetKhmttSlddRepository.save(slDd);
@@ -142,14 +142,14 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         hhDcQdPduyetKhMttDxRepository.deleteAll(dcQdPduyetKhmttDxList);
         for (HhDcQdPduyetKhmttDxReq listDx :objReq.getHhDcQdPduyetKhmttDxList()){
             HhDcQdPduyetKhmttDx dx = ObjectMapperUtils.map(listDx, HhDcQdPduyetKhmttDx.class);
-            dx.setIdDxuat(listDx.getIdDxuat());
+            dx.setIdDxHdr(listDx.getIdDxHdr());
             dx.setIdDcHdr(data.getId());
             HhDcQdPduyetKhmttDx save = hhDcQdPduyetKhMttDxRepository.save(dx);
 
             hhDcQdPduyetKhmttSlddRepository.deleteAll(listSlDd);
             for (HhDcQdPduyetKhmttSlddReq listSLDD : listDx.getHhDcQdPduyetKhmttSlddList()){
                 HhDcQdPduyetKhmttSldd slDd =ObjectMapperUtils.map(listSLDD, HhDcQdPduyetKhmttSldd.class);
-                slDd.setIdDxKhmtt(save.getIdDxuat());
+                slDd.setIdDxKhmtt(save.getIdDxHdr());
                 slDd.setIdDcKhmtt(save.getId());
                 dx.setIdQdHdr(listDx.getIdQdHdr());
                 slDd.setMaDiemKho(userInfo.getDvql());
