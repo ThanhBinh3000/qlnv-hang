@@ -48,7 +48,7 @@ public class HhDxKhLcntThopHdrController {
 			@Valid @RequestBody HhDxKhLcntTChiThopReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(service.sumarryData(objReq, request));
+			resp.setData(service.sumarryData(objReq));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
