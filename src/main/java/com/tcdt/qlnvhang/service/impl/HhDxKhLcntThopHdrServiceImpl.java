@@ -66,6 +66,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		Map<String, String> mapDmuc = getMapCategory();
 
 		Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
+		Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
 
 		thopHdr.setNamKhoach(objReq.getNamKhoach());
 		thopHdr.setLoaiVthh(objReq.getLoaiVthh());
@@ -124,7 +125,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 			// Set thong tin chung lay tu de xuat
 			thopDtl.setIdDxHdr(dxuat.getId());
 			thopDtl.setMaDvi(dxuat.getMaDvi());
-			thopDtl.setTenDvi(getDviByMa(dxuat.getMaDvi(), req).getTenDvi());
+			thopDtl.setTenDvi(mapDmucDvi.get(dxuat.getMaDvi()));
 			thopDtl.setSoDxuat(dxuat.getSoDxuat());
 			thopDtl.setNgayTao(dxuat.getNgayTao());
 			thopDtl.setNgayPduyet(dxuat.getNgayPduyet());
