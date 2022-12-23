@@ -94,15 +94,13 @@ public class XhDxKhBanDauGiaService extends BaseServiceImpl {
         dataMap.setNguoiTaoId(userInfo.getId());
         dataMap.setTrangThai(Contains.DU_THAO);
         dataMap.setTrangThaiTh(Contains.CHUATONGHOP);
-        Map<String, String> hashMapDmdv = getListDanhMucDvi(null, null, "01");
-        dataMap.setTenDvi(StringUtils.isEmpty(userInfo.getDvql()) ? null : hashMapDmdv.get(userInfo.getDvql()));
         this.validateData(dataMap,dataMap.getTrangThai());
-        XhDxKhBanDauGia created=xhDxKhBanDauGiaRepository.save(dataMap);
+        XhDxKhBanDauGia created = xhDxKhBanDauGiaRepository.save(dataMap);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),dataMap.getId(),"XH_DX_KH_BAN_DAU_GIA");
         created.setFileDinhKems(fileDinhKems);
 
         this.saveDetail(objReq,dataMap.getId());
-         return dataMap;
+        return dataMap;
     }
 
     public void validateData(XhDxKhBanDauGia objHdr,String trangThai) throws Exception {
@@ -280,61 +278,45 @@ public class XhDxKhBanDauGiaService extends BaseServiceImpl {
  @Transactional
  public XhDxKhBanDauGia approve (StatusReq stReq) throws Exception {
      UserInfo userInfo= SecurityContextService.getUser();
-     if (userInfo == null)
+     if (userInfo == null){
          throw new Exception("Bad request.");
+     }
 
-     if (StringUtils.isEmpty(stReq.getId()))
-            throw new Exception("Không tìm thấy dữ liệu");
+     if (StringUtils.isEmpty(stReq.getId())){
+         throw new Exception("Không tìm thấy dữ liệu");
+     }
 
-        XhDxKhBanDauGia optional = this.detail(stReq.getId());
+     Optional<XhDxKhBanDauGia> optional = xhDxKhBanDauGiaRepository.findById(stReq.getId());
+     if(!optional.isPresent()){
+         throw new Exception("Không tìm thấy dữ liệu");
+     }
 
-        if (optional.getLoaiVthh().startsWith("02")){
-            String status = stReq.getTrangThai() + optional.getTrangThai();
-            switch (status) {
-                case Contains.CHODUYET_LDV + Contains.DUTHAO:
-                case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
-                    optional.setNguoiGduyetId(userInfo.getId());
-                    optional.setNgayGduyet(getDateTimeNow());
-                    break;
-                case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
-                    optional.setNguoiGduyetId(userInfo.getId());
-                    optional.setNgayPduyet(getDateTimeNow());
-                    optional.setLdoTuChoi(stReq.getLyDo());
-                    break;
-                case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
-                    optional.setNguoiGduyetId(userInfo.getId());
-                    optional.setNgayPduyet(getDateTimeNow());
-                    break;
-                default:
-                    throw new Exception("Phê duyệt không thành công");
-            }
-        }else{
-            String status = stReq.getTrangThai() + optional.getTrangThai();
-            switch (status) {
-                case Contains.CHODUYET_TP + Contains.DUTHAO:
-                case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
-                case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
-                    this.validateData(optional,Contains.CHODUYET_TP);
-                    optional.setNguoiGduyetId(userInfo.getId());
-                    optional.setNgayGduyet(getDateTimeNow());
-                case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
-                case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
-                    optional.setNguoiPduyetId(userInfo.getId());
-                    optional.setNgayPduyet(getDateTimeNow());
-                    optional.setLdoTuChoi(stReq.getLyDo());
-                    break;
-                case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
-                case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
-                    this.validateData(optional,stReq.getTrangThai());
-                    optional.setNguoiPduyetId(userInfo.getId());
-                    optional.setNgayPduyet(getDateTimeNow());
-                    break;
-                default:
-                    throw new Exception("Phê duyệt không thành công");
-            }
-        }
-     optional.setTrangThai(stReq.getTrangThai());
-     return xhDxKhBanDauGiaRepository.save(optional);
+     XhDxKhBanDauGia data = optional.get();
+     String status = stReq.getTrangThai() + data.getTrangThai();
+     switch (status) {
+         case Contains.CHODUYET_TP + Contains.DUTHAO:
+         case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+         case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
+//             this.validateData(data,Contains.CHODUYET_TP);
+             data.setNguoiGduyetId(userInfo.getId());
+             data.setNgayGduyet(getDateTimeNow());
+         case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
+         case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
+             data.setNguoiPduyetId(userInfo.getId());
+             data.setNgayPduyet(getDateTimeNow());
+             data.setLdoTuChoi(stReq.getLyDo());
+             break;
+         case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
+         case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
+//             this.validateData(data,stReq.getTrangThai());
+             data.setNguoiPduyetId(userInfo.getId());
+             data.setNgayPduyet(getDateTimeNow());
+             break;
+         default:
+             throw new Exception("Phê duyệt không thành công");
+     }
+     data.setTrangThai(stReq.getTrangThai());
+     return xhDxKhBanDauGiaRepository.save(data);
  }
 
     public void export (SearchXhDxKhBanDauGia objReq, HttpServletResponse response) throws Exception{
