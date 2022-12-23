@@ -17,14 +17,14 @@ import com.tcdt.qlnvhang.util.Contains;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
+
 
 import javax.persistence.Transient;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
+
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -64,8 +64,8 @@ public class HhPhuLucHopDongMttService extends BaseServiceImpl {
         HhPhuLucHopDongMtt data= new ModelMapper().map(objReq,HhPhuLucHopDongMtt.class);
         Optional<HhHdongBkePmuahangHdr> hd =hhHdongBkePmuahangRepository.findById(objReq.getIdHdHdr());
 
-        data.setTenHdong(hd.get().getTenHdong());
-        data.setSoHdong(hd.get().getSoHdong());
+//        data.setTenHdong(hd.get().getTenHdong());
+//        data.setSoHdong(hd.get().getSoHdong());
         data.setNgayTao(new Date());
         data.setNguoiTao(userInfo.getUsername());
         data.setTrangThai(Contains.DUTHAO);

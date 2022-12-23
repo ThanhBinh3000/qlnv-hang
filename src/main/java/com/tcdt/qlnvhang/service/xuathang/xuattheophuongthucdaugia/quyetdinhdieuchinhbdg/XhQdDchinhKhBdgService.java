@@ -13,10 +13,14 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.*;
+import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinh.XhQdDchinhKhBdgReq;
+import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinh.XhQdDchinhKhBdgSearchReq;
+import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.feign.KeHoachService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.*;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgHdr;
@@ -43,7 +47,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -82,13 +85,13 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
     @Autowired
     private XhTcTtinBdgHdrRepository xhTcTtinBdgHdrRepository;
 
-    public Page<XhQdDchinhKhBdgHdr> searchPage(XhQdPdKhBdgSearchReq objReq)throws Exception{
+    public Page<XhQdDchinhKhBdgHdr> searchPage(XhQdDchinhKhBdgSearchReq objReq)throws Exception{
 
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),
                 objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<XhQdDchinhKhBdgHdr> data = xhQdDchinhKhBdgHdrRepository.searchPage(
                 objReq.getNamKh(),
-                objReq.getSoQdPd(),
+                objReq.getSoQdDc(),
                 objReq.getTrichYeu(),
                 Contains.convertDateToString(objReq.getNgayKyQdTu()),
                 Contains.convertDateToString(objReq.getNgayKyQdDen()),
@@ -108,7 +111,7 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
     }
 
     @Transactional
-    public XhQdDchinhKhBdgHdr create(XhQdPdKhBdgReq objReq) throws Exception{
+    public XhQdDchinhKhBdgHdr create(XhQdDchinhKhBdgReq objReq) throws Exception{
         // Vật tư
         if(objReq.getLoaiVthh().startsWith("02")){
             return createVatTu(objReq);
@@ -119,12 +122,13 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
     }
 
     @Transactional
-    public XhQdDchinhKhBdgHdr createLuongThuc (XhQdPdKhBdgReq objReq) throws Exception{
+    public XhQdDchinhKhBdgHdr createLuongThuc (XhQdDchinhKhBdgReq objReq) throws Exception{
+        UserInfo userInfo= SecurityContextService.getUser();
         if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh()))
             throw new Exception("Loại vật tư hàng hóa không phù hợp");
 
         if(!StringUtils.isEmpty(objReq.getSoQdPd())){
-            List<XhQdDchinhKhBdgHdr> checkSoQd = xhQdDchinhKhBdgHdrRepository.findBySoQdPd(objReq.getSoQdPd());
+            List<XhQdDchinhKhBdgHdr> checkSoQd = xhQdDchinhKhBdgHdrRepository.findBySoQdDc(objReq.getSoQdPd());
             if (!checkSoQd.isEmpty()) {
                 throw new Exception("Số quyết định " + objReq.getSoQdPd() + " đã tồn tại");
             }
@@ -144,6 +148,7 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
         XhQdDchinhKhBdgHdr dataMap = ObjectMapperUtils.map(objReq, XhQdDchinhKhBdgHdr.class);
         dataMap.setTrangThai(Contains.DUTHAO);
         dataMap.setLastest(objReq.getLastest());
+        dataMap.setMaDvi(userInfo.getDepartment());
         XhQdDchinhKhBdgHdr created=xhQdDchinhKhBdgHdrRepository.save(dataMap);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),dataMap.getId(),"XH_DX_KH_BAN_DAU_GIA");
         created.setFileDinhKems(fileDinhKems);
@@ -162,8 +167,9 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
     }
 
     @Transactional
-    XhQdDchinhKhBdgHdr createVatTu(XhQdPdKhBdgReq objReq) throws Exception{
-        List<XhQdDchinhKhBdgHdr> checkSoQd = xhQdDchinhKhBdgHdrRepository.findBySoQdPd(objReq.getSoQdPd());
+    XhQdDchinhKhBdgHdr createVatTu(XhQdDchinhKhBdgReq objReq) throws Exception{
+        UserInfo userInfo= SecurityContextService.getUser();
+        List<XhQdDchinhKhBdgHdr> checkSoQd = xhQdDchinhKhBdgHdrRepository.findBySoQdDc(objReq.getSoQdPd());
         if (!checkSoQd.isEmpty()) {
             throw new Exception("Số quyết định " + objReq.getSoQdPd() + " đã tồn tại");
         }
@@ -171,6 +177,7 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
         XhQdDchinhKhBdgHdr dataMap = ObjectMapperUtils.map(objReq, XhQdDchinhKhBdgHdr.class);
         dataMap.setTrangThai(Contains.DUTHAO);
         dataMap.setLastest(objReq.getLastest());
+        dataMap.setMaDvi(userInfo.getDepartment());
         XhQdDchinhKhBdgHdr created=xhQdDchinhKhBdgHdrRepository.save(dataMap);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),dataMap.getId(),"XH_DX_KH_BAN_DAU_GIA");
         created.setFileDinhKems(fileDinhKems);
@@ -184,7 +191,7 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
     }
 
     @Transactional
-    void saveDetail(XhQdPdKhBdgReq objReq, XhQdDchinhKhBdgHdr dataMap){
+    void saveDetail(XhQdDchinhKhBdgReq objReq, XhQdDchinhKhBdgHdr dataMap){
         xhQdDchinhKhBdgDtlRepository.deleteAllByIdQdHdr(dataMap.getId());
         for (XhQdPdKhBdgDtlReq  dx : objReq.getDsDeXuat()){
             XhQdDchinhKhBdgDtl qd = ObjectMapperUtils.map(dx, XhQdDchinhKhBdgDtl.class);
@@ -225,7 +232,7 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
     }
 
     @Transactional
-    public XhQdDchinhKhBdgHdr update(XhQdPdKhBdgReq objReq) throws Exception {
+    public XhQdDchinhKhBdgHdr update(XhQdDchinhKhBdgReq objReq) throws Exception {
         // Vật tư
         if(objReq.getLoaiVthh().startsWith("02")){
             return updateVatTu(objReq);
@@ -236,7 +243,7 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
     }
 
     @Transactional
-    public XhQdDchinhKhBdgHdr updateLuongThuc(XhQdPdKhBdgReq objReq) throws Exception{
+    public XhQdDchinhKhBdgHdr updateLuongThuc(XhQdDchinhKhBdgReq objReq) throws Exception{
         if (StringUtils.isEmpty(objReq.getId())){
             throw new Exception("Sửa thất bại, không tìm thấy dữ liệu");
         }
@@ -248,7 +255,7 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
 
         if(!StringUtils.isEmpty(objReq.getSoQdPd())){
             if (!objReq.getSoQdPd().equals(qOptional.get().getSoQdPd())) {
-                List<XhQdDchinhKhBdgHdr> checkSoQd = xhQdDchinhKhBdgHdrRepository.findBySoQdPd(objReq.getSoQdPd());
+                List<XhQdDchinhKhBdgHdr> checkSoQd = xhQdDchinhKhBdgHdrRepository.findBySoQdDc(objReq.getSoQdPd());
                 if (!checkSoQd.isEmpty()) {
                     throw new Exception("Số quyết định " + objReq.getSoQdPd() + " đã tồn tại");
                 }
@@ -279,7 +286,7 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
     }
 
     @Transactional
-    public XhQdDchinhKhBdgHdr updateVatTu(XhQdPdKhBdgReq objReq) throws Exception{
+    public XhQdDchinhKhBdgHdr updateVatTu(XhQdDchinhKhBdgReq objReq) throws Exception{
         if (StringUtils.isEmpty(objReq.getId())){
             throw new Exception("Sửa thất bại, không tìm thấy dữ liệu");
         }
@@ -290,7 +297,7 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
         }
 
         if (!qOptional.get().getSoQdPd().equals(objReq.getSoQdPd())){
-            List<XhQdDchinhKhBdgHdr> checkSoQd = xhQdDchinhKhBdgHdrRepository.findBySoQdPd(objReq.getSoQdPd());
+            List<XhQdDchinhKhBdgHdr> checkSoQd = xhQdDchinhKhBdgHdrRepository.findBySoQdDc(objReq.getSoQdPd());
             if (!checkSoQd.isEmpty()){
                 throw new Exception("Số quết định" + objReq.getSoQdPd() + " đã tồn tại" );
             }
@@ -550,7 +557,7 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
         }
     }
 
-    public  void  export(XhQdPdKhBdgSearchReq objReq, HttpServletResponse response) throws Exception{
+    public  void  export(XhQdDchinhKhBdgSearchReq objReq, HttpServletResponse response) throws Exception{
         PaggingReq paggingReq = new PaggingReq();
         paggingReq.setPage(0);
         paggingReq.setLimit(Integer.MAX_VALUE);

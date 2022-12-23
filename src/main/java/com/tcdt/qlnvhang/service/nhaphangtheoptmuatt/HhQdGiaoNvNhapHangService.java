@@ -98,12 +98,12 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),data.getId(),"HH_QD_GIAO_NV_NHAP_HANG");
         created.setFileDinhKems(fileDinhKems);
         if (!DataUtils.isNullObject(data.getIdHdong())){
-            HhHdongBkePmuahangHdr update = hhHdongBkePmuahangRepository.findAllById(data.getIdHdong());
-            update.setTrangThaiNh(data.getTenTrangThai());
-            hhHdongBkePmuahangRepository.save(update);
+//            HhHdongBkePmuahangHdr update = hhHdongBkePmuahangRepository.findAllById(data.getIdHdong());
+//            update.setTrangThaiNh(data.getTenTrangThai());
+//            hhHdongBkePmuahangRepository.save(update);
         }else if (!DataUtils.isNullObject(data.getIdQdPduyet())){
             HhQdPduyetKqcgHdr update= hhQdPduyetKqcgRepository.findAllById(data.getIdQdPduyet());
-            update.setTrangThaiNh(data.getTrangThai());
+//            update.setTrangThaiNh(data.getTrangThai());
             hhQdPduyetKqcgRepository.save(update);
         }
 

@@ -21,6 +21,7 @@ public class HhDcQdPduyetKhmttDx implements Serializable {
 
     private Long id;
     private Long idDxuat;
+    private Long idQdHdr;
     private String soDxuat;
     private Long idDcHdr;
     private String maDvi;
@@ -36,9 +37,9 @@ public class HhDcQdPduyetKhmttDx implements Serializable {
     private String moTaHangHoa;
     private String ptMua;
     private String tchuanCluong;
-    private BigDecimal giaMua;
-    private BigDecimal giaChuaThue;
-    private BigDecimal giaCoThue;
+    private String giaMua;
+    private BigDecimal donGia;
+    private BigDecimal donGiaVat;
     private BigDecimal thueGtgt;
     @Temporal(TemporalType.DATE)
     private Date tgianMkho;

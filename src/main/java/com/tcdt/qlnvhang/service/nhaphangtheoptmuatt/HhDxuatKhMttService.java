@@ -1,25 +1,17 @@
 package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
-import com.google.common.collect.Lists;
-import com.tcdt.qlnvhang.entities.FileDKemJoinDxKhLcntCcxdg;
-import com.tcdt.qlnvhang.entities.FileDKemJoinDxKhLcntHdr;
 import com.tcdt.qlnvhang.entities.FileDKemJoinDxKhMttCcxdg;
 import com.tcdt.qlnvhang.entities.FileDKemJoinDxKhMttHdr;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.*;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhDxuatKhMttCcxdgRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhDxuatKhMttRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhDxuatKhMttSlddDtlRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhDxuatKhMttSlddRepository;
-import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.*;
-import com.tcdt.qlnvhang.request.object.*;
 import com.tcdt.qlnvhang.service.SecurityContextService;
-import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDxuatKhMttCcxdg;
@@ -38,8 +30,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
-
-import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
@@ -138,44 +128,45 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
         return dataMap;
     }
 
-    @Transactional
-    void saveDetail(HhDxuatKhMttHdrReq objReq,Long idHdr){
+  @Transactional
+  void saveDetail(HhDxuatKhMttHdrReq objReq, Long idHdr){
         hhDxuatKhMttSlddRepository.deleteAllByIdDxKhmtt(idHdr);
-        for (HhDxuatKhMttSlddReq gt : objReq.getDsSlddReq()){
-            HhDxuatKhMttSldd data = new ModelMapper().map(gt, HhDxuatKhMttSldd.class);
+        for ( HhDxuatKhMttSlddReq sldd: objReq.getDsSlddReq()){
+            HhDxuatKhMttSldd data = new ModelMapper().map(sldd, HhDxuatKhMttSldd.class);
             data.setId(null);
             data.setIdDxKhmtt(idHdr);
             BigDecimal thanhTien = data.getDonGia().multiply(data.getSoLuong());
             data.setThanhTien(thanhTien);
             hhDxuatKhMttSlddRepository.save(data);
-            hhDxuatKhMttSlddDtlRepository.deleteAllByIdDiaDiem(data.getId());
-            for (HhDxuatKhMttSlddDtlReq ddNhap : gt.getChildren()){
-                HhDxuatKhMttSlddDtl dataDdNhap = new ModelMapper().map(ddNhap, HhDxuatKhMttSlddDtl.class);
-                dataDdNhap.setId(null);
-                dataDdNhap.setIdDiaDiem(data.getId());
-                BigDecimal tien = dataDdNhap.getDonGia().multiply(dataDdNhap.getSoLuong());
-                dataDdNhap.setThanhTien(tien);
-                hhDxuatKhMttSlddDtlRepository.save(dataDdNhap);
+            hhDxuatKhMttSlddDtlRepository.deleteAllByIdDiaDiem(sldd.getId());
+            for (HhDxuatKhMttSlddDtlReq slddDtlReq : sldd.getChildren()){
+                HhDxuatKhMttSlddDtl slddDtl = new ModelMapper().map(slddDtlReq, HhDxuatKhMttSlddDtl.class);
+                slddDtl.setIdDiaDiem(data.getId());
+                hhDxuatKhMttSlddDtlRepository.save(slddDtl);
             }
         }
-    }
+  }
 
     public void validateData(HhDxuatKhMttHdr objHdr,String trangThai) throws Exception {
-        if(trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.DUTHAO.getId())){
-            HhDxuatKhMttHdr dXuat = hhDxuatKhMttRepository.findAllByLoaiVthhAndCloaiVthhAndNamKhAndMaDviAndTrangThaiNot(objHdr.getLoaiVthh(), objHdr.getCloaiVthh(), objHdr.getNamKh(), objHdr.getMaDvi(), NhapXuatHangTrangThaiEnum.DUTHAO.getId());
-            if (!ObjectUtils.isEmpty(dXuat) && !dXuat.getId().equals(objHdr.getId())){
-                throw new Exception("Chủng loại hàng hóa đã được tạo và gửi duyệt, xin vui lòng chọn lại chủng loại hàng hóa khác");
-            }
-        }
-        if(trangThai.equals(NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId())) {
-            for (HhDxuatKhMttSldd chiCuc : objHdr.getDsSlddDtlList()){
-                BigDecimal aLong = hhDxuatKhMttRepository.countSLDalenKh(objHdr.getNamKh(), objHdr.getLoaiVthh(), chiCuc.getMaDvi(), NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
-                BigDecimal soLuongTotal = aLong.add(chiCuc.getSoLuong());
-                if (soLuongTotal.compareTo(chiCuc.getSoLuongChiTieu()) >  0){
-                    throw new Exception(chiCuc.getTenDvi() + " đã nhập quá số lượng chi tiêu, vui lòng nhập lại");
+            if(trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.DUTHAO.getId())){
+                HhDxuatKhMttHdr dXuat = hhDxuatKhMttRepository.findAllByLoaiVthhAndCloaiVthhAndNamKhAndMaDviAndTrangThaiNot(objHdr.getLoaiVthh(), objHdr.getCloaiVthh(), objHdr.getNamKh(), objHdr.getMaDvi(),NhapXuatHangTrangThaiEnum.DUTHAO.getId());
+                if(!ObjectUtils.isEmpty(dXuat) && !dXuat.getId().equals(objHdr.getId())){
+                    throw new Exception("Chủng loại hàng hóa đã được tạo và gửi duyệt, xin vui lòng chọn lại chủng loại hàng hóa khác");
                 }
             }
-        }
+            if(trangThai.equals(NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId())) {
+                for(HhDxuatKhMttSldd chiCuc : objHdr.getDsSlddDtlList()){
+                    BigDecimal aLong = hhDxuatKhMttRepository.countSLDalenKh(objHdr.getNamKh(), objHdr.getLoaiVthh(), chiCuc.getMaDvi(),NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
+                    BigDecimal soLuongTotal = aLong.add(chiCuc.getSoLuong());
+                    if (chiCuc.getSoLuongChiTieu() == null){
+                        throw new Exception("Hiện chưa có số lượng chỉ tiêu kế hoạch năm, vui lòng nhập lại");
+                    }
+                    if(soLuongTotal.compareTo(chiCuc.getSoLuongChiTieu()) > 0){
+                        throw new Exception(chiCuc.getTenDvi() + " đã nhập quá số lượng chi tiêu, vui lòng nhập lại");
+                    }
+                }
+            }
+
     }
 
     @Transactional
@@ -270,43 +261,38 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
         return qOptional.get();
     }
 
-    public HhDxuatKhMttHdr approve(StatusReq statusReq) throws Exception{
-        UserInfo userInfo=SecurityContextService.getUser();
-        if(StringUtils.isEmpty(statusReq.getId())){
+    @Transactional
+    public HhDxuatKhMttHdr approve(StatusReq stReq) throws Exception {
+        if (StringUtils.isEmpty(stReq.getId()))
             throw new Exception("Không tìm thấy dữ liệu");
-        }
-        Optional<HhDxuatKhMttHdr> optional =hhDxuatKhMttRepository.findById(Long.valueOf(statusReq.getId()));
-        if (!optional.isPresent()){
-            throw new Exception("Không tìm thấy dữ liệu");
-        }
 
-        String status= statusReq.getTrangThai()+optional.get().getTrangThai();
-        switch (status){
-            case Contains.CHO_DUYET_TP + Contains.DUTHAO:
-            case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
-            case Contains.CHO_DUYET_TP + Contains.TUCHOI_TP:
-            case Contains.CHO_DUYET_TP + Contains.TUCHOI_LDC:
-                this.validateData(optional.get(),Contains.CHODUYET_TP);
-                optional.get().setNguoiGuiDuyet(getUser().getUsername());
-                optional.get().setNgayGuiDuyet(getDateTimeNow());
-                break;
-            case Contains.TUCHOI_TP + Contains.CHO_DUYET_TP:
+        HhDxuatKhMttHdr optional = this.detail(stReq.getId());
+        String status = stReq.getTrangThai() + optional.getTrangThai();
+        switch (status) {
+            case Contains.CHODUYET_TP + Contains.DUTHAO:
+            case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+            case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
+                this.validateData(optional,Contains.CHODUYET_TP);
+                optional.setNguoiGuiDuyet(getUser().getUsername());
+                optional.setNgayGuiDuyet(getDateTimeNow());
+            case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
             case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
-                optional.get().setNguoiPduyet(getUser().getUsername());
-                optional.get().setNgayPduyet(getDateTimeNow());
-                optional.get().setLdoTuchoi(statusReq.getLyDo());
+                optional.setNguoiPduyet(getUser().getUsername());
+                optional.setNgayPduyet(getDateTimeNow());
+                optional.setLdoTuchoi(stReq.getLyDo());
                 break;
+            case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
             case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
-                this.validateData(optional.get(),statusReq.getTrangThai());
-                optional.get().setNguoiPduyet(getUser().getUsername());
-                optional.get().setNgayPduyet(getDateTimeNow());
+                this.validateData(optional,stReq.getTrangThai());
+                optional.setNguoiPduyet(getUser().getUsername());
+                optional.setNgayPduyet(getDateTimeNow());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
         }
-        optional.get().setTrangThai(statusReq.getTrangThai());
-        HhDxuatKhMttHdr created = hhDxuatKhMttRepository.save(optional.get());
-        return created;
+
+        optional.setTrangThai(stReq.getTrangThai());
+        return hhDxuatKhMttRepository.save(optional);
     }
 
     public  void export(SearchHhDxKhMttHdrReq objReq, HttpServletResponse response) throws Exception{

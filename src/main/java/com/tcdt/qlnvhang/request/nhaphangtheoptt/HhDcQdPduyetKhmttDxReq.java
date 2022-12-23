@@ -14,6 +14,7 @@ import java.util.List;
 public class HhDcQdPduyetKhmttDxReq {
     private Long id;
     private Long idDxuat;
+    private Long idQdHdr;
     private String soDxuat;
     private Long idDcHdr;
     private String maDvi;
@@ -29,9 +30,9 @@ public class HhDcQdPduyetKhmttDxReq {
     private String moTaHangHoa;
     private String ptMua;
     private String tchuanCluong;
-    private BigDecimal giaMua;
-    private BigDecimal giaChuaThue;
-    private BigDecimal giaCoThue;
+    private String giaMua;
+    private BigDecimal donGia;
+    private BigDecimal donGiaVat;
     private BigDecimal thueGtgt;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date tgianMkho;

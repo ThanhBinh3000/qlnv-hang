@@ -10,9 +10,9 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface XhQdDchinhKhBdgHdrRepository extends JpaRepository<XhQdDchinhKhBdgHdr, Long> {
-  @Query(value = "select * from XH_QD_DC_KH_BDG BDG " +
+  @Query(value = "select * from XH_QD_DC_KH_BDG_HDR BDG " +
       " where (:namKh IS NULL OR BDG.NAM_KH = TO_NUMBER(:namKh)) " +
-      "AND (:soQdPd IS NULL OR LOWER(BDG.SO_QD_PD) LIKE LOWER(CONCAT(CONCAT('%',:soQdPd),'%' ) ) )" +
+      "AND (:soQdDc IS NULL OR LOWER(BDG.SO_QD_DC) LIKE LOWER(CONCAT(CONCAT('%',:soQdDc),'%' ) ) )" +
       "AND (:trichYeu IS NULL OR LOWER(BDG.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%',:trichYeu),'%')))" +
       "AND (:ngayKyQdTu IS NULL OR BDG.NGAY_KY_QD >=  TO_DATE(:ngayKyQdTu,'yyyy-MM-dd')) " +
       "AND (:ngayKyQdDen IS NULL OR BDG.NGAY_KY_QD <= TO_DATE(:ngayKyQdDen,'yyyy-MM-dd'))" +
@@ -22,9 +22,9 @@ public interface XhQdDchinhKhBdgHdrRepository extends JpaRepository<XhQdDchinhKh
       " AND (:lastest IS NULL OR BDG.LASTEST = :lastest) " +
       "AND (:maDvi IS NULL OR LOWER(BDG.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "
       ,nativeQuery = true)
-  Page<XhQdDchinhKhBdgHdr> searchPage(Integer namKh, String soQdPd, String trichYeu, String ngayKyQdTu, String ngayKyQdDen, String soTrHdr, String loaiVthh, String trangThai, Integer lastest, String maDvi, Pageable pageable);
+  Page<XhQdDchinhKhBdgHdr> searchPage(Integer namKh, String soQdDc, String trichYeu, String ngayKyQdTu, String ngayKyQdDen, String soTrHdr, String loaiVthh, String trangThai, Integer lastest, String maDvi, Pageable pageable);
 
 
-  List<XhQdDchinhKhBdgHdr> findBySoQdPd(String soQdPd);
+  List<XhQdDchinhKhBdgHdr> findBySoQdDc(String soQdDc);
   List <XhQdDchinhKhBdgHdr> findAllByIdIn(List<Long> ids);
 }

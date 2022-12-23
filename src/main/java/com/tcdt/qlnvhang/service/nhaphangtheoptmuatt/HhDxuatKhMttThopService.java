@@ -103,7 +103,7 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
             HhDxKhMttThopDtl thopDtl = new HhDxKhMttThopDtl();
             thopDtl.setIdDxHdr(dXuat.getId());
             thopDtl.setMaDvi(dXuat.getMaDvi());
-            thopDtl.setTenDvi(getDviByMa(dXuat.getMaDvi(), req).getTenDvi());
+//            thopDtl.setTenDvi(getDviByMa(dXuat.getMaDvi(), req).getTenDvi());
             thopDtl.setDiaChiDvi(dXuat.getDiaChiDvi());
             thopDtl.setSoDxuat(dXuat.getSoDxuat());
             thopDtl.setNgayPduyet(dXuat.getNgayPduyet());

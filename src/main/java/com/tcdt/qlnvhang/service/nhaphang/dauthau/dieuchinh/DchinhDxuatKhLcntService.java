@@ -340,7 +340,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		optional.get().setTrangThai(stReq.getTrangThai());
 		hdrRepository.save(optional.get());
 		if (stReq.getTrangThai().equals(Contains.BAN_HANH)) {
-			this.updateDataQdGoc(optional.get());
+//			this.updateDataQdGoc(optional.get());
 		}
 
 		return optional.get();
