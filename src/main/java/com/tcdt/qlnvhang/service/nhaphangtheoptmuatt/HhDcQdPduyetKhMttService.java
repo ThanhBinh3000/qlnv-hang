@@ -139,14 +139,17 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         List<HhDcQdPduyetKhmttDx> dcQdPduyetKhmttDxList=hhDcQdPduyetKhMttDxRepository.findAllByIdDcHdr(data.getId());
         List<Long>  listIdDx=dcQdPduyetKhmttDxList.stream().map(HhDcQdPduyetKhmttDx::getId).collect(Collectors.toList());
         List<HhDcQdPduyetKhmttSldd> listSlDd=hhDcQdPduyetKhmttSlddRepository.findAllByIdDcKhmttIn(listIdDx);
+        for (HhDcQdPduyetKhmttSldd a : listSlDd){
+            List<HhDcQdPdKhmttSlddDtl> listSlDdDtl =hhDcQdPdKhmttSlddDtlRepository.findAllByIdDiaDiem(a.getId());
+            hhDcQdPdKhmttSlddDtlRepository.deleteAll(listSlDdDtl);
+        }
+        hhDcQdPduyetKhmttSlddRepository.deleteAll(listSlDd);
         hhDcQdPduyetKhMttDxRepository.deleteAll(dcQdPduyetKhmttDxList);
         for (HhDcQdPduyetKhmttDxReq listDx :objReq.getHhDcQdPduyetKhmttDxList()){
             HhDcQdPduyetKhmttDx dx = ObjectMapperUtils.map(listDx, HhDcQdPduyetKhmttDx.class);
             dx.setIdDxHdr(listDx.getIdDxHdr());
             dx.setIdDcHdr(data.getId());
             HhDcQdPduyetKhmttDx save = hhDcQdPduyetKhMttDxRepository.save(dx);
-
-            hhDcQdPduyetKhmttSlddRepository.deleteAll(listSlDd);
             for (HhDcQdPduyetKhmttSlddReq listSLDD : listDx.getChildren()){
                 HhDcQdPduyetKhmttSldd slDd =ObjectMapperUtils.map(listSLDD, HhDcQdPduyetKhmttSldd.class);
                 slDd.setIdDxKhmtt(save.getIdDxHdr());
@@ -300,20 +303,18 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
 
         String status= statusReq.getTrangThai()+optional.get().getTrangThai();
         switch (status){
-            case Contains.CHO_DUYET_TP + Contains.DUTHAO:
-            case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
-            case Contains.CHO_DUYET_TP + Contains.TUCHOI_TP:
-            case Contains.CHO_DUYET_TP + Contains.TUCHOI_LDC:
+            case Contains.CHODUYET_LDV + Contains.DUTHAO:
+            case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
                 optional.get().setNguoiGduyet(userInfo.getUsername());
                 optional.get().setNgayGduyet(getDateTimeNow());
                 break;
-            case Contains.TUCHOI_TP + Contains.CHO_DUYET_TP:
-            case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
+            case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
                 optional.get().setNguoiGduyet(getUser().getUsername());
                 optional.get().setNgayGduyet(getDateTimeNow());
                 optional.get().setLdoTchoi(statusReq.getLyDo());
                 break;
-            case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
+            case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
+            case Contains.BAN_HANH + Contains.DADUYET_LDV:
                 optional.get().setNguoiPduyet(getUser().getUsername());
                 optional.get().setNgayPduyet(getDateTimeNow());
                 break;
