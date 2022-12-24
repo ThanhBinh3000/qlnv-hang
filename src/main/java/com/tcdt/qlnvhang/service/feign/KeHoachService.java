@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
@@ -43,15 +44,17 @@ public class KeHoachService extends BaseServiceImpl {
 
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(str);
-        // Thóc
-        if(loaiVthh.equals("0101")){
-            return typeChiTieu.equals("NHAP") ? jsonNode.get("ntnThoc").decimalValue() : jsonNode.get("xtnTongThoc").decimalValue();
+        if(ObjectUtils.isEmpty(jsonNode)){
+            // Thóc
+            if(loaiVthh.equals("0101")){
+                return typeChiTieu.equals("NHAP") ? jsonNode.get("ntnThoc").decimalValue() : jsonNode.get("xtnTongThoc").decimalValue();
+            }
+            // Gạo
+            if(loaiVthh.equals("0102")){
+                return typeChiTieu.equals("NHAP") ? jsonNode.get("ntnGao").decimalValue() : jsonNode.get("xtnTongGao").decimalValue();
+            }
         }
-        // Gạo
-        if(loaiVthh.equals("0102")){
-            return typeChiTieu.equals("NHAP") ? jsonNode.get("ntnGao").decimalValue() : jsonNode.get("xtnTongGao").decimalValue();
-        }
-        return null;
+        return new BigDecimal(0);
     }
 
 //

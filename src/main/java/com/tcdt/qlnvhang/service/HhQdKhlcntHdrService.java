@@ -31,7 +31,6 @@ public interface HhQdKhlcntHdrService {
 
 //	Page<HhQdKhlcntHdr> colection(HhQdKhlcntSearchReq objReq) throws Exception;
 
-	@Transactional(rollbackOn = Exception.class)
 	HhQdKhlcntHdr approve(StatusReq stReq) throws Exception;
 
 	@Transactional(rollbackOn = Exception.class)

@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
-import javax.transaction.Transactional;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.*;
@@ -26,6 +25,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -180,7 +180,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			qd.setTrangThai(Contains.CHUACAPNHAT);
 			hhQdKhlcntDtlRepository.save(qd);
 			for (HhQdKhlcntDsgthauReq gtList : ObjectUtils.isEmpty(dx.getDsGoiThau()) ? dx.getChildren() : dx.getDsGoiThau()){
-				HhQdKhlcntDsgthau gt = ObjectMapperUtils.map(gtList, HhQdKhlcntDsgthau.class);
+					HhQdKhlcntDsgthau gt = ObjectMapperUtils.map(gtList, HhQdKhlcntDsgthau.class);
 				hhQdKhlcntDsgthauCtietRepository.deleteAllByIdGoiThau(gt.getId());
 				gt.setId(null);
 				gt.setIdQdDtl(qd.getId());
@@ -203,6 +203,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		}
 	}
 
+	@Transactional(rollbackFor = {Exception.class, Throwable.class})
 	public void validateData(HhQdKhlcntHdr objHdr) throws Exception {
 		for(HhQdKhlcntDtl dtl : objHdr.getChildren()){
 			for(HhQdKhlcntDsgthau dsgthau : dtl.getChildren()){
@@ -485,6 +486,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	}
 
 	@Override
+	@Transactional(rollbackFor = {Exception.class, Throwable.class})
 	public HhQdKhlcntHdr approve(StatusReq stReq) throws Exception {
 		if (StringUtils.isEmpty(stReq.getId())){
 			throw new Exception("Không tìm thấy dữ liệu");
@@ -497,7 +499,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		}
 	}
 
-	@Transactional(rollbackOn = Exception.class)
+	@Transactional(rollbackFor = {Exception.class, Throwable.class})
 	HhQdKhlcntHdr approveVatTu(StatusReq stReq,HhQdKhlcntHdr dataDB) throws Exception {
 		String status = stReq.getTrangThai() + dataDB.getTrangThai();
 		switch (status) {
@@ -535,7 +537,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		return createCheck;
 	}
 
-	@Transactional(rollbackOn = Exception.class)
+	@Transactional(rollbackFor = {Exception.class, Throwable.class})
 	HhQdKhlcntHdr approveLT(StatusReq stReq, HhQdKhlcntHdr dataDB) throws Exception{
 		String status = stReq.getTrangThai() + dataDB.getTrangThai();
 		switch (status) {
@@ -554,7 +556,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 					if(qOptional.get().getTrangThai().equals(Contains.DABANHANH_QD)){
 						throw new Exception("Tổng hợp kế hoạch này đã được quyết định");
 					}
-					hhDxKhLcntThopHdrRepository.updateTrangThai(dataDB.getIdThHdr(), Contains.DABANHANH_QD);
+					qOptional.get().setTrangThai(Contains.DABANHANH_QD);
+					hhDxKhLcntThopHdrRepository.save(qOptional.get());
 				}else{
 					throw new Exception("Tổng hợp kế hoạch không được tìm thấy");
 				}
