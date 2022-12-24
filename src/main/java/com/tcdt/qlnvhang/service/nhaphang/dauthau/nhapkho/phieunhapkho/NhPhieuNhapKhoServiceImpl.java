@@ -286,17 +286,9 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
     public Page<NhPhieuNhapKho> search(LkPhieuNhapKhoReq req) throws Exception {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),req.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<NhPhieuNhapKho> pages = nhPhieuNhapKhoRepository.selectPageTheKho(req.getTrangThai(),req.getNam(), Contains.convertDateToString(req.getTuNgay()),Contains.convertDateToString(req.getDenNgay()), req.getMaDvi(),req.getLoaiVthh(),req.getCloaiVthh(),req.getMaDiemKho(),req.getMaNhaKho(),req.getMaNganKho(),req.getMaLoKho(),pageable);
-        Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
-        Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
         pages.getContent().forEach(x -> {
             x.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(x.getTrangThai()));
-            x.setTenLoaiVthh(listDanhMucHangHoa.get(x.getLoaiVthh()));
-            x.setTenCloaiVthh(listDanhMucHangHoa.get(x.getCloaiVthh()));
-            x.setTenDvi(listDanhMucDvi.get(x.getMaDvi()));
-            x.setTenDiemKho(listDanhMucDvi.get(x.getMaDiemKho()));
-            x.setTenNhaKho(listDanhMucDvi.get(x.getMaNhaKho()));
-            x.setTenNganKho(listDanhMucDvi.get(x.getMaNganKho()));
-            x.setTenLoKho(listDanhMucDvi.get(x.getMaLoKho()));
+            x.setHangHoaList(nhPhieuNhapKhoCtRepository.findAllByIdPhieuNkHdr(x.getId()));
         });
         return pages;
     }
