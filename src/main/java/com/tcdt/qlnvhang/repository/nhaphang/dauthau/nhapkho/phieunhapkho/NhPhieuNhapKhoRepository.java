@@ -32,8 +32,8 @@ public interface NhPhieuNhapKhoRepository extends BaseRepository<NhPhieuNhapKho,
             value = "SELECT * FROM NH_PHIEU_NHAP_KHO PNKLT " +
                     "WHERE (:trangThai IS NULL OR PNKLT.TRANG_THAI = :trangThai )" +
                     "  AND (:nam IS NULL OR PNKLT.NAM = TO_NUMBER(:nam) ) " +
-                    "AND (:tuNgay IS NULL OR PNKLT.NGAY_NHAP_KHO >=  TO_DATE(:tuNgay,'yyyy-MM-dd'))"+
-                    "AND (:denNgay IS NULL OR PNKLT.NGAY_NHAP_KHO <=  TO_DATE(:denNgay,'yyyy-MM-dd'))"+
+                    "AND (:tuNgay IS NULL OR PNKLT.NGAY_TAO >=  TO_DATE(:tuNgay,'yyyy-MM-dd'))"+
+                    "AND (:denNgay IS NULL OR PNKLT.NGAY_TAO <=  TO_DATE(:denNgay,'yyyy-MM-dd'))"+
                     "  AND (:maDvi IS NULL OR PNKLT.MA_DVI = :maDvi ) " +
                     "  AND (:loaiVthh IS NULL OR PNKLT.LOAI_VTHH = :loaiVthh ) " +
                     "  AND (:cloaiVthh IS NULL OR PNKLT.CLOAI_VTHH = :cloaiVthh ) " +

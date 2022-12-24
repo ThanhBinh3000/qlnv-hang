@@ -137,6 +137,7 @@ public class NhPhieuNhapKhoController {
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            e.printStackTrace();
             resp.setMsg(e.getMessage());
             log.error("Tra cứu Quản lý lương thực lỗi: {}", e);
         }
