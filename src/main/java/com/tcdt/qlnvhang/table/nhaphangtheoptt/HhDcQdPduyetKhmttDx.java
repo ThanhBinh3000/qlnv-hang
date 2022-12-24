@@ -56,6 +56,6 @@ public class HhDcQdPduyetKhmttDx implements Serializable {
     private String tenDuAn;
 
     @Transient
-    private  List<HhDcQdPduyetKhmttSldd> hhDcQdPduyetKhmttSlddList=new ArrayList<>();
+    private  List<HhDcQdPduyetKhmttSldd> children=new ArrayList<>();
 
 }

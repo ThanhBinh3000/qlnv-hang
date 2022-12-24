@@ -97,7 +97,7 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
             dx.setIdQdHdr(listDx.getIdQdHdr());
             dx.setIdDcHdr(data.getId());
             HhDcQdPduyetKhmttDx save = hhDcQdPduyetKhMttDxRepository.save(dx);
-            for (HhDcQdPduyetKhmttSlddReq listSLDD : listDx.getHhDcQdPduyetKhmttSlddList()){
+            for (HhDcQdPduyetKhmttSlddReq listSLDD : listDx.getChildren()){
                 HhDcQdPduyetKhmttSldd slDd =ObjectMapperUtils.map(listSLDD, HhDcQdPduyetKhmttSldd.class);
                 slDd.setIdDxKhmtt(save.getIdDxHdr());
                 slDd.setIdDcKhmtt(save.getId());
@@ -147,7 +147,7 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
             HhDcQdPduyetKhmttDx save = hhDcQdPduyetKhMttDxRepository.save(dx);
 
             hhDcQdPduyetKhmttSlddRepository.deleteAll(listSlDd);
-            for (HhDcQdPduyetKhmttSlddReq listSLDD : listDx.getHhDcQdPduyetKhmttSlddList()){
+            for (HhDcQdPduyetKhmttSlddReq listSLDD : listDx.getChildren()){
                 HhDcQdPduyetKhmttSldd slDd =ObjectMapperUtils.map(listSLDD, HhDcQdPduyetKhmttSldd.class);
                 slDd.setIdDxKhmtt(save.getIdDxHdr());
                 slDd.setIdDcKhmtt(save.getId());
@@ -190,16 +190,16 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
             pduyetDx.setTenDvi(StringUtils.isEmpty(pduyetDx.getMaDvi()) ? null : hashMapDmdv.get(pduyetDx.getMaDvi()));
             List<Long> idDx=listdx.stream().map(HhDcQdPduyetKhmttDx::getId).collect(Collectors.toList());
             List<HhDcQdPduyetKhmttSldd> listSlDd =hhDcQdPduyetKhmttSlddRepository.findAllByIdDcKhmttIn(idDx);
-            pduyetDx.setHhDcQdPduyetKhmttSlddList(listSlDd);
+            pduyetDx.setChildren(listSlDd);
             for (HhDcQdPduyetKhmttSldd sldd:listSlDd){
                 sldd.setTenDvi(StringUtils.isEmpty(sldd.getMaDvi()) ? null : hashMapDmdv.get(sldd.getMaDvi()));
                 List<HhDcQdPdKhmttSlddDtl> listSlddDtl =hhDcQdPdKhmttSlddDtlRepository.findAllByIdDiaDiem(sldd.getId());
                 for (HhDcQdPdKhmttSlddDtl slddDtl :listSlddDtl){
                     slddDtl.setTenDvi(StringUtils.isEmpty(slddDtl.getMaDvi())? null:hashMapDmdv.get(slddDtl.getMaDvi()));
                     slddDtl.setDiaDiemNhap(StringUtils.isEmpty(slddDtl.getMaDiemKho()) ? null : hashMapDmdv.get(slddDtl.getMaDiemKho()));
+                    sldd.setChildren(listSlddDtl);
                 }
             }
-            pduyetDx.setHhDcQdPduyetKhmttSlddList(listSlDd);
         }
         data.setHhDcQdPduyetKhmttDxList(listdx);
         

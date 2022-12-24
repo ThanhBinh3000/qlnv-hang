@@ -49,7 +49,7 @@ public class HhDcQdPduyetKhmttDxReq {
     private String tenDuAn;
 
 
-    private List<HhDcQdPduyetKhmttSlddReq> hhDcQdPduyetKhmttSlddList =new ArrayList<>();
+    private List<HhDcQdPduyetKhmttSlddReq> children =new ArrayList<>();
 
 
 }
