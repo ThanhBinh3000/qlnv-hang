@@ -13,11 +13,11 @@ public class LkPhieuNhapKhoReq extends BaseRequest {
 
     Integer nam;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
-     Date tuNgay;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    Date tuNgay;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
-     Date denNgay;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    Date denNgay;
 
     String loaiVthh;
 
