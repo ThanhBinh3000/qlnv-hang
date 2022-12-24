@@ -44,7 +44,7 @@ public class KeHoachService extends BaseServiceImpl {
 
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(str);
-        if(ObjectUtils.isEmpty(jsonNode)){
+        if(!ObjectUtils.isEmpty(jsonNode)){
             // Thóc
             if(loaiVthh.equals("0101")){
                 return typeChiTieu.equals("NHAP") ? jsonNode.get("ntnThoc").decimalValue() : jsonNode.get("xtnTongThoc").decimalValue();
