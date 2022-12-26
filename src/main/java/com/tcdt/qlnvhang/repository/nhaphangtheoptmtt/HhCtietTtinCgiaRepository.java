@@ -7,10 +7,15 @@ import org.springframework.data.jpa.repository.Query;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 public interface HhCtietTtinCgiaRepository extends JpaRepository<HhChiTietTTinChaoGia,Long> {
     List<HhChiTietTTinChaoGia> findAllByIdSoQdPduyetCgia(Long idSoQdPduyetCgia);
     List<HhChiTietTTinChaoGia> findAllByIdTkhaiKh(Long idTkhaiKh);
+
+    Optional<HhChiTietTTinChaoGia> findByIdTkhaiKh(Long idTkhaiKh);
+
+
 
     List<HhChiTietTTinChaoGia> findAllByIdSoQdPduyetCgiaIn(List<Long> ids);
 
