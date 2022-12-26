@@ -20,7 +20,9 @@ public class HhCgiaReq {
 
     private String trangThaiTkhai;
 
-    private List<FileDinhKemReq> fileDinhkems =new ArrayList<>();
+    private String ptMuaTrucTiep;
+
+    private List<FileDinhKemReq> fileDinhKems =new ArrayList<>();
 
     private List<HhChiTietTTinChaoGiaReq> hhChiTietTTinChaoGiaReqs = new ArrayList<>();
 }
