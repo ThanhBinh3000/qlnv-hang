@@ -118,10 +118,10 @@ public class HhBbNghiemthuKlstHdrController {
 
 	@ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03", response = List.class)
 	@PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> updateStatus(@Valid HttpServletRequest req, @RequestBody StatusReq stReq) {
+	public ResponseEntity<BaseResponse> updateStatus(@RequestBody HhBbNghiemthuKlstHdrReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-//			resp.setData(service.approve(stReq));
+			resp.setData(service.approve(objReq));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {

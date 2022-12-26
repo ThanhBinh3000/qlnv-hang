@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.tcdt.qlnvhang.entities.FileDKemJoinKeLot;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbangiaonhan.NhBbGiaoNhanVt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
@@ -14,6 +15,7 @@ import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhap
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
+import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.extern.log4j.Log4j2;
@@ -178,7 +180,60 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 
     @Override
     public HhBbNghiemthuKlstHdr approve(HhBbNghiemthuKlstHdrReq req) throws Exception {
-        return null;
+        UserInfo userInfo = UserUtils.getUserInfo();
+
+        if (!Contains.CAP_CHI_CUC.equals(userInfo.getCapDvi())){
+            throw new Exception("Bad Request");
+        }
+
+        if (StringUtils.isEmpty(req.getId())){
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+
+        Optional<HhBbNghiemthuKlstHdr> optional = hhBbNghiemthuKlstRepository.findById(req.getId());
+        if (!optional.isPresent()){
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+
+        HhBbNghiemthuKlstHdr phieu = optional.get();
+
+        String status = req.getTrangThai() + phieu.getTrangThai();
+        if (
+            (NhapXuatHangTrangThaiEnum.CHODUYET_TK.getId() + NhapXuatHangTrangThaiEnum.DUTHAO.getId()).equals(status) ||
+            (NhapXuatHangTrangThaiEnum.CHODUYET_TK.getId() + NhapXuatHangTrangThaiEnum.TUCHOI_TK.getId()).equals(status) ||
+            (NhapXuatHangTrangThaiEnum.CHODUYET_TK.getId() + NhapXuatHangTrangThaiEnum.TUCHOI_KT.getId()).equals(status) ||
+            (NhapXuatHangTrangThaiEnum.CHODUYET_TK.getId() + NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId()).equals(status)
+        ) {
+            phieu.setNguoiGuiDuyetId(userInfo.getId());
+            phieu.setNgayGuiDuyet(new Date());
+        } else if (
+            (NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_TK.getId()).equals(status) ||
+            (NhapXuatHangTrangThaiEnum.TUCHOI_TK.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_TK.getId()).equals(status)
+        ) {
+            phieu.setNgayPduyet(new Date());
+            phieu.setNguoiPduyetId(userInfo.getId());
+            phieu.setLyDoTuChoi(req.getLyDoTuChoi());
+        } else if (
+            (NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId()).equals(status) ||
+            (NhapXuatHangTrangThaiEnum.TUCHOI_KT.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId()).equals(status)
+        ) {
+            phieu.setNgayPduyet(new Date());
+            phieu.setNguoiPduyetId(userInfo.getId());
+            phieu.setLyDoTuChoi(req.getLyDoTuChoi());
+        } else if (
+            (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId()).equals(status) ||
+            (NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId()).equals(status)
+        ) {
+            phieu.setNgayPduyet(new Date());
+            phieu.setNguoiPduyetId(userInfo.getId());
+            phieu.setLyDoTuChoi(req.getLyDoTuChoi());
+        }
+        else {
+            throw new Exception("Phê duyệt không thành công");
+        }
+        phieu.setTrangThai(req.getTrangThai());
+        hhBbNghiemthuKlstRepository.save(phieu);
+        return phieu;
     }
 
     @Override
