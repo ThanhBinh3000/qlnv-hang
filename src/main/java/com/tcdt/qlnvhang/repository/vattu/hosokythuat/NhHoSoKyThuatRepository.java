@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.repository.vattu.hosokythuat;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMau;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoKyThuat;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
 import com.tcdt.qlnvhang.repository.BaseRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +25,9 @@ public interface NhHoSoKyThuatRepository extends BaseRepository<NhHoSoKyThuat, L
             countQuery = "SELECT COUNT(1) FROM NH_HO_SO_KY_THUAT  HS",
             nativeQuery = true)
     Page<NhHoSoKyThuat> selectPage(Pageable pageable);
+
+    NhHoSoKyThuat findBySoBbLayMau(String soBienBanLayMau);
+
 
 //    Optional<NhHoSoKyThuat> findFirstBySoBienBan(String soBienBan);
 }
