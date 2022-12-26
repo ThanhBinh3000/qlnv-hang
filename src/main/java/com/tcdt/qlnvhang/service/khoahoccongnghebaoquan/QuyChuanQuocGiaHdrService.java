@@ -176,9 +176,9 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         Page<QuyChuanQuocGiaHdr> page=this.searchPage(objReq);
         List<QuyChuanQuocGiaHdr> data=page.getContent();
 
-        String title="Danh sách đề xuất kế hoạch mua trực tiếp";
+        String title="Danh sách quy chuẩn kỹ thuật quốc gia";
         String[] rowsName=new String[]{"STT","Số văn bản","Số hiệu quy chuẩn,tiêu chuẩn văn bản","Áp dụng tại","Loại hàng hóa","Ngày quyết dịnh","Ngày hiệu lực","Trạng thái","Hiệu lực"};
-        String fileName="danh-sach-dx-kh-mua-truc-tiep.xlsx";
+        String fileName="danh-sach-quy-chuan-ky-thuat-quoc-gia.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs=null;
         for (int i=0;i<data.size();i++){

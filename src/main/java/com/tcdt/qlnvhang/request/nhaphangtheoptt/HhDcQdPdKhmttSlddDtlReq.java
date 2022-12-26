@@ -8,14 +8,12 @@ import java.math.BigDecimal;
 @Data
 public class HhDcQdPdKhmttSlddDtlReq {
     private Long id;
-    private Long idSldd;
+    private Long idDiaDiem;
     private String maDvi;
-    @Transient
-    private String tenDvi;
     private String maDiemKho;
-    @Transient
-    private String tenDiemKho;
-    private String diaDiemKho;
-    private BigDecimal soLuongDxmtt;
+    private String diaDiemNhap;
+    private BigDecimal soLuong;
     private BigDecimal donGiaVat;
+    private BigDecimal donGia;
+    private BigDecimal thanhTien;
 }

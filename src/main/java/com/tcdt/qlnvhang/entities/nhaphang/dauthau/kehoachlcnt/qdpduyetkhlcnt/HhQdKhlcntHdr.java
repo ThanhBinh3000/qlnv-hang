@@ -183,10 +183,10 @@ public class HhQdKhlcntHdr implements Serializable {
 	String soDxuatKhlcnt;
 
 	public String getTenTrangThai() {
-		return NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(this.getTrangThai());
+		return NhapXuatHangTrangThaiEnum.getTenById(this.getTrangThai());
 	}
 
 	public String getTenTrangThaiDt() {
-		return NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(this.getTrangThaiDt());
+		return NhapXuatHangTrangThaiEnum.getTenById(this.getTrangThaiDt());
 	}
 }

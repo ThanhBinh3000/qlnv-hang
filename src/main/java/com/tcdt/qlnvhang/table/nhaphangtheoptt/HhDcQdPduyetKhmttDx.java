@@ -20,7 +20,8 @@ public class HhDcQdPduyetKhmttDx implements Serializable {
     @SequenceGenerator(sequenceName = "HH_DC_QD_PDUYET_KHMTT_DX_SEQ", allocationSize = 1, name = "HH_DC_QD_PDUYET_KHMTT_DX_SEQ")
 
     private Long id;
-    private Long idDxuat;
+    private Long idDxHdr;
+    private Long idQdHdr;
     private String soDxuat;
     private Long idDcHdr;
     private String maDvi;
@@ -36,9 +37,9 @@ public class HhDcQdPduyetKhmttDx implements Serializable {
     private String moTaHangHoa;
     private String ptMua;
     private String tchuanCluong;
-    private BigDecimal giaMua;
-    private BigDecimal giaChuaThue;
-    private BigDecimal giaCoThue;
+    private String giaMua;
+    private BigDecimal donGia;
+    private BigDecimal donGiaVat;
     private BigDecimal thueGtgt;
     @Temporal(TemporalType.DATE)
     private Date tgianMkho;
@@ -55,6 +56,6 @@ public class HhDcQdPduyetKhmttDx implements Serializable {
     private String tenDuAn;
 
     @Transient
-    private  List<HhDcQdPduyetKhmttSldd> hhDcQdPduyetKhmttSlddList=new ArrayList<>();
+    private  List<HhDcQdPduyetKhmttSldd> children=new ArrayList<>();
 
 }

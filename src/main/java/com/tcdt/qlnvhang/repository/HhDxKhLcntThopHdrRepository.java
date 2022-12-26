@@ -17,9 +17,8 @@ public interface HhDxKhLcntThopHdrRepository extends BaseRepository<HhDxKhLcntTh
 	@Query(value = "UPDATE HH_DX_KHLCNT_THOP_HDR SET PHUONG_AN=:trangThai WHERE ID = :idThHdr", nativeQuery = true)
 	void updateTongHop(Long idThHdr, String trangThai);
 
-	@Transactional()
-	@Modifying
 	@Query(value = "UPDATE HH_DX_KHLCNT_THOP_HDR SET TRANG_THAI =:trangThai WHERE ID = :idThHdr", nativeQuery = true)
+	@Transactional()
 	void updateTrangThai(Long idThHdr, String trangThai);
 
 	@Query(
