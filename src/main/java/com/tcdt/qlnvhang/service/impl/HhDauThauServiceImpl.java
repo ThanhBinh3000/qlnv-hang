@@ -238,7 +238,7 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
         }
 
         String status = stReq.getTrangThai() + optional.get().getTrangThai();
-        if ((NhapXuatHangTrangThaiEnum.HOANTHANHCAPNHAT.getId() + NhapXuatHangTrangThaiEnum.CHUACAPNHAT.getId()).equals(status)) {
+        if ((NhapXuatHangTrangThaiEnum.HOANTHANHCAPNHAT.getId() + NhapXuatHangTrangThaiEnum.DANGCAPNHAT.getId()).equals(status)) {
             optional.get().setTrangThai(stReq.getTrangThai());
         }else{
             throw new Exception("Cập nhật không thành công");

@@ -40,5 +40,5 @@ public class HhChiTietTTinChaoGia implements Serializable {
     @Transient
     private String tenTrangThai;
     @Transient
-    private FileDinhKem fileDinhKems ;
+    private FileDinhKem fileDinhKemChaogia ;
 }
