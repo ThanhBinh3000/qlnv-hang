@@ -428,8 +428,10 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		dtl.setHhQdKhlcntHdr(hhQdKhlcntHdr);
 
 		List<HhQdKhlcntDsgthau> byIdQdDtl = hhQdKhlcntDsgthauRepository.findByIdQdDtl(dtl.getId());
+		byIdQdDtl.forEach( x -> {
+			x.setTenDvi(hashMapDvi.get(x.getMaDvi()));
+		});
 		dtl.setChildren(byIdQdDtl);
-
 
 		long countThanhCong = byIdQdDtl.stream().filter(x -> x.getTrangThai().equals(NhapXuatHangTrangThaiEnum.THANH_CONG.getId())).count();
 		long countThatBai = byIdQdDtl.stream().filter(x -> x.getTrangThai().equals(NhapXuatHangTrangThaiEnum.THAT_BAI.getId())).count();
