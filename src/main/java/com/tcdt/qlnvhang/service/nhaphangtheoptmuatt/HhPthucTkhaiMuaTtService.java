@@ -120,7 +120,7 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
             nthauDthau.setIdTkhaiKh(objReq.getIdChaoGia());
             HhChiTietTTinChaoGia save = hhCtietTtinCgiaRepository.save(nthauDthau);
             List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(req.getFileDinhKems()), nthauDthau.getId(), "HH_CTIET_TTIN_CHAO_GIA");
-            nthauDthau.setFileDinhKemChaogia(fileDinhKems.get(0));
+            nthauDthau.setFileDinhKems(fileDinhKems.get(0));
             listDuThau.add(nthauDthau);
         }
         if(byId.get().getPtMuaTrucTiep().equals(Contains.UY_QUYEN)){
@@ -145,11 +145,11 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
         byIdDtGt.forEach(f -> {
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
         });
-        Optional<HhChiTietTTinChaoGia> optional = hhCtietTtinCgiaRepository.findByIdTkhaiKh(Long.parseLong(ids));
-        HhChiTietTTinChaoGia chaoGia = optional.get();
+
+        HhChiTietTTinChaoGia chaoGia = byIdDtGt.get(0);
       List<FileDinhKem> fileDinhKems = fileDinhKemService.search(chaoGia.getId(), Arrays.asList(HhChiTietTTinChaoGia.TABLE_NAME));
       if (!DataUtils.isNullObject(fileDinhKems)){
-          chaoGia.setFileDinhKemChaogia(fileDinhKems.get(0));
+          chaoGia.setFileDinhKems(fileDinhKems.get(0));
       }
         return byIdDtGt;
     }
