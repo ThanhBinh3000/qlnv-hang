@@ -20,15 +20,27 @@ public class HhQdGiaoNvNhangDtl {
     private Long id;
     private Long idQdHdr;
     private String maDvi;
-    private String tenDvi;
     private String maDiemKho;
-    private String diaDiemKho;
+    private String maNhaKho;
+    private String maNganKho;
+    private String maLoKho;
     private BigDecimal soLuong;
+    private BigDecimal soLuongGiao;
     private BigDecimal donGiaVat;
     private BigDecimal thanhTien;
     private String trangThai;
     @Transient
     private String tenTrangThai;
     @Transient
-    private List<HhQdGiaoNvNhDdiem> hhQdGiaoNvNhDdiemList = new ArrayList<>();
+    private String tenDvi;
+    @Transient
+    private String tenDiemKho;
+    @Transient
+    private String tenNhaKho;
+    @Transient
+    private String tenNganKho;
+    @Transient
+    private String tenLoKho;
+//    @Transient
+//    private List<HhQdGiaoNvNhDdiem> hhQdGiaoNvNhDdiemList = new ArrayList<>();
 }
