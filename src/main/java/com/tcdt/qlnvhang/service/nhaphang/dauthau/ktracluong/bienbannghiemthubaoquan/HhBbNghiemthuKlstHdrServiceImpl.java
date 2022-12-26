@@ -182,7 +182,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
     public HhBbNghiemthuKlstHdr approve(HhBbNghiemthuKlstHdrReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
 
-        if (!Contains.CAP_CUC.equals(userInfo.getCapDvi())){
+        if (!Contains.CAP_CHI_CUC.equals(userInfo.getCapDvi())){
             throw new Exception("Bad Request");
         }
 
