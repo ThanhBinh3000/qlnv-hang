@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import lombok.Data;
 
 @Entity
@@ -77,4 +78,7 @@ public class HhQdKhlcntDsgthau implements Serializable {
 
 	Long idNhaThau;
 
+	public String getTenTrangThai() {
+		return NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(this.getTrangThai());
+	}
 }

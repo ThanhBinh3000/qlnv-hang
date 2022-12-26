@@ -18,6 +18,7 @@ import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.XhQdPdKhBdg;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import org.modelmapper.ModelMapper;
@@ -150,7 +151,6 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
             hhQdPheduyetKhMttSLDDRepository.deleteByIdQdDtl(qd.getId());
             qd.setId(null);
             qd.setIdQdHdr(dataMap.getId());
-            qd.setTrangThaiTkhai(Contains.CHUACAPNHAT);
             hhQdPheduyetKhMttDxRepository.save(qd);
             for (HhQdPheduyetKhMttSLDDReq slddReq  :ObjectUtils.isEmpty(dx.getDsSlddDtlList()) ? dx.getChildren() : dx.getDsSlddDtlList()) {
                 HhQdPheduyetKhMttSLDD sldd = new ModelMapper().map(slddReq , HhQdPheduyetKhMttSLDD.class);
@@ -463,9 +463,18 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
         hhQdPheduyetKhMttHdr.setTenCloaiVthh(hashMapDmHh.get(hhQdPheduyetKhMttHdr.getCloaiVthh()));
         hhQdPheduyetKhMttHdr.setTenLoaiVthh(hashMapDmHh.get(hhQdPheduyetKhMttHdr.getLoaiVthh()));
         dtl.setHhQdPheduyetKhMttHdr(hhQdPheduyetKhMttHdr);
-
         List<HhChiTietTTinChaoGia> byIdQdDtl = hhCtietTtinCgiaRepository.findAllByIdTkhaiKh(dtl.getId());
         dtl.setHhChiTietTTinChaoGiaList(byIdQdDtl);
+        Optional<HhChiTietTTinChaoGia> optional = hhCtietTtinCgiaRepository.findByIdTkhaiKh(ids);
+        HhChiTietTTinChaoGia chaoGia = optional.get();
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.search(chaoGia.getId(), Arrays.asList(HhChiTietTTinChaoGia.TABLE_NAME));
+        if (!DataUtils.isNullObject(fileDinhKems)){
+            chaoGia.setFileDinhKemChaogia(fileDinhKems.get(0));
+        }
+        dtl.setFileDinhKemMuaLe(fileDinhKemService.search(dtl.getId(), Collections.singleton(HhQdPheduyetKhMttDx.TABLE_NAME)));
+        dtl.setFileDinhKemUyQuyen(fileDinhKemService.search(dtl.getId(), Collections.singleton(HhQdPheduyetKhMttDx.TABLE_NAME)));
+
+
 
         Optional<HhDxuatKhMttHdr> bySoDxuat;
         if (!StringUtils.isEmpty(dtl.getSoDxuat())){
@@ -474,7 +483,6 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
             bySoDxuat = hhDxuatKhMttRepository.findBySoDxuat(hhQdPheduyetKhMttHdr.getSoTrHdr());
         }
         bySoDxuat.ifPresent(dtl::setDxuatKhMttHdr);
-        dtl.setTenTrangThaiTkhai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(dtl.getTrangThaiTkhai()));
         dtl.setTenDvi(hashMapDvi.get(dtl.getMaDvi()));
         return dtl;
     }

@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
+import com.tcdt.qlnvhang.entities.bandaugia.thongbaobandaugiakhongthanh.BhThongBaoBdgKt;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDsgthau;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDtl;
@@ -20,6 +21,7 @@ import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhChiTietTTinChaoGia;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDxuatKhMttHdr;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhQdPduyetKqcgHdr;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DataUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,6 +110,7 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
             byId.get().setTrangThaiTkhai(NhapXuatHangTrangThaiEnum.DANGCAPNHAT.getId());
             hhQdPheduyetKhMttDxRepository.save(byId.get());
         }
+        byId.get().setPtMuaTrucTiep(objReq.getPtMuaTrucTiep());
         HhQdPheduyetKhMttDx hhQdPheduyetKhMttDx = byId.get();
         hhCtietTtinCgiaRepository.deleteAllByIdTkhaiKh(objReq.getIdChaoGia());
         List<HhChiTietTTinChaoGia> listDuThau = new ArrayList<>();
@@ -116,14 +119,16 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
             BeanUtils.copyProperties(req,nthauDthau,"id");
             nthauDthau.setIdTkhaiKh(objReq.getIdChaoGia());
             HhChiTietTTinChaoGia save = hhCtietTtinCgiaRepository.save(nthauDthau);
+            List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(req.getFileDinhKems()), nthauDthau.getId(), "HH_CTIET_TTIN_CHAO_GIA");
+            nthauDthau.setFileDinhKemChaogia(fileDinhKems.get(0));
             listDuThau.add(nthauDthau);
         }
-        if(hhQdPheduyetKhMttDx.getPtMua().equals(Contains.UY_QUYEN)){
-            List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),hhQdPheduyetKhMttDx.getId(),"HH_QD_PHE_DUYET_KHMTT_DX");
+        if(byId.get().getPtMuaTrucTiep().equals(Contains.UY_QUYEN)){
+            List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),hhQdPheduyetKhMttDx.getId(),"HH_QD_PHE_DUYET_KHMTT_DX");
             hhQdPheduyetKhMttDx.setFileDinhKemUyQuyen(fileDinhKems);
         }
-        if(hhQdPheduyetKhMttDx.getPtMua().equals(Contains.MUA_LE)){
-            List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),hhQdPheduyetKhMttDx.getId(),"HH_QD_PHE_DUYET_KHMTT_DX");
+        if(byId.get().getPtMuaTrucTiep().equals(Contains.MUA_LE)){
+            List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),hhQdPheduyetKhMttDx.getId(),"HH_QD_PHE_DUYET_KHMTT_DX");
             hhQdPheduyetKhMttDx.setFileDinhKemMuaLe(fileDinhKems);
         }
         hhQdPheduyetKhMttDxRepository.save(hhQdPheduyetKhMttDx);
@@ -132,15 +137,20 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
 
 
     public List<HhChiTietTTinChaoGia> detail(String ids) throws Exception {
-
             Optional<HhQdPheduyetKhMttDx> byId = hhQdPheduyetKhMttDxRepository.findById(Long.parseLong(ids));
             if(!byId.isPresent()){
-                throw new Exception("Gói thầu không tồn tại");
+                throw new Exception("Bản ghi không tồn tại");
             }
         List<HhChiTietTTinChaoGia> byIdDtGt = hhCtietTtinCgiaRepository.findAllByIdTkhaiKh(Long.parseLong(ids));
         byIdDtGt.forEach(f -> {
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
         });
+        Optional<HhChiTietTTinChaoGia> optional = hhCtietTtinCgiaRepository.findByIdTkhaiKh(Long.parseLong(ids));
+        HhChiTietTTinChaoGia chaoGia = optional.get();
+      List<FileDinhKem> fileDinhKems = fileDinhKemService.search(chaoGia.getId(), Arrays.asList(HhChiTietTTinChaoGia.TABLE_NAME));
+      if (!DataUtils.isNullObject(fileDinhKems)){
+          chaoGia.setFileDinhKemChaogia(fileDinhKems.get(0));
+      }
         return byIdDtGt;
     }
 

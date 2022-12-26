@@ -97,6 +97,9 @@ public class HhQdPheduyetKhMttHdr implements Serializable {
     @Transient
     private List<HhQdPheduyetKhMttDx> children = new ArrayList<>();
 
+    @Transient
+     private  HhQdPheduyetKhMttDx hhQdPheduyetKhMttDxList;
+
 
 //    @Transient
 //    private List<HhChiTietTTinChaoGia> hhChiTietTTinChaoGiaList = new ArrayList<>();
