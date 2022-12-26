@@ -430,6 +430,28 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		List<HhQdKhlcntDsgthau> byIdQdDtl = hhQdKhlcntDsgthauRepository.findByIdQdDtl(dtl.getId());
 		byIdQdDtl.forEach( x -> {
 			x.setTenDvi(hashMapDvi.get(x.getMaDvi()));
+			List<HhQdKhlcntDsgthau> hhQdKhlcntDsgthauList = new ArrayList<>();
+			for(HhQdKhlcntDsgthau dsg : hhQdKhlcntDsgthauRepository.findByIdQdDtl(dtl.getId())){
+				List<HhQdKhlcntDsgthauCtiet> listGtCtiet = hhQdKhlcntDsgthauCtietRepository.findByIdGoiThau(dsg.getId());
+				listGtCtiet.forEach(f -> {
+					f.setTenDvi(hashMapDvi.get(f.getMaDvi()));
+					f.setTenDiemKho(hashMapDvi.get(f.getMaDiemKho()));
+					List<HhQdKhlcntDsgthauCtietVt> byIdGoiThauCtiet = hhQdKhlcntDsgthauCtietVtRepository.findByIdGoiThauCtiet(f.getId());
+					byIdGoiThauCtiet.forEach( z -> {
+						z.setTenDvi(hashMapDvi.get(z.getMaDvi()));
+					});
+					f.setChildren(byIdGoiThauCtiet);
+				});
+				dsg.setTenDvi(hashMapDvi.get(dsg.getMaDvi()));
+				dsg.setTenCloaiVthh(hashMapDmHh.get(dsg.getCloaiVthh()));
+				dsg.setTenLoaiHdong(hashMapLoaiHdong.get(dsg.getLoaiHdong()));
+				dsg.setTenNguonVon(hashMapNguonVon.get(dsg.getNguonVon()));
+				dsg.setTenPthucLcnt(hashMapPthucDthau.get(dsg.getPthucLcnt()));
+				dsg.setTenHthucLcnt(hashMapHtLcnt.get(dsg.getHthucLcnt()));
+				dsg.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dsg.getTrangThai()));
+				dsg.setChildren(listGtCtiet);
+				hhQdKhlcntDsgthauList.add(dsg);
+			};
 		});
 		dtl.setChildren(byIdQdDtl);
 
