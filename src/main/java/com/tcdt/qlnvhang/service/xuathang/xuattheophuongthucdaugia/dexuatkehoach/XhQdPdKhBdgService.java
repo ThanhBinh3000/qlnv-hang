@@ -411,6 +411,60 @@ public class XhQdPdKhBdgService extends BaseServiceImpl {
     return qOptional.get();
   }
 
+  public XhQdPdKhBdgDtl detailDtl(String ids) throws Exception {
+    if (StringUtils.isEmpty(ids)){
+      throw new Exception("Không tồn tại bản ghi");
+    }
+
+    Optional<XhQdPdKhBdg> qOptional = xhQdPdKhBdgRepository.findById(Long.parseLong(ids));
+
+    if (!qOptional.isPresent()){
+      throw new UnsupportedOperationException("Không tồn tại bản ghi");
+    }
+
+    Map<String, String> hashMapDmHh = getListDanhMucHangHoa();
+    Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+    Map<String, String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
+
+    qOptional.get().setTenLoaiVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getLoaiVthh()));
+    qOptional.get().setTenCloaiVthh(StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getCloaiVthh()));
+    qOptional.get().setTenDvi(mapDmucDvi.get(qOptional.get().getMaDvi()));
+    List<XhQdPdKhBdgDtl> xhQdPdKhBdgDtlList = new ArrayList<>();
+    for (XhQdPdKhBdgDtl dtl : xhQdPdKhBdgDtlRepository.findAllByIdQdHdr(Long.parseLong(ids))) {
+      List<XhQdPdKhBdgPl> xhQdPdKhBdgPlList = new ArrayList<>();
+      for (XhQdPdKhBdgPl dsg : xhQdPdKhBdgPlRepository.findByIdQdDtl(dtl.getId())) {
+        List<XhQdPdKhBdgPlDtl> xhQdPdKhBdgPlDtlList = xhQdPdKhBdgPlDtlRepository.findByIdPhanLo(dsg.getId());
+        xhQdPdKhBdgPlDtlList.forEach(f -> {
+          f.setTenDvi(mapDmucDvi.get(f.getMaDvi()));
+          f.setTenDiemKho(mapDmucDvi.get(f.getMaDiemKho()));
+          f.setTenNhakho(mapDmucDvi.get(f.getMaNhaKho()));
+          f.setTenNganKho(mapDmucDvi.get(f.getMaNganKho()));
+          f.setTenLoKho(mapDmucDvi.get(f.getMaLoKho()));
+          f.setTenLoaiVthh(hashMapDmHh.get(f.getLoaiVthh()));
+          f.setTenCloaiVthh(hashMapDmHh.get(f.getCloaiVthh()));
+        });
+        dsg.setTenDvi(mapDmucDvi.get(dsg.getMaDvi()));
+        dsg.setTenDiemKho(mapDmucDvi.get(dsg.getMaDiemKho()));
+        dsg.setTenNhakho(mapDmucDvi.get(dsg.getMaNhaKho()));
+        dsg.setTenNganKho(mapDmucDvi.get(dsg.getMaNganKho()));
+        dsg.setTenLoKho(mapDmucDvi.get(dsg.getMaLoKho()));
+        dsg.setTenLoaiVthh(hashMapLoaiHdong.get(dsg.getTenLoaiVthh()));
+        dsg.setTenCloaiVthh(hashMapDmHh.get(dsg.getCloaiVthh()));
+        dsg.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dsg.getTrangThai()));
+        dsg.setChildren(xhQdPdKhBdgPlDtlList);
+        xhQdPdKhBdgPlList.add(dsg);
+      }
+      ;
+      dtl.setTenDvi(StringUtils.isEmpty(dtl.getMaDvi()) ? null : mapDmucDvi.get(dtl.getMaDvi()));
+      dtl.setChildren(xhQdPdKhBdgPlList);
+      dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThai()));
+      xhQdPdKhBdgDtlList.add(dtl);
+    }
+    qOptional.get().setChildren(xhQdPdKhBdgDtlList);
+    qOptional.get().setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qOptional.get().getTrangThai()));
+    return null;
+  }
+
   @Transactional
   public void delete(IdSearchReq idSearchReq) throws Exception {
     if (StringUtils.isEmpty(idSearchReq.getId()))
