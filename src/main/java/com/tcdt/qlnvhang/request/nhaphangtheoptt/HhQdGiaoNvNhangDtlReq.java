@@ -22,5 +22,5 @@ public class HhQdGiaoNvNhangDtlReq {
     private BigDecimal thanhTien;
     private String trangThai;
 
-//    private List<HhQdGiaoNvNhDdiemReq> hhQdGiaoNvNhDdiemList = new ArrayList<>();
+    private List<HhQdGiaoNvNhDdiemReq> hhQdGiaoNvNhDdiemList = new ArrayList<>();
 }
