@@ -130,6 +130,7 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
 
   @Transactional
   void saveDetail(HhDxuatKhMttHdrReq objReq, Long idHdr){
+      HhDxuatKhMttHdr dataMap = new ModelMapper().map(objReq, HhDxuatKhMttHdr.class);
         hhDxuatKhMttSlddRepository.deleteAllByIdDxKhmtt(idHdr);
         for ( HhDxuatKhMttSlddReq sldd: objReq.getDsSlddReq()){
             HhDxuatKhMttSldd data = new ModelMapper().map(sldd, HhDxuatKhMttSldd.class);
@@ -143,6 +144,7 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
                 HhDxuatKhMttSlddDtl slddDtl = new ModelMapper().map(slddDtlReq, HhDxuatKhMttSlddDtl.class);
                 slddDtl.setIdDiaDiem(data.getId());
                 hhDxuatKhMttSlddDtlRepository.save(slddDtl);
+                dataMap.setDonGiaVat(slddDtl.getDonGiaVat());
             }
         }
   }

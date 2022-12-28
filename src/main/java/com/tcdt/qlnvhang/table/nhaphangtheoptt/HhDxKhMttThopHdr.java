@@ -40,7 +40,7 @@ public class HhDxKhMttThopHdr implements Serializable {
     private String trangThai;
     @Transient
     String tenTrangThai;
-    private String SoQdPduyet;
+    private String soQdPduyet;
     private BigDecimal tongMucDt;
     private BigDecimal tongSoLuong;
     private String maDvi;

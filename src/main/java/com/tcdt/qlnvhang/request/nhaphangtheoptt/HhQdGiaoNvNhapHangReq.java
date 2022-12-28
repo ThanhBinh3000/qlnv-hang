@@ -19,6 +19,7 @@ public class HhQdGiaoNvNhapHangReq {
     private String maDvi;
     private String tenDvi;
     private Long idHd;
+    private String soHd;
     private String tenHd;
     private Long idQdPdKh;
     private String soQdPdKh;
@@ -29,7 +30,7 @@ public class HhQdGiaoNvNhapHangReq {
     private String moTaHangHoa;
     private String dviTinh;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date tgianKthuc;
+    private Date tgianNkho;
     private String trichYeu;
     private String trangThai;
     private BigDecimal soLuong;

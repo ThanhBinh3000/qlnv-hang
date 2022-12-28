@@ -17,18 +17,18 @@ import java.util.List;
 public interface HhDxuatKhMttThopRepository extends JpaRepository<HhDxKhMttThopHdr ,Long> {
 
     @Query(value = "select * from HH_DX_KHMTT_THOP_HDR TH" +
-//            " right join  HH_QD_PHE_DUYET_KHMTT_HDR QDPD ON TH.ID=QDPD.ID_TH_HDR"+
+            " LEFT JOIN  HH_QD_PHE_DUYET_KHMTT_HDR QDPD ON TH.ID=QDPD.ID_TH_HDR"+
             " where (:namKh IS NULL OR TH.NAM_KH = TO_NUMBER(:namKh)) " +
             "AND (:loaiVthh IS NULL OR TH.LOAI_VTHH = :loaiVthh) " +
             "AND (:cloaiVthh IS NULL OR TH.CLOAI_VTHH = :cloaiVthh) " +
             "AND (:noiDung IS NULL OR LOWER( TH.NOI_DUNG) LIKE LOWER(CONCAT(CONCAT('%',:noiDung),'%')))" +
             "AND (:ngayThopTu IS NULL OR TH.NGAY_THOP >=  TO_DATE(:ngayThopTu,'yyyy-MM-dd')) " +
             "AND (:ngayThopDen IS NULL OR TH.NGAY_THOP <= TO_DATE(:ngayThopDen,'yyyy-MM-dd'))" +
-//            "AND (:ngayKyQdTu IS NULL OR QDPD.NGAY_QD >=  TO_DATE(:ngayKyQdTu,'yyyy-MM-dd')) " +
-//            "AND (:ngayKyQdDen IS NULL OR QDPD.NGAY_QD <= TO_DATE(:ngayKyQdDen,'yyyy-MM-dd'))" +
-            "AND (:trangThai IS NULL OR TH.TRANG_THAI = :trangThai) "
-            ,nativeQuery = true)
-    Page<HhDxKhMttThopHdr> searchPage(Integer namKh, String loaiVthh, String cloaiVthh, String noiDung, String ngayThopTu, String ngayThopDen,String trangThai, Pageable pageable);
+            "AND (:ngayKyQdTu IS NULL OR QDPD.NGAY_QD >=  TO_DATE(:ngayKyQdTu,'yyyy-MM-dd')) " +
+            "AND (:ngayKyQdDen IS NULL OR QDPD.NGAY_QD <= TO_DATE(:ngayKyQdDen,'yyyy-MM-dd'))" +
+            "AND (:trangThai IS NULL OR TH.TRANG_THAI = :trangThai) "+
+            " AND QDPD.LASTEST = 0 OR QDPD.LASTEST IS NULL   ",nativeQuery = true )
+    Page<HhDxKhMttThopHdr> searchPage(Integer namKh, String loaiVthh, String cloaiVthh, String noiDung, String ngayThopTu, String ngayThopDen,String ngayKyQdTu, String ngayKyQdDen, String trangThai, Pageable pageable);
 
     List<HhDxKhMttThopHdr> findAllByIdIn(List<Long> ids);
 
@@ -43,8 +43,9 @@ public interface HhDxuatKhMttThopRepository extends JpaRepository<HhDxKhMttThopH
 
     @Transactional()
     @Modifying
-    @Query(value = "UPDATE HH_DX_KHMTT_THOP_HDR SET SO_QD_PDUYET =:SoQdPduyet WHERE ID = :idThHdr", nativeQuery = true)
-    void updateSoQdPduyet(Long idThHdr, String SoQdPduyet);
+    @Query(value = "UPDATE HH_DX_KHMTT_THOP_HDR SET SO_QD_PDUYET=:soQdPduyet WHERE ID IN :idThHdr", nativeQuery = true)
+    void updateSoQdPduyet(Long idThHdr, String soQdPduyet);
+
 
 
 }

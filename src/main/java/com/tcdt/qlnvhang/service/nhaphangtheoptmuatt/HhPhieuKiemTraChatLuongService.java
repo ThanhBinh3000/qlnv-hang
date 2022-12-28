@@ -31,6 +31,7 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -267,4 +268,8 @@ public class HhPhieuKiemTraChatLuongService extends BaseServiceImpl {
     }
 
 
+    public BigDecimal getSoLuongNhapKho(Long idDdiemGiaoNvNh) {
+        BigDecimal bigDecimal = hhPhieuKiemTraChatLuongRepository.soLuongNhapKho(idDdiemGiaoNvNh,NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId());
+        return bigDecimal;
+    }
 }

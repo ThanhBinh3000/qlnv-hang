@@ -7,6 +7,7 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhPhieuKiemTraChatLuongReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhPhieuKiemTraChatLuong;
+import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongRequestDto;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.nhaphangtheoptmuatt.HhPhieuKiemTraChatLuongService;
 import com.tcdt.qlnvhang.util.PathContains;
@@ -172,4 +173,21 @@ public class HhPhieuKiemTraChatLuongController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
+    @ApiOperation(value = "update số lượng", response = List.class)
+    @PostMapping(value= PathContains.PKT_CL + "/so-luong-nhap-kho", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public final ResponseEntity<BaseResponse> deleteMultiple(@RequestBody HhPhieuKiemTraChatLuongReq req) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(hhPhieuKiemTraChatLuongService.getSoLuongNhapKho(req.getIdDdiemGiaoNvNh()));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            resp.setMsg(e.getMessage());
+            log.error("Delete multiple lỗi ", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
 }

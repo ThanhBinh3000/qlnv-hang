@@ -30,6 +30,7 @@ public class HhPhieuKiemTraChatLuong implements Serializable {
     private String soQdGiaoNvNh;
     @Temporal(TemporalType.DATE)
     private Date ngayQdGiaoNvNh;
+    private String ktvBaoQuan;
     private String loaiVthh;
     @Transient
     private String tenLoaiVthh;
@@ -66,6 +67,7 @@ public class HhPhieuKiemTraChatLuong implements Serializable {
     private String trangThai;
     @Transient
     private String tenTrangThai;
+    private Long idDdiemGiaoNvNh;
     private Date ngayTao;
     private String nguoiTao;
     private Date ngaySua;
