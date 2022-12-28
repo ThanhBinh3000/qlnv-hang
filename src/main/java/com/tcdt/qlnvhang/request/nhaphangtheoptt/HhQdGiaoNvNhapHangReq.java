@@ -29,7 +29,7 @@ public class HhQdGiaoNvNhapHangReq {
     private String moTaHangHoa;
     private String dviTinh;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date tgianKthuc;
+    private Date tgianNkho;
     private String trichYeu;
     private String trangThai;
     private BigDecimal soLuong;

@@ -42,7 +42,7 @@ public class HhQdGiaoNvNhapHang implements Serializable {
     private String moTaHangHoa;
     private String dviTinh;
     @Temporal(TemporalType.DATE)
-    private Date tgianKthuc;
+    private Date tgianNkho;
     private String trichYeu;
     private String trangThai;
     @Transient

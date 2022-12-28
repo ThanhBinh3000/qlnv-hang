@@ -41,6 +41,6 @@ public class HhQdGiaoNvNhangDtl {
     private String tenNganKho;
     @Transient
     private String tenLoKho;
-//    @Transient
-//    private List<HhQdGiaoNvNhDdiem> hhQdGiaoNvNhDdiemList = new ArrayList<>();
+    @Transient
+    private List<HhQdGiaoNvNhDdiem> hhQdGiaoNvNhDdiemList = new ArrayList<>();
 }
