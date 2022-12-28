@@ -12,15 +12,15 @@ public class HhQdGiaoNvNhangDtlReq {
     private Long id;
     private Long idQdHdr;
     private String maDvi;
-    private String tenDvi;
     private String maDiemKho;
-    private String diaDiemKho;
+    private String maNhaKho;
+    private String maNganKho;
+    private String maLoKho;
     private BigDecimal soLuong;
+    private BigDecimal soLuongGiao;
     private BigDecimal donGiaVat;
     private BigDecimal thanhTien;
     private String trangThai;
-    @Transient
-    private String tenTrangThai;
-    @Transient
+
     private List<HhQdGiaoNvNhDdiemReq> hhQdGiaoNvNhDdiemList = new ArrayList<>();
 }
