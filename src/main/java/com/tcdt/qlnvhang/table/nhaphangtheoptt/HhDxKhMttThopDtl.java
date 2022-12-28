@@ -80,5 +80,11 @@ public class HhDxKhMttThopDtl implements Serializable {
 
     private BigDecimal tongMucDt;
 
+    private String soQd;
+
+    private String trangThaiDx;
+    @Transient
+    private String tenTrangThaiDx;
+
 
 }

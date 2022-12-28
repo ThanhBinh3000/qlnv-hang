@@ -126,13 +126,13 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
         dataMap.setLastest(objReq.getLastest());
         dataMap.setMaDvi(getUser().getDvql());
         HhQdPheduyetKhMttHdr created=hhQdPheduyetKhMttHdrRepository.save(dataMap);
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),dataMap.getId(),"HH_QD_PHE_DUYET_KHMTT_HDR");
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),dataMap.getId(),"HH_QD_PHE_DUYET_KHMTT_HDR");
         created.setFileDinhKems(fileDinhKems);
 
         // Update trạng thái tổng hợp dxkhclnt
         if(objReq.getPhanLoai().equals("TH")){
             hhDxuatKhMttThopRepository.updateTrangThai(dataMap.getIdThHdr(), Contains.DADUTHAO_QD);
-            hhDxuatKhMttThopRepository.updateSoQdPduyet(dataMap.getIdThHdr(),dataMap.getSoQd());
+            hhDxuatKhMttThopRepository.updateSoQdPduyet(dataMap.getIdThHdr(), dataMap.getSoQd());
         }else{
             hhDxuatKhMttRepository.updateStatusInList(Arrays.asList(objReq.getSoTrHdr()), Contains.DADUTHAO_QD);
             hhDxuatKhMttRepository.updateSoQdPduyet(Arrays.asList(objReq.getSoTrHdr()), dataMap.getSoQd());
@@ -225,16 +225,16 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
 
         if (!qOptional.isPresent())
             throw new UnsupportedOperationException("Không tồn tại bản ghi");
-
+        HhQdPheduyetKhMttHdr qd = qOptional.get();
         Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
-
-
+        qd.setFileDinhKems(fileDinhKemService.search(qd.getId(), Collections.singleton(HhQdPheduyetKhMttHdr.TABLE_NAME)));
         qOptional.get().setTenLoaiVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getLoaiVthh()));
         qOptional.get().setTenCloaiVthh(StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getCloaiVthh()));
         qOptional.get().setTenDvi(mapDmucDvi.get(qOptional.get().getMaDvi()));
 
         List<HhQdPheduyetKhMttDx> hhQdPheduyetKhMttDxList = new ArrayList<>();
+
         for (HhQdPheduyetKhMttDx dtl : hhQdPheduyetKhMttDxRepository.findAllByIdQdHdr(Long.parseLong(ids))){
             List<HhQdPheduyetKhMttSLDD> hhQdPheduyetKhMttSLDDList = new ArrayList<>();
             for(HhQdPheduyetKhMttSLDD dsg : hhQdPheduyetKhMttSLDDRepository.findByIdQdDtl(dtl.getId())){

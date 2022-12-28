@@ -62,7 +62,7 @@ public class HhQdPheduyetKhMttHdrReq {
 
     private String soQdPdKqCg;
 
-    private List<FileDinhKemReq> fileDinhkems =new ArrayList<>();
+    private List<FileDinhKemReq> fileDinhKems =new ArrayList<>();
 
     private List<HhQdPheduyetKhMttDxReq> dsDiaDiem = new ArrayList<>();
 
