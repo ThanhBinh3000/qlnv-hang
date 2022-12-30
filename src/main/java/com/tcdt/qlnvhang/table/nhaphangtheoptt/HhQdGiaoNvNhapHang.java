@@ -28,6 +28,7 @@ public class HhQdGiaoNvNhapHang implements Serializable {
     private String maDvi;
     private String tenDvi;
     private Long idHd;
+    private String soHd;
     private String tenHd;
     private Long idQdPdKh;
     private String soQdPdKh;
