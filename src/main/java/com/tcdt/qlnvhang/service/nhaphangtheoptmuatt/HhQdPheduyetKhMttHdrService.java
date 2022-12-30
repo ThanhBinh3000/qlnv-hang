@@ -464,19 +464,14 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
         hhQdPheduyetKhMttHdr.setTenLoaiVthh(hashMapDmHh.get(hhQdPheduyetKhMttHdr.getLoaiVthh()));
         dtl.setHhQdPheduyetKhMttHdr(hhQdPheduyetKhMttHdr);
         List<HhChiTietTTinChaoGia> byIdQdDtl = hhCtietTtinCgiaRepository.findAllByIdTkhaiKh(dtl.getId());
-        HhChiTietTTinChaoGia chaoGia = byIdQdDtl.get(0);
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.search(chaoGia.getId(), Arrays.asList(HhChiTietTTinChaoGia.TABLE_NAME));
-        if (!DataUtils.isNullObject(fileDinhKems)){
+        for (HhChiTietTTinChaoGia chaoGia : byIdQdDtl){
+            List<FileDinhKem> fileDinhKems = fileDinhKemService.search(chaoGia.getId(), Arrays.asList(HhChiTietTTinChaoGia.TABLE_NAME));
             chaoGia.setFileDinhKems(fileDinhKems.get(0));
         }
         dtl.setHhChiTietTTinChaoGiaList(byIdQdDtl);
-
         dtl.setFileDinhKemMuaLe(fileDinhKemService.search(dtl.getId(), Collections.singleton(HhQdPheduyetKhMttDx.TABLE_NAME)));
         dtl.setFileDinhKemUyQuyen(fileDinhKemService.search(dtl.getId(), Collections.singleton(HhQdPheduyetKhMttDx.TABLE_NAME)));
         dtl.setTenTrangThaiTkhai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThaiTkhai()));
-
-
-
         Optional<HhDxuatKhMttHdr> bySoDxuat;
         if (!StringUtils.isEmpty(dtl.getSoDxuat())){
             bySoDxuat = hhDxuatKhMttRepository.findBySoDxuat(dtl.getSoDxuat());

@@ -128,8 +128,8 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
             thopDtl.setMoTaHangHoa(dXuat.getMoTaHangHoa());
             thopDtl.setSoQd(dXuat.getSoQd());
             thopDtl.setTrangThaiDx(dXuat.getTrangThai());
-            thopDtl.setTenTrangThaiDx(NhapXuatHangTrangThaiEnum.getTenById(thopDtl.getTrangThaiDx()));
             thopDtl.setTenDvi(mapDmucDvi.get(thopDtl.getMaDvi()));
+            thopDtl.setTenTrangThaiDx(NhapXuatHangTrangThaiEnum.getTenById(thopDtl.getTrangThaiDx()));
 
 //            List<HhDxuatKhMttSldd> dtlslDd = hhDxuatKhMttSlddRepository.findAllByIdDxKhmtt(dXuat.getId());
 //            BigDecimal soLuong = BigDecimal.ZERO;
@@ -218,6 +218,8 @@ return thopHdr;
         Map<String, String> mapDmucDvi = getMapTenDvi();
         listTh.forEach(f -> {
             f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
+            f.setTenTrangThaiDx(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiDx()));
+
         });
         hdrThop.setHhDxKhMttThopDtls(listTh);
 
