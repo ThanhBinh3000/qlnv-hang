@@ -145,12 +145,10 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
         byIdDtGt.forEach(f -> {
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
         });
-
-        HhChiTietTTinChaoGia chaoGia = byIdDtGt.get(0);
-      List<FileDinhKem> fileDinhKems = fileDinhKemService.search(chaoGia.getId(), Arrays.asList(HhChiTietTTinChaoGia.TABLE_NAME));
-      if (!DataUtils.isNullObject(fileDinhKems)){
-          chaoGia.setFileDinhKems(fileDinhKems.get(0));
-      }
+        for (HhChiTietTTinChaoGia chaoGia : byIdDtGt){
+            List<FileDinhKem> fileDinhKems = fileDinhKemService.search(chaoGia.getId(), Arrays.asList(HhChiTietTTinChaoGia.TABLE_NAME));
+            chaoGia.setFileDinhKems(fileDinhKems.get(0));
+        }
         return byIdDtGt;
     }
 
