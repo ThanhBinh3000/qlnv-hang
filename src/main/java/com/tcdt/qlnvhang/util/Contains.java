@@ -225,9 +225,9 @@ public class Contains {
 	public static final String DISABLE = "N";
 
 	// Phương thức tổ chức triển khai mua trực tiếp
-	public static final String CHAO_GIA = "CG";
-	public static final String UY_QUYEN = "UQ";
-	public static final String MUA_LE = "ML";
+	public static final String CHAO_GIA = "Chào giá";
+	public static final String UY_QUYEN = "Ủy quyền";
+	public static final String MUA_LE = "Mua lẻ";
 
 	public static final String DAU_TU = "DT";
 
