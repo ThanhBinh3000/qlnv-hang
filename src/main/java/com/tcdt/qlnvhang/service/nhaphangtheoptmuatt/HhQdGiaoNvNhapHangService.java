@@ -11,6 +11,8 @@ import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatDtl;
+import com.tcdt.qlnvhang.table.HhQdGiaoNvuNxDdiem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
 import com.tcdt.qlnvhang.util.Contains;
@@ -47,7 +49,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
     private HhQdPduyetKqcgRepository hhQdPduyetKqcgRepository;
 
     @Autowired
-    private HhHdongBkePmuahangRepository hhHdongBkePmuahangRepository;
+    private HhPhieuKiemTraChatLuongService hhPhieuKiemTraChatLuongService;
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
@@ -84,13 +86,42 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
         }
 
         Map<String, String> hashMapDmHh = getListDanhMucHangHoa();
+        Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
         data.getContent().forEach( f -> {
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+
+            // dtl
+            List<HhQdGiaoNvNhangDtl> hhQdGiaoNvNhangDtl = hhQdGiaoNvNhangDtlRepository.findAllByIdQdHdr(f.getId());
+            List<Long> listIdDtl= hhQdGiaoNvNhangDtl.stream().map(HhQdGiaoNvNhangDtl::getId).collect(Collectors.toList());
+            List<HhQdGiaoNvNhDdiem> ddiemList= hhQdGiaoNvNhDdiemRepository.findAllByIdDtlIn(listIdDtl);
+            // địa điểm
+            for (HhQdGiaoNvNhDdiem dDiem: ddiemList){
+                dDiem.setTenCuc(StringUtils.isEmpty(dDiem.getMaCuc())?null:hashMapDmdv.get(dDiem.getMaCuc()));
+                dDiem.setTenChiCuc(StringUtils.isEmpty(dDiem.getMaChiCuc())?null:hashMapDmdv.get(dDiem.getMaChiCuc()));
+                dDiem.setTenDiemKho(StringUtils.isEmpty(dDiem.getMaDiemKho())?null:hashMapDmdv.get(dDiem.getMaDiemKho()));
+                dDiem.setTenNhaKho(StringUtils.isEmpty(dDiem.getMaNhaKho())?null:hashMapDmdv.get(dDiem.getMaNhaKho()));
+                dDiem.setTenNganKho(StringUtils.isEmpty(dDiem.getMaNganKho())?null:hashMapDmdv.get(dDiem.getMaNganKho()));
+                dDiem.setTenLoKho(StringUtils.isEmpty(dDiem.getMaLoKho())?null:hashMapDmdv.get(dDiem.getMaLoKho()));
+                this.setDataPhieu(null,dDiem);
+            }
+            for (HhQdGiaoNvNhangDtl dtl : hhQdGiaoNvNhangDtl ){
+                dtl.setHhQdGiaoNvNhDdiemList(ddiemList);
+            }
+            f.setHhQdGiaoNvNhangDtlList(hhQdGiaoNvNhangDtl);
+
         });
 
     return data;
+    }
+
+    void setDataPhieu(HhQdGiaoNvNhangDtl dtl , HhQdGiaoNvNhDdiem ddNhap){
+        if(dtl != null){
+
+        }else{
+            ddNhap.setListPhieuKtraCl(hhPhieuKiemTraChatLuongService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
+        }
     }
 
     @Transactional
@@ -205,9 +236,6 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
         for (HhQdGiaoNvNhangDtl dtl : listDtl){
             dtl.setTenDvi(StringUtils.isEmpty(dtl.getMaDvi())?null:hashMapDmdv.get(dtl.getMaDvi()));
             dtl.setTenDiemKho(StringUtils.isEmpty(dtl.getMaDiemKho())?null:hashMapDmdv.get(dtl.getMaDiemKho()));
-//            dtl.setTenNhaKho(StringUtils.isEmpty(dtl.getMaNhaKho())?null:hashMapDmdv.get(dtl.getMaNhaKho()));
-//            dtl.setTenNganKho(StringUtils.isEmpty(dtl.getTenNganKho())?null:hashMapDmdv.get(dtl.getMaNganKho()));
-//            dtl.setTenLoKho(StringUtils.isEmpty(dtl.getMaNganKho())?null:hashMapDmdv.get(dtl.getMaLoKho()));
             dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThai()));
             for (HhQdGiaoNvNhDdiem dDiem : listDd){
                 dDiem.setTenCuc(StringUtils.isEmpty(dDiem.getMaCuc())?null:hashMapDmdv.get(dDiem.getMaCuc()));

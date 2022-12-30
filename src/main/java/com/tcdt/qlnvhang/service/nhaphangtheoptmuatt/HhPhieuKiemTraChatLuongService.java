@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhPhieuKiemTraChatLuongRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhPhieuKiemTraCluongDtlRepository;
@@ -17,6 +18,7 @@ import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuKiemTraChatLuong;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import org.modelmapper.ModelMapper;
@@ -94,7 +96,9 @@ public class HhPhieuKiemTraChatLuongService extends BaseServiceImpl {
         data.setMaDvi(userInfo.getDvql());
         data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh()) ? null : hashMapDmHh.get(data.getLoaiVthh()));
         HhPhieuKiemTraChatLuong created=hhPhieuKiemTraChatLuongRepository.save(data);
-
+        if (!DataUtils.isNullObject(objReq.getFileDinhKem())) {
+            fileDinhKemService.saveListFileDinhKem(Arrays.asList(objReq.getFileDinhKem()), created.getId(),"HH_PHIEU_KT_CHAT_LUONG");
+        }
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),data.getId(),"HH_PHIEU_KT_CHAT_LUONG");
         created.setFileDinhKems(fileDinhKems);
 
@@ -127,6 +131,9 @@ public class HhPhieuKiemTraChatLuongService extends BaseServiceImpl {
         data.setNguoiSua(userInfo.getUsername());
 
         HhPhieuKiemTraChatLuong created=hhPhieuKiemTraChatLuongRepository.save(data);
+        if (!DataUtils.isNullObject(objReq.getFileDinhKem())) {
+            fileDinhKemService.saveListFileDinhKem(Arrays.asList(objReq.getFileDinhKem()), created.getId(),"HH_PHIEU_KT_CHAT_LUONG");
+        }
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),data.getId(),"HH_DX_KHMTT_HDR");
         created.setFileDinhKems(fileDinhKems);
 
@@ -155,10 +162,19 @@ public class HhPhieuKiemTraChatLuongService extends BaseServiceImpl {
         data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh())?null:hashMapDmhh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh())?null:hashMapDmhh.get(data.getCloaiVthh()));
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
+        data.setTenDvi(StringUtils.isEmpty(data.getMaDvi())?null:hashMapDmdv.get(data.getMaDvi()));
         data.setTenDiemKho(StringUtils.isEmpty(data.getMaDiemKho())?null:hashMapDmdv.get(data.getMaDiemKho()));
         data.setTenNhaKho(StringUtils.isEmpty(data.getMaNhaKho())?null:hashMapDmdv.get(data.getMaNhaKho()));
         data.setTenNganKho(StringUtils.isEmpty(data.getMaNganKho())?null:hashMapDmdv.get(data.getMaNganKho()));
         data.setTenLoKho(StringUtils.isEmpty(data.getMaLoKho())?null:hashMapDmdv.get(data.getMaLoKho()));
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList("HH_PHIEU_KT_CHAT_LUONG"));
+        if (!DataUtils.isNullOrEmpty(fileDinhKem)) {
+            data.setFileDinhKem(fileDinhKem.get(0));
+        }
+        List<FileDinhKem> fileDinhkems = fileDinhKemService.search(data.getId(), Arrays.asList("HH_PHIEU_KT_CHAT_LUONG"));
+        if (!DataUtils.isNullOrEmpty(fileDinhkems)) {
+            data.setFileDinhKems(fileDinhkems);
+        }
         List<HhPhieuKiemTraChatLuongDtl> listDtl=hhPhieuKiemTraCluongDtlRepository.findAllByIdHdr(data.getId());
         data.setPhieuKiemTraChatLuongDtlList(listDtl);
         return data;
@@ -267,9 +283,21 @@ public class HhPhieuKiemTraChatLuongService extends BaseServiceImpl {
         return created;
     }
 
+    public List<HhPhieuKiemTraChatLuong> findAllByIdDdiemGiaoNvNh(Long idDdiemGiaoNvNh) {
+        List<HhPhieuKiemTraChatLuong> list = hhPhieuKiemTraChatLuongRepository.findByIdDdiemGiaoNvNhOrderById(idDdiemGiaoNvNh);
+        return list;
+    }
 
     public BigDecimal getSoLuongNhapKho(Long idDdiemGiaoNvNh) {
         BigDecimal bigDecimal = hhPhieuKiemTraChatLuongRepository.soLuongNhapKho(idDdiemGiaoNvNh,NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId());
         return bigDecimal;
     }
+//    List<HhPhieuKiemTraChatLuong> setDetailList(List<HhPhieuKiemTraChatLuong> list){
+//        list.forEach( item -> {
+//            item.setPhieuNhapKho(hhPhieuKiemTraChatLuongRepository.findBySoPhieuKtraCl(item.getSoPhieu()));
+//        });
+//        return list;
+//    }
+
+
 }
