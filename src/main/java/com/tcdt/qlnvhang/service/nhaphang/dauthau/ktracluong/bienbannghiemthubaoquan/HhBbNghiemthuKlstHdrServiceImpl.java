@@ -169,7 +169,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
         HhBbNghiemthuKlstHdr hhBbNghiemthuKlstHdr = qOptional.get();
 
         Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
-        hhBbNghiemthuKlstHdr.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(hhBbNghiemthuKlstHdr.getTrangThai()));
+        hhBbNghiemthuKlstHdr.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(hhBbNghiemthuKlstHdr.getTrangThai()));
         hhBbNghiemthuKlstHdr.setTenDvi(listDanhMucDvi.get(hhBbNghiemthuKlstHdr.getMaDvi()));
         hhBbNghiemthuKlstHdr.setTenNguoiTao(ObjectUtils.isEmpty(hhBbNghiemthuKlstHdr.getNguoiTaoId()) ? null : userInfoRepository.findById(hhBbNghiemthuKlstHdr.getNguoiTaoId()).get().getFullName());
         hhBbNghiemthuKlstHdr.setTenKeToan(ObjectUtils.isEmpty(hhBbNghiemthuKlstHdr.getIdKeToan()) ? null : userInfoRepository.findById(hhBbNghiemthuKlstHdr.getIdKeToan()).get().getFullName());

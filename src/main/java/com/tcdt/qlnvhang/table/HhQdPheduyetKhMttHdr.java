@@ -89,6 +89,9 @@ public class HhQdPheduyetKhMttHdr implements Serializable {
 
     private String soQdPdKqCg;
 
+    private String ptMuaTrucTiep;
+
+
     private Long idGoc;
 
     @Transient

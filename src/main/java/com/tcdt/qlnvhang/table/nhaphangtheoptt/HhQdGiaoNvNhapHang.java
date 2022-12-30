@@ -27,10 +27,13 @@ public class HhQdGiaoNvNhapHang implements Serializable {
     private Date ngayQd;
     private String maDvi;
     private String tenDvi;
-    private Long idHdong;
-    private String tenHdong;
-    private Long idQdPduyet;
-    private String soQdPduyet;
+    private Long idHd;
+    private String soHd;
+    private String tenHd;
+    private Long idQdPdKh;
+    private String soQdPdKh;
+    private Long idQdPdKq;
+    private String soQdPdKq;
     private String loaiVthh;
     @Transient
     private String tenLoaiVthh;
@@ -40,7 +43,7 @@ public class HhQdGiaoNvNhapHang implements Serializable {
     private String moTaHangHoa;
     private String dviTinh;
     @Temporal(TemporalType.DATE)
-    private Date tgianKthuc;
+    private Date tgianNkho;
     private String trichYeu;
     private String trangThai;
     @Transient

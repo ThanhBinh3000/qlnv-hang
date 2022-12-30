@@ -1,9 +1,11 @@
 package com.tcdt.qlnvhang.table.nhaphangtheoptt;
 
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuong;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "HH_QD_GIAO_NV_NH_DDIEM")
@@ -36,5 +38,8 @@ public class HhQdGiaoNvNhDdiem {
     private String tenNganKho;
     @Transient
     private String tenLoKho;
+
+    @Transient
+    List<HhPhieuKiemTraChatLuong> listPhieuKtraCl;
 }
 

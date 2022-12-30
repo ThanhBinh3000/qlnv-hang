@@ -30,6 +30,7 @@ public class HhPhieuKiemTraChatLuong implements Serializable {
     private String soQdGiaoNvNh;
     @Temporal(TemporalType.DATE)
     private Date ngayQdGiaoNvNh;
+    private String ktvBaoQuan;
     private String loaiVthh;
     @Transient
     private String tenLoaiVthh;
@@ -66,15 +67,22 @@ public class HhPhieuKiemTraChatLuong implements Serializable {
     private String trangThai;
     @Transient
     private String tenTrangThai;
+    private Long idDdiemGiaoNvNh;
+    @Temporal(TemporalType.DATE)
     private Date ngayTao;
     private String nguoiTao;
+    @Temporal(TemporalType.DATE)
     private Date ngaySua;
     private String nguoiSua;
     private String ldoTuchoi;
+    @Temporal(TemporalType.DATE)
     private Date ngayGduyet;
     private String nguoiGduyet;
+    @Temporal(TemporalType.DATE)
     private Date ngayPduyet;
     private String nguoiPduyet;
+    @Transient
+    private FileDinhKem fileDinhKem;
     @Transient
     private List<FileDinhKem> fileDinhKems =new ArrayList<>();
     @Transient

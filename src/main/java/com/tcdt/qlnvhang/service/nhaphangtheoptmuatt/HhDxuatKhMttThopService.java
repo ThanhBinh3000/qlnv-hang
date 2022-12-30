@@ -64,8 +64,8 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
                 objReq.getNoiDung(),
                 Contains.convertDateToString(objReq.getNgayThopTu()),
                 Contains.convertDateToString(objReq.getNgayThopDen()),
-//                Contains.convertDateToString(objReq.getNgayKyQdTu()),
-//                Contains.convertDateToString(objReq.getNgayKyQdDen()),
+                Contains.convertDateToString(objReq.getNgayKyQdTu()),
+                Contains.convertDateToString(objReq.getNgayKyQdDen()),
                 objReq.getTrangThai(),
                 pageable);
         Map<String, String> hashMapDmhh = getListDanhMucHangHoa();
@@ -87,9 +87,9 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
 
         HhDxKhMttThopHdr thopHdr = new HhDxKhMttThopHdr();
 
-        Map<String, String> mapDmuc = getMapCategory();
-
         Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+
 
         thopHdr.setNamKh(objReq.getNamKh());
         thopHdr.setLoaiVthh(objReq.getLoaiVthh());
@@ -103,7 +103,6 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
             HhDxKhMttThopDtl thopDtl = new HhDxKhMttThopDtl();
             thopDtl.setIdDxHdr(dXuat.getId());
             thopDtl.setMaDvi(dXuat.getMaDvi());
-//            thopDtl.setTenDvi(getDviByMa(dXuat.getMaDvi(), req).getTenDvi());
             thopDtl.setDiaChiDvi(dXuat.getDiaChiDvi());
             thopDtl.setSoDxuat(dXuat.getSoDxuat());
             thopDtl.setNgayPduyet(dXuat.getNgayPduyet());
@@ -127,6 +126,10 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
             thopDtl.setNguonVon(dXuat.getNguonVon());
             thopDtl.setTongMucDt(dXuat.getTongMucDt());
             thopDtl.setMoTaHangHoa(dXuat.getMoTaHangHoa());
+            thopDtl.setSoQd(dXuat.getSoQd());
+            thopDtl.setTrangThaiDx(dXuat.getTrangThai());
+            thopDtl.setTenDvi(mapDmucDvi.get(thopDtl.getMaDvi()));
+            thopDtl.setTenTrangThaiDx(NhapXuatHangTrangThaiEnum.getTenById(thopDtl.getTrangThaiDx()));
 
 //            List<HhDxuatKhMttSldd> dtlslDd = hhDxuatKhMttSlddRepository.findAllByIdDxKhmtt(dXuat.getId());
 //            BigDecimal soLuong = BigDecimal.ZERO;
@@ -160,6 +163,8 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
         hhDxuatKhMttThopRepository.save(thopHdr);
         for (HhDxKhMttThopDtl dtl : thopHdr.getHhDxKhMttThopDtls()) {
             dtl.setIdThopHdr(thopHdr.getId());
+            BigDecimal tongTienVat = dtl.getTongSoLuong().multiply(dtl.getDonGiaVat());
+            dtl.setTongTienVat(tongTienVat);
             hhDxuatKhMttThopDtlRepository.save(dtl);
         }
         if (thopHdr.getId() > 0 && thopHdr.getHhDxKhMttThopDtls().size() > 0) {
@@ -213,6 +218,8 @@ return thopHdr;
         Map<String, String> mapDmucDvi = getMapTenDvi();
         listTh.forEach(f -> {
             f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
+            f.setTenTrangThaiDx(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiDx()));
+
         });
         hdrThop.setHhDxKhMttThopDtls(listTh);
 
