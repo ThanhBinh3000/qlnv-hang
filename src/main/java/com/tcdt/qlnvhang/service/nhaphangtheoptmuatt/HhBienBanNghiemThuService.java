@@ -235,7 +235,7 @@ public class HhBienBanNghiemThuService extends BaseServiceImpl {
             objs=new Object[rowsName.length];
             objs[0]=i;
             objs[1]=dx.getSoBb();
-            objs[2]=dx.getSoQdNh();
+            objs[2]=dx.getSoQdGiaoNvNh();
             objs[3]=dx.getNgayNghiemThu();
             objs[4]=dx.getTenDiemKho();
             objs[5]=dx.getTenNhaKho();

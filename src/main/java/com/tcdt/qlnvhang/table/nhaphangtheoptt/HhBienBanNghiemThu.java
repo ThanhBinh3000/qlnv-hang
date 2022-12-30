@@ -20,8 +20,6 @@ public class HhBienBanNghiemThu implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BB_NGHIEM_THU_SEQ")
     @SequenceGenerator(sequenceName = "BB_NGHIEM_THU_SEQ", allocationSize = 1, name = "BB_NGHIEM_THU_SEQ")
     private Long id;
-    private Long idQdNh;
-    private String soQdNh;
     private String soBb;
     @Temporal(TemporalType.DATE)
     private Date ngayNghiemThu;
@@ -84,6 +82,12 @@ public class HhBienBanNghiemThu implements Serializable {
     private String tenLoKho;
 
     private String maQhns;
+
+    private Long idQdGiaoNvNh;
+
+    private String soQdGiaoNvNh;
+
+    private Long idDdiemGiaoNvNh;
 
     @Transient
     private List<FileDinhKem> fileDinhKems =new ArrayList<>();
