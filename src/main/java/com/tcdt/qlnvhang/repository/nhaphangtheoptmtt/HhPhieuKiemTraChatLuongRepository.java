@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.repository.nhaphangtheoptmtt;
 
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuKiemTraChatLuong;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +30,8 @@ public interface HhPhieuKiemTraChatLuongRepository extends JpaRepository<HhPhieu
 
     Optional<HhPhieuKiemTraChatLuong> findAllBySoPhieu(String soPhieu);
     List<HhPhieuKiemTraChatLuong> findAllByIdIn(List<Long> ids);
+
+    List<HhPhieuKiemTraChatLuong> findByIdDdiemGiaoNvNhOrderById(Long idDdiemGiaoNvNh);
 
     @Query(value = " SELECT NVL(SUM(KT.SO_LUONG_NHAP_KHO),0) as C FROM HH_PHIEU_KT_CHAT_LUONG KT " +
             " WHERE KT.ID_DDIEM_GIAO_NV_NH = :idDdiemNhap AND KT.TRANG_THAI = :trangThai",nativeQuery = true)
