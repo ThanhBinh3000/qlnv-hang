@@ -111,7 +111,7 @@ public class XhDxKhBanDauGiaService extends BaseServiceImpl {
            }
        }
        if (trangThai.equals(NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId())){
-           for (XhDxKhBanDauGiaPhanLo chiCuc : objHdr.getDsPhanLoList()){
+           for (XhDxKhBanDauGiaPhanLo chiCuc : objHdr.getChildren()){
                BigDecimal aLong = xhDxKhBanDauGiaRepository.countSLDalenKh(objHdr.getNamKh(), objHdr.getLoaiVthh(), chiCuc.getMaDvi(),NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
                BigDecimal soLuongTotal = aLong.add(chiCuc.getSoLuong());
                if (chiCuc.getSoLuongChiTieu() == null){
@@ -219,7 +219,7 @@ public class XhDxKhBanDauGiaService extends BaseServiceImpl {
             });
             dsP.setChildren(listDdNhap);
         }
-        qOptional.get().setDsPhanLoList(dsPloList);
+        qOptional.get().setChildren(dsPloList);
         return qOptional.get();
     }
 
@@ -294,13 +294,13 @@ public class XhDxKhBanDauGiaService extends BaseServiceImpl {
          case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
          case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
 //             this.validateData(data,Contains.CHODUYET_TP);
-             data.setNguoiGduyetId(userInfo.getId());
-             data.setNgayGduyet(getDateTimeNow());
+             data.setNguoiGuiDuyetId(userInfo.getId());
+             data.setNgayGuiDuyet(getDateTimeNow());
          case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
          case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
              data.setNguoiPduyetId(userInfo.getId());
              data.setNgayPduyet(getDateTimeNow());
-             data.setLdoTuChoi(stReq.getLyDo());
+             data.setLyDoTuChoi(stReq.getLyDo());
              break;
          case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
          case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
