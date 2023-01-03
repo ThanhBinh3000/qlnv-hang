@@ -7,6 +7,9 @@ import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhBienBanNghiemThuReposito
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.khoahoccongnghebaoquan.KhCnCongTrinhNghienCuuReq;
+import com.tcdt.qlnvhang.request.khoahoccongnghebaoquan.KhCnNghiemThuThanhLyReq;
+import com.tcdt.qlnvhang.request.khoahoccongnghebaoquan.KhCnTienDoThucHienReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhBbanNghiemThuDtlReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhBienBanNghiemThuReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhBbNghiemThu;
@@ -15,9 +18,13 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.khoahoccongnghebaoquan.KhCnCongTrinhNghienCuu;
+import com.tcdt.qlnvhang.table.khoahoccongnghebaoquan.KhCnNghiemThuThanhLy;
+import com.tcdt.qlnvhang.table.khoahoccongnghebaoquan.KhCnTienDoThucHien;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBbanNghiemThuDtl;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBienBanNghiemThu;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import org.modelmapper.ModelMapper;
@@ -68,13 +75,6 @@ public class HhBienBanNghiemThuService extends BaseServiceImpl {
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmhh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmhh.get(f.getCloaiVthh()));
-            f.setTenDvi(StringUtils.isEmpty(f.getTenDvi()) ? null : hashMapDmdv.get(userInfo.getTenDvi()));
-            f.setTenDiemKho(StringUtils.isEmpty(f.getMaDiemKho()) ? null : hashMapDmdv.get(f.getMaDiemKho()));
-            f.setTenNhaKho(StringUtils.isEmpty(f.getMaNhaKho()) ? null : hashMapDmdv.get(f.getMaNhaKho()));
-            f.setTenNganKho(StringUtils.isEmpty(f.getMaNganKho()) ? null : hashMapDmdv.get(f.getMaNganKho()));
-            f.setTenLoKho(StringUtils.isEmpty(f.getMaLoKho()) ? null : hashMapDmdv.get(f.getMaLoKho()));
-            List<HhBbanNghiemThuDtl> listDtl=hhBbanNghiemThuDtlRepository.findAllByIdHdr(f.getId());
-            f.setBbanNghiemThuDtlList(listDtl);
         });
 
         return data;
@@ -98,9 +98,17 @@ public class HhBienBanNghiemThuService extends BaseServiceImpl {
         data.setMaDvi(userInfo.getDvql());
         data.setTenDvi(StringUtils.isEmpty(userInfo.getDvql()) ? null : hashMapDmdv.get(userInfo.getDvql()));
         HhBienBanNghiemThu created= hhBienBanNghiemThuRepository.save(data);
+        if (!DataUtils.isNullObject(objReq.getFileDinhKem())) {
+            fileDinhKemService.saveListFileDinhKem(Arrays.asList(objReq.getFileDinhKem()), created.getId(),"HH_BIEN_BAN_NGHIEM_THU");
+        }
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),data.getId(),"HH_BIEN_BAN_NGHIEM_THU");
         created.setFileDinhKems(fileDinhKems);
-        for (HhBbanNghiemThuDtlReq dtlReq:objReq.getBbanNghiemThuDtlList()){
+        this.saveCtiet(data,objReq);
+        return created;
+    }
+
+    public void saveCtiet(HhBienBanNghiemThu data, HhBienBanNghiemThuReq objReq){
+        for (HhBbanNghiemThuDtlReq dtlReq:objReq.getDviChuDongThucHien()){
             HhBbanNghiemThuDtl dtl = ObjectMapperUtils.map(dtlReq,HhBbanNghiemThuDtl.class);
             dtl.setId(null);
             dtl.setIdHdr(data.getId());
@@ -110,9 +118,17 @@ public class HhBienBanNghiemThuService extends BaseServiceImpl {
             dtl.setDonGiaQt(thanhTienQt);
             hhBbanNghiemThuDtlRepository.save(dtl);
         }
-        return created;
+        for (HhBbanNghiemThuDtlReq dtlReq:objReq.getDmTongCucPdTruocThucHien()){
+            HhBbanNghiemThuDtl dtl = ObjectMapperUtils.map(dtlReq,HhBbanNghiemThuDtl.class);
+            dtl.setId(null);
+            dtl.setIdHdr(data.getId());
+            BigDecimal thanhTienTn = dtl.getDonGiaTn().multiply(dtl.getSoLuongTn());
+            BigDecimal thanhTienQt = dtl.getDonGiaQt().multiply(dtl.getSoLuongQt());
+            dtl.setThanhTienTn(thanhTienTn);
+            dtl.setDonGiaQt(thanhTienQt);
+            hhBbanNghiemThuDtlRepository.save(dtl);
+        }
     }
-
     @Transactional
     public HhBienBanNghiemThu update(HhBienBanNghiemThuReq objReq)throws Exception{
         UserInfo userInfo= SecurityContextService.getUser();
@@ -134,20 +150,14 @@ public class HhBienBanNghiemThuService extends BaseServiceImpl {
         data.setNguoiSua(userInfo.getUsername());
         data.setNgaySua(new Date());
         HhBienBanNghiemThu created= hhBienBanNghiemThuRepository.save(data);
+        if (!DataUtils.isNullObject(objReq.getFileDinhKem())) {
+            fileDinhKemService.saveListFileDinhKem(Arrays.asList(objReq.getFileDinhKem()), created.getId(),"HH_BIEN_BAN_NGHIEM_THU");
+        }
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),data.getId(),"HH_BIEN_BAN_NGHIEM_THU");
         created.setFileDinhKems(fileDinhKems);
         List<HhBbanNghiemThuDtl> listDtl =hhBbanNghiemThuDtlRepository.findAllByIdHdr(data.getId());
         hhBbanNghiemThuDtlRepository.deleteAll(listDtl);
-        for (HhBbanNghiemThuDtlReq dtlReq:objReq.getBbanNghiemThuDtlList()){
-            HhBbanNghiemThuDtl dtl = ObjectMapperUtils.map(dtlReq,HhBbanNghiemThuDtl.class);
-            dtl.setId(null);
-            dtl.setIdHdr(data.getId());
-            BigDecimal thanhTienTn = dtl.getDonGiaTn().multiply(dtl.getSoLuongTn());
-            BigDecimal thanhTienQt = dtl.getDonGiaQt().multiply(dtl.getSoLuongQt());
-            dtl.setThanhTienTn(thanhTienTn);
-            dtl.setDonGiaQt(thanhTienQt);
-            hhBbanNghiemThuDtlRepository.save(dtl);
-        }
+        this.saveCtiet(data,objReq);
         return created;
     }
 
@@ -171,9 +181,17 @@ public class HhBienBanNghiemThuService extends BaseServiceImpl {
         data.setTenNganKho(StringUtils.isEmpty(data.getMaNganKho()) ? null : hashMapDmdv.get(data.getMaNganKho()));
         data.setTenLoKho(StringUtils.isEmpty(data.getMaLoKho()) ? null : hashMapDmdv.get(data.getMaLoKho()));
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
-        data.setFileDinhKems(data.getFileDinhKems());
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList("HH_BIEN_BAN_NGHIEM_THU"));
+        if (!DataUtils.isNullOrEmpty(fileDinhKem)) {
+            data.setFileDinhKem(fileDinhKem.get(0));
+        }
+        List<FileDinhKem> fileDinhkems = fileDinhKemService.search(data.getId(), Arrays.asList("HH_BIEN_BAN_NGHIEM_THU"));
+        if (!DataUtils.isNullOrEmpty(fileDinhkems)) {
+            data.setFileDinhKems(fileDinhkems);
+        }
         List<HhBbanNghiemThuDtl> listDtl = hhBbanNghiemThuDtlRepository.findAllByIdHdr(data.getId());
-        data.setBbanNghiemThuDtlList(listDtl);
+        data.setDviChuDongThucHien(listDtl.stream().filter(item -> item.getType().equals(Contains.CHU_DONG)).collect(Collectors.toList()));
+        data.setDmTongCucPdTruocThucHien(listDtl.stream().filter(item -> item.getType().equals(Contains.PHE_DUYET_TRUOC)).collect(Collectors.toList()));
         return data;
     }
 
@@ -241,9 +259,11 @@ public class HhBienBanNghiemThuService extends BaseServiceImpl {
             objs[5]=dx.getTenNhaKho();
             objs[6]=dx.getTenNganKho();
             objs[7]=dx.getTenLoKho();
-            for (HhBbanNghiemThuDtl dtl : dx.getBbanNghiemThuDtlList()){
-                objs[8]=dtl.getThanhTienTn();
-                objs[9]=dtl.getThanhTienQt();
+            objs[8]=dx.getNgayNghiemThu();
+            for (HhBbanNghiemThuDtl dtl : dx.getDviChuDongThucHien()){
+                objs[9]=dtl.getTongGtri();
+            }
+            for (HhBbanNghiemThuDtl dtl : dx.getDviChuDongThucHien()){
                 objs[10]=dtl.getTongGtri();
             }
             objs[11]=dx.getTenTrangThai();

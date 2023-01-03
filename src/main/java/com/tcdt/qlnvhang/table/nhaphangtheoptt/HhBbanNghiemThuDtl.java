@@ -18,6 +18,7 @@ public class HhBbanNghiemThuDtl implements Serializable {
     @SequenceGenerator(sequenceName = "HH_BB_NGHIEM_THU_DTL_SEQ", allocationSize = 1, name = "HH_BB_NGHIEM_THU_DTL_SEQ")
     private Long id;
     private Long idHdr;
+    private String type;
     private String noiDung;
     private String dvt;
     private BigDecimal soLuongTn;
