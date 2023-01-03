@@ -96,8 +96,8 @@ public class HhBienBanNghiemThu implements Serializable {
     private List<FileDinhKem> fileDinhKems =new ArrayList<>();
 
     @Transient
-    private List<HhBbanNghiemThuDtl> DviChuDongThucHien =new ArrayList<>();
+    private List<HhBbanNghiemThuDtl> dviChuDongThucHien =new ArrayList<>();
 
     @Transient
-    private List<HhBbanNghiemThuDtl> DmTongCucPdTruocThucHien =new ArrayList<>();
+    private List<HhBbanNghiemThuDtl> dmTongCucPdTruocThucHien =new ArrayList<>();
 }
