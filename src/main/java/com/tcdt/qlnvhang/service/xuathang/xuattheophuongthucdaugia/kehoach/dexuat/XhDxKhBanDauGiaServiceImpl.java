@@ -142,6 +142,7 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
             for (XhDxKhBanDauGiaPhanLoReq phanLoReq : dtlReq.getChildren()){
                 XhDxKhBanDauGiaPhanLo phanLo = new XhDxKhBanDauGiaPhanLo();
                 BeanUtils.copyProperties(phanLoReq,phanLo,"id");
+                phanLo.setIdDtl(dtl.getId());
                 xhDxKhBanDauGiaPhanLoRepository.save(phanLo);
             }
         }
@@ -171,7 +172,7 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
 
         XhDxKhBanDauGia dataDTB = qOptional.get();
 
-        BeanUtils.copyProperties(req,dataDTB,"id");
+        BeanUtils.copyProperties(req,dataDTB,"id","trangThaiTh");
         dataDTB.setNgaySua(getDateTimeNow());
         dataDTB.setNguoiSuaId(userInfo.getId());
         xhDxKhBanDauGiaRepository.save(dataDTB);

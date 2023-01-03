@@ -54,11 +54,6 @@ public class XhDxKhBanDauGiaReq extends BaseRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayDuyetDen;
 
-
-
     private List<XhDxKhBanDauGiaDtlReq> children = new ArrayList<>();
-
-
-
 
 }
