@@ -253,6 +253,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                 dDiem.setTenNhaKho(StringUtils.isEmpty(dDiem.getMaNhaKho())?null:hashMapDmdv.get(dDiem.getMaNhaKho()));
                 dDiem.setTenNganKho(StringUtils.isEmpty(dDiem.getMaNganKho())?null:hashMapDmdv.get(dDiem.getMaNganKho()));
                 dDiem.setTenLoKho(StringUtils.isEmpty(dDiem.getMaLoKho())?null:hashMapDmdv.get(dDiem.getMaLoKho()));
+                dDiem.setListPhieuKtraCl(hhPhieuKiemTraChatLuongService.findAllByIdDdiemGiaoNvNh(dDiem.getId()));
             }
             dtl.setHhQdGiaoNvNhDdiemList(listDd);
         }
