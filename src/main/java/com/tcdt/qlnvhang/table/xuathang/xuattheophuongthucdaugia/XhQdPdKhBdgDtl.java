@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.dexuat.XhDxKhBanDauGia;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 

@@ -5,11 +5,9 @@ import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
 import com.tcdt.qlnvhang.request.IdSearchReq;
-import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.SearchXhDxKhBanDauGia;
-import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.XhDxKhBanDauGiaReq;
+import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.kehoachbdg.dexuat.XhDxKhBanDauGiaReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.xuathang.xuattheophuongthucdaugia.dexuatkehoach.XhDxKhBanDauGiaService;
+import com.tcdt.qlnvhang.service.xuathang.xuattheophuongthucdaugia.kehoach.dexuat.XhDxKhBanDauGiaService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -38,7 +36,7 @@ public class XhKhBanDauGiaController extends BaseController {
 
     @ApiOperation(value = "Tra cứu ", response = List.class)
     @PostMapping(value=  PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody SearchXhDxKhBanDauGia objReq) {
+    public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody XhDxKhBanDauGiaReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(xhDxKhBanDauGiaService.searchPage(objReq));
@@ -107,7 +105,7 @@ public class XhKhBanDauGiaController extends BaseController {
     public final ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            xhDxKhBanDauGiaService.delete(idSearchReq);
+            xhDxKhBanDauGiaService.delete(idSearchReq.getId());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -120,10 +118,10 @@ public class XhKhBanDauGiaController extends BaseController {
 
     @ApiOperation(value = "Xóa dánh sách ", response = List.class)
     @PostMapping(value=  PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
+    public final ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody XhDxKhBanDauGiaReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            xhDxKhBanDauGiaService.deleteMulti(idSearchReq);
+            xhDxKhBanDauGiaService.deleteMulti(idSearchReq.getIds());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -137,7 +135,7 @@ public class XhKhBanDauGiaController extends BaseController {
     @ApiOperation(value = "Kết xuất danh sách ", response = List.class)
     @PostMapping(value= PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void exportListQdBtcBnToExcel(@Valid @RequestBody SearchXhDxKhBanDauGia objReq, HttpServletResponse response) throws Exception{
+    public void exportListQdBtcBnToExcel(@Valid @RequestBody XhDxKhBanDauGiaReq objReq, HttpServletResponse response) throws Exception{
 
         try {
             xhDxKhBanDauGiaService.export(objReq,response);
@@ -159,7 +157,7 @@ public class XhKhBanDauGiaController extends BaseController {
 
     @ApiOperation(value = "Phê duyêt", response = List.class)
     @PostMapping(value=PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> updateStatus(@Valid HttpServletRequest req, @RequestBody StatusReq stReq) {
+    public ResponseEntity<BaseResponse> updateStatus( @RequestBody XhDxKhBanDauGiaReq stReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(xhDxKhBanDauGiaService.approve(stReq));

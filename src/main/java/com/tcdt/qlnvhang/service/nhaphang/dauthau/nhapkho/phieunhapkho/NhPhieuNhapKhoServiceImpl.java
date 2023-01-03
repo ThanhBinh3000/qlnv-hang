@@ -37,6 +37,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
@@ -272,7 +273,7 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
     }
 
     @Override
-    public boolean export(NhPhieuNhapKhoReq req) throws Exception {
+    public boolean export(NhPhieuNhapKhoReq req, HttpServletResponse response) throws Exception {
         return false;
     }
 

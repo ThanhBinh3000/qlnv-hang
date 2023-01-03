@@ -25,6 +25,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
@@ -249,7 +250,7 @@ public class NhPhieuKtChatLuongServiceImpl extends BaseServiceImpl implements Nh
 	}
 
 	@Override
-	public boolean export(QlpktclhPhieuKtChatLuongRequestDto req) throws Exception {
+	public boolean export(QlpktclhPhieuKtChatLuongRequestDto req, HttpServletResponse response) throws Exception {
 		return false;
 	}
 

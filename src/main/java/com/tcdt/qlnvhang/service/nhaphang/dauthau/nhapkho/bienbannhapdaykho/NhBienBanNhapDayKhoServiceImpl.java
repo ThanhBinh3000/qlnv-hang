@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
@@ -199,7 +200,7 @@ public class NhBienBanNhapDayKhoServiceImpl extends BaseServiceImpl implements N
     }
 
     @Override
-    public boolean export(QlBienBanNhapDayKhoLtReq req) throws Exception {
+    public boolean export(QlBienBanNhapDayKhoLtReq req, HttpServletResponse response) throws Exception {
         return false;
     }
 

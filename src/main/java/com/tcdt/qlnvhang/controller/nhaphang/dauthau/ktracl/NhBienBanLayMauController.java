@@ -155,7 +155,7 @@ public class NhBienBanLayMauController {
 	public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody BienBanLayMauReq req) {
 
 		try {
-			bienBanLayMauService.export(req);
+			bienBanLayMauService.export(req,response);
 		} catch (Exception e) {
 			log.error("Error can not export", e);
 		}

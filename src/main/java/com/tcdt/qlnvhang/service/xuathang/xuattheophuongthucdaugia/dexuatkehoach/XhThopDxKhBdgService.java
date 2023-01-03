@@ -1,26 +1,18 @@
 package com.tcdt.qlnvhang.service.xuathang.xuattheophuongthucdaugia.dexuatkehoach;
 
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.XhDxKhBanDauGiaPhanLoRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.kehoach.dexuat.XhDxKhBanDauGiaPhanLoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.XhThopDxKhBdgDtlRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.XhDxKhBanDauGiaRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.kehoach.dexuat.XhDxKhBanDauGiaRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.XhThopDxKhBdgRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
-import com.tcdt.qlnvhang.request.object.HhDxKhLcntThopHdrReq;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.SearchXhThopDxKhBdg;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.XhThopChiTieuReq;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.XhThopDxKhBdgReq;
-import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.table.HhDxKhLcntThopDtl;
-import com.tcdt.qlnvhang.table.HhDxKhLcntThopHdr;
-import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDxKhMttThopDtl;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDxuatKhMttHdr;
-import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.XhDxKhBanDauGia;
-import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.XhDxKhBanDauGiaPhanLo;
+import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.dexuat.XhDxKhBanDauGia;
+import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.dexuat.XhDxKhBanDauGiaPhanLo;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.XhThopDxKhBdgDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.XhThopDxKhBdg;
 import com.tcdt.qlnvhang.util.Contains;
@@ -122,7 +114,7 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
           thopDtl.setNgayPduyet(dxuat.getNgayPduyet());
           thopDtl.setNgayTao(dxuat.getNgayTao());
           thopDtl.setTrichYeu(dxuat.getTrichYeu());
-          thopDtl.setSoDviTsan(dxuat.getSoDviTsan());
+//          thopDtl.setSoDviTsan(dxuat.getSoDviTsan());
           thopDtl.setTongTienKdienDonGia(dxuat.getTongTienKdienDonGia());
           thopDtl.setTongTienDatTruocDonGia(dxuat.getTongTienDatTruocDonGia());
           thopDtl.setMoTaHangHoa(dxuat.getMoTaHangHoa());
@@ -138,12 +130,12 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
           thopDtl.setPthucGnhan(dxuat.getPthucGnhan());
           thopDtl.setThongBaoKh(dxuat.getThongBaoKh());
           thopDtl.setKhoanTienDatTruoc(dxuat.getKhoanTienDatTruoc());
-          List<XhDxKhBanDauGiaPhanLo> dtlsPhanLo = xhDxKhBanDauGiaPhanLoRepository.findByIdDxKhbdg(dxuat.getId());
-          BigDecimal soLuong = BigDecimal.ZERO;
-          for (XhDxKhBanDauGiaPhanLo phanLoDtl : dtlsPhanLo) {
-              soLuong = soLuong.add(phanLoDtl.getTongSoLuong());
-          }
-          thopDtl.setTongSoLuong(soLuong);
+//          List<XhDxKhBanDauGiaPhanLo> dtlsPhanLo = xhDxKhBanDauGiaPhanLoRepository.findByIdDxKhbdg(dxuat.getId());
+//          BigDecimal soLuong = BigDecimal.ZERO;
+//          for (XhDxKhBanDauGiaPhanLo phanLoDtl : dtlsPhanLo) {
+//              soLuong = soLuong.add(phanLoDtl.getTongSoLuong());
+//          }
+//          thopDtl.setTongSoLuong(soLuong);
           thopDtls.add(thopDtl);
           tChuanCluong = tChuanCluong.concat(dxuat.getTchuanCluong()+",");
       }
@@ -178,10 +170,10 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
             List<String> soDxuatList = thopHdr.getThopDxKhBdgDtlList().stream().map(XhThopDxKhBdgDtl::getSoDxuat)
                     .collect(Collectors.toList());
             List<XhDxKhBanDauGia> list = xhDxKhBanDauGiaRepository.findBySoDxuatIn(soDxuatList);
-            for (XhDxKhBanDauGia bdg : list){
-                bdg.setMaThop(String.valueOf(thopHdr.getId()));
-                xhDxKhBanDauGiaRepository.save(bdg);
-            }
+//            for (XhDxKhBanDauGia bdg : list){
+//                bdg.setMaThop(String.valueOf(thopHdr.getId()));
+//                xhDxKhBanDauGiaRepository.save(bdg);
+//            }
             xhDxKhBanDauGiaRepository.updateStatusInList(soDxuatList, Contains.DATONGHOP);
         }
         return thopHdr;
