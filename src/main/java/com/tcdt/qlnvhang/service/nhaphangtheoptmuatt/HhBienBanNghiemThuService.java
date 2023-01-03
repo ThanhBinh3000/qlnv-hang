@@ -112,6 +112,7 @@ public class HhBienBanNghiemThuService extends BaseServiceImpl {
             HhBbanNghiemThuDtl dtl = ObjectMapperUtils.map(dtlReq,HhBbanNghiemThuDtl.class);
             dtl.setId(null);
             dtl.setIdHdr(data.getId());
+            dtl.setType(Contains.CHU_DONG);
             BigDecimal thanhTienTn = dtl.getDonGiaTn().multiply(dtl.getSoLuongTn());
             BigDecimal thanhTienQt = dtl.getDonGiaQt().multiply(dtl.getSoLuongQt());
             dtl.setThanhTienTn(thanhTienTn);
@@ -122,6 +123,7 @@ public class HhBienBanNghiemThuService extends BaseServiceImpl {
             HhBbanNghiemThuDtl dtl = ObjectMapperUtils.map(dtlReq,HhBbanNghiemThuDtl.class);
             dtl.setId(null);
             dtl.setIdHdr(data.getId());
+            dtl.setType(Contains.PHE_DUYET_TRUOC);
             BigDecimal thanhTienTn = dtl.getDonGiaTn().multiply(dtl.getSoLuongTn());
             BigDecimal thanhTienQt = dtl.getDonGiaQt().multiply(dtl.getSoLuongQt());
             dtl.setThanhTienTn(thanhTienTn);
@@ -175,7 +177,7 @@ public class HhBienBanNghiemThuService extends BaseServiceImpl {
         Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
         data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh())?null:hashMapDmhh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh())?null:hashMapDmhh.get(data.getCloaiVthh()));
-        data.setTenDvi(StringUtils.isEmpty(userInfo.getTenDvi()) ? null : hashMapDmdv.get(userInfo.getTenDvi()));
+        data.setTenDvi(StringUtils.isEmpty(data.getMaDvi()) ? null : hashMapDmdv.get(userInfo.getTenDvi()));
         data.setTenDiemKho(StringUtils.isEmpty(data.getMaDiemKho()) ? null : hashMapDmdv.get(data.getMaDiemKho()));
         data.setTenNhaKho(StringUtils.isEmpty(data.getMaNhaKho()) ? null : hashMapDmdv.get(data.getMaNhaKho()));
         data.setTenNganKho(StringUtils.isEmpty(data.getMaNganKho()) ? null : hashMapDmdv.get(data.getMaNganKho()));

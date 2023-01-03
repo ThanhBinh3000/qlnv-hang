@@ -58,6 +58,9 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
     @Autowired
     private FileDinhKemService fileDinhKemService;
 
+    @Autowired
+    HhBbanNghiemThuDtlRepository hhBbanNghiemThuDtlRepository;
+
     public Page<HhQdGiaoNvNhapHang> searchPage(SearchHhQdGiaoNvNhReq objReq) throws Exception{
         UserInfo userInfo= SecurityContextService.getUser();
         Pageable pageable= PageRequest.of(objReq.getPaggingReq().getPage(),
@@ -115,7 +118,18 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                 // Set biên bản nghiệm thu bảo quản
                 List<HhBienBanNghiemThu> bbNghiemThuBq = hhBienBanNghiemThuRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(), dtl.getMaDvi());
                 bbNghiemThuBq.forEach( item ->  {
+                    List<HhBbanNghiemThuDtl> listDtl = hhBbanNghiemThuDtlRepository.findAllByIdHdr(item.getId());
                     item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+                    List<HhBbanNghiemThuDtl> dtl1= listDtl.stream().filter(x -> x.getType().equals(Contains.CHU_DONG)).collect(Collectors.toList());
+                    for (HhBbanNghiemThuDtl a: dtl1){
+                        item.setKinhPhiThucTe(a.getTongGtri());
+                    }
+                    List<HhBbanNghiemThuDtl> dtl2=listDtl.stream().filter(x -> x.getType().equals(Contains.PHE_DUYET_TRUOC)).collect(Collectors.toList());
+                    for (HhBbanNghiemThuDtl b: dtl2){
+                        item.setKinhPhiTcPd(b.getTongGtri());
+                    }
+
+
                 });
                 dtl.setListBienBanNghiemThuBq(bbNghiemThuBq);
             }
