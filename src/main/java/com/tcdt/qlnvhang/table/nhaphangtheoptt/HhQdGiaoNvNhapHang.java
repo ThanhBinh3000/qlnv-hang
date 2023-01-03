@@ -25,6 +25,8 @@ public class HhQdGiaoNvNhapHang implements Serializable {
     private String soQd;
     @Temporal(TemporalType.DATE)
     private Date ngayQd;
+    @Temporal(TemporalType.DATE)
+    private Date ngayKyHd;
     private String maDvi;
     private String tenDvi;
     private Long idHd;
