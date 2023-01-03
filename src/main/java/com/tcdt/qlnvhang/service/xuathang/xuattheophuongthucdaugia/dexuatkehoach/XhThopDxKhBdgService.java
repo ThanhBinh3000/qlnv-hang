@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.service.xuathang.xuattheophuongthucdaugia.dexuatkehoach;
 
-import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.kehoach.dexuat.XhDxKhBanDauGiaPhanLoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.XhThopDxKhBdgDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.kehoach.dexuat.XhDxKhBanDauGiaRepository;
@@ -12,7 +11,6 @@ import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.XhThopChiTieu
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.XhThopDxKhBdgReq;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.dexuat.XhDxKhBanDauGia;
-import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.dexuat.XhDxKhBanDauGiaPhanLo;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.XhThopDxKhBdgDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.XhThopDxKhBdg;
 import com.tcdt.qlnvhang.util.Contains;
@@ -30,7 +28,6 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -63,7 +60,6 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
                 pageable);
         Map<String,String> hashMapDmhh = getListDanhMucHangHoa();
         data.getContent().forEach(f -> {
-            f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmhh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmhh.get(f.getCloaiVthh()));
         });
@@ -83,64 +79,18 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
           throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
       }
 
-//      Set thông tin hdr tổng hợp
       XhThopDxKhBdg thopHdr = new XhThopDxKhBdg();
-
-
-//      Lấy danh mục chung
-      Map<String, String> mapDmuc = getMapCategory();
-
-      Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
-
-      thopHdr.setNamKh(objReq.getNamKh());
-      thopHdr.setLoaiVthh(objReq.getLoaiVthh());
-      thopHdr.setTenLoaiVthh(listDanhMucHangHoa.get(objReq.getLoaiVthh()));
-      thopHdr.setCloaiVthh(objReq.getCloaiVthh());
-      thopHdr.setTenCloaiVthh(listDanhMucHangHoa.get(objReq.getCloaiVthh()));
-//      for (XhDxKhBanDauGia dx : dxuatList) {
-//          thopHdr.setTchuanCluong(dx.getTchuanCluong());
-//        }
-
-//      Add thong tin list dtl
       List<XhThopDxKhBdgDtl> thopDtls = new ArrayList<XhThopDxKhBdgDtl>();
-      String tChuanCluong = "";
       for (XhDxKhBanDauGia dxuat : dxuatList) {
           XhThopDxKhBdgDtl thopDtl = new XhThopDxKhBdgDtl();
-          // Set thong tin chung lay tu de xuat
           thopDtl.setIdDxHdr(dxuat.getId());
           thopDtl.setMaDvi(dxuat.getMaDvi());
-          thopDtl.setTenDvi(dxuat.getTenDvi());
           thopDtl.setSoDxuat(dxuat.getSoDxuat());
           thopDtl.setNgayPduyet(dxuat.getNgayPduyet());
-          thopDtl.setNgayTao(dxuat.getNgayTao());
           thopDtl.setTrichYeu(dxuat.getTrichYeu());
-//          thopDtl.setSoDviTsan(dxuat.getSoDviTsan());
-          thopDtl.setTongTienKdienDonGia(dxuat.getTongTienKdienDonGia());
-          thopDtl.setTongTienDatTruocDonGia(dxuat.getTongTienDatTruocDonGia());
-          thopDtl.setMoTaHangHoa(dxuat.getMoTaHangHoa());
-          thopDtl.setTchuanCluong(dxuat.getTchuanCluong());
-          thopDtl.setDiaChi(dxuat.getDiaChi());
-          thopDtl.setTgianDkienTu(dxuat.getTgianDkienTu());
-          thopDtl.setTgianDkienDen(dxuat.getTgianDkienDen());
-          thopDtl.setTgianTtoan(dxuat.getTgianTtoan());
-          thopDtl.setTgianTtoanGhiChu(dxuat.getTgianTtoanGhiChu());
-          thopDtl.setPthucTtoan(dxuat.getPthucTtoan());
-          thopDtl.setTgianGnhan(dxuat.getTgianGnhan());
-          thopDtl.setTgianGnhanGhiChu(dxuat.getTgianGnhanGhiChu());
-          thopDtl.setPthucGnhan(dxuat.getPthucGnhan());
-          thopDtl.setThongBaoKh(dxuat.getThongBaoKh());
-          thopDtl.setKhoanTienDatTruoc(dxuat.getKhoanTienDatTruoc());
-//          List<XhDxKhBanDauGiaPhanLo> dtlsPhanLo = xhDxKhBanDauGiaPhanLoRepository.findByIdDxKhbdg(dxuat.getId());
-//          BigDecimal soLuong = BigDecimal.ZERO;
-//          for (XhDxKhBanDauGiaPhanLo phanLoDtl : dtlsPhanLo) {
-//              soLuong = soLuong.add(phanLoDtl.getTongSoLuong());
-//          }
-//          thopDtl.setTongSoLuong(soLuong);
           thopDtls.add(thopDtl);
-          tChuanCluong = tChuanCluong.concat(dxuat.getTchuanCluong()+",");
       }
-      thopHdr.setTchuanCluong(tChuanCluong);
-      thopHdr.setThopDxKhBdgDtlList(thopDtls);
+      thopHdr.setChildren(thopDtls);
       return thopHdr;
   }
 
@@ -152,8 +102,8 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
         // Set thong tin hdr tong hop
         XhThopDxKhBdg thopHdr = sumarryData(objReq,req);
         thopHdr.setId(objReq.getIdTh());
-        thopHdr.setNgayTao(getDateTimeNow());
-        thopHdr.setNguoiTao(getUser().getUsername());
+        thopHdr.setNgayTao(new Date());
+        thopHdr.setNguoiTaoId(getUser().getId());
         thopHdr.setNgayDuyetTu(objReq.getNgayDuyetTu());
         thopHdr.setNgayDuyetDen(objReq.getNgayDuyetDen());
         thopHdr.setLoaiVthh(objReq.getLoaiVthh());
@@ -162,18 +112,13 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
         thopHdr.setNgayThop(new Date());
         thopHdr.setNoiDungThop(objReq.getNoiDungThop());
         xhThopDxKhBdgRepository.save(thopHdr);
-        for (XhThopDxKhBdgDtl dtl : thopHdr.getThopDxKhBdgDtlList()){
+        for (XhThopDxKhBdgDtl dtl : thopHdr.getChildren()){
             dtl.setIdThopHdr(thopHdr.getId());
             xhThopDxKhBdgDtlRepository.save(dtl);
         }
-        if (thopHdr.getId() > 0 && thopHdr.getThopDxKhBdgDtlList().size() > 0) {
-            List<String> soDxuatList = thopHdr.getThopDxKhBdgDtlList().stream().map(XhThopDxKhBdgDtl::getSoDxuat)
+        if (thopHdr.getId() > 0 && thopHdr.getChildren().size() > 0) {
+            List<String> soDxuatList = thopHdr.getChildren().stream().map(XhThopDxKhBdgDtl::getSoDxuat)
                     .collect(Collectors.toList());
-            List<XhDxKhBanDauGia> list = xhDxKhBanDauGiaRepository.findBySoDxuatIn(soDxuatList);
-//            for (XhDxKhBanDauGia bdg : list){
-//                bdg.setMaThop(String.valueOf(thopHdr.getId()));
-//                xhDxKhBanDauGiaRepository.save(bdg);
-//            }
             xhDxKhBanDauGiaRepository.updateStatusInList(soDxuatList, Contains.DATONGHOP);
         }
         return thopHdr;
@@ -222,7 +167,7 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
       listTh.forEach(f ->{
           f.setTenDvi(StringUtils.isEmpty(f.getMaDvi())? null : mapDmucDvi.get(f.getMaDvi()));
       });
-      hdrThop.setThopDxKhBdgDtlList(listTh);
+      hdrThop.setChildren(listTh);
 
       return hdrThop;
   }

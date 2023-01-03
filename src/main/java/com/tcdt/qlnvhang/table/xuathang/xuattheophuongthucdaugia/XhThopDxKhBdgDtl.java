@@ -24,42 +24,14 @@ public class XhThopDxKhBdgDtl implements Serializable {
     private Long idThopHdr;
     private Long idDxHdr;
     private String maDvi;
-    @Transient
-    private String tenDvi;
     private String soDxuat;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayTao;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayPduyet;
     private String trichYeu;
-    private BigDecimal tongSoLuong;
-    private Integer soDviTsan;
-    private BigDecimal tongTienKdienDonGia;
-    private BigDecimal tongTienDatTruocDonGia;
-    private String moTaHangHoa;
-    private String tchuanCluong;
-    private String diaChi;
 
-
-
-    @Temporal(TemporalType.DATE)
-    private Date tgianDkienTu;
-    @Temporal(TemporalType.DATE)
-    private Date tgianDkienDen;
-    private Integer tgianTtoan;
-
-    private String tgianTtoanGhiChu;
-
-    private String pthucTtoan;
-
-    private Integer tgianGnhan;
-
-    private String tgianGnhanGhiChu;
-
-    private String pthucGnhan;
-
-    private String thongBaoKh;
-    private BigDecimal khoanTienDatTruoc;
+    // Transient
+    @Transient
+    private String tenDvi;
 
 
 
