@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
 @Service
 public interface BaseService<E,R, PK extends Serializable>   {
 
-	Page<E> searchPage (R req);
+	Page<E> searchPage (R req) throws Exception;
 
 	List<E> searchAll (R req);
 
@@ -29,8 +30,8 @@ public interface BaseService<E,R, PK extends Serializable>   {
 	void delete(PK id) throws Exception;
 
 	@Transactional(rollbackFor = {Exception.class, Throwable.class})
-	void deleteMulti(List<PK> listMulti);
+	void deleteMulti(List<PK> listMulti) throws Exception;
 
-	boolean export(R req) throws Exception;
+	boolean export(R req, HttpServletResponse response) throws Exception;
 
 }

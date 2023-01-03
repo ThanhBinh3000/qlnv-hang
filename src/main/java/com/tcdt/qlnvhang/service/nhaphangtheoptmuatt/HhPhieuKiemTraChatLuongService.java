@@ -285,6 +285,9 @@ public class HhPhieuKiemTraChatLuongService extends BaseServiceImpl {
 
     public List<HhPhieuKiemTraChatLuong> findAllByIdDdiemGiaoNvNh(Long idDdiemGiaoNvNh) {
         List<HhPhieuKiemTraChatLuong> list = hhPhieuKiemTraChatLuongRepository.findByIdDdiemGiaoNvNhOrderById(idDdiemGiaoNvNh);
+        for(HhPhieuKiemTraChatLuong pkt : list){
+            pkt.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(pkt.getTrangThai()));
+        }
         return list;
     }
 

@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -191,7 +192,7 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
     }
 
     @Override
-    public boolean export(PhieuKnghiemCluongHangReq req) throws Exception {
+    public boolean export(PhieuKnghiemCluongHangReq req, HttpServletResponse response) throws Exception {
         return false;
     }
 

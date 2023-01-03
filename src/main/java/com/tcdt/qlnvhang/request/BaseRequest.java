@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.request;
 
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import lombok.Data;
 import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +30,8 @@ public class BaseRequest {
 	Set<String> trangThais = new HashSet<>();
 	Set<String> capDvis = new HashSet<>();
 	String lyDoTuChoi;
+
+	private List<FileDinhKemReq> fileDinhKemReq =new ArrayList<>();
 
 	private List<Long> ids = new ArrayList<>();
 

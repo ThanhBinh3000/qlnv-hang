@@ -25,6 +25,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
@@ -206,10 +207,9 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
     }
 
     @Override
-    public boolean export(NhPhieuNhapKhoTamGuiReq req) throws Exception {
+    public boolean export(NhPhieuNhapKhoTamGuiReq req, HttpServletResponse response) throws Exception {
         return false;
     }
-
 
 //    @Override
 //    @Transactional(rollbackOn = Exception.class)
