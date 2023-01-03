@@ -1,8 +1,8 @@
-package com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia;
+package com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.kehoachbdg.dexuat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.XhDxKhBanDauGiaPhanLo;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
@@ -12,20 +12,15 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-public class XhDxKhBanDauGiaReq {
+public class XhDxKhBanDauGiaReq extends BaseRequest {
     private Long id;
     private String maDvi;
-    private String tenDvi;
     private String loaiHinhNx;
     private String kieuNx;
     private String diaChi;
     private Integer namKh;
     private String soDxuat;
     private String trichYeu;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayTao;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayPduyet;
     private String soQdCtieu;
     private String loaiVthh;
     private String cloaiVthh;
@@ -39,28 +34,26 @@ public class XhDxKhBanDauGiaReq {
     private String tgianTtoanGhiChu;
     private String pthucTtoan;
     private Integer tgianGnhan;
-    private String tgianGnhanGhiChu;
     private String pthucGnhan;
+    private String tgianGnhanGhiChu;
     private String thongBaoKh;
-    private Integer khoanTienDatTruoc;
+    private BigDecimal khoanTienDatTruoc;
     private BigDecimal tongSoLuong;
     private BigDecimal tongTienKdiem;
     private BigDecimal tongTienKdienDonGia;
     private BigDecimal tongTienDatTruoc;
     private BigDecimal tongTienDatTruocDonGia;
     private String ghiChu;
-    private String maThop;
-    private String soQdPd;
-
-    private Integer soDviTsan;
-    private Integer slHdDaKy;
+    private String trangThaiTh;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayKyQd;
+    private Date ngayTaoTu;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayTaoDen;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayDuyetTu;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayDuyetDen;
 
-    private List<FileDinhKemReq> fileDinhkems =new ArrayList<>();
-
-
-    private List<XhDxKhBanDauGiaPhanLoReq> dsPhanLoReq = new ArrayList<>();
-
+    private List<XhDxKhBanDauGiaDtlReq> children = new ArrayList<>();
 
 }

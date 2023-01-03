@@ -14,14 +14,12 @@ import java.util.List;
 @Data
 public class HhBienBanNghiemThu implements Serializable {
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "NH_BB_NGHIEM_THU";
+    public static final String TABLE_NAME = "HH_BIEN_BAN_NGHIEM_THU";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BB_NGHIEM_THU_SEQ")
-    @SequenceGenerator(sequenceName = "BB_NGHIEM_THU_SEQ", allocationSize = 1, name = "BB_NGHIEM_THU_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_BIEN_BAN_NGHIEM_THU_SEQ")
+    @SequenceGenerator(sequenceName = "HH_BIEN_BAN_NGHIEM_THU_SEQ", allocationSize = 1, name = "HH_BIEN_BAN_NGHIEM_THU_SEQ")
     private Long id;
-    private Long idQdNh;
-    private String soQdNh;
     private String soBb;
     @Temporal(TemporalType.DATE)
     private Date ngayNghiemThu;
@@ -85,9 +83,21 @@ public class HhBienBanNghiemThu implements Serializable {
 
     private String maQhns;
 
+    private Long idQdGiaoNvNh;
+
+    private String soQdGiaoNvNh;
+
+    private Long idDdiemGiaoNvNh;
+
+    @Transient
+    private FileDinhKem fileDinhKem;
+
     @Transient
     private List<FileDinhKem> fileDinhKems =new ArrayList<>();
 
     @Transient
-    private List<HhBbanNghiemThuDtl> bbanNghiemThuDtlList =new ArrayList<>();
+    private List<HhBbanNghiemThuDtl> dviChuDongThucHien =new ArrayList<>();
+
+    @Transient
+    private List<HhBbanNghiemThuDtl> dmTongCucPdTruocThucHien =new ArrayList<>();
 }

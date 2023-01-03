@@ -1,7 +1,6 @@
-package com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia;
+package com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.kehoach.dexuat;
 
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDxuatKhMttHdr;
-import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.XhDxKhBanDauGia;
+import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.dexuat.XhDxKhBanDauGia;
 import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

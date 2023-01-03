@@ -233,6 +233,10 @@ public class Contains {
 
 	public static final String CUNG_CAP = "CC";
 
+	public static final String CHU_DONG = "CD";
+
+	public static final String PHE_DUYET_TRUOC = "PDT";
+
 
 	public static final Map<String, String> mappingLoaiDx;
 	static {

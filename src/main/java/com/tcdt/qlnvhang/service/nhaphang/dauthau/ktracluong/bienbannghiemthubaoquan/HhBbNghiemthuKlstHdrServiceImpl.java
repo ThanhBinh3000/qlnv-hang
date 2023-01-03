@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.tcdt.qlnvhang.entities.FileDKemJoinKeLot;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstHdr;
@@ -247,7 +248,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
     }
 
     @Override
-    public boolean export(HhBbNghiemthuKlstHdrReq req) throws Exception {
+    public boolean export(HhBbNghiemthuKlstHdrReq req, HttpServletResponse response) throws Exception {
         return false;
     }
 

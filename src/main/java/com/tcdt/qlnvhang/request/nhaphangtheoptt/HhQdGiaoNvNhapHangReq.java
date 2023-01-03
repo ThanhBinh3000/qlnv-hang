@@ -16,6 +16,8 @@ public class HhQdGiaoNvNhapHangReq {
     private String soQd;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayQd;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayKyHd;
     private String maDvi;
     private String tenDvi;
     private Long idHd;

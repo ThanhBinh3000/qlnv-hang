@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -50,6 +51,9 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
 
     @Autowired
     private HhPhieuKiemTraChatLuongService hhPhieuKiemTraChatLuongService;
+
+    @Autowired
+    HhBienBanNghiemThuRepository hhBienBanNghiemThuRepository;
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
@@ -108,9 +112,14 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
             }
             for (HhQdGiaoNvNhangDtl dtl : hhQdGiaoNvNhangDtl ){
                 dtl.setHhQdGiaoNvNhDdiemList(ddiemList);
+                // Set biên bản nghiệm thu bảo quản
+                List<HhBienBanNghiemThu> bbNghiemThuBq = hhBienBanNghiemThuRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(), dtl.getMaDvi());
+                bbNghiemThuBq.forEach( item ->  {
+                    item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+                });
+                dtl.setListBienBanNghiemThuBq(bbNghiemThuBq);
             }
             f.setHhQdGiaoNvNhangDtlList(hhQdGiaoNvNhangDtl);
-
         });
 
     return data;
@@ -244,6 +253,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                 dDiem.setTenNhaKho(StringUtils.isEmpty(dDiem.getMaNhaKho())?null:hashMapDmdv.get(dDiem.getMaNhaKho()));
                 dDiem.setTenNganKho(StringUtils.isEmpty(dDiem.getMaNganKho())?null:hashMapDmdv.get(dDiem.getMaNganKho()));
                 dDiem.setTenLoKho(StringUtils.isEmpty(dDiem.getMaLoKho())?null:hashMapDmdv.get(dDiem.getMaLoKho()));
+                dDiem.setListPhieuKtraCl(hhPhieuKiemTraChatLuongService.findAllByIdDdiemGiaoNvNh(dDiem.getId()));
             }
             dtl.setHhQdGiaoNvNhDdiemList(listDd);
         }

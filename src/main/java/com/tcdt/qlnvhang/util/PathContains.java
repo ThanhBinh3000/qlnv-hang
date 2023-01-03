@@ -222,6 +222,9 @@ public class PathContains {
 	public static final String XH_BIEN_BAN_HAO_DOI = "/xh-bb-hao-doi";
 
 	public static final String XUAT_HANG_DTQG = "/xuat-hang";
+
+	public static final String DAU_GIA = "/dau-gia";
+
 	public static final String XUAT_CUU_TRO = "/cuu-tro";
 	public static final String XAY_DUNG_PHUONG_AN_DE_XUAT = "/de-xuat";
 	public static final String TONG_HOP_PHUONG_AN= "/tong-hop";

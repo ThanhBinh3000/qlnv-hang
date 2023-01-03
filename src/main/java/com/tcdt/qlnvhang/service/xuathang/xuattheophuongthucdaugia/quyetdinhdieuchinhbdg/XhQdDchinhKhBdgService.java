@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.*;
+import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.kehoach.dexuat.XhDxKhBanDauGiaRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgPlDtlRepository;
@@ -22,6 +23,7 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.*;
+import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.dexuat.XhDxKhBanDauGia;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgPl;
@@ -150,7 +152,7 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
         dataMap.setLastest(objReq.getLastest());
         dataMap.setMaDvi(userInfo.getDepartment());
         XhQdDchinhKhBdgHdr created=xhQdDchinhKhBdgHdrRepository.save(dataMap);
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),dataMap.getId(),"XH_DX_KH_BAN_DAU_GIA");
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),dataMap.getId(),XhQdDchinhKhBdgHdr.TABLE_NAME);
         created.setFileDinhKems(fileDinhKems);
 
         // Update trạng thái tổng hợp dxkhclnt
@@ -179,7 +181,7 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
         dataMap.setLastest(objReq.getLastest());
         dataMap.setMaDvi(userInfo.getDepartment());
         XhQdDchinhKhBdgHdr created=xhQdDchinhKhBdgHdrRepository.save(dataMap);
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),dataMap.getId(),"XH_DX_KH_BAN_DAU_GIA");
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),dataMap.getId(),XhQdDchinhKhBdgHdr.TABLE_NAME);
         created.setFileDinhKems(fileDinhKems);
 
         // Update trạng thái tờ trình
@@ -476,8 +478,8 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
             }else {
                 throw new Exception("Số tờ trình kế hoạch không được tìm thấy");
             }
-            this.cloneProject(dataDB.getId());
-            this.cloneForToChucBdg(dataDB);
+//            this.cloneProject(dataDB.getId());
+//            this.cloneForToChucBdg(dataDB);
         }
         XhQdDchinhKhBdgHdr createCheck = xhQdDchinhKhBdgHdrRepository.save(dataDB);
         return createCheck;
@@ -518,8 +520,8 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
                     throw new Exception("Số tờ trình kế hoạch không được tìm thấy");
                 }
             }
-            this.cloneProject(dataDB.getId());
-            this.cloneForToChucBdg(dataDB);
+      /*      this.cloneProject(dataDB.getId());
+            this.cloneForToChucBdg(dataDB);*/
 //            this.validateData(dataDB);
         }
         XhQdDchinhKhBdgHdr createCheck = xhQdDchinhKhBdgHdrRepository.save(dataDB);
