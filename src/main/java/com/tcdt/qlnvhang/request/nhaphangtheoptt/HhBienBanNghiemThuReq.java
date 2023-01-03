@@ -52,9 +52,9 @@ public class HhBienBanNghiemThuReq {
 
     private FileDinhKemReq fileDinhKem;
 
-    private List<HhBbanNghiemThuDtlReq> DviChuDongThucHien =new ArrayList<>();
+    private List<HhBbanNghiemThuDtlReq> dviChuDongThucHien =new ArrayList<>();
 
-    private List<HhBbanNghiemThuDtlReq> DmTongCucPdTruocThucHien =new ArrayList<>();
+    private List<HhBbanNghiemThuDtlReq> dmTongCucPdTruocThucHien =new ArrayList<>();
 
     private List<FileDinhKemReq> fileDinhkems =new ArrayList<>();
 }
