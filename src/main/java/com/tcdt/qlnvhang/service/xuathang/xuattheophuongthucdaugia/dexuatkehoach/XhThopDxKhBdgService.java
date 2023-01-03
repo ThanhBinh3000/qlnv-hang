@@ -79,7 +79,7 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
         }
 
         XhThopDxKhBdg thopHdr = new XhThopDxKhBdg();
-        Map<String, String> listDanhMucDvi = getListDanhMucDvi("1", null, "01");
+        Map<String, String> listDanhMucDvi = getListDanhMucDvi("2", null, "01");
         List<XhThopDxKhBdgDtl> thopDtls = new ArrayList<>();
         for (XhDxKhBanDauGia dxuat : dxuatList) {
             XhThopDxKhBdgDtl thopDtl = new XhThopDxKhBdgDtl();
@@ -108,6 +108,8 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
         thopHdr.setCloaiVthh(objReq.getCloaiVthh());
         thopHdr.setTrangThai(Contains.CHUATAO_QD);
         thopHdr.setNgayThop(new Date());
+        thopHdr.setNamKh(objReq.getNamKh());
+        thopHdr.setMaDvi(objReq.getMaDvi());
         thopHdr.setNoiDungThop(objReq.getNoiDungThop());
         xhThopDxKhBdgRepository.save(thopHdr);
         for (XhThopDxKhBdgDtl dtl : thopHdr.getChildren()) {
@@ -161,7 +163,7 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
         hdrThop.setTenCloaiVthh(hashMapDmHh.get(hdrThop.getCloaiVthh()));
 
         List<XhThopDxKhBdgDtl> listTh = xhThopDxKhBdgDtlRepository.findByIdThopHdr(hdrThop.getId());
-        Map<String, String> mapDmucDvi = getMapTenDvi();
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(Contains.CAP_CUC,null,"01");
         listTh.forEach(f -> {
             f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
         });

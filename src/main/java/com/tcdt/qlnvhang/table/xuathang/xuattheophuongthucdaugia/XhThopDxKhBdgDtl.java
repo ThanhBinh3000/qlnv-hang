@@ -15,7 +15,7 @@ import java.util.Date;
 @Data
 public class XhThopDxKhBdgDtl implements Serializable {
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "XH_THOP_DX_KH_BDG_DTL  ";
+    public static final String TABLE_NAME = "XH_THOP_DX_KH_BDG_DTL";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_THOP_DX_KH_BDG_DTL_SEQ  ")
@@ -29,7 +29,7 @@ public class XhThopDxKhBdgDtl implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayPduyet;
     private String trichYeu;
-    private String dviTsan;
+    private Integer soDviTsan;
     private String trangThai;
 
     // Transient
