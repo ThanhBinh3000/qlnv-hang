@@ -16,6 +16,7 @@ import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.XhThopDxKhBdg;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -78,16 +79,13 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
         }
 
         XhThopDxKhBdg thopHdr = new XhThopDxKhBdg();
-        Map<String, String> listDanhMucDvi = getListDanhMucDvi("2", null, "01");
+        Map<String, String> listDanhMucDvi = getListDanhMucDvi("1", null, "01");
         List<XhThopDxKhBdgDtl> thopDtls = new ArrayList<>();
         for (XhDxKhBanDauGia dxuat : dxuatList) {
             XhThopDxKhBdgDtl thopDtl = new XhThopDxKhBdgDtl();
+            BeanUtils.copyProperties(dxuat,thopDtl,"id");
             thopDtl.setIdDxHdr(dxuat.getId());
-            thopDtl.setMaDvi(dxuat.getMaDvi());
             thopDtl.setTenDvi(listDanhMucDvi.get(dxuat.getMaDvi()));
-            thopDtl.setSoDxuat(dxuat.getSoDxuat());
-            thopDtl.setNgayPduyet(dxuat.getNgayPduyet());
-            thopDtl.setTrichYeu(dxuat.getTrichYeu());
             thopDtls.add(thopDtl);
         }
         thopHdr.setChildren(thopDtls);
