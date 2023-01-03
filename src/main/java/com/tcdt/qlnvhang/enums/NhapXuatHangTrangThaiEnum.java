@@ -61,7 +61,15 @@ public enum NhapXuatHangTrangThaiEnum {
 
 	TUCHOI_TBP_KTBQ("48", "Từ chối - TBP KTBQ", "Từ chối - TBP KTBQ"),
 
-	DATAO_CB_VU("49", "Đã tạo - Cán bộ Vụ", "Đã tạo - Cán bộ Vụ");
+	DATAO_CB_VU("49", "Chờ duyêt - BTC", "Chờ duyêt - BTC") ,
+
+	DA_TAO_CBV("52", "Đã tạo - CB Vụ", "Đã tạo - CB Vụ"),
+
+	DA_DUYET_CBV("53", "Đã duyệt - CB Vụ", "Đã duyệt - CB Vụ"),
+
+	TU_CHOI_CBV("54", "Từ chối - CB Vụ", "Từ chối - CB Vụ")
+
+	;
 
 
 

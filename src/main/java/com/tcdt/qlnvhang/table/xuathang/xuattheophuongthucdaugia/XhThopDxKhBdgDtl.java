@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
@@ -28,12 +29,16 @@ public class XhThopDxKhBdgDtl implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayPduyet;
     private String trichYeu;
+    private String dviTsan;
+    private String trangThai;
 
     // Transient
     @Transient
     private String tenDvi;
+    @Transient
+    private String tenTrangThai;
 
-
-
-
+    public String getTenTrangThai() {
+        return NhapXuatHangTrangThaiEnum.getTenById(trangThai);
+    }
 }
