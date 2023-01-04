@@ -96,23 +96,11 @@ public class Contains {
 	public static final String HUYTHAU = "36";
 	public static final String TRUNGTHAU = "37";
 
-	// Trạng thái tổng hợp
-	public static final String CHUA_QUYET_DINH = "00";
 
-	public static final String DU_THAO_QD = "01";
-	public static final String DA_QUYET_DINH = "02";
+	public static final String DA_DUYET_CBV = "53";
 
-	// Trạng thái gói thầu
+	public static final String TU_CHOI_CBV = "54";
 
-	public static final String CHUA_CAP_NHAT = "00";
-
-	public static final String DANG_CAP_NHAT = "01";
-
-	public static final String HOAN_THANH_CAP_NHAT = "02";
-
-	public static final String GT_TRUNG_THAU = "03";
-
-	public static final String GT_HUY_THAU = "04";
 
 	// Trang thai response
 	public static final int RESP_SUCC = 0;

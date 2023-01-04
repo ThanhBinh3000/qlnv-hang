@@ -2,15 +2,12 @@ package com.tcdt.qlnvhang.service.xuathang.xuattheophuongthucdaugia.tochuctrienk
 
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.XhQdPdKhBdgPlDtlRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.XhQdPdKhBdgPlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.*;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.ThongTinDauGiaReq;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.XhQdCuuTroHdr;
-import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.XhQdPdKhBdgPl;
-import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.XhQdPdKhBdgPlDtl;
+import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.pheduyet.XhQdPdKhBdgPlDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.*;
 import com.tcdt.qlnvhang.util.DataUtils;
 import org.springframework.beans.BeanUtils;
@@ -95,27 +92,27 @@ public class XhTcTtinBdgHdrService extends BaseServiceImpl {
 
       //tai san tu quyet dinh de lam template
       List<XhTcTtinBdgTaiSan> listTaiSanTmp = new ArrayList<>();
-      List<XhQdPdKhBdgPlDtl> listPhanLo = xhQdPdKhBdgPlDtlRepository.findByIdQdHdr(data.getIdQdPdKh());
+//      List<XhQdPdKhBdgPlDtl> listPhanLo = xhQdPdKhBdgPlDtlRepository.findByIdQdHdr(data.getIdQdPdKh());
 
-      listPhanLo.forEach(s -> {
-        XhTcTtinBdgTaiSan row = new XhTcTtinBdgTaiSan();
-        row.setIdTtinHdr(data.getId());
-        row.setIdTtinDtl(null);
-        row.setMaDvi(s.getMaDvi());
-        row.setMaDiaDiem(DataUtils.isNullOrEmpty(s.getMaLoKho()) ? s.getMaNganKho() : s.getMaLoKho());
-        row.setSoLuong(DataUtils.safeToLong(s.getSoLuong()));
-        row.setDonGia(DataUtils.safeToLong(s.getDonGiaVat()));
-        row.setDonGiaCaoNhat(0L);
-        row.setCloaiVthh(s.getCloaiVthh());
-        row.setMaDvTaiSan(s.getMaDviTsan());
-        row.setTonKho(0L);
-        row.setDonViTinh(s.getDviTinh());
-        row.setGiaKhoiDiem(DataUtils.safeToLong(s.getGiaKhoiDiem()));
-        row.setSoTienDatTruoc(DataUtils.safeToLong(s.getTienDatTruoc()));
-        row.setSoLanTraGia(0);
-        row.setNguoiTraGiaCaoNhat("");
-        listTaiSanTmp.add(row);
-      });
+//      listPhanLo.forEach(s -> {
+//        XhTcTtinBdgTaiSan row = new XhTcTtinBdgTaiSan();
+//        row.setIdTtinHdr(data.getId());
+//        row.setIdTtinDtl(null);
+////        row.setMaDvi(s.getMaDvi());
+//        row.setMaDiaDiem(DataUtils.isNullOrEmpty(s.getMaLoKho()) ? s.getMaNganKho() : s.getMaLoKho());
+//        row.setSoLuong(DataUtils.safeToLong(s.getSoLuong()));
+//        row.setDonGia(DataUtils.safeToLong(s.getDonGiaVat()));
+//        row.setDonGiaCaoNhat(0L);
+////        row.setCloaiVthh(s.getCloaiVthh());
+//        row.setMaDvTaiSan(s.getMaDviTsan());
+//        row.setTonKho(0L);
+//        row.setDonViTinh(s.getDviTinh());
+////        row.setGiaKhoiDiem(DataUtils.safeToLong(s.getGiaKhoiDiem()));
+////        row.setSoTienDatTruoc(DataUtils.safeToLong(s.getTienDatTruoc()));
+//        row.setSoLanTraGia(0);
+//        row.setNguoiTraGiaCaoNhat("");
+//        listTaiSanTmp.add(row);
+//      });
       setTenTaiSan(listTaiSanTmp, mapDmucDvi, mapVthh);
 
       data.setDetail(listDetail);

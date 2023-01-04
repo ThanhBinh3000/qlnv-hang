@@ -240,17 +240,20 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
          case Contains.CHODUYET_TP + Contains.DUTHAO:
          case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
          case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
+         case Contains.CHODUYET_TP + Contains.TU_CHOI_CBV:
 //             this.validateData(data,Contains.CHODUYET_TP);
              data.setNguoiGuiDuyetId(userInfo.getId());
              data.setNgayGuiDuyet(getDateTimeNow());
          case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
          case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
+         case Contains.TU_CHOI_CBV + Contains.DADUYET_LDC:
              data.setNguoiPduyetId(userInfo.getId());
              data.setNgayPduyet(getDateTimeNow());
              data.setLyDoTuChoi(req.getLyDoTuChoi());
              break;
          case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
          case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
+         case Contains.DA_DUYET_CBV + Contains.DADUYET_LDC:
 //             this.validateData(data,stReq.getTrangThai());
              data.setNguoiPduyetId(userInfo.getId());
              data.setNgayPduyet(getDateTimeNow());
@@ -303,7 +306,7 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
     }
 
     @Override
-    public boolean export(XhDxKhBanDauGiaReq req, HttpServletResponse response) throws Exception {
+    public void export(XhDxKhBanDauGiaReq req, HttpServletResponse response) throws Exception {
         PaggingReq paggingReq = new PaggingReq();
         paggingReq.setPage(0);
         paggingReq.setLimit(Integer.MAX_VALUE);
@@ -335,7 +338,6 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
 
         ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
         ex.export();
-        return true;
     }
 
 

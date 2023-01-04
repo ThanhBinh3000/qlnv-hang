@@ -1,8 +1,7 @@
 package com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia;
 
-import com.tcdt.qlnvhang.table.HhDxKhLcntThopDtl;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDxKhMttThopDtl;
-import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.XhThopDxKhBdgDtl;
+import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.tonghop.XhThopDxKhBdgDtl;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;

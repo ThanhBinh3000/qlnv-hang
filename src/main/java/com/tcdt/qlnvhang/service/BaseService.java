@@ -32,6 +32,6 @@ public interface BaseService<E,R, PK extends Serializable>   {
 	@Transactional(rollbackFor = {Exception.class, Throwable.class})
 	void deleteMulti(List<PK> listMulti) throws Exception;
 
-	boolean export(R req, HttpServletResponse response) throws Exception;
+	void export(R req, HttpServletResponse response) throws Exception;
 
 }

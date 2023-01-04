@@ -1,6 +1,7 @@
-package com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia;
+package com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.tonghop;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
@@ -14,7 +15,7 @@ import java.util.Date;
 @Data
 public class XhThopDxKhBdgDtl implements Serializable {
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "XH_THOP_DX_KH_BDG_DTL  ";
+    public static final String TABLE_NAME = "XH_THOP_DX_KH_BDG_DTL";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_THOP_DX_KH_BDG_DTL_SEQ  ")
@@ -24,44 +25,20 @@ public class XhThopDxKhBdgDtl implements Serializable {
     private Long idThopHdr;
     private Long idDxHdr;
     private String maDvi;
-    @Transient
-    private String tenDvi;
     private String soDxuat;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayTao;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayPduyet;
     private String trichYeu;
-    private BigDecimal tongSoLuong;
     private Integer soDviTsan;
-    private BigDecimal tongTienKdienDonGia;
-    private BigDecimal tongTienDatTruocDonGia;
-    private String moTaHangHoa;
-    private String tchuanCluong;
-    private String diaChi;
+    private String trangThai;
 
+    // Transient
+    @Transient
+    private String tenDvi;
+    @Transient
+    private String tenTrangThai;
 
-
-    @Temporal(TemporalType.DATE)
-    private Date tgianDkienTu;
-    @Temporal(TemporalType.DATE)
-    private Date tgianDkienDen;
-    private Integer tgianTtoan;
-
-    private String tgianTtoanGhiChu;
-
-    private String pthucTtoan;
-
-    private Integer tgianGnhan;
-
-    private String tgianGnhanGhiChu;
-
-    private String pthucGnhan;
-
-    private String thongBaoKh;
-    private BigDecimal khoanTienDatTruoc;
-
-
-
-
+    public String getTenTrangThai() {
+        return NhapXuatHangTrangThaiEnum.getTenById(trangThai);
+    }
 }

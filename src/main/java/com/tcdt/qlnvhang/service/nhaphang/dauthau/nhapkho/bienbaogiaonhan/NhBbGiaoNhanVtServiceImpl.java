@@ -195,8 +195,8 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
     }
 
     @Override
-    public boolean export(NhBbGiaoNhanVtReq req, HttpServletResponse response) throws Exception {
-        return false;
+    public void export(NhBbGiaoNhanVtReq req, HttpServletResponse response) throws Exception {
+//        return false;
     }
 
 //    @Override
