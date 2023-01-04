@@ -87,16 +87,10 @@ public class QuyetDinhGnvCuuTroService extends BaseServiceImpl {
 //    Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
     Map<String, String> mapVthh = getListDanhMucHangHoa();
+    //set label
     search.getContent().forEach(s -> {
-      if (mapDmucDvi.get((s.getMaDvi())) != null) {
-        s.setTenDvi(mapDmucDvi.get(s.getMaDvi()));
-      }
-      if (mapVthh.get((s.getLoaiVthh())) != null) {
-        s.setTenLoaiVthh(mapVthh.get(s.getLoaiVthh()));
-      }
-      if (mapVthh.get((s.getCloaiVthh())) != null) {
-        s.setTenCloaiVthh(mapVthh.get(s.getCloaiVthh()));
-      }
+      s.setMapDmucDvi(mapDmucDvi);
+      s.setMapVthh(mapVthh);
     });
     return search;
   }
@@ -111,6 +105,8 @@ public class QuyetDinhGnvCuuTroService extends BaseServiceImpl {
     Optional<XhQdGnvCuuTroHdr> currentHdr = xhQdGnvCuuTroHdrRepository.findById(id);
     if (currentHdr.isPresent()) {
       XhQdGnvCuuTroHdr data = currentHdr.get();
+      data.setMapDmucDvi(mapDmucDvi);
+      data.setMapVthh(mapVthh);
       //set thong tin de xuat
       List<XhQdGnvCuuTroDtl> dataDtl = xhQdGnvCuuTroDtlRepository.findByIdHdr(data.getId());
       dataDtl.forEach(s -> s.setMapDmucDvi(mapDmucDvi));
