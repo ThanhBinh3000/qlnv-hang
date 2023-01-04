@@ -93,11 +93,9 @@ public class HhBienBanNghiemThu implements Serializable {
     @Transient
     private FileDinhKem fileDinhKem;
 
-    @Transient
-    BigDecimal kinhPhiThucTe;
+    private BigDecimal kinhPhiThucTe;
 
-    @Transient
-    BigDecimal kinhPhiTcPd;
+    private BigDecimal kinhPhiTcPd;
 
     @Transient
     private List<FileDinhKem> fileDinhKems =new ArrayList<>();

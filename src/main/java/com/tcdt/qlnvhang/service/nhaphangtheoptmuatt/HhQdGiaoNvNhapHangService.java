@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
 import com.google.common.collect.Lists;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -12,8 +11,6 @@ import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatDtl;
-import com.tcdt.qlnvhang.table.HhQdGiaoNvuNxDdiem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
 import com.tcdt.qlnvhang.util.Contains;
@@ -31,6 +28,7 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -118,18 +116,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                 // Set biên bản nghiệm thu bảo quản
                 List<HhBienBanNghiemThu> bbNghiemThuBq = hhBienBanNghiemThuRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(), dtl.getMaDvi());
                 bbNghiemThuBq.forEach( item ->  {
-                    List<HhBbanNghiemThuDtl> listDtl = hhBbanNghiemThuDtlRepository.findAllByIdHdr(item.getId());
-                    item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
-                    List<HhBbanNghiemThuDtl> dtl1= listDtl.stream().filter(x -> x.getType().equals(Contains.CHU_DONG)).collect(Collectors.toList());
-                    for (HhBbanNghiemThuDtl a: dtl1){
-                        item.setKinhPhiThucTe(a.getTongGtri());
-                    }
-                    List<HhBbanNghiemThuDtl> dtl2=listDtl.stream().filter(x -> x.getType().equals(Contains.PHE_DUYET_TRUOC)).collect(Collectors.toList());
-                    for (HhBbanNghiemThuDtl b: dtl2){
-                        item.setKinhPhiTcPd(b.getTongGtri());
-                    }
-
-
+                   item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
                 });
                 dtl.setListBienBanNghiemThuBq(bbNghiemThuBq);
             }
