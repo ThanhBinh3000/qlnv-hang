@@ -1,13 +1,9 @@
 package com.tcdt.qlnvhang.request.nhaphangtheoptt;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuNhapKhoCt;
 import com.tcdt.qlnvhang.util.Contains;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-
 import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -16,6 +12,7 @@ import java.util.List;
 
 @Data
 public class HhPhieuNhapKhoHdrReq  {
+
     @ApiModelProperty(notes = "Bắt buộc set đối với update")
     private Long id;
 
@@ -84,6 +81,9 @@ public class HhPhieuNhapKhoHdrReq  {
     private String ghiChu;
 
     private String lyDoTuChoi;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayGdinh;
 
     @Transient
     private List<HhPhieuNhapKhoCtReq> PhieuNhapKhoCtList = new ArrayList<>();

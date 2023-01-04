@@ -1,9 +1,6 @@
 package com.tcdt.qlnvhang.table.nhaphangtheoptt;
-
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import io.swagger.models.auth.In;
 import lombok.Data;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -19,8 +16,8 @@ public class HhPhieuNhapKhoHdr implements Serializable {
     public static final String TABLE_NAME = "HH_PHIEU_NHAP_KHO_HDR";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_PHIEU_NHAP_KHO_HDR_SEQ")
-    @SequenceGenerator(sequenceName = "HH_PHIEU_NHAP_KHO_HDR_SEQ", allocationSize = 1, name = "HH_PHIEU_NHAP_KHO_HDR_SEQ")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_PHIEU_NHAP_KHO_HDR_SEQ")
+//    @SequenceGenerator(sequenceName = "HH_PHIEU_NHAP_KHO_HDR_SEQ", allocationSize = 1, name = "HH_PHIEU_NHAP_KHO_HDR_SEQ")
 
     private Long id;
 
@@ -82,7 +79,7 @@ public class HhPhieuNhapKhoHdr implements Serializable {
 
     private String lanhDaoChiCuc;
 
-    private String KtvBaoQuan;
+    private String ktvBaoQuan;
 
     private String keToanTruong;
 
@@ -120,6 +117,12 @@ public class HhPhieuNhapKhoHdr implements Serializable {
     private String trangThai;
     @Transient
     private String tenTrangThai;
+
+    private String lyDoTuChoi;
+
+    @Temporal(TemporalType.DATE)
+    private Date ngayGdinh;
+
 
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();

@@ -7,6 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Repository
 public interface HhPhieuNhapKhoHdrRepository  extends JpaRepository<HhPhieuNhapKhoHdr, Long> {
@@ -22,6 +25,9 @@ public interface HhPhieuNhapKhoHdrRepository  extends JpaRepository<HhPhieuNhapK
             ,nativeQuery = true)
     Page<HhPhieuNhapKhoHdr> searchPage(Integer namKh, String soQuyetDinhNhap, String soPhieuNhapKho, String ngayNhapKhoTu, String ngayNhapKhoDen, String trangThai, String maDvi, Pageable pageable);
 
+    List<HhPhieuNhapKhoHdr> findByIdIn(List<Long> id);
+    @Transactional
+    void deleteAllByIdIn(List<Long> ids);
 
 
 }

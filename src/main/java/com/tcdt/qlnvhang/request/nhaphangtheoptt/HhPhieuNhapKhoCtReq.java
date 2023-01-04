@@ -26,7 +26,7 @@ public class HhPhieuNhapKhoCtReq {
 
     private BigDecimal donGia;
 
-    private BigDecimal thanhTien;
+    private String maSo;
 
 
 }
