@@ -192,8 +192,8 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
     }
 
     @Override
-    public boolean export(PhieuKnghiemCluongHangReq req, HttpServletResponse response) throws Exception {
-        return false;
+    public void export(PhieuKnghiemCluongHangReq req, HttpServletResponse response) throws Exception {
+//        return false;
     }
 
 

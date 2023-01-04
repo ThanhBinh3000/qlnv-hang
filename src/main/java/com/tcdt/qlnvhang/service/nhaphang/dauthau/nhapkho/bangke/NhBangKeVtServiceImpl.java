@@ -207,8 +207,8 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
     }
 
     @Override
-    public boolean export(NhBangKeVtReq req, HttpServletResponse response) throws Exception {
-        return false;
+    public void export(NhBangKeVtReq req, HttpServletResponse response) throws Exception {
+//        return false;
     }
 
 //    @Override

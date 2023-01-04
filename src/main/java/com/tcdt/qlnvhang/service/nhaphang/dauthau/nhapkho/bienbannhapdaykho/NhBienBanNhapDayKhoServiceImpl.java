@@ -200,8 +200,8 @@ public class NhBienBanNhapDayKhoServiceImpl extends BaseServiceImpl implements N
     }
 
     @Override
-    public boolean export(QlBienBanNhapDayKhoLtReq req, HttpServletResponse response) throws Exception {
-        return false;
+    public void export(QlBienBanNhapDayKhoLtReq req, HttpServletResponse response) throws Exception {
+//        return false;
     }
 
 

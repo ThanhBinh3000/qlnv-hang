@@ -243,8 +243,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 	}
 
 	@Override
-	public boolean export(BienBanLayMauReq req, HttpServletResponse response) throws Exception {
-		return false;
+	public void export(BienBanLayMauReq req, HttpServletResponse response) throws Exception {
 	}
 
 //	@Override

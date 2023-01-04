@@ -204,8 +204,8 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
     }
 
     @Override
-    public boolean export(NhHoSoKyThuatReq req, HttpServletResponse response) throws Exception {
-        return false;
+    public void export(NhHoSoKyThuatReq req, HttpServletResponse response) throws Exception {
+//        return false;
     }
 
 

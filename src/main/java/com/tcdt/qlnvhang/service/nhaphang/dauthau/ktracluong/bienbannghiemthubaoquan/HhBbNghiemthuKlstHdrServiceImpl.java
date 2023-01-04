@@ -248,8 +248,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
     }
 
     @Override
-    public boolean export(HhBbNghiemthuKlstHdrReq req, HttpServletResponse response) throws Exception {
-        return false;
+    public void export(HhBbNghiemthuKlstHdrReq req, HttpServletResponse response) throws Exception {
     }
 
 //	@Override

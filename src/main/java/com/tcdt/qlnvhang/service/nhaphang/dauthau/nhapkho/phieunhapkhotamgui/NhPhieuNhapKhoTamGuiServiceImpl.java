@@ -207,8 +207,8 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
     }
 
     @Override
-    public boolean export(NhPhieuNhapKhoTamGuiReq req, HttpServletResponse response) throws Exception {
-        return false;
+    public void export(NhPhieuNhapKhoTamGuiReq req, HttpServletResponse response) throws Exception {
+//        return false;
     }
 
 //    @Override
