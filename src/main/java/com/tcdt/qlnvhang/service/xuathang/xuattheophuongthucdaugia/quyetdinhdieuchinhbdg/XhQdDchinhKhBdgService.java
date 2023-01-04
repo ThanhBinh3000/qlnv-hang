@@ -204,7 +204,7 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
             qd.setIdQdHdr(dataMap.getId());
             qd.setTrangThai(Contains.CHUACAPNHAT);
             xhQdDchinhKhBdgDtlRepository.save(qd);
-            for (XhQdPdKhBdgPlReq gtList : ObjectUtils.isEmpty(dx.getDsPhanLoList()) ? dx.getChildren(): dx.getDsPhanLoList()){
+            for (XhQdPdKhBdgPlReq gtList : dx.getChildren()){
                 XhQdDchinhKhBdgPl gt = ObjectMapperUtils.map(gtList, XhQdDchinhKhBdgPl.class);
                 xhQdDchinhKhBdgPlDtlRepository.deleteAllByIdPhanLo(gt.getId());
                 gt.setId(null);

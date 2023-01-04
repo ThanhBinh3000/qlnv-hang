@@ -306,7 +306,7 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
     }
 
     @Override
-    public boolean export(XhDxKhBanDauGiaReq req, HttpServletResponse response) throws Exception {
+    public void export(XhDxKhBanDauGiaReq req, HttpServletResponse response) throws Exception {
         PaggingReq paggingReq = new PaggingReq();
         paggingReq.setPage(0);
         paggingReq.setLimit(Integer.MAX_VALUE);
@@ -338,7 +338,6 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
 
         ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
         ex.export();
-        return true;
     }
 
 

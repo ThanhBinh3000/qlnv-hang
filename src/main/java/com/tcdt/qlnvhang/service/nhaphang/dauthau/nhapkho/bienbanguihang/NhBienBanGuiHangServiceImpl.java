@@ -214,8 +214,8 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
     }
 
     @Override
-    public boolean export(NhBienBanGuiHangReq req, HttpServletResponse response) throws Exception {
-        return false;
+    public void export(NhBienBanGuiHangReq req, HttpServletResponse response) throws Exception {
+//        return false;
     }
 
 //    @Override

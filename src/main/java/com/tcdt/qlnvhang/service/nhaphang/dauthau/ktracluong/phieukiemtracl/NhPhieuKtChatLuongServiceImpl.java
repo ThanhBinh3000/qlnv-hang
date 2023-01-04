@@ -250,8 +250,8 @@ public class NhPhieuKtChatLuongServiceImpl extends BaseServiceImpl implements Nh
 	}
 
 	@Override
-	public boolean export(QlpktclhPhieuKtChatLuongRequestDto req, HttpServletResponse response) throws Exception {
-		return false;
+	public void export(QlpktclhPhieuKtChatLuongRequestDto req, HttpServletResponse response) throws Exception {
+//		return false;
 	}
 
 	@Override

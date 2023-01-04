@@ -194,8 +194,8 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
     }
 
     @Override
-    public boolean export(NhBienBanChuanBiKhoReq req, HttpServletResponse response) throws Exception {
-        return false;
+    public void export(NhBienBanChuanBiKhoReq req, HttpServletResponse response) throws Exception {
+//        return false;
     }
 
 

@@ -83,8 +83,8 @@ public class NhBbKtNhapKhoVtServiceImpl extends BaseServiceImpl implements NhBbK
     }
 
     @Override
-    public boolean export(NhBbKtNhapKhoVtReq req, HttpServletResponse response) throws Exception {
-        return false;
+    public void export(NhBbKtNhapKhoVtReq req, HttpServletResponse response) throws Exception {
+//        return false;
     }
 
 //    @Override

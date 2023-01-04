@@ -200,8 +200,8 @@ public class NhBangKeCanHangServiceImpl extends BaseServiceImpl implements NhBan
     }
 
     @Override
-    public boolean export(QlBangKeCanHangLtReq req, HttpServletResponse response) throws Exception {
-        return false;
+    public void export(QlBangKeCanHangLtReq req, HttpServletResponse response) throws Exception {
+//        return false;
     }
 
     @Override

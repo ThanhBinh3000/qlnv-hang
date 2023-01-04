@@ -18,23 +18,15 @@ public class XhQdPdKhBdgDtlReq {
     private Long idHdr;
     private Long idDxHdr;
 
-
     @NotNull(message = "Không được để trống")
     @Size(max = 20, message = "Mã đơn vị không được vượt quá 20 ký tự")
     @ApiModelProperty(example = "HNO")
     String maDvi;
 
-
-    @NotNull(message = "Không được để trống")
-    @Size(max = 250, message = "Tên đơn vị không được vượt quá 250 ký tự")
-    @ApiModelProperty(example = "Cục Hà Nội")
-    String tenDvi;
-
     @NotNull(message = "Không được để trống")
     @Size(max = 20, message = "Số đề xuất không được vượt quá 20 ký tự")
     @ApiModelProperty(example = "Tên dự án")
     String soDxuat;
-
 
     @NotNull(message = "Không được để trống")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
@@ -80,9 +72,6 @@ public class XhQdPdKhBdgDtlReq {
     private String thongBaoKh;
 
     private BigDecimal khoanTienDatTruoc;
-
-
-    private List<XhQdPdKhBdgPlReq> dsPhanLoList;
 
     private List<XhQdPdKhBdgPlReq> children;
 }
