@@ -1,6 +1,9 @@
 package com.tcdt.qlnvhang.table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
+import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -8,6 +11,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = XhQdGnvCuuTroHdr.TABLE_NAME)
@@ -59,6 +63,41 @@ public class XhQdGnvCuuTroHdr extends BaseEntity implements Serializable {
   @Transient
   private String tenTrangThai;
   @Transient
+  private String tenTrangThaiXh;
+  @Transient
   private List<XhQdGnvCuuTroDtl> noiDungCuuTro = new ArrayList<>();
 
+  @JsonIgnore
+  @Transient
+  private Map<String, String> mapDmucDvi;
+  @JsonIgnore
+  @Transient
+  private Map<String, String> mapVthh;
+
+  public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
+    this.mapDmucDvi = mapDmucDvi;
+    if (!DataUtils.isNullObject(getMaDvi())) {
+      setTenDvi(mapDmucDvi.containsKey(getMaDvi()) ? mapDmucDvi.get(getMaDvi()) : null);
+    }
+  }
+
+  public void setMapVthh(Map<String, String> mapVthh) {
+    this.mapVthh = mapVthh;
+    if (!DataUtils.isNullObject(getLoaiVthh())) {
+      setTenLoaiVthh(mapVthh.containsKey(getLoaiVthh()) ? mapVthh.get(getLoaiVthh()) : null);
+    }
+    if (!DataUtils.isNullObject(getCloaiVthh())) {
+      setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
+    }
+  }
+
+  public String getTrangThai() {
+    setTenTrangThai(TrangThaiAllEnum.getLabelById(trangThai));
+    return trangThai;
+  }
+
+  public String getTrangThaiXh() {
+    setTenTrangThaiXh(TrangThaiAllEnum.getLabelById(trangThaiXh));
+    return trangThaiXh;
+  }
 }
