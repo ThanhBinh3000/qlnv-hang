@@ -22,8 +22,8 @@ public class HhBienBanLayMauReq {
     private String maDvi;
     private String soBienBan;
     private String maQhns;
-    private Long idQdNh;
-    private String soQdNh;
+    private Long idQdGiaoNvNh;
+    private String soQdGiaoNvNh;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayQdNh;
     private String soHd;

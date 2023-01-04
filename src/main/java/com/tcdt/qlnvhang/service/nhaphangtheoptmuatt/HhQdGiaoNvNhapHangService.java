@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMau;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -58,6 +60,9 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
 
     @Autowired
     HhBbanNghiemThuDtlRepository hhBbanNghiemThuDtlRepository;
+
+    @Autowired
+    private HhBienBanLayMauRepository hhBienBanLayMauRepository;
 
     public Page<HhQdGiaoNvNhapHang> searchPage(SearchHhQdGiaoNvNhReq objReq) throws Exception{
         UserInfo userInfo= SecurityContextService.getUser();
@@ -118,8 +123,21 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                 bbNghiemThuBq.forEach( item ->  {
                    item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
                 });
+                // Set biên bản lấy mẫu/ bàn giao mẫu
                 dtl.setListBienBanNghiemThuBq(bbNghiemThuBq);
+                List<HhBienBanLayMau> bbLayMau = hhBienBanLayMauRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(), dtl.getMaDvi());
+                bbLayMau.forEach(item ->{
+                    item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+                    item.setTenDiemKho(StringUtils.isEmpty(item.getMaDiemKho())?null:hashMapDmdv.get(item.getMaDiemKho()));
+                    item.setTenNhaKho(StringUtils.isEmpty(item.getMaNhaKho())?null:hashMapDmdv.get(item.getMaNhaKho()));
+                    item.setTenNganKho(StringUtils.isEmpty(item.getMaNganKho())?null:hashMapDmdv.get(item.getMaNganKho()));
+                    item.setTenLoKho(StringUtils.isEmpty(item.getMaLoKho())?null:hashMapDmdv.get(item.getMaLoKho()));
+//                    NhBbNhapDayKho nhBbNhapDayKhoStream = bbNhapDayKho.stream().filter(x -> Objects.equals(x.getId(), item.getIdBbNhapDayKho())).findAny().orElse(null);
+//                    item.setBbNhapDayKho(nhBbNhapDayKhoStream);
+                });
+                dtl.setListBienBanLayMau(bbLayMau);
             }
+
             f.setHhQdGiaoNvNhangDtlList(hhQdGiaoNvNhangDtl);
         });
 
