@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia;
 
-import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.XhThopDxKhBdg;
+import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.tonghop.XhThopDxKhBdg;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

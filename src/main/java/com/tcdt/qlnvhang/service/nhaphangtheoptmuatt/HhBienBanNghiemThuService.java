@@ -113,10 +113,6 @@ public class HhBienBanNghiemThuService extends BaseServiceImpl {
             dtl.setId(null);
             dtl.setIdHdr(data.getId());
             dtl.setType(Contains.CHU_DONG);
-            BigDecimal thanhTienTn = dtl.getDonGiaTn().multiply(dtl.getSoLuongTn());
-            BigDecimal thanhTienQt = dtl.getDonGiaQt().multiply(dtl.getSoLuongQt());
-            dtl.setThanhTienTn(thanhTienTn);
-            dtl.setDonGiaQt(thanhTienQt);
             hhBbanNghiemThuDtlRepository.save(dtl);
         }
         for (HhBbanNghiemThuDtlReq dtlReq:objReq.getDmTongCucPdTruocThucHien()){
@@ -124,10 +120,6 @@ public class HhBienBanNghiemThuService extends BaseServiceImpl {
             dtl.setId(null);
             dtl.setIdHdr(data.getId());
             dtl.setType(Contains.PHE_DUYET_TRUOC);
-            BigDecimal thanhTienTn = dtl.getDonGiaTn().multiply(dtl.getSoLuongTn());
-            BigDecimal thanhTienQt = dtl.getDonGiaQt().multiply(dtl.getSoLuongQt());
-            dtl.setThanhTienTn(thanhTienTn);
-            dtl.setDonGiaQt(thanhTienQt);
             hhBbanNghiemThuDtlRepository.save(dtl);
         }
     }
@@ -157,8 +149,11 @@ public class HhBienBanNghiemThuService extends BaseServiceImpl {
         }
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),data.getId(),"HH_BIEN_BAN_NGHIEM_THU");
         created.setFileDinhKems(fileDinhKems);
-        List<HhBbanNghiemThuDtl> listDtl =hhBbanNghiemThuDtlRepository.findAllByIdHdr(data.getId());
-        hhBbanNghiemThuDtlRepository.deleteAll(listDtl);
+        List<HhBbanNghiemThuDtl> listDtl = hhBbanNghiemThuDtlRepository.findAllByIdHdr(data.getId());
+        List<HhBbanNghiemThuDtl>listCd=listDtl.stream().filter(item -> item.getType().equals(Contains.CHU_DONG)).collect(Collectors.toList());
+        hhBbanNghiemThuDtlRepository.deleteAll(listCd);
+        List<HhBbanNghiemThuDtl>listPdt=listDtl.stream().filter(item -> item.getType().equals(Contains.PHE_DUYET_TRUOC)).collect(Collectors.toList());
+        hhBbanNghiemThuDtlRepository.deleteAll(listPdt);
         this.saveCtiet(data,objReq);
         return created;
     }

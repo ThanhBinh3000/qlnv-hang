@@ -1,24 +1,16 @@
 package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
-import com.google.common.collect.Lists;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdr;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.*;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
 import com.tcdt.qlnvhang.request.*;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhQdPdKhMttSlddDtlReq;
-import com.tcdt.qlnvhang.request.object.*;
-import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.XhQdPdKhBdgSearchReq;
-import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.feign.KeHoachService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
-import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.XhQdPdKhBdg;
 import com.tcdt.qlnvhang.util.Contains;
-import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import org.modelmapper.ModelMapper;
@@ -35,7 +27,6 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-import java.beans.Transient;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;

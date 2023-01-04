@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia;
+package com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.tonghop;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;

@@ -1,35 +1,25 @@
-package com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia;
+package com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.kehoachbdg.pheduyet;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.persistence.Transient;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
-public class XhQdPdKhBdgPlDtlReq {
+public class XhQdPdKhBdgPlReq {
+    @ApiModelProperty(notes = "Bắt buộc set đối với update")
     private Long id;
-    private Long idPhanLo;
-    private String maDvi;
-    @Transient
-    private String tenDvi;
+   private Long idHdr;
+   private String maDvi;
     private String maDiemKho;
-    @Transient
-    private String tenDiemKho;
+    private String diaDiemKho;
     private String maNhaKho;
-    @Transient
-    private String tenNhakho;
     private String maNganKho;
-    @Transient
-    private String tenNganKho;
     private String maLoKho;
-    @Transient
-    private String tenLoKho;
     private String loaiVthh;
-    @Transient
-    private String tenLoaiVthh;
     private String cloaiVthh;
-    @Transient
-    private String tenCloaiVthh;
     private String maDviTsan;
     private BigDecimal duDau;
     private BigDecimal soLuong;
@@ -38,14 +28,17 @@ public class XhQdPdKhBdgPlDtlReq {
     private BigDecimal donGiaVat;
     private BigDecimal giaKhoiDiemDduyet;
     private BigDecimal tienDatTruoc;
-
-
     private BigDecimal tienDatTruocDduyet;
-    private BigDecimal  soLuongChiTieu;
+    private BigDecimal soLuongChiTieu;
     private BigDecimal soLuongKh;
-    private String dviTinh;
-    private BigDecimal tongSoLuong;
-    private BigDecimal tongTienDatTruoc;
-    private BigDecimal tongTienDatTruocDd;
 
+    private BigDecimal tongSoLuong;
+
+    private BigDecimal tongTienDatTruoc;
+
+    private BigDecimal tongTienDatTruocDd;
+    private String dviTinh;
+
+
+    List<XhQdPdKhBdgPlDtlReq> children =new ArrayList<>();
 }

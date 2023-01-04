@@ -1,8 +1,6 @@
 package com.tcdt.qlnvhang.repository.nhaphangtheoptmtt;
 
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDtl;
 import com.tcdt.qlnvhang.table.HhQdPheduyetKhMttDx;
-import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.XhQdPdKhBdgDtl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

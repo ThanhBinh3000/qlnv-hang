@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia;
+package com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.kehoachbdg.tonghop;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.kehoachbdg.dexuat.XhDxKhBanDauGiaReq;

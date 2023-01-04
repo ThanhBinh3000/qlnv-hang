@@ -3,7 +3,6 @@ package com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.quyetdinhdieuc
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.XhQdPdKhBdgDtl;
 import lombok.Data;
 
 import javax.persistence.*;

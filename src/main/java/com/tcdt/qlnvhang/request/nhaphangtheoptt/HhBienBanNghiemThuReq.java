@@ -8,6 +8,7 @@ import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
 import javax.persistence.Transient;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -49,6 +50,10 @@ public class HhBienBanNghiemThuReq {
     private String soQdGiaoNvNh;
 
     private Long idDdiemGiaoNvNh;
+
+    private BigDecimal kinhPhiThucTe;
+
+    private BigDecimal kinhPhiTcPd;
 
     private FileDinhKemReq fileDinhKem;
 
