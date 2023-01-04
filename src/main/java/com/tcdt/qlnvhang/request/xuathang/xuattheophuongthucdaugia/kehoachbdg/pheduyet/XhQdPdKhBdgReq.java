@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia;
+package com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.kehoachbdg.pheduyet;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.BaseRequest;
@@ -8,7 +8,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.Size;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,7 +18,7 @@ public class XhQdPdKhBdgReq extends BaseRequest {
     private Long id;
 
     @ApiModelProperty(example = "2022")
-    private  Integer nam;
+    private Integer nam;
 
     private String maDvi;
 
@@ -50,7 +49,7 @@ public class XhQdPdKhBdgReq extends BaseRequest {
 
     private String tchuanCluong;
 
-    private Boolean lastest = false;
+    private Integer lastest ;
 
     private String phanLoai;
 
@@ -59,5 +58,12 @@ public class XhQdPdKhBdgReq extends BaseRequest {
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 
     private List<FileDinhKemReq> canCuPhapLy = new ArrayList<>();
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayKyQdTu;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayKyQdDen;
+
 }
 

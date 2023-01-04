@@ -1,9 +1,7 @@
-package com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia;
+package com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.tonghop;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
-import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 

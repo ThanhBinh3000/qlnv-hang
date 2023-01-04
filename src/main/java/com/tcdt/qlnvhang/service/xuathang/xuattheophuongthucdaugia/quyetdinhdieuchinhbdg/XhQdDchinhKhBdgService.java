@@ -13,7 +13,9 @@ import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.tochuctrie
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.*;
+import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.kehoachbdg.pheduyet.XhQdPdKhBdgDtlReq;
+import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.kehoachbdg.pheduyet.XhQdPdKhBdgPlDtlReq;
+import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.kehoachbdg.pheduyet.XhQdPdKhBdgPlReq;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinh.XhQdDchinhKhBdgReq;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinh.XhQdDchinhKhBdgSearchReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
@@ -22,8 +24,8 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.*;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.dexuat.XhDxKhBanDauGia;
+import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.tonghop.XhThopDxKhBdg;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgPl;
@@ -195,7 +197,7 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
     @Transactional
     void saveDetail(XhQdDchinhKhBdgReq objReq, XhQdDchinhKhBdgHdr dataMap){
         xhQdDchinhKhBdgDtlRepository.deleteAllByIdQdHdr(dataMap.getId());
-        for (XhQdPdKhBdgDtlReq  dx : objReq.getDsDeXuat()){
+        for (XhQdPdKhBdgDtlReq dx : objReq.getDsDeXuat()){
             XhQdDchinhKhBdgDtl qd = ObjectMapperUtils.map(dx, XhQdDchinhKhBdgDtl.class);
             xhQdDchinhKhBdgPlRepository.deleteByIdQdDtl(qd.getId());
             qd.setId(null);

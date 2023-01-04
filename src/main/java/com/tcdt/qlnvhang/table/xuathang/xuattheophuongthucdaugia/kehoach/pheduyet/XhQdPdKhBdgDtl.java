@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia;
+package com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.pheduyet;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
@@ -30,9 +30,6 @@ public class XhQdPdKhBdgDtl implements Serializable {
     private Long idDxHdr;
 
     private String maDvi;
-
-    @Transient
-    private String tenDvi;
 
     private String soDxuat;
 
@@ -67,9 +64,6 @@ public class XhQdPdKhBdgDtl implements Serializable {
 
     private String trangThai;
 
-    @Transient
-    private String tenTrangThai;
-
     private Integer tgianTtoan;
 
     private String tgianTtoanGhiChu;
@@ -85,6 +79,14 @@ public class XhQdPdKhBdgDtl implements Serializable {
     private String thongBaoKh;
 
     private BigDecimal khoanTienDatTruoc;
+
+    // Transient
+
+    @Transient
+    private String tenDvi;
+
+    @Transient
+    private String tenTrangThai;
 
     @Transient
     private XhQdPdKhBdg xhQdPdKhBdg;

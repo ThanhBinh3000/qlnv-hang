@@ -1,19 +1,13 @@
-package com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia;
+package com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.pheduyet;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
-import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.Contains;
-import io.swagger.models.auth.In;
 import lombok.Data;
 
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -55,13 +49,7 @@ public class XhQdPdKhBdg extends TrangThaiBaseEntity implements Serializable {
 
     private String loaiVthh;
 
-    @Transient
-    private String tenLoaiVthh;
-
     private String cloaiVthh;
-
-    @Transient
-    private  String tenCloaiVthh;
 
     private String  moTaHangHoa;
 
@@ -73,11 +61,19 @@ public class XhQdPdKhBdg extends TrangThaiBaseEntity implements Serializable {
 
     private Long idGoc;
 
+    // Transient
+
+    @Transient
+    private String tenLoaiVthh;
+
+    @Transient
+    private  String tenCloaiVthh;
+
     @Transient
     List<XhQdPdKhBdgDtl> children = new ArrayList<>();
 
     @Transient
-    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
+    private List<FileDinhKem> fileDinhKem = new ArrayList<>();
 
     @Transient
     private List<FileDinhKem> canCuPhapLy = new ArrayList<>();
