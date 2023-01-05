@@ -74,7 +74,7 @@ public class HhPhieuKiemTraChatLuong implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date ngaySua;
     private String nguoiSua;
-    private String ldoTuchoi;
+    private String ldoTuChoi;
     @Temporal(TemporalType.DATE)
     private Date ngayGduyet;
     private String nguoiGduyet;

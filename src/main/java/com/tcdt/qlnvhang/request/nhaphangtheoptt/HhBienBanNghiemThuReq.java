@@ -31,7 +31,7 @@ public class HhBienBanNghiemThuReq {
     private Double dinhMuc;
     private String ketLuan;
     private String trangThai;
-    private String ldoTuchoi;
+    private String ldoTuChoi;
     private String capDvi;
     private String maDvi;
     private Integer namKh;
