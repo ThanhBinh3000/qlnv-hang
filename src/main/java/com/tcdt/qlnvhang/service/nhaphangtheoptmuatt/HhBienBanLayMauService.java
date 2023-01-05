@@ -16,6 +16,7 @@ import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBienBanLayMau;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import org.modelmapper.ModelMapper;
@@ -95,8 +96,10 @@ public class HhBienBanLayMauService extends BaseServiceImpl {
         data.setMaDvi(userInfo.getDvql());
         data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh()) ? null : hashMapDmHh.get(data.getLoaiVthh()));
         HhBienBanLayMau created=hhBienBanLayMauRepository.save(data);
-        List<FileDinhKem> canCuPhapLy = fileDinhKemService.saveListFileDinhKem(objReq.getCanCuPhapLy(),data.getId(),"HH_BIEN_BAN_LAY_MAU");
-        created.setCanCuPhapLy(canCuPhapLy);
+        if (!DataUtils.isNullObject(objReq.getFileDinhKem())) {
+            List<FileDinhKem> fileDinhKem= fileDinhKemService.saveListFileDinhKem(Arrays.asList(objReq.getFileDinhKem()), created.getId(),"HH_BIEN_BAN_LAY_MAU");
+            created.setFileDinhKems(fileDinhKem);
+        }
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),data.getId(),"HH_BIEN_BAN_LAY_MAU");
         created.setFileDinhKems(fileDinhKems);
 
@@ -128,6 +131,13 @@ public class HhBienBanLayMauService extends BaseServiceImpl {
         data.setNguoiSua(userInfo.getUsername());
         data.setNgaySua(new Date());
         HhBienBanLayMau created=hhBienBanLayMauRepository.save(data);
+        fileDinhKemService.delete(objReq.getId(),  Lists.newArrayList("HH_BIEN_BAN_LAY_MAU"));
+        if (!DataUtils.isNullObject(objReq.getFileDinhKem())) {
+            List<FileDinhKem> fileDinhKem= fileDinhKemService.saveListFileDinhKem(Arrays.asList(objReq.getFileDinhKem()), created.getId(),"HH_BIEN_BAN_LAY_MAU");
+            created.setFileDinhKems(fileDinhKem);
+        }
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),data.getId(),"HH_BIEN_BAN_LAY_MAU");
+        created.setFileDinhKems(fileDinhKems);
 
         List<HhBbanLayMauDtl> hhBbanLayMauDtls = hhBbanLayMauDtlRepository.findAllByIdHdr(objReq.getId());
         hhBbanLayMauDtlRepository.deleteAll(hhBbanLayMauDtls);
@@ -159,7 +169,14 @@ public class HhBienBanLayMauService extends BaseServiceImpl {
         data.setTenNhaKho(StringUtils.isEmpty(data.getMaNhaKho()) ? null : hashMapDmdv.get(data.getMaNhaKho()));
         data.setTenNganKho(StringUtils.isEmpty(data.getMaNganKho()) ? null : hashMapDmdv.get(data.getMaNganKho()));
         data.setTenLoKho(StringUtils.isEmpty(data.getMaLoKho()) ? null : hashMapDmdv.get(data.getMaLoKho()));
-
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList("HH_BIEN_BAN_LAY_MAU"));
+        if (!DataUtils.isNullOrEmpty(fileDinhKem)) {
+            data.setFileDinhKem(fileDinhKem.get(0));
+        }
+        List<FileDinhKem> fileDinhkems = fileDinhKemService.search(data.getId(), Arrays.asList("HH_BIEN_BAN_LAY_MAU"));
+        if (!DataUtils.isNullOrEmpty(fileDinhkems)) {
+            data.setFileDinhKems(fileDinhkems);
+        }
         List<HhBbanLayMauDtl> listDtl = hhBbanLayMauDtlRepository.findAllByIdHdr(data.getId());
         data.setBbanLayMauDtlList(listDtl);
         return data;

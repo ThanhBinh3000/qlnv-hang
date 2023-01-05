@@ -32,8 +32,10 @@ public class HhBienBanLayMau implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date ngayQdNh;
     private String soHd;
-    private String soBbNhap;
-    private Long idBbNhap;
+    private String soBbNhapDayKho;
+    private Long idBbNhapDayKho;
+    @Temporal(TemporalType.DATE)
+    private Date ngayKetThucNhap;
     private String loaiVthh;
     @Transient
     private String tenLoaiVthh;
@@ -79,9 +81,11 @@ public class HhBienBanLayMau implements Serializable {
     private String nguoiPduyet;
 
     @Transient
-    private List<FileDinhKem> fileDinhKems =new ArrayList<>();
+    private FileDinhKem fileDinhKem;
+
     @Transient
-    private List<FileDinhKem> canCuPhapLy =new ArrayList<>();
+    private List<FileDinhKem> fileDinhKems =new ArrayList<>();
+
     @Transient
     private List<HhBbanLayMauDtl> bbanLayMauDtlList = new ArrayList<>();
 
