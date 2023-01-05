@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.repository.nhaphangtheoptmtt;
 
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBienBanLayMau;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBienBanNghiemThu;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,4 +27,6 @@ public interface HhBienBanLayMauRepository extends JpaRepository<HhBienBanLayMau
     Optional<HhBienBanLayMau> findBySoBienBan(String soBb);
 
     List<HhBienBanLayMau> findAllByIdIn(List<Long> listId);
+
+    List<HhBienBanLayMau> findByIdQdGiaoNvNhAndMaDvi(Long idQdGiaoNvNh, String maDvi);
 }

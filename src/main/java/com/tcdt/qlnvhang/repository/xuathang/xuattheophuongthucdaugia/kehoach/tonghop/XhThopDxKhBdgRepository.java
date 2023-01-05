@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia;
+package com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.kehoach.tonghop;
 
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.tonghop.XhThopDxKhBdg;
 import org.springframework.data.domain.Page;
