@@ -220,7 +220,7 @@ public class HhBienBanLayMauService extends BaseServiceImpl {
             objs=new Object[rowsName.length];
             objs[0]=i;
             objs[1]=dx.getSoBienBan();
-            objs[2]=dx.getSoQdNh();
+            objs[2]=dx.getSoQdGiaoNvNh();
             objs[3]=dx.getNgayLayMau();
             objs[4]=dx.getSoHd();
             objs[5]=dx.getTenDiemKho();
