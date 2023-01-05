@@ -3,12 +3,9 @@ package com.tcdt.qlnvhang.request.nhaphangtheoptt;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBbanLayMauDtl;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,8 +24,10 @@ public class HhBienBanLayMauReq {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayQdNh;
     private String soHd;
-    private String soBbNhap;
-    private Long idBbNhap;
+    private String soBbNhapDayKho;
+    private Long idBbNhapDayKho;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayKetThucNhap;
     private String loaiVthh;
     private String cloaiVthh;
     private String moTaHangHoa;
@@ -46,10 +45,9 @@ public class HhBienBanLayMauReq {
     private Boolean ketQuaNiemPhong;
     private String trangThai;
 
-    @Transient
+    private FileDinhKemReq fileDinhKem;
+
     private List<FileDinhKemReq> fileDinhKems =new ArrayList<>();
-    @Transient
-    private List<FileDinhKemReq> canCuPhapLy =new ArrayList<>();
-    @Transient
+
     private List<HhBbanLayMauDtlReq> bbanLayMauDtlList = new ArrayList<>();
 }
