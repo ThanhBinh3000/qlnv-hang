@@ -38,7 +38,7 @@ public class HhBienBanNghiemThu implements Serializable {
     private String trangThai;
     @Transient
     private String tenTrangThai;
-    private String ldoTuchoi;
+    private String ldoTuChoi;
     private String capDvi;
     private String maDvi;
     private Integer namKh;
