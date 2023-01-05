@@ -273,7 +273,7 @@ public class HhBienBanLayMauService extends BaseServiceImpl {
                 optional.get().setNgayPduyet(getDateTimeNow());
                 optional.get().setLdoTuChoi(statusReq.getLyDo());
                 break;
-            case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
+            case Contains.DADUYET_LDCC + Contains.CHODUYET_LDCC:
                 optional.get().setNguoiPduyet(getUser().getUsername());
                 optional.get().setNgayPduyet(getDateTimeNow());
                 break;
