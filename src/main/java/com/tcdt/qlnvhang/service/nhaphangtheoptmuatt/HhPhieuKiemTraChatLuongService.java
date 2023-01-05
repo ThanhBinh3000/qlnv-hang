@@ -97,7 +97,8 @@ public class HhPhieuKiemTraChatLuongService extends BaseServiceImpl {
         data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh()) ? null : hashMapDmHh.get(data.getLoaiVthh()));
         HhPhieuKiemTraChatLuong created=hhPhieuKiemTraChatLuongRepository.save(data);
         if (!DataUtils.isNullObject(objReq.getFileDinhKem())) {
-            fileDinhKemService.saveListFileDinhKem(Arrays.asList(objReq.getFileDinhKem()), created.getId(),"HH_PHIEU_KT_CHAT_LUONG");
+            List<FileDinhKem> fileDinhKem= fileDinhKemService.saveListFileDinhKem(Arrays.asList(objReq.getFileDinhKem()), created.getId(),"HH_PHIEU_KT_CHAT_LUONG");
+            created.setFileDinhKems(fileDinhKem);
         }
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),data.getId(),"HH_PHIEU_KT_CHAT_LUONG");
         created.setFileDinhKems(fileDinhKems);
@@ -131,8 +132,10 @@ public class HhPhieuKiemTraChatLuongService extends BaseServiceImpl {
         data.setNguoiSua(userInfo.getUsername());
 
         HhPhieuKiemTraChatLuong created=hhPhieuKiemTraChatLuongRepository.save(data);
+        fileDinhKemService.delete(objReq.getId(),  Lists.newArrayList("HH_PHIEU_KT_CHAT_LUONG"));
         if (!DataUtils.isNullObject(objReq.getFileDinhKem())) {
-            fileDinhKemService.saveListFileDinhKem(Arrays.asList(objReq.getFileDinhKem()), created.getId(),"HH_PHIEU_KT_CHAT_LUONG");
+            List<FileDinhKem> fileDinhKem=fileDinhKemService.saveListFileDinhKem(Arrays.asList(objReq.getFileDinhKem()), created.getId(),"HH_PHIEU_KT_CHAT_LUONG");
+            created.setFileDinhKems(fileDinhKem);
         }
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),data.getId(),"HH_DX_KHMTT_HDR");
         created.setFileDinhKems(fileDinhKems);
