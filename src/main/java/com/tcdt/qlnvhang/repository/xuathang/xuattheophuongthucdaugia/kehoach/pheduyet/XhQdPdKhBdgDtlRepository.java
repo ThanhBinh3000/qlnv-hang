@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia;
+package com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.kehoach.pheduyet;
 
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.pheduyet.XhQdPdKhBdgDtl;
 import org.springframework.data.jpa.repository.JpaRepository;

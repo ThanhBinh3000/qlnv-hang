@@ -1,14 +1,11 @@
 package com.tcdt.qlnvhang.request.nhaphangtheoptt.hopdong.hopdongphuluc;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
-import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.ThongTinDauGiaDtlReq;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter

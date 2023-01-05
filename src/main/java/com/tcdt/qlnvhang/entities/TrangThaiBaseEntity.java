@@ -7,9 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
-import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -24,6 +24,7 @@ public class TrangThaiBaseEntity {
 	private String tenTrangThai;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	@Column(columnDefinition = "Date")
 	private Date ngayTao;
 
 	private Long nguoiTaoId;
@@ -31,6 +32,7 @@ public class TrangThaiBaseEntity {
 	@Transient
 	private String tenNguoiTao;
 
+	@Column(columnDefinition = "Date")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	private Date ngaySua;
 
@@ -39,6 +41,7 @@ public class TrangThaiBaseEntity {
 	private Long nguoiGuiDuyetId;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	@Column(columnDefinition = "Date")
 	private Date ngayGuiDuyet;
 
 	private Long nguoiPduyetId;
@@ -47,6 +50,7 @@ public class TrangThaiBaseEntity {
 	private String tenNguoiPduyet;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	@Column(columnDefinition = "Date")
 	private Date ngayPduyet;
 
 	private String lyDoTuChoi;
