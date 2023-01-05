@@ -46,5 +46,7 @@ public class HhQdGiaoNvNhangDtl {
     private List<HhQdGiaoNvNhDdiem> hhQdGiaoNvNhDdiemList = new ArrayList<>();
     @Transient
     List<HhBienBanNghiemThu> listBienBanNghiemThuBq;
+    @Transient
+    List<HhBienBanLayMau> listBienBanLayMau;
 
 }
