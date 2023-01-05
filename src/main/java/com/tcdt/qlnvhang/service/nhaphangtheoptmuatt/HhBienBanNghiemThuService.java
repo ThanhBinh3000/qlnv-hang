@@ -299,7 +299,7 @@ public class HhBienBanNghiemThuService extends BaseServiceImpl {
             case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
                 optional.get().setNguoiPduyet(getUser().getUsername());
                 optional.get().setNgayPduyet(getDateTimeNow());
-                optional.get().setLdoTuchoi(statusReq.getLyDo());
+                optional.get().setLdoTuChoi(statusReq.getLyDo());
                 break;
             case Contains.DADUYET_LDCC + Contains.CHODUYET_LDCC:
                 optional.get().setNguoiPduyet(getUser().getUsername());

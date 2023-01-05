@@ -13,7 +13,6 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.resource.ResourceUrlEncodingFilter;
 
 @Configuration
-@EnableWebMvc
 @ComponentScan("com.tcdt.qlnvhang.*")
 public class AppConfig implements WebMvcConfigurer {
 
@@ -28,15 +27,6 @@ public class AppConfig implements WebMvcConfigurer {
     @Bean
     public ResourceUrlEncodingFilter resourceUrlEncodingFilter() {
         return new ResourceUrlEncodingFilter();
-    }
-
-    @Bean(name = "localeResolver")
-    public LocaleResolver getLocaleResolver() {
-        CookieLocaleResolver resolver = new CookieLocaleResolver();
-//        resolver.setDefaultLocale(new Locale("vi", "VN"));
-//        resolver.setCookieDomain("app_locale_cookie");
-//        resolver.setCookieMaxAge(60 * 60);
-        return resolver;
     }
 
     @Bean
