@@ -102,15 +102,13 @@ public class HhPhieuNhapKhoHdrService  extends BaseServiceImpl {
 
     @Transactional()
     void saveCtiet(Long idHdr , HhPhieuNhapKhoHdrReq objReq){
-        hhPhieuNhapKhoCtRepository.deleteAllByIdHdr(idHdr);
-        if(!ObjectUtils.isEmpty(objReq.getPhieuNhapKhoCtList())){
-            for(HhPhieuNhapKhoCtReq obj : objReq.getPhieuNhapKhoCtList()){
-                HhPhieuNhapKhoCt data = new HhPhieuNhapKhoCt();
-                BeanUtils.copyProperties(obj,data,"id");
-                data.setIdHdr(idHdr);
-                hhPhieuNhapKhoCtRepository.save(data);
+        hhPhieuNhapKhoCtRepository.deleteByIdHdr(idHdr);
+            for(HhPhieuNhapKhoCtReq nhapKhoCtReq : objReq.getPhieuNhapKhoCtList()){
+                HhPhieuNhapKhoCt nhapKhoCt = new HhPhieuNhapKhoCt();
+                BeanUtils.copyProperties(nhapKhoCtReq,nhapKhoCt,"id");
+                nhapKhoCt.setIdHdr(idHdr);
+                hhPhieuNhapKhoCtRepository.save(nhapKhoCt);
             }
-        }
     }
 
     @Transactional()
@@ -125,7 +123,7 @@ public class HhPhieuNhapKhoHdrService  extends BaseServiceImpl {
         }
         HhPhieuNhapKhoHdr phieuNhapKhoHdr = optional.get();
         BeanUtils.copyProperties(objReq, phieuNhapKhoHdr, "id");
-        phieuNhapKhoHdr.setNgaySua(new Date());
+        phieuNhapKhoHdr.setNgaySua(getDateTimeNow());
         phieuNhapKhoHdr.setNguoiSua(userInfo.getUsername());
         HhPhieuNhapKhoHdr  createCheck = hhPhieuNhapKhoHdrRepository.save(phieuNhapKhoHdr);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), phieuNhapKhoHdr.getId(), HhPhieuNhapKhoHdr.TABLE_NAME);
@@ -175,7 +173,7 @@ public class HhPhieuNhapKhoHdrService  extends BaseServiceImpl {
         switch (status){
             case Contains.CHODUYET_LDCC + Contains.DUTHAO:
             case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
-                optional.get().setNguoiGuiDuyet(userInfo.getUsername());
+                optional.get().setNguoiGuiDuyet(getUser().getUsername());
                 optional.get().setNgayGuiDuyet(getDateTimeNow());
                 break;
             case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
