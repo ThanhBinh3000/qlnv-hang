@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.table.nhaphangtheoptt;
 
+import com.tcdt.qlnvhang.entities.BaseEntity;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -11,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "HH_BCAN_KE_HANG_HDR")
 @Data
-public class HhBcanKeHangHdr implements Serializable {
+public class HhBcanKeHangHdr extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "HH_BCAN_KE_HANG_HDR";
 
@@ -82,17 +83,10 @@ public class HhBcanKeHangHdr implements Serializable {
 
     private String donViTinh;
 
-    @Temporal(TemporalType.DATE)
-    private Date ngayTao;
-    private String nguoiTao;
 
     @Temporal(TemporalType.DATE)
     private Date ngayPduyet;
     private String nguoiPduyet;
-
-    @Temporal(TemporalType.DATE)
-    private Date ngaySua;
-    private  String nguoiSua;
 
     @Temporal(TemporalType.DATE)
     private Date ngayGuiDuyet;
