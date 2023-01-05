@@ -2,13 +2,13 @@ package com.tcdt.qlnvhang.service.xuathang.xuattheophuongthucdaugia.quyetdinhdie
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.XhThopDxKhBdgRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.kehoach.tonghop.XhThopDxKhBdgRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.kehoach.dexuat.XhDxKhBanDauGiaRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgPlDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgPlRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.XhTcTtinBdgHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;

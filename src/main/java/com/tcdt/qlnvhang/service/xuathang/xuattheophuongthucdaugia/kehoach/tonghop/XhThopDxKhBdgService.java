@@ -1,9 +1,9 @@
 package com.tcdt.qlnvhang.service.xuathang.xuattheophuongthucdaugia.kehoach.tonghop;
 
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.kehoach.dexuat.XhDxKhBanDauGiaPhanLoRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.XhThopDxKhBdgDtlRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.kehoach.tonghop.XhThopDxKhBdgDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.kehoach.dexuat.XhDxKhBanDauGiaRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.XhThopDxKhBdgRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.kehoach.tonghop.XhThopDxKhBdgRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.SearchXhThopDxKhBdg;

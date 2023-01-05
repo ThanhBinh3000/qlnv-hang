@@ -1,17 +1,26 @@
-package com.tcdt.qlnvhang.service.xuathang.xuattheophuongthucdaugia.tochuctrienkhai;
+package com.tcdt.qlnvhang.service.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin;
 
-import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.XhQdPdKhBdgPlDtlRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.*;
-import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.ThongTinDauGiaReq;
-import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
+import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgDtlRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgNlqRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgPloRepository;
+import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.ThongTinDauGiaDtlReq;
+import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.ThongTinDauGiaReq;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgNlq;
+import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgPlo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTtinBdgHdrService {
@@ -20,25 +29,14 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
     private XhTcTtinBdgHdrRepository xhTcTtinBdgHdrRepository;
 
     @Autowired
-    private XhTcTtinBdgThongBaoRepository xhTcTtinBdgThongBaoRepository;
-
-    @Autowired
-    private XhTcTtinBdgKetQuaRepository xhTcTtinBdgKetQuaRepository;
-
-    @Autowired
     private XhTcTtinBdgNlqRepository xhTcTtinBdgNlqRepository;
-
-    @Autowired
-    private XhTcTtinBdgTaiSanRepository xhTcTtinBdgTaiSanRepository;
 
     @Autowired
     private XhTcTtinBdgDtlRepository xhTcTtinBdgDtlRepository;
 
     @Autowired
-    private XhQdPdKhBdgPlDtlRepository xhQdPdKhBdgPlDtlRepository;
+    private XhTcTtinBdgPloRepository xhTcTtinBdgPloRepository;
 
-    @Autowired
-    private FileDinhKemService fileDinhKemService;
 
     @Override
     public Page<XhTcTtinBdgHdr> searchPage(ThongTinDauGiaReq req) throws Exception {
@@ -52,17 +50,76 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
 
     @Override
     public XhTcTtinBdgHdr create(ThongTinDauGiaReq req) throws Exception {
-        return null;
+        XhTcTtinBdgHdr data = new XhTcTtinBdgHdr();
+        BeanUtils.copyProperties(req, data, "id");
+        data.setNam(new Date().getYear());
+        data.setNguoiTaoId(getUser().getId());
+        data.setNgayTao(new Date());
+        data.setId(Long.valueOf(req.getMaThongBao().split("/")[0]));
+
+        xhTcTtinBdgHdrRepository.save(data);
+
+        this.saveDetail(req, data.getId());
+
+        return data;
+    }
+
+    void saveDetail(ThongTinDauGiaReq req, Long id) {
+        xhTcTtinBdgNlqRepository.deleteByIdTtinHdr(id);
+        for (XhTcTtinBdgNlq nlqReq : req.getListNguoiLienQuan()) {
+            nlqReq.setId(null);
+            nlqReq.setIdTtinHdr(id);
+            xhTcTtinBdgNlqRepository.save(nlqReq);
+        }
+
+        xhTcTtinBdgDtlRepository.deleteByIdTtinHdr(id);
+        for (ThongTinDauGiaDtlReq dtlReq : req.getChildren()) {
+            XhTcTtinBdgDtl dtl = new XhTcTtinBdgDtl();
+            BeanUtils.copyProperties(dtlReq, dtl, "id");
+            dtl.setIdTtinHdr(id);
+            xhTcTtinBdgDtlRepository.save(dtl);
+            xhTcTtinBdgPloRepository.deleteAllByIdTtinDtl(dtl.getId());
+            for (XhTcTtinBdgPlo ploDtl : dtlReq.getChildren()) {
+                ploDtl.setIdTtinDtl(dtl.getId());
+                ploDtl.setId(null);
+                xhTcTtinBdgPloRepository.save(ploDtl);
+            }
+        }
     }
 
     @Override
     public XhTcTtinBdgHdr update(ThongTinDauGiaReq req) throws Exception {
-        return null;
+        Optional<XhTcTtinBdgHdr> byId = xhTcTtinBdgHdrRepository.findById(req.getId());
+        if (!byId.isPresent()) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        XhTcTtinBdgHdr data = byId.get();
+        BeanUtils.copyProperties(req, data, "id");
+        data.setNgaySua(new Date());
+        data.setNguoiSuaId(getUser().getId());
+        this.saveDetail(req, data.getId());
+        return data;
     }
 
     @Override
     public XhTcTtinBdgHdr detail(Long id) throws Exception {
-        return null;
+        if (ObjectUtils.isEmpty(id)) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        Optional<XhTcTtinBdgHdr> byId = xhTcTtinBdgHdrRepository.findById(id);
+        if (!byId.isPresent()) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        XhTcTtinBdgHdr data = byId.get();
+
+        data.setListNguoiTgia(xhTcTtinBdgNlqRepository.findByIdTtinHdr(id));
+
+        List<XhTcTtinBdgDtl> byIdTtinHdr = xhTcTtinBdgDtlRepository.findByIdTtinHdr(id);
+        byIdTtinHdr.forEach(item -> {
+            item.setChildren(xhTcTtinBdgPloRepository.findByIdTtinDtl(item.getId()));
+        });
+        data.setChildren(byIdTtinHdr);
+        return data;
     }
 
     @Override
