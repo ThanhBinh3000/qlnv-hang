@@ -39,8 +39,6 @@ import java.util.*;
 
 @Service
 public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhBdgService {
-
-
     @Autowired
     private XhQdPdKhBdgRepository xhQdPdKhBdgRepository;
 
