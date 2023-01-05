@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.tochuctrienkha
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgNlq;
 import lombok.Getter;
 import lombok.Setter;
 

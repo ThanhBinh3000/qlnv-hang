@@ -1,9 +1,8 @@
 package com.tcdt.qlnvhang.service.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinhbdg;
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.*;
+import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.XhThopDxKhBdgRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.kehoach.dexuat.XhDxKhBanDauGiaRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgHdrRepository;
@@ -30,9 +29,7 @@ import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.quyetdinhdieuch
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgPl;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgPlDtl;
-import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.XhTcTtinBdgHdr;
 import com.tcdt.qlnvhang.util.Contains;
-import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import org.modelmapper.ModelMapper;
@@ -44,14 +41,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -595,45 +589,45 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
     }
 
   private void cloneForToChucBdg(XhQdDchinhKhBdgHdr data) {
-    List<XhTcTtinBdgHdr> listXhTcTtinBdgHdr =new ArrayList<>();
-    data.getChildren().forEach(s->{
-        XhTcTtinBdgHdr hdr = new XhTcTtinBdgHdr();
-        hdr.setNam(data.getNamKh());
-        hdr.setMaDvi(data.getMaDvi());
-        hdr.setLoaiVthh(data.getLoaiVthh());
-        hdr.setCloaiVthh(data.getCloaiVthh());
-        hdr.setIdQdPdKh(data.getId());
-        hdr.setSoQdPdKh(data.getSoQdPd());
-        hdr.setIdQdDcKh(null);
-        hdr.setSoQdDcKh(null);
-        hdr.setIdQdPdKq(null);
-        hdr.setSoQdPdKq(null);
-        hdr.setIdKhDx(data.getIdTrHdr());
-        hdr.setSoKhDx(data.getSoTrHdr());
-//        hdr.setMaTh(data.getIdThHdr());
-        hdr.setNgayQdPdKqBdg(null);
-        hdr.setThoiHanGiaoNhan(s.getTgianGnhan());
-        hdr.setThoiHanThanhToan(s.getTgianTtoan());
-        hdr.setPhuongThucThanhToan(s.getPthucTtoan());
-        hdr.setPhuongThucGiaoNhan(s.getPthucGnhan());
-        hdr.setTrangThai(TrangThaiAllEnum.CHUA_CAP_NHAT.getId());
-        hdr.setMaDviThucHien(s.getMaDvi());
-        hdr.setTongTienGiaKhoiDiem(DataUtils.safeToLong(s.getTongTienKdienDonGia()));
-        hdr.setTongTienDatTruoc(DataUtils.safeToLong(s.getKhoanTienDatTruoc()));
-        hdr.setTongTienDatTruocDuocDuyet(DataUtils.safeToLong(s.getTongTienDatTruocDonGia()));
-        hdr.setTongSoLuong(DataUtils.safeToLong(s.getTongSoLuong()));
-        hdr.setPhanTramDatTruoc(DataUtils.safeToInt(s.getKhoanTienDatTruoc()));
-        if (!DataUtils.isNullObject(s.getTgianDkienTu()) && !DataUtils.isNullObject(s.getTgianDkienTu())) {
-            LocalDate localDateTu = s.getTgianDkienTu().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            LocalDate localDateDen = s.getTgianDkienDen().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            hdr.setThoiGianToChucTu(localDateTu);
-            hdr.setThoiGianToChucDen(localDateDen);
-        }
-        hdr.setSoDviTsan(s.getSoDviTsan());
-        hdr.setSoDviTsanThanhCong(0);
-        hdr.setSoDviTsanKhongThanh(0);
-        listXhTcTtinBdgHdr.add(hdr);
-    });
-    xhTcTtinBdgHdrRepository.saveAll(listXhTcTtinBdgHdr);
+//    List<XhTcTtinBdgHdr> listXhTcTtinBdgHdr =new ArrayList<>();
+//    data.getChildren().forEach(s->{
+//        XhTcTtinBdgHdr hdr = new XhTcTtinBdgHdr();
+//        hdr.setNam(data.getNamKh());
+//        hdr.setMaDvi(data.getMaDvi());
+//        hdr.setLoaiVthh(data.getLoaiVthh());
+//        hdr.setCloaiVthh(data.getCloaiVthh());
+//        hdr.setIdQdPdKh(data.getId());
+//        hdr.setSoQdPdKh(data.getSoQdPd());
+//        hdr.setIdQdDcKh(null);
+//        hdr.setSoQdDcKh(null);
+//        hdr.setIdQdPdKq(null);
+//        hdr.setSoQdPdKq(null);
+//        hdr.setIdKhDx(data.getIdTrHdr());
+//        hdr.setSoKhDx(data.getSoTrHdr());
+////        hdr.setMaTh(data.getIdThHdr());
+//        hdr.setNgayQdPdKqBdg(null);
+//        hdr.setThoiHanGiaoNhan(s.getTgianGnhan());
+//        hdr.setThoiHanThanhToan(s.getTgianTtoan());
+//        hdr.setPhuongThucThanhToan(s.getPthucTtoan());
+//        hdr.setPhuongThucGiaoNhan(s.getPthucGnhan());
+//        hdr.setTrangThai(TrangThaiAllEnum.CHUA_CAP_NHAT.getId());
+//        hdr.setMaDviThucHien(s.getMaDvi());
+//        hdr.setTongTienGiaKhoiDiem(DataUtils.safeToLong(s.getTongTienKdienDonGia()));
+//        hdr.setTongTienDatTruoc(DataUtils.safeToLong(s.getKhoanTienDatTruoc()));
+//        hdr.setTongTienDatTruocDuocDuyet(DataUtils.safeToLong(s.getTongTienDatTruocDonGia()));
+//        hdr.setTongSoLuong(DataUtils.safeToLong(s.getTongSoLuong()));
+//        hdr.setPhanTramDatTruoc(DataUtils.safeToInt(s.getKhoanTienDatTruoc()));
+//        if (!DataUtils.isNullObject(s.getTgianDkienTu()) && !DataUtils.isNullObject(s.getTgianDkienTu())) {
+//            LocalDate localDateTu = s.getTgianDkienTu().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//            LocalDate localDateDen = s.getTgianDkienDen().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//            hdr.setThoiGianToChucTu(localDateTu);
+//            hdr.setThoiGianToChucDen(localDateDen);
+//        }
+//        hdr.setSoDviTsan(s.getSoDviTsan());
+//        hdr.setSoDviTsanThanhCong(0);
+//        hdr.setSoDviTsanKhongThanh(0);
+//        listXhTcTtinBdgHdr.add(hdr);
+//    });
+//    xhTcTtinBdgHdrRepository.saveAll(listXhTcTtinBdgHdr);
   }
 }

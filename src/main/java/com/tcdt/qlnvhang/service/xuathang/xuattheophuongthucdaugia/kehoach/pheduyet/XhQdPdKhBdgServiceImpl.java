@@ -1,15 +1,11 @@
 package com.tcdt.qlnvhang.service.xuathang.xuattheophuongthucdaugia.kehoach.pheduyet;
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.*;
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.kehoach.dexuat.XhDxKhBanDauGiaRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.XhTcTtinBdgHdrRepository;
-import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
-import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.*;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.kehoachbdg.pheduyet.XhQdPdKhBdgDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.kehoachbdg.pheduyet.XhQdPdKhBdgPlDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.kehoachbdg.pheduyet.XhQdPdKhBdgPlReq;
@@ -24,12 +20,8 @@ import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.pheduye
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.pheduyet.XhQdPdKhBdgPl;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.pheduyet.XhQdPdKhBdgPlDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.tonghop.XhThopDxKhBdg;
-import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.XhTcTtinBdgHdr;
 import com.tcdt.qlnvhang.util.Contains;
-import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
-import com.tcdt.qlnvhang.util.ObjectMapperUtils;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -42,13 +34,8 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.transaction.Transactional;
 import java.math.BigDecimal;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhBdgService {
@@ -262,8 +249,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
                 dsg.setTenDvi(mapDmucDvi.get(dsg.getMaDvi()));
                 dsg.setChildren(xhQdPdKhBdgPlDtlList);
                 xhQdPdKhBdgPlList.add(dsg);
-            }
-            ;
+            };
             dtl.setTenDvi(StringUtils.isEmpty(dtl.getMaDvi()) ? null : mapDmucDvi.get(dtl.getMaDvi()));
             dtl.setChildren(xhQdPdKhBdgPlList);
             dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThai()));
@@ -424,6 +410,25 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
         }
 
         XhQdPdKhBdgDtl data = qOptional.get();
+
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+
+        List<XhQdPdKhBdgPl> xhQdPdKhBdgPlList = new ArrayList<>();
+        for (XhQdPdKhBdgPl dsg : xhQdPdKhBdgPlRepository.findByIdQdDtl(data.getId())) {
+            List<XhQdPdKhBdgPlDtl> xhQdPdKhBdgPlDtlList = xhQdPdKhBdgPlDtlRepository.findByIdPhanLo(dsg.getId());
+            xhQdPdKhBdgPlDtlList.forEach(f -> {
+                f.setTenDiemKho(mapDmucDvi.get(f.getMaDiemKho()));
+                f.setTenNhakho(mapDmucDvi.get(f.getMaNhaKho()));
+                f.setTenNganKho(mapDmucDvi.get(f.getMaNganKho()));
+                f.setTenLoKho(mapDmucDvi.get(f.getMaLoKho()));
+            });
+            dsg.setTenDvi(mapDmucDvi.get(dsg.getMaDvi()));
+            dsg.setChildren(xhQdPdKhBdgPlDtlList);
+            xhQdPdKhBdgPlList.add(dsg);
+        };
+        data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
+        data.setChildren(xhQdPdKhBdgPlList);
+        data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
         return data;
     }
 
