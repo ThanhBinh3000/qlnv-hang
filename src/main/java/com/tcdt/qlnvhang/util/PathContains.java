@@ -107,6 +107,7 @@ public class PathContains {
 	// bán hàng Nhập theo phương thức mua trực tiếp
 	public static final String DX_MUA_TT = "/dx-kh-mtt";
 
+	public static final String PHIEU_NHAP_KHO_MTT = "/phieu-nhap-kho-mtt";
 	public static final String TH_MUA_TT = "/thop-kh-mtt";
 
 	public static final String QD_PD_MTT = "/qd-pd-mtt";
@@ -138,6 +139,7 @@ public class PathContains {
 	public static final String TH_KH_BDG = "/thop-kh-bdg";
 
 	public static final String QD_PD_BDG = "/qd-pd-bdg";
+
 	public static final String QD_DC_BDG = "/qd-dc-bdg";
 	public static final String KH_CN_BQ = "/kh-cn-bq";
 
@@ -228,4 +230,7 @@ public class PathContains {
 	public static final String XAY_DUNG_PHUONG_AN_DE_XUAT = "/de-xuat";
 	public static final String TONG_HOP_PHUONG_AN= "/tong-hop";
 	public static final String QUYET_DINH_PHE_DUYET= "/quyet-dinh";
+	public static final String QUYET_DINH_GIAO_NHIEM_VU= "/qd-gnv";
+
+	public static final String TTIN_DGIA = "/ttin-dgia";
 }

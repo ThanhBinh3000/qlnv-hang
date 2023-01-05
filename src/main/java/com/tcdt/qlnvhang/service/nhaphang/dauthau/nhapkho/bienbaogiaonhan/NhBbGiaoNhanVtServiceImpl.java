@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
@@ -194,8 +195,8 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
     }
 
     @Override
-    public boolean export(NhBbGiaoNhanVtReq req) throws Exception {
-        return false;
+    public void export(NhBbGiaoNhanVtReq req, HttpServletResponse response) throws Exception {
+//        return false;
     }
 
 //    @Override

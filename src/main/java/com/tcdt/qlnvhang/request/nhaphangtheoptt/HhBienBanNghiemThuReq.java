@@ -2,10 +2,13 @@ package com.tcdt.qlnvhang.request.nhaphangtheoptt;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBbanNghiemThuDtl;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
 import javax.persistence.Transient;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,7 +51,15 @@ public class HhBienBanNghiemThuReq {
 
     private Long idDdiemGiaoNvNh;
 
-    private List<HhBbanNghiemThuDtlReq> bbanNghiemThuDtlList =new ArrayList<>();
+    private BigDecimal kinhPhiThucTe;
+
+    private BigDecimal kinhPhiTcPd;
+
+    private FileDinhKemReq fileDinhKem;
+
+    private List<HhBbanNghiemThuDtlReq> dviChuDongThucHien =new ArrayList<>();
+
+    private List<HhBbanNghiemThuDtlReq> dmTongCucPdTruocThucHien =new ArrayList<>();
 
     private List<FileDinhKemReq> fileDinhkems =new ArrayList<>();
 }

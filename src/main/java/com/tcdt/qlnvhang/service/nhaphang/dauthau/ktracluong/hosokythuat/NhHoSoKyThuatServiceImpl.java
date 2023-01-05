@@ -30,6 +30,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
@@ -203,8 +204,8 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
     }
 
     @Override
-    public boolean export(NhHoSoKyThuatReq req) throws Exception {
-        return false;
+    public void export(NhHoSoKyThuatReq req, HttpServletResponse response) throws Exception {
+//        return false;
     }
 
 

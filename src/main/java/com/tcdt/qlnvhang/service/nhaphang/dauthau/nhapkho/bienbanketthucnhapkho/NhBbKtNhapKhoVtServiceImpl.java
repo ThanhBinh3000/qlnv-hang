@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 @Service
@@ -82,8 +83,8 @@ public class NhBbKtNhapKhoVtServiceImpl extends BaseServiceImpl implements NhBbK
     }
 
     @Override
-    public boolean export(NhBbKtNhapKhoVtReq req) throws Exception {
-        return false;
+    public void export(NhBbKtNhapKhoVtReq req, HttpServletResponse response) throws Exception {
+//        return false;
     }
 
 //    @Override

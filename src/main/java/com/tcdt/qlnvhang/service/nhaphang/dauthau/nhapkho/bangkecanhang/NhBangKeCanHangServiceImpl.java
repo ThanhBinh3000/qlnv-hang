@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
@@ -199,8 +200,8 @@ public class NhBangKeCanHangServiceImpl extends BaseServiceImpl implements NhBan
     }
 
     @Override
-    public boolean export(QlBangKeCanHangLtReq req) throws Exception {
-        return false;
+    public void export(QlBangKeCanHangLtReq req, HttpServletResponse response) throws Exception {
+//        return false;
     }
 
     @Override

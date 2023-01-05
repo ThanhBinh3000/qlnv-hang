@@ -27,6 +27,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
@@ -213,8 +214,8 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
     }
 
     @Override
-    public boolean export(NhBienBanGuiHangReq req) throws Exception {
-        return false;
+    public void export(NhBienBanGuiHangReq req, HttpServletResponse response) throws Exception {
+//        return false;
     }
 
 //    @Override

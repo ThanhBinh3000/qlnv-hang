@@ -135,7 +135,7 @@ public class NhPhieuKtChatLuongController {
 	public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody QlpktclhPhieuKtChatLuongRequestDto req) {
 
 		try {
-			service.export(req);
+			service.export(req,response);
 		} catch (Exception e) {
 			log.error("Error can not export", e);
 		}

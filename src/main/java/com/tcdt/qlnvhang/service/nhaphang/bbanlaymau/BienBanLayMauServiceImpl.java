@@ -31,6 +31,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 @Service
@@ -242,8 +243,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 	}
 
 	@Override
-	public boolean export(BienBanLayMauReq req) throws Exception {
-		return false;
+	public void export(BienBanLayMauReq req, HttpServletResponse response) throws Exception {
 	}
 
 //	@Override

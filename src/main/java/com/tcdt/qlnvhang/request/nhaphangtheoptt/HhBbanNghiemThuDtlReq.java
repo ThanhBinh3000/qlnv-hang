@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 public class HhBbanNghiemThuDtlReq {
     private Long id;
     private Long idHdr;
+    private String type;
     private String noiDung;
     private String dvt;
     private BigDecimal soLuongTn;
