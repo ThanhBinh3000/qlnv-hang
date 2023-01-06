@@ -236,7 +236,7 @@ public class HhBienBanNghiemThuService extends BaseServiceImpl {
         List<HhBienBanNghiemThu> data=page.getContent();
 
         String title="Danh sách quyết biên bản nghiệm thu bảo quản lần đầu nhập hàng dự trữ quốc gia";
-        String[] rowsName=new String[]{"STT","Số biên bản","Số quyết định nhập","Ngày nghiệm thu","Điểm kho","Nhà kho","Ngăn Kho","Lô Kho","Chi phí thực hiện trong năm","Chi phí thực hiện năm trước","Tổng giá trị","Trạng Thái"};
+        String[] rowsName=new String[]{"STT","Số QĐ giao nhiêm vụ NH","Năm kế hoạch","Số biên bản","Ngày lập biên bản","Ngày kết thúc NT kê lót,BQLD","Tổng kinh phí thực tế","Tổng kinh phí TC PD","Trạng Thái"};
         String fileName="danh-sach-bien-ban-nghiem-thu.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs=null;
@@ -244,21 +244,14 @@ public class HhBienBanNghiemThuService extends BaseServiceImpl {
             HhBienBanNghiemThu dx=data.get(i);
             objs=new Object[rowsName.length];
             objs[0]=i;
-            objs[1]=dx.getSoBb();
-            objs[2]=dx.getSoQdGiaoNvNh();
-            objs[3]=dx.getNgayNghiemThu();
-            objs[4]=dx.getTenDiemKho();
-            objs[5]=dx.getTenNhaKho();
-            objs[6]=dx.getTenNganKho();
-            objs[7]=dx.getTenLoKho();
-            objs[8]=dx.getNgayNghiemThu();
-            for (HhBbanNghiemThuDtl dtl : dx.getDviChuDongThucHien()){
-                objs[9]=dtl.getTongGtri();
-            }
-            for (HhBbanNghiemThuDtl dtl : dx.getDviChuDongThucHien()){
-                objs[10]=dtl.getTongGtri();
-            }
-            objs[11]=dx.getTenTrangThai();
+            objs[1]=dx.getSoQdGiaoNvNh();
+            objs[2]=dx.getNamKh();
+            objs[3]=dx.getSoBb();
+            objs[4]=dx.getNgayTao();
+            objs[5]=dx.getNgayNghiemThu();
+            objs[6]=dx.getKinhPhiThucTe();
+            objs[7]=dx.getKinhPhiTcPd();
+            objs[8]=dx.getTenTrangThai();
             dataList.add(objs);
         }
         ExportExcel ex =new ExportExcel(title,fileName,rowsName,dataList,response);
