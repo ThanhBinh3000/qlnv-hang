@@ -57,6 +57,9 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
         data.setNgayTao(new Date());
         data.setId(Long.valueOf(req.getMaThongBao().split("/")[0]));
 
+        List<XhTcTtinBdgHdr> byIdQdPdDtl = xhTcTtinBdgHdrRepository.findByIdQdPdDtl(data.getIdQdPdDtl());
+        data.setLanDauGia(byIdQdPdDtl.size()+1);
+
         xhTcTtinBdgHdrRepository.save(data);
 
         this.saveDetail(req, data.getId());

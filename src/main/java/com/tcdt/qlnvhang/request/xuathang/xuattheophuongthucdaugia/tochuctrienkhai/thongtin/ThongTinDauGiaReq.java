@@ -98,7 +98,7 @@ public class ThongTinDauGiaReq extends BaseRequest {
 
   private String dkienCthuc;
 
-  private Boolean ketQua;
+  private Integer ketQua; // 0 : Trượt 1 Trúng
 
   private String soBienBan;
 
