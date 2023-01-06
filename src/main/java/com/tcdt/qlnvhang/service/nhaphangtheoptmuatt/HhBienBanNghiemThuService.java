@@ -59,15 +59,7 @@ public class HhBienBanNghiemThuService extends BaseServiceImpl {
         UserInfo userInfo= SecurityContextService.getUser();
         Pageable pageable= PageRequest.of(objReq.getPaggingReq().getPage(),
                 objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
-        Page<HhBienBanNghiemThu> data =hhBienBanNghiemThuRepository.searchPage(
-                objReq.getNamKh(),
-                objReq.getSoQd(),
-                objReq.getSoBb(),
-                Contains.convertDateToString(objReq.getNgayKnTu()),
-                Contains.convertDateToString(objReq.getNgayKnDen()),
-                objReq.getTrangThai(),
-                objReq.getMaDvi(),
-                pageable);
+        Page<HhBienBanNghiemThu> data =hhBienBanNghiemThuRepository.searchPage(objReq,pageable);
         Map<String,String> hashMapDmhh = getListDanhMucHangHoa();
         Map<String,String> hashMapDmdv = getListDanhMucDvi(null, null,"01");
 
