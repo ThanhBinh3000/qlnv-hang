@@ -130,6 +130,9 @@ public class HhPhieuNhapKhoHdr implements Serializable {
     @Transient
     private List<HhPhieuNhapKhoCt> hhPhieuNhapKhoCtList = new ArrayList<>();
 
+    @Transient
+    private HhBcanKeHangHdr hhBcanKeHangHdr;
+
 
 
 

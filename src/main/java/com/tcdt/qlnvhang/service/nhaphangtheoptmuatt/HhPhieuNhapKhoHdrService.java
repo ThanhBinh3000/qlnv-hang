@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhBcanKeHangHdrRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhPhieuNhapKhoCtRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhPhieuNhapKhoHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -15,6 +16,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBcanKeHangHdr;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuNhapKhoCt;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuNhapKhoHdr;
 import com.tcdt.qlnvhang.util.Contains;
@@ -41,6 +43,9 @@ public class HhPhieuNhapKhoHdrService  extends BaseServiceImpl {
 
     @Autowired
     private HhPhieuNhapKhoCtRepository hhPhieuNhapKhoCtRepository;
+
+    @Autowired
+    private HhBcanKeHangHdrRepository hhBcanKeHangHdrRepository;
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
@@ -148,8 +153,12 @@ public class HhPhieuNhapKhoHdrService  extends BaseServiceImpl {
         qOptional.get().setTenLoKho(mapDmucDvi.get(qOptional.get().getMaLoKho()));
         qOptional.get().setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qOptional.get().getTrangThai()));
         qOptional.get().setFileDinhKems(fileDinhKemService.search(qOptional.get().getId(), Collections.singleton(HhPhieuNhapKhoHdr.TABLE_NAME)));
-        List<HhPhieuNhapKhoCt> list = hhPhieuNhapKhoCtRepository.findAllByIdHdr(qOptional.get().getId());
-        qOptional.get().setHhPhieuNhapKhoCtList(list);
+        List<HhPhieuNhapKhoCt> Ctlist = hhPhieuNhapKhoCtRepository.findAllByIdHdr(qOptional.get().getId());
+        qOptional.get().setHhPhieuNhapKhoCtList(Ctlist);
+        HhBcanKeHangHdr bcanKeHangHdr  = hhBcanKeHangHdrRepository.findBySoPhieuNhapKho(qOptional.get().getSoPhieuNhapKho());
+        if (!ObjectUtils.isEmpty(bcanKeHangHdr)){
+            qOptional.get().setHhBcanKeHangHdr(bcanKeHangHdr);
+        }
         return qOptional.get();
 
     }

@@ -18,8 +18,8 @@ public class HhBcanKeHangHdr  implements Serializable {
     public static final String TABLE_NAME = "HH_BCAN_KE_HANG_HDR";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_BCAN_KE_HANG_HDR_SEQ")
-    @SequenceGenerator(sequenceName = "HH_BCAN_KE_HANG_HDR_SEQ", allocationSize = 1, name = "HH_BCAN_KE_HANG_HDR_SEQ")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_BCAN_KE_HANG_HDR_SEQ")
+//    @SequenceGenerator(sequenceName = "HH_BCAN_KE_HANG_HDR_SEQ", allocationSize = 1, name = "HH_BCAN_KE_HANG_HDR_SEQ")
 
     private Long id;
 

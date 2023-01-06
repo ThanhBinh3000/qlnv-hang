@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.repository.nhaphangtheoptmtt;
 
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHang;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBcanKeHangHdr;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuKngiemCluong;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuNhapKhoHdr;
@@ -30,4 +31,8 @@ public interface HhBcanKeHangHdrRepository extends  JpaRepository<HhBcanKeHangHd
 
     @Transactional
     void deleteAllByIdIn(List<Long> ids);
+
+    List<HhBcanKeHangHdr> findAllByIdQdGiaoNvNh(Long idQdGiaoNvNh);
+
+    HhBcanKeHangHdr findBySoPhieuNhapKho(String soPhieuNhapKho);
 }
