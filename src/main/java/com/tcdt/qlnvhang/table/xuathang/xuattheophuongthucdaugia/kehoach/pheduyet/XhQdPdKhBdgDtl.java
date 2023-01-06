@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.pheduy
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.dexuat.XhDxKhBanDauGia;
+import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
@@ -96,6 +97,9 @@ public class XhQdPdKhBdgDtl implements Serializable {
 
     @Transient
     private List<XhQdPdKhBdgPl> children= new ArrayList<>();
+
+    @Transient
+    List<XhTcTtinBdgHdr> listTtinDg = new ArrayList<>();
 
     public String getTenTrangThai() {
         return NhapXuatHangTrangThaiEnum.getTenById(this.getTrangThai());

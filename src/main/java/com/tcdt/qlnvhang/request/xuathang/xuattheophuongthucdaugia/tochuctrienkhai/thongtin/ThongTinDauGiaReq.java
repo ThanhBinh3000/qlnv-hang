@@ -16,6 +16,8 @@ import java.util.List;
 public class ThongTinDauGiaReq extends BaseRequest {
   private Long id;
 
+  private String soQdPd;
+
   private Long idQdPdDtl;
 
   private Integer nam;

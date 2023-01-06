@@ -23,6 +23,8 @@ public class XhTcTtinBdgHdr extends TrangThaiBaseEntity implements Serializable 
   @SequenceGenerator(sequenceName = "XH_TC_TTIN_BDG_HDR_SEQ", allocationSize = 1, name = "XH_TC_TTIN_BDG_HDR_SEQ")
   private Long id;
 
+  private String soQdPd;
+
   private Long idQdPdDtl;
 
   private Integer nam;
