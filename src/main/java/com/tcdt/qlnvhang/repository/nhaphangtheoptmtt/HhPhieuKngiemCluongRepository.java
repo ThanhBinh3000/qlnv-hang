@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.repository.nhaphangtheoptmtt;
 
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuknghiemcl.PhieuKnghiemCluongHang;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuKngiemCluong;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,8 +25,11 @@ public interface HhPhieuKngiemCluongRepository extends JpaRepository<HhPhieuKngi
             ,nativeQuery = true)
     Page<HhPhieuKngiemCluong> searchPage(Integer namKh, String soQdNh, String soPhieu, String soBb, String ngayKnTu, String ngayKnDen, String trangThai, String maDvi, Pageable pageable);
 
-    Optional<HhPhieuKngiemCluong> findAllBySoPhieu(String soPhieu);
+    Optional<HhPhieuKngiemCluong> findAllBySoBbLayMau(String soBblayMau);
 
     List<HhPhieuKngiemCluong> findAllByIdIn(List<Long> ids);
+
+    List<HhPhieuKngiemCluong> findBySoQdGiaoNvNhAndMaDvi(String idQdGiaoNvNh, String maDvi);
+
 
 }
