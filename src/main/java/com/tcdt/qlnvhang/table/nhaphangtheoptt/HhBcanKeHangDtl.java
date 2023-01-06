@@ -19,7 +19,6 @@ public class HhBcanKeHangDtl  implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_BCAN_KE_HANG_DTL_SEQ")
     @SequenceGenerator(sequenceName = "HH_BCAN_KE_HANG_DTL_SEQ", allocationSize = 1, name = "HH_BCAN_KE_HANG_DTL_SEQ")
-    @Column(name = "ID")
     private Long id;
 
     private Long idHdr;

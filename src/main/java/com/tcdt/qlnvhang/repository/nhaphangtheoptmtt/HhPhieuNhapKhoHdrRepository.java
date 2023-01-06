@@ -29,5 +29,5 @@ public interface HhPhieuNhapKhoHdrRepository  extends JpaRepository<HhPhieuNhapK
     @Transactional
     void deleteAllByIdIn(List<Long> ids);
 
-
+    List<HhPhieuNhapKhoHdr> findAllByIdQdGiaoNvNh(Long idQdGiaoNvNh);
 }

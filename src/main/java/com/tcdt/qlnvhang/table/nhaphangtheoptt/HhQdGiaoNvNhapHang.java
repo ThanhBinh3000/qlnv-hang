@@ -69,6 +69,12 @@ public class HhQdGiaoNvNhapHang implements Serializable {
     private List<HhQdGiaoNvNhangDtl> hhQdGiaoNvNhangDtlList= new ArrayList<>();
 
     @Transient
+    private List<HhPhieuNhapKhoHdr> hhPhieuNhapKhoHdrList = new ArrayList<>();
+
+    @Transient
+    private List<HhBcanKeHangHdr> hhBcanKeHangHdrList = new ArrayList<>();
+
+    @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
 }
