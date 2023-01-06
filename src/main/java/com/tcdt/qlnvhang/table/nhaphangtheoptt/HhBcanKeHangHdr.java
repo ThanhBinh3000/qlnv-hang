@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.nhaphangtheoptt;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -12,15 +13,21 @@ import java.util.List;
 @Entity
 @Table(name = "HH_BCAN_KE_HANG_HDR")
 @Data
-public class HhBcanKeHangHdr extends BaseEntity implements Serializable {
+public class HhBcanKeHangHdr  implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "HH_BCAN_KE_HANG_HDR";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_BCAN_KE_HANG_HDR_SEQ")
-    @SequenceGenerator(sequenceName = "HH_BCAN_KE_HANG_HDR_SEQ", allocationSize = 1, name = "HH_BCAN_KE_HANG_HDR_SEQ")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_BCAN_KE_HANG_HDR_SEQ")
+//    @SequenceGenerator(sequenceName = "HH_BCAN_KE_HANG_HDR_SEQ", allocationSize = 1, name = "HH_BCAN_KE_HANG_HDR_SEQ")
 
     private Long id;
+
+    private Long idQdGiaoNvNh;
+
+    private Long idPhieuNhapKho;
+
+    private Long idDdiemGiaoNvNh;
 
     private Integer namKh;
 
@@ -68,6 +75,8 @@ public class HhBcanKeHangHdr extends BaseEntity implements Serializable {
 
     private String donViGiao;
 
+    private String diaChiNguoiGiao;
+
     @Temporal(TemporalType.DATE)
     private Date thoiGianGiaoNhan;
 
@@ -83,7 +92,6 @@ public class HhBcanKeHangHdr extends BaseEntity implements Serializable {
 
     private String donViTinh;
 
-
     @Temporal(TemporalType.DATE)
     private Date ngayPduyet;
     private String nguoiPduyet;
@@ -98,8 +106,18 @@ public class HhBcanKeHangHdr extends BaseEntity implements Serializable {
 
     private String lyDoTuChoi;
 
+    @Temporal(TemporalType.DATE)
+    private Date ngayTao;
+    private String nguoiTao;
+
+    @Temporal(TemporalType.DATE)
+    private Date ngaySua;
+    private String nguoiSua;
+
+
     @Transient
     private List<HhBcanKeHangDtl> hhBcanKeHangDtlList = new ArrayList<>();
+
 
 
 

@@ -15,6 +15,7 @@ import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -96,6 +97,7 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
         String tChuanCluong = "";
         for (HhDxuatKhMttHdr dXuat : dxuatList) {
             HhDxKhMttThopDtl thopDtl = new HhDxKhMttThopDtl();
+            BeanUtils.copyProperties(dXuat,thopDtl,"id");
             thopDtl.setIdDxHdr(dXuat.getId());
             thopDtl.setMaDvi(dXuat.getMaDvi());
             thopDtl.setDiaChiDvi(dXuat.getDiaChiDvi());
@@ -152,7 +154,7 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
         thopHdr.setNoiDung(objReq.getNoiDung());
         thopHdr.setTrangThai(Contains.CHUATAO_QD);
         thopHdr.setNgayThop(new Date());
-        thopHdr.setId(objReq.getId());
+        thopHdr.setId(objReq.getIdTh());
         thopHdr.setSoQdCc(objReq.getSoQdCc());
         thopHdr.setMaDvi(userInfo.getDvql());
         hhDxuatKhMttThopRepository.save(thopHdr);

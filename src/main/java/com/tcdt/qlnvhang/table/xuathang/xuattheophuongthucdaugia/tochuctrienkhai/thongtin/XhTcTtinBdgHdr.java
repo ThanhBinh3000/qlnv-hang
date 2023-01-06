@@ -105,7 +105,7 @@ public class XhTcTtinBdgHdr extends TrangThaiBaseEntity implements Serializable 
 
   private String dkienCthuc;
 
-  private Boolean ketQua;
+  private Integer ketQua; // 0 : Trượt 1 Trúng
 
   private String soBienBan;
 
@@ -113,6 +113,8 @@ public class XhTcTtinBdgHdr extends TrangThaiBaseEntity implements Serializable 
 
   @Column(columnDefinition = "Date")
   private Date ngayKyBban;
+
+  private Integer lanDauGia;
 
   // Transient
   @Transient
