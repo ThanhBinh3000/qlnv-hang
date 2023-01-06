@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,7 +46,7 @@ public interface XhDxKhBanDauGiaRepository extends JpaRepository<XhDxKhBanDauGia
             " AND (:ngayDuyetDen IS NULL OR DX.NGAY_PDUYET <= TO_DATE(:ngayDuyetDen,'yyyy-MM-dd'))" +
             " AND DX.TRANG_THAI = '"+ Contains.DA_DUYET_CBV+"'" +
             " AND DX.TRANG_THAI_TH = '"+ Contains.CHUATONGHOP+"'" +
-            " AND DX.MA_THOP is null "+
+            " AND DX.ID_THOP is null "+
             " AND DX.SO_QD_PD is null "
 
             ,nativeQuery = true)
@@ -65,26 +64,17 @@ public interface XhDxKhBanDauGiaRepository extends JpaRepository<XhDxKhBanDauGia
     @Query(value = " SELECT NVL(SUM(DSG.SO_LUONG),0) FROM XH_QD_PD_KH_BDG HDR " +
             " INNER JOIN XH_QD_PD_KH_BDG_DTL DTL on HDR.ID = DTL.ID_QD_HDR " +
             " LEFT JOIN XH_QD_PD_KH_BDG_PL DSG ON DSG.ID_QD_DTL = DTL.ID " +
-            "WHERE HDR.NAM_KH = :namKh AND HDR.LOAI_VTHH = :loaiVthh AND DSG.MA_DVI = :maDvi AND HDR.TRANG_THAI = :trangThai AND HDR.LASTEST = 1",
+            "WHERE HDR.NAM = :namKh AND HDR.LOAI_VTHH = :loaiVthh AND DSG.MA_DVI = :maDvi AND HDR.TRANG_THAI = :trangThai AND HDR.LASTEST = 1",
             nativeQuery = true)
     BigDecimal countSLDalenKh(Integer namKh, String loaiVthh, String maDvi,String trangThai);
 
 
     @Transactional()
     @Modifying
-    @Query(value = "UPDATE XH_DX_KH_BAN_DAU_GIA SET TRANG_THAI_TH = :trangThaiTh WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
-    void updateStatusInList(List<String> soDxuatList, String trangThaiTh);
-
-    @Transactional()
-    @Modifying
-    @Query(value = "UPDATE XH_DX_KH_BAN_DAU_GIA SET SO_QD_PD=:soQdPd WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
-    void updateSoQdPd(List<String> soDxuatList, String soQdPd);
+    @Query(value = "UPDATE XH_DX_KH_BAN_DAU_GIA SET TRANG_THAI_TH = :trangThaiTh , ID_THOP = :idTh WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
+    void updateStatusInList(List<String> soDxuatList, String trangThaiTh,Long idTh);
 
 
-    @Transactional()
-    @Modifying
-    @Query(value = "UPDATE XH_DX_KH_BAN_DAU_GIA SET NGAY_KY_QD=:ngayKyQd WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
-    void updateNgayKyQd(List<String> soDxuatList, Date ngayKyQd);
 
 
 }

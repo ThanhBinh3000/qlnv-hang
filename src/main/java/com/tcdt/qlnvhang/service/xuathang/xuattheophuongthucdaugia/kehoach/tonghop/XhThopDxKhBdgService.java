@@ -119,7 +119,7 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
         if (thopHdr.getId() > 0 && thopHdr.getChildren().size() > 0) {
             List<String> soDxuatList = thopHdr.getChildren().stream().map(XhThopDxKhBdgDtl::getSoDxuat)
                     .collect(Collectors.toList());
-            xhDxKhBanDauGiaRepository.updateStatusInList(soDxuatList, Contains.DATONGHOP);
+            xhDxKhBanDauGiaRepository.updateStatusInList(soDxuatList, Contains.DATONGHOP,thopHdr.getId());
         }
         return thopHdr;
     }
