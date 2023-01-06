@@ -24,6 +24,9 @@ public class HhBienBanNghiemThuReq {
     private String kyThuatVien;
     private String thuKho;
     private String lhKho;
+    private Double slCanNhap;
+    private Long idPhieuNhapKho;
+    private String soPhieuNhapKho;
     private Double slThucNhap;
     private Double tichLuong;
     private String pthucBquan;
