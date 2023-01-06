@@ -30,14 +30,14 @@ import java.util.Map;
 @Api(tags = "Xuất hàng - Bán đấu giá - Kế hoạch bán đấu giá - Đề xuất kế hoạch bán đấu giá ")
 public class XhTcTtinBdgController extends BaseController {
     @Autowired
-    private XhTcTtinBdgHdrService service;
+    private XhTcTtinBdgHdrService xhTcTtinBdgHdrService;
 
     @ApiOperation(value = "Tra cứu ", response = List.class)
     @PostMapping(value=  PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody ThongTinDauGiaReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.searchPage(objReq));
+            resp.setData(xhTcTtinBdgHdrService.searchPage(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -53,7 +53,7 @@ public class XhTcTtinBdgController extends BaseController {
     public final ResponseEntity<BaseResponse> save(@Valid @RequestBody ThongTinDauGiaReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.create(objReq));
+            resp.setData(xhTcTtinBdgHdrService.create(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -69,7 +69,7 @@ public class XhTcTtinBdgController extends BaseController {
     public final ResponseEntity<BaseResponse> update(@Valid @RequestBody ThongTinDauGiaReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.update(objReq));
+            resp.setData(xhTcTtinBdgHdrService.update(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -87,7 +87,7 @@ public class XhTcTtinBdgController extends BaseController {
             @ApiParam(value = "ID", example = "1", required = true) @PathVariable("id") Long id) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.detail(id));
+            resp.setData(xhTcTtinBdgHdrService.detail(id));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -103,7 +103,7 @@ public class XhTcTtinBdgController extends BaseController {
     public final ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            service.delete(idSearchReq.getId());
+            xhTcTtinBdgHdrService.delete(idSearchReq.getId());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -119,7 +119,7 @@ public class XhTcTtinBdgController extends BaseController {
     public final ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody ThongTinDauGiaReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            service.deleteMulti(idSearchReq.getIds());
+            xhTcTtinBdgHdrService.deleteMulti(idSearchReq.getIds());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -136,7 +136,7 @@ public class XhTcTtinBdgController extends BaseController {
     public void exportListQdBtcBnToExcel(@Valid @RequestBody ThongTinDauGiaReq objReq, HttpServletResponse response) throws Exception{
 
         try {
-            service.export(objReq,response);
+            xhTcTtinBdgHdrService.export(objReq,response);
         } catch (Exception e) {
 
             log.error("Kết xuất danh sách : {}", e);
@@ -158,7 +158,7 @@ public class XhTcTtinBdgController extends BaseController {
     public ResponseEntity<BaseResponse> updateStatus( @RequestBody ThongTinDauGiaReq stReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.approve(stReq));
+            resp.setData(xhTcTtinBdgHdrService.approve(stReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

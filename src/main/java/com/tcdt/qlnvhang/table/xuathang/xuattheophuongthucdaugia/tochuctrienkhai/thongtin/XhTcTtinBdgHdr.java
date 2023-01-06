@@ -23,6 +23,8 @@ public class XhTcTtinBdgHdr extends TrangThaiBaseEntity implements Serializable 
   @SequenceGenerator(sequenceName = "XH_TC_TTIN_BDG_HDR_SEQ", allocationSize = 1, name = "XH_TC_TTIN_BDG_HDR_SEQ")
   private Long id;
 
+  private String soQdPd;
+
   private Long idQdPdDtl;
 
   private Integer nam;
@@ -103,7 +105,7 @@ public class XhTcTtinBdgHdr extends TrangThaiBaseEntity implements Serializable 
 
   private String dkienCthuc;
 
-  private Boolean ketQua;
+  private Integer ketQua; // 0 : Trượt 1 Trúng
 
   private String soBienBan;
 
@@ -111,6 +113,8 @@ public class XhTcTtinBdgHdr extends TrangThaiBaseEntity implements Serializable 
 
   @Column(columnDefinition = "Date")
   private Date ngayKyBban;
+
+  private Integer lanDauGia;
 
   // Transient
   @Transient

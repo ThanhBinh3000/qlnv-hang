@@ -24,6 +24,7 @@ import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.pheduye
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.pheduyet.XhQdPdKhBdgPl;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.pheduyet.XhQdPdKhBdgPlDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.tonghop.XhThopDxKhBdg;
+import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.springframework.beans.BeanUtils;
@@ -295,7 +296,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
                         throw new Exception("Đề xuất này đã được quyết định");
                     }
                     // Update trạng thái tờ trình
-                    xhDxKhBanDauGiaRepository.updateStatusInList(Arrays.asList(dataDB.getSoTrHdr()), Contains.DABANHANH_QD);
+                    xhDxKhBanDauGiaRepository.updateStatusInList(Arrays.asList(dataDB.getSoTrHdr()), Contains.DABANHANH_QD,qOptional.get().getIdThop());
                 } else {
                     throw new Exception("Số tờ trình kế hoạch không được tìm thấy");
                 }
@@ -336,7 +337,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
         if (optional.get().getPhanLoai().equals("TH")) {
             xhThopDxKhBdgRepository.updateTrangThai(optional.get().getIdThHdr(), NhapXuatHangTrangThaiEnum.CHUATAO_QD.getId());
         } else {
-            xhDxKhBanDauGiaRepository.updateStatusInList(Arrays.asList(optional.get().getSoTrHdr()), NhapXuatHangTrangThaiEnum.CHUATONGHOP.getId());
+            xhDxKhBanDauGiaRepository.updateStatusInList(Arrays.asList(optional.get().getSoTrHdr()), NhapXuatHangTrangThaiEnum.CHUATONGHOP.getId(),null);
         }
     }
 
@@ -431,6 +432,10 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
         data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
         data.setChildren(xhQdPdKhBdgPlList);
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
+
+        List<XhTcTtinBdgHdr> byIdQdPdDtl = xhTcTtinBdgHdrRepository.findByIdQdPdDtl(ids);
+        data.setListTtinDg(byIdQdPdDtl);
+
         return data;
     }
 

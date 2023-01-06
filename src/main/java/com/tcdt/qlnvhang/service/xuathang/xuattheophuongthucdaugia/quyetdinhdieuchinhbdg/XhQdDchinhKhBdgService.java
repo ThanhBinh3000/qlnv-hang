@@ -155,9 +155,9 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
         if(objReq.getPhanLoai().equals("TH")){
             xhThopDxKhBdgRepository.updateTrangThai(dataMap.getIdThHdr(), Contains.DADUTHAO_QD);
         }else{
-            xhDxKhBanDauGiaRepository.updateStatusInList(Arrays.asList(objReq.getSoTrHdr()), Contains.DADUTHAO_QD);
-            xhDxKhBanDauGiaRepository.updateSoQdPd(Arrays.asList(objReq.getSoTrHdr()),dataMap.getSoQdPd());
-            xhDxKhBanDauGiaRepository.updateNgayKyQd(Arrays.asList(objReq.getSoTrHdr()),dataMap.getNgayKyQd());
+//            xhDxKhBanDauGiaRepository.updateStatusInList(Arrays.asList(objReq.getSoTrHdr()), Contains.DADUTHAO_QD);
+//            xhDxKhBanDauGiaRepository.updateSoQdPd(Arrays.asList(objReq.getSoTrHdr()),dataMap.getSoQdPd());
+//            xhDxKhBanDauGiaRepository.updateNgayKyQd(Arrays.asList(objReq.getSoTrHdr()),dataMap.getNgayKyQd());
         }
 
         saveDetail(objReq,dataMap);
@@ -181,7 +181,7 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
         created.setFileDinhKems(fileDinhKems);
 
         // Update trạng thái tờ trình
-        xhDxKhBanDauGiaRepository.updateStatusInList(Arrays.asList(objReq.getSoTrHdr()), Contains.DADUTHAO_QD);
+//        xhDxKhBanDauGiaRepository.updateStatusInList(Arrays.asList(objReq.getSoTrHdr()), Contains.DADUTHAO_QD);
 
         saveDetail(objReq,dataMap);
 
@@ -400,7 +400,7 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
         if (optional.get().getPhanLoai().equals("TH")){
             xhThopDxKhBdgRepository.updateTrangThai(optional.get().getIdThHdr(), NhapXuatHangTrangThaiEnum.CHUATAO_QD.getId());
         }else {
-            xhDxKhBanDauGiaRepository.updateStatusInList(Arrays.asList(optional.get().getSoTrHdr()), NhapXuatHangTrangThaiEnum.CHUATONGHOP.getId());
+//            xhDxKhBanDauGiaRepository.updateStatusInList(Arrays.asList(optional.get().getSoTrHdr()), NhapXuatHangTrangThaiEnum.CHUATONGHOP.getId());
         }
     }
 
@@ -470,7 +470,7 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
                     throw new Exception("Đề xuất này đã được quyết định ");
                 }
                 // Update trạng thái tờ trình
-                xhDxKhBanDauGiaRepository.updateStatusInList(Arrays.asList(dataDB.getSoTrHdr()), Contains.DABANHANH_QD);
+//                xhDxKhBanDauGiaRepository.updateStatusInList(Arrays.asList(dataDB.getSoTrHdr()), Contains.DABANHANH_QD);
             }else {
                 throw new Exception("Số tờ trình kế hoạch không được tìm thấy");
             }
@@ -511,7 +511,7 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
                         throw new Exception("Đề xuất này đã được quyết định");
                     }
                   // Update trạng thái tờ trình
-                    xhDxKhBanDauGiaRepository.updateStatusInList(Arrays.asList(dataDB.getSoTrHdr()), Contains.DABANHANH_QD);
+//                    xhDxKhBanDauGiaRepository.updateStatusInList(Arrays.asList(dataDB.getSoTrHdr()), Contains.DABANHANH_QD);
                 }else {
                     throw new Exception("Số tờ trình kế hoạch không được tìm thấy");
                 }

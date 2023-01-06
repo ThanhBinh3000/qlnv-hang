@@ -15,7 +15,7 @@ import java.util.Optional;
 public interface HhBienBanLayMauRepository extends JpaRepository<HhBienBanLayMau,Long> {
     @Query(value = "select * from HH_BIEN_BAN_LAY_MAU BB where (:namKh IS NULL OR BB.NAM_KH = TO_NUMBER(:namKh))" +
             "AND (:soBb IS NULL OR LOWER(BB.SO_BIEN_BAN) LIKE LOWER(CONCAT(CONCAT('%',:soBb),'%' ) ) )" +
-            "AND (:soQdNh IS NULL OR LOWER(BB.SO_QD_NH) LIKE LOWER(CONCAT(CONCAT('%',:soQdNh),'%' ) ) )" +
+            "AND (:soQdNh IS NULL OR LOWER(BB.SO_QD_GIAO_NV_NH) LIKE LOWER(CONCAT(CONCAT('%',:soQdNh),'%' ) ) )" +
             "AND (:dviKn IS NULL OR LOWER(BB.DVI_KIEM_NGHIEM) LIKE LOWER(CONCAT(CONCAT('%',:dviKn),'%' ) ) )" +
             "AND (:ngayLayMauTu IS NULL OR BB.NGAY_LAY_MAU >=  TO_DATE(:ngayLayMauTu,'yyyy-MM-dd')) " +
             "AND (:ngayLayMauDen IS NULL OR BB.NGAY_LAY_MAU <= TO_DATE(:ngayLayMauDen,'yyyy-MM-dd'))"+
