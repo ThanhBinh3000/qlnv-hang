@@ -48,5 +48,7 @@ public class HhQdGiaoNvNhangDtl {
     List<HhBienBanNghiemThu> listBienBanNghiemThuBq;
     @Transient
     List<HhBienBanLayMau> listBienBanLayMau;
+    @Transient
+    List<HhPhieuKngiemCluong> listPhieuKiemNghiemCl;
 
 }

@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMau;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuknghiemcl.PhieuKnghiemCluongHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
@@ -63,6 +64,9 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
 
     @Autowired
     private HhBienBanLayMauRepository hhBienBanLayMauRepository;
+
+    @Autowired
+    HhPhieuKngiemCluongRepository hhPhieuKngiemCluongRepository;
 
     public Page<HhQdGiaoNvNhapHang> searchPage(SearchHhQdGiaoNvNhReq objReq) throws Exception{
         UserInfo userInfo= SecurityContextService.getUser();
@@ -136,6 +140,16 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
 //                    item.setBbNhapDayKho(nhBbNhapDayKhoStream);
                 });
                 dtl.setListBienBanLayMau(bbLayMau);
+                // Set phiếu kiểm nghiệm chất lượng
+                List<HhPhieuKngiemCluong> phieuKnghiemCl = hhPhieuKngiemCluongRepository.findBySoQdGiaoNvNhAndMaDvi(f.getSoQd(), f.getMaDvi());
+                phieuKnghiemCl.forEach( item -> {
+                    item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+                    item.setTenDiemKho(StringUtils.isEmpty(item.getMaDiemKho())?null:hashMapDmdv.get(item.getMaDiemKho()));
+                    item.setTenNhaKho(StringUtils.isEmpty(item.getMaNhaKho())?null:hashMapDmdv.get(item.getMaNhaKho()));
+                    item.setTenNganKho(StringUtils.isEmpty(item.getMaNganKho())?null:hashMapDmdv.get(item.getMaNganKho()));
+                    item.setTenLoKho(StringUtils.isEmpty(item.getMaLoKho())?null:hashMapDmdv.get(item.getMaLoKho()));
+                });
+                dtl.setListPhieuKiemNghiemCl(phieuKnghiemCl);
             }
 
             f.setHhQdGiaoNvNhangDtlList(hhQdGiaoNvNhangDtl);
