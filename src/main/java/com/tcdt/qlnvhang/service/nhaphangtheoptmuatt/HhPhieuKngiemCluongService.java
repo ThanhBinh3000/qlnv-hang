@@ -73,13 +73,13 @@ public class HhPhieuKngiemCluongService extends BaseServiceImpl {
         UserInfo userInfo= SecurityContextService.getUser();
         if (userInfo == null)
             throw new Exception("Bad request.");
-        Optional<HhPhieuKngiemCluong> optional = hhPhieuKngiemCluongRepository.findAllBySoPhieu(objReq.getSoPhieu());
+        Optional<HhPhieuKngiemCluong> optional = hhPhieuKngiemCluongRepository.findAllBySoBbLayMau(objReq.getSoBbLayMau());
         if(optional.isPresent()){
             throw new Exception("số phiếu đã tồn tại");
         }
         HhPhieuKngiemCluong data = new ModelMapper().map(objReq,HhPhieuKngiemCluong.class);
         data.setNgayTao(new Date());
-        data.setNguoiTao(userInfo.getUsername());
+        data.setNguoiTaoId(userInfo.getId());
         data.setTrangThai(Contains.DUTHAO);
          data.setMaDvi(userInfo.getDvql());
         HhPhieuKngiemCluong created=hhPhieuKngiemCluongRepository.save(data);
@@ -100,7 +100,7 @@ public class HhPhieuKngiemCluongService extends BaseServiceImpl {
         if (userInfo == null)
             throw new Exception("Bad request.");
         Optional<HhPhieuKngiemCluong> optional = hhPhieuKngiemCluongRepository.findById(objReq.getId());
-        Optional<HhPhieuKngiemCluong> soPhieu = hhPhieuKngiemCluongRepository.findAllBySoPhieu(objReq.getSoPhieu());
+        Optional<HhPhieuKngiemCluong> soPhieu = hhPhieuKngiemCluongRepository.findAllBySoBbLayMau(objReq.getSoBbLayMau());
         if(soPhieu.isPresent()){
             if (!soPhieu.get().getId().equals(objReq.getId())){
                 throw new Exception("số phiếu đã tồn tại");
@@ -110,7 +110,7 @@ public class HhPhieuKngiemCluongService extends BaseServiceImpl {
         HhPhieuKngiemCluong dataMap = new ModelMapper().map(objReq,HhPhieuKngiemCluong.class);
         updateObjectToObject(data,dataMap);
         data.setNgaySua(new Date());
-        data.setNguoiSua(userInfo.getUsername());
+        data.setNguoiSuaId(userInfo.getId());
 
         HhPhieuKngiemCluong created=hhPhieuKngiemCluongRepository.save(data);
         List<HhPhieuKnCluongDtl> listDtl=hhPhieuKnCluongDtlRepository.findAllByIdHdr(objReq.getId());
@@ -188,7 +188,7 @@ public class HhPhieuKngiemCluongService extends BaseServiceImpl {
         List<HhPhieuKngiemCluong> data=page.getContent();
 
         String title="Danh sách phiếu kiểm nghiệm lượng ";
-        String[] rowsName=new String[]{"STT","Số phiếu","Số quyết định nhập","Ngày kiểm nghiệm","Số biên bản lấy mẫu","Ngày lấy mẫu","Điểm kho","Nhà kho","Ngăn Kho","Lô kho","Trạng thái"};
+        String[] rowsName=new String[]{"STT","Số quyết định nhập","Ngày kiểm nghiệm","Điểm kho","Nhà kho","Ngăn kho","Lô kho","Số BB LM/BGM","Ngày lấy mẫu","Số BB nhập đầy kho","Ngày nhập đầy kho","Trạng thái"};
         String fileName="danh-sach-phieu-kiem-nghiem-chat-luong.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs=null;
@@ -196,16 +196,17 @@ public class HhPhieuKngiemCluongService extends BaseServiceImpl {
             HhPhieuKngiemCluong dx=data.get(i);
             objs=new Object[rowsName.length];
             objs[0]=i;
-            objs[1]=dx.getSoPhieu();
-            objs[2]=dx.getSoQdNh();
-            objs[3]=dx.getNgayKnMau();
-            objs[4]=dx.getSoBienBan();
-            objs[5]=dx.getNgayLayMau();
-            objs[6]=dx.getTenDiemKho();
-            objs[7]=dx.getTenNhaKho();
-            objs[8]=dx.getTenNganKho();
-            objs[9]=dx.getTenLoKho();
-            objs[10]=dx.getTenTrangThai();
+            objs[1]=dx.getSoQdGiaoNvNh();
+            objs[2]=dx.getNgayKnghiem();
+            objs[3]=dx.getTenDiemKho();
+            objs[4]=dx.getTenNhaKho();
+            objs[5]=dx.getTenNganKho();
+            objs[6]=dx.getTenLoKho();
+            objs[7]=dx.getSoBbLayMau();
+            objs[8]=dx.getNgayLayMau();
+            objs[9]=dx.getSoBbNhapDayKho();
+            objs[10]=dx.getNgayNhapDayKho();
+            objs[11]=dx.getTenTrangThai();
             dataList.add(objs);
         }
         ExportExcel ex =new ExportExcel(title,fileName,rowsName,dataList,response);
@@ -228,17 +229,17 @@ public class HhPhieuKngiemCluongService extends BaseServiceImpl {
             case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
             case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
             case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
-                optional.get().setNguoiGduyet(userInfo.getUsername());
-                optional.get().setNgayGduyet(getDateTimeNow());
+                optional.get().setNguoiGuiDuyetId(userInfo.getId());
+                optional.get().setNgayGuiDuyet(new Date());
                 break;
             case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
             case Contains.TUCHOI_LDC + Contains.TUCHOI_LDC:
-                optional.get().setNguoiPduyet(getUser().getUsername());
+                optional.get().setNguoiPduyetId(userInfo.getId());
                 optional.get().setNgayPduyet(getDateTimeNow());
-                optional.get().setLdoTuChoi(statusReq.getLyDo());
+                optional.get().setLyDoTuChoi(statusReq.getLyDo());
                 break;
             case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
-                optional.get().setNguoiPduyet(getUser().getUsername());
+                optional.get().setNguoiPduyetId(userInfo.getId());
                 optional.get().setNgayPduyet(getDateTimeNow());
                 break;
             default:

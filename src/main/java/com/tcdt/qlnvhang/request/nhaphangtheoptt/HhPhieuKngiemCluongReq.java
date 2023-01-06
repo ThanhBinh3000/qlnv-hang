@@ -5,6 +5,8 @@ import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
 
+import javax.persistence.Transient;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,29 +14,34 @@ import java.util.List;
 @Data
 public class HhPhieuKngiemCluongReq {
     private Long id;
-    private String soPhieu;
     private Integer namKh;
-    private Long idBienBan;
-    private String soBienBan;
-    private Long idQdNh;
-    private String soQdNh;
     private String maDvi;
     private String maQhns;
+    @Transient
+    private String tenDvi;
+    private String soBbLayMau;
+    private String soQdGiaoNvNh;
+    private String soBbNhapDayKho;
+    private String soPhieuKiemNghiemCl;
     private String maDiemKho;
     private String maNhaKho;
     private String maNganKho;
     private String maLoKho;
-    private String soLuongBq;
+    private Long idDdiemGiaoNvNh;
+    private Long idQdGiaoNvNh;
+    private String loaiVthh;
+    private String cloaiVthh;
+    private String moTaHangHoa;
     private String hthucBquan;
-    private String thuKho;
+    private BigDecimal soLuongNhapDayKho;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayNhapDay;
+    private Date ngayNhapDayKho;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayLayMau;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayKnMau;
+    private Date ngayKnghiem;
+    private String ketLuan;
     private String ketQuaDanhGia;
-    private String trangThai;
 
     List<HhPhieuKnCluongDtlReq> phieuKnCluongDtlReqList = new ArrayList<>();
 }
