@@ -19,7 +19,6 @@ import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.dexuat.
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.dexuat.XhDxKhBanDauGiaPhanLo;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -52,17 +51,7 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
                 Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),
                 req.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<XhDxKhBanDauGia> data = xhDxKhBanDauGiaRepository.searchPage(
-                req.getNamKh(),
-                req.getSoDxuat(),
-                Contains.convertDateToString(req.getNgayTaoTu()),
-                Contains.convertDateToString(req.getNgayTaoDen()),
-                Contains.convertDateToString(req.getNgayDuyetTu()),
-                Contains.convertDateToString(req.getNgayDuyetDen()),
-                req.getTrichYeu(),
-                req.getLoaiVthh(),
-                req.getTrangThai(),
-                req.getTrangThaiTh(),
-                req.getMaDvi(),
+                req,
                 pageable);
         Map<String,String> hashMapDmhh = getListDanhMucHangHoa();
         Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
