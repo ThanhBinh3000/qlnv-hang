@@ -189,7 +189,7 @@ public class DeXuatCuuTroService extends BaseServiceImpl {
   }
 
   @Transactional(rollbackFor = Exception.class)
-  public XhDxCuuTroHdr update(CustomUserDetails currentUser, XhDxCuuTroHdrSearchReq req) throws Exception {
+  public XhDxCuuTroHdr  update(CustomUserDetails currentUser, XhDxCuuTroHdrSearchReq req) throws Exception {
     if (DataUtils.isNullObject(req.getId()))
       throw new Exception("Tham số không hợp lệ.");
     XhDxCuuTroHdr currentRow = deXuatCuuTroRepository.findById(req.getId()).orElse(null);
