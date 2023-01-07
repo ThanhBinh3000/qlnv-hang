@@ -77,7 +77,7 @@ public class HhBienBanLayMauService extends BaseServiceImpl {
         return data;
     }
 
-    @Transactional
+    @Transient
     public HhBienBanLayMau save(HhBienBanLayMauReq objReq) throws Exception{
         UserInfo userInfo= SecurityContextService.getUser();
         if (userInfo == null)

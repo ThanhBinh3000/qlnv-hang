@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface HopDongMttHdrRepository extends JpaRepository<HopDongMttHdr, Long> {
   @Query("SELECT c FROM HopDongMttHdr c WHERE 1=1 " +
@@ -32,4 +33,8 @@ public interface HopDongMttHdrRepository extends JpaRepository<HopDongMttHdr, Lo
   List<HopDongMttHdr> findByIdIn(List<Long> ids);
 
   List<HopDongMttHdr> findByIdHd(Long idHdr);
+  Optional<HopDongMttHdr> findBySoHd(String soHd);
+
+  List<HopDongMttHdr> findAllByIdIn(List<Long> listId);
+
 }

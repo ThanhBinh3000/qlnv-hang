@@ -85,6 +85,7 @@ public class HopDongMttHdr extends BaseEntity implements Serializable {
   private BigDecimal thanhTien;
   private String thanhTienBangChu;
   private String ghiChu;
+  private String nguoiKy;
   @Transient
   private List<FileDinhKem> fileDinhKem = new ArrayList<>();
   @Transient
@@ -93,6 +94,10 @@ public class HopDongMttHdr extends BaseEntity implements Serializable {
   private String trangThai;
   @Transient
   private String tenTrangThai;
+
+  private String trangThaiNh;
+  @Transient
+  private String tenTrangThaiNh;
 
   @Transient
   private List<DiaDiemGiaoNhanMtt> diaDiemGiaoNhan = new ArrayList<>();
