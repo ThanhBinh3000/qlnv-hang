@@ -17,12 +17,15 @@ public interface HopDongMttHdrRepository extends JpaRepository<HopDongMttHdr, Lo
       "AND (:#{#param.maDvi} IS NULL OR c.maDvi = :#{#param.maDvi}) " +
       "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
       "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
-
+      "AND (:#{#param.soHd} IS NULL OR  LOWER(c.soHd) LIKE CONCAT('%',LOWER(:#{#param.soHd}),'%')) " +
+      "AND (:#{#param.tenHd} IS NULL OR  LOWER(c.tenHd) LIKE CONCAT('%',LOWER(:#{#param.tenHd}),'%')) " +
+      "AND ((:#{#param.ngayKyTu}  IS NULL OR c.ngayKy >= :#{#param.ngayKyTu})" +
+      "AND (:#{#param.ngayKyDen}  IS NULL OR c.ngayKy <= :#{#param.ngayKyDen}) ) " +
       "AND (:#{#param.soQdPdKh}  IS NULL OR LOWER(c.soQdPdKh) LIKE CONCAT('%',LOWER(:#{#param.soQdPdKh}),'%')) " +
       "AND (:#{#param.soQdPdKq}  IS NULL OR LOWER(c.soQdPdKq) LIKE CONCAT('%',LOWER(:#{#param.soQdPdKq}),'%')) " +
       "AND (:#{#param.loaiVthh}  IS NULL OR LOWER(c.loaiVthh) =:#{#param.loaiVthh}) " +
       "AND (:#{#param.cloaiVthh}  IS NULL OR LOWER(c.cloaiVthh) =:#{#param.cloaiVthh}) " +
-      "AND (:#{#param.listTrangThai == null} = true OR c.trangThai in :#{#param.listTrangThai}) " +
+      "AND (:#{#param.trangThai == null} = true OR c.trangThai in :#{#param.trangThai}) " +
 //      "AND ((:#{#param.ngayQdPdKqBdg}  IS NULL OR c.ngayQdPdKqBdg >= :#{#param.ngayQdPdKqBdg}) AND (:#{#param.ngayQdPdKqBdg}  IS NULL OR c.ngayQdPdKqBdg <= :#{#param.ngayQdPdKqBdg}) ) " +
       "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
