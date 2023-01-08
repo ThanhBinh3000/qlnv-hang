@@ -31,6 +31,9 @@ public class XhQdGnvCuuTroDtl extends BaseEntity implements Serializable {
   private String tenCloaiVthh;
   private BigDecimal tongTichLuong;
   private BigDecimal tonKho;
+  private BigDecimal soLuongNoiDung;
+  private BigDecimal soLuongGiao;
+  private BigDecimal soLuongXuat;
   private BigDecimal soLuong;
   private String donViTinh;
   private String trangThai;
