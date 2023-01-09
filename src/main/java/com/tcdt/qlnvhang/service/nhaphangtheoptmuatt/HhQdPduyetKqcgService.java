@@ -166,9 +166,10 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
         if (!qOptional.isPresent()){
             throw new UnsupportedOperationException("Không tồn tại bản ghi");
         }
-
+        Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
         Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
-
+        qOptional.get().setTenLoaiVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh())?null:hashMapDmHh.get(qOptional.get().getLoaiVthh()));
+        qOptional.get().setTenCloaiVthh(StringUtils.isEmpty(qOptional.get().getCloaiVthh())?null:hashMapDmHh.get(qOptional.get().getCloaiVthh()));
         qOptional.get().setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qOptional.get().getTrangThai()));
         qOptional.get().setHhQdPheduyetKhMttDx(Objects.isNull(qOptional.get().getIdQdPdKhDtl()) ? null : qdKhMttService.detailDtl(qOptional.get().getIdQdPdKhDtl()));
         qOptional.get().setTenDvi(listDanhMucDvi.get(qOptional.get().getMaDvi()));
