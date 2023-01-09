@@ -1,13 +1,13 @@
 package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt.hopdong.hopdongphuluc;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.hopdong.hopdongphuluc.DiaDiemGiaoNhanMttRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.hopdong.hopdongphuluc.HopDongMttHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhBbanLayMau;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.hopdong.hopdongphuluc.DiaDiemGiaoNhanMttReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.hopdong.hopdongphuluc.HopDongMttHdrReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
@@ -15,7 +15,6 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBienBanLayMau;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc.DiaDiemGiaoNhanMtt;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc.HopDongMttHdr;
 import com.tcdt.qlnvhang.util.Contains;
@@ -63,6 +62,8 @@ public class HopDongMttHdrService extends BaseServiceImpl {
       if (mapVthh.get((s.getCloaiVthh())) != null) {
         s.setTenCloaiVthh(mapVthh.get(s.getCloaiVthh()));
       }
+      s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
+      s.setTenTrangThaiNh(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThaiNh()));
     });
     return search;
   }
@@ -131,7 +132,14 @@ public class HopDongMttHdrService extends BaseServiceImpl {
     }
     List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(),data.getId(),HopDongMttHdr.TABLE_NAME + "_CAN_CU");
     created.setCanCu(canCu);
-
+    List<HopDongMttHdr> listPhuLuc = hopDongHdrRepository.findByIdHd(objReq.getId());
+    hopDongHdrRepository.deleteAll(listPhuLuc);
+    for (HopDongMttHdrReq phuLucReq :objReq.getPhuLuc()){
+      HopDongMttHdr phuLuc =ObjectMapperUtils.map(phuLucReq,HopDongMttHdr.class);
+      phuLuc.setId(null);
+      phuLuc.setIdHd(created.getId());
+      hopDongHdrRepository.save(phuLuc);
+    }
     List<DiaDiemGiaoNhanMtt> DiaDiemGiaoNhanMtts = diaDiemGiaoNhanRepository.findAllByIdHdr(objReq.getId());
     diaDiemGiaoNhanRepository.deleteAll(DiaDiemGiaoNhanMtts);
     for (DiaDiemGiaoNhanMttReq listDtl : objReq.getDiaDiemGiaoNhan()){
@@ -160,6 +168,7 @@ public class HopDongMttHdrService extends BaseServiceImpl {
       data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
       data.setTenLoaiVthh(mapVthh.get(data.getLoaiVthh()));
       data.setTenCloaiVthh(mapVthh.get(data.getCloaiVthh()));
+      data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
     });
     return allById;
   }
@@ -176,6 +185,8 @@ public class HopDongMttHdrService extends BaseServiceImpl {
       throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối");
     }
     HopDongMttHdr data = optional.get();
+    List<HopDongMttHdr> listPhuLuc = hopDongHdrRepository.findByIdHd(idSearchReq.getId());
+    hopDongHdrRepository.deleteAll(listPhuLuc);
     List<DiaDiemGiaoNhanMtt> listDtl=diaDiemGiaoNhanRepository.findAllByIdHdr(data.getId());
     diaDiemGiaoNhanRepository.deleteAll(listDtl);
     fileDinhKemService.delete(data.getId(),  Lists.newArrayList(HopDongMttHdr.TABLE_NAME + "_DINH_KEM"));
@@ -197,6 +208,8 @@ public class HopDongMttHdrService extends BaseServiceImpl {
       }
     }
     List<Long> listId=list.stream().map(HopDongMttHdr::getId).collect(Collectors.toList());
+    List<HopDongMttHdr> listPhuLuc = hopDongHdrRepository.findByIdHdIn(listId);
+    hopDongHdrRepository.deleteAll(listPhuLuc);
     List<DiaDiemGiaoNhanMtt> listDtl=diaDiemGiaoNhanRepository.findAllByIdHdrIn(listId);
     diaDiemGiaoNhanRepository.deleteAll(listDtl);
     fileDinhKemService.deleteMultiple(idSearchReq.getIdList(),  Lists.newArrayList(HopDongMttHdr.TABLE_NAME + "_DINH_KEM"));
