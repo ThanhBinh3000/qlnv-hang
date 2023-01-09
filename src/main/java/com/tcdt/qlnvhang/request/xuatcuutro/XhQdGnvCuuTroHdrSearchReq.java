@@ -15,6 +15,7 @@ import java.util.List;
 @Data
 public class XhQdGnvCuuTroHdrSearchReq extends BaseRequest {
   private Long id;
+  private Long idQdPd;
   private String loaiNhapXuat;
   private String soDxuat;
   private String soQd;
@@ -27,6 +28,7 @@ public class XhQdGnvCuuTroHdrSearchReq extends BaseRequest {
   private String cloaiVthh;
   private String tenVthh;
   private Long tongSoLuong;
+  private Long soLuong;
   private String trichYeu;
   private String trangThai;
   private List<String> listTrangThai;
