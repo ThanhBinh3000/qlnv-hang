@@ -2,8 +2,6 @@ package com.tcdt.qlnvhang.request.nhaphangtheoptt.hopdong.hopdongphuluc;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc.DiaDiemGiaoNhanMtt;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc.HopDongMttHdr;
 import lombok.Getter;
 import lombok.Setter;
 

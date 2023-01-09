@@ -125,7 +125,8 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         }
         QuyChuanQuocGiaHdr data= optional.get();
         Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
-        data.setTenDvi(StringUtils.isEmpty(data.getTenDvi())?null:hashMapDmHh.get(data.getMaDvi()));
+        Map<String,String> hashMapDvi = getListDanhMucDvi(null,null,"01");
+        data.setTenDvi(StringUtils.isEmpty(data.getMaDvi())?null:hashMapDvi.get(data.getMaDvi()));
         data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh())?null:hashMapDmHh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh())?null:hashMapDmHh.get(data.getCloaiVthh()));
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));

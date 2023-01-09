@@ -36,6 +36,9 @@ public interface HopDongMttHdrRepository extends JpaRepository<HopDongMttHdr, Lo
   List<HopDongMttHdr> findByIdIn(List<Long> ids);
 
   List<HopDongMttHdr> findByIdHd(Long idHdr);
+
+  List<HopDongMttHdr> findByIdHdIn(List<Long> idHdr);
+
   Optional<HopDongMttHdr> findBySoHd(String soHd);
 
   List<HopDongMttHdr> findAllByIdIn(List<Long> listId);
