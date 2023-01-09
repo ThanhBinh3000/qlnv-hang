@@ -341,7 +341,7 @@ public class QuyetDinhGnvCuuTroService extends BaseServiceImpl {
       throw new Exception("Quy trình phê duyệt không hợp lệ.");
     }
     currentRow.get().setTrangThai(trangThai);
-    if (trangThai.equals(TrangThaiAllEnum.TU_CHOI_LDTC.getId())) {
+    if (trangThai.equals(TrangThaiAllEnum.TU_CHOI_LDC.getId())) {
       currentRow.get().setLyDoTuChoi(DataUtils.safeToString(req.getLyDo()));
     }
     xhQdGnvCuuTroHdrRepository.save(currentRow.get());
