@@ -465,6 +465,12 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
         dtl.setFileDinhKemMuaLe(fileDinhKemService.search(dtl.getId(), Collections.singleton(HhQdPheduyetKhMttDx.TABLE_NAME)));
         dtl.setFileDinhKemUyQuyen(fileDinhKemService.search(dtl.getId(), Collections.singleton(HhQdPheduyetKhMttDx.TABLE_NAME)));
         dtl.setTenTrangThaiTkhai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThaiTkhai()));
+
+        List<HhQdPheduyetKhMttSLDD> listSlDd= hhQdPheduyetKhMttSLDDRepository.findByIdQdDtl(dtl.getId());
+        for (HhQdPheduyetKhMttSLDD sldd : listSlDd){
+            sldd.setTenDvi(StringUtils.isEmpty(sldd.getMaDvi())?null:hashMapDvi.get(sldd.getMaDvi()));
+        }
+        dtl.setChildren(listSlDd);
         Optional<HhDxuatKhMttHdr> bySoDxuat;
         if (!StringUtils.isEmpty(dtl.getSoDxuat())){
             bySoDxuat = hhDxuatKhMttRepository.findBySoDxuat(dtl.getSoDxuat());
