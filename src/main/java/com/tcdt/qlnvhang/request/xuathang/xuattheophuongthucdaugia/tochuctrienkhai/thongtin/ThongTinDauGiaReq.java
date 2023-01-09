@@ -106,6 +106,10 @@ public class ThongTinDauGiaReq extends BaseRequest {
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
   private Date ngayKyBban;
 
+  private String ketQuaSl;
+
+  private String trangThai;
+
   // Transient
 
   private List<ThongTinDauGiaDtlReq> children = new ArrayList<>();
