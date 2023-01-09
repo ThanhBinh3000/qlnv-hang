@@ -459,6 +459,8 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
             List<FileDinhKem> fileDinhKems = fileDinhKemService.search(chaoGia.getId(), Arrays.asList(HhChiTietTTinChaoGia.TABLE_NAME));
             chaoGia.setFileDinhKems(fileDinhKems.get(0));
         }
+        dtl.setTenLoaiVthh(StringUtils.isEmpty(dtl.getLoaiVthh())?null:hashMapDmHh.get(dtl.getLoaiVthh()));
+        dtl.setTenCloaiVthh(StringUtils.isEmpty(dtl.getCloaiVthh())?null:hashMapDmHh.get(dtl.getCloaiVthh()));
         dtl.setHhChiTietTTinChaoGiaList(byIdQdDtl);
         dtl.setFileDinhKemMuaLe(fileDinhKemService.search(dtl.getId(), Collections.singleton(HhQdPheduyetKhMttDx.TABLE_NAME)));
         dtl.setFileDinhKemUyQuyen(fileDinhKemService.search(dtl.getId(), Collections.singleton(HhQdPheduyetKhMttDx.TABLE_NAME)));
