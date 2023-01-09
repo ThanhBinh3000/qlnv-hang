@@ -34,10 +34,29 @@ public enum TrangThaiAllEnum {
   DA_KY("30", "Đã ký"),
   CHUA_TAO_TO_TRINH("31", "Chưa tạo tờ trình"),
   DA_TAO_TO_TRINH("32", "Đã tạo tờ trình"),
-//   CHUA_CAP_NHAT("32", "Đã tạo tờ trình");
+  //   CHUA_CAP_NHAT("32", "Đã tạo tờ trình");
   CHUA_CAP_NHAT("33", "Chưa cập nhật"),
   DANG_CAP_NHAT("34", "Đang cập nhật"),
-  HOAN_THANH_CAP_NHAT("35", "Hoàn thành cập nhật");
+  HOAN_THANH_CAP_NHAT("35", "Hoàn thành cập nhật"),
+  HUY_THAU("36", "Hủy thầu"),
+  TRUNG_THAU("37", "Trúng thầu"),
+  CHO_DUYET_TVQT("38", "Chờ duyệt Phòng tài vụ quản trị"),
+  TU_CHOI_PTTVQT("39", "Từ chối Phòng tài vụ quản trị"),
+  THANH_CONG("40", "Thành công"),
+  THAT_BAI("41", "Thất bại"),
+  TRUOT_THAU("42", "Trượt thầu"),
+  CHUA_THUC_HIEN("43", "Chưa thực hiện"),
+  DANG_THUC_HIEN("44", "Đang thực hiện"),
+  DA_HOAN_THANH("45", "Đã hoàn thành"),
+  DA_NGHIEM_THU("46", "Đã nghiệm thu"),
+  CHO_DUYET_TBP_KTBQ("47", "Chờ duyệt Phòng kỹ thuật bảo quản"),
+  TU_CHOI_TBP_KTBQ("48", "Từ chối Phòng kỹ thuật bảo quản"),
+  CHO_DUYET_BTC("49", "Chờ duyệt Bộ tài chính"),
+  TU_CHOI_BTC("50", "Từ chối Bộ tài chính"),
+  DA_DUYET_BTC("51", "Đã duyệt Bộ tài chính"),
+  DA_TAO_CBV("52", "Đã tạo cán bộ Vụ"),
+  DA_DUYET_CBV("53", "Đã duyệt cán bộ Vụ"),
+  TU_CHOI_CBV("54", "Từ chối cán bộ Vụ");
 
   private final String id;
   private final String ten;

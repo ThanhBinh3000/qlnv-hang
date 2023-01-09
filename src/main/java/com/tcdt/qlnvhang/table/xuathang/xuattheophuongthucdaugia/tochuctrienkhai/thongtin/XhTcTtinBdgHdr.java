@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
+import com.tcdt.qlnvhang.util.Contains;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,8 +21,8 @@ public class XhTcTtinBdgHdr extends TrangThaiBaseEntity implements Serializable 
   public static final String TABLE_NAME = "XH_TC_TTIN_BDG_HDR";
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_TC_TTIN_BDG_HDR_SEQ")
-  @SequenceGenerator(sequenceName = "XH_TC_TTIN_BDG_HDR_SEQ", allocationSize = 1, name = "XH_TC_TTIN_BDG_HDR_SEQ")
+//  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_TC_TTIN_BDG_HDR_SEQ")
+//  @SequenceGenerator(sequenceName = "XH_TC_TTIN_BDG_HDR_SEQ", allocationSize = 1, name = "XH_TC_TTIN_BDG_HDR_SEQ")
   private Long id;
 
   private String soQdPd;
@@ -47,10 +49,10 @@ public class XhTcTtinBdgHdr extends TrangThaiBaseEntity implements Serializable 
 
   private String hthucTchuc;
 
-  @Column(columnDefinition = "Date")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
   private Date tgianDkyTu;
 
-  @Column(columnDefinition = "Date")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
   private Date tgianDkyDen;
 
   private String ghiChuTgianDky;
@@ -63,20 +65,20 @@ public class XhTcTtinBdgHdr extends TrangThaiBaseEntity implements Serializable 
 
   private String buocGia;
 
-  @Column(columnDefinition = "Date")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
   private Date tgianXemTu;
 
-  @Column(columnDefinition = "Date")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
   private Date tgianXemDen;
 
   private String ghiChuTgianXem;
 
   private String diaDiemXem;
 
-  @Column(columnDefinition = "Date")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
   private Date tgianNopTienTu;
 
-  @Column(columnDefinition = "Date")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
   private Date tgianNopTienDen;
 
   private String ghiChuTgianNopTien;
@@ -91,10 +93,10 @@ public class XhTcTtinBdgHdr extends TrangThaiBaseEntity implements Serializable 
 
   private String chiNhanhNganHang;
 
-  @Column(columnDefinition = "Date")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
   private Date tgianDauGiaTu;
 
-  @Column(columnDefinition = "Date")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
   private Date tgianDauGiaDen;
 
   private String diaDiemDauGia;
@@ -111,16 +113,19 @@ public class XhTcTtinBdgHdr extends TrangThaiBaseEntity implements Serializable 
 
   private String trichYeuBban;
 
-  @Column(columnDefinition = "Date")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
   private Date ngayKyBban;
 
   private Integer lanDauGia;
+
+  private String ketQuaSl;
+
+  private String ghiChu;
 
   // Transient
   @Transient
   private List<XhTcTtinBdgDtl> children = new ArrayList<>();
   @Transient
   List<XhTcTtinBdgNlq> listNguoiTgia = new ArrayList<>();
-
 
 }

@@ -147,7 +147,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                 });
                 dtl.setListBienBanLayMau(bbLayMau);
                 // Set phiếu kiểm nghiệm chất lượng
-                List<HhPhieuKngiemCluong> phieuKnghiemCl = hhPhieuKngiemCluongRepository.findBySoQdGiaoNvNhAndMaDvi(f.getSoQd(), f.getMaDvi());
+                List<HhPhieuKngiemCluong> phieuKnghiemCl = hhPhieuKngiemCluongRepository.findBySoQdGiaoNvNhAndMaDvi(f.getSoQd(), dtl.getMaDvi());
                 phieuKnghiemCl.forEach( item -> {
                     item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
                     item.setTenDiemKho(StringUtils.isEmpty(item.getMaDiemKho())?null:hashMapDmdv.get(item.getMaDiemKho()));

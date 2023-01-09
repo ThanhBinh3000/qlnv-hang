@@ -5,6 +5,8 @@ import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.tochuctrie
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgNlqRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgPloRepository;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.ThongTinDauGiaDtlReq;
+import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.ThongTinDauGiaNtgReq;
+import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.ThongTinDauGiaPloReq;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.ThongTinDauGiaReq;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgDtl;
@@ -20,6 +22,7 @@ import org.springframework.util.ObjectUtils;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -62,27 +65,36 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
 
         xhTcTtinBdgHdrRepository.save(data);
 
-        this.saveDetail(req, data.getId());
+        this.saveDetail(req, data.getId(),false);
 
         return data;
     }
 
-    void saveDetail(ThongTinDauGiaReq req, Long id) {
-        xhTcTtinBdgNlqRepository.deleteByIdTtinHdr(id);
-        for (XhTcTtinBdgNlq nlqReq : req.getListNguoiLienQuan()) {
-            nlqReq.setId(null);
-            nlqReq.setIdTtinHdr(id);
-            xhTcTtinBdgNlqRepository.save(nlqReq);
+    void saveDetail(ThongTinDauGiaReq req, Long id , boolean isUpdate) {
+        if(isUpdate){
+            xhTcTtinBdgNlqRepository.deleteByIdTtinHdr(id);
         }
-
-        xhTcTtinBdgDtlRepository.deleteByIdTtinHdr(id);
+        for (ThongTinDauGiaNtgReq nlqReq : req.getListNguoiTgia()) {
+            XhTcTtinBdgNlq nlq = new XhTcTtinBdgNlq();
+            BeanUtils.copyProperties(nlqReq,nlq,"id");
+            nlq.setId(null);
+            nlq.setIdTtinHdr(id);
+            xhTcTtinBdgNlqRepository.save(nlq);
+        }
+        if(isUpdate){
+            xhTcTtinBdgDtlRepository.deleteByIdTtinHdr(id);
+        }
         for (ThongTinDauGiaDtlReq dtlReq : req.getChildren()) {
             XhTcTtinBdgDtl dtl = new XhTcTtinBdgDtl();
             BeanUtils.copyProperties(dtlReq, dtl, "id");
             dtl.setIdTtinHdr(id);
             xhTcTtinBdgDtlRepository.save(dtl);
-            xhTcTtinBdgPloRepository.deleteAllByIdTtinDtl(dtl.getId());
-            for (XhTcTtinBdgPlo ploDtl : dtlReq.getChildren()) {
+            if(isUpdate){
+                xhTcTtinBdgPloRepository.deleteAllByIdTtinDtl(dtlReq.getId());
+            }
+            for (ThongTinDauGiaPloReq ploReq : dtlReq.getChildren()) {
+                XhTcTtinBdgPlo ploDtl = new XhTcTtinBdgPlo();
+                BeanUtils.copyProperties(ploReq,ploDtl,"id");
                 ploDtl.setIdTtinDtl(dtl.getId());
                 ploDtl.setId(null);
                 xhTcTtinBdgPloRepository.save(ploDtl);
@@ -100,7 +112,7 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
         BeanUtils.copyProperties(req, data, "id");
         data.setNgaySua(new Date());
         data.setNguoiSuaId(getUser().getId());
-        this.saveDetail(req, data.getId());
+        this.saveDetail(req, data.getId(),true);
         return data;
     }
 
@@ -116,10 +128,19 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
         XhTcTtinBdgHdr data = byId.get();
 
         data.setListNguoiTgia(xhTcTtinBdgNlqRepository.findByIdTtinHdr(id));
+        Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
 
         List<XhTcTtinBdgDtl> byIdTtinHdr = xhTcTtinBdgDtlRepository.findByIdTtinHdr(id);
         byIdTtinHdr.forEach(item -> {
-            item.setChildren(xhTcTtinBdgPloRepository.findByIdTtinDtl(item.getId()));
+            item.setTenDvi(listDanhMucDvi.get(item.getMaDvi()));
+            List<XhTcTtinBdgPlo> byIdTtinDtl = xhTcTtinBdgPloRepository.findByIdTtinDtl(item.getId());
+            byIdTtinDtl.forEach(x -> {
+                x.setTenDiemKho(listDanhMucDvi.get(x.getMaDiemKho()));
+                x.setTenNhaKho(listDanhMucDvi.get(x.getMaNhaKho()));
+                x.setTenNganKho(listDanhMucDvi.get(x.getMaNganKho()));
+                x.setTenLoKho(listDanhMucDvi.get(x.getMaLoKho()));
+            });
+            item.setChildren(byIdTtinDtl);
         });
         data.setChildren(byIdTtinHdr);
         return data;

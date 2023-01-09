@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.tochuctrienk
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.BaseRequest;
-import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgNlq;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Getter;
 import lombok.Setter;
@@ -107,10 +106,16 @@ public class ThongTinDauGiaReq extends BaseRequest {
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
   private Date ngayKyBban;
 
+  private String ketQuaSl;
+
+  private String trangThai;
+
+  private String ghiChu;
+
   // Transient
 
   private List<ThongTinDauGiaDtlReq> children = new ArrayList<>();
 
-  private List<XhTcTtinBdgNlq> listNguoiLienQuan = new ArrayList<>();
+  private List<ThongTinDauGiaNtgReq> listNguoiTgia = new ArrayList<>();
 
 }

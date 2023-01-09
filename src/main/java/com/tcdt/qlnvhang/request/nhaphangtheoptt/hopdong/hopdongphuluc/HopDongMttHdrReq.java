@@ -1,11 +1,14 @@
 package com.tcdt.qlnvhang.request.nhaphangtheoptt.hopdong.hopdongphuluc;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -65,4 +68,15 @@ public class HopDongMttHdrReq extends BaseRequest {
   private String ghiChu;
   private List<Long> ids;
   private String dvql;
+  private String nguoiKy;
+  private String trangThaiNh;
+  @Transient
+  private LocalDate ngayKyTu;
+  @Transient
+  private LocalDate ngayKyDen;
+
+  private List<FileDinhKemReq> fileDinhKem = new ArrayList<>();
+  private List<FileDinhKemReq> canCu = new ArrayList<>();
+  private List<DiaDiemGiaoNhanMttReq> diaDiemGiaoNhan = new ArrayList<>();
+  private List<HopDongMttHdrReq> phuLuc = new ArrayList<>();
 }

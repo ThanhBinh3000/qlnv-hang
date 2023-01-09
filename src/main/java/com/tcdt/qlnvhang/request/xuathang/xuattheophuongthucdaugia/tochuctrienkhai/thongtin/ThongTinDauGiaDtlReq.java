@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
-import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgPlo;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,5 +21,5 @@ public class ThongTinDauGiaDtlReq extends BaseRequest {
 
   private BigDecimal soLuong;
 
-  private List<XhTcTtinBdgPlo> children = new ArrayList<>();
+  private List<ThongTinDauGiaPloReq> children = new ArrayList<>();
 }
