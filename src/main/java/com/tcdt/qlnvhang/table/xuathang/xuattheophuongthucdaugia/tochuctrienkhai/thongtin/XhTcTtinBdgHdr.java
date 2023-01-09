@@ -120,6 +120,8 @@ public class XhTcTtinBdgHdr extends TrangThaiBaseEntity implements Serializable 
 
   private String ketQuaSl;
 
+  private String ghiChu;
+
   // Transient
   @Transient
   private List<XhTcTtinBdgDtl> children = new ArrayList<>();
