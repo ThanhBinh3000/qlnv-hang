@@ -168,6 +168,7 @@ public class HopDongMttHdrService extends BaseServiceImpl {
       data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
       data.setTenLoaiVthh(mapVthh.get(data.getLoaiVthh()));
       data.setTenCloaiVthh(mapVthh.get(data.getCloaiVthh()));
+      data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
     });
     return allById;
   }
