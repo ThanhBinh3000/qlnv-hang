@@ -27,7 +27,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = PathContains.XUAT_HANG_DTQG + PathContains.DAU_GIA + PathContains.TTIN_DGIA )
 @Slf4j
-@Api(tags = "Xuất hàng - Bán đấu giá - Kế hoạch bán đấu giá - Đề xuất kế hoạch bán đấu giá ")
+@Api(tags = "Xuất hàng - Bán đấu giá - Tổ chức triền khai KH bán đấu giá - Thông tin đấu giá ")
 public class XhTcTtinBdgController extends BaseController {
     @Autowired
     private XhTcTtinBdgHdrService xhTcTtinBdgHdrService;
