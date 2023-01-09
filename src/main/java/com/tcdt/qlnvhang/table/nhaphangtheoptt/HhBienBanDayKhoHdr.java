@@ -1,6 +1,9 @@
 package com.tcdt.qlnvhang.table.nhaphangtheoptt;
+
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -9,21 +12,23 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "HH_PHIEU_NHAP_KHO_HDR")
+@Table(name = "HH_BIEN_BAN_DAY_KHO_HDR")
 @Data
-public class HhPhieuNhapKhoHdr implements Serializable {
+public class HhBienBanDayKhoHdr implements Serializable {
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "HH_PHIEU_NHAP_KHO_HDR";
-
+    public static final String TABLE_NAME = "HH_BIEN_BAN_DAY_KHO_HDR";
     @Id
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_PHIEU_NHAP_KHO_HDR_SEQ")
-//    @SequenceGenerator(sequenceName = "HH_PHIEU_NHAP_KHO_HDR_SEQ", allocationSize = 1, name = "HH_PHIEU_NHAP_KHO_HDR_SEQ")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_BIEN_BAN_DAY_KHO_HDR_SEQ")
+//    @SequenceGenerator(sequenceName = "HH_BIEN_BAN_DAY_KHO_HDR_SEQ", allocationSize = 1, name = "HH_BIEN_BAN_DAY_KHO_HDR_SEQ")
+
 
     private Long id;
 
     private Long idQdGiaoNvNh;
 
-    private Long idDdiemGiaoNvNh;
+    private Long idPhieuNhapKho;
+
+    private Long idBangCanKeHang;
 
     private Integer namKh;
 
@@ -33,14 +38,10 @@ public class HhPhieuNhapKhoHdr implements Serializable {
 
     private String maQhns;
 
-    private String soPhieuNhapKho;
+    private String soBbNhapDayKho;
 
     @Temporal(TemporalType.DATE)
-    private Date ngayNkho;
-
-    private BigDecimal no;
-
-    private BigDecimal co;
+    private Date ngayLapBban;
 
     private String soQuyetDinhNhap;
 
@@ -65,52 +66,35 @@ public class HhPhieuNhapKhoHdr implements Serializable {
     @Transient
     private String tenLoKho;
 
-    private String soPhieuKtraCluong;
-
-    private String loaiVthh;
-    @Transient
-    private String tenLoaiVthh;
-
-    private String cloaiVthh;
-    @Transient
-    private String tenCloaiVthh;
-
-    private String moTaHangHoa;
-
-    private String canBoLapPhieu;
-
-    private String lanhDaoChiCuc;
-
-    private String ktvBaoQuan;
-
-    private String keToanTruong;
-
-    private String hoTenNguoiGiao;
-
-    private String cmt;
-
-    private String donViGiao;
-
-    private String diaChiNguoiGiao;
+    @Temporal(TemporalType.DATE)
+    private Date ngayBdauNhap;
 
     @Temporal(TemporalType.DATE)
-    private Date thoiGianGiaoNhan;
+    private Date ngayKthucNhap;
 
-    private String soBangKeCanHang;
+    private BigDecimal tongSoLuongNhap;
+
+    private BigDecimal donGia;
+
+    private BigDecimal thanhTien;
 
     private String ghiChu;
+
+    private String ktvBanQuan;
+
+    private String keToanTruong;
 
     @Temporal(TemporalType.DATE)
     private Date ngayTao;
     private String nguoiTao;
 
     @Temporal(TemporalType.DATE)
-    private Date ngayPduyet;
-    private String nguoiPduyet;
+    private Date ngaySua;
+    private String nguoiSua;
 
     @Temporal(TemporalType.DATE)
-    private Date ngaySua;
-    private  String nguoiSua;
+    private Date ngayPduyet;
+    private String nguoiPduyet;
 
     @Temporal(TemporalType.DATE)
     private Date ngayGuiDuyet;
@@ -122,21 +106,13 @@ public class HhPhieuNhapKhoHdr implements Serializable {
 
     private String lyDoTuChoi;
 
-    @Temporal(TemporalType.DATE)
-    private Date ngayGdinh;
 
 
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
     @Transient
-    private List<HhPhieuNhapKhoCt> hhPhieuNhapKhoCtList = new ArrayList<>();
-
-    @Transient
-    private HhBcanKeHangHdr hhBcanKeHangHdr;
-
-
-
+    private List<HhBienBanDayKhoDtl> hhBienBanDayKhoDtlList = new ArrayList<>();
 
 
 
