@@ -214,7 +214,7 @@ public class HhPhieuNhapKhoHdrService  extends BaseServiceImpl {
         }
         HhPhieuNhapKhoHdr nhapKhoHdr = optional.get();
         if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(nhapKhoHdr.getTrangThai())){
-            throw new Exception("Không thể xoa khi quyết định đã duyệt");
+            throw new Exception("Không thể xóa khi quyết định đã duyệt");
         }
         List<HhPhieuNhapKhoCt> phieuNhapKhoCtList = hhPhieuNhapKhoCtRepository.findAllByIdHdr(nhapKhoHdr.getId());
         if (!CollectionUtils.isEmpty(phieuNhapKhoCtList)){

@@ -1,5 +1,9 @@
 package com.tcdt.qlnvhang.repository.nhaphangtheoptmtt;
 
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHang;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKho;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkhotamgui.NhPhieuNhapKhoTamGui;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBcanKeHangHdr;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDxuatKhMttHdr;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuNhapKhoHdr;
 import org.springframework.data.domain.Page;
@@ -28,6 +32,8 @@ public interface HhPhieuNhapKhoHdrRepository  extends JpaRepository<HhPhieuNhapK
     List<HhPhieuNhapKhoHdr> findByIdIn(List<Long> id);
     @Transactional
     void deleteAllByIdIn(List<Long> ids);
+
+    List<HhPhieuNhapKhoHdr> findAllByIdDdiemGiaoNvNh(Long idDdiemGiaoNvNh);
 
     List<HhPhieuNhapKhoHdr> findAllByIdQdGiaoNvNh(Long idQdGiaoNvNh);
 }
