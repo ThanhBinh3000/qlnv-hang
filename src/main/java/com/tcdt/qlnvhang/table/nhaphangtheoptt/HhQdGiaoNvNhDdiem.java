@@ -41,5 +41,12 @@ public class HhQdGiaoNvNhDdiem {
 
     @Transient
     List<HhPhieuKiemTraChatLuong> listPhieuKtraCl;
+
+    @Transient
+   List<HhPhieuNhapKhoHdr>  hhPhieuNhapKhoHdr;
+
+    @Transient
+    List<HhBcanKeHangHdr> bcanKeHangHdr;
+
 }
 

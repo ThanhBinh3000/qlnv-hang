@@ -22,6 +22,7 @@ import org.springframework.util.ObjectUtils;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -127,10 +128,19 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
         XhTcTtinBdgHdr data = byId.get();
 
         data.setListNguoiTgia(xhTcTtinBdgNlqRepository.findByIdTtinHdr(id));
+        Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
 
         List<XhTcTtinBdgDtl> byIdTtinHdr = xhTcTtinBdgDtlRepository.findByIdTtinHdr(id);
         byIdTtinHdr.forEach(item -> {
-            item.setChildren(xhTcTtinBdgPloRepository.findByIdTtinDtl(item.getId()));
+            item.setTenDvi(listDanhMucDvi.get(item.getMaDvi()));
+            List<XhTcTtinBdgPlo> byIdTtinDtl = xhTcTtinBdgPloRepository.findByIdTtinDtl(item.getId());
+            byIdTtinDtl.forEach(x -> {
+                x.setTenDiemKho(listDanhMucDvi.get(x.getMaDiemKho()));
+                x.setTenNhaKho(listDanhMucDvi.get(x.getMaNhaKho()));
+                x.setTenNganKho(listDanhMucDvi.get(x.getMaNganKho()));
+                x.setTenLoKho(listDanhMucDvi.get(x.getMaLoKho()));
+            });
+            item.setChildren(byIdTtinDtl);
         });
         data.setChildren(byIdTtinHdr);
         return data;

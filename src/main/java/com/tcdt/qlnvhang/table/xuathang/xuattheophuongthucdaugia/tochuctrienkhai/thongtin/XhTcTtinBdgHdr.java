@@ -118,6 +118,10 @@ public class XhTcTtinBdgHdr extends TrangThaiBaseEntity implements Serializable 
 
   private Integer lanDauGia;
 
+  private String ketQuaSl;
+
+  private String ghiChu;
+
   // Transient
   @Transient
   private List<XhTcTtinBdgDtl> children = new ArrayList<>();
