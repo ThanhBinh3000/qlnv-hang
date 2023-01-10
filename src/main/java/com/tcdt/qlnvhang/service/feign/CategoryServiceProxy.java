@@ -53,7 +53,7 @@ public interface CategoryServiceProxy {
 	public ResponseEntity<String> getDanhMucHangHoa(
 			@RequestHeader(value = "Authorization", required = true) String authorizationHeader);
 
-	@PostMapping("/dm-hang/search-all")
+	@PostMapping("/dm-hang/search-all-ma")
 	@Headers({"Accept: application/json; charset=utf-8", "Content-Type: application/x-www-form-urlencoded"})
 	public ResponseEntity<String> getAllHangByBoNganh(
 			@RequestBody HashMap objReq);
