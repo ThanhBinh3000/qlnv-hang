@@ -16,11 +16,13 @@ import java.util.List;
 public class XhQdGnvCuuTroHdrSearchReq extends BaseRequest {
   private Long id;
   private Long idQdPd;
+  private String soQdPd;
   private String loaiNhapXuat;
   private String soDxuat;
   private String soQd;
   private String maDvi;
   private String maDviDxuat;
+  private LocalDate ngayKy;
   private LocalDate ngayDxuat;
   private LocalDate tuNgayDxuat;
   private LocalDate denNgayDxuat;
