@@ -112,6 +112,10 @@ public class ThongTinDauGiaReq extends BaseRequest {
 
   private String ghiChu;
 
+  private String maDvi;
+
+  private String loaiVthh;
+
   // Transient
 
   private List<ThongTinDauGiaDtlReq> children = new ArrayList<>();

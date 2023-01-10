@@ -19,6 +19,9 @@ import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.tochuctrienkhai
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -48,8 +51,10 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
 
 
     @Override
-    public Page<XhTcTtinBdgHdr> searchPage(ThongTinDauGiaReq req) throws Exception {
-        return null;
+    public Page<XhTcTtinBdgHdr> searchPage(ThongTinDauGiaReq objReq) throws Exception {
+        Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
+        Page<XhTcTtinBdgHdr> page = xhTcTtinBdgHdrRepository.search(objReq,pageable);
+        return page;
     }
 
     @Override
