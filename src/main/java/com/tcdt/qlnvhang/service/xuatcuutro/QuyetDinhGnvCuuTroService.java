@@ -85,6 +85,7 @@ public class QuyetDinhGnvCuuTroService extends BaseServiceImpl {
 //    Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
     Map<String, String> mapVthh = getListDanhMucHangHoa();
+    System.out.println(getAllHangByBoNganh("02"));
     //set label
     search.getContent().forEach(s -> {
       s.setMapDmucDvi(mapDmucDvi);

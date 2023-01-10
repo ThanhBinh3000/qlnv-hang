@@ -124,7 +124,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
             throw new Exception("Bản ghi không tồn tại");
         }
         QuyChuanQuocGiaHdr data= optional.get();
-        Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
+        Map<String,String> hashMapDmHh = getAllHangByBoNganh(data.getMaDvi().substring(0,2));
         Map<String,String> hashMapDvi = getListDanhMucDvi(null,null,"01");
         data.setTenDvi(StringUtils.isEmpty(data.getMaDvi())?null:hashMapDvi.get(data.getMaDvi()));
         data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh())?null:hashMapDmHh.get(data.getLoaiVthh()));

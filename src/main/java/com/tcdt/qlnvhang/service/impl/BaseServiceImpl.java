@@ -420,18 +420,17 @@ public class BaseServiceImpl {
 
 	public Map<String, String> getAllHangByBoNganh(String dviQly) {
 		//bo tai chinh thi chuyen thanh tong cuc du tru
-		if (dviQly.equals("01")) {
-			dviQly = "0101";
-		}
+
 		HashMap req = new HashMap();
-		req.put("dviQly", dviQly);
-		ResponseEntity<String> response = categoryServiceProxy.getAllHangByBoNganh(getAuthorizationToken(request),req);
+		req.put("maDvi", dviQly);
+		ResponseEntity<String> response = categoryServiceProxy.getAllHangByBoNganh(req);
+
 		String str = Request.getAttrFromJson(response.getBody(), "data");
 		HashMap<String, String> data = new HashMap<String, String>();
 		List<Map<String, Object>> retMap = new Gson().fromJson(str, new TypeToken<List<HashMap<String, Object>>>() {
 		}.getType());
 		for (Map<String, Object> map : retMap) {
-			data.put(String.valueOf(map.get("ma")), String.valueOf(map.get("ten")));
+			data.put(String.valueOf(map.get("maHangHoa")), String.valueOf(map.get("tenHangHoa")));
 		}
 		return data;
 	}
