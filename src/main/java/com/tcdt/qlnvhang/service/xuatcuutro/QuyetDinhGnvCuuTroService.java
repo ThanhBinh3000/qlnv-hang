@@ -94,8 +94,7 @@ public class QuyetDinhGnvCuuTroService extends BaseServiceImpl {
   }
 
   public XhQdGnvCuuTroHdr detail(CustomUserDetails currentUser, Long id) throws Exception {
-    if (DataUtils.isNullObject(id))
-      throw new Exception("Tham số không hợp lệ.");
+    if (DataUtils.isNullObject(id)) throw new Exception("Tham số không hợp lệ.");
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
     Map<String, String> mapVthh = getListDanhMucHangHoa();
 
@@ -114,7 +113,7 @@ public class QuyetDinhGnvCuuTroService extends BaseServiceImpl {
       List<FileDinhKem> canCu = fileDinhKemService.search(id, Arrays.asList(XhQdGnvCuuTroHdr.TABLE_NAME + "_CAN_CU"));
       data.setCanCu(canCu);
       List<FileDinhKem> fileDinhKem = fileDinhKemService.search(id, Arrays.asList(XhQdGnvCuuTroHdr.TABLE_NAME + "_DINH_KEM"));
-      data.setCanCu(fileDinhKem);
+      data.setFileDinhKem(fileDinhKem);
       return data;
     }
     return currentHdr.get();
@@ -161,16 +160,14 @@ public class QuyetDinhGnvCuuTroService extends BaseServiceImpl {
     });
     xhQdGnvCuuTroDtlRepository.saveAll(req.getNoiDungCuuTro());
 
-    return null;
+    return newRow;
   }
 
   @Transactional(rollbackFor = Exception.class)
   public XhQdGnvCuuTroHdr update(CustomUserDetails currentUser, XhQdGnvCuuTroHdrSearchReq req) throws Exception {
-    if (DataUtils.isNullObject(req.getId()))
-      throw new Exception("Tham số không hợp lệ.");
+    if (DataUtils.isNullObject(req.getId())) throw new Exception("Tham số không hợp lệ.");
     XhQdGnvCuuTroHdr currentRow = xhQdGnvCuuTroHdrRepository.findById(req.getId()).orElse(null);
-    if (DataUtils.isNullObject(currentRow))
-      throw new Exception("Không tìm thấy dữ liệu.");
+    if (DataUtils.isNullObject(currentRow)) throw new Exception("Không tìm thấy dữ liệu.");
     XhQdGnvCuuTroHdr validateRow = xhQdGnvCuuTroHdrRepository.findFirstBySoQdAndNam(currentRow.getSoQd(), currentRow.getNam()).get();
     if (!DataUtils.isNullObject(validateRow) && currentRow.getId() != req.getId()) {
       throw new Exception(MessageFormat.format("Số đề xuất {0} đã tồn tại", req.getSoDxuat()));
@@ -197,14 +194,28 @@ public class QuyetDinhGnvCuuTroService extends BaseServiceImpl {
   }
 
   @Transactional(rollbackFor = Exception.class)
+  public boolean delete(CustomUserDetails currentUser, Long id) throws Exception {
+    if (DataUtils.safeToLong(id) <= 0) throw new Exception("Bad request.");
+    Optional<XhQdGnvCuuTroHdr> delRowHdr = xhQdGnvCuuTroHdrRepository.findById(id);
+    if (delRowHdr.isPresent()) {
+      List<XhQdGnvCuuTroDtl> listDelRowDtl = xhQdGnvCuuTroDtlRepository.findByIdHdr(delRowHdr.get().getId());
+      xhQdGnvCuuTroDtlRepository.deleteAll(listDelRowDtl);
+      xhQdGnvCuuTroHdrRepository.delete(delRowHdr.get());
+    }
+    return true;
+  }
+
+  @Transactional(rollbackFor = Exception.class)
   public boolean deleteMultiple(CustomUserDetails currentUser, List<Long> ids) throws Exception {
     if (CollectionUtils.isEmpty(ids)) throw new Exception("Bad request.");
 
-    List<XhQdCuuTroHdr> listData = quyetDinhCuuTroRepository.findAllById(ids);
-    List<XhQdCuuTroHdr> listDataValid = listData.stream()
-        .filter(s -> s.getTrangThai().equals(TrangThaiAllEnum.DU_THAO.getId()))
-        .collect(Collectors.toList());
-    quyetDinhCuuTroRepository.deleteAll(listDataValid);
+    List<XhQdGnvCuuTroHdr> listHdr = xhQdGnvCuuTroHdrRepository.findAllById(ids);
+    List<XhQdGnvCuuTroHdr> listHdrValid = listHdr.stream().filter(s -> s.getTrangThai().equals(TrangThaiAllEnum.DU_THAO.getId())).collect(Collectors.toList());
+    List<Long> listIdHdrValid = listHdrValid.stream().map(XhQdGnvCuuTroHdr::getId).collect(Collectors.toList());
+
+    List<XhQdGnvCuuTroDtl> listDtlValid = xhQdGnvCuuTroDtlRepository.findByIdHdrIn(listIdHdrValid);
+    xhQdGnvCuuTroDtlRepository.deleteAll(listDtlValid);
+    xhQdGnvCuuTroHdrRepository.deleteAll(listHdrValid);
     return true;
   }
 
@@ -248,20 +259,15 @@ public class QuyetDinhGnvCuuTroService extends BaseServiceImpl {
       Set<String> maNganKhoList = responses.stream().map(XhDxCuuTroKho::getMaNganKho).collect(Collectors.toSet());
 
 
-      Map<String, KtNganLo> mapNganLo = ktNganLoRepository.findByMaNganloIn(maLoKhoList)
-          .stream().collect(Collectors.toMap(KtNganLo::getMaNganlo, Function.identity()));
+      Map<String, KtNganLo> mapNganLo = ktNganLoRepository.findByMaNganloIn(maLoKhoList).stream().collect(Collectors.toMap(KtNganLo::getMaNganlo, Function.identity()));
 
-      Map<String, KtDiemKho> mapDiemKho = ktDiemKhoRepository.findByMaDiemkhoIn(maDiemKhoList)
-          .stream().collect(Collectors.toMap(KtDiemKho::getMaDiemkho, Function.identity()));
+      Map<String, KtDiemKho> mapDiemKho = ktDiemKhoRepository.findByMaDiemkhoIn(maDiemKhoList).stream().collect(Collectors.toMap(KtDiemKho::getMaDiemkho, Function.identity()));
 
-      Map<String, KtNhaKho> mapNhaKho = ktNhaKhoRepository.findByMaNhakhoIn(maNhaKhoList)
-          .stream().collect(Collectors.toMap(KtNhaKho::getMaNhakho, Function.identity()));
+      Map<String, KtNhaKho> mapNhaKho = ktNhaKhoRepository.findByMaNhakhoIn(maNhaKhoList).stream().collect(Collectors.toMap(KtNhaKho::getMaNhakho, Function.identity()));
 
-      Map<String, QlnvDmDonvi> mapChiCuc = dmDonviRepository.findByMaDviIn(maChiCucList)
-          .stream().collect(Collectors.toMap(QlnvDmDonvi::getMaDvi, Function.identity()));
+      Map<String, QlnvDmDonvi> mapChiCuc = dmDonviRepository.findByMaDviIn(maChiCucList).stream().collect(Collectors.toMap(QlnvDmDonvi::getMaDvi, Function.identity()));
 
-      Map<String, KtNganKho> mapNganKho = ktNganKhoRepository.findByMaNgankhoIn(maNganKhoList)
-          .stream().collect(Collectors.toMap(KtNganKho::getMaNgankho, Function.identity()));
+      Map<String, KtNganKho> mapNganKho = ktNganKhoRepository.findByMaNgankhoIn(maNganKhoList).stream().collect(Collectors.toMap(KtNganKho::getMaNgankho, Function.identity()));
 
       for (XhDxCuuTroKho item : responses) {
         KtNganLo nganLo = mapNganLo.get(item.getMaLoKho());
@@ -289,8 +295,7 @@ public class QuyetDinhGnvCuuTroService extends BaseServiceImpl {
   @Transactional(rollbackFor = Exception.class)
   public XhQdGnvCuuTroHdr updateStatus(CustomUserDetails currentUser, StatusReq req) throws Exception {
     Optional<XhQdGnvCuuTroHdr> currentRow = xhQdGnvCuuTroHdrRepository.findById(req.getId());
-    if (!currentRow.isPresent())
-      throw new Exception("Không tìm thấy dữ liệu.");
+    if (!currentRow.isPresent()) throw new Exception("Không tìm thấy dữ liệu.");
     /*if (currentUser.getUser().getCapDvi().equals(CAP_CUC) ||
         (currentUser.getUser().getCapDvi().equals(CAP_CHI_CUC))) {
       List<String> statusAllow = Arrays.asList(TrangThaiAllEnum.CHO_DUYET_TP.getId());
