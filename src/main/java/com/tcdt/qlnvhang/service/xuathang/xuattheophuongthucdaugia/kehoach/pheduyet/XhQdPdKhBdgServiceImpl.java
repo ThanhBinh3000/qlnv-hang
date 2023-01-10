@@ -439,6 +439,29 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
         return data;
     }
 
+      public XhQdPdKhBdgDtl approveDtl(XhQdPdKhBdgReq stReq) throws Exception {
+
+          if (ObjectUtils.isEmpty(stReq.getId())) {
+              throw new Exception("Không tồn tại bản ghi");
+          }
+          Optional<XhQdPdKhBdgDtl> qOptional = xhQdPdKhBdgDtlRepository.findById(stReq.getId());
+          if (!qOptional.isPresent()) {
+              throw new UnsupportedOperationException("Không tồn tại bản ghi");
+          }
+
+          XhQdPdKhBdgDtl data = qOptional.get();
+          String status = stReq.getTrangThai() + data.getTrangThai();
+          switch (status) {
+              case Contains.HOANTHANHCAPNHAT + Contains.DANGCAPNHAT:
+                  break;
+              default:
+                  throw new Exception("Phê duyệt không thành công");
+          }
+          data.setTrangThai(stReq.getTrangThai());
+          xhQdPdKhBdgDtlRepository.save(data);
+          return data;
+      }
+
     //
 //
 //  public XhQdPdKhBdg approve(StatusReq stReq) throws Exception {

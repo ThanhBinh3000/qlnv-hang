@@ -1,5 +1,7 @@
 package com.tcdt.qlnvhang.service.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin;
 
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.kehoach.pheduyet.XhQdPdKhBdgDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgNlqRepository;
@@ -9,6 +11,7 @@ import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.tochuctrienkh
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.ThongTinDauGiaPloReq;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.ThongTinDauGiaReq;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.pheduyet.XhQdPdKhBdgDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgNlq;
@@ -40,6 +43,9 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
     @Autowired
     private XhTcTtinBdgPloRepository xhTcTtinBdgPloRepository;
 
+    @Autowired
+    private XhQdPdKhBdgDtlRepository xhQdPdKhBdgDtlRepository;
+
 
     @Override
     public Page<XhTcTtinBdgHdr> searchPage(ThongTinDauGiaReq req) throws Exception {
@@ -60,12 +66,20 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
         data.setNgayTao(new Date());
         data.setId(Long.valueOf(req.getMaThongBao().split("/")[0]));
 
+        Optional<XhQdPdKhBdgDtl> byId = xhQdPdKhBdgDtlRepository.findById(data.getIdQdPdDtl());
+        if(byId.isPresent()){
+            byId.get().setTrangThai(NhapXuatHangTrangThaiEnum.DANGCAPNHAT.getId());
+            xhQdPdKhBdgDtlRepository.save(byId.get());
+        }else{
+            throw new Exception("Không tìm thấy Quyết định phê duyệt kế hoạch bán đấu giá");
+        }
+
         List<XhTcTtinBdgHdr> byIdQdPdDtl = xhTcTtinBdgHdrRepository.findByIdQdPdDtlOrderByLanDauGia(data.getIdQdPdDtl());
         data.setLanDauGia(byIdQdPdDtl.size()+1);
-
         xhTcTtinBdgHdrRepository.save(data);
 
         this.saveDetail(req, data.getId(),false);
+
 
         return data;
     }
