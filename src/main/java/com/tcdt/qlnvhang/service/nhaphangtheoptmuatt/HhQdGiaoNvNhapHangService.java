@@ -124,7 +124,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                 dDiem.setTenNhaKho(StringUtils.isEmpty(dDiem.getMaNhaKho())?null:hashMapDmdv.get(dDiem.getMaNhaKho()));
                 dDiem.setTenNganKho(StringUtils.isEmpty(dDiem.getMaNganKho())?null:hashMapDmdv.get(dDiem.getMaNganKho()));
                 dDiem.setTenLoKho(StringUtils.isEmpty(dDiem.getMaLoKho())?null:hashMapDmdv.get(dDiem.getMaLoKho()));
-                this.setDataPhieu(null,dDiem);
+                dDiem.setListPhieuKtraCl(hhPhieuKiemTraChatLuongService.findAllByIdDdiemGiaoNvNh(dDiem.getId()));
             }
             for (HhQdGiaoNvNhangDtl dtl : hhQdGiaoNvNhangDtl ){
                 dtl.setHhQdGiaoNvNhDdiemList(ddiemList);
@@ -189,11 +189,13 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
     return data;
     }
 
-    void setDataPhieu(HhQdGiaoNvNhangDtl dtl , HhQdGiaoNvNhDdiem ddNhap){
+    void setDataPhieu(HhQdGiaoNvNhangDtl dtl , HhQdGiaoNvNhDdiem dDiem){
         if(dtl != null){
 
         }else{
-            ddNhap.setListPhieuKtraCl(hhPhieuKiemTraChatLuongService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
+            dDiem.setListPhieuKtraCl(hhPhieuKiemTraChatLuongService.findAllByIdDdiemGiaoNvNh(dDiem.getId()));
+            dDiem.setBcanKeHangHdr(hhBcanKeHangHdrRepository.findAllByIdDdiemGiaoNvNh(dDiem.getId()));
+            dDiem.setHhPhieuNhapKhoHdr(hhPhieuNhapKhoHdrRepository.findAllByIdDdiemGiaoNvNh(dDiem.getId()));
         }
     }
 
@@ -317,7 +319,8 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                 dDiem.setTenNhaKho(StringUtils.isEmpty(dDiem.getMaNhaKho())?null:hashMapDmdv.get(dDiem.getMaNhaKho()));
                 dDiem.setTenNganKho(StringUtils.isEmpty(dDiem.getMaNganKho())?null:hashMapDmdv.get(dDiem.getMaNganKho()));
                 dDiem.setTenLoKho(StringUtils.isEmpty(dDiem.getMaLoKho())?null:hashMapDmdv.get(dDiem.getMaLoKho()));
-                dDiem.setListPhieuKtraCl(hhPhieuKiemTraChatLuongService.findAllByIdDdiemGiaoNvNh(dDiem.getId()));
+                this.setDataPhieu(null,dDiem);
+
             }
             dtl.setHhQdGiaoNvNhDdiemList(listDd);
         }

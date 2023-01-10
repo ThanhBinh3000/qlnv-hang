@@ -139,7 +139,8 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         }
         KhCnCongTrinhNghienCuu data= optional.get();
         Map<String,String> hashMapDmhh = getListDanhMucHangHoa();
-        data.setTenDvi(StringUtils.isEmpty(data.getTenDvi())?null:hashMapDmhh.get(data.getMaDvi()));
+        Map<String,String> hashMapDvi = getListDanhMucDvi(null,null,"01");
+        data.setTenDvi(StringUtils.isEmpty(data.getMaDvi())?null:hashMapDvi.get(data.getMaDvi()));
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
         List<KhCnTienDoThucHien> tienDoThucHien = khCnTienDoThucHienRepository.findAllByIdHdr(data.getId());
         List<KhCnNghiemThuThanhLy> nghiemThuThanhLy = khCnNghiemThuThanhLyRepository.findAllByIdHdr(data.getId());
