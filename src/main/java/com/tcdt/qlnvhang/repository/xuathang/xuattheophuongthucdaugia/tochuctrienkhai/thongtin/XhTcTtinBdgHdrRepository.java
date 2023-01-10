@@ -26,5 +26,5 @@ public interface XhTcTtinBdgHdrRepository extends JpaRepository<XhTcTtinBdgHdr, 
 
   List<XhTcTtinBdgHdr> findByIdIn(List<Long> ids);
 
-  List<XhTcTtinBdgHdr> findByIdQdPdDtl(Long idQdPdDtl);
+  List<XhTcTtinBdgHdr> findByIdQdPdDtlOrderByLanDauGia(Long idQdPdDtl);
 }

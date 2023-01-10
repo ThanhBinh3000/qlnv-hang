@@ -60,7 +60,7 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
         data.setNgayTao(new Date());
         data.setId(Long.valueOf(req.getMaThongBao().split("/")[0]));
 
-        List<XhTcTtinBdgHdr> byIdQdPdDtl = xhTcTtinBdgHdrRepository.findByIdQdPdDtl(data.getIdQdPdDtl());
+        List<XhTcTtinBdgHdr> byIdQdPdDtl = xhTcTtinBdgHdrRepository.findByIdQdPdDtlOrderByLanDauGia(data.getIdQdPdDtl());
         data.setLanDauGia(byIdQdPdDtl.size()+1);
 
         xhTcTtinBdgHdrRepository.save(data);
@@ -153,6 +153,25 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
 
     @Override
     public void delete(Long id) throws Exception {
+        if (ObjectUtils.isEmpty(id)) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        Optional<XhTcTtinBdgHdr> byId = xhTcTtinBdgHdrRepository.findById(id);
+        if (!byId.isPresent()) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        XhTcTtinBdgHdr data = byId.get();
+
+        xhTcTtinBdgNlqRepository.deleteByIdTtinHdr(id);
+
+        List<XhTcTtinBdgDtl> byIdTtinHdr = xhTcTtinBdgDtlRepository.findByIdTtinHdr(id);
+        byIdTtinHdr.forEach(item -> {
+            xhTcTtinBdgPloRepository.deleteAllByIdTtinDtl(item.getId());
+        });
+
+        xhTcTtinBdgDtlRepository.deleteByIdTtinHdr(id);
+
+        xhTcTtinBdgHdrRepository.delete(data);
 
     }
 
