@@ -425,7 +425,7 @@ public class BaseServiceImpl {
 		}
 		HashMap req = new HashMap();
 		req.put("dviQly", dviQly);
-		ResponseEntity<String> response = categoryServiceProxy.getAllHangByBoNganh(getAuthorizationToken(request),req);
+		ResponseEntity<String> response = categoryServiceProxy.getAllHangByBoNganh(req);
 		String str = Request.getAttrFromJson(response.getBody(), "data");
 		HashMap<String, String> data = new HashMap<String, String>();
 		List<Map<String, Object>> retMap = new Gson().fromJson(str, new TypeToken<List<HashMap<String, Object>>>() {
