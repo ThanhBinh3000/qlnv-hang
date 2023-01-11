@@ -7,6 +7,9 @@ import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.tochuctrienkhai
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -23,7 +26,9 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
 
     @Override
     public Page<XhKqBdgHdr> searchPage(XhKqBdgHdrReq req) throws Exception {
-        return null;
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),req.getPaggingReq().getLimit(), Sort.by("id").descending());
+        Page<XhKqBdgHdr> page = xhKqBdgHdrRepository.search(req,pageable);
+        return page;
     }
 
     @Override

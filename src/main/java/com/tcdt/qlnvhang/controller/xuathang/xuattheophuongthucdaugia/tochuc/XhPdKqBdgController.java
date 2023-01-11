@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.IdSearchReq;
-import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.ThongTinDauGiaReq;
+import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.ketqua.XhKqBdgHdrReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdrService;
+import com.tcdt.qlnvhang.service.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.ketqua.XhKqBdgHdrService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,14 +30,14 @@ import java.util.Map;
 @Api(tags = "Xuất hàng - Bán đấu giá - Tổ chức triền khai KH bán đấu giá - Quyết định phê duyệt kết quả bán đấu giá ")
 public class XhPdKqBdgController extends BaseController {
     @Autowired
-    private XhTcTtinBdgHdrService xhTcTtinBdgHdrService;
+    private XhKqBdgHdrService service;
 
     @ApiOperation(value = "Tra cứu ", response = List.class)
     @PostMapping(value=  PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody ThongTinDauGiaReq objReq) {
+    public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody XhKqBdgHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhTcTtinBdgHdrService.searchPage(objReq));
+            resp.setData(service.searchPage(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -50,10 +50,10 @@ public class XhPdKqBdgController extends BaseController {
 
     @ApiOperation(value = "Tạo mới ", response = List.class)
     @PostMapping(value=  PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> save(@Valid @RequestBody ThongTinDauGiaReq objReq) {
+    public final ResponseEntity<BaseResponse> save(@Valid @RequestBody XhKqBdgHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhTcTtinBdgHdrService.create(objReq));
+            resp.setData(service.create(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -66,10 +66,10 @@ public class XhPdKqBdgController extends BaseController {
 
     @ApiOperation(value = "Sửa ", response = List.class)
     @PostMapping(value=  PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> update(@Valid @RequestBody ThongTinDauGiaReq objReq) {
+    public final ResponseEntity<BaseResponse> update(@Valid @RequestBody XhKqBdgHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhTcTtinBdgHdrService.update(objReq));
+            resp.setData(service.update(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -87,7 +87,7 @@ public class XhPdKqBdgController extends BaseController {
             @ApiParam(value = "ID", example = "1", required = true) @PathVariable("id") Long id) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhTcTtinBdgHdrService.detail(id));
+            resp.setData(service.detail(id));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -103,7 +103,7 @@ public class XhPdKqBdgController extends BaseController {
     public final ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            xhTcTtinBdgHdrService.delete(idSearchReq.getId());
+            service.delete(idSearchReq.getId());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -116,10 +116,10 @@ public class XhPdKqBdgController extends BaseController {
 
     @ApiOperation(value = "Xóa dánh sách ", response = List.class)
     @PostMapping(value=  PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody ThongTinDauGiaReq idSearchReq) {
+    public final ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody XhKqBdgHdrReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            xhTcTtinBdgHdrService.deleteMulti(idSearchReq.getIds());
+            service.deleteMulti(idSearchReq.getIds());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -133,10 +133,10 @@ public class XhPdKqBdgController extends BaseController {
     @ApiOperation(value = "Kết xuất danh sách ", response = List.class)
     @PostMapping(value= PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void exportListQdBtcBnToExcel(@Valid @RequestBody ThongTinDauGiaReq objReq, HttpServletResponse response) throws Exception{
+    public void exportListQdBtcBnToExcel(@Valid @RequestBody XhKqBdgHdrReq objReq, HttpServletResponse response) throws Exception{
 
         try {
-            xhTcTtinBdgHdrService.export(objReq,response);
+            service.export(objReq,response);
         } catch (Exception e) {
 
             log.error("Kết xuất danh sách : {}", e);
@@ -155,10 +155,10 @@ public class XhPdKqBdgController extends BaseController {
 
     @ApiOperation(value = "Phê duyêt", response = List.class)
     @PostMapping(value=PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> updateStatus( @RequestBody ThongTinDauGiaReq stReq) {
+    public ResponseEntity<BaseResponse> updateStatus( @RequestBody XhKqBdgHdrReq stReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhTcTtinBdgHdrService.approve(stReq));
+            resp.setData(service.approve(stReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
