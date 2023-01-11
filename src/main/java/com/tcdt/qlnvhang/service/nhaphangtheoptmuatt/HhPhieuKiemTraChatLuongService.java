@@ -66,11 +66,16 @@ public class HhPhieuKiemTraChatLuongService extends BaseServiceImpl {
                 userInfo.getDvql(),
                 pageable);
         Map<String,String> hashMapDmhh = getListDanhMucHangHoa();
-
+        Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
         data.getContent().forEach(f->{
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh())?null:hashMapDmhh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh())?null:hashMapDmhh.get(f.getCloaiVthh()));
+            f.setTenDvi(StringUtils.isEmpty(f.getMaDvi())?null:hashMapDmdv.get(f.getMaDvi()));
+            f.setTenDiemKho(StringUtils.isEmpty(f.getMaDiemKho())?null:hashMapDmdv.get(f.getMaDiemKho()));
+            f.setTenNhaKho(StringUtils.isEmpty(f.getMaNhaKho())?null:hashMapDmdv.get(f.getMaNhaKho()));
+            f.setTenNganKho(StringUtils.isEmpty(f.getMaNganKho())?null:hashMapDmdv.get(f.getMaNganKho()));
+            f.setTenLoKho(StringUtils.isEmpty(f.getMaLoKho())?null:hashMapDmdv.get(f.getMaLoKho()));
         });
         return data;
     }

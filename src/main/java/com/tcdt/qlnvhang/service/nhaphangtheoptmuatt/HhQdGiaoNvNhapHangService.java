@@ -383,7 +383,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
         Page<HhQdGiaoNvNhapHang> page=this.searchPage(objReq);
         List<HhQdGiaoNvNhapHang> data=page.getContent();
 
-        String title="Danh sách đề xuất kế hoạch mua trực tiếp";
+        String title="Danh sách quyết định giao nhiệm vụ nhập hàng";
         String[] rowsName=new String[]{"STT","Số QD giao nhiệm vụ NH","Ngày quyết định","Số hơp đồng","Số QĐ phê duyệt KH","Năm nhập","Loại hàng hóa","Chủng loại hàng hóa","Trích yếu","Trạng Thái"};
         String fileName="danh-sach-dx-kh-mua-truc-tiep.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
