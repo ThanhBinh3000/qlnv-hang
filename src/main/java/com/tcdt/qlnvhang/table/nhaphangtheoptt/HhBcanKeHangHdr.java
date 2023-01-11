@@ -114,6 +114,8 @@ public class HhBcanKeHangHdr  implements Serializable {
     private Date ngaySua;
     private String nguoiSua;
 
+    private String soPhieuKtraCluong;
+
 
     @Transient
     private List<HhBcanKeHangDtl> hhBcanKeHangDtlList = new ArrayList<>();

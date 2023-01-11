@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.controller.nhaphangtheoptmuatt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -19,8 +20,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/bien-ban-day-kho-mua-tt")
@@ -152,5 +156,25 @@ public class HhBienBanDayKhoControler  {
         return ResponseEntity.ok(resp);
     }
 
+    @ApiOperation(value = "Kết xuất danh sách biên bản nhập đầy kho mua trực tiếp ", response = List.class)
+    @PostMapping(value= PathContains.BIEN_BAN_DAY_KHO + PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public void exportListQdBtcBnToExcel(@Valid @RequestBody SearchHhBienBanDayKhoReq objReq, HttpServletResponse response) throws Exception{
+
+        try {
+            hhBienBanDayKhoService.export(objReq,response);
+        } catch (Exception e) {
+
+            log.error("Kết xuất danh sách : {}", e);
+            final Map<String, Object> body = new HashMap<>();
+            body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            body.put("msg", e.getMessage());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("UTF-8");
+            final ObjectMapper mapper = new ObjectMapper();
+            mapper.writeValue(response.getOutputStream(), body);
+        }
+
+    }
 
 }

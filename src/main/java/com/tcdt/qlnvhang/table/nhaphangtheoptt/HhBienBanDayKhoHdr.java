@@ -106,6 +106,14 @@ public class HhBienBanDayKhoHdr implements Serializable {
 
     private String lyDoTuChoi;
 
+    private String soPhieuNhapKho;
+
+    private String soBangKeCanHang;
+
+    @Temporal(TemporalType.DATE)
+    private Date ngayNkho;
+
+
 
 
     @Transient

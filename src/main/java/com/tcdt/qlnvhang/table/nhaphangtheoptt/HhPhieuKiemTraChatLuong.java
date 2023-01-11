@@ -89,6 +89,9 @@ public class HhPhieuKiemTraChatLuong implements Serializable {
     private List<HhPhieuKiemTraChatLuongDtl> phieuKiemTraChatLuongDtlList= new ArrayList<>();
 
     @Transient
-    private HhPhieuNhapKhoHdr phieuNhapKho;
+    private HhBcanKeHangHdr bcanKeHangHdr;
+
+    @Transient
+    private HhPhieuNhapKhoHdr phieuNhapKhoHdr;
 
 }
