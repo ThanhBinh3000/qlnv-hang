@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieu
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhPhieuKiemTraChatLuongRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhPhieuKiemTraCluongDtlRepository;
+import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhPhieuNhapKhoHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -48,6 +49,9 @@ public class HhPhieuKiemTraChatLuongService extends BaseServiceImpl {
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
+
+    @Autowired
+    private HhPhieuNhapKhoHdrRepository hhPhieuNhapKhoHdrRepository;
 
     public Page<HhPhieuKiemTraChatLuong> searchPage(SearchHhPhieuKiemTraChatLuong objReq)throws Exception{
         UserInfo userInfo= SecurityContextService.getUser();
@@ -296,19 +300,19 @@ public class HhPhieuKiemTraChatLuongService extends BaseServiceImpl {
         for(HhPhieuKiemTraChatLuong pkt : list){
             pkt.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(pkt.getTrangThai()));
         }
-        return list;
+        return setDetailList(list);
     }
 
     public BigDecimal getSoLuongNhapKho(Long idDdiemGiaoNvNh) {
         BigDecimal bigDecimal = hhPhieuKiemTraChatLuongRepository.soLuongNhapKho(idDdiemGiaoNvNh,NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId());
         return bigDecimal;
     }
-//    List<HhPhieuKiemTraChatLuong> setDetailList(List<HhPhieuKiemTraChatLuong> list){
-//        list.forEach( item -> {
-//            item.setPhieuNhapKho(hhPhieuKiemTraChatLuongRepository.findBySoPhieuKtraCl(item.getSoPhieu()));
-//        });
-//        return list;
-//    }
+    List<HhPhieuKiemTraChatLuong> setDetailList(List<HhPhieuKiemTraChatLuong> list){
+        list.forEach( item -> {
+            item.setPhieuNhapKho(hhPhieuNhapKhoHdrRepository.findBySoPhieuKtraCluong(item.getSoPhieu()));
+        });
+        return list;
+    }
 
 
 }
