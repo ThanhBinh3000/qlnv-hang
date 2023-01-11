@@ -74,6 +74,9 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
     @Autowired
     private HhBcanKeHangHdrRepository hhBcanKeHangHdrRepository;
 
+    @Autowired
+    private HhBienBanDayKhoHdrRepository hhBienBanDayKhoHdrRepository;
+
     public Page<HhQdGiaoNvNhapHang> searchPage(SearchHhQdGiaoNvNhReq objReq) throws Exception{
         UserInfo userInfo= SecurityContextService.getUser();
         Pageable pageable= PageRequest.of(objReq.getPaggingReq().getPage(),
@@ -181,8 +184,19 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                 bcanKeHang.setTenLoKho(hashMapDmdv.get(bcanKeHang.getMaLoKho()));
             }
 
+            List<HhBienBanDayKhoHdr> hhBienBanDayKhoHdr = hhBienBanDayKhoHdrRepository.findAllByIdQdGiaoNvNh(f.getId());
+            for (HhBienBanDayKhoHdr bienBanDayKhoHdr : hhBienBanDayKhoHdr){
+                bienBanDayKhoHdr.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(bienBanDayKhoHdr.getTrangThai()));
+                bienBanDayKhoHdr.setTenDvi(hashMapDmdv.get(bienBanDayKhoHdr.getMaDvi()));
+                bienBanDayKhoHdr.setTenDiemKho(hashMapDmdv.get(bienBanDayKhoHdr.getMaDiemKho()));
+                bienBanDayKhoHdr.setTenNhaKho(hashMapDmdv.get(bienBanDayKhoHdr.getMaNhaKho()));
+                bienBanDayKhoHdr.setTenNganKho(hashMapDmdv.get(bienBanDayKhoHdr.getMaNganKho()));
+                bienBanDayKhoHdr.setTenLoKho(hashMapDmdv.get(bienBanDayKhoHdr.getMaLoKho()));
+            }
+
             f.setHhPhieuNhapKhoHdrList(hhPhieuNhapKhoHdrList);
             f.setHhBcanKeHangHdrList(hhBcanKeHangHdrList);
+            f.setHhBienBanDayKhoHdrList(hhBienBanDayKhoHdr);
             f.setHhQdGiaoNvNhangDtlList(hhQdGiaoNvNhangDtl);
         });
 
@@ -193,9 +207,16 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
         if(dtl != null){
 
         }else{
-            dDiem.setListPhieuKtraCl(hhPhieuKiemTraChatLuongService.findAllByIdDdiemGiaoNvNh(dDiem.getId()));
             dDiem.setBcanKeHangHdr(hhBcanKeHangHdrRepository.findAllByIdDdiemGiaoNvNh(dDiem.getId()));
             dDiem.setHhPhieuNhapKhoHdr(hhPhieuNhapKhoHdrRepository.findAllByIdDdiemGiaoNvNh(dDiem.getId()));
+            List<HhPhieuKiemTraChatLuong> phieuKiemTraChatLuongList = hhPhieuKiemTraChatLuongService.findAllByIdDdiemGiaoNvNh(dDiem.getId());
+            for (HhPhieuKiemTraChatLuong Cl : phieuKiemTraChatLuongList){
+                HhPhieuNhapKhoHdr phieuNhapKhoHdr = hhPhieuNhapKhoHdrRepository.findBySoPhieuKtraCluong(Cl.getSoPhieu());
+                Cl.setPhieuNhapKhoHdr(phieuNhapKhoHdr);
+                HhBcanKeHangHdr bcanKeHangHdr = hhBcanKeHangHdrRepository.findBySoPhieuKtraCluong(Cl.getSoPhieu());
+                Cl.setBcanKeHangHdr(bcanKeHangHdr);
+            }
+            dDiem.setListPhieuKtraCl(phieuKiemTraChatLuongList);
         }
     }
 
