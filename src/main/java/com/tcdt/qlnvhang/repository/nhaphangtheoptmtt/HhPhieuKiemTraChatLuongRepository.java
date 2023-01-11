@@ -23,8 +23,8 @@ public interface HhPhieuKiemTraChatLuongRepository extends JpaRepository<HhPhieu
             " AND (:ngayGdinhTu IS NULL OR PKT.NGAY_GDINH >=  TO_DATE(:ngayGdinhTu,'yyyy-MM-dd')) " +
             " AND (:ngayGdinhDen IS NULL OR PKT.NGAY_GDINH <= TO_DATE(:ngayGdinhDen,'yyyy-MM-dd'))" +
             " AND(:ketQua IS NULL OR LOWER(PKT.KQ_DANH_GIA) LIKE LOWER(CONCAT(CONCAT('%',:ketQua),'%')))" +
-            "AND (:trangThai IS NULL OR PKT.TRANG_THAI = :trangThai) " +
-            "AND (:maDvi IS NULL OR LOWER(PKT.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "
+            " AND (:trangThai IS NULL OR PKT.TRANG_THAI = :trangThai) " +
+            " AND (:maDvi IS NULL OR LOWER(PKT.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "
             ,nativeQuery = true)
     Page<HhPhieuKiemTraChatLuong> searchPage(Integer namKh, String soQd, String soPhieu, String ngayLphieuTu,String ngayLphieuDen, String ngayGdinhTu, String ngayGdinhDen, String ketQua, String trangThai, String maDvi, Pageable pageable);
 
