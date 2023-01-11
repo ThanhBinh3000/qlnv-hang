@@ -43,6 +43,7 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
         data.setNam(new Date().getYear());
         data.setNguoiTaoId(getUser().getId());
         data.setNgayTao(new Date());
+        data.setMaDvi(getUser().getDvql());
         xhKqBdgHdrRepository.save(data);
         return data;
     }
