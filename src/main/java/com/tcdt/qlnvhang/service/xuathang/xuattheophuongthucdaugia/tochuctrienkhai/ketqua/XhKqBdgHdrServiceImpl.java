@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -40,7 +41,7 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
     public XhKqBdgHdr create(XhKqBdgHdrReq req) throws Exception {
         XhKqBdgHdr data = new XhKqBdgHdr();
         BeanUtils.copyProperties(req, data, "id");
-        data.setNam(new Date().getYear());
+        data.setNam(LocalDate.now().getYear());
         data.setNguoiTaoId(getUser().getId());
         data.setNgayTao(new Date());
         data.setMaDvi(getUser().getDvql());
@@ -85,12 +86,28 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
 
     @Override
     public void delete(Long id) throws Exception {
-
+        if (ObjectUtils.isEmpty(id)) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        Optional<XhKqBdgHdr> byId = xhKqBdgHdrRepository.findById(id);
+        if (!byId.isPresent()) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        xhKqBdgHdrRepository.delete(byId.get());
     }
 
     @Override
     public void deleteMulti(List<Long> listMulti) throws Exception {
-
+        if (ObjectUtils.isEmpty(listMulti)) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        listMulti.forEach(item -> {
+            try {
+                this.delete(item);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @Override
