@@ -433,11 +433,34 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
         data.setChildren(xhQdPdKhBdgPlList);
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
 
-        List<XhTcTtinBdgHdr> byIdQdPdDtl = xhTcTtinBdgHdrRepository.findByIdQdPdDtl(ids);
+        List<XhTcTtinBdgHdr> byIdQdPdDtl = xhTcTtinBdgHdrRepository.findByIdQdPdDtlOrderByLanDauGia(ids);
         data.setListTtinDg(byIdQdPdDtl);
 
         return data;
     }
+
+      public XhQdPdKhBdgDtl approveDtl(XhQdPdKhBdgReq stReq) throws Exception {
+
+          if (ObjectUtils.isEmpty(stReq.getId())) {
+              throw new Exception("Không tồn tại bản ghi");
+          }
+          Optional<XhQdPdKhBdgDtl> qOptional = xhQdPdKhBdgDtlRepository.findById(stReq.getId());
+          if (!qOptional.isPresent()) {
+              throw new UnsupportedOperationException("Không tồn tại bản ghi");
+          }
+
+          XhQdPdKhBdgDtl data = qOptional.get();
+          String status = stReq.getTrangThai() + data.getTrangThai();
+          switch (status) {
+              case Contains.HOANTHANHCAPNHAT + Contains.DANGCAPNHAT:
+                  break;
+              default:
+                  throw new Exception("Phê duyệt không thành công");
+          }
+          data.setTrangThai(stReq.getTrangThai());
+          xhQdPdKhBdgDtlRepository.save(data);
+          return data;
+      }
 
     //
 //

@@ -240,4 +240,7 @@ public class PathContains {
 	public static final String QUYET_DINH_GIAO_NHIEM_VU= "/qd-gnv";
 
 	public static final String TTIN_DGIA = "/ttin-dgia";
+
+	public static final String KQUA_DGIA = "/kq-bdg";
+
 }

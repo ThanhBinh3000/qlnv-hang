@@ -417,6 +417,23 @@ public class BaseServiceImpl {
 
 		return true;
 	}
+
+	public Map<String, String> getAllHangByBoNganh(String dviQly) {
+		//bo tai chinh thi chuyen thanh tong cuc du tru
+
+		HashMap req = new HashMap();
+		req.put("maDvi", dviQly);
+		ResponseEntity<String> response = categoryServiceProxy.getAllHangByBoNganh(req);
+
+		String str = Request.getAttrFromJson(response.getBody(), "data");
+		HashMap<String, String> data = new HashMap<String, String>();
+		List<Map<String, Object>> retMap = new Gson().fromJson(str, new TypeToken<List<HashMap<String, Object>>>() {
+		}.getType());
+		for (Map<String, Object> map : retMap) {
+			data.put(String.valueOf(map.get("maHangHoa")), String.valueOf(map.get("tenHangHoa")));
+		}
+		return data;
+	}
 }
 
 

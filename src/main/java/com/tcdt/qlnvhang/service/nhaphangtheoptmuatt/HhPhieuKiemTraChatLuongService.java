@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieu
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhPhieuKiemTraChatLuongRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhPhieuKiemTraCluongDtlRepository;
+import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhPhieuNhapKhoHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -49,6 +50,9 @@ public class HhPhieuKiemTraChatLuongService extends BaseServiceImpl {
     @Autowired
     private FileDinhKemService fileDinhKemService;
 
+    @Autowired
+    private HhPhieuNhapKhoHdrRepository hhPhieuNhapKhoHdrRepository;
+
     public Page<HhPhieuKiemTraChatLuong> searchPage(SearchHhPhieuKiemTraChatLuong objReq)throws Exception{
         UserInfo userInfo= SecurityContextService.getUser();
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),
@@ -66,11 +70,16 @@ public class HhPhieuKiemTraChatLuongService extends BaseServiceImpl {
                 userInfo.getDvql(),
                 pageable);
         Map<String,String> hashMapDmhh = getListDanhMucHangHoa();
-
+        Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
         data.getContent().forEach(f->{
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh())?null:hashMapDmhh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh())?null:hashMapDmhh.get(f.getCloaiVthh()));
+            f.setTenDvi(StringUtils.isEmpty(f.getMaDvi())?null:hashMapDmdv.get(f.getMaDvi()));
+            f.setTenDiemKho(StringUtils.isEmpty(f.getMaDiemKho())?null:hashMapDmdv.get(f.getMaDiemKho()));
+            f.setTenNhaKho(StringUtils.isEmpty(f.getMaNhaKho())?null:hashMapDmdv.get(f.getMaNhaKho()));
+            f.setTenNganKho(StringUtils.isEmpty(f.getMaNganKho())?null:hashMapDmdv.get(f.getMaNganKho()));
+            f.setTenLoKho(StringUtils.isEmpty(f.getMaLoKho())?null:hashMapDmdv.get(f.getMaLoKho()));
         });
         return data;
     }
@@ -291,19 +300,19 @@ public class HhPhieuKiemTraChatLuongService extends BaseServiceImpl {
         for(HhPhieuKiemTraChatLuong pkt : list){
             pkt.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(pkt.getTrangThai()));
         }
-        return list;
+        return setDetailList(list);
     }
 
     public BigDecimal getSoLuongNhapKho(Long idDdiemGiaoNvNh) {
         BigDecimal bigDecimal = hhPhieuKiemTraChatLuongRepository.soLuongNhapKho(idDdiemGiaoNvNh,NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId());
         return bigDecimal;
     }
-//    List<HhPhieuKiemTraChatLuong> setDetailList(List<HhPhieuKiemTraChatLuong> list){
-//        list.forEach( item -> {
-//            item.setPhieuNhapKho(hhPhieuKiemTraChatLuongRepository.findBySoPhieuKtraCl(item.getSoPhieu()));
-//        });
-//        return list;
-//    }
+    List<HhPhieuKiemTraChatLuong> setDetailList(List<HhPhieuKiemTraChatLuong> list){
+        list.forEach( item -> {
+            item.setPhieuNhapKhoHdr(hhPhieuNhapKhoHdrRepository.findBySoPhieuKtraCluong(item.getSoPhieu()));
+        });
+        return list;
+    }
 
 
 }

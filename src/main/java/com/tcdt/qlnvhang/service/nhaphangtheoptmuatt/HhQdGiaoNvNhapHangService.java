@@ -145,8 +145,9 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                     item.setTenNhaKho(StringUtils.isEmpty(item.getMaNhaKho())?null:hashMapDmdv.get(item.getMaNhaKho()));
                     item.setTenNganKho(StringUtils.isEmpty(item.getMaNganKho())?null:hashMapDmdv.get(item.getMaNganKho()));
                     item.setTenLoKho(StringUtils.isEmpty(item.getMaLoKho())?null:hashMapDmdv.get(item.getMaLoKho()));
-//                    NhBbNhapDayKho nhBbNhapDayKhoStream = bbNhapDayKho.stream().filter(x -> Objects.equals(x.getId(), item.getIdBbNhapDayKho())).findAny().orElse(null);
-//                    item.setBbNhapDayKho(nhBbNhapDayKhoStream);
+                    HhBienBanDayKhoHdr bienBanDayKho = hhBienBanDayKhoHdrRepository.findAllByIdQdGiaoNvNh(f.getId())
+                            .stream().filter(x -> Objects.equals(x.getId(), item.getIdBbNhapDayKho())).findAny().orElse(null);
+                    item.setBbNhapDayKho(bienBanDayKho);
                 });
                 dtl.setListBienBanLayMau(bbLayMau);
                 // Set phiếu kiểm nghiệm chất lượng
@@ -404,7 +405,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
         Page<HhQdGiaoNvNhapHang> page=this.searchPage(objReq);
         List<HhQdGiaoNvNhapHang> data=page.getContent();
 
-        String title="Danh sách đề xuất kế hoạch mua trực tiếp";
+        String title="Danh sách quyết định giao nhiệm vụ nhập hàng";
         String[] rowsName=new String[]{"STT","Số QD giao nhiệm vụ NH","Ngày quyết định","Số hơp đồng","Số QĐ phê duyệt KH","Năm nhập","Loại hàng hóa","Chủng loại hàng hóa","Trích yếu","Trạng Thái"};
         String fileName="danh-sach-dx-kh-mua-truc-tiep.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();

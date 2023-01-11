@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface XhQdGnvCuuTroDtlRepository extends JpaRepository<XhQdGnvCuuTroDtl, Long> {
   List<XhQdGnvCuuTroDtl> findByIdHdr(Long idHdr);
+  List<XhQdGnvCuuTroDtl> findByIdHdrIn(List<Long> idHdr);
 }

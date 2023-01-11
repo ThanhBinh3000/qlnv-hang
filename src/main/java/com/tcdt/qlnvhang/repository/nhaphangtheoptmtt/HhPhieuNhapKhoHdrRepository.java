@@ -39,4 +39,5 @@ public interface HhPhieuNhapKhoHdrRepository  extends JpaRepository<HhPhieuNhapK
 
     HhPhieuNhapKhoHdr findBySoPhieuKtraCluong(String soPhieuKtraCluong);
 
+
 }

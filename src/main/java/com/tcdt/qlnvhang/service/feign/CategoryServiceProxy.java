@@ -14,6 +14,8 @@ import com.tcdt.qlnvhang.request.BaseRequest;
 
 import feign.Headers;
 
+import java.util.HashMap;
+
 @FeignClient(name = "qlnv-category")
 public interface CategoryServiceProxy {
 
@@ -51,4 +53,8 @@ public interface CategoryServiceProxy {
 	public ResponseEntity<String> getDanhMucHangHoa(
 			@RequestHeader(value = "Authorization", required = true) String authorizationHeader);
 
+	@PostMapping("/dm-hang/search-all-ma")
+	@Headers({"Accept: application/json; charset=utf-8", "Content-Type: application/x-www-form-urlencoded"})
+	public ResponseEntity<String> getAllHangByBoNganh(
+			@RequestBody HashMap objReq);
 }

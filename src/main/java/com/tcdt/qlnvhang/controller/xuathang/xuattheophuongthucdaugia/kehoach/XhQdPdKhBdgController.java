@@ -4,9 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.IdSearchReq;
-import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.kehoachbdg.pheduyet.XhQdPdKhBdgReq;
-import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.XhQdPdKhBdgSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.xuathang.xuattheophuongthucdaugia.kehoach.pheduyet.XhQdPdKhBdgServiceImpl;
 import com.tcdt.qlnvhang.util.PathContains;
@@ -99,6 +97,23 @@ public class XhQdPdKhBdgController extends BaseController {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
             log.error("Lấy chi tiết Quyết định phê duyệt kế hoạch bán đấu giá trace: {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 Quyết định phê duyệt kế hoạch bán đấu giá", response = List.class)
+    @PostMapping(value = "/dtl-chi-tiet" + PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> updateStatusDtl(@Valid HttpServletRequest req, @RequestBody XhQdPdKhBdgReq stReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(xhQdPdKhBdgService.approveDtl(stReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            // TODO: handle exception
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Phê duyệt quyết định phê duyệt kế hoạch bán đấu giá trace: {}", e);
         }
         return ResponseEntity.ok(resp);
     }

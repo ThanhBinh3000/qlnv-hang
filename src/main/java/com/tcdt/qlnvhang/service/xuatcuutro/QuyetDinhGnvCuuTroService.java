@@ -9,7 +9,6 @@ import com.tcdt.qlnvhang.repository.khotang.KtNganKhoRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNhaKhoRepository;
 import com.tcdt.qlnvhang.repository.xuatcuutro.*;
-import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuatcuutro.XhQdGnvCuuTroHdrSearchReq;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -21,8 +20,6 @@ import com.tcdt.qlnvhang.table.khotang.KtNganKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganLo;
 import com.tcdt.qlnvhang.table.khotang.KtNhaKho;
 import com.tcdt.qlnvhang.util.DataUtils;
-import com.tcdt.qlnvhang.util.ExportExcel;
-import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +36,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static com.tcdt.qlnvhang.util.Contains.CAP_CUC;
 import static com.tcdt.qlnvhang.util.Contains.CAP_TONG_CUC;
 
 @Service
@@ -87,6 +85,7 @@ public class QuyetDinhGnvCuuTroService extends BaseServiceImpl {
 //    Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
     Map<String, String> mapVthh = getListDanhMucHangHoa();
+    System.out.println(getAllHangByBoNganh("02"));
     //set label
     search.getContent().forEach(s -> {
       s.setMapDmucDvi(mapDmucDvi);
@@ -96,8 +95,7 @@ public class QuyetDinhGnvCuuTroService extends BaseServiceImpl {
   }
 
   public XhQdGnvCuuTroHdr detail(CustomUserDetails currentUser, Long id) throws Exception {
-    if (DataUtils.isNullObject(id))
-      throw new Exception("Tham số không hợp lệ.");
+    if (DataUtils.isNullObject(id)) throw new Exception("Tham số không hợp lệ.");
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
     Map<String, String> mapVthh = getListDanhMucHangHoa();
 
@@ -116,7 +114,7 @@ public class QuyetDinhGnvCuuTroService extends BaseServiceImpl {
       List<FileDinhKem> canCu = fileDinhKemService.search(id, Arrays.asList(XhQdGnvCuuTroHdr.TABLE_NAME + "_CAN_CU"));
       data.setCanCu(canCu);
       List<FileDinhKem> fileDinhKem = fileDinhKemService.search(id, Arrays.asList(XhQdGnvCuuTroHdr.TABLE_NAME + "_DINH_KEM"));
-      data.setCanCu(fileDinhKem);
+      data.setFileDinhKem(fileDinhKem);
       return data;
     }
     return currentHdr.get();
@@ -163,16 +161,14 @@ public class QuyetDinhGnvCuuTroService extends BaseServiceImpl {
     });
     xhQdGnvCuuTroDtlRepository.saveAll(req.getNoiDungCuuTro());
 
-    return null;
+    return newRow;
   }
 
   @Transactional(rollbackFor = Exception.class)
   public XhQdGnvCuuTroHdr update(CustomUserDetails currentUser, XhQdGnvCuuTroHdrSearchReq req) throws Exception {
-    if (DataUtils.isNullObject(req.getId()))
-      throw new Exception("Tham số không hợp lệ.");
+    if (DataUtils.isNullObject(req.getId())) throw new Exception("Tham số không hợp lệ.");
     XhQdGnvCuuTroHdr currentRow = xhQdGnvCuuTroHdrRepository.findById(req.getId()).orElse(null);
-    if (DataUtils.isNullObject(currentRow))
-      throw new Exception("Không tìm thấy dữ liệu.");
+    if (DataUtils.isNullObject(currentRow)) throw new Exception("Không tìm thấy dữ liệu.");
     XhQdGnvCuuTroHdr validateRow = xhQdGnvCuuTroHdrRepository.findFirstBySoQdAndNam(currentRow.getSoQd(), currentRow.getNam()).get();
     if (!DataUtils.isNullObject(validateRow) && currentRow.getId() != req.getId()) {
       throw new Exception(MessageFormat.format("Số đề xuất {0} đã tồn tại", req.getSoDxuat()));
@@ -199,14 +195,28 @@ public class QuyetDinhGnvCuuTroService extends BaseServiceImpl {
   }
 
   @Transactional(rollbackFor = Exception.class)
+  public boolean delete(CustomUserDetails currentUser, Long id) throws Exception {
+    if (DataUtils.safeToLong(id) <= 0) throw new Exception("Bad request.");
+    Optional<XhQdGnvCuuTroHdr> delRowHdr = xhQdGnvCuuTroHdrRepository.findById(id);
+    if (delRowHdr.isPresent()) {
+      List<XhQdGnvCuuTroDtl> listDelRowDtl = xhQdGnvCuuTroDtlRepository.findByIdHdr(delRowHdr.get().getId());
+      xhQdGnvCuuTroDtlRepository.deleteAll(listDelRowDtl);
+      xhQdGnvCuuTroHdrRepository.delete(delRowHdr.get());
+    }
+    return true;
+  }
+
+  @Transactional(rollbackFor = Exception.class)
   public boolean deleteMultiple(CustomUserDetails currentUser, List<Long> ids) throws Exception {
     if (CollectionUtils.isEmpty(ids)) throw new Exception("Bad request.");
 
-    List<XhQdCuuTroHdr> listData = quyetDinhCuuTroRepository.findAllById(ids);
-    List<XhQdCuuTroHdr> listDataValid = listData.stream()
-        .filter(s -> s.getTrangThai().equals(TrangThaiAllEnum.DU_THAO.getId()))
-        .collect(Collectors.toList());
-    quyetDinhCuuTroRepository.deleteAll(listDataValid);
+    List<XhQdGnvCuuTroHdr> listHdr = xhQdGnvCuuTroHdrRepository.findAllById(ids);
+    List<XhQdGnvCuuTroHdr> listHdrValid = listHdr.stream().filter(s -> s.getTrangThai().equals(TrangThaiAllEnum.DU_THAO.getId())).collect(Collectors.toList());
+    List<Long> listIdHdrValid = listHdrValid.stream().map(XhQdGnvCuuTroHdr::getId).collect(Collectors.toList());
+
+    List<XhQdGnvCuuTroDtl> listDtlValid = xhQdGnvCuuTroDtlRepository.findByIdHdrIn(listIdHdrValid);
+    xhQdGnvCuuTroDtlRepository.deleteAll(listDtlValid);
+    xhQdGnvCuuTroHdrRepository.deleteAll(listHdrValid);
     return true;
   }
 
@@ -250,20 +260,15 @@ public class QuyetDinhGnvCuuTroService extends BaseServiceImpl {
       Set<String> maNganKhoList = responses.stream().map(XhDxCuuTroKho::getMaNganKho).collect(Collectors.toSet());
 
 
-      Map<String, KtNganLo> mapNganLo = ktNganLoRepository.findByMaNganloIn(maLoKhoList)
-          .stream().collect(Collectors.toMap(KtNganLo::getMaNganlo, Function.identity()));
+      Map<String, KtNganLo> mapNganLo = ktNganLoRepository.findByMaNganloIn(maLoKhoList).stream().collect(Collectors.toMap(KtNganLo::getMaNganlo, Function.identity()));
 
-      Map<String, KtDiemKho> mapDiemKho = ktDiemKhoRepository.findByMaDiemkhoIn(maDiemKhoList)
-          .stream().collect(Collectors.toMap(KtDiemKho::getMaDiemkho, Function.identity()));
+      Map<String, KtDiemKho> mapDiemKho = ktDiemKhoRepository.findByMaDiemkhoIn(maDiemKhoList).stream().collect(Collectors.toMap(KtDiemKho::getMaDiemkho, Function.identity()));
 
-      Map<String, KtNhaKho> mapNhaKho = ktNhaKhoRepository.findByMaNhakhoIn(maNhaKhoList)
-          .stream().collect(Collectors.toMap(KtNhaKho::getMaNhakho, Function.identity()));
+      Map<String, KtNhaKho> mapNhaKho = ktNhaKhoRepository.findByMaNhakhoIn(maNhaKhoList).stream().collect(Collectors.toMap(KtNhaKho::getMaNhakho, Function.identity()));
 
-      Map<String, QlnvDmDonvi> mapChiCuc = dmDonviRepository.findByMaDviIn(maChiCucList)
-          .stream().collect(Collectors.toMap(QlnvDmDonvi::getMaDvi, Function.identity()));
+      Map<String, QlnvDmDonvi> mapChiCuc = dmDonviRepository.findByMaDviIn(maChiCucList).stream().collect(Collectors.toMap(QlnvDmDonvi::getMaDvi, Function.identity()));
 
-      Map<String, KtNganKho> mapNganKho = ktNganKhoRepository.findByMaNgankhoIn(maNganKhoList)
-          .stream().collect(Collectors.toMap(KtNganKho::getMaNgankho, Function.identity()));
+      Map<String, KtNganKho> mapNganKho = ktNganKhoRepository.findByMaNgankhoIn(maNganKhoList).stream().collect(Collectors.toMap(KtNganKho::getMaNgankho, Function.identity()));
 
       for (XhDxCuuTroKho item : responses) {
         KtNganLo nganLo = mapNganLo.get(item.getMaLoKho());
@@ -291,8 +296,7 @@ public class QuyetDinhGnvCuuTroService extends BaseServiceImpl {
   @Transactional(rollbackFor = Exception.class)
   public XhQdGnvCuuTroHdr updateStatus(CustomUserDetails currentUser, StatusReq req) throws Exception {
     Optional<XhQdGnvCuuTroHdr> currentRow = xhQdGnvCuuTroHdrRepository.findById(req.getId());
-    if (!currentRow.isPresent())
-      throw new Exception("Không tìm thấy dữ liệu.");
+    if (!currentRow.isPresent()) throw new Exception("Không tìm thấy dữ liệu.");
     /*if (currentUser.getUser().getCapDvi().equals(CAP_CUC) ||
         (currentUser.getUser().getCapDvi().equals(CAP_CHI_CUC))) {
       List<String> statusAllow = Arrays.asList(TrangThaiAllEnum.CHO_DUYET_TP.getId());
@@ -302,7 +306,7 @@ public class QuyetDinhGnvCuuTroService extends BaseServiceImpl {
     String trangThai = "";
     String capDvi = currentUser.getUser().getCapDvi();
     String condition = currentRow.get().getTrangThai() + req.getTrangThai();
-    if (capDvi.equals(CAP_TONG_CUC)) {
+    /*if (capDvi.equals(CAP_TONG_CUC)) {
 
       //gui duyet
       if (condition.equals(TrangThaiAllEnum.DU_THAO.getId() + TrangThaiAllEnum.CHO_DUYET_LDTC.getId())) {
@@ -322,33 +326,28 @@ public class QuyetDinhGnvCuuTroService extends BaseServiceImpl {
       if (condition.equals(TrangThaiAllEnum.DU_THAO.getId() + TrangThaiAllEnum.BAN_HANH.getId())) {
         trangThai = TrangThaiAllEnum.BAN_HANH.getId();
       }
-    }
-    /*else if (capDvi.equals(CAP_CUC)) {
+    }*/
+    if (capDvi.equals(CAP_CUC)) {
       //gui duyet
-      if (condition.equals(TrangThaiAllEnum.DU_THAO.getId() + TrangThaiAllEnum.CHO_DUYET_LDTC.getId())) {
-        trangThai = TrangThaiAllEnum.CHO_DUYET_TP.getId();
-      } else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_TP.getId() + TrangThaiAllEnum.CHO_DUYET_LDTC.getId())) {
+      if (condition.equals(TrangThaiAllEnum.DU_THAO.getId() + TrangThaiAllEnum.CHO_DUYET_LDC.getId())) {
+        trangThai = TrangThaiAllEnum.CHO_DUYET_LDC.getId();
+      } else if (condition.equals(TrangThaiAllEnum.TU_CHOI_LDC.getId() + TrangThaiAllEnum.CHO_DUYET_LDC.getId())) {
         trangThai = TrangThaiAllEnum.CHO_DUYET_LDC.getId();
       }
       //duyet
-      else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_TP.getId() + TrangThaiAllEnum.DA_DUYET_LDTC.getId())) {
-        trangThai = TrangThaiAllEnum.DA_DUYET_LDC.getId();
-      } else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_LDC.getId() + TrangThaiAllEnum.DA_DUYET_LDTC.getId())) {
+      else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_LDC.getId() + TrangThaiAllEnum.DA_DUYET_LDC.getId())) {
         trangThai = TrangThaiAllEnum.DA_DUYET_LDC.getId();
       }
       //tu choi
-      else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_TP.getId() + TrangThaiAllEnum.TU_CHOI_TP.getId())) {
-        trangThai = TrangThaiAllEnum.TU_CHOI_TP.getId();
-      }
-      else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_LDTC.getId() + TrangThaiAllEnum.TU_CHOI_LDTC.getId())) {
+      else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_LDC.getId() + TrangThaiAllEnum.TU_CHOI_LDC.getId())) {
         trangThai = TrangThaiAllEnum.TU_CHOI_LDC.getId();
       }
-    }*/
+    }
     if (DataUtils.isNullOrEmpty(trangThai)) {
       throw new Exception("Quy trình phê duyệt không hợp lệ.");
     }
     currentRow.get().setTrangThai(trangThai);
-    if (trangThai.equals(TrangThaiAllEnum.TU_CHOI_LDTC.getId())) {
+    if (trangThai.equals(TrangThaiAllEnum.TU_CHOI_LDC.getId())) {
       currentRow.get().setLyDoTuChoi(DataUtils.safeToString(req.getLyDo()));
     }
     xhQdGnvCuuTroHdrRepository.save(currentRow.get());

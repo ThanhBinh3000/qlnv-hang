@@ -89,5 +89,6 @@ public class HhBienBanLayMau implements Serializable {
     @Transient
     private List<HhBbanLayMauDtl> bbanLayMauDtlList = new ArrayList<>();
 
-
+    @Transient
+    private HhBienBanDayKhoHdr bbNhapDayKho;
 }

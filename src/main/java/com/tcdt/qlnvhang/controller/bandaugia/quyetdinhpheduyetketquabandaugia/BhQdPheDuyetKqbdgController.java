@@ -27,7 +27,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping(PathContains.QD_PHE_DUYET_KQBDG)
-@Api(tags = "Quản lý Quyết định phê duyệt kết quả bán đấu giá ")
+@Api(tags = "Quản lý quyết định phê duyệt kết quả bán đấu giá ")
 public class BhQdPheDuyetKqbdgController {
 
     @Autowired
