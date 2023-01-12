@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -34,6 +35,10 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
     public Page<XhKqBdgHdr> searchPage(XhKqBdgHdrReq req) throws Exception {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),req.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<XhKqBdgHdr> page = xhKqBdgHdrRepository.search(req,pageable);
+        Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
+        page.getContent().forEach(f -> {
+            f.setTenLoaiVthh(listDanhMucHangHoa.get(f.getLoaiVthh()));
+        });
         return page;
     }
 
@@ -50,6 +55,11 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
         data.setNguoiTaoId(getUser().getId());
         data.setNgayTao(new Date());
         data.setMaDvi(getUser().getDvql());
+
+        XhKqBdgHdr byMaThongBao = xhKqBdgHdrRepository.findByMaThongBao(req.getMaThongBao());
+        if(!ObjectUtils.isEmpty(byMaThongBao)){
+            throw new Exception("Mã thông báo này đã được quyết định kết quả bán đấu giá, xin vui lòng chọn mã thông báo khác");
+        }
         xhKqBdgHdrRepository.save(data);
         return data;
     }
