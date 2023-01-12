@@ -127,8 +127,8 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                 dDiem.setTenNhaKho(StringUtils.isEmpty(dDiem.getMaNhaKho())?null:hashMapDmdv.get(dDiem.getMaNhaKho()));
                 dDiem.setTenNganKho(StringUtils.isEmpty(dDiem.getMaNganKho())?null:hashMapDmdv.get(dDiem.getMaNganKho()));
                 dDiem.setTenLoKho(StringUtils.isEmpty(dDiem.getMaLoKho())?null:hashMapDmdv.get(dDiem.getMaLoKho()));
-                dDiem.setListPhieuKtraCl(hhPhieuKiemTraChatLuongService.findAllByIdDdiemGiaoNvNh(dDiem.getId()));
-            }
+                this.setDataPhieu(null,dDiem);
+                 }
             for (HhQdGiaoNvNhangDtl dtl : hhQdGiaoNvNhangDtl ){
                 dtl.setHhQdGiaoNvNhDdiemList(ddiemList);
                 // Set biên bản nghiệm thu bảo quản
@@ -218,6 +218,8 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                 Cl.setBcanKeHangHdr(bcanKeHangHdr);
             }
             dDiem.setListPhieuKtraCl(phieuKiemTraChatLuongList);
+            dDiem.setBienBanNhapDayKho(hhBienBanDayKhoHdrRepository.findAllByIdQdGiaoNvNh(dDiem.getId()));
+            dDiem.setBienBanNhapDayKho(hhBienBanDayKhoHdrRepository.findAllByIdDdiemGiaoNvNh(dDiem.getId()));
         }
     }
 
@@ -407,7 +409,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
 
         String title="Danh sách quyết định giao nhiệm vụ nhập hàng";
         String[] rowsName=new String[]{"STT","Số QD giao nhiệm vụ NH","Ngày quyết định","Số hơp đồng","Số QĐ phê duyệt KH","Năm nhập","Loại hàng hóa","Chủng loại hàng hóa","Trích yếu","Trạng Thái"};
-        String fileName="danh-sach-dx-kh-mua-truc-tiep.xlsx";
+        String fileName="danh-sach-quyet-dinh-giao-nhiem-vu-nhap-hang.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs=null;
         for (int i=0;i<data.size();i++){
