@@ -26,6 +26,8 @@ public class HhBienBanDayKhoHdrReq {
 
     private Long idBangCanKeHang;
 
+    private Long idDdiemGiaoNvNh;
+
     private Integer namKh;
 
     private String maDvi;
