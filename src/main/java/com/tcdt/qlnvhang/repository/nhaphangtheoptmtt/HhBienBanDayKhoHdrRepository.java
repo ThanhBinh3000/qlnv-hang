@@ -36,6 +36,7 @@ public interface HhBienBanDayKhoHdrRepository extends JpaRepository <HhBienBanDa
     void deleteAllByIdIn(List<Long> ids);
 
     List<HhBienBanDayKhoHdr> findAllByIdQdGiaoNvNh(Long idQdGiaoNvNh);
+    List<HhBienBanDayKhoHdr> findAllByIdDdiemGiaoNvNh(Long idDdiemGiaoNvNh);
 
 
 }
