@@ -30,6 +30,8 @@ public class HhBienBanDayKhoHdr implements Serializable {
 
     private Long idBangCanKeHang;
 
+    private Long idDdiemGiaoNvNh;
+
     private Integer namKh;
 
     private String maDvi;
