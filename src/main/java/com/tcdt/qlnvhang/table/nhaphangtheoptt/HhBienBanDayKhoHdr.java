@@ -30,6 +30,8 @@ public class HhBienBanDayKhoHdr implements Serializable {
 
     private Long idBangCanKeHang;
 
+    private Long idDdiemGiaoNvNh;
+
     private Integer namKh;
 
     private String maDvi;
@@ -105,6 +107,14 @@ public class HhBienBanDayKhoHdr implements Serializable {
     private String tenTrangThai;
 
     private String lyDoTuChoi;
+
+    private String soPhieuNhapKho;
+
+    private String soBangKeCanHang;
+
+    @Temporal(TemporalType.DATE)
+    private Date ngayNkho;
+
 
 
 

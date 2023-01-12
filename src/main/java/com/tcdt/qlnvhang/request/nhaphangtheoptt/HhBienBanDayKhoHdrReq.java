@@ -7,6 +7,8 @@ import com.tcdt.qlnvhang.util.Contains;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -23,6 +25,8 @@ public class HhBienBanDayKhoHdrReq {
     private Long idPhieuNhapKho;
 
     private Long idBangCanKeHang;
+
+    private Long idDdiemGiaoNvNh;
 
     private Integer namKh;
 
@@ -67,6 +71,14 @@ public class HhBienBanDayKhoHdrReq {
     private String ktvBanQuan;
 
     private String keToanTruong;
+
+    private String soPhieuNhapKho;
+
+    private String soBangKeCanHang;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayNkho;
+
 
 
     @Transient

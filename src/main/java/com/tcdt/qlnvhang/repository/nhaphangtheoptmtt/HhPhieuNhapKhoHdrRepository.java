@@ -36,4 +36,8 @@ public interface HhPhieuNhapKhoHdrRepository  extends JpaRepository<HhPhieuNhapK
     List<HhPhieuNhapKhoHdr> findAllByIdDdiemGiaoNvNh(Long idDdiemGiaoNvNh);
 
     List<HhPhieuNhapKhoHdr> findAllByIdQdGiaoNvNh(Long idQdGiaoNvNh);
+
+    HhPhieuNhapKhoHdr findBySoPhieuKtraCluong(String soPhieuKtraCluong);
+
+
 }

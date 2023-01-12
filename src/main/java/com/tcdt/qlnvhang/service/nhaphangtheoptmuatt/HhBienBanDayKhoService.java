@@ -9,9 +9,7 @@ import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhBienBanDayKhoHdrReposito
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhBienBanDayKhoDtlReq;
-import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhBienBanDayKhoHdrReq;
-import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhBienBanDayKhoReq;
+import com.tcdt.qlnvhang.request.nhaphangtheoptt.*;
 import com.tcdt.qlnvhang.service.BaseService;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -20,8 +18,10 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBienBanDayKhoDtl;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBienBanDayKhoHdr;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuNhapKhoCt;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuNhapKhoHdr;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import org.docx4j.wml.P;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,15 +105,16 @@ public class HhBienBanDayKhoService extends BaseServiceImpl {
     }
 
     @Transactional()
-    void saveCtiet(Long idHdr, HhBienBanDayKhoHdrReq objReq){
+    void saveCtiet(Long idHdr , HhBienBanDayKhoHdrReq objReq){
         hhBienBanDayKhoDtlRepository.deleteByIdHdr(idHdr);
-        for (HhBienBanDayKhoDtlReq bienBanDtlReq : objReq.getHhBienBanDayKhoDtlReqList()){
-            HhBienBanDayKhoDtl hhBienBanDayKhoDtl = new HhBienBanDayKhoDtl();
-            BeanUtils.copyProperties(bienBanDtlReq, hhBienBanDayKhoDtl, "id");
-            hhBienBanDayKhoDtl.setIdHdr(idHdr);
-            hhBienBanDayKhoDtlRepository.save(hhBienBanDayKhoDtl);
+        for( HhBienBanDayKhoDtlReq bienBanDayKhoDtlReq : objReq.getHhBienBanDayKhoDtlReqList()){
+            HhBienBanDayKhoDtl bienBanDayKhoDtl = new HhBienBanDayKhoDtl();
+            BeanUtils.copyProperties(bienBanDayKhoDtlReq,bienBanDayKhoDtl,"id");
+            bienBanDayKhoDtl.setIdHdr(idHdr);
+            hhBienBanDayKhoDtlRepository.save(bienBanDayKhoDtl);
         }
     }
+
 
     @Transactional
     public HhBienBanDayKhoHdr update(HhBienBanDayKhoHdrReq objReq) throws Exception{
@@ -147,10 +148,10 @@ public class HhBienBanDayKhoService extends BaseServiceImpl {
         HhBienBanDayKhoHdr bienBanDayKhoHdr = qOptional.get();
         bienBanDayKhoHdr.setTenDvi(mapDmucDvi.get(bienBanDayKhoHdr.getMaDvi()));
         bienBanDayKhoHdr.setTenDiemKho(mapDmucDvi.get(bienBanDayKhoHdr.getMaDiemKho()));
-        bienBanDayKhoHdr.setTenNhaKho(mapDmucDvi.get(bienBanDayKhoHdr.getTenNhaKho()));
+        bienBanDayKhoHdr.setTenNhaKho(mapDmucDvi.get(bienBanDayKhoHdr.getMaNhaKho()));
         bienBanDayKhoHdr.setTenNganKho(mapDmucDvi.get(bienBanDayKhoHdr.getMaNganKho()));
         bienBanDayKhoHdr.setTenLoKho(mapDmucDvi.get(bienBanDayKhoHdr.getMaLoKho()));
-        bienBanDayKhoHdr.setTrangThai(NhapXuatHangTrangThaiEnum.getTenById(bienBanDayKhoHdr.getTrangThai()));
+        bienBanDayKhoHdr.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(bienBanDayKhoHdr.getTrangThai()));
         bienBanDayKhoHdr.setFileDinhKems(fileDinhKemService.search(bienBanDayKhoHdr.getId(), Collections.singleton(HhBienBanDayKhoHdr.TABLE_NAME)));
         List<HhBienBanDayKhoDtl> ctList = hhBienBanDayKhoDtlRepository.findAllByIdHdr(bienBanDayKhoHdr.getId());
         bienBanDayKhoHdr.setHhBienBanDayKhoDtlList(ctList);
@@ -252,25 +253,39 @@ public class HhBienBanDayKhoService extends BaseServiceImpl {
         return created;
     }
 
-//    public void export (SearchHhBienBanDayKhoReq objReq, HttpServletResponse response) throws Exception{
-//        PaggingReq paggingReq = new PaggingReq();
-//        paggingReq.setPage(0);
-//        paggingReq.setLimit(Integer.MAX_VALUE);
-//        objReq.setPaggingReq(paggingReq);
-//        Page<HhBienBanDayKhoHdr> page = this.searchPage(objReq);
-//        List<HhBienBanDayKhoHdr> data = page.getContent();
-//        String title = "Danh sách biên bản nhập đầy kho";
-//        String[] rowsName = new String[]{"STT", "Số QĐ giao NN NH", "Năm Kh", "Thời gian Nh trước ngày", "Số BB NĐK", "Ngày bắt đầu nhập", "Ngày kết thúc nhập", "Số phiếu NK", "Số bảng kê", "Ngày nhập kho", "Điểm kho","Nhà kho", "Ngăn kho", "Lô kho", "Trạng thái"};
-//        String fileName="danh-sach-bien-ban-nhap-day-kho.xlsx";
-//        List<Object[]> dataList = new ArrayList<Object[]>();
-//        Object[] objs=null;
-//        for (int i=0;i<data.size();i++){
-//            HhBienBanDayKhoHdr hdr = data.get(i);
-//            objs=new Object[rowsName.length];
-//            objs[0] = i;
-//            objs[1] = hdr.getSoQuyetDinhNhap();
-//            objs[2] = hdr.getNamKh();
-//            objs[3] = hdr.get
-//        }
-//    }
+    public void export (SearchHhBienBanDayKhoReq objReq, HttpServletResponse response) throws Exception{
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        objReq.setPaggingReq(paggingReq);
+        Page<HhBienBanDayKhoHdr> page = this.searchPage(objReq);
+        List<HhBienBanDayKhoHdr> data = page.getContent();
+        String title = "Danh sách biên bản nhập đầy kho";
+        String[] rowsName = new String[]{"STT", "Số QĐ giao NN NH", "Năm Kh", "Thời gian Nh trước ngày", "Số BB NĐK", "Ngày bắt đầu nhập", "Ngày kết thúc nhập", "Số phiếu NK", "Số bảng kê", "Ngày nhập kho", "Điểm kho","Nhà kho", "Ngăn kho", "Lô kho", "Trạng thái"};
+        String fileName="danh-sach-bien-ban-nhap-day-kho.xlsx";
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs=null;
+        for (int i=0;i<data.size();i++){
+            HhBienBanDayKhoHdr hdr = data.get(i);
+            objs=new Object[rowsName.length];
+            objs[0] = i;
+            objs[1] = hdr.getSoQuyetDinhNhap();
+            objs[2] = hdr.getNamKh();
+            objs[3] = hdr.getNgayNkho();
+            objs[4] = hdr.getSoBbNhapDayKho();
+            objs[5] = hdr.getNgayBdauNhap();
+            objs[6] = hdr.getNgayKthucNhap();
+            objs[7] = hdr.getSoPhieuNhapKho();
+            objs[8] = hdr.getSoBangKeCanHang();
+            objs[9] = hdr.getNgayNkho();
+            objs[10] = hdr.getTenDiemKho();
+            objs[11] = hdr.getTenNhaKho();
+            objs[12] = hdr.getTenNganKho();
+            objs[13] = hdr.getTenLoKho();
+            objs[14] = hdr.getTenTrangThai();
+            dataList.add(objs);
+        }
+        ExportExcel exportExcel = new ExportExcel(title,fileName,rowsName,dataList,response);
+        exportExcel.export();
+    }
 }

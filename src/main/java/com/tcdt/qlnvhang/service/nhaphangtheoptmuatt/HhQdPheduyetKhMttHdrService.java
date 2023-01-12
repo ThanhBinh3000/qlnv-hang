@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
+import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
@@ -198,13 +199,11 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
 
         dataDB.setNgaySua(getDateTimeNow());
         dataDB.setNguoiSua(getUser().getUsername());
-
-
-        hhQdPheduyetKhMttHdrRepository.save(dataDB);
-
+        HhQdPheduyetKhMttHdr  createCheck = hhQdPheduyetKhMttHdrRepository.save(dataDB);
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), dataMap.getId(), HhQdPheduyetKhMttHdr.TABLE_NAME);
+        createCheck.setFileDinhKems(fileDinhKems);
         this.saveDetail(objReq,dataDB);
-
-        return dataDB;
+        return createCheck;
     }
 
 
@@ -280,7 +279,7 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
             hhQdPheduyetKhMttDxRepository.deleteAll(hhQdPheduyetKhMttDx);
         }
         hhQdPheduyetKhMttHdrRepository.delete(optional.get());
-
+        fileDinhKemService.delete(optional.get().getId(), Collections.singleton(HhQdPheduyetKhMttHdr.TABLE_NAME));
         if (optional.get().getPhanLoai().equals("TH")){
             hhDxuatKhMttThopRepository.updateTrangThai(optional.get().getIdThHdr(), NhapXuatHangTrangThaiEnum.CHUATAO_QD.getId());
         }else {
@@ -313,6 +312,7 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
         }
         hhQdPheduyetKhMttSLDDRepository.deleteAll(hhQdPheduyetKhMttSLDDS);
         hhQdPheduyetKhMttDxRepository.deleteAll(hhQdPheduyetKhMttDxs);
+        fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(HhQdPheduyetKhMttHdr.TABLE_NAME));
         hhQdPheduyetKhMttHdrRepository.deleteAll(list);
     }
 

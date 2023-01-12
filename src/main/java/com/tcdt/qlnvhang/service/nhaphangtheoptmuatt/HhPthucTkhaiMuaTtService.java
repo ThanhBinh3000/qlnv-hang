@@ -123,11 +123,11 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
             nthauDthau.setFileDinhKems(fileDinhKems.get(0));
             listDuThau.add(nthauDthau);
         }
-        if(byId.get().getPtMuaTrucTiep().equals(Contains.UY_QUYEN)){
+        if(hhQdPheduyetKhMttDx.getPtMuaTrucTiep().equals(Contains.UY_QUYEN)){
             List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),hhQdPheduyetKhMttDx.getId(),"HH_QD_PHE_DUYET_KHMTT_DX");
             hhQdPheduyetKhMttDx.setFileDinhKemUyQuyen(fileDinhKems);
         }
-        if(byId.get().getPtMuaTrucTiep().equals(Contains.MUA_LE)){
+        if(hhQdPheduyetKhMttDx.getPtMuaTrucTiep().equals(Contains.MUA_LE)){
             List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),hhQdPheduyetKhMttDx.getId(),"HH_QD_PHE_DUYET_KHMTT_DX");
             hhQdPheduyetKhMttDx.setFileDinhKemMuaLe(fileDinhKems);
         }
@@ -135,12 +135,12 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
         return listDuThau;
     }
 
-
     public List<HhChiTietTTinChaoGia> detail(String ids) throws Exception {
             Optional<HhQdPheduyetKhMttDx> byId = hhQdPheduyetKhMttDxRepository.findById(Long.parseLong(ids));
             if(!byId.isPresent()){
                 throw new Exception("Bản ghi không tồn tại");
             }
+        HhQdPheduyetKhMttDx hhQdPheduyetKhMttDx = byId.get();
         List<HhChiTietTTinChaoGia> byIdDtGt = hhCtietTtinCgiaRepository.findAllByIdTkhaiKh(Long.parseLong(ids));
         byIdDtGt.forEach(f -> {
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
@@ -149,9 +149,14 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
             List<FileDinhKem> fileDinhKems = fileDinhKemService.search(chaoGia.getId(), Arrays.asList(HhChiTietTTinChaoGia.TABLE_NAME));
             chaoGia.setFileDinhKems(fileDinhKems.get(0));
         }
+        if(hhQdPheduyetKhMttDx.getPtMuaTrucTiep().equals(Contains.UY_QUYEN)){
+            hhQdPheduyetKhMttDx.setFileDinhKemUyQuyen(fileDinhKemService.search(hhQdPheduyetKhMttDx.getId(), Collections.singleton(HhQdPheduyetKhMttDx.TABLE_NAME)));
+        }
+        if (hhQdPheduyetKhMttDx.getPtMuaTrucTiep().equals(Contains.MUA_LE)){
+            hhQdPheduyetKhMttDx.setFileDinhKemMuaLe(fileDinhKemService.search(hhQdPheduyetKhMttDx.getId(), Collections.singleton(HhQdPheduyetKhMttDx.TABLE_NAME)));
+        }
         return byIdDtGt;
     }
-
 
   public  void approve(HhCgiaReq stReq) throws Exception {
         Optional<HhQdPheduyetKhMttDx> optional = hhQdPheduyetKhMttDxRepository.findById(stReq.getId());

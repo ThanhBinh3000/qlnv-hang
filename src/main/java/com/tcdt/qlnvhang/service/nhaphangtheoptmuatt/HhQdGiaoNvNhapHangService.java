@@ -74,6 +74,9 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
     @Autowired
     private HhBcanKeHangHdrRepository hhBcanKeHangHdrRepository;
 
+    @Autowired
+    private HhBienBanDayKhoHdrRepository hhBienBanDayKhoHdrRepository;
+
     public Page<HhQdGiaoNvNhapHang> searchPage(SearchHhQdGiaoNvNhReq objReq) throws Exception{
         UserInfo userInfo= SecurityContextService.getUser();
         Pageable pageable= PageRequest.of(objReq.getPaggingReq().getPage(),
@@ -142,8 +145,9 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                     item.setTenNhaKho(StringUtils.isEmpty(item.getMaNhaKho())?null:hashMapDmdv.get(item.getMaNhaKho()));
                     item.setTenNganKho(StringUtils.isEmpty(item.getMaNganKho())?null:hashMapDmdv.get(item.getMaNganKho()));
                     item.setTenLoKho(StringUtils.isEmpty(item.getMaLoKho())?null:hashMapDmdv.get(item.getMaLoKho()));
-//                    NhBbNhapDayKho nhBbNhapDayKhoStream = bbNhapDayKho.stream().filter(x -> Objects.equals(x.getId(), item.getIdBbNhapDayKho())).findAny().orElse(null);
-//                    item.setBbNhapDayKho(nhBbNhapDayKhoStream);
+                    HhBienBanDayKhoHdr bienBanDayKho = hhBienBanDayKhoHdrRepository.findAllByIdQdGiaoNvNh(f.getId())
+                            .stream().filter(x -> Objects.equals(x.getId(), item.getIdBbNhapDayKho())).findAny().orElse(null);
+                    item.setBbNhapDayKho(bienBanDayKho);
                 });
                 dtl.setListBienBanLayMau(bbLayMau);
                 // Set phiếu kiểm nghiệm chất lượng
@@ -181,8 +185,19 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                 bcanKeHang.setTenLoKho(hashMapDmdv.get(bcanKeHang.getMaLoKho()));
             }
 
+            List<HhBienBanDayKhoHdr> hhBienBanDayKhoHdr = hhBienBanDayKhoHdrRepository.findAllByIdQdGiaoNvNh(f.getId());
+            for (HhBienBanDayKhoHdr bienBanDayKhoHdr : hhBienBanDayKhoHdr){
+                bienBanDayKhoHdr.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(bienBanDayKhoHdr.getTrangThai()));
+                bienBanDayKhoHdr.setTenDvi(hashMapDmdv.get(bienBanDayKhoHdr.getMaDvi()));
+                bienBanDayKhoHdr.setTenDiemKho(hashMapDmdv.get(bienBanDayKhoHdr.getMaDiemKho()));
+                bienBanDayKhoHdr.setTenNhaKho(hashMapDmdv.get(bienBanDayKhoHdr.getMaNhaKho()));
+                bienBanDayKhoHdr.setTenNganKho(hashMapDmdv.get(bienBanDayKhoHdr.getMaNganKho()));
+                bienBanDayKhoHdr.setTenLoKho(hashMapDmdv.get(bienBanDayKhoHdr.getMaLoKho()));
+            }
+
             f.setHhPhieuNhapKhoHdrList(hhPhieuNhapKhoHdrList);
             f.setHhBcanKeHangHdrList(hhBcanKeHangHdrList);
+            f.setHhBienBanDayKhoHdrList(hhBienBanDayKhoHdr);
             f.setHhQdGiaoNvNhangDtlList(hhQdGiaoNvNhangDtl);
         });
 
@@ -193,9 +208,16 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
         if(dtl != null){
 
         }else{
-            dDiem.setListPhieuKtraCl(hhPhieuKiemTraChatLuongService.findAllByIdDdiemGiaoNvNh(dDiem.getId()));
             dDiem.setBcanKeHangHdr(hhBcanKeHangHdrRepository.findAllByIdDdiemGiaoNvNh(dDiem.getId()));
             dDiem.setHhPhieuNhapKhoHdr(hhPhieuNhapKhoHdrRepository.findAllByIdDdiemGiaoNvNh(dDiem.getId()));
+            List<HhPhieuKiemTraChatLuong> phieuKiemTraChatLuongList = hhPhieuKiemTraChatLuongService.findAllByIdDdiemGiaoNvNh(dDiem.getId());
+            for (HhPhieuKiemTraChatLuong Cl : phieuKiemTraChatLuongList){
+                HhPhieuNhapKhoHdr phieuNhapKhoHdr = hhPhieuNhapKhoHdrRepository.findBySoPhieuKtraCluong(Cl.getSoPhieu());
+                Cl.setPhieuNhapKhoHdr(phieuNhapKhoHdr);
+                HhBcanKeHangHdr bcanKeHangHdr = hhBcanKeHangHdrRepository.findBySoPhieuKtraCluong(Cl.getSoPhieu());
+                Cl.setBcanKeHangHdr(bcanKeHangHdr);
+            }
+            dDiem.setListPhieuKtraCl(phieuKiemTraChatLuongList);
         }
     }
 
@@ -383,7 +405,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
         Page<HhQdGiaoNvNhapHang> page=this.searchPage(objReq);
         List<HhQdGiaoNvNhapHang> data=page.getContent();
 
-        String title="Danh sách đề xuất kế hoạch mua trực tiếp";
+        String title="Danh sách quyết định giao nhiệm vụ nhập hàng";
         String[] rowsName=new String[]{"STT","Số QD giao nhiệm vụ NH","Ngày quyết định","Số hơp đồng","Số QĐ phê duyệt KH","Năm nhập","Loại hàng hóa","Chủng loại hàng hóa","Trích yếu","Trạng Thái"};
         String fileName="danh-sach-dx-kh-mua-truc-tiep.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
