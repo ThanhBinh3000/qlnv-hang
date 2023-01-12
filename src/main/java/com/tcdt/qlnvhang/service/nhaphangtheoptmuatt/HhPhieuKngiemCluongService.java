@@ -234,7 +234,7 @@ public class HhPhieuKngiemCluongService extends BaseServiceImpl {
                 optional.get().setNgayGuiDuyet(new Date());
                 break;
             case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
-            case Contains.TUCHOI_LDC + Contains.TUCHOI_LDC:
+            case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
                 optional.get().setNguoiPduyetId(userInfo.getId());
                 optional.get().setNgayPduyet(getDateTimeNow());
                 optional.get().setLyDoTuChoi(statusReq.getLyDo());
