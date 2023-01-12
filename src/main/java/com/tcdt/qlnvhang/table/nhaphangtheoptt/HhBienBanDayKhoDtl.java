@@ -30,6 +30,22 @@ public class HhBienBanDayKhoDtl implements Serializable {
 
     private String soBangKeCanHang;
 
+    private String maDiemKho;
+    @Transient
+    private String tenDiemKho;
+
+    private String maNhaKho;
+    @Transient
+    private String tenNhaKho;
+
+    private String maNganKho;
+    @Transient
+    private String tenNganKho;
+
+    private String maLoKho;
+    @Transient
+    private String tenLoKho;
+
     @Temporal(TemporalType.DATE)
     private Date ngayNkho;
 

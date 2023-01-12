@@ -77,6 +77,9 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
     @Autowired
     private HhBienBanDayKhoHdrRepository hhBienBanDayKhoHdrRepository;
 
+    @Autowired
+    private HhBienBanDayKhoDtlRepository hhBienBanDayKhoDtlRepository;
+
     public Page<HhQdGiaoNvNhapHang> searchPage(SearchHhQdGiaoNvNhReq objReq) throws Exception{
         UserInfo userInfo= SecurityContextService.getUser();
         Pageable pageable= PageRequest.of(objReq.getPaggingReq().getPage(),
@@ -193,6 +196,14 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                 bienBanDayKhoHdr.setTenNhaKho(hashMapDmdv.get(bienBanDayKhoHdr.getMaNhaKho()));
                 bienBanDayKhoHdr.setTenNganKho(hashMapDmdv.get(bienBanDayKhoHdr.getMaNganKho()));
                 bienBanDayKhoHdr.setTenLoKho(hashMapDmdv.get(bienBanDayKhoHdr.getMaLoKho()));
+                List<HhBienBanDayKhoDtl> hhBienBanDayKhoDtl = hhBienBanDayKhoDtlRepository.findAllByIdHdr(bienBanDayKhoHdr.getId());
+                for (HhBienBanDayKhoDtl bienBanDayKhoDtl : hhBienBanDayKhoDtl){
+                    bienBanDayKhoDtl.setTenDiemKho(hashMapDmdv.get(bienBanDayKhoDtl.getMaDiemKho()));
+                    bienBanDayKhoDtl.setTenNhaKho(hashMapDmdv.get(bienBanDayKhoDtl.getMaNhaKho()));
+                    bienBanDayKhoDtl.setTenNganKho(hashMapDmdv.get(bienBanDayKhoDtl.getMaNganKho()));
+                    bienBanDayKhoDtl.setTenLoKho(hashMapDmdv.get(bienBanDayKhoDtl.getMaLoKho()));
+                }
+                bienBanDayKhoHdr.setHhBienBanDayKhoDtlList(hhBienBanDayKhoDtl);
             }
 
             f.setHhPhieuNhapKhoHdrList(hhPhieuNhapKhoHdrList);
