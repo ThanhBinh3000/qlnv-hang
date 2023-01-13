@@ -4,9 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.IdSearchReq;
-import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinh.XhQdDchinhKhBdgReq;
-import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinh.XhQdDchinhKhBdgSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgService;
 import com.tcdt.qlnvhang.util.PathContains;
@@ -37,7 +35,7 @@ public class XhQdDchinhKhBdgController extends BaseController {
 
     @ApiOperation(value = "Tra cứu  ", response = List.class)
     @PostMapping(value=   PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody XhQdDchinhKhBdgSearchReq objReq) {
+    public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody XhQdDchinhKhBdgReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(xhQdDchinhKhBdgService.searchPage(objReq));
@@ -72,7 +70,7 @@ public class XhQdDchinhKhBdgController extends BaseController {
     @GetMapping(value =  PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> detail(
-            @ApiParam(value = "ID phương án kế hoạch ", example = "1", required = true) @PathVariable("ids") String ids) {
+            @ApiParam(value = "ID phương án kế hoạch ", example = "1", required = true) @PathVariable("ids") Long ids) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(xhQdDchinhKhBdgService.detail(ids));
@@ -92,7 +90,7 @@ public class XhQdDchinhKhBdgController extends BaseController {
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            xhQdDchinhKhBdgService.delete(idSearchReq);
+            xhQdDchinhKhBdgService.delete(idSearchReq.getId());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -111,7 +109,7 @@ public class XhQdDchinhKhBdgController extends BaseController {
     public ResponseEntity<BaseResponse> deleteMuilti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            xhQdDchinhKhBdgService.deleteMulti(idSearchReq);
+            xhQdDchinhKhBdgService.deleteMulti(idSearchReq.getIdList());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -143,7 +141,7 @@ public class XhQdDchinhKhBdgController extends BaseController {
 
     @ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03  ", response = List.class)
     @PostMapping(value =  PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> updateStatus(@Valid HttpServletRequest req, @RequestBody StatusReq stReq) {
+    public ResponseEntity<BaseResponse> updateStatus(@Valid HttpServletRequest req, @RequestBody XhQdDchinhKhBdgReq stReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(xhQdDchinhKhBdgService.approve(stReq));
@@ -162,7 +160,7 @@ public class XhQdDchinhKhBdgController extends BaseController {
     @ApiOperation(value = "Kết xuất danh sách ", response = List.class)
     @PostMapping(value=  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void exportListQdBtcBnToExcel(@Valid @RequestBody XhQdDchinhKhBdgSearchReq objReq, HttpServletResponse response) throws Exception{
+    public void exportListQdBtcBnToExcel(@Valid @RequestBody XhQdDchinhKhBdgReq objReq, HttpServletResponse response) throws Exception{
 
         try {
             xhQdDchinhKhBdgService.export(objReq,response);
