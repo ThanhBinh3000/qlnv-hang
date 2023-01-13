@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.nhaphangtheoptt;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuong;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -47,6 +48,9 @@ public class HhQdGiaoNvNhDdiem {
 
     @Transient
     List<HhBcanKeHangHdr> bcanKeHangHdr;
+
+    @Transient
+    List<HhBienBanDayKhoHdr> bienBanNhapDayKho;
 
 }
 

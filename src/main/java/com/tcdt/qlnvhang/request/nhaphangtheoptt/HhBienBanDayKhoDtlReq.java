@@ -7,6 +7,7 @@ import lombok.Data;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -22,6 +23,22 @@ public class HhBienBanDayKhoDtlReq {
     private String soPhieuNhapKho;
 
     private String soBangKeCanHang;
+
+    private String maDiemKho;
+    @Transient
+    private String tenDiemKho;
+
+    private String maNhaKho;
+    @Transient
+    private String tenNhaKho;
+
+    private String maNganKho;
+    @Transient
+    private String tenNganKho;
+
+    private String maLoKho;
+    @Transient
+    private String tenLoKho;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayNkho;

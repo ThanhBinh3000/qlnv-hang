@@ -77,6 +77,9 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
     @Autowired
     private HhBienBanDayKhoHdrRepository hhBienBanDayKhoHdrRepository;
 
+    @Autowired
+    private HhBienBanDayKhoDtlRepository hhBienBanDayKhoDtlRepository;
+
     public Page<HhQdGiaoNvNhapHang> searchPage(SearchHhQdGiaoNvNhReq objReq) throws Exception{
         UserInfo userInfo= SecurityContextService.getUser();
         Pageable pageable= PageRequest.of(objReq.getPaggingReq().getPage(),
@@ -127,8 +130,8 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                 dDiem.setTenNhaKho(StringUtils.isEmpty(dDiem.getMaNhaKho())?null:hashMapDmdv.get(dDiem.getMaNhaKho()));
                 dDiem.setTenNganKho(StringUtils.isEmpty(dDiem.getMaNganKho())?null:hashMapDmdv.get(dDiem.getMaNganKho()));
                 dDiem.setTenLoKho(StringUtils.isEmpty(dDiem.getMaLoKho())?null:hashMapDmdv.get(dDiem.getMaLoKho()));
-                dDiem.setListPhieuKtraCl(hhPhieuKiemTraChatLuongService.findAllByIdDdiemGiaoNvNh(dDiem.getId()));
-            }
+                this.setDataPhieu(null,dDiem);
+                 }
             for (HhQdGiaoNvNhangDtl dtl : hhQdGiaoNvNhangDtl ){
                 dtl.setHhQdGiaoNvNhDdiemList(ddiemList);
                 // Set biên bản nghiệm thu bảo quản
@@ -193,6 +196,14 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                 bienBanDayKhoHdr.setTenNhaKho(hashMapDmdv.get(bienBanDayKhoHdr.getMaNhaKho()));
                 bienBanDayKhoHdr.setTenNganKho(hashMapDmdv.get(bienBanDayKhoHdr.getMaNganKho()));
                 bienBanDayKhoHdr.setTenLoKho(hashMapDmdv.get(bienBanDayKhoHdr.getMaLoKho()));
+                List<HhBienBanDayKhoDtl> hhBienBanDayKhoDtl = hhBienBanDayKhoDtlRepository.findAllByIdHdr(bienBanDayKhoHdr.getId());
+                for (HhBienBanDayKhoDtl bienBanDayKhoDtl : hhBienBanDayKhoDtl){
+                    bienBanDayKhoDtl.setTenDiemKho(hashMapDmdv.get(bienBanDayKhoDtl.getMaDiemKho()));
+                    bienBanDayKhoDtl.setTenNhaKho(hashMapDmdv.get(bienBanDayKhoDtl.getMaNhaKho()));
+                    bienBanDayKhoDtl.setTenNganKho(hashMapDmdv.get(bienBanDayKhoDtl.getMaNganKho()));
+                    bienBanDayKhoDtl.setTenLoKho(hashMapDmdv.get(bienBanDayKhoDtl.getMaLoKho()));
+                }
+                bienBanDayKhoHdr.setHhBienBanDayKhoDtlList(hhBienBanDayKhoDtl);
             }
 
             f.setHhPhieuNhapKhoHdrList(hhPhieuNhapKhoHdrList);
@@ -218,6 +229,8 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                 Cl.setBcanKeHangHdr(bcanKeHangHdr);
             }
             dDiem.setListPhieuKtraCl(phieuKiemTraChatLuongList);
+            dDiem.setBienBanNhapDayKho(hhBienBanDayKhoHdrRepository.findAllByIdQdGiaoNvNh(dDiem.getId()));
+            dDiem.setBienBanNhapDayKho(hhBienBanDayKhoHdrRepository.findAllByIdDdiemGiaoNvNh(dDiem.getId()));
         }
     }
 
@@ -407,7 +420,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
 
         String title="Danh sách quyết định giao nhiệm vụ nhập hàng";
         String[] rowsName=new String[]{"STT","Số QD giao nhiệm vụ NH","Ngày quyết định","Số hơp đồng","Số QĐ phê duyệt KH","Năm nhập","Loại hàng hóa","Chủng loại hàng hóa","Trích yếu","Trạng Thái"};
-        String fileName="danh-sach-dx-kh-mua-truc-tiep.xlsx";
+        String fileName="danh-sach-quyet-dinh-giao-nhiem-vu-nhap-hang.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs=null;
         for (int i=0;i<data.size();i++){
