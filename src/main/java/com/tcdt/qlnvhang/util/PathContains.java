@@ -129,6 +129,8 @@ public class PathContains {
 
 	public static final String HD_MTT = "/hd-mtt";
 
+	public static final String BK_ML = "/bk-ml";
+
 	public static final String QD_NV_NH = "/qd-nv-nh";
 
 	public static final String PKT_CL = "/pkt-cl";
