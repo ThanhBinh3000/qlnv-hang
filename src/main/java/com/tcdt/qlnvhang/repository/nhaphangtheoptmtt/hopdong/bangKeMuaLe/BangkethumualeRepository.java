@@ -16,7 +16,6 @@ import java.util.Optional;
 public interface BangkethumualeRepository extends JpaRepository<BangKeMuaLe,Long> {
     @Query("SELECT c FROM BangKeMuaLe c WHERE 1=1 " +
             "AND (:#{#param.maDvi} IS NULL OR c.maDvi = :#{#param.maDvi}) " +
-            "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
             "AND (:#{#param.namQd} IS NULL OR c.namQd = :#{#param.namQd}) " +
              "AND ((:#{#param.ngayMuaTu}  IS NULL OR c.ngayMua >= :#{#param.ngayMuaTu})" +
             "AND (:#{#param.ngayMuaDen}  IS NULL OR c.ngayMua <= :#{#param.ngayMuaDen}) ) " +
