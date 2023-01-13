@@ -237,7 +237,7 @@ public class HhBienBanLayMauService extends BaseServiceImpl {
 
         String title="Danh sách biên bản lấy mẫu bàn giao mẫu";
         String[] rowsName=new String[]{"STT","Số biên bản","Số quyết định nhập hàng","Ngày lấy mẫu","Số hợp đồng","Điểm kho","Nhà kho","Ngăn kho","Lô kho","Trạng thái",};
-        String fileName="danh-sach-dx-kh-mua-truc-tiep.xlsx";
+        String fileName="danh-sach-bien-ban-lay-mau-ban-giao-mau.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs=null;
         for (int i=0;i<data.size();i++){
