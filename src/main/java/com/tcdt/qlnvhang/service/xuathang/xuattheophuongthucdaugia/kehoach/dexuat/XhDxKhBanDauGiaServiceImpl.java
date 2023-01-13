@@ -26,6 +26,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
@@ -41,22 +42,22 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
     private XhDxKhBanDauGiaDtlRepository xhDxKhBanDauGiaDtlRepository;
 
     @Autowired
-     private XhDxKhBanDauGiaPhanLoRepository xhDxKhBanDauGiaPhanLoRepository;
+    private XhDxKhBanDauGiaPhanLoRepository xhDxKhBanDauGiaPhanLoRepository;
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
 
     @Override
     public Page<XhDxKhBanDauGia> searchPage(XhDxKhBanDauGiaReq req) throws Exception {
-                Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),
                 req.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<XhDxKhBanDauGia> data = xhDxKhBanDauGiaRepository.searchPage(
                 req,
                 pageable);
-        Map<String,String> hashMapDmhh = getListDanhMucHangHoa();
+        Map<String, String> hashMapDmhh = getListDanhMucHangHoa();
         Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
 
-        data.getContent().forEach(f->{
+        data.getContent().forEach(f -> {
             f.setTenLoaiVthh(hashMapDmhh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(hashMapDmhh.get(f.getCloaiVthh()));
             f.setMaDvi(listDanhMucDvi.get(f.getMaDvi()));
@@ -71,7 +72,7 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
 
     @Override
     public XhDxKhBanDauGia create(XhDxKhBanDauGiaReq req) throws Exception {
-        UserInfo userInfo= SecurityContextService.getUser();
+        UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null)
             throw new Exception("Bad request.");
 
@@ -83,27 +84,27 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
         }
 
         XhDxKhBanDauGia dataMap = new XhDxKhBanDauGia();
-        BeanUtils.copyProperties(req,dataMap,"id");
+        BeanUtils.copyProperties(req, dataMap, "id");
         dataMap.setNgayTao(getDateTimeNow());
         dataMap.setNguoiTaoId(userInfo.getId());
         dataMap.setTrangThai(Contains.DU_THAO);
         dataMap.setTrangThaiTh(Contains.CHUATONGHOP);
-//        this.validateData(dataMap,dataMap.getTrangThai());
+        this.validateData(dataMap, dataMap.getTrangThai());
         xhDxKhBanDauGiaRepository.save(dataMap);
-        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(),dataMap.getId(),"XH_DX_KH_BAN_DAU_GIA");
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), dataMap.getId(), "XH_DX_KH_BAN_DAU_GIA");
         dataMap.setFileDinhKem(fileDinhKem);
 
-        this.saveDetail(req,dataMap.getId());
+        this.saveDetail(req, dataMap.getId());
         return dataMap;
     }
 
-        public void validateData(XhDxKhBanDauGia objHdr,String trangThai) throws Exception {
-//       if (trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.DUTHAO.getId())){
-//           XhDxKhBanDauGia dXuat = xhDxKhBanDauGiaRepository.findAllByLoaiVthhAndCloaiVthhAndNamKhAndMaDviAndTrangThaiNot(objHdr.getLoaiVthh(), objHdr.getCloaiVthh(), objHdr.getNamKh(), objHdr.getMaDvi(),NhapXuatHangTrangThaiEnum.DUTHAO.getId());
-//           if (!ObjectUtils.isEmpty(dXuat) && !dXuat.getId().equals(objHdr.getId())){
-//               throw new Exception("Chủng loại hàng hóa đã được tạo và gửi duyệt, xin vui lòng chọn lại chủng loại hàng hóa khác");
-//           }
-//       }
+    public void validateData(XhDxKhBanDauGia objHdr, String trangThai) throws Exception {
+        if (trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.DUTHAO.getId())) {
+            XhDxKhBanDauGia dXuat = xhDxKhBanDauGiaRepository.findAllByLoaiVthhAndCloaiVthhAndNamKhAndMaDviAndTrangThaiNot(objHdr.getLoaiVthh(), objHdr.getCloaiVthh(), objHdr.getNamKh(), objHdr.getMaDvi(), NhapXuatHangTrangThaiEnum.DUTHAO.getId());
+            if (!ObjectUtils.isEmpty(dXuat) && !dXuat.getId().equals(objHdr.getId())) {
+                throw new Exception("Chủng loại hàng hóa đã được tạo và gửi duyệt, xin vui lòng chọn lại chủng loại hàng hóa khác");
+            }
+        }
 //       if (trangThai.equals(NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId())){
 //           for (XhDxKhBanDauGiaPhanLo chiCuc : objHdr.getChildren()){
 //               BigDecimal aLong = xhDxKhBanDauGiaRepository.countSLDalenKh(objHdr.getNamKh(), objHdr.getLoaiVthh(), chiCuc.getMaDvi(),NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
@@ -121,16 +122,16 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
     void saveDetail(XhDxKhBanDauGiaReq objReq, Long idHdr) {
         // Delete dtl in hdr
         xhDxKhBanDauGiaDtlRepository.deleteAllByIdHdr(idHdr);
-        for (XhDxKhBanDauGiaDtlReq dtlReq : objReq.getChildren()){
+        for (XhDxKhBanDauGiaDtlReq dtlReq : objReq.getChildren()) {
             XhDxKhBanDauGiaDtl dtl = new XhDxKhBanDauGiaDtl();
-            BeanUtils.copyProperties(dtlReq,dtl,"id");
+            BeanUtils.copyProperties(dtlReq, dtl, "id");
             dtl.setIdHdr(idHdr);
             xhDxKhBanDauGiaDtlRepository.save(dtl);
             // Delete phanLo in dtl
             xhDxKhBanDauGiaPhanLoRepository.deleteAllByIdDtl(dtlReq.getId());
-            for (XhDxKhBanDauGiaPhanLoReq phanLoReq : dtlReq.getChildren()){
+            for (XhDxKhBanDauGiaPhanLoReq phanLoReq : dtlReq.getChildren()) {
                 XhDxKhBanDauGiaPhanLo phanLo = new XhDxKhBanDauGiaPhanLo();
-                BeanUtils.copyProperties(phanLoReq,phanLo,"id");
+                BeanUtils.copyProperties(phanLoReq, phanLo, "id");
                 phanLo.setIdDtl(dtl.getId());
                 xhDxKhBanDauGiaPhanLoRepository.save(phanLo);
             }
@@ -139,7 +140,7 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
 
     @Override
     public XhDxKhBanDauGia update(XhDxKhBanDauGiaReq req) throws Exception {
-        UserInfo userInfo= SecurityContextService.getUser();
+        UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null)
             throw new Exception("Bad request.");
 
@@ -150,10 +151,10 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
         if (!qOptional.isPresent())
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
 
-        if (!StringUtils.isEmpty(req.getSoDxuat())){
+        if (!StringUtils.isEmpty(req.getSoDxuat())) {
             Optional<XhDxKhBanDauGia> deXuat = xhDxKhBanDauGiaRepository.findBySoDxuat(req.getSoDxuat());
-            if (deXuat.isPresent()){
-                if (!deXuat.get().getId().equals(req.getId())){
+            if (deXuat.isPresent()) {
+                if (!deXuat.get().getId().equals(req.getId())) {
                     throw new Exception("Số đề xuất " + req.getSoDxuat() + " đã tồn tại");
                 }
             }
@@ -161,11 +162,11 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
 
         XhDxKhBanDauGia dataDTB = qOptional.get();
 
-        BeanUtils.copyProperties(req,dataDTB,"id","trangThaiTh");
+        BeanUtils.copyProperties(req, dataDTB, "id", "trangThaiTh");
         dataDTB.setNgaySua(getDateTimeNow());
         dataDTB.setNguoiSuaId(userInfo.getId());
         xhDxKhBanDauGiaRepository.save(dataDTB);
-        this.saveDetail(req,dataDTB.getId());
+        this.saveDetail(req, dataDTB.getId());
         return dataDTB;
     }
 
@@ -173,14 +174,14 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
     public XhDxKhBanDauGia detail(Long id) throws Exception {
         Optional<XhDxKhBanDauGia> qOptional = xhDxKhBanDauGiaRepository.findById(id);
 
-        if(!qOptional.isPresent()){
+        if (!qOptional.isPresent()) {
             throw new UnsupportedOperationException("Không tồn tại bản ghi");
         }
 
         XhDxKhBanDauGia data = qOptional.get();
 
-        Map<String, String > hasMapVthh = getListDanhMucHangHoa();
-        Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
+        Map<String, String> hasMapVthh = getListDanhMucHangHoa();
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
 
         data.setTenLoaiVthh(hasMapVthh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(hasMapVthh.get(data.getCloaiVthh()));
@@ -192,13 +193,13 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
         data.setFileDinhKem(listFileDinhKem);
 
         List<XhDxKhBanDauGiaDtl> dtlList = xhDxKhBanDauGiaDtlRepository.findAllByIdHdr(data.getId());
-        for (XhDxKhBanDauGiaDtl dtl : dtlList){
+        for (XhDxKhBanDauGiaDtl dtl : dtlList) {
             dtl.setTenDvi(mapDmucDvi.get(dtl.getMaDvi()));
-            List<XhDxKhBanDauGiaPhanLo>  phanLoList = xhDxKhBanDauGiaPhanLoRepository.findByIdDtl(dtl.getId());
-            phanLoList.forEach(f ->{
+            List<XhDxKhBanDauGiaPhanLo> phanLoList = xhDxKhBanDauGiaPhanLoRepository.findByIdDtl(dtl.getId());
+            phanLoList.forEach(f -> {
                 f.setTenDiemKho(mapDmucDvi.get(f.getMaDiemKho()));
                 f.setTenNhakho(mapDmucDvi.get(f.getMaNhaKho()));
-                f.setTenNganKho( mapDmucDvi.get(f.getMaNganKho()));
+                f.setTenNganKho(mapDmucDvi.get(f.getMaNganKho()));
                 f.setTenLoKho(mapDmucDvi.get(f.getMaLoKho()));
             });
             dtl.setChildren(phanLoList);
@@ -209,54 +210,54 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
 
     @Override
     public XhDxKhBanDauGia approve(XhDxKhBanDauGiaReq req) throws Exception {
-     UserInfo userInfo= SecurityContextService.getUser();
-     if (userInfo == null){
-         throw new Exception("Bad request.");
-     }
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null) {
+            throw new Exception("Bad request.");
+        }
 
-     if (StringUtils.isEmpty(req.getId())){
-         throw new Exception("Không tìm thấy dữ liệu");
-     }
+        if (StringUtils.isEmpty(req.getId())) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
 
-     Optional<XhDxKhBanDauGia> optional = xhDxKhBanDauGiaRepository.findById(req.getId());
-     if(!optional.isPresent()){
-         throw new Exception("Không tìm thấy dữ liệu");
-     }
+        Optional<XhDxKhBanDauGia> optional = xhDxKhBanDauGiaRepository.findById(req.getId());
+        if (!optional.isPresent()) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
 
-     XhDxKhBanDauGia data = optional.get();
-     String status = req.getTrangThai() + data.getTrangThai();
-     switch (status) {
-         case Contains.CHODUYET_TP + Contains.DUTHAO:
-         case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
-         case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
-         case Contains.CHODUYET_TP + Contains.TU_CHOI_CBV:
+        XhDxKhBanDauGia data = optional.get();
+        String status = req.getTrangThai() + data.getTrangThai();
+        switch (status) {
+            case Contains.CHODUYET_TP + Contains.DUTHAO:
+            case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+            case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
+            case Contains.CHODUYET_TP + Contains.TU_CHOI_CBV:
 //             this.validateData(data,Contains.CHODUYET_TP);
-             data.setNguoiGuiDuyetId(userInfo.getId());
-             data.setNgayGuiDuyet(getDateTimeNow());
-         case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
-         case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
-         case Contains.TU_CHOI_CBV + Contains.DADUYET_LDC:
-             data.setNguoiPduyetId(userInfo.getId());
-             data.setNgayPduyet(getDateTimeNow());
-             data.setLyDoTuChoi(req.getLyDoTuChoi());
-             break;
-         case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
-         case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
-         case Contains.DA_DUYET_CBV + Contains.DADUYET_LDC:
+                data.setNguoiGuiDuyetId(userInfo.getId());
+                data.setNgayGuiDuyet(getDateTimeNow());
+            case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
+            case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
+            case Contains.TU_CHOI_CBV + Contains.DADUYET_LDC:
+                data.setNguoiPduyetId(userInfo.getId());
+                data.setNgayPduyet(getDateTimeNow());
+                data.setLyDoTuChoi(req.getLyDoTuChoi());
+                break;
+            case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
+            case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
+            case Contains.DA_DUYET_CBV + Contains.DADUYET_LDC:
 //             this.validateData(data,stReq.getTrangThai());
-             data.setNguoiPduyetId(userInfo.getId());
-             data.setNgayPduyet(getDateTimeNow());
-             break;
-         default:
-             throw new Exception("Phê duyệt không thành công");
-     }
-     data.setTrangThai(req.getTrangThai());
-     return xhDxKhBanDauGiaRepository.save(data);
+                data.setNguoiPduyetId(userInfo.getId());
+                data.setNgayPduyet(getDateTimeNow());
+                break;
+            default:
+                throw new Exception("Phê duyệt không thành công");
+        }
+        data.setTrangThai(req.getTrangThai());
+        return xhDxKhBanDauGiaRepository.save(data);
     }
 
     @Override
     public void delete(Long id) throws Exception {
-        if (StringUtils.isEmpty(id)){
+        if (StringUtils.isEmpty(id)) {
             throw new Exception("Xóa thất bại không tìm thấy dữ liệu");
         }
 
@@ -266,13 +267,13 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
         }
 
         if (!optional.get().getTrangThai().equals(Contains.DUTHAO)
-            && !optional.get().getTrangThai().equals(Contains.TU_CHOI_TP)
-            && !optional.get().getTrangThai().equals(Contains.TUCHOI_LDC)) {
+                && !optional.get().getTrangThai().equals(Contains.TU_CHOI_TP)
+                && !optional.get().getTrangThai().equals(Contains.TUCHOI_LDC)) {
             throw new Exception("Chỉ thực hiện xóa với kế hoạch ở trạng thái bản nháp hoặc từ chối");
         }
 
         List<XhDxKhBanDauGiaDtl> allByIdHdr = xhDxKhBanDauGiaDtlRepository.findAllByIdHdr(id);
-        for(XhDxKhBanDauGiaDtl dtl : allByIdHdr){
+        for (XhDxKhBanDauGiaDtl dtl : allByIdHdr) {
             xhDxKhBanDauGiaPhanLoRepository.deleteAllByIdDtl(dtl.getId());
         }
         xhDxKhBanDauGiaDtlRepository.deleteAllByIdHdr(id);
@@ -281,15 +282,15 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
 
     @Override
     public void deleteMulti(List<Long> listMulti) throws Exception {
-        if (StringUtils.isEmpty(listMulti)){
+        if (StringUtils.isEmpty(listMulti)) {
             throw new Exception("Xóa thất bại, không tìm thấy dữ liệu");
         }
         List<XhDxKhBanDauGia> listDg = xhDxKhBanDauGiaRepository.findByIdIn(listMulti);
-        if(listDg.isEmpty()){
+        if (listDg.isEmpty()) {
             throw new Exception("Không tìm thấy dữ liệu cần xóa");
         }
 
-        for (XhDxKhBanDauGia dg: listDg){
+        for (XhDxKhBanDauGia dg : listDg) {
             this.delete(dg.getId());
         }
     }
@@ -308,7 +309,7 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
         String filename = "danh-sách-đề-xuất-kế-hoạch-mua-trực-tiếp.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
-        for (int i = 0; i <data.size(); i ++){
+        for (int i = 0; i < data.size(); i++) {
             XhDxKhBanDauGia dx = data.get(i);
             objs[0] = i;
             objs[1] = dx.getNamKh();
@@ -362,10 +363,10 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
 //
 //    public void export (SearchXhDxKhBanDauGia objReq, HttpServletResponse response) throws Exception{
 
-//    }
+    //    }
 //
     public BigDecimal countSoLuongKeHoachNam(CountKhlcntSlReq req) {
-        return xhDxKhBanDauGiaRepository.countSLDalenKh(req.getYear(),req.getLoaiVthh(), req.getMaDvi(), NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
+        return xhDxKhBanDauGiaRepository.countSLDalenKh(req.getYear(), req.getLoaiVthh(), req.getMaDvi(), NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
     }
 
 
