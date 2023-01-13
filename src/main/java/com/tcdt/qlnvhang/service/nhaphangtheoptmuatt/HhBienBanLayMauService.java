@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhBbanLayMauDtlRepository;
+import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhBienBanDayKhoHdrRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhBienBanLayMauRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -26,12 +27,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -45,6 +46,9 @@ public class HhBienBanLayMauService extends BaseServiceImpl {
     
     @Autowired
     private FileDinhKemService fileDinhKemService;
+
+    @Autowired
+    private HhBienBanDayKhoHdrRepository hhBienBanDayKhoHdrRepository;
 
 
     public Page<HhBienBanLayMau> searchPage(SearchHhBbanLayMau objReq)throws Exception{
@@ -176,6 +180,10 @@ public class HhBienBanLayMauService extends BaseServiceImpl {
         List<FileDinhKem> fileDinhkems = fileDinhKemService.search(data.getId(), Arrays.asList("HH_BIEN_BAN_LAY_MAU"));
         if (!DataUtils.isNullOrEmpty(fileDinhkems)) {
             data.setFileDinhKems(fileDinhkems);
+        }
+        if(!ObjectUtils.isEmpty(data.getIdBbNhapDayKho())){
+            Optional<HhBienBanDayKhoHdr> byId = hhBienBanDayKhoHdrRepository.findById(data.getIdBbNhapDayKho());
+            byId.ifPresent(data::setBbNhapDayKho);
         }
         List<HhBbanLayMauDtl> listDtl = hhBbanLayMauDtlRepository.findAllByIdHdr(data.getId());
         data.setBbanLayMauDtlList(listDtl);
