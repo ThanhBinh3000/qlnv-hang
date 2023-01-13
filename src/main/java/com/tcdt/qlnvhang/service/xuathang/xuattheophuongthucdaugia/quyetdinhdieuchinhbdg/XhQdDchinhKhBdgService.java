@@ -110,13 +110,23 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
 
     @Transactional
     public XhQdDchinhKhBdgHdr create(XhQdDchinhKhBdgReq objReq) throws Exception{
-        // Vật tư
-        if(objReq.getLoaiVthh().startsWith("02")){
-            return createVatTu(objReq);
-        }else{
-            // Lương thực
-            return createLuongThuc(objReq);
+        UserInfo userInfo= SecurityContextService.getUser();
+
+        List<XhQdDchinhKhBdgHdr> checkSoQd = xhQdDchinhKhBdgHdrRepository.findBySoQdDc(objReq.getSoQdPd());
+        if (!checkSoQd.isEmpty()) {
+            throw new Exception("Số quyết định " + objReq.getSoQdPd() + " đã tồn tại");
         }
+
+        XhQdDchinhKhBdgHdr dataMap = ObjectMapperUtils.map(objReq, XhQdDchinhKhBdgHdr.class);
+        dataMap.setTrangThai(Contains.DUTHAO);
+        dataMap.setLastest(objReq.getLastest());
+        dataMap.setMaDvi(userInfo.getDepartment());
+        XhQdDchinhKhBdgHdr created=xhQdDchinhKhBdgHdrRepository.save(dataMap);
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),dataMap.getId(),XhQdDchinhKhBdgHdr.TABLE_NAME);
+        created.setFileDinhKems(fileDinhKems);
+
+        saveDetail(objReq,dataMap);
+        return dataMap;
     }
 
     @Transactional
@@ -167,6 +177,7 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
     @Transactional
     XhQdDchinhKhBdgHdr createVatTu(XhQdDchinhKhBdgReq objReq) throws Exception{
         UserInfo userInfo= SecurityContextService.getUser();
+
         List<XhQdDchinhKhBdgHdr> checkSoQd = xhQdDchinhKhBdgHdrRepository.findBySoQdDc(objReq.getSoQdPd());
         if (!checkSoQd.isEmpty()) {
             throw new Exception("Số quyết định " + objReq.getSoQdPd() + " đã tồn tại");
@@ -179,9 +190,6 @@ public class XhQdDchinhKhBdgService extends BaseServiceImpl {
         XhQdDchinhKhBdgHdr created=xhQdDchinhKhBdgHdrRepository.save(dataMap);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),dataMap.getId(),XhQdDchinhKhBdgHdr.TABLE_NAME);
         created.setFileDinhKems(fileDinhKems);
-
-        // Update trạng thái tờ trình
-//        xhDxKhBanDauGiaRepository.updateStatusInList(Arrays.asList(objReq.getSoTrHdr()), Contains.DADUTHAO_QD);
 
         saveDetail(objReq,dataMap);
 

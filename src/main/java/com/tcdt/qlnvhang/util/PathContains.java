@@ -239,6 +239,8 @@ public class PathContains {
 	public static final String QUYET_DINH_PHE_DUYET= "/quyet-dinh";
 	public static final String QUYET_DINH_GIAO_NHIEM_VU= "/qd-gnv";
 
+	public static final String QD_DC_KH = "/qd-dieu-chinh";
+
 	public static final String TTIN_DGIA = "/ttin-dgia";
 
 	public static final String KQUA_DGIA = "/kq-bdg";

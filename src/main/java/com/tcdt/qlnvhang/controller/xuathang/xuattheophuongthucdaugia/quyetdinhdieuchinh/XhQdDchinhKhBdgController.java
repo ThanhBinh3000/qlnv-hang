@@ -28,14 +28,14 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/qd-dieu-chinh")
+@RequestMapping(value = PathContains.XUAT_HANG_DTQG + PathContains.DAU_GIA + PathContains.QD_DC_KH )
 @Slf4j
-@Api(tags = "Xuất hàng - Bán đấu giá - Kế hoạch bán đấu giá - Quyết định phê duyệt điều chỉnh bán đấu giá")
+@Api(tags = "Xuất hàng - Bán đấu giá - Kế hoạch bán đấu giá - Điều chỉnh KH bán đấu giá")
 public class XhQdDchinhKhBdgController extends BaseController {
     @Autowired
     private XhQdDchinhKhBdgService xhQdDchinhKhBdgService;
 
-    @ApiOperation(value = "Tra cứu Quyết định điều chỉnh kế hoạch bán đấu giá  ", response = List.class)
+    @ApiOperation(value = "Tra cứu  ", response = List.class)
     @PostMapping(value=   PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody XhQdDchinhKhBdgSearchReq objReq) {
         BaseResponse resp = new BaseResponse();
@@ -51,11 +51,10 @@ public class XhQdDchinhKhBdgController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Tạo mới Quyết định điều chỉnh kế hoạch bán đấu giá lương thực", response = List.class)
+    @ApiOperation(value = "Tạo mới lương thực", response = List.class)
     @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<BaseResponse> insert(HttpServletRequest request,
-                                               @Valid @RequestBody XhQdDchinhKhBdgReq objReq) {
+    public ResponseEntity<BaseResponse> insert( @Valid @RequestBody XhQdDchinhKhBdgReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(xhQdDchinhKhBdgService.create(objReq));
@@ -64,16 +63,16 @@ public class XhQdDchinhKhBdgController extends BaseController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Tạo mới Quyết định điều chỉnh kế hoạch bán đấu giá trace: {}", e);
+            log.error("Tạo mới trace: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Lấy chi tiết Quyết định điều chỉnh kế hoạch bán đấu giá", response = List.class)
+    @ApiOperation(value = "Lấy chi tiết  ", response = List.class)
     @GetMapping(value =  PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> detail(
-            @ApiParam(value = "ID phương án kế hoạch bán đấu giá", example = "1", required = true) @PathVariable("ids") String ids) {
+            @ApiParam(value = "ID phương án kế hoạch ", example = "1", required = true) @PathVariable("ids") String ids) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(xhQdDchinhKhBdgService.detail(ids));
@@ -82,12 +81,12 @@ public class XhQdDchinhKhBdgController extends BaseController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Lấy chi tiết Quyết định điều chỉnh kế hoạch bán đấu giá trace: {}", e);
+            log.error("Lấy chi tiết trace: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xoá quyết định điều chỉnh kế hoạch bán đấu giá", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Xoá ", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping(value =  PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
@@ -100,13 +99,13 @@ public class XhQdDchinhKhBdgController extends BaseController {
             // TODO: handle exception
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Xoá quyết định điều chỉnh kế hoạch bán đấu giá trace: {}", e);
+            log.error("Xoá  trace: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
 
-    @ApiOperation(value = "Xoá danh sách quyết định điều chỉnh kế hoạch bán đấu giá", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Xoá danh sách ", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping(value =  PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> deleteMuilti(@Valid @RequestBody IdSearchReq idSearchReq) {
@@ -119,13 +118,13 @@ public class XhQdDchinhKhBdgController extends BaseController {
             // TODO: handle exception
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Xoá quyết định điều chỉnh kế hoạch bán đấu giá trace: {}", e);
+            log.error("Xoá  trace: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
 
-    @ApiOperation(value = "Cập nhật Quyết định điều chỉnh kế hoạch bán đấu giá", response = List.class)
+    @ApiOperation(value = "Cập nhật  ", response = List.class)
     @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> update(HttpServletRequest request,
                                                @Valid @RequestBody XhQdDchinhKhBdgReq objReq) {
@@ -137,12 +136,12 @@ public class XhQdDchinhKhBdgController extends BaseController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Cập nhật Quyết định điều chỉnh kế hoạch bán đấu giá trace: {}", e);
+            log.error("Cập nhật trace: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 Quyết định điều chỉnh kế hoạch bán đấu giá", response = List.class)
+    @ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03  ", response = List.class)
     @PostMapping(value =  PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> updateStatus(@Valid HttpServletRequest req, @RequestBody StatusReq stReq) {
         BaseResponse resp = new BaseResponse();
@@ -154,7 +153,7 @@ public class XhQdDchinhKhBdgController extends BaseController {
             // TODO: handle exception
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Phê duyệt quyết định điều chỉnh kế hoạch bán đấu giá trace: {}", e);
+            log.error("Phê duyệt bán đấu giá trace: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
