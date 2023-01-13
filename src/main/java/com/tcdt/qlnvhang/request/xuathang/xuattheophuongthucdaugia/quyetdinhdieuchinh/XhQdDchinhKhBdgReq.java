@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.quyetdinhdieuchinh;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.kehoachbdg.pheduyet.XhQdPdKhBdgDtlReq;
 import com.tcdt.qlnvhang.util.Contains;
@@ -14,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-public class XhQdDchinhKhBdgReq {
+public class XhQdDchinhKhBdgReq extends BaseRequest {
     @ApiModelProperty(notes = "Bắt buộc set đối với update")
     private Long id;
 
@@ -94,11 +95,16 @@ public class XhQdDchinhKhBdgReq {
 
     private String ldoTuchoi;
 
-    private Boolean lastest = false;
 
    private String phanLoai;
 
     private List<XhQdPdKhBdgDtlReq> dsDeXuat;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayKyQdTu;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayKyQdDen;
 
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 
