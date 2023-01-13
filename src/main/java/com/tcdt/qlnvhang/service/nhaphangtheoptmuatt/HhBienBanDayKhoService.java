@@ -125,7 +125,7 @@ public class HhBienBanDayKhoService extends BaseServiceImpl {
 
         Optional<HhBienBanDayKhoHdr> optional = hhBienBanDayKhoHdrRepository.findById(objReq.getId());
         if (!optional.isPresent()){
-            throw new Exception("Biên bản nhập đầy kho không tồn tại.");
+            throw new Exception("Bản ghi không tồn tại. ");
         }
         HhBienBanDayKhoHdr bienBanDayKhoHdr = optional.get();
         BeanUtils.copyProperties(objReq, bienBanDayKhoHdr, "id");
@@ -142,7 +142,7 @@ public class HhBienBanDayKhoService extends BaseServiceImpl {
     public HhBienBanDayKhoHdr detail(Long ids) throws Exception{
         Optional<HhBienBanDayKhoHdr> qOptional = hhBienBanDayKhoHdrRepository.findById(ids);
         if (!qOptional.isPresent()){
-            throw new UnsupportedOperationException("Bản ghi không tồn tại");
+            throw new UnsupportedOperationException("Bản ghi không tồn tại. ");
         }
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         HhBienBanDayKhoHdr bienBanDayKhoHdr = qOptional.get();
@@ -167,12 +167,12 @@ public class HhBienBanDayKhoService extends BaseServiceImpl {
 
         Optional<HhBienBanDayKhoHdr> optional = hhBienBanDayKhoHdrRepository.findById(id);
         if (!optional.isPresent()){
-            throw new Exception("Biên bản nhập đày kho không tồn tại");
+            throw new Exception("Biên bản nhập đầy kho không tồn tại");
         }
 
         HhBienBanDayKhoHdr bienBanDayKhoHdr = optional.get();
         if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(bienBanDayKhoHdr.getTrangThai())){
-            throw new Exception("Không thể xóa khi quyết định đã duyệt");
+            throw new Exception("Không thể xóa khi quyết định đã được duyệt");
         }
 
         List<HhBienBanDayKhoDtl> bienBanDayKhoDtls = hhBienBanDayKhoDtlRepository.findAllByIdHdr(bienBanDayKhoHdr.getId());
