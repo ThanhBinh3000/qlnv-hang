@@ -251,7 +251,7 @@ public class HopDongMttHdrService extends BaseServiceImpl {
 
     String title="Danh sách hợp đồng mua trực tiếp";
     String[] rowsName=new String[]{"STT","Năm KH","QĐ PD KH MTT","QĐ PD KQ chào giá","SL HĐ cần ký","SL HĐ đã ký","Thời hạn nhập kho","Loại hàng hóa","Chủng loại hàng hóa","Tổng giá trị hợp tuổi","Trạng thái ký HĐ","Trạng thái NH",};
-    String fileName="danh-sach-dx-kh-mua-truc-tiep.xlsx";
+    String fileName="danh-sach-hop-dong-mua-truc-tiep.xlsx";
     List<Object[]> dataList = new ArrayList<Object[]>();
     Object[] objs=null;
     for (int i=0;i<data.size();i++){
