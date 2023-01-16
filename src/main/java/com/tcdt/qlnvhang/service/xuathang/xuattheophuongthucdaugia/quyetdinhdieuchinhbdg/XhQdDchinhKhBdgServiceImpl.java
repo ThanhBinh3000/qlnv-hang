@@ -28,6 +28,7 @@ import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -38,10 +39,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl implements XhQdDchinhKhBdgService {
@@ -145,7 +143,25 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl implements XhQdD
 
     @Override
     public XhQdDchinhKhBdgHdr update(XhQdDchinhKhBdgReq req) throws Exception {
-        return null;
+        if (StringUtils.isEmpty(req.getId())){
+            throw new Exception("Không tồn tại bản ghi");
+        }
+        Optional<XhQdDchinhKhBdgHdr> qOptional = xhQdDchinhKhBdgHdrRepository.findById(req.getId());
+
+        if (!qOptional.isPresent()){
+            throw new UnsupportedOperationException("Không tồn tại bản ghi");
+        }
+
+        XhQdDchinhKhBdgHdr data = qOptional.get();
+
+        BeanUtils.copyProperties(req,data,"id");
+        data.setNguoiSuaId(getUser().getId());
+        data.setNgaySua(new Date());
+        xhQdDchinhKhBdgHdrRepository.save(data);
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), data.getId(), XhQdDchinhKhBdgHdr.TABLE_NAME);
+        data.setFileDinhKems(fileDinhKems);
+        saveDetail(req, data.getId());
+        return data;
     }
 
     @Override
@@ -204,7 +220,36 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl implements XhQdD
 
     @Override
     public XhQdDchinhKhBdgHdr approve(XhQdDchinhKhBdgReq req) throws Exception {
-        return null;
+        if (StringUtils.isEmpty(req.getId())){
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        XhQdDchinhKhBdgHdr detail = detail(req.getId());
+        String status = req.getTrangThai() + detail.getTrangThai();
+        switch (status) {
+            case Contains.BAN_HANH + Contains.DADUYET_LDV:
+                detail.setNguoiPduyetId(getUser().getId());
+                detail.setNgayPduyet(getDateTimeNow());
+                break;
+            default:
+                throw new Exception("Phê duyệt không thành công");
+        }
+        detail.setTrangThai(req.getTrangThai());
+//        if (stReq.getTrangThai().equals(Contains.BAN_HANH)){
+//            Optional<XhDxKhBanDauGia> qOptional = xhDxKhBanDauGiaRepository.findById(dataDB.getIdTrHdr());
+//            if (qOptional.isPresent()){
+//                if (qOptional.get().getTrangThai().equals(Contains.DABANHANH_QD)){
+//                    throw new Exception("Đề xuất này đã được quyết định ");
+//                }
+//                // Update trạng thái tờ trình
+////                xhDxKhBanDauGiaRepository.updateStatusInList(Arrays.asList(dataDB.getSoTrHdr()), Contains.DABANHANH_QD);
+//            }else {
+//                throw new Exception("Số tờ trình kế hoạch không được tìm thấy");
+//            }
+////            this.cloneProject(dataDB.getId());
+////            this.cloneForToChucBdg(dataDB);
+//        }
+        XhQdDchinhKhBdgHdr createCheck = xhQdDchinhKhBdgHdrRepository.save(detail);
+        return createCheck;
     }
 
     @Override
