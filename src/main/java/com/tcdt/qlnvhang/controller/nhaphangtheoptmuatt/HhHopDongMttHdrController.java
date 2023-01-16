@@ -164,7 +164,7 @@ public class HhHopDongMttHdrController extends BaseController {
     @ApiOperation(value = "Kết xuất danh sách mua", response = List.class)
     @PostMapping(value = PathContains.HD_BK_PMH + PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void exportList(@Valid @RequestBody @CurrentUser CustomUserDetails currentUser, HopDongMttHdrReq objReq, HttpServletResponse response) throws Exception {
+    public void exportList(@CurrentUser CustomUserDetails currentUser ,@Valid @RequestBody  HopDongMttHdrReq objReq, HttpServletResponse response) throws Exception {
         try {
             hopDongMttHdrService.export( currentUser,objReq, response);
 

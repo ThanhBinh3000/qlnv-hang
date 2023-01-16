@@ -146,7 +146,7 @@ public class HhBangKeMuaLeController extends BaseController {
     @ApiOperation(value = "Kết xuất danh sách mua", response = List.class)
     @PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void exportList(@Valid @RequestBody @CurrentUser CustomUserDetails currentUser, BangKeMuaLeReq objReq, HttpServletResponse response) throws Exception {
+    public void exportList(@CurrentUser CustomUserDetails currentUser,@RequestBody BangKeMuaLeReq objReq, HttpServletResponse response) throws Exception {
         try {
             bangKeMuaLeService.export(currentUser, objReq, response);
 
