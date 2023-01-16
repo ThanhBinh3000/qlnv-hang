@@ -81,15 +81,7 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl implements XhQdD
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),
                 req.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<XhQdDchinhKhBdgHdr> data = xhQdDchinhKhBdgHdrRepository.searchPage(
-                req.getNamKh(),
-                req.getSoQdDc(),
-                req.getTrichYeu(),
-                Contains.convertDateToString(req.getNgayKyQdTu()),
-                Contains.convertDateToString(req.getNgayKyQdDen()),
-                req.getSoTrHdr(),
-                req.getLoaiVthh(),
-                req.getTrangThai(),
-                req.getMaDvi(),
+                req,
                 pageable);
         Map<String, String> hashMapDmHh = getListDanhMucHangHoa();
         data.getContent().forEach(f -> {
@@ -109,9 +101,9 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl implements XhQdD
     public XhQdDchinhKhBdgHdr create(XhQdDchinhKhBdgReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
 
-        List<XhQdDchinhKhBdgHdr> checkSoQd = xhQdDchinhKhBdgHdrRepository.findBySoQdDc(req.getSoQdPd());
+        List<XhQdDchinhKhBdgHdr> checkSoQd = xhQdDchinhKhBdgHdrRepository.findBySoQdDc(req.getSoQdGoc());
         if (!checkSoQd.isEmpty()) {
-            throw new Exception("Số quyết định " + req.getSoQdPd() + " đã tồn tại");
+            throw new Exception("Số quyết định " + req.getSoQdGoc() + " đã tồn tại");
         }
 
         XhQdDchinhKhBdgHdr dataMap = ObjectMapperUtils.map(req, XhQdDchinhKhBdgHdr.class);
@@ -121,17 +113,17 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl implements XhQdD
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), dataMap.getId(), XhQdDchinhKhBdgHdr.TABLE_NAME);
         created.setFileDinhKems(fileDinhKems);
 
-        saveDetail(req, dataMap);
+        saveDetail(req, dataMap.getId());
         return dataMap;
     }
 
-    void saveDetail(XhQdDchinhKhBdgReq req, XhQdDchinhKhBdgHdr dataMap) {
-        xhQdDchinhKhBdgDtlRepository.deleteAllByIdQdHdr(dataMap.getId());
-        for (XhQdPdKhBdgDtlReq dx : req.getDsDeXuat()) {
+    void saveDetail(XhQdDchinhKhBdgReq req, Long idHdr) {
+        xhQdDchinhKhBdgDtlRepository.deleteAllByIdQdHdr(idHdr);
+        for (XhQdPdKhBdgDtlReq dx : req.getChildren()) {
             XhQdDchinhKhBdgDtl qd = ObjectMapperUtils.map(dx, XhQdDchinhKhBdgDtl.class);
             xhQdDchinhKhBdgPlRepository.deleteByIdQdDtl(qd.getId());
             qd.setId(null);
-            qd.setIdQdHdr(dataMap.getId());
+            qd.setIdQdHdr(idHdr);
             qd.setTrangThai(Contains.CHUACAPNHAT);
             xhQdDchinhKhBdgDtlRepository.save(qd);
             for (XhQdPdKhBdgPlReq gtList : dx.getChildren()) {
@@ -144,7 +136,6 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl implements XhQdD
                 for (XhQdPdKhBdgPlDtlReq ddNhap : gtList.getChildren()) {
                     XhQdDchinhKhBdgPlDtl dataDdNhap = new ModelMapper().map(ddNhap, XhQdDchinhKhBdgPlDtl.class);
                     dataDdNhap.setId(null);
-                    dataDdNhap.setIdQdHdr(dataMap.getId());
                     dataDdNhap.setIdPhanLo(gt.getId());
                     xhQdDchinhKhBdgPlDtlRepository.save(dataDdNhap);
                 }
@@ -272,16 +263,16 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl implements XhQdD
             XhQdDchinhKhBdgHdr pduyet = data.get(i);
             objs = new Object[rowsName.length];
             objs[0] = i;
-            objs[1] = pduyet.getNamKh();
-            objs[2] = pduyet.getSoQdPd();
-            objs[3] = pduyet.getNgayKyQd();
+//            objs[1] = pduyet.getNamKh();
+//            objs[2] = pduyet.getSoQdPd();
+//            objs[3] = pduyet.getNgayKyQd();
             objs[4] = pduyet.getTrichYeu();
-            objs[5] = pduyet.getSoTrHdr();
-            objs[6] = pduyet.getIdThHdr();
+//            objs[5] = pduyet.getSoTrHdr();
+//            objs[6] = pduyet.getIdThHdr();
             objs[7] = pduyet.getTenLoaiVthh();
             objs[8] = pduyet.getTenCloaiVthh();
-            objs[9] = pduyet.getSoDviTsan();
-            objs[10] = pduyet.getSlHdDaKy();
+//            objs[9] = pduyet.getSoDviTsan();
+//            objs[10] = pduyet.getSlHdDaKy();
             objs[11] = pduyet.getTenTrangThai();
             dataList.add(objs);
         }
