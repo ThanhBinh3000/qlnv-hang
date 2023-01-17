@@ -36,8 +36,6 @@ public class BangKeMuaLeService extends BaseServiceImpl {
 
     public Page<BangKeMuaLe> searchPage(CustomUserDetails currentUser, BangKeMuaLeReq req) throws Exception {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-
-        req.setMaDvi(currentUser.getUser().getDepartment());
         Page<BangKeMuaLe> search = bangkethumualeRepository.search(req, pageable);
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
