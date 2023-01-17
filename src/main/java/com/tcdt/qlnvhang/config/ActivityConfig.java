@@ -25,6 +25,8 @@ public class ActivityConfig extends HandlerInterceptorAdapter {
     @Autowired
     private Gson gson;
 
+    private final static String SYSTEM = "hang";
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String userAgent = request.getHeader("User-Agent");
@@ -41,6 +43,7 @@ public class ActivityConfig extends HandlerInterceptorAdapter {
         entity.setRequestMethod(request.getMethod());
         entity.setRequestUrl(request.getRequestURI());
         entity.setUserId(user.getUser().getId());
+        entity.setSystem(SYSTEM);
         entity.setUserAgent(userAgent);
         Map<String, String[]> parameterMap = request.getParameterMap();
         if (parameterMap != null && !parameterMap.isEmpty()) {
