@@ -83,7 +83,6 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl implements XhQdD
                 pageable);
         Map<String, String> hashMapDmHh = getListDanhMucHangHoa();
         data.getContent().forEach(f -> {
-            f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
         });
@@ -163,7 +162,6 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl implements XhQdD
         saveDetail(req, data.getId());
         return data;
     }
-
     @Override
     public XhQdDchinhKhBdgHdr detail(Long id) throws Exception {
         if (StringUtils.isEmpty(id)){
