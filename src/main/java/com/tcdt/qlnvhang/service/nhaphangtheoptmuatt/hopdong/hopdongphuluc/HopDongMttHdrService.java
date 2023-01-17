@@ -47,8 +47,6 @@ public class HopDongMttHdrService extends BaseServiceImpl {
   private DiaDiemGiaoNhanMttRepository diaDiemGiaoNhanRepository;
   public Page<HopDongMttHdr> searchPage(CustomUserDetails currentUser, HopDongMttHdrReq req) throws Exception {
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-
-    req.setMaDvi(currentUser.getUser().getDepartment());
     Page<HopDongMttHdr> search = hopDongHdrRepository.search(req, pageable);
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
     Map<String, String> mapVthh = getListDanhMucHangHoa();

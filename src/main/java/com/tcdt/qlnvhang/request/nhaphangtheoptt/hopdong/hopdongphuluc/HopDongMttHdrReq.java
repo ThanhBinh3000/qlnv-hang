@@ -32,7 +32,7 @@ public class HopDongMttHdrReq extends BaseRequest {
   private Integer soNgayThien;
   LocalDate tgianGnhanTu;
   LocalDate tgianGnhanDen;
-  LocalDate tgianGnhanGhiChu;
+  private Integer tgianGnhanGhiChu;
   private String noiDung;
   private String dieuKien;
   private String maDvi;
