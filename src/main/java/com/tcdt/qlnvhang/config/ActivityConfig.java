@@ -13,6 +13,10 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -45,6 +49,7 @@ public class ActivityConfig extends HandlerInterceptorAdapter {
         entity.setUserId(user.getUser().getId());
         entity.setSystem(SYSTEM);
         entity.setUserAgent(userAgent);
+        entity.setRequestBody(this.getBody(request));
         Map<String, String[]> parameterMap = request.getParameterMap();
         if (parameterMap != null && !parameterMap.isEmpty()) {
             entity.setRequestParameter(gson.toJson(parameterMap));
@@ -53,5 +58,36 @@ public class ActivityConfig extends HandlerInterceptorAdapter {
         return super.preHandle(request, response, handler);
     }
 
+
+    public static String getBody(HttpServletRequest request) throws IOException {
+        String body = null;
+        StringBuilder stringBuilder = new StringBuilder();
+        BufferedReader bufferedReader = null;
+        try {
+            InputStream inputStream = request.getInputStream();
+            if (inputStream != null) {
+                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                char[] charBuffer = new char[128];
+                int bytesRead = -1;
+                while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
+                    stringBuilder.append(charBuffer, 0, bytesRead);
+                }
+            } else {
+                stringBuilder.append("");
+            }
+        } catch (IOException ex) {
+            throw ex;
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException ex) {
+                    throw ex;
+                }
+            }
+        }
+        body = stringBuilder.toString();
+        return body;
+    }
 
 }
