@@ -144,7 +144,6 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
                 HhDxuatKhMttSlddDtl slddDtl = new ModelMapper().map(slddDtlReq, HhDxuatKhMttSlddDtl.class);
                 slddDtl.setIdDiaDiem(data.getId());
                 hhDxuatKhMttSlddDtlRepository.save(slddDtl);
-                dataMap.setDonGiaVat(slddDtl.getDonGiaVat());
             }
         }
   }
@@ -250,11 +249,8 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
         List<HhDxuatKhMttSldd> dsSlDdList = hhDxuatKhMttSlddRepository.findAllByIdDxKhmtt(qOptional.get().getId());
         for(HhDxuatKhMttSldd dsG : dsSlDdList){
             dsG.setTenDvi(mapDmucDvi.get(dsG.getMaDvi()));
-            dsG.setTenCloaiVthh(mapVthh.get(dsG.getCloaiVthh()));
-
             List<HhDxuatKhMttSlddDtl> listDdNhap = hhDxuatKhMttSlddDtlRepository.findByIdDiaDiem(dsG.getId());
             listDdNhap.forEach( f -> {
-                f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
                 f.setTenDiemKho(StringUtils.isEmpty(f.getMaDiemKho()) ? null : mapDmucDvi.get(f.getMaDiemKho()));
             });
             dsG.setChildren(listDdNhap);
@@ -274,17 +270,20 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
             case Contains.CHODUYET_TP + Contains.DUTHAO:
             case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
             case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
+            case Contains.CHODUYET_TP + Contains.TU_CHOI_CBV:
                 this.validateData(optional,Contains.CHODUYET_TP);
                 optional.setNguoiGuiDuyet(getUser().getUsername());
                 optional.setNgayGuiDuyet(getDateTimeNow());
             case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
             case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
+            case Contains.TU_CHOI_CBV + Contains.DADUYET_LDC:
                 optional.setNguoiPduyet(getUser().getUsername());
                 optional.setNgayPduyet(getDateTimeNow());
                 optional.setLdoTuchoi(stReq.getLyDo());
                 break;
             case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
             case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
+            case Contains.DA_DUYET_CBV + Contains.DADUYET_LDC:
                 this.validateData(optional,stReq.getTrangThai());
                 optional.setNguoiPduyet(getUser().getUsername());
                 optional.setNgayPduyet(getDateTimeNow());
@@ -387,9 +386,6 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
         hhDxuatKhMttRepository.deleteAllByIdIn(idSearchReq.getIdList());
 
     }
-
-
-
 
 
     public BigDecimal countSoLuongKeHoachNam(CountKhMttSlReq req) throws Exception {

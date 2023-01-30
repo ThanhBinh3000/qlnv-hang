@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.request.nhaphangtheoptt;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
@@ -14,37 +15,28 @@ public class HhDxuatKhMttSlddReq {
     @ApiModelProperty(notes = "Bắt buộc set đối với update")
     private Long id;
 
+    private String tenGoiThau;
+
     private Long idHdr;
 
     private String maDvi;
-
-    private String maDiemKho;
-
-    private String diaDiemNhap;
 
     private BigDecimal soLuongChiTieu;
 
     private BigDecimal soLuongKhDd;
 
-    private BigDecimal soLuong;
 
     private BigDecimal donGia;
 
-    private BigDecimal thanhTien;
-
-    private String loaiVthh;
-
-    private String cloaiVthh;
-
     private BigDecimal donGiaVat;
-
-    private BigDecimal thanhTienVat;
 
     private BigDecimal tongSoLuong;
 
-    private BigDecimal tongDonGia;
-
     private BigDecimal tongThanhTien;
+
+    private BigDecimal tongThanhTienVat;
+
+    private BigDecimal soLuong;
 
 
 

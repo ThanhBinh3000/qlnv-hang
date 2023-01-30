@@ -95,7 +95,7 @@ public class HhQdPheduyetKhMttHdr implements Serializable {
     private Long idGoc;
 
     @Transient
-    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
+    private List<FileDinhKem> fileDinhKem = new ArrayList<>();
 
     @Transient
     private List<HhQdPheduyetKhMttDx> children = new ArrayList<>();

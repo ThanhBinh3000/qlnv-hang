@@ -19,6 +19,9 @@ public class HhDxuatKhMttSldd implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_DX_KHMTT_SLDD_SEQ")
     @SequenceGenerator(sequenceName = "HH_DX_KHMTT_SLDD_SEQ", allocationSize = 1, name = "HH_DX_KHMTT_SLDD_SEQ")
     private Long id;
+
+    private String tenGoiThau;
+
     @Transient
     private Long idVirtual;
 
@@ -29,42 +32,25 @@ public class HhDxuatKhMttSldd implements Serializable {
     @Transient
     private String tenDvi;
 
-    private String maDiemKho;
-
-    @Transient
-    private String tenDiemKho;
-
-    private String diaDiemNhap;
-
     private BigDecimal soLuongChiTieu;
 
     private BigDecimal soLuongKhDd;
 
-    private BigDecimal soLuong;
 
     private BigDecimal donGia;
 
-    private BigDecimal thanhTien;
-
-    private String loaiVthh;
-
-    @Transient
-    private String tenLoaiVthh;
-
-    private String cloaiVthh;
-
-    @Transient
-    private String tenCloaiVthh;
-
     private BigDecimal donGiaVat;
-
-    private BigDecimal thanhTienVat;
 
     private BigDecimal tongSoLuong;
 
-    private BigDecimal tongDonGia;
-
     private BigDecimal tongThanhTien;
+
+    private BigDecimal tongThanhTienVat;
+
+    private BigDecimal soLuong;
+
+    private BigDecimal thanhTien;
+
 
 
 

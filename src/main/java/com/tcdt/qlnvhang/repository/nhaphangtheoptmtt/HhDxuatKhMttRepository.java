@@ -56,11 +56,9 @@ public interface HhDxuatKhMttRepository extends JpaRepository<HhDxuatKhMttHdr, L
             " AND (:cloaiVthh IS NULL OR MTT.CLOAI_VTHH = :cloaiVthh) " +
             " AND MTT.TRANG_THAI = '"+ Contains.DADUYET_LDC+"'" +
             " AND MTT.TRANG_THAI_TH = '"+ Contains.CHUATONGHOP+"'" +
-            " AND MTT.MA_THOP is null "+
-//            " AND MTT.SO_QD_PDUYET is null "+
-            " AND (:maDvi IS NULL OR LOWER(MTT.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "
+            " AND MTT.MA_THOP is null "
             ,nativeQuery = true)
-    List<HhDxuatKhMttHdr> listTongHop(Integer namKh, String loaiVthh, String cloaiVthh, String maDvi);
+    List<HhDxuatKhMttHdr> listTongHop(Integer namKh, String loaiVthh, String cloaiVthh);
 
     List<HhDxuatKhMttHdr> findByIdIn(List<Long> id);
     HhDxuatKhMttHdr findAllById(Long id);
