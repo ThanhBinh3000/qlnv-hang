@@ -241,6 +241,10 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
         data.setMaDvi(userInfo.getDvql());
         data.setTenDvi(StringUtils.isEmpty(userInfo.getDvql()) ? null : hashMapDmdv.get(userInfo.getDvql()));
         HhQdGiaoNvNhapHang created= hhQdGiaoNvNhapHangRepository.save(data);
+        if (!DataUtils.isNullObject(objReq.getFileDinhKem())) {
+            List<FileDinhKem> fileDinhKem= fileDinhKemService.saveListFileDinhKem(Arrays.asList(objReq.getFileDinhKem()), created.getId(),"HH_QD_GIAO_NV_NHAP_HANG");
+            created.setFileDinhKems(fileDinhKem);
+        }
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),data.getId(),"HH_QD_GIAO_NV_NHAP_HANG");
         created.setFileDinhKems(fileDinhKems);
         if (!DataUtils.isNullObject(data.getIdHd())){
@@ -276,6 +280,14 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
         data.setNgaySua(new Date());
         data.setNguoiSua(userInfo.getUsername());
         HhQdGiaoNvNhapHang created= hhQdGiaoNvNhapHangRepository.save(data);
+        fileDinhKemService.delete(objReq.getId(),  Lists.newArrayList("HH_QD_GIAO_NV_NHAP_HANG"));
+        if (!DataUtils.isNullObject(objReq.getFileDinhKem())) {
+            List<FileDinhKem> fileDinhKem=fileDinhKemService.saveListFileDinhKem(Arrays.asList(objReq.getFileDinhKem()), created.getId(),"HH_QD_GIAO_NV_NHAP_HANG");
+            created.setFileDinhKems(fileDinhKem);
+        }
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),data.getId(),"HH_QD_GIAO_NV_NHAP_HANG");
+        created.setFileDinhKems(fileDinhKems);
+
         List<HhQdGiaoNvNhangDtl> listDtl = hhQdGiaoNvNhangDtlRepository.findAllByIdQdHdr(data.getId());
         hhQdGiaoNvNhangDtlRepository.deleteAll(listDtl);
         List<Long> listId=listDtl.stream().map(HhQdGiaoNvNhangDtl::getId).collect(Collectors.toList());
@@ -329,6 +341,16 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
         data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh())?null:hashMapDmhh.get(data.getCloaiVthh()));
         data.setTenDvi(StringUtils.isEmpty(data.getTenDvi())?null:hashMapDmdv.get(data.getMaDvi()));
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
+
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList("HH_QD_GIAO_NV_NHAP_HANG"));
+        if (!DataUtils.isNullOrEmpty(fileDinhKem)) {
+            data.setFileDinhKem(fileDinhKem.get(0));
+        }
+        List<FileDinhKem> fileDinhkems = fileDinhKemService.search(data.getId(), Arrays.asList("HH_QD_GIAO_NV_NHAP_HANG"));
+        if (!DataUtils.isNullOrEmpty(fileDinhkems)) {
+            data.setFileDinhKems(fileDinhkems);
+        }
+
         List<HhQdGiaoNvNhangDtl> listDtl = hhQdGiaoNvNhangDtlRepository.findAllByIdQdHdr(data.getId());
         List<Long> listId=listDtl.stream().map(HhQdGiaoNvNhangDtl::getId).collect(Collectors.toList());
         List<HhQdGiaoNvNhDdiem> listDd = hhQdGiaoNvNhDdiemRepository.findAllByIdDtlIn(listId);
