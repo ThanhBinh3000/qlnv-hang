@@ -20,17 +20,12 @@ public class HhDxuatKhMttSlddDtl implements Serializable {
     @Transient
     private Long IdVirtual;
 
-    private String maDvi;
-    @Transient
-    private String tenDvi;
-
     private String maDiemKho;
     @Transient
     private String tenDiemKho;
 
     private String diaDiemNhap;
 
-    private BigDecimal donGiaVat;
 
     private Long idDiaDiem;
 
@@ -38,27 +33,7 @@ public class HhDxuatKhMttSlddDtl implements Serializable {
 
     private BigDecimal donGia;
 
-    private BigDecimal thanhTien;
 
-    private String tenGoiThau;
-
-    private BigDecimal soLuongChiTieu;
-
-    private BigDecimal soLuongKhDd;
-
-    private BigDecimal tongThanhTienVat;
-
-    private BigDecimal tongSoLuong;
-
-    private BigDecimal tongThanhTien;
-
-    private BigDecimal tongDonGia;
-
-    private BigDecimal thanhTienVat;
-
-    private String loaiVthh;
-
-    private String cloaiVthh;
 
 
 }

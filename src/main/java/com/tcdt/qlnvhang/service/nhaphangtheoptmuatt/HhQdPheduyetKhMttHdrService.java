@@ -119,7 +119,7 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
         dataMap.setMaDvi(getUser().getDvql());
         HhQdPheduyetKhMttHdr created=hhQdPheduyetKhMttHdrRepository.save(dataMap);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),dataMap.getId(),"HH_QD_PHE_DUYET_KHMTT_HDR");
-        created.setFileDinhKems(fileDinhKems);
+        created.setFileDinhKem(fileDinhKems);
 
         // Update trạng thái tổng hợp dxkhclnt
         if(objReq.getPhanLoai().equals("TH")){
@@ -143,6 +143,7 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
             hhQdPheduyetKhMttSLDDRepository.deleteByIdQdDtl(qd.getId());
             qd.setId(null);
             qd.setIdQdHdr(dataMap.getId());
+            qd.setTrangThaiTkhai(Contains.CHUACAPNHAT);
             hhQdPheduyetKhMttDxRepository.save(qd);
             for (HhQdPheduyetKhMttSLDDReq slddReq  :ObjectUtils.isEmpty(dx.getDsSlddDtlList()) ? dx.getChildren() : dx.getDsSlddDtlList()) {
                 HhQdPheduyetKhMttSLDD sldd = new ModelMapper().map(slddReq , HhQdPheduyetKhMttSLDD.class);
@@ -201,7 +202,7 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
         dataDB.setNguoiSua(getUser().getUsername());
         HhQdPheduyetKhMttHdr  createCheck = hhQdPheduyetKhMttHdrRepository.save(dataDB);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), dataMap.getId(), HhQdPheduyetKhMttHdr.TABLE_NAME);
-        createCheck.setFileDinhKems(fileDinhKems);
+        createCheck.setFileDinhKem(fileDinhKems);
         this.saveDetail(objReq,dataDB);
         return createCheck;
     }
@@ -218,7 +219,7 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
         HhQdPheduyetKhMttHdr qd = qOptional.get();
         Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
-        qd.setFileDinhKems(fileDinhKemService.search(qd.getId(), Collections.singleton(HhQdPheduyetKhMttHdr.TABLE_NAME)));
+        qd.setFileDinhKem(fileDinhKemService.search(qd.getId(), Collections.singleton(HhQdPheduyetKhMttHdr.TABLE_NAME)));
         qOptional.get().setTenLoaiVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getLoaiVthh()));
         qOptional.get().setTenCloaiVthh(StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getCloaiVthh()));
         qOptional.get().setTenDvi(mapDmucDvi.get(qOptional.get().getMaDvi()));

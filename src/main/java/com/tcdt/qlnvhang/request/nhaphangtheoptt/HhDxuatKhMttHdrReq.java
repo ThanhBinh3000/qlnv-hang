@@ -58,7 +58,6 @@ public class HhDxuatKhMttHdrReq {
     private Long maThop;
 
     private String noiDungTh;
-    private BigDecimal donGia;
     private BigDecimal donGiaVat;
 
     private List<FileDinhKemReq> fileDinhKemReq =  new ArrayList<>();
