@@ -28,7 +28,6 @@ public class HhDxKhMttThopHdr implements Serializable {
     private String cloaiVthh;
     @Transient
     String tenCloaiVthh;
-    private String moTaHangHoa;
     private Integer namKh;
     private  String noiDung;
     @Temporal(TemporalType.DATE)

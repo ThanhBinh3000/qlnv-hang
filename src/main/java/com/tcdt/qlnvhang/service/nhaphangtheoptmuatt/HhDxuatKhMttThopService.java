@@ -74,68 +74,25 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
     }
 
     public HhDxKhMttThopHdr sumarryData(HhDxKhMttTChiThopReq objReq, HttpServletRequest req) throws Exception {
-        UserInfo userInfo = SecurityContextService.getUser();
-        List<HhDxuatKhMttHdr> dxuatList = hhDxuatKhMttRepository.listTongHop(objReq.getNamKh(), objReq.getLoaiVthh(), objReq.getCloaiVthh(), userInfo.getDvql());
-
+        List<HhDxuatKhMttHdr> dxuatList = hhDxuatKhMttRepository.listTongHop(
+                objReq.getNamKh(),
+                objReq.getLoaiVthh(),
+                objReq.getCloaiVthh());
         if (dxuatList.isEmpty()) {
             throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
         }
 
         HhDxKhMttThopHdr thopHdr = new HhDxKhMttThopHdr();
 
-        Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-
-
-        thopHdr.setNamKh(objReq.getNamKh());
-        thopHdr.setLoaiVthh(objReq.getLoaiVthh());
-        thopHdr.setTenLoaiVthh(listDanhMucHangHoa.get(objReq.getLoaiVthh()));
-        thopHdr.setCloaiVthh(objReq.getCloaiVthh());
-        thopHdr.setTenCloaiVthh(listDanhMucHangHoa.get(objReq.getCloaiVthh()));
-
         List<HhDxKhMttThopDtl> thopDtls = new ArrayList<HhDxKhMttThopDtl>();
         String tChuanCluong = "";
         for (HhDxuatKhMttHdr dXuat : dxuatList) {
             HhDxKhMttThopDtl thopDtl = new HhDxKhMttThopDtl();
             BeanUtils.copyProperties(dXuat,thopDtl,"id");
             thopDtl.setIdDxHdr(dXuat.getId());
-            thopDtl.setMaDvi(dXuat.getMaDvi());
-            thopDtl.setDiaChiDvi(dXuat.getDiaChiDvi());
-            thopDtl.setSoDxuat(dXuat.getSoDxuat());
-            thopDtl.setNgayPduyet(dXuat.getNgayPduyet());
-            thopDtl.setTrichYeu(dXuat.getTrichYeu());
-            thopDtl.setTenDuAn(dXuat.getTenDuAn());
-            thopDtl.setTongSoLuong(dXuat.getTongSoLuong());
-            thopDtl.setNamKh(dXuat.getNamKh());
-            thopDtl.setTongTienVat(dXuat.getTongTienVat());
-            thopDtl.setLoaiVthh(dXuat.getLoaiVthh());
-            thopDtl.setCloaiVthh(dXuat.getCloaiVthh());
-            thopDtl.setMoTaHangHoa(dXuat.getMoTaHangHoa());
-            thopDtl.setPtMua(dXuat.getPtMua());
-            thopDtl.setTchuanCluong(dXuat.getTchuanCluong());
-            thopDtl.setGiaMua(dXuat.getGiaMua());
-            thopDtl.setDonGia(dXuat.getDonGia());
-            thopDtl.setThueGtgt(dXuat.getThueGtgt());
-            thopDtl.setDonGiaVat(dXuat.getDonGiaVat());
-            thopDtl.setTgianMkho(dXuat.getTgianMkho());
-            thopDtl.setTgianKthuc(dXuat.getTgianKthuc());
-            thopDtl.setGhiChu(dXuat.getGhiChu());
-            thopDtl.setNguonVon(dXuat.getNguonVon());
-            thopDtl.setTongMucDt(dXuat.getTongMucDt());
-            thopDtl.setMoTaHangHoa(dXuat.getMoTaHangHoa());
-            thopDtl.setSoQd(dXuat.getSoQd());
-            thopDtl.setTrangThaiDx(dXuat.getTrangThai());
-            thopDtl.setTenDvi(mapDmucDvi.get(thopDtl.getMaDvi()));
-            thopDtl.setTenTrangThaiDx(NhapXuatHangTrangThaiEnum.getTenById(thopDtl.getTrangThaiDx()));
-
-//            List<HhDxuatKhMttSldd> dtlslDd = hhDxuatKhMttSlddRepository.findAllByIdDxKhmtt(dXuat.getId());
-//            BigDecimal soLuong = BigDecimal.ZERO;
-//            BigDecimal tongTien = BigDecimal.ZERO;
-//            for (HhDxuatKhMttSldd gthauDtl : dtlslDd) {
-//                soLuong = soLuong.add(gthauDtl.getSoLuong());
-//                tongTien = tongTien.add(gthauDtl.getThanhTien() == null ? BigDecimal.ZERO : gthauDtl.getThanhTien());
-//            }
-//            thopDtl.setTongSoLuong(soLuong);
+            thopDtl.setTenDvi(mapDmucDvi.get(dXuat.getMaDvi()));
+            thopDtls.add(thopDtl);
             tChuanCluong = tChuanCluong.concat(dXuat.getTchuanCluong() + "");
             thopDtls.add(thopDtl);
         }
@@ -149,29 +106,24 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
         UserInfo userInfo = SecurityContextService.getUser();
 
         HhDxKhMttThopHdr thopHdr = sumarryData(objReq, req);
-        thopHdr.setNgayTao(getDateTimeNow());
+        thopHdr.setId(objReq.getIdTh());
+        thopHdr.setNgayTao(new Date());
         thopHdr.setNguoiTao(getUser().getUsername());
-        thopHdr.setNoiDung(objReq.getNoiDung());
+        thopHdr.setLoaiVthh(objReq.getLoaiVthh());
+        thopHdr.setCloaiVthh(objReq.getCloaiVthh());
         thopHdr.setTrangThai(Contains.CHUATAO_QD);
         thopHdr.setNgayThop(new Date());
-        thopHdr.setId(objReq.getIdTh());
-        thopHdr.setSoQdCc(objReq.getSoQdCc());
+        thopHdr.setNamKh(objReq.getNamKh());
         thopHdr.setMaDvi(userInfo.getDvql());
+        thopHdr.setNoiDung(objReq.getNoiDung());
         hhDxuatKhMttThopRepository.save(thopHdr);
         for (HhDxKhMttThopDtl dtl : thopHdr.getHhDxKhMttThopDtls()) {
             dtl.setIdThopHdr(thopHdr.getId());
-            BigDecimal tongTienVat = dtl.getTongSoLuong().multiply(dtl.getDonGiaVat());
-            dtl.setTongTienVat(tongTienVat);
             hhDxuatKhMttThopDtlRepository.save(dtl);
         }
         if (thopHdr.getId() > 0 && thopHdr.getHhDxKhMttThopDtls().size() > 0) {
             List<String> soDxuatList = thopHdr.getHhDxKhMttThopDtls().stream().map(HhDxKhMttThopDtl::getSoDxuat)
                     .collect(Collectors.toList());
-//            List<HhDxuatKhMttHdr> list = hhDxuatKhMttRepository.findBySoDxuatIn(soDxuatList);
-//            for (HhDxuatKhMttHdr bdg : list){
-//                bdg.setMaThop(thopHdr.getId());
-//                hhDxuatKhMttRepository.save(bdg);
-//            }
             hhDxuatKhMttRepository.updateStatusInList(soDxuatList, Contains.DATONGHOP);
         }
 return thopHdr;
