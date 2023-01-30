@@ -61,6 +61,7 @@ public class HopDongMttHdr extends BaseEntity implements Serializable {
   private String cdtMoTai;
   private String cdtThongTinGiayUyQuyen;
 
+  private Long nccId;
   private String nccTen;
   private String nccDiaChi;
   private String nccMst;
