@@ -148,6 +148,7 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
 
         data.setListNguoiTgia(xhTcTtinBdgNlqRepository.findByIdTtinHdr(id));
         Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
+        Map<String,String> listDanhMucHangHoa = getListDanhMucHangHoa();
 
         List<XhTcTtinBdgDtl> byIdTtinHdr = xhTcTtinBdgDtlRepository.findByIdTtinHdr(id);
         byIdTtinHdr.forEach(item -> {
@@ -162,6 +163,8 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
             item.setChildren(byIdTtinDtl);
         });
         data.setChildren(byIdTtinHdr);
+        data.setTenLoaiVthh(listDanhMucHangHoa.get(data.getLoaiVthh()));
+        data.setTenCloaiVthh(listDanhMucHangHoa.get(data.getCloaiVthh()));
         return data;
     }
 
