@@ -12,5 +12,6 @@ public class DiaDiemGiaoNhanMttReq {
     private String maDvi;
     private BigDecimal soLuong;
     private BigDecimal donGiaVat;
+    private BigDecimal thanhTien;
     private Integer stt;
 }

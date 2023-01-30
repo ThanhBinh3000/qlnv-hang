@@ -57,7 +57,7 @@ public class HhBangKeMuaLeController extends BaseController {
     }
 
     @ApiOperation(value = "Tạo mới thông tin bảng kê thu mua lẻ ", response = List.class)
-    @PostMapping(value = PathContains.HD_BK_PMH + PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<BaseResponse> insert(HttpServletRequest request, @Valid @RequestBody BangKeMuaLeReq objReq) {
         BaseResponse resp = new BaseResponse();
@@ -75,7 +75,7 @@ public class HhBangKeMuaLeController extends BaseController {
 
 
     @ApiOperation(value = "Cập nhật thông tin bảng kê thu mua lẻ", response = List.class)
-    @PostMapping(value = PathContains.HD_BK_PMH + PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> update(HttpServletRequest request, @Valid @RequestBody BangKeMuaLeReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -91,7 +91,7 @@ public class HhBangKeMuaLeController extends BaseController {
     }
 
     @ApiOperation(value = "Lấy chi tiết thông tin bảng kê thu mua lẻ", response = List.class)
-    @GetMapping(value = PathContains.HD_BK_PMH + PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> detail(
             @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids") List<Long> ids) {
@@ -107,9 +107,9 @@ public class HhBangKeMuaLeController extends BaseController {
         }
         return ResponseEntity.ok(resp);
     }
-    
+
     @ApiOperation(value = "Xoá thông tin bảng kê thu mua lẻ", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PostMapping(value = PathContains.HD_BK_PMH + PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
@@ -127,7 +127,7 @@ public class HhBangKeMuaLeController extends BaseController {
     }
 
     @ApiOperation(value = "Xoá danh sách thông tin bảng kê thu mua lẻ", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PostMapping(value = PathContains.HD_BK_PMH + PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
@@ -144,9 +144,9 @@ public class HhBangKeMuaLeController extends BaseController {
     }
 
     @ApiOperation(value = "Kết xuất danh sách mua", response = List.class)
-    @PostMapping(value = PathContains.HD_BK_PMH + PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void exportList(@Valid @RequestBody @CurrentUser CustomUserDetails currentUser, BangKeMuaLeReq objReq, HttpServletResponse response) throws Exception {
+    public void exportList(@CurrentUser CustomUserDetails currentUser,@RequestBody BangKeMuaLeReq objReq, HttpServletResponse response) throws Exception {
         try {
             bangKeMuaLeService.export(currentUser, objReq, response);
 

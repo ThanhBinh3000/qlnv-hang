@@ -41,7 +41,7 @@ public class HopDongMttHdr extends BaseEntity implements Serializable {
   private Integer soNgayThien;
   LocalDate tgianGnhanTu;
   LocalDate tgianGnhanDen;
-  LocalDate tgianGnhanGhiChu;
+  private Integer tgianGnhanGhiChu;
   private String noiDung;
   private String dieuKien;
 

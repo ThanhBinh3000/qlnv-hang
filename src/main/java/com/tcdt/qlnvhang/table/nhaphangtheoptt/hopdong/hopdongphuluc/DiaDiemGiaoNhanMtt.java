@@ -24,5 +24,6 @@ public class DiaDiemGiaoNhanMtt extends BaseEntity implements Serializable {
   private String maDvi;
   private BigDecimal soLuong;
   private BigDecimal donGiaVat;
+  private BigDecimal thanhTien;
   private Integer stt;
 }

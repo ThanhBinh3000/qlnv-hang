@@ -25,6 +25,10 @@ public class BangKeMuaLeReq extends BaseRequest {
     private String nguoiMua;
     private String diaChiThuMua;
     private LocalDate ngayMua;
+    @Transient
+    private LocalDate ngayMuaTu;
+    @Transient
+    private LocalDate ngayMuaDen;
     private String loaiVthh;
     private String cloaiVthh;
     private String moTaHangHoa;

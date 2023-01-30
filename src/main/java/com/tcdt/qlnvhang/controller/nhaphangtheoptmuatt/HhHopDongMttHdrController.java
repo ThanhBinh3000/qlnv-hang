@@ -58,7 +58,7 @@ public class HhHopDongMttHdrController extends BaseController {
     }
 
     @ApiOperation(value = "Tạo mới thông tin hợp đồng ", response = List.class)
-    @PostMapping(value = PathContains.HD_BK_PMH + PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value =  PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<BaseResponse> insert(HttpServletRequest request, @Valid @RequestBody HopDongMttHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
@@ -76,7 +76,7 @@ public class HhHopDongMttHdrController extends BaseController {
 
 
     @ApiOperation(value = "Cập nhật thông tin hợp đồng", response = List.class)
-    @PostMapping(value = PathContains.HD_BK_PMH + PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value =  PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> update(HttpServletRequest request, @Valid @RequestBody HopDongMttHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -92,7 +92,7 @@ public class HhHopDongMttHdrController extends BaseController {
     }
 
     @ApiOperation(value = "Lấy chi tiết thông tin hợp đồng", response = List.class)
-    @GetMapping(value = PathContains.HD_BK_PMH + PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value =  PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> detail(
             @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids")List<Long> ids) {
@@ -110,7 +110,7 @@ public class HhHopDongMttHdrController extends BaseController {
     }
 
     @ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 thông tin", response = List.class)
-    @PostMapping(value = PathContains.HD_BK_PMH + PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value =  PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> updateStatus(@Valid HttpServletRequest req, @RequestBody StatusReq stReq) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -127,7 +127,7 @@ public class HhHopDongMttHdrController extends BaseController {
 
 
     @ApiOperation(value = "Xoá thông tin hợp đồng", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PostMapping(value = PathContains.HD_BK_PMH + PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value =  PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
@@ -145,7 +145,7 @@ public class HhHopDongMttHdrController extends BaseController {
     }
 
     @ApiOperation(value = "Xoá danh sách thông tin hợp đồng", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PostMapping(value = PathContains.HD_BK_PMH + PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value =  PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
@@ -162,9 +162,9 @@ public class HhHopDongMttHdrController extends BaseController {
     }
 
     @ApiOperation(value = "Kết xuất danh sách mua", response = List.class)
-    @PostMapping(value = PathContains.HD_BK_PMH + PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value =  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void exportList(@Valid @RequestBody @CurrentUser CustomUserDetails currentUser, HopDongMttHdrReq objReq, HttpServletResponse response) throws Exception {
+    public void exportList(@CurrentUser CustomUserDetails currentUser ,@Valid @RequestBody  HopDongMttHdrReq objReq, HttpServletResponse response) throws Exception {
         try {
             hopDongMttHdrService.export( currentUser,objReq, response);
 

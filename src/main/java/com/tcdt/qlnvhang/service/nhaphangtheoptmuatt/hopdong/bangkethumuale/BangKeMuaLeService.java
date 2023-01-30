@@ -36,8 +36,6 @@ public class BangKeMuaLeService extends BaseServiceImpl {
 
     public Page<BangKeMuaLe> searchPage(CustomUserDetails currentUser, BangKeMuaLeReq req) throws Exception {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-
-        req.setMaDvi(currentUser.getUser().getDepartment());
         Page<BangKeMuaLe> search = bangkethumualeRepository.search(req, pageable);
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
@@ -142,7 +140,7 @@ public class BangKeMuaLeService extends BaseServiceImpl {
 
         String title="Danh sách bảng kê thu mua lẻ";
         String[] rowsName=new String[]{"STT","Năm kế hoạch","Sô bảng kê","Số quyết định","Địa chỉ","Số CMT/CCCD","Loại hàng hóa","Chủng loại hàng hóa","Số lượng","Đơn giá(đ)","Thành tiên(đ)",};
-        String fileName="danh-sach-bang-ke_thu-mua-le.xlsx";
+        String fileName="danh-sach-bang-ke-thu-mua-le.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs=null;
         for (int i=0;i<data.size();i++){

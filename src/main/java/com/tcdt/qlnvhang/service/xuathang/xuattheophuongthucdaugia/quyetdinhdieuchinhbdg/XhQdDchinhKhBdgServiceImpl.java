@@ -28,6 +28,7 @@ import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -38,10 +39,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl implements XhQdDchinhKhBdgService {
@@ -81,19 +79,10 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl implements XhQdD
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),
                 req.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<XhQdDchinhKhBdgHdr> data = xhQdDchinhKhBdgHdrRepository.searchPage(
-                req.getNamKh(),
-                req.getSoQdDc(),
-                req.getTrichYeu(),
-                Contains.convertDateToString(req.getNgayKyQdTu()),
-                Contains.convertDateToString(req.getNgayKyQdDen()),
-                req.getSoTrHdr(),
-                req.getLoaiVthh(),
-                req.getTrangThai(),
-                req.getMaDvi(),
+                req,
                 pageable);
         Map<String, String> hashMapDmHh = getListDanhMucHangHoa();
         data.getContent().forEach(f -> {
-            f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
         });
@@ -109,9 +98,9 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl implements XhQdD
     public XhQdDchinhKhBdgHdr create(XhQdDchinhKhBdgReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
 
-        List<XhQdDchinhKhBdgHdr> checkSoQd = xhQdDchinhKhBdgHdrRepository.findBySoQdDc(req.getSoQdPd());
+        List<XhQdDchinhKhBdgHdr> checkSoQd = xhQdDchinhKhBdgHdrRepository.findBySoQdDc(req.getSoQdGoc());
         if (!checkSoQd.isEmpty()) {
-            throw new Exception("Số quyết định " + req.getSoQdPd() + " đã tồn tại");
+            throw new Exception("Số quyết định " + req.getSoQdGoc() + " đã tồn tại");
         }
 
         XhQdDchinhKhBdgHdr dataMap = ObjectMapperUtils.map(req, XhQdDchinhKhBdgHdr.class);
@@ -121,17 +110,17 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl implements XhQdD
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), dataMap.getId(), XhQdDchinhKhBdgHdr.TABLE_NAME);
         created.setFileDinhKems(fileDinhKems);
 
-        saveDetail(req, dataMap);
+        saveDetail(req, dataMap.getId());
         return dataMap;
     }
 
-    void saveDetail(XhQdDchinhKhBdgReq req, XhQdDchinhKhBdgHdr dataMap) {
-        xhQdDchinhKhBdgDtlRepository.deleteAllByIdQdHdr(dataMap.getId());
-        for (XhQdPdKhBdgDtlReq dx : req.getDsDeXuat()) {
+    void saveDetail(XhQdDchinhKhBdgReq req, Long idHdr) {
+        xhQdDchinhKhBdgDtlRepository.deleteAllByIdQdHdr(idHdr);
+        for (XhQdPdKhBdgDtlReq dx : req.getChildren()) {
             XhQdDchinhKhBdgDtl qd = ObjectMapperUtils.map(dx, XhQdDchinhKhBdgDtl.class);
             xhQdDchinhKhBdgPlRepository.deleteByIdQdDtl(qd.getId());
             qd.setId(null);
-            qd.setIdQdHdr(dataMap.getId());
+            qd.setIdQdHdr(idHdr);
             qd.setTrangThai(Contains.CHUACAPNHAT);
             xhQdDchinhKhBdgDtlRepository.save(qd);
             for (XhQdPdKhBdgPlReq gtList : dx.getChildren()) {
@@ -144,7 +133,6 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl implements XhQdD
                 for (XhQdPdKhBdgPlDtlReq ddNhap : gtList.getChildren()) {
                     XhQdDchinhKhBdgPlDtl dataDdNhap = new ModelMapper().map(ddNhap, XhQdDchinhKhBdgPlDtl.class);
                     dataDdNhap.setId(null);
-                    dataDdNhap.setIdQdHdr(dataMap.getId());
                     dataDdNhap.setIdPhanLo(gt.getId());
                     xhQdDchinhKhBdgPlDtlRepository.save(dataDdNhap);
                 }
@@ -154,9 +142,26 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl implements XhQdD
 
     @Override
     public XhQdDchinhKhBdgHdr update(XhQdDchinhKhBdgReq req) throws Exception {
-        return null;
-    }
+        if (StringUtils.isEmpty(req.getId())){
+            throw new Exception("Không tồn tại bản ghi");
+        }
+        Optional<XhQdDchinhKhBdgHdr> qOptional = xhQdDchinhKhBdgHdrRepository.findById(req.getId());
 
+        if (!qOptional.isPresent()){
+            throw new UnsupportedOperationException("Không tồn tại bản ghi");
+        }
+
+        XhQdDchinhKhBdgHdr data = qOptional.get();
+
+        BeanUtils.copyProperties(req,data,"id");
+        data.setNguoiSuaId(getUser().getId());
+        data.setNgaySua(new Date());
+        xhQdDchinhKhBdgHdrRepository.save(data);
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), data.getId(), XhQdDchinhKhBdgHdr.TABLE_NAME);
+        data.setFileDinhKems(fileDinhKems);
+        saveDetail(req, data.getId());
+        return data;
+    }
     @Override
     public XhQdDchinhKhBdgHdr detail(Long id) throws Exception {
         if (StringUtils.isEmpty(id)){
@@ -213,7 +218,36 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl implements XhQdD
 
     @Override
     public XhQdDchinhKhBdgHdr approve(XhQdDchinhKhBdgReq req) throws Exception {
-        return null;
+        if (StringUtils.isEmpty(req.getId())){
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        XhQdDchinhKhBdgHdr detail = detail(req.getId());
+        String status = req.getTrangThai() + detail.getTrangThai();
+        switch (status) {
+            case Contains.BAN_HANH + Contains.DADUYET_LDV:
+                detail.setNguoiPduyetId(getUser().getId());
+                detail.setNgayPduyet(getDateTimeNow());
+                break;
+            default:
+                throw new Exception("Phê duyệt không thành công");
+        }
+        detail.setTrangThai(req.getTrangThai());
+//        if (stReq.getTrangThai().equals(Contains.BAN_HANH)){
+//            Optional<XhDxKhBanDauGia> qOptional = xhDxKhBanDauGiaRepository.findById(dataDB.getIdTrHdr());
+//            if (qOptional.isPresent()){
+//                if (qOptional.get().getTrangThai().equals(Contains.DABANHANH_QD)){
+//                    throw new Exception("Đề xuất này đã được quyết định ");
+//                }
+//                // Update trạng thái tờ trình
+////                xhDxKhBanDauGiaRepository.updateStatusInList(Arrays.asList(dataDB.getSoTrHdr()), Contains.DABANHANH_QD);
+//            }else {
+//                throw new Exception("Số tờ trình kế hoạch không được tìm thấy");
+//            }
+////            this.cloneProject(dataDB.getId());
+////            this.cloneForToChucBdg(dataDB);
+//        }
+        XhQdDchinhKhBdgHdr createCheck = xhQdDchinhKhBdgHdrRepository.save(detail);
+        return createCheck;
     }
 
     @Override
@@ -272,16 +306,16 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl implements XhQdD
             XhQdDchinhKhBdgHdr pduyet = data.get(i);
             objs = new Object[rowsName.length];
             objs[0] = i;
-            objs[1] = pduyet.getNamKh();
-            objs[2] = pduyet.getSoQdPd();
-            objs[3] = pduyet.getNgayKyQd();
+//            objs[1] = pduyet.getNamKh();
+//            objs[2] = pduyet.getSoQdPd();
+//            objs[3] = pduyet.getNgayKyQd();
             objs[4] = pduyet.getTrichYeu();
-            objs[5] = pduyet.getSoTrHdr();
-            objs[6] = pduyet.getIdThHdr();
+//            objs[5] = pduyet.getSoTrHdr();
+//            objs[6] = pduyet.getIdThHdr();
             objs[7] = pduyet.getTenLoaiVthh();
             objs[8] = pduyet.getTenCloaiVthh();
-            objs[9] = pduyet.getSoDviTsan();
-            objs[10] = pduyet.getSlHdDaKy();
+//            objs[9] = pduyet.getSoDviTsan();
+//            objs[10] = pduyet.getSlHdDaKy();
             objs[11] = pduyet.getTenTrangThai();
             dataList.add(objs);
         }
