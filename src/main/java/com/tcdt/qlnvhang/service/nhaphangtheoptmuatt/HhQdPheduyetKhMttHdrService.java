@@ -243,7 +243,8 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
             dtl.setTenDvi(StringUtils.isEmpty(dtl.getMaDvi()) ? null : mapDmucDvi.get(dtl.getMaDvi()));
             dtl.setChildren(hhQdPheduyetKhMttSLDDList);
             dtl.setTenTrangThaiTkhai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThaiTkhai()));
-
+            dtl.setTenLoaiVthh(StringUtils.isEmpty(dtl.getLoaiVthh()) ? null : hashMapDmHh.get(dtl.getLoaiVthh()));
+            dtl.setTenCloaiVthh(StringUtils.isEmpty(dtl.getCloaiVthh()) ? null : hashMapDmHh.get(dtl.getCloaiVthh()));
             hhQdPheduyetKhMttDxList.add(dtl);
 
         }
@@ -482,10 +483,4 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
         dtl.setTenDvi(hashMapDvi.get(dtl.getMaDvi()));
         return dtl;
     }
-
-
-
-
-
-
 }
