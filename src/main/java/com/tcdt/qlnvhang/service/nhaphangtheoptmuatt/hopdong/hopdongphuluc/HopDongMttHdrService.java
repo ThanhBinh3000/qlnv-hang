@@ -169,6 +169,8 @@ public class HopDongMttHdrService extends BaseServiceImpl {
       data.setFileDinhKem(dinhKem);
       List<HopDongMttHdr> listPhuLuc = hopDongHdrRepository.findByIdHd(data.getId());
       data.setPhuLuc(listPhuLuc);
+      List<DiaDiemGiaoNhanMtt> listDiaDiem = diaDiemGiaoNhanRepository.findAllByIdHdr(data.getId());
+      data.setDiaDiemGiaoNhan(listDiaDiem);
       data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
       data.setTenLoaiVthh(mapVthh.get(data.getLoaiVthh()));
       data.setTenCloaiVthh(mapVthh.get(data.getCloaiVthh()));
