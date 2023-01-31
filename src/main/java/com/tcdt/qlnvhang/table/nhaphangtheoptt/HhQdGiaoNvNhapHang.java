@@ -43,7 +43,7 @@ public class HhQdGiaoNvNhapHang implements Serializable {
     @Transient
     private String tenCloaiVthh;
     private String moTaHangHoa;
-    private String dviTinh;
+    private String donViTinh;
     @Temporal(TemporalType.DATE)
     private Date tgianNkho;
     private String trichYeu;
@@ -79,5 +79,8 @@ public class HhQdGiaoNvNhapHang implements Serializable {
 
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
+
+    @Transient
+    private FileDinhKem fileDinhKem;
 
 }

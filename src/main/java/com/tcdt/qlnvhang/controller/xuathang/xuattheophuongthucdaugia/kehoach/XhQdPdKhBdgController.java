@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.IdSearchReq;
-import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.kehoachbdg.pheduyet.XhQdPdKhBdgReq;
+import com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.pheduyet.XhQdPdKhBdgReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.xuathang.xuattheophuongthucdaugia.kehoach.pheduyet.XhQdPdKhBdgServiceImpl;
 import com.tcdt.qlnvhang.util.PathContains;

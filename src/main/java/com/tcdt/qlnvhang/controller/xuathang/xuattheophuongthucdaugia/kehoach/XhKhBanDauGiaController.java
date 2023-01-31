@@ -5,7 +5,7 @@ import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
 import com.tcdt.qlnvhang.request.IdSearchReq;
-import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.kehoachbdg.dexuat.XhDxKhBanDauGiaReq;
+import com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.dexuat.XhDxKhBanDauGiaReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.xuathang.xuattheophuongthucdaugia.kehoach.dexuat.XhDxKhBanDauGiaService;
 import com.tcdt.qlnvhang.util.PathContains;

@@ -1,21 +1,21 @@
 package com.tcdt.qlnvhang.service.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin;
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.kehoach.pheduyet.XhQdPdKhBdgDtlRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgDtlRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdrRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgNlqRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgPloRepository;
-import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.ThongTinDauGiaDtlReq;
-import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.ThongTinDauGiaNtgReq;
-import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.ThongTinDauGiaPloReq;
-import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.ThongTinDauGiaReq;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgDtlRepository;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgDtlRepository;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgNlqRepository;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgPloRepository;
+import com.tcdt.qlnvhang.request.xuathang.daugia.tochuctrienkhai.thongtin.ThongTinDauGiaDtlReq;
+import com.tcdt.qlnvhang.request.xuathang.daugia.tochuctrienkhai.thongtin.ThongTinDauGiaNtgReq;
+import com.tcdt.qlnvhang.request.xuathang.daugia.tochuctrienkhai.thongtin.ThongTinDauGiaPloReq;
+import com.tcdt.qlnvhang.request.xuathang.daugia.tochuctrienkhai.thongtin.ThongTinDauGiaReq;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.pheduyet.XhQdPdKhBdgDtl;
-import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgDtl;
-import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdr;
-import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgNlq;
-import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.tochuctrienkhai.thongtin.XhTcTtinBdgPlo;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgDtl;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgDtl;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdr;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgNlq;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgPlo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -148,6 +148,7 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
 
         data.setListNguoiTgia(xhTcTtinBdgNlqRepository.findByIdTtinHdr(id));
         Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
+        Map<String,String> listDanhMucHangHoa = getListDanhMucHangHoa();
 
         List<XhTcTtinBdgDtl> byIdTtinHdr = xhTcTtinBdgDtlRepository.findByIdTtinHdr(id);
         byIdTtinHdr.forEach(item -> {
@@ -162,6 +163,8 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
             item.setChildren(byIdTtinDtl);
         });
         data.setChildren(byIdTtinHdr);
+        data.setTenLoaiVthh(listDanhMucHangHoa.get(data.getLoaiVthh()));
+        data.setTenCloaiVthh(listDanhMucHangHoa.get(data.getCloaiVthh()));
         return data;
     }
 

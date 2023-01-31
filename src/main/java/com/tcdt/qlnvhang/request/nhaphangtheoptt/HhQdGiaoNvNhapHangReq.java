@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,7 +31,7 @@ public class HhQdGiaoNvNhapHangReq {
     private String loaiVthh;
     private String cloaiVthh;
     private String moTaHangHoa;
-    private String dviTinh;
+    private String donViTinh;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date tgianNkho;
     private String trichYeu;
@@ -39,4 +40,5 @@ public class HhQdGiaoNvNhapHangReq {
 
     private List<HhQdGiaoNvNhangDtlReq> hhQdGiaoNvNhangDtlList= new ArrayList<>();
     private List<FileDinhKemReq> fileDinhkems =new ArrayList<>();
+    private FileDinhKemReq fileDinhKem;
 }

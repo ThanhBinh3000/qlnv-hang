@@ -1,9 +1,9 @@
 package com.tcdt.qlnvhang.service.xuathang.xuattheophuongthucdaugia.kehoach.dexuat;
 
 import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
-import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.kehoachbdg.dexuat.XhDxKhBanDauGiaReq;
+import com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.dexuat.XhDxKhBanDauGiaReq;
 import com.tcdt.qlnvhang.service.BaseService;
-import com.tcdt.qlnvhang.table.xuathang.xuattheophuongthucdaugia.kehoach.dexuat.XhDxKhBanDauGia;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGia;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
