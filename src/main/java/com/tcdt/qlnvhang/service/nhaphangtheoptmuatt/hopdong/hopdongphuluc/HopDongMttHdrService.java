@@ -21,7 +21,7 @@ import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
-import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -45,59 +45,64 @@ public class HopDongMttHdrService extends BaseServiceImpl {
 
   @Autowired
   private DiaDiemGiaoNhanMttRepository diaDiemGiaoNhanRepository;
+
   public Page<HopDongMttHdr> searchPage(CustomUserDetails currentUser, HopDongMttHdrReq req) throws Exception {
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<HopDongMttHdr> search = hopDongHdrRepository.search(req, pageable);
-    Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+    //Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+    Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
+
     Map<String, String> mapVthh = getListDanhMucHangHoa();
     search.getContent().forEach(s -> {
-      if (mapDmucDvi.get((s.getMaDvi())) != null) {
-        s.setTenDvi(mapDmucDvi.get(s.getMaDvi()));
+      try {
+        if (mapDmucDvi.containsKey((s.getMaDvi()))) {
+          Map<String, Object> objDonVi = mapDmucDvi.get(s.getMaDvi());
+          s.setTenDvi(objDonVi.get("tenDvi").toString());
+        }
+        if (mapVthh.get((s.getLoaiVthh())) != null) {
+          s.setTenLoaiVthh(mapVthh.get(s.getLoaiVthh()));
+        }
+        if (mapVthh.get((s.getCloaiVthh())) != null) {
+          s.setTenCloaiVthh(mapVthh.get(s.getCloaiVthh()));
+        }
+        s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
+        s.setTenTrangThaiNh(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThaiNh()));
+      } catch (RuntimeException e) {
+        throw new RuntimeException(e);
       }
-      if (mapVthh.get((s.getLoaiVthh())) != null) {
-        s.setTenLoaiVthh(mapVthh.get(s.getLoaiVthh()));
-      }
-      if (mapVthh.get((s.getCloaiVthh())) != null) {
-        s.setTenCloaiVthh(mapVthh.get(s.getCloaiVthh()));
-      }
-      s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
-      s.setTenTrangThaiNh(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThaiNh()));
     });
     return search;
   }
 
   @Transactional
-  public HopDongMttHdr save(HopDongMttHdrReq objReq) throws Exception{
-    UserInfo userInfo= SecurityContextService.getUser();
+  public HopDongMttHdr save(HopDongMttHdrReq objReq) throws Exception {
+    UserInfo userInfo = SecurityContextService.getUser();
     if (userInfo == null)
       throw new Exception("Bad request.");
     Optional<HopDongMttHdr> optional = hopDongHdrRepository.findBySoHd(objReq.getSoHd());
-    if(optional.isPresent()){
+    if (optional.isPresent()) {
       throw new Exception("số hợp đồng đã tồn tại");
     }
-    HopDongMttHdr data = new ModelMapper().map(objReq,HopDongMttHdr.class);
+    HopDongMttHdr data = new HopDongMttHdr();
+    BeanUtils.copyProperties(objReq, data);
     data.setTrangThai(Contains.DUTHAO);
-    Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
-    Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
-    data.setTenDvi(StringUtils.isEmpty(userInfo.getDvql()) ? null : hashMapDmdv.get(userInfo.getDvql()));
-    data.setMaDvi(userInfo.getDvql());
-    data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh()) ? null : hashMapDmHh.get(data.getLoaiVthh()));
-    HopDongMttHdr created=hopDongHdrRepository.save(data);
+    data.setMaDvi(userInfo.getDepartment());
+    HopDongMttHdr created = hopDongHdrRepository.save(data);
 
     if (!DataUtils.isNullObject(objReq.getFileDinhKem())) {
-      List<FileDinhKem> fileDinhKem= fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(),data.getId(), HopDongMttHdr.TABLE_NAME + "_DINH_KEM");
+      List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(), data.getId(), HopDongMttHdr.TABLE_NAME + "_DINH_KEM");
       created.setFileDinhKem(fileDinhKem);
     }
-    List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(),data.getId(),HopDongMttHdr.TABLE_NAME + "_CAN_CU");
+    List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), data.getId(), HopDongMttHdr.TABLE_NAME + "_CAN_CU");
     created.setCanCu(canCu);
-    for (HopDongMttHdrReq phuLucReq :objReq.getPhuLuc()){
-      HopDongMttHdr phuLuc =ObjectMapperUtils.map(phuLucReq,HopDongMttHdr.class);
+    for (HopDongMttHdrReq phuLucReq : objReq.getPhuLuc()) {
+      HopDongMttHdr phuLuc = ObjectMapperUtils.map(phuLucReq, HopDongMttHdr.class);
       phuLuc.setId(null);
       phuLuc.setIdHd(created.getId());
       hopDongHdrRepository.save(phuLuc);
     }
 
-    for (DiaDiemGiaoNhanMttReq listDtl : objReq.getDiaDiemGiaoNhan()){
+    for (DiaDiemGiaoNhanMttReq listDtl : objReq.getDiaDiemGiaoNhan()) {
       DiaDiemGiaoNhanMtt dtl = ObjectMapperUtils.map(listDtl, DiaDiemGiaoNhanMtt.class);
       dtl.setId(null);
       dtl.setIdHdr(created.getId());
@@ -107,41 +112,44 @@ public class HopDongMttHdrService extends BaseServiceImpl {
   }
 
   @Transactional
-  public HopDongMttHdr update(HopDongMttHdrReq objReq) throws Exception{
-    UserInfo userInfo= SecurityContextService.getUser();
+  public HopDongMttHdr update(HopDongMttHdrReq objReq) throws Exception {
+    UserInfo userInfo = SecurityContextService.getUser();
     if (userInfo == null)
       throw new Exception("Bad request.");
     Optional<HopDongMttHdr> optional = hopDongHdrRepository.findById(objReq.getId());
 
     Optional<HopDongMttHdr> soBienBan = hopDongHdrRepository.findBySoHd(objReq.getSoHd());
-    if (soBienBan.isPresent()){
-      if (!soBienBan.get().getId().equals(objReq.getId())){
+    if (soBienBan.isPresent()) {
+      if (!soBienBan.get().getId().equals(objReq.getId())) {
         throw new Exception("số hợp đồng đã tồn tại");
       }
     }
     HopDongMttHdr data = optional.get();
-    HopDongMttHdr dataMap = new ModelMapper().map(objReq,HopDongMttHdr.class);
-    updateObjectToObject(data,dataMap);
-    HopDongMttHdr created=hopDongHdrRepository.save(data);
-    fileDinhKemService.delete(objReq.getId(),  Lists.newArrayList("HH_BIEN_BAN_LAY_MAU"));
+//    HopDongMttHdr dataMap = new ModelMapper().map(objReq,HopDongMttHdr.class);
+//    updateObjectToObject(data,dataMap);
+    BeanUtils.copyProperties(objReq, data);
+    HopDongMttHdr created = hopDongHdrRepository.save(data);
+    fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(HopDongMttHdr.TABLE_NAME + "_DINH_KEM", HopDongMttHdr.TABLE_NAME + "_CAN_CU"));
     if (!DataUtils.isNullObject(objReq.getFileDinhKem())) {
-      List<FileDinhKem> fileDinhKem= fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(), created.getId(),HopDongMttHdr.TABLE_NAME + "_DINH_KEM");
+      List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(), created.getId(), HopDongMttHdr.TABLE_NAME + "_DINH_KEM");
       created.setFileDinhKem(fileDinhKem);
     }
-    List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(),data.getId(),HopDongMttHdr.TABLE_NAME + "_CAN_CU");
+    List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), data.getId(), HopDongMttHdr.TABLE_NAME + "_CAN_CU");
     created.setCanCu(canCu);
     List<HopDongMttHdr> listPhuLuc = hopDongHdrRepository.findByIdHd(objReq.getId());
     hopDongHdrRepository.deleteAll(listPhuLuc);
-    for (HopDongMttHdrReq phuLucReq :objReq.getPhuLuc()){
-      HopDongMttHdr phuLuc =ObjectMapperUtils.map(phuLucReq,HopDongMttHdr.class);
+    for (HopDongMttHdrReq phuLucReq : objReq.getPhuLuc()) {
+      HopDongMttHdr phuLuc = new HopDongMttHdr();
+      BeanUtils.copyProperties(phuLucReq, phuLuc);
       phuLuc.setId(null);
       phuLuc.setIdHd(created.getId());
       hopDongHdrRepository.save(phuLuc);
     }
     List<DiaDiemGiaoNhanMtt> DiaDiemGiaoNhanMtts = diaDiemGiaoNhanRepository.findAllByIdHdr(objReq.getId());
     diaDiemGiaoNhanRepository.deleteAll(DiaDiemGiaoNhanMtts);
-    for (DiaDiemGiaoNhanMttReq listDtl : objReq.getDiaDiemGiaoNhan()){
-      DiaDiemGiaoNhanMtt dtl = ObjectMapperUtils.map(listDtl, DiaDiemGiaoNhanMtt.class);
+    for (DiaDiemGiaoNhanMttReq listDtl : objReq.getDiaDiemGiaoNhan()) {
+      DiaDiemGiaoNhanMtt dtl = new DiaDiemGiaoNhanMtt();
+      BeanUtils.copyProperties(listDtl, dtl);
       dtl.setId(null);
       dtl.setIdHdr(data.getId());
       diaDiemGiaoNhanRepository.save(dtl);
@@ -150,10 +158,11 @@ public class HopDongMttHdrService extends BaseServiceImpl {
   }
 
 
-  public List<HopDongMttHdr> detail( List<Long> ids) throws Exception {
+  public List<HopDongMttHdr> detail(List<Long> ids) throws Exception {
     if (DataUtils.isNullOrEmpty(ids))
       throw new Exception("Tham số không hợp lệ.");
-    Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+    //Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+    Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
     Map<String, String> mapVthh = getListDanhMucHangHoa();
     List<HopDongMttHdr> allById = hopDongHdrRepository.findAllById(ids);
     allById.forEach(data -> {
@@ -163,7 +172,17 @@ public class HopDongMttHdrService extends BaseServiceImpl {
       data.setFileDinhKem(dinhKem);
       List<HopDongMttHdr> listPhuLuc = hopDongHdrRepository.findByIdHd(data.getId());
       data.setPhuLuc(listPhuLuc);
-      data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
+      List<DiaDiemGiaoNhanMtt> listDiaDiem = diaDiemGiaoNhanRepository.findAllByIdHdr(data.getId());
+      listDiaDiem.forEach(s -> {
+        if (mapDmucDvi.containsKey(s.getMaDvi())) {
+          s.setTenDvi(mapDmucDvi.get(s.getMaDvi()).get("tenDvi").toString());
+          s.setDiaChiDvi(mapDmucDvi.get(s.getMaDvi()).get("diaChi").toString());
+        }
+      });
+      data.setDiaDiemGiaoNhan(listDiaDiem);
+      if (mapDmucDvi.containsKey(data.getMaDvi())) {
+        data.setTenDvi(mapDmucDvi.get(data.getMaDvi()).get("tenDvi").toString());
+      }
       data.setTenLoaiVthh(mapVthh.get(data.getLoaiVthh()));
       data.setTenCloaiVthh(mapVthh.get(data.getCloaiVthh()));
       data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
@@ -173,60 +192,60 @@ public class HopDongMttHdrService extends BaseServiceImpl {
 
 
   @Transient
-  public void delete(IdSearchReq idSearchReq) throws Exception{
-    Optional<HopDongMttHdr> optional= hopDongHdrRepository.findById(idSearchReq.getId());
-    if (!optional.isPresent()){
+  public void delete(IdSearchReq idSearchReq) throws Exception {
+    Optional<HopDongMttHdr> optional = hopDongHdrRepository.findById(idSearchReq.getId());
+    if (!optional.isPresent()) {
       throw new Exception("Bản ghi không tồn tại");
     }
     if (!optional.get().getTrangThai().equals(Contains.DUTHAO)
-            && !optional.get().getTrangThai().equals(Contains.TUCHOI_LDCC)){
+        && !optional.get().getTrangThai().equals(Contains.TUCHOI_LDCC)) {
       throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối");
     }
     HopDongMttHdr data = optional.get();
     List<HopDongMttHdr> listPhuLuc = hopDongHdrRepository.findByIdHd(idSearchReq.getId());
     hopDongHdrRepository.deleteAll(listPhuLuc);
-    List<DiaDiemGiaoNhanMtt> listDtl=diaDiemGiaoNhanRepository.findAllByIdHdr(data.getId());
+    List<DiaDiemGiaoNhanMtt> listDtl = diaDiemGiaoNhanRepository.findAllByIdHdr(data.getId());
     diaDiemGiaoNhanRepository.deleteAll(listDtl);
-    fileDinhKemService.delete(data.getId(),  Lists.newArrayList(HopDongMttHdr.TABLE_NAME + "_DINH_KEM"));
-    fileDinhKemService.delete(data.getId(),  Lists.newArrayList(HopDongMttHdr.TABLE_NAME + "_CAN_CU"));
+    fileDinhKemService.delete(data.getId(), Lists.newArrayList(HopDongMttHdr.TABLE_NAME + "_DINH_KEM"));
+    fileDinhKemService.delete(data.getId(), Lists.newArrayList(HopDongMttHdr.TABLE_NAME + "_CAN_CU"));
     hopDongHdrRepository.delete(data);
   }
 
   @Transient
-  public void deleteMulti(IdSearchReq idSearchReq) throws Exception{
-    List<HopDongMttHdr> list= hopDongHdrRepository.findAllByIdIn(idSearchReq.getIdList());
+  public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
+    List<HopDongMttHdr> list = hopDongHdrRepository.findAllByIdIn(idSearchReq.getIdList());
 
-    if (list.isEmpty()){
+    if (list.isEmpty()) {
       throw new Exception("Bản ghi không tồn tại");
     }
-    for (HopDongMttHdr dxuatKhMttHdr : list){
+    for (HopDongMttHdr dxuatKhMttHdr : list) {
       if (!dxuatKhMttHdr.getTrangThai().equals(Contains.DUTHAO)
-              && !dxuatKhMttHdr.getTrangThai().equals(Contains.TUCHOI_LDCC)){
+          && !dxuatKhMttHdr.getTrangThai().equals(Contains.TUCHOI_LDCC)) {
         throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối");
       }
     }
-    List<Long> listId=list.stream().map(HopDongMttHdr::getId).collect(Collectors.toList());
+    List<Long> listId = list.stream().map(HopDongMttHdr::getId).collect(Collectors.toList());
     List<HopDongMttHdr> listPhuLuc = hopDongHdrRepository.findByIdHdIn(listId);
     hopDongHdrRepository.deleteAll(listPhuLuc);
-    List<DiaDiemGiaoNhanMtt> listDtl=diaDiemGiaoNhanRepository.findAllByIdHdrIn(listId);
+    List<DiaDiemGiaoNhanMtt> listDtl = diaDiemGiaoNhanRepository.findAllByIdHdrIn(listId);
     diaDiemGiaoNhanRepository.deleteAll(listDtl);
-    fileDinhKemService.deleteMultiple(idSearchReq.getIdList(),  Lists.newArrayList(HopDongMttHdr.TABLE_NAME + "_DINH_KEM"));
-    fileDinhKemService.deleteMultiple(idSearchReq.getIdList(),  Lists.newArrayList(HopDongMttHdr.TABLE_NAME + "_CAN_CU"));
+    fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(HopDongMttHdr.TABLE_NAME + "_DINH_KEM"));
+    fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(HopDongMttHdr.TABLE_NAME + "_CAN_CU"));
     hopDongHdrRepository.deleteAll(list);
   }
 
-  public HopDongMttHdr approve(StatusReq statusReq) throws Exception{
-    UserInfo userInfo=SecurityContextService.getUser();
-    if(StringUtils.isEmpty(statusReq.getId())){
+  public HopDongMttHdr approve(StatusReq statusReq) throws Exception {
+    UserInfo userInfo = SecurityContextService.getUser();
+    if (StringUtils.isEmpty(statusReq.getId())) {
       throw new Exception("Không tìm thấy dữ liệu");
     }
-    Optional<HopDongMttHdr> optional =hopDongHdrRepository.findById(Long.valueOf(statusReq.getId()));
-    if (!optional.isPresent()){
+    Optional<HopDongMttHdr> optional = hopDongHdrRepository.findById(Long.valueOf(statusReq.getId()));
+    if (!optional.isPresent()) {
       throw new Exception("Không tìm thấy dữ liệu");
     }
 
-    String status= statusReq.getTrangThai()+optional.get().getTrangThai();
-    switch (status){
+    String status = statusReq.getTrangThai() + optional.get().getTrangThai();
+    switch (status) {
       case Contains.DAKY + Contains.DUTHAO:
         optional.get().setNguoiKy(userInfo.getUsername());
         optional.get().setNgayKy(LocalDate.now());
@@ -239,36 +258,36 @@ public class HopDongMttHdrService extends BaseServiceImpl {
     return created;
   }
 
-  public  void export(CustomUserDetails currentUser ,HopDongMttHdrReq objReq, HttpServletResponse response) throws Exception{
+  public void export(CustomUserDetails currentUser, HopDongMttHdrReq objReq, HttpServletResponse response) throws Exception {
     PaggingReq paggingReq = new PaggingReq();
     paggingReq.setPage(0);
     paggingReq.setLimit(Integer.MAX_VALUE);
     objReq.setPaggingReq(paggingReq);
-    Page<HopDongMttHdr> page=this.searchPage(currentUser,objReq);
-    List<HopDongMttHdr> data=page.getContent();
+    Page<HopDongMttHdr> page = this.searchPage(currentUser, objReq);
+    List<HopDongMttHdr> data = page.getContent();
 
-    String title="Danh sách hợp đồng mua trực tiếp";
-    String[] rowsName=new String[]{"STT","Năm KH","QĐ PD KH MTT","QĐ PD KQ chào giá","SL HĐ cần ký","SL HĐ đã ký","Thời hạn nhập kho","Loại hàng hóa","Chủng loại hàng hóa","Tổng giá trị hợp tuổi","Trạng thái ký HĐ","Trạng thái NH",};
-    String fileName="danh-sach-hop-dong-mua-truc-tiep.xlsx";
+    String title = "Danh sách hợp đồng mua trực tiếp";
+    String[] rowsName = new String[]{"STT", "Năm KH", "QĐ PD KH MTT", "QĐ PD KQ chào giá", "SL HĐ cần ký", "SL HĐ đã ký", "Thời hạn nhập kho", "Loại hàng hóa", "Chủng loại hàng hóa", "Tổng giá trị hợp tuổi", "Trạng thái ký HĐ", "Trạng thái NH",};
+    String fileName = "danh-sach-hop-dong-mua-truc-tiep.xlsx";
     List<Object[]> dataList = new ArrayList<Object[]>();
-    Object[] objs=null;
-    for (int i=0;i<data.size();i++){
-      HopDongMttHdr dx=data.get(i);
-      objs=new Object[rowsName.length];
-      objs[0]=i;
-      objs[1]=dx.getSoQdPdKh();
-      objs[2]=dx.getSoQdPdKq();
-      objs[3]=dx.getSoLuong();
-      objs[4]=dx.getSoLuong();
-      objs[5]=dx.getTgianNkho();
-      objs[6]=dx.getTenLoaiVthh();
-      objs[7]=dx.getTenCloaiVthh();
-      objs[8]=dx.getThanhTien();
-      objs[9]=dx.getTenTrangThai();
-      objs[10]=dx.getTenTrangThaiNh();
+    Object[] objs = null;
+    for (int i = 0; i < data.size(); i++) {
+      HopDongMttHdr dx = data.get(i);
+      objs = new Object[rowsName.length];
+      objs[0] = i;
+      objs[1] = dx.getSoQdPdKh();
+      objs[2] = dx.getSoQdPdKq();
+      objs[3] = dx.getSoLuong();
+      objs[4] = dx.getSoLuong();
+      objs[5] = dx.getTgianNkho();
+      objs[6] = dx.getTenLoaiVthh();
+      objs[7] = dx.getTenCloaiVthh();
+      objs[8] = dx.getThanhTien();
+      objs[9] = dx.getTenTrangThai();
+      objs[10] = dx.getTenTrangThaiNh();
       dataList.add(objs);
     }
-    ExportExcel ex =new ExportExcel(title,fileName,rowsName,dataList,response);
+    ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
     ex.export();
   }
 }

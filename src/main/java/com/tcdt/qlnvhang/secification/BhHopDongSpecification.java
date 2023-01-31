@@ -1,7 +1,7 @@
 package com.tcdt.qlnvhang.secification;
 
 import com.tcdt.qlnvhang.request.search.banhang.BhHopDongSearchReq;
-import com.tcdt.qlnvhang.table.BhHopDongHdr;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.hopdong.XhHopDongHdr;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -11,8 +11,8 @@ import javax.persistence.criteria.*;
 import java.util.Date;
 
 public class BhHopDongSpecification {
-    public static Specification<BhHopDongHdr> buildSearchQuery(final BhHopDongSearchReq objReq) {
-        return new Specification<BhHopDongHdr>() {
+    public static Specification<XhHopDongHdr> buildSearchQuery(final BhHopDongSearchReq objReq) {
+        return new Specification<XhHopDongHdr>() {
             /**
              *
              */
@@ -20,7 +20,7 @@ public class BhHopDongSpecification {
 
             @SuppressWarnings({ "unused", "unchecked" })
             @Override
-            public Predicate toPredicate(Root<BhHopDongHdr> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
+            public Predicate toPredicate(Root<XhHopDongHdr> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
                 Predicate predicate = builder.conjunction();
                 if (ObjectUtils.isEmpty(objReq))
                     return predicate;

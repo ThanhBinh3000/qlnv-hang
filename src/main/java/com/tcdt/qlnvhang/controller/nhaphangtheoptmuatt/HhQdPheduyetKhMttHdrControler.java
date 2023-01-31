@@ -6,8 +6,6 @@ import com.tcdt.qlnvhang.request.HhQdPheduyetKhMttHdrReq;
 import com.tcdt.qlnvhang.request.HhQdPheduyetKhMttHdrSearchReq;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.object.HhQdKhlcntHdrReq;
-import com.tcdt.qlnvhang.request.xuathang.xuattheophuongthucdaugia.XhQdPdKhBdgSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.nhaphangtheoptmuatt.HhQdPheduyetKhMttHdrService;
 import com.tcdt.qlnvhang.util.PathContains;

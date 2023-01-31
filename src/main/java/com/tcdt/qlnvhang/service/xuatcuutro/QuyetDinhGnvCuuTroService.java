@@ -329,17 +329,21 @@ public class QuyetDinhGnvCuuTroService extends BaseServiceImpl {
     }*/
     if (capDvi.equals(CAP_CUC)) {
       //gui duyet
-      if (condition.equals(TrangThaiAllEnum.DU_THAO.getId() + TrangThaiAllEnum.CHO_DUYET_LDC.getId())) {
-        trangThai = TrangThaiAllEnum.CHO_DUYET_LDC.getId();
-      } else if (condition.equals(TrangThaiAllEnum.TU_CHOI_LDC.getId() + TrangThaiAllEnum.CHO_DUYET_LDC.getId())) {
-        trangThai = TrangThaiAllEnum.CHO_DUYET_LDC.getId();
+      if (condition.equals(TrangThaiAllEnum.DU_THAO.getId() + TrangThaiAllEnum.CHO_DUYET_TP.getId())) {
+        trangThai = TrangThaiAllEnum.CHO_DUYET_TP.getId();
+      } else if (condition.equals(TrangThaiAllEnum.TU_CHOI_TP.getId() + TrangThaiAllEnum.CHO_DUYET_TP.getId())) {
+        trangThai = TrangThaiAllEnum.CHO_DUYET_TP.getId();
       }
       //duyet
-      else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_LDC.getId() + TrangThaiAllEnum.DA_DUYET_LDC.getId())) {
+      else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_TP.getId() + TrangThaiAllEnum.CHO_DUYET_LDC.getId())) {
+        trangThai = TrangThaiAllEnum.CHO_DUYET_LDC.getId();
+      } else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_LDC.getId() + TrangThaiAllEnum.DA_DUYET_LDC.getId())) {
         trangThai = TrangThaiAllEnum.DA_DUYET_LDC.getId();
       }
       //tu choi
-      else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_LDC.getId() + TrangThaiAllEnum.TU_CHOI_LDC.getId())) {
+      else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_TP.getId() + TrangThaiAllEnum.TU_CHOI_TP.getId())) {
+        trangThai = TrangThaiAllEnum.TU_CHOI_TP.getId();
+      } else if (condition.equals(TrangThaiAllEnum.CHO_DUYET_LDC.getId() + TrangThaiAllEnum.TU_CHOI_LDC.getId())) {
         trangThai = TrangThaiAllEnum.TU_CHOI_LDC.getId();
       }
     }
@@ -347,7 +351,7 @@ public class QuyetDinhGnvCuuTroService extends BaseServiceImpl {
       throw new Exception("Quy trình phê duyệt không hợp lệ.");
     }
     currentRow.get().setTrangThai(trangThai);
-    if (trangThai.equals(TrangThaiAllEnum.TU_CHOI_LDC.getId())) {
+    if (trangThai.equals(TrangThaiAllEnum.TU_CHOI_TP.getId()) || trangThai.equals(TrangThaiAllEnum.TU_CHOI_LDC.getId())) {
       currentRow.get().setLyDoTuChoi(DataUtils.safeToString(req.getLyDo()));
     }
     xhQdGnvCuuTroHdrRepository.save(currentRow.get());

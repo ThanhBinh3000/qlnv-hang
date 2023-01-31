@@ -4,7 +4,7 @@ import com.tcdt.qlnvhang.entities.xuathang.XhQdGiaoNvuXuat;
 import com.tcdt.qlnvhang.entities.xuathang.XhQdGiaoNvuXuatCt;
 import com.tcdt.qlnvhang.entities.xuathang.XhQdGiaoNvuXuatCt1;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.repository.banhang.BhHopDongRepository;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.hopdong.XhHopDongRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.quyetdinhgiaonhiemvuxuat.XhQdGiaoNvuXuatCt1Repository;
 import com.tcdt.qlnvhang.repository.xuathang.quyetdinhgiaonhiemvuxuat.XhQdGiaoNvuXuatCtRepository;
@@ -20,7 +20,7 @@ import com.tcdt.qlnvhang.response.xuathang.quyetdinhgiaonhiemvuxuat.XhQdGiaoNvuX
 import com.tcdt.qlnvhang.response.xuathang.quyetdinhgiaonhiemvuxuat.XhQdGiaoNvuXuatRes;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.table.BhHopDongHdr;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.hopdong.XhHopDongHdr;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
@@ -55,7 +55,7 @@ public class XhQdGiaoNvuXuatServiceImpl extends BaseServiceImpl implements XhQdG
     private final XhQdGiaoNvuXuatRepository xhQdGiaoNvuXuatRepository;
     private final XhQdGiaoNvuXuatCtRepository xhQdGiaoNvuXuatCtRepository;
     private final XhQdGiaoNvuXuatCt1Repository xhQdGiaoNvuXuatCt1Repository;
-    private final BhHopDongRepository hopDongRepository;
+    private final XhHopDongRepository hopDongRepository;
     private final FileDinhKemService fileDinhKemService;
     private final KtNganLoRepository ktNganLoRepository;
 
@@ -162,7 +162,7 @@ public class XhQdGiaoNvuXuatServiceImpl extends BaseServiceImpl implements XhQdG
         this.setThongTinDonVi(res, item.getMaDvi());
 
         res.setHopDongIds(item.getCt1s().stream().map(XhQdGiaoNvuXuatCt1::getHopDongId).collect(Collectors.toList()));
-        List<BhHopDongHdr> hopDongs = hopDongRepository.findAllById(res.getHopDongIds());
+        List<XhHopDongHdr> hopDongs = hopDongRepository.findAllById(res.getHopDongIds());
         res.setHopDongs(hopDongs.stream().map(h -> new IdAndNameDto(h.getId(), h.getSoHd())).collect(Collectors.toList()));
         return res;
     }

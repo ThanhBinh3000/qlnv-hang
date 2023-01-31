@@ -1,7 +1,7 @@
 package com.tcdt.qlnvhang.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.tcdt.qlnvhang.table.BhHopDongHdr;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.hopdong.XhHopDongHdr;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -28,6 +28,6 @@ public class FileDKemJoinBhHopDong {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dataId")
     @JsonBackReference
-    private BhHopDongHdr parent;
+    private XhHopDongHdr parent;
 }
 
