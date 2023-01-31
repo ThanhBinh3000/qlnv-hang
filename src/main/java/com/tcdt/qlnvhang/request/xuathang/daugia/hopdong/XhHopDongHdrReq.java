@@ -89,4 +89,6 @@ public class XhHopDongHdrReq extends BaseRequest {
 
     private String trangThai;
 
+    private List<XhHopDongDtlReq> children = new ArrayList<>();
+
 }
