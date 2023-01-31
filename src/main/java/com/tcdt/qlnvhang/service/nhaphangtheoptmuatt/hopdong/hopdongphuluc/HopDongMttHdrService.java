@@ -21,7 +21,6 @@ import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -50,20 +49,27 @@ public class HopDongMttHdrService extends BaseServiceImpl {
   public Page<HopDongMttHdr> searchPage(CustomUserDetails currentUser, HopDongMttHdrReq req) throws Exception {
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<HopDongMttHdr> search = hopDongHdrRepository.search(req, pageable);
-    Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+    //Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+    Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
+
     Map<String, String> mapVthh = getListDanhMucHangHoa();
     search.getContent().forEach(s -> {
-      if (mapDmucDvi.get((s.getMaDvi())) != null) {
-        s.setTenDvi(mapDmucDvi.get(s.getMaDvi()));
+      try {
+        if (mapDmucDvi.containsKey((s.getMaDvi()))) {
+          Map<String, Object> objDonVi = mapDmucDvi.get(s.getMaDvi());
+          s.setTenDvi(objDonVi.get("tenDvi").toString());
+        }
+        if (mapVthh.get((s.getLoaiVthh())) != null) {
+          s.setTenLoaiVthh(mapVthh.get(s.getLoaiVthh()));
+        }
+        if (mapVthh.get((s.getCloaiVthh())) != null) {
+          s.setTenCloaiVthh(mapVthh.get(s.getCloaiVthh()));
+        }
+        s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
+        s.setTenTrangThaiNh(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThaiNh()));
+      } catch (RuntimeException e) {
+        throw new RuntimeException(e);
       }
-      if (mapVthh.get((s.getLoaiVthh())) != null) {
-        s.setTenLoaiVthh(mapVthh.get(s.getLoaiVthh()));
-      }
-      if (mapVthh.get((s.getCloaiVthh())) != null) {
-        s.setTenCloaiVthh(mapVthh.get(s.getCloaiVthh()));
-      }
-      s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
-      s.setTenTrangThaiNh(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThaiNh()));
     });
     return search;
   }
@@ -80,11 +86,7 @@ public class HopDongMttHdrService extends BaseServiceImpl {
     HopDongMttHdr data = new HopDongMttHdr();
     BeanUtils.copyProperties(objReq, data);
     data.setTrangThai(Contains.DUTHAO);
-    Map<String, String> hashMapDmHh = getListDanhMucHangHoa();
-    Map<String, String> hashMapDmdv = getListDanhMucDvi(null, null, "01");
-    data.setTenDvi(StringUtils.isEmpty(userInfo.getDvql()) ? null : hashMapDmdv.get(userInfo.getDvql()));
     data.setMaDvi(userInfo.getDepartment());
-    data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh()) ? null : hashMapDmHh.get(data.getLoaiVthh()));
     HopDongMttHdr created = hopDongHdrRepository.save(data);
 
     if (!DataUtils.isNullObject(objReq.getFileDinhKem())) {
@@ -159,7 +161,8 @@ public class HopDongMttHdrService extends BaseServiceImpl {
   public List<HopDongMttHdr> detail(List<Long> ids) throws Exception {
     if (DataUtils.isNullOrEmpty(ids))
       throw new Exception("Tham số không hợp lệ.");
-    Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+    //Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+    Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
     Map<String, String> mapVthh = getListDanhMucHangHoa();
     List<HopDongMttHdr> allById = hopDongHdrRepository.findAllById(ids);
     allById.forEach(data -> {
@@ -170,8 +173,16 @@ public class HopDongMttHdrService extends BaseServiceImpl {
       List<HopDongMttHdr> listPhuLuc = hopDongHdrRepository.findByIdHd(data.getId());
       data.setPhuLuc(listPhuLuc);
       List<DiaDiemGiaoNhanMtt> listDiaDiem = diaDiemGiaoNhanRepository.findAllByIdHdr(data.getId());
+      listDiaDiem.forEach(s -> {
+        if (mapDmucDvi.containsKey(s.getMaDvi())) {
+          s.setTenDvi(mapDmucDvi.get(s.getMaDvi()).get("tenDvi").toString());
+          s.setDiaChiDvi(mapDmucDvi.get(s.getMaDvi()).get("diaChi").toString());
+        }
+      });
       data.setDiaDiemGiaoNhan(listDiaDiem);
-      data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
+      if (mapDmucDvi.containsKey(data.getMaDvi())) {
+        data.setTenDvi(mapDmucDvi.get(data.getMaDvi()).get("tenDvi").toString());
+      }
       data.setTenLoaiVthh(mapVthh.get(data.getLoaiVthh()));
       data.setTenCloaiVthh(mapVthh.get(data.getCloaiVthh()));
       data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
