@@ -126,7 +126,7 @@ public class HhBcanKeHangService extends BaseServiceImpl {
     public HhBcanKeHangHdr detail(Long ids) throws Exception{
         Optional<HhBcanKeHangHdr> qOptional = hhBcanKeHangHdrRepository.findById(ids);
         if (!qOptional.isPresent()){
-            throw new UnsupportedOperationException("Không tồn tại bản ghi");
+            throw new UnsupportedOperationException(" Bản ghi không tồn tại");
         }
         HhBcanKeHangHdr bcanKeHangHdr = qOptional.get();
         Map<String,String> mapVthh = getListDanhMucHangHoa();
@@ -152,11 +152,11 @@ public class HhBcanKeHangService extends BaseServiceImpl {
         }
         Optional<HhBcanKeHangHdr> optional = hhBcanKeHangHdrRepository.findById(id);
         if (!optional.isPresent()){
-            throw new Exception("Bảng kê hàng không tồn tại");
+            throw new Exception(" Bảng cân kê hàng không tồn tại ");
         }
         HhBcanKeHangHdr bcanKeHangHdr = optional.get();
         if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(bcanKeHangHdr.getTrangThai())){
-            throw new Exception("Không thể xoa khi quyết định đã duyệt");
+            throw new Exception(" Không thể xóa khi quyết định đã được phê duyệt");
         }
 
         List<HhBcanKeHangDtl> hhBcanKeHangDtlList = hhBcanKeHangDtlRepository.findAllByIdHdr(bcanKeHangHdr.getId());
