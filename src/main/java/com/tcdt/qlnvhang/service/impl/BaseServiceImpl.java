@@ -70,6 +70,8 @@ public class BaseServiceImpl {
 	@Autowired
 	private HttpServletRequest request;
 
+	@Autowired
+	public ObjectMapper objectMapper;
 //	@Autowired
 //	private HttpServletRequest req;
 
@@ -126,6 +128,23 @@ public class BaseServiceImpl {
 		}.getType());
 		for (Map<String, Object> map : retMap) {
 			data.put(String.valueOf(map.get("maDvi")), String.valueOf(map.get("tenDvi")));
+		}
+		return data;
+	}
+
+	public Map<String, Map<String, Object>> getListDanhMucDviObject(String capDvi,String maDviCha,String trangThai) {
+		QlnvDmDonviSearchReq objRequest = new QlnvDmDonviSearchReq();
+		objRequest.setCapDvi(capDvi);
+		objRequest.setMaDviCha(maDviCha);
+		objRequest.setTrangThai(trangThai);
+		ResponseEntity<String> response = categoryServiceProxy.getDanhMucDvi(getAuthorizationToken(request),
+				objRequest);
+		String str = Request.getAttrFromJson(response.getBody(), "data");
+		HashMap<String, Map<String, Object>> data = new HashMap<String, Map<String, Object>>();
+		List<Map<String, Object>> retMap = new Gson().fromJson(str, new TypeToken<List<HashMap<String, Object>>>() {
+		}.getType());
+		for (Map<String, Object> map : retMap) {
+			data.put(String.valueOf(map.get("maDvi")), map);
 		}
 		return data;
 	}

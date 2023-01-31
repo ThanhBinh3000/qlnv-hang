@@ -146,7 +146,7 @@ public class HhPhieuKiemTraChatLuongService extends BaseServiceImpl {
             List<FileDinhKem> fileDinhKem=fileDinhKemService.saveListFileDinhKem(Arrays.asList(objReq.getFileDinhKem()), created.getId(),"HH_PHIEU_KT_CHAT_LUONG");
             created.setFileDinhKems(fileDinhKem);
         }
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),data.getId(),"HH_DX_KHMTT_HDR");
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),data.getId(),"HH_PHIEU_KT_CHAT_LUONG");
         created.setFileDinhKems(fileDinhKems);
 
         List<HhPhieuKiemTraChatLuongDtl> listDtl=hhPhieuKiemTraCluongDtlRepository.findAllByIdHdr(objReq.getId());
