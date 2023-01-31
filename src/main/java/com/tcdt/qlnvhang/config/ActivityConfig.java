@@ -50,6 +50,7 @@ public class ActivityConfig extends HandlerInterceptorAdapter {
         entity.setSystem(SYSTEM);
         entity.setUserAgent(userAgent);
         entity.setRequestBody(this.getBody(request));
+        entity.setUserName(user.getUser().getUsername());
         Map<String, String[]> parameterMap = request.getParameterMap();
         if (parameterMap != null && !parameterMap.isEmpty()) {
             entity.setRequestParameter(gson.toJson(parameterMap));
