@@ -80,7 +80,7 @@ public class HopDongMttHdrService extends BaseServiceImpl {
     Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
     Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
     data.setTenDvi(StringUtils.isEmpty(userInfo.getDvql()) ? null : hashMapDmdv.get(userInfo.getDvql()));
-    data.setMaDvi(userInfo.getDvql());
+    data.setMaDvi(userInfo.getDepartment());
     data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh()) ? null : hashMapDmHh.get(data.getLoaiVthh()));
     HopDongMttHdr created=hopDongHdrRepository.save(data);
 
