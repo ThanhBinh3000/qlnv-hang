@@ -2,10 +2,12 @@ package com.tcdt.qlnvhang.service.xuathang.xuattheophuongthucdaugia.hopdong;
 
 import com.tcdt.qlnvhang.entities.xuathang.daugia.hopdong.XhHopDongDdiemNhapKho;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.hopdong.XhHopDongDtl;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.ketqua.XhKqBdgHdr;
 import com.tcdt.qlnvhang.repository.HhQdPduyetKqlcntHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.hopdong.XhHopDongDdiemNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.hopdong.XhHopDongDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.hopdong.XhHopDongRepository;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.tochuctrienkhai.ketqua.XhKqBdgHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.hopdong.XhDdiemNhapKhoReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.hopdong.XhHopDongDtlReq;
@@ -37,7 +39,7 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
     private XhHopDongDdiemNhapKhoRepository xhHopDongDdiemNhapKhoRepository;
 
     @Autowired
-    private HhQdPduyetKqlcntHdrRepository hhQdPduyetKqlcntHdrRepository;
+    private XhKqBdgHdrRepository xhKqBdgHdrRepository;
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
@@ -59,7 +61,7 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
             throw new Exception("Hợp đồng số " + req.getSoHd() + " đã tồn tại");
         }
 
-        Optional<HhQdPduyetKqlcntHdr> checkSoQd = hhQdPduyetKqlcntHdrRepository.findBySoQd(req.getSoQdKq());
+        Optional<XhKqBdgHdr> checkSoQd = xhKqBdgHdrRepository.findBySoQdKq(req.getSoQdKq());
         if (!checkSoQd.isPresent()) {
             throw new Exception("Số quyết định phê duyệt kết quả lựa chọn nhà thầu " + req.getSoQdKq() + " không tồn tại");
         }
@@ -76,6 +78,7 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
         dataMap.setNgayTao(new Date());
         dataMap.setTrangThai(Contains.DU_THAO);
         dataMap.setMaDvi(userInfo.getDvql());
+        dataMap.setMaDviTsan(String.join(",",req.getListMaDviTsan()));
 
         xhHopDongRepository.save(dataMap);
         saveDetail(req,dataMap.getId());
@@ -106,7 +109,7 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
         }
 
         if (!qOptional.get().getSoQdKq().equals(req.getSoQdKq())) {
-            Optional<HhQdPduyetKqlcntHdr> checkSoQd = hhQdPduyetKqlcntHdrRepository.findBySoQd(req.getSoQdKq());
+            Optional<XhKqBdgHdr> checkSoQd = xhKqBdgHdrRepository.findBySoQdKq(req.getSoQdKq());
             if (!checkSoQd.isPresent())
 
                 throw new Exception(
