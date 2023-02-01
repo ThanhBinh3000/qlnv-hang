@@ -1,9 +1,7 @@
 package com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.hopdong.bangKeMuaLe;
 
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.hopdong.bangkethumuale.BangKeMuaLeReq;
-import com.tcdt.qlnvhang.request.nhaphangtheoptt.hopdong.hopdongphuluc.HopDongMttHdrReq;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.bangkethumuale.BangKeMuaLe;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc.HopDongMttHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
