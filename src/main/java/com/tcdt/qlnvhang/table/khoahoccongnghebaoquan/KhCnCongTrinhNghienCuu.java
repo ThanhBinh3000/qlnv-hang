@@ -1,14 +1,12 @@
 package com.tcdt.qlnvhang.table.khoahoccongnghebaoquan;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
-import com.tcdt.qlnvhang.request.khoahoccongnghebaoquan.KhCnNghiemThuThanhLyReq;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
