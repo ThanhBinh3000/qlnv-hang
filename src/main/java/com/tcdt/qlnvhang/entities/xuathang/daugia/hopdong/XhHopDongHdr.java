@@ -98,7 +98,7 @@ public class XhHopDongHdr extends TrangThaiBaseEntity {
 
     private Double soLuong;
 
-    private Double donGia;
+    private Double donGiaVat;
 
     // Transient
     @Transient
