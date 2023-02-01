@@ -33,30 +33,37 @@ public class ActivityConfig extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String userAgent = request.getHeader("User-Agent");
-        if (ObjectUtils.isEmpty(userAgent)) {
-            userAgent = request.getHeader("user-agent");
+        if (request != null && handler != null) {
+            String userAgent = request.getHeader("User-Agent");
+            if (ObjectUtils.isEmpty(userAgent)) {
+                userAgent = request.getHeader("user-agent");
+            }
+            Matcher m = Pattern.compile("\\(([^)]+)\\)").matcher(userAgent);
+            if (m.find()) {
+                userAgent = m.group(1);
+            }
+            if (!String.class.equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal().getClass())) {
+                CustomUserDetails user = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                UserActivity entity = new UserActivity();
+                entity.setIp(UserUtils.getClientIpAddress(request));
+                entity.setRequestMethod(request.getMethod());
+                entity.setRequestUrl(request.getRequestURI());
+                entity.setUserId(user.getUser().getId());
+                entity.setSystem(SYSTEM);
+                entity.setUserAgent(userAgent);
+                entity.setRequestBody(this.getBody(request));
+                entity.setUserName(user.getUser().getUsername());
+                Map<String, String[]> parameterMap = request.getParameterMap();
+                if (parameterMap != null && !parameterMap.isEmpty()) {
+                    entity.setRequestParameter(gson.toJson(parameterMap));
+                }
+                userActivityService.log(entity);
+                return super.preHandle(request, response, handler);
+            }
+            return super.preHandle(null, response, null);
+        } else {
+            return super.preHandle(null, response, null);
         }
-        Matcher m = Pattern.compile("\\(([^)]+)\\)").matcher(userAgent);
-        if (m.find()) {
-            userAgent = m.group(1);
-        }
-        CustomUserDetails user = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserActivity entity = new UserActivity();
-        entity.setIp(UserUtils.getClientIpAddress(request));
-        entity.setRequestMethod(request.getMethod());
-        entity.setRequestUrl(request.getRequestURI());
-        entity.setUserId(user.getUser().getId());
-        entity.setSystem(SYSTEM);
-        entity.setUserAgent(userAgent);
-        entity.setRequestBody(this.getBody(request));
-        entity.setUserName(user.getUser().getUsername());
-        Map<String, String[]> parameterMap = request.getParameterMap();
-        if (parameterMap != null && !parameterMap.isEmpty()) {
-            entity.setRequestParameter(gson.toJson(parameterMap));
-        }
-        userActivityService.log(entity);
-        return super.preHandle(request, response, handler);
     }
 
 
