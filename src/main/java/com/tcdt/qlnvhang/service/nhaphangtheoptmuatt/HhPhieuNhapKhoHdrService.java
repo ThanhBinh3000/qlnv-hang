@@ -140,7 +140,7 @@ public class HhPhieuNhapKhoHdrService  extends BaseServiceImpl {
     public HhPhieuNhapKhoHdr detail(Long ids) throws Exception{
         Optional<HhPhieuNhapKhoHdr> qOptional = hhPhieuNhapKhoHdrRepository.findById(ids);
         if (!qOptional.isPresent()){
-            throw new UnsupportedOperationException("Không tồn tại bản ghi");
+            throw new UnsupportedOperationException("Không tồn tại bản ghi.");
         }
         Map<String,String> mapVthh = getListDanhMucHangHoa();
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
@@ -214,7 +214,7 @@ public class HhPhieuNhapKhoHdrService  extends BaseServiceImpl {
         }
         HhPhieuNhapKhoHdr nhapKhoHdr = optional.get();
         if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(nhapKhoHdr.getTrangThai())){
-            throw new Exception("Không thể xóa khi quyết định đã duyệt");
+            throw new Exception("Không thể xóa khi quyết định đã được phê duyệt.");
         }
         List<HhPhieuNhapKhoCt> phieuNhapKhoCtList = hhPhieuNhapKhoCtRepository.findAllByIdHdr(nhapKhoHdr.getId());
         if (!CollectionUtils.isEmpty(phieuNhapKhoCtList)){
@@ -242,7 +242,7 @@ public class HhPhieuNhapKhoHdrService  extends BaseServiceImpl {
         for (HhPhieuNhapKhoHdr hdr: list){
             if (!hdr.getTrangThai().equals(Contains.DUTHAO)
                   && !hdr.getTrangThai().equals(Contains.TUCHOI_LDCC)){
-                throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối");
+                throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối.");
             }
         }
         hhPhieuNhapKhoCtRepository.deleteAllByIdHdrIn(idSearchReq.getIdList());

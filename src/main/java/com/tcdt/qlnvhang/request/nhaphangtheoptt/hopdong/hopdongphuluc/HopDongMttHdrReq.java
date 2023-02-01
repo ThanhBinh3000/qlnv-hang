@@ -46,6 +46,7 @@ public class HopDongMttHdrReq extends BaseRequest {
   private String cdtStk;
   private String cdtMoTai;
   private String cdtThongTinGiayUyQuyen;
+  private String nccId;
   private String nccTen;
   private String nccDiaChi;
   private String nccMst;
