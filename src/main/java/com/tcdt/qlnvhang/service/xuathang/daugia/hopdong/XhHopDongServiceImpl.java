@@ -125,7 +125,6 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
         dataDB.setNgaySua(new Date());
         dataDB.setNguoiSuaId(userInfo.getId());
 
-
         xhHopDongHdrRepository.save(dataDB);
 
         saveDetail(req,dataDB.getId());
@@ -138,6 +137,7 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
             XhHopDongDtl dtl = new XhHopDongDtl();
             BeanUtils.copyProperties(dtlReq,dtl,"id");
             dtl.setIdHdr(idHdr);
+            xhHopDongDtlRepository.save(dtl);
             xhHopDongDdiemNhapKhoRepository.deleteAllByIdDtl((dtlReq.getId()));
             for (XhDdiemNhapKhoReq nhapKhoReq : dtlReq.getChildren()) {
                 XhHopDongDdiemNhapKho nhapKho = new XhHopDongDdiemNhapKho();
@@ -181,7 +181,7 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
             item.setChildren(allByIdDtl);
             item.setTenDvi(mapDmucDvi.get(item.getTenDvi()));
         });
-        data.setChildren(allByIdHdr);
+            data.setChildren(allByIdHdr);
         return data;
     }
 
