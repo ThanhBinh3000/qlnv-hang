@@ -161,13 +161,27 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
         }
 
         XhHopDongHdr data = qOptional.get();
-        Map<String, String> mapDmucDvi = getListDanhMucDvi("1",null,"01");
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
         Map<String,String> mapVthh = getListDanhMucHangHoa();
 
         data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
         data.setTenLoaiVthh(mapVthh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(mapVthh.get(data.getCloaiVthh()));
         data.setListMaDviTsan(Arrays.asList(data.getMaDviTsan().split(",")));
+
+        List<XhHopDongDtl> allByIdHdr = xhHopDongDtlRepository.findAllByIdHdr(id);
+        allByIdHdr.forEach(item -> {
+            List<XhHopDongDdiemNhapKho> allByIdDtl = xhHopDongDdiemNhapKhoRepository.findAllByIdDtl(item.getId());
+            allByIdDtl.forEach(x -> {
+                x.setTenDiemKho(mapDmucDvi.get(x.getMaDiemKho()));
+                x.setTenNhaKho(mapDmucDvi.get(x.getMaNhaKho()));
+                x.setTenNganKho(mapDmucDvi.get(x.getMaNganKho()));
+                x.setTenLoKho(mapDmucDvi.get(x.getMaLoKho()));
+            });
+            item.setChildren(allByIdDtl);
+            item.setTenDvi(mapDmucDvi.get(item.getTenDvi()));
+        });
+        data.setChildren(allByIdHdr);
         return data;
     }
 

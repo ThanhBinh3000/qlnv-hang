@@ -10,5 +10,7 @@ import java.util.List;
 @Repository
 public interface XhHopDongDdiemNhapKhoRepository extends BaseRepository<XhHopDongDdiemNhapKho,Long> {
 
+    List<XhHopDongDdiemNhapKho> findAllByIdDtl(Long idDtl);
+
     void deleteAllByIdDtl(Long idDtl);
 }

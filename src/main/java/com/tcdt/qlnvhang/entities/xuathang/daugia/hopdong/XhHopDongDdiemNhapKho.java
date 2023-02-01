@@ -39,7 +39,13 @@ public class XhHopDongDdiemNhapKho {
     String toChucCaNhan;
 
     String dviTinh;
-
+    // Teansient
     @Transient
-    String tenDvi;
+    private String tenDiemKho;
+    @Transient
+    private String tenNhaKho;
+    @Transient
+    private String tenNganKho;
+    @Transient
+    private String tenLoKho;
 }
