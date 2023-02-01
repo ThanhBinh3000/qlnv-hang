@@ -31,6 +31,8 @@ public class XhTcTtinBdgHdr extends TrangThaiBaseEntity implements Serializable 
 
   private Integer nam;
 
+  private String maDvi;
+
   private String maThongBao;
 
   private String trichYeuTbao;
@@ -137,5 +139,7 @@ public class XhTcTtinBdgHdr extends TrangThaiBaseEntity implements Serializable 
   private String tenLoaiVthh;
   @Transient
   private String tenCloaiVthh;
+  @Transient
+  private String tenDvi;
 
 }

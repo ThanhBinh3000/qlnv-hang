@@ -65,7 +65,7 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
         if (!checkSoQd.isPresent()) {
             throw new Exception("Số quyết định phê duyệt kết quả lựa chọn nhà thầu " + req.getSoQdKq() + " không tồn tại");
         }else{
-            checkSoQd.get().setTrangThai(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
+            checkSoQd.get().setTrangThaiHd(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
             xhKqBdgHdrRepository.save(checkSoQd.get());
         }
 
@@ -161,11 +161,12 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
         }
 
         XhHopDongHdr data = qOptional.get();
-        Map<String, String> mapDmucDvi = getMapTenDvi();
-        Map<String,String> hashMapDviLquan = getListDanhMucDviLq("NT");
-
+        Map<String, String> mapDmucDvi = getListDanhMucDvi("1",null,"01");
         Map<String,String> mapVthh = getListDanhMucHangHoa();
 
+        data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
+        data.setTenLoaiVthh(mapVthh.get(data.getLoaiVthh()));
+        data.setTenCloaiVthh(mapVthh.get(data.getCloaiVthh()));
 
         return data;
     }
