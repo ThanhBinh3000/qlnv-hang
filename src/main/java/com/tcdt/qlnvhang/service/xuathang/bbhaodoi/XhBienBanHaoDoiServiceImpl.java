@@ -9,7 +9,7 @@ import com.tcdt.qlnvhang.repository.khotang.*;
 import com.tcdt.qlnvhang.repository.xuathang.bbhaodoi.XhBienBanHaoDoiCtRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bbhaodoi.XhBienBanHaoDoiRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bbtinhkho.XhBienBanTinhKhoRepository;
-import com.tcdt.qlnvhang.repository.xuathang.quyetdinhgiaonhiemvuxuat.XhQdGiaoNvuXuatRepository;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXhRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -19,7 +19,6 @@ import com.tcdt.qlnvhang.response.xuathang.bbhaodoi.XhBienBanHaoDoiCtRes;
 import com.tcdt.qlnvhang.response.xuathang.bbhaodoi.XhBienBanHaoDoiRes;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.ExportExcel;
-import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
@@ -60,7 +59,7 @@ public class XhBienBanHaoDoiServiceImpl implements XhBienBanHaoDoiService {
     @Autowired
     XhBienBanHaoDoiCtRepository xhBienBanHaoDoiCtRepository;
     @Autowired
-    XhQdGiaoNvuXuatRepository xhQdGiaoNvuXuatRepository;
+    XhQdGiaoNvXhRepository xhQdGiaoNvXhRepository;
     @Autowired
     XhBienBanTinhKhoRepository xhBienBanTinhKhoRepository;
     @Autowired
@@ -311,7 +310,7 @@ public class XhBienBanHaoDoiServiceImpl implements XhBienBanHaoDoiService {
         xhBienBanHaoDoiRes.setId(xhBienBanHaoDoi.getId());
         XhBienBanTinhKho data = xhBienBanTinhKhoRepository.findById(xhBienBanHaoDoi.getBbTinhkhoId()).get();
         xhBienBanHaoDoiRes.setSoBienBanTinhKho(data.getSoBienBan());
-        xhBienBanHaoDoiRes.setSoQd(xhQdGiaoNvuXuatRepository.getOne(data.getQdgnvnxId()).getSoQuyetDinh());
+//        xhBienBanHaoDoiRes.setSoQd(xhQdGiaoNvXhRepository.getOne(data.getQdgnvnxId()).getSoQuyetDinh());
         xhBienBanHaoDoiRes.setDiemKho(ktDiemKho.findByMaDiemkho(data.getMaDiemkho()).getTenDiemkho());
         xhBienBanHaoDoiRes.setNhaKho(ktNhaKho.findByMaNhakho(data.getMaNhakho()).getTenNhakho());
         xhBienBanHaoDoiRes.setNganKho(ktNganKho.findByMaNgankho(data.getMaNgankho()).getTenNgankho());

@@ -1,7 +1,7 @@
 package com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat;
 
 import com.tcdt.qlnvhang.repository.BaseRepository;
-import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatDtl;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatDtl;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -10,10 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
-public interface HhQdGiaoNvuNhapxuatDtlRepository extends BaseRepository<HhQdGiaoNvuNhapxuatDtl, Long> {
+public interface HhQdGiaoNvuNhapxuatDtlRepository extends BaseRepository<NhQdGiaoNvuNhapxuatDtl, Long> {
 
     void deleteAllByIdHdr(Long idHdr);
-    List<HhQdGiaoNvuNhapxuatDtl> findAllByIdHdr(Long idHdr);
+    List<NhQdGiaoNvuNhapxuatDtl> findAllByIdHdr(Long idHdr);
 
     @Transactional()
     @Modifying

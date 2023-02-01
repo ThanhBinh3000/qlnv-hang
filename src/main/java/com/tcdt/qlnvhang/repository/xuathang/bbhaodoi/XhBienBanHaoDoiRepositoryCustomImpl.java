@@ -1,9 +1,8 @@
 package com.tcdt.qlnvhang.repository.xuathang.bbhaodoi;
 
 import com.tcdt.qlnvhang.entities.xuathang.bbhaodoi.XhBienBanHaoDoi;
-import com.tcdt.qlnvhang.repository.xuathang.quyetdinhgiaonhiemvuxuat.XhQdGiaoNvuXuatRepository;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXhRepository;
 import com.tcdt.qlnvhang.request.search.xuathang.XhBienBanHaoDoiSearchReq;
-import com.tcdt.qlnvhang.request.search.xuathang.XhBienBanTinhKhoSearchReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +19,7 @@ public class XhBienBanHaoDoiRepositoryCustomImpl implements XhBienBanHaoDoiRepos
     private EntityManager em;
 
     @Autowired
-    XhQdGiaoNvuXuatRepository xhQdGiaoNvuXuatRepository;
+    XhQdGiaoNvXhRepository xhQdGiaoNvXhRepository;
 
     @Override
     public List<XhBienBanHaoDoi> search(XhBienBanHaoDoiSearchReq req) {
@@ -67,7 +66,7 @@ public class XhBienBanHaoDoiRepositoryCustomImpl implements XhBienBanHaoDoiRepos
 
     private void setParameterSearch(XhBienBanHaoDoiSearchReq req, Query query) {
         if (!StringUtils.isEmpty(req.getSoQuyetDinh())) {
-            query.setParameter("qdId", xhQdGiaoNvuXuatRepository.findFirstBySoQuyetDinh(req.getSoQuyetDinh()));
+//            query.setParameter("qdId", xhQdGiaoNvXhRepository.findFirstBySoQuyetDinh(req.getSoQuyetDinh()));
         }
         if (!StringUtils.isEmpty(req.getSoBienBan())) {
             query.setParameter("soBienBan", req.getSoBienBan());

@@ -9,6 +9,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
 import lombok.Data;
 
 @Entity
@@ -35,7 +36,7 @@ public class HhDviThuchienQdinh implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_hdr")
 	@JsonBackReference
-	private HhQdGiaoNvuNhapxuatHdr parent;
+	private NhQdGiaoNvuNhapxuatHdr parent;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "id_hdr")

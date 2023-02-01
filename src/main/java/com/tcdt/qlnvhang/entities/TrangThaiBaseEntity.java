@@ -27,6 +27,7 @@ public class TrangThaiBaseEntity {
 	@Column(columnDefinition = "Date")
 	private Date ngayTao;
 
+	@Column(columnDefinition = "Number")
 	private Long nguoiTaoId;
 
 	@Transient
@@ -36,14 +37,17 @@ public class TrangThaiBaseEntity {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	private Date ngaySua;
 
+	@Column(columnDefinition = "Number")
 	private Long nguoiSuaId;
 
+	@Column(columnDefinition = "Number")
 	private Long nguoiGuiDuyetId;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	@Column(columnDefinition = "Date")
 	private Date ngayGuiDuyet;
 
+	@Column(columnDefinition = "Number")
 	private Long nguoiPduyetId;
 
 	@Transient

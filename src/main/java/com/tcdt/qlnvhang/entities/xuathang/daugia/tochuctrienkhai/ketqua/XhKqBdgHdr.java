@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.ketqua;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.hopdong.XhHopDongHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.Contains;
@@ -66,6 +67,9 @@ public class XhKqBdgHdr extends TrangThaiBaseEntity implements Serializable {
   private List<FileDinhKem> fileDinhKems = new ArrayList<>();
   @Transient
   private String tenLoaiVthh;
+
+  @Transient
+  private List<XhHopDongHdr> listHopDong;
 
   public String getTenTrangThaiHd() {
     return NhapXuatHangTrangThaiEnum.getTenById(trangThaiHd);

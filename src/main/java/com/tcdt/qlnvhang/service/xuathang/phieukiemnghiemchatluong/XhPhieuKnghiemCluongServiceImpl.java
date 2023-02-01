@@ -1,13 +1,12 @@
 package com.tcdt.qlnvhang.service.xuathang.phieukiemnghiemchatluong;
 
-import com.tcdt.qlnvhang.entities.xuathang.XhQdGiaoNvuXuat;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXh;
 import com.tcdt.qlnvhang.entities.xuathang.phieukiemnghiemchatluong.XhPhieuKnghiemCluong;
 import com.tcdt.qlnvhang.entities.xuathang.phieukiemnghiemchatluong.XhPhieuKnghiemCluongCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.xuathang.phieukiemnghiemchatluong.XhPhieuKnghiemCluongCtRepository;
 import com.tcdt.qlnvhang.repository.xuathang.phieukiemnghiemchatluong.XhPhieuKnghiemCluongRepository;
-import com.tcdt.qlnvhang.repository.xuathang.quyetdinhgiaonhiemvuxuat.XhQdGiaoNvuXuatRepository;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXhRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -51,7 +50,7 @@ public class XhPhieuKnghiemCluongServiceImpl extends BaseServiceImpl implements 
 
     private final XhPhieuKnghiemCluongRepository xhPhieuKnghiemCluongRepository;
     private final XhPhieuKnghiemCluongCtRepository xhPhieuKnghiemCluongCtRepository;
-    private final XhQdGiaoNvuXuatRepository xhQdGiaoNvuXuatRepository;
+    private final XhQdGiaoNvXhRepository xhQdGiaoNvXhRepository;
 
     private static final String SHEET_PHIEU_KIEM_NGHIEM_CHAT_LUONG = "Phiếu kiểm nghiệm chất lượng";
     private static final String STT = "STT";
@@ -132,11 +131,11 @@ public class XhPhieuKnghiemCluongServiceImpl extends BaseServiceImpl implements 
         res.setTenVatTuCha(mapVthh.get(item.getMaVatTuCha()));
 
         if (item.getQdgnvxId() != null) {
-            Optional<XhQdGiaoNvuXuat> qdXuat = xhQdGiaoNvuXuatRepository.findById(item.getQdgnvxId());
+            Optional<XhQdGiaoNvXh> qdXuat = xhQdGiaoNvXhRepository.findById(item.getQdgnvxId());
             if (!qdXuat.isPresent()) {
                 throw new Exception("Không tìm thấy quyết định xuất");
             }
-            res.setSoQuyetDinhXuat(qdXuat.get().getSoQuyetDinh());
+//            res.setSoQuyetDinhXuat(qdXuat.get().getSoQuyetDinh());
         }
 
         //TODO: Biên bản lấy mẫu

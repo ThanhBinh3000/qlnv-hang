@@ -1,14 +1,11 @@
 package com.tcdt.qlnvhang.entities.xuathang.bbtinhkho;
 
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
-import com.tcdt.qlnvhang.entities.xuathang.XhQdGiaoNvuXuat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @Entity
 @Table(name = XhBienBanTinhKho.TABLE_NAME)

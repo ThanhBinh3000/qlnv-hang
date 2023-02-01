@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.response.xuathang.quyetdinhgiaonhiemvuxuat;
 
-import com.tcdt.qlnvhang.entities.xuathang.XhQdGiaoNvuXuatCt;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -37,7 +36,4 @@ public class XhQdGiaoNvuXuatCtRes {
     private LocalDate thoiHanXuatBan;
     private Long qdgnvxId;
 
-    public XhQdGiaoNvuXuatCtRes(XhQdGiaoNvuXuatCt item) {
-        BeanUtils.copyProperties(item, this);
-    }
 }

@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.tcdt.qlnvhang.entities.FileDKemJoinKeLot;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstHdr;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbangiaonhan.NhBbGiaoNhanVt;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
@@ -66,7 +66,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
     public HhBbNghiemthuKlstHdr create(HhBbNghiemthuKlstHdrReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
 
-        Optional<HhQdGiaoNvuNhapxuatHdr> qdNxOptional = hhQdGiaoNvuNhapxuatRepository.findById(req.getIdQdGiaoNvNh());
+        Optional<NhQdGiaoNvuNhapxuatHdr> qdNxOptional = hhQdGiaoNvuNhapxuatRepository.findById(req.getIdQdGiaoNvNh());
         if (!qdNxOptional.isPresent())
             throw new Exception("Quyết định giao nhiệm vụ nhập xuất không tồn tại");
 
@@ -114,7 +114,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 		}
 
 
-        Optional<HhQdGiaoNvuNhapxuatHdr> qdNxOptional = hhQdGiaoNvuNhapxuatRepository.findById(objReq.getIdQdGiaoNvNh());
+        Optional<NhQdGiaoNvuNhapxuatHdr> qdNxOptional = hhQdGiaoNvuNhapxuatRepository.findById(objReq.getIdQdGiaoNvNh());
         if (!qdNxOptional.isPresent()){
 			throw new Exception("Quyết định giao nhiệm vụ nhập xuất không tồn tại");
 		}
