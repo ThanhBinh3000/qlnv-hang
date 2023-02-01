@@ -179,7 +179,7 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
                 x.setTenLoKho(mapDmucDvi.get(x.getMaLoKho()));
             });
             item.setChildren(allByIdDtl);
-            item.setTenDvi(mapDmucDvi.get(item.getTenDvi()));
+            item.setTenDvi(mapDmucDvi.get(item.getMaDvi()));
         });
             data.setChildren(allByIdHdr);
         return data;
