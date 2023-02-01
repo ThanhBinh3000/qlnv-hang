@@ -30,15 +30,12 @@ public class XhHopDongDdiemNhapKho {
 
     BigDecimal soLuong;
 
-    BigDecimal donGiaDeXuat;
-
     BigDecimal donGiaVat;
-
-    BigDecimal donGiaTraGia;
 
     String toChucCaNhan;
 
     String dviTinh;
+
     // Teansient
     @Transient
     private String tenDiemKho;

@@ -8,21 +8,26 @@ import java.math.BigDecimal;
 
 @Data
 public class XhDdiemNhapKhoReq {
-    @ApiModelProperty(notes = "Bắt buộc set đối với update")
+
     private Long id;
 
-    Long idHdr;
+    private Long idDtl;
 
-    @Size(max = 250, message = "Chi cục dự trữ nhà nước không được vượt quá 250 ký tự")
-    String maDvi;
+    private String maDiemKho;
 
-    @Size(max = 250, message = "Điểm kho không được vượt quá 250 ký tự")
-    String maDiemKho;
+    private String maNhaKho;
 
-    @Size(max = 250, message = "Nhà kho không được vượt quá 250 ký tự")
-    String nhaKho;
+    private String maNganKho;
 
-    BigDecimal soLuong;
+    private String maLoKho;
 
-    BigDecimal donGia;
+    private String maDviTsan;
+
+    private BigDecimal soLuong;
+
+    private BigDecimal donGiaVat;
+
+    private String toChucCaNhan;
+
+    private String dviTinh;
 }
