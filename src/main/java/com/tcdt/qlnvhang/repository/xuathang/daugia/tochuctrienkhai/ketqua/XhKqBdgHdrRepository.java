@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 public interface XhKqBdgHdrRepository extends JpaRepository<XhKqBdgHdr, Long> {
 
     @Query("SELECT c FROM XhKqBdgHdr c where 1 = 1" +
@@ -18,5 +20,7 @@ public interface XhKqBdgHdrRepository extends JpaRepository<XhKqBdgHdr, Long> {
     Page<XhKqBdgHdr> search(@Param("param") XhKqBdgHdrReq param, Pageable pageable);
 
     XhKqBdgHdr findByMaThongBao(String maThongBao);
+
+    Optional<XhKqBdgHdr> findBySoQdKq(String soQdKq);
 
 }

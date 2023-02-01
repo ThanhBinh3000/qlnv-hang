@@ -100,9 +100,12 @@ public class XhHopDongHdr extends TrangThaiBaseEntity {
 
     private Double donGia;
 
-    private String trangThai;
-
+    // Transient
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
+    @Transient
+    private List<XhHopDongDtl> children = new ArrayList<>();
+    @Transient
+    private List<String> listMaDviTsan = new ArrayList<>();
 
 }

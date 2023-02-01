@@ -7,7 +7,7 @@ import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 
 @Data
-public class BhDdiemNhapKhoReq {
+public class XhDdiemNhapKhoReq {
     @ApiModelProperty(notes = "Bắt buộc set đối với update")
     private Long id;
 

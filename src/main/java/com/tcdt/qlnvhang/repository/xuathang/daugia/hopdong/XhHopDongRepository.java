@@ -18,7 +18,7 @@ public interface XhHopDongRepository extends BaseRepository<XhHopDongHdr,Long> {
 
     @Query(
             value = "SELECT * " +
-                    "FROM BH_HOP_DONG_HDR  HDR" +
+                    "FROM XH_HOP_DONG_HDR  HDR" +
                     " WHERE (:loaiVthh IS NULL OR HDR.LOAI_VTHH = :loaiVthh) " +
                     "  AND (:soHd IS NULL OR HDR.SO_HD = :soHd) " +
                     "  AND (:tenHd IS NULL OR HDR.TEN_HD = :tenHd) " +
