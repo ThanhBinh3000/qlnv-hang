@@ -31,4 +31,6 @@ public class UserActivity implements Serializable {
     private String requestParameter;
     private Date ngayTao;
     private String system;
+    private String requestBody;
+    private String userName;
 }

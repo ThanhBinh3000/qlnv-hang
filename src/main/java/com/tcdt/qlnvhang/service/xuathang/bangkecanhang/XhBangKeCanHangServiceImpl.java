@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.service.xuathang.bangkecanhang;
 
-import com.tcdt.qlnvhang.entities.xuathang.XhQdGiaoNvuXuat;
 import com.tcdt.qlnvhang.entities.xuathang.bangkecanhang.XhBangKeCanHang;
 import com.tcdt.qlnvhang.entities.xuathang.bangkecanhang.XhBangKeCanHangCt;
 import com.tcdt.qlnvhang.entities.xuathang.phieuxuatkho.XhPhieuXuatKho;
@@ -14,7 +13,7 @@ import com.tcdt.qlnvhang.repository.khotang.KtNhaKhoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bangkecanhang.XhBangKeCanHangCtRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bangkecanhang.XhBangKeCanHangRepository;
 import com.tcdt.qlnvhang.repository.xuathang.phieuxuatkho.XhPhieuXuatKhoRepository;
-import com.tcdt.qlnvhang.repository.xuathang.quyetdinhgiaonhiemvuxuat.XhQdGiaoNvuXuatRepository;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXhRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -70,7 +69,7 @@ public class XhBangKeCanHangServiceImpl implements XhBangKeCanHangService {
     @Autowired
     QlnvDmDonviRepository qlnvDmDonviRepository;
     @Autowired
-    XhQdGiaoNvuXuatRepository xhQdGiaoNvuXuatRepository;
+    XhQdGiaoNvXhRepository xhQdGiaoNvXhRepository;
     @Autowired
     XhPhieuXuatKhoRepository xuatKhoRepo;
     @Autowired
@@ -208,8 +207,8 @@ public class XhBangKeCanHangServiceImpl implements XhBangKeCanHangService {
         item.setTenNgankho(ktNganKhoRepository.findByMaNgankho(item.getMaNgankho()).getTenNgankho());
         item.setTenLokho(ktNganLoRepository.findByMaNganlo(item.getMaLokho()).getTenNganlo());
         item.setTenDvi(qlnvDmDonviRepository.findByMaDvi(item.getMaDvi()).getTenDvi());
-        Optional<XhQdGiaoNvuXuat> nvuXuat = xhQdGiaoNvuXuatRepository.findById(item.getSqdxId());
-        item.setSoSqdx(nvuXuat.get().getSoQuyetDinh());
+//        Optional<XhQdGiaoNvuXuat> nvuXuat = xhQdGiaoNvXhRepository.findById(item.getSqdxId());
+//        item.setSoSqdx(nvuXuat.get().getSoQuyetDinh());
         Optional<XhPhieuXuatKho> xuatKho = xuatKhoRepo.findById(item.getPhieuXuatKhoId());
         item.setSoPhieuXuatKho(xuatKho.get().getSpXuatKho());
         item.setTenLoaiHangHoa(dmVattuRepository.findByMa(item.getMaLoaiHangHoa()).getTen());

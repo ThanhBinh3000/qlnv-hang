@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.tcdt.qlnvhang.repository.BaseRepository;
-import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
@@ -15,11 +15,11 @@ import org.springframework.stereotype.Repository;
 import javax.transaction.Transactional;
 
 @Repository
-public interface HhQdGiaoNvuNhapxuatRepository extends BaseRepository<HhQdGiaoNvuNhapxuatHdr, Long>, HhQdGiaoNvuNhapxuatRepositoryCustom {
+public interface HhQdGiaoNvuNhapxuatRepository extends BaseRepository<NhQdGiaoNvuNhapxuatHdr, Long>, HhQdGiaoNvuNhapxuatRepositoryCustom {
 
-	Optional<HhQdGiaoNvuNhapxuatHdr> findFirstBySoQd(String soQd);
+	Optional<NhQdGiaoNvuNhapxuatHdr> findFirstBySoQd(String soQd);
 
-	Optional<HhQdGiaoNvuNhapxuatHdr> findByIdHdAndMaDviAndNamNhap(Long idHd,String maDvi,Integer nam);
+	Optional<NhQdGiaoNvuNhapxuatHdr> findByIdHdAndMaDviAndNamNhap(Long idHd, String maDvi, Integer nam);
 
 //	@Query(
 //			value = "SELECT * \n" +
@@ -80,7 +80,7 @@ public interface HhQdGiaoNvuNhapxuatRepository extends BaseRepository<HhQdGiaoNv
 ////			"AND (?2 IS NULL OR qd.loaiVthh = ?2)")
 ////	int countQdChiCuc(String maDvi, String loaiVtth);
 
-	List<HhQdGiaoNvuNhapxuatHdr> findByIdIn(Collection<Long> ids);
+	List<NhQdGiaoNvuNhapxuatHdr> findByIdIn(Collection<Long> ids);
 
 	@Transactional
 	@Modifying
@@ -106,7 +106,7 @@ public interface HhQdGiaoNvuNhapxuatRepository extends BaseRepository<HhQdGiaoNv
 					"  AND (:denNgayQD IS NULL OR NX.NGAY_QDINH <= TO_DATE(:denNgayQD, 'yyyy-MM-dd')) " +
 					"  AND (:maDvi IS NULL OR NX.MA_DVI = :maDvi) "
 			, nativeQuery = true)
-	Page<HhQdGiaoNvuNhapxuatHdr> selectPageCuc(Long namNhap, String soQd, String loaiVthh, String trichYeu, String tuNgayQD, String denNgayQD, String maDvi, Pageable pageable);
+	Page<NhQdGiaoNvuNhapxuatHdr> selectPageCuc(Long namNhap, String soQd, String loaiVthh, String trichYeu, String tuNgayQD, String denNgayQD, String maDvi, Pageable pageable);
 
 	@Query(
 			value = " SELECT NX.* " +
@@ -130,5 +130,5 @@ public interface HhQdGiaoNvuNhapxuatRepository extends BaseRepository<HhQdGiaoNv
 					"  AND (:denNgayQD IS NULL OR NX.NGAY_QDINH <= TO_DATE(:denNgayQD, 'yyyy-MM-dd')) " +
 					"   AND ( NX_DTL.MA_DVI = :maDvi) "
 			, nativeQuery = true)
-	Page<HhQdGiaoNvuNhapxuatHdr> selectPageChiCuc(Long namNhap, String soQd, String loaiVthh, String trichYeu, String tuNgayQD, String denNgayQD, String maDvi, Pageable pageable);
+	Page<NhQdGiaoNvuNhapxuatHdr> selectPageChiCuc(Long namNhap, String soQd, String loaiVthh, String trichYeu, String tuNgayQD, String denNgayQD, String maDvi, Pageable pageable);
 }

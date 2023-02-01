@@ -8,7 +8,7 @@ import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.khotang.*;
 import com.tcdt.qlnvhang.repository.xuathang.bbtinhkho.XhBienBanTinhKhoCtRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bbtinhkho.XhBienBanTinhKhoRepository;
-import com.tcdt.qlnvhang.repository.xuathang.quyetdinhgiaonhiemvuxuat.XhQdGiaoNvuXuatRepository;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXhRepository;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -18,7 +18,6 @@ import com.tcdt.qlnvhang.response.xuathang.bbtinhkho.XhBienBanTinhKhoCtRes;
 import com.tcdt.qlnvhang.response.xuathang.bbtinhkho.XhBienBanTinhKhoRes;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.ExportExcel;
-import com.tcdt.qlnvhang.util.LocalDateTimeUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
@@ -57,7 +56,7 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
     @Autowired
     XhBienBanTinhKhoCtRepository xhBienBanTinhKhoCtRepository;
     @Autowired
-    XhQdGiaoNvuXuatRepository xhQdGiaoNvuXuatRepository;
+    XhQdGiaoNvXhRepository xhQdGiaoNvXhRepository;
     @Autowired
     KtDiemKhoRepository ktDiemKho;
     @Autowired
@@ -352,7 +351,7 @@ public class XhBienBanTinhKhoServiceImpl implements XhBienBanTinhKhoService {
     private XhBienBanTinhKhoRes buildResponse(XhBienBanTinhKho xhBienBanTinhKho) {
         XhBienBanTinhKhoRes xhBienBanTinhKhoRes = new XhBienBanTinhKhoRes();
         xhBienBanTinhKhoRes.setId(xhBienBanTinhKho.getId());
-        xhBienBanTinhKhoRes.setSoQd(xhQdGiaoNvuXuatRepository.getOne(xhBienBanTinhKho.getQdgnvnxId()).getSoQuyetDinh());
+//        xhBienBanTinhKhoRes.setSoQd(xhQdGiaoNvXhRepository.getOne(xhBienBanTinhKho.getQdgnvnxId()).getSoQuyetDinh());
         xhBienBanTinhKhoRes.setLoaiHH(qlnvDmVattuRepository.findByMa(xhBienBanTinhKho.getMaLoaiHangHoa()).getTen());
         xhBienBanTinhKhoRes.setChungLoaiHH(qlnvDmVattuRepository.findByMa(xhBienBanTinhKho.getMaChungLoaiHangHoa()).getTen());
         xhBienBanTinhKhoRes.setTenDvi(xhBienBanTinhKho.getCapDvi());

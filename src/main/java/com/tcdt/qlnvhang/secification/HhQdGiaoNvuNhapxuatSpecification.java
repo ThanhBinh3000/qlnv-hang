@@ -1,28 +1,27 @@
 package com.tcdt.qlnvhang.secification;
 
 import java.util.Date;
-import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.criteria.*;
 
-import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatDtl;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatDtl;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.tcdt.qlnvhang.request.search.HhQdNhapxuatSearchReq;
-import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
 import org.springframework.util.CollectionUtils;
 
 public class HhQdGiaoNvuNhapxuatSpecification {
 
 	@SuppressWarnings("serial")
-	public static Specification<HhQdGiaoNvuNhapxuatHdr> buildSearchQuery(final HhQdNhapxuatSearchReq req) {
-		return new Specification<HhQdGiaoNvuNhapxuatHdr>() {
+	public static Specification<NhQdGiaoNvuNhapxuatHdr> buildSearchQuery(final HhQdNhapxuatSearchReq req) {
+		return new Specification<NhQdGiaoNvuNhapxuatHdr>() {
 			@Override
-			public Predicate toPredicate(Root<HhQdGiaoNvuNhapxuatHdr> root, CriteriaQuery<?> query,
-					CriteriaBuilder builder) {
+			public Predicate toPredicate(Root<NhQdGiaoNvuNhapxuatHdr> root, CriteriaQuery<?> query,
+										 CriteriaBuilder builder) {
 				Predicate predicate = builder.conjunction();
 				
 				if (req != null) {
@@ -36,7 +35,7 @@ public class HhQdGiaoNvuNhapxuatSpecification {
 //					Integer namNhap = Integer.valueOf(req.getNamNhap());
 //					String veViec = req.getVeViec();
 
-					Join<HhQdGiaoNvuNhapxuatHdr, HhQdGiaoNvuNhapxuatDtl> joinQuerry = root.join("children");
+					Join<NhQdGiaoNvuNhapxuatHdr, NhQdGiaoNvuNhapxuatDtl> joinQuerry = root.join("children");
 
 					if (ngayQd != null) {
 						predicate.getExpressions()

@@ -9,7 +9,7 @@ import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhie
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNxDdiemRepository;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongRequestDto;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.table.HhQdGiaoNvuNxDdiem;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNxDdiem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -140,7 +140,7 @@ public class NhPhieuKtChatLuongServiceImpl extends BaseServiceImpl implements Nh
 
 	void validateData(NhPhieuKtChatLuong obj) throws Exception {
 		BigDecimal soLuongNhapKho = this.getSoLuongNhapKho(obj.getIdDdiemGiaoNvNh());
-		Optional<HhQdGiaoNvuNxDdiem> byId = hhQdGiaoNvuNxDdiemRepository.findById(obj.getIdDdiemGiaoNvNh());
+		Optional<NhQdGiaoNvuNxDdiem> byId = hhQdGiaoNvuNxDdiemRepository.findById(obj.getIdDdiemGiaoNvNh());
 		if(byId.isPresent()){
 			BigDecimal soLuong = byId.get().getSoLuong().multiply(new BigDecimal(1000));
 			if(soLuongNhapKho.add(obj.getSoLuongNhapKho()).compareTo(soLuong) > 0){

@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat;
 
 import com.tcdt.qlnvhang.request.search.HhQdNhapxuatSearchReq;
-import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.PageRequest;

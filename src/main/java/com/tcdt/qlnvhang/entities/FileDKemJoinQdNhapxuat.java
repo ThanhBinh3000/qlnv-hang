@@ -14,7 +14,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
 
 import lombok.Data;
 
@@ -39,5 +39,5 @@ public class FileDKemJoinQdNhapxuat implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "dataId")
 	@JsonBackReference
-	private HhQdGiaoNvuNhapxuatHdr parent;
+	private NhQdGiaoNvuNhapxuatHdr parent;
 }

@@ -14,23 +14,7 @@ public class XhHopDongDtlReq {
     @ApiModelProperty(notes = "Bắt buộc set đối với update")
     private Long id;
 
-    Long idHdr;
-
-    @NotNull(message = "Không được để trống")
-    @Size(max = 20, message = "Số gói thầu không được vượt quá 250 ký tự")
-    @ApiModelProperty(example = "Cục Hà Nội")
-    String shgt;
-
-    @NotNull(message = "Không được để trống")
-    @Size(max = 20, message = "Tên gói thầu không được vượt quá 250 ký tự")
-    @ApiModelProperty(example = "Tên gói thầu")
-    String tenGthau;
-
-    BigDecimal soLuong;
-    BigDecimal donGia;
-    Long vat;
-    BigDecimal giaTruocVat;
-    BigDecimal giaSauVat;
+    private String maDvi;
 
     private List<XhDdiemNhapKhoReq> children = new ArrayList<>();
 

@@ -22,7 +22,7 @@ import com.tcdt.qlnvhang.response.bbanlaymau.BienBanBanGiaoMauRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongHdr;
-import com.tcdt.qlnvhang.table.HhQdGiaoNvuNhapxuatHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
@@ -301,7 +301,7 @@ public class BienBanBanGiaoMauServiceImpl extends BaseServiceImpl implements Bie
 
 
 		if (item.getQdgnvnxId() != null) {
-			Optional<HhQdGiaoNvuNhapxuatHdr> qdNhap = hhQdGiaoNvuNhapxuatRepository.findById(item.getQdgnvnxId());
+			Optional<NhQdGiaoNvuNhapxuatHdr> qdNhap = hhQdGiaoNvuNhapxuatRepository.findById(item.getQdgnvnxId());
 			if (!qdNhap.isPresent()) {
 				throw new Exception("Không tìm thấy quyết định nhập");
 			}

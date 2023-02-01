@@ -222,7 +222,7 @@ public class PathContains {
 	public static final String THONG_BAO_BAN_DAU_GIA_KHONG_THANH = "/thong-bao-ban-dau-gia-khong-thanh";
 
 	// Xuat hang
-	public static final String QD_GIAO_NVU_XUAT_HANG = "/qd-giao-nvu-xuat-hang";
+	public static final String QD_GIAO_NVU_XUAT_HANG = "/qd-gnv-xh";
 	public static final String XUAT_HANG_PHIEU_KIEM_NGHIEM_CHAT_LUONG = "/xuat-hang/phieu-kiem-nghiem-chat-luong";
 
 	public static final String XH_BIEN_BAN_TINH_KHO = "/xh-bb-tinh-kho";
