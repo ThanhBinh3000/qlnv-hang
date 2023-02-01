@@ -26,6 +26,7 @@ public class XhQdGiaoNvXh extends TrangThaiBaseEntity implements Serializable {
     private Long id;
     private Integer nam;
     private String soQd;
+    private String maDvi;
     @Temporal(TemporalType.DATE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKy;
@@ -41,6 +42,15 @@ public class XhQdGiaoNvXh extends TrangThaiBaseEntity implements Serializable {
     private Date tgianGnhan;
     private String trichYeu;
     private BigDecimal soLuong;
+
+    private String trangThaiXh;
+
+    private String bbTinhKho;
+
+    private String bbHaoDoi;
+
+    @Transient
+    private String tenTrangThaiXh;
 
     // Transient
     @Transient
