@@ -67,6 +67,7 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
         XhTcTtinBdgHdr data = new XhTcTtinBdgHdr();
         BeanUtils.copyProperties(req, data, "id");
         data.setNam(new Date().getYear());
+        data.setMaDvi(getUser().getDvql());
         data.setNguoiTaoId(getUser().getId());
         data.setNgayTao(new Date());
         data.setId(Long.valueOf(req.getMaThongBao().split("/")[0]));

@@ -85,7 +85,7 @@ public class XhHopDongHdrReq extends BaseRequest {
 
     private Double soLuong;
 
-    private Double donGia;
+    private Double donGiaVat;
 
     private String trangThai;
 

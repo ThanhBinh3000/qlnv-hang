@@ -98,7 +98,8 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
         XhKqBdgHdr data = byId.get();
 
         data.setListHopDong(xhHopDongHdrRepository.findAllBySoQdKq(data.getSoQdKq()));
-
+        Map<String, String> listDanhMucDvi = getListDanhMucDvi("2", null, "01");
+        data.setTenDvi(listDanhMucDvi.get(data.getMaDvi()));
         return data;
     }
 

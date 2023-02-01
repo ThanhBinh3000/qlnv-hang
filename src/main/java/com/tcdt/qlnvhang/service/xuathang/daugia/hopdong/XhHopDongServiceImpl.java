@@ -65,7 +65,7 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
         if (!checkSoQd.isPresent()) {
             throw new Exception("Số quyết định phê duyệt kết quả lựa chọn nhà thầu " + req.getSoQdKq() + " không tồn tại");
         }else{
-            checkSoQd.get().setTrangThai(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
+            checkSoQd.get().setTrangThaiHd(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
             xhKqBdgHdrRepository.save(checkSoQd.get());
         }
 
@@ -125,7 +125,6 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
         dataDB.setNgaySua(new Date());
         dataDB.setNguoiSuaId(userInfo.getId());
 
-
         xhHopDongHdrRepository.save(dataDB);
 
         saveDetail(req,dataDB.getId());
@@ -138,6 +137,7 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
             XhHopDongDtl dtl = new XhHopDongDtl();
             BeanUtils.copyProperties(dtlReq,dtl,"id");
             dtl.setIdHdr(idHdr);
+            xhHopDongDtlRepository.save(dtl);
             xhHopDongDdiemNhapKhoRepository.deleteAllByIdDtl((dtlReq.getId()));
             for (XhDdiemNhapKhoReq nhapKhoReq : dtlReq.getChildren()) {
                 XhHopDongDdiemNhapKho nhapKho = new XhHopDongDdiemNhapKho();
@@ -161,12 +161,27 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
         }
 
         XhHopDongHdr data = qOptional.get();
-        Map<String, String> mapDmucDvi = getMapTenDvi();
-        Map<String,String> hashMapDviLquan = getListDanhMucDviLq("NT");
-
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
         Map<String,String> mapVthh = getListDanhMucHangHoa();
 
+        data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
+        data.setTenLoaiVthh(mapVthh.get(data.getLoaiVthh()));
+        data.setTenCloaiVthh(mapVthh.get(data.getCloaiVthh()));
+        data.setListMaDviTsan(Arrays.asList(data.getMaDviTsan().split(",")));
 
+        List<XhHopDongDtl> allByIdHdr = xhHopDongDtlRepository.findAllByIdHdr(id);
+        allByIdHdr.forEach(item -> {
+            List<XhHopDongDdiemNhapKho> allByIdDtl = xhHopDongDdiemNhapKhoRepository.findAllByIdDtl(item.getId());
+            allByIdDtl.forEach(x -> {
+                x.setTenDiemKho(mapDmucDvi.get(x.getMaDiemKho()));
+                x.setTenNhaKho(mapDmucDvi.get(x.getMaNhaKho()));
+                x.setTenNganKho(mapDmucDvi.get(x.getMaNganKho()));
+                x.setTenLoKho(mapDmucDvi.get(x.getMaLoKho()));
+            });
+            item.setChildren(allByIdDtl);
+            item.setTenDvi(mapDmucDvi.get(item.getTenDvi()));
+        });
+            data.setChildren(allByIdHdr);
         return data;
     }
 
