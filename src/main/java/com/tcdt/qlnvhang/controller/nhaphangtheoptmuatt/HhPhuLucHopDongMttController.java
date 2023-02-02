@@ -31,7 +31,7 @@ public class HhPhuLucHopDongMttController extends BaseController {
 
     @ApiOperation(value = "Danh sách ", response = List.class)
     @PostMapping(value=  PathContains.HD_PL_MTT + PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody HhPhuLucHopDongMttReq objReq) {
+    public ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody HhPhuLucHopDongMttReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhPhuLucHopDongMttService.findAll(objReq));
@@ -47,7 +47,7 @@ public class HhPhuLucHopDongMttController extends BaseController {
 
     @ApiOperation(value = "Tạo mới danh sách ", response = List.class)
     @PostMapping(value=  PathContains.HD_PL_MTT + PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> save(@Valid @RequestBody HhPhuLucHopDongMttReq objReq) {
+    public ResponseEntity<BaseResponse> save(@Valid @RequestBody HhPhuLucHopDongMttReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhPhuLucHopDongMttService.save(objReq));
@@ -63,7 +63,7 @@ public class HhPhuLucHopDongMttController extends BaseController {
 
     @ApiOperation(value = "Cập nhật danh sách ", response = List.class)
     @PostMapping(value=  PathContains.HD_PL_MTT + PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> update(@Valid @RequestBody HhPhuLucHopDongMttReq objReq) {
+    public ResponseEntity<BaseResponse> update(@Valid @RequestBody HhPhuLucHopDongMttReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhPhuLucHopDongMttService.update(objReq));
@@ -97,7 +97,7 @@ public class HhPhuLucHopDongMttController extends BaseController {
 
     @ApiOperation(value = "Xóa đề xuất ", response = List.class)
     @PostMapping(value=  PathContains.HD_PL_MTT + PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
+    public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
             hhPhuLucHopDongMttService.delete(idSearchReq);

@@ -39,7 +39,7 @@ public class HhQdPheduyetKhMttHdrControler {
 
     @ApiOperation(value = "Tra cứu Quyết định phê duyệt kế hoạch mua trực tiếp", response = List.class)
     @PostMapping(value=  PathContains.QD_PD_MTT + PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody HhQdPheduyetKhMttHdrSearchReq objReq) {
+    public ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody HhQdPheduyetKhMttHdrSearchReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhQdPheduyetKhMttHdrService.searchPage(objReq));
@@ -57,7 +57,7 @@ public class HhQdPheduyetKhMttHdrControler {
 
     @ApiOperation(value = "Tạo mới Quyết định phê duyệt kế hoạch mua trực tiếp ", response = List.class)
     @PostMapping(value=PathContains.QD_PD_MTT+ PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> save(@Valid @RequestBody HhQdPheduyetKhMttHdrReq objReq) {
+    public ResponseEntity<BaseResponse> save(@Valid @RequestBody HhQdPheduyetKhMttHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhQdPheduyetKhMttHdrService.create(objReq));

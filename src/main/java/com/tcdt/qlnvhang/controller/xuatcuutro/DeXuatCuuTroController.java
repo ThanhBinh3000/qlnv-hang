@@ -59,7 +59,7 @@ public class DeXuatCuuTroController extends BaseController {
   @ApiOperation(value = "Cập nhật Đề xuất xuất cứu trợ viện trợ", response = List.class)
   @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public final ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhDxCuuTroHdrSearchReq req) {
+  public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhDxCuuTroHdrSearchReq req) {
     BaseResponse resp = new BaseResponse();
     try {
       XhDxCuuTroHdr data = deXuatCuuTroService.update(currentUser, req);
@@ -77,7 +77,7 @@ public class DeXuatCuuTroController extends BaseController {
   @ApiOperation(value = "Chi tiết Đề xuất xuất cứu trợ viện trợ", response = List.class)
   @GetMapping(value = PathContains.URL_CHI_TIET + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public final ResponseEntity<BaseResponse> detail(@CurrentUser CustomUserDetails currentUser, @PathVariable("id") Long id) {
+  public ResponseEntity<BaseResponse> detail(@CurrentUser CustomUserDetails currentUser, @PathVariable("id") Long id) {
     BaseResponse resp = new BaseResponse();
     try {
       XhDxCuuTroHdr data = deXuatCuuTroService.detail(currentUser, Arrays.asList(id)).get(0);

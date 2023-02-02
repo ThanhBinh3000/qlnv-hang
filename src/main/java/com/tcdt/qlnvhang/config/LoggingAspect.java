@@ -1,39 +1,50 @@
 package com.tcdt.qlnvhang.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.tcdt.qlnvhang.entities.UserActivity;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.service.UserActivityService;
 import com.tcdt.qlnvhang.util.UserUtils;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Aspect
 @Component
-public class ActivityConfig extends HandlerInterceptorAdapter {
+public class LoggingAspect {
 
-    @Autowired
-    private UserActivityService userActivityService;
-    @Autowired
-    private Gson gson;
-
+    private static final Logger logger = LoggerFactory.getLogger(LoggingAspect.class);
     private final static String SYSTEM = "hang";
 
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if (request != null && handler != null) {
+    @Autowired
+    private Gson gson;
+    @Autowired
+    private UserActivityService userActivityService;
+
+    @Pointcut("within(com.tcdt.qlnvhang..*) && bean(*Controller))")
+    public void v3Controller() {
+    }
+
+    @Before("v3Controller()")
+    public void logBefore(JoinPoint joinPoint) {
+        try {
+            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
             String userAgent = request.getHeader("User-Agent");
             if (ObjectUtils.isEmpty(userAgent)) {
                 userAgent = request.getHeader("user-agent");
@@ -51,51 +62,21 @@ public class ActivityConfig extends HandlerInterceptorAdapter {
                 entity.setUserId(user.getUser().getId());
                 entity.setSystem(SYSTEM);
                 entity.setUserAgent(userAgent);
-                entity.setRequestBody(this.getBody(request));
+                entity.setRequestBody(getBody(joinPoint.getArgs()));
                 entity.setUserName(user.getUser().getUsername());
                 Map<String, String[]> parameterMap = request.getParameterMap();
                 if (parameterMap != null && !parameterMap.isEmpty()) {
                     entity.setRequestParameter(gson.toJson(parameterMap));
                 }
                 userActivityService.log(entity);
-                return super.preHandle(request, response, handler);
             }
-            return super.preHandle(null, response, null);
-        } else {
-            return super.preHandle(null, response, null);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-
-    public static String getBody(HttpServletRequest request) throws IOException {
-        String body = null;
-        StringBuilder stringBuilder = new StringBuilder();
-        BufferedReader bufferedReader = null;
-        try {
-            InputStream inputStream = request.getInputStream();
-            if (inputStream != null) {
-                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                char[] charBuffer = new char[128];
-                int bytesRead = -1;
-                while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
-                    stringBuilder.append(charBuffer, 0, bytesRead);
-                }
-            } else {
-                stringBuilder.append("");
-            }
-        } catch (IOException ex) {
-            throw ex;
-        } finally {
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close();
-                } catch (IOException ex) {
-                    throw ex;
-                }
-            }
-        }
-        body = stringBuilder.toString();
-        return body;
+    public String getBody(Object[] args) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(args);
     }
-
 }
