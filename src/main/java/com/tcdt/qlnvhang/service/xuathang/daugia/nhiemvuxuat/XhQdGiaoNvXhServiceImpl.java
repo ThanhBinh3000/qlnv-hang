@@ -86,7 +86,7 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
 
         data.getContent().forEach(item ->{
             item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
-            item.setTenTrangThaiXh(NhapXuatHangTrangThaiEnum.getTenById(item.getTenTrangThaiXh()));
+            item.setTenTrangThaiXh(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThaiXh()));
             item.setTenDvi(mapDmucDvi.get(item.getMaDvi()));
             item.setTenLoaiVthh(mapDmucHh.get(item.getLoaiVthh()));
             item.setTenCloaiVthh(mapDmucHh.get(item.getCloaiVthh()));
@@ -103,9 +103,6 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
             throw new Exception("Bad request.");
         }
 
-        if (!Contains.CAP_CUC.equalsIgnoreCase(userInfo.getCapDvi())){
-            throw new Exception("Bad request.");
-        }
 
         Optional<XhQdGiaoNvXh> optional = xhQdGiaoNvXhRepository.findAllBySoQd(objReq.getSoQd());
         if (optional.isPresent()){
@@ -122,7 +119,7 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
         dataMap.setNgayTao(new Date());
         dataMap.setTrangThai(Contains.DUTHAO);
         dataMap.setTrangThaiXh(Contains.CHUACAPNHAT);
-        dataMap.setMaDvi(userInfo.getCapDvi());
+        dataMap.setMaDvi(userInfo.getDvql());
         dataMap.setTenDvi(StringUtils.isEmpty(userInfo.getDvql()) ? null : mapDmucDvi.get(userInfo.getDvql()));
         XhQdGiaoNvXh created = xhQdGiaoNvXhRepository.save(dataMap);
         if (!DataUtils.isNullObject(objReq.getFileDinhKem())){
@@ -156,10 +153,6 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
     public XhQdGiaoNvXh update (XhQdGiaoNvuXuatReq objReq) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null) {
-            throw new Exception("Bad request.");
-        }
-
-        if (!Contains.CAP_CUC.equalsIgnoreCase(userInfo.getCapDvi())){
             throw new Exception("Bad request.");
         }
 
@@ -240,9 +233,7 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
     @Override
     @Transactional()
     public void delete(IdSearchReq idSearchReq) throws Exception {
-        UserInfo userInfo = UserUtils.getUserInfo();
-        if (!Contains.CAP_CUC.equalsIgnoreCase(userInfo.getCapDvi()))
-            throw new Exception("Bad request.");
+        UserInfo userInfo = SecurityContextService.getUser();
 
         if (StringUtils.isEmpty(idSearchReq.getId()))
             throw new Exception("Xoá thất bại, không tìm thấy dữ liệu");
@@ -295,10 +286,6 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
       UserInfo userInfo = SecurityContextService.getUser();
       if (StringUtils.isEmpty(statusReq.getId())){
           throw new Exception("Không tìm thấy dữ liệu");
-      }
-
-      if (!Contains.CAP_CUC.equalsIgnoreCase(userInfo.getCapDvi())){
-          throw new Exception("Bad request.");
       }
 
       Optional<XhQdGiaoNvXh> optional = xhQdGiaoNvXhRepository.findById(Long.valueOf(statusReq.getId()));
