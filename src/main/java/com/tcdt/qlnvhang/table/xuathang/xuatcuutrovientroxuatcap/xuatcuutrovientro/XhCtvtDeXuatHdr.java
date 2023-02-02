@@ -56,6 +56,8 @@ public class XhCtvtDeXuatHdr extends BaseEntity implements Serializable {
     private String tenCloaiVthh;
     @Transient
     private String tenTrangThai;
+    @Transient
+    private String tenLoaiHinhNhapXuat;
 
     @Transient
     private List<FileDinhKem> canCu = new ArrayList<>();
