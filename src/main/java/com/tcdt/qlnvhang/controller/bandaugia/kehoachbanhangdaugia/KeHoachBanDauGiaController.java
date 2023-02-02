@@ -167,7 +167,7 @@ public class KeHoachBanDauGiaController extends BaseController {
 	@ApiOperation(value = "Tra cứu đề xuất  kế họach bán đấu giá", response = List.class)
 	@PostMapping(value=  PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody KeHoachBanDauGiaSearchRequest objReq) {
+	public ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody KeHoachBanDauGiaSearchRequest objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			resp.setData(keHoachBanDauGiaService.searchPage(objReq));

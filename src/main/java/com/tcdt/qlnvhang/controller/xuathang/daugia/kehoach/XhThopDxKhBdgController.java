@@ -38,7 +38,7 @@ public class XhThopDxKhBdgController extends BaseController {
 
     @ApiOperation(value = "Tổng hợp đề xuất kế hoạch bán đấu giá  ", response = List.class)
     @PostMapping()
-    public final ResponseEntity<BaseResponse> sumarryData(HttpServletRequest request
+    public ResponseEntity<BaseResponse> sumarryData(HttpServletRequest request
             , @Valid @RequestBody XhThopChiTieuReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -73,7 +73,7 @@ public class XhThopDxKhBdgController extends BaseController {
 
     @ApiOperation(value = "Cập nhật tổng hợp ", response = List.class)
     @PostMapping(value=  PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> update(@Valid @RequestBody XhThopDxKhBdgReq objReq) {
+    public ResponseEntity<BaseResponse> update(@Valid @RequestBody XhThopDxKhBdgReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(xhThopDxKhBdgService.update(objReq));
@@ -131,7 +131,7 @@ public class XhThopDxKhBdgController extends BaseController {
 
     @ApiOperation(value = "Xóa tổng hợp ", response = List.class)
     @PostMapping(value=  PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
+    public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
             xhThopDxKhBdgService.delete(idSearchReq);
@@ -147,7 +147,7 @@ public class XhThopDxKhBdgController extends BaseController {
 
     @ApiOperation(value = "Xóa dánh sách tổng hợp ", response = List.class)
     @PostMapping(value=  PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
+    public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
             xhThopDxKhBdgService.deleteMulti(idSearchReq);

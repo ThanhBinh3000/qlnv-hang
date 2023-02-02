@@ -167,7 +167,7 @@ public class HhBbNghiemthuKlstHdrController {
 	@ApiOperation(value = "Delete multiple Biên bản nghiệm thu bảo quản lần đầu nhập", response = List.class)
 	@ResponseStatus(HttpStatus.OK)
 	@PostMapping("/delete/multiple")
-	public final ResponseEntity<BaseResponse> deleteMultiple(@RequestBody @Valid DeleteReq req) {
+	public ResponseEntity<BaseResponse> deleteMultiple(@RequestBody @Valid DeleteReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
 //			resp.setData(service.deleteMultiple(req));

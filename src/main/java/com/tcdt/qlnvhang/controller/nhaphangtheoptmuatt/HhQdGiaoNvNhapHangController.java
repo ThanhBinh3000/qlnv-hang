@@ -39,7 +39,7 @@ public class HhQdGiaoNvNhapHangController {
 
     @ApiOperation(value = "Tra cứu ", response = List.class)
     @PostMapping(value=  PathContains.QD_NV_NH + PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody SearchHhQdGiaoNvNhReq objReq) {
+    public ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody SearchHhQdGiaoNvNhReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhQdGiaoNvNhapHangService.searchPage(objReq));
@@ -55,7 +55,7 @@ public class HhQdGiaoNvNhapHangController {
 
     @ApiOperation(value = "Tạo mới ", response = List.class)
     @PostMapping(value=PathContains.QD_NV_NH+ PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> save(@Valid @RequestBody HhQdGiaoNvNhapHangReq objReq) {
+    public ResponseEntity<BaseResponse> save(@Valid @RequestBody HhQdGiaoNvNhapHangReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhQdGiaoNvNhapHangService.save(objReq));
@@ -71,7 +71,7 @@ public class HhQdGiaoNvNhapHangController {
 
     @ApiOperation(value = "Cập nhật ", response = List.class)
     @PostMapping(value=PathContains.QD_NV_NH+ PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> update(@Valid @RequestBody HhQdGiaoNvNhapHangReq objReq) {
+    public ResponseEntity<BaseResponse> update(@Valid @RequestBody HhQdGiaoNvNhapHangReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhQdGiaoNvNhapHangService.update(objReq));
@@ -105,7 +105,7 @@ public class HhQdGiaoNvNhapHangController {
 
     @ApiOperation(value = "Xóa đề xuất ", response = List.class)
     @PostMapping(value=  PathContains.QD_NV_NH + PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
+    public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
             hhQdGiaoNvNhapHangService.delete(idSearchReq);
@@ -121,7 +121,7 @@ public class HhQdGiaoNvNhapHangController {
 
     @ApiOperation(value = "Xóa dánh sách ", response = List.class)
     @PostMapping(value=  PathContains.QD_NV_NH + PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
+    public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
             hhQdGiaoNvNhapHangService.deleteMulti(idSearchReq);
@@ -159,7 +159,7 @@ public class HhQdGiaoNvNhapHangController {
 
     @ApiOperation(value = "Phê duyêt đề xuất kế hoạch mưa trực tiếp ", response = List.class)
     @PostMapping(value=PathContains.QD_NV_NH + PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> updateStatusUbtvqh(@Valid @RequestBody StatusReq statusReq, HttpServletRequest req) {
+    public ResponseEntity<BaseResponse> updateStatusUbtvqh(@Valid @RequestBody StatusReq statusReq, HttpServletRequest req) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhQdGiaoNvNhapHangService.approve(statusReq));
@@ -174,7 +174,7 @@ public class HhQdGiaoNvNhapHangController {
     }
     @ApiOperation(value = "Cập nhật địa điểm  nhập hàng", response = List.class)
     @PostMapping(value=PathContains.QD_NV_NH+ "/cap-nhat-ddiem-nhap", produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> updateDdiem(@Valid @RequestBody HhQdGiaoNvNhapHangReq objReq) {
+    public ResponseEntity<BaseResponse> updateDdiem(@Valid @RequestBody HhQdGiaoNvNhapHangReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             hhQdGiaoNvNhapHangService.updateDiem(objReq);

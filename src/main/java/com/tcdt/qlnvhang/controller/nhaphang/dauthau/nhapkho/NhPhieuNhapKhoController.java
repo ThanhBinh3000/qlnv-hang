@@ -147,7 +147,7 @@ public class NhPhieuNhapKhoController {
     @ApiOperation(value = "Delete multiple lương thực", response = List.class)
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/delete/multiple")
-    public final ResponseEntity<BaseResponse> deleteMultiple(@RequestBody @Valid DeleteReq req) {
+    public ResponseEntity<BaseResponse> deleteMultiple(@RequestBody @Valid DeleteReq req) {
         BaseResponse resp = new BaseResponse();
         try {
 //            resp.setData(nhPhieuNhapKhoService.deleteMultiple(req));

@@ -41,7 +41,7 @@ public class HhDxuatKhMttHdrController extends BaseController {
 
     @ApiOperation(value = "Tra cứu đề xuất kế hoạch mua trực tiếp ", response = List.class)
     @PostMapping(value=  PathContains.DX_MUA_TT + PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody SearchHhDxKhMttHdrReq objReq) {
+    public ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody SearchHhDxKhMttHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhDxuatKhMttService.searchPage(objReq));

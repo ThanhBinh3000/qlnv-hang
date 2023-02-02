@@ -71,7 +71,7 @@ public class TongHopPACuuTroController extends BaseController {
   @ApiOperation(value = "Cập nhật Tổng hợp phương án xuất cứu trợ viện trợ", response = List.class)
   @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public final ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhThCuuTroHdrSearchReq req) {
+  public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhThCuuTroHdrSearchReq req) {
     BaseResponse resp = new BaseResponse();
     try {
       XhThCuuTroHdr data = tongHopCuuTroService.update(currentUser, req);
@@ -89,7 +89,7 @@ public class TongHopPACuuTroController extends BaseController {
   @ApiOperation(value = "Chi tiết Đề xuất xuất cứu trợ viện trợ", response = List.class)
   @GetMapping(value = PathContains.URL_CHI_TIET + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public final ResponseEntity<BaseResponse> detail(@CurrentUser CustomUserDetails currentUser, @PathVariable("id") Long id) {
+  public ResponseEntity<BaseResponse> detail(@CurrentUser CustomUserDetails currentUser, @PathVariable("id") Long id) {
     BaseResponse resp = new BaseResponse();
     try {
       XhThCuuTroHdr data = tongHopCuuTroService.detail(currentUser, id);
@@ -195,7 +195,7 @@ public class TongHopPACuuTroController extends BaseController {
   @ApiOperation(value = "Tổng hợp phương án đề xuất cứu trợ", response = List.class)
   @PostMapping(value = PathContains.URL_DIEU_CHINH, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public final ResponseEntity<BaseResponse> synthetic(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhDxCuuTroHdrSearchReq req) {
+  public ResponseEntity<BaseResponse> synthetic(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhDxCuuTroHdrSearchReq req) {
     BaseResponse resp = new BaseResponse();
     try {
       XhThCuuTroHdr data = tongHopCuuTroService.synthetic(currentUser, req);

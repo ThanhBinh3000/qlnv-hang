@@ -107,7 +107,7 @@ public class XhQdGiaoNvXhController {
 
     @ApiOperation(value = "Xóa dánh sách quyết định giao nhiệm vụ xuất hàng ", response = List.class)
     @PostMapping(value=  PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
+    public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
             service.deleteMulti(idSearchReq);

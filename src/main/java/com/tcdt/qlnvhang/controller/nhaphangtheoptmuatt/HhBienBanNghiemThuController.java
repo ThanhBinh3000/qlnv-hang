@@ -38,7 +38,7 @@ public class HhBienBanNghiemThuController extends BaseController {
 
     @ApiOperation(value = "Tra cứu ", response = List.class)
     @PostMapping(value=  PathContains.BB_NT + PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody SearchHhBbNghiemThu objReq) {
+    public ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody SearchHhBbNghiemThu objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhBienBanNghiemThuService.searchPage(objReq));
@@ -54,7 +54,7 @@ public class HhBienBanNghiemThuController extends BaseController {
 
     @ApiOperation(value = "Tạo mới ", response = List.class)
     @PostMapping(value=  PathContains.BB_NT + PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> save(@Valid @RequestBody HhBienBanNghiemThuReq objReq) {
+    public ResponseEntity<BaseResponse> save(@Valid @RequestBody HhBienBanNghiemThuReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhBienBanNghiemThuService.save(objReq));
@@ -70,7 +70,7 @@ public class HhBienBanNghiemThuController extends BaseController {
 
     @ApiOperation(value = "Sửa ", response = List.class)
     @PostMapping(value=  PathContains.BB_NT + PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> update(@Valid @RequestBody HhBienBanNghiemThuReq objReq) {
+    public ResponseEntity<BaseResponse> update(@Valid @RequestBody HhBienBanNghiemThuReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhBienBanNghiemThuService.update(objReq));
@@ -104,7 +104,7 @@ public class HhBienBanNghiemThuController extends BaseController {
 
     @ApiOperation(value = "Xóa ", response = List.class)
     @PostMapping(value=  PathContains.BB_NT + PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
+    public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
             hhBienBanNghiemThuService.delete(idSearchReq);
@@ -120,7 +120,7 @@ public class HhBienBanNghiemThuController extends BaseController {
 
     @ApiOperation(value = "Xóa dánh sách ", response = List.class)
     @PostMapping(value=  PathContains.BB_NT + PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
+    public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
             hhBienBanNghiemThuService.deleteMulti(idSearchReq);
@@ -159,7 +159,7 @@ public class HhBienBanNghiemThuController extends BaseController {
 
     @ApiOperation(value = "Phê duyêt  ", response = List.class)
     @PostMapping(value=PathContains.BB_NT + PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> updateStatusUbtvqh(@Valid @RequestBody StatusReq statusReq, HttpServletRequest req) {
+    public ResponseEntity<BaseResponse> updateStatusUbtvqh(@Valid @RequestBody StatusReq statusReq, HttpServletRequest req) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhBienBanNghiemThuService.approve(statusReq));
