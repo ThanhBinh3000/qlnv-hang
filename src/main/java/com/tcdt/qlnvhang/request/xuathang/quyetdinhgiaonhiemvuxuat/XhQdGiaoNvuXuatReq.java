@@ -27,6 +27,7 @@ public class XhQdGiaoNvuXuatReq {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKy;
     private String soHd;
+    private String maDviTsan;
     private String tenTtcn;
     private String loaiVthh;
     private String cloaiVthh;
