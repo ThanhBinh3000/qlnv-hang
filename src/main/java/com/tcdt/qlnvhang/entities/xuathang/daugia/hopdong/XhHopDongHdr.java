@@ -32,6 +32,8 @@ public class XhHopDongHdr extends TrangThaiBaseEntity {
 
     private String soQdKq;
 
+    private Integer nam;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     @Column(columnDefinition = "Date")
     private Date ngayKyQdKq;

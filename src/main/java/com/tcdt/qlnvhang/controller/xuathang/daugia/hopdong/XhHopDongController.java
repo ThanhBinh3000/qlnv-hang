@@ -157,8 +157,7 @@ public class XhHopDongController {
     @ApiOperation(value = "Tra cứu ", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> colection( HttpServletResponse response,
-                                                   @Valid @RequestBody XhHopDongHdrReq objReq) {
+    public ResponseEntity<BaseResponse> search(@Valid @RequestBody XhHopDongHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(xhHopDongService.searchPage(objReq));

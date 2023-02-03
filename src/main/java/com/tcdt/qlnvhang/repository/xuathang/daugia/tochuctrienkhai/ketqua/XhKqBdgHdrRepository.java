@@ -15,7 +15,9 @@ public interface XhKqBdgHdrRepository extends JpaRepository<XhKqBdgHdr, Long> {
     @Query("SELECT c FROM XhKqBdgHdr c where 1 = 1" +
             "AND (:#{#param.maDvi} IS NULL OR c.maDvi = :#{#param.maDvi}) " +
             "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
-            "AND (:#{#param.loaiVthh } IS NULL OR LOWER(c.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh},'%')) "
+            "AND (:#{#param.loaiVthh } IS NULL OR LOWER(c.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
+            "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
+            "AND (:#{#param.trangThaiHdSr} IS NULL OR c.trangThaiHd = :#{#param.trangThaiHdSr}) "
     )
     Page<XhKqBdgHdr> search(@Param("param") XhKqBdgHdrReq param, Pageable pageable);
 

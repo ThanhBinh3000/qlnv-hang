@@ -21,6 +21,9 @@ import com.tcdt.qlnvhang.util.ExportExcel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -46,6 +49,12 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
 
     @Override
     public Page<XhHopDongHdr> searchPage(XhHopDongHdrReq req) throws Exception {
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),req.getPaggingReq().getLimit(), Sort.by("id").descending());
+        Page<XhHopDongHdr> page = xhHopDongHdrRepository.selectPage(req,pageable);
+        Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
+        page.getContent().forEach(f -> {
+            f.setTenLoaiVthh(listDanhMucHangHoa.get(f.getLoaiVthh()));
+        });
         return null;
     }
 
