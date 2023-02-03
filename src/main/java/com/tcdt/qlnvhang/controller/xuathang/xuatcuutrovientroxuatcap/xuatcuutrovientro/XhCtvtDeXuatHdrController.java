@@ -99,7 +99,7 @@ public class XhCtvtDeXuatHdrController extends BaseController {
             @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids")List<Long> ids) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhCtvtDeXuatHdrService.detail(ids));
+            resp.setData(xhCtvtDeXuatHdrService.detail(ids).get(0));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
