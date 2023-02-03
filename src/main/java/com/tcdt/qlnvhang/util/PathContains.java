@@ -145,6 +145,8 @@ public class PathContains {
 
 	public static final String DX_KH_BDG = "/dx-kh-bdg";
 
+	public static final String DX_KH_BTT = "/dx-kh-btt";
+
 	public static final String TH_KH_BDG = "/thop-kh-bdg";
 
 	public static final String QD_PD_BDG = "/qd-pd-bdg";
@@ -234,6 +236,8 @@ public class PathContains {
 	public static final String XUAT_HANG_DTQG = "/xuat-hang";
 
 	public static final String DAU_GIA = "/dau-gia";
+
+	public static final String BAN_TRUC_TIEP = "/ban-truc-tiep";
 
 	public static final String XUAT_CUU_TRO = "/cuu-tro";
 	public static final String XAY_DUNG_PHUONG_AN_DE_XUAT = "/de-xuat";
