@@ -35,7 +35,7 @@ public class XhQdDchinhKhBdgController extends BaseController {
 
     @ApiOperation(value = "Tra cứu  ", response = List.class)
     @PostMapping(value=   PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody XhQdDchinhKhBdgReq objReq) {
+    public ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody XhQdDchinhKhBdgReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(xhQdDchinhKhBdgService.searchPage(objReq));

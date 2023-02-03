@@ -79,7 +79,7 @@ public class NhPhieuKtChatLuongController {
 
 	@ApiOperation(value = "Chi tiết", response = List.class)
 	@GetMapping(PathContains.URL_CHI_TIET + "/{id}")
-	public final ResponseEntity<BaseResponse> getDetail(@PathVariable("id") Long id) {
+	public ResponseEntity<BaseResponse> getDetail(@PathVariable("id") Long id) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			resp.setData(service.detail(id));
@@ -96,7 +96,7 @@ public class NhPhieuKtChatLuongController {
 
 	@ApiOperation(value = "Gửi duyệt/Phê duyệt/Từ chối", response = List.class)
 	@PostMapping(PathContains.URL_PHE_DUYET)
-	public final ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody QlpktclhPhieuKtChatLuongRequestDto req) {
+	public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody QlpktclhPhieuKtChatLuongRequestDto req) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			resp.setData(service.approve(req));
@@ -145,7 +145,7 @@ public class NhPhieuKtChatLuongController {
 	@ApiOperation(value = "Delete multiple", response = List.class)
 	@ResponseStatus(HttpStatus.OK)
 	@PostMapping("so-luong-nhap-kho")
-	public final ResponseEntity<BaseResponse> deleteMultiple(@RequestBody QlpktclhPhieuKtChatLuongRequestDto req) {
+	public ResponseEntity<BaseResponse> deleteMultiple(@RequestBody QlpktclhPhieuKtChatLuongRequestDto req) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			resp.setData(service.getSoLuongNhapKho(req.getIdDdiemGiaoNvNh()));
@@ -162,7 +162,7 @@ public class NhPhieuKtChatLuongController {
 
 	@ResponseStatus(HttpStatus.OK)
 	@PostMapping("/delete/multiple")
-	public final ResponseEntity<BaseResponse> deleteMultiple(@RequestBody @Valid DeleteReq req) {
+	public ResponseEntity<BaseResponse> deleteMultiple(@RequestBody @Valid DeleteReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			service.deleteMulti(req.getIds());

@@ -78,7 +78,7 @@ public class QuyetDinhPDCuuTroController extends BaseController {
   @ApiOperation(value = "Cập nhật Quyết định phê duyệt xuất cứu trợ viện trợ", response = List.class)
   @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public final ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhQdCuuTroHdrSearchReq req) {
+  public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhQdCuuTroHdrSearchReq req) {
     BaseResponse resp = new BaseResponse();
     try {
       XhQdCuuTroHdr data = quyetDinhCuuTroService.update(currentUser, req);
@@ -96,7 +96,7 @@ public class QuyetDinhPDCuuTroController extends BaseController {
   @ApiOperation(value = "Chi tiết Quyết định phê duyệt cứu trợ viện trợ", response = List.class)
   @GetMapping(value = PathContains.URL_CHI_TIET + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public final ResponseEntity<BaseResponse> detail(@CurrentUser CustomUserDetails currentUser, @PathVariable("id") Long id) {
+  public ResponseEntity<BaseResponse> detail(@CurrentUser CustomUserDetails currentUser, @PathVariable("id") Long id) {
     BaseResponse resp = new BaseResponse();
     try {
       XhQdCuuTroHdr data = quyetDinhCuuTroService.detail(currentUser, id);

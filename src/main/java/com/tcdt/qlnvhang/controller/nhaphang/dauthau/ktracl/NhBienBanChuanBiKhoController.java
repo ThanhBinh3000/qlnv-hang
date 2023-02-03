@@ -129,7 +129,7 @@ public class NhBienBanChuanBiKhoController {
 //    @ApiOperation(value = "Delete multiple Biên bản chuẩn bị kho", response = List.class)
 //    @ResponseStatus(HttpStatus.OK)
 //    @PostMapping("/delete/multiple")
-//    public final ResponseEntity<BaseResponse> deleteMultiple(@RequestBody @Valid DeleteReq req) {
+//    public ResponseEntity<BaseResponse> deleteMultiple(@RequestBody @Valid DeleteReq req) {
 //        BaseResponse resp = new BaseResponse();
 //        try {
 //            resp.setData(service.deleteMultiple(req));

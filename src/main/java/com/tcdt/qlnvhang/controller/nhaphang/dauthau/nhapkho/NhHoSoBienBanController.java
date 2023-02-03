@@ -33,7 +33,7 @@ public class NhHoSoBienBanController extends BaseController {
 
     @ApiOperation(value = "Tra cứu ", response = List.class)
     @PostMapping(value=  PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody SearchNhHoSoBienBan objReq) {
+    public ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody SearchNhHoSoBienBan objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(nhHoSoBienBanService.findAll());
@@ -49,7 +49,7 @@ public class NhHoSoBienBanController extends BaseController {
 
     @ApiOperation(value = "Tạo mới ", response = List.class)
     @PostMapping(value=  PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> save(@Valid @RequestBody NhHoSoBienBanReq objReq) {
+    public ResponseEntity<BaseResponse> save(@Valid @RequestBody NhHoSoBienBanReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(nhHoSoBienBanService.save(objReq));
@@ -65,7 +65,7 @@ public class NhHoSoBienBanController extends BaseController {
 
     @ApiOperation(value = "Sửa ", response = List.class)
     @PostMapping(value=  PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> update(@Valid @RequestBody NhHoSoBienBanReq objReq) {
+    public ResponseEntity<BaseResponse> update(@Valid @RequestBody NhHoSoBienBanReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(nhHoSoBienBanService.update(objReq));
@@ -99,7 +99,7 @@ public class NhHoSoBienBanController extends BaseController {
 
     @ApiOperation(value = "Xóa ", response = List.class)
     @PostMapping(value=  PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
+    public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
             nhHoSoBienBanService.delete(idSearchReq);
@@ -115,7 +115,7 @@ public class NhHoSoBienBanController extends BaseController {
 
     @ApiOperation(value = "Xóa dánh sách ", response = List.class)
     @PostMapping(value=  PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
+    public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
             nhHoSoBienBanService.deleteMulti(idSearchReq);
@@ -131,7 +131,7 @@ public class NhHoSoBienBanController extends BaseController {
 
     @ApiOperation(value = "Phê duyêt  ", response = List.class)
     @PostMapping(value=PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> updateStatusUbtvqh(@Valid @RequestBody StatusReq statusReq, HttpServletRequest req) {
+    public ResponseEntity<BaseResponse> updateStatusUbtvqh(@Valid @RequestBody StatusReq statusReq, HttpServletRequest req) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(nhHoSoBienBanService.approve(statusReq));

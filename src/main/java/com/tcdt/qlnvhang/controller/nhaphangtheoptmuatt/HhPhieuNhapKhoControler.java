@@ -34,7 +34,7 @@ public class HhPhieuNhapKhoControler {
 
     @ApiOperation(value = "Tra cứu phiếu nhập kho mua trực tiếp", response = List.class)
     @PostMapping(value=  PathContains.PHIEU_NHAP_KHO_MTT + PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody SearchHhPhieuNhapKhoReq objReq) {
+    public ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody SearchHhPhieuNhapKhoReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhPhieuNhapKhoHdrService.searchPage(objReq));
@@ -103,7 +103,7 @@ public class HhPhieuNhapKhoControler {
 
     @ApiOperation(value = "Phê duyêt phiếu nhập kho mua trực tiếp  ", response = List.class)
     @PostMapping(value=PathContains.PHIEU_NHAP_KHO_MTT + PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> updateStatusUbtvqh(@Valid @RequestBody StatusReq statusReq, HttpServletRequest req) {
+    public ResponseEntity<BaseResponse> updateStatusUbtvqh(@Valid @RequestBody StatusReq statusReq, HttpServletRequest req) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhPhieuNhapKhoHdrService.approve(statusReq));

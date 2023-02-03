@@ -33,7 +33,7 @@ public class KhLuaChonNhaThauController {
 
 	@ApiOperation(value = "Tạo mới Kế hoạch lựa chọn nhà thầu vật tư", response = ListResponse.class)
 	@PostMapping
-	public final ResponseEntity<BaseResponse> create(@RequestBody KhLuaChonNhaThauReq req) {
+	public ResponseEntity<BaseResponse> create(@RequestBody KhLuaChonNhaThauReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			resp.setData(khLuaChonNhaThauService.create(req));
@@ -48,7 +48,7 @@ public class KhLuaChonNhaThauController {
 
 	@ApiOperation(value = "Sửa Kế hoạch lựa chọn nhà thầu vật tư", response = KhLuaChonNhaThauRes.class)
 	@PutMapping
-	public final ResponseEntity<BaseResponse> update(@RequestBody KhLuaChonNhaThauReq req) {
+	public ResponseEntity<BaseResponse> update(@RequestBody KhLuaChonNhaThauReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			resp.setData(khLuaChonNhaThauService.update(req));
@@ -63,7 +63,7 @@ public class KhLuaChonNhaThauController {
 
 	@ApiOperation(value = "Xoá Kế hoạch lựa chọn nhà thầu vật tư", response = Boolean.class)
 	@DeleteMapping
-	public final ResponseEntity<BaseResponse> delete(@RequestParam Long khLcntId) {
+	public ResponseEntity<BaseResponse> delete(@RequestParam Long khLcntId) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			resp.setData(khLuaChonNhaThauService.delete(khLcntId));
@@ -78,7 +78,7 @@ public class KhLuaChonNhaThauController {
 
 	@ApiOperation(value = "Tìm kiếm Kế hoạch lựa chọn nhà thầu vật tư", response = ListResponse.class)
 	@GetMapping
-	public final ResponseEntity<BaseResponse> search(KhLuaChonNhaThauSearchReq req) {
+	public ResponseEntity<BaseResponse> search(KhLuaChonNhaThauSearchReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			resp.setData(khLuaChonNhaThauService.search(req));
@@ -93,7 +93,7 @@ public class KhLuaChonNhaThauController {
 
 	@ApiOperation(value = "Chi tiết Kế hoạch lựa chọn nhà thầu vật tư", response = KhLuaChonNhaThauRes.class)
 	@GetMapping("/{id}")
-	public final ResponseEntity<BaseResponse> detail(@PathVariable("id") Long id, @RequestParam("pageSize") Integer pageSize, @RequestParam("pageIndex") Integer pageIndex) {
+	public ResponseEntity<BaseResponse> detail(@PathVariable("id") Long id, @RequestParam("pageSize") Integer pageSize, @RequestParam("pageIndex") Integer pageIndex) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			if (pageSize == null)
@@ -114,7 +114,7 @@ public class KhLuaChonNhaThauController {
 
 	@ApiOperation(value = "Gửi duyệt/Phê duyệt/Từ chối Kế hoạch lựa chọn nhà thầu vật tư", response = Boolean.class)
 	@PutMapping("/status")
-	public final ResponseEntity<BaseResponse> updateStatus(@RequestBody StatusReq req) {
+	public ResponseEntity<BaseResponse> updateStatus(@RequestBody StatusReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			resp.setData(khLuaChonNhaThauService.updateStatus(req));

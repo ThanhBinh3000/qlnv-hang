@@ -40,7 +40,7 @@ public class HhBcanKeHangControler {
 
     @ApiOperation(value = "Tra cứu bảng cân kê hàng mua trực tiếp", response = List.class)
     @PostMapping(value=  PathContains.BANG_CAN_KE_MTT + PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody SearchHhBcanKeHangReq objReq) {
+    public ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody SearchHhBcanKeHangReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhBcanKeHangService.searchPage(objReq));
@@ -144,7 +144,7 @@ public class HhBcanKeHangControler {
 
     @ApiOperation(value = "Phê duyêt bảng cân kê hàng mua trực tiếp  ", response = List.class)
     @PostMapping(value=PathContains.BANG_CAN_KE_MTT + PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> updateStatusUbtvqh(@Valid @RequestBody StatusReq statusReq, HttpServletRequest req) {
+    public ResponseEntity<BaseResponse> updateStatusUbtvqh(@Valid @RequestBody StatusReq statusReq, HttpServletRequest req) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhBcanKeHangService.approve(statusReq));

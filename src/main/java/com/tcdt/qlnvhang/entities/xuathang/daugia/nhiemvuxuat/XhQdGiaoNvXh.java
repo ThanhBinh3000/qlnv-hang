@@ -32,6 +32,7 @@ public class XhQdGiaoNvXh extends TrangThaiBaseEntity implements Serializable {
     private Date ngayKy;
     private Long idHd;
     private String soHd;
+    private String maDviTsan;
     private String tenTtcn;
     private String loaiVthh;
     private String cloaiVthh;

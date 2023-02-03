@@ -287,7 +287,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
         List<XhCtvtDeXuatHdr> data=page.getContent();
 
         String title="Danh sách phương án xuất cứu trợ, viện trợ ";
-        String[] rowsName=new String[]{"STT","Năm kH","Loại hình nhập xuất","Số công văn/đề xuất","Đơn vị đề xuất","Ngày đề xuất",
+        String[] rowsName=new String[]{"STT","Năm kH","Loại hình nhập xuất","Số công văn/đề xuất","Đơn vị đề xuất","Ngày đề xuất","Ngày duyệt đề xuất",
                 "Loại hàng hóa","Tổng SL xuất CT,VT (kg)","Trích yếu","Trang thái đề xuât","Trạng thái/Mã tổng hợp",};
         String fileName="danh-sach-phuong-an-xuat-cuu-tro-vien-tro";
         List<Object[]> dataList = new ArrayList<Object[]>();
@@ -301,11 +301,12 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
             objs[3]=dx.getSoDx();
             objs[4]=dx.getTenDvi();
             objs[5]=dx.getNgayDx();
-            objs[6]=dx.getTenLoaiVthh();
-            objs[7]=dx.getTongSoLuong();
-            objs[8]=dx.getTrichYeu();
-            objs[9]=dx.getTenTrangThai();
-            objs[10]=dx.getMaTongHop();
+            objs[6]=dx.getNgayPduyet();
+            objs[7]=dx.getTenLoaiVthh();
+            objs[8]=dx.getTongSoLuong();
+            objs[9]=dx.getTrichYeu();
+            objs[10]=dx.getTenTrangThai();
+            objs[11]=dx.getMaTongHop();
             dataList.add(objs);
         }
         ExportExcel ex =new ExportExcel(title,fileName,rowsName,dataList,response);

@@ -37,7 +37,7 @@ public class HhDcQdPduyetKhMttController {
     
     @ApiOperation(value = "Tra cứu quyết định ", response = List.class)
     @PostMapping(value=  PathContains.DC_QD_PD + PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody SearchHhDcQdPduyetKhMttReq objReq) {
+    public ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody SearchHhDcQdPduyetKhMttReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhDcQdPduyetKhMttService.searchPage(objReq));
@@ -55,7 +55,7 @@ public class HhDcQdPduyetKhMttController {
 
     @ApiOperation(value = "Tạo mới quyết định ", response = List.class)
     @PostMapping(value=PathContains.DC_QD_PD+ PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> save(@Valid @RequestBody HhDcQdPduyetKhmttHdrReq objReq) {
+    public ResponseEntity<BaseResponse> save(@Valid @RequestBody HhDcQdPduyetKhmttHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhDcQdPduyetKhMttService.save(objReq));
@@ -71,7 +71,7 @@ public class HhDcQdPduyetKhMttController {
 
     @ApiOperation(value = "Sửa quyết định ", response = List.class)
     @PostMapping(value=  PathContains.DC_QD_PD + PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> update(@Valid @RequestBody HhDcQdPduyetKhmttHdrReq objReq) {
+    public ResponseEntity<BaseResponse> update(@Valid @RequestBody HhDcQdPduyetKhmttHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhDcQdPduyetKhMttService.update(objReq));
@@ -105,7 +105,7 @@ public class HhDcQdPduyetKhMttController {
 
     @ApiOperation(value = "Xóa thông tin quyết định ", response = List.class)
     @PostMapping(value=  PathContains.DC_QD_PD + PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
+    public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
             hhDcQdPduyetKhMttService.delete(idSearchReq);
@@ -121,7 +121,7 @@ public class HhDcQdPduyetKhMttController {
 
     @ApiOperation(value = "Xóa danh sách quyết định ", response = List.class)
     @PostMapping(value=  PathContains.DC_QD_PD + PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
+    public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
             hhDcQdPduyetKhMttService.deleteMulti(idSearchReq);
@@ -160,7 +160,7 @@ public class HhDcQdPduyetKhMttController {
 
     @ApiOperation(value = "Phê duyêt điêu chỉnh quyết định mua trực tiếp ", response = List.class)
     @PostMapping(value=PathContains.DC_QD_PD + PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> updateStatusUbtvqh(@Valid @RequestBody StatusReq statusReq, HttpServletRequest req) {
+    public ResponseEntity<BaseResponse> updateStatusUbtvqh(@Valid @RequestBody StatusReq statusReq, HttpServletRequest req) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhDcQdPduyetKhMttService.approve(statusReq));

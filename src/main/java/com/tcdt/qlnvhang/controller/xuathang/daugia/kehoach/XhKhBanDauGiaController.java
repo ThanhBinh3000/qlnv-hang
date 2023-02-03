@@ -36,7 +36,7 @@ public class XhKhBanDauGiaController extends BaseController {
 
     @ApiOperation(value = "Tra cứu ", response = List.class)
     @PostMapping(value=  PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody XhDxKhBanDauGiaReq objReq) {
+    public ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody XhDxKhBanDauGiaReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(xhDxKhBanDauGiaService.searchPage(objReq));
@@ -52,7 +52,7 @@ public class XhKhBanDauGiaController extends BaseController {
 
     @ApiOperation(value = "Tạo mới ", response = List.class)
     @PostMapping(value=  PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> save(@Valid @RequestBody XhDxKhBanDauGiaReq objReq) {
+    public ResponseEntity<BaseResponse> save(@Valid @RequestBody XhDxKhBanDauGiaReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(xhDxKhBanDauGiaService.create(objReq));
@@ -68,7 +68,7 @@ public class XhKhBanDauGiaController extends BaseController {
 
     @ApiOperation(value = "Sửa ", response = List.class)
     @PostMapping(value=  PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> update(@Valid @RequestBody XhDxKhBanDauGiaReq objReq) {
+    public ResponseEntity<BaseResponse> update(@Valid @RequestBody XhDxKhBanDauGiaReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(xhDxKhBanDauGiaService.update(objReq));
@@ -102,7 +102,7 @@ public class XhKhBanDauGiaController extends BaseController {
 
     @ApiOperation(value = "Xóa ", response = List.class)
     @PostMapping(value=  PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
+    public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
             xhDxKhBanDauGiaService.delete(idSearchReq.getId());
@@ -118,7 +118,7 @@ public class XhKhBanDauGiaController extends BaseController {
 
     @ApiOperation(value = "Xóa dánh sách ", response = List.class)
     @PostMapping(value=  PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody XhDxKhBanDauGiaReq idSearchReq) {
+    public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody XhDxKhBanDauGiaReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
             xhDxKhBanDauGiaService.deleteMulti(idSearchReq.getIds());

@@ -84,7 +84,7 @@ public class NhBangKeVtController {
 
     @ApiOperation(value = "Xóa Quản lý Bảng kê vật tư", response = List.class)
     @PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> delete(@Valid @RequestBody NhBangKeVtReq req) {
+    public ResponseEntity<BaseResponse> delete(@Valid @RequestBody NhBangKeVtReq req) {
         BaseResponse resp = new BaseResponse();
         try {
             service.delete(req.getId());
