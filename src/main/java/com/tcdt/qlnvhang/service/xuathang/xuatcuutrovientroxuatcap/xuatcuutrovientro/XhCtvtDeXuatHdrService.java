@@ -157,10 +157,10 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
             List<XhCtvtDeXuatPa> list = xhCtvtDeXuatPaRepository.findByIdHdr(data.getId());
             for (XhCtvtDeXuatPa deXuatPhuongAn : list){
                 if (mapDmucDvi.containsKey(deXuatPhuongAn.getMaDviCuc())) {
-                    deXuatPhuongAn.setMaDviCuc(mapDmucDvi.get(deXuatPhuongAn.getMaDviCuc()).get("tenDvi").toString());
+                    deXuatPhuongAn.setTenCuc(mapDmucDvi.get(deXuatPhuongAn.getMaDviCuc()).get("tenDvi").toString());
                 }
                 if (mapDmucDvi.containsKey(deXuatPhuongAn.getMaDviChiCuc())) {
-                    deXuatPhuongAn.setMaDviChiCuc(mapDmucDvi.get(deXuatPhuongAn.getMaDviChiCuc()).get("tenDvi").toString());
+                    deXuatPhuongAn.setTenChiCuc(mapDmucDvi.get(deXuatPhuongAn.getMaDviChiCuc()).get("tenDvi").toString());
                 }
                 deXuatPhuongAn.setTenCloaiVthh(mapVthh.get(deXuatPhuongAn.getCloaiVthh()));
             }
