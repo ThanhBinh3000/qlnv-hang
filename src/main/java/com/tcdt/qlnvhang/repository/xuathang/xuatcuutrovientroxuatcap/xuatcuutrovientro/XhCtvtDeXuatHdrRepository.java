@@ -1,7 +1,9 @@
 package com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
+import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGia;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.SearchXhCtvtDeXuatHdrReq;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatHdr;
+import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -36,5 +38,17 @@ public interface XhCtvtDeXuatHdrRepository extends JpaRepository<XhCtvtDeXuatHdr
     List<XhCtvtDeXuatHdr> findAllByIdIn(List<Long> listId);
 
     Optional<XhCtvtDeXuatHdr> findBySoDx (String soDx);
+
+    @Query("SELECT c FROM XhCtvtDeXuatHdr c WHERE 1=1 " +
+            "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
+            "AND (:#{#param.type} IS NULL OR c.type = :#{#param.type}) " +
+            "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR c.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
+            "AND (:#{#param.loaiNhapXuat} IS NULL OR c.loaiNhapXuat LIKE CONCAT(:#{#param.loaiNhapXuat},'%')) " +
+            "AND (:#{#param.trangThaiList == null || #param.trangThaiList.isEmpty() } = true OR c.trangThai IN :#{#param.trangThaiList}) "+
+            "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
+    )
+    List<XhCtvtDeXuatHdr> listTongHop(@Param("param") SearchXhCtvtDeXuatHdrReq param);
+
 
 }
