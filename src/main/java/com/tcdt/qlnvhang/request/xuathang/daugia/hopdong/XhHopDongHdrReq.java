@@ -22,6 +22,8 @@ public class XhHopDongHdrReq extends BaseRequest {
 
     private String soQdKq;
 
+    private Integer nam;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKyQdKq;
 

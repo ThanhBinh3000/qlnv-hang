@@ -55,7 +55,7 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
         page.getContent().forEach(f -> {
             f.setTenLoaiVthh(listDanhMucHangHoa.get(f.getLoaiVthh()));
         });
-        return null;
+        return page;
     }
 
     @Override
