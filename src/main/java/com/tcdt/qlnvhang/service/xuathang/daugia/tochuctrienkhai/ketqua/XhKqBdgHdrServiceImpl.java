@@ -122,7 +122,7 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
         XhKqBdgHdr data = optional.get();
         String status = req.getTrangThai() + data.getTrangThai();
         if(req.getTrangThai().equals(NhapXuatHangTrangThaiEnum.DA_HOAN_THANH.getId())
-            && data.getTrangThai().equals(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId()))
+            && data.getTrangThaiHd().equals(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId()))
         {
             data.setTrangThaiHd(req.getTrangThai());
         } else{
