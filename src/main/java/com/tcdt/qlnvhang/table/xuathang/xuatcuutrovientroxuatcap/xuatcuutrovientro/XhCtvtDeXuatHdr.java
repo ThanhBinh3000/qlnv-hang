@@ -46,6 +46,7 @@ public class XhCtvtDeXuatHdr extends BaseEntity implements Serializable {
     private Long nguoiPduyetId;
     private String lyDoTuChoi;
     private String type;
+    private BigDecimal thanhTien;
     @Transient
     private String tenDvi;
     @Transient

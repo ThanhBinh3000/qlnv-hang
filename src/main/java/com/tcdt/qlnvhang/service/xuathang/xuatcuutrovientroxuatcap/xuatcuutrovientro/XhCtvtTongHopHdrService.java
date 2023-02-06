@@ -83,6 +83,12 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
             BeanUtils.copyProperties(dxuat,thopDtl,"id");
             thopDtl.setIdHdr(dxuat.getId());
             thopDtl.setMaDviDx(dxuat.getMaDvi());
+            thopDtl.setNgayPduyetDx(dxuat.getNgayPduyet());
+            thopDtl.setTrichYeuDx(dxuat.getTrichYeu());
+            thopDtl.setTongSoLuongDx(dxuat.getTongSoLuong());
+            thopDtl.setSoLuongXuatCap(dxuat.getSoLuongXuatCap());
+            thopDtl.setThanhTienDx(dxuat.getThanhTien());
+            thopDtl.setNgayKetThucDx(dxuat.getNgayKetThuc());
             thopDtls.add(thopDtl);
         }
         thopHdr.setDeXuatCuuTro(thopDtls);
