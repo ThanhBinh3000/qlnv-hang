@@ -20,6 +20,7 @@ public class XhCtvtDeXuatHdrReq {
     private String trichYeu;
     private String loaiVthh;
     private String cloaiVthh;
+    private String tenVthh;
     private BigDecimal tonKho;
     private LocalDate ngayDx;
     private LocalDate ngayKetThuc;
