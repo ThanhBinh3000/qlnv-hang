@@ -17,7 +17,7 @@ import java.util.Set;
 public class BaseRequest {
 
 	public static final int DEFAULT_PAGE = 0;
-	public static final int DEFAULT_LIMIT = 10;
+	public static final int DEFAULT_LIMIT = Integer.MAX_VALUE;
 
 	public static final String ORDER_BY = "id";
 
