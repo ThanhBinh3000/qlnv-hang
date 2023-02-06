@@ -8,7 +8,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +39,7 @@ public class XhCtvtDeXuatHdr extends BaseEntity implements Serializable {
     private String trangThai;
     private String maTongHop;
     private BigDecimal tongSoLuong;
+    private BigDecimal soLuongXuatCap;
     private LocalDate ngayGduyet;
     private Long nguoiGduyetId;
     private LocalDate ngayPduyet;

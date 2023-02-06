@@ -4,24 +4,18 @@ import com.tcdt.qlnvhang.request.BaseRequest;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
-public class SearchXhCtvtDeXuatHdrReq extends BaseRequest {
+public class SearchXhCtvtTongHopHdr extends BaseRequest {
     private Integer nam;
-    private String maDvi;
+    private String maDviDx;
     private String dvql;
     private String soDx;
     private LocalDate ngayDxTu;
     private LocalDate ngayDxDen;
-    private LocalDate ngayKetThucTu;
-    private LocalDate ngayKetThucDen;
+    private LocalDate ngayKetThucDxTu;
+    private LocalDate ngayKetThucDxDen;
     private String trangThai;
     private String type;
-
-    private String loaiVthh;
-    private String loaiNhapXuat;
-    private List<String> trangThaiList = new ArrayList<>();
 
 }
