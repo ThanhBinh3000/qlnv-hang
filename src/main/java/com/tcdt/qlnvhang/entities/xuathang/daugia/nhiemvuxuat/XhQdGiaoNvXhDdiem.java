@@ -23,6 +23,7 @@ public class XhQdGiaoNvXhDdiem {
     private String maLoKho;
     private BigDecimal soLuong;
     private BigDecimal donGiaVat;
+    private String maDviTsan;
     @Transient
     private String tenDiemKho;
     @Transient

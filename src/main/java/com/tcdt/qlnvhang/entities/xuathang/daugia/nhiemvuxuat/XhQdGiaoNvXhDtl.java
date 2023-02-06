@@ -21,14 +21,13 @@ public class XhQdGiaoNvXhDtl {
     private Long idQdHdr;
     private String maDvi;
     private BigDecimal soLuong;
-    private BigDecimal donGiaVat;
     private String trangThai;
     @Transient
     private String tenTrangThai;
     @Transient
     private String tenDvi;
     @Transient
-    private List<XhQdGiaoNvXhDdiem> hhQdGiaoNvNhDdiemList = new ArrayList<>();
+    private List<XhQdGiaoNvXhDdiem> children = new ArrayList<>();
 //    @Transient
 //    List<HhBienBanNghiemThu> listBienBanNghiemThuBq;
 //    @Transient

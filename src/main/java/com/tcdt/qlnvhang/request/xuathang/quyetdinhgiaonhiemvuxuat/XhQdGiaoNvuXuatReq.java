@@ -42,7 +42,7 @@ public class XhQdGiaoNvuXuatReq {
 
     private String bbHaoDoi;
     
-    private List<XhQdGiaoNvuXuatCtReq> cts = new ArrayList<>();
+    private List<XhQdGiaoNvuXuatCtReq> children = new ArrayList<>();
 
 //    private List<Long> hopDongIds = new ArrayList<>();
 

@@ -14,4 +14,5 @@ public class XhQdGiaoNvXhDdiemReq {
     private String maLoKho;
     private BigDecimal soLuong;
     private BigDecimal donGiaVat;
+    private String maDviTsan;
 }

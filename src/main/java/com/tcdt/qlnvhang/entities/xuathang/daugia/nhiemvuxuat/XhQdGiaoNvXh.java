@@ -63,7 +63,7 @@ public class XhQdGiaoNvXh extends TrangThaiBaseEntity implements Serializable {
     private String tenCloaiVthh;
 
     @Transient
-    private List<XhQdGiaoNvXhDtl> hhQdGiaoNvNhangDtlList= new ArrayList<>();
+    private List<XhQdGiaoNvXhDtl> children = new ArrayList<>();
 
 //    @Transient
 //    private List<HhPhieuNhapKhoHdr> hhPhieuNhapKhoHdrList = new ArrayList<>();

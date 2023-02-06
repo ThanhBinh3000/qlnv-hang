@@ -133,13 +133,13 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
     }
 
     public void saveDetail (XhQdGiaoNvXh dataMap, XhQdGiaoNvuXuatReq objReq){
-        for (XhQdGiaoNvuXuatCtReq req : objReq.getCts()){
+        for (XhQdGiaoNvuXuatCtReq req : objReq.getChildren()){
             XhQdGiaoNvXhDtl dtl = new ModelMapper().map(req, XhQdGiaoNvXhDtl.class);
             dtl.setId(null);
             dtl.setIdQdHdr(dataMap.getId());
             dtl.setTrangThai(Contains.CHUACAPNHAT);
             xhQdGiaoNvXhDtlRepository.save(dtl);
-            for (XhQdGiaoNvXhDdiemReq ddiemReq : req.getXhQdGiaoNvXhDdiemList()){
+            for (XhQdGiaoNvXhDdiemReq ddiemReq : req.getChildren()){
                 XhQdGiaoNvXhDdiem ddiem = new ModelMapper().map(ddiemReq, XhQdGiaoNvXhDdiem.class);
                 ddiem.setId(null);
                 ddiem.setIdDtl(dtl.getId());
@@ -223,9 +223,9 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
                 item.setTenNganKho(mapDmucDvi.get(item.getMaNganKho()));
                 item.setTenLoKho(mapDmucDvi.get(item.getMaLoKho()));
             });
-            dtl.setHhQdGiaoNvNhDdiemList(listDd);
+            dtl.setChildren(listDd);
         }
-        data.setHhQdGiaoNvNhangDtlList(listDtl);
+        data.setChildren(listDtl);
 
         return data;
     }

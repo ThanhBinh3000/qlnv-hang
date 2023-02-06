@@ -18,8 +18,7 @@ public class XhQdGiaoNvuXuatCtReq {
     private Long idQdHdr;
     private String maDvi;
     private BigDecimal soLuong;
-    private BigDecimal donGiaVat;
     private String trangThai;
 
-    private List<XhQdGiaoNvXhDdiemReq> xhQdGiaoNvXhDdiemList = new ArrayList<>();
+    private List<XhQdGiaoNvXhDdiemReq> children = new ArrayList<>();
 }

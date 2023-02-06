@@ -54,6 +54,7 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
         Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
         page.getContent().forEach(f -> {
             f.setTenLoaiVthh(listDanhMucHangHoa.get(f.getLoaiVthh()));
+            f.setTenCloaiVthh(listDanhMucHangHoa.get(f.getCloaiVthh()));
         });
         return page;
     }
