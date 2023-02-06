@@ -121,28 +121,34 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
 
         XhKqBdgHdr data = optional.get();
         String status = req.getTrangThai() + data.getTrangThai();
-        switch (status) {
-            case Contains.CHODUYET_TP + Contains.DUTHAO:
-            case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
-            case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
-                data.setNguoiGuiDuyetId(userInfo.getId());
-                data.setNgayGuiDuyet(getDateTimeNow());
-            case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
-            case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
-                data.setNguoiPduyetId(userInfo.getId());
-                data.setNgayPduyet(getDateTimeNow());
-                data.setLyDoTuChoi(req.getLyDoTuChoi());
-                break;
-            case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
-            case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
-            case Contains.BAN_HANH + Contains.DADUYET_LDC:
-                data.setNguoiPduyetId(userInfo.getId());
-                data.setNgayPduyet(getDateTimeNow());
-                break;
-            default:
-                throw new Exception("Phê duyệt không thành công");
+        if(req.getTrangThai().equals(NhapXuatHangTrangThaiEnum.DA_HOAN_THANH.getId())
+            && data.getTrangThai().equals(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId()))
+        {
+            data.setTrangThaiHd(req.getTrangThai());
+        } else{
+            switch (status) {
+                case Contains.CHODUYET_TP + Contains.DUTHAO:
+                case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+                case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
+                    data.setNguoiGuiDuyetId(userInfo.getId());
+                    data.setNgayGuiDuyet(getDateTimeNow());
+                case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
+                case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
+                    data.setNguoiPduyetId(userInfo.getId());
+                    data.setNgayPduyet(getDateTimeNow());
+                    data.setLyDoTuChoi(req.getLyDoTuChoi());
+                    break;
+                case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
+                case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
+                case Contains.BAN_HANH + Contains.DADUYET_LDC:
+                    data.setNguoiPduyetId(userInfo.getId());
+                    data.setNgayPduyet(getDateTimeNow());
+                    break;
+                default:
+                    throw new Exception("Phê duyệt không thành công");
+            }
+            data.setTrangThai(req.getTrangThai());
         }
-        data.setTrangThai(req.getTrangThai());
         return xhKqBdgHdrRepository.save(data);
     }
 
