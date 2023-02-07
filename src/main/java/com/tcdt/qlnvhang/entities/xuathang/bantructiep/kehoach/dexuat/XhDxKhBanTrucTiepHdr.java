@@ -90,7 +90,7 @@ public class XhDxKhBanTrucTiepHdr extends TrangThaiBaseEntity implements Seriali
     private String tenTrangThaiTh;
 
     @Transient
-    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
+    private List<FileDinhKem> fileDinhKem = new ArrayList<>();
 
     @Transient
     private List<XhDxKhBanTrucTiepDtl> children = new ArrayList<>();
