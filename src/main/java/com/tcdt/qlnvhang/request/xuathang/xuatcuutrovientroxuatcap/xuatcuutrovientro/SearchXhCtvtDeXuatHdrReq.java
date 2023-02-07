@@ -9,6 +9,7 @@ import java.util.List;
 
 @Data
 public class SearchXhCtvtDeXuatHdrReq extends BaseRequest {
+    private Long id;
     private Integer nam;
     private String maDvi;
     private String dvql;
