@@ -139,7 +139,7 @@ public class XhQdGiaoNvXhController {
 
     @ApiOperation(value = "Tra cứu quyết định giao nhiệm vụ xuất hàng ", response = List.class)
     @PostMapping(value=  PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> search(XhQdGiaoNvuXuatReq req) {
+    public ResponseEntity<BaseResponse> search(@RequestBody XhQdGiaoNvuXuatReq req) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(service.searchPage(req));
