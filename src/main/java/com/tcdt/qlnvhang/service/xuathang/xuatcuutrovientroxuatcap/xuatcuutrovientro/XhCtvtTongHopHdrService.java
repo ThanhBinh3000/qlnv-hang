@@ -31,7 +31,10 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -112,6 +115,7 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
     xhCtvtTongHopHdrRepository.save(thopHdr);
 
     for (XhCtvtTongHopDtl dtl : thopHdr.getDeXuatCuuTro()) {
+      dtl.setIdHdr(DataUtils.safeToLong(objReq.getMaTongHop()));
       xhCtvtTongHopDtlRepository.save(dtl);
     }
     if (thopHdr.getId() > 0 && thopHdr.getDeXuatCuuTro().size() > 0) {
