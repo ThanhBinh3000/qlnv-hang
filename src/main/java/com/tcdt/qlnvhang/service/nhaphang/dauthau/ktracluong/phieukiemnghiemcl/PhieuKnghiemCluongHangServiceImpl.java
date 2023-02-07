@@ -46,11 +46,6 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
     }
 
     @Override
-    public List<PhieuKnghiemCluongHang> searchAll(PhieuKnghiemCluongHangReq req) {
-        return null;
-    }
-
-    @Override
     public PhieuKnghiemCluongHang create(PhieuKnghiemCluongHangReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null) {

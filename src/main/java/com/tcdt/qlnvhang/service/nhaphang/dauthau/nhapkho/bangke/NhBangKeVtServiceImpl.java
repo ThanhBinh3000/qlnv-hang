@@ -47,11 +47,6 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
     }
 
     @Override
-    public List<NhBangKeVt> searchAll(NhBangKeVtReq req) {
-        return null;
-    }
-
-    @Override
     public NhBangKeVt create(NhBangKeVtReq req) throws Exception {
         if (req == null){
             return null;

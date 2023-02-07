@@ -57,11 +57,6 @@ public class NhBangKeCanHangServiceImpl extends BaseServiceImpl implements NhBan
     }
 
     @Override
-    public List<NhBangKeCanHang> searchAll(QlBangKeCanHangLtReq req) {
-        return null;
-    }
-
-    @Override
     @Transactional
     public NhBangKeCanHang create(QlBangKeCanHangLtReq req) throws Exception {
         if (req == null){

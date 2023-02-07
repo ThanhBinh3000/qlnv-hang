@@ -82,11 +82,6 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
     }
 
     @Override
-    public List<NhBienBanGuiHang> searchAll(NhBienBanGuiHangReq req) {
-        return null;
-    }
-
-    @Override
     @Transactional
     public NhBienBanGuiHang create(NhBienBanGuiHangReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();

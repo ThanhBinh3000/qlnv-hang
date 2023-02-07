@@ -14,8 +14,6 @@ public interface BaseService<E,R, PK extends Serializable>   {
 
 	Page<E> searchPage (R req) throws Exception;
 
-	List<E> searchAll (R req);
-
 	@Transactional(rollbackFor = {Exception.class, Throwable.class})
 	E create(R req) throws Exception;
 

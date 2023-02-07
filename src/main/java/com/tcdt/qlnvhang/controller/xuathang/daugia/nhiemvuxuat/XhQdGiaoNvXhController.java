@@ -73,7 +73,7 @@ public class XhQdGiaoNvXhController {
     @GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> detail(
-            @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids") String ids) {
+            @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids") Long ids) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(service.detail(ids));
@@ -93,7 +93,7 @@ public class XhQdGiaoNvXhController {
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            service.delete(idSearchReq);
+            service.delete(idSearchReq.getId());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -110,7 +110,7 @@ public class XhQdGiaoNvXhController {
     public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            service.deleteMulti(idSearchReq);
+            service.deleteMulti(idSearchReq.getIdList());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -123,10 +123,10 @@ public class XhQdGiaoNvXhController {
 
     @ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 thông tin", response = List.class)
     @PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> updateStatus(@Valid HttpServletRequest req, @RequestBody StatusReq stReq) {
+    public ResponseEntity<BaseResponse> updateStatus(@RequestBody XhQdGiaoNvuXuatReq stReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.updateStatus(stReq));
+            resp.setData(service.approve(stReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -139,7 +139,7 @@ public class XhQdGiaoNvXhController {
 
     @ApiOperation(value = "Tra cứu quyết định giao nhiệm vụ xuất hàng ", response = List.class)
     @PostMapping(value=  PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> search(XhQdGiaoNvuXuatSearchReq req) {
+    public ResponseEntity<BaseResponse> search(XhQdGiaoNvuXuatReq req) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(service.searchPage(req));
@@ -156,10 +156,10 @@ public class XhQdGiaoNvXhController {
     @ApiOperation(value = "Kết xuất Danh sách quyết định giao nhiệm vụ xuất hàng", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping(value=  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void exportDsQdGNvNx(@Valid @RequestBody XhQdGiaoNvuXuatSearchReq searchReq, HttpServletResponse response)
+    public void exportDsQdGNvNx(@Valid @RequestBody XhQdGiaoNvuXuatReq searchReq, HttpServletResponse response)
             throws Exception {
         try {
-            service.exportToExcel(searchReq, response);
+            service.export(searchReq, response);
         } catch (Exception e) {
             // TODO: handle exception
             log.error("Kết xuất Danh sách trace: {}", e);

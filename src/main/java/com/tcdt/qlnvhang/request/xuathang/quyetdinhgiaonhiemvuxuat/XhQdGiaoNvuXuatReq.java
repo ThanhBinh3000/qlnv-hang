@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.xuathang.quyetdinhgiaonhiemvuxuat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
+import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.Contains;
@@ -19,10 +20,11 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-public class XhQdGiaoNvuXuatReq {
+public class XhQdGiaoNvuXuatReq extends BaseRequest {
     private Long id;
     private Integer nam;
 
+    private String maDvi;
     private String soQd;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKy;

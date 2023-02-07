@@ -43,11 +43,6 @@ public class NhBienBanNhapDayKhoServiceImpl extends BaseServiceImpl implements N
     }
 
     @Override
-    public List<NhBbNhapDayKho> searchAll(QlBienBanNhapDayKhoLtReq req) {
-        return null;
-    }
-
-    @Override
     public NhBbNhapDayKho create(QlBienBanNhapDayKhoLtReq req) throws Exception {
         if (req == null) {
             return null;

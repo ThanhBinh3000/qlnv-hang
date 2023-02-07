@@ -58,11 +58,6 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
     }
 
     @Override
-    public List<XhTcTtinBdgHdr> searchAll(ThongTinDauGiaReq req) {
-        return null;
-    }
-
-    @Override
     public XhTcTtinBdgHdr create(ThongTinDauGiaReq req) throws Exception {
         XhTcTtinBdgHdr data = new XhTcTtinBdgHdr();
         BeanUtils.copyProperties(req, data, "id");

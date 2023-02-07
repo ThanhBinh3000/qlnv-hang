@@ -47,11 +47,6 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
     }
 
     @Override
-    public List<XhKqBdgHdr> searchAll(XhKqBdgHdrReq req) {
-        return null;
-    }
-
-    @Override
     public XhKqBdgHdr create(XhKqBdgHdrReq req) throws Exception {
         XhKqBdgHdr data = new XhKqBdgHdr();
         BeanUtils.copyProperties(req, data, "id");

@@ -99,11 +99,6 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 	}
 
 	@Override
-	public List<BienBanLayMau> searchAll(BienBanLayMauReq req) {
-		return null;
-	}
-
-	@Override
 	public BienBanLayMau create(BienBanLayMauReq req) throws Exception {
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null){

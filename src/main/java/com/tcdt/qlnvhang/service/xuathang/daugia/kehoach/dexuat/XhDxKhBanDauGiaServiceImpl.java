@@ -65,11 +65,6 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
     }
 
     @Override
-    public List<XhDxKhBanDauGia> searchAll(XhDxKhBanDauGiaReq req) {
-        return null;
-    }
-
-    @Override
     public XhDxKhBanDauGia create(XhDxKhBanDauGiaReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null)

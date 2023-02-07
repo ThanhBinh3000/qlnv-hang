@@ -48,11 +48,6 @@ public class NhBbKtNhapKhoVtServiceImpl extends BaseServiceImpl implements NhBbK
     }
 
     @Override
-    public List<NhBbKtNhapKhoVt> searchAll(NhBbKtNhapKhoVtReq req) {
-        return null;
-    }
-
-    @Override
     public NhBbKtNhapKhoVt create(NhBbKtNhapKhoVtReq req) throws Exception {
         return null;
     }

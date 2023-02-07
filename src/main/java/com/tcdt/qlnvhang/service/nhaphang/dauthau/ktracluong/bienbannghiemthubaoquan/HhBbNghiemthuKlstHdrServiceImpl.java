@@ -58,11 +58,6 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
     }
 
     @Override
-    public List<HhBbNghiemthuKlstHdr> searchAll(HhBbNghiemthuKlstHdrReq req) {
-        return null;
-    }
-
-    @Override
     public HhBbNghiemthuKlstHdr create(HhBbNghiemthuKlstHdrReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
 

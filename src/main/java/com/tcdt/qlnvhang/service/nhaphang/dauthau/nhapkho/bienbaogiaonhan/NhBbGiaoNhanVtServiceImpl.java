@@ -48,11 +48,6 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
     }
 
     @Override
-    public List<NhBbGiaoNhanVt> searchAll(NhBbGiaoNhanVtReq req) {
-        return null;
-    }
-
-    @Override
     public NhBbGiaoNhanVt create(NhBbGiaoNhanVtReq req) throws Exception {
         if (req == null){
             return null;

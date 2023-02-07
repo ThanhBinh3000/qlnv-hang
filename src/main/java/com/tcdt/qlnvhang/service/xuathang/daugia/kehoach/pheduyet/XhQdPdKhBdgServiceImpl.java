@@ -97,11 +97,6 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
     }
 
     @Override
-    public List<XhQdPdKhBdg> searchAll(XhQdPdKhBdgReq req) {
-        return null;
-    }
-
-    @Override
     public XhQdPdKhBdg create(XhQdPdKhBdgReq req) throws Exception {
 
         if (!StringUtils.isEmpty(req.getSoQdPd())) {

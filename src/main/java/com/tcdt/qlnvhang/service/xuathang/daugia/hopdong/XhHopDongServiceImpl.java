@@ -60,11 +60,6 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
     }
 
     @Override
-    public List<XhHopDongHdr> searchAll(XhHopDongHdrReq req) {
-        return null;
-    }
-
-    @Override
     public XhHopDongHdr create(XhHopDongHdrReq req) throws Exception {
         Optional<XhHopDongHdr> qOpHdong = xhHopDongHdrRepository.findBySoHd(req.getSoHd());
         if (qOpHdong.isPresent()) {

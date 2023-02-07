@@ -52,11 +52,6 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
     }
 
     @Override
-    public List<NhBienBanChuanBiKho> searchAll(NhBienBanChuanBiKhoReq req) {
-        return null;
-    }
-
-    @Override
     @Transactional
     public NhBienBanChuanBiKho create(NhBienBanChuanBiKhoReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();

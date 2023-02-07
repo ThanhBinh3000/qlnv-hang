@@ -82,11 +82,6 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
     }
 
     @Override
-    public List<NhHoSoKyThuat> searchAll(NhHoSoKyThuatReq req) {
-        return null;
-    }
-
-    @Override
     @Transactional
     public NhHoSoKyThuat create(NhHoSoKyThuatReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();

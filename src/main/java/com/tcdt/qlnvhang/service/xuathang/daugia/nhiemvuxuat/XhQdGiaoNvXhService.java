@@ -16,25 +16,25 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.util.List;
 
-public interface XhQdGiaoNvXhService {
-    @Transactional(rollbackOn = Exception.class)
-    XhQdGiaoNvXh create(XhQdGiaoNvuXuatReq req) throws Exception;
-
-    @Transactional(rollbackOn = Exception.class)
-    XhQdGiaoNvXh update(XhQdGiaoNvuXuatReq objReq) throws Exception;
-
-    XhQdGiaoNvXh detail(String ids) throws Exception;
-
-    @Transactional(rollbackOn = Exception.class)
-    void delete(IdSearchReq idSearchReq) throws Exception;
-
-    @Transactional(rollbackOn = Exception.class)
-    void deleteMulti(IdSearchReq idSearchReq) throws Exception;
-
-    @Transactional(rollbackOn = Exception.class)
-    boolean updateStatus(StatusReq req) throws Exception;
-
-    Page<XhQdGiaoNvXh> searchPage(XhQdGiaoNvuXuatSearchReq req) throws Exception;
-
-    void exportToExcel(XhQdGiaoNvuXuatSearchReq searchReq, HttpServletResponse response) throws Exception;
+public interface XhQdGiaoNvXhService extends BaseService<XhQdGiaoNvXh,XhQdGiaoNvuXuatReq,Long> {
+//    @Transactional(rollbackOn = Exception.class)
+//    XhQdGiaoNvXh create(XhQdGiaoNvuXuatReq req) throws Exception;
+//
+//    @Transactional(rollbackOn = Exception.class)
+//    XhQdGiaoNvXh update(XhQdGiaoNvuXuatReq objReq) throws Exception;
+//
+//    XhQdGiaoNvXh detail(String ids) throws Exception;
+//
+//    @Transactional(rollbackOn = Exception.class)
+//    void delete(IdSearchReq idSearchReq) throws Exception;
+//
+//    @Transactional(rollbackOn = Exception.class)
+//    void deleteMulti(IdSearchReq idSearchReq) throws Exception;
+//
+//    @Transactional(rollbackOn = Exception.class)
+//    boolean updateStatus(StatusReq req) throws Exception;
+//
+//    Page<XhQdGiaoNvXh> searchPage(XhQdGiaoNvuXuatSearchReq req) throws Exception;
+//
+//    void exportToExcel(XhQdGiaoNvuXuatSearchReq searchReq, HttpServletResponse response) throws Exception;
 }

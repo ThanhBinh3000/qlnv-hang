@@ -90,11 +90,6 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl implements XhQdD
     }
 
     @Override
-    public List<XhQdDchinhKhBdgHdr> searchAll(XhQdDchinhKhBdgReq req) {
-        return null;
-    }
-
-    @Override
     public XhQdDchinhKhBdgHdr create(XhQdDchinhKhBdgReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
 

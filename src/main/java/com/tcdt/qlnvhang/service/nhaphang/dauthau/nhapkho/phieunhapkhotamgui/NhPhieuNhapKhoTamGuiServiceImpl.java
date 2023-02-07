@@ -69,11 +69,6 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
     }
 
     @Override
-    public List<NhPhieuNhapKhoTamGui> searchAll(NhPhieuNhapKhoTamGuiReq req) {
-        return null;
-    }
-
-    @Override
     public NhPhieuNhapKhoTamGui create(NhPhieuNhapKhoTamGuiReq req) throws Exception {
                 UserInfo userInfo = UserUtils.getUserInfo();
 

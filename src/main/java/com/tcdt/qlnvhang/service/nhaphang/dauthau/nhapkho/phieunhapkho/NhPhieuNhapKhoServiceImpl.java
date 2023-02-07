@@ -81,11 +81,6 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
     }
 
     @Override
-    public List<NhPhieuNhapKho> searchAll(NhPhieuNhapKhoReq req) {
-        return null;
-    }
-
-    @Override
     @Transactional()
     public NhPhieuNhapKho create(NhPhieuNhapKhoReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();

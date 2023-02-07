@@ -60,11 +60,6 @@ public class NhPhieuKtChatLuongServiceImpl extends BaseServiceImpl implements Nh
 	}
 
 	@Override
-	public List<NhPhieuKtChatLuong> searchAll(QlpktclhPhieuKtChatLuongRequestDto req) {
-		return null;
-	}
-
-	@Override
 	public NhPhieuKtChatLuong create(QlpktclhPhieuKtChatLuongRequestDto req) throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
 
