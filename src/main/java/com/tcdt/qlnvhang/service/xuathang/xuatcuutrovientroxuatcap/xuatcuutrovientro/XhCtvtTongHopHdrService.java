@@ -78,11 +78,17 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
         }
         XhCtvtTongHopHdr thopHdr = new XhCtvtTongHopHdr();
         List<XhCtvtTongHopDtl> thopDtls = new ArrayList<>();
+        Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
         for (XhCtvtDeXuatHdr dxuat : dxuatList) {
             XhCtvtTongHopDtl thopDtl = new XhCtvtTongHopDtl();
             BeanUtils.copyProperties(dxuat,thopDtl,"id");
             thopDtl.setIdHdr(dxuat.getId());
             thopDtl.setMaDviDx(dxuat.getMaDvi());
+            if (mapDmucDvi.containsKey((thopDtl.getMaDviDx()))) {
+                Map<String, Object> objDonVi = mapDmucDvi.get(thopDtl.getMaDviDx());
+                thopDtl.setTenDviDx(objDonVi.get("tenDvi").toString());
+            }
+
             thopDtl.setNgayPduyetDx(dxuat.getNgayPduyet());
             thopDtl.setTrichYeuDx(dxuat.getTrichYeu());
             thopDtl.setTongSoLuongDx(dxuat.getTongSoLuong());
