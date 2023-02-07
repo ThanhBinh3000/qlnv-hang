@@ -1,9 +1,12 @@
 package com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtTongHopDtl;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Data
@@ -27,8 +30,8 @@ public class XhCtvtTongHopHdrReq{
     private String lyDoTuChoi;
     private String type;
     private String loaiNhapXuat;
-
     private BigDecimal tongSlCtVt;
     private BigDecimal tongSlXuatCap;
+    private List<XhCtvtTongHopDtl> deXuatCuuTro = new ArrayList<>();
 
 }

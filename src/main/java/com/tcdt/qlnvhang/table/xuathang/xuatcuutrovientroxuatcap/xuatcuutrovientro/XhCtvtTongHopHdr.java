@@ -17,6 +17,7 @@ import java.util.List;
 @Table(name = XhCtvtTongHopHdr.TABLE_NAME)
 @Data
 @NoArgsConstructor
+@RequiredArgsConstructor
 public class XhCtvtTongHopHdr extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
