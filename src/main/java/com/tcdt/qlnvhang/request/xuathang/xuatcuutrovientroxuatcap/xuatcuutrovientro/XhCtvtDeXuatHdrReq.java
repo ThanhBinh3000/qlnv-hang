@@ -35,6 +35,7 @@ public class XhCtvtDeXuatHdrReq {
     private Long nguoiPduyetId;
     private String lyDoTuChoi;
     private String type;
+    private BigDecimal thanhTien;
 
     private List<FileDinhKemReq> canCu = new ArrayList<>();
 
