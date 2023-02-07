@@ -2,14 +2,11 @@ package com.tcdt.qlnvhang.controller.xuathang.bantructiep.kehoach;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.controller.BaseController;
-import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdr;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.IdSearchReq;
-import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhPhieuNhapKhoReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdrReq;
-import com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.dexuat.XhDxKhBanDauGiaReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.xuathang.bantructiep.kehoach.XhDxKhBanTrucTiepService;
+import com.tcdt.qlnvhang.service.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -21,7 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -53,11 +49,9 @@ public class XhDxKhBanTrucTiepControler extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Tạo mới đề xuất kế hoạch bán trực tiếp", response = List.class)
-    @PostMapping(value =PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<BaseResponse> insert(@Valid HttpServletRequest request,
-                                               @RequestBody XhDxKhBanTrucTiepHdrReq objReq) {
+    @ApiOperation(value = "Tạo mới đề xuất kế hoạch bán trực tiếp ", response = List.class)
+    @PostMapping(value=  PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> save(@Valid @RequestBody XhDxKhBanTrucTiepHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(xhDxKhBanTrucTiepService.create(objReq));
@@ -66,15 +60,14 @@ public class XhDxKhBanTrucTiepControler extends BaseController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Tạo mới trace: {}", e);
+            log.error("Tạo mới: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Cập nhật đề xuất kế hoạch bán trực tiếp", response = List.class)
-    @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> update(@Valid HttpServletRequest request,
-                                               @RequestBody XhDxKhBanTrucTiepHdrReq objReq) {
+    @ApiOperation(value = "Sửa đề xuất kế hoạch bán trực tiếp ", response = List.class)
+    @PostMapping(value=  PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> update(@Valid @RequestBody XhDxKhBanTrucTiepHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(xhDxKhBanTrucTiepService.update(objReq));
@@ -83,13 +76,13 @@ public class XhDxKhBanTrucTiepControler extends BaseController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Cập nhật trace: {}", e);
+            log.error("Cập nhật: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
     @ApiOperation(value = "Lấy chi tiết kế hoạch bán trực tiếp", response = List.class)
-    @GetMapping(value = PathContains.URL_CHI_TIET + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value =PathContains.URL_CHI_TIET + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> detail(
             @ApiParam(value = "ID", example = "1", required = true) @PathVariable("id") Long id) {
@@ -102,38 +95,6 @@ public class XhDxKhBanTrucTiepControler extends BaseController {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
             log.error("Lấy chi tiết trace: {}", e);
-        }
-        return ResponseEntity.ok(resp);
-    }
-
-    @ApiOperation(value = "Xóa đề xuất kế hoạch bán trực tiếp ", response = List.class)
-    @PostMapping(value=  PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
-        BaseResponse resp = new BaseResponse();
-        try {
-            xhDxKhBanTrucTiepService.delete(idSearchReq.getId());
-            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-        } catch (Exception e) {
-            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-            resp.setMsg(e.getMessage());
-            log.error("xóa: {}", e);
-        }
-        return ResponseEntity.ok(resp);
-    }
-
-    @ApiOperation(value = "Xóa dánh sách kế hoạch bán trực tiếp ", response = List.class)
-    @PostMapping(value=  PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody XhDxKhBanDauGiaReq idSearchReq) {
-        BaseResponse resp = new BaseResponse();
-        try {
-            xhDxKhBanTrucTiepService.deleteMulti(idSearchReq.getIds());
-            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-        } catch (Exception e) {
-            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-            resp.setMsg(e.getMessage());
-            log.error("Xóa danh sách: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
@@ -154,6 +115,39 @@ public class XhDxKhBanTrucTiepControler extends BaseController {
         }
         return ResponseEntity.ok(resp);
     }
+
+    @ApiOperation(value = "Xóa kế hoạch bán trực tiếp  ", response = List.class)
+    @PostMapping(value=  PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            xhDxKhBanTrucTiepService.delete(idSearchReq.getId());
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("xóa: {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Xóa dánh sách kế hoạch bán trực tiếp ", response = List.class)
+    @PostMapping(value=  PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody XhDxKhBanTrucTiepHdrReq idSearchReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            xhDxKhBanTrucTiepService.deleteMulti(idSearchReq.getIds());
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Xóa danh sách: {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
 
     @ApiOperation(value = "Kết xuất danh sách kế hoạch bán trực tiếp ", response = List.class)
     @PostMapping(value= PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -177,5 +171,4 @@ public class XhDxKhBanTrucTiepControler extends BaseController {
         }
 
     }
-
 }

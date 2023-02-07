@@ -7,7 +7,7 @@ import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.tonghop.SearchXhTh
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.tonghop.XhThopDxKhBttHdrReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.XhThopChiTieuReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.xuathang.bantructiep.kehoach.XhThopDxKhBttService;
+import com.tcdt.qlnvhang.service.xuathang.bantructiep.kehoach.tonghop.XhThopDxKhBttService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
