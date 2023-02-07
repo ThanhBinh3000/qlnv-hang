@@ -77,6 +77,7 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
             throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
         }
         XhCtvtTongHopHdr thopHdr = new XhCtvtTongHopHdr();
+        thopHdr.setId(getNextSequence("XH_CTVT_TONG_HOP_HDR_SEQ"));
         List<XhCtvtTongHopDtl> thopDtls = new ArrayList<>();
         Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
         for (XhCtvtDeXuatHdr dxuat : dxuatList) {
