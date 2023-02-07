@@ -80,10 +80,10 @@ public class XhCtvtTongHopHdrController extends BaseController {
     @ApiOperation(value = "Tạo mới thông tin tổng hợp ", response = List.class)
     @PostMapping(value =  PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser,@Valid @RequestBody XhCtvtTongHopHdrReq obj,  SearchXhCtvtDeXuatHdrReq objReq) {
+    public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser,@Valid @RequestBody XhCtvtTongHopHdrReq obj) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhCtvtTongHopHdrService.save(currentUser,obj,objReq));
+            resp.setData(xhCtvtTongHopHdrService.save(currentUser,obj));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
