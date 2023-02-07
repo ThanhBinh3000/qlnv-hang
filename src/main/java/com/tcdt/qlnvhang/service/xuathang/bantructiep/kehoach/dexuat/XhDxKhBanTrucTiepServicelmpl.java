@@ -28,7 +28,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
@@ -111,7 +110,6 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl implements XhD
         }
     }
 
-
     @Override
     public XhDxKhBanTrucTiepHdr update(XhDxKhBanTrucTiepHdrReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
@@ -119,7 +117,7 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl implements XhD
             throw new Exception("Bad request.");
 
         if (StringUtils.isEmpty(req.getId()))
-            throw new Exception("Sửa thất bại, không tìm thấy dữu liệu");
+            throw new Exception("Sửa thất bại, không tìm thấy dữ liệu");
 
         Optional<XhDxKhBanTrucTiepHdr> qOptional = xhDxKhBanTrucTiepHdrRepository.findById(req.getId());
         if (!qOptional.isPresent())

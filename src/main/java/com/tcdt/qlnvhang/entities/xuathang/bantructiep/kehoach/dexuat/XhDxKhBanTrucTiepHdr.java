@@ -89,6 +89,8 @@ public class XhDxKhBanTrucTiepHdr extends TrangThaiBaseEntity implements Seriali
     @Transient
     private String tenTrangThaiTh;
 
+    private Long idThop;
+
     @Transient
     private List<FileDinhKem> fileDinhKem = new ArrayList<>();
 
