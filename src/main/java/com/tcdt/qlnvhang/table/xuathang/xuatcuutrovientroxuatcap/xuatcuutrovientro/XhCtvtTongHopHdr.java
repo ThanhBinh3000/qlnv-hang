@@ -24,9 +24,9 @@ public class XhCtvtTongHopHdr extends BaseEntity implements Serializable {
     public static final String TABLE_NAME = "XH_CTVT_TONG_HOP_HDR";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhCtvtTongHopHdr.TABLE_NAME + "_SEQ")
+    /*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhCtvtTongHopHdr.TABLE_NAME + "_SEQ")
     @SequenceGenerator(sequenceName = XhCtvtTongHopHdr.TABLE_NAME
-            + "_SEQ", allocationSize = 1, name = XhCtvtTongHopHdr.TABLE_NAME + "_SEQ")
+            + "_SEQ", allocationSize = 1, name = XhCtvtTongHopHdr.TABLE_NAME + "_SEQ")*/
     @NonNull
     private Long id;
     private Integer nam;

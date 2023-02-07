@@ -112,7 +112,7 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
     DataUtils.copyProperties(objReq, thopHdr);
     thopHdr.setTrangThai(Contains.DUTHAO);
     thopHdr.setMaDvi(currentUser.getUser().getDepartment());
-    xhCtvtTongHopHdrRepository.save(thopHdr);
+    XhCtvtTongHopHdr save = xhCtvtTongHopHdrRepository.save(thopHdr);
 
     for (XhCtvtTongHopDtl dtl : thopHdr.getDeXuatCuuTro()) {
       dtl.setIdHdr(DataUtils.safeToLong(objReq.getMaTongHop()));
@@ -128,7 +128,7 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
       }
     }
 
-    return thopHdr;
+    return save;
   }
 
 
