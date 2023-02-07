@@ -105,10 +105,8 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
 
   @Transactional()
   public XhCtvtTongHopHdr save(CustomUserDetails currentUser, XhCtvtTongHopHdrReq objReq) throws Exception {
-    XhCtvtTongHopHdr thopHdr = new XhCtvtTongHopHdr(objReq.getId());
-
+    XhCtvtTongHopHdr thopHdr = new XhCtvtTongHopHdr(DataUtils.safeToLong(objReq.getMaTongHop()));
     DataUtils.copyProperties(objReq, thopHdr);
-    System.out.println(thopHdr+"@@@@@@@");
     thopHdr.setTrangThai(Contains.DUTHAO);
     thopHdr.setMaDvi(currentUser.getUser().getDepartment());
     xhCtvtTongHopHdrRepository.save(thopHdr);
