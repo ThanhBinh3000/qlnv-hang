@@ -40,7 +40,7 @@ public interface XhDxKhBanTrucTiepHdrRepository extends JpaRepository<XhDxKhBanT
             " AND (:cloaiVthh IS NULL OR DX.CLOAI_VTHH = :cloaiVthh) " +
             " AND (:ngayDuyetTu IS NULL OR DX.NGAY_PDUYET >=  TO_DATE(:ngayDuyetTu,'yyyy-MM-dd')) " +
             " AND (:ngayDuyetDen IS NULL OR DX.NGAY_PDUYET <= TO_DATE(:ngayDuyetDen,'yyyy-MM-dd'))" +
-            " AND DX.TRANG_THAI = '"+ Contains.DA_DUYET_CBV+"'" +
+            " AND DX.TRANG_THAI = '"+ Contains.DADUYET_LDC+"'" +
             " AND DX.TRANG_THAI_TH = '"+ Contains.CHUATONGHOP+"'" +
             " AND DX.ID_THOP is null "+
             " AND DX.SO_QD_PD is null "
