@@ -162,11 +162,11 @@ public class XhDxKhBanTrucTiepService extends BaseServiceImpl {
         Map<String,String> mapDmucVthh = getListDanhMucHangHoa();
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
 
-        dataMap.setTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dataMap.getTrangThai()));
+        dataMap.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dataMap.getTrangThai()));
         dataMap.setTenTrangThaiTh(NhapXuatHangTrangThaiEnum.getTenById(dataMap.getTrangThaiTh()));
         dataMap.setTenDvi(mapDmucDvi.get(dataMap.getMaDvi()));
         dataMap.setTenLoaiVthh(mapDmucVthh.get(dataMap.getLoaiVthh()));
-        dataMap.setTenCloaiVthh(mapDmucVthh.get(dataMap.getTenCloaiVthh()));
+        dataMap.setTenCloaiVthh(mapDmucVthh.get(dataMap.getCloaiVthh()));
 
         List<FileDinhKem> fileDinhKemList = fileDinhKemService.search(dataMap.getId(), Arrays.asList(XhDxKhBanTrucTiepHdr.TABLE_NAME));
         dataMap.setFileDinhKems(fileDinhKemList);
@@ -292,7 +292,7 @@ public class XhDxKhBanTrucTiepService extends BaseServiceImpl {
         List<XhDxKhBanTrucTiepHdr> data=page.getContent();
 
         String title="Danh sách đề xuất kế hoạch bán trực tiếp";
-        String[] rowsName = new String[]{"STT", "Số KH/đề xuất", "Ngày lập KH", "Ngày duyệt KH", "Số QĐ duyệt KH bán TT", "Ngày ký QĐ", "Trích yếu", "Loại hàng hóa", "Chủng loại hàng hóa", "Số ĐV tài sản", "SL HĐ đã ký", "Số QĐ giao chỉ tiêu", "Trạng thái"};
+        String[] rowsName = new String[]{"STT","Năm KH", "Số KH/đề xuất", "Ngày lập KH", "Ngày duyệt KH", "Số QĐ duyệt KH bán TT", "Ngày ký QĐ", "Trích yếu", "Loại hàng hóa", "Chủng loại hàng hóa", "Số ĐV tài sản", "SL HĐ đã ký", "Số QĐ giao chỉ tiêu", "Trạng thái"};
         String fileName="danh-sach-dx-kh-ban-truc-tiep.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs=null;

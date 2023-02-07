@@ -28,7 +28,7 @@ public class XhDxKhBanTrucTiepHdr extends TrangThaiBaseEntity implements Seriali
 
     private String maDvi;
     @Transient
-    private String TenDvi;
+    private String tenDvi;
 
     private String loaiHinhNx;
 
@@ -56,13 +56,12 @@ public class XhDxKhBanTrucTiepHdr extends TrangThaiBaseEntity implements Seriali
 
     private String tchuanCluong;
 
-
-
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date tgianDkienTu;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date tgianDkienDen;
+
     private Integer tgianTtoan;
 
     private String tgianTtoanGhiChu;
