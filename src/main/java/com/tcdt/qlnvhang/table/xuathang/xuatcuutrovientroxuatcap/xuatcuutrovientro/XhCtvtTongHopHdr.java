@@ -2,6 +2,9 @@ package com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovien
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,6 +16,7 @@ import java.util.List;
 @Entity
 @Table(name = XhCtvtTongHopHdr.TABLE_NAME)
 @Data
+@NoArgsConstructor
 public class XhCtvtTongHopHdr extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -22,6 +26,7 @@ public class XhCtvtTongHopHdr extends BaseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhCtvtTongHopHdr.TABLE_NAME + "_SEQ")
     @SequenceGenerator(sequenceName = XhCtvtTongHopHdr.TABLE_NAME
             + "_SEQ", allocationSize = 1, name = XhCtvtTongHopHdr.TABLE_NAME + "_SEQ")
+    @NonNull
     private Long id;
     private Integer nam;
     private String maDvi;
