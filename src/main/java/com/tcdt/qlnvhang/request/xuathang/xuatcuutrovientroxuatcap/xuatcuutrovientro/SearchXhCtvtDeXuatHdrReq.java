@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtTongHopDtl;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -24,6 +25,8 @@ public class SearchXhCtvtDeXuatHdrReq extends BaseRequest {
     private String loaiVthh;
     private String loaiNhapXuat;
     private List<String> trangThaiList = new ArrayList<>();
+    private List<XhCtvtTongHopDtl> deXuatCuuTro = new ArrayList<>();
     private String maTongHop;
+
 
 }
