@@ -291,7 +291,8 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
                         throw new Exception("Đề xuất này đã được quyết định");
                     }
                     // Update trạng thái tờ trình
-                    xhDxKhBanDauGiaRepository.updateStatusInList(Arrays.asList(dataDB.getSoTrHdr()), Contains.DABANHANH_QD,qOptional.get().getIdThop());
+                    qOptional.get().setTrangThaiTh(Contains.DABANHANH_QD);
+                    xhDxKhBanDauGiaRepository.save(qOptional.get());
                 } else {
                     throw new Exception("Số tờ trình kế hoạch không được tìm thấy");
                 }
@@ -299,7 +300,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
             this.cloneProject(dataDB.getId());
         }
         XhQdPdKhBdg createCheck = xhQdPdKhBdgRepository.save(dataDB);
-        return null;
+        return createCheck;
     }
 
     @Override
@@ -332,7 +333,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
         if (optional.get().getPhanLoai().equals("TH")) {
             xhThopDxKhBdgRepository.updateTrangThai(optional.get().getIdThHdr(), NhapXuatHangTrangThaiEnum.CHUATAO_QD.getId());
         } else {
-            xhDxKhBanDauGiaRepository.updateStatusInList(Arrays.asList(optional.get().getSoTrHdr()), NhapXuatHangTrangThaiEnum.CHUATONGHOP.getId(),null);
+            xhDxKhBanDauGiaRepository.updateStatusTh(optional.get().getIdTrHdr(), NhapXuatHangTrangThaiEnum.CHUATONGHOP.getId());
         }
     }
 
