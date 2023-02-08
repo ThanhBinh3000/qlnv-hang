@@ -23,7 +23,7 @@ public interface XhDxKhBanTrucTiepHdrRepository extends JpaRepository<XhDxKhBanT
 
     @Query("SELECT DX from XhDxKhBanTrucTiepHdr DX WHERE 1 = 1 " +
             "AND (:#{#param.namKh} IS NULL OR DX.namKh = :#{#param.namKh}) " +
-            "AND (:#{#param.soKeHoach} IS NULL OR LOWER(DX.soKeHoach) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soKeHoach}),'%' ) ) )" +
+            "AND (:#{#param.soDxuat} IS NULL OR LOWER(DX.soDxuat) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soDxuat}),'%' ) ) )" +
             "AND (:#{#param.ngayTaoTu} IS NULL OR DX.ngayTao >= :#{#param.ngayTaoTu}) " +
             "AND (:#{#param.ngayTaoDen} IS NULL OR DX.ngayTao <= :#{#param.ngayTaoDen}) " +
             "AND (:#{#param.ngayDuyetTu} IS NULL OR DX.ngayPduyet >= :#{#param.ngayDuyetTu}) " +
@@ -53,9 +53,13 @@ public interface XhDxKhBanTrucTiepHdrRepository extends JpaRepository<XhDxKhBanT
     @Query(value = "UPDATE XH_DX_KH_BAN_TRUC_TIEP_HDR SET TRANG_THAI_TH = :trangThaiTh , ID_THOP = :idTh WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
     void updateStatusInList(List<String> soDxuatList, String trangThaiTh,Long idTh);
 
-
-
-    Optional<XhDxKhBanTrucTiepHdr> findBySoKeHoach(String soKeHoach);
+    Optional<XhDxKhBanTrucTiepHdr> findBySoDxuat(String soDxuat);
 
     List<XhDxKhBanTrucTiepHdr> findByIdIn(List<Long> idDxList);
+
+    @Transactional()
+    @Modifying
+    @Query(value = "UPDATE XH_DX_KH_BAN_TRUC_TIEP_HDR SET TRANG_THAI_TH = :trangThaiTh WHERE ID = :idDxuat", nativeQuery = true)
+    void updateStatusTh(Long idDxuat, String trangThaiTh);
+
 }
