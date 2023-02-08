@@ -74,6 +74,11 @@ public interface XhDxKhBanDauGiaRepository extends JpaRepository<XhDxKhBanDauGia
     @Query(value = "UPDATE XH_DX_KH_BAN_DAU_GIA SET TRANG_THAI_TH = :trangThaiTh , ID_THOP = :idTh WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
     void updateStatusInList(List<String> soDxuatList, String trangThaiTh,Long idTh);
 
+    @Transactional()
+    @Modifying
+    @Query(value = "UPDATE XH_DX_KH_BAN_DAU_GIA SET TRANG_THAI_TH = :trangThaiTh WHERE ID = :idDx", nativeQuery = true)
+    void updateStatusTh(Long idDx, String trangThaiTh);
+
 
 
 
