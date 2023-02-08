@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.tonghop;
 
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.tonghop.XhThopDxKhBttHdr;
-import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.tonghop.XhThopDxKhBdg;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -31,4 +30,10 @@ public interface XhThopDxKhBttRepository extends JpaRepository<XhThopDxKhBttHdr,
     @Transactional
     @Modifying
     void deleteAllByIdIn(List<Long> ids);
+
+    @Transactional()
+    @Modifying
+    @Query(value = "UPDATE XH_THOP_DX_KH_BTT_HDR SET TRANG_THAI =:trangThai WHERE ID = :idThHdr", nativeQuery = true)
+    void updateTrangThai(Long idThHdr, String trangThai);
+
 }
