@@ -81,8 +81,8 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
         }
         XhCtvtDeXuatHdr data = new XhCtvtDeXuatHdr();
         BeanUtils.copyProperties(objReq, data);
-        data.setTongSoLuong(data.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPa::getSoLuongXuatChiCuc).reduce(BigDecimal.ZERO,BigDecimal::add));
-        data.setThanhTien(data.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPa::getThanhTien).reduce(BigDecimal.ZERO,BigDecimal::add));
+        data.setTongSoLuong(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPaReq::getSoLuongXuatChiCuc).reduce(BigDecimal.ZERO,BigDecimal::add));
+        data.setThanhTien(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPaReq::getThanhTien).reduce(BigDecimal.ZERO,BigDecimal::add));
         data.setMaDvi(currentUser.getUser().getDepartment());
         data.setTrangThai(Contains.DUTHAO);
         data.setMaTongHop("Chưa tổng hợp");;
@@ -122,8 +122,8 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
         }
         XhCtvtDeXuatHdr data = optional.get();
         BeanUtils.copyProperties(objReq,data);
-        data.setTongSoLuong(data.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPa::getSoLuongXuatChiCuc).reduce(BigDecimal.ZERO,BigDecimal::add));
-        data.setThanhTien(data.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPa::getThanhTien).reduce(BigDecimal.ZERO,BigDecimal::add));
+        data.setTongSoLuong(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPaReq::getSoLuongXuatChiCuc).reduce(BigDecimal.ZERO,BigDecimal::add));
+        data.setThanhTien(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPaReq::getThanhTien).reduce(BigDecimal.ZERO,BigDecimal::add));
         XhCtvtDeXuatHdr created=xhCtvtDeXuatHdrRepository.save(data);
 
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList( XhCtvtDeXuatHdr.TABLE_NAME + "_CAN_CU"));
