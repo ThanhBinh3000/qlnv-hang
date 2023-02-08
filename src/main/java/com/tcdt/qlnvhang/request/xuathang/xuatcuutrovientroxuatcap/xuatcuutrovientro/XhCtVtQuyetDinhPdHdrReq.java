@@ -34,7 +34,7 @@ public class XhCtVtQuyetDinhPdHdrReq {
     private LocalDate ngayPduyet;
     private Long nguoiPduyetId;
 
-    private FileDinhKemReq fileDinhKem;
+    private List<FileDinhKemReq> fileDinhKem;
 
     private List<FileDinhKemReq> canCu = new ArrayList<>();
 
