@@ -38,7 +38,7 @@ public class XhDxKhBanTrucTiepHdr extends TrangThaiBaseEntity implements Seriali
 
     private Integer namKh;
 
-    private String soKeHoach;
+    private String soDxuat;
 
     private String trichYeu;
 

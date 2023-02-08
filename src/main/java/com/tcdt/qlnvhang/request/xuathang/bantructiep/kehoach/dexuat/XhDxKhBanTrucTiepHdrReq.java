@@ -29,7 +29,7 @@ public class XhDxKhBanTrucTiepHdrReq extends BaseRequest {
 
     private Integer namKh;
 
-    private String soKeHoach;
+    private String soDxuat;
 
     private String trichYeu;
 
