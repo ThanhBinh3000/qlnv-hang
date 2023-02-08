@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
 
@@ -48,7 +49,7 @@ public class XhCtVtQuyetDinhPdHdr extends BaseEntity implements Serializable {
     private Long nguoiPduyetId;
 
     @Transient
-    private FileDinhKem fileDinhKem;
+    private List<FileDinhKem> fileDinhKem;
     @Transient
     private List<FileDinhKem> canCu = new ArrayList<>();
     @Transient
@@ -60,6 +61,6 @@ public class XhCtVtQuyetDinhPdHdr extends BaseEntity implements Serializable {
     @Transient
     private String tenTrangThai;
 
-    @OneToMany(mappedBy = "XhCtVtQuyetDinhPdHdr")
+    @OneToMany(mappedBy = "xhCtVtQuyetDinhPdHdr")
     private List<XhCtVtQuyetDinhPdDtl> quyetDinhPdDtl = new ArrayList<>();
 }

@@ -50,4 +50,6 @@ public class XhQdGiaoNvuXuatReq extends BaseRequest {
 
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
     private FileDinhKemReq fileDinhKem;
+
+    private String maChiCuc;
 }

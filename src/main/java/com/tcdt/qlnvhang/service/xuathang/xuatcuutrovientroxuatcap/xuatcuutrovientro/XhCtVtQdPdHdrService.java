@@ -10,16 +10,16 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.SearchXhCtvtTongHopHdr;
-import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQuyetDinhPdDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQuyetDinhPdDxReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQuyetDinhPdHdrReq;
+import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQuyetDinhPdDtlReq;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.XhQdCuuTroHdr;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQuyetDinhPdDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQuyetDinhPdDx;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQuyetDinhPdHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQuyetDinhPdDtl;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -89,18 +89,16 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
             throw new Exception("số quyết định đã tồn tại");
         }
         XhCtVtQuyetDinhPdHdr data = new XhCtVtQuyetDinhPdHdr();
-        BeanUtils.copyProperties(objReq, data);
+        BeanUtils.copyProperties(objReq, data,"id");
         data.setMaDvi(currentUser.getUser().getDepartment());
         data.setTrangThai(Contains.DUTHAO);
-        data.setMaTongHop("Chưa tổng hợp");
-        ;
         XhCtVtQuyetDinhPdHdr created = xhCtVtQdPdHdrRepository.save(data);
 
         if (!DataUtils.isNullOrEmpty(objReq.getCanCu())) {
             fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), XhCtVtQuyetDinhPdHdr.TABLE_NAME + "_CAN_CU");
         }
         if (!DataUtils.isNullObject(objReq.getFileDinhKem())) {
-            fileDinhKemService.saveListFileDinhKem(Arrays.asList(objReq.getFileDinhKem()), created.getId(), XhCtVtQuyetDinhPdHdr.TABLE_NAME);
+            fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(), created.getId(), XhCtVtQuyetDinhPdHdr.TABLE_NAME);
         }
 
         this.saveCtiet(created.getId(), objReq);
@@ -108,18 +106,18 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
     }
 
     @Transactional()
-    void saveCtiet(Long idHdr, XhCtVtQuyetDinhPdHdrReq objReq) {
+    void saveCtiet(Long id, XhCtVtQuyetDinhPdHdrReq objReq) {
         for (XhCtVtQuyetDinhPdDtlReq quyetDinhPdDtlReq : objReq.getQuyetDinhPdDtl()) {
             XhCtVtQuyetDinhPdDtl quyetDinhPdDtl = new XhCtVtQuyetDinhPdDtl();
             BeanUtils.copyProperties(quyetDinhPdDtlReq, quyetDinhPdDtl);
             quyetDinhPdDtl.setId(null);
-            quyetDinhPdDtl.setIdHdr(idHdr);
-            xhCtVtQdPdDtlRepository.save(quyetDinhPdDtl);
+            quyetDinhPdDtl.setIdHdr(id);
+            XhCtVtQuyetDinhPdDtl dtl = xhCtVtQdPdDtlRepository.save(quyetDinhPdDtl);
             for (XhCtVtQuyetDinhPdDxReq quyetDinhPdDxReq : quyetDinhPdDtlReq.getQuyetDinhPdDx()) {
                 XhCtVtQuyetDinhPdDx quyetDinhPdDx = new XhCtVtQuyetDinhPdDx();
                 BeanUtils.copyProperties(quyetDinhPdDxReq, quyetDinhPdDx);
                 quyetDinhPdDx.setId(null);
-                quyetDinhPdDx.setIdHdr(idHdr);
+                quyetDinhPdDx.setIdHdr(dtl.getId());
                 xhCtVtQdPdDxRepository.save(quyetDinhPdDx);
             }
         }
@@ -152,7 +150,7 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
             fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), XhCtVtQuyetDinhPdHdr.TABLE_NAME + "_CAN_CU");
         }
         if (!DataUtils.isNullObject(objReq.getFileDinhKem())) {
-            fileDinhKemService.saveListFileDinhKem(Arrays.asList(objReq.getFileDinhKem()), created.getId(), XhCtVtQuyetDinhPdHdr.TABLE_NAME);
+            fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(), created.getId(), XhCtVtQuyetDinhPdHdr.TABLE_NAME);
         }
 
         List<XhCtVtQuyetDinhPdDtl> quyetDinhPdDtl = xhCtVtQdPdDtlRepository.findByIdHdr(objReq.getId());
@@ -184,10 +182,9 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
             data.setTenCloaiVthh(mapVthh.get(data.getCloaiVthh()));
             data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
 
-            List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdCuuTroHdr.TABLE_NAME));
-            if (!DataUtils.isNullOrEmpty(fileDinhKem)) {
-                data.setFileDinhKem(fileDinhKem.get(0));
-            }
+            List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhCtVtQuyetDinhPdHdr.TABLE_NAME));
+            data.setFileDinhKem(fileDinhKem);
+
 
             List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Arrays.asList(XhCtVtQuyetDinhPdHdr.TABLE_NAME + "_CAN_CU"));
             data.setCanCu(canCu);
@@ -196,20 +193,19 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
             for (XhCtVtQuyetDinhPdDtl quyetDinhPdDtl : ListDtl) {
                 if (mapDmucDvi.containsKey(quyetDinhPdDtl.getMaDviDx())) {
                     quyetDinhPdDtl.setTenDviDx(mapDmucDvi.get(quyetDinhPdDtl.getMaDviDx()).get("tenDvi").toString());
-
-                    List<Long> XhCtVtQuyetDinhPdDx = ListDtl.stream().map(XhCtVtQuyetDinhPdDtl::getId).collect(Collectors.toList());
-                    List<XhCtVtQuyetDinhPdDx> listQuyetDinhPdDx = xhCtVtQdPdDxRepository.findByIdHdrIn(XhCtVtQuyetDinhPdDx);
-                    for (XhCtVtQuyetDinhPdDx quyetDinhPdDx : listQuyetDinhPdDx) {
-                        if (mapDmucDvi.containsKey(quyetDinhPdDx.getMaDviCuc())) {
-                            quyetDinhPdDx.setTenCuc(mapDmucDvi.get(quyetDinhPdDx.getMaDviCuc()).get("tenDvi").toString());
-                        }
-                        if (mapDmucDvi.containsKey(quyetDinhPdDx.getMaDviChiCuc())) {
-                            quyetDinhPdDx.setTenChiCuc(mapDmucDvi.get(quyetDinhPdDx.getMaDviChiCuc()).get("tenDvi").toString());
-                        }
-                        quyetDinhPdDx.setTenCloaiVthh(mapVthh.get(quyetDinhPdDx.getCloaiVthh()));
-                    }
-                    quyetDinhPdDtl.setQuyetDinhPdDx(listQuyetDinhPdDx);
                 }
+                List<Long> listId = ListDtl.stream().map(XhCtVtQuyetDinhPdDtl::getId).collect(Collectors.toList());
+                List<XhCtVtQuyetDinhPdDx> listQuyetDinhPdDx = xhCtVtQdPdDxRepository.findByIdHdrIn(listId);
+                for (XhCtVtQuyetDinhPdDx quyetDinhPdDx : listQuyetDinhPdDx) {
+                    if (mapDmucDvi.containsKey(quyetDinhPdDx.getMaDviCuc())) {
+                        quyetDinhPdDx.setTenCuc(mapDmucDvi.get(quyetDinhPdDx.getMaDviCuc()).get("tenDvi").toString());
+                    }
+                    if (mapDmucDvi.containsKey(quyetDinhPdDx.getMaDviChiCuc())) {
+                        quyetDinhPdDx.setTenChiCuc(mapDmucDvi.get(quyetDinhPdDx.getMaDviChiCuc()).get("tenDvi").toString());
+                    }
+                    quyetDinhPdDx.setTenCloaiVthh(mapVthh.get(quyetDinhPdDx.getCloaiVthh()));
+                }
+                quyetDinhPdDtl.setQuyetDinhPdDx(listQuyetDinhPdDx);
                 data.setQuyetDinhPdDtl(ListDtl);
             }
         });
@@ -289,7 +285,7 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
 
         String title = "Danh sách quyết định phương án xuất cứu trợ, viện trợ ";
         String[] rowsName = new String[]{"STT", "Số quyết định", "Ngày ký quyết định", "Mã tổng hợp", "Ngày tổng hợp", "Số công văn/đề xuất", "Ngày đề xuất",
-                "Loại hàng hóa", "Tổng SL đề xuất cứu trợ,viện trợ (kg)", "Tổng SL xuất kho cứu trợ,viện trợ (kg)", "SL xuất CT,VT chuyển sang xuất cấp", "Trích yếu", "Trạng thái quyết định",};
+            "Loại hàng hóa", "Tổng SL đề xuất cứu trợ,viện trợ (kg)", "Tổng SL xuất kho cứu trợ,viện trợ (kg)", "SL xuất CT,VT chuyển sang xuất cấp", "Trích yếu", "Trạng thái quyết định",};
         String fileName = "danh-sach-phuong-an-xuat-cuu-tro-vien-tro";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
