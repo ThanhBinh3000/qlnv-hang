@@ -72,10 +72,10 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl implements XhD
             throw new Exception("Bad request.");
 
 
-        if (!StringUtils.isEmpty(req.getSoKeHoach())){
-            Optional<XhDxKhBanTrucTiepHdr> qOptional = xhDxKhBanTrucTiepHdrRepository.findBySoKeHoach(req.getSoKeHoach());
+        if (!StringUtils.isEmpty(req.getSoDxuat())){
+            Optional<XhDxKhBanTrucTiepHdr> qOptional = xhDxKhBanTrucTiepHdrRepository.findBySoDxuat(req.getSoDxuat());
             if (qOptional.isPresent()){
-                throw new Exception("Số đề xuất " + req.getSoKeHoach() + " đã tồn tại");
+                throw new Exception("Số đề xuất " + req.getSoDxuat() + " đã tồn tại");
             }
         }
 
@@ -123,11 +123,11 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl implements XhD
         if (!qOptional.isPresent())
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
 
-        if (!StringUtils.isEmpty(req.getSoKeHoach())){
-            Optional<XhDxKhBanTrucTiepHdr> hdr = xhDxKhBanTrucTiepHdrRepository.findBySoKeHoach(req.getSoKeHoach());
+        if (!StringUtils.isEmpty(req.getSoDxuat())){
+            Optional<XhDxKhBanTrucTiepHdr> hdr = xhDxKhBanTrucTiepHdrRepository.findBySoDxuat(req.getSoDxuat());
             if (hdr.isPresent()){
                 if (!hdr.get().getId().equals(req.getId())){
-                    throw new Exception("Số đề xuất " + req.getSoKeHoach() + " đã tồn tại");
+                    throw new Exception("Số đề xuất " + req.getSoDxuat() + " đã tồn tại");
                 }
             }
         }
@@ -287,7 +287,7 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl implements XhD
             XhDxKhBanTrucTiepHdr hdr = data.get(i);
             objs[0]=i;
             objs[1]=hdr.getNamKh();
-            objs[2]=hdr.getSoKeHoach();
+            objs[2]=hdr.getSoDxuat();
             objs[3]=hdr.getNgayTao();
             objs[4]=hdr.getNgayPduyet();
             objs[5]=hdr.getSoQdPd();
