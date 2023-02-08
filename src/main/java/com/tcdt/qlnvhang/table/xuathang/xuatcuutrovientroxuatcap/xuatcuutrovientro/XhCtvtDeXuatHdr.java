@@ -38,7 +38,11 @@ public class XhCtvtDeXuatHdr extends BaseEntity implements Serializable {
     private LocalDate ngayKetThuc;
     private String noiDungDx;
     private String trangThai;
+    private Long idThop;
     private String maTongHop;
+    private Long idQdPd;
+    private String soQdPd;
+    private LocalDate ngayKyQd;
     private BigDecimal tongSoLuong;
     private BigDecimal soLuongXuatCap;
     private LocalDate ngayGduyet;
