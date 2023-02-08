@@ -82,7 +82,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
         BeanUtils.copyProperties(objReq, data);
         data.setMaDvi(currentUser.getUser().getDepartment());
         data.setTrangThai(Contains.DUTHAO);
-        data.setMaTongHop("Chưa tổng hợp");;
+        data.setMaTongHop("Chưa tổng hợp");
         XhCtvtDeXuatHdr created=xhCtvtDeXuatHdrRepository.save(data);
 
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), XhCtvtDeXuatHdr.TABLE_NAME + "_CAN_CU");

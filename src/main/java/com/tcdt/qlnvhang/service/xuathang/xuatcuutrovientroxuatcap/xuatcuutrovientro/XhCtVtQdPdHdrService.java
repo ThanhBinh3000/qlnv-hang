@@ -3,9 +3,7 @@ package com.tcdt.qlnvhang.service.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovi
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
-import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQdPdDtlRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQdPdDxRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQdPdHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -16,10 +14,7 @@ import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovie
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.XhQdCuuTroHdr;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQuyetDinhPdDx;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQuyetDinhPdHdr;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQuyetDinhPdDtl;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -29,6 +24,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.Transient;
@@ -51,6 +47,12 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
     @Autowired
 
     private XhCtVtQdPdDxRepository xhCtVtQdPdDxRepository;
+
+    @Autowired
+    private XhCtvtTongHopHdrRepository xhCtvtTongHopHdrRepository;
+
+    @Autowired
+    private XhCtvtDeXuatHdrRepository xhCtvtDeXuatHdrRepository;
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
@@ -101,6 +103,22 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
             fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(), created.getId(), XhCtVtQuyetDinhPdHdr.TABLE_NAME);
         }
 
+        if (!DataUtils.isNullOrEmpty(created.getMaTongHop())){
+            Optional<XhCtvtTongHopHdr> tongHopHdr= xhCtvtTongHopHdrRepository.findById(created.getIdTongHop());
+            XhCtvtTongHopHdr tongHop= tongHopHdr.get();
+            tongHop.setSoQdPd(created.getSoQd());
+            tongHop.setIdQdPd(created.getId());
+            tongHop.setNgayKyQd(created.getNgayKy());
+            xhCtvtTongHopHdrRepository.save(tongHop);
+        }
+       if (!DataUtils.isNullOrEmpty(created.getSoDx())){
+           Optional<XhCtvtDeXuatHdr> deXuatHdr = xhCtvtDeXuatHdrRepository.findById(created.getIdDx());
+           XhCtvtDeXuatHdr deXuat= deXuatHdr.get();
+           deXuat.setSoQdPd(created.getSoQd());
+           deXuat.setIdQdPd(created.getId());
+           deXuat.setNgayKyQd(created.getNgayKy());
+           xhCtvtDeXuatHdrRepository.save(deXuat);
+       }
         this.saveCtiet(created.getId(), objReq);
         return created;
     }
@@ -229,6 +247,22 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
         fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhCtVtQuyetDinhPdHdr.TABLE_NAME + "_CAN_CU"));
         fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhCtVtQuyetDinhPdHdr.TABLE_NAME));
         xhCtVtQdPdHdrRepository.delete(data);
+        if (!DataUtils.isNullOrEmpty(data.getMaTongHop())){
+            Optional<XhCtvtTongHopHdr> tongHopHdr= xhCtvtTongHopHdrRepository.findById(data.getIdTongHop());
+            XhCtvtTongHopHdr tongHop= tongHopHdr.get();
+            tongHop.setSoQdPd(null);
+            tongHop.setIdQdPd(null);
+            tongHop.setNgayKyQd(null);
+            xhCtvtTongHopHdrRepository.save(tongHop);
+        }
+        if (!DataUtils.isNullOrEmpty(data.getSoDx())){
+            Optional<XhCtvtDeXuatHdr> deXuatHdr = xhCtvtDeXuatHdrRepository.findById(data.getIdDx());
+            XhCtvtDeXuatHdr deXuat= deXuatHdr.get();
+            deXuat.setSoQdPd(null);
+            deXuat.setIdQdPd(null);
+            deXuat.setNgayKyQd(null);
+            xhCtvtDeXuatHdrRepository.save(deXuat);
+        }
     }
 
     @Transient
@@ -247,6 +281,26 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
         fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(XhCtVtQuyetDinhPdHdr.TABLE_NAME));
         fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(XhCtVtQuyetDinhPdHdr.TABLE_NAME + "_CAN_CU"));
         xhCtVtQdPdHdrRepository.deleteAll(list);
+        List<Long> listIdThop = list.stream().map(XhCtVtQuyetDinhPdHdr::getIdTongHop).collect(Collectors.toList());
+        if (!CollectionUtils.isEmpty(listIdThop)){
+            List<XhCtvtTongHopHdr> tongHopHdr= xhCtvtTongHopHdrRepository.findByIdIn(listIdThop);
+            tongHopHdr.stream().map(item ->{
+                item.setNgayKyQd(null);
+                item.setIdQdPd(null);
+                item.setSoQdPd(null);
+                return item;
+            }).collect(Collectors.toList());
+        }
+        List<Long> listIdDx = list.stream().map(XhCtVtQuyetDinhPdHdr::getIdDx).collect(Collectors.toList());
+        if (!CollectionUtils.isEmpty(listIdThop)){
+            List<XhCtvtDeXuatHdr> deXuatHdr = xhCtvtDeXuatHdrRepository.findByIdIn(listIdDx);
+            deXuatHdr.stream().map(item ->{
+                item.setNgayKyQd(null);
+                item.setIdQdPd(null);
+                item.setSoQdPd(null);
+                return item;
+            }).collect(Collectors.toList());
+        }
     }
 
 
