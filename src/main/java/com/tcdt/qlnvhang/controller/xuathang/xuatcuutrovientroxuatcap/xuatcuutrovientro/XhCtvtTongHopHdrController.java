@@ -119,6 +119,7 @@ public class XhCtvtTongHopHdrController extends BaseController {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(xhCtvtTongHopHdrService.detail(ids));
+            resp.setData(xhCtvtTongHopHdrService.detail(ids).get(0));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
