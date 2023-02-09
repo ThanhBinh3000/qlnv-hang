@@ -32,6 +32,10 @@ public class XhQdPdKhBdgDtl implements Serializable {
 
     private String maDvi;
 
+    private String loaiVthh;
+
+    private String cloaiVthh;
+
     private String soDxuat;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
@@ -85,6 +89,7 @@ public class XhQdPdKhBdgDtl implements Serializable {
 
     @Transient
     private String tenDvi;
+
 
     @Transient
     private String tenTrangThai;

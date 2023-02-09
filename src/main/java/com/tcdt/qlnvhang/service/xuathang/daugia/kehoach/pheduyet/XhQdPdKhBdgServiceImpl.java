@@ -153,6 +153,8 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
             XhQdPdKhBdgDtl qd = new XhQdPdKhBdgDtl();
             BeanUtils.copyProperties(dtl, qd, "id");
             qd.setIdQdHdr(idHdr);
+            qd.setLoaiVthh(req.getLoaiVthh());
+            qd.setCloaiVthh(req.getCloaiVthh());
             qd.setTrangThai(Contains.CHUACAPNHAT);
             xhQdPdKhBdgDtlRepository.save(qd);
             xhQdPdKhBdgPlRepository.deleteByIdQdDtl(dtl.getId());
