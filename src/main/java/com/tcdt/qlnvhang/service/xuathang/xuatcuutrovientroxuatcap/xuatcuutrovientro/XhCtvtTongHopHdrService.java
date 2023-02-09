@@ -185,7 +185,7 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
     XhCtvtTongHopHdr data = optional.get();
     List<XhCtvtTongHopDtl> listDls = xhCtvtTongHopDtlRepository.findAllByIdHdr(data.getId());
     if (!CollectionUtils.isEmpty(listDls)) {
-      List<Long> idDxList = listDls.stream().map(XhCtvtTongHopDtl::getIdHdr).collect(Collectors.toList());
+      List<Long> idDxList = listDls.stream().map(XhCtvtTongHopDtl::getIdDx).collect(Collectors.toList());
       List<XhCtvtDeXuatHdr> listDxHdr = xhCtvtDeXuatHdrRepository.findByIdIn(idDxList);
       if (!CollectionUtils.isEmpty(listDxHdr)) {
         listDxHdr.stream().map(item -> {
