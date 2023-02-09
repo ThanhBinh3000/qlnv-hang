@@ -57,6 +57,7 @@ public class XhQdPdKhBttHdrReq extends BaseRequest {
 
     private String soHopDong;
 
+    private String soQdCc;
 
     private List<XhQdPdKhBttDtlReq> children;
 

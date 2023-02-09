@@ -88,7 +88,7 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
 
     @Transactional()
     public XhThopDxKhBttHdr create(XhThopDxKhBttHdrReq objReq, HttpServletRequest req) throws Exception{
-        if (objReq.getLoaiVthh() == null || Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh())){
+        if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh())) {
             throw new Exception("Loại vật tư hàng hóa không phù hợp");
         }
 
@@ -127,7 +127,7 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
         if (!qOptional.isPresent()){
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
-        if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh())){
+        if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh())) {
             throw new Exception("Loại vật tư hàng hóa không phù hợp");
         }
         XhThopDxKhBttHdr dataDTB = qOptional.get();
@@ -171,10 +171,11 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
         if (!CollectionUtils.isEmpty(listDtl)){
             List<Long> idDxList = listDtl.stream().map(XhThopDxKhBttDtl::getIdDxHdr).collect(Collectors.toList());
             List<XhDxKhBanTrucTiepHdr> listDxHdr = xhDxKhBanTrucTiepHdrRepository.findByIdIn(idDxList);
-            if (!CollectionUtils.isEmpty(listDxHdr)){
-                listDxHdr.stream().map(f ->{
-                    f.setTenTrangThai(Contains.CHUATONGHOP);
-                    return f;
+            if (!CollectionUtils.isEmpty(listDxHdr)) {
+                listDxHdr.stream().map(item -> {
+                    item.setTrangThaiTh(Contains.CHUATONGHOP);
+                    item.setIdThop(null);
+                    return item;
                 }).collect(Collectors.toList());
             }
             xhDxKhBanTrucTiepHdrRepository.saveAll(listDxHdr);
@@ -195,6 +196,7 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
                 if (!CollectionUtils.isEmpty(listDxHdr)) {
                     listDxHdr.stream().map(item -> {
                         item.setTrangThaiTh(Contains.CHUATONGHOP);
+                        item.setIdThop(null);
                         return item;
                     }).collect(Collectors.toList());
                 }
