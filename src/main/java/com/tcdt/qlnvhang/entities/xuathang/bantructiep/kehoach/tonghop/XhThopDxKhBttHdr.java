@@ -51,6 +51,10 @@ public class XhThopDxKhBttHdr extends TrangThaiBaseEntity implements Serializabl
 
     private String soQdPd;
 
+    private String soQdCc;
+
+    private String tchuanCluong;
+
     @Transient
     private List<XhThopDxKhBttDtl> children = new ArrayList<>();
 }
