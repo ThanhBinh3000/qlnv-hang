@@ -224,7 +224,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
 
         XhQdPdKhBttHdr data = qOptional.get();
 
-        data.setTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
+        data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
         data.setTenDvi(hashMapDvi.get(data.getMaDvi()));
         data.setTenLoaiVthh(hashMapVthh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(hashMapVthh.get(data.getCloaiVthh()));
