@@ -27,6 +27,7 @@ public interface XhCtvtDeXuatHdrRepository extends JpaRepository<XhCtvtDeXuatHdr
             "AND ((:#{#param.ngayKetThucTu}  IS NULL OR c.ngayKetThuc >= :#{#param.ngayKetThucTu})" +
             "AND (:#{#param.ngayKetThucDen}  IS NULL OR c.ngayKetThuc <= :#{#param.ngayKetThucDen}) ) " +
             "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
+            "AND (:#{#param.trangThaiList == null || #param.trangThaiList.isEmpty() } = true OR c.trangThai IN :#{#param.trangThaiList}) "+
             "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
     )
     Page<XhCtvtDeXuatHdr> search(@Param("param") SearchXhCtvtDeXuatHdrReq param, Pageable pageable);
