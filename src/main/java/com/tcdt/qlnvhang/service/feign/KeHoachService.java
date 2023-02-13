@@ -35,6 +35,7 @@ public class KeHoachService extends BaseServiceImpl {
     private HttpServletRequest request;
 
     public BigDecimal getChiTieuNhapXuat(Integer nam, String loaiVthh, String maDvi,String typeChiTieu) throws Exception {
+
         KeHoachRequest obj = new KeHoachRequest();
         obj.setNamKh(nam);
         obj.setLoaiVthh(loaiVthh);
