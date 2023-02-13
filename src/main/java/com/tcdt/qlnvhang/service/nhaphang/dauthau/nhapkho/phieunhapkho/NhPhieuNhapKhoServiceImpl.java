@@ -215,8 +215,8 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
                 throw new Exception("Phê duyệt không thành công");
         }
         phieu.setTrangThai(req.getTrangThai());
-        nhPhieuNhapKhoRepository.save(phieu);
-        return phieu;
+        NhPhieuNhapKho rs = nhPhieuNhapKhoRepository.save(phieu);
+        return rs;
     }
 
 
