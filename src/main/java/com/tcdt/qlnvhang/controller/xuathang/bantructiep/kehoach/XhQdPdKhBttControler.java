@@ -7,6 +7,7 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdrReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttService;
+import com.tcdt.qlnvhang.service.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttServicelmpl;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,6 +34,9 @@ public class XhQdPdKhBttControler extends BaseController {
 
     @Autowired
     private XhQdPdKhBttService xhQdPdKhBttService;
+
+    @Autowired
+    private XhQdPdKhBttServicelmpl xhQdPdKhBttServicelmpl;
 
     @ApiOperation(value = "Tra cứu Quyết định phê duyệt kế hoạch bán trực tiếp  ", response = List.class)
     @PostMapping(value=  PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -175,7 +179,21 @@ public class XhQdPdKhBttControler extends BaseController {
             final ObjectMapper mapper = new ObjectMapper();
             mapper.writeValue(response.getOutputStream(), body);
         }
-
     }
-
+    @ApiOperation(value = "Lấy chi tiết Quyết định phê duyệt kế hoạch bán trực tiếp", response = List.class)
+    @GetMapping(value = "/dtl-chi-tiet" + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> detailDtl( @ApiParam(value = "ID phương án kế hoạch bán đấu giá", example = "1", required = true) @PathVariable("ids") Long ids) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(xhQdPdKhBttServicelmpl.detailDtl(ids));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Lấy chi tiết Quyết định phê duyệt kế hoạch bán đấu giá trace: {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
 }
