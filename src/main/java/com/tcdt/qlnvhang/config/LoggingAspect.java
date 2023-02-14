@@ -4,16 +4,27 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.tcdt.qlnvhang.entities.UserActivity;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKho;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoCt;
+import com.tcdt.qlnvhang.enums.EnumResponse;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoCtRepository;
+import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.UserActivityService;
+import com.tcdt.qlnvhang.service.feign.LuuKhoClient;
+import com.tcdt.qlnvhang.table.PhieuNhapXuatHistory;
+import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
@@ -21,7 +32,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,9 +47,19 @@ public class LoggingAspect {
   private Gson gson;
   @Autowired
   private UserActivityService userActivityService;
+  @Autowired
+  ObjectMapper objectMapper;
+  @Autowired
+  private LuuKhoClient luuKhoClient;
+  @Autowired
+  private NhPhieuNhapKhoCtRepository nhPhieuNhapKhoCtRepository;
 
   @Pointcut("within(com.tcdt.qlnvhang..*) && bean(*Controller))")
   public void v3Controller() {
+  }
+
+  @Pointcut("execution(* com.tcdt.qlnvhang.controller.nhaphang.dauthau.nhapkho.NhPhieuNhapKhoController.updateStatus(..))")
+  public void phieuNhapXuatPointCut() {
   }
 
   @Before("v3Controller()")
@@ -73,6 +93,30 @@ public class LoggingAspect {
       }
     } catch (Exception e) {
       e.printStackTrace();
+    }
+  }
+
+
+  @AfterReturning(value = "phieuNhapXuatPointCut()", returning = "result")
+  public void phieuNhapXuatAfterLog(JoinPoint joinPoint, ResponseEntity<BaseResponse> result) {
+    try {
+      if (result != null && result.getBody().getMsg().equals(EnumResponse.RESP_SUCC.getDescription())) {
+        NhPhieuNhapKho nhPhieuNhapKho = objectMapper.convertValue(result.getBody().getData(), NhPhieuNhapKho.class);
+        if (nhPhieuNhapKho.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDCC.getId())) {
+          NhPhieuNhapKhoCt nhPhieuNhapKhoCt = nhPhieuNhapKhoCtRepository.findAllByIdPhieuNkHdr(nhPhieuNhapKho.getId()).get(0);
+          PhieuNhapXuatHistory phieuNhapXuatHistory = new PhieuNhapXuatHistory();
+          phieuNhapXuatHistory.setSoLuong(DataUtils.safeToLong(nhPhieuNhapKhoCt.getSoLuongThucNhap()));
+          phieuNhapXuatHistory.setLoaiVthh(nhPhieuNhapKho.getLoaiVthh());
+          phieuNhapXuatHistory.setMaKho(nhPhieuNhapKho.getMaLoKho());
+          phieuNhapXuatHistory.setNgayDuyet(DataUtils.convertToLocalDate(nhPhieuNhapKho.getNgayPduyet()));
+          phieuNhapXuatHistory.setLoaiNhapXuat(1);//fix tam 1 la nhap -1 la xuat
+          luuKhoClient.synchronizeData(phieuNhapXuatHistory);
+          logger.info("Cập nhật kho theo Phiếu nhập kho {}", nhPhieuNhapKho);
+        }
+      }
+
+    } catch (Exception e) {
+      throw new RuntimeException(e);
     }
   }
 
