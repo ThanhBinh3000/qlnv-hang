@@ -193,10 +193,10 @@ public class XhCtvtQdGiaoNvXhHdrService extends BaseServiceImpl {
           noiDungCuuTro.setTenDiemKho(mapDmucDvi.get(noiDungCuuTro.getMaDiemKho()).get("tenDvi").toString());
         }
         if (mapDmucDvi.containsKey(noiDungCuuTro.getMaNhaKho())) {
-          noiDungCuuTro.setTenNganKho(mapDmucDvi.get(noiDungCuuTro.getMaNhaKho()).get("tenDvi").toString());
+          noiDungCuuTro.setTenNhaKho(mapDmucDvi.get(noiDungCuuTro.getMaNhaKho()).get("tenDvi").toString());
         }
         if (mapDmucDvi.containsKey(noiDungCuuTro.getMaNganKho())) {
-          noiDungCuuTro.setTenLoKho(mapDmucDvi.get(noiDungCuuTro.getMaNganKho()).get("tenDvi").toString());
+          noiDungCuuTro.setTenNganKho(mapDmucDvi.get(noiDungCuuTro.getMaNganKho()).get("tenDvi").toString());
         }
         if (mapDmucDvi.containsKey(noiDungCuuTro.getMaLoKho())) {
           noiDungCuuTro.setTenLoKho(mapDmucDvi.get(noiDungCuuTro.getMaLoKho()).get("tenDvi").toString());
