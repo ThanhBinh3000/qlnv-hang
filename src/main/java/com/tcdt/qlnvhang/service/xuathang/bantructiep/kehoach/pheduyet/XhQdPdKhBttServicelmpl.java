@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKh
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.tonghop.XhThopDxKhBttHdr;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.thongtin.XhTcTtinBtt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdrRepository;
@@ -14,6 +15,7 @@ import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPd
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.tonghop.XhThopDxKhBttRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.tochuctrienkhai.thongtin.XhTcTtinBttRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviDtlReq;
@@ -32,13 +34,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhBttService {
@@ -66,6 +66,9 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
 
     @Autowired
     private XhDxKhBanTrucTiepHdrRepository xhDxKhBanTrucTiepHdrRepository;
+
+    @Autowired
+    private XhTcTtinBttRepository xhTcTtinBttRepository;
 
 
     @Override
@@ -411,5 +414,37 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
                 }
             }
         }
+    }
+
+    public XhQdPdKhBttDtl detailDtl(Long id) throws Exception{
+        if (ObjectUtils.isEmpty(id)){
+            throw new Exception("Không tồn tại bản ghi.");
+        }
+        Optional<XhQdPdKhBttDtl> byId = xhQdPdKhBttDtlRepository.findById(id);
+        if (!byId.isPresent()){
+            throw new UnsupportedOperationException("Bản ghi không tồn tại.");
+        }
+
+        XhQdPdKhBttDtl dtl = byId.get();
+
+        Map<String, String> hashMapVthh = getListDanhMucHangHoa();
+        Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
+        XhQdPdKhBttHdr hdr = xhQdPdKhBttHdrRepository.findById(dtl.getIdQdHdr()).get();
+        hdr.setTenLoaiVthh(hashMapVthh.get(hdr.getLoaiVthh()));
+        hdr.setTenCloaiVthh(hashMapVthh.get(hdr.getCloaiVthh()));
+        dtl.setHdr(hdr);
+        List<XhTcTtinBtt> byIdTt = xhTcTtinBttRepository.findAllByIdDtl(dtl.getId());
+        for (XhTcTtinBtt btt : byIdTt){
+            List<FileDinhKem> fileDinhKems = fileDinhKemService.search(btt.getId(), Arrays.asList(XhTcTtinBtt.TABLE_NAME));
+            btt.setFileDinhKems(fileDinhKems.get(0));
+        }
+        dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThai()));
+        dtl.setTenDvi(StringUtils.isEmpty(dtl.getMaDvi())? null : hashMapDvi.get(dtl.getMaDvi()));
+        dtl.setTenLoaiVthh(StringUtils.isEmpty(dtl.getLoaiVthh())? null : hashMapVthh.get(dtl.getLoaiVthh()));
+        dtl.setTenCloaiVthh(StringUtils.isEmpty(dtl.getCloaiVthh())? null : hashMapVthh.get(dtl.getCloaiVthh()));
+        dtl.setFileDinhKemMuaLe(fileDinhKemService.search(dtl.getId(), Collections.singleton(XhQdPdKhBttDtl.TABLE_NAME)));
+        dtl.setFileDinhKemUyQuyen(fileDinhKemService.search(dtl.getId(), Collections.singleton(XhQdPdKhBttDtl.TABLE_NAME)));
+        dtl.setXhTcTtinBttList(byIdTt);
+     return dtl;
     }
 }
