@@ -253,6 +253,9 @@ public class PathContains {
 
 	public static final String TTIN_DGIA = "/ttin-dgia";
 
+	public static final String TTIN_BTT = "/ttin-btt";
+
+
 	public static final String KQUA_DGIA = "/kq-bdg";
 
 }
