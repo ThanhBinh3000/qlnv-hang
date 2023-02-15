@@ -58,7 +58,7 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl implements XhD
         data.getContent().forEach( f->{
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenTrangThaiTh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiTh()));
-            f.setMaDvi(hashMapDvi.get(f.getMaDvi()));
+            f.setTenDvi(hashMapDvi.get(f.getMaDvi()));
             f.setTenLoaiVthh(hashMapVthh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(hashMapVthh.get(f.getCloaiVthh()));
         });
