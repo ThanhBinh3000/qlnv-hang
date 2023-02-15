@@ -255,7 +255,7 @@ public class PathContains {
 
 	public static final String TTIN_BTT = "/ttin-btt";
 
-
+	public static final String KQUA_BTT = "/kq-btt";
 	public static final String KQUA_DGIA = "/kq-bdg";
 
 }
