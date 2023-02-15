@@ -32,7 +32,6 @@ public class XhTcTtinBttControler extends BaseController {
     @Autowired
     private XhTcTtinBttServiceImpl xhTcTtinBttService;
 
-
     @ApiOperation(value = "Tra cứu thông tin đấu thầu ", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -53,7 +52,6 @@ public class XhTcTtinBttControler extends BaseController {
 
         return ResponseEntity.ok(resp);
     }
-
 
     @ApiOperation(value = "Tạo mới thông tin đấu thầu gạo", response = List.class)
     @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -91,7 +89,7 @@ public class XhTcTtinBttControler extends BaseController {
     }
 
     @ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 thông tin bán trực tiếp", response = List.class)
-    @PostMapping(value =PathContains.TKHAI_MTT + PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> updateStatus(@Valid HttpServletRequest req, @RequestBody XhCgiaReq stReq) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -105,5 +103,4 @@ public class XhTcTtinBttControler extends BaseController {
         }
         return ResponseEntity.ok(resp);
     }
-
 }

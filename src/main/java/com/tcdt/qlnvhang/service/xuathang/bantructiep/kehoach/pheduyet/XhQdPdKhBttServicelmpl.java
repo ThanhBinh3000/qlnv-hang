@@ -150,6 +150,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
             XhQdPdKhBttDtl dtl = new XhQdPdKhBttDtl();
             BeanUtils.copyProperties(dtlReq, dtl, "id");
             dtl.setIdQdHdr(idQdHdr);
+            dtl.setSoQdPd(req.getSoQdPd());
             dtl.setTrangThai(Contains.CHUACAPNHAT);
             xhQdPdKhBttDtlRepository.save(dtl);
             xhQdPdKhBttDviRepository.deleteByIdQdDtl(dtlReq.getId());
@@ -272,22 +273,27 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
                 throw new Exception("Phê duyệt không thành công");
         }
         dataDB.setTrangThai(req.getTrangThai());
-        if (req.getTrangThai().equals(Contains.BAN_HANH)){
-            if (dataDB.getPhanLoai().equals("TH")){
+        if (req.getTrangThai().equals(Contains.BAN_HANH)) {
+            if (dataDB.getPhanLoai().equals("TH")) {
                 Optional<XhThopDxKhBttHdr> qOptionalTh = xhThopDxKhBttRepository.findById(dataDB.getIdThHdr());
-                if (qOptionalTh.isPresent()){
-                    throw new Exception("Tổng hợp kế hoạch này đã được quyết định");
+                if (qOptionalTh.isPresent()) {
+                    if (qOptionalTh.get().getTrangThai().equals(Contains.DABANHANH_QD)) {
+                        throw new Exception("Tổng hợp kế hoạch này đã được quyết định");
+                    }
+                    xhThopDxKhBttRepository.updateTrangThai(dataDB.getIdThHdr(), Contains.DABANHANH_QD);
+                } else {
+                    throw new Exception("Tổng hợp kế hoạch không được tìm thấy");
                 }
-                xhThopDxKhBttRepository.updateTrangThai(dataDB.getIdThHdr(), Contains.DABANHANH_QD);
-            }else {
-                Optional<XhDxKhBanTrucTiepHdr> qOptionalDx = xhDxKhBanTrucTiepHdrRepository.findById(dataDB.getIdTrHdr());
-                if (qOptionalDx.isPresent()){
-                    if (qOptionalDx.get().getTrangThai().equals(Contains.DABANHANH_QD)) {
+            } else {
+                Optional<XhDxKhBanTrucTiepHdr> qOptionalTr = xhDxKhBanTrucTiepHdrRepository.findById(dataDB.getIdTrHdr());
+                if (qOptionalTr.isPresent()) {
+                    if (qOptionalTr.get().getTrangThai().equals(Contains.DABANHANH_QD)) {
                         throw new Exception("Đề xuất này đã được quyết định");
                     }
-                    qOptionalDx.get().setTrangThaiTh(Contains.DABANHANH_QD);
-                    xhDxKhBanTrucTiepHdrRepository.save(qOptionalDx.get());
-                }else {
+                    // Update trạng thái tờ trình
+                    qOptionalTr.get().setTrangThaiTh(Contains.DABANHANH_QD);
+                    xhDxKhBanTrucTiepHdrRepository.save(qOptionalTr.get());
+                } else {
                     throw new Exception("Số tờ trình kế hoạch không được tìm thấy");
                 }
             }

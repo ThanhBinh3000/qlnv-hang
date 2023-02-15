@@ -108,6 +108,10 @@ public class XhQdPdKhBttDtl implements Serializable {
     @Transient
     private String tenCloaiVthh;
 
+    private String soQdPd;
+
+    private String soQdKq;
+
     @Transient
     private List<FileDinhKem> fileDinhKemUyQuyen = new ArrayList<>();
 
