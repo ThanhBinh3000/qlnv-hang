@@ -60,6 +60,9 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
 
     public Page<XhCtVtQuyetDinhPdHdr> searchPage(CustomUserDetails currentUser, SearchXhCtvtTongHopHdr req) throws Exception {
         req.setDvql(currentUser.getDvql());
+        //cuc xem cac quyet dinh tu tong cuc
+        if(currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)){}
+
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhCtVtQuyetDinhPdHdr> search = xhCtVtQdPdHdrRepository.search(req, pageable);
         Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");

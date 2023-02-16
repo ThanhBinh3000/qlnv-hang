@@ -14,10 +14,11 @@ import java.util.Optional;
 
 @Repository
 public interface XhCtVtQdPdHdrRepository extends JpaRepository<XhCtVtQuyetDinhPdHdr,Long> {
-    @Query("SELECT DISTINCT  c FROM XhCtVtQuyetDinhPdHdr c  join c.quyetDinhPdDtl e" +
+    @Query("SELECT DISTINCT  c FROM XhCtVtQuyetDinhPdHdr c  join c.quyetDinhPdDtl e join e.quyetDinhPdDx dx" +
             " WHERE 1=1 " +
             "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
             "AND (:#{#param.maDviDx} IS NULL OR e.maDviDx LIKE CONCAT(:#{#param.maDviDx},'%')) " +
+            "AND (:#{#param.maDviGiao} IS NULL OR dx.maDviCuc = :#{#param.maDviGiao}) " +
             "AND (:#{#param.type} IS NULL OR c.type = :#{#param.type}) " +
             "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
             "AND (:#{#param.soDx} IS NULL OR LOWER(e.soDx) LIKE CONCAT('%',LOWER(:#{#param.soDx}),'%')) " +

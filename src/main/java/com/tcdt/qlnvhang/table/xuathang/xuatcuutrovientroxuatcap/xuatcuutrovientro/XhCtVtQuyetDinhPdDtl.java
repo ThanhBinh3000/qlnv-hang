@@ -37,7 +37,8 @@ public class XhCtVtQuyetDinhPdDtl implements Serializable {
     private String type;
     @Transient
     private String tenDviDx;
-    @Transient
+    @OneToMany(mappedBy = "xhCtVtQuyetDinhPdDtl")
+//    @Transient
     private List<XhCtVtQuyetDinhPdDx> quyetDinhPdDx = new ArrayList<>();
 
     @ManyToOne
