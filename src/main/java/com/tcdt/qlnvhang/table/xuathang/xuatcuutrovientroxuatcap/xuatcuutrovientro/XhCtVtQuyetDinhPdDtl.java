@@ -15,34 +15,34 @@ import java.util.List;
 @Data
 public class XhCtVtQuyetDinhPdDtl implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "XH_CTVT_QUYET_DINH_PD_DTL";
+  private static final long serialVersionUID = 1L;
+  public static final String TABLE_NAME = "XH_CTVT_QUYET_DINH_PD_DTL";
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhCtVtQuyetDinhPdDtl.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = XhCtVtQuyetDinhPdDtl.TABLE_NAME
-            + "_SEQ", allocationSize = 1, name = XhCtVtQuyetDinhPdDtl.TABLE_NAME + "_SEQ")
-    private Long id;
-    private Long idHdr;
-    private Long idDx;
-    private String soDx;
-    private String maDviDx;
-    private LocalDate ngayPduyetDx;
-    private String trichYeuDx;
-    private BigDecimal tongSoLuongDx;
-    private BigDecimal soLuongXuatCap;
-    private BigDecimal thanhTienDx;
-    private LocalDate ngayDx;
-    private LocalDate ngayKetThucDx;
-    private String type;
-    @Transient
-    private String tenDviDx;
-    @OneToMany(mappedBy = "xhCtVtQuyetDinhPdDtl")
+  @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhCtVtQuyetDinhPdDtl.TABLE_NAME + "_SEQ")
+  @SequenceGenerator(sequenceName = XhCtVtQuyetDinhPdDtl.TABLE_NAME
+      + "_SEQ", allocationSize = 1, name = XhCtVtQuyetDinhPdDtl.TABLE_NAME + "_SEQ")
+  private Long id;
+  private Long idHdr;
+  private Long idDx;
+  private String soDx;
+  private String maDviDx;
+  private LocalDate ngayPduyetDx;
+  private String trichYeuDx;
+  private BigDecimal tongSoLuongDx;
+  private BigDecimal soLuongXuatCap;
+  private BigDecimal thanhTienDx;
+  private LocalDate ngayDx;
+  private LocalDate ngayKetThucDx;
+  private String type;
+  @Transient
+  private String tenDviDx;
+  @OneToMany(mappedBy = "xhCtVtQuyetDinhPdDtl", fetch = FetchType.LAZY)
 //    @Transient
-    private List<XhCtVtQuyetDinhPdDx> quyetDinhPdDx = new ArrayList<>();
+  private List<XhCtVtQuyetDinhPdDx> quyetDinhPdDx = new ArrayList<>();
 
-    @ManyToOne
-    @JsonIgnore
-    @JoinColumn(name = "idHdr", updatable = false, insertable = false)
-    private XhCtVtQuyetDinhPdHdr xhCtVtQuyetDinhPdHdr;
+  @ManyToOne
+  @JsonIgnore
+  @JoinColumn(name = "idHdr", updatable = false, insertable = false)
+  private XhCtVtQuyetDinhPdHdr xhCtVtQuyetDinhPdHdr;
 }
