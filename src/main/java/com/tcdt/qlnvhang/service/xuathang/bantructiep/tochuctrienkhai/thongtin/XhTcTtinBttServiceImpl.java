@@ -48,6 +48,7 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl  {
                 convertDateToString(req.getNgayCgiadDen()),
                 req.getLoaiVthh(),
                 req.getMaDvi(),
+                req.getTrangThai(),
                 req.getTochucCanhan(),
                 pageable
         );
