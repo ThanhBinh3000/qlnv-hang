@@ -157,7 +157,7 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
             }
         }
         XhCtVtQuyetDinhPdHdr data = optional.get();
-        BeanUtils.copyProperties(objReq, data);
+        BeanUtils.copyProperties(objReq, data,"id","quyetDinhPdDtl");
         XhCtVtQuyetDinhPdHdr created = xhCtVtQdPdHdrRepository.save(data);
 
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhCtVtQuyetDinhPdHdr.TABLE_NAME + "_CAN_CU"));
