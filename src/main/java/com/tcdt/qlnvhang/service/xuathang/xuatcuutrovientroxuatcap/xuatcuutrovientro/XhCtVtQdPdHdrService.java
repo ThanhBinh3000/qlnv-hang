@@ -212,8 +212,7 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
                 if (mapDmucDvi.containsKey(quyetDinhPdDtl.getMaDviDx())) {
                     quyetDinhPdDtl.setTenDviDx(mapDmucDvi.get(quyetDinhPdDtl.getMaDviDx()).get("tenDvi").toString());
                 }
-                List<Long> listId = ListDtl.stream().map(XhCtVtQuyetDinhPdDtl::getId).collect(Collectors.toList());
-                List<XhCtVtQuyetDinhPdDx> listQuyetDinhPdDx = xhCtVtQdPdDxRepository.findByIdHdrIn(listId);
+                List<XhCtVtQuyetDinhPdDx> listQuyetDinhPdDx = xhCtVtQdPdDxRepository.findByIdHdrIn(Collections.singletonList(quyetDinhPdDtl.getId()));
                 for (XhCtVtQuyetDinhPdDx quyetDinhPdDx : listQuyetDinhPdDx) {
                     if (mapDmucDvi.containsKey(quyetDinhPdDx.getMaDviCuc())) {
                         quyetDinhPdDx.setTenCuc(mapDmucDvi.get(quyetDinhPdDx.getMaDviCuc()).get("tenDvi").toString());
