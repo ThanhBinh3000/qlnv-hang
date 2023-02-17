@@ -20,7 +20,7 @@ public class XhCtvtQdGiaoNvXhHdrReq {
   private String loaiVthh;
   private String cloaiVthh;
   private BigDecimal soLuong;
-  private BigDecimal donViTinh;
+  private String donViTinh;
   private LocalDate thoiGianGiaoNhan;
   private String trichYeu;
   private String trangThai;
