@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.response.xuathang.phieuknghiemcluonghang;
 
-import com.tcdt.qlnvhang.entities.xuathang.phieukiemnghiemchatluong.XhPhieuKnghiemCluongCt;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.phieukiemnghiemcl.XhPhieuKnghiemCluongCt;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
