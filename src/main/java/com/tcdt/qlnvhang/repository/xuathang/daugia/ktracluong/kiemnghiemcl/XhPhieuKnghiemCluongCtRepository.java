@@ -1,6 +1,6 @@
-package com.tcdt.qlnvhang.repository.xuathang.phieukiemnghiemchatluong;
+package com.tcdt.qlnvhang.repository.xuathang.daugia.ktracluong.kiemnghiemcl;
 
-import com.tcdt.qlnvhang.entities.xuathang.phieukiemnghiemchatluong.XhPhieuKnghiemCluongCt;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.phieukiemnghiemcl.XhPhieuKnghiemCluongCt;
 import com.tcdt.qlnvhang.repository.BaseRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;

@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.bandaugia.bienbanlaymau;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class XhBbLayMauRequest {
+public class XhBbLayMauRequest extends BaseRequest {
 	private Long id;
 	private Long qdgnvxId;
 	private String soBienBan;

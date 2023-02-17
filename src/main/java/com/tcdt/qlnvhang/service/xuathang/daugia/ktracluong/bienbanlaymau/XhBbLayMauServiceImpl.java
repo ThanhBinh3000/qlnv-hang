@@ -1,14 +1,12 @@
-package com.tcdt.qlnvhang.service.impl;
+package com.tcdt.qlnvhang.service.xuathang.daugia.ktracluong.bienbanlaymau;
 
-import com.tcdt.qlnvhang.entities.bandaugia.bienbanlaymau.XhBbLayMau;
-import com.tcdt.qlnvhang.entities.bandaugia.bienbanlaymau.XhBbLayMauCt;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMau;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMauCt;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXh;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.mapper.bandaugia.bienbanlaymau.XhBbLayMauCtRequestMapper;
-import com.tcdt.qlnvhang.mapper.bandaugia.bienbanlaymau.XhBbLayMauRequestMapper;
-import com.tcdt.qlnvhang.mapper.bandaugia.bienbanlaymau.XhBbLayMauResponseMapper;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
-import com.tcdt.qlnvhang.repository.bandaugia.bienbanlaymau.XhBbLayMauCtRepository;
-import com.tcdt.qlnvhang.repository.bandaugia.bienbanlaymau.XhBbLayMauRepository;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMauCtRepository;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMauRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtDiemKhoRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganKhoRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
@@ -19,7 +17,8 @@ import com.tcdt.qlnvhang.request.bandaugia.bienbanlaymau.XhBbLayMauSearchRequest
 import com.tcdt.qlnvhang.response.banhangdaugia.bienbanlaymau.XhBbLayMauResponse;
 import com.tcdt.qlnvhang.response.banhangdaugia.bienbanlaymau.XhBbLayMauSearchResponse;
 import com.tcdt.qlnvhang.service.SecurityContextService;
-import com.tcdt.qlnvhang.service.bandaugia.bienbanlaymau.XhBbLayMauService;
+import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.service.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMauService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
@@ -33,7 +32,11 @@ import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -50,23 +53,67 @@ import java.util.stream.Collectors;
 @Transactional(rollbackFor = Exception.class)
 public class XhBbLayMauServiceImpl extends BaseServiceImpl implements XhBbLayMauService {
 	private final XhBbLayMauRepository xhBbLayMauRepository;
-	private final XhBbLayMauRequestMapper xhBbLayMauRequestMapper;
-	private final XhBbLayMauResponseMapper xhBbLayMauResponseMapper;
 
-	private final XhBbLayMauCtRequestMapper ctRequestMapper;
 	private final FileDinhKemService fileDinhKemService;
 	private final QlnvDmVattuRepository dmVattuRepository;
 
 	private final XhBbLayMauCtRepository ctRepository;
 
-	private final KtNganLoRepository ktNganLoRepository;
-	private final KtDiemKhoRepository ktDiemKhoRepository;
-	private final KtNhaKhoRepository ktNhaKhoRepository;
-	private final KtNganKhoRepository ktNganKhoRepository;
-
-	private static final String SHEET_NAME = "Biên bản lấy mẫu";
+	@Override
+	public Page<XhBbLayMau> searchPage(XhBbLayMauRequest req) throws Exception {
+		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),
+				req.getPaggingReq().getLimit(), Sort.by("id").descending());
+		Page<XhBbLayMau> data = xhBbLayMauRepository.searchPage( req,pageable);
+		return data;
+	}
 
 	@Override
+	public XhBbLayMau create(XhBbLayMauRequest req) throws Exception {
+
+		XhBbLayMau xhBbLayMau = new XhBbLayMau();
+		BeanUtils.copyProperties(req,xhBbLayMau,"id");
+
+		saveDetail(req,xhBbLayMau.getId());
+
+		return xhBbLayMauRepository.save(xhBbLayMau);
+	}
+
+	void saveDetail(XhBbLayMauRequest req,Long idHdr){
+
+	}
+
+	@Override
+	public XhBbLayMau update(XhBbLayMauRequest req) throws Exception {
+		return null;
+	}
+
+	@Override
+	public XhBbLayMau detail(Long id) throws Exception {
+		return null;
+	}
+
+	@Override
+	public XhBbLayMau approve(XhBbLayMauRequest req) throws Exception {
+		return null;
+	}
+
+	@Override
+	public void delete(Long id) throws Exception {
+
+	}
+
+	@Override
+	public void deleteMulti(List<Long> listMulti) throws Exception {
+
+	}
+
+	@Override
+	public void export(XhBbLayMauRequest req, HttpServletResponse response) throws Exception {
+
+	}
+
+
+	/*@Override
 	public XhBbLayMauResponse create(XhBbLayMauRequest req) throws Exception {
 		if (req == null) return null;
 
@@ -303,5 +350,5 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl implements XhBbLayMau
 		so = Optional.ofNullable(so).orElse(0);
 		so = so + 1;
 		return so;
-	}
+	}*/
 }

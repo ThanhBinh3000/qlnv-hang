@@ -58,6 +58,18 @@ public class XhCtvtBbLayMauHdrService extends BaseServiceImpl {
         Map<String, Object> objDonVi = mapDmucDvi.get(s.getMaDvi());
         s.setTenDvi(objDonVi.get("tenDvi").toString());
       }
+      if (mapDmucDvi.containsKey(s.getMaDiemKho())) {
+        s.setTenDiemKho(mapDmucDvi.get(s.getMaDiemKho()).get("tenDvi").toString());
+      }
+      if (mapDmucDvi.containsKey(s.getMaNhaKho())) {
+        s.setTenNhaKho(mapDmucDvi.get(s.getMaNhaKho()).get("tenDvi").toString());
+      }
+      if (mapDmucDvi.containsKey(s.getMaNganKho())) {
+        s.setTenNganKho(mapDmucDvi.get(s.getMaNganKho()).get("tenDvi").toString());
+      }
+      if (mapDmucDvi.containsKey(s.getMaLoKho())) {
+        s.setTenLoKho(mapDmucDvi.get(s.getMaLoKho()).get("tenDvi").toString());
+      }
       if (mapVthh.get((s.getLoaiVthh())) != null) {
         s.setTenLoaiVthh(mapVthh.get(s.getLoaiVthh()));
       }
@@ -86,6 +98,8 @@ public class XhCtvtBbLayMauHdrService extends BaseServiceImpl {
 
     List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhCtvtBbLayMauHdr.TABLE_NAME );
     created.setFileDinhKems(fileDinhKems);
+    List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhCtvtBbLayMauHdr.TABLE_NAME + "_CAN_CU");
+    created.setCanCu(canCu);
     List<FileDinhKem> niemPhong = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemNiemPhong(), created.getId(), XhCtvtBbLayMauHdr.TABLE_NAME + "_NIEM_PHONG");
     created.setFileDinhKemNiemPhong(niemPhong);
 
@@ -126,6 +140,9 @@ public class XhCtvtBbLayMauHdrService extends BaseServiceImpl {
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList( XhCtvtBbLayMauHdr.TABLE_NAME));
     List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhCtvtBbLayMauHdr.TABLE_NAME );
     created.setFileDinhKems(fileDinhKems);
+    fileDinhKemService.delete(objReq.getId(), Lists.newArrayList( XhCtvtBbLayMauHdr.TABLE_NAME + "_CAN_CU"));
+    List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhCtvtBbLayMauHdr.TABLE_NAME + "_CAN_CU");
+    created.setCanCu(canCu);
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList( XhCtvtBbLayMauHdr.TABLE_NAME + "_NIEM_PHONG"));
     List<FileDinhKem> niemPhong = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemNiemPhong(), created.getId(), XhCtvtBbLayMauHdr.TABLE_NAME + "_NIEM_PHONG");
     created.setFileDinhKemNiemPhong(niemPhong);
@@ -152,14 +169,28 @@ public class XhCtvtBbLayMauHdrService extends BaseServiceImpl {
         data.setTenDvi(mapDmucDvi.get(data.getMaDvi()).get("tenDvi").toString());
         data.setDiaChiDvi(mapDmucDvi.get(data.getMaDvi()).get("diaChi").toString());
       }
+      if (mapDmucDvi.containsKey(data.getMaDiemKho())) {
+        data.setTenDiemKho(mapDmucDvi.get(data.getMaDiemKho()).get("tenDvi").toString());
+      }
+      if (mapDmucDvi.containsKey(data.getMaNhaKho())) {
+        data.setTenNhaKho(mapDmucDvi.get(data.getMaNhaKho()).get("tenDvi").toString());
+      }
+      if (mapDmucDvi.containsKey(data.getMaNganKho())) {
+        data.setTenNganKho(mapDmucDvi.get(data.getMaNganKho()).get("tenDvi").toString());
+      }
+      if (mapDmucDvi.containsKey(data.getMaLoKho())) {
+        data.setTenLoKho(mapDmucDvi.get(data.getMaLoKho()).get("tenDvi").toString());
+      }
       data.setTenLoaiVthh(mapVthh.get(data.getLoaiVthh()));
       data.setTenCloaiVthh(mapVthh.get(data.getCloaiVthh()));
       data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
 
       List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhCtvtBbLayMauHdr.TABLE_NAME));
+      List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Arrays.asList(XhCtvtBbLayMauHdr.TABLE_NAME + "_CAN_CU"));
       List<FileDinhKem> niemPhong = fileDinhKemService.search(data.getId(), Arrays.asList(XhCtvtBbLayMauHdr.TABLE_NAME + "_NIEM_PHONG"));
       data.setFileDinhKems(fileDinhKems);
-      data.setFileDinhKems(niemPhong);
+      data.setCanCu(canCu);
+      data.setFileDinhKemNiemPhong(niemPhong);
 
       List<XhCtvtBbLayMauDtl> list = xhCtvtBbLayMauDtlRepository.findByIdHdr(data.getId());
       data.setNguoiLienQuan(list);
@@ -177,7 +208,9 @@ public class XhCtvtBbLayMauHdrService extends BaseServiceImpl {
     XhCtvtBbLayMauHdr data = optional.get();
     List<XhCtvtBbLayMauDtl> list = xhCtvtBbLayMauDtlRepository.findByIdHdr(data.getId());
     xhCtvtBbLayMauDtlRepository.deleteAll(list);
+    fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhCtvtBbLayMauHdr.TABLE_NAME ));
     fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhCtvtBbLayMauHdr.TABLE_NAME + "_CAN_CU"));
+    fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhCtvtBbLayMauHdr.TABLE_NAME + "_NIEM_PHONG"));
     xhCtvtBbLayMauHdrRepository.delete(data);
   }
 
@@ -191,7 +224,9 @@ public class XhCtvtBbLayMauHdrService extends BaseServiceImpl {
     List<Long> listId = list.stream().map(XhCtvtBbLayMauHdr::getId).collect(Collectors.toList());
     List<XhCtvtBbLayMauDtl> listPhuongAn = xhCtvtBbLayMauDtlRepository.findAllByIdHdrIn(listId);
     xhCtvtBbLayMauDtlRepository.deleteAll(listPhuongAn);
+    fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(XhCtvtBbLayMauHdr.TABLE_NAME ));
     fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(XhCtvtBbLayMauHdr.TABLE_NAME + "_CAN_CU"));
+    fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(XhCtvtBbLayMauHdr.TABLE_NAME + "_NIEM_PHONG"));
     xhCtvtBbLayMauHdrRepository.deleteAll(list);
   }
 
