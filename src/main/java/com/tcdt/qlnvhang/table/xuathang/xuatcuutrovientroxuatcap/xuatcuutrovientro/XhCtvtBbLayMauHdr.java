@@ -8,7 +8,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -33,7 +32,7 @@ public class XhCtvtBbLayMauHdr extends BaseEntity implements Serializable {
   private LocalDate ngayQdGiaoNvXh;
   private String ktvBaoQuan;
   private String soBienBan;
-  private Date ngayLayMau;
+  private LocalDate ngayLayMau;
   private String dviKiemNghiem;
   private String diaDiemLayMau;
   private String loaiVthh;
@@ -79,6 +78,8 @@ public class XhCtvtBbLayMauHdr extends BaseEntity implements Serializable {
   private String tenLoKho;
   @Transient
   private List<FileDinhKem> fileDinhKems =new ArrayList<>();
+  @Transient
+  private List<FileDinhKem> canCu =new ArrayList<>();
   @Transient
   private List<FileDinhKem> fileDinhKemNiemPhong =new ArrayList<>();
   @Transient
