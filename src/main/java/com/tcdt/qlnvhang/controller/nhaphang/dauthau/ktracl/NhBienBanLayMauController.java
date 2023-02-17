@@ -29,15 +29,14 @@ import java.util.List;
 @Api(tags = "Nhập hàng - Đấu thầu - Kiểm tra chất lượng - Biên bản lấy mẫu/bàn giao mẫu")
 public class NhBienBanLayMauController {
 	@Autowired
-	private BienBanLayMauService bienBanLayMauService;
+	private BienBanLayMauService service;
 
 	@ApiOperation(value = "Tạo mới", response = BienBanLayMauRes.class)
-	@PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value=  PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> create(@Valid @RequestBody BienBanLayMauReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			BienBanLayMau res = bienBanLayMauService.create(req);
-			resp.setData(res);
+			resp.setData(service.create(req));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -53,7 +52,7 @@ public class NhBienBanLayMauController {
 	public ResponseEntity<BaseResponse> update(@Valid @RequestBody BienBanLayMauReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			BienBanLayMau res = bienBanLayMauService.update(req);
+			BienBanLayMau res = service.update(req);
 			resp.setData(res);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
@@ -70,7 +69,7 @@ public class NhBienBanLayMauController {
 	public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			bienBanLayMauService.delete(idSearchReq.getId());
+			service.delete(idSearchReq.getId());
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -82,12 +81,11 @@ public class NhBienBanLayMauController {
 	}
 
 	@ApiOperation(value = "Chi tiết thông tin", response = Page.class)
-	@GetMapping(value = PathContains.URL_CHI_TIET + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> detail(@PathVariable("id") Long id) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			BienBanLayMau res = bienBanLayMauService.detail(id);
-			resp.setData(res);
+			resp.setData(service.detail(id));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -103,8 +101,7 @@ public class NhBienBanLayMauController {
 	public ResponseEntity<BaseResponse> updateStatus(@RequestBody BienBanLayMauReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			BienBanLayMau res = bienBanLayMauService.approve(req);
-			resp.setData(res);
+			resp.setData(service.approve(req));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -120,8 +117,7 @@ public class NhBienBanLayMauController {
 	public ResponseEntity<BaseResponse> search(@RequestBody BienBanLayMauReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			Page<BienBanLayMau> res = bienBanLayMauService.searchPage(req);
-			resp.setData(res);
+			resp.setData(service.searchPage(req));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -134,11 +130,11 @@ public class NhBienBanLayMauController {
 
 	@ApiOperation(value = "Delete multiple", response = List.class)
 	@ResponseStatus(HttpStatus.OK)
-	@PostMapping("/delete/multiple")
+	@PostMapping(value=  PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> deleteMultiple(@RequestBody @Valid DeleteReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			bienBanLayMauService.deleteMulti(req.getIds());
+			service.deleteMulti(req.getIds());
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -150,16 +146,14 @@ public class NhBienBanLayMauController {
 	}
 
 	@ApiOperation(value = "Export", response = List.class)
-	@PostMapping(value = "/export/list", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value=  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody BienBanLayMauReq req) {
-
 		try {
-			bienBanLayMauService.export(req,response);
+			service.export(req,response);
 		} catch (Exception e) {
 			log.error("Error can not export", e);
 		}
-
 	}
 
 }

@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.entities.xuathang.daugia.nhiemvuxuat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMau;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
@@ -65,9 +66,9 @@ public class XhQdGiaoNvXh extends TrangThaiBaseEntity implements Serializable {
     @Transient
     private List<XhQdGiaoNvXhDtl> children = new ArrayList<>();
 
-//    @Transient
-//    private List<HhPhieuNhapKhoHdr> hhPhieuNhapKhoHdrList = new ArrayList<>();
-//
+    @Transient
+    private List<XhBbLayMau> xhBbLayMauList = new ArrayList<>();
+
 //    @Transient
 //    private List<HhBcanKeHangHdr> hhBcanKeHangHdrList = new ArrayList<>();
 //

@@ -28,4 +28,6 @@ public interface XhBbLayMauRepository extends BaseRepository<XhBbLayMau, Long> {
 	void deleteAllByIdIn(Collection<Long> ids);
 
 	List<XhBbLayMau> findByIdIn(List<Long> ids);
+
+	List<XhBbLayMau> findAllByIdQd(Long idQd);
 }

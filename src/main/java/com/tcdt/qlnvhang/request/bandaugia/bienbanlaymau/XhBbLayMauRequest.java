@@ -1,9 +1,11 @@
 package com.tcdt.qlnvhang.request.bandaugia.bienbanlaymau;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.util.Contains;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +15,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -23,36 +26,56 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class XhBbLayMauRequest extends BaseRequest {
 	private Long id;
-	private Long qdgnvxId;
-	private String soBienBan;
-	private String donViKiemNghiem;
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-	private LocalDate ngayLayMau;
-	private String diaDiemLayMau;
-	private String maVatTuCha;
-	private String maVatTu;
-	private String maDiemKho;
-	private String maNhaKho;
-	private String maNganKho;
-	private String maNganLo;
-	private BigDecimal soLuongMau;
-	private String ppLayMau;
-	private String chiTieuKiemTra;
-	private String trangThai;
-	private String lyDoTuChoi;
-	private String maDvi;
-	private String capDvi;
-	private Long nguoiGuiDuyetId;
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-	private LocalDate ngayGuiDuyet;
-	private Long nguoiPduyetId;
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-	private LocalDate ngayPduyet;
-	private String ketQuaNiemPhong;
-	private Integer so;
+
 	private Integer nam;
+
+	private String maDvi;
+
+	private Long idQd;
+
+	private String soQd;
+
+	private String soHd;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	private Date ngayHd;
+
+	private Long idKtv;
+
+	private String soBienBan;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	private Date ngayLayMau;
+
+	private String dviKnghiem;
+
+	private String ddiemLayMau;
+
 	private String loaiVthh;
+
+	private String cloaiVthh;
+
+	private String moTaHangHoa;
+
+	private Long idDdiemXh;
+
+	private String maDiemKho;
+
+	private String maNhaKho;
+
+	private String maNganKho;
+
+	private String maLoKho;
+
+	private BigDecimal soLuong;
+
+	private String ppLayMau;
+
+	private String chiTieuKiemTra;
+
+	private Integer ketQuaNiemPhong;
+
 	private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
-	private List<XhBbLayMauCtRequest> chiTietList;
-	private Long hopDongId;
+
+	private List<XhBbLayMauCtRequest> children = new ArrayList<>();
 }

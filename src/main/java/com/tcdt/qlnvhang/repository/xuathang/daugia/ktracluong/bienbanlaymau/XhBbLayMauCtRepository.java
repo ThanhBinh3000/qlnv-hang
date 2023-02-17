@@ -11,6 +11,8 @@ import java.util.List;
 public interface XhBbLayMauCtRepository extends BaseRepository<XhBbLayMauCt, Long> {
 	void deleteAllByIdIn(Collection<Long> ids);
 
+	void deleteAllByBbLayMauId(Long bbLayMauId);
+
 //	List<XhBbLayMauCt> findByXhBbLayMauIdIn(Collection<Long> ids);
 
 

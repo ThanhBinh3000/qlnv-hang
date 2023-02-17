@@ -2,34 +2,15 @@ package com.tcdt.qlnvhang.service.xuathang.daugia.ktracluong.bienbanlaymau;
 
 import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMau;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMauCt;
-import com.tcdt.qlnvhang.entities.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXh;
-import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMauCtRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMauRepository;
-import com.tcdt.qlnvhang.repository.khotang.KtDiemKhoRepository;
-import com.tcdt.qlnvhang.repository.khotang.KtNganKhoRepository;
-import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
-import com.tcdt.qlnvhang.repository.khotang.KtNhaKhoRepository;
-import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.bandaugia.bienbanlaymau.XhBbLayMauCtRequest;
 import com.tcdt.qlnvhang.request.bandaugia.bienbanlaymau.XhBbLayMauRequest;
-import com.tcdt.qlnvhang.request.bandaugia.bienbanlaymau.XhBbLayMauSearchRequest;
-import com.tcdt.qlnvhang.response.banhangdaugia.bienbanlaymau.XhBbLayMauResponse;
-import com.tcdt.qlnvhang.response.banhangdaugia.bienbanlaymau.XhBbLayMauSearchResponse;
 import com.tcdt.qlnvhang.service.SecurityContextService;
-import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.service.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMauService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
-import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
-import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
-import com.tcdt.qlnvhang.table.khotang.KtNganKho;
-import com.tcdt.qlnvhang.table.khotang.KtNganLo;
-import com.tcdt.qlnvhang.table.khotang.KtNhaKho;
-import com.tcdt.qlnvhang.util.ExcelHeaderConst;
-import com.tcdt.qlnvhang.util.ExportExcel;
-import com.tcdt.qlnvhang.util.UserUtils;
+import com.tcdt.qlnvhang.util.Contains;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
@@ -39,25 +20,22 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
-import java.time.LocalDate;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Date;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Log4j2
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class XhBbLayMauServiceImpl extends BaseServiceImpl implements XhBbLayMauService {
+
 	private final XhBbLayMauRepository xhBbLayMauRepository;
 
 	private final FileDinhKemService fileDinhKemService;
-	private final QlnvDmVattuRepository dmVattuRepository;
 
-	private final XhBbLayMauCtRepository ctRepository;
+	private final XhBbLayMauCtRepository xhBbLayMauCtRepository;
 
 	@Override
 	public Page<XhBbLayMau> searchPage(XhBbLayMauRequest req) throws Exception {
@@ -70,16 +48,35 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl implements XhBbLayMau
 	@Override
 	public XhBbLayMau create(XhBbLayMauRequest req) throws Exception {
 
-		XhBbLayMau xhBbLayMau = new XhBbLayMau();
-		BeanUtils.copyProperties(req,xhBbLayMau,"id");
+		UserInfo userInfo = SecurityContextService.getUser();
+		if (userInfo == null) {
+			throw new Exception("Bad request.");
+		}
 
-		saveDetail(req,xhBbLayMau.getId());
+		XhBbLayMau data = new XhBbLayMau();
+		BeanUtils.copyProperties(req,data,"id");
 
-		return xhBbLayMauRepository.save(xhBbLayMau);
+		data.setNguoiTaoId(userInfo.getId());
+		data.setNgayTao(new Date());
+		data.setTrangThai(Contains.DUTHAO);
+		data.setMaDvi(userInfo.getDvql());
+		data.setNam(new Date().getYear());
+		data.setId(Long.parseLong(data.getSoBienBan().split("/")[0]));
+		data.setIdKtv(userInfo.getId());
+		xhBbLayMauRepository.save(data);
+
+		saveDetail(req,data.getId());
+		return data;
 	}
 
 	void saveDetail(XhBbLayMauRequest req,Long idHdr){
-
+		xhBbLayMauCtRepository.deleteAllByBbLayMauId(idHdr);
+		for (XhBbLayMauCtRequest ctReq :req.getChildren()) {
+			XhBbLayMauCt ct = new XhBbLayMauCt();
+			BeanUtils.copyProperties(ctReq,ct,"id");
+			ct.setBbLayMauId(idHdr);
+			xhBbLayMauCtRepository.save(ct);
+		}
 	}
 
 	@Override
