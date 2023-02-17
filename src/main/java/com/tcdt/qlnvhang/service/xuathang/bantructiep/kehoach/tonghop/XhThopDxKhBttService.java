@@ -74,16 +74,21 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
 
         XhThopDxKhBttHdr thopHdr = new XhThopDxKhBttHdr();
         Map<String, String> listDanhMucDvi = getListDanhMucDvi("2", null, "01");
+        String tChuanCluong = "";
+        String soQdcc = "";
         List<XhThopDxKhBttDtl> thopDtls = new ArrayList<>();
         for (XhDxKhBanTrucTiepHdr dxuat : dxuatBtt) {
             XhThopDxKhBttDtl thopDtl = new XhThopDxKhBttDtl();
             BeanUtils.copyProperties(dxuat,thopDtl,"id");
             thopDtl.setIdDxHdr(dxuat.getId());
             thopDtl.setTenDvi(listDanhMucDvi.get(dxuat.getMaDvi()));
-            thopHdr.setSoQdCc(dxuat.getSoQdCtieu());
-            thopHdr.setTchuanCluong(dxuat.getTchuanCluong());
+            thopDtls.add(thopDtl);
+            tChuanCluong = tChuanCluong.concat(dxuat.getTchuanCluong() + "");
+            soQdcc = soQdcc.concat(dxuat.getSoQdCtieu() + "");
             thopDtls.add(thopDtl);
         }
+        thopHdr.setTchuanCluong(tChuanCluong);
+        thopHdr.setSoQdCc(soQdcc);
         thopHdr.setChildren(thopDtls);
         return thopHdr;
     }
