@@ -21,9 +21,10 @@ public interface XhQdPdKhBttDtlRepository extends JpaRepository<XhQdPdKhBttDtl ,
             " AND (:ngayCgiadDen IS NULL OR CG.NGAY_CHAO_GIA <= TO_DATE(:ngayCgiadDen,'yyyy-MM-dd'))" +
             " AND (:loaiVthh IS NULL OR HDR.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) " +
             " AND (:maDvi IS NULL OR DTL.MA_DVI = :maDvi)" +
+            " AND (:trangThai IS NULL OR DTL.TRANG_THAI = :trangThai )" +
             " AND (:toChucCaNhan IS NULL OR LOWER(CG.TOCHUC_CANHAN) LIKE LOWER(CONCAT(CONCAT('%', :toChucCaNhan),'%'))) "+
             " AND HDR.LASTEST = 1 ",nativeQuery = true )
-    Page<XhQdPdKhBttDtl> selectPage(Integer namKh , String ngayCgiaTu, String ngayCgiadDen, String loaiVthh, String maDvi, String toChucCaNhan, Pageable pageable);
+    Page<XhQdPdKhBttDtl> selectPage(Integer namKh , String ngayCgiaTu, String ngayCgiadDen, String loaiVthh, String maDvi, String trangThai, String toChucCaNhan, Pageable pageable);
 
 
     List<XhQdPdKhBttDtl> findAllByIdQdHdr (Long idQdHdr);
