@@ -13,6 +13,7 @@ import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.message.Message;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,8 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Log4j2
@@ -81,12 +81,52 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl implements XhBbLayMau
 
 	@Override
 	public XhBbLayMau update(XhBbLayMauRequest req) throws Exception {
-		return null;
+		if(Objects.isNull(req)){
+			throw new Exception("Bad reqeust");
+		}
+
+		UserInfo userInfo = SecurityContextService.getUser();
+		if (userInfo == null) {
+			throw new Exception("Bad request.");
+		}
+
+		Optional<XhBbLayMau> byId = xhBbLayMauRepository.findById(req.getId());
+		if(!byId.isPresent()){
+			throw new Exception("Không tìm thấy dữ liệu");
+		}
+		XhBbLayMau dataDb = byId.get();
+		BeanUtils.copyProperties(req,dataDb,"id");
+		dataDb.setNgaySua(new Date());
+		dataDb.setNguoiSuaId(userInfo.getId());
+
+		xhBbLayMauRepository.save(dataDb);
+		this.saveDetail(req,dataDb.getId());
+		return dataDb;
 	}
 
 	@Override
 	public XhBbLayMau detail(Long id) throws Exception {
-		return null;
+		if(Objects.isNull(id)){
+			throw new Exception("Bad reqeust");
+		}
+
+		Optional<XhBbLayMau> byId = xhBbLayMauRepository.findById(id);
+		if(!byId.isPresent()){
+			throw new Exception("Không tìm thấy dữ liệu");
+		}
+		Map<String, String> mapDmucHh = getListDanhMucHangHoa();
+		Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+		XhBbLayMau data = byId.get();
+
+		data.setTenLoaiVthh(mapDmucHh.get(data.getLoaiVthh()));
+		data.setTenCloaiVthh(mapDmucHh.get(data.getCloaiVthh()));
+		data.setTenDiemKho(mapDmucDvi.get(data.getMaDiemKho()));
+		data.setTenNhaKho(mapDmucDvi.get(data.getMaNganKho()));
+		data.setTenNganKho(mapDmucDvi.get(data.getMaNganKho()));
+		data.setTenLoKho(mapDmucDvi.get(data.getMaLoKho()));
+		data.setChildren(xhBbLayMauCtRepository.findByBbLayMauId(id));
+
+		return data;
 	}
 
 	@Override

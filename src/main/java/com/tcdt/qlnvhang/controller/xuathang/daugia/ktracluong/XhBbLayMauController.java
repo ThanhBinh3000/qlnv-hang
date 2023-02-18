@@ -7,6 +7,7 @@ import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.bandaugia.bienbanlaymau.XhBbLayMauRequest;
 import com.tcdt.qlnvhang.request.bandaugia.bienbanlaymau.XhBbLayMauSearchRequest;
+import com.tcdt.qlnvhang.request.xuathang.quyetdinhgiaonhiemvuxuat.XhQdGiaoNvuXuatReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.response.banhangdaugia.bienbanlaymau.XhBbLayMauResponse;
 import com.tcdt.qlnvhang.response.banhangdaugia.bienbanlaymau.XhBbLayMauSearchResponse;
@@ -52,7 +53,7 @@ public class XhBbLayMauController extends BaseController {
 	}
 
 	@ApiOperation(value = "Sửa Biên bản lấy mẫu", response = XhBbLayMauResponse.class)
-	@PutMapping()
+	@PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> update(@Valid @RequestBody XhBbLayMauRequest req) {
 		BaseResponse resp = new BaseResponse();
 		try {
@@ -68,7 +69,7 @@ public class XhBbLayMauController extends BaseController {
 	}
 
 	@ApiOperation(value = "Xoá Biên bản lấy mẫu", response = Boolean.class)
-	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value=  PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> delete(@PathVariable("id") Long id) {
 		BaseResponse resp = new BaseResponse();
 		try {
@@ -84,12 +85,11 @@ public class XhBbLayMauController extends BaseController {
 	}
 
 	@ApiOperation(value = "Xoá danh sách Biên bản lấy mẫu", response = Boolean.class)
-	@DeleteMapping()
+	@PostMapping(value = PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> deleteMultiple(@RequestBody @Valid DeleteReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-//			Boolean res = service.deleteMultiple(req.getIds());
-//			resp.setData(res);
+			service.deleteMulti(req.getIds());
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -101,12 +101,11 @@ public class XhBbLayMauController extends BaseController {
 	}
 
 	@ApiOperation(value = "Search Biên bản lấy mẫu", response = Page.class)
-	@GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> search(XhBbLayMauSearchRequest req) {
+	@PostMapping(value=  PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<BaseResponse> search(@RequestBody XhBbLayMauRequest req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-//			Page<XhBbLayMauSearchResponse> res = service.search(req);
-//			resp.setData(res);
+			resp.setData(service.searchPage(req));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -118,12 +117,11 @@ public class XhBbLayMauController extends BaseController {
 	}
 
 	@ApiOperation(value = "Thông tin chi tiết Biên bản lấy mẫu", response = Boolean.class)
-	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> detail(@PathVariable("id") Long id) {
+	@GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<BaseResponse> detail(@PathVariable("ids") Long id) {
 		BaseResponse resp = new BaseResponse();
 		try {
-//			XhBbLayMauResponse res = service.detail(id);
-//			resp.setData(res);
+			resp.setData(service.detail(id));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -135,13 +133,11 @@ public class XhBbLayMauController extends BaseController {
 	}
 
 	@ApiOperation(value = "Update trạng thái Biên bản lấy mẫu", response = XhBbLayMauResponse.class)
-	@PutMapping(value = "/trang-thai", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> updateTrangThai(@RequestParam Long id,
-														@RequestParam String trangThaiId) {
+	@PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<BaseResponse> updateTrangThai(@RequestBody XhBbLayMauRequest req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-//			XhBbLayMauResponse res = service.updateTrangThai(id, trangThaiId);
-//			resp.setData(res);
+			resp.setData(service.approve(req));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -153,12 +149,11 @@ public class XhBbLayMauController extends BaseController {
 	}
 
 	@ApiOperation(value = "Export kế hoạch Biên bản lấy mẫu", response = List.class)
-	@PostMapping(value = "/export/list", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value=  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public void exportToExcel(HttpServletResponse response, @RequestBody XhBbLayMauSearchRequest req) {
-
+	public void exportToExcel(HttpServletResponse response, @RequestBody XhBbLayMauRequest req) {
 		try {
-//			service.exportToExcel(req, response);
+			service.export(req, response);
 		} catch (Exception e) {
 			log.error("Error can not export", e);
 		}

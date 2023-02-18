@@ -13,6 +13,8 @@ public interface XhBbLayMauCtRepository extends BaseRepository<XhBbLayMauCt, Lon
 
 	void deleteAllByBbLayMauId(Long bbLayMauId);
 
+	List<XhBbLayMauCt> findByBbLayMauId(Long id);
+
 //	List<XhBbLayMauCt> findByXhBbLayMauIdIn(Collection<Long> ids);
 
 

@@ -79,7 +79,16 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
 
         data.getContent().forEach(item -> {
-            item.setXhBbLayMauList(xhBbLayMauRepository.findAllByIdQd(item.getId()));
+            List<XhBbLayMau> allByIdQd = xhBbLayMauRepository.findAllByIdQd(item.getId());
+            allByIdQd.forEach(x -> {
+                x.setTenLoaiVthh(mapDmucHh.get(x.getLoaiVthh()));
+                x.setTenCloaiVthh(mapDmucHh.get(x.getCloaiVthh()));
+                x.setTenDiemKho(mapDmucDvi.get(x.getMaDiemKho()));
+                x.setTenNhaKho(mapDmucDvi.get(x.getMaNganKho()));
+                x.setTenNganKho(mapDmucDvi.get(x.getMaNganKho()));
+                x.setTenLoKho(mapDmucDvi.get(x.getMaLoKho()));
+            });
+            item.setXhBbLayMauList(allByIdQd);
             item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
             item.setTenTrangThaiXh(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThaiXh()));
             item.setTenDvi(mapDmucDvi.get(item.getMaDvi()));
@@ -88,6 +97,8 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
         });
         return data;
     }
+
+
 
     @Override
     @Transactional
