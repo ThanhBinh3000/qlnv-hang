@@ -25,11 +25,14 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class XhBbLayMauRequest extends BaseRequest {
+
 	private Long id;
 
 	private Integer nam;
 
 	private String maDvi;
+
+	private String maQhns;
 
 	private Long idQd;
 

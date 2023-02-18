@@ -120,6 +120,7 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl implements XhBbLayMau
 
 		data.setTenLoaiVthh(mapDmucHh.get(data.getLoaiVthh()));
 		data.setTenCloaiVthh(mapDmucHh.get(data.getCloaiVthh()));
+		data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
 		data.setTenDiemKho(mapDmucDvi.get(data.getMaDiemKho()));
 		data.setTenNhaKho(mapDmucDvi.get(data.getMaNganKho()));
 		data.setTenNganKho(mapDmucDvi.get(data.getMaNganKho()));
@@ -136,7 +137,17 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl implements XhBbLayMau
 
 	@Override
 	public void delete(Long id) throws Exception {
+		if(Objects.isNull(id)){
+			throw new Exception("Bad reqeust");
+		}
 
+		Optional<XhBbLayMau> byId = xhBbLayMauRepository.findById(id);
+		if(!byId.isPresent()){
+			throw new Exception("Không tìm thấy dữ liệu");
+		}
+
+		xhBbLayMauRepository.delete(byId.get());
+		xhBbLayMauCtRepository.deleteAllByBbLayMauId(byId.get().getId());
 	}
 
 	@Override

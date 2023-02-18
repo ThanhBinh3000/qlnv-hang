@@ -35,6 +35,8 @@ public class XhBbLayMau extends TrangThaiBaseEntity implements Serializable {
 
 	private String maDvi;
 
+	private String maQhns;
+
 	private Long idQd;
 
 	private String soQd;
@@ -82,6 +84,9 @@ public class XhBbLayMau extends TrangThaiBaseEntity implements Serializable {
 	private Integer ketQuaNiemPhong;
 
 	// Transient
+	@Transient
+	private String tenDvi;
+
 	@Transient
 	private String tenLoaiVthh;
 
