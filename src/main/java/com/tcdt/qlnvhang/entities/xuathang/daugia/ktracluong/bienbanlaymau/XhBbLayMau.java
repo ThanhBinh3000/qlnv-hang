@@ -82,16 +82,22 @@ public class XhBbLayMau extends TrangThaiBaseEntity implements Serializable {
 	private Integer ketQuaNiemPhong;
 
 	// Transient
+	@Transient
 	private String tenLoaiVthh;
 
+	@Transient
 	private String tenCloaiVthh;
 
+	@Transient
 	private String tenDiemKho;
 
+	@Transient
 	private String tenNhaKho;
 
+	@Transient
 	private String tenNganKho;
 
+	@Transient
 	private String tenLoKho;
 
 	@Transient
@@ -99,6 +105,5 @@ public class XhBbLayMau extends TrangThaiBaseEntity implements Serializable {
 
 	@Transient
 	private List<XhBbLayMauCt> children = new ArrayList<>();
-
 
 }
