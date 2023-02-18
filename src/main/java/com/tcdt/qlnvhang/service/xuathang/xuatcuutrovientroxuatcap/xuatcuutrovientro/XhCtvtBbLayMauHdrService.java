@@ -98,7 +98,7 @@ public class XhCtvtBbLayMauHdrService extends BaseServiceImpl {
 
     List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhCtvtBbLayMauHdr.TABLE_NAME );
     created.setFileDinhKems(fileDinhKems);
-    List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhCtvtBbLayMauHdr.TABLE_NAME + "_CAN_CU");
+    List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), XhCtvtBbLayMauHdr.TABLE_NAME + "_CAN_CU");
     created.setCanCu(canCu);
     List<FileDinhKem> niemPhong = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemNiemPhong(), created.getId(), XhCtvtBbLayMauHdr.TABLE_NAME + "_NIEM_PHONG");
     created.setFileDinhKemNiemPhong(niemPhong);
@@ -141,7 +141,7 @@ public class XhCtvtBbLayMauHdrService extends BaseServiceImpl {
     List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhCtvtBbLayMauHdr.TABLE_NAME );
     created.setFileDinhKems(fileDinhKems);
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList( XhCtvtBbLayMauHdr.TABLE_NAME + "_CAN_CU"));
-    List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhCtvtBbLayMauHdr.TABLE_NAME + "_CAN_CU");
+    List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), XhCtvtBbLayMauHdr.TABLE_NAME + "_CAN_CU");
     created.setCanCu(canCu);
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList( XhCtvtBbLayMauHdr.TABLE_NAME + "_NIEM_PHONG"));
     List<FileDinhKem> niemPhong = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemNiemPhong(), created.getId(), XhCtvtBbLayMauHdr.TABLE_NAME + "_NIEM_PHONG");

@@ -42,14 +42,8 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl  {
 
     public Page<XhQdPdKhBttDtl> selectPage(SearchXhTcTtinBttReq req) throws Exception{
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").descending());
-        Page<XhQdPdKhBttDtl> dtl = xhQdPdKhBttDtlRepository.selectPage(
-                req.getNamKh(),
-                convertDateToString(req.getNgayCgiaTu()),
-                convertDateToString(req.getNgayCgiadDen()),
-                req.getLoaiVthh(),
-                req.getMaDvi(),
-                req.getTrangThai(),
-                req.getTochucCanhan(),
+        Page<XhQdPdKhBttDtl> dtl = xhQdPdKhBttDtlRepository.search(
+                req,
                 pageable
         );
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
@@ -58,10 +52,8 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl  {
 
             try {
                 XhQdPdKhBttHdr hdr = xhQdPdKhBttHdrRepository.findById(f.getIdQdHdr()).get();
-
                 hdr.setTenLoaiVthh(hashMapVthh.get(hdr.getLoaiVthh()));
                 hdr.setTenCloaiVthh(hashMapVthh.get(hdr.getCloaiVthh()));
-
                 f.setHdr(hdr);
             } catch (Exception e){
                 throw new RuntimeException(e);
