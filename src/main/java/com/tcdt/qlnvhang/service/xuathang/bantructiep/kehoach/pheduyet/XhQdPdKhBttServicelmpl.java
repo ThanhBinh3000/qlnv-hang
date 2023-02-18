@@ -7,6 +7,12 @@ import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKh
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.tonghop.XhThopDxKhBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.thongtin.XhTcTtinBtt;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGia;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdg;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgDtl;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgPl;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgPlDtl;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.tonghop.XhThopDxKhBdg;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdrRepository;
@@ -397,24 +403,24 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
         hdrClone.setLastest(true);
         hdrClone.setIdGoc(hdr.getId());
         xhQdPdKhBttHdrRepository.save(hdrClone);
-        for (XhQdPdKhBttDtl dtl : hdr.getChildren()){
-            XhQdPdKhBttDtl dtlClone = new XhQdPdKhBttDtl();
-            BeanUtils.copyProperties(dtl, dtlClone);
-            dtlClone.setId(null);
-            dtlClone.setIdQdHdr(hdrClone.getId());
-            xhQdPdKhBttDtlRepository.save(dtlClone);
-            for (XhQdPdKhBttDvi dvi : dtlClone.getChildren()){
-                XhQdPdKhBttDvi dviClone = new XhQdPdKhBttDvi();
-                BeanUtils.copyProperties(dvi, dviClone);
-                dviClone.setId(null);
-                dviClone.setIdQdDtl(dtlClone.getId());
-                xhQdPdKhBttDviRepository.save(dviClone);
-                for (XhQdPdKhBttDviDtl dviDtl : dviClone.getChildren()){
-                    XhQdPdKhBttDviDtl dviDtlClone = new XhQdPdKhBttDviDtl();
-                    BeanUtils.copyProperties(dviDtl, dviDtlClone);
-                    dviDtlClone.setId(null);
-                    dviDtlClone.setIdDvi(dviClone.getId());
-                    xhQdPdKhBttDviDtlRepository.save(dviDtlClone);
+        for (XhQdPdKhBttDtl dx : hdr.getChildren()) {
+            XhQdPdKhBttDtl dxClone = new XhQdPdKhBttDtl();
+            BeanUtils.copyProperties(dx, dxClone);
+            dxClone.setId(null);
+            dxClone.setIdQdHdr(hdrClone.getId());
+            xhQdPdKhBttDtlRepository.save(dxClone);
+            for (XhQdPdKhBttDvi pl : dxClone.getChildren()) {
+                XhQdPdKhBttDvi plClone = new XhQdPdKhBttDvi();
+                BeanUtils.copyProperties(pl, plClone);
+                plClone.setId(null);
+                plClone.setIdQdDtl(dxClone.getId());
+                xhQdPdKhBttDviRepository.save(plClone);
+                for (XhQdPdKhBttDviDtl plDtl : pl.getChildren()) {
+                    XhQdPdKhBttDviDtl plDtlClone = new XhQdPdKhBttDviDtl();
+                    BeanUtils.copyProperties(plDtl, plDtlClone);
+                    plDtlClone.setId(null);
+                    plDtlClone.setIdDvi(plClone.getId());
+                    xhQdPdKhBttDviDtlRepository.save(plDtlClone);
                 }
             }
         }
