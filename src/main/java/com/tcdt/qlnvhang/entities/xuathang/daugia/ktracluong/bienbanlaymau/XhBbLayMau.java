@@ -1,30 +1,34 @@
-package com.tcdt.qlnvhang.request.bandaugia.bienbanlaymau;
+package com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.bienbanlaymau;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.tcdt.qlnvhang.request.BaseRequest;
-import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.Contains;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Entity
+@Table(name = XhBbLayMau.TABLE_NAME)
 @Data
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class XhBbLayMauRequest extends BaseRequest {
+@EqualsAndHashCode(callSuper = false)
+public class XhBbLayMau extends TrangThaiBaseEntity implements Serializable {
+	public static final String TABLE_NAME = "XH_BB_LAY_MAU";
+	private static final long serialVersionUID = -7021660593183667859L;
+
+	@Id
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_BB_LAY_MAU_SEQ")
+//	@SequenceGenerator(sequenceName = "XH_BB_LAY_MAU_SEQ", allocationSize = 1, name = "XH_BB_LAY_MAU_SEQ")
+	@Column(name = "ID")
 	private Long id;
 
 	private Integer nam;
@@ -37,12 +41,14 @@ public class XhBbLayMauRequest extends BaseRequest {
 
 	private String soHd;
 
+
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	private Date ngayHd;
 
 	private Long idKtv;
 
 	private String soBienBan;
+
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	private Date ngayLayMau;
@@ -75,7 +81,10 @@ public class XhBbLayMauRequest extends BaseRequest {
 
 	private Integer ketQuaNiemPhong;
 
-	private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
+	@Transient
+	private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
-	private List<XhBbLayMauCtRequest> children = new ArrayList<>();
+	@Transient
+	private List<XhBbLayMauCt> children = new ArrayList<>();
+
 }

@@ -1,7 +1,8 @@
-package com.tcdt.qlnvhang.controller.bandaugia.bienbanlaymau;
+package com.tcdt.qlnvhang.controller.xuathang.daugia.ktracluong;
 
 
 import com.tcdt.qlnvhang.controller.BaseController;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMau;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.bandaugia.bienbanlaymau.XhBbLayMauRequest;
@@ -9,11 +10,13 @@ import com.tcdt.qlnvhang.request.bandaugia.bienbanlaymau.XhBbLayMauSearchRequest
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.response.banhangdaugia.bienbanlaymau.XhBbLayMauResponse;
 import com.tcdt.qlnvhang.response.banhangdaugia.bienbanlaymau.XhBbLayMauSearchResponse;
-import com.tcdt.qlnvhang.service.bandaugia.bienbanlaymau.XhBbLayMauService;
+import com.tcdt.qlnvhang.service.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMauService;
+import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,20 +28,19 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/bien-ban-lay-mau")
+@RequestMapping(value = PathContains.XUAT_HANG_DTQG + PathContains.DAU_GIA + PathContains.BBAN_LAY_MAU )
 @Slf4j
-@Api(tags = "Xuất hàng Biên bản lấy mẫu")
-@RequiredArgsConstructor
+@Api(tags = "Xuất hàng - Bán đấu giá - Kế hoạch bán đấu giá - Biên bản lấy mẫu")
 public class XhBbLayMauController extends BaseController {
-	private final XhBbLayMauService xhBbLayMauService;
+	@Autowired
+	private XhBbLayMauService service;
 
 	@ApiOperation(value = "Tạo mới Biên bản lấy mẫu", response = XhBbLayMauResponse.class)
-	@PostMapping()
+	@PostMapping(value=  PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> create(@RequestBody XhBbLayMauRequest req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			XhBbLayMauResponse res = xhBbLayMauService.create(req);
-			resp.setData(res);
+			resp.setData(service.create(req));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -54,8 +56,7 @@ public class XhBbLayMauController extends BaseController {
 	public ResponseEntity<BaseResponse> update(@Valid @RequestBody XhBbLayMauRequest req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			XhBbLayMauResponse res = xhBbLayMauService.update(req);
-			resp.setData(res);
+			resp.setData(service.update(req));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -71,8 +72,7 @@ public class XhBbLayMauController extends BaseController {
 	public ResponseEntity<BaseResponse> delete(@PathVariable("id") Long id) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			Boolean res = xhBbLayMauService.delete(id);
-			resp.setData(res);
+			service.delete(id);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -88,8 +88,8 @@ public class XhBbLayMauController extends BaseController {
 	public ResponseEntity<BaseResponse> deleteMultiple(@RequestBody @Valid DeleteReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			Boolean res = xhBbLayMauService.deleteMultiple(req.getIds());
-			resp.setData(res);
+//			Boolean res = service.deleteMultiple(req.getIds());
+//			resp.setData(res);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -105,8 +105,8 @@ public class XhBbLayMauController extends BaseController {
 	public ResponseEntity<BaseResponse> search(XhBbLayMauSearchRequest req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			Page<XhBbLayMauSearchResponse> res = xhBbLayMauService.search(req);
-			resp.setData(res);
+//			Page<XhBbLayMauSearchResponse> res = service.search(req);
+//			resp.setData(res);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -122,8 +122,8 @@ public class XhBbLayMauController extends BaseController {
 	public ResponseEntity<BaseResponse> detail(@PathVariable("id") Long id) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			XhBbLayMauResponse res = xhBbLayMauService.detail(id);
-			resp.setData(res);
+//			XhBbLayMauResponse res = service.detail(id);
+//			resp.setData(res);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -140,8 +140,8 @@ public class XhBbLayMauController extends BaseController {
 														@RequestParam String trangThaiId) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			XhBbLayMauResponse res = xhBbLayMauService.updateTrangThai(id, trangThaiId);
-			resp.setData(res);
+//			XhBbLayMauResponse res = service.updateTrangThai(id, trangThaiId);
+//			resp.setData(res);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -158,27 +158,12 @@ public class XhBbLayMauController extends BaseController {
 	public void exportToExcel(HttpServletResponse response, @RequestBody XhBbLayMauSearchRequest req) {
 
 		try {
-			xhBbLayMauService.exportToExcel(req, response);
+//			service.exportToExcel(req, response);
 		} catch (Exception e) {
 			log.error("Error can not export", e);
 		}
 	}
 
-	@ApiOperation(value = "Get số Biên bản bàn giao mẫu", response = List.class)
-	@GetMapping("/so")
-	public ResponseEntity<BaseResponse> getSo() {
-		BaseResponse resp = new BaseResponse();
-		try {
-			resp.setData(xhBbLayMauService.getSo());
-			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-		} catch (Exception e) {
-			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-			resp.setMsg(e.getMessage());
-			log.error("Get số Biên bản bàn giao mẫu lỗi", e);
-		}
-		return ResponseEntity.ok(resp);
-	}
 }
 
 

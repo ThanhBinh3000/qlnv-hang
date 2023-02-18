@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.entities.bandaugia.bienbanlaymau;
+package com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.bienbanlaymau;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,12 +23,7 @@ public class XhBbLayMauCt implements Serializable {
 	@Column(name = "ID")
 	private Long id;
 
-	@Column(name = "XH_BB_LAY_MAU_ID")
-	private Long xhBbLayMauId;
-
-	@Column(name = "LOAI_DAI_DIEN")
+	private Long bbLayMauId;
 	private String loaiDaiDien;
-
-	@Column(name = "DAI_DIEN")
 	private String daiDien;
 }

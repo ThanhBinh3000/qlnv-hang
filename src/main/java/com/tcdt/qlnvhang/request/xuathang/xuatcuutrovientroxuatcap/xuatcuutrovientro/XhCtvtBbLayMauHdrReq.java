@@ -5,7 +5,6 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -20,7 +19,7 @@ public class XhCtvtBbLayMauHdrReq {
   private LocalDate ngayQdGiaoNvXh;
   private String ktvBaoQuan;
   private String soBienBan;
-  private Date ngayLayMau;
+  private LocalDate ngayLayMau;
   private String dviKiemNghiem;
   private String diaDiemLayMau;
   private String loaiVthh;
@@ -44,6 +43,8 @@ public class XhCtvtBbLayMauHdrReq {
   private String soBbTinhKho;
   private LocalDate ngayXuatDocKho;
   private List<FileDinhKemReq> fileDinhKems =new ArrayList<>();
+
+  private List<FileDinhKemReq> canCu =new ArrayList<>();
 
   private List<FileDinhKemReq> fileDinhKemNiemPhong =new ArrayList<>();
 

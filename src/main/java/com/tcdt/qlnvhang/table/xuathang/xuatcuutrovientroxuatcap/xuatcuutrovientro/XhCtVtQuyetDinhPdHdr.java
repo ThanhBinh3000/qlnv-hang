@@ -62,6 +62,6 @@ public class XhCtVtQuyetDinhPdHdr extends BaseEntity implements Serializable {
     @Transient
     private String tenTrangThai;
 
-    @OneToMany(mappedBy = "xhCtVtQuyetDinhPdHdr")
+    @OneToMany(mappedBy = "xhCtVtQuyetDinhPdHdr", fetch = FetchType.LAZY)
     private List<XhCtVtQuyetDinhPdDtl> quyetDinhPdDtl = new ArrayList<>();
 }

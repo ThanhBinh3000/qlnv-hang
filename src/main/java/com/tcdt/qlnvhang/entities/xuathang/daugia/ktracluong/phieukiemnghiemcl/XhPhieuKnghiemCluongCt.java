@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.entities.xuathang.phieukiemnghiemchatluong;
+package com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.phieukiemnghiemcl;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,22 +23,14 @@ public class XhPhieuKnghiemCluongCt implements Serializable {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "PHIEU_KNGHIEM_ID")
     private Long phieuKnghiemId;
 
-    @Column(name = "STT")
-    private Integer stt;
-
-    @Column(name = "TEN_CTIEU")
     private String tenCtieu;
 
-    @Column(name = "KQUA_KTRA")
     private String kquaKtra;
 
-    @Column(name = "PPHAP_XDINH")
     private String pphapXdinh;
 
-    @Column(name = "CHI_SO_CHAT_LUONG")
     private String chiSoChatLuong;
 
 }
