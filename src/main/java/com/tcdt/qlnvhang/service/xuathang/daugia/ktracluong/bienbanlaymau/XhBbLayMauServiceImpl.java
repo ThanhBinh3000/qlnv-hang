@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -60,7 +61,7 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl implements XhBbLayMau
 		data.setNgayTao(new Date());
 		data.setTrangThai(Contains.DUTHAO);
 		data.setMaDvi(userInfo.getDvql());
-		data.setNam(new Date().getYear());
+		data.setNam(LocalDate.now().getYear());
 		data.setId(Long.parseLong(data.getSoBienBan().split("/")[0]));
 		data.setIdKtv(userInfo.getId());
 		xhBbLayMauRepository.save(data);

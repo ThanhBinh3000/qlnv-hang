@@ -28,6 +28,8 @@ public class XhBbLayMauRequest extends BaseRequest {
 
 	private Long id;
 
+	private String loaiBienBan;
+
 	private Integer nam;
 
 	private String maDvi;

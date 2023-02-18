@@ -43,6 +43,7 @@ public class XhBbLayMau extends TrangThaiBaseEntity implements Serializable {
 
 	private String soHd;
 
+	private String loaiBienBan;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	private Date ngayHd;
