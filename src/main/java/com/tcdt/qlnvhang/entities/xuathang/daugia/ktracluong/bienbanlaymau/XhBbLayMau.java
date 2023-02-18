@@ -86,6 +86,9 @@ public class XhBbLayMau extends TrangThaiBaseEntity implements Serializable {
 
 	// Transient
 	@Transient
+	private String tenKtv;
+	
+	@Transient
 	private String tenDvi;
 
 	@Transient
