@@ -26,5 +26,7 @@ public class SearchXhTcTtinBttReq extends BaseRequest {
 
     String tochucCanhan;
 
+    Integer lastest ;
+
 
 }

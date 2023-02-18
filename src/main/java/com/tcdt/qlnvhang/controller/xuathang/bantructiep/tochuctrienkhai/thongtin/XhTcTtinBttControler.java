@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.controller.xuathang.bantructiep.tochuctrienkhai.thongt
 
 import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
+import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhDxKhMttHdrReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.tochuctrienkhai.thongtin.SearchXhTcTtinBttReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.tochuctrienkhai.thongtin.XhCgiaReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
@@ -35,21 +36,17 @@ public class XhTcTtinBttControler extends BaseController {
     @ApiOperation(value = "Tra cứu thông tin đấu thầu ", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> colection(HttpServletRequest request,
-                                                  @Valid @RequestBody SearchXhTcTtinBttReq req) {
+    public ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody SearchXhTcTtinBttReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhTcTtinBttService.selectPage(req));
+            resp.setData(xhTcTtinBttService.selectPage(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-        } catch (
-
-                Exception e) {
+        } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
             log.error("Tra cứu thông tin đấu thầu gạo trace: {}", e);
         }
-
         return ResponseEntity.ok(resp);
     }
 
