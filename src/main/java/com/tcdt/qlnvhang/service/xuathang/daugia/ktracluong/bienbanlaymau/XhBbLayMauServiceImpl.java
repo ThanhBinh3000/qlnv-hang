@@ -138,7 +138,7 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl implements XhBbLayMau
 	@Override
 	public void delete(Long id) throws Exception {
 		if(Objects.isNull(id)){
-			throw new Exception("Bad reqeust");
+			throw new Exception("Bad request");
 		}
 
 		Optional<XhBbLayMau> byId = xhBbLayMauRepository.findById(id);

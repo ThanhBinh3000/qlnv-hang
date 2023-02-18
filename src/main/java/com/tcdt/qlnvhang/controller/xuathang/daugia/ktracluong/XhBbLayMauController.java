@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMau;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.DeleteReq;
+import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.bandaugia.bienbanlaymau.XhBbLayMauRequest;
 import com.tcdt.qlnvhang.request.bandaugia.bienbanlaymau.XhBbLayMauSearchRequest;
 import com.tcdt.qlnvhang.request.xuathang.quyetdinhgiaonhiemvuxuat.XhQdGiaoNvuXuatReq;
@@ -70,10 +71,10 @@ public class XhBbLayMauController extends BaseController {
 
 	@ApiOperation(value = "Xoá Biên bản lấy mẫu", response = Boolean.class)
 	@PostMapping(value=  PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> delete(@PathVariable("id") Long id) {
+	public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			service.delete(id);
+			service.delete(idSearchReq.getId());
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
