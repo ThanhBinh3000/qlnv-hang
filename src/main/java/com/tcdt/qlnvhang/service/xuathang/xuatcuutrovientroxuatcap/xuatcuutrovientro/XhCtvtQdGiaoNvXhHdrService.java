@@ -51,7 +51,7 @@ public class XhCtvtQdGiaoNvXhHdrService extends BaseServiceImpl {
     String dvql = currentUser.getDvql();
     if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
       req.setDvql(dvql.substring(0, 6));
-      System.out.println("3333333" + dvql.substring(0, 6));
+      req.setTrangThai(TrangThaiAllEnum.DA_DUYET_LDC.getId());
     } else {
       req.setDvql(dvql);
     }
@@ -160,6 +160,13 @@ public class XhCtvtQdGiaoNvXhHdrService extends BaseServiceImpl {
       noiDungCuuTro.setIdHdr(objReq.getId());
       xhCtvtQdGiaoNvXhDtlRepository.save(noiDungCuuTro);
     }
+    if (objReq.getTrangThaiXh().equals(TrangThaiAllEnum.HOAN_THANH_CAP_NHAT)) {
+      Optional<XhCtvtQdGiaoNvXhHdr> qdHdr = xhCtvtQdGiaoNvXhHdrRepository.findById(objReq.getId());
+      if (qdHdr.isPresent()) {
+        qdHdr.get().setTrangThaiXh(TrangThaiAllEnum.HOAN_THANH_CAP_NHAT.getId());
+        xhCtvtQdGiaoNvXhHdrRepository.save(qdHdr.get());
+      }
+    }
   }
 
   public List<XhCtvtQdGiaoNvXhHdr> detail(List<Long> ids) throws Exception {
@@ -266,7 +273,8 @@ public class XhCtvtQdGiaoNvXhHdrService extends BaseServiceImpl {
             status.equals(TrangThaiAllEnum.DA_DUYET_LDC.getId() + TrangThaiAllEnum.CHO_DUYET_LDC.getId()) ||
             status.equals(TrangThaiAllEnum.TU_CHOI_LDC.getId() + TrangThaiAllEnum.CHO_DUYET_LDC.getId()) ||
             status.equals(TrangThaiAllEnum.CHO_DUYET_TP.getId() + TrangThaiAllEnum.TU_CHOI_LDC.getId()) ||
-            status.equals(TrangThaiAllEnum.BAN_HANH.getId() + TrangThaiAllEnum.DA_DUYET_LDC.getId())) {
+            (status.equals(TrangThaiAllEnum.BAN_HANH.getId() + TrangThaiAllEnum.DA_DUYET_LDC.getId())
+                && optional.get().getTrangThaiXh().equals(TrangThaiAllEnum.HOAN_THANH_CAP_NHAT.getId()))) {
       optional.get().setNguoiPduyetId(currentUser.getUser().getId());
       optional.get().setNgayPduyet(LocalDate.now());
       optional.get().setLyDoTuChoi(statusReq.getLyDo());
