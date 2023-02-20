@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovi
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBbLayMauDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBbLayMauHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -25,6 +26,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.Transient;
@@ -43,6 +45,9 @@ public class XhCtvtBbLayMauHdrService extends BaseServiceImpl {
 
   @Autowired
   private XhCtvtBbLayMauDtlRepository xhCtvtBbLayMauDtlRepository;
+  @Autowired
+  private UserInfoRepository userInfoRepository;
+
   @Autowired
   private FileDinhKemService fileDinhKemService;
 
@@ -75,6 +80,8 @@ public class XhCtvtBbLayMauHdrService extends BaseServiceImpl {
       }
       if (mapVthh.get((s.getCloaiVthh())) != null) {
         s.setTenCloaiVthh(mapVthh.get(s.getCloaiVthh()));
+      }if (s.getNguoiPduyetId() != null) {
+        s.setTenThuKHo(ObjectUtils.isEmpty(s.getNguoiPduyetId()) ? null : userInfoRepository.findById(s.getNguoiPduyetId()).get().getFullName());
       }
       s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
     });

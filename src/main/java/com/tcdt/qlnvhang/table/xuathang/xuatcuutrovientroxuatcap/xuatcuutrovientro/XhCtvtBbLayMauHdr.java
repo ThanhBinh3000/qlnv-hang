@@ -77,6 +77,8 @@ public class XhCtvtBbLayMauHdr extends BaseEntity implements Serializable {
   @Transient
   private String tenLoKho;
   @Transient
+  private String tenThuKHo;
+  @Transient
   private List<FileDinhKem> fileDinhKems =new ArrayList<>();
   @Transient
   private List<FileDinhKem> canCu =new ArrayList<>();
