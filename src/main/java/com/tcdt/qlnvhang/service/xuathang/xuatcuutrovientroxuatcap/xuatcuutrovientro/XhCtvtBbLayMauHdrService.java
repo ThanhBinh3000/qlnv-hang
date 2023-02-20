@@ -110,11 +110,11 @@ public class XhCtvtBbLayMauHdrService extends BaseServiceImpl {
   @Transactional()
   void saveCtiet(Long idHdr, XhCtvtBbLayMauHdrReq objReq) {
     for (XhCtvtBbLayMauDtlReq nguoiLienQuanReq : objReq.getNguoiLienQuan()) {
-      XhCtvtBbLayMauDtl deXuatPhuongAn =new XhCtvtBbLayMauDtl();
-      BeanUtils.copyProperties(nguoiLienQuanReq,deXuatPhuongAn);
-      deXuatPhuongAn.setId(null);
-      deXuatPhuongAn.setIdHdr(idHdr);
-      xhCtvtBbLayMauDtlRepository.save(deXuatPhuongAn);
+      XhCtvtBbLayMauDtl nguoiLienQuan =new XhCtvtBbLayMauDtl();
+      BeanUtils.copyProperties(nguoiLienQuanReq,nguoiLienQuan);
+      nguoiLienQuan.setId(null);
+      nguoiLienQuan.setIdHdr(idHdr);
+      xhCtvtBbLayMauDtlRepository.save(nguoiLienQuan);
     }
   }
 
@@ -147,8 +147,8 @@ public class XhCtvtBbLayMauHdrService extends BaseServiceImpl {
     List<FileDinhKem> niemPhong = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemNiemPhong(), created.getId(), XhCtvtBbLayMauHdr.TABLE_NAME + "_NIEM_PHONG");
     created.setFileDinhKemNiemPhong(niemPhong);
 
-    List<XhCtvtBbLayMauDtl> listDeXuatPhuongAn = xhCtvtBbLayMauDtlRepository.findByIdHdr(objReq.getId());
-    xhCtvtBbLayMauDtlRepository.deleteAll(listDeXuatPhuongAn);
+    List<XhCtvtBbLayMauDtl> listnguoiLienQuan = xhCtvtBbLayMauDtlRepository.findByIdHdr(objReq.getId());
+    xhCtvtBbLayMauDtlRepository.deleteAll(listnguoiLienQuan);
     this.saveCtiet(created.getId(),objReq);
     return created;
   }
@@ -222,8 +222,8 @@ public class XhCtvtBbLayMauHdrService extends BaseServiceImpl {
       throw new Exception("Bản ghi không tồn tại");
     }
     List<Long> listId = list.stream().map(XhCtvtBbLayMauHdr::getId).collect(Collectors.toList());
-    List<XhCtvtBbLayMauDtl> listPhuongAn = xhCtvtBbLayMauDtlRepository.findAllByIdHdrIn(listId);
-    xhCtvtBbLayMauDtlRepository.deleteAll(listPhuongAn);
+    List<XhCtvtBbLayMauDtl> listNguoiLienQuan = xhCtvtBbLayMauDtlRepository.findAllByIdHdrIn(listId);
+    xhCtvtBbLayMauDtlRepository.deleteAll(listNguoiLienQuan);
     fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(XhCtvtBbLayMauHdr.TABLE_NAME ));
     fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(XhCtvtBbLayMauHdr.TABLE_NAME + "_CAN_CU"));
     fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(XhCtvtBbLayMauHdr.TABLE_NAME + "_NIEM_PHONG"));
