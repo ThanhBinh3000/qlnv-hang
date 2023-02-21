@@ -1,9 +1,11 @@
 package com.tcdt.qlnvhang.service.xuathang.bantructiep.tochuctrienkhai.thongtin;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDtl;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDvi;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.thongtin.XhTcTtinBtt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDtlRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.tochuctrienkhai.thongtin.XhTcTtinBttRepository;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.tochuctrienkhai.thongtin.SearchXhTcTtinBttReq;
@@ -36,6 +38,9 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl  {
 
     @Autowired
     private XhTcTtinBttRepository xhTcTtinBttRepository;
+
+    @Autowired
+    private XhQdPdKhBttDviRepository xhQdPdKhBttDviRepository;
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
@@ -152,7 +157,13 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl  {
         data.setTenLoaiVthh(hashMapVthh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(hashMapVthh.get(data.getCloaiVthh()));
         data.setTenDvi(hashMapDvi.get(data.getMaDvi()));
+        List<XhQdPdKhBttDvi> byIdDvi = xhQdPdKhBttDviRepository.findByIdQdDtl(data.getId());
+        for (XhQdPdKhBttDvi dvi : byIdDvi){
+            dvi.setTenDvi(hashMapDvi.get(dvi.getMaDvi()));
+        }
+        data.setChildren(byIdDvi);
         List<XhTcTtinBtt> byId = xhTcTtinBttRepository.findAllByIdDtl(data.getId());
+
         for (XhTcTtinBtt btt : byId){
             List<FileDinhKem> fileDinhKems = fileDinhKemService.search(btt.getId(), Arrays.asList(XhTcTtinBtt.TABLE_NAME));
             btt.setFileDinhKems(fileDinhKems.get(0));

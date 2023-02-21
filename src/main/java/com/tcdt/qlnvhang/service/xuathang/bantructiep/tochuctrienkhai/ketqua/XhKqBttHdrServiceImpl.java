@@ -52,6 +52,8 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
         page.getContent().forEach(f ->{
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+            f.setTenTrangThaiHd(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiHd()));
+            f.setTenTrangThaiXh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiXh()));
             f.setTenDvi(hashMapDvi.get(f.getMaDvi()));
             f.setTenLoaiVthh(hashMapVthh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(hashMapVthh.get(f.getCloaiVthh()));
@@ -68,6 +70,8 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
         data.setNguoiTaoId(getUser().getId());
         data.setMaDvi(getUser().getDvql());
         data.setTrangThai(Contains.DUTHAO);
+        data.setTrangThaiHd(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
+        data.setTrangThaiXh(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
         XhKqBttHdr bySoDxuat = xhKqBttHdrRepository.findBySoQdPd(req.getSoQdPd());
         if (!ObjectUtils.isEmpty(bySoDxuat)){
             throw new Exception("Số quyết định phê duyệt kế hoạch đã được quyết định kết quả bán trực tiếp, xin vui lòng chọn số quyết định khác");
