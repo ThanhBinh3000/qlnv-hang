@@ -6,6 +6,13 @@ import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKh
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.tonghop.XhThopDxKhBttHdr;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.thongtin.XhTcTtinBtt;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGia;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdg;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgDtl;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgPl;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgPlDtl;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.tonghop.XhThopDxKhBdg;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdrRepository;
@@ -14,6 +21,7 @@ import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPd
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.tonghop.XhThopDxKhBttRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.tochuctrienkhai.thongtin.XhTcTtinBttRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviDtlReq;
@@ -32,13 +40,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhBttService {
@@ -66,6 +72,9 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
 
     @Autowired
     private XhDxKhBanTrucTiepHdrRepository xhDxKhBanTrucTiepHdrRepository;
+
+    @Autowired
+    private XhTcTtinBttRepository xhTcTtinBttRepository;
 
 
     @Override
@@ -147,6 +156,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
             XhQdPdKhBttDtl dtl = new XhQdPdKhBttDtl();
             BeanUtils.copyProperties(dtlReq, dtl, "id");
             dtl.setIdQdHdr(idQdHdr);
+            dtl.setSoQdPd(req.getSoQdPd());
             dtl.setTrangThai(Contains.CHUACAPNHAT);
             xhQdPdKhBttDtlRepository.save(dtl);
             xhQdPdKhBttDviRepository.deleteByIdQdDtl(dtlReq.getId());
@@ -209,9 +219,8 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
 
     @Override
     public XhQdPdKhBttHdr detail(Long id) throws Exception {
-       if (StringUtils.isEmpty(id)){
-           throw new Exception("Bản ghi không tồn tại");
-       }
+        if (StringUtils.isEmpty(id))
+            throw new Exception("Không tồn tại bản ghi");
 
        Optional<XhQdPdKhBttHdr> qOptional = xhQdPdKhBttHdrRepository.findById(id);
 
@@ -224,7 +233,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
 
         XhQdPdKhBttHdr data = qOptional.get();
 
-        data.setTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
+        data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
         data.setTenDvi(hashMapDvi.get(data.getMaDvi()));
         data.setTenLoaiVthh(hashMapVthh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(hashMapVthh.get(data.getCloaiVthh()));
@@ -257,7 +266,6 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
         if (StringUtils.isEmpty(req.getId())) {
             throw new Exception("Không tìm thấy dữ liệu");
         }
-
         XhQdPdKhBttHdr dataDB = detail(req.getId());
         String status = req.getTrangThai() + dataDB.getTrangThai();
         switch (status) {
@@ -269,22 +277,27 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
                 throw new Exception("Phê duyệt không thành công");
         }
         dataDB.setTrangThai(req.getTrangThai());
-        if (req.getTrangThai().equals(Contains.BAN_HANH)){
-            if (dataDB.getPhanLoai().equals("TH")){
-                Optional<XhThopDxKhBttHdr> qOptionalTh = xhThopDxKhBttRepository.findById(dataDB.getIdThHdr());
-                if (qOptionalTh.isPresent()){
-                    throw new Exception("Tổng hợp kế hoạch này đã được quyết định");
+        if (req.getTrangThai().equals(Contains.BAN_HANH)) {
+            if (dataDB.getPhanLoai().equals("TH")) {
+                Optional<XhThopDxKhBttHdr> qOptional = xhThopDxKhBttRepository.findById(dataDB.getIdThHdr());
+                if (qOptional.isPresent()) {
+                    if (qOptional.get().getTrangThai().equals(Contains.DABANHANH_QD)) {
+                        throw new Exception("Tổng hợp kế hoạch này đã được quyết định");
+                    }
+                    xhThopDxKhBttRepository.updateTrangThai(dataDB.getIdThHdr(), Contains.DABANHANH_QD);
+                } else {
+                    throw new Exception("Tổng hợp kế hoạch không được tìm thấy");
                 }
-                xhThopDxKhBttRepository.updateTrangThai(dataDB.getIdThHdr(), Contains.DABANHANH_QD);
-            }else {
-                Optional<XhDxKhBanTrucTiepHdr> qOptionalDx = xhDxKhBanTrucTiepHdrRepository.findById(dataDB.getIdTrHdr());
-                if (qOptionalDx.isPresent()){
-                    if (qOptionalDx.get().getTrangThai().equals(Contains.DABANHANH_QD)) {
+            } else {
+                Optional<XhDxKhBanTrucTiepHdr> qOptional = xhDxKhBanTrucTiepHdrRepository.findById(dataDB.getIdTrHdr());
+                if (qOptional.isPresent()) {
+                    if (qOptional.get().getTrangThai().equals(Contains.DABANHANH_QD)) {
                         throw new Exception("Đề xuất này đã được quyết định");
                     }
-                    qOptionalDx.get().setTrangThaiTh(Contains.DABANHANH_QD);
-                    xhDxKhBanTrucTiepHdrRepository.save(qOptionalDx.get());
-                }else {
+                    // Update trạng thái tờ trình
+                    qOptional.get().setTrangThaiTh(Contains.DABANHANH_QD);
+                    xhDxKhBanTrucTiepHdrRepository.save(qOptional.get());
+                } else {
                     throw new Exception("Số tờ trình kế hoạch không được tìm thấy");
                 }
             }
@@ -390,26 +403,58 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
         hdrClone.setLastest(true);
         hdrClone.setIdGoc(hdr.getId());
         xhQdPdKhBttHdrRepository.save(hdrClone);
-        for (XhQdPdKhBttDtl dtl : hdr.getChildren()){
-            XhQdPdKhBttDtl dtlClone = new XhQdPdKhBttDtl();
-            BeanUtils.copyProperties(dtl, dtlClone);
-            dtlClone.setId(null);
-            dtlClone.setIdQdHdr(hdrClone.getId());
-            xhQdPdKhBttDtlRepository.save(dtlClone);
-            for (XhQdPdKhBttDvi dvi : dtlClone.getChildren()){
-                XhQdPdKhBttDvi dviClone = new XhQdPdKhBttDvi();
-                BeanUtils.copyProperties(dvi, dviClone);
-                dviClone.setId(null);
-                dviClone.setIdQdDtl(dtlClone.getId());
-                xhQdPdKhBttDviRepository.save(dviClone);
-                for (XhQdPdKhBttDviDtl dviDtl : dviClone.getChildren()){
-                    XhQdPdKhBttDviDtl dviDtlClone = new XhQdPdKhBttDviDtl();
-                    BeanUtils.copyProperties(dviDtl, dviDtlClone);
-                    dviDtlClone.setId(null);
-                    dviDtlClone.setIdDvi(dviClone.getId());
-                    xhQdPdKhBttDviDtlRepository.save(dviDtlClone);
+        for (XhQdPdKhBttDtl dx : hdr.getChildren()) {
+            XhQdPdKhBttDtl dxClone = new XhQdPdKhBttDtl();
+            BeanUtils.copyProperties(dx, dxClone);
+            dxClone.setId(null);
+            dxClone.setIdQdHdr(hdrClone.getId());
+            xhQdPdKhBttDtlRepository.save(dxClone);
+            for (XhQdPdKhBttDvi pl : dxClone.getChildren()) {
+                XhQdPdKhBttDvi plClone = new XhQdPdKhBttDvi();
+                BeanUtils.copyProperties(pl, plClone);
+                plClone.setId(null);
+                plClone.setIdQdDtl(dxClone.getId());
+                xhQdPdKhBttDviRepository.save(plClone);
+                for (XhQdPdKhBttDviDtl plDtl : pl.getChildren()) {
+                    XhQdPdKhBttDviDtl plDtlClone = new XhQdPdKhBttDviDtl();
+                    BeanUtils.copyProperties(plDtl, plDtlClone);
+                    plDtlClone.setId(null);
+                    plDtlClone.setIdDvi(plClone.getId());
+                    xhQdPdKhBttDviDtlRepository.save(plDtlClone);
                 }
             }
         }
+    }
+
+    public XhQdPdKhBttDtl detailDtl(Long id) throws Exception{
+        if (ObjectUtils.isEmpty(id)){
+            throw new Exception("Không tồn tại bản ghi.");
+        }
+        Optional<XhQdPdKhBttDtl> byId = xhQdPdKhBttDtlRepository.findById(id);
+        if (!byId.isPresent()){
+            throw new UnsupportedOperationException("Bản ghi không tồn tại.");
+        }
+
+        XhQdPdKhBttDtl dtl = byId.get();
+
+        Map<String, String> hashMapVthh = getListDanhMucHangHoa();
+        Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
+        XhQdPdKhBttHdr hdr = xhQdPdKhBttHdrRepository.findById(dtl.getIdQdHdr()).get();
+        hdr.setTenLoaiVthh(hashMapVthh.get(hdr.getLoaiVthh()));
+        hdr.setTenCloaiVthh(hashMapVthh.get(hdr.getCloaiVthh()));
+        dtl.setHdr(hdr);
+        List<XhTcTtinBtt> byIdTt = xhTcTtinBttRepository.findAllByIdDtl(dtl.getId());
+        for (XhTcTtinBtt btt : byIdTt){
+            List<FileDinhKem> fileDinhKems = fileDinhKemService.search(btt.getId(), Arrays.asList(XhTcTtinBtt.TABLE_NAME));
+            btt.setFileDinhKems(fileDinhKems.get(0));
+        }
+        dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThai()));
+        dtl.setTenDvi(StringUtils.isEmpty(dtl.getMaDvi())? null : hashMapDvi.get(dtl.getMaDvi()));
+        dtl.setTenLoaiVthh(StringUtils.isEmpty(dtl.getLoaiVthh())? null : hashMapVthh.get(dtl.getLoaiVthh()));
+        dtl.setTenCloaiVthh(StringUtils.isEmpty(dtl.getCloaiVthh())? null : hashMapVthh.get(dtl.getCloaiVthh()));
+        dtl.setFileDinhKemMuaLe(fileDinhKemService.search(dtl.getId(), Collections.singleton(XhQdPdKhBttDtl.TABLE_NAME)));
+        dtl.setFileDinhKemUyQuyen(fileDinhKemService.search(dtl.getId(), Collections.singleton(XhQdPdKhBttDtl.TABLE_NAME)));
+        dtl.setXhTcTtinBttList(byIdTt);
+     return dtl;
     }
 }

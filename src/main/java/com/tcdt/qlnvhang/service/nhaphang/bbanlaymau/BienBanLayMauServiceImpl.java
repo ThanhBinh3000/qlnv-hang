@@ -37,23 +37,9 @@ import java.util.*;
 @Service
 @Log4j2
 public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBanLayMauService {
-	private static final String SHEET_BIEN_BAN_LAY_MAU = "Biên bản lấy mẫu";
-	private static final String STT = "STT";
-	private static final String SO_BIEN_BAN = "Số Biên Bản";
-	private static final String SO_QUYET_DINH_NHAP = "Số Quyết Định Nhập";
-	private static final String NGAY_LAY_MAU = "Ngày Lấy Mẫu";
-	private static final String SO_HOP_DONG = "Số Hợp Đồng";
-	private static final String DIEM_KHO = "Điểm Kho";
-	private static final String NHA_KHO = "Nhà Kho";
-	private static final String NGAN_KHO = "Ngăn Kho";
-	private static final String NGAN_LO = "Ngăn Lô";
-	private static final String TRANG_THAI = "Trạng Thái";
 
 	@Autowired
 	private BienBanLayMauRepository bienBanLayMauRepository;
-
-	@Autowired
-	private QlnvDmVattuRepository qlnvDmVattuRepository;
 
 	@Autowired
 	private BienBanLayMauCtRepository bienBanLayMauCtRepository;

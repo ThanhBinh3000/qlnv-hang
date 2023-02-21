@@ -597,7 +597,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 					throw new Exception("Số tờ trình kế hoạch không được tìm thấy");
 				}
 			}
-			this.validateData(dataDB);
+//			this.validateData(dataDB);
 			this.cloneProject(dataDB.getId());
 		}
 		HhQdKhlcntHdr createCheck = hhQdKhlcntHdrRepository.save(dataDB);
