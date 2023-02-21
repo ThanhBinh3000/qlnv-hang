@@ -188,6 +188,9 @@ public class XhCtvtBbLayMauHdrService extends BaseServiceImpl {
       if (mapDmucDvi.containsKey(data.getMaLoKho())) {
         data.setTenLoKho(mapDmucDvi.get(data.getMaLoKho()).get("tenDvi").toString());
       }
+      if (data.getNguoiPduyetId() != null) {
+        data.setTenThuKHo(ObjectUtils.isEmpty(data.getNguoiPduyetId()) ? null : userInfoRepository.findById(data.getNguoiPduyetId()).get().getFullName());
+      }
       data.setTenLoaiVthh(mapVthh.get(data.getLoaiVthh()));
       data.setTenCloaiVthh(mapVthh.get(data.getCloaiVthh()));
       data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
