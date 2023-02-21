@@ -228,17 +228,20 @@ public class XhCtvtPhieuKnClHdrService extends BaseServiceImpl {
 
     String status = statusReq.getTrangThai() + optional.get().getTrangThai();
     switch (status){
-      case Contains.CHODUYET_LDCC + Contains.DUTHAO:
-      case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
+      case Contains.CHODUYET_TP + Contains.DUTHAO:
+      case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
+      case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+      case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
         optional.get().setNguoiGduyetId(currentUser.getUser().getId());
         optional.get().setNgayGduyet(LocalDate.now());
         break;
-      case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
+      case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
+      case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
         optional.get().setNgayPduyet(LocalDate.now());
         optional.get().setLyDoTuChoi(statusReq.getLyDo());
         break;
-      case Contains.DADUYET_LDCC + Contains.CHODUYET_LDCC:
+      case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
         optional.get().setNgayPduyet(LocalDate.now());
         break;
