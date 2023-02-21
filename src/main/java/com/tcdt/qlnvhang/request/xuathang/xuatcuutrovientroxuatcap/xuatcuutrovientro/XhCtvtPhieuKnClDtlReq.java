@@ -6,8 +6,12 @@ import lombok.Data;
 public class XhCtvtPhieuKnClDtlReq {
   private Long id;
   private Long idHdr;
-  private String chiTieuCl;
-  private String chiSoCl;
-  private String ketQuaPt;
+  private String chiSoNhap;
+  private String chiSoXuat;
+  private String danhMuc;
   private String phuongPhap;
+  private String tenTchuan;
+  private String trangThai;
+  private Long thuTu;
+  private String ketQuaPt;
 }

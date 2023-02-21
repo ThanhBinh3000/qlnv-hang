@@ -19,8 +19,12 @@ public class XhCtvtPhieuKnClDtl implements Serializable {
       + "_SEQ", allocationSize = 1, name = XhCtvtPhieuKnClDtl.TABLE_NAME + "_SEQ")
   private Long id;
   private Long idHdr;
-  private String chiTieuCl;
-  private String chiSoCl;
-  private String ketQuaPt;
+  private String chiSoNhap;
+  private String chiSoXuat;
+  private String danhMuc;
   private String phuongPhap;
+  private String tenTchuan;
+  private String trangThai;
+  private String ketQuaPt;
+  private Long thuTu;
 }
