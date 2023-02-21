@@ -6,16 +6,15 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class SearchXhCtvtBbLayMau extends BaseRequest {
+public class SearchXhCtvtPhieuXuatKho extends BaseRequest {
   private String maDvi;
   private String dvql;
-  private String soBienBan;
+  private Long nam;
   private String soQdGiaoNvXh;
-  private String dviKiemNghiem;
-  private LocalDate ngayLayMauTu;
-  private LocalDate ngayLayMauDen;
+  private String soPhieuXuatKho;
+  private LocalDate ngayXuatKhoTu;
+  private LocalDate ngayXuatKhoDen;
   private String type;
   private String trangThai;
   private String loaiVthh;
-
 }

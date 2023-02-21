@@ -81,7 +81,7 @@ public class XhCtvtBbLayMauHdrService extends BaseServiceImpl {
       if (mapVthh.get((s.getCloaiVthh())) != null) {
         s.setTenCloaiVthh(mapVthh.get(s.getCloaiVthh()));
       }if (s.getNguoiPduyetId() != null) {
-        s.setTenThuKHo(ObjectUtils.isEmpty(s.getNguoiPduyetId()) ? null : userInfoRepository.findById(s.getNguoiPduyetId()).get().getFullName());
+        s.setTenThuKho(ObjectUtils.isEmpty(s.getNguoiPduyetId()) ? null : userInfoRepository.findById(s.getNguoiPduyetId()).get().getFullName());
       }
       s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
     });
@@ -189,7 +189,7 @@ public class XhCtvtBbLayMauHdrService extends BaseServiceImpl {
         data.setTenLoKho(mapDmucDvi.get(data.getMaLoKho()).get("tenDvi").toString());
       }
       if (data.getNguoiPduyetId() != null) {
-        data.setTenThuKHo(ObjectUtils.isEmpty(data.getNguoiPduyetId()) ? null : userInfoRepository.findById(data.getNguoiPduyetId()).get().getFullName());
+        data.setTenThuKho(ObjectUtils.isEmpty(data.getNguoiPduyetId()) ? null : userInfoRepository.findById(data.getNguoiPduyetId()).get().getFullName());
       }
       data.setTenLoaiVthh(mapVthh.get(data.getLoaiVthh()));
       data.setTenCloaiVthh(mapVthh.get(data.getCloaiVthh()));
@@ -261,7 +261,7 @@ public class XhCtvtBbLayMauHdrService extends BaseServiceImpl {
       case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
         optional.get().setNgayPduyet(LocalDate.now());
-        optional.get().setLyDoTuChoi(statusReq.getLyDo());
+        optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
         break;
       case Contains.DADUYET_LDCC + Contains.CHODUYET_LDCC:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
@@ -285,7 +285,7 @@ public class XhCtvtBbLayMauHdrService extends BaseServiceImpl {
 
     String title="Danh sách biên bản lấy mẫu bàn giao mẫu ";
     String[] rowsName=new String[]{"STT","Số QĐ giao nhiệm vụ XH","Năm KH","Thời hạn XH trước ngày","Số BB LM/BGM","Ngày lấy mẫu","Điểm Kho",
-        "Lô kho","Số BB tịnh kho","Ngày xuất dốc kho","Số BB hao dôi","Trạng thái",};
+        "Lô kho","Số BB tịnh kho","Ngày xuất dốc kho","Số BB hao dôi","Trạng thái"};
     String fileName="danh-sach-bien-ban-lay-mau-ban-giao-mau";
     List<Object[]> dataList = new ArrayList<Object[]>();
     Object[] objs=null;
