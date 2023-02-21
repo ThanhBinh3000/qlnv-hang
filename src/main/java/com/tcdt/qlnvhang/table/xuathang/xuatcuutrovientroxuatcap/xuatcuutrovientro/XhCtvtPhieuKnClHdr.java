@@ -11,30 +11,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = XhCtvtBbLayMauHdr.TABLE_NAME)
+@Table(name = XhCtvtPhieuKnClHdr.TABLE_NAME)
 @Data
-public class XhCtvtBbLayMauHdr extends BaseEntity implements Serializable {
+public class XhCtvtPhieuKnClHdr extends BaseEntity implements Serializable {
 
   private static final long serialVersionUID = 1L;
-  public static final String TABLE_NAME = "XH_CTVT_BB_LAY_MAU_HDR";
+  public static final String TABLE_NAME = "XH_CTVT_PHIEU_KN_CL_HDR";
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhCtvtBbLayMauHdr.TABLE_NAME + "_SEQ")
-  @SequenceGenerator(sequenceName = XhCtvtBbLayMauHdr.TABLE_NAME
-      + "_SEQ", allocationSize = 1, name = XhCtvtBbLayMauHdr.TABLE_NAME + "_SEQ")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhCtvtPhieuKnClHdr.TABLE_NAME + "_SEQ")
+  @SequenceGenerator(sequenceName = XhCtvtPhieuKnClHdr.TABLE_NAME
+      + "_SEQ", allocationSize = 1, name = XhCtvtPhieuKnClHdr.TABLE_NAME + "_SEQ")
   private Long id;
   private Integer nam;
   private String maDvi;
-  private String loaiBienBan;
   private String maQhNs;
+  private String soPhieu;
+  private LocalDate ngayLapPhieu;
+  private LocalDate ngayKnMau;
+  private Long idBienBan;
+  private String soBienBan;
+  private LocalDate ngayLayMau;
   private Long idQdGiaoNvXh;
   private String soQdGiaoNvXh;
   private LocalDate ngayQdGiaoNvXh;
-  private String ktvBaoQuan;
-  private String soBienBan;
-  private LocalDate ngayLayMau;
-  private String dviKiemNghiem;
-  private String diaDiemLayMau;
+  private String nguoiKn;
+  private String truongPhong;
+  private String thuKho;
   private String loaiVthh;
   private String cloaiVthh;
   private String moTaHangHoa;
@@ -42,20 +45,19 @@ public class XhCtvtBbLayMauHdr extends BaseEntity implements Serializable {
   private String maNhaKho;
   private String maNganKho;
   private String maLoKho;
-  private Integer soLuongMau;
-  private String ppLayMau;
-  private String chiTieuKiemTra;
-  private Boolean ketQuaNiemPhong;
+  private String hinhThucBq;
+  private String noiDung;
+  private String ketLuan;
   private String trangThai;
   private LocalDate ngayGduyet;
   private Long nguoiGduyetId;
   private LocalDate ngayPduyet;
   private Long nguoiPduyetId;
   private String lyDoTuChoi;
-  private String soBbHaoDoi;
-  private String soBbTinhKho;
-  private LocalDate ngayXuatDocKho;
   private String type;
+  private String soBbTinhKho;
+  private String soBbXuatDocKho;
+  private LocalDate ngayXuatDocKho;
   @Transient
   private String tenDvi;
   @Transient
@@ -77,13 +79,8 @@ public class XhCtvtBbLayMauHdr extends BaseEntity implements Serializable {
   @Transient
   private String tenLoKho;
   @Transient
-  private String tenThuKHo;
-  @Transient
   private List<FileDinhKem> fileDinhKems =new ArrayList<>();
   @Transient
-  private List<FileDinhKem> canCu =new ArrayList<>();
-  @Transient
-  private List<FileDinhKem> fileDinhKemNiemPhong =new ArrayList<>();
-  @Transient
-  private List<XhCtvtBbLayMauDtl> nguoiLienQuan = new ArrayList<>();
+  private List<XhCtvtPhieuKnClDtl> ketQuaPhanTich= new ArrayList<>();
+
 }

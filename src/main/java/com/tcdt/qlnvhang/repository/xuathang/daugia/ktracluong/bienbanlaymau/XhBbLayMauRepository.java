@@ -19,15 +19,17 @@ public interface XhBbLayMauRepository extends BaseRepository<XhBbLayMau, Long> {
 
 	@Query("SELECT c FROM XhBbLayMau c " +
 			" WHERE 1 = 1 " +
-			"AND (:#{#param.maDvi} IS NULL OR c.maDvi = :#{#param.maDvi}) " +
+			"AND (:#{#param.maDvi} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDvi},'%')) " +
 			"AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
 			"AND (:#{#param.loaiVthh } IS NULL OR LOWER(c.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
 			"AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) "
 	)
 	Page<XhBbLayMau> searchPage(@Param("param") XhBbLayMauRequest param, Pageable pageable);
+
 	void deleteAllByIdIn(Collection<Long> ids);
 
 	List<XhBbLayMau> findByIdIn(List<Long> ids);
 
 	List<XhBbLayMau> findAllByIdQd(Long idQd);
+
 }
