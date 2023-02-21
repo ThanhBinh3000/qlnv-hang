@@ -18,4 +18,5 @@ public class SearchXhCtvtPhieuKnCl extends BaseRequest {
   private String soBbXuatDocKho;
   private String type;
   private String trangThai;
+  private String loaiVthh;
 }

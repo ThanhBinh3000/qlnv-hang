@@ -253,6 +253,7 @@ public class PathContains {
 
 	public static final String BIEN_BAN_LAY_MAU= "/bb-lm";
 	public static final String KIEM_NGHIEM_CHAT_LUONG= "/kn-cl";
+	public static final String PHIEU_XUAT_KHO= "/phieu-xuat-kho";
 
 	public static final String QD_DC_KH = "/qd-dieu-chinh";
 
