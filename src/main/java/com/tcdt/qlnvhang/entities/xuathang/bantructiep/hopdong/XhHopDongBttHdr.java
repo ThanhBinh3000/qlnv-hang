@@ -1,0 +1,142 @@
+package com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
+import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.util.Contains;
+import lombok.Data;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+@Entity
+@Table(name = XhHopDongBttHdr.TABLE_NAME)
+@Data
+public class XhHopDongBttHdr extends TrangThaiBaseEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
+    public static final String TABLE_NAME = "XH_HOP_DONG_BTT_HDR";
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = TABLE_NAME +"_SEQ")
+    @SequenceGenerator(sequenceName =  TABLE_NAME+ "_SEQ", allocationSize = 1, name = TABLE_NAME+ "_SEQ")
+    private Long id;
+
+    private Integer namHd;
+
+    private String soQdKq;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    @Column(columnDefinition = "Date")
+    private Date ngayKyQdKq;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    @Column(columnDefinition = "Date")
+    private Date ngayMkho;
+
+    private String soQdPd;
+
+    private String maDviTsan;
+
+    private String soHd;
+
+    private String tenHd;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    @Column(columnDefinition = "Date")
+    private Date ngayHluc;
+
+    private String ghiChuNgayHluc;
+
+    private String loaiHdong;
+
+    private String ghiChuLoaiHdong;
+
+    private Integer tgianThienHd;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    @Column(columnDefinition = "Date")
+    private Date tgianGnhanTu;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    @Column(columnDefinition = "Date")
+    private Date tgianGnhanDen;
+
+    private String ghiChuTgianGnhan;
+
+    private String noiDungHdong;
+
+    private String dkienHanTtoan;
+
+    private String maDvi;
+    @Transient
+    private String tenDvi;
+
+    private String diaChi;
+
+    private String mst;
+
+    private String tenNguoiDdien;
+
+    private String chucVu;
+
+    private String sdt;
+
+    private String fax;
+
+    private String stk;
+
+    private String moLai;
+
+    private String ttinGiayUyQuyen;
+
+    private String tenDviMua;
+
+    private String diaChiDviMua;
+
+    private String mstDviMua;
+
+    private String tenNguoiDdienDviMua;
+
+    private String chucVuDviMua;
+
+    private String sdtDviMua;
+
+    private String faxDviMua;
+
+    private String stkDviMua;
+
+    private String moLaiDviMua;
+
+    private String loaiVthh;
+    @Transient
+    private String tenLoaiVthh;
+
+    private String cloaiVthh;
+    @Transient
+    private String tenCloaiVthh;
+
+    private String moTaHangHoa;
+
+    private String dviTinh;
+
+    private BigDecimal soLuong;
+
+    private BigDecimal donGiaVat;
+
+    private String ghiChu;
+
+    private BigDecimal soLuongQdChuaKy;
+
+    @Transient
+    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
+
+    @Transient
+    private List<XhHopDongBttDtl> children = new ArrayList<>();
+
+    @Transient
+    private List<String> listMaDviTsan = new ArrayList<>();
+}

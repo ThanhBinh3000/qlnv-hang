@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface XhKqBttHdrRepository  extends JpaRepository<XhKqBttHdr, Long> {
 
@@ -21,6 +23,8 @@ public interface XhKqBttHdrRepository  extends JpaRepository<XhKqBttHdr, Long> {
     Page<XhKqBttHdr> search(@Param("param") XhKqBttHdrReq param, Pageable pageable);
 
     XhKqBttHdr findBySoQdPd(String soQdPd);
+
+    Optional<XhKqBttHdr> findBySoQdKq(String soQdKq);
 
 
 }
