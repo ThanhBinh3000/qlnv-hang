@@ -40,5 +40,5 @@ public interface HhHopDongService {
 
 	void exportList(HhHopDongSearchReq objReq, HttpServletResponse response) throws Exception;
 
-	Page<HhHopDongHdr> lookupData(HhHopDongSearchReq req, HttpServletResponse response) throws Exception;
+	Page<HhHopDongHdr> lookupData(HhHopDongSearchReq req) throws Exception;
 }

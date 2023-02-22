@@ -240,11 +240,10 @@ public class HhHopDongController {
   @ApiOperation(value = "Danh sách chọn", response = List.class)
   @PostMapping(value = "/ds-qd-giao-nv-nh", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<BaseResponse> lookupData(HttpServletResponse response,
-                                                 @Valid @RequestBody HhHopDongSearchReq objReq) {
+  public ResponseEntity<BaseResponse> lookupData( @Valid @RequestBody HhHopDongSearchReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(service.lookupData(objReq, response));
+      resp.setData(service.lookupData(objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {

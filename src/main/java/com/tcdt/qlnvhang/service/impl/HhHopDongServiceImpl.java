@@ -463,7 +463,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
   }
 
   @Override
-  public Page<HhHopDongHdr> lookupData(HhHopDongSearchReq req, HttpServletResponse response) throws Exception {
+  public Page<HhHopDongHdr> lookupData(HhHopDongSearchReq req) throws Exception {
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("ngay_sua", "ngay_tao").descending());
     UserInfo userInfo = UserUtils.getUserInfo();
     Page<HhHopDongHdr> page = hhHopDongRepository.lookupData(req.getLoaiVthh(), req.getNamHd(), userInfo.getDvql(), req.getTrangThai(), pageable);
