@@ -26,7 +26,7 @@ public class XhKqBttHdr extends TrangThaiBaseEntity implements Serializable {
 
     private Long id;
 
-    private Long idDtl;
+    private Long idHdr;
 
     private Integer namKh;
 
