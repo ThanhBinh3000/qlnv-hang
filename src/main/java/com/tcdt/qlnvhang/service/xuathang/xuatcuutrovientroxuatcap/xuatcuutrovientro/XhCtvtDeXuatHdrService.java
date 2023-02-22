@@ -224,7 +224,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
 
         String status = statusReq.getTrangThai() + optional.get().getTrangThai();
         switch (status) {
-            case Contains.CHODUYET_LDV+ Contains.DUTHAO:
+            case Contains.DA_TAO_CBV + Contains.DUTHAO:
             case Contains.CHODUYET_LDV+ Contains.TUCHOI_LDV:
                 optional.get().setNgayGduyet(LocalDate.now());
                 optional.get().setNguoiGduyetId(currentUser.getUser().getId());
