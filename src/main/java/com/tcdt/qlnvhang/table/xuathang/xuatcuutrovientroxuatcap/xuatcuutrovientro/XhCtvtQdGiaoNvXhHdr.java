@@ -33,7 +33,7 @@ public class XhCtvtQdGiaoNvXhHdr extends BaseEntity implements Serializable {
   private String loaiVthh;
   private String cloaiVthh;
   private BigDecimal soLuong;
-  private BigDecimal donViTinh;
+  private String donViTinh;
   private LocalDate thoiGianGiaoNhan;
   private String trichYeu;
   private String trangThai;

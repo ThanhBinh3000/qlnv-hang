@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -44,7 +43,7 @@ public class XhCtvtPhieuXuatKhoReq {
   private LocalDate thoiGianGiaoNhan;
   private String soBangKeCh;
   private String maSo;
-  private String dviTinh;
+  private String donViTinh;
   private String theoChungTu;
   private String thucNhap;
   private String donGia;
