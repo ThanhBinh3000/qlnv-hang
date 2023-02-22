@@ -1,9 +1,9 @@
 package com.tcdt.qlnvhang.service.xuathang.bantructiep.tochuctrienkhai.ketqua;
 
-import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDtl;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDtlRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdrReq;
@@ -36,7 +36,7 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
     private XhKqBttHdrRepository xhKqBttHdrRepository;
 
     @Autowired
-    private XhQdPdKhBttDtlRepository xhQdPdKhBttDtlRepository;
+    private XhQdPdKhBttHdrRepository xhQdPdKhBttHdrRepository;
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
@@ -78,9 +78,9 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
         }
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), data.getId(), XhKqBttHdr.TABLE_NAME);
         data.setFileDinhKems(fileDinhKems);
-        Optional<XhQdPdKhBttDtl> dtl = xhQdPdKhBttDtlRepository.findById(req.getIdDtl());
+        Optional<XhQdPdKhBttHdr> dtl = xhQdPdKhBttHdrRepository.findById(req.getIdHdr());
         dtl.get().setSoQdKq(req.getSoQdKq());
-        xhQdPdKhBttDtlRepository.save(dtl.get());
+        xhQdPdKhBttHdrRepository.save(dtl.get());
         xhKqBttHdrRepository.save(data);
         return data;
     }

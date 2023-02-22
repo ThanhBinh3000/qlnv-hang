@@ -59,6 +59,8 @@ public class XhQdPdKhBttHdrReq extends BaseRequest {
 
     private String soQdCc;
 
+    private String trangThaiChaoGia;
+
     private List<XhQdPdKhBttDtlReq> children;
 
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
