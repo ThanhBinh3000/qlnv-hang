@@ -134,6 +134,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
 
         if (req.getPhanLoai().equals("TH")){
             dataTh.setTrangThai(Contains.DADUTHAO_QD);
+            dataTh.setSoQdPd(dataMap.getSoQdPd());
             xhThopDxKhBttRepository.save(dataTh);
         }else {
             dataDx.setTrangThaiTh(Contains.DADUTHAO_QD);
@@ -272,6 +273,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
             case Contains.BAN_HANH + Contains.DUTHAO:
                 dataDB.setNgayPduyet(getDateTimeNow());
                 dataDB.setNguoiPduyetId(getUser().getId());
+                dataDB.setTrangThaiChaoGia(Contains.CHUACAPNHAT);
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
@@ -301,6 +303,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
                     throw new Exception("Số tờ trình kế hoạch không được tìm thấy");
                 }
             }
+
             this.cloneProject(dataDB.getId());
         }
         XhQdPdKhBttHdr createCheck = xhQdPdKhBttHdrRepository.save(dataDB);

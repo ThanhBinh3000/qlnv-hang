@@ -20,5 +20,8 @@ public class XhQdPdKhBttDviReq {
 
     private String diaChi;
 
+    private BigDecimal donGiaVat;
+
+
     List<XhQdPdKhBttDviDtlReq> children =new ArrayList<>();
 }
