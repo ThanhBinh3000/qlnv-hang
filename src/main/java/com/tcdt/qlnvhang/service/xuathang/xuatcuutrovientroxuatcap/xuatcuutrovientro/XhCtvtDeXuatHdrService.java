@@ -87,7 +87,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
       if (DataUtils.isNullObject(s.getIdThop())) {
         s.setTenTrangThaiTh("Chưa tổng hợp");
       } else {
-        s.setTenTrangThaiTh(TrangThaiAllEnum.getLabelById(trangThaiTh.get(s.getMaTongHop())));
+        s.setTenTrangThaiTh(TrangThaiAllEnum.getLabelById(trangThaiTh.get(s.getIdThop())));
       }
       if (!DataUtils.isNullObject(s.getIdQdPd())) {
         s.setTenTrangThaiQd(TrangThaiAllEnum.getLabelById(trangThaiQd.get(s.getIdQdPd())));
