@@ -249,11 +249,13 @@ public class PathContains {
 	public static final String QUYET_DINH_PHE_DUYET= "/quyet-dinh";
 	public static final String QUYET_DINH_GIAO_NHIEM_VU= "/qd-gnv";
 
+	public static final String XUAT_KHO= "/xuat-kho";
 	public static final String KIEM_TRA_CHAT_LUONG= "/kt-cl";
 
 	public static final String BIEN_BAN_LAY_MAU= "/bb-lm";
 	public static final String KIEM_NGHIEM_CHAT_LUONG= "/kn-cl";
 	public static final String PHIEU_XUAT_KHO= "/phieu-xuat-kho";
+	public static final String BANG_KE= "/bang-ke";
 
 	public static final String QD_DC_KH = "/qd-dieu-chinh";
 

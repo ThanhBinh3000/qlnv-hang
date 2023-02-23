@@ -96,9 +96,8 @@ public class Contains {
 	public static final String HUYTHAU = "36";
 	public static final String TRUNGTHAU = "37";
 
-
+	public static final String DA_TAO_CBV = "52";
 	public static final String DA_DUYET_CBV = "53";
-
 	public static final String TU_CHOI_CBV = "54";
 
 
