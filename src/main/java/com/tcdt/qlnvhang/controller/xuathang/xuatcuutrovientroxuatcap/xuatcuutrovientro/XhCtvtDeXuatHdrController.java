@@ -11,6 +11,7 @@ import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovie
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatHdrReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatHdrService;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatHdr;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,7 +34,7 @@ import java.util.Map;
 @Slf4j
 @Api(tags = "Xuất hàng DTQG - Xuất cứu trợ viện trợ - Xây dựng phương án")
 public class XhCtvtDeXuatHdrController extends BaseController {
-
+//    XhCtvtDeXuatHdr
     @Autowired
     XhCtvtDeXuatHdrService xhCtvtDeXuatHdrService;
 
