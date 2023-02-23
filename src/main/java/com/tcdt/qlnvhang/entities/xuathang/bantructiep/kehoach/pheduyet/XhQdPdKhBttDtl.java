@@ -1,9 +1,6 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.thongtin.XhTcTtinBtt;
-import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
@@ -71,6 +68,8 @@ public class XhQdPdKhBttDtl implements Serializable {
     private String pthucGnhan;
 
     private String thongBaoKh;
+
+    private BigDecimal donGiaVat;
 
 
     @Transient

@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,8 @@ public class XhQdDchinhKhBttSl implements Serializable {
     private String maDvi;
     @Transient
     private String tenDvi;
+
+    private BigDecimal soLuong;
 
     @Transient
     private List<XhQdDchinhKhBttSlDtl> children= new ArrayList<>();

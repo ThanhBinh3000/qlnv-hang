@@ -63,6 +63,14 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
 
     @Override
     public XhKqBttHdr create(XhKqBttHdrReq req) throws Exception {
+
+        if (!StringUtils.isEmpty(req.getSoQdKq())){
+            Optional<XhKqBttHdr> qOptional = xhKqBttHdrRepository.findBySoQdKq(req.getSoQdKq());
+            if (qOptional.isPresent()){
+                throw new Exception("Số quyết định " + req.getSoQdKq() + " kết quả chào giá đã tồn tại");
+            }
+        }
+
        XhKqBttHdr data = new XhKqBttHdr();
         BeanUtils.copyProperties(req, data, "id");
         data.setNamKh(LocalDate.now().getYear());

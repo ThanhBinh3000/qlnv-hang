@@ -34,25 +34,25 @@ public class XhQdDchinhKhBttDtlReq  {
 
     private BigDecimal tongSoLuong;
 
-    private BigDecimal tongTienVat;
-
-    private BigDecimal giaChuaVat;
-
-    private String thueGtgt;
-
-    private String giaVat;
+    private BigDecimal donGiaVat;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date tgianDkienTu;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date tgianDkienDen;
+    private Integer tgianTtoan;
+
+    private String tgianTtoanGhiChu;
+
+    private String pthucTtoan;
+
+    private Integer tgianGnhan;
+
+    private String tgianGnhanGhiChu;
+
+    private String pthucGnhan;
 
     private String thongBaoKh;
-
-    private BigDecimal tongMucDauTu;
-
-    private String nguonVon;
 
     @Transient
     List<XhQdDchinhKhBttSlReq> children = new ArrayList<>();

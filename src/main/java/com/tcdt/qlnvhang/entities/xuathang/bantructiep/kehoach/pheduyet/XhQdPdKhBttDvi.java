@@ -30,6 +30,8 @@ public class XhQdPdKhBttDvi implements Serializable {
 
     private String diaChi;
 
+    private BigDecimal donGiaVat;
+
     @Transient
     List<XhQdPdKhBttDviDtl> children =new ArrayList<>();
 }
