@@ -189,7 +189,7 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
       List<XhCtvtDeXuatHdr> listDxHdr = xhCtvtDeXuatHdrRepository.findByIdIn(idDxList);
       if (!CollectionUtils.isEmpty(listDxHdr)) {
         listDxHdr.stream().map(item -> {
-          item.setMaTongHop("Chưa tổng hợp");
+          item.setMaTongHop(null);
           return item;
         }).collect(Collectors.toList());
       }
@@ -211,7 +211,7 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
         List<XhCtvtDeXuatHdr> listDxHdr = xhCtvtDeXuatHdrRepository.findByIdIn(idDxList);
         if (!CollectionUtils.isEmpty(listDxHdr)) {
           listDxHdr.stream().map(item -> {
-            item.setMaTongHop("Chưa tổng hợp");
+            item.setMaTongHop(null);
             return item;
           }).collect(Collectors.toList());
         }
