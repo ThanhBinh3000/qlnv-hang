@@ -87,7 +87,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
       if (DataUtils.isNullObject(s.getIdThop())) {
         s.setTenTrangThaiTh("Chưa tổng hợp");
       } else {
-        s.setTenTrangThaiTh(TrangThaiAllEnum.getLabelById(trangThaiTh.get(s.getMaTongHop())));
+        s.setTenTrangThaiTh(TrangThaiAllEnum.getLabelById(trangThaiTh.get(s.getIdThop())));
       }
       if (!DataUtils.isNullObject(s.getIdQdPd())) {
         s.setTenTrangThaiQd(TrangThaiAllEnum.getLabelById(trangThaiQd.get(s.getIdQdPd())));
@@ -251,6 +251,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
     String status = statusReq.getTrangThai() + optional.get().getTrangThai();
     switch (status) {
       case Contains.DA_TAO_CBV + Contains.DUTHAO:
+      case Contains.DUTHAO + Contains.DA_TAO_CBV:
       case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
         optional.get().setNgayGduyet(LocalDate.now());
         optional.get().setNguoiGduyetId(currentUser.getUser().getId());
