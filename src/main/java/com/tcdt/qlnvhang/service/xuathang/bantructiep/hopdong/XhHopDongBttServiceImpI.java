@@ -52,11 +52,13 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
                 pageable);
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
+        Map<String,String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
         page.getContent().forEach(f ->{
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenDvi(hashMapDvi.get(f.getMaDvi()));
             f.setTenLoaiVthh(hashMapVthh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(hashMapVthh.get(f.getCloaiVthh()));
+            f.setTenLoaiHdong(hashMapLoaiHdong.get(f.getLoaiHdong()));
         });
         return page;
     }
@@ -162,12 +164,15 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
         }
 
         XhHopDongBttHdr data = qOptional.get();
+
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
+        Map<String,String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
+
         data.setTenDvi(hashMapDvi.get(data.getMaDvi()));
         data.setTenLoaiVthh(hashMapVthh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(hashMapVthh.get(data.getCloaiVthh()));
-        data.setListMaDviTsan(Arrays.asList(data.getMaDviTsan().split(",")));
+        data.setTenLoaiHdong(hashMapLoaiHdong.get(data.getLoaiHdong()));
         List<FileDinhKem> fileDinhKemList = fileDinhKemService.search(data.getId(), Arrays.asList(XhHopDongBttHdr.TABLE_NAME));
         data.setFileDinhKems(fileDinhKemList);
 

@@ -25,6 +25,8 @@ public class XhHopDongBttHdr extends TrangThaiBaseEntity implements Serializable
     @SequenceGenerator(sequenceName =  TABLE_NAME+ "_SEQ", allocationSize = 1, name = TABLE_NAME+ "_SEQ")
     private Long id;
 
+    private Long idQdKq;
+
     private Integer namHd;
 
     private String soQdKq;
@@ -52,6 +54,8 @@ public class XhHopDongBttHdr extends TrangThaiBaseEntity implements Serializable
     private String ghiChuNgayHluc;
 
     private String loaiHdong;
+    @Transient
+    private String tenLoaiHdong;
 
     private String ghiChuLoaiHdong;
 
@@ -93,6 +97,8 @@ public class XhHopDongBttHdr extends TrangThaiBaseEntity implements Serializable
 
     private String ttinGiayUyQuyen;
 
+    private Long idDviMua;
+
     private String tenDviMua;
 
     private String diaChiDviMua;
@@ -125,11 +131,15 @@ public class XhHopDongBttHdr extends TrangThaiBaseEntity implements Serializable
 
     private BigDecimal soLuong;
 
-    private BigDecimal donGiaVat;
+    private BigDecimal donGiaGomThue;
+
+    private BigDecimal donGia;
 
     private String ghiChu;
 
     private BigDecimal soLuongQdChuaKy;
+
+    private BigDecimal tongTien;
 
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
