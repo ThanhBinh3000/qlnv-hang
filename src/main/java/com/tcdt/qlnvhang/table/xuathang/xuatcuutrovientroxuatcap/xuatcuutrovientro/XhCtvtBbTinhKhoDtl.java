@@ -8,16 +8,16 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = XhCtvtPhieuXuatKho.TABLE_NAME)
+@Table(name = XhCtvtBbTinhKhoDtl.TABLE_NAME)
 @Data
 public class XhCtvtBbTinhKhoDtl implements Serializable {
   private static final long serialVersionUID = 1L;
-  public static final String TABLE_NAME = "XH_CTVT_PHIEU_XUAT_KHO";
+  public static final String TABLE_NAME = "XH_CTVT_BB_TINH_KHO_DTL";
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhCtvtPhieuXuatKho.TABLE_NAME + "_SEQ")
-  @SequenceGenerator(sequenceName = XhCtvtPhieuXuatKho.TABLE_NAME
-      + "_SEQ", allocationSize = 1, name = XhCtvtPhieuXuatKho.TABLE_NAME + "_SEQ")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhCtvtBbTinhKhoDtl.TABLE_NAME + "_SEQ")
+  @SequenceGenerator(sequenceName = XhCtvtBbTinhKhoDtl.TABLE_NAME
+      + "_SEQ", allocationSize = 1, name = XhCtvtBbTinhKhoDtl.TABLE_NAME + "_SEQ")
   private Long id;
   private Long idHdr;
   private Long idPhieuKnCl;

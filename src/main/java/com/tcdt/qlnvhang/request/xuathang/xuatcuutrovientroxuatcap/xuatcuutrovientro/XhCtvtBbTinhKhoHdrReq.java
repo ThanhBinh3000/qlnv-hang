@@ -15,7 +15,7 @@ public class XhCtvtBbTinhKhoHdrReq {
   private String maDvi;
   private String maQhNs;
   private String soBbTinhKho;
-  private LocalDate ngayTaoPhieu;
+  private LocalDate ngayTaoBb;
   private Long idQdGiaoNvXh;
   private String soQdGiaoNvXh;
   private LocalDate ngayQdGiaoNvXh;
