@@ -16,6 +16,8 @@ import java.util.List;
 public class XhHopDongBttHdrReq extends BaseRequest {
     private Long id;
 
+    private Long idQdKq;
+
     private Integer namHd;
 
     private String soQdKq;
@@ -77,6 +79,8 @@ public class XhHopDongBttHdrReq extends BaseRequest {
 
     private String ttinGiayUyQuyen;
 
+    private Long idDviMua;
+
     private String tenDviMua;
 
     private String diaChiDviMua;
@@ -105,11 +109,15 @@ public class XhHopDongBttHdrReq extends BaseRequest {
 
     private BigDecimal soLuong;
 
-    private BigDecimal donGiaVat;
+    private BigDecimal donGiaGomThue;
+
+    private BigDecimal donGia;
 
     private String ghiChu;
 
     private BigDecimal soLuongQdChuaKy;
+
+    private BigDecimal tongTien;
 
     @Transient
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
