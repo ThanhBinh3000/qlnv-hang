@@ -36,9 +36,11 @@ public class XhPhieuKnghiemCluong extends TrangThaiBaseEntity implements Seriali
 
     private String maQhns;
 
-    private String soBienBanLayMau;
+    private String soBbLayMau;
 
     private String soQdGiaoNvXh;
+
+    private Long idQdGiaoNvXh;
 
     private String soPhieu;
 
@@ -69,6 +71,8 @@ public class XhPhieuKnghiemCluong extends TrangThaiBaseEntity implements Seriali
     private Date ngayLayMau;
 
     private Date ngayKnghiem;
+
+    private String ketQua;
 
     private String ketLuan;
 
