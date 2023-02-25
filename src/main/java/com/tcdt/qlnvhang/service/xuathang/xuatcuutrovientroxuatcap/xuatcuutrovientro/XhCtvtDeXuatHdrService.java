@@ -65,6 +65,9 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
             if (mapVthh.get((s.getCloaiVthh())) != null) {
                 s.setTenCloaiVthh(mapVthh.get(s.getCloaiVthh()));
             }
+            if(s.getMaTongHop()==null){
+                s.setMaTongHop("Chưa tổng hơp");
+            }
             s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
         });
         return search;
@@ -85,7 +88,6 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
         data.setThanhTien(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPaReq::getThanhTien).reduce(BigDecimal.ZERO,BigDecimal::add));
         data.setMaDvi(currentUser.getUser().getDepartment());
         data.setTrangThai(Contains.DUTHAO);
-        data.setMaTongHop("Chưa tổng hợp");
         XhCtvtDeXuatHdr created=xhCtvtDeXuatHdrRepository.save(data);
 
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), XhCtvtDeXuatHdr.TABLE_NAME + "_CAN_CU");
