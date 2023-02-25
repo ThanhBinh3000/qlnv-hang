@@ -40,15 +40,15 @@ public interface XhCtvtDeXuatHdrRepository extends JpaRepository<XhCtvtDeXuatHdr
 
     Optional<XhCtvtDeXuatHdr> findBySoDx (String soDx);
 
-    @Query("SELECT c FROM XhCtvtDeXuatHdr c WHERE 1=1 " +
-            "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
-            "AND (:#{#param.type} IS NULL OR c.type = :#{#param.type}) " +
-            "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
-            "AND c.maTongHop = 'Chưa tổng hợp'" +
-            "AND (:#{#param.loaiVthh} IS NULL OR c.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
-            "AND (:#{#param.loaiNhapXuat} IS NULL OR c.loaiNhapXuat LIKE CONCAT(:#{#param.loaiNhapXuat},'%')) " +
-            "AND (:#{#param.trangThaiList == null || #param.trangThaiList.isEmpty() } = true OR c.trangThai IN :#{#param.trangThaiList}) "+
-            "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
+    @Query("SELECT c FROM XhCtvtDeXuatHdr c WHERE " +
+        "(:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) AND " +
+        "(:#{#param.type} IS NULL OR c.type = :#{#param.type}) AND " +
+        "(:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) AND " +
+        "c.maTongHop IS NULL AND " +
+        "(:#{#param.loaiVthh} IS NULL OR c.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) AND " +
+        "(:#{#param.loaiNhapXuat} IS NULL OR c.loaiNhapXuat LIKE CONCAT(:#{#param.loaiNhapXuat},'%')) AND " +
+        "(:#{#param.trangThaiList == null || #param.trangThaiList.isEmpty()} = true OR c.trangThai IN :#{#param.trangThaiList}) " +
+        "ORDER BY c.ngaySua DESC, c.ngayTao DESC, c.id DESC"
     )
     List<XhCtvtDeXuatHdr> listTongHop(@Param("param") SearchXhCtvtDeXuatHdrReq param);
 

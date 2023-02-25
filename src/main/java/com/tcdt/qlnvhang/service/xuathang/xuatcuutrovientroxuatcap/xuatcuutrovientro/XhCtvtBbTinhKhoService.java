@@ -78,6 +78,7 @@ public class XhCtvtBbTinhKhoService extends BaseServiceImpl {
         s.setTenLoKho(mapDmucDvi.get(s.getMaLoKho()).get("tenDvi").toString());
       }
       s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
+      s.setListPhieuXuatKho(xhCtvtBbTinhKhoDtlRepository.findByIdHdr(s.getId()));
     });
     return search;
   }
