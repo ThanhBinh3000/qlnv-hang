@@ -1,9 +1,11 @@
 package com.tcdt.qlnvhang.service.xuathang.bantructiep.tochuctrienkhai.ketqua;
 
-import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDtl;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttHdr;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDtlRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.hopdong.XhHopDongBttHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdrReq;
@@ -36,7 +38,10 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
     private XhKqBttHdrRepository xhKqBttHdrRepository;
 
     @Autowired
-    private XhQdPdKhBttDtlRepository xhQdPdKhBttDtlRepository;
+    private XhQdPdKhBttHdrRepository xhQdPdKhBttHdrRepository;
+
+    @Autowired
+    private XhHopDongBttHdrRepository xhHopDongBttHdrRepository;
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
@@ -63,6 +68,14 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
 
     @Override
     public XhKqBttHdr create(XhKqBttHdrReq req) throws Exception {
+
+        if (!StringUtils.isEmpty(req.getSoQdKq())){
+            Optional<XhKqBttHdr> qOptional = xhKqBttHdrRepository.findBySoQdKq(req.getSoQdKq());
+            if (qOptional.isPresent()){
+                throw new Exception("Số quyết định " + req.getSoQdKq() + " kết quả chào giá đã tồn tại");
+            }
+        }
+
        XhKqBttHdr data = new XhKqBttHdr();
         BeanUtils.copyProperties(req, data, "id");
         data.setNamKh(LocalDate.now().getYear());
@@ -78,9 +91,9 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
         }
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), data.getId(), XhKqBttHdr.TABLE_NAME);
         data.setFileDinhKems(fileDinhKems);
-        Optional<XhQdPdKhBttDtl> dtl = xhQdPdKhBttDtlRepository.findById(req.getIdDtl());
+        Optional<XhQdPdKhBttHdr> dtl = xhQdPdKhBttHdrRepository.findById(req.getIdHdr());
         dtl.get().setSoQdKq(req.getSoQdKq());
-        xhQdPdKhBttDtlRepository.save(dtl.get());
+        xhQdPdKhBttHdrRepository.save(dtl.get());
         xhKqBttHdrRepository.save(data);
         return data;
     }
@@ -121,10 +134,17 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
+        data.setTenTrangThaiHd(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiHd()));
+        data.setTenTrangThaiXh(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiXh()));
         data.setTenDvi(hashMapDvi.get(data.getMaDvi()));
         data.setTenLoaiVthh(hashMapVthh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(hashMapVthh.get(data.getCloaiVthh()));
 
+        List<XhHopDongBttHdr> allById = xhHopDongBttHdrRepository.findAllByIdQdKq(id);
+        allById.forEach(f ->{
+            f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+        });
+        data.setListHopDongBtt(allById);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhKqBttHdr.TABLE_NAME));
         data.setFileDinhKems(fileDinhKems);
         return data;
@@ -148,6 +168,11 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
 
         XhKqBttHdr data = optional.get();
         String status = req.getTrangThai() + data.getTrangThai();
+        if(req.getTrangThai().equals(NhapXuatHangTrangThaiEnum.DA_HOAN_THANH.getId())
+                && data.getTrangThaiHd().equals(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId()))
+        {
+            data.setTrangThaiHd(req.getTrangThai());
+        } else {
             switch (status) {
                 case Contains.CHODUYET_TP + Contains.DUTHAO:
                 case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
@@ -170,6 +195,7 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
                     throw new Exception("Phê duyệt không thành công");
             }
             data.setTrangThai(req.getTrangThai());
+        }
         return xhKqBttHdrRepository.save(data);
     }
 

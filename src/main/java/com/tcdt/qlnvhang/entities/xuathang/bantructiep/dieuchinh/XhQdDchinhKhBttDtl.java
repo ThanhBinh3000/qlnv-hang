@@ -44,13 +44,7 @@ public class XhQdDchinhKhBttDtl implements Serializable {
 
     private BigDecimal tongSoLuong;
 
-    private BigDecimal tongTienVat;
-
-    private BigDecimal giaChuaVat;
-
-    private String thueGtgt;
-
-    private String giaVat;
+    private BigDecimal donGiaVat;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date tgianDkienTu;
@@ -58,11 +52,19 @@ public class XhQdDchinhKhBttDtl implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date tgianDkienDen;
 
+    private Integer tgianTtoan;
+
+    private String tgianTtoanGhiChu;
+
+    private String pthucTtoan;
+
+    private Integer tgianGnhan;
+
+    private String tgianGnhanGhiChu;
+
+    private String pthucGnhan;
+
     private String thongBaoKh;
-
-    private BigDecimal tongMucDauTu;
-
-    private String nguonVon;
 
     @Transient
     private List<XhQdDchinhKhBttSl> children= new ArrayList<>();

@@ -16,11 +16,11 @@ public class XhCgiaReq {
     @ApiModelProperty(notes = "Bắt buộc set đối với update")
     private Long id;
 
-    private Long idDtl;
+    private Long idHdr;
 
-    private String trangThai;
+    private String trangThaiChaoGia;
     @Transient
-    private String tenTrangThai;
+    private String tenTrangThaiChaoGia;
 
     private String pthucBanTrucTiep;
 
@@ -31,16 +31,6 @@ public class XhCgiaReq {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKthuc;
-
-    private String loaiVthh;
-    @Transient
-    private String tenLoaiVthh;
-
-    private String cloaiVthh;
-    @Transient
-    private String tenCloaiVthh;
-
-    private String moTaHangHoa;
 
     private String ghiChu;
 

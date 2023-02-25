@@ -17,7 +17,7 @@ public class XhKqBttHdrReq extends BaseRequest  {
     @ApiModelProperty(notes = "Bắt buộc set đối với update")
     private Long id;
 
-    private Long idDtl;
+    private Long idHdr;
 
     private Integer namKh;
 

@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface XhTcTtinBttRepository extends JpaRepository<XhTcTtinBtt, Long> {
 
-    void deleteAllByIdDtl(Long idDtl);
+    void deleteAllByIdHdr(Long idHdr);
 
-    List<XhTcTtinBtt> findAllByIdDtl(Long idDtl);
+    List<XhTcTtinBtt> findAllByIdHdr(Long idHdr);
 }

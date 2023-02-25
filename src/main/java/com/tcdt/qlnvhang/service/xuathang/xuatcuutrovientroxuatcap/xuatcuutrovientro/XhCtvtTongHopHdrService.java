@@ -109,7 +109,7 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
   @Transactional()
   public XhCtvtTongHopHdr save(CustomUserDetails currentUser, XhCtvtTongHopHdrReq objReq) throws Exception {
     XhCtvtTongHopHdr thopHdr = new XhCtvtTongHopHdr(DataUtils.safeToLong(objReq.getMaTongHop()));
-    DataUtils.copyProperties(objReq, thopHdr,"id");
+    DataUtils.copyProperties(objReq, thopHdr, "id");
     thopHdr.setTrangThai(Contains.DUTHAO);
     thopHdr.setMaDvi(currentUser.getUser().getDepartment());
     XhCtvtTongHopHdr save = xhCtvtTongHopHdrRepository.save(thopHdr);
@@ -123,6 +123,7 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
       List<Long> listIdDxHdr = listDtl.stream().map(XhCtvtTongHopDtl::getIdDx).collect(Collectors.toList());
       List<XhCtvtDeXuatHdr> listDeXuatHdr = xhCtvtDeXuatHdrRepository.findAllByIdIn(listIdDxHdr);
       for (XhCtvtDeXuatHdr deXuatHdr : listDeXuatHdr) {
+        deXuatHdr.setIdThop(thopHdr.getId());
         deXuatHdr.setMaTongHop(thopHdr.getMaTongHop());
         xhCtvtDeXuatHdrRepository.save(deXuatHdr);
       }
@@ -189,7 +190,8 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
       List<XhCtvtDeXuatHdr> listDxHdr = xhCtvtDeXuatHdrRepository.findByIdIn(idDxList);
       if (!CollectionUtils.isEmpty(listDxHdr)) {
         listDxHdr.stream().map(item -> {
-          item.setMaTongHop("Chưa tổng hợp");
+          item.setMaTongHop(null);
+          item.setIdThop(null);
           return item;
         }).collect(Collectors.toList());
       }
@@ -211,7 +213,8 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
         List<XhCtvtDeXuatHdr> listDxHdr = xhCtvtDeXuatHdrRepository.findByIdIn(idDxList);
         if (!CollectionUtils.isEmpty(listDxHdr)) {
           listDxHdr.stream().map(item -> {
-            item.setMaTongHop("Chưa tổng hợp");
+            item.setMaTongHop(null);
+            item.setIdThop(null);
             return item;
           }).collect(Collectors.toList());
         }
