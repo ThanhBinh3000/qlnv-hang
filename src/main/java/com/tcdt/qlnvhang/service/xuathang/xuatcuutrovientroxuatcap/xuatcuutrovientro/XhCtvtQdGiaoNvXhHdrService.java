@@ -300,7 +300,7 @@ public class XhCtvtQdGiaoNvXhHdrService extends BaseServiceImpl {
     String title = "Danh sách quyết định giao nhiệm vụ xuất cứu trợ, viện trợ ";
     String[] rowsName = new String[]{"STT", "Năm xuất", "Số QĐ giao NV XH", "Ngày quyết định", "Số QĐ PD PA", "Loại hàng hóa",
         "Thời gian giao nhận", "Trích yếu", "Số BB tịnh kho", "Số BB hao dôi", "Trang thái QĐ", "Trạng thái NX",};
-    String fileName = "danh-sach-quyet-dinh-giao-nhiem-vu-xuat-cuu-tro-vien-tro";
+    String fileName = "danh-sach-quyet-dinh-giao-nhiem-vu-xuat-cuu-tro-vien-tro.xlsx";
     List<Object[]> dataList = new ArrayList<Object[]>();
     Object[] objs = null;
     for (int i = 0; i < data.size(); i++) {

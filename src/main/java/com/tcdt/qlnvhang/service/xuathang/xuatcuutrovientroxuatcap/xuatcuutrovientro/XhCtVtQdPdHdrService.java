@@ -344,7 +344,7 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
     String title = "Danh sách quyết định phương án xuất cứu trợ, viện trợ ";
     String[] rowsName = new String[]{"STT", "Số quyết định", "Ngày ký quyết định", "Mã tổng hợp", "Ngày tổng hợp", "Số công văn/đề xuất", "Ngày đề xuất",
         "Loại hàng hóa", "Tổng SL đề xuất cứu trợ,viện trợ (kg)", "Tổng SL xuất kho cứu trợ,viện trợ (kg)", "SL xuất CT,VT chuyển sang xuất cấp", "Trích yếu", "Trạng thái quyết định",};
-    String fileName = "danh-sach-phuong-an-xuat-cuu-tro-vien-tro";
+    String fileName = "danh-sach-phuong-an-xuat-cuu-tro-vien-tro.xlsx";
     List<Object[]> dataList = new ArrayList<Object[]>();
     Object[] objs = null;
     for (int i = 0; i < data.size(); i++) {

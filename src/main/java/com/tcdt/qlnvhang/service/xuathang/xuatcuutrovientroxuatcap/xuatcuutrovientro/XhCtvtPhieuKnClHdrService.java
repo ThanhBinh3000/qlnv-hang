@@ -264,7 +264,7 @@ public class XhCtvtPhieuKnClHdrService extends BaseServiceImpl {
     String title="Danh sách phiếu kiểm nghiệm chất lượng ";
     String[] rowsName=new String[]{"STT","Số QĐ giao nhiệm vụ XH","Năm KH","Thời hạn XH trước ngày","Số phiếu KNCL","Ngày kiểm nghiệm","Nhà kho","Ngăn Kho",
         "Lô kho","Số BB LM/BGM","Ngày lấy mẫu","Số BB tịnh kho","Ngày xuất dốc kho","Trạng thái",};
-    String fileName="danh-sach-phieu-kiem-nghiem-chat-luong";
+    String fileName="danh-sach-phieu-kiem-nghiem-chat-luong.xlsx";
     List<Object[]> dataList = new ArrayList<Object[]>();
     Object[] objs=null;
     for (int i=0;i<data.size();i++){

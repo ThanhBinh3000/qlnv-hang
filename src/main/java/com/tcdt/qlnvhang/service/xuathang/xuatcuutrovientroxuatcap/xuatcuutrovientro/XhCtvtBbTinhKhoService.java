@@ -255,7 +255,7 @@ public class XhCtvtBbTinhKhoService extends BaseServiceImpl {
     String title="Danh sách biên bản tịnh kho ";
     String[] rowsName=new String[]{"STT","Số QĐ giao nhiệm vụ XH","Năm KH","Thời hạn XH trước ngày","Số BB tịnh kho",
         "Ngày bắt đầu","Ngày kết thúc xuất","Điểm kho", "Lô kho","Số phiếu XK","Ngày xuất kho","Số bảng kê","Trạng thái"};
-    String fileName="danh-sach-phieu-tinh-kho";
+    String fileName="danh-sach-bien-ban-tinh-kho.xlsx";
     List<Object[]> dataList = new ArrayList<Object[]>();
     Object[] objs=null;
     for (int i=0;i<data.size();i++){
@@ -270,9 +270,12 @@ public class XhCtvtBbTinhKhoService extends BaseServiceImpl {
       objs[6]=dx.getNgayKetThucXuat();
       objs[7]=dx.getTenDiemKho();
       objs[8]=dx.getTenLoKho();
-      objs[9]=dx.getSoPhieuXuatKho();
-      objs[10]=dx.getNgayXuatKho();
-      objs[11]=dx.getSoBbTinhKho();
+      Object[] finalObjs = objs;
+      dx.getListPhieuXuatKho().forEach(s ->{
+        finalObjs[9]=s.getSoPhieuXuatKho();
+        finalObjs[10]=s.getNgayXuatKho();
+        finalObjs[11]=s.getSoBkCanHang();
+      });
       objs[12]=dx.getTenTrangThai();
       dataList.add(objs);
     }
