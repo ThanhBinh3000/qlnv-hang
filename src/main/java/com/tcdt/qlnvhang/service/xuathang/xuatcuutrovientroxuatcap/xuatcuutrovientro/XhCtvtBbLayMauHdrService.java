@@ -286,7 +286,7 @@ public class XhCtvtBbLayMauHdrService extends BaseServiceImpl {
     String title="Danh sách biên bản lấy mẫu bàn giao mẫu ";
     String[] rowsName=new String[]{"STT","Số QĐ giao nhiệm vụ XH","Năm KH","Thời hạn XH trước ngày","Số BB LM/BGM","Ngày lấy mẫu","Điểm Kho",
         "Lô kho","Số BB tịnh kho","Ngày xuất dốc kho","Số BB hao dôi","Trạng thái"};
-    String fileName="danh-sach-bien-ban-lay-mau-ban-giao-mau";
+    String fileName="danh-sach-bien-ban-lay-mau-ban-giao-mau.xlsx";
     List<Object[]> dataList = new ArrayList<Object[]>();
     Object[] objs=null;
     for (int i=0;i<data.size();i++){

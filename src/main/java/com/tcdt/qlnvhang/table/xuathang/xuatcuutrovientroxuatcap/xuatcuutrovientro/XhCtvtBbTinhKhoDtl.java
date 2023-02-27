@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -28,5 +29,8 @@ public class XhCtvtBbTinhKhoDtl implements Serializable {
   private String soBkCanHang;
   private LocalDate ngayXuatKho;
   private BigDecimal slXuat;
-
+  @ManyToOne
+  @JsonIgnore
+  @JoinColumn(name = "idHdr", updatable = false, insertable = false)
+  private XhCtvtBbTinhKhoHdr xhCtvtBbTinhKhoHdr;
 }
