@@ -12,9 +12,15 @@ import java.util.List;
 @Repository
 public interface XhPhieuKnghiemCluongCtRepository extends BaseRepository<XhPhieuKnghiemCluongCt, Long> {
 
-    List<XhPhieuKnghiemCluongCt> findByPhieuKnghiemIdIn(Collection<Long> phieuKnghiemIds);
+//    List<XhPhieuKnghiemCluongCt> findByPhieuKnghiemIdIn(Collection<Long> phieuKnghiemIds);
+//
+//    @Transactional
+//    @Modifying
+//    void deleteByPhieuKnghiemIdIn(Collection<Long> phieuKnghiemIds);
 
-    @Transactional
-    @Modifying
-    void deleteByPhieuKnghiemIdIn(Collection<Long> phieuKnghiemIds);
+    List<XhPhieuKnghiemCluongCt> findAllByIdHdr(Long idHdr);
+
+    void deleteAllByIdHdr (Long idHdr);
+
+
 }

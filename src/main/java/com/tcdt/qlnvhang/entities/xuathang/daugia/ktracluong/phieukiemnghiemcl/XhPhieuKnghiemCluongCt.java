@@ -23,14 +23,18 @@ public class XhPhieuKnghiemCluongCt implements Serializable {
     @Column(name = "ID")
     private Long id;
 
-    private Long phieuKnghiemId;
+    private Long idHdr;
 
-    private String tenCtieu;
+    private String tenTchuan;
 
-    private String kquaKtra;
+    private String ketQuaKiemTra; // Ket qua phan tich
 
-    private String pphapXdinh;
+    private String phuongPhap;
 
-    private String chiSoChatLuong;
+    private String trangThai;
+
+    private String chiSoNhap;
+
+    private String kieu;
 
 }
