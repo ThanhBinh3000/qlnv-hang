@@ -1,11 +1,13 @@
 package com.tcdt.qlnvhang.request.xuathang.bantructiep.hopdong;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -126,4 +128,43 @@ public class XhHopDongBttHdrReq extends BaseRequest {
     @Transient
     private List<XhHopDongBttDtlReq> children = new ArrayList<>();
 
+
+
+    //    Phụ lục
+    private Long idHd;
+
+    private String soPhuLuc;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    @Column(columnDefinition = "Date")
+    private Date ngayHlucPhuLuc;
+
+    private String noiDungPhuLuc;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    @Column(columnDefinition = "Date")
+    private Date ngayHlucSauDcTu;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    @Column(columnDefinition = "Date")
+    private Date ngayHlucSauDcDen;
+
+    private Integer tgianThienHdSauDc;
+
+    private String noiDungDcKhac;
+
+    private String ghiChuPhuLuc;
+
+    private String trangThaiPhuLuc;
+    @Transient
+    private String tenTrangThaiPhuLuc;
+
+    @Transient
+    private List<FileDinhKemReq> fileDinhKemPhuLuc = new ArrayList<>();
+
+    @Transient
+    private List<XhHopDongBttHdrReq> phuLuc = new ArrayList<>();
+
+    @Transient
+    private List<XhHopDongBttDtlReq> phuLucDtl = new ArrayList<>();
 }

@@ -20,13 +20,26 @@ public class XhHopDongBttDtl implements Serializable {
 
     private Long idHdr;
 
+
     private String maDvi;
 
     @Transient
     private String tenDvi;
 
-    private BigDecimal soLuong;
+    private BigDecimal tongSoLuong;
 
     private BigDecimal donGiaVat;
+
+    private String diaChi;
+
+//    phu luc
+    private Long idHdDtl;
+
+    @Transient
+    private String tenDviHd;
+    @Transient
+    private String diaChiHd;
+
+
 
 }

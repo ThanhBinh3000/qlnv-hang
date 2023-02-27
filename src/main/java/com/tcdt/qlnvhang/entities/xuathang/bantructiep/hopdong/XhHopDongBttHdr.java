@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc.HopDongMttHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
@@ -149,4 +150,44 @@ public class XhHopDongBttHdr extends TrangThaiBaseEntity implements Serializable
 
     @Transient
     private List<String> listMaDviTsan = new ArrayList<>();
+
+//    Phụ lục
+
+    private Long idHd;
+
+    private String soPhuLuc;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    @Column(columnDefinition = "Date")
+    private Date ngayHlucPhuLuc;
+
+    private String noiDungPhuLuc;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    @Column(columnDefinition = "Date")
+    private Date ngayHlucSauDcTu;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    @Column(columnDefinition = "Date")
+    private Date ngayHlucSauDcDen;
+
+    private Integer tgianThienHdSauDc;
+
+    private String noiDungDcKhac;
+
+    private String ghiChuPhuLuc;
+
+    private String trangThaiPhuLuc;
+    @Transient
+    private String tenTrangThaiPhuLuc;
+
+    @Transient
+    private List<FileDinhKem> fileDinhKemPhuLuc = new ArrayList<>();
+
+    @Transient
+    private List<XhHopDongBttHdr> phuLuc = new ArrayList<>();
+
+    @Transient
+    private List<XhHopDongBttDtl> phuLucDtl = new ArrayList<>();
+
 }
