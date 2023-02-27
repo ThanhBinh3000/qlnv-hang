@@ -2,11 +2,13 @@ package com.tcdt.qlnvhang.service.xuathang.daugia.nhiemvuxuat;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMau;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.phieukiemnghiemcl.XhPhieuKnghiemCluong;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXh;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXhDdiem;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXhDtl;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMauRepository;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.ktracluong.kiemnghiemcl.XhPhieuKnghiemCluongRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXhDdiemRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXhDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXhRepository;
@@ -68,6 +70,9 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
     private XhBbLayMauRepository xhBbLayMauRepository;
 
     @Autowired
+    private XhPhieuKnghiemCluongRepository xhPhieuKnghiemCluongRepository;
+
+    @Autowired
     private FileDinhKemService fileDinhKemService;
 
     @Override
@@ -79,6 +84,7 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
 
         data.getContent().forEach(item -> {
+            // Set biên bản lấy mẫu
             List<XhBbLayMau> allByIdQd = xhBbLayMauRepository.findAllByIdQd(item.getId());
             allByIdQd.forEach(x -> {
                 x.setTenLoaiVthh(mapDmucHh.get(x.getLoaiVthh()));
@@ -89,6 +95,18 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
                 x.setTenLoKho(mapDmucDvi.get(x.getMaLoKho()));
             });
             item.setXhBbLayMauList(allByIdQd);
+            // Set kiểm tra chất lượng
+            List<XhPhieuKnghiemCluong> listKtraCluong = xhPhieuKnghiemCluongRepository.findAllByIdQdGiaoNvXh(item.getId());
+            listKtraCluong.forEach(x -> {
+                x.setTenLoaiVthh(mapDmucHh.get(x.getLoaiVthh()));
+                x.setTenCloaiVthh(mapDmucHh.get(x.getCloaiVthh()));
+                x.setTenDiemKho(mapDmucDvi.get(x.getMaDiemKho()));
+                x.setTenNhaKho(mapDmucDvi.get(x.getMaNganKho()));
+                x.setTenNganKho(mapDmucDvi.get(x.getMaNganKho()));
+                x.setTenLoKho(mapDmucDvi.get(x.getMaLoKho()));
+            });
+            item.setXhPhieuKnghiemCluongList(listKtraCluong);
+
             item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
             item.setTenTrangThaiXh(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThaiXh()));
             item.setTenDvi(mapDmucDvi.get(item.getMaDvi()));

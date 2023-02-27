@@ -17,4 +17,10 @@ public interface XhPhieuKnghiemCluongCtRepository extends BaseRepository<XhPhieu
 //    @Transactional
 //    @Modifying
 //    void deleteByPhieuKnghiemIdIn(Collection<Long> phieuKnghiemIds);
+
+    List<XhPhieuKnghiemCluongCt> findAllByIdHdr(Long idHdr);
+
+    void deleteAllByIdHdr (Long idHdr);
+
+
 }
