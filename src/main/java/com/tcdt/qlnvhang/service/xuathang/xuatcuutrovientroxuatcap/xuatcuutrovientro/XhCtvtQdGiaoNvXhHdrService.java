@@ -160,7 +160,7 @@ public class XhCtvtQdGiaoNvXhHdrService extends BaseServiceImpl {
       noiDungCuuTro.setIdHdr(objReq.getId());
       xhCtvtQdGiaoNvXhDtlRepository.save(noiDungCuuTro);
     }
-    if (objReq.getTrangThaiXh().equals(TrangThaiAllEnum.HOAN_THANH_CAP_NHAT)) {
+    if (objReq.getTrangThaiXh().equals(TrangThaiAllEnum.HOAN_THANH_CAP_NHAT.getId())) {
       Optional<XhCtvtQdGiaoNvXhHdr> qdHdr = xhCtvtQdGiaoNvXhHdrRepository.findById(objReq.getId());
       if (qdHdr.isPresent()) {
         qdHdr.get().setTrangThaiXh(TrangThaiAllEnum.HOAN_THANH_CAP_NHAT.getId());
