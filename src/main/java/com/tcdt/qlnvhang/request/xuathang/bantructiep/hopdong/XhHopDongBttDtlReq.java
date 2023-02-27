@@ -12,9 +12,15 @@ public class XhHopDongBttDtlReq {
 
     private String maDvi;
 
-    private BigDecimal soLuong;
+    private BigDecimal tongSoLuong;
 
     private BigDecimal donGiaVat;
+
+    private String diaChi;
+
+
+    //    phu luc
+    private Long idHdDtl;
 
 
 }

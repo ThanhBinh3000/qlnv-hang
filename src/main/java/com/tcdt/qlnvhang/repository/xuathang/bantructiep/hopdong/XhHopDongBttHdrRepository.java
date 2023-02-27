@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.repository.xuathang.bantructiep.hopdong;
 
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttHdr;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.hopdong.XhHopDongBttHdrReq;
 import org.springframework.data.domain.Page;
@@ -30,5 +31,8 @@ public interface XhHopDongBttHdrRepository extends JpaRepository<XhHopDongBttHdr
 
     @Transactional
     List<XhHopDongBttHdr> findAllByIdQdKq(Long idQdKq);
+
+    @Transactional
+    List<XhHopDongBttHdr> findAllByIdHd(Long idHd);
 
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface XhHopDongBttDtlRepository extends JpaRepository<XhHopDongBttDtl,Long> {
@@ -15,5 +16,12 @@ public interface XhHopDongBttDtlRepository extends JpaRepository<XhHopDongBttDtl
 
     @Transactional
     List<XhHopDongBttDtl> findAllByIdHdr(Long idHdr);
+
+     @Transactional
+   Optional<XhHopDongBttDtl>  findByIdHdDtl(Long idHdDtl);
+    @Transactional
+    List<XhHopDongBttDtl>  findAllByIdHdDtl(Long idHdDtl);
+
+
 
 }
