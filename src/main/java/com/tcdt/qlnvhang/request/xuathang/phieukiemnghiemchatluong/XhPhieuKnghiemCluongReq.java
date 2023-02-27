@@ -1,40 +1,69 @@
 package com.tcdt.qlnvhang.request.xuathang.phieukiemnghiemchatluong;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.phieukiemnghiemcl.XhPhieuKnghiemCluongCt;
+import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.SoBienBanPhieuReq;
+import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
 import javax.persistence.Column;
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
-public class XhPhieuKnghiemCluongReq extends SoBienBanPhieuReq {
+public class XhPhieuKnghiemCluongReq extends BaseRequest {
 	private Long id;
-	private Long qdgnvxId;
-	private Long bbBanLayMauId;
+
+	private Integer nam;
+
+	private String maDvi;
+
+	private String maQhns;
+
+	private String soBbLayMau;
+
+	private String soQdGiaoNvXh;
+
+	private Long idQdGiaoNvXh;
+
+	private Long idKtv;
+
 	private String soPhieu;
-	private LocalDate ngayLayMau;
-	private LocalDate ngayKnghiem;
-	private String maVatTu;
-	private String maVatTuCha;
-	private String soBbanKthucNhap;
-	private LocalDate ngayNhapDay;
-	private BigDecimal sluongBquan;
-	private String hthucBquan;
-	private String ddiemBquan;
-	private String trangThai;
-	private String chiSoChatLuong;
+
+	private Long idDdiemXh;
 
 	private String maDiemKho;
-	private String maNhaKho;
-	private String maNganKho;
-	private String maNganLo;
 
-	private String thuKho;
-	private String ketLuan;
-	private String ketQuaDanhGia;
+	private String maNhaKho;
+
+	private String maNganKho;
+
+	private String maLoKho;
+
 	private String loaiVthh;
-	private List<XhPhieuKnghiemCluongCtReq> cts = new ArrayList<>();
+
+	private String cloaiVthh;
+
+	private String moTaHangHoa;
+
+	private String hthucBquan;
+
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	private Date ngayLayMau;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	private Date ngayKnghiem;
+
+	private String ketQua;
+
+	private String ketLuan;
+
+	@Transient
+	private List<XhPhieuKnghiemCluongCt> children = new ArrayList<>();
 }

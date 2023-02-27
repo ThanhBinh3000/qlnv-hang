@@ -1,13 +1,11 @@
-package com.tcdt.qlnvhang.controller.xuathang;
+package com.tcdt.qlnvhang.controller.xuathang.daugia.ktracluong;
 
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.DeleteReq;
-import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.search.xuathang.XhPhieuKnghiemCluongSearchReq;
+import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.xuathang.phieukiemnghiemchatluong.XhPhieuKnghiemCluongReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.response.bbanlaymau.BienBanLayMauRes;
-import com.tcdt.qlnvhang.response.xuathang.phieuknghiemcluonghang.XhPhieuKnghiemCluongRes;
 import com.tcdt.qlnvhang.service.xuathang.daugia.ktracluong.kiemnghiemcl.XhPhieuKnghiemCluongService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
@@ -26,19 +24,18 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping(value = PathContains.XUAT_HANG_PHIEU_KIEM_NGHIEM_CHAT_LUONG)
-@Api(tags = "Quản lý Xuất hàng Phiếu Kiểm nghiệm chất lượng hàng")
+@RequestMapping(value = PathContains.XUAT_HANG_DTQG + PathContains.DAU_GIA + PathContains.KNGHIEM_CLUONG )
+@Api(tags = "Xuất hàng - Bán đấu giá - Kế hoạch bán đấu giá -  Phiếu kiểm nghiệm chất lượng hàng DTQG")
 public class XhPhieuKnghiemCluongController {
 	@Autowired
 	private XhPhieuKnghiemCluongService service;
 
-	@ApiOperation(value = "Tạo mới Phiếu Kiểm nghiệm chất lượng hàng", response = BienBanLayMauRes.class)
-	@PostMapping
+	@ApiOperation(value = "Tạo mới ", response = BienBanLayMauRes.class)
+	@PostMapping(value=  PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> create(@Valid @RequestBody XhPhieuKnghiemCluongReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-//			XhPhieuKnghiemCluongRes res = service.create(req);
-//			resp.setData(res);
+			resp.setData(service.create(req));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -49,13 +46,12 @@ public class XhPhieuKnghiemCluongController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Sửa thông tin Phiếu Kiểm nghiệm chất lượng hàng", response = BienBanLayMauRes.class)
-	@PutMapping
+	@ApiOperation(value = "Sửa thông tin ", response = BienBanLayMauRes.class)
+	@PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> update(@Valid @RequestBody XhPhieuKnghiemCluongReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-//			XhPhieuKnghiemCluongRes res = service.update(req);
-//			resp.setData(res);
+			resp.setData(service.update(req));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -66,13 +62,12 @@ public class XhPhieuKnghiemCluongController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Xoá thông tin Phiếu Kiểm nghiệm chất lượng hàng", response = Boolean.class)
-	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> delete(@PathVariable("id") Long id) {
+	@ApiOperation(value = "Xoá thông tin ", response = Boolean.class)
+	@PostMapping(value=  PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-//			Boolean res = service.delete(id);
-//			resp.setData(res);
+			service.delete(idSearchReq.getId());
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -83,13 +78,12 @@ public class XhPhieuKnghiemCluongController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Chi tiết Phiếu Kiểm nghiệm chất lượng hàng", response = Page.class)
-	@GetMapping("/{id}")
-	public ResponseEntity<BaseResponse> detail(@PathVariable("id") Long id) {
+	@ApiOperation(value = "Chi tiết ", response = Page.class)
+	@GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<BaseResponse> detail(@PathVariable("ids") Long id) {
 		BaseResponse resp = new BaseResponse();
 		try {
-//			XhPhieuKnghiemCluongRes res = service.detail(id);
-//			resp.setData(res);
+			resp.setData(service.detail(id));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -100,13 +94,12 @@ public class XhPhieuKnghiemCluongController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Gửi duyệt/Duyệt/Từ chối Phiếu Kiểm nghiệm chất lượng hàng", response = Boolean.class)
-	@PutMapping("/status")
-	public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody StatusReq req) {
+	@ApiOperation(value = "Gửi duyệt/Duyệt/Từ chối ", response = Boolean.class)
+	@PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<BaseResponse> updateTrangThai(@RequestBody XhPhieuKnghiemCluongReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-//			Boolean res = service.updateStatus(req);
-//			resp.setData(res);
+			resp.setData(service.approve(req));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -117,13 +110,12 @@ public class XhPhieuKnghiemCluongController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Tra cứu thông tin Phiếu Kiểm nghiệm chất lượng hàng", response = Page.class)
-	@GetMapping
-	public ResponseEntity<BaseResponse> search(XhPhieuKnghiemCluongSearchReq req) {
+	@ApiOperation(value = "Tra cứu thông tin ", response = Page.class)
+	@PostMapping(value=  PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<BaseResponse> search(@RequestBody XhPhieuKnghiemCluongReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-//			Page<XhPhieuKnghiemCluongRes> res = service.search(req);
-//			resp.setData(res);
+			resp.setData(service.searchPage(req));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -134,30 +126,29 @@ public class XhPhieuKnghiemCluongController {
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Delete multiple Phiếu Kiểm nghiệm chất lượng hàng", response = List.class)
+	@ApiOperation(value = "Delete multiple ", response = List.class)
 	@ResponseStatus(HttpStatus.OK)
-	@PostMapping("/delete/multiple")
+	@PostMapping(value = PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> deleteMultiple(@RequestBody @Valid DeleteReq req) {
 		BaseResponse resp = new BaseResponse();
 		try {
-//			resp.setData(service.deleteMultiple(req));
+			service.deleteMulti(req.getIds());
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-			resp.setMsg("Delete multiple Phiếu Kiểm nghiệm chất lượng hàng lỗi");
-			log.error("Delete multiple Phiếu Kiểm nghiệm chất lượng hàng lỗi", e);
+			resp.setMsg("Delete multiple  lỗi");
+			log.error("Delete multiple  lỗi", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
 
-	@ApiOperation(value = "Export Phiếu Kiểm nghiệm chất lượng hàng", response = List.class)
-	@PostMapping(value = "/export/list", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value = "Export ", response = List.class)
+	@PostMapping(value=  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody XhPhieuKnghiemCluongSearchReq req) {
-
+	public void exportToExcel(HttpServletResponse response, @RequestBody XhPhieuKnghiemCluongReq req) {
 		try {
-//			service.exportToExcel(req, response);
+			service.export(req, response);
 		} catch (Exception e) {
 			log.error("Error can not export", e);
 		}

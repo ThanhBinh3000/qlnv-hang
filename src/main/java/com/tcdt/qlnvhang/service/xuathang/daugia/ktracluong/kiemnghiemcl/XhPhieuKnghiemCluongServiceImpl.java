@@ -1,14 +1,31 @@
 package com.tcdt.qlnvhang.service.xuathang.daugia.ktracluong.kiemnghiemcl;
 
+import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMau;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMauCt;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.phieukiemnghiemcl.XhPhieuKnghiemCluong;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.phieukiemnghiemcl.XhPhieuKnghiemCluongCt;
+import com.tcdt.qlnvhang.repository.UserInfoRepository;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.ktracluong.kiemnghiemcl.XhPhieuKnghiemCluongCtRepository;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.ktracluong.kiemnghiemcl.XhPhieuKnghiemCluongRepository;
+import com.tcdt.qlnvhang.request.bandaugia.bienbanlaymau.XhBbLayMauCtRequest;
+import com.tcdt.qlnvhang.request.bandaugia.bienbanlaymau.XhBbLayMauRequest;
 import com.tcdt.qlnvhang.request.xuathang.phieukiemnghiemchatluong.XhPhieuKnghiemCluongReq;
+import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -16,34 +33,162 @@ import java.util.*;
 @Log4j2
 public class XhPhieuKnghiemCluongServiceImpl extends BaseServiceImpl implements XhPhieuKnghiemCluongService {
 
+    private final XhPhieuKnghiemCluongRepository mainRepository;
+
+    private final XhPhieuKnghiemCluongCtRepository subRepository;
+
+    private final UserInfoRepository userInfoRepository;
+
     @Override
     public Page<XhPhieuKnghiemCluong> searchPage(XhPhieuKnghiemCluongReq req) throws Exception {
-        return null;
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),
+                req.getPaggingReq().getLimit(), Sort.by("id").descending());
+        Page<XhPhieuKnghiemCluong> data = mainRepository.searchPage( req,pageable);
+        return data;
     }
 
     @Override
     public XhPhieuKnghiemCluong create(XhPhieuKnghiemCluongReq req) throws Exception {
-        return null;
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null) {
+            throw new Exception("Bad request.");
+        }
+
+        XhPhieuKnghiemCluong data = new XhPhieuKnghiemCluong();
+        BeanUtils.copyProperties(req,data,"id");
+
+        data.setNguoiTaoId(userInfo.getId());
+        data.setNgayTao(new Date());
+        data.setTrangThai(Contains.DUTHAO);
+        data.setMaDvi(userInfo.getDvql());
+        data.setNam(LocalDate.now().getYear());
+        data.setId(Long.parseLong(data.getSoPhieu().split("/")[0]));
+        data.setIdNguoiKiemNghiem(userInfo.getId());
+        mainRepository.save(data);
+
+        saveDetail(req,data.getId());
+        return data;
+    }
+
+    void saveDetail(XhPhieuKnghiemCluongReq req, Long idHdr){
+        subRepository.deleteAllByIdHdr(idHdr);
+        for (XhPhieuKnghiemCluongCt ctReq :req.getChildren()) {
+            XhPhieuKnghiemCluongCt ct = new XhPhieuKnghiemCluongCt();
+            BeanUtils.copyProperties(ctReq,ct,"id");
+            ct.setIdHdr(idHdr);
+            subRepository.save(ct);
+        }
     }
 
     @Override
     public XhPhieuKnghiemCluong update(XhPhieuKnghiemCluongReq req) throws Exception {
-        return null;
+        if(Objects.isNull(req)){
+            throw new Exception("Bad reqeust");
+        }
+
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null) {
+            throw new Exception("Bad request.");
+        }
+
+        Optional<XhPhieuKnghiemCluong> byId = mainRepository.findById(req.getId());
+        if(!byId.isPresent()){
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        XhPhieuKnghiemCluong dataDb = byId.get();
+        BeanUtils.copyProperties(req,dataDb,"id");
+        dataDb.setNgaySua(new Date());
+        dataDb.setNguoiSuaId(userInfo.getId());
+
+        mainRepository.save(dataDb);
+        this.saveDetail(req,dataDb.getId());
+        return dataDb;
     }
 
     @Override
     public XhPhieuKnghiemCluong detail(Long id) throws Exception {
-        return null;
+        if(Objects.isNull(id)){
+            throw new Exception("Bad reqeust");
+        }
+
+        Optional<XhPhieuKnghiemCluong> byId = mainRepository.findById(id);
+        if(!byId.isPresent()){
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        Map<String, String> mapDmucHh = getListDanhMucHangHoa();
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+        XhPhieuKnghiemCluong data = byId.get();
+
+        data.setTenLoaiVthh(mapDmucHh.get(data.getLoaiVthh()));
+        data.setTenCloaiVthh(mapDmucHh.get(data.getCloaiVthh()));
+        data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
+        data.setTenKtv(userInfoRepository.findById(data.getIdKtv()).get().getFullName());
+        data.setTenDiemKho(mapDmucDvi.get(data.getMaDiemKho()));
+        data.setTenNhaKho(mapDmucDvi.get(data.getMaNganKho()));
+        data.setTenNganKho(mapDmucDvi.get(data.getMaNganKho()));
+        data.setTenLoKho(mapDmucDvi.get(data.getMaLoKho()));
+        data.setChildren(subRepository.findAllByIdHdr(id));
+
+        return data;
     }
 
     @Override
     public XhPhieuKnghiemCluong approve(XhPhieuKnghiemCluongReq req) throws Exception {
-        return null;
+        UserInfo userInfo = UserUtils.getUserInfo();
+
+
+        if(Objects.isNull(req.getId())){
+            throw new Exception("Bad reqeust");
+        }
+
+        if (!Contains.CAP_CHI_CUC.equals(userInfo.getCapDvi())){
+            throw new Exception("Bad Request");
+        }
+
+        Optional<XhPhieuKnghiemCluong> byId = mainRepository.findById(req.getId());
+        if(!byId.isPresent()){
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        XhPhieuKnghiemCluong data = byId.get();
+        String status = req.getTrangThai() + data.getTrangThai();
+        switch (status) {
+            case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+            case Contains.CHODUYET_TP + Contains.DUTHAO:
+                data.setNguoiGuiDuyetId(userInfo.getId());
+                data.setNgayGuiDuyet(new Date());
+                break;
+            case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
+            case Contains.TU_CHOI_LDC + Contains.CHODUYET_LDC:
+                data.setNguoiPduyetId(userInfo.getId());
+                data.setNgayPduyet(new Date());
+                data.setLyDoTuChoi(req.getLyDoTuChoi());
+                break;
+            case Contains.CHO_DUYET_LDC + Contains.CHODUYET_TP:
+            case Contains.DA_DUYET_LDC + Contains.CHO_DUYET_LDC:
+                data.setNguoiPduyetId(userInfo.getId());
+                data.setNgayPduyet(new Date());
+                break;
+            default:
+                throw new Exception("Phê duyệt không thành công");
+        }
+        data.setTrangThai(req.getTrangThai());
+        mainRepository.save(data);
+        return data;
     }
 
     @Override
     public void delete(Long id) throws Exception {
+        if(Objects.isNull(id)){
+            throw new Exception("Bad request");
+        }
 
+        Optional<XhPhieuKnghiemCluong> byId = mainRepository.findById(id);
+        if(!byId.isPresent()){
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+
+        mainRepository.delete(byId.get());
+        subRepository.deleteAllByIdHdr(byId.get().getId());
     }
 
     @Override
@@ -55,10 +200,9 @@ public class XhPhieuKnghiemCluongServiceImpl extends BaseServiceImpl implements 
     public void export(XhPhieuKnghiemCluongReq req, HttpServletResponse response) throws Exception {
 
     }
+}
 
-//    private final XhPhieuKnghiemCluongRepository xhPhieuKnghiemCluongRepository;
-//    private final XhPhieuKnghiemCluongCtRepository xhPhieuKnghiemCluongCtRepository;
-//    private final XhQdGiaoNvXhRepository xhQdGiaoNvXhRepository;
+
 //
 //    private static final String SHEET_PHIEU_KIEM_NGHIEM_CHAT_LUONG = "Phiếu kiểm nghiệm chất lượng";
 //    private static final String STT = "STT";
@@ -394,4 +538,3 @@ public class XhPhieuKnghiemCluongServiceImpl extends BaseServiceImpl implements 
 //        count.setVatTu(xhPhieuKnghiemCluongRepository.count(countReq));
 //        return count;
 //    }
-}
