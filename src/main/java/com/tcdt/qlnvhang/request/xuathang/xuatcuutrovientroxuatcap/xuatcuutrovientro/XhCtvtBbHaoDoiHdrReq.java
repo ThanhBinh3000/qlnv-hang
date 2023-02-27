@@ -9,12 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class XhCtvtBbTinhKhoHdrReq {
+public class XhCtvtBbHaoDoiHdrReq {
   private Long id;
   private Integer nam;
   private String maDvi;
   private String maQhNs;
-  private String soBbTinhKho;
+  private String soBbHaoDoi;
   private LocalDate ngayTaoBb;
   private Long idQdGiaoNvXh;
   private String soQdGiaoNvXh;
@@ -26,14 +26,24 @@ public class XhCtvtBbTinhKhoHdrReq {
   private String loaiVthh;
   private String cloaiVthh;
   private String moTaHangHoa;
+  private Long idBbTinhKho;
+  private String soBbTinhKho;
   private LocalDate ngayBatDauXuat;
   private LocalDate ngayKetThucXuat;
   private BigDecimal tongSlNhap;
+  private LocalDate ngayKtNhap;
   private BigDecimal tongSlXuat;
-  private BigDecimal slConLai;
-  private BigDecimal slThucTeCon;
-  private BigDecimal slThua;
-  private BigDecimal slThieu;
+  private LocalDate ngayKtXuat;
+  private BigDecimal slHaoThucTe;
+  private String tiLeHaoThucTe;
+  private BigDecimal slHaoThanhLy;
+  private String tiLeHaoThanhLy;
+  private BigDecimal slHaoVuotDm;
+  private String tiLeHaoVuotDm;
+  private BigDecimal slHaoDuoiDm;
+  private String tiLeHaoDuoiDm;
+  private String dinhMucHaoHut;
+  private BigDecimal sLHaoHutTheoDm;
   private String nguyenNhan;
   private String kienNghi;
   private String ghiChu;
@@ -49,5 +59,5 @@ public class XhCtvtBbTinhKhoHdrReq {
   private String lyDoTuChoi;
   private String type;
   private List<FileDinhKemReq> fileDinhKems =new ArrayList<>();
-  private List<XhCtvtBbTinhKhoDtlReq> listPhieuXuatKho= new ArrayList<>();
+  private List<XhCtvtBbHaoDoiDtlReq> listPhieuXuatKho= new ArrayList<>();
 }

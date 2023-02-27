@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = PathContains.XUAT_CUU_TRO +PathContains.KIEM_TRA_CHAT_LUONG+PathContains.PHIEU_XUAT_KHO)
+@RequestMapping(value = PathContains.XUAT_CUU_TRO +PathContains.XUAT_KHO+PathContains.PHIEU_XUAT_KHO)
 @Slf4j
 @Api(tags = "Xuất hàng DTQG - Xuất cứu trợ viện trợ - Phiếu xuất kho")
 
