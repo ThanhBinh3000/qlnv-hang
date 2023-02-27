@@ -34,8 +34,9 @@ public class XhCtvtBangKeHdr extends BaseEntity implements Serializable {
   private String maNhaKho;
   private String maNganKho;
   private String maLoKho;
-  private String idPhieuXuatKho;
-  private String ngayXuat;
+  private Long idPhieuXuatKho;
+  private String soPhieuXuatKho;
+  private LocalDate ngayXuat;
   private String diaDiemKho;
   private String loaiVthh;
   private String cloaiVthh;
@@ -79,7 +80,7 @@ public class XhCtvtBangKeHdr extends BaseEntity implements Serializable {
   @Transient
   private String nguoiPduyet;
   @Transient
-  private String nguoiGDuyet;
+  private String nguoiGduyet;
   @Transient
   private List<XhCtvtBangKeDtl> bangKeDtl= new ArrayList<>();
 
