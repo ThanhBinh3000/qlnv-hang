@@ -1,11 +1,11 @@
 package com.tcdt.qlnvhang.service.xuathang.bantructiep.tochuctrienkhai.ketqua;
 
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttHdr;
-import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdr;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.hopdong.XhHopDongBttHdrRepository;
-import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdrReq;
@@ -38,7 +38,7 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
     private XhKqBttHdrRepository xhKqBttHdrRepository;
 
     @Autowired
-    private XhQdPdKhBttHdrRepository xhQdPdKhBttHdrRepository;
+    private XhQdPdKhBttDtlRepository xhQdPdKhBttDtlRepository;
 
     @Autowired
     private XhHopDongBttHdrRepository xhHopDongBttHdrRepository;
@@ -91,9 +91,9 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
         }
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), data.getId(), XhKqBttHdr.TABLE_NAME);
         data.setFileDinhKems(fileDinhKems);
-        Optional<XhQdPdKhBttHdr> dtl = xhQdPdKhBttHdrRepository.findById(req.getIdHdr());
+        Optional<XhQdPdKhBttDtl> dtl = xhQdPdKhBttDtlRepository.findById(req.getIdPdKhDtl());
         dtl.get().setSoQdKq(req.getSoQdKq());
-        xhQdPdKhBttHdrRepository.save(dtl.get());
+        xhQdPdKhBttDtlRepository.save(dtl.get());
         xhKqBttHdrRepository.save(data);
         return data;
     }
