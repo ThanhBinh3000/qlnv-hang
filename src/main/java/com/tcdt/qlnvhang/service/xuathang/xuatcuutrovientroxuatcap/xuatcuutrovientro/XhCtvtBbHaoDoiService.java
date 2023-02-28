@@ -135,7 +135,8 @@ public class XhCtvtBbHaoDoiService extends BaseServiceImpl {
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList( XhCtvtBbHaoDoiHdr.TABLE_NAME));
     List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhCtvtBbHaoDoiHdr.TABLE_NAME );
     created.setFileDinhKems(fileDinhKems);
-    fileDinhKemService.delete(objReq.getId(), Lists.newArrayList( XhCtvtBbHaoDoiHdr.TABLE_NAME + "_CAN_CU"));
+    List<XhCtvtBbHaoDoiDtl> list = xhCtvtBbHaoDoiDtlRepository.findByIdHdr(data.getId());
+    xhCtvtBbHaoDoiDtlRepository.deleteAll(list);
     this.saveCtiet(created.getId(),objReq);
     return created;
   }
