@@ -25,7 +25,6 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 @RestController
 @RequestMapping(value = PathContains.XUAT_HANG_DTQG + PathContains.BAN_TRUC_TIEP + PathContains.QD_PD_BTT )
 @Slf4j
@@ -180,20 +179,20 @@ public class XhQdPdKhBttControler extends BaseController {
             mapper.writeValue(response.getOutputStream(), body);
         }
     }
-//    @ApiOperation(value = "Lấy chi tiết Quyết định phê duyệt kế hoạch bán trực tiếp", response = List.class)
-//    @GetMapping(value = "/dtl-chi-tiet" + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
-//    @ResponseStatus(HttpStatus.OK)
-//    public ResponseEntity<BaseResponse> detailDtl( @ApiParam(value = "ID phương án kế hoạch bán đấu giá", example = "1", required = true) @PathVariable("ids") Long ids) {
-//        BaseResponse resp = new BaseResponse();
-//        try {
-//            resp.setData(xhQdPdKhBttServicelmpl.detailDtl(ids));
-//            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-//            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-//        } catch (Exception e) {
-//            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-//            resp.setMsg(e.getMessage());
-//            log.error("Lấy chi tiết Quyết định phê duyệt kế hoạch bán đấu giá trace: {}", e);
-//        }
-//        return ResponseEntity.ok(resp);
-//    }
+    @ApiOperation(value = "Lấy chi tiết Quyết định phê duyệt kế hoạch bán trực tiếp", response = List.class)
+    @GetMapping(value = "/dtl-chi-tiet" + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> detailDtl( @ApiParam(value = "ID phương án kế hoạch bán đấu giá", example = "1", required = true) @PathVariable("ids") Long ids) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(xhQdPdKhBttServicelmpl.detailDtl(ids));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Lấy chi tiết Quyết định phê duyệt kế hoạch bán đấu giá trace: {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
 }

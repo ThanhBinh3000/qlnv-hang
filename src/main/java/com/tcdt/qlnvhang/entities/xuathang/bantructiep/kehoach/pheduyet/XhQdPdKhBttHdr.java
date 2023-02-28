@@ -83,42 +83,5 @@ public class XhQdPdKhBttHdr extends TrangThaiBaseEntity implements Serializable 
 
 
 
-    // trường của chào giá, ủy quyền, mua lẻ.
-    private String trangThaiChaoGia;
-    @Transient
-    private String tenTrangThaiChaoGia;
-
-    private String pthucBanTrucTiep;
-
-    private String diaDiemChaoGia;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayNhanCgia;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayMkho;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayKthuc;
-
-    private String ghiChu;
-
-
-    private String soQdKq;
-
-    @Transient
-    private List<FileDinhKem> fileDinhKemUyQuyen = new ArrayList<>();
-
-    @Transient
-    private List<FileDinhKem> fileDinhKemMuaLe = new ArrayList<>();
-
-    @Transient
-    private List<XhTcTtinBtt> xhTcTtinBttList = new ArrayList<>();
-
-    public String getTenTrangThai() {
-        return NhapXuatHangTrangThaiEnum.getTenById(this.getTrangThai());
-    }
-
-
 
 }
