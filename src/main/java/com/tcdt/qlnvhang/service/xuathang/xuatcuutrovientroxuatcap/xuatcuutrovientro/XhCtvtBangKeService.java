@@ -147,7 +147,9 @@ public class XhCtvtBangKeService extends BaseServiceImpl {
     Map<String, String> mapVthh = getListDanhMucHangHoa();
     allById.forEach(data -> {
       if (mapDmucDvi.containsKey(data.getMaDvi())) {
-        data.setTenDvi(mapDmucDvi.get(data.getMaDvi()).get("tenDvi").toString());
+        //lay ten chi cuc nen lui lai 1 cap
+        String maChiCuc = data.getMaDvi().substring(0, 8);
+        data.setTenDvi(mapDmucDvi.get(DataUtils.safeToString(maChiCuc)).get("tenDvi").toString());
         data.setDiaChiDvi(mapDmucDvi.get(data.getMaDvi()).get("diaChi").toString());
       }
       if (mapDmucDvi.containsKey(data.getMaDiemKho())) {

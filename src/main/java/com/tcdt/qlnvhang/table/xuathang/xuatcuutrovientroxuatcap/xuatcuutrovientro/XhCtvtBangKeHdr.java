@@ -26,7 +26,7 @@ public class XhCtvtBangKeHdr extends BaseEntity implements Serializable {
   private Long id;
   private Integer nam;
   private String maDvi;
-  private String maQhNs;
+  private String maQhns;
   private String soBangKe;
   private Long idQdGiaoNvXh;
   private String soQdGiaoNvXh;
