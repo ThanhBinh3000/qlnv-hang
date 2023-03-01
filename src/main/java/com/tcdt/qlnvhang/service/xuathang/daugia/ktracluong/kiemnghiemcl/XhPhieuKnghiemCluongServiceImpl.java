@@ -125,6 +125,12 @@ public class XhPhieuKnghiemCluongServiceImpl extends BaseServiceImpl implements 
         if(!Objects.isNull(data.getIdKtv())){
             data.setTenKtv(userInfoRepository.findById(data.getIdKtv()).get().getFullName());
         }
+        if(!Objects.isNull(data.getIdTruongPhong())){
+            data.setTenTruongPhong(userInfoRepository.findById(data.getIdTruongPhong()).get().getFullName());
+        }
+        if(!Objects.isNull(data.getIdNguoiKiemNghiem())){
+            data.setTenNguoiKiemNghiem(userInfoRepository.findById(data.getIdNguoiKiemNghiem()).get().getFullName());
+        }
         data.setTenDiemKho(mapDmucDvi.get(data.getMaDiemKho()));
         data.setTenNhaKho(mapDmucDvi.get(data.getMaNganKho()));
         data.setTenNganKho(mapDmucDvi.get(data.getMaNganKho()));
@@ -137,13 +143,11 @@ public class XhPhieuKnghiemCluongServiceImpl extends BaseServiceImpl implements 
     @Override
     public XhPhieuKnghiemCluong approve(XhPhieuKnghiemCluongReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
-
-
         if(Objects.isNull(req.getId())){
             throw new Exception("Bad reqeust");
         }
 
-        if (!Contains.CAP_CHI_CUC.equals(userInfo.getCapDvi())){
+        if (!Contains.CAP_CUC.equals(userInfo.getCapDvi())){
             throw new Exception("Bad Request");
         }
 

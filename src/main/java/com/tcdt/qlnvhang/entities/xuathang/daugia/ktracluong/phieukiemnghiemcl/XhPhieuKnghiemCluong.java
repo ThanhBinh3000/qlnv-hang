@@ -87,6 +87,12 @@ public class XhPhieuKnghiemCluong extends TrangThaiBaseEntity implements Seriali
     private String tenKtv;
 
     @Transient
+    private String tenTruongPhong;
+
+    @Transient
+    private String tenNguoiKiemNghiem;
+
+    @Transient
     private String tenDvi;
 
     @Transient
