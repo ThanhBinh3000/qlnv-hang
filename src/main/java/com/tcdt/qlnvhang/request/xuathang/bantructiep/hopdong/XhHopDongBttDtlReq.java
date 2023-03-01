@@ -12,7 +12,7 @@ public class XhHopDongBttDtlReq {
 
     private String maDvi;
 
-    private BigDecimal tongSoLuong;
+    private BigDecimal soLuong;
 
     private BigDecimal donGiaVat;
 

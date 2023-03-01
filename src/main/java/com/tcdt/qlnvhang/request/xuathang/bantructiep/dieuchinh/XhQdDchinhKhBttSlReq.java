@@ -17,6 +17,8 @@ public class XhQdDchinhKhBttSlReq {
 
     private BigDecimal soLuong;
 
+    private String diaChi;
+
     @Transient
     private List<XhQdDchinhKhBttSlDtlReq> children= new ArrayList<>();
 
