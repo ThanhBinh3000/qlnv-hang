@@ -15,6 +15,7 @@ import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovie
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQuyetDinhPdDx;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBbTinhKhoHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBbTinhKhoDtl;
 import com.tcdt.qlnvhang.util.Contains;
@@ -135,7 +136,8 @@ public class XhCtvtBbTinhKhoService extends BaseServiceImpl {
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList( XhCtvtBbTinhKhoHdr.TABLE_NAME));
     List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhCtvtBbTinhKhoHdr.TABLE_NAME );
     created.setFileDinhKems(fileDinhKems);
-    fileDinhKemService.delete(objReq.getId(), Lists.newArrayList( XhCtvtBbTinhKhoHdr.TABLE_NAME + "_CAN_CU"));
+    List<XhCtvtBbTinhKhoDtl> list = xhCtvtBbTinhKhoDtlRepository.findByIdHdr(data.getId());
+    xhCtvtBbTinhKhoDtlRepository.deleteAll(list);
     this.saveCtiet(created.getId(),objReq);
     return created;
   }
