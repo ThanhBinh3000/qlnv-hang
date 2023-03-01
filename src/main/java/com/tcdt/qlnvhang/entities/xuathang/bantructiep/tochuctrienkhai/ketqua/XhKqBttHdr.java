@@ -27,7 +27,9 @@ public class XhKqBttHdr extends TrangThaiBaseEntity implements Serializable {
 
     private Long id;
 
-    private Long idHdr;
+    private Long idPdKhDtl;
+
+    private Long idPdKhHdr;
 
     private Integer namKh;
 
@@ -79,6 +81,8 @@ public class XhKqBttHdr extends TrangThaiBaseEntity implements Serializable {
     private String trangThaiXh;
     @Transient
     private String tenTrangThaiXh;
+
+
 
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();

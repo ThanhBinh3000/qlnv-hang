@@ -16,11 +16,11 @@ public class XhCgiaReq {
     @ApiModelProperty(notes = "Bắt buộc set đối với update")
     private Long id;
 
-    private Long idHdr;
+    private Long idDtl;
 
-    private String trangThaiChaoGia;
+    private String trangThai;
     @Transient
-    private String tenTrangThaiChaoGia;
+    private String tenTrangThai;
 
     private String pthucBanTrucTiep;
 
@@ -33,6 +33,10 @@ public class XhCgiaReq {
     private Date ngayKthuc;
 
     private String ghiChu;
+
+    private String loaiVthh;
+
+    private String cloaiVthh;
 
     private List<FileDinhKemReq> fileDinhKems =new ArrayList<>();
 

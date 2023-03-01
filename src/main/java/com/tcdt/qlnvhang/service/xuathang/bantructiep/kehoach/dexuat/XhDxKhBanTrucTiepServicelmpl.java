@@ -286,6 +286,7 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl implements XhD
         Object[] objs=null;
         for (int i = 0; i < data.size(); i++) {
             XhDxKhBanTrucTiepHdr hdr = data.get(i);
+            objs=new Object[rowsName.length];
             objs[0]=i;
             objs[1]=hdr.getNamKh();
             objs[2]=hdr.getSoDxuat();
