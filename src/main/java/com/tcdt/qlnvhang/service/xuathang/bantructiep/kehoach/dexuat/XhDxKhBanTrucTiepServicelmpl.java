@@ -85,13 +85,12 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl implements XhD
         data.setNguoiTaoId(userInfo.getId());
         data.setTrangThai(Contains.DU_THAO);
         data.setTrangThaiTh(Contains.CHUATONGHOP);
+        XhDxKhBanTrucTiepHdr created = xhDxKhBanTrucTiepHdrRepository.save(data);
         List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), data.getId(), XhDxKhBanTrucTiepHdr.TABLE_NAME);
-        data.setFileDinhKem(fileDinhKem);
-        xhDxKhBanTrucTiepHdrRepository.save(data);
-
+        created.setFileDinhKem(fileDinhKem);
 
         this.saveDetail(req, data.getId());
-        return data;
+        return created;
     }
 
     void saveDetail(XhDxKhBanTrucTiepHdrReq objReq, Long idHdr) {

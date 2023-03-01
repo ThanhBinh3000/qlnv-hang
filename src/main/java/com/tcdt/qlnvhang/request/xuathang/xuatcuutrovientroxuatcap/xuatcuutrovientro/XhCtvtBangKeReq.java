@@ -1,16 +1,18 @@
 package com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBangKeDtl;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class XhCtvtBangKeReq extends BaseRequest {
   private Long id;
   private Integer nam;
   private String maDvi;
-  private String dvql;
   private String maQhNs;
   private String soBangKe;
   private Long idQdGiaoNvXh;
@@ -20,8 +22,9 @@ public class XhCtvtBangKeReq extends BaseRequest {
   private String maNhaKho;
   private String maNganKho;
   private String maLoKho;
-  private String idPhieuXuatKho;
-  private String ngayXuat;
+  private Long idPhieuXuatKho;
+  private String soPhieuXuatKho;
+  private LocalDate ngayXuat;
   private String diaDiemKho;
   private String loaiVthh;
   private String cloaiVthh;
@@ -39,5 +42,7 @@ public class XhCtvtBangKeReq extends BaseRequest {
   private LocalDate ngayPduyet;
   private Long nguoiPduyetId;
   private String lyDoTuChoi;
+  private String trangThai;
   private String type;
+  private List<XhCtvtBangKeDtl> bangKeDtl= new ArrayList<>();
 }

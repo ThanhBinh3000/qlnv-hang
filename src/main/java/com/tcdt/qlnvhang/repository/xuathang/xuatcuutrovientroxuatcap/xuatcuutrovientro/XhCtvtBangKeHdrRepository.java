@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface XhCtvtBangKeRepository extends JpaRepository<XhCtvtBangKeHdr, Long> {
+public interface XhCtvtBangKeHdrRepository extends JpaRepository<XhCtvtBangKeHdr, Long> {
 
   @Query("SELECT c FROM XhCtvtBangKeHdr c WHERE 1=1 " +
       "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +

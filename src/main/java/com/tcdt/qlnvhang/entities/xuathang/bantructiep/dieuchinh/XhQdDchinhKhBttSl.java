@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 public class XhQdDchinhKhBttSl implements Serializable {
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "XH_QD_DC_KH_BDG_SL";
+    public static final String TABLE_NAME = "XH_QD_DC_KH_BTT_SL";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = TABLE_NAME + "_SEQ")
@@ -27,6 +27,8 @@ public class XhQdDchinhKhBttSl implements Serializable {
     private String tenDvi;
 
     private BigDecimal soLuong;
+
+    private String diaChi;
 
     @Transient
     private List<XhQdDchinhKhBttSlDtl> children= new ArrayList<>();

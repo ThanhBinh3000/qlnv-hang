@@ -79,7 +79,7 @@ public class XhQdPdKhBttHdr extends TrangThaiBaseEntity implements Serializable 
     private List<FileDinhKem> fileDinhKem = new ArrayList<>();
 
     @Transient
-    private List<FileDinhKem> canCuPhapLy = new ArrayList<>();
+    private List<FileDinhKem> fileDinhKemBanHanh = new ArrayList<>();
 
 
 
