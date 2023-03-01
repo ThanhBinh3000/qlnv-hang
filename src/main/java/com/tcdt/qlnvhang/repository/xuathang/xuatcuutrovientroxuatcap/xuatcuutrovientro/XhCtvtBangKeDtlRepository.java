@@ -9,5 +9,7 @@ import java.util.List;
 @Repository
 public interface XhCtvtBangKeDtlRepository extends JpaRepository<XhCtvtBangKeDtl, Long> {
 
-  List<XhCtvtBangKeDtl> findAllByIdHdr(List<Long> idList);
+  List<XhCtvtBangKeDtl> findAllByIdHdr(Long id);
+
+  void deleteAllByIdHdr(Long id);
 }

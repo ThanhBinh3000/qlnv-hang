@@ -12,6 +12,7 @@ import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovie
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBangKeReq;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBangKeDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBangKeHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -95,6 +96,7 @@ public class XhCtvtBangKeService extends BaseServiceImpl {
     }
     XhCtvtBangKeHdr data = new XhCtvtBangKeHdr();
     BeanUtils.copyProperties(objReq, data);
+    data.setId(DataUtils.safeToLong(data.getSoBangKe().split("/")[0]));
     data.setMaDvi(currentUser.getUser().getDepartment());
     data.setTrangThai(Contains.DUTHAO);
     XhCtvtBangKeHdr created = xhCtvtBangKeHdrRepository.save(data);
@@ -125,19 +127,24 @@ public class XhCtvtBangKeService extends BaseServiceImpl {
     XhCtvtBangKeHdr data = optional.get();
     BeanUtils.copyProperties(objReq, data);
     XhCtvtBangKeHdr created = xhCtvtBangKeHdrRepository.save(data);
+
+    xhCtvtBangKeDtlRepository.deleteAllByIdHdr(created.getId());
+    data.getBangKeDtl().forEach(s -> {
+      s.setIdHdr(created.getId());
+    });
+    xhCtvtBangKeDtlRepository.saveAll(data.getBangKeDtl());
     return created;
   }
 
 
   public List<XhCtvtBangKeHdr> detail(List<Long> ids) throws Exception {
     if (DataUtils.isNullOrEmpty(ids)) throw new Exception("Tham số không hợp lệ.");
-    List<XhCtvtBangKeHdr> optional = xhCtvtBangKeHdrRepository.findByIdIn(ids);
-    if (DataUtils.isNullOrEmpty(optional)) {
+    List<XhCtvtBangKeHdr> allById = xhCtvtBangKeHdrRepository.findByIdIn(ids);
+    if (DataUtils.isNullOrEmpty(allById)) {
       throw new Exception("Không tìm thấy dữ liệu");
     }
     Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
     Map<String, String> mapVthh = getListDanhMucHangHoa();
-    List<XhCtvtBangKeHdr> allById = xhCtvtBangKeHdrRepository.findAllById(ids);
     allById.forEach(data -> {
       if (mapDmucDvi.containsKey(data.getMaDvi())) {
         data.setTenDvi(mapDmucDvi.get(data.getMaDvi()).get("tenDvi").toString());
@@ -161,6 +168,10 @@ public class XhCtvtBangKeService extends BaseServiceImpl {
       data.setTenLoaiVthh(mapVthh.get(data.getLoaiVthh()));
       data.setTenCloaiVthh(mapVthh.get(data.getCloaiVthh()));
       data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
+
+      List<XhCtvtBangKeDtl> allDtl = xhCtvtBangKeDtlRepository.findAllByIdHdr(data.getId());
+      data.setBangKeDtl(allDtl);
+
     });
 
     return allById;
