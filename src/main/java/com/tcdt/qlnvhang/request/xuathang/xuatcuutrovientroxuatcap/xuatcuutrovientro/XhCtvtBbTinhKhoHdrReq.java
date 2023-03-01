@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBbTinhKhoDtl;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -49,5 +50,5 @@ public class XhCtvtBbTinhKhoHdrReq {
   private String lyDoTuChoi;
   private String type;
   private List<FileDinhKemReq> fileDinhKems =new ArrayList<>();
-  private List<XhCtvtBbTinhKhoDtlReq> listPhieuXuatKho= new ArrayList<>();
+  private List<XhCtvtBbTinhKhoDtl> listPhieuXuatKho= new ArrayList<>();
 }

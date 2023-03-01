@@ -122,7 +122,9 @@ public class XhPhieuKnghiemCluongServiceImpl extends BaseServiceImpl implements 
         data.setTenLoaiVthh(mapDmucHh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(mapDmucHh.get(data.getCloaiVthh()));
         data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
-        data.setTenKtv(userInfoRepository.findById(data.getIdKtv()).get().getFullName());
+        if(!Objects.isNull(data.getIdKtv())){
+            data.setTenKtv(userInfoRepository.findById(data.getIdKtv()).get().getFullName());
+        }
         data.setTenDiemKho(mapDmucDvi.get(data.getMaDiemKho()));
         data.setTenNhaKho(mapDmucDvi.get(data.getMaNganKho()));
         data.setTenNganKho(mapDmucDvi.get(data.getMaNganKho()));
