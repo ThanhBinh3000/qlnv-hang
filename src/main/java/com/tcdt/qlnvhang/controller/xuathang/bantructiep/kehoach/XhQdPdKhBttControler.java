@@ -28,7 +28,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = PathContains.XUAT_HANG_DTQG + PathContains.BAN_TRUC_TIEP + PathContains.QD_PD_BTT )
 @Slf4j
-@Api(tags = "Xuất hàng - Bans trực tiếp - Kế hoạch bán trực tiếp - Quyết định phê duyệt KH bán trực tiếp")
+@Api(tags = "Xuất hàng - Bán trực tiếp - Kế hoạch bán trực tiếp - Quyết định phê duyệt KH bán trực tiếp")
 public class XhQdPdKhBttControler extends BaseController {
 
     @Autowired

@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.xuathang.bantructiep.tochuctrienkhai.ketqua;
 
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDtl;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.hopdong.XhHopDongBttHdrRepository;
@@ -15,6 +16,7 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,17 +87,20 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
         data.setTrangThai(Contains.DUTHAO);
         data.setTrangThaiHd(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
         data.setTrangThaiXh(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
-        XhKqBttHdr bySoDxuat = xhKqBttHdrRepository.findBySoQdPd(req.getSoQdPd());
-        if (!ObjectUtils.isEmpty(bySoDxuat)){
-            throw new Exception("Số quyết định phê duyệt kế hoạch đã được quyết định kết quả bán trực tiếp, xin vui lòng chọn số quyết định khác");
-        }
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), data.getId(), XhKqBttHdr.TABLE_NAME);
-        data.setFileDinhKems(fileDinhKems);
+
         Optional<XhQdPdKhBttDtl> dtl = xhQdPdKhBttDtlRepository.findById(req.getIdPdKhDtl());
-        dtl.get().setSoQdKq(req.getSoQdKq());
-        xhQdPdKhBttDtlRepository.save(dtl.get());
-        xhKqBttHdrRepository.save(data);
-        return data;
+        if (dtl.isPresent()){
+            dtl.get().setSoQdKq(req.getSoQdKq());
+            xhQdPdKhBttDtlRepository.save(dtl.get());
+        }
+        XhKqBttHdr created =  xhKqBttHdrRepository.save(data);
+        if (!DataUtils.isNullObject(req.getFileDinhKem())) {
+            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Arrays.asList(req.getFileDinhKem()), created.getId(), XhKqBttHdr.TABLE_NAME);
+            created.setFileDinhKems(fileDinhKem);
+        }
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhQdNvXhBttHdr.TABLE_NAME);
+        created.setFileDinhKems(fileDinhKems);
+        return created;
     }
 
     @Override
