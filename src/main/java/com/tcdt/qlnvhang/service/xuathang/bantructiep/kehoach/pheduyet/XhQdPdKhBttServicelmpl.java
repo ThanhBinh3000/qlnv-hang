@@ -126,9 +126,13 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
         dataMap.setTrangThai(Contains.DUTHAO);
         dataMap.setLastest(false);
         dataMap.setMaDvi(getUser().getDvql());
-        xhQdPdKhBttHdrRepository.save(dataMap);
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), dataMap.getId(), XhQdPdKhBttHdr.TABLE_NAME);
-        dataMap.setFileDinhKem(fileDinhKems);
+        XhQdPdKhBttHdr created =  xhQdPdKhBttHdrRepository.save(dataMap);
+
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), dataMap.getId(), XhQdPdKhBttHdr.TABLE_NAME);
+        created.setFileDinhKem(fileDinhKem);
+
+        List<FileDinhKem> fileDinhKemBanHanh = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemBanHanh(), dataMap.getId(), XhQdPdKhBttHdr.TABLE_NAME);
+        created.setFileDinhKemBanHanh(fileDinhKemBanHanh);
 
         if (req.getPhanLoai().equals("TH")){
             dataTh.setTrangThai(Contains.DADUTHAO_QD);
@@ -141,7 +145,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
             xhDxKhBanTrucTiepHdrRepository.save(dataDx);
         }
         saveDetail(req, dataMap.getId());
-        return dataMap;
+        return created;
     }
 
     void saveDetail(XhQdPdKhBttHdrReq req, Long idQdHdr){
@@ -206,9 +210,16 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
         BeanUtils.copyProperties(req, dataDB, "id");
         dataDB.setNgaySua(getDateTimeNow());
         dataDB.setNguoiSuaId(getUser().getId());
-        xhQdPdKhBttHdrRepository.save(dataDB);
+        XhQdPdKhBttHdr created =  xhQdPdKhBttHdrRepository.save(dataDB);
+
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(),dataDB.getId(), XhQdPdKhBttHdr.TABLE_NAME);
+        created.setFileDinhKem(fileDinhKems);
+
+        List<FileDinhKem> fileDinhKemBanHanh = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemBanHanh(),dataDB.getId(), XhQdPdKhBttHdr.TABLE_NAME);
+        created.setFileDinhKemBanHanh(fileDinhKemBanHanh);
+
         this.saveDetail(req, dataDB.getId());
-        return dataDB;
+        return created;
     }
 
     @Override
@@ -231,6 +242,13 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
         data.setTenDvi(hashMapDvi.get(data.getMaDvi()));
         data.setTenLoaiVthh(hashMapVthh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(hashMapVthh.get(data.getCloaiVthh()));
+
+        List<FileDinhKem> fileDinhKemList = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdPdKhBttHdr.TABLE_NAME));
+        data.setFileDinhKem(fileDinhKemList);
+
+        List<FileDinhKem> fileDinhKemBanHanh = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdPdKhBttHdr.TABLE_NAME));
+        data.setFileDinhKemBanHanh(fileDinhKemBanHanh);
+
         List<XhQdPdKhBttDtl> xhQdPdKhBttDtlList = new ArrayList<>();
         for (XhQdPdKhBttDtl dtl : xhQdPdKhBttDtlRepository.findAllByIdQdHdr(id)){
             List<XhQdPdKhBttDvi> xhQdPdKhBttDviList = new ArrayList<>();
@@ -328,6 +346,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
             xhQdPdKhBttDtlRepository.deleteAll(xhQdPdKhBttDtls);
         }
         xhQdPdKhBttHdrRepository.delete(optional.get());
+        fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhQdPdKhBttHdr.TABLE_NAME));
 
         if (optional.get().getPhanLoai().equals("TH")){
             xhThopDxKhBttRepository.updateTrangThai(optional.get().getIdThHdr(), NhapXuatHangTrangThaiEnum.CHUATAO_QD.getId());
@@ -443,11 +462,16 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
             List<FileDinhKem> fileDinhKems = fileDinhKemService.search(btt.getId(), Arrays.asList(XhTcTtinBtt.TABLE_NAME));
             btt.setFileDinhKems(fileDinhKems.get(0));
         }
+       List<XhQdPdKhBttDvi> byIdDvi = xhQdPdKhBttDviRepository.findByIdQdDtl(dtl.getId());
+        for (XhQdPdKhBttDvi dvi : byIdDvi){
+            dvi.setTenDvi(hashMapDvi.get(dvi.getMaDvi()));
+        }
         dtl.setTenDvi(StringUtils.isEmpty(dtl.getMaDvi())? null : hashMapDvi.get(dtl.getMaDvi()));
         dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThai()));
         dtl.setTenLoaiVthh(StringUtils.isEmpty(dtl.getLoaiVthh())? null : hashMapVthh.get(dtl.getLoaiVthh()));
         dtl.setTenCloaiVthh(StringUtils.isEmpty(dtl.getCloaiVthh())? null : hashMapVthh.get(dtl.getCloaiVthh()));
         dtl.setXhTcTtinBttList(byIdTt);
+        dtl.setChildren(byIdDvi);
 
         return dtl;
     }
