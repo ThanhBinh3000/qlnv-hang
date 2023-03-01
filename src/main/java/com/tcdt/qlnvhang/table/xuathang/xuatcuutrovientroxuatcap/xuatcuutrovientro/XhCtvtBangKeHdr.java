@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovien
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,13 +20,13 @@ public class XhCtvtBangKeHdr extends BaseEntity implements Serializable {
   public static final String TABLE_NAME = "XH_CTVT_BANG_KE_HDR";
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhCtvtBangKeHdr.TABLE_NAME + "_SEQ")
+  /*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhCtvtBangKeHdr.TABLE_NAME + "_SEQ")
   @SequenceGenerator(sequenceName = XhCtvtBangKeHdr.TABLE_NAME
-      + "_SEQ", allocationSize = 1, name = XhCtvtBangKeHdr.TABLE_NAME + "_SEQ")
+      + "_SEQ", allocationSize = 1, name = XhCtvtBangKeHdr.TABLE_NAME + "_SEQ")*/
   private Long id;
   private Integer nam;
   private String maDvi;
-  private String maQhNs;
+  private String maQhns;
   private String soBangKe;
   private Long idQdGiaoNvXh;
   private String soQdGiaoNvXh;
@@ -82,6 +83,5 @@ public class XhCtvtBangKeHdr extends BaseEntity implements Serializable {
   @Transient
   private String nguoiGduyet;
   @Transient
-  private List<XhCtvtBangKeDtl> bangKeDtl= new ArrayList<>();
-
+  private List<XhCtvtBangKeDtl> bangKeDtl = new ArrayList<>();
 }
