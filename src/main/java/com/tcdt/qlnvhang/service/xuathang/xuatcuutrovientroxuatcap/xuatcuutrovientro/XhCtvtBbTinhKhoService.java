@@ -11,11 +11,9 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.SearchXhCtvtBbTinhKho;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBbTinhKhoHdrReq;
-import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBbTinhKhoDtlReq;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQuyetDinhPdDx;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBbTinhKhoHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBbTinhKhoDtl;
 import com.tcdt.qlnvhang.util.Contains;
@@ -106,10 +104,10 @@ public class XhCtvtBbTinhKhoService extends BaseServiceImpl {
   
   @Transactional()
   void saveCtiet(Long idHdr, XhCtvtBbTinhKhoHdrReq objReq) {
-    for (XhCtvtBbTinhKhoDtlReq listPhieuXuatKhoReq : objReq.getListPhieuXuatKho()) {
+    for (XhCtvtBbTinhKhoDtl listPhieuXuatKhoReq : objReq.getListPhieuXuatKho()) {
       XhCtvtBbTinhKhoDtl listPhieuXuatKho =new XhCtvtBbTinhKhoDtl();
       BeanUtils.copyProperties(listPhieuXuatKhoReq,listPhieuXuatKho);
-      listPhieuXuatKho.setId(null);
+//      listPhieuXuatKho.setId(null);
       listPhieuXuatKho.setIdHdr(idHdr);
       xhCtvtBbTinhKhoDtlRepository.save(listPhieuXuatKho);
     }
@@ -131,13 +129,13 @@ public class XhCtvtBbTinhKhoService extends BaseServiceImpl {
       }
     }
     XhCtvtBbTinhKhoHdr data = optional.get();
-    BeanUtils.copyProperties(objReq,data);
+    BeanUtils.copyProperties(objReq,data,"listPhieuXuatKho");
     XhCtvtBbTinhKhoHdr created=xhCtvtBbTinhKhoHdrRepository.save(data);
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList( XhCtvtBbTinhKhoHdr.TABLE_NAME));
     List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhCtvtBbTinhKhoHdr.TABLE_NAME );
     created.setFileDinhKems(fileDinhKems);
-    List<XhCtvtBbTinhKhoDtl> list = xhCtvtBbTinhKhoDtlRepository.findByIdHdr(data.getId());
-    xhCtvtBbTinhKhoDtlRepository.deleteAll(list);
+//    List<XhCtvtBbTinhKhoDtl> list = xhCtvtBbTinhKhoDtlRepository.findByIdHdr(data.getId());
+//    xhCtvtBbTinhKhoDtlRepository.deleteAll(list);
     this.saveCtiet(created.getId(),objReq);
     return created;
   }
