@@ -15,8 +15,7 @@ public class XhXuatCapPhieuKnClDtl implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_XC_PHIEU_KN_CL_DTL_SEQ")
-  @SequenceGenerator(sequenceName = XhXuatCapPhieuKnClDtl.TABLE_NAME
-      + "_SEQ", allocationSize = 1, name =  "XH_XC_PHIEU_KN_CL_DTL_SEQ")
+  @SequenceGenerator(sequenceName = "XH_XC_PHIEU_KN_CL_DTL_SEQ", allocationSize = 1, name =  "XH_XC_PHIEU_KN_CL_DTL_SEQ")
   private Long id;
   private Long idHdr;
   private String chiSoNhap;

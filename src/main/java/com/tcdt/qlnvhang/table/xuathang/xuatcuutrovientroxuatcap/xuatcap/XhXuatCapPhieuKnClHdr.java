@@ -21,8 +21,7 @@ public class XhXuatCapPhieuKnClHdr extends BaseEntity implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_XC_PHIEU_KN_CL_HDR_SEQ")
-  @SequenceGenerator(sequenceName = XhXuatCapPhieuKnClHdr.TABLE_NAME
-      + "_SEQ", allocationSize = 1, name = "XH_XC_PHIEU_KN_CL_HDR_SEQ")
+  @SequenceGenerator(sequenceName = "XH_XC_PHIEU_KN_CL_HDR_SEQ", allocationSize = 1, name = "XH_XC_PHIEU_KN_CL_HDR_SEQ")
   private Long id;
   private Integer nam;
   private String maDvi;
