@@ -4,8 +4,13 @@ import com.tcdt.qlnvhang.entities.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttDv
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface XhQdNvXhBttDviRepository extends JpaRepository<XhQdNvXhBttDvi, Long> {
 
     void deleteAllByIdDtl(Long idDtl);
+
+    List<XhQdNvXhBttDvi> findAllByIdDtl(Long idDtl);
+
 }

@@ -22,7 +22,6 @@ public class XhHopDongBttDtl implements Serializable {
 
     private Long idHdr;
 
-
     private String maDvi;
 
     @Transient
