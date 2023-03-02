@@ -148,6 +148,7 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
         List<XhHopDongBttHdr> allById = xhHopDongBttHdrRepository.findAllByIdQdKq(id);
         allById.forEach(f ->{
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+            f.setTenTrangThaiXh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiXh()));
         });
         data.setListHopDongBtt(allById);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhKqBttHdr.TABLE_NAME));
