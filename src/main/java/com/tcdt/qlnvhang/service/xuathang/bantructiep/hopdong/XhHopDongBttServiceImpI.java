@@ -63,6 +63,7 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
         page.getContent().forEach(f -> {
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenTrangThaiPhuLuc(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiPhuLuc()));
+            f.setTenTrangThaiXh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiXh()));
             f.setTenDvi(hashMapDvi.get(f.getMaDvi()));
             f.setTenLoaiVthh(hashMapVthh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(hashMapVthh.get(f.getCloaiVthh()));

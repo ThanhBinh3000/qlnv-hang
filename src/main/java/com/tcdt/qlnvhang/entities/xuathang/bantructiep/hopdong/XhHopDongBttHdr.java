@@ -142,6 +142,12 @@ public class XhHopDongBttHdr extends TrangThaiBaseEntity implements Serializable
 
     private BigDecimal tongTien;
 
+    private String trangThaiXh;
+    @Transient
+    private String tenTrangThaiXh;
+
+    private String soQd;
+
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
