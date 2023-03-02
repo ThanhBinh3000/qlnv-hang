@@ -140,7 +140,7 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
             dtl.setIdQdHdr(idHdr);
             dtl.setTrangThai(Contains.CHUACAPNHAT);
             xhQdNvXhBttDtlRepository.save(dtl);
-            xhQdNvXhBttDviRepository.deleteAllByIdDtl(dtl.getId());
+            xhQdNvXhBttDviRepository.deleteAllByIdDtl(dtlReq.getId());
             for (XhQdNvXhBttDviReq dviReq : dtlReq.getChildren()){
                 XhQdNvXhBttDvi dvi = new XhQdNvXhBttDvi();
                 BeanUtils.copyProperties(dviReq, dvi, "id");

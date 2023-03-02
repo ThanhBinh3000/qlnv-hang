@@ -5,6 +5,8 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = XhHopDongBttDtl.TABLE_NAME)
@@ -40,6 +42,8 @@ public class XhHopDongBttDtl implements Serializable {
     @Transient
     private String diaChiHd;
 
+    @Transient
+    private List<XhHopDongBttDvi> children = new ArrayList<>();
 
 
 }

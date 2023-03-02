@@ -22,16 +22,13 @@ public class XhQdNvXhBttHdrReq extends BaseRequest {
 
     private String maDvi;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayKy;
-
     private Long idHd;
 
     private String soHd;
 
     private Long idQdPdKh;
 
-    private String soQdPdKh;
+    private String soQdPd;
 
     private String maDviTsan;
 
@@ -63,8 +60,10 @@ public class XhQdNvXhBttHdrReq extends BaseRequest {
 
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayKyTu;
+    private Date ngayTaoTu;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayKyDen;
+    private Date ngayTaoDen;
+
+    private String maChiCuc;
 }
 

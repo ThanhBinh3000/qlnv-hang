@@ -1,14 +1,17 @@
 package com.tcdt.qlnvhang.service.xuathang.bantructiep.hopdong;
 
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttDtl;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttDvi;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.hopdong.XhHopDongBttDtlRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.hopdong.XhHopDongBttDviRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.hopdong.XhHopDongBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.hopdong.XhHopDongBttDtlReq;
+import com.tcdt.qlnvhang.request.xuathang.bantructiep.hopdong.XhHopDongBttDviReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.hopdong.XhHopDongBttHdrReq;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -37,6 +40,9 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
 
     @Autowired
     private XhHopDongBttDtlRepository xhHopDongBttDtlRepository;
+
+    @Autowired
+    private XhHopDongBttDviRepository xhHopDongBttDviRepository;
 
     @Autowired
     private XhKqBttHdrRepository xhKqBttHdrRepository;
@@ -113,7 +119,6 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
         for (XhHopDongBttDtlReq dtlReq : req.getChildren()) {
             XhHopDongBttDtl dtl = new XhHopDongBttDtl();
             BeanUtils.copyProperties(dtlReq, dtl, "id");
-            dtl.setId(null);
             dtl.setIdHdr(idHdr);
             XhHopDongBttDtl create = xhHopDongBttDtlRepository.save(dtl);
             System.out.println(dtlReq.getId()+"@@@");
@@ -123,6 +128,14 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
                     s.setIdHdDtl(create.getId());
                 });
                 xhHopDongBttDtlRepository.saveAll(phuLucDtl);
+            }
+            xhHopDongBttDviRepository.deleteAllByIdDtl(dtlReq.getId());
+            for (XhHopDongBttDviReq dviReq : dtlReq.getChildren()){
+                XhHopDongBttDvi dvi = new XhHopDongBttDvi();
+                BeanUtils.copyProperties(dviReq, dvi, "id");
+                dvi.setId(null);
+                dvi.setIdDtl(dtl.getId());
+                xhHopDongBttDviRepository.save(dvi);
             }
         }
 
@@ -209,7 +222,7 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
         List<FileDinhKem> fileDinhKemList = fileDinhKemService.search(data.getId(), Arrays.asList(XhHopDongBttHdr.TABLE_NAME));
         data.setFileDinhKems(fileDinhKemList);
 
-        List<XhHopDongBttDtl> allByIdHdr = xhHopDongBttDtlRepository.findAllByIdHdr(id);
+        List<XhHopDongBttDtl> allByIdHdr = xhHopDongBttDtlRepository.findAllByIdHdr(data.getId());
         allByIdHdr.forEach(item -> {
             item.setTenDvi(hashMapDvi.get(item.getMaDvi()));
             if (!DataUtils.isNullObject(qOptional.get().getIdHd())) {
@@ -222,9 +235,19 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
             }
         });
         data.setChildren(allByIdHdr);
-        /*
-        Bắt đầu Phụ lục
-         * */
+
+        for (XhHopDongBttDtl dtl : allByIdHdr){
+            List<XhHopDongBttDvi> hopDongBttDviList = xhHopDongBttDviRepository.findAllByIdDtl(dtl.getId());
+            hopDongBttDviList.forEach(f->{
+                f.setTenDiemKho(hashMapDvi.get(f.getMaDiemKho()));
+                f.setTenNhaKho(hashMapDvi.get(f.getMaNhaKho()));
+                f.setTenNganKho(hashMapDvi.get(f.getMaNganKho()));
+                f.setTenLoKho(hashMapDvi.get(f.getMaLoKho()));
+            });
+            dtl.setChildren(hopDongBttDviList);
+        }
+
+//        Bắt đầu phụ lục
         data.setPhuLucDtl(allByIdHdr);
         List<FileDinhKem> fileDinhKemPhuLuc = fileDinhKemService.search(data.getId(), Arrays.asList(XhHopDongBttHdr.TABLE_NAME));
         data.setFileDinhKemPhuLuc(fileDinhKemPhuLuc);
@@ -301,9 +324,13 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
             }
         }
 
+        List<XhHopDongBttDtl> dtlList = xhHopDongBttDtlRepository.findAllByIdHdr(id);
+        for (XhHopDongBttDtl dtl : dtlList){
+            xhHopDongBttDviRepository.deleteAllByIdDtl(dtl.getId());
+        }
+
         xhHopDongBttHdrRepository.delete(optional.get());
         xhHopDongBttDtlRepository.deleteAllByIdHdr(optional.get().getId());
-
     }
 
     @Override
