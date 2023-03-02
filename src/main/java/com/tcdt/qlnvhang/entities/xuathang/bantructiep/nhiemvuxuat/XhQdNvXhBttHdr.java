@@ -33,17 +33,13 @@ public class XhQdNvXhBttHdr extends TrangThaiBaseEntity implements Serializable 
     @Transient
     private String tenDvi;
 
-    @Temporal(TemporalType.DATE)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayKy;
-
     private Long idHd;
 
     private String soHd;
 
     private Long idQdPdKh;
 
-    private String soQdPdKh;
+    private String soQdPd;
 
     private String maDviTsan;
 

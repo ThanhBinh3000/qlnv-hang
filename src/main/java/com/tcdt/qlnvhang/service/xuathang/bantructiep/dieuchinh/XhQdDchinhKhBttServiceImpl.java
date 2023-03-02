@@ -102,13 +102,13 @@ public class XhQdDchinhKhBttServiceImpl extends BaseServiceImpl implements XhQdD
             dtl.setId(null);
             dtl.setIdDcHdr(idDcHdr);
             xhQdDchinhKhBttDtlRepository.save(dtl);
-            xhQdDchinhKhBttSlRepository.deleteAllByIdDtl(dtl.getId());
+            xhQdDchinhKhBttSlRepository.deleteAllByIdDtl(dtlReq.getId());
             for (XhQdDchinhKhBttSlReq slReq : dtlReq.getChildren()){
                 XhQdDchinhKhBttSl sl =  ObjectMapperUtils.map(slReq, XhQdDchinhKhBttSl.class);
                 sl.setId(null);
                 sl.setIdDtl(dtl.getId());
                 xhQdDchinhKhBttSlRepository.save(sl);
-                xhQdDchinhKhBttSlDtlRepository.deleteAllByIdSl(sl.getId());
+                xhQdDchinhKhBttSlDtlRepository.deleteAllByIdSl(slReq.getId());
                 for (XhQdDchinhKhBttSlDtlReq slDtlReq : slReq.getChildren()){
                     XhQdDchinhKhBttSlDtl slDtl =  ObjectMapperUtils.map(slDtlReq, XhQdDchinhKhBttSlDtl.class);
                     slDtl.setId(null);

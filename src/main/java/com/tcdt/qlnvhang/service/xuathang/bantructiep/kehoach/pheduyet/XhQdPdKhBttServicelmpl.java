@@ -256,7 +256,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
                 List<XhQdPdKhBttDviDtl> xhQdPdKhBttDviDtlList = xhQdPdKhBttDviDtlRepository.findByIdDvi(dvi.getId());
                 xhQdPdKhBttDviDtlList.forEach(f ->{
                     f.setTenDiemKho(hashMapDvi.get(f.getMaDiemKho()));
-                    f.setTenNhakho(hashMapDvi.get(f.getMaNhaKho()));
+                    f.setTenNhaKho(hashMapDvi.get(f.getMaNhaKho()));
                     f.setTenNganKho(hashMapDvi.get(f.getMaNganKho()));
                     f.setTenLoKho(hashMapDvi.get(f.getMaLoKho()));
                 });
@@ -464,6 +464,14 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
         }
        List<XhQdPdKhBttDvi> byIdDvi = xhQdPdKhBttDviRepository.findByIdQdDtl(dtl.getId());
         for (XhQdPdKhBttDvi dvi : byIdDvi){
+            List<XhQdPdKhBttDviDtl> byIdDviDtl = xhQdPdKhBttDviDtlRepository.findByIdDvi(dvi.getId());
+            byIdDviDtl.forEach(f ->{
+                f.setTenDiemKho(hashMapDvi.get(f.getMaDiemKho()));
+                f.setTenNhaKho(hashMapDvi.get(f.getMaNhaKho()));
+                f.setTenNganKho(hashMapDvi.get(f.getMaNganKho()));
+                f.setTenLoKho(hashMapDvi.get(f.getMaLoKho()));
+            });
+            dvi.setChildren(byIdDviDtl);
             dvi.setTenDvi(hashMapDvi.get(dvi.getMaDvi()));
         }
         dtl.setTenDvi(StringUtils.isEmpty(dtl.getMaDvi())? null : hashMapDvi.get(dtl.getMaDvi()));
