@@ -17,7 +17,7 @@ import java.util.List;
 public class XhXuatCapPhieuKnClHdr extends BaseEntity implements Serializable {
 
   private static final long serialVersionUID = 1L;
-  public static final String TABLE_NAME = "XH_XUAT_CAP_PHIEU_KN_CL_HDR";
+  public static final String TABLE_NAME = "XH_XC_PHIEU_KN_CL_HDR";
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_XC_PHIEU_KN_CL_HDR_SEQ")

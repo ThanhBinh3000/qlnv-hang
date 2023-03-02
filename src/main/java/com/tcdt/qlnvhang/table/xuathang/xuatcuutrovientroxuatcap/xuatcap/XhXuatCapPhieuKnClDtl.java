@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class XhXuatCapPhieuKnClDtl implements Serializable {
 
   private static final long serialVersionUID = 1L;
-  public static final String TABLE_NAME = "XH_XUAT_CAP_PHIEU_KN_CL_DTL";
+  public static final String TABLE_NAME = "XH_XC_PHIEU_KN_CL_DTL";
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_XC_PHIEU_KN_CL_DTL_SEQ")

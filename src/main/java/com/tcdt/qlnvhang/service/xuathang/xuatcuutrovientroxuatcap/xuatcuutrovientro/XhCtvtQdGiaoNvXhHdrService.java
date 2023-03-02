@@ -212,6 +212,9 @@ public class XhCtvtQdGiaoNvXhHdrService extends BaseServiceImpl {
         if (noiDungCuuTro.getCloaiVthh() != null) {
           noiDungCuuTro.setTenCloaiVthh(mapVthh.get(noiDungCuuTro.getCloaiVthh()));
         }
+        if (noiDungCuuTro.getLoaiVthh() != null) {
+          noiDungCuuTro.setTenLoaiVthh(mapVthh.get(noiDungCuuTro.getLoaiVthh()));
+        }
         if (noiDungCuuTro.getTrangThai() != null) {
           noiDungCuuTro.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(noiDungCuuTro.getTrangThai()));
         }
