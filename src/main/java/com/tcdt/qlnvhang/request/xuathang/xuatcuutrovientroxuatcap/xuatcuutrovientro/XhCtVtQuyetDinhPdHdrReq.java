@@ -31,6 +31,7 @@ public class XhCtVtQuyetDinhPdHdrReq {
     private String trangThai;
     private String lyDoTuChoi;
     private String type;
+    private Boolean xuatCap;
 
     private LocalDate ngayPduyet;
     private Long nguoiPduyetId;

@@ -20,6 +20,6 @@ public class SearchXhCtvtTongHopHdr extends BaseRequest {
     private LocalDate ngayKetThucDxDen;
     private String trangThai;
     private String type;
-    private boolean xuatCap;
+    private Boolean xuatCap;
 
 }
