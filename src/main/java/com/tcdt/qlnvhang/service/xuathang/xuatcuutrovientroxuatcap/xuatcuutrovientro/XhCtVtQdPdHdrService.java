@@ -124,19 +124,19 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
       deXuat.setNgayKyQd(created.getNgayKy());
       xhCtvtDeXuatHdrRepository.save(deXuat);
     }
-    this.saveCtiet(created.getId(), objReq);
+//    this.saveCtiet(created.getId(), objReq);
     return created;
   }
 
   @Transactional()
   void saveCtiet(Long id, XhCtVtQuyetDinhPdHdrReq objReq) {
-    for (XhCtVtQuyetDinhPdDtlReq quyetDinhPdDtlReq : objReq.getQuyetDinhPdDtl()) {
+    for (XhCtVtQuyetDinhPdDtl quyetDinhPdDtlReq : objReq.getQuyetDinhPdDtl()) {
       XhCtVtQuyetDinhPdDtl quyetDinhPdDtl = new XhCtVtQuyetDinhPdDtl();
       BeanUtils.copyProperties(quyetDinhPdDtlReq, quyetDinhPdDtl);
       quyetDinhPdDtl.setId(null);
       quyetDinhPdDtl.setIdHdr(id);
       XhCtVtQuyetDinhPdDtl dtl = xhCtVtQdPdDtlRepository.save(quyetDinhPdDtl);
-      for (XhCtVtQuyetDinhPdDxReq quyetDinhPdDxReq : quyetDinhPdDtlReq.getQuyetDinhPdDx()) {
+      for (XhCtVtQuyetDinhPdDx quyetDinhPdDxReq : quyetDinhPdDtlReq.getQuyetDinhPdDx()) {
         XhCtVtQuyetDinhPdDx quyetDinhPdDx = new XhCtVtQuyetDinhPdDx();
         BeanUtils.copyProperties(quyetDinhPdDxReq, quyetDinhPdDx);
         quyetDinhPdDx.setId(null);
@@ -162,7 +162,7 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
       }
     }
     XhCtVtQuyetDinhPdHdr data = optional.get();
-    BeanUtils.copyProperties(objReq, data, "id", "quyetDinhPdDtl");
+    BeanUtils.copyProperties(objReq, data, "id");
     XhCtVtQuyetDinhPdHdr created = xhCtVtQdPdHdrRepository.save(data);
 
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhCtVtQuyetDinhPdHdr.TABLE_NAME + "_CAN_CU"));
@@ -175,14 +175,14 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
     if (!DataUtils.isNullObject(objReq.getFileDinhKem())) {
       fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(), created.getId(), XhCtVtQuyetDinhPdHdr.TABLE_NAME);
     }
-
+/*
     List<XhCtVtQuyetDinhPdDtl> quyetDinhPdDtl = xhCtVtQdPdDtlRepository.findByIdHdr(objReq.getId());
     xhCtVtQdPdDtlRepository.deleteAll(quyetDinhPdDtl);
 
     List<Long> XhCtVtQuyetDinhPdDx = quyetDinhPdDtl.stream().map(XhCtVtQuyetDinhPdDtl::getId).collect(Collectors.toList());
     List<XhCtVtQuyetDinhPdDx> quyetDinhPdDx = xhCtVtQdPdDxRepository.findByIdHdrIn(XhCtVtQuyetDinhPdDx);
     xhCtVtQdPdDxRepository.deleteAll(quyetDinhPdDx);
-    this.saveCtiet(created.getId(), objReq);
+    this.saveCtiet(created.getId(), objReq);*/
     return created;
   }
 
