@@ -15,17 +15,18 @@ import java.util.List;
 @Repository
 public interface XhQdNvXhBttHdrRepository extends JpaRepository<XhQdNvXhBttHdr, Long> {
 
-    @Query("SELECT QD from XhQdNvXhBttHdr QD WHERE 1 = 1 " +
+    @Query("SELECT QD FROM XhQdNvXhBttHdr QD WHERE 1 = 1 " +
+            "AND (:#{#param.maDvi} IS NULL OR QD.maDvi = :#{#param.maDvi}) " +
             "AND (:#{#param.namKh} IS NULL OR QD.namKh = :#{#param.namKh}) " +
             "AND (:#{#param.soQd} IS NULL OR LOWER(QD.soQd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQd}),'%' ) ) )" +
-            "AND (:#{#param.loaiVthh} IS NULL OR QD.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
+            "AND (:#{#param.loaiVthh } IS NULL OR LOWER(QD.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
             "AND (:#{#param.trichYeu} IS NULL OR LOWER(QD.trichYeu) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.trichYeu}),'%'))) " +
-            "AND (:#{#param.ngayKyTu} IS NULL OR QD.ngayKy >= :#{#param.ngayKyTu}) " +
-            "AND (:#{#param.ngayKyDen} IS NULL OR QD.ngayKy <= :#{#param.ngayKyDen}) " +
-            "AND (:#{#param.trangThai} IS NULL OR QD.trangThai = :#{#param.trangThai}) " +
-            "AND (:#{#param.maDvi} IS NULL OR QD.maDvi = :#{#param.maDvi})")
+            "AND (:#{#param.ngayTaoTu} IS NULL OR QD.ngayTao >= :#{#param.ngayTaoTu}) " +
+            "AND (:#{#param.ngayTaoDen} IS NULL OR QD.ngayTao <= :#{#param.ngayTaoDen}) " +
+            "AND (:#{#param.trangThai} IS NULL OR QD.trangThai = :#{#param.trangThai}) "
+//            "AND (:#{#param.maChiCuc} IS NULL OR DTL.maDvi = :#{#param.maChiCuc}) "
+    )
     Page<XhQdNvXhBttHdr> searchPage(@Param("param") XhQdNvXhBttHdrReq param, Pageable pageable);
-
     List<XhQdNvXhBttHdr> findBySoQd(String soQd);
 
 }
