@@ -16,52 +16,53 @@ import java.util.List;
 @Data
 public class XhCtVtQuyetDinhPdHdr extends BaseEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "XH_CTVT_QUYET_DINH_PD_HDR";
+  private static final long serialVersionUID = 1L;
+  public static final String TABLE_NAME = "XH_CTVT_QUYET_DINH_PD_HDR";
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhCtVtQuyetDinhPdHdr.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = XhCtVtQuyetDinhPdHdr.TABLE_NAME
-            + "_SEQ", allocationSize = 1, name = XhCtVtQuyetDinhPdHdr.TABLE_NAME + "_SEQ")
-    private Long id;
-    private String maDvi;
-    private Integer nam;
-    private String soQd;
-    private LocalDate ngayKy;
-    private LocalDate ngayHluc;
-    private Long idTongHop;
-    private String maTongHop;
-    private LocalDate ngayThop;
-    private Long idDx;
-    private String soDx;
-    private LocalDate ngayDx;
-    private Long tongSoLuongDx;
-    private Long tongSoLuong;
-    private Long soLuongXuaCap;
-    private String loaiVthh;
-    private String cloaiVthh;
-    private String loaiNhapXuat;
-    private String trichYeu;
-    private String trangThai;
-    private String lyDoTuChoi;
-    private String type;
+  @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhCtVtQuyetDinhPdHdr.TABLE_NAME + "_SEQ")
+  @SequenceGenerator(sequenceName = XhCtVtQuyetDinhPdHdr.TABLE_NAME
+      + "_SEQ", allocationSize = 1, name = XhCtVtQuyetDinhPdHdr.TABLE_NAME + "_SEQ")
+  private Long id;
+  private String maDvi;
+  private Integer nam;
+  private String soQd;
+  private LocalDate ngayKy;
+  private LocalDate ngayHluc;
+  private Long idTongHop;
+  private String maTongHop;
+  private LocalDate ngayThop;
+  private Long idDx;
+  private String soDx;
+  private LocalDate ngayDx;
+  private Long tongSoLuongDx;
+  private Long tongSoLuong;
+  private Long soLuongXuaCap;
+  private String loaiVthh;
+  private String cloaiVthh;
+  private String loaiNhapXuat;
+  private String trichYeu;
+  private String trangThai;
+  private String lyDoTuChoi;
+  private boolean xuatCap;
+  private String type;
 
-    private LocalDate ngayPduyet;
-    private Long nguoiPduyetId;
+  private LocalDate ngayPduyet;
+  private Long nguoiPduyetId;
 
-    @Transient
-    private List<FileDinhKem> fileDinhKem;
-    @Transient
-    private List<FileDinhKem> canCu = new ArrayList<>();
-    @Transient
-    private String tenDvi;
-    @Transient
-    private String tenLoaiVthh;
-    @Transient
-    private String tenCloaiVthh;
-    @Transient
-    private String tenTrangThai;
+  @Transient
+  private List<FileDinhKem> fileDinhKem;
+  @Transient
+  private List<FileDinhKem> canCu = new ArrayList<>();
+  @Transient
+  private String tenDvi;
+  @Transient
+  private String tenLoaiVthh;
+  @Transient
+  private String tenCloaiVthh;
+  @Transient
+  private String tenTrangThai;
 
-    @OneToMany(mappedBy = "xhCtVtQuyetDinhPdHdr", fetch = FetchType.LAZY)
-    private List<XhCtVtQuyetDinhPdDtl> quyetDinhPdDtl = new ArrayList<>();
+  @OneToMany(mappedBy = "xhCtVtQuyetDinhPdHdr", cascade = CascadeType.MERGE)
+  private List<XhCtVtQuyetDinhPdDtl> quyetDinhPdDtl = new ArrayList<>();
 }

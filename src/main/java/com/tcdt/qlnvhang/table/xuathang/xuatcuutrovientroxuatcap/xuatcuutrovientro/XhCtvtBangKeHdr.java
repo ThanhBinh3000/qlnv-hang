@@ -1,11 +1,13 @@
 package com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
-import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -35,6 +37,7 @@ public class XhCtvtBangKeHdr extends BaseEntity implements Serializable {
   private String maNhaKho;
   private String maNganKho;
   private String maLoKho;
+  private String maKho;
   private Long idPhieuXuatKho;
   private String soPhieuXuatKho;
   private LocalDate ngayXuat;
@@ -83,5 +86,15 @@ public class XhCtvtBangKeHdr extends BaseEntity implements Serializable {
   @Transient
   private String nguoiGduyet;
   @Transient
+  private String tenKho;
+  @Transient
   private List<XhCtvtBangKeDtl> bangKeDtl = new ArrayList<>();
+
+  public String getMaKho() {
+    return DataUtils.isNullOrEmpty(maLoKho) ? maNganKho : maLoKho;
+  }
+
+  public String getTenKho() {
+    return DataUtils.isNullOrEmpty(tenLoKho) ? tenNganKho : tenLoKho;
+  }
 }
