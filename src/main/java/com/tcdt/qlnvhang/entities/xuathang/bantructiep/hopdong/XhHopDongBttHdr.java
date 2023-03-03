@@ -3,7 +3,6 @@ package com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc.HopDongMttHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
@@ -152,6 +151,9 @@ public class XhHopDongBttHdr extends TrangThaiBaseEntity implements Serializable
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
     @Transient
+    private FileDinhKem fileDinhKem;
+
+    @Transient
     private List<XhHopDongBttDtl> children = new ArrayList<>();
 
     @Transient
@@ -186,9 +188,6 @@ public class XhHopDongBttHdr extends TrangThaiBaseEntity implements Serializable
     private String trangThaiPhuLuc;
     @Transient
     private String tenTrangThaiPhuLuc;
-
-    @Transient
-    private List<FileDinhKem> fileDinhKemPhuLuc = new ArrayList<>();
 
     @Transient
     private List<XhHopDongBttHdr> phuLuc = new ArrayList<>();

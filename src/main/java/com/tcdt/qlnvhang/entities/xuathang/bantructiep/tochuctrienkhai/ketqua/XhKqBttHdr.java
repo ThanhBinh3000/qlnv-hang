@@ -93,4 +93,7 @@ public class XhKqBttHdr extends TrangThaiBaseEntity implements Serializable {
     @Transient
     private List<XhHopDongBttHdr> listHopDongBtt;
 
+    @Transient
+    private List<XhKqBttDtl> children = new ArrayList<>();
+
 }

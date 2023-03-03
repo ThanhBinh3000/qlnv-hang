@@ -25,6 +25,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.BeanUtils;
@@ -128,11 +129,14 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
         dataMap.setMaDvi(getUser().getDvql());
         XhQdPdKhBttHdr created =  xhQdPdKhBttHdrRepository.save(dataMap);
 
-        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), dataMap.getId(), XhQdPdKhBttHdr.TABLE_NAME);
-        created.setFileDinhKem(fileDinhKem);
-
-        List<FileDinhKem> fileDinhKemBanHanh = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemBanHanh(), dataMap.getId(), XhQdPdKhBttHdr.TABLE_NAME);
-        created.setFileDinhKemBanHanh(fileDinhKemBanHanh);
+        if (!DataUtils.isNullObject(req.getFileDinhKem())) {
+            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(req.getFileDinhKem()), created.getId(), XhQdPdKhBttHdr.TABLE_NAME);
+            created.setFileDinhKem(fileDinhKem.get(0));
+        }
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
+            List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhQdPdKhBttHdr.TABLE_NAME);
+            created.setFileDinhKems(fileDinhKems);
+        }
 
         if (req.getPhanLoai().equals("TH")){
             dataTh.setTrangThai(Contains.DADUTHAO_QD);
@@ -212,11 +216,15 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
         dataDB.setNguoiSuaId(getUser().getId());
         XhQdPdKhBttHdr created =  xhQdPdKhBttHdrRepository.save(dataDB);
 
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(),dataDB.getId(), XhQdPdKhBttHdr.TABLE_NAME);
-        created.setFileDinhKem(fileDinhKems);
+        if (!DataUtils.isNullObject(req.getFileDinhKem())) {
+            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Arrays.asList(req.getFileDinhKem()), created.getId(), XhQdPdKhBttHdr.TABLE_NAME);
+            dataDB.setFileDinhKem(fileDinhKem.get(0));
+        }
 
-        List<FileDinhKem> fileDinhKemBanHanh = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemBanHanh(),dataDB.getId(), XhQdPdKhBttHdr.TABLE_NAME);
-        created.setFileDinhKemBanHanh(fileDinhKemBanHanh);
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
+            List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhQdPdKhBttHdr.TABLE_NAME);
+            dataDB.setFileDinhKems(fileDinhKems);
+        }
 
         this.saveDetail(req, dataDB.getId());
         return created;
@@ -243,11 +251,11 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
         data.setTenLoaiVthh(hashMapVthh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(hashMapVthh.get(data.getCloaiVthh()));
 
-        List<FileDinhKem> fileDinhKemList = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdPdKhBttHdr.TABLE_NAME));
-        data.setFileDinhKem(fileDinhKemList);
-
-        List<FileDinhKem> fileDinhKemBanHanh = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdPdKhBttHdr.TABLE_NAME));
-        data.setFileDinhKemBanHanh(fileDinhKemBanHanh);
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdPdKhBttHdr.TABLE_NAME));
+        if (!DataUtils.isNullOrEmpty(fileDinhKem)) {
+            data.setFileDinhKem(fileDinhKem.get(0));
+        }
+        data.setFileDinhKems(fileDinhKem);
 
         List<XhQdPdKhBttDtl> xhQdPdKhBttDtlList = new ArrayList<>();
         for (XhQdPdKhBttDtl dtl : xhQdPdKhBttDtlRepository.findAllByIdQdHdr(id)){
@@ -457,11 +465,15 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
         hdr.setTenLoaiVthh(hashMapVthh.get(hdr.getLoaiVthh()));
         hdr.setTenCloaiVthh(hashMapVthh.get(hdr.getCloaiVthh()));
         dtl.setXhQdPdKhBttHdr(hdr);
+
         List<XhTcTtinBtt> byIdTt = xhTcTtinBttRepository.findAllByIdDtl(dtl.getId());
         for (XhTcTtinBtt btt : byIdTt){
             List<FileDinhKem> fileDinhKems = fileDinhKemService.search(btt.getId(), Arrays.asList(XhTcTtinBtt.TABLE_NAME));
-            btt.setFileDinhKems(fileDinhKems.get(0));
+            if (!DataUtils.isNullOrEmpty(fileDinhKems)) {
+                btt.setFileDinhKems(fileDinhKems.get(0));
+            }
         }
+
        List<XhQdPdKhBttDvi> byIdDvi = xhQdPdKhBttDviRepository.findByIdQdDtl(dtl.getId());
         for (XhQdPdKhBttDvi dvi : byIdDvi){
             List<XhQdPdKhBttDviDtl> byIdDviDtl = xhQdPdKhBttDviDtlRepository.findByIdDvi(dvi.getId());
@@ -481,6 +493,16 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
         dtl.setXhTcTtinBttList(byIdTt);
         dtl.setChildren(byIdDvi);
 
+        if (!DataUtils.isNullObject(dtl.getPthucBanTrucTiep())) {
+            if (dtl.getPthucBanTrucTiep().equals(Contains.UY_QUYEN)){
+                List<FileDinhKem> fileDinhKem = fileDinhKemService.search(id, Arrays.asList(XhQdPdKhBttDtl.TABLE_NAME));
+                dtl.setFileDinhKemUyQuyen(fileDinhKem);
+            }
+            if (dtl.getPthucBanTrucTiep().equals(Contains.MUA_LE)){
+                List<FileDinhKem> fileDinhKem = fileDinhKemService.search(id, Arrays.asList(XhQdPdKhBttDtl.TABLE_NAME));
+                dtl.setFileDinhKemMuaLe(fileDinhKem);
+            }
+        }
         return dtl;
     }
 }

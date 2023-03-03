@@ -56,9 +56,7 @@ public class XhQdDchinhKhBttHdrReq extends BaseRequest {
     @Transient
     List<XhQdDchinhKhBttDtlReq> children = new ArrayList<>();
 
-    @Transient
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 
-    @Transient
-    private List<FileDinhKemReq> canCuPhapLy = new ArrayList<>();
+    private FileDinhKemReq fileDinhKem;
 }

@@ -101,14 +101,24 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
         dataMap.setTrangThai(Contains.DU_THAO);
         dataMap.setTrangThaiPhuLuc(Contains.DUTHAO);
         dataMap.setMaDvi(userInfo.getDvql());
-//        dataMap.setMaDviTsan(String.join(",",req.getListMaDviTsan()));
-        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), dataMap.getId(), XhHopDongBttHdr.TABLE_NAME);
-        dataMap.setFileDinhKems(fileDinhKem);
 
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemPhuLuc(), dataMap.getId(), XhHopDongBttHdr.TABLE_NAME);
-        dataMap.setFileDinhKemPhuLuc(fileDinhKems);
+        XhHopDongBttHdr created = xhHopDongBttHdrRepository.save(dataMap);
+        if (!DataUtils.isNullObject(req.getFileDinhKem())) {
+            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(req.getFileDinhKem()), created.getId(), XhHopDongBttHdr.TABLE_NAME);
+            created.setFileDinhKem(fileDinhKem.get(0));
+        }
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
+            List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhHopDongBttHdr.TABLE_NAME);
+            created.setFileDinhKems(fileDinhKems);
+        }
 
-        xhHopDongBttHdrRepository.save(dataMap);
+        if (!DataUtils.isNullObject(req.getIdHd())) {
+            if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
+                List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhHopDongBttHdr.TABLE_NAME);
+                created.setFileDinhKems(fileDinhKems);
+            }
+        }
+
         saveDetail(req, dataMap.getId());
 
         return dataMap;
@@ -140,10 +150,7 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
             }
         }
 
-
-        /*
-        Bắt đầu Phụ lục DTL
-         * */
+//        Bắt đầu Phụ lục DTL
         for (XhHopDongBttDtlReq phuLucReq : req.getPhuLucDtl()) {
             XhHopDongBttDtl phuLuc = new XhHopDongBttDtl();
             BeanUtils.copyProperties(phuLucReq, phuLuc, "id");
@@ -151,9 +158,7 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
             phuLuc.setIdHdr(idHdr);
             xhHopDongBttDtlRepository.save(phuLuc);
         }
-         /*
-       Kết thúc Phụ lục DTL
-         * */
+//       Kết thúc Phụ lục DTL
     }
 
     @Override
@@ -191,7 +196,25 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
         dataDB.setNgaySua(new Date());
         dataDB.setNguoiSuaId(userInfo.getId());
 
-        xhHopDongBttHdrRepository.save(dataDB);
+        XhHopDongBttHdr created = xhHopDongBttHdrRepository.save(dataDB);
+
+        if (!DataUtils.isNullObject(req.getFileDinhKem())) {
+            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Arrays.asList(req.getFileDinhKem()), created.getId(), XhHopDongBttHdr.TABLE_NAME);
+            dataDB.setFileDinhKem(fileDinhKem.get(0));
+        }
+
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
+            List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhHopDongBttHdr.TABLE_NAME);
+            dataDB.setFileDinhKems(fileDinhKems);
+        }
+
+        if (!DataUtils.isNullObject(req.getIdHd())) {
+            if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
+                List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhHopDongBttHdr.TABLE_NAME);
+                dataDB.setFileDinhKems(fileDinhKems);
+            }
+        }
+
         saveDetail(req, dataDB.getId());
         return dataDB;
     }
@@ -220,8 +243,12 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
         data.setTenLoaiVthh(hashMapVthh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(hashMapVthh.get(data.getCloaiVthh()));
         data.setTenLoaiHdong(hashMapLoaiHdong.get(data.getLoaiHdong()));
-        List<FileDinhKem> fileDinhKemList = fileDinhKemService.search(data.getId(), Arrays.asList(XhHopDongBttHdr.TABLE_NAME));
-        data.setFileDinhKems(fileDinhKemList);
+
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhHopDongBttHdr.TABLE_NAME));
+        if (!DataUtils.isNullOrEmpty(fileDinhKem)) {
+            data.setFileDinhKem(fileDinhKem.get(0));
+        }
+        data.setFileDinhKems(fileDinhKem);
 
         List<XhHopDongBttDtl> allByIdHdr = xhHopDongBttDtlRepository.findAllByIdHdr(data.getId());
         allByIdHdr.forEach(item -> {
@@ -250,8 +277,11 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
 
 //        Bắt đầu phụ lục
         data.setPhuLucDtl(allByIdHdr);
-        List<FileDinhKem> fileDinhKemPhuLuc = fileDinhKemService.search(data.getId(), Arrays.asList(XhHopDongBttHdr.TABLE_NAME));
-        data.setFileDinhKemPhuLuc(fileDinhKemPhuLuc);
+        if (!DataUtils.isNullObject(data.getIdHd())) {
+            List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhHopDongBttHdr.TABLE_NAME));
+            data.setFileDinhKems(fileDinhKems);
+        }
+
 
         List<XhHopDongBttHdr> phuLucList = new ArrayList<>();
         for (XhHopDongBttHdr phuLuc : xhHopDongBttHdrRepository.findAllByIdHd(id)) {
@@ -332,6 +362,7 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
 
         xhHopDongBttHdrRepository.delete(optional.get());
         xhHopDongBttDtlRepository.deleteAllByIdHdr(optional.get().getId());
+        fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhHopDongBttHdr.TABLE_NAME));
     }
 
     @Override
@@ -352,25 +383,24 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
         req.setPaggingReq(paggingReq);
         Page<XhHopDongBttHdr> page = this.searchPage(req);
         List<XhHopDongBttHdr> data = page.getContent();
-
-        String title = "Danh sách hợp đồng mua";
-        String fileName = "danh-sach-hop-dong.xlsx";
-        String[] rowsName = new String[]{"STT", "Năm KH", "QĐ PD KH BTT", "QĐ PD KQ chào giá", "SL HĐ cần ký", "SL HĐ đã ký", "Thời hạn xuất kho", "Loại hàng hóa", "Chủng loại hàng hóa", "Tổng giá trị hợp đồng", "Trạng thái ký HĐ", "Trạng thái XH"};
+        String title = "Danh sách hợp đồng bán trực tiếp";
+        String[] rowsName = new String[]{"STT", "Số hợp đồng", "Tên hợp đồng", "Ngày ký hợp đồng", "Mã đơn vị tài sản", "Số lượng (Kg)", "Thành tiền đã bao gồm thuế VAT(đ)", "Trạng thái HD", "Số QĐ giao NV XH", "Trạng thái XH"};
+        String fileName = "danh-sach-dx-pd-kh-ban-truc-tiep.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
         for (int i = 0; i < data.size(); i++) {
-            XhHopDongBttHdr hd = data.get(i);
+            XhHopDongBttHdr hdr = data.get(i);
             objs = new Object[rowsName.length];
             objs[0] = i;
-            objs[1] = hd.getSoHd();
-            objs[2] = hd.getTenHd();
-//            objs[3]=hd.getNgayKy();
-            objs[4] = hd.getLoaiVthh();
-            objs[5] = hd.getCloaiVthh();
-            objs[6] = hd.getMaDvi();
-//            objs[7]=hd.getIdNthau();
-//            objs[8]=hd.getGtriHdSauVat();
-            objs[9] = hd.getTrangThai();
+            objs[1] = hdr.getSoHd();
+            objs[2] = hdr.getTenHd();
+            objs[3] = hdr.getNgayHluc();
+            objs[4] = hdr.getMaDviTsan();
+            objs[5] = hdr.getSoLuong();
+            objs[6] = null;
+            objs[7] = hdr.getTenTrangThai();
+            objs[8] = hdr.getSoQd();
+            objs[9] = hdr.getTenTrangThaiXh();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);

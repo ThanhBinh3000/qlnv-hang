@@ -123,11 +123,15 @@ public class XhHopDongBttHdrReq extends BaseRequest {
 
     @Transient
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
+
+    @Transient
+    private FileDinhKemReq fileDinhKem;
+
     @Transient
     private List<String> listMaDviTsan = new ArrayList<>();
+
     @Transient
     private List<XhHopDongBttDtlReq> children = new ArrayList<>();
-
 
 
     //    Phụ lục
@@ -158,9 +162,6 @@ public class XhHopDongBttHdrReq extends BaseRequest {
     private String trangThaiPhuLuc;
     @Transient
     private String tenTrangThaiPhuLuc;
-
-    @Transient
-    private List<FileDinhKemReq> fileDinhKemPhuLuc = new ArrayList<>();
 
     @Transient
     private List<XhHopDongBttHdrReq> phuLuc = new ArrayList<>();

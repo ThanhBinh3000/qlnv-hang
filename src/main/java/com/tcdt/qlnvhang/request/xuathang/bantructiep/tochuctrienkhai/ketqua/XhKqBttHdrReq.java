@@ -60,4 +60,7 @@ public class XhKqBttHdrReq extends BaseRequest  {
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 
     private FileDinhKemReq fileDinhKem;
+
+    @Transient
+    private List<XhKqBttDtlReq> children = new ArrayList<>();
 }

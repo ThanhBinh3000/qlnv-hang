@@ -67,7 +67,7 @@ public class XhQdDchinhKhBttHdr extends TrangThaiBaseEntity implements Serializa
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
     @Transient
-    private List<FileDinhKem> canCuPhapLy = new ArrayList<>();
+    private FileDinhKem fileDinhKem;
 
 
 
