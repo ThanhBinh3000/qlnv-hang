@@ -17,12 +17,11 @@ import java.util.List;
 public class XhXuatCapPhieuKnClHdr extends BaseEntity implements Serializable {
 
   private static final long serialVersionUID = 1L;
-  public static final String TABLE_NAME = "XH_XUAT_CAP_PHIEU_KN_CL_HDR";
+  public static final String TABLE_NAME = "XH_XC_PHIEU_KN_CL_HDR";
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhXuatCapPhieuKnClHdr.TABLE_NAME + "_SEQ")
-  @SequenceGenerator(sequenceName = XhXuatCapPhieuKnClHdr.TABLE_NAME
-      + "_SEQ", allocationSize = 1, name = XhXuatCapPhieuKnClHdr.TABLE_NAME + "_SEQ")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_XC_PHIEU_KN_CL_HDR_SEQ")
+  @SequenceGenerator(sequenceName = "XH_XC_PHIEU_KN_CL_HDR_SEQ", allocationSize = 1, name = "XH_XC_PHIEU_KN_CL_HDR_SEQ")
   private Long id;
   private Integer nam;
   private String maDvi;
