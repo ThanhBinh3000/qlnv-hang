@@ -38,7 +38,7 @@ public interface XhCtvtDeXuatHdrRepository extends JpaRepository<XhCtvtDeXuatHdr
 
     List<XhCtvtDeXuatHdr> findAllByIdIn(List<Long> listId);
 
-    Optional<XhCtvtDeXuatHdr> findBySoDx (String soDx);
+    Optional<XhCtvtDeXuatHdr> findFirstBySoDx (String soDx);
 
     @Query("SELECT c FROM XhCtvtDeXuatHdr c WHERE " +
         "(:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) AND " +
