@@ -14,6 +14,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,8 +104,12 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
             chaoGiaList.setId(null);
             chaoGiaList.setIdDtl(ObjReq.getIdDtl());
             XhTcTtinBtt save = xhTcTtinBttRepository.save(chaoGiaList);
-            List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(chaoGiaReq.getFileDinhKems()), chaoGiaList.getId(), XhTcTtinBtt.TABLE_NAME);
-            chaoGiaList.setFileDinhKems(fileDinhKems.get(0));
+
+            if (!DataUtils.isNullObject(chaoGiaReq.getFileDinhKems())) {
+                List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(chaoGiaReq.getFileDinhKems()), save.getId(), XhTcTtinBtt.TABLE_NAME);
+                chaoGiaList.setFileDinhKems(fileDinhKems.get(0));
+            }
+
             bttList.add(chaoGiaList);
 
         }

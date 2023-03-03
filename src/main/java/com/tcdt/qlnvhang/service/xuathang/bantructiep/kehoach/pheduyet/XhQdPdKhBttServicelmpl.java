@@ -25,6 +25,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.BeanUtils;
@@ -457,11 +458,15 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
         hdr.setTenLoaiVthh(hashMapVthh.get(hdr.getLoaiVthh()));
         hdr.setTenCloaiVthh(hashMapVthh.get(hdr.getCloaiVthh()));
         dtl.setXhQdPdKhBttHdr(hdr);
+
         List<XhTcTtinBtt> byIdTt = xhTcTtinBttRepository.findAllByIdDtl(dtl.getId());
         for (XhTcTtinBtt btt : byIdTt){
             List<FileDinhKem> fileDinhKems = fileDinhKemService.search(btt.getId(), Arrays.asList(XhTcTtinBtt.TABLE_NAME));
-            btt.setFileDinhKems(fileDinhKems.get(0));
+            if (!DataUtils.isNullOrEmpty(fileDinhKems)) {
+                btt.setFileDinhKems(fileDinhKems.get(0));
+            }
         }
+
        List<XhQdPdKhBttDvi> byIdDvi = xhQdPdKhBttDviRepository.findByIdQdDtl(dtl.getId());
         for (XhQdPdKhBttDvi dvi : byIdDvi){
             List<XhQdPdKhBttDviDtl> byIdDviDtl = xhQdPdKhBttDviDtlRepository.findByIdDvi(dvi.getId());
