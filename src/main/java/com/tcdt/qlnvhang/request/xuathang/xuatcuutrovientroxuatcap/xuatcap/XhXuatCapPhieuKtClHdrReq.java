@@ -3,17 +3,18 @@ package com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcap;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class XhXuatCapPhieuKnClHdrReq {
+public class XhXuatCapPhieuKtClHdrReq {
   private Long id;
   private Integer nam;
   private String maDvi;
   private String maQhNs;
-  private String soPhieuKnCl;
+  private String soPhieuKtCl;
   private LocalDate ngayLapPhieu;
   private Long idQdGiaoNvXh;
   private String soQdGiaoNvXh;
@@ -28,7 +29,9 @@ public class XhXuatCapPhieuKnClHdrReq {
   private String maNganKho;
   private String maLoKho;
   private String hinhThucBq;
-  private String noiDung;
+  private BigDecimal soLuongXuat;
+  private BigDecimal soLuongNhan;
+  private String ketQua;
   private String ketLuan;
   private String trangThai;
   private LocalDate ngayGduyet;
@@ -40,6 +43,6 @@ public class XhXuatCapPhieuKnClHdrReq {
   private String soBbTinhKho;
 
   private List<FileDinhKemReq> fileDinhKems =new ArrayList<>();
-  private List<XhXuatCapPhieuKnClDtlReq> ketQuaPhanTich= new ArrayList<>();
+  private List<XhXuatCapPhieuKtClDtlReq> ketQuaPhanTich= new ArrayList<>();
 
 }
