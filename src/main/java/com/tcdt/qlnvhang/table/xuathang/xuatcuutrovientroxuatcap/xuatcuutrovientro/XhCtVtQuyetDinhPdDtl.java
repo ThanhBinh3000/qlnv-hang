@@ -37,11 +37,10 @@ public class XhCtVtQuyetDinhPdDtl implements Serializable {
   private String type;
   @Transient
   private String tenDviDx;
-  @OneToMany(mappedBy = "xhCtVtQuyetDinhPdDtl", fetch = FetchType.LAZY)
-//    @Transient
+  @OneToMany(mappedBy = "xhCtVtQuyetDinhPdDtl", cascade = CascadeType.MERGE)
   private List<XhCtVtQuyetDinhPdDx> quyetDinhPdDx = new ArrayList<>();
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JsonIgnore
   @JoinColumn(name = "idHdr", updatable = false, insertable = false)
   private XhCtVtQuyetDinhPdHdr xhCtVtQuyetDinhPdHdr;

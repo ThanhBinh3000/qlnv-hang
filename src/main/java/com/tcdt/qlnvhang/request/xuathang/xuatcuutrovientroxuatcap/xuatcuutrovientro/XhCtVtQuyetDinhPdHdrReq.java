@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQuyetDinhPdDtl;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -31,6 +32,7 @@ public class XhCtVtQuyetDinhPdHdrReq {
     private String trangThai;
     private String lyDoTuChoi;
     private String type;
+    private Boolean xuatCap;
 
     private LocalDate ngayPduyet;
     private Long nguoiPduyetId;
@@ -39,6 +41,6 @@ public class XhCtVtQuyetDinhPdHdrReq {
 
     private List<FileDinhKemReq> canCu = new ArrayList<>();
 
-    private List<XhCtVtQuyetDinhPdDtlReq> quyetDinhPdDtl = new ArrayList<>();
+    private List<XhCtVtQuyetDinhPdDtl> quyetDinhPdDtl = new ArrayList<>();
 }
 
