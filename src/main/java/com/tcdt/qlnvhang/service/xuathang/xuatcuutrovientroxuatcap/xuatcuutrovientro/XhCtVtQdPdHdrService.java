@@ -8,9 +8,7 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.SearchXhCtvtTongHopHdr;
-import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQuyetDinhPdDxReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQuyetDinhPdHdrReq;
-import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQuyetDinhPdDtlReq;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -35,6 +33,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class XhCtVtQdPdHdrService extends BaseServiceImpl {
 
 
@@ -96,10 +95,18 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
       throw new Exception("số quyết định đã tồn tại");
     }
     XhCtVtQuyetDinhPdHdr data = new XhCtVtQuyetDinhPdHdr();
-    BeanUtils.copyProperties(objReq, data, "id");
+    BeanUtils.copyProperties(objReq, data);
     data.setMaDvi(currentUser.getUser().getDepartment());
     data.setTrangThai(Contains.DUTHAO);
+
+    //save child
     XhCtVtQuyetDinhPdHdr created = xhCtVtQdPdHdrRepository.save(data);
+    created.getQuyetDinhPdDtl().forEach(s -> s.setIdHdr(created.getId()));
+    List<XhCtVtQuyetDinhPdDtl> dtl = xhCtVtQdPdDtlRepository.saveAll(created.getQuyetDinhPdDtl());
+    dtl.forEach(s -> {
+      s.getQuyetDinhPdDx().forEach(s1 -> s1.setIdHdr(s.getId()));
+      xhCtVtQdPdDxRepository.saveAll(s.getQuyetDinhPdDx());
+    });
 
     if (!DataUtils.isNullOrEmpty(objReq.getCanCu())) {
       fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), XhCtVtQuyetDinhPdHdr.TABLE_NAME + "_CAN_CU");
@@ -188,8 +195,7 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
 
 
   public List<XhCtVtQuyetDinhPdHdr> detail(List<Long> ids) throws Exception {
-    if (DataUtils.isNullOrEmpty(ids))
-      throw new Exception("Tham số không hợp lệ.");
+    if (DataUtils.isNullOrEmpty(ids)) throw new Exception("Tham số không hợp lệ.");
     List<XhCtVtQuyetDinhPdHdr> optional = xhCtVtQdPdHdrRepository.findByIdIn(ids);
     if (DataUtils.isNullOrEmpty(optional)) {
       throw new Exception("Không tìm thấy dữ liệu");
@@ -234,7 +240,7 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
     return allById;
   }
 
-  @Transient
+  @Transactional
   public void delete(IdSearchReq idSearchReq) throws Exception {
     Optional<XhCtVtQuyetDinhPdHdr> optional = xhCtVtQdPdHdrRepository.findById(idSearchReq.getId());
     if (!optional.isPresent()) {
@@ -342,8 +348,7 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
     List<XhCtVtQuyetDinhPdHdr> data = page.getContent();
 
     String title = "Danh sách quyết định phương án xuất cứu trợ, viện trợ ";
-    String[] rowsName = new String[]{"STT", "Số quyết định", "Ngày ký quyết định", "Mã tổng hợp", "Ngày tổng hợp", "Số công văn/đề xuất", "Ngày đề xuất",
-        "Loại hàng hóa", "Tổng SL đề xuất cứu trợ,viện trợ (kg)", "Tổng SL xuất kho cứu trợ,viện trợ (kg)", "SL xuất CT,VT chuyển sang xuất cấp", "Trích yếu", "Trạng thái quyết định",};
+    String[] rowsName = new String[]{"STT", "Số quyết định", "Ngày ký quyết định", "Mã tổng hợp", "Ngày tổng hợp", "Số công văn/đề xuất", "Ngày đề xuất", "Loại hàng hóa", "Tổng SL đề xuất cứu trợ,viện trợ (kg)", "Tổng SL xuất kho cứu trợ,viện trợ (kg)", "SL xuất CT,VT chuyển sang xuất cấp", "Trích yếu", "Trạng thái quyết định",};
     String fileName = "danh-sach-phuong-an-xuat-cuu-tro-vien-tro.xlsx";
     List<Object[]> dataList = new ArrayList<Object[]>();
     Object[] objs = null;
