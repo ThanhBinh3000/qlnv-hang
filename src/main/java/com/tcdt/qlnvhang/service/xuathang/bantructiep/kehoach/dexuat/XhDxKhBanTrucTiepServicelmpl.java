@@ -17,6 +17,7 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,8 +87,11 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl implements XhD
         data.setTrangThai(Contains.DU_THAO);
         data.setTrangThaiTh(Contains.CHUATONGHOP);
         XhDxKhBanTrucTiepHdr created = xhDxKhBanTrucTiepHdrRepository.save(data);
-        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), data.getId(), XhDxKhBanTrucTiepHdr.TABLE_NAME);
-        created.setFileDinhKem(fileDinhKem);
+
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
+            List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhDxKhBanTrucTiepHdr.TABLE_NAME);
+            created.setFileDinhKems(fileDinhKemList);
+        }
 
         this.saveDetail(req, data.getId());
         return created;
@@ -137,8 +141,10 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl implements XhD
         data.setNgaySua(getDateTimeNow());
         data.setNguoiSuaId(userInfo.getId());
         XhDxKhBanTrucTiepHdr created = xhDxKhBanTrucTiepHdrRepository.save(data);
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(),data.getId(), XhDxKhBanTrucTiepHdr.TABLE_NAME);
-        created.setFileDinhKem(fileDinhKems);
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
+            List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhDxKhBanTrucTiepHdr.TABLE_NAME);
+            data.setFileDinhKems(fileDinhKemList);
+        }
         this.saveDetail(req, data.getId());
         return created;
     }
@@ -162,8 +168,8 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl implements XhD
         data.setTenCloaiVthh(hashMapVthh.get(data.getCloaiVthh()));
         data.setTenDvi(hashMapDvi.get(data.getMaDvi()));
 
-        List<FileDinhKem> fileDinhKemList = fileDinhKemService.search(data.getId(), Arrays.asList(XhDxKhBanTrucTiepHdr.TABLE_NAME));
-        data.setFileDinhKem(fileDinhKemList);
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhDxKhBanTrucTiepHdr.TABLE_NAME));
+        data.setFileDinhKems(fileDinhKems);
 
         List<XhDxKhBanTrucTiepDtl> dtlList = xhDxKhBanTrucTiepDtlRepository.findAllByIdHdr(data.getId());
         for (XhDxKhBanTrucTiepDtl dtl : dtlList){

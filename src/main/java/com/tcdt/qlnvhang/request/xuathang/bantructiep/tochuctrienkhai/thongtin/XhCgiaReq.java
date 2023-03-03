@@ -38,7 +38,9 @@ public class XhCgiaReq {
 
     private String cloaiVthh;
 
-    private List<FileDinhKemReq> fileDinhKems =new ArrayList<>();
+    private List<FileDinhKemReq> fileDinhKemUyQuyen = new ArrayList<>();
+
+    private List<FileDinhKemReq> fileDinhKemMuaLe = new ArrayList<>();
 
     private List<XhTcTtinBttReq> children = new ArrayList<>();
 }

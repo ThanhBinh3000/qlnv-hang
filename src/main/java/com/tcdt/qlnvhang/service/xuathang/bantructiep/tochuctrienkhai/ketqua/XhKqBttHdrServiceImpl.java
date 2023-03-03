@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.service.xuathang.bantructiep.tochuctrienkhai.ketqua;
 
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDtl;
-import com.tcdt.qlnvhang.entities.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
@@ -102,12 +101,14 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
         XhKqBttHdr created =  xhKqBttHdrRepository.save(data);
 
         if (!DataUtils.isNullObject(req.getFileDinhKem())) {
-            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Arrays.asList(req.getFileDinhKem()), created.getId(), XhKqBttHdr.TABLE_NAME);
+            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(req.getFileDinhKem()), created.getId(), XhKqBttHdr.TABLE_NAME);
             created.setFileDinhKem(fileDinhKem.get(0));
         }
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
+            List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhKqBttHdr.TABLE_NAME);
+            created.setFileDinhKems(fileDinhKems);
+        }
 
-        List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhQdNvXhBttHdr.TABLE_NAME);
-        created.setFileDinhKems(fileDinhKemList);
         this.saveDetail(req, data.getId());
         return created;
     }
@@ -146,8 +147,17 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
       data.setNgaySua(new Date());
       data.setNguoiSuaId(getUser().getId());
       XhKqBttHdr created = xhKqBttHdrRepository.save(data);
-      List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(),data.getId(), XhKqBttHdr.TABLE_NAME);
-      created.setFileDinhKems(fileDinhKems);
+
+     if (!DataUtils.isNullObject(req.getFileDinhKem())){
+         List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Arrays.asList(req.getFileDinhKem()), created.getId(), XhKqBttHdr.TABLE_NAME);
+         data.setFileDinhKem(fileDinhKem.get(0));
+     }
+
+     if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
+         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhKqBttHdr.TABLE_NAME);
+         data.setFileDinhKems(fileDinhKems);
+     }
+
       this.saveDetail(req, data.getId());
       return created;
     }
@@ -189,13 +199,11 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
         data.setChildren(ByIdDtl);
         data.setListHopDongBtt(allById);
 
-        List<FileDinhKem> fileDinhKem  = fileDinhKemService.search(data.getId(), Arrays.asList(XhKqBttHdr.TABLE_NAME));
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhKqBttHdr.TABLE_NAME));
         if (!DataUtils.isNullOrEmpty(fileDinhKem)) {
             data.setFileDinhKem(fileDinhKem.get(0));
         }
-
-        List<FileDinhKem> fileDinhKemList = fileDinhKemService.search(data.getId(), Arrays.asList(XhKqBttHdr.TABLE_NAME));
-        data.setFileDinhKems(fileDinhKemList);
+        data.setFileDinhKems(fileDinhKem);
         return data;
     }
 
@@ -293,14 +301,14 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
         req.setPaggingReq(paggingReq);
         Page<XhKqBttHdr> page = this.searchPage(req);
         List<XhKqBttHdr> data = page.getContent();
-
-        String title="Danh sách quyết định phê duyệt kết quả chào giá";
-        String[] rowsName = new String[]{"STT", "Số QĐ PDKQ chào giá", "Ngày ký QĐ", "Đơn vị", "Số QĐ PDKH bán trực tiếp", "Loại hàng hóa", "Chủng loại hàng hóa", "Trạng thái"};
-        String filename="danh-sach-quyet-dinh-phe-duyet-ket-qua-chao-gia.xlsx";
+        String title = " Danh sách quyết định phê duyệt kết quả chào giá";
+        String[] rowsName = new String[]{"STT", "Số QĐ PDKQ chào giá", "Ngày ký QĐ", "Đơn vị", "Số QĐ PDKH bán trực tiếp", "Loại hàng hóa", "Chủng loại hành hóa", "Trạng thái"};
+        String fileName = "danh-sach-dx-pd-kq-chao-gia.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
-        Object[] objs=null;
+        Object[] objs = null;
         for (int i = 0; i < data.size(); i++) {
-            XhKqBttHdr hdr =data.get(i);
+            XhKqBttHdr hdr = data.get(i);
+            objs = new Object[rowsName.length];
             objs[0] = i;
             objs[1] = hdr.getSoQdKq();
             objs[2] = hdr.getNgayKy();
@@ -311,7 +319,8 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
             objs[7] = hdr.getTenTrangThai();
             dataList.add(objs);
         }
-        ExportExcel exportExcel =  new ExportExcel(title, filename, rowsName, dataList, response);
-        exportExcel.export();
+        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
+        ex.export();
     }
+
 }

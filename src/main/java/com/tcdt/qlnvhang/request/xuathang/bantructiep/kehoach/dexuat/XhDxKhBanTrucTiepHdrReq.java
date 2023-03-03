@@ -87,7 +87,7 @@ public class XhDxKhBanTrucTiepHdrReq extends BaseRequest {
 
 
     @Transient
-    private List<FileDinhKemReq> fileDinhKem = new ArrayList<>();
+    private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 
     @Transient
     private List<XhDxKhBanTrucTiepDtlReq> children = new ArrayList<>();
