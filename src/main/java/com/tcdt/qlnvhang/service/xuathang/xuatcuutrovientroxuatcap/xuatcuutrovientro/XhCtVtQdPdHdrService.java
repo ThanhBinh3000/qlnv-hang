@@ -200,10 +200,11 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
     if (DataUtils.isNullOrEmpty(optional)) {
       throw new Exception("Không tìm thấy dữ liệu");
     }
+
     Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
     Map<String, String> mapVthh = getListDanhMucHangHoa();
     List<XhCtVtQuyetDinhPdHdr> allById = xhCtVtQdPdHdrRepository.findAllById(ids);
-    allById.forEach(data -> {
+   allById.forEach(data -> {
       if (mapDmucDvi.containsKey(data.getMaDvi())) {
         data.setTenDvi(mapDmucDvi.get(data.getMaDvi()).get("tenDvi").toString());
       }
