@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.repository.xuathang.bantructiep.nhiemvuxuat;
 
-import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttHdr;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttHdrReq;
 import org.springframework.data.domain.Page;
@@ -31,5 +30,7 @@ public interface XhQdNvXhBttHdrRepository extends JpaRepository<XhQdNvXhBttHdr, 
     )
     Page<XhQdNvXhBttHdr> searchPage(@Param("param") XhQdNvXhBttHdrReq param, Pageable pageable);
     List<XhQdNvXhBttHdr> findBySoQd(String soQd);
+
+    List<XhQdNvXhBttHdr> findByIdIn(List<Long> idDxList);
 
 }
