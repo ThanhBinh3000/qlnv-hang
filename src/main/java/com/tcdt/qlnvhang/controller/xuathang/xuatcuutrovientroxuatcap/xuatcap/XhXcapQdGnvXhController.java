@@ -10,7 +10,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.SearchXhCtvtQdGiaoNvXh;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQdGiaoNvXhHdrReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhXuatCapQdGiaoNvXhHdrService;
+import com.tcdt.qlnvhang.service.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhXcapQdGnvXhHdrService;
 import com.tcdt.qlnvhang.service.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQdGiaoNvXhHdrService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
@@ -33,10 +33,10 @@ import java.util.Map;
 @RequestMapping(value = PathContains.XUAT_CAP +PathContains.QUYET_DINH_GIAO_NHIEM_VU)
 @Slf4j
 @Api(tags = "Xuất hàng DTQG - Xuất cứu trợ viện trợ - Quyết định giao nhiệm vụ xuất hàng cứu trợ, viện trợ")
-public class XhXuatCapQdGiaoNvXhController extends BaseController {
+public class XhXcapQdGnvXhController extends BaseController {
 
   @Autowired
-  XhXuatCapQdGiaoNvXhHdrService xhXuatCapQdGiaoNvXhHdrService;
+  XhXcapQdGnvXhHdrService XhXcapQdGnvXhHdrService;
 
   @ApiOperation(value = "Tra cứu thông tin đề xuất", response = List.class)
   @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -45,7 +45,7 @@ public class XhXuatCapQdGiaoNvXhController extends BaseController {
                                                 @RequestBody SearchXhCtvtQdGiaoNvXh objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhXuatCapQdGiaoNvXhHdrService.searchPage(currentUser,objReq));
+      resp.setData(XhXcapQdGnvXhHdrService.searchPage(currentUser,objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (
@@ -64,7 +64,7 @@ public class XhXuatCapQdGiaoNvXhController extends BaseController {
   public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhCtvtQdGiaoNvXhHdrReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhXuatCapQdGiaoNvXhHdrService.save(currentUser,objReq));
+      resp.setData(XhXcapQdGnvXhHdrService.save(currentUser,objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -81,7 +81,7 @@ public class XhXuatCapQdGiaoNvXhController extends BaseController {
   public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhCtvtQdGiaoNvXhHdrReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhXuatCapQdGiaoNvXhHdrService.update(currentUser,objReq));
+      resp.setData(XhXcapQdGnvXhHdrService.update(currentUser,objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -96,7 +96,7 @@ public class XhXuatCapQdGiaoNvXhController extends BaseController {
   public ResponseEntity<BaseResponse> updateDdiem(@Valid @RequestBody XhCtvtQdGiaoNvXhHdrReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      xhXuatCapQdGiaoNvXhHdrService.updateDiem(objReq);
+      XhXcapQdGnvXhHdrService.updateDiem(objReq);
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -114,7 +114,7 @@ public class XhXuatCapQdGiaoNvXhController extends BaseController {
       @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids")List<Long> ids) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhXuatCapQdGiaoNvXhHdrService.detail(ids).get(0));
+      resp.setData(XhXcapQdGnvXhHdrService.detail(ids).get(0));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -130,7 +130,7 @@ public class XhXuatCapQdGiaoNvXhController extends BaseController {
   public ResponseEntity<BaseResponse> updateStatus( @CurrentUser CustomUserDetails currentUser,@Valid @RequestBody StatusReq stReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      xhXuatCapQdGiaoNvXhHdrService.approve(currentUser,stReq);
+      XhXcapQdGnvXhHdrService.approve(currentUser,stReq);
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -148,7 +148,7 @@ public class XhXuatCapQdGiaoNvXhController extends BaseController {
   public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      xhXuatCapQdGiaoNvXhHdrService.delete(idSearchReq);
+      XhXcapQdGnvXhHdrService.delete(idSearchReq);
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -166,7 +166,7 @@ public class XhXuatCapQdGiaoNvXhController extends BaseController {
   public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      xhXuatCapQdGiaoNvXhHdrService.deleteMulti(idSearchReq);
+      XhXcapQdGnvXhHdrService.deleteMulti(idSearchReq);
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -182,7 +182,7 @@ public class XhXuatCapQdGiaoNvXhController extends BaseController {
   @ResponseStatus(HttpStatus.OK)
   public void exportList(@CurrentUser CustomUserDetails currentUser ,@Valid @RequestBody  SearchXhCtvtQdGiaoNvXh objReq, HttpServletResponse response) throws Exception {
     try {
-      xhXuatCapQdGiaoNvXhHdrService.export( currentUser,objReq, response);
+      XhXcapQdGnvXhHdrService.export( currentUser,objReq, response);
 
     } catch (Exception e) {
       log.error("Kết xuất danh sách dánh sách mua : {}", e);

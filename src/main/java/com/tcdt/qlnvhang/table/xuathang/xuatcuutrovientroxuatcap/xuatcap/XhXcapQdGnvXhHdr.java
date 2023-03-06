@@ -12,16 +12,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = XhXuatCapQdGiaoNvXhHdr.TABLE_NAME)
+@Table(name = XhXcapQdGnvXhHdr.TABLE_NAME)
 @Data
-public class XhXuatCapQdGiaoNvXhHdr extends BaseEntity implements Serializable {
+public class XhXcapQdGnvXhHdr extends BaseEntity implements Serializable {
 
   private static final long serialVersionUID = 1L;
   public static final String TABLE_NAME = "XH_XUAT_CAP_QD_GIAO_NV_XH_HDR";
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhXuatCapQdGiaoNvXhHdr.TABLE_NAME + "_SEQ")
-  @SequenceGenerator(sequenceName = XhXuatCapQdGiaoNvXhHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhXuatCapQdGiaoNvXhHdr.TABLE_NAME + "_SEQ")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhXcapQdGnvXhHdr.TABLE_NAME + "_SEQ")
+  @SequenceGenerator(sequenceName = XhXcapQdGnvXhHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhXcapQdGnvXhHdr.TABLE_NAME + "_SEQ")
   private Long id;
   private String maDvi;
   private Integer nam;
@@ -65,5 +65,5 @@ public class XhXuatCapQdGiaoNvXhHdr extends BaseEntity implements Serializable {
   @Transient
   private String tenTrangThaiXh;
   @Transient
-  private List<XhXuatCapQdGiaoNvXhDtl> noiDungCuuTro = new ArrayList<>();
+  private List<XhXcapQdGnvXhDtl> noiDungCuuTro = new ArrayList<>();
 }

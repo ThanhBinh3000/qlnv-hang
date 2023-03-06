@@ -6,16 +6,16 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = XhXuatCapQdGiaoNvXhDtl.TABLE_NAME)
+@Table(name = XhXcapQdGnvXhDtl.TABLE_NAME)
 @Data
-public class XhXuatCapQdGiaoNvXhDtl {
+public class XhXcapQdGnvXhDtl {
 
   private static final long serialVersionUID = 1L;
-  public static final String TABLE_NAME = "XH_XUAT_CAP_QD_GIAO_NV_XH_DTL";
+  public static final String TABLE_NAME = "XH_XUAT_CAP_QD_GNV_XH_DTL";
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhXuatCapQdGiaoNvXhDtl.TABLE_NAME + "_SEQ")
-  @SequenceGenerator(sequenceName = XhXuatCapQdGiaoNvXhDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhXuatCapQdGiaoNvXhDtl.TABLE_NAME + "_SEQ")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhXcapQdGnvXhDtl.TABLE_NAME + "_SEQ")
+  @SequenceGenerator(sequenceName = XhXcapQdGnvXhDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhXcapQdGnvXhDtl.TABLE_NAME + "_SEQ")
   private Long id;
   private Long idHdr;
   private String noiDung;

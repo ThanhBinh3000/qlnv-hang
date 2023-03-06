@@ -36,7 +36,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class XhXuatCapQdGiaoNvXhHdrService extends BaseServiceImpl {
+public class XhXcapQdGnvXhHdrService extends BaseServiceImpl {
 
 
   @Autowired
