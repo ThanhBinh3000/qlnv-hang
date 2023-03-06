@@ -51,7 +51,9 @@ public class XhXcapQdGnvXhHdrService extends BaseServiceImpl {
     String dvql = currentUser.getDvql();
     if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
       req.setDvql(dvql.substring(0, 6));
-      req.setTrangThai(TrangThaiAllEnum.BAN_HANH.getId());
+      req.setTrangThais(Arrays.asList(
+          TrangThaiAllEnum.DA_DUYET_LDC.getId(),
+          TrangThaiAllEnum.BAN_HANH.getId()));
     } else {
       req.setDvql(dvql);
     }
