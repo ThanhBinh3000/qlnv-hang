@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 public class XhXcapQdGnvXhDtl {
 
   private static final long serialVersionUID = 1L;
-  public static final String TABLE_NAME = "XH_XUAT_CAP_QD_GNV_XH_DTL";
+  public static final String TABLE_NAME = "XH_XCAP_QD_GNV_XH_DTL";
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhXcapQdGnvXhDtl.TABLE_NAME + "_SEQ")
