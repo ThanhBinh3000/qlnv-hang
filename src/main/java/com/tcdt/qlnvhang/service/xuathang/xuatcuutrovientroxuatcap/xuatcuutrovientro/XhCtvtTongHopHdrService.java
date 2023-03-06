@@ -56,13 +56,13 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
     Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit());
     Page<XhCtvtTongHopHdr> data = xhCtvtTongHopHdrRepository.search(objReq, pageable);
     Map<String, String> hashMapDmhh = getListDanhMucHangHoa();
+    Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
     data.getContent().forEach(f -> {
       f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmhh.get(f.getLoaiVthh()));
       f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmhh.get(f.getCloaiVthh()));
       f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
 
       List<XhCtvtTongHopDtl> listTh = xhCtvtTongHopDtlRepository.findAllByIdHdr(f.getId());
-      Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
       listTh.forEach(s -> {
         if (mapDmucDvi.containsKey((s.getMaDviDx()))) {
           Map<String, Object> objDonVi = mapDmucDvi.get(s.getMaDviDx());
