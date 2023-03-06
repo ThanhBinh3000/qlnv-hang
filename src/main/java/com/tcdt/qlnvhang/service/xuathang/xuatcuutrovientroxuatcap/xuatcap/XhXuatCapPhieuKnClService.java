@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.xuathang.xuatcuutrovientroxuatcap.xuatcap;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhXuatCapPhieuKnClDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhXuatCapPhieuKnClHdrRepository;
@@ -47,7 +48,13 @@ public class XhXuatCapPhieuKnClService extends BaseServiceImpl {
   private FileDinhKemService fileDinhKemService;
 
   public Page<XhXuatCapPhieuKnClHdr> searchPage(CustomUserDetails currentUser, SearchXhXuatCapPhieuKnCl req) throws Exception {
-    req.setDvql(currentUser.getDvql());
+    String dvql = currentUser.getDvql();
+    if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+      req.setDvql(dvql.substring(0, 6));
+      req.setTrangThai(TrangThaiAllEnum.DA_DUYET_LDC.getId());
+    } else {
+      req.setDvql(dvql);
+    }
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<XhXuatCapPhieuKnClHdr> search = xhCtvtPhieuKtClHdrRepository.search(req, pageable);
     Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
