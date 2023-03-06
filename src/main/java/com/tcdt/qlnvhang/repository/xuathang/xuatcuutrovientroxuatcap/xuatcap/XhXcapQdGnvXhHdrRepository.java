@@ -25,6 +25,7 @@ public interface XhXcapQdGnvXhHdrRepository extends JpaRepository<XhXcapQdGnvXhH
       "AND ((:#{#param.ngayKyTu}  IS NULL OR c.ngayKy >= :#{#param.ngayKyTu})" +
       "AND (:#{#param.ngayKyDen}  IS NULL OR c.ngayKy <= :#{#param.ngayKyDen}) ) " +
       "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
+      "AND (:#{#param.listTrangThai.size() } = 0 OR c.trangThai in :#{#param.listTrangThai}) " +
       "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
   Page<XhXcapQdGnvXhHdr> search(@Param("param") SearchXhCtvtQdGiaoNvXh param, Pageable pageable);
