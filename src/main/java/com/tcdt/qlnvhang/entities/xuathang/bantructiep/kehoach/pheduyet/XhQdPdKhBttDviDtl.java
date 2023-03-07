@@ -1,10 +1,13 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet;
 
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.thongtin.XhTcTtinBtt;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "XH_QD_PD_KH_BTT_DVI_DTL")
@@ -47,4 +50,8 @@ public class XhQdPdKhBttDviDtl implements Serializable {
     private BigDecimal donGiaVat;
 
     private String dviTinh;
+
+    @Transient
+    private List<XhTcTtinBtt> children = new ArrayList<>();
+
 }

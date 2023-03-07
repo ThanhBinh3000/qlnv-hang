@@ -118,9 +118,6 @@ public class XhQdPdKhBttDtl implements Serializable {
     private List<FileDinhKem> fileDinhKemMuaLe = new ArrayList<>();
 
     @Transient
-    private List<XhTcTtinBtt> xhTcTtinBttList = new ArrayList<>();
-
-    @Transient
     private XhQdPdKhBttHdr xhQdPdKhBttHdr;
 
 

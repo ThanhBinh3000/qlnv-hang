@@ -71,7 +71,7 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
 
     @Transactional()
     public List<XhTcTtinBtt> create(XhCgiaReq ObjReq) throws Exception {
-        Optional<XhQdPdKhBttDtl> byId = xhQdPdKhBttDtlRepository.findById(ObjReq.getIdDviDtl());
+        Optional<XhQdPdKhBttDtl> byId = xhQdPdKhBttDtlRepository.findById(ObjReq.getIdDtl());
         XhQdPdKhBttDtl dtl = byId.get();
         if (!byId.isPresent()) {
             throw new Exception("Bản ghi không tồn tại");
