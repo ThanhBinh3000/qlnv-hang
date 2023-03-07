@@ -466,7 +466,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
         hdr.setTenCloaiVthh(hashMapVthh.get(hdr.getCloaiVthh()));
         dtl.setXhQdPdKhBttHdr(hdr);
 
-        List<XhTcTtinBtt> byIdTt = xhTcTtinBttRepository.findAllByIdDtl(dtl.getId());
+        List<XhTcTtinBtt> byIdTt = xhTcTtinBttRepository.findAllByIdDviDtl(dtl.getId());
         for (XhTcTtinBtt btt : byIdTt){
             List<FileDinhKem> fileDinhKems = fileDinhKemService.search(btt.getId(), Arrays.asList(XhTcTtinBtt.TABLE_NAME));
             if (!DataUtils.isNullOrEmpty(fileDinhKems)) {
