@@ -177,7 +177,7 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl implements XhD
             List<XhDxKhBanTrucTiepDdiem> ddiemList = xhDxKhBanTrucTiepDdiemRepository.findByIdDtl(dtl.getId());
             ddiemList.forEach(f ->{
                 f.setTenDiemKho(hashMapDvi.get(f.getMaDiemKho()));
-                f.setTenNhakho(hashMapDvi.get(f.getMaNhaKho()));
+                f.setTenNhaKho(hashMapDvi.get(f.getMaNhaKho()));
                 f.setTenNganKho(hashMapDvi.get(f.getMaNganKho()));
                 f.setTenLoKho(hashMapDvi.get(f.getMaLoKho()));
             });

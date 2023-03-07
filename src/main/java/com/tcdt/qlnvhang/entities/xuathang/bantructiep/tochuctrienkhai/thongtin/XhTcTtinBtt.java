@@ -22,7 +22,7 @@ public class XhTcTtinBtt implements Serializable {
     @SequenceGenerator(sequenceName = "XH_TCTTIN_BTT_SEQ", allocationSize = 1, name = "XH_TCTTIN_BTT_SEQ")
     private Long id;
 
-    private Long idDtl;
+    private Long idDviDtl;
 
     private String tochucCanhan;
 

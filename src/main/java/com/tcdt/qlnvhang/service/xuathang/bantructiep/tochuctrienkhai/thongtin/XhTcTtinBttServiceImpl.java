@@ -71,7 +71,7 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
 
     @Transactional()
     public List<XhTcTtinBtt> create(XhCgiaReq ObjReq) throws Exception {
-        Optional<XhQdPdKhBttDtl> byId = xhQdPdKhBttDtlRepository.findById(ObjReq.getIdDtl());
+        Optional<XhQdPdKhBttDtl> byId = xhQdPdKhBttDtlRepository.findById(ObjReq.getIdDviDtl());
         XhQdPdKhBttDtl dtl = byId.get();
         if (!byId.isPresent()) {
             throw new Exception("Bản ghi không tồn tại");
@@ -101,13 +101,13 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
             }
             xhQdPdKhBttDtlRepository.save(dtl);
         }
-        xhTcTtinBttRepository.deleteAllByIdDtl(ObjReq.getIdDtl());
+        xhTcTtinBttRepository.deleteAllByIdDviDtl(ObjReq.getIdDviDtl());
         List<XhTcTtinBtt> bttList = new ArrayList<>();
         for (XhTcTtinBttReq chaoGiaReq : ObjReq.getChildren()) {
             XhTcTtinBtt chaoGiaList = new XhTcTtinBtt();
             BeanUtils.copyProperties(chaoGiaReq, chaoGiaList, "id");
             chaoGiaList.setId(null);
-            chaoGiaList.setIdDtl(ObjReq.getIdDtl());
+            chaoGiaList.setIdDviDtl(ObjReq.getIdDviDtl());
             XhTcTtinBtt save = xhTcTtinBttRepository.save(chaoGiaList);
 
             if (!DataUtils.isNullObject(chaoGiaReq.getFileDinhKems())) {
