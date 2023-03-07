@@ -466,23 +466,23 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
         hdr.setTenCloaiVthh(hashMapVthh.get(hdr.getCloaiVthh()));
         dtl.setXhQdPdKhBttHdr(hdr);
 
-        List<XhTcTtinBtt> byIdTt = xhTcTtinBttRepository.findAllByIdDviDtl(dtl.getId());
-        for (XhTcTtinBtt btt : byIdTt){
-            List<FileDinhKem> fileDinhKems = fileDinhKemService.search(btt.getId(), Arrays.asList(XhTcTtinBtt.TABLE_NAME));
-            if (!DataUtils.isNullOrEmpty(fileDinhKems)) {
-                btt.setFileDinhKems(fileDinhKems.get(0));
-            }
-        }
-
        List<XhQdPdKhBttDvi> byIdDvi = xhQdPdKhBttDviRepository.findByIdQdDtl(dtl.getId());
         for (XhQdPdKhBttDvi dvi : byIdDvi){
             List<XhQdPdKhBttDviDtl> byIdDviDtl = xhQdPdKhBttDviDtlRepository.findByIdDvi(dvi.getId());
-            byIdDviDtl.forEach(f ->{
-                f.setTenDiemKho(hashMapDvi.get(f.getMaDiemKho()));
-                f.setTenNhaKho(hashMapDvi.get(f.getMaNhaKho()));
-                f.setTenNganKho(hashMapDvi.get(f.getMaNganKho()));
-                f.setTenLoKho(hashMapDvi.get(f.getMaLoKho()));
-            });
+            for (XhQdPdKhBttDviDtl dviDtl : byIdDviDtl){
+                List<XhTcTtinBtt> byIdTt = xhTcTtinBttRepository.findAllByIdDviDtl(dviDtl.getId());
+                for (XhTcTtinBtt btt : byIdTt){
+                    List<FileDinhKem> fileDinhKems = fileDinhKemService.search(btt.getId(), Arrays.asList(XhTcTtinBtt.TABLE_NAME));
+                    if (!DataUtils.isNullOrEmpty(fileDinhKems)) {
+                        btt.setFileDinhKems(fileDinhKems.get(0));
+                    }
+                }
+                dviDtl.setTenDiemKho(hashMapDvi.get(dviDtl.getMaDiemKho()));
+                dviDtl.setTenNhaKho(hashMapDvi.get(dviDtl.getMaNhaKho()));
+                dviDtl.setTenNganKho(hashMapDvi.get(dviDtl.getMaNganKho()));
+                dviDtl.setTenLoKho(hashMapDvi.get(dviDtl.getMaLoKho()));
+                dviDtl.setChildren(byIdTt);
+            }
             dvi.setChildren(byIdDviDtl);
             dvi.setTenDvi(hashMapDvi.get(dvi.getMaDvi()));
         }
@@ -490,7 +490,6 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
         dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThai()));
         dtl.setTenLoaiVthh(StringUtils.isEmpty(dtl.getLoaiVthh())? null : hashMapVthh.get(dtl.getLoaiVthh()));
         dtl.setTenCloaiVthh(StringUtils.isEmpty(dtl.getCloaiVthh())? null : hashMapVthh.get(dtl.getCloaiVthh()));
-        dtl.setXhTcTtinBttList(byIdTt);
         dtl.setChildren(byIdDvi);
 
         if (!DataUtils.isNullObject(dtl.getPthucBanTrucTiep())) {

@@ -16,6 +16,8 @@ public class XhCgiaReq {
     @ApiModelProperty(notes = "Bắt buộc set đối với update")
     private Long id;
 
+    private Long idDtl;
+
     private Long idDviDtl;
 
     private String trangThai;
