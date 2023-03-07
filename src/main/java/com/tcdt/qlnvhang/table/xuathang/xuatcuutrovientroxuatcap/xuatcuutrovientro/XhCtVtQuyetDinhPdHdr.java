@@ -1,8 +1,10 @@
 package com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhCtvtQdXuatCapHdr;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -68,4 +70,8 @@ public class XhCtVtQuyetDinhPdHdr extends BaseEntity implements Serializable {
 
   @OneToMany(mappedBy = "xhCtVtQuyetDinhPdHdr", cascade = CascadeType.MERGE)
   private List<XhCtVtQuyetDinhPdDtl> quyetDinhPdDtl = new ArrayList<>();
+
+  @OneToOne(mappedBy = "xhCtVtQuyetDinhPdHdr")
+  @JsonIgnore
+  private XhCtvtQdXuatCapHdr xhCtvtQdXuatCapHdr;
 }

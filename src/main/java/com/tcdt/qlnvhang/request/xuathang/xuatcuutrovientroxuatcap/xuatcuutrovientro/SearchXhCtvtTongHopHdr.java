@@ -14,6 +14,10 @@ public class SearchXhCtvtTongHopHdr extends BaseRequest {
     private List<String> listMaDviGiao;
     private String dvql;
     private String soDx;
+    private String soQd;
+    private String loaiVthh;
+    private LocalDate ngayKyTu;
+    private LocalDate ngayKyDen;
     private LocalDate ngayDxTu;
     private LocalDate ngayDxDen;
     private LocalDate ngayKetThucDxTu;

@@ -248,6 +248,7 @@ public class PathContains {
 	public static final String XUAT_CUU_TRO = "/cuu-tro";
 
 	public static final String XUAT_CAP = "/xuat-cap";
+	public static final String QD_PA_XUAT_CAP = "/qd-pa-xuat-cap";
 	public static final String XAY_DUNG_PHUONG_AN_DE_XUAT = "/de-xuat";
 	public static final String TONG_HOP_PHUONG_AN= "/tong-hop";
 	public static final String QUYET_DINH_PHE_DUYET= "/quyet-dinh";

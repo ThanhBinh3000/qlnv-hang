@@ -24,9 +24,13 @@ public interface XhCtVtQdPdHdrRepository extends JpaRepository<XhCtVtQuyetDinhPd
       "AND ((:#{#param.ngayDxTu}  IS NULL OR e.ngayDx >= :#{#param.ngayDxTu})" +
       "AND (:#{#param.ngayDxDen}  IS NULL OR e.ngayDx <= :#{#param.ngayDxDen}) ) " +
       "AND ((:#{#param.ngayKetThucDxTu}  IS NULL OR e.ngayKetThucDx >= :#{#param.ngayKetThucDxTu})" +
-      "AND (:#{#param.ngayKetThucDxDen}  IS NULL OR e.ngayKetThucDx <= :#{#param.ngayKetThucDxTu}) ) " +
+      "AND (:#{#param.ngayKetThucDxDen}  IS NULL OR e.ngayKetThucDx <= :#{#param.ngayKetThucDxDen}) ) " +
       "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
       "AND (:#{#param.xuatCap} IS NULL OR c.xuatCap = :#{#param.xuatCap}) " +
+      "AND (:#{#param.soQd} IS NULL OR LOWER(c.soQd) LIKE CONCAT('%',LOWER(:#{#param.soQd}),'%')) " +
+      "AND (:#{#param.loaiVthh} IS NULL OR c.loaiVthh = :#{#param.loaiVthh}) " +
+          "AND ((:#{#param.ngayKyTu}  IS NULL OR c.ngayKy >= :#{#param.ngayKyTu})" +
+          "AND (:#{#param.ngayKyDen}  IS NULL OR c.ngayKy <= :#{#param.ngayKyDen}) ) " +
       "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
   Page<XhCtVtQuyetDinhPdHdr> search(@Param("param") SearchXhCtvtTongHopHdr param, Pageable pageable);
@@ -39,4 +43,16 @@ public interface XhCtVtQdPdHdrRepository extends JpaRepository<XhCtVtQuyetDinhPd
   List<XhCtVtQuyetDinhPdHdr> findAllByIdIn(List<Long> listId);
 
   Optional<XhCtVtQuyetDinhPdHdr> findBySoQd(String soQd);
+
+  @Query("SELECT DISTINCT  c FROM XhCtVtQuyetDinhPdHdr c " +
+          " WHERE 1=1 " +
+//          "AND ((:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) OR (:#{#param.maDviGiao} IS NULL OR dx.maDviCuc = :#{#param.maDviGiao})) " +
+//          "AND (:#{#param.maDviDx} IS NULL OR e.maDviDx LIKE CONCAT(:#{#param.maDviDx},'%')) " +
+          "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
+          "AND (:#{#param.loaiVthh} IS NULL OR c.loaiVthh = :#{#param.loaiVthh}) " +
+          "AND (:#{#param.xuatCap} IS NULL OR c.xuatCap = :#{#param.xuatCap}) " +
+          "AND c.id NOT IN (SELECT d.xhCtVtQuyetDinhPdHdr.id FROM XhCtvtQdXuatCapHdr d WHERE d.xhCtVtQuyetDinhPdHdr.id IS NOT NULL) " +
+          "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
+  )
+  List<XhCtVtQuyetDinhPdHdr> searchQdPaXuatCap(@Param("param") SearchXhCtvtTongHopHdr param);
 }
