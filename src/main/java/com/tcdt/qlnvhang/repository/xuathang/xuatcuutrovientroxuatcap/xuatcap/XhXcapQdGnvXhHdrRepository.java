@@ -1,7 +1,7 @@
-package com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
+package com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcap;
 
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.SearchXhCtvtQdGiaoNvXh;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQdGiaoNvXhHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhXcapQdGnvXhHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface XhCtvtQdGiaoNvXhHdrRepository extends JpaRepository<XhCtvtQdGiaoNvXhHdr,Long> {
+public interface XhXcapQdGnvXhHdrRepository extends JpaRepository<XhXcapQdGnvXhHdr, Long> {
 
-  @Query("SELECT c FROM XhCtvtQdGiaoNvXhHdr c WHERE 1=1 " +
+  @Query("SELECT c FROM XhXcapQdGnvXhHdr c WHERE 1=1 " +
       "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
       "AND (:#{#param.type} IS NULL OR c.type = :#{#param.type}) " +
       "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
@@ -28,14 +28,14 @@ public interface XhCtvtQdGiaoNvXhHdrRepository extends JpaRepository<XhCtvtQdGia
       "AND (:#{#param.listTrangThai.size() } = 0 OR c.trangThai in :#{#param.listTrangThai}) " +
       "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
-  Page<XhCtvtQdGiaoNvXhHdr> search(@Param("param") SearchXhCtvtQdGiaoNvXh param, Pageable pageable);
+  Page<XhXcapQdGnvXhHdr> search(@Param("param") SearchXhCtvtQdGiaoNvXh param, Pageable pageable);
 
   void deleteAllByIdIn(List<Long> listId);
 
-  List<XhCtvtQdGiaoNvXhHdr> findByIdIn(List<Long> ids);
+  List<XhXcapQdGnvXhHdr> findByIdIn(List<Long> ids);
 
-  List<XhCtvtQdGiaoNvXhHdr> findAllByIdIn(List<Long> listId);
+  List<XhXcapQdGnvXhHdr> findAllByIdIn(List<Long> listId);
 
-  Optional<XhCtvtQdGiaoNvXhHdr> findBySoQd (String soQd);
+  Optional<XhXcapQdGnvXhHdr> findBySoQd(String soQd);
 
 }

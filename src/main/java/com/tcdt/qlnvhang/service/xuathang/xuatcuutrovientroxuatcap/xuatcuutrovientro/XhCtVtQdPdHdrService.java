@@ -374,4 +374,13 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
     ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
     ex.export();
   }
+
+    public List<XhCtVtQuyetDinhPdHdr> searchQdPaXc(CustomUserDetails currentUser, SearchXhCtvtTongHopHdr req) throws Exception {
+//        req.setDvql(currentUser.getDvql());
+//        //cuc xem cac quyet dinh tu tong cuc
+//        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
+//            req.setMaDviGiao(currentUser.getDvql());
+//        }
+        return xhCtVtQdPdHdrRepository.searchQdPaXuatCap(req);
+    }
 }

@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBangKeDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBangKeHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtPhieuXuatKhoRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -14,6 +15,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBangKeDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBangKeHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtPhieuXuatKho;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -34,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class XhCtvtBangKeService extends BaseServiceImpl {
@@ -44,6 +47,8 @@ public class XhCtvtBangKeService extends BaseServiceImpl {
   @Autowired
   private XhCtvtBangKeDtlRepository xhCtvtBangKeDtlRepository;
 
+  @Autowired
+  private XhCtvtPhieuXuatKhoRepository xhCtvtPhieuXuatKhoRepository ;
   @Autowired
   private UserInfoRepository userInfoRepository;
 
@@ -100,7 +105,14 @@ public class XhCtvtBangKeService extends BaseServiceImpl {
     data.setMaDvi(currentUser.getUser().getDepartment());
     data.setTrangThai(Contains.DUTHAO);
     XhCtvtBangKeHdr created = xhCtvtBangKeHdrRepository.save(data);
-
+    if (!DataUtils.isNullOrEmpty(created.getSoPhieuXuatKho())) {
+      Optional<XhCtvtPhieuXuatKho> phieuXuatKho = xhCtvtPhieuXuatKhoRepository.findById(created.getIdPhieuXuatKho());
+      if (phieuXuatKho.isPresent()) {
+        XhCtvtPhieuXuatKho phieu = phieuXuatKho.get();
+        phieu.setSoBangKeCh(created.getSoBangKe());
+        xhCtvtPhieuXuatKhoRepository.save(phieu);
+      }
+    }
     //dtl
     data.getBangKeDtl().forEach(s -> {
       s.setIdHdr(created.getId());
@@ -187,6 +199,14 @@ public class XhCtvtBangKeService extends BaseServiceImpl {
     }
     XhCtvtBangKeHdr data = optional.get();
     xhCtvtBangKeHdrRepository.delete(data);
+    if (!DataUtils.isNullOrEmpty(data.getSoPhieuXuatKho())) {
+      Optional<XhCtvtPhieuXuatKho> phieuXuatKho = xhCtvtPhieuXuatKhoRepository.findById(data.getIdPhieuXuatKho());
+      if (phieuXuatKho.isPresent()) {
+        XhCtvtPhieuXuatKho phieu = phieuXuatKho.get();
+        phieu.setSoBangKeCh(null);
+        xhCtvtPhieuXuatKhoRepository.save(phieu);
+      }
+    }
   }
 
   @Transient
@@ -196,7 +216,15 @@ public class XhCtvtBangKeService extends BaseServiceImpl {
     if (list.isEmpty()) {
       throw new Exception("Bản ghi không tồn tại");
     }
+    List<Long> listID= list.stream().map(XhCtvtBangKeHdr::getId).collect(Collectors.toList());
+    List<XhCtvtPhieuXuatKho> phieuXuatKho = xhCtvtPhieuXuatKhoRepository.findByIdIn(listID);
     xhCtvtBangKeHdrRepository.deleteAll(list);
+    if (!DataUtils.isNullOrEmpty(phieuXuatKho)) {
+     for (XhCtvtPhieuXuatKho phieu : phieuXuatKho){
+       phieu.setSoBangKeCh(null);
+       xhCtvtPhieuXuatKhoRepository.save(phieu);
+     }
+    }
   }
 
   @Transient
