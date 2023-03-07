@@ -283,7 +283,7 @@ public class XhCtvtQdGiaoNvXhHdrService extends BaseServiceImpl {
                 && optional.get().getTrangThaiXh().equals(TrangThaiAllEnum.HOAN_THANH_CAP_NHAT.getId()))) {
       optional.get().setNguoiPduyetId(currentUser.getUser().getId());
       optional.get().setNgayPduyet(LocalDate.now());
-      optional.get().setLyDoTuChoi(statusReq.getLyDo());
+      optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
     } else {
       throw new Exception("Phê duyệt không thành công");
     }
