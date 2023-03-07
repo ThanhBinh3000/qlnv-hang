@@ -285,7 +285,7 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
       case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
         optional.get().setNgayPduyet(LocalDate.now());
-        optional.get().setLyDoTuChoi(statusReq.getLyDo());
+        optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
         break;
       case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
