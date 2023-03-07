@@ -176,4 +176,22 @@ public class XhCtVtQdPdHdrController {
 
     }
   }
+
+  @ApiOperation(value = "Tra cứu danh sách quyết định phương án được chuyển xuất cấp chưa có quyết định xuất cấp ", response = List.class)
+  @PostMapping(value = PathContains.QD_PA_XUAT_CAP, produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<BaseResponse> search(@CurrentUser CustomUserDetails currentUser, @RequestBody SearchXhCtvtTongHopHdr objReq) {
+    BaseResponse resp = new BaseResponse();
+    try {
+      resp.setData(xhCtVtQdPdHdrService.searchQdPaXc(currentUser, objReq));
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (Exception e) {
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Tra cứu thông tin : {}", e);
+    }
+
+    return ResponseEntity.ok(resp);
+  }
 }
