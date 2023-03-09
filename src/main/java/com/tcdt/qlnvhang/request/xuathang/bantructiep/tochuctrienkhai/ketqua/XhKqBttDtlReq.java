@@ -1,39 +1,35 @@
 package com.tcdt.qlnvhang.request.xuathang.bantructiep.tochuctrienkhai.ketqua;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttDdiem;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
 import javax.persistence.Transient;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
-public class XhKqBttDtlReq { private Long id;
+public class XhKqBttDtlReq {
+
+    private Long id;
 
     private Long idHdr;
 
-    private String tochucCanhan;
-
-    private String mst;
-
-    private String diaDiemChaoGia;
-
-    private String sdt;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayChaoGia;
+    private String maDvi;
+    @Transient
+    private String tenDvi;
 
     private BigDecimal soLuong;
 
-    private BigDecimal donGia;
+    private String diaChi;
 
-    private String thueGtgt;
-
-    private Boolean luaChon;
+    private BigDecimal donGiaVat;
 
     @Transient
-    private FileDinhKemReq fileDinhKems;
+    private List<XhKqBttDdiemReq> children = new ArrayList<>();
 
 }

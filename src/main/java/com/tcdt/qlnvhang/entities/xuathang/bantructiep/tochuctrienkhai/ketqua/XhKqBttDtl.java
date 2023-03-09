@@ -1,13 +1,12 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.ketqua;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.util.Contains;
+
 import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "XH_KQ_BTT_DTL")
@@ -23,25 +22,17 @@ public class XhKqBttDtl {
 
     private Long idHdr;
 
-    private String tochucCanhan;
-
-    private String mst;
-
-    private String diaDiemChaoGia;
-
-    private String sdt;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayChaoGia;
+    private String maDvi;
+    @Transient
+    private String tenDvi;
 
     private BigDecimal soLuong;
 
-    private BigDecimal donGia;
+    private String diaChi;
 
-    private String thueGtgt;
-
-    private Boolean luaChon;
+    private BigDecimal donGiaVat;
 
     @Transient
-    private FileDinhKem fileDinhKems;
+    private List<XhKqBttDdiem> children = new ArrayList<>();
+
 }

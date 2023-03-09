@@ -2,16 +2,22 @@ package com.tcdt.qlnvhang.service.xuathang.bantructiep.tochuctrienkhai.ketqua;
 
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDtl;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttDdiem;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdr;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttTchuc;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.hopdong.XhHopDongBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDtlRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttDdiemRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttTchucRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttDdiemReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdrReq;
+import com.tcdt.qlnvhang.request.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttTchucReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -27,6 +33,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
@@ -43,6 +50,12 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
 
     @Autowired
     private XhKqBttDtlRepository xhKqBttDtlRepository;
+
+    @Autowired
+    private XhKqBttDdiemRepository xhKqBttDdiemRepository;
+
+    @Autowired
+    private XhKqBttTchucRepository xhKqBttTchucRepository;
 
     @Autowired
     private XhQdPdKhBttDtlRepository xhQdPdKhBttDtlRepository;
@@ -113,22 +126,32 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
         return created;
     }
 
-    List<XhKqBttDtl> saveDetail(XhKqBttHdrReq req, Long idHdr){
+    void saveDetail(XhKqBttHdrReq req, Long idHdr){
         xhKqBttDtlRepository.deleteAllByIdHdr(idHdr);
-        List<XhKqBttDtl> xhKqBttDtlArrayList = new ArrayList<>();
         for (XhKqBttDtlReq dtlReq : req.getChildren()){
             XhKqBttDtl dtl = new XhKqBttDtl();
             BeanUtils.copyProperties(dtlReq, dtl, "id");
-            dtl.setId(null);
             dtl.setIdHdr(idHdr);
-            XhKqBttDtl create =  xhKqBttDtlRepository.save(dtl);
-            if (!DataUtils.isNullObject(dtlReq.getFileDinhKems())) {
-                List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(dtlReq.getFileDinhKems()), create.getId(), XhKqBttDtl.TABLE_NAME);
-                dtl.setFileDinhKems(fileDinhKem.get(0));
+            xhKqBttDtlRepository.save(dtl);
+            xhKqBttDdiemRepository.deleteAllByIdDtl(dtlReq.getId());
+            for (XhKqBttDdiemReq ddiemReq: dtlReq.getChildren()){
+                XhKqBttDdiem ddiem = new XhKqBttDdiem();
+                BeanUtils.copyProperties(ddiemReq, ddiem, "id");
+                ddiem.setIdDtl(dtl.getId());
+                xhKqBttDdiemRepository.save(ddiem);
+                xhKqBttTchucRepository.deleteAllByIdDdiem(ddiemReq.getId());
+                for (XhKqBttTchucReq tchucReq : ddiemReq.getChildren()){
+                    XhKqBttTchuc tchuc = new XhKqBttTchuc();
+                    BeanUtils.copyProperties(tchucReq, tchuc, "id");
+                    tchuc.setIdDdiem(ddiem.getId());
+                    if (!DataUtils.isNullObject(tchucReq.getFileDinhKems())) {
+                        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(tchucReq.getFileDinhKems()), tchuc.getId(), XhKqBttDtl.TABLE_NAME);
+                        tchuc.setFileDinhKems(fileDinhKem.get(0));
+                    }
+                    xhKqBttTchucRepository.save(tchuc);
+                }
             }
-            xhKqBttDtlArrayList.add(dtl);
         }
-        return xhKqBttDtlArrayList;
     }
 
     @Override
@@ -188,16 +211,31 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenTrangThaiXh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiXh()));
         });
-
-        List<XhKqBttDtl> ByIdDtl = xhKqBttDtlRepository.findAllByIdHdr(id);
-        for (XhKqBttDtl dtl : ByIdDtl){
-                List<FileDinhKem> fileDinhKems = fileDinhKemService.search(dtl.getId(), Arrays.asList(XhKqBttDtl.TABLE_NAME));
-            if (!DataUtils.isNullOrEmpty(fileDinhKems)) {
-                dtl.setFileDinhKems(fileDinhKems.get(0));
-            }
-        }
-        data.setChildren(ByIdDtl);
         data.setListHopDongBtt(allById);
+
+        List<XhKqBttDtl> xhKqBttDtlList = new ArrayList<>();
+        for (XhKqBttDtl dtl : xhKqBttDtlRepository.findAllByIdHdr(id)){
+            List<XhKqBttDdiem> xhKqBttDdiemList = new ArrayList<>();
+            for (XhKqBttDdiem ddiem : xhKqBttDdiemRepository.findAllByIdDtl(dtl.getId())){
+                List<XhKqBttTchuc> xhKqBttTchucList = xhKqBttTchucRepository.findAllByIdDdiem(ddiem.getId());
+                for (XhKqBttTchuc xhKqBttTchuc : xhKqBttTchucList){
+                    List<FileDinhKem> fileDinhKems = fileDinhKemService.search(dtl.getId(), Arrays.asList(XhKqBttTchuc.TABLE_NAME));
+                    if (!DataUtils.isNullOrEmpty(fileDinhKems)) {
+                        xhKqBttTchuc.setFileDinhKems(fileDinhKems.get(0));
+                    }
+                }
+                ddiem.setChildren(xhKqBttTchucList);
+                ddiem.setTenDiemKho(StringUtils.isEmpty(ddiem.getMaDiemKho()) ? null : hashMapDvi.get(ddiem.getMaDiemKho()));
+                ddiem.setTenNhaKho(StringUtils.isEmpty(ddiem.getMaNhaKho()) ? null : hashMapDvi.get(ddiem.getMaNhaKho()));
+                ddiem.setTenNganKho(StringUtils.isEmpty(ddiem.getMaNganKho()) ? null : hashMapDvi.get(ddiem.getMaNganKho()));
+                ddiem.setTenLoKho(StringUtils.isEmpty(ddiem.getMaLoKho()) ? null : hashMapDvi.get(ddiem.getMaLoKho()));
+                xhKqBttDdiemList.add(ddiem);
+            }
+            dtl.setTenDvi(StringUtils.isEmpty(dtl.getMaDvi()) ? null : hashMapDvi.get(dtl.getMaDvi()));
+            dtl.setChildren(xhKqBttDdiemList);
+            xhKqBttDtlList.add(dtl);
+        }
+        data.setChildren(xhKqBttDtlList);
 
         List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhKqBttHdr.TABLE_NAME));
         if (!DataUtils.isNullOrEmpty(fileDinhKem)) {
@@ -262,21 +300,30 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
             throw new Exception("Không tìm thấy dữ liệu");
         }
 
-        Optional<XhKqBttHdr> byId = xhKqBttHdrRepository.findById(id);
-        if (!byId.isPresent()){
+        Optional<XhKqBttHdr> optional = xhKqBttHdrRepository.findById(id);
+        if (!optional.isPresent()){
             throw new Exception("Không tìm thấy dữ liệu");
         }
 
-        if (!byId.get().getTrangThai().equals(NhapXuatHangTrangThaiEnum.DUTHAO.getId())){
+        if (!optional.get().getTrangThai().equals(NhapXuatHangTrangThaiEnum.DUTHAO.getId())){
             throw new Exception("Chỉ được xóa bản ghi khi ở trạng thái là dự thảo");
         }
-        List<XhKqBttDtl> dtlList = xhKqBttDtlRepository.findAllByIdHdr(id);
-        for (XhKqBttDtl dtl : dtlList){
-            fileDinhKemService.delete(dtl.getId(), Collections.singleton(XhKqBttDtl.TABLE_NAME));
+
+        XhKqBttHdr hdr = optional.get();
+
+        List<XhKqBttDtl> xhKqBttDtlList = xhKqBttDtlRepository.findAllByIdHdr(hdr.getId());
+        if (!CollectionUtils.isEmpty(xhKqBttDtlList)){
+            for (XhKqBttDtl dtl : xhKqBttDtlList){
+                List<XhKqBttDdiem> xhKqBttDdiemList = xhKqBttDdiemRepository.findAllByIdDtl(dtl.getId());
+                for (XhKqBttDdiem ddiem : xhKqBttDdiemList){
+                    xhKqBttTchucRepository.deleteAllByIdDdiem(ddiem.getId());
+                }
+                xhKqBttDdiemRepository.deleteAllByIdDtl(dtl.getId());
+            }
+            xhKqBttDtlRepository.deleteAll(xhKqBttDtlList);
         }
-        xhKqBttDtlRepository.deleteAllByIdHdr(byId.get().getId());
-        xhKqBttHdrRepository.delete(byId.get());
-        fileDinhKemService.delete(byId.get().getId(), Collections.singleton(XhKqBttHdr.TABLE_NAME));
+        xhKqBttHdrRepository.delete(hdr);
+        fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhKqBttHdr.TABLE_NAME));
     }
 
     @Override
