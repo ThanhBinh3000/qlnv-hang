@@ -18,7 +18,17 @@ public class XhHopDongBttDviReq {
 
     private String maLoKho;
 
+    private String maDviTsan;
+
+    private BigDecimal duDau;
+
     private BigDecimal soLuong;
+
+    private BigDecimal donGiaDeXuat;
+
+    private BigDecimal donGiaVat;
+
+    private String dviTinh;
 
 
 

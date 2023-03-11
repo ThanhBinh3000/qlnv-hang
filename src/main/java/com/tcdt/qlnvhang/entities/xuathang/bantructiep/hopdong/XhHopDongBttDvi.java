@@ -19,21 +19,31 @@ public class XhHopDongBttDvi {
 
     private Long idDtl;
 
-    String maDiemKho;
+    private String maDiemKho;
     @Transient
     private String tenDiemKho;
 
-    String maNhaKho;
+    private String maNhaKho;
     @Transient
     private String tenNhaKho;
 
-    String maNganKho;
+    private String maNganKho;
     @Transient
     private String tenNganKho;
 
-    String maLoKho;
+    private String maLoKho;
     @Transient
     private String tenLoKho;
 
-    BigDecimal soLuong;
+    private String maDviTsan;
+
+    private BigDecimal duDau;
+
+    private BigDecimal soLuong;
+
+    private BigDecimal donGiaDeXuat;
+
+    private BigDecimal donGiaVat;
+
+    private String dviTinh;
 }
