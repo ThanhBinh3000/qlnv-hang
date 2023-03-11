@@ -101,6 +101,7 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
         dataMap.setTrangThai(Contains.DU_THAO);
         dataMap.setTrangThaiPhuLuc(Contains.DUTHAO);
         dataMap.setMaDvi(userInfo.getDvql());
+        dataMap.setMaDviTsan(String.join(",",req.getListMaDviTsan()));
 
         XhHopDongBttHdr created = xhHopDongBttHdrRepository.save(dataMap);
         if (!DataUtils.isNullObject(req.getFileDinhKem())) {
@@ -132,7 +133,6 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
             BeanUtils.copyProperties(dtlReq, dtl, "id");
             dtl.setIdHdr(idHdr);
             XhHopDongBttDtl create = xhHopDongBttDtlRepository.save(dtl);
-            System.out.println(dtlReq.getId()+"@@@");
             List<XhHopDongBttDtl> phuLucDtl = xhHopDongBttDtlRepository.findAllByIdHdDtl(dtlReq.getId());
             if (!DataUtils.isNullOrEmpty(phuLucDtl)) {
                 phuLucDtl.forEach(s -> {
@@ -237,12 +237,15 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
 
-        data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
-        data.setTenTrangThaiPhuLuc(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiPhuLuc()));
-        data.setTenDvi(hashMapDvi.get(data.getMaDvi()));
-        data.setTenLoaiVthh(hashMapVthh.get(data.getLoaiVthh()));
-        data.setTenCloaiVthh(hashMapVthh.get(data.getCloaiVthh()));
-        data.setTenLoaiHdong(hashMapLoaiHdong.get(data.getLoaiHdong()));
+            data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
+            data.setTenTrangThaiPhuLuc(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiPhuLuc()));
+            data.setTenDvi(hashMapDvi.get(data.getMaDvi()));
+            data.setTenLoaiVthh(hashMapVthh.get(data.getLoaiVthh()));
+            data.setTenCloaiVthh(hashMapVthh.get(data.getCloaiVthh()));
+            data.setTenLoaiHdong(hashMapLoaiHdong.get(data.getLoaiHdong()));
+        if (DataUtils.isNullObject(data.getIdHd())) {
+            data.setListMaDviTsan(Arrays.asList(data.getMaDviTsan().split(",")));
+        }
 
         List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhHopDongBttHdr.TABLE_NAME));
         if (!DataUtils.isNullOrEmpty(fileDinhKem)) {
@@ -399,7 +402,7 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
             objs[5] = hdr.getSoLuong();
             objs[6] = null;
             objs[7] = hdr.getTenTrangThai();
-            objs[8] = hdr.getSoQd();
+            objs[8] = null;
             objs[9] = hdr.getTenTrangThaiXh();
             dataList.add(objs);
         }

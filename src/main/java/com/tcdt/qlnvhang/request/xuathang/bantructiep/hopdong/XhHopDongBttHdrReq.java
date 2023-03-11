@@ -16,6 +16,7 @@ import java.util.List;
 
 @Data
 public class XhHopDongBttHdrReq extends BaseRequest {
+
     private Long id;
 
     private Long idQdKq;
@@ -62,6 +63,8 @@ public class XhHopDongBttHdrReq extends BaseRequest {
     private String dkienHanTtoan;
 
     private String maDvi;
+    @Transient
+    private String tenDvi;
 
     private String diaChi;
 
@@ -102,8 +105,12 @@ public class XhHopDongBttHdrReq extends BaseRequest {
     private String moLaiDviMua;
 
     private String loaiVthh;
+    @Transient
+    private String tenLoaiVthh;
 
     private String cloaiVthh;
+    @Transient
+    private String tenCloaiVthh;
 
     private String moTaHangHoa;
 
@@ -111,24 +118,28 @@ public class XhHopDongBttHdrReq extends BaseRequest {
 
     private BigDecimal soLuong;
 
-    private BigDecimal donGiaGomThue;
-
-    private BigDecimal donGia;
+    private BigDecimal thanhTien;
 
     private String ghiChu;
 
-    private BigDecimal soLuongQdChuaKy;
+    private BigDecimal tongSoLuongQdKh;
 
-    private BigDecimal tongTien;
+    private BigDecimal tongSoLuongQdKhDaky;
+
+    private BigDecimal tongSoLuongQdKhChuaky;
+
+    private BigDecimal donGia;
+
+    private BigDecimal donGiaGomThue;
+
+    @Transient
+    private List<String> listMaDviTsan = new ArrayList<>();
 
     @Transient
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 
     @Transient
     private FileDinhKemReq fileDinhKem;
-
-    @Transient
-    private List<String> listMaDviTsan = new ArrayList<>();
 
     @Transient
     private List<XhHopDongBttDtlReq> children = new ArrayList<>();
