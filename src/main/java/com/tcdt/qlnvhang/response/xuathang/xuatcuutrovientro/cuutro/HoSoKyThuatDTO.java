@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.response.xuathang.xuatcuutrovientro.cuutro;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,6 +46,7 @@ public class HoSoKyThuatDTO {
   private String tenDvi;
 
   @Temporal(TemporalType.DATE)
+  @JsonFormat(pattern = "yyyy-MM-dd")
   private Date ngayTao;
 
   public HoSoKyThuatDTO(Long id, Long idQdGiaoNvNh, String soQdGiaoNvNh, String soBbLayMau, String soHd, String maDvi, String soHoSoKyThuat, Integer nam, Integer idBbLayMauXuat, Boolean kqKiemTra, String loaiNhap, String maDiemKho, String maNhaKho, String maNganKho, String maLoKho, Date ngayTao) {
