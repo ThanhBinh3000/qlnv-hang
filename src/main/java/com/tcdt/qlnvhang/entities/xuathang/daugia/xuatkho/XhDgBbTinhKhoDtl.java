@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.entities.xuathang.phieuxuatkho;
+package com.tcdt.qlnvhang.entities.xuathang.daugia.xuatkho;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBbTinhKhoHdr;
