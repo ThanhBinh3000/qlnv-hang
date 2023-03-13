@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.xuathang.xuatkho;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.AllArgsConstructor;
@@ -19,7 +20,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class XhPhieuXuatKhoReq {
+public class XhPhieuXuatKhoReq  extends BaseRequest {
     private Long id;
     private Long sqdxId;
     private Long pknclId;

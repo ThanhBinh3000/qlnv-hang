@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.request.xuathang.bangkecanhang;
 
+import com.tcdt.qlnvhang.request.BaseRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class XhBangKeCanHangReq {
+public class XhBangKeCanHangReq extends BaseRequest {
     private Long id;
     // Số quyết định xuất id
     private Long sqdxId;
