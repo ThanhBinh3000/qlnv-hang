@@ -69,7 +69,7 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
     @Override
     public Page<XhKqBttHdr> searchPage(XhKqBttHdrReq req) throws Exception {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),req.getPaggingReq().getLimit(), Sort.by("id").descending());
-        Page<XhKqBttHdr> page = xhKqBttHdrRepository.search(
+        Page<XhKqBttHdr> page = xhKqBttHdrRepository.searchPage(
                 req,
                 pageable
         );
@@ -145,8 +145,8 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
                     BeanUtils.copyProperties(tchucReq, tchuc, "id");
                     tchuc.setIdDdiem(ddiem.getId());
                     if (!DataUtils.isNullObject(tchucReq.getFileDinhKems())) {
-                        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(tchucReq.getFileDinhKems()), tchuc.getId(), XhKqBttDtl.TABLE_NAME);
-                        tchuc.setFileDinhKems(fileDinhKem.get(0));
+                        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(tchucReq.getFileDinhKems()), tchuc.getId(), XhKqBttTchuc.TABLE_NAME);
+                        tchuc.setFileDinhKems(fileDinhKems.get(0));
                     }
                     xhKqBttTchucRepository.save(tchuc);
                 }
