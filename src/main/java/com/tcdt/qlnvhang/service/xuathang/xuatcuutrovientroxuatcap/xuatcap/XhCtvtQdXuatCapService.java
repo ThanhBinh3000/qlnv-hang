@@ -5,6 +5,8 @@ import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhCtvtQdXuatCapDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhCtvtQdXuatCapHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQdPdDtlRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQdPdHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcap.SearchXhCtvtQdXuatCap;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhCtvtQdXuatCapDtlReq;
@@ -17,6 +19,7 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhCtvtQdXuatCapDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhCtvtQdXuatCapHdr;
 
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQuyetDinhPdDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQuyetDinhPdHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -40,6 +43,8 @@ public class XhCtvtQdXuatCapService extends BaseServiceImpl {
     private FileDinhKemService fileDinhKemService;
     @Autowired
     private XhCtvtQdXuatCapDtlRepository xhCtvtQdXuatCapDtlRepository;
+    @Autowired
+    private XhCtVtQdPdDtlRepository xhCtVtQdPdDtlRepository;
 
     public Page<XhCtvtQdXuatCapHdr> search(SearchXhCtvtQdXuatCap req, CustomUserDetails currentUser) {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
@@ -121,6 +126,12 @@ public class XhCtvtQdXuatCapService extends BaseServiceImpl {
         }
         XhCtvtQdXuatCapChiTiet data = new XhCtvtQdXuatCapChiTiet();
         BeanUtils.copyProperties(xhCtvtQdXuatCapHdr.get(), data);
+        if (xhCtvtQdXuatCapHdr.get().getQdPaXuatCapId() != null) {
+            data.setQdPaXuatCapId(xhCtvtQdXuatCapHdr.get().getQdPaXuatCapId());
+            List<XhCtVtQuyetDinhPdDtl> listDtl = xhCtVtQdPdDtlRepository.findByIdHdr(xhCtvtQdXuatCapHdr.get().getQdPaXuatCapId());
+            data.setQuyetDinhPdDtl(listDtl);
+            data.setIsChonPhuongAn(true);
+        }
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         data.setTenLoaiVthh(mapVthh.get(data.getLoaiVthh()));
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));

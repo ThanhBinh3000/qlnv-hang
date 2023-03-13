@@ -43,10 +43,7 @@ public class XhCtvtQdXuatCapHdr extends BaseEntity implements Serializable {
     private BigDecimal tongSoLuongThoc;
     private BigDecimal tongSoLuongGao;
     private BigDecimal thanhTien;
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "qdPaXuatCapId")
-    private XhCtVtQuyetDinhPdHdr xhCtVtQuyetDinhPdHdr;
+    private Long qdPaXuatCapId;
 
     @OneToMany(mappedBy = "xhCtvtQdXuatCapHdr", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<XhCtvtQdXuatCapDtl> xhCtvtQdXuatCapDtl = new ArrayList<>();
