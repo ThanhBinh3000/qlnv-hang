@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.response.xuathang.xuatcuutrovientro.xuatcap;
 
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhCtvtQdXuatCapDtlReq;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQuyetDinhPdDtl;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -32,4 +33,7 @@ public class XhCtvtQdXuatCapChiTiet {
     private List<XhCtvtQdXuatCapDtlReq> deXuatPhuongAn;
     private List<FileDinhKem> fileDinhKem;
     private List<FileDinhKem> canCu;
+    private List<XhCtVtQuyetDinhPdDtl> quyetDinhPdDtl;
+    private Boolean isChonPhuongAn;
+    private Long qdPaXuatCapId;
 }

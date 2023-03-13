@@ -51,7 +51,7 @@ public interface XhCtVtQdPdHdrRepository extends JpaRepository<XhCtVtQuyetDinhPd
           "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
           "AND (:#{#param.loaiVthh} IS NULL OR c.loaiVthh = :#{#param.loaiVthh}) " +
           "AND (:#{#param.xuatCap} IS NULL OR c.xuatCap = :#{#param.xuatCap}) " +
-          "AND c.id NOT IN (SELECT d.xhCtVtQuyetDinhPdHdr.id FROM XhCtvtQdXuatCapHdr d WHERE d.xhCtVtQuyetDinhPdHdr.id IS NOT NULL) " +
+          "AND c.id NOT IN (SELECT d.qdPaXuatCapId FROM XhCtvtQdXuatCapHdr d) " +
           "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
   List<XhCtVtQuyetDinhPdHdr> searchQdPaXuatCap(@Param("param") SearchXhCtvtTongHopHdr param);

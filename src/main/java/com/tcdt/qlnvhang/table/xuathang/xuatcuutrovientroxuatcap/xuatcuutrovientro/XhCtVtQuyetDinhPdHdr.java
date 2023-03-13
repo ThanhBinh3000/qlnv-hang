@@ -70,8 +70,4 @@ public class XhCtVtQuyetDinhPdHdr extends BaseEntity implements Serializable {
 
   @OneToMany(mappedBy = "xhCtVtQuyetDinhPdHdr", cascade = CascadeType.MERGE)
   private List<XhCtVtQuyetDinhPdDtl> quyetDinhPdDtl = new ArrayList<>();
-
-  @OneToOne(mappedBy = "xhCtVtQuyetDinhPdHdr")
-  @JsonIgnore
-  private XhCtvtQdXuatCapHdr xhCtvtQdXuatCapHdr;
 }
