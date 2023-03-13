@@ -9,8 +9,8 @@ import com.tcdt.qlnvhang.repository.xuathang.daugia.xuatkho.XhDgPhieuXuatKhoRepo
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.search.xuathang.XhDgPhieuXuatKhoSearchReq;
-import com.tcdt.qlnvhang.request.xuathang.xuatkho.XhDgPhieuXuatKhoReq;
+import com.tcdt.qlnvhang.request.xuathang.daugia.xuatkho.SearchXhDgPhieuXuatKhoReq;
+import com.tcdt.qlnvhang.request.xuathang.daugia.xuatkho.XhDgPhieuXuatKhoReq;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -45,7 +45,7 @@ public class XhDgPhieuXuatKhoService extends BaseServiceImpl {
   @Autowired
   private FileDinhKemService fileDinhKemService;
 
-  public Page<XhDgPhieuXuatKho> searchPage(CustomUserDetails currentUser, XhDgPhieuXuatKhoSearchReq req) throws Exception {
+  public Page<XhDgPhieuXuatKho> searchPage(CustomUserDetails currentUser, SearchXhDgPhieuXuatKhoReq req) throws Exception {
     req.setDvql(currentUser.getDvql());
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<XhDgPhieuXuatKho> search = xhDgPhieuXuatKhoRepository.search(req, pageable);
@@ -221,7 +221,7 @@ public class XhDgPhieuXuatKhoService extends BaseServiceImpl {
     return created;
   }
 
-  public void export(CustomUserDetails currentUser, XhDgPhieuXuatKhoSearchReq objReq, HttpServletResponse response) throws Exception {
+  public void export(CustomUserDetails currentUser, SearchXhDgPhieuXuatKhoReq objReq, HttpServletResponse response) throws Exception {
     PaggingReq paggingReq = new PaggingReq();
     paggingReq.setPage(0);
     paggingReq.setLimit(Integer.MAX_VALUE);

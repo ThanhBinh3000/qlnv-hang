@@ -1,7 +1,7 @@
 package com.tcdt.qlnvhang.repository.xuathang.daugia.xuatkho;
 
 import com.tcdt.qlnvhang.entities.xuathang.daugia.xuatkho.XhDgBangKeHdr;
-import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.SearchXhCtvtBangKeReq;
+import com.tcdt.qlnvhang.request.xuathang.daugia.xuatkho.SearchXhDgBangKeReq;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -27,7 +27,7 @@ public interface XhDgBangKeHdrRepository extends JpaRepository<XhDgBangKeHdr, Lo
       "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
       "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
-  Page<XhDgBangKeHdr> search(@Param("param") SearchXhCtvtBangKeReq param, Pageable pageable);
+  Page<XhDgBangKeHdr> search(@Param("param") SearchXhDgBangKeReq param, Pageable pageable);
 
   Optional<XhDgBangKeHdr> findBySoBangKe(String str);
 

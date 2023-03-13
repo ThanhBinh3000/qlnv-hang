@@ -12,8 +12,8 @@ import com.tcdt.qlnvhang.repository.xuathang.daugia.xuatkho.XhDgPhieuXuatKhoRepo
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.SearchXhCtvtBangKeReq;
-import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBangKeReq;
+import com.tcdt.qlnvhang.request.xuathang.daugia.xuatkho.SearchXhDgBangKeReq;
+import com.tcdt.qlnvhang.request.xuathang.daugia.xuatkho.XhDgBangKeReq;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.util.Contains;
@@ -55,7 +55,7 @@ public class XhDgBangKeService extends BaseServiceImpl {
   @Autowired
   private FileDinhKemService fileDinhKemService;
 
-  public Page<XhDgBangKeHdr> searchPage(CustomUserDetails currentUser, SearchXhCtvtBangKeReq req) throws Exception {
+  public Page<XhDgBangKeHdr> searchPage(CustomUserDetails currentUser, SearchXhDgBangKeReq req) throws Exception {
     req.setDvql(currentUser.getDvql());
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<XhDgBangKeHdr> search = xhDgBangKeHdrRepository.search(req, pageable);
@@ -91,7 +91,7 @@ public class XhDgBangKeService extends BaseServiceImpl {
   }
 
   @Transactional
-  public XhDgBangKeHdr save(CustomUserDetails currentUser, XhCtvtBangKeReq objReq) throws Exception {
+  public XhDgBangKeHdr save(CustomUserDetails currentUser, XhDgBangKeReq objReq) throws Exception {
     if (currentUser == null) {
       throw new Exception("Bad request.");
     }
@@ -122,7 +122,7 @@ public class XhDgBangKeService extends BaseServiceImpl {
   }
 
   @Transactional
-  public XhDgBangKeHdr update(CustomUserDetails currentUser, XhCtvtBangKeReq objReq) throws Exception {
+  public XhDgBangKeHdr update(CustomUserDetails currentUser, XhDgBangKeReq objReq) throws Exception {
     if (currentUser == null) {
       throw new Exception("Bad request.");
     }
@@ -262,7 +262,7 @@ public class XhDgBangKeService extends BaseServiceImpl {
     return created;
   }
 
-  public void export(CustomUserDetails currentUser, SearchXhCtvtBangKeReq objReq, HttpServletResponse response) throws Exception {
+  public void export(CustomUserDetails currentUser, SearchXhDgBangKeReq objReq, HttpServletResponse response) throws Exception {
     PaggingReq paggingReq = new PaggingReq();
     paggingReq.setPage(0);
     paggingReq.setLimit(Integer.MAX_VALUE);

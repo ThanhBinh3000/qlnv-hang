@@ -7,8 +7,8 @@ import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.search.xuathang.XhDgPhieuXuatKhoSearchReq;
-import com.tcdt.qlnvhang.request.xuathang.xuatkho.XhDgPhieuXuatKhoReq;
+import com.tcdt.qlnvhang.request.xuathang.daugia.xuatkho.SearchXhDgPhieuXuatKhoReq;
+import com.tcdt.qlnvhang.request.xuathang.daugia.xuatkho.XhDgPhieuXuatKhoReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.xuathang.daugia.xuatkho.XhDgPhieuXuatKhoService;
 import com.tcdt.qlnvhang.util.PathContains;
@@ -42,7 +42,7 @@ public class XhDgPhieuXuatKhoController extends BaseController {
   @ApiOperation(value = "Tra cứu thông tin đề xuất", response = List.class)
   @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser, @RequestBody XhDgPhieuXuatKhoSearchReq objReq) {
+  public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser, @RequestBody SearchXhDgPhieuXuatKhoReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
       resp.setData(xhDgPhieuXuatKhoService.searchPage(currentUser, objReq));
@@ -163,7 +163,7 @@ public class XhDgPhieuXuatKhoController extends BaseController {
   @ApiOperation(value = "Kết xuất danh sách mua", response = List.class)
   @PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public void exportList(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhDgPhieuXuatKhoSearchReq objReq, HttpServletResponse response) throws Exception {
+  public void exportList(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody SearchXhDgPhieuXuatKhoReq objReq, HttpServletResponse response) throws Exception {
     try {
       xhDgPhieuXuatKhoService.export(currentUser, objReq, response);
 

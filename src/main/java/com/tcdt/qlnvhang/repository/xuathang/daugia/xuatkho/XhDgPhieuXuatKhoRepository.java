@@ -1,7 +1,7 @@
 package com.tcdt.qlnvhang.repository.xuathang.daugia.xuatkho;
 
 import com.tcdt.qlnvhang.entities.xuathang.daugia.xuatkho.XhDgPhieuXuatKho;
-import com.tcdt.qlnvhang.request.search.xuathang.XhDgPhieuXuatKhoSearchReq;
+import com.tcdt.qlnvhang.request.xuathang.daugia.xuatkho.SearchXhDgPhieuXuatKhoReq;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -27,7 +27,7 @@ public interface XhDgPhieuXuatKhoRepository extends JpaRepository<XhDgPhieuXuatK
       "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
       "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
-  Page<XhDgPhieuXuatKho> search(@Param("param") XhDgPhieuXuatKhoSearchReq param, Pageable pageable);
+  Page<XhDgPhieuXuatKho> search(@Param("param") SearchXhDgPhieuXuatKhoReq param, Pageable pageable);
 
   Optional<XhDgPhieuXuatKho> findBySoPhieuXuatKho(String soPhieuXuatKho);
 
