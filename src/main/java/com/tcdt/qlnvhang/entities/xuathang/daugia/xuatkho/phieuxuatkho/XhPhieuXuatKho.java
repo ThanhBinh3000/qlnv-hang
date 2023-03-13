@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.entities.xuathang.phieuxuatkho;
+package com.tcdt.qlnvhang.entities.xuathang.daugia.xuatkho.phieuxuatkho;
 
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -7,8 +7,6 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +75,4 @@ public class XhPhieuXuatKho extends TrangThaiBaseEntity implements Serializable 
 
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
-
-    @Transient
-    private List<XhPhieuXuatKhoCt> ds = new ArrayList<>();
 }
