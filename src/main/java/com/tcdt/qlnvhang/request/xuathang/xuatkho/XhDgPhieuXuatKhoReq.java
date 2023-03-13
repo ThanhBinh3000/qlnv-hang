@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.request.xuathang.xuatkho;
 
-import com.tcdt.qlnvhang.entities.xuathang.daugia.xuatkho.XhDgBbTinhKhoDtl;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import lombok.Data;
 
@@ -10,13 +9,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class XhDgBbTinhKhoHdrReq {
+public class XhDgPhieuXuatKhoReq {
   private Long id;
   private Integer nam;
   private String maDvi;
   private String maQhNs;
-  private String soBbTinhKho;
-  private LocalDate ngayTaoBb;
+  private String soPhieuXuatKho;
+  private LocalDate ngayTaoPhieu;
+  private LocalDate ngayXuatKho;
+  private BigDecimal taiKhoanNo;
+  private BigDecimal taiKhoanCo;
   private Long idQdGiaoNvXh;
   private String soQdGiaoNvXh;
   private LocalDate ngayQdGiaoNvXh;
@@ -24,24 +26,29 @@ public class XhDgBbTinhKhoHdrReq {
   private String maNhaKho;
   private String maNganKho;
   private String maLoKho;
+  private Long idPhieuKnCl;
+  private String soPhieuKnCl;
+  private LocalDate ngayKn;
   private String loaiVthh;
   private String cloaiVthh;
   private String moTaHangHoa;
-  private LocalDate ngayBatDauXuat;
-  private LocalDate ngayKetThucXuat;
-  private BigDecimal tongSlNhap;
-  private BigDecimal tongSlXuat;
-  private BigDecimal slConLai;
-  private BigDecimal slThucTeCon;
-  private BigDecimal slThua;
-  private BigDecimal slThieu;
-  private String nguyenNhan;
-  private String kienNghi;
-  private String ghiChu;
-  private String thuKho;
-  private String ktvBaoQuan;
-  private String keToan;
+  private String canBoLapPhieu;
   private String ldChiCuc;
+  private String ktvBaoQuan;
+  private String keToanTruong;
+  private String nguoiGiaoHang;
+  private String soCmt;
+  private String ctyNguoiGh;
+  private String diaChi;
+  private LocalDate thoiGianGiaoNhan;
+  private String soBangKeCh;
+  private String maSo;
+  private String donViTinh;
+  private String theoChungTu;
+  private BigDecimal thucXuat;
+  private String donGia;
+  private String thanhTien;
+  private String ghiChu;
   private String trangThai;
   private LocalDate ngayGduyet;
   private Long nguoiGduyetId;
@@ -50,5 +57,4 @@ public class XhDgBbTinhKhoHdrReq {
   private String lyDoTuChoi;
   private String type;
   private List<FileDinhKemReq> fileDinhKems =new ArrayList<>();
-  private List<XhDgBbTinhKhoDtl> listPhieuXuatKho= new ArrayList<>();
 }

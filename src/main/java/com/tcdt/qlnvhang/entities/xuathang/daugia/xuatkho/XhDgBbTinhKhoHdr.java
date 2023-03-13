@@ -1,9 +1,7 @@
-package com.tcdt.qlnvhang.entities.xuathang.phieuxuatkho;
-
+package com.tcdt.qlnvhang.entities.xuathang.daugia.xuatkho;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBbHaoDoiDtl;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -14,22 +12,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = XhDgBbHaoDoiHdr.TABLE_NAME)
+@Table(name = XhDgBbTinhKhoHdr.TABLE_NAME)
 @Data
-public class XhDgBbHaoDoiHdr extends BaseEntity implements Serializable {
+public class XhDgBbTinhKhoHdr extends BaseEntity implements Serializable {
 
   private static final long serialVersionUID = 1L;
-  public static final String TABLE_NAME = "XH_DG_BB_HAO_DOI_HDR";
+  public static final String TABLE_NAME = "XH_DG_BB_TINH_KHO_HDR";
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhDgBbHaoDoiHdr.TABLE_NAME + "_SEQ")
-  @SequenceGenerator(sequenceName = XhDgBbHaoDoiHdr.TABLE_NAME
-      + "_SEQ", allocationSize = 1, name = XhDgBbHaoDoiHdr.TABLE_NAME + "_SEQ")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhDgBbTinhKhoHdr.TABLE_NAME + "_SEQ")
+  @SequenceGenerator(sequenceName = XhDgBbTinhKhoHdr.TABLE_NAME
+      + "_SEQ", allocationSize = 1, name = XhDgBbTinhKhoHdr.TABLE_NAME + "_SEQ")
   private Long id;
   private Integer nam;
   private String maDvi;
   private String maQhNs;
-  private String soBbHaoDoi;
+  private String soBbTinhKho;
   private LocalDate ngayTaoBb;
   private Long idQdGiaoNvXh;
   private String soQdGiaoNvXh;
@@ -41,24 +39,14 @@ public class XhDgBbHaoDoiHdr extends BaseEntity implements Serializable {
   private String loaiVthh;
   private String cloaiVthh;
   private String moTaHangHoa;
-  private Long idBbTinhKho;
-  private String soBbTinhKho;
   private LocalDate ngayBatDauXuat;
   private LocalDate ngayKetThucXuat;
   private BigDecimal tongSlNhap;
-  private LocalDate ngayKtNhap;
   private BigDecimal tongSlXuat;
-  private LocalDate ngayKtXuat;
-  private BigDecimal slHaoThucTe;
-  private String tiLeHaoThucTe;
-  private BigDecimal slHaoThanhLy;
-  private String tiLeHaoThanhLy;
-  private BigDecimal slHaoVuotDm;
-  private String tiLeHaoVuotDm;
-  private BigDecimal slHaoDuoiDm;
-  private String tiLeHaoDuoiDm;
-  private String dinhMucHaoHut;
-  private BigDecimal sLHaoHutTheoDm;
+  private BigDecimal slConLai;
+  private BigDecimal slThucTeCon;
+  private BigDecimal slThua;
+  private BigDecimal slThieu;
   private String nguyenNhan;
   private String kienNghi;
   private String ghiChu;
@@ -92,7 +80,7 @@ public class XhDgBbHaoDoiHdr extends BaseEntity implements Serializable {
   @Transient
   private String tenLoKho;
   @Transient
-  private List<FileDinhKem> fileDinhKems = new ArrayList<>();
-  @Transient
-  private List<XhDgBbHaoDoiDtl> listPhieuXuatKho = new ArrayList<>();
+  private List<FileDinhKem> fileDinhKems =new ArrayList<>();
+  @OneToMany(mappedBy = "xhCtvtBbTinhKhoHdr", fetch = FetchType.LAZY)
+  private List<XhDgBbTinhKhoDtl> listPhieuXuatKho= new ArrayList<>();
 }

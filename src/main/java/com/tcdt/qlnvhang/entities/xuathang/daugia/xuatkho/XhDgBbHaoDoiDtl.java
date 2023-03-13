@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.entities.xuathang.phieuxuatkho;
+package com.tcdt.qlnvhang.entities.xuathang.daugia.xuatkho;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import lombok.Data;

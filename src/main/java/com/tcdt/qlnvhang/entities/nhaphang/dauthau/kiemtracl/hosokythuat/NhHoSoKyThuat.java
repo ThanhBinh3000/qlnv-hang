@@ -55,6 +55,11 @@ public class NhHoSoKyThuat extends TrangThaiBaseEntity implements Serializable {
     @Column(name = "NAM")
     private Integer nam;
 
+    //bo sung cot cho ktcl xuat kho
+    private Integer idBbLayMauXuat;
+
+    private Boolean kqKiemTra;
+
     @Transient
     private List<NhHoSoKyThuatCt> children = new ArrayList<>();
 

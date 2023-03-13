@@ -1,8 +1,8 @@
 package com.tcdt.qlnvhang.service.xuathang.daugia.xuatkho;
 
 import com.google.common.collect.Lists;
-import com.tcdt.qlnvhang.entities.xuathang.phieuxuatkho.XhDgBbTinhKhoDtl;
-import com.tcdt.qlnvhang.entities.xuathang.phieuxuatkho.XhDgBbTinhKhoHdr;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.xuatkho.XhDgBbTinhKhoDtl;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.xuatkho.XhDgBbTinhKhoHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;

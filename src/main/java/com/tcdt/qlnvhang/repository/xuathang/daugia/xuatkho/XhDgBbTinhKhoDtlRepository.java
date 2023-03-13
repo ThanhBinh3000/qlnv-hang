@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.repository.xuathang.daugia.xuatkho;
 
-import com.tcdt.qlnvhang.entities.xuathang.phieuxuatkho.XhDgBbTinhKhoDtl;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.xuatkho.XhDgBbTinhKhoDtl;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
