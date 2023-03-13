@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -40,21 +42,9 @@ public class HoSoKyThuatDTO {
 
   private String tenDvi;
 
-  public HoSoKyThuatDTO(Long id, Long idQdGiaoNvNh, String soQdGiaoNvNh, String soBbLayMau, String soHd, String maDvi, String soHoSoKyThuat, Integer nam, Integer idBbLayMauXuat, Boolean kqKiemTra, String loaiNhap) {
-    this.id = id;
-    this.idQdGiaoNvNh = idQdGiaoNvNh;
-    this.soQdGiaoNvNh = soQdGiaoNvNh;
-    this.soBbLayMau = soBbLayMau;
-    this.soHd = soHd;
-    this.maDvi = maDvi;
-    this.soHoSoKyThuat = soHoSoKyThuat;
-    this.nam = nam;
-    this.idBbLayMauXuat = idBbLayMauXuat;
-    this.kqKiemTra = kqKiemTra;
-    this.loaiNhap = loaiNhap;
-  }
+  private Date ngayTao;
 
-  public HoSoKyThuatDTO(Long id, Long idQdGiaoNvNh, String soQdGiaoNvNh, String soBbLayMau, String soHd, String maDvi, String soHoSoKyThuat, Integer nam, Integer idBbLayMauXuat, Boolean kqKiemTra, String loaiNhap, String maDiemKho, String maNhaKho, String maNganKho, String maLoKho) {
+  public HoSoKyThuatDTO(Long id, Long idQdGiaoNvNh, String soQdGiaoNvNh, String soBbLayMau, String soHd, String maDvi, String soHoSoKyThuat, Integer nam, Integer idBbLayMauXuat, Boolean kqKiemTra, String loaiNhap, String maDiemKho, String maNhaKho, String maNganKho, String maLoKho, Date ngayTao) {
     this.id = id;
     this.idQdGiaoNvNh = idQdGiaoNvNh;
     this.soQdGiaoNvNh = soQdGiaoNvNh;
@@ -70,5 +60,6 @@ public class HoSoKyThuatDTO {
     this.maNhaKho = maNhaKho;
     this.maNganKho = maNganKho;
     this.maLoKho = maLoKho;
+    this.ngayTao = ngayTao;
   }
 }
