@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.entities.xuathang.bantructiep.nhiemvuxuat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.bienbanlaymau.XhBbLayMauBttHdr;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
@@ -36,6 +37,10 @@ public class XhQdNvXhBttHdr extends TrangThaiBaseEntity implements Serializable 
     private Long idHd;
 
     private String soHd;
+
+    @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayHd;
 
     private Long idQdPdKh;
 
@@ -79,4 +84,7 @@ public class XhQdNvXhBttHdr extends TrangThaiBaseEntity implements Serializable 
 
     @Transient
     private FileDinhKem fileDinhKem;
+
+    @Transient
+    private List<XhBbLayMauBttHdr> xhBbLayMauBttHdrList = new ArrayList<>();
 }

@@ -2,12 +2,14 @@ package com.tcdt.qlnvhang.service.xuathang.bantructiep.nhiemvuxuat;
 
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdr;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.bienbanlaymau.XhBbLayMauBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttDvi;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.hopdong.XhHopDongBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.ktracluong.bienbanlaymau.XhBbLayMauBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttDviRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttHdrRepository;
@@ -60,6 +62,9 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
     @Autowired
     private XhQdPdKhBttHdrRepository xhQdPdKhBttHdrRepository;
 
+    @Autowired
+    private XhBbLayMauBttHdrRepository xhBbLayMauBttHdrRepository;
+
 
     @Override
     public Page<XhQdNvXhBttHdr> searchPage(XhQdNvXhBttHdrReq req) throws Exception {
@@ -73,6 +78,19 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
 
         data.getContent().forEach(f ->{
+            // Set biên bản lấy mẫu
+            List<XhBbLayMauBttHdr> allByIdQd = xhBbLayMauBttHdrRepository.findAllByIdQd(f.getId());
+            allByIdQd.forEach(x ->{
+                x.setTenLoaiVthh(hashMapVthh.get(x.getLoaiVthh()));
+                x.setTenCloaiVthh(hashMapVthh.get(x.getCloaiVthh()));
+                x.setTenDiemKho(hashMapDvi.get(x.getMaDiemKho()));
+                x.setTenNhaKho(hashMapDvi.get(x.getMaNganKho()));
+                x.setTenNganKho(hashMapDvi.get(x.getMaNganKho()));
+                x.setTenLoKho(hashMapDvi.get(x.getMaLoKho()));
+            });
+            f.setXhBbLayMauBttHdrList(allByIdQd);
+
+
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenTrangThaiXh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiXh()));
             f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : hashMapDvi.get(f.getMaDvi()));
