@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.xuathang.bantructiep.nhiemvuxuat;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.bienbanlaymau.XhBbLayMauBttHdr;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.phieuktracluong.XhPhieuKtraCluongBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttDvi;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttHdr;
@@ -10,6 +11,7 @@ import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.hopdong.XhHopDongBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.ktracluong.bienbanlaymau.XhBbLayMauBttHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.ktracluong.phieuktracluong.XhPhieuKtraCluongBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttDviRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttHdrRepository;
@@ -65,6 +67,9 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
     @Autowired
     private XhBbLayMauBttHdrRepository xhBbLayMauBttHdrRepository;
 
+    @Autowired
+    private XhPhieuKtraCluongBttHdrRepository xhPhieuKtraCluongBttHdrRepository;
+
 
     @Override
     public Page<XhQdNvXhBttHdr> searchPage(XhQdNvXhBttHdrReq req) throws Exception {
@@ -90,6 +95,17 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
             });
             f.setXhBbLayMauBttHdrList(allByIdQd);
 
+            // Set kiểm tra chất lượng
+            List<XhPhieuKtraCluongBttHdr> xhPhieuKtraCluongBttHdrList = xhPhieuKtraCluongBttHdrRepository.findAllByIdQd(f.getId());
+            xhPhieuKtraCluongBttHdrList.forEach(s ->{
+                s.setTenLoaiVthh(hashMapVthh.get(s.getLoaiVthh()));
+                s.setTenCloaiVthh(hashMapVthh.get(s.getCloaiVthh()));
+                s.setTenDiemKho(hashMapDvi.get(s.getMaDiemKho()));
+                s.setTenNhaKho(hashMapDvi.get(s.getMaNganKho()));
+                s.setTenNganKho(hashMapDvi.get(s.getMaNganKho()));
+                s.setTenLoKho(hashMapDvi.get(s.getMaLoKho()));
+            });
+            f.setXhPhieuKtraCluongBttHdrList(xhPhieuKtraCluongBttHdrList);
 
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenTrangThaiXh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiXh()));

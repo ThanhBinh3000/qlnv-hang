@@ -15,7 +15,7 @@ import java.util.List;
 public interface XhQdNvXhBttHdrRepository extends JpaRepository<XhQdNvXhBttHdr, Long> {
 
 
-    @Query("SELECT  QD FROM XhQdNvXhBttHdr QD " +
+    @Query("SELECT DISTINCT QD FROM XhQdNvXhBttHdr QD " +
             " LEFT JOIN XhQdNvXhBttDtl DTL on QD.id = DTL.idQdHdr " +
             "LEFT JOIN XhBbLayMauBttHdr BBLM on QD.id = BBLM.idQd" +
             " WHERE 1 = 1 " +

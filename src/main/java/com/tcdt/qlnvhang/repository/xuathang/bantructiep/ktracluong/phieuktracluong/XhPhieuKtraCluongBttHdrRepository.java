@@ -1,7 +1,7 @@
-package com.tcdt.qlnvhang.repository.xuathang.bantructiep.ktracluong.bienbanlaymau;
+package com.tcdt.qlnvhang.repository.xuathang.bantructiep.ktracluong.phieuktracluong;
 
-import com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.bienbanlaymau.XhBbLayMauBttHdr;
-import com.tcdt.qlnvhang.request.xuathang.bantructiep.ktracluong.bienbanlaymau.XhBbLayMauBttHdrReq;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.phieuktracluong.XhPhieuKtraCluongBttHdr;
+import com.tcdt.qlnvhang.request.xuathang.bantructiep.ktracluong.phieuktracluong.XhPhieuKtraCluongBttHdrReq;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,18 +13,18 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface XhBbLayMauBttHdrRepository extends JpaRepository<XhBbLayMauBttHdr, Long> {
+public interface XhPhieuKtraCluongBttHdrRepository extends JpaRepository<XhPhieuKtraCluongBttHdr ,Long> {
 
-    @Query("SELECT c FROM XhBbLayMauBttHdr c " +
+    @Query("SELECT c FROM XhPhieuKtraCluongBttHdr c " +
             " WHERE 1 = 1 " +
             "AND (:#{#param.maDvi} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDvi},'%')) " +
             "AND (:#{#param.namKh} IS NULL OR c.namKh = :#{#param.namKh}) " +
             "AND (:#{#param.loaiVthh } IS NULL OR LOWER(c.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
             "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) "
     )
-    Page<XhBbLayMauBttHdr> searchPage(@Param("param") XhBbLayMauBttHdrReq param, Pageable pageable);
+    Page<XhPhieuKtraCluongBttHdr> searchPage(@Param("param") XhPhieuKtraCluongBttHdrReq param, Pageable pageable);
 
-    List<XhBbLayMauBttHdr> findAllByIdQd(Long idQd);
+    Optional<XhPhieuKtraCluongBttHdr> findBySoPhieu(String soPhieu);
 
-    Optional<XhBbLayMauBttHdr> findBySoBienBan(String soBienBan);
+    List<XhPhieuKtraCluongBttHdr> findAllByIdQd(Long idQd);
 }

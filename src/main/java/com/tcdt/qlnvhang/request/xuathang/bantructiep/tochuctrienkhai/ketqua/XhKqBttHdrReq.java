@@ -63,4 +63,6 @@ public class XhKqBttHdrReq extends BaseRequest  {
 
     @Transient
     private List<XhKqBttDtlReq> children = new ArrayList<>();
+
+    private String maChiCuc;
 }
