@@ -7,6 +7,8 @@ import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.xuathang.daugia.xuatkho.SearchXhDgBangKeReq;
+import com.tcdt.qlnvhang.request.xuathang.daugia.xuatkho.XhDgBangKeReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.xuathang.daugia.xuatkho.XhDgBangKeService;
 import com.tcdt.qlnvhang.util.PathContains;
@@ -33,7 +35,7 @@ import java.util.Map;
 
 public class XhDgBangKeController extends BaseController {
 
-  /*@Autowired
+  @Autowired
   XhDgBangKeService xhDgBangKeService;
 //  XhCtvtBangKeHdr
 
@@ -179,5 +181,5 @@ public class XhDgBangKeController extends BaseController {
       mapper.writeValue(response.getOutputStream(), body);
 
     }
-  }*/
+  }
 }

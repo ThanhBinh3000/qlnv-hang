@@ -11,9 +11,9 @@ import com.tcdt.qlnvhang.repository.xuathang.daugia.xuatkho.XhDgBbHaoDoiHdrRepos
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.xuathang.xuatkho.SearchXhDgBbHaoDoi;
-import com.tcdt.qlnvhang.request.xuathang.xuatkho.XhDgBbHaoDoiDtlReq;
-import com.tcdt.qlnvhang.request.xuathang.xuatkho.XhDgBbHaoDoiHdrReq;
+import com.tcdt.qlnvhang.request.xuathang.daugia.xuatkho.SearchXhDgBbHaoDoi;
+import com.tcdt.qlnvhang.request.xuathang.daugia.xuatkho.XhDgBbHaoDoiDtlReq;
+import com.tcdt.qlnvhang.request.xuathang.daugia.xuatkho.XhDgBbHaoDoiHdrReq;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;

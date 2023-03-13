@@ -1,7 +1,7 @@
 package com.tcdt.qlnvhang.repository.xuathang.daugia.xuatkho;
 
 import com.tcdt.qlnvhang.entities.xuathang.daugia.xuatkho.XhDgBbTinhKhoHdr;
-import com.tcdt.qlnvhang.request.xuathang.xuatkho.SearchXhDgBbTinhKho;
+import com.tcdt.qlnvhang.request.xuathang.daugia.xuatkho.SearchXhDgBbTinhKho;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,7 +1,6 @@
-package com.tcdt.qlnvhang.request.xuathang.xuatkho;
+package com.tcdt.qlnvhang.request.xuathang.daugia.xuatkho;
 
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBbHaoDoiDtlReq;
 import lombok.Data;
 
 import java.math.BigDecimal;
