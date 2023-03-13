@@ -17,7 +17,7 @@ import java.util.Optional;
 public interface XhCtvtHoSoKyThuatRepository extends JpaRepository<NhHoSoKyThuat, Long> {
 
   @Query("SELECT new com.tcdt.qlnvhang.response.xuathang.xuatcuutrovientro.cuutro.HoSoKyThuatDTO(" +
-      "hs.id, hs.idQdGiaoNvNh , hs.soQdGiaoNvNh , hs.soBbLayMau , hs.soHd , hs.maDvi , hs.soHoSoKyThuat , hs.nam , hs.idBbLayMauXuat , hs.kqKiemTra , 'DT' , bb.maDiemKho , bb.maNhaKho , bb.maNganKho , bb.maLoKho) " +
+      "hs.id, hs.idQdGiaoNvNh , hs.soQdGiaoNvNh , hs.soBbLayMau , hs.soHd , hs.maDvi , hs.soHoSoKyThuat , hs.nam , hs.idBbLayMauXuat , hs.kqKiemTra , 'DT' , bb.maDiemKho , bb.maNhaKho , bb.maNganKho , bb.maLoKho, hs.ngayTao) " +
       "FROM NhHoSoKyThuat hs,BienBanLayMau bb WHERE 1=1 " +
       "AND hs.soBbLayMau = bb.soBienBan"
       /* "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
