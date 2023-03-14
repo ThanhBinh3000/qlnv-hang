@@ -1,9 +1,7 @@
 package com.tcdt.qlnvhang.repository.xuathang.daugia.ktracluong.kiemnghiemcl;
 
-import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMau;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.phieukiemnghiemcl.XhPhieuKnghiemCluong;
 import com.tcdt.qlnvhang.repository.BaseRepository;
-import com.tcdt.qlnvhang.request.bandaugia.bienbanlaymau.XhBbLayMauRequest;
 import com.tcdt.qlnvhang.request.xuathang.phieukiemnghiemchatluong.XhPhieuKnghiemCluongReq;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +19,7 @@ import java.util.Optional;
 public interface XhPhieuKnghiemCluongRepository extends BaseRepository<XhPhieuKnghiemCluong, Long> {
 
 
-    @Query("SELECT c FROM XhBbLayMau c " +
+    @Query("SELECT c FROM XhPhieuKnghiemCluong c " +
             " WHERE 1 = 1 " +
             "AND (:#{#param.maDvi} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDvi},'%')) " +
             "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +

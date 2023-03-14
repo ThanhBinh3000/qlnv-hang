@@ -27,7 +27,7 @@ import java.util.List;
 public class XhPhieuKnghiemCluong extends TrangThaiBaseEntity implements Serializable {
 
     private static final long serialVersionUID = -1315211820556764708L;
-
+  
     @Id
 //    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_PHIEU_KNGHIEM_CLUONG_SEQ")
 //    @SequenceGenerator(sequenceName = "XH_PHIEU_KNGHIEM_CLUONG_SEQ", allocationSize = 1, name = "XH_PHIEU_KNGHIEM_CLUONG_SEQ")
