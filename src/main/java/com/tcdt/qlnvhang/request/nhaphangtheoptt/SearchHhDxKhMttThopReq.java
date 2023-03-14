@@ -23,6 +23,6 @@ public class SearchHhDxKhMttThopReq extends BaseRequest {
     String loaiVthh;
     String cloaiVthh;
     String TrangThai;
-    String noiDung;
+    String noiDungThop;
 
 }

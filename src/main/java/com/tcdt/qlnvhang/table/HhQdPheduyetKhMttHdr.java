@@ -2,12 +2,10 @@ package com.tcdt.qlnvhang.table;
 
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhChiTietTTinChaoGia;
 import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -102,16 +100,6 @@ public class HhQdPheduyetKhMttHdr implements Serializable {
 
     @Transient
      private  HhQdPheduyetKhMttDx hhQdPheduyetKhMttDxList;
-
-
-//    @Transient
-//    private List<HhChiTietTTinChaoGia> hhChiTietTTinChaoGiaList = new ArrayList<>();
-//
-//    @Transient
-//    private List<FileDinhKem> fileDinhKemUyQuyen = new ArrayList<>();
-//
-//    @Transient
-//    private List<FileDinhKem> fileDinhKemMuaLe = new ArrayList<>();
 
     public String getTenTrangThai() {
         return NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(this.getTrangThai());

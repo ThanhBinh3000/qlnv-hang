@@ -44,8 +44,8 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
     @Autowired
     private HhQdPheduyetKhMttSLDDRepository hhQdPheduyetKhMttSLDDRepository;
 
-@Autowired
-private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
+    @Autowired
+    private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
 
     @Autowired
     FileDinhKemService fileDinhKemService;
@@ -126,7 +126,7 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
             hhDxuatKhMttThopRepository.updateTrangThai(dataMap.getIdThHdr(), Contains.DADUTHAO_QD);
             hhDxuatKhMttThopRepository.updateSoQdPduyet(dataMap.getIdThHdr(), dataMap.getSoQd());
         }else{
-            hhDxuatKhMttRepository.updateStatusInList(Arrays.asList(objReq.getSoTrHdr()), Contains.DADUTHAO_QD);
+//            hhDxuatKhMttRepository.updateStatusInList(Arrays.asList(objReq.getSoTrHdr()), Contains.DADUTHAO_QD),objReq.getIdTrHdr();
             hhDxuatKhMttRepository.updateSoQdPduyet(Arrays.asList(objReq.getSoTrHdr()), dataMap.getSoQd());
         }
 
@@ -285,7 +285,7 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
         if (optional.get().getPhanLoai().equals("TH")){
             hhDxuatKhMttThopRepository.updateTrangThai(optional.get().getIdThHdr(), NhapXuatHangTrangThaiEnum.CHUATAO_QD.getId());
         }else {
-            hhDxuatKhMttRepository.updateStatusInList(Arrays.asList(optional.get().getSoTrHdr()), NhapXuatHangTrangThaiEnum.CHUATONGHOP.getId());
+//            hhDxuatKhMttRepository.updateStatusInList(Arrays.asList(optional.get().getSoTrHdr()), NhapXuatHangTrangThaiEnum.CHUATONGHOP.getId());
         }
     }
 
@@ -356,7 +356,7 @@ private HhCtietTtinCgiaRepository hhCtietTtinCgiaRepository;
                         throw new Exception("Đề xuất này đã được quyết định");
                     }
                     // Update trạng thái tờ trình
-                    hhDxuatKhMttRepository.updateStatusInList(Arrays.asList(dataDB.getSoTrHdr()), Contains.DABANHANH_QD);
+                    hhDxuatKhMttRepository.updateStatusInList(Arrays.asList(dataDB.getSoTrHdr()), Contains.DABANHANH_QD, dataDB.getIdTrHdr());
                 }else{
                     throw new Exception("Số tờ trình kế hoạch không được tìm thấy");
                 }

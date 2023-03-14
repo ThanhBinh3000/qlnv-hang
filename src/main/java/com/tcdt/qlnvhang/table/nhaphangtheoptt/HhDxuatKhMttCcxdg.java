@@ -1,14 +1,8 @@
 package com.tcdt.qlnvhang.table.nhaphangtheoptt;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.tcdt.qlnvhang.entities.FileDKemJoinDxKhLcntCcxdg;
-import com.tcdt.qlnvhang.entities.FileDKemJoinDxKhLcntHdr;
 import com.tcdt.qlnvhang.entities.FileDKemJoinDxKhMttCcxdg;
-import com.tcdt.qlnvhang.entities.FileDKemJoinDxKhMttHdr;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxKhlcntDsgthau;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntCcxdgDtl;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdr;
-import com.tcdt.qlnvhang.table.FileDinhKem;
+
 import lombok.Data;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -30,7 +24,7 @@ public class HhDxuatKhMttCcxdg implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_DX_KHMTT_CCXDG_SEQ")
     @SequenceGenerator(sequenceName = "HH_DX_KHMTT_CCXDG_SEQ", allocationSize = 1, name = "HH_DX_KHMTT_CCXDG_SEQ")
     private Long id;
-    private Long idDxKhmtt;
+    private Long idHdr;
 
     private String tenTlieu;
     private String loaiCanCu;

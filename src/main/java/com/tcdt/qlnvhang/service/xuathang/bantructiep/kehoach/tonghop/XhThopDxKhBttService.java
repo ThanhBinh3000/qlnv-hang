@@ -41,17 +41,11 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
     @Autowired
     private XhThopDxKhBttDtlRepository xhThopDxKhBttDtlRepository;
 
-    public Page<XhThopDxKhBttHdr> searchPage (SearchXhThopDxKhBtt objReq) throws Exception{
-        Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),
-                objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
+    public Page<XhThopDxKhBttHdr> searchPage (SearchXhThopDxKhBtt req) throws Exception{
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),
+                req.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<XhThopDxKhBttHdr> data = xhThopDxKhBttRepository.searchPage(
-                objReq.getNamKh(),
-                objReq.getLoaiVthh(),
-                objReq.getCloaiVthh(),
-                objReq.getNoiDungThop(),
-                convertDateToString(objReq.getNgayThopTu()),
-                convertDateToString(objReq.getNgayThopDen()),
-                objReq.getTrangThai(),
+                req,
                 pageable);
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         data.getContent().forEach(f->{
