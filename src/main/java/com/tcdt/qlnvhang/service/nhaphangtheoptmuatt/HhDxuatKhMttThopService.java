@@ -41,28 +41,16 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
     private HhDxuatKhMttRepository hhDxuatKhMttRepository;
 
     @Autowired
-    private HhDxuatKhMttSlddRepository hhDxuatKhMttSlddRepository;
-
-    @Autowired
     private HhDxuatKhMttThopDtlRepository hhDxuatKhMttThopDtlRepository;
 
-    @Autowired
-    private HhDxuatKhMttCcxdgRepository hhDxuatKhMttCcxdgRepository;
 
 
-    public Page<HhDxKhMttThopHdr> searchPage(SearchHhDxKhMttThopReq objReq) throws Exception {
-        Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),
-                objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
+
+    public Page<HhDxKhMttThopHdr> searchPage(SearchHhDxKhMttThopReq req) throws Exception {
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),
+                req.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<HhDxKhMttThopHdr> data = hhDxuatKhMttThopRepository.searchPage(
-                objReq.getNamKh(),
-                objReq.getLoaiVthh(),
-                objReq.getCloaiVthh(),
-                objReq.getNoiDung(),
-                Contains.convertDateToString(objReq.getNgayThopTu()),
-                Contains.convertDateToString(objReq.getNgayThopDen()),
-                Contains.convertDateToString(objReq.getNgayKyQdTu()),
-                Contains.convertDateToString(objReq.getNgayKyQdDen()),
-                objReq.getTrangThai(),
+                req,
                 pageable);
         Map<String, String> hashMapDmhh = getListDanhMucHangHoa();
         data.getContent().forEach(f -> {
@@ -87,6 +75,7 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         List<HhDxKhMttThopDtl> thopDtls = new ArrayList<HhDxKhMttThopDtl>();
         String tChuanCluong = "";
+        String soQdcc = "";
         for (HhDxuatKhMttHdr dXuat : dxuatList) {
             HhDxKhMttThopDtl thopDtl = new HhDxKhMttThopDtl();
             BeanUtils.copyProperties(dXuat,thopDtl,"id");
@@ -94,10 +83,12 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
             thopDtl.setTenDvi(mapDmucDvi.get(dXuat.getMaDvi()));
             thopDtls.add(thopDtl);
             tChuanCluong = tChuanCluong.concat(dXuat.getTchuanCluong() + "");
+            soQdcc = soQdcc.concat(dXuat.getSoQdCc() + "");
             thopDtls.add(thopDtl);
         }
         thopHdr.setTchuanCluong(tChuanCluong);
-        thopHdr.setHhDxKhMttThopDtls(thopDtls);
+        thopHdr.setSoQdCc(soQdcc);
+        thopHdr.setChildren(thopDtls);
         return thopHdr;
     }
 
@@ -108,23 +99,23 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
         HhDxKhMttThopHdr thopHdr = sumarryData(objReq, req);
         thopHdr.setId(objReq.getIdTh());
         thopHdr.setNgayTao(new Date());
-        thopHdr.setNguoiTao(getUser().getUsername());
+        thopHdr.setNguoiTaoId(getUser().getId());
         thopHdr.setLoaiVthh(objReq.getLoaiVthh());
         thopHdr.setCloaiVthh(objReq.getCloaiVthh());
         thopHdr.setTrangThai(Contains.CHUATAO_QD);
         thopHdr.setNgayThop(new Date());
         thopHdr.setNamKh(objReq.getNamKh());
-        thopHdr.setMaDvi(userInfo.getDvql());
-        thopHdr.setNoiDung(objReq.getNoiDung());
+        thopHdr.setMaDvi(objReq.getMaDvi());
+        thopHdr.setNoiDungThop(objReq.getNoiDungThop());
         hhDxuatKhMttThopRepository.save(thopHdr);
-        for (HhDxKhMttThopDtl dtl : thopHdr.getHhDxKhMttThopDtls()) {
+        for (HhDxKhMttThopDtl dtl : thopHdr.getChildren()) {
             dtl.setIdThopHdr(thopHdr.getId());
             hhDxuatKhMttThopDtlRepository.save(dtl);
         }
-        if (thopHdr.getId() > 0 && thopHdr.getHhDxKhMttThopDtls().size() > 0) {
-            List<String> soDxuatList = thopHdr.getHhDxKhMttThopDtls().stream().map(HhDxKhMttThopDtl::getSoDxuat)
+        if (thopHdr.getId() > 0 && thopHdr.getChildren().size() > 0) {
+            List<String> soDxuatList = thopHdr.getChildren().stream().map(HhDxKhMttThopDtl::getSoDxuat)
                     .collect(Collectors.toList());
-            hhDxuatKhMttRepository.updateStatusInList(soDxuatList, Contains.DATONGHOP);
+            hhDxuatKhMttRepository.updateStatusInList(soDxuatList, Contains.DATONGHOP, thopHdr.getId());
         }
 return thopHdr;
     }
@@ -167,10 +158,9 @@ return thopHdr;
         Map<String, String> mapDmucDvi = getMapTenDvi();
         listTh.forEach(f -> {
             f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
-            f.setTenTrangThaiDx(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiDx()));
 
         });
-        hdrThop.setHhDxKhMttThopDtls(listTh);
+        hdrThop.setChildren(listTh);
 
         return hdrThop;
     }
@@ -189,6 +179,7 @@ return thopHdr;
             if(!CollectionUtils.isEmpty(listDxHdr)){
                 listDxHdr.stream().map(item ->{
                     item.setTrangThaiTh(Contains.CHUATONGHOP);
+                    item.setMaThop(null);
                     return item;
                 }).collect(Collectors.toList());
             }
@@ -236,16 +227,16 @@ return thopHdr;
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
         for (int i = 0; i < data.size(); i++) {
-            HhDxKhMttThopHdr dx = data.get(i);
+            HhDxKhMttThopHdr thop = data.get(i);
             objs = new Object[rowsName.length];
             objs[0] = i;
-            objs[1] = dx.getId();
-            objs[2] = dx.getNgayThop();
-            objs[3] = dx.getNoiDung();
-            objs[4] = dx.getNamKh();
-            objs[5] = dx.getTenCloaiVthh();
-            objs[6] = dx.getTenTrangThai();
-            objs[7] = dx.getSoQdPduyet();
+            objs[1] = thop.getId();
+            objs[2] = thop.getNgayThop();
+            objs[3] = thop.getNoiDungThop();
+            objs[4] = thop.getNamKh();
+            objs[5] = thop.getTenCloaiVthh();
+            objs[6] = thop.getTenTrangThai();
+            objs[7] = thop.getSoQdPduyet();
             dataList.add(objs);
         }
 

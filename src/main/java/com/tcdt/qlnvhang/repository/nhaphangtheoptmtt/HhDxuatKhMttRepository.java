@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.repository.nhaphangtheoptmtt;
 
+import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhDxKhMttHdrReq;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDxuatKhMttHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.data.domain.Page;
@@ -7,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,11 +18,25 @@ import java.util.Optional;
 
 @Repository
 public interface HhDxuatKhMttRepository extends JpaRepository<HhDxuatKhMttHdr, Long> {
+    @Query("SELECT DX from HhDxuatKhMttHdr DX WHERE 1 = 1 " +
+            "AND (:#{#param.namKh} IS NULL OR DX.namKh = :#{#param.namKh}) " +
+            "AND (:#{#param.soDxuat} IS NULL OR LOWER(DX.soDxuat) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soDxuat}),'%' ) ) )" +
+            "AND (:#{#param.ngayTaoTu} IS NULL OR DX.ngayTao >= :#{#param.ngayTaoTu}) " +
+            "AND (:#{#param.ngayTaoDen} IS NULL OR DX.ngayTao <= :#{#param.ngayTaoDen}) " +
+            "AND (:#{#param.ngayDuyetTu} IS NULL OR DX.ngayPduyet >= :#{#param.ngayDuyetTu}) " +
+            "AND (:#{#param.ngayDuyetDen} IS NULL OR DX.ngayPduyet <= :#{#param.ngayDuyetDen}) " +
+            "AND (:#{#param.trichYeu} IS NULL OR LOWER(DX.trichYeu) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.trichYeu}),'%'))) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR DX.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
+            "AND (:#{#param.trangThai} IS NULL OR DX.trangThai = :#{#param.trangThai}) " +
+            "AND (:#{#param.trangThaiTh} IS NULL OR DX.trangThaiTh = :#{#param.trangThaiTh}) " +
+            "AND (:#{#param.maDvi} IS NULL OR DX.maDvi = :#{#param.maDvi})")
+    Page<HhDxuatKhMttHdr> searchPage(@Param("param") SearchHhDxKhMttHdrReq param, Pageable pageable);
 
     @Transactional()
     @Modifying
-    @Query(value = "UPDATE HH_DX_KHMTT_HDR SET TRANG_THAI_TH=:trangThaiTh WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
-    void updateStatusInList(List<String> soDxuatList, String trangThaiTh);
+    @Query(value = "UPDATE HH_DX_KHMTT_HDR SET TRANG_THAI_TH = :trangThaiTh , MA_THOP = :idTh WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
+    void updateStatusInList(List<String> soDxuatList, String trangThaiTh,Long idTh);
+
 
     @Transactional()
     @Modifying
@@ -28,21 +44,6 @@ public interface HhDxuatKhMttRepository extends JpaRepository<HhDxuatKhMttHdr, L
     void updateSoQdPduyet(List<String> soDxuatList, String soQdPduyet);
 
 
-
-    @Query(value = "select * from HH_DX_KHMTT_HDR MTT where (:namKh IS NULL OR MTT.NAM_KH = TO_NUMBER(:namKh)) " +
-            "AND (:soDxuat IS NULL OR LOWER(MTT.SO_DXUAT) LIKE LOWER(CONCAT(CONCAT('%',:soDxuat),'%' ) ) )" +
-            "AND (:ngayTaoTu IS NULL OR MTT.NGAY_TAO >=  TO_DATE(:ngayTaoTu,'yyyy-MM-dd')) " +
-            "AND (:ngayTaoDen IS NULL OR MTT.NGAY_TAO <= TO_DATE(:ngayTaoDen,'yyyy-MM-dd'))" +
-            "AND (:ngayDuyetTu IS NULL OR MTT.NGAY_PDUYET >=  TO_DATE(:ngayDuyetTu,'yyyy-MM-dd')) " +
-            "AND (:ngayDuyetDen IS NULL OR MTT.NGAY_PDUYET <= TO_DATE(:ngayDuyetDen,'yyyy-MM-dd'))" +
-            "AND (:trichYeu IS NULL OR LOWER(MTT.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%',:trichYeu),'%' ) ) )" +
-            "AND (:noiDungTh IS NULL OR LOWER(MTT.NOI_DUNG_TH) LIKE LOWER(CONCAT(CONCAT('%',:noiDungTh),'%' ) ) )" +
-            "AND (:loaiVthh IS NULL OR MTT.LOAI_VTHH = :loaiVthh) " +
-            "AND (:trangThai IS NULL OR MTT.TRANG_THAI = :trangThai)" +
-            "AND (:trangThaiTh IS NULL OR MTT.TRANG_THAI_TH = :trangThaiTh) " +
-            "AND (:maDvi IS NULL OR LOWER(MTT.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "
-            ,nativeQuery = true)
-    Page<HhDxuatKhMttHdr> searchPage(Integer namKh, String soDxuat, String ngayTaoTu, String ngayTaoDen,String ngayDuyetTu, String ngayDuyetDen, String trichYeu,String noiDungTh, String loaiVthh, String trangThai, String trangThaiTh, String maDvi, Pageable pageable);
 
     @Transactional
     void deleteAllByIdIn(List<Long> ids);

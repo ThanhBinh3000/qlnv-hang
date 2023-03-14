@@ -20,50 +20,67 @@ public class HhDxuatKhMttHdrReq {
 
     @ApiModelProperty(notes = "Bắt buộc set đối với update")
     private Long id;
+
     private String maDvi;
+
     private String loaiHinhNx;
+
     private String kieuNx;
-    private String diaChiDvi;
+
+    private String diaChi;
+
     private Integer namKh;
+
     private String soDxuat;
+
     private String trichYeu;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayTao;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayPduyet;
+
     private String tenDuAn;
-    private String soQd;
+
+    private String soQdCc
+            ;
     private String loaiVthh;
+
     private String cloaiVthh;
+
     private String moTaHangHoa;
+
     private String ptMua;
+
     private String tchuanCluong;
+
     private String giaMua;
+
     private BigDecimal thueGtgt;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date tgianMkho;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date tgianKthuc;
+
     private String ghiChu;
+
     private BigDecimal tongMucDt;
+
     private BigDecimal tongSoLuong;
+
+    private BigDecimal tongTienGomThue;
+
     private String nguonVon;
-
-    private BigDecimal tongTienVat;
-    private String trangThai;
-    private String trangThaiTh;
-
-    private String ldoTuchoi;
 
     private Long maThop;
 
-    private String noiDungTh;
     private BigDecimal donGiaVat;
+
+    private String soQdPduyet;
+
+    private String trangThaiTh;
 
     private List<FileDinhKemReq> fileDinhKemReq =  new ArrayList<>();
 
 
-    private List<HhDxuatKhMttSlddReq> dsSlddReq = new ArrayList<>();
+    private List<HhDxuatKhMttSlddReq> children = new ArrayList<>();
 
 
     private List<HhDxuatKhMttCcxdgReq> ccXdgReq = new ArrayList<>();

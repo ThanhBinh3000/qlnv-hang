@@ -7,12 +7,10 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 public interface HhDxuatKhMttSlddRepository extends JpaRepository<HhDxuatKhMttSldd,Long> {
-    void deleteAllByIdDxKhmtt(Long idDxKhmtt);
+    void deleteAllByIdHdr(Long idHdr);
 
-    List<HhDxuatKhMttSldd> findAllByIdDxKhmtt(Long idDxKhmtt);
-
-    List<HhDxuatKhMttSldd> findAllByIdDxKhmttIn(List<Long> idDxKhmtt);
+    List<HhDxuatKhMttSldd> findAllByIdHdr(Long idHdr);
 
     @Transactional
-    void deleteAllByIdDxKhmttIn(List<Long> idDxKhmtt);
+    void deleteAllByIdHdrIn(List<Long> idHdr);
 }
