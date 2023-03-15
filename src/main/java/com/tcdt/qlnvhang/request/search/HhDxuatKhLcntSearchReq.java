@@ -32,6 +32,12 @@ public class HhDxuatKhLcntSearchReq extends BaseRequest {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date denNgayKy;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date tuNgayTao;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date denNgayTao;
+
 	@Size(max = 250, message = "Trích yếu không được vượt quá 250 ký tự")
 	@ApiModelProperty(example = "SQDGCT123")
 	String trichYeu;
