@@ -29,6 +29,8 @@ public class HhQdPheduyetKhMttSLDD implements Serializable {
     @Transient
     private String tenDvi;
 
+    private String diaChi;
+
     private String tenGoiThau;
 
     private BigDecimal soLuongChiTieu;

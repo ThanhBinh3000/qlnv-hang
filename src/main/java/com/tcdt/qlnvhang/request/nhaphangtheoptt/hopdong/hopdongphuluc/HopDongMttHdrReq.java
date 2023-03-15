@@ -1,83 +1,165 @@
 package com.tcdt.qlnvhang.request.nhaphangtheoptt.hopdong.hopdongphuluc;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import lombok.Getter;
-import lombok.Setter;
+import com.tcdt.qlnvhang.util.Contains;
+import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Transient;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 public class HopDongMttHdrReq extends BaseRequest {
-  private Long id;
-  private Long idHd;
-  private Integer nam;
-  private Long idQdPdKq;
-  private String soQdPdKq;
-  private Long idQdPdKh;
-  private String soQdPdKh;
-  LocalDate ngayKyQdPdKh;
-  LocalDate tgianNkho;
-  private String soHd;
-  private String tenHd;
-  LocalDate ngayKy;
-  private String ngayKyGhiChu;
-  private String loaiHdong;
-  private String loaiHdongGhiChu;
-  private Integer soNgayThien;
-  LocalDate tgianGnhanTu;
-  LocalDate tgianGnhanDen;
-  private Integer tgianGnhanGhiChu;
-  private String noiDung;
-  private String dieuKien;
-  private String maDvi;
-  private String cdtTen;
-  private String cdtDiaChi;
-  private String cdtMst;
-  private String cdtTenNguoiDdien;
-  private String cdtChucVu;
-  private String cdtSdt;
-  private String cdtFax;
-  private String cdtStk;
-  private String cdtMoTai;
-  private String cdtThongTinGiayUyQuyen;
-  private Long nccId;
-  private String nccTen;
-  private String nccDiaChi;
-  private String nccMst;
-  private String nccTenNguoiDdien;
-  private String nccChucVu;
-  private String nccSdt;
-  private String nccFax;
-  private String nccStk;
-  private String nccMoTai;
-  private String nccThongTinGiayUyQuyen;
-  private String loaiVthh;
-  private String cloaiVthh;
-  private String moTaHangHoa;
-  private String donViTinh;
-  private BigDecimal soLuong;
-  private BigDecimal donGia;
-  private BigDecimal donGiaVat;
-  private BigDecimal thanhTien;
-  private String thanhTienBangChu;
-  private String ghiChu;
-  private List<Long> ids;
-  private String dvql;
-  private String nguoiKy;
-  private String trangThaiNh;
-  @Transient
-  private LocalDate ngayKyTu;
-  @Transient
-  private LocalDate ngayKyDen;
 
-  private List<FileDinhKemReq> fileDinhKem = new ArrayList<>();
-  private List<FileDinhKemReq> canCu = new ArrayList<>();
-  private List<DiaDiemGiaoNhanMttReq> diaDiemGiaoNhan = new ArrayList<>();
+  private Long id;
+
+  private Long idQdKq;
+
+  private Integer namHd;
+
+  private String soQdKq;
+
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+  private Date ngayKyQdKq;
+
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+  private Date ngayMkho;
+
+  private String soQd;
+
+  private String soHd;
+
+  private String tenHd;
+
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+  private Date ngayHluc;
+
+  private String ghiChuNgayHluc;
+
+  private String loaiHdong;
+
+  private String ghiChuLoaiHdong;
+
+  private Integer tgianThienHd;
+
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+  private Date tgianGnhanTu;
+
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+  private Date tgianGnhanDen;
+
+  private String ghiChuTgianGnhan;
+
+  private String noiDungHdong;
+
+  private String dkienHanTtoan;
+
+  private String maDvi;
+
+  private String diaChi;
+
+  private String mst;
+
+  private String tenNguoiDdien;
+
+  private String chucVu;
+
+  private String sdt;
+
+  private String fax;
+
+  private String stk;
+
+  private String moLai;
+
+  private String ttinGiayUyQuyen;
+
+  private Long idDviMua;
+
+  private String tenDviMua;
+
+  private String diaChiDviMua;
+
+  private String mstDviMua;
+
+  private String tenNguoiDdienDviMua;
+
+  private String chucVuDviMua;
+
+  private String sdtDviMua;
+
+  private String faxDviMua;
+
+  private String stkDviMua;
+
+  private String moLaiDviMua;
+
+  private String loaiVthh;
+
+  private String cloaiVthh;
+
+  private String moTaHangHoa;
+
+  private String dviTinh;
+
+  private BigDecimal soLuong;
+
+  private BigDecimal donGiaGomThue;
+
+  private BigDecimal thanhTien;
+
+  private String ghiChu;
+
+  private BigDecimal tongSoLuongQdKhChuakyHd;
+
+  @Transient
+  private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
+
+  @Transient
+  private FileDinhKemReq fileDinhKem;
+
+  private List<DiaDiemGiaoNhanMttReq> children = new ArrayList<>();
+
+
+  //    Phụ lục
+
+  private Long idHd;
+
+  private String soPhuLuc;
+
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+  @Column(columnDefinition = "Date")
+  private Date ngayHlucPhuLuc;
+
+  private String noiDungPhuLuc;
+
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+  @Column(columnDefinition = "Date")
+  private Date ngayHlucSauDcTu;
+
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+  @Column(columnDefinition = "Date")
+  private Date ngayHlucSauDcDen;
+
+  private Integer tgianThienHdSauDc;
+
+  private String noiDungDcKhac;
+
+  private String ghiChuPhuLuc;
+
+  private String trangThaiPhuLuc;
+  @Transient
+  private String tenTrangThaiPhuLuc;
+
+  @Transient
   private List<HopDongMttHdrReq> phuLuc = new ArrayList<>();
+
+  @Transient
+  private List<DiaDiemGiaoNhanMttReq> phuLucDtl = new ArrayList<>();
+
 }

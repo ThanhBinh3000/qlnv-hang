@@ -18,6 +18,8 @@ public class HhQdPheduyetKhMttSLDDReq {
 
     private String maDvi;
 
+    private String diaChi;
+
     private String tenGoiThau;
 
     private BigDecimal soLuongChiTieu;

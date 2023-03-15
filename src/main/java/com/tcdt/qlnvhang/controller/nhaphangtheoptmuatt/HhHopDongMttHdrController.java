@@ -3,10 +3,7 @@ package com.tcdt.qlnvhang.controller.nhaphangtheoptmuatt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
-import com.tcdt.qlnvhang.jwt.CurrentUser;
-import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.IdSearchReq;
-import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.hopdong.hopdongphuluc.HopDongMttHdrReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.nhaphangtheoptmuatt.hopdong.hopdongphuluc.HopDongMttHdrService;
@@ -40,11 +37,10 @@ public class HhHopDongMttHdrController extends BaseController {
     @ApiOperation(value = "Tra cứu thông tin hợp đồng", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser,
-                                                  @Valid @RequestBody HopDongMttHdrReq objReq) {
+    public ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody HopDongMttHdrReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(hopDongMttHdrService.searchPage(currentUser,objReq));
+            resp.setData(hopDongMttHdrService.searchPage(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (
@@ -60,10 +56,10 @@ public class HhHopDongMttHdrController extends BaseController {
     @ApiOperation(value = "Tạo mới thông tin hợp đồng ", response = List.class)
     @PostMapping(value =  PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<BaseResponse> insert(HttpServletRequest request, @Valid @RequestBody HopDongMttHdrReq objReq) {
+    public ResponseEntity<BaseResponse> insert(HttpServletRequest request, @Valid @RequestBody HopDongMttHdrReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(hopDongMttHdrService.save(objReq));
+            resp.setData(hopDongMttHdrService.save(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -77,10 +73,10 @@ public class HhHopDongMttHdrController extends BaseController {
 
     @ApiOperation(value = "Cập nhật thông tin hợp đồng", response = List.class)
     @PostMapping(value =  PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> update(HttpServletRequest request, @Valid @RequestBody HopDongMttHdrReq objReq) {
+    public ResponseEntity<BaseResponse> update(HttpServletRequest request, @Valid @RequestBody HopDongMttHdrReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(hopDongMttHdrService.update(objReq));
+            resp.setData(hopDongMttHdrService.update(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -95,7 +91,7 @@ public class HhHopDongMttHdrController extends BaseController {
     @GetMapping(value =  PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> detail(
-            @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids")List<Long> ids) {
+            @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids") Long ids) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hopDongMttHdrService.detail(ids));
@@ -111,7 +107,7 @@ public class HhHopDongMttHdrController extends BaseController {
 
     @ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 thông tin", response = List.class)
     @PostMapping(value =  PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> updateStatus(@Valid HttpServletRequest req, @RequestBody StatusReq stReq) {
+    public ResponseEntity<BaseResponse> updateStatus(@Valid HttpServletRequest req, @RequestBody HopDongMttHdrReq stReq) {
         BaseResponse resp = new BaseResponse();
         try {
             hopDongMttHdrService.approve(stReq);
@@ -132,7 +128,7 @@ public class HhHopDongMttHdrController extends BaseController {
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            hopDongMttHdrService.delete(idSearchReq);
+            hopDongMttHdrService.delete(idSearchReq.getId());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -150,7 +146,7 @@ public class HhHopDongMttHdrController extends BaseController {
     public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            hopDongMttHdrService.deleteMulti(idSearchReq);
+            hopDongMttHdrService.deleteMulti(idSearchReq.getIds());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -164,9 +160,9 @@ public class HhHopDongMttHdrController extends BaseController {
     @ApiOperation(value = "Kết xuất danh sách mua", response = List.class)
     @PostMapping(value =  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void exportList(@CurrentUser CustomUserDetails currentUser ,@Valid @RequestBody  HopDongMttHdrReq objReq, HttpServletResponse response) throws Exception {
+    public void exportList(@Valid @RequestBody  HopDongMttHdrReq objReq, HttpServletResponse response) throws Exception {
         try {
-            hopDongMttHdrService.export( currentUser,objReq, response);
+            hopDongMttHdrService.export(objReq,response);
 
         } catch (Exception e) {
             log.error("Kết xuất danh sách dánh sách mua : {}", e);

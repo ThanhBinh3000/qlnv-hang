@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhQdPduyetKqcgRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhQdPheduyetKhMttHdrRepository;
+import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.hopdong.hopdongphuluc.HopDongMttHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhQdPduyetKqcgHdrReq;
@@ -12,6 +13,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc.HopDongMttHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -39,6 +41,9 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
     HhQdPheduyetKhMttHdrRepository hhQdPheduyetKhMttHdrRepository;
 
     @Autowired
+    HopDongMttHdrRepository hopDongMttHdrRepository;
+
+    @Autowired
     private FileDinhKemService fileDinhKemService;
 
     public Page<HhQdPduyetKqcgHdr> searchPage(SearchHhQdPduyetKqcg req ) throws Exception {
@@ -51,6 +56,8 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
         data.getContent().forEach(f->{
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+            f.setTenTrangThaiHd(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiHd()));
+            f.setTenTrangThaiNh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiNh()));
             f.setTenDvi(hashMapDvi.get(f.getMaDvi()));
             f.setTenLoaiVthh(hashMapVthh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(hashMapVthh.get(f.getCloaiVthh()));
@@ -73,6 +80,8 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
         data.setNguoiTaoId(getUser().getId());
         data.setMaDvi(getUser().getDvql());
         data.setTrangThai(Contains.DUTHAO);
+        data.setTrangThaiHd(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
+        data.setTrangThaiNh(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
 
         HhQdPduyetKqcgHdr created = hhQdPduyetKqcgRepository.save(data);
         if (!DataUtils.isNullObject(req.getFileDinhKem())) {
@@ -128,7 +137,17 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
         HhQdPduyetKqcgHdr data = qOptional.get();
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
+
+        List<HopDongMttHdr> allById = hopDongMttHdrRepository.findAllByIdQdKq(Long.parseLong(ids));
+        allById.forEach(f ->{
+            f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+            f.setTenTrangThaiNh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiNh()));
+        });
+        data.setHopDongMttHdrList(allById);
+
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
+        data.setTenTrangThaiHd(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiHd()));
+        data.setTenTrangThaiNh(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiNh()));
         data.setTenDvi(hashMapDvi.get(data.getMaDvi()));
         data.setTenLoaiVthh(hashMapVthh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(hashMapVthh.get(data.getCloaiVthh()));
@@ -137,6 +156,8 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
             data.setFileDinhKem(fileDinhKem.get(0));
         }
         data.setFileDinhKems(fileDinhKem);
+
+
         return data;
     }
 

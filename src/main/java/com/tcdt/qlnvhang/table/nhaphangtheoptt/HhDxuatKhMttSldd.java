@@ -28,6 +28,8 @@ public class HhDxuatKhMttSldd implements Serializable {
     @Transient
     private String tenDvi;
 
+    private String diaChi;
+
     private BigDecimal soLuongChiTieu;
 
     private BigDecimal soLuongKhDd;
