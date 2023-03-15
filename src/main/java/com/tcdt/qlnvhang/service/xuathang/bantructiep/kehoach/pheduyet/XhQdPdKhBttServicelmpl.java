@@ -260,8 +260,8 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
         List<XhQdPdKhBttDtl> xhQdPdKhBttDtlList = new ArrayList<>();
         for (XhQdPdKhBttDtl dtl : xhQdPdKhBttDtlRepository.findAllByIdQdHdr(id)){
             List<XhQdPdKhBttDvi> xhQdPdKhBttDviList = new ArrayList<>();
-            for (XhQdPdKhBttDvi dvi : xhQdPdKhBttDviRepository.findByIdQdDtl(dtl.getId())) {
-                List<XhQdPdKhBttDviDtl> xhQdPdKhBttDviDtlList = xhQdPdKhBttDviDtlRepository.findByIdDvi(dvi.getId());
+            for (XhQdPdKhBttDvi dvi : xhQdPdKhBttDviRepository.findAllByIdQdDtl(dtl.getId())) {
+                List<XhQdPdKhBttDviDtl> xhQdPdKhBttDviDtlList = xhQdPdKhBttDviDtlRepository.findAllByIdDvi(dvi.getId());
                 xhQdPdKhBttDviDtlList.forEach(f ->{
                     f.setTenDiemKho(hashMapDvi.get(f.getMaDiemKho()));
                     f.setTenNhaKho(hashMapDvi.get(f.getMaNhaKho()));
@@ -345,7 +345,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
         List<XhQdPdKhBttDtl> xhQdPdKhBttDtls = xhQdPdKhBttDtlRepository.findAllByIdQdHdr(optional.get().getId());
         if (!CollectionUtils.isEmpty(xhQdPdKhBttDtls)){
             for (XhQdPdKhBttDtl dtl : xhQdPdKhBttDtls){
-                List<XhQdPdKhBttDvi> byIdQdDtl = xhQdPdKhBttDviRepository.findByIdQdDtl(dtl.getId());
+                List<XhQdPdKhBttDvi> byIdQdDtl = xhQdPdKhBttDviRepository.findAllByIdQdDtl(dtl.getId());
                 for (XhQdPdKhBttDvi dvi : byIdQdDtl ){
                     xhQdPdKhBttDviDtlRepository.deleteAllByIdDvi(dvi.getId());
                 }
@@ -466,9 +466,9 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
         hdr.setTenCloaiVthh(hashMapVthh.get(hdr.getCloaiVthh()));
         dtl.setXhQdPdKhBttHdr(hdr);
 
-       List<XhQdPdKhBttDvi> byIdDvi = xhQdPdKhBttDviRepository.findByIdQdDtl(dtl.getId());
+       List<XhQdPdKhBttDvi> byIdDvi = xhQdPdKhBttDviRepository.findAllByIdQdDtl(dtl.getId());
         for (XhQdPdKhBttDvi dvi : byIdDvi){
-            List<XhQdPdKhBttDviDtl> byIdDviDtl = xhQdPdKhBttDviDtlRepository.findByIdDvi(dvi.getId());
+            List<XhQdPdKhBttDviDtl> byIdDviDtl = xhQdPdKhBttDviDtlRepository.findAllByIdDvi(dvi.getId());
             for (XhQdPdKhBttDviDtl dviDtl : byIdDviDtl){
                 List<XhTcTtinBtt> byIdTt = xhTcTtinBttRepository.findAllByIdDviDtl(dviDtl.getId());
                 for (XhTcTtinBtt btt : byIdTt){

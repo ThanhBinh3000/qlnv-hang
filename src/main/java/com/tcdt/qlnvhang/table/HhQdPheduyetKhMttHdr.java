@@ -1,13 +1,13 @@
 package com.tcdt.qlnvhang.table;
 
 
-import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhChiTietTTinChaoGia;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
+import com.tcdt.qlnvhang.util.Contains;
 import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
 @Entity
 @Table(name = "HH_QD_PHE_DUYET_KHMTT_HDR")
 @Data
-public class HhQdPheduyetKhMttHdr implements Serializable {
+public class HhQdPheduyetKhMttHdr extends TrangThaiBaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "HH_QD_PHE_DUYET_KHMTT_HDR";
 
@@ -27,45 +27,25 @@ public class HhQdPheduyetKhMttHdr implements Serializable {
 
     private Integer namKh;
 
-    private String soQd;
-
-    @Temporal(TemporalType.DATE)
-    private Date ngayQd;
-
-    @Temporal(TemporalType.DATE)
-    private Date ngayHluc;
-
-    private Long idThHdr;
-
-    private Long idTrHdr;
-
-    private String soTrHdr;
-
     private String maDvi;
     @Transient
     private String tenDvi;
 
+    private String soQd;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayQd;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayHluc;
+
+    private Long idThHdr;
+
+    private String soTrHdr;
+
+    private Long idTrHdr;
+
     private String trichYeu;
-
-    @Temporal(TemporalType.DATE)
-    private Date ngayTao;
-    private String nguoiTao;
-
-    @Temporal(TemporalType.DATE)
-    private Date ngaySua;
-    private String nguoiSua;
-
-    @Temporal(TemporalType.DATE)
-    private Date ngayGuiDuyet;
-    private String nguoiGuiDuyet;
-
-    private String trangThai;
-    @Transient
-    private String tenTrangThai;
-
-    @Temporal(TemporalType.DATE)
-    private Date ngayPduyet;
-    private String nguoiPduyet;
 
     private String loaiVthh;
     @Transient
@@ -75,45 +55,22 @@ public class HhQdPheduyetKhMttHdr implements Serializable {
     @Transient
     private String tenCloaiVthh;
 
+    private String  moTaHangHoa;
+
     private String tchuanCluong;
 
     private Boolean lastest;
 
     private String phanLoai;
 
-    private String ptMua;
-
-    private String diaDiemCgia;
-
-    private String ghiChu;
-
-    private String soQdPdKqCg;
+    private Long idGoc;
 
     private String ptMuaTrucTiep;
 
-
-    private Long idGoc;
-
     @Transient
-    private List<FileDinhKem> fileDinhKem = new ArrayList<>();
+    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
     @Transient
     private List<HhQdPheduyetKhMttDx> children = new ArrayList<>();
 
-    @Transient
-     private  HhQdPheduyetKhMttDx hhQdPheduyetKhMttDxList;
-
-
-//    @Transient
-//    private List<HhChiTietTTinChaoGia> hhChiTietTTinChaoGiaList = new ArrayList<>();
-//
-//    @Transient
-//    private List<FileDinhKem> fileDinhKemUyQuyen = new ArrayList<>();
-//
-//    @Transient
-//    private List<FileDinhKem> fileDinhKemMuaLe = new ArrayList<>();
-
-    public String getTenTrangThai() {
-        return NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(this.getTrangThai());
-    }
 }

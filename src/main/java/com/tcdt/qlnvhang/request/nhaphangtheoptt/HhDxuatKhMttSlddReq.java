@@ -3,9 +3,6 @@ package com.tcdt.qlnvhang.request.nhaphangtheoptt;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +22,6 @@ public class HhDxuatKhMttSlddReq {
 
     private BigDecimal soLuongKhDd;
 
-
     private BigDecimal donGia;
 
     private BigDecimal donGiaVat;
@@ -37,8 +33,6 @@ public class HhDxuatKhMttSlddReq {
     private BigDecimal tongThanhTienVat;
 
     private BigDecimal soLuong;
-
-
 
     List<HhDxuatKhMttSlddDtlReq> children = new ArrayList<>();
 }

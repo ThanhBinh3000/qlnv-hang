@@ -14,14 +14,6 @@ import java.util.Optional;
 @Repository
 public interface XhKqBttHdrRepository  extends JpaRepository<XhKqBttHdr, Long> {
 
-//    @Query("SELECT c FROM XhKqBttHdr c where 1 = 1" +
-//            "AND (:#{#param.maDvi} IS NULL OR c.maDvi = :#{#param.maDvi}) " +
-//            "AND (:#{#param.namKh} IS NULL OR c.namKh = :#{#param.namKh}) " +
-//            "AND (:#{#param.loaiVthh } IS NULL OR LOWER(c.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
-//            "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) "
-//    )
-//    Page<XhKqBttHdr> search(@Param("param") XhKqBttHdrReq param, Pageable pageable);
-
     @Query("SELECT DISTINCT QD FROM XhKqBttHdr QD " +
             " LEFT JOIN XhKqBttDtl DTL on QD.id = DTL.idHdr " +
             " WHERE 1 = 1 " +

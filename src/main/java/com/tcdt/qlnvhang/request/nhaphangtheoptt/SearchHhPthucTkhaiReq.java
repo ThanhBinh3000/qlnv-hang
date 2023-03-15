@@ -14,16 +14,17 @@ public class SearchHhPthucTkhaiReq extends BaseRequest {
 
     Integer namKh;
 
-    private String soDxuat;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    Date  ngayCgiaTu;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    Date ngayCgiaTu;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    Date ngayCgiadDen;
-    String maDvi;
+    Date  ngayCgiadDen;
+
     String loaiVthh;
-    String cloaiVthh;
-    String trangThaiTkhai;
-    String ctyCgia;
-    String ptMua;
+
+    String maDvi;
+
+    String tochucCanhan;
+
+    Integer lastest ;
 }

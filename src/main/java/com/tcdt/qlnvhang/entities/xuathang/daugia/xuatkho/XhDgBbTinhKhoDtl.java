@@ -1,7 +1,7 @@
 package com.tcdt.qlnvhang.entities.xuathang.daugia.xuatkho;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBbTinhKhoHdr;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.xuatkho.XhDgBbTinhKhoHdr;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -33,5 +33,5 @@ public class XhDgBbTinhKhoDtl implements Serializable {
   @ManyToOne
   @JsonIgnore
   @JoinColumn(name = "idHdr", updatable = false, insertable = false)
-  private XhDgBbTinhKhoHdr xhDgBbTinhKhoHdr;
+  private XhDgBbTinhKhoHdr xhCtvtBbTinhKhoHdr;
 }

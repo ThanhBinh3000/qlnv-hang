@@ -1,16 +1,12 @@
 package com.tcdt.qlnvhang.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhChiTietTTinChaoGiaReq;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.util.Contains;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.Size;
-import java.math.BigDecimal;
+import javax.persistence.Transient;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,6 +18,8 @@ public class HhQdPheduyetKhMttHdrReq {
 
     private Integer namKh;
 
+    private String maDvi;
+
     private String soQd;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
@@ -32,39 +30,29 @@ public class HhQdPheduyetKhMttHdrReq {
 
     private Long idThHdr;
 
-    private Long idTrHdr;
-
     private String soTrHdr;
 
-    private String maDvi;
+    private Long idTrHdr;
 
     private String trichYeu;
-
-    private String trangThai;
-
 
     private String loaiVthh;
 
     private String cloaiVthh;
 
+    private String  moTaHangHoa;
+
     private String tchuanCluong;
 
-    private Boolean lastest = false;
+    private Integer lastest ;
 
     private String phanLoai;
 
+    private Long idGoc;
 
-    private String ptMua;
+    @Transient
+    private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 
-    private String diaDiemCgia;
+    private List<HhQdPheduyetKhMttDxReq> children = new ArrayList<>();
 
-    private String ghiChu;
-
-    private String soQdPdKqCg;
-
-    private List<FileDinhKemReq> fileDinhKems =new ArrayList<>();
-
-    private List<HhQdPheduyetKhMttDxReq> dsDiaDiem = new ArrayList<>();
-
-//    private List<HhChiTietTTinChaoGiaReq> hhChiTietTTinChaoGiaReqList = new ArrayList<>();
 }

@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface HhQdPheduyetKhMttSLDDRepository extends JpaRepository<HhQdPheduyetKhMttSLDD, Long> {
 
-    List<HhQdPheduyetKhMttSLDD> findAllByIdQdDtlIn (List<Long> ids);
+
 
     void deleteByIdQdDtl(Long idQdDtl);
 
-    List<HhQdPheduyetKhMttSLDD> findByIdQdDtl(Long IdQdDtl);
+    List<HhQdPheduyetKhMttSLDD> findAllByIdQdDtl(Long idQdDtl);
 
 
 }

@@ -1,21 +1,32 @@
 package com.tcdt.qlnvhang.request.nhaphangtheoptt;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.util.Contains;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import java.util.Date;
 
 @Data
 public class HhDxKhMttThopHdrReq extends HhDxKhMttTChiThopReq {
     @ApiModelProperty(notes = "Bắt buộc set đối với update")
     private Long id;
-    private Long idTh;
-    @NotNull(message = "Không được để trống")
-    @Size(max = 250, message = "Về việc không được vượt quá 250 ký tự")
-    @ApiModelProperty(example = "Nội dung về việc")
-    String noiDung;
 
-    String soQdCc;
+    private Long idTh;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayThop;
+
+    private String maDvi;
+
+    private String noiDungThop;
+
+    private String trangThai;
+
+    private String soQdPd;
+
+    private String soQdCc;
+
+    private String tchuanCluong;
 
 }
 

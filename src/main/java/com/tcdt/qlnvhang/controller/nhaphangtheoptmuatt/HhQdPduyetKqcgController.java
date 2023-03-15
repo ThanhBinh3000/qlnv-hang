@@ -6,10 +6,7 @@ import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhQdPduyetKqcgHdrReq;
-import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhDxKhMttHdrReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhQdPduyetKqcg;
-import com.tcdt.qlnvhang.request.object.HhQdPduyetKqlcntHdrReq;
-import com.tcdt.qlnvhang.request.search.HhQdPduyetKqlcntSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.nhaphangtheoptmuatt.HhQdPduyetKqcgService;
 import com.tcdt.qlnvhang.util.PathContains;
@@ -48,7 +45,7 @@ public class HhQdPduyetKqcgController extends BaseController {
                                                   @Valid @RequestBody SearchHhQdPduyetKqcg objReq, HttpServletResponse response) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(hhQdPduyetKqcgService.searchPage(objReq,response));
+            resp.setData(hhQdPduyetKqcgService.searchPage(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (
@@ -137,7 +134,7 @@ public class HhQdPduyetKqcgController extends BaseController {
     public ResponseEntity<BaseResponse> delete(@RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            hhQdPduyetKqcgService.delete(idSearchReq);
+            hhQdPduyetKqcgService.delete(idSearchReq.getId());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -156,7 +153,7 @@ public class HhQdPduyetKqcgController extends BaseController {
     public ResponseEntity<BaseResponse> deleteMulti(@RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            hhQdPduyetKqcgService.deleteMulti(idSearchReq);
+            hhQdPduyetKqcgService.deleteMulti(idSearchReq.getIds());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

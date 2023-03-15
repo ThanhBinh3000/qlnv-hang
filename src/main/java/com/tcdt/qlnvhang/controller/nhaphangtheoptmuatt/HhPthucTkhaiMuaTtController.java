@@ -2,17 +2,14 @@ package com.tcdt.qlnvhang.controller.nhaphangtheoptmuatt;
 
 import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
-import com.tcdt.qlnvhang.request.HhQdPheduyetKhMttHdrReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhCgiaReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhPthucTkhaiReq;
-import com.tcdt.qlnvhang.request.object.HhDthauReq;
-import com.tcdt.qlnvhang.request.search.HhQdKhlcntSearchReq;
+
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.nhaphangtheoptmuatt.HhPthucTkhaiMuaTtService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -75,22 +72,23 @@ public ResponseEntity<BaseResponse> colection(HttpServletRequest request,
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Lấy chi tiết thông tin đấu thầu gạo", response = List.class)
-    @GetMapping(value =PathContains.TKHAI_MTT + PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> detail(@PathVariable("ids") String ids) {
-        BaseResponse resp = new BaseResponse();
-        try {
-            resp.setData(hhPthucTkhaiMuaTtService.detail(ids));
-            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-        } catch (Exception e) {
-            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-            resp.setMsg(e.getMessage());
-            log.error("Lấy chi tiết thông tin đấu thầu gạo trace: {}", e);
-        }
-        return ResponseEntity.ok(resp);
-    }
+//    @ApiOperation(value = "Lấy chi tiết thông tin đấu thầu gạo", response = List.class)
+//    @GetMapping(value =PathContains.TKHAI_MTT + PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ResponseStatus(HttpStatus.OK)
+//    public ResponseEntity<BaseResponse> detail(@PathVariable("ids") String ids) {
+//        BaseResponse resp = new BaseResponse();
+//        try {
+//            resp.setData(hhPthucTkhaiMuaTtService.detail(ids));
+//            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+//            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+//        } catch (Exception e) {
+//            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+//            resp.setMsg(e.getMessage());
+//            log.error("Lấy chi tiết thông tin đấu thầu gạo trace: {}", e);
+//        }
+//        return ResponseEntity.ok(resp);
+//    }
+
     @ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 thông tin đấu thầu gạo", response = List.class)
     @PostMapping(value =PathContains.TKHAI_MTT + PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> updateStatus(@Valid HttpServletRequest req, @RequestBody HhCgiaReq stReq) {

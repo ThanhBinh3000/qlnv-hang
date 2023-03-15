@@ -29,7 +29,7 @@ public class HhDxKhMttThopDtl implements Serializable {
     @Transient
     private String tenDvi;
 
-    private String diaChiDvi;
+    private String diaChi;
 
     private String soDxuat;
 
@@ -42,49 +42,8 @@ public class HhDxKhMttThopDtl implements Serializable {
 
     private BigDecimal tongSoLuong;
 
-    private Integer namKh;
-
-    private BigDecimal tongTienVat;
-
-    private String loaiVthh;
-    @Transient
-    private String tenLoaiVthh;
-
-    private String cloaiVthh;
-    @Transient
-    private String tenCloaiVthh;
-
-    private String moTaHangHoa;
-
-    private String ptMua;
-
-    private String tchuanCluong;
-
-    private String giaMua;
-
-    private BigDecimal donGia;
-
-    private BigDecimal thueGtgt;
+    private BigDecimal tongTienGomThue;
 
     private BigDecimal donGiaVat;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date tgianMkho;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date tgianKthuc;
-
-    private String ghiChu;
-
-    private String nguonVon;
-
-    private BigDecimal tongMucDt;
-
-    private String soQd;
-
-    private String trangThaiDx;
-    @Transient
-    private String tenTrangThaiDx;
-
 
 }

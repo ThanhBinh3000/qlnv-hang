@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.repository.nhaphangtheoptmtt;
 
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxKhlcntDsgthauCtiet;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDxuatKhMttSlddDtl;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -8,11 +7,11 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 public interface HhDxuatKhMttSlddDtlRepository extends JpaRepository<HhDxuatKhMttSlddDtl,Long> {
-    List<HhDxuatKhMttSlddDtl> findByIdDiaDiem(Long idDiaDiem);
+    List<HhDxuatKhMttSlddDtl> findAllByIdDtl(Long idDtl);
 
-    void deleteAllByIdDiaDiem(Long idDiaDiem);
+    void deleteAllByIdDtl(Long idDtl);
 
     @Transactional
-    void deleteAllByIdDiaDiemIn(List<Long> idDiaDiem);
+    void deleteAllByIdDtlIn(List<Long> idDtl);
 
 }

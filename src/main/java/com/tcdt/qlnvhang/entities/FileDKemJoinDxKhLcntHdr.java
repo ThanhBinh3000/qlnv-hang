@@ -30,6 +30,7 @@ public class FileDKemJoinDxKhLcntHdr implements Serializable {
 	@SequenceGenerator(sequenceName = "FILE_DINH_KEM_SEQ", allocationSize = 1, name = "FILE_DINH_KEM_SEQ")
 	Long id;
 	String fileName;
+	String noiDung;
 	String fileSize;
 	String fileUrl;
 	String fileType;
