@@ -33,5 +33,5 @@ public class XhDgBbTinhKhoDtl implements Serializable {
   @ManyToOne
   @JsonIgnore
   @JoinColumn(name = "idHdr", updatable = false, insertable = false)
-  private XhCtvtBbTinhKhoHdr xhCtvtBbTinhKhoHdr;
+  private XhDgBbTinhKhoHdr xhDgBbTinhKhoHdr;
 }
