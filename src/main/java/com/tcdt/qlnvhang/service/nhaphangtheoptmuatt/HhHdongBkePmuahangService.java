@@ -82,12 +82,12 @@ public class HhHdongBkePmuahangService extends BaseServiceImpl {
                 throw new Exception("Số hợp đồng" + objReq.getSoHd() + " đã tồn tại ");
             }
         }
-
-        Optional<HhQdPduyetKqcgHdr> checkSoQd = hhQdPduyetKqcgRepository.findBySoQd(objReq.getSoQdKqMtt());
-        if (!checkSoQd.isPresent()){
-            throw new Exception(
-                    "Số quyết định phê duyệt kết quả lựa chọn nhà thầu " + objReq.getSoQdKqMtt() + " không tồn tại");
-        }
+//
+//        Optional<HhQdPduyetKqcgHdr> checkSoQd = hhQdPduyetKqcgRepository.findBySoQd(objReq.getSoQdKqMtt());
+//        if (!checkSoQd.isPresent()){
+//            throw new Exception(
+//                    "Số quyết định phê duyệt kết quả lựa chọn nhà thầu " + objReq.getSoQdKqMtt() + " không tồn tại");
+//        }
 
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null){
@@ -112,11 +112,11 @@ public class HhHdongBkePmuahangService extends BaseServiceImpl {
 
         this.saveDataChildren(dataMap, objReq);
 
-        Optional<HhQdPduyetKqcgHdr> bySoQd = hhQdPduyetKqcgRepository.findById(dataMap.getIdQdKqMtt());
-        if (bySoQd.isPresent()){
-            bySoQd.get().setTrangThaiHd(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
-            hhQdPduyetKqcgRepository.save(bySoQd.get());
-        }
+//        Optional<HhQdPduyetKqcgHdr> bySoQd = hhQdPduyetKqcgRepository.findById(dataMap.getIdQdKqMtt());
+//        if (bySoQd.isPresent()){
+//            bySoQd.get().setTrangThaiHd(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
+//            hhQdPduyetKqcgRepository.save(bySoQd.get());
+//        }
 return dataMap;
     }
 
@@ -159,12 +159,12 @@ return dataMap;
             }
         }
 
-        if (!qOptional.get().getSoQdKqMtt().equals(objReq.getSoQdKqMtt())) {
-            Optional<HhQdPduyetKqcgHdr> checkSoQd = hhQdPduyetKqcgRepository.findBySoQd(objReq.getSoQdKqMtt());
-            if (!checkSoQd.isPresent())
-                throw new Exception("Số quyết định kết quả mua trực tiếp" + objReq.getSoQdKqMtt() + " không tồn tại ");
-
-        }
+//        if (!qOptional.get().getSoQdKqMtt().equals(objReq.getSoQdKqMtt())) {
+//            Optional<HhQdPduyetKqcgHdr> checkSoQd = hhQdPduyetKqcgRepository.findBySoQd(objReq.getSoQdKqMtt());
+//            if (!checkSoQd.isPresent())
+//                throw new Exception("Số quyết định kết quả mua trực tiếp" + objReq.getSoQdKqMtt() + " không tồn tại ");
+//
+//        }
 
         HhHdongBkePmuahangHdr dataDB = qOptional.get();
         BeanUtils.copyProperties(objReq, dataDB);

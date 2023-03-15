@@ -1,9 +1,6 @@
 package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
 import com.google.common.collect.Lists;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMau;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuknghiemcl.PhieuKnghiemCluongHang;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -263,9 +260,9 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
 //            update.setTrangThaiNh(data.getTenTrangThai());
 //            hhHdongBkePmuahangRepository.save(update);
         }else if (!DataUtils.isNullObject(data.getIdQdPdKq())){
-            HhQdPduyetKqcgHdr update= hhQdPduyetKqcgRepository.findAllById(data.getIdQdPdKq());
+//            HhQdPduyetKqcgHdr update= hhQdPduyetKqcgRepository.findAllById(data.getIdQdPdKq());
 //            update.setTrangThaiNh(data.getTrangThai());
-            hhQdPduyetKqcgRepository.save(update);
+//            hhQdPduyetKqcgRepository.save(update);
         }
 
         this.saveCtiet(data,objReq);

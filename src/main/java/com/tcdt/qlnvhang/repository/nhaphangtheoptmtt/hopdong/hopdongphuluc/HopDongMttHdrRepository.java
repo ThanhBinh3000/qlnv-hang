@@ -9,38 +9,27 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 public interface HopDongMttHdrRepository extends JpaRepository<HopDongMttHdr, Long> {
-  @Query("SELECT c FROM HopDongMttHdr c WHERE 1=1 " +
-      "AND (:#{#param.maDvi} IS NULL OR c.maDvi = :#{#param.maDvi}) " +
-      "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
-      "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
-      "AND (:#{#param.soHd} IS NULL OR  LOWER(c.soHd) LIKE CONCAT('%',LOWER(:#{#param.soHd}),'%')) " +
-      "AND (:#{#param.tenHd} IS NULL OR  LOWER(c.tenHd) LIKE CONCAT('%',LOWER(:#{#param.tenHd}),'%')) " +
-      "AND ((:#{#param.ngayKyTu}  IS NULL OR c.ngayKy >= :#{#param.ngayKyTu})" +
-      "AND (:#{#param.ngayKyDen}  IS NULL OR c.ngayKy <= :#{#param.ngayKyDen}) ) " +
-      "AND (:#{#param.soQdPdKh}  IS NULL OR LOWER(c.soQdPdKh) LIKE CONCAT('%',LOWER(:#{#param.soQdPdKh}),'%')) " +
-      "AND (:#{#param.soQdPdKq}  IS NULL OR LOWER(c.soQdPdKq) LIKE CONCAT('%',LOWER(:#{#param.soQdPdKq}),'%')) " +
-      "AND (:#{#param.loaiVthh}  IS NULL OR LOWER(c.loaiVthh) =:#{#param.loaiVthh}) " +
-      "AND (:#{#param.cloaiVthh}  IS NULL OR LOWER(c.cloaiVthh) =:#{#param.cloaiVthh}) " +
-      "AND (:#{#param.trangThai == null} = true OR c.trangThai in :#{#param.trangThai}) " +
-//      "AND ((:#{#param.ngayQdPdKqBdg}  IS NULL OR c.ngayQdPdKqBdg >= :#{#param.ngayQdPdKqBdg}) AND (:#{#param.ngayQdPdKqBdg}  IS NULL OR c.ngayQdPdKqBdg <= :#{#param.ngayQdPdKqBdg}) ) " +
-      "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
-  )
-  Page<HopDongMttHdr> search(@Param("param") HopDongMttHdrReq param, Pageable pageable);
-
-  void deleteAllByIdIn(List<Long> listId);
-
-  List<HopDongMttHdr> findByIdIn(List<Long> ids);
-
-  List<HopDongMttHdr> findByIdHd(Long idHdr);
-
-  List<HopDongMttHdr> findByIdHdIn(List<Long> idHdr);
+  @Query("SELECT DX from HopDongMttHdr DX WHERE 1 = 1 " +
+          "AND (:#{#param.namHd} IS NULL OR DX.namHd = :#{#param.namHd}) " +
+          "AND (:#{#param.soHd} IS NULL OR LOWER(DX.soHd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soHd}),'%' ) ) )" +
+          "AND (:#{#param.tenHd} IS NULL OR LOWER(DX.tenHd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.tenHd}),'%'))) " +
+          "AND (:#{#param.tenDviMua} IS NULL OR LOWER(DX.tenDviMua) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.tenDviMua}),'%'))) " +
+          "AND (:#{#param.loaiVthh} IS NULL OR DX.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
+          "AND (:#{#param.trangThai} IS NULL OR DX.trangThai = :#{#param.trangThai}) " +
+          "AND (:#{#param.maDvi} IS NULL OR DX.maDvi = :#{#param.maDvi})")
+  Page<HopDongMttHdr> searchPage(@Param("param") HopDongMttHdrReq param, Pageable pageable);
 
   Optional<HopDongMttHdr> findBySoHd(String soHd);
 
-  List<HopDongMttHdr> findAllByIdIn(List<Long> listId);
+  @Transactional
+  List<HopDongMttHdr> findAllByIdHd(Long idHd);
+
+  @Transactional
+  List<HopDongMttHdr> findAllByIdQdKq(Long idQdKq);
 
 }

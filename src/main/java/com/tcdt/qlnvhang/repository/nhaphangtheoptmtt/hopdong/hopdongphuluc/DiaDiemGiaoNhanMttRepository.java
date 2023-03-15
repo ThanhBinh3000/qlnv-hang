@@ -4,11 +4,17 @@ import com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc.DiaDiemGiao
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
 public interface DiaDiemGiaoNhanMttRepository extends JpaRepository<DiaDiemGiaoNhanMtt,Long> {
-    List<DiaDiemGiaoNhanMtt> findAllByIdHdr(Long ids);
+    @Transactional
+    void deleteAllByIdHdr(Long idHdr);
 
-    List<DiaDiemGiaoNhanMtt> findAllByIdHdrIn(List<Long> ids);
+    @Transactional
+    List<DiaDiemGiaoNhanMtt> findAllByIdHdr(Long idHdr);
+
+    @Transactional
+    List<DiaDiemGiaoNhanMtt>  findAllByIdHdDtl(Long idHdDtl);
 }

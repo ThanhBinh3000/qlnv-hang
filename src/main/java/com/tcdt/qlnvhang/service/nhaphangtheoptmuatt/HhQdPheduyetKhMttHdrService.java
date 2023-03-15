@@ -447,7 +447,20 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         hdr.setTenCloaiVthh(hashMapVthh.get(hdr.getCloaiVthh()));
         dtl.setHhQdPheduyetKhMttHdr(hdr);
 
-
+        List<HhQdPheduyetKhMttSLDD> byIdSldd = hhQdPheduyetKhMttSLDDRepository.findAllByIdQdDtl(dtl.getId());
+        for (HhQdPheduyetKhMttSLDD sldd : byIdSldd){
+            List<HhQdPdKhMttSlddDtl> byIdSlddDtl = hhQdPdKhMttSlddDtlRepository.findAllByIdDiaDiem(sldd.getId());
+            byIdSlddDtl.forEach(f->{
+                f.setTenDiemKho(hashMapDvi.get(f.getMaDiemKho()));
+            });
+            sldd.setChildren(byIdSlddDtl);
+            sldd.setTenDvi(hashMapDvi.get(sldd.getMaDvi()));
+        }
+        dtl.setTenDvi(StringUtils.isEmpty(dtl.getMaDvi())? null : hashMapDvi.get(dtl.getMaDvi()));
+        dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThai()));
+        dtl.setTenLoaiVthh(StringUtils.isEmpty(dtl.getLoaiVthh())? null : hashMapVthh.get(dtl.getLoaiVthh()));
+        dtl.setTenCloaiVthh(StringUtils.isEmpty(dtl.getCloaiVthh())? null : hashMapVthh.get(dtl.getCloaiVthh()));
+        dtl.setChildren(byIdSldd);
 
         List<HhChiTietTTinChaoGia> byIdQdDtl = hhCtietTtinCgiaRepository.findAllByIdQdDtl(dtl.getId());
         for (HhChiTietTTinChaoGia chaoGia : byIdQdDtl){
@@ -456,10 +469,6 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
                 chaoGia.setFileDinhKems(fileDinhKems.get(0));
             }
         }
-        dtl.setTenDvi(StringUtils.isEmpty(dtl.getMaDvi())? null : hashMapDvi.get(dtl.getMaDvi()));
-        dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThai()));
-        dtl.setTenLoaiVthh(StringUtils.isEmpty(dtl.getLoaiVthh())? null : hashMapVthh.get(dtl.getLoaiVthh()));
-        dtl.setTenCloaiVthh(StringUtils.isEmpty(dtl.getCloaiVthh())? null : hashMapVthh.get(dtl.getCloaiVthh()));
         dtl.setListChaoGia(byIdQdDtl);
 
         if (!DataUtils.isNullObject(dtl.getPthucMuaTrucTiep())) {

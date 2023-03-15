@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc.HopDongMttHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Getter;
 import lombok.Setter;
@@ -78,10 +79,17 @@ public class HhQdPduyetKqcgHdr extends TrangThaiBaseEntity implements Serializab
     @Transient
     private String tenTrangThaiHd;
 
+    private String trangThaiNh;
+    @Transient
+    private String tenTrangThaiNh;
+
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
     @Transient
     private FileDinhKem fileDinhKem;
+
+    @Transient
+    private List<HopDongMttHdr> hopDongMttHdrList = new ArrayList<>();
 
 }
