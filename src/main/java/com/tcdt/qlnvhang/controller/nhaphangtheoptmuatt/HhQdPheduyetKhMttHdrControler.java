@@ -90,10 +90,10 @@ public class HhQdPheduyetKhMttHdrControler {
 
 
     @ApiOperation(value = "Lấy chi tiết Quyết định phê duyệt kế hoạch mua trực tiếp", response = List.class)
-    @GetMapping(value =PathContains.QD_PD_MTT+ PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value =PathContains.QD_PD_MTT + PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> detail(
-            @ApiParam(value = "ID phương án kế hoạch mua trực tiếp", example = "1", required = true) @PathVariable("ids") String ids) {
+            @ApiParam(value = "ID phương án kế hoạch bán trực tiếp", example = "1", required = true) @PathVariable("ids") Long ids) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhQdPheduyetKhMttHdrService.detail(ids));
@@ -102,45 +102,43 @@ public class HhQdPheduyetKhMttHdrControler {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Lấy chi tiết Quyết định phê duyệt kế hoạch mua trực tiếp trace: {}", e);
+            log.error("Lấy chi tiết Quyết định phê duyệt kế hoạch bán trực tiếp trace: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-
-    @ApiOperation(value = "Xoá Quyết định phê duyệt kế hoạch mua trực tiếp", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PostMapping(value = PathContains.QD_PD_MTT + PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Xoá quyết định phê duyệt kế hoạch mua tiếp", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.QD_PD_MTT +PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
-        try {
-            hhQdPheduyetKhMttHdrService.delete(idSearchReq);
+        try {hhQdPheduyetKhMttHdrService.delete(idSearchReq.getId());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
             // TODO: handle exception
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Xoá Quyết định phê duyệt kế hoạch mua trực tiếp trace: {}", e);
+            log.error("Xoá quyết định phê duyệt kế hoạch bán đấu giá trace: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
 
-    @ApiOperation(value = "Xoá danh sách Quyết định phê duyệt kế hoạch mua trực tiếp", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Xoá danh sách quyết định phê duyệt kế hoạch mua trực tiếp", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping(value = PathContains.QD_PD_MTT + PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> deleteMuilti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            hhQdPheduyetKhMttHdrService.deleteMulti(idSearchReq);
+            hhQdPheduyetKhMttHdrService.deleteMulti(idSearchReq.getIdList());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
             // TODO: handle exception
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Xoá Quyết định phê duyệt kế hoạch mua trực tiếp trace: {}", e);
+            log.error("Xoá quyết định phê duyệt kế hoạch bán đấu giá trace: {}", e);
         }
         return ResponseEntity.ok(resp);
     }

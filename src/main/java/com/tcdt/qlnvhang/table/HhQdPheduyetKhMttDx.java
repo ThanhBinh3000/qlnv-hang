@@ -1,10 +1,7 @@
 package com.tcdt.qlnvhang.table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDsgthau;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhChiTietTTinChaoGia;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDxuatKhMttHdr;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhQdPduyetKqcgHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
@@ -37,11 +34,11 @@ public class HhQdPheduyetKhMttDx implements Serializable {
     @Transient
     private String tenDvi;
 
-    private String diaChiDvi;
+    private String diaChi;
 
     private String soDxuat;
 
-    @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayPduyet;
 
     private String trichYeu;
@@ -50,13 +47,7 @@ public class HhQdPheduyetKhMttDx implements Serializable {
 
     private BigDecimal tongSoLuong;
 
-    private Integer namKh;
-
-    private BigDecimal tongTienVat;
-
-    private String trangThaiTkhai;
-    @Transient
-    private String tenTrangThaiTkhai;
+    private BigDecimal tongTienGomThue;
 
     private String loaiVthh;
     @Transient
@@ -80,34 +71,37 @@ public class HhQdPheduyetKhMttDx implements Serializable {
 
     private BigDecimal donGiaVat;
 
-    @Temporal(TemporalType.DATE)
-    private Date tgianMkho;
-
-    @Temporal(TemporalType.DATE)
-    private Date tgianKthuc;
-
     private String ghiChu;
 
     private String nguonVon;
 
     private BigDecimal tongMucDt;
 
-    @Column(name="SO_QD_PD_KQ_MTT")
-    String soQdPdKqMtt;
-
-    private String ptMuaTrucTiep;
-
     @Transient
-    private HhQdPheduyetKhMttHdr hhQdPheduyetKhMttHdr;
+    private List<HhQdPheduyetKhMttSLDD> children = new ArrayList<>();
 
-    @Transient
-    private HhDxuatKhMttHdr dxuatKhMttHdr;
 
-    @Transient
-    private HhQdPduyetKqcgHdr hhQdPduyetKqcgHdr;
+    // thông tin chào giá
+    private String pthucMuaTrucTiep;
 
+    private String soQd;
+
+    private String diaDiemChaoGia;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayNhanCgia;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayMkho;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayMua;
+
+    private String ghiChuChaoGia;
+
+    private String trangThai;
     @Transient
-    private List<HhChiTietTTinChaoGia> hhChiTietTTinChaoGiaList = new ArrayList<>();
+    private String tenTrangThai;
 
     @Transient
     private List<FileDinhKem> fileDinhKemUyQuyen = new ArrayList<>();
@@ -115,8 +109,11 @@ public class HhQdPheduyetKhMttDx implements Serializable {
     @Transient
     private List<FileDinhKem> fileDinhKemMuaLe = new ArrayList<>();
 
-
+    @Transient
+    private List<HhChiTietTTinChaoGia> listChaoGia = new ArrayList<>();
 
     @Transient
-    private List<HhQdPheduyetKhMttSLDD> children = new ArrayList<>();
+    private HhQdPheduyetKhMttHdr hhQdPheduyetKhMttHdr;
+
+
 }

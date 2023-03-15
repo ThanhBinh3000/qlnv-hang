@@ -1,12 +1,13 @@
 package com.tcdt.qlnvhang.request.nhaphangtheoptt;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import com.tcdt.qlnvhang.request.object.HhDthauNthauDuthauReq;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhChiTietTTinChaoGia;
+import com.tcdt.qlnvhang.util.Contains;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -14,15 +15,27 @@ public class HhCgiaReq {
     @ApiModelProperty(notes = "Bắt buộc set đối với update")
     private Long id;
 
-    private Long idChaoGia;
+    private Long idQdDtl;
 
-    private String loaiVthh;
+    private String soQd;
 
-    private String trangThaiTkhai;
+    private String pthucMuaTrucTiep;
 
-    private String ptMuaTrucTiep;
+    private String diaDiemChaoGia;
 
-    private List<FileDinhKemReq> fileDinhKems =new ArrayList<>();
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayMkho;
 
-    private List<HhChiTietTTinChaoGiaReq> hhChiTietTTinChaoGiaReqs = new ArrayList<>();
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayMua;
+
+    private String ghiChuChaoGia;
+
+    private String trangThai;
+
+    private List<FileDinhKemReq> fileDinhKemUyQuyen = new ArrayList<>();
+
+    private List<FileDinhKemReq> fileDinhKemMuaLe = new ArrayList<>();
+
+    private List<HhChiTietTTinChaoGiaReq> children = new ArrayList<>();
 }
