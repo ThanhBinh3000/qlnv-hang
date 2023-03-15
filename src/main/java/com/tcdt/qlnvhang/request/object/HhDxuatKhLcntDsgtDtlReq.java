@@ -34,7 +34,7 @@ public class HhDxuatKhLcntDsgtDtlReq {
 	String diaDiemNhap;
 
 	BigDecimal donGiaVat;
-
+	BigDecimal donGiaDx;
 	BigDecimal donGiaTamTinh;
 
 	BigDecimal thanhTien;

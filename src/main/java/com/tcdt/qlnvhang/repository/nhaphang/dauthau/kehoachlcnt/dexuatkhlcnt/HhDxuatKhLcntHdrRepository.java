@@ -39,15 +39,17 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 					" WHERE (:namKh IS NULL OR KHLCNT.NAM_KHOACH = TO_NUMBER(:namKh)) " +
 					"  AND (:soTr IS NULL OR LOWER(KHLCNT.SO_DXUAT) LIKE LOWER(CONCAT(CONCAT('%', :soTr),'%'))) " +
 					"  AND (:soQd IS NULL OR LOWER(KHLCNT.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQd),'%')))" +
-					"  AND (:ngayKyTu IS NULL OR KHLCNT.NGAY_KY >= TO_DATE(:ngayKyTu, 'yyyy-MM-dd'))" +
-					"  AND (:ngayKyDen IS NULL OR KHLCNT.NGAY_KY <= TO_DATE(:ngayKyDen, 'yyyy-MM-dd'))" +
+					"  AND (:ngayKyTu IS NULL OR KHLCNT.NGAY_PDUYET >= TO_DATE(:ngayKyTu, 'yyyy-MM-dd'))" +
+					"  AND (:ngayKyDen IS NULL OR KHLCNT.NGAY_PDUYET <= TO_DATE(:ngayKyDen, 'yyyy-MM-dd'))" +
+					"  AND (:ngayTaoTu IS NULL OR KHLCNT.NGAY_TAO >= TO_DATE(:ngayTaoTu, 'yyyy-MM-dd'))" +
+					"  AND (:ngayTaoDen IS NULL OR KHLCNT.NGAY_TAO <= TO_DATE(:ngayTaoDen, 'yyyy-MM-dd'))" +
 					"  AND (:loaiVthh IS NULL OR KHLCNT.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) " +
 					"  AND (:trichYeu IS NULL OR LOWER(KHLCNT.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%')))" +
 					"  AND (:trangThai IS NULL OR KHLCNT.TRANG_THAI = :trangThai) "+
 					"  AND (:trangThaiTh IS NULL OR KHLCNT.TRANG_THAI_TH = :trangThaiTh) " +
 					"  AND (:maDvi IS NULL OR KHLCNT.MA_DVI = :maDvi) "
 			,nativeQuery = true)
-	Page<HhDxuatKhLcntHdr> select(String namKh, String soTr,String soQd, String ngayKyTu,String ngayKyDen,String loaiVthh,String trichYeu,String trangThai,String trangThaiTh,String maDvi, Pageable pageable);
+	Page<HhDxuatKhLcntHdr> select(String namKh, String soTr,String soQd, String ngayKyTu,String ngayKyDen, String ngayTaoTu,String ngayTaoDen,String loaiVthh,String trichYeu,String trangThai,String trangThaiTh,String maDvi, Pageable pageable);
 
 	@Query(
 			value = "SELECT * " +
@@ -107,4 +109,9 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 			" AND DX_HDR.ID IN (:dxIds) "
 			, nativeQuery = true)
 	List<Object[]> getQdPdKhLcnt(Collection<Long> dxIds, String trangThai);
+
+	@Query(value = " SELECT PAG.GIA_DE_NGHI FROM KH_PHUONG_AN_GIA PAG " +
+			" WHERE PAG.TRANG_THAI = '05' AND PAG.LOAI_GIA = 'LG01' AND PAG.TYPE = 'GMTDBTT' AND PAG.CLOAI_VTHH = :cloaiVthh ",
+			nativeQuery = true)
+	BigDecimal getGiaBanToiDa(String cloaiVthh);
 }

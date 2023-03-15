@@ -269,5 +269,6 @@ public class PathContains {
 
 	public static final String KQUA_BTT = "/kq-btt";
 	public static final String KQUA_DGIA = "/kq-bdg";
+	public static final String GIA_BAN_TOI_DA = "/gia-ban-toi-da";
 
 }
