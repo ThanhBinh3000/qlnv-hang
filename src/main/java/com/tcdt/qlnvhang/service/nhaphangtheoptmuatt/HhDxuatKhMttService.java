@@ -121,9 +121,9 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
     }
 
   @Transactional
-  void saveDetail(HhDxuatKhMttHdrReq objReq, Long idHdr){
+  void saveDetail(HhDxuatKhMttHdrReq req, Long idHdr){
         hhDxuatKhMttSlddRepository.deleteAllByIdHdr(idHdr);
-        for ( HhDxuatKhMttSlddReq slddReq: objReq.getChildren()){
+        for ( HhDxuatKhMttSlddReq slddReq: req.getChildren()){
             HhDxuatKhMttSldd sldd = new HhDxuatKhMttSldd();
             BeanUtils.copyProperties(slddReq, sldd, "id");
             sldd.setId(null);

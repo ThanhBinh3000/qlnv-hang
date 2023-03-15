@@ -37,20 +37,9 @@ public interface HhDxuatKhMttRepository extends JpaRepository<HhDxuatKhMttHdr, L
     @Query(value = "UPDATE HH_DX_KHMTT_HDR SET TRANG_THAI_TH = :trangThaiTh , MA_THOP = :idTh WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
     void updateStatusInList(List<String> soDxuatList, String trangThaiTh,Long idTh);
 
-
-    @Transactional()
-    @Modifying
-    @Query(value = "UPDATE HH_DX_KHMTT_HDR SET SO_QD_PDUYET=:soQdPduyet WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
-    void updateSoQdPduyet(List<String> soDxuatList, String soQdPduyet);
-
-
-
     @Transactional
     void deleteAllByIdIn(List<Long> ids);
     Optional<HhDxuatKhMttHdr> findBySoDxuat(String soDxuat);
-    List<HhDxuatKhMttHdr> findBySoDxuatIn (List<String> list);
-
-    List <HhDxuatKhMttHdr>findAllByIdIn(List<Long> listId);
 
     @Query(value = "select * from HH_DX_KHMTT_HDR MTT where (:namKh IS NULL OR MTT.NAM_KH = TO_NUMBER(:namKh)) " +
             " AND (:loaiVthh IS NULL OR MTT.LOAI_VTHH = :loaiVthh) " +
@@ -62,9 +51,6 @@ public interface HhDxuatKhMttRepository extends JpaRepository<HhDxuatKhMttHdr, L
     List<HhDxuatKhMttHdr> listTongHop(Integer namKh, String loaiVthh, String cloaiVthh);
 
     List<HhDxuatKhMttHdr> findByIdIn(List<Long> id);
-    HhDxuatKhMttHdr findAllById(Long id);
-
-
 
     @Query(value = " SELECT NVL(SUM(SLDD.SO_LUONG),0) FROM HH_QD_PHE_DUYET_KHMTT_HDR HDR " +
             " INNER JOIN HH_QD_PHE_DUYET_KHMTT_DX DX on HDR.ID = DX.ID_QD_HDR " +
@@ -73,6 +59,11 @@ public interface HhDxuatKhMttRepository extends JpaRepository<HhDxuatKhMttHdr, L
             nativeQuery = true)
     BigDecimal countSLDalenKh(Integer namKh, String loaiVthh, String maDvi, String trangThai);
 
-
     HhDxuatKhMttHdr findAllByLoaiVthhAndCloaiVthhAndNamKhAndMaDviAndTrangThaiNot(String loaiVthh,String cloaiVthh,Integer namKh,String maDvi,String trangThai);
+
+    @Transactional()
+    @Modifying
+    @Query(value = "UPDATE HH_DX_KHMTT_HDR SET TRANG_THAI_TH = :trangThaiTh WHERE ID = :idDxuat", nativeQuery = true)
+    void updateStatusTh(Long idDxuat, String trangThaiTh);
+
 }

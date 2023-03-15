@@ -3,40 +3,60 @@ package com.tcdt.qlnvhang.request.nhaphangtheoptt;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.util.Contains;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
+
+import javax.persistence.Column;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 public class HhQdPduyetKqcgHdrReq  {
     private Long id;
+
+    private Long idPdKhDtl;
+
+    private Long idPdKhHdr;
+
     private Integer namKh;
-    private String soQd;
+
+    private String soQdKq;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    @Column(columnDefinition = "Date")
     private Date ngayKy;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    @Column(columnDefinition = "Date")
     private Date ngayHluc;
-    private String soQdPdKh;
+
+    private String soQd;
+
     private String trichYeu;
-    private String ghiChu;
+
     private String maDvi;
-    private String diaChiCgia;
+
+    private String diaDiemChaoGia;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date tgianMkho;
+    @Column(columnDefinition = "Date")
+    private Date ngayMkho;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date tgianKthuc;
+    @Column(columnDefinition = "Date")
+    private Date ngayMua;
+
     private String loaiVthh;
+
     private String cloaiVthh;
+
     private String moTaHangHoa;
-    private String trangThai;
-    private Long idQdPdKh;
-    private Long idQdPdKhDtl;
-    private List<FileDinhKemReq> fileDinhKems;
+
+    private String ghiChu;
+
+    private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
+
+    private FileDinhKemReq fileDinhKem;
 }
