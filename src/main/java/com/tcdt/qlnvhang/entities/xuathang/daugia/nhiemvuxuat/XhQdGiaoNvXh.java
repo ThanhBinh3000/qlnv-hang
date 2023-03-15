@@ -11,6 +11,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,6 +35,7 @@ public class XhQdGiaoNvXh extends TrangThaiBaseEntity implements Serializable {
     private Date ngayKy;
     private Long idHd;
     private String soHd;
+    private LocalDate ngayKyHd;
     private String maDviTsan;
     private String tenTtcn;
     private String loaiVthh;

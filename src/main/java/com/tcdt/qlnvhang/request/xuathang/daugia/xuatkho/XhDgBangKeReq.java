@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.request.xuathang.daugia.xuatkho;
 
+import com.tcdt.qlnvhang.entities.xuathang.daugia.xuatkho.XhDgBangKeDtl;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBangKeDtl;
 import lombok.Data;
@@ -47,5 +48,5 @@ public class XhDgBangKeReq extends BaseRequest {
   private String lyDoTuChoi;
   private String trangThai;
   private String type;
-  private List<XhCtvtBangKeDtl> bangKeDtl= new ArrayList<>();
+  private List<XhDgBangKeDtl> bangKeDtl= new ArrayList<>();
 }
