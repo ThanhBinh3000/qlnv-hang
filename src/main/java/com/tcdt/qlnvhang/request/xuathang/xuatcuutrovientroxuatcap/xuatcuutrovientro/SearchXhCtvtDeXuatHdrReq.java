@@ -10,24 +10,25 @@ import java.util.List;
 
 @Data
 public class SearchXhCtvtDeXuatHdrReq extends BaseRequest {
-    private Long id;
-    private Integer nam;
-    private String maDvi;
-    private String dvql;
-    private String soDx;
-    private LocalDate ngayDxTu;
-    private LocalDate ngayDxDen;
-    private LocalDate ngayKetThucTu;
-    private LocalDate ngayKetThucDen;
-    private String trangThai;
-    private String type;
+  private Long id;
+  private Integer nam;
+  private String maDvi;
+  private String dvql;
+  private String soDx;
+  private LocalDate ngayDxTu;
+  private LocalDate ngayDxDen;
+  private LocalDate ngayKetThucTu;
+  private LocalDate ngayKetThucDen;
+  private String trangThai;
+  private String type;
 
-    private String loaiVthh;
-    private String loaiNhapXuat;
-    private List<String> trangThaiList = new ArrayList<>();
-    private List<XhCtvtTongHopDtl> deXuatCuuTro = new ArrayList<>();
-    private String maTongHop;
+  private String loaiVthh;
+  private String loaiNhapXuat;
+  private List<String> trangThaiList = new ArrayList<>();
+  private List<XhCtvtTongHopDtl> deXuatCuuTro = new ArrayList<>();
+  private String maTongHop;
 
-    private List<Long> idQdPdList = new ArrayList<>();
+  private List<Long> idQdPdList = new ArrayList<>();
+  private Boolean idQdPdNull = false;
 
 }
