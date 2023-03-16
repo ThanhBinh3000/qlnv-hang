@@ -300,4 +300,22 @@ public class HhDxuatKhLcntHdrController {
 		return ResponseEntity.ok(resp);
 	}
 
+	@ApiOperation(value = "Lấy giá bán tối đa", response = List.class)
+	@GetMapping(value = PathContains.GIA_BAN_TOI_DA + "/{cloaiVthh}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> getGiaBanToiDa(
+			@ApiParam(value = "cloaiVthh", example = "010101", required = true) @PathVariable("cloaiVthh") String cloaiVthh) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.getGiaBanToiDa(cloaiVthh));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Lấy giá bán tối đa trace: {}", e);
+		}
+		return ResponseEntity.ok(resp);
+	}
+
 }
