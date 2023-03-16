@@ -28,5 +28,6 @@ public class SearchXhCtvtDeXuatHdrReq extends BaseRequest {
     private List<XhCtvtTongHopDtl> deXuatCuuTro = new ArrayList<>();
     private String maTongHop;
 
+    private List<Long> idQdPdList = new ArrayList<>();
 
 }
