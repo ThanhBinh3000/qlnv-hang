@@ -24,6 +24,10 @@ public class XhDxKhBanTrucTiepDtlReq {
 
     private BigDecimal donGiaVat;
 
+    private BigDecimal soLuongChiTieu;
+
+    private BigDecimal soLuongKh;
+
     @Transient
     private List<XhDxKhBanTrucTiepDdiemReq> children = new ArrayList<>();
 

@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhQdPduyetKqcgRepository;
+import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhQdPheduyetKhMttDxRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhQdPheduyetKhMttHdrRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.hopdong.hopdongphuluc.HopDongMttHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -39,6 +40,9 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
 
     @Autowired
     HhQdPheduyetKhMttHdrRepository hhQdPheduyetKhMttHdrRepository;
+
+    @Autowired
+    HhQdPheduyetKhMttDxRepository hhQdPheduyetKhMttDxRepository;
 
     @Autowired
     HopDongMttHdrRepository hopDongMttHdrRepository;
@@ -82,6 +86,12 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
         data.setTrangThai(Contains.DUTHAO);
         data.setTrangThaiHd(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
         data.setTrangThaiNh(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
+
+        Optional<HhQdPheduyetKhMttDx> dx = hhQdPheduyetKhMttDxRepository.findById(req.getIdPdKhDtl());
+        if (dx.isPresent()){
+            dx.get().setSoQdKq(req.getSoQdKq());
+            hhQdPheduyetKhMttDxRepository.save(dx.get());
+        }
 
         HhQdPduyetKqcgHdr created = hhQdPduyetKqcgRepository.save(data);
         if (!DataUtils.isNullObject(req.getFileDinhKem())) {

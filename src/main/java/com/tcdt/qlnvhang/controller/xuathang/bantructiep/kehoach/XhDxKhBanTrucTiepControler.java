@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.IdSearchReq;
+import com.tcdt.qlnvhang.request.nhaphangtheoptt.CountKhMttSlReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdrReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepService;
+import com.tcdt.qlnvhang.service.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepServicelmpl;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -18,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -32,6 +35,9 @@ public class XhDxKhBanTrucTiepControler extends BaseController {
 
     @Autowired
     private XhDxKhBanTrucTiepService xhDxKhBanTrucTiepService;
+
+    @Autowired
+    private XhDxKhBanTrucTiepServicelmpl xhDxKhBanTrucTiepServicelmpl;
 
     @ApiOperation(value = "Tra cứu đề xuất kế hoạch bán trực tiếp", response = List.class)
     @PostMapping(value=  PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -170,5 +176,23 @@ public class XhDxKhBanTrucTiepControler extends BaseController {
             mapper.writeValue(response.getOutputStream(), body);
         }
 
+    }
+
+    @ApiOperation(value = "Lấy tổng số lượng đã lên kế hoạch trong năm theo đơn vị, loại vật tư  hàng hóa", response = List.class)
+    @PostMapping(value =  "/count-sl-kh", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> getCountSl(HttpServletRequest request,
+                                                   @Valid @RequestBody CountKhMttSlReq req) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(xhDxKhBanTrucTiepServicelmpl.countSoLuongKeHoachNam(req));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Lấy tổng số lượng đã lên kế hoạch trong năm theo đơn vị, loại vật tư  hàng hóa: {}", e);
+        }
+        return ResponseEntity.ok(resp);
     }
 }

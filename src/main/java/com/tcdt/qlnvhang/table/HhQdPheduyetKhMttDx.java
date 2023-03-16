@@ -77,6 +77,8 @@ public class HhQdPheduyetKhMttDx implements Serializable {
 
     private BigDecimal tongMucDt;
 
+    private Integer namKh;
+
     @Transient
     private List<HhQdPheduyetKhMttSLDD> children = new ArrayList<>();
 
@@ -102,6 +104,8 @@ public class HhQdPheduyetKhMttDx implements Serializable {
     private String trangThai;
     @Transient
     private String tenTrangThai;
+
+    private String soQdKq;
 
     @Transient
     private List<FileDinhKem> fileDinhKemUyQuyen = new ArrayList<>();

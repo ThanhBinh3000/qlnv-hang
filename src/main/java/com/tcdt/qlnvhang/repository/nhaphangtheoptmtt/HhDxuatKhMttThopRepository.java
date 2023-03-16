@@ -17,15 +17,20 @@ import java.util.List;
 @Repository
 public interface HhDxuatKhMttThopRepository extends JpaRepository<HhDxKhMttThopHdr ,Long> {
 
-    @Query("SELECT DISTINCT DX from HhDxKhMttThopHdr DX WHERE 1 = 1 " +
-            "AND (:#{#param.namKh} IS NULL OR DX.namKh = :#{#param.namKh}) " +
-            "AND (:#{#param.loaiVthh} IS NULL OR DX.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
-            "AND (:#{#param.cloaiVthh} IS NULL OR DX.cloaiVthh LIKE CONCAT(:#{#param.cloaiVthh},'%')) " +
-            "AND (:#{#param.noiDungThop} IS NULL OR LOWER(DX.noiDungThop) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.noiDungThop}),'%'))) " +
-            "AND (:#{#param.ngayThopTu} IS NULL OR DX.ngayThop >= :#{#param.ngayThopTu}) " +
-            "AND (:#{#param.ngayThopDen} IS NULL OR DX.ngayThop <= :#{#param.ngayThopDen}) " +
-            "AND (:#{#param.trangThai} IS NULL OR DX.trangThai = :#{#param.trangThai})")
+    @Query("SELECT DISTINCT TH FROM HhDxKhMttThopHdr TH " +
+            " left join HhQdPheduyetKhMttHdr QD on TH.id = QD.idThHdr WHERE 1=1 " +
+            "AND (:#{#param.namKh} IS NULL OR TH.namKh = :#{#param.namKh}) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR TH.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
+            "AND (:#{#param.cloaiVthh} IS NULL OR TH.cloaiVthh LIKE CONCAT(:#{#param.cloaiVthh},'%')) " +
+            "AND (:#{#param.noiDungThop} IS NULL OR LOWER(TH.noiDungThop) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.noiDungThop}),'%'))) " +
+            "AND (:#{#param.ngayThopTu} IS NULL OR TH.ngayThop >= :#{#param.ngayThopTu}) " +
+            "AND (:#{#param.ngayThopDen} IS NULL OR TH.ngayThop <= :#{#param.ngayThopDen}) " +
+            "AND (:#{#param.ngayQdTu} IS NULL OR QD.ngayQd >= :#{#param.ngayQdTu}) " +
+            "AND (:#{#param.ngayQdDen} IS NULL OR QD.ngayQd <= :#{#param.ngayQdDen}) " +
+            "AND (:#{#param.trangThai} IS NULL OR TH.trangThai = :#{#param.trangThai})")
     Page<HhDxKhMttThopHdr> searchPage(@Param("param") SearchHhDxKhMttThopReq param, Pageable pageable);
+
+
 
     List<HhDxKhMttThopHdr> findAllByIdIn(List<Long> ids);
 

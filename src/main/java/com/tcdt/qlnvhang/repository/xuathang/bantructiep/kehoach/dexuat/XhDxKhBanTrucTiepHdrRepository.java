@@ -1,10 +1,7 @@
 package com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.dexuat;
 
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdr;
-import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGia;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdrReq;
-import com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.dexuat.XhDxKhBanDauGiaReq;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuNhapKhoHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,4 +62,12 @@ public interface XhDxKhBanTrucTiepHdrRepository extends JpaRepository<XhDxKhBanT
     @Query(value = "UPDATE XH_DX_KH_BAN_TRUC_TIEP_HDR SET TRANG_THAI_TH = :trangThaiTh WHERE ID = :idDxuat", nativeQuery = true)
     void updateStatusTh(Long idDxuat, String trangThaiTh);
 
+    XhDxKhBanTrucTiepHdr findAllByLoaiVthhAndCloaiVthhAndNamKhAndMaDviAndTrangThaiNot(String loaiVthh, String cloaiVthh, Integer namKh, String maDvi, String trangThai);
+
+    @Query(value = " SELECT NVL(SUM(SLDD.SO_LUONG),0) FROM XH_QD_PD_KH_BTT_HDR HDR " +
+            " INNER JOIN XH_QD_PD_KH_BTT_DTL DX on HDR.ID = DX.ID_QD_HDR " +
+            " LEFT JOIN XH_QD_PD_KH_BTT_DVI SLDD ON SLDD.ID_QD_DTL = DX.ID " +
+            "WHERE HDR.NAM_KH = :namKh AND HDR.LOAI_VTHH = :loaiVthh AND SLDD.MA_DVI = :maDvi AND HDR.TRANG_THAI = :trangThai",
+            nativeQuery = true)
+    BigDecimal countSLDalenKh(Integer namKh, String loaiVthh, String maDvi, String trangThai);
 }

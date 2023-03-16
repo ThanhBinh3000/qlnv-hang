@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.*;
 
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -12,6 +13,7 @@ import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhChiTietTTinChaoGia;
 
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,6 +23,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.util.*;
 
@@ -162,6 +165,36 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
       hhQdPheduyetKhMttDxRepository.save(optional.get());
   }
 
+    public void export(SearchHhPthucTkhaiReq req, HttpServletResponse response) throws Exception {
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        req.setPaggingReq(paggingReq);
+        Page<HhQdPheduyetKhMttDx> page = this.selectPage(req);
+        List<HhQdPheduyetKhMttDx> data = page.getContent();
+        String title = " Danh sách thông tin triển khai kế hoạch mua trực tiếp";
+        String[] rowsName = new String[]{"STT", "Số QĐ phê duyệt KH mua trực tiếp","Đơn vị", "Năm kế hoạch", "Phương thức bán trực tiếp", "Ngày nhận chào giá/Ngày ủy quyền", "Số QĐ PDKQ chào giá", "Loại hàng hóa", "Chủng loại hàng hóa", "Trạng thái"};
+        String fileName = "Danh-sach-thong-tin-trien-khai-ke-hoach-ban-truc-tiep.xlsx";
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+        for (int i = 0; i < data.size(); i++) {
+            HhQdPheduyetKhMttDx dtl = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i;
+            objs[1] = dtl.getSoQd();
+            objs[2] = dtl.getTenDvi();
+            objs[3] = dtl.getNamKh();
+            objs[4] = dtl.getPthucMuaTrucTiep();
+            objs[5] = dtl.getNgayNhanCgia();
+            objs[6] = dtl.getSoQdKq();
+            objs[7] = dtl.getTenLoaiVthh();
+            objs[8] = dtl.getTenCloaiVthh();
+            objs[9] = dtl.getTenTrangThai();
+            dataList.add(objs);
+        }
+        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
+        ex.export();
+    }
 
 }
 
