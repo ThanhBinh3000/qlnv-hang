@@ -8,6 +8,7 @@ import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.dexuat.XhDxKhBa
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.nhaphangtheoptt.CountKhMttSlReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepDdiemReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdrReq;
@@ -26,9 +27,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -86,6 +89,7 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl implements XhD
         data.setNguoiTaoId(userInfo.getId());
         data.setTrangThai(Contains.DU_THAO);
         data.setTrangThaiTh(Contains.CHUATONGHOP);
+//        this.validateData(data,data.getTrangThai());
         XhDxKhBanTrucTiepHdr created = xhDxKhBanTrucTiepHdrRepository.save(data);
 
         if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
@@ -211,6 +215,7 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl implements XhD
             case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
             case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
             case Contains.CHODUYET_TP + Contains.TU_CHOI_CBV:
+//                this.validateData(data,Contains.CHODUYET_TP);
                 data.setNguoiGuiDuyetId(userInfo.getId());
                 data.setNgayGuiDuyet(getDateTimeNow());
             case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
@@ -223,6 +228,7 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl implements XhD
             case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
             case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
             case Contains.DA_DUYET_CBV + Contains.DADUYET_LDC:
+//                this.validateData(optional,req.getTrangThai());
                 data.setNguoiPduyetId(userInfo.getId());
                 data.setNgayPduyet(getDateTimeNow());
                 break;
@@ -310,6 +316,30 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl implements XhD
         ex.export();
     }
 
+    public  void  validateData(XhDxKhBanTrucTiepHdr objHdr, String trangThai) throws  Exception{
+        if (trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.DUTHAO.getId())){
+            XhDxKhBanTrucTiepHdr hdr = xhDxKhBanTrucTiepHdrRepository.findAllByLoaiVthhAndCloaiVthhAndNamKhAndMaDviAndTrangThaiNot(objHdr.getLoaiVthh(), objHdr.getCloaiVthh(), objHdr.getNamKh(), objHdr.getMaDvi(),NhapXuatHangTrangThaiEnum.DUTHAO.getId());
+            if(!ObjectUtils.isEmpty(hdr) && !hdr.getId().equals(hdr.getId())){
+                throw new Exception("Chủng loại hàng hóa đã được tạo và gửi duyệt, xin vui lòng chọn lại chủng loại hàng hóa khác");
+            }
+        }
+        if(trangThai.equals(NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId())) {
+            for (XhDxKhBanTrucTiepDtl chiCuc : objHdr.getChildren()){
+                BigDecimal aLong = xhDxKhBanTrucTiepHdrRepository.countSLDalenKh(objHdr.getNamKh(), objHdr.getLoaiVthh(), chiCuc.getMaDvi(),NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
+                BigDecimal soLuongTotal = aLong.add(chiCuc.getSoLuong());
+                if (chiCuc.getSoLuongChiTieu() == null){
+                    throw new Exception("Hiện chưa có số lượng chỉ tiêu kế hoạch năm, vui lòng nhập lại");
+                }
+                if (soLuongTotal.compareTo(chiCuc.getSoLuongChiTieu()) >0){
+                    throw new Exception(chiCuc.getTenDvi() + " đã nhập quá số lượng chi tiêu, vui lòng nhập lại");
+                }
+            }
+        }
+    }
+
+    public BigDecimal countSoLuongKeHoachNam(CountKhMttSlReq req) throws Exception {
+        return xhDxKhBanTrucTiepHdrRepository.countSLDalenKh(req.getYear() , req.getLoaiVthh(), req.getMaDvi(), NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
+    }
 
 //    public Page<XhDxKhBanTrucTiepHdr> searchPage(XhDxKhBanTrucTiepHdrReq objReq) throws Exception{
 //        Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),

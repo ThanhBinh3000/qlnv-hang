@@ -65,6 +65,8 @@ public class HhQdPheduyetKhMttDxReq {
 
     private BigDecimal tongMucDt;
 
+    private Integer namKh;
+
     @Transient
     private List<HhQdPheduyetKhMttSLDDReq> children = new ArrayList<>();
 

@@ -13,8 +13,12 @@ import java.util.List;
 public interface HhQdPheduyetKhMttDxRepository extends JpaRepository<HhQdPheduyetKhMttDx, Long> {
 
     @Query("SELECT DISTINCT dtl FROM HhQdPheduyetKhMttDx dtl " +
-            " left join HhQdPheduyetKhMttHdr hdr on hdr.id = dtl.idQdHdr WHERE 1=1 " +
+            " left join HhQdPheduyetKhMttHdr hdr on hdr.id = dtl.idQdHdr " +
+            " left join HhChiTietTTinChaoGia cg on dtl.id = cg.idQdDtl WHERE 1=1 " +
             "AND (:#{#param.namKh} IS NULL OR hdr.namKh = :#{#param.namKh}) " +
+            "AND (:#{#param.ngayCgiaTu} IS NULL OR dtl.ngayNhanCgia >= :#{#param.ngayCgiaTu}) " +
+            "AND (:#{#param.ngayCgiadDen} IS NULL OR dtl.ngayNhanCgia <= :#{#param.ngayCgiadDen}) " +
+            "AND (:#{#param.canhanTochuc} IS NULL OR LOWER(cg.canhanTochuc) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.canhanTochuc}),'%'))) " +
             "AND (:#{#param.maDvi} IS NULL OR dtl.maDvi = :#{#param.maDvi}) " +
             "AND (:#{#param.trangThai} IS NULL OR dtl.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.lastest} IS NULL OR LOWER(hdr.lastest) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.lastest}),'%'))) " +

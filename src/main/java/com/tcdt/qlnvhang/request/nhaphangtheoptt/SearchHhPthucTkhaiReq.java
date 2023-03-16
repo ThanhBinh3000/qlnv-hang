@@ -27,4 +27,6 @@ public class SearchHhPthucTkhaiReq extends BaseRequest {
     String tochucCanhan;
 
     Integer lastest ;
+
+    String canhanTochuc;
 }

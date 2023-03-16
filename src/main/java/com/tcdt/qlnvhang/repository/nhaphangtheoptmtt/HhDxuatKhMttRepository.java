@@ -18,7 +18,9 @@ import java.util.Optional;
 
 @Repository
 public interface HhDxuatKhMttRepository extends JpaRepository<HhDxuatKhMttHdr, Long> {
-    @Query("SELECT DX from HhDxuatKhMttHdr DX WHERE 1 = 1 " +
+
+    @Query("SELECT DISTINCT DX FROM HhDxuatKhMttHdr DX " +
+            " left join HhDxKhMttThopHdr TH on TH.id = DX.maThop WHERE 1=1 " +
             "AND (:#{#param.namKh} IS NULL OR DX.namKh = :#{#param.namKh}) " +
             "AND (:#{#param.soDxuat} IS NULL OR LOWER(DX.soDxuat) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soDxuat}),'%' ) ) )" +
             "AND (:#{#param.ngayTaoTu} IS NULL OR DX.ngayTao >= :#{#param.ngayTaoTu}) " +
@@ -26,11 +28,13 @@ public interface HhDxuatKhMttRepository extends JpaRepository<HhDxuatKhMttHdr, L
             "AND (:#{#param.ngayDuyetTu} IS NULL OR DX.ngayPduyet >= :#{#param.ngayDuyetTu}) " +
             "AND (:#{#param.ngayDuyetDen} IS NULL OR DX.ngayPduyet <= :#{#param.ngayDuyetDen}) " +
             "AND (:#{#param.trichYeu} IS NULL OR LOWER(DX.trichYeu) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.trichYeu}),'%'))) " +
+            "AND (:#{#param.noiDungThop} IS NULL OR LOWER(TH.noiDungThop) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.noiDungThop}),'%'))) " +
             "AND (:#{#param.loaiVthh} IS NULL OR DX.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
             "AND (:#{#param.trangThai} IS NULL OR DX.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.trangThaiTh} IS NULL OR DX.trangThaiTh = :#{#param.trangThaiTh}) " +
             "AND (:#{#param.maDvi} IS NULL OR DX.maDvi = :#{#param.maDvi})")
     Page<HhDxuatKhMttHdr> searchPage(@Param("param") SearchHhDxKhMttHdrReq param, Pageable pageable);
+
 
     @Transactional()
     @Modifying
@@ -44,7 +48,7 @@ public interface HhDxuatKhMttRepository extends JpaRepository<HhDxuatKhMttHdr, L
     @Query(value = "select * from HH_DX_KHMTT_HDR MTT where (:namKh IS NULL OR MTT.NAM_KH = TO_NUMBER(:namKh)) " +
             " AND (:loaiVthh IS NULL OR MTT.LOAI_VTHH = :loaiVthh) " +
             " AND (:cloaiVthh IS NULL OR MTT.CLOAI_VTHH = :cloaiVthh) " +
-            " AND MTT.TRANG_THAI = '"+ Contains.DADUYET_LDC+"'" +
+            " AND MTT.TRANG_THAI = '"+ Contains.DA_DUYET_CBV+"'" +
             " AND MTT.TRANG_THAI_TH = '"+ Contains.CHUATONGHOP+"'" +
             " AND MTT.MA_THOP is null "
             ,nativeQuery = true)

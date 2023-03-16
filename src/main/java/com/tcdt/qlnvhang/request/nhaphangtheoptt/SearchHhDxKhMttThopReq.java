@@ -16,9 +16,9 @@ public class SearchHhDxKhMttThopReq extends BaseRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     Date ngayThopDen;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    Date ngayKyQdTu;
+    Date ngayQdTu;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    Date ngayKyQdDen;
+    Date ngayQdDen;
     String maDvi;
     String loaiVthh;
     String cloaiVthh;
