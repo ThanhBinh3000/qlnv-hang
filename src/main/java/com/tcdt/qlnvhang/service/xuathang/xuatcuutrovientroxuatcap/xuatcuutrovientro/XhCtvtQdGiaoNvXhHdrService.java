@@ -288,7 +288,7 @@ public class XhCtvtQdGiaoNvXhHdrService extends BaseServiceImpl {
       throw new Exception("Phê duyệt không thành công");
     }
     optional.get().setTrangThai(statusReq.getTrangThai());
-    if (statusReq.equals(TrangThaiAllEnum.DA_DUYET_LDC)) {
+    if (statusReq.equals(TrangThaiAllEnum.BAN_HANH)) {
       optional.get().setTrangThaiXh(TrangThaiAllEnum.CHUA_CAP_NHAT.getId());
     }
     XhCtvtQdGiaoNvXhHdr created = xhCtvtQdGiaoNvXhHdrRepository.save(optional.get());
