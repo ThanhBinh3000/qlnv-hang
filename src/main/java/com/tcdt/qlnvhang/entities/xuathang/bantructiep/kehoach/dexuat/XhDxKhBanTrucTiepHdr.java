@@ -78,6 +78,8 @@ public class XhDxKhBanTrucTiepHdr extends TrangThaiBaseEntity implements Seriali
 
     private BigDecimal tongSoLuong;
 
+    private BigDecimal tongDonGia;
+
     private String ghiChu;
 
     private String soQdPd;

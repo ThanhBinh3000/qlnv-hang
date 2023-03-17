@@ -64,6 +64,9 @@ public class XhDxKhBanTrucTiepHdrReq extends BaseRequest {
     private String thongBaoKh;
 
     private BigDecimal tongSoLuong;
+
+    private BigDecimal tongDonGia;
+
     private String soQdPd;
 
     private String ghiChu;
