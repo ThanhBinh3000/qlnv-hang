@@ -140,10 +140,10 @@ public class XhDxKhBanTrucTiepControler extends BaseController {
 
     @ApiOperation(value = "Xóa dánh sách kế hoạch bán trực tiếp ", response = List.class)
     @PostMapping(value=  PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody XhDxKhBanTrucTiepHdrReq idSearchReq) {
+    public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            xhDxKhBanTrucTiepService.deleteMulti(idSearchReq.getIds());
+            xhDxKhBanTrucTiepService.deleteMulti(idSearchReq.getIdList());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

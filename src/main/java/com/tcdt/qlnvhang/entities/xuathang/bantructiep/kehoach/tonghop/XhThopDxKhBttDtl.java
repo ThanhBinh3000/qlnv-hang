@@ -47,6 +47,8 @@ public class XhThopDxKhBttDtl implements Serializable {
 
     private BigDecimal donGiaVat;
 
+    private BigDecimal tongDonGia;
+
     public String getTenTrangThai() {
         return NhapXuatHangTrangThaiEnum.getTenById(trangThai);
     }
