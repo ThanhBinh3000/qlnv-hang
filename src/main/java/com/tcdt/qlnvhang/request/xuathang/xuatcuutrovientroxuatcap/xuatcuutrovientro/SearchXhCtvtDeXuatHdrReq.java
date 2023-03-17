@@ -28,6 +28,7 @@ public class SearchXhCtvtDeXuatHdrReq extends BaseRequest {
   private List<XhCtvtTongHopDtl> deXuatCuuTro = new ArrayList<>();
   private String maTongHop;
 
+  //dung cho chuc nang list cua man hình Qdpd
   private List<Long> idQdPdList = new ArrayList<>();
   private Boolean idQdPdNull = false;
 

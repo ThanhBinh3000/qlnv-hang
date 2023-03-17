@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.request.BaseRequest;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -26,4 +27,7 @@ public class SearchXhCtvtTongHopHdr extends BaseRequest {
     private String type;
     private Boolean xuatCap;
 
+    //dung cho chuc nang list cua man hình Qdpd
+    private List<Long> idQdPdList = new ArrayList<>();
+    private Boolean idQdPdNull = false;
 }
