@@ -276,10 +276,9 @@ public class XhCtvtQdGiaoNvXhHdrService extends BaseServiceImpl {
         status.equals(TrangThaiAllEnum.CHO_DUYET_LDC.getId() + TrangThaiAllEnum.CHO_DUYET_TP.getId()) ||
             status.equals(TrangThaiAllEnum.TU_CHOI_TP.getId() + TrangThaiAllEnum.CHO_DUYET_TP.getId()) ||
             status.equals(TrangThaiAllEnum.CHO_DUYET_TP.getId() + TrangThaiAllEnum.TU_CHOI_TP.getId()) ||
-            status.equals(TrangThaiAllEnum.DA_DUYET_LDC.getId() + TrangThaiAllEnum.CHO_DUYET_LDC.getId()) ||
             status.equals(TrangThaiAllEnum.TU_CHOI_LDC.getId() + TrangThaiAllEnum.CHO_DUYET_LDC.getId()) ||
             status.equals(TrangThaiAllEnum.CHO_DUYET_TP.getId() + TrangThaiAllEnum.TU_CHOI_LDC.getId()) ||
-            status.equals(TrangThaiAllEnum.BAN_HANH.getId() + TrangThaiAllEnum.DA_DUYET_LDC.getId())) {
+            status.equals(TrangThaiAllEnum.BAN_HANH.getId() + TrangThaiAllEnum.CHO_DUYET_LDC.getId())) {
       optional.get().setNguoiPduyetId(currentUser.getUser().getId());
       optional.get().setNgayPduyet(LocalDate.now());
       optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
