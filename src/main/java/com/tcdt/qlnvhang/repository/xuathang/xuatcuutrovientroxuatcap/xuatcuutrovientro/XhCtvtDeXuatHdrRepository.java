@@ -55,5 +55,5 @@ public interface XhCtvtDeXuatHdrRepository extends JpaRepository<XhCtvtDeXuatHdr
   )
   List<XhCtvtDeXuatHdr> listTongHop(@Param("param") SearchXhCtvtDeXuatHdrReq param);
 
-
+  List<XhCtvtDeXuatHdr> findAllByIdThop(Long id);
 }
