@@ -17,6 +17,7 @@ public class XhCtvtQdGiaoNvXhHdrReq {
   private LocalDate ngayKy;
   private Long idQdPd;
   private String soQdPd;
+  private LocalDate ngayKyQdPa;
   private String loaiVthh;
   private String cloaiVthh;
   private BigDecimal soLuong;
