@@ -8,6 +8,7 @@ import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcap.Xh
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQdPdDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQdPdHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
+import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcap.SearchXhCtvtQdXuatCap;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhCtvtQdXuatCapDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhCtvtQdXuatCapReq;
@@ -29,9 +30,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.Transient;
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -194,4 +197,27 @@ public class XhCtvtQdXuatCapService extends BaseServiceImpl {
         fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(XhCtvtQdXuatCapHdr.TABLE_NAME + "_CAN_CU"));
         xhCtvtQdXuatCapHdrRepository.deleteAll(list);
     }
+    public XhCtvtQdXuatCapHdr approve(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
+        if (StringUtils.isEmpty(statusReq.getId())) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        Optional<XhCtvtQdXuatCapHdr> optional = xhCtvtQdXuatCapHdrRepository.findById(Long.valueOf(statusReq.getId()));
+        if (!optional.isPresent()) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+
+        String status = statusReq.getTrangThai() + optional.get().getTrangThai();
+        switch (status) {
+            case Contains.BAN_HANH + Contains.DUTHAO:
+                optional.get().setNgayPduyet(LocalDate.now());
+                optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+                break;
+            default:
+                throw new Exception("Phê duyệt không thành công");
+        }
+        optional.get().setTrangThai(statusReq.getTrangThai());
+        XhCtvtQdXuatCapHdr created = xhCtvtQdXuatCapHdrRepository.save(optional.get());
+        return created;
+    }
+
 }
