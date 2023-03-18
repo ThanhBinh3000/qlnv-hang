@@ -30,6 +30,7 @@ public class SearchXhCtvtDeXuatHdrReq extends BaseRequest {
 
   //dung cho chuc nang list cua man hình Qdpd
   private List<Long> idQdPdList = new ArrayList<>();
+  private Boolean idThopNull = false;
   private Boolean idQdPdNull = false;
 
 }
