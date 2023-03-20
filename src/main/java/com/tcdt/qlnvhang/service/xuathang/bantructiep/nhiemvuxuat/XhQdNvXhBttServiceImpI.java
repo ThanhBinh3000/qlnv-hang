@@ -7,6 +7,7 @@ import com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.phieuktracluon
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttDvi;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttHdr;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.hopdong.XhHopDongBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdrRepository;
@@ -15,6 +16,7 @@ import com.tcdt.qlnvhang.repository.xuathang.bantructiep.ktracluong.phieuktraclu
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttDviRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttDviReq;
@@ -63,6 +65,9 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
 
     @Autowired
     private XhQdPdKhBttHdrRepository xhQdPdKhBttHdrRepository;
+
+    @Autowired
+    private XhKqBttHdrRepository xhKqBttHdrRepository;
 
     @Autowired
     private XhBbLayMauBttHdrRepository xhBbLayMauBttHdrRepository;
@@ -132,7 +137,7 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         }
 
         XhHopDongBttHdr dataHd = new XhHopDongBttHdr();
-        XhQdPdKhBttHdr dataQdPdKh = new XhQdPdKhBttHdr();
+        XhKqBttHdr dataQdPdKq = new XhKqBttHdr();
         if (req.getPhanLoai().equals("HD")){
             Optional<XhHopDongBttHdr> qOptionalHd = xhHopDongBttHdrRepository.findById(req.getIdHd());
             if (!qOptionalHd.isPresent()){
@@ -140,11 +145,14 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
             }
             dataHd = qOptionalHd.get();
         }else {
-            Optional<XhQdPdKhBttHdr> qOptionalQdPdKh = xhQdPdKhBttHdrRepository.findById(req.getIdQdPdKh());
-            if (!qOptionalQdPdKh.isPresent()){
-                throw new Exception("Không tìm thấy quyết định phê duyệt kế hoạch bán trực tiếp");
+            Optional<XhKqBttHdr> qOptionalQdPdKh = xhKqBttHdrRepository.findById(req.getIdQdKqCg());
+            if (qOptionalQdPdKh.isPresent()){
+                Optional<XhQdPdKhBttHdr> xhQdPdKhBttHdr = xhQdPdKhBttHdrRepository.findById(qOptionalQdPdKh.get().getIdPdKhHdr());
+                if (!xhQdPdKhBttHdr.isPresent()){
+                    throw new Exception("Không tìm thấy quyết định phê duyệt kế hoạch bán trực tiếp");
+                }
             }
-            dataQdPdKh = qOptionalQdPdKh.get();
+            dataQdPdKq = qOptionalQdPdKh.get();
         }
 
         XhQdNvXhBttHdr  dataMap = new XhQdNvXhBttHdr();
@@ -152,7 +160,11 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         dataMap.setNgayTao(getDateTimeNow());
         dataMap.setNguoiTaoId(getUser().getId());
         dataMap.setTrangThai(Contains.DUTHAO);
+        dataMap.setTrangThaiXh(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
         dataMap.setMaDvi(userInfo.getDvql());
+        if(req.getPhanLoai().equals("QDDX")){
+            dataMap.setMaDviTsan(String.join(",",req.getListMaDviTsan()));
+        }
         XhQdNvXhBttHdr created = xhQdNvXhBttHdrRepository.save(dataMap);
 
         if (!DataUtils.isNullObject(req.getFileDinhKem())) {
@@ -165,9 +177,12 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         }
 
         if (req.getPhanLoai().equals("HD")){
-            dataHd.setTrangThaiXh(Contains.CHUACAPNHAT);
+            dataHd.setTrangThaiXh(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
             dataHd.setSoQd(dataMap.getSoQd());
             xhHopDongBttHdrRepository.save(dataHd);
+        }else {
+            dataQdPdKq.setTrangThaiXh(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
+            xhKqBttHdrRepository.save(dataQdPdKq);
         }
 
         this.saveDetail(req, dataMap.getId());
@@ -180,7 +195,6 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
             XhQdNvXhBttDtl dtl = new XhQdNvXhBttDtl();
             BeanUtils.copyProperties(dtlReq, dtl, "id");
             dtl.setIdQdHdr(idHdr);
-            dtl.setTrangThai(Contains.CHUACAPNHAT);
             xhQdNvXhBttDtlRepository.save(dtl);
             xhQdNvXhBttDviRepository.deleteAllByIdDtl(dtlReq.getId());
             for (XhQdNvXhBttDviReq dviReq : dtlReq.getChildren()){
@@ -258,6 +272,10 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         data.setTenLoaiVthh(hashMapVthh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(hashMapVthh.get(data.getCloaiVthh()));
 
+        if(data.getPhanLoai().equals("QDDX")){
+            data.setListMaDviTsan(Arrays.asList(data.getMaDviTsan().split(",")));
+        }
+
         List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdNvXhBttHdr.TABLE_NAME));
         if (!DataUtils.isNullOrEmpty(fileDinhKem)) {
             data.setFileDinhKem(fileDinhKem.get(0));
@@ -274,7 +292,6 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
                 f.setTenLoKho(hashMapDvi.get(f.getMaLoKho()));
             });
             dtl.setTenDvi(hashMapDvi.get(dtl.getMaDvi()));
-            dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThai()));
             dtl.setChildren(dviList);
         }
         data.setChildren(dtlList);

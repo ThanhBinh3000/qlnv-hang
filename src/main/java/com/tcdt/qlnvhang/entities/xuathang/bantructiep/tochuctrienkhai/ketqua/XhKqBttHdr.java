@@ -74,6 +74,8 @@ public class XhKqBttHdr extends TrangThaiBaseEntity implements Serializable {
 
     private String ghiChu;
 
+    private String pthucBanTrucTiep;
+
     private String trangThaiHd;
     @Transient
     private String tenTrangThaiHd;

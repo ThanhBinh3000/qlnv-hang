@@ -145,8 +145,8 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
                     BeanUtils.copyProperties(tchucReq, tchuc, "id");
                     tchuc.setIdDdiem(ddiem.getId());
                     if (!DataUtils.isNullObject(tchucReq.getFileDinhKems())) {
-                        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(tchucReq.getFileDinhKems()), tchuc.getId(), XhKqBttTchuc.TABLE_NAME);
-                        tchuc.setFileDinhKems(fileDinhKems.get(0));
+                        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(tchucReq.getFileDinhKems()), tchuc.getId(), XhKqBttTchuc.TABLE_NAME);
+                        tchuc.setFileDinhKems(fileDinhKem.get(0));
                     }
                     xhKqBttTchucRepository.save(tchuc);
                 }
@@ -219,9 +219,9 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
             for (XhKqBttDdiem ddiem : xhKqBttDdiemRepository.findAllByIdDtl(dtl.getId())){
                 List<XhKqBttTchuc> xhKqBttTchucList = xhKqBttTchucRepository.findAllByIdDdiem(ddiem.getId());
                 for (XhKqBttTchuc xhKqBttTchuc : xhKqBttTchucList){
-                    List<FileDinhKem> fileDinhKems = fileDinhKemService.search(dtl.getId(), Arrays.asList(XhKqBttTchuc.TABLE_NAME));
-                    if (!DataUtils.isNullOrEmpty(fileDinhKems)) {
-                        xhKqBttTchuc.setFileDinhKems(fileDinhKems.get(0));
+                    List<FileDinhKem> fileDinhKem = fileDinhKemService.search(xhKqBttTchuc.getId(), Arrays.asList(XhKqBttTchuc.TABLE_NAME));
+                    if (!DataUtils.isNullOrEmpty(fileDinhKem)) {
+                        xhKqBttTchuc.setFileDinhKems(fileDinhKem.get(0));
                     }
                 }
                 ddiem.setChildren(xhKqBttTchucList);
