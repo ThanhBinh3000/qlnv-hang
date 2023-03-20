@@ -112,24 +112,18 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
     DataUtils.copyProperties(objReq, thopHdr, "id");
     thopHdr.setTrangThai(Contains.DUTHAO);
     thopHdr.setMaDvi(currentUser.getUser().getDepartment());
-    XhCtvtTongHopHdr save = xhCtvtTongHopHdrRepository.save(thopHdr);
+    XhCtvtTongHopHdr created = xhCtvtTongHopHdrRepository.save(thopHdr);
 
-    for (XhCtvtTongHopDtl dtl : thopHdr.getDeXuatCuuTro()) {
-      dtl.setIdHdr(DataUtils.safeToLong(objReq.getMaTongHop()));
-      xhCtvtTongHopDtlRepository.save(dtl);
+    if (created.getDeXuatCuuTro().size() > 0) {
+      List<Long> collectDxId = created.getDeXuatCuuTro().stream().map(XhCtvtTongHopDtl::getIdDx).collect(Collectors.toList());
+      List<XhCtvtDeXuatHdr> newDeXuatHdr = xhCtvtDeXuatHdrRepository.findAllByIdIn(collectDxId);
+      newDeXuatHdr.forEach(s -> {
+        s.setIdThop(created.getId());
+        s.setMaTongHop(created.getMaTongHop());
+      });
+      xhCtvtDeXuatHdrRepository.saveAll(newDeXuatHdr);
     }
-    if (thopHdr.getId() > 0 && thopHdr.getDeXuatCuuTro().size() > 0) {
-      List<XhCtvtTongHopDtl> listDtl = xhCtvtTongHopDtlRepository.findAllByIdHdr(thopHdr.getId());
-      List<Long> listIdDxHdr = listDtl.stream().map(XhCtvtTongHopDtl::getIdDx).collect(Collectors.toList());
-      List<XhCtvtDeXuatHdr> listDeXuatHdr = xhCtvtDeXuatHdrRepository.findAllByIdIn(listIdDxHdr);
-      for (XhCtvtDeXuatHdr deXuatHdr : listDeXuatHdr) {
-        deXuatHdr.setIdThop(thopHdr.getId());
-        deXuatHdr.setMaTongHop(thopHdr.getMaTongHop());
-        xhCtvtDeXuatHdrRepository.save(deXuatHdr);
-      }
-    }
-
-    return save;
+    return created;
   }
 
 
@@ -145,6 +139,26 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
     XhCtvtTongHopHdr data = qOptional.get();
     BeanUtils.copyProperties(objReq, data);
     XhCtvtTongHopHdr created = xhCtvtTongHopHdrRepository.save(data);
+
+    //update dx
+    //tim tat ca dx dang co ma th va update lại thanh null
+    //update ma th cho dx xuat moi
+    List<XhCtvtDeXuatHdr> oldDeXuatHdr = xhCtvtDeXuatHdrRepository.findAllByIdThop(created.getId());
+    oldDeXuatHdr.forEach(s -> {
+      s.setIdThop(null);
+      s.setMaTongHop(null);
+    });
+    xhCtvtDeXuatHdrRepository.saveAll(oldDeXuatHdr);
+
+    if (created.getDeXuatCuuTro().size() > 0) {
+      List<Long> collectDxId = created.getDeXuatCuuTro().stream().map(XhCtvtTongHopDtl::getIdDx).collect(Collectors.toList());
+      List<XhCtvtDeXuatHdr> newDeXuatHdr = xhCtvtDeXuatHdrRepository.findAllByIdIn(collectDxId);
+      newDeXuatHdr.forEach(s -> {
+        s.setIdThop(created.getId());
+        s.setMaTongHop(created.getMaTongHop());
+      });
+      xhCtvtDeXuatHdrRepository.saveAll(newDeXuatHdr);
+    }
     return created;
   }
 

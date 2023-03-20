@@ -37,6 +37,7 @@ public interface HhDxKhLcntThopHdrService {
 
 	List<HhDxKhLcntThopDtl> findByStatus(HhDxKhLcntDsChuaThReq objReq, HttpServletRequest req) throws Exception;
 
+	@Transactional(rollbackOn = Exception.class)
 	void exportDsThDxKhLcnt(HhDxKhLcntThopSearchReq searchReq, HttpServletResponse response) throws Exception;
 
 	Page<HhDxKhLcntThopHdr> timKiemPage(HttpServletRequest request,HhDxKhLcntThopSearchReq objReq) throws Exception;

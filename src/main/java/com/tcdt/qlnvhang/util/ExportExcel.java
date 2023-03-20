@@ -137,6 +137,7 @@ public class ExportExcel {
 
 			if (workbook != null) {
 				try {
+					response.reset();
 					String headStr = "attachment; filename=\"" + fileName + "\"";
 					response.setContentType("APPLICATION/OCTET-STREAM");
 					response.setHeader("Content-Disposition", headStr);

@@ -287,7 +287,7 @@ public class XhCtvtQdGiaoNvXhHdrService extends BaseServiceImpl {
     }
     optional.get().setTrangThai(statusReq.getTrangThai());
     if (statusReq.equals(TrangThaiAllEnum.BAN_HANH)) {
-      optional.get().setTrangThaiXh(TrangThaiAllEnum.CHUA_CAP_NHAT.getId());
+      optional.get().setTrangThaiXh(TrangThaiAllEnum.CHUA_THUC_HIEN.getId());
     }
     XhCtvtQdGiaoNvXhHdr created = xhCtvtQdGiaoNvXhHdrRepository.save(optional.get());
     return created;

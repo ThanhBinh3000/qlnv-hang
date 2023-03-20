@@ -90,7 +90,7 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
     if (currentUser == null) {
       throw new Exception("Bad request.");
     }
-    Optional<XhCtVtQuyetDinhPdHdr> optional = xhCtVtQdPdHdrRepository.findBySoQd(objReq.getSoDx());
+    Optional<XhCtVtQuyetDinhPdHdr> optional = xhCtVtQdPdHdrRepository.findBySoQd(objReq.getSoQd());
     if (optional.isPresent()) {
       throw new Exception("số quyết định đã tồn tại");
     }
