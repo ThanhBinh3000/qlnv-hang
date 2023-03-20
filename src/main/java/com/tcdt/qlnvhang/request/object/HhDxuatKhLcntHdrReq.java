@@ -66,6 +66,7 @@ public class HhDxuatKhLcntHdrReq {
 	String tenDuAn;
 
 	BigDecimal tongMucDt;
+	BigDecimal tongMucDtDx;
 
 
 	//	@NotNull(message = "Không được để trống")
