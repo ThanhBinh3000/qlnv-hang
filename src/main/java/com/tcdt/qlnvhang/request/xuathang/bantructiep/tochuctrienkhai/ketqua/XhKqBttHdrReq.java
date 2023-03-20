@@ -57,6 +57,8 @@ public class XhKqBttHdrReq extends BaseRequest  {
 
     private String ghiChu;
 
+    private String pthucBanTrucTiep;
+
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 
     private FileDinhKemReq fileDinhKem;

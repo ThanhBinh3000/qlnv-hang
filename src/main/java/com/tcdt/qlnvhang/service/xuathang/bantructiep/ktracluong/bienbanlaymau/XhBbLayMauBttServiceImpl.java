@@ -243,6 +243,10 @@ public class XhBbLayMauBttServiceImpl extends BaseServiceImpl implements  XhBbLa
             throw new Exception("Không tìm thấy dữ liệu");
         }
 
+        if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(optional.get().getTrangThai())) {
+            throw new Exception("Không thể xóa quyết định đã duyệt");
+        }
+
         xhBbLayMauBttHdrRepository.delete(optional.get());
         xhBbLayMauBttDtlRepository.deleteAllByIdHdr(optional.get().getId());
         fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhBbLayMauBttHdr.TABLE_NAME));

@@ -27,10 +27,6 @@ public class XhQdNvXhBttDtl {
 
     private BigDecimal soLuong;
 
-    private String trangThai;
-    @Transient
-    private String tenTrangThai;
-
     @Transient
     private List<XhQdNvXhBttDvi> children = new ArrayList<>();
 }
