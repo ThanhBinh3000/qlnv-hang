@@ -45,6 +45,8 @@ public class XhQdNvXhBttHdrReq extends BaseRequest {
 
     private BigDecimal soLuong;
 
+    private BigDecimal donGia;
+
     private String donViTinh;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)

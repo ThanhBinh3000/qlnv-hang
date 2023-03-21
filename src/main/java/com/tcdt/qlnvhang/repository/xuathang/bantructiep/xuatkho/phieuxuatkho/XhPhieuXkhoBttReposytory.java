@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface XhPhieuXkhoBttReposytory extends JpaRepository<XhPhieuXkhoBtt, Long> {
 
@@ -20,4 +22,6 @@ public interface XhPhieuXkhoBttReposytory extends JpaRepository<XhPhieuXkhoBtt, 
             "AND (:#{#param.trangThai} IS NULL OR XK.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.maDvi} IS NULL OR XK.maDvi = :#{#param.maDvi})")
     Page<XhPhieuXkhoBtt> searchPage(@Param("param") XhPhieuXkhoBttReq param, Pageable pageable);
+
+    List<XhPhieuXkhoBtt> findAllByIdQd(Long idQd);
 }

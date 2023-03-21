@@ -21,9 +21,9 @@ public class XhPhieuXkhoBtt extends TrangThaiBaseEntity implements Serializable 
     public static final String TABLE_NAME = "XH_PHIEU_XKHO_BTT";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator =TABLE_NAME +"_SEQ")
-    @SequenceGenerator(sequenceName = TABLE_NAME +"_SEQ", allocationSize = 1, name = TABLE_NAME +"_SEQ")
-
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator =TABLE_NAME +"_SEQ")
+//    @SequenceGenerator(sequenceName = TABLE_NAME +"_SEQ", allocationSize = 1, name = TABLE_NAME +"_SEQ")
+    @Column(name = "ID")
     private Long id;
 
     private Integer namKh;
@@ -54,6 +54,8 @@ public class XhPhieuXkhoBtt extends TrangThaiBaseEntity implements Serializable 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKyHd;
 
+    private Long  idDdiemXh;
+
     private String maDiemKho;
     @Transient
     private String tenDiemKho;
@@ -73,6 +75,9 @@ public class XhPhieuXkhoBtt extends TrangThaiBaseEntity implements Serializable 
     private Long idPhieuKtraCluong;
 
     private String soPhieu;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayKnghiem;
 
     private String loaiVthh;
     @Transient
@@ -98,8 +103,6 @@ public class XhPhieuXkhoBtt extends TrangThaiBaseEntity implements Serializable 
 
     private String cmtNguoiGiao;
 
-    private String donViNguoiGiao;
-
     private String ctyNguoiGiao;
 
     private String diaChiNguoiGiao;
@@ -115,7 +118,7 @@ public class XhPhieuXkhoBtt extends TrangThaiBaseEntity implements Serializable 
 
     private BigDecimal soLuongChungTu;
 
-    private BigDecimal soLuongThucNhap;
+    private BigDecimal soLuongThucXuat;
 
     private BigDecimal donGia;
 
