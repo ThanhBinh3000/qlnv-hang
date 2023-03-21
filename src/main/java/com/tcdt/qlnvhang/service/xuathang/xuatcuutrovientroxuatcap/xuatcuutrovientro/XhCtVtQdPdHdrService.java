@@ -179,7 +179,7 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
       objReq.getQuyetDinhPdDtl().forEach(s -> {
         s.setIdHdr(objReq.getId());
         XhCtVtQuyetDinhPdDtl dtl = xhCtVtQdPdDtlRepository.save(s);
-        dtl.getQuyetDinhPdDx().forEach(s1 -> s.setIdHdr(s1.getId()));
+        dtl.getQuyetDinhPdDx().forEach(s1 -> s1.setIdHdr(dtl.getId()));
       });
     }
 
