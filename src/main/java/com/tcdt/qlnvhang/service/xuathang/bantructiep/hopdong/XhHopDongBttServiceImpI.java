@@ -88,18 +88,19 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
             }
 
             Optional<XhKqBttHdr> checkSoQd = xhKqBttHdrRepository.findBySoQdKq(req.getSoQdKq());
-            if (!checkSoQd.isPresent()) {
-                throw new Exception("Số quyết định phê duyệt kết quả chào giá " + req.getSoQdKq() + " không tồn tại");
-            } else {
-                checkSoQd.get().setTrangThaiHd(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
-                xhKqBttHdrRepository.save(checkSoQd.get());
-            }
+                if (!checkSoQd.isPresent() && !Contains.CAP_CHI_CUC.equals(userInfo.getCapDvi())) {
+                    throw new Exception("Số quyết định phê duyệt kết quả chào giá " + req.getSoQdKq() + " không tồn tại");
+                } else {
+                    checkSoQd.get().setTrangThaiHd(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
+                    xhKqBttHdrRepository.save(checkSoQd.get());
+                }
         }
         BeanUtils.copyProperties(req, dataMap, "id");
         dataMap.setNguoiTaoId(userInfo.getId());
         dataMap.setNgayTao(new Date());
         dataMap.setTrangThai(Contains.DU_THAO);
         dataMap.setTrangThaiPhuLuc(Contains.DUTHAO);
+        dataMap.setTrangThaiXh(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
         dataMap.setMaDvi(userInfo.getDvql());
         dataMap.setMaDviTsan(String.join(",",req.getListMaDviTsan()));
 
@@ -182,13 +183,13 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
                 if (qOpHdong.isPresent())
                     throw new Exception("Hợp đồng số " + req.getSoHd() + " đã tồn tại");
             }
-
-            if (!qOptional.get().getSoQdKq().equals(req.getSoQdKq())) {
+            if (!qOptional.get().getSoQdKq().equals(req.getSoQdKq()) && !Contains.CAP_CHI_CUC.equals(userInfo.getCapDvi())) {
                 Optional<XhKqBttHdr> checkSoQd = xhKqBttHdrRepository.findBySoQdKq(req.getSoQdKq());
                 if (!checkSoQd.isPresent())
                     throw new Exception(
-                            "Số quyết định phê duyệt kết quả chào giá " + req.getSoQdKq() + " không tồn tại");
+                                "Số quyết định phê duyệt kết quả chào giá " + req.getSoQdKq() + " không tồn tại");
             }
+
         }
         XhHopDongBttHdr dataDB = qOptional.get();
         BeanUtils.copyProperties(req, dataDB, "id");

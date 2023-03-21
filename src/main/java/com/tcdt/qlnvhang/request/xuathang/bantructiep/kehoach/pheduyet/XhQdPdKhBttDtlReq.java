@@ -70,6 +70,8 @@ public class XhQdPdKhBttDtlReq {
 
     private BigDecimal donGiaVat;
 
+    private BigDecimal tongDonGia;
+
     private List<XhQdPdKhBttDviReq> children;
 
 }

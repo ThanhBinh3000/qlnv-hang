@@ -68,6 +68,7 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	String moTaHangHoa;
 	String tenDuAn;
 	BigDecimal tongMucDt;
+	BigDecimal tongMucDtDx;
 	String loaiHdong;
 	String tchuanCluong;
 	String nguonVon;
@@ -119,5 +120,8 @@ public class HhDxuatKhLcntHdr implements Serializable {
 
 	@Transient
 	private List<HhDxuatKhLcntCcxdgDtl> ccXdgDtlList = new ArrayList<>();
+
+	@Transient
+	private Long maTh;
 
 }

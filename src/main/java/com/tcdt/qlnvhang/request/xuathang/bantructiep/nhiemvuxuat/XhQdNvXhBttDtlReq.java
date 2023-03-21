@@ -16,7 +16,5 @@ public class XhQdNvXhBttDtlReq {
 
     private BigDecimal soLuong;
 
-    private String trangThai;
-
     private List<XhQdNvXhBttDviReq> children = new ArrayList<>();
 }

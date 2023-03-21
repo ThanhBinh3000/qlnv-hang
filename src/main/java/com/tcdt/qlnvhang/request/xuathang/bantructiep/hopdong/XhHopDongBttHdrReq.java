@@ -31,6 +31,10 @@ public class XhHopDongBttHdrReq extends BaseRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayMkho;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    @Column(columnDefinition = "Date")
+    private Date ngayKyQdPd;
+
     private String soQdPd;
 
     private String maDviTsan;
@@ -131,6 +135,14 @@ public class XhHopDongBttHdrReq extends BaseRequest {
     private BigDecimal donGia;
 
     private BigDecimal donGiaGomThue;
+
+    private BigDecimal donGiaKhongVat;
+
+    private BigDecimal slUyQuyenChiCucKh;
+
+    private String pthucBanTrucTiep;
+
+    private String trichYeu;
 
     @Transient
     private List<String> listMaDviTsan = new ArrayList<>();
