@@ -168,9 +168,13 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
         throw new Exception("số quyết định đã tồn tại");
       }
     }
+    List<XhCtVtQuyetDinhPdDtl> quyetDinhPdDtl = xhCtVtQdPdDtlRepository.findByIdHdr(objReq.getId());
+    xhCtVtQdPdDtlRepository.deleteAll(quyetDinhPdDtl);
+    objReq.getQuyetDinhPdDtl().forEach(s -> s.setIdHdr(objReq.getId()));
     XhCtVtQuyetDinhPdHdr data = optional.get();
     BeanUtils.copyProperties(objReq, data, "id");
     XhCtVtQuyetDinhPdHdr created = xhCtVtQdPdHdrRepository.save(data);
+
 
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhCtVtQuyetDinhPdHdr.TABLE_NAME + "_CAN_CU"));
 
