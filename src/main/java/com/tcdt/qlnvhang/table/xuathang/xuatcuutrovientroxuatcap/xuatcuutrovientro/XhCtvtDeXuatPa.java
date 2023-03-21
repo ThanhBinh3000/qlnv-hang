@@ -26,7 +26,7 @@ public class XhCtvtDeXuatPa implements Serializable {
     private BigDecimal soLuongXuatCuc;
     private String maDviChiCuc;
     private BigDecimal tonKhoChiCuc;
-    private BigDecimal tonkhoCloaiVthh;
+    private BigDecimal tonKhoCloaiVthh;
     private String loaiVthh;
     private String cloaiVthh;
     private BigDecimal soLuongXuatChiCuc;
