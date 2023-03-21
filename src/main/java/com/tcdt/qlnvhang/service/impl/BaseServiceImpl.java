@@ -336,6 +336,14 @@ public class BaseServiceImpl {
     return df.format(date);
   }
 
+  public static String convertFullDateToString (Date date) {
+    if (Objects.isNull(date)) {
+      return null;
+    }
+    DateFormat df = new SimpleDateFormat(Contains.FORMAT_DATE_TIME_FULL_STR);
+    return df.format(date);
+  }
+
   public static String getUUID(String code) {
     if (StringUtils.isEmpty(code))
       return UUID.randomUUID().toString().replace("-", "");
