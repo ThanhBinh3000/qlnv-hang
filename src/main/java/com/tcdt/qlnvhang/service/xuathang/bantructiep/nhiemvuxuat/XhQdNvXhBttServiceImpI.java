@@ -8,6 +8,7 @@ import com.tcdt.qlnvhang.entities.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttDt
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttDvi;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdr;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPhieuXkhoBtt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.hopdong.XhHopDongBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdrRepository;
@@ -17,6 +18,7 @@ import com.tcdt.qlnvhang.repository.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBtt
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttDviRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPhieuXkhoBttReposytory;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttDviReq;
@@ -75,6 +77,9 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
     @Autowired
     private XhPhieuKtraCluongBttHdrRepository xhPhieuKtraCluongBttHdrRepository;
 
+    @Autowired
+    private XhPhieuXkhoBttReposytory xhPhieuXkhoBttReposytory;
+
 
     @Override
     public Page<XhQdNvXhBttHdr> searchPage(XhQdNvXhBttHdrReq req) throws Exception {
@@ -111,6 +116,18 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
                 s.setTenLoKho(hashMapDvi.get(s.getMaLoKho()));
             });
             f.setXhPhieuKtraCluongBttHdrList(xhPhieuKtraCluongBttHdrList);
+
+            // Phiếu xuất kho
+            List<XhPhieuXkhoBtt> xhPhieuXkhoBttList = xhPhieuXkhoBttReposytory.findAllByIdQd(f.getId());
+            xhPhieuXkhoBttList.forEach(a ->{
+                a.setTenLoaiVthh(hashMapVthh.get(a.getLoaiVthh()));
+                a.setTenCloaiVthh(hashMapVthh.get(a.getCloaiVthh()));
+                a.setTenDiemKho(hashMapDvi.get(a.getMaDiemKho()));
+                a.setTenNhaKho(hashMapDvi.get(a.getMaNganKho()));
+                a.setTenNganKho(hashMapDvi.get(a.getMaNganKho()));
+                a.setTenLoKho(hashMapDvi.get(a.getMaLoKho()));
+            });
+            f.setXhPhieuXkhoBttList(xhPhieuXkhoBttList);
 
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenTrangThaiXh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiXh()));

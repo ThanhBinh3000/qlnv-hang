@@ -147,6 +147,10 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl implements XhPhie
             data.setTenKtv(userInfoRepository.findById(data.getIdKtv()).get().getFullName());
         }
 
+        if (!Objects.isNull(data.getNguoiPduyetId())){
+            data.setTenNguoiPduyet(userInfoRepository.findById(data.getNguoiPduyetId()).get().getFullName());
+        }
+        data.setTenDvi(hashMapDvi.get(data.getMaDvi()));
         data.setTenDiemKho(hashMapDvi.get(data.getMaDiemKho()));
         data.setTenNhaKho(hashMapDvi.get(data.getMaNganKho()));
         data.setTenNganKho(hashMapDvi.get(data.getMaNganKho()));
@@ -218,7 +222,6 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl implements XhPhie
 
         xhPhieuXkhoBttReposytory.delete(optional.get());
         fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhPhieuXkhoBtt.TABLE_NAME));
-
     }
 
     @Override

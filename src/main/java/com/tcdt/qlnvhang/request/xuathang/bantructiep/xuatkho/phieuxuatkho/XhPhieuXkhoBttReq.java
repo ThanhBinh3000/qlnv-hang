@@ -44,6 +44,8 @@ public class XhPhieuXkhoBttReq extends BaseRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKyHd;
 
+    private Long  idDdiemXh;
+
     private String maDiemKho;
 
     private String maNhaKho;
@@ -55,6 +57,9 @@ public class XhPhieuXkhoBttReq extends BaseRequest {
     private Long idPhieuKtraCluong;
 
     private String soPhieu;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayKnghiem;
 
     private String loaiVthh;
 
@@ -72,8 +77,6 @@ public class XhPhieuXkhoBttReq extends BaseRequest {
 
     private String cmtNguoiGiao;
 
-    private String donViNguoiGiao;
-
     private String ctyNguoiGiao;
 
     private String diaChiNguoiGiao;
@@ -89,7 +92,7 @@ public class XhPhieuXkhoBttReq extends BaseRequest {
 
     private BigDecimal soLuongChungTu;
 
-    private BigDecimal soLuongThucNhap;
+    private BigDecimal soLuongThucXuat;
 
     private BigDecimal donGia;
 
