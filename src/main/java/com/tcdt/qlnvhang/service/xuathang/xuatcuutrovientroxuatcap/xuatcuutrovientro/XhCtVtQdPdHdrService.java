@@ -168,13 +168,21 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
         throw new Exception("số quyết định đã tồn tại");
       }
     }
-    List<XhCtVtQuyetDinhPdDtl> quyetDinhPdDtl = xhCtVtQdPdDtlRepository.findByIdHdr(objReq.getId());
-    xhCtVtQdPdDtlRepository.deleteAll(quyetDinhPdDtl);
-    List<Long> XhCtVtQuyetDinhPdDx = quyetDinhPdDtl.stream().map(XhCtVtQuyetDinhPdDtl::getId).collect(Collectors.toList());
-    List<XhCtVtQuyetDinhPdDx> quyetDinhPdDx = xhCtVtQdPdDxRepository.findByIdHdrIn(XhCtVtQuyetDinhPdDx);
-    xhCtVtQdPdDxRepository.deleteAll(quyetDinhPdDx);
+    if (!DataUtils.safeToString(objReq.getIdDx()).equals(DataUtils.safeToString(optional.get().getIdDx())) ||
+        !DataUtils.safeToString(objReq.getIdTongHop()).equals(DataUtils.safeToString(optional.get().getIdTongHop()))) {
+      List<XhCtVtQuyetDinhPdDtl> quyetDinhPdDtl = xhCtVtQdPdDtlRepository.findByIdHdr(objReq.getId());
+      xhCtVtQdPdDtlRepository.deleteAll(quyetDinhPdDtl);
+      List<Long> XhCtVtQuyetDinhPdDx = quyetDinhPdDtl.stream().map(XhCtVtQuyetDinhPdDtl::getId).collect(Collectors.toList());
+      List<XhCtVtQuyetDinhPdDx> quyetDinhPdDx = xhCtVtQdPdDxRepository.findByIdHdrIn(XhCtVtQuyetDinhPdDx);
+      xhCtVtQdPdDxRepository.deleteAll(quyetDinhPdDx);
 
-    objReq.getQuyetDinhPdDtl().forEach(s -> s.setIdHdr(objReq.getId()));
+      objReq.getQuyetDinhPdDtl().forEach(s -> {
+        s.setIdHdr(objReq.getId());
+        XhCtVtQuyetDinhPdDtl dtl = xhCtVtQdPdDtlRepository.save(s);
+        dtl.getQuyetDinhPdDx().forEach(s1 -> s.setIdHdr(s1.getId()));
+      });
+    }
+
     XhCtVtQuyetDinhPdHdr data = optional.get();
     BeanUtils.copyProperties(objReq, data, "id");
     XhCtVtQuyetDinhPdHdr created = xhCtVtQdPdHdrRepository.save(data);
@@ -212,7 +220,7 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
     Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
     Map<String, String> mapVthh = getListDanhMucHangHoa();
     List<XhCtVtQuyetDinhPdHdr> allById = xhCtVtQdPdHdrRepository.findAllById(ids);
-   allById.forEach(data -> {
+    allById.forEach(data -> {
       if (mapDmucDvi.containsKey(data.getMaDvi())) {
         data.setTenDvi(mapDmucDvi.get(data.getMaDvi()).get("tenDvi").toString());
       }
@@ -383,12 +391,12 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
     ex.export();
   }
 
-    public List<XhCtVtQuyetDinhPdHdr> searchQdPaXc(CustomUserDetails currentUser, SearchXhCtvtTongHopHdr req) throws Exception {
+  public List<XhCtVtQuyetDinhPdHdr> searchQdPaXc(CustomUserDetails currentUser, SearchXhCtvtTongHopHdr req) throws Exception {
 //        req.setDvql(currentUser.getDvql());
 //        //cuc xem cac quyet dinh tu tong cuc
 //        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
 //            req.setMaDviGiao(currentUser.getDvql());
 //        }
-        return xhCtVtQdPdHdrRepository.searchQdPaXuatCap(req);
-    }
+    return xhCtVtQdPdHdrRepository.searchQdPaXuatCap(req);
+  }
 }
