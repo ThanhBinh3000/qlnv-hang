@@ -170,6 +170,10 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
     }
     List<XhCtVtQuyetDinhPdDtl> quyetDinhPdDtl = xhCtVtQdPdDtlRepository.findByIdHdr(objReq.getId());
     xhCtVtQdPdDtlRepository.deleteAll(quyetDinhPdDtl);
+    List<Long> XhCtVtQuyetDinhPdDx = quyetDinhPdDtl.stream().map(XhCtVtQuyetDinhPdDtl::getId).collect(Collectors.toList());
+    List<XhCtVtQuyetDinhPdDx> quyetDinhPdDx = xhCtVtQdPdDxRepository.findByIdHdrIn(XhCtVtQuyetDinhPdDx);
+    xhCtVtQdPdDxRepository.deleteAll(quyetDinhPdDx);
+
     objReq.getQuyetDinhPdDtl().forEach(s -> s.setIdHdr(objReq.getId()));
     XhCtVtQuyetDinhPdHdr data = optional.get();
     BeanUtils.copyProperties(objReq, data, "id");
