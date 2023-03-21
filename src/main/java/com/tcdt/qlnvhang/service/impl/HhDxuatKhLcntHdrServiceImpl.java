@@ -11,10 +11,12 @@ import javax.transaction.Transactional;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.*;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.repository.HhDxKhLcntThopDtlRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.*;
 import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.object.*;
+import com.tcdt.qlnvhang.table.HhDxKhLcntThopDtl;
 import com.tcdt.qlnvhang.util.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +59,9 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 
     @Autowired
     private HhDxuatKhLcntCcxdgDtlRepository hhDxuatKhLcntCcxdgDtlRepository;
+
+    @Autowired
+    private HhDxKhLcntThopDtlRepository hhDxKhLcntThopDtlRepository;
 
 
     Long shgtNext = new Long(0);
@@ -583,6 +588,8 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
             hhDxKhlcnt.put(Long.parseLong(it[0].toString()), dataQd);
         }
         page.getContent().forEach(f -> {
+            Optional<HhDxKhLcntThopDtl> thopDtl = hhDxKhLcntThopDtlRepository.findByIdDxHdr(f.getId());
+            thopDtl.ifPresent(hhDxKhLcntThopDtl -> f.setMaTh(hhDxKhLcntThopDtl.getIdThopHdr()));
             f.setSoGoiThau(hhDxuatKhLcntDsgtDtlRepository.countByIdDxKhlcnt(f.getId()));
             f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : mapVthh.get(f.getLoaiVthh()));
