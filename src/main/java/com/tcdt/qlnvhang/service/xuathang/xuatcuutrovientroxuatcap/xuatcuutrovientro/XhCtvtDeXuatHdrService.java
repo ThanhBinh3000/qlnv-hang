@@ -58,7 +58,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
   public Page<XhCtvtDeXuatHdr> searchPage(CustomUserDetails currentUser, SearchXhCtvtDeXuatHdrReq req) throws Exception {
     req.setDvql(currentUser.getDvql());
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-    System.out.println(req+"@@");
+    System.out.println(req + "@@");
     Page<XhCtvtDeXuatHdr> search = xhCtvtDeXuatHdrRepository.search(req, pageable);
     Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
 
@@ -109,8 +109,10 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
     }
     XhCtvtDeXuatHdr data = new XhCtvtDeXuatHdr();
     BeanUtils.copyProperties(objReq, data);
-    data.setTongSoLuong(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPaReq::getSoLuongXuatChiCuc).reduce(BigDecimal.ZERO, BigDecimal::add));
+    data.setTongSoLuong(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPaReq::getSoLuongXuatCuc).reduce(BigDecimal.ZERO, BigDecimal::add));
     data.setThanhTien(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPaReq::getThanhTien).reduce(BigDecimal.ZERO, BigDecimal::add));
+    data.setTonKho(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPaReq::getSoLuongXuatChiCuc).reduce(BigDecimal.ZERO, BigDecimal::add));
+    data.setSoLuongXuatCap(DataUtils.safeToBigDecimal(data.getTongSoLuong()).divide(DataUtils.safeToBigDecimal(data.getTonKho())));
     data.setMaDvi(currentUser.getUser().getDepartment());
     data.setTrangThai(Contains.DUTHAO);
     XhCtvtDeXuatHdr created = xhCtvtDeXuatHdrRepository.save(data);
