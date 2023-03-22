@@ -78,6 +78,10 @@ public class XhHopDongHdr extends TrangThaiBaseEntity {
 
     private String stk;
 
+    private String fax;
+
+    private String moTai;
+
     private String tenNhaThau;
 
     private String diaChiNhaThau;
