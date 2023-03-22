@@ -145,11 +145,13 @@ public class ExportExcel {
 					workbook.write(out);
 					out.close();
 				} catch (IOException e) {
+					response.reset();
 					log.error(e.getMessage());
 				}
 			}
 
 		} catch (Exception e) {
+			response.reset();
 			log.error(e.getMessage());
 		}
 

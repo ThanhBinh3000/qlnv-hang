@@ -65,6 +65,10 @@ public class XhHopDongHdrReq extends BaseRequest {
 
     private String stk;
 
+    private String fax;
+
+    private String moTai;
+
     private String tenNhaThau;
 
     private String diaChiNhaThau;

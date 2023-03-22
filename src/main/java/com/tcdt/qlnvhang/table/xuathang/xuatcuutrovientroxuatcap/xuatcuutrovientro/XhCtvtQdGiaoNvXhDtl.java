@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 public class XhCtvtQdGiaoNvXhDtl {
 
   private static final long serialVersionUID = 1L;
-  public static final String TABLE_NAME = "XH_CTVT_Qd_Giao_Nv_Xh_DTL";
+  public static final String TABLE_NAME = "XH_CTVT_QD_GIAO_NV_XH_DTL";
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhCtvtQdGiaoNvXhDtl.TABLE_NAME + "_SEQ")
@@ -22,7 +22,7 @@ public class XhCtvtQdGiaoNvXhDtl {
   private BigDecimal soLuongXuat;
   private String maDviChiCuc;
   private BigDecimal tonKhoChiCuc;
-  private BigDecimal tonkhoCloaiVthh;
+  private BigDecimal tonKhoCloaiVthh;
   private String loaiVthh;
   private String cloaiVthh;
   private BigDecimal soLuongXuatChiCuc;

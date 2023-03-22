@@ -1,20 +1,19 @@
-package com.tcdt.qlnvhang.request.xuathang.bantructiep.xuatkho.phieuxuatkho;
+package com.tcdt.qlnvhang.request.xuathang.bantructiep.xuatkho.bangkecanhang;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.BaseRequest;
-import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.util.Contains;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.Transient;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Data
-public class XhPhieuXkhoBttReq extends BaseRequest {
+public class XhBkeCanHangBttHdrReq extends BaseRequest {
+
     @ApiModelProperty(notes = "Bắt buộc set đối với update")
     private Long id;
 
@@ -24,14 +23,7 @@ public class XhPhieuXkhoBttReq extends BaseRequest {
 
     private String maQhns;
 
-    private String soPhieuXuat;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayXuatKho;
-
-    private BigDecimal no;
-
-    private BigDecimal co;
+    private String soBangKe;
 
     private Long idQd;
 
@@ -44,8 +36,6 @@ public class XhPhieuXkhoBttReq extends BaseRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKyHd;
 
-    private Long  idDdiemXh;
-
     private String maDiemKho;
 
     private String maNhaKho;
@@ -54,24 +44,16 @@ public class XhPhieuXkhoBttReq extends BaseRequest {
 
     private String maLoKho;
 
-    private Long idPhieuKtraCluong;
+    private Long idPhieuXuat;
 
-    private String soPhieu;
+    private String soPhieuXuat;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayKnghiem;
+    private Date ngayXuatKho;
 
-    private String loaiVthh;
+    private String diaDiemKho;
 
-    private String cloaiVthh;
-
-    private String moTaHangHoa;
-
-    private Long idNguoiLapPhieu;
-
-    private Long idKtv;
-
-    private String keToanTruong;
+    private Long idThuKho;
 
     private String nguoiGiao;
 
@@ -84,20 +66,14 @@ public class XhPhieuXkhoBttReq extends BaseRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date tgianGiaoNhan;
 
-    private String soBangKe;
+    private String loaiVthh;
 
-    private String  maSo;
+    private String cloaiVthh;
+
+    private String moTaHangHoa;
 
     private String dviTinh;
 
-    private BigDecimal soLuongChungTu;
-
-    private BigDecimal soLuongThucXuat;
-
-    private BigDecimal donGia;
-
-    private String ghiChu;
-
     @Transient
-    private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
+    private List<XhBkeCanHangBttDtlReq> children = new ArrayList<>();
 }
