@@ -112,7 +112,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
     data.setTongSoLuong(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPaReq::getSoLuongXuatCuc).reduce(BigDecimal.ZERO, BigDecimal::add));
     data.setThanhTien(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPaReq::getThanhTien).reduce(BigDecimal.ZERO, BigDecimal::add));
     data.setTonKho(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPaReq::getSoLuongXuatChiCuc).reduce(BigDecimal.ZERO, BigDecimal::add));
-    data.setSoLuongXuatCap(DataUtils.safeToBigDecimal(data.getTongSoLuong()).divide(DataUtils.safeToBigDecimal(data.getTonKho())));
+    data.setSoLuongXuatCap(DataUtils.safeToBigDecimal(data.getTongSoLuong()).subtract(DataUtils.safeToBigDecimal(data.getTonKho())));
     data.setMaDvi(currentUser.getUser().getDepartment());
     data.setTrangThai(Contains.DUTHAO);
     XhCtvtDeXuatHdr created = xhCtvtDeXuatHdrRepository.save(data);
@@ -151,8 +151,10 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
     }
     XhCtvtDeXuatHdr data = optional.get();
     BeanUtils.copyProperties(objReq, data);
-    data.setTongSoLuong(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPaReq::getSoLuongXuatChiCuc).reduce(BigDecimal.ZERO, BigDecimal::add));
+    data.setTongSoLuong(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPaReq::getSoLuongXuatCuc).reduce(BigDecimal.ZERO, BigDecimal::add));
     data.setThanhTien(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPaReq::getThanhTien).reduce(BigDecimal.ZERO, BigDecimal::add));
+    data.setTonKho(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPaReq::getSoLuongXuatChiCuc).reduce(BigDecimal.ZERO, BigDecimal::add));
+    data.setSoLuongXuatCap(DataUtils.safeToBigDecimal(data.getTongSoLuong()).subtract(DataUtils.safeToBigDecimal(data.getTonKho())));
     XhCtvtDeXuatHdr created = xhCtvtDeXuatHdrRepository.save(data);
 
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhCtvtDeXuatHdr.TABLE_NAME + "_CAN_CU"));
