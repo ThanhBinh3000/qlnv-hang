@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.bienbanlaymau.XhBbLayMauBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.phieuktracluong.XhPhieuKtraCluongBttHdr;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bangkecanhang.XhBkeCanHangBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPhieuXkhoBtt;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.Contains;
@@ -110,5 +111,8 @@ public class XhQdNvXhBttHdr extends TrangThaiBaseEntity implements Serializable 
 
     @Transient
     private List<XhPhieuXkhoBtt> xhPhieuXkhoBttList = new ArrayList<>();
+
+    @Transient
+    private List<XhBkeCanHangBttHdr> xhBkeCanHangBttHdrList = new ArrayList<>();
 
 }
