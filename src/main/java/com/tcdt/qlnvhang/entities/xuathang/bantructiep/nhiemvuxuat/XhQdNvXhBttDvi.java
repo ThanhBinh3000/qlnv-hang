@@ -1,9 +1,13 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.nhiemvuxuat;
 
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.phieuktracluong.XhPhieuKtraCluongBttHdr;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPhieuXkhoBtt;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "XH_QD_NV_XH_BTT_DVI")
@@ -36,4 +40,10 @@ public class XhQdNvXhBttDvi {
     private String tenLoKho;
 
     private BigDecimal soLuong;
+
+    @Transient
+    private List<XhPhieuKtraCluongBttHdr> children = new ArrayList<>();
+
+    @Transient
+    private List<XhPhieuXkhoBtt> xkhoBttList = new ArrayList<>();
 }

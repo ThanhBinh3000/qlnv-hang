@@ -1,10 +1,13 @@
-package com.tcdt.qlnvhang.service.xuathang.bantructiep.xuatkho.phieuxuatkho;
+package com.tcdt.qlnvhang.service.xuathang.bantructiep.xuatkho.bienbantinhkho;
 
-import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPhieuXkhoBtt;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bienbantinhkho.XhBbTinhkBttDtl;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bienbantinhkho.XhBbTinhkBttHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
-import com.tcdt.qlnvhang.repository.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPhieuXkhoBttReposytory;
-import com.tcdt.qlnvhang.request.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPhieuXkhoBttReq;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.xuatkho.bienbantinhkho.XhBbTinhkBttDtlRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.xuatkho.bienbantinhkho.XhBbTinhkBttHdrRepository;
+import com.tcdt.qlnvhang.request.xuathang.bantructiep.xuatkho.bienbantinhkho.XhBbTinhkBttDtlReq;
+import com.tcdt.qlnvhang.request.xuathang.bantructiep.xuatkho.bienbantinhkho.XhBbTinhkBttHdrReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -26,10 +29,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 @Service
-public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl implements XhPhieuXkhoBttService {
+public class XhBbTinhkBttServiceImpl extends BaseServiceImpl implements XhBbTinhkBttService {
 
     @Autowired
-    private XhPhieuXkhoBttReposytory xhPhieuXkhoBttReposytory;
+    private XhBbTinhkBttHdrRepository xhBbTinhkBttHdrRepository;
+
+    @Autowired
+    private XhBbTinhkBttDtlRepository xhBbTinhkBttDtlRepository;
 
     @Autowired
     FileDinhKemService fileDinhKemService;
@@ -37,14 +43,14 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl implements XhPhie
     @Autowired
     UserInfoRepository userInfoRepository;
 
-
     @Override
-    public Page<XhPhieuXkhoBtt> searchPage(XhPhieuXkhoBttReq req) throws Exception {
+    public Page<XhBbTinhkBttHdr> searchPage(XhBbTinhkBttHdrReq req) throws Exception {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),
                 req.getPaggingReq().getLimit(), Sort.by("id").descending());
-        Page<XhPhieuXkhoBtt> data = xhPhieuXkhoBttReposytory.searchPage(
+        Page<XhBbTinhkBttHdr> data = xhBbTinhkBttHdrRepository.searchPage(
                 req,
-                pageable);
+                pageable
+        );
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
         data.getContent().forEach(f ->{
@@ -54,41 +60,47 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl implements XhPhie
             f.setTenNhaKho(StringUtils.isEmpty(f.getMaNhaKho()) ? null : hashMapDvi.get(f.getMaNhaKho()));
             f.setTenNganKho(StringUtils.isEmpty(f.getMaNganKho()) ? null : hashMapDvi.get(f.getMaNganKho()));
             f.setTenLoKho(StringUtils.isEmpty(f.getMaLoKho()) ? null : hashMapDvi.get(f.getMaLoKho()));
-            f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapVthh.get(f.getLoaiVthh()));
-            f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapVthh.get(f.getCloaiVthh()));
-
         });
         return data;
     }
 
     @Override
-    public XhPhieuXkhoBtt create(XhPhieuXkhoBttReq req) throws Exception {
+    public XhBbTinhkBttHdr create(XhBbTinhkBttHdrReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null){
             throw new Exception("Bad request.");
 
         }
 
-        XhPhieuXkhoBtt data = new XhPhieuXkhoBtt();
+        XhBbTinhkBttHdr data = new XhBbTinhkBttHdr();
         BeanUtils.copyProperties(req, data, "id");
         data.setNgayTao(getDateTimeNow());
         data.setNguoiTaoId(userInfo.getId());
         data.setTrangThai(Contains.DU_THAO);
         data.setMaDvi(userInfo.getDvql());
-        data.setIdNguoiLapPhieu(userInfo.getId());
-        data.setId(Long.valueOf(data.getSoPhieuXuat().split("/")[0]));
-        XhPhieuXkhoBtt created = xhPhieuXkhoBttReposytory.save(data);
-
-        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
-            List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhPhieuXkhoBtt.TABLE_NAME);
-            created.setFileDinhKems(fileDinhKemList);
+        data.setIdThuKho(userInfo.getId());
+        data.setId(Long.valueOf(data.getSoBbTinhKho().split("/")[0]));
+        XhBbTinhkBttHdr created = xhBbTinhkBttHdrRepository.save(data);
+        if (!DataUtils.isNullObject(req.getFileDinhKem())) {
+            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(req.getFileDinhKem()), created.getId(), XhBbTinhkBttHdr.TABLE_NAME);
+            created.setFileDinhKem(fileDinhKem.get(0));
         }
-
+        saveDetail(req, data.getId());
         return created;
     }
 
+    void saveDetail(XhBbTinhkBttHdrReq req, Long idHdr){
+        xhBbTinhkBttDtlRepository.deleteAllByIdHdr(idHdr);
+        for (XhBbTinhkBttDtlReq dtlReq : req.getChildren()){
+            XhBbTinhkBttDtl dtl = new XhBbTinhkBttDtl();
+            BeanUtils.copyProperties(dtlReq, dtl, "id");
+            dtl.setIdHdr(idHdr);
+            xhBbTinhkBttDtlRepository.save(dtl);
+        }
+    }
+
     @Override
-    public XhPhieuXkhoBtt update(XhPhieuXkhoBttReq req) throws Exception {
+    public XhBbTinhkBttHdr update(XhBbTinhkBttHdrReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null)
             throw new Exception("Bad request.");
@@ -96,30 +108,33 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl implements XhPhie
         if (StringUtils.isEmpty(req.getId()))
             throw new Exception("Sửa thất bại, không tìm thấy dữ liệu");
 
-        Optional<XhPhieuXkhoBtt> qOptional = xhPhieuXkhoBttReposytory.findById(req.getId());
-        if (!qOptional.isPresent())
+        Optional<XhBbTinhkBttHdr> qOptional = xhBbTinhkBttHdrRepository.findById(req.getId());
+        if (!qOptional.isPresent()){
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
+        }
 
-        XhPhieuXkhoBtt dataDB = qOptional.get();
+        XhBbTinhkBttHdr dataDB = qOptional.get();
         BeanUtils.copyProperties(req, dataDB, "id");
         dataDB.setNgaySua(getDateTimeNow());
         dataDB.setNguoiSuaId(getUser().getId());
-        XhPhieuXkhoBtt created = xhPhieuXkhoBttReposytory.save(dataDB);
+        XhBbTinhkBttHdr created = xhBbTinhkBttHdrRepository.save(dataDB);
 
-        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
-            List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhPhieuXkhoBtt.TABLE_NAME);
-            dataDB.setFileDinhKems(fileDinhKems);
+        if (!DataUtils.isNullObject(req.getFileDinhKem())) {
+            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Arrays.asList(req.getFileDinhKem()), created.getId(), XhBbTinhkBttHdr.TABLE_NAME);
+            dataDB.setFileDinhKem(fileDinhKem.get(0));
         }
+
+        this.saveDetail(req, dataDB.getId());
 
         return created;
     }
 
     @Override
-    public XhPhieuXkhoBtt detail(Long id) throws Exception {
+    public XhBbTinhkBttHdr detail(Long id) throws Exception {
         if (StringUtils.isEmpty(id))
             throw new Exception("Không tồn tại bản ghi");
 
-        Optional<XhPhieuXkhoBtt> qOptional = xhPhieuXkhoBttReposytory.findById(id);
+        Optional<XhBbTinhkBttHdr> qOptional = xhBbTinhkBttHdrRepository.findById(id);
 
         if (!qOptional.isPresent()){
             throw new UnsupportedOperationException("Bản ghi không tồn tại");
@@ -128,43 +143,43 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl implements XhPhie
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
 
-        XhPhieuXkhoBtt data = qOptional.get();
+        XhBbTinhkBttHdr data = qOptional.get();
 
-        data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
-        data.setTenLoaiVthh(hashMapVthh.get(data.getLoaiVthh()));
-        data.setTenCloaiVthh(hashMapVthh.get(data.getCloaiVthh()));
-
-
-        if(!Objects.isNull(data.getIdNguoiLapPhieu())){
-            data.setTenNguoiLapPhieu(userInfoRepository.findById(data.getIdNguoiLapPhieu()).get().getFullName());
+        if (!Objects.isNull(data.getIdThuKho())){
+            data.setTenThuKho(userInfoRepository.findById(data.getIdThuKho()).get().getFullName());
         }
 
-        if (!Objects.isNull(data.getNguoiPduyetId())){
-            data.setTenNguoiPduyet(userInfoRepository.findById(data.getIdNguoiLapPhieu()).get().getFullName());
-        }
-
-        if(!Objects.isNull(data.getIdKtv())){
+        if (!Objects.isNull(data.getIdKtv())){
             data.setTenKtv(userInfoRepository.findById(data.getIdKtv()).get().getFullName());
+        }
+
+        if (!Objects.isNull(data.getIdKeToan())){
+            data.setTenKeToan(userInfoRepository.findById(data.getIdKeToan()).get().getFullName());
         }
 
         if (!Objects.isNull(data.getNguoiPduyetId())){
             data.setTenNguoiPduyet(userInfoRepository.findById(data.getNguoiPduyetId()).get().getFullName());
         }
+
+        data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
         data.setTenDvi(hashMapDvi.get(data.getMaDvi()));
         data.setTenDiemKho(hashMapDvi.get(data.getMaDiemKho()));
         data.setTenNhaKho(hashMapDvi.get(data.getMaNganKho()));
         data.setTenNganKho(hashMapDvi.get(data.getMaNganKho()));
         data.setTenLoKho(hashMapDvi.get(data.getMaLoKho()));
 
-        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhPhieuXkhoBtt.TABLE_NAME));
-        data.setFileDinhKems(fileDinhKem);
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhBbTinhkBttHdr.TABLE_NAME));
+        if (!DataUtils.isNullOrEmpty(fileDinhKem)) {
+            data.setFileDinhKem(fileDinhKem.get(0));
+        }
+
+        data.setChildren(xhBbTinhkBttDtlRepository.findAllByIdHdr(id));
+
         return data;
-
-
     }
 
     @Override
-    public XhPhieuXkhoBtt approve(XhPhieuXkhoBttReq req) throws Exception {
+    public XhBbTinhkBttHdr approve(XhBbTinhkBttHdrReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
 
         if(Objects.isNull(req.getId())){
@@ -175,19 +190,26 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl implements XhPhie
             throw new Exception("Bad Request");
         }
 
-        Optional<XhPhieuXkhoBtt> optional = xhPhieuXkhoBttReposytory.findById(req.getId());
+        Optional<XhBbTinhkBttHdr> optional = xhBbTinhkBttHdrRepository.findById(req.getId());
         if (!optional.isPresent()){
             throw new Exception("Không tìm thấy dữ liệu");
         }
 
-        XhPhieuXkhoBtt data = optional.get();
+        XhBbTinhkBttHdr data = optional.get();
         String status = req.getTrangThai() + data.getTrangThai();
         switch (status) {
-            case Contains.CHODUYET_LDCC + Contains.DUTHAO:
-            case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
+            case Contains.CHODUYET_KTVBQ + Contains.DUTHAO:
+            case Contains.CHODUYET_KT + Contains.CHODUYET_KTVBQ:
+            case Contains.CHODUYET_LDCC + Contains.CHODUYET_KT:
+            case Contains.CHODUYET_KTVBQ + Contains.TUCHOI_KTVBQ:
+            case Contains.CHODUYET_KTVBQ + Contains.TUCHOI_KT:
+            case Contains.CHODUYET_KTVBQ + Contains.TUCHOI_LDCC:
                 data.setNguoiGuiDuyetId(userInfo.getId());
+                data.setIdKtv(userInfo.getId());
                 data.setNgayGuiDuyet(new Date());
                 break;
+            case Contains.TUCHOI_KTVBQ + Contains.CHODUYET_KTVBQ:
+            case Contains.TUCHOI_KT + Contains.CHODUYET_KT:
             case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
                 data.setNguoiPduyetId(userInfo.getId());
                 data.setNgayPduyet(new Date());
@@ -201,7 +223,7 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl implements XhPhie
                 throw new Exception("Phê duyệt không thành công");
         }
         data.setTrangThai(req.getTrangThai());
-        xhPhieuXkhoBttReposytory.save(data);
+        xhBbTinhkBttHdrRepository.save(data);
         return data;
     }
 
@@ -211,7 +233,7 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl implements XhPhie
             throw new Exception("Bad request");
         }
 
-        Optional<XhPhieuXkhoBtt> optional = xhPhieuXkhoBttReposytory.findById(id);
+        Optional<XhBbTinhkBttHdr> optional = xhBbTinhkBttHdrRepository.findById(id);
         if (!optional.isPresent()){
             throw new Exception("Không tìm thấy dữ liệu");
         }
@@ -220,8 +242,9 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl implements XhPhie
             throw new Exception("Không thể xóa quyết định đã duyệt");
         }
 
-        xhPhieuXkhoBttReposytory.delete(optional.get());
-        fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhPhieuXkhoBtt.TABLE_NAME));
+        xhBbTinhkBttHdrRepository.delete(optional.get());
+        xhBbTinhkBttDtlRepository.deleteAllByIdHdr(optional.get().getId());
+        fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhBbTinhkBttHdr.TABLE_NAME));
     }
 
     @Override
@@ -230,7 +253,7 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl implements XhPhie
     }
 
     @Override
-    public void export(XhPhieuXkhoBttReq req, HttpServletResponse response) throws Exception {
+    public void export(XhBbTinhkBttHdrReq req, HttpServletResponse response) throws Exception {
 
     }
 }

@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.Transient;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +24,8 @@ public class XhPhieuKtraCluongBttHdrReq extends BaseRequest {
     private String maDvi;
 
     private String maQhns;
+
+    private Long idBienBan;
 
     private String soBienBan;
 
@@ -47,6 +50,8 @@ public class XhPhieuKtraCluongBttHdrReq extends BaseRequest {
     private String maNganKho;
 
     private String maLoKho;
+
+    private BigDecimal soLuong;
 
     private String loaiVthh;
 

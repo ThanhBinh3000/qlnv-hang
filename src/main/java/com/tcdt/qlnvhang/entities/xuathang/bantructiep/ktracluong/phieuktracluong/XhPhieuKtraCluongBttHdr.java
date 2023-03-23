@@ -8,6 +8,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,6 +33,8 @@ public class XhPhieuKtraCluongBttHdr extends TrangThaiBaseEntity implements Seri
     private String tenDvi;
 
     private String maQhns;
+
+    private Long idBienBan;
 
     private String soBienBan;
 
@@ -70,6 +73,8 @@ public class XhPhieuKtraCluongBttHdr extends TrangThaiBaseEntity implements Seri
     private String maLoKho;
     @Transient
     private String tenLoKho;
+
+    private BigDecimal soLuong;
 
     private String loaiVthh;
     @Transient

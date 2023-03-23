@@ -24,4 +24,6 @@ public interface XhPhieuXkhoBttReposytory extends JpaRepository<XhPhieuXkhoBtt, 
     Page<XhPhieuXkhoBtt> searchPage(@Param("param") XhPhieuXkhoBttReq param, Pageable pageable);
 
     List<XhPhieuXkhoBtt> findAllByIdQd(Long idQd);
+
+    List<XhPhieuXkhoBtt> findAllByIdDdiemXh(Long idDdiemXh);
 }

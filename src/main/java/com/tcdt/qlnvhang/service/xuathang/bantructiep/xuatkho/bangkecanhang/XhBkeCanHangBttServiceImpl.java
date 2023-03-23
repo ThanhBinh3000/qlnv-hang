@@ -2,10 +2,12 @@ package com.tcdt.qlnvhang.service.xuathang.bantructiep.xuatkho.bangkecanhang;
 
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bangkecanhang.XhBkeCanHangBttDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bangkecanhang.XhBkeCanHangBttHdr;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPhieuXkhoBtt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.xuatkho.bangcankehang.XhBkeCanHangBttDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.xuatkho.bangcankehang.XhBkeCanHangBttHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPhieuXkhoBttReposytory;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.xuatkho.bangkecanhang.XhBkeCanHangBttDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.xuatkho.bangkecanhang.XhBkeCanHangBttHdrReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
@@ -34,6 +36,9 @@ public class XhBkeCanHangBttServiceImpl extends BaseServiceImpl implements XhBke
 
     @Autowired
     private XhBkeCanHangBttDtlRepository xhBkeCanHangBttDtlRepository;
+
+    @Autowired
+    private XhPhieuXkhoBttReposytory xhPhieuXkhoBttReposytory;
 
     @Autowired
     FileDinhKemService fileDinhKemService;
@@ -82,6 +87,13 @@ public class XhBkeCanHangBttServiceImpl extends BaseServiceImpl implements XhBke
         data.setMaDvi(userInfo.getDvql());
         data.setIdThuKho(userInfo.getId());
         data.setId(Long.valueOf(data.getSoBangKe().split("/")[0]));
+        if(!StringUtils.isEmpty(req.getIdPhieuXuat())){
+            Optional<XhPhieuXkhoBtt> xhPhieuXkhoBtt = xhPhieuXkhoBttReposytory.findById(req.getIdPhieuXuat());
+            if (xhPhieuXkhoBtt.isPresent()){
+                xhPhieuXkhoBtt.get().setSoBangKe(data.getSoBangKe());
+                xhPhieuXkhoBttReposytory.save(xhPhieuXkhoBtt.get());
+            }
+        }
         xhBkeCanHangBttHdrRepository.save(data);
         saveDetail(req, data.getId());
         return data;
@@ -217,7 +229,6 @@ public class XhBkeCanHangBttServiceImpl extends BaseServiceImpl implements XhBke
 
         xhBkeCanHangBttHdrRepository.delete(optional.get());
         xhBkeCanHangBttDtlRepository.deleteAllByIdHdr(optional.get().getId());
-        fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhBkeCanHangBttHdr.TABLE_NAME));
     }
 
     @Override
