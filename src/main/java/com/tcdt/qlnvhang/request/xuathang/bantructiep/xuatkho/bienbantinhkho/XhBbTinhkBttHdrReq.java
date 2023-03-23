@@ -1,7 +1,8 @@
-package com.tcdt.qlnvhang.request.xuathang.bantructiep.xuatkho.bangkecanhang;
+package com.tcdt.qlnvhang.request.xuathang.bantructiep.xuatkho.bienbantinhkho;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.BaseRequest;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.util.Contains;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -13,7 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-public class XhBkeCanHangBttHdrReq extends BaseRequest {
+public class XhBbTinhkBttHdrReq extends BaseRequest {
 
     @ApiModelProperty(notes = "Bắt buộc set đối với update")
     private Long id;
@@ -24,7 +25,7 @@ public class XhBkeCanHangBttHdrReq extends BaseRequest {
 
     private String maQhns;
 
-    private String soBangKe;
+    private String soBbTinhKho;
 
     private Long idQd;
 
@@ -37,8 +38,6 @@ public class XhBkeCanHangBttHdrReq extends BaseRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKyHd;
 
-    private Long  idDdiemXh;
-
     private String maDiemKho;
 
     private String maNhaKho;
@@ -47,38 +46,37 @@ public class XhBkeCanHangBttHdrReq extends BaseRequest {
 
     private String maLoKho;
 
-    private BigDecimal soLuong;
-
-    private Long idPhieuXuat;
-
-    private String soPhieuXuat;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayBdauXuat;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayXuatKho;
+    private Date ngayKthucXuat;
 
-    private String diaDiemKho;
+    private BigDecimal tongSlNhap;
+
+    private BigDecimal tongSlXuat;
+
+    private BigDecimal slConLai;
+
+    private BigDecimal slThucTe;
+
+    private BigDecimal slChenhLech;
+
+    private String nguyenNhan;
+
+    private String kienNghi;
+
+    private String ghiChu;
 
     private Long idThuKho;
 
-    private String nguoiGiao;
+    private Long idKtv;
 
-    private String cmtNguoiGiao;
-
-    private String ctyNguoiGiao;
-
-    private String diaChiNguoiGiao;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date tgianGiaoNhan;
-
-    private String loaiVthh;
-
-    private String cloaiVthh;
-
-    private String moTaHangHoa;
-
-    private String dviTinh;
+    private Long idKeToan;
 
     @Transient
-    private List<XhBkeCanHangBttDtlReq> children = new ArrayList<>();
+    private List<XhBbTinhkBttDtlReq> children = new ArrayList<>();
+
+    @Transient
+    private FileDinhKemReq fileDinhKem;
 }

@@ -1,7 +1,8 @@
-package com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bangkecanhang;
+package com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bienbantinhkho;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
@@ -13,11 +14,11 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = XhBkeCanHangBttHdr.TABLE_NAME)
+@Table(name = XhBbTinhkBttHdr.TABLE_NAME)
 @Data
-public class XhBkeCanHangBttHdr extends TrangThaiBaseEntity implements Serializable {
+public class XhBbTinhkBttHdr extends TrangThaiBaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "XH_BKE_CAN_HANG_BTT_HDR";
+    public static final String TABLE_NAME = "XH_BB_TINHK_BTT_HDR";
 
     @Id
 //    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator =TABLE_NAME +"_SEQ")
@@ -34,7 +35,7 @@ public class XhBkeCanHangBttHdr extends TrangThaiBaseEntity implements Serializa
 
     private String maQhns;
 
-    private String soBangKe;
+    private String soBbTinhKho;
 
     private Long idQd;
 
@@ -46,8 +47,6 @@ public class XhBkeCanHangBttHdr extends TrangThaiBaseEntity implements Serializa
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKyHd;
-
-    private Long  idDdiemXh;
 
     private String maDiemKho;
     @Transient
@@ -65,44 +64,43 @@ public class XhBkeCanHangBttHdr extends TrangThaiBaseEntity implements Serializa
     @Transient
     private String tenLoKho;
 
-    private BigDecimal soLuong;
-
-    private Long idPhieuXuat;
-
-    private String soPhieuXuat;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayBdauXuat;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayXuatKho;
+    private Date ngayKthucXuat;
 
-    private String diaDiemKho;
+    private BigDecimal tongSlNhap;
+
+    private BigDecimal tongSlXuat;
+
+    private BigDecimal slConLai;
+
+    private BigDecimal slThucTe;
+
+    private BigDecimal slChenhLech;
+
+    private String nguyenNhan;
+
+    private String kienNghi;
+
+    private String ghiChu;
 
     private Long idThuKho;
     @Transient
     private String tenThuKho;
 
-    private String nguoiGiao;
-
-    private String cmtNguoiGiao;
-
-    private String ctyNguoiGiao;
-
-    private String diaChiNguoiGiao;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date tgianGiaoNhan;
-
-    private String loaiVthh;
+    private Long idKtv;
     @Transient
-    private String tenLoaiVthh;
+    private String tenKtv;
 
-    private String cloaiVthh;
+    private Long idKeToan;
     @Transient
-    private String tenCloaiVthh;
-
-    private String moTaHangHoa;
-
-    private String dviTinh;
+    private String tenKeToan;
 
     @Transient
-    private List<XhBkeCanHangBttDtl> children = new ArrayList<>();
+    private List<XhBbTinhkBttDtl> children = new ArrayList<>();
+
+    @Transient
+    private FileDinhKem fileDinhKem;
 }

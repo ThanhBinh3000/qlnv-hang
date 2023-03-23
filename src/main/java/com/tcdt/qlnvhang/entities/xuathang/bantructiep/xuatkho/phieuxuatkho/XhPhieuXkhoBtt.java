@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.phieuxuatkho;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
-import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bangkecanhang.XhBkeCanHangBttHdr;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
@@ -127,8 +126,5 @@ public class XhPhieuXkhoBtt extends TrangThaiBaseEntity implements Serializable 
 
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
-
-    @Transient
-    private XhBkeCanHangBttHdr xhBkeCanHangBttHdr;
 
 }
