@@ -107,6 +107,7 @@ public class LoggingAspect {
           PhieuNhapXuatHistory phieuNhapXuatHistory = new PhieuNhapXuatHistory();
           phieuNhapXuatHistory.setSoLuong(DataUtils.safeToLong(nhPhieuNhapKhoCt.getSoLuongThucNhap()));
           phieuNhapXuatHistory.setLoaiVthh(nhPhieuNhapKho.getLoaiVthh());
+          phieuNhapXuatHistory.setCloaiVthh(nhPhieuNhapKho.getCloaiVthh());
           phieuNhapXuatHistory.setMaKho(nhPhieuNhapKho.getMaLoKho());
           phieuNhapXuatHistory.setNgayDuyet(DataUtils.convertToLocalDate(nhPhieuNhapKho.getNgayPduyet()));
           phieuNhapXuatHistory.setLoaiNhapXuat(1);//fix tam 1 la nhap -1 la xuat
