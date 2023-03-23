@@ -37,4 +37,12 @@ public class HhQdPduyetKqlcntSearchReq extends BaseRequest {
 	String trichYeu;
 
 	String soQdPdKhlcnt;
+	String soHd;
+	String tenHd;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
+	Date tuNgayKy;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
+	Date denNgayKy;
+
 }
