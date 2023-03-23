@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @Table(name = PhieuNhapXuatHistory.TABLE_NAME)
 public class PhieuNhapXuatHistory implements Serializable {
   private static final long serialVersionUID = 1L;
-  public static final String TABLE_NAME = "PHIEU_NHAP_KHO_HISTORY";
+  public static final String TABLE_NAME = "PHIEU_NHAP_XUAT_HISTORY";
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = PhieuNhapXuatHistory.TABLE_NAME + "_SEQ")
