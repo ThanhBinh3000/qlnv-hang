@@ -44,12 +44,13 @@ public interface HhQdKhlcntDtlRepository extends JpaRepository<HhQdKhlcntDtl, Lo
     @Query(value = " SELECT DTL.* FROM HH_QD_KHLCNT_DTL DTL " +
             " LEFT JOIN HH_QD_KHLCNT_HDR HDR ON HDR.ID = DTL.ID_QD_HDR " +
             " WHERE (:namKh IS NULL OR HDR.NAM_KHOACH = TO_NUMBER(:namKh)) " +
+            " AND (:soQd IS NULL OR DTL.SO_DXUAT LIKE CONCAT(:soQd,'%')) " +
             " AND (:loaiVthh IS NULL OR HDR.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) " +
             " AND (:maDvi IS NULL OR DTL.MA_DVI = :maDvi)" +
             " AND (:trangThaiCuc IS NULL OR DTL.TRANG_THAI = :trangThaiCuc)" +
             " AND HDR.TRANG_THAI = :trangThai " +
             " AND (:trangThaiDt IS NULL OR HDR.TRANG_THAI_DT = :trangThaiDt )" +
             " AND HDR.LASTEST = 1 ",nativeQuery = true )
-    Page<HhQdKhlcntDtl> selectPage(Integer namKh , String loaiVthh, String maDvi, String trangThai,String trangThaiCuc,String trangThaiDt, Pageable pageable);
+    Page<HhQdKhlcntDtl> selectPage(Integer namKh , String loaiVthh, String maDvi, String trangThai,String trangThaiCuc,String trangThaiDt, String soQd, Pageable pageable);
 
 }
