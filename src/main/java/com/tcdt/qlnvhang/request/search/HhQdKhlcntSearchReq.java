@@ -19,10 +19,10 @@ public class HhQdKhlcntSearchReq extends BaseRequest {
 	@ApiModelProperty(example = "2022")
 	Integer namKhoach;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
 	Date tuNgayQd;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
 	Date denNgayQd;
 
 	@ApiModelProperty(example = Contains.LOAI_VTHH_GAO)

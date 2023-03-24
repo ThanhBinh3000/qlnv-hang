@@ -836,9 +836,9 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			objs[4] = qd.getIdThHdr();
 			objs[5] = qd.getSoTrHdr();
 			objs[6] = qd.getNamKhoach();
-			objs[7] = qd.getLoaiVthh();
-			objs[8] = qd.getCloaiVthh();
-			objs[9] = qd.getTrangThai();
+			objs[7] = qd.getTenLoaiVthh();
+			objs[8] = qd.getTenCloaiVthh();
+			objs[9] = qd.getTenTrangThai();
 			dataList.add(objs);
 		}
 
@@ -874,8 +874,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			objs[2] = qd.getNgayQd();
 			objs[3] = qd.getTrichYeu();
 			objs[4] = qd.getNamKhoach();
-			objs[5] = qd.getLoaiVthh();
-			objs[6] = qd.getCloaiVthh();
+			objs[5] = qd.getTenLoaiVthh();
+			objs[6] = qd.getTenCloaiVthh();
 			objs[7] = qd.getSoGthau();
 			objs[8] = qd.getTongTien();
 			dataList.add(objs);
