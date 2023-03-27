@@ -116,10 +116,10 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
     }
 
     public void validateData(HhDxuatKhLcntHdr objHdr, String trangThai) throws Exception {
-        if (objHdr.getLoaiVthh().startsWith("02")) {
+        if (objHdr.getLoaiVthh() != null && objHdr.getLoaiVthh().startsWith("02")) {
 
         } else {
-            if (trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.DUTHAO.getId())) {
+            if (trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId())) {
                 HhDxuatKhLcntHdr dXuat = hhDxuatKhLcntHdrRepository.findAllByLoaiVthhAndCloaiVthhAndNamKhoachAndMaDviAndTrangThaiNot(objHdr.getLoaiVthh(), objHdr.getCloaiVthh(), objHdr.getNamKhoach(), objHdr.getMaDvi(), NhapXuatHangTrangThaiEnum.DUTHAO.getId());
                 if (!ObjectUtils.isEmpty(dXuat) && !dXuat.getId().equals(objHdr.getId())) {
                     throw new Exception("Chủng loại hàng hóa đã được tạo và gửi duyệt, xin vui lòng chọn lại chủng loại hàng hóa khác");
@@ -802,7 +802,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
     }
 
     @Override
-    public BigDecimal getGiaBanToiDa(String cloaiVhtt) {
-        return hhDxuatKhLcntHdrRepository.getGiaBanToiDa(cloaiVhtt);
+    public BigDecimal getGiaBanToiDa(String cloaiVhtt, String maDvi) {
+        return hhDxuatKhLcntHdrRepository.getGiaBanToiDa(cloaiVhtt, maDvi);
     }
 }
