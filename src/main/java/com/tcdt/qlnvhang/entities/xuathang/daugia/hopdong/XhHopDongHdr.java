@@ -1,21 +1,12 @@
 package com.tcdt.qlnvhang.entities.xuathang.daugia.hopdong;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.tcdt.qlnvhang.entities.FileDKemJoinBhHopDong;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.HhDviLquan;
-import com.tcdt.qlnvhang.table.HhPhuLucHd;
-import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -34,25 +25,19 @@ public class XhHopDongHdr extends TrangThaiBaseEntity {
 
     private Integer nam;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
-    private Date ngayKyQdKq;
+    private LocalDate ngayKyQdKq;
 
     private String soQdPd;
 
     private String maDviTsan;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
-    private Date tgianNkho;
+    private LocalDate tgianNkho;
 
     private String soHd;
 
     private String tenHd;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
-    private Date ngayHluc;
+    private LocalDate ngayHluc;
 
     private String ghiChuNgayHluc;
 
@@ -82,6 +67,8 @@ public class XhHopDongHdr extends TrangThaiBaseEntity {
 
     private String moTai;
 
+    private String uyQuyen;
+
     private String tenNhaThau;
 
     private String diaChiNhaThau;
@@ -95,6 +82,10 @@ public class XhHopDongHdr extends TrangThaiBaseEntity {
     private String sdtNhaThau;
 
     private String stkNhaThau;
+
+    private String faxNhaThau;
+
+    private String moTaiNhaThau;
 
     private String loaiVthh;
 
@@ -119,5 +110,35 @@ public class XhHopDongHdr extends TrangThaiBaseEntity {
     private List<XhHopDongDtl> children = new ArrayList<>();
     @Transient
     private List<String> listMaDviTsan = new ArrayList<>();
+
+    //    Phụ lục
+
+    private Long idHd;
+
+    private String soPhuLuc;
+
+    private LocalDate ngayHlucPhuLuc;
+
+    private String noiDungPhuLuc;
+
+    private LocalDate ngayHlucSauDcTu;
+
+    private LocalDate ngayHlucSauDcDen;
+
+    private Integer tgianThienHdSauDc;
+
+    private String noiDungDcKhac;
+
+    private String ghiChuPhuLuc;
+
+    private String trangThaiPhuLuc;
+    @Transient
+    private String tenTrangThaiPhuLuc;
+
+    @Transient
+    private List<XhHopDongHdr> phuLuc = new ArrayList<>();
+
+    @Transient
+    private List<XhHopDongDtl> phuLucDtl = new ArrayList<>();
 
 }

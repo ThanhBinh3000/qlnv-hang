@@ -11,10 +11,21 @@ import java.util.List;
 
 @Data
 public class XhHopDongDtlReq {
-    @ApiModelProperty(notes = "Bắt buộc set đối với update")
     private Long id;
 
+    private Long idHdr;
+
     private String maDvi;
+
+    private BigDecimal soLuong;
+
+    private BigDecimal donGiaVat;
+
+    private String diaChi;
+
+
+    //    phu luc
+    private Long idHdDtl;
 
     private List<XhDdiemNhapKhoReq> children = new ArrayList<>();
 

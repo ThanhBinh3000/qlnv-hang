@@ -65,5 +65,5 @@ public class XhPhieuKnghiemCluongReq extends BaseRequest {
 	private String ketLuan;
 
 	@Transient
-	private List<XhPhieuKnghiemCluongCt> children = new ArrayList<>();
+	private List<XhPhieuKnghiemCluongCtReq> children = new ArrayList<>();
 }

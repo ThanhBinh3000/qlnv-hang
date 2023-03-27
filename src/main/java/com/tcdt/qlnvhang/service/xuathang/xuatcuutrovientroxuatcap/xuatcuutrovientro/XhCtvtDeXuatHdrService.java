@@ -255,7 +255,6 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
 
     String status = statusReq.getTrangThai() + optional.get().getTrangThai();
     switch (status) {
-      case Contains.DA_TAO_CBV + Contains.DUTHAO:
       case Contains.DUTHAO + Contains.DA_TAO_CBV:
       case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
         optional.get().setNgayGduyet(LocalDate.now());
@@ -267,6 +266,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
         optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
         break;
       case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
+      case Contains.DA_TAO_CBV + Contains.DUTHAO:
         optional.get().setNgayPduyet(LocalDate.now());
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
         break;
