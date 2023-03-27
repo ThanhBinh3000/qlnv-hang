@@ -274,21 +274,26 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
     fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhCtVtQuyetDinhPdHdr.TABLE_NAME + "_CAN_CU"));
     fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhCtVtQuyetDinhPdHdr.TABLE_NAME));
     xhCtVtQdPdHdrRepository.delete(data);
-    if (!DataUtils.isNullOrEmpty(data.getMaTongHop())) {
-      Optional<XhCtvtTongHopHdr> tongHopHdr = xhCtvtTongHopHdrRepository.findById(data.getIdTongHop());
-      XhCtvtTongHopHdr tongHop = tongHopHdr.get();
-      tongHop.setSoQdPd(null);
-      tongHop.setIdQdPd(null);
-      tongHop.setNgayKyQd(null);
-      xhCtvtTongHopHdrRepository.save(tongHop);
+
+    String maThop = data.getMaTongHop();
+    if (!DataUtils.isNullOrEmpty(maThop)) {
+      XhCtvtTongHopHdr tongHop = xhCtvtTongHopHdrRepository.findById(data.getIdTongHop()).orElse(null);
+      if (tongHop != null) {
+        tongHop.setSoQdPd(null);
+        tongHop.setIdQdPd(null);
+        tongHop.setNgayKyQd(null);
+        xhCtvtTongHopHdrRepository.save(tongHop);
+      }
     }
-    if (!DataUtils.isNullOrEmpty(data.getSoDx())) {
-      Optional<XhCtvtDeXuatHdr> deXuatHdr = xhCtvtDeXuatHdrRepository.findById(data.getIdDx());
-      XhCtvtDeXuatHdr deXuat = deXuatHdr.get();
-      deXuat.setSoQdPd(null);
-      deXuat.setIdQdPd(null);
-      deXuat.setNgayKyQd(null);
-      xhCtvtDeXuatHdrRepository.save(deXuat);
+    String soDx = data.getSoDx();
+    if (!DataUtils.isNullOrEmpty(soDx)) {
+      XhCtvtDeXuatHdr deXuat = xhCtvtDeXuatHdrRepository.findById(data.getIdDx()).orElse(null);
+      if (deXuat != null) {
+        deXuat.setSoQdPd(null);
+        deXuat.setIdQdPd(null);
+        deXuat.setNgayKyQd(null);
+        xhCtvtDeXuatHdrRepository.save(deXuat);
+      }
     }
   }
 
