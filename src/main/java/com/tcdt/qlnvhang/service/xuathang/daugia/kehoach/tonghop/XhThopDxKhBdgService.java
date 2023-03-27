@@ -53,6 +53,7 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
         Page<XhThopDxKhBdg> data = xhThopDxKhBdgRepository.searchPage(
                 objReq.getNamKh(),
                 objReq.getLoaiVthh(),
+                objReq.getTypeLoaiVthh(),
                 objReq.getCloaiVthh(),
                 objReq.getNoiDungThop(),
                 Contains.convertDateToString(objReq.getNgayThopTu()),
@@ -94,9 +95,9 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
 
     @Transactional()
     public XhThopDxKhBdg create(XhThopDxKhBdgReq objReq, HttpServletRequest req) throws Exception {
-        if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh())) {
-            throw new Exception("Loại vật tư hàng hóa không phù hợp");
-        }
+//        if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh())) {
+//            throw new Exception("Loại vật tư hàng hóa không phù hợp");
+//        }
         // Set thong tin hdr tong hop
         XhThopDxKhBdg thopHdr = sumarryData(objReq, req);
         thopHdr.setId(objReq.getIdTh());
@@ -111,6 +112,7 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
         thopHdr.setNamKh(objReq.getNamKh());
         thopHdr.setMaDvi(objReq.getMaDvi());
         thopHdr.setNoiDungThop(objReq.getNoiDungThop());
+        thopHdr.setTypeLoaiVthh(objReq.getTypeLoaiVthh());
         xhThopDxKhBdgRepository.save(thopHdr);
         for (XhThopDxKhBdgDtl dtl : thopHdr.getChildren()) {
             dtl.setIdThopHdr(thopHdr.getId());
@@ -186,6 +188,7 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
             if (!CollectionUtils.isEmpty(listDxHdr)) {
                 listDxHdr.stream().map(item -> {
                     item.setTrangThaiTh(Contains.CHUATONGHOP);
+                    item.setIdThop(null);
                     return item;
                 }).collect(Collectors.toList());
             }

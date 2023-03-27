@@ -89,9 +89,9 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
 
     @Transactional()
     public XhThopDxKhBttHdr create(XhThopDxKhBttHdrReq objReq, HttpServletRequest req) throws Exception{
-        if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh())) {
-            throw new Exception("Loại vật tư hàng hóa không phù hợp");
-        }
+//        if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh())) {
+//            throw new Exception("Loại vật tư hàng hóa không phù hợp");
+//        }
 
         XhThopDxKhBttHdr thopHdr = sumarryData(objReq,req);
         thopHdr.setId(objReq.getIdTh());

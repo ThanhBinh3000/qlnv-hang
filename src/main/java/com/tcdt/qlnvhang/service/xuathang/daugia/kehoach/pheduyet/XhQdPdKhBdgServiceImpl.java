@@ -135,6 +135,8 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
         // Update trạng thái tổng hợp dxkhclnt
         if (req.getPhanLoai().equals("TH")) {
             dataTh.setTrangThai(Contains.DADUTHAO_QD);
+            dataTh.setSoQdPd(dataMap.getSoQdPd());
+            dataTh.setIdQdPd(dataMap.getId());
             xhThopDxKhBdgRepository.save(dataTh);
         } else {
             dataDx.setTrangThaiTh(Contains.DADUTHAO_QD);
@@ -333,6 +335,10 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
         xhQdPdKhBdgRepository.delete(optional.get());
 
         if (optional.get().getPhanLoai().equals("TH")) {
+            Optional<XhThopDxKhBdg> qOptionalTh = xhThopDxKhBdgRepository.findById(optional.get().getIdThHdr());
+            XhThopDxKhBdg bdg = qOptionalTh.get();
+            bdg.setIdQdPd(null);
+            bdg.setSoQdPd(null);
             xhThopDxKhBdgRepository.updateTrangThai(optional.get().getIdThHdr(), NhapXuatHangTrangThaiEnum.CHUATAO_QD.getId());
         } else {
             xhDxKhBanDauGiaRepository.updateStatusTh(optional.get().getIdTrHdr(), NhapXuatHangTrangThaiEnum.CHUATONGHOP.getId());
