@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.bienbanlaymau.XhBbLayMauBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.phieuktracluong.XhPhieuKtraCluongBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bangkecanhang.XhBkeCanHangBttHdr;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bienbanhaodoi.XhBbHdoiBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bienbantinhkho.XhBbTinhkBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPhieuXkhoBtt;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -118,5 +119,8 @@ public class XhQdNvXhBttHdr extends TrangThaiBaseEntity implements Serializable 
 
     @Transient
     private List<XhBbTinhkBttHdr> xhBbTinhkBttHdrList = new ArrayList<>();
+
+    @Transient
+    private List<XhBbHdoiBttHdr> xhBbHdoiBttHdrList = new ArrayList<>();
 
 }

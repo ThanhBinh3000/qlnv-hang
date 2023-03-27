@@ -1,13 +1,13 @@
-package com.tcdt.qlnvhang.service.xuathang.bantructiep.xuatkho.bienbantinhkho;
+package com.tcdt.qlnvhang.service.xuathang.bantructiep.xuatkho.bienbanhaodoi;
 
-import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bienbantinhkho.XhBbTinhkBttDtl;
-import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bienbantinhkho.XhBbTinhkBttHdr;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bienbanhaodoi.XhBbHdoiBttDtl;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bienbanhaodoi.XhBbHdoiBttHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
-import com.tcdt.qlnvhang.repository.xuathang.bantructiep.xuatkho.bienbantinhkho.XhBbTinhkBttDtlRepository;
-import com.tcdt.qlnvhang.repository.xuathang.bantructiep.xuatkho.bienbantinhkho.XhBbTinhkBttHdrRepository;
-import com.tcdt.qlnvhang.request.xuathang.bantructiep.xuatkho.bienbantinhkho.XhBbTinhkBttDtlReq;
-import com.tcdt.qlnvhang.request.xuathang.bantructiep.xuatkho.bienbantinhkho.XhBbTinhkBttHdrReq;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.xuatkho.bienbanhaodoi.XhBbHdoiBttDtlRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.xuatkho.bienbanhaodoi.XhBbHdoiBttHdrRepository;
+import com.tcdt.qlnvhang.request.xuathang.bantructiep.xuatkho.bienbanhaodoi.XhBbHdoiBttDtlReq;
+import com.tcdt.qlnvhang.request.xuathang.bantructiep.xuatkho.bienbanhaodoi.XhBbHdoiBttHdrReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -29,13 +29,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 @Service
-public class XhBbTinhkBttServiceImpl extends BaseServiceImpl implements XhBbTinhkBttService {
+public class XhBbHdoiBttServiceIpml extends BaseServiceImpl implements XhBbHdoiBttService {
 
     @Autowired
-    private XhBbTinhkBttHdrRepository xhBbTinhkBttHdrRepository;
+    private XhBbHdoiBttHdrRepository xhBbHdoiBttHdrRepository;
 
     @Autowired
-    private XhBbTinhkBttDtlRepository xhBbTinhkBttDtlRepository;
+    private XhBbHdoiBttDtlRepository xhBbHdoiBttDtlRepository;
 
     @Autowired
     FileDinhKemService fileDinhKemService;
@@ -44,10 +44,10 @@ public class XhBbTinhkBttServiceImpl extends BaseServiceImpl implements XhBbTinh
     UserInfoRepository userInfoRepository;
 
     @Override
-    public Page<XhBbTinhkBttHdr> searchPage(XhBbTinhkBttHdrReq req) throws Exception {
+    public Page<XhBbHdoiBttHdr> searchPage(XhBbHdoiBttHdrReq req) throws Exception {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),
                 req.getPaggingReq().getLimit(), Sort.by("id").descending());
-        Page<XhBbTinhkBttHdr> data = xhBbTinhkBttHdrRepository.searchPage(
+        Page<XhBbHdoiBttHdr> data = xhBbHdoiBttHdrRepository.searchPage(
                 req,
                 pageable
         );
@@ -64,43 +64,45 @@ public class XhBbTinhkBttServiceImpl extends BaseServiceImpl implements XhBbTinh
         return data;
     }
 
+
     @Override
-    public XhBbTinhkBttHdr create(XhBbTinhkBttHdrReq req) throws Exception {
+    public XhBbHdoiBttHdr create(XhBbHdoiBttHdrReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null){
             throw new Exception("Bad request.");
 
         }
 
-        XhBbTinhkBttHdr data = new XhBbTinhkBttHdr();
+        XhBbHdoiBttHdr data = new XhBbHdoiBttHdr();
         BeanUtils.copyProperties(req, data, "id");
         data.setNgayTao(getDateTimeNow());
         data.setNguoiTaoId(userInfo.getId());
         data.setTrangThai(Contains.DU_THAO);
         data.setMaDvi(userInfo.getDvql());
         data.setIdThuKho(userInfo.getId());
-        data.setId(Long.valueOf(data.getSoBbTinhKho().split("/")[0]));
-        XhBbTinhkBttHdr created = xhBbTinhkBttHdrRepository.save(data);
+        data.setId(Long.valueOf(data.getSoBbHaoDoi().split("/")[0]));
+        XhBbHdoiBttHdr created = xhBbHdoiBttHdrRepository.save(data);
         if (!DataUtils.isNullObject(req.getFileDinhKem())) {
-            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(req.getFileDinhKem()), created.getId(), XhBbTinhkBttHdr.TABLE_NAME);
+            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(req.getFileDinhKem()), created.getId(), XhBbHdoiBttHdr.TABLE_NAME);
             created.setFileDinhKem(fileDinhKem.get(0));
         }
+
         saveDetail(req, data.getId());
         return created;
     }
 
-    void saveDetail(XhBbTinhkBttHdrReq req, Long idHdr){
-        xhBbTinhkBttDtlRepository.deleteAllByIdHdr(idHdr);
-        for (XhBbTinhkBttDtlReq dtlReq : req.getChildren()){
-            XhBbTinhkBttDtl dtl = new XhBbTinhkBttDtl();
+    void saveDetail(XhBbHdoiBttHdrReq req, Long idHdr){
+        xhBbHdoiBttDtlRepository.deleteAllByIdHdr(idHdr);
+        for (XhBbHdoiBttDtlReq dtlReq : req.getChildren()){
+            XhBbHdoiBttDtl dtl = new XhBbHdoiBttDtl();
             BeanUtils.copyProperties(dtlReq, dtl, "id");
             dtl.setIdHdr(idHdr);
-            xhBbTinhkBttDtlRepository.save(dtl);
+            xhBbHdoiBttDtlRepository.save(dtl);
         }
     }
 
     @Override
-    public XhBbTinhkBttHdr update(XhBbTinhkBttHdrReq req) throws Exception {
+    public XhBbHdoiBttHdr update(XhBbHdoiBttHdrReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null)
             throw new Exception("Bad request.");
@@ -108,34 +110,32 @@ public class XhBbTinhkBttServiceImpl extends BaseServiceImpl implements XhBbTinh
         if (StringUtils.isEmpty(req.getId()))
             throw new Exception("Sửa thất bại, không tìm thấy dữ liệu");
 
-        Optional<XhBbTinhkBttHdr> qOptional = xhBbTinhkBttHdrRepository.findById(req.getId());
+        Optional<XhBbHdoiBttHdr> qOptional = xhBbHdoiBttHdrRepository.findById(req.getId());
         if (!qOptional.isPresent()){
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
 
-        XhBbTinhkBttHdr dataDB = qOptional.get();
+        XhBbHdoiBttHdr dataDB = qOptional.get();
         BeanUtils.copyProperties(req, dataDB, "id");
         dataDB.setNgaySua(getDateTimeNow());
         dataDB.setNguoiSuaId(getUser().getId());
-        XhBbTinhkBttHdr created = xhBbTinhkBttHdrRepository.save(dataDB);
+        XhBbHdoiBttHdr created = xhBbHdoiBttHdrRepository.save(dataDB);
 
         if (!DataUtils.isNullObject(req.getFileDinhKem())) {
-            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Arrays.asList(req.getFileDinhKem()), created.getId(), XhBbTinhkBttHdr.TABLE_NAME);
+            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Arrays.asList(req.getFileDinhKem()), created.getId(), XhBbHdoiBttHdr.TABLE_NAME);
             dataDB.setFileDinhKem(fileDinhKem.get(0));
         }
 
         this.saveDetail(req, dataDB.getId());
-
         return created;
     }
 
     @Override
-    public XhBbTinhkBttHdr detail(Long id) throws Exception {
+    public XhBbHdoiBttHdr detail(Long id) throws Exception {
         if (StringUtils.isEmpty(id))
             throw new Exception("Không tồn tại bản ghi");
 
-        Optional<XhBbTinhkBttHdr> qOptional = xhBbTinhkBttHdrRepository.findById(id);
-
+        Optional<XhBbHdoiBttHdr> qOptional = xhBbHdoiBttHdrRepository.findById(id);
         if (!qOptional.isPresent()){
             throw new UnsupportedOperationException("Bản ghi không tồn tại");
         }
@@ -143,7 +143,7 @@ public class XhBbTinhkBttServiceImpl extends BaseServiceImpl implements XhBbTinh
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
 
-        XhBbTinhkBttHdr data = qOptional.get();
+        XhBbHdoiBttHdr data = qOptional.get();
 
         if (!Objects.isNull(data.getIdThuKho())){
             data.setTenThuKho(userInfoRepository.findById(data.getIdThuKho()).get().getFullName());
@@ -168,18 +168,19 @@ public class XhBbTinhkBttServiceImpl extends BaseServiceImpl implements XhBbTinh
         data.setTenNganKho(hashMapDvi.get(data.getMaNganKho()));
         data.setTenLoKho(hashMapDvi.get(data.getMaLoKho()));
 
-        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhBbTinhkBttHdr.TABLE_NAME));
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhBbHdoiBttHdr.TABLE_NAME));
         if (!DataUtils.isNullOrEmpty(fileDinhKem)) {
             data.setFileDinhKem(fileDinhKem.get(0));
         }
 
-        data.setChildren(xhBbTinhkBttDtlRepository.findAllByIdHdr(id));
+        data.setChildren(xhBbHdoiBttDtlRepository.findAllByIdHdr(id));
 
         return data;
+
     }
 
     @Override
-    public XhBbTinhkBttHdr approve(XhBbTinhkBttHdrReq req) throws Exception {
+    public XhBbHdoiBttHdr approve(XhBbHdoiBttHdrReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
 
         if(Objects.isNull(req.getId())){
@@ -190,12 +191,12 @@ public class XhBbTinhkBttServiceImpl extends BaseServiceImpl implements XhBbTinh
             throw new Exception("Bad Request");
         }
 
-        Optional<XhBbTinhkBttHdr> optional = xhBbTinhkBttHdrRepository.findById(req.getId());
+        Optional<XhBbHdoiBttHdr> optional = xhBbHdoiBttHdrRepository.findById(req.getId());
         if (!optional.isPresent()){
             throw new Exception("Không tìm thấy dữ liệu");
         }
 
-        XhBbTinhkBttHdr data = optional.get();
+        XhBbHdoiBttHdr data = optional.get();
         String status = req.getTrangThai() + data.getTrangThai();
         switch (status) {
             case Contains.CHODUYET_KTVBQ + Contains.DUTHAO:
@@ -207,7 +208,6 @@ public class XhBbTinhkBttServiceImpl extends BaseServiceImpl implements XhBbTinh
                 data.setNguoiGuiDuyetId(userInfo.getId());
                 data.setIdKtv(userInfo.getId());
                 data.setNgayGuiDuyet(new Date());
-                data.setIdKeToan(userInfo.getId()   );
                 break;
             case Contains.TUCHOI_KTVBQ + Contains.CHODUYET_KTVBQ:
             case Contains.TUCHOI_KT + Contains.CHODUYET_KT:
@@ -224,7 +224,7 @@ public class XhBbTinhkBttServiceImpl extends BaseServiceImpl implements XhBbTinh
                 throw new Exception("Phê duyệt không thành công");
         }
         data.setTrangThai(req.getTrangThai());
-        xhBbTinhkBttHdrRepository.save(data);
+        xhBbHdoiBttHdrRepository.save(data);
         return data;
     }
 
@@ -234,7 +234,7 @@ public class XhBbTinhkBttServiceImpl extends BaseServiceImpl implements XhBbTinh
             throw new Exception("Bad request");
         }
 
-        Optional<XhBbTinhkBttHdr> optional = xhBbTinhkBttHdrRepository.findById(id);
+        Optional<XhBbHdoiBttHdr> optional = xhBbHdoiBttHdrRepository.findById(id);
         if (!optional.isPresent()){
             throw new Exception("Không tìm thấy dữ liệu");
         }
@@ -243,9 +243,9 @@ public class XhBbTinhkBttServiceImpl extends BaseServiceImpl implements XhBbTinh
             throw new Exception("Không thể xóa quyết định đã duyệt");
         }
 
-        xhBbTinhkBttHdrRepository.delete(optional.get());
-        xhBbTinhkBttDtlRepository.deleteAllByIdHdr(optional.get().getId());
-        fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhBbTinhkBttHdr.TABLE_NAME));
+        xhBbHdoiBttHdrRepository.delete(optional.get());
+        xhBbHdoiBttDtlRepository.deleteAllByIdHdr(optional.get().getId());
+        fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhBbHdoiBttHdr.TABLE_NAME));
     }
 
     @Override
@@ -254,7 +254,7 @@ public class XhBbTinhkBttServiceImpl extends BaseServiceImpl implements XhBbTinh
     }
 
     @Override
-    public void export(XhBbTinhkBttHdrReq req, HttpServletResponse response) throws Exception {
+    public void export(XhBbHdoiBttHdrReq req, HttpServletResponse response) throws Exception {
 
     }
 }

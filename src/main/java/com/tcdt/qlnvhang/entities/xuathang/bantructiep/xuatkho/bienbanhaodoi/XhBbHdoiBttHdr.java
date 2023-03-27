@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bienbantinhkho;
+package com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bienbanhaodoi;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
@@ -14,11 +14,11 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = XhBbTinhkBttHdr.TABLE_NAME)
+@Table(name = XhBbHdoiBttHdr.TABLE_NAME)
 @Data
-public class XhBbTinhkBttHdr extends TrangThaiBaseEntity implements Serializable {
+public class XhBbHdoiBttHdr extends TrangThaiBaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "XH_BB_TINHK_BTT_HDR";
+    public static final String TABLE_NAME = "XH_BB_HDOI_BTT_HDR";
 
     @Id
 //    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator =TABLE_NAME +"_SEQ")
@@ -35,7 +35,7 @@ public class XhBbTinhkBttHdr extends TrangThaiBaseEntity implements Serializable
 
     private String maQhns;
 
-    private String soBbTinhKho;
+    private String soBbHaoDoi;
 
     private Long idQd;
 
@@ -47,8 +47,6 @@ public class XhBbTinhkBttHdr extends TrangThaiBaseEntity implements Serializable
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKyHd;
-
-    private Long idDdiemXh;
 
     private String maDiemKho;
     @Transient
@@ -66,21 +64,29 @@ public class XhBbTinhkBttHdr extends TrangThaiBaseEntity implements Serializable
     @Transient
     private String tenLoKho;
 
+    private Long idBbTinhKho;
+
+    private String soBbTinhKho;
+
+    private BigDecimal tongSlNhap;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayBdauXuat;
+    private Date ngayKthucNhap;
+
+    private BigDecimal tongSlXuat;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKthucXuat;
 
-    private BigDecimal tongSlNhap;
+    private BigDecimal slHaoThucTe;
 
-    private BigDecimal tongSlXuat;
+    private String tiLe;
 
-    private BigDecimal slConLai;
+    private BigDecimal slHaoVuotMuc;
 
-    private BigDecimal slThucTe;
+    private BigDecimal slHaoThanhLy;
 
-    private BigDecimal slChenhLech;
+    private BigDecimal slHaoDuoiDinhMuc;
 
     private String nguyenNhan;
 
@@ -101,7 +107,7 @@ public class XhBbTinhkBttHdr extends TrangThaiBaseEntity implements Serializable
     private String tenKeToan;
 
     @Transient
-    private List<XhBbTinhkBttDtl> children = new ArrayList<>();
+    private List<XhBbHdoiBttDtl> children = new ArrayList<>();
 
     @Transient
     private FileDinhKem fileDinhKem;

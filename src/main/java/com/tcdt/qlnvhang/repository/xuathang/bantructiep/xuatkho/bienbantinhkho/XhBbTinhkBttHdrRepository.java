@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.repository.xuathang.bantructiep.xuatkho.bienbantinhkho;
 
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bienbantinhkho.XhBbTinhkBttHdr;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPhieuXkhoBtt;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.xuatkho.bienbantinhkho.XhBbTinhkBttHdrReq;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +23,9 @@ public interface XhBbTinhkBttHdrRepository extends JpaRepository<XhBbTinhkBttHdr
     Page<XhBbTinhkBttHdr> searchPage(@Param("param") XhBbTinhkBttHdrReq param, Pageable pageable);
 
     List<XhBbTinhkBttHdr> findAllByIdQd(Long idQd);
+
+    List<XhBbTinhkBttHdr> findAllByIdDdiemXh(Long idDdiemXh);
+
 
 
 

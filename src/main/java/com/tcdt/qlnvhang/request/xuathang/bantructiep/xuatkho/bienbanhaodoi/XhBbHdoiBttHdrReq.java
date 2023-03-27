@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.request.xuathang.bantructiep.xuatkho.bienbantinhkho;
+package com.tcdt.qlnvhang.request.xuathang.bantructiep.xuatkho.bienbanhaodoi;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.BaseRequest;
@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-public class XhBbTinhkBttHdrReq extends BaseRequest {
+public class XhBbHdoiBttHdrReq extends BaseRequest {
 
     @ApiModelProperty(notes = "Bắt buộc set đối với update")
     private Long id;
@@ -25,7 +25,7 @@ public class XhBbTinhkBttHdrReq extends BaseRequest {
 
     private String maQhns;
 
-    private String soBbTinhKho;
+    private String soBbHaoDoi;
 
     private Long idQd;
 
@@ -38,8 +38,6 @@ public class XhBbTinhkBttHdrReq extends BaseRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKyHd;
 
-    private Long idDdiemXh;
-
     private String maDiemKho;
 
     private String maNhaKho;
@@ -48,21 +46,29 @@ public class XhBbTinhkBttHdrReq extends BaseRequest {
 
     private String maLoKho;
 
+    private Long idBbTinhKho;
+
+    private String soBbTinhKho;
+
+    private BigDecimal tongSlNhap;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayBdauXuat;
+    private Date ngayKthucNhap;
+
+    private BigDecimal tongSlXuat;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKthucXuat;
 
-    private BigDecimal tongSlNhap;
+    private BigDecimal slHaoThucTe;
 
-    private BigDecimal tongSlXuat;
+    private String tiLe;
 
-    private BigDecimal slConLai;
+    private BigDecimal slHaoVuotMuc;
 
-    private BigDecimal slThucTe;
+    private BigDecimal slHaoThanhLy;
 
-    private BigDecimal slChenhLech;
+    private BigDecimal slHaoDuoiDinhMuc;
 
     private String nguyenNhan;
 
@@ -77,8 +83,10 @@ public class XhBbTinhkBttHdrReq extends BaseRequest {
     private Long idKeToan;
 
     @Transient
-    private List<XhBbTinhkBttDtlReq> children = new ArrayList<>();
+    private List<XhBbHdoiBttDtlReq> children = new ArrayList<>();
 
     @Transient
     private FileDinhKemReq fileDinhKem;
+
+
 }
