@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.nhiemvuxuat;
 
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.phieuktracluong.XhPhieuKtraCluongBttHdr;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bienbantinhkho.XhBbTinhkBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPhieuXkhoBtt;
 import lombok.Data;
 
@@ -46,4 +47,7 @@ public class XhQdNvXhBttDvi {
 
     @Transient
     private List<XhPhieuXkhoBtt> xkhoBttList = new ArrayList<>();
+
+    @Transient
+    private List<XhBbTinhkBttHdr> xhBbTinhkBttHdrList = new ArrayList<>();
 }

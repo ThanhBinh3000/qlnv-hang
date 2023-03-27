@@ -9,6 +9,8 @@ import com.tcdt.qlnvhang.entities.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttDv
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bangkecanhang.XhBkeCanHangBttHdr;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bienbanhaodoi.XhBbHdoiBttDtl;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bienbanhaodoi.XhBbHdoiBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bienbantinhkho.XhBbTinhkBttDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bienbantinhkho.XhBbTinhkBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPhieuXkhoBtt;
@@ -23,6 +25,8 @@ import com.tcdt.qlnvhang.repository.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBtt
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.xuatkho.bangcankehang.XhBkeCanHangBttHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.xuatkho.bienbanhaodoi.XhBbHdoiBttDtlRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.xuatkho.bienbanhaodoi.XhBbHdoiBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.xuatkho.bienbantinhkho.XhBbTinhkBttDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.xuatkho.bienbantinhkho.XhBbTinhkBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPhieuXkhoBttReposytory;
@@ -99,6 +103,12 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
     @Autowired
     private XhBbTinhkBttDtlRepository xhBbTinhkBttDtlRepository;
 
+    @Autowired
+    private XhBbHdoiBttHdrRepository xhBbHdoiBttHdrRepository;
+
+    @Autowired
+    private XhBbHdoiBttDtlRepository xhBbHdoiBttDtlRepository;
+
 
     @Override
     public Page<XhQdNvXhBttHdr> searchPage(XhQdNvXhBttHdrReq req) throws Exception {
@@ -171,6 +181,18 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
                 tinhkBttHdr.setChildren(xhBbTinhkBttDtlList);
             }
             f.setXhBbTinhkBttHdrList(xhBbTinhkBttHdrList);
+
+            // Biên bản hao dôi
+            List<XhBbHdoiBttHdr> xhBbHdoiBttHdrList = xhBbHdoiBttHdrRepository.findAllByIdQd(f.getId());
+            for (XhBbHdoiBttHdr hdoiBttHdr : xhBbHdoiBttHdrList){
+                hdoiBttHdr.setTenDiemKho(hashMapDvi.get(hdoiBttHdr.getMaDiemKho()));
+                hdoiBttHdr.setTenNhaKho(hashMapDvi.get(hdoiBttHdr.getMaNganKho()));
+                hdoiBttHdr.setTenNganKho(hashMapDvi.get(hdoiBttHdr.getMaNganKho()));
+                hdoiBttHdr.setTenLoKho(hashMapDvi.get(hdoiBttHdr.getMaLoKho()));
+                List<XhBbHdoiBttDtl> xhBbHdoiBttDtlList = xhBbHdoiBttDtlRepository.findAllByIdHdr(hdoiBttHdr.getId());
+                hdoiBttHdr.setChildren(xhBbHdoiBttDtlList);
+            }
+            f.setXhBbHdoiBttHdrList(xhBbHdoiBttHdrList);
 
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenTrangThaiXh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiXh()));
@@ -371,6 +393,15 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
                         s.setTenKtv(userInfoRepository.findById(s.getIdKtv()).get().getFullName());
                     }
                 });
+
+                List<XhBbTinhkBttHdr> xhBbTinhkBttHdrList = xhBbTinhkBttHdrRepository.findAllByIdDdiemXh(dvi.getId());
+                xhBbTinhkBttHdrList.forEach(t ->{
+                    t.setTenDiemKho(hashMapDvi.get(t.getMaDiemKho()));
+                    t.setTenNhaKho(hashMapDvi.get(t.getMaNhaKho()));
+                    t.setTenNganKho(hashMapDvi.get(t.getMaNganKho()));
+                    t.setTenLoKho(hashMapDvi.get(t.getMaLoKho()));
+                });
+                dvi.setXhBbTinhkBttHdrList(xhBbTinhkBttHdrList);
                 dvi.setXkhoBttList(xhPhieuXkhoBttList);
                 dvi.setChildren(cluongBttHdrList);
                 dvi.setTenDiemKho(hashMapDvi.get(dvi.getMaDiemKho()));
