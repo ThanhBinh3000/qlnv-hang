@@ -9,6 +9,7 @@ import com.tcdt.qlnvhang.repository.xuathang.daugia.ktracluong.kiemnghiemcl.XhPh
 import com.tcdt.qlnvhang.repository.xuathang.daugia.ktracluong.kiemnghiemcl.XhPhieuKnghiemCluongRepository;
 import com.tcdt.qlnvhang.request.bandaugia.bienbanlaymau.XhBbLayMauCtRequest;
 import com.tcdt.qlnvhang.request.bandaugia.bienbanlaymau.XhBbLayMauRequest;
+import com.tcdt.qlnvhang.request.xuathang.phieukiemnghiemchatluong.XhPhieuKnghiemCluongCtReq;
 import com.tcdt.qlnvhang.request.xuathang.phieukiemnghiemchatluong.XhPhieuKnghiemCluongReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -72,7 +73,7 @@ public class XhPhieuKnghiemCluongServiceImpl extends BaseServiceImpl implements 
 
     void saveDetail(XhPhieuKnghiemCluongReq req, Long idHdr){
         subRepository.deleteAllByIdHdr(idHdr);
-        for (XhPhieuKnghiemCluongCt ctReq :req.getChildren()) {
+        for (XhPhieuKnghiemCluongCtReq ctReq :req.getChildren()) {
             XhPhieuKnghiemCluongCt ct = new XhPhieuKnghiemCluongCt();
             BeanUtils.copyProperties(ctReq,ct,"id");
             ct.setIdHdr(idHdr);

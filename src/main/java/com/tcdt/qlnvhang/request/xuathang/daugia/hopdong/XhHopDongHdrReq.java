@@ -1,9 +1,14 @@
 package com.tcdt.qlnvhang.request.xuathang.daugia.hopdong;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttDtl;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttHdr;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.hopdong.XhHopDongDtl;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.request.object.HhDviLquanReq;
+import com.tcdt.qlnvhang.request.xuathang.bantructiep.hopdong.XhHopDongBttDtlReq;
+import com.tcdt.qlnvhang.request.xuathang.bantructiep.hopdong.XhHopDongBttHdrReq;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.Contains;
 import io.swagger.annotations.ApiModelProperty;
@@ -12,6 +17,7 @@ import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,24 +28,21 @@ public class XhHopDongHdrReq extends BaseRequest {
 
     private String soQdKq;
 
-    private int nam;
+    private Integer nam;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayKyQdKq;
+    private LocalDate ngayKyQdKq;
 
     private String soQdPd;
 
     private String maDviTsan;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date tgianNkho;
+    private LocalDate tgianNkho;
 
     private String soHd;
 
     private String tenHd;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayHluc;
+    private LocalDate ngayHluc;
 
     private String ghiChuNgayHluc;
 
@@ -93,10 +96,48 @@ public class XhHopDongHdrReq extends BaseRequest {
 
     private Double tongTien;
 
-    private String trangThai;
-
+    // Transient
+    @Transient
+    private String tenLoaiVthh;
+    @Transient
+    private String tenCloaiVthh;
+    @Transient
+    private String tenDvi;
+    @Transient
+    private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
+    @Transient
+    private List<XhHopDongDtlReq> children = new ArrayList<>();
+    @Transient
     private List<String> listMaDviTsan = new ArrayList<>();
 
-    private List<XhHopDongDtlReq> children = new ArrayList<>();
+    //    Phụ lục
+
+    private Long idHd;
+
+    private String soPhuLuc;
+
+    private LocalDate ngayHlucPhuLuc;
+
+    private String noiDungPhuLuc;
+
+    private LocalDate ngayHlucSauDcTu;
+
+    private LocalDate ngayHlucSauDcDen;
+
+    private Integer tgianThienHdSauDc;
+
+    private String noiDungDcKhac;
+
+    private String ghiChuPhuLuc;
+
+    private String trangThaiPhuLuc;
+    @Transient
+    private String tenTrangThaiPhuLuc;
+
+    @Transient
+    private List<XhHopDongHdrReq> phuLuc = new ArrayList<>();
+
+    @Transient
+    private List<XhHopDongDtlReq> phuLucDtl = new ArrayList<>();
 
 }

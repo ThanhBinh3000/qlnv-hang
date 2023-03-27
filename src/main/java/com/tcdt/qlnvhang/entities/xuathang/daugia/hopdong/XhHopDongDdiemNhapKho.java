@@ -18,25 +18,26 @@ public class XhHopDongDdiemNhapKho {
 
     private Long idDtl;
 
-    String maDiemKho;
+    private String maDiemKho;
 
-    String maNhaKho;
+    private String maNhaKho;
 
-    String maNganKho;
+    private String maNganKho;
 
-    String maLoKho;
+    private String maLoKho;
 
-    String maDviTsan;
+    private String maDviTsan;
 
-    BigDecimal soLuong;
+    private BigDecimal duDau;
 
-    BigDecimal donGiaVat;
+    private BigDecimal soLuong;
 
-    String toChucCaNhan;
+    private BigDecimal donGiaDeXuat;
 
-    String dviTinh;
+    private BigDecimal donGiaVat;
 
-    // Teansient
+    private String dviTinh;
+
     @Transient
     private String tenDiemKho;
     @Transient
