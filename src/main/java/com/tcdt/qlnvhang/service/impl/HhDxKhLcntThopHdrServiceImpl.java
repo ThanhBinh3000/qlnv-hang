@@ -10,10 +10,12 @@ import javax.transaction.Transactional;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxKhlcntDsgthau;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.*;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntDsgtDtlRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdrRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.util.*;
@@ -48,6 +50,9 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 
 	@Autowired
 	private HhDxuatKhLcntDsgtDtlRepository hhDxuatKhLcntDsgtDtlRepository;
+
+	@Autowired
+	private HhQdKhlcntHdrRepository hhQdKhlcntHdrRepository;
 
 	@Override
 	public HhDxKhLcntThopHdr sumarryData(HhDxKhLcntTChiThopReq objReq) throws Exception {
@@ -374,25 +379,40 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 
 		String title = "Tổng hợp đề xuất kế hoạch lựa chọn nhà thầu";
 		String[] rowsName = new String[] { "STT", "Mã tổng hợp", "Ngày tổng hợp", "Nội dung tổng hợp",
-		"Năm kế hoạch", "Loại hàng hóa", "Chủng loại hàng hóa", "Hình thức LCNT","Phương thức LCNT","Loại hợp đồng","Nguồn vốn","Trạng thái"};
+		"Năm kế hoạch", "Loại hàng hóa", "Chủng loại hàng hóa", "Hình thức LCNT","Phương thức LCNT","Loại hợp đồng","Nguồn vốn","Số QĐ PD KHLCNT","Trạng thái"};
 		String filename = "Tong_hop_de_xuat_ke_hoach_lua_chon_nha_thau.xlsx";
+
+		Map<String,String> hashMapPthucDthau = getListDanhMucChung("PT_DTHAU");
+		Map<String,String> hashMapNguonVon = getListDanhMucChung("NGUON_VON");
+		Map<String,String> hashMapHtLcnt = getListDanhMucChung("HT_LCNT");
+		Map<String,String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
+		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 
 		List<Object[]> dataList = new ArrayList<Object[]>();
 		Object[] objs = null;
 		for (int i = 0; i < data.size(); i++) {
 			HhDxKhLcntThopHdr dx = data.get(i);
+			Optional<HhQdKhlcntHdr> hhQdKhlcntHdr = hhQdKhlcntHdrRepository.findByIdThHdrAndLastest(dx.getId(), true);
+
 			objs = new Object[rowsName.length];
 			objs[0] = i;
 			objs[1] = dx.getId();
 			objs[2] = dx.getNgayThop();
 			objs[3] = dx.getNoiDung();
 			objs[4] = dx.getNamKhoach();
-			objs[5] = dx.getTenLoaiVthh();
-			objs[6] = dx.getTenCloaiVthh();
-			objs[7] = dx.getTenHthucLcnt();
-			objs[8] = dx.getTenPthucLcnt();
-			objs[9] = dx.getTenLoaiHdong();
-			objs[10] = dx.getTenTrangThai();
+			objs[5] = StringUtils.isEmpty(dx.getLoaiVthh()) ? null : hashMapDmHh.get(dx.getLoaiVthh());
+			objs[6] = StringUtils.isEmpty(dx.getCloaiVthh()) ? null : hashMapDmHh.get(dx.getCloaiVthh());
+			objs[7] = StringUtils.isEmpty(dx.getHthucLcnt()) ? null : hashMapHtLcnt.get(dx.getHthucLcnt());
+			objs[8] = StringUtils.isEmpty(dx.getPthucLcnt()) ? null :hashMapPthucDthau.get(dx.getPthucLcnt());
+			objs[9] = StringUtils.isEmpty(dx.getLoaiHdong()) ? null :hashMapLoaiHdong.get(dx.getLoaiHdong());
+			objs[10] = StringUtils.isEmpty(dx.getNguonVon()) ? null :hashMapNguonVon.get(dx.getNguonVon());
+			if(hhQdKhlcntHdr.isPresent()){
+				dx.setSoQdCc(hhQdKhlcntHdr.get().getSoQd());
+				objs[11] = dx.getSoQdCc();
+			}else{
+				objs[11] = null;
+			}
+			objs[12] = NhapXuatHangTrangThaiEnum.getTenById(dx.getTrangThai());
 			dataList.add(objs);
 		}
 
@@ -404,13 +424,17 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 	public Page<HhDxKhLcntThopHdr> timKiemPage(HttpServletRequest request,HhDxKhLcntThopSearchReq req) throws Exception {
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").descending());
 		Page<HhDxKhLcntThopHdr> page = hhDxKhLcntThopHdrRepository.select(req.getNamKhoach(),req.getLoaiVthh(),req.getCloaiVthh(),convertDateToString(req.getTuNgayThop()),convertDateToString(req.getDenNgayThop()),req.getNoiDung(),req.getTrangThai(), pageable);
-
 		Map<String,String> hashMapPthucDthau = getListDanhMucChung("PT_DTHAU");
 		Map<String,String> hashMapNguonVon = getListDanhMucChung("NGUON_VON");
 		Map<String,String> hashMapHtLcnt = getListDanhMucChung("HT_LCNT");
 		Map<String,String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
 		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 		page.getContent().forEach(f -> {
+			Optional<HhQdKhlcntHdr> hhQdKhlcntHdr = hhQdKhlcntHdrRepository.findByIdThHdrAndLastest(f.getId(), true);
+			if(hhQdKhlcntHdr.isPresent()){
+				f.setSoQdCc(hhQdKhlcntHdr.get().getSoQd());
+				f.setQdPdKhlcntId(hhQdKhlcntHdr.get().getId());
+			}
 			f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
 			f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
 			f.setTenHthucLcnt( StringUtils.isEmpty(f.getHthucLcnt()) ? null : hashMapHtLcnt.get(f.getHthucLcnt()));
