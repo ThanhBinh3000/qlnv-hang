@@ -23,4 +23,6 @@ public class XhCtvtBangKeDtl extends BaseEntity implements Serializable {
   private String soBaoBi;
   private Long trongLuongBaoBi;
   private Long trongLuongCaBi;
+  private String soSerial;
+  private Long soLuong;
 }

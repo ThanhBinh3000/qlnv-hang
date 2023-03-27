@@ -72,6 +72,8 @@ public class XhHopDongHdrReq extends BaseRequest {
 
     private String moTai;
 
+    private String uyQuyen;
+
     private String tenNhaThau;
 
     private String diaChiNhaThau;
@@ -85,6 +87,10 @@ public class XhHopDongHdrReq extends BaseRequest {
     private String sdtNhaThau;
 
     private String stkNhaThau;
+
+    private String faxNhaThau;
+
+    private String moTaiNhaThau;
 
     private String loaiVthh;
 
