@@ -23,11 +23,14 @@ public class XhDdiemNhapKhoReq {
 
     private String maDviTsan;
 
+    private BigDecimal duDau;
+
     private BigDecimal soLuong;
+
+    private BigDecimal donGiaDeXuat;
 
     private BigDecimal donGiaVat;
 
-    private String toChucCaNhan;
-
     private String dviTinh;
+
 }

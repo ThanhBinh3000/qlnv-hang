@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.entities.xuathang.daugia.hopdong;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,18 @@ public class XhHopDongDtl {
 
     private String maDvi;
 
+    private BigDecimal soLuong;
+
+    private BigDecimal donGiaVat;
+
+    private String diaChi;
+
+    //    phu luc
+    private Long idHdDtl;
+    @Transient
+    private String tenDviHd;
+    @Transient
+    private String diaChiHd;
     @Transient
     private String tenDvi;
 
