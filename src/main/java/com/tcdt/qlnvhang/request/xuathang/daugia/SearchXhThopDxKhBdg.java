@@ -19,4 +19,6 @@ public class SearchXhThopDxKhBdg extends BaseRequest {
     Date ngayThopDen;
 
     String TrangThai;
+    String typeLoaiVthh;
+
 }
