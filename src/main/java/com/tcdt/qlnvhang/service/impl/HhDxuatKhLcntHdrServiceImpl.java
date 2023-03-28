@@ -588,6 +588,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
             hhDxKhlcnt.put(Long.parseLong(it[0].toString()), dataQd);
         }
         page.getContent().forEach(f -> {
+            f.setQdGiaoChiTieuId(hhDxuatKhLcntHdrRepository.getIdByKhLcnt(f.getId()));
             Optional<HhDxKhLcntThopDtl> thopDtl = hhDxKhLcntThopDtlRepository.findByIdDxHdr(f.getId());
             thopDtl.ifPresent(hhDxKhLcntThopDtl -> f.setMaTh(hhDxKhLcntThopDtl.getIdThopHdr()));
             f.setSoGoiThau(hhDxuatKhLcntDsgtDtlRepository.countByIdDxKhlcnt(f.getId()));
