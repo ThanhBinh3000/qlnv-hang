@@ -111,7 +111,13 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 	List<Object[]> getQdPdKhLcnt(Collection<Long> dxIds, String trangThai);
 
 	@Query(value = " SELECT PAG.GIA_DE_NGHI FROM KH_PHUONG_AN_GIA PAG " +
-			" WHERE PAG.TRANG_THAI = '05' AND PAG.LOAI_GIA = 'LG01' AND PAG.TYPE = 'GMTDBTT' AND PAG.CLOAI_VTHH = :cloaiVthh ",
+			" WHERE PAG.TRANG_THAI = '05' AND PAG.LOAI_GIA = 'LG01' AND PAG.TYPE = 'GMTDBTT' AND PAG.CLOAI_VTHH = :cloaiVthh AND PAG.MA_DVI = :maDvi " +
+			" FETCH FIRST 1 ROWS ONLY ",
 			nativeQuery = true)
-	BigDecimal getGiaBanToiDa(String cloaiVthh);
+	BigDecimal getGiaBanToiDa(String cloaiVthh, String maDvi);
+
+	@Query(value = " select ct.id from KH_CHI_TIEU_KE_HOACH_NAM ct join HH_DX_KHLCNT_HDR hdr ON ct.SO_QUYET_DINH = hdr.SO_QD " +
+			" WHERE hdr.id = :khlcntId ",
+			nativeQuery = true)
+	BigDecimal getIdByKhLcnt (Long khlcntId);
 }

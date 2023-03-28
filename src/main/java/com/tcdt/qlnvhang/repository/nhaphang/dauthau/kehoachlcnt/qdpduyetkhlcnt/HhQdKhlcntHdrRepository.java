@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdr;
 import com.tcdt.qlnvhang.repository.BaseRepository;
@@ -57,4 +58,6 @@ public interface HhQdKhlcntHdrRepository extends BaseRepository<HhQdKhlcntHdr, L
 	@Query(value = "select nvl(sum(so_luong),0) from HH_DX_KHLCNT_DSGTHAU dtl,HH_DX_KHLCNT_HDR hdr where dtl.id_dx_khlcnt = hdr.id and hdr.nam_khoach = :namKh and dtl.ma_dvi = :maDvi and hdr.loai_vthh = :loaiVthh ",
 			nativeQuery = true)
 	Long countSLDalenKh(Integer namKh, String loaiVthh, String maDvi);
+
+	Optional<HhQdKhlcntHdr> findByIdThHdrAndLastest(Long id, Boolean lastest);
 }

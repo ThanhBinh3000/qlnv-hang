@@ -161,7 +161,7 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
     @Override
     public Page<HhQdKhlcntDtl> selectPage(HhQdKhlcntSearchReq objReq) throws Exception {
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
-        Page<HhQdKhlcntDtl> hhQdKhlcntDtls = dtlRepository.selectPage(objReq.getNamKhoach(), objReq.getLoaiVthh(), objReq.getMaDvi(), NhapXuatHangTrangThaiEnum.BAN_HANH.getId(),objReq.getTrangThaiDtl(),objReq.getTrangThaiDt(),objReq.getSoQd(), pageable);
+        Page<HhQdKhlcntDtl> hhQdKhlcntDtls = dtlRepository.selectPage(objReq.getNamKhoach(), objReq.getLoaiVthh(), objReq.getMaDvi(), NhapXuatHangTrangThaiEnum.BAN_HANH.getId(),objReq.getTrangThaiDtl(),objReq.getTrangThaiDt(),objReq.getSoQd(), convertDateToString(objReq.getTuNgayQd()), convertDateToString(objReq.getDenNgayQd()), objReq.getSoQdPdKhlcnt(), objReq.getSoQdPdKqlcnt(), pageable);
         Map<String,String> hashMapPthucDthau = getListDanhMucChung("PT_DTHAU");
         Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 
