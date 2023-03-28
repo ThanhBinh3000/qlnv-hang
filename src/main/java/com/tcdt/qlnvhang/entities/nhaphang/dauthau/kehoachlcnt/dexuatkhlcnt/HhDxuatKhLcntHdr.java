@@ -123,5 +123,7 @@ public class HhDxuatKhLcntHdr implements Serializable {
 
 	@Transient
 	private Long maTh;
+	@Transient
+	private BigDecimal qdGiaoChiTieuId;
 
 }
