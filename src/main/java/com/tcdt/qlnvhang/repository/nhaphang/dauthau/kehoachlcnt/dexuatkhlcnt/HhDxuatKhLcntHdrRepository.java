@@ -115,4 +115,9 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 			" FETCH FIRST 1 ROWS ONLY ",
 			nativeQuery = true)
 	BigDecimal getGiaBanToiDa(String cloaiVthh, String maDvi);
+
+	@Query(value = " select ct.id from KH_CHI_TIEU_KE_HOACH_NAM ct join HH_DX_KHLCNT_HDR hdr ON ct.SO_QUYET_DINH = hdr.SO_QD " +
+			" WHERE hdr.id = :khlcntId ",
+			nativeQuery = true)
+	BigDecimal getIdByKhLcnt (Long khlcntId);
 }
