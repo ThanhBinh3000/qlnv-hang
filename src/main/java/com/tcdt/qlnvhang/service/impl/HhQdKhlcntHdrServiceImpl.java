@@ -817,11 +817,12 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 
 		// Tao form excel
 		String title = "Danh sách QĐ phê duyệt KHLCNT";
-		String[] rowsName = new String[] { "STT", "Số quyết định", "Ngày QĐ", "Trích yếu","Mã tổng hợp","Mã tờ trình", "Năm kế hoạch",
-				"Loại hàng hóa", "Chủng loại hàng hóa","Trạng thái" };
+		String[] rowsName = new String[] { "STT", "Năm kế hoạch", "Số quyết định", "Ngày quyết định","Trình yếu","Số KH/tờ trình", "Mã tổng hợp",
+				"Loại hàng hóa", "Chủng loại hàng hóa", "Tổng số gói thầu", "Số gói thầu đã trúng", "SL HĐ đã ký", "Thời hạn nhập kho", "Thời gian thực hiện dự án", "Trạng thái" };
 
 
 		String filename = "Quyet_dinh_ke_hoach_lcnt-tong-cuc.xlsx";
+		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 
 		// Lay danh muc dung chung
 		List<Object[]> dataList = new ArrayList<Object[]>();
@@ -830,15 +831,20 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			HhQdKhlcntHdr qd = data.get(i);
 			objs = new Object[rowsName.length];
 			objs[0] = i;
-			objs[1] = qd.getSoQd();
-			objs[2] = qd.getNgayQd();
-			objs[3] = qd.getTrichYeu();
-			objs[4] = qd.getIdThHdr();
+			objs[1] = qd.getNamKhoach();
+			objs[2] = qd.getSoQd();
+			objs[3] = qd.getNgayQd();
+			objs[4] = qd.getTrichYeu();
 			objs[5] = qd.getSoTrHdr();
-			objs[6] = qd.getNamKhoach();
-			objs[7] = qd.getTenLoaiVthh();
-			objs[8] = qd.getTenCloaiVthh();
-			objs[9] = qd.getTenTrangThai();
+			objs[6] = qd.getIdThHdr();
+			objs[7] = StringUtils.isEmpty(qd.getLoaiVthh()) ? null : hashMapDmHh.get(qd.getLoaiVthh());
+			objs[8] = StringUtils.isEmpty(qd.getCloaiVthh()) ? null : hashMapDmHh.get(qd.getCloaiVthh());
+			objs[9] = qd.getSoGthau();
+			objs[10] = qd.getSoGthauTrung();
+			objs[11] = null;
+			objs[12] = qd.getTgianNhang();
+			objs[13] = qd.getTgianThien();
+			objs[14] = NhapXuatHangTrangThaiEnum.getTenById(qd.getTrangThai());
 			dataList.add(objs);
 		}
 
