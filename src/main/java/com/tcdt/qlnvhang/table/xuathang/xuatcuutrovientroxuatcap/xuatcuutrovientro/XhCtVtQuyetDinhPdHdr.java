@@ -54,7 +54,7 @@ public class XhCtVtQuyetDinhPdHdr extends BaseEntity implements Serializable {
 
   private LocalDate ngayPduyet;
   private Long nguoiPduyetId;
-
+  private String donViTinh;
   @Transient
   private List<FileDinhKem> fileDinhKem;
   @Transient
