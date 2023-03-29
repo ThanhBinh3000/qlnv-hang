@@ -32,6 +32,7 @@ public class XhDxKhBanDauGia extends TrangThaiBaseEntity implements Serializable
     private Integer namKh;
     private String soDxuat;
     private String trichYeu;
+    private Long idSoQdCtieu;
     private String soQdCtieu;
     private String loaiVthh;
     private String cloaiVthh;
@@ -55,6 +56,7 @@ public class XhDxKhBanDauGia extends TrangThaiBaseEntity implements Serializable
     private BigDecimal tongTienDatTruoc;
     private BigDecimal tongTienDatTruocDonGia;
     private String ghiChu;
+    private Integer slDviTsan;
     private String trangThaiTh;
     private String soQdPd;
     private Long idThop;

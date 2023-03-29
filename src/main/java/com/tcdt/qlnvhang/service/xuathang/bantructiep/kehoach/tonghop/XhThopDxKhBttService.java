@@ -214,9 +214,9 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
         searchReq.setPaggingReq(paggingReq);
         Page<XhThopDxKhBttHdr> page = this.searchPage(searchReq);
         List<XhThopDxKhBttHdr> data = page.getContent();
-        String title = "Danh sách tổng hợp kế hoạch bán trực tiếp";
+        String title = "Danh sách thông tin tổng hợp kế hoạch bán trực tiếp";
         String[] rowsName = new String[]{"STT", "Mã tổng hợp", "Ngày tổng hợp", "Nội dung tổng hợp", "Năm kế hoạch", "Số QĐ phê duyệt KH bán trực tiếp", "Loại hàng hóa", "Trạng thái"};
-        String filename = "Tong_hop_ke_hoach_ban_truc_tiep.xlsx";
+        String filename = "Thong_tin_tong_hop_ke_hoach_ban_truc_tiep.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
         for (int i = 0; i < data.size(); i++) {
@@ -228,7 +228,7 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
             objs[3] = thop.getNoiDungThop();
             objs[4] = thop.getNamKh();
             objs[5] = thop.getSoQdPd();
-            objs[6] = thop.getLoaiVthh();
+            objs[6] = thop.getTenLoaiVthh();
             objs[7] = thop.getTenTrangThai();
             dataList.add(objs);
         }

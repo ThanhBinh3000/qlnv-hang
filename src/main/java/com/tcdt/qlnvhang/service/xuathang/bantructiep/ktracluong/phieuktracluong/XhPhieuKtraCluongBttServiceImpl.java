@@ -212,6 +212,7 @@ public class XhPhieuKtraCluongBttServiceImpl extends BaseServiceImpl implements 
         switch (status) {
             case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
             case Contains.CHODUYET_TP + Contains.DUTHAO:
+            case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
                 data.setNguoiGuiDuyetId(userInfo.getId());
                 data.setNgayGuiDuyet(new Date());
                 break;

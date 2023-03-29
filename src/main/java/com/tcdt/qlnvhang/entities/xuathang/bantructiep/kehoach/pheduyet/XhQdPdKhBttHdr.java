@@ -64,7 +64,7 @@ public class XhQdPdKhBttHdr extends TrangThaiBaseEntity implements Serializable 
 
     private Long idGoc;
 
-    private String maDviTsan;
+    private Integer slDviTsan;
 
     private String soHopDong;
 
