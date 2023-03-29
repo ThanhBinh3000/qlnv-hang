@@ -73,6 +73,8 @@ public class XhDxKhBanTrucTiepHdrReq extends BaseRequest {
 
     private BigDecimal donGiaVat;
 
+    private Integer slDviTsan;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayTaoTu;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)

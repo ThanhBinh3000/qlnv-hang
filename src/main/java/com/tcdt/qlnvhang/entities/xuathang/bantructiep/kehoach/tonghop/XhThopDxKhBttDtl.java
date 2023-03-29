@@ -35,7 +35,8 @@ public class XhThopDxKhBttDtl implements Serializable {
 
     private String trichYeu;
 
-    private Integer soDviTsan;
+    private Integer slDviTsan;
+
     private String trangThai;
 
     @Transient
