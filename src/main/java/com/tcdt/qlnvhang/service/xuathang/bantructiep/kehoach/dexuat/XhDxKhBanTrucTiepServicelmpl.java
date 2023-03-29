@@ -85,7 +85,7 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl implements XhD
 
         XhDxKhBanTrucTiepHdr data = new XhDxKhBanTrucTiepHdr();
         BeanUtils.copyProperties(req, data, "id");
-        data.setNgayTao(getDateTimeNow());
+//        data.setNgayTao(getDateTimeNow());
         data.setNguoiTaoId(userInfo.getId());
         data.setTrangThai(Contains.DU_THAO);
         data.setTrangThaiTh(Contains.CHUATONGHOP);

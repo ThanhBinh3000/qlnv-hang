@@ -298,28 +298,30 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
         Page<XhDxKhBanDauGia> page = this.searchPage(req);
         List<XhDxKhBanDauGia> data = page.getContent();
 
-        String title = "Danh sách đề xuất kế hoạch mua trực tiếp";
-        String[] rowsName = new String[]{"STT", "Năm kế hoạch", "Số kế hoạch", "Đơn vị", "Ngày lập kế hoạch", "Ngày ký", "Trích yếu", "Loại hành hóa", "Chủng loại hành hóa", "Số QĐ giao chỉ tiêu", "Số QĐ phê duyệt KH bán đấu giá", "Trạng thái"};
-        String filename = "danh-sách-đề-xuất-kế-hoạch-mua-trực-tiếp.xlsx";
+        String title="Danh sách đề xuất kế hoạch bán đấu giá";
+        String[] rowsName = new String[]{"STT","Năm KH", "Số KH/tờ trình", "Ngày lập KH", "Ngày duyệt KH", "Số QĐ duyệt KH bán ĐG", "Ngày ký QĐ", "Trích yếu", "Loại hàng hóa", "Chủng loại hàng hóa", "Số ĐV tài sản", "SL HĐ đã ký", "Số QĐ giao chỉ tiêu", "Trạng thái"};
+        String filename="danh-sach-dx-kh-ban-dau-gia.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
-        Object[] objs = null;
+        Object[] objs=null;
         for (int i = 0; i < data.size(); i++) {
-            XhDxKhBanDauGia dx = data.get(i);
-            objs[0] = i;
-            objs[1] = dx.getNamKh();
-            objs[2] = dx.getSoDxuat();
-            objs[3] = dx.getTenDvi();
-            objs[4] = dx.getNgayTao();
-//            objs[5] = dx.getNgayKyQd();
-            objs[6] = dx.getTrichYeu();
-            objs[7] = dx.getTenLoaiVthh();
-            objs[8] = dx.getTenCloaiVthh();
-            objs[9] = dx.getSoQdCtieu();
-//            objs[10] = dx.getSoQdPd();
-            objs[11] = dx.getTenTrangThai();
+            XhDxKhBanDauGia hdr = data.get(i);
+            objs=new Object[rowsName.length];
+            objs[0]=i;
+            objs[1]=hdr.getNamKh();
+            objs[2]=hdr.getSoDxuat();
+            objs[3]=hdr.getNgayTao();
+            objs[4]=hdr.getNgayPduyet();
+            objs[5]=hdr.getSoQdPd();
+            objs[6]=hdr.getNgayKyQd();
+            objs[7]=hdr.getTrichYeu();
+            objs[8]=hdr.getTenLoaiVthh();
+            objs[9] =hdr.getTenCloaiVthh();
+            objs[10] = hdr.getSlDviTsan();
+            objs[11] = null;
+            objs[12] =hdr.getSoQdCtieu();
+            objs[13] =hdr.getTenTrangThai();
             dataList.add(objs);
         }
-
         ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
         ex.export();
     }
