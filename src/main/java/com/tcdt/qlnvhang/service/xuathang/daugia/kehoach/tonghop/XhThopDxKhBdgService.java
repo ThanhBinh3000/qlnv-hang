@@ -230,10 +230,10 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
         Page<XhThopDxKhBdg> page = this.searchPage(searchReq);
         List<XhThopDxKhBdg> data = page.getContent();
 
-        String title = "Danh sách tổng hợp kế hoạch mua trực tiếp";
+        String title = "Danh sách tổng hợp kế hoạch bán đấu giá";
         String[] rowsName = new String[]{"STT", "Mã tổng hợp", "Ngày tổng hợp", "Nội dung tổng hợp",
                 "Năm kế hoạch", "Số QĐ phê duyêt KH BDG ", "Loại hàng hóa", "Trạng thái"};
-        String filename = "Tong_hop_de_xuat_ke_hoach_lua_chon_nha_thau.xlsx";
+        String filename = "Tong-hop-de-xuat-ke-hoach-ban-dau-gia.xlsx";
 
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;

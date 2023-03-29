@@ -10,12 +10,15 @@ import com.tcdt.qlnvhang.request.xuathang.daugia.tochuctrienkhai.thongtin.ThongT
 import com.tcdt.qlnvhang.request.xuathang.daugia.tochuctrienkhai.thongtin.ThongTinDauGiaNtgReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.tochuctrienkhai.thongtin.ThongTinDauGiaPloReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.tochuctrienkhai.thongtin.ThongTinDauGiaReq;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgDtl;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgDtl;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdr;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgNlq;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgPlo;
+import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.util.DataUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,10 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTtinBdgHdrService {
@@ -48,6 +48,9 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
 
     @Autowired
     private XhQdPdKhBdgDtlRepository xhQdPdKhBdgDtlRepository;
+
+    @Autowired
+    FileDinhKemService fileDinhKemService;
 
 
     @Override
@@ -77,12 +80,17 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
 
         List<XhTcTtinBdgHdr> byIdQdPdDtl = xhTcTtinBdgHdrRepository.findByIdQdPdDtlOrderByLanDauGia(data.getIdQdPdDtl());
         data.setLanDauGia(byIdQdPdDtl.size()+1);
-        xhTcTtinBdgHdrRepository.save(data);
+        XhTcTtinBdgHdr created =  xhTcTtinBdgHdrRepository.save(data);
+
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
+            List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhTcTtinBdgHdr.TABLE_NAME);
+            created.setFileDinhKems(fileDinhKems);
+        }
 
         this.saveDetail(req, data.getId(),false);
 
 
-        return data;
+        return created;
     }
 
     void saveDetail(ThongTinDauGiaReq req, Long id , boolean isUpdate) {
@@ -127,8 +135,13 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
         BeanUtils.copyProperties(req, data, "id");
         data.setNgaySua(new Date());
         data.setNguoiSuaId(getUser().getId());
+        XhTcTtinBdgHdr created = xhTcTtinBdgHdrRepository.save(data);
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
+            List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhTcTtinBdgHdr.TABLE_NAME);
+            data.setFileDinhKems(fileDinhKems);
+        }
         this.saveDetail(req, data.getId(),true);
-        return data;
+        return created;
     }
 
     @Override
@@ -161,6 +174,8 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
         data.setChildren(byIdTtinHdr);
         data.setTenLoaiVthh(listDanhMucHangHoa.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(listDanhMucHangHoa.get(data.getCloaiVthh()));
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhTcTtinBdgHdr.TABLE_NAME));
+        data.setFileDinhKems(fileDinhKem);
         return data;
     }
 
@@ -188,6 +203,7 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
         });
 
         xhTcTtinBdgDtlRepository.deleteByIdTtinHdr(id);
+        fileDinhKemService.delete(data.getId(), Collections.singleton(XhTcTtinBdgHdr.TABLE_NAME));
 
         xhTcTtinBdgHdrRepository.delete(data);
 
