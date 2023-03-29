@@ -2,10 +2,12 @@ package com.tcdt.qlnvhang.request.xuathang.daugia.tochuctrienkhai.thongtin;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.BaseRequest;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Transient;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -121,6 +123,9 @@ public class ThongTinDauGiaReq extends BaseRequest {
   // Transient
 
   private List<ThongTinDauGiaDtlReq> children = new ArrayList<>();
+
+  @Transient
+  private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 
   private List<ThongTinDauGiaNtgReq> listNguoiTgia = new ArrayList<>();
 
