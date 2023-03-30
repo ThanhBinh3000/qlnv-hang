@@ -64,10 +64,10 @@ public interface XhDxKhBanTrucTiepHdrRepository extends JpaRepository<XhDxKhBanT
 
     XhDxKhBanTrucTiepHdr findAllByLoaiVthhAndCloaiVthhAndNamKhAndMaDviAndTrangThaiNot(String loaiVthh, String cloaiVthh, Integer namKh, String maDvi, String trangThai);
 
-    @Query(value = " SELECT NVL(SUM(DVI.SO_LUONG),0) FROM XH_QD_PD_KH_BTT_HDR HDR " +
+    @Query(value = " SELECT NVL(SUM(DVI.SO_LUONG_CHI_CUC),0) FROM XH_QD_PD_KH_BTT_HDR HDR " +
             " INNER JOIN XH_QD_PD_KH_BTT_DTL DTL on HDR.ID = DTL.ID_QD_HDR " +
             " LEFT JOIN XH_QD_PD_KH_BTT_DVI DVI ON DTL.ID = DVI.ID_QD_DTL " +
-            "WHERE HDR.NAM_KH = :namKh AND HDR.LOAI_VTHH = :loaiVthh AND DVI.MA_DVI = :maDvi AND HDR.TRANG_THAI = :trangThai",
+            "WHERE HDR.NAM_KH = :namKh AND HDR.LOAI_VTHH = :loaiVthh AND DVI.MA_DVI = :maDvi AND HDR.LASTEST = :lastest",
             nativeQuery = true)
-    BigDecimal countSLDalenKh(Integer namKh, String loaiVthh, String maDvi, String trangThai);
+    BigDecimal countSLDalenKh(Integer namKh, String loaiVthh, String maDvi, Integer lastest);
 }

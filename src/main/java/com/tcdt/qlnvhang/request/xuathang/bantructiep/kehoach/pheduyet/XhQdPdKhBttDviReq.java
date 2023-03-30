@@ -14,7 +14,7 @@ public class XhQdPdKhBttDviReq {
 
     private Long idDtl;
 
-    private BigDecimal soLuong;
+    private BigDecimal soLuongChiCuc;
 
     private String maDvi;
 

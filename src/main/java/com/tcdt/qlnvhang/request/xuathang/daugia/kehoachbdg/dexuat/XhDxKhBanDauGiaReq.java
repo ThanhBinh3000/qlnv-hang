@@ -2,9 +2,11 @@ package com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.dexuat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.BaseRequest;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -56,6 +58,9 @@ public class XhDxKhBanDauGiaReq extends BaseRequest {
     private Date ngayDuyetDen;
 
     private List<String> trangThaiList = new ArrayList<>();
+
+    @Transient
+    private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
     
     private List<XhDxKhBanDauGiaDtlReq> children = new ArrayList<>();
 

@@ -74,7 +74,7 @@ public class XhDxKhBanDauGia extends TrangThaiBaseEntity implements Serializable
     @Transient
     private String tenTrangThaiTh;
     @Transient
-    private List<FileDinhKem> fileDinhKem = new ArrayList<>();
+    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
     @Transient
     private List<XhDxKhBanDauGiaDtl> children = new ArrayList<>();
 

@@ -26,7 +26,7 @@ public class XhQdPdKhBttDvi implements Serializable {
     @Transient
     private String tenDvi;
 
-    private BigDecimal soLuong;
+    private BigDecimal soLuongChiCuc;
 
     private String diaChi;
 
