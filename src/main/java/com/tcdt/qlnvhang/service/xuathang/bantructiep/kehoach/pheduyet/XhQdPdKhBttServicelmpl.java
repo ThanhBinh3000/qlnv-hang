@@ -408,7 +408,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
             objs[6] = hdr.getIdThHdr();
             objs[7] = hdr.getTenLoaiVthh();
             objs[8] = hdr.getTenCloaiVthh();
-            objs[9] = hdr.getMaDviTsan();
+            objs[9] = hdr.getSlDviTsan();
             objs[10] = hdr.getSoHopDong();
             objs[11] = hdr.getTenTrangThai();
             dataList.add(objs);

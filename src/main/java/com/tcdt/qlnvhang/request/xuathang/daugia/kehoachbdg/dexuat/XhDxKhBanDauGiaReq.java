@@ -20,6 +20,7 @@ public class XhDxKhBanDauGiaReq extends BaseRequest {
     private Integer namKh;
     private String soDxuat;
     private String trichYeu;
+    private Long idSoQdCtieu;
     private String soQdCtieu;
     private String loaiVthh;
     private String cloaiVthh;
@@ -43,6 +44,7 @@ public class XhDxKhBanDauGiaReq extends BaseRequest {
     private BigDecimal tongTienDatTruoc;
     private BigDecimal tongTienDatTruocDonGia;
     private String ghiChu;
+    private Integer slDviTsan;
     private String trangThaiTh;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayTaoTu;

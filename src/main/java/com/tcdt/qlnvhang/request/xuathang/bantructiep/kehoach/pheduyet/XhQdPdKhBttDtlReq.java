@@ -48,7 +48,7 @@ public class XhQdPdKhBttDtlReq {
 
     private BigDecimal tongSoLuong;
 
-    private Integer soDviTsan;
+    private Integer slDviTsan;
 
     private String moTaHangHoa;
 
