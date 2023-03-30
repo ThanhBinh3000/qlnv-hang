@@ -29,6 +29,7 @@ public class PhieuNhapXuatHistory implements Serializable {
   private String cloaiVthh;
   private String maKho;
   private LocalDate ngayDuyet;
+  private String kieu;
 
   @Transient
   private String maCuc;
