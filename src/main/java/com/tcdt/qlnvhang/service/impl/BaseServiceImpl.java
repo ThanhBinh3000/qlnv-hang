@@ -174,6 +174,18 @@ public class BaseServiceImpl {
     return data;
   }
 
+  public Map<String, Map<String, Object>> getListDanhMucHangHoaObject() {
+    ResponseEntity<String> response = categoryServiceProxy.getDanhMucHangHoa(getAuthorizationToken(request));
+    String str = Request.getAttrFromJson(response.getBody(), "data");
+    HashMap<String, Map<String, Object>> data = new HashMap<String, Map<String, Object>>();
+    List<Map<String, Object>> retMap = new Gson().fromJson(str, new TypeToken<List<HashMap<String, Object>>>() {
+    }.getType());
+    for (Map<String, Object> map : retMap) {
+      data.put(String.valueOf(map.get("ma")), map);
+    }
+    return data;
+  }
+
   public Map<String, String> getMapCategory() {
     if (MapCategory.map == null && danhMucRepository != null) {
       MapCategory.map = new HashMap<>();

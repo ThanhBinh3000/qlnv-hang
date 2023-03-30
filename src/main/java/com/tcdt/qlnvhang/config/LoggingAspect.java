@@ -111,6 +111,7 @@ public class LoggingAspect {
           phieuNhapXuatHistory.setMaKho(nhPhieuNhapKho.getMaLoKho());
           phieuNhapXuatHistory.setNgayDuyet(DataUtils.convertToLocalDate(nhPhieuNhapKho.getNgayPduyet()));
           phieuNhapXuatHistory.setLoaiNhapXuat(1);//fix tam 1 la nhap -1 la xuat
+          phieuNhapXuatHistory.setKieu("NHAP_XUAT");//nhap xuat hoac khoi tao so du dau ky
           luuKhoClient.synchronizeData(phieuNhapXuatHistory);
           logger.info("Cập nhật kho theo Phiếu nhập kho {}", nhPhieuNhapKho);
         }
