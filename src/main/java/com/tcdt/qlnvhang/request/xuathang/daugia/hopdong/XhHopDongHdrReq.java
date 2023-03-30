@@ -111,6 +111,7 @@ public class XhHopDongHdrReq extends BaseRequest {
     private String tenDvi;
     @Transient
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
+    private List<FileDinhKemReq> canCu = new ArrayList<>();
     @Transient
     private List<XhHopDongDtlReq> children = new ArrayList<>();
     @Transient
