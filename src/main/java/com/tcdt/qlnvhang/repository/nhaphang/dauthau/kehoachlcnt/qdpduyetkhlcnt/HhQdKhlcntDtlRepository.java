@@ -45,10 +45,10 @@ public interface HhQdKhlcntDtlRepository extends JpaRepository<HhQdKhlcntDtl, Lo
             " LEFT JOIN HH_QD_KHLCNT_HDR HDR ON HDR.ID = DTL.ID_QD_HDR " +
             " LEFT JOIN HH_QD_PDUYET_KQLCNT_HDR PD_HDR ON PD_HDR.ID_QD_PD_KHLCNT_DTL = DTL.ID " +
             " WHERE (:namKh IS NULL OR HDR.NAM_KHOACH = TO_NUMBER(:namKh)) " +
-            " AND (:soQd IS NULL OR DTL.SO_DXUAT LIKE LOWER(CONCAT(CONCAT('%', :soQd),'%')))" +
-            " AND (:soQdPdKqlcnt IS NULL OR PD_HDR.SO_QD LIKE LOWER(CONCAT(CONCAT('%', :soQdPdKqlcnt),'%')))" +
-            " AND (:soQdPdKhlcnt IS NULL OR HDR.SO_QD LIKE LOWER(CONCAT(CONCAT('%', :soQdPdKhlcnt),'%')))" +
-            " AND (:loaiVthh IS NULL OR HDR.LOAI_VTHH LIKE LOWER(CONCAT(CONCAT('%', :loaiVthh),'%')))" +
+            " AND (:soQd IS NULL OR LOWER(DTL.SO_DXUAT) LIKE LOWER(CONCAT(CONCAT('%', :soQd),'%')))" +
+            " AND (:soQdPdKqlcnt IS NULL OR LOWER(PD_HDR.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQdPdKqlcnt),'%')))" +
+            " AND (:soQdPdKhlcnt IS NULL OR LOWER(HDR.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQdPdKhlcnt),'%')))" +
+            " AND (:loaiVthh IS NULL OR LOWER(HDR.LOAI_VTHH) LIKE LOWER(CONCAT(CONCAT('%', :loaiVthh),'%')))" +
             " AND (:maDvi IS NULL OR DTL.MA_DVI = :maDvi)" +
             " AND (:trangThaiCuc IS NULL OR DTL.TRANG_THAI = :trangThaiCuc)" +
             " AND HDR.TRANG_THAI = :trangThai " +
@@ -61,10 +61,10 @@ public interface HhQdKhlcntDtlRepository extends JpaRepository<HhQdKhlcntDtl, Lo
                     " LEFT JOIN HH_QD_KHLCNT_HDR HDR ON HDR.ID = DTL.ID_QD_HDR " +
                     " LEFT JOIN HH_QD_PDUYET_KQLCNT_HDR PD_HDR ON PD_HDR.ID_QD_PD_KHLCNT_DTL = DTL.ID " +
                     " WHERE (:namKh IS NULL OR HDR.NAM_KHOACH = TO_NUMBER(:namKh)) " +
-                    " AND (:soQd IS NULL OR DTL.SO_DXUAT LIKE CONCAT(:soQd,'%')) " +
-                    " AND (:soQdPdKqlcnt IS NULL OR PD_HDR.SO_QD LIKE CONCAT(:soQdPdKqlcnt,'%')) " +
-                    " AND (:soQdPdKhlcnt IS NULL OR HDR.SO_QD LIKE CONCAT(:soQdPdKhlcnt,'%')) " +
-                    " AND (:loaiVthh IS NULL OR HDR.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) " +
+                    " AND (:soQd IS NULL OR LOWER(DTL.SO_DXUAT) LIKE LOWER(CONCAT(CONCAT('%', :soQd),'%')))" +
+                    " AND (:soQdPdKqlcnt IS NULL OR LOWER(PD_HDR.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQdPdKqlcnt),'%')))" +
+                    " AND (:soQdPdKhlcnt IS NULL OR LOWER(HDR.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQdPdKhlcnt),'%')))" +
+                    " AND (:loaiVthh IS NULL OR LOWER(HDR.LOAI_VTHH) LIKE LOWER(CONCAT(CONCAT('%', :loaiVthh),'%')))" +
                     " AND (:maDvi IS NULL OR DTL.MA_DVI = :maDvi)" +
                     " AND (:trangThaiCuc IS NULL OR DTL.TRANG_THAI = :trangThaiCuc)" +
                     " AND HDR.TRANG_THAI = :trangThai " +
