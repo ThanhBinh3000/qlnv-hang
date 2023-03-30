@@ -9,4 +9,5 @@ public class CountKhMttSlReq {
     Integer year;
     String loaiVthh;
     String maDvi;
+    Integer lastest ;
 }

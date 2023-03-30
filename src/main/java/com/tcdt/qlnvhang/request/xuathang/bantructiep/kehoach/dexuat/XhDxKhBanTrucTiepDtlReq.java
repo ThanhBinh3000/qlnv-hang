@@ -16,7 +16,7 @@ public class XhDxKhBanTrucTiepDtlReq {
 
     private Long idHdr;
 
-    private BigDecimal soLuong;
+    private BigDecimal soLuongChiCuc;
 
     private String maDvi;
 

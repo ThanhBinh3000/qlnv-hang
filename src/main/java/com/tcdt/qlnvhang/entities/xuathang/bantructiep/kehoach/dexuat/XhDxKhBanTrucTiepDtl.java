@@ -22,7 +22,7 @@ public class XhDxKhBanTrucTiepDtl implements Serializable {
 
     private Long idHdr;
 
-    private BigDecimal soLuong;
+    private BigDecimal soLuongChiCuc;
 
     private String maDvi;
     @Transient

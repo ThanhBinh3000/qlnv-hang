@@ -33,6 +33,8 @@ public class XhDxKhBanTrucTiepHdrReq extends BaseRequest {
 
     private String trichYeu;
 
+    private Long idSoQdCtieu;
+
     private String soQdCtieu;
 
     private String loaiVthh;
