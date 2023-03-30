@@ -143,6 +143,7 @@ public class XhCtvtQdGiaoNvXhHdrService extends BaseServiceImpl {
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhCtvtQdGiaoNvXhHdr.TABLE_NAME + "_CAN_CU"));
     List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), XhCtvtQdGiaoNvXhHdr.TABLE_NAME + "_CAN_CU");
     created.setCanCu(canCu);
+    fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhCtvtQdGiaoNvXhHdr.TABLE_NAME + "_FILE_DINH_KEM"));
     List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), XhCtvtQdGiaoNvXhHdr.TABLE_NAME + "_FILE_DINH_KEM");
     created.setFileDinhKem(fileDinhKem);
 
