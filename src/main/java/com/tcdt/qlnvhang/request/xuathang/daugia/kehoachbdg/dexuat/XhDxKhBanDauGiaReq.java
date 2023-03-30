@@ -38,7 +38,7 @@ public class XhDxKhBanDauGiaReq extends BaseRequest {
     private Integer tgianGnhan;
     private String pthucGnhan;
     private String tgianGnhanGhiChu;
-    private String thongBaoKh;
+    private String thongBao;
     private BigDecimal khoanTienDatTruoc;
     private BigDecimal tongSoLuong;
     private BigDecimal tongTienKdiem;
@@ -48,6 +48,7 @@ public class XhDxKhBanDauGiaReq extends BaseRequest {
     private String ghiChu;
     private Integer slDviTsan;
     private String trangThaiTh;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayTaoTu;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)

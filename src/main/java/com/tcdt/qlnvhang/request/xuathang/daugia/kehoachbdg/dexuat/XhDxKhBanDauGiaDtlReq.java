@@ -9,9 +9,22 @@ import java.util.List;
 @Data
 public class XhDxKhBanDauGiaDtlReq {
     private Long id;
+
     private Long idHdr;
+
+    private BigDecimal soLuongChiCuc;
+
+    private BigDecimal tienDtruocDxChiCuc;
+
+    private BigDecimal tienDtruocDdChiCuc;
+
     private String maDvi;
-    private BigDecimal soLuong;
+
     private String diaChi;
+
+    private String slChiTieu;
+
+    private String slKeHoachDd;
+
     private List<XhDxKhBanDauGiaPhanLoReq> children = new ArrayList<>();
 }

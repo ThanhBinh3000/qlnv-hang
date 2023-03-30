@@ -84,7 +84,7 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
         dataMap.setNguoiTaoId(userInfo.getId());
         dataMap.setTrangThai(Contains.DU_THAO);
         dataMap.setTrangThaiTh(Contains.CHUATONGHOP);
-//        this.validateData(dataMap, dataMap.getTrangThai());
+
         XhDxKhBanDauGia created = xhDxKhBanDauGiaRepository.save(dataMap);
 
         if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
@@ -96,7 +96,7 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
         return created;
     }
 
-    public void validateData(XhDxKhBanDauGia objHdr, String trangThai) throws Exception {
+//    public void validateData(XhDxKhBanDauGia objHdr, String trangThai) throws Exception {
 //        if (trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.DUTHAO.getId())) {
 //            XhDxKhBanDauGia dXuat = xhDxKhBanDauGiaRepository.findAllByLoaiVthhAndCloaiVthhAndNamKhAndMaDviAndTrangThaiNot(objHdr.getLoaiVthh(), objHdr.getCloaiVthh(), objHdr.getNamKh(), objHdr.getMaDvi(), NhapXuatHangTrangThaiEnum.DUTHAO.getId());
 //            if (!ObjectUtils.isEmpty(dXuat) && !dXuat.getId().equals(objHdr.getId())) {
@@ -115,7 +115,7 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
 //               }
 //           }
 //       }
-    }
+//    }
 
     void saveDetail(XhDxKhBanDauGiaReq objReq, Long idHdr) {
         // Delete dtl in hdr
@@ -232,7 +232,6 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
             case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
             case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
             case Contains.CHODUYET_TP + Contains.TU_CHOI_CBV:
-//             this.validateData(data,Contains.CHODUYET_TP);
                 data.setNguoiGuiDuyetId(userInfo.getId());
                 data.setNgayGuiDuyet(getDateTimeNow());
             case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
@@ -245,7 +244,6 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
             case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
             case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
             case Contains.DA_DUYET_CBV + Contains.DADUYET_LDC:
-//             this.validateData(data,stReq.getTrangThai());
                 data.setNguoiPduyetId(userInfo.getId());
                 data.setNgayPduyet(getDateTimeNow());
                 break;
@@ -336,42 +334,8 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
     }
 
 
-//    public XhDxKhBanDauGia detail (Long ids) throws Exception{
-
-//    }
-//
-//    public void delete(IdSearchReq idSearchReq) throws Exception {
-
-//    }
-//
-//    public void deleteMulti (IdSearchReq idSearchReq) throws Exception {
-//        if (StringUtils.isEmpty(idSearchReq.getIdList()))
-//            throw new Exception("Xóa thất bại, không tìm thấy dữ liệu");
-//        List<XhDxKhBanDauGia> listDg = xhDxKhBanDauGiaRepository.findByIdIn(idSearchReq.getIdList());
-//        if(listDg.isEmpty()){
-//            throw new Exception("Không tìm thấy dữ liệu cần xóa");
-//        }
-//
-//        for (XhDxKhBanDauGia dg: listDg){
-//            if (!dg.getTrangThai().equals(Contains.DUTHAO)
-//            && !dg.getTrangThai().equals(Contains.TU_CHOI_TP)
-//            && !dg.getTrangThai().equals(Contains.TUCHOI_LDC)){
-//                throw new Exception("Chỉ thực hiện xóa với kế hoạch ở trạng thái bản nháp hoặc từ chối");
-//            }
-//            List<XhDxKhBanDauGiaPhanLo> phanlo = xhDxKhBanDauGiaPhanLoRepository.findByIdDxKhbdg(dg.getId());
-//            List<Long> listPhanLo = phanlo.stream().map(XhDxKhBanDauGiaPhanLo :: getId).collect(Collectors.toList());
-//            xhDxKhBanDauGiaDtlRepository.deleteAllByIdPhanLoIn(listPhanLo);
-//        }
-//        xhDxKhBanDauGiaPhanLoRepository.deleteAllByIdDxKhbdgIn(idSearchReq.getIdList());
-//        xhDxKhBanDauGiaRepository.deleteAllByIdIn(idSearchReq.getIdList());
-//    }
-//
-//    public void export (SearchXhDxKhBanDauGia objReq, HttpServletResponse response) throws Exception{
-
-    //    }
-//
     public BigDecimal countSoLuongKeHoachNam(CountKhlcntSlReq req) {
-        return xhDxKhBanDauGiaRepository.countSLDalenKh(req.getYear(), req.getLoaiVthh(), req.getMaDvi(), NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
+        return xhDxKhBanDauGiaRepository.countSLDalenKh(req.getYear(), req.getLoaiVthh(), req.getMaDvi(), req.getLastest());
     }
 
 
