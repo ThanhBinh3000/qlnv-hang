@@ -394,18 +394,18 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
         ex.export();
     }
 
-    public void validateData(XhQdPdKhBdg objHdr) throws Exception {
-        for (XhQdPdKhBdgDtl dtl : objHdr.getChildren()) {
-            for (XhQdPdKhBdgPl dsgthau : dtl.getChildren()) {
-                BigDecimal aLong = xhDxKhBanDauGiaRepository.countSLDalenKh(objHdr.getNam(), objHdr.getLoaiVthh(), dsgthau.getMaDvi(), NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
-                BigDecimal soLuongTotal = aLong.add(dsgthau.getSoLuong());
-                BigDecimal nhap = keHoachService.getChiTieuNhapXuat(objHdr.getNam(), objHdr.getLoaiVthh(), dsgthau.getMaDvi(), "NHAP");
-                if (soLuongTotal.compareTo(nhap) > 0) {
-                    throw new Exception(dsgthau.getTenDvi() + "Đã nhập quá số lượng chỉ tiêu vui lòng nhập lại");
-                }
-            }
-        }
-    }
+//    public void validateData(XhQdPdKhBdg objHdr) throws Exception {
+//        for (XhQdPdKhBdgDtl dtl : objHdr.getChildren()) {
+//            for (XhQdPdKhBdgPl dsgthau : dtl.getChildren()) {
+//                BigDecimal aLong = xhDxKhBanDauGiaRepository.countSLDalenKh(objHdr.getNam(), objHdr.getLoaiVthh(), dsgthau.getMaDvi(), NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
+//                BigDecimal soLuongTotal = aLong.add(dsgthau.getSoLuong());
+//                BigDecimal nhap = keHoachService.getChiTieuNhapXuat(objHdr.getNam(), objHdr.getLoaiVthh(), dsgthau.getMaDvi(), "NHAP");
+//                if (soLuongTotal.compareTo(nhap) > 0) {
+//                    throw new Exception(dsgthau.getTenDvi() + "Đã nhập quá số lượng chỉ tiêu vui lòng nhập lại");
+//                }
+//            }
+//        }
+//    }
 
     public XhQdPdKhBdgDtl detailDtl(Long ids) throws Exception {
         if (ObjectUtils.isEmpty(ids)) {
