@@ -43,7 +43,7 @@ public class XhDxKhBanDauGiaPhanLo implements Serializable {
     @Transient
     private String tenDiemKho;
     @Transient
-    private String tenNhakho;
+    private String tenNhaKho;
     @Transient
     private String tenNganKho;
     @Transient

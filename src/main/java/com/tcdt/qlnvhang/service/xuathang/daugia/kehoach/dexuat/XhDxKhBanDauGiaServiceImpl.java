@@ -164,10 +164,9 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
         dataDTB.setNgaySua(getDateTimeNow());
         dataDTB.setNguoiSuaId(userInfo.getId());
         XhDxKhBanDauGia created = xhDxKhBanDauGiaRepository.save(dataDTB);
-        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
             List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhDxKhBanDauGia.TABLE_NAME);
             dataDTB.setFileDinhKems(fileDinhKemList);
-        }
+
         this.saveDetail(req, dataDTB.getId());
         return dataDTB;
     }
@@ -199,7 +198,7 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
             List<XhDxKhBanDauGiaPhanLo> phanLoList = xhDxKhBanDauGiaPhanLoRepository.findByIdDtl(dtl.getId());
             phanLoList.forEach(f -> {
                 f.setTenDiemKho(mapDmucDvi.get(f.getMaDiemKho()));
-                f.setTenNhakho(mapDmucDvi.get(f.getMaNhaKho()));
+                f.setTenNhaKho(mapDmucDvi.get(f.getMaNhaKho()));
                 f.setTenNganKho(mapDmucDvi.get(f.getMaNganKho()));
                 f.setTenLoKho(mapDmucDvi.get(f.getMaLoKho()));
             });
