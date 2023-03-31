@@ -27,6 +27,7 @@ public class HhQdPduyetKqlcntSearchReq extends BaseRequest {
 
 	@ApiModelProperty(example = Contains.LOAI_VTHH_GAO)
 	String loaiVthh;
+	String cloaiVthh;
 
 	@ApiModelProperty(example = "2022")
 	String soQd;

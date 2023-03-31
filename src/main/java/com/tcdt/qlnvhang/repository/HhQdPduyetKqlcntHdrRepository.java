@@ -14,6 +14,7 @@ public interface HhQdPduyetKqlcntHdrRepository extends BaseRepository<HhQdPduyet
 			" LEFT JOIN HH_HOP_DONG_HDR HD ON QDPD.ID = HD.ID_QD_KQ_LCNT  " +
 			" WHERE (:#{#req.namKhoach} IS NULL OR QDPD.NAM_KHOACH = TO_NUMBER(:#{#req.namKhoach})) "+
 			" AND (:#{#req.loaiVthh} IS NULL OR QDPD.LOAI_VTHH LIKE CONCAT(:#{#req.loaiVthh},'%')) "+
+			" AND (:#{#req.cloaiVthh} IS NULL OR QDPD.CLOAI_VTHH LIKE CONCAT(:#{#req.cloaiVthh},'%')) "+
 			" AND (:#{#req.soHd} IS NULL OR LOWER(HD.SO_HD) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.soHd}),'%')))" +
 			" AND (:#{#req.tenHd} IS NULL OR LOWER(HD.TEN_HD) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.tenHd}),'%')))" +
 			" AND (:#{#req.tuNgayKy} IS NULL OR QDPD.NGAY_KY >= TO_DATE(:#{#req.tuNgayKy}, 'YYYY-MM-DD HH24:MI:SS')) "+
