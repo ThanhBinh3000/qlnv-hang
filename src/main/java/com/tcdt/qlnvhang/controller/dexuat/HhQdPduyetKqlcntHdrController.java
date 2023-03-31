@@ -131,6 +131,25 @@ public class HhQdPduyetKqlcntHdrController extends BaseController {
 		return ResponseEntity.ok(resp);
 	}
 
+	@ApiOperation(value = "Xoá danh sách quyết định phê duyệt kết quả lựa chọn nhà thầu", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> deleteMuilti(@Valid @RequestBody IdSearchReq idSearchReq) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			service.deleteMulti(idSearchReq);
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Xoá danh sách quyết định phê duyệt kết quả lựa chọn nhà thầu trace: {}", e);
+		}
+
+		return ResponseEntity.ok(resp);
+	}
+
+
 	@ApiOperation(value = "Tra cứu quyết định phê duyệt kết quả lựa chọn nhà thầu", response = List.class)
 	@PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)

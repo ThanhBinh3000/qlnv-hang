@@ -33,6 +33,8 @@ public interface HhQdPduyetKqlcntHdrService {
 
 	@Transactional(rollbackOn = Exception.class)
 	void delete(IdSearchReq idSearchReq) throws Exception;
+	@Transactional(rollbackOn = Exception.class)
+	void deleteMulti(IdSearchReq idSearchReq) throws Exception;
 
 	Page<HhQdPduyetKqlcntHdr> timKiemPage(HhQdPduyetKqlcntSearchReq req, HttpServletResponse response) throws Exception;
 
