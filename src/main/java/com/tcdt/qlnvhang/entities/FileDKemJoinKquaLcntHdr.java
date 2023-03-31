@@ -31,6 +31,7 @@ public class FileDKemJoinKquaLcntHdr implements Serializable {
 	Long id;
 	String fileName;
 	String fileSize;
+	String noiDung;
 	String fileUrl;
 	String fileType;
 	String dataType;

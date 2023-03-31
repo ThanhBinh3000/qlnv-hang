@@ -756,6 +756,10 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		Map<String,String> soGthau = new HashMap<>();
 		Map<String,String> soGthau2 = new HashMap<>();
 		for (HhQdKhlcntHdr f : data.getContent()) {
+			if(f.getIdTrHdr() == null){
+				HhQdKhlcntDtl hhQdKhlcntDtl = hhQdKhlcntDtlRepository.findByIdQdHdr(f.getId());
+				f.setSoTrHdr(hhQdKhlcntDtl.getSoDxuat());
+			}
 			f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
 			f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
 //			if(f.getLoaiVthh().startsWith("02")){
