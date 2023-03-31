@@ -95,6 +95,8 @@ public class XhDxKhBanDauGia extends TrangThaiBaseEntity implements Serializable
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKyQd;
 
+    private String dviTinh;
+
     @Transient
     private String tenLoaiVthh;
     @Transient

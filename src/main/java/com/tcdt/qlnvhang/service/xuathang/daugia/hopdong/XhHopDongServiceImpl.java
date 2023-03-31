@@ -67,7 +67,7 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
             throw new Exception("Hợp đồng số " + req.getSoHd() + " đã tồn tại");
         }
 
-        Optional<XhKqBdgHdr> checkSoQd = xhKqBdgHdrRepository.findBySoQdKq(req.getSoQdKq());
+        Optional<XhKqBdgHdr> checkSoQd = xhKqBdgHdrRepository.findFirstBySoQdKq(req.getSoQdKq());
         if (!checkSoQd.isPresent()) {
             throw new Exception("Số quyết định phê duyệt kết quả lựa chọn nhà thầu " + req.getSoQdKq() + " không tồn tại");
         }else{
@@ -87,7 +87,7 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
         dataMap.setNgayTao(new Date());
         dataMap.setTrangThai(Contains.DU_THAO);
         dataMap.setMaDvi(userInfo.getDvql());
-        dataMap.setMaDviTsan(String.join(",",req.getListMaDviTsan()));
+//        dataMap.setMaDviTsan(String.join(",",req.getListMaDviTsan()));
 
         xhHopDongHdrRepository.save(dataMap);
 
