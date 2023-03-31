@@ -102,6 +102,8 @@ public class XhHopDongHdrReq extends BaseRequest {
 
     private Double tongTien;
 
+    private String ghiChu;
+
     // Transient
     @Transient
     private String tenLoaiVthh;

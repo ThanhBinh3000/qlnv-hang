@@ -84,6 +84,8 @@ public class XhDxKhBanTrucTiepHdr extends TrangThaiBaseEntity implements Seriali
 
     private String ghiChu;
 
+    private Long idSoQdPd;
+
     private String soQdPd;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
