@@ -25,4 +25,5 @@ public interface XhKqBdgHdrRepository extends JpaRepository<XhKqBdgHdr, Long> {
 
     Optional<XhKqBdgHdr> findBySoQdKq(String soQdKq);
 
+  Optional<XhKqBdgHdr> findFirstBySoQdKq(String soQdKq);
 }
