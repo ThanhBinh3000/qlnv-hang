@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.dexuat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGiaDtl;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.util.Contains;
@@ -64,6 +65,6 @@ public class XhDxKhBanDauGiaReq extends BaseRequest {
     @Transient
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
     
-    private List<XhDxKhBanDauGiaDtlReq> children = new ArrayList<>();
+    private List<XhDxKhBanDauGiaDtl> children = new ArrayList<>();
 
 }
