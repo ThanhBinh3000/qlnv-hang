@@ -126,6 +126,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         }else{
             dataDx.setTrangThaiTh(Contains.DADUTHAO_QD);
             dataDx.setSoQdPduyet(dataMap.getSoQd());
+            dataDx.setIdSoQdPduyet(dataMap.getId());
             hhDxuatKhMttRepository.save(dataDx);
         }
 

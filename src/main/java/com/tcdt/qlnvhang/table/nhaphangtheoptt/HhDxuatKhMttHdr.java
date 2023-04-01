@@ -47,7 +47,10 @@ public class HhDxuatKhMttHdr extends TrangThaiBaseEntity implements Serializable
 
     private String tenDuAn;
 
+    private Long idSoQdCc;
+
     private String soQdCc;
+
     private String loaiVthh;
     @Transient
     private String tenLoaiVthh;
@@ -85,6 +88,8 @@ public class HhDxuatKhMttHdr extends TrangThaiBaseEntity implements Serializable
     private Long maThop;
 
     private BigDecimal donGiaVat;
+
+    private Long idSoQdPduyet;
 
     private String soQdPduyet;
 
