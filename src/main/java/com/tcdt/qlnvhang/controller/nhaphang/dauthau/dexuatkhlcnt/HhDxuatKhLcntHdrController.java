@@ -301,14 +301,15 @@ public class HhDxuatKhLcntHdrController {
 	}
 
 	@ApiOperation(value = "Lấy giá bán tối đa", response = List.class)
-	@GetMapping(value = PathContains.GIA_BAN_TOI_DA + "/{cloaiVthh}/{maDvi}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = PathContains.GIA_BAN_TOI_DA + "/{cloaiVthh}/{maDvi}/{namKhoach}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<BaseResponse> getGiaBanToiDa(
 			@ApiParam(value = "cloaiVthh", example = "010101", required = true) @PathVariable("cloaiVthh") String cloaiVthh,
-			@ApiParam(value = "maDvi", example = "010101", required = true) @PathVariable("maDvi") String maDvi) {
+			@ApiParam(value = "maDvi", example = "010101", required = true) @PathVariable("maDvi") String maDvi,
+			@ApiParam(value = "namKhoach", example = "2023", required = true) @PathVariable("namKhoach") String namKhoach) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(service.getGiaBanToiDa(cloaiVthh, maDvi));
+			resp.setData(service.getGiaBanToiDa(cloaiVthh, maDvi, namKhoach));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {

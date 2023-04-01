@@ -267,6 +267,8 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 	@Override
 	public Page<HhQdPduyetKqlcntHdr> timKiemPage(HhQdPduyetKqlcntSearchReq req, HttpServletResponse response) throws Exception {
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").descending());
+		req.setTuNgayKyStr(convertFullDateToString(req.getTuNgayKy()));
+		req.setDenNgayKyStr(convertFullDateToString(req.getDenNgayKy()));
 		Page<HhQdPduyetKqlcntHdr> hhQdPduyetKqlcntHdrs = hhQdPduyetKqlcntHdrRepository.selectPage(req, pageable);
 		Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
 		hhQdPduyetKqlcntHdrs.forEach( item -> {
