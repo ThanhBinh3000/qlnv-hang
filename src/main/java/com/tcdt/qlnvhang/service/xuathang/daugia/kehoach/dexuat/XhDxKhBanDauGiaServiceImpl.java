@@ -90,7 +90,6 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
     int tongDviTsan = dataMap.getChildren().stream()
         .flatMap(child1 -> child1.getChildren().stream())
         .map(XhDxKhBanDauGiaPhanLo::getMaDviTsan).collect(Collectors.toSet()).size();
-    System.out.println("tong"+tongDviTsan);
     dataMap.setSlDviTsan(DataUtils.safeToInt(tongDviTsan));
 
     XhDxKhBanDauGia created = xhDxKhBanDauGiaRepository.save(dataMap);
@@ -172,12 +171,9 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
     dataDTB.setNgaySua(getDateTimeNow());
     dataDTB.setNguoiSuaId(userInfo.getId());
 
-    Long tongDviTsan = dataDTB.getChildren().stream()
+    int tongDviTsan = dataDTB.getChildren().stream()
         .flatMap(child1 -> child1.getChildren().stream())
-        .collect(Collectors.groupingBy(
-            XhDxKhBanDauGiaPhanLo::getMaDviTsan,
-            Collectors.counting()
-        )).values().stream().reduce(0L, Long::sum);
+        .map(XhDxKhBanDauGiaPhanLo::getMaDviTsan).collect(Collectors.toSet()).size();
     dataDTB.setSlDviTsan(DataUtils.safeToInt(tongDviTsan));
 
     XhDxKhBanDauGia created = xhDxKhBanDauGiaRepository.save(dataDTB);
