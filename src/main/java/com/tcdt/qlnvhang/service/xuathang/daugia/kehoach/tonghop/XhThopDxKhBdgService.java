@@ -47,18 +47,11 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
     @Autowired
     private XhDxKhBanDauGiaPhanLoRepository xhDxKhBanDauGiaPhanLoRepository;
 
-    public Page<XhThopDxKhBdg> searchPage(SearchXhThopDxKhBdg objReq) throws Exception {
-        Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),
-                objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
+    public Page<XhThopDxKhBdg> searchPage(SearchXhThopDxKhBdg req) throws Exception {
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),
+                req.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<XhThopDxKhBdg> data = xhThopDxKhBdgRepository.searchPage(
-                objReq.getNamKh(),
-                objReq.getLoaiVthh(),
-                objReq.getTypeLoaiVthh(),
-                objReq.getCloaiVthh(),
-                objReq.getNoiDungThop(),
-                Contains.convertDateToString(objReq.getNgayThopTu()),
-                Contains.convertDateToString(objReq.getNgayThopDen()),
-                objReq.getTrangThai(),
+                req,
                 pageable);
         Map<String, String> hashMapDmhh = getListDanhMucHangHoa();
         data.getContent().forEach(f -> {
@@ -112,7 +105,6 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
         thopHdr.setNamKh(objReq.getNamKh());
         thopHdr.setMaDvi(objReq.getMaDvi());
         thopHdr.setNoiDungThop(objReq.getNoiDungThop());
-        thopHdr.setTypeLoaiVthh(objReq.getTypeLoaiVthh());
         xhThopDxKhBdgRepository.save(thopHdr);
         for (XhThopDxKhBdgDtl dtl : thopHdr.getChildren()) {
             dtl.setIdThopHdr(thopHdr.getId());
