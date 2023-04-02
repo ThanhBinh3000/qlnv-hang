@@ -221,7 +221,6 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
             dataDB.setFileDinhKem(fileDinhKem.get(0));
         }
 
-
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhQdPdKhBttHdr.TABLE_NAME);
         dataDB.setFileDinhKems(fileDinhKems);
 

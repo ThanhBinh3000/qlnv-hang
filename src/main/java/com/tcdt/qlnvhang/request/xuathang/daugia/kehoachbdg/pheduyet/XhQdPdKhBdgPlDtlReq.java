@@ -27,7 +27,7 @@ public class XhQdPdKhBdgPlDtlReq {
 
     private BigDecimal donGiaVat;
 
-    private BigDecimal dviTinh;
+    private String dviTinh;
 
 
 }
