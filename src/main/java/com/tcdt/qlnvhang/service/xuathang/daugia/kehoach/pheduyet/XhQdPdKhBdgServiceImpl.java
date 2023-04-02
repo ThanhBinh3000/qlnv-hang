@@ -141,7 +141,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
         } else {
             dataDx.setTrangThaiTh(Contains.DADUTHAO_QD);
             dataDx.setSoQdPd(dataMap.getSoQdPd());
-            dataDx.setNgayKyQd(dataMap.getNgayKyQd());
+            dataDx.setIdSoQdPd(dataMap.getId());
             xhDxKhBanDauGiaRepository.save(dataDx);
         }
         saveDetail(req, dataMap.getId());
@@ -294,8 +294,8 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
                     if (qOptional.get().getTrangThai().equals(Contains.DABANHANH_QD)) {
                         throw new Exception("Đề xuất này đã được quyết định");
                     }
-                    // Update trạng thái tờ trình
                     qOptional.get().setTrangThaiTh(Contains.DABANHANH_QD);
+                    qOptional.get().setNgayKyQd(dataDB.getNgayPduyet());
                     xhDxKhBanDauGiaRepository.save(qOptional.get());
                 } else {
                     throw new Exception("Số tờ trình kế hoạch không được tìm thấy");
