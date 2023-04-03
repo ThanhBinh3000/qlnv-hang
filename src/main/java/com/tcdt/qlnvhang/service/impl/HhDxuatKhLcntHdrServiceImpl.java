@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.impl;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -92,9 +93,11 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         dataMap.setFileDinhKems(fileDinhKemList);
         this.validateData(dataMap, dataMap.getTrangThai());
         hhDxuatKhLcntHdrRepository.save(dataMap);
-
-
-        this.saveDetail(objReq, dataMap.getId());
+        if (objReq.getLoaiVthh() != null && !objReq.getLoaiVthh().startsWith("02")) {
+            saveDetailLuongThuc(objReq, dataMap.getId());
+        } else {
+            saveDetail(objReq, dataMap.getId());
+        }
 
         // Lưu quyết định căn cứ
         for (HhDxuatKhLcntCcxdgDtlReq cc : objReq.getCcXdgReq()) {
@@ -136,6 +139,69 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
             }
         }
     }
+
+    @Transactional
+    void saveDetailLuongThuc(HhDxuatKhLcntHdrReq objReq, Long idHdr) {
+        hhDxuatKhLcntDsgtDtlRepository.deleteAllByIdDxKhlcnt(idHdr);
+        Map<String, List<HhDxuatKhLcntDsgtDtlReq>> mapGoiThau = new HashMap<>();
+        for (HhDxuatKhLcntDsgtDtlReq gt : objReq.getDsGtReq()) {
+            if (!mapGoiThau.containsKey(gt.getGoiThau())) {
+                List<HhDxuatKhLcntDsgtDtlReq> newList = new ArrayList<>();
+                newList.add(gt);
+                mapGoiThau.put(gt.getGoiThau(), newList);
+            } else {
+                mapGoiThau.get(gt.getGoiThau()).add(gt);
+            }
+        }
+        for (List<HhDxuatKhLcntDsgtDtlReq> listData : mapGoiThau.values()) {
+            HhDxKhlcntDsgthau gthau = setGoiThau(listData, objReq, idHdr);
+            hhDxuatKhLcntDsgtDtlRepository.save(gthau);
+            hhDxKhlcntDsgthauCtietRepository.deleteAllByIdGoiThau(gthau.getId());
+            AtomicReference<Long> soLuong = new AtomicReference<>(0L);
+            listData.forEach(cuc -> {
+                soLuong.updateAndGet(v -> v + cuc.getSoLuong().longValue());
+                for (HhDxuatKhLcntDsgthauDtlCtietReq child : cuc.getChildren()) {
+                    HhDxKhlcntDsgthauCtiet dsgthauCtiet = setDsgthauCtiet(child, gthau.getId());
+                    hhDxKhlcntDsgthauCtietRepository.save(dsgthauCtiet);
+                    hhDxKhlcntDsgthauCtietVtRepository.deleteAllByIdGoiThauCtiet(dsgthauCtiet.getId());
+                    for (HhDxuatKhLcntDsgthauDtlCtietVtReq vt : child.getChildren()) {
+                        HhDxKhlcntDsgthauCtietVt vtMap = new ModelMapper().map(vt, HhDxKhlcntDsgthauCtietVt.class);
+                        vtMap.setId(null);
+                        vtMap.setIdGoiThauCtiet(dsgthauCtiet.getId());
+                        hhDxKhlcntDsgthauCtietVtRepository.save(vtMap);
+                        hhDxKhlcntDsgthauCtietVt1Repository.deleteAllByIdGoiThauCtietVt(vt.getId());
+                    }
+                }
+            });
+            gthau.setSoLuong(new BigDecimal(soLuong.toString()));
+            hhDxuatKhLcntDsgtDtlRepository.save(gthau);
+
+        }
+    }
+
+    HhDxKhlcntDsgthau setGoiThau (List<HhDxuatKhLcntDsgtDtlReq> listData, HhDxuatKhLcntHdrReq objReq, Long idHdr) {
+        HhDxKhlcntDsgthau gthau = new HhDxKhlcntDsgthau();
+        gthau.setGoiThau(listData.get(0).getGoiThau());
+        gthau.setDonGiaVat(listData.get(0).getDonGiaVat());
+        gthau.setDonGiaTamTinh(listData.get(0).getDonGiaTamTinh());
+        gthau.setMaDvi(objReq.getMaDvi());
+        gthau.setLoaiVthh(objReq.getLoaiVthh());
+        gthau.setCloaiVthh(objReq.getCloaiVthh());
+        gthau.setDviTinh("kg");
+        gthau.setIdDxKhlcnt(idHdr);
+        return gthau;
+    }
+    HhDxKhlcntDsgthauCtiet setDsgthauCtiet (HhDxuatKhLcntDsgthauDtlCtietReq child, Long goiThauId) {
+        HhDxKhlcntDsgthauCtiet dsgthauCtiet = new HhDxKhlcntDsgthauCtiet();
+        dsgthauCtiet.setMaDvi(child.getMaDvi());
+        dsgthauCtiet.setSoLuong(new BigDecimal(child.getSoLuong()));
+        dsgthauCtiet.setDiaDiemNhap(child.getDiaDiemNhap());
+        dsgthauCtiet.setIdGoiThau(goiThauId);
+        dsgthauCtiet.setSoLuongTheoChiTieu(child.getSoLuongTheoChiTieu());
+        dsgthauCtiet.setSoLuongDaMua(child.getSoLuongDaMua());
+        return dsgthauCtiet;
+    }
+
 
     @Transactional
     void saveDetail(HhDxuatKhLcntHdrReq objReq, Long idHdr) {
@@ -216,7 +282,11 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 
         hhDxuatKhLcntHdrRepository.save(dataDTB);
 
-        this.saveDetail(objReq, dataDTB.getId());
+        if (objReq.getLoaiVthh() != null && !objReq.getLoaiVthh().startsWith("02")) {
+            saveDetailLuongThuc(objReq, dataMap.getId());
+        } else {
+            saveDetail(objReq, dataMap.getId());
+        }
 
         // Xóa tât cả các căn cứ xác định giá cũ và lưu mới
         hhDxuatKhLcntCcxdgDtlRepository.deleteAllByIdDxKhlcnt(dataDTB.getId());
@@ -264,6 +334,9 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 
             List<HhDxKhlcntDsgthauCtiet> listDdNhap = hhDxKhlcntDsgthauCtietRepository.findByIdGoiThau(dsG.getId());
             listDdNhap.forEach(f -> {
+                f.setDonGiaTamTinh(dsG.getDonGiaTamTinh());
+                f.setDonGiaVat(dsG.getDonGiaVat());
+                f.setGoiThau(dsG.getGoiThau());
                 f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
                 f.setTenDiemKho(StringUtils.isEmpty(f.getMaDiemKho()) ? null : mapDmucDvi.get(f.getMaDiemKho()));
                 List<HhDxKhlcntDsgthauCtietVt> byIdGoiThauCtiet = hhDxKhlcntDsgthauCtietVtRepository.findByIdGoiThauCtiet(f.getId());
@@ -803,7 +876,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
     }
 
     @Override
-    public BigDecimal getGiaBanToiDa(String cloaiVhtt, String maDvi) {
-        return hhDxuatKhLcntHdrRepository.getGiaBanToiDa(cloaiVhtt, maDvi);
+    public BigDecimal getGiaBanToiDa(String cloaiVhtt, String maDvi, String namKhoach) {
+        return hhDxuatKhLcntHdrRepository.getGiaBanToiDa(cloaiVhtt, maDvi, namKhoach);
     }
 }

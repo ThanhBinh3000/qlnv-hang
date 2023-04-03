@@ -58,7 +58,6 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
   public Page<XhCtvtDeXuatHdr> searchPage(CustomUserDetails currentUser, SearchXhCtvtDeXuatHdrReq req) throws Exception {
     req.setDvql(currentUser.getDvql());
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-    System.out.println(req + "@@");
     Page<XhCtvtDeXuatHdr> search = xhCtvtDeXuatHdrRepository.search(req, pageable);
     Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
 
@@ -104,7 +103,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
       throw new Exception("Bad request.");
     }
     Optional<XhCtvtDeXuatHdr> optional = xhCtvtDeXuatHdrRepository.findFirstBySoDx(objReq.getSoDx());
-    if (optional.isPresent()) {
+    if (optional.isPresent() && objReq.getSoDx().split("/").length == 1) {
       throw new Exception("số đề xuất đã tồn tại");
     }
     XhCtvtDeXuatHdr data = new XhCtvtDeXuatHdr();
@@ -144,7 +143,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
       throw new Exception("Không tìm thấy dữ liệu cần sửa");
     }
     Optional<XhCtvtDeXuatHdr> soDx = xhCtvtDeXuatHdrRepository.findFirstBySoDx(objReq.getSoDx());
-    if (soDx.isPresent()) {
+    if (soDx.isPresent() && objReq.getSoDx().split("/").length == 1) {
       if (!soDx.get().getId().equals(objReq.getId())) {
         throw new Exception("số đề xuất đã tồn tại");
       }

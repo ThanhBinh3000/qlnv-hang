@@ -62,5 +62,5 @@ public interface HhDxuatKhLcntHdrService {
 
 	BigDecimal countSoLuongKeHoachNam(CountKhlcntSlReq objReq) throws Exception;
 
-	BigDecimal getGiaBanToiDa (String cloaiVhtt, String maDvi);
+	BigDecimal getGiaBanToiDa (String cloaiVhtt, String maDvi, String namKhoach);
 }

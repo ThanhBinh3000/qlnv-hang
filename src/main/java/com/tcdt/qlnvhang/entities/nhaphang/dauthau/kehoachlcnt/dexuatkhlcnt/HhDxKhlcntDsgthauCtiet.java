@@ -41,4 +41,13 @@ public class HhDxKhlcntDsgthauCtiet {
 
 	@Transient
 	private List<HhDxKhlcntDsgthauCtietVt> children;
+
+	@Transient
+	private BigDecimal donGiaTamTinh;
+	@Transient
+	private BigDecimal donGiaVat;
+	private BigDecimal soLuongTheoChiTieu;
+	private BigDecimal soLuongDaMua;
+	@Transient
+	private String goiThau;
 }
