@@ -63,6 +63,8 @@ public class XhQdPdKhBdg extends TrangThaiBaseEntity implements Serializable {
 
     private String soQdCc;
 
+    private Integer slDviTsan;
+
     // Transient
 
     @Transient

@@ -22,15 +22,19 @@ public class XhQdPdKhBttDvi implements Serializable {
 
     private Long idQdDtl;
 
+    private BigDecimal soLuongChiCuc;
+
     private String maDvi;
     @Transient
     private String tenDvi;
 
-    private BigDecimal soLuongChiCuc;
-
     private String diaChi;
 
     private BigDecimal donGiaVat;
+
+    private BigDecimal soLuongChiTieu;
+
+    private BigDecimal soLuongKh;
 
     @Transient
     List<XhQdPdKhBttDviDtl> children =new ArrayList<>();

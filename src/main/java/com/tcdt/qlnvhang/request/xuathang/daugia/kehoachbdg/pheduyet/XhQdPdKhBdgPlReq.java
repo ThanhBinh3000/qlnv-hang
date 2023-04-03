@@ -24,5 +24,9 @@ public class XhQdPdKhBdgPlReq {
 
     private String diaChi;
 
+    private String slChiTieu;
+
+    private String slKeHoachDd;
+
     List<XhQdPdKhBdgPlDtlReq> children =new ArrayList<>();
 }

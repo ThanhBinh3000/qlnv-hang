@@ -22,6 +22,9 @@ public class XhQdPdKhBttDviReq {
 
     private BigDecimal donGiaVat;
 
+    private BigDecimal soLuongChiTieu;
+
+    private BigDecimal soLuongKh;
 
     List<XhQdPdKhBttDviDtlReq> children =new ArrayList<>();
 }
