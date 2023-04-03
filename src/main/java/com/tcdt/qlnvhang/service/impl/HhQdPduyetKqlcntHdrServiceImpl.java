@@ -33,6 +33,7 @@ import com.tcdt.qlnvhang.request.object.HhQdPduyetKqlcntHdrReq;
 import com.tcdt.qlnvhang.request.search.HhQdPduyetKqlcntSearchReq;
 import com.tcdt.qlnvhang.service.HhQdPduyetKqlcntHdrService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
@@ -57,6 +58,8 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 
 	@Autowired
 	private HhHopDongRepository hhHopDongRepository;
+	@Autowired
+	private HttpServletRequest request;
 
 	@Override
 	public HhQdPduyetKqlcntHdr create(HhQdPduyetKqlcntHdrReq objReq) throws Exception {
@@ -128,7 +131,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		if (objReq.getFileDinhKems() != null) {
 			fileDinhKemList = ObjectMapperUtils.mapAll(objReq.getFileDinhKems(), FileDKemJoinKquaLcntHdr.class);
 			fileDinhKemList.forEach(f -> {
-				f.setDataType(HhPaKhlcntHdr.TABLE_NAME);
+				f.setDataType(HhQdPduyetKqlcntHdr.TABLE_NAME);
 				f.setCreateDate(new Date());
 			});
 		}
