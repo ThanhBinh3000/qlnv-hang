@@ -32,7 +32,7 @@ public class XhTcTtinBttReq {
 
     private BigDecimal donGia;
 
-    private String thueGtgt;
+    private BigDecimal thueGtgt;
 
     private Boolean luaChon;
 

@@ -76,6 +76,8 @@ public class XhDxKhBanDauGia extends TrangThaiBaseEntity implements Serializable
 
     private BigDecimal tongSoLuong;
 
+    private BigDecimal tongDonGia;
+
     private BigDecimal tongTienKdiem;
 
     private BigDecimal tongTienKdienDonGia;
@@ -90,12 +92,18 @@ public class XhDxKhBanDauGia extends TrangThaiBaseEntity implements Serializable
 
     private Long idSoQdCtieu;
     private String trangThaiTh;
+
+    private Long idSoQdPd;
+
     private String soQdPd;
+
     private Long idThop;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKyQd;
 
     private String dviTinh;
+
+    private BigDecimal donGiaVat;
 
     @Transient
     private String tenLoaiVthh;

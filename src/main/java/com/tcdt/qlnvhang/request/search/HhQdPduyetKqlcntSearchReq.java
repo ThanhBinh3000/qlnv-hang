@@ -27,6 +27,7 @@ public class HhQdPduyetKqlcntSearchReq extends BaseRequest {
 
 	@ApiModelProperty(example = Contains.LOAI_VTHH_GAO)
 	String loaiVthh;
+	String cloaiVthh;
 
 	@ApiModelProperty(example = "2022")
 	String soQd;
@@ -44,5 +45,8 @@ public class HhQdPduyetKqlcntSearchReq extends BaseRequest {
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
 	Date denNgayKy;
+
+	String tuNgayKyStr;
+	String denNgayKyStr;
 
 }

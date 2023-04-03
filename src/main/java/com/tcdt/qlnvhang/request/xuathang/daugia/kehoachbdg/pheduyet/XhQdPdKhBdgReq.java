@@ -7,6 +7,7 @@ import com.tcdt.qlnvhang.util.Contains;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Date;
@@ -53,11 +54,15 @@ public class XhQdPdKhBdgReq extends BaseRequest {
 
     private String phanLoai;
 
+    private String soQdCc;
+
     private List<XhQdPdKhBdgDtlReq> children;
 
+    @Transient
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 
-    private List<FileDinhKemReq> canCuPhapLy = new ArrayList<>();
+    @Transient
+    private FileDinhKemReq fileDinhKem;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKyQdTu;

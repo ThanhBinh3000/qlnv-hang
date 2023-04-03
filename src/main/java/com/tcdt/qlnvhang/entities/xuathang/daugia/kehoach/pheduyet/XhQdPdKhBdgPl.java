@@ -24,7 +24,11 @@ public class XhQdPdKhBdgPl implements Serializable {
 
     private String maDvi;
 
-    private BigDecimal soLuong;
+    private BigDecimal soLuongChiCuc;
+
+    private BigDecimal tienDtruocDxChiCuc;
+
+    private BigDecimal tienDtruocDdChiCuc;
 
     private String diaChi;
 

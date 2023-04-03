@@ -20,6 +20,8 @@ public class XhCgiaReq {
 
     private Long idDviDtl;
 
+    private Long idQdPdDtl;
+
     private String trangThai;
     @Transient
     private String tenTrangThai;

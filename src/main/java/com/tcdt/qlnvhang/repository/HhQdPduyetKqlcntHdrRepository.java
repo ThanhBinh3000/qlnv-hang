@@ -14,10 +14,11 @@ public interface HhQdPduyetKqlcntHdrRepository extends BaseRepository<HhQdPduyet
 			" LEFT JOIN HH_HOP_DONG_HDR HD ON QDPD.ID = HD.ID_QD_KQ_LCNT  " +
 			" WHERE (:#{#req.namKhoach} IS NULL OR QDPD.NAM_KHOACH = TO_NUMBER(:#{#req.namKhoach})) "+
 			" AND (:#{#req.loaiVthh} IS NULL OR QDPD.LOAI_VTHH LIKE CONCAT(:#{#req.loaiVthh},'%')) "+
+			" AND (:#{#req.cloaiVthh} IS NULL OR QDPD.CLOAI_VTHH LIKE CONCAT(:#{#req.cloaiVthh},'%')) "+
 			" AND (:#{#req.soHd} IS NULL OR LOWER(HD.SO_HD) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.soHd}),'%')))" +
 			" AND (:#{#req.tenHd} IS NULL OR LOWER(HD.TEN_HD) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.tenHd}),'%')))" +
-			" AND (:#{#req.tuNgayKy} IS NULL OR QDPD.NGAY_KY >= TO_DATE(:#{#req.tuNgayKy}, 'YYYY-MM-DD HH24:MI:SS')) "+
-			" AND (:#{#req.denNgayKy} IS NULL OR QDPD.NGAY_TAO <= TO_DATE(:#{#req.denNgayKy}, 'YYYY-MM-DD HH24:MI:SS')) "+
+			" AND (:#{#req.tuNgayKyStr} IS NULL OR QDPD.NGAY_KY >= TO_DATE(:#{#req.tuNgayKyStr}, 'YYYY-MM-DD HH24:MI:SS')) "+
+			" AND (:#{#req.denNgayKyStr} IS NULL OR QDPD.NGAY_TAO <= TO_DATE(:#{#req.denNgayKyStr}, 'YYYY-MM-DD HH24:MI:SS')) "+
 			" AND (:#{#req.soQd} IS NULL OR QDPD.SO_QD = :#{#req.soQd}) "+
 			" AND (:#{#req.tuNgayQd} IS NULL OR QDPD.NGAY_TAO >= TO_DATE(:#{#req.tuNgayQd}, 'yyyy-MM-dd')) "+
 			" AND (:#{#req.denNgayQd} IS NULL OR QDPD.NGAY_TAO <= TO_DATE(:#{#req.denNgayQd}, 'yyyy-MM-dd')) "+
