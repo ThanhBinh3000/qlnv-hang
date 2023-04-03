@@ -24,6 +24,8 @@ public class XhTcTtinBtt implements Serializable {
 
     private Long idDviDtl;
 
+    private Long idQdPdDtl;
+
     private String tochucCanhan;
 
     private String mst;
@@ -39,7 +41,7 @@ public class XhTcTtinBtt implements Serializable {
 
     private BigDecimal donGia;
 
-    private String thueGtgt;
+    private BigDecimal thueGtgt;
 
     private Boolean luaChon;
 

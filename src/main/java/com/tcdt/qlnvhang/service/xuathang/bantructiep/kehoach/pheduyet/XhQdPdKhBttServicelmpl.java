@@ -141,6 +141,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
         if (req.getPhanLoai().equals("TH")){
             dataTh.setTrangThai(Contains.DADUTHAO_QD);
             dataTh.setSoQdPd(dataMap.getSoQdPd());
+            dataTh.setIdSoQdPd(dataMap.getId());
             xhThopDxKhBttRepository.save(dataTh);
         }else {
             dataDx.setTrangThaiTh(Contains.DADUTHAO_QD);
@@ -221,10 +222,9 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
             dataDB.setFileDinhKem(fileDinhKem.get(0));
         }
 
-        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
-            List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhQdPdKhBttHdr.TABLE_NAME);
-            dataDB.setFileDinhKems(fileDinhKems);
-        }
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhQdPdKhBttHdr.TABLE_NAME);
+        dataDB.setFileDinhKems(fileDinhKems);
+
 
         this.saveDetail(req, dataDB.getId());
         return created;
@@ -357,10 +357,22 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
         xhQdPdKhBttHdrRepository.delete(optional.get());
         fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhQdPdKhBttHdr.TABLE_NAME));
 
+
+
         if (optional.get().getPhanLoai().equals("TH")){
-            xhThopDxKhBttRepository.updateTrangThai(optional.get().getIdThHdr(), NhapXuatHangTrangThaiEnum.CHUATAO_QD.getId());
+            Optional<XhThopDxKhBttHdr> qOptionalTh = xhThopDxKhBttRepository.findById(optional.get().getIdThHdr());
+            qOptionalTh.get().setIdSoQdPd(null);
+            qOptionalTh.get().setSoQdPd(null);
+            qOptionalTh.get().setTrangThai(NhapXuatHangTrangThaiEnum.CHUATAO_QD.getId());
+//            xhThopDxKhBttRepository.updateTrangThai(optional.get().getIdThHdr(), NhapXuatHangTrangThaiEnum.CHUATAO_QD.getId());
+            xhThopDxKhBttRepository.save(qOptionalTh.get());
         }else {
-            xhDxKhBanTrucTiepHdrRepository.updateStatusTh(optional.get().getIdTrHdr(), NhapXuatHangTrangThaiEnum.CHUATONGHOP.getId());
+            Optional<XhDxKhBanTrucTiepHdr> qOptionalTr = xhDxKhBanTrucTiepHdrRepository.findById(optional.get().getIdTrHdr());
+            qOptionalTr.get().setIdSoQdPd(null);
+            qOptionalTr.get().setSoQdPd(null);
+            qOptionalTr.get().setTrangThaiTh(NhapXuatHangTrangThaiEnum.CHUATONGHOP.getId());
+//            xhDxKhBanTrucTiepHdrRepository.updateStatusTh(optional.get().getIdTrHdr(), NhapXuatHangTrangThaiEnum.CHUATONGHOP.getId());
+            xhDxKhBanTrucTiepHdrRepository.save(qOptionalTr.get());
         }
     }
 
@@ -498,7 +510,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
                 List<FileDinhKem> fileDinhKem = fileDinhKemService.search(id, Arrays.asList(XhQdPdKhBttDtl.TABLE_NAME));
                 dtl.setFileDinhKemUyQuyen(fileDinhKem);
             }
-            if (dtl.getPthucBanTrucTiep().equals(Contains.MUA_LE)){
+            if (dtl.getPthucBanTrucTiep().equals(Contains.BAN_LE)){
                 List<FileDinhKem> fileDinhKem = fileDinhKemService.search(id, Arrays.asList(XhQdPdKhBttDtl.TABLE_NAME));
                 dtl.setFileDinhKemMuaLe(fileDinhKem);
             }

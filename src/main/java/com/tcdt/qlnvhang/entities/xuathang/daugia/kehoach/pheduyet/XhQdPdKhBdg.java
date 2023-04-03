@@ -61,6 +61,8 @@ public class XhQdPdKhBdg extends TrangThaiBaseEntity implements Serializable {
 
     private Long idGoc;
 
+    private String soQdCc;
+
     // Transient
 
     @Transient
@@ -73,9 +75,9 @@ public class XhQdPdKhBdg extends TrangThaiBaseEntity implements Serializable {
     List<XhQdPdKhBdgDtl> children = new ArrayList<>();
 
     @Transient
-    private List<FileDinhKem> fileDinhKem = new ArrayList<>();
+    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
     @Transient
-    private List<FileDinhKem> canCuPhapLy = new ArrayList<>();
+    private FileDinhKem fileDinhKem;
 
 }

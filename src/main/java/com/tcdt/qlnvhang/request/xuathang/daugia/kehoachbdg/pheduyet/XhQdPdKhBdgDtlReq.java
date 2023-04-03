@@ -40,11 +40,11 @@ public class XhQdPdKhBdgDtlReq {
 
     private BigDecimal tongSoLuong;
 
-    private Integer soDviTsan;
-
-    private BigDecimal tongTienKdienDonGia;
+    private Integer slDviTsan;
 
     private BigDecimal tongTienDatTruocDonGia;
+
+    private BigDecimal tongTienKdienDonGia;
 
     private String moTaHangHoa;
 
@@ -55,7 +55,6 @@ public class XhQdPdKhBdgDtlReq {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     Date tgianDkienDen;
-
 
     private Integer tgianTtoan;
 
