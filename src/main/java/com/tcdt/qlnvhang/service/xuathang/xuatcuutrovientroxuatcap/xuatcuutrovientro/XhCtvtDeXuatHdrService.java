@@ -74,7 +74,9 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
     search.getContent().forEach(s -> {
       if (mapDmucDvi.containsKey((s.getMaDvi()))) {
         Map<String, Object> objDonVi = mapDmucDvi.get(s.getMaDvi());
+        Map<String, Object> objDonViDx = mapDmucDvi.get(s.getMaDvi().substring(0,6));
         s.setTenDvi(objDonVi.get("tenDvi").toString());
+        s.setTenDviDx(objDonViDx.get("tenDvi").toString());
       }
       if (mapVthh.get((s.getLoaiVthh())) != null) {
         s.setTenLoaiVthh(mapVthh.get(s.getLoaiVthh()));
