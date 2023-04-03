@@ -37,8 +37,6 @@ public class XhThopDxKhBdg extends TrangThaiBaseEntity implements Serializable {
     private Long idQdPd;
     private String soQdPd;
 
-    private String typeLoaiVthh;
-
     // Transient
     @Transient
     private String tenLoaiVthh;

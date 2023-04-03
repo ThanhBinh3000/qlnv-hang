@@ -219,6 +219,8 @@ public class Contains {
 	public static final String UY_QUYEN = "Ủy quyền";
 	public static final String MUA_LE = "Mua lẻ";
 
+	public static final String BAN_LE = "Bán lẻ";
+
 	public static final String DAU_TU = "DT";
 
 	public static final String CUNG_CAP = "CC";
