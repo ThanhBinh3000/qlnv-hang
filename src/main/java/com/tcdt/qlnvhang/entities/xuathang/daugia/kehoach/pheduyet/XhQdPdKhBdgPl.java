@@ -23,6 +23,8 @@ public class XhQdPdKhBdgPl implements Serializable {
     private Long idQdDtl;
 
     private String maDvi;
+    @Transient
+    private String tenDvi;
 
     private BigDecimal soLuongChiCuc;
 
@@ -32,9 +34,11 @@ public class XhQdPdKhBdgPl implements Serializable {
 
     private String diaChi;
 
-    // Transient
-    @Transient
-    private String tenDvi;
+    private String slChiTieu;
+
+    private String slKeHoachDd;
+
+
 
     @Transient
     List<XhQdPdKhBdgPlDtl> children =new ArrayList<>();
