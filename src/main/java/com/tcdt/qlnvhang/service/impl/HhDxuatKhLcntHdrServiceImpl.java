@@ -183,7 +183,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         HhDxKhlcntDsgthau gthau = new HhDxKhlcntDsgthau();
         gthau.setGoiThau(listData.get(0).getGoiThau());
         gthau.setDonGiaVat(listData.get(0).getDonGiaVat());
-        gthau.setDonGiaTamTinh(listData.get(0).getDonGiaDx());
+        gthau.setDonGiaTamTinh(listData.get(0).getDonGiaTamTinh());
         gthau.setMaDvi(objReq.getMaDvi());
         gthau.setLoaiVthh(objReq.getLoaiVthh());
         gthau.setCloaiVthh(objReq.getCloaiVthh());
