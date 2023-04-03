@@ -316,9 +316,9 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
     Page<HhHopDongHdr> page;
     if (req.getTrangThai() != null && req.getTrangThai().equals(TrangThaiAllEnum.DA_KY.getId())) {
       dvql = userInfo.getDvql().substring(0, 4);
-      page = hhHopDongRepository.selectAll(req.getLoaiVthh(), req.getSoHd(), req.getTenHd(), req.getNhaCcap(), convertDateToString(req.getTuNgayKy()), convertDateToString(req.getDenNgayKy()), req.getTrangThai(), dvql, req.getNamHd(), pageable);
+      page = hhHopDongRepository.selectAll(req.getLoaiVthh(), req.getSoHd(), req.getTenHd(), req.getNhaCcap(), convertFullDateToString(req.getTuNgayKy()), convertFullDateToString(req.getDenNgayKy()), req.getTrangThai(), dvql, req.getNamHd(), pageable);
     } else {
-      page = hhHopDongRepository.select(req.getLoaiVthh(), req.getSoHd(), req.getTenHd(), req.getNhaCcap(), convertDateToString(req.getTuNgayKy()), convertDateToString(req.getDenNgayKy()), req.getTrangThai(), dvql, req.getNamHd(), pageable);
+      page = hhHopDongRepository.select(req.getLoaiVthh(), req.getSoHd(), req.getTenHd(), req.getNhaCcap(), convertFullDateToString(req.getTuNgayKy()), convertFullDateToString(req.getDenNgayKy()), req.getTrangThai(), dvql, req.getNamHd(), pageable);
     }
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
     Map<String, String> mapVthh = getListDanhMucHangHoa();

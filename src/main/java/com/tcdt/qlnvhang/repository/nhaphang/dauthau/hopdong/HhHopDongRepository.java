@@ -29,8 +29,8 @@ public interface HhHopDongRepository extends BaseRepository<HhHopDongHdr, Long> 
           "  AND (:tenHd IS NULL OR LOWER(HDR.TEN_HD) LIKE LOWER(CONCAT(CONCAT('%',:tenHd),'%'))) " +
           "  AND (:nhaCcap IS NULL OR HDR.SO_HD = :nhaCcap) " +
           "  AND (:namHd IS NULL OR HDR.NAM_HD = :namHd) " +
-          "  AND (:tuNgayKy IS NULL OR HDR.NGAY_KY >= TO_DATE(:tuNgayKy, 'yyyy-MM-dd')) " +
-          "  AND (:denNgayKy IS NULL OR HDR.NGAY_KY <= TO_DATE(:denNgayKy, 'yyyy-MM-dd')) " +
+          "  AND (:tuNgayKy IS NULL OR HDR.NGAY_KY >= TO_DATE(:tuNgayKy, 'YYYY-MM-DD HH24:MI:SS')) " +
+          "  AND (:denNgayKy IS NULL OR HDR.NGAY_KY <= TO_DATE(:denNgayKy, 'YYYY-MM-DD HH24:MI:SS')) " +
           "  AND (:maDvi IS NULL OR HDR.MA_DVI = :maDvi) " +
           "  AND (:trangThai IS NULL OR HDR.TRANG_THAI = :trangThai) ",
       nativeQuery = true)
