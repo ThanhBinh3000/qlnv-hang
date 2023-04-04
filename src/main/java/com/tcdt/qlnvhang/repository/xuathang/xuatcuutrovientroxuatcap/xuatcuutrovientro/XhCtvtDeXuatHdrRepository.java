@@ -17,7 +17,7 @@ import java.util.Optional;
 @Repository
 public interface XhCtvtDeXuatHdrRepository extends JpaRepository<XhCtvtDeXuatHdr, Long> {
 
-  @Query("SELECT c FROM XhCtvtDeXuatHdr c join c.deXuatPhuongAn h WHERE 1=1 " +
+  @Query("SELECT distinct c FROM XhCtvtDeXuatHdr c left join c.deXuatPhuongAn h WHERE 1=1 " +
       "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
       "AND (:#{#param.maDvi} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDvi},'%')) " +
       "AND (:#{#param.maDviCuc} IS NULL OR h.maDviCuc LIKE CONCAT(:#{#param.maDviCuc},'%')) " +
