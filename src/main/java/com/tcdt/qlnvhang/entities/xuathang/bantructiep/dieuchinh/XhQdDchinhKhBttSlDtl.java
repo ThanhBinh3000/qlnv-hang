@@ -26,7 +26,7 @@ public class XhQdDchinhKhBttSlDtl implements Serializable {
 
     private String maNhaKho;
     @Transient
-    private String tenNhakho;
+    private String tenNhaKho;
 
     private String maNganKho;
     @Transient

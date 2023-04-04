@@ -1,12 +1,8 @@
 package com.tcdt.qlnvhang.repository.xuathang.daugia.nhiemvuxuat;
 
 import com.tcdt.qlnvhang.entities.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXh;
-import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.ketqua.XhKqBdgHdr;
 import com.tcdt.qlnvhang.repository.BaseRepository;
-import com.tcdt.qlnvhang.request.xuathang.daugia.tochuctrienkhai.ketqua.XhKqBdgHdrReq;
 import com.tcdt.qlnvhang.request.xuathang.quyetdinhgiaonhiemvuxuat.XhQdGiaoNvuXuatReq;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuNhapKhoHdr;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhQdGiaoNvNhapHang;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -31,5 +27,5 @@ public interface XhQdGiaoNvXhRepository extends BaseRepository<XhQdGiaoNvXh, Lon
 
     Optional<XhQdGiaoNvXh> findAllBySoQd(String soQd);
 
-    List<XhQdGiaoNvXh> findAllByIdIn(List<Long> ids);
+    List<XhQdGiaoNvXh> findByIdIn(List<Long> idQdList);
 }
