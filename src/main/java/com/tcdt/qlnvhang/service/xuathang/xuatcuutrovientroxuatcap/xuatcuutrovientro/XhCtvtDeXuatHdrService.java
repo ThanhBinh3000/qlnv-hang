@@ -56,7 +56,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
   private FileDinhKemService fileDinhKemService;
 
   public Page<XhCtvtDeXuatHdr> searchPage(CustomUserDetails currentUser, SearchXhCtvtDeXuatHdrReq req) throws Exception {
-    req.setDvql(currentUser.getDvql());
+//    req.setDvql(currentUser.getDvql());
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<XhCtvtDeXuatHdr> search = xhCtvtDeXuatHdrRepository.search(req, pageable);
     Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
