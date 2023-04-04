@@ -86,7 +86,7 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
             dtl.setMaDvi(getUser().getDvql());
             dtl.setLoaiVthh(ObjReq.getLoaiVthh());
             dtl.setCloaiVthh(ObjReq.getCloaiVthh());
-
+            dtl.setTypeSoQdKq(false);
             if (ObjReq.getPthucBanTrucTiep().equals(Contains.UY_QUYEN)) {
                 if (!DataUtils.isNullOrEmpty(ObjReq.getFileDinhKemUyQuyen())) {
                     List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(ObjReq.getFileDinhKemUyQuyen(), dtl.getId(), XhQdPdKhBttDtl.TABLE_NAME);

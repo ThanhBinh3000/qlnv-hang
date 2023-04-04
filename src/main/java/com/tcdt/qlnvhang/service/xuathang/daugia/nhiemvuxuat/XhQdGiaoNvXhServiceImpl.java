@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.service.xuathang.daugia.nhiemvuxuat;
 
-import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdr;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMau;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.phieukiemnghiemcl.XhPhieuKnghiemCluong;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXh;
@@ -12,11 +12,7 @@ import com.tcdt.qlnvhang.repository.xuathang.daugia.ktracluong.kiemnghiemcl.XhPh
 import com.tcdt.qlnvhang.repository.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXhDdiemRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXhDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXhRepository;
-import com.tcdt.qlnvhang.request.DeleteReq;
-import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
-import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.search.xuathang.XhQdGiaoNvuXuatSearchReq;
 import com.tcdt.qlnvhang.request.xuathang.quyetdinhgiaonhiemvuxuat.XhQdGiaoNvXhDdiemReq;
 import com.tcdt.qlnvhang.request.xuathang.quyetdinhgiaonhiemvuxuat.XhQdGiaoNvuXuatCtReq;
 import com.tcdt.qlnvhang.request.xuathang.quyetdinhgiaonhiemvuxuat.XhQdGiaoNvuXuatReq;
@@ -25,7 +21,6 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuNhapKhoHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -41,7 +36,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 
@@ -146,12 +140,17 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
         dataMap.setMaDvi(userInfo.getDvql());
         dataMap.setTenDvi(StringUtils.isEmpty(userInfo.getDvql()) ? null : mapDmucDvi.get(userInfo.getDvql()));
         XhQdGiaoNvXh created = xhQdGiaoNvXhRepository.save(dataMap);
-        if (!DataUtils.isNullObject(objReq.getFileDinhKem())) {
-            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Arrays.asList(objReq.getFileDinhKem()), created.getId(), XhQdGiaoNvXh.TABLE_NAME);
-            created.setFileDinhKems(fileDinhKem);
+
+        if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKems())) {
+            List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhQdGiaoNvXh.TABLE_NAME);
+            created.setFileDinhKems(fileDinhKems);
         }
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), dataMap.getId(), XhQdGiaoNvXh.TABLE_NAME);
-        created.setFileDinhKems(fileDinhKems);
+
+        if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKem())) {
+            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(), created.getId(), XhQdGiaoNvXh.TABLE_NAME);
+            created.setFileDinhKem(fileDinhKem);
+        }
+
         this.saveDetail(dataMap, objReq);
         return created;
     }
@@ -194,13 +193,13 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
         data.setNgaySua(new Date());
         data.setNguoiSuaId(userInfo.getId());
         XhQdGiaoNvXh created = xhQdGiaoNvXhRepository.save(data);
-        fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhQdGiaoNvXh.TABLE_NAME));
-        if (!DataUtils.isNullObject(objReq.getFileDinhKem())) {
-            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Arrays.asList(objReq.getFileDinhKem()), created.getId(), XhQdGiaoNvXh.TABLE_NAME);
-            created.setFileDinhKems(fileDinhKem);
-        }
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), data.getId(), XhQdGiaoNvXh.TABLE_NAME);
-        created.setFileDinhKems(fileDinhKems);
+
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhQdGiaoNvXh.TABLE_NAME);
+        data.setFileDinhKems(fileDinhKems);
+
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(), created.getId(), XhQdGiaoNvXh.TABLE_NAME);
+        data.setFileDinhKem(fileDinhKem);
+
         List<XhQdGiaoNvXhDtl> listDtl = xhQdGiaoNvXhDtlRepository.findAllByIdQdHdr(data.getId());
         xhQdGiaoNvXhDtlRepository.deleteAll(listDtl);
         List<Long> listId = listDtl.stream().map(XhQdGiaoNvXhDtl::getId).collect(Collectors.toList());
@@ -226,14 +225,9 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
         data.setTenLoaiVthh(mapDmucHh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(mapDmucHh.get(data.getCloaiVthh()));
 
-        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdGiaoNvXh.TABLE_NAME));
-        if (!DataUtils.isNullOrEmpty(fileDinhKem)) {
-            data.setFileDinhKem(fileDinhKem.get(0));
-        }
-        List<FileDinhKem> fileDinhkems = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdGiaoNvXh.TABLE_NAME));
-        if (!DataUtils.isNullOrEmpty(fileDinhkems)) {
-            data.setFileDinhKems(fileDinhkems);
-        }
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdGiaoNvXh.TABLE_NAME));
+        data.setFileDinhKems(fileDinhKems);
+        data.setFileDinhKem(fileDinhKems);
 
         List<XhQdGiaoNvXhDtl> listDtl = xhQdGiaoNvXhDtlRepository.findAllByIdQdHdr(data.getId());
         List<Long> listId = listDtl.stream().map(XhQdGiaoNvXhDtl::getId).collect(Collectors.toList());
@@ -293,12 +287,43 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
 
     @Override
     public void delete(Long id) throws Exception {
+        if (StringUtils.isEmpty(id)){
+            throw new Exception("Xóa thất bại không tìm thấy dữ liệu");
+        }
+
+        Optional<XhQdGiaoNvXh> optional = xhQdGiaoNvXhRepository.findById(id);
+        if (!optional.isPresent()){
+            throw new Exception("Không tìm thấy dữ liệu cần xóa");
+        }
+
+        if (!optional.get().getTrangThai().equals(Contains.DUTHAO)){
+            throw new Exception("Chỉ thực hiện xóa với kế hoạch ở trạng thái bản nháp hoặc từ chối");
+        }
+
+        List<XhQdGiaoNvXhDtl> dtlList = xhQdGiaoNvXhDtlRepository.findAllByIdQdHdr(id);
+        for (XhQdGiaoNvXhDtl dtl : dtlList){
+            xhQdGiaoNvXhDdiemRepository.deleteAllByIdDtl(dtl.getId());
+        }
+        xhQdGiaoNvXhDtlRepository.deleteAllByIdQdHdr(id);
+        xhQdGiaoNvXhRepository.delete(optional.get());
+        fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhQdGiaoNvXh.TABLE_NAME));
 
     }
 
     @Override
     public void deleteMulti(List<Long> listMulti) throws Exception {
+        if (StringUtils.isEmpty(listMulti)) {
+            throw new Exception("Xóa thất bại, không tìm thấy dữ liệu");
+        }
 
+        List<XhQdGiaoNvXh> list = xhQdGiaoNvXhRepository.findByIdIn(listMulti);
+        if (list.isEmpty()){
+            throw new Exception("Không tìm thấy dữ liệu cần xóa");
+        }
+
+        for (XhQdGiaoNvXh hdr : list){
+            this.delete(hdr.getId());
+        }
     }
 
     @Override
