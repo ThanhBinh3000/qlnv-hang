@@ -125,7 +125,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
 
     List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), XhCtvtDeXuatHdr.TABLE_NAME + "_CAN_CU");
     created.setCanCu(canCu);
-    this.saveCtiet(created.getId(), objReq);
+//    this.saveCtiet(created.getId(), objReq);
     return created;
   }
 
@@ -156,7 +156,10 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
       }
     }
     XhCtvtDeXuatHdr data = optional.get();
+    data.setDeXuatPhuongAn(objReq.getDeXuatPhuongAn());
+
     BeanUtils.copyProperties(objReq, data);
+
     data.setTongSoLuong(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPa::getSoLuongXuatCuc).reduce(BigDecimal.ZERO, BigDecimal::add));
     data.setThanhTien(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPa::getThanhTien).reduce(BigDecimal.ZERO, BigDecimal::add));
     data.setTonKho(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPa::getSoLuongXuatChiCuc).reduce(BigDecimal.ZERO, BigDecimal::add));
@@ -166,10 +169,10 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhCtvtDeXuatHdr.TABLE_NAME + "_CAN_CU"));
     List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), XhCtvtDeXuatHdr.TABLE_NAME + "_CAN_CU");
     created.setCanCu(canCu);
-
+/*
     List<XhCtvtDeXuatPa> listDeXuatPhuongAn = xhCtvtDeXuatPaRepository.findByIdHdr(objReq.getId());
     xhCtvtDeXuatPaRepository.deleteAll(listDeXuatPhuongAn);
-    this.saveCtiet(created.getId(), objReq);
+    this.saveCtiet(created.getId(), objReq);*/
     return created;
   }
 
