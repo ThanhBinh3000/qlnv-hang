@@ -62,6 +62,8 @@ public class XhQdPdKhBttHdrReq extends BaseRequest {
 
     private String trangThaiChaoGia;
 
+    private Integer typeQdDc;
+
     @Transient
     private List<XhQdPdKhBttDtlReq> children;
 
