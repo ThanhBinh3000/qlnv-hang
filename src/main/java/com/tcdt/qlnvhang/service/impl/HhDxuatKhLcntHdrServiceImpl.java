@@ -129,12 +129,15 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
                 }
             }
             if (trangThai.equals(NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId())) {
-                for (HhDxKhlcntDsgthau chiCuc : objHdr.getDsGtDtlList()) {
-                    BigDecimal aLong = hhDxuatKhLcntHdrRepository.countSLDalenKh(objHdr.getNamKhoach(), objHdr.getLoaiVthh(), chiCuc.getMaDvi(), NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
-                    BigDecimal soLuongTotal = aLong.add(chiCuc.getSoLuong());
-                    if (soLuongTotal.compareTo(chiCuc.getSoLuongChiTieu()) > 0) {
-                        throw new Exception(chiCuc.getTenDvi() + " đã nhập quá số lượng chi tiêu, vui lòng nhập lại");
+                for (HhDxKhlcntDsgthau goiThau : objHdr.getDsGtDtlList()) {
+                    for (HhDxKhlcntDsgthauCtiet chiCuc: goiThau.getChildren()) {
+                        BigDecimal aLong = hhDxuatKhLcntHdrRepository.countSLDalenKh(objHdr.getNamKhoach(), objHdr.getLoaiVthh(), chiCuc.getMaDvi(), NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
+                        BigDecimal soLuongTotal = aLong.add(chiCuc.getSoLuong());
+                        if (soLuongTotal.compareTo(chiCuc.getSoLuongTheoChiTieu()) > 0) {
+                            throw new Exception(chiCuc.getTenDvi() + " đã nhập quá số lượng chi tiêu, vui lòng nhập lại");
+                        }
                     }
+
                 }
             }
         }
