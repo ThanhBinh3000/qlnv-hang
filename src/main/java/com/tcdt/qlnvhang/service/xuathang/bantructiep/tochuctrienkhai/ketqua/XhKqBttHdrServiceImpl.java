@@ -317,6 +317,13 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
 
         XhKqBttHdr hdr = optional.get();
 
+        Optional<XhQdPdKhBttDtl> qdPdKhBttDtl = xhQdPdKhBttDtlRepository.findById(hdr.getIdPdKhDtl());
+        if (qdPdKhBttDtl.isPresent()){
+            qdPdKhBttDtl.get().setIdSoQdKq(null);
+            qdPdKhBttDtl.get().setTypeSoQdKq(false);
+            xhQdPdKhBttDtlRepository.save(qdPdKhBttDtl.get());
+        }
+
         List<XhKqBttDtl> xhKqBttDtlList = xhKqBttDtlRepository.findAllByIdHdr(hdr.getId());
         if (!CollectionUtils.isEmpty(xhKqBttDtlList)){
             for (XhKqBttDtl dtl : xhKqBttDtlList){
