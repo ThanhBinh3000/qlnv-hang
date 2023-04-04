@@ -73,7 +73,7 @@ public class XhCtvtDeXuatHdr extends BaseEntity implements Serializable {
     @Transient
     private List<FileDinhKem> canCu = new ArrayList<>();
 
-    @Transient
+//    @Transient
     @OneToMany(mappedBy = "xhCtvtDeXuatHdr", cascade = CascadeType.MERGE)
     private List<XhCtvtDeXuatPa> deXuatPhuongAn = new ArrayList<>();
 

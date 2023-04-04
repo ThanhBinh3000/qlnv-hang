@@ -40,6 +40,8 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.tcdt.qlnvhang.util.Contains.CAP_CUC;
+
 @Service
 public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
 
@@ -57,6 +59,9 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
 
   public Page<XhCtvtDeXuatHdr> searchPage(CustomUserDetails currentUser, SearchXhCtvtDeXuatHdrReq req) throws Exception {
 //    req.setDvql(currentUser.getDvql());
+    if (currentUser.getUser().getCapDvi().equals(CAP_CUC)) {
+      req.setMaDviCuc(currentUser.getDvql());
+    }
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<XhCtvtDeXuatHdr> search = xhCtvtDeXuatHdrRepository.search(req, pageable);
     Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
@@ -74,7 +79,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
     search.getContent().forEach(s -> {
       if (mapDmucDvi.containsKey((s.getMaDvi()))) {
         Map<String, Object> objDonVi = mapDmucDvi.get(s.getMaDvi());
-        Map<String, Object> objDonViDx = mapDmucDvi.get(s.getMaDvi().substring(0,6));
+        Map<String, Object> objDonViDx = mapDmucDvi.get(s.getMaDvi().substring(0, 6));
         s.setTenDvi(objDonVi.get("tenDvi").toString());
         s.setTenDviDx(objDonViDx.get("tenDvi").toString());
       }
