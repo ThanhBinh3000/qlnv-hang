@@ -12,8 +12,8 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.SearchXhCtvtDeXuatHdrReq;
+
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatHdrReq;
-import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatPaReq;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -115,9 +115,9 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
     }
     XhCtvtDeXuatHdr data = new XhCtvtDeXuatHdr();
     BeanUtils.copyProperties(objReq, data);
-    data.setTongSoLuong(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPaReq::getSoLuongXuatCuc).reduce(BigDecimal.ZERO, BigDecimal::add));
-    data.setThanhTien(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPaReq::getThanhTien).reduce(BigDecimal.ZERO, BigDecimal::add));
-    data.setTonKho(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPaReq::getSoLuongXuatChiCuc).reduce(BigDecimal.ZERO, BigDecimal::add));
+    data.setTongSoLuong(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPa::getSoLuongXuatCuc).reduce(BigDecimal.ZERO, BigDecimal::add));
+    data.setThanhTien(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPa::getThanhTien).reduce(BigDecimal.ZERO, BigDecimal::add));
+    data.setTonKho(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPa::getSoLuongXuatChiCuc).reduce(BigDecimal.ZERO, BigDecimal::add));
     data.setSoLuongXuatCap(DataUtils.safeToBigDecimal(data.getTongSoLuong()).subtract(DataUtils.safeToBigDecimal(data.getTonKho())));
     data.setMaDvi(currentUser.getUser().getDepartment());
     data.setTrangThai(Contains.DUTHAO);
@@ -131,7 +131,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
 
   @Transactional()
   void saveCtiet(Long idHdr, XhCtvtDeXuatHdrReq objReq) {
-    for (XhCtvtDeXuatPaReq deXuatPhuongAnReq : objReq.getDeXuatPhuongAn()) {
+    for (XhCtvtDeXuatPa deXuatPhuongAnReq : objReq.getDeXuatPhuongAn()) {
       XhCtvtDeXuatPa deXuatPhuongAn = new XhCtvtDeXuatPa();
       BeanUtils.copyProperties(deXuatPhuongAnReq, deXuatPhuongAn);
       deXuatPhuongAn.setId(null);
@@ -157,9 +157,9 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
     }
     XhCtvtDeXuatHdr data = optional.get();
     BeanUtils.copyProperties(objReq, data);
-    data.setTongSoLuong(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPaReq::getSoLuongXuatCuc).reduce(BigDecimal.ZERO, BigDecimal::add));
-    data.setThanhTien(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPaReq::getThanhTien).reduce(BigDecimal.ZERO, BigDecimal::add));
-    data.setTonKho(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPaReq::getSoLuongXuatChiCuc).reduce(BigDecimal.ZERO, BigDecimal::add));
+    data.setTongSoLuong(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPa::getSoLuongXuatCuc).reduce(BigDecimal.ZERO, BigDecimal::add));
+    data.setThanhTien(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPa::getThanhTien).reduce(BigDecimal.ZERO, BigDecimal::add));
+    data.setTonKho(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPa::getSoLuongXuatChiCuc).reduce(BigDecimal.ZERO, BigDecimal::add));
     data.setSoLuongXuatCap(DataUtils.safeToBigDecimal(data.getTongSoLuong()).subtract(DataUtils.safeToBigDecimal(data.getTonKho())));
     XhCtvtDeXuatHdr created = xhCtvtDeXuatHdrRepository.save(data);
 

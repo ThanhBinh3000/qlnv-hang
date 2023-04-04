@@ -2,6 +2,8 @@ package com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovien
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -9,7 +11,8 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = XhCtvtDeXuatPa.TABLE_NAME)
-@Data
+@Getter
+@Setter
 public class XhCtvtDeXuatPa implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -44,7 +47,7 @@ public class XhCtvtDeXuatPa implements Serializable {
     @Transient
     private String tenChiCuc;
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idHdr", nullable = false)
     @JsonIgnore
-    @JoinColumn(name = "idHdr", updatable = false, insertable = false)
     private XhCtvtDeXuatHdr xhCtvtDeXuatHdr;
 }
