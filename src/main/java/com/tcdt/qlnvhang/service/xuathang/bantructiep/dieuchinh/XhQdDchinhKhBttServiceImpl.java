@@ -189,7 +189,7 @@ public class XhQdDchinhKhBttServiceImpl extends BaseServiceImpl implements XhQdD
                 List<XhQdDchinhKhBttSlDtl> xhQdDchinhKhBttSlDtlList = xhQdDchinhKhBttSlDtlRepository.findByIdSl(sl.getId());
                 xhQdDchinhKhBttSlDtlList.forEach(f->{
                     f.setTenDiemKho(hashMapDvi.get(f.getMaDiemKho()));
-                    f.setTenNhakho(hashMapDvi.get(f.getMaNhaKho()));
+                    f.setTenNhaKho(hashMapDvi.get(f.getMaNhaKho()));
                     f.setTenNganKho(hashMapDvi.get(f.getMaNganKho()));
                     f.setTenLoKho(hashMapDvi.get(f.getMaLoKho()));
                 });

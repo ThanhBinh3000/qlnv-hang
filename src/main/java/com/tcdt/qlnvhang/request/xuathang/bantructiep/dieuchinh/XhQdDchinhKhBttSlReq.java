@@ -13,11 +13,17 @@ public class XhQdDchinhKhBttSlReq {
 
     private Long idDtl;
 
+    private BigDecimal soLuongChiCuc;
+
     private String maDvi;
 
-    private BigDecimal soLuong;
-
     private String diaChi;
+
+    private BigDecimal donGiaVat;
+
+    private BigDecimal soLuongChiTieu;
+
+    private BigDecimal soLuongKh;
 
     @Transient
     private List<XhQdDchinhKhBttSlDtlReq> children= new ArrayList<>();

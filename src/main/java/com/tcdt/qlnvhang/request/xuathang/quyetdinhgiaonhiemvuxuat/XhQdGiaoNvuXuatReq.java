@@ -1,18 +1,11 @@
 package com.tcdt.qlnvhang.request.xuathang.quyetdinhgiaonhiemvuxuat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.Contains;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -50,7 +43,7 @@ public class XhQdGiaoNvuXuatReq extends BaseRequest {
 //    private List<Long> hopDongIds = new ArrayList<>();
 
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
-    private FileDinhKemReq fileDinhKem;
+    private List<FileDinhKemReq> fileDinhKem = new ArrayList<>();
 
     private String maChiCuc;
 }

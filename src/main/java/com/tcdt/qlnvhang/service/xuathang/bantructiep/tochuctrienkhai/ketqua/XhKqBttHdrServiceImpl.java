@@ -106,12 +106,13 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
         data.setTrangThaiHd(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
         data.setTrangThaiXh(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
 
+        XhKqBttHdr created =  xhKqBttHdrRepository.save(data);
         Optional<XhQdPdKhBttDtl> dtl = xhQdPdKhBttDtlRepository.findById(req.getIdPdKhDtl());
         if (dtl.isPresent()){
-            dtl.get().setSoQdKq(req.getSoQdKq());
+            dtl.get().setIdSoQdKq(created.getId());
+            dtl.get().setTypeSoQdKq(true);
             xhQdPdKhBttDtlRepository.save(dtl.get());
         }
-        XhKqBttHdr created =  xhKqBttHdrRepository.save(data);
 
         if (!DataUtils.isNullObject(req.getFileDinhKem())) {
             List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(req.getFileDinhKem()), created.getId(), XhKqBttHdr.TABLE_NAME);
@@ -176,10 +177,8 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
          data.setFileDinhKem(fileDinhKem.get(0));
      }
 
-     if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
          List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhKqBttHdr.TABLE_NAME);
          data.setFileDinhKems(fileDinhKems);
-     }
 
       this.saveDetail(req, data.getId());
       return created;
@@ -281,15 +280,22 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
                     data.setLyDoTuChoi(req.getLyDoTuChoi());
                     break;
                 case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
-                case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
-                case Contains.BAN_HANH + Contains.DADUYET_LDC:
+                case Contains.BAN_HANH + Contains.CHODUYET_LDC:
                     data.setNguoiPduyetId(userInfo.getId());
                     data.setNgayPduyet(getDateTimeNow());
                     break;
                 default:
                     throw new Exception("Phê duyệt không thành công");
             }
+
             data.setTrangThai(req.getTrangThai());
+            if (req.getTrangThai().equals(Contains.BAN_HANH)) {
+                Optional<XhQdPdKhBttDtl> qdPdKhBttDtl = xhQdPdKhBttDtlRepository.findById(data.getIdPdKhDtl());
+                if (qdPdKhBttDtl.isPresent()){
+                    qdPdKhBttDtl.get().setSoQdKq(data.getSoQdKq());
+                    xhQdPdKhBttDtlRepository.save(qdPdKhBttDtl.get());
+                }
+            }
         }
         return xhKqBttHdrRepository.save(data);
     }
