@@ -10,6 +10,7 @@ import com.tcdt.qlnvhang.repository.xuathang.bantructiep.dieuchinh.XhQdDchinhKhB
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.dieuchinh.XhQdDchinhKhBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.dieuchinh.XhQdDchinhKhBttSlDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.dieuchinh.XhQdDchinhKhBttSlRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.dieuchinh.XhQdDchinhKhBttDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.dieuchinh.XhQdDchinhKhBttHdrReq;
@@ -53,6 +54,9 @@ public class XhQdDchinhKhBttServiceImpl extends BaseServiceImpl implements XhQdD
     private XhQdDchinhKhBttSlDtlRepository xhQdDchinhKhBttSlDtlRepository;
 
     @Autowired
+    private XhQdPdKhBttHdrRepository xhQdPdKhBttHdrRepository;
+
+    @Autowired
     private FileDinhKemService fileDinhKemService;
 
     @Override
@@ -88,6 +92,11 @@ public class XhQdDchinhKhBttServiceImpl extends BaseServiceImpl implements XhQdD
         dataMap.setNgayTao(new Date());
         dataMap.setNguoiTaoId(userInfo.getId());
         XhQdDchinhKhBttHdr created = xhQdDchinhKhBttHdrRepository.save(dataMap);
+        Optional<XhQdPdKhBttHdr> qdPdKhBttHdr =  xhQdPdKhBttHdrRepository.findById(req.getIdQdGoc());
+        if (qdPdKhBttHdr.isPresent()){
+            qdPdKhBttHdr.get().setTypeQdDc(true);
+            xhQdPdKhBttHdrRepository.save(qdPdKhBttHdr.get());
+        }
 
         if (!DataUtils.isNullObject(req.getFileDinhKem())) {
             List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(req.getFileDinhKem()), created.getId(), XhQdDchinhKhBttHdr.TABLE_NAME);
@@ -255,6 +264,12 @@ public class XhQdDchinhKhBttServiceImpl extends BaseServiceImpl implements XhQdD
 
         if (!hdr.getTrangThai().equals(Contains.DUTHAO)){
             throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái dự thảo");
+        }
+
+        Optional<XhQdPdKhBttHdr> qdPdKhBttHdr =  xhQdPdKhBttHdrRepository.findById(hdr.getIdQdGoc());
+        if (qdPdKhBttHdr.isPresent()){
+            qdPdKhBttHdr.get().setTypeQdDc(false);
+            xhQdPdKhBttHdrRepository.save(qdPdKhBttHdr.get());
         }
 
         List<XhQdDchinhKhBttDtl> xhQdDchinhKhBttDtlList = xhQdDchinhKhBttDtlRepository.findAllByIdDcHdr(hdr.getId());
