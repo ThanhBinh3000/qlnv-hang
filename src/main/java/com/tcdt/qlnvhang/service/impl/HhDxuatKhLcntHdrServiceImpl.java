@@ -586,11 +586,16 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         objReq.setPaggingReq(paggingReq);
         Page<HhDxuatKhLcntHdr> page = this.timKiem(objReq);
         List<HhDxuatKhLcntHdr> data = page.getContent();
-
-        String title = "Danh sách kế hoạch đề xuất lựa chọn nhà thầu";
-        String[] rowsName = new String[]{"STT", "Số tờ trình", "Đơn vị", "Ngày đề xuất", "Trích yếu", "Số QĐ giao chỉ tiêu", "Năm kế hoạch", "Hàng hóa", "Số gói thầu", "Trạng thái"};
         String filename = "Danh_sach_ke_hoach_de_xuat_lua_chon_nha_thau_tong_cuc.xlsx";
-
+        String title = "Danh sách kế hoạch đề xuất lựa chọn nhà thầu";
+        String[] rowsName;
+        if (objReq.getLoaiVthh().startsWith("02")) {
+            rowsName = new String[]{"STT", "Số tờ trình", "Năm kế hoạch", "Ngày lập KH", "Ngày duyệt KH", "Số QĐ giao chỉ tiêu", "Loại hàng hóa",
+                    "Tổng số gói thầu", "Số gói thầu đã trúng", "SL HĐ đã ký", "Số QĐ duyệt KHLCNT", "Thời hạn thực hiện dự án", "Trạng thái đề xuất"};
+        } else {
+            rowsName = new String[]{"STT", "Số tờ trình", "Năm kế hoạch", "Ngày lập KH", "Ngày duyệt KH", "Số QĐ giao chỉ tiêu", "Loại hàng hóa",
+                    "Chủng loại hàng hóa", "Tổng số gói thầu", "Số gói thầu đã trúng", "SL HĐ đã ký", "Số QĐ duyệt KHLCNT", "Thời hạn nhập kho", "Trạng thái đề xuất", "Mã tổng hợp"};
+        }
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
         for (int i = 0; i < data.size(); i++) {
@@ -598,14 +603,30 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
             objs = new Object[rowsName.length];
             objs[0] = i;
             objs[1] = dx.getSoDxuat();
-            objs[2] = dx.getTenDvi();
-            objs[3] = dx.getNgayGuiDuyet();
-            objs[4] = dx.getTrichYeu();
+            objs[2] = dx.getNamKhoach();
+            objs[3] = dx.getNgayTao();
+            objs[4] = dx.getNgayPduyet();
             objs[5] = dx.getSoQd();
-            objs[6] = dx.getNamKhoach();
-            objs[7] = dx.getTenLoaiVthh();
-            objs[8] = dx.getSoGoiThau();
-            objs[9] = dx.getTenTrangThai();
+            objs[6] = dx.getTenLoaiVthh();
+            if (objReq.getLoaiVthh().startsWith("02")) {
+                objs[7] = dx.getSoGoiThau();
+                objs[8] = dx.getSoGthauTrung();
+                objs[10] = dx.getSoQdPdKqLcnt();
+                objs[11] = dx.getTgianNhang();
+                objs[12] = dx.getTenTrangThai();
+            } else {
+                objs[7] = dx.getTenCloaiVthh();
+                objs[8] = dx.getSoGoiThau();
+                objs[9] = dx.getSoGthauTrung();
+                objs[11] = dx.getSoQdPdKqLcnt();
+                objs[12] = dx.getTgianNhang();
+                objs[13] = dx.getTenTrangThai();
+                if (dx.getTrangThaiTh().equals(Contains.CHUATONGHOP)) {
+                    objs[14] = dx.getTenTrangThaiTh();
+                } else {
+                    objs[14] = dx.getMaTh();
+                }
+            }
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
@@ -622,7 +643,8 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         List<HhDxuatKhLcntHdr> data = page.getContent();
 
         String title = "Danh sách kế hoạch đề xuất lựa chọn nhà thầu";
-        String[] rowsName = new String[]{"STT", "Số tờ trình", "Ngày ký", "Trích yếu", "Số QĐ giao chỉ tiêu", "Năm kế hoạch", "Hàng hóa", "Chủng loại hàng hóa", "Số gói thầu", "Trạng thái"};
+        String[] rowsName = new String[]{"STT", "Số tờ trình", "Năm kế hoạch", "Ngày lập KH", "Ngày duyệt KH", "Số QĐ giao chỉ tiêu", "Loại hàng hóa",
+                "Chủng loại hàng hóa", "Tổng số gói thầu", "Số gói thầu đã trúng", "SL HĐ đã ký", "Số QĐ duyệt KHLCNT", "Thời hạn nhập kho", "Trạng thái"};
         String filename = "Danh_sach_ke_hoach_de_xuat_lua_chon_nha_thau_cuc.xlsx";
 
         List<Object[]> dataList = new ArrayList<Object[]>();
@@ -632,14 +654,17 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
             objs = new Object[rowsName.length];
             objs[0] = i;
             objs[1] = dx.getSoDxuat();
-            objs[2] = dx.getNgayGuiDuyet();
-            objs[3] = dx.getTrichYeu();
-            objs[4] = dx.getSoQd();
-            objs[5] = dx.getNamKhoach();
-            objs[6] = dx.getLoaiVthh();
-            objs[7] = dx.getCloaiVthh();
+            objs[2] = dx.getNamKhoach();
+            objs[3] = dx.getNgayTao();
+            objs[4] = dx.getNgayPduyet();
+            objs[5] = dx.getSoQd();
+            objs[6] = dx.getTenLoaiVthh();
+            objs[7] = dx.getTenCloaiVthh();
             objs[8] = dx.getSoGoiThau();
-            objs[9] = dx.getTenTrangThai();
+            objs[9] = dx.getSoGthauTrung();
+            objs[11] = dx.getSoQdPdKqLcnt();
+            objs[12] = dx.getTgianNhang();
+            objs[13] = dx.getTenTrangThai();
             dataList.add(objs);
         }
 
