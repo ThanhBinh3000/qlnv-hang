@@ -23,6 +23,7 @@ public interface XhQdPdKhBttHdrRepository extends JpaRepository<XhQdPdKhBttHdr, 
             "AND (:#{#param.soTrHdr} IS NULL OR LOWER(DX.soTrHdr) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soTrHdr}),'%'))) " +
             "AND (:#{#param.loaiVthh} IS NULL OR DX.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
             "AND (:#{#param.lastest} IS NULL OR LOWER(DX.lastest) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.lastest}),'%'))) " +
+            "AND (:#{#param.typeQdDc} IS NULL OR LOWER(DX.typeQdDc) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.typeQdDc}),'%'))) " +
             "AND (:#{#param.trangThai} IS NULL OR DX.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.maDvi} IS NULL OR DX.maDvi = :#{#param.maDvi})")
     Page<XhQdPdKhBttHdr> searchPage(@Param("param") XhQdPdKhBttHdrReq param, Pageable pageable);
