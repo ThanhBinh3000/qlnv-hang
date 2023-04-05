@@ -47,7 +47,7 @@ public class XhCtvtDeXuatPa implements Serializable {
   @Transient
   private String tenChiCuc;
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "idHdr", insertable = true, updatable = false)
+  @JoinColumn(name = "idHdr", insertable = false, updatable = false)
   @JsonIgnore
   private XhCtvtDeXuatHdr xhCtvtDeXuatHdr;
 }

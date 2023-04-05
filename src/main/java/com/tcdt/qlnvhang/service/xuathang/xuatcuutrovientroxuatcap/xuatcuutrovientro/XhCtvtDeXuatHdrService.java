@@ -126,6 +126,10 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
     List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), XhCtvtDeXuatHdr.TABLE_NAME + "_CAN_CU");
     created.setCanCu(canCu);
 //    this.saveCtiet(created.getId(), objReq);
+    created.getDeXuatPhuongAn().forEach(s -> {
+      s.setIdHdr(created.getId());
+    });
+    xhCtvtDeXuatHdrRepository.save(data);
     return created;
   }
 
