@@ -597,9 +597,12 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 					req.getSoQd(),
 					req.getLoaiVthh(),
 					req.getTrichYeu(),
-					Contains.convertDateToString(req.getTuNgayQd()),
-					Contains.convertDateToString(req.getDenNgayQd()),
+					Contains.convertDateToString(req.getTuNgayLP()),
+					Contains.convertDateToString(req.getDenNgayLP()),
+					Contains.convertDateToString(req.getTuNgayKT()),
+					Contains.convertDateToString(req.getDenNgayKT()),
 					userInfo.getDvql(),
+					req.getSoBbNtBq(),
 					pageable);
 		} else {
 			// Cục or Tổng cục
