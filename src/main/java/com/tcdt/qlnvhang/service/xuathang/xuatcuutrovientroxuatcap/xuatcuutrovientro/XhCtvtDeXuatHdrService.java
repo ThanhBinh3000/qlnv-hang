@@ -129,7 +129,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
     created.getDeXuatPhuongAn().forEach(s -> {
       s.setIdHdr(created.getId());
     });
-    xhCtvtDeXuatHdrRepository.save(data);
+    xhCtvtDeXuatHdrRepository.save(created);
     return created;
   }
 
@@ -173,6 +173,11 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhCtvtDeXuatHdr.TABLE_NAME + "_CAN_CU"));
     List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), XhCtvtDeXuatHdr.TABLE_NAME + "_CAN_CU");
     created.setCanCu(canCu);
+
+    created.getDeXuatPhuongAn().forEach(s -> {
+      s.setIdHdr(created.getId());
+    });
+    xhCtvtDeXuatHdrRepository.save(created);
 /*
     List<XhCtvtDeXuatPa> listDeXuatPhuongAn = xhCtvtDeXuatPaRepository.findByIdHdr(objReq.getId());
     xhCtvtDeXuatPaRepository.deleteAll(listDeXuatPhuongAn);
