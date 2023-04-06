@@ -348,6 +348,14 @@ public class BaseServiceImpl {
     return df.format(date);
   }
 
+  public static String convertDate(Date date) throws Exception {
+    if (Objects.isNull(date)) {
+      return null;
+    }
+    DateFormat df = new SimpleDateFormat(Contains.FORMAT_DATE);
+    return df.format(date);
+  }
+
   public static String convertFullDateToString (Date date) {
     if (Objects.isNull(date)) {
       return null;

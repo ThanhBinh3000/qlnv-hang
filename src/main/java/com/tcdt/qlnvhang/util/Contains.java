@@ -9,6 +9,7 @@ import java.util.Objects;
 
 public class Contains {
 	public static final String FORMAT_DATE_STR = "yyyy-MM-dd";
+	public static final String FORMAT_DATE = "dd/MM/yyyy";
 	public static final String FORMAT_DATE_TIME_STR = "yyyy-MM-dd HH:mm";
 	public static final String FORMAT_DATE_TIME_FULL_STR = "yyyy-MM-dd HH:mm:ss";
 	public static final String NGUOI_DUNG_NOI_BO = "BE";
