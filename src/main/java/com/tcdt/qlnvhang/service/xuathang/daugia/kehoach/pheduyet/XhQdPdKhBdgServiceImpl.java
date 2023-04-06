@@ -202,20 +202,29 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
                 }
             }
         }
-
+        XhQdPdKhBdg dataDB = qOptional.get();
         if (req.getPhanLoai().equals("TH")) {
             Optional<XhThopDxKhBdg> qOptionalTh = xhThopDxKhBdgRepository.findById(req.getIdThHdr());
+            XhThopDxKhBdg dataTh = qOptionalTh.get();
             if (!qOptionalTh.isPresent()) {
                 throw new Exception("Không tìm thấy tổng hợp kế hoạch bán đấu giá");
+            }else {
+                dataTh.setSoQdPd(req.getSoQdPd());
+                dataTh.setIdQdPd(dataDB.getId());
+                xhThopDxKhBdgRepository.save(dataTh);
             }
         } else {
             Optional<XhDxKhBanDauGia> byId = xhDxKhBanDauGiaRepository.findById(req.getIdTrHdr());
+            XhDxKhBanDauGia dataTr = byId.get();
             if (!byId.isPresent()) {
                 throw new Exception("Không tìm thấy đề xuất kế hoạch bán đấu giá");
+            }else {
+                dataTr.setSoQdPd(req.getSoQdPd());
+                dataTr.setIdSoQdPd(dataDB.getId());
+                xhDxKhBanDauGiaRepository.save(dataTr);
             }
         }
 
-        XhQdPdKhBdg dataDB = qOptional.get();
         BeanUtils.copyProperties(req, dataDB, "id");
         dataDB.setNgaySua(getDateTimeNow());
         dataDB.setNguoiSuaId(getUser().getId());
@@ -360,12 +369,20 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
 
         if (optional.get().getPhanLoai().equals("TH")) {
             Optional<XhThopDxKhBdg> qOptionalTh = xhThopDxKhBdgRepository.findById(optional.get().getIdThHdr());
-            XhThopDxKhBdg bdg = qOptionalTh.get();
-            bdg.setIdQdPd(null);
-            bdg.setSoQdPd(null);
-            xhThopDxKhBdgRepository.updateTrangThai(optional.get().getIdThHdr(), NhapXuatHangTrangThaiEnum.CHUATAO_QD.getId());
+            XhThopDxKhBdg bdgTh = qOptionalTh.get();
+            bdgTh.setIdQdPd(null);
+            bdgTh.setSoQdPd(null);
+            bdgTh.setTrangThai(NhapXuatHangTrangThaiEnum.CHUATAO_QD.getId());
+            xhThopDxKhBdgRepository.save(qOptionalTh.get());
+//            xhThopDxKhBdgRepository.updateTrangThai(optional.get().getIdThHdr(), NhapXuatHangTrangThaiEnum.CHUATAO_QD.getId());
         } else {
-            xhDxKhBanDauGiaRepository.updateStatusTh(optional.get().getIdTrHdr(), NhapXuatHangTrangThaiEnum.CHUATONGHOP.getId());
+            Optional<XhDxKhBanDauGia> qOptionalTr = xhDxKhBanDauGiaRepository.findById(optional.get().getIdTrHdr());
+            XhDxKhBanDauGia bdgDx = qOptionalTr.get();
+            bdgDx.setIdSoQdPd(null);
+            bdgDx.setSoQdPd(null);
+            bdgDx.setTrangThaiTh(NhapXuatHangTrangThaiEnum.CHUATONGHOP.getId());
+            xhDxKhBanDauGiaRepository.save(qOptionalTr.get());
+//            xhDxKhBanDauGiaRepository.updateStatusTh(optional.get().getIdTrHdr(), NhapXuatHangTrangThaiEnum.CHUATONGHOP.getId());
         }
     }
 

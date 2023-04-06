@@ -78,7 +78,7 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
 
     XhDxKhBanDauGia dataMap = new XhDxKhBanDauGia();
     BeanUtils.copyProperties(req, dataMap, "id");
-    dataMap.setNgayTao(getDateTimeNow());
+//    dataMap.setNgayTao(getDateTimeNow());
     dataMap.setNguoiTaoId(userInfo.getId());
     dataMap.setTrangThai(Contains.DU_THAO);
     dataMap.setTrangThaiTh(Contains.CHUATONGHOP);

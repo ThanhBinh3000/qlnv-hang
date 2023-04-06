@@ -199,20 +199,29 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
                 }
             }
         }
-
+        XhQdPdKhBttHdr dataDB = qOptional.get();
         if (req.getPhanLoai().equals("TH")){
             Optional<XhThopDxKhBttHdr> qOptionalTh = xhThopDxKhBttRepository.findById(req.getIdThHdr());
+            XhThopDxKhBttHdr dataTh = qOptionalTh.get();
             if (!qOptionalTh.isPresent()){
                 throw new Exception("Không tìm thấy tổng hợp kế hoạch bán trực tiếp");
+            }else {
+                dataTh.setSoQdPd(req.getSoQdPd());
+                dataTh.setIdSoQdPd(dataDB.getId());
+                xhThopDxKhBttRepository.save(dataTh);
             }
         }else {
             Optional<XhDxKhBanTrucTiepHdr>  qOptionalDx = xhDxKhBanTrucTiepHdrRepository.findById(req.getIdTrHdr());
+            XhDxKhBanTrucTiepHdr dataTr = qOptionalDx.get();
             if (!qOptionalDx.isPresent()){
                 throw new Exception("Không tìm thấy đề xuất kế hoạch bán trực tiếp");
+            }else {
+                dataTr.setSoQdPd(req.getSoQdPd());
+                dataTr.setIdSoQdPd(dataDB.getId());
+                xhDxKhBanTrucTiepHdrRepository.save(dataTr);
             }
         }
 
-        XhQdPdKhBttHdr dataDB = qOptional.get();
         BeanUtils.copyProperties(req, dataDB, "id");
         dataDB.setNgaySua(getDateTimeNow());
         dataDB.setNguoiSuaId(getUser().getId());
@@ -225,7 +234,6 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
 
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhQdPdKhBttHdr.TABLE_NAME);
         dataDB.setFileDinhKems(fileDinhKems);
-
 
         this.saveDetail(req, dataDB.getId());
         return created;
