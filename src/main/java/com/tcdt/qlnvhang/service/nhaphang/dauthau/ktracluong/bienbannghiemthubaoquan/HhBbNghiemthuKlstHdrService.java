@@ -1,9 +1,12 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.bienbannghiemthubaoquan;
 
+import com.tcdt.qlnvhang.request.search.HhQdNhapxuatSearchReq;
 import com.tcdt.qlnvhang.service.BaseService;
 
 import com.tcdt.qlnvhang.request.object.HhBbNghiemthuKlstHdrReq;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstHdr;
+
+import javax.servlet.http.HttpServletResponse;
 
 public interface HhBbNghiemthuKlstHdrService extends BaseService<HhBbNghiemthuKlstHdr,HhBbNghiemthuKlstHdrReq,Long> {
 
@@ -31,4 +34,6 @@ public interface HhBbNghiemthuKlstHdrService extends BaseService<HhBbNghiemthuKl
 //	Integer getSo() throws Exception;
 //
 //	BaseNhapHangCount count(Set<String> maDvis);
+
+    void exportBbNtBq(HhQdNhapxuatSearchReq searchReq, HttpServletResponse response) throws Exception;
 }

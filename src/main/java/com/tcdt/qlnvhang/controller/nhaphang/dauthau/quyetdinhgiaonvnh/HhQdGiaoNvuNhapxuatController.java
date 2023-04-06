@@ -214,6 +214,28 @@ public class HhQdGiaoNvuNhapxuatController {
 		}
 	}
 
+	@ApiOperation(value = "Kết xuất Danh sách", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(PathContains.URL_KET_XUAT + "/bbntbq")
+	@ResponseStatus(HttpStatus.OK)
+	public void exportBbNtBq(@Valid @RequestBody HhQdNhapxuatSearchReq searchReq, HttpServletResponse response)
+			throws Exception {
+		try {
+			service.exportBbNtBq(searchReq, response);
+		} catch (Exception e) {
+			// TODO: handle exception
+			log.error("Kết xuất Danh sách trace: {}", e);
+			final Map<String, Object> body = new HashMap<>();
+			body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			body.put("msg", e.getMessage());
+
+			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+			response.setCharacterEncoding("UTF-8");
+
+			final ObjectMapper mapper = new ObjectMapper();
+			mapper.writeValue(response.getOutputStream(), body);
+		}
+	}
+
 	@ApiOperation(value = "Count quyết định nhập xuất", response = List.class)
 	@GetMapping(value = "/count", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
