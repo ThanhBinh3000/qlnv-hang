@@ -110,11 +110,11 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 			, nativeQuery = true)
 	List<Object[]> getQdPdKhLcnt(Collection<Long> dxIds, String trangThai);
 
-	@Query(value = " SELECT PAG.GIA_DE_NGHI FROM KH_PHUONG_AN_GIA PAG " +
-			" WHERE PAG.TRANG_THAI = '05' AND PAG.LOAI_GIA = 'LG01' AND PAG.TYPE = 'GMTDBTT' AND PAG.CLOAI_VTHH = :cloaiVthh AND PAG.MA_DVI = :maDvi " +
+	@Query(value = " SELECT PAG.GIA_DE_NGHI_VAT FROM KH_PHUONG_AN_GIA PAG " +
+			" WHERE PAG.TRANG_THAI = '05' AND PAG.LOAI_GIA = 'LG01' AND PAG.TYPE = 'GMTDBTT' AND PAG.CLOAI_VTHH = :cloaiVthh AND PAG.MA_DVI = :maDvi AND PAG.NAM_KE_HOACH = :namKhoach " +
 			" FETCH FIRST 1 ROWS ONLY ",
 			nativeQuery = true)
-	BigDecimal getGiaBanToiDa(String cloaiVthh, String maDvi);
+	BigDecimal getGiaBanToiDa(String cloaiVthh, String maDvi, String namKhoach);
 
 	@Query(value = " select ct.id from KH_CHI_TIEU_KE_HOACH_NAM ct join HH_DX_KHLCNT_HDR hdr ON ct.SO_QUYET_DINH = hdr.SO_QD " +
 			" WHERE hdr.id = :khlcntId ",

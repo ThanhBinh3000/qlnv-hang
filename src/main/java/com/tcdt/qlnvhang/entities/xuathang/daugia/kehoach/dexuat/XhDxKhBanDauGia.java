@@ -25,48 +25,86 @@ public class XhDxKhBanDauGia extends TrangThaiBaseEntity implements Serializable
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_DX_KH_BAN_DAU_GIA_SEQ")
     @SequenceGenerator(sequenceName = "XH_DX_KH_BAN_DAU_GIA_SEQ", allocationSize = 1, name = "XH_DX_KH_BAN_DAU_GIA_SEQ")
     private Long id;
+
     private String maDvi;
-    private String loaiHinhNx;
-    private String kieuNx;
+    @Transient
+    private String tenDvi;
+
     private String diaChi;
+
+    private String loaiHinhNx;
+
+    private String kieuNx;
+
     private Integer namKh;
+
     private String soDxuat;
+
     private String trichYeu;
-    private Long idSoQdCtieu;
+
     private String soQdCtieu;
+
     private String loaiVthh;
+
     private String cloaiVthh;
+
     private String moTaHangHoa;
+
     private String tchuanCluong;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date tgianDkienTu;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date tgianDkienDen;
+
     private Integer tgianTtoan;
-    private String tgianTtoanGhiChu;
-    private String pthucTtoan;
+
     private Integer tgianGnhan;
+
+    private String pthucTtoan;
+
     private String pthucGnhan;
+
+    private String tgianTtoanGhiChu;
+
     private String tgianGnhanGhiChu;
-    private String thongBaoKh;
+
+    private String thongBao;
+
     private BigDecimal khoanTienDatTruoc;
+
     private BigDecimal tongSoLuong;
+
+    private BigDecimal tongDonGia;
+
     private BigDecimal tongTienKdiem;
+
     private BigDecimal tongTienKdienDonGia;
+
     private BigDecimal tongTienDatTruoc;
+
     private BigDecimal tongTienDatTruocDonGia;
+
     private String ghiChu;
+
     private Integer slDviTsan;
+
+    private Long idSoQdCtieu;
     private String trangThaiTh;
+
+    private Long idSoQdPd;
+
     private String soQdPd;
+
     private Long idThop;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKyQd;
 
+    private String dviTinh;
 
-    //Transient
-    @Transient
-    private String tenDvi;
+    private BigDecimal donGiaVat;
+
     @Transient
     private String tenLoaiVthh;
     @Transient
@@ -74,7 +112,7 @@ public class XhDxKhBanDauGia extends TrangThaiBaseEntity implements Serializable
     @Transient
     private String tenTrangThaiTh;
     @Transient
-    private List<FileDinhKem> fileDinhKem = new ArrayList<>();
+    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
     @Transient
     private List<XhDxKhBanDauGiaDtl> children = new ArrayList<>();
 

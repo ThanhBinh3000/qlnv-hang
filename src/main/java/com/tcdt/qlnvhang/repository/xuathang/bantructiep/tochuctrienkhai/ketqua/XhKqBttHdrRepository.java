@@ -16,10 +16,13 @@ public interface XhKqBttHdrRepository  extends JpaRepository<XhKqBttHdr, Long> {
 
     @Query("SELECT DISTINCT QD FROM XhKqBttHdr QD " +
             " LEFT JOIN XhKqBttDtl DTL on QD.id = DTL.idHdr " +
+            " LEFT JOIN XhQdPdKhBttDtl QDDTL on QD.id = QDDTL.idSoQdKq " +
             " WHERE 1 = 1 " +
             "AND (:#{#param.maDvi} IS NULL OR QD.maDvi = :#{#param.maDvi}) " +
             "AND (:#{#param.namKh} IS NULL OR QD.namKh = :#{#param.namKh}) " +
             "AND (:#{#param.loaiVthh } IS NULL OR LOWER(QD.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
+            "AND (:#{#param.ngayCgiaTu} IS NULL OR QDDTL.ngayNhanCgia >= :#{#param.ngayCgiaTu}) " +
+            "AND (:#{#param.ngayCgiaDen} IS NULL OR QDDTL.ngayNhanCgia <= :#{#param.ngayCgiaDen}) " +
             "AND (:#{#param.pthucBanTrucTiep} IS NULL OR LOWER(QD.pthucBanTrucTiep) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.pthucBanTrucTiep}),'%'))) " +
             "AND (:#{#param.maChiCuc} IS NULL OR DTL.maDvi = :#{#param.maChiCuc}) "
     )

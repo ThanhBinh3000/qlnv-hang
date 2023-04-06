@@ -1,11 +1,13 @@
 package com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.tonghop;
 
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.tonghop.XhThopDxKhBdg;
+import com.tcdt.qlnvhang.request.xuathang.daugia.SearchXhThopDxKhBdg;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,18 +22,15 @@ public interface XhThopDxKhBdgRepository extends JpaRepository<XhThopDxKhBdg,Lon
     @Query(value = "UPDATE XH_THOP_DX_KH_BAN_DAU_GIA SET TRANG_THAI =:trangThai WHERE ID = :idThHdr", nativeQuery = true)
     void updateTrangThai(Long idThHdr, String trangThai);
 
-
-    @Query(value = "select * from XH_THOP_DX_KH_BAN_DAU_GIA  TH" +
-            " where (:namKh IS NULL OR TH.NAM_KH = TO_NUMBER(:namKh)) " +
-            "AND (:loaiVthh IS NULL OR TH.LOAI_VTHH = :loaiVthh) " +
-            "AND (:cloaiVthh IS NULL OR TH.CLOAI_VTHH = :cloaiVthh) " +
-            "AND (:typeLoaiVthh IS NULL OR TH.TYPE_LOAI_VTHH = :typeLoaiVthh) " +
-            "AND (:noiDungThop IS NULL OR LOWER( TH.NOI_DUNG_THOP) LIKE LOWER(CONCAT(CONCAT('%',:noiDungThop),'%')))" +
-            "AND (:ngayThopTu IS NULL OR TH.NGAY_THOP >=  TO_DATE(:ngayThopTu,'yyyy-MM-dd')) " +
-            "AND (:ngayThopDen IS NULL OR TH.NGAY_THOP <= TO_DATE(:ngayThopDen,'yyyy-MM-dd'))" +
-            "AND (:trangThai IS NULL OR TH.TRANG_THAI = :trangThai) "
-            ,nativeQuery = true)
-    Page<XhThopDxKhBdg> searchPage(Integer namKh, String loaiVthh, String typeLoaiVthh,  String cloaiVthh, String noiDungThop, String ngayThopTu, String ngayThopDen, String trangThai,  Pageable pageable);
+    @Query("SELECT  DX from XhThopDxKhBdg DX WHERE 1 = 1 " +
+            "AND (:#{#param.namKh} IS NULL OR DX.namKh = :#{#param.namKh}) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR DX.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
+            "AND (:#{#param.cloaiVthh} IS NULL OR DX.cloaiVthh LIKE CONCAT(:#{#param.cloaiVthh},'%')) " +
+            "AND (:#{#param.noiDungThop} IS NULL OR LOWER(DX.noiDungThop) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.noiDungThop}),'%'))) " +
+            "AND (:#{#param.ngayThopTu} IS NULL OR DX.ngayThop >= :#{#param.ngayThopTu}) " +
+            "AND (:#{#param.ngayThopDen} IS NULL OR DX.ngayThop <= :#{#param.ngayThopDen}) " +
+            "AND (:#{#param.trangThai} IS NULL OR DX.trangThai = :#{#param.trangThai})")
+    Page<XhThopDxKhBdg> searchPage(@Param("param") SearchXhThopDxKhBdg param, Pageable pageable);
 
     List<XhThopDxKhBdg> findAllByIdIn(List<Long> ids);
 

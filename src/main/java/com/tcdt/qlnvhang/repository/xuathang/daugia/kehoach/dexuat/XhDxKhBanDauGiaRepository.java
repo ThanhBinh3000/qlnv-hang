@@ -63,9 +63,9 @@ public interface XhDxKhBanDauGiaRepository extends JpaRepository<XhDxKhBanDauGia
     @Query(value = " SELECT NVL(SUM(DSG.SO_LUONG),0) FROM XH_QD_PD_KH_BDG HDR " +
             " INNER JOIN XH_QD_PD_KH_BDG_DTL DTL on HDR.ID = DTL.ID_QD_HDR " +
             " LEFT JOIN XH_QD_PD_KH_BDG_PL DSG ON DSG.ID_QD_DTL = DTL.ID " +
-            "WHERE HDR.NAM = :namKh AND HDR.LOAI_VTHH = :loaiVthh AND DSG.MA_DVI = :maDvi AND HDR.TRANG_THAI = :trangThai AND HDR.LASTEST = 1",
+            "WHERE HDR.NAM = :namKh AND HDR.LOAI_VTHH = :loaiVthh AND DSG.MA_DVI = :maDvi AND HDR.LASTEST = :lastest",
             nativeQuery = true)
-    BigDecimal countSLDalenKh(Integer namKh, String loaiVthh, String maDvi,String trangThai);
+    BigDecimal countSLDalenKh(Integer namKh, String loaiVthh, String maDvi, Integer lastest);
 
 
     @Transactional()

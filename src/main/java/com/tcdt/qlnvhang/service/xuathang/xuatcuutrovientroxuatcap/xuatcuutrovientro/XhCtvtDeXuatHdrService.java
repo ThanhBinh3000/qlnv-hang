@@ -12,8 +12,8 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.SearchXhCtvtDeXuatHdrReq;
+
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatHdrReq;
-import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatPaReq;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -40,6 +40,8 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.tcdt.qlnvhang.util.Contains.CAP_CUC;
+
 @Service
 public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
 
@@ -56,9 +58,11 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
   private FileDinhKemService fileDinhKemService;
 
   public Page<XhCtvtDeXuatHdr> searchPage(CustomUserDetails currentUser, SearchXhCtvtDeXuatHdrReq req) throws Exception {
-    req.setDvql(currentUser.getDvql());
+//    req.setDvql(currentUser.getDvql());
+    if (currentUser.getUser().getCapDvi().equals(CAP_CUC)) {
+      req.setMaDviCuc(currentUser.getDvql());
+    }
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-    System.out.println(req + "@@");
     Page<XhCtvtDeXuatHdr> search = xhCtvtDeXuatHdrRepository.search(req, pageable);
     Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
 
@@ -75,7 +79,9 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
     search.getContent().forEach(s -> {
       if (mapDmucDvi.containsKey((s.getMaDvi()))) {
         Map<String, Object> objDonVi = mapDmucDvi.get(s.getMaDvi());
+        Map<String, Object> objDonViDx = mapDmucDvi.get(s.getMaDvi().substring(0, 6));
         s.setTenDvi(objDonVi.get("tenDvi").toString());
+        s.setTenDviDx(objDonViDx.get("tenDvi").toString());
       }
       if (mapVthh.get((s.getLoaiVthh())) != null) {
         s.setTenLoaiVthh(mapVthh.get(s.getLoaiVthh()));
@@ -104,14 +110,14 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
       throw new Exception("Bad request.");
     }
     Optional<XhCtvtDeXuatHdr> optional = xhCtvtDeXuatHdrRepository.findFirstBySoDx(objReq.getSoDx());
-    if (optional.isPresent()) {
+    if (optional.isPresent() && objReq.getSoDx().split("/").length == 1) {
       throw new Exception("số đề xuất đã tồn tại");
     }
     XhCtvtDeXuatHdr data = new XhCtvtDeXuatHdr();
     BeanUtils.copyProperties(objReq, data);
-    data.setTongSoLuong(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPaReq::getSoLuongXuatCuc).reduce(BigDecimal.ZERO, BigDecimal::add));
-    data.setThanhTien(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPaReq::getThanhTien).reduce(BigDecimal.ZERO, BigDecimal::add));
-    data.setTonKho(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPaReq::getSoLuongXuatChiCuc).reduce(BigDecimal.ZERO, BigDecimal::add));
+    data.setTongSoLuong(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPa::getSoLuongXuatCuc).reduce(BigDecimal.ZERO, BigDecimal::add));
+    data.setThanhTien(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPa::getThanhTien).reduce(BigDecimal.ZERO, BigDecimal::add));
+    data.setTonKho(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPa::getSoLuongXuatChiCuc).reduce(BigDecimal.ZERO, BigDecimal::add));
     data.setSoLuongXuatCap(DataUtils.safeToBigDecimal(data.getTongSoLuong()).subtract(DataUtils.safeToBigDecimal(data.getTonKho())));
     data.setMaDvi(currentUser.getUser().getDepartment());
     data.setTrangThai(Contains.DUTHAO);
@@ -119,13 +125,17 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
 
     List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), XhCtvtDeXuatHdr.TABLE_NAME + "_CAN_CU");
     created.setCanCu(canCu);
-    this.saveCtiet(created.getId(), objReq);
+//    this.saveCtiet(created.getId(), objReq);
+    created.getDeXuatPhuongAn().forEach(s -> {
+      s.setIdHdr(created.getId());
+    });
+    xhCtvtDeXuatHdrRepository.save(created);
     return created;
   }
 
   @Transactional()
   void saveCtiet(Long idHdr, XhCtvtDeXuatHdrReq objReq) {
-    for (XhCtvtDeXuatPaReq deXuatPhuongAnReq : objReq.getDeXuatPhuongAn()) {
+    for (XhCtvtDeXuatPa deXuatPhuongAnReq : objReq.getDeXuatPhuongAn()) {
       XhCtvtDeXuatPa deXuatPhuongAn = new XhCtvtDeXuatPa();
       BeanUtils.copyProperties(deXuatPhuongAnReq, deXuatPhuongAn);
       deXuatPhuongAn.setId(null);
@@ -144,16 +154,19 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
       throw new Exception("Không tìm thấy dữ liệu cần sửa");
     }
     Optional<XhCtvtDeXuatHdr> soDx = xhCtvtDeXuatHdrRepository.findFirstBySoDx(objReq.getSoDx());
-    if (soDx.isPresent()) {
+    if (soDx.isPresent() && objReq.getSoDx().split("/").length == 1) {
       if (!soDx.get().getId().equals(objReq.getId())) {
         throw new Exception("số đề xuất đã tồn tại");
       }
     }
     XhCtvtDeXuatHdr data = optional.get();
+    data.setDeXuatPhuongAn(objReq.getDeXuatPhuongAn());
+
     BeanUtils.copyProperties(objReq, data);
-    data.setTongSoLuong(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPaReq::getSoLuongXuatCuc).reduce(BigDecimal.ZERO, BigDecimal::add));
-    data.setThanhTien(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPaReq::getThanhTien).reduce(BigDecimal.ZERO, BigDecimal::add));
-    data.setTonKho(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPaReq::getSoLuongXuatChiCuc).reduce(BigDecimal.ZERO, BigDecimal::add));
+
+    data.setTongSoLuong(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPa::getSoLuongXuatCuc).reduce(BigDecimal.ZERO, BigDecimal::add));
+    data.setThanhTien(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPa::getThanhTien).reduce(BigDecimal.ZERO, BigDecimal::add));
+    data.setTonKho(objReq.getDeXuatPhuongAn().stream().map(XhCtvtDeXuatPa::getSoLuongXuatChiCuc).reduce(BigDecimal.ZERO, BigDecimal::add));
     data.setSoLuongXuatCap(DataUtils.safeToBigDecimal(data.getTongSoLuong()).subtract(DataUtils.safeToBigDecimal(data.getTonKho())));
     XhCtvtDeXuatHdr created = xhCtvtDeXuatHdrRepository.save(data);
 
@@ -161,9 +174,14 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
     List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), XhCtvtDeXuatHdr.TABLE_NAME + "_CAN_CU");
     created.setCanCu(canCu);
 
+    created.getDeXuatPhuongAn().forEach(s -> {
+      s.setIdHdr(created.getId());
+    });
+    xhCtvtDeXuatHdrRepository.save(created);
+/*
     List<XhCtvtDeXuatPa> listDeXuatPhuongAn = xhCtvtDeXuatPaRepository.findByIdHdr(objReq.getId());
     xhCtvtDeXuatPaRepository.deleteAll(listDeXuatPhuongAn);
-    this.saveCtiet(created.getId(), objReq);
+    this.saveCtiet(created.getId(), objReq);*/
     return created;
   }
 

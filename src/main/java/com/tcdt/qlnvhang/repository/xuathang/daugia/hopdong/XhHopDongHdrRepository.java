@@ -23,6 +23,7 @@ public interface XhHopDongHdrRepository extends BaseRepository<XhHopDongHdr,Long
     @Query("SELECT c FROM XhHopDongHdr c where 1 = 1" +
             "AND (:#{#param.maDvi} IS NULL OR c.maDvi = :#{#param.maDvi}) " +
             "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
+            "AND (:#{#param.soQdKq} IS NULL OR c.soQdKq = :#{#param.soQdKq}) " +
             "AND (:#{#param.loaiVthh } IS NULL OR LOWER(c.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
             "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) "
     )

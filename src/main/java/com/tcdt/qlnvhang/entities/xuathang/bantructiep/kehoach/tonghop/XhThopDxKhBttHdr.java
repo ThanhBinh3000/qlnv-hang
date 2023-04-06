@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.tonghop;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
-import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.tonghop.XhThopDxKhBdgDtl;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
@@ -49,11 +48,9 @@ public class XhThopDxKhBttHdr extends TrangThaiBaseEntity implements Serializabl
 
     private String maDvi;
 
+    private Long idSoQdPd;
+
     private String soQdPd;
-
-    private String soQdCc;
-
-    private String tchuanCluong;
 
     @Transient
     private List<XhThopDxKhBttDtl> children = new ArrayList<>();

@@ -12,6 +12,7 @@ import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.HhHopDongRepository
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDsgthauRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDtlRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdrRepository;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.response.dauthauvattu.HhQdPduyetKqlcntRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.table.*;
@@ -32,6 +33,7 @@ import com.tcdt.qlnvhang.request.object.HhQdPduyetKqlcntHdrReq;
 import com.tcdt.qlnvhang.request.search.HhQdPduyetKqlcntSearchReq;
 import com.tcdt.qlnvhang.service.HhQdPduyetKqlcntHdrService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
@@ -56,6 +58,8 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 
 	@Autowired
 	private HhHopDongRepository hhHopDongRepository;
+	@Autowired
+	private HttpServletRequest request;
 
 	@Override
 	public HhQdPduyetKqlcntHdr create(HhQdPduyetKqlcntHdrReq objReq) throws Exception {
@@ -127,7 +131,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		if (objReq.getFileDinhKems() != null) {
 			fileDinhKemList = ObjectMapperUtils.mapAll(objReq.getFileDinhKems(), FileDKemJoinKquaLcntHdr.class);
 			fileDinhKemList.forEach(f -> {
-				f.setDataType(HhPaKhlcntHdr.TABLE_NAME);
+				f.setDataType(HhQdPduyetKqlcntHdr.TABLE_NAME);
 				f.setCreateDate(new Date());
 			});
 		}
@@ -247,12 +251,27 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 
 	@Override
 	public void delete(IdSearchReq idSearchReq) throws Exception {
+		if(!StringUtils.isEmpty(idSearchReq.getId())){
+			hhQdPduyetKqlcntHdrRepository.deleteById(idSearchReq.getId());
+		}else{
+			throw new Exception(
+					"Xóa thất bại, không tìm thấy dữ liệu");
+		}
+	}
 
+	@Override
+	public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
+		if (StringUtils.isEmpty(idSearchReq.getIds()))
+			throw new Exception("Xoá thất bại, không tìm thấy dữ liệu");
+		List<HhQdPduyetKqlcntHdr> listHdr = hhQdPduyetKqlcntHdrRepository.findAllByIdIn(idSearchReq.getIds());
+		hhQdPduyetKqlcntHdrRepository.deleteAll(listHdr);
 	}
 
 	@Override
 	public Page<HhQdPduyetKqlcntHdr> timKiemPage(HhQdPduyetKqlcntSearchReq req, HttpServletResponse response) throws Exception {
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").descending());
+		req.setTuNgayKyStr(convertFullDateToString(req.getTuNgayKy()));
+		req.setDenNgayKyStr(convertFullDateToString(req.getDenNgayKy()));
 		Page<HhQdPduyetKqlcntHdr> hhQdPduyetKqlcntHdrs = hhQdPduyetKqlcntHdrRepository.selectPage(req, pageable);
 		Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
 		hhQdPduyetKqlcntHdrs.forEach( item -> {
@@ -316,7 +335,44 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 
 	@Override
 	public void exportList(HhQdPduyetKqlcntSearchReq req, HttpServletResponse response) throws Exception {
+		PaggingReq paggingReq = new PaggingReq();
+		paggingReq.setPage(0);
+		paggingReq.setLimit(Integer.MAX_VALUE);
+		req.setPaggingReq(paggingReq);
+		Page<HhQdPduyetKqlcntHdr> page = this.timKiemPage(req, response);
+		List<HhQdPduyetKqlcntHdr> data = page.getContent();
 
+		// Tao form excel
+		String title = "Danh sách QĐ phê duyệt KHLCNT";
+		String[] rowsName = new String[] { "STT", "Năm kế hoạch", "Số QĐ PD KQLCNT", "Số QĐ PD KHLCNT","Ngày ký QĐ PD KQLCNT","Đơn vị", "Trích yếu",
+				"Loại hàng hóa", "Chủng loại hàng hóa", "Số gói thầu", "Trạng thái" };
+
+
+		String filename = "Quyet_dinh_phe_duyet_kq_lcnt.xlsx";
+		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
+
+		// Lay danh muc dung chung
+		List<Object[]> dataList = new ArrayList<Object[]>();
+		Object[] objs = null;
+		for (int i = 0; i < data.size(); i++) {
+			HhQdPduyetKqlcntHdr qd = data.get(i);
+			objs = new Object[rowsName.length];
+			objs[0] = i;
+			objs[1] = qd.getNamKhoach();
+			objs[2] = qd.getSoQd();
+			objs[3] = qd.getSoQdPdKhlcnt();
+			objs[4] = qd.getNgayTao();
+			objs[5] = qd.getTenDvi();
+			objs[6] = qd.getTrichYeu();
+			objs[7] = StringUtils.isEmpty(qd.getLoaiVthh()) ? null : hashMapDmHh.get(qd.getLoaiVthh());
+			objs[8] = StringUtils.isEmpty(qd.getCloaiVthh()) ? null : hashMapDmHh.get(qd.getCloaiVthh());
+			objs[9] = qd.getSoGthau();
+			objs[10] = NhapXuatHangTrangThaiEnum.getTenById(qd.getTrangThai());
+			dataList.add(objs);
+		}
+
+		ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+		ex.export();
 	}
 
 

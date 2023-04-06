@@ -86,14 +86,14 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
             dtl.setMaDvi(getUser().getDvql());
             dtl.setLoaiVthh(ObjReq.getLoaiVthh());
             dtl.setCloaiVthh(ObjReq.getCloaiVthh());
-
+            dtl.setTypeSoQdKq(false);
             if (ObjReq.getPthucBanTrucTiep().equals(Contains.UY_QUYEN)) {
                 if (!DataUtils.isNullOrEmpty(ObjReq.getFileDinhKemUyQuyen())) {
                     List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(ObjReq.getFileDinhKemUyQuyen(), dtl.getId(), XhQdPdKhBttDtl.TABLE_NAME);
                     dtl.setFileDinhKemUyQuyen(fileDinhKemList);
                 }
             }
-            if (ObjReq.getPthucBanTrucTiep().equals(Contains.MUA_LE)) {
+            if (ObjReq.getPthucBanTrucTiep().equals(Contains.BAN_LE)) {
                 if (!DataUtils.isNullOrEmpty(ObjReq.getFileDinhKemMuaLe())) {
                     List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(ObjReq.getFileDinhKemMuaLe(), dtl.getId(), XhQdPdKhBttDtl.TABLE_NAME);
                     dtl.setFileDinhKemMuaLe(fileDinhKemList);
@@ -108,6 +108,7 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
             BeanUtils.copyProperties(chaoGiaReq, chaoGiaList, "id");
             chaoGiaList.setId(null);
             chaoGiaList.setIdDviDtl(ObjReq.getIdDviDtl());
+            chaoGiaList.setIdQdPdDtl(ObjReq.getIdDtl());
             XhTcTtinBtt save = xhTcTtinBttRepository.save(chaoGiaList);
 
             if (!DataUtils.isNullObject(chaoGiaReq.getFileDinhKems())) {

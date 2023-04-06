@@ -1,10 +1,13 @@
 package com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.dexuat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGiaDtl;
 import com.tcdt.qlnvhang.request.BaseRequest;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,7 +39,7 @@ public class XhDxKhBanDauGiaReq extends BaseRequest {
     private Integer tgianGnhan;
     private String pthucGnhan;
     private String tgianGnhanGhiChu;
-    private String thongBaoKh;
+    private String thongBao;
     private BigDecimal khoanTienDatTruoc;
     private BigDecimal tongSoLuong;
     private BigDecimal tongTienKdiem;
@@ -45,7 +48,11 @@ public class XhDxKhBanDauGiaReq extends BaseRequest {
     private BigDecimal tongTienDatTruocDonGia;
     private String ghiChu;
     private Integer slDviTsan;
+    private String dviTinh;
     private String trangThaiTh;
+    private BigDecimal donGiaVat;
+    private BigDecimal tongDonGia;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayTaoTu;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
@@ -56,7 +63,10 @@ public class XhDxKhBanDauGiaReq extends BaseRequest {
     private Date ngayDuyetDen;
 
     private List<String> trangThaiList = new ArrayList<>();
+
+    @Transient
+    private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
     
-    private List<XhDxKhBanDauGiaDtlReq> children = new ArrayList<>();
+    private List<XhDxKhBanDauGiaDtl> children = new ArrayList<>();
 
 }

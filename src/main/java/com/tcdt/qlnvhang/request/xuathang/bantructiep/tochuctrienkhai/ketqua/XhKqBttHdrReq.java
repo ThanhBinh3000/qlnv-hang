@@ -67,4 +67,10 @@ public class XhKqBttHdrReq extends BaseRequest  {
     private List<XhKqBttDtlReq> children = new ArrayList<>();
 
     private String maChiCuc;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    Date  ngayCgiaTu;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    Date  ngayCgiaDen;
 }

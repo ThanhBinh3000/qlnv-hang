@@ -37,8 +37,10 @@ public class HhDxuatKhMttHdrReq {
 
     private String tenDuAn;
 
-    private String soQdCc
-            ;
+    private Long idSoQdCc;
+
+    private String soQdCc;
+
     private String loaiVthh;
 
     private String cloaiVthh;
@@ -72,6 +74,8 @@ public class HhDxuatKhMttHdrReq {
     private Long maThop;
 
     private BigDecimal donGiaVat;
+
+    private Long idSoQdPduyet;
 
     private String soQdPduyet;
 

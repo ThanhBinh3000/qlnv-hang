@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.impl;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -92,9 +93,11 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         dataMap.setFileDinhKems(fileDinhKemList);
         this.validateData(dataMap, dataMap.getTrangThai());
         hhDxuatKhLcntHdrRepository.save(dataMap);
-
-
-        this.saveDetail(objReq, dataMap.getId());
+        if (objReq.getLoaiVthh() != null && !objReq.getLoaiVthh().startsWith("02")) {
+            saveDetailLuongThuc(objReq, dataMap.getId());
+        } else {
+            saveDetail(objReq, dataMap.getId());
+        }
 
         // Lưu quyết định căn cứ
         for (HhDxuatKhLcntCcxdgDtlReq cc : objReq.getCcXdgReq()) {
@@ -126,16 +129,82 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
                 }
             }
             if (trangThai.equals(NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId())) {
-                for (HhDxKhlcntDsgthau chiCuc : objHdr.getDsGtDtlList()) {
-                    BigDecimal aLong = hhDxuatKhLcntHdrRepository.countSLDalenKh(objHdr.getNamKhoach(), objHdr.getLoaiVthh(), chiCuc.getMaDvi(), NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
-                    BigDecimal soLuongTotal = aLong.add(chiCuc.getSoLuong());
-                    if (soLuongTotal.compareTo(chiCuc.getSoLuongChiTieu()) > 0) {
-                        throw new Exception(chiCuc.getTenDvi() + " đã nhập quá số lượng chi tiêu, vui lòng nhập lại");
+                for (HhDxKhlcntDsgthau goiThau : objHdr.getDsGtDtlList()) {
+                    for (HhDxKhlcntDsgthauCtiet chiCuc: goiThau.getChildren()) {
+                        BigDecimal aLong = hhDxuatKhLcntHdrRepository.countSLDalenKh(objHdr.getNamKhoach(), objHdr.getLoaiVthh(), chiCuc.getMaDvi(), NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
+                        BigDecimal soLuongTotal = aLong.add(chiCuc.getSoLuong());
+                        if (soLuongTotal.compareTo(chiCuc.getSoLuongTheoChiTieu()) > 0) {
+                            throw new Exception(chiCuc.getTenDvi() + " đã nhập quá số lượng chi tiêu, vui lòng nhập lại");
+                        }
                     }
+
                 }
             }
         }
     }
+
+    @Transactional
+    void saveDetailLuongThuc(HhDxuatKhLcntHdrReq objReq, Long idHdr) {
+        hhDxuatKhLcntDsgtDtlRepository.deleteAllByIdDxKhlcnt(idHdr);
+        Map<String, List<HhDxuatKhLcntDsgtDtlReq>> mapGoiThau = new HashMap<>();
+        for (HhDxuatKhLcntDsgtDtlReq gt : objReq.getDsGtReq()) {
+            if (!mapGoiThau.containsKey(gt.getGoiThau())) {
+                List<HhDxuatKhLcntDsgtDtlReq> newList = new ArrayList<>();
+                newList.add(gt);
+                mapGoiThau.put(gt.getGoiThau(), newList);
+            } else {
+                mapGoiThau.get(gt.getGoiThau()).add(gt);
+            }
+        }
+        for (List<HhDxuatKhLcntDsgtDtlReq> listData : mapGoiThau.values()) {
+            HhDxKhlcntDsgthau gthau = setGoiThau(listData, objReq, idHdr);
+            hhDxuatKhLcntDsgtDtlRepository.save(gthau);
+            hhDxKhlcntDsgthauCtietRepository.deleteAllByIdGoiThau(gthau.getId());
+            AtomicReference<Long> soLuong = new AtomicReference<>(0L);
+            listData.forEach(cuc -> {
+                soLuong.updateAndGet(v -> v + cuc.getSoLuong().longValue());
+                for (HhDxuatKhLcntDsgthauDtlCtietReq child : cuc.getChildren()) {
+                    HhDxKhlcntDsgthauCtiet dsgthauCtiet = setDsgthauCtiet(child, gthau.getId());
+                    hhDxKhlcntDsgthauCtietRepository.save(dsgthauCtiet);
+                    hhDxKhlcntDsgthauCtietVtRepository.deleteAllByIdGoiThauCtiet(dsgthauCtiet.getId());
+                    for (HhDxuatKhLcntDsgthauDtlCtietVtReq vt : child.getChildren()) {
+                        HhDxKhlcntDsgthauCtietVt vtMap = new ModelMapper().map(vt, HhDxKhlcntDsgthauCtietVt.class);
+                        vtMap.setId(null);
+                        vtMap.setIdGoiThauCtiet(dsgthauCtiet.getId());
+                        hhDxKhlcntDsgthauCtietVtRepository.save(vtMap);
+                        hhDxKhlcntDsgthauCtietVt1Repository.deleteAllByIdGoiThauCtietVt(vt.getId());
+                    }
+                }
+            });
+            gthau.setSoLuong(new BigDecimal(soLuong.toString()));
+            hhDxuatKhLcntDsgtDtlRepository.save(gthau);
+
+        }
+    }
+
+    HhDxKhlcntDsgthau setGoiThau (List<HhDxuatKhLcntDsgtDtlReq> listData, HhDxuatKhLcntHdrReq objReq, Long idHdr) {
+        HhDxKhlcntDsgthau gthau = new HhDxKhlcntDsgthau();
+        gthau.setGoiThau(listData.get(0).getGoiThau());
+        gthau.setDonGiaVat(listData.get(0).getDonGiaVat());
+        gthau.setDonGiaTamTinh(listData.get(0).getDonGiaTamTinh());
+        gthau.setMaDvi(objReq.getMaDvi());
+        gthau.setLoaiVthh(objReq.getLoaiVthh());
+        gthau.setCloaiVthh(objReq.getCloaiVthh());
+        gthau.setDviTinh("kg");
+        gthau.setIdDxKhlcnt(idHdr);
+        return gthau;
+    }
+    HhDxKhlcntDsgthauCtiet setDsgthauCtiet (HhDxuatKhLcntDsgthauDtlCtietReq child, Long goiThauId) {
+        HhDxKhlcntDsgthauCtiet dsgthauCtiet = new HhDxKhlcntDsgthauCtiet();
+        dsgthauCtiet.setMaDvi(child.getMaDvi());
+        dsgthauCtiet.setSoLuong(new BigDecimal(child.getSoLuong()));
+        dsgthauCtiet.setDiaDiemNhap(child.getDiaDiemNhap());
+        dsgthauCtiet.setIdGoiThau(goiThauId);
+        dsgthauCtiet.setSoLuongTheoChiTieu(child.getSoLuongTheoChiTieu());
+        dsgthauCtiet.setSoLuongDaMua(child.getSoLuongDaMua());
+        return dsgthauCtiet;
+    }
+
 
     @Transactional
     void saveDetail(HhDxuatKhLcntHdrReq objReq, Long idHdr) {
@@ -216,7 +285,11 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 
         hhDxuatKhLcntHdrRepository.save(dataDTB);
 
-        this.saveDetail(objReq, dataDTB.getId());
+        if (objReq.getLoaiVthh() != null && !objReq.getLoaiVthh().startsWith("02")) {
+            saveDetailLuongThuc(objReq, dataMap.getId());
+        } else {
+            saveDetail(objReq, dataMap.getId());
+        }
 
         // Xóa tât cả các căn cứ xác định giá cũ và lưu mới
         hhDxuatKhLcntCcxdgDtlRepository.deleteAllByIdDxKhlcnt(dataDTB.getId());
@@ -264,6 +337,9 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 
             List<HhDxKhlcntDsgthauCtiet> listDdNhap = hhDxKhlcntDsgthauCtietRepository.findByIdGoiThau(dsG.getId());
             listDdNhap.forEach(f -> {
+                f.setDonGiaTamTinh(dsG.getDonGiaTamTinh());
+                f.setDonGiaVat(dsG.getDonGiaVat());
+                f.setGoiThau(dsG.getGoiThau());
                 f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
                 f.setTenDiemKho(StringUtils.isEmpty(f.getMaDiemKho()) ? null : mapDmucDvi.get(f.getMaDiemKho()));
                 List<HhDxKhlcntDsgthauCtietVt> byIdGoiThauCtiet = hhDxKhlcntDsgthauCtietVtRepository.findByIdGoiThauCtiet(f.getId());
@@ -510,11 +586,16 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         objReq.setPaggingReq(paggingReq);
         Page<HhDxuatKhLcntHdr> page = this.timKiem(objReq);
         List<HhDxuatKhLcntHdr> data = page.getContent();
-
-        String title = "Danh sách kế hoạch đề xuất lựa chọn nhà thầu";
-        String[] rowsName = new String[]{"STT", "Số tờ trình", "Đơn vị", "Ngày đề xuất", "Trích yếu", "Số QĐ giao chỉ tiêu", "Năm kế hoạch", "Hàng hóa", "Số gói thầu", "Trạng thái"};
         String filename = "Danh_sach_ke_hoach_de_xuat_lua_chon_nha_thau_tong_cuc.xlsx";
-
+        String title = "Danh sách kế hoạch đề xuất lựa chọn nhà thầu";
+        String[] rowsName;
+        if (objReq.getLoaiVthh().startsWith("02")) {
+            rowsName = new String[]{"STT", "Số tờ trình", "Năm kế hoạch", "Ngày lập KH", "Ngày duyệt KH", "Số QĐ giao chỉ tiêu", "Loại hàng hóa",
+                    "Tổng số gói thầu", "Số gói thầu đã trúng", "SL HĐ đã ký", "Số QĐ duyệt KHLCNT", "Thời hạn thực hiện dự án", "Trạng thái đề xuất"};
+        } else {
+            rowsName = new String[]{"STT", "Số tờ trình", "Năm kế hoạch", "Ngày lập KH", "Ngày duyệt KH", "Số QĐ giao chỉ tiêu", "Loại hàng hóa",
+                    "Chủng loại hàng hóa", "Tổng số gói thầu", "Số gói thầu đã trúng", "SL HĐ đã ký", "Số QĐ duyệt KHLCNT", "Thời hạn nhập kho", "Trạng thái đề xuất", "Mã tổng hợp"};
+        }
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
         for (int i = 0; i < data.size(); i++) {
@@ -522,14 +603,30 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
             objs = new Object[rowsName.length];
             objs[0] = i;
             objs[1] = dx.getSoDxuat();
-            objs[2] = dx.getTenDvi();
-            objs[3] = dx.getNgayGuiDuyet();
-            objs[4] = dx.getTrichYeu();
+            objs[2] = dx.getNamKhoach();
+            objs[3] = dx.getNgayTao();
+            objs[4] = dx.getNgayPduyet();
             objs[5] = dx.getSoQd();
-            objs[6] = dx.getNamKhoach();
-            objs[7] = dx.getTenLoaiVthh();
-            objs[8] = dx.getSoGoiThau();
-            objs[9] = dx.getTenTrangThai();
+            objs[6] = dx.getTenLoaiVthh();
+            if (objReq.getLoaiVthh().startsWith("02")) {
+                objs[7] = dx.getSoGoiThau();
+                objs[8] = dx.getSoGthauTrung();
+                objs[10] = dx.getSoQdPdKqLcnt();
+                objs[11] = dx.getTgianNhang();
+                objs[12] = dx.getTenTrangThai();
+            } else {
+                objs[7] = dx.getTenCloaiVthh();
+                objs[8] = dx.getSoGoiThau();
+                objs[9] = dx.getSoGthauTrung();
+                objs[11] = dx.getSoQdPdKqLcnt();
+                objs[12] = dx.getTgianNhang();
+                objs[13] = dx.getTenTrangThai();
+                if (dx.getTrangThaiTh().equals(Contains.CHUATONGHOP)) {
+                    objs[14] = dx.getTenTrangThaiTh();
+                } else {
+                    objs[14] = dx.getMaTh();
+                }
+            }
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
@@ -546,7 +643,8 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         List<HhDxuatKhLcntHdr> data = page.getContent();
 
         String title = "Danh sách kế hoạch đề xuất lựa chọn nhà thầu";
-        String[] rowsName = new String[]{"STT", "Số tờ trình", "Ngày ký", "Trích yếu", "Số QĐ giao chỉ tiêu", "Năm kế hoạch", "Hàng hóa", "Chủng loại hàng hóa", "Số gói thầu", "Trạng thái"};
+        String[] rowsName = new String[]{"STT", "Số tờ trình", "Năm kế hoạch", "Ngày lập KH", "Ngày duyệt KH", "Số QĐ giao chỉ tiêu", "Loại hàng hóa",
+                "Chủng loại hàng hóa", "Tổng số gói thầu", "Số gói thầu đã trúng", "SL HĐ đã ký", "Số QĐ duyệt KHLCNT", "Thời hạn nhập kho", "Trạng thái"};
         String filename = "Danh_sach_ke_hoach_de_xuat_lua_chon_nha_thau_cuc.xlsx";
 
         List<Object[]> dataList = new ArrayList<Object[]>();
@@ -556,14 +654,17 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
             objs = new Object[rowsName.length];
             objs[0] = i;
             objs[1] = dx.getSoDxuat();
-            objs[2] = dx.getNgayGuiDuyet();
-            objs[3] = dx.getTrichYeu();
-            objs[4] = dx.getSoQd();
-            objs[5] = dx.getNamKhoach();
-            objs[6] = dx.getLoaiVthh();
-            objs[7] = dx.getCloaiVthh();
+            objs[2] = dx.getNamKhoach();
+            objs[3] = dx.getNgayTao();
+            objs[4] = dx.getNgayPduyet();
+            objs[5] = dx.getSoQd();
+            objs[6] = dx.getTenLoaiVthh();
+            objs[7] = dx.getTenCloaiVthh();
             objs[8] = dx.getSoGoiThau();
-            objs[9] = dx.getTenTrangThai();
+            objs[9] = dx.getSoGthauTrung();
+            objs[11] = dx.getSoQdPdKqLcnt();
+            objs[12] = dx.getTgianNhang();
+            objs[13] = dx.getTenTrangThai();
             dataList.add(objs);
         }
 
@@ -803,7 +904,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
     }
 
     @Override
-    public BigDecimal getGiaBanToiDa(String cloaiVhtt, String maDvi) {
-        return hhDxuatKhLcntHdrRepository.getGiaBanToiDa(cloaiVhtt, maDvi);
+    public BigDecimal getGiaBanToiDa(String cloaiVhtt, String maDvi, String namKhoach) {
+        return hhDxuatKhLcntHdrRepository.getGiaBanToiDa(cloaiVhtt, maDvi, namKhoach);
     }
 }

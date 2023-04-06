@@ -11,10 +11,22 @@ import java.util.List;
 public class XhQdPdKhBdgPlReq {
     @ApiModelProperty(notes = "Bắt buộc set đối với update")
     private Long id;
+
     private Long idHdr;
-    private BigDecimal soLuong;
+
     private String maDvi;
+
+    private BigDecimal soLuongChiCuc;
+
+    private BigDecimal tienDtruocDxChiCuc;
+
+    private BigDecimal tienDtruocDdChiCuc;
+
     private String diaChi;
+
+    private String slChiTieu;
+
+    private String slKeHoachDd;
 
     List<XhQdPdKhBdgPlDtlReq> children =new ArrayList<>();
 }

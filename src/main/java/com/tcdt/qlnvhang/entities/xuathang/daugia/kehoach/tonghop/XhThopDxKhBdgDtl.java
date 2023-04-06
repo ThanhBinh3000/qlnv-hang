@@ -7,6 +7,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -22,14 +23,24 @@ public class XhThopDxKhBdgDtl implements Serializable {
     private Long id;
 
     private Long idThopHdr;
+
     private Long idDxHdr;
+
     private String maDvi;
+
     private String soDxuat;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayPduyet;
+
     private String trichYeu;
-    private Integer soDviTsan;
+
+    private Integer slDviTsan;
     private String trangThai;
+
+    private BigDecimal tongTienDatTruocDonGia;
+
+    private BigDecimal tongTienKdienDonGia;
 
     // Transient
     @Transient
