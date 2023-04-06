@@ -604,8 +604,8 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
             objs[0] = i;
             objs[1] = dx.getSoDxuat();
             objs[2] = dx.getNamKhoach();
-            objs[3] = dx.getNgayTao();
-            objs[4] = dx.getNgayPduyet();
+            objs[3] = convertDate(dx.getNgayTao());
+            objs[4] = convertDate(dx.getNgayPduyet());
             objs[5] = dx.getSoQd();
             objs[6] = dx.getTenLoaiVthh();
             if (objReq.getLoaiVthh().startsWith("02")) {
@@ -643,7 +643,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         List<HhDxuatKhLcntHdr> data = page.getContent();
 
         String title = "Danh sách kế hoạch đề xuất lựa chọn nhà thầu";
-        String[] rowsName = new String[]{"STT", "Số tờ trình", "Năm kế hoạch", "Ngày lập KH", "Ngày duyệt KH", "Số QĐ giao chỉ tiêu", "Loại hàng hóa",
+        String[] rowsName = new String[]{"STT", "Số kế hoạch/ tờ trình", "Năm kế hoạch", "Ngày lập KH", "Ngày duyệt KH", "Số QĐ giao chỉ tiêu", "Loại hàng hóa",
                 "Chủng loại hàng hóa", "Tổng số gói thầu", "Số gói thầu đã trúng", "SL HĐ đã ký", "Số QĐ duyệt KHLCNT", "Thời hạn nhập kho", "Trạng thái"};
         String filename = "Danh_sach_ke_hoach_de_xuat_lua_chon_nha_thau_cuc.xlsx";
 
@@ -655,8 +655,8 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
             objs[0] = i;
             objs[1] = dx.getSoDxuat();
             objs[2] = dx.getNamKhoach();
-            objs[3] = dx.getNgayTao();
-            objs[4] = dx.getNgayPduyet();
+            objs[3] = convertDate(dx.getNgayTao());
+            objs[4] = convertDate(dx.getNgayPduyet());
             objs[5] = dx.getSoQd();
             objs[6] = dx.getTenLoaiVthh();
             objs[7] = dx.getTenCloaiVthh();

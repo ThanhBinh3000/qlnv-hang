@@ -645,9 +645,10 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 					req.getNamNhap(),
 					req.getSoQd(),
 					req.getLoaiVthh(),
+					req.getCloaiVthh(),
 					req.getTrichYeu(),
-					Contains.convertDateToString(req.getTuNgayQd()),
-					Contains.convertDateToString(req.getDenNgayQd()),
+					convertFullDateToString(req.getTuNgayQd()),
+					convertFullDateToString(req.getDenNgayQd()),
 					req.getMaDvi(),
 					pageable);
 		}
