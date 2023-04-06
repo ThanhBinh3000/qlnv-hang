@@ -229,6 +229,10 @@ public class Contains {
 
 	public static final String PHE_DUYET_TRUOC = "PDT";
 
+	// Điều chuyển nội bộ
+	public static final String DIEU_CHUYEN = "DC";
+
+	public static final String NHAN_DIEU_CHUYEN = "NDC";
 
 	public static final Map<String, String> mappingLoaiDx;
 	static {
