@@ -498,6 +498,41 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 	}
 
 	@Override
+	public void exportBbNtBq(HhQdNhapxuatSearchReq searchReq, HttpServletResponse response) throws Exception {
+		UserInfo userInfo = UserUtils.getUserInfo();
+		PaggingReq paggingReq = new PaggingReq();
+		paggingReq.setPage(0);
+		paggingReq.setLimit(Integer.MAX_VALUE);
+		searchReq.setPaggingReq(paggingReq);
+		searchReq.setMaDvi(userInfo.getDvql());
+		Page<NhQdGiaoNvuNhapxuatHdr> page = this.searchPage(searchReq);
+		List<NhQdGiaoNvuNhapxuatHdr> data = page.getContent();
+
+		String title = "Danh sách quyết định giao nhiệm vụ nhập xuất";
+		String[] rowsName = new String[]{"STT", "Số QĐ giao NVNH", "Năm kế hoạch", "Thời hạn NH trước ngày", "Điểm kho", "Lô kho",
+				"Số BB NT kê lót, BQLĐ", "Ngày lập biên bản", "Ngày kết thúc NT kê lót, BQLĐ", "Tổng kinh phí thực tế (đ)", "Tổng kinh phí TC PD (đ)", "Trạng thái"};
+		String filename = "Danh_sach_quyet_dinh_giao_nhiem_vu_nhap_xuat.xlsx";
+
+		List<Object[]> dataList = new ArrayList<Object[]>();
+		Object[] objs = null;
+		for (int i = 0; i < data.size(); i++) {
+			NhQdGiaoNvuNhapxuatHdr qd = data.get(i);
+			objs = new Object[rowsName.length];
+			objs[0] = i;
+			objs[1] = qd.getSoQd();
+			objs[2] = convertDateToString(qd.getNgayQdinh());
+			objs[3] = qd.getNamNhap();
+			objs[4] = qd.getTenLoaiVthh();
+			objs[5] = qd.getTrichYeu();
+			objs[6] = NhapXuatHangTrangThaiEnum.getTenById(qd.getTrangThai());
+			dataList.add(objs);
+		}
+
+		ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+		ex.export();
+	}
+
+	@Override
 	public Page<NhQdGiaoNvuNhapxuatHdr> timKiem(HhQdNhapxuatSearchReq req) throws Exception {
 //		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").descending());
 //		UserInfo userInfo = UserUtils.getUserInfo();

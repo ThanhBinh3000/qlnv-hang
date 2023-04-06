@@ -42,6 +42,7 @@ public interface HhQdGiaoNvuNhapxuatService {
 	List<Map<String, String>> listLoaiNx();
 
 	void exportDsQdGNvNx(HhQdNhapxuatSearchReq searchReq, HttpServletResponse response) throws Exception;
+	void exportBbNtBq(HhQdNhapxuatSearchReq searchReq, HttpServletResponse response) throws Exception;
 
 	Page<NhQdGiaoNvuNhapxuatHdr> timKiem(HhQdNhapxuatSearchReq objReq) throws Exception;
 
