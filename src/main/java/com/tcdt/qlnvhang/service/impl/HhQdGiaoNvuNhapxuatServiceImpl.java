@@ -428,6 +428,31 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 	}
 
+	@Transactional
+	@Override
+	public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
+		UserInfo userInfo = UserUtils.getUserInfo();
+		if (!Contains.CAP_CUC.equalsIgnoreCase(userInfo.getCapDvi()))
+			throw new Exception("Bad request.");
+		if (idSearchReq.getIdList() != null && idSearchReq.getIdList().size() > 0){
+			List<NhQdGiaoNvuNhapxuatHdr> listData = hhQdGiaoNvuNhapxuatRepository.findByIdIn(idSearchReq.getIdList());
+			for (NhQdGiaoNvuNhapxuatHdr qd: listData) {
+				if (!qd.getTrangThai().equals(Contains.DUTHAO)
+						&& !qd.getTrangThai().equals(Contains.TU_CHOI)) {
+					throw new Exception("Chỉ thực hiện xóa thông tin đấu thầu ở trạng thái bản nháp hoặc từ chối");
+				}
+				List<NhQdGiaoNvuNhapxuatDtl> listDtl  = dtlRepository.findAllByIdHdr(qd.getId());
+				if(!CollectionUtils.isEmpty(listDtl)){
+					dtlRepository.deleteAll(listDtl);
+				}
+				hhHopDongRepository.updateHopDong(qd.getIdHd(),NhapXuatHangTrangThaiEnum.DAKY.getId());
+				hhQdGiaoNvuNhapxuatRepository.delete(qd);
+			}
+		} else {
+			throw new Exception("Không tìm thấy dữ liệu cần xoá");
+		}
+	}
+
 	@Override
 	public NhQdGiaoNvuNhapxuatHdr findBySoHd(StrSearchReq strSearchReq) throws Exception {
 		// TODO Auto-generated method stub
@@ -473,10 +498,10 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		Page<NhQdGiaoNvuNhapxuatHdr> page = this.searchPage(searchReq);
 		List<NhQdGiaoNvuNhapxuatHdr> data = page.getContent();
 
-		String title = "Danh sách quyết định giao nhiệm vụ nhập xuất";
-		String[] rowsName = new String[]{"STT", "Số quyết định", "Ngày quyết định", "Năm Nhập", "Loại hàng hóa", "Chủng loại hàng hóa",
-				"Trích Yếu Quyết Định", "Trạng thái"};
-		String filename = "Danh_sach_quyet_dinh_giao_nhiem_vu_nhap_xuat.xlsx";
+		String title = "Danh sách quyết định giao nhiệm vụ nhập hàng";
+		String[] rowsName = new String[]{"STT", "Số quyết định", "Ngày quyết định", "Số hợp đồng", "Năm Nhập", "Loại hàng hóa", "Chủng loại hàng hóa",
+				"Thời gian nhập kho muộn nhất", "Trích Yếu Quyết Định", "Trạng thái", "Trạng thái NH"};
+		String filename = "Danh_sach_quyet_dinh_giao_nhiem_vu_nhap_hang.xlsx";
 
 		List<Object[]> dataList = new ArrayList<Object[]>();
 		Object[] objs = null;
@@ -485,11 +510,14 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			objs = new Object[rowsName.length];
 			objs[0] = i;
 			objs[1] = qd.getSoQd();
-			objs[2] = convertDateToString(qd.getNgayQdinh());
-			objs[3] = qd.getNamNhap();
-			objs[4] = qd.getTenLoaiVthh();
-			objs[5] = qd.getTrichYeu();
-			objs[6] = NhapXuatHangTrangThaiEnum.getTenById(qd.getTrangThai());
+			objs[2] = convertDate(qd.getNgayQdinh());
+			objs[3] = qd.getSoHd();
+			objs[4] = qd.getNamNhap();
+			objs[5] = qd.getTenLoaiVthh();
+			objs[6] = qd.getCloaiVthh();
+			objs[7] = convertDate(qd.getTgianNkho());
+			objs[8] = qd.getTrichYeu();
+			objs[9] = NhapXuatHangTrangThaiEnum.getTenById(qd.getTrangThai());
 			dataList.add(objs);
 		}
 

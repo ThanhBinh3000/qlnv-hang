@@ -34,6 +34,7 @@ public interface HhQdGiaoNvuNhapxuatService {
 
     @Transactional(rollbackOn = Exception.class)
 	void delete(IdSearchReq idSearchReq) throws Exception;
+	void deleteMulti(IdSearchReq idSearchReq) throws Exception;
 
 	NhQdGiaoNvuNhapxuatHdr findBySoHd(StrSearchReq strSearchReq) throws Exception;
 
