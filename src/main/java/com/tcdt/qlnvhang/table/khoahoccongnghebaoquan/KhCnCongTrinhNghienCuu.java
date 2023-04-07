@@ -64,9 +64,11 @@ public class KhCnCongTrinhNghienCuu extends BaseEntity implements Serializable  
     private String xepLoai;
     private String ldoTuChoi;
     @Transient
-    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
+    private List<FileDinhKem> fileDinhKem = new ArrayList<>();
     @Transient
-    private List<FileDinhKem> fileDinhKems1 = new ArrayList<>();
+    private List<FileDinhKem> fileTienDoTh = new ArrayList<>();
+    @Transient
+    private List<FileDinhKem> fileNghiemThuTl = new ArrayList<>();
     @Transient
     private List<KhCnTienDoThucHien> tienDoThucHien = new ArrayList<>();
     @Transient

@@ -17,6 +17,7 @@ import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.khoahoccongnghebaoquan.KhCnCongTrinhNghienCuu;
 import com.tcdt.qlnvhang.table.khoahoccongnghebaoquan.KhCnNghiemThuThanhLy;
 import com.tcdt.qlnvhang.table.khoahoccongnghebaoquan.KhCnTienDoThucHien;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtPhieuXuatKho;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.modelmapper.ModelMapper;
@@ -54,15 +55,7 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         UserInfo userInfo= SecurityContextService.getUser();
         Pageable pageable= PageRequest.of(objReq.getPaggingReq().getPage(),
                 objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
-        Page<KhCnCongTrinhNghienCuu> data = khCnCongTrinhNghienCuuRepository.searchPage(
-                objReq.getMaDeTai(),
-                objReq.getTenDeTai(),
-                objReq.getCapDeTai(),
-                objReq.getTrangThai(),
-                objReq.getTuNam(),
-                objReq.getDenNam(),
-                pageable);
-
+        Page<KhCnCongTrinhNghienCuu> data = khCnCongTrinhNghienCuuRepository.searchPage(objReq,pageable);
         data.getContent().forEach( f -> {
        f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
         });
@@ -85,10 +78,12 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         data.setMaDvi(userInfo.getDvql());
         data.setTenDvi(StringUtils.isEmpty(userInfo.getDvql()) ? null : hashMapDmdv.get(userInfo.getDvql()));
         KhCnCongTrinhNghienCuu created= khCnCongTrinhNghienCuuRepository.save(data);
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(),data.getId(),"KH_CN_CONG_TRINH_NGHIEN_CUU");
-        List<FileDinhKem> fileDinhKem1 = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq1(),data.getId(),"KH_CN_NGHIEM_THU_THANH_LY");
-        created.setFileDinhKems(fileDinhKems);
-        created.setFileDinhKems(fileDinhKem1);
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(),data.getId(),KhCnCongTrinhNghienCuu.TABLE_NAME);
+        List<FileDinhKem> fileTienDoTh = fileDinhKemService.saveListFileDinhKem(objReq.getFileTienDoTh(),data.getId(),KhCnTienDoThucHien.TABLE_NAME);
+        List<FileDinhKem> fileNghiemThuTl = fileDinhKemService.saveListFileDinhKem(objReq.getFileNghiemThuTl(),data.getId(),KhCnNghiemThuThanhLy.TABLE_NAME);
+        created.setFileDinhKem(fileDinhKem);
+        created.setFileTienDoTh(fileTienDoTh);
+        created.setFileNghiemThuTl(fileNghiemThuTl);
         this.saveCtiet(data,objReq);
         return created;
     }
@@ -110,6 +105,15 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         KhCnCongTrinhNghienCuu dataMap = new ModelMapper().map(objReq,KhCnCongTrinhNghienCuu.class);
         updateObjectToObject(data,dataMap);
         KhCnCongTrinhNghienCuu created= khCnCongTrinhNghienCuuRepository.save(data);
+        fileDinhKemService.delete(objReq.getId(), Lists.newArrayList( KhCnCongTrinhNghienCuu.TABLE_NAME));
+        fileDinhKemService.delete(objReq.getId(), Lists.newArrayList( KhCnTienDoThucHien.TABLE_NAME));
+        fileDinhKemService.delete(objReq.getId(), Lists.newArrayList( KhCnCongTrinhNghienCuu.TABLE_NAME));
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(), created.getId(), KhCnCongTrinhNghienCuu.TABLE_NAME );
+        List<FileDinhKem> fileTienDoTh = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(), created.getId(), KhCnTienDoThucHien.TABLE_NAME );
+        List<FileDinhKem> fileNghiemThuTl = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(), created.getId(), KhCnNghiemThuThanhLy.TABLE_NAME );
+        created.setFileDinhKem(fileDinhKem);
+        created.setFileTienDoTh(fileTienDoTh);
+        created.setFileNghiemThuTl(fileNghiemThuTl);
         List<KhCnTienDoThucHien> tienDoThucHien = khCnTienDoThucHienRepository.findAllByIdHdr(data.getId());
         khCnTienDoThucHienRepository.deleteAll(tienDoThucHien);
         List<KhCnNghiemThuThanhLy> nghiemThuThanhLy = khCnNghiemThuThanhLyRepository.findAllByIdHdr(data.getId());
@@ -146,10 +150,12 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         List<KhCnNghiemThuThanhLy> nghiemThuThanhLy = khCnNghiemThuThanhLyRepository.findAllByIdHdr(data.getId());
         data.setChildren(nghiemThuThanhLy);
         data.setTienDoThucHien(tienDoThucHien);
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Collections.singleton(KhCnCongTrinhNghienCuu.TABLE_NAME));
-        data.setFileDinhKems(fileDinhKems);
-        List<FileDinhKem> fileDinhKems1 = fileDinhKemService.search(data.getId(), Collections.singleton(KhCnNghiemThuThanhLy.TABLE_NAME));
-        data.setFileDinhKems1(fileDinhKems1);
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Collections.singleton(KhCnCongTrinhNghienCuu.TABLE_NAME));
+        data.setFileDinhKem(fileDinhKem);
+        List<FileDinhKem> fileTienDoTh = fileDinhKemService.search(data.getId(), Collections.singleton(KhCnTienDoThucHien.TABLE_NAME));
+        data.setFileTienDoTh(fileTienDoTh);
+        List<FileDinhKem> fileNghiemThuTl = fileDinhKemService.search(data.getId(), Collections.singleton(KhCnNghiemThuThanhLy.TABLE_NAME));
+        data.setFileNghiemThuTl(fileNghiemThuTl);
         return data;
     }
 
@@ -164,8 +170,9 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         khCnTienDoThucHienRepository.deleteAll(tienDoThucHien);
         List<KhCnNghiemThuThanhLy> nghiemThuThanhLy = khCnNghiemThuThanhLyRepository.findAllByIdHdr(data.getId());
         khCnNghiemThuThanhLyRepository.deleteAll(nghiemThuThanhLy);
-        fileDinhKemService.delete(data.getId(),  Lists.newArrayList("KH_CN_CONG_TRINH_NGHIEN_CUU"));
-        fileDinhKemService.delete(data.getId(),  Lists.newArrayList("KH_CN_NGHIEM_THU_THANH_LY"));
+        fileDinhKemService.delete(data.getId(),  Lists.newArrayList(KhCnCongTrinhNghienCuu.TABLE_NAME));
+        fileDinhKemService.delete(data.getId(),  Lists.newArrayList(KhCnTienDoThucHien.TABLE_NAME));
+        fileDinhKemService.delete(data.getId(),  Lists.newArrayList(KhCnNghiemThuThanhLy.TABLE_NAME));
         khCnCongTrinhNghienCuuRepository.delete(data);
 
     }
@@ -181,8 +188,9 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         khCnTienDoThucHienRepository.deleteAll(tienDoThucHien);
         List<KhCnNghiemThuThanhLy> nghiemThuThanhLy = khCnNghiemThuThanhLyRepository.findAllByIdHdrIn(listIdHdr);
         khCnNghiemThuThanhLyRepository.deleteAll(nghiemThuThanhLy);
-        fileDinhKemService.deleteMultiple(idSearchReq.getIdList(),  Lists.newArrayList("HH_QD_GIAO_NV_NHAP_HANG"));
-        fileDinhKemService.deleteMultiple(idSearchReq.getIdList(),  Lists.newArrayList("KH_CN_NGHIEM_THU_THANH_LY"));
+        fileDinhKemService.deleteMultiple(idSearchReq.getIdList(),  Lists.newArrayList(KhCnCongTrinhNghienCuu.TABLE_NAME));
+        fileDinhKemService.deleteMultiple(idSearchReq.getIdList(),  Lists.newArrayList(KhCnTienDoThucHien.TABLE_NAME));
+        fileDinhKemService.deleteMultiple(idSearchReq.getIdList(),  Lists.newArrayList(KhCnNghiemThuThanhLy.TABLE_NAME));
         khCnCongTrinhNghienCuuRepository.deleteAll(list);
 
     }

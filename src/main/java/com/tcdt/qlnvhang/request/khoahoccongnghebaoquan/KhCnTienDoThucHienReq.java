@@ -26,6 +26,4 @@ public class KhCnTienDoThucHienReq {
     @Transient
     private String tenTrangThaiTd;
 
-    @Transient
-    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 }

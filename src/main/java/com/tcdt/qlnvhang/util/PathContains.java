@@ -271,4 +271,9 @@ public class PathContains {
 	public static final String KQUA_DGIA = "/kq-bdg";
 	public static final String GIA_BAN_TOI_DA = "/gia-ban-toi-da";
 
+	// điều chuyển nội bộ
+
+	public static final String DIEU_CHUYEN_NOI_BO = "/dieu-chuyen-noi-bo";
+	public static final String KE_HOACH_DIEU_CHUYEN = "/ke-hoach-dieu-chuyen";
+
 }
