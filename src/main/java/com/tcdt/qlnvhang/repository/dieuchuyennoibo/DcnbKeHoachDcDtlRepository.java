@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface DcnbKeHoachDcDtlRepository extends JpaRepository<DcnbKeHoachDcDtl,Long> {
 
-    List<DcnbKeHoachDcDtl> findByIdHdr(Long idHdr);
+    List<DcnbKeHoachDcDtl> findByDcnbKeHoachDcHdrId(Long idHdr);
 
-    List<DcnbKeHoachDcDtl> findAllByIdHdrIn(List<Long> ids);
+    List<DcnbKeHoachDcDtl> findByDcnbKeHoachDcHdrIdIn(List<Long> ids);
     }

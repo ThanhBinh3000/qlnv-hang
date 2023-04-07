@@ -81,10 +81,10 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
     BeanUtils.copyProperties(objReq, data);
     data.setMaDvi(currentUser.getUser().getDepartment());
     data.setTrangThai(Contains.DUTHAO);
+    objReq.getDcNbKeHoachDcDtl().forEach(e -> e.setDcnbKeHoachDcHdr(data));
     DcnbKeHoachDcHdr created = dcnbKeHoachDcHdrRepository.save(data);
     List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), DcnbKeHoachDcHdr.TABLE_NAME + "_CAN_CU");
     created.setCanCu(canCu);
-    dcnbKeHoachDcHdrRepository.save(created);
     return created;
   }
 
@@ -134,7 +134,7 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
       data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
       List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Arrays.asList(DcnbKeHoachDcHdr.TABLE_NAME + "_CAN_CU"));
       data.setCanCu(canCu);
-      List<DcnbKeHoachDcDtl> list = dcnbKeHoachDcDtlRepository.findByIdHdr(data.getId());
+      List<DcnbKeHoachDcDtl> list = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(data.getId());
       for (DcnbKeHoachDcDtl keHoachDcDtl : list) {
         keHoachDcDtl.setTenLoaiVthh(mapVthh.get(keHoachDcDtl.getLoaiVthh()));
         keHoachDcDtl.setTenCloaiVthh(mapVthh.get(keHoachDcDtl.getCloaiVthh()));
@@ -151,7 +151,7 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
       throw new Exception("Bản ghi không tồn tại");
     }
     DcnbKeHoachDcHdr data = optional.get();
-    List<DcnbKeHoachDcDtl> list = dcnbKeHoachDcDtlRepository.findByIdHdr(data.getId());
+    List<DcnbKeHoachDcDtl> list = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(data.getId());
     dcnbKeHoachDcDtlRepository.deleteAll(list);
     fileDinhKemService.delete(data.getId(), Lists.newArrayList(DcnbKeHoachDcHdr.TABLE_NAME + "_CAN_CU"));
     dcnbKeHoachDcHdrRepository.delete(data);
@@ -165,7 +165,7 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
       throw new Exception("Bản ghi không tồn tại");
     }
     List<Long> listId = list.stream().map(DcnbKeHoachDcHdr::getId).collect(Collectors.toList());
-    List<DcnbKeHoachDcDtl> listPhuongAn = dcnbKeHoachDcDtlRepository.findAllByIdHdrIn(listId);
+    List<DcnbKeHoachDcDtl> listPhuongAn = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrIdIn(listId);
     dcnbKeHoachDcDtlRepository.deleteAll(listPhuongAn);
     fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(DcnbKeHoachDcHdr.TABLE_NAME + "_CAN_CU"));
     dcnbKeHoachDcHdrRepository.deleteAll(list);
