@@ -1,10 +1,12 @@
 package com.tcdt.qlnvhang.repository.khoahoccongnghebaoquan;
 
+import com.tcdt.qlnvhang.request.khoahoccongnghebaoquan.SearchKhCnCtrinhNcReq;
 import com.tcdt.qlnvhang.table.khoahoccongnghebaoquan.KhCnCongTrinhNghienCuu;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,17 +15,16 @@ import java.util.Optional;
 @Repository
 public interface KhCnCongTrinhNghienCuuRepository extends JpaRepository<KhCnCongTrinhNghienCuu,Long> {
 
-
-    @Query(value = "select * from KH_CN_CONG_TRINH_NGHIEN_CUU KHCN " +
-            " where (:maDeTai IS NULL OR LOWER(KHCN.MA_DE_TAI) LIKE LOWER(CONCAT(CONCAT('%',:maDeTai),'%' ) ) ) " +
-            "AND (:tenDeTai IS NULL OR LOWER(KHCN.TEN_DE_TAI) LIKE LOWER(CONCAT(CONCAT('%',:tenDeTai),'%' ) ) )" +
-            "AND (:capDeTai IS NULL OR KHCN.CAP_DE_TAI= :capDeTai)" +
-            "AND (:trangThai IS NULL OR KHCN.TRANG_THAI = :trangThai)" +
-            "AND (:tuNam IS NULL OR KHCN.NAM >=TO_NUMBER(:tuNam))" +
-            "AND (:denNam IS NULL OR KHCN.NAM <=TO_NUMBER(:denNam))"
-//            "AND (:maDvi IS NULL OR LOWER(KHCN.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "
-            ,nativeQuery = true)
-    Page<KhCnCongTrinhNghienCuu> searchPage(String maDeTai, String tenDeTai, String capDeTai, String trangThai,String tuNam,String denNam,  Pageable pageable);
+    @Query("SELECT c FROM KhCnCongTrinhNghienCuu c WHERE 1=1"+
+        " AND (:#{#param.dvpl} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvpl},'%'))" +
+        " AND (:#{#param.maDeTai} IS NULL OR c.maDeTai LIKE CONCAT(:#{#param.maDeTai},'%'))" +
+        " AND (:#{#param.tenDeTai} IS NULL OR c.tenDeTai LIKE CONCAT(:#{#param.tenDeTai},'%'))" +
+        " AND (:#{#param.capDeTai} IS NULL OR c.capDeTai =:#{#param.capDeTai})" +
+        " AND ((:#{#param.thoiGianTu}  IS NULL OR (c.ngayKyTu >= :#{#param.thoiGianTu} AND c.ngayKyDen >= :#{#param.thoiGianTu}))" +
+        " AND (:#{#param.thoiGianDen}  IS NULL OR (c.ngayKyTu <= :#{#param.thoiGianDen} AND c.ngayKyDen <= :#{#param.thoiGianDen})))" +
+        " ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
+    )
+    Page<KhCnCongTrinhNghienCuu> searchPage(@Param("param") SearchKhCnCtrinhNcReq param, Pageable pageable);
 
     Optional<KhCnCongTrinhNghienCuu> findAllByMaDeTai(String maDetai);
 

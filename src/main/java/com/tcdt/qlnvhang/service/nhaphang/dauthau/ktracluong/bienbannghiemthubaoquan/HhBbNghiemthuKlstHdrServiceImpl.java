@@ -14,9 +14,13 @@ import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.HhHopDongRepository
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
+import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.search.HhQdNhapxuatSearchReq;
+import com.tcdt.qlnvhang.service.HhQdGiaoNvuNhapxuatService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.extern.log4j.Log4j2;
@@ -39,6 +43,8 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 
     @Autowired
     private HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
+    @Autowired
+    private HhQdGiaoNvuNhapxuatService hhQdGiaoNvuNhapxuatService;
 
     @Autowired
     private KtNganLoRepository ktNganLoRepository;
@@ -244,6 +250,57 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 
     @Override
     public void export(HhBbNghiemthuKlstHdrReq req, HttpServletResponse response) throws Exception {
+    }
+
+    @Override
+    public void exportBbNtBq(HhQdNhapxuatSearchReq searchReq, HttpServletResponse response) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        searchReq.setPaggingReq(paggingReq);
+        searchReq.setMaDvi(userInfo.getDvql());
+        Page<NhQdGiaoNvuNhapxuatHdr> page = hhQdGiaoNvuNhapxuatService.searchPage(searchReq);
+        List<NhQdGiaoNvuNhapxuatHdr> data = page.getContent();
+
+        String title = "Danh sách quyết định giao nhiệm vụ nhập xuất";
+        String[] rowsName = new String[]{"STT", "Số QĐ giao NVNH", "Năm kế hoạch", "Thời hạn NH trước ngày", "Điểm kho", "Lô kho",
+                "Số BB NT kê lót, BQLĐ", "Ngày lập biên bản", "Ngày kết thúc NT kê lót, BQLĐ", "Tổng kinh phí thực tế (đ)", "Tổng kinh phí TC PD (đ)", "Trạng thái"};
+        String filename = "Danh_sach_quyet_dinh_giao_nhiem_vu_nhap_xuat.xlsx";
+
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+        Object[] objsb = null;
+        Object[] objsc = null;
+        for (int i = 0; i < data.size(); i++) {
+            NhQdGiaoNvuNhapxuatHdr qd = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i;
+            objs[1] = qd.getSoQd();
+            objs[2] = qd.getNamNhap();
+            objs[3] = qd.getTgianNkho();
+            dataList.add(objs);
+            for (int j = 0; j < qd.getDtlList().get(0).getChildren().size(); j++) {
+                objsb = new Object[rowsName.length];
+                objsb[4] = qd.getDtlList().get(0).getChildren().get(j).getTenDiemKho();
+                objsb[5] = qd.getDtlList().get(0).getChildren().get(j).getTenLoKho();
+                dataList.add(objsb);
+                for (int k = 0; k < qd.getDtlList().get(0).getListBienBanNghiemThuBq().size(); k++) {
+//                    if(qd.getDtlList().get(0).getChildren().get(j).getMaLoKho() && qd.getDtlList().get(0).getListBienBanNghiemThuBq().get(k).getMaLoKho() != null ? qd.getDtlList().get(0).getChildren().get(j).getMaLoKho() == qd.getDtlList().get(0).getListBienBanNghiemThuBq().get(k).getMaLoKho() : (qd.getDtlList().get(0).getChildren().get(j).getMaNganKho() && qd.getDtlList().get(0).getListBienBanNghiemThuBq().get(k).getMaNganKho() != null ? qd.getDtlList().get(0).getChildren().get(j).getMaNganKho() == qd.getDtlList().get(0).getListBienBanNghiemThuBq().get(k).getMaNganKho() : (qd.getDtlList().get(0).getChildren().get(j).getMaNhaKho() && qd.getDtlList().get(0).getListBienBanNghiemThuBq().get(k).getMaNhaKho() != null ? qd.getDtlList().get(0).getChildren().get(j).getMaNhaKho() == qd.getDtlList().get(0).getListBienBanNghiemThuBq().get(k).getMaNhaKho() : false))){
+//
+//                    }
+                    objsc = new Object[rowsName.length];
+                    objsc[6] = qd.getDtlList().get(0).getListBienBanNghiemThuBq().get(k).getSoBbNtBq();
+                    objsc[7] = qd.getDtlList().get(0).getListBienBanNghiemThuBq().get(k).getNgayTao();
+                    objsc[8] = qd.getDtlList().get(0).getListBienBanNghiemThuBq().get(k).getNgayNghiemThu();
+                    objsc[11] = qd.getDtlList().get(0).getListBienBanNghiemThuBq().get(k).getTenTrangThai();
+                    dataList.add(objsc);
+                }
+            }
+        }
+
+        ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+        ex.export();
     }
 
 //	@Override

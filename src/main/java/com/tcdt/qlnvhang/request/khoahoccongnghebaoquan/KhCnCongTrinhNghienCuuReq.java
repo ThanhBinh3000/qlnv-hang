@@ -5,10 +5,7 @@ import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -54,9 +51,11 @@ public class KhCnCongTrinhNghienCuuReq {
     private String xepLoai;
     private String ldoTuChoi;
 
-    private List<FileDinhKemReq> fileDinhKemReq = new ArrayList<>();
+    private List<FileDinhKemReq> fileDinhKem = new ArrayList<>();
 
-    private List<FileDinhKemReq> fileDinhKemReq1 = new ArrayList<>();
+    private List<FileDinhKemReq> fileTienDoTh = new ArrayList<>();
+
+    private List<FileDinhKemReq> fileNghiemThuTl = new ArrayList<>();
 
     private List<KhCnTienDoThucHienReq> tienDoThucHien=new ArrayList<>();
 

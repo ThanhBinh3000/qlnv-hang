@@ -19,20 +19,32 @@ public class HhQdNhapxuatSearchReq extends BaseRequest {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayQd;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
 	Date tuNgayQd;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
 	Date denNgayQd;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
+	Date tuNgayLP;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
+	Date denNgayLP;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
+	Date tuNgayKT;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
+	Date denNgayKT;
 
 	String maDvi;
 
 	String maVthh;
 
 	String loaiQd;
+	String soBbNtBq;
 
 	Long namNhap;
 
 	String loaiVthh;
+	String cloaiVthh;
 
 	String trichYeu;
 
