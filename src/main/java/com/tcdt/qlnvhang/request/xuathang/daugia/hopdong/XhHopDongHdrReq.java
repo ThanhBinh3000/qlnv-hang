@@ -98,6 +98,8 @@ public class XhHopDongHdrReq extends BaseRequest {
 
     private String moTaHangHoa;
 
+    private String donViTinh;
+
     private Double soLuong;
 
     private Double tongTien;
