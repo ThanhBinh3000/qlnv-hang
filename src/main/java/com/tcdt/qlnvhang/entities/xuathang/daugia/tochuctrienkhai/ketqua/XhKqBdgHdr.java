@@ -28,11 +28,15 @@ public class XhKqBdgHdr extends TrangThaiBaseEntity implements Serializable {
   @SequenceGenerator(sequenceName = "XH_KQ_BDG_HDR_SEQ", allocationSize = 1, name = "XH_KQ_BDG_HDR_SEQ")
   private Long id;
 
+  private Integer nam;
+
+  private String maDvi;
+  @Transient
+  private String tenDvi;
+
   private String soQdKq;
 
   private String trichYeu;
-
-  private Integer nam;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
   @Column(columnDefinition = "Date")
@@ -41,6 +45,18 @@ public class XhKqBdgHdr extends TrangThaiBaseEntity implements Serializable {
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
   @Column(columnDefinition = "Date")
   private Date ngayKy;
+
+  private String loaiHinhNx;
+
+  private String kieuNx;
+
+  private String loaiVthh;
+  @Transient
+  private String tenLoaiVthh;
+
+  private String cloaiVthh;
+  @Transient
+  private String tenCloaiVthh;
 
   private String maThongBao;
 
@@ -54,21 +70,30 @@ public class XhKqBdgHdr extends TrangThaiBaseEntity implements Serializable {
 
   private String ghiChu;
 
-  private String maDvi;
+  private String soQdPd;
 
-  private String loaiVthh;
+  private String hinhThucDauGia;
+
+  private String pthucDauGia;
+
+  private String soTbKhongThanh;
 
   private String trangThaiHd;
+  @Transient
+  private String tenTrangThaiHd;
 
   private String trangThaiXh;
+  @Transient
+  private String tenTrangThaiXh;
 
-  // Transient
   @Transient
   private List<FileDinhKem> fileDinhKems = new ArrayList<>();
+
   @Transient
-  private String tenLoaiVthh;
-  @Transient
-  private String tenDvi;
+  private List<FileDinhKem> fileDinhKem = new ArrayList<>();
+
+
+
   @Transient
   private List<XhHopDongHdr> listHopDong;
 
