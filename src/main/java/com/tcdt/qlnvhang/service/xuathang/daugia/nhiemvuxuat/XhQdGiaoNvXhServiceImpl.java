@@ -84,7 +84,7 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
                 x.setTenLoaiVthh(mapDmucHh.get(x.getLoaiVthh()));
                 x.setTenCloaiVthh(mapDmucHh.get(x.getCloaiVthh()));
                 x.setTenDiemKho(mapDmucDvi.get(x.getMaDiemKho()));
-                x.setTenNhaKho(mapDmucDvi.get(x.getMaNganKho()));
+                x.setTenNhaKho(mapDmucDvi.get(x.getMaNhaKho()));
                 x.setTenNganKho(mapDmucDvi.get(x.getMaNganKho()));
                 x.setTenLoKho(mapDmucDvi.get(x.getMaLoKho()));
             });
@@ -95,7 +95,7 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
                 x.setTenLoaiVthh(mapDmucHh.get(x.getLoaiVthh()));
                 x.setTenCloaiVthh(mapDmucHh.get(x.getCloaiVthh()));
                 x.setTenDiemKho(mapDmucDvi.get(x.getMaDiemKho()));
-                x.setTenNhaKho(mapDmucDvi.get(x.getMaNganKho()));
+                x.setTenNhaKho(mapDmucDvi.get(x.getMaNhaKho()));
                 x.setTenNganKho(mapDmucDvi.get(x.getMaNganKho()));
                 x.setTenLoKho(mapDmucDvi.get(x.getMaLoKho()));
             });

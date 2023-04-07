@@ -17,15 +17,15 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "XH_QD_GIAO_NV_XH")
+@Table(name = XhQdGiaoNvXh.TABLE_NAME)
 @Data
 public class XhQdGiaoNvXh extends TrangThaiBaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "XH_QD_GIAO_NV_NHAP_HANG";
+    public static final String TABLE_NAME = "XH_QD_GIAO_NV_XH";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_QD_GIAO_NV_NHAP_HANG_SEQ")
-    @SequenceGenerator(sequenceName = "XH_QD_GIAO_NV_NHAP_HANG_SEQ", allocationSize = 1, name = "XH_QD_GIAO_NV_NHAP_HANG_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_QD_GIAO_NV_XH_SEQ")
+    @SequenceGenerator(sequenceName = "XH_QD_GIAO_NV_XH_SEQ", allocationSize = 1, name = "XH_QD_GIAO_NV_XH_SEQ")
     private Long id;
     private Integer nam;
     private String soQd;
@@ -53,6 +53,10 @@ public class XhQdGiaoNvXh extends TrangThaiBaseEntity implements Serializable {
     private String bbTinhKho;
 
     private String bbHaoDoi;
+
+    private String loaiHinhNx;
+
+    private String kieuNx;
 
     @Transient
     private String tenTrangThaiXh;

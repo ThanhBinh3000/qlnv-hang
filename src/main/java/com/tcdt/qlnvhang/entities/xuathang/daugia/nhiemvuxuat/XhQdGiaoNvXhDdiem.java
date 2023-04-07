@@ -6,15 +6,15 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "XH_QD_GIAO_NV_XH_DDIEM")
+@Table(name = XhQdGiaoNvXhDdiem.TABLE_NAME)
 @Data
 public class XhQdGiaoNvXhDdiem {
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "XH_QD_GIAO_NV_NH_DDIEM";
+    public static final String TABLE_NAME = "XH_QD_GIAO_NV_XH_DDIEM";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_QD_GIAO_NV_NH_DDIEM_SEQ")
-    @SequenceGenerator(sequenceName = "XH_QD_GIAO_NV_NH_DDIEM_SEQ", allocationSize = 1, name = "XH_QD_GIAO_NV_NH_DDIEM_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_QD_GIAO_NV_XH_DDIEM_SEQ")
+    @SequenceGenerator(sequenceName = "XH_QD_GIAO_NV_XH_DDIEM_SEQ", allocationSize = 1, name = "XH_QD_GIAO_NV_XH_DDIEM_SEQ")
     private Long id;
     private Long idDtl;
     private String maDiemKho;

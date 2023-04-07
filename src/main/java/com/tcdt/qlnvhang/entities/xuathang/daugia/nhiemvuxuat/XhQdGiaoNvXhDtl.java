@@ -8,15 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "XH_QD_GIAO_NV_XH_DTL")
+@Table(name = XhQdGiaoNvXhDtl.TABLE_NAME)
 @Data
 public class XhQdGiaoNvXhDtl {
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "XH_QD_GIAO_NV_NHAP_HANG_DTL";
+    public static final String TABLE_NAME = "XH_QD_GIAO_NV_XH_DTL";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_QD_GIAO_NV_NH_DTL_SEQ")
-    @SequenceGenerator(sequenceName = "XH_QD_GIAO_NV_NH_DTL_SEQ", allocationSize = 1, name = "XH_QD_GIAO_NV_NH_DTL_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_QD_GIAO_NV_XH_DTL_SEQ")
+    @SequenceGenerator(sequenceName = "XH_QD_GIAO_NV_XH_DTL_SEQ", allocationSize = 1, name = "XH_QD_GIAO_NV_XH_DTL_SEQ")
     private Long id;
     private Long idQdHdr;
     private String maDvi;
