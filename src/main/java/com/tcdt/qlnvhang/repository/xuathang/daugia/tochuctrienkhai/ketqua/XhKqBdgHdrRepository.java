@@ -19,6 +19,7 @@ public interface XhKqBdgHdrRepository extends JpaRepository<XhKqBdgHdr, Long> {
             "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
             "AND (:#{#param.trichYeu} IS NULL OR LOWER(c.trichYeu) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.trichYeu}),'%'))) " +
             "AND (:#{#param.loaiVthh } IS NULL OR LOWER(c.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
+            "AND (:#{#param.cloaiVthh } IS NULL OR LOWER(c.cloaiVthh) LIKE CONCAT(:#{#param.cloaiVthh},'%')) " +
             "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.ngayPduyetTu} IS NULL OR c.ngayPduyet >= :#{#param.ngayPduyetTu}) " +
             "AND (:#{#param.ngayPduyetDen} IS NULL OR c.ngayPduyet <= :#{#param.ngayPduyetDen}) " +

@@ -37,6 +37,10 @@ public class XhQdGiaoNvuXuatReq extends BaseRequest {
     private String bbTinhKho;
 
     private String bbHaoDoi;
+
+    private String loaiHinhNx;
+
+    private String kieuNx;
     
     private List<XhQdGiaoNvuXuatCtReq> children = new ArrayList<>();
 
