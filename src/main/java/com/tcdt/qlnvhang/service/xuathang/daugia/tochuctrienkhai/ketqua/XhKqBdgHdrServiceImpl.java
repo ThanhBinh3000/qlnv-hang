@@ -3,12 +3,17 @@ package com.tcdt.qlnvhang.service.xuathang.daugia.tochuctrienkhai.ketqua;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.hopdong.XhHopDongHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.tochuctrienkhai.ketqua.XhKqBdgHdrRepository;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.tochuctrienkhai.ketqua.XhKqBdgHdrReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.ketqua.XhKqBdgHdr;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DataUtils;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,10 +26,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdrService {
@@ -34,6 +36,9 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
 
     @Autowired
     private XhHopDongHdrRepository xhHopDongHdrRepository;
+
+    @Autowired
+    private FileDinhKemService fileDinhKemService;
 
     @Override
     public Page<XhKqBdgHdr> searchPage(XhKqBdgHdrReq req) throws Exception {
@@ -48,6 +53,16 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
 
     @Override
     public XhKqBdgHdr create(XhKqBdgHdrReq req) throws Exception {
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null)
+            throw new Exception("Bad request.");
+
+        if (!StringUtils.isEmpty(req.getSoQdKq())){
+            Optional<XhKqBdgHdr> qOptional = xhKqBdgHdrRepository.findBySoQdKq(req.getSoQdKq());
+            if (qOptional.isPresent()){
+                throw new Exception("Số quyết định kết quả " + req.getSoQdKq() + " đã tồn tại");
+            }
+        }
         XhKqBdgHdr data = new XhKqBdgHdr();
         BeanUtils.copyProperties(req, data, "id");
         data.setNam(LocalDate.now().getYear());
@@ -60,8 +75,15 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
         if(!ObjectUtils.isEmpty(byMaThongBao)){
             throw new Exception("Mã thông báo này đã được quyết định kết quả bán đấu giá, xin vui lòng chọn mã thông báo khác");
         }
-        xhKqBdgHdrRepository.save(data);
-        return data;
+        XhKqBdgHdr created = xhKqBdgHdrRepository.save(data);
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
+            List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhKqBdgHdr.TABLE_NAME);
+            created.setFileDinhKems(fileDinhKems);
+
+            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), created.getId(), XhKqBdgHdr.TABLE_NAME);
+            created.setFileDinhKem(fileDinhKem);
+        }
+        return created;
     }
 
     @Override
@@ -77,8 +99,13 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
         BeanUtils.copyProperties(req, data, "id");
         data.setNgaySua(new Date());
         data.setNguoiSuaId(getUser().getId());
-        xhKqBdgHdrRepository.save(data);
-        return data;
+        XhKqBdgHdr created =  xhKqBdgHdrRepository.save(data);
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhKqBdgHdr.TABLE_NAME);
+        data.setFileDinhKems(fileDinhKems);
+
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), created.getId(), XhKqBdgHdr.TABLE_NAME);
+        data.setFileDinhKem(fileDinhKem);
+        return created;
     }
 
     @Override
@@ -95,6 +122,9 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
         data.setListHopDong(xhHopDongHdrRepository.findAllBySoQdKq(data.getSoQdKq()));
         Map<String, String> listDanhMucDvi = getListDanhMucDvi("2", null, "01");
         data.setTenDvi(listDanhMucDvi.get(data.getMaDvi()));
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhKqBdgHdr.TABLE_NAME));
+        data.setFileDinhKems(fileDinhKems);
+        data.setFileDinhKem(fileDinhKems);
         return data;
     }
 
@@ -149,8 +179,8 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
 
     @Override
     public void delete(Long id) throws Exception {
-        if (ObjectUtils.isEmpty(id)) {
-            throw new Exception("Không tìm thấy dữ liệu");
+        if (StringUtils.isEmpty(id)) {
+            throw new Exception("Xóa thất bại không tìm thấy dữ liệu");
         }
         Optional<XhKqBdgHdr> byId = xhKqBdgHdrRepository.findById(id);
         if (!byId.isPresent()) {
@@ -160,25 +190,60 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
             throw new Exception("Chỉ được xóa bản ghi với trang thái là dự thảo");
         }
         xhKqBdgHdrRepository.delete(byId.get());
+        fileDinhKemService.delete(byId.get().getId(), Collections.singleton(XhKqBdgHdr.TABLE_NAME));
+
     }
 
     @Override
     public void deleteMulti(List<Long> listMulti) throws Exception {
-        if (ObjectUtils.isEmpty(listMulti)) {
-            throw new Exception("Không tìm thấy dữ liệu");
+        if (StringUtils.isEmpty(listMulti)) {
+            throw new Exception("Xóa thất bại, không tìm thấy dữ liệu");
         }
-        listMulti.forEach(item -> {
-            try {
-                this.delete(item);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        });
+
+        List<XhKqBdgHdr> list = xhKqBdgHdrRepository.findByIdIn(listMulti);
+        if (list.isEmpty()){
+            throw new Exception("Không tìm thấy dữ liệu cần xóa");
+        }
+
+        for (XhKqBdgHdr hdr : list){
+            this.delete(hdr.getId());
+        }
     }
 
     @Override
     public void export(XhKqBdgHdrReq req, HttpServletResponse response) throws Exception {
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        req.setPaggingReq(paggingReq);
+        Page<XhKqBdgHdr> page = this.searchPage(req);
+        List<XhKqBdgHdr> data = page.getContent();
 
+        String title="Danh sách quyết định phê duyệt kết quả đấu giá";
+        String[] rowsName = new String[]{"STT","Năm Kế hoạch", "Số QĐ PD KQ BĐG", "Ngày ký", "Trích yếu", "Ngày tổ chức BĐG", "Số QĐ PD KH BĐG", "Mã thông báo BĐG", "Hình thức đấu thầu", "Phương thức đấu giá", "Số TB đấu giá không thành", "Số biên bản đấu giá", "Trạng thái"};
+        String filename="danh-sach-quyet-dinh-phe-duyet-ket-qua-dau-gia.xlsx";
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs=null;
+        for (int i = 0; i < data.size(); i++) {
+            XhKqBdgHdr hdr = data.get(i);
+            objs=new Object[rowsName.length];
+            objs[0]=i;
+            objs[1]=hdr.getNam();
+            objs[2]=hdr.getSoQdKq();
+            objs[3]=hdr.getNgayPduyet();
+            objs[4]=hdr.getTrichYeu();
+            objs[5]=hdr.getNgayKy();
+            objs[6]=hdr.getSoQdPd();
+            objs[7]=hdr.getMaThongBao();
+            objs[8]=hdr.getHinhThucDauGia();
+            objs[9]=hdr.getPthucDauGia();
+            objs[10]=hdr.getSoTbKhongThanh();
+            objs[11]=hdr.getSoBienBan();
+            objs[12]=hdr.getTenTrangThai();
+            dataList.add(objs);
+        }
+        ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+        ex.export();
     }
 
 }

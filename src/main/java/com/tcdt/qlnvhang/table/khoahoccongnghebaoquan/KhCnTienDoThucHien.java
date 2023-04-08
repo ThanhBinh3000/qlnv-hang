@@ -32,7 +32,5 @@ public class KhCnTienDoThucHien implements Serializable {
     @Transient
     private String tenTrangThaiTd;
 
-    @Transient
-    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
 }

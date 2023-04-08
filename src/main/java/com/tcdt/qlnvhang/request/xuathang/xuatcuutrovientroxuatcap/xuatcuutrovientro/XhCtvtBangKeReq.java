@@ -13,7 +13,7 @@ public class XhCtvtBangKeReq extends BaseRequest {
   private Long id;
   private Integer nam;
   private String maDvi;
-  private String maQhNs;
+  private String maQhns;
   private String soBangKe;
   private Long idQdGiaoNvXh;
   private String soQdGiaoNvXh;
@@ -28,7 +28,7 @@ public class XhCtvtBangKeReq extends BaseRequest {
   private String diaDiemKho;
   private String loaiVthh;
   private String cloaiVthh;
-  private String moTaHangHoa;
+  private String thuKho;
   private String nlqHoTen;
   private String nlqCmnd;
   private String nlqDonVi;
