@@ -129,6 +129,23 @@ public class HhDxuatKhLcntHdrController {
 		return ResponseEntity.ok(resp);
 	}
 
+	@ApiOperation(value = "Lấy chi tiết bằng số đề xuất", response = List.class)
+	@PostMapping(value = PathContains.URL_CHI_TIET + "/bySdx", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> detailBySoDx(@RequestBody HhDxuatKhLcntSearchReq objReq) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.detail(objReq.getSoDxuat()));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Lấy chi tiết trace: {}", e);
+		}
+		return ResponseEntity.ok(resp);
+	}
+
 	@ApiOperation(value = "Xoá", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
 	@PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
