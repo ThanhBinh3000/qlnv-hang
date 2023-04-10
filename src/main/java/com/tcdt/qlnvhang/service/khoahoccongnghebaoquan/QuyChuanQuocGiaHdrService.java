@@ -78,9 +78,6 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         data.setTrangThai(Contains.DUTHAO);
         if(DataUtils.isNullObject(objReq.getIdVanBanThayThe())){
             data.setIdVanBanThayThe(data.getId());
-        }else {
-            Optional<QuyChuanQuocGiaHdr> qc =quyChuanQuocGiaHdrRepository.findById(objReq.getIdVanBanThayThe());
-            qc.get().setTrangThaiHl("Hết hiệu lực");
         }
         QuyChuanQuocGiaHdr created= quyChuanQuocGiaHdrRepository.save(data);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),data.getId(),"KHCN_QUY_CHUAN_QG_HDR");
@@ -236,6 +233,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
             quyChuanQuocGiaHdrRepository.findById(created.getIdVanBanThayThe())
                 .ifPresent(vanBanThayThe -> {
                     vanBanThayThe.setNgayHetHieuLuc(LocalDate.now());
+                    vanBanThayThe.setTrangThaiHl("Hết hiệu lực");
                     quyChuanQuocGiaHdrRepository.save(vanBanThayThe);
                 });
         }
