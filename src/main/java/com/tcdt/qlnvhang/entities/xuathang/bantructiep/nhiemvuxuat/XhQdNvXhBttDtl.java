@@ -25,7 +25,7 @@ public class XhQdNvXhBttDtl {
     @Transient
     private String tenDvi;
 
-    private BigDecimal soLuong;
+    private BigDecimal soLuongChiCuc;
 
     @Transient
     private List<XhQdNvXhBttDvi> children = new ArrayList<>();

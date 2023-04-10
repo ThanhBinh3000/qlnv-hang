@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.ktracluong.bienbanlaymau.XhBbLayMauBttDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.ktracluong.bienbanlaymau.XhBbLayMauBttHdrRepository;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.ktracluong.bienbanlaymau.XhBbLayMauBttDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.ktracluong.bienbanlaymau.XhBbLayMauBttHdrReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
@@ -15,6 +16,7 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +61,7 @@ public class XhBbLayMauBttServiceImpl extends BaseServiceImpl implements  XhBbLa
             f.setTenDiemKho(StringUtils.isEmpty(f.getMaDiemKho()) ? null : hashMapDvi.get(f.getMaDiemKho()));
             f.setTenNhaKho(StringUtils.isEmpty(f.getMaNhaKho()) ? null : hashMapDvi.get(f.getMaNhaKho()));
             f.setTenNganKho(StringUtils.isEmpty(f.getMaNganKho()) ? null : hashMapDvi.get(f.getMaNganKho()));
-            f.setTenTrangThai(StringUtils.isEmpty(f.getMaLoKho()) ? null : hashMapDvi.get(f.getMaLoKho()));
+            f.setTenLoKho(StringUtils.isEmpty(f.getMaLoKho()) ? null : hashMapDvi.get(f.getMaLoKho()));
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapVthh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapVthh.get(f.getCloaiVthh()));
         });
@@ -255,11 +257,51 @@ public class XhBbLayMauBttServiceImpl extends BaseServiceImpl implements  XhBbLa
 
     @Override
     public void deleteMulti(List<Long> listMulti) throws Exception {
+        if (StringUtils.isEmpty(listMulti)) {
+            throw new Exception("Xóa thất bại, không tìm thấy dữ liệu");
+        }
 
+        List<XhBbLayMauBttHdr> list = xhBbLayMauBttHdrRepository.findByIdIn(listMulti);
+        if (list.isEmpty()){
+            throw new Exception("Không tìm thấy dữ liệu cần xóa");
+        }
+
+        for (XhBbLayMauBttHdr hdr : list){
+            this.delete(hdr.getId());
+        }
     }
 
     @Override
     public void export(XhBbLayMauBttHdrReq req, HttpServletResponse response) throws Exception {
-
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        req.setPaggingReq(paggingReq);
+        Page<XhBbLayMauBttHdr> page = this.searchPage(req);
+        List<XhBbLayMauBttHdr> data = page.getContent();
+        String title="Danh sách biên bản lấy mẫu bán trực tiếp";
+        String[] rowsName = new String[]{"STT","Số QĐ giao nhiệm vụ XH", "Năm KH", "Thời hạn XH trước ngày", "Điển kho", "Lô kho", "Số BB LM/BGM", "Ngày lấy mẫu", "Số BB tịnh kho", "Ngày xuất dốc kho", "sô BB hao dôi", "Trạng thái"};
+        String filename="danh-sach-biển-ban-lay-mau-ban-truc-tiep.xlsx";
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs=null;
+        for (int i = 0; i < data.size(); i++) {
+            XhBbLayMauBttHdr hdr = data.get(i);
+            objs=new Object[rowsName.length];
+            objs[0]=i;
+            objs[1]=hdr.getSoQd();
+            objs[2]=hdr.getNamKh();
+            objs[3]=hdr.getNgayQd();
+            objs[4]=hdr.getTenDiemKho();
+            objs[5]=hdr.getTenLoKho();
+            objs[6]=hdr.getSoBienBan();
+            objs[7]=hdr.getNgayLayMau();
+            objs[8]=hdr.getSoBbTinhKho();
+            objs[9]=hdr.getNgayXuatDocKho();
+            objs[10]=hdr.getSoBbHaoDoi();
+            objs[11]=hdr.getTenTrangThai();
+            dataList.add(objs);
+        }
+        ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+        ex.export();
     }
 }

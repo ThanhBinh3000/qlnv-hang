@@ -29,6 +29,9 @@ public class XhBbLayMauBttHdrReq extends BaseRequest {
 
     private String soQd;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayQd;
+
     private String soHd;
 
     private String loaiBienBan;
@@ -71,6 +74,13 @@ public class XhBbLayMauBttHdrReq extends BaseRequest {
 
     private Integer ketQuaNiemPhong;
 
+    private String soBbTinhKho;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayXuatDocKho;
+
+    private String soBbHaoDoi;
+
     @Transient
     private List<XhBbLayMauBttDtlReq> children = new ArrayList<>();
 
@@ -79,4 +89,9 @@ public class XhBbLayMauBttHdrReq extends BaseRequest {
 
     @Transient
     private FileDinhKemReq fileDinhKem;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayLayMauTu;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayLayMauDen;
 }
