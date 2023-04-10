@@ -30,6 +30,7 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -231,6 +232,13 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         }
         optional.get().setTrangThai(statusReq.getTrangThai());
         QuyChuanQuocGiaHdr created = quyChuanQuocGiaHdrRepository.save(optional.get());
+        if (created.getIdVanBanThayThe() != null && created.getTrangThai().equals(Contains.BAN_HANH) ) {
+            quyChuanQuocGiaHdrRepository.findById(created.getIdVanBanThayThe())
+                .ifPresent(vanBanThayThe -> {
+                    vanBanThayThe.setNgayHetHieuLuc(LocalDate.now());
+                    quyChuanQuocGiaHdrRepository.save(vanBanThayThe);
+                });
+        }
         return created;
     }
 
