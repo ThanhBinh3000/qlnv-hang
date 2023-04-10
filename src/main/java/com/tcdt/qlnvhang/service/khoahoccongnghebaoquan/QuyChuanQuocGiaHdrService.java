@@ -78,9 +78,6 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         data.setTrangThai(Contains.DUTHAO);
         if(DataUtils.isNullObject(objReq.getIdVanBanThayThe())){
             data.setIdVanBanThayThe(data.getId());
-        }else {
-            Optional<QuyChuanQuocGiaHdr> qc =quyChuanQuocGiaHdrRepository.findById(objReq.getIdVanBanThayThe());
-            qc.get().setTrangThaiHl("Hết hiệu lực");
         }
         QuyChuanQuocGiaHdr created= quyChuanQuocGiaHdrRepository.save(data);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),data.getId(),"KHCN_QUY_CHUAN_QG_HDR");
@@ -125,7 +122,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
             throw new Exception("Bản ghi không tồn tại");
         }
         QuyChuanQuocGiaHdr data= optional.get();
-        Map<String,String> hashMapDmHh = getAllHangByBoNganh(data.getMaDvi().substring(0,2));
+        Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
         Map<String,String> hashMapDvi = getListDanhMucDvi(null,null,"01");
         data.setTenDvi(StringUtils.isEmpty(data.getMaDvi())?null:hashMapDvi.get(data.getMaDvi()));
         data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh())?null:hashMapDmHh.get(data.getLoaiVthh()));
@@ -236,6 +233,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
             quyChuanQuocGiaHdrRepository.findById(created.getIdVanBanThayThe())
                 .ifPresent(vanBanThayThe -> {
                     vanBanThayThe.setNgayHetHieuLuc(LocalDate.now());
+                    vanBanThayThe.setTrangThaiHl("Hết hiệu lực");
                     quyChuanQuocGiaHdrRepository.save(vanBanThayThe);
                 });
         }
