@@ -22,7 +22,6 @@ public class XhCtvtQdGiaoNvXhHdrReq {
   private String cloaiVthh;
   private BigDecimal soLuong;
   private String donViTinh;
-  private String thuKho;
   private LocalDate thoiGianGiaoNhan;
   private String trichYeu;
   private String trangThai;
