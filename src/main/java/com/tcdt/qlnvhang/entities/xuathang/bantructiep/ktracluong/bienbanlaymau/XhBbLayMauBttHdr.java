@@ -38,6 +38,9 @@ public class XhBbLayMauBttHdr extends TrangThaiBaseEntity implements Serializabl
 
     private String soQd;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayQd;
+
     private String soHd;
 
     private String loaiBienBan;
@@ -93,6 +96,13 @@ public class XhBbLayMauBttHdr extends TrangThaiBaseEntity implements Serializabl
     private String chiTieuKiemTra;
 
     private Integer ketQuaNiemPhong;
+
+    private String soBbTinhKho;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayXuatDocKho;
+
+    private String soBbHaoDoi;
 
     @Transient
     private List<XhBbLayMauBttDtl> children = new ArrayList<>();

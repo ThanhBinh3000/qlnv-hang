@@ -27,7 +27,7 @@ public class XhHopDongBttDtl implements Serializable {
     @Transient
     private String tenDvi;
 
-    private BigDecimal soLuong;
+    private BigDecimal soLuongChiCuc;
 
     private BigDecimal donGiaVat;
 

@@ -15,7 +15,7 @@ public class XhHopDongBttDtlReq {
 
     private String maDvi;
 
-    private BigDecimal soLuong;
+    private BigDecimal soLuongChiCuc;
 
     private BigDecimal donGiaVat;
 

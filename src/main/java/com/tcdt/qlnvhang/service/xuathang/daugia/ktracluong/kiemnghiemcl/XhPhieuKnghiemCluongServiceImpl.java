@@ -133,7 +133,7 @@ public class XhPhieuKnghiemCluongServiceImpl extends BaseServiceImpl implements 
             data.setTenNguoiKiemNghiem(userInfoRepository.findById(data.getIdNguoiKiemNghiem()).get().getFullName());
         }
         data.setTenDiemKho(mapDmucDvi.get(data.getMaDiemKho()));
-        data.setTenNhaKho(mapDmucDvi.get(data.getMaNganKho()));
+        data.setTenNhaKho(mapDmucDvi.get(data.getMaNhaKho()));
         data.setTenNganKho(mapDmucDvi.get(data.getMaNganKho()));
         data.setTenLoKho(mapDmucDvi.get(data.getMaLoKho()));
         data.setChildren(subRepository.findAllByIdHdr(id));

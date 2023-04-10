@@ -14,7 +14,7 @@ public class XhQdNvXhBttDtlReq {
 
     private String maDvi;
 
-    private BigDecimal soLuong;
+    private BigDecimal soLuongChiCuc;
 
     private List<XhQdNvXhBttDviReq> children = new ArrayList<>();
 }
