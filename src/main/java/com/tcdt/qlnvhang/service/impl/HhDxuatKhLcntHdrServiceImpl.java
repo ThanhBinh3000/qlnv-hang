@@ -360,6 +360,12 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
     }
 
     @Override
+    public HhDxuatKhLcntHdr detail(String soDx) throws Exception {
+        Optional<HhDxuatKhLcntHdr> data = hhDxuatKhLcntHdrRepository.findBySoDxuat(soDx);
+        return data.get();
+    }
+
+    @Override
     public Page<HhDxuatKhLcntHdr> colection(HhDxuatKhLcntSearchReq objReq, HttpServletRequest req) throws Exception {
         int page = PaginationSet.getPage(objReq.getPaggingReq().getPage());
         int limit = PaginationSet.getLimit(objReq.getPaggingReq().getLimit());
