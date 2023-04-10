@@ -19,11 +19,13 @@ public class QuyChuanQuocGiaHdrReq {
     private String cloaiVthh;
     private LocalDate ngayKy;
     private LocalDate ngayHieuLuc;
+    private LocalDate ngayHetHieuLuc;
     private String soHieuQuyChuan;
     private String apDungTai;
     private String loaiApDung;
     private String danhSachApDung;
     private String trichYeu;
+    private String type;
     private int thoiGianLuuKhoToiDa;
     private boolean lastest;
     private String trangThai;
