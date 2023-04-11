@@ -240,7 +240,6 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
         }
         xhCtvtDeXuatHdrRepository.saveAll(listDxHdr);
       }
-      xhCtvtTongHopDtlRepository.deleteAll(listDls);
     }
     xhCtvtTongHopHdrRepository.deleteAllByIdIn(idSearchReq.getIdList());
   }
