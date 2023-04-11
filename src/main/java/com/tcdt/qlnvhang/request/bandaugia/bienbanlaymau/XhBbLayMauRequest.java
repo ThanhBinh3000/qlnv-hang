@@ -10,10 +10,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.Transient;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,6 +38,9 @@ public class XhBbLayMauRequest extends BaseRequest {
 	private Long idQd;
 
 	private String soQd;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	private Date ngayQd;
 
 	private String soHd;
 
@@ -80,7 +82,16 @@ public class XhBbLayMauRequest extends BaseRequest {
 
 	private Integer ketQuaNiemPhong;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	private Date ngayLayMauTu;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	private Date ngayLayMauDen;
+
+	@Transient
 	private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
+
+	@Transient
+	private FileDinhKemReq fileDinhKem;
 
 	private List<XhBbLayMauCtRequest> children = new ArrayList<>();
 }

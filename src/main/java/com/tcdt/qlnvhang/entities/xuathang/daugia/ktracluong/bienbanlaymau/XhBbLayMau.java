@@ -41,6 +41,9 @@ public class XhBbLayMau extends TrangThaiBaseEntity implements Serializable {
 
 	private String soQd;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	private Date ngayQd;
+
 	private String soHd;
 
 	private String loaiBienBan;
@@ -51,7 +54,6 @@ public class XhBbLayMau extends TrangThaiBaseEntity implements Serializable {
 	private Long idKtv;
 
 	private String soBienBan;
-
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	private Date ngayLayMau;
@@ -84,6 +86,13 @@ public class XhBbLayMau extends TrangThaiBaseEntity implements Serializable {
 
 	private Integer ketQuaNiemPhong;
 
+	private String soBbTinhKho;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	private Date ngayXuatDocKho;
+
+	private String soBbHaoDoi;
+
 	// Transient
 	@Transient
 	private String tenKtv;
@@ -111,6 +120,9 @@ public class XhBbLayMau extends TrangThaiBaseEntity implements Serializable {
 
 	@Transient
 	private List<FileDinhKem> fileDinhKems = new ArrayList<>();
+
+	@Transient
+	private FileDinhKem fileDinhKem;
 
 	@Transient
 	private List<XhBbLayMauCt> children = new ArrayList<>();

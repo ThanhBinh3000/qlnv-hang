@@ -23,7 +23,9 @@ public class XhBbLayMauCt implements Serializable {
 	@Column(name = "ID")
 	private Long id;
 
-	private Long bbLayMauId;
+	private Long idHdr;
+
 	private String loaiDaiDien;
+
 	private String daiDien;
 }

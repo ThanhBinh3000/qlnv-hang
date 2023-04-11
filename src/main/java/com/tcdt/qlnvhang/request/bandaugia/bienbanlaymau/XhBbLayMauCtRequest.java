@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class XhBbLayMauCtRequest {
 	private Long id;
-	private Long xhBbLayMauId;
+	private Long idHdr;
 	private String loaiDaiDien;
 	private String daiDien;
 }
