@@ -41,6 +41,11 @@ public class XhQdGiaoNvuXuatReq extends BaseRequest {
     private String loaiHinhNx;
 
     private String kieuNx;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayTaoTu;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayTaoDen;
     
     private List<XhQdGiaoNvuXuatCtReq> children = new ArrayList<>();
 

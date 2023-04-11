@@ -86,12 +86,6 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
     private XhKqBttHdrRepository xhKqBttHdrRepository;
 
     @Autowired
-    private XhBbLayMauBttHdrRepository xhBbLayMauBttHdrRepository;
-
-    @Autowired
-    private XhPhieuKtraCluongBttHdrRepository xhPhieuKtraCluongBttHdrRepository;
-
-    @Autowired
     private XhPhieuXkhoBttReposytory xhPhieuXkhoBttReposytory;
 
     @Autowired
@@ -122,29 +116,6 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
 
         data.getContent().forEach(f ->{
-            // Set biên bản lấy mẫu
-            List<XhBbLayMauBttHdr> allByIdQd = xhBbLayMauBttHdrRepository.findAllByIdQd(f.getId());
-            allByIdQd.forEach(x ->{
-                x.setTenLoaiVthh(hashMapVthh.get(x.getLoaiVthh()));
-                x.setTenCloaiVthh(hashMapVthh.get(x.getCloaiVthh()));
-                x.setTenDiemKho(hashMapDvi.get(x.getMaDiemKho()));
-                x.setTenNhaKho(hashMapDvi.get(x.getMaNganKho()));
-                x.setTenNganKho(hashMapDvi.get(x.getMaNganKho()));
-                x.setTenLoKho(hashMapDvi.get(x.getMaLoKho()));
-            });
-            f.setXhBbLayMauBttHdrList(allByIdQd);
-
-            // Set kiểm tra chất lượng
-            List<XhPhieuKtraCluongBttHdr> xhPhieuKtraCluongBttHdrList = xhPhieuKtraCluongBttHdrRepository.findAllByIdQd(f.getId());
-            xhPhieuKtraCluongBttHdrList.forEach(s ->{
-                s.setTenLoaiVthh(hashMapVthh.get(s.getLoaiVthh()));
-                s.setTenCloaiVthh(hashMapVthh.get(s.getCloaiVthh()));
-                s.setTenDiemKho(hashMapDvi.get(s.getMaDiemKho()));
-                s.setTenNhaKho(hashMapDvi.get(s.getMaNganKho()));
-                s.setTenNganKho(hashMapDvi.get(s.getMaNganKho()));
-                s.setTenLoKho(hashMapDvi.get(s.getMaLoKho()));
-            });
-            f.setXhPhieuKtraCluongBttHdrList(xhPhieuKtraCluongBttHdrList);
 
             // Phiếu xuất kho
             List<XhPhieuXkhoBtt> xhPhieuXkhoBttList = xhPhieuXkhoBttReposytory.findAllByIdQd(f.getId());
@@ -260,7 +231,6 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
 
         if (req.getPhanLoai().equals("HD")){
             dataHd.setTrangThaiXh(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
-            dataHd.setSoQd(dataMap.getSoQd());
             xhHopDongBttHdrRepository.save(dataHd);
         }else {
             dataQdPdKq.setTrangThaiXh(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
@@ -368,48 +338,11 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         for (XhQdNvXhBttDtl dtl : dtlList){
             List<XhQdNvXhBttDvi> dviList = xhQdNvXhBttDviRepository.findAllByIdDtl(dtl.getId());
             for (XhQdNvXhBttDvi dvi :dviList){
-                List<XhPhieuKtraCluongBttHdr> cluongBttHdrList = xhPhieuKtraCluongBttHdrRepository.findAllByIdDdiemXh(dvi.getId());
-                cluongBttHdrList.forEach(f ->{
-                    f.setTenDiemKho(hashMapDvi.get(f.getMaDiemKho()));
-                    f.setTenNhaKho(hashMapDvi.get(f.getMaNhaKho()));
-                    f.setTenNganKho(hashMapDvi.get(f.getMaNganKho()));
-                    f.setTenLoKho(hashMapDvi.get(f.getMaLoKho()));
-                    f.setTenLoaiVthh(hashMapVthh.get(f.getLoaiVthh()));
-                    f.setTenCloaiVthh(hashMapVthh.get(f.getCloaiVthh()));
-                    if(!Objects.isNull(f.getIdKtv())){
-                        f.setTenKtv(userInfoRepository.findById(f.getIdKtv()).get().getFullName());
-                    }
-                });
-
-                List<XhPhieuXkhoBtt> xhPhieuXkhoBttList = xhPhieuXkhoBttReposytory.findAllByIdDdiemXh(dvi.getId());
-                xhPhieuXkhoBttList.forEach(s ->{
-                    s.setTenDiemKho(hashMapDvi.get(s.getMaDiemKho()));
-                    s.setTenNhaKho(hashMapDvi.get(s.getMaNhaKho()));
-                    s.setTenNganKho(hashMapDvi.get(s.getMaNganKho()));
-                    s.setTenLoKho(hashMapDvi.get(s.getMaLoKho()));
-                    s.setTenLoaiVthh(hashMapVthh.get(s.getLoaiVthh()));
-                    s.setTenCloaiVthh(hashMapVthh.get(s.getCloaiVthh()));
-                    if(!Objects.isNull(s.getIdKtv())){
-                        s.setTenKtv(userInfoRepository.findById(s.getIdKtv()).get().getFullName());
-                    }
-                });
-
-                List<XhBbTinhkBttHdr> xhBbTinhkBttHdrList = xhBbTinhkBttHdrRepository.findAllByIdDdiemXh(dvi.getId());
-                xhBbTinhkBttHdrList.forEach(t ->{
-                    t.setTenDiemKho(hashMapDvi.get(t.getMaDiemKho()));
-                    t.setTenNhaKho(hashMapDvi.get(t.getMaNhaKho()));
-                    t.setTenNganKho(hashMapDvi.get(t.getMaNganKho()));
-                    t.setTenLoKho(hashMapDvi.get(t.getMaLoKho()));
-                });
-                dvi.setXhBbTinhkBttHdrList(xhBbTinhkBttHdrList);
-                dvi.setXkhoBttList(xhPhieuXkhoBttList);
-                dvi.setChildren(cluongBttHdrList);
                 dvi.setTenDiemKho(hashMapDvi.get(dvi.getMaDiemKho()));
                 dvi.setTenNhaKho(hashMapDvi.get(dvi.getMaNhaKho()));
                 dvi.setTenNganKho(hashMapDvi.get(dvi.getMaNganKho()));
                 dvi.setTenLoKho(hashMapDvi.get(dvi.getMaLoKho()));
             }
-
             dtl.setTenDvi(hashMapDvi.get(dtl.getMaDvi()));
             dtl.setChildren(dviList);
         }
@@ -459,6 +392,24 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
                 throw new Exception("Phê duyệt không thành công");
         }
         optional.get().setTrangThai(req.getTrangThai());
+
+        if (req.getTrangThai().equals(Contains.BAN_HANH)){
+
+                Optional<XhHopDongBttHdr> hopDongBttHdr = xhHopDongBttHdrRepository.findById(data.getIdHd());
+                if (hopDongBttHdr.isPresent()){
+                    hopDongBttHdr.get().setSoQd(data.getSoQd());
+                    hopDongBttHdr.get().setTrangThaiXh(NhapXuatHangTrangThaiEnum.DA_HOAN_THANH.getId());
+                    xhHopDongBttHdrRepository.save(hopDongBttHdr.get());
+                }
+//               Optional<XhKqBttHdr> kqBttHdr = xhKqBttHdrRepository.findById(data.getIdQdKqCg());
+//               if (kqBttHdr.isPresent()){
+//                   kqBttHdr.get().setTrangThaiXh(NhapXuatHangTrangThaiEnum.DA_HOAN_THANH.getId());
+//                   xhKqBttHdrRepository.save(kqBttHdr.get());
+//               }
+
+               data.setTrangThaiXh(NhapXuatHangTrangThaiEnum.DA_HOAN_THANH.getId());
+        }
+
         xhQdNvXhBttHdrRepository.save(data);
         return data;
     }
@@ -479,6 +430,13 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
                 && !hdr.getTrangThai().equals(Contains.TU_CHOI_TP)
                 && !hdr.getTrangThai().equals(Contains.TUCHOI_LDC)) {
             throw new Exception("Chỉ thực hiện xóa với kế hoạch ở trạng thái bản nháp hoặc từ chối ");
+        }
+
+        Optional<XhHopDongBttHdr> hopDongBttHdr = xhHopDongBttHdrRepository.findById(hdr.getIdHd());
+        if (hopDongBttHdr.isPresent()){
+            hopDongBttHdr.get().setIdHd(null);
+            hopDongBttHdr.get().setTrangThaiXh(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
+            xhHopDongBttHdrRepository.save(hopDongBttHdr.get());
         }
 
         List<XhQdNvXhBttDtl> dtlList = xhQdNvXhBttDtlRepository.findAllByIdQdHdr(id);

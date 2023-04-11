@@ -1,0 +1,13 @@
+# .gitlab-ci.yml
+
+stages:
+  - build
+
+build:
+  stage: build
+  script:
+    - npm install # Cài đặt các gói phụ thuộc
+    - npm run build # Thực hiện lệnh build dự án Angular
+  artifacts:
+    paths:
+      - dist/ # Lưu trữ thư mục dist (nơi chứa file build)

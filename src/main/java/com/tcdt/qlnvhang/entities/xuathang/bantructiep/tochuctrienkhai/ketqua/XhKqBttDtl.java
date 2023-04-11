@@ -26,7 +26,7 @@ public class XhKqBttDtl {
     @Transient
     private String tenDvi;
 
-    private BigDecimal soLuong;
+    private BigDecimal soLuongChiCuc;
 
     private String diaChi;
 

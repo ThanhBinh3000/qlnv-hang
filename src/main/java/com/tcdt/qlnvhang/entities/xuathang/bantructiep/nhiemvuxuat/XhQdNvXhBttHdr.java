@@ -75,14 +75,6 @@ public class XhQdNvXhBttHdr extends TrangThaiBaseEntity implements Serializable 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date tgianGnhan;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
-    private Date tgianGnhanTu;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
-    private Date tgianGnhanDen;
-
     private String trichYeu;
 
     private String trangThaiXh;
@@ -104,12 +96,6 @@ public class XhQdNvXhBttHdr extends TrangThaiBaseEntity implements Serializable 
 
     @Transient
     private List<String> listMaDviTsan = new ArrayList<>();
-
-    @Transient
-    private List<XhBbLayMauBttHdr> xhBbLayMauBttHdrList = new ArrayList<>();
-
-    @Transient
-    private List<XhPhieuKtraCluongBttHdr> xhPhieuKtraCluongBttHdrList = new ArrayList<>();
 
     @Transient
     private List<XhPhieuXkhoBtt> xhPhieuXkhoBttList = new ArrayList<>();

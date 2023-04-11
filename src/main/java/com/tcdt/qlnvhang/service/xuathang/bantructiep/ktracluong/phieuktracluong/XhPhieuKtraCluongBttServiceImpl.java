@@ -1,11 +1,13 @@
 package com.tcdt.qlnvhang.service.xuathang.bantructiep.ktracluong.phieuktracluong;
 
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.bienbanlaymau.XhBbLayMauBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.phieuktracluong.XhPhieuKtraCluongBttDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.phieuktracluong.XhPhieuKtraCluongBttHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.ktracluong.phieuktracluong.XhPhieuKtraCluongBttDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.ktracluong.phieuktracluong.XhPhieuKtraCluongBttHdrRepository;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.ktracluong.phieuktracluong.XhPhieuKtraCluongBttDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.ktracluong.phieuktracluong.XhPhieuKtraCluongBttHdrReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
@@ -60,7 +62,7 @@ public class XhPhieuKtraCluongBttServiceImpl extends BaseServiceImpl implements 
             f.setTenDiemKho(StringUtils.isEmpty(f.getMaDiemKho()) ? null : hashMapDvi.get(f.getMaDiemKho()));
             f.setTenNhaKho(StringUtils.isEmpty(f.getMaNhaKho()) ? null : hashMapDvi.get(f.getMaNhaKho()));
             f.setTenNganKho(StringUtils.isEmpty(f.getMaNganKho()) ? null : hashMapDvi.get(f.getMaNganKho()));
-            f.setTenTrangThai(StringUtils.isEmpty(f.getMaLoKho()) ? null : hashMapDvi.get(f.getMaLoKho()));
+            f.setTenLoKho(StringUtils.isEmpty(f.getMaLoKho()) ? null : hashMapDvi.get(f.getMaLoKho()));
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapVthh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapVthh.get(f.getCloaiVthh()));
         });
@@ -254,11 +256,50 @@ public class XhPhieuKtraCluongBttServiceImpl extends BaseServiceImpl implements 
 
     @Override
     public void deleteMulti(List<Long> listMulti) throws Exception {
+        if (StringUtils.isEmpty(listMulti)) {
+            throw new Exception("Xóa thất bại, không tìm thấy dữ liệu");
+        }
 
+        List<XhPhieuKtraCluongBttHdr> list =xhPhieuKtraCluongBttHdrRepository.findByIdIn(listMulti);
+        if (list.isEmpty()){
+            throw new Exception("Không tìm thấy dữ liệu cần xóa");
+        }
+
+        for (XhPhieuKtraCluongBttHdr hdr : list){
+            this.delete(hdr.getId());
+        }
     }
 
     @Override
     public void export(XhPhieuKtraCluongBttHdrReq req, HttpServletResponse response) throws Exception {
-
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        req.setPaggingReq(paggingReq);
+        Page<XhPhieuKtraCluongBttHdr> page = this.searchPage(req);
+        List<XhPhieuKtraCluongBttHdr> data = page.getContent();
+        String title="Danh sách phiếu kiểm tra chất lượng bán trực tiếp";
+        String[] rowsName = new String[]{"STT","Số QĐ giao NCXH", "Năm KH", "Thời hạn XH trước ngày", "Điển kho", "Lô kho", "Số phiếu KNCL", "Ngày kiểm nghiệm", "Số BB LM/BGM", "Ngày lấy mẫu", "Số BB xuất dốc kho","Ngày xuất dốc kho", "Trạng thái"};
+        String filename="danh-sach-phieu-kiem-tra-chat-luong-ban-truc-tiep.xlsx";
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs=null;
+        for (int i = 0; i < data.size(); i++) {
+            XhPhieuKtraCluongBttHdr hdr = data.get(i);
+            objs=new Object[rowsName.length];
+            objs[0]=i;
+            objs[1]=hdr.getSoQd();
+            objs[2]=hdr.getNamKh();
+            objs[3]=hdr.getNgayQd();
+            objs[4]=hdr.getTenDiemKho();
+            objs[5]=hdr.getTenLoKho();
+            objs[6]=hdr.getSoPhieu();
+            objs[7]=hdr.getNgayKnghiem();
+            objs[8]=hdr.getSoBienBan();
+            objs[9]=hdr.getNgayLayMau();
+            objs[10]=hdr.getSoBbXuatDoc();
+            objs[11]=hdr.getNgayXuatDocKho();
+            objs[12]=hdr.getTenTrangThai();
+            dataList.add(objs);
+        }
     }
 }

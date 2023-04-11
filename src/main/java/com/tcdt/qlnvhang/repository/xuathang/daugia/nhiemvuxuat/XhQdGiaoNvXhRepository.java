@@ -14,15 +14,16 @@ import java.util.Optional;
 
 @Repository
 public interface XhQdGiaoNvXhRepository extends BaseRepository<XhQdGiaoNvXh, Long> {
-    @Query("SELECT c FROM XhQdGiaoNvXh c " +
-            " LEFT JOIN XhQdGiaoNvXhDtl dtl on c.id = dtl.idQdHdr " +
-            " WHERE 1 = 1 " +
-            "AND (:#{#param.maDvi} IS NULL OR c.maDvi = :#{#param.maDvi}) " +
-            "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
-            "AND (:#{#param.loaiVthh } IS NULL OR LOWER(c.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
-            "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
-            "AND (:#{#param.maChiCuc} IS NULL OR dtl.maDvi = :#{#param.maChiCuc}) "
-    )
+
+    @Query("SELECT QD from XhQdGiaoNvXh QD WHERE 1 = 1 " +
+            "AND (:#{#param.nam} IS NULL OR QD.nam = :#{#param.nam}) " +
+            "AND (:#{#param.soQd} IS NULL OR LOWER(QD.soQd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQd}),'%' ) ) )" +
+            "AND (:#{#param.ngayTaoTu} IS NULL OR QD.ngayTao >= :#{#param.ngayTaoTu}) " +
+            "AND (:#{#param.ngayTaoDen} IS NULL OR QD.ngayTao <= :#{#param.ngayTaoDen}) " +
+            "AND (:#{#param.trichYeu} IS NULL OR LOWER(QD.trichYeu) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.trichYeu}),'%'))) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR QD.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
+            "AND (:#{#param.trangThai} IS NULL OR QD.trangThai = :#{#param.trangThai}) " +
+            "AND (:#{#param.maDvi} IS NULL OR QD.maDvi = :#{#param.maDvi})")
     Page<XhQdGiaoNvXh> searchPage(@Param("param") XhQdGiaoNvuXuatReq param, Pageable pageable);
 
     Optional<XhQdGiaoNvXh> findAllBySoQd(String soQd);

@@ -42,12 +42,4 @@ public class XhQdNvXhBttDvi {
 
     private BigDecimal soLuong;
 
-    @Transient
-    private List<XhPhieuKtraCluongBttHdr> children = new ArrayList<>();
-
-    @Transient
-    private List<XhPhieuXkhoBtt> xkhoBttList = new ArrayList<>();
-
-    @Transient
-    private List<XhBbTinhkBttHdr> xhBbTinhkBttHdrList = new ArrayList<>();
 }
