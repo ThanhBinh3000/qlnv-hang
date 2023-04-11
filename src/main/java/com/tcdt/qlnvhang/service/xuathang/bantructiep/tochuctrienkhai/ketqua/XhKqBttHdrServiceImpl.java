@@ -107,7 +107,7 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
         data.setTrangThaiXh(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
 
         XhKqBttHdr created =  xhKqBttHdrRepository.save(data);
-        Optional<XhQdPdKhBttDtl> dtl = xhQdPdKhBttDtlRepository.findById(req.getIdPdKhDtl());
+        Optional<XhQdPdKhBttDtl> dtl = xhQdPdKhBttDtlRepository.findById(created.getIdPdKhDtl());
         if (dtl.isPresent()){
             dtl.get().setIdSoQdKq(created.getId());
             dtl.get().setTypeSoQdKq(true);

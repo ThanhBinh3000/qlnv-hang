@@ -21,6 +21,7 @@ public class XhQdGiaoNvuXuatReq extends BaseRequest {
     private String soQd;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKy;
+    private Long idHd;
     private String soHd;
     private LocalDate ngayKyHd;
     private String maDviTsan;

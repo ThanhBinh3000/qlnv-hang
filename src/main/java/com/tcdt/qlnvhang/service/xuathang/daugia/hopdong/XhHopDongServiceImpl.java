@@ -87,6 +87,7 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
         dataMap.setNgayTao(new Date());
         dataMap.setTrangThai(Contains.DU_THAO);
         dataMap.setMaDvi(userInfo.getDvql());
+        dataMap.setTypeQdGnv(false);
 //        dataMap.setMaDviTsan(String.join(",",req.getListMaDviTsan()));
 
         xhHopDongHdrRepository.save(dataMap);
