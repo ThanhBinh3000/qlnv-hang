@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcHdr;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -35,9 +36,9 @@ public class XhCtvtTongHopDtl implements Serializable {
     @Transient
     private String tenDviDx;
 
-
-    @ManyToOne
-    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idHdr")
+    @JsonIgnore
     private XhCtvtTongHopHdr xhCtvtTongHopHdr;
+
 }

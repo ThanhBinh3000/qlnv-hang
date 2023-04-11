@@ -60,7 +60,7 @@ public class XhCtvtTongHopHdr extends BaseEntity implements Serializable {
     @Transient
     private String tenDvi;
 
-    @OneToMany(mappedBy = "xhCtvtTongHopHdr")
+    @OneToMany(mappedBy = "xhCtvtTongHopHdr",cascade = CascadeType.ALL)
 //    @Transient
     private List<XhCtvtTongHopDtl> deXuatCuuTro = new ArrayList<>();
 
