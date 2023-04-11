@@ -33,7 +33,7 @@ import java.util.Map;
 @Slf4j
 @Api(tags = "Điều chuyển nội bộ - Kế hoạch điều chuyển")
 public class DcnbKeHoachDcHdrController extends BaseController {
-  //    XhCtvtDeXuatHdr
+  //    DcnbKeHoachDcHdr
   @Autowired
   DcnbKeHoachDcDtlService dcnbKeHoachDcDtlService;
 

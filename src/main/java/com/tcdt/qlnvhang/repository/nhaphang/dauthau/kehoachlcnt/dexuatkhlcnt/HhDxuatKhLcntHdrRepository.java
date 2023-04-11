@@ -110,11 +110,19 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 			, nativeQuery = true)
 	List<Object[]> getQdPdKhLcnt(Collection<Long> dxIds, String trangThai);
 
-	@Query(value = " SELECT PAG.GIA_DE_NGHI_VAT FROM KH_PHUONG_AN_GIA PAG " +
-			" WHERE PAG.TRANG_THAI = '05' AND PAG.LOAI_GIA = 'LG01' AND PAG.TYPE = 'GMTDBTT' AND PAG.CLOAI_VTHH = :cloaiVthh AND PAG.MA_DVI = :maDvi AND PAG.NAM_KE_HOACH = :namKhoach " +
+	@Query(value = " SELECT dtl.GIA_QD_VAT_BTC FROM KH_PAG_QD_BTC_CTIET dtl " +
+			"JOIN KH_PAG_QD_BTC hdr ON dtl.QD_BTC_ID = hdr.ID " +
+			" WHERE hdr.TRANG_THAI = '29' AND hdr.LOAI_GIA = 'LG01'  AND hdr.CLOAI_VTHH = :cloaiVthh AND dtl.MA_DVI = :maDvi AND hdr.NAM_KE_HOACH = :namKhoach AND hdr.NGAY_HIEU_LUC <= SYSDATE " +
 			" FETCH FIRST 1 ROWS ONLY ",
 			nativeQuery = true)
-	BigDecimal getGiaBanToiDa(String cloaiVthh, String maDvi, String namKhoach);
+	BigDecimal getGiaBanToiDaLt(String cloaiVthh, String maDvi, String namKhoach);
+
+	@Query(value = " SELECT dtl.GIA_QD_VAT FROM KH_PAG_TT_CHUNG dtl " +
+			"JOIN KH_PAG_QD_BTC hdr ON dtl.QD_BTC_ID = hdr.ID " +
+			" WHERE hdr.TRANG_THAI = '29' AND hdr.LOAI_GIA = 'LG01'  AND dtl.CLOAI_VTHH = :cloaiVthh AND hdr.NAM_KE_HOACH = :namKhoach AND hdr.NGAY_HIEU_LUC <= SYSDATE " +
+			" FETCH FIRST 1 ROWS ONLY ",
+			nativeQuery = true)
+	BigDecimal getGiaBanToiDaVt(String cloaiVthh, String namKhoach);
 
 	@Query(value = " select ct.id from KH_CHI_TIEU_KE_HOACH_NAM ct join HH_DX_KHLCNT_HDR hdr ON ct.SO_QUYET_DINH = hdr.SO_QD " +
 			" WHERE hdr.id = :khlcntId ",
