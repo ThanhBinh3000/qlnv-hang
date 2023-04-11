@@ -911,6 +911,9 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 
     @Override
     public BigDecimal getGiaBanToiDa(String cloaiVhtt, String maDvi, String namKhoach) {
-        return hhDxuatKhLcntHdrRepository.getGiaBanToiDa(cloaiVhtt, maDvi, namKhoach);
+        if (cloaiVhtt.startsWith("02")) {
+            return hhDxuatKhLcntHdrRepository.getGiaBanToiDaVt(cloaiVhtt, namKhoach);
+        }
+        return hhDxuatKhLcntHdrRepository.getGiaBanToiDaLt(cloaiVhtt, maDvi, namKhoach);
     }
 }
