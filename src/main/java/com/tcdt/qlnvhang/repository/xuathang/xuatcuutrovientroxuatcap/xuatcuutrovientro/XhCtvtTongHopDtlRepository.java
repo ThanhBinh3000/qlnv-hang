@@ -10,8 +10,8 @@ import java.util.List;
 
 @Repository
 public interface XhCtvtTongHopDtlRepository extends JpaRepository<XhCtvtTongHopDtl, Long> {
-    List<XhCtvtTongHopDtl> findAllByXhCtvtTongHopHdr(Long idHdr);
-    List<XhCtvtTongHopDtl> findAllByXhCtvtTongHopHdrIn(List<Long> idHdr);
+    List<XhCtvtTongHopDtl> findAllByXhCtvtTongHopHdrId(Long idHdr);
+    List<XhCtvtTongHopDtl> findAllByXhCtvtTongHopHdrIdIn(List<Long> idHdr);
 
     @Transactional
     @Modifying
