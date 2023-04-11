@@ -62,7 +62,7 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
       f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmhh.get(f.getCloaiVthh()));
       f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
 
-      List<XhCtvtTongHopDtl> listTh = xhCtvtTongHopDtlRepository.findAllByIdHdr(f.getId());
+      List<XhCtvtTongHopDtl> listTh = xhCtvtTongHopDtlRepository.findAllByXhCtvtTongHopHdr(f.getId());
       listTh.forEach(s -> {
         if (mapDmucDvi.containsKey((s.getMaDviDx()))) {
           Map<String, Object> objDonVi = mapDmucDvi.get(s.getMaDviDx());
@@ -86,7 +86,7 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
     for (XhCtvtDeXuatHdr dxuat : dxuatList) {
       XhCtvtTongHopDtl thopDtl = new XhCtvtTongHopDtl();
       BeanUtils.copyProperties(dxuat, thopDtl, "id");
-      thopDtl.setIdHdr(objReq.getId());
+//      thopDtl.setIdHdr(objReq.getId());
       thopDtl.setMaDviDx(dxuat.getMaDvi());
       if (mapDmucDvi.containsKey((thopDtl.getMaDviDx()))) {
         Map<String, Object> objDonVi = mapDmucDvi.get(thopDtl.getMaDviDx());
@@ -176,7 +176,7 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
       data.setTenCloaiVthh(hashMapDmHh.get(data.getCloaiVthh()));
       data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
 
-      List<XhCtvtTongHopDtl> listTh = xhCtvtTongHopDtlRepository.findAllByIdHdr(data.getId());
+      List<XhCtvtTongHopDtl> listTh = xhCtvtTongHopDtlRepository.findAllByXhCtvtTongHopHdr(data.getId());
       Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
       listTh.forEach(s -> {
         if (mapDmucDvi.containsKey((s.getMaDviDx()))) {
@@ -198,7 +198,7 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
       throw new Exception("Không tìm thấy dữ liệu cần xóa");
 
     XhCtvtTongHopHdr data = optional.get();
-    List<XhCtvtTongHopDtl> listDls = xhCtvtTongHopDtlRepository.findAllByIdHdr(data.getId());
+    List<XhCtvtTongHopDtl> listDls = xhCtvtTongHopDtlRepository.findAllByXhCtvtTongHopHdr(data.getId());
     if (!CollectionUtils.isEmpty(listDls)) {
       List<Long> idDxList = listDls.stream().map(XhCtvtTongHopDtl::getIdDx).collect(Collectors.toList());
       List<XhCtvtDeXuatHdr> listDxHdr = xhCtvtDeXuatHdrRepository.findByIdIn(idDxList);
@@ -221,7 +221,7 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
       throw new Exception("Xóa thất bại, không tìm thấy dữ liệu");
     List<XhCtvtTongHopHdr> listThop = xhCtvtTongHopHdrRepository.findAllByIdIn(idSearchReq.getIdList());
     for (XhCtvtTongHopHdr thopHdr : listThop) {
-      List<XhCtvtTongHopDtl> listDls = xhCtvtTongHopDtlRepository.findAllByIdHdr(thopHdr.getId());
+      List<XhCtvtTongHopDtl> listDls = xhCtvtTongHopDtlRepository.findAllByXhCtvtTongHopHdr(thopHdr.getId());
       if (!CollectionUtils.isEmpty(listDls)) {
         List<Long> idDxList = listDls.stream().map(XhCtvtTongHopDtl::getIdDx).collect(Collectors.toList());
         List<XhCtvtDeXuatHdr> listDxHdr = xhCtvtDeXuatHdrRepository.findByIdIn(idDxList);

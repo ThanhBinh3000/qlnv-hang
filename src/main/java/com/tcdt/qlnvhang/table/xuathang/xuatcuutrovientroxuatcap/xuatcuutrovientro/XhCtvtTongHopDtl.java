@@ -20,7 +20,7 @@ public class XhCtvtTongHopDtl implements Serializable {
     @SequenceGenerator(sequenceName = XhCtvtTongHopDtl.TABLE_NAME
             + "_SEQ", allocationSize = 1, name = XhCtvtTongHopDtl.TABLE_NAME + "_SEQ")
     private Long id;
-    private Long idHdr;
+//    private Long idHdr;
     private Long idDx;
     private String soDx;
     private String maDviDx;
@@ -38,6 +38,6 @@ public class XhCtvtTongHopDtl implements Serializable {
 
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "idHdr", updatable = false, insertable = false)
+    @JoinColumn(name = "idHdr")
     private XhCtvtTongHopHdr xhCtvtTongHopHdr;
 }
