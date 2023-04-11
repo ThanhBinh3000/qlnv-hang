@@ -1,11 +1,13 @@
 package com.tcdt.qlnvhang.service.xuathang.daugia.nhiemvuxuat;
 
+import com.tcdt.qlnvhang.entities.xuathang.daugia.hopdong.XhHopDongHdr;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMau;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.phieukiemnghiemcl.XhPhieuKnghiemCluong;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXh;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXhDdiem;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXhDtl;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.hopdong.XhHopDongHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMauRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.ktracluong.kiemnghiemcl.XhPhieuKnghiemCluongRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXhDdiemRepository;
@@ -27,7 +29,6 @@ import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -64,6 +65,9 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
 
     @Autowired
     private XhPhieuKnghiemCluongRepository xhPhieuKnghiemCluongRepository;
+
+    @Autowired
+    private XhHopDongHdrRepository xhHopDongHdrRepository;
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
@@ -139,6 +143,12 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
         dataMap.setMaDvi(userInfo.getDvql());
         dataMap.setTenDvi(StringUtils.isEmpty(userInfo.getDvql()) ? null : mapDmucDvi.get(userInfo.getDvql()));
         XhQdGiaoNvXh created = xhQdGiaoNvXhRepository.save(dataMap);
+
+        Optional<XhHopDongHdr> hopDongHdr = xhHopDongHdrRepository.findById(created.getIdHd());
+        if (hopDongHdr.isPresent()){
+            hopDongHdr.get().setTypeQdGnv(true);
+            xhHopDongHdrRepository.save(hopDongHdr.get());
+        }
 
         if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
             List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhQdGiaoNvXh.TABLE_NAME);
@@ -271,6 +281,14 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
                 throw new Exception("Phê duyệt không thành công");
         }
         optional.get().setTrangThai(req.getTrangThai());
+
+        if (req.getTrangThai().equals(Contains.BAN_HANH)){
+            Optional<XhHopDongHdr> hopDongHdr = xhHopDongHdrRepository.findById(data.getIdHd());
+            if (hopDongHdr.isPresent()){
+                hopDongHdr.get().setSoQdGnv(data.getSoQd());
+                xhHopDongHdrRepository.save(hopDongHdr.get());
+            }
+        }
         xhQdGiaoNvXhRepository.save(data);
         return data;
     }
@@ -288,6 +306,12 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
 
         if (!optional.get().getTrangThai().equals(Contains.DUTHAO)){
             throw new Exception("Chỉ thực hiện xóa với kế hoạch ở trạng thái bản nháp hoặc từ chối");
+        }
+
+        Optional<XhHopDongHdr> hopDongHdr = xhHopDongHdrRepository.findById(optional.get().getIdHd());
+        if (hopDongHdr.isPresent()){
+            hopDongHdr.get().setTypeQdGnv(false);
+            xhHopDongHdrRepository.save(hopDongHdr.get());
         }
 
         List<XhQdGiaoNvXhDtl> dtlList = xhQdGiaoNvXhDtlRepository.findAllByIdQdHdr(id);

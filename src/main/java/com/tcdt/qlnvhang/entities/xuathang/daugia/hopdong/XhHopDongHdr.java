@@ -101,6 +101,10 @@ public class XhHopDongHdr extends TrangThaiBaseEntity {
 
     private String ghiChu;
 
+    private String soQdGnv;
+
+    private Boolean typeQdGnv;
+
     // Transient
     @Transient
     private String tenLoaiVthh;
