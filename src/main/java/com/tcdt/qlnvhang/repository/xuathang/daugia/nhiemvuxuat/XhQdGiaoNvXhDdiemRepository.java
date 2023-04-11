@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface XhQdGiaoNvXhDdiemRepository extends BaseRepository<XhQdGiaoNvXhDdiem, Long> {
-    List<XhQdGiaoNvXhDdiem> findAllByIdDtlIn(List<Long> ids);
-
     void deleteAllByIdDtl(Long idDtl);
+
+    List<XhQdGiaoNvXhDdiem> findAllByIdDtl(Long idDtl);
 }

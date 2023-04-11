@@ -42,6 +42,9 @@ public class XhPhieuKtraCluongBttHdr extends TrangThaiBaseEntity implements Seri
 
     private String soQd;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayQd;
+
     private String soPhieu;
 
     private Long idNgKnghiem;
@@ -97,6 +100,11 @@ public class XhPhieuKtraCluongBttHdr extends TrangThaiBaseEntity implements Seri
     private String ketQua;
 
     private String ketLuan;
+
+    private String soBbXuatDoc;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayXuatDocKho;
 
     @Transient
     private FileDinhKem fileDinhKem;
