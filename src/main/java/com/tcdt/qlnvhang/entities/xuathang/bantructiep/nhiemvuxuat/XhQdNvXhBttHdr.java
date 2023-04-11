@@ -98,9 +98,6 @@ public class XhQdNvXhBttHdr extends TrangThaiBaseEntity implements Serializable 
     private List<String> listMaDviTsan = new ArrayList<>();
 
     @Transient
-    private List<XhPhieuKtraCluongBttHdr> xhPhieuKtraCluongBttHdrList = new ArrayList<>();
-
-    @Transient
     private List<XhPhieuXkhoBtt> xhPhieuXkhoBttList = new ArrayList<>();
 
     @Transient

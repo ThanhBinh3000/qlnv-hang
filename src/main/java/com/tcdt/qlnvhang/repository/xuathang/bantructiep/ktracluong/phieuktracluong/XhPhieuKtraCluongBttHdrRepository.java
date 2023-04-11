@@ -26,7 +26,7 @@ public interface XhPhieuKtraCluongBttHdrRepository extends JpaRepository<XhPhieu
 
     Optional<XhPhieuKtraCluongBttHdr> findBySoPhieu(String soPhieu);
 
-    List<XhPhieuKtraCluongBttHdr> findAllByIdQd(Long idQd);
+    List<XhPhieuKtraCluongBttHdr> findByIdIn(List<Long> idList);
 
-    List<XhPhieuKtraCluongBttHdr> findAllByIdDdiemXh(Long idDdiemXh);
+
 }

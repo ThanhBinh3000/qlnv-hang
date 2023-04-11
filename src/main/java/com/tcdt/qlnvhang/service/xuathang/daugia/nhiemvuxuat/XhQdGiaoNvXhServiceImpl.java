@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.service.xuathang.daugia.nhiemvuxuat;
 
-import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdr;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMau;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.phieukiemnghiemcl.XhPhieuKnghiemCluong;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXh;
@@ -114,7 +113,7 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
 
     @Override
     @Transactional
-    public XhQdGiaoNvXh create(XhQdGiaoNvuXuatReq objReq) throws Exception {
+    public XhQdGiaoNvXh create(XhQdGiaoNvuXuatReq req) throws Exception {
 
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null) {
@@ -122,7 +121,7 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
         }
 
 
-        Optional<XhQdGiaoNvXh> optional = xhQdGiaoNvXhRepository.findAllBySoQd(objReq.getSoQd());
+        Optional<XhQdGiaoNvXh> optional = xhQdGiaoNvXhRepository.findAllBySoQd(req.getSoQd());
         if (optional.isPresent()) {
             throw new Exception("Số quyết định đã tồn tại");
         }
@@ -131,39 +130,41 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
 
         XhQdGiaoNvXh dataMap = new XhQdGiaoNvXh();
-        BeanUtils.copyProperties(objReq, dataMap, "id");
+        BeanUtils.copyProperties(req, dataMap, "id");
 
         dataMap.setNguoiTaoId(userInfo.getId());
         dataMap.setNgayTao(new Date());
         dataMap.setTrangThai(Contains.DUTHAO);
-        dataMap.setTrangThaiXh(Contains.CHUACAPNHAT);
+        dataMap.setTrangThaiXh(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
         dataMap.setMaDvi(userInfo.getDvql());
         dataMap.setTenDvi(StringUtils.isEmpty(userInfo.getDvql()) ? null : mapDmucDvi.get(userInfo.getDvql()));
         XhQdGiaoNvXh created = xhQdGiaoNvXhRepository.save(dataMap);
 
-        if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKems())) {
-            List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhQdGiaoNvXh.TABLE_NAME);
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
+            List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhQdGiaoNvXh.TABLE_NAME);
             created.setFileDinhKems(fileDinhKems);
         }
 
-        if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKem())) {
-            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(), created.getId(), XhQdGiaoNvXh.TABLE_NAME);
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKem())) {
+            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), created.getId(), XhQdGiaoNvXh.TABLE_NAME);
             created.setFileDinhKem(fileDinhKem);
         }
 
-        this.saveDetail(dataMap, objReq);
+        this.saveDetail(req, dataMap.getId() );
         return created;
     }
 
-    public void saveDetail(XhQdGiaoNvXh dataMap, XhQdGiaoNvuXuatReq objReq) {
-        for (XhQdGiaoNvuXuatCtReq req : objReq.getChildren()) {
-            XhQdGiaoNvXhDtl dtl = new ModelMapper().map(req, XhQdGiaoNvXhDtl.class);
-            dtl.setId(null);
-            dtl.setIdQdHdr(dataMap.getId());
-            dtl.setTrangThai(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
+    public void saveDetail( XhQdGiaoNvuXuatReq req, Long idHdr) {
+        xhQdGiaoNvXhDtlRepository.deleteAllByIdQdHdr(idHdr);
+        for (XhQdGiaoNvuXuatCtReq dtlReq: req.getChildren()){
+            XhQdGiaoNvXhDtl dtl = new XhQdGiaoNvXhDtl();
+            BeanUtils.copyProperties(dtlReq, dtl, "id");
+            dtl.setIdQdHdr(idHdr);
             xhQdGiaoNvXhDtlRepository.save(dtl);
-            for (XhQdGiaoNvXhDdiemReq ddiemReq : req.getChildren()) {
-                XhQdGiaoNvXhDdiem ddiem = new ModelMapper().map(ddiemReq, XhQdGiaoNvXhDdiem.class);
+            xhQdGiaoNvXhDdiemRepository.deleteAllByIdDtl(dtlReq.getId());
+            for (XhQdGiaoNvXhDdiemReq ddiemReq : dtlReq.getChildren()){
+                XhQdGiaoNvXhDdiem ddiem = new XhQdGiaoNvXhDdiem();
+                BeanUtils.copyProperties(ddiemReq, ddiem, "id");
                 ddiem.setId(null);
                 ddiem.setIdDtl(dtl.getId());
                 xhQdGiaoNvXhDdiemRepository.save(ddiem);
@@ -173,78 +174,67 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
 
     @Override
     @Transactional
-    public XhQdGiaoNvXh update(XhQdGiaoNvuXuatReq objReq) throws Exception {
+    public XhQdGiaoNvXh update(XhQdGiaoNvuXuatReq req) throws Exception {
+
         UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null) {
+        if (userInfo == null)
             throw new Exception("Bad request.");
-        }
 
-        if (StringUtils.isEmpty(objReq.getId())) {
+        if (StringUtils.isEmpty(req.getId()))
             throw new Exception("Sửa thất bại, không tìm thấy dữ liệu");
+        Optional<XhQdGiaoNvXh> qOptional = xhQdGiaoNvXhRepository.findById(req.getId());
+
+        if (!qOptional.isPresent()){
+            throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
 
-        Optional<XhQdGiaoNvXh> optional = xhQdGiaoNvXhRepository.findById(objReq.getId());
-        if (!optional.isPresent())
-            throw new Exception("Không cần thấy dữ liệu cần sửa");
+        XhQdGiaoNvXh dataDB = qOptional.get();
+        BeanUtils.copyProperties(req, dataDB, "id");
+        dataDB.setNgaySua(getDateTimeNow());
+        dataDB.setNguoiSuaId(getUser().getId());
+        XhQdGiaoNvXh created = xhQdGiaoNvXhRepository.save(dataDB);
 
-        XhQdGiaoNvXh data = optional.get();
-        BeanUtils.copyProperties(objReq, data, "id");
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhQdGiaoNvXh.TABLE_NAME);
+        dataDB.setFileDinhKems(fileDinhKems);
 
-        data.setNgaySua(new Date());
-        data.setNguoiSuaId(userInfo.getId());
-        XhQdGiaoNvXh created = xhQdGiaoNvXhRepository.save(data);
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), created.getId(), XhQdGiaoNvXh.TABLE_NAME);
+        dataDB.setFileDinhKem(fileDinhKem);
 
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhQdGiaoNvXh.TABLE_NAME);
-        data.setFileDinhKems(fileDinhKems);
-
-        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(), created.getId(), XhQdGiaoNvXh.TABLE_NAME);
-        data.setFileDinhKem(fileDinhKem);
-
-        List<XhQdGiaoNvXhDtl> listDtl = xhQdGiaoNvXhDtlRepository.findAllByIdQdHdr(data.getId());
-        xhQdGiaoNvXhDtlRepository.deleteAll(listDtl);
-        List<Long> listId = listDtl.stream().map(XhQdGiaoNvXhDtl::getId).collect(Collectors.toList());
-        List<XhQdGiaoNvXhDdiem> listDd = xhQdGiaoNvXhDdiemRepository.findAllByIdDtlIn(listId);
-        xhQdGiaoNvXhDdiemRepository.deleteAll(listDd);
-        this.saveDetail(data, objReq);
+        this.saveDetail(req, dataDB.getId());
         return created;
     }
 
     @Override
     public XhQdGiaoNvXh detail(Long id) throws Exception {
         Optional<XhQdGiaoNvXh> optional = xhQdGiaoNvXhRepository.findById(id);
-        if (!optional.isPresent()) {
+        if (!optional.isPresent()){
             throw new Exception("Bản ghi không tồn tại");
         }
-
         XhQdGiaoNvXh data = optional.get();
-        Map<String, String> mapDmucHh = getListDanhMucHangHoa();
-        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-
+        Map<String, String> hashMapVthh = getListDanhMucHangHoa();
+        Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
-        data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
-        data.setTenLoaiVthh(mapDmucHh.get(data.getLoaiVthh()));
-        data.setTenCloaiVthh(mapDmucHh.get(data.getCloaiVthh()));
+        data.setTenDvi(hashMapDvi.get(data.getMaDvi()));
+        data.setTenLoaiVthh(hashMapVthh.get(data.getLoaiVthh()));
+        data.setTenCloaiVthh(hashMapVthh.get(data.getCloaiVthh()));
 
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdGiaoNvXh.TABLE_NAME));
-        data.setFileDinhKems(fileDinhKems);
-        data.setFileDinhKem(fileDinhKems);
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdGiaoNvXh.TABLE_NAME));
+        data.setFileDinhKems(fileDinhKem);
+        data.setFileDinhKem(fileDinhKem);
 
-        List<XhQdGiaoNvXhDtl> listDtl = xhQdGiaoNvXhDtlRepository.findAllByIdQdHdr(data.getId());
-        List<Long> listId = listDtl.stream().map(XhQdGiaoNvXhDtl::getId).collect(Collectors.toList());
-        List<XhQdGiaoNvXhDdiem> listDd = xhQdGiaoNvXhDdiemRepository.findAllByIdDtlIn(listId);
-        for (XhQdGiaoNvXhDtl dtl : listDtl) {
-            dtl.setTenDvi(mapDmucDvi.get(dtl.getMaDvi()));
-            dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThai()));
-            listDd.forEach(item -> {
-                item.setTenDiemKho(mapDmucDvi.get(item.getMaDiemKho()));
-                item.setTenNhaKho(mapDmucDvi.get(item.getMaNhaKho()));
-                item.setTenNganKho(mapDmucDvi.get(item.getMaNganKho()));
-                item.setTenLoKho(mapDmucDvi.get(item.getMaLoKho()));
-            });
-            dtl.setChildren(listDd);
+        List<XhQdGiaoNvXhDtl> dtlList = xhQdGiaoNvXhDtlRepository.findAllByIdQdHdr(data.getId());
+        for (XhQdGiaoNvXhDtl dtl : dtlList){
+            List<XhQdGiaoNvXhDdiem> ddiemList = xhQdGiaoNvXhDdiemRepository.findAllByIdDtl(dtl.getId());
+            for (XhQdGiaoNvXhDdiem ddiem : ddiemList){
+                ddiem.setTenDiemKho(hashMapDvi.get(ddiem.getMaDiemKho()));
+                ddiem.setTenNhaKho(hashMapDvi.get(ddiem.getMaNhaKho()));
+                ddiem.setTenNganKho(hashMapDvi.get(ddiem.getMaNganKho()));
+                ddiem.setTenLoKho(hashMapDvi.get(ddiem.getMaLoKho()));
+            }
+            dtl.setTenDvi(hashMapDvi.get(dtl.getMaDvi()));
+            dtl.setChildren(ddiemList);
         }
-        data.setChildren(listDtl);
-
+        data.setChildren(dtlList);
         return data;
     }
 
