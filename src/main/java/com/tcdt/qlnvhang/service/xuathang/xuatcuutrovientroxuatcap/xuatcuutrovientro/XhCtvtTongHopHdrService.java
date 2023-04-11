@@ -195,6 +195,7 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
     return allById;
   }
 
+  @Transactional
   public void delete(IdSearchReq idSearchReq) throws Exception {
     if (StringUtils.isEmpty(idSearchReq.getId()))
       throw new Exception("Xóa thất bại, không tìm thấy dữ liệu");
@@ -222,6 +223,7 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
 
   }
 
+  @Transactional
   public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
     if (StringUtils.isEmpty(idSearchReq.getIdList()))
       throw new Exception("Xóa thất bại, không tìm thấy dữ liệu");
