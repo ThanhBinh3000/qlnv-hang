@@ -7,14 +7,15 @@ import com.tcdt.qlnvhang.request.object.HhBbNghiemthuKlstHdrReq;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstHdr;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
 public interface HhBbNghiemthuKlstHdrService extends BaseService<HhBbNghiemthuKlstHdr,HhBbNghiemthuKlstHdrReq,Long> {
 
-//	@Transactional(rollbackOn = Exception.class)
-//	HhBbNghiemthuKlstHdr create(HhBbNghiemthuKlstHdrReq objReq) throws Exception;
+	@Transactional(rollbackOn = Exception.class)
+	HhBbNghiemthuKlstHdr create(HhBbNghiemthuKlstHdrReq objReq) throws Exception;
 //
-//	@Transactional(rollbackOn = Exception.class)
-//	HhBbNghiemthuKlstHdr update(HhBbNghiemthuKlstHdrReq objReq) throws Exception;
+	@Transactional(rollbackOn = Exception.class)
+	HhBbNghiemthuKlstHdr update(HhBbNghiemthuKlstHdrReq objReq) throws Exception;
 //
 //	HhBbNghiemthuKlstHdr detail(String ids) throws Exception;
 //

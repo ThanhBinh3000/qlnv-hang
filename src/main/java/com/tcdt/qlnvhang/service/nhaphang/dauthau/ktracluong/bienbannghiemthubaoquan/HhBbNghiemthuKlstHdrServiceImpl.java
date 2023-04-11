@@ -7,8 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.tcdt.qlnvhang.entities.FileDKemJoinKeLot;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstDtl;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNxDdiem;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
@@ -88,8 +90,8 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
         dataMap.setChildren1(fileDinhKemList);
 
         // Add thong tin chung
-//		List<HhBbNghiemthuKlstDtl> dtls1 = ObjectMapperUtils.mapAll(req.getDetail(), HhBbNghiemthuKlstDtl.class);
-//		dataMap.setChildren(dtls1);
+		List<HhBbNghiemthuKlstDtl> dtls1 = ObjectMapperUtils.mapAll(req.getDetail(), HhBbNghiemthuKlstDtl.class);
+		dataMap.setChildren(dtls1);
 
         dataMap.setNam(qdNxOptional.get().getNamNhap());
         dataMap.setMaDvi(userInfo.getDvql());
@@ -138,8 +140,8 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
         dataDTB.setChildren1(fileDinhKemList);
 
         // Add thong tin chung
-//        List<HhBbNghiemthuKlstDtl> dtls1 = ObjectMapperUtils.mapAll(objReq.getDetail(), HhBbNghiemthuKlstDtl.class);
-//        dataDTB.setChildren(dtls1);
+        List<HhBbNghiemthuKlstDtl> dtls1 = ObjectMapperUtils.mapAll(objReq.getDetail(), HhBbNghiemthuKlstDtl.class);
+        dataDTB.setChildren(dtls1);
 
         dataDTB.setNam(qdNxOptional.get().getNamNhap());
         dataDTB.setMaDvi(userInfo.getDvql());
@@ -286,21 +288,37 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
                 objsb[5] = qd.getDtlList().get(0).getChildren().get(j).getTenLoKho();
                 dataList.add(objsb);
                 for (int k = 0; k < qd.getDtlList().get(0).getListBienBanNghiemThuBq().size(); k++) {
-//                    if(qd.getDtlList().get(0).getChildren().get(j).getMaLoKho() && qd.getDtlList().get(0).getListBienBanNghiemThuBq().get(k).getMaLoKho() != null ? qd.getDtlList().get(0).getChildren().get(j).getMaLoKho() == qd.getDtlList().get(0).getListBienBanNghiemThuBq().get(k).getMaLoKho() : (qd.getDtlList().get(0).getChildren().get(j).getMaNganKho() && qd.getDtlList().get(0).getListBienBanNghiemThuBq().get(k).getMaNganKho() != null ? qd.getDtlList().get(0).getChildren().get(j).getMaNganKho() == qd.getDtlList().get(0).getListBienBanNghiemThuBq().get(k).getMaNganKho() : (qd.getDtlList().get(0).getChildren().get(j).getMaNhaKho() && qd.getDtlList().get(0).getListBienBanNghiemThuBq().get(k).getMaNhaKho() != null ? qd.getDtlList().get(0).getChildren().get(j).getMaNhaKho() == qd.getDtlList().get(0).getListBienBanNghiemThuBq().get(k).getMaNhaKho() : false))){
-//
-//                    }
-                    objsc = new Object[rowsName.length];
-                    objsc[6] = qd.getDtlList().get(0).getListBienBanNghiemThuBq().get(k).getSoBbNtBq();
-                    objsc[7] = qd.getDtlList().get(0).getListBienBanNghiemThuBq().get(k).getNgayTao();
-                    objsc[8] = qd.getDtlList().get(0).getListBienBanNghiemThuBq().get(k).getNgayNghiemThu();
-                    objsc[11] = qd.getDtlList().get(0).getListBienBanNghiemThuBq().get(k).getTenTrangThai();
-                    dataList.add(objsc);
+                    if (checkValidateExportBbNtBq(qd.getDtlList().get(0).getChildren().get(j), qd.getDtlList().get(0).getListBienBanNghiemThuBq().get(k))) {
+                        objsc = new Object[rowsName.length];
+                        objsc[6] = qd.getDtlList().get(0).getListBienBanNghiemThuBq().get(k).getSoBbNtBq();
+                        objsc[7] = qd.getDtlList().get(0).getListBienBanNghiemThuBq().get(k).getNgayTao();
+                        objsc[8] = qd.getDtlList().get(0).getListBienBanNghiemThuBq().get(k).getNgayNghiemThu();
+                        objsc[11] = qd.getDtlList().get(0).getListBienBanNghiemThuBq().get(k).getTenTrangThai();
+                        dataList.add(objsc);
+                    }
                 }
             }
         }
 
         ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
         ex.export();
+    }
+
+    private boolean checkValidateExportBbNtBq(NhQdGiaoNvuNxDdiem dataDdiem, HhBbNghiemthuKlstHdr dataBb) {
+        if (dataDdiem.getMaLoKho() != null && dataBb.getMaLoKho() != null) {
+            if (dataDdiem.getMaLoKho().equals(dataBb.getMaLoKho())) {
+                return true;
+            }
+        } else if (dataDdiem.getMaNganKho() != null && dataBb.getMaNganKho() != null) {
+            if (dataDdiem.getMaNganKho().equals(dataBb.getMaNganKho())) {
+                return true;
+            }
+        } else if (dataDdiem.getMaNhaKho() != null && dataBb.getMaNhaKho() != null) {
+            if (dataDdiem.getMaNhaKho().equals(dataBb.getMaNhaKho())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 //	@Override
