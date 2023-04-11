@@ -20,7 +20,7 @@ public interface QuyChuanQuocGiaHdrRepository extends JpaRepository<QuyChuanQuoc
             " AND (:#{#param.soHieuQuyChuan} IS NULL OR LOWER(c.soHieuQuyChuan) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soHieuQuyChuan}),'%' ) ) )" +
             " AND (:#{#param.loaiVthh}  IS NULL OR LOWER(c.loaiVthh) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.loaiVthh}),'%' ) ) ) " +
             " AND (:#{#param.cloaiVthh}  IS NULL OR LOWER(c.cloaiVthh) =:#{#param.cloaiVthh}) " +
-            " AND (:#{#param.trichYeu}  IS NULL OR LOWER(c.trichYeu) =:#{#param.trichYeu}) " +
+            " AND (:#{#param.trichYeu}  IS NULL OR LOWER(c.trichYeu) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.trichYeu}),'%' ) ) ) " +
             " AND ((:#{#param.ngayKyTu}  IS NULL OR c.ngayKy >= :#{#param.ngayKyTu})" +
             " AND (:#{#param.ngayKyDen}  IS NULL OR c.ngayKy <= :#{#param.ngayKyDen}) ) " +
             " AND ((:#{#param.ngayHieuLucTu}  IS NULL OR c.ngayHieuLuc >= :#{#param.ngayHieuLucTu})" +
