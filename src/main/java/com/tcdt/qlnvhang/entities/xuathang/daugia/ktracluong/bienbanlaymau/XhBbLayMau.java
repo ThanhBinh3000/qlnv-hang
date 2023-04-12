@@ -78,7 +78,7 @@ public class XhBbLayMau extends TrangThaiBaseEntity implements Serializable {
 
 	private String maLoKho;
 
-	private BigDecimal soLuong;
+	private BigDecimal soLuongLayMau;
 
 	private String ppLayMau;
 
@@ -122,7 +122,10 @@ public class XhBbLayMau extends TrangThaiBaseEntity implements Serializable {
 	private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
 	@Transient
-	private FileDinhKem fileDinhKem;
+	private List<FileDinhKem> canCuPhapLy = new ArrayList<>();
+
+	@Transient
+	private List<FileDinhKem> fileNiemPhong = new ArrayList<>();
 
 	@Transient
 	private List<XhBbLayMauCt> children = new ArrayList<>();
