@@ -31,6 +31,8 @@ public interface XhBbLayMauRepository extends BaseRepository<XhBbLayMau, Long> {
 
 	List<XhBbLayMau> findByIdIn(List<Long> idList);
 
+	List<XhBbLayMau> findAllByIdQd (Long idQd);
+
 
 
 }

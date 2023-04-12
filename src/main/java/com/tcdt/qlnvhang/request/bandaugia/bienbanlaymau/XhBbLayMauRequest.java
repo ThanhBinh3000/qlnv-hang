@@ -74,7 +74,7 @@ public class XhBbLayMauRequest extends BaseRequest {
 
 	private String maLoKho;
 
-	private BigDecimal soLuong;
+	private BigDecimal soLuongLayMau;
 
 	private String ppLayMau;
 
@@ -91,7 +91,10 @@ public class XhBbLayMauRequest extends BaseRequest {
 	private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 
 	@Transient
-	private FileDinhKemReq fileDinhKem;
+	private List<FileDinhKemReq> canCuPhapLy = new ArrayList<>();
+
+	@Transient
+	private List<FileDinhKemReq> fileNiemPhong = new ArrayList<>();
 
 	private List<XhBbLayMauCtRequest> children = new ArrayList<>();
 }
