@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
@@ -112,9 +113,16 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
     DataUtils.copyProperties(objReq, thopHdr, "id");
     thopHdr.setTrangThai(Contains.DUTHAO);
     thopHdr.setMaDvi(currentUser.getUser().getDepartment());
+    AtomicInteger tongDeXuat = new AtomicInteger();
+    AtomicInteger tongXuatCap = new AtomicInteger();
     thopHdr.getDeXuatCuuTro().forEach(s -> {
       s.setXhCtvtTongHopHdr(thopHdr);
+      tongDeXuat.addAndGet(s.getTongSoLuongDx().intValue());
+      tongXuatCap.addAndGet(s.getSoLuongXuatCap().intValue());
     });
+    thopHdr.setTongSlCtVt(DataUtils.safeToBigDecimal(tongDeXuat.get()));
+    thopHdr.setTongSlXuatCap(DataUtils.safeToBigDecimal(tongXuatCap.get()));
+
     XhCtvtTongHopHdr created = xhCtvtTongHopHdrRepository.save(thopHdr);
 
     if (created.getDeXuatCuuTro().size() > 0) {
@@ -141,9 +149,16 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
 
     XhCtvtTongHopHdr data = qOptional.get();
     BeanUtils.copyProperties(objReq, data);
+    AtomicInteger tongDeXuat = new AtomicInteger();
+    AtomicInteger tongXuatCap = new AtomicInteger();
     data.getDeXuatCuuTro().forEach(s -> {
       s.setXhCtvtTongHopHdr(data);
+      tongDeXuat.addAndGet(s.getTongSoLuongDx().intValue());
+      tongXuatCap.addAndGet(s.getSoLuongXuatCap().intValue());
     });
+    data.setTongSlCtVt(DataUtils.safeToBigDecimal(tongDeXuat.get()));
+    data.setTongSlXuatCap(DataUtils.safeToBigDecimal(tongXuatCap.get()));
+
     XhCtvtTongHopHdr created = xhCtvtTongHopHdrRepository.save(data);
 
     //update dx
