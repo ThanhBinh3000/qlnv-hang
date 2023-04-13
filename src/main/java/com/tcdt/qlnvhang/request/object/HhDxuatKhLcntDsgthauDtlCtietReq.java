@@ -24,7 +24,8 @@ public class HhDxuatKhLcntDsgthauDtlCtietReq {
 
 	String maDiemKho;
 
-	Integer donGia;
+	BigDecimal donGia;
+	BigDecimal donGiaTamTinh;
 
 	String diaDiemNhap;
 
