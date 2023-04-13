@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.phieukiemnghiemcl;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
-import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMauCt;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.AllArgsConstructor;
@@ -12,20 +11,18 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "XH_PHIEU_KNGHIEM_CLUONG")
+@Table(name = XhPhieuKnghiemCluong.TABLE_NAME )
 @EqualsAndHashCode(callSuper = false)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class XhPhieuKnghiemCluong extends TrangThaiBaseEntity implements Serializable {
-
+    public static final String TABLE_NAME = "XH_PHIEU_KNGHIEM_CLUONG";
     private static final long serialVersionUID = -1315211820556764708L;
   
     @Id
@@ -43,6 +40,9 @@ public class XhPhieuKnghiemCluong extends TrangThaiBaseEntity implements Seriali
     private String soBbLayMau;
 
     private String soQdGiaoNvXh;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayQdGiaoNvXh;
 
     private Long idQdGiaoNvXh;
 
@@ -81,6 +81,11 @@ public class XhPhieuKnghiemCluong extends TrangThaiBaseEntity implements Seriali
     private String ketQua;
 
     private String ketLuan;
+
+    private String soBbTinhKho;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayXuatDocKho;
 
     // Transient
     @Transient

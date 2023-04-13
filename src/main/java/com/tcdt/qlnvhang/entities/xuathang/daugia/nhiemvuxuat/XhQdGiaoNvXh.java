@@ -73,9 +73,6 @@ public class XhQdGiaoNvXh extends TrangThaiBaseEntity implements Serializable {
     private List<XhQdGiaoNvXhDtl> children = new ArrayList<>();
 
     @Transient
-    private List<XhPhieuKnghiemCluong> xhPhieuKnghiemCluongList = new ArrayList<>();
-
-    @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
     @Transient
