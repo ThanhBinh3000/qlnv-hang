@@ -15,7 +15,7 @@ import java.util.Optional;
 @Repository
 public interface XhQdGiaoNvXhRepository extends BaseRepository<XhQdGiaoNvXh, Long> {
 
-    @Query("SELECT QD from XhQdGiaoNvXh QD " +
+    @Query("SELECT DISTINCT QD from XhQdGiaoNvXh QD " +
             "LEFT JOIN XhQdGiaoNvXhDtl DTL on QD.id = DTL.idQdHdr WHERE 1=1 " +
             "AND (:#{#param.nam} IS NULL OR QD.nam = :#{#param.nam}) " +
             "AND (:#{#param.soQd} IS NULL OR LOWER(QD.soQd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQd}),'%' ) ) )" +
