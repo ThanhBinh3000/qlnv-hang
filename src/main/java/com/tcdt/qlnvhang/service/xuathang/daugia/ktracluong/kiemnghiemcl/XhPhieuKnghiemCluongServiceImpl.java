@@ -159,8 +159,8 @@ public class XhPhieuKnghiemCluongServiceImpl extends BaseServiceImpl implements 
         data.setTenLoaiVthh(mapDmucHh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(mapDmucHh.get(data.getCloaiVthh()));
         data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
-        if(!Objects.isNull(data.getIdKtv())){
-            data.setTenKtv(userInfoRepository.findById(data.getIdKtv()).get().getFullName());
+        if(!Objects.isNull(data.getIdThuKho())){
+            data.setTenThuKho(userInfoRepository.findById(data.getIdThuKho()).get().getFullName());
         }
         if(!Objects.isNull(data.getIdTruongPhong())){
             data.setTenTruongPhong(userInfoRepository.findById(data.getIdTruongPhong()).get().getFullName());
@@ -278,7 +278,7 @@ public class XhPhieuKnghiemCluongServiceImpl extends BaseServiceImpl implements 
             objs[7]=hdr.getNgayKnghiem();
             objs[8]=hdr.getSoBbLayMau();
             objs[9]=hdr.getNgayLayMau();
-            objs[10]=hdr.getSoBbTinhKho();
+            objs[10]=hdr.getSoBbXuatDocKho();
             objs[11]=hdr.getNgayXuatDocKho();
             objs[12]=hdr.getTenTrangThai();
             dataList.add(objs);

@@ -37,6 +37,8 @@ public class XhPhieuKnghiemCluong extends TrangThaiBaseEntity implements Seriali
 
     private String maQhns;
 
+    private Long idBbLayMau;
+
     private String soBbLayMau;
 
     private String soQdGiaoNvXh;
@@ -52,7 +54,7 @@ public class XhPhieuKnghiemCluong extends TrangThaiBaseEntity implements Seriali
 
     private Long idTruongPhong;
 
-    private Long idKtv;
+    private Long idThuKho;
 
     private Long idDdiemXh;
 
@@ -82,14 +84,14 @@ public class XhPhieuKnghiemCluong extends TrangThaiBaseEntity implements Seriali
 
     private String ketLuan;
 
-    private String soBbTinhKho;
+    private String soBbXuatDocKho;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayXuatDocKho;
 
     // Transient
     @Transient
-    private String tenKtv;
+    private String tenThuKho;
 
     @Transient
     private String tenTruongPhong;

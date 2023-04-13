@@ -37,4 +37,6 @@ public class XhPhieuKnghiemCluongCt implements Serializable {
 
     private String kieu;
 
+    private String danhGia;
+
 }

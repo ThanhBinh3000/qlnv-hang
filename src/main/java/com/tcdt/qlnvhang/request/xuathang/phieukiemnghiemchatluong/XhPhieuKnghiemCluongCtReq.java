@@ -18,4 +18,6 @@ public class XhPhieuKnghiemCluongCtReq {
 	private String chiSoNhap;
 
 	private String kieu;
+
+	private String danhGia;
 }

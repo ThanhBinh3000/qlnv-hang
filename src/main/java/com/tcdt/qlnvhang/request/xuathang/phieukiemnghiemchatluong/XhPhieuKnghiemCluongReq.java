@@ -21,6 +21,8 @@ public class XhPhieuKnghiemCluongReq extends BaseRequest {
 
 	private String maQhns;
 
+	private Long idBbLayMau;
+
 	private String soBbLayMau;
 
 	private String soQdGiaoNvXh;
@@ -63,7 +65,7 @@ public class XhPhieuKnghiemCluongReq extends BaseRequest {
 
 	private String ketLuan;
 
-	private String soBbTinhKho;
+	private String soBbXuatDocKho;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	private Date ngayXuatDocKho;
