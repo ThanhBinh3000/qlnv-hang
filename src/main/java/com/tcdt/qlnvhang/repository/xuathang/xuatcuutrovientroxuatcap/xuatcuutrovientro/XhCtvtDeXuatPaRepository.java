@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface XhCtvtDeXuatPaRepository extends JpaRepository<XhCtvtDeXuatPa,Long> {
-    List<XhCtvtDeXuatPa> findByXhCtvtDeXuatHdr(Long idHdr);
+    List<XhCtvtDeXuatPa> findByXhCtvtDeXuatHdrId(Long idHdr);
 
-    List<XhCtvtDeXuatPa> findAllByXhCtvtDeXuatHdrIn(List<Long> ids);
+    List<XhCtvtDeXuatPa> findAllByXhCtvtDeXuatHdrIdIn(List<Long> ids);
 }
