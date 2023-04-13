@@ -22,7 +22,6 @@ public class XhCtvtDeXuatPa implements Serializable {
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhCtvtDeXuatPa.TABLE_NAME + "_SEQ")
   @SequenceGenerator(sequenceName = XhCtvtDeXuatPa.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhCtvtDeXuatPa.TABLE_NAME + "_SEQ")
   private Long id;
-  private Long idHdr;
   private String noiDung;
   private BigDecimal soLuongXuat;
   private String maDviCuc;
@@ -47,7 +46,7 @@ public class XhCtvtDeXuatPa implements Serializable {
   @Transient
   private String tenChiCuc;
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "idHdr", insertable = false, updatable = false)
+  @JoinColumn(name = "idHdr")
   @JsonIgnore
   private XhCtvtDeXuatHdr xhCtvtDeXuatHdr;
 }
