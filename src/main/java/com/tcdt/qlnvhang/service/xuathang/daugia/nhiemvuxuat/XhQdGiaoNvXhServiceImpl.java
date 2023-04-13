@@ -58,9 +58,6 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
     private XhQdGiaoNvXhDdiemRepository xhQdGiaoNvXhDdiemRepository;
 
     @Autowired
-    private XhPhieuKnghiemCluongRepository xhPhieuKnghiemCluongRepository;
-
-    @Autowired
     private XhHopDongHdrRepository xhHopDongHdrRepository;
 
     @Autowired
@@ -75,18 +72,6 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
 
         data.getContent().forEach(item -> {
-            // Set kiểm tra chất lượng
-            List<XhPhieuKnghiemCluong> listKtraCluong = xhPhieuKnghiemCluongRepository.findAllByIdQdGiaoNvXh(item.getId());
-            listKtraCluong.forEach(x -> {
-                x.setTenLoaiVthh(mapDmucHh.get(x.getLoaiVthh()));
-                x.setTenCloaiVthh(mapDmucHh.get(x.getCloaiVthh()));
-                x.setTenDiemKho(mapDmucDvi.get(x.getMaDiemKho()));
-                x.setTenNhaKho(mapDmucDvi.get(x.getMaNhaKho()));
-                x.setTenNganKho(mapDmucDvi.get(x.getMaNganKho()));
-                x.setTenLoKho(mapDmucDvi.get(x.getMaLoKho()));
-            });
-            item.setXhPhieuKnghiemCluongList(listKtraCluong);
-
             item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
             item.setTenTrangThaiXh(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThaiXh()));
             item.setTenDvi(mapDmucDvi.get(item.getMaDvi()));

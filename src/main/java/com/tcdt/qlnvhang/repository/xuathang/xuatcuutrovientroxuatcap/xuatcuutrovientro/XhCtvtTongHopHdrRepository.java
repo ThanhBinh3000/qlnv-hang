@@ -23,7 +23,7 @@ public interface XhCtvtTongHopHdrRepository extends JpaRepository<XhCtvtTongHopH
       "AND ((:#{#param.ngayDxTu}  IS NULL OR e.ngayDx >= :#{#param.ngayDxTu})" +
       "AND (:#{#param.ngayDxDen}  IS NULL OR e.ngayDx <= :#{#param.ngayDxDen}) ) " +
       "AND ((:#{#param.ngayKetThucDxTu}  IS NULL OR e.ngayKetThucDx >= :#{#param.ngayKetThucDxTu})" +
-      "AND (:#{#param.ngayKetThucDxDen}  IS NULL OR e.ngayKetThucDx <= :#{#param.ngayKetThucDxTu}) ) " +
+      "AND (:#{#param.ngayKetThucDxDen}  IS NULL OR e.ngayKetThucDx <= :#{#param.ngayKetThucDxDen}) ) " +
       "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
       "AND (:#{#param.idQdPdList.isEmpty() } = true OR c.idQdPd IN :#{#param.idQdPdList}) " +
       "AND (:#{#param.idQdPdNull } = false OR (:#{#param.idQdPdNull } = true AND c.idQdPd IS NULL)) " +

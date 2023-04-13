@@ -117,8 +117,8 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
     AtomicInteger tongXuatCap = new AtomicInteger();
     thopHdr.getDeXuatCuuTro().forEach(s -> {
       s.setXhCtvtTongHopHdr(thopHdr);
-      tongDeXuat.addAndGet(s.getTongSoLuongDx().intValue());
-      tongXuatCap.addAndGet(s.getSoLuongXuatCap().intValue());
+      tongDeXuat.addAndGet(DataUtils.safeToInt(s.getTongSoLuongDx()));
+      tongXuatCap.addAndGet(DataUtils.safeToInt(s.getSoLuongXuatCap()));
     });
     thopHdr.setTongSlCtVt(DataUtils.safeToBigDecimal(tongDeXuat.get()));
     thopHdr.setTongSlXuatCap(DataUtils.safeToBigDecimal(tongXuatCap.get()));
@@ -153,8 +153,8 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
     AtomicInteger tongXuatCap = new AtomicInteger();
     data.getDeXuatCuuTro().forEach(s -> {
       s.setXhCtvtTongHopHdr(data);
-      tongDeXuat.addAndGet(s.getTongSoLuongDx().intValue());
-      tongXuatCap.addAndGet(s.getSoLuongXuatCap().intValue());
+      tongDeXuat.addAndGet(DataUtils.safeToInt(s.getTongSoLuongDx()));
+      tongXuatCap.addAndGet(DataUtils.safeToInt(s.getSoLuongXuatCap()));
     });
     data.setTongSlCtVt(DataUtils.safeToBigDecimal(tongDeXuat.get()));
     data.setTongSlXuatCap(DataUtils.safeToBigDecimal(tongXuatCap.get()));
