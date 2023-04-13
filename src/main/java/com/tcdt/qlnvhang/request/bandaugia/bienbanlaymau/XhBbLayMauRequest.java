@@ -87,6 +87,8 @@ public class XhBbLayMauRequest extends BaseRequest {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	private Date ngayLayMauDen;
 
+	private String maDviCuc;
+
 	@Transient
 	private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 

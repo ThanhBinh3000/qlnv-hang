@@ -15,7 +15,8 @@ import java.util.Optional;
 @Repository
 public interface XhBbLayMauRepository extends BaseRepository<XhBbLayMau, Long> {
 
-	@Query("SELECT LM from XhBbLayMau LM WHERE 1 = 1 " +
+	@Query("SELECT DISTINCT LM from XhBbLayMau LM " +
+			"LEFT JOIN XhQdGiaoNvXh QD ON LM.idQd = QD.id WHERE 1 = 1 " +
 			"AND (:#{#param.nam} IS NULL OR LM.nam = :#{#param.nam}) " +
 			"AND (:#{#param.soBienBan} IS NULL OR LOWER(LM.soBienBan) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soBienBan}),'%' ) ) )" +
 			"AND (:#{#param.soQd} IS NULL OR LOWER(LM.soQd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQd}),'%' ) ) )" +
@@ -24,6 +25,7 @@ public interface XhBbLayMauRepository extends BaseRepository<XhBbLayMau, Long> {
 			"AND (:#{#param.ngayLayMauDen} IS NULL OR LM.ngayLayMau <= :#{#param.ngayLayMauDen}) " +
 			"AND (:#{#param.loaiVthh} IS NULL OR LM.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
 			"AND (:#{#param.trangThai} IS NULL OR LM.trangThai = :#{#param.trangThai}) " +
+			"AND (:#{#param.maDviCuc} IS NULL OR QD.maDvi = :#{#param.maDviCuc}) " +
 			"AND (:#{#param.maDvi} IS NULL OR LM.maDvi = :#{#param.maDvi})")
 	Page<XhBbLayMau> searchPage(@Param("param") XhBbLayMauRequest param, Pageable pageable);
 
