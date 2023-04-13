@@ -190,6 +190,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 					HhQdKhlcntDsgthauCtiet dataDdNhap = new ModelMapper().map(ddNhap, HhQdKhlcntDsgthauCtiet.class);
 					dataDdNhap.setId(null);
 					dataDdNhap.setIdGoiThau(gt.getId());
+					dataDdNhap.setDonGia(ddNhap.getDonGiaTamTinh() != null ? ddNhap.getDonGiaTamTinh() : ddNhap.getDonGia());
 					hhQdKhlcntDsgthauCtietRepository.save(dataDdNhap);
 					hhQdKhlcntDsgthauCtietVtRepository.deleteAllByIdGoiThauCtiet(ddNhap.getId());
 					for(HhDxuatKhLcntDsgthauDtlCtietVtReq ctietReq : ddNhap.getChildren()){
