@@ -11,7 +11,9 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.tonghop.SearchXhThopDxKhBtt;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.tonghop.XhThopDxKhBttHdrReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.XhThopChiTieuReq;
+import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
@@ -55,56 +57,76 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
         return data;
     }
 
-    public XhThopDxKhBttHdr sumarryData(XhThopChiTieuReq objReq , HttpServletRequest req) throws Exception{
+    public XhThopDxKhBttHdr sumarryData(XhThopChiTieuReq req , HttpServletRequest servletRequest) throws Exception{
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null) {
+            throw new Exception("Bad request.");
+        }
+
         List<XhDxKhBanTrucTiepHdr>  dxuatBtt = xhDxKhBanTrucTiepHdrRepository.listTongHop(
-                objReq.getNamKh(),
-                objReq.getLoaiVthh(),
-                objReq.getCloaiVthh(),
-                convertDateToString(objReq.getNgayDuyetTu()),
-                convertDateToString(objReq.getNgayDuyetDen()));
+                req.getNamKh(),
+                req.getLoaiVthh(),
+                req.getCloaiVthh(),
+                convertDateToString(req.getNgayDuyetTu()),
+                convertDateToString(req.getNgayDuyetDen()));
         if (dxuatBtt.isEmpty()){
             throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
         }
 
         XhThopDxKhBttHdr thopHdr = new XhThopDxKhBttHdr();
-        Map<String, String> listDanhMucDvi = getListDanhMucDvi("2", null, "01");
-//        String tChuanCluong = "";
-//        String soQdcc = "";
+
+        Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+
+        thopHdr.setNamKh(req.getNamKh());
+        thopHdr.setLoaiVthh(req.getLoaiVthh());
+        thopHdr.setTenLoaiVthh(listDanhMucHangHoa.get(req.getLoaiVthh()));
+        thopHdr.setCloaiVthh(req.getCloaiVthh());
+        thopHdr.setTenCloaiVthh(listDanhMucHangHoa.get(req.getCloaiVthh()));
+        thopHdr.setNgayDuyetTu(req.getNgayDuyetTu());
+        thopHdr.setNgayDuyetDen(req.getNgayDuyetDen());
+        thopHdr.setMaDvi(userInfo.getDvql());
+
+
+
         List<XhThopDxKhBttDtl> thopDtls = new ArrayList<>();
+
         for (XhDxKhBanTrucTiepHdr dxuat : dxuatBtt) {
             XhThopDxKhBttDtl thopDtl = new XhThopDxKhBttDtl();
             BeanUtils.copyProperties(dxuat,thopDtl,"id");
             thopDtl.setIdDxHdr(dxuat.getId());
-            thopDtl.setTenDvi(listDanhMucDvi.get(dxuat.getMaDvi()));
-//            tChuanCluong = tChuanCluong.concat(dxuat.getTchuanCluong() + "");
-//            soQdcc = soQdcc.concat(dxuat.getSoQdCtieu() + "");
+            thopDtl.setMaDvi(dxuat.getMaDvi());
+            thopDtl.setTenDvi(mapDmucDvi.get(dxuat.getMaDvi()));
+            thopDtl.setSoDxuat(dxuat.getSoDxuat());
+            thopDtl.setNgayPduyet(dxuat.getNgayPduyet());
+            thopDtl.setTrichYeu(dxuat.getTrichYeu());
+            thopDtl.setSlDviTsan(dxuat.getSlDviTsan());
+            thopDtl.setTrangThai(dxuat.getTrangThai());
+            thopDtl.setTongSoLuong(dxuat.getTongSoLuong());
+            thopDtl.setDonGiaVat(dxuat.getDonGiaVat());
+            thopDtl.setTongDonGia(dxuat.getTongDonGia());
             thopDtls.add(thopDtl);
+
+            thopHdr.setLoaiHinhNx(dxuat.getLoaiHinhNx());
+            thopHdr.setKieuNx(dxuat.getKieuNx());
         }
-//        thopHdr.setTchuanCluong(tChuanCluong);
-//        thopHdr.setSoQdCc(soQdcc);
         thopHdr.setChildren(thopDtls);
         return thopHdr;
     }
 
     @Transactional()
-    public XhThopDxKhBttHdr create(XhThopDxKhBttHdrReq objReq, HttpServletRequest req) throws Exception{
-//        if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh())) {
-//            throw new Exception("Loại vật tư hàng hóa không phù hợp");
-//        }
-
-        XhThopDxKhBttHdr thopHdr = sumarryData(objReq,req);
-        thopHdr.setId(objReq.getIdTh());
+    public XhThopDxKhBttHdr create(XhThopDxKhBttHdrReq req, HttpServletRequest servletRequest) throws Exception{
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null)
+            throw new Exception("Bad request.");
+        XhThopDxKhBttHdr thopHdr = sumarryData(req,servletRequest);
+        thopHdr.setId(req.getIdTh());
         thopHdr.setNgayTao(new Date());
         thopHdr.setNguoiTaoId(getUser().getId());
-        thopHdr.setNgayDuyetTu(objReq.getNgayDuyetTu());
-        thopHdr.setNgayDuyetDen(objReq.getNgayDuyetDen());
-        thopHdr.setLoaiVthh(objReq.getLoaiVthh());
-        thopHdr.setCloaiVthh(objReq.getCloaiVthh());
+        thopHdr.setNoiDungThop(req.getNoiDungThop());
         thopHdr.setTrangThai(Contains.CHUATAO_QD);
         thopHdr.setNgayThop(new Date());
-        thopHdr.setNamKh(objReq.getNamKh());
-        thopHdr.setMaDvi(objReq.getMaDvi());
-        thopHdr.setNoiDungThop(objReq.getNoiDungThop());
+        thopHdr.setMaDvi(userInfo.getDvql());
         xhThopDxKhBttRepository.save(thopHdr);
         for (XhThopDxKhBttDtl dtl : thopHdr.getChildren()){
             dtl.setIdThopHdr(thopHdr.getId());
@@ -132,6 +154,8 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
         }
         XhThopDxKhBttHdr dataDTB = qOptional.get();
         XhThopDxKhBttHdr dataMap = ObjectMapperUtils.map(objReq, XhThopDxKhBttHdr.class);
+        dataMap.setNgaySua(getDateTimeNow());
+        dataMap.setNguoiTaoId(getUser().getId());
         updateObjectToObject(dataDTB, dataMap);
         xhThopDxKhBttRepository.save(dataDTB);
         return dataDTB;

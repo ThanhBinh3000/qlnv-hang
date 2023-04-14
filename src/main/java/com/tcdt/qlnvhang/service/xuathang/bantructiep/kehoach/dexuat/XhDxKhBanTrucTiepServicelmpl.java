@@ -155,6 +155,7 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl implements XhD
 
         XhDxKhBanTrucTiepHdr created = xhDxKhBanTrucTiepHdrRepository.save(data);
 
+        fileDinhKemService.delete(created.getId(), Collections.singleton(XhDxKhBanTrucTiepHdr.TABLE_NAME));
         List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhDxKhBanTrucTiepHdr.TABLE_NAME);
         data.setFileDinhKems(fileDinhKemList);
 
