@@ -83,10 +83,4 @@ public class QuyChuanQuocGiaHdr extends BaseEntity implements Serializable {
   public String getTenTrangThai() {
     return TrangThaiAllEnum.getLabelById(trangThai);
   }
-
-  public String getTenTrangThaiHl() {
-    return TrangThaiAllEnum.getLabelById(trangThaiHl);
-  }
-
-
 }
