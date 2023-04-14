@@ -38,9 +38,10 @@ public class XhCgiaReq {
 
     private String ghiChu;
 
-    private String loaiVthh;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date thoiHanBan;
 
-    private String cloaiVthh;
+
 
     private List<FileDinhKemReq> fileDinhKemUyQuyen = new ArrayList<>();
 

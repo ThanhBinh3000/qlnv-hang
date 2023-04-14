@@ -72,6 +72,10 @@ public class XhQdPdKhBttHdr extends TrangThaiBaseEntity implements Serializable 
 
     private Boolean typeQdDc;
 
+    private String loaiHinhNx;
+
+    private String kieuNx;
+
     @Transient
     private List<XhQdPdKhBttDtl> children = new ArrayList<>();
 
@@ -79,7 +83,7 @@ public class XhQdPdKhBttHdr extends TrangThaiBaseEntity implements Serializable 
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
     @Transient
-    private FileDinhKem fileDinhKem;
+    private List<FileDinhKem> fileDinhKem = new ArrayList<>();
 
 
 
