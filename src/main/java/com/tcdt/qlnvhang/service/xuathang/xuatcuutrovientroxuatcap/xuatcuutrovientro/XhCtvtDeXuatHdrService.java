@@ -157,6 +157,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
       }
     }
     XhCtvtDeXuatHdr data = optional.get();
+    data.getDeXuatPhuongAn().forEach(e -> e.setXhCtvtDeXuatHdr(null));
     BeanUtils.copyProperties(objReq, data);
     data.getDeXuatPhuongAn().forEach(e -> e.setXhCtvtDeXuatHdr(data));
     XhCtvtDeXuatHdr created = xhCtvtDeXuatHdrRepository.save(data);
@@ -168,7 +169,6 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
 //    created.getDeXuatPhuongAn().forEach(s -> {
 //      s.setIdHdr(created.getId());
 //    });
-    xhCtvtDeXuatHdrRepository.save(created);
 /*
     List<XhCtvtDeXuatPa> listDeXuatPhuongAn = xhCtvtDeXuatPaRepository.findByIdHdr(objReq.getId());
     xhCtvtDeXuatPaRepository.deleteAll(listDeXuatPhuongAn);
