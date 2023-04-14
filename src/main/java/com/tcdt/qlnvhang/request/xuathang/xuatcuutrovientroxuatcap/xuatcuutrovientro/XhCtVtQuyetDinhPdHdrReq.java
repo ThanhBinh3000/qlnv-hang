@@ -24,6 +24,7 @@ public class XhCtVtQuyetDinhPdHdrReq {
     private LocalDate ngayDx;
     private Long tongSoLuongDx;
     private Long tongSoLuong;
+    private Long thanhTien;
     private Long soLuongXuaCap;
     private String loaiVthh;
     private String cloaiVthh;
