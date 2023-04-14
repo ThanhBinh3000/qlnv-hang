@@ -117,7 +117,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
     BeanUtils.copyProperties(objReq, data);
     data.setMaDvi(currentUser.getUser().getDepartment());
     data.setTrangThai(Contains.DUTHAO);
-    objReq.getDeXuatPhuongAn().forEach(e -> e.setXhCtvtDeXuatHdr(data));
+    data.getDeXuatPhuongAn().forEach(e -> e.setXhCtvtDeXuatHdr(data));
     XhCtvtDeXuatHdr created = xhCtvtDeXuatHdrRepository.save(data);
 
     List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), XhCtvtDeXuatHdr.TABLE_NAME + "_CAN_CU");
@@ -158,8 +158,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
     }
     XhCtvtDeXuatHdr data = optional.get();
     BeanUtils.copyProperties(objReq, data);
-    objReq.getDeXuatPhuongAn().forEach(e -> e.setXhCtvtDeXuatHdr(data));
-    data.setDeXuatPhuongAn(objReq.getDeXuatPhuongAn());
+    data.getDeXuatPhuongAn().forEach(e -> e.setXhCtvtDeXuatHdr(data));
     XhCtvtDeXuatHdr created = xhCtvtDeXuatHdrRepository.save(data);
 
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhCtvtDeXuatHdr.TABLE_NAME + "_CAN_CU"));
