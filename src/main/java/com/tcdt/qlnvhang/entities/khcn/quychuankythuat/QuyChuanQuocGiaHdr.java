@@ -78,6 +78,8 @@ public class QuyChuanQuocGiaHdr extends BaseEntity implements Serializable {
   @Transient
   private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
+  @Transient String tenTrangThaiHl;
+
   public String getTenTrangThai() {
     return TrangThaiAllEnum.getLabelById(trangThai);
   }

@@ -117,6 +117,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
     BeanUtils.copyProperties(objReq, data);
     data.setMaDvi(currentUser.getUser().getDepartment());
     data.setTrangThai(Contains.DUTHAO);
+    objReq.getDeXuatPhuongAn().forEach(e -> e.setXhCtvtDeXuatHdr(data));
     XhCtvtDeXuatHdr created = xhCtvtDeXuatHdrRepository.save(data);
 
     List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), XhCtvtDeXuatHdr.TABLE_NAME + "_CAN_CU");
@@ -156,6 +157,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
       }
     }
     XhCtvtDeXuatHdr data = optional.get();
+    objReq.getDeXuatPhuongAn().forEach(e -> e.setXhCtvtDeXuatHdr(data));
     data.setDeXuatPhuongAn(objReq.getDeXuatPhuongAn());
 
     BeanUtils.copyProperties(objReq, data);
@@ -199,7 +201,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
       List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Arrays.asList(XhCtvtDeXuatHdr.TABLE_NAME + "_CAN_CU"));
       data.setCanCu(canCu);
 
-      List<XhCtvtDeXuatPa> list = xhCtvtDeXuatPaRepository.findByXhCtvtDeXuatHdr(data.getId());
+      List<XhCtvtDeXuatPa> list = xhCtvtDeXuatPaRepository.findByXhCtvtDeXuatHdrId(data.getId());
       for (XhCtvtDeXuatPa deXuatPhuongAn : list) {
         if (mapDmucDvi.containsKey(deXuatPhuongAn.getMaDviCuc())) {
           deXuatPhuongAn.setTenCuc(mapDmucDvi.get(deXuatPhuongAn.getMaDviCuc()).get("tenDvi").toString());
@@ -222,7 +224,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
       throw new Exception("Bản ghi không tồn tại");
     }
     XhCtvtDeXuatHdr data = optional.get();
-    List<XhCtvtDeXuatPa> list = xhCtvtDeXuatPaRepository.findByXhCtvtDeXuatHdr(data.getId());
+    List<XhCtvtDeXuatPa> list = xhCtvtDeXuatPaRepository.findByXhCtvtDeXuatHdrId(data.getId());
     xhCtvtDeXuatPaRepository.deleteAll(list);
     fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhCtvtDeXuatHdr.TABLE_NAME + "_CAN_CU"));
     xhCtvtDeXuatHdrRepository.delete(data);
@@ -236,7 +238,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
       throw new Exception("Bản ghi không tồn tại");
     }
     List<Long> listId = list.stream().map(XhCtvtDeXuatHdr::getId).collect(Collectors.toList());
-    List<XhCtvtDeXuatPa> listPhuongAn = xhCtvtDeXuatPaRepository.findAllByXhCtvtDeXuatHdrIn(listId);
+    List<XhCtvtDeXuatPa> listPhuongAn = xhCtvtDeXuatPaRepository.findAllByXhCtvtDeXuatHdrIdIn(listId);
     xhCtvtDeXuatPaRepository.deleteAll(listPhuongAn);
     fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(XhCtvtDeXuatHdr.TABLE_NAME + "_CAN_CU"));
     xhCtvtDeXuatHdrRepository.deleteAll(list);

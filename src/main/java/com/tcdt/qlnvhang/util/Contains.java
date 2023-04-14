@@ -197,6 +197,8 @@ public class Contains {
 	public static final String LOAI_VTHH_THOC = "0101";
 	public static final String LOAI_VTHH_MUOI = "04";
 	public static final String LOAI_VTHH_VATTU = "02";
+	public static final String HET_HIEU_LUC = "00";
+	public static final String CON_HIEU_LUC = "01";
 
 	// Don vi tinh
 	public static final String DVT_KG = "kg";

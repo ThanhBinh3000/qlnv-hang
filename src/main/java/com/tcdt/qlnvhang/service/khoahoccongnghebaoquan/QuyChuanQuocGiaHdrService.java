@@ -58,6 +58,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh())?null:hashMapDmHh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh())?null:hashMapDmHh.get(f.getCloaiVthh()));
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+            f.setTenTrangThaiHl(f.getTrangThaiHl().equals(Contains.CON_HIEU_LUC) ? "Còn hiệu lực" : "Hết hiệu lực");
         });
 
         return data;
@@ -72,6 +73,9 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         Optional<QuyChuanQuocGiaHdr> optional = quyChuanQuocGiaHdrRepository.findAllBySoVanBan(objReq.getSoVanBan());
         if (optional.isPresent()){
             throw new Exception("Số văn bản đã tồn tại");
+        }
+        if (objReq.getTieuChuanKyThuat().isEmpty()) {
+            throw new Exception("Không tìm thấy thông tin tiêu chuẩn kỹ thuật");
         }
         QuyChuanQuocGiaHdr data= new ModelMapper().map(objReq,QuyChuanQuocGiaHdr.class);
         data.setMaDvi(userInfo.getDvql());
@@ -98,6 +102,9 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
             if (!soQd.get().getId().equals(objReq.getId())){
                 throw new Exception("Số văn bản đã tồn tại");
             }
+        }
+        if (objReq.getTieuChuanKyThuat().isEmpty()) {
+            throw new Exception("Không tìm thấy thông tin tiêu chuẩn kỹ thuật");
         }
         QuyChuanQuocGiaHdr data=optional.get();
         BeanUtils.copyProperties(objReq,data,"id","maDvi");
@@ -128,14 +135,32 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh())?null:hashMapDmHh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh())?null:hashMapDmHh.get(data.getCloaiVthh()));
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
-        List<QuyChuanQuocGiaDtl> dtlList = quyChuanQuocGiaDtlRepository.findAllByIdHdr(data.getId());
-        for(QuyChuanQuocGiaDtl dtl: dtlList){
-            dtl.setTenLoaiVthh(StringUtils.isEmpty(dtl.getLoaiVthh()) ? null : hashMapDmHh.get(dtl.getLoaiVthh()));
-            dtl.setTenCloaiVthh(StringUtils.isEmpty(dtl.getCloaiVthh()) ? null : hashMapDmHh.get(dtl.getCloaiVthh()));
-        }
         List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Collections.singleton(QuyChuanQuocGiaHdr.TABLE_NAME));
-        data.setTieuChuanKyThuat(dtlList);
         data.setFileDinhKems(fileDinhKems);
+        List<QuyChuanQuocGiaDtl> dtlList  = quyChuanQuocGiaDtlRepository.findAllByIdHdr(data.getId());
+        if (!dtlList.isEmpty()) {
+            if (data.isApDungCloaiVthh() == false) {
+                for(QuyChuanQuocGiaDtl dtl: dtlList){
+                    dtl.setTenLoaiVthh(StringUtils.isEmpty(dtl.getLoaiVthh()) ? null : hashMapDmHh.get(dtl.getLoaiVthh()));
+                    dtl.setTenCloaiVthh(StringUtils.isEmpty(dtl.getCloaiVthh()) ? null : hashMapDmHh.get(dtl.getCloaiVthh()));
+                }
+                data.setTieuChuanKyThuat(dtlList);
+            } else {
+                List<QuyChuanQuocGiaDtl> listQuyChuan  = new ArrayList<>();
+                List<String> listTenChiTieu = dtlList.stream().map(QuyChuanQuocGiaDtl::getTenChiTieu).collect(Collectors.toList());
+                if (!listTenChiTieu.isEmpty()) {
+                    dtlList.forEach(item -> {
+                        List<String> listStringCompare = listQuyChuan.stream().map(QuyChuanQuocGiaDtl::getTenChiTieu).collect(Collectors.toList());
+                        if (!listStringCompare.contains(item.getTenChiTieu())) {
+                            item.setLoaiVthh(null);
+                            item.setCloaiVthh(null);
+                            listQuyChuan.add(item);
+                        }
+                    });
+                }
+                data.setTieuChuanKyThuat(listQuyChuan);
+            }
+        }
         return data;
     }
 
@@ -233,7 +258,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
             quyChuanQuocGiaHdrRepository.findById(created.getIdVanBanThayThe())
                 .ifPresent(vanBanThayThe -> {
                     vanBanThayThe.setNgayHetHieuLuc(LocalDate.now());
-                    vanBanThayThe.setTrangThaiHl("Hết hiệu lực");
+                    vanBanThayThe.setTrangThaiHl(Contains.HET_HIEU_LUC);
                     quyChuanQuocGiaHdrRepository.save(vanBanThayThe);
                 });
         }
