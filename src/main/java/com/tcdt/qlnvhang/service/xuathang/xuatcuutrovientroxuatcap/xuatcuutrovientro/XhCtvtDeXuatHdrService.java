@@ -157,10 +157,9 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
       }
     }
     XhCtvtDeXuatHdr data = optional.get();
+    BeanUtils.copyProperties(objReq, data);
     objReq.getDeXuatPhuongAn().forEach(e -> e.setXhCtvtDeXuatHdr(data));
     data.setDeXuatPhuongAn(objReq.getDeXuatPhuongAn());
-
-    BeanUtils.copyProperties(objReq, data);
     XhCtvtDeXuatHdr created = xhCtvtDeXuatHdrRepository.save(data);
 
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhCtvtDeXuatHdr.TABLE_NAME + "_CAN_CU"));
