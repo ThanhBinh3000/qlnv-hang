@@ -8,7 +8,6 @@ import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKh
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.tonghop.XhThopDxKhBttDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.tonghop.XhThopDxKhBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.thongtin.XhTcTtinBtt;
-import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMau;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdrRepository;
@@ -233,11 +232,11 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
         XhQdPdKhBttHdr created =  xhQdPdKhBttHdrRepository.save(dataDB);
 
         fileDinhKemService.delete(dataDB.getId(), Collections.singleton(XhQdPdKhBttHdr.TABLE_NAME + "_BAN_HANH"));
-        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), created.getId(), XhBbLayMau.TABLE_NAME);
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), created.getId(), XhQdPdKhBttHdr.TABLE_NAME + "_BAN_HANH");
         created.setFileDinhKem(fileDinhKem);
 
         fileDinhKemService.delete(dataDB.getId(), Collections.singleton(XhQdPdKhBttHdr.TABLE_NAME));
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhBbLayMau.TABLE_NAME);
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhQdPdKhBttHdr.TABLE_NAME);
         created.setFileDinhKems(fileDinhKems);
 
         this.saveDetail(req, dataDB.getId());

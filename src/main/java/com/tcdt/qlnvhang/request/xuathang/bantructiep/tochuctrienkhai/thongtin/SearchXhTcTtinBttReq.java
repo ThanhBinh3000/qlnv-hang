@@ -14,28 +14,23 @@ public class SearchXhTcTtinBttReq extends BaseRequest {
 
     Integer namKh;
 
+    String maDvi;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     Date  ngayCgiaTu;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     Date  ngayCgiaDen;
 
-    String loaiVthh;
-
-    String maDvi;
+    String maDviChiCuc;
 
     String tochucCanhan;
 
     Integer lastest ;
 
-    String maDviChiCuc;
+    String loaiVthh;
 
-    String soQdPd;
-
-    Long idSoQdKq;
+    String pthucBanTrucTiep;
 
     Integer typeSoQdKq;
-
-     String pthucBanTrucTiep;
-
 }
