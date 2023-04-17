@@ -19,6 +19,7 @@ public class SearchXhCtvtQdGiaoNvXh extends BaseRequest {
   private LocalDate ngayKyTu;
   private LocalDate ngayKyDen;
   private String trangThai;
+  private String trangThaiXh;
   private List<String> listTrangThai = new ArrayList<>();
   private String type;
 }

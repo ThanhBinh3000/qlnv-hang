@@ -60,8 +60,6 @@ public class XhQdPdKhBttHdrReq extends BaseRequest {
 
     private String soQdCc;
 
-    private String trangThaiChaoGia;
-
     private Integer typeQdDc;
 
     private String loaiHinhNx;

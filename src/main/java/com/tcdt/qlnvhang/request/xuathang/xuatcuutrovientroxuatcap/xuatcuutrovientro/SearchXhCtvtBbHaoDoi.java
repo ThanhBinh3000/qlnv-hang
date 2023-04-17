@@ -9,7 +9,7 @@ import java.time.LocalDate;
 public class SearchXhCtvtBbHaoDoi extends BaseRequest {
   private String maDvi;
   private String dvql;
-  private Long nam;
+  private Integer nam;
   private String soQdGiaoNvXh;
   private String soBbHaoDoi;
   private LocalDate ngayTaoBbTu;
