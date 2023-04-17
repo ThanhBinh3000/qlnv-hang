@@ -2,6 +2,8 @@ package com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovien
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -9,7 +11,8 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = XhCtVtQuyetDinhPdDx.TABLE_NAME)
-@Data
+@Getter
+@Setter
 public class XhCtVtQuyetDinhPdDx implements Serializable {
 
     private static final long serialVersionUID = 1L;
