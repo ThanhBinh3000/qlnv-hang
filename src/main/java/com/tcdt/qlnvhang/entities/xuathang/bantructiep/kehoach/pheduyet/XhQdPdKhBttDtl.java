@@ -103,17 +103,8 @@ public class XhQdPdKhBttDtl implements Serializable {
     @Transient
     private String tenTrangThai;
 
-    private String loaiVthh;
-    @Transient
-    private String tenLoaiVthh;
-
-    private String cloaiVthh;
-    @Transient
-    private String tenCloaiVthh;
-
-    private String soQdPd;
-
-
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date thoiHanBan;
 
     @Transient
     private List<FileDinhKem> fileDinhKemUyQuyen = new ArrayList<>();
