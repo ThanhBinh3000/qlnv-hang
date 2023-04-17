@@ -215,8 +215,10 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
             HhDxKhlcntDsgthau data = new ModelMapper().map(gt, HhDxKhlcntDsgthau.class);
             data.setId(null);
             data.setIdDxKhlcnt(idHdr);
-            BigDecimal thanhTien = data.getDonGiaVat().multiply(data.getSoLuong());
-            data.setThanhTien(thanhTien);
+            if (data.getDonGiaTamTinh() != null && data.getSoLuong() != null) {
+                BigDecimal thanhTien = data.getDonGiaTamTinh().multiply(data.getSoLuong());
+                data.setThanhTien(thanhTien);
+            }
             hhDxuatKhLcntDsgtDtlRepository.save(data);
             hhDxKhlcntDsgthauCtietRepository.deleteAllByIdGoiThau(data.getId());
             // Lưu danh sách gói thầu Cục ( Vật tư ) và Điểm kho ( Lương thực )
@@ -395,6 +397,9 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
             String status = stReq.getTrangThai() + optional.getTrangThai();
             switch (status) {
                 case Contains.CHODUYET_LDV + Contains.DUTHAO:
+                    optional.setNguoiGuiDuyet(getUser().getUsername());
+                    optional.setNgayGuiDuyet(getDateTimeNow());
+                    break;
                 case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
                     optional.setNguoiGuiDuyet(getUser().getUsername());
                     optional.setNgayGuiDuyet(getDateTimeNow());
@@ -415,18 +420,35 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
             String status = stReq.getTrangThai() + optional.getTrangThai();
             switch (status) {
                 case Contains.CHODUYET_TP + Contains.DUTHAO:
+                    this.validateData(optional, Contains.CHODUYET_TP);
+                    optional.setNguoiGuiDuyet(getUser().getUsername());
+                    optional.setNgayGuiDuyet(getDateTimeNow());
+                    break;
                 case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+                    this.validateData(optional, Contains.CHODUYET_TP);
+                    optional.setNguoiGuiDuyet(getUser().getUsername());
+                    optional.setNgayGuiDuyet(getDateTimeNow());
+                    break;
                 case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
                     this.validateData(optional, Contains.CHODUYET_TP);
                     optional.setNguoiGuiDuyet(getUser().getUsername());
                     optional.setNgayGuiDuyet(getDateTimeNow());
+                    break;
                 case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
+                    optional.setNguoiPduyet(getUser().getUsername());
+                    optional.setNgayPduyet(getDateTimeNow());
+                    optional.setLdoTuchoi(stReq.getLyDo());
+                    break;
                 case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
                     optional.setNguoiPduyet(getUser().getUsername());
                     optional.setNgayPduyet(getDateTimeNow());
                     optional.setLdoTuchoi(stReq.getLyDo());
                     break;
                 case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
+                    this.validateData(optional, stReq.getTrangThai());
+                    optional.setNguoiPduyet(getUser().getUsername());
+                    optional.setNgayPduyet(getDateTimeNow());
+                    break;
                 case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
                     this.validateData(optional, stReq.getTrangThai());
                     optional.setNguoiPduyet(getUser().getUsername());
