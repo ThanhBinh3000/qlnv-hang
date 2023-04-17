@@ -8,7 +8,7 @@ import java.time.LocalDate;
 public class SearchXhCtvtBbTinhKho  extends BaseRequest {
   private String maDvi;
   private String dvql;
-  private Long nam;
+  private Integer nam;
   private String soQdGiaoNvXh;
   private String soBbTinhKho;
   private LocalDate ngayBatDauXuatTu;
