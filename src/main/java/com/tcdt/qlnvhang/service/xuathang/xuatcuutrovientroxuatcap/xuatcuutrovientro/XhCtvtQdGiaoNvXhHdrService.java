@@ -162,6 +162,7 @@ public class XhCtvtQdGiaoNvXhHdrService extends BaseServiceImpl {
       BeanUtils.copyProperties(noiDungCuuTroReq, noiDungCuuTro);
       noiDungCuuTro.setId(null);
       noiDungCuuTro.setIdHdr(objReq.getId());
+      noiDungCuuTro.setTrangThai(objReq.getTrangThaiXh());
       xhCtvtQdGiaoNvXhDtlRepository.save(noiDungCuuTro);
     }
     Optional<XhCtvtQdGiaoNvXhHdr> optionalQdHdr = xhCtvtQdGiaoNvXhHdrRepository.findById(objReq.getId());
