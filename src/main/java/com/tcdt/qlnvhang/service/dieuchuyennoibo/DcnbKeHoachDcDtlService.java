@@ -55,16 +55,6 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
     }
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<DcnbKeHoachDcHdr> search = dcnbKeHoachDcHdrRepository.search(req, pageable);
-    Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
-    search.getContent().forEach(s -> {
-      if (mapDmucDvi.containsKey((s.getMaDvi()))) {
-        Map<String, Object> tenDvi = mapDmucDvi.get(s.getMaDvi());
-        s.setTenDvi(tenDvi.get("tenDvi").toString());
-        Map<String, Object> tenCucNhan = mapDmucDvi.get(s.getMaCucNhan());
-        s.setTenCucNhan(tenCucNhan.get("tenDvi").toString());
-      }
-      s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
-    });
     return search;
   }
 
@@ -126,21 +116,11 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
     if (DataUtils.isNullOrEmpty(optional)) {
       throw new Exception("Không tìm thấy dữ liệu");
     }
-    Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
-    Map<String, String> mapVthh = getListDanhMucHangHoa();
     List<DcnbKeHoachDcHdr> allById = dcnbKeHoachDcHdrRepository.findAllById(ids);
     allById.forEach(data -> {
-      if (mapDmucDvi.containsKey(data.getMaDvi())) {
-        data.setTenDvi(mapDmucDvi.get(data.getMaDvi()).get("tenDvi").toString());
-      }
-      data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
       List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Arrays.asList(DcnbKeHoachDcHdr.TABLE_NAME + "_CAN_CU"));
       data.setCanCu(canCu);
       List<DcnbKeHoachDcDtl> list = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(data.getId());
-      for (DcnbKeHoachDcDtl keHoachDcDtl : list) {
-        keHoachDcDtl.setTenLoaiVthh(mapVthh.get(keHoachDcDtl.getLoaiVthh()));
-        keHoachDcDtl.setTenCloaiVthh(mapVthh.get(keHoachDcDtl.getCloaiVthh()));
-      }
       data.setDcNbKeHoachDcDtl(list);
     });
     return allById;

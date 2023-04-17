@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,9 +33,13 @@ public class DcnbKeHoachDcHdr extends BaseEntity implements Serializable {
   private LocalDate ngayDuyetLdc;
   private String trichYeu;
   private String lyDoDc;
+  @Access(value=AccessType.PROPERTY)
   private String maDvi;
+  private String tenDvi;
   private String maCucNhan;
+  private String tenCucNhan;
   private String trachNhiemDviTh;
+  @Access(value=AccessType.PROPERTY)
   private String trangThai;
   private String lyDoTuChoi;
   private String type;
@@ -47,11 +52,7 @@ public class DcnbKeHoachDcHdr extends BaseEntity implements Serializable {
   private LocalDate ngayPduyet;
   private Long nguoiPduyetId;
   @Transient
-  private String tenDvi;
-  @Transient
-  private String tenCucDxuat;
-  @Transient
-  private String tenCucNhan;
+  private String maCucDxuat;
   @Transient
   private String tenTrangThai;
   @Transient
@@ -65,6 +66,10 @@ public class DcnbKeHoachDcHdr extends BaseEntity implements Serializable {
 
   public void setMaDvi(String maDvi) {
     this.maDvi = maDvi;
-    setTenCucDxuat(maDvi.length() >= 6 ? maDvi.substring(0, 6) : "");
+    setMaCucDxuat(maDvi.length() >= 6 ? maDvi.substring(0, 6) : "");
+  }
+  public void setTrangThai(String trangThai) {
+    this.trangThai = trangThai;
+    this.tenTrangThai = NhapXuatHangTrangThaiEnum.getTenById(this.trangThai);
   }
 }

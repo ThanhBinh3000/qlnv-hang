@@ -23,22 +23,23 @@ public class DcnbKeHoachDcDtl implements Serializable {
     @SequenceGenerator(sequenceName = DcnbKeHoachDcDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbKeHoachDcDtl.TABLE_NAME + "_SEQ")
     private Long id;
     private String maChiCucNhan;
+    private String tenChiCucNhan;
     private LocalDate thoiGianDkDc;
+    @Access(value=AccessType.PROPERTY)
     private String maKho;
     private String loaiVthh;
     private String cloaiVthh;
-    private BigDecimal tonKho;
+    private String tenLoaiVthh;
+    private String tenCloaiVthh;
     private String donViTinh;
+    private BigDecimal tonKho;
     private BigDecimal soLuongDc;
     private BigDecimal duToanKphi;
+    @Access(value=AccessType.PROPERTY)
     private String maKhoNhan;
     private BigDecimal tichLuongKd;
     private BigDecimal soLuongPhanBo;
 
-    @Transient
-    private String tenLoaiVthh;
-    @Transient
-    private String tenCloaiVthh;
     @Transient
     private String maDiemKho;
     @Transient

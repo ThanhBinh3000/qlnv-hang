@@ -22,7 +22,9 @@ public class DcnbKeHoachDcHdrReq {
   private String trichYeu;
   private String lyDoDc;
   private String maDvi;
+  private String tenDvi;
   private String maCucNhan;
+  private String tenCucNhan;
   private String trachNhiemDviTh;
   private String trangThai;
   private String lyDoTuChoi;
@@ -31,6 +33,12 @@ public class DcnbKeHoachDcHdrReq {
   private String maThop;
   private Long idQdDc;
   private String soQdDc;
+  private LocalDate ngayGduyet;
+  private Long nguoiGduyetId;
+  private LocalDate ngayPduyet;
+  private Long nguoiPduyetId;
+  private String maCucDxuat;
+  private String tenTrangThai;
 
   private List<FileDinhKemReq> canCu = new ArrayList<>();
   private List<DcnbKeHoachDcDtl> dcNbKeHoachDcDtl = new ArrayList<>();
