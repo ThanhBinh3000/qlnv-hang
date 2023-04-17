@@ -60,7 +60,10 @@ public class DcnbKeHoachDcHdr extends BaseEntity implements Serializable {
   @OneToMany(mappedBy = "dcnbKeHoachDcHdr",cascade = CascadeType.ALL)
   private List<DcnbKeHoachDcDtl> dcNbKeHoachDcDtl = new ArrayList<>();
 
-  public void maDvi(String maDvi) {
+  @OneToMany(mappedBy = "dcnbKeHoachDcHdr",cascade = CascadeType.ALL)
+  private List<DcnbPhuongAnDc> dcnbPhuongAnDc = new ArrayList<>();
+
+  public void setMaDvi(String maDvi) {
     this.maDvi = maDvi;
     setTenCucDxuat(maDvi.length() >= 6 ? maDvi.substring(0, 6) : "");
   }

@@ -82,6 +82,7 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
     data.setMaDvi(currentUser.getUser().getDepartment());
     data.setTrangThai(Contains.DUTHAO);
     objReq.getDcNbKeHoachDcDtl().forEach(e -> e.setDcnbKeHoachDcHdr(data));
+    objReq.getDcnbPhuongAnDc().forEach(e -> e.setDcnbKeHoachDcHdr(data));
     DcnbKeHoachDcHdr created = dcnbKeHoachDcHdrRepository.save(data);
     List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), DcnbKeHoachDcHdr.TABLE_NAME + "_CAN_CU");
     created.setCanCu(canCu);
@@ -105,6 +106,7 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
     }
     DcnbKeHoachDcHdr data = optional.get();
     data.setDcNbKeHoachDcDtl(objReq.getDcNbKeHoachDcDtl());
+    data.setDcnbPhuongAnDc(objReq.getDcnbPhuongAnDc());
 
     BeanUtils.copyProperties(objReq, data);
     DcnbKeHoachDcHdr created = dcnbKeHoachDcHdrRepository.save(data);

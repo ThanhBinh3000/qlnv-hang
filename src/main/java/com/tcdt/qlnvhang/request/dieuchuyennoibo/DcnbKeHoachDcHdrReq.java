@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhuongAnDc;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,4 +34,5 @@ public class DcnbKeHoachDcHdrReq {
 
   private List<FileDinhKemReq> canCu = new ArrayList<>();
   private List<DcnbKeHoachDcDtl> dcNbKeHoachDcDtl = new ArrayList<>();
+  private List<DcnbPhuongAnDc> dcnbPhuongAnDc = new ArrayList<>();
 }
