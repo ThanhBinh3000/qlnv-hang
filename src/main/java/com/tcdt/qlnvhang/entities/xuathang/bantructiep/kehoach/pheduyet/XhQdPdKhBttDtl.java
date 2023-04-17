@@ -115,6 +115,15 @@ public class XhQdPdKhBttDtl implements Serializable {
     @Transient
     private XhQdPdKhBttHdr xhQdPdKhBttHdr;
 
+    @Transient
+    private String soQdPd;
+
+    @Transient
+    private String tenLoaiVthh;
+
+    @Transient
+    private String tenCloaiVthh;
+
 
 
 }
