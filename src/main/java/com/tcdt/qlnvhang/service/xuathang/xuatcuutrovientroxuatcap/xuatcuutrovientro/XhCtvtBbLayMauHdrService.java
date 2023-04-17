@@ -125,12 +125,12 @@ public class XhCtvtBbLayMauHdrService extends BaseServiceImpl {
       Optional<XhCtvtQdGiaoNvXhHdr> qdGiaoNvXhHdr = xhCtvtQdGiaoNvXhHdrRepository.findById(created.getIdQdGiaoNvXh());
       if (qdGiaoNvXhHdr.isPresent()) {
         XhCtvtQdGiaoNvXhHdr qd = qdGiaoNvXhHdr.get();
-        qd.setTenTrangThaiXh(Contains.DANGCAPNHAT);
+        qd.setTenTrangThaiXh(Contains.DANG_THUC_HIEN);
         xhCtvtQdGiaoNvXhHdrRepository.save(qd);
       }
       List<XhCtvtQdGiaoNvXhDtl> qdGiaoNvXhDtl = xhCtvtQdGiaoNvXhDtlRepository.findByIdHdr(created.getIdQdGiaoNvXh());
       qdGiaoNvXhDtl.forEach(qdDtl -> {
-            qdDtl.setTrangThai(Contains.DANGCAPNHAT);
+            qdDtl.setTrangThai(Contains.DANG_THUC_HIEN);
             xhCtvtQdGiaoNvXhDtlRepository.save(qdDtl);
           }
       );
@@ -253,21 +253,21 @@ public class XhCtvtBbLayMauHdrService extends BaseServiceImpl {
         Optional<XhCtvtQdGiaoNvXhHdr> qdGiaoNvXhHdr = xhCtvtQdGiaoNvXhHdrRepository.findById(data.getIdQdGiaoNvXh());
         if (qdGiaoNvXhHdr.isPresent()) {
           XhCtvtQdGiaoNvXhHdr qd = qdGiaoNvXhHdr.get();
-          qd.setTenTrangThaiXh(Contains.CHUACAPNHAT);
+          qd.setTenTrangThaiXh(Contains.CHUA_THUC_HIEN);
           xhCtvtQdGiaoNvXhHdrRepository.save(qd);
         }
       }else {
         Optional<XhCtvtQdGiaoNvXhHdr> qdGiaoNvXhHdr = xhCtvtQdGiaoNvXhHdrRepository.findById(data.getIdQdGiaoNvXh());
         if (qdGiaoNvXhHdr.isPresent()) {
           XhCtvtQdGiaoNvXhHdr qd = qdGiaoNvXhHdr.get();
-          qd.setTenTrangThaiXh(Contains.DANGCAPNHAT);
+          qd.setTenTrangThaiXh(Contains.DANG_THUC_HIEN);
           xhCtvtQdGiaoNvXhHdrRepository.save(qd);
         }
       }
 
       List<XhCtvtQdGiaoNvXhDtl> qdGiaoNvXhDtl = xhCtvtQdGiaoNvXhDtlRepository.findByIdHdr(data.getIdQdGiaoNvXh());
       qdGiaoNvXhDtl.forEach(qdDtl -> {
-            qdDtl.setTrangThai(Contains.CHUACAPNHAT);
+            qdDtl.setTrangThai(Contains.CHUA_THUC_HIEN);
             xhCtvtQdGiaoNvXhDtlRepository.save(qdDtl);
           }
       );
