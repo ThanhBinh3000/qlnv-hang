@@ -58,6 +58,10 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
                 hdr.setTenLoaiVthh(hashMapVthh.get(hdr.getLoaiVthh()));
                 hdr.setTenCloaiVthh(hashMapVthh.get(hdr.getCloaiVthh()));
                 f.setXhQdPdKhBttHdr(hdr);
+//                set tên hàng hóa và số quyết định PD để tìm kiếm cho quyết định PD kết quả chào giá
+                f.setSoQdPd(hdr.getSoQdPd());
+                f.setTenLoaiVthh(hashMapVthh.get(hdr.getLoaiVthh()));
+                f.setTenCloaiVthh(hashMapVthh.get(hdr.getCloaiVthh()));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

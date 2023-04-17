@@ -59,9 +59,18 @@ public class XhKqBttHdrReq extends BaseRequest  {
 
     private String pthucBanTrucTiep;
 
-    private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
+    private String loaiHinhNx;
 
-    private FileDinhKemReq fileDinhKem;
+    private String kieuNx;
+
+    @Transient
+    private List<FileDinhKemReq> fileCanCu = new ArrayList<>();
+
+    @Transient
+    private List<FileDinhKemReq> fileQdDaKy = new ArrayList<>();
+
+    @Transient
+    private List<FileDinhKemReq> fileQd = new ArrayList<>();
 
     @Transient
     private List<XhKqBttDtlReq> children = new ArrayList<>();
