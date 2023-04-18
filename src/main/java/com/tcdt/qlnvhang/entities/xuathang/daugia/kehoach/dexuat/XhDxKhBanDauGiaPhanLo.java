@@ -35,8 +35,6 @@ public class XhDxKhBanDauGiaPhanLo implements Serializable {
 
     private BigDecimal donGiaDeXuat;
 
-    private BigDecimal donGiaVat;
-
     private String dviTinh;
 
     // Transient
@@ -48,5 +46,7 @@ public class XhDxKhBanDauGiaPhanLo implements Serializable {
     private String tenNganKho;
     @Transient
     private String tenLoKho;
+    @Transient
+    private BigDecimal donGiaVat;
 
 }

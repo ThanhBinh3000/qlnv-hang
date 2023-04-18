@@ -24,9 +24,7 @@ public class XhDxKhBanDauGiaDtl implements Serializable {
 
     private BigDecimal soLuongChiCuc;
 
-    private BigDecimal tienDtruocDxChiCuc;
-
-    private BigDecimal tienDtruocDdChiCuc;
+    private BigDecimal donGiaChiCuc;
 
     private String maDvi;
     @Transient
@@ -37,6 +35,12 @@ public class XhDxKhBanDauGiaDtl implements Serializable {
     private String slChiTieu;
 
     private String slKeHoachDd;
+
+    @Transient
+    private String soTienDatTruocChiCuc;
+
+    @Transient
+    private BigDecimal tongTienDatTruocDuocDuyet;
 
     @Transient
     private List<XhDxKhBanDauGiaPhanLo> children = new ArrayList<>();
