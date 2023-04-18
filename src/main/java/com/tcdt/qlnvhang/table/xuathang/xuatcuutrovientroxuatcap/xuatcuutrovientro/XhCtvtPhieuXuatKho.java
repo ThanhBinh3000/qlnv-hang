@@ -54,6 +54,7 @@ public class XhCtvtPhieuXuatKho extends BaseEntity implements Serializable {
   private String ctyNguoiGh;
   private String diaChi;
   private LocalDate thoiGianGiaoNhan;
+  private Long idBangKeCh;
   private String soBangKeCh;
   private String maSo;
   private String donViTinh;
