@@ -51,22 +51,22 @@ public class DcnbKeHoachDcHdr extends BaseEntity implements Serializable {
   private Long nguoiGduyetId;
   private LocalDate ngayPduyet;
   private Long nguoiPduyetId;
-  @Transient
-  private String maCucDxuat;
+  private String maDviCuc;
+  private String tenDviCuc;
   @Transient
   private String tenTrangThai;
   @Transient
   private List<FileDinhKem> canCu = new ArrayList<>();
 
   @OneToMany(mappedBy = "dcnbKeHoachDcHdr",cascade = CascadeType.ALL)
-  private List<DcnbKeHoachDcDtl> dcNbKeHoachDcDtl = new ArrayList<>();
+  private List<DcnbKeHoachDcDtl> danhSachHangHoa = new ArrayList<>();
 
   @OneToMany(mappedBy = "dcnbKeHoachDcHdr",cascade = CascadeType.ALL)
   private List<DcnbPhuongAnDc> dcnbPhuongAnDc = new ArrayList<>();
 
   public void setMaDvi(String maDvi) {
     this.maDvi = maDvi;
-    setMaCucDxuat(maDvi.length() >= 6 ? maDvi.substring(0, 6) : "");
+    setMaDviCuc(maDvi.length() >= 6 ? maDvi.substring(0, 6) : "");
   }
   public void setTrangThai(String trangThai) {
     this.trangThai = trangThai;

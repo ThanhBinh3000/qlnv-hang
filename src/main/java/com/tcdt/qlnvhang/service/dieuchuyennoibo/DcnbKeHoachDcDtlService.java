@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
 import com.google.common.collect.Lists;
-import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcHdrRepository;
@@ -30,7 +29,10 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -49,9 +51,9 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
   public Page<DcnbKeHoachDcHdr> searchPage(CustomUserDetails currentUser, SearchDcnbKeHoachDc req) throws Exception {
     String dvql = currentUser.getDvql();
     if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-      req.setDvql(dvql.substring(0, 6));
+      req.setMaDvi(dvql.substring(0, 6));
     } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
-      req.setDvql(dvql);
+      req.setMaDvi(dvql);
     }
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<DcnbKeHoachDcHdr> search = dcnbKeHoachDcHdrRepository.search(req, pageable);
@@ -71,7 +73,7 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
     BeanUtils.copyProperties(objReq, data);
     data.setMaDvi(currentUser.getUser().getDepartment());
     data.setTrangThai(Contains.DUTHAO);
-    objReq.getDcNbKeHoachDcDtl().forEach(e -> e.setDcnbKeHoachDcHdr(data));
+    objReq.getDanhSachHangHoa().forEach(e -> e.setDcnbKeHoachDcHdr(data));
     objReq.getDcnbPhuongAnDc().forEach(e -> e.setDcnbKeHoachDcHdr(data));
     DcnbKeHoachDcHdr created = dcnbKeHoachDcHdrRepository.save(data);
     List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), DcnbKeHoachDcHdr.TABLE_NAME + "_CAN_CU");
@@ -95,7 +97,7 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
       }
     }
     DcnbKeHoachDcHdr data = optional.get();
-    data.setDcNbKeHoachDcDtl(objReq.getDcNbKeHoachDcDtl());
+    data.setDanhSachHangHoa(objReq.getDanhSachHangHoa());
     data.setDcnbPhuongAnDc(objReq.getDcnbPhuongAnDc());
 
     BeanUtils.copyProperties(objReq, data);
@@ -121,7 +123,7 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
       List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Arrays.asList(DcnbKeHoachDcHdr.TABLE_NAME + "_CAN_CU"));
       data.setCanCu(canCu);
       List<DcnbKeHoachDcDtl> list = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(data.getId());
-      data.setDcNbKeHoachDcDtl(list);
+      data.setDanhSachHangHoa(list);
     });
     return allById;
   }

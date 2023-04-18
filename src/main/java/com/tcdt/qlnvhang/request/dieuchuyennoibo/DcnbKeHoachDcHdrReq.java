@@ -3,15 +3,13 @@ package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhuongAnDc;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Setter
-@Getter
+@Data
 public class DcnbKeHoachDcHdrReq {
   private Long id;
   private String loaiDc;
@@ -37,10 +35,10 @@ public class DcnbKeHoachDcHdrReq {
   private Long nguoiGduyetId;
   private LocalDate ngayPduyet;
   private Long nguoiPduyetId;
-  private String maCucDxuat;
+  private String maDviCuc;
+  private String tenDviCuc;
   private String tenTrangThai;
-
   private List<FileDinhKemReq> canCu = new ArrayList<>();
-  private List<DcnbKeHoachDcDtl> dcNbKeHoachDcDtl = new ArrayList<>();
+  private List<DcnbKeHoachDcDtl> danhSachHangHoa = new ArrayList<>();
   private List<DcnbPhuongAnDc> dcnbPhuongAnDc = new ArrayList<>();
 }

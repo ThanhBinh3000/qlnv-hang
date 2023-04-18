@@ -11,7 +11,6 @@ import java.time.LocalDate;
 public class SearchDcnbKeHoachDc extends BaseRequest {
   private Integer nam;
   private String maDvi;
-  private String dvql;
   private String loaiDc;
   private LocalDate ngayLapKhTu;
   private LocalDate ngayLapKhDen;
@@ -23,6 +22,4 @@ public class SearchDcnbKeHoachDc extends BaseRequest {
   private String cloaiVthh;
   private String trichYeu;
   private String trangThai;
-  private String type;
-
 }
