@@ -6,13 +6,11 @@ import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhCtvtQdXuatCapDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhCtvtQdXuatCapHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQdPdDtlRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQdPdHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcap.SearchXhCtvtQdXuatCap;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhCtvtQdXuatCapDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhCtvtQdXuatCapReq;
-import com.tcdt.qlnvhang.response.xuathang.xuatcuutrovientro.xuatcap.XhCtvtQdXuatCap;
 import com.tcdt.qlnvhang.response.xuathang.xuatcuutrovientro.xuatcap.XhCtvtQdXuatCapChiTiet;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -57,7 +55,7 @@ public class XhCtvtQdXuatCapService extends BaseServiceImpl {
     }
 
     @Transactional
-    public boolean save(CustomUserDetails currentUser, XhCtvtQdXuatCapReq objReq) throws Exception {
+    public XhCtvtQdXuatCapHdr save(CustomUserDetails currentUser, XhCtvtQdXuatCapReq objReq) throws Exception {
         if (currentUser == null) {
             throw new Exception("Bad request.");
         }
@@ -80,13 +78,13 @@ public class XhCtvtQdXuatCapService extends BaseServiceImpl {
                 fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(), created.getId(), XhCtvtQdXuatCapHdr.TABLE_NAME);
             }
             saveChiTiet(created.getId(), objReq);
-            return true;
+            return created;
         }
         throw new Exception("Thông tin thêm mới không hợp lệ.");
     }
 
     @Transactional
-    public boolean update(CustomUserDetails currentUser, XhCtvtQdXuatCapReq objReq) throws Exception {
+    public XhCtvtQdXuatCapHdr update(CustomUserDetails currentUser, XhCtvtQdXuatCapReq objReq) throws Exception {
         if (currentUser == null) {
             throw new Exception("Bad request.");
         }
@@ -114,7 +112,7 @@ public class XhCtvtQdXuatCapService extends BaseServiceImpl {
             }
             xhCtvtQdXuatCapDtlRepository.deleteAllByHdrId(objReq.getId());
             saveChiTiet(created.getId(), objReq);
-            return true;
+            return created;
         }
         throw new Exception("Thông tin cập nhật không hợp lệ.");
     }
