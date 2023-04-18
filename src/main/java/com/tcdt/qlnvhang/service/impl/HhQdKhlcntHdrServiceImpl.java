@@ -405,7 +405,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	@Override
 	public HhQdKhlcntDtl detailDtl(Long ids) throws Exception {
 		Optional<HhQdKhlcntDtl> byId = hhQdKhlcntDtlRepository.findById(ids);
-
+		HhQdKhlcntHdr hhQdKhlcntHdr = new HhQdKhlcntHdr();
 		if(!byId.isPresent()){
 			throw new Exception("Không tìm thấy dữ liệu");
 		};
@@ -419,14 +419,16 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 		Map<String,String> hashMapDvi = getListDanhMucDvi(null,null,"01");
 		// Set Hdr
-		HhQdKhlcntHdr hhQdKhlcntHdr = hhQdKhlcntHdrRepository.findById(dtl.getIdQdHdr()).get();
-		hhQdKhlcntHdr.setTenLoaiHdong(hashMapLoaiHdong.get(hhQdKhlcntHdr.getLoaiHdong()));
-		hhQdKhlcntHdr.setTenNguonVon(hashMapNguonVon.get(hhQdKhlcntHdr.getNguonVon()));
-		hhQdKhlcntHdr.setTenPthucLcnt(hashMapPthucDthau.get(hhQdKhlcntHdr.getPthucLcnt()));
-		hhQdKhlcntHdr.setTenHthucLcnt(hashMapHtLcnt.get(hhQdKhlcntHdr.getHthucLcnt()));
-		hhQdKhlcntHdr.setTenCloaiVthh(hashMapDmHh.get(hhQdKhlcntHdr.getCloaiVthh()));
-		hhQdKhlcntHdr.setTenLoaiVthh(hashMapDmHh.get(hhQdKhlcntHdr.getLoaiVthh()));
-		dtl.setHhQdKhlcntHdr(hhQdKhlcntHdr);
+		if(hhQdKhlcntHdrRepository.findById(dtl.getIdQdHdr()).isPresent()){
+			hhQdKhlcntHdr = hhQdKhlcntHdrRepository.findById(dtl.getIdQdHdr()).get();
+			hhQdKhlcntHdr.setTenLoaiHdong(hashMapLoaiHdong.get(hhQdKhlcntHdr.getLoaiHdong()));
+			hhQdKhlcntHdr.setTenNguonVon(hashMapNguonVon.get(hhQdKhlcntHdr.getNguonVon()));
+			hhQdKhlcntHdr.setTenPthucLcnt(hashMapPthucDthau.get(hhQdKhlcntHdr.getPthucLcnt()));
+			hhQdKhlcntHdr.setTenHthucLcnt(hashMapHtLcnt.get(hhQdKhlcntHdr.getHthucLcnt()));
+			hhQdKhlcntHdr.setTenCloaiVthh(hashMapDmHh.get(hhQdKhlcntHdr.getCloaiVthh()));
+			hhQdKhlcntHdr.setTenLoaiVthh(hashMapDmHh.get(hhQdKhlcntHdr.getLoaiVthh()));
+			dtl.setHhQdKhlcntHdr(hhQdKhlcntHdr);
+		}
 
 		List<HhQdKhlcntDsgthau> byIdQdDtl = hhQdKhlcntDsgthauRepository.findByIdQdDtl(dtl.getId());
 		byIdQdDtl.forEach( x -> {
