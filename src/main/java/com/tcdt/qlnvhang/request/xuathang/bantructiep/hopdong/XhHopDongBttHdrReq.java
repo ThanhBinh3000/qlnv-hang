@@ -39,6 +39,10 @@ public class XhHopDongBttHdrReq extends BaseRequest {
 
     private String maDviTsan;
 
+    private String loaiHinhNx;
+
+    private String kieuNx;
+
     private String soHd;
 
     private String tenHd;
@@ -148,10 +152,14 @@ public class XhHopDongBttHdrReq extends BaseRequest {
     private List<String> listMaDviTsan = new ArrayList<>();
 
     @Transient
+    private List<FileDinhKemReq> canCuPhapLy = new ArrayList<>();
+
+    @Transient
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 
     @Transient
-    private FileDinhKemReq fileDinhKem;
+    private List<FileDinhKemReq> filePhuLuc = new ArrayList<>();
+
 
     @Transient
     private List<XhHopDongBttDtlReq> children = new ArrayList<>();

@@ -47,6 +47,10 @@ public class XhHopDongBttHdr extends TrangThaiBaseEntity implements Serializable
 
     private String maDviTsan;
 
+    private String loaiHinhNx;
+
+    private String kieuNx;
+
     private String soHd;
 
     private String tenHd;
@@ -164,10 +168,13 @@ public class XhHopDongBttHdr extends TrangThaiBaseEntity implements Serializable
     private String trichYeu;
 
     @Transient
+    private List<FileDinhKem> canCuPhapLy = new ArrayList<>();
+
+    @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
     @Transient
-    private FileDinhKem fileDinhKem;
+    private List<FileDinhKem> filePhuLuc = new ArrayList<>();
 
     @Transient
     private List<XhHopDongBttDtl> children = new ArrayList<>();
