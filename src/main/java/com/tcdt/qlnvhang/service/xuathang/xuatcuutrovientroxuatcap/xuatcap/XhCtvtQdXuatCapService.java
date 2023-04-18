@@ -208,9 +208,19 @@ public class XhCtvtQdXuatCapService extends BaseServiceImpl {
 
         String status = statusReq.getTrangThai() + optional.get().getTrangThai();
         switch (status) {
-            case Contains.BAN_HANH + Contains.DUTHAO:
-                optional.get().setNgayPduyet(LocalDate.now());
+            case Contains.CHODUYET_LDV + Contains.DUTHAO:
+            case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
+                optional.get().setNguoiGduyetId(currentUser.getUser().getId());
+                optional.get().setNgayGduyet(LocalDate.now());
+                break;
+            case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
                 optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+                optional.get().setNgayPduyet(LocalDate.now());
+                optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
+                break;
+            case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
+                optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+                optional.get().setNgayPduyet(LocalDate.now());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");

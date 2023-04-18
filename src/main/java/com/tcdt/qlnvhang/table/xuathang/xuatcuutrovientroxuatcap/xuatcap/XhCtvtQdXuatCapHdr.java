@@ -40,9 +40,14 @@ public class XhCtvtQdXuatCapHdr extends BaseEntity implements Serializable {
     private LocalDate thoiHanXuat;
     private LocalDate ngayPduyet;
     private Long nguoiPduyetId;
+    private LocalDate ngayGduyet;
+    private Long nguoiGduyetId;
+    private String lyDoTuChoi;
     private BigDecimal tongSoLuongThoc;
     private BigDecimal tongSoLuongGao;
     private BigDecimal thanhTien;
+
+
     private Long qdPaXuatCapId;
 
     @OneToMany(mappedBy = "xhCtvtQdXuatCapHdr", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
