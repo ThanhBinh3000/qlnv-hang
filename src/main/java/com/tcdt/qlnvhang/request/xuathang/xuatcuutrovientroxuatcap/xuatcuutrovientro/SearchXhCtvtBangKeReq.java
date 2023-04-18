@@ -40,4 +40,8 @@ public class SearchXhCtvtBangKeReq extends BaseRequest {
   private Long nguoiPduyetId;
   private String lyDoTuChoi;
   private String type;
+  private LocalDate ngayXuatTu;
+  private LocalDate ngayXuatDen;
+  private LocalDate thoiGianGiaoNhanTu;
+  private LocalDate thoiGianGiaoNhanDen;
 }
