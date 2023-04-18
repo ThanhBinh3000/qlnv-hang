@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutr
 
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.SearchXhCtvtBbLayMau;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBbLayMauHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQdGiaoNvXhHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -34,5 +35,7 @@ public interface XhCtvtBbLayMauHdrRepository extends JpaRepository<XhCtvtBbLayMa
   List<XhCtvtBbLayMauHdr> findByIdIn(List<Long> ids);
 
   List<XhCtvtBbLayMauHdr> findAllByIdIn(List<Long> idList);
+
+  List<XhCtvtBbLayMauHdr> findByIdQdGiaoNvXh(Long ids);
 
 }
