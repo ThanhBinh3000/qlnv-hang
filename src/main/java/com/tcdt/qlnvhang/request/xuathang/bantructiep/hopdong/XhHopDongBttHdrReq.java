@@ -88,7 +88,7 @@ public class XhHopDongBttHdrReq extends BaseRequest {
 
     private String stk;
 
-    private String moLai;
+    private String moTai;
 
     private String ttinGiayUyQuyen;
 
@@ -110,7 +110,7 @@ public class XhHopDongBttHdrReq extends BaseRequest {
 
     private String stkDviMua;
 
-    private String moLaiDviMua;
+    private String moTaiDviMua;
 
     private String loaiVthh;
     @Transient
@@ -143,8 +143,6 @@ public class XhHopDongBttHdrReq extends BaseRequest {
     private BigDecimal donGiaKhongVat;
 
     private BigDecimal slUyQuyenChiCucKh;
-
-    private String pthucBanTrucTiep;
 
     private String trichYeu;
 

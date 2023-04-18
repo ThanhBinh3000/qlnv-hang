@@ -101,7 +101,7 @@ public class XhHopDongBttHdr extends TrangThaiBaseEntity implements Serializable
 
     private String stk;
 
-    private String moLai;
+    private String moTai;
 
     private String ttinGiayUyQuyen;
 
@@ -123,7 +123,7 @@ public class XhHopDongBttHdr extends TrangThaiBaseEntity implements Serializable
 
     private String stkDviMua;
 
-    private String moLaiDviMua;
+    private String moTaiDviMua;
 
     private String loaiVthh;
     @Transient
@@ -158,8 +158,6 @@ public class XhHopDongBttHdr extends TrangThaiBaseEntity implements Serializable
     private BigDecimal slUyQuyenChiCucKh;
 
     private String soQd;
-
-    private String pthucBanTrucTiep;
 
     private String trangThaiXh;
     @Transient
