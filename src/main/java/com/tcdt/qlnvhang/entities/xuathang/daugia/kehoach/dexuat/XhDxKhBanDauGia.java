@@ -76,15 +76,9 @@ public class XhDxKhBanDauGia extends TrangThaiBaseEntity implements Serializable
 
     private BigDecimal tongSoLuong;
 
-    private BigDecimal tongDonGia;
+    private BigDecimal tongTienGiaKhoiDiemDx;
 
-    private BigDecimal tongTienKdiem;
-
-    private BigDecimal tongTienKdienDonGia;
-
-    private BigDecimal tongTienDatTruoc;
-
-    private BigDecimal tongTienDatTruocDonGia;
+    private BigDecimal tongKhoanTienDatTruocDx;
 
     private String ghiChu;
 
@@ -103,7 +97,8 @@ public class XhDxKhBanDauGia extends TrangThaiBaseEntity implements Serializable
 
     private String dviTinh;
 
-    private BigDecimal donGiaVat;
+    @Transient
+    private BigDecimal tongTienDatTruocDuocDuyet;
 
     @Transient
     private String tenLoaiVthh;
@@ -111,6 +106,10 @@ public class XhDxKhBanDauGia extends TrangThaiBaseEntity implements Serializable
     private String tenCloaiVthh;
     @Transient
     private String tenTrangThaiTh;
+    @Transient
+    private BigDecimal tongTienGiaKdTheoDgiaDd;
+    @Transient
+    private BigDecimal tongKhoanTienDtTheoDgiaDd;
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
     @Transient
