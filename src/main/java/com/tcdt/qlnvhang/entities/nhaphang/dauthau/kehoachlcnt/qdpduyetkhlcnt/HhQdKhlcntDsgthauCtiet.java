@@ -36,6 +36,10 @@ public class HhQdKhlcntDsgthauCtiet {
 
 	private Long idGoiThau;
 
+	BigDecimal soLuongTheoChiTieu;
+
+	BigDecimal soLuongDaMua;
+
 	@Transient
 	private List<HhQdKhlcntDsgthauCtietVt> children;
 }
