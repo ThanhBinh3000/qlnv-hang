@@ -249,24 +249,39 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
       List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Arrays.asList(XhCtVtQuyetDinhPdHdr.TABLE_NAME + "_CAN_CU"));
       data.setCanCu(canCu);
 
-      List<XhCtVtQuyetDinhPdDtl> ListDtl = xhCtVtQdPdDtlRepository.findByXhCtVtQuyetDinhPdHdrId(data.getId());
-      for (XhCtVtQuyetDinhPdDtl quyetDinhPdDtl : ListDtl) {
-        if (mapDmucDvi.containsKey(quyetDinhPdDtl.getMaDviDx())) {
-          quyetDinhPdDtl.setTenDviDx(mapDmucDvi.get(quyetDinhPdDtl.getMaDviDx()).get("tenDvi").toString());
+      data.getQuyetDinhPdDtl().forEach(s -> {
+        if (mapDmucDvi.containsKey(s.getMaDviDx())) {
+          s.setTenDviDx(mapDmucDvi.get(s.getMaDviDx()).get("tenDvi").toString());
         }
-        List<XhCtVtQuyetDinhPdDx> listQuyetDinhPdDx = xhCtVtQdPdDxRepository.findByXhCtVtQuyetDinhPdDtlIn(Collections.singletonList(quyetDinhPdDtl.getId()));
-        for (XhCtVtQuyetDinhPdDx quyetDinhPdDx : listQuyetDinhPdDx) {
-          if (mapDmucDvi.containsKey(quyetDinhPdDx.getMaDviCuc())) {
-            quyetDinhPdDx.setTenCuc(mapDmucDvi.get(quyetDinhPdDx.getMaDviCuc()).get("tenDvi").toString());
+        s.getQuyetDinhPdDx().forEach(s1 -> {
+          if (mapDmucDvi.containsKey(s1.getMaDviCuc())) {
+            s1.setTenCuc(mapDmucDvi.get(s1.getMaDviCuc()).get("tenDvi").toString());
           }
-          if (mapDmucDvi.containsKey(quyetDinhPdDx.getMaDviChiCuc())) {
-            quyetDinhPdDx.setTenChiCuc(mapDmucDvi.get(quyetDinhPdDx.getMaDviChiCuc()).get("tenDvi").toString());
+          if (mapDmucDvi.containsKey(s1.getMaDviChiCuc())) {
+            s1.setTenChiCuc(mapDmucDvi.get(s1.getMaDviChiCuc()).get("tenDvi").toString());
           }
-          quyetDinhPdDx.setTenCloaiVthh(mapVthh.get(quyetDinhPdDx.getCloaiVthh()));
-        }
-        quyetDinhPdDtl.setQuyetDinhPdDx(listQuyetDinhPdDx);
-        data.setQuyetDinhPdDtl(ListDtl);
-      }
+          s1.setTenCloaiVthh(mapVthh.get(s1.getCloaiVthh()));
+        });
+      });
+
+//      List<XhCtVtQuyetDinhPdDtl> ListDtl = xhCtVtQdPdDtlRepository.findByXhCtVtQuyetDinhPdHdrId(data.getId());
+//      for (XhCtVtQuyetDinhPdDtl quyetDinhPdDtl : ListDtl) {
+//        if (mapDmucDvi.containsKey(quyetDinhPdDtl.getMaDviDx())) {
+//          quyetDinhPdDtl.setTenDviDx(mapDmucDvi.get(quyetDinhPdDtl.getMaDviDx()).get("tenDvi").toString());
+//        }
+//        List<XhCtVtQuyetDinhPdDx> listQuyetDinhPdDx = xhCtVtQdPdDxRepository.findByXhCtVtQuyetDinhPdDtlIn(Collections.singletonList(quyetDinhPdDtl.getId()));
+//        for (XhCtVtQuyetDinhPdDx quyetDinhPdDx : listQuyetDinhPdDx) {
+//          if (mapDmucDvi.containsKey(quyetDinhPdDx.getMaDviCuc())) {
+//            quyetDinhPdDx.setTenCuc(mapDmucDvi.get(quyetDinhPdDx.getMaDviCuc()).get("tenDvi").toString());
+//          }
+//          if (mapDmucDvi.containsKey(quyetDinhPdDx.getMaDviChiCuc())) {
+//            quyetDinhPdDx.setTenChiCuc(mapDmucDvi.get(quyetDinhPdDx.getMaDviChiCuc()).get("tenDvi").toString());
+//          }
+//          quyetDinhPdDx.setTenCloaiVthh(mapVthh.get(quyetDinhPdDx.getCloaiVthh()));
+//        }
+//        quyetDinhPdDtl.setQuyetDinhPdDx(listQuyetDinhPdDx);
+//        data.setQuyetDinhPdDtl(ListDtl);
+//      }
     });
     return allById;
   }
