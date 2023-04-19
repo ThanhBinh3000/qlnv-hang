@@ -293,12 +293,13 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
       throw new Exception("Bản ghi không tồn tại");
     }
     XhCtVtQuyetDinhPdHdr data = optional.get();
-    List<XhCtVtQuyetDinhPdDtl> quyetDinhPdDtl = xhCtVtQdPdDtlRepository.findByXhCtVtQuyetDinhPdHdrId(data.getId());
-    xhCtVtQdPdDtlRepository.deleteAll(quyetDinhPdDtl);
 
-    List<Long> XhCtVtQuyetDinhPdDx = quyetDinhPdDtl.stream().map(XhCtVtQuyetDinhPdDtl::getId).collect(Collectors.toList());
-    List<XhCtVtQuyetDinhPdDx> quyetDinhPdDx = xhCtVtQdPdDxRepository.findByXhCtVtQuyetDinhPdDtlIn(XhCtVtQuyetDinhPdDx);
-    xhCtVtQdPdDxRepository.deleteAll(quyetDinhPdDx);
+//    List<XhCtVtQuyetDinhPdDtl> quyetDinhPdDtl = xhCtVtQdPdDtlRepository.findByXhCtVtQuyetDinhPdHdrId(data.getId());
+//    xhCtVtQdPdDtlRepository.deleteAll(quyetDinhPdDtl);
+//
+//    List<Long> XhCtVtQuyetDinhPdDx = quyetDinhPdDtl.stream().map(XhCtVtQuyetDinhPdDtl::getId).collect(Collectors.toList());
+//    List<XhCtVtQuyetDinhPdDx> quyetDinhPdDx = xhCtVtQdPdDxRepository.findByXhCtVtQuyetDinhPdDtlIn(XhCtVtQuyetDinhPdDx);
+//    xhCtVtQdPdDxRepository.deleteAll(quyetDinhPdDx);
 
     fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhCtVtQuyetDinhPdHdr.TABLE_NAME + "_CAN_CU"));
     fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhCtVtQuyetDinhPdHdr.TABLE_NAME));
@@ -333,12 +334,12 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
     if (list.isEmpty()) {
       throw new Exception("Bản ghi không tồn tại");
     }
-    List<Long> listId = list.stream().map(XhCtVtQuyetDinhPdHdr::getId).collect(Collectors.toList());
-    List<XhCtVtQuyetDinhPdDtl> listDtl = xhCtVtQdPdDtlRepository.findByXhCtVtQuyetDinhPdHdrIdIn(listId);
-    List<Long> XhCtVtQuyetDinhPdDx = listDtl.stream().map(XhCtVtQuyetDinhPdDtl::getId).collect(Collectors.toList());
-    List<XhCtVtQuyetDinhPdDx> quyetDinhPdDx = xhCtVtQdPdDxRepository.findByXhCtVtQuyetDinhPdDtlIn(XhCtVtQuyetDinhPdDx);
-    xhCtVtQdPdDxRepository.deleteAll(quyetDinhPdDx);
-    xhCtVtQdPdDtlRepository.deleteAll(listDtl);
+//    List<Long> listId = list.stream().map(XhCtVtQuyetDinhPdHdr::getId).collect(Collectors.toList());
+//    List<XhCtVtQuyetDinhPdDtl> listDtl = xhCtVtQdPdDtlRepository.findByXhCtVtQuyetDinhPdHdrIdIn(listId);
+//    List<Long> XhCtVtQuyetDinhPdDx = listDtl.stream().map(XhCtVtQuyetDinhPdDtl::getId).collect(Collectors.toList());
+//    List<XhCtVtQuyetDinhPdDx> quyetDinhPdDx = xhCtVtQdPdDxRepository.findByXhCtVtQuyetDinhPdDtlIn(XhCtVtQuyetDinhPdDx);
+//    xhCtVtQdPdDxRepository.deleteAll(quyetDinhPdDx);
+//    xhCtVtQdPdDtlRepository.deleteAll(listDtl);
     fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(XhCtVtQuyetDinhPdHdr.TABLE_NAME));
     fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(XhCtVtQuyetDinhPdHdr.TABLE_NAME + "_CAN_CU"));
     xhCtVtQdPdHdrRepository.deleteAll(list);
