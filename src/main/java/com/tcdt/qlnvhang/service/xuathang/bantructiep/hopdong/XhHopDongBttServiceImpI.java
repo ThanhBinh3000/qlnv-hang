@@ -105,26 +105,23 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
         dataMap.setMaDviTsan(String.join(",",req.getListMaDviTsan()));
 
         XhHopDongBttHdr created = xhHopDongBttHdrRepository.save(dataMap);
-        if (!DataUtils.isNullObject(req.getFileDinhKem())) {
-            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(req.getFileDinhKem()), created.getId(), XhHopDongBttHdr.TABLE_NAME);
-            created.setFileDinhKem(fileDinhKem.get(0));
+
+        if (!DataUtils.isNullOrEmpty(req.getCanCuPhapLy())) {
+            List<FileDinhKem> canCuPhapLy = fileDinhKemService.saveListFileDinhKem(req.getCanCuPhapLy(), created.getId(), XhHopDongBttHdr.TABLE_NAME+ "_CAN_CU");
+            created.setCanCuPhapLy(canCuPhapLy);
         }
+
         if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
             List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhHopDongBttHdr.TABLE_NAME);
             created.setFileDinhKems(fileDinhKems);
         }
 
-        if (!DataUtils.isNullObject(req.getIdHd())) {
-            if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
-                List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhHopDongBttHdr.TABLE_NAME);
-                created.setFileDinhKems(fileDinhKems);
-            }
+        if (!DataUtils.isNullOrEmpty(req.getFilePhuLuc())) {
+            List<FileDinhKem> filePhuLuc = fileDinhKemService.saveListFileDinhKem(req.getFilePhuLuc(), created.getId(), XhHopDongBttHdr.TABLE_NAME + "_PHU_LUC");
+            created.setFilePhuLuc(filePhuLuc);
         }
-
         saveDetail(req, dataMap.getId());
-
         return dataMap;
-
     }
 
     void saveDetail(XhHopDongBttHdrReq req, Long idHdr) {
@@ -199,22 +196,17 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
 
         XhHopDongBttHdr created = xhHopDongBttHdrRepository.save(dataDB);
 
-        if (!DataUtils.isNullObject(req.getFileDinhKem())) {
-            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Arrays.asList(req.getFileDinhKem()), created.getId(), XhHopDongBttHdr.TABLE_NAME);
-            dataDB.setFileDinhKem(fileDinhKem.get(0));
-        }
+        fileDinhKemService.delete(dataDB.getId(), Collections.singleton(XhHopDongBttHdr.TABLE_NAME + "_CAN_CU"));
+        List<FileDinhKem> canCuPhapLy = fileDinhKemService.saveListFileDinhKem(req.getCanCuPhapLy(), created.getId(), XhHopDongBttHdr.TABLE_NAME + "_CAN_CU");
+        created.setCanCuPhapLy(canCuPhapLy);
 
-        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
-            List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhHopDongBttHdr.TABLE_NAME);
-            dataDB.setFileDinhKems(fileDinhKems);
-        }
+        fileDinhKemService.delete(dataDB.getId(), Collections.singleton(XhHopDongBttHdr.TABLE_NAME));
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhHopDongBttHdr.TABLE_NAME);
+        created.setFileDinhKems(fileDinhKems);
 
-        if (!DataUtils.isNullObject(req.getIdHd())) {
-            if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
-                List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhHopDongBttHdr.TABLE_NAME);
-                dataDB.setFileDinhKems(fileDinhKems);
-            }
-        }
+        fileDinhKemService.delete(dataDB.getId(), Collections.singleton(XhHopDongBttHdr.TABLE_NAME + "_BAN_HANH"));
+        List<FileDinhKem> filePhuLuc = fileDinhKemService.saveListFileDinhKem(req.getFilePhuLuc(), created.getId(), XhHopDongBttHdr.TABLE_NAME + "_PHU_LUC");
+        created.setFilePhuLuc(filePhuLuc);
 
         saveDetail(req, dataDB.getId());
         return dataDB;
@@ -227,7 +219,6 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
         }
 
         Optional<XhHopDongBttHdr> qOptional = xhHopDongBttHdrRepository.findById(id);
-
         if (!qOptional.isPresent()) {
             throw new UnsupportedOperationException("Không tồn tại bản ghi");
         }
@@ -248,11 +239,11 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
             data.setListMaDviTsan(Arrays.asList(data.getMaDviTsan().split(",")));
         }
 
-        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhHopDongBttHdr.TABLE_NAME));
-        if (!DataUtils.isNullOrEmpty(fileDinhKem)) {
-            data.setFileDinhKem(fileDinhKem.get(0));
-        }
-        data.setFileDinhKems(fileDinhKem);
+        List<FileDinhKem> canCuPhapLy = fileDinhKemService.search(data.getId(), Arrays.asList(XhHopDongBttHdr.TABLE_NAME+ "_CAN_CU"));
+        data.setCanCuPhapLy(canCuPhapLy);
+
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhHopDongBttHdr.TABLE_NAME));
+        data.setFileDinhKems(fileDinhKems);
 
         List<XhHopDongBttDtl> allByIdHdr = xhHopDongBttDtlRepository.findAllByIdHdr(data.getId());
         allByIdHdr.forEach(item -> {
@@ -282,8 +273,8 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
 //        Bắt đầu phụ lục
         data.setPhuLucDtl(allByIdHdr);
         if (!DataUtils.isNullObject(data.getIdHd())) {
-            List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhHopDongBttHdr.TABLE_NAME));
-            data.setFileDinhKems(fileDinhKems);
+            List<FileDinhKem> filePhuLuc = fileDinhKemService.search(data.getId(), Arrays.asList(XhHopDongBttHdr.TABLE_NAME+ "_PHU_LUC"));
+            data.setFilePhuLuc(filePhuLuc);
         }
 
 
@@ -366,7 +357,9 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
 
         xhHopDongBttHdrRepository.delete(optional.get());
         xhHopDongBttDtlRepository.deleteAllByIdHdr(optional.get().getId());
+        fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhHopDongBttHdr.TABLE_NAME+"_CAN_CU"));
         fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhHopDongBttHdr.TABLE_NAME));
+        fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhHopDongBttHdr.TABLE_NAME+"_PHU_LUC"));
     }
 
     @Override
