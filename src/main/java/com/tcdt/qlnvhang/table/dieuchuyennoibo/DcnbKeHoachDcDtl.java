@@ -32,6 +32,7 @@ public class DcnbKeHoachDcDtl implements Serializable {
     private String tenLoaiVthh;
     private String tenCloaiVthh;
     private String donViTinh;
+    private String tenDonViTinh;
     private BigDecimal tonKho;
     private BigDecimal soLuongDc;
     private BigDecimal duToanKphi;
@@ -39,23 +40,22 @@ public class DcnbKeHoachDcDtl implements Serializable {
     private String maKhoNhan;
     private BigDecimal tichLuongKd;
     private BigDecimal soLuongPhanBo;
-
-    @Transient
     private String maDiemKho;
-    @Transient
+    private String tenDiemKho;
     private String maNhaKho;
-    @Transient
+    private String tenNhaKho;
     private String maNganKho;
-    @Transient
+    private String tenNganKho;
     private String maLoKho;
-    @Transient
+    private String tenLoKho;
     private String maDiemKhoNhan;
-    @Transient
+    private String tenDiemKhoNhan;
     private String maNhaKhoNhan;
-    @Transient
+    private String tenNhaKhoNhan;
     private String maNganKhoNhan;
-    @Transient
+    private String tenNganKhoNhan;
     private String maLoKhoNhan;
+    private String tenLoKhoNhan;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HDR_ID")
