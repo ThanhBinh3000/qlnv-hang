@@ -19,6 +19,8 @@ public class HhHopDongDdiemNhapKhoVt {
 
 	@Transient
 	private String tenDvi;
+	@Transient
+	private String diaDiemNhap;
 
 	private BigDecimal soLuong;
 
