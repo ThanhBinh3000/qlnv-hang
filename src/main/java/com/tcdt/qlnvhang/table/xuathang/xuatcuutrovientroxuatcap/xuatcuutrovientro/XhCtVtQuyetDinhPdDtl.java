@@ -26,7 +26,6 @@ public class XhCtVtQuyetDinhPdDtl implements Serializable {
   @SequenceGenerator(sequenceName = XhCtVtQuyetDinhPdDtl.TABLE_NAME
       + "_SEQ", allocationSize = 1, name = XhCtVtQuyetDinhPdDtl.TABLE_NAME + "_SEQ")
   private Long id;
-  private Long idHdr;
   private Long idDx;
   private String soDx;
   private String maDviDx;
@@ -40,11 +39,11 @@ public class XhCtVtQuyetDinhPdDtl implements Serializable {
   private String type;
   @Transient
   private String tenDviDx;
-  @OneToMany(mappedBy = "xhCtVtQuyetDinhPdDtl", cascade = CascadeType.MERGE)
+  @OneToMany(mappedBy = "xhCtVtQuyetDinhPdDtl", cascade = CascadeType.ALL)
   private List<XhCtVtQuyetDinhPdDx> quyetDinhPdDx = new ArrayList<>();
 
   @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "idHdr")
   @JsonIgnore
-  @JoinColumn(name = "idHdr", updatable = false, insertable = false)
   private XhCtVtQuyetDinhPdHdr xhCtVtQuyetDinhPdHdr;
 }
