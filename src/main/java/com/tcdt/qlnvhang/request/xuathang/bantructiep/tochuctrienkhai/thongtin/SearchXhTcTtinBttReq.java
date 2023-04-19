@@ -6,31 +6,48 @@ import com.tcdt.qlnvhang.util.Contains;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
 public class SearchXhTcTtinBttReq extends BaseRequest {
 
-    Integer namKh;
+    private Integer namKh;
 
-    String maDvi;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    Date  ngayCgiaTu;
+    private String maDvi;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    Date  ngayCgiaDen;
+    private  Date  ngayCgiaTu;
 
-    String maDviChiCuc;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date  ngayCgiaDen;
 
-    String tochucCanhan;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayTaoTu;
 
-    Integer lastest ;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayTaoDen;
 
-    String loaiVthh;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayDuyetTu;
 
-    String pthucBanTrucTiep;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayDuyetDen;
 
-    Integer typeSoQdKq;
+    private String maDviChiCuc;
+
+    private String tochucCanhan;
+
+    private Integer lastest ;
+
+    private String loaiVthh;
+
+    private String soDxuat;
+
+    private List<String> pthucBanTrucTiep = new ArrayList<>();
+
+    private Integer typeSoQdKq;
+
 }
