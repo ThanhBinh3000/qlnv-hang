@@ -23,7 +23,6 @@ public class XhCtVtQuyetDinhPdDx implements Serializable {
     @SequenceGenerator(sequenceName = XhCtVtQuyetDinhPdDx.TABLE_NAME
             + "_SEQ", allocationSize = 1, name = XhCtVtQuyetDinhPdDx.TABLE_NAME + "_SEQ")
     private Long id;
-    private Long idHdr;
     private String noiDung;
     private BigDecimal soLuongXuat;
     private String maDviCuc;
@@ -49,7 +48,7 @@ public class XhCtVtQuyetDinhPdDx implements Serializable {
     private String tenChiCuc;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idHdr")
     @JsonIgnore
-    @JoinColumn(name = "idHdr", updatable = false, insertable = false)
     private XhCtVtQuyetDinhPdDtl xhCtVtQuyetDinhPdDtl;
 }

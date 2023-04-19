@@ -69,6 +69,6 @@ public class XhCtVtQuyetDinhPdHdr extends BaseEntity implements Serializable {
   @Transient
   private String tenTrangThai;
 
-  @OneToMany(mappedBy = "xhCtVtQuyetDinhPdHdr", cascade = CascadeType.MERGE)
+  @OneToMany(mappedBy = "xhCtVtQuyetDinhPdHdr", cascade = CascadeType.ALL)
   private List<XhCtVtQuyetDinhPdDtl> quyetDinhPdDtl = new ArrayList<>();
 }
