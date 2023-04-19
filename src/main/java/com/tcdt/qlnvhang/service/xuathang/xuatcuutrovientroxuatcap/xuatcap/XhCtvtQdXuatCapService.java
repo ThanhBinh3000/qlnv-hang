@@ -131,7 +131,7 @@ public class XhCtvtQdXuatCapService extends BaseServiceImpl {
         BeanUtils.copyProperties(xhCtvtQdXuatCapHdr.get(), data);
         if (xhCtvtQdXuatCapHdr.get().getQdPaXuatCapId() != null) {
             data.setQdPaXuatCapId(xhCtvtQdXuatCapHdr.get().getQdPaXuatCapId());
-            List<XhCtVtQuyetDinhPdDtl> listDtl = xhCtVtQdPdDtlRepository.findByIdHdr(xhCtvtQdXuatCapHdr.get().getQdPaXuatCapId());
+            List<XhCtVtQuyetDinhPdDtl> listDtl = xhCtVtQdPdDtlRepository.findByXhCtVtQuyetDinhPdHdrId(xhCtvtQdXuatCapHdr.get().getQdPaXuatCapId());
             data.setQuyetDinhPdDtl(listDtl);
             data.setIsChonPhuongAn(true);
         }
