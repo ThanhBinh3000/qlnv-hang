@@ -42,16 +42,13 @@ public class XhDxKhBanDauGiaReq extends BaseRequest {
     private String thongBao;
     private BigDecimal khoanTienDatTruoc;
     private BigDecimal tongSoLuong;
-    private BigDecimal tongTienKdiem;
-    private BigDecimal tongTienKdienDonGia;
-    private BigDecimal tongTienDatTruoc;
-    private BigDecimal tongTienDatTruocDonGia;
+    private BigDecimal tongDonGiaDx;
+    private BigDecimal tongTienGiaKhoiDiemDx;
+    private BigDecimal tongKhoanTienDatTruocDx;
     private String ghiChu;
     private Integer slDviTsan;
     private String dviTinh;
     private String trangThaiTh;
-    private BigDecimal donGiaVat;
-    private BigDecimal tongDonGia;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayTao;

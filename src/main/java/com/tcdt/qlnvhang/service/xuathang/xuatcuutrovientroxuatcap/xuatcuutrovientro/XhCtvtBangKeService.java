@@ -110,6 +110,7 @@ public class XhCtvtBangKeService extends BaseServiceImpl {
       if (phieuXuatKho.isPresent()) {
         XhCtvtPhieuXuatKho phieu = phieuXuatKho.get();
         phieu.setSoBangKeCh(created.getSoBangKe());
+        phieu.setIdBangKeCh(created.getId());
         xhCtvtPhieuXuatKhoRepository.save(phieu);
       }
     }

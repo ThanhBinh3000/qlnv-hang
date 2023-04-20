@@ -63,6 +63,9 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
   @Autowired
   private HttpServletRequest req;
 
+  @Autowired
+  private QlnvDmDonviRepository qlnvDmDonviRepository;
+
   @Override
   @Transactional()
   public HhHopDongHdr create(HhHopDongHdrReq objReq) throws Exception {
@@ -266,6 +269,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
           List<HhHopDongDdiemNhapKhoVt> allByIdHdongDdiemNkho = hhHopDongDdiemNhapKhoVtRepository.findAllByIdHdongDdiemNkho(s.getId());
           allByIdHdongDdiemNkho.forEach( x -> {
             x.setTenDvi(mapDmucDvi.get(x.getMaDvi()));
+            x.setDiaDiemNhap(qlnvDmDonviRepository.findByMaDvi(x.getMaDvi()).getDiaChi());
           });
           s.setChildren(allByIdHdongDdiemNkho);
       });

@@ -98,10 +98,11 @@ public class XhQdDchinhKhBttServiceImpl extends BaseServiceImpl implements XhQdD
             xhQdPdKhBttHdrRepository.save(qdPdKhBttHdr.get());
         }
 
-        if (!DataUtils.isNullObject(req.getFileDinhKem())) {
-            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(req.getFileDinhKem()), created.getId(), XhQdDchinhKhBttHdr.TABLE_NAME);
-            created.setFileDinhKem(fileDinhKem.get(0));
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKem())) {
+            List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), created.getId(), XhQdDchinhKhBttHdr.TABLE_NAME+ "_BAN_HANH");
+            created.setFileDinhKem(fileDinhKems);
         }
+
         if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
             List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhQdDchinhKhBttHdr.TABLE_NAME);
             created.setFileDinhKems(fileDinhKems);
@@ -154,15 +155,14 @@ public class XhQdDchinhKhBttServiceImpl extends BaseServiceImpl implements XhQdD
         data.setNguoiSuaId(getUser().getId());
         XhQdDchinhKhBttHdr created = xhQdDchinhKhBttHdrRepository.save(data);
 
-        if (!DataUtils.isNullObject(req.getFileDinhKem())) {
-            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Arrays.asList(req.getFileDinhKem()), created.getId(), XhQdDchinhKhBttHdr.TABLE_NAME);
-            data.setFileDinhKem(fileDinhKem.get(0));
-        }
+        fileDinhKemService.delete(data.getId(), Collections.singleton(XhQdDchinhKhBttHdr.TABLE_NAME + "_BAN_HANH"));
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), created.getId(), XhQdDchinhKhBttHdr.TABLE_NAME + "_BAN_HANH");
+        created.setFileDinhKem(fileDinhKem);
 
-        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
-            List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhQdDchinhKhBttHdr.TABLE_NAME);
-            data.setFileDinhKems(fileDinhKems);
-        }
+        fileDinhKemService.delete(data.getId(), Collections.singleton(XhQdDchinhKhBttHdr.TABLE_NAME));
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhQdDchinhKhBttHdr.TABLE_NAME);
+        created.setFileDinhKems(fileDinhKems);
+
 
         saveDetail(req, data.getId());
         return created;
@@ -185,11 +185,11 @@ public class XhQdDchinhKhBttServiceImpl extends BaseServiceImpl implements XhQdD
 
         XhQdDchinhKhBttHdr hdr = qOptional.get();
 
-        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(hdr.getId(), Arrays.asList(XhQdDchinhKhBttHdr.TABLE_NAME));
-        if (!DataUtils.isNullOrEmpty(fileDinhKem)) {
-            hdr.setFileDinhKem(fileDinhKem.get(0));
-        }
-        hdr.setFileDinhKems(fileDinhKem);
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(hdr.getId(), Arrays.asList(XhQdDchinhKhBttHdr.TABLE_NAME+ "_BAN_HANH"));
+        hdr.setFileDinhKem(fileDinhKem);
+
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.search(hdr.getId(), Arrays.asList(XhQdDchinhKhBttHdr.TABLE_NAME));
+        hdr.setFileDinhKems(fileDinhKems);
 
         List<XhQdDchinhKhBttDtl> xhQdDchinhKhBttDtlList = new ArrayList<>();
         for (XhQdDchinhKhBttDtl dtl : xhQdDchinhKhBttDtlRepository.findAllByIdDcHdr(id)){
@@ -284,7 +284,9 @@ public class XhQdDchinhKhBttServiceImpl extends BaseServiceImpl implements XhQdD
             xhQdDchinhKhBttDtlRepository.deleteAll(xhQdDchinhKhBttDtlList);
         }
         xhQdDchinhKhBttHdrRepository.delete(hdr);
-        fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhQdPdKhBttHdr.TABLE_NAME));
+        fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhQdDchinhKhBttHdr.TABLE_NAME));
+        fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhQdDchinhKhBttHdr.TABLE_NAME+"_BAN_HANH"));
+
     }
 
     @Override

@@ -21,9 +21,11 @@ public interface XhCtvtBangKeHdrRepository extends JpaRepository<XhCtvtBangKeHdr
       "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
       "AND (:#{#param.loaiVthh} IS NULL OR c.loaiVthh = :#{#param.loaiVthh}) " +
       "AND (:#{#param.soQdGiaoNvXh} IS NULL OR LOWER(c.soQdGiaoNvXh) LIKE CONCAT('%',LOWER(:#{#param.soQdGiaoNvXh}),'%')) " +
-//      "AND (:#{#param.soPhieuXuatKho} IS NULL OR LOWER(c.soPhieuXuatKho) LIKE CONCAT('%',LOWER(:#{#param.soPhieuXuatKho}),'%')) " +
-//      "AND ((:#{#param.ngayXuatKhoTu}  IS NULL OR c.ngayXuatKho >= :#{#param.ngayXuatKhoTu})" +
-//      "AND (:#{#param.ngayXuatKhoDen}  IS NULL OR c.ngayXuatKho <= :#{#param.ngayXuatKhoDen}) ) " +
+      "AND (:#{#param.soBangKe} IS NULL OR LOWER(c.soBangKe) LIKE CONCAT('%',LOWER(:#{#param.soBangKe}),'%')) " +
+      "AND ((:#{#param.ngayXuatTu}  IS NULL OR c.ngayXuat >= :#{#param.ngayXuatTu})" +
+      "AND (:#{#param.ngayXuatDen}  IS NULL OR c.ngayXuat <= :#{#param.ngayXuatDen}) ) " +
+      "AND ((:#{#param.thoiGianGiaoNhanTu}  IS NULL OR c.thoiGianGiaoNhan >= :#{#param.thoiGianGiaoNhanTu})" +
+      "AND (:#{#param.thoiGianGiaoNhanDen}  IS NULL OR c.thoiGianGiaoNhan <= :#{#param.thoiGianGiaoNhanDen}) ) " +
       "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
       "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
