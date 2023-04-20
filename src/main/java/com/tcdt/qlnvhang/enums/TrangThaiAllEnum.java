@@ -57,7 +57,12 @@ public enum TrangThaiAllEnum {
   DA_TAO_CBV("52", "Đã tạo cán bộ Vụ"),
   DA_DUYET_CBV("53", "Đã duyệt cán bộ Vụ"),
   TU_CHOI_CBV("54", "Từ chối cán bộ Vụ"),
-  YC_CHICUC_PHANBO_DC("59", "Y/c Chi cục xác định điểm nhập ĐC");
+  YC_CHICUC_PHANBO_DC("59", "Y/c Chi cục xác định điểm nhập ĐC"),
+  DA_PHANBO_DC_CHODUYET_TBP_TVQT("60", "Đã xác định điểm nhập, chờ duyệt – TBP TVQT"),
+  DA_PHANBO_DC_TUCHOI_TBP_TVQT("61", "Đã xác định điểm nhập, từ chối – TBP TVQT"),
+  DA_PHANBO_DC_CHODUYET_LDCC("62", "Đã xác định điểm nhập, chờ duyệt – LĐ Chi cục"),
+  DA_PHANBO_DC_TUCHOI_LDCC("63","Đã xác định điểm nhập, từ chối – LĐ Chi cục"),
+  DA_PHANBO_DC_DADUYET_LDCC("64", "Đã xác định điểm nhập, đã duyệt – LĐ Chi cục");
 
 
 
