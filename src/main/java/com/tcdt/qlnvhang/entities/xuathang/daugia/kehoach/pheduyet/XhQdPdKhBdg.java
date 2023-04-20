@@ -65,6 +65,10 @@ public class XhQdPdKhBdg extends TrangThaiBaseEntity implements Serializable {
 
     private Integer slDviTsan;
 
+    private String loaiHinhNx;
+
+    private String kieuNx;
+
     // Transient
 
     @Transient
@@ -80,6 +84,6 @@ public class XhQdPdKhBdg extends TrangThaiBaseEntity implements Serializable {
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
     @Transient
-    private FileDinhKem fileDinhKem;
+    private List<FileDinhKem> fileDinhKem = new ArrayList<>();
 
 }
