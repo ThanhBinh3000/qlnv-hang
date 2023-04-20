@@ -14,8 +14,8 @@ public class SearchDcnbKeHoachDc extends BaseRequest {
   private String loaiDc;
   private LocalDate ngayLapKhTu;
   private LocalDate ngayLapKhDen;
-  private LocalDate ngayDuyetLdcTu;
-  private LocalDate ngayDuyetLdcDen;
+  private LocalDate ngayDuyetLdccTu;
+  private LocalDate ngayDuyetLdccDen;
   private String soDxuat;
   private String nguonChi;
   private String loaiVthh;
