@@ -39,6 +39,10 @@ public class XhHopDongBttHdrReq extends BaseRequest {
 
     private String maDviTsan;
 
+    private String loaiHinhNx;
+
+    private String kieuNx;
+
     private String soHd;
 
     private String tenHd;
@@ -84,7 +88,7 @@ public class XhHopDongBttHdrReq extends BaseRequest {
 
     private String stk;
 
-    private String moLai;
+    private String moTai;
 
     private String ttinGiayUyQuyen;
 
@@ -106,7 +110,7 @@ public class XhHopDongBttHdrReq extends BaseRequest {
 
     private String stkDviMua;
 
-    private String moLaiDviMua;
+    private String moTaiDviMua;
 
     private String loaiVthh;
     @Transient
@@ -140,18 +144,20 @@ public class XhHopDongBttHdrReq extends BaseRequest {
 
     private BigDecimal slUyQuyenChiCucKh;
 
-    private String pthucBanTrucTiep;
-
     private String trichYeu;
 
     @Transient
     private List<String> listMaDviTsan = new ArrayList<>();
 
     @Transient
+    private List<FileDinhKemReq> canCuPhapLy = new ArrayList<>();
+
+    @Transient
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 
     @Transient
-    private FileDinhKemReq fileDinhKem;
+    private List<FileDinhKemReq> filePhuLuc = new ArrayList<>();
+
 
     @Transient
     private List<XhHopDongBttDtlReq> children = new ArrayList<>();

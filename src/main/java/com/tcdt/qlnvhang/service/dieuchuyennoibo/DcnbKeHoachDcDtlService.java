@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcHdrRepository;
@@ -71,10 +72,11 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
     }
     DcnbKeHoachDcHdr data = new DcnbKeHoachDcHdr();
     BeanUtils.copyProperties(objReq, data);
-    data.setMaDvi(currentUser.getUser().getDepartment());
+    data.setMaDvi(currentUser.getDvql());
+    data.setType(Contains.DIEU_CHUYEN);
     data.setTrangThai(Contains.DUTHAO);
     objReq.getDanhSachHangHoa().forEach(e -> e.setDcnbKeHoachDcHdr(data));
-    objReq.getDcnbPhuongAnDc().forEach(e -> e.setDcnbKeHoachDcHdr(data));
+    objReq.getPhuongAnDieuChuyen().forEach(e -> e.setDcnbKeHoachDcHdr(data));
     DcnbKeHoachDcHdr created = dcnbKeHoachDcHdrRepository.save(data);
     List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), DcnbKeHoachDcHdr.TABLE_NAME + "_CAN_CU");
     created.setCanCu(canCu);
@@ -90,15 +92,18 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
     if (!optional.isPresent()) {
       throw new Exception("Không tìm thấy dữ liệu cần sửa");
     }
-    Optional<DcnbKeHoachDcHdr> SoDxuat = dcnbKeHoachDcHdrRepository.findFirstBySoDxuat(objReq.getSoDxuat());
-    if (SoDxuat.isPresent() && objReq.getSoDxuat().split("/").length == 1) {
-      if (!SoDxuat.get().getId().equals(objReq.getId())) {
+    Optional<DcnbKeHoachDcHdr> soDxuat = dcnbKeHoachDcHdrRepository.findFirstBySoDxuat(objReq.getSoDxuat());
+    if (soDxuat.isPresent() && objReq.getSoDxuat().split("/").length == 1) {
+      if (!soDxuat.get().getId().equals(objReq.getId())) {
         throw new Exception("số đề xuất đã tồn tại");
       }
     }
     DcnbKeHoachDcHdr data = optional.get();
+    objReq.getDanhSachHangHoa().forEach(e -> e.setDcnbKeHoachDcHdr(data));
+    objReq.getPhuongAnDieuChuyen().forEach(e -> e.setDcnbKeHoachDcHdr(data));
+    objReq.setType(data.getType());
     data.setDanhSachHangHoa(objReq.getDanhSachHangHoa());
-    data.setDcnbPhuongAnDc(objReq.getDcnbPhuongAnDc());
+    data.setPhuongAnDieuChuyen(objReq.getPhuongAnDieuChuyen());
 
     BeanUtils.copyProperties(objReq, data);
     DcnbKeHoachDcHdr created = dcnbKeHoachDcHdrRepository.save(data);
@@ -122,8 +127,6 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
     allById.forEach(data -> {
       List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Arrays.asList(DcnbKeHoachDcHdr.TABLE_NAME + "_CAN_CU"));
       data.setCanCu(canCu);
-      List<DcnbKeHoachDcDtl> list = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(data.getId());
-      data.setDanhSachHangHoa(list);
     });
     return allById;
   }
@@ -163,30 +166,43 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
     if (!optional.isPresent()) {
       throw new Exception("Không tìm thấy dữ liệu");
     }
-    if (optional.get().getType().equals(Contains.DIEU_CHUYEN)) {
+    // check đang là điều chuyển hay là nhận điều chuyển
+    if (Contains.DIEU_CHUYEN.equals(optional.get().getType())) {
       this.approveDieuChuyen(currentUser, statusReq, optional); // Truyền giá trị của optional vào
-    } else if (optional.get().getType().equals(Contains.NHAN_DIEU_CHUYEN)) {
+    }else if (Contains.NHAN_DIEU_CHUYEN.equals(optional.get().getType())){
       this.approveNhanDieuChuyen(currentUser, statusReq, optional); // Truyền giá trị của optional vào
     }
   }
 
   public DcnbKeHoachDcHdr approveDieuChuyen(CustomUserDetails currentUser, StatusReq statusReq, Optional<DcnbKeHoachDcHdr> optional) throws Exception {
-    String status = statusReq.getTrangThai() + optional.get().getTrangThai();
+    String status =  optional.get().getTrangThai() + statusReq.getTrangThai();
     switch (status) {
-      case Contains.DUTHAO + Contains.DA_TAO_CBV:
-      case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
+      case Contains.DUTHAO + Contains.CHODUYET_TBP_TVQT:
+      case Contains.TUCHOI_TBP_TVQT + Contains.CHODUYET_TBP_TVQT:
+      case Contains.TUCHOI_LDCC + Contains.CHODUYET_TBP_TVQT:
         optional.get().setNgayGduyet(LocalDate.now());
         optional.get().setNguoiGduyetId(currentUser.getUser().getId());
+        // check thông tin lô kho tồn kho với sl điều chuyển với  trong kế hoạch và các kế hoạch khác có đủ k, đã xuất bao nhiêu trong kế hoạch
         break;
-      case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
-        optional.get().setNgayGduyet(LocalDate.now());
-        optional.get().setNguoiGduyetId(currentUser.getUser().getId());
-        optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
-        break;
-      case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
-      case Contains.DA_TAO_CBV + Contains.DUTHAO:
+      case Contains.CHODUYET_TBP_TVQT + Contains.TUCHOI_TBP_TVQT:
         optional.get().setNgayPduyet(LocalDate.now());
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+        optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
+        break;
+      case Contains.CHODUYET_TBP_TVQT + Contains.CHODUYET_LDCC:
+        optional.get().setNgayPduyet(LocalDate.now());
+        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+        break;
+      case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
+        optional.get().setNgayDuyetLdcc(LocalDate.now());
+        optional.get().setNguoiDuyetLdccId(currentUser.getUser().getId());
+        optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
+        break;
+      case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
+        optional.get().setNgayDuyetLdcc(LocalDate.now());
+        optional.get().setNguoiDuyetLdccId(currentUser.getUser().getId());
+
+        // xử lý clone tờ kế hoạch cho các chi cục với trạng thái YC_CHICUC_PHANBO_DC = 59
         break;
       default:
         throw new Exception("Phê duyệt không thành công");
@@ -197,25 +213,33 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
   }
 
   public DcnbKeHoachDcHdr approveNhanDieuChuyen(CustomUserDetails currentUser, StatusReq statusReq, Optional<DcnbKeHoachDcHdr> optional) throws Exception {
-
-    String status = statusReq.getTrangThai() + optional.get().getTrangThai();
+    String status = optional.get().getTrangThai() + statusReq.getTrangThai();
     switch (status) {
-      case Contains.CHODUYET_TP + Contains.DUTHAO:
-      case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
-      case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
-      case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
-        optional.get().setNguoiGduyetId(currentUser.getUser().getId());
+      case Contains.YC_CHICUC_PHANBO_DC + Contains.DA_PHANBO_DC_CHODUYET_TBP_TVQT:
+      case Contains.DA_PHANBO_DC_TUCHOI_TBP_TVQT + Contains.DA_PHANBO_DC_CHODUYET_TBP_TVQT:
+      case Contains.DA_PHANBO_DC_TUCHOI_LDCC + Contains.DA_PHANBO_DC_CHODUYET_TBP_TVQT:
         optional.get().setNgayGduyet(LocalDate.now());
+        optional.get().setNguoiGduyetId(currentUser.getUser().getId());
         break;
-      case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
-      case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
-        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+      case Contains.DA_PHANBO_DC_CHODUYET_TBP_TVQT + Contains.DA_PHANBO_DC_TUCHOI_TBP_TVQT:
         optional.get().setNgayPduyet(LocalDate.now());
+        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
         optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
         break;
-      case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
-        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+      case Contains.DA_PHANBO_DC_CHODUYET_TBP_TVQT + Contains.DA_PHANBO_DC_CHODUYET_LDCC:
         optional.get().setNgayPduyet(LocalDate.now());
+        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+        break;
+      case Contains.DA_PHANBO_DC_CHODUYET_LDCC + Contains.DA_PHANBO_DC_TUCHOI_LDCC:
+        optional.get().setNgayDuyetLdcc(LocalDate.now());
+        optional.get().setNguoiDuyetLdccId(currentUser.getUser().getId());
+        optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
+        break;
+      case Contains.DA_PHANBO_DC_CHODUYET_LDCC + Contains.DA_PHANBO_DC_DADUYET_LDCC:
+        optional.get().setNgayDuyetLdcc(LocalDate.now());
+        optional.get().setNguoiDuyetLdccId(currentUser.getUser().getId());
+
+        // update lại các kho nhận điều chuyển trong danh sách hàng hóa cha.
         break;
       default:
         throw new Exception("Phê duyệt không thành công");
@@ -244,7 +268,7 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
       objs[0] = i;
       objs[1] = dx.getNam();
       objs[2] = dx.getSoDxuat();
-      objs[3] = dx.getNgayDuyetLdc();
+      objs[3] = dx.getNgayDuyetLdcc();
       objs[4] = dx.getLoaiDc();
       objs[5] = dx.getTenDvi();
       dataList.add(objs);

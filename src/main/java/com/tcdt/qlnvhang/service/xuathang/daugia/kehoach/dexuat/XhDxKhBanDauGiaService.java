@@ -13,4 +13,6 @@ public interface XhDxKhBanDauGiaService extends BaseService<XhDxKhBanDauGia, XhD
 
     BigDecimal countSoLuongKeHoachNam(CountKhlcntSlReq req) throws Exception;
 
+    BigDecimal getGiaBanToiThieu (String cloaiVthh, String maDvi, Integer namKh);
+
 }

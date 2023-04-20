@@ -205,11 +205,23 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
     for (XhDxKhBanDauGiaDtl dtl : dtlList) {
       dtl.setTenDvi(mapDmucDvi.get(dtl.getMaDvi()));
       List<XhDxKhBanDauGiaPhanLo> phanLoList = xhDxKhBanDauGiaPhanLoRepository.findByIdDtl(dtl.getId());
+      BigDecimal donGiaVat = data.getCloaiVthh().startsWith("02") ? xhDxKhBanDauGiaPhanLoRepository.getDonGiaVatVt(data.getCloaiVthh(), data.getNamKh()) : xhDxKhBanDauGiaPhanLoRepository.getDonGiaVatLt(data.getCloaiVthh(), data.getMaDvi(), data.getNamKh());
       phanLoList.forEach(f -> {
         f.setTenDiemKho(mapDmucDvi.get(f.getMaDiemKho()));
         f.setTenNhaKho(mapDmucDvi.get(f.getMaNhaKho()));
         f.setTenNganKho(mapDmucDvi.get(f.getMaNganKho()));
         f.setTenLoKho(mapDmucDvi.get(f.getMaLoKho()));
+        if (donGiaVat != null){
+          f.setDonGiaVat(donGiaVat);
+          if (dtl.getDonGiaChiCuc() != null && dtl.getSoLuongChiCuc() != null && data.getKhoanTienDatTruoc() != null && data.getTongSoLuong() != null){
+            BigDecimal tongTienDatTruocDuocDuyet = dtl.getSoLuongChiCuc().multiply(donGiaVat).multiply(data.getKhoanTienDatTruoc()).divide(BigDecimal.valueOf(100));
+            BigDecimal tongTienGiaKdTheoDgiaDd = data.getTongSoLuong().multiply(donGiaVat);
+            BigDecimal tongKhoanTienDtTheoDgiaDd = data.getTongSoLuong().multiply(donGiaVat).multiply(data.getKhoanTienDatTruoc()).divide(BigDecimal.valueOf(100));
+            dtl.setTongTienDatTruocDuocDuyet(tongTienDatTruocDuocDuyet);
+            data.setTongTienGiaKdTheoDgiaDd(tongTienGiaKdTheoDgiaDd);
+            data.setTongKhoanTienDtTheoDgiaDd(tongKhoanTienDtTheoDgiaDd);
+          }
+        }
       });
       dtl.setChildren(phanLoList);
     }
@@ -344,5 +356,15 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
 
   public BigDecimal countSoLuongKeHoachNam(CountKhlcntSlReq req) {
     return xhDxKhBanDauGiaRepository.countSLDalenKh(req.getYear(), req.getLoaiVthh(), req.getMaDvi(), req.getLastest());
+  }
+
+  @Override
+  public BigDecimal getGiaBanToiThieu(String cloaiVthh, String maDvi, Integer namKh) {
+    if (cloaiVthh.startsWith("02")) {
+      return xhDxKhBanDauGiaRepository.getGiaBanToiThieuVt(cloaiVthh, namKh);
+    }else {
+      return xhDxKhBanDauGiaRepository.getGiaBanToiThieuLt(cloaiVthh, maDvi, namKh);
+    }
+
   }
 }

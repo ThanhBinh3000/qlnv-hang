@@ -20,8 +20,8 @@ public interface DcnbKeHoachDcHdrRepository extends JpaRepository<DcnbKeHoachDcH
       "AND (:#{#param.soDxuat} IS NULL OR LOWER(c.soDxuat) LIKE CONCAT('%',LOWER(:#{#param.soDxuat}),'%')) " +
       "AND ((:#{#param.ngayLapKhTu}  IS NULL OR c.ngayLapKh >= :#{#param.ngayLapKhTu})" +
       "AND (:#{#param.ngayLapKhDen}  IS NULL OR c.ngayLapKh <= :#{#param.ngayLapKhDen}) ) " +
-      "AND ((:#{#param.ngayDuyetLdcTu}  IS NULL OR c.ngayDuyetLdc >= :#{#param.ngayDuyetLdcTu})" +
-      "AND (:#{#param.ngayDuyetLdcDen}  IS NULL OR c.ngayDuyetLdc <= :#{#param.ngayDuyetLdcDen}) ) " +
+      "AND ((:#{#param.ngayDuyetLdccTu}  IS NULL OR c.ngayDuyetLdcc >= :#{#param.ngayDuyetLdccTu})" +
+      "AND (:#{#param.ngayDuyetLdccDen}  IS NULL OR c.ngayDuyetLdcc <= :#{#param.ngayDuyetLdccDen}) ) " +
       "AND (:#{#param.trichYeu} IS NULL OR LOWER(c.trichYeu) LIKE CONCAT('%',LOWER(:#{#param.trichYeu}),'%')) " +
       "AND (:#{#param.cloaiVthh} IS NULL OR h.cloaiVthh = :#{#param.cloaiVthh}) " +
       "AND (:#{#param.loaiVthh} IS NULL OR h.loaiVthh = :#{#param.loaiVthh}) " +

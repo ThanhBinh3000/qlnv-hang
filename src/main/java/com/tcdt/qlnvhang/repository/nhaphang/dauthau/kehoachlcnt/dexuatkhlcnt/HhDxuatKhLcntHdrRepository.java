@@ -91,10 +91,11 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 			nativeQuery = true)
 	List<HhQdKhlcntHdr> selectAll(String namKh, String loaiVthh, String cloaiVthh, String soQd, String tuNgayQd, String denNgayQd, String trangThai);
 
-	@Query(value = " SELECT NVL(SUM(DSG.SO_LUONG),0) FROM HH_QD_KHLCNT_HDR HDR " +
+	@Query(value = " SELECT NVL(SUM(DSGCT.SO_LUONG),0) FROM HH_QD_KHLCNT_HDR HDR " +
 			" INNER JOIN HH_QD_KHLCNT_DTL DTL on HDR.ID = DTL.ID_QD_HDR " +
 			" LEFT JOIN HH_QD_KHLCNT_DSGTHAU DSG ON DSG.ID_QD_DTL = DTL.ID " +
-			"WHERE HDR.NAM_KHOACH = :namKh AND HDR.LOAI_VTHH = :loaiVthh AND DSG.MA_DVI = :maDvi AND HDR.TRANG_THAI = :trangThai AND HDR.LASTEST = 1",
+			" LEFT JOIN HH_QD_KHLCNT_DSGTHAU_CTIET DSGCT ON DSG.ID = DSGCT.ID_GOI_THAU " +
+			"WHERE HDR.NAM_KHOACH = :namKh AND HDR.LOAI_VTHH = :loaiVthh AND DSGCT.MA_DVI = :maDvi AND HDR.TRANG_THAI = :trangThai AND HDR.LASTEST = 1",
 			nativeQuery = true)
 	BigDecimal countSLDalenKh(Integer namKh, String loaiVthh, String maDvi,String trangThai);
 

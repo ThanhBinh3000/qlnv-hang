@@ -62,5 +62,6 @@ public class HhQdGiaoNvuNhapxuatHdrReq {
 	private List<HhQdGiaoNvuNhapxuatDtlReq> detailList;
 
 	private List<FileDinhKemReq> fileDinhKems;
+	private List<FileDinhKemReq> fileCanCu;
 
 }

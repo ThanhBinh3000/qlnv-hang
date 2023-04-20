@@ -57,8 +57,6 @@ public class XhKqBttHdrReq extends BaseRequest  {
 
     private String ghiChu;
 
-    private String pthucBanTrucTiep;
-
     private String loaiHinhNx;
 
     private String kieuNx;

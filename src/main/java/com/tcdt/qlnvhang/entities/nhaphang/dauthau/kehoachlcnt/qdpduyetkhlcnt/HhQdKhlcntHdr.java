@@ -8,8 +8,10 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.util.Contains;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Where;
@@ -97,12 +99,14 @@ public class HhQdKhlcntHdr implements Serializable {
 	Date tgianBdauTchuc;
 
 	@Temporal(TemporalType.DATE)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
 	Date tgianDthau;
 
 	@Temporal(TemporalType.DATE)
 	Date tgianNhang;
 
 	@Temporal(TemporalType.DATE)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
 	Date tgianMthau;
 
 	@Temporal(TemporalType.DATE)

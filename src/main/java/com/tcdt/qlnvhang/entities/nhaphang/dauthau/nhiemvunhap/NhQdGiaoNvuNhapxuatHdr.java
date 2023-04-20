@@ -21,6 +21,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuknghiemcl.PhieuKnghiemCluongHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbangiaonhan.NhBbGiaoNhanVt;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.Contains;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -151,4 +153,8 @@ public class NhQdGiaoNvuNhapxuatHdr implements Serializable {
 
 	@Transient
 	List<NhBbGiaoNhanVt> listBienBanGiaoNhan;
+	@Transient
+	private List<FileDinhKem> fileDinhKems;
+	@Transient
+	private List<FileDinhKem> fileCanCu;
 }

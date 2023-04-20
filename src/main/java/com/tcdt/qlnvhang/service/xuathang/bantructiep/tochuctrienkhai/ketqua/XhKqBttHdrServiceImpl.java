@@ -88,6 +88,10 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
 
     @Override
     public XhKqBttHdr create(XhKqBttHdrReq req) throws Exception {
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null)
+            throw new Exception("Bad request.");
+
 
         if (!StringUtils.isEmpty(req.getSoQdKq())){
             Optional<XhKqBttHdr> qOptional = xhKqBttHdrRepository.findBySoQdKq(req.getSoQdKq());
@@ -163,6 +167,10 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
 
     @Override
     public XhKqBttHdr update(XhKqBttHdrReq req) throws Exception {
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null)
+            throw new Exception("Bad request.");
+
         if(ObjectUtils.isEmpty(req.getId())){
           throw new Exception("Không tìn thấy dữ liệu cần sửa");
       }

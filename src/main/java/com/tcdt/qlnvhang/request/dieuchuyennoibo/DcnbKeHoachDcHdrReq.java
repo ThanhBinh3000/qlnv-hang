@@ -12,11 +12,15 @@ import java.util.List;
 @Data
 public class DcnbKeHoachDcHdrReq {
   private Long id;
+  private Long parentId;
   private String loaiDc;
+  private String tenLoaiDc;
+  private String type;
   private Integer nam;
   private String soDxuat;
   private LocalDate ngayLapKh;
-  private LocalDate ngayDuyetLdc;
+  private LocalDate ngayDuyetLdcc;
+  private Long nguoiDuyetLdccId;
   private String trichYeu;
   private String lyDoDc;
   private String maDvi;
@@ -26,7 +30,6 @@ public class DcnbKeHoachDcHdrReq {
   private String trachNhiemDviTh;
   private String trangThai;
   private String lyDoTuChoi;
-  private String type;
   private Long idThop;
   private String maThop;
   private Long idQdDc;
@@ -40,5 +43,5 @@ public class DcnbKeHoachDcHdrReq {
   private String tenTrangThai;
   private List<FileDinhKemReq> canCu = new ArrayList<>();
   private List<DcnbKeHoachDcDtl> danhSachHangHoa = new ArrayList<>();
-  private List<DcnbPhuongAnDc> dcnbPhuongAnDc = new ArrayList<>();
+  private List<DcnbPhuongAnDc> phuongAnDieuChuyen = new ArrayList<>();
 }
