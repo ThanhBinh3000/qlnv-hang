@@ -34,8 +34,10 @@ public class DcnbPhuongAnDc implements Serializable {
     private String tenHinhThucDvCcDvVanChuyen;
     @Column(name = "HT_DC_CC_DV_VAN_CHUYEN")
     private String hinhThucDvCcDvVanChuyen;
+    @Column(name = "KE_HOACH_DC_HDR_ID", insertable = true, updatable = true)
+    private Long keHoachDcHdrId;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "KE_HOACH_DC_HDR_ID")
+    @JoinColumn(name = "KE_HOACH_DC_HDR_ID", insertable = false, updatable = false)
     @JsonIgnore
     private DcnbKeHoachDcHdr dcnbKeHoachDcHdr;
 }
