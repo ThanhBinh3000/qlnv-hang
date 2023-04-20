@@ -378,6 +378,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
         }
         xhQdPdKhBdgRepository.delete(optional.get());
         fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhQdPdKhBdg.TABLE_NAME));
+        fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhQdPdKhBdg.TABLE_NAME + "_BAN_HANH"));
 
         if (optional.get().getPhanLoai().equals("TH")) {
             Optional<XhThopDxKhBdg> qOptionalTh = xhThopDxKhBdgRepository.findById(optional.get().getIdThHdr());
@@ -433,14 +434,14 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
             XhQdPdKhBdg pduyet = data.get(i);
             objs = new Object[rowsName.length];
             objs[0] = i;
-            objs[2] = pduyet.getSoQdPd();
-            objs[3] = pduyet.getNgayKyQd();
-            objs[4] = pduyet.getTrichYeu();
-            objs[5] = pduyet.getSoTrHdr();
-            objs[6] = pduyet.getIdThHdr();
-            objs[7] = pduyet.getTenLoaiVthh();
-            objs[8] = pduyet.getTenCloaiVthh();
-            objs[11] = pduyet.getTenTrangThai();
+            objs[1] = pduyet.getSoQdPd();
+            objs[2] = pduyet.getNgayKyQd();
+            objs[3] = pduyet.getTrichYeu();
+            objs[4] = pduyet.getSoTrHdr();
+            objs[5] = pduyet.getIdThHdr();
+            objs[6] = pduyet.getTenLoaiVthh();
+            objs[7] = pduyet.getTenCloaiVthh();
+            objs[8] = pduyet.getTenTrangThai();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
