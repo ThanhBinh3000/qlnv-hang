@@ -24,6 +24,7 @@ public class DcnbKeHoachDcHdrReq {
   private String trichYeu;
   private String lyDoDc;
   private String maDvi;
+  private String maDviPq;
   private String tenDvi;
   private String maCucNhan;
   private String tenCucNhan;

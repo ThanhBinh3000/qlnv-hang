@@ -15,7 +15,7 @@ import java.util.Optional;
 public interface DcnbKeHoachDcHdrRepository extends JpaRepository<DcnbKeHoachDcHdr, Long> {
 
   @Query(value = "SELECT distinct c FROM DcnbKeHoachDcHdr c left join c.danhSachHangHoa h  WHERE 1=1 " +
-      "AND (:#{#param.maDvi} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDvi},'%')) " +
+      "AND (:#{#param.maDvi} IS NULL OR c.maDviPq LIKE CONCAT(:#{#param.maDvi},'%')) " +
       "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
       "AND (:#{#param.soDxuat} IS NULL OR LOWER(c.soDxuat) LIKE CONCAT('%',LOWER(:#{#param.soDxuat}),'%')) " +
       "AND ((:#{#param.ngayLapKhTu}  IS NULL OR c.ngayLapKh >= :#{#param.ngayLapKhTu})" +

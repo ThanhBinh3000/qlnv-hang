@@ -39,6 +39,8 @@ public class DcnbKeHoachDcDtl implements Serializable {
     private String maKhoNhan;
     private BigDecimal tichLuongKd;
     private BigDecimal soLuongPhanBo;
+    private BigDecimal slDcConLai;
+    private Boolean coLoKho;
     private String maDiemKho;
     private String tenDiemKho;
     @Access(value=AccessType.PROPERTY)
@@ -56,6 +58,7 @@ public class DcnbKeHoachDcDtl implements Serializable {
     private String tenNganKhoNhan;
     private String maLoKhoNhan;
     private String tenLoKhoNhan;
+    private Boolean coLoKhoNhan;
     @Column(name = "HDR_ID", insertable = true, updatable = true)
     private Long hdrId;
     @ManyToOne(fetch = FetchType.LAZY)
