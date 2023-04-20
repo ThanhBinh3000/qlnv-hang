@@ -60,6 +60,10 @@ public class XhQdDchinhKhBttHdr extends TrangThaiBaseEntity implements Serializa
 
     private String moTaHangHoa;
 
+    private String loaiHinhNx;
+
+    private String kieuNx;
+
     @Transient
     List<XhQdDchinhKhBttDtl> children = new ArrayList<>();
 
@@ -67,7 +71,7 @@ public class XhQdDchinhKhBttHdr extends TrangThaiBaseEntity implements Serializa
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
     @Transient
-    private FileDinhKem fileDinhKem;
+    private List<FileDinhKem> fileDinhKem = new ArrayList<>();
 
 
 
