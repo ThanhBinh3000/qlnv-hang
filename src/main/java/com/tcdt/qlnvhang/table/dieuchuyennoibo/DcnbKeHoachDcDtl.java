@@ -56,9 +56,10 @@ public class DcnbKeHoachDcDtl implements Serializable {
     private String tenNganKhoNhan;
     private String maLoKhoNhan;
     private String tenLoKhoNhan;
-
+    @Column(name = "HDR_ID", insertable = true, updatable = true)
+    private Long hdrId;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "HDR_ID")
+    @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
     @JsonIgnore
     private DcnbKeHoachDcHdr dcnbKeHoachDcHdr;
 }

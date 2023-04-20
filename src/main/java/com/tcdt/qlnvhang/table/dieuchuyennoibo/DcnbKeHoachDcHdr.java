@@ -62,10 +62,12 @@ public class DcnbKeHoachDcHdr extends BaseEntity implements Serializable {
   @Transient
   private List<FileDinhKem> canCu = new ArrayList<>();
 
-  @OneToMany(mappedBy = "dcnbKeHoachDcHdr",cascade = CascadeType.ALL)
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "HDR_ID")
   private List<DcnbKeHoachDcDtl> danhSachHangHoa = new ArrayList<>();
 
-  @OneToMany(mappedBy = "dcnbKeHoachDcHdr",cascade = CascadeType.ALL)
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "KE_HOACH_DC_HDR_ID")
   private List<DcnbPhuongAnDc> phuongAnDieuChuyen = new ArrayList<>();
 
   public void setTrangThai(String trangThai) {

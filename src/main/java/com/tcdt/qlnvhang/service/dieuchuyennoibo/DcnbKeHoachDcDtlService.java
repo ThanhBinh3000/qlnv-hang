@@ -99,19 +99,16 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
       }
     }
     DcnbKeHoachDcHdr data = optional.get();
-    objReq.getDanhSachHangHoa().forEach(e -> e.setDcnbKeHoachDcHdr(data));
-    objReq.getPhuongAnDieuChuyen().forEach(e -> e.setDcnbKeHoachDcHdr(data));
     objReq.setType(data.getType());
+    BeanUtils.copyProperties(objReq, data);
     data.setDanhSachHangHoa(objReq.getDanhSachHangHoa());
     data.setPhuongAnDieuChuyen(objReq.getPhuongAnDieuChuyen());
 
-    BeanUtils.copyProperties(objReq, data);
     DcnbKeHoachDcHdr created = dcnbKeHoachDcHdrRepository.save(data);
 
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbKeHoachDcHdr.TABLE_NAME + "_CAN_CU"));
     List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), DcnbKeHoachDcHdr.TABLE_NAME + "_CAN_CU");
     created.setCanCu(canCu);
-    dcnbKeHoachDcHdrRepository.save(created);
     return created;
   }
 
