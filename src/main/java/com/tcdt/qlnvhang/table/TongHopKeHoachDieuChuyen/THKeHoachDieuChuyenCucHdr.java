@@ -100,6 +100,9 @@ public class THKeHoachDieuChuyenCucHdr implements Serializable {
     @Transient
     private List<THKeHoachDieuChuyenNoiBoCucDtl> thKeHoachDieuChuyenNoiBoCucDtls = new ArrayList<>();
 
+    @Transient
+    private List<THKeHoachDieuChuyenCucKhacCucDtl> thKeHoachDieuChuyenCucKhacCucDtls = new ArrayList<>();
+
 
 
     public void setTrangThai(String trangThai) {

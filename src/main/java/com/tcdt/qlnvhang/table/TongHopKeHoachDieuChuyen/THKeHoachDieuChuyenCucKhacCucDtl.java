@@ -8,6 +8,8 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Table(name = "DCNB_TH_KE_HOACH_DCC_KC_DTL")
@@ -33,7 +35,7 @@ public class THKeHoachDieuChuyenCucKhacCucDtl implements Serializable {
     @Column(name = "NGAY_DXUAT")
     private LocalDate ngayDxuat;
 
-    @Column(name = "NGAY_DUYET_TC")
+    @Column(name = "NGAY_GDUYET_TC")
     private LocalDate ngayGduyetTc;
 
     @Column(name = "TONG_DU_TOAN_KP")
@@ -48,5 +50,7 @@ public class THKeHoachDieuChuyenCucKhacCucDtl implements Serializable {
     @Column(name = "DCNB_KE_HOACH_DC_HDR_ID")
     private Long dcnbKeHoachDcHdrId;
 
+    @Transient
+    private List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtlList = new ArrayList<>();
 
 }

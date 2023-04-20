@@ -146,11 +146,22 @@ public class TongHopKeHoachDcController extends BaseController {
     }
 
     @ApiOperation(value = "Tổng hợp kế hoạch điều chuyển", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PostMapping(value = "/lap-ke-hoach", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/lap-khdc-chi-cuc", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> createTable(@CurrentUser CustomUserDetails currentUser,@RequestBody  TongHopKeHoachDieuChuyenSearch req) throws Exception {
+    public ResponseEntity<BaseResponse> createTableChiCuc(@CurrentUser CustomUserDetails currentUser,@RequestBody  TongHopKeHoachDieuChuyenSearch req) throws Exception {
         BaseResponse resp = new BaseResponse();
-        resp.setData(thKeHoachDieuChuyenService.createPlan(currentUser,req));
+        resp.setData(thKeHoachDieuChuyenService.createPlanChiCuc(currentUser,req));
+        resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+        resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Tổng hợp kế hoạch điều chuyển", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/lap-khdc-cuc", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> createTableCuc(@CurrentUser CustomUserDetails currentUser,@RequestBody  TongHopKeHoachDieuChuyenSearch req) throws Exception {
+        BaseResponse resp = new BaseResponse();
+        resp.setData(thKeHoachDieuChuyenService.createPlanCuc(currentUser,req));
         resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
         resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         return ResponseEntity.ok(resp);
