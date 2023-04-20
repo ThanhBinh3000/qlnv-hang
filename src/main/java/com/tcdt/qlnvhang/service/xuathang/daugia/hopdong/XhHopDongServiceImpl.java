@@ -18,6 +18,7 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.hopdong.XhHopDongHdr;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,12 +68,14 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
             throw new Exception("Hợp đồng số " + req.getSoHd() + " đã tồn tại");
         }
 
-        Optional<XhKqBdgHdr> checkSoQd = xhKqBdgHdrRepository.findFirstBySoQdKq(req.getSoQdKq());
-        if (!checkSoQd.isPresent()) {
-            throw new Exception("Số quyết định phê duyệt kết quả lựa chọn nhà thầu " + req.getSoQdKq() + " không tồn tại");
-        }else{
-            checkSoQd.get().setTrangThaiHd(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
-            xhKqBdgHdrRepository.save(checkSoQd.get());
+        if(!DataUtils.isNullObject(req.getSoQdKq())){
+            Optional<XhKqBdgHdr> checkSoQd = xhKqBdgHdrRepository.findFirstBySoQdKq(req.getSoQdKq());
+            if (!checkSoQd.isPresent()) {
+                throw new Exception("Số quyết định phê duyệt kết quả lựa chọn nhà thầu " + req.getSoQdKq() + " không tồn tại");
+            }else{
+                checkSoQd.get().setTrangThaiHd(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
+                xhKqBdgHdrRepository.save(checkSoQd.get());
+            }
         }
 
         UserInfo userInfo = getUser();
@@ -186,8 +189,10 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
         data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
         data.setTenLoaiVthh(mapVthh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(mapVthh.get(data.getCloaiVthh()));
-        data.setListMaDviTsan(Arrays.asList(data.getMaDviTsan().split(",")));
-        
+        if(!DataUtils.isNullObject(data.getMaDviTsan())){
+            data.setListMaDviTsan(Arrays.asList(data.getMaDviTsan().split(",")));
+        }
+
         List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Arrays.asList(XhHopDongHdr.TABLE_NAME + "_CAN_CU"));
         data.setCanCu(canCu);
         List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhHopDongHdr.TABLE_NAME + "_FILE_DINH_KEM"));
