@@ -35,8 +35,6 @@ public class DcnbKeHoachDcDtl implements Serializable {
     private BigDecimal tonKho;
     private BigDecimal soLuongDc;
     private BigDecimal duToanKphi;
-    @Access(value=AccessType.PROPERTY)
-    private String maKhoNhan;
     private BigDecimal tichLuongKd;
     private BigDecimal soLuongPhanBo;
     private BigDecimal slDcConLai;
