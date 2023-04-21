@@ -26,7 +26,7 @@ public interface XhCtVtQdPdHdrRepository extends JpaRepository<XhCtVtQuyetDinhPd
       "AND ((:#{#param.ngayKetThucDxTu}  IS NULL OR e.ngayKetThucDx >= :#{#param.ngayKetThucDxTu})" +
       "AND (:#{#param.ngayKetThucDxDen}  IS NULL OR e.ngayKetThucDx <= :#{#param.ngayKetThucDxDen}) ) " +
       "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
-      "AND (:#{#param.xuatCap} IS NULL OR (c.xuatCap = :#{#param.xuatCap} AND c.idXc IS NULL)) " +
+      "AND (:#{#param.xuatCap} IS NULL OR c.xuatCap = :#{#param.xuatCap}) " +
       "AND (:#{#param.soQd} IS NULL OR LOWER(c.soQd) LIKE CONCAT('%',LOWER(:#{#param.soQd}),'%')) " +
       "AND (:#{#param.loaiVthh} IS NULL OR c.loaiVthh = :#{#param.loaiVthh}) " +
           "AND ((:#{#param.ngayKyTu}  IS NULL OR c.ngayKy >= :#{#param.ngayKyTu})" +
