@@ -202,12 +202,14 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
     }
 
     XhHopDongHdr data = qOptional.get();
-    Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-    Map<String, String> mapVthh = getListDanhMucHangHoa();
 
-    data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
+    Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
+    Map<String, String> mapVthh = getListDanhMucHangHoa();
+    data.setTenDvi(mapDmucDvi.get(data.getMaDvi()) == null ? null : mapDmucDvi.get(data.getMaDvi()).get("tenDvi").toString());
     data.setTenLoaiVthh(mapVthh.get(data.getLoaiVthh()));
     data.setTenCloaiVthh(mapVthh.get(data.getCloaiVthh()));
+    data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
+    data.setTenTrangThaiPhuLuc(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiPhuLuc()));
     if (!DataUtils.isNullObject(data.getMaDviTsan())) {
       data.setListMaDviTsan(Arrays.asList(data.getMaDviTsan().split(",")));
     }
@@ -223,33 +225,32 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
     allByIdHdr.forEach(item -> {
       List<XhHopDongDdiemNhapKho> allByIdDtl = xhHopDongDdiemNhapKhoRepository.findAllByIdDtl(item.getId());
       allByIdDtl.forEach(x -> {
-        x.setTenDiemKho(mapDmucDvi.get(x.getMaDiemKho()));
-        x.setTenNhaKho(mapDmucDvi.get(x.getMaNhaKho()));
-        x.setTenNganKho(mapDmucDvi.get(x.getMaNganKho()));
-        x.setTenLoKho(mapDmucDvi.get(x.getMaLoKho()));
+        x.setTenDiemKho(mapDmucDvi.get(x.getMaDiemKho()) == null ? null : mapDmucDvi.get(x.getMaDiemKho()).get("tenDvi").toString());
+        x.setTenNhaKho(mapDmucDvi.get(x.getMaNhaKho()) == null ? null : mapDmucDvi.get(x.getMaNhaKho()).get("tenDvi").toString());
+        x.setTenNganKho(mapDmucDvi.get(x.getMaNganKho()) == null ? null : mapDmucDvi.get(x.getMaNganKho()).get("tenDvi").toString());
+        x.setTenLoKho(mapDmucDvi.get(x.getMaLoKho()) == null ? null : mapDmucDvi.get(x.getMaLoKho()).get("tenDvi").toString());
+
       });
       item.setChildren(allByIdDtl);
-      item.setTenDvi(mapDmucDvi.get(item.getMaDvi()));
+      item.setTenDvi(mapDmucDvi.get(item.getMaDvi()) == null ? null : mapDmucDvi.get(item.getMaDvi()).get("tenDvi").toString());
+      item.setDiaChi(mapDmucDvi.get(item.getMaDvi()) == null ? null : mapDmucDvi.get(item.getMaDvi()).get("diaChi").toString());
+
     });
     data.setChildren(allByIdHdr);
     data.setPhuLucDtl(allByIdHdr);
-    if (!DataUtils.isNullObject(data.getIdHd())) {
-      List<FileDinhKem> filePhuLuc = fileDinhKemService.search(data.getId(), Arrays.asList(XhHopDongBttHdr.TABLE_NAME + "_PHU_LUC"));
-      data.setFilePhuLuc(filePhuLuc);
+    if (DataUtils.isNullObject(data.getIdHd())) {
+      List<XhHopDongHdr> phuLucList = new ArrayList<>();
+      for (XhHopDongHdr phuLucHd : xhHopDongHdrRepository.findAllByIdHd(id)) {
+        List<XhHopDongDtl> phuLucDtlList = xhHopDongDtlRepository.findAllByIdHdr(phuLucHd.getId());
+        phuLucDtlList.forEach(f -> {
+          f.setTenDvi(mapDmucDvi.get(f.getMaDvi()) == null ? null : mapDmucDvi.get(f.getMaDvi()).get("tenDvi").toString());
+        });
+        phuLucHd.setTenTrangThaiPhuLuc(NhapXuatHangTrangThaiEnum.getTenById(phuLucHd.getTrangThaiPhuLuc()));
+        phuLucHd.setPhuLucDtl(phuLucDtlList);
+        phuLucList.add(phuLucHd);
+      }
+      data.setPhuLuc(phuLucList);
     }
-
-
-    List<XhHopDongHdr> phuLucList = new ArrayList<>();
-    for (XhHopDongHdr phuLucHd : xhHopDongHdrRepository.findAllByIdHd(id)) {
-      List<XhHopDongDtl> phuLucDtlList = xhHopDongDtlRepository.findAllByIdHdr(phuLucHd.getId());
-      phuLucDtlList.forEach(f -> {
-        f.setTenDvi(mapDmucDvi.get(f.getMaDvi()));
-      });
-      phuLucHd.setTenTrangThaiPhuLuc(NhapXuatHangTrangThaiEnum.getTenById(phuLucHd.getTrangThaiPhuLuc()));
-      phuLucHd.setPhuLucDtl(phuLucDtlList);
-      phuLucList.add(phuLucHd);
-    }
-    data.setPhuLuc(phuLucList);
 
     return data;
   }
@@ -286,8 +287,10 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
     if (!optional.isPresent()) {
       throw new Exception("Không tìm thấy dữ liệu cần xoá");
     }
-    if (!optional.get().getTrangThai().equals(Contains.TAO_MOI)) {
-      throw new Exception("Chỉ được xóa với bản ghi là dự thảo");
+    if (DataUtils.isNullObject(optional.get().getIdHd())) {
+      if (!optional.get().getTrangThai().equals(Contains.TAO_MOI)) {
+        throw new Exception("Chỉ được xóa với bản ghi là dự thảo");
+      }
     }
     xhHopDongHdrRepository.delete(optional.get());
     fileDinhKemService.delete(optional.get().getId(), Lists.newArrayList(XhHopDongHdr.TABLE_NAME + "_CAN_CU"));
