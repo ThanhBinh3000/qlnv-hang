@@ -175,7 +175,7 @@ public class BaseServiceImpl {
   }
 
   public Map<String, Map<String, Object>> getListDanhMucHangHoaObject() {
-    ResponseEntity<String> response = categoryServiceProxy.getDanhMucHangHoa(getAuthorizationToken(request));
+    ResponseEntity<String> response = categoryServiceProxy.getDanhMucHangHoaAll(getAuthorizationToken(request),new HashMap<>());
     String str = Request.getAttrFromJson(response.getBody(), "data");
     HashMap<String, Map<String, Object>> data = new HashMap<String, Map<String, Object>>();
     List<Map<String, Object>> retMap = new Gson().fromJson(str, new TypeToken<List<HashMap<String, Object>>>() {
