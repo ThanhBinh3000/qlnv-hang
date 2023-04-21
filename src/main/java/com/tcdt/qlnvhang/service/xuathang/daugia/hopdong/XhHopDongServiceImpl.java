@@ -1,6 +1,9 @@
 package com.tcdt.qlnvhang.service.xuathang.daugia.hopdong;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttDtl;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttHdr;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.hopdong.XhHopDongDdiemNhapKho;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.hopdong.XhHopDongDtl;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.ketqua.XhKqBdgHdr;
@@ -10,6 +13,7 @@ import com.tcdt.qlnvhang.repository.xuathang.daugia.hopdong.XhHopDongDtlReposito
 import com.tcdt.qlnvhang.repository.xuathang.daugia.hopdong.XhHopDongHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.tochuctrienkhai.ketqua.XhKqBdgHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.xuathang.bantructiep.hopdong.XhHopDongBttDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.hopdong.XhDdiemNhapKhoReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.hopdong.XhHopDongDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.hopdong.XhHopDongHdrReq;
@@ -18,6 +22,7 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.hopdong.XhHopDongHdr;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,22 +67,26 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
 
     @Override
     public XhHopDongHdr create(XhHopDongHdrReq req) throws Exception {
-        Optional<XhHopDongHdr> qOpHdong = xhHopDongHdrRepository.findBySoHd(req.getSoHd());
-        if (qOpHdong.isPresent()) {
-            throw new Exception("Hợp đồng số " + req.getSoHd() + " đã tồn tại");
-        }
-
-        Optional<XhKqBdgHdr> checkSoQd = xhKqBdgHdrRepository.findFirstBySoQdKq(req.getSoQdKq());
-        if (!checkSoQd.isPresent()) {
-            throw new Exception("Số quyết định phê duyệt kết quả lựa chọn nhà thầu " + req.getSoQdKq() + " không tồn tại");
-        }else{
-            checkSoQd.get().setTrangThaiHd(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
-            xhKqBdgHdrRepository.save(checkSoQd.get());
-        }
-
         UserInfo userInfo = getUser();
         if (userInfo == null) {
             throw new Exception("Bad request.");
+        }
+        Optional<XhHopDongHdr> qOpHdong = xhHopDongHdrRepository.findBySoHd(req.getSoHd());
+        if (DataUtils.isNullObject(req.getIdHd())) {
+            if (qOpHdong.isPresent()) {
+                throw new Exception("Hợp đồng số" + req.getSoHd() + "đã tồn tại");
+            }
+
+        }
+
+        if(!DataUtils.isNullObject(req.getSoQdKq())){
+            Optional<XhKqBdgHdr> checkSoQd = xhKqBdgHdrRepository.findFirstBySoQdKq(req.getSoQdKq());
+            if (!checkSoQd.isPresent()) {
+                throw new Exception("Số quyết định phê duyệt kết quả lựa chọn nhà thầu " + req.getSoQdKq() + " không tồn tại");
+            }else{
+                checkSoQd.get().setTrangThaiHd(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
+                xhKqBdgHdrRepository.save(checkSoQd.get());
+            }
         }
 
         XhHopDongHdr dataMap = new XhHopDongHdr();
@@ -86,6 +95,7 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
         dataMap.setNguoiTaoId(userInfo.getId());
         dataMap.setNgayTao(new Date());
         dataMap.setTrangThai(Contains.DU_THAO);
+        dataMap.setTrangThaiPhuLuc(Contains.DUTHAO);
         dataMap.setMaDvi(userInfo.getDvql());
         dataMap.setTypeQdGnv(false);
 //        dataMap.setMaDviTsan(String.join(",",req.getListMaDviTsan()));
@@ -145,7 +155,8 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
         fileDinhKemService.delete(req.getId(), Lists.newArrayList(XhHopDongHdr.TABLE_NAME + "_FILE_DINH_KEM"));
         List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getCanCu(), dataDB.getId(), XhHopDongHdr.TABLE_NAME + "_FILE_DINH_KEM");
         dataDB.setFileDinhKems(fileDinhKem);
-        
+        List<FileDinhKem> filePhuLuc = fileDinhKemService.saveListFileDinhKem(req.getFilePhuLuc(), dataDB.getId(), XhHopDongHdr.TABLE_NAME + "_PHU_LUC");
+        dataDB.setFilePhuLuc(filePhuLuc);
         saveDetail(req,dataDB.getId());
         return dataDB;
     }
@@ -164,6 +175,14 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
                 nhapKho.setIdDtl(dtl.getId());
                 xhHopDongDdiemNhapKhoRepository.save(nhapKho);
             }
+        }
+
+        for (XhHopDongDtlReq phuLucReq : req.getPhuLucDtl()) {
+            XhHopDongDtl phuLuc = new XhHopDongDtl();
+            BeanUtils.copyProperties(phuLucReq, phuLuc, "id");
+            phuLuc.setId(null);
+            phuLuc.setIdHdr(idHdr);
+            xhHopDongDtlRepository.save(phuLuc);
         }
     }
 
@@ -186,12 +205,16 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
         data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
         data.setTenLoaiVthh(mapVthh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(mapVthh.get(data.getCloaiVthh()));
-        data.setListMaDviTsan(Arrays.asList(data.getMaDviTsan().split(",")));
-        
+        if(!DataUtils.isNullObject(data.getMaDviTsan())){
+            data.setListMaDviTsan(Arrays.asList(data.getMaDviTsan().split(",")));
+        }
+
         List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Arrays.asList(XhHopDongHdr.TABLE_NAME + "_CAN_CU"));
         data.setCanCu(canCu);
         List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhHopDongHdr.TABLE_NAME + "_FILE_DINH_KEM"));
         data.setFileDinhKems(fileDinhKem);
+        List<FileDinhKem> phuLuc = fileDinhKemService.search(data.getId(), Arrays.asList(XhHopDongHdr.TABLE_NAME + "_PHU_LUC"));
+        data.setFilePhuLuc(phuLuc);
         List<XhHopDongDtl> allByIdHdr = xhHopDongDtlRepository.findAllByIdHdr(id);
         
         allByIdHdr.forEach(item -> {
@@ -206,6 +229,25 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
             item.setTenDvi(mapDmucDvi.get(item.getMaDvi()));
         });
             data.setChildren(allByIdHdr);
+        data.setPhuLucDtl(allByIdHdr);
+        if (!DataUtils.isNullObject(data.getIdHd())) {
+            List<FileDinhKem> filePhuLuc = fileDinhKemService.search(data.getId(), Arrays.asList(XhHopDongBttHdr.TABLE_NAME+ "_PHU_LUC"));
+            data.setFilePhuLuc(filePhuLuc);
+        }
+
+
+        List<XhHopDongHdr> phuLucList = new ArrayList<>();
+        for (XhHopDongHdr phuLucHd : xhHopDongHdrRepository.findAllByIdHd(id)) {
+            List<XhHopDongDtl> phuLucDtlList = xhHopDongDtlRepository.findAllByIdHdr(phuLucHd.getId());
+            phuLucDtlList.forEach(f -> {
+                f.setTenDvi(mapDmucDvi.get(f.getMaDvi()));
+            });
+            phuLucHd.setTenTrangThaiPhuLuc(NhapXuatHangTrangThaiEnum.getTenById(phuLucHd.getTrangThaiPhuLuc()));
+            phuLucHd.setPhuLucDtl(phuLucDtlList);
+            phuLucList.add(phuLucHd);
+        }
+        data.setPhuLuc(phuLucList);
+
         return data;
     }
 
@@ -247,7 +289,7 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
         xhHopDongHdrRepository.delete(optional.get());
         fileDinhKemService.delete(optional.get().getId(), Lists.newArrayList(XhHopDongHdr.TABLE_NAME + "_CAN_CU"));
         fileDinhKemService.delete(optional.get().getId(), Lists.newArrayList(XhHopDongHdr.TABLE_NAME + "_FILE_DINH_KEM"));
-
+        fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhHopDongHdr.TABLE_NAME+"_PHU_LUC"));
         for (XhHopDongDtl hdDtl : xhHopDongDtlRepository.findAllByIdHdr(optional.get().getId()) ) {
             xhHopDongDdiemNhapKhoRepository.deleteAllByIdDtl(hdDtl.getId());
         }
@@ -265,6 +307,7 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
 
         fileDinhKemService.deleteMultiple(listMulti, Lists.newArrayList(XhHopDongHdr.TABLE_NAME + "_CAN_CU"));
         fileDinhKemService.deleteMultiple(listMulti, Lists.newArrayList(XhHopDongHdr.TABLE_NAME + "_FILE_DINH_KEM"));
+        fileDinhKemService.deleteMultiple(listMulti, Lists.newArrayList(XhHopDongHdr.TABLE_NAME + "_PHU_LUC"));
 
     }
 

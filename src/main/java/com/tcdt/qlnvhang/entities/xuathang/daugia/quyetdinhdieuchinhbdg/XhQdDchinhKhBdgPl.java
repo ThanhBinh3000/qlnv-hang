@@ -20,67 +20,20 @@ public class XhQdDchinhKhBdgPl  extends BaseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = TABLE_NAME + "_SEQ")
     @SequenceGenerator(sequenceName = TABLE_NAME + "_SEQ", allocationSize = 1, name = TABLE_NAME + "_SEQ")
     private Long id;
-    private Long idQdDtl;
+
+    private Long idDcDtl;
+
     private String maDvi;
     @Transient
     private String tenDvi;
-    private String maDiemKho;
-    private String diaDiemKho;
-    @Transient
-    private String tenDiemKho;
 
-    private String maNhaKho;
-    @Transient
-    private String tenNhakho;
+    private BigDecimal soLuongChiCuc;
 
-    private String maNganKho;
-    @Transient
-    private String tenNganKho;
+    private String diaChi;
 
-    private String maLoKho;
-    @Transient
-    private String tenLoKho;
+    private String slChiTieu;
 
-    private String loaiVthh;
-    @Transient
-    private String tenLoaiVthh;
-    private String cloaiVthh;
-    @Transient
-    private String tenCloaiVthh;
-
-    private String maDviTsan;
-
-    private BigDecimal duDau;
-
-    private BigDecimal soLuong;
-
-    private BigDecimal giaKhongVat;
-
-    private BigDecimal giaKhoiDiem;
-
-    private BigDecimal donGiaVat;
-
-    private BigDecimal giaKhoiDiemDduyet;
-
-    private BigDecimal tienDatTruoc;
-
-    private BigDecimal tienDatTruocDduyet;
-
-    private BigDecimal soLuongChiTieu;
-
-    private BigDecimal soLuongKh;
-
-    private BigDecimal tongSoLuong;
-
-    private BigDecimal tongTienDatTruoc;
-
-    private BigDecimal tongTienDatTruocDd;
-    private String dviTinh;
-
-    private String trangThai;
-    @Transient
-    private String tenTrangThai;
-
+    private String slKeHoachDd;
 
     @Transient
     private XhQdDchinhKhBdgDtl xhQdPdKhBdgDtl;

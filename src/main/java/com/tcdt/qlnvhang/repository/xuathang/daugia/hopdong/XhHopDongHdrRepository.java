@@ -1,10 +1,8 @@
 package com.tcdt.qlnvhang.repository.xuathang.daugia.hopdong;
 
-import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.ketqua.XhKqBdgHdr;
 import com.tcdt.qlnvhang.repository.BaseRepository;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.hopdong.XhHopDongHdr;
 import com.tcdt.qlnvhang.request.xuathang.daugia.hopdong.XhHopDongHdrReq;
-import com.tcdt.qlnvhang.request.xuathang.daugia.tochuctrienkhai.ketqua.XhKqBdgHdrReq;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -51,4 +49,6 @@ public interface XhHopDongHdrRepository extends BaseRepository<XhHopDongHdr,Long
     List<XhHopDongHdr> findAllBySoQdKq(String soQdKq);
 
 
+    @Transactional
+    List<XhHopDongHdr> findAllByIdHd(Long idHd);
 }

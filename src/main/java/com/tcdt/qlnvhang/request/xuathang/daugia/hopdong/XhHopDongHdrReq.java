@@ -153,4 +153,7 @@ public class XhHopDongHdrReq extends BaseRequest {
     @Transient
     private List<XhHopDongDtlReq> phuLucDtl = new ArrayList<>();
 
+    @Transient
+    private List<FileDinhKemReq> filePhuLuc = new ArrayList<>();
+
 }

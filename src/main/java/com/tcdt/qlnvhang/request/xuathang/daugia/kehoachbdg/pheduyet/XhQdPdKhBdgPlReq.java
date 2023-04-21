@@ -18,10 +18,6 @@ public class XhQdPdKhBdgPlReq {
 
     private BigDecimal soLuongChiCuc;
 
-    private BigDecimal tienDtruocDxChiCuc;
-
-    private BigDecimal tienDtruocDdChiCuc;
-
     private String diaChi;
 
     private String slChiTieu;
