@@ -233,9 +233,7 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
       });
       item.setChildren(allByIdDtl);
       item.setTenDvi(mapDmucDvi.get(item.getMaDvi()) == null ? null : mapDmucDvi.get(item.getMaDvi()).get("tenDvi").toString());
-      item.setTenDviHd(mapDmucDvi.get(item.getMaDvi()) == null ? null : mapDmucDvi.get(item.getMaDvi()).get("tenDvi").toString());
-      item.setDiaChiHd(mapDmucDvi.get(item.getMaDvi()) == null ? null : mapDmucDvi.get(item.getMaDvi()).get("diaChi").toString());
-
+      item.setDiaChi(mapDmucDvi.get(item.getMaDvi()) == null ? null : mapDmucDvi.get(item.getMaDvi()).get("diaChi").toString());
 
     });
     data.setChildren(allByIdHdr);
