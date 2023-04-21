@@ -40,6 +40,7 @@ public class DcnbKeHoachDcHdr extends BaseEntity implements Serializable {
   private String lyDoDc;
   @Access(value=AccessType.PROPERTY)
   private String maDvi;
+  private String maDviPq;
   private String tenDvi;
   private String maCucNhan;
   private String tenCucNhan;
