@@ -10,6 +10,7 @@ import javax.validation.Valid;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.request.search.HhDthauSearchReq;
+import com.tcdt.qlnvhang.request.search.HhDxuatKhLcntSearchReq;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,6 +94,22 @@ public class HhQdPduyetKqlcntHdrController extends BaseController {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
 			log.error("Lấy chi tiết quyết định phê duyệt kết quả lựa chọn nhà thầu trace: {}", e);
+		}
+		return ResponseEntity.ok(resp);
+	}
+	@ApiOperation(value = "Lấy chi tiết quyết định phê duyệt kết quả lựa chọn nhà thầu", response = List.class)
+	@PostMapping(value = PathContains.URL_CHI_TIET + "/bySoQd", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> detailBySoQd(@RequestBody HhQdPduyetKqlcntSearchReq objReq) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.detailBySoQd(objReq.getSoQd()));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Lấy chi tiết trace: {}", e);
 		}
 		return ResponseEntity.ok(resp);
 	}

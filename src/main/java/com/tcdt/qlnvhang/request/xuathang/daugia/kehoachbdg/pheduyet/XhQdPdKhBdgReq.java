@@ -58,13 +58,17 @@ public class XhQdPdKhBdgReq extends BaseRequest {
 
     private Integer slDviTsan;
 
+    private String loaiHinhNx;
+
+    private String kieuNx;
+
     private List<XhQdPdKhBdgDtlReq> children;
 
     @Transient
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 
     @Transient
-    private FileDinhKemReq fileDinhKem;
+    private List<FileDinhKemReq> fileDinhKem = new ArrayList<>();
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKyQdTu;

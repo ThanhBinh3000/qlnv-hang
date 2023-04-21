@@ -56,9 +56,9 @@ public class XhQdPdKhBdgDtl implements Serializable {
 
     private Integer slDviTsan;
 
-    private BigDecimal tongTienDatTruocDonGia;
+    private BigDecimal tongTienGiaKhoiDiemDx;
 
-    private BigDecimal tongTienKdienDonGia;
+    private BigDecimal tongKhoanTienDatTruocDx;
 
     private String moTaHangHoa;
 

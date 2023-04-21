@@ -38,9 +38,11 @@ public class XhThopDxKhBdgDtl implements Serializable {
     private Integer slDviTsan;
     private String trangThai;
 
-    private BigDecimal tongTienDatTruocDonGia;
+    private BigDecimal tongSoLuong;
 
-    private BigDecimal tongTienKdienDonGia;
+    private BigDecimal tongTienGiaKhoiDiemDx;
+
+    private BigDecimal tongKhoanTienDatTruocDx;
 
     // Transient
     @Transient
