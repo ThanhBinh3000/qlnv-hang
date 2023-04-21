@@ -66,7 +66,7 @@ public class XhBbLayMauBttHdrReq extends BaseRequest {
 
     private String maLoKho;
 
-    private BigDecimal soLuong;
+    private BigDecimal soLuongLayMau;
 
     private String ppLayMau;
 
@@ -88,7 +88,10 @@ public class XhBbLayMauBttHdrReq extends BaseRequest {
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 
     @Transient
-    private FileDinhKemReq fileDinhKem;
+    private List<FileDinhKemReq> canCuPhapLy = new ArrayList<>();
+
+    @Transient
+    private List<FileDinhKemReq> fileNiemPhong = new ArrayList<>();
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayLayMauTu;

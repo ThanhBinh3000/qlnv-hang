@@ -22,26 +22,38 @@ public class XhThopDxKhBdg extends TrangThaiBaseEntity implements Serializable {
 //    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_THOP_DX_KH_BDG_SEQ")
 //    @SequenceGenerator(sequenceName = "XH_THOP_DX_KH_BDG_SEQ", allocationSize = 1, name = "XH_THOP_DX_KH_BDG_SEQ")
     private Long id;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayThop;
+
     private String loaiVthh;
+    @Transient
+    private String tenLoaiVthh;
+
     private String cloaiVthh;
+    @Transient
+    private String tenCloaiVthh;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayDuyetTu;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayDuyetDen;
+
     private String noiDungThop;
+
     private Integer namKh;
+
     private String maDvi;
 
     private Long idQdPd;
+
     private String soQdPd;
 
-    // Transient
-    @Transient
-    private String tenLoaiVthh;
-    @Transient
-    private String tenCloaiVthh;
+    private String loaiHinhNx;
+
+    private String kieuNx;
+
     @Transient
     private List<XhThopDxKhBdgDtl> children = new ArrayList<>();
 

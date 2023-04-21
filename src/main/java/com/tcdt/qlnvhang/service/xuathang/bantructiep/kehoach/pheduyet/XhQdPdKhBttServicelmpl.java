@@ -9,7 +9,6 @@ import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.tonghop.XhThopDxK
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.tonghop.XhThopDxKhBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.thongtin.XhTcTtinBtt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviDtlRepository;
@@ -60,9 +59,6 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
 
     @Autowired
     FileDinhKemService fileDinhKemService;
-
-    @Autowired
-    FileDinhKemRepository fileDinhKemRepository;
 
     @Autowired
     private XhThopDxKhBttRepository xhThopDxKhBttRepository;
@@ -136,8 +132,8 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
         XhQdPdKhBttHdr created =  xhQdPdKhBttHdrRepository.save(dataMap);
 
         if (!DataUtils.isNullOrEmpty(req.getFileDinhKem())) {
-            List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), created.getId(), XhQdPdKhBttHdr.TABLE_NAME+ "_BAN_HANH");
-            created.setFileDinhKem(fileDinhKems);
+            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), created.getId(), XhQdPdKhBttHdr.TABLE_NAME+ "_BAN_HANH");
+            created.setFileDinhKem(fileDinhKem);
         }
 
         if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {

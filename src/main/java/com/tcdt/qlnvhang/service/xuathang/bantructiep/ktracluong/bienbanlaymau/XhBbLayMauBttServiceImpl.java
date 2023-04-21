@@ -93,13 +93,19 @@ public class XhBbLayMauBttServiceImpl extends BaseServiceImpl implements  XhBbLa
         data.setIdKtv(userInfo.getId());
         XhBbLayMauBttHdr created = xhBbLayMauBttHdrRepository.save(data);
 
-        if (!DataUtils.isNullObject(req.getFileDinhKem())) {
-            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(req.getFileDinhKem()), created.getId(), XhBbLayMauBttHdr.TABLE_NAME);
-            created.setFileDinhKem(fileDinhKem.get(0));
-        }
         if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
             List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhBbLayMauBttHdr.TABLE_NAME);
             created.setFileDinhKems(fileDinhKems);
+        }
+
+        if (!DataUtils.isNullOrEmpty(req.getCanCuPhapLy())) {
+            List<FileDinhKem> canCuPhapLy = fileDinhKemService.saveListFileDinhKem(req.getCanCuPhapLy(), created.getId(), XhBbLayMauBttHdr.TABLE_NAME + "_CAN_CU");
+            created.setCanCuPhapLy(canCuPhapLy);
+        }
+
+        if (!DataUtils.isNullOrEmpty(req.getFileNiemPhong())) {
+            List<FileDinhKem> fileNienPhong = fileDinhKemService.saveListFileDinhKem(req.getFileNiemPhong(), created.getId(), XhBbLayMauBttHdr.TABLE_NAME + "_NIEM_PHONG");
+            created.setFileNiemPhong(fileNienPhong);
         }
         saveDetail(req, data.getId());
         return created;
@@ -137,15 +143,18 @@ public class XhBbLayMauBttServiceImpl extends BaseServiceImpl implements  XhBbLa
         dataDB.setNguoiSuaId(userInfo.getId());
         XhBbLayMauBttHdr created = xhBbLayMauBttHdrRepository.save(dataDB);
 
-        if (!DataUtils.isNullObject(req.getFileDinhKem())) {
-            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Arrays.asList(req.getFileDinhKem()), created.getId(), XhBbLayMauBttHdr.TABLE_NAME);
-            dataDB.setFileDinhKem(fileDinhKem.get(0));
-        }
+        fileDinhKemService.delete(dataDB.getId(), Collections.singleton(XhBbLayMauBttHdr.TABLE_NAME));
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhBbLayMauBttHdr.TABLE_NAME);
+        created.setFileDinhKems(fileDinhKems);
 
-        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
-            List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhBbLayMauBttHdr.TABLE_NAME);
-            dataDB.setFileDinhKems(fileDinhKems);
-        }
+        fileDinhKemService.delete(dataDB.getId(), Collections.singleton(XhBbLayMauBttHdr.TABLE_NAME+ "_CAN_CU"));
+        List<FileDinhKem> canCuPhapLy = fileDinhKemService.saveListFileDinhKem(req.getCanCuPhapLy(), created.getId(), XhBbLayMauBttHdr.TABLE_NAME + "_CAN_CU");
+        created.setCanCuPhapLy(canCuPhapLy);
+
+        fileDinhKemService.delete(dataDB.getId(), Collections.singleton(XhBbLayMauBttHdr.TABLE_NAME+ "_NIEM_PHONG"));
+        List<FileDinhKem> fileNiemPhong = fileDinhKemService.saveListFileDinhKem(req.getFileNiemPhong(), created.getId(), XhBbLayMauBttHdr.TABLE_NAME + "_NIEM_PHONG");
+        created.setFileNiemPhong(fileNiemPhong);
+
 
         this.saveDetail(req, dataDB.getId());
         return created;
@@ -168,10 +177,13 @@ public class XhBbLayMauBttServiceImpl extends BaseServiceImpl implements  XhBbLa
         XhBbLayMauBttHdr data = qOptional.get();
 
         List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhBbLayMauBttHdr.TABLE_NAME));
-        if (!DataUtils.isNullOrEmpty(fileDinhKem)) {
-            data.setFileDinhKem(fileDinhKem.get(0));
-        }
         data.setFileDinhKems(fileDinhKem);
+
+        List<FileDinhKem> canCuPhapLy = fileDinhKemService.search(data.getId(), Arrays.asList(XhBbLayMauBttHdr.TABLE_NAME + "_CAN_CU"));
+        data.setCanCuPhapLy(canCuPhapLy);
+
+        List<FileDinhKem> fileNiemPhong = fileDinhKemService.search(data.getId(), Arrays.asList(XhBbLayMauBttHdr.TABLE_NAME + "_NIEM_PHONG"));
+        data.setFileNiemPhong(fileNiemPhong);
 
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
         data.setTenDvi(hashMapDvi.get(data.getMaDvi()));
@@ -252,6 +264,8 @@ public class XhBbLayMauBttServiceImpl extends BaseServiceImpl implements  XhBbLa
         xhBbLayMauBttHdrRepository.delete(optional.get());
         xhBbLayMauBttDtlRepository.deleteAllByIdHdr(optional.get().getId());
         fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhBbLayMauBttHdr.TABLE_NAME));
+        fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhBbLayMauBttHdr.TABLE_NAME + "_CAN_CU"));
+        fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhBbLayMauBttHdr.TABLE_NAME + "_NIEM_PHONG"));
 
     }
 

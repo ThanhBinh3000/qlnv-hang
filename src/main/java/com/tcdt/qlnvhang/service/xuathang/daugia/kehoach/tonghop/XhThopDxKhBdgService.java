@@ -9,10 +9,12 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.SearchXhThopDxKhBdg;
 import com.tcdt.qlnvhang.request.xuathang.daugia.XhThopChiTieuReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.tonghop.XhThopDxKhBdgReq;
+import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGia;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.tonghop.XhThopDxKhBdgDtl;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.tonghop.XhThopDxKhBdg;
+import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
@@ -44,9 +46,6 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
     @Autowired
     private XhDxKhBanDauGiaRepository xhDxKhBanDauGiaRepository;
 
-    @Autowired
-    private XhDxKhBanDauGiaPhanLoRepository xhDxKhBanDauGiaPhanLoRepository;
-
     public Page<XhThopDxKhBdg> searchPage(SearchXhThopDxKhBdg req) throws Exception {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),
                 req.getPaggingReq().getLimit(), Sort.by("id").descending());
@@ -61,50 +60,75 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
         return data;
     }
 
-    public XhThopDxKhBdg sumarryData(XhThopChiTieuReq objReq, HttpServletRequest req) throws Exception {
+    public XhThopDxKhBdg sumarryData(XhThopChiTieuReq req, HttpServletRequest servletRequest) throws Exception {
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null) {
+            throw new Exception("Bad request.");
+        }
         List<XhDxKhBanDauGia> dxuatList = xhDxKhBanDauGiaRepository.listTongHop(
-                objReq.getNamKh(),
-                objReq.getLoaiVthh(),
-                objReq.getCloaiVthh(),
-                Contains.convertDateToString(objReq.getNgayDuyetTu()),
-                Contains.convertDateToString(objReq.getNgayDuyetDen()));
+                req.getNamKh(),
+                req.getLoaiVthh(),
+                req.getCloaiVthh(),
+                convertDateToString(req.getNgayDuyetTu()),
+                convertDateToString(req.getNgayDuyetDen()));
         if (dxuatList.isEmpty()) {
             throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
         }
 
         XhThopDxKhBdg thopHdr = new XhThopDxKhBdg();
-        Map<String, String> listDanhMucDvi = getListDanhMucDvi("2", null, "01");
+
+        Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+
+        thopHdr.setNamKh(req.getNamKh());
+        thopHdr.setLoaiVthh(req.getLoaiVthh());
+        thopHdr.setTenLoaiVthh(listDanhMucHangHoa.get(req.getLoaiVthh()));
+        thopHdr.setCloaiVthh(req.getCloaiVthh());
+        thopHdr.setTenCloaiVthh(listDanhMucHangHoa.get(req.getCloaiVthh()));
+        thopHdr.setNgayDuyetTu(req.getNgayDuyetTu());
+        thopHdr.setNgayDuyetDen(req.getNgayDuyetDen());
+        thopHdr.setMaDvi(userInfo.getDvql());
+
+
         List<XhThopDxKhBdgDtl> thopDtls = new ArrayList<>();
+
         for (XhDxKhBanDauGia dxuat : dxuatList) {
             XhThopDxKhBdgDtl thopDtl = new XhThopDxKhBdgDtl();
             BeanUtils.copyProperties(dxuat,thopDtl,"id");
             thopDtl.setIdDxHdr(dxuat.getId());
-            thopDtl.setTenDvi(listDanhMucDvi.get(dxuat.getMaDvi()));
+            thopDtl.setMaDvi(dxuat.getMaDvi());
+            thopDtl.setTenDvi(mapDmucDvi.get(dxuat.getMaDvi()));
+            thopDtl.setSoDxuat(dxuat.getSoDxuat());
+            thopDtl.setNgayPduyet(dxuat.getNgayPduyet());
+            thopDtl.setTrichYeu(dxuat.getTrichYeu());
+            thopDtl.setSlDviTsan(dxuat.getSlDviTsan());
+            thopDtl.setTrangThai(dxuat.getTrangThai());
+            thopDtl.setTongSoLuong(dxuat.getTongSoLuong());
+            thopDtl.setTongTienGiaKhoiDiemDx(dxuat.getTongTienGiaKhoiDiemDx());
+            thopDtl.setTongKhoanTienDatTruocDx(dxuat.getTongKhoanTienDatTruocDx());
             thopDtls.add(thopDtl);
+
+            thopHdr.setLoaiHinhNx(dxuat.getLoaiHinhNx());
+            thopHdr.setKieuNx(dxuat.getKieuNx());
         }
         thopHdr.setChildren(thopDtls);
         return thopHdr;
     }
 
     @Transactional()
-    public XhThopDxKhBdg create(XhThopDxKhBdgReq objReq, HttpServletRequest req) throws Exception {
-//        if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh())) {
-//            throw new Exception("Loại vật tư hàng hóa không phù hợp");
-//        }
-        // Set thong tin hdr tong hop
-        XhThopDxKhBdg thopHdr = sumarryData(objReq, req);
-        thopHdr.setId(objReq.getIdTh());
+    public XhThopDxKhBdg create(XhThopDxKhBdgReq  req, HttpServletRequest servletRequest) throws Exception {
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null)
+            throw new Exception("Bad request.");
+
+        XhThopDxKhBdg thopHdr = sumarryData(req,servletRequest);
+        thopHdr.setId(req.getIdTh());
         thopHdr.setNgayTao(new Date());
         thopHdr.setNguoiTaoId(getUser().getId());
-        thopHdr.setNgayDuyetTu(objReq.getNgayDuyetTu());
-        thopHdr.setNgayDuyetDen(objReq.getNgayDuyetDen());
-        thopHdr.setLoaiVthh(objReq.getLoaiVthh());
-        thopHdr.setCloaiVthh(objReq.getCloaiVthh());
+        thopHdr.setNoiDungThop(req.getNoiDungThop());
         thopHdr.setTrangThai(Contains.CHUATAO_QD);
         thopHdr.setNgayThop(new Date());
-        thopHdr.setNamKh(objReq.getNamKh());
-        thopHdr.setMaDvi(objReq.getMaDvi());
-        thopHdr.setNoiDungThop(objReq.getNoiDungThop());
+        thopHdr.setMaDvi(userInfo.getDvql());
         xhThopDxKhBdgRepository.save(thopHdr);
         for (XhThopDxKhBdgDtl dtl : thopHdr.getChildren()) {
             dtl.setIdThopHdr(thopHdr.getId());
@@ -133,7 +157,8 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
 
         XhThopDxKhBdg dataDTB = qOptional.get();
         XhThopDxKhBdg dataMap = ObjectMapperUtils.map(objReq, XhThopDxKhBdg.class);
-
+        dataMap.setNgaySua(getDateTimeNow());
+        dataMap.setNguoiTaoId(getUser().getId());
         updateObjectToObject(dataDTB, dataMap);
         xhThopDxKhBdgRepository.save(dataDTB);
         return dataDTB;
