@@ -61,6 +61,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
 //    req.setDvql(currentUser.getDvql());
     if (currentUser.getUser().getCapDvi().equals(CAP_CUC)) {
       req.setMaDviCuc(currentUser.getDvql());
+      req.setDvql(currentUser.getDvql());
     }
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<XhCtvtDeXuatHdr> search = xhCtvtDeXuatHdrRepository.search(req, pageable);
