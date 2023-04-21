@@ -6,10 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface XhQdDchinhKhBdgPlDtlRepository extends JpaRepository<XhQdDchinhKhBdgPlDtl, Long> {
-  List<XhQdDchinhKhBdgPlDtl> findByIdPhanLo(Long idPhanLo);
+    void deleteAllByIdPhanLo(Long idPhanLo);
 
-  List<XhQdDchinhKhBdgPlDtl> findByIdQdHdr(Long id);
-
-
-  void deleteAllByIdPhanLo(Long idPhanLo);
+    List<XhQdDchinhKhBdgPlDtl> findByIdPhanLo(Long idPhanLo);
 }

@@ -25,6 +25,7 @@ public interface HhQdPduyetKqlcntHdrService {
 	HhQdPduyetKqlcntHdr update(HhQdPduyetKqlcntHdrReq objReq) throws Exception;
 
 	HhQdPduyetKqlcntHdr detail(String ids) throws Exception;
+	HhQdPduyetKqlcntHdr detailBySoQd(String soQd) throws Exception;
 
 	Page<HhQdPduyetKqlcntHdr> colection(HhQdPduyetKqlcntSearchReq objReq) throws Exception;
 

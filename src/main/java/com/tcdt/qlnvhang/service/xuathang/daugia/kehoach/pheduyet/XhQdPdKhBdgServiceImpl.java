@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.service.xuathang.daugia.kehoach.pheduyet;
 
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.tonghop.XhThopDxKhBdgDtl;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGiaRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgPlDtlRepository;
@@ -16,7 +15,6 @@ import com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.pheduyet.XhQdPdKhBdg
 import com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.pheduyet.XhQdPdKhBdgPlDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.pheduyet.XhQdPdKhBdgPlReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.pheduyet.XhQdPdKhBdgReq;
-import com.tcdt.qlnvhang.service.feign.KeHoachService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -69,12 +67,6 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
 
     @Autowired
     FileDinhKemService fileDinhKemService;
-
-    @Autowired
-    FileDinhKemRepository fileDinhKemRepository;
-
-    @Autowired
-    private KeHoachService keHoachService;
 
     @Autowired
     private XhTcTtinBdgHdrRepository xhTcTtinBdgHdrRepository;
@@ -135,10 +127,11 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
         dataMap.setMaDvi(getUser().getDvql());
         XhQdPdKhBdg created = xhQdPdKhBdgRepository.save(dataMap);
 
-        if (!DataUtils.isNullObject(req.getFileDinhKem())) {
-            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(req.getFileDinhKem()), created.getId(), XhQdPdKhBdg.TABLE_NAME);
-            created.setFileDinhKem(fileDinhKem.get(0));
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKem())) {
+            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), created.getId(), XhQdPdKhBdg.TABLE_NAME+ "_BAN_HANH");
+            created.setFileDinhKem(fileDinhKem);
         }
+
         if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
             List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhQdPdKhBdg.TABLE_NAME);
             created.setFileDinhKems(fileDinhKems);
@@ -236,13 +229,13 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
         dataDB.setNguoiSuaId(getUser().getId());
         XhQdPdKhBdg created = xhQdPdKhBdgRepository.save(dataDB);
 
-        if (!DataUtils.isNullObject(req.getFileDinhKem())) {
-            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Arrays.asList(req.getFileDinhKem()), created.getId(), XhQdPdKhBdg.TABLE_NAME);
-            dataDB.setFileDinhKem(fileDinhKem.get(0));
-        }
+        fileDinhKemService.delete(dataDB.getId(), Collections.singleton(XhQdPdKhBdg.TABLE_NAME + "_BAN_HANH"));
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), created.getId(), XhQdPdKhBdg.TABLE_NAME + "_BAN_HANH");
+        created.setFileDinhKem(fileDinhKem);
 
+        fileDinhKemService.delete(dataDB.getId(), Collections.singleton(XhQdPdKhBdg.TABLE_NAME));
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhQdPdKhBdg.TABLE_NAME);
-        dataDB.setFileDinhKems(fileDinhKems);
+        created.setFileDinhKems(fileDinhKems);
 
         this.saveDetail(req, dataDB.getId());
         return dataDB;
@@ -269,11 +262,11 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
         data.setTenCloaiVthh(hashMapDmHh.get(data.getCloaiVthh()));
         data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
 
-        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdPdKhBdg.TABLE_NAME));
-        if (!DataUtils.isNullOrEmpty(fileDinhKem)) {
-            data.setFileDinhKem(fileDinhKem.get(0));
-        }
-        data.setFileDinhKems(fileDinhKem);
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdPdKhBdg.TABLE_NAME+ "_BAN_HANH"));
+        data.setFileDinhKem(fileDinhKem);
+
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdPdKhBdg.TABLE_NAME));
+        data.setFileDinhKems(fileDinhKems);
 
         List<XhQdPdKhBdgDtl> xhQdPdKhBdgDtlList = new ArrayList<>();
         for (XhQdPdKhBdgDtl dtl : xhQdPdKhBdgDtlRepository.findAllByIdQdHdr(id)) {
@@ -385,6 +378,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
         }
         xhQdPdKhBdgRepository.delete(optional.get());
         fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhQdPdKhBdg.TABLE_NAME));
+        fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhQdPdKhBdg.TABLE_NAME + "_BAN_HANH"));
 
         if (optional.get().getPhanLoai().equals("TH")) {
             Optional<XhThopDxKhBdg> qOptionalTh = xhThopDxKhBdgRepository.findById(optional.get().getIdThHdr());
@@ -440,14 +434,14 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
             XhQdPdKhBdg pduyet = data.get(i);
             objs = new Object[rowsName.length];
             objs[0] = i;
-            objs[2] = pduyet.getSoQdPd();
-            objs[3] = pduyet.getNgayKyQd();
-            objs[4] = pduyet.getTrichYeu();
-            objs[5] = pduyet.getSoTrHdr();
-            objs[6] = pduyet.getIdThHdr();
-            objs[7] = pduyet.getTenLoaiVthh();
-            objs[8] = pduyet.getTenCloaiVthh();
-            objs[11] = pduyet.getTenTrangThai();
+            objs[1] = pduyet.getSoQdPd();
+            objs[2] = pduyet.getNgayKyQd();
+            objs[3] = pduyet.getTrichYeu();
+            objs[4] = pduyet.getSoTrHdr();
+            objs[5] = pduyet.getIdThHdr();
+            objs[6] = pduyet.getTenLoaiVthh();
+            objs[7] = pduyet.getTenCloaiVthh();
+            objs[8] = pduyet.getTenTrangThai();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);

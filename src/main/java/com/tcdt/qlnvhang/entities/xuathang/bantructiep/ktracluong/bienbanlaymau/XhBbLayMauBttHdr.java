@@ -89,7 +89,7 @@ public class XhBbLayMauBttHdr extends TrangThaiBaseEntity implements Serializabl
     @Transient
     private String tenLoKho;
 
-    private BigDecimal soLuong;
+    private BigDecimal soLuongLayMau;
 
     private String ppLayMau;
 
@@ -111,5 +111,8 @@ public class XhBbLayMauBttHdr extends TrangThaiBaseEntity implements Serializabl
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
     @Transient
-    private FileDinhKem fileDinhKem;
+    private List<FileDinhKem> canCuPhapLy = new ArrayList<>();
+
+    @Transient
+    private List<FileDinhKem> fileNiemPhong = new ArrayList<>();
 }

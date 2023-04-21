@@ -177,6 +177,34 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 	}
 
 	@Override
+	public HhQdPduyetKqlcntHdr detailBySoQd(String soQd) throws Exception {
+		if (StringUtils.isEmpty(soQd)){
+			throw new UnsupportedOperationException("Không tồn tại bản ghi");
+		}
+
+		Optional<HhQdPduyetKqlcntHdr> qOptional = hhQdPduyetKqlcntHdrRepository.findBySoQd(soQd);
+
+		if (!qOptional.isPresent()){
+			throw new UnsupportedOperationException("Không tồn tại bản ghi");
+		}
+		Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
+
+		qOptional.get().setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qOptional.get().getTrangThai()));
+		if(qOptional.get().getLoaiVthh().startsWith("02")){
+			qOptional.get().setHhQdKhlcntHdr(Objects.isNull(qOptional.get().getIdQdPdKhlcnt()) ? null : qdKhLcntService.detail(String.valueOf(qOptional.get().getIdQdPdKhlcnt())));
+		}else{
+			qOptional.get().setQdKhlcntDtl(Objects.isNull(qOptional.get().getIdQdPdKhlcntDtl()) ? null : qdKhLcntService.detailDtl(qOptional.get().getIdQdPdKhlcntDtl()));
+		}
+		qOptional.get().setTenDvi(listDanhMucDvi.get(qOptional.get().getMaDvi()));
+		List<HhHopDongHdr> allByIdQdKqLcnt = hhHopDongRepository.findAllByIdQdKqLcnt(qOptional.get().getId());
+		allByIdQdKqLcnt.forEach(item -> {
+			item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+		});
+		qOptional.get().setListHopDong(allByIdQdKqLcnt);
+		return qOptional.get();
+	}
+
+	@Override
 	public Page<HhQdPduyetKqlcntHdr> colection(HhQdPduyetKqlcntSearchReq objReq) throws Exception {
 		return null;
 	}

@@ -27,6 +27,8 @@ public class XhQdDchinhKhBdgHdr extends TrangThaiBaseEntity implements Serializa
   private Integer nam;
 
   private String maDvi;
+  @Transient
+  private String tenDvi;
 
   private String soQdDc;
 
@@ -48,22 +50,25 @@ public class XhQdDchinhKhBdgHdr extends TrangThaiBaseEntity implements Serializa
 
   private String trichYeu;
 
-  private String loaiVthh;
-
-  private String cloaiVthh;
-
-  private String moTaHangHoa;
-
   private String soQdCc;
 
-  private String tchuanCluong;
-
-  // Trasient
+  private String loaiVthh;
   @Transient
   private String tenLoaiVthh;
 
+  private String cloaiVthh;
   @Transient
   private String tenCloaiVthh;
+
+  private String moTaHangHoa;
+
+  private String loaiHinhNx;
+
+  private String kieuNx;
+
+  private String tchuanCluong;
+
+  private Integer slDviTsan;
 
   @Transient
   List<XhQdDchinhKhBdgDtl> children = new ArrayList<>();
@@ -72,9 +77,8 @@ public class XhQdDchinhKhBdgHdr extends TrangThaiBaseEntity implements Serializa
   private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
   @Transient
-  private List<FileDinhKem> canCuPhapLy = new ArrayList<>();
+  private List<FileDinhKem> fileDinhKem = new ArrayList<>();
 
-  @Transient
-  private String tenDvi;
+
 
 }
