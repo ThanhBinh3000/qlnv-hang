@@ -107,11 +107,14 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
         Optional<DcnbKeHoachDcHdr> soDxuat = dcnbKeHoachDcHdrRepository.findFirstBySoDxuat(objReq.getSoDxuat());
-        if (soDxuat.isPresent() && objReq.getSoDxuat().split("/").length == 1) {
-            if (!soDxuat.get().getId().equals(objReq.getId())) {
-                throw new Exception("số đề xuất đã tồn tại");
+        if(org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoDxuat())){
+            if (soDxuat.isPresent() && objReq.getSoDxuat().split("/").length == 1) {
+                if (!soDxuat.get().getId().equals(objReq.getId())) {
+                    throw new Exception("số đề xuất đã tồn tại");
+                }
             }
         }
+
         DcnbKeHoachDcHdr data = optional.get();
         objReq.setType(data.getType());
         objReq.setMaDviPq(data.getMaDviPq());
