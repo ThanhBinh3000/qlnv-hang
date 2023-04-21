@@ -69,11 +69,7 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
 
     public Page<DcnbKeHoachDcHdr> searchPage(CustomUserDetails currentUser, SearchDcnbKeHoachDc req) throws Exception {
         String dvql = currentUser.getDvql();
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            req.setMaDvi(dvql.substring(0, 6));
-        } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
-            req.setMaDvi(dvql);
-        }
+        req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<DcnbKeHoachDcHdr> search = dcnbKeHoachDcHdrRepository.search(req, pageable);
         return search;
