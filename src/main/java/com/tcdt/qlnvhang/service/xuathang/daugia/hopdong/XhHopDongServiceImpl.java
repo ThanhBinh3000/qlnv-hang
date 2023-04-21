@@ -128,20 +128,21 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
 
-        if (!qOptional.get().getSoHd().equals(req.getSoHd())) {
-            Optional<XhHopDongHdr> qOpHdong = xhHopDongHdrRepository.findBySoHd(req.getSoHd());
-            if (qOpHdong.isPresent())
-                throw new Exception("Hợp đồng số " + req.getSoHd() + " đã tồn tại");
+        if (DataUtils.isNullObject(req.getIdHd())) {
+            if(!DataUtils.isNullObject(qOptional.get().getSoHd())) {
+                if (!qOptional.get().getSoHd().equals(req.getSoHd())) {
+                    Optional<XhHopDongHdr> qOpHdong = xhHopDongHdrRepository.findBySoHd(req.getSoHd());
+                    if (qOpHdong.isPresent())
+                        throw new Exception("Hợp đồng số " + req.getSoHd() + " đã tồn tại");
+                }
+            }
         }
-
-        if (!qOptional.get().getSoQdKq().equals(req.getSoQdKq())) {
-            Optional<XhKqBdgHdr> checkSoQd = xhKqBdgHdrRepository.findBySoQdKq(req.getSoQdKq());
-            if (!checkSoQd.isPresent())
-
-                throw new Exception(
+            if (!qOptional.get().getSoQdKq().equals(req.getSoQdKq())) {
+                Optional<XhKqBdgHdr> checkSoQd = xhKqBdgHdrRepository.findBySoQdKq(req.getSoQdKq());
+                if (!checkSoQd.isPresent())
+                    throw new Exception(
                         "Số quyết định phê duyệt kết quả lựa chọn nhà thầu " + req.getSoQdKq() + " không tồn tại");
         }
-
         XhHopDongHdr dataDB = qOptional.get();
         BeanUtils.copyProperties(req,dataDB, "id");
 
