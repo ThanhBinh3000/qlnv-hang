@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +17,7 @@ import java.util.List;
 @Table(name = DcnbKeHoachDcHdr.TABLE_NAME)
 @Getter
 @Setter
-public class DcnbKeHoachDcHdr extends BaseEntity implements Serializable {
+public class DcnbKeHoachDcHdr extends BaseEntity implements Serializable, Cloneable{
 
   private static final long serialVersionUID = 1L;
   public static final String TABLE_NAME = "DCNB_KE_HOACH_DC_HDR";
@@ -25,19 +27,27 @@ public class DcnbKeHoachDcHdr extends BaseEntity implements Serializable {
   @SequenceGenerator(sequenceName = DcnbKeHoachDcHdr.TABLE_NAME
       + "_SEQ", allocationSize = 1, name = DcnbKeHoachDcHdr.TABLE_NAME + "_SEQ")
   private Long id;
+  private Long parentId;
   private String loaiDc;
+  private String tenLoaiDc;
+  private String type;
   private Integer nam;
   private String soDxuat;
   private LocalDate ngayLapKh;
-  private LocalDate ngayDuyetLdc;
+  private LocalDate ngayDuyetLdcc;
+  private Long nguoiDuyetLdccId;
   private String trichYeu;
   private String lyDoDc;
+  @Access(value=AccessType.PROPERTY)
   private String maDvi;
+  private String maDviPq;
+  private String tenDvi;
   private String maCucNhan;
+  private String tenCucNhan;
   private String trachNhiemDviTh;
+  @Access(value=AccessType.PROPERTY)
   private String trangThai;
   private String lyDoTuChoi;
-  private String type;
   private Long idThop;
   private String maThop;
   private Long idQdDc;
@@ -46,22 +56,23 @@ public class DcnbKeHoachDcHdr extends BaseEntity implements Serializable {
   private Long nguoiGduyetId;
   private LocalDate ngayPduyet;
   private Long nguoiPduyetId;
-  @Transient
-  private String tenDvi;
-  @Transient
-  private String tenCucDxuat;
-  @Transient
-  private String tenCucNhan;
+  private String maDviCuc;
+  private String tenDviCuc;
   @Transient
   private String tenTrangThai;
   @Transient
   private List<FileDinhKem> canCu = new ArrayList<>();
 
-  @OneToMany(mappedBy = "dcnbKeHoachDcHdr",cascade = CascadeType.ALL)
-  private List<DcnbKeHoachDcDtl> dcNbKeHoachDcDtl = new ArrayList<>();
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "HDR_ID")
+  private List<DcnbKeHoachDcDtl> danhSachHangHoa = new ArrayList<>();
 
-  public void maDvi(String maDvi) {
-    this.maDvi = maDvi;
-    setTenCucDxuat(maDvi.length() >= 6 ? maDvi.substring(0, 6) : "");
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "KE_HOACH_DC_HDR_ID")
+  private List<DcnbPhuongAnDc> phuongAnDieuChuyen = new ArrayList<>();
+
+  public void setTrangThai(String trangThai) {
+    this.trangThai = trangThai;
+    this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
   }
 }

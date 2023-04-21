@@ -48,8 +48,8 @@ public class DcnbKeHoachDcHdrController extends BaseController {
       resp.setData(dcnbKeHoachDcDtlService.searchPage(currentUser,objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-    } catch (
-        Exception e) {
+    } catch ( Exception e) {
+      e.printStackTrace();
       resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
       resp.setMsg(e.getMessage());
       log.error("Tra cứu thông tin : {}", e);
@@ -68,6 +68,7 @@ public class DcnbKeHoachDcHdrController extends BaseController {
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
+      e.printStackTrace();
       resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
       resp.setMsg(e.getMessage());
       log.error("Tạo mới thông tin  : {}", e);
@@ -85,6 +86,7 @@ public class DcnbKeHoachDcHdrController extends BaseController {
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
+      e.printStackTrace();
       resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
       resp.setMsg(e.getMessage());
       log.error("Cập nhật thông tin : {}", e);
@@ -99,10 +101,11 @@ public class DcnbKeHoachDcHdrController extends BaseController {
       @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids")List<Long> ids) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(dcnbKeHoachDcDtlService.detail(ids).get(0));
+      resp.setData(dcnbKeHoachDcDtlService.details(ids).get(0));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
+      e.printStackTrace();
       resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
       resp.setMsg(e.getMessage());
       log.error("Lấy chi tiết thông tin : {}", e);
@@ -119,6 +122,7 @@ public class DcnbKeHoachDcHdrController extends BaseController {
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
+      e.printStackTrace();
       resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
       resp.setMsg(e.getMessage());
       log.error("Phê duyệt thông tin : {}", e);
@@ -137,6 +141,7 @@ public class DcnbKeHoachDcHdrController extends BaseController {
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
+      e.printStackTrace();
       resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
       resp.setMsg(e.getMessage());
       log.error("Xoá thông tin : {}", e);
@@ -155,6 +160,7 @@ public class DcnbKeHoachDcHdrController extends BaseController {
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
+      e.printStackTrace();
       resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
       resp.setMsg(e.getMessage());
       log.error("Xoá thông tin : {}", e);

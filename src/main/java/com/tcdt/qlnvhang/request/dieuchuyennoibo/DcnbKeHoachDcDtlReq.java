@@ -18,7 +18,6 @@ public class DcnbKeHoachDcDtlReq {
   private String donViTinh;
   private BigDecimal soLuongDc;
   private BigDecimal duToanKphi;
-  private String maKhoNhan;
   private BigDecimal tichLuongKd;
   private BigDecimal soLuongPhanBo;
   private String dviVanChuyen;
