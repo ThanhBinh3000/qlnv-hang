@@ -271,6 +271,7 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
                     clonedObj.setId(null);
                     clonedObj.setMaDviPq(dc.getMaChiCucNhan());
                     clonedObj.setType(Contains.NHAN_DIEU_CHUYEN);
+                    clonedObj.setTrangThai(statusReq.getTrangThai());
                     clonedObj.setDanhSachHangHoa(clonedObj.getDanhSachHangHoa().stream()
                             .filter(item -> item.getMaChiCucNhan().equals(dc.getMaChiCucNhan())).map(itemMap -> {
                                 itemMap.setParentId(itemMap.getId());
