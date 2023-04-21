@@ -3,9 +3,8 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.tcdt.qlnvhang.config.LoggingAspect;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxKhlcntDsgthauCtietVt1;
 import com.tcdt.qlnvhang.enums.EnumResponse;
-import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcHdrRepository;
@@ -15,6 +14,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbKeHoachDcHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbKeHoachDc;
 import com.tcdt.qlnvhang.request.feign.TrangThaiHtReq;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.response.feign.TrangThaiHtResponce;
 import com.tcdt.qlnvhang.service.feign.LuuKhoClient;
@@ -23,9 +23,13 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhuongAnDc;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import org.apache.commons.lang3.SerializationUtils;
+import org.hibernate.Hibernate;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -128,7 +132,7 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
     }
 
 
-    public List<DcnbKeHoachDcHdr> detail(List<Long> ids) throws Exception {
+    public List<DcnbKeHoachDcHdr> details(List<Long> ids) throws Exception {
         if (DataUtils.isNullOrEmpty(ids))
             throw new Exception("Tham số không hợp lệ.");
         List<DcnbKeHoachDcHdr> optional = dcnbKeHoachDcHdrRepository.findByIdIn(ids);
@@ -141,6 +145,16 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
             data.setCanCu(canCu);
         });
         return allById;
+    }
+
+    public DcnbKeHoachDcHdr details(Long id) throws Exception {
+        List<DcnbKeHoachDcHdr> details = details(Arrays.asList(id));
+        DcnbKeHoachDcHdr result = details.isEmpty() ? null : details.get(0);
+        if(result!=null){
+            Hibernate.initialize(result.getDanhSachHangHoa());
+            Hibernate.initialize(result.getPhuongAnDieuChuyen());
+        }
+        return result;
     }
 
     @Transient
@@ -174,7 +188,8 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
         if (StringUtils.isEmpty(statusReq.getId())) {
             throw new Exception("Không tìm thấy dữ liệu");
         }
-        Optional<DcnbKeHoachDcHdr> optional = dcnbKeHoachDcHdrRepository.findById(Long.valueOf(statusReq.getId()));
+        DcnbKeHoachDcHdr details = details(Long.valueOf(statusReq.getId()));
+        Optional<DcnbKeHoachDcHdr> optional = Optional.of(details);
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu");
         }
@@ -207,13 +222,14 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
                     BaseResponse body = response.getBody();
                     if (body != null && EnumResponse.RESP_SUCC.getDescription().equals(body.getMsg())) {
                         logger.debug(body.toString());
-                        TypeToken<List<TrangThaiHtResponce>> token = new TypeToken<List<TrangThaiHtResponce>>() {};
+                        TypeToken<List<TrangThaiHtResponce>> token = new TypeToken<List<TrangThaiHtResponce>>() {
+                        };
                         Gson gson = new Gson();
                         List<TrangThaiHtResponce> res = gson.fromJson(gson.toJson(body.getData()), token.getType());
-                        if(res == null || res.isEmpty()){
+                        if (res == null || res.isEmpty()) {
                             throw new Exception("Không lấy được trạng thái kho hiện thời!");
                         }
-                        if(res.size() > 1){
+                        if (res.size() > 1) {
                             throw new Exception("Tìm thấy 2 trạng thái kho hiện thời!");
                         }
                         if (!hh.getCloaiVthh().equals(res.get(0).getCloaiVthh())) {
@@ -223,9 +239,9 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
                         BigDecimal slConLai = slHienThoi.subtract((getTongKeHoachDeXuat(hh.getCloaiVthh(), hh.getMaLoKho()).subtract(getTongSoLuongXuatKho(hh.getCloaiVthh(), hh.getMaLoKho()))));
                         int result = slConLai.compareTo(BigDecimal.valueOf(0));
                         if (result < 0) {
-                            throw new Exception(hh.getTenLoKho()+ ": Không đủ số lượng xuất hàng!");
+                            throw new Exception(hh.getTenLoKho() + ": Không đủ số lượng xuất hàng!");
                         }
-                    }else {
+                    } else {
                         throw new Exception("Không lấy được trạng thái kho hiện thời!");
                     }
                 }
@@ -248,7 +264,38 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
                 optional.get().setNgayDuyetLdcc(LocalDate.now());
                 optional.get().setNguoiDuyetLdccId(currentUser.getUser().getId());
 
-                // xử lý clone tờ kế hoạch cho các chi cục với trạng thái YC_CHICUC_PHANBO_DC = 59
+                // xử lý clone tờ kế hoạch cho các chi cục
+                for (DcnbPhuongAnDc dc : optional.get().getPhuongAnDieuChuyen()) {
+                    DcnbKeHoachDcHdr clonedObj = SerializationUtils.clone(optional.get());
+                    clonedObj.setParentId(clonedObj.getId());
+                    clonedObj.setId(null);
+                    clonedObj.setMaDviPq(dc.getMaChiCucNhan());
+                    clonedObj.setType(Contains.NHAN_DIEU_CHUYEN);
+                    clonedObj.setDanhSachHangHoa(clonedObj.getDanhSachHangHoa().stream()
+                            .filter(item -> item.getMaChiCucNhan().equals(dc.getMaChiCucNhan())).map(itemMap -> {
+                                itemMap.setParentId(itemMap.getId());
+                                itemMap.setId(null);
+                                return itemMap;
+                            }).collect(Collectors.toList()));
+                    clonedObj.setPhuongAnDieuChuyen(clonedObj.getPhuongAnDieuChuyen().stream()
+                            .filter(item -> item.getMaChiCucNhan().equals(dc.getMaChiCucNhan())).map(itemMap -> {
+                                itemMap.setParentId(itemMap.getId());
+                                itemMap.setId(null);
+                                return itemMap;
+                            }).collect(Collectors.toList()));
+                    clonedObj.setCanCu(clonedObj.getCanCu().stream().map(itemMap ->{
+                        itemMap.setId(null);
+                        itemMap.setDataId(null);
+                        return itemMap;
+                    }).collect(Collectors.toList()));
+                    clonedObj = dcnbKeHoachDcHdrRepository.save(clonedObj);
+                    fileDinhKemService.delete(clonedObj.getId(), Lists.newArrayList(DcnbKeHoachDcHdr.TABLE_NAME + "_CAN_CU"));
+                    List<FileDinhKemReq> fileDinhKemReqs = clonedObj.getCanCu().stream()
+                            .map(person -> new ModelMapper().map(person, FileDinhKemReq.class))
+                            .collect(Collectors.toList());
+                    List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(fileDinhKemReqs, clonedObj.getId(), DcnbKeHoachDcHdr.TABLE_NAME + "_CAN_CU");
+                    clonedObj.setCanCu(canCu);
+                }
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
@@ -264,7 +311,7 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
     }
 
     private BigDecimal getTongKeHoachDeXuat(String cloaiVthh, String maLoKho) {
-       return dcnbKeHoachDcHdrRepository.countTongKeHoachDeXuat(cloaiVthh, maLoKho);
+        return dcnbKeHoachDcHdrRepository.countTongKeHoachDeXuat(cloaiVthh, maLoKho);
     }
 
     public DcnbKeHoachDcHdr approveNhanDieuChuyen(CustomUserDetails currentUser, StatusReq statusReq, Optional<DcnbKeHoachDcHdr> optional) throws Exception {

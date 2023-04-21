@@ -20,6 +20,7 @@ public class DcnbPhuongAnDc implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbPhuongAnDc.TABLE_NAME + "_SEQ")
     @SequenceGenerator(sequenceName = DcnbPhuongAnDc.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbPhuongAnDc.TABLE_NAME + "_SEQ")
     private Long id;
+    private Long parentId;
     private String maChiCucNhan;
     private String tenChiCucNhan;
     private String dviVanChuyen;
