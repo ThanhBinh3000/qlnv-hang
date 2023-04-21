@@ -101,7 +101,7 @@ public class DcnbKeHoachDcHdrController extends BaseController {
       @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids")List<Long> ids) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(dcnbKeHoachDcDtlService.detail(ids).get(0));
+      resp.setData(dcnbKeHoachDcDtlService.details(ids).get(0));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {

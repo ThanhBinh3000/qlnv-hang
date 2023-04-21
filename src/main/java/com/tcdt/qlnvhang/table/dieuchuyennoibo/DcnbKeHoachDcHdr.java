@@ -17,7 +17,7 @@ import java.util.List;
 @Table(name = DcnbKeHoachDcHdr.TABLE_NAME)
 @Getter
 @Setter
-public class DcnbKeHoachDcHdr extends BaseEntity implements Serializable {
+public class DcnbKeHoachDcHdr extends BaseEntity implements Serializable, Cloneable{
 
   private static final long serialVersionUID = 1L;
   public static final String TABLE_NAME = "DCNB_KE_HOACH_DC_HDR";

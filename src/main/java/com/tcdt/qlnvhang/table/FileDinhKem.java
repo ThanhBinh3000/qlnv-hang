@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.table;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -14,7 +15,7 @@ import lombok.Data;
 @Entity
 @Table(name = "FILE_DINH_KEM")
 @Data
-public class FileDinhKem {
+public class FileDinhKem implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FILE_DINH_KEM_SEQ")
 	@SequenceGenerator(sequenceName = "FILE_DINH_KEM_SEQ", allocationSize = 1, name = "FILE_DINH_KEM_SEQ")
