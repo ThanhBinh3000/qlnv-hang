@@ -249,6 +249,11 @@ public class Contains {
 
 	public static final String NHAN_DIEU_CHUYEN = "NDC";
 
+	// Loa diều chuyển
+
+	public static final String GIUA_2_CHI_CUC_TRONG_1_CUC = "CHI_CUC";
+	public static final String GIUA_2_CUC_DTNN_KV = "CUC";
+
 	public static final Map<String, String> mappingLoaiDx;
 	static {
 		mappingLoaiDx = Maps.<String, String>buildMap().put(Contains.DX_THANH_LY, "Thanh lý")
