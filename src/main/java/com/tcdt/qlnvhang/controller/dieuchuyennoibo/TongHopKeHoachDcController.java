@@ -11,6 +11,7 @@ import com.tcdt.qlnvhang.request.dieuchuyennoibo.ThKeHoachDieuChuyenCucHdrReq;
 import com.tcdt.qlnvhang.request.search.TongHopKeHoachDieuChuyenSearch;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.THKeHoachDieuChuyenService;
+import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -151,13 +152,13 @@ public class TongHopKeHoachDcController extends BaseController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> createTable(@CurrentUser CustomUserDetails currentUser,@RequestBody  TongHopKeHoachDieuChuyenSearch req) throws Exception {
         BaseResponse resp = new BaseResponse();
-        if(Objects.equals(req.getLoaiDieuChuyen(), "00")) {
+        if(Objects.equals(req.getLoaiDieuChuyen(), Contains.GIUA_2_CHI_CUC_TRONG_1_CUC)) {
             resp.setData(thKeHoachDieuChuyenService.createPlanChiCuc(currentUser, req));
-        } else if (Objects.equals(req.getLoaiDieuChuyen(), "01")) {
+        } else if (Objects.equals(req.getLoaiDieuChuyen(), Contains.GIUA_2_CUC_DTNN_KV)) {
             resp.setData(thKeHoachDieuChuyenService.createPlanCuc(currentUser, req));
-        } else if (Objects.equals(req.getLoaiDieuChuyen(), "02")) {
+        } else if (Objects.equals(req.getLoaiDieuChuyen(), Contains.TAT_CA)) {
             resp.setData(thKeHoachDieuChuyenService.createPlanChiCuc(currentUser, req));
-            resp.setData(thKeHoachDieuChuyenService.createPlanCuc(currentUser, req));
+            resp.setOtherData(thKeHoachDieuChuyenService.createPlanCuc(currentUser, req));
         }
         resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());

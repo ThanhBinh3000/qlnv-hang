@@ -65,14 +65,7 @@ public class ThKeHoachDieuChuyenCucHdrReq {
 
     private Boolean daXdinhDiemNhap;
 
-
     List<ThKeHoachDieuChuyenNoiBoCucDtlReq> ctTongHopKeHoachDieuChuyen;
 
     List<ThKeHoachDieuChuyenKhacCucDtlReq> ctTongHopKeHoachDieuChuyenKhacCuc;
-
-
-    List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdrs = new ArrayList<>();;
-
-
-    List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtlList = new ArrayList<>();;
 }

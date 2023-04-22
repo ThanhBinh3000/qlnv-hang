@@ -14,6 +14,7 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.search.TongHopKeHoachDieuChuyenSearch;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.TongHopKeHoachDieuChuyen.THKeHoachDieuChuyenTongCucHdr;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcHdr;
@@ -184,21 +185,6 @@ public class THKeHoachDieuChuyenService extends BaseServiceImpl {
         }
         List<THKeHoachDieuChuyenCucHdr> allById = thKeHoachDieuChuyenHdrRepository.findAllById(ids);
         allById.forEach(data -> {
-            if(Objects.equals(data.getLoaiDieuChuyen(), Contains.GIUA_2_CHI_CUC_TRONG_1_CUC)) {
-                List<THKeHoachDieuChuyenNoiBoCucDtl> list = thKeHoachDieuChuyenNoiBoCucDtlRepository.findByHdrId(data.getId());
-                data.setThKeHoachDieuChuyenNoiBoCucDtls(list);
-                list.forEach(data1 -> {
-                    List<DcnbKeHoachDcDtl> list1 = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrIdAndId(data1.getDcKeHoachDcHdrId(), data1.getDcKeHoachDcDtlId());
-                    data1.setDcnbKeHoachDcDtlList(list1);
-                });
-            } else if (Objects.equals(data.getLoaiDieuChuyen(), Contains.GIUA_2_CUC_DTNN_KV)) {
-                List<THKeHoachDieuChuyenCucKhacCucDtl> list = thKeHoachDieuChuyenCucKhacCucDtlRepository.findByHdrId(data.getId());
-                data.setThKeHoachDieuChuyenCucKhacCucDtls(list);
-                list.forEach(data1 -> {
-                    List<DcnbKeHoachDcDtl> list1 = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(data1.getDcnbKeHoachDcHdrId());
-                    data1.setDcnbKeHoachDcDtlList(list1);
-                });
-            } else if (Objects.equals(data.getLoaiDieuChuyen(), Contains.TAT_CA)){
                 List<THKeHoachDieuChuyenCucKhacCucDtl> list = thKeHoachDieuChuyenCucKhacCucDtlRepository.findByHdrId(data.getId());
                 data.setThKeHoachDieuChuyenCucKhacCucDtls(list);
                 list.forEach(data1 -> {
@@ -212,7 +198,6 @@ public class THKeHoachDieuChuyenService extends BaseServiceImpl {
                     List<DcnbKeHoachDcDtl> list2 = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrIdAndId(data1.getDcKeHoachDcHdrId(), data1.getDcKeHoachDcDtlId());
                     data1.setDcnbKeHoachDcDtlList(list2);
                 });
-            }
         });
         return allById;
     }
@@ -275,7 +260,7 @@ public class THKeHoachDieuChuyenService extends BaseServiceImpl {
             }
         }
         THKeHoachDieuChuyenCucHdr data = optional.get();
-        BeanUtils.copyProperties(objReq, data);
+        ObjectMapperUtils.map(objReq,data);
         data.setNguoiSuaId(currentUser.getUser().getId());
         data.setNgaySua(new Date());
         THKeHoachDieuChuyenCucHdr created = thKeHoachDieuChuyenHdrRepository.save(data);
@@ -360,7 +345,7 @@ public class THKeHoachDieuChuyenService extends BaseServiceImpl {
         List<ThKeHoachDieuChuyenNoiBoCucDtlReq> result = new ArrayList<>();
         for (QlnvDmDonvi cqt : donvis) {
                 req.setMaDVi(cqt.getMaDvi());
-                List<DcnbKeHoachDcDtl> thKeHoachDieuChuyenNoiBoCucDtls = dcnbKeHoachDcDtlRepository.findByDonViChaAndTrangThaiChiCuc(req.getMaDVi(), TrangThaiAllEnum.DA_DUYET_LDCC.getId(), formatter.format(req.getThoiGianTongHop()));
+                List<DcnbKeHoachDcDtl> thKeHoachDieuChuyenNoiBoCucDtls = dcnbKeHoachDcDtlRepository.findByDonViAndTrangThaiChiCuc(req.getMaDVi(), TrangThaiAllEnum.DA_DUYET_LDCC.getId(), formatter.format(req.getThoiGianTongHop()));
                 for (DcnbKeHoachDcDtl entry : thKeHoachDieuChuyenNoiBoCucDtls) {
                     ThKeHoachDieuChuyenNoiBoCucDtlReq chiTiet = new ThKeHoachDieuChuyenNoiBoCucDtlReq();
                     chiTiet.setMaChiCucDxuat(req.getMaDVi());
@@ -406,5 +391,34 @@ public class THKeHoachDieuChuyenService extends BaseServiceImpl {
             }
         return result;
         }
+    @Transactional
+    public List<ThKeHoachDieuChuyenTongCucDtlReq> createPlanTongCuc(CustomUserDetails currentUser, TongHopKeHoachDieuChuyenSearch req) throws Exception{
+        Optional<THKeHoachDieuChuyenTongCucHdr> optional = tongCucHdrRepository.findByMaTongHop(req.getMaTongHop());
+        if (optional.isPresent()) {
+            throw new Exception("Mã tổng hợp đã tồn tại");
+        }
+        List<QlnvDmDonvi> donvis = qlnvDmDonviRepository.findByMaDviChaAndTrangThai(currentUser.getDvql(),"01");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        List<ThKeHoachDieuChuyenTongCucDtlReq> result = new ArrayList<>();
+        for (QlnvDmDonvi cqt : donvis) {
+            req.setMaDVi(cqt.getMaDvi());
+
+            List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdrs = dcHdrRepository.findByDonViAndTrangThaiCuc(req.getMaDVi(), TrangThaiAllEnum.DA_DUYET_LDCC.getId(), formatter.format(req.getThoiGianTongHop()));
+            for (DcnbKeHoachDcHdr entry : dcnbKeHoachDcHdrs) {
+                ThKeHoachDieuChuyenTongCucDtlReq chiTiet = new ThKeHoachDieuChuyenTongCucDtlReq();
+                chiTiet.setMaCucDxuatDc(entry.getMaDviCuc());
+                chiTiet.setTenCucDxuatDc(entry.getTenDviCuc());
+                chiTiet.setKeHoachDcHdrId(entry.getId());
+                chiTiet.setSoDxuat(entry.getSoDxuat());
+                chiTiet.setTrichYeu(entry.getTrichYeu());
+                Long tongDuToanKp = dcnbKeHoachDcDtlRepository.findByMaDviCucAndTypeAndLoaiDc(req.getMaDVi(),currentUser.getDvql(),entry.getMaCucNhan(),formatter.format(req.getThoiGianTongHop()));
+                chiTiet.setDuToanKp(tongDuToanKp);
+                List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(chiTiet.getKeHoachDcHdrId());
+                chiTiet.setDcnbKeHoachDcDtls(dcnbKeHoachDcDtls);
+                result.add(chiTiet);
+            }
+        }
+        return result;
+    }
 }
 

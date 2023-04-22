@@ -1,12 +1,16 @@
 package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
 import javax.persistence.Column;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class ThKeHoachDieuChuyenTongCucHdrReq {
@@ -45,4 +49,6 @@ public class ThKeHoachDieuChuyenTongCucHdrReq {
     private String maDVi;
 
     private String tenDVi;
+
+    List<ThKeHoachDieuChuyenTongCucDtlReq> ctTongHopKeHoachDieuChuyen;
 }
