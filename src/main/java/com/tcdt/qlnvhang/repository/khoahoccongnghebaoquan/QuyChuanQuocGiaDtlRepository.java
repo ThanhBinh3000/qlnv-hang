@@ -14,5 +14,11 @@ public interface QuyChuanQuocGiaDtlRepository extends JpaRepository<QuyChuanQuoc
 
     List<QuyChuanQuocGiaDtl> findAllByIdHdrIn(List<Long> ids);
 
+    @Query(value = "select distinct dtl.cloai_vthh from KHCN_QUY_CHUAN_QG_DTL dtl, KHCN_QUY_CHUAN_QG_HDR hdr where dtl.id_hdr = hdr.id" +
+            " and hdr.trang_thai_hl = :trangThaiHl" +
+            " and ( :hdrId is null or dtl.id_hdr <> to_number(:hdrId))",
+            nativeQuery = true)
+    List<String> findAllCloaiHoatDong(String trangThaiHl, Long hdrId);
+
 
 }
