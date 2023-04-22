@@ -395,6 +395,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				dsg.setChildren(listGtCtiet);
 				hhQdKhlcntDsgthauList.add(dsg);
 			};
+			dtl.setTenCloaiVthh(hashMapDmHh.get(dtl.getCloaiVthh()));
+			dtl.setTenLoaiVthh(hashMapDmHh.get(dtl.getLoaiVthh()));
 			dtl.setTenDvi(StringUtils.isEmpty(dtl.getMaDvi()) ? null : mapDmucDvi.get(dtl.getMaDvi()));
 			dtl.setChildren(hhQdKhlcntDsgthauList);
 			dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThai()));
