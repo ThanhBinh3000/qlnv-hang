@@ -18,6 +18,9 @@ import java.util.Optional;
 public interface XhHopDongHdrRepository extends BaseRepository<XhHopDongHdr,Long> {
     Optional<XhHopDongHdr> findBySoHd(String soHd);
 
+    Optional<XhHopDongHdr> findFirstBySoHd(String soHd);
+
+
     @Query("SELECT c FROM XhHopDongHdr c where 1 = 1" +
             "AND (:#{#param.maDvi} IS NULL OR c.maDvi = :#{#param.maDvi}) " +
             "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
