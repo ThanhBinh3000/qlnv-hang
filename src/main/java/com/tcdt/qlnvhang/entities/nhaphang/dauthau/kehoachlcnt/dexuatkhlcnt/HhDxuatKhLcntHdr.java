@@ -88,7 +88,11 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	String dienGiai;
 	String trangThaiTh;
 	String loaiHinhNx;
+	@Transient
+	String tenLoaiHinhNx;
 	String kieuNx;
+	@Transient
+	String tenKieuNx;
 	String diaChiDvi;
 	BigDecimal donGiaVat;
 	@Transient
