@@ -50,6 +50,12 @@ public class THKeHoachDieuChuyenCucKhacCucDtl implements Serializable {
     @Column(name = "DCNB_KE_HOACH_DC_HDR_ID")
     private Long dcnbKeHoachDcHdrId;
 
+    @Column(name = "MA_CHI_CUC_DXUAT")
+    private String maChiCucDxuat;
+
+    @Column(name = "TEN_CHI_CUC_DXUAT")
+    private String tenChiCucDxuat;
+
     @Transient
     private List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtlList = new ArrayList<>();
 

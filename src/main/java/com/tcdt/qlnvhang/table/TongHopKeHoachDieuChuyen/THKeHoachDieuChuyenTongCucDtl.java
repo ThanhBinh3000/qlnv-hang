@@ -1,9 +1,12 @@
 package com.tcdt.qlnvhang.table.TongHopKeHoachDieuChuyen;
 
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
 import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Table(name = "DCNB_TH_KE_HOACH_DCTC_DTL")
@@ -18,11 +21,14 @@ public class THKeHoachDieuChuyenTongCucDtl implements Serializable {
     private Long id;
 
     @Column(name = "HDR_ID")
-    private Integer hdrId;
+    private Long hdrId;
 
     @Column(name = "DCNB_KE_HOACH_DC_HDR_ID")
-    private Integer keHoachDcHdrId;
+    private Long keHoachDcHdrId;
 
     @Column(name = "DCNB_KE_HOACH_DC_DTL_ID")
-    private Integer keHoachDcDtlId;
+    private Long keHoachDcDtlId;
+
+    @Transient
+    private List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtlList = new ArrayList<>();
 }

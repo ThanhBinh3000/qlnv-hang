@@ -77,7 +77,7 @@ public class THKeHoachDieuChuyenCucHdr implements Serializable {
     private Date ngayDuyetTp;
 
     @Column(name = "NGUOI_DUYET_TP_ID")
-    private Long nguoiDuyetTPId;
+    private Long nguoiDuyetTpId;
 
     @Column(name = "NGAY_DUYET_LDC")
     private Date ngayDuyetLdc;
@@ -94,8 +94,8 @@ public class THKeHoachDieuChuyenCucHdr implements Serializable {
     @Column(name = "TEN_DVI")
     private String tenDvi;
 
-    @Transient
-    private String tenTrangThai;
+    @Column(name = "DA_XDINH_DIEM_NHAP")
+    private Boolean daXdinhDiemNhap;
 
     @Transient
     private List<THKeHoachDieuChuyenNoiBoCucDtl> thKeHoachDieuChuyenNoiBoCucDtls = new ArrayList<>();
@@ -103,11 +103,5 @@ public class THKeHoachDieuChuyenCucHdr implements Serializable {
     @Transient
     private List<THKeHoachDieuChuyenCucKhacCucDtl> thKeHoachDieuChuyenCucKhacCucDtls = new ArrayList<>();
 
-
-
-    public void setTrangThai(String trangThai) {
-        this.trangThai = trangThai;
-        this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
-    }
 
 }

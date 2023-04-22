@@ -26,7 +26,7 @@ public class THKeHoachDieuChuyenTongCucHdr implements Serializable {
     private Long nguoiTaoId;
 
     @Column(name = "NGAY_SUA")
-    private LocalDate ngaySua;
+    private Date ngaySua;
 
     @Column(name = "NGUOI_SUA_ID")
     private Long nguoiSuaId;
@@ -65,8 +65,10 @@ public class THKeHoachDieuChuyenTongCucHdr implements Serializable {
     private String trangThai;
 
     @Column(name = "MA_DVI")
-    private String maDonVi;
+    private String maDVi;
 
     @Column(name = "TEN_DVI")
-    private String tenDonVi;
+    private String tenDVi;
+
+
 }

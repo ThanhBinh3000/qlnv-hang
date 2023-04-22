@@ -1,6 +1,10 @@
 package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Data
@@ -9,7 +13,15 @@ public class ThKeHoachDieuChuyenNoiBoCucDtlReq {
 
     private Long hdrId;
 
-    private Long keHoachDcHdrId;
+    private String maChiCucDxuat;
 
-    private Long keHoachDcDtlId;
+    private String tenChiCucDxuat;
+
+    private Long dcKeHoachDcHdrId;
+
+    private Long dcKeHoachDcDtlId;
+
+    private Boolean daXdinhDiemNhap;
+
+    private List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = new ArrayList<>();
 }

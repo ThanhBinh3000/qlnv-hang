@@ -27,6 +27,7 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping(value = PathContains.DIEU_CHUYEN_NOI_BO +PathContains.TONG_HOP_KE_HOACH_DIEU_CHUYEN)
@@ -146,26 +147,23 @@ public class TongHopKeHoachDcController extends BaseController {
     }
 
     @ApiOperation(value = "Tổng hợp kế hoạch điều chuyển", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PostMapping(value = "/lap-khdc-chi-cuc", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/lap-ke-hoach", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> createTableChiCuc(@CurrentUser CustomUserDetails currentUser,@RequestBody  TongHopKeHoachDieuChuyenSearch req) throws Exception {
+    public ResponseEntity<BaseResponse> createTable(@CurrentUser CustomUserDetails currentUser,@RequestBody  TongHopKeHoachDieuChuyenSearch req) throws Exception {
         BaseResponse resp = new BaseResponse();
-        resp.setData(thKeHoachDieuChuyenService.createPlanChiCuc(currentUser,req));
+        if(Objects.equals(req.getLoaiDieuChuyen(), "00")) {
+            resp.setData(thKeHoachDieuChuyenService.createPlanChiCuc(currentUser, req));
+        } else if (Objects.equals(req.getLoaiDieuChuyen(), "01")) {
+            resp.setData(thKeHoachDieuChuyenService.createPlanCuc(currentUser, req));
+        } else if (Objects.equals(req.getLoaiDieuChuyen(), "02")) {
+            resp.setData(thKeHoachDieuChuyenService.createPlanChiCuc(currentUser, req));
+            resp.setData(thKeHoachDieuChuyenService.createPlanCuc(currentUser, req));
+        }
         resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-        resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-        return ResponseEntity.ok(resp);
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+            return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Tổng hợp kế hoạch điều chuyển", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PostMapping(value = "/lap-khdc-cuc", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> createTableCuc(@CurrentUser CustomUserDetails currentUser,@RequestBody  TongHopKeHoachDieuChuyenSearch req) throws Exception {
-        BaseResponse resp = new BaseResponse();
-        resp.setData(thKeHoachDieuChuyenService.createPlanCuc(currentUser,req));
-        resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-        resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-        return ResponseEntity.ok(resp);
-    }
 
     @ApiOperation(value = "Cập nhật thông tin đề xuất", response = List.class)
     @PostMapping(value =  PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)

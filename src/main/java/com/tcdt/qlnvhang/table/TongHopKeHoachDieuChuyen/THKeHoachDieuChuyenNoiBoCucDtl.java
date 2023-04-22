@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Data
 @Table(name = "DCNB_TH_KE_HOACH_DCC_NBC_DTL")
@@ -26,10 +27,19 @@ public class THKeHoachDieuChuyenNoiBoCucDtl implements Serializable {
     private Long hdrId;
 
     @Column(name = "DCNB_KE_HOACH_DC_HDR_ID")
-    private Long dcnbKeHoachDcHdrId;
+    private Long dcKeHoachDcHdrId;
 
     @Column(name = "DCNB_KE_HOACH_DC_DTL_ID")
-    private Long dcnbKeHoachDcDtlId;
+    private Long dcKeHoachDcDtlId;
+
+    @Column(name = "MA_CHI_CUC_DXUAT")
+    private String maChiCucDxuat;
+
+    @Column(name = "TEN_CHI_CUC_DXUAT")
+    private String tenChiCucDxuat;
+
+    @Column(name = "DA_XDINH_DIEM_NHAP")
+    private Boolean daXdinhDiemNhap;
 
     @Transient
     private List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtlList = new ArrayList<>();

@@ -44,4 +44,7 @@ public interface DcnbKeHoachDcHdrRepository extends JpaRepository<DcnbKeHoachDcH
     @Query(value = "SELECT CAST(COUNT(dtl.SO_LUONG_DC) AS DECIMAL) FROM DCNB_KE_HOACH_DC_HDR hdr " +
             "JOIN DCNB_KE_HOACH_DC_DTL dtl ON dtl.HDR_ID = hdr.ID WHERE dtl.CLOAI_VTHH = ?1 AND dtl.MA_LO_KHO = ?2", nativeQuery = true)
     BigDecimal countTongKeHoachDeXuat(String cloaiVthh, String maLoKho);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM DCNB_KE_HOACH_DC_HDR hdr WHERE hdr.MA_DVI = ?1  AND hdr.TRANG_THAI = ?2 AND (TO_DATE(TO_CHAR(hdr.NGAY_TAO ,'YYYY-MM-DD'),'YYYY-MM-DD') <= TO_DATE(?3,'YYYY-MM-DD'))")
+    List<DcnbKeHoachDcHdr> findByDonViAndTrangThaiCuc(String maDVi, String trangThai, String thoiGianTongHop);
 }

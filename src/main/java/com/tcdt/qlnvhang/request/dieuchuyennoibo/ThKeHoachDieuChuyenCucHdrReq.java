@@ -63,6 +63,8 @@ public class ThKeHoachDieuChuyenCucHdrReq {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date thoiGianTongHop;
 
+    private Boolean daXdinhDiemNhap;
+
 
     List<ThKeHoachDieuChuyenNoiBoCucDtlReq> ctTongHopKeHoachDieuChuyen;
 

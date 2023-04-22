@@ -25,4 +25,6 @@ public class TongHopKeHoachDieuChuyenSearch extends BaseRequest {
     private Date thoiGianTongHop;
     private String trichYeu;
     private String maDVi;
+    private String loaiHH;
+    private String chungLoaiHH;
 }
