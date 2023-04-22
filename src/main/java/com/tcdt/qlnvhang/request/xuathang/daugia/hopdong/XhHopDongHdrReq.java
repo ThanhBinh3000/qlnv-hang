@@ -108,6 +108,12 @@ public class XhHopDongHdrReq extends BaseRequest {
 
     private Integer typeQdGnv;
 
+    private String toChucTrungDg;
+
+    private String loaiHinhNx;
+
+    private String kieuNhapXuat;
+
     // Transient
     @Transient
     private String tenLoaiVthh;
