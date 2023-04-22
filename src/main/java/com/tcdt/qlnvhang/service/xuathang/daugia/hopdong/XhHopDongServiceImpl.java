@@ -71,12 +71,11 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
     if (userInfo == null) {
       throw new Exception("Bad request.");
     }
-    Optional<XhHopDongHdr> qOpHdong = xhHopDongHdrRepository.findBySoHd(req.getSoHd());
+    Optional<XhHopDongHdr> qOpHdong = xhHopDongHdrRepository.findFirstBySoHd(req.getSoHd());
     if (DataUtils.isNullObject(req.getIdHd())) {
       if (qOpHdong.isPresent()) {
         throw new Exception("Hợp đồng số" + req.getSoHd() + "đã tồn tại");
       }
-
     }
 
     if (!DataUtils.isNullObject(req.getSoQdKq())) {
@@ -233,9 +232,7 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
       });
       item.setChildren(allByIdDtl);
       item.setTenDvi(mapDmucDvi.get(item.getMaDvi()) == null ? null : mapDmucDvi.get(item.getMaDvi()).get("tenDvi").toString());
-      item.setTenDviHd(mapDmucDvi.get(item.getMaDvi()) == null ? null : mapDmucDvi.get(item.getMaDvi()).get("tenDvi").toString());
-      item.setDiaChiHd(mapDmucDvi.get(item.getMaDvi()) == null ? null : mapDmucDvi.get(item.getMaDvi()).get("diaChi").toString());
-
+      item.setDiaChi(mapDmucDvi.get(item.getMaDvi()) == null ? null : mapDmucDvi.get(item.getMaDvi()).get("diaChi").toString());
 
     });
     data.setChildren(allByIdHdr);
