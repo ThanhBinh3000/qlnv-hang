@@ -69,11 +69,7 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
 
     public Page<DcnbKeHoachDcHdr> searchPage(CustomUserDetails currentUser, SearchDcnbKeHoachDc req) throws Exception {
         String dvql = currentUser.getDvql();
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            req.setMaDvi(dvql.substring(0, 6));
-        } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
-            req.setMaDvi(dvql);
-        }
+        req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<DcnbKeHoachDcHdr> search = dcnbKeHoachDcHdrRepository.search(req, pageable);
         return search;
@@ -111,11 +107,14 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
         Optional<DcnbKeHoachDcHdr> soDxuat = dcnbKeHoachDcHdrRepository.findFirstBySoDxuat(objReq.getSoDxuat());
-        if (soDxuat.isPresent() && objReq.getSoDxuat().split("/").length == 1) {
-            if (!soDxuat.get().getId().equals(objReq.getId())) {
-                throw new Exception("số đề xuất đã tồn tại");
+        if(org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoDxuat())){
+            if (soDxuat.isPresent() && objReq.getSoDxuat().split("/").length == 1) {
+                if (!soDxuat.get().getId().equals(objReq.getId())) {
+                    throw new Exception("số đề xuất đã tồn tại");
+                }
             }
         }
+
         DcnbKeHoachDcHdr data = optional.get();
         objReq.setType(data.getType());
         objReq.setMaDviPq(data.getMaDviPq());

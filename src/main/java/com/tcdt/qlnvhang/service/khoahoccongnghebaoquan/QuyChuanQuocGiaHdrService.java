@@ -77,6 +77,12 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         if (objReq.getTieuChuanKyThuat().isEmpty()) {
             throw new Exception("Không tìm thấy thông tin tiêu chuẩn kỹ thuật");
         }
+        List<String> listCloai = quyChuanQuocGiaDtlRepository.findAllCloaiHoatDong(Contains.HOAT_DONG, null);
+        List<String> listCloaiReq = objReq.getTieuChuanKyThuat().stream().map(QuyChuanQuocGiaDtlReq::getCloaiVthh).distinct().collect(Collectors.toList());
+        listCloai.retainAll(listCloaiReq);
+        if (!listCloai.isEmpty()) {
+            throw new Exception("Có chủng loại hàng hóa đã được tạo tiêu chuẩn kỹ thuật ở bản ghi khác");
+        }
         QuyChuanQuocGiaHdr data= new ModelMapper().map(objReq,QuyChuanQuocGiaHdr.class);
         data.setMaDvi(userInfo.getDvql());
         data.setTrangThai(Contains.DUTHAO);
@@ -105,6 +111,12 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         }
         if (objReq.getTieuChuanKyThuat().isEmpty()) {
             throw new Exception("Không tìm thấy thông tin tiêu chuẩn kỹ thuật");
+        }
+        List<String> listCloai = quyChuanQuocGiaDtlRepository.findAllCloaiHoatDong(Contains.HOAT_DONG, objReq.getId());
+        List<String> listCloaiReq = objReq.getTieuChuanKyThuat().stream().map(QuyChuanQuocGiaDtlReq::getCloaiVthh).distinct().collect(Collectors.toList());
+        listCloai.retainAll(listCloaiReq);
+        if (!listCloai.isEmpty()) {
+            throw new Exception("Có chủng loại hàng hóa đã được tạo tiêu chuẩn kỹ thuật ở bản ghi khác");
         }
         QuyChuanQuocGiaHdr data=optional.get();
         BeanUtils.copyProperties(objReq,data,"id","maDvi");
