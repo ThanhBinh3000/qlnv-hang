@@ -219,7 +219,7 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
                 }
                 for (DcnbKeHoachDcDtl hh : danhSachHangHoa) {
                     TrangThaiHtReq objReq = new TrangThaiHtReq();
-                    objReq.setMaDvi(hh.getMaLoKho());
+                    objReq.setMaDvi(hh.getCoLoKho() ? hh.getMaLoKho() : hh.getMaNganKho());
                     ResponseEntity<BaseResponse> response = luuKhoClient.trangThaiHt(objReq);
                     BaseResponse body = response.getBody();
                     if (body != null && EnumResponse.RESP_SUCC.getDescription().equals(body.getMsg())) {
