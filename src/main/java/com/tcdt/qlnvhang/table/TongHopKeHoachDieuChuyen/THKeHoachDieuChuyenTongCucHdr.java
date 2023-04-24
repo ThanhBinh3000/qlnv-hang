@@ -5,7 +5,9 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Table(name = "DCNB_TH_KE_HOACH_DCTC_HDR")
@@ -16,7 +18,7 @@ import java.util.Date;
 public class THKeHoachDieuChuyenTongCucHdr implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DCNB_TH_KH_DCTC_HDR_SEQ")
-    @SequenceGenerator(sequenceName = "DCNB_TH_DCTC_HDR_SEQ", allocationSize = 1, name = "DCNB_TH_KH_DCTC_HDR_SEQ")
+    @SequenceGenerator(sequenceName = "DCNB_TH_KH_DCTC_HDR_SEQ", allocationSize = 1, name = "DCNB_TH_KH_DCTC_HDR_SEQ")
     private Long id;
 
     @Column(name = "NGAY_TAO")
@@ -70,5 +72,6 @@ public class THKeHoachDieuChuyenTongCucHdr implements Serializable {
     @Column(name = "TEN_DVI")
     private String tenDVi;
 
-
+    @Transient
+    private List<THKeHoachDieuChuyenTongCucDtl> thKeHoachDieuChuyenTongCucDtls = new ArrayList<>();
 }
