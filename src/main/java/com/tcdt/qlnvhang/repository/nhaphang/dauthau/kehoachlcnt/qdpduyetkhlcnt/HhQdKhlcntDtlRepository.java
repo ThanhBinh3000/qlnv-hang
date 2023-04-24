@@ -18,22 +18,24 @@ public interface HhQdKhlcntDtlRepository extends JpaRepository<HhQdKhlcntDtl, Lo
 
     HhQdKhlcntDtl findByIdQdHdr(Long idQdHdr);
 
-    @Query(value = "SELECT HDR.ID,COUNT(GT.ID) AS C " +
-            " FROM HH_QD_KHLCNT_HDR HDR , HH_QD_KHLCNT_DTL DTL , HH_QD_KHLCNT_DSGTHAU GT " +
-            "  WHERE GT.ID_QD_DTL = DTL.ID " +
-            "  AND HDR.ID = DTL.ID_QD_HDR " +
+    @Query(value = "SELECT HDR.ID,COUNT( DISTINCT GT.ID_QD_DTL ) AS C " +
+            " FROM HH_QD_KHLCNT_HDR HDR " +
+            " JOIN HH_QD_KHLCNT_DTL dtl ON hdr.id = dtl.ID_QD_HDR " +
+            " JOIN HH_QD_KHLCNT_DSGTHAU gt ON dtl.id = gt.ID_QD_DTL " +
+            "  WHERE 1=1 " +
             "  AND HDR.ID IN (:qdIds) " +
-            "  AND HDR.LASTEST = 0 GROUP BY HDR.ID "
+            "  AND HDR.LASTEST = 1 GROUP BY HDR.ID "
             , nativeQuery = true)
     List<Object[]> countAllBySoGthau(Collection<Long> qdIds);
 
-    @Query(value = "SELECT HDR.ID_GOC,COUNT(GT.ID) AS C " +
-            "    FROM HH_QD_KHLCNT_HDR HDR , HH_QD_KHLCNT_DTL DTL , HH_QD_KHLCNT_DSGTHAU GT " +
-            "    WHERE GT.ID_QD_DTL = DTL.ID" +
-            "      AND HDR.ID = DTL.ID_QD_HDR " +
-            "      AND HDR.ID_GOC IN (:qdIds) " +
-            "      AND HDR.LASTEST = 1 " +
-            "      AND (:trangThai is null or GT.TRANG_THAI = :trangThai) GROUP BY HDR.ID_GOC"
+    @Query(value = "SELECT HDR.ID,COUNT( DISTINCT GT.ID_QD_DTL ) AS C " +
+            " FROM HH_QD_KHLCNT_HDR HDR " +
+            " JOIN HH_QD_KHLCNT_DTL dtl ON hdr.id = dtl.ID_QD_HDR " +
+            " JOIN HH_QD_KHLCNT_DSGTHAU gt ON dtl.id = gt.ID_QD_DTL " +
+            "  WHERE 1=1 " +
+            "  AND HDR.ID IN (:qdIds) " +
+            "  AND HDR.LASTEST = 1 " +
+            "  AND (:trangThai is null or GT.TRANG_THAI = :trangThai) GROUP BY HDR.ID"
             , nativeQuery = true)
     List<Object[]> countAllBySoGthauStatus(Collection<Long> qdIds,String trangThai);
 
