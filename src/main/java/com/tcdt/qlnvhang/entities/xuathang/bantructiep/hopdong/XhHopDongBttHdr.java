@@ -25,9 +25,9 @@ public class XhHopDongBttHdr extends TrangThaiBaseEntity implements Serializable
     @SequenceGenerator(sequenceName =  TABLE_NAME+ "_SEQ", allocationSize = 1, name = TABLE_NAME+ "_SEQ")
     private Long id;
 
-    private Long idQdKq;
-
     private Integer namHd;
+
+    private Long idQdKq;
 
     private String soQdKq;
 
@@ -87,7 +87,7 @@ public class XhHopDongBttHdr extends TrangThaiBaseEntity implements Serializable
     @Transient
     private String tenDvi;
 
-    private String diaChi;
+    private String diaChiDvi;
 
     private String mst;
 
@@ -135,35 +135,26 @@ public class XhHopDongBttHdr extends TrangThaiBaseEntity implements Serializable
 
     private String moTaHangHoa;
 
-    private String dviTinh;
+    private String donViTinh;
 
-    private BigDecimal soLuong;
+    private BigDecimal soLuongBanTrucTiep;
 
     private BigDecimal thanhTien;
 
     private String ghiChu;
 
-    private BigDecimal tongSoLuongQdKh;
+    private BigDecimal tongSlXuatBanQdKh;
 
-    private BigDecimal tongSoLuongQdKhDaky;
+    private BigDecimal tongSlBanttQdkhDakyHd;
 
-    private BigDecimal tongSoLuongQdKhChuaky;
-
-    private BigDecimal donGia;
-
-    private BigDecimal donGiaGomThue;
-
-    private BigDecimal donGiaKhongVat;
-
-    private BigDecimal slUyQuyenChiCucKh;
-
-    private String soQd;
+    private BigDecimal tongSlBanttQdkhChuakyHd;
 
     private String trangThaiXh;
     @Transient
     private String tenTrangThaiXh;
 
-    private String trichYeu;
+    @Transient
+    private List<String> listMaDviTsan = new ArrayList<>();
 
     @Transient
     private List<FileDinhKem> canCuPhapLy = new ArrayList<>();
@@ -177,11 +168,7 @@ public class XhHopDongBttHdr extends TrangThaiBaseEntity implements Serializable
     @Transient
     private List<XhHopDongBttDtl> children = new ArrayList<>();
 
-    @Transient
-    private List<String> listMaDviTsan = new ArrayList<>();
-
-//    Phụ lục
-
+    //    Phụ lục
     private Long idHd;
 
     private String soPhuLuc;
