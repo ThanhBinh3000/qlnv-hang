@@ -102,7 +102,7 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
         dataMap.setTrangThaiPhuLuc(Contains.DUTHAO);
         dataMap.setTrangThaiXh(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
         dataMap.setMaDvi(userInfo.getDvql());
-        dataMap.setMaDviTsan(String.join(",",req.getListMaDviTsan()));
+//        dataMap.setMaDviTsan(String.join(",",req.getListMaDviTsan()));
 
         XhHopDongBttHdr created = xhHopDongBttHdrRepository.save(dataMap);
 
@@ -393,7 +393,7 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
             objs[2] = hdr.getTenHd();
             objs[3] = hdr.getNgayHluc();
             objs[4] = hdr.getMaDviTsan();
-            objs[5] = hdr.getSoLuong();
+            objs[5] = hdr.getSoLuongBanTrucTiep();
             objs[6] = null;
             objs[7] = hdr.getTenTrangThai();
             objs[8] = null;
