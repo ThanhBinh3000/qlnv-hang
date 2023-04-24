@@ -10,5 +10,5 @@ import java.util.List;
 public interface THKeHoachDieuChuyenTongCucDtlRepository extends JpaRepository<THKeHoachDieuChuyenTongCucDtl, Long> {
     List<THKeHoachDieuChuyenTongCucDtl> findByHdrId(Long id);
 
-    List<THKeHoachDieuChuyenTongCucDtl> findAllByIdIn(List<Long> listId);
+    List<THKeHoachDieuChuyenTongCucDtl> findAllByHdrIdIn(List<Long> ids);
 }

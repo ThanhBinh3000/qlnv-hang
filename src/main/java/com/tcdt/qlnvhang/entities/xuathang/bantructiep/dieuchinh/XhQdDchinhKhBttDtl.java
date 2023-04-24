@@ -25,7 +25,7 @@ public class XhQdDchinhKhBttDtl implements Serializable {
 
     private Long idDcHdr;
 
-    private Long idDxHdr;
+    private Long idQdGoc;
 
     private String maDvi;
     @Transient

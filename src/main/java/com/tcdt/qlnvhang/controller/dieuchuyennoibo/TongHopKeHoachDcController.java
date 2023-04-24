@@ -8,6 +8,7 @@ import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.ThKeHoachDieuChuyenCucHdrReq;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.ThKeHoachDieuChuyenTongCucHdrReq;
 import com.tcdt.qlnvhang.request.search.TongHopKeHoachDieuChuyenSearch;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.THKeHoachDieuChuyenService;
@@ -46,11 +47,14 @@ public class TongHopKeHoachDcController extends BaseController {
     public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser,@RequestBody TongHopKeHoachDieuChuyenSearch objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(thKeHoachDieuChuyenService.searchPage(currentUser,objReq));
+            if(currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
+                resp.setData(thKeHoachDieuChuyenService.searchPageCuc(currentUser, objReq));
+            }else{
+                resp.setData(thKeHoachDieuChuyenService.searchPageTongCuc(currentUser, objReq));
+            }
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-        } catch (
-                Exception e) {
+        } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
             log.error("Tra cứu thông tin : {}", e);
@@ -60,7 +64,7 @@ public class TongHopKeHoachDcController extends BaseController {
     }
 
     @ApiOperation(value = "Tạo mới thông tin tổng hợp ", response = List.class)
-    @PostMapping(value =  PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/them-moi-kh-cuc", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody ThKeHoachDieuChuyenCucHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
@@ -76,6 +80,24 @@ public class TongHopKeHoachDcController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
+    @ApiOperation(value = "Tạo mới thông tin tổng hợp ", response = List.class)
+    @PostMapping(value = "/them-moi-kh-tong-cuc", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody ThKeHoachDieuChuyenTongCucHdrReq objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(thKeHoachDieuChuyenService.saveTongCuc(currentUser,objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tạo mới thông tin  : {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
+
 
     @ApiOperation(value = "Lấy chi tiết thông tin tổng hợp", response = List.class)
     @GetMapping(value =  PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -85,6 +107,24 @@ public class TongHopKeHoachDcController extends BaseController {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(thKeHoachDieuChuyenService.detail(ids).get(0));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Lấy chi tiết thông tin : {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Lấy chi tiết thông tin tổng hợp", response = List.class)
+    @GetMapping(value =  "chi-tiet-kh-tong-cuc" + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> detailTongCuc(
+            @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids")List<Long> ids) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(thKeHoachDieuChuyenService.detailTongCuc(ids).get(0));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -115,10 +155,10 @@ public class TongHopKeHoachDcController extends BaseController {
     @ApiOperation(value = "Xoá thông tin tổng hợp", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping(value =  PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
+    public ResponseEntity<BaseResponse> delete(@CurrentUser CustomUserDetails currentUser,@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            thKeHoachDieuChuyenService.delete(idSearchReq);
+            thKeHoachDieuChuyenService.delete(currentUser,idSearchReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -133,10 +173,10 @@ public class TongHopKeHoachDcController extends BaseController {
     @ApiOperation(value = "Xoá danh sách thông tin tổng hợp", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping(value =  PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
+    public ResponseEntity<BaseResponse> deleteMulti(@CurrentUser CustomUserDetails currentUser,@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            thKeHoachDieuChuyenService.deleteMulti(idSearchReq);
+            thKeHoachDieuChuyenService.deleteMulti(currentUser, idSearchReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -152,13 +192,17 @@ public class TongHopKeHoachDcController extends BaseController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> createTable(@CurrentUser CustomUserDetails currentUser,@RequestBody  TongHopKeHoachDieuChuyenSearch req) throws Exception {
         BaseResponse resp = new BaseResponse();
-        if(Objects.equals(req.getLoaiDieuChuyen(), Contains.GIUA_2_CHI_CUC_TRONG_1_CUC)) {
-            resp.setData(thKeHoachDieuChuyenService.createPlanChiCuc(currentUser, req));
-        } else if (Objects.equals(req.getLoaiDieuChuyen(), Contains.GIUA_2_CUC_DTNN_KV)) {
-            resp.setData(thKeHoachDieuChuyenService.createPlanCuc(currentUser, req));
-        } else if (Objects.equals(req.getLoaiDieuChuyen(), Contains.TAT_CA)) {
-            resp.setData(thKeHoachDieuChuyenService.createPlanChiCuc(currentUser, req));
-            resp.setOtherData(thKeHoachDieuChuyenService.createPlanCuc(currentUser, req));
+        if(currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
+            if (Objects.equals(req.getLoaiDieuChuyen(), Contains.GIUA_2_CHI_CUC_TRONG_1_CUC)) {
+                resp.setData(thKeHoachDieuChuyenService.createPlanChiCuc(currentUser, req));
+            } else if (Objects.equals(req.getLoaiDieuChuyen(), Contains.GIUA_2_CUC_DTNN_KV)) {
+                resp.setData(thKeHoachDieuChuyenService.createPlanCuc(currentUser, req));
+            } else if (Objects.equals(req.getLoaiDieuChuyen(), Contains.TAT_CA)) {
+                resp.setData(thKeHoachDieuChuyenService.createPlanChiCuc(currentUser, req));
+                resp.setOtherData(thKeHoachDieuChuyenService.createPlanCuc(currentUser, req));
+            }
+        } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
+            resp.setData(thKeHoachDieuChuyenService.createPlanTongCuc(currentUser, req));
         }
         resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
@@ -167,11 +211,27 @@ public class TongHopKeHoachDcController extends BaseController {
 
 
     @ApiOperation(value = "Cập nhật thông tin đề xuất", response = List.class)
-    @PostMapping(value =  PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value =  "cap-nhat-cuc", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody ThKeHoachDieuChuyenCucHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(thKeHoachDieuChuyenService.update(currentUser,objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Cập nhật thông tin : {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Cập nhật thông tin đề xuất", response = List.class)
+    @PostMapping(value =  "cap-nhat-tong-cuc", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody ThKeHoachDieuChuyenTongCucHdrReq objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(thKeHoachDieuChuyenService.updateTongCuc(currentUser,objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

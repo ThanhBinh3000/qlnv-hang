@@ -75,6 +75,8 @@ public class XhPhieuKnghiemCluongReq extends BaseRequest {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	private Date ngayKnghiemDen;
 
+	private String maChiCuc;
+
 	@Transient
 	private List<XhPhieuKnghiemCluongCtReq> children = new ArrayList<>();
 

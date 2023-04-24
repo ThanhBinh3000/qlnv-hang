@@ -15,7 +15,8 @@ import java.util.List;
 public interface XhPhieuKnghiemCluongRepository extends BaseRepository<XhPhieuKnghiemCluong, Long> {
 
 
-    @Query("SELECT CL from XhPhieuKnghiemCluong CL WHERE 1 = 1 " +
+    @Query("SELECT CL from XhPhieuKnghiemCluong CL " +
+            "LEFT JOIN XhBbLayMau LM ON LM.id = CL.idBbLayMau WHERE 1 = 1 " +
             "AND (:#{#param.nam} IS NULL OR CL.nam = :#{#param.nam}) " +
             "AND (:#{#param.soQdGiaoNvXh} IS NULL OR LOWER(CL.soQdGiaoNvXh) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQdGiaoNvXh}),'%' ) ) )" +
             "AND (:#{#param.soPhieu} IS NULL OR LOWER(CL.soPhieu) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soPhieu}),'%' ) ) )" +
@@ -24,6 +25,7 @@ public interface XhPhieuKnghiemCluongRepository extends BaseRepository<XhPhieuKn
             "AND (:#{#param.soBbLayMau} IS NULL OR LOWER(CL.soBbLayMau) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soBbLayMau}),'%' ) ) )" +
             "AND (:#{#param.loaiVthh} IS NULL OR CL.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
             "AND (:#{#param.trangThai} IS NULL OR CL.trangThai = :#{#param.trangThai}) " +
+            "AND (:#{#param.maChiCuc} IS NULL OR LM.maDvi = :#{#param.maChiCuc})" +
             "AND (:#{#param.maDvi} IS NULL OR CL.maDvi = :#{#param.maDvi})")
     Page<XhPhieuKnghiemCluong> searchPage(@Param("param") XhPhieuKnghiemCluongReq param, Pageable pageable);
 
