@@ -71,10 +71,12 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
     if (userInfo == null) {
       throw new Exception("Bad request.");
     }
-    Optional<XhHopDongHdr> qOpHdong = xhHopDongHdrRepository.findFirstBySoHd(req.getSoHd());
-    if (DataUtils.isNullObject(req.getIdHd())) {
-      if (qOpHdong.isPresent()) {
-        throw new Exception("Hợp đồng số" + req.getSoHd() + "đã tồn tại");
+    if (!DataUtils.isNullObject(req.getSoHd())){
+      Optional<XhHopDongHdr> qOpHdong = xhHopDongHdrRepository.findFirstBySoHd(req.getSoHd());
+      if (DataUtils.isNullObject(req.getIdHd())) {
+        if (qOpHdong.isPresent()) {
+          throw new Exception("Hợp đồng số" + req.getSoHd() + "đã tồn tại");
+        }
       }
     }
 
