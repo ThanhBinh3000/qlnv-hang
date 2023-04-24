@@ -105,6 +105,12 @@ public class XhHopDongHdr extends TrangThaiBaseEntity {
 
     private Boolean typeQdGnv;
 
+    private String toChucTrungDg;
+
+    private String loaiHinhNx;
+
+    private String kieuNhapXuat;
+
     // Transient
     @Transient
     private String tenLoaiVthh;
@@ -150,5 +156,8 @@ public class XhHopDongHdr extends TrangThaiBaseEntity {
 
     @Transient
     private List<XhHopDongDtl> phuLucDtl = new ArrayList<>();
+
+    @Transient
+    private List<FileDinhKem> filePhuLuc = new ArrayList<>();
 
 }

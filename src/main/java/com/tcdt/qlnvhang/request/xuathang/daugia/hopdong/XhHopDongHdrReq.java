@@ -108,6 +108,12 @@ public class XhHopDongHdrReq extends BaseRequest {
 
     private Integer typeQdGnv;
 
+    private String toChucTrungDg;
+
+    private String loaiHinhNx;
+
+    private String kieuNhapXuat;
+
     // Transient
     @Transient
     private String tenLoaiVthh;
@@ -152,5 +158,8 @@ public class XhHopDongHdrReq extends BaseRequest {
 
     @Transient
     private List<XhHopDongDtlReq> phuLucDtl = new ArrayList<>();
+
+    @Transient
+    private List<FileDinhKemReq> filePhuLuc = new ArrayList<>();
 
 }

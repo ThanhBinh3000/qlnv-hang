@@ -43,8 +43,12 @@ public class HhQdKhlcntDtl implements Serializable {
 	String goiThau;
 
 	String cloaiVthh;
+	@Transient
+	String tenCloaiVthh;
 
 	String loaiVthh;
+	@Transient
+	String tenLoaiVthh;
 
 	Long soGthau;
 

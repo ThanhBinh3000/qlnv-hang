@@ -361,20 +361,20 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		Map<String,String> hashMapNguonVon = getListDanhMucChung("NGUON_VON");
 		Map<String,String> hashMapHtLcnt = getListDanhMucChung("HT_LCNT");
 		Map<String,String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
+		Map<String,String> hashMapLoaiNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
+		Map<String,String> hashMapKieuNx = getListDanhMucChung("KIEU_NHAP_XUAT");
 
 		qOptional.get().setTenLoaiVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getLoaiVthh()));
 		qOptional.get().setTenCloaiVthh(StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getCloaiVthh()));
 		qOptional.get().setTenDvi(mapDmucDvi.get(qOptional.get().getMaDvi()));
 		List<HhQdKhlcntDtl> hhQdKhlcntDtlList = new ArrayList<>();
+		Optional<HhDxuatKhLcntHdr> hhDxuatKhLcntHdr = hhDxuatKhLcntHdrRepository.findById(qOptional.get().getIdTrHdr());
+		List<HhQdKhlcntDsgthau> hhQdKhlcntDsgthauList = new ArrayList<>();
+		List<HhQdKhlcntDsgthau> hhQdKhlcntDsgthauData = new ArrayList<>();
 		for(HhQdKhlcntDtl dtl : hhQdKhlcntDtlRepository.findAllByIdQdHdr(Long.parseLong(ids))){
-			if(dtl.getIdDxHdr() != null){
-				Optional<HhDxuatKhLcntHdr> hhDxuatKhLcntHdr = hhDxuatKhLcntHdrRepository.findById(dtl.getIdDxHdr());
-				if(hhDxuatKhLcntHdr.isPresent()){
-					dtl.setDxuatKhLcntHdr(hhDxuatKhLcntHdr.get());
-				}
-			}
-			List<HhQdKhlcntDsgthau> hhQdKhlcntDsgthauList = new ArrayList<>();
-			for(HhQdKhlcntDsgthau dsg : hhQdKhlcntDsgthauRepository.findByIdQdDtl(dtl.getId())){
+			dtl.setDxuatKhLcntHdr(hhDxuatKhLcntHdr.get());
+			hhQdKhlcntDsgthauData = hhQdKhlcntDsgthauRepository.findByIdQdDtl(dtl.getId());
+			for(HhQdKhlcntDsgthau dsg : hhQdKhlcntDsgthauData){
 				List<HhQdKhlcntDsgthauCtiet> listGtCtiet = hhQdKhlcntDsgthauCtietRepository.findByIdGoiThau(dsg.getId());
 				listGtCtiet.forEach(f -> {
 					f.setTenDvi(mapDmucDvi.get(f.getMaDvi()));
@@ -395,6 +395,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				dsg.setChildren(listGtCtiet);
 				hhQdKhlcntDsgthauList.add(dsg);
 			};
+			dtl.setTenCloaiVthh(hashMapDmHh.get(dtl.getCloaiVthh()));
+			dtl.setTenLoaiVthh(hashMapDmHh.get(dtl.getLoaiVthh()));
 			dtl.setTenDvi(StringUtils.isEmpty(dtl.getMaDvi()) ? null : mapDmucDvi.get(dtl.getMaDvi()));
 			dtl.setChildren(hhQdKhlcntDsgthauList);
 			dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThai()));
@@ -402,8 +404,14 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 
 			hhQdKhlcntDtlList.add(dtl);
 		}
-
+		long countThanhCong = hhQdKhlcntDsgthauList.stream().filter(x -> x.getTrangThai().equals(NhapXuatHangTrangThaiEnum.THANH_CONG.getId())).count();
+		qOptional.get().setSoGthau(Long.valueOf(hhQdKhlcntDsgthauData.size()));
+		qOptional.get().setSoGthauTrung(countThanhCong);
+		qOptional.get().setTenLoaiHinhNx(hashMapLoaiNx.get(hhDxuatKhLcntHdr.get().getLoaiHinhNx()));
+		qOptional.get().setTenKieuNx(hashMapKieuNx.get(hhDxuatKhLcntHdr.get().getKieuNx()));
 		qOptional.get().setChildren(hhQdKhlcntDtlList);
+		qOptional.get().setTenHthucLcnt(hashMapHtLcnt.get(qOptional.get().getHthucLcnt()));
+		qOptional.get().setTenPthucLcnt(hashMapPthucDthau.get(qOptional.get().getPthucLcnt()));
 		qOptional.get().setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qOptional.get().getTrangThai()));
 		qOptional.get().setTenTrangThaiDt(NhapXuatHangTrangThaiEnum.getTenById(qOptional.get().getTrangThaiDt()));
 
@@ -424,6 +432,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		Map<String,String> hashMapNguonVon = getListDanhMucChung("NGUON_VON");
 		Map<String,String> hashMapHtLcnt = getListDanhMucChung("HT_LCNT");
 		Map<String,String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
+		Map<String,String> hashMapLoaiNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
+		Map<String,String> hashMapKieuNx = getListDanhMucChung("KIEU_NHAP_XUAT");
 		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 		Map<String,String> hashMapDvi = getListDanhMucDvi(null,null,"01");
 		// Set Hdr
@@ -473,8 +483,12 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		Optional<HhDxuatKhLcntHdr> bySoDxuat;
 		if(!StringUtils.isEmpty(dtl.getSoDxuat())){
 			bySoDxuat = hhDxuatKhLcntHdrRepository.findBySoDxuat(dtl.getSoDxuat());
+			bySoDxuat.get().setTenLoaiHinhNx(hashMapLoaiNx.get(bySoDxuat.get().getLoaiHinhNx()));
+			bySoDxuat.get().setTenKieuNx(hashMapKieuNx.get(bySoDxuat.get().getKieuNx()));
 		}else{
 			bySoDxuat = hhDxuatKhLcntHdrRepository.findBySoDxuat(hhQdKhlcntHdr.getSoTrHdr());
+			bySoDxuat.get().setTenLoaiHinhNx(hashMapLoaiNx.get(bySoDxuat.get().getLoaiHinhNx()));
+			bySoDxuat.get().setTenKieuNx(hashMapKieuNx.get(bySoDxuat.get().getKieuNx()));
 		}
 		bySoDxuat.ifPresent(dtl::setDxuatKhLcntHdr);
 		dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(dtl.getTrangThai()));
@@ -748,6 +762,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		int limit = req.getPaggingReq().getLimit();
 		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").descending());
 		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
+		Map<String,String> hashMapPthucDthau = getListDanhMucChung("PT_DTHAU");
 		Page<HhQdKhlcntHdr> data = hhQdKhlcntHdrRepository.selectPage(req.getNamKhoach(), req.getLoaiVthh(), req.getSoQd(), req.getTrichYeu(),
 				convertDateToString(req.getTuNgayQd()),
 				convertDateToString(req.getDenNgayQd()),
@@ -788,6 +803,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			soGthau2.put(it[0].toString(),it[1].toString());
 		}
 		for (HhQdKhlcntHdr qd:data.getContent()) {
+			qd.setTenPthucLcnt(hashMapPthucDthau.get(qd.getPthucLcnt()));
 			qd.setSoGthau(StringUtils.isEmpty(soGthau.get(qd.getId().toString())) ? 0 : Long.parseLong(soGthau.get(qd.getId().toString())));
 			qd.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qd.getTrangThai()));
 			qd.setSoGthauTrung(StringUtils.isEmpty(soGthau2.get(qd.getId().toString())) ? 0 : Long.parseLong(soGthau2.get(qd.getId().toString())));

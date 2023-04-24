@@ -278,4 +278,6 @@ public class PathContains {
 	public static final String DIEU_CHUYEN_NOI_BO = "/dieu-chuyen-noi-bo";
 	public static final String KE_HOACH_DIEU_CHUYEN = "/ke-hoach-dieu-chuyen";
 
+	public static final String TONG_HOP_KE_HOACH_DIEU_CHUYEN = "/tong-hop-ke-hoach-dieu-chuyen";
+
 }

@@ -15,71 +15,52 @@ import java.time.LocalDate;
 @Setter
 public class DcnbKeHoachDcDtl implements Serializable {
 
-  private static final long serialVersionUID = 1L;
-  public static final String TABLE_NAME = "DCNB_KE_HOACH_DC_DTL";
+    private static final long serialVersionUID = 1L;
+    public static final String TABLE_NAME = "DCNB_KE_HOACH_DC_DTL";
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbKeHoachDcDtl.TABLE_NAME + "_SEQ")
-  @SequenceGenerator(sequenceName = DcnbKeHoachDcDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbKeHoachDcDtl.TABLE_NAME + "_SEQ")
-  private Long id;
-//  private Long idHdr;
-  private String maChiCucNhan;
-  private LocalDate thoiGianDkDc;
-  private String maKho;
-  private String loaiVthh;
-  private String cloaiVthh;
-  private BigDecimal tonKho;
-  private String donViTinh;
-  private BigDecimal soLuongDc;
-  private BigDecimal duToanKphi;
-  private String maKhoNhan;
-  private BigDecimal tichLuongKd;
-  private BigDecimal soLuongPhanBo;
-  private String dviVanChuyen;
-  private String pthucGiaoHang;
-  private String pthucNhanHang;
-  private String nguonChi;
-
-  @Transient
-  private String tenChiCucNhan;
-  @Transient
-  private String tenLoaiVthh;
-  @Transient
-  private String tenCloaiVthh;
-  @Transient
-  private String maDiemKho;
-  @Transient
-  private String maNhaKho;
-  @Transient
-  private String maNganKho;
-  @Transient
-  private String maLoKho;
-  @Transient
-  private String maDiemKhoNhan;
-  @Transient
-  private String maNhaKhoNhan;
-  @Transient
-  private String maNganKhoNhan;
-  @Transient
-  private String maLoKhoNhan;
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "idHdr")
-  @JsonIgnore
-  private DcnbKeHoachDcHdr dcnbKeHoachDcHdr;
-
-  public void setMaKho(String maKho) {
-    this.maKho = maKho;
-    setMaDiemKho(maKho.length() >= 10 ? maKho.substring(0, 10) : "");
-    setMaNhaKho(maKho.length() >= 12 ? maKho.substring(0, 12) : "");
-    setMaNganKho(maKho.length() >= 14 ? maKho.substring(0, 14) : "");
-    setMaLoKho(maKho.length() >= 16 ? maKho.substring(0, 16) : "");
-  }
-  public void setMaKhoNhan(String maKhoNhan) {
-    this.maKhoNhan = maKhoNhan;
-    setMaDiemKhoNhan(maKhoNhan.length() >= 10 ? maKhoNhan.substring(0, 10) : "");
-    setMaNhaKhoNhan(maKhoNhan.length() >= 12 ? maKhoNhan.substring(0, 12) : "");
-    setMaNganKhoNhan(maKhoNhan.length() >= 14 ? maKhoNhan.substring(0, 14) : "");
-    setMaLoKhoNhan(maKhoNhan.length() >= 16 ? maKhoNhan.substring(0, 16) : "");
-  }
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbKeHoachDcDtl.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = DcnbKeHoachDcDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbKeHoachDcDtl.TABLE_NAME + "_SEQ")
+    private Long id;
+    private Long parentId;
+    private String maChiCucNhan;
+    private String tenChiCucNhan;
+    private LocalDate thoiGianDkDc;
+    private String loaiVthh;
+    private String cloaiVthh;
+    private String tenLoaiVthh;
+    private String tenCloaiVthh;
+    private String donViTinh;
+    private String tenDonViTinh;
+    private BigDecimal tonKho;
+    private BigDecimal soLuongDc;
+    private BigDecimal duToanKphi;
+    private BigDecimal tichLuongKd;
+    private BigDecimal soLuongPhanBo;
+    private BigDecimal slDcConLai;
+    private Boolean coLoKho;
+    private String maDiemKho;
+    private String tenDiemKho;
+    @Access(value=AccessType.PROPERTY)
+    private String maNhaKho;
+    private String tenNhaKho;
+    private String maNganKho;
+    private String tenNganKho;
+    private String maLoKho;
+    private String tenLoKho;
+    private String maDiemKhoNhan;
+    private String tenDiemKhoNhan;
+    private String maNhaKhoNhan;
+    private String tenNhaKhoNhan;
+    private String maNganKhoNhan;
+    private String tenNganKhoNhan;
+    private String maLoKhoNhan;
+    private String tenLoKhoNhan;
+    private Boolean coLoKhoNhan;
+    @Column(name = "HDR_ID", insertable = true, updatable = true)
+    private Long hdrId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
+    @JsonIgnore
+    private DcnbKeHoachDcHdr dcnbKeHoachDcHdr;
 }

@@ -1,10 +1,8 @@
 package com.tcdt.qlnvhang.repository.xuathang.daugia.hopdong;
 
-import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.ketqua.XhKqBdgHdr;
 import com.tcdt.qlnvhang.repository.BaseRepository;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.hopdong.XhHopDongHdr;
 import com.tcdt.qlnvhang.request.xuathang.daugia.hopdong.XhHopDongHdrReq;
-import com.tcdt.qlnvhang.request.xuathang.daugia.tochuctrienkhai.ketqua.XhKqBdgHdrReq;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -19,6 +17,9 @@ import java.util.Optional;
 @Repository
 public interface XhHopDongHdrRepository extends BaseRepository<XhHopDongHdr,Long> {
     Optional<XhHopDongHdr> findBySoHd(String soHd);
+
+    Optional<XhHopDongHdr> findFirstBySoHd(String soHd);
+
 
     @Query("SELECT c FROM XhHopDongHdr c where 1 = 1" +
             "AND (:#{#param.maDvi} IS NULL OR c.maDvi = :#{#param.maDvi}) " +
@@ -51,4 +52,6 @@ public interface XhHopDongHdrRepository extends BaseRepository<XhHopDongHdr,Long
     List<XhHopDongHdr> findAllBySoQdKq(String soQdKq);
 
 
+    @Transactional
+    List<XhHopDongHdr> findAllByIdHd(Long idHd);
 }

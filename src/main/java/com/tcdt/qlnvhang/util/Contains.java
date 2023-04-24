@@ -98,6 +98,8 @@ public class Contains {
 	public static final String HOANTHANHCAPNHAT = "35";
 	public static final String HUYTHAU = "36";
 	public static final String TRUNGTHAU = "37";
+	public static final String CHODUYET_TBP_TVQT = "38";
+	public static final String TUCHOI_TBP_TVQT = "39";
 
 
 	public static final String CHUA_THUC_HIEN = "43";
@@ -108,6 +110,12 @@ public class Contains {
 	public static final String DA_DUYET_CBV = "53";
 	public static final String TU_CHOI_CBV = "54";
 
+	public static final String YC_CHICUC_PHANBO_DC = "59";
+	public static final String DA_PHANBO_DC_CHODUYET_TBP_TVQT = "60";
+	public static final String DA_PHANBO_DC_TUCHOI_TBP_TVQT = "61";
+	public static final String DA_PHANBO_DC_CHODUYET_LDCC = "62";
+	public static final String DA_PHANBO_DC_TUCHOI_LDCC = "63";
+	public static final String DA_PHANBO_DC_DADUYET_LDCC = "64";
 
 	// Trang thai response
 	public static final int RESP_SUCC = 0;
@@ -240,6 +248,11 @@ public class Contains {
 	public static final String DIEU_CHUYEN = "DC";
 
 	public static final String NHAN_DIEU_CHUYEN = "NDC";
+
+	// Loa diều chuyển
+
+	public static final String GIUA_2_CHI_CUC_TRONG_1_CUC = "CHI_CUC";
+	public static final String GIUA_2_CUC_DTNN_KV = "CUC";
 
 	public static final Map<String, String> mappingLoaiDx;
 	static {
