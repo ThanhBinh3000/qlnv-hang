@@ -1,8 +1,6 @@
 package com.tcdt.qlnvhang.repository.dieuchuyennoibo;
 
-import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbKeHoachDc;
 import com.tcdt.qlnvhang.table.TongHopKeHoachDieuChuyen.THKeHoachDieuChuyenCucHdr;
-import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.search.TongHopKeHoachDieuChuyenSearch;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,4 +30,13 @@ public interface THKeHoachDieuChuyenCucHdrRepository extends JpaRepository<THKeH
     List<THKeHoachDieuChuyenCucHdr> findByIdIn(List<Long> id);
 
     Optional<THKeHoachDieuChuyenCucHdr> findByMaTongHop(String maTongHop);
+
+@Query(nativeQuery = true,value = "SELECT * FROM DCNB_TH_KE_HOACH_DCC_HDR h \n" +
+        "LEFT JOIN DCNB_TH_KE_HOACH_DCC_NBC_DTL dtl ON dtl.HDR_ID = h.ID \n" +
+        "LEFT JOIN DCNB_KE_HOACH_DC_DTL khdtl ON khdtl.ID = dtl.DCNB_KE_HOACH_DC_DTL_ID \n" +
+        "WHERE h.MA_DVI = ?1 AND h.TRANG_THAI = ?2 AND h.LOAI_DC = ?3 \n" +
+        "AND (khdtl.LOAI_VTHH IS NULL OR khdtl.LOAI_VTHH = ?4) \n" +
+        "AND (khdtl.CLOAI_VTHH IS NULL OR khdtl.CLOAI_VTHH = ?5)\n" +
+        "AND ((TO_DATE(TO_CHAR(hdr.NGAY_TAO ,'YYYY-MM-DD'),'YYYY-MM-DD') <= TO_DATE(?6,'YYYY-MM-DD')))")
+    List<THKeHoachDieuChuyenCucHdr> findByDonViAndTrangThaiTongCuc(String maDVi,String trangThai,String loaiDieuChuyen, String loaiHangHoa, String chungLoaiHangHoa, String thoiGianTongHop);
 }
