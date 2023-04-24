@@ -483,10 +483,10 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		Optional<HhDxuatKhLcntHdr> bySoDxuat;
 		if(!StringUtils.isEmpty(dtl.getSoDxuat())){
 			bySoDxuat = hhDxuatKhLcntHdrRepository.findBySoDxuat(dtl.getSoDxuat());
-			bySoDxuat.get().setTenLoaiHinhNx(hashMapLoaiNx.get(bySoDxuat.get().getLoaiHinhNx()));
-			bySoDxuat.get().setTenKieuNx(hashMapKieuNx.get(bySoDxuat.get().getKieuNx()));
 		}else{
 			bySoDxuat = hhDxuatKhLcntHdrRepository.findBySoDxuat(hhQdKhlcntHdr.getSoTrHdr());
+		}
+		if (bySoDxuat.isPresent()) {
 			bySoDxuat.get().setTenLoaiHinhNx(hashMapLoaiNx.get(bySoDxuat.get().getLoaiHinhNx()));
 			bySoDxuat.get().setTenKieuNx(hashMapKieuNx.get(bySoDxuat.get().getKieuNx()));
 		}
