@@ -56,6 +56,6 @@ public interface DcnbKeHoachDcHdrRepository extends JpaRepository<DcnbKeHoachDcH
 
     @Query(nativeQuery = true, value = "SELECT * FROM DCNB_KE_HOACH_DC_HDR hdr WHERE hdr.MA_DVI = ?1  " +
             "AND hdr.TRANG_THAI = ?2 AND hdr.LOAI_DC = ?3 AND hdr.TYPE = 'DC' " +
-            "AND (TO_DATE(TO_CHAR(hdr.NGAY_TAO ,'YYYY-MM-DD'),'YYYY-MM-DD') <= TO_DATE(?6,'YYYY-MM-DD'))")
+            "AND (TO_DATE(TO_CHAR(hdr.NGAY_TAO ,'YYYY-MM-DD'),'YYYY-MM-DD') <= TO_DATE(?4,'YYYY-MM-DD'))")
     List<DcnbKeHoachDcHdr> findByDonViAndTrangThaiCuc(String maDVi, String trangThai, String loaiDieuChuyen, String thoiGianTongHop);
 }
