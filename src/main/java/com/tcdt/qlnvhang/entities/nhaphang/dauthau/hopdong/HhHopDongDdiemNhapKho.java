@@ -37,6 +37,8 @@ public class HhHopDongDdiemNhapKho implements Serializable {
   String tenDvi;
   @Transient
   String tenDiemKho;
+  @Transient
+  String diaDiemNhap;
 
   @Transient
   private List<HhHopDongDdiemNhapKhoVt> children;
