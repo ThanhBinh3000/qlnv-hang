@@ -64,6 +64,20 @@ public class XhKqBdgHdrReq extends BaseRequest {
 
   private String trangThaiXh;
 
+  private String tongDviTs;
+
+  private String soDvtsDgTc;
+
+  private String slHdDaKy;
+
+  private String thoiHanTt;
+
+  private String toChucCaNhanDg;
+
+  private String tongSlXuat;
+
+  private String thanhTien;
+
   // Transient
   @Transient
   private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
