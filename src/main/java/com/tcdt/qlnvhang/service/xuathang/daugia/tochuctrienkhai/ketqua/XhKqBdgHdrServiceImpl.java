@@ -1,16 +1,19 @@
 package com.tcdt.qlnvhang.service.xuathang.daugia.tochuctrienkhai.ketqua;
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.hopdong.XhHopDongHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.tochuctrienkhai.ketqua.XhKqBdgHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.tochuctrienkhai.ketqua.XhKqBdgHdrReq;
+import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.SearchXhCtvtQdGiaoNvXh;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.ketqua.XhKqBdgHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQdGiaoNvXhHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -211,19 +214,19 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
     }
 
     @Override
-    public void export(XhKqBdgHdrReq req, HttpServletResponse response) throws Exception {
+    public void export( XhKqBdgHdrReq objReq, HttpServletResponse response) throws Exception {
         PaggingReq paggingReq = new PaggingReq();
         paggingReq.setPage(0);
         paggingReq.setLimit(Integer.MAX_VALUE);
-        req.setPaggingReq(paggingReq);
-        Page<XhKqBdgHdr> page = this.searchPage(req);
+        objReq.setPaggingReq(paggingReq);
+        Page<XhKqBdgHdr> page = this.searchPage(objReq);
         List<XhKqBdgHdr> data = page.getContent();
 
-        String title="Danh sách quyết định phê duyệt kết quả đấu giá";
+        String title = "Danh sách quyết định phê duyệt kết quả đấu giá";
         String[] rowsName = new String[]{"STT","Năm Kế hoạch", "Số QĐ PD KQ BĐG", "Ngày ký", "Trích yếu", "Ngày tổ chức BĐG", "Số QĐ PD KH BĐG", "Mã thông báo BĐG", "Hình thức đấu thầu", "Phương thức đấu giá", "Số TB đấu giá không thành", "Số biên bản đấu giá", "Trạng thái"};
-        String filename="danh-sach-quyet-dinh-phe-duyet-ket-qua-dau-gia.xlsx";
+        String fileName="danh-sach-quyet-dinh-phe-duyet-ket-qua-dau-gia.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
-        Object[] objs=null;
+        Object[] objs = null;
         for (int i = 0; i < data.size(); i++) {
             XhKqBdgHdr hdr = data.get(i);
             objs=new Object[rowsName.length];
@@ -242,7 +245,7 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
             objs[12]=hdr.getTenTrangThai();
             dataList.add(objs);
         }
-        ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
     }
 
