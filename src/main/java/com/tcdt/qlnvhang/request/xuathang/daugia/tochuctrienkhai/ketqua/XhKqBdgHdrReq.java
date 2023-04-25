@@ -64,19 +64,19 @@ public class XhKqBdgHdrReq extends BaseRequest {
 
   private String trangThaiXh;
 
-  private String tongDviTs;
+  private Long tongDviTs;
 
-  private String soDvtsDgTc;
+  private Long soDvtsDgTc;
 
-  private String slHdDaKy;
+  private Long slHdDaKy;
 
-  private String thoiHanTt;
+  private LocalDate thoiHanTt;
 
   private String toChucCaNhanDg;
 
-  private String tongSlXuat;
+  private Long tongSlXuat;
 
-  private String thanhTien;
+  private Long thanhTien;
 
   // Transient
   @Transient
