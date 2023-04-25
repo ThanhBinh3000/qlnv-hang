@@ -20,6 +20,7 @@ import com.tcdt.qlnvhang.request.object.HhDdiemNhapKhoVtReq;
 import com.tcdt.qlnvhang.request.object.HhHopDongDtlReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.table.*;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.util.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -250,13 +251,14 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
       throw new UnsupportedOperationException("Không tồn tại bản ghi");
 
 
-    Map<String, String> mapDmucDvi = getMapTenDvi();
+//    Map<String, String> mapDmucDvi = getMapTenDvi();
     Map<String, String> hashMapDviLquan = getListDanhMucDviLq("NT");
 
     Map<String, String> mapVthh = getListDanhMucHangHoa();
     qOptional.get().setTenLoaiVthh(mapVthh.get(qOptional.get().getLoaiVthh()));
     qOptional.get().setTenCloaiVthh(mapVthh.get(qOptional.get().getCloaiVthh()));
-    qOptional.get().setTenDvi(mapDmucDvi.get(qOptional.get().getMaDvi()));
+    qlnvDmDonviRepository.findByMaDvi(qOptional.get().getMaDvi());
+    qOptional.get().setTenDvi(qlnvDmDonviRepository.findByMaDvi(qOptional.get().getMaDvi()).getTenDvi());
     qOptional.get().setDonViTinh( mapVthh.get(qOptional.get().getDonViTinh()));
     qOptional.get().setHhPhuLucHdongList(hhPhuLucRepository.findBySoHd(qOptional.get().getSoHd()));
 
@@ -264,17 +266,20 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
     allByIdHdr.forEach(item -> {
       List<HhHopDongDdiemNhapKho> allByIdHdongDtl = hhHopDongDdiemNhapKhoRepository.findAllByIdHdongDtl(item.getId());
       allByIdHdongDtl.forEach(s -> {
-          s.setTenDvi(mapDmucDvi.get(s.getMaDvi()));
-          s.setTenDiemKho(mapDmucDvi.get(s.getMaDiemKho()));
+//          s.setTenDvi(mapDmucDvi.get(s.getMaDvi()));
+          QlnvDmDonvi dvi = qlnvDmDonviRepository.findByMaDvi(s.getMaDiemKho());
+          s.setTenDiemKho(dvi.getTenDvi());
+          s.setDiaDiemNhap(dvi.getDiaChi());
           List<HhHopDongDdiemNhapKhoVt> allByIdHdongDdiemNkho = hhHopDongDdiemNhapKhoVtRepository.findAllByIdHdongDdiemNkho(s.getId());
           allByIdHdongDdiemNkho.forEach( x -> {
-            x.setTenDvi(mapDmucDvi.get(x.getMaDvi()));
-            x.setDiaDiemNhap(qlnvDmDonviRepository.findByMaDvi(x.getMaDvi()).getDiaChi());
+            QlnvDmDonvi dviCon = qlnvDmDonviRepository.findByMaDvi(x.getMaDvi());
+            x.setTenDvi(dviCon.getTenDvi());
+            x.setDiaDiemNhap(dviCon.getDiaChi());
           });
           s.setChildren(allByIdHdongDdiemNkho);
       });
       item.setChildren(allByIdHdongDtl);
-      item.setTenDvi(mapDmucDvi.get(item.getMaDvi()));
+      item.setTenDvi(qlnvDmDonviRepository.findByMaDvi(item.getMaDvi()).getTenDvi());
     });
 
 

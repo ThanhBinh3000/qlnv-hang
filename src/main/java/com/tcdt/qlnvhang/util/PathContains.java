@@ -95,6 +95,7 @@ public class PathContains {
 	public static final String TTIN_DTHAU_GTHAU = "/ttin-dthau-gthau";
 	public static final String QD_PDUYET_KQLCNT = "/qd-pduyet-kqlcnt";
 	public static final String HOP_DONG = "/hop-dong";
+	public static final String QLY_HD_MUA_HANG = "/qly-hd-mua";
 
 	public static final String BK_BAN_LE = "/bk-ban-le";
 	public static final String PHU_LUC = "/phu-luc";
