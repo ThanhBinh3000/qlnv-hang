@@ -151,6 +151,22 @@ public class TongHopKeHoachDcController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
+    @ApiOperation(value = "Yêu cầu xác định điểm nhập", response = List.class)
+    @PostMapping(value =  "yeu-cai-xac-dinh-diem-nhap", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> yeuCauXacDinhDiemNhap(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody ThKeHoachDieuChuyenCucHdrReq objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            thKeHoachDieuChuyenService.yeuCauXacDinhDiemNhap(currentUser,objReq);
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Phê duyệt thông tin : {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
 
     @ApiOperation(value = "Xoá thông tin tổng hợp", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping(value =  PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)

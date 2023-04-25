@@ -28,7 +28,7 @@ public interface THKeHoachDieuChuyenCucHdrRepository extends JpaRepository<THKeH
 
     List<THKeHoachDieuChuyenCucHdr> findByIdIn(List<Long> id);
 
-    Optional<THKeHoachDieuChuyenCucHdr> findByMaTongHop(String maTongHop);
+    List<THKeHoachDieuChuyenCucHdr> findByMaTongHop(String maTongHop);
 
 @Query(nativeQuery = true,value = "SELECT * FROM DCNB_TH_KE_HOACH_DCC_HDR h \n" +
         "LEFT JOIN DCNB_TH_KE_HOACH_DCC_NBC_DTL dtl ON dtl.HDR_ID = h.ID \n" +
@@ -36,6 +36,6 @@ public interface THKeHoachDieuChuyenCucHdrRepository extends JpaRepository<THKeH
         "WHERE h.MA_DVI = ?1 AND h.TRANG_THAI = ?2 AND h.LOAI_DC = ?3 \n" +
         "AND (khdtl.LOAI_VTHH IS NULL OR khdtl.LOAI_VTHH = ?4) \n" +
         "AND (khdtl.CLOAI_VTHH IS NULL OR khdtl.CLOAI_VTHH = ?5)\n" +
-        "AND ((TO_DATE(TO_CHAR(hdr.NGAY_TAO ,'YYYY-MM-DD'),'YYYY-MM-DD') <= TO_DATE(?6,'YYYY-MM-DD')))")
+        "AND ((TO_DATE(TO_CHAR(hdr.NGAY_TAO ,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS') <= TO_DATE(?6,'YYYY-MM-DD HH24:MI:SS')))")
     List<THKeHoachDieuChuyenCucHdr> findByDonViAndTrangThaiTongCuc(String maDVi,String trangThai,String loaiDieuChuyen, String loaiHangHoa, String chungLoaiHangHoa, String thoiGianTongHop);
 }

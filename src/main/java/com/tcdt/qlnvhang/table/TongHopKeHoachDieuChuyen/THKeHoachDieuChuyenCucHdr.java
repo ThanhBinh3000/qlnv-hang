@@ -94,6 +94,9 @@ public class THKeHoachDieuChuyenCucHdr implements Serializable {
     @Column(name = "TEN_DVI")
     private String tenDvi;
 
+    @Column(name = "THOI_GIAN_TONG_HOP")
+    private Date thoiGianTongHop;
+
     @Column(name = "DA_XDINH_DIEM_NHAP")
     private Boolean daXdinhDiemNhap;
 
