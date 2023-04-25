@@ -255,6 +255,14 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 			}
 			hdr.setSoQdPdKqLcnt(optional.get().getSoQd());
 			hhQdKhlcntHdrRepository.save(hdr);
+			List<HhQdKhlcntDtl> dtl = hhQdKhlcntDtlRepository.findAllByIdQdHdr(hdr.getId());
+			dtl.forEach(item ->{
+				List<HhQdKhlcntDsgthau> listDsgThau = hhQdKhlcntDsgthauRepository.findByIdQdDtl(item.getId());
+				for (HhQdKhlcntDsgthau dsgthau : listDsgThau) {
+					dsgthau.setTrangThai(item.getTrangThai().equals(NhapXuatHangTrangThaiEnum.THANH_CONG.getId()) ? NhapXuatHangTrangThaiEnum.THANH_CONG.getId() : NhapXuatHangTrangThaiEnum.THAT_BAI.getId());
+					hhQdKhlcntDsgthauRepository.save(dsgthau);
+				}
+			});
 		}else{
 			throw new Exception(
 					"Số quyết định phê duyệt kế hoạch lựa chọn nhà thầu " + optional.get().getSoQdPdKhlcnt() + " không tồn tại");
@@ -271,6 +279,10 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 			}
 			hhQdKhlcntDtl.setSoQdPdKqLcnt(optional.get().getSoQd());
 			hhQdKhlcntDtlRepository.save(hhQdKhlcntDtl);
+			hhQdKhlcntDtl.getChildren().forEach(item ->{
+				item.setTrangThai(hhQdKhlcntDtl.getTrangThai().equals(NhapXuatHangTrangThaiEnum.THANH_CONG.getId()) ? NhapXuatHangTrangThaiEnum.THANH_CONG.getId() : NhapXuatHangTrangThaiEnum.THAT_BAI.getId());
+					hhQdKhlcntDsgthauRepository.save(item);
+			});
 		}else{
 			throw new Exception(
 					"Số quyết định phê duyệt kế hoạch lựa chọn nhà thầu " + optional.get().getSoQdPdKhlcnt() + " không tồn tại");

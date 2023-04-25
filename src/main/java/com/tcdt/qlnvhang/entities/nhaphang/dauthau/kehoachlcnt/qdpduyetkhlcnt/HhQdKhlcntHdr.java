@@ -95,6 +95,10 @@ public class HhQdKhlcntHdr implements Serializable {
 
 	@Transient
 	String tenNguonVon;
+	@Transient
+	String tenKieuNx;
+	@Transient
+	String tenLoaiHinhNx;
 
 	@Temporal(TemporalType.DATE)
 	Date tgianBdauTchuc;
@@ -181,6 +185,8 @@ public class HhQdKhlcntHdr implements Serializable {
 	Long soGthau;
 	@Transient
 	Long soGthauTrung;
+	@Transient
+	Long soGthauTruot;
 	@Transient
 	String tenTrangThai;
 	@Transient

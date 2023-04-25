@@ -118,6 +118,7 @@ public class XhQdDchinhKhBttServiceImpl extends BaseServiceImpl implements XhQdD
             XhQdDchinhKhBttDtl dtl =  ObjectMapperUtils.map(dtlReq, XhQdDchinhKhBttDtl.class);
             dtl.setId(null);
             dtl.setIdDcHdr(idDcHdr);
+            dtl.setIdQdGoc(req.getIdQdGoc());
             xhQdDchinhKhBttDtlRepository.save(dtl);
             xhQdDchinhKhBttSlRepository.deleteAllByIdDtl(dtlReq.getId());
             for (XhQdDchinhKhBttSlReq slReq : dtlReq.getChildren()){
