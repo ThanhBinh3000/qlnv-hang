@@ -15,7 +15,7 @@ import java.util.List;
 public interface XhQdDchinhKhBdgHdrRepository extends JpaRepository<XhQdDchinhKhBdgHdr, Long> {
 
     @Query("SELECT DC from XhQdDchinhKhBdgHdr DC WHERE 1 = 1 " +
-            "AND (:#{#param.nam} IS NULL OR DC.nam = :#{#param.namKh}) " +
+            "AND (:#{#param.nam} IS NULL OR DC.nam = :#{#param.nam}) " +
             "AND (:#{#param.soQdDc} IS NULL OR LOWER(DC.soQdDc) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQdDc}),'%' ) ) )" +
             "AND (:#{#param.trichYeu} IS NULL OR LOWER(DC.trichYeu) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.trichYeu}),'%'))) " +
             "AND (:#{#param.ngayDuyetTu} IS NULL OR DC.ngayPduyet >= :#{#param.ngayDuyetTu}) " +

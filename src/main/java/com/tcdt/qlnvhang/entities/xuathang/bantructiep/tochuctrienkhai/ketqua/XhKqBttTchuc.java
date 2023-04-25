@@ -45,4 +45,8 @@ public class XhKqBttTchuc implements Serializable {
 
     @Transient
     private FileDinhKem fileDinhKems;
+
+    @Transient
+    private  XhKqBttDdiem xhKqBttDdiem;
+
 }

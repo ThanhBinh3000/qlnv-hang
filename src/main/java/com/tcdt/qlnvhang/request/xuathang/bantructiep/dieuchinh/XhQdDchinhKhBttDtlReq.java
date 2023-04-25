@@ -17,7 +17,7 @@ public class XhQdDchinhKhBttDtlReq  {
 
     private Long idDcHdr;
 
-    private Long idDxHdr;
+    private Long idQdGoc;
 
     private String maDvi;
 
@@ -38,6 +38,9 @@ public class XhQdDchinhKhBttDtlReq  {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date tgianDkienTu;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date tgianDkienDen;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Integer tgianTtoan;

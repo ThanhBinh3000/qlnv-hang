@@ -12,7 +12,7 @@ import java.util.List;
 public interface THKeHoachDieuChuyenNoiBoCucDtlRepository extends JpaRepository<THKeHoachDieuChuyenNoiBoCucDtl, Long> {
     List<THKeHoachDieuChuyenNoiBoCucDtl> findByHdrId(Long hdrId);
 
-    List<THKeHoachDieuChuyenNoiBoCucDtl> findAllByIdIn(List<Long> idList);
+    List<THKeHoachDieuChuyenNoiBoCucDtl> findAllByHdrIdIn(List<Long> ids);
 
     @Modifying
     @Query(nativeQuery = true, value = "DELETE FROM DCNB_TH_KE_HOACH_DCC_NBC_DTL d WHERE d.HDR.ID= ?1")

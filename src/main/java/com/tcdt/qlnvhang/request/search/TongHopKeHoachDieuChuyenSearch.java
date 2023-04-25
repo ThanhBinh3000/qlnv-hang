@@ -14,7 +14,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 public class TongHopKeHoachDieuChuyenSearch extends BaseRequest {
-    private Integer nam;
+    private Integer namKeHoach;
     private String maTongHop;
     private String loaiDieuChuyen;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
@@ -25,6 +25,6 @@ public class TongHopKeHoachDieuChuyenSearch extends BaseRequest {
     private Date thoiGianTongHop;
     private String trichYeu;
     private String maDVi;
-    private String loaiHH;
-    private String chungLoaiHH;
+    private String loaiHangHoa;
+    private String chungLoaiHangHoa;
 }
