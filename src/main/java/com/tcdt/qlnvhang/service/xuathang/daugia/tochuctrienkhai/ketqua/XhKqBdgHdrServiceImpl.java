@@ -236,7 +236,7 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
             objs[1]=hdr.getNam();
             objs[2]=hdr.getSoQdPd();
             objs[3]=hdr.getSoQdKq();
-            objs[4]=hdr.getTongDviTs();
+            objs[4]=hdr.getTongDvts();
             objs[5]=hdr.getSoDvtsDgTc();
             objs[6]=hdr.getSlHdDaKy();
             objs[7]=hdr.getThoiHanTt();
