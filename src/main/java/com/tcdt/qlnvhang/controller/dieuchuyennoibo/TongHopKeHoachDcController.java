@@ -213,9 +213,9 @@ public class TongHopKeHoachDcController extends BaseController {
                 resp.setData(thKeHoachDieuChuyenService.createPlanChiCuc(currentUser, req));
             } else if (Objects.equals(req.getLoaiDieuChuyen(), Contains.GIUA_2_CUC_DTNN_KV)) {
                 resp.setData(thKeHoachDieuChuyenService.createPlanCuc(currentUser, req));
-            } else if (Objects.equals(req.getLoaiDieuChuyen(), Contains.TAT_CA)) {
-                resp.setData(thKeHoachDieuChuyenService.createPlanChiCuc(currentUser, req));
-                resp.setOtherData(thKeHoachDieuChuyenService.createPlanCuc(currentUser, req));
+//            } else if (Objects.equals(req.getLoaiDieuChuyen(), Contains.TAT_CA)) {
+//                resp.setData(thKeHoachDieuChuyenService.createPlanChiCuc(currentUser, req));
+//                resp.setOtherData(thKeHoachDieuChuyenService.createPlanCuc(currentUser, req));
             }
         } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
             resp.setData(thKeHoachDieuChuyenService.createPlanTongCuc(currentUser, req));

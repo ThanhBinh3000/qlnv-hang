@@ -72,6 +72,9 @@ public class THKeHoachDieuChuyenTongCucHdr implements Serializable {
     @Column(name = "TEN_DVI")
     private String tenDVi;
 
+    @Column(name = "THOI_GIAN_TONG_HOP")
+    private Date thoiGianTongHop;
+
     @Transient
     private List<THKeHoachDieuChuyenTongCucDtl> thKeHoachDieuChuyenTongCucDtls = new ArrayList<>();
 }

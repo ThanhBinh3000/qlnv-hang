@@ -60,12 +60,12 @@ public class ThKeHoachDieuChuyenCucHdrReq {
     private String maDVi;
 
     private String tenDVi;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
     private Date thoiGianTongHop;
 
     private Boolean daXdinhDiemNhap;
 
-    List<ThKeHoachDieuChuyenNoiBoCucDtlReq> ctTongHopKeHoachDieuChuyen;
+    List<ThKeHoachDieuChuyenNoiBoCucDtlReq> thKeHoachDieuChuyenNoiBoCucDtls;
 
-    List<ThKeHoachDieuChuyenKhacCucDtlReq> ctTongHopKeHoachDieuChuyenKhacCuc;
+    List<ThKeHoachDieuChuyenKhacCucDtlReq> thKeHoachDieuChuyenCucKhacCucDtls;
 }
