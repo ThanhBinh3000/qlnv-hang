@@ -64,7 +64,7 @@ public class XhKqBdgHdrReq extends BaseRequest {
 
   private String trangThaiXh;
 
-  private Long tongDviTs;
+  private Long tongDvts;
 
   private Long soDvtsDgTc;
 
