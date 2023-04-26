@@ -233,5 +233,27 @@ public class HhQdPduyetKqlcntHdrController extends BaseController {
 		}
 	}
 
+	@ApiOperation(value = "Kết xuất danh sách Hợp đồng", response = List.class)
+	@PostMapping(value = PathContains.URL_KET_XUAT + PathContains.HOP_DONG, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public void exportListHd (@Valid @RequestBody HhQdPduyetKqlcntSearchReq objReq, HttpServletResponse response) throws Exception{
+		try {
+			service.exportListHd(objReq,response);
+
+		} catch (Exception e) {
+			log.error("Kết xuất danh sách Quyết định phê duyệt kết quả lựa chọn nhà thầu trace: {}", e);
+			final Map<String, Object> body = new HashMap<>();
+			body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			body.put("msg", e.getMessage());
+
+			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+			response.setCharacterEncoding("UTF-8");
+
+			final ObjectMapper mapper = new ObjectMapper();
+			mapper.writeValue(response.getOutputStream(), body);
+
+		}
+	}
+
 
 }

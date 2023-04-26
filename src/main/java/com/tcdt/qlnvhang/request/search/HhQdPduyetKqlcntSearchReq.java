@@ -48,5 +48,7 @@ public class HhQdPduyetKqlcntSearchReq extends BaseRequest {
 
 	String tuNgayKyStr;
 	String denNgayKyStr;
+	String trangThaiHd;
+	Boolean hdChuaBanHanh;
 
 }

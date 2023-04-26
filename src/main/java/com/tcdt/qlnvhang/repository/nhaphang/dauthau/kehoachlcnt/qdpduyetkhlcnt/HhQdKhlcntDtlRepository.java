@@ -51,7 +51,7 @@ public interface HhQdKhlcntDtlRepository extends JpaRepository<HhQdKhlcntDtl, Lo
             " AND (:soQdPdKqlcnt IS NULL OR LOWER(PD_HDR.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQdPdKqlcnt),'%')))" +
             " AND (:soQdPdKhlcnt IS NULL OR LOWER(HDR.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQdPdKhlcnt),'%')))" +
             " AND (:loaiVthh IS NULL OR LOWER(HDR.LOAI_VTHH) LIKE LOWER(CONCAT(CONCAT('%', :loaiVthh),'%')))" +
-            " AND (:maDvi IS NULL OR DTL.MA_DVI = :maDvi)" +
+            " AND (:maDvi IS NULL OR LOWER(DTL.MA_DVI) LIKE LOWER(CONCAT(CONCAT('%', :maDvi),'%')))" +
             " AND (:trangThaiCuc IS NULL OR DTL.TRANG_THAI = :trangThaiCuc)" +
             " AND HDR.TRANG_THAI = :trangThai " +
             " AND (:trangThaiDt IS NULL OR HDR.TRANG_THAI_DT = :trangThaiDt )" +
@@ -67,7 +67,7 @@ public interface HhQdKhlcntDtlRepository extends JpaRepository<HhQdKhlcntDtl, Lo
                     " AND (:soQdPdKqlcnt IS NULL OR LOWER(PD_HDR.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQdPdKqlcnt),'%')))" +
                     " AND (:soQdPdKhlcnt IS NULL OR LOWER(HDR.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQdPdKhlcnt),'%')))" +
                     " AND (:loaiVthh IS NULL OR LOWER(HDR.LOAI_VTHH) LIKE LOWER(CONCAT(CONCAT('%', :loaiVthh),'%')))" +
-                    " AND (:maDvi IS NULL OR DTL.MA_DVI = :maDvi)" +
+                    " AND (:maDvi IS NULL OR LOWER(DTL.MA_DVI) LIKE LOWER(CONCAT(CONCAT('%', :maDvi),'%')))" +
                     " AND (:trangThaiCuc IS NULL OR DTL.TRANG_THAI = :trangThaiCuc)" +
                     " AND HDR.TRANG_THAI = :trangThai " +
                     " AND (:trangThaiDt IS NULL OR HDR.TRANG_THAI_DT = :trangThaiDt )" +
