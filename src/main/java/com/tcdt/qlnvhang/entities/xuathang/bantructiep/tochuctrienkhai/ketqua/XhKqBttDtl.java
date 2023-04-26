@@ -22,15 +22,19 @@ public class XhKqBttDtl {
 
     private Long idHdr;
 
+    private BigDecimal soLuongChiCuc;
+
     private String maDvi;
     @Transient
     private String tenDvi;
 
-    private BigDecimal soLuongChiCuc;
-
     private String diaChi;
 
-    private BigDecimal donGiaVat;
+    private BigDecimal soLuongChiTieu;
+
+    private BigDecimal soLuongKhDaDuyet;
+
+    private String donViTinh;
 
     @Transient
     private List<XhKqBttDdiem> children = new ArrayList<>();

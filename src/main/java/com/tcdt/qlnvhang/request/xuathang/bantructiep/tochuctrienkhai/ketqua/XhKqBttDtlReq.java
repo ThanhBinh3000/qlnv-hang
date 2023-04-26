@@ -19,15 +19,17 @@ public class XhKqBttDtlReq {
 
     private Long idHdr;
 
-    private String maDvi;
-    @Transient
-    private String tenDvi;
-
     private BigDecimal soLuongChiCuc;
+
+    private String maDvi;
 
     private String diaChi;
 
-    private BigDecimal donGiaVat;
+    private BigDecimal soLuongChiTieu;
+
+    private BigDecimal soLuongKhDaDuyet;
+
+    private String donViTinh;
 
     @Transient
     private List<XhKqBttDdiemReq> children = new ArrayList<>();

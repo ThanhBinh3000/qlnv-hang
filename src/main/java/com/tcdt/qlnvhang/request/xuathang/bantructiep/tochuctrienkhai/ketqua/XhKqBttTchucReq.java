@@ -30,7 +30,7 @@ public class XhKqBttTchucReq {
 
     private BigDecimal donGia;
 
-    private String thueGtgt;
+    private BigDecimal thueGtgt;
 
     private Boolean luaChon;
 
