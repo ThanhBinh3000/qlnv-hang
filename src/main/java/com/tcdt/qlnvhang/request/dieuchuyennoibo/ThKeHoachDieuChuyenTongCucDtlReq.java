@@ -39,5 +39,4 @@ public class ThKeHoachDieuChuyenTongCucDtlReq {
 
     private List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = new ArrayList<>();
 
-    private List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdrs = new ArrayList<>();
 }
