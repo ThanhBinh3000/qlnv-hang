@@ -64,11 +64,11 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 	@Override
 	public HhQdPduyetKqlcntHdr create(HhQdPduyetKqlcntHdrReq objReq) throws Exception {
 
-		List<HhQdKhlcntHdr> checkSoCc = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQdPdKhlcnt());
-		if (checkSoCc.isEmpty()){
-			throw new Exception(
-					"Số quyết định phê duyệt kế hoạch lựa chọn nhà thầu " + objReq.getSoQdPdKhlcnt() + " không tồn tại");
-		}
+//		List<HhQdKhlcntHdr> checkSoCc = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQdPdKhlcnt());
+//		if (checkSoCc.isEmpty()){
+//			throw new Exception(
+//					"Số quyết định phê duyệt kế hoạch lựa chọn nhà thầu " + objReq.getSoQdPdKhlcnt() + " không tồn tại");
+//		}
 
 		if(!StringUtils.isEmpty(objReq.getSoQd())){
 			Optional<HhQdPduyetKqlcntHdr> checkSoQd = hhQdPduyetKqlcntHdrRepository.findBySoQd(objReq.getSoQd());
@@ -310,8 +310,8 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 	@Override
 	public Page<HhQdPduyetKqlcntHdr> timKiemPage(HhQdPduyetKqlcntSearchReq req, HttpServletResponse response) throws Exception {
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").descending());
-		req.setTuNgayKyStr(convertFullDateToString(req.getTuNgayKy()));
-		req.setDenNgayKyStr(convertFullDateToString(req.getDenNgayKy()));
+		req.setTuNgayKyStr(convertDateToString(req.getTuNgayKy()));
+		req.setDenNgayKyStr(convertDateToString(req.getDenNgayKy()));
 		Page<HhQdPduyetKqlcntHdr> hhQdPduyetKqlcntHdrs = hhQdPduyetKqlcntHdrRepository.selectPage(req, pageable);
 		Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
 		hhQdPduyetKqlcntHdrs.forEach( item -> {

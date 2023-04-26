@@ -58,6 +58,8 @@ public class HhQdKhlcntDsgthauReq {
 	String diaDiemNhap;
 
 	String tgianBdauThien;
+	BigDecimal soLuongTheoChiTieu;
+	BigDecimal soLuongDaMua;
 
 	private List<HhDxuatKhLcntDsgthauDtlCtietReq> children = new ArrayList<>();
 
