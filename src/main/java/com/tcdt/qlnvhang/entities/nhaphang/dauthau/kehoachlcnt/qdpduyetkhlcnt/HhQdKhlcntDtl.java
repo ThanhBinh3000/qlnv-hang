@@ -11,6 +11,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdr;
+import com.tcdt.qlnvhang.table.HhDxKhLcntThopHdr;
 import com.tcdt.qlnvhang.table.HhQdPduyetKqlcntHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
@@ -79,6 +80,8 @@ public class HhQdKhlcntDtl implements Serializable {
 
 	@Transient
 	private HhDxuatKhLcntHdr dxuatKhLcntHdr;
+	@Transient
+	private HhDxKhLcntThopHdr hhDxKhLcntThopHdr;
 
 	@Transient
 	private HhQdPduyetKqlcntHdr hhQdPduyetKqlcntHdr;

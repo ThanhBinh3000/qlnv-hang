@@ -129,4 +129,12 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 			" WHERE hdr.id = :khlcntId ",
 			nativeQuery = true)
 	BigDecimal getIdByKhLcnt (Long khlcntId);
+
+	@Query(value = "SELECT DX.* FROM HH_DX_KHLCNT_HDR DX " +
+			" JOIN HH_DX_KHLCNT_THOP_DTL dtl ON dx.id = dtl.ID_DX_HDR "+
+			" JOIN HH_DX_KHLCNT_THOP_HDR hdr ON dtl.ID_THOP_HDR = HDR.ID "+
+			" WHERE 1=1 "+
+			" AND (:idThopHdr IS NULL OR HDR.ID = :idThopHdr) ",
+			nativeQuery = true)
+	Optional<HhDxuatKhLcntHdr> getByIdThopHrd(Long idThopHdr);
 }

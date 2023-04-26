@@ -15,13 +15,10 @@ public interface HhQdPduyetKqlcntHdrRepository extends BaseRepository<HhQdPduyet
 			" WHERE (:#{#req.namKhoach} IS NULL OR QDPD.NAM_KHOACH = TO_NUMBER(:#{#req.namKhoach})) "+
 			" AND (:#{#req.loaiVthh} IS NULL OR QDPD.LOAI_VTHH LIKE CONCAT(:#{#req.loaiVthh},'%')) "+
 			" AND (:#{#req.cloaiVthh} IS NULL OR QDPD.CLOAI_VTHH LIKE CONCAT(:#{#req.cloaiVthh},'%')) "+
-			" AND (:#{#req.soHd} IS NULL OR LOWER(HD.SO_HD) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.soHd}),'%')))" +
-			" AND (:#{#req.tenHd} IS NULL OR LOWER(HD.TEN_HD) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.tenHd}),'%')))" +
+			" AND (:#{#req.soQdPdKhlcnt} IS NULL OR LOWER(QDPD.SO_QD_PD_KHLCNT) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.soQdPdKhlcnt}),'%')))" +
+			" AND (:#{#req.soQd} IS NULL OR LOWER(QDPD.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.soQd}),'%')))" +
 			" AND (:#{#req.tuNgayKyStr} IS NULL OR QDPD.NGAY_KY >= TO_DATE(:#{#req.tuNgayKyStr}, 'YYYY-MM-DD HH24:MI:SS')) "+
-			" AND (:#{#req.denNgayKyStr} IS NULL OR QDPD.NGAY_TAO <= TO_DATE(:#{#req.denNgayKyStr}, 'YYYY-MM-DD HH24:MI:SS')) "+
-			" AND (:#{#req.soQd} IS NULL OR QDPD.SO_QD = :#{#req.soQd}) "+
-			" AND (:#{#req.tuNgayQd} IS NULL OR QDPD.NGAY_TAO >= TO_DATE(:#{#req.tuNgayQd}, 'yyyy-MM-dd')) "+
-			" AND (:#{#req.denNgayQd} IS NULL OR QDPD.NGAY_TAO <= TO_DATE(:#{#req.denNgayQd}, 'yyyy-MM-dd')) "+
+			" AND (:#{#req.denNgayKyStr} IS NULL OR QDPD.NGAY_KY <= TO_DATE(:#{#req.denNgayKyStr}, 'YYYY-MM-DD HH24:MI:SS')) "+
 			" AND (:#{#req.trichYeu} IS NULL OR LOWER(QDPD.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.trichYeu}),'%')))" +
 			" AND (:#{#req.maDvi} IS NULL OR QDPD.MA_DVI = :#{#req.maDvi}) "+
 			" AND (:#{#req.trangThaiHd} IS NULL OR QDPD.TRANG_THAI_HD != :#{#req.trangThaiHd}) "+
