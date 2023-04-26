@@ -28,9 +28,6 @@ public class THKeHoachDieuChuyenTongCucDtl implements Serializable {
     @Column(name = "DCNB_KE_HOACH_DC_HDR_ID")
     private Long keHoachDcHdrId;
 
-    @Column(name = "DCNB_KE_HOACH_DC_DTL_ID")
-    private Long keHoachDcDtlId;
-
     @Column(name = "MA_CUC_DXUAT_DC")
     private String maCucDxuatDc;
 
