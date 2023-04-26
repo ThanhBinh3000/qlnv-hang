@@ -41,20 +41,20 @@ public interface DcnbKeHoachDcDtlRepository extends JpaRepository<DcnbKeHoachDcD
     @Query(nativeQuery = true,value ="SELECT SUM(d.DU_TOAN_KPHI) FROM DCNB_KE_HOACH_DC_DTL d " +
             "LEFT JOIN DCNB_KE_HOACH_DC_HDR h ON h.ID = d.HDR_ID " +
             "WHERE h.MA_DVI_CUC = ?1 AND h.TYPE = ?2 AND h.LOAI_DC = ?3 AND h.TRANG_THAI = ?4 " +
-            "AND (d.LOAI_VTHH IS NULL OR d.LOAI_VTHH = ?5 )" +
-            "AND (d.CLOAI_VTHH IS NULL OR d.CLOAI_VTHH = ?6)"+
+            "AND (?5 IS NULL OR d.LOAI_VTHH = ?5 )" +
+            "AND (?6 IS NULL OR d.CLOAI_VTHH = ?6)"+
             "AND (TO_DATE(TO_CHAR(h.NGAY_TAO,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS') <= TO_DATE(?7,'YYYY-MM-DD HH24:MI:SS'))")
     Long findByMaDviCucAndTypeAndLoaiDcTongCucChiCuc(String maDVi, String type, String loaiDieuChuyen, String trangThai,String loaiHH, String chungLoaiHH , String thoigianTongHop);
 
     @Query(nativeQuery = true,value ="SELECT SUM(d.DU_TOAN_KPHI) FROM DCNB_KE_HOACH_DC_DTL d " +
             "LEFT JOIN DCNB_KE_HOACH_DC_HDR h ON h.ID = d.HDR_ID " +
             "WHERE h.MA_DVI_CUC = ?1 AND h.MA_CUC_NHAN = ?2 AND h.TYPE = ?2 AND h.LOAI_DC = ?3 AND h.TRANG_THAI = ?4 " +
-            "AND (d.LOAI_VTHH IS NOT NULL OR d.LOAI_VTHH = ?5 )" +
-            "AND (d.CLOAI_VTHH IS NOT NULL OR d.CLOAI_VTHH = ?6)"+
+            "AND (?5 IS NULL OR d.LOAI_VTHH = ?5 )" +
+            "AND (?6 IS NULL OR d.CLOAI_VTHH = ?6)"+
             "AND (TO_DATE(TO_CHAR(h.NGAY_TAO,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS') <= TO_DATE(?7,'YYYY-MM-DD HH24:MI:SS'))")
     Long findByMaDviCucAndTypeAndLoaiDcTongCucCuc(String maDVi,String maDviCucNhan, String type, String loaiDieuChuyen, String trangThai,String loaiHH, String chungLoaiHH , String thoigianTongHop);
 
     @Query(nativeQuery = true,value = "SELECT * FROM DCNB_KE_HOACH_DC_DTL d " +
-            "WHERE d.HDR_ID = ?1 AND (d.LOAI_VTHH IS NOT NULL OR d.LOAI_VTHH = ?2) AND (d.CLOAI_VTHH IS NOT NULL OR d.CLOAI_VTHH = ?3)")
+            "WHERE d.HDR_ID = ?1 AND (?2 IS NULL OR d.LOAI_VTHH = ?2) AND (?3 IS NULL OR d.CLOAI_VTHH = ?3)")
     List<DcnbKeHoachDcDtl> findByDcnbKeHoachDcHdrIdAndLoaiHhAndCLoaiHh(Long keHoachDcHdrId,String trangThai,String loaiHH);
 }
