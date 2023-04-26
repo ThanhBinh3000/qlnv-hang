@@ -166,7 +166,7 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
     if (!optional.isPresent()) {
       throw new Exception("Không tìm thấy dữ liệu cần sửa");
     }
-    Optional<XhCtVtQuyetDinhPdHdr> soDx = xhCtVtQdPdHdrRepository.findBySoQd(objReq.getSoDx());
+    Optional<XhCtVtQuyetDinhPdHdr> soDx = xhCtVtQdPdHdrRepository.findBySoQd(objReq.getSoQd());
     if (soDx.isPresent()) {
       if (!soDx.get().getId().equals(objReq.getId())) {
         throw new Exception("số quyết định đã tồn tại");
