@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -56,6 +57,10 @@ public interface DcnbKeHoachDcHdrRepository extends JpaRepository<DcnbKeHoachDcH
 
     @Query(nativeQuery = true, value = "SELECT * FROM DCNB_KE_HOACH_DC_HDR hdr WHERE hdr.MA_DVI = ?1  " +
             "AND hdr.TRANG_THAI = ?2 AND hdr.LOAI_DC = ?3 AND hdr.TYPE = ?4 " +
-            "AND (TO_DATE(TO_CHAR(hdr.NGAY_TAO ,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS') <= TO_DATE(?4,'YYYY-MM-DD HH24:MI:SS'))")
+            "AND (TO_DATE(TO_CHAR(hdr.NGAY_TAO ,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS') <= TO_DATE(?5,'YYYY-MM-DD HH24:MI:SS'))")
     List<DcnbKeHoachDcHdr> findByDonViAndTrangThaiCuc(String maDVi, String trangThai, String loaiDieuChuyen,String type, String thoiGianTongHop);
+
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE  DCNB_KE_HOACH_DC_HDR SET  TRANG_THAI = '59' WHERE PARENT_ID = ?1 AND TYPE= ?2")
+    void updateTrangThaiNdc(Long hdrId, String type);
 }

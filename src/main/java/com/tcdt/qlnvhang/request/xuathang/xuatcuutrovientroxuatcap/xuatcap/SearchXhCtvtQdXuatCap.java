@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 @Data
 public class SearchXhCtvtQdXuatCap extends BaseRequest {
+    private String dvql;
     private Integer nam;
     private String soQdXc;
     private LocalDate ngayXuatCtvtTu;

@@ -8,6 +8,7 @@ import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcHdrRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.THKeHoachDieuChuyenNoiBoCucDtlRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -63,6 +64,8 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
     @Autowired
     private DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
     @Autowired
+    private THKeHoachDieuChuyenNoiBoCucDtlRepository tHKeHoachDieuChuyenNoiBoCucDtlRepository;
+    @Autowired
     private FileDinhKemService fileDinhKemService;
     @Autowired
     private LuuKhoClient luuKhoClient;
@@ -110,7 +113,7 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
         Optional<DcnbKeHoachDcHdr> soDxuat = dcnbKeHoachDcHdrRepository.findFirstBySoDxuat(objReq.getSoDxuat());
-        if(org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoDxuat())){
+        if (org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoDxuat())) {
             if (soDxuat.isPresent() && objReq.getSoDxuat().split("/").length == 1) {
                 if (!soDxuat.get().getId().equals(objReq.getId())) {
                     throw new Exception("số đề xuất đã tồn tại");
@@ -152,7 +155,7 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
     public DcnbKeHoachDcHdr details(Long id) throws Exception {
         List<DcnbKeHoachDcHdr> details = details(Arrays.asList(id));
         DcnbKeHoachDcHdr result = details.isEmpty() ? null : details.get(0);
-        if(result!=null){
+        if (result != null) {
             Hibernate.initialize(result.getDanhSachHangHoa());
             Hibernate.initialize(result.getPhuongAnDieuChuyen());
         }
@@ -186,6 +189,7 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
         dcnbKeHoachDcHdrRepository.deleteAll(list);
     }
 
+    @Transactional
     public void approve(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
         if (StringUtils.isEmpty(statusReq.getId())) {
             throw new Exception("Không tìm thấy dữ liệu");
@@ -286,7 +290,7 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
                                 itemMap.setId(null);
                                 return itemMap;
                             }).collect(Collectors.toList()));
-                    clonedObj.setCanCu(clonedObj.getCanCu().stream().map(itemMap ->{
+                    clonedObj.setCanCu(clonedObj.getCanCu().stream().map(itemMap -> {
                         itemMap.setId(null);
                         itemMap.setDataId(null);
                         return itemMap;
@@ -343,8 +347,37 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
             case Contains.DA_PHANBO_DC_CHODUYET_LDCC + Contains.DA_PHANBO_DC_DADUYET_LDCC:
                 optional.get().setNgayDuyetLdcc(LocalDate.now());
                 optional.get().setNguoiDuyetLdccId(currentUser.getUser().getId());
-
+                optional.get().setDaXdinhDiemNhap(true);
+                Optional<DcnbKeHoachDcDtl> parentHdr = dcnbKeHoachDcDtlRepository.findById(optional.get().getParentId());
+                if(parentHdr.isPresent()){
+                    parentHdr.get().setDaXdinhDiemNhap(true);
+                    dcnbKeHoachDcDtlRepository.save(parentHdr.get());
+                }
                 // update lại các kho nhận điều chuyển trong danh sách hàng hóa cha.
+                List<DcnbKeHoachDcDtl> danhSachHangHoa = optional.get().getDanhSachHangHoa();
+                for (DcnbKeHoachDcDtl hh : danhSachHangHoa) {
+                    Optional<DcnbKeHoachDcDtl> parentDtl = dcnbKeHoachDcDtlRepository.findById(hh.getParentId());
+                    if (parentDtl.isPresent()) {
+                        parentDtl.get().setMaDiemKhoNhan(hh.getMaDiemKhoNhan());
+                        parentDtl.get().setTenDiemKhoNhan(hh.getTenDiemKhoNhan());
+                        parentDtl.get().setMaNhaKhoNhan(hh.getMaNhaKhoNhan());
+                        parentDtl.get().setTenNhaKhoNhan(hh.getTenNhaKhoNhan());
+                        parentDtl.get().setMaNganKhoNhan(hh.getMaNganKhoNhan());
+                        parentDtl.get().setTenNganKhoNhan(hh.getTenNganKhoNhan());
+                        parentDtl.get().setCoLoKhoNhan(hh.getCoLoKhoNhan());
+                        parentDtl.get().setMaLoKhoNhan(hh.getMaLoKhoNhan());
+                        parentDtl.get().setTenLoKhoNhan(hh.getTenLoKhoNhan());
+                        parentDtl.get().setTichLuongKd(hh.getTichLuongKd());
+                        parentDtl.get().setSoLuongPhanBo(hh.getSoLuongPhanBo());
+                        parentDtl.get().setSlDcConLai(hh.getSlDcConLai());
+                        parentDtl.get().setDaXdinhDiemNhap(true);
+                        dcnbKeHoachDcDtlRepository.save(parentDtl.get());
+                    }
+                }
+                // update các xác định điểm nhập
+                for (DcnbKeHoachDcDtl hh : danhSachHangHoa) {
+                    tHKeHoachDieuChuyenNoiBoCucDtlRepository.updateByDcKeHoachDcDtlId(hh.getParentId());
+                }
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
@@ -380,5 +413,15 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
+    }
+
+    public List<DcnbKeHoachDcDtl> detailDtl(List<Long> ids) throws Exception {
+        if (DataUtils.isNullOrEmpty(ids))
+            throw new Exception("Tham số không hợp lệ.");
+        List<DcnbKeHoachDcDtl> optional = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrIdIn(ids);
+        if (DataUtils.isNullOrEmpty(optional)) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        return optional;
     }
 }

@@ -58,6 +58,7 @@ public class DcnbKeHoachDcHdr extends BaseEntity implements Serializable, Clonea
   private Long nguoiPduyetId;
   private String maDviCuc;
   private String tenDviCuc;
+  private Boolean daXdinhDiemNhap;
   @Transient
   private String tenTrangThai;
   @Transient

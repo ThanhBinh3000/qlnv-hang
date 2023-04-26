@@ -30,12 +30,11 @@ public class XhDxKhBanTrucTiepDtl implements Serializable {
 
     private String diaChi;
 
-    private BigDecimal donGiaVat;
-
     private BigDecimal soLuongChiTieu;
 
-    private BigDecimal soLuongKh;
+    private BigDecimal soLuongKhDaDuyet;
 
+    private String donViTinh;
 
     @Transient
     private List<XhDxKhBanTrucTiepDdiem> children = new ArrayList<>();

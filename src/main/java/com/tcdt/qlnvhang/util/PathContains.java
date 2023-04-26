@@ -9,6 +9,7 @@ public class PathContains {
 	public static final String URL_TRA_CUU = "/tra-cuu";
 	public static final String URL_TAT_CA = "/tat-ca";
 	public static final String URL_CHI_TIET = "/chi-tiet";
+	public static final String URL_CHI_TIET_DTL = "/chi-tiet-dtl";
 	public static final String URL_PHE_DUYET = "/phe-duyet";
 	public static final String URL_KET_XUAT = "/ket-xuat";
 	public static final String URL_DIEU_CHINH = "/dieu-chinh";
@@ -278,7 +279,7 @@ public class PathContains {
 
 	public static final String DIEU_CHUYEN_NOI_BO = "/dieu-chuyen-noi-bo";
 	public static final String KE_HOACH_DIEU_CHUYEN = "/ke-hoach-dieu-chuyen";
-
 	public static final String TONG_HOP_KE_HOACH_DIEU_CHUYEN = "/tong-hop-ke-hoach-dieu-chuyen";
-
+	public static final String QUYET_DINH_DIEU_CHUYEN_TC = "/quyet-dinh-dieu-chuyen-tc";
+	public static final String QUYET_DINH_DIEU_CHUYEN_C = "/quyet-dinh-dieu-chuyen-c";
 }

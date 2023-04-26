@@ -26,13 +26,13 @@ public class THKeHoachDieuChuyenCucHdr implements Serializable {
     private Long id;
 
     @Column(name = "NGAY_TAO")
-    private Date ngaytao;
+    private LocalDate ngaytao;
 
     @Column(name = "NGUOI_TAO_ID")
     private Long nguoiTaoId;
 
     @Column(name = "NGAY_SUA")
-    private Date ngaySua;
+    private LocalDate ngaySua;
 
     @Column(name = "NGUOI_SUA_ID")
     private Long nguoiSuaId;
@@ -46,7 +46,7 @@ public class THKeHoachDieuChuyenCucHdr implements Serializable {
     private String soDeXuat;
 
     @Column(name = "NGAY_TONG_HOP")
-    private Date ngayTongHop;
+    private LocalDate ngayTongHop;
 
     @Column(name = "TRICH_YEU")
     private String trichYeu;
@@ -58,28 +58,28 @@ public class THKeHoachDieuChuyenCucHdr implements Serializable {
     private String loaiDieuChuyen;
 
     @Column(name = "TH_TU_NGAY")
-    private Date thTuNgay;
+    private LocalDate thTuNgay;
 
     @Column(name = "TH_DEN_NGAY")
-    private Date thDenNgay;
+    private LocalDate thDenNgay;
 
     @Column(name = "TRANG_THAI")
     private String trangThai;
 
     @Column(name = "NGAY_GDUYET")
-    private Date ngayGDuyet;
+    private LocalDate ngayGDuyet;
 
     @Column(name = "NGUOI_GDUYET_ID")
     private Long nguoiGDuyetId;
 
     @Column(name = "NGAY_DUYET_TP")
-    private Date ngayDuyetTp;
+    private LocalDate ngayDuyetTp;
 
     @Column(name = "NGUOI_DUYET_TP_ID")
     private Long nguoiDuyetTpId;
 
     @Column(name = "NGAY_DUYET_LDC")
-    private Date ngayDuyetLdc;
+    private LocalDate ngayDuyetLdc;
 
     @Column(name = "NGUOI_DUYET_LDC_ID")
     private Long nguoiDuyetLdcId;
@@ -95,9 +95,6 @@ public class THKeHoachDieuChuyenCucHdr implements Serializable {
 
     @Column(name = "THOI_GIAN_TONG_HOP")
     private Date thoiGianTongHop;
-
-    @Column(name = "DA_XDINH_DIEM_NHAP")
-    private Boolean daXdinhDiemNhap;
 
     @Transient
     private List<THKeHoachDieuChuyenNoiBoCucDtl> thKeHoachDieuChuyenNoiBoCucDtls = new ArrayList<>();
