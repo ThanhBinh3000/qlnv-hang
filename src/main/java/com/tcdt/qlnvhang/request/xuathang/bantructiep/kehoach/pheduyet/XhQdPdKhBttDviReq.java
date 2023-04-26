@@ -20,11 +20,11 @@ public class XhQdPdKhBttDviReq {
 
     private String diaChi;
 
-    private BigDecimal donGiaVat;
-
     private BigDecimal soLuongChiTieu;
 
-    private BigDecimal soLuongKh;
+    private BigDecimal soLuongKhDaDuyet;
+
+    private String donViTinh;
 
     List<XhQdPdKhBttDviDtlReq> children =new ArrayList<>();
 }
