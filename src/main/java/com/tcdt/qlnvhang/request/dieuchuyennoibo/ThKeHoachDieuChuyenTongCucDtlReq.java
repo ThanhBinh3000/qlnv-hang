@@ -15,8 +15,6 @@ public class ThKeHoachDieuChuyenTongCucDtlReq {
 
     private Long keHoachDcHdrId;
 
-    private Long keHoachDcDtlId;
-
     private String maCucDxuatDc;
 
     private String tenCucDxuatDc;

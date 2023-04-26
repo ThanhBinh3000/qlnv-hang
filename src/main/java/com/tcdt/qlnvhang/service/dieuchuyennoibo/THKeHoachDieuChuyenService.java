@@ -28,6 +28,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.TransactionRequiredException;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
@@ -90,8 +91,10 @@ public class THKeHoachDieuChuyenService extends BaseServiceImpl {
         if (objReq.getLoaiDieuChuyen().equals(Contains.GIUA_2_CUC_DTNN_KV)){
             throw new Exception("Chức năng chỉ dành cho tổng hợp giữa 2 chi cục trong cùng 1 cục và tổng hợp tất cả");
         }
-        if(objReq.getDaXdinhDiemNhap().equals(null)){
-            this.save(currentUser, objReq);
+        try {
+            dcHdrRepository.updateTrangThaiNdc(objReq.getId(), Contains.NHAN_DIEU_CHUYEN);
+        }catch (TransactionRequiredException ex ){
+            ex.printStackTrace();
         }
     }
     @Transactional
@@ -105,7 +108,7 @@ public class THKeHoachDieuChuyenService extends BaseServiceImpl {
         data.setTenDvi(currentUser.getUser().getTenDvi());
         data.setTrangThai(Contains.DUTHAO);
         data.setNgaytao(new Date());
-        data.setNgayTongHop(new Date());
+        data.setNgayTongHop(objReq.getNgayTongHop());
         data.setThoiGianTongHop(objReq.getThoiGianTongHop());
         data.setNguoiTaoId(currentUser.getUser().getId());
         data.setNamKeHoach(objReq.getNamKeHoach());
@@ -203,7 +206,7 @@ public class THKeHoachDieuChuyenService extends BaseServiceImpl {
         data.setMaDVi(currentUser.getUser().getDvql());
         data.setTenDVi(currentUser.getUser().getTenDvi());
         data.setTrangThai(Contains.CHUATAO_QD);
-        data.setNgayTongHop(new Date());
+        data.setNgayTongHop(objReq.getNgayTongHop());
         data.setThoiGianTongHop(objReq.getThoiGianTongHop());
         data.setLoaiHangHoa(objReq.getLoaiHangHoa());
         data.setChungLoaiHangHoa(objReq.getChungLoaiHangHoa());
@@ -471,8 +474,9 @@ public class THKeHoachDieuChuyenService extends BaseServiceImpl {
                     chiTiet.setMaChiCucDxuat(req.getMaDVi());
                     chiTiet.setTenChiCucDxuat(cqt.getTenDvi());
                     chiTiet.setDcKeHoachDcDtlId(entry.getId());
-                    chiTiet.setDcKeHoachDcHdrId(entry.getDcnbKeHoachDcHdr().getId());
-                    chiTiet.setDcnbKeHoachDcDtls(thKeHoachDieuChuyenNoiBoCucDtls);
+                    chiTiet.setDcKeHoachDcHdrId(entry.getHdrId());
+                    List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrIdAndId(chiTiet.getDcKeHoachDcHdrId(), chiTiet.getDcKeHoachDcDtlId());
+                    chiTiet.setDcnbKeHoachDcDtls(dcnbKeHoachDcDtls);
                     result.add(chiTiet);
                 }
             }

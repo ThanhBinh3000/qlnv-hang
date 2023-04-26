@@ -42,16 +42,30 @@ public class TongHopKeHoachDcController extends BaseController {
 
 
     @ApiOperation(value = "Tra cứu thông tin tổng hợp", response = List.class)
-    @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/tra-cuu-cuc", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser,@RequestBody TongHopKeHoachDieuChuyenSearch objReq) {
+    public ResponseEntity<BaseResponse> colectionCuc(@CurrentUser CustomUserDetails currentUser,@RequestBody TongHopKeHoachDieuChuyenSearch objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            if(currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
-                resp.setData(thKeHoachDieuChuyenService.searchPageCuc(currentUser, objReq));
-            }else{
-                resp.setData(thKeHoachDieuChuyenService.searchPageTongCuc(currentUser, objReq));
-            }
+            resp.setData(thKeHoachDieuChuyenService.searchPageCuc(currentUser, objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tra cứu thông tin : {}", e);
+        }
+
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Tra cứu thông tin tổng hợp", response = List.class)
+    @PostMapping(value = "/tra-cuu-tong-cuc", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> colectionTongCuc(@CurrentUser CustomUserDetails currentUser,@RequestBody TongHopKeHoachDieuChuyenSearch objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(thKeHoachDieuChuyenService.searchPageTongCuc(currentUser, objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -204,27 +218,31 @@ public class TongHopKeHoachDcController extends BaseController {
     }
 
     @ApiOperation(value = "Tổng hợp kế hoạch điều chuyển", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PostMapping(value = "/lap-ke-hoach", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/lap-ke-hoach-cuc", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> createTable(@CurrentUser CustomUserDetails currentUser,@RequestBody  TongHopKeHoachDieuChuyenSearch req) throws Exception {
+    public ResponseEntity<BaseResponse> createTableCuc(@CurrentUser CustomUserDetails currentUser,@RequestBody  TongHopKeHoachDieuChuyenSearch req) throws Exception {
         BaseResponse resp = new BaseResponse();
-        if(currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
             if (Objects.equals(req.getLoaiDieuChuyen(), Contains.GIUA_2_CHI_CUC_TRONG_1_CUC)) {
                 resp.setData(thKeHoachDieuChuyenService.createPlanChiCuc(currentUser, req));
             } else if (Objects.equals(req.getLoaiDieuChuyen(), Contains.GIUA_2_CUC_DTNN_KV)) {
                 resp.setData(thKeHoachDieuChuyenService.createPlanCuc(currentUser, req));
-//            } else if (Objects.equals(req.getLoaiDieuChuyen(), Contains.TAT_CA)) {
-//                resp.setData(thKeHoachDieuChuyenService.createPlanChiCuc(currentUser, req));
-//                resp.setOtherData(thKeHoachDieuChuyenService.createPlanCuc(currentUser, req));
             }
-        } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
-            resp.setData(thKeHoachDieuChuyenService.createPlanTongCuc(currentUser, req));
-        }
         resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
             return ResponseEntity.ok(resp);
     }
 
+
+    @ApiOperation(value = "Tổng hợp kế hoạch điều chuyển", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/lap-ke-hoach-tong-cuc", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> createTableTongCuc(@CurrentUser CustomUserDetails currentUser,@RequestBody  TongHopKeHoachDieuChuyenSearch req) throws Exception {
+        BaseResponse resp = new BaseResponse();
+        resp.setData(thKeHoachDieuChuyenService.createPlanTongCuc(currentUser, req));
+        resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+        resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        return ResponseEntity.ok(resp);
+    }
 
     @ApiOperation(value = "Cập nhật thông tin đề xuất", response = List.class)
     @PostMapping(value =  "cap-nhat-cuc", produces = MediaType.APPLICATION_JSON_VALUE)
