@@ -365,8 +365,6 @@ public class THKeHoachDieuChuyenService extends BaseServiceImpl {
         BeanUtils.copyProperties(objReq,data);
         data.setNguoiSuaId(currentUser.getUser().getId());
         data.setNgaySua(new Date());
-        data.setThKeHoachDieuChuyenNoiBoCucDtls(data.getThKeHoachDieuChuyenNoiBoCucDtls());
-        data.setThKeHoachDieuChuyenCucKhacCucDtls(data.getThKeHoachDieuChuyenCucKhacCucDtls());
         THKeHoachDieuChuyenCucHdr created = thKeHoachDieuChuyenHdrRepository.save(data);
         thKeHoachDieuChuyenHdrRepository.save(created);
         return created;
