@@ -82,21 +82,31 @@ public class THKeHoachDieuChuyenService extends BaseServiceImpl {
         return search;
     }
 
-    public void yeuCauXacDinhDiemNhap(CustomUserDetails currentUser, ThKeHoachDieuChuyenCucHdrReq objReq) throws Exception{
+//    public List<THKeHoachDieuChuyenTongCucHdr> danhSachMaTongHop(CustomUserDetails currentUser, TongHopKeHoachDieuChuyenSearch req) throws Exception{
+//        List<THKeHoachDieuChuyenTongCucHdr> danhSachMaTongHop = thKeHoachDieuChuyenHdrRepository.filter(req);
+//        return danhSachMaTongHop;
+//    }
+    public THKeHoachDieuChuyenCucHdr yeuCauXacDinhDiemNhap(CustomUserDetails currentUser,StatusReq statusReq) throws Exception{
         if (currentUser == null) {
             throw new Exception("Bad request.");
         }
         if(!currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)){
             throw  new Exception("Chức năng chỉ dành cho cấp cục");
         }
-        if (objReq.getLoaiDieuChuyen().equals(Contains.GIUA_2_CUC_DTNN_KV)){
-            throw new Exception("Chức năng chỉ dành cho tổng hợp giữa 2 chi cục trong cùng 1 cục và tổng hợp tất cả");
-        }
-        try {
-            dcHdrRepository.updateTrangThaiNdc(objReq.getId(), Contains.NHAN_DIEU_CHUYEN);
-        }catch (TransactionRequiredException ex ){
+        Optional<THKeHoachDieuChuyenCucHdr> optional = thKeHoachDieuChuyenHdrRepository.findById(statusReq.getId());
+        if(optional.get().getTrangThai().equals(Contains.DUTHAO)) {
+            THKeHoachDieuChuyenCucHdr data = optional.get();
+            data.setTrangThai(Contains.YEU_CAU_XAC_DINH_DIEM_NHAP);
+            THKeHoachDieuChuyenCucHdr created = thKeHoachDieuChuyenHdrRepository.save(data);
+            return created;
+        }else{
+            try {
+                dcHdrRepository.updateTrangThaiNdc(optional.get().getId(),Contains.GIUA_2_CHI_CUC_TRONG_1_CUC);
+            }catch (TransactionRequiredException ex){
             ex.printStackTrace();
         }
+        return null;
+    }
     }
     @Transactional
     public THKeHoachDieuChuyenCucHdr save(CustomUserDetails currentUser, ThKeHoachDieuChuyenCucHdrReq objReq) throws Exception {
@@ -129,7 +139,6 @@ public class THKeHoachDieuChuyenService extends BaseServiceImpl {
             if (!chiTiet.isEmpty()) {
                 for (THKeHoachDieuChuyenNoiBoCucDtl ct : chiTiet) {
                     ct.setHdrId(created.getId());
-                    ct.setDaXdinhDiemNhap(false);
                 }
             }
             thKeHoachDieuChuyenNoiBoCucDtlRepository.saveAll(chiTiet);
@@ -362,7 +371,6 @@ public class THKeHoachDieuChuyenService extends BaseServiceImpl {
         BeanUtils.copyProperties(objReq,data);
         data.setNguoiSuaId(currentUser.getUser().getId());
         data.setNgaySua(LocalDate.now());
-        List<THKeHoachDieuChuyenNoiBoCucDtl> data1 = thKeHoachDieuChuyenNoiBoCucDtlRepository.findByHdrId(data.getId());
         THKeHoachDieuChuyenCucHdr created = thKeHoachDieuChuyenHdrRepository.save(data);
         thKeHoachDieuChuyenHdrRepository.save(created);
         return created;
@@ -397,18 +405,18 @@ public class THKeHoachDieuChuyenService extends BaseServiceImpl {
     public THKeHoachDieuChuyenCucHdr approveTongHop(CustomUserDetails currentUser, StatusReq statusReq, Optional<THKeHoachDieuChuyenCucHdr> optional) throws Exception {
         String status = optional.get().getTrangThai() + statusReq.getTrangThai() ;
         switch (status) {
-            case  Contains.DUTHAO + Contains.CHODUYET_TP:
+            case  Contains.YEU_CAU_XAC_DINH_DIEM_NHAP + Contains.CHODUYET_TP:
                 optional.get().setNguoiGDuyetId(currentUser.getUser().getId());
                 optional.get().setNgayGDuyet(LocalDate.now());
                 break;
             case Contains.CHODUYET_TP + Contains.TU_CHOI_TP:
-                optional.get().setTrangThai(Contains.DUTHAO);
+                optional.get().setTrangThai(Contains.YEU_CAU_XAC_DINH_DIEM_NHAP);
                 optional.get().setNguoiDuyetTpId(currentUser.getUser().getId());
                 optional.get().setNgayDuyetTp(LocalDate.now());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 break;
             case Contains.CHODUYET_LDC + Contains.TU_CHOI_LDC:
-                optional.get().setTrangThai(Contains.DUTHAO);
+                optional.get().setTrangThai(Contains.YEU_CAU_XAC_DINH_DIEM_NHAP);
                 optional.get().setNguoiDuyetLdcId(currentUser.getUser().getId());
                 optional.get().setNgayDuyetLdc(LocalDate.now());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
@@ -520,6 +528,8 @@ public class THKeHoachDieuChuyenService extends BaseServiceImpl {
                 ThKeHoachDieuChuyenTongCucDtlReq chiTiet = new ThKeHoachDieuChuyenTongCucDtlReq();
                 chiTiet.setMaCucDxuatDc(entry.getMaDvi());
                 chiTiet.setTenCucDxuatDc(entry.getTenDvi());
+                chiTiet.setTenChiCucDxuat(null);
+                chiTiet.setMaChiCucDxuat(null);
                 chiTiet.setKeHoachDcHdrId(entry.getId());
                 chiTiet.setSoDxuat(entry.getSoDeXuat());
                 chiTiet.setTrichYeu(entry.getTrichYeu());

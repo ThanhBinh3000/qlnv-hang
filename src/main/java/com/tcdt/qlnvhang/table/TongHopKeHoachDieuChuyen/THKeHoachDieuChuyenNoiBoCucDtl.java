@@ -38,9 +38,6 @@ public class THKeHoachDieuChuyenNoiBoCucDtl implements Serializable {
     @Column(name = "TEN_CHI_CUC_DXUAT")
     private String tenChiCucDxuat;
 
-    @Column(name = "DA_XDINH_DIEM_NHAP")
-    private Boolean daXdinhDiemNhap;
-
     @Transient
     private List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtlList = new ArrayList<>();
 

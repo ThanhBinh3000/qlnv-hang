@@ -52,6 +52,9 @@ public class THKeHoachDieuChuyenTongCucDtl implements Serializable {
     @Column(name = "TRICH_YEU")
     private String trichYeu;
 
+    @Column(name = "DCNB_TH_KE_HOACH_DCC_HDR_ID")
+    private Long dcnbThKhDccHdrId;
+
     @Transient
     private List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtlList = new ArrayList<>();
 }

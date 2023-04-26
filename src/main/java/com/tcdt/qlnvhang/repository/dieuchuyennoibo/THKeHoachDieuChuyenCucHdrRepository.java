@@ -42,4 +42,10 @@ public interface THKeHoachDieuChuyenCucHdrRepository extends JpaRepository<THKeH
 
 @Query(nativeQuery = true,value = "SELECT h.ID FROM DCNB_TH_KE_HOACH_DCC_HDR h WHERE h.MA_DVI = ?1 AND h.LOAI_DC = ?2")
     List<THKeHoachDieuChuyenCucHdr> findByDonViAndLoaiDc(String maDVi, String loaiDieuChuyen);
+
+    @Query(value = "SELECT distinct hdr FROM THKeHoachDieuChuyenCucHdr hdr WHERE 1=1 " +
+            "AND (:#{#param.maDVi} IS NULL OR hdr.maDvi LIKE CONCAT(:#{#param.maDVi},'%')) "+
+            "AND (:#{#param.maTongHop} IS NULL OR LOWER(hdr.maTongHop) LIKE CONCAT('%',LOWER(:#{#param.maTongHop}),'%')) " +
+            "ORDER BY hdr.maTongHop desc")
+    List<THKeHoachDieuChuyenCucHdr> filter(@Param("param") TongHopKeHoachDieuChuyenSearch param);
 }
