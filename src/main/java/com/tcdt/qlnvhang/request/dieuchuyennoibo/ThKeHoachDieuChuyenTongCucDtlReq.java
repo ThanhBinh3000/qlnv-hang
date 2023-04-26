@@ -33,5 +33,9 @@ public class ThKeHoachDieuChuyenTongCucDtlReq {
 
     private String trichYeu;
 
+    private String maChiCucDxuat;
+
+    private String tenChiCucDxuat;
+
     private List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = new ArrayList<>();
 }

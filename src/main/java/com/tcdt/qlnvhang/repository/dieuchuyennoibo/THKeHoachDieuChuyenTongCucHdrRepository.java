@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @Repository
 public interface THKeHoachDieuChuyenTongCucHdrRepository extends JpaRepository<THKeHoachDieuChuyenTongCucHdr,Long> {
-    Optional<THKeHoachDieuChuyenTongCucHdr> findByMaTongHop(String maTongHop);
+    List<THKeHoachDieuChuyenTongCucHdr> findByMaTongHop(String maTongHop);
     @Query(value = "SELECT distinct hdr FROM THKeHoachDieuChuyenTongCucHdr hdr WHERE 1=1 " +
             "AND (:#{#param.maDVi} IS NULL OR hdr.maDVi LIKE CONCAT(:#{#param.maDVi},'%')) " +
             "AND (:#{#param.nam} IS NULL OR hdr.namKeHoach = :#{#param.nam}) " +
