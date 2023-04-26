@@ -49,7 +49,7 @@ public class ThKeHoachDieuChuyenTongCucHdrReq {
     private String maDVi;
 
     private String tenDVi;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
     private Date thoiGianTongHop;
 
     List<ThKeHoachDieuChuyenTongCucDtlReq> thKeHoachDieuChuyenTongCucDtls;
