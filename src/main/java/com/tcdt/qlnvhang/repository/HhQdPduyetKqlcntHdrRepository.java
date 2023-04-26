@@ -24,6 +24,7 @@ public interface HhQdPduyetKqlcntHdrRepository extends BaseRepository<HhQdPduyet
 			" AND (:#{#req.denNgayQd} IS NULL OR QDPD.NGAY_TAO <= TO_DATE(:#{#req.denNgayQd}, 'yyyy-MM-dd')) "+
 			" AND (:#{#req.trichYeu} IS NULL OR LOWER(QDPD.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.trichYeu}),'%')))" +
 			" AND (:#{#req.maDvi} IS NULL OR QDPD.MA_DVI = :#{#req.maDvi}) "+
+			" AND (:#{#req.trangThaiHd} IS NULL OR QDPD.TRANG_THAI_HD != :#{#req.trangThaiHd}) "+
 			" AND (:#{#req.trangThai} IS NULL OR QDPD.TRANG_THAI = :#{#req.trangThai}) ";
 
 	Optional<HhQdPduyetKqlcntHdr> findBySoQd(String soQd);

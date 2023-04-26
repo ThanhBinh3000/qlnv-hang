@@ -312,6 +312,9 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").descending());
 		req.setTuNgayKyStr(convertFullDateToString(req.getTuNgayKy()));
 		req.setDenNgayKyStr(convertFullDateToString(req.getDenNgayKy()));
+		if (Boolean.TRUE.equals(req.getHdChuaBanHanh())) {
+			req.setTrangThaiHd(Contains.DA_HOAN_THANH);
+		}
 		Page<HhQdPduyetKqlcntHdr> hhQdPduyetKqlcntHdrs = hhQdPduyetKqlcntHdrRepository.selectPage(req, pageable);
 		Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
 		hhQdPduyetKqlcntHdrs.forEach( item -> {
@@ -408,6 +411,109 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 			objs[8] = StringUtils.isEmpty(qd.getCloaiVthh()) ? null : hashMapDmHh.get(qd.getCloaiVthh());
 			objs[9] = qd.getSoGthau();
 			objs[10] = NhapXuatHangTrangThaiEnum.getTenById(qd.getTrangThai());
+			dataList.add(objs);
+		}
+
+		ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+		ex.export();
+	}
+
+	@Override
+	public void exportListHd(HhQdPduyetKqlcntSearchReq req, HttpServletResponse response) throws Exception {
+		PaggingReq paggingReq = new PaggingReq();
+		paggingReq.setPage(0);
+		paggingReq.setLimit(Integer.MAX_VALUE);
+		req.setPaggingReq(paggingReq);
+		Page<HhQdPduyetKqlcntHdr> page = this.timKiemPage(req, response);
+		List<HhQdPduyetKqlcntHdr> data = page.getContent();
+
+		// Tao form excel
+		String title = "QUẢN LÝ KÝ HỢP ĐỒNG MUA HÀNG DTQG";
+		String[] rowsName;
+		if(req.getLoaiVthh().startsWith("02")) {
+			rowsName = new String[] { "STT", "Năm kế hoạch", "QĐ PD KHLCNT", "QĐ PD KQLCNT","Tổng số gói thầu","Số gói thầu đã trúng", "SL hợp đồng đã ký",
+					"Thời hạn thực hiện HĐ", "Thời hạn nhập kho", "Loại hàng hóa", "Chủng loại hàng hóa", "Tổng mức đầu tư (đ)", "Nhà thầu trúng thầu",
+					"Trạng thái ký HĐ", "Trạng thái NH"};
+		} else {
+			rowsName = new String[] { "STT", "Năm kế hoạch", "QĐ PD KHLCNT", "QĐ PD KQLCNT","Tổng số gói thầu","Số gói thầu đã trúng", "SL hợp đồng đã ký",
+					"Thời hạn nhập kho", "Chủng loại hàng hóa", "Tổng mức đầu tư (đ)", "Chủ đầu tư",
+					"Trạng thái ký HĐ", "Trạng thái NH"};
+		}
+		String filename = "quan_ly_ky_hop_dong_mua_hang_dtqg.xlsx";
+		// Lay danh muc dung chung
+		List<Object[]> dataList = new ArrayList<Object[]>();
+		Object[] objs = null;
+		for (int i = 0; i < data.size(); i++) {
+			HhQdPduyetKqlcntHdr qd = data.get(i);
+			objs = new Object[rowsName.length];
+			objs[0] = i;
+			objs[1] = qd.getNamKhoach();
+			objs[2] = qd.getSoQdPdKhlcnt();
+			objs[3] = qd.getSoQd();
+			objs[4] = qd.getSoGthau();
+			if (qd.getQdKhlcntDtl() != null && qd.getQdKhlcntDtl().getSoGthauTrung() != null) {
+				objs[5] = qd.getQdKhlcntDtl().getSoGthauTrung();
+			} else {
+				objs[5] = "";
+			}
+			if (qd.getListHopDong() != null) {
+				objs[6] = qd.getListHopDong().size();
+			} else {
+				objs[6] = "";
+			}
+			if (req.getLoaiVthh().startsWith("02")) {
+				if (qd.getQdKhlcntDtl() != null) {
+					if(qd.getQdKhlcntDtl().getDxuatKhLcntHdr() != null ) {
+						objs[7] = qd.getQdKhlcntDtl().getDxuatKhLcntHdr().getTgianThien();
+					} else {
+						objs[7] = "";
+					}
+					if(qd.getQdKhlcntDtl().getDxuatKhLcntHdr() != null ) {
+						objs[8] = convertDate(qd.getQdKhlcntDtl().getDxuatKhLcntHdr().getTgianNhang());
+					} else {
+						objs[8] = "";
+					}
+					if(qd.getQdKhlcntDtl().getHhQdKhlcntHdr() != null ) {
+						objs[9] = qd.getQdKhlcntDtl().getHhQdKhlcntHdr().getTenLoaiVthh();
+					} else {
+						objs[9] = "";
+					}
+					if(qd.getQdKhlcntDtl().getHhQdKhlcntHdr() != null ) {
+						objs[10] = qd.getQdKhlcntDtl().getHhQdKhlcntHdr().getTenCloaiVthh();
+					} else {
+						objs[10] = "";
+					}
+					if(qd.getQdKhlcntDtl().getDonGiaVat() != null && qd.getQdKhlcntDtl().getSoLuong() != null) {
+						objs[11] = qd.getQdKhlcntDtl().getDonGiaVat().multiply(qd.getQdKhlcntDtl().getSoLuong());
+					} else {
+						objs[11] = "";
+					}
+				}
+				objs[12] = qd.getTenDviTrungThau();
+				objs[13] = qd.getTenTrangThaiHd();
+				objs[14] = qd.getTenTrangThaiNh();
+			} else {
+				if (qd.getQdKhlcntDtl() != null) {
+					if(qd.getQdKhlcntDtl().getDxuatKhLcntHdr() != null ) {
+						objs[7] = convertDate(qd.getQdKhlcntDtl().getDxuatKhLcntHdr().getTgianNhang());
+					} else {
+						objs[7] = "";
+					}
+					if(qd.getQdKhlcntDtl().getHhQdKhlcntHdr() != null ) {
+						objs[8] = qd.getQdKhlcntDtl().getHhQdKhlcntHdr().getTenCloaiVthh();
+					} else {
+						objs[8] = "";
+					}
+					if(qd.getQdKhlcntDtl().getDonGiaVat() != null && qd.getQdKhlcntDtl().getSoLuong() != null) {
+						objs[9] = qd.getQdKhlcntDtl().getDonGiaVat().multiply(qd.getQdKhlcntDtl().getSoLuong());
+					} else {
+						objs[9] = "";
+					}
+				}
+				objs[10] = qd.getTenDvi();
+				objs[11] = qd.getTenTrangThaiHd();
+				objs[12] = qd.getTenTrangThaiNh();
+			}
 			dataList.add(objs);
 		}
 
