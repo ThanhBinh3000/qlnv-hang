@@ -80,8 +80,6 @@ public class XhDxKhBanTrucTiepHdr extends TrangThaiBaseEntity implements Seriali
 
     private BigDecimal tongSoLuong;
 
-    private BigDecimal tongDonGia;
-
     private String ghiChu;
 
     private Long idSoQdPd;
@@ -97,11 +95,9 @@ public class XhDxKhBanTrucTiepHdr extends TrangThaiBaseEntity implements Seriali
 
     private Long idThop;
 
-    private BigDecimal donGiaVat;
-
     private Integer slDviTsan;
 
-    private String dviTinh;
+    private String donViTinh;
 
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();

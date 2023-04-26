@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface DcnbKeHoachDcDtlRepository extends JpaRepository<DcnbKeHoachDcDtl,Long> {
+public interface DcnbKeHoachDcDtlRepository extends JpaRepository<DcnbKeHoachDcDtl, Long> {
 
     List<DcnbKeHoachDcDtl> findByDcnbKeHoachDcHdrId(Long idHdr);
 

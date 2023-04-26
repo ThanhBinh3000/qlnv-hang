@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.controller.xuathang.bantructiep.kehoach;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
+import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.CountKhMttSlReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdrReq;
@@ -35,9 +36,6 @@ public class XhDxKhBanTrucTiepControler extends BaseController {
 
     @Autowired
     private XhDxKhBanTrucTiepService xhDxKhBanTrucTiepService;
-
-    @Autowired
-    private XhDxKhBanTrucTiepServicelmpl xhDxKhBanTrucTiepServicelmpl;
 
     @ApiOperation(value = "Tra cứu đề xuất kế hoạch bán trực tiếp", response = List.class)
     @PostMapping(value=  PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -179,19 +177,39 @@ public class XhDxKhBanTrucTiepControler extends BaseController {
     }
 
     @ApiOperation(value = "Lấy tổng số lượng đã lên kế hoạch trong năm theo đơn vị, loại vật tư  hàng hóa", response = List.class)
-    @PostMapping(value =  "/count-sl-kh", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value="/count-sl-kh", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> getCountSl(HttpServletRequest request,
-                                                   @Valid @RequestBody CountKhMttSlReq req) {
+                                                   @Valid @RequestBody CountKhlcntSlReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhDxKhBanTrucTiepServicelmpl.countSoLuongKeHoachNam(req));
+            resp.setData(xhDxKhBanTrucTiepService.countSoLuongKeHoachNam(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
             log.error("Lấy tổng số lượng đã lên kế hoạch trong năm theo đơn vị, loại vật tư  hàng hóa: {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Lấy giá bán tối thiểu", response = List.class)
+    @GetMapping(value = PathContains.GIA_BAN_TOI_THIEU + "/{cloaiVthh}/{maDvi}/{namKhoach}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> getGiaBanToiDa(
+            @ApiParam(value = "cloaiVthh", example = "010101", required = true) @PathVariable("cloaiVthh") String cloaiVthh,
+            @ApiParam(value = "maDvi", example = "010101", required = true) @PathVariable("maDvi") String maDvi,
+            @ApiParam(value = "namKhoach", example = "2023", required = true) @PathVariable("namKhoach") Integer namKhoach) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(xhDxKhBanTrucTiepService.getGiaBanToiThieu(cloaiVthh, maDvi, namKhoach));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Lấy giá bán tối đa trace: {}", e);
         }
         return ResponseEntity.ok(resp);
     }

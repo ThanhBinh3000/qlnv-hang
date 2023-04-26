@@ -17,14 +17,15 @@ import java.util.Optional;
 @Repository
 public interface XhHopDongBttHdrRepository extends JpaRepository<XhHopDongBttHdr, Long> {
 
-    @Query("SELECT DX from XhHopDongBttHdr DX WHERE 1 = 1 " +
-            "AND (:#{#param.namHd} IS NULL OR DX.namHd = :#{#param.namHd}) " +
-            "AND (:#{#param.soHd} IS NULL OR LOWER(DX.soHd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soHd}),'%' ) ) )" +
-            "AND (:#{#param.tenHd} IS NULL OR LOWER(DX.tenHd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.tenHd}),'%'))) " +
-            "AND (:#{#param.tenDviMua} IS NULL OR LOWER(DX.tenDviMua) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.tenDviMua}),'%'))) " +
-            "AND (:#{#param.loaiVthh} IS NULL OR DX.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
-            "AND (:#{#param.trangThai} IS NULL OR DX.trangThai = :#{#param.trangThai}) " +
-            "AND (:#{#param.maDvi} IS NULL OR DX.maDvi = :#{#param.maDvi})")
+    @Query("SELECT HD from XhHopDongBttHdr HD WHERE 1 = 1 " +
+            "AND (:#{#param.namHd} IS NULL OR HD.namHd = :#{#param.namHd}) " +
+            "AND (:#{#param.soHd} IS NULL OR LOWER(HD.soHd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soHd}),'%' ) ) )" +
+            "AND (:#{#param.tenHd} IS NULL OR LOWER(HD.tenHd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.tenHd}),'%'))) " +
+            "AND (:#{#param.tenDviMua} IS NULL OR LOWER(HD.tenDviMua) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.tenDviMua}),'%'))) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR HD.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
+            "AND (:#{#param.soQdKq} IS NULL OR LOWER(HD.soQdKq) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQdKq}),'%' ) ) )" +
+            "AND (:#{#param.trangThai} IS NULL OR HD.trangThai = :#{#param.trangThai}) " +
+            "AND (:#{#param.maDvi} IS NULL OR HD.maDvi = :#{#param.maDvi})")
     Page<XhHopDongBttHdr> searchPage(@Param("param") XhHopDongBttHdrReq param, Pageable pageable);
 
     Optional<XhHopDongBttHdr> findBySoHd(String soHd);
