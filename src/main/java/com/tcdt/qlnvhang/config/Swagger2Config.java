@@ -90,6 +90,14 @@ public class Swagger2Config {
 				.securityContexts(Lists.newArrayList(securityContext())).apiInfo(apiEndPointsInfo())
 				.groupName("Đề xuất kế hoạch lựa chọn nhà thầu");
 	}
+	@Bean
+	public Docket api9() {
+		return new Docket(DocumentationType.SWAGGER_2).select()
+				.apis(RequestHandlerSelectors.basePackage("com.tcdt.qlnvhang.controller.dieuchuyennoibo"))
+				.paths(PathSelectors.regex("/.*")).build().securitySchemes(Lists.newArrayList(apiKey()))
+				.securityContexts(Lists.newArrayList(securityContext())).apiInfo(apiEndPointsInfo())
+				.groupName("Điều chuyển nội bộ");
+	}
 	private ApiInfo apiEndPointsInfo() {
 		return new ApiInfoBuilder().title("TCDT REST API").description("Quản lý API hệ thống Quản lý nghiệp vụ - TCDT")
 				.version("1.0.0").build();

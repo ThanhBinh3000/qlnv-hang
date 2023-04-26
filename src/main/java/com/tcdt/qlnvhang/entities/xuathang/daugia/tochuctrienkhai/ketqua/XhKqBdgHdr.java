@@ -1,18 +1,16 @@
 package com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.ketqua;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.hopdong.XhHopDongHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.util.Contains;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -38,13 +36,10 @@ public class XhKqBdgHdr extends TrangThaiBaseEntity implements Serializable {
 
   private String trichYeu;
 
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-  @Column(columnDefinition = "Date")
-  private Date ngayHluc;
 
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-  @Column(columnDefinition = "Date")
-  private Date ngayKy;
+  private LocalDate ngayHluc;
+
+  private LocalDate ngayKy;
 
   private String loaiHinhNx;
 
@@ -77,6 +72,20 @@ public class XhKqBdgHdr extends TrangThaiBaseEntity implements Serializable {
   private String pthucDauGia;
 
   private String soTbKhongThanh;
+
+  private Long tongDvts;
+
+  private Long soDvtsDgTc;
+
+  private Long slHdDaKy;
+
+  private LocalDate thoiHanTt;
+
+  private String toChucCaNhanDg;
+
+  private Long tongSlXuat;
+
+  private Long thanhTien;
 
   private String trangThaiHd;
   @Transient

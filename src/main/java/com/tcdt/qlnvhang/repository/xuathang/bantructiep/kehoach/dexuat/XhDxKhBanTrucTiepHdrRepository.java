@@ -47,7 +47,6 @@ public interface XhDxKhBanTrucTiepHdrRepository extends JpaRepository<XhDxKhBanT
             ,nativeQuery = true)
     List<XhDxKhBanTrucTiepHdr> listTongHop(Integer namKh, String loaiVthh, String cloaiVthh,String ngayDuyetTu, String ngayDuyetDen);
 
-
     @Transactional()
     @Modifying
     @Query(value = "UPDATE XH_DX_KH_BAN_TRUC_TIEP_HDR SET TRANG_THAI_TH = :trangThaiTh , ID_THOP = :idTh WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
@@ -57,17 +56,25 @@ public interface XhDxKhBanTrucTiepHdrRepository extends JpaRepository<XhDxKhBanT
 
     List<XhDxKhBanTrucTiepHdr> findByIdIn(List<Long> idDxList);
 
-    @Transactional()
-    @Modifying
-    @Query(value = "UPDATE XH_DX_KH_BAN_TRUC_TIEP_HDR SET TRANG_THAI_TH = :trangThaiTh WHERE ID = :idDxuat", nativeQuery = true)
-    void updateStatusTh(Long idDxuat, String trangThaiTh);
-
-    XhDxKhBanTrucTiepHdr findAllByLoaiVthhAndCloaiVthhAndNamKhAndMaDviAndTrangThaiNot(String loaiVthh, String cloaiVthh, Integer namKh, String maDvi, String trangThai);
-
     @Query(value = " SELECT NVL(SUM(DVI.SO_LUONG_CHI_CUC),0) FROM XH_QD_PD_KH_BTT_HDR HDR " +
             " INNER JOIN XH_QD_PD_KH_BTT_DTL DTL on HDR.ID = DTL.ID_QD_HDR " +
             " LEFT JOIN XH_QD_PD_KH_BTT_DVI DVI ON DTL.ID = DVI.ID_QD_DTL " +
             "WHERE HDR.NAM_KH = :namKh AND HDR.LOAI_VTHH = :loaiVthh AND DVI.MA_DVI = :maDvi AND HDR.LASTEST = :lastest",
             nativeQuery = true)
     BigDecimal countSLDalenKh(Integer namKh, String loaiVthh, String maDvi, Integer lastest);
+
+    @Query(value = " SELECT dtl.GIA_QD FROM KH_PAG_TT_CHUNG dtl " +
+            "JOIN KH_PAG_QD_BTC hdr ON dtl.QD_BTC_ID = hdr.ID " +
+            " WHERE hdr.TRANG_THAI = '29' AND hdr.LOAI_GIA = 'LG02'  AND dtl.CLOAI_VTHH = :cloaiVthh AND hdr.NAM_KE_HOACH = :namKhoach AND hdr.NGAY_HIEU_LUC <= SYSDATE " +
+            " FETCH FIRST 1 ROWS ONLY ",
+            nativeQuery = true)
+    BigDecimal getGiaBanToiThieuVt(String cloaiVthh, Integer namKhoach);
+
+    @Query(value = " SELECT dtl.GIA_QD_BTC FROM KH_PAG_QD_BTC_CTIET dtl " +
+            "JOIN KH_PAG_QD_BTC hdr ON dtl.QD_BTC_ID = hdr.ID " +
+            " WHERE hdr.TRANG_THAI = '29' AND hdr.LOAI_GIA = 'LG02'  AND hdr.CLOAI_VTHH = :cloaiVthh AND dtl.MA_DVI = :maDvi AND hdr.NAM_KE_HOACH = :namKhoach AND hdr.NGAY_HIEU_LUC <= SYSDATE " +
+            " FETCH FIRST 1 ROWS ONLY ",
+            nativeQuery = true)
+    BigDecimal getGiaBanToiThieuLt(String cloaiVthh, String maDvi, Integer namKhoach);
+
 }

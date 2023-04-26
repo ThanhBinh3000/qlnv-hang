@@ -91,6 +91,9 @@ public class HhHopDongHdrReq {
 	String noiDung;
 
 	String dieuKien;
+	String fax;
+	String moTai;
+	String giayUyQuyen;
 
 //	String donViTinh;
 //

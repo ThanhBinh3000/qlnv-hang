@@ -38,13 +38,12 @@ public class THKeHoachDieuChuyenCucHdr implements Serializable {
     private Long nguoiSuaId;
 
     @Column(name = "MA_TONG_HOP")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DCNB_TH_KE_HOACH_DCC_HDR_SEQ")
+    @SequenceGenerator(sequenceName = "DCNB_TH_KE_HOACH_DCC_HDR_SEQ", allocationSize = 1, name = "DCNB_TH_KE_HOACH_DCC_HDR_SEQ")
     private String maTongHop;
 
     @Column(name = "SO_DXUAT")
     private String soDeXuat;
-
-    @Column(name = "NGAY_DXUAT")
-    private Date ngayDXuat;
 
     @Column(name = "NGAY_TONG_HOP")
     private Date ngayTongHop;
@@ -93,6 +92,9 @@ public class THKeHoachDieuChuyenCucHdr implements Serializable {
 
     @Column(name = "TEN_DVI")
     private String tenDvi;
+
+    @Column(name = "THOI_GIAN_TONG_HOP")
+    private Date thoiGianTongHop;
 
     @Column(name = "DA_XDINH_DIEM_NHAP")
     private Boolean daXdinhDiemNhap;
