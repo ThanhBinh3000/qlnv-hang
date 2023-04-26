@@ -70,10 +70,6 @@ public class XhQdPdKhBttDtl implements Serializable {
 
     private String thongBaoKh;
 
-    private BigDecimal donGiaVat;
-
-    private BigDecimal tongDonGia;
-
     @Transient
     private List<XhQdPdKhBttDvi> children= new ArrayList<>();
 
@@ -123,7 +119,4 @@ public class XhQdPdKhBttDtl implements Serializable {
 
     @Transient
     private String tenCloaiVthh;
-
-
-
 }
