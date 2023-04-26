@@ -31,7 +31,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = PathContains.DIEU_CHUYEN_NOI_BO +PathContains.QUYET_DINH_DIEU_CHUYEN_C)
 @Slf4j
-@Api(tags = "Điều chuyển nội bộ - Quyết định điều chuyển")
+@Api(tags = "Điều chuyển nội bộ - Quyết định điều chuyển cục")
 public class DcnbQuyetDinhDcCHdrController extends BaseController {
   //    DcnbQuyetDinhDcTcHdr
   @Autowired

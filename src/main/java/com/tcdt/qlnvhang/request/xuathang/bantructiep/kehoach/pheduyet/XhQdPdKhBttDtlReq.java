@@ -68,10 +68,6 @@ public class XhQdPdKhBttDtlReq {
 
     private String thongBaoKh;
 
-    private BigDecimal donGiaVat;
-
-    private BigDecimal tongDonGia;
-
     private List<XhQdPdKhBttDviReq> children;
 
 }

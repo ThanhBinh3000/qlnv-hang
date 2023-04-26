@@ -27,6 +27,8 @@ public class XhThopDxKhBttDtl implements Serializable {
     private Long idDxHdr;
 
     private String maDvi;
+    @Transient
+    private String tenDvi;
 
     private String soDxuat;
 
@@ -38,21 +40,9 @@ public class XhThopDxKhBttDtl implements Serializable {
     private Integer slDviTsan;
 
     private String trangThai;
-
-    @Transient
-    private String tenDvi;
     @Transient
     private String tenTrangThai;
 
     private BigDecimal tongSoLuong;
-
-    private BigDecimal donGiaVat;
-
-    private BigDecimal tongDonGia;
-
-    public String getTenTrangThai() {
-        return NhapXuatHangTrangThaiEnum.getTenById(trangThai);
-    }
-
 
 }
