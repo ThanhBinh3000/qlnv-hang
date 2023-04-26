@@ -174,4 +174,6 @@ public class XhHopDongBttHdrReq extends BaseRequest {
 
     @Transient
     private List<XhHopDongBttDtlReq> phuLucDtl = new ArrayList<>();
+
+    private BigDecimal donGiaBanTrucTiep;
 }
