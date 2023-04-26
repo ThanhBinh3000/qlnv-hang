@@ -114,7 +114,7 @@ public class TongHopKeHoachDcController extends BaseController {
 
 
     @ApiOperation(value = "Lấy chi tiết thông tin tổng hợp", response = List.class)
-    @GetMapping(value =  PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value =  "chi-tiet-kh-cuc" + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> detail(
             @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids")List<Long> ids) {
