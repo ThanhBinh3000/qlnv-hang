@@ -117,6 +117,8 @@ public class Contains {
 	public static final String DA_PHANBO_DC_TUCHOI_LDCC = "63";
 	public static final String DA_PHANBO_DC_DADUYET_LDCC = "64";
 
+	public static final String YEU_CAU_XAC_DINH_DIEM_NHAP = "65";
+
 	// Trang thai response
 	public static final int RESP_SUCC = 0;
 	public static final int RESP_FAIL = 1;

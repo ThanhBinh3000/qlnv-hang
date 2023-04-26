@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
+import com.tcdt.qlnvhang.table.TongHopKeHoachDieuChuyen.THKeHoachDieuChuyenNoiBoCucDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcHdr;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -36,4 +38,5 @@ public class ThKeHoachDieuChuyenTongCucDtlReq {
     private String tenChiCucDxuat;
 
     private List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = new ArrayList<>();
+
 }
