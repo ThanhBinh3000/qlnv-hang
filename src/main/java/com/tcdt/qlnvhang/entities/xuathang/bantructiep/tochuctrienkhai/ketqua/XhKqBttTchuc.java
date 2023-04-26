@@ -39,7 +39,7 @@ public class XhKqBttTchuc implements Serializable {
 
     private BigDecimal donGia;
 
-    private String thueGtgt;
+    private BigDecimal thueGtgt;
 
     private Boolean luaChon;
 

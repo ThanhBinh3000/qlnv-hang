@@ -272,16 +272,13 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
         if (userInfo == null){
             throw new Exception("Bad request.");
         }
-
         if (StringUtils.isEmpty(req.getId())){
             throw new Exception("Không tìm thấy dữ liệu");
         }
-
         Optional<XhKqBttHdr> optional = xhKqBttHdrRepository.findById(req.getId());
         if(!optional.isPresent()){
             throw new Exception("Không tìm thấy dữ liệu");
         }
-
         XhKqBttHdr data = optional.get();
         String status = req.getTrangThai() + data.getTrangThai();
         if(req.getTrangThai().equals(NhapXuatHangTrangThaiEnum.DA_HOAN_THANH.getId())
@@ -327,18 +324,14 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
         if (ObjectUtils.isEmpty(id)){
             throw new Exception("Không tìm thấy dữ liệu");
         }
-
         Optional<XhKqBttHdr> optional = xhKqBttHdrRepository.findById(id);
         if (!optional.isPresent()){
             throw new Exception("Không tìm thấy dữ liệu");
         }
-
         if (!optional.get().getTrangThai().equals(NhapXuatHangTrangThaiEnum.DUTHAO.getId())){
             throw new Exception("Chỉ được xóa bản ghi khi ở trạng thái là dự thảo");
         }
-
         XhKqBttHdr hdr = optional.get();
-
         Optional<XhQdPdKhBttDtl> qdPdKhBttDtl = xhQdPdKhBttDtlRepository.findById(hdr.getIdPdKhDtl());
         if (qdPdKhBttDtl.isPresent()){
             qdPdKhBttDtl.get().setIdSoQdKq(null);
@@ -416,12 +409,9 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
         if (!byIdTc.isPresent()){
             throw new UnsupportedOperationException("Bản ghi không tồn tại.");
         }
-
         XhKqBttTchuc tchuc = byIdTc.get();
-
         XhKqBttDdiem ddiem = xhKqBttDdiemRepository.findById(tchuc.getIdDdiem()).get();
         tchuc.setXhKqBttDdiem(ddiem);
         return tchuc;
-
     }
 }
