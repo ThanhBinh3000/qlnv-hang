@@ -101,6 +101,9 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
             e.setDaXdinhDiemNhap(false);
         });
         objReq.getPhuongAnDieuChuyen().forEach(e -> e.setDcnbKeHoachDcHdr(data));
+        BigDecimal total = objReq.getDanhSachHangHoa().stream().map(DcnbKeHoachDcDtl::getDuToanKphi)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        data.setTongDuToanKp(total);
         DcnbKeHoachDcHdr created = dcnbKeHoachDcHdrRepository.save(data);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), DcnbKeHoachDcHdr.TABLE_NAME + "_CAN_CU");
         created.setCanCu(canCu);
@@ -135,7 +138,9 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
         data.getDanhSachHangHoa().forEach(e -> {
             e.setDaXdinhDiemNhap(false);
         });
-
+        BigDecimal total = data.getDanhSachHangHoa().stream().map(DcnbKeHoachDcDtl::getDuToanKphi)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        data.setTongDuToanKp(total);
         DcnbKeHoachDcHdr created = dcnbKeHoachDcHdrRepository.save(data);
 
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbKeHoachDcHdr.TABLE_NAME + "_CAN_CU"));
@@ -303,6 +308,9 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
                         itemMap.setDataId(null);
                         return itemMap;
                     }).collect(Collectors.toList()));
+                    BigDecimal total = clonedObj.getDanhSachHangHoa().stream().map(DcnbKeHoachDcDtl::getDuToanKphi)
+                            .reduce(BigDecimal.ZERO, BigDecimal::add);
+                    clonedObj.setTongDuToanKp(total);
                     clonedObj = dcnbKeHoachDcHdrRepository.save(clonedObj);
                     fileDinhKemService.delete(clonedObj.getId(), Lists.newArrayList(DcnbKeHoachDcHdr.TABLE_NAME + "_CAN_CU"));
                     List<FileDinhKemReq> fileDinhKemReqs = clonedObj.getCanCu().stream()
