@@ -8,11 +8,9 @@ import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.ThKeHoachDieuChuyenCucHdrReq;
-import com.tcdt.qlnvhang.request.dieuchuyennoibo.ThKeHoachDieuChuyenTongCucHdrReq;
 import com.tcdt.qlnvhang.request.search.TongHopKeHoachDieuChuyenSearch;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.dieuchuyennoibo.THKeHoachDieuChuyenService;
-import com.tcdt.qlnvhang.table.TongHopKeHoachDieuChuyen.THKeHoachDieuChuyenCucHdr;
+import com.tcdt.qlnvhang.service.dieuchuyennoibo.THKeHoachDieuChuyenCucService;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
@@ -36,7 +34,7 @@ import java.util.*;
 public class TongHopKeHoachDcController extends BaseController {
 
     @Autowired
-    THKeHoachDieuChuyenService thKeHoachDieuChuyenService;
+    THKeHoachDieuChuyenCucService thKeHoachDieuChuyenService;
 
 
     @ApiOperation(value = "Tra cứu thông tin tổng hợp", response = List.class)
@@ -148,7 +146,7 @@ public class TongHopKeHoachDcController extends BaseController {
     public ResponseEntity<BaseResponse> delete(@CurrentUser CustomUserDetails currentUser,@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            thKeHoachDieuChuyenService.delete(currentUser,idSearchReq);
+            thKeHoachDieuChuyenService.delete(idSearchReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -163,10 +161,10 @@ public class TongHopKeHoachDcController extends BaseController {
     @ApiOperation(value = "Xoá danh sách thông tin tổng hợp", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping(value =  PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> deleteMulti(@CurrentUser CustomUserDetails currentUser,@Valid @RequestBody IdSearchReq idSearchReq) {
+    public ResponseEntity<BaseResponse> deleteMultiCuc(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            thKeHoachDieuChuyenService.deleteMulti(currentUser, idSearchReq);
+            thKeHoachDieuChuyenService.deleteMulti(idSearchReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
