@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.THKeHoachDieuChuyenTongCucDtl;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
@@ -15,28 +16,28 @@ import java.util.List;
 @Data
 public class ThKeHoachDieuChuyenTongCucHdrReq {
     private Long id;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngaytao;
+
+    private LocalDate ngaytao;
 
     private Long nguoiTaoId;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngaySua;
+
+    private LocalDate ngaySua;
 
     private Long nguoiSuaId;
 
     private String maTongHop;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayTongHop;
+
+    private LocalDate ngayTongHop;
 
     private String noiDung;
 
     private Integer namKeHoach;
 
     private String loaiDieuChuyen;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date thTuNgay;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date thDenNgay;
+
+    private LocalDate thTuNgay;
+
+    private LocalDate thDenNgay;
 
     private String loaiHangHoa;
 
@@ -49,8 +50,8 @@ public class ThKeHoachDieuChuyenTongCucHdrReq {
     private String maDVi;
 
     private String tenDVi;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
     private Date thoiGianTongHop;
 
-    List<ThKeHoachDieuChuyenTongCucDtlReq> thKeHoachDieuChuyenTongCucDtls;
+    List<THKeHoachDieuChuyenTongCucDtl> thKeHoachDieuChuyenTongCucDtls;
 }

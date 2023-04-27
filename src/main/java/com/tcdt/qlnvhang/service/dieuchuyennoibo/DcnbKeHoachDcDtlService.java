@@ -95,8 +95,15 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
         data.setMaDviPq(currentUser.getDvql());
         data.setType(Contains.DIEU_CHUYEN);
         data.setTrangThai(Contains.DUTHAO);
-        objReq.getDanhSachHangHoa().forEach(e -> e.setDcnbKeHoachDcHdr(data));
+        data.setDaXdinhDiemNhap(false);
+        objReq.getDanhSachHangHoa().forEach(e -> {
+            e.setDcnbKeHoachDcHdr(data);
+            e.setDaXdinhDiemNhap(false);
+        });
         objReq.getPhuongAnDieuChuyen().forEach(e -> e.setDcnbKeHoachDcHdr(data));
+        BigDecimal total = objReq.getDanhSachHangHoa().stream().map(DcnbKeHoachDcDtl::getDuToanKphi)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        data.setTongDuToanKp(total);
         DcnbKeHoachDcHdr created = dcnbKeHoachDcHdrRepository.save(data);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), DcnbKeHoachDcHdr.TABLE_NAME + "_CAN_CU");
         created.setCanCu(canCu);
@@ -127,7 +134,13 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
         BeanUtils.copyProperties(objReq, data);
         data.setDanhSachHangHoa(objReq.getDanhSachHangHoa());
         data.setPhuongAnDieuChuyen(objReq.getPhuongAnDieuChuyen());
-
+        data.setDaXdinhDiemNhap(false);
+        data.getDanhSachHangHoa().forEach(e -> {
+            e.setDaXdinhDiemNhap(false);
+        });
+        BigDecimal total = data.getDanhSachHangHoa().stream().map(DcnbKeHoachDcDtl::getDuToanKphi)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        data.setTongDuToanKp(total);
         DcnbKeHoachDcHdr created = dcnbKeHoachDcHdrRepository.save(data);
 
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbKeHoachDcHdr.TABLE_NAME + "_CAN_CU"));
@@ -295,6 +308,9 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
                         itemMap.setDataId(null);
                         return itemMap;
                     }).collect(Collectors.toList()));
+                    BigDecimal total = clonedObj.getDanhSachHangHoa().stream().map(DcnbKeHoachDcDtl::getDuToanKphi)
+                            .reduce(BigDecimal.ZERO, BigDecimal::add);
+                    clonedObj.setTongDuToanKp(total);
                     clonedObj = dcnbKeHoachDcHdrRepository.save(clonedObj);
                     fileDinhKemService.delete(clonedObj.getId(), Lists.newArrayList(DcnbKeHoachDcHdr.TABLE_NAME + "_CAN_CU"));
                     List<FileDinhKemReq> fileDinhKemReqs = clonedObj.getCanCu().stream()
@@ -347,30 +363,34 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
             case Contains.DA_PHANBO_DC_CHODUYET_LDCC + Contains.DA_PHANBO_DC_DADUYET_LDCC:
                 optional.get().setNgayDuyetLdcc(LocalDate.now());
                 optional.get().setNguoiDuyetLdccId(currentUser.getUser().getId());
-
+                optional.get().setDaXdinhDiemNhap(true);
+                Optional<DcnbKeHoachDcDtl> parentHdr = dcnbKeHoachDcDtlRepository.findById(optional.get().getParentId());
+                if (parentHdr.isPresent()) {
+                    parentHdr.get().setDaXdinhDiemNhap(true);
+                    dcnbKeHoachDcDtlRepository.save(parentHdr.get());
+                }
                 // update lại các kho nhận điều chuyển trong danh sách hàng hóa cha.
                 List<DcnbKeHoachDcDtl> danhSachHangHoa = optional.get().getDanhSachHangHoa();
                 for (DcnbKeHoachDcDtl hh : danhSachHangHoa) {
-                    Optional<DcnbKeHoachDcDtl> parent = dcnbKeHoachDcDtlRepository.findById(hh.getParentId());
-                    if (parent.isPresent()) {
-                        parent.get().setMaDiemKhoNhan(hh.getMaDiemKhoNhan());
-                        parent.get().setTenDiemKhoNhan(hh.getTenDiemKhoNhan());
-                        parent.get().setMaNhaKhoNhan(hh.getMaNhaKhoNhan());
-                        parent.get().setTenNhaKhoNhan(hh.getTenNhaKhoNhan());
-                        parent.get().setMaNganKhoNhan(hh.getMaNganKhoNhan());
-                        parent.get().setTenNganKhoNhan(hh.getTenNganKhoNhan());
-                        parent.get().setCoLoKhoNhan(hh.getCoLoKhoNhan());
-                        parent.get().setMaLoKhoNhan(hh.getMaLoKhoNhan());
-                        parent.get().setTenLoKhoNhan(hh.getTenLoKhoNhan());
-                        parent.get().setTichLuongKd(hh.getTichLuongKd());
-                        parent.get().setSoLuongPhanBo(hh.getSoLuongPhanBo());
-                        parent.get().setSlDcConLai(hh.getSlDcConLai());
-                        dcnbKeHoachDcDtlRepository.save(parent.get());
+                    hh.setDaXdinhDiemNhap(true);
+                    dcnbKeHoachDcDtlRepository.save(hh);
+                    Optional<DcnbKeHoachDcDtl> parentDtl = dcnbKeHoachDcDtlRepository.findById(hh.getParentId());
+                    if (parentDtl.isPresent()) {
+                        parentDtl.get().setMaDiemKhoNhan(hh.getMaDiemKhoNhan());
+                        parentDtl.get().setTenDiemKhoNhan(hh.getTenDiemKhoNhan());
+                        parentDtl.get().setMaNhaKhoNhan(hh.getMaNhaKhoNhan());
+                        parentDtl.get().setTenNhaKhoNhan(hh.getTenNhaKhoNhan());
+                        parentDtl.get().setMaNganKhoNhan(hh.getMaNganKhoNhan());
+                        parentDtl.get().setTenNganKhoNhan(hh.getTenNganKhoNhan());
+                        parentDtl.get().setCoLoKhoNhan(hh.getCoLoKhoNhan());
+                        parentDtl.get().setMaLoKhoNhan(hh.getMaLoKhoNhan());
+                        parentDtl.get().setTenLoKhoNhan(hh.getTenLoKhoNhan());
+                        parentDtl.get().setTichLuongKd(hh.getTichLuongKd());
+                        parentDtl.get().setSoLuongPhanBo(hh.getSoLuongPhanBo());
+                        parentDtl.get().setSlDcConLai(hh.getSlDcConLai());
+                        parentDtl.get().setDaXdinhDiemNhap(true);
+                        dcnbKeHoachDcDtlRepository.save(parentDtl.get());
                     }
-                }
-                // update các xác định điểm nhập
-                for (DcnbKeHoachDcDtl hh : danhSachHangHoa) {
-                    tHKeHoachDieuChuyenNoiBoCucDtlRepository.updateByDcKeHoachDcDtlId(hh.getParentId());
                 }
                 break;
             default:

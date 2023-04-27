@@ -39,6 +39,7 @@ public class XhThopDxKhBttHdr extends TrangThaiBaseEntity implements Serializabl
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayDuyetTu;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayDuyetDen;
 

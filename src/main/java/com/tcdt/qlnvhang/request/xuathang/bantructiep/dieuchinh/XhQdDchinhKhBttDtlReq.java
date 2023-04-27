@@ -20,6 +20,8 @@ public class XhQdDchinhKhBttDtlReq  {
     private Long idQdGoc;
 
     private String maDvi;
+    @Transient
+    private String tenDvi;
 
     private String diaChi;
 
@@ -34,15 +36,12 @@ public class XhQdDchinhKhBttDtlReq  {
 
     private BigDecimal tongSoLuong;
 
-    private BigDecimal donGiaVat;
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date tgianDkienTu;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date tgianDkienDen;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Integer tgianTtoan;
 
     private String tgianTtoanGhiChu;

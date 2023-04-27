@@ -47,4 +47,5 @@ public interface HhQdPduyetKqlcntHdrService {
 	List<HhQdPduyetKqlcntHdr> timKiemAll(HhQdPduyetKqlcntSearchReq req) throws Exception;
 
 	void exportList(@Valid @RequestBody HhQdPduyetKqlcntSearchReq req, HttpServletResponse response) throws  Exception;
+	void exportListHd(@Valid @RequestBody HhQdPduyetKqlcntSearchReq req, HttpServletResponse response) throws  Exception;
 }

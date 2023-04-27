@@ -423,6 +423,7 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         if (!optional.isPresent()){
             throw new Exception("Không tìm thấy dữ liệu cần xóa");
         }
+
         XhQdNvXhBttHdr hdr = optional.get();
 
         if (!hdr.getTrangThai().equals(Contains.DUTHAO)
@@ -431,12 +432,7 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
             throw new Exception("Chỉ thực hiện xóa với kế hoạch ở trạng thái bản nháp hoặc từ chối ");
         }
 
-        Optional<XhHopDongBttHdr> hopDongBttHdr = xhHopDongBttHdrRepository.findById(hdr.getIdHd());
-        if (hopDongBttHdr.isPresent()){
-            hopDongBttHdr.get().setIdHd(null);
-            hopDongBttHdr.get().setTrangThaiXh(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
-            xhHopDongBttHdrRepository.save(hopDongBttHdr.get());
-        }
+
 
         List<XhQdNvXhBttDtl> dtlList = xhQdNvXhBttDtlRepository.findAllByIdQdHdr(id);
         for (XhQdNvXhBttDtl dtl : dtlList){
@@ -446,6 +442,14 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         xhQdNvXhBttHdrRepository.delete(hdr);
         fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhQdNvXhBttHdr.TABLE_NAME));
 
+        if(hdr.getPhanLoai().equals("HD")){
+            Optional<XhHopDongBttHdr> hopDongBttHdr = xhHopDongBttHdrRepository.findById(hdr.getIdHd());
+            if (hopDongBttHdr.isPresent()){
+                hopDongBttHdr.get().setIdHd(null);
+                hopDongBttHdr.get().setTrangThaiXh(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
+                xhHopDongBttHdrRepository.save(hopDongBttHdr.get());
+            }
+        }
     }
 
     @Override

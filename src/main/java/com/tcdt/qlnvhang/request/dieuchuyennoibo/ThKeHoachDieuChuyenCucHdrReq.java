@@ -1,15 +1,13 @@
 package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tcdt.qlnvhang.table.TongHopKeHoachDieuChuyen.THKeHoachDieuChuyenNoiBoCucDtl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.THKeHoachDieuChuyenCucKhacCucDtl;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.THKeHoachDieuChuyenNoiBoCucDtl;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
-import javax.validation.Valid;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -17,41 +15,41 @@ import java.util.List;
 public class ThKeHoachDieuChuyenCucHdrReq {
     private Long id;
 
-    private Date ngaytao;
+    private LocalDate ngaytao;
 
     private Long nguoiTaoId;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngaySua;
+
+    private LocalDate ngaySua;
 
     private Long nguoiSuaId;
 
     private String maTongHop;
 
     private String soDeXuat;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayTongHop;
+
+    private LocalDate ngayTongHop;
 
     private String trichYeu;
 
     private Integer namKeHoach;
 
     private String loaiDieuChuyen;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date thTuNgay;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date thDenNgay;
+
+    private LocalDate thTuNgay;
+
+    private LocalDate thDenNgay;
 
     private String trangThai;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayGDuyet;
+
+    private LocalDate ngayGDuyet;
 
     private Long nguoiGDuyetId;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayDuyetTp;
+
+    private LocalDate ngayDuyetTp;
 
     private Long nguoiDuyetTPId;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayDuyetLdc;
+
+    private LocalDate ngayDuyetLdc;
 
     private Long nguoiDuyetLdcId;
 
@@ -60,12 +58,10 @@ public class ThKeHoachDieuChuyenCucHdrReq {
     private String maDVi;
 
     private String tenDVi;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
-    private Date thoiGianTongHop;
 
-    private Boolean daXdinhDiemNhap;
+    private LocalDateTime thoiGianTongHop;
 
-    List<ThKeHoachDieuChuyenNoiBoCucDtlReq> thKeHoachDieuChuyenNoiBoCucDtls;
+    List<THKeHoachDieuChuyenNoiBoCucDtl> thKeHoachDieuChuyenNoiBoCucDtls;
 
-    List<ThKeHoachDieuChuyenKhacCucDtlReq> thKeHoachDieuChuyenCucKhacCucDtls;
+    List<THKeHoachDieuChuyenCucKhacCucDtl> thKeHoachDieuChuyenCucKhacCucDtls;
 }

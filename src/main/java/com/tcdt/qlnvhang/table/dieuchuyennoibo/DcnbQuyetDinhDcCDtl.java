@@ -8,19 +8,18 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = DcnbQuyetDinhDcTcDtl.TABLE_NAME)
+@Table(name = DcnbQuyetDinhDcCDtl.TABLE_NAME)
 @Getter
 @Setter
-public class DcnbQuyetDinhDcTcDtl implements Serializable {
+public class DcnbQuyetDinhDcCDtl implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "DCNB_QUYET_DINH_DC_TC_DTL";
+    public static final String TABLE_NAME = "DCNB_QUYET_DINH_DC_C_DTL";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbQuyetDinhDcTcDtl.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = DcnbQuyetDinhDcTcDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbQuyetDinhDcTcDtl.TABLE_NAME + "_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbQuyetDinhDcCDtl.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = DcnbQuyetDinhDcCDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbQuyetDinhDcCDtl.TABLE_NAME + "_SEQ")
     private Long id;
-
     @Column(name = "DCNB_KE_HOACH_DC_HDR_ID", insertable = false, updatable = false)
     private Long keHoachDcHdrId;
     @Column(name = "HDR_ID", insertable = true, updatable = true)
@@ -28,5 +27,5 @@ public class DcnbQuyetDinhDcTcDtl implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
     @JsonIgnore
-    private DcnbQuyetDinhDcTcHdr dcnbQuyetDinhDcTcHdr;
+    private DcnbQuyetDinhDcCHdr dcnbQuyetDinhDcCHdr;
 }

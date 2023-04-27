@@ -17,6 +17,8 @@ public class XhTcTtinBttReq {
 
     private Long idDtl;
 
+    private Long idDviDtl;
+
     private String tochucCanhan;
 
     private String mst;

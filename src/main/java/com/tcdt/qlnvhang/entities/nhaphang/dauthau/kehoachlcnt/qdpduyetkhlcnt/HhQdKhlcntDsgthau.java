@@ -75,6 +75,9 @@ public class HhQdKhlcntDsgthau implements Serializable {
 	BigDecimal donGiaNhaThau;
 
 	BigDecimal thanhTienNhaThau;
+	BigDecimal soLuongTheoChiTieu;
+
+	BigDecimal soLuongDaMua;
 
 	Long idNhaThau;
 

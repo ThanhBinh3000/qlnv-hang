@@ -15,8 +15,6 @@ public class ThKeHoachDieuChuyenTongCucDtlReq {
 
     private Long keHoachDcHdrId;
 
-    private Long keHoachDcDtlId;
-
     private String maCucDxuatDc;
 
     private String tenCucDxuatDc;
@@ -38,4 +36,5 @@ public class ThKeHoachDieuChuyenTongCucDtlReq {
     private String tenChiCucDxuat;
 
     private List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = new ArrayList<>();
+
 }

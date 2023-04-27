@@ -44,8 +44,6 @@ public class XhQdDchinhKhBttDtl implements Serializable {
 
     private BigDecimal tongSoLuong;
 
-    private BigDecimal donGiaVat;
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date tgianDkienTu;
 

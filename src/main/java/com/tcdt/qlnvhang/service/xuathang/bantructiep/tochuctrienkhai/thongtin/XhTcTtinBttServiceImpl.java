@@ -7,6 +7,8 @@ import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPd
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.tochuctrienkhai.thongtin.XhTcTtinBttRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviDtlReq;
+import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.tochuctrienkhai.thongtin.SearchXhTcTtinBttReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.tochuctrienkhai.thongtin.XhCgiaReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.tochuctrienkhai.thongtin.XhTcTtinBttReq;
@@ -102,23 +104,24 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
             }
             xhQdPdKhBttDtlRepository.save(dtl);
         }
-        xhTcTtinBttRepository.deleteAllByIdDviDtl(ObjReq.getIdDviDtl());
         List<XhTcTtinBtt> bttList = new ArrayList<>();
-        for (XhTcTtinBttReq chaoGiaReq : ObjReq.getChildren()) {
-            XhTcTtinBtt chaoGiaList = new XhTcTtinBtt();
-            BeanUtils.copyProperties(chaoGiaReq, chaoGiaList, "id");
-            chaoGiaList.setId(null);
-            chaoGiaList.setIdDviDtl(ObjReq.getIdDviDtl());
-            chaoGiaList.setIdQdPdDtl(ObjReq.getIdDtl());
-            XhTcTtinBtt save = xhTcTtinBttRepository.save(chaoGiaList);
-
-            if (!DataUtils.isNullObject(chaoGiaReq.getFileDinhKems())) {
-                List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(chaoGiaReq.getFileDinhKems()), save.getId(), XhTcTtinBtt.TABLE_NAME);
-                chaoGiaList.setFileDinhKems(fileDinhKems.get(0));
+        for (XhQdPdKhBttDviReq dviReq : ObjReq.getChildren()){
+            for (XhQdPdKhBttDviDtlReq dviDtlReq : dviReq.getChildren()){
+                xhTcTtinBttRepository.deleteAllByIdDviDtl(dviDtlReq.getId());
+                for (XhTcTtinBttReq chaoGiaReq : dviDtlReq.getChildren()) {
+                    XhTcTtinBtt chaoGiaList = new XhTcTtinBtt();
+                    BeanUtils.copyProperties(chaoGiaReq, chaoGiaList, "id");
+                    chaoGiaList.setId(null);
+                    chaoGiaList.setIdQdPdDtl(ObjReq.getIdDtl());
+                    XhTcTtinBtt save = xhTcTtinBttRepository.save(chaoGiaList);
+                    fileDinhKemService.delete(save.getId(), Collections.singleton(XhTcTtinBtt.TABLE_NAME));
+                    if (!DataUtils.isNullObject(chaoGiaReq.getFileDinhKems())) {
+                        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(chaoGiaReq.getFileDinhKems()), save.getId(), XhTcTtinBtt.TABLE_NAME);
+                        chaoGiaList.setFileDinhKems(fileDinhKems.get(0));
+                    }
+                    bttList.add(chaoGiaList);
+                }
             }
-
-            bttList.add(chaoGiaList);
-
         }
         return bttList;
     }

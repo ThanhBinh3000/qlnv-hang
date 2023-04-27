@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.repository.dieuchuyennoibo;
 
-import com.tcdt.qlnvhang.table.TongHopKeHoachDieuChuyen.THKeHoachDieuChuyenCucHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.THKeHoachDieuChuyenCucHdr;
 import com.tcdt.qlnvhang.request.search.TongHopKeHoachDieuChuyenSearch;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +10,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface THKeHoachDieuChuyenCucHdrRepository extends JpaRepository<THKeHoachDieuChuyenCucHdr, Long> {
@@ -34,10 +33,14 @@ public interface THKeHoachDieuChuyenCucHdrRepository extends JpaRepository<THKeH
         "LEFT JOIN DCNB_TH_KE_HOACH_DCC_NBC_DTL dtl ON dtl.HDR_ID = h.ID \n" +
         "LEFT JOIN DCNB_KE_HOACH_DC_DTL khdtl ON khdtl.ID = dtl.DCNB_KE_HOACH_DC_DTL_ID \n" +
         "WHERE h.MA_DVI = ?1 AND h.TRANG_THAI = ?2 AND h.LOAI_DC = ?3 \n" +
-        "AND (khdtl.LOAI_VTHH IS NULL OR khdtl.LOAI_VTHH = ?4) \n" +
-        "AND (khdtl.CLOAI_VTHH IS NULL OR khdtl.CLOAI_VTHH = ?5)\n" +
+        "AND (?4 IS NULL OR khdtl.LOAI_VTHH = ?4) \n" +
+        "AND (?5 IS NULL OR khdtl.CLOAI_VTHH = ?5)\n" +
         "AND ((TO_DATE(TO_CHAR(h.NGAY_TAO ,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS') <= TO_DATE(?6,'YYYY-MM-DD HH24:MI:SS')))")
     List<THKeHoachDieuChuyenCucHdr> findByDonViAndTrangThaiTongCuc(String maDVi,String trangThai,String loaiDieuChuyen, String loaiHangHoa, String chungLoaiHangHoa, String thoiGianTongHop);
 
 
+    @Query(nativeQuery = true,value = "SELECT h.ID FROM DCNB_TH_KE_HOACH_DCC_HDR h WHERE h.MA_DVI = ?1 AND h.LOAI_DC = ?2")
+    List<THKeHoachDieuChuyenCucHdr> findByDonViAndLoaiDc(String maDVi, String loaiDieuChuyen);
+    @Query(nativeQuery = true,value = "SELECT h.ID FROM DCNB_TH_KE_HOACH_DCC_HDR h WHERE h.MA_DVI = ?1 AND h.LOAI_DC = ?2")
+    void insertDataDtl(Long id, Long dcnbKeHoachDcHdrId);
 }

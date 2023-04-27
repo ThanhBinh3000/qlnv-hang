@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.xuathang.bantructiep.tochuctrienkhai.thongtin;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviReq;
 import com.tcdt.qlnvhang.util.Contains;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -17,8 +18,6 @@ public class XhCgiaReq {
     private Long id;
 
     private Long idDtl;
-
-    private Long idDviDtl;
 
     private Long idQdPdDtl;
 
@@ -47,5 +46,5 @@ public class XhCgiaReq {
 
     private List<FileDinhKemReq> fileDinhKemMuaLe = new ArrayList<>();
 
-    private List<XhTcTtinBttReq> children = new ArrayList<>();
+    private List<XhQdPdKhBttDviReq> children = new ArrayList<>();
 }

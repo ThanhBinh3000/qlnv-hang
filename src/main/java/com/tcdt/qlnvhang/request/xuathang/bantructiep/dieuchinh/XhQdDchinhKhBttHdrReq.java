@@ -6,7 +6,6 @@ import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
-import javax.persistence.Column;
 import javax.persistence.Transient;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,12 +23,14 @@ public class XhQdDchinhKhBttHdrReq extends BaseRequest {
     private String soQdDc;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
     private Date ngayKyDc;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
     private Date ngayHluc;
+
+    private String loaiHinhNx;
+
+    private String kieuNx;
 
     private String trichYeu;
 
@@ -38,7 +39,6 @@ public class XhQdDchinhKhBttHdrReq extends BaseRequest {
     private Long idQdGoc;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
     private Date ngayKyQdGoc;
 
     private String loaiVthh;
@@ -46,10 +46,6 @@ public class XhQdDchinhKhBttHdrReq extends BaseRequest {
     private String cloaiVthh;
 
     private String moTaHangHoa;
-
-    private String loaiHinhNx;
-
-    private String kieuNx;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKyDcTu;

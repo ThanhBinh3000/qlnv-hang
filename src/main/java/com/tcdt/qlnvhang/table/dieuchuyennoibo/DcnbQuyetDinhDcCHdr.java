@@ -8,23 +8,24 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = DcnbQuyetDinhDcTcHdr.TABLE_NAME)
+@Table(name = DcnbQuyetDinhDcCHdr.TABLE_NAME)
 @Getter
 @Setter
-public class DcnbQuyetDinhDcTcHdr extends BaseEntity implements Serializable, Cloneable{
+public class DcnbQuyetDinhDcCHdr extends BaseEntity implements Serializable, Cloneable{
 
   private static final long serialVersionUID = 1L;
-  public static final String TABLE_NAME = "DCNB_QUYET_DINH_DC_TC_HDR";
+  public static final String TABLE_NAME = "DCNB_QUYET_DINH_DC_C_HDR";
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbQuyetDinhDcTcHdr.TABLE_NAME + "_SEQ")
-  @SequenceGenerator(sequenceName = DcnbQuyetDinhDcTcHdr.TABLE_NAME
-      + "_SEQ", allocationSize = 1, name = DcnbQuyetDinhDcTcHdr.TABLE_NAME + "_SEQ")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbQuyetDinhDcCHdr.TABLE_NAME + "_SEQ")
+  @SequenceGenerator(sequenceName = DcnbQuyetDinhDcCHdr.TABLE_NAME
+      + "_SEQ", allocationSize = 1, name = DcnbQuyetDinhDcCHdr.TABLE_NAME + "_SEQ")
   private Long id;
   private String loaiDc;
   private String tenLoaiDc;
@@ -36,11 +37,17 @@ public class DcnbQuyetDinhDcTcHdr extends BaseEntity implements Serializable, Cl
   private String trichYeu;
   private String maDvi;
   private String tenDvi;
-  private String maThop;
-  private Long idThop;
-  private String maDxuat;
-  private Long idDxuat;
-  private String type; // loại TH (tổng hợp), DX (đề xuất)
+
+  private String loaiQdinh;
+  private String tenLoaiQdinh;
+  private BigDecimal tongDuToanKp;
+  private Long canCuQdTc;
+  private String soCanCuQdTc;
+  private Long dxuatId;
+  private String soDxuat;
+  private LocalDate ngayTrinhDuyetTc;
+
+
   @Access(value=AccessType.PROPERTY)
   private String trangThai;
   private String lyDoTuChoi;
@@ -48,11 +55,6 @@ public class DcnbQuyetDinhDcTcHdr extends BaseEntity implements Serializable, Cl
   private Long nguoiGduyetId;
   private LocalDate ngayPduyet;
   private Long nguoiPduyetId;
-  private Long qdinhNhapCucId;
-  private String soQdinhNhapCuc;
-  private Long qdinhXuatCucId;
-  private String soQdinhXuatCuc;
-
   @Transient
   private String tenTrangThai;
   @Transient
@@ -62,7 +64,7 @@ public class DcnbQuyetDinhDcTcHdr extends BaseEntity implements Serializable, Cl
 
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "HDR_ID")
-  private List<DcnbQuyetDinhDcTcDtl> danhSachQuyetDinh = new ArrayList<>();
+  private List<DcnbQuyetDinhDcCDtl> danhSachQuyetDinh = new ArrayList<>();
 
   public void setTrangThai(String trangThai) {
     this.trangThai = trangThai;

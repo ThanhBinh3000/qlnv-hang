@@ -1,8 +1,11 @@
 package com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.pheduyet;
 
+import com.tcdt.qlnvhang.request.xuathang.bantructiep.tochuctrienkhai.thongtin.XhTcTtinBttReq;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class XhQdPdKhBttDviDtlReq {
@@ -20,13 +23,20 @@ public class XhQdPdKhBttDviDtlReq {
 
     private String maDviTsan;
 
-    private BigDecimal duDau;
+    private BigDecimal tonKho;
 
-    private BigDecimal soLuong;
+    private BigDecimal soLuongDeXuat;
+
+    private String donViTinh;
 
     private BigDecimal donGiaDeXuat;
 
-    private BigDecimal donGiaVat;
+    private BigDecimal donGiaDuocDuyet;
 
-    private String dviTinh;
+    private String loaiVthh;
+
+    private String cloaiVthh;
+
+    private List<XhTcTtinBttReq> children = new ArrayList<>();
+
 }

@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.table.TongHopKeHoachDieuChuyen;
+package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 import lombok.*;
 
@@ -22,13 +22,13 @@ public class THKeHoachDieuChuyenTongCucHdr implements Serializable {
     private Long id;
 
     @Column(name = "NGAY_TAO")
-    private Date ngaytao;
+    private LocalDate ngaytao;
 
     @Column(name = "NGUOI_TAO_ID")
     private Long nguoiTaoId;
 
     @Column(name = "NGAY_SUA")
-    private Date ngaySua;
+    private LocalDate ngaySua;
 
     @Column(name = "NGUOI_SUA_ID")
     private Long nguoiSuaId;
@@ -37,7 +37,7 @@ public class THKeHoachDieuChuyenTongCucHdr implements Serializable {
     private String maTongHop;
 
     @Column(name = "NGAY_TONG_HOP")
-    private Date ngayTongHop;
+    private LocalDate ngayTongHop;
 
     @Column(name = "NOI_DUNG")
     private String noiDung;
@@ -49,10 +49,10 @@ public class THKeHoachDieuChuyenTongCucHdr implements Serializable {
     private String loaiDieuChuyen;
 
     @Column(name = "TH_TU_NGAY")
-    private Date thTuNgay;
+    private LocalDate thTuNgay;
 
     @Column(name = "TH_DEN_NGAY")
-    private Date thDenNgay;
+    private LocalDate thDenNgay;
 
     @Column(name = "LOAI_HH")
     private String loaiHangHoa;
@@ -75,6 +75,7 @@ public class THKeHoachDieuChuyenTongCucHdr implements Serializable {
     @Column(name = "THOI_GIAN_TONG_HOP")
     private Date thoiGianTongHop;
 
-    @Transient
-    private List<THKeHoachDieuChuyenTongCucDtl> thKeHoachDieuChuyenTongCucDtls = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "HDR_ID")
+    private List<THKeHoachDieuChuyenTongCucDtl> thKeHoachDieuChuyenNoiBoCucDtls = new ArrayList<>();
 }

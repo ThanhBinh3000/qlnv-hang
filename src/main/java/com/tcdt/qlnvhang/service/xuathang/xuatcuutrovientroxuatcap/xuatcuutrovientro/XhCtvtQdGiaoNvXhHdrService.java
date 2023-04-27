@@ -85,9 +85,11 @@ public class XhCtvtQdGiaoNvXhHdrService extends BaseServiceImpl {
     if (currentUser == null) {
       throw new Exception("Bad request.");
     }
-    Optional<XhCtvtQdGiaoNvXhHdr> optional = xhCtvtQdGiaoNvXhHdrRepository.findBySoQd(objReq.getSoQd());
-    if (optional.isPresent()) {
-      throw new Exception("số quyết định giao nhiệm vụ nhập hàng đã tồn tại");
+    if (!DataUtils.isNullObject(objReq.getSoQd())){
+      Optional<XhCtvtQdGiaoNvXhHdr> optional = xhCtvtQdGiaoNvXhHdrRepository.findBySoQd(objReq.getSoQd());
+      if (optional.isPresent()) {
+        throw new Exception("số quyết định giao nhiệm vụ nhập hàng đã tồn tại");
+      }
     }
     XhCtvtQdGiaoNvXhHdr data = new XhCtvtQdGiaoNvXhHdr();
     BeanUtils.copyProperties(objReq, data);
