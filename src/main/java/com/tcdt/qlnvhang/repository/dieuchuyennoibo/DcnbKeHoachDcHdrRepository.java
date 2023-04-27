@@ -12,6 +12,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,10 +61,10 @@ public interface DcnbKeHoachDcHdrRepository extends JpaRepository<DcnbKeHoachDcH
             "AND (TO_DATE(TO_CHAR(hdr.NGAY_TAO ,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS') <= TO_DATE(?6,'YYYY-MM-DD HH24:MI:SS'))")
     List<DcnbKeHoachDcHdr> findByDonViAndTrangThaiTongCuc(String maDVi, String trangThai, String loaiDieuChuyen,String loaiHH, String chungLoaiHH , String thoiGianTongHop);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM DCNB_KE_HOACH_DC_HDR hdr WHERE hdr.MA_DVI = ?1  " +
-            "AND hdr.TRANG_THAI = ?2 AND hdr.LOAI_DC = ?3 AND hdr.TYPE = ?4 " +
-            "AND (TO_DATE(TO_CHAR(hdr.NGAY_TAO ,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS') <= TO_DATE(?5,'YYYY-MM-DD HH24:MI:SS'))")
-    List<DcnbKeHoachDcHdr> findByDonViAndTrangThaiCuc(String maDVi, String trangThai, String loaiDieuChuyen,String type, String thoiGianTongHop);
+    @Query(value = "FROM DcnbKeHoachDcHdr hdr WHERE hdr.maDvi = ?1  " +
+            "AND hdr.trangThai = ?2 AND hdr.loaiDc = ?3 AND hdr.type = ?4 " +
+            "AND hdr.ngayTao <= ?5")
+    List<DcnbKeHoachDcHdr> findByDonViAndTrangThaiCuc(String maDVi, String trangThai, String loaiDieuChuyen, String type, LocalDateTime thoiGianTongHop);
 
     @Modifying
     @Query(nativeQuery = true, value = "UPDATE  DCNB_KE_HOACH_DC_HDR SET  TRANG_THAI = '59' WHERE PARENT_ID = ?1 AND TYPE= ?2")

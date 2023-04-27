@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -17,12 +18,9 @@ public class TongHopKeHoachDieuChuyenSearch extends BaseRequest {
     private Integer namKeHoach;
     private String maTongHop;
     private String loaiDieuChuyen;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date tuNgay;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date denNgay;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date thoiGianTongHop;
+    private LocalDate tuNgay;
+    private LocalDate denNgay;
+    private LocalDateTime thoiGianTongHop;
     private String trichYeu;
     private String maDVi;
     private String loaiHangHoa;
