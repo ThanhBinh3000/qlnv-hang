@@ -115,23 +115,16 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         data.setNamKeHoach(objReq.getNamKeHoach());
         data.setLoaiDieuChuyen(objReq.getLoaiDieuChuyen());
         if (Objects.equals(data.getLoaiDieuChuyen(), Contains.GIUA_2_CHI_CUC_TRONG_1_CUC)) {
-            List<THKeHoachDieuChuyenNoiBoCucDtl> chiTiet = new ArrayList<>();
             TongHopKeHoachDieuChuyenSearch tongHopSearch = new ModelMapper().map(objReq, TongHopKeHoachDieuChuyenSearch.class);
-            objReq.setThKeHoachDieuChuyenNoiBoCucDtls(createPlanChiCuc(currentUser, tongHopSearch));
-            if (objReq.getThKeHoachDieuChuyenNoiBoCucDtls() != null && !objReq.getThKeHoachDieuChuyenNoiBoCucDtls().isEmpty()) {
-                for (THKeHoachDieuChuyenNoiBoCucDtl ct : objReq.getThKeHoachDieuChuyenNoiBoCucDtls()) {
-                    THKeHoachDieuChuyenNoiBoCucDtl ctTongHop = new THKeHoachDieuChuyenNoiBoCucDtl();
-                    ObjectMapperUtils.map(ct, ctTongHop);
-                    chiTiet.add(ctTongHop);
-                }
+            List<ThKeHoachDieuChuyenNoiBoCucDtlReq> planCuc = createPlanChiCuc(currentUser, tongHopSearch);
+            List<THKeHoachDieuChuyenNoiBoCucDtl> dtls = new ArrayList<>();
+            for (ThKeHoachDieuChuyenNoiBoCucDtlReq req : planCuc) {
+                THKeHoachDieuChuyenNoiBoCucDtl dtl = new ModelMapper().map(req, THKeHoachDieuChuyenNoiBoCucDtl.class);
+                dtls.add(dtl);
             }
+            dtls.forEach(e -> e.setTHKeHoachDieuChuyenCucHdr(data));
+            data.setThKeHoachDieuChuyenNoiBoCucDtls(dtls);
             THKeHoachDieuChuyenCucHdr created = thKeHoachDieuChuyenHdrRepository.save(data);
-            if (!chiTiet.isEmpty()) {
-                for (THKeHoachDieuChuyenNoiBoCucDtl ct : chiTiet) {
-                    ct.setHdrId(created.getId());
-                }
-            }
-            thKeHoachDieuChuyenNoiBoCucDtlRepository.saveAll(chiTiet);
             return created;
         } else if (Objects.equals(data.getLoaiDieuChuyen(), Contains.GIUA_2_CUC_DTNN_KV)) {
             TongHopKeHoachDieuChuyenSearch tongHopSearch = new ModelMapper().map(objReq, TongHopKeHoachDieuChuyenSearch.class);
@@ -168,27 +161,31 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
 
     @Transient
     public void delete(IdSearchReq idSearchReq) throws Exception {
-        Optional<THKeHoachDieuChuyenTongCucHdr> optional = tongCucHdrRepository.findById(idSearchReq.getId());
+        Optional<THKeHoachDieuChuyenCucHdr> optional = thKeHoachDieuChuyenHdrRepository.findById(idSearchReq.getId());
         if (!optional.isPresent()) {
             throw new Exception("Bản ghi không tồn tại");
         }
-        THKeHoachDieuChuyenTongCucHdr data = optional.get();
-        List<THKeHoachDieuChuyenTongCucDtl> list = thKeHoachDieuChuyenTongCucDtlRepository.findByHdrId(data.getId());
-        thKeHoachDieuChuyenTongCucDtlRepository.deleteAll(list);
-        tongCucHdrRepository.delete(data);
+        THKeHoachDieuChuyenCucHdr data = optional.get();
+        List<THKeHoachDieuChuyenNoiBoCucDtl> list = thKeHoachDieuChuyenNoiBoCucDtlRepository.findByHdrId(data.getId());
+        thKeHoachDieuChuyenNoiBoCucDtlRepository.deleteAll(list);
+        List<THKeHoachDieuChuyenCucKhacCucDtl> list1 = thKeHoachDieuChuyenCucKhacCucDtlRepository.findByHdrId(data.getId());
+        thKeHoachDieuChuyenCucKhacCucDtlRepository.deleteAll(list1);
+        thKeHoachDieuChuyenHdrRepository.delete(data);
 
     }
 
     @Transient
     public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
-        List<THKeHoachDieuChuyenTongCucHdr> list = tongCucHdrRepository.findAllById(idSearchReq.getIds());
+        List<THKeHoachDieuChuyenCucHdr> list = thKeHoachDieuChuyenHdrRepository.findAllById(idSearchReq.getIds());
         if (list.isEmpty()) {
             throw new Exception("Bản ghi không tồn tại");
         }
-        List<Long> listId = list.stream().map(THKeHoachDieuChuyenTongCucHdr::getId).collect(Collectors.toList());
-        List<THKeHoachDieuChuyenTongCucDtl> listTongHopKeHoach = thKeHoachDieuChuyenTongCucDtlRepository.findAllByHdrIdIn(listId);
-        thKeHoachDieuChuyenTongCucDtlRepository.deleteAll(listTongHopKeHoach);
-        tongCucHdrRepository.deleteAll(list);
+        List<Long> listId = list.stream().map(THKeHoachDieuChuyenCucHdr::getId).collect(Collectors.toList());
+        List<THKeHoachDieuChuyenNoiBoCucDtl> listTongHopKeHoachChiCuc = thKeHoachDieuChuyenNoiBoCucDtlRepository.findAllByHdrIdIn(listId);
+        thKeHoachDieuChuyenNoiBoCucDtlRepository.deleteAll(listTongHopKeHoachChiCuc);
+        List<THKeHoachDieuChuyenCucKhacCucDtl> listTongHopKeHoachKhacCuc = thKeHoachDieuChuyenCucKhacCucDtlRepository.findAllByHdrIdIn(listId);
+        thKeHoachDieuChuyenCucKhacCucDtlRepository.deleteAll(listTongHopKeHoachKhacCuc);
+        thKeHoachDieuChuyenHdrRepository.deleteAll(list);
     }
 
 
@@ -201,7 +198,6 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
             throw new Exception("Không tìm thấy dữ liệu");
         }
         this.approveTongHop(currentUser, statusReq, optional); // Truyền giá trị của optional vào
-
     }
 
     @Transactional
@@ -293,16 +289,16 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
     }
 
     @Transactional
-    public List<THKeHoachDieuChuyenNoiBoCucDtl> createPlanChiCuc(CustomUserDetails currentUser, TongHopKeHoachDieuChuyenSearch req) throws Exception {
+    public List<ThKeHoachDieuChuyenNoiBoCucDtlReq> createPlanChiCuc(CustomUserDetails currentUser, TongHopKeHoachDieuChuyenSearch req) throws Exception {
         List<QlnvDmDonvi> donvis = qlnvDmDonviRepository.findByMaDviChaAndTrangThai(currentUser.getDvql(), "01");
-        List<THKeHoachDieuChuyenNoiBoCucDtl> result = new ArrayList<>();
+        List<ThKeHoachDieuChuyenNoiBoCucDtlReq> result = new ArrayList<>();
         for (QlnvDmDonvi cqt : donvis) {
             req.setMaDVi(cqt.getMaDvi());
             List<DcnbKeHoachDcDtl> thKeHoachDieuChuyenNoiBoCucDtls = dcnbKeHoachDcDtlRepository.findByDonViAndTrangThaiChiCuc(req.getMaDVi(), Contains.DADUYET_LDCC, Contains.DIEU_CHUYEN, Contains.GIUA_2_CHI_CUC_TRONG_1_CUC, req.getThoiGianTongHop());
             for (DcnbKeHoachDcDtl entry : thKeHoachDieuChuyenNoiBoCucDtls) {
                 Hibernate.initialize(entry.getDcnbKeHoachDcHdr());
                 DcnbKeHoachDcDtl entryClone = SerializationUtils.clone(entry);
-                THKeHoachDieuChuyenNoiBoCucDtl dtl = new ModelMapper().map(entryClone, THKeHoachDieuChuyenNoiBoCucDtl.class);
+                ThKeHoachDieuChuyenNoiBoCucDtlReq dtl = new ModelMapper().map(entryClone, ThKeHoachDieuChuyenNoiBoCucDtlReq.class);
                 dtl.setId(null);
                 dtl.setDcKeHoachDcDtlId(entry.getId());
                 result.add(dtl);
@@ -326,6 +322,8 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                 dtl.setDcnbKeHoachDcHdrId(khh.getId());
                 dtl.setHdrId(null);
                 dtl.setNgayGduyetTc(null);
+                List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(dtl.getDcnbKeHoachDcHdrId());
+                dtl.setDcnbKeHoachDcDtls(dcnbKeHoachDcDtls);
                 result.add(dtl);
             }
         }

@@ -29,7 +29,7 @@ public class THKeHoachDieuChuyenCucKhacCucDtl implements Serializable {
     @Column(name = "HDR_ID", insertable = false, updatable = false)
     private Long hdrId;
 
-    @Column(name = "DCNB_KE_HOACH_DC_HDR_ID", insertable = false, updatable = false)
+    @Column(name = "DCNB_KE_HOACH_DC_HDR_ID")
     private Long dcnbKeHoachDcHdrId;
 
     @ManyToOne(fetch = FetchType.LAZY)
