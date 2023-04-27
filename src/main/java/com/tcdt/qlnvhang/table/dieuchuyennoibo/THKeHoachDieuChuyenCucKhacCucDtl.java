@@ -1,11 +1,11 @@
-package com.tcdt.qlnvhang.table.TongHopKeHoachDieuChuyen;
+package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcHdr;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Immutable;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -18,6 +18,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Entity
 @PrimaryKeyJoinColumn(name = "DCNB_KE_HOACH_DC_HDR_ID", referencedColumnName = "id")
+@Immutable
 public class THKeHoachDieuChuyenCucKhacCucDtl extends DcnbKeHoachDcHdr implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DCNB_TH_KH_DCC_KC_DTL_SEQ")
@@ -27,7 +28,7 @@ public class THKeHoachDieuChuyenCucKhacCucDtl extends DcnbKeHoachDcHdr implement
     @Column(name = "NGAY_GDUYET_TC")
     private LocalDate ngayGduyetTc;
 
-    @Column(name = "HDR_ID")
+    @Column(name = "DCNB_TH_KE_HOACH_DCC_HDR_ID")
     private Long hdrId;
 
     @Column(name = "DCNB_KE_HOACH_DC_HDR_ID", insertable = false, updatable = false)

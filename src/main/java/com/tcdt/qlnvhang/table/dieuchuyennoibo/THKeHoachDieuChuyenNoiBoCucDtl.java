@@ -1,7 +1,6 @@
-package com.tcdt.qlnvhang.table.TongHopKeHoachDieuChuyen;
+package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,7 +22,7 @@ public class THKeHoachDieuChuyenNoiBoCucDtl extends DcnbKeHoachDcDtl implements 
     @SequenceGenerator(sequenceName = "DCNB_TH_KH_DCC_NBC_DTL_SEQ", allocationSize = 1, name = "DCNB_TH_KH_DCC_NBC_DTL_SEQ")
     private Long id;
 
-    @Column(name = "HDR_ID")
+    @Column(name = "DCNB_TH_KE_HOACH_DCC_HDR_ID")
     private Long hdrId;
 
     @Column(name = "DCNB_KE_HOACH_DC_DTL_ID", insertable = false, updatable = false)

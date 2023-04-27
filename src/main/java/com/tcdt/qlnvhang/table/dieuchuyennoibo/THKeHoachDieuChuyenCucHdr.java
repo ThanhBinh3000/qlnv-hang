@@ -1,13 +1,12 @@
-package com.tcdt.qlnvhang.table.TongHopKeHoachDieuChuyen;
+package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 
-import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
 import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -94,7 +93,7 @@ public class THKeHoachDieuChuyenCucHdr implements Serializable {
     private String tenDvi;
 
     @Column(name = "THOI_GIAN_TONG_HOP")
-    private Date thoiGianTongHop;
+    private LocalDateTime thoiGianTongHop;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")

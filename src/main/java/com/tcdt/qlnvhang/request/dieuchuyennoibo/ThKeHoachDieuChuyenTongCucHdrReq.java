@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.THKeHoachDieuChuyenTongCucDtl;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
@@ -52,5 +53,5 @@ public class ThKeHoachDieuChuyenTongCucHdrReq {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
     private Date thoiGianTongHop;
 
-    List<ThKeHoachDieuChuyenTongCucDtlReq> thKeHoachDieuChuyenTongCucDtls;
+    List<THKeHoachDieuChuyenTongCucDtl> thKeHoachDieuChuyenTongCucDtls;
 }

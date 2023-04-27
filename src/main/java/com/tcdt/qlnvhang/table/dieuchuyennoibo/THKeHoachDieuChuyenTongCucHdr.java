@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.table.TongHopKeHoachDieuChuyen;
+package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 import lombok.*;
 
@@ -75,6 +75,7 @@ public class THKeHoachDieuChuyenTongCucHdr implements Serializable {
     @Column(name = "THOI_GIAN_TONG_HOP")
     private Date thoiGianTongHop;
 
-    @Transient
-    private List<THKeHoachDieuChuyenTongCucDtl> thKeHoachDieuChuyenTongCucDtls = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "HDR_ID")
+    private List<THKeHoachDieuChuyenTongCucDtl> thKeHoachDieuChuyenNoiBoCucDtls = new ArrayList<>();
 }

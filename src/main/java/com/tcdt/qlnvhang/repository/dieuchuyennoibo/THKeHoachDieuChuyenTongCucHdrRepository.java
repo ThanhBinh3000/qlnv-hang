@@ -1,9 +1,8 @@
 package com.tcdt.qlnvhang.repository.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.request.search.TongHopKeHoachDieuChuyenSearch;
-import com.tcdt.qlnvhang.table.TongHopKeHoachDieuChuyen.THKeHoachDieuChuyenCucHdr;
-import com.tcdt.qlnvhang.table.TongHopKeHoachDieuChuyen.THKeHoachDieuChuyenTongCucDtl;
-import com.tcdt.qlnvhang.table.TongHopKeHoachDieuChuyen.THKeHoachDieuChuyenTongCucHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.THKeHoachDieuChuyenTongCucDtl;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.THKeHoachDieuChuyenTongCucHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,7 +11,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface THKeHoachDieuChuyenTongCucHdrRepository extends JpaRepository<THKeHoachDieuChuyenTongCucHdr,Long> {
@@ -33,4 +31,16 @@ public interface THKeHoachDieuChuyenTongCucHdrRepository extends JpaRepository<T
 
     List<THKeHoachDieuChuyenTongCucHdr> findByIdIn(List<Long> ids);
     List<THKeHoachDieuChuyenTongCucDtl> findAllByIdIn(List<Long> listId);
+
+//    @Query(value = "SELECT distinct hdr.maTongHop FROM THKeHoachDieuChuyenTongCucHdr hdr WHERE 1=1 " +
+//            "AND (:#{#param.maDVi} IS NULL OR hdr.maDVi LIKE CONCAT(:#{#param.maDVi},'%')) "+
+//            "AND (:#{#param.loaiDieuChuyen} IS NULL OR LOWER(hdr.loaiDieuChuyen) LIKE CONCAT('%',LOWER(:#{#param.loaiDieuChuyen}),'%'))"+
+//            "ORDER BY hdr.maTongHop desc")
+//    List<THKeHoachDieuChuyenTongCucHdr> filterMaTongHop(@Param("param") TongHopKeHoachDieuChuyenSearch param);
+//
+//    @Query(value = "SELECT distinct hdr.soDeXuat FROM THKeHoachDieuChuyenTongCucHdr hdr WHERE 1=1 " +
+//            "AND (:#{#param.maDVi} IS NULL OR hdr.maDVi LIKE CONCAT(:#{#param.maDVi},'%')) "+
+//            "AND (:#{#param.loaiDieuChuyen} IS NULL OR LOWER(hdr.loaiDieuChuyen) LIKE CONCAT('%',LOWER(:#{#param.loaiDieuChuyen}),'%'))"+
+//            "ORDER BY hdr.maTongHop desc")
+//    List<THKeHoachDieuChuyenTongCucHdr> filterSoDeXuat(TongHopKeHoachDieuChuyenSearch req);
 }
