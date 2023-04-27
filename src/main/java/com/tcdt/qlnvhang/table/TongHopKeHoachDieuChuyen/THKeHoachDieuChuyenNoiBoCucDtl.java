@@ -2,14 +2,13 @@ package com.tcdt.qlnvhang.table.TongHopKeHoachDieuChuyen;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcHdr;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Data
 @Table(name = "DCNB_TH_KE_HOACH_DCC_NBC_DTL")
@@ -17,7 +16,8 @@ import java.util.Optional;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class THKeHoachDieuChuyenNoiBoCucDtl implements Serializable {
+@PrimaryKeyJoinColumn(name = "DCNB_KE_HOACH_DC_DTL_ID", referencedColumnName = "id")
+public class THKeHoachDieuChuyenNoiBoCucDtl extends DcnbKeHoachDcDtl implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DCNB_TH_KH_DCC_NBC_DTL_SEQ")
     @SequenceGenerator(sequenceName = "DCNB_TH_KH_DCC_NBC_DTL_SEQ", allocationSize = 1, name = "DCNB_TH_KH_DCC_NBC_DTL_SEQ")
@@ -26,20 +26,11 @@ public class THKeHoachDieuChuyenNoiBoCucDtl implements Serializable {
     @Column(name = "HDR_ID")
     private Long hdrId;
 
-    @Column(name = "DCNB_KE_HOACH_DC_HDR_ID")
-    private Long dcKeHoachDcHdrId;
-
-    @Column(name = "DCNB_KE_HOACH_DC_DTL_ID")
+    @Column(name = "DCNB_KE_HOACH_DC_DTL_ID", insertable = false, updatable = false)
     private Long dcKeHoachDcDtlId;
 
-    @Column(name = "MA_CHI_CUC_DXUAT")
-    private String maChiCucDxuat;
-
-    @Column(name = "TEN_CHI_CUC_DXUAT")
-    private String tenChiCucDxuat;
-
-    @Transient
-    private List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtlList = new ArrayList<>();
-
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
+    @JsonIgnore
+    private THKeHoachDieuChuyenCucHdr tHKeHoachDieuChuyenCucHdr;
 }

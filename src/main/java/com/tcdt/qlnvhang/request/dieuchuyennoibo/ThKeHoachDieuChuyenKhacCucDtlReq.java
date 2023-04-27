@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcHdr;
 import lombok.Data;
 
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,7 @@ public class ThKeHoachDieuChuyenKhacCucDtlReq {
 
     private LocalDate ngayGduyetTc;
 
-    private Long tongDuToanKp;
+    private BigDecimal tongDuToanKp;
 
     private String trichYeu;
 
