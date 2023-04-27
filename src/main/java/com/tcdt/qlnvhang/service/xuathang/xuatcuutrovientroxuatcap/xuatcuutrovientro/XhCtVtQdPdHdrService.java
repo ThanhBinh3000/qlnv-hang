@@ -90,9 +90,11 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
     if (currentUser == null) {
       throw new Exception("Bad request.");
     }
-    Optional<XhCtVtQuyetDinhPdHdr> optional = xhCtVtQdPdHdrRepository.findBySoQd(objReq.getSoQd());
-    if (optional.isPresent()) {
-      throw new Exception("số quyết định đã tồn tại");
+    if (!DataUtils.isNullObject(objReq.getSoQd())) {
+      Optional<XhCtVtQuyetDinhPdHdr> optional = xhCtVtQdPdHdrRepository.findBySoQd(objReq.getSoQd());
+      if (optional.isPresent()) {
+        throw new Exception("số quyết định đã tồn tại");
+      }
     }
     XhCtVtQuyetDinhPdHdr data = new XhCtVtQuyetDinhPdHdr();
     BeanUtils.copyProperties(objReq, data);
