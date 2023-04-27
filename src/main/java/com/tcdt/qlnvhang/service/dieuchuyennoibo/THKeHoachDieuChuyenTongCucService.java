@@ -1,0 +1,200 @@
+package com.tcdt.qlnvhang.service.dieuchuyennoibo;
+
+import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.THKeHoachDieuChuyenCucHdrRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.THKeHoachDieuChuyenCucKhacCucDtlRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.THKeHoachDieuChuyenTongCucDtlRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.THKeHoachDieuChuyenTongCucHdrRepository;
+import com.tcdt.qlnvhang.request.IdSearchReq;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.ThKeHoachDieuChuyenTongCucHdrReq;
+import com.tcdt.qlnvhang.request.search.TongHopKeHoachDieuChuyenSearch;
+import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
+import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DataUtils;
+import com.tcdt.qlnvhang.util.ObjectMapperUtils;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import javax.persistence.Transient;
+import javax.transaction.Transactional;
+import javax.xml.bind.ValidationException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@Service
+public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
+
+    @Autowired
+    private THKeHoachDieuChuyenTongCucHdrRepository tongCucHdrRepository;
+
+    @Autowired
+    private THKeHoachDieuChuyenTongCucDtlRepository thKeHoachDieuChuyenTongCucDtlRepository;
+
+    @Autowired
+    private THKeHoachDieuChuyenCucHdrRepository thKeHoachDieuChuyenCucHdrRepository;
+
+    @Autowired
+    private THKeHoachDieuChuyenCucKhacCucDtlRepository thKeHoachDieuChuyenCucKhacCucDtlRepository;
+    @Autowired
+    private QlnvDmDonviRepository qlnvDmDonviRepository;
+
+    public Page<THKeHoachDieuChuyenTongCucHdr> searchPage(CustomUserDetails currentUser, TongHopKeHoachDieuChuyenSearch req) throws Exception {
+        req.setMaDVi(currentUser.getDvql());
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
+        Page<THKeHoachDieuChuyenTongCucHdr> search = tongCucHdrRepository.search(req, pageable);
+        return search;
+    }
+
+    @Transactional
+    public THKeHoachDieuChuyenTongCucHdr save(CustomUserDetails currentUser, ThKeHoachDieuChuyenTongCucHdrReq objReq) throws Exception {
+        if (currentUser == null) {
+            throw new Exception("Bad request.");
+        }
+        THKeHoachDieuChuyenTongCucHdr data = new THKeHoachDieuChuyenTongCucHdr();
+        BeanUtils.copyProperties(objReq, data);
+        data.setMaDVi(currentUser.getUser().getDvql());
+        data.setTenDVi(currentUser.getUser().getTenDvi());
+        data.setTrangThai(Contains.CHUATAO_QD);
+        data.setNgayTongHop(objReq.getNgayTongHop());
+        data.setThoiGianTongHop(objReq.getThoiGianTongHop());
+        data.setLoaiHangHoa(objReq.getLoaiHangHoa());
+        data.setChungLoaiHangHoa(objReq.getChungLoaiHangHoa());
+        data.setTenLoaiHangHoa(objReq.getTenLoaiHangHoa());
+        data.setNgaytao(LocalDate.now());
+        data.setNguoiTaoId(currentUser.getUser().getId());
+        data.setNamKeHoach(objReq.getNamKeHoach());
+        data.setLoaiDieuChuyen(objReq.getLoaiDieuChuyen());
+        List<THKeHoachDieuChuyenTongCucDtl> chiTiet = new ArrayList<>();
+        TongHopKeHoachDieuChuyenSearch tongHopSearch = new ModelMapper().map(objReq, TongHopKeHoachDieuChuyenSearch.class);
+        objReq.setThKeHoachDieuChuyenTongCucDtls(createPlan(currentUser, tongHopSearch));
+        if (objReq.getThKeHoachDieuChuyenTongCucDtls() != null && !objReq.getThKeHoachDieuChuyenTongCucDtls().isEmpty()) {
+            for (THKeHoachDieuChuyenTongCucDtl ct : objReq.getThKeHoachDieuChuyenTongCucDtls()) {
+                THKeHoachDieuChuyenTongCucDtl ctTongHop = new THKeHoachDieuChuyenTongCucDtl();
+                ObjectMapperUtils.map(ct, ctTongHop);
+                chiTiet.add(ctTongHop);
+            }
+        }
+        THKeHoachDieuChuyenTongCucHdr created = tongCucHdrRepository.save(data);
+        if (!chiTiet.isEmpty()) {
+            for (THKeHoachDieuChuyenTongCucDtl ct : chiTiet) {
+                ct.setHdrId(created.getId());
+            }
+        }
+        thKeHoachDieuChuyenTongCucDtlRepository.saveAll(chiTiet);
+        return created;
+    }
+
+    public List<THKeHoachDieuChuyenTongCucHdr> detail(List<Long> ids) throws Exception {
+        if (DataUtils.isNullOrEmpty(ids))
+            throw new ValidationException("Tham số không hợp lệ.");
+        List<THKeHoachDieuChuyenTongCucHdr> optional = tongCucHdrRepository.findByIdIn(ids);
+        if (DataUtils.isNullOrEmpty(optional)) {
+            throw new ValidationException("Không tìm thấy dữ liệu");
+        }
+        List<THKeHoachDieuChuyenTongCucHdr> allById = tongCucHdrRepository.findAllById(ids);
+//        allById.forEach(data -> {
+//            List<THKeHoachDieuChuyenTongCucDtl> list = thKeHoachDieuChuyenTongCucDtlRepository.findByHdrId(data.getId());
+//            data.setThKeHoachDieuChuyenTongCucDtls(list);
+//            list.forEach(data1 -> {
+//                List<DcnbKeHoachDcDtl> list1 = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(data1.getKeHoachDcHdrId());
+//                data1.setDcnbKeHoachDcDtlList(list1);
+//            });
+//        });
+        return allById;
+    }
+
+    @Transient
+    public void delete(IdSearchReq idSearchReq) throws Exception {
+            Optional<THKeHoachDieuChuyenTongCucHdr> optional = tongCucHdrRepository.findById(idSearchReq.getId());
+            if (!optional.isPresent()) {
+                throw new Exception("Bản ghi không tồn tại");
+            }
+            THKeHoachDieuChuyenTongCucHdr data = optional.get();
+            List<THKeHoachDieuChuyenTongCucDtl> list = thKeHoachDieuChuyenTongCucDtlRepository.findByHdrId(data.getId());
+            thKeHoachDieuChuyenTongCucDtlRepository.deleteAll(list);
+            tongCucHdrRepository.delete(data);
+        }
+
+
+    @Transient
+    public void deleteMulti( IdSearchReq idSearchReq) throws Exception {
+            List<THKeHoachDieuChuyenTongCucHdr> list = tongCucHdrRepository.findAllById(idSearchReq.getIds());
+            if (list.isEmpty()) {
+                throw new Exception("Bản ghi không tồn tại");
+            }
+            List<Long> listId = list.stream().map(THKeHoachDieuChuyenTongCucHdr::getId).collect(Collectors.toList());
+            List<THKeHoachDieuChuyenTongCucDtl> listTongHopKeHoach = thKeHoachDieuChuyenTongCucDtlRepository.findAllByHdrIdIn(listId);
+            thKeHoachDieuChuyenTongCucDtlRepository.deleteAll(listTongHopKeHoach);
+            tongCucHdrRepository.deleteAll(list);
+        }
+
+    @Transactional
+    public THKeHoachDieuChuyenTongCucHdr update(CustomUserDetails currentUser, ThKeHoachDieuChuyenTongCucHdrReq objReq) throws Exception {
+        if (currentUser == null) {
+            throw new Exception("Bad request.");
+        }
+        Optional<THKeHoachDieuChuyenTongCucHdr> optional = tongCucHdrRepository.findById(objReq.getId());
+        if (!optional.isPresent()) {
+            throw new Exception("Không tìm thấy dữ liệu cần sửa");
+        }
+        List<THKeHoachDieuChuyenTongCucHdr> maTongHop = tongCucHdrRepository.findByMaTongHop(optional.get().getMaTongHop());
+        if (!maTongHop.isEmpty() && objReq.getMaTongHop().split("/").length == 1) {
+            if (!maTongHop.get(0).getId().equals(objReq.getId())) {
+                throw new Exception("Mã tổng hợp đã tồn tại");
+            }
+        }
+        THKeHoachDieuChuyenTongCucHdr data = optional.get();
+        ObjectMapperUtils.map(objReq, data);
+        data.setNguoiSuaId(currentUser.getUser().getId());
+        data.setNgaySua(LocalDate.now());
+        THKeHoachDieuChuyenTongCucHdr created = tongCucHdrRepository.save(data);
+        tongCucHdrRepository.save(created);
+        return created;
+    }
+
+    @Transactional
+    public List<THKeHoachDieuChuyenTongCucDtl> createPlan(CustomUserDetails currentUser, TongHopKeHoachDieuChuyenSearch req) throws Exception {
+        List<QlnvDmDonvi> donvis = qlnvDmDonviRepository.findByMaDviChaAndTrangThai(currentUser.getDvql(), "01");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        List<THKeHoachDieuChuyenTongCucDtl> result = new ArrayList<>();
+//        for (QlnvDmDonvi cqt : donvis) {
+//            req.setMaDVi(cqt.getMaDvi());
+//            if (req.getLoaiDieuChuyen().equals(Contains.GIUA_2_CHI_CUC_TRONG_1_CUC)) {
+//                List<THKeHoachDieuChuyenCucHdr> dcnbKeHoachDcHdrs = thKeHoachDieuChuyenCucHdrRepository.findByDonViAndTrangThaiTongCuc(req.getMaDVi(), Contains.DADUYET_LDC, Contains.GIUA_2_CHI_CUC_TRONG_1_CUC, req.getLoaiHangHoa(), req.getChungLoaiHangHoa(), formatter.format(req.getThoiGianTongHop()));
+//                for (THKeHoachDieuChuyenCucHdr entry : dcnbKeHoachDcHdrs) {
+//                    THKeHoachDieuChuyenTongCucDtl chiTiet = new THKeHoachDieuChuyenTongCucDtl();
+//                    chiTiet.set(entry.getId());
+//                    chiTiet.setHdrId(null);
+//                    Long tongDuToanKp = dcnbKeHoachDcDtlRepository.findByMaDviCucAndTypeAndLoaiDcTongCucChiCuc(req.getMaDVi(), Contains.DIEU_CHUYEN, Contains.GIUA_2_CHI_CUC_TRONG_1_CUC, Contains.DADUYET_LDCC, req.getLoaiHangHoa(), req.getChungLoaiHangHoa(), formatter.format(req.getThoiGianTongHop()));
+//                    chiTiet.setDuToanKp(tongDuToanKp);
+//                    result.add(chiTiet);
+//                }
+//            } else if (req.getLoaiDieuChuyen().equals(Contains.GIUA_2_CUC_DTNN_KV)) {
+//                List<THKeHoachDieuChuyenCucKhacCucDtl> dcnbKeHoachDcHdrs = thKeHoachDieuChuyenCucKhacCucDtlRepository.findByDonViAndTrangThaiAndLoaiDcCuc(req.getMaDVi(), Contains.DADUYET_LDC, Contains.GIUA_2_CUC_DTNN_KV, req.getLoaiHangHoa(), req.getChungLoaiHangHoa(), formatter.format(req.getThoiGianTongHop()));
+//                for (THKeHoachDieuChuyenCucKhacCucDtl entry : dcnbKeHoachDcHdrs) {
+//                    THKeHoachDieuChuyenTongCucDtl chiTiet = new THKeHoachDieuChuyenTongCucDtl();
+//                    chiTiet.setKeHoachDcHdrId(entry.getDcnbKeHoachDcHdrId());
+//                    Long tongDuToanKp = dcnbKeHoachDcDtlRepository.findByMaDviCucAndTypeAndLoaiDcTongCucCuc(req.getMaDVi(), entry.getMaCucNhan(), Contains.DIEU_CHUYEN, Contains.GIUA_2_CUC_DTNN_KV, Contains.DADUYET_LDCC, req.getLoaiHangHoa(), req.getChungLoaiHangHoa(), formatter.format(req.getThoiGianTongHop()));
+//                    chiTiet.setDuToanKp(tongDuToanKp);
+//                    result.add(chiTiet);
+//                }
+//
+//            }
+//
+//        }
+        return result;
+    }
+}
+

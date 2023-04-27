@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.repository.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbKeHoachDc;
-import com.tcdt.qlnvhang.request.search.TongHopKeHoachDieuChuyenSearch;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,9 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,22 +48,12 @@ public interface DcnbKeHoachDcHdrRepository extends JpaRepository<DcnbKeHoachDcH
             "JOIN DCNB_KE_HOACH_DC_DTL dtl ON dtl.HDR_ID = hdr.ID WHERE dtl.CLOAI_VTHH = ?1 AND dtl.MA_LO_KHO = ?2", nativeQuery = true)
     BigDecimal countTongKeHoachDeXuat(String cloaiVthh, String maLoKho);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM DCNB_KE_HOACH_DC_HDR hdr " +
-            "LEFT JOIN DCNB_KE_HOACH_DC_DTL dtl ON dtl.HDR_ID = hdr.ID " +
-            "LEFT JOIN DCNB_TH_KE_HOACH_DCC_NBC_DTL d ON d.DCNB_KE_HOACH_DC_HDR_ID = hdr. " +
-            "WHERE hdr.MA_DVI_CUC = ?1  " +
-            "AND hdr.TRANG_THAI = ?2 AND hdr.LOAI_DC = ?3 AND hdr.TYPE = 'DC'" +
-            "AND dtl.LOAI_VTHH IS NULL OR dtl.LOAI_VTHH = ?4 " +
-            "AND dtl.CLOAI_VTHH IS NULL OR dtl.CLOAI_VTHH = ?5 " +
-            "AND (TO_DATE(TO_CHAR(hdr.NGAY_TAO ,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS') <= TO_DATE(?6,'YYYY-MM-DD HH24:MI:SS'))")
-    List<DcnbKeHoachDcHdr> findByDonViAndTrangThaiTongCuc(String maDVi, String trangThai, String loaiDieuChuyen,String loaiHH, String chungLoaiHH , String thoiGianTongHop);
-
     @Query(value = "FROM DcnbKeHoachDcHdr hdr WHERE hdr.maDvi = ?1  " +
             "AND hdr.trangThai = ?2 AND hdr.loaiDc = ?3 AND hdr.type = ?4 " +
             "AND hdr.ngayTao <= ?5")
     List<DcnbKeHoachDcHdr> findByDonViAndTrangThaiCuc(String maDVi, String trangThai, String loaiDieuChuyen, String type, LocalDateTime thoiGianTongHop);
 
     @Modifying
-    @Query(nativeQuery = true, value = "UPDATE  DCNB_KE_HOACH_DC_HDR SET  TRANG_THAI = '59' WHERE PARENT_ID = ?1 AND TYPE= ?2")
-    void updateTrangThaiNdc(Long hdrId, String type);
+    @Query(nativeQuery = true, value = "UPDATE  DCNB_KE_HOACH_DC_HDR SET  TRANG_THAI = '59' WHERE PARENT_ID = (SELECT HDR_ID FROM DCNB_KE_HOACH_DC_DTL WHERE ?1) AND TYPE= ?2")
+    void updateTrangThaiNdc(Long dtlId, String type);
 }

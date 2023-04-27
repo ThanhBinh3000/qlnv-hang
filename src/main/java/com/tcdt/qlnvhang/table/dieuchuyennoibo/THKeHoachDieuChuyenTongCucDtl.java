@@ -1,5 +1,6 @@
-package com.tcdt.qlnvhang.table.TongHopKeHoachDieuChuyen;
+package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
 import lombok.*;
 import org.checkerframework.checker.units.qual.C;
@@ -28,33 +29,8 @@ public class THKeHoachDieuChuyenTongCucDtl implements Serializable {
     @Column(name = "DCNB_KE_HOACH_DC_HDR_ID")
     private Long keHoachDcHdrId;
 
-    @Column(name = "MA_CUC_DXUAT_DC")
-    private String maCucDxuatDc;
-
-    @Column(name = "TEN_CUC_DXUAT_DC")
-    private String tenCucDxuatDc;
-
-    @Column(name = "MA_CUC_NHAN_DC")
-    private String maCucNhanDc;
-
-    @Column(name = "TEN_CUC_NHAN_DC")
-    private String tenCucNhanDc;
-
-    @Column(name = "SO_DXUAT")
-    private String soDxuat;
-
-    @Column(name = "NGAY_DUYET_TC")
-    private Date ngayDuyetTc;
-
-    @Column(name = "DU_TOAN_KP")
-    private Long duToanKp;
-
-    @Column(name = "TRICH_YEU")
-    private String trichYeu;
-
-    @Column(name = "DCNB_TH_KE_HOACH_DCC_HDR_ID")
-    private Long dcnbThKhDccHdrId;
-
-    @Transient
-    private List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtlList = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
+    @JsonIgnore
+    private THKeHoachDieuChuyenCucHdr tHKeHoachDieuChuyenCucHdr;
 }

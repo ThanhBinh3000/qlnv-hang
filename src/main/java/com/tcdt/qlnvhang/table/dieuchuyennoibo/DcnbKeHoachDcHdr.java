@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Immutable;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -18,7 +19,6 @@ import java.util.List;
 @Table(name = DcnbKeHoachDcHdr.TABLE_NAME)
 @Getter
 @Setter
-@Inheritance(strategy = InheritanceType.JOINED)
 public class DcnbKeHoachDcHdr extends BaseEntity implements Serializable, Cloneable{
 
   private static final long serialVersionUID = 1L;

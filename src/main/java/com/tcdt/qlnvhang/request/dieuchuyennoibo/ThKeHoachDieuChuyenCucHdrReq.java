@@ -1,16 +1,13 @@
 package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tcdt.qlnvhang.table.TongHopKeHoachDieuChuyen.THKeHoachDieuChuyenCucKhacCucDtl;
-import com.tcdt.qlnvhang.table.TongHopKeHoachDieuChuyen.THKeHoachDieuChuyenNoiBoCucDtl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.THKeHoachDieuChuyenCucKhacCucDtl;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.THKeHoachDieuChuyenNoiBoCucDtl;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
-import javax.validation.Valid;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -61,8 +58,8 @@ public class ThKeHoachDieuChuyenCucHdrReq {
     private String maDVi;
 
     private String tenDVi;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
-    private Date thoiGianTongHop;
+
+    private LocalDateTime thoiGianTongHop;
 
     List<THKeHoachDieuChuyenNoiBoCucDtl> thKeHoachDieuChuyenNoiBoCucDtls;
 
