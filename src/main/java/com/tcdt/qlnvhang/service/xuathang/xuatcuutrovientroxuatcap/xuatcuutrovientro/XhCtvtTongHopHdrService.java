@@ -99,6 +99,7 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
       thopDtl.setTrichYeuDx(dxuat.getTrichYeu());
       thopDtl.setTongSoLuongDx(dxuat.getTongSoLuong());
       thopDtl.setSoLuongXuatCap(dxuat.getSoLuongXuatCap());
+      thopDtl.setSoLuongDeXuat(dxuat.getTongSoLuongDeXuat());
       thopDtl.setThanhTienDx(dxuat.getThanhTien());
       thopDtl.setNgayKetThucDx(dxuat.getNgayKetThuc());
       thopDtls.add(thopDtl);
