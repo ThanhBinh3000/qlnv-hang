@@ -17,9 +17,6 @@ public interface THKeHoachDieuChuyenNoiBoCucDtlRepository extends JpaRepository<
     @Modifying
     @Query(nativeQuery = true, value = "DELETE FROM DCNB_TH_KE_HOACH_DCC_NBC_DTL d WHERE d.HDR.ID= ?1")
     void deleteByHdrId(Long id);
-    @Modifying
-    @Query(nativeQuery = true, value = "UPDATE DCNB_TH_KE_HOACH_DCC_NBC_DTL SET DA_XDINH_DIEM_NHAP=1 WHERE DCNB_KE_HOACH_DC_DTL_ID = ?1")
-    void  updateByDcKeHoachDcDtlId(Long id);
 
     @Query(nativeQuery = true, value="SELECT * FROM DCNB_TH_KE_HOACH_DCC_NBC_DTL d\n" +
             "LEFT JOIN DCNB_KE_HOACH_DC_HDR h ON h.ID = d.DCNB_KE_HOACH_DC_HDR_ID \n" +
