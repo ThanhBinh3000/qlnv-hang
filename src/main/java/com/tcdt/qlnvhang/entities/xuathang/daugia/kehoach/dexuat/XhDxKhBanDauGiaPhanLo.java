@@ -20,33 +20,39 @@ public class XhDxKhBanDauGiaPhanLo implements Serializable {
     private Long idDtl;
 
     private String maDiemKho;
+    @Transient
+    private String tenDiemKho;
 
     private String maNhaKho;
+    @Transient
+    private String tenNhaKho;
 
     private String maNganKho;
+    @Transient
+    private String tenNganKho;
 
     private String maLoKho;
+    @Transient
+    private String tenLoKho;
 
     private String maDviTsan;
 
-    private BigDecimal duDau;
+    private BigDecimal tonKho;
 
-    private BigDecimal soLuong;
+    private BigDecimal soLuongDeXuat;
 
     private BigDecimal donGiaDeXuat;
 
-    private String dviTinh;
+    @Transient
+    private BigDecimal donGiaDuocDuyet;
 
-    // Transient
-    @Transient
-    private String tenDiemKho;
-    @Transient
-    private String tenNhaKho;
-    @Transient
-    private String tenNganKho;
-    @Transient
-    private String tenLoKho;
-    @Transient
-    private BigDecimal donGiaVat;
+    private String donViTinh;
 
+    private String loaiVthh;
+    @Transient
+    private String tenLoaiVthh;
+
+    private String cloaiVthh;
+    @Transient
+    private String tenCloaiVthh;
 }
