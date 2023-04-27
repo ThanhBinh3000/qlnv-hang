@@ -22,28 +22,26 @@ public class XhDxKhBanDauGiaDtl implements Serializable {
 
     private Long idHdr;
 
-    private BigDecimal soLuongChiCuc;
-
-    private BigDecimal donGiaChiCuc;
-
     private String maDvi;
     @Transient
     private String tenDvi;
 
+    private BigDecimal slChiTieu;
+
+    private BigDecimal slKeHoachDd;
+
+    private BigDecimal soLuongChiCuc;
+
+    private String donViTinh;
+
+    private BigDecimal soTienDtruocDx;
+
     private String diaChi;
 
-    private String slChiTieu;
-
-    private String slKeHoachDd;
-
     @Transient
-    private String soTienDatTruocChiCuc;
-
-    @Transient
-    private BigDecimal tongTienDatTruocDuocDuyet;
+    private BigDecimal soTienDtruocDd;
 
     @Transient
     private List<XhDxKhBanDauGiaPhanLo> children = new ArrayList<>();
-
 
 }

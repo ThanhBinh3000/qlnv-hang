@@ -33,12 +33,14 @@ public class XhQdDchinhKhBttHdr extends TrangThaiBaseEntity implements Serializa
     private String soQdDc;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
     private Date ngayKyDc;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
     private Date ngayHluc;
+
+    private String loaiHinhNx;
+
+    private String kieuNx;
 
     private String trichYeu;
 
@@ -47,7 +49,6 @@ public class XhQdDchinhKhBttHdr extends TrangThaiBaseEntity implements Serializa
     private Long idQdGoc;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
     private Date ngayKyQdGoc;
 
     private String loaiVthh;
@@ -59,10 +60,6 @@ public class XhQdDchinhKhBttHdr extends TrangThaiBaseEntity implements Serializa
     private String tenCloaiVthh;
 
     private String moTaHangHoa;
-
-    private String loaiHinhNx;
-
-    private String kieuNx;
 
     @Transient
     List<XhQdDchinhKhBttDtl> children = new ArrayList<>();

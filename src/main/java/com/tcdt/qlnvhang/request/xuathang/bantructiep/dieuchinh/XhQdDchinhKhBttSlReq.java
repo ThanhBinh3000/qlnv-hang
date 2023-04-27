@@ -19,11 +19,11 @@ public class XhQdDchinhKhBttSlReq {
 
     private String diaChi;
 
-    private BigDecimal donGiaVat;
-
     private BigDecimal soLuongChiTieu;
 
-    private BigDecimal soLuongKh;
+    private BigDecimal soLuongKhDaDuyet;
+
+    private String donViTinh;
 
     @Transient
     private List<XhQdDchinhKhBttSlDtlReq> children= new ArrayList<>();

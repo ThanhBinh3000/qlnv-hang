@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
-import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
@@ -30,11 +29,11 @@ public class XhDxKhBanDauGia extends TrangThaiBaseEntity implements Serializable
     @Transient
     private String tenDvi;
 
-    private String diaChi;
-
     private String loaiHinhNx;
 
     private String kieuNx;
+
+    private String diaChi;
 
     private Integer namKh;
 
@@ -42,11 +41,17 @@ public class XhDxKhBanDauGia extends TrangThaiBaseEntity implements Serializable
 
     private String trichYeu;
 
+    private Long idSoQdCtieu;
+
     private String soQdCtieu;
 
     private String loaiVthh;
+    @Transient
+    private String tenLoaiVthh;
 
     private String cloaiVthh;
+    @Transient
+    private String tenCloaiVthh;
 
     private String moTaHangHoa;
 
@@ -78,45 +83,37 @@ public class XhDxKhBanDauGia extends TrangThaiBaseEntity implements Serializable
 
     private BigDecimal tongTienGiaKhoiDiemDx;
 
+    @Transient
+    private BigDecimal tongTienGiaKdTheoDgiaDd;
+
     private BigDecimal tongKhoanTienDatTruocDx;
+
+    @Transient
+    private BigDecimal tongKhoanTienDtTheoDgiaDd;
 
     private String ghiChu;
 
     private Integer slDviTsan;
 
-    private Long idSoQdCtieu;
     private String trangThaiTh;
+    @Transient
+    private String tenTrangThaiTh;
 
     private Long idSoQdPd;
 
     private String soQdPd;
 
     private Long idThop;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKyQd;
 
-    private String dviTinh;
+    private String donViTinh;
 
-    @Transient
-    private BigDecimal tongTienDatTruocDuocDuyet;
-
-    @Transient
-    private String tenLoaiVthh;
-    @Transient
-    private String tenCloaiVthh;
-    @Transient
-    private String tenTrangThaiTh;
-    @Transient
-    private BigDecimal tongTienGiaKdTheoDgiaDd;
-    @Transient
-    private BigDecimal tongKhoanTienDtTheoDgiaDd;
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
+
     @Transient
     private List<XhDxKhBanDauGiaDtl> children = new ArrayList<>();
 
-    // Getter & Setter
-    public String getTenTrangThaiTh() {
-        return NhapXuatHangTrangThaiEnum.getTenById(trangThaiTh);
-    }
 }
