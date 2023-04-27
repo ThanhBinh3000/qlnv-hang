@@ -15,14 +15,13 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@PrimaryKeyJoinColumn(name = "DCNB_KE_HOACH_DC_DTL_ID", referencedColumnName = "id")
-public class THKeHoachDieuChuyenNoiBoCucDtl extends DcnbKeHoachDcDtl implements Serializable {
+public class THKeHoachDieuChuyenNoiBoCucDtl implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DCNB_TH_KH_DCC_NBC_DTL_SEQ")
     @SequenceGenerator(sequenceName = "DCNB_TH_KH_DCC_NBC_DTL_SEQ", allocationSize = 1, name = "DCNB_TH_KH_DCC_NBC_DTL_SEQ")
     private Long id;
 
-    @Column(name = "DCNB_TH_KE_HOACH_DCC_HDR_ID")
+    @Column(name = "HDR_ID")
     private Long hdrId;
 
     @Column(name = "DCNB_KE_HOACH_DC_DTL_ID", insertable = false, updatable = false)
