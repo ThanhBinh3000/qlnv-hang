@@ -81,13 +81,14 @@ public class XhCtvtQdXuatCapService extends BaseServiceImpl {
       }
 
       //update so xuat cap vao bang qd cuu tro
-      Optional<XhCtVtQuyetDinhPdHdr> qdCuuTro = xhCtVtQdPdHdrRepository.findById(data.getQdPaXuatCapId());
-      if (qdCuuTro.isPresent()) {
-        qdCuuTro.get().setIdXc(created.getId());
-        qdCuuTro.get().setSoXc(created.getSoQd());
-        xhCtVtQdPdHdrRepository.save(qdCuuTro.get());
+      if (!DataUtils.isNullObject(data.getQdPaXuatCapId())) {
+        Optional<XhCtVtQuyetDinhPdHdr> qdCuuTro = xhCtVtQdPdHdrRepository.findById(data.getQdPaXuatCapId());
+        if (qdCuuTro.isPresent()) {
+          qdCuuTro.get().setIdXc(created.getId());
+          qdCuuTro.get().setSoXc(created.getSoQd());
+          xhCtVtQdPdHdrRepository.save(qdCuuTro.get());
+        }
       }
-
       saveChiTiet(created.getId(), objReq);
       return created;
     }

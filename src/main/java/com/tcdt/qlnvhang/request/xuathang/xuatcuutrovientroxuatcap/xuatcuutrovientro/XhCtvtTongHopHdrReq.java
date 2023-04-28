@@ -32,6 +32,7 @@ public class XhCtvtTongHopHdrReq{
     private String loaiNhapXuat;
     private BigDecimal tongSlCtVt;
     private BigDecimal tongSlXuatCap;
+    private BigDecimal tongSlDeXuat;
     private List<XhCtvtTongHopDtl> deXuatCuuTro = new ArrayList<>();
 
 }
