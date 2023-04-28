@@ -6,6 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -74,7 +75,7 @@ public class THKeHoachDieuChuyenTongCucHdr implements Serializable {
     private String tenDVi;
 
     @Column(name = "THOI_GIAN_TONG_HOP")
-    private Date thoiGianTongHop;
+    private LocalDateTime thoiGianTongHop;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")

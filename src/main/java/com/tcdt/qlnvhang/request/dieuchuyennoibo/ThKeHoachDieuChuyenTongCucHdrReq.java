@@ -9,6 +9,7 @@ import lombok.Data;
 
 import javax.persistence.Column;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -50,8 +51,8 @@ public class ThKeHoachDieuChuyenTongCucHdrReq {
     private String maDVi;
 
     private String tenDVi;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
-    private Date thoiGianTongHop;
+
+    private LocalDateTime thoiGianTongHop;
 
     List<ThKeHoachDieuChuyenTongCucDtlReq> thKeHoachDieuChuyenTongCucDtls;
 }
