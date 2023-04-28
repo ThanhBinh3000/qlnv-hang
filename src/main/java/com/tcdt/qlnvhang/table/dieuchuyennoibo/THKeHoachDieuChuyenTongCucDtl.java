@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
 import lombok.*;
 import org.checkerframework.checker.units.qual.C;
@@ -45,9 +46,9 @@ public class THKeHoachDieuChuyenTongCucDtl implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DCNB_KE_HOACH_DC_HDR_ID",insertable = false,updatable = false)
-    @JsonIgnore
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private DcnbKeHoachDcHdr dcnbKeHoachDcHdr;
 
-    @Transient
-    private List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = new ArrayList<>();
+//    @Transient
+//    private List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = new ArrayList<>();
 }
