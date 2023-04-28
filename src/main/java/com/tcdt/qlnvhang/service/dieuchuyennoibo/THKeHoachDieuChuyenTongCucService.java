@@ -115,11 +115,8 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
         }
         List<THKeHoachDieuChuyenTongCucHdr> allById = tongCucHdrRepository.findAllById(ids);
         allById.forEach(data -> {
-            List<THKeHoachDieuChuyenTongCucDtl> list = thKeHoachDieuChuyenTongCucDtlRepository.findByHdrId(data.getId());
-            data.setThKeHoachDieuChuyenTongCucDtls(list);
-            list.forEach(data1 -> {
-                List<DcnbKeHoachDcDtl> list1 = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrIdAndId(data1.getKeHoachDcHdrId(),data1.getKeHoachDcDtlId());
-                data1.setDcnbKeHoachDcDtls(list1);
+            data.getThKeHoachDieuChuyenTongCucDtls().forEach(data1 -> {
+                Hibernate.initialize(data1.getDcnbKeHoachDcHdr());
             });
         });
         return allById;
