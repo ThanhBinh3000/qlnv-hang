@@ -305,6 +305,8 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                 DcnbKeHoachDcHdr entryClone = SerializationUtils.clone(entry.getDcnbKeHoachDcHdr());
                 ThKeHoachDieuChuyenNoiBoCucDtlReq dtl = new ModelMapper().map(entryClone, ThKeHoachDieuChuyenNoiBoCucDtlReq.class);
                 dtl.setId(null);
+                dtl.setHdrId(null);
+                dtl.setDcKeHoachDcHdrId(entryClone.getId());
                 dtl.setDcKeHoachDcDtlId(entry.getId());
                 List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrIdAndId(entryClone.getId(),entry.getId());
                 dtl.setDcnbKeHoachDcDtls(dcnbKeHoachDcDtls);

@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -25,6 +26,6 @@ public interface THKeHoachDieuChuyenNoiBoCucDtlRepository extends JpaRepository<
             "WHERE hdr.MA_DVI = ?1 AND hdr.TRANG_THAI = ?2 AND hdr.LOAI_DC = ?3 " +
             "AND (?4 IS NULL OR dtl.LOAI_VTHH = ?4) \n" +
             "AND (?5 IS NULL OR dtl.CLOAI_VTHH = ?5)\n" +
-            "AND (TO_DATE(TO_CHAR(hdr.NGAY_TAO ,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS') <= TO_DATE(?6,'YYYY-MM-DD HH24:MI:SS'))")
-    List<THKeHoachDieuChuyenNoiBoCucDtl> findByDonViAndTrangThaiTongCuc(String maDVi, String daduyetLdc, String giua2ChiCucTrong1Cuc, String loaiHangHoa, String chungLoaiHangHoa, String format);
+            "AND hdr.NGAY_TAO <= ?6 ")
+    List<THKeHoachDieuChuyenNoiBoCucDtl> findByDonViAndTrangThaiTongCuc(String maDVi, String daduyetLdc, String giua2ChiCucTrong1Cuc, String loaiHangHoa, String chungLoaiHangHoa, LocalDateTime thoiGianTongHop);
 }
