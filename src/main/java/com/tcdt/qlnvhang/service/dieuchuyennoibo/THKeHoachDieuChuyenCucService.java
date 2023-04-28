@@ -113,6 +113,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         data.setTenDvi(currentUser.getUser().getTenDvi());
         data.setTrangThai(Contains.DUTHAO);
         data.setNgaytao(LocalDate.now());
+        data.setMaTongHop(String.valueOf(objReq.getId()));
         data.setNgayTongHop(objReq.getNgayTongHop());
         data.setThoiGianTongHop(objReq.getThoiGianTongHop());
         data.setNguoiTaoId(currentUser.getUser().getId());
