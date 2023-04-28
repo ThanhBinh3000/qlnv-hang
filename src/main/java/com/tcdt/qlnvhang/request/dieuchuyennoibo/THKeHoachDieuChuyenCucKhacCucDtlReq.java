@@ -50,7 +50,7 @@ public class THKeHoachDieuChuyenCucKhacCucDtlReq {
     private Boolean daXdinhDiemNhap;
     private String tenTrangThai;
 
-    private List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdrs = new ArrayList<>();
+//    private List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdrs = new ArrayList<>();
 
     private List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = new ArrayList<>();
 }
