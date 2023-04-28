@@ -19,13 +19,13 @@ public interface THKeHoachDieuChuyenNoiBoCucDtlRepository extends JpaRepository<
     @Query(nativeQuery = true, value = "DELETE FROM DCNB_TH_KE_HOACH_DCC_NBC_DTL d WHERE d.HDR.ID= ?1")
     void deleteByHdrId(Long id);
 
-    @Query(nativeQuery = true, value="SELECT * FROM DCNB_TH_KE_HOACH_DCC_NBC_DTL d\n" +
-            "LEFT JOIN DCNB_KE_HOACH_DC_HDR h ON h.ID = d.DCNB_KE_HOACH_DC_HDR_ID \n" +
-            "LEFT JOIN DCNB_KE_HOACH_DC_DTL dtl ON dtl.HDR_ID = h.ID \n" +
-            "LEFT JOIN DCNB_TH_KE_HOACH_DCC_HDR hdr ON hdr.ID = d.HDR_ID \n" +
-            "WHERE hdr.MA_DVI = ?1 AND hdr.TRANG_THAI = ?2 AND hdr.LOAI_DC = ?3 " +
-            "AND (?4 IS NULL OR dtl.LOAI_VTHH = ?4) \n" +
-            "AND (?5 IS NULL OR dtl.CLOAI_VTHH = ?5)\n" +
-            "AND hdr.NGAY_TAO <= ?6 ")
+    @Query(value="FROM THKeHoachDieuChuyenNoiBoCucDtl d\n" +
+            "LEFT JOIN THKeHoachDieuChuyenCucHdr h ON h.id = d.hdrId \n" +
+            "LEFT JOIN DcnbKeHoachDcDtl dtl ON dtl.hdrId = h.id \n" +
+            "LEFT JOIN DcnbKeHoachDcHdr hdr ON hdr.id = d.hdrId \n" +
+            "WHERE hdr.maDvi = ?1 AND hdr.trangThai = ?2 AND hdr.loaiDc = ?3 " +
+            "AND (?4 IS NULL OR dtl.loaiVthh = ?4) \n" +
+            "AND (?5 IS NULL OR dtl.cloaiVthh = ?5)\n" +
+            "AND hdr.ngayTao <= ?6 ")
     List<THKeHoachDieuChuyenNoiBoCucDtl> findByDonViAndTrangThaiTongCuc(String maDVi, String daduyetLdc, String giua2ChiCucTrong1Cuc, String loaiHangHoa, String chungLoaiHangHoa, LocalDateTime thoiGianTongHop);
 }
