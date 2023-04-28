@@ -36,6 +36,9 @@ public class THKeHoachDieuChuyenTongCucHdr implements Serializable {
     @Column(name = "MA_TONG_HOP")
     private String maTongHop;
 
+    @Column(name = "SO_DXUAT")
+    private String soDxuat;
+
     @Column(name = "NGAY_TONG_HOP")
     private LocalDate ngayTongHop;
 

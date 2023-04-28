@@ -54,23 +54,22 @@ public class TongHopKeHoachDcController extends BaseController {
 
         return ResponseEntity.ok(resp);
     }
-//    @ApiOperation(value = "Danh sách mã tổng hợp", response = List.class)
-//    @PostMapping(value = "/danh-sach-ma-tong-hop", produces = MediaType.APPLICATION_JSON_VALUE)
-//    @ResponseStatus(HttpStatus.OK)
-//    public ResponseEntity<BaseResponse> danhSachMaTongHop(@CurrentUser CustomUserDetails currentUser,@RequestBody TongHopKeHoachDieuChuyenSearch objReq) {
-//        BaseResponse resp = new BaseResponse();
-//        try {
-//            resp.setData(thKeHoachDieuChuyenService.danhSachMaTongHop(currentUser, objReq));
-//            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-//            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-//        } catch (Exception e) {
-//            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-//            resp.setMsg(e.getMessage());
-//            log.error("Tra cứu thông tin : {}", e);
-//        }
-//
-//        return ResponseEntity.ok(resp);
-//    }
+    @ApiOperation(value = "Danh sách số đề xuất", response = List.class)
+    @PostMapping(value = "/danh-sach-so-de-xuat", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> danhSachSoDeXuat(@RequestBody TongHopKeHoachDieuChuyenSearch objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(thKeHoachDieuChuyenService.danhSachSoDeXuat(objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tra cứu thông tin : {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
 
     @ApiOperation(value = "Tạo mới thông tin tổng hợp ", response = List.class)
     @PostMapping(value = "/them-moi-kh-cuc", produces = MediaType.APPLICATION_JSON_VALUE)

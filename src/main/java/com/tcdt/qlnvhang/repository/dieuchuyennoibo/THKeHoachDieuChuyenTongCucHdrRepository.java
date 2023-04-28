@@ -32,15 +32,11 @@ public interface THKeHoachDieuChuyenTongCucHdrRepository extends JpaRepository<T
     List<THKeHoachDieuChuyenTongCucHdr> findByIdIn(List<Long> ids);
     List<THKeHoachDieuChuyenTongCucDtl> findAllByIdIn(List<Long> listId);
 
-//    @Query(value = "SELECT distinct hdr.maTongHop FROM THKeHoachDieuChuyenTongCucHdr hdr WHERE 1=1 " +
-//            "AND (:#{#param.maDVi} IS NULL OR hdr.maDVi LIKE CONCAT(:#{#param.maDVi},'%')) "+
-//            "AND (:#{#param.loaiDieuChuyen} IS NULL OR LOWER(hdr.loaiDieuChuyen) LIKE CONCAT('%',LOWER(:#{#param.loaiDieuChuyen}),'%'))"+
-//            "ORDER BY hdr.maTongHop desc")
-//    List<THKeHoachDieuChuyenTongCucHdr> filterMaTongHop(@Param("param") TongHopKeHoachDieuChuyenSearch param);
-//
-//    @Query(value = "SELECT distinct hdr.soDeXuat FROM THKeHoachDieuChuyenTongCucHdr hdr WHERE 1=1 " +
-//            "AND (:#{#param.maDVi} IS NULL OR hdr.maDVi LIKE CONCAT(:#{#param.maDVi},'%')) "+
-//            "AND (:#{#param.loaiDieuChuyen} IS NULL OR LOWER(hdr.loaiDieuChuyen) LIKE CONCAT('%',LOWER(:#{#param.loaiDieuChuyen}),'%'))"+
-//            "ORDER BY hdr.maTongHop desc")
-//    List<THKeHoachDieuChuyenTongCucHdr> filterSoDeXuat(TongHopKeHoachDieuChuyenSearch req);
+    @Query(value = "SELECT distinct hdr FROM THKeHoachDieuChuyenTongCucHdr hdr WHERE 1=1 " +
+            "AND (:#{#param.loaiDieuChuyen} IS NULL OR hdr.loaiDieuChuyen = :#{#param.loaiDieuChuyen}) "+
+            "AND (:#{#param.maTongHop} IS NULL OR LOWER(hdr.maTongHop) LIKE CONCAT('%',LOWER(:#{#param.maTongHop}),'%')) " +
+            "AND (:#{#param.namKeHoach} IS NULL OR hdr.namKeHoach = :#{#param.namKeHoach}) " +
+            "ORDER BY hdr.maTongHop desc")
+    List<THKeHoachDieuChuyenTongCucHdr> filterMaTongHop(@Param("param") TongHopKeHoachDieuChuyenSearch param);
+
 }

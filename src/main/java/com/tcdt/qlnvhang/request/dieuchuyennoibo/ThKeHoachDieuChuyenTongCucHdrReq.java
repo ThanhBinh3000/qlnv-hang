@@ -53,5 +53,5 @@ public class ThKeHoachDieuChuyenTongCucHdrReq {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
     private Date thoiGianTongHop;
 
-    List<THKeHoachDieuChuyenTongCucDtl> thKeHoachDieuChuyenTongCucDtls;
+    List<ThKeHoachDieuChuyenTongCucDtlReq> thKeHoachDieuChuyenTongCucDtls;
 }

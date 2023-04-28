@@ -3,6 +3,12 @@ package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
 import lombok.Data;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.SequenceGenerator;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,26 +21,54 @@ public class ThKeHoachDieuChuyenTongCucDtlReq {
 
     private Long keHoachDcHdrId;
 
-    private String maCucDxuatDc;
+    private Long tongDuToanKp;
 
-    private String tenCucDxuatDc;
+////
+    private LocalDate ngaytao;
 
-    private String maCucNhanDc;
+    private Long nguoiTaoId;
 
-    private String tenCucNhanDc;
+    private LocalDate ngaySua;
 
-    private String soDxuat;
+    private Long nguoiSuaId;
 
-    private Date ngayDuyetTc;
+    private String maTongHop;
 
-    private Long duToanKp;
+    private String soDeXuat;
+
+    private LocalDate ngayTongHop;
 
     private String trichYeu;
 
-    private String maChiCucDxuat;
+    private Integer namKeHoach;
 
-    private String tenChiCucDxuat;
+    private String loaiDieuChuyen;
 
-    private List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = new ArrayList<>();
+    private LocalDate thTuNgay;
+
+    private LocalDate thDenNgay;
+
+    private String trangThai;
+
+    private LocalDate ngayGDuyet;
+
+    private Long nguoiGDuyetId;
+
+    private LocalDate ngayDuyetTp;
+
+    private Long nguoiDuyetTpId;
+
+    private LocalDate ngayDuyetLdc;
+
+    private Long nguoiDuyetLdcId;
+
+    private String lyDoTuChoi;
+
+    private String maDvi;
+
+    private String tenDvi;
+
+    private LocalDateTime thoiGianTongHop;
+
 
 }

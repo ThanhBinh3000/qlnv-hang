@@ -17,6 +17,7 @@ import java.util.Date;
 public class TongHopKeHoachDieuChuyenSearch extends BaseRequest {
     private Integer namKeHoach;
     private String maTongHop;
+    private String soDeXuat;
     private String loaiDieuChuyen;
     private LocalDate tuNgay;
     private LocalDate denNgay;

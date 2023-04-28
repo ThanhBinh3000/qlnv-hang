@@ -2,11 +2,10 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.THKeHoachDieuChuyenCucHdrRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.THKeHoachDieuChuyenCucKhacCucDtlRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.THKeHoachDieuChuyenTongCucDtlRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.THKeHoachDieuChuyenTongCucHdrRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.THKeHoachDieuChuyenCucKhacCucDtlReq;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.ThKeHoachDieuChuyenTongCucDtlReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.ThKeHoachDieuChuyenTongCucHdrReq;
 import com.tcdt.qlnvhang.request.search.TongHopKeHoachDieuChuyenSearch;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -15,6 +14,8 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
+import org.apache.commons.lang3.SerializationUtils;
+import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,12 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
     private THKeHoachDieuChuyenCucHdrRepository thKeHoachDieuChuyenCucHdrRepository;
 
     @Autowired
+    private DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
+    @Autowired
     private THKeHoachDieuChuyenCucKhacCucDtlRepository thKeHoachDieuChuyenCucKhacCucDtlRepository;
+
+    @Autowired
+    private THKeHoachDieuChuyenNoiBoCucDtlRepository thKeHoachDieuChuyenNoiBoCucDtlRepository;
     @Autowired
     private QlnvDmDonviRepository qlnvDmDonviRepository;
 
@@ -80,7 +86,7 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
         TongHopKeHoachDieuChuyenSearch tongHopSearch = new ModelMapper().map(objReq, TongHopKeHoachDieuChuyenSearch.class);
         objReq.setThKeHoachDieuChuyenTongCucDtls(createPlan(currentUser, tongHopSearch));
         if (objReq.getThKeHoachDieuChuyenTongCucDtls() != null && !objReq.getThKeHoachDieuChuyenTongCucDtls().isEmpty()) {
-            for (THKeHoachDieuChuyenTongCucDtl ct : objReq.getThKeHoachDieuChuyenTongCucDtls()) {
+            for (ThKeHoachDieuChuyenTongCucDtlReq ct : objReq.getThKeHoachDieuChuyenTongCucDtls()) {
                 THKeHoachDieuChuyenTongCucDtl ctTongHop = new THKeHoachDieuChuyenTongCucDtl();
                 ObjectMapperUtils.map(ct, ctTongHop);
                 chiTiet.add(ctTongHop);
@@ -113,6 +119,11 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
 //            });
 //        });
         return allById;
+    }
+
+    public List<THKeHoachDieuChuyenTongCucHdr> danhSachMaTongHop(TongHopKeHoachDieuChuyenSearch req) throws Exception{
+        List<THKeHoachDieuChuyenTongCucHdr> danhSachMaTongHop = tongCucHdrRepository.filterMaTongHop(req);
+        return danhSachMaTongHop;
     }
 
     @Transient
@@ -165,35 +176,42 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
     }
 
     @Transactional
-    public List<THKeHoachDieuChuyenTongCucDtl> createPlan(CustomUserDetails currentUser, TongHopKeHoachDieuChuyenSearch req) throws Exception {
+    public List<ThKeHoachDieuChuyenTongCucDtlReq> createPlan(CustomUserDetails currentUser, TongHopKeHoachDieuChuyenSearch req) throws Exception {
         List<QlnvDmDonvi> donvis = qlnvDmDonviRepository.findByMaDviChaAndTrangThai(currentUser.getDvql(), "01");
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        List<THKeHoachDieuChuyenTongCucDtl> result = new ArrayList<>();
-//        for (QlnvDmDonvi cqt : donvis) {
-//            req.setMaDVi(cqt.getMaDvi());
-//            if (req.getLoaiDieuChuyen().equals(Contains.GIUA_2_CHI_CUC_TRONG_1_CUC)) {
-//                List<THKeHoachDieuChuyenCucHdr> dcnbKeHoachDcHdrs = thKeHoachDieuChuyenCucHdrRepository.findByDonViAndTrangThaiTongCuc(req.getMaDVi(), Contains.DADUYET_LDC, Contains.GIUA_2_CHI_CUC_TRONG_1_CUC, req.getLoaiHangHoa(), req.getChungLoaiHangHoa(), formatter.format(req.getThoiGianTongHop()));
-//                for (THKeHoachDieuChuyenCucHdr entry : dcnbKeHoachDcHdrs) {
-//                    THKeHoachDieuChuyenTongCucDtl chiTiet = new THKeHoachDieuChuyenTongCucDtl();
-//                    chiTiet.set(entry.getId());
-//                    chiTiet.setHdrId(null);
-//                    Long tongDuToanKp = dcnbKeHoachDcDtlRepository.findByMaDviCucAndTypeAndLoaiDcTongCucChiCuc(req.getMaDVi(), Contains.DIEU_CHUYEN, Contains.GIUA_2_CHI_CUC_TRONG_1_CUC, Contains.DADUYET_LDCC, req.getLoaiHangHoa(), req.getChungLoaiHangHoa(), formatter.format(req.getThoiGianTongHop()));
-//                    chiTiet.setDuToanKp(tongDuToanKp);
-//                    result.add(chiTiet);
-//                }
-//            } else if (req.getLoaiDieuChuyen().equals(Contains.GIUA_2_CUC_DTNN_KV)) {
-//                List<THKeHoachDieuChuyenCucKhacCucDtl> dcnbKeHoachDcHdrs = thKeHoachDieuChuyenCucKhacCucDtlRepository.findByDonViAndTrangThaiAndLoaiDcCuc(req.getMaDVi(), Contains.DADUYET_LDC, Contains.GIUA_2_CUC_DTNN_KV, req.getLoaiHangHoa(), req.getChungLoaiHangHoa(), formatter.format(req.getThoiGianTongHop()));
-//                for (THKeHoachDieuChuyenCucKhacCucDtl entry : dcnbKeHoachDcHdrs) {
-//                    THKeHoachDieuChuyenTongCucDtl chiTiet = new THKeHoachDieuChuyenTongCucDtl();
-//                    chiTiet.setKeHoachDcHdrId(entry.getDcnbKeHoachDcHdrId());
+        List<ThKeHoachDieuChuyenTongCucDtlReq> result = new ArrayList<>();
+        for (QlnvDmDonvi cqt : donvis) {
+            req.setMaDVi(cqt.getMaDvi());
+            if (req.getLoaiDieuChuyen().equals(Contains.GIUA_2_CHI_CUC_TRONG_1_CUC)) {
+                List<THKeHoachDieuChuyenNoiBoCucDtl> dcnbKeHoachDcHdrs = thKeHoachDieuChuyenNoiBoCucDtlRepository.findByDonViAndTrangThaiTongCuc(req.getMaDVi(), Contains.DADUYET_LDC, Contains.GIUA_2_CHI_CUC_TRONG_1_CUC, req.getLoaiHangHoa(), req.getChungLoaiHangHoa(), formatter.format(req.getThoiGianTongHop()));
+                for (THKeHoachDieuChuyenNoiBoCucDtl entry : dcnbKeHoachDcHdrs) {
+                    Hibernate.initialize(entry.getTHKeHoachDieuChuyenCucHdr());
+                    THKeHoachDieuChuyenCucHdr entryClone = SerializationUtils.clone(entry.getTHKeHoachDieuChuyenCucHdr());
+                    ThKeHoachDieuChuyenTongCucDtlReq chiTiet = new ModelMapper().map(entry, ThKeHoachDieuChuyenTongCucDtlReq.class);
+                    chiTiet.setId(null);
+                    chiTiet.setHdrId(null);
+                    chiTiet.setKeHoachDcHdrId(entryClone.getId());
+                    Long tongDuToanKp = dcnbKeHoachDcDtlRepository.findByMaDviCucAndTypeAndLoaiDcTongCucChiCuc(req.getMaDVi(), Contains.DIEU_CHUYEN, Contains.GIUA_2_CHI_CUC_TRONG_1_CUC, Contains.DADUYET_LDCC, req.getLoaiHangHoa(), req.getChungLoaiHangHoa(), formatter.format(req.getThoiGianTongHop()));
+                    chiTiet.setTongDuToanKp(tongDuToanKp);
+                    result.add(chiTiet);
+                }
+            } else if (req.getLoaiDieuChuyen().equals(Contains.GIUA_2_CUC_DTNN_KV)) {
+                List<THKeHoachDieuChuyenCucKhacCucDtl> dcnbKeHoachDcHdrs = thKeHoachDieuChuyenCucKhacCucDtlRepository.findByDonViAndTrangThaiAndLoaiDcCuc(req.getMaDVi(), Contains.DADUYET_LDC, Contains.GIUA_2_CUC_DTNN_KV, req.getLoaiHangHoa(), req.getChungLoaiHangHoa(), formatter.format(req.getThoiGianTongHop()));
+                for (THKeHoachDieuChuyenCucKhacCucDtl entry : dcnbKeHoachDcHdrs) {
+                    Hibernate.initialize(entry.getTHKeHoachDieuChuyenCucHdr());
+                    THKeHoachDieuChuyenCucHdr entryClone = SerializationUtils.clone(entry.getTHKeHoachDieuChuyenCucHdr());
+                    ThKeHoachDieuChuyenTongCucDtlReq chiTiet = new ModelMapper().map(entry, ThKeHoachDieuChuyenTongCucDtlReq.class);
+                    chiTiet.setId(null);
+                    chiTiet.setHdrId(null);
+                    chiTiet.setKeHoachDcHdrId(entryClone.getId());
 //                    Long tongDuToanKp = dcnbKeHoachDcDtlRepository.findByMaDviCucAndTypeAndLoaiDcTongCucCuc(req.getMaDVi(), entry.getMaCucNhan(), Contains.DIEU_CHUYEN, Contains.GIUA_2_CUC_DTNN_KV, Contains.DADUYET_LDCC, req.getLoaiHangHoa(), req.getChungLoaiHangHoa(), formatter.format(req.getThoiGianTongHop()));
-//                    chiTiet.setDuToanKp(tongDuToanKp);
-//                    result.add(chiTiet);
-//                }
-//
-//            }
-//
-//        }
+//                    chiTiet.setTongDuToanKp(tongDuToanKp);
+                    result.add(chiTiet);
+                }
+
+            }
+
+        }
         return result;
     }
 }
