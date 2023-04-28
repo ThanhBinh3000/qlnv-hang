@@ -6,6 +6,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = DcnbQuyetDinhDcCDtl.TABLE_NAME)
@@ -28,4 +30,9 @@ public class DcnbQuyetDinhDcCDtl implements Serializable {
     @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
     @JsonIgnore
     private DcnbQuyetDinhDcCHdr dcnbQuyetDinhDcCHdr;
+
+    @Transient
+    private DcnbKeHoachDcHdr dcnbKeHoachDcHdr;
+    @Transient
+    private List<DcnbKeHoachDcDtl> danhSachKeHoach = new ArrayList<>();
 }
