@@ -49,7 +49,7 @@ import java.util.*;
 
 @Slf4j
 @Service
-public class BaseServiceImpl {
+public abstract class BaseServiceImpl {
   @Autowired
   private CategoryServiceProxy categoryServiceProxy;
 

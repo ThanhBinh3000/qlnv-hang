@@ -153,6 +153,29 @@ public class XhPdKqBdgController extends BaseController {
 
     }
 
+    @ApiOperation(value = "Kết xuất danh sách ", response = List.class)
+    @PostMapping(value= PathContains.URL_KET_XUAT + PathContains.HOP_DONG, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public void exportQdHdToExcel(@Valid @RequestBody XhKqBdgHdrReq objReq, HttpServletResponse response) throws Exception{
+
+        try {
+            service.exportQdHd(objReq,response);
+        } catch (Exception e) {
+
+            log.error("Kết xuất danh sách : {}", e);
+            final Map<String, Object> body = new HashMap<>();
+            body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            body.put("msg", e.getMessage());
+
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("UTF-8");
+
+            final ObjectMapper mapper = new ObjectMapper();
+            mapper.writeValue(response.getOutputStream(), body);
+        }
+
+    }
+
     @ApiOperation(value = "Phê duyêt", response = List.class)
     @PostMapping(value=PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> updateStatus( @RequestBody XhKqBdgHdrReq stReq) {
