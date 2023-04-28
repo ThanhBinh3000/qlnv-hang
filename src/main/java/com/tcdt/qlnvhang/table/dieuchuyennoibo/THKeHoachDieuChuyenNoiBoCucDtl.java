@@ -24,6 +24,9 @@ public class THKeHoachDieuChuyenNoiBoCucDtl implements Serializable {
     @Column(name = "DCNB_TH_KE_HOACH_DCC_HDR_ID")
     private Long hdrId;
 
+    @Column(name = "DCNB_KE_HOACH_DC_HDR_ID")
+    private Long dcKeHoachDcHdrId;
+
     @Column(name = "DCNB_KE_HOACH_DC_DTL_ID")
     private Long dcKeHoachDcDtlId;
 
@@ -31,4 +34,10 @@ public class THKeHoachDieuChuyenNoiBoCucDtl implements Serializable {
     @JoinColumn(name = "DCNB_TH_KE_HOACH_DCC_HDR_ID", insertable = false, updatable = false)
     @JsonIgnore
     private THKeHoachDieuChuyenCucHdr tHKeHoachDieuChuyenCucHdr;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "DCNB_KE_HOACH_DC_DTL_ID",referencedColumnName="ID", insertable = false, updatable = false)
+    @JoinColumn(name = "DCNB_KE_HOACH_DC_HDR_ID",referencedColumnName="HDR_ID", insertable = false, updatable = false)
+    @JsonIgnore
+    private DcnbKeHoachDcDtl dcnbKeHoachDcDtl;
 }
