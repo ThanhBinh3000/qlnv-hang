@@ -591,16 +591,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	HhQdKhlcntHdr approveVatTu(StatusReq stReq,HhQdKhlcntHdr dataDB) throws Exception {
 		String status = stReq.getTrangThai() + dataDB.getTrangThai();
 		switch (status) {
-			case Contains.CHODUYET_LDV + Contains.DUTHAO:
-			case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
-				dataDB.setNguoiGuiDuyet(getUser().getUsername());
-				dataDB.setNgayGuiDuyet(getDateTimeNow());
-			case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
-				dataDB.setNguoiPduyet(getUser().getUsername());
-				dataDB.setNgayPduyet(getDateTimeNow());
-				dataDB.setLdoTuchoi(stReq.getLyDo());
-			case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
-			case Contains.BAN_HANH + Contains.DADUYET_LDV:
+			case Contains.BAN_HANH + Contains.DUTHAO:
 				dataDB.setNguoiPduyet(getUser().getUsername());
 				dataDB.setNgayPduyet(getDateTimeNow());
 				break;
