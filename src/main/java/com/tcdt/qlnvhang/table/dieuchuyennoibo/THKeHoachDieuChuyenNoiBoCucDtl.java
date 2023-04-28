@@ -21,14 +21,14 @@ public class THKeHoachDieuChuyenNoiBoCucDtl implements Serializable {
     @SequenceGenerator(sequenceName = "DCNB_TH_KH_DCC_NBC_DTL_SEQ", allocationSize = 1, name = "DCNB_TH_KH_DCC_NBC_DTL_SEQ")
     private Long id;
 
-    @Column(name = "HDR_ID")
+    @Column(name = "DCNB_TH_KE_HOACH_DCC_HDR_ID")
     private Long hdrId;
 
-    @Column(name = "DCNB_KE_HOACH_DC_DTL_ID", insertable = false, updatable = false)
+    @Column(name = "DCNB_KE_HOACH_DC_DTL_ID")
     private Long dcKeHoachDcDtlId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
+    @JoinColumn(name = "DCNB_TH_KE_HOACH_DCC_HDR_ID", insertable = false, updatable = false)
     @JsonIgnore
     private THKeHoachDieuChuyenCucHdr tHKeHoachDieuChuyenCucHdr;
 }

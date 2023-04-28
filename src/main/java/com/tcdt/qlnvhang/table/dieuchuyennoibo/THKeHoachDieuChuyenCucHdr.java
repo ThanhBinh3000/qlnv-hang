@@ -96,7 +96,7 @@ public class THKeHoachDieuChuyenCucHdr implements Serializable {
     private LocalDateTime thoiGianTongHop;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "HDR_ID")
+    @JoinColumn(name = "DCNB_TH_KE_HOACH_DCC_HDR_ID")
     private List<THKeHoachDieuChuyenNoiBoCucDtl> thKeHoachDieuChuyenNoiBoCucDtls = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)

@@ -1,10 +1,9 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
 import com.google.common.collect.Lists;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcDtlRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbQuyetDinhDcTcDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbQuyetDinhDcTcHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -12,13 +11,12 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbQuyetDinhDcTcHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbQuyetDinhDcTc;
-import com.tcdt.qlnvhang.request.feign.TrangThaiHtReq;
-import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.response.feign.TrangThaiHtResponce;
 import com.tcdt.qlnvhang.service.feign.LuuKhoClient;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcHdr;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbQuyetDinhDcTcDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbQuyetDinhDcTcHdr;
 import com.tcdt.qlnvhang.util.Contains;
@@ -31,14 +29,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,6 +54,10 @@ public class DcnbQuyetDinhDcTcDtlService extends BaseServiceImpl {
     private DcnbQuyetDinhDcTcDtlRepository dcnbQuyetDinhDcTcDtlRepository;
     @Autowired
     private FileDinhKemService fileDinhKemService;
+    @Autowired
+    private DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
+    @Autowired
+    private DcnbKeHoachDcHdrRepository dcnbKeHoachDcHdrRepository;
     @Autowired
     private LuuKhoClient luuKhoClient;
 
@@ -102,7 +102,7 @@ public class DcnbQuyetDinhDcTcDtlService extends BaseServiceImpl {
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
         Optional<DcnbQuyetDinhDcTcHdr> soDxuat = dcnbQuyetDinhDcTcHdrRepository.findFirstBySoQdinh(objReq.getSoQdinh());
-        if(org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoQdinh())){
+        if (org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoQdinh())) {
             if (soDxuat.isPresent() && objReq.getSoQdinh().split("/").length == 1) {
                 if (!soDxuat.get().getId().equals(objReq.getId())) {
                     throw new Exception("số quyết định đã tồn tại");
@@ -141,6 +141,16 @@ public class DcnbQuyetDinhDcTcDtlService extends BaseServiceImpl {
             data.setCanCu(canCu);
             List<FileDinhKem> quyetDinh = fileDinhKemService.search(data.getId(), Arrays.asList(DcnbQuyetDinhDcTcHdr.TABLE_NAME + "_QUYET_DINH"));
             data.setCanCu(quyetDinh);
+
+            List<DcnbQuyetDinhDcTcDtl> sachQuyetDinh = data.getDanhSachQuyetDinh();
+            sachQuyetDinh.forEach(data1 -> {
+                Optional<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcnbKeHoachDcHdrRepository.findById(data1.getKeHoachDcHdrId());
+                if (dcnbKeHoachDcHdr.isPresent()) {
+                    data1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr.get());
+                }
+                List<DcnbKeHoachDcDtl> khs = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(data1.getKeHoachDcHdrId());
+                data1.setDanhSachKeHoach(khs);
+            });
         });
         return allById;
     }
