@@ -27,7 +27,7 @@ public class XhXcapQuyetDinhPdDx implements Serializable {
   private String maDviCuc;
   private BigDecimal tonKhoCuc;
   private BigDecimal soLuongCon;
-
+  private BigDecimal soLuongXuatCuc;
   private String maDviChiCuc;
   private BigDecimal tonKhoChiCuc;
   private String loaiVthh;
