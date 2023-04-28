@@ -26,11 +26,28 @@ public class THKeHoachDieuChuyenTongCucDtl implements Serializable {
     @Column(name = "HDR_ID")
     private Long hdrId;
 
-    @Column(name = "DCNB_KE_HOACH_DC_HDR_ID")
+    @Column(name = "DCNB_TH_KE_HOACH_DCC_HDR_ID",insertable = true,updatable = true)
+    private Long thKhDcHdrId;
+
+    @Column(name = "DCNB_KE_HOACH_DC_HDR_ID",insertable = true,updatable = true)
     private Long keHoachDcHdrId;
 
+    @Column(name = "DCNB_TH_KE_HOACH_DCC_DTL_ID",insertable = true,updatable = true)
+    private Long thKhDcDtlId;
+
+    @Column(name = "DCNB_KE_HOACH_DC_DTL_ID",insertable = true,updatable = true)
+    private Long keHoachDcDtlId;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
+    @JoinColumn(name = "HDR_ID",insertable = false,updatable = false)
     @JsonIgnore
-    private THKeHoachDieuChuyenCucHdr tHKeHoachDieuChuyenCucHdr;
+    private THKeHoachDieuChuyenTongCucHdr thKeHoachDieuChuyenTongCucHdr;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "DCNB_KE_HOACH_DC_HDR_ID",insertable = false,updatable = false)
+    @JsonIgnore
+    private DcnbKeHoachDcHdr dcnbKeHoachDcHdr;
+
+    @Transient
+    private List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = new ArrayList<>();
 }

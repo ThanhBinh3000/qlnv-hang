@@ -155,11 +155,6 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
             throw new ValidationException("Không tìm thấy dữ liệu");
         }
         List<THKeHoachDieuChuyenCucHdr> allById = thKeHoachDieuChuyenHdrRepository.findAllById(ids);
-//        allById.forEach(data -> {
-//            List<THKeHoachDieuChuyenNoiBoCucDtl> thKeHoachDieuChuyenNoiBoCucDtls = thKeHoachDieuChuyenNoiBoCucDtlRepository.findByHdrId(data.getId());
-//            data.setThKeHoachDieuChuyenNoiBoCucDtls(thKeHoachDieuChuyenNoiBoCucDtls);
-//            thKeHoachDieuChuyenNoiBoCucDtls.forEach();
-//        });
         return allById;
     }
 
@@ -321,7 +316,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         List<THKeHoachDieuChuyenCucKhacCucDtlReq> result = new ArrayList<>();
         for (QlnvDmDonvi cqt : donvis) {
             req.setMaDVi(cqt.getMaDvi());
-            List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdrs = dcHdrRepository.findByDonViAndTrangThaiCuc(req.getMaDVi(), TrangThaiAllEnum.DA_DUYET_LDCC.getId(), Contains.GIUA_2_CUC_DTNN_KV, Contains.DIEU_CHUYEN, req.getThoiGianTongHop());
+            List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdrs = dcHdrRepository.findByDonViAndTrangThaiCuc(req.getMaDVi(), Contains.DADUYET_LDCC, Contains.GIUA_2_CUC_DTNN_KV, Contains.DIEU_CHUYEN,req.getThoiGianTongHop());
             for (DcnbKeHoachDcHdr khh : dcnbKeHoachDcHdrs) {
                 Hibernate.initialize(khh.getDanhSachHangHoa());
                 DcnbKeHoachDcHdr khhc = SerializationUtils.clone(khh);

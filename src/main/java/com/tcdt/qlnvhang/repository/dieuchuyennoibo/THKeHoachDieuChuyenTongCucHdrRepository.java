@@ -17,11 +17,11 @@ public interface THKeHoachDieuChuyenTongCucHdrRepository extends JpaRepository<T
     List<THKeHoachDieuChuyenTongCucHdr> findByMaTongHop(String maTongHop);
     @Query(value = "SELECT distinct hdr FROM THKeHoachDieuChuyenTongCucHdr hdr WHERE 1=1 " +
             "AND (:#{#param.maDVi} IS NULL OR hdr.maDVi LIKE CONCAT(:#{#param.maDVi},'%')) " +
-            "AND (:#{#param.nam} IS NULL OR hdr.namKeHoach = :#{#param.nam}) " +
+            "AND (:#{#param.namKeHoach} IS NULL OR hdr.namKeHoach = :#{#param.namKeHoach}) " +
             "AND (:#{#param.maTongHop} IS NULL OR LOWER(hdr.maTongHop) LIKE CONCAT('%',LOWER(:#{#param.maTongHop}),'%')) " +
             "AND (:#{#param.loaiDieuChuyen} IS NULL OR LOWER(hdr.loaiDieuChuyen) LIKE CONCAT('%',LOWER(:#{#param.loaiDieuChuyen}),'%'))"+
-            "AND (:#{#param.loaiHH} IS NULL OR LOWER(hdr.loaiHangHoa) LIKE CONCAT('%',LOWER(:#{#param.loaiHH}),'%'))"+
-            "AND (:#{#param.chungLoaiHH} IS NULL OR LOWER(hdr.chungLoaiHangHoa) LIKE CONCAT('%',LOWER(:#{#param.chungLoaiHH}),'%'))"+
+            "AND (:#{#param.loaiHangHoa} IS NULL OR LOWER(hdr.loaiHangHoa) LIKE CONCAT('%',LOWER(:#{#param.loaiHangHoa}),'%'))"+
+            "AND (:#{#param.chungLoaiHangHoa} IS NULL OR LOWER(hdr.chungLoaiHangHoa) LIKE CONCAT('%',LOWER(:#{#param.chungLoaiHangHoa}),'%'))"+
             "AND ((:#{#param.tuNgay}  IS NULL OR hdr.ngayTongHop >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR hdr.ngayTongHop <= :#{#param.denNgay}) ) " +
             "AND (:#{#param.trichYeu} IS NULL OR LOWER(hdr.noiDung) LIKE CONCAT('%',LOWER(:#{#param.trichYeu}),'%')) "+

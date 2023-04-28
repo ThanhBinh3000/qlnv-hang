@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 
+import com.tcdt.qlnvhang.entities.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
