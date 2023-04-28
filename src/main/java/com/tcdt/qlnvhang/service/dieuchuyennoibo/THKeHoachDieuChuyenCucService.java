@@ -219,7 +219,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         }
         List<THKeHoachDieuChuyenCucHdr> maTongHop = thKeHoachDieuChuyenHdrRepository.findByMaTongHop(optional.get().getMaTongHop());
         if (!maTongHop.isEmpty() && objReq.getMaTongHop().split("/").length == 1) {
-            if (!maTongHop.get(0).getId().equals(objReq.getId())) {
+            if (maTongHop.get(0).getId().equals(objReq.getId())) {
                 throw new Exception("Mã tổng hợp đã tồn tại");
             }
         }
