@@ -183,7 +183,7 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
         for (QlnvDmDonvi cqt : donvis) {
             req.setMaDVi(cqt.getMaDvi());
             if (req.getLoaiDieuChuyen().equals(Contains.GIUA_2_CHI_CUC_TRONG_1_CUC)) {
-                List<THKeHoachDieuChuyenNoiBoCucDtl> dcnbKeHoachDcHdrs = thKeHoachDieuChuyenNoiBoCucDtlRepository.findByDonViAndTrangThaiTongCuc(req.getMaDVi(), Contains.DADUYET_LDC, Contains.GIUA_2_CHI_CUC_TRONG_1_CUC, req.getLoaiHangHoa(), req.getChungLoaiHangHoa(), formatter.format(req.getThoiGianTongHop()));
+                List<THKeHoachDieuChuyenNoiBoCucDtl> dcnbKeHoachDcHdrs = thKeHoachDieuChuyenNoiBoCucDtlRepository.findByDonViAndTrangThaiTongCuc(req.getMaDVi(), Contains.DADUYET_LDC, Contains.GIUA_2_CHI_CUC_TRONG_1_CUC, req.getLoaiHangHoa(), req.getChungLoaiHangHoa(), req.getThoiGianTongHop());
                 for (THKeHoachDieuChuyenNoiBoCucDtl entry : dcnbKeHoachDcHdrs) {
                     Hibernate.initialize(entry.getTHKeHoachDieuChuyenCucHdr());
                     THKeHoachDieuChuyenCucHdr entryClone = SerializationUtils.clone(entry.getTHKeHoachDieuChuyenCucHdr());

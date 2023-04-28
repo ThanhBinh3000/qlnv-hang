@@ -28,9 +28,9 @@ import javax.validation.Valid;
 import java.util.*;
 
 @RestController
-@RequestMapping(value = PathContains.DIEU_CHUYEN_NOI_BO +PathContains.TONG_HOP_KE_HOACH_DIEU_CHUYEN)
+@RequestMapping(value = PathContains.DIEU_CHUYEN_NOI_BO +PathContains.TONG_HOP_KE_HOACH_DIEU_CHUYEN_C)
 @Slf4j
-@Api(tags = "Điều chuyển nội bộ - Tổng hợp kế hoạch điều chuyển")
+@Api(tags = "Điều chuyển nội bộ - Tổng hợp kế hoạch điều chuyển cấp cục")
 public class TongHopKeHoachDcController extends BaseController {
 
     @Autowired
@@ -38,7 +38,7 @@ public class TongHopKeHoachDcController extends BaseController {
 
 
     @ApiOperation(value = "Tra cứu thông tin tổng hợp", response = List.class)
-    @PostMapping(value = "/tra-cuu-cuc", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> colectionCuc(@CurrentUser CustomUserDetails currentUser,@RequestBody TongHopKeHoachDieuChuyenSearch objReq) {
         BaseResponse resp = new BaseResponse();
@@ -72,7 +72,7 @@ public class TongHopKeHoachDcController extends BaseController {
     }
 
     @ApiOperation(value = "Tạo mới thông tin tổng hợp ", response = List.class)
-    @PostMapping(value = "/them-moi-kh-cuc", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody ThKeHoachDieuChuyenCucHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
@@ -89,7 +89,7 @@ public class TongHopKeHoachDcController extends BaseController {
     }
 
     @ApiOperation(value = "Lấy chi tiết thông tin tổng hợp", response = List.class)
-    @GetMapping(value =  "chi-tiet-kh-cuc" + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value =  PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> detail(
             @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids")List<Long> ids) {
@@ -191,7 +191,7 @@ public class TongHopKeHoachDcController extends BaseController {
 
 
     @ApiOperation(value = "Cập nhật thông tin đề xuất", response = List.class)
-    @PostMapping(value =  "cap-nhat-cuc", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value =  PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody ThKeHoachDieuChuyenCucHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
