@@ -54,4 +54,6 @@ public interface DcnbKeHoachDcDtlRepository extends JpaRepository<DcnbKeHoachDcD
     @Query(nativeQuery = true,value = "SELECT * FROM DCNB_KE_HOACH_DC_DTL d " +
             "WHERE d.HDR_ID = ?1 AND (?2 IS NULL OR d.LOAI_VTHH = ?2) AND (?3 IS NULL OR d.CLOAI_VTHH = ?3)")
     List<DcnbKeHoachDcDtl> findByDcnbKeHoachDcHdrIdAndLoaiHhAndCLoaiHh(Long keHoachDcHdrId,String trangThai,String loaiHH);
+
+    List<DcnbKeHoachDcDtl> findByIdIn(List<Long> idList);
 }

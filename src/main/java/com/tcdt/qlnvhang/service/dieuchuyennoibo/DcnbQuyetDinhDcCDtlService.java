@@ -2,6 +2,8 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcDtlRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbQuyetDinhDcCDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbQuyetDinhDcCHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -13,8 +15,7 @@ import com.tcdt.qlnvhang.service.feign.LuuKhoClient;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbQuyetDinhDcTcDtl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbQuyetDinhDcCHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -50,6 +51,10 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
     private DcnbQuyetDinhDcCDtlRepository dcnbQuyetDinhDcCDtlRepository;
     @Autowired
     private FileDinhKemService fileDinhKemService;
+    @Autowired
+    private DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
+    @Autowired
+    private DcnbKeHoachDcHdrRepository dcnbKeHoachDcHdrRepository;
     @Autowired
     private LuuKhoClient luuKhoClient;
 
@@ -131,6 +136,17 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
             data.setCanCu(canCu);
             List<FileDinhKem> quyetDinh = fileDinhKemService.search(data.getId(), Arrays.asList(DcnbQuyetDinhDcCHdr.TABLE_NAME + "_QUYET_DINH"));
             data.setCanCu(quyetDinh);
+
+
+            List<DcnbQuyetDinhDcCDtl> sachQuyetDinh = data.getDanhSachQuyetDinh();
+            sachQuyetDinh.forEach(data1 -> {
+                Optional<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcnbKeHoachDcHdrRepository.findById(data1.getKeHoachDcHdrId());
+                if (dcnbKeHoachDcHdr.isPresent()) {
+                    data1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr.get());
+                }
+                List<DcnbKeHoachDcDtl> khs = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(data1.getKeHoachDcHdrId());
+                data1.setDanhSachKeHoach(khs);
+            });
         });
         return allById;
     }

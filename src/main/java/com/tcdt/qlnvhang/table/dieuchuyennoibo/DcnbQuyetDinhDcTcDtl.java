@@ -6,6 +6,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = DcnbQuyetDinhDcTcDtl.TABLE_NAME)
@@ -21,10 +23,14 @@ public class DcnbQuyetDinhDcTcDtl implements Serializable {
     @SequenceGenerator(sequenceName = DcnbQuyetDinhDcTcDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbQuyetDinhDcTcDtl.TABLE_NAME + "_SEQ")
     private Long id;
 
-    @Column(name = "DCNB_KE_HOACH_DC_HDR_ID", insertable = false, updatable = false)
+    @Column(name = "DCNB_KE_HOACH_DC_HDR_ID")
     private Long keHoachDcHdrId;
     @Column(name = "HDR_ID", insertable = true, updatable = true)
     private Long hdrId;
+    @Transient
+    private DcnbKeHoachDcHdr dcnbKeHoachDcHdr;
+    @Transient
+    private List<DcnbKeHoachDcDtl> danhSachKeHoach = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
     @JsonIgnore
