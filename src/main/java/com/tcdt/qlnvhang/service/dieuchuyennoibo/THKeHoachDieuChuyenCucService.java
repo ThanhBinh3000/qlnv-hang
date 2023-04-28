@@ -155,6 +155,14 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
             throw new ValidationException("Không tìm thấy dữ liệu");
         }
         List<THKeHoachDieuChuyenCucHdr> allById = thKeHoachDieuChuyenHdrRepository.findAllById(ids);
+        allById.forEach(data -> {
+            data.getThKeHoachDieuChuyenNoiBoCucDtls().forEach(data1 -> {
+                Hibernate.initialize(data1.getDcnbKeHoachDcDtl());
+            });
+            data.getThKeHoachDieuChuyenCucKhacCucDtls().forEach(data2 ->{
+                Hibernate.initialize(data2.getDcnbKeHoachDcHdr());
+            });
+        });
         return allById;
     }
 
