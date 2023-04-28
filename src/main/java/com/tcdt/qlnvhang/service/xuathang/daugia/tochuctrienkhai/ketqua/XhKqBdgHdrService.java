@@ -5,8 +5,11 @@ import com.tcdt.qlnvhang.service.BaseService;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.ketqua.XhKqBdgHdr;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
+
 @Service
 public interface XhKqBdgHdrService extends BaseService<XhKqBdgHdr, XhKqBdgHdrReq,Long> {
 
+  void exportQdHd(XhKqBdgHdrReq objReq, HttpServletResponse response) throws Exception;
 }
 
