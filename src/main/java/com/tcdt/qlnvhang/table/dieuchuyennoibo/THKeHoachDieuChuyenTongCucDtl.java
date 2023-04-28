@@ -52,6 +52,5 @@ public class THKeHoachDieuChuyenTongCucDtl implements Serializable {
     @NotFound(action = NotFoundAction.IGNORE)
     private DcnbKeHoachDcHdr dcnbKeHoachDcHdr;
 
-//    @Transient
-//    private List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = new ArrayList<>();
+
 }

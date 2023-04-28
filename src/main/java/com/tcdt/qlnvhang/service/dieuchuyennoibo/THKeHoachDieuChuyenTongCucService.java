@@ -29,6 +29,7 @@ import javax.transaction.Transactional;
 import javax.xml.bind.ValidationException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -180,11 +181,12 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
     @Transactional
     public List<ThKeHoachDieuChuyenTongCucDtlReq> createPlan(CustomUserDetails currentUser, TongHopKeHoachDieuChuyenSearch req) throws Exception {
         List<QlnvDmDonvi> donvis = qlnvDmDonviRepository.findByMaDviChaAndTrangThai(currentUser.getDvql(), "01");
+        LocalDateTime thoiGianTongHop = req.getThoiGianTongHop();
         List<ThKeHoachDieuChuyenTongCucDtlReq> result = new ArrayList<>();
         for (QlnvDmDonvi cqt : donvis) {
             req.setMaDVi(cqt.getMaDvi());
             if (req.getLoaiDieuChuyen().equals(Contains.GIUA_2_CHI_CUC_TRONG_1_CUC)) {
-                List<THKeHoachDieuChuyenNoiBoCucDtl> dcnbKeHoachDcHdrs = thKeHoachDieuChuyenNoiBoCucDtlRepository.findByDonViAndTrangThaiTongCuc(req.getMaDVi(), Contains.DADUYET_LDC, Contains.GIUA_2_CHI_CUC_TRONG_1_CUC, req.getLoaiHangHoa(), req.getChungLoaiHangHoa(), req.getThoiGianTongHop());
+                List<THKeHoachDieuChuyenNoiBoCucDtl> dcnbKeHoachDcHdrs = thKeHoachDieuChuyenNoiBoCucDtlRepository.findByDonViAndTrangThaiTongCuc(req.getMaDVi(), Contains.DADUYET_LDC, Contains.GIUA_2_CHI_CUC_TRONG_1_CUC, req.getLoaiHangHoa(), req.getChungLoaiHangHoa(), thoiGianTongHop.toLocalDate());
                 for (THKeHoachDieuChuyenNoiBoCucDtl entry : dcnbKeHoachDcHdrs) {
                     Hibernate.initialize(entry.getTHKeHoachDieuChuyenCucHdr());
                     THKeHoachDieuChuyenCucHdr entryClone = SerializationUtils.clone(entry.getTHKeHoachDieuChuyenCucHdr());
