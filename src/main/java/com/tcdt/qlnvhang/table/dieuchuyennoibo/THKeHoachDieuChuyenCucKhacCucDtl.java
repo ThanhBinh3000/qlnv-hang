@@ -36,4 +36,9 @@ public class THKeHoachDieuChuyenCucKhacCucDtl implements Serializable {
     @JoinColumn(name = "HDR_ID", insertable = true, updatable = true)
     @JsonIgnore
     private THKeHoachDieuChuyenCucHdr tHKeHoachDieuChuyenCucHdr;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "DCNB_KE_HOACH_DC_HDR_ID", insertable = false, updatable = false)
+    @JsonIgnore
+    private DcnbKeHoachDcHdr dcnbKeHoachDcHdr;
 }

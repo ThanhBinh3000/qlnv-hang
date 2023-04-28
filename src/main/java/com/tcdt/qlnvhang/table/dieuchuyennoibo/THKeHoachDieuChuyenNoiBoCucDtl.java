@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tcdt.qlnvhang.entities.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Table(name = "DCNB_TH_KE_HOACH_DCC_NBC_DTL")
@@ -36,8 +39,15 @@ public class THKeHoachDieuChuyenNoiBoCucDtl implements Serializable {
     private THKeHoachDieuChuyenCucHdr tHKeHoachDieuChuyenCucHdr;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "DCNB_KE_HOACH_DC_DTL_ID",referencedColumnName="ID", insertable = false, updatable = false)
-    @JoinColumn(name = "DCNB_KE_HOACH_DC_HDR_ID",referencedColumnName="HDR_ID", insertable = false, updatable = false)
+    @JoinColumn(name = "DCNB_KE_HOACH_DC_HDR_ID", insertable = false, updatable = false)
+    @JsonIgnore
+    private DcnbKeHoachDcHdr dcnbKeHoachDcHdr;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "DCNB_KE_HOACH_DC_DTL_ID", insertable = false, updatable = false)
     @JsonIgnore
     private DcnbKeHoachDcDtl dcnbKeHoachDcDtl;
+
+    @Transient
+    List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = new ArrayList<>();
 }

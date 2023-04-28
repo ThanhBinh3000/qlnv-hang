@@ -19,7 +19,13 @@ public class ThKeHoachDieuChuyenTongCucDtlReq {
 
     private Long hdrId;
 
+    private Long thKhDcHdrId;
+
+    private Long thKhDcDtlId;
+
     private Long keHoachDcHdrId;
+
+    private Long keHoachDcDtlId;
 
     private Long tongDuToanKp;
 
@@ -70,5 +76,6 @@ public class ThKeHoachDieuChuyenTongCucDtlReq {
 
     private LocalDateTime thoiGianTongHop;
 
+    private List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = new ArrayList<>();
 
 }

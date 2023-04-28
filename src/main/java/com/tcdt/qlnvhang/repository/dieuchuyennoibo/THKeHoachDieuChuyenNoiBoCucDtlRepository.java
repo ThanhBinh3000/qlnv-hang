@@ -21,11 +21,11 @@ public interface THKeHoachDieuChuyenNoiBoCucDtlRepository extends JpaRepository<
 
     @Query(value="FROM THKeHoachDieuChuyenNoiBoCucDtl d\n" +
             "LEFT JOIN THKeHoachDieuChuyenCucHdr h ON h.id = d.hdrId \n" +
-            "LEFT JOIN DcnbKeHoachDcDtl dtl ON dtl.hdrId = h.id \n" +
-            "LEFT JOIN DcnbKeHoachDcHdr hdr ON hdr.id = d.hdrId \n" +
-            "WHERE hdr.maDvi = ?1 AND hdr.trangThai = ?2 AND hdr.loaiDc = ?3 " +
+            "LEFT JOIN DcnbKeHoachDcDtl dtl ON dtl.id = d.dcKeHoachDcDtlId \n" +
+            "LEFT JOIN DcnbKeHoachDcHdr hdr ON hdr.id = d.dcKeHoachDcHdrId \n" +
+            "WHERE h.maDvi = ?1 AND h.trangThai = ?2 AND h.loaiDieuChuyen = ?3 " +
             "AND (?4 IS NULL OR dtl.loaiVthh = ?4) \n" +
-            "AND (?5 IS NULL OR dtl.cloaiVthh = ?5)\n" +
-            "AND hdr.ngayTao <= ?6 ")
+            "AND (?5 IS NULL OR dtl.cloaiVthh = ?5)\n" )
+//            "AND h.ngaytao <= ?6 ")
     List<THKeHoachDieuChuyenNoiBoCucDtl> findByDonViAndTrangThaiTongCuc(String maDVi, String daduyetLdc, String giua2ChiCucTrong1Cuc, String loaiHangHoa, String chungLoaiHangHoa, LocalDateTime thoiGianTongHop);
 }

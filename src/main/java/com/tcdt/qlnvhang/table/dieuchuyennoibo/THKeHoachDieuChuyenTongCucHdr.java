@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
+import com.tcdt.qlnvhang.entities.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -77,5 +78,5 @@ public class THKeHoachDieuChuyenTongCucHdr implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
-    private List<THKeHoachDieuChuyenTongCucDtl> thKeHoachDieuChuyenNoiBoCucDtls = new ArrayList<>();
+    private List<THKeHoachDieuChuyenTongCucDtl> thKeHoachDieuChuyenTongCucDtls = new ArrayList<>();
 }
