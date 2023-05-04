@@ -36,6 +36,9 @@ public class XhCtvtQdGiaoNvXhHdrReq {
   private Long nguoiGduyetId;
   private LocalDate ngayPduyet;
   private Long nguoiPduyetId;
+  private String loaiNhapXuat;
+  private String kieuNhapXuat;
+  private String mucDichXuat;
 
   private List<FileDinhKemReq> canCu = new ArrayList<>();
   private List<FileDinhKemReq> fileDinhKem = new ArrayList<>();
