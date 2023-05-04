@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhXcapQuyetDinhPdHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQdPdHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -13,6 +14,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhXcapQuyetDinhPdHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQuyetDinhPdHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -37,13 +39,15 @@ public class XhXcapQuyetDinhPdService extends BaseServiceImpl {
 
   @Autowired
   private XhXcapQuyetDinhPdHdrRepository xhXcapQuyetDinhPdHdrRepository;
+  @Autowired
+  private XhCtVtQdPdHdrRepository xhCtVtQdPdHdrRepository;
 
   @Autowired
   private FileDinhKemService fileDinhKemService;
 
   public Page<XhXcapQuyetDinhPdHdr> searchPage(CustomUserDetails currentUser, SearchXhCtvtQdXuatCap req) throws Exception {
     req.setDvql(currentUser.getDvql());
-    
+
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<XhXcapQuyetDinhPdHdr> search = xhXcapQuyetDinhPdHdrRepository.search(req, pageable);
     Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
@@ -67,8 +71,8 @@ public class XhXcapQuyetDinhPdService extends BaseServiceImpl {
     if (currentUser == null) {
       throw new Exception("Bad request.");
     }
-    Optional<XhXcapQuyetDinhPdHdr> optional = xhXcapQuyetDinhPdHdrRepository.findBySoQd(objReq.getSoQd());
-    if (!DataUtils.isNullObject(objReq.getSoQdPd())){
+    if (!DataUtils.isNullObject(objReq.getSoQdPd())) {
+      Optional<XhXcapQuyetDinhPdHdr> optional = xhXcapQuyetDinhPdHdrRepository.findBySoQd(objReq.getSoQd());
       if (optional.isPresent()) {
         throw new Exception("số quyết định đã tồn tại");
       }
@@ -84,6 +88,16 @@ public class XhXcapQuyetDinhPdService extends BaseServiceImpl {
     });
 
     XhXcapQuyetDinhPdHdr created = xhXcapQuyetDinhPdHdrRepository.save(data);
+
+    //update so xuat cap vao bang qd cuu tro
+    if (!DataUtils.isNullObject(data.getIdQdPd())) {
+      Optional<XhCtVtQuyetDinhPdHdr> qdCuuTro = xhCtVtQdPdHdrRepository.findById(data.getIdQdPd());
+      if (qdCuuTro.isPresent()) {
+        qdCuuTro.get().setIdXc(created.getId());
+        qdCuuTro.get().setSoXc(created.getSoQd());
+        xhCtVtQdPdHdrRepository.save(qdCuuTro.get());
+      }
+    }
 
     if (!DataUtils.isNullOrEmpty(objReq.getCanCu())) {
       fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), XhXcapQuyetDinhPdHdr.TABLE_NAME + "_CAN_CU");
@@ -123,6 +137,15 @@ public class XhXcapQuyetDinhPdService extends BaseServiceImpl {
     });
     XhXcapQuyetDinhPdHdr created = xhXcapQuyetDinhPdHdrRepository.save(data);
 
+    //update so xuat cap vao bang qd cuu tro
+    if (!DataUtils.isNullObject(data.getIdQdPd())) {
+      Optional<XhCtVtQuyetDinhPdHdr> qdCuuTro = xhCtVtQdPdHdrRepository.findById(data.getIdQdPd());
+      if (qdCuuTro.isPresent()) {
+        qdCuuTro.get().setIdXc(created.getId());
+        qdCuuTro.get().setSoXc(created.getSoQd());
+        xhCtVtQdPdHdrRepository.save(qdCuuTro.get());
+      }
+    }
 
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhXcapQuyetDinhPdHdr.TABLE_NAME + "_CAN_CU"));
 
@@ -257,7 +280,7 @@ public class XhXcapQuyetDinhPdService extends BaseServiceImpl {
 
     String title = "Danh sách quyết định xuất cấp thóc gia công cứu trợ, viện trợ ";
     String[] rowsName = new String[]{"STT", "Số QĐ xuất cấp", "Ngày hiệu lực QĐ xuất cấp", "Số QĐ chuyển xuất cấp",
-        "Ngày hiệu lực QĐ chuyển xuất cấp", "SL gạo chuyển sang xuất cấp (kg)", "SL thóc xuất cấp", "Trích yếu","Trạng thái QĐ xuất cấp",};
+        "Ngày hiệu lực QĐ chuyển xuất cấp", "SL gạo chuyển sang xuất cấp (kg)", "SL thóc xuất cấp", "Trích yếu", "Trạng thái QĐ xuất cấp",};
     String fileName = "danh-sach-phuong-quyet-dinh-xuat-thoc-gia-cong-cuu-tro-vien-tro.xlsx";
     List<Object[]> dataList = new ArrayList<Object[]>();
     Object[] objs = null;
