@@ -42,13 +42,13 @@ public interface DcnbKeHoachDcDtlRepository extends JpaRepository<DcnbKeHoachDcD
             "AND d.dcnbKeHoachDcHdr.ngayTao <= ?7")
     Long findByMaDviCucAndTypeAndLoaiDcTongCucChiCuc(String maDVi, String type, String loaiDieuChuyen, String trangThai,String loaiHH, String chungLoaiHH , LocalDateTime thoigianTongHop);
 
-    @Query(nativeQuery = true,value ="SELECT SUM(d.DU_TOAN_KPHI) FROM DCNB_KE_HOACH_DC_DTL d " +
-            "LEFT JOIN DCNB_KE_HOACH_DC_HDR h ON h.ID = d.HDR_ID " +
-            "WHERE h.MA_DVI_CUC = ?1 AND h.MA_CUC_NHAN = ?2 AND h.TYPE = ?2 AND h.LOAI_DC = ?3 AND h.TRANG_THAI = ?4 " +
-            "AND (?5 IS NULL OR d.LOAI_VTHH = ?5 )" +
-            "AND (?6 IS NULL OR d.CLOAI_VTHH = ?6)"+
-            "AND (TO_DATE(TO_CHAR(h.NGAY_TAO,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS') <= TO_DATE(?7,'YYYY-MM-DD HH24:MI:SS'))")
-    Long findByMaDviCucAndTypeAndLoaiDcTongCucCuc(String maDVi,String maDviCucNhan, String type, String loaiDieuChuyen, String trangThai,String loaiHH, String chungLoaiHH , String thoigianTongHop);
+    @Query(value ="SELECT SUM(d.duToanKphi) FROM DcnbKeHoachDcDtl d " +
+            "LEFT JOIN DcnbKeHoachDcHdr h ON h.id = d.hdrId " +
+            "WHERE h.maDviCuc = ?1 AND h.type = ?2 AND h.loaiDc = ?3 AND h.trangThai = ?4 " +
+            "AND (?5 IS NULL OR d.loaiVthh = ?5 )" +
+            "AND (?6 IS NULL OR d.cloaiVthh = ?6)"+
+            "AND h.ngayTao <= ?7")
+    Long findByMaDviCucAndTypeAndLoaiDcTongCucCuc(String maDVi, String type, String loaiDieuChuyen, String trangThai,String loaiHH, String chungLoaiHH , LocalDateTime thoigianTongHop);
 
     @Query(nativeQuery = true,value = "SELECT * FROM DCNB_KE_HOACH_DC_DTL d " +
             "WHERE d.HDR_ID = ?1 AND (?2 IS NULL OR d.LOAI_VTHH = ?2) AND (?3 IS NULL OR d.CLOAI_VTHH = ?3)")
