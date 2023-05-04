@@ -49,6 +49,9 @@ public class XhCtvtQdGiaoNvXhHdr extends BaseEntity implements Serializable {
   private Long nguoiGduyetId;
   private LocalDate ngayPduyet;
   private Long nguoiPduyetId;
+  private String loaiNhapXuat;
+  private String kieuNhapXuat;
+  private String mucDichXuat;
 
   @Transient
   private List<FileDinhKem> canCu = new ArrayList<>();

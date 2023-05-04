@@ -50,12 +50,12 @@ public class XhCtVtQuyetDinhPdHdr extends BaseEntity implements Serializable {
   private String cloaiVthh;
   private String loaiNhapXuat;
   private String kieuNhapXuat;
+  private String mucDichXuat;
   private String trichYeu;
   private String trangThai;
   private String lyDoTuChoi;
   private boolean xuatCap = false;
   private String type;
-
   private LocalDate ngayPduyet;
   private Long nguoiPduyetId;
   private String donViTinh;
