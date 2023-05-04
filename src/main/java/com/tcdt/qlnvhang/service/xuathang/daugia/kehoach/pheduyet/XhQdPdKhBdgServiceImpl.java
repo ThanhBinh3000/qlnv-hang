@@ -40,6 +40,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -278,6 +279,24 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
                     f.setTenNhaKho(mapDmucDvi.get(f.getMaNhaKho()));
                     f.setTenNganKho(mapDmucDvi.get(f.getMaNganKho()));
                     f.setTenLoKho(mapDmucDvi.get(f.getMaLoKho()));
+                    f.setTenLoaiVthh(hashMapDmHh.get(f.getLoaiVthh()));
+                    f.setTenCloaiVthh(hashMapDmHh.get(f.getCloaiVthh()));
+                    BigDecimal donGiaDuocDuyet = BigDecimal.ZERO;
+                    if(data.getLoaiVthh().startsWith("02")){
+                        donGiaDuocDuyet = xhQdPdKhBdgDtlRepository.getDonGiaVatVt(data.getCloaiVthh(), data.getNam());
+                        if (!DataUtils.isNullObject(donGiaDuocDuyet) && !StringUtils.isEmpty(dtl.getTongSoLuong()) && !StringUtils.isEmpty(dtl.getKhoanTienDatTruoc())){
+                            BigDecimal tongKhoanTienDtTheoDgiaDd = dtl.getTongSoLuong().multiply(donGiaDuocDuyet).multiply(dtl.getKhoanTienDatTruoc()).divide(BigDecimal.valueOf(100));
+                            f.setDonGiaDuocDuyet(donGiaDuocDuyet);
+                            dtl.setTongKhoanTienDtTheoDgiaDd(tongKhoanTienDtTheoDgiaDd);
+                        }
+                    }else {
+                        donGiaDuocDuyet = xhQdPdKhBdgDtlRepository.getDonGiaVatLt(data.getCloaiVthh(), dtl.getMaDvi(), data.getNam());
+                        if (!DataUtils.isNullObject(donGiaDuocDuyet) && !StringUtils.isEmpty(dtl.getTongSoLuong()) && !StringUtils.isEmpty(dtl.getKhoanTienDatTruoc())){
+                            BigDecimal tongKhoanTienDtTheoDgiaDd = dtl.getTongSoLuong().multiply(donGiaDuocDuyet).multiply(dtl.getKhoanTienDatTruoc()).divide(BigDecimal.valueOf(100));
+                            f.setDonGiaDuocDuyet(donGiaDuocDuyet);
+                            dtl.setTongKhoanTienDtTheoDgiaDd(tongKhoanTienDtTheoDgiaDd);
+                        }
+                    }
                 });
                 dsg.setTenDvi(mapDmucDvi.get(dsg.getMaDvi()));
                 dsg.setChildren(xhQdPdKhBdgPlDtlList);

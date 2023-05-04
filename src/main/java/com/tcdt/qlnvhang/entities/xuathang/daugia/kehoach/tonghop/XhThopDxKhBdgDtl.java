@@ -40,9 +40,13 @@ public class XhThopDxKhBdgDtl implements Serializable {
 
     private BigDecimal tongSoLuong;
 
-    private BigDecimal tongTienGiaKhoiDiemDx;
+    private BigDecimal khoanTienDatTruoc;
 
-    private BigDecimal tongKhoanTienDatTruocDx;
+    @Transient
+    private BigDecimal giaKdTheoDonGiaDd;
+
+    @Transient
+    private BigDecimal khoanTienDtruocTheoDgiaDd;
 
     // Transient
     @Transient

@@ -54,11 +54,10 @@ public class XhQdPdKhBdgDtl implements Serializable {
 
     private BigDecimal tongSoLuong;
 
+    @Transient
+    private BigDecimal tongKhoanTienDtTheoDgiaDd;
+
     private Integer slDviTsan;
-
-    private BigDecimal tongTienGiaKhoiDiemDx;
-
-    private BigDecimal tongKhoanTienDatTruocDx;
 
     private String moTaHangHoa;
 
@@ -84,6 +83,8 @@ public class XhQdPdKhBdgDtl implements Serializable {
     private String thongBaoKh;
 
     private BigDecimal khoanTienDatTruoc;
+
+    private String donViTinh;
 
     // Transient
 

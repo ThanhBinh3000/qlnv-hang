@@ -42,10 +42,6 @@ public class XhQdPdKhBdgDtlReq {
 
     private Integer slDviTsan;
 
-    private BigDecimal tongTienGiaKhoiDiemDx;
-
-    private BigDecimal tongKhoanTienDatTruocDx;
-
     private String moTaHangHoa;
 
     private String diaChi;
@@ -71,6 +67,8 @@ public class XhQdPdKhBdgDtlReq {
     private String thongBaoKh;
 
     private BigDecimal khoanTienDatTruoc;
+
+    private String donViTinh;
 
     private List<XhQdPdKhBdgPlReq> children;
 }

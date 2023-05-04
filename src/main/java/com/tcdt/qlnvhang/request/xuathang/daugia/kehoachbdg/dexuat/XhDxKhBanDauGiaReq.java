@@ -67,10 +67,6 @@ public class XhDxKhBanDauGiaReq extends BaseRequest {
 
     private BigDecimal tongSoLuong;
 
-    private BigDecimal tongTienGiaKhoiDiemDx;
-
-    private BigDecimal tongKhoanTienDatTruocDx;
-
     private String ghiChu;
 
     private Integer slDviTsan;
