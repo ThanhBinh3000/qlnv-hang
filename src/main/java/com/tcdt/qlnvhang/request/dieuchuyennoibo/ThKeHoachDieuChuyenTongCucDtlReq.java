@@ -3,14 +3,9 @@ package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.SequenceGenerator;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -29,8 +24,8 @@ public class ThKeHoachDieuChuyenTongCucDtlReq {
 
     private Long tongDuToanKp;
 
-////
-    private LocalDate ngaytao;
+    //Trường Tổng hợp kế hoạch điều chuyển
+    private LocalDate ngayTao;
 
     private Long nguoiTaoId;
 
