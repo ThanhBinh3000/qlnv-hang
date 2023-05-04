@@ -34,6 +34,7 @@ public class XhDxKhBanDauGiaDtl implements Serializable {
 
     private String donViTinh;
 
+    @Transient
     private BigDecimal soTienDtruocDx;
 
     private String diaChi;

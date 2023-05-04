@@ -81,11 +81,13 @@ public class XhDxKhBanDauGia extends TrangThaiBaseEntity implements Serializable
 
     private BigDecimal tongSoLuong;
 
+    @Transient
     private BigDecimal tongTienGiaKhoiDiemDx;
 
     @Transient
     private BigDecimal tongTienGiaKdTheoDgiaDd;
 
+    @Transient
     private BigDecimal tongKhoanTienDatTruocDx;
 
     @Transient
