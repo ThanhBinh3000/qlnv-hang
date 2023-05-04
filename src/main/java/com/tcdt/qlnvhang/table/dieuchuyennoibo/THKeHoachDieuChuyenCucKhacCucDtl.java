@@ -31,20 +31,20 @@ public class THKeHoachDieuChuyenCucKhacCucDtl implements Serializable {
     @Column(name = "NGAY_GDUYET_TC")
     private LocalDate ngayGduyetTc;
 
-    @Column(name = "HDR_ID", insertable = false, updatable = false)
+    @Column(name = "HDR_ID")
     private Long hdrId;
 
     @Column(name = "DCNB_KE_HOACH_DC_HDR_ID")
     private Long dcnbKeHoachDcHdrId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "HDR_ID", insertable = true, updatable = true)
+    @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
     @JsonIgnore
     private THKeHoachDieuChuyenCucHdr tHKeHoachDieuChuyenCucHdr;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DCNB_KE_HOACH_DC_HDR_ID", insertable = false, updatable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler","ngayTao","nguoiTaoId","ngaySua","nguoiSuaId"})
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @NotFound(action = NotFoundAction.IGNORE)
     private DcnbKeHoachDcHdr dcnbKeHoachDcHdr;
 }

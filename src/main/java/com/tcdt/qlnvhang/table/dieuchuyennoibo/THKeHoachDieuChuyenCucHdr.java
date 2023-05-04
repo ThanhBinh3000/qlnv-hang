@@ -37,8 +37,9 @@ public class THKeHoachDieuChuyenCucHdr implements Serializable {
     @Column(name = "NGUOI_SUA_ID")
     private Long nguoiSuaId;
 
-    @Column(name = "MA_TONG_HOP")
-    private String maTongHop;
+    @Column(name = "MA_TONG_HOP", nullable = false, unique = true)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DCNB_TH_KE_HOACH_DCC_HDR_SEQ")
+    private Long maTongHop;
 
     @Column(name = "SO_DXUAT")
     private String soDeXuat;
