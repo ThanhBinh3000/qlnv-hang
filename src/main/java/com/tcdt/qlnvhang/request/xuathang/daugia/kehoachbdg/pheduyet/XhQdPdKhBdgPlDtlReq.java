@@ -2,11 +2,13 @@ package com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.pheduyet;
 
 import lombok.Data;
 
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 
 @Data
 public class XhQdPdKhBdgPlDtlReq {
     private Long id;
+
     private Long idPhanLo;
 
     private String maDiemKho;
@@ -19,15 +21,16 @@ public class XhQdPdKhBdgPlDtlReq {
 
     private String maDviTsan;
 
-    private BigDecimal duDau;
+    private BigDecimal tonKho;
 
-    private BigDecimal soLuong;
+    private BigDecimal soLuongDeXuat;
 
     private BigDecimal donGiaDeXuat;
 
-    private BigDecimal donGiaVat;
+    private String donViTinh;
 
-    private String dviTinh;
+    private String loaiVthh;
 
+    private String cloaiVthh;
 
 }

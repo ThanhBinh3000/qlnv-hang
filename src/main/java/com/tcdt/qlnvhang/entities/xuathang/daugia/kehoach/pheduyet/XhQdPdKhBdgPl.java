@@ -26,14 +26,21 @@ public class XhQdPdKhBdgPl implements Serializable {
     @Transient
     private String tenDvi;
 
-    private BigDecimal soLuongChiCuc;
-
-    private String diaChi;
-
     private String slChiTieu;
 
     private String slKeHoachDd;
 
+    private BigDecimal soLuongChiCuc;
+
+    private String donViTinh;
+
+    @Transient
+    private BigDecimal soTienDtruocDx;
+
+    private String diaChi;
+
+    @Transient
+    private BigDecimal soTienDtruocDd;
 
 
     @Transient

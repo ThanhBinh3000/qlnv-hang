@@ -30,6 +30,7 @@ public class XhCtVtQuyetDinhPdHdrReq {
     private String cloaiVthh;
     private String loaiNhapXuat;
     private String kieuNhapXuat;
+    private String mucDichXuat;
     private String trichYeu;
     private String trangThai;
     private String lyDoTuChoi;

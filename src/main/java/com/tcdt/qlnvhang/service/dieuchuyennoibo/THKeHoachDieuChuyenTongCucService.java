@@ -186,39 +186,33 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
         for (QlnvDmDonvi cqt : donvis) {
             req.setMaDVi(cqt.getMaDvi());
             if (req.getLoaiDieuChuyen().equals(Contains.GIUA_2_CHI_CUC_TRONG_1_CUC)) {
-                List<THKeHoachDieuChuyenNoiBoCucDtl> dcnbKeHoachDcHdrs = thKeHoachDieuChuyenNoiBoCucDtlRepository.findByDonViAndTrangThaiTongCuc(req.getMaDVi(), Contains.DADUYET_LDC, Contains.GIUA_2_CHI_CUC_TRONG_1_CUC, req.getLoaiHangHoa(), req.getChungLoaiHangHoa(), thoiGianTongHop.toLocalDate());
-                for (THKeHoachDieuChuyenNoiBoCucDtl entry : dcnbKeHoachDcHdrs) {
-                    Hibernate.initialize(entry.getTHKeHoachDieuChuyenCucHdr());
-                    THKeHoachDieuChuyenCucHdr entryClone = SerializationUtils.clone(entry.getTHKeHoachDieuChuyenCucHdr());
+                List<THKeHoachDieuChuyenCucHdr> dcnbKeHoachDcHdrs = thKeHoachDieuChuyenCucHdrRepository.findByDonViAndTrangThaiTongCuc(req.getMaDVi(), Contains.DADUYET_LDC, Contains.GIUA_2_CHI_CUC_TRONG_1_CUC, req.getLoaiHangHoa(), req.getChungLoaiHangHoa(), thoiGianTongHop.toLocalDate());
+                for (THKeHoachDieuChuyenCucHdr entry : dcnbKeHoachDcHdrs) {
+                    Hibernate.initialize(entry.getThKeHoachDieuChuyenNoiBoCucDtls());
+                    THKeHoachDieuChuyenCucHdr entryClone = SerializationUtils.clone(entry);
                     ThKeHoachDieuChuyenTongCucDtlReq chiTiet = new ModelMapper().map(entryClone, ThKeHoachDieuChuyenTongCucDtlReq.class);
                     chiTiet.setId(null);
                     chiTiet.setHdrId(null);
                     chiTiet.setThKhDcHdrId(entryClone.getId());
-                    chiTiet.setThKhDcDtlId(entry.getId());
-                    chiTiet.setKeHoachDcHdrId(entry.getDcKeHoachDcHdrId());
-                    chiTiet.setKeHoachDcDtlId(entry.getDcKeHoachDcDtlId());
+//                    chiTiet.setThKhDcDtlId(entry.getId());
+//                    chiTiet.setKeHoachDcHdrId(entry.getDcKeHoachDcHdrId());
+//                    chiTiet.setKeHoachDcDtlId(entry.getDcKeHoachDcDtlId());
                     Long tongDuToanKp = dcnbKeHoachDcDtlRepository.findByMaDviCucAndTypeAndLoaiDcTongCucChiCuc(req.getMaDVi(), Contains.DIEU_CHUYEN, Contains.GIUA_2_CHI_CUC_TRONG_1_CUC, Contains.DADUYET_LDCC, req.getLoaiHangHoa(), req.getChungLoaiHangHoa(), req.getThoiGianTongHop());
                     chiTiet.setTongDuToanKp(tongDuToanKp);
-                    List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrIdAndId(entry.getDcKeHoachDcHdrId(),entry.getDcKeHoachDcDtlId());
-                    chiTiet.setDcnbKeHoachDcDtls(dcnbKeHoachDcDtls);
-                    Hibernate.initialize(entry.getDcKeHoachDcHdrId());
                     result.add(chiTiet);
                 }
             } else if (req.getLoaiDieuChuyen().equals(Contains.GIUA_2_CUC_DTNN_KV)) {
-                List<THKeHoachDieuChuyenCucKhacCucDtl> dcnbKeHoachDcHdrs = thKeHoachDieuChuyenCucKhacCucDtlRepository.findByDonViAndTrangThaiAndLoaiDcCuc(req.getMaDVi(), Contains.DADUYET_LDC, Contains.GIUA_2_CUC_DTNN_KV, req.getLoaiHangHoa(), req.getChungLoaiHangHoa(),thoiGianTongHop.toLocalDate());
-                for (THKeHoachDieuChuyenCucKhacCucDtl entry : dcnbKeHoachDcHdrs) {
-                    Hibernate.initialize(entry.getTHKeHoachDieuChuyenCucHdr());
-                    THKeHoachDieuChuyenCucHdr entryClone = SerializationUtils.clone(entry.getTHKeHoachDieuChuyenCucHdr());
+                List<THKeHoachDieuChuyenCucHdr> dcnbKeHoachDcHdrs = thKeHoachDieuChuyenCucHdrRepository.findByDonViAndTrangThaiTongCucKhacCuc(req.getMaDVi(), Contains.DADUYET_LDC, Contains.GIUA_2_CUC_DTNN_KV, req.getLoaiHangHoa(), req.getChungLoaiHangHoa(),thoiGianTongHop.toLocalDate());
+                for (THKeHoachDieuChuyenCucHdr entry : dcnbKeHoachDcHdrs) {
+                    Hibernate.initialize(entry.getThKeHoachDieuChuyenCucKhacCucDtls());
+                    THKeHoachDieuChuyenCucHdr entryClone = SerializationUtils.clone(entry);
                     ThKeHoachDieuChuyenTongCucDtlReq chiTiet = new ModelMapper().map(entryClone, ThKeHoachDieuChuyenTongCucDtlReq.class);
                     chiTiet.setId(null);
                     chiTiet.setHdrId(null);
-                    chiTiet.setKeHoachDcHdrId(entry.getDcnbKeHoachDcHdrId());
                     chiTiet.setThKhDcHdrId(entryClone.getId());
-                    chiTiet.setThKhDcDtlId(entry.getId());
+//                    chiTiet.setThKhDcDtlId(entry.getId());
                     Long tongDuToanKp = dcnbKeHoachDcDtlRepository.findByMaDviCucAndTypeAndLoaiDcTongCucCuc(req.getMaDVi(), Contains.DIEU_CHUYEN, Contains.GIUA_2_CUC_DTNN_KV, Contains.DADUYET_LDCC, req.getLoaiHangHoa(), req.getChungLoaiHangHoa(), req.getThoiGianTongHop());
                     chiTiet.setTongDuToanKp(tongDuToanKp);
-                    List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(entry.getDcnbKeHoachDcHdrId());
-                    chiTiet.setDcnbKeHoachDcDtls(dcnbKeHoachDcDtls);
                     result.add(chiTiet);
                 }
 
