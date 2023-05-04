@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.xuathang.xuatcuutrovientroxuatcap.xuatcap;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhXcapQuyetDinhPdHdrRepository;
@@ -31,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -211,6 +213,14 @@ public class XhXcapQuyetDinhPdService extends BaseServiceImpl {
     }
     XhXcapQuyetDinhPdHdr data = optional.get();
 
+    //update so xuat cap vao bang qd cuu tro
+    Optional<XhCtVtQuyetDinhPdHdr> qdCuuTro = xhCtVtQdPdHdrRepository.findById(data.getIdQdPd());
+    if (qdCuuTro.isPresent()) {
+      qdCuuTro.get().setIdXc(null);
+      qdCuuTro.get().setSoXc(null);
+      xhCtVtQdPdHdrRepository.save(qdCuuTro.get());
+    }
+
     fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhXcapQuyetDinhPdHdr.TABLE_NAME + "_CAN_CU"));
     fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhXcapQuyetDinhPdHdr.TABLE_NAME));
     xhXcapQuyetDinhPdHdrRepository.delete(data);
@@ -224,6 +234,15 @@ public class XhXcapQuyetDinhPdService extends BaseServiceImpl {
     if (list.isEmpty()) {
       throw new Exception("Bản ghi không tồn tại");
     }
+
+    //update so xuat cap vao bang qd cuu tro
+    List<Long> listIdQdPd = list.stream().map(XhXcapQuyetDinhPdHdr::getIdQdPd).collect(Collectors.toList());
+    List<XhCtVtQuyetDinhPdHdr> listObjQdPd = xhCtVtQdPdHdrRepository.findByIdIn(listIdQdPd);
+    listObjQdPd.forEach(s -> {
+      s.setIdXc(null);
+      s.setSoXc(null);
+    });
+    xhCtVtQdPdHdrRepository.saveAll(listObjQdPd);
 
     fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(XhXcapQuyetDinhPdHdr.TABLE_NAME));
     fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(XhXcapQuyetDinhPdHdr.TABLE_NAME + "_CAN_CU"));
