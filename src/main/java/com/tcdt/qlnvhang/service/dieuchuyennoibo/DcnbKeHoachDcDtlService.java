@@ -96,14 +96,18 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
         data.setType(Contains.DIEU_CHUYEN);
         data.setTrangThai(Contains.DUTHAO);
         data.setDaXdinhDiemNhap(false);
-        objReq.getDanhSachHangHoa().forEach(e -> {
-            e.setDcnbKeHoachDcHdr(data);
-            e.setDaXdinhDiemNhap(false);
-        });
-        objReq.getPhuongAnDieuChuyen().forEach(e -> e.setDcnbKeHoachDcHdr(data));
-        BigDecimal total = objReq.getDanhSachHangHoa().stream().map(DcnbKeHoachDcDtl::getDuToanKphi)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        data.setTongDuToanKp(total);
+        if(objReq.getDanhSachHangHoa() !=null){
+            BigDecimal total = objReq.getDanhSachHangHoa().stream().map(DcnbKeHoachDcDtl::getDuToanKphi)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+            data.setTongDuToanKp(total);
+            objReq.getDanhSachHangHoa().forEach(e -> {
+                e.setDcnbKeHoachDcHdr(data);
+                e.setDaXdinhDiemNhap(false);
+            });
+        }
+        if(objReq.getPhuongAnDieuChuyen()!= null){
+            objReq.getPhuongAnDieuChuyen().forEach(e -> e.setDcnbKeHoachDcHdr(data));
+        }
         DcnbKeHoachDcHdr created = dcnbKeHoachDcHdrRepository.save(data);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), DcnbKeHoachDcHdr.TABLE_NAME + "_CAN_CU");
         created.setCanCu(canCu);
@@ -135,12 +139,14 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
         data.setDanhSachHangHoa(objReq.getDanhSachHangHoa());
         data.setPhuongAnDieuChuyen(objReq.getPhuongAnDieuChuyen());
         data.setDaXdinhDiemNhap(false);
-        data.getDanhSachHangHoa().forEach(e -> {
-            e.setDaXdinhDiemNhap(false);
-        });
-        BigDecimal total = data.getDanhSachHangHoa().stream().map(DcnbKeHoachDcDtl::getDuToanKphi)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        data.setTongDuToanKp(total);
+        if(objReq.getDanhSachHangHoa() !=null){
+            BigDecimal total = objReq.getDanhSachHangHoa().stream().map(DcnbKeHoachDcDtl::getDuToanKphi)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+            data.setTongDuToanKp(total);
+            objReq.getDanhSachHangHoa().forEach(e -> {
+                e.setDaXdinhDiemNhap(false);
+            });
+        }
         DcnbKeHoachDcHdr created = dcnbKeHoachDcHdrRepository.save(data);
 
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbKeHoachDcHdr.TABLE_NAME + "_CAN_CU"));
