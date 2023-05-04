@@ -159,7 +159,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         List<THKeHoachDieuChuyenCucHdr> allById = thKeHoachDieuChuyenHdrRepository.findAllById(ids);
         allById.forEach(data -> {
             data.getThKeHoachDieuChuyenNoiBoCucDtls().forEach(data1 -> {
-                Hibernate.initialize(data1.getDcnbKeHoachDcDtl());
+                Hibernate.initialize(data1.getDcnbKeHoachDcHdr());
             });
             data.getThKeHoachDieuChuyenCucKhacCucDtls().forEach(data2 ->{
                 Hibernate.initialize(data2.getDcnbKeHoachDcHdr());
@@ -304,16 +304,15 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         List<ThKeHoachDieuChuyenNoiBoCucDtlReq> result = new ArrayList<>();
         for (QlnvDmDonvi cqt : donvis) {
             req.setMaDVi(cqt.getMaDvi());
-            List<DcnbKeHoachDcDtl> thKeHoachDieuChuyenNoiBoCucDtls = dcnbKeHoachDcDtlRepository.findByDonViAndTrangThaiChiCuc(req.getMaDVi(), Contains.DADUYET_LDCC, Contains.DIEU_CHUYEN, Contains.GIUA_2_CHI_CUC_TRONG_1_CUC, req.getThoiGianTongHop());
-            for (DcnbKeHoachDcDtl entry : thKeHoachDieuChuyenNoiBoCucDtls) {
-                Hibernate.initialize(entry.getDcnbKeHoachDcHdr());
-                DcnbKeHoachDcHdr entryClone = SerializationUtils.clone(entry.getDcnbKeHoachDcHdr());
-                ThKeHoachDieuChuyenNoiBoCucDtlReq dtl = new ModelMapper().map(entryClone, ThKeHoachDieuChuyenNoiBoCucDtlReq.class);
+            List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdrs = dcHdrRepository.findByDonViAndTrangThaiCuc(req.getMaDVi(), Contains.DADUYET_LDCC, Contains.GIUA_2_CHI_CUC_TRONG_1_CUC, Contains.DIEU_CHUYEN,req.getThoiGianTongHop());
+            for (DcnbKeHoachDcHdr khh : dcnbKeHoachDcHdrs) {
+                Hibernate.initialize(khh.getDanhSachHangHoa());
+                DcnbKeHoachDcHdr khhc = SerializationUtils.clone(khh);
+                ThKeHoachDieuChuyenNoiBoCucDtlReq dtl = new ModelMapper().map(khhc, ThKeHoachDieuChuyenNoiBoCucDtlReq.class);
                 dtl.setId(null);
+                dtl.setDcKeHoachDcHdrId(khh.getId());
                 dtl.setHdrId(null);
-                dtl.setDcKeHoachDcHdrId(entryClone.getId());
-                dtl.setDcKeHoachDcDtlId(entry.getId());
-                List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrIdAndId(entryClone.getId(),entry.getId());
+                List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(dtl.getDcKeHoachDcHdrId());
                 dtl.setDcnbKeHoachDcDtls(dcnbKeHoachDcDtls);
                 result.add(dtl);
             }
