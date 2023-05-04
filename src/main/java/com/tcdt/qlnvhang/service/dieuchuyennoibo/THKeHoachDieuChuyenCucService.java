@@ -113,7 +113,6 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         data.setTenDvi(currentUser.getUser().getTenDvi());
         data.setTrangThai(Contains.DUTHAO);
         data.setNgaytao(LocalDate.now());
-        data.setMaTongHop(String.valueOf(objReq.getId()));
         data.setNgayTongHop(objReq.getNgayTongHop());
         data.setThoiGianTongHop(objReq.getThoiGianTongHop());
         data.setNguoiTaoId(currentUser.getUser().getId());
@@ -125,6 +124,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
             List<THKeHoachDieuChuyenNoiBoCucDtl> dtls = new ArrayList<>();
             for (ThKeHoachDieuChuyenNoiBoCucDtlReq req : planCuc) {
                 THKeHoachDieuChuyenNoiBoCucDtl dtl = new ModelMapper().map(req, THKeHoachDieuChuyenNoiBoCucDtl.class);
+                dtl.setHdrId(data.getId());
                 dtls.add(dtl);
             }
             dtls.forEach(e -> e.setTHKeHoachDieuChuyenCucHdr(data));
@@ -137,6 +137,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
             List<THKeHoachDieuChuyenCucKhacCucDtl> dtls = new ArrayList<>();
             for (THKeHoachDieuChuyenCucKhacCucDtlReq req : planCuc) {
                 THKeHoachDieuChuyenCucKhacCucDtl dtl = new ModelMapper().map(req, THKeHoachDieuChuyenCucKhacCucDtl.class);
+                dtl.setHdrId(data.getId());
                 dtls.add(dtl);
             }
             dtls.forEach(e -> e.setTHKeHoachDieuChuyenCucHdr(data));
@@ -218,7 +219,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
-        List<THKeHoachDieuChuyenCucHdr> maTongHop = thKeHoachDieuChuyenHdrRepository.findByMaTongHop(optional.get().getMaTongHop());
+        List<THKeHoachDieuChuyenCucHdr> maTongHop = thKeHoachDieuChuyenHdrRepository.findByMaTongHop(String.valueOf(optional.get().getMaTongHop()));
         if (!maTongHop.isEmpty() && objReq.getMaTongHop().split("/").length == 1) {
             if (maTongHop.get(0).getId().equals(objReq.getId())) {
                 throw new Exception("Mã tổng hợp đã tồn tại");
