@@ -17,6 +17,7 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhXcapQdGnvXhDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhXcapQdGnvXhHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQdGiaoNvXhHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -158,14 +159,14 @@ public class XhXcapQdGnvXhHdrService extends BaseServiceImpl {
       BeanUtils.copyProperties(noiDungCuuTroReq, noiDungCuuTro);
       noiDungCuuTro.setId(null);
       noiDungCuuTro.setIdHdr(objReq.getId());
+      noiDungCuuTro.setTrangThai(objReq.getTrangThaiXh());
       xhXcapQdGnvXhDtlRepository.save(noiDungCuuTro);
     }
-    if (objReq.getTrangThaiXh().equals(TrangThaiAllEnum.HOAN_THANH_CAP_NHAT.getId())) {
-      Optional<XhXcapQdGnvXhHdr> qdHdr = xhXcapQdGnvXhHdrRepository.findById(objReq.getId());
-      if (qdHdr.isPresent()) {
-        qdHdr.get().setTrangThaiXh(TrangThaiAllEnum.HOAN_THANH_CAP_NHAT.getId());
-        xhXcapQdGnvXhHdrRepository.save(qdHdr.get());
-      }
+    Optional<XhXcapQdGnvXhHdr> optionalQdHdr = xhXcapQdGnvXhHdrRepository.findById(objReq.getId());
+    if (optionalQdHdr.isPresent()) {
+      XhXcapQdGnvXhHdr qdHdr = optionalQdHdr.get();
+      qdHdr.setTrangThaiXh(objReq.getTrangThaiXh());
+      xhXcapQdGnvXhHdrRepository.save(qdHdr);
     }
   }
 
@@ -273,20 +274,18 @@ public class XhXcapQdGnvXhHdrService extends BaseServiceImpl {
         status.equals(TrangThaiAllEnum.CHO_DUYET_LDC.getId() + TrangThaiAllEnum.CHO_DUYET_TP.getId()) ||
             status.equals(TrangThaiAllEnum.TU_CHOI_TP.getId() + TrangThaiAllEnum.CHO_DUYET_TP.getId()) ||
             status.equals(TrangThaiAllEnum.CHO_DUYET_TP.getId() + TrangThaiAllEnum.TU_CHOI_TP.getId()) ||
-            status.equals(TrangThaiAllEnum.DA_DUYET_LDC.getId() + TrangThaiAllEnum.CHO_DUYET_LDC.getId()) ||
             status.equals(TrangThaiAllEnum.TU_CHOI_LDC.getId() + TrangThaiAllEnum.CHO_DUYET_LDC.getId()) ||
             status.equals(TrangThaiAllEnum.CHO_DUYET_TP.getId() + TrangThaiAllEnum.TU_CHOI_LDC.getId()) ||
-            (status.equals(TrangThaiAllEnum.BAN_HANH.getId() + TrangThaiAllEnum.DA_DUYET_LDC.getId())
-                && optional.get().getTrangThaiXh().equals(TrangThaiAllEnum.HOAN_THANH_CAP_NHAT.getId()))) {
+            status.equals(TrangThaiAllEnum.BAN_HANH.getId() + TrangThaiAllEnum.CHO_DUYET_LDC.getId())) {
       optional.get().setNguoiPduyetId(currentUser.getUser().getId());
       optional.get().setNgayPduyet(LocalDate.now());
-      optional.get().setLyDoTuChoi(statusReq.getLyDo());
+      optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
     } else {
       throw new Exception("Phê duyệt không thành công");
     }
     optional.get().setTrangThai(statusReq.getTrangThai());
     if (statusReq.equals(TrangThaiAllEnum.BAN_HANH)) {
-      optional.get().setTrangThaiXh(TrangThaiAllEnum.CHUA_CAP_NHAT.getId());
+      optional.get().setTrangThaiXh(TrangThaiAllEnum.CHUA_THUC_HIEN.getId());
     }
     XhXcapQdGnvXhHdr created = xhXcapQdGnvXhHdrRepository.save(optional.get());
     return created;
@@ -314,13 +313,12 @@ public class XhXcapQdGnvXhHdrService extends BaseServiceImpl {
       objs[2] = dx.getSoQd();
       objs[3] = dx.getNgayKy();
       objs[4] = dx.getSoQd();
-      objs[5] = dx.getTenLoaiVthh();
-      objs[6] = dx.getThoiGianGiaoNhan();
-      objs[7] = dx.getTrichYeu();
-      objs[8] = dx.getSoBbTinhKho();
-      objs[9] = dx.getSoBbHaoDoi();
-      objs[10] = dx.getTenTrangThai();
-      objs[11] = dx.getTenTrangThaiXh();
+      objs[5] = dx.getThoiGianGiaoNhan();
+      objs[6] = dx.getTrichYeu();
+      objs[7] = dx.getSoBbTinhKho();
+      objs[8] = dx.getSoBbHaoDoi();
+      objs[9] = dx.getTenTrangThai();
+      objs[10] = dx.getTenTrangThaiXh();
       dataList.add(objs);
     }
     ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
