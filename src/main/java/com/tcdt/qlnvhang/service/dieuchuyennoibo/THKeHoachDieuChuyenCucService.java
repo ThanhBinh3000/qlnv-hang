@@ -81,14 +81,14 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         return danhSachSoDeXuat;
     }
 
-    public THKeHoachDieuChuyenCucHdr yeuCauXacDinhDiemNhap(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
+    public THKeHoachDieuChuyenCucHdr yeuCauXacDinhDiemNhap(CustomUserDetails currentUser, IdSearchReq idSearchReq) throws Exception {
         if (currentUser == null) {
             throw new Exception("Bad request.");
         }
         if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
             throw new Exception("Chức năng chỉ dành cho cấp cục");
         }
-        Optional<THKeHoachDieuChuyenCucHdr> optional = thKeHoachDieuChuyenHdrRepository.findById(statusReq.getId());
+        Optional<THKeHoachDieuChuyenCucHdr> optional = thKeHoachDieuChuyenHdrRepository.findById(idSearchReq.getId());
         if (optional.isPresent() && optional.get().getTrangThai().equals(Contains.DUTHAO)) {
             THKeHoachDieuChuyenCucHdr data = optional.get();
             data.setTrangThai(Contains.YEU_CAU_XAC_DINH_DIEM_NHAP);
@@ -304,14 +304,15 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         List<ThKeHoachDieuChuyenNoiBoCucDtlReq> result = new ArrayList<>();
         for (QlnvDmDonvi cqt : donvis) {
             req.setMaDVi(cqt.getMaDvi());
-            List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdrs = dcHdrRepository.findByDonViAndTrangThaiCuc(req.getMaDVi(), Contains.DADUYET_LDCC, Contains.GIUA_2_CHI_CUC_TRONG_1_CUC, Contains.DIEU_CHUYEN,req.getThoiGianTongHop());
-            for (DcnbKeHoachDcHdr khh : dcnbKeHoachDcHdrs) {
-                Hibernate.initialize(khh.getDanhSachHangHoa());
-                DcnbKeHoachDcHdr khhc = SerializationUtils.clone(khh);
+            List<DcnbKeHoachDcDtl> dcnbKeHoachDcHdrs = dcnbKeHoachDcDtlRepository.findByDonViAndTrangThaiChiCuc(req.getMaDVi(), Contains.DADUYET_LDCC, Contains.DIEU_CHUYEN,Contains.GIUA_2_CHI_CUC_TRONG_1_CUC,req.getThoiGianTongHop());
+            for (DcnbKeHoachDcDtl khh : dcnbKeHoachDcHdrs) {
+                Hibernate.initialize(khh.getDcnbKeHoachDcHdr());
+                DcnbKeHoachDcHdr khhc = SerializationUtils.clone(khh.getDcnbKeHoachDcHdr());
                 ThKeHoachDieuChuyenNoiBoCucDtlReq dtl = new ModelMapper().map(khhc, ThKeHoachDieuChuyenNoiBoCucDtlReq.class);
                 dtl.setId(null);
-                dtl.setDcKeHoachDcHdrId(khh.getId());
+                dtl.setDcKeHoachDcHdrId(khh.getHdrId());
                 dtl.setHdrId(null);
+                dtl.setDcKeHoachDcDtlId(khh.getId());
                 List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(dtl.getDcKeHoachDcHdrId());
                 dtl.setDcnbKeHoachDcDtls(dcnbKeHoachDcDtls);
                 result.add(dtl);
