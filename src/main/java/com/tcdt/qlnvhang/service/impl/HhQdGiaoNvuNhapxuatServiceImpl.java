@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMau;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuknghiemcl.PhieuKnghiemCluongHang;
@@ -309,7 +310,10 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			dtl.setChildren(allByIdCt);
 		}
 		data.setDtlList(nhQdGiaoNvuNhapxuatDtl);
-		data.setHopDong(hhHopDongRepository.findById(data.getIdHd()).get());
+		Optional<HhHopDongHdr> hhHopDongHdr = hhHopDongRepository.findById(data.getIdHd());
+		if(hhHopDongHdr.isPresent()){
+			data.setHopDong(hhHopDongHdr.get());
+		}
 
 		return data;
 	}
@@ -664,6 +668,10 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 					Contains.convertDateToString(req.getDenNgayKT()),
 					userInfo.getDvql(),
 					req.getSoBbNtBq(),
+					req.getTrangThai(),
+					Contains.convertDateToString(req.getTuNgayGD()),
+					Contains.convertDateToString(req.getDenNgayGD()),
+					req.getKqDanhGia(),
 					pageable);
 		} else {
 			// Cục or Tổng cục

@@ -58,6 +58,8 @@ public class KtNganLo implements Serializable {
   String nguoiGuiDuyet;
   Date ngayPduyet;
   String nguoiPduyet;
+  @Transient
+  String lhKho;
 
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
   @JoinColumn(name = "NGANKHO_ID",updatable = false, insertable = false)
