@@ -11,14 +11,12 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbQuyetDinhDcTcHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbQuyetDinhDcTc;
+import com.tcdt.qlnvhang.request.search.TongHopKeHoachDieuChuyenSearch;
 import com.tcdt.qlnvhang.service.feign.LuuKhoClient;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbQuyetDinhDcTcDtl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbQuyetDinhDcTcHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -224,7 +222,7 @@ public class DcnbQuyetDinhDcTcDtlService extends BaseServiceImpl {
                 optional.get().setNguoiDuyetTcId(currentUser.getUser().getId());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 break;
-            case Contains.CHODUYET_LDTC + Contains.DADUYET_LDTC:
+            case Contains.CHODUYET_LDTC + Contains.BAN_HANH:
                 optional.get().setNgayDuyetTc(LocalDate.now());
                 optional.get().setNguoiDuyetTcId(currentUser.getUser().getId());
 
@@ -264,5 +262,12 @@ public class DcnbQuyetDinhDcTcDtlService extends BaseServiceImpl {
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
+    }
+
+    public List<DcnbQuyetDinhDcTcHdr> danhSachQuyetDinh(CustomUserDetails currentUser,SearchDcnbQuyetDinhDcTc objReq) {
+        String dvql = currentUser.getDvql();
+        objReq.setMaDvi(dvql);
+        List<DcnbQuyetDinhDcTcHdr> danhSachs = dcnbQuyetDinhDcTcHdrRepository.findDanhSachQuyetDinh(objReq);
+        return danhSachs;
     }
 }
