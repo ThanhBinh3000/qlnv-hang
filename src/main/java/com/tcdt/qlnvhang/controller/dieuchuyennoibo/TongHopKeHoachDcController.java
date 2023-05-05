@@ -124,10 +124,10 @@ public class TongHopKeHoachDcController extends BaseController {
 
     @ApiOperation(value = "Yêu cầu xác định điểm nhập", response = List.class)
     @PostMapping(value =  "/yeu-cau-xac-dinh-diem-nhap", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> yeuCauXacDinhDiemNhap(@CurrentUser CustomUserDetails currentUser,@Valid @RequestBody StatusReq statusReq) {
+    public ResponseEntity<BaseResponse> yeuCauXacDinhDiemNhap(@CurrentUser CustomUserDetails currentUser,@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            thKeHoachDieuChuyenService.yeuCauXacDinhDiemNhap(currentUser,statusReq);
+            thKeHoachDieuChuyenService.yeuCauXacDinhDiemNhap(currentUser,idSearchReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
