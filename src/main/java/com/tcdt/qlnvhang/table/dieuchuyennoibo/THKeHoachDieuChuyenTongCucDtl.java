@@ -52,5 +52,4 @@ public class THKeHoachDieuChuyenTongCucDtl implements Serializable {
     @NotFound(action = NotFoundAction.IGNORE)
     private THKeHoachDieuChuyenCucHdr thKeHoachDieuChuyenCucHdr;
 
-
 }

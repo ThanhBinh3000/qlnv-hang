@@ -15,6 +15,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 public class TongHopKeHoachDieuChuyenSearch extends BaseRequest {
+    private Long id;
     private Integer namKeHoach;
     private String maTongHop;
     private String soDeXuat;

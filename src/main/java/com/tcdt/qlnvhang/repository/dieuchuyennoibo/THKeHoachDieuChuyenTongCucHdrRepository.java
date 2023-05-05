@@ -18,7 +18,7 @@ public interface THKeHoachDieuChuyenTongCucHdrRepository extends JpaRepository<T
     @Query(value = "SELECT distinct hdr FROM THKeHoachDieuChuyenTongCucHdr hdr WHERE 1=1 " +
             "AND (:#{#param.maDVi} IS NULL OR hdr.maDVi LIKE CONCAT(:#{#param.maDVi},'%')) " +
             "AND (:#{#param.namKeHoach} IS NULL OR hdr.namKeHoach = :#{#param.namKeHoach}) " +
-            "AND (:#{#param.maTongHop} IS NULL OR LOWER(hdr.maTongHop) LIKE CONCAT('%',LOWER(:#{#param.maTongHop}),'%')) " +
+            "AND (:#{#param.id} IS NULL OR LOWER(hdr.id) LIKE CONCAT('%',LOWER(:#{#param.id}),'%')) " +
             "AND (:#{#param.loaiDieuChuyen} IS NULL OR LOWER(hdr.loaiDieuChuyen) LIKE CONCAT('%',LOWER(:#{#param.loaiDieuChuyen}),'%'))"+
             "AND (:#{#param.loaiHangHoa} IS NULL OR LOWER(hdr.loaiHangHoa) LIKE CONCAT('%',LOWER(:#{#param.loaiHangHoa}),'%'))"+
             "AND (:#{#param.chungLoaiHangHoa} IS NULL OR LOWER(hdr.chungLoaiHangHoa) LIKE CONCAT('%',LOWER(:#{#param.chungLoaiHangHoa}),'%'))"+
@@ -34,7 +34,7 @@ public interface THKeHoachDieuChuyenTongCucHdrRepository extends JpaRepository<T
 
     @Query(value = "SELECT distinct hdr FROM THKeHoachDieuChuyenTongCucHdr hdr WHERE 1=1 " +
             "AND (:#{#param.loaiDieuChuyen} IS NULL OR hdr.loaiDieuChuyen = :#{#param.loaiDieuChuyen}) "+
-            "AND (:#{#param.maTongHop} IS NULL OR LOWER(hdr.maTongHop) LIKE CONCAT('%',LOWER(:#{#param.maTongHop}),'%')) " +
+            "AND (:#{#param.id} IS NULL OR LOWER(hdr.id) LIKE CONCAT('%',LOWER(:#{#param.id}),'%')) " +
             "AND (:#{#param.namKeHoach} IS NULL OR hdr.namKeHoach = :#{#param.namKeHoach}) " +
             "ORDER BY hdr.maTongHop desc")
     List<THKeHoachDieuChuyenTongCucHdr> filterMaTongHop(@Param("param") TongHopKeHoachDieuChuyenSearch param);

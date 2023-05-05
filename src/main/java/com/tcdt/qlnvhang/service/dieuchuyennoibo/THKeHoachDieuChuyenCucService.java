@@ -219,12 +219,15 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
-        List<THKeHoachDieuChuyenCucHdr> maTongHop = thKeHoachDieuChuyenHdrRepository.findByMaTongHop(String.valueOf(optional.get().getMaTongHop()));
-        if (!maTongHop.isEmpty() && objReq.getMaTongHop().split("/").length == 1) {
-            if (maTongHop.get(0).getId().equals(objReq.getId())) {
-                throw new Exception("Mã tổng hợp đã tồn tại");
-            }
+        if(!optional.get().getTrangThai().equals(Contains.DUTHAO)){
+            throw new Exception("Tổng hợp không được phép chỉnh sửa");
         }
+//        List<THKeHoachDieuChuyenCucHdr> maTongHop = thKeHoachDieuChuyenHdrRepository.findByMaTongHop(String.valueOf(optional.get().getMaTongHop()));
+//        if (!maTongHop.isEmpty() && objReq.getMaTongHop().split("/").length == 1) {
+//            if (maTongHop.get(0).getId().equals(objReq.getId())) {
+//                throw new Exception("Mã tổng hợp đã tồn tại");
+//            }
+//        }
         THKeHoachDieuChuyenCucHdr data = optional.get();
         BeanUtils.copyProperties(objReq, data);
         data.setNguoiSuaId(currentUser.getUser().getId());
