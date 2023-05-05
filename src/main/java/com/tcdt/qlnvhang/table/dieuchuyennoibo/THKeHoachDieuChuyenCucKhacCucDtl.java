@@ -44,7 +44,7 @@ public class THKeHoachDieuChuyenCucKhacCucDtl implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DCNB_KE_HOACH_DC_HDR_ID", insertable = false, updatable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler","phuongAnDieuChuyen","canCu"})
     @NotFound(action = NotFoundAction.IGNORE)
     private DcnbKeHoachDcHdr dcnbKeHoachDcHdr;
 }

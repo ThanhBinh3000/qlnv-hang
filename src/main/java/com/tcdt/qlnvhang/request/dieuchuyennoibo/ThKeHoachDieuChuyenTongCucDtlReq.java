@@ -71,6 +71,4 @@ public class ThKeHoachDieuChuyenTongCucDtlReq {
 
     private LocalDateTime thoiGianTongHop;
 
-    private List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = new ArrayList<>();
-
 }
