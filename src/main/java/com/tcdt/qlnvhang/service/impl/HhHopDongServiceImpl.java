@@ -19,6 +19,7 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.object.HhDdiemNhapKhoVtReq;
 import com.tcdt.qlnvhang.request.object.HhHopDongDtlReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.util.*;
@@ -66,6 +67,8 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 
   @Autowired
   private QlnvDmDonviRepository qlnvDmDonviRepository;
+  @Autowired
+  private FileDinhKemService fileDinhKemService;
 
   @Override
   @Transactional()
@@ -101,19 +104,13 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 //		dataMap.setNgayTao(getDateTimeNow());
     dataMap.setTrangThai(Contains.DUTHAO);
     dataMap.setMaDvi(userInfo.getDvql());
-
-    // File dinh kem cua goi thau
-    List<FileDKemJoinHopDong> dtls2 = new ArrayList<FileDKemJoinHopDong>();
-    if (objReq.getFileDinhKems() != null) {
-      dtls2 = ObjectMapperUtils.mapAll(objReq.getFileDinhKems(), FileDKemJoinHopDong.class);
-      dtls2.forEach(f -> {
-        f.setDataType(HhHopDongHdr.TABLE_NAME);
-        f.setCreateDate(new Date());
-      });
-    }
-    dataMap.setFileDinhKems(dtls2);
-
     hhHopDongRepository.save(dataMap);
+    if (!DataUtils.isNullOrEmpty(objReq.getListCcPhapLy())) {
+      fileDinhKemService.saveListFileDinhKem(objReq.getListCcPhapLy(), dataMap.getId(), HhHopDongHdr.TABLE_NAME + "_CAN_CU");
+    }
+    if (!DataUtils.isNullObject(objReq.getListFileDinhKem())) {
+      fileDinhKemService.saveListFileDinhKem(objReq.getListFileDinhKem(), dataMap.getId(), HhHopDongHdr.TABLE_NAME);
+    }
 
     this.saveDataChildren(dataMap,objReq);
     return dataMap;
@@ -140,22 +137,15 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
     }
 
     HhHopDongHdr dataMap = ObjectMapperUtils.map(objReq, HhHopDongHdr.class);
-
     dataMap.setTrangThai(Contains.DUTHAO);
     dataMap.setMaDvi(userInfo.getDvql());
-
-    // File dinh kem cua goi thau
-    List<FileDKemJoinHopDong> dtls2 = new ArrayList<FileDKemJoinHopDong>();
-    if (objReq.getFileDinhKems() != null) {
-      dtls2 = ObjectMapperUtils.mapAll(objReq.getFileDinhKems(), FileDKemJoinHopDong.class);
-      dtls2.forEach(f -> {
-        f.setDataType(HhHopDongHdr.TABLE_NAME);
-        f.setCreateDate(new Date());
-      });
-    }
-    dataMap.setFileDinhKems(dtls2);
-
     hhHopDongRepository.save(dataMap);
+    if (!DataUtils.isNullOrEmpty(objReq.getListCcPhapLy())) {
+      fileDinhKemService.saveListFileDinhKem(objReq.getListCcPhapLy(), dataMap.getId(), HhHopDongHdr.TABLE_NAME + "_CAN_CU");
+    }
+    if (!DataUtils.isNullObject(objReq.getListFileDinhKem())) {
+      fileDinhKemService.saveListFileDinhKem(objReq.getListFileDinhKem(), dataMap.getId(), HhHopDongHdr.TABLE_NAME);
+    }
 
     this.saveDataChildren(dataMap,objReq);
 
@@ -223,19 +213,13 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 
     HhHopDongHdr dataDB = qOptional.get();
     BeanUtils.copyProperties(objReq, dataDB);
-
-    // File dinh kem cua goi thau
-    List<FileDKemJoinHopDong> dtls2 = new ArrayList<>();
-    if (objReq.getFileDinhKems() != null) {
-      dtls2 = ObjectMapperUtils.mapAll(objReq.getFileDinhKems(), FileDKemJoinHopDong.class);
-      dtls2.forEach(f -> {
-        f.setDataType(HhHopDongHdr.TABLE_NAME);
-        f.setCreateDate(new Date());
-      });
-    }
-    dataDB.setFileDinhKems(dtls2);
-
     hhHopDongRepository.save(dataDB);
+    if (!DataUtils.isNullOrEmpty(objReq.getListCcPhapLy())) {
+      fileDinhKemService.saveListFileDinhKem(objReq.getListCcPhapLy(), dataDB.getId(), HhHopDongHdr.TABLE_NAME + "_CAN_CU");
+    }
+    if (!DataUtils.isNullObject(objReq.getListFileDinhKem())) {
+      fileDinhKemService.saveListFileDinhKem(objReq.getListFileDinhKem(), dataDB.getId(), HhHopDongHdr.TABLE_NAME);
+    }
     this.saveDataChildren(dataDB,objReq);
     return dataDB;
   }
@@ -260,6 +244,10 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
     qOptional.get().setTenDvi(qlnvDmDonviRepository.findByMaDvi(qOptional.get().getMaDvi()).getTenDvi());
     qOptional.get().setDonViTinh( mapVthh.get(qOptional.get().getDonViTinh()));
     qOptional.get().setHhPhuLucHdongList(hhPhuLucRepository.findBySoHd(qOptional.get().getSoHd()));
+    List<FileDinhKem> fileDinhKem = fileDinhKemService.search(qOptional.get().getId(), Collections.singletonList(HhHopDongHdr.TABLE_NAME));
+    qOptional.get().setListFileDinhKem(fileDinhKem);
+    List<FileDinhKem> canCu = fileDinhKemService.search(qOptional.get().getId(), Collections.singletonList(HhHopDongHdr.TABLE_NAME + "_CAN_CU"));
+    qOptional.get().setListCcPhapLy(canCu);
 
     List<HhHopDongDtl> allByIdHdr = hhHopDongDtlRepository.findAllByIdHdr(qOptional.get().getId());
     allByIdHdr.forEach(item -> {
