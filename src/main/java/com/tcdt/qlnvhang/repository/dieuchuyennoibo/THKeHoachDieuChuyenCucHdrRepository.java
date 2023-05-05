@@ -19,7 +19,7 @@ public interface THKeHoachDieuChuyenCucHdrRepository extends JpaRepository<THKeH
     @Query(value = "SELECT distinct hdr FROM THKeHoachDieuChuyenCucHdr hdr WHERE 1=1 " +
             "AND (:#{#param.maDVi} IS NULL OR hdr.maDvi LIKE CONCAT(:#{#param.maDVi},'%')) " +
             "AND (:#{#param.namKeHoach} IS NULL OR hdr.namKeHoach = :#{#param.namKeHoach}) " +
-            "AND (:#{#param.id} IS NULL OR LOWER(hdr.id) LIKE CONCAT('%',LOWER(:#{#param.id}),'%')) " +
+            "AND LOWER(hdr.id) LIKE CONCAT('%',LOWER(:#{#param.id}),'%') " +
             "AND ((:#{#param.tuNgay}  IS NULL OR hdr.ngayTongHop >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR hdr.ngayTongHop <= :#{#param.denNgay}) ) " +
             "AND (:#{#param.trichYeu} IS NULL OR LOWER(hdr.trichYeu) LIKE CONCAT('%',LOWER(:#{#param.trichYeu}),'%')) " +
