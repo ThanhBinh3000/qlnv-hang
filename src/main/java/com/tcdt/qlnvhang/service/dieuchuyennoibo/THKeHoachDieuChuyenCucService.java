@@ -304,17 +304,17 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         List<ThKeHoachDieuChuyenNoiBoCucDtlReq> result = new ArrayList<>();
         for (QlnvDmDonvi cqt : donvis) {
             req.setMaDVi(cqt.getMaDvi());
-            List<DcnbKeHoachDcDtl> dcnbKeHoachDcHdrs = dcnbKeHoachDcDtlRepository.findByDonViAndTrangThaiChiCuc(req.getMaDVi(), Contains.DADUYET_LDCC, Contains.DIEU_CHUYEN,Contains.GIUA_2_CHI_CUC_TRONG_1_CUC,req.getThoiGianTongHop());
-            for (DcnbKeHoachDcDtl khh : dcnbKeHoachDcHdrs) {
-                Hibernate.initialize(khh.getDcnbKeHoachDcHdr());
-                DcnbKeHoachDcHdr khhc = SerializationUtils.clone(khh.getDcnbKeHoachDcHdr());
+//            List<DcnbKeHoachDcDtl> dcnbKeHoachDcHdrs = dcnbKeHoachDcDtlRepository.findByDonViAndTrangThaiChiCuc(req.getMaDVi(), Contains.DADUYET_LDCC, Contains.DIEU_CHUYEN,Contains.GIUA_2_CHI_CUC_TRONG_1_CUC,req.getThoiGianTongHop());
+            List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdrs = dcHdrRepository.findByDonViAndTrangThaiCuc(req.getMaDVi(), Contains.DADUYET_LDCC, Contains.GIUA_2_CHI_CUC_TRONG_1_CUC, Contains.DIEU_CHUYEN,req.getThoiGianTongHop());
+            for (DcnbKeHoachDcHdr khh : dcnbKeHoachDcHdrs) {
+                Hibernate.initialize(khh.getDanhSachHangHoa());
+                DcnbKeHoachDcHdr khhc = SerializationUtils.clone(khh);
                 ThKeHoachDieuChuyenNoiBoCucDtlReq dtl = new ModelMapper().map(khhc, ThKeHoachDieuChuyenNoiBoCucDtlReq.class);
                 dtl.setId(null);
-                dtl.setDcKeHoachDcHdrId(khh.getHdrId());
+                dtl.setDcKeHoachDcHdrId(khh.getId());
                 dtl.setHdrId(null);
-                dtl.setDcKeHoachDcDtlId(khh.getId());
-                List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(dtl.getDcKeHoachDcHdrId());
-                dtl.setDcnbKeHoachDcDtls(dcnbKeHoachDcDtls);
+//                List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(dtl.getDcKeHoachDcHdrId());
+//                dtl.setDcnbKeHoachDcDtls(dcnbKeHoachDcDtls);
                 result.add(dtl);
             }
         }
