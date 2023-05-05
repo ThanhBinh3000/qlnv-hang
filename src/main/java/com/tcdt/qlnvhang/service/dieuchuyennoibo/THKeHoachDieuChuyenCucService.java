@@ -81,14 +81,14 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         return danhSachSoDeXuat;
     }
 
-    public THKeHoachDieuChuyenCucHdr yeuCauXacDinhDiemNhap(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
+    public THKeHoachDieuChuyenCucHdr yeuCauXacDinhDiemNhap(CustomUserDetails currentUser, IdSearchReq idSearchReq) throws Exception {
         if (currentUser == null) {
             throw new Exception("Bad request.");
         }
         if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
             throw new Exception("Chức năng chỉ dành cho cấp cục");
         }
-        Optional<THKeHoachDieuChuyenCucHdr> optional = thKeHoachDieuChuyenHdrRepository.findById(statusReq.getId());
+        Optional<THKeHoachDieuChuyenCucHdr> optional = thKeHoachDieuChuyenHdrRepository.findById(idSearchReq.getId());
         if (optional.isPresent() && optional.get().getTrangThai().equals(Contains.DUTHAO)) {
             THKeHoachDieuChuyenCucHdr data = optional.get();
             data.setTrangThai(Contains.YEU_CAU_XAC_DINH_DIEM_NHAP);
@@ -219,12 +219,15 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
-        List<THKeHoachDieuChuyenCucHdr> maTongHop = thKeHoachDieuChuyenHdrRepository.findByMaTongHop(String.valueOf(optional.get().getMaTongHop()));
-        if (!maTongHop.isEmpty() && objReq.getMaTongHop().split("/").length == 1) {
-            if (maTongHop.get(0).getId().equals(objReq.getId())) {
-                throw new Exception("Mã tổng hợp đã tồn tại");
-            }
+        if(!optional.get().getTrangThai().equals(Contains.DUTHAO)){
+            throw new Exception("Tổng hợp không được phép chỉnh sửa");
         }
+//        List<THKeHoachDieuChuyenCucHdr> maTongHop = thKeHoachDieuChuyenHdrRepository.findByMaTongHop(String.valueOf(optional.get().getMaTongHop()));
+//        if (!maTongHop.isEmpty() && objReq.getMaTongHop().split("/").length == 1) {
+//            if (maTongHop.get(0).getId().equals(objReq.getId())) {
+//                throw new Exception("Mã tổng hợp đã tồn tại");
+//            }
+//        }
         THKeHoachDieuChuyenCucHdr data = optional.get();
         BeanUtils.copyProperties(objReq, data);
         data.setNguoiSuaId(currentUser.getUser().getId());
@@ -304,6 +307,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         List<ThKeHoachDieuChuyenNoiBoCucDtlReq> result = new ArrayList<>();
         for (QlnvDmDonvi cqt : donvis) {
             req.setMaDVi(cqt.getMaDvi());
+//            List<DcnbKeHoachDcDtl> dcnbKeHoachDcHdrs = dcnbKeHoachDcDtlRepository.findByDonViAndTrangThaiChiCuc(req.getMaDVi(), Contains.DADUYET_LDCC, Contains.DIEU_CHUYEN,Contains.GIUA_2_CHI_CUC_TRONG_1_CUC,req.getThoiGianTongHop());
             List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdrs = dcHdrRepository.findByDonViAndTrangThaiCuc(req.getMaDVi(), Contains.DADUYET_LDCC, Contains.GIUA_2_CHI_CUC_TRONG_1_CUC, Contains.DIEU_CHUYEN,req.getThoiGianTongHop());
             for (DcnbKeHoachDcHdr khh : dcnbKeHoachDcHdrs) {
                 Hibernate.initialize(khh.getDanhSachHangHoa());
@@ -312,8 +316,8 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                 dtl.setId(null);
                 dtl.setDcKeHoachDcHdrId(khh.getId());
                 dtl.setHdrId(null);
-                List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(dtl.getDcKeHoachDcHdrId());
-                dtl.setDcnbKeHoachDcDtls(dcnbKeHoachDcDtls);
+//                List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(dtl.getDcKeHoachDcHdrId());
+//                dtl.setDcnbKeHoachDcDtls(dcnbKeHoachDcDtls);
                 result.add(dtl);
             }
         }

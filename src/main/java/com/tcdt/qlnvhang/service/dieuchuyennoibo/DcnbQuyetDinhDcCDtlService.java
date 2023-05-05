@@ -220,7 +220,7 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
                 optional.get().setNguoiDuyetTcId(currentUser.getUser().getId());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 break;
-            case Contains.CHODUYET_LDC + Contains.DADUYET_LDC:
+            case Contains.CHODUYET_LDC + Contains.BAN_HANH:
                 optional.get().setNgayDuyetTc(LocalDate.now());
                 optional.get().setNguoiDuyetTcId(currentUser.getUser().getId());
 
