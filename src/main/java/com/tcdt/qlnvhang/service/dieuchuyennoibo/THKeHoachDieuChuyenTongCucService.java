@@ -99,6 +99,7 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
             }
         }
         thKeHoachDieuChuyenTongCucDtlRepository.saveAll(chiTiet);
+
         return created;
     }
 

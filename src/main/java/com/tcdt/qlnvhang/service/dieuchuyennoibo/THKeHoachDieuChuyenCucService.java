@@ -330,6 +330,16 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         for (QlnvDmDonvi cqt : donvis) {
             req.setMaDVi(cqt.getMaDvi());
             List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdrs = dcHdrRepository.findByDonViAndTrangThaiCuc(req.getMaDVi(), Contains.DADUYET_LDCC, Contains.GIUA_2_CUC_DTNN_KV, Contains.DIEU_CHUYEN,req.getThoiGianTongHop());
+//            Map<String, List<DcnbKeHoachDcHdr>> postsPerType = dcnbKeHoachDcHdrs.stream()
+//                    .collect(groupingBy(dcnbKeHoachDcHdr -> dcnbKeHoachDcHdr.getMaCucNhan()));
+//            for (Map.Entry<String, List<DcnbKeHoachDcHdr>> entry : postsPerType.entrySet()) {
+//                THKeHoachDieuChuyenCucKhacCucDtlReq dtl = new THKeHoachDieuChuyenCucKhacCucDtlReq();
+//                dtl.setMaCucNhan(entry.getKey());
+//                List<DcnbKeHoachDcHdr> khh = entry.getValue();
+//                dtl.setTenCucNhan(khh.get(0).getTenCucNhan());
+//                dtl.setDcnbKeHoachDcHdrs(khh);
+//                dtl.setId(null);
+//                dtl.setHdrId(null);
             for (DcnbKeHoachDcHdr khh : dcnbKeHoachDcHdrs) {
                 Hibernate.initialize(khh.getDanhSachHangHoa());
                 DcnbKeHoachDcHdr khhc = SerializationUtils.clone(khh);
@@ -337,9 +347,10 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                 dtl.setId(null);
                 dtl.setDcnbKeHoachDcHdrId(khh.getId());
                 dtl.setHdrId(null);
-                dtl.setNgayGduyetTc(null);
                 List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(dtl.getDcnbKeHoachDcHdrId());
                 dtl.setDcnbKeHoachDcDtls(dcnbKeHoachDcDtls);
+                Long tongDuToanKinhPhi = dcnbKeHoachDcDtlRepository.findByMaDviCucAndCucNhan(currentUser.getDvql(),dtl.getMaCucNhan(),Contains.DADUYET_LDCC,Contains.GIUA_2_CUC_DTNN_KV,Contains.DIEU_CHUYEN,req.getThoiGianTongHop());
+                dtl.setTongDuToanKinhPhi((tongDuToanKinhPhi == null) ? 0 : tongDuToanKinhPhi);
                 result.add(dtl);
             }
         }
