@@ -1,15 +1,13 @@
 package com.tcdt.qlnvhang.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongHdr;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.*;
-import com.tcdt.qlnvhang.util.UserUtils;
+import com.tcdt.qlnvhang.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,9 +27,6 @@ import com.tcdt.qlnvhang.request.object.HhPhuLucHdReq;
 import com.tcdt.qlnvhang.request.search.HhPhuLucHdSearchReq;
 import com.tcdt.qlnvhang.secification.HhPhuLucHdSpecification;
 import com.tcdt.qlnvhang.service.HhPhuLucHdService;
-import com.tcdt.qlnvhang.util.Contains;
-import com.tcdt.qlnvhang.util.ObjectMapperUtils;
-import com.tcdt.qlnvhang.util.PaginationSet;
 
 @Service
 public class HhPhuLucHdServiceImpl extends BaseServiceImpl implements HhPhuLucHdService {
@@ -43,11 +38,12 @@ public class HhPhuLucHdServiceImpl extends BaseServiceImpl implements HhPhuLucHd
 
 	@Autowired
 	private HttpServletRequest req;
+	@Autowired
+	private FileDinhKemService fileDinhKemService;
 
 	@Override
 	public HhPhuLucHd create(HhPhuLucHdReq objReq) throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
-		System.out.println(objReq.getLoaiVthh()+"@@@@@@@@@@");
 		if (objReq.getLoaiVthh() == null)
 			throw new Exception("Loại vật tư hàng hóa không phù hợp");
 
@@ -60,7 +56,6 @@ public class HhPhuLucHdServiceImpl extends BaseServiceImpl implements HhPhuLucHd
 			throw new Exception("Phụ lục số " + objReq.getSoPluc() + " đã tồn tại");
 
 		HhPhuLucHd dataMap = ObjectMapperUtils.map(objReq, HhPhuLucHd.class);
-
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setNgayTao(getDateTimeNow());
 		dataMap.setTrangThai(Contains.TAO_MOI);
@@ -89,15 +84,9 @@ public class HhPhuLucHdServiceImpl extends BaseServiceImpl implements HhPhuLucHd
 //		}
 
 		// File dinh kem cua phu luc
-		List<FileDKemJoinPhuLuc> dtls1 = new ArrayList<FileDKemJoinPhuLuc>();
-		if (objReq.getFileDinhKems() != null) {
-			dtls1 = ObjectMapperUtils.mapAll(objReq.getFileDinhKems(), FileDKemJoinPhuLuc.class);
-			dtls1.forEach(f -> {
-				f.setDataType(HhPhuLucHd.TABLE_NAME);
-				f.setCreateDate(new Date());
-			});
+		if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKems())) {
+			fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), dataMap.getId(), HhPhuLucHd.TABLE_NAME);
 		}
-		dataMap.setFileDinhKems(dtls1);
 		return hhPhuLucHdRepository.save(dataMap);
 	}
 
@@ -133,38 +122,31 @@ public class HhPhuLucHdServiceImpl extends BaseServiceImpl implements HhPhuLucHd
 		dataDB.setNgaySua(getDateTimeNow());
 		dataDB.setNguoiSua(getUser().getUsername());
 
-		// Add thong tin dieu chinh dia diem nhap
-		List<HhHopDongDtlReq> dtlReqList = objReq.getDetail();
-		List<HhPhuLucHdDtl> details = new ArrayList<>();
-		if (dtlReqList != null) {
-			List<HhDdiemNhapKhoPluc> detailChild;
-			for (HhHopDongDtlReq dtlReq : dtlReqList) {
-				List<HhDdiemNhapKhoReq> cTietReq = dtlReq.getDetail();
-				HhPhuLucHdDtl detail = ObjectMapperUtils.map(dtlReq, HhPhuLucHdDtl.class);
-				detail.setType(Contains.PHU_LUC);
-				detailChild = new ArrayList<HhDdiemNhapKhoPluc>();
-				if (cTietReq != null)
-					detailChild = ObjectMapperUtils.mapAll(cTietReq, HhDdiemNhapKhoPluc.class);
-				detailChild.forEach(f -> {
-					f.setType(Contains.PHU_LUC);
-				});
+//		// Add thong tin dieu chinh dia diem nhap
+//		List<HhHopDongDtlReq> dtlReqList = objReq.getDetail();
+//		List<HhPhuLucHdDtl> details = new ArrayList<>();
+//		if (dtlReqList != null) {
+//			List<HhDdiemNhapKhoPluc> detailChild;
+//			for (HhHopDongDtlReq dtlReq : dtlReqList) {
+//				List<HhDdiemNhapKhoReq> cTietReq = dtlReq.getDetail();
+//				HhPhuLucHdDtl detail = ObjectMapperUtils.map(dtlReq, HhPhuLucHdDtl.class);
+//				detail.setType(Contains.PHU_LUC);
+//				detailChild = new ArrayList<HhDdiemNhapKhoPluc>();
+//				if (cTietReq != null)
+//					detailChild = ObjectMapperUtils.mapAll(cTietReq, HhDdiemNhapKhoPluc.class);
+//				detailChild.forEach(f -> {
+//					f.setType(Contains.PHU_LUC);
+//				});
+//
+//				detail.setChildren(detailChild);
+//				details.add(detail);
+//			}
+////			dataDB.setChildren(details);
+//		}
 
-				detail.setChildren(detailChild);
-				details.add(detail);
-			}
-//			dataDB.setChildren(details);
+		if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKems())) {
+			fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), dataMap.getId(), HhPhuLucHd.TABLE_NAME);
 		}
-
-		// File dinh kem cua phu luc
-		List<FileDKemJoinPhuLuc> dtls1 = new ArrayList<FileDKemJoinPhuLuc>();
-		if (objReq.getFileDinhKems() != null) {
-			dtls1 = ObjectMapperUtils.mapAll(objReq.getFileDinhKems(), FileDKemJoinPhuLuc.class);
-			dtls1.forEach(f -> {
-				f.setDataType(HhPhuLucHd.TABLE_NAME);
-				f.setCreateDate(new Date());
-			});
-		}
-		dataDB.setFileDinhKems(dtls1);
 
 		return hhPhuLucHdRepository.save(dataDB);
 	}
@@ -178,6 +160,8 @@ public class HhPhuLucHdServiceImpl extends BaseServiceImpl implements HhPhuLucHd
 
 		if (!qOptional.isPresent())
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
+		List<FileDinhKem> fileDinhKem = fileDinhKemService.search(qOptional.get().getId(), Collections.singletonList(HhPhuLucHd.TABLE_NAME));
+		qOptional.get().setFileDinhKems(fileDinhKem);
 
 		return qOptional.get();
 	}

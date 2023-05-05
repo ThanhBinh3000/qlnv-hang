@@ -42,6 +42,7 @@ public class HhHopDongHdrReq {
 
 	String tenHd;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	@Temporal(TemporalType.DATE)
 	Date ngayKy;
 
@@ -94,6 +95,9 @@ public class HhHopDongHdrReq {
 	String fax;
 	String moTai;
 	String giayUyQuyen;
+	String faxNhaThau;
+	String moTaiNhaThau;
+	String giayUyQuyenNhaThau;
 
 //	String donViTinh;
 //
@@ -211,9 +215,8 @@ public class HhHopDongHdrReq {
 //	Date tgianNkho;
 
 	private List<HhHopDongDtlReq> detail;
-//
-//	private List<HhDviLquanReq> detail1;
 
-	private List<FileDinhKemReq> fileDinhKems;
+	private List<FileDinhKemReq> listFileDinhKem;
+	private List<FileDinhKemReq> listCcPhapLy;
 
 }

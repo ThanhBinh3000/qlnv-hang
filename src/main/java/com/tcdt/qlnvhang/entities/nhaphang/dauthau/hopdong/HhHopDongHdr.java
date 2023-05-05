@@ -5,14 +5,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -20,13 +16,8 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.HhPhuLucHd;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Where;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.tcdt.qlnvhang.entities.FileDKemJoinHopDong;
 
 import lombok.Data;
 
@@ -85,6 +76,9 @@ public class HhHopDongHdr extends BaseEntity implements Serializable  {
 	String chucVuNhaThau;
 	String sdtNhaThau;
 	String stkNhaThau;
+	String faxNhaThau;
+	String moTaiNhaThau;
+	String giayUyQuyenNhaThau;
 
 	String loaiVthh;
 	@Transient
@@ -120,25 +114,8 @@ public class HhHopDongHdr extends BaseEntity implements Serializable  {
 
 	@Transient
 	private List<HhPhuLucHd> hhPhuLucHdongList = new ArrayList<>();
-
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@Fetch(value = FetchMode.SUBSELECT)
-	@JoinColumn(name = "dataId")
-	@JsonManagedReference
-	@Where(clause = "data_type='" + HhHopDongHdr.TABLE_NAME + "'")
-	private List<FileDKemJoinHopDong> fileDinhKems = new ArrayList<>();
-
-	public void setFileDinhKems(List<FileDKemJoinHopDong> children2) {
-		this.fileDinhKems.clear();
-		for (FileDKemJoinHopDong child2 : children2) {
-			child2.setParent(this);
-		}
-		this.fileDinhKems.addAll(children2);
-	}
-
-	public void addFileDinhKems(FileDKemJoinHopDong child2) {
-		child2.setParent(this);
-		this.fileDinhKems.add(child2);
-	}
-
+	@Transient
+	private List<FileDinhKem> listFileDinhKem;
+	@Transient
+	private List<FileDinhKem> listCcPhapLy;
 }
