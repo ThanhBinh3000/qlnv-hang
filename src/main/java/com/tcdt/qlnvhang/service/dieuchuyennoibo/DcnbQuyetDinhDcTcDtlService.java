@@ -138,7 +138,7 @@ public class DcnbQuyetDinhDcTcDtlService extends BaseServiceImpl {
             List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Arrays.asList(DcnbQuyetDinhDcTcHdr.TABLE_NAME + "_CAN_CU"));
             data.setCanCu(canCu);
             List<FileDinhKem> quyetDinh = fileDinhKemService.search(data.getId(), Arrays.asList(DcnbQuyetDinhDcTcHdr.TABLE_NAME + "_QUYET_DINH"));
-            data.setCanCu(quyetDinh);
+            data.setQuyetDinh(quyetDinh);
 
             List<DcnbQuyetDinhDcTcDtl> sachQuyetDinh = data.getDanhSachQuyetDinh();
             sachQuyetDinh.forEach(data1 -> {
