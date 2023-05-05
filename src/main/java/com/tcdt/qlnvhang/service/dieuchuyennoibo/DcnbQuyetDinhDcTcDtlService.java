@@ -263,11 +263,4 @@ public class DcnbQuyetDinhDcTcDtlService extends BaseServiceImpl {
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
     }
-
-    public List<DcnbQuyetDinhDcTcHdr> danhSachQuyetDinh(CustomUserDetails currentUser,SearchDcnbQuyetDinhDcTc objReq) {
-        String dvql = currentUser.getDvql();
-        objReq.setMaDvi(dvql);
-        List<DcnbQuyetDinhDcTcHdr> danhSachs = dcnbQuyetDinhDcTcHdrRepository.findDanhSachQuyetDinh(objReq);
-        return danhSachs;
-    }
 }
