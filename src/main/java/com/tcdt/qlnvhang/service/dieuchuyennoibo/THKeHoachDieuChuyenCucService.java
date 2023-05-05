@@ -316,8 +316,8 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                 dtl.setId(null);
                 dtl.setDcKeHoachDcHdrId(khh.getId());
                 dtl.setHdrId(null);
-//                List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(dtl.getDcKeHoachDcHdrId());
-//                dtl.setDcnbKeHoachDcDtls(dcnbKeHoachDcDtls);
+                List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(dtl.getDcKeHoachDcHdrId());
+                dtl.setDcnbKeHoachDcDtls(dcnbKeHoachDcDtls);
                 result.add(dtl);
             }
         }
