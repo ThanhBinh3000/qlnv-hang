@@ -61,6 +61,8 @@ public class KtNganKho implements Serializable {
   String nguoiGuiDuyet;
   Date ngayPduyet;
   String nguoiPduyet;
+  @Transient
+  String lhKho;
 
   @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY,
       cascade = CascadeType.ALL)

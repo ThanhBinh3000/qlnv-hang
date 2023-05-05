@@ -32,6 +32,7 @@ public class FileDKemJoinKeLot implements Serializable {
 	String fileName;
 	String fileSize;
 	String fileUrl;
+	String noiDung;
 	String fileType;
 	String dataType;
 	Date createDate;
