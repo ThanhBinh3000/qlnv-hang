@@ -76,7 +76,7 @@ public class DcnbQuyetDinhDcTcDtlService extends BaseServiceImpl {
         }
         Optional<DcnbQuyetDinhDcTcHdr> optional = dcnbQuyetDinhDcTcHdrRepository.findFirstBySoQdinh(objReq.getSoQdinh());
         if (optional.isPresent() && objReq.getSoQdinh().split("/").length == 1) {
-            throw new Exception("số đề xuất đã tồn tại");
+            throw new Exception("số quyết định đã tồn tại");
         }
         DcnbQuyetDinhDcTcHdr data = new DcnbQuyetDinhDcTcHdr();
         BeanUtils.copyProperties(objReq, data);
