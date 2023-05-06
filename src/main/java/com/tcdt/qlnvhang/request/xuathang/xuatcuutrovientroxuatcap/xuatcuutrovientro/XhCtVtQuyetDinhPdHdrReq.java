@@ -40,6 +40,10 @@ public class XhCtVtQuyetDinhPdHdrReq {
     private LocalDate ngayPduyet;
     private Long nguoiPduyetId;
     private String donViTinh;
+
+    private Long idQdGiaoNv;
+    private String soQdGiaoNv;
+
     private List<FileDinhKemReq> fileDinhKem;
 
     private List<FileDinhKemReq> canCu = new ArrayList<>();

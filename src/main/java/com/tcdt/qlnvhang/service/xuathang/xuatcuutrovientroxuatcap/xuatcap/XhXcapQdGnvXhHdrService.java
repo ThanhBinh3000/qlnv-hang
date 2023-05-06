@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhXcapQdGnvXhDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhXcapQdGnvXhHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhXcapQuyetDinhPdHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -45,6 +46,9 @@ public class XhXcapQdGnvXhHdrService extends BaseServiceImpl {
 
   @Autowired
   private XhXcapQdGnvXhDtlRepository xhXcapQdGnvXhDtlRepository;
+
+  @Autowired
+  private XhXcapQuyetDinhPdHdrRepository xhXcapQuyetDinhPdHdrRepository;
   @Autowired
   private FileDinhKemService fileDinhKemService;
 
@@ -96,6 +100,14 @@ public class XhXcapQdGnvXhHdrService extends BaseServiceImpl {
     data.setMaDvi(currentUser.getUser().getDepartment());
     data.setTrangThai(Contains.DUTHAO);
     XhXcapQdGnvXhHdr created = xhXcapQdGnvXhHdrRepository.save(data);
+    if (!DataUtils.isNullObject(objReq.getSoQd())) {
+      xhXcapQuyetDinhPdHdrRepository.findById(objReq.getIdQdPd())
+          .ifPresent(item -> {
+            item.setIdQdGiaoNv(objReq.getId());
+            item.setSoQdGiaoNv(objReq.getSoQd());
+            xhXcapQuyetDinhPdHdrRepository.save(item);
+          });
+    }
 
     List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), XhXcapQdGnvXhHdr.TABLE_NAME + "_CAN_CU");
     created.setCanCu(canCu);
@@ -235,6 +247,14 @@ public class XhXcapQdGnvXhHdrService extends BaseServiceImpl {
     XhXcapQdGnvXhHdr data = optional.get();
     List<XhXcapQdGnvXhDtl> list = xhXcapQdGnvXhDtlRepository.findByIdHdr(data.getId());
     xhXcapQdGnvXhDtlRepository.deleteAll(list);
+    if (!DataUtils.isNullObject(data.getSoQd())) {
+      xhXcapQuyetDinhPdHdrRepository.findById(data.getIdQdPd())
+          .ifPresent(item -> {
+            item.setIdQdGiaoNv(null);
+            item.setSoQdGiaoNv(null);
+            xhXcapQuyetDinhPdHdrRepository.save(item);
+          });
+    }
     fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhXcapQdGnvXhHdr.TABLE_NAME + "_CAN_CU"));
     fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhXcapQdGnvXhHdr.TABLE_NAME + "_FILE_DINH_KEM"));
     xhXcapQdGnvXhHdrRepository.delete(data);
@@ -248,6 +268,17 @@ public class XhXcapQdGnvXhHdrService extends BaseServiceImpl {
       throw new Exception("Bản ghi không tồn tại");
     }
     List<Long> listId = list.stream().map(XhXcapQdGnvXhHdr::getId).collect(Collectors.toList());
+    list.forEach(xhXcapQdGnvXhHdr -> {
+      if (!DataUtils.isNullObject(xhXcapQdGnvXhHdr.getIdQdPd())) {
+        xhXcapQuyetDinhPdHdrRepository.findById(xhXcapQdGnvXhHdr.getIdQdPd())
+            .ifPresent(item -> {
+              item.setIdQdGiaoNv(null);
+              item.setSoQdGiaoNv(null);
+              xhXcapQuyetDinhPdHdrRepository.save(item);
+            });
+      }
+    });
+
     List<XhXcapQdGnvXhDtl> listNoiDung = xhXcapQdGnvXhDtlRepository.findAllByIdHdrIn(listId);
     xhXcapQdGnvXhDtlRepository.deleteAll(listNoiDung);
     fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(XhXcapQdGnvXhHdr.TABLE_NAME + "_CAN_CU"));
