@@ -35,7 +35,7 @@ public class THKeHoachDieuChuyenCucKhacCucDtl implements Serializable {
     private Long hdrId;
 
     @Column(name = "DCNB_KE_HOACH_DC_HDR_ID")
-    private Long dcnbKeHoachDcHdrId;
+    private String dcnbKeHoachDcHdrId;
 
     @Column(name = "MA_CUC_NHAN")
     private String maCucNhan;
@@ -47,13 +47,16 @@ public class THKeHoachDieuChuyenCucKhacCucDtl implements Serializable {
     private Long tongDuToanKinhPhi;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
+    @JoinColumn(name = "HDR_ID",referencedColumnName="ID", insertable = false, updatable = false)
     @JsonIgnore
     private THKeHoachDieuChuyenCucHdr tHKeHoachDieuChuyenCucHdr;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "DCNB_KE_HOACH_DC_HDR_ID", insertable = false, updatable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler","phuongAnDieuChuyen","canCu"})
-    @NotFound(action = NotFoundAction.IGNORE)
-    private DcnbKeHoachDcHdr dcnbKeHoachDcHdr;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "DCNB_KE_HOACH_DC_HDR_ID", insertable = false, updatable = false)
+//    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler","phuongAnDieuChuyen","canCu"})
+//    @NotFound(action = NotFoundAction.IGNORE)
+//    private DcnbKeHoachDcHdr dcnbKeHoachDcHdr;
+
+    @Transient
+    private List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr ;
 }
