@@ -68,25 +68,18 @@ public class HhPhuLucHd implements Serializable {
 	String cloaiVthh;
 	String maDvi;
 	String ghiChu;
+	String noiDungPl;
+	@Temporal(TemporalType.DATE)
+	Date ngayHlucDc;
+	@Temporal(TemporalType.DATE)
+	Date ngayHlucTrc;
+	@Transient
+	private List<FileDinhKem> fileDinhKems;
 
 	@Transient
 	private List<HhPhuLucHdDtl> HhPhuLucHdDtl = new ArrayList<>();
 	@Transient
 	String tenTrangThai;
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@Fetch(value = FetchMode.SUBSELECT)
-	@JoinColumn(name = "dataId")
-	@JsonManagedReference
-	@Where(clause = "data_type='" + HhPhuLucHd.TABLE_NAME + "'")
-	private List<FileDKemJoinPhuLuc> fileDinhKems = new ArrayList<>();
-
-	public void setFileDinhKems(List<FileDKemJoinPhuLuc> children1) {
-		this.fileDinhKems.clear();
-		for (FileDKemJoinPhuLuc child1 : children1) {
-			child1.setParent(this);
-		}
-		this.fileDinhKems.addAll(children1);
-	}
 
 	public String getTenTrangThai() {
 		return TrangThaiAllEnum.getLabelById(trangThai);

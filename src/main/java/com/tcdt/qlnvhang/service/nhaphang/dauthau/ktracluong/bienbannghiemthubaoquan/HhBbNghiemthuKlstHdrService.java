@@ -17,7 +17,8 @@ public interface HhBbNghiemthuKlstHdrService extends BaseService<HhBbNghiemthuKl
 	@Transactional(rollbackOn = Exception.class)
 	HhBbNghiemthuKlstHdr update(HhBbNghiemthuKlstHdrReq objReq) throws Exception;
 //
-//	HhBbNghiemthuKlstHdr detail(String ids) throws Exception;
+//	HhBbNghiemthuKlstHdr detail(Long ids) throws Exception;
+	Object getDataKho(String maDvi) throws Exception;
 //
 //	Page<HhBbNghiemthuKlstHdr> colection(HhBbNghiemthuKlstSearchReq objReq, HttpServletRequest req) throws Exception;
 //
@@ -37,4 +38,5 @@ public interface HhBbNghiemthuKlstHdrService extends BaseService<HhBbNghiemthuKl
 //	BaseNhapHangCount count(Set<String> maDvis);
 
     void exportBbNtBq(HhQdNhapxuatSearchReq searchReq, HttpServletResponse response) throws Exception;
+    void exportPktCl(HhQdNhapxuatSearchReq searchReq, HttpServletResponse response) throws Exception;
 }

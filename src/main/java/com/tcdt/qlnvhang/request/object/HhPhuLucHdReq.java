@@ -23,6 +23,7 @@ public class HhPhuLucHdReq {
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayKy;
+	String noiDungPl;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayHluc;
@@ -32,6 +33,10 @@ public class HhPhuLucHdReq {
 	Integer tgianThienHdTrc;
 
 	Integer tgianThienHdDc;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date ngayHlucHdTrc;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date ngayHlucDc;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date tuNgayHlucTrc;
@@ -57,12 +62,10 @@ public class HhPhuLucHdReq {
 	@Size(max = 200, message = "Nội dung điều chỉnh không được vượt quá 200 ký tự")
 	String noiDung;
 
-	@NotNull(message = "Không được để trống")
 	@Size(max = 20, message = "Loại vật tư hàng hóa không được vượt quá 20 ký tự")
 	@ApiModelProperty(example = "00")
 	String loaiVthh;
 
-	@NotNull(message = "Không được để trống")
 	String cloaiVthh;
 
 	String ghiChu;

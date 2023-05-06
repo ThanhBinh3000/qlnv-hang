@@ -19,7 +19,7 @@ public interface THKeHoachDieuChuyenCucHdrRepository extends JpaRepository<THKeH
     @Query(value = "SELECT distinct hdr FROM THKeHoachDieuChuyenCucHdr hdr WHERE 1=1 " +
             "AND (:#{#param.maDVi} IS NULL OR hdr.maDvi LIKE CONCAT(:#{#param.maDVi},'%')) " +
             "AND (:#{#param.namKeHoach} IS NULL OR hdr.namKeHoach = :#{#param.namKeHoach}) " +
-            "AND (:#{#param.maTongHop} IS NULL OR LOWER(hdr.maTongHop) LIKE CONCAT('%',LOWER(:#{#param.maTongHop}),'%')) " +
+            "AND LOWER(hdr.id) LIKE CONCAT('%',LOWER(:#{#param.id}),'%') " +
             "AND ((:#{#param.tuNgay}  IS NULL OR hdr.ngayTongHop >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR hdr.ngayTongHop <= :#{#param.denNgay}) ) " +
             "AND (:#{#param.trichYeu} IS NULL OR LOWER(hdr.trichYeu) LIKE CONCAT('%',LOWER(:#{#param.trichYeu}),'%')) " +
@@ -32,7 +32,7 @@ public interface THKeHoachDieuChuyenCucHdrRepository extends JpaRepository<THKeH
 
     List<THKeHoachDieuChuyenCucHdr> findByMaTongHop(String maTongHop);
 
-@Query(value = "FROM THKeHoachDieuChuyenCucHdr h \n" +
+@Query(value = "SELECT distinct h FROM THKeHoachDieuChuyenCucHdr h \n" +
         "LEFT JOIN THKeHoachDieuChuyenNoiBoCucDtl dtl ON dtl.hdrId = h.id \n" +
         "LEFT JOIN DcnbKeHoachDcDtl khdtl ON khdtl.id = dtl.dcKeHoachDcDtlId \n" +
         "WHERE h.maDvi = ?1 AND h.trangThai = ?2 AND h.loaiDieuChuyen = ?3 \n" +
@@ -41,7 +41,7 @@ public interface THKeHoachDieuChuyenCucHdrRepository extends JpaRepository<THKeH
         "AND h.ngaytao <= ?6")
     List<THKeHoachDieuChuyenCucHdr> findByDonViAndTrangThaiTongCuc(String maDVi,String trangThai,String loaiDieuChuyen, String loaiHangHoa, String chungLoaiHangHoa, LocalDate thoiGianTongHop);
 
-    @Query(value = "FROM THKeHoachDieuChuyenCucHdr h \n" +
+    @Query(value = "SELECT distinct h FROM THKeHoachDieuChuyenCucHdr h \n" +
             "LEFT JOIN THKeHoachDieuChuyenCucKhacCucDtl dtl ON dtl.hdrId = h.id \n" +
             "LEFT JOIN DcnbKeHoachDcHdr khhdr ON khhdr.id = dtl.dcnbKeHoachDcHdrId\n" +
             "LEFT JOIN DcnbKeHoachDcDtl khdtl ON khdtl.hdrId = khhdr.id \n " +

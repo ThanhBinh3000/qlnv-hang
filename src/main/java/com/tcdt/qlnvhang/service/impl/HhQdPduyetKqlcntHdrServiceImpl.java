@@ -83,7 +83,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		if (objReq.getFileDinhKems() != null) {
 			fileDinhKemList = ObjectMapperUtils.mapAll(objReq.getFileDinhKems(), FileDKemJoinKquaLcntHdr.class);
 			fileDinhKemList.forEach(f -> {
-				f.setDataType(HhPaKhlcntHdr.TABLE_NAME);
+				f.setDataType(HhQdPduyetKqlcntHdr.TABLE_NAME);
 				f.setCreateDate(new Date());
 			});
 		}

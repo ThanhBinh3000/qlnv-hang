@@ -83,6 +83,24 @@ public class HhBbNghiemthuKlstHdrController {
 		return ResponseEntity.ok(resp);
 	}
 
+	@ApiOperation(value = "Lấy chi tiết", response = List.class)
+	@GetMapping(value = PathContains.URL_CHI_TIET + "/data-kho/{maDvi}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> getDataKho(
+			@ApiParam(value = "Mã ngăn kho hoặc lô kho", example = "1", required = true) @PathVariable("maDvi") String maDvi) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.getDataKho(maDvi));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Lấy chi tiết trace: {}", e);
+		}
+		return ResponseEntity.ok(resp);
+	}
+
 	@ApiOperation(value = "Tra cứu", response = List.class)
 	@PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
@@ -209,6 +227,28 @@ public class HhBbNghiemthuKlstHdrController {
 			throws Exception {
 		try {
 			service.exportBbNtBq(searchReq, response);
+		} catch (Exception e) {
+			// TODO: handle exception
+			log.error("Kết xuất Danh sách trace: {}", e);
+			final Map<String, Object> body = new HashMap<>();
+			body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			body.put("msg", e.getMessage());
+
+			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+			response.setCharacterEncoding("UTF-8");
+
+			final ObjectMapper mapper = new ObjectMapper();
+			mapper.writeValue(response.getOutputStream(), body);
+		}
+	}
+
+	@ApiOperation(value = "Kết xuất Danh sách", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(PathContains.URL_KET_XUAT + "/pktcl")
+	@ResponseStatus(HttpStatus.OK)
+	public void exportPktCl(@Valid @RequestBody HhQdNhapxuatSearchReq searchReq, HttpServletResponse response)
+			throws Exception {
+		try {
+			service.exportPktCl(searchReq, response);
 		} catch (Exception e) {
 			// TODO: handle exception
 			log.error("Kết xuất Danh sách trace: {}", e);

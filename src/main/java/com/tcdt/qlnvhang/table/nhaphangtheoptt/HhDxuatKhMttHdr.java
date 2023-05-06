@@ -1,13 +1,8 @@
 package com.tcdt.qlnvhang.table.nhaphangtheoptt;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.tcdt.qlnvhang.entities.FileDKemJoinDxKhMttHdr;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Where;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -96,21 +91,8 @@ public class HhDxuatKhMttHdr extends TrangThaiBaseEntity implements Serializable
     private String trangThaiTh;
     @Transient
     private String tenTrangThaiTh;
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @Fetch(value = FetchMode.SUBSELECT)
-    @JoinColumn(name = "dataId")
-    @JsonManagedReference
-    @Where(clause = "data_type='" + HhDxuatKhMttHdr.TABLE_NAME + "'")
-    private List<FileDKemJoinDxKhMttHdr> fileDinhKems = new ArrayList<>();
-
-    public void setFileDinhKems(List<FileDKemJoinDxKhMttHdr> children) {
-        this.fileDinhKems.clear();
-        for (FileDKemJoinDxKhMttHdr child : children) {
-            child.setParent(this);
-        }
-        this.fileDinhKems.addAll(children);
-    }
+    @Transient
+    private List<FileDinhKem> fileDinhKems;
     @Transient
     private List<HhDxuatKhMttSldd> children = new ArrayList<>();
 

@@ -12,6 +12,7 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.*;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDxuatKhMttCcxdg;
@@ -19,6 +20,7 @@ import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDxuatKhMttHdr;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDxuatKhMttSldd;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDxuatKhMttSlddDtl;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import org.modelmapper.ModelMapper;
@@ -49,6 +51,8 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
     private HhDxuatKhMttCcxdgRepository hhDxuatKhMttCcxdgRepository;
     @Autowired
     private HhDxuatKhMttSlddDtlRepository hhDxuatKhMttSlddDtlRepository;
+    @Autowired
+    private FileDinhKemService fileDinhKemService;
 
     public Page<HhDxuatKhMttHdr> searchPage(SearchHhDxKhMttHdrReq req)throws Exception{
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),
@@ -80,24 +84,17 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
                 throw new Exception("Số đề xuất " + req.getSoDxuat() + " đã tồn tại");
             }
         }
-        // Add danh sach file dinh kem o Master
-        List<FileDKemJoinDxKhMttHdr> fileDinhKemList = new ArrayList<FileDKemJoinDxKhMttHdr>();
-        if (req.getFileDinhKemReq() != null) {
-            fileDinhKemList = ObjectMapperUtils.mapAll(req.getFileDinhKemReq(), FileDKemJoinDxKhMttHdr.class);
-            fileDinhKemList.forEach(f -> {
-                f.setDataType(HhDxuatKhMttHdr.TABLE_NAME);
-                f.setCreateDate(new Date());
-            });
-        }
+
         HhDxuatKhMttHdr dataMap = new ModelMapper().map(req, HhDxuatKhMttHdr.class);
         dataMap.setNgayTao(getDateTimeNow());
         dataMap.setTrangThai(Contains.DUTHAO);
         dataMap.setTrangThaiTh(Contains.CHUATONGHOP);
         dataMap.setNguoiTaoId(userInfo.getId());
-        dataMap.setFileDinhKems(fileDinhKemList);
         this.validateData(dataMap,dataMap.getTrangThai());
         hhDxuatKhMttRepository.save(dataMap);
-
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKemReq())) {
+            fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), dataMap.getId(), HhDxuatKhMttHdr.TABLE_NAME + "_CAN_CU");
+        }
 
         this.saveDetail(req,dataMap.getId());
 
@@ -198,9 +195,11 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
 
         dataDTB.setNgaySua(getDateTimeNow());
         dataDTB.setNguoiSuaId(userInfo.getId());
-        dataDTB.setFileDinhKems(fileDinhKemList);
 
         hhDxuatKhMttRepository.save(dataDTB);
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKemReq())) {
+            fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), dataDTB.getId(), HhDxuatKhMttHdr.TABLE_NAME + "_CAN_CU");
+        }
 
         this.saveDetail(req,dataDTB.getId());
 
@@ -241,6 +240,8 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
         data.setTenDvi( StringUtils.isEmpty(data.getMaDvi()) ? null :mapDmucDvi.get(data.getMaDvi()));
         data.setCcXdgDtlList(hhDxuatKhMttCcxdgRepository.findAllByIdHdr(data.getId()));
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Collections.singletonList(HhDxuatKhMttHdr.TABLE_NAME + "_CAN_CU"));
+        data.setFileDinhKems(fileDinhKem);
 
         List<HhDxuatKhMttSldd> dsSlDdList = hhDxuatKhMttSlddRepository.findAllByIdHdr(qOptional.get().getId());
         for(HhDxuatKhMttSldd dsG : dsSlDdList){
