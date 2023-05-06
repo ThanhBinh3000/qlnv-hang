@@ -30,13 +30,15 @@ import javax.xml.bind.ValidationException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
-
+    @Autowired
+    private DcnbKeHoachDcHdrRepository dcHdrRepository;
     @Autowired
     private THKeHoachDieuChuyenTongCucHdrRepository tongCucHdrRepository;
 
@@ -114,6 +116,11 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
         allById.forEach(data -> {
             data.getThKeHoachDieuChuyenTongCucDtls().forEach(data1 -> {
                 Hibernate.initialize(data1.getThKeHoachDieuChuyenCucHdr());
+                data1.getThKeHoachDieuChuyenCucHdr().getThKeHoachDieuChuyenCucKhacCucDtls().forEach(data2 ->{
+                    List<Long> listId = Arrays.asList(data2.getDcnbKeHoachDcHdrId().split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+                    List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcHdrRepository.findByIdIn(listId);
+                    data2.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
+                });
             });
         });
         return allById;
