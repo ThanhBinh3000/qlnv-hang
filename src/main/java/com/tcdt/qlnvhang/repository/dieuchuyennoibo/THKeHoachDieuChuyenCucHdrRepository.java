@@ -32,31 +32,33 @@ public interface THKeHoachDieuChuyenCucHdrRepository extends JpaRepository<THKeH
 
     List<THKeHoachDieuChuyenCucHdr> findByMaTongHop(String maTongHop);
 
-@Query(value = "SELECT distinct h FROM THKeHoachDieuChuyenCucHdr h \n" +
-        "LEFT JOIN THKeHoachDieuChuyenNoiBoCucDtl dtl ON dtl.hdrId = h.id \n" +
-        "LEFT JOIN DcnbKeHoachDcDtl khdtl ON khdtl.id = dtl.dcKeHoachDcDtlId \n" +
-        "WHERE h.maDvi = ?1 AND h.trangThai = ?2 AND h.loaiDieuChuyen = ?3 \n" +
-        "AND (?4 IS NULL OR khdtl.loaiVthh = ?4) \n" +
-        "AND (?5 IS NULL OR khdtl.cloaiVthh = ?5)\n" +
-        "AND h.ngaytao <= ?6")
-    List<THKeHoachDieuChuyenCucHdr> findByDonViAndTrangThaiTongCuc(String maDVi,String trangThai,String loaiDieuChuyen, String loaiHangHoa, String chungLoaiHangHoa, LocalDate thoiGianTongHop);
-
-    @Query(nativeQuery = true,value = "SELECT distinct h FROM THKeHoachDieuChuyenCucHdr h " +
-            "LEFT JOIN THKeHoachDieuChuyenCucKhacCucDtl dtl ON dtl.hdrId = h.id " +
-            "LEFT JOIN DcnbKeHoachDcHdr khhdr ON CAST(khhdr.id AS string) = dtl.dcnbKeHoachDcHdrId" +
-            "LEFT JOIN DcnbKeHoachDcDtl khdtl ON khdtl.hdrId = khhdr.id  " +
-            "WHERE h.maDvi = ?1 AND h.trangThai = ?2 AND h.loaiDieuChuyen = ?3 " +
-            "AND (?4 IS NULL OR khdtl.loaiVthh = ?4) " +
-            "AND (?5 IS NULL OR khdtl.cloaiVthh = ?5)" +
+    @Query(value = "SELECT distinct h FROM THKeHoachDieuChuyenCucHdr h \n" +
+            "LEFT JOIN THKeHoachDieuChuyenNoiBoCucDtl dtl ON dtl.hdrId = h.id \n" +
+            "LEFT JOIN DcnbKeHoachDcDtl khdtl ON khdtl.id = dtl.dcKeHoachDcDtlId \n" +
+            "WHERE h.maDvi = ?1 AND h.trangThai = ?2 AND h.loaiDieuChuyen = ?3 \n" +
+            "AND (?4 IS NULL OR khdtl.loaiVthh = ?4) \n" +
+            "AND (?5 IS NULL OR khdtl.cloaiVthh = ?5)\n" +
             "AND h.ngaytao <= ?6")
-    List<THKeHoachDieuChuyenCucHdr> findByDonViAndTrangThaiTongCucKhacCuc(String maDVi,String trangThai,String loaiDieuChuyen, String loaiHangHoa, String chungLoaiHangHoa, LocalDate thoiGianTongHop);
-    @Query(nativeQuery = true,value = "SELECT h.ID FROM DCNB_TH_KE_HOACH_DCC_HDR h WHERE h.MA_DVI = ?1 AND h.LOAI_DC = ?2")
+    List<THKeHoachDieuChuyenCucHdr> findByDonViAndTrangThaiTongCuc(String maDVi, String trangThai, String loaiDieuChuyen, String loaiHangHoa, String chungLoaiHangHoa, LocalDate thoiGianTongHop);
+
+    @Query(nativeQuery = true, value = "SELECT  h.* FROM DCNB_TH_KE_HOACH_DCC_HDR h  " +
+            "            LEFT JOIN DCNB_TH_KE_HOACH_DCC_KC_DTL dtl ON dtl.hdr_Id = h.id " +
+            "            LEFT JOIN DCNB_KE_HOACH_DC_HDR khhdr ON to_char(khhdr.id) = dtl.dcnb_Ke_Hoach_Dc_Hdr_Id" +
+            "            LEFT JOIN DCNB_KE_HOACH_DC_DTL khdtl ON khdtl.hdr_Id = khhdr.id " +
+            "            WHERE h.ma_Dvi = :maDVi AND h.trang_Thai = :trangThai AND h.loai_dc = :loaiDieuChuyen " +
+            "            AND (:loaiHangHoa IS NULL OR khdtl.loai_Vthh = :loaiHangHoa)  " +
+            "            AND (:chungLoaiHangHoa IS NULL OR khdtl.cloai_Vthh = :chungLoaiHangHoa)" +
+            "            AND h.ngay_tao <= :thoiGianTongHop")
+    List<THKeHoachDieuChuyenCucHdr> findByDonViAndTrangThaiTongCucKhacCuc(String maDVi, String trangThai, String loaiDieuChuyen, String loaiHangHoa, String chungLoaiHangHoa, LocalDate thoiGianTongHop);
+
+    @Query(nativeQuery = true, value = "SELECT h.ID FROM DCNB_TH_KE_HOACH_DCC_HDR h WHERE h.MA_DVI = ?1 AND h.LOAI_DC = ?2")
     List<THKeHoachDieuChuyenCucHdr> findByDonViAndLoaiDc(String maDVi, String loaiDieuChuyen);
-    @Query(nativeQuery = true,value = "SELECT h.ID FROM DCNB_TH_KE_HOACH_DCC_HDR h WHERE h.MA_DVI = ?1 AND h.LOAI_DC = ?2")
+
+    @Query(nativeQuery = true, value = "SELECT h.ID FROM DCNB_TH_KE_HOACH_DCC_HDR h WHERE h.MA_DVI = ?1 AND h.LOAI_DC = ?2")
     void insertDataDtl(Long id, Long dcnbKeHoachDcHdrId);
 
     @Query(value = "SELECT distinct hdr FROM THKeHoachDieuChuyenCucHdr hdr WHERE 1=1 " +
-            "AND (:#{#param.loaiDieuChuyen} IS NULL OR hdr.loaiDieuChuyen = :#{#param.loaiDieuChuyen}) "+
+            "AND (:#{#param.loaiDieuChuyen} IS NULL OR hdr.loaiDieuChuyen = :#{#param.loaiDieuChuyen}) " +
             "AND (:#{#param.namKeHoach} IS NULL OR hdr.namKeHoach = :#{#param.namKeHoach}) " +
             "AND (:#{#param.soDeXuat} IS NULL OR LOWER(hdr.soDeXuat) LIKE CONCAT('%',LOWER(:#{#param.soDeXuat}),'%')) ")
     List<THKeHoachDieuChuyenCucHdr> filterSoDeXuat(@Param("param") TongHopKeHoachDieuChuyenSearch req);
