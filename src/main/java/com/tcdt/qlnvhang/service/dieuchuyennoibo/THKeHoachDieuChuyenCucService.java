@@ -245,18 +245,18 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
     public THKeHoachDieuChuyenCucHdr approveTongHop(CustomUserDetails currentUser, StatusReq statusReq, Optional<THKeHoachDieuChuyenCucHdr> optional) throws Exception {
         String status = optional.get().getTrangThai() + statusReq.getTrangThai();
         switch (status) {
+            case Contains.DUTHAO + Contains.CHODUYET_TP:
             case Contains.YEU_CAU_XAC_DINH_DIEM_NHAP + Contains.CHODUYET_TP:
+            case Contains.TU_CHOI_TP + Contains.CHODUYET_TP:
                 optional.get().setNguoiGDuyetId(currentUser.getUser().getId());
                 optional.get().setNgayGDuyet(LocalDate.now());
                 break;
             case Contains.CHODUYET_TP + Contains.TU_CHOI_TP:
-                optional.get().setTrangThai(Contains.YEU_CAU_XAC_DINH_DIEM_NHAP);
                 optional.get().setNguoiDuyetTpId(currentUser.getUser().getId());
                 optional.get().setNgayDuyetTp(LocalDate.now());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 break;
             case Contains.TU_CHOI_LDC + Contains.CHODUYET_TP:
-            case Contains.TU_CHOI_TP + Contains.CHODUYET_TP:
             case Contains.CHODUYET_LDC + Contains.TU_CHOI_LDC:
                 optional.get().setNguoiDuyetLdcId(currentUser.getUser().getId());
                 optional.get().setNgayDuyetLdc(LocalDate.now());
