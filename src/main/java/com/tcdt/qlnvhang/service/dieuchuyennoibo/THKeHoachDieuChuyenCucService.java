@@ -33,6 +33,7 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import javax.xml.bind.ValidationException;
+import java.sql.NClob;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -161,9 +162,9 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
             data.getThKeHoachDieuChuyenNoiBoCucDtls().forEach(data1 -> {
                 Hibernate.initialize(data1.getDcnbKeHoachDcHdr());
             });
-            data.getThKeHoachDieuChuyenCucKhacCucDtls().forEach(data2 ->{
-                Hibernate.initialize(data2.getDcnbKeHoachDcHdr());
-            });
+//            data.getThKeHoachDieuChuyenCucKhacCucDtls().forEach(data2 ->{
+//                Hibernate.initialize(data2.getDcnbKeHoachDcHdr());
+//            });
         });
         return allById;
     }
@@ -251,8 +252,9 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                 optional.get().setNgayDuyetTp(LocalDate.now());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 break;
+            case Contains.TU_CHOI_LDC + Contains.CHODUYET_TP:
+            case Contains.TU_CHOI_TP + Contains.CHODUYET_TP:
             case Contains.CHODUYET_LDC + Contains.TU_CHOI_LDC:
-                optional.get().setTrangThai(Contains.YEU_CAU_XAC_DINH_DIEM_NHAP);
                 optional.get().setNguoiDuyetLdcId(currentUser.getUser().getId());
                 optional.get().setNgayDuyetLdc(LocalDate.now());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
@@ -330,25 +332,26 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         for (QlnvDmDonvi cqt : donvis) {
             req.setMaDVi(cqt.getMaDvi());
             List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdrs = dcHdrRepository.findByDonViAndTrangThaiCuc(req.getMaDVi(), Contains.DADUYET_LDCC, Contains.GIUA_2_CUC_DTNN_KV, Contains.DIEU_CHUYEN,req.getThoiGianTongHop());
-//            Map<String, List<DcnbKeHoachDcHdr>> postsPerType = dcnbKeHoachDcHdrs.stream()
-//                    .collect(groupingBy(dcnbKeHoachDcHdr -> dcnbKeHoachDcHdr.getMaCucNhan()));
-//            for (Map.Entry<String, List<DcnbKeHoachDcHdr>> entry : postsPerType.entrySet()) {
-//                THKeHoachDieuChuyenCucKhacCucDtlReq dtl = new THKeHoachDieuChuyenCucKhacCucDtlReq();
-//                dtl.setMaCucNhan(entry.getKey());
-//                List<DcnbKeHoachDcHdr> khh = entry.getValue();
-//                dtl.setTenCucNhan(khh.get(0).getTenCucNhan());
-//                dtl.setDcnbKeHoachDcHdrs(khh);
-//                dtl.setId(null);
-//                dtl.setHdrId(null);
-            for (DcnbKeHoachDcHdr khh : dcnbKeHoachDcHdrs) {
-                Hibernate.initialize(khh.getDanhSachHangHoa());
-                DcnbKeHoachDcHdr khhc = SerializationUtils.clone(khh);
-                THKeHoachDieuChuyenCucKhacCucDtlReq dtl = new ModelMapper().map(khhc, THKeHoachDieuChuyenCucKhacCucDtlReq.class);
+            Map<String, List<DcnbKeHoachDcHdr>> postsPerType = dcnbKeHoachDcHdrs.stream()
+                    .collect(groupingBy(dcnbKeHoachDcHdr -> dcnbKeHoachDcHdr.getMaCucNhan()));
+            for (Map.Entry<String, List<DcnbKeHoachDcHdr>> entry : postsPerType.entrySet()) {
+                THKeHoachDieuChuyenCucKhacCucDtlReq dtl = new THKeHoachDieuChuyenCucKhacCucDtlReq();
+                dtl.setMaCucNhan(entry.getKey());
+                List<DcnbKeHoachDcHdr> khhc = entry.getValue();
+                dtl.setTenCucNhan(khhc.get(0).getTenCucNhan());
+                List<Long> listId = khhc.stream().map(DcnbKeHoachDcHdr::getId).collect(Collectors.toList());
+                String idString = listId.stream().map(Objects::toString).collect(Collectors.joining(","));
+                dtl.setDcnbKeHoachDcHdrId(idString);
+                dtl.setDcnbKeHoachDcHdrs(khhc);
                 dtl.setId(null);
-                dtl.setDcnbKeHoachDcHdrId(khh.getId());
                 dtl.setHdrId(null);
-                List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(dtl.getDcnbKeHoachDcHdrId());
-                dtl.setDcnbKeHoachDcDtls(dcnbKeHoachDcDtls);
+//            for (DcnbKeHoachDcHdr khh : dcnbKeHoachDcHdrs) {
+//                Hibernate.initialize(khh.getDanhSachHangHoa());
+//                DcnbKeHoachDcHdr khhc = SerializationUtils.clone(khh);
+//                THKeHoachDieuChuyenCucKhacCucDtlReq dtl = new ModelMapper().map(khhc, THKeHoachDieuChuyenCucKhacCucDtlReq.class);
+//                dtl.setId(null);
+//                dtl.setDcnbKeHoachDcHdrId(khh.getId());
+//                dtl.setHdrId(null);
                 Long tongDuToanKinhPhi = dcnbKeHoachDcDtlRepository.findByMaDviCucAndCucNhan(currentUser.getDvql(),dtl.getMaCucNhan(),Contains.DADUYET_LDCC,Contains.GIUA_2_CUC_DTNN_KV,Contains.DIEU_CHUYEN,req.getThoiGianTongHop());
                 dtl.setTongDuToanKinhPhi((tongDuToanKinhPhi == null) ? 0 : tongDuToanKinhPhi);
                 result.add(dtl);
