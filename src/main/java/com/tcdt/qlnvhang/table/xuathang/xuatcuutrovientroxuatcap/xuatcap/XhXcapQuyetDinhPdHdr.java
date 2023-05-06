@@ -29,7 +29,9 @@ public class XhXcapQuyetDinhPdHdr extends BaseEntity implements Serializable {
   private LocalDate ngayKy;
   private LocalDate ngayHluc;
   private Long idQdPd;
-  private String soQdPd ;
+  private String soQdPd;
+  private Long idQdGiaoNv;
+  private String soQdGiaoNv;
   private LocalDate ngayHlucQdPd;
   private String trichYeu;
   private String trangThai;

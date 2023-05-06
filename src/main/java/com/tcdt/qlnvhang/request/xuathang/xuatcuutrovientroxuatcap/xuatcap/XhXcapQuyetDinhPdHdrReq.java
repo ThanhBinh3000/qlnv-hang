@@ -19,6 +19,8 @@ public class XhXcapQuyetDinhPdHdrReq {
   private LocalDate ngayHluc;
   private Long idQdPd;
   private String soQdPd ;
+  private Long idQdGiaoNv;
+  private String soQdGiaoNv;
   private LocalDate ngayHlucQdPd;
   private String trichYeu;
   private String trangThai;
