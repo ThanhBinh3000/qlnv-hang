@@ -618,7 +618,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         String title = "Danh sách kế hoạch đề xuất lựa chọn nhà thầu";
         String[] rowsName;
         if (objReq.getLoaiVthh().startsWith("02")) {
-            rowsName = new String[]{"STT", "Số tờ trình", "Năm kế hoạch", "Ngày lập KH", "Ngày duyệt KH", "Số QĐ giao chỉ tiêu", "Loại hàng hóa",
+            rowsName = new String[]{"STT", "Số kế hoạch/ tờ trình", "Năm kế hoạch", "Ngày lập KH", "Ngày duyệt KH", "Số QĐ giao chỉ tiêu", "Loại hàng hóa",
                     "Tổng số gói thầu", "Số gói thầu đã trúng", "SL HĐ đã ký", "Số QĐ duyệt KHLCNT", "Thời hạn thực hiện dự án", "Trạng thái đề xuất"};
         } else {
             rowsName = new String[]{"STT", "Số tờ trình", "Năm kế hoạch", "Ngày lập KH", "Ngày duyệt KH", "Số QĐ giao chỉ tiêu", "Loại hàng hóa",

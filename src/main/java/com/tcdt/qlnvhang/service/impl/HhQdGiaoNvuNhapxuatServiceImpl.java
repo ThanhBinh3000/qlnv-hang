@@ -501,8 +501,8 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		List<NhQdGiaoNvuNhapxuatHdr> data = page.getContent();
 
 		String title = "Danh sách quyết định giao nhiệm vụ nhập hàng";
-		String[] rowsName = new String[]{"STT", "Số quyết định", "Ngày quyết định", "Số hợp đồng", "Năm Nhập", "Loại hàng hóa", "Chủng loại hàng hóa",
-				"Thời gian nhập kho muộn nhất", "Trích Yếu Quyết Định", "Trạng thái", "Trạng thái NH"};
+		String[] rowsName = new String[]{"STT","Năm Nhập", "Số quyết định", "Ngày quyết định", "Số hợp đồng", "Loại hàng hóa", "Chủng loại hàng hóa",
+				"Thời gian nhập kho muộn nhất", "Trích Yếu Quyết Định", "Trạng thái QĐ", "Trạng thái NH"};
 		String filename = "Danh_sach_quyet_dinh_giao_nhiem_vu_nhap_hang.xlsx";
 
 		List<Object[]> dataList = new ArrayList<Object[]>();
@@ -511,10 +511,10 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			NhQdGiaoNvuNhapxuatHdr qd = data.get(i);
 			objs = new Object[rowsName.length];
 			objs[0] = i;
-			objs[1] = qd.getSoQd();
-			objs[2] = convertDate(qd.getNgayQdinh());
-			objs[3] = qd.getSoHd();
-			objs[4] = qd.getNamNhap();
+			objs[1] = qd.getNamNhap();
+			objs[2] = qd.getSoQd();
+			objs[3] = convertDate(qd.getNgayQdinh());
+			objs[4] = qd.getSoHd();
 			objs[5] = qd.getTenLoaiVthh();
 			objs[6] = qd.getCloaiVthh();
 			objs[7] = convertDate(qd.getTgianNkho());
