@@ -137,7 +137,8 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
             List<THKeHoachDieuChuyenCucKhacCucDtlReq> planCuc = createPlanCuc(currentUser, tongHopSearch);
             List<THKeHoachDieuChuyenCucKhacCucDtl> dtls = new ArrayList<>();
             for (THKeHoachDieuChuyenCucKhacCucDtlReq req : planCuc) {
-                THKeHoachDieuChuyenCucKhacCucDtl dtl = new ModelMapper().map(req, THKeHoachDieuChuyenCucKhacCucDtl.class);
+                THKeHoachDieuChuyenCucKhacCucDtl dtl = new THKeHoachDieuChuyenCucKhacCucDtl();
+                BeanUtils.copyProperties(req,dtl);
                 dtl.setHdrId(data.getId());
                 dtls.add(dtl);
             }
@@ -162,9 +163,11 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
             data.getThKeHoachDieuChuyenNoiBoCucDtls().forEach(data1 -> {
                 Hibernate.initialize(data1.getDcnbKeHoachDcHdr());
             });
-//            data.getThKeHoachDieuChuyenCucKhacCucDtls().forEach(data2 ->{
-//                Hibernate.initialize(data2.getDcnbKeHoachDcHdr());
-//            });
+            data.getThKeHoachDieuChuyenCucKhacCucDtls().forEach(data2 ->{
+                List<Long> listId = Arrays.asList(data2.getDcnbKeHoachDcHdrId().split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+                List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcHdrRepository.findByIdIn(listId);
+                data2.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
+            });
         });
         return allById;
     }
