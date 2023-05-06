@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcHdr;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.sql.NClob;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
 public class THKeHoachDieuChuyenCucKhacCucDtlReq {
 //    private LocalDate ngayGduyetTc;
     private Long hdrId;
-    private Long dcnbKeHoachDcHdrId;
+    private String dcnbKeHoachDcHdrId;
     private Long id;
     private String maCucNhan;
     private String tenCucNhan;
@@ -51,7 +52,5 @@ public class THKeHoachDieuChuyenCucKhacCucDtlReq {
 //    private Boolean daXdinhDiemNhap;
 //    private String tenTrangThai;
 
-    private List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdrs = new ArrayList<>();
-
-    private List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = new ArrayList<>();
+      private List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdrs = new ArrayList<>();
 }
