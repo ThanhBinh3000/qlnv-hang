@@ -36,7 +36,7 @@ public class THKeHoachDieuChuyenNoiBoCucDtl implements Serializable {
     @Column(name = "DCNB_KE_HOACH_DC_DTL_ID")
     private Long dcKeHoachDcDtlId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "DCNB_TH_KE_HOACH_DCC_HDR_ID", insertable = false, updatable = false)
     @JsonIgnore
     private THKeHoachDieuChuyenCucHdr tHKeHoachDieuChuyenCucHdr;

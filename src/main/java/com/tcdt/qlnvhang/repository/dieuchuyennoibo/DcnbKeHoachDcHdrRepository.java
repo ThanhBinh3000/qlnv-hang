@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -56,4 +57,9 @@ public interface DcnbKeHoachDcHdrRepository extends JpaRepository<DcnbKeHoachDcH
     @Modifying
     @Query(nativeQuery = true, value = "UPDATE  DCNB_KE_HOACH_DC_HDR SET  TRANG_THAI = '59' WHERE PARENT_ID = (SELECT HDR_ID FROM DCNB_KE_HOACH_DC_DTL WHERE ?1) AND TYPE= ?2")
     void updateTrangThaiNdc(Long dtlId, String type);
+
+    @Transactional()
+    @Modifying
+    @Query(value = "UPDATE DCNB_KE_HOACH_DC_HDR SET ID_THOP = :idTh WHERE ID IN :danhSachKeHoach", nativeQuery = true)
+    void updateIdTongHop(List<Long> danhSachKeHoach, Long idTh);
 }

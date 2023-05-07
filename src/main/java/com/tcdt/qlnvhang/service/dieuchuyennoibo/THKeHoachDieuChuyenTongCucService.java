@@ -29,11 +29,10 @@ import javax.transaction.Transactional;
 import javax.xml.bind.ValidationException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
 
 @Service
 public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
@@ -116,11 +115,11 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
         allById.forEach(data -> {
             data.getThKeHoachDieuChuyenTongCucDtls().forEach(data1 -> {
                 Hibernate.initialize(data1.getThKeHoachDieuChuyenCucHdr());
-                data1.getThKeHoachDieuChuyenCucHdr().getThKeHoachDieuChuyenCucKhacCucDtls().forEach(data2 ->{
-                    List<Long> listId = Arrays.asList(data2.getDcnbKeHoachDcHdrId().split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
-                    List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcHdrRepository.findByIdIn(listId);
-                    data2.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
-                });
+//                data1.getThKeHoachDieuChuyenCucHdr().getThKeHoachDieuChuyenCucKhacCucDtls().forEach(data2 ->{
+//                    List<Long> listId = Arrays.asList(data2.getDcnbKeHoachDcHdrId().split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+//                    List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcHdrRepository.findByIdIn(listId);
+//                    data2.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
+//                });
             });
         });
         return allById;
@@ -191,6 +190,7 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
             if (req.getLoaiDieuChuyen().equals(Contains.GIUA_2_CHI_CUC_TRONG_1_CUC)) {
                 List<THKeHoachDieuChuyenCucHdr> dcnbKeHoachDcHdrs = thKeHoachDieuChuyenCucHdrRepository.findByDonViAndTrangThaiTongCuc(req.getMaDVi(), Contains.DADUYET_LDC, Contains.GIUA_2_CHI_CUC_TRONG_1_CUC, req.getLoaiHangHoa(), req.getChungLoaiHangHoa(), thoiGianTongHop.toLocalDate());
                 for (THKeHoachDieuChuyenCucHdr entry : dcnbKeHoachDcHdrs) {
+                    Hibernate.initialize(entry.getThKeHoachDieuChuyenCucKhacCucDtls());
                     THKeHoachDieuChuyenCucHdr khhc = SerializationUtils.clone(entry);
                     ThKeHoachDieuChuyenTongCucDtlReq chiTiet = new ModelMapper().map(khhc, ThKeHoachDieuChuyenTongCucDtlReq.class);
                     chiTiet.setId(null);
@@ -201,15 +201,32 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
                     result.add(chiTiet);
                 }
             } else if (req.getLoaiDieuChuyen().equals(Contains.GIUA_2_CUC_DTNN_KV)) {
-                List<THKeHoachDieuChuyenCucHdr> dcnbKeHoachDcHdrs = thKeHoachDieuChuyenCucHdrRepository.findByDonViAndTrangThaiTongCucKhacCuc(req.getMaDVi(), Contains.DADUYET_LDC, Contains.GIUA_2_CUC_DTNN_KV, req.getLoaiHangHoa(), req.getChungLoaiHangHoa(), thoiGianTongHop.toLocalDate());
-                for (THKeHoachDieuChuyenCucHdr entry : dcnbKeHoachDcHdrs) {
-                    Hibernate.initialize(entry.getThKeHoachDieuChuyenCucKhacCucDtls());
-                    THKeHoachDieuChuyenCucHdr khhc = SerializationUtils.clone(entry);
-                    ThKeHoachDieuChuyenTongCucDtlReq chiTiet = new ModelMapper().map(khhc, ThKeHoachDieuChuyenTongCucDtlReq.class);
+                List<THKeHoachDieuChuyenCucKhacCucDtl> dcnbKeHoachDcHdrs = thKeHoachDieuChuyenCucKhacCucDtlRepository.findByDonViAndTrangThaiAndLoaiDcCuc(req.getMaDVi(), Contains.DADUYET_LDC, Contains.GIUA_2_CUC_DTNN_KV, req.getLoaiHangHoa(), req.getChungLoaiHangHoa(), thoiGianTongHop.toLocalDate());
+                Map<String, List<THKeHoachDieuChuyenCucKhacCucDtl>> postsPerType = dcnbKeHoachDcHdrs.stream()
+                        .collect(groupingBy(THKeHoachDieuChuyenCucKhacCucDtl::getMaCucNhan));
+                for (Map.Entry<String, List<THKeHoachDieuChuyenCucKhacCucDtl>> entry : postsPerType.entrySet()) {
+                    ThKeHoachDieuChuyenTongCucDtlReq chiTiet = new ThKeHoachDieuChuyenTongCucDtlReq();
+//                    Hibernate.initialize();
+//                    THKeHoachDieuChuyenCucHdr khhc = SerializationUtils.clone(entry);
+//                    ThKeHoachDieuChuyenTongCucDtlReq chiTiet = new ModelMapper().map(khhc, ThKeHoachDieuChuyenTongCucDtlReq.class);
+                    List<THKeHoachDieuChuyenCucKhacCucDtl> thkh = entry.getValue();
+                    chiTiet.setMaCucNhan(entry.getKey());
+                    chiTiet.setTenCucNhan(thkh.get(0).getTenCucNhan());
                     chiTiet.setId(null);
                     chiTiet.setHdrId(null);
-                    chiTiet.setThKhDcHdrId(khhc.getId());
-                    Long tongDuToanKp = dcnbKeHoachDcDtlRepository.findByMaDviCucAndTypeAndLoaiDcTongCucCuc(req.getMaDVi(), Contains.DIEU_CHUYEN, Contains.GIUA_2_CUC_DTNN_KV, Contains.DADUYET_LDCC, req.getLoaiHangHoa(), req.getChungLoaiHangHoa(), req.getThoiGianTongHop());
+                    thkh.forEach(data ->{
+                        chiTiet.setThKhDcDtlId(data.getId());
+                        chiTiet.setThKhDcHdrId(data.getHdrId());
+                        List<THKeHoachDieuChuyenCucKhacCucDtl> chiTietKh = thKeHoachDieuChuyenCucKhacCucDtlRepository.findAllByHdrIdAndId(chiTiet.getThKhDcHdrId(),chiTiet.getThKhDcDtlId());
+                        chiTiet.setThKeHoachDieuChuyenCucKhacCucDtls(chiTietKh);
+                        chiTietKh.forEach(data2 ->{
+                    List<Long> listId = Arrays.asList(data2.getDcnbKeHoachDcHdrId().split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+                    List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcHdrRepository.findByIdIn(listId);
+                    data2.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
+                });
+                    });
+
+                    Long tongDuToanKp = dcnbKeHoachDcDtlRepository.findByMaDviCucAndTypeAndLoaiDcTongCucCuc(req.getMaDVi(), chiTiet.getMaCucNhan(), Contains.DIEU_CHUYEN, Contains.GIUA_2_CUC_DTNN_KV, Contains.DADUYET_LDCC, req.getLoaiHangHoa(), req.getChungLoaiHangHoa(), req.getThoiGianTongHop());
                     chiTiet.setTongDuToanKp(tongDuToanKp);
                     result.add(chiTiet);
                 }

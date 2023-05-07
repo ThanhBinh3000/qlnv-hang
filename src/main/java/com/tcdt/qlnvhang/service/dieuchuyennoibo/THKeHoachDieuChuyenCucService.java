@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
 
+import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.tonghop.XhThopDxKhBdgDtl;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.*;
@@ -131,6 +132,11 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
             dtls.forEach(e -> e.setTHKeHoachDieuChuyenCucHdr(data));
             data.setThKeHoachDieuChuyenNoiBoCucDtls(dtls);
             THKeHoachDieuChuyenCucHdr created = thKeHoachDieuChuyenHdrRepository.save(data);
+            if (created.getId() > 0 && created.getThKeHoachDieuChuyenNoiBoCucDtls().size() > 0) {
+                List<Long> danhSachKeHoach = created.getThKeHoachDieuChuyenNoiBoCucDtls().stream().map(THKeHoachDieuChuyenNoiBoCucDtl::getDcKeHoachDcHdrId)
+                        .collect(Collectors.toList());
+                dcHdrRepository.updateIdTongHop(danhSachKeHoach,created.getId());
+            }
             return created;
         } else if (Objects.equals(data.getLoaiDieuChuyen(), Contains.GIUA_2_CUC_DTNN_KV)) {
             TongHopKeHoachDieuChuyenSearch tongHopSearch = new ModelMapper().map(objReq, TongHopKeHoachDieuChuyenSearch.class);
@@ -145,6 +151,12 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
             dtls.forEach(e -> e.setTHKeHoachDieuChuyenCucHdr(data));
             data.setThKeHoachDieuChuyenCucKhacCucDtls(dtls);
             THKeHoachDieuChuyenCucHdr created = thKeHoachDieuChuyenHdrRepository.save(data);
+            if (created.getId() > 0 && created.getThKeHoachDieuChuyenCucKhacCucDtls().size() > 0) {
+                created.getThKeHoachDieuChuyenCucKhacCucDtls().forEach(dataHdrId -> {
+                    List<Long> listId = Arrays.asList(dataHdrId.getDcnbKeHoachDcHdrId().split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+                    dcHdrRepository.updateIdTongHop(listId,dataHdrId.getHdrId());
+                });
+            }
             return created;
         }
         return null;
@@ -336,7 +348,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
             req.setMaDVi(cqt.getMaDvi());
             List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdrs = dcHdrRepository.findByDonViAndTrangThaiCuc(req.getMaDVi(), Contains.DADUYET_LDCC, Contains.GIUA_2_CUC_DTNN_KV, Contains.DIEU_CHUYEN,req.getThoiGianTongHop());
             Map<String, List<DcnbKeHoachDcHdr>> postsPerType = dcnbKeHoachDcHdrs.stream()
-                    .collect(groupingBy(dcnbKeHoachDcHdr -> dcnbKeHoachDcHdr.getMaCucNhan()));
+                    .collect(groupingBy(DcnbKeHoachDcHdr::getMaCucNhan));
             for (Map.Entry<String, List<DcnbKeHoachDcHdr>> entry : postsPerType.entrySet()) {
                 THKeHoachDieuChuyenCucKhacCucDtlReq dtl = new THKeHoachDieuChuyenCucKhacCucDtlReq();
                 dtl.setMaCucNhan(entry.getKey());
