@@ -44,11 +44,11 @@ public interface DcnbKeHoachDcDtlRepository extends JpaRepository<DcnbKeHoachDcD
 
     @Query(value ="SELECT SUM(d.duToanKphi) FROM DcnbKeHoachDcDtl d " +
             "LEFT JOIN DcnbKeHoachDcHdr h ON h.id = d.hdrId " +
-            "WHERE h.maDviCuc = ?1 AND h.type = ?2 AND h.loaiDc = ?3 AND h.trangThai = ?4 " +
+            "WHERE h.maDviCuc = ?1 AND h.maCucNhan = ?2 AND h.type = ?2 AND h.loaiDc = ?3 AND h.trangThai = ?4 " +
             "AND (?5 IS NULL OR d.loaiVthh = ?5 )" +
             "AND (?6 IS NULL OR d.cloaiVthh = ?6)"+
             "AND h.ngayTao <= ?7")
-    Long findByMaDviCucAndTypeAndLoaiDcTongCucCuc(String maDVi, String type, String loaiDieuChuyen, String trangThai,String loaiHH, String chungLoaiHH , LocalDateTime thoigianTongHop);
+    Long findByMaDviCucAndTypeAndLoaiDcTongCucCuc(String maDVi,String cucNhan, String type, String loaiDieuChuyen, String trangThai,String loaiHH, String chungLoaiHH , LocalDateTime thoigianTongHop);
 
     @Query(nativeQuery = true,value = "SELECT * FROM DCNB_KE_HOACH_DC_DTL d " +
             "WHERE d.HDR_ID = ?1 AND (?2 IS NULL OR d.LOAI_VTHH = ?2) AND (?3 IS NULL OR d.CLOAI_VTHH = ?3)")

@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.THKeHoachDieuChuyenCucKhacCucDtl;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -69,6 +70,12 @@ public class ThKeHoachDieuChuyenTongCucDtlReq {
 
     private String tenDvi;
 
+    private String maCucNhan;
+
+    private String tenCucNhan;
+
     private LocalDateTime thoiGianTongHop;
+
+    List<THKeHoachDieuChuyenCucKhacCucDtl> thKeHoachDieuChuyenCucKhacCucDtls = new ArrayList<>();
 
 }
