@@ -53,6 +53,10 @@ public class THKeHoachDieuChuyenTongCucDtl implements Serializable {
     @Column(name = "TRICH_YEU")
     private String trichYeu;
 
+    @Column(name = "DU_TOAN_KP")
+    private Long tongDuToanKp;
+
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HDR_ID",insertable = false,updatable = false)
     @JsonIgnore
