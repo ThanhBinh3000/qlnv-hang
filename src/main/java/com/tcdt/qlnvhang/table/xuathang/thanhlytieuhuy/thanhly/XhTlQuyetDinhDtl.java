@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhXcapQuyetDinhPdDtl;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 
@@ -12,7 +11,7 @@ import java.time.LocalDate;
 import java.util.Map;
 
 @Entity
-@Table(name = XhXcapQuyetDinhPdDtl.TABLE_NAME)
+@Table(name = XhTlQuyetDinhDtl.TABLE_NAME)
 @Data
 public class XhTlQuyetDinhDtl implements Serializable {
 
@@ -32,11 +31,14 @@ public class XhTlQuyetDinhDtl implements Serializable {
   private BigDecimal slHienTai;
   private BigDecimal slDeXuat;
   private BigDecimal slDaDuyet;
+  private BigDecimal slCon;
+  private BigDecimal donGia;
   private BigDecimal thanhTien;
   private LocalDate ngayNhapKho;
   private LocalDate ngayDeXuat;
   private LocalDate ngayTongHop;
   private String lyDo;
+  private String ketQua;
   private String type;
 
   @Transient
