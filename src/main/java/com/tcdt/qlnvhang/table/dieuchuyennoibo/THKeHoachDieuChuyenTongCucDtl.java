@@ -32,24 +32,41 @@ public class THKeHoachDieuChuyenTongCucDtl implements Serializable {
     @Column(name = "DCNB_TH_KE_HOACH_DCC_HDR_ID",insertable = true,updatable = true)
     private Long thKhDcHdrId;
 
-    @Column(name = "DCNB_KE_HOACH_DC_HDR_ID",insertable = true,updatable = true)
-    private Long keHoachDcHdrId;
-
     @Column(name = "DCNB_TH_KE_HOACH_DCC_DTL_ID",insertable = true,updatable = true)
     private Long thKhDcDtlId;
 
-    @Column(name = "DCNB_KE_HOACH_DC_DTL_ID",insertable = true,updatable = true)
-    private Long keHoachDcDtlId;
+    @Column(name = "MA_CUC_NHAN")
+    private String maCucNhan;
+
+    @Column(name = "SO_DXUAT")
+    private String soDxuat;
+
+    @Column(name = "TEN_CUC_NHAN")
+    private String tenCucNhan;
+
+    @Column(name = "MA_CUC_DXUAT")
+    private String maCucDxuat;
+
+    @Column(name = "TEN_CUC_DXUAT")
+    private String tenCucDxuat;
+
+    @Column(name = "TRICH_YEU")
+    private String trichYeu;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HDR_ID",insertable = false,updatable = false)
     @JsonIgnore
     private THKeHoachDieuChuyenTongCucHdr thKeHoachDieuChuyenTongCucHdr;
 
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "DCNB_TH_KE_HOACH_DCC_HDR_ID",insertable = false,updatable = false)
+//    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler","ngayTao","nguoiTaoId","ngaySua","nguoiSuaId"})
+//    @NotFound(action = NotFoundAction.IGNORE)
+//    private THKeHoachDieuChuyenCucHdr thKeHoachDieuChuyenCucHdr;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "DCNB_TH_KE_HOACH_DCC_HDR_ID",insertable = false,updatable = false)
+    @JoinColumn(name = "DCNB_TH_KE_HOACH_DCC_DTL_ID",insertable = false,updatable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler","ngayTao","nguoiTaoId","ngaySua","nguoiSuaId"})
     @NotFound(action = NotFoundAction.IGNORE)
-    private THKeHoachDieuChuyenCucHdr thKeHoachDieuChuyenCucHdr;
-
+    private THKeHoachDieuChuyenCucKhacCucDtl thKeHoachDieuChuyenCucKhacCucDtl;
 }
