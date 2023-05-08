@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.table.xuathang.thanhly;
+package com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import lombok.Data;
