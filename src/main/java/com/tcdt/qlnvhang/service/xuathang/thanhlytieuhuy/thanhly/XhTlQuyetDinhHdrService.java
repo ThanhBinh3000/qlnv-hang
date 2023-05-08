@@ -78,7 +78,7 @@ public class XhTlQuyetDinhHdrService extends BaseServiceImpl {
     data.setMaDvi(currentUser.getUser().getDepartment());
     data.setTrangThai(Contains.DUTHAO);
 
-    data.getQuyetDinhPdDtl().forEach(s -> {
+    data.getQuyetDinhDtl().forEach(s -> {
       s.setQuyetDinhHdr(data);
     });
 
@@ -86,7 +86,7 @@ public class XhTlQuyetDinhHdrService extends BaseServiceImpl {
 
     //update so xuat cap vao bang qd cuu tro
 //    if (!DataUtils.isNullObject(data.getIdQd())) {
-//      Optional<XhCtVtQuyetDinhPdHdr> qdCuuTro = xhCtVtQdPdHdrRepository.findById(data.getIdQd());
+//      Optional<XhCtVtQuyetDinhHdr> qdCuuTro = xhCtVtQdPdHdrRepository.findById(data.getIdQd());
 //      if (qdCuuTro.isPresent()) {
 //        qdCuuTro.get().setIdXc(created.getId());
 //        qdCuuTro.get().setSoXc(created.getSoQd());
@@ -121,18 +121,18 @@ public class XhTlQuyetDinhHdrService extends BaseServiceImpl {
     }
 
     XhTlQuyetDinhHdr data = optional.get();
-    objReq.getQuyetDinhPdDtl().forEach(s -> {
+    objReq.getQuyetDinhDtl().forEach(s -> {
       s.setQuyetDinhHdr(null);
     });
     BeanUtils.copyProperties(objReq, data, "id");
-    data.getQuyetDinhPdDtl().forEach(s -> {
+    data.getQuyetDinhDtl().forEach(s -> {
       s.setQuyetDinhHdr(data);
     });
     XhTlQuyetDinhHdr created = xhTlQuyetDinhHdrRepository.save(data);
 
     //update so xuat cap vao bang qd cuu tro
 //    if (!DataUtils.isNullObject(data.getIdQd())) {
-//      Optional<XhCtVtQuyetDinhPdHdr> qdCuuTro = xhCtVtQdPdHdrRepository.findById(data.getIdQd());
+//      Optional<XhCtVtQuyetDinhHdr> qdCuuTro = xhCtVtQdPdHdrRepository.findById(data.getIdQd());
 //      if (qdCuuTro.isPresent()) {
 //        qdCuuTro.get().setIdXc(created.getId());
 //        qdCuuTro.get().setSoXc(created.getSoQd());
@@ -176,7 +176,7 @@ public class XhTlQuyetDinhHdrService extends BaseServiceImpl {
       List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Arrays.asList(XhTlQuyetDinhHdr.TABLE_NAME + "_CAN_CU"));
       data.setCanCu(canCu);
 
-      data.getQuyetDinhPdDtl().forEach(s -> {
+      data.getQuyetDinhDtl().forEach(s -> {
 
         s.setTenLoaiVthh(StringUtils.isEmpty(s.getLoaiVthh()) ? null : mapVthh.get(s.getLoaiVthh()));
         s.setTenCloaiVthh(StringUtils.isEmpty(s.getCloaiVthh()) ? null : mapVthh.get(s.getCloaiVthh()));
@@ -195,7 +195,7 @@ public class XhTlQuyetDinhHdrService extends BaseServiceImpl {
     XhTlQuyetDinhHdr data = optional.get();
 
     //update so xuat cap vao bang qd cuu tro
-//    Optional<XhCtVtQuyetDinhPdHdr> qdCuuTro = xhCtVtQdPdHdrRepository.findById(data.getIdQdPd());
+//    Optional<XhCtVtQuyetDinhHdr> qdCuuTro = xhCtVtQdPdHdrRepository.findById(data.getIdQdPd());
 //    if (qdCuuTro.isPresent()) {
 //      qdCuuTro.get().setIdXc(null);
 //      qdCuuTro.get().setSoXc(null);
@@ -218,7 +218,7 @@ public class XhTlQuyetDinhHdrService extends BaseServiceImpl {
 
     //update so xuat cap vao bang qd cuu tro
 //    List<Long> listIdQdPd = list.stream().map(XhTlQuyetDinhHdr::getIdQdPd).collect(Collectors.toList());
-//    List<XhCtVtQuyetDinhPdHdr> listObjQdPd = xhCtVtQdPdHdrRepository.findByIdIn(listIdQdPd);
+//    List<XhCtVtQuyetDinhHdr> listObjQdPd = xhCtVtQdPdHdrRepository.findByIdIn(listIdQdPd);
 //    listObjQdPd.forEach(s -> {
 //      s.setIdXc(null);
 //      s.setSoXc(null);

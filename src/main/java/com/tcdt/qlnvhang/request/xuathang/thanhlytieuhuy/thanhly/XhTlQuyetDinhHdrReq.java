@@ -36,5 +36,5 @@ public class XhTlQuyetDinhHdrReq {
 
   private List<FileDinhKemReq> fileDinhKem;
   private List<FileDinhKemReq> canCu = new ArrayList<>();
-  private List<XhTlQuyetDinhDtl> quyetDinhPdDtl = new ArrayList<>();
+  private List<XhTlQuyetDinhDtl> quyetDinhDtl = new ArrayList<>();
 }

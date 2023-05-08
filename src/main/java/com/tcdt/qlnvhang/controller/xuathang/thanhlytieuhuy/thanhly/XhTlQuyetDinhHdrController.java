@@ -31,7 +31,7 @@ import java.util.Map;
 @RequestMapping(value = PathContains.XUAT_HANG_DTQG + PathContains.XUAT_THANH_LY + PathContains.QUYET_DINH_THANH_LY)
 @Slf4j
 @Api(tags = "Xuất hàng DTQG - Xuất thanh lý - Quyết định thanh lý")
-public class XhTlQuyetDinhTlHdrController {
+public class XhTlQuyetDinhHdrController {
   @Autowired
   XhTlQuyetDinhHdrService xhTlQuyetDinhTlHdrService;
 
