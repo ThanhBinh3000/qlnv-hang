@@ -58,15 +58,15 @@ public class THKeHoachDieuChuyenTongCucDtl implements Serializable {
     @JsonIgnore
     private THKeHoachDieuChuyenTongCucHdr thKeHoachDieuChuyenTongCucHdr;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "DCNB_TH_KE_HOACH_DCC_HDR_ID",insertable = false,updatable = false)
-//    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler","ngayTao","nguoiTaoId","ngaySua","nguoiSuaId"})
-//    @NotFound(action = NotFoundAction.IGNORE)
-//    private THKeHoachDieuChuyenCucHdr thKeHoachDieuChuyenCucHdr;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "DCNB_TH_KE_HOACH_DCC_DTL_ID",insertable = false,updatable = false)
+    @JoinColumn(name = "DCNB_TH_KE_HOACH_DCC_HDR_ID",insertable = false,updatable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler","ngayTao","nguoiTaoId","ngaySua","nguoiSuaId"})
     @NotFound(action = NotFoundAction.IGNORE)
-    private THKeHoachDieuChuyenCucKhacCucDtl thKeHoachDieuChuyenCucKhacCucDtl;
+    private THKeHoachDieuChuyenCucHdr thKeHoachDieuChuyenCucHdr;
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "DCNB_TH_KE_HOACH_DCC_DTL_ID",insertable = false,updatable = false)
+//    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler","ngayTao","nguoiTaoId","ngaySua","nguoiSuaId"})
+//    @NotFound(action = NotFoundAction.IGNORE)
+//    private THKeHoachDieuChuyenCucKhacCucDtl thKeHoachDieuChuyenCucKhacCucDtl;
 }

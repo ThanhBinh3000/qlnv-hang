@@ -177,7 +177,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                 Hibernate.initialize(data1.getDcnbKeHoachDcHdr());
             });
             data.getThKeHoachDieuChuyenCucKhacCucDtls().forEach(data2 ->{
-                List<Long> listId = Arrays.asList(data2.getDcnbKeHoachDcHdrId().split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+                List<Long> listId = Arrays.stream(data2.getDcnbKeHoachDcHdrId().split(",")).map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
                 List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcHdrRepository.findByIdIn(listId);
                 data2.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
             });
