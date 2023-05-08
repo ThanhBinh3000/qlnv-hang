@@ -1,7 +1,7 @@
 package com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly;
 
-import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.SearchXhTlQuyetDinhTl;
-import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhTlHdr;
+import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.SearchXhTlQuyetDinh;
+import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhHdr;
 import feign.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,9 +11,9 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
-public interface XhTlQuyetDinhTlHdrReqository extends JpaRepository<XhTlQuyetDinhTlHdr,Long> {
+public interface XhTlQuyetDinhHdrRepository extends JpaRepository<XhTlQuyetDinhHdr,Long> {
 
-  @Query("SELECT DISTINCT  c FROM XhTlQuyetDinhTlHdr c " +
+  @Query("SELECT DISTINCT  c FROM XhTlQuyetDinhHdr c " +
       " WHERE 1=1 " +
       "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
       "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
@@ -24,14 +24,14 @@ public interface XhTlQuyetDinhTlHdrReqository extends JpaRepository<XhTlQuyetDin
       "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
       "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
-  Page<XhTlQuyetDinhTlHdr> search (@Param("param") SearchXhTlQuyetDinhTl param, Pageable pageable);
+  Page<XhTlQuyetDinhHdr> search (@Param("param") SearchXhTlQuyetDinh param, Pageable pageable);
 
 
   void deleteAllByIdIn(List<Long> listId);
 
-  List<XhTlQuyetDinhTlHdr> findByIdIn(List<Long> ids);
+  List<XhTlQuyetDinhHdr> findByIdIn(List<Long> ids);
 
-  List<XhTlQuyetDinhTlHdr> findAllByIdIn(List<Long> listId);
+  List<XhTlQuyetDinhHdr> findAllByIdIn(List<Long> listId);
 
-  Optional<XhTlQuyetDinhTlHdr> findBySoQd(String soQd);
+  Optional<XhTlQuyetDinhHdr> findBySoQd(String soQd);
 }

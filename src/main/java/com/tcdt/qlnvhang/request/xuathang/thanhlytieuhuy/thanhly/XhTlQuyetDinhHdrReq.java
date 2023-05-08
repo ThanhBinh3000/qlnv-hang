@@ -1,7 +1,7 @@
 package com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly;
 
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhTlDtl;
+import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhDtl;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class XhTlQuyetDinhTlHdrReq {
+public class XhTlQuyetDinhHdrReq {
   private Long id;
   private String maDvi;
   private Integer nam;
@@ -36,5 +36,5 @@ public class XhTlQuyetDinhTlHdrReq {
 
   private List<FileDinhKemReq> fileDinhKem;
   private List<FileDinhKemReq> canCu = new ArrayList<>();
-  private List<XhTlQuyetDinhTlDtl> quyetDinhPdDtl = new ArrayList<>();
+  private List<XhTlQuyetDinhDtl> quyetDinhPdDtl = new ArrayList<>();
 }

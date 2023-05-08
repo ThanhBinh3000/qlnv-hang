@@ -21,7 +21,6 @@ public class XhTlDanhSachDtl implements Serializable {
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlDanhSachDtl.TABLE_NAME + "_SEQ")
   @SequenceGenerator(sequenceName = XhTlDanhSachDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhTlDanhSachDtl.TABLE_NAME + "_SEQ")
   private Long id;
-  private Long idHdr;
   private Long idTongHop;
   private String maTongHop;
   private String maDiaDiem;
