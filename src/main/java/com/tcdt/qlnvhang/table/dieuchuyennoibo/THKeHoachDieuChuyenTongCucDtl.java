@@ -14,7 +14,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Table(name = "DCNB_TH_KE_HOACH_DCTC_DTL")
 @Builder
 @NoArgsConstructor
@@ -68,9 +69,9 @@ public class THKeHoachDieuChuyenTongCucDtl implements Serializable {
     @NotFound(action = NotFoundAction.IGNORE)
     private THKeHoachDieuChuyenCucHdr thKeHoachDieuChuyenCucHdr;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "DCNB_TH_KE_HOACH_DCC_DTL_ID",insertable = false,updatable = false)
-//    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler","ngayTao","nguoiTaoId","ngaySua","nguoiSuaId"})
-//    @NotFound(action = NotFoundAction.IGNORE)
-//    private THKeHoachDieuChuyenCucKhacCucDtl thKeHoachDieuChuyenCucKhacCucDtl;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "DCNB_TH_KE_HOACH_DCC_DTL_ID",insertable = false,updatable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler","ngayTao","nguoiTaoId","ngaySua","nguoiSuaId"})
+    @NotFound(action = NotFoundAction.IGNORE)
+    private THKeHoachDieuChuyenCucKhacCucDtl thKeHoachDieuChuyenCucKhacCucDtl;
 }
