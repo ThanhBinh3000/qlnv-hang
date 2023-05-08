@@ -6,10 +6,10 @@ import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.SearchXhTlQuyetDinhTl;
-import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhTlHdrReq;
+import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.SearchXhTlQuyetDinh;
+import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhHdrReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhTlHdrService;
+import com.tcdt.qlnvhang.service.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhHdrService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,12 +33,12 @@ import java.util.Map;
 @Api(tags = "Xuất hàng DTQG - Xuất thanh lý - Quyết định thanh lý")
 public class XhTlQuyetDinhTlHdrController {
   @Autowired
-  XhTlQuyetDinhTlHdrService xhTlQuyetDinhTlHdrService;
+  XhTlQuyetDinhHdrService xhTlQuyetDinhTlHdrService;
 
   @ApiOperation(value = "Tra cứu", response = List.class)
   @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser, @RequestBody SearchXhTlQuyetDinhTl objReq) {
+  public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser, @RequestBody SearchXhTlQuyetDinh objReq) {
     BaseResponse resp = new BaseResponse();
     try {
       resp.setData(xhTlQuyetDinhTlHdrService.searchPage(currentUser, objReq));
@@ -56,7 +56,7 @@ public class XhTlQuyetDinhTlHdrController {
   @ApiOperation(value = "Tạo mới", response = List.class)
   @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
-  public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhTlQuyetDinhTlHdrReq objReq) {
+  public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhTlQuyetDinhHdrReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
       resp.setData(xhTlQuyetDinhTlHdrService.save(currentUser, objReq));
@@ -73,7 +73,7 @@ public class XhTlQuyetDinhTlHdrController {
 
   @ApiOperation(value = "Cập nhật", response = List.class)
   @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhTlQuyetDinhTlHdrReq objReq) {
+  public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhTlQuyetDinhHdrReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
       resp.setData(xhTlQuyetDinhTlHdrService.update(currentUser, objReq));
@@ -159,7 +159,7 @@ public class XhTlQuyetDinhTlHdrController {
   @ApiOperation(value = "Kết xuất danh sách", response = List.class)
   @PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public void exportList(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody SearchXhTlQuyetDinhTl objReq, HttpServletResponse response) throws Exception {
+  public void exportList(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody SearchXhTlQuyetDinh objReq, HttpServletResponse response) throws Exception {
     try {
       xhTlQuyetDinhTlHdrService.export(currentUser, objReq, response);
 

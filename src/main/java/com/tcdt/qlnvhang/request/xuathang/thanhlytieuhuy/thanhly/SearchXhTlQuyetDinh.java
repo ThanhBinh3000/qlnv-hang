@@ -6,7 +6,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class SearchXhTlQuyetDinhTl extends BaseRequest {
+public class SearchXhTlQuyetDinh extends BaseRequest {
   private String dvql;
   private Integer nam;
   private String soQd;
