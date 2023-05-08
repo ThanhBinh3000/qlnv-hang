@@ -32,11 +32,14 @@ public class XhTlQuyetDinhDtl implements Serializable {
   private BigDecimal slHienTai;
   private BigDecimal slDeXuat;
   private BigDecimal slDaDuyet;
+  private BigDecimal slCon;
+  private BigDecimal donGia;
   private BigDecimal thanhTien;
   private LocalDate ngayNhapKho;
   private LocalDate ngayDeXuat;
   private LocalDate ngayTongHop;
   private String lyDo;
+  private String ketQua;
   private String type;
 
   @Transient
