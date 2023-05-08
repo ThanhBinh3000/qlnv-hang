@@ -37,6 +37,9 @@ public class XhTlDanhSachDtl implements Serializable {
   private String lyDo;
   private String type;
 
+  @JsonIgnore
+  @Transient
+  private Map<String, String> mapVthh;
   @Transient
   private String tenLoaiVthh;
   @Transient
@@ -78,6 +81,16 @@ public class XhTlDanhSachDtl implements Serializable {
       setTenNhaKho(tenNhaKho);
       setTenNganKho(tenNganKho);
       setTenLoKho(tenLoKho);
+    }
+  }
+
+  public void setMapVthh(Map<String, String> mapVthh) {
+    this.mapVthh = mapVthh;
+    if (!DataUtils.isNullObject(getLoaiVthh())) {
+      setTenLoaiVthh(mapVthh.containsKey(getLoaiVthh()) ? mapVthh.get(getLoaiVthh()) : null);
+    }
+    if (!DataUtils.isNullObject(getCloaiVthh())) {
+      setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
     }
   }
 
