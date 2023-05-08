@@ -114,7 +114,8 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
         List<THKeHoachDieuChuyenTongCucHdr> allById = tongCucHdrRepository.findAllById(ids);
         allById.forEach(data -> {
             data.getThKeHoachDieuChuyenTongCucDtls().forEach(data1 -> {
-                data1.getThKeHoachDieuChuyenCucHdr().getThKeHoachDieuChuyenCucKhacCucDtls().forEach(data2 ->{
+                List<THKeHoachDieuChuyenCucKhacCucDtl> chiTietKh = thKeHoachDieuChuyenCucKhacCucDtlRepository.findAllByHdrIdAndId(data1.getThKhDcHdrId(), data1.getThKhDcDtlId());
+                chiTietKh.forEach(data2 ->{
                     List<Long> listId = Arrays.stream(data2.getDcnbKeHoachDcHdrId().split(",")).map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
                     List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcHdrRepository.findByIdIn(listId);
                     data2.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
@@ -164,12 +165,12 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
-        List<THKeHoachDieuChuyenTongCucHdr> maTongHop = tongCucHdrRepository.findByMaTongHop(optional.get().getMaTongHop());
-        if (!maTongHop.isEmpty() && objReq.getMaTongHop().split("/").length == 1) {
-            if (!maTongHop.get(0).getId().equals(objReq.getId())) {
-                throw new Exception("Mã tổng hợp đã tồn tại");
-            }
-        }
+//        List<THKeHoachDieuChuyenTongCucHdr> maTongHop = tongCucHdrRepository.findByMaTongHop(optional.get().getMaTongHop());
+//        if (!maTongHop.isEmpty() && objReq.getMaTongHop().split("/").length == 1) {
+//            if (!maTongHop.get(0).getId().equals(objReq.getId())) {
+//                throw new Exception("Mã tổng hợp đã tồn tại");
+//            }
+//        }
         THKeHoachDieuChuyenTongCucHdr data = optional.get();
         ObjectMapperUtils.map(objReq, data);
         data.setNguoiSuaId(currentUser.getUser().getId());
@@ -211,10 +212,15 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
                     List<THKeHoachDieuChuyenCucKhacCucDtl> thkh = entry.getValue();
                     chiTiet.setMaCucNhan(entry.getKey());
                     chiTiet.setTenCucNhan(thkh.get(0).getTenCucNhan());
+                    chiTiet.setMaCucDxuat(cqt.getMaDvi());
+                    chiTiet.setTenCucDxuat(cqt.getTenDvi());
                     chiTiet.setId(null);
                     chiTiet.setHdrId(null);
                     thkh.forEach(data ->{
                         chiTiet.setThKhDcDtlId(data.getId());
+                        chiTiet.setSoDxuat(data.getTHKeHoachDieuChuyenCucHdr().getSoDeXuat());
+                        chiTiet.setNgayTrinhDuyetTc(data.getTHKeHoachDieuChuyenCucHdr().getNgayDuyetLdc());
+                        chiTiet.setTrichYeu(data.getTHKeHoachDieuChuyenCucHdr().getTrichYeu());
                         chiTiet.setThKhDcHdrId(data.getHdrId());
                         List<THKeHoachDieuChuyenCucKhacCucDtl> chiTietKh = thKeHoachDieuChuyenCucKhacCucDtlRepository.findAllByHdrIdAndId(chiTiet.getThKhDcHdrId(),chiTiet.getThKhDcDtlId());
                         chiTiet.setThKeHoachDieuChuyenCucKhacCucDtls(chiTietKh);
@@ -224,7 +230,6 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
                     data2.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
                 });
                     });
-
                     Long tongDuToanKp = dcnbKeHoachDcDtlRepository.findByMaDviCucAndTypeAndLoaiDcTongCucCuc(req.getMaDVi(), chiTiet.getMaCucNhan(), Contains.DIEU_CHUYEN, Contains.GIUA_2_CUC_DTNN_KV, Contains.DADUYET_LDCC, req.getThoiGianTongHop());
                     chiTiet.setTongDuToanKp(tongDuToanKp);
                     result.add(chiTiet);
