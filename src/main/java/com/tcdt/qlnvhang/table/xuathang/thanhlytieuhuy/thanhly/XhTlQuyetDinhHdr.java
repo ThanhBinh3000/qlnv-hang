@@ -56,5 +56,5 @@ public class XhTlQuyetDinhHdr extends BaseEntity implements Serializable {
   private List<FileDinhKem> canCu = new ArrayList<>();
 
   @OneToMany(mappedBy = "quyetDinhHdr", cascade = CascadeType.ALL)
-  private List<XhTlQuyetDinhDtl> quyetDinhPdDtl = new ArrayList<>();
+  private List<XhTlQuyetDinhDtl> quyetDinhDtl = new ArrayList<>();
 }
