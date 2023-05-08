@@ -37,22 +37,15 @@ public interface DcnbKeHoachDcDtlRepository extends JpaRepository<DcnbKeHoachDcD
 
     @Query(value ="SELECT SUM(d.duToanKphi) FROM DcnbKeHoachDcDtl d " +
             "WHERE d.dcnbKeHoachDcHdr.maDviCuc = ?1 AND d.dcnbKeHoachDcHdr.type = ?2 AND d.dcnbKeHoachDcHdr.loaiDc = ?3 AND d.dcnbKeHoachDcHdr.trangThai = ?4 " +
-            "AND (?5 IS NULL OR d.loaiVthh = ?5 )" +
-            "AND (?6 IS NULL OR d.cloaiVthh = ?6)"+
-            "AND d.dcnbKeHoachDcHdr.ngayTao <= ?7")
-    Long findByMaDviCucAndTypeAndLoaiDcTongCucChiCuc(String maDVi, String type, String loaiDieuChuyen, String trangThai,String loaiHH, String chungLoaiHH , LocalDateTime thoigianTongHop);
+            "AND d.dcnbKeHoachDcHdr.ngayTao <= ?5")
+    Long findByMaDviCucAndTypeAndLoaiDcTongCucChiCuc(String maDVi, String type, String loaiDieuChuyen, String trangThai,LocalDateTime thoigianTongHop);
 
     @Query(value ="SELECT SUM(d.duToanKphi) FROM DcnbKeHoachDcDtl d " +
             "LEFT JOIN DcnbKeHoachDcHdr h ON h.id = d.hdrId " +
-            "WHERE h.maDviCuc = ?1 AND h.maCucNhan = ?2 AND h.type = ?2 AND h.loaiDc = ?3 AND h.trangThai = ?4 " +
-            "AND (?5 IS NULL OR d.loaiVthh = ?5 )" +
-            "AND (?6 IS NULL OR d.cloaiVthh = ?6)"+
-            "AND h.ngayTao <= ?7")
-    Long findByMaDviCucAndTypeAndLoaiDcTongCucCuc(String maDVi,String cucNhan, String type, String loaiDieuChuyen, String trangThai,String loaiHH, String chungLoaiHH , LocalDateTime thoigianTongHop);
+            "WHERE h.maDviCuc = ?1 AND h.maCucNhan = ?2 AND h.type = ?3 AND h.loaiDc = ?4 AND h.trangThai = ?5 " +
+            "AND h.ngayTao <= ?6")
+    Long findByMaDviCucAndTypeAndLoaiDcTongCucCuc(String maDVi,String cucNhan, String type, String loaiDieuChuyen, String trangThai, LocalDateTime thoigianTongHop);
 
-    @Query(nativeQuery = true,value = "SELECT * FROM DCNB_KE_HOACH_DC_DTL d " +
-            "WHERE d.HDR_ID = ?1 AND (?2 IS NULL OR d.LOAI_VTHH = ?2) AND (?3 IS NULL OR d.CLOAI_VTHH = ?3)")
-    List<DcnbKeHoachDcDtl> findByDcnbKeHoachDcHdrIdAndLoaiHhAndCLoaiHh(Long keHoachDcHdrId,String trangThai,String loaiHH);
 
     List<DcnbKeHoachDcDtl> findByIdIn(List<Long> idList);
     @Query(value ="SELECT SUM(d.duToanKphi) FROM DcnbKeHoachDcDtl d " +
