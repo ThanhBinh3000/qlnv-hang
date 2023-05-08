@@ -18,6 +18,7 @@ import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
+import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.SerializationUtils;
 import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
@@ -135,7 +136,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
             if (created.getId() > 0 && created.getThKeHoachDieuChuyenNoiBoCucDtls().size() > 0) {
                 List<Long> danhSachKeHoach = created.getThKeHoachDieuChuyenNoiBoCucDtls().stream().map(THKeHoachDieuChuyenNoiBoCucDtl::getDcKeHoachDcHdrId)
                         .collect(Collectors.toList());
-                dcHdrRepository.updateIdTongHop(danhSachKeHoach,created.getId());
+                dcHdrRepository.updateIdTongHop(created.getId(),danhSachKeHoach);
             }
             return created;
         } else if (Objects.equals(data.getLoaiDieuChuyen(), Contains.GIUA_2_CUC_DTNN_KV)) {
@@ -153,8 +154,8 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
             THKeHoachDieuChuyenCucHdr created = thKeHoachDieuChuyenHdrRepository.save(data);
             if (created.getId() > 0 && created.getThKeHoachDieuChuyenCucKhacCucDtls().size() > 0) {
                 created.getThKeHoachDieuChuyenCucKhacCucDtls().forEach(dataHdrId -> {
-                    List<Long> listId = Arrays.asList(dataHdrId.getDcnbKeHoachDcHdrId().split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
-                    dcHdrRepository.updateIdTongHop(listId,dataHdrId.getHdrId());
+                    List<Long> danhSachKeHoach = Arrays.stream(dataHdrId.getDcnbKeHoachDcHdrId().split(",")).map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+                    dcHdrRepository.updateIdTongHop(created.getId(),danhSachKeHoach);
                 });
             }
             return created;
