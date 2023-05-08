@@ -114,18 +114,18 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
         List<THKeHoachDieuChuyenTongCucHdr> allById = tongCucHdrRepository.findAllById(ids);
         allById.forEach(data -> {
             data.getThKeHoachDieuChuyenTongCucDtls().forEach(data1 -> {
-                    Hibernate.initialize(data1.getThKeHoachDieuChuyenCucHdr());
-//                    data1.getThKeHoachDieuChuyenCucHdr().getThKeHoachDieuChuyenCucKhacCucDtls().forEach(data2 -> {
-//                        List<THKeHoachDieuChuyenCucKhacCucDtl> thKeHoachDieuChuyenCucKhacCucDtls = thKeHoachDieuChuyenCucKhacCucDtlRepository.findAllByHdrIdAndId(data2.getHdrId(),data2.getId());
-//                        data2.getTHKeHoachDieuChuyenCucHdr().setThKeHoachDieuChuyenCucKhacCucDtls(thKeHoachDieuChuyenCucKhacCucDtls);
-//                        data2.getTHKeHoachDieuChuyenCucHdr().getThKeHoachDieuChuyenCucKhacCucDtls().forEach(data3 ->  {
-//                                List<Long> listId = Arrays.stream(data3.getDcnbKeHoachDcHdrId().split(",")).map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
-//                                List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcHdrRepository.findByIdIn(listId);
-//                                data3.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
-//                        });
-//                    });
+//                    Hibernate.initialize(data1.getThKeHoachDieuChuyenCucHdr());
+                data1.getThKeHoachDieuChuyenCucHdr().getThKeHoachDieuChuyenCucKhacCucDtls().forEach(e ->{
+                    List<THKeHoachDieuChuyenCucKhacCucDtl> chiTietKh = thKeHoachDieuChuyenCucKhacCucDtlRepository.findAllByHdrIdAndId(e.getHdrId(), e.getId());
+                    e.getTHKeHoachDieuChuyenCucHdr().setThKeHoachDieuChuyenCucKhacCucDtls(chiTietKh);
+                    e.getTHKeHoachDieuChuyenCucHdr().getThKeHoachDieuChuyenCucKhacCucDtls().forEach(data2 -> {
+                        List<Long> listId = Arrays.asList(data2.getDcnbKeHoachDcHdrId().split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+                        List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcHdrRepository.findByIdIn(listId);
+                        data2.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
+                    });
+                });
             });
-        });
+            });
         return allById;
     }
 
