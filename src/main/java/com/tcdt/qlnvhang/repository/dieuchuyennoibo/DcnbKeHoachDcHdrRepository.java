@@ -60,6 +60,6 @@ public interface DcnbKeHoachDcHdrRepository extends JpaRepository<DcnbKeHoachDcH
 
     @Transactional()
     @Modifying
-    @Query(value = "UPDATE DCNB_KE_HOACH_DC_HDR SET ID_THOP = :idTh WHERE ID IN :danhSachKeHoach", nativeQuery = true)
-    void updateIdTongHop(List<Long> danhSachKeHoach, Long idTh);
+    @Query(value = "UPDATE DCNB_KE_HOACH_DC_HDR SET ID_THOP = to_number(:idTh) WHERE ID IN :danhSachKeHoach", nativeQuery = true)
+    void updateIdTongHop(Long idTh,List<Long> danhSachKeHoach);
 }
