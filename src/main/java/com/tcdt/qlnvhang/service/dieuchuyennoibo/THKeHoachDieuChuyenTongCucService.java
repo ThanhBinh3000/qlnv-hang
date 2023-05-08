@@ -114,11 +114,11 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
         List<THKeHoachDieuChuyenTongCucHdr> allById = tongCucHdrRepository.findAllById(ids);
         allById.forEach(data -> {
             data.getThKeHoachDieuChuyenTongCucDtls().forEach(data1 -> {
-                List<THKeHoachDieuChuyenCucKhacCucDtl> chiTietKh = thKeHoachDieuChuyenCucKhacCucDtlRepository.findAllByHdrIdAndId(data1.getThKhDcHdrId(), data1.getThKhDcDtlId());
-                chiTietKh.forEach(data2 ->{
-                    List<Long> listId = Arrays.stream(data2.getDcnbKeHoachDcHdrId().split(",")).map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+                Hibernate.initialize(data1.getThKeHoachDieuChuyenCucKhacCucDtl());
+                data.getThKeHoachDieuChuyenTongCucDtls().forEach(data2 -> {
+                    List<Long> listId = Arrays.asList(data2.getThKeHoachDieuChuyenCucKhacCucDtl().getDcnbKeHoachDcHdrId().split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
                     List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcHdrRepository.findByIdIn(listId);
-                    data2.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
+                    data2.getThKeHoachDieuChuyenCucKhacCucDtl().setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
                 });
             });
         });
