@@ -72,8 +72,7 @@ public abstract class BaseServiceImpl {
 
   @Autowired
   private SystemServiceProxy systemServiceProxy;
-  public Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-  public Map<String, String> mapVthh = getListDanhMucHangHoa();
+
   public QlnvDmDonvi getDviByMa(String maDvi, HttpServletRequest req) throws Exception {
     QlnvDmDonvi qlnvDmDonvi = null;
     try {
