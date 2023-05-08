@@ -16,8 +16,6 @@ import java.util.List;
 @Entity
 @Table(name = XhTlDanhSachHdr.TABLE_NAME)
 @Data
-@NoArgsConstructor
-@RequiredArgsConstructor
 public class XhTlDanhSachHdr extends BaseEntity implements Serializable {
 
   private static final long serialVersionUID = 1L;
