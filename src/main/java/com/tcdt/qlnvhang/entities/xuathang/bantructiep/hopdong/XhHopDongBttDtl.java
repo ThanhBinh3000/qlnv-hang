@@ -22,14 +22,13 @@ public class XhHopDongBttDtl implements Serializable {
 
     private Long idHdr;
 
-    private String maDvi;
+    private BigDecimal soLuongBanTrucTiep;
 
+    private BigDecimal soLuongBanTrucTiepHd;
+
+    private String maDvi;
     @Transient
     private String tenDvi;
-
-    private BigDecimal soLuongChiCuc;
-
-    private BigDecimal donGiaVat;
 
     private String diaChi;
 
