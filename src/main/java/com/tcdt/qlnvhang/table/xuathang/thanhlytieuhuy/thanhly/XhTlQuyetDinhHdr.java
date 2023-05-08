@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 public class XhTlQuyetDinhHdr extends BaseEntity implements Serializable {
   private static final long serialVersionUID = 1L;
-  public static final String TABLE_NAME = "XH_TL_QUYET_DINH_TL_HDR";
+  public static final String TABLE_NAME = "XH_TL_QUYET_DINH_HDR";
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlQuyetDinhHdr.TABLE_NAME + "_SEQ")
