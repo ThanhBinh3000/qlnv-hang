@@ -20,8 +20,6 @@ public interface THKeHoachDieuChuyenTongCucHdrRepository extends JpaRepository<T
             "AND (:#{#param.namKeHoach} IS NULL OR hdr.namKeHoach = :#{#param.namKeHoach}) " +
             "AND (:#{#param.id} IS NULL OR LOWER(hdr.id) LIKE CONCAT('%',LOWER(:#{#param.id}),'%')) " +
             "AND (:#{#param.loaiDieuChuyen} IS NULL OR LOWER(hdr.loaiDieuChuyen) LIKE CONCAT('%',LOWER(:#{#param.loaiDieuChuyen}),'%'))"+
-            "AND (:#{#param.loaiHangHoa} IS NULL OR LOWER(hdr.loaiHangHoa) LIKE CONCAT('%',LOWER(:#{#param.loaiHangHoa}),'%'))"+
-            "AND (:#{#param.chungLoaiHangHoa} IS NULL OR LOWER(hdr.chungLoaiHangHoa) LIKE CONCAT('%',LOWER(:#{#param.chungLoaiHangHoa}),'%'))"+
             "AND ((:#{#param.tuNgay}  IS NULL OR hdr.ngayTongHop >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR hdr.ngayTongHop <= :#{#param.denNgay}) ) " +
             "AND (:#{#param.trichYeu} IS NULL OR LOWER(hdr.noiDung) LIKE CONCAT('%',LOWER(:#{#param.trichYeu}),'%')) "+
