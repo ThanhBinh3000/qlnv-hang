@@ -28,6 +28,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -51,6 +52,8 @@ public class XhTlDanhSachService extends BaseServiceImpl {
     Page<XhTlDanhSachHdr> search = xhTlDanhSachRepository.searchPage(req, pageable);
 
     //set label
+    Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+    Map<String, String> mapVthh = getListDanhMucHangHoa();
     search.getContent().forEach(s -> {
       s.getDanhSachDtl().forEach(s1 -> {
         s1.setMapDmucDvi(mapDmucDvi);
@@ -119,6 +122,8 @@ public class XhTlDanhSachService extends BaseServiceImpl {
     }
 
     List<XhTlDanhSachHdr> allById = xhTlDanhSachRepository.findAllById(ids);
+    Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+    Map<String, String> mapVthh = getListDanhMucHangHoa();
     allById.forEach(data -> {
       data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
       data.getDanhSachDtl().forEach(s -> {
