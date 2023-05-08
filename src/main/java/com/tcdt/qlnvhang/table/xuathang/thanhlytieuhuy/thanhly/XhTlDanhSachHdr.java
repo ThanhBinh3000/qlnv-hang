@@ -29,7 +29,8 @@ public class XhTlDanhSachHdr extends BaseEntity implements Serializable {
   private Integer nam;
   private String maDvi;
   private String maDanhSach;
-  private LocalDate ngayThop;
+  private LocalDate thoiGianTlTu;
+  private LocalDate thoiGianTlDen;
   private String trangThai;
   private Long idHoSo;
   private String soHoSo;
@@ -41,23 +42,16 @@ public class XhTlDanhSachHdr extends BaseEntity implements Serializable {
   private LocalDate ngayPduyet;
   private Long nguoiPduyetId;
   private String lyDoTuChoi;
-
-  private BigDecimal tongSlCtVt;
-  private BigDecimal tongSlXuatCap;
+  private BigDecimal tongSlHienTai;
   private BigDecimal tongSlDeXuat;
+  private BigDecimal tongSlDaDuyet;
 
-
-  @Transient
-  private String tenLoaiVthh;
-  @Transient
-  private String tenCloaiVthh;
   @Transient
   private String tenTrangThai;
   @Transient
   private String tenDvi;
 
-  @OneToMany(mappedBy = "xhTlDanhSachHdr", cascade = CascadeType.ALL)
-//    @Transient
-  private List<XhTlDanhSachDtl> danhSachDtls = new ArrayList<>();
+  @OneToMany(mappedBy = "danhSachHdr", cascade = CascadeType.ALL)
+  private List<XhTlDanhSachDtl> danhSachDtl = new ArrayList<>();
 
 }

@@ -12,16 +12,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = XhTlQuyetDinhTlHdr.TABLE_NAME)
+@Table(name = XhTlQuyetDinhHdr.TABLE_NAME)
 @Data
-public class XhTlQuyetDinhTlHdr extends BaseEntity implements Serializable {
+public class XhTlQuyetDinhHdr extends BaseEntity implements Serializable {
   private static final long serialVersionUID = 1L;
   public static final String TABLE_NAME = "XH_TL_QUYET_DINH_TL_HDR";
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlQuyetDinhTlHdr.TABLE_NAME + "_SEQ")
-  @SequenceGenerator(sequenceName = XhTlQuyetDinhTlHdr.TABLE_NAME
-      + "_SEQ", allocationSize = 1, name = XhTlQuyetDinhTlHdr.TABLE_NAME + "_SEQ")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlQuyetDinhHdr.TABLE_NAME + "_SEQ")
+  @SequenceGenerator(sequenceName = XhTlQuyetDinhHdr.TABLE_NAME
+      + "_SEQ", allocationSize = 1, name = XhTlQuyetDinhHdr.TABLE_NAME + "_SEQ")
   private Long id;
   private String maDvi;
   private Integer nam;
@@ -55,6 +55,6 @@ public class XhTlQuyetDinhTlHdr extends BaseEntity implements Serializable {
   @Transient
   private List<FileDinhKem> canCu = new ArrayList<>();
 
-  @OneToMany(mappedBy = "quyetDinhTlHdr", cascade = CascadeType.ALL)
-  private List<XhTlQuyetDinhTlDtl> quyetDinhPdDtl = new ArrayList<>();
+  @OneToMany(mappedBy = "quyetDinhHdr", cascade = CascadeType.ALL)
+  private List<XhTlQuyetDinhDtl> quyetDinhPdDtl = new ArrayList<>();
 }
