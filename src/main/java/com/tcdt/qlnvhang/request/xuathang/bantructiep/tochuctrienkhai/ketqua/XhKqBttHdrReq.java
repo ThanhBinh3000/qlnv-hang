@@ -82,4 +82,16 @@ public class XhKqBttHdrReq extends BaseRequest  {
     Date  ngayCgiaDen;
 
     private String trangThaiHd;
+
+    private String soHd;
+
+    private String tenHd;
+
+    private String tenDviMua;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    Date  ngayPduyetTu;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    Date  ngayPduyetDen;
 }

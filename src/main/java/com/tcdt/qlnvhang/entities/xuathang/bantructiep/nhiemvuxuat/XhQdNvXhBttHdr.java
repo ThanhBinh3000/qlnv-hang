@@ -32,13 +32,15 @@ public class XhQdNvXhBttHdr extends TrangThaiBaseEntity implements Serializable 
 
     private Integer namKh;
 
-    private String soQd;
+    private String soQdNv;
 
     private Long idHd;
 
     private String soHd;
 
     private Long idQdPd;
+
+    private Long idQdPdDtl;
 
     private String soQdPd;
 
@@ -55,6 +57,10 @@ public class XhQdNvXhBttHdr extends TrangThaiBaseEntity implements Serializable 
     private String tenCloaiVthh;
 
     private String moTaHangHoa;
+
+    private String loaiHinhNx;
+
+    private String kieuNx;
 
     private BigDecimal soLuongBanTrucTiep;
 

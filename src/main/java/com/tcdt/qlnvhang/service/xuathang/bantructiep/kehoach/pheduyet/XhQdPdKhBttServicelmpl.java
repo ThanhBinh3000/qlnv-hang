@@ -512,6 +512,8 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
                 dviDtl.setTenNhaKho(hashMapDvi.get(dviDtl.getMaNhaKho()));
                 dviDtl.setTenNganKho(hashMapDvi.get(dviDtl.getMaNganKho()));
                 dviDtl.setTenLoKho(hashMapDvi.get(dviDtl.getMaLoKho()));
+                dviDtl.setTenLoaiVthh(hashMapVthh.get(dviDtl.getLoaiVthh()));
+                dviDtl.setTenCloaiVthh(hashMapVthh.get(dviDtl.getCloaiVthh()));
                 dviDtl.setChildren(byIdTt);
             }
             dvi.setChildren(byIdDviDtl);

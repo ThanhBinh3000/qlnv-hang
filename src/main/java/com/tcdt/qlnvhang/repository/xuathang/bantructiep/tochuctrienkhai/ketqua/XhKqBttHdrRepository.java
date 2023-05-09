@@ -17,13 +17,18 @@ public interface XhKqBttHdrRepository  extends JpaRepository<XhKqBttHdr, Long> {
     @Query("SELECT DISTINCT QD FROM XhKqBttHdr QD " +
             " LEFT JOIN XhKqBttDtl DTL on QD.id = DTL.idHdr " +
             " LEFT JOIN XhQdPdKhBttDtl QDDTL on QD.id = QDDTL.idSoQdKq " +
-            " WHERE 1 = 1 " +
+            " LEFT JOIN XhHopDongBttHdr HD on QD.id = HD.idQdKq" + " WHERE 1 = 1 " +
             "AND (:#{#param.maDvi} IS NULL OR QD.maDvi = :#{#param.maDvi}) " +
             "AND (:#{#param.namKh} IS NULL OR QD.namKh = :#{#param.namKh}) " +
             "AND (:#{#param.loaiVthh } IS NULL OR LOWER(QD.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
             "AND (:#{#param.ngayCgiaTu} IS NULL OR QDDTL.ngayNhanCgia >= :#{#param.ngayCgiaTu}) " +
             "AND (:#{#param.ngayCgiaDen} IS NULL OR QDDTL.ngayNhanCgia <= :#{#param.ngayCgiaDen}) " +
             "AND (:#{#param.trangThai} IS NULL OR QD.trangThai = :#{#param.trangThai}) " +
+            "AND (:#{#param.soHd} IS NULL OR LOWER(HD.soHd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soHd}),'%' ) ) )" +
+            "AND (:#{#param.tenHd} IS NULL OR LOWER(HD.tenHd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.tenHd}),'%'))) " +
+            "AND (:#{#param.tenDviMua} IS NULL OR LOWER(HD.tenDviMua) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.tenDviMua}),'%'))) " +
+            "AND (:#{#param.ngayPduyetTu} IS NULL OR HD.ngayPduyet >= :#{#param.ngayPduyetTu}) " +
+            "AND (:#{#param.ngayPduyetDen} IS NULL OR HD.ngayPduyet <= :#{#param.ngayPduyetDen}) " +
             "AND (:#{#param.maChiCuc} IS NULL OR DTL.maDvi = :#{#param.maChiCuc}) "
     )
     Page<XhKqBttHdr> searchPage(@Param("param") XhKqBttHdrReq param, Pageable pageable);

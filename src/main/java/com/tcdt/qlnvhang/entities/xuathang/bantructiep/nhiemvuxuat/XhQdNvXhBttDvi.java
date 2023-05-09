@@ -40,6 +40,6 @@ public class XhQdNvXhBttDvi {
     @Transient
     private String tenLoKho;
 
-    private BigDecimal soLuong;
+    private BigDecimal soLuongDeXuat;
 
 }
