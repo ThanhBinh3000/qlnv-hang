@@ -1,8 +1,6 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
 
-import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.tonghop.XhThopDxKhBdgDtl;
-import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
@@ -17,8 +15,6 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
-import com.tcdt.qlnvhang.util.ObjectMapperUtils;
-import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.SerializationUtils;
 import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
@@ -35,7 +31,6 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import javax.xml.bind.ValidationException;
-import java.sql.NClob;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -133,6 +128,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
             dtls.forEach(e -> e.setTHKeHoachDieuChuyenCucHdr(data));
             data.setThKeHoachDieuChuyenNoiBoCucDtls(dtls);
             THKeHoachDieuChuyenCucHdr created = thKeHoachDieuChuyenHdrRepository.save(data);
+            // Update Id tổng hợp, mã tổng hợp kế hoạch điều chuyển
             if (created.getId() > 0 && created.getThKeHoachDieuChuyenNoiBoCucDtls().size() > 0) {
                 List<Long> danhSachKeHoach = created.getThKeHoachDieuChuyenNoiBoCucDtls().stream().map(THKeHoachDieuChuyenNoiBoCucDtl::getDcKeHoachDcHdrId)
                         .collect(Collectors.toList());
@@ -152,6 +148,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
             dtls.forEach(e -> e.setTHKeHoachDieuChuyenCucHdr(data));
             data.setThKeHoachDieuChuyenCucKhacCucDtls(dtls);
             THKeHoachDieuChuyenCucHdr created = thKeHoachDieuChuyenHdrRepository.save(data);
+            // Update Id tổng hợp, mã tổng hợp kế hoạch điều chuyển
             if (created.getId() > 0 && created.getThKeHoachDieuChuyenCucKhacCucDtls().size() > 0) {
                 created.getThKeHoachDieuChuyenCucKhacCucDtls().forEach(dataHdrId -> {
                     List<Long> danhSachKeHoach = Arrays.stream(dataHdrId.getDcnbKeHoachDcHdrId().split(",")).map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
@@ -193,9 +190,31 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
             throw new Exception("Bản ghi không tồn tại");
         }
         THKeHoachDieuChuyenCucHdr data = optional.get();
+        //Xóa tổng hợp kế hoạch nội bộ cục
         List<THKeHoachDieuChuyenNoiBoCucDtl> list = thKeHoachDieuChuyenNoiBoCucDtlRepository.findByHdrId(data.getId());
+        if(data.getLoaiDieuChuyen().equals(Contains.GIUA_2_CHI_CUC_TRONG_1_CUC)) {
+            list.forEach(e ->{
+                e.getDcnbKeHoachDcHdr().setIdThop(null);
+                e.getDcnbKeHoachDcHdr().setMaThop(null);
+                dcHdrRepository.save(e.getDcnbKeHoachDcHdr());
+            });
+            thKeHoachDieuChuyenNoiBoCucDtlRepository.saveAll(list);
+        }
         thKeHoachDieuChuyenNoiBoCucDtlRepository.deleteAll(list);
+        //Xóa tổng hợp kế hoạch khác cục
         List<THKeHoachDieuChuyenCucKhacCucDtl> list1 = thKeHoachDieuChuyenCucKhacCucDtlRepository.findByHdrId(data.getId());
+        if(data.getLoaiDieuChuyen().equals(Contains.GIUA_2_CUC_DTNN_KV)) {
+            list1.forEach(dataHdrId -> {
+                List<Long> danhSachKeHoach = Arrays.stream(dataHdrId.getDcnbKeHoachDcHdrId().split(",")).map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+                List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcHdrRepository.findByIdIn(danhSachKeHoach);
+                dcnbKeHoachDcHdr.forEach(e ->{
+                    e.setMaThop(null);
+                    e.setIdThop(null);
+                    dcHdrRepository.save(e);
+                });
+            });
+            thKeHoachDieuChuyenCucKhacCucDtlRepository.saveAll(list1);
+        }
         thKeHoachDieuChuyenCucKhacCucDtlRepository.deleteAll(list1);
         thKeHoachDieuChuyenHdrRepository.delete(data);
 
@@ -208,9 +227,29 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
             throw new Exception("Bản ghi không tồn tại");
         }
         List<Long> listId = list.stream().map(THKeHoachDieuChuyenCucHdr::getId).collect(Collectors.toList());
+        //Xóa tổng hợp kế hoạch nội bộ cục
         List<THKeHoachDieuChuyenNoiBoCucDtl> listTongHopKeHoachChiCuc = thKeHoachDieuChuyenNoiBoCucDtlRepository.findAllByHdrIdIn(listId);
+
         thKeHoachDieuChuyenNoiBoCucDtlRepository.deleteAll(listTongHopKeHoachChiCuc);
+        listTongHopKeHoachChiCuc.forEach(e->{
+             e.getDcnbKeHoachDcHdr().setIdThop(null);
+             e.getDcnbKeHoachDcHdr().setMaThop(null);
+             dcHdrRepository.save(e.getDcnbKeHoachDcHdr());
+        });
+        thKeHoachDieuChuyenNoiBoCucDtlRepository.saveAll(listTongHopKeHoachChiCuc);
+        //Xóa tổng hợp kế hoạch khác cục
         List<THKeHoachDieuChuyenCucKhacCucDtl> listTongHopKeHoachKhacCuc = thKeHoachDieuChuyenCucKhacCucDtlRepository.findAllByHdrIdIn(listId);
+        listTongHopKeHoachKhacCuc.forEach(dataHdrId -> {
+            List<Long> danhSachKeHoach = Arrays.stream(dataHdrId.getDcnbKeHoachDcHdrId().split(",")).map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+            List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcHdrRepository.findByIdIn(danhSachKeHoach);
+            dcnbKeHoachDcHdr.forEach(e ->{
+                e.setMaThop(null);
+                e.setIdThop(null);
+                dcHdrRepository.save(e);
+            });
+        });
+        thKeHoachDieuChuyenCucKhacCucDtlRepository.saveAll(listTongHopKeHoachKhacCuc);
+
         thKeHoachDieuChuyenCucKhacCucDtlRepository.deleteAll(listTongHopKeHoachKhacCuc);
         thKeHoachDieuChuyenHdrRepository.deleteAll(list);
     }

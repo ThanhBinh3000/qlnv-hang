@@ -54,5 +54,7 @@ public class ThKeHoachDieuChuyenTongCucHdrReq {
 
     private LocalDateTime thoiGianTongHop;
 
+    private Long idThTongCuc;
+
     List<ThKeHoachDieuChuyenTongCucDtlReq> thKeHoachDieuChuyenTongCucDtls;
 }

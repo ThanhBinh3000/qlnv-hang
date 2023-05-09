@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Table(name = "DCNB_TH_KE_HOACH_DCTC_HDR")
 @Builder
 @NoArgsConstructor

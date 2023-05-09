@@ -13,7 +13,8 @@ import java.util.Date;
 import java.util.List;
 
 
-@Data
+@Getter
+@Setter
 @Table(name = "DCNB_TH_KE_HOACH_DCC_HDR")
 @Builder
 @NoArgsConstructor
@@ -93,6 +94,9 @@ public class THKeHoachDieuChuyenCucHdr implements Serializable {
 
     @Column(name = "THOI_GIAN_TONG_HOP")
     private LocalDateTime thoiGianTongHop;
+
+    @Column(name = "ID_THOP_TC")
+    private Long idThTongCuc;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "DCNB_TH_KE_HOACH_DCC_HDR_ID")
