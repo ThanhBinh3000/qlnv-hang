@@ -282,6 +282,8 @@ public class PathContains {
 
 	public static final String THONG_BAO_KET_QUA = "/thong-bao-ket-qua";
 
+	public static final String BAO_CAO_KET_QUẢ = "/bao-cao-ket-qua";
+
 	// điều chuyển nội bộ
 
 	public static final String DIEU_CHUYEN_NOI_BO = "/dieu-chuyen-noi-bo";

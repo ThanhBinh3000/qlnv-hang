@@ -3,7 +3,7 @@ package com.tcdt.qlnvhang.service.xuathang.thanhlytieuhuy.thanhly;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
-import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -31,11 +31,11 @@ import java.time.LocalDate;
 import java.util.*;
 
 @Service
-public class XhTlQuyetDinhHdrService extends BaseServiceImpl {
+public class XhTlQuyetDinhService extends BaseServiceImpl {
 
 
   @Autowired
-  private XhTlQuyetDinhHdrRepository xhTlQuyetDinhHdrRepository;
+  private XhTlQuyetDinhRepository xhTlQuyetDinhRepository;
 
   @Autowired
   private FileDinhKemService fileDinhKemService;
@@ -48,7 +48,7 @@ public class XhTlQuyetDinhHdrService extends BaseServiceImpl {
       req.setDvql(dvql);
     }
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-    Page<XhTlQuyetDinhHdr> search = xhTlQuyetDinhHdrRepository.search(req, pageable);
+    Page<XhTlQuyetDinhHdr> search = xhTlQuyetDinhRepository.search(req, pageable);
     Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
 
     Map<String, String> mapVthh = getListDanhMucHangHoa();
@@ -68,7 +68,7 @@ public class XhTlQuyetDinhHdrService extends BaseServiceImpl {
       throw new Exception("Bad request.");
     }
     if (!DataUtils.isNullObject(objReq.getSoQd())) {
-      Optional<XhTlQuyetDinhHdr> optional = xhTlQuyetDinhHdrRepository.findBySoQd(objReq.getSoQd());
+      Optional<XhTlQuyetDinhHdr> optional = xhTlQuyetDinhRepository.findBySoQd(objReq.getSoQd());
       if (optional.isPresent()) {
         throw new Exception("số quyết định đã tồn tại");
       }
@@ -82,7 +82,7 @@ public class XhTlQuyetDinhHdrService extends BaseServiceImpl {
       s.setQuyetDinhHdr(data);
     });
 
-    XhTlQuyetDinhHdr created = xhTlQuyetDinhHdrRepository.save(data);
+    XhTlQuyetDinhHdr created = xhTlQuyetDinhRepository.save(data);
 
     //update so xuat cap vao bang qd cuu tro
 //    if (!DataUtils.isNullObject(data.getIdQd())) {
@@ -109,11 +109,11 @@ public class XhTlQuyetDinhHdrService extends BaseServiceImpl {
     if (currentUser == null) {
       throw new Exception("Bad request.");
     }
-    Optional<XhTlQuyetDinhHdr> optional = xhTlQuyetDinhHdrRepository.findById(objReq.getId());
+    Optional<XhTlQuyetDinhHdr> optional = xhTlQuyetDinhRepository.findById(objReq.getId());
     if (!optional.isPresent()) {
       throw new Exception("Không tìm thấy dữ liệu cần sửa");
     }
-    Optional<XhTlQuyetDinhHdr> soDx = xhTlQuyetDinhHdrRepository.findBySoQd(objReq.getSoQd());
+    Optional<XhTlQuyetDinhHdr> soDx = xhTlQuyetDinhRepository.findBySoQd(objReq.getSoQd());
     if (soDx.isPresent()) {
       if (!soDx.get().getId().equals(objReq.getId())) {
         throw new Exception("số quyết định đã tồn tại");
@@ -128,7 +128,7 @@ public class XhTlQuyetDinhHdrService extends BaseServiceImpl {
     data.getQuyetDinhDtl().forEach(s -> {
       s.setQuyetDinhHdr(data);
     });
-    XhTlQuyetDinhHdr created = xhTlQuyetDinhHdrRepository.save(data);
+    XhTlQuyetDinhHdr created = xhTlQuyetDinhRepository.save(data);
 
     //update so xuat cap vao bang qd cuu tro
 //    if (!DataUtils.isNullObject(data.getIdQd())) {
@@ -156,14 +156,14 @@ public class XhTlQuyetDinhHdrService extends BaseServiceImpl {
 
   public List<XhTlQuyetDinhHdr> detail(List<Long> ids) throws Exception {
     if (DataUtils.isNullOrEmpty(ids)) throw new Exception("Tham số không hợp lệ.");
-    List<XhTlQuyetDinhHdr> optional = xhTlQuyetDinhHdrRepository.findByIdIn(ids);
+    List<XhTlQuyetDinhHdr> optional = xhTlQuyetDinhRepository.findByIdIn(ids);
     if (DataUtils.isNullOrEmpty(optional)) {
       throw new Exception("Không tìm thấy dữ liệu");
     }
 
     Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
     Map<String, String> mapVthh = getListDanhMucHangHoa();
-    List<XhTlQuyetDinhHdr> allById = xhTlQuyetDinhHdrRepository.findAllById(ids);
+    List<XhTlQuyetDinhHdr> allById = xhTlQuyetDinhRepository.findAllById(ids);
     allById.forEach(data -> {
       if (mapDmucDvi.containsKey(data.getMaDvi())) {
         data.setTenDvi(mapDmucDvi.get(data.getMaDvi()).get("tenDvi").toString());
@@ -188,7 +188,7 @@ public class XhTlQuyetDinhHdrService extends BaseServiceImpl {
 
   @Transactional
   public void delete(IdSearchReq idSearchReq) throws Exception {
-    Optional<XhTlQuyetDinhHdr> optional = xhTlQuyetDinhHdrRepository.findById(idSearchReq.getId());
+    Optional<XhTlQuyetDinhHdr> optional = xhTlQuyetDinhRepository.findById(idSearchReq.getId());
     if (!optional.isPresent()) {
       throw new Exception("Bản ghi không tồn tại");
     }
@@ -204,13 +204,13 @@ public class XhTlQuyetDinhHdrService extends BaseServiceImpl {
 
     fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhTlQuyetDinhHdr.TABLE_NAME + "_CAN_CU"));
     fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhTlQuyetDinhHdr.TABLE_NAME));
-    xhTlQuyetDinhHdrRepository.delete(data);
+    xhTlQuyetDinhRepository.delete(data);
 
   }
 
   @Transient
   public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
-    List<XhTlQuyetDinhHdr> list = xhTlQuyetDinhHdrRepository.findAllByIdIn(idSearchReq.getIdList());
+    List<XhTlQuyetDinhHdr> list = xhTlQuyetDinhRepository.findAllByIdIn(idSearchReq.getIdList());
 
     if (list.isEmpty()) {
       throw new Exception("Bản ghi không tồn tại");
@@ -227,7 +227,7 @@ public class XhTlQuyetDinhHdrService extends BaseServiceImpl {
 
     fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(XhTlQuyetDinhHdr.TABLE_NAME));
     fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(XhTlQuyetDinhHdr.TABLE_NAME + "_CAN_CU"));
-    xhTlQuyetDinhHdrRepository.deleteAll(list);
+    xhTlQuyetDinhRepository.deleteAll(list);
 
   }
 
@@ -237,7 +237,7 @@ public class XhTlQuyetDinhHdrService extends BaseServiceImpl {
     if (StringUtils.isEmpty(statusReq.getId())) {
       throw new Exception("Không tìm thấy dữ liệu");
     }
-    Optional<XhTlQuyetDinhHdr> optional = xhTlQuyetDinhHdrRepository.findById(Long.valueOf(statusReq.getId()));
+    Optional<XhTlQuyetDinhHdr> optional = xhTlQuyetDinhRepository.findById(Long.valueOf(statusReq.getId()));
     if (!optional.isPresent()) {
       throw new Exception("Không tìm thấy dữ liệu");
     }
@@ -265,7 +265,7 @@ public class XhTlQuyetDinhHdrService extends BaseServiceImpl {
         throw new Exception("Phê duyệt không thành công");
     }
     optional.get().setTrangThai(statusReq.getTrangThai());
-    XhTlQuyetDinhHdr created = xhTlQuyetDinhHdrRepository.save(optional.get());
+    XhTlQuyetDinhHdr created = xhTlQuyetDinhRepository.save(optional.get());
     return created;
   }
 
