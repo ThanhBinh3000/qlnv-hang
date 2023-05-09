@@ -28,9 +28,8 @@ public class ThongTinDauGiaPloReq extends BaseRequest {
 
   private String maLoKho;
 
-  private BigDecimal soLuongDeXuat;
-
   private BigDecimal soLuong;
+  private BigDecimal soLuongDeXuat;
 
   private Integer soLanTraGia;
 

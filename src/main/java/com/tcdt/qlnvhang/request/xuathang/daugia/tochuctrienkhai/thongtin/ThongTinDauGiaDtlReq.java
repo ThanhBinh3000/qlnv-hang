@@ -20,6 +20,12 @@ public class ThongTinDauGiaDtlReq extends BaseRequest {
   private String diaChi;
 
   private BigDecimal soLuong;
+  private BigDecimal soLuongChiCuc;
+
+  public void setSoLuongChiCuc(BigDecimal soLuongChiCuc) {
+    this.soLuongChiCuc = soLuongChiCuc;
+    this.soLuong = this.soLuongChiCuc;
+  }
 
   private List<ThongTinDauGiaPloReq> children = new ArrayList<>();
 }
