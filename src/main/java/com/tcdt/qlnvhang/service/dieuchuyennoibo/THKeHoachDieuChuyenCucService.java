@@ -84,7 +84,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
             data.setTrangThai(Contains.YEU_CAU_XAC_DINH_DIEM_NHAP);
             THKeHoachDieuChuyenCucHdr created = thKeHoachDieuChuyenHdrRepository.save(data);
             for (THKeHoachDieuChuyenNoiBoCucDtl boCucDtl : created.getThKeHoachDieuChuyenNoiBoCucDtls()) {
-                dcHdrRepository.updateTrangThaiNdc(boCucDtl.getDcKeHoachDcDtlId(), Contains.GIUA_2_CHI_CUC_TRONG_1_CUC);
+                dcHdrRepository.updateTrangThaiNdc(boCucDtl.getDcKeHoachDcDtlId(), Contains.NHAN_DIEU_CHUYEN);
             }
             return created;
         }
@@ -389,6 +389,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                 dtl.setTenCucNhan(khhc.get(0).getTenCucNhan());
                 List<Long> listId = khhc.stream().map(DcnbKeHoachDcHdr::getId).collect(Collectors.toList());
                 String idString = listId.stream().map(Objects::toString).collect(Collectors.joining(","));
+                dtl.setNgayGduyetTc(LocalDate.now());
                 dtl.setDcnbKeHoachDcHdrId(idString);
                 dtl.setDcnbKeHoachDcHdrs(khhc);
                 dtl.setId(null);

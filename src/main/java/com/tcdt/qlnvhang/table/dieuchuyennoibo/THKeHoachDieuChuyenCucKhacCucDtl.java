@@ -27,8 +27,8 @@ public class THKeHoachDieuChuyenCucKhacCucDtl implements Serializable {
     @SequenceGenerator(sequenceName = "DCNB_TH_KH_DCC_KC_DTL_SEQ", allocationSize = 1, name = "DCNB_TH_KH_DCC_KC_DTL_SEQ")
     private Long id;
 
-//    @Column(name = "NGAY_GDUYET_TC")
-//    private LocalDate ngayGduyetTc;
+    @Column(name = "NGAY_GUI_DUYET_TC")
+    private LocalDate ngayGduyetTc;
 
     @Column(name = "HDR_ID")
     private Long hdrId;

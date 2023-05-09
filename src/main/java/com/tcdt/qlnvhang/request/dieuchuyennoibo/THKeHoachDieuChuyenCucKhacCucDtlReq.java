@@ -12,7 +12,7 @@ import java.util.List;
 
 @Data
 public class THKeHoachDieuChuyenCucKhacCucDtlReq {
-//    private LocalDate ngayGduyetTc;
+    private LocalDate ngayGduyetTc;
     private Long hdrId;
     private String dcnbKeHoachDcHdrId;
     private Long id;
