@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 
@@ -11,15 +12,15 @@ import java.time.LocalDate;
 import java.util.Map;
 
 @Entity
-@Table(name = XhTlDanhSachDtl.TABLE_NAME)
+@Table(name = XhTlTongHopDtl.TABLE_NAME)
 @Data
-public class XhTlDanhSachDtl implements Serializable {
+public class XhTlTongHopDtl extends BaseEntity implements Serializable {
   private static final long serialVersionUID = 1L;
-  public static final String TABLE_NAME = "XH_TL_DANH_SACH_DTL";
+  public static final String TABLE_NAME = "XH_TL_TONG_HOP_DTL";
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlDanhSachDtl.TABLE_NAME + "_SEQ")
-  @SequenceGenerator(sequenceName = XhTlDanhSachDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhTlDanhSachDtl.TABLE_NAME + "_SEQ")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlTongHopDtl.TABLE_NAME + "_SEQ")
+  @SequenceGenerator(sequenceName = XhTlTongHopDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhTlTongHopDtl.TABLE_NAME + "_SEQ")
   private Long id;
   private Long idTongHop;
   private String maTongHop;
@@ -97,6 +98,6 @@ public class XhTlDanhSachDtl implements Serializable {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "idHdr")
   @JsonIgnore
-  private XhTlDanhSachHdr danhSachHdr;
+  private XhTlTongHopHdr danhSachHdr;
 
 }

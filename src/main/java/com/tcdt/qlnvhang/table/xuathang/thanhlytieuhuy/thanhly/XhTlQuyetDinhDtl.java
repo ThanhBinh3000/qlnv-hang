@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 
@@ -13,7 +14,7 @@ import java.util.Map;
 @Entity
 @Table(name = XhTlQuyetDinhDtl.TABLE_NAME)
 @Data
-public class XhTlQuyetDinhDtl implements Serializable {
+public class XhTlQuyetDinhDtl extends BaseEntity implements Serializable {
 
   private static final long serialVersionUID = 1L;
   public static final String TABLE_NAME = "XH_TL_QUYET_DINH_DTL";
