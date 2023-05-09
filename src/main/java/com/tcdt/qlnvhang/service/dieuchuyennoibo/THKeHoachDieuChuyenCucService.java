@@ -267,7 +267,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
-        if(!optional.get().getTrangThai().equals(Contains.DUTHAO)){
+        if(!optional.get().getTrangThai().equals(Contains.DUTHAO) || !optional.get().getTrangThai().equals(Contains.YEU_CAU_XAC_DINH_DIEM_NHAP)){
             throw new Exception("Tổng hợp không được phép chỉnh sửa");
         }
 //        List<THKeHoachDieuChuyenCucHdr> maTongHop = thKeHoachDieuChuyenHdrRepository.findByMaTongHop(String.valueOf(optional.get().getMaTongHop()));
