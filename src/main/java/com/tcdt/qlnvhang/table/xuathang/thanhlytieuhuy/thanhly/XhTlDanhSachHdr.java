@@ -81,8 +81,8 @@ public class XhTlDanhSachHdr extends BaseEntity implements Serializable {
       String tenNhaKho = mapDmucDvi.containsKey(maNhaKho) ? mapDmucDvi.get(maNhaKho) : null;
       String tenNganKho = mapDmucDvi.containsKey(maNganKho) ? mapDmucDvi.get(maNganKho) : null;
       String tenLoKho = mapDmucDvi.containsKey(maLoKho) ? mapDmucDvi.get(maLoKho) : null;
-      setTenDiemKho(tenCuc);
-      setTenNhaKho(tenChiCuc);
+      setTenCuc(tenCuc);
+      setTenChiCuc(tenChiCuc);
       setTenDiemKho(tenDiemKho);
       setTenNhaKho(tenNhaKho);
       setTenNganKho(tenNganKho);

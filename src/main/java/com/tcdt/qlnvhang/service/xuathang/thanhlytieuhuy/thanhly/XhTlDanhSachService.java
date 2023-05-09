@@ -40,6 +40,7 @@ public class XhTlDanhSachService extends BaseServiceImpl {
     //set label
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
     Map<String, String> mapVthh = getListDanhMucHangHoa();
+    System.out.println(mapDmucDvi);
     search.getContent().forEach(s -> {
       s.setMapDmucDvi(mapDmucDvi);
       s.setMapVthh(mapVthh);
