@@ -253,7 +253,7 @@ public class Contains {
 
 	public static final String NHAN_DIEU_CHUYEN_TS = "NDCTS";
 
-	// Loa diều chuyển
+	// Loai diều chuyển
 
 	public static final String GIUA_2_CHI_CUC_TRONG_1_CUC = "CHI_CUC";
 	public static final String GIUA_2_CUC_DTNN_KV = "CUC";
