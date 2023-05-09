@@ -25,7 +25,7 @@ public class DcnbQuyetDinhDcTcDtl implements Serializable {
 
     @Column(name = "DCNB_KE_HOACH_DC_HDR_ID")
     private Long keHoachDcHdrId;
-    @Column(name = "HDR_ID", insertable = true, updatable = true)
+    @Column(name = "HDR_ID")
     private Long hdrId;
     @Transient
     private DcnbKeHoachDcHdr dcnbKeHoachDcHdr;

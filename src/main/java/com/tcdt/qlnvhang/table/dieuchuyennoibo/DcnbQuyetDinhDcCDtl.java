@@ -22,7 +22,7 @@ public class DcnbQuyetDinhDcCDtl implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbQuyetDinhDcCDtl.TABLE_NAME + "_SEQ")
     @SequenceGenerator(sequenceName = DcnbQuyetDinhDcCDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbQuyetDinhDcCDtl.TABLE_NAME + "_SEQ")
     private Long id;
-    @Column(name = "DCNB_KE_HOACH_DC_HDR_ID", insertable = false, updatable = false)
+    @Column(name = "DCNB_KE_HOACH_DC_HDR_ID")
     private Long keHoachDcHdrId;
     @Column(name = "HDR_ID", insertable = true, updatable = true)
     private Long hdrId;
