@@ -282,10 +282,10 @@ public class XhTlBaoCaoKqService extends BaseServiceImpl {
     Page<XhTlBaoCaoKqHdr> page = this.searchPage(currentUser, objReq);
     List<XhTlBaoCaoKqHdr> data = page.getContent();
 
-    String title = "Danh sách quyết định thanh lý hàng DTQG ";
+    String title = "Danh sách báo cáo kết quả bán thanh lý hàng DTQG ";
     String[] rowsName = new String[]{"STT", "Số quyết định", "Trích yếu", "Ngày ký",
         "Hồ sơ đề nghị thanh lý", "Trạng thái"};
-    String fileName = "danh-sach-phuong-quyet-dinh-thanh-ly-hang-dtqg.xlsx";
+    String fileName = "danh-sach-bao-cao-ket-qua-ban-thanh-ly-hang-dtqg.xlsx";
     List<Object[]> dataList = new ArrayList<Object[]>();
     Object[] objs = null;
     for (int i = 0; i < data.size(); i++) {
