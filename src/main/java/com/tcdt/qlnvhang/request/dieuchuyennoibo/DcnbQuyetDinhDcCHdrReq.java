@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbQuyetDinhDcCDtl;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +23,14 @@ public class DcnbQuyetDinhDcCHdrReq implements Serializable {
   private String trichYeu;
   private String maDvi;
   private String tenDvi;
-  private String maThop;
-  private Long idThop;
-  private String maDxuat;
-  private Long idDxuat;
-  private String type; // loại TH (tổng hợp), DX (đề xuất)
+  private String loaiQdinh;
+  private String tenLoaiQdinh;
+  private BigDecimal tongDuToanKp;
+  private Long canCuQdTc;
+  private String soCanCuQdTc;
+  private Long dxuatId;
+  private String soDxuat;
+  private LocalDate ngayTrinhDuyetTc;
   private String trangThai;
   private String lyDoTuChoi;
   private LocalDate ngayGduyet;
