@@ -79,6 +79,7 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
         data.setChungLoaiHangHoa(objReq.getChungLoaiHangHoa());
         data.setTenLoaiHangHoa(objReq.getTenLoaiHangHoa());
         data.setNgaytao(LocalDate.now());
+        data.setNgayTongHop(LocalDate.now());
         data.setNguoiTaoId(currentUser.getUser().getId());
         data.setNamKeHoach(objReq.getNamKeHoach());
         data.setLoaiDieuChuyen(objReq.getLoaiDieuChuyen());
@@ -99,7 +100,11 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
             }
         }
         thKeHoachDieuChuyenTongCucDtlRepository.saveAll(chiTiet);
-
+//        if (created.getId() > 0) {
+//            List<Long> danhSachKeHoach = created.getThKeHoachDieuChuyenTongCucDtls().stream().map(THKeHoachDieuChuyenTongCucDtl::getThKhDcHdrId)
+//                    .collect(Collectors.toList());
+//            thKeHoachDieuChuyenCucHdrRepository.updateIdTongHop(created.getId(),danhSachKeHoach);
+//        }
         return created;
     }
 
@@ -141,6 +146,10 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
             }
             THKeHoachDieuChuyenTongCucHdr data = optional.get();
             List<THKeHoachDieuChuyenTongCucDtl> list = thKeHoachDieuChuyenTongCucDtlRepository.findByHdrId(data.getId());
+//            list.forEach(e ->{
+//                e.getThKeHoachDieuChuyenCucHdr().setIdThTongCuc(null);
+//                thKeHoachDieuChuyenCucHdrRepository.save(e.getThKeHoachDieuChuyenCucHdr());
+//            });
             thKeHoachDieuChuyenTongCucDtlRepository.deleteAll(list);
             tongCucHdrRepository.delete(data);
         }
@@ -154,6 +163,10 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
             }
             List<Long> listId = list.stream().map(THKeHoachDieuChuyenTongCucHdr::getId).collect(Collectors.toList());
             List<THKeHoachDieuChuyenTongCucDtl> listTongHopKeHoach = thKeHoachDieuChuyenTongCucDtlRepository.findAllByHdrIdIn(listId);
+            listTongHopKeHoach.forEach(e ->{
+                e.getThKeHoachDieuChuyenCucHdr().setIdThTongCuc(null);
+                thKeHoachDieuChuyenCucHdrRepository.save(e.getThKeHoachDieuChuyenCucHdr());
+            });
             thKeHoachDieuChuyenTongCucDtlRepository.deleteAll(listTongHopKeHoach);
             tongCucHdrRepository.deleteAll(list);
         }
@@ -174,7 +187,8 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
 //            }
 //        }
         THKeHoachDieuChuyenTongCucHdr data = optional.get();
-        ObjectMapperUtils.map(objReq, data);
+        THKeHoachDieuChuyenTongCucHdr dataMap = new ModelMapper().map(objReq, THKeHoachDieuChuyenTongCucHdr.class);
+        updateObjectToObject(data,dataMap);
         data.setNguoiSuaId(currentUser.getUser().getId());
         data.setNgaySua(LocalDate.now());
         THKeHoachDieuChuyenTongCucHdr created = tongCucHdrRepository.save(data);

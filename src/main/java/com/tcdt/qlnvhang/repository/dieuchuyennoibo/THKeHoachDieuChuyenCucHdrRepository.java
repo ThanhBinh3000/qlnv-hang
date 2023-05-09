@@ -1,17 +1,17 @@
 package com.tcdt.qlnvhang.repository.dieuchuyennoibo;
 
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.THKeHoachDieuChuyenCucHdr;
 import com.tcdt.qlnvhang.request.search.TongHopKeHoachDieuChuyenSearch;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.THKeHoachDieuChuyenTongCucHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.THKeHoachDieuChuyenCucHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -59,4 +59,9 @@ public interface THKeHoachDieuChuyenCucHdrRepository extends JpaRepository<THKeH
             "AND (:#{#param.namKeHoach} IS NULL OR hdr.namKeHoach = :#{#param.namKeHoach}) " +
             "AND (:#{#param.soDeXuat} IS NULL OR LOWER(hdr.soDeXuat) LIKE CONCAT('%',LOWER(:#{#param.soDeXuat}),'%')) ")
     List<THKeHoachDieuChuyenCucHdr> filterSoDeXuat(@Param("param") TongHopKeHoachDieuChuyenSearch req);
+
+    @Transactional()
+    @Modifying
+    @Query(value = "UPDATE DCNB_TH_KE_HOACH_DCC_HDR SET ID_THOP_TC = to_number(:idTh) WHERE ID IN :danhSachKeHoach", nativeQuery = true)
+    void updateIdTongHop(Long id, List<Long> danhSachKeHoach);
 }
