@@ -56,15 +56,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
     private THKeHoachDieuChuyenCucKhacCucDtlRepository thKeHoachDieuChuyenCucKhacCucDtlRepository;
 
     @Autowired
-    private THKeHoachDieuChuyenTongCucHdrRepository tongCucHdrRepository;
-
-    @Autowired
-    private THKeHoachDieuChuyenTongCucDtlRepository thKeHoachDieuChuyenTongCucDtlRepository;
-
-    @Autowired
     private DcnbKeHoachDcHdrRepository dcHdrRepository;
-    @Autowired
-    private EntityManager entityManager;
 
 
     public Page<THKeHoachDieuChuyenCucHdr> searchPageCuc(CustomUserDetails currentUser, TongHopKeHoachDieuChuyenSearch req) throws Exception {
