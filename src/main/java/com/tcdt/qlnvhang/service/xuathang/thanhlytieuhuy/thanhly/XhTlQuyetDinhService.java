@@ -281,7 +281,7 @@ public class XhTlQuyetDinhService extends BaseServiceImpl {
     String title = "Danh sách quyết định thanh lý hàng DTQG ";
     String[] rowsName = new String[]{"STT", "Số quyết định", "Trích yếu", "Ngày ký",
         "Hồ sơ đề nghị thanh lý", "Trạng thái"};
-    String fileName = "danh-sach-phuong-quyet-dinh-thanh-ly-hang-dtqg.xlsx";
+    String fileName = "danh-sach-quyet-dinh-thanh-ly-hang-dtqg.xlsx";
     List<Object[]> dataList = new ArrayList<Object[]>();
     Object[] objs = null;
     for (int i = 0; i < data.size(); i++) {
