@@ -19,7 +19,7 @@ public class XhQdNvXhBttDtl {
     @SequenceGenerator(sequenceName = "XH_QD_NV_XH_BTT_DTL_SEQ", allocationSize = 1, name = "XH_QD_NV_XH_BTT_DTL_SEQ")
     private Long id;
 
-    private Long idQdHdr;
+    private Long idHdr;
 
     private String maDvi;
     @Transient

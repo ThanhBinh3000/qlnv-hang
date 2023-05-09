@@ -280,6 +280,8 @@ public class PathContains {
 	public static final String DANH_SACH = "/danh-sach";
 	public static final String QUYET_DINH_THANH_LY = "/quyet-dinh-thanh-ly";
 
+	public static final String THONG_BAO_KET_QUA = "/thong-bao-ket-qua";
+
 	// điều chuyển nội bộ
 
 	public static final String DIEU_CHUYEN_NOI_BO = "/dieu-chuyen-noi-bo";

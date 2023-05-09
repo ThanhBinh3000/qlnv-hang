@@ -27,6 +27,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
@@ -68,6 +69,12 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
             f.setTenLoaiVthh(hashMapVthh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(hashMapVthh.get(f.getCloaiVthh()));
             f.setTenLoaiHdong(hashMapLoaiHdong.get(f.getLoaiHdong()));
+            List<XhHopDongBttDtl> dtlList = xhHopDongBttDtlRepository.findAllByIdHdr(f.getId());
+            dtlList.forEach(s ->{
+                List<XhHopDongBttDvi> dviList = xhHopDongBttDviRepository.findAllByIdDtl(s.getId());
+                s.setChildren(dviList);
+            });
+            f.setChildren(dtlList);
         });
         return page;
     }
@@ -102,7 +109,9 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
         dataMap.setTrangThaiPhuLuc(Contains.DUTHAO);
         dataMap.setTrangThaiXh(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
         dataMap.setMaDvi(userInfo.getDvql());
-//        dataMap.setMaDviTsan(String.join(",",req.getListMaDviTsan()));
+        if(!ObjectUtils.isEmpty(req.getListMaDviTsan())){
+            dataMap.setMaDviTsan(String.join(",",req.getListMaDviTsan()));
+        }
 
         XhHopDongBttHdr created = xhHopDongBttHdrRepository.save(dataMap);
 
@@ -193,6 +202,9 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
 
         dataDB.setNgaySua(new Date());
         dataDB.setNguoiSuaId(userInfo.getId());
+        if(!ObjectUtils.isEmpty(req.getListMaDviTsan())){
+            dataDB.setMaDviTsan(String.join(",",req.getListMaDviTsan()));
+        }
 
         XhHopDongBttHdr created = xhHopDongBttHdrRepository.save(dataDB);
 
@@ -235,7 +247,7 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl implements XhHopDon
             data.setTenLoaiVthh(hashMapVthh.get(data.getLoaiVthh()));
             data.setTenCloaiVthh(hashMapVthh.get(data.getCloaiVthh()));
             data.setTenLoaiHdong(hashMapLoaiHdong.get(data.getLoaiHdong()));
-        if (DataUtils.isNullObject(data.getIdHd())) {
+        if (!DataUtils.isNullObject(data.getMaDviTsan())) {
             data.setListMaDviTsan(Arrays.asList(data.getMaDviTsan().split(",")));
         }
 
