@@ -96,10 +96,6 @@ public class XhTlBaoCaoKqService extends BaseServiceImpl {
             xhTlQuyetDinhRepository.save(item);
           });
     }
-
-    if (!DataUtils.isNullOrEmpty(objReq.getCanCu())) {
-      fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), XhTlBaoCaoKqHdr.TABLE_NAME + "_CAN_CU");
-    }
     if (!DataUtils.isNullObject(objReq.getFileDinhKem())) {
       fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(), created.getId(), XhTlBaoCaoKqHdr.TABLE_NAME);
     }
@@ -146,9 +142,6 @@ public class XhTlBaoCaoKqService extends BaseServiceImpl {
 
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhTlBaoCaoKqHdr.TABLE_NAME));
 
-    if (!DataUtils.isNullOrEmpty(objReq.getCanCu())) {
-      fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), XhTlBaoCaoKqHdr.TABLE_NAME + "_CAN_CU");
-    }
     if (!DataUtils.isNullObject(objReq.getFileDinhKem())) {
       fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(), created.getId(), XhTlBaoCaoKqHdr.TABLE_NAME);
     }
@@ -174,9 +167,6 @@ public class XhTlBaoCaoKqService extends BaseServiceImpl {
 
       List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhTlBaoCaoKqHdr.TABLE_NAME));
       data.setFileDinhKem(fileDinhKem);
-
-      List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Arrays.asList(XhTlBaoCaoKqHdr.TABLE_NAME + "_CAN_CU"));
-      data.setCanCu(canCu);
 
       data.getBaoCaoKqDtl().forEach(s -> {
 
@@ -205,7 +195,6 @@ public class XhTlBaoCaoKqService extends BaseServiceImpl {
           });
     }
 
-    fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhTlBaoCaoKqHdr.TABLE_NAME + "_CAN_CU"));
     fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhTlBaoCaoKqHdr.TABLE_NAME));
     xhTlBaoCaoKqRepository.delete(data);
 
@@ -231,7 +220,6 @@ public class XhTlBaoCaoKqService extends BaseServiceImpl {
     });
 
     fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(XhTlBaoCaoKqHdr.TABLE_NAME));
-    fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(XhTlBaoCaoKqHdr.TABLE_NAME + "_CAN_CU"));
     xhTlBaoCaoKqRepository.deleteAll(list);
 
   }
@@ -282,10 +270,10 @@ public class XhTlBaoCaoKqService extends BaseServiceImpl {
     Page<XhTlBaoCaoKqHdr> page = this.searchPage(currentUser, objReq);
     List<XhTlBaoCaoKqHdr> data = page.getContent();
 
-    String title = "Danh sách quyết định thanh lý hàng DTQG ";
+    String title = "Danh sách báo cáo kết quả bán thanh lý hàng DTQG ";
     String[] rowsName = new String[]{"STT", "Số quyết định", "Trích yếu", "Ngày ký",
         "Hồ sơ đề nghị thanh lý", "Trạng thái"};
-    String fileName = "danh-sach-phuong-quyet-dinh-thanh-ly-hang-dtqg.xlsx";
+    String fileName = "danh-sach-bao-cao-ket-qua-ban-thanh-ly-hang-dtqg.xlsx";
     List<Object[]> dataList = new ArrayList<Object[]>();
     Object[] objs = null;
     for (int i = 0; i < data.size(); i++) {

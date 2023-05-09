@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = PathContains.XUAT_HANG_DTQG + PathContains.XUAT_THANH_LY + PathContains.BAO_CAO_KET_QUẢ)
+@RequestMapping(value = PathContains.XUAT_HANG_DTQG + PathContains.XUAT_THANH_LY + PathContains.BAO_CAO_KET_QUA)
 @Slf4j
 @Api(tags = "Xuất hàng DTQG - Xuất thanh lý - Báo cáo kết quả bán thanh lý")
 public class XhTlBaoCaoKqController {

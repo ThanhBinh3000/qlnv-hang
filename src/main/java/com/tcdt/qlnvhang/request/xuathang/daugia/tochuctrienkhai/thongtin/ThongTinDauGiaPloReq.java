@@ -29,10 +29,16 @@ public class ThongTinDauGiaPloReq extends BaseRequest {
   private String maLoKho;
 
   private BigDecimal soLuong;
+  private BigDecimal soLuongDeXuat;
 
   private Integer soLanTraGia;
 
   private BigDecimal donGiaTraGia;
 
   private String toChucCaNhan;
+
+  public void setSoLuongDeXuat(BigDecimal soLuongDeXuat) {
+    this.soLuongDeXuat = soLuongDeXuat;
+    this.soLuong = this.soLuongDeXuat;
+  }
 }

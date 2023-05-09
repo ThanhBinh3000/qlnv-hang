@@ -77,7 +77,7 @@ public class XhTlTongHopService extends BaseServiceImpl {
     data.setTrangThai(Contains.DUTHAO);
 
     data.getTongHopDtl().forEach(s -> {
-      s.setDanhSachHdr(data);
+      s.setTongHopHdr(data);
     });
 
     XhTlTongHopHdr created = xhTlTongHopRepository.save(data);
@@ -103,7 +103,7 @@ public class XhTlTongHopService extends BaseServiceImpl {
     XhTlTongHopHdr data = optional.get();
     BeanUtils.copyProperties(objReq, data, "id");
     data.getTongHopDtl().forEach(s -> {
-      s.setDanhSachHdr(data);
+      s.setTongHopHdr(data);
     });
     XhTlTongHopHdr created = xhTlTongHopRepository.save(data);
     return created;

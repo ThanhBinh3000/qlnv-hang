@@ -35,6 +35,5 @@ public class XhTlBaoCaoKqHdrReq {
   private String lyDoTuChoi;
 
   private List<FileDinhKemReq> fileDinhKem;
-  private List<FileDinhKemReq> canCu = new ArrayList<>();
   private List<XhTlBaoCaoKqDtl> baoCaoKqDtl = new ArrayList<>();
 }
