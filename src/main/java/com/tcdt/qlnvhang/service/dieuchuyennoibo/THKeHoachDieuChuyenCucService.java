@@ -267,7 +267,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
-        if(!optional.get().getTrangThai().equals(Contains.DUTHAO) || !optional.get().getTrangThai().equals(Contains.YEU_CAU_XAC_DINH_DIEM_NHAP)){
+        if(!optional.get().getTrangThai().equals(Contains.DUTHAO) && !optional.get().getTrangThai().equals(Contains.YEU_CAU_XAC_DINH_DIEM_NHAP)){
             throw new Exception("Tổng hợp không được phép chỉnh sửa");
         }
 //        List<THKeHoachDieuChuyenCucHdr> maTongHop = thKeHoachDieuChuyenHdrRepository.findByMaTongHop(String.valueOf(optional.get().getMaTongHop()));
@@ -278,7 +278,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
 //        }
         THKeHoachDieuChuyenCucHdr data = optional.get();
         THKeHoachDieuChuyenCucHdr dataMap = new ModelMapper().map(objReq, THKeHoachDieuChuyenCucHdr.class);
-        updateObjectToObject(data,dataMap);
+        BeanUtils.copyProperties(data,dataMap);
         data.setNguoiSuaId(currentUser.getUser().getId());
         data.setNgaySua(LocalDate.now());
         THKeHoachDieuChuyenCucHdr created = thKeHoachDieuChuyenHdrRepository.save(data);
