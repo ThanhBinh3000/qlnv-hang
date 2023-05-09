@@ -48,8 +48,6 @@ public class XhTlBaoCaoKqHdr extends BaseEntity implements Serializable {
 
   @Transient
   private List<FileDinhKem> fileDinhKem;
-  @Transient
-  private List<FileDinhKem> canCu = new ArrayList<>();
 
   @OneToMany(mappedBy = "baoCaoKqHdr", cascade = CascadeType.ALL)
   private List<XhTlBaoCaoKqDtl> baoCaoKqDtl = new ArrayList<>();
