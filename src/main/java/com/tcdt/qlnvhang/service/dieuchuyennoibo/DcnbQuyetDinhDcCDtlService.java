@@ -32,6 +32,7 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -73,13 +74,39 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
         }
         Optional<DcnbQuyetDinhDcCHdr> optional = dcnbQuyetDinhDcCHdrRepository.findFirstBySoQdinh(objReq.getSoQdinh());
         if (optional.isPresent() && objReq.getSoQdinh().split("/").length == 1) {
-            throw new Exception("số đề xuất đã tồn tại");
+            throw new Exception("số quyết định đã tồn tại");
         }
         DcnbQuyetDinhDcCHdr data = new DcnbQuyetDinhDcCHdr();
         BeanUtils.copyProperties(objReq, data);
         data.setMaDvi(currentUser.getDvql());
         data.setTrangThai(Contains.DUTHAO);
-        objReq.getDanhSachQuyetDinh().forEach(e -> e.setDcnbQuyetDinhDcCHdr(data));
+        for (DcnbQuyetDinhDcCDtl e : objReq.getDanhSachQuyetDinh()) {
+            if (Contains.DCNB.equals(data.getLoaiDc()) && Contains.CAP_CUC.equals(currentUser.getUser().getCapDvi())) {
+                // được phép thêm mới kế hoạch và update kế hoạch (ngầm)
+                DcnbKeHoachDcHdr dcnbKeHoachDcHdr = e.getDcnbKeHoachDcHdr();
+                if (dcnbKeHoachDcHdr.getId() == null) {
+                    dcnbKeHoachDcHdr.setType(Contains.NHAN_DIEU_CHUYEN_TS);
+                    dcnbKeHoachDcHdr.setMaDviPq(e.getDcnbKeHoachDcHdr().getMaDvi());
+                    dcnbKeHoachDcHdr.setPhuongAnDieuChuyen(new ArrayList<>());
+                    if (dcnbKeHoachDcHdr.getDanhSachHangHoa() != null) {
+                        BigDecimal total = dcnbKeHoachDcHdr.getDanhSachHangHoa().stream().map(DcnbKeHoachDcDtl::getDuToanKphi)
+                                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                        dcnbKeHoachDcHdr.setTongDuToanKp(total);
+                        dcnbKeHoachDcHdr.getDanhSachHangHoa().forEach(e1 -> {
+                            e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
+                            e1.setDaXdinhDiemNhap(true);
+                        });
+                    }
+                    dcnbKeHoachDcHdr.setDaXdinhDiemNhap(true);
+                    DcnbKeHoachDcHdr dcnbKeHoachDcHdrNew = dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr);
+                    e.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdrNew);
+                    e.setKeHoachDcHdrId(dcnbKeHoachDcHdrNew.getId());
+                }else {
+                    throw new Exception("dcnbKeHoachDcHdr.id phải là null!");
+                }
+            }
+            e.setDcnbQuyetDinhDcCHdr(data);
+        }
         DcnbQuyetDinhDcCHdr created = dcnbQuyetDinhDcCHdrRepository.save(data);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), DcnbQuyetDinhDcCHdr.TABLE_NAME + "_CAN_CU");
         List<FileDinhKem> quyetDinh = fileDinhKemService.saveListFileDinhKem(objReq.getQuyetDinh(), created.getId(), DcnbQuyetDinhDcCHdr.TABLE_NAME + "_QUYET_DINH");
@@ -98,7 +125,7 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
         Optional<DcnbQuyetDinhDcCHdr> soDxuat = dcnbQuyetDinhDcCHdrRepository.findFirstBySoQdinh(objReq.getSoQdinh());
-        if(org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoQdinh())){
+        if (org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoQdinh())) {
             if (soDxuat.isPresent() && objReq.getSoQdinh().split("/").length == 1) {
                 if (!soDxuat.get().getId().equals(objReq.getId())) {
                     throw new Exception("số quyết định đã tồn tại");
@@ -110,6 +137,42 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
         objReq.setMaDvi(data.getMaDvi());
         BeanUtils.copyProperties(objReq, data);
         data.setDanhSachQuyetDinh(objReq.getDanhSachQuyetDinh());
+        for (DcnbQuyetDinhDcCDtl e : objReq.getDanhSachQuyetDinh()) {
+            if (Contains.DCNB.equals(data.getLoaiDc()) && Contains.CAP_CUC.equals(currentUser.getUser().getCapDvi())) {
+                // được phép thêm mới kế hoạch và update kế hoạch (ngầm)
+                DcnbKeHoachDcHdr dcnbKeHoachDcHdr = e.getDcnbKeHoachDcHdr();
+                if (dcnbKeHoachDcHdr.getId() != null) {
+                    dcnbKeHoachDcHdr.setType(Contains.NHAN_DIEU_CHUYEN_TS);
+                    dcnbKeHoachDcHdr.setMaDviPq(e.getDcnbKeHoachDcHdr().getMaDvi());
+                    if (dcnbKeHoachDcHdr.getDanhSachHangHoa() != null) {
+                        BigDecimal total = dcnbKeHoachDcHdr.getDanhSachHangHoa().stream().map(DcnbKeHoachDcDtl::getDuToanKphi)
+                                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                        dcnbKeHoachDcHdr.setTongDuToanKp(total);
+                        dcnbKeHoachDcHdr.getDanhSachHangHoa().forEach(e1 -> {
+                            e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
+                            e1.setDaXdinhDiemNhap(true);
+                        });
+                    }
+                    dcnbKeHoachDcHdr.setDaXdinhDiemNhap(true);
+                    dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr);
+                }else {
+                    throw new Exception("dcnbKeHoachDcHdr.id phải khác null!");
+                }
+            } else if (Contains.GIUA_2_CUC_DTNN_KV.equals(data.getLoaiDc()) && Contains.QD_NHAP.equals(data.getLoaiQdinh()) && Contains.CAP_CHI_CUC.equals(currentUser.getUser().getCapDvi())) {
+                // được phép update kế hoạch (ngầm)
+                DcnbKeHoachDcHdr dcnbKeHoachDcHdr = e.getDcnbKeHoachDcHdr();
+                if (dcnbKeHoachDcHdr.getId() != null) {
+                    if (dcnbKeHoachDcHdr.getDanhSachHangHoa() != null) {
+                        dcnbKeHoachDcHdr.getDanhSachHangHoa().forEach(e1 -> {
+                            e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
+                            e1.setDaXdinhDiemNhap(true);
+                        });
+                    }
+                    dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr);
+                }
+            }
+            e.setDcnbQuyetDinhDcCHdr(data);
+        }
         DcnbQuyetDinhDcCHdr created = dcnbQuyetDinhDcCHdrRepository.save(data);
 
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbQuyetDinhDcCHdr.TABLE_NAME + "_CAN_CU"));
