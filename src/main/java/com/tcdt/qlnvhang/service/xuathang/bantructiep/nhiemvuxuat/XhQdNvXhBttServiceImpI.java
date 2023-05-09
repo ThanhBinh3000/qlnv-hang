@@ -85,24 +85,6 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
     @Autowired
     private XhKqBttHdrRepository xhKqBttHdrRepository;
 
-    @Autowired
-    private XhPhieuXkhoBttReposytory xhPhieuXkhoBttReposytory;
-
-    @Autowired
-    private XhBkeCanHangBttHdrRepository xhBkeCanHangBttHdrRepository;
-
-    @Autowired
-    private XhBbTinhkBttHdrRepository xhBbTinhkBttHdrRepository;
-
-    @Autowired
-    private XhBbTinhkBttDtlRepository xhBbTinhkBttDtlRepository;
-
-    @Autowired
-    private XhBbHdoiBttHdrRepository xhBbHdoiBttHdrRepository;
-
-    @Autowired
-    private XhBbHdoiBttDtlRepository xhBbHdoiBttDtlRepository;
-
 
     @Override
     public Page<XhQdNvXhBttHdr> searchPage(XhQdNvXhBttHdrReq req) throws Exception {
@@ -116,55 +98,6 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
 
         data.getContent().forEach(f ->{
-
-            // Phiếu xuất kho
-            List<XhPhieuXkhoBtt> xhPhieuXkhoBttList = xhPhieuXkhoBttReposytory.findAllByIdQd(f.getId());
-            xhPhieuXkhoBttList.forEach(a ->{
-                a.setTenLoaiVthh(hashMapVthh.get(a.getLoaiVthh()));
-                a.setTenCloaiVthh(hashMapVthh.get(a.getCloaiVthh()));
-                a.setTenDiemKho(hashMapDvi.get(a.getMaDiemKho()));
-                a.setTenNhaKho(hashMapDvi.get(a.getMaNganKho()));
-                a.setTenNganKho(hashMapDvi.get(a.getMaNganKho()));
-                a.setTenLoKho(hashMapDvi.get(a.getMaLoKho()));
-            });
-            f.setXhPhieuXkhoBttList(xhPhieuXkhoBttList);
-
-            // Bảng kê cân hàng
-            List<XhBkeCanHangBttHdr> xhBkeCanHangBttHdrList = xhBkeCanHangBttHdrRepository.findAllByIdQd(f.getId());
-            xhBkeCanHangBttHdrList.forEach( b ->{
-                b.setTenLoaiVthh(hashMapVthh.get(b.getLoaiVthh()));
-                b.setTenCloaiVthh(hashMapVthh.get(b.getCloaiVthh()));
-                b.setTenDiemKho(hashMapDvi.get(b.getMaDiemKho()));
-                b.setTenNhaKho(hashMapDvi.get(b.getMaNganKho()));
-                b.setTenNganKho(hashMapDvi.get(b.getMaNganKho()));
-                b.setTenLoKho(hashMapDvi.get(b.getMaLoKho()));
-            });
-            f.setXhBkeCanHangBttHdrList(xhBkeCanHangBttHdrList);
-
-            // Biên bản tịnh kho
-            List<XhBbTinhkBttHdr> xhBbTinhkBttHdrList =  xhBbTinhkBttHdrRepository.findAllByIdQd(f.getId());
-            for (XhBbTinhkBttHdr tinhkBttHdr : xhBbTinhkBttHdrList){
-                tinhkBttHdr.setTenDiemKho(hashMapDvi.get(tinhkBttHdr.getMaDiemKho()));
-                tinhkBttHdr.setTenNhaKho(hashMapDvi.get(tinhkBttHdr.getMaNganKho()));
-                tinhkBttHdr.setTenNganKho(hashMapDvi.get(tinhkBttHdr.getMaNganKho()));
-                tinhkBttHdr.setTenLoKho(hashMapDvi.get(tinhkBttHdr.getMaLoKho()));
-                List<XhBbTinhkBttDtl> xhBbTinhkBttDtlList = xhBbTinhkBttDtlRepository.findAllByIdHdr(tinhkBttHdr.getId());
-                tinhkBttHdr.setChildren(xhBbTinhkBttDtlList);
-            }
-            f.setXhBbTinhkBttHdrList(xhBbTinhkBttHdrList);
-
-            // Biên bản hao dôi
-            List<XhBbHdoiBttHdr> xhBbHdoiBttHdrList = xhBbHdoiBttHdrRepository.findAllByIdQd(f.getId());
-            for (XhBbHdoiBttHdr hdoiBttHdr : xhBbHdoiBttHdrList){
-                hdoiBttHdr.setTenDiemKho(hashMapDvi.get(hdoiBttHdr.getMaDiemKho()));
-                hdoiBttHdr.setTenNhaKho(hashMapDvi.get(hdoiBttHdr.getMaNganKho()));
-                hdoiBttHdr.setTenNganKho(hashMapDvi.get(hdoiBttHdr.getMaNganKho()));
-                hdoiBttHdr.setTenLoKho(hashMapDvi.get(hdoiBttHdr.getMaLoKho()));
-                List<XhBbHdoiBttDtl> xhBbHdoiBttDtlList = xhBbHdoiBttDtlRepository.findAllByIdHdr(hdoiBttHdr.getId());
-                hdoiBttHdr.setChildren(xhBbHdoiBttDtlList);
-            }
-            f.setXhBbHdoiBttHdrList(xhBbHdoiBttHdrList);
-
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenTrangThaiXh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiXh()));
             f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : hashMapDvi.get(f.getMaDvi()));
@@ -220,10 +153,6 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         }
         XhQdNvXhBttHdr created = xhQdNvXhBttHdrRepository.save(dataMap);
 
-        if (!DataUtils.isNullObject(req.getFileDinhKem())) {
-            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(req.getFileDinhKem()), created.getId(), XhQdNvXhBttHdr.TABLE_NAME);
-            created.setFileDinhKem(fileDinhKem.get(0));
-        }
         if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
             List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhQdNvXhBttHdr.TABLE_NAME);
             created.setFileDinhKems(fileDinhKems);
@@ -242,11 +171,11 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
     }
 
     public void saveDetail(XhQdNvXhBttHdrReq req, Long idHdr){
-        xhQdNvXhBttDtlRepository.deleteAllByIdQdHdr(idHdr);
+        xhQdNvXhBttDtlRepository.deleteAllByIdHdr(idHdr);
         for (XhQdNvXhBttDtlReq dtlReq : req.getChildren()){
             XhQdNvXhBttDtl dtl = new XhQdNvXhBttDtl();
             BeanUtils.copyProperties(dtlReq, dtl, "id");
-            dtl.setIdQdHdr(idHdr);
+            dtl.setIdHdr(idHdr);
             xhQdNvXhBttDtlRepository.save(dtl);
             xhQdNvXhBttDviRepository.deleteAllByIdDtl(dtlReq.getId());
             for (XhQdNvXhBttDviReq dviReq : dtlReq.getChildren()){
@@ -293,10 +222,6 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         dataDB.setNguoiSuaId(getUser().getId());
         XhQdNvXhBttHdr created = xhQdNvXhBttHdrRepository.save(dataDB);
 
-        if (!DataUtils.isNullObject(req.getFileDinhKem())) {
-            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Arrays.asList(req.getFileDinhKem()), created.getId(), XhQdNvXhBttHdr.TABLE_NAME);
-            dataDB.setFileDinhKem(fileDinhKem.get(0));
-        }
 
         if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
             List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhQdNvXhBttHdr.TABLE_NAME);
@@ -329,12 +254,9 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         }
 
         List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdNvXhBttHdr.TABLE_NAME));
-        if (!DataUtils.isNullOrEmpty(fileDinhKem)) {
-            data.setFileDinhKem(fileDinhKem.get(0));
-        }
         data.setFileDinhKems(fileDinhKem);
 
-        List<XhQdNvXhBttDtl> dtlList  = xhQdNvXhBttDtlRepository.findAllByIdQdHdr(data.getId());
+        List<XhQdNvXhBttDtl> dtlList  = xhQdNvXhBttDtlRepository.findAllByIdHdr(data.getId());
         for (XhQdNvXhBttDtl dtl : dtlList){
             List<XhQdNvXhBttDvi> dviList = xhQdNvXhBttDviRepository.findAllByIdDtl(dtl.getId());
             for (XhQdNvXhBttDvi dvi :dviList){
@@ -434,11 +356,11 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
 
 
 
-        List<XhQdNvXhBttDtl> dtlList = xhQdNvXhBttDtlRepository.findAllByIdQdHdr(id);
+        List<XhQdNvXhBttDtl> dtlList = xhQdNvXhBttDtlRepository.findAllByIdHdr(id);
         for (XhQdNvXhBttDtl dtl : dtlList){
             xhQdNvXhBttDviRepository.deleteAllByIdDtl(dtl.getId());
         }
-        xhQdNvXhBttDtlRepository.deleteAllByIdQdHdr(id);
+        xhQdNvXhBttDtlRepository.deleteAllByIdHdr(id);
         xhQdNvXhBttHdrRepository.delete(hdr);
         fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhQdNvXhBttHdr.TABLE_NAME));
 
@@ -487,7 +409,7 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
             objs=new Object[rowsName.length];
             objs[0]=i;
             objs[1]=hdr.getNamKh();
-            objs[2]=hdr.getSoQd();
+            objs[2]=null;
             objs[3]=hdr.getNgayTao();
             objs[4]=hdr.getSoHd();
             objs[5]=hdr.getTenLoaiVthh();

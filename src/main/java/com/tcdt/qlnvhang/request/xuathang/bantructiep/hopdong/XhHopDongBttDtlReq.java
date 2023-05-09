@@ -13,7 +13,7 @@ public class XhHopDongBttDtlReq {
 
     private Long idHdr;
 
-    private BigDecimal soLuongBanTrucTiep;
+    private BigDecimal soLuongChiCuc;
 
     private BigDecimal soLuongBanTrucTiepHd;
 

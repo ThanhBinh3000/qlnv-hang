@@ -130,8 +130,8 @@ public class XhHopDongBttHdrReq extends BaseRequest {
 
     private String trangThaiXh;
 
-//    @Transient
-//    private List<String> listMaDviTsan = new ArrayList<>();
+    @Transient
+    private List<String> listMaDviTsan = new ArrayList<>();
 
     @Transient
     private List<FileDinhKemReq> canCuPhapLy = new ArrayList<>();

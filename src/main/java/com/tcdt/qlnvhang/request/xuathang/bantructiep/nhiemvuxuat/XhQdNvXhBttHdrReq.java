@@ -35,7 +35,7 @@ public class XhQdNvXhBttHdrReq extends BaseRequest {
 
     private String maDviTsan;
 
-    private String tenTtcn;
+    private String tenTccn;;
 
     private String loaiVthh;
 

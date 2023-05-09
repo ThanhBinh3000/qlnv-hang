@@ -168,6 +168,7 @@ public class XhHopDongBttHdr extends TrangThaiBaseEntity implements Serializable
     @Transient
     private List<XhHopDongBttDtl> children = new ArrayList<>();
 
+
     //    Phụ lục
     private Long idHd;
 

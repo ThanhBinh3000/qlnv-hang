@@ -22,7 +22,7 @@ public class XhHopDongBttDtl implements Serializable {
 
     private Long idHdr;
 
-    private BigDecimal soLuongBanTrucTiep;
+    private BigDecimal soLuongChiCuc;
 
     private BigDecimal soLuongBanTrucTiepHd;
 
