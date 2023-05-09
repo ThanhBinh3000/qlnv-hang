@@ -11,15 +11,16 @@ import java.time.LocalDate;
 import java.util.Map;
 
 @Entity
-@Table(name = XhTlDanhSachDtl.TABLE_NAME)
+@Table(name = XhTlQuyetDinhDtl.TABLE_NAME)
 @Data
-public class XhTlDanhSachDtl implements Serializable {
+public class XhTlQuyetDinhDtl implements Serializable {
+
   private static final long serialVersionUID = 1L;
-  public static final String TABLE_NAME = "XH_TL_DANH_SACH_DTL";
+  public static final String TABLE_NAME = "XH_TL_QUYET_DINH_DTL";
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlDanhSachDtl.TABLE_NAME + "_SEQ")
-  @SequenceGenerator(sequenceName = XhTlDanhSachDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhTlDanhSachDtl.TABLE_NAME + "_SEQ")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlQuyetDinhDtl.TABLE_NAME + "_SEQ")
+  @SequenceGenerator(sequenceName = XhTlQuyetDinhDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhTlQuyetDinhDtl.TABLE_NAME + "_SEQ")
   private Long id;
   private Long idTongHop;
   private String maTongHop;
@@ -30,16 +31,16 @@ public class XhTlDanhSachDtl implements Serializable {
   private BigDecimal slHienTai;
   private BigDecimal slDeXuat;
   private BigDecimal slDaDuyet;
+  private BigDecimal slCon;
+  private BigDecimal donGia;
   private BigDecimal thanhTien;
   private LocalDate ngayNhapKho;
   private LocalDate ngayDeXuat;
   private LocalDate ngayTongHop;
   private String lyDo;
+  private String ketQua;
   private String type;
 
-  @JsonIgnore
-  @Transient
-  private Map<String, String> mapVthh;
   @Transient
   private String tenLoaiVthh;
   @Transient
@@ -84,19 +85,8 @@ public class XhTlDanhSachDtl implements Serializable {
     }
   }
 
-  public void setMapVthh(Map<String, String> mapVthh) {
-    this.mapVthh = mapVthh;
-    if (!DataUtils.isNullObject(getLoaiVthh())) {
-      setTenLoaiVthh(mapVthh.containsKey(getLoaiVthh()) ? mapVthh.get(getLoaiVthh()) : null);
-    }
-    if (!DataUtils.isNullObject(getCloaiVthh())) {
-      setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
-    }
-  }
-
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "idHdr")
   @JsonIgnore
-  private XhTlDanhSachHdr danhSachHdr;
-
+  private XhTlQuyetDinhHdr quyetDinhHdr;
 }
