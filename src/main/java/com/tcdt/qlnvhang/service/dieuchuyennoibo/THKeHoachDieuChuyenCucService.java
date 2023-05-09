@@ -184,29 +184,29 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         THKeHoachDieuChuyenCucHdr data = optional.get();
         //Xóa tổng hợp kế hoạch nội bộ cục
         List<THKeHoachDieuChuyenNoiBoCucDtl> list = thKeHoachDieuChuyenNoiBoCucDtlRepository.findByHdrId(data.getId());
-        if(data.getLoaiDieuChuyen().equals(Contains.GIUA_2_CHI_CUC_TRONG_1_CUC)) {
-            list.forEach(e ->{
-                e.getDcnbKeHoachDcHdr().setIdThop(null);
-                e.getDcnbKeHoachDcHdr().setMaThop(null);
-                dcHdrRepository.save(e.getDcnbKeHoachDcHdr());
-            });
-            thKeHoachDieuChuyenNoiBoCucDtlRepository.saveAll(list);
-        }
+//        if(data.getLoaiDieuChuyen().equals(Contains.GIUA_2_CHI_CUC_TRONG_1_CUC)) {
+//            list.forEach(e ->{
+//                e.getDcnbKeHoachDcHdr().setIdThop(null);
+//                e.getDcnbKeHoachDcHdr().setMaThop(null);
+//                dcHdrRepository.save(e.getDcnbKeHoachDcHdr());
+//            });
+//            thKeHoachDieuChuyenNoiBoCucDtlRepository.saveAll(list);
+//        }
         thKeHoachDieuChuyenNoiBoCucDtlRepository.deleteAll(list);
         //Xóa tổng hợp kế hoạch khác cục
         List<THKeHoachDieuChuyenCucKhacCucDtl> list1 = thKeHoachDieuChuyenCucKhacCucDtlRepository.findByHdrId(data.getId());
-        if(data.getLoaiDieuChuyen().equals(Contains.GIUA_2_CUC_DTNN_KV)) {
-            list1.forEach(dataHdrId -> {
-                List<Long> danhSachKeHoach = Arrays.stream(dataHdrId.getDcnbKeHoachDcHdrId().split(",")).map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
-                List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcHdrRepository.findByIdIn(danhSachKeHoach);
-                dcnbKeHoachDcHdr.forEach(e ->{
-                    e.setMaThop(null);
-                    e.setIdThop(null);
-                    dcHdrRepository.save(e);
-                });
-            });
-            thKeHoachDieuChuyenCucKhacCucDtlRepository.saveAll(list1);
-        }
+//        if(data.getLoaiDieuChuyen().equals(Contains.GIUA_2_CUC_DTNN_KV)) {
+//            list1.forEach(dataHdrId -> {
+//                List<Long> danhSachKeHoach = Arrays.stream(dataHdrId.getDcnbKeHoachDcHdrId().split(",")).map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+//                List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcHdrRepository.findByIdIn(danhSachKeHoach);
+//                dcnbKeHoachDcHdr.forEach(e ->{
+//                    e.setMaThop(null);
+//                    e.setIdThop(null);
+//                    dcHdrRepository.save(e);
+//                });
+//            });
+//            thKeHoachDieuChuyenCucKhacCucDtlRepository.saveAll(list1);
+//        }
         thKeHoachDieuChuyenCucKhacCucDtlRepository.deleteAll(list1);
         thKeHoachDieuChuyenHdrRepository.delete(data);
 
@@ -223,24 +223,24 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         List<THKeHoachDieuChuyenNoiBoCucDtl> listTongHopKeHoachChiCuc = thKeHoachDieuChuyenNoiBoCucDtlRepository.findAllByHdrIdIn(listId);
 
         thKeHoachDieuChuyenNoiBoCucDtlRepository.deleteAll(listTongHopKeHoachChiCuc);
-        listTongHopKeHoachChiCuc.forEach(e->{
-             e.getDcnbKeHoachDcHdr().setIdThop(null);
-             e.getDcnbKeHoachDcHdr().setMaThop(null);
-             dcHdrRepository.save(e.getDcnbKeHoachDcHdr());
-        });
-        thKeHoachDieuChuyenNoiBoCucDtlRepository.saveAll(listTongHopKeHoachChiCuc);
+//        listTongHopKeHoachChiCuc.forEach(e->{
+//             e.getDcnbKeHoachDcHdr().setIdThop(null);
+//             e.getDcnbKeHoachDcHdr().setMaThop(null);
+//             dcHdrRepository.save(e.getDcnbKeHoachDcHdr());
+//        });
+//        thKeHoachDieuChuyenNoiBoCucDtlRepository.saveAll(listTongHopKeHoachChiCuc);
         //Xóa tổng hợp kế hoạch khác cục
         List<THKeHoachDieuChuyenCucKhacCucDtl> listTongHopKeHoachKhacCuc = thKeHoachDieuChuyenCucKhacCucDtlRepository.findAllByHdrIdIn(listId);
-        listTongHopKeHoachKhacCuc.forEach(dataHdrId -> {
-            List<Long> danhSachKeHoach = Arrays.stream(dataHdrId.getDcnbKeHoachDcHdrId().split(",")).map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
-            List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcHdrRepository.findByIdIn(danhSachKeHoach);
-            dcnbKeHoachDcHdr.forEach(e ->{
-                e.setMaThop(null);
-                e.setIdThop(null);
-                dcHdrRepository.save(e);
-            });
-        });
-        thKeHoachDieuChuyenCucKhacCucDtlRepository.saveAll(listTongHopKeHoachKhacCuc);
+//        listTongHopKeHoachKhacCuc.forEach(dataHdrId -> {
+//            List<Long> danhSachKeHoach = Arrays.stream(dataHdrId.getDcnbKeHoachDcHdrId().split(",")).map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+//            List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcHdrRepository.findByIdIn(danhSachKeHoach);
+//            dcnbKeHoachDcHdr.forEach(e ->{
+//                e.setMaThop(null);
+//                e.setIdThop(null);
+//                dcHdrRepository.save(e);
+//            });
+//        });
+//        thKeHoachDieuChuyenCucKhacCucDtlRepository.saveAll(listTongHopKeHoachKhacCuc);
 
         thKeHoachDieuChuyenCucKhacCucDtlRepository.deleteAll(listTongHopKeHoachKhacCuc);
         thKeHoachDieuChuyenHdrRepository.deleteAll(list);
@@ -277,7 +277,8 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
 //            }
 //        }
         THKeHoachDieuChuyenCucHdr data = optional.get();
-        BeanUtils.copyProperties(objReq, data);
+        THKeHoachDieuChuyenCucHdr dataMap = new ModelMapper().map(objReq, THKeHoachDieuChuyenCucHdr.class);
+        updateObjectToObject(data,dataMap);
         data.setNguoiSuaId(currentUser.getUser().getId());
         data.setNgaySua(LocalDate.now());
         THKeHoachDieuChuyenCucHdr created = thKeHoachDieuChuyenHdrRepository.save(data);

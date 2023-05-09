@@ -58,7 +58,7 @@ public class THKeHoachDieuChuyenTongCucDtl implements Serializable {
     private Long tongDuToanKp;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "HDR_ID",insertable = false,updatable = false)
     @JsonIgnore
     private THKeHoachDieuChuyenTongCucHdr thKeHoachDieuChuyenTongCucHdr;
