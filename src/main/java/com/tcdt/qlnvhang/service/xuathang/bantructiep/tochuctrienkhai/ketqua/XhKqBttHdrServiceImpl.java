@@ -276,14 +276,14 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
             throw new Exception("Không tìm thấy dữ liệu");
         }
         Optional<XhKqBttHdr> optional = xhKqBttHdrRepository.findById(req.getId());
-        if(!optional.isPresent()){
+        if (!optional.isPresent()){
             throw new Exception("Không tìm thấy dữ liệu");
         }
         XhKqBttHdr data = optional.get();
         String status = req.getTrangThai() + data.getTrangThai();
         if(req.getTrangThai().equals(NhapXuatHangTrangThaiEnum.DA_HOAN_THANH.getId())
-                && data.getTrangThaiHd().equals(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId()))
-        {
+                && data.getTrangThaiHd().equals(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId())) {
+
             data.setTrangThaiHd(req.getTrangThai());
         } else {
             switch (status) {
