@@ -23,7 +23,7 @@ public class ThKeHoachDieuChuyenTongCucHdrReq implements Serializable {
 
     private LocalDate ngayTongHop;
 
-    private String noiDung;
+    private String trichYeu;
 
     private Integer namKeHoach;
 
