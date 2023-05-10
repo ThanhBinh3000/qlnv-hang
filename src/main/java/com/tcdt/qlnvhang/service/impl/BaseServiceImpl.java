@@ -72,9 +72,6 @@ public abstract class BaseServiceImpl {
 
   @Autowired
   private SystemServiceProxy systemServiceProxy;
-  Map<String, String> mapDmucDvi;
-  Map<String, Map<String, Object>> mapDmucDviObject;
-  Map<String, String> mapVthh;
 
   public QlnvDmDonvi getDviByMa(String maDvi, HttpServletRequest req) throws Exception {
     QlnvDmDonvi qlnvDmDonvi = null;
@@ -117,9 +114,6 @@ public abstract class BaseServiceImpl {
   }
 
   public Map<String, String> getListDanhMucDvi(String capDvi, String maDviCha, String trangThai) {
-    if (!DataUtils.isNullObject(mapDmucDvi)) {
-      return mapDmucDvi;
-    }
     QlnvDmDonviSearchReq objRequest = new QlnvDmDonviSearchReq();
     objRequest.setCapDvi(capDvi);
     objRequest.setMaDviCha(maDviCha);
@@ -133,14 +127,10 @@ public abstract class BaseServiceImpl {
     for (Map<String, Object> map : retMap) {
       data.put(String.valueOf(map.get("maDvi")), String.valueOf(map.get("tenDvi")));
     }
-    mapDmucDvi = data;
     return data;
   }
 
   public Map<String, Map<String, Object>> getListDanhMucDviObject(String capDvi, String maDviCha, String trangThai) {
-    if (!DataUtils.isNullObject(mapDmucDviObject)) {
-      return mapDmucDviObject;
-    }
     QlnvDmDonviSearchReq objRequest = new QlnvDmDonviSearchReq();
     objRequest.setCapDvi(capDvi);
     objRequest.setMaDviCha(maDviCha);
@@ -154,7 +144,6 @@ public abstract class BaseServiceImpl {
     for (Map<String, Object> map : retMap) {
       data.put(String.valueOf(map.get("maDvi")), map);
     }
-    mapDmucDviObject = data;
     return data;
   }
 
@@ -174,9 +163,6 @@ public abstract class BaseServiceImpl {
   }
 
   public Map<String, String> getListDanhMucHangHoa() {
-    if (!DataUtils.isNullObject(mapVthh)) {
-      return mapVthh;
-    }
     ResponseEntity<String> response = categoryServiceProxy.getDanhMucHangHoa(getAuthorizationToken(request));
     String str = Request.getAttrFromJson(response.getBody(), "data");
     HashMap<String, String> data = new HashMap<String, String>();
@@ -185,12 +171,11 @@ public abstract class BaseServiceImpl {
     for (Map<String, Object> map : retMap) {
       data.put(String.valueOf(map.get("ma")), String.valueOf(map.get("ten")));
     }
-    mapVthh = data;
     return data;
   }
 
   public Map<String, Map<String, Object>> getListDanhMucHangHoaObject() {
-    ResponseEntity<String> response = categoryServiceProxy.getDanhMucHangHoaAll(getAuthorizationToken(request), new HashMap<>());
+    ResponseEntity<String> response = categoryServiceProxy.getDanhMucHangHoaAll(getAuthorizationToken(request),new HashMap<>());
     String str = Request.getAttrFromJson(response.getBody(), "data");
     HashMap<String, Map<String, Object>> data = new HashMap<String, Map<String, Object>>();
     List<Map<String, Object>> retMap = new Gson().fromJson(str, new TypeToken<List<HashMap<String, Object>>>() {
@@ -371,7 +356,7 @@ public abstract class BaseServiceImpl {
     return df.format(date);
   }
 
-  public static String convertFullDateToString(Date date) {
+  public static String convertFullDateToString (Date date) {
     if (Objects.isNull(date)) {
       return null;
     }
