@@ -1,10 +1,14 @@
 package com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
+import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhDtl;
+import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlTongHopDtl;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class XhTlTongHopRequest extends BaseRequest {
@@ -47,4 +51,5 @@ public class XhTlTongHopRequest extends BaseRequest {
   private String type;
 
   private String dvql;
+  private List<XhTlTongHopDtl> tongHopDtl = new ArrayList<>();
 }
