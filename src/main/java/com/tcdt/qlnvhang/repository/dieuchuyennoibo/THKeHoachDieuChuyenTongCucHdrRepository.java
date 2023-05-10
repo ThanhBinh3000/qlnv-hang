@@ -22,7 +22,7 @@ public interface THKeHoachDieuChuyenTongCucHdrRepository extends JpaRepository<T
             "AND (:#{#param.loaiDieuChuyen} IS NULL OR LOWER(hdr.loaiDieuChuyen) LIKE CONCAT('%',LOWER(:#{#param.loaiDieuChuyen}),'%'))"+
             "AND ((:#{#param.tuNgay}  IS NULL OR hdr.ngayTongHop >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR hdr.ngayTongHop <= :#{#param.denNgay}) ) " +
-            "AND (:#{#param.trichYeu} IS NULL OR LOWER(hdr.noiDung) LIKE CONCAT('%',LOWER(:#{#param.trichYeu}),'%')) "+
+            "AND (:#{#param.trichYeu} IS NULL OR LOWER(hdr.trichYeu) LIKE CONCAT('%',LOWER(:#{#param.trichYeu}),'%')) "+
             "ORDER BY hdr.namKeHoach desc"
     )
     Page<THKeHoachDieuChuyenTongCucHdr> search(@Param("param") TongHopKeHoachDieuChuyenSearch req, Pageable pageable);

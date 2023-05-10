@@ -41,7 +41,7 @@ public class THKeHoachDieuChuyenTongCucHdr implements Serializable {
     private LocalDate ngayTongHop;
 
     @Column(name = "NOI_DUNG")
-    private String noiDung;
+    private String trichYeu;
 
     @Column(name = "NAM_KE_HOACH")
     private Integer namKeHoach;
