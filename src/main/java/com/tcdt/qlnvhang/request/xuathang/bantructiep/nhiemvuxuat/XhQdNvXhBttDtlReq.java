@@ -10,7 +10,7 @@ import java.util.List;
 public class XhQdNvXhBttDtlReq {
     private Long id;
 
-    private Long idQdHdr;
+    private Long idHdr;
 
     private String maDvi;
 

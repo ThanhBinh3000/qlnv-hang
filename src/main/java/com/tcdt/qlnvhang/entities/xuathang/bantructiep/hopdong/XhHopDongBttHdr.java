@@ -205,4 +205,6 @@ public class XhHopDongBttHdr extends TrangThaiBaseEntity implements Serializable
     private List<XhHopDongBttDtl> phuLucDtl = new ArrayList<>();
 
     private BigDecimal donGiaBanTrucTiep;
+
+    private String soQdNv;
 }

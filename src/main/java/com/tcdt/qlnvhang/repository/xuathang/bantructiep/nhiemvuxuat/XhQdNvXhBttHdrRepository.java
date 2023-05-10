@@ -21,7 +21,7 @@ public interface XhQdNvXhBttHdrRepository extends JpaRepository<XhQdNvXhBttHdr, 
             " WHERE 1 = 1 " +
             "AND (:#{#param.maDvi} IS NULL OR QD.maDvi = :#{#param.maDvi}) " +
             "AND (:#{#param.namKh} IS NULL OR QD.namKh = :#{#param.namKh}) " +
-//            "AND (:#{#param.soQd} IS NULL OR LOWER(QD.soQd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQd}),'%' ) ) )" +
+            "AND (:#{#param.soQdNv} IS NULL OR LOWER(QD.soQdNv) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQdNv}),'%' ) ) )" +
             "AND (:#{#param.soBienBan} IS NULL OR LOWER(BBLM.soBienBan) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soBienBan}),'%' ) ) )" +
             "AND (:#{#param.ngayLayMauTu} IS NULL OR BBLM.ngayLayMau >= :#{#param.ngayLayMauTu}) " +
             "AND (:#{#param.ngayLayMauDen} IS NULL OR BBLM.ngayLayMau <= :#{#param.ngayLayMauDen}) " +
@@ -34,7 +34,7 @@ public interface XhQdNvXhBttHdrRepository extends JpaRepository<XhQdNvXhBttHdr, 
     )
     Page<XhQdNvXhBttHdr> searchPage(@Param("param") XhQdNvXhBttHdrReq param, Pageable pageable);
 
-    List<XhQdNvXhBttHdr> findBySoQd(String soQd);
+    List<XhQdNvXhBttHdr> findBySoQdNv(String soQdNv);
 
     List<XhQdNvXhBttHdr> findByIdIn(List<Long> idDxList);
 

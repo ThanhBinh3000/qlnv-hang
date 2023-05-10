@@ -18,5 +18,5 @@ public class XhQdNvXhBttDviReq {
 
     private String maLoKho;
 
-    private BigDecimal soLuong;
+    private BigDecimal soLuongDeXuat;
 }
