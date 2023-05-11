@@ -340,9 +340,9 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         objReq.setPaggingReq(paggingReq);
         Page<THKeHoachDieuChuyenCucHdr> page = this.searchPageCuc(currentUser, objReq);
         List<THKeHoachDieuChuyenCucHdr> data = page.getContent();
-        String title = "Danh sách phương án xuất cứu trợ, viện trợ ";
-        String[] rowsName = new String[]{"STT", "Năm kH", "Số công văn/đề xuất", "Ngày duyệt LĐ Cục", "Loại điều chuyển", "Đơn vị đề xuất", "Trạng thái",};
-        String fileName = "danh-sach-ke-hoach-dieu-chuyen-noi-bo-hang-dtqg.xlsx";
+        String title = "Danh sách tổng hợp kế hoạch điều chuyển";
+        String[] rowsName = new String[]{"STT", "Năm KH", "Mã tổng hợp", "Loại điều chuyển", "Ngày tổng hợp", "Nội dung tổng hợp", "Trạng thái",};
+        String fileName = "danh-sach-tong-hop-ke-hoach-dieu-chuyen-noi-bo-hang-dtqg.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
         for (int i = 0; i < data.size(); i++) {
@@ -351,9 +351,10 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
             objs[0] = i;
             objs[1] = dx.getNamKeHoach();
             objs[2] = dx.getMaTongHop();
-            objs[3] = dx.getNgayDuyetLdc();
-            objs[4] = dx.getLoaiDieuChuyen();
-            objs[5] = dx.getTenDvi();
+            objs[3] = dx.getLoaiDieuChuyen();
+            objs[4] = dx.getNgayTongHop();
+            objs[5] = dx.getTrichYeu();
+            objs[6] = dx.getTrangThai();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
@@ -368,6 +369,9 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
             req.setMaDVi(cqt.getMaDvi());
 //            List<DcnbKeHoachDcDtl> dcnbKeHoachDcHdrs = dcnbKeHoachDcDtlRepository.findByDonViAndTrangThaiChiCuc(req.getMaDVi(), Contains.DADUYET_LDCC, Contains.DIEU_CHUYEN,Contains.GIUA_2_CHI_CUC_TRONG_1_CUC,req.getThoiGianTongHop());
             List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdrs = dcHdrRepository.findByDonViAndTrangThaiCuc(req.getMaDVi(), Contains.DADUYET_LDCC, Contains.GIUA_2_CHI_CUC_TRONG_1_CUC, Contains.DIEU_CHUYEN,req.getThoiGianTongHop());
+            if(dcnbKeHoachDcHdrs.isEmpty()){
+                throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
+            }
             for (DcnbKeHoachDcHdr khh : dcnbKeHoachDcHdrs) {
                 Hibernate.initialize(khh.getDanhSachHangHoa());
                 DcnbKeHoachDcHdr khhc = SerializationUtils.clone(khh);
@@ -389,6 +393,9 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         for (QlnvDmDonvi cqt : donvis) {
             req.setMaDVi(cqt.getMaDvi());
             List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdrs = dcHdrRepository.findByDonViAndTrangThaiCuc(req.getMaDVi(), Contains.DADUYET_LDCC, Contains.GIUA_2_CUC_DTNN_KV, Contains.DIEU_CHUYEN,req.getThoiGianTongHop());
+            if(dcnbKeHoachDcHdrs.isEmpty()){
+                throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
+            }
             Map<String, List<DcnbKeHoachDcHdr>> postsPerType = dcnbKeHoachDcHdrs.stream()
                     .collect(groupingBy(DcnbKeHoachDcHdr::getMaCucNhan));
             for (Map.Entry<String, List<DcnbKeHoachDcHdr>> entry : postsPerType.entrySet()) {
