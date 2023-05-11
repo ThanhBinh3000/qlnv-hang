@@ -71,6 +71,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         return danhSachSoDeXuat;
     }
 
+    @Transactional
     public THKeHoachDieuChuyenCucHdr yeuCauXacDinhDiemNhap(CustomUserDetails currentUser, IdSearchReq idSearchReq) throws Exception {
         if (currentUser == null) {
             throw new Exception("Bad request.");
@@ -79,12 +80,14 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
             throw new Exception("Chức năng chỉ dành cho cấp cục");
         }
         Optional<THKeHoachDieuChuyenCucHdr> optional = thKeHoachDieuChuyenHdrRepository.findById(idSearchReq.getId());
-        if (optional.isPresent() && optional.get().getTrangThai().equals(Contains.DUTHAO)) {
+        if (optional.isPresent() && (optional.get().getTrangThai().equals(Contains.DUTHAO)|| optional.get().getTrangThai().equals(Contains.YEU_CAU_XAC_DINH_DIEM_NHAP))){
             THKeHoachDieuChuyenCucHdr data = optional.get();
             data.setTrangThai(Contains.YEU_CAU_XAC_DINH_DIEM_NHAP);
             THKeHoachDieuChuyenCucHdr created = thKeHoachDieuChuyenHdrRepository.save(data);
             for (THKeHoachDieuChuyenNoiBoCucDtl boCucDtl : created.getThKeHoachDieuChuyenNoiBoCucDtls()) {
-                dcHdrRepository.updateTrangThaiNdc(boCucDtl.getDcKeHoachDcDtlId(), Contains.NHAN_DIEU_CHUYEN);
+                for(DcnbKeHoachDcDtl dcnbKeHoachDcDtl : boCucDtl.getDcnbKeHoachDcHdr().getDanhSachHangHoa()) {
+                    dcHdrRepository.updateTrangThaiNdc(dcnbKeHoachDcDtl.getId(), Contains.NHAN_DIEU_CHUYEN);
+                }
             }
             return created;
         }
@@ -117,6 +120,9 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                 dtl.setHdrId(data.getId());
                 dtls.add(dtl);
             }
+            if(dtls.isEmpty()){
+                throw new Exception("Không có dữ liệu tổng hợp");
+            }
             dtls.forEach(e -> e.setTHKeHoachDieuChuyenCucHdr(data));
             data.setThKeHoachDieuChuyenNoiBoCucDtls(dtls);
             THKeHoachDieuChuyenCucHdr created = thKeHoachDieuChuyenHdrRepository.save(data);
@@ -136,6 +142,9 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                 BeanUtils.copyProperties(req,dtl);
                 dtl.setHdrId(data.getId());
                 dtls.add(dtl);
+            }
+            if(dtls.isEmpty()){
+                throw new Exception("Không có dữ liệu tổng hợp");
             }
             dtls.forEach(e -> e.setTHKeHoachDieuChuyenCucHdr(data));
             data.setThKeHoachDieuChuyenCucKhacCucDtls(dtls);
