@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.xuathang.thanhlytieuhuy.thanhly;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhRepository;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlThongBaoKqRepository;
@@ -58,7 +59,7 @@ public class XhTlThongBaoKqService extends BaseServiceImpl {
         Map<String, Object> objDonVi = mapDmucDvi.get(s.getMaDvi());
         s.setTenDvi(objDonVi.get("tenDvi").toString());
       }
-      s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
+      s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
     });
     return search;
   }
@@ -148,7 +149,7 @@ public class XhTlThongBaoKqService extends BaseServiceImpl {
       if (mapDmucDvi.containsKey(data.getMaDvi())) {
         data.setTenDvi(mapDmucDvi.get(data.getMaDvi()).get("tenDvi").toString());
       }
-      data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
+      data.setTenTrangThai(TrangThaiAllEnum.getLabelById(data.getTrangThai()));
 
       List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhTlThongBaoKq.TABLE_NAME));
       data.setFileDinhKem(fileDinhKem);
