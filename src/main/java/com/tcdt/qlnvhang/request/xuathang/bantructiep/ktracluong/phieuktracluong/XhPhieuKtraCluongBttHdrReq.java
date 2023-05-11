@@ -29,9 +29,9 @@ public class XhPhieuKtraCluongBttHdrReq extends BaseRequest {
 
     private String soBienBan;
 
-    private Long idQd;
+    private Long idQdNv;
 
-    private String soQd;
+    private String soQdNv;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayQd;
