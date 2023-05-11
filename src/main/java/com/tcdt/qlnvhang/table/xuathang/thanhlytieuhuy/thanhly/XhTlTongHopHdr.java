@@ -26,6 +26,7 @@ public class XhTlTongHopHdr extends BaseEntity implements Serializable {
   private Integer nam;
   private String maDvi;
   private String maDanhSach;
+  private String tenDanhSach;
   private LocalDate thoiGianTlTu;
   private LocalDate thoiGianTlDen;
   private String trangThai;

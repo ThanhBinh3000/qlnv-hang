@@ -55,7 +55,8 @@ public class XhTlTongHopService extends BaseServiceImpl {
         s1.setMapDmucDvi(mapDmucDvi);
         s1.setMapVthh(mapVthh);
       });
-      s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
+      s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
+      s.setTenDvi(mapDmucDvi.containsKey(s.getMaDvi()) ? mapDmucDvi.get(s.getMaDvi()) : null);
     });
     return search;
   }
@@ -121,7 +122,7 @@ public class XhTlTongHopService extends BaseServiceImpl {
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
     Map<String, String> mapVthh = getListDanhMucHangHoa();
     allById.forEach(data -> {
-      data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
+      data.setTenTrangThai(TrangThaiAllEnum.getLabelById(data.getTrangThai()));
       data.getTongHopDtl().forEach(s -> {
         s.setMapDmucDvi(mapDmucDvi);
         s.setMapVthh(mapVthh);
