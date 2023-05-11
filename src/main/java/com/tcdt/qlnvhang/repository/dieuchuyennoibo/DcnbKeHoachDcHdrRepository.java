@@ -55,7 +55,7 @@ public interface DcnbKeHoachDcHdrRepository extends JpaRepository<DcnbKeHoachDcH
     List<DcnbKeHoachDcHdr> findByDonViAndTrangThaiCuc(String maDVi, String trangThai, String loaiDieuChuyen, String type, LocalDateTime thoiGianTongHop);
 
     @Modifying
-    @Query(nativeQuery = true, value = "UPDATE  DCNB_KE_HOACH_DC_HDR SET  TRANG_THAI = '59' WHERE PARENT_ID = (SELECT HDR_ID FROM DCNB_KE_HOACH_DC_DTL WHERE ?1) AND TYPE= ?2")
+    @Query(nativeQuery = true, value = "UPDATE  DCNB_KE_HOACH_DC_HDR SET  TRANG_THAI = '59' WHERE PARENT_ID = (SELECT HDR_ID FROM DCNB_KE_HOACH_DC_DTL WHERE ID = to_number(?1)) AND TYPE= ?2")
     void updateTrangThaiNdc(Long dtlId, String type);
 
     @Transactional()
