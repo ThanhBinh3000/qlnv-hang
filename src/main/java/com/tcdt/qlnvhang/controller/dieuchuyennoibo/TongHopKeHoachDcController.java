@@ -180,7 +180,6 @@ public class TongHopKeHoachDcController extends BaseController {
     public ResponseEntity<BaseResponse> createTableCuc(@CurrentUser CustomUserDetails currentUser,@RequestBody  TongHopKeHoachDieuChuyenSearch req) throws Exception {
         BaseResponse resp = new BaseResponse();
         try {
-
             if (Objects.equals(req.getLoaiDieuChuyen(), Contains.GIUA_2_CHI_CUC_TRONG_1_CUC)) {
                 resp.setData(thKeHoachDieuChuyenService.createPlanChiCuc(currentUser, req));
             } else if (Objects.equals(req.getLoaiDieuChuyen(), Contains.GIUA_2_CUC_DTNN_KV)) {
