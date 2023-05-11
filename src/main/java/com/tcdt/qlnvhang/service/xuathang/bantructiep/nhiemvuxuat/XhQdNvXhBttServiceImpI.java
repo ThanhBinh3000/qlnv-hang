@@ -85,6 +85,7 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         data.getContent().forEach(f ->{
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenTrangThaiXh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiXh()));
+            f.setTenTrangThaiHd(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiHd()));
             f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : hashMapDvi.get(f.getMaDvi()));
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapVthh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapVthh.get(f.getCloaiVthh()));
@@ -129,6 +130,7 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         dataMap.setNguoiTaoId(getUser().getId());
         dataMap.setTrangThai(Contains.DUTHAO);
         dataMap.setTrangThaiXh(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
+        dataMap.setTrangThaiHd(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
         dataMap.setMaDvi(userInfo.getDvql());
         if(!ObjectUtils.isEmpty(req.getListMaDviTsan())){
             dataMap.setMaDviTsan(String.join(",",req.getListMaDviTsan()));
@@ -249,12 +251,20 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
 
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
+        data.setTenTrangThaiHd(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiHd()));
         data.setTenDvi(hashMapDvi.get(data.getMaDvi()));
         data.setTenLoaiVthh(hashMapVthh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(hashMapVthh.get(data.getCloaiVthh()));
         if (!DataUtils.isNullObject(data.getMaDviTsan())) {
             data.setListMaDviTsan(Arrays.asList(data.getMaDviTsan().split(",")));
         }
+
+        List<XhHopDongBttHdr> hopDongBttHdrList = xhHopDongBttHdrRepository.findAllByIdQdNv(id);
+        hopDongBttHdrList.forEach(f ->{
+            f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+            f.setTenTrangThaiXh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiXh()));
+        });
+        data.setListHopDongBtt(hopDongBttHdrList);
         List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdNvXhBttHdr.TABLE_NAME+ "_CAN_CU"));
         data.setFileDinhKem(fileDinhKem);
 
@@ -295,35 +305,40 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         }
 
         XhQdNvXhBttHdr data = optional.get();
-
         String status = req.getTrangThai() + data.getTrangThai();
-        switch (status) {
-            case Contains.CHODUYET_TP + Contains.DUTHAO:
-            case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
-            case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
-                data.setNguoiGuiDuyetId(userInfo.getId());
-                data.setNgayGuiDuyet(getDateTimeNow());
-                break;
-            case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
-            case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
-            case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
-                data.setNguoiPduyetId(userInfo.getId());
-                data.setNgayPduyet(getDateTimeNow());
-                data.setLyDoTuChoi(req.getLyDoTuChoi());
-                break;
-            case Contains.BAN_HANH + Contains.CHODUYET_LDC:
-                data.setNguoiPduyetId(userInfo.getId());
-                data.setNgayPduyet(getDateTimeNow());
-                break;
-            default:
-                throw new Exception("Phê duyệt không thành công");
-        }
-        data.setTrangThai(req.getTrangThai());
-        if (req.getTrangThai().equals(Contains.BAN_HANH)){
-            Optional<XhHopDongBttHdr> optionalHd = xhHopDongBttHdrRepository.findById(data.getIdHd());
-            if (optionalHd.isPresent()){
-                optionalHd.get().setSoQdNv(data.getSoQdNv());
-                xhHopDongBttHdrRepository.save(optionalHd.get());
+        if(req.getTrangThai().equals(NhapXuatHangTrangThaiEnum.DA_HOAN_THANH.getId())
+                && data.getTrangThaiHd().equals(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId())) {
+
+            data.setTrangThaiHd(req.getTrangThai());
+        }else {
+            switch (status) {
+                case Contains.CHODUYET_TP + Contains.DUTHAO:
+                case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+                case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
+                    data.setNguoiGuiDuyetId(userInfo.getId());
+                    data.setNgayGuiDuyet(getDateTimeNow());
+                    break;
+                case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
+                case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
+                case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
+                    data.setNguoiPduyetId(userInfo.getId());
+                    data.setNgayPduyet(getDateTimeNow());
+                    data.setLyDoTuChoi(req.getLyDoTuChoi());
+                    break;
+                case Contains.BAN_HANH + Contains.CHODUYET_LDC:
+                    data.setNguoiPduyetId(userInfo.getId());
+                    data.setNgayPduyet(getDateTimeNow());
+                    break;
+                default:
+                    throw new Exception("Phê duyệt không thành công");
+            }
+            data.setTrangThai(req.getTrangThai());
+            if (req.getTrangThai().equals(Contains.BAN_HANH) && data.getPhanLoai().equals("HD")){
+                Optional<XhHopDongBttHdr> optionalHd = xhHopDongBttHdrRepository.findById(data.getIdHd());
+                if (optionalHd.isPresent()){
+                    optionalHd.get().setSoQdNv(data.getSoQdNv());
+                    xhHopDongBttHdrRepository.save(optionalHd.get());
+                }
             }
         }
         xhQdNvXhBttHdrRepository.save(data);

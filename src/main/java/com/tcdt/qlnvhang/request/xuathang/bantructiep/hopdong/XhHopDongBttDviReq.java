@@ -11,6 +11,8 @@ public class XhHopDongBttDviReq {
 
     private Long idDtl;
 
+    private Long idHdr;
+
     private String maDiemKho;
 
     private String maNhaKho;

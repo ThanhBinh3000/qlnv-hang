@@ -71,8 +71,8 @@ public class XhTlBaoCaoKqService extends BaseServiceImpl {
     if (currentUser == null) {
       throw new Exception("Bad request.");
     }
-    if (!DataUtils.isNullObject(objReq.getSoQd())) {
-      Optional<XhTlBaoCaoKqHdr> optional = xhTlBaoCaoKqRepository.findBySoQd(objReq.getSoQd());
+    if (!DataUtils.isNullObject(objReq.getSoBaoCao())) {
+      Optional<XhTlBaoCaoKqHdr> optional = xhTlBaoCaoKqRepository.findBySoBaoCao(objReq.getSoBaoCao());
       if (optional.isPresent()) {
         throw new Exception("số quyết định đã tồn tại");
       }
@@ -112,7 +112,7 @@ public class XhTlBaoCaoKqService extends BaseServiceImpl {
     if (!optional.isPresent()) {
       throw new Exception("Không tìm thấy dữ liệu cần sửa");
     }
-    Optional<XhTlBaoCaoKqHdr> soDx = xhTlBaoCaoKqRepository.findBySoQd(objReq.getSoQd());
+    Optional<XhTlBaoCaoKqHdr> soDx = xhTlBaoCaoKqRepository.findBySoBaoCao(objReq.getSoBaoCao());
     if (soDx.isPresent()) {
       if (!soDx.get().getId().equals(objReq.getId())) {
         throw new Exception("số quyết định đã tồn tại");
@@ -271,8 +271,8 @@ public class XhTlBaoCaoKqService extends BaseServiceImpl {
     List<XhTlBaoCaoKqHdr> data = page.getContent();
 
     String title = "Danh sách báo cáo kết quả bán thanh lý hàng DTQG ";
-    String[] rowsName = new String[]{"STT", "Số quyết định", "Trích yếu", "Ngày ký",
-        "Hồ sơ đề nghị thanh lý", "Trạng thái"};
+    String[] rowsName = new String[]{"STT", "Số báo cáo", "Nội dung báo cáo", "Ngày báo cáo",
+        "Số quyết định thanh lý", "Trạng thái"};
     String fileName = "danh-sach-bao-cao-ket-qua-ban-thanh-ly-hang-dtqg.xlsx";
     List<Object[]> dataList = new ArrayList<Object[]>();
     Object[] objs = null;

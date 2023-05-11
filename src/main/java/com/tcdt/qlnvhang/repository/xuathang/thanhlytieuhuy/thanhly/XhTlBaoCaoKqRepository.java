@@ -33,5 +33,5 @@ public interface XhTlBaoCaoKqRepository extends JpaRepository<XhTlBaoCaoKqHdr,Lo
 
   List<XhTlBaoCaoKqHdr> findAllByIdIn(List<Long> listId);
 
-  Optional<XhTlBaoCaoKqHdr> findBySoQd(String soQd);
+  Optional<XhTlBaoCaoKqHdr> findBySoBaoCao(String soQd);
 }

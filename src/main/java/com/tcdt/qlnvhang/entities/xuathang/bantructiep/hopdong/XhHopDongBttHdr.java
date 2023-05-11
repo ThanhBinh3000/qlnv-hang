@@ -33,7 +33,7 @@ public class XhHopDongBttHdr extends TrangThaiBaseEntity implements Serializable
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     @Column(columnDefinition = "Date")
-    private Date ngayKyQdKq;
+    private Date ngayKyQd;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     @Column(columnDefinition = "Date")
@@ -207,4 +207,10 @@ public class XhHopDongBttHdr extends TrangThaiBaseEntity implements Serializable
     private BigDecimal donGiaBanTrucTiep;
 
     private String soQdNv;
+
+    private Long idQdNv;
+
+//    cấp chi cục
+   @Transient
+   private List<XhHopDongBttDvi> xhHopDongBttDviList = new ArrayList<>();
 }
