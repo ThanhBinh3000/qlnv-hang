@@ -121,7 +121,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                 dtls.add(dtl);
             }
             if(dtls.isEmpty()){
-                throw new Exception("Không có dữ liệu tổng hợp");
+                throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
             }
             dtls.forEach(e -> e.setTHKeHoachDieuChuyenCucHdr(data));
             data.setThKeHoachDieuChuyenNoiBoCucDtls(dtls);
@@ -144,7 +144,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                 dtls.add(dtl);
             }
             if(dtls.isEmpty()){
-                throw new Exception("Không có dữ liệu tổng hợp");
+                throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
             }
             dtls.forEach(e -> e.setTHKeHoachDieuChuyenCucHdr(data));
             data.setThKeHoachDieuChuyenCucKhacCucDtls(dtls);

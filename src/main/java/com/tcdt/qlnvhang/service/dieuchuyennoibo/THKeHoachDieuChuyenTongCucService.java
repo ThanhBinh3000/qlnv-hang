@@ -94,10 +94,13 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
             }
         }
         THKeHoachDieuChuyenTongCucHdr created = tongCucHdrRepository.save(data);
-        if (!chiTiet.isEmpty()) {
-            for (THKeHoachDieuChuyenTongCucDtl ct : chiTiet) {
-                ct.setHdrId(created.getId());
-            }
+
+        if (chiTiet.isEmpty()) {
+            throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
+        }else {
+                for (THKeHoachDieuChuyenTongCucDtl ct : chiTiet) {
+                    ct.setHdrId(created.getId());
+                }
         }
         thKeHoachDieuChuyenTongCucDtlRepository.saveAll(chiTiet);
 //        if (created.getId() > 0) {
