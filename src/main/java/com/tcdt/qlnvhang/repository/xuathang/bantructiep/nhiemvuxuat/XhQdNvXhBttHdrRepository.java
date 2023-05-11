@@ -17,14 +17,10 @@ public interface XhQdNvXhBttHdrRepository extends JpaRepository<XhQdNvXhBttHdr, 
 
     @Query("SELECT DISTINCT QD FROM XhQdNvXhBttHdr QD " +
             " LEFT JOIN XhQdNvXhBttDtl DTL on QD.id = DTL.idHdr " +
-            "LEFT JOIN XhBbLayMauBttHdr BBLM on QD.id = BBLM.idQd" +
             " WHERE 1 = 1 " +
             "AND (:#{#param.maDvi} IS NULL OR QD.maDvi = :#{#param.maDvi}) " +
             "AND (:#{#param.namKh} IS NULL OR QD.namKh = :#{#param.namKh}) " +
             "AND (:#{#param.soQdNv} IS NULL OR LOWER(QD.soQdNv) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQdNv}),'%' ) ) )" +
-            "AND (:#{#param.soBienBan} IS NULL OR LOWER(BBLM.soBienBan) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soBienBan}),'%' ) ) )" +
-            "AND (:#{#param.ngayLayMauTu} IS NULL OR BBLM.ngayLayMau >= :#{#param.ngayLayMauTu}) " +
-            "AND (:#{#param.ngayLayMauDen} IS NULL OR BBLM.ngayLayMau <= :#{#param.ngayLayMauDen}) " +
             "AND (:#{#param.loaiVthh } IS NULL OR LOWER(QD.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
             "AND (:#{#param.trichYeu} IS NULL OR LOWER(QD.trichYeu) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.trichYeu}),'%'))) " +
             "AND (:#{#param.ngayTaoTu} IS NULL OR QD.ngayTao >= :#{#param.ngayTaoTu}) " +

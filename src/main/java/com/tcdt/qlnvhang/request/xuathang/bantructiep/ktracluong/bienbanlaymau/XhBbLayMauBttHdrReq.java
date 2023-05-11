@@ -25,9 +25,9 @@ public class XhBbLayMauBttHdrReq extends BaseRequest {
 
     private String maQhns;
 
-    private Long idQd;
+    private Long idQdNv;
 
-    private String soQd;
+    private String soQdNv;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayQd;
@@ -37,7 +37,7 @@ public class XhBbLayMauBttHdrReq extends BaseRequest {
     private String loaiBienBan;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayHd;
+    private Date ngayKyHd;
 
     private Long idKtv;
 

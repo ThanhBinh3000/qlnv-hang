@@ -79,9 +79,9 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl implements XhPhie
         data.setId(Long.valueOf(data.getSoPhieuXuat().split("/")[0]));
         XhPhieuXkhoBtt created = xhPhieuXkhoBttReposytory.save(data);
 
-        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
-            List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhPhieuXkhoBtt.TABLE_NAME);
-            created.setFileDinhKems(fileDinhKemList);
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKem())) {
+            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), created.getId(), XhPhieuXkhoBtt.TABLE_NAME);
+            created.setFileDinhKem(fileDinhKem);
         }
 
         return created;
@@ -106,10 +106,9 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl implements XhPhie
         dataDB.setNguoiSuaId(getUser().getId());
         XhPhieuXkhoBtt created = xhPhieuXkhoBttReposytory.save(dataDB);
 
-        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
-            List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhPhieuXkhoBtt.TABLE_NAME);
-            dataDB.setFileDinhKems(fileDinhKems);
-        }
+        fileDinhKemService.delete(dataDB.getId(), Collections.singleton(XhPhieuXkhoBtt.TABLE_NAME));
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), created.getId(), XhPhieuXkhoBtt.TABLE_NAME);
+        created.setFileDinhKem(fileDinhKem);
 
         return created;
     }
@@ -157,7 +156,7 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl implements XhPhie
         data.setTenLoKho(hashMapDvi.get(data.getMaLoKho()));
 
         List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhPhieuXkhoBtt.TABLE_NAME));
-        data.setFileDinhKems(fileDinhKem);
+        data.setFileDinhKem(fileDinhKem);
         return data;
 
 

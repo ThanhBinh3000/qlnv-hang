@@ -33,9 +33,12 @@ public class XhPhieuXkhoBttReq extends BaseRequest {
 
     private BigDecimal co;
 
-    private Long idQd;
+    private Long idQdNv;
 
-    private String soQd;
+    private String soQdNv;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayQdNv;
 
     private Long idHd;
 
@@ -43,8 +46,6 @@ public class XhPhieuXkhoBttReq extends BaseRequest {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKyHd;
-
-    private Long  idDdiemXh;
 
     private String maDiemKho;
 
@@ -54,7 +55,7 @@ public class XhPhieuXkhoBttReq extends BaseRequest {
 
     private String maLoKho;
 
-    private Long idPhieuKtraCluong;
+    private Long idPhieu;
 
     private String soPhieu;
 
@@ -88,7 +89,7 @@ public class XhPhieuXkhoBttReq extends BaseRequest {
 
     private String  maSo;
 
-    private String dviTinh;
+    private String donViTinh;
 
     private BigDecimal soLuongChungTu;
 
@@ -99,5 +100,5 @@ public class XhPhieuXkhoBttReq extends BaseRequest {
     private String ghiChu;
 
     @Transient
-    private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
+    private List<FileDinhKemReq> fileDinhKem = new ArrayList<>();
 }
