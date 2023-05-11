@@ -126,7 +126,7 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
         Optional<DcnbKeHoachDcHdr> soDxuat = dcnbKeHoachDcHdrRepository.findFirstBySoDxuat(objReq.getSoDxuat());
         if (org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoDxuat())) {
             if (soDxuat.isPresent() && objReq.getSoDxuat().split("/").length == 1) {
-                if (!soDxuat.get().getId().equals(objReq.getId())) {
+                if (!soDxuat.get().getId().equals(objReq.getId()) && !Contains.NHAN_DIEU_CHUYEN.equals(optional.get().getType())) {
                     throw new Exception("số đề xuất đã tồn tại");
                 }
             }
