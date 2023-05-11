@@ -19,6 +19,8 @@ public class XhHopDongBttDvi {
 
     private Long idDtl;
 
+    private Long idHdr;
+
     private String maDiemKho;
     @Transient
     private String tenDiemKho;

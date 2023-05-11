@@ -24,6 +24,7 @@ public interface XhHopDongBttHdrRepository extends JpaRepository<XhHopDongBttHdr
             "AND (:#{#param.tenDviMua} IS NULL OR LOWER(HD.tenDviMua) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.tenDviMua}),'%'))) " +
             "AND (:#{#param.loaiVthh} IS NULL OR HD.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
             "AND (:#{#param.soQdKq} IS NULL OR LOWER(HD.soQdKq) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQdKq}),'%' ) ) )" +
+            "AND (:#{#param.soQdNv} IS NULL OR LOWER(HD.soQdNv) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQdNv}),'%' ) ) )" +
             "AND (:#{#param.trangThai} IS NULL OR HD.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.maDvi} IS NULL OR HD.maDvi = :#{#param.maDvi})")
     Page<XhHopDongBttHdr> searchPage(@Param("param") XhHopDongBttHdrReq param, Pageable pageable);
@@ -32,6 +33,9 @@ public interface XhHopDongBttHdrRepository extends JpaRepository<XhHopDongBttHdr
 
     @Transactional
     List<XhHopDongBttHdr> findAllByIdQdKq(Long idQdKq);
+
+    @Transactional
+    List<XhHopDongBttHdr> findAllByIdQdNv(Long idQdNv);
 
     @Transactional
     List<XhHopDongBttHdr> findAllByIdHd(Long idHd);

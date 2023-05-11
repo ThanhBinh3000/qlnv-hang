@@ -19,4 +19,14 @@ public class XhQdNvXhBttDviReq {
     private String maLoKho;
 
     private BigDecimal soLuongDeXuat;
+
+    private String maDviTsan;
+
+    private BigDecimal tonKho;
+
+    private String donViTinh;
+
+    private BigDecimal donGiaDeXuat;
+
+    private BigDecimal donGiaDuocDuyet;
 }
