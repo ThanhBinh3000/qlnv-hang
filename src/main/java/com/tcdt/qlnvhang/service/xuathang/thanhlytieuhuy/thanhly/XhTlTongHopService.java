@@ -82,6 +82,8 @@ public class XhTlTongHopService extends BaseServiceImpl {
     });
 
     XhTlTongHopHdr created = xhTlTongHopRepository.save(data);
+    created.setMaDanhSach(created.getId() + created.getMaDanhSach());
+    created = xhTlTongHopRepository.save(created);
     return created;
   }
 
