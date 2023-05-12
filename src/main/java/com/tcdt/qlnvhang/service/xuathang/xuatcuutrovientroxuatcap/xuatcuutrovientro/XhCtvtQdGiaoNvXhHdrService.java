@@ -81,6 +81,7 @@ public class XhCtvtQdGiaoNvXhHdrService extends BaseServiceImpl {
       if (s.getTrangThaiXh() != null) {
         s.setTenTrangThaiXh(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThaiXh()));
       }
+      s.setNoiDungCuuTro(xhCtvtQdGiaoNvXhDtlRepository.findByIdHdr(s.getId()));
     });
     return search;
   }
