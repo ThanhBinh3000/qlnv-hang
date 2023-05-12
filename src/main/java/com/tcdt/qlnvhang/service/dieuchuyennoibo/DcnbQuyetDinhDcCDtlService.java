@@ -34,10 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -83,25 +80,26 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
         for (DcnbQuyetDinhDcCDtl e : objReq.getDanhSachQuyetDinh()) {
             if (Contains.DCNB.equals(data.getLoaiDc()) && Contains.CAP_CUC.equals(currentUser.getUser().getCapDvi())) {
                 // được phép thêm mới kế hoạch và update kế hoạch (ngầm)
-                DcnbKeHoachDcHdr dcnbKeHoachDcHdr = e.getDcnbKeHoachDcHdr();
-                if (dcnbKeHoachDcHdr.getId() == null) {
-                    dcnbKeHoachDcHdr.setType(Contains.NHAN_DIEU_CHUYEN_TS);
-                    dcnbKeHoachDcHdr.setMaDviPq(e.getDcnbKeHoachDcHdr().getMaDvi());
-                    dcnbKeHoachDcHdr.setPhuongAnDieuChuyen(new ArrayList<>());
-                    if (dcnbKeHoachDcHdr.getDanhSachHangHoa() != null) {
-                        BigDecimal total = dcnbKeHoachDcHdr.getDanhSachHangHoa().stream().map(DcnbKeHoachDcDtl::getDuToanKphi)
+                if (e.getKeHoachDcHdrId() == null) {
+                    if (e.getDanhSachKeHoach() != null) {
+                        DcnbKeHoachDcHdr dcnbKeHoachDcHdr = new DcnbKeHoachDcHdr();
+                        dcnbKeHoachDcHdr.setType(Contains.NHAN_DIEU_CHUYEN_TS);
+                        dcnbKeHoachDcHdr.setMaDviPq(e.getDanhSachKeHoach().get(0).getMaChiCucNhan());
+                        dcnbKeHoachDcHdr.setPhuongAnDieuChuyen(new ArrayList<>());
+                        BigDecimal total = e.getDanhSachKeHoach().stream().map(DcnbKeHoachDcDtl::getDuToanKphi)
                                 .reduce(BigDecimal.ZERO, BigDecimal::add);
                         dcnbKeHoachDcHdr.setTongDuToanKp(total);
-                        dcnbKeHoachDcHdr.getDanhSachHangHoa().forEach(e1 -> {
+                        e.getDanhSachKeHoach().forEach(e1 -> {
                             e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
                             e1.setDaXdinhDiemNhap(true);
                         });
+                        dcnbKeHoachDcHdr.setDaXdinhDiemNhap(true);
+                        dcnbKeHoachDcHdr.setDanhSachHangHoa(e.getDanhSachKeHoach());
+                        DcnbKeHoachDcHdr dcnbKeHoachDcHdrNew = dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr);
+                        e.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdrNew);
+                        e.setKeHoachDcHdrId(dcnbKeHoachDcHdrNew.getId());
                     }
-                    dcnbKeHoachDcHdr.setDaXdinhDiemNhap(true);
-                    DcnbKeHoachDcHdr dcnbKeHoachDcHdrNew = dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr);
-                    e.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdrNew);
-                    e.setKeHoachDcHdrId(dcnbKeHoachDcHdrNew.getId());
-                }else {
+                } else {
                     throw new Exception("dcnbKeHoachDcHdr.id phải là null!");
                 }
             }
@@ -140,44 +138,68 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
         for (DcnbQuyetDinhDcCDtl e : objReq.getDanhSachQuyetDinh()) {
             if (Contains.DCNB.equals(data.getLoaiDc()) && Contains.CAP_CUC.equals(currentUser.getUser().getCapDvi())) {
                 // được phép thêm mới kế hoạch và update kế hoạch (ngầm)
-                DcnbKeHoachDcHdr dcnbKeHoachDcHdr = e.getDcnbKeHoachDcHdr();
-                if (dcnbKeHoachDcHdr.getId() != null) {
-                    Optional<DcnbKeHoachDcHdr> keHoachDcHdrOpt = dcnbKeHoachDcHdrRepository.findById(dcnbKeHoachDcHdr.getId());
-                    if(!keHoachDcHdrOpt.isPresent()){
-                        throw new Exception("dcnbKeHoachDcHdr.id không tìm thấy trong hệ thống!");
-                    }
-                    dcnbKeHoachDcHdr.setType(Contains.NHAN_DIEU_CHUYEN_TS);
-                    dcnbKeHoachDcHdr.setMaDviPq(e.getDcnbKeHoachDcHdr().getMaDvi());
-                    if (dcnbKeHoachDcHdr.getDanhSachHangHoa() != null) {
-                        BigDecimal total = dcnbKeHoachDcHdr.getDanhSachHangHoa().stream().map(DcnbKeHoachDcDtl::getDuToanKphi)
+                if (e.getKeHoachDcHdrId() != null) {
+                    if (e.getDanhSachKeHoach() != null) {
+                        DcnbKeHoachDcHdr dcnbKeHoachDcHdr = new DcnbKeHoachDcHdr();
+                        dcnbKeHoachDcHdr.setType(Contains.NHAN_DIEU_CHUYEN_TS);
+                        dcnbKeHoachDcHdr.setMaDviPq(e.getDanhSachKeHoach().get(0).getMaChiCucNhan());
+                        dcnbKeHoachDcHdr.setPhuongAnDieuChuyen(new ArrayList<>());
+                        Optional<DcnbKeHoachDcHdr> keHoachDcHdrOpt = dcnbKeHoachDcHdrRepository.findById(dcnbKeHoachDcHdr.getId());
+                        if (!keHoachDcHdrOpt.isPresent()) {
+                            throw new Exception("dcnbKeHoachDcHdr.id không tìm thấy trong hệ thống!");
+                        }
+                        dcnbKeHoachDcHdr.setType(Contains.NHAN_DIEU_CHUYEN_TS);
+                        dcnbKeHoachDcHdr.setMaDviPq(e.getDcnbKeHoachDcHdr().getMaDvi());
+
+                        BigDecimal total = e.getDanhSachKeHoach().stream().map(DcnbKeHoachDcDtl::getDuToanKphi)
                                 .reduce(BigDecimal.ZERO, BigDecimal::add);
                         dcnbKeHoachDcHdr.setTongDuToanKp(total);
-                        dcnbKeHoachDcHdr.getDanhSachHangHoa().forEach(e1 -> {
+                        e.getDanhSachKeHoach().forEach(e1 -> {
                             e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
                             e1.setDaXdinhDiemNhap(true);
                         });
+                        dcnbKeHoachDcHdr.setDaXdinhDiemNhap(true);
+                        dcnbKeHoachDcHdr.setDanhSachHangHoa(e.getDanhSachKeHoach());
+                        dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr);
                     }
-                    dcnbKeHoachDcHdr.setDaXdinhDiemNhap(true);
-                    dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr);
-                }else {
-                    throw new Exception("dcnbKeHoachDcHdr.id phải khác null!");
+                } else {
+                    if (e.getDanhSachKeHoach() != null) {
+                        DcnbKeHoachDcHdr dcnbKeHoachDcHdr = new DcnbKeHoachDcHdr();
+                        dcnbKeHoachDcHdr.setType(Contains.NHAN_DIEU_CHUYEN_TS);
+                        dcnbKeHoachDcHdr.setMaDviPq(e.getDanhSachKeHoach().get(0).getMaDiemKhoNhan());
+                        dcnbKeHoachDcHdr.setPhuongAnDieuChuyen(new ArrayList<>());
+
+                        BigDecimal total = e.getDanhSachKeHoach().stream().map(DcnbKeHoachDcDtl::getDuToanKphi)
+                                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                        dcnbKeHoachDcHdr.setTongDuToanKp(total);
+                        e.getDanhSachKeHoach().forEach(e1 -> {
+                            e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
+                            e1.setDaXdinhDiemNhap(true);
+                        });
+                        dcnbKeHoachDcHdr.setDaXdinhDiemNhap(true);
+                        dcnbKeHoachDcHdr.setDanhSachHangHoa(e.getDanhSachKeHoach());
+                        DcnbKeHoachDcHdr dcnbKeHoachDcHdrNew = dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr);
+                        e.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdrNew);
+                        e.setKeHoachDcHdrId(dcnbKeHoachDcHdrNew.getId());
+                    }
                 }
             } else if (Contains.GIUA_2_CUC_DTNN_KV.equals(data.getLoaiDc()) && Contains.QD_NHAP.equals(data.getLoaiQdinh()) && Contains.CAP_CHI_CUC.equals(currentUser.getUser().getCapDvi())) {
                 // được phép update kế hoạch (ngầm)
                 DcnbKeHoachDcHdr dcnbKeHoachDcHdr = e.getDcnbKeHoachDcHdr();
                 if (dcnbKeHoachDcHdr.getId() != null) {
                     Optional<DcnbKeHoachDcHdr> keHoachDcHdrOpt = dcnbKeHoachDcHdrRepository.findById(dcnbKeHoachDcHdr.getId());
-                    if(!keHoachDcHdrOpt.isPresent()){
+                    if (!keHoachDcHdrOpt.isPresent()) {
                         throw new Exception("dcnbKeHoachDcHdr.id không tìm thấy trong hệ thống!");
                     }
-                    if (dcnbKeHoachDcHdr.getDanhSachHangHoa() != null) {
-                        dcnbKeHoachDcHdr.getDanhSachHangHoa().forEach(e1 -> {
+                    if (e.getDanhSachKeHoach() != null) {
+                        e.getDanhSachKeHoach().forEach(e1 -> {
                             e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
                             e1.setDaXdinhDiemNhap(true);
                         });
                     }
+                    dcnbKeHoachDcHdr.setDanhSachHangHoa(e.getDanhSachKeHoach());
                     dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr);
-                }else {
+                } else {
                     throw new Exception("dcnbKeHoachDcHdr.id phải khác null!");
                 }
             }
@@ -211,7 +233,7 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
 
             List<DcnbQuyetDinhDcCDtl> sachQuyetDinh = data.getDanhSachQuyetDinh();
             sachQuyetDinh.forEach(data1 -> {
-                if(data1.getKeHoachDcHdrId() != null){
+                if (data1.getKeHoachDcHdrId() != null) {
                     Optional<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcnbKeHoachDcHdrRepository.findById(data1.getKeHoachDcHdrId());
                     if (dcnbKeHoachDcHdr.isPresent()) {
                         data1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr.get());
