@@ -64,4 +64,6 @@ public interface THKeHoachDieuChuyenCucHdrRepository extends JpaRepository<THKeH
     @Modifying
     @Query(value = "UPDATE DCNB_TH_KE_HOACH_DCC_HDR SET ID_THOP_TC = to_number(:idTh) WHERE ID IN :danhSachKeHoach", nativeQuery = true)
     void updateIdTongHop(Long id, List<Long> danhSachKeHoach);
+
+    List<THKeHoachDieuChuyenCucHdr> findBySoDeXuat(String soDeXuat);
 }
