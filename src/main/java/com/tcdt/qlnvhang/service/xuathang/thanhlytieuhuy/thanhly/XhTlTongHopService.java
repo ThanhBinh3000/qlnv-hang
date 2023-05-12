@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.service.xuathang.thanhlytieuhuy.thanhly;
 
-import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlTongHopRepository;
@@ -57,6 +56,7 @@ public class XhTlTongHopService extends BaseServiceImpl {
       });
       s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
       s.setTenDvi(mapDmucDvi.containsKey(s.getMaDvi()) ? mapDmucDvi.get(s.getMaDvi()) : null);
+      s.setTenDvql(mapDmucDvi.containsKey(s.getMaDvql()) ? mapDmucDvi.get(s.getMaDvql()) : null);
     });
     return search;
   }
@@ -77,9 +77,7 @@ public class XhTlTongHopService extends BaseServiceImpl {
     data.setMaDvi(currentUser.getUser().getDepartment());
     data.setTrangThai(Contains.DUTHAO);
 
-    data.getTongHopDtl().forEach(s -> {
-      s.setTongHopHdr(data);
-    });
+    data.getTongHopDtl().forEach(s -> s.setTongHopHdr(data));
 
     XhTlTongHopHdr created = xhTlTongHopRepository.save(data);
     created.setMaDanhSach(created.getId() + created.getMaDanhSach());
@@ -124,11 +122,13 @@ public class XhTlTongHopService extends BaseServiceImpl {
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
     Map<String, String> mapVthh = getListDanhMucHangHoa();
     allById.forEach(data -> {
-      data.setTenTrangThai(TrangThaiAllEnum.getLabelById(data.getTrangThai()));
       data.getTongHopDtl().forEach(s -> {
         s.setMapDmucDvi(mapDmucDvi);
         s.setMapVthh(mapVthh);
       });
+      data.setTenTrangThai(TrangThaiAllEnum.getLabelById(data.getTrangThai()));
+      data.setTenDvi(mapDmucDvi.containsKey(data.getMaDvi()) ? mapDmucDvi.get(data.getMaDvi()) : null);
+      data.setTenDvql(mapDmucDvi.containsKey(data.getMaDvql()) ? mapDmucDvi.get(data.getMaDvql()) : null);
     });
     return allById;
   }
