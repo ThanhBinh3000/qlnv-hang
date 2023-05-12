@@ -53,6 +53,16 @@ public class XhTlTongHopHdr extends BaseEntity implements Serializable {
   @Transient
   private String tenDvi;
 
+  @Transient
+  private String maDvql;
+  @Transient
+  private String tenDvql;
+
+  public void setMaDvi(String maDvi) {
+    this.maDvi = maDvi;
+    this.maDvql = maDvi.substring(0, maDvi.length() - 2);
+  }
+
   @OneToMany(mappedBy = "tongHopHdr", cascade = CascadeType.ALL)
   private List<XhTlTongHopDtl> tongHopDtl = new ArrayList<>();
 
