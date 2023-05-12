@@ -30,6 +30,7 @@ public class XhTlTongHopHdr extends BaseEntity implements Serializable {
   private LocalDate thoiGianTlTu;
   private LocalDate thoiGianTlDen;
   private String trangThai;
+  private String trangThaiTl;
   private Long idHoSo;
   private String soHoSo;
   private Long idQdPd;
@@ -46,6 +47,9 @@ public class XhTlTongHopHdr extends BaseEntity implements Serializable {
 
   @Transient
   private String tenTrangThai;
+  @Transient
+  private String tenTrangThaiTl;
+
   @Transient
   private String tenDvi;
 

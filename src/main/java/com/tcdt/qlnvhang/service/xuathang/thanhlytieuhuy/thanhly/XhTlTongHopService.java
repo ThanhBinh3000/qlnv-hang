@@ -77,9 +77,7 @@ public class XhTlTongHopService extends BaseServiceImpl {
     data.setMaDvi(currentUser.getUser().getDepartment());
     data.setTrangThai(Contains.DUTHAO);
 
-    data.getTongHopDtl().forEach(s -> {
-      s.setTongHopHdr(data);
-    });
+    data.getTongHopDtl().forEach(s -> s.setTongHopHdr(data));
 
     XhTlTongHopHdr created = xhTlTongHopRepository.save(data);
     created.setMaDanhSach(created.getId() + created.getMaDanhSach());
