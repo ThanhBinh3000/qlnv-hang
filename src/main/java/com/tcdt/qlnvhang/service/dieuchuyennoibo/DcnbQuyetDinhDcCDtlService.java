@@ -203,25 +203,25 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
         if (DataUtils.isNullOrEmpty(optional)) {
             throw new Exception("Không tìm thấy dữ liệu");
         }
-        List<DcnbQuyetDinhDcCHdr> allById = dcnbQuyetDinhDcCHdrRepository.findAllById(ids);
-        allById.forEach(data -> {
+        optional.forEach(data -> {
             List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Arrays.asList(DcnbQuyetDinhDcCHdr.TABLE_NAME + "_CAN_CU"));
             data.setCanCu(canCu);
             List<FileDinhKem> quyetDinh = fileDinhKemService.search(data.getId(), Arrays.asList(DcnbQuyetDinhDcCHdr.TABLE_NAME + "_QUYET_DINH"));
             data.setCanCu(quyetDinh);
 
-
             List<DcnbQuyetDinhDcCDtl> sachQuyetDinh = data.getDanhSachQuyetDinh();
             sachQuyetDinh.forEach(data1 -> {
-                Optional<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcnbKeHoachDcHdrRepository.findById(data1.getKeHoachDcHdrId());
-                if (dcnbKeHoachDcHdr.isPresent()) {
-                    data1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr.get());
+                if(data1.getKeHoachDcHdrId() != null){
+                    Optional<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcnbKeHoachDcHdrRepository.findById(data1.getKeHoachDcHdrId());
+                    if (dcnbKeHoachDcHdr.isPresent()) {
+                        data1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr.get());
+                    }
+                    List<DcnbKeHoachDcDtl> khs = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(data1.getKeHoachDcHdrId());
+                    data1.setDanhSachKeHoach(khs);
                 }
-                List<DcnbKeHoachDcDtl> khs = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(data1.getKeHoachDcHdrId());
-                data1.setDanhSachKeHoach(khs);
             });
         });
-        return allById;
+        return optional;
     }
 
     public DcnbQuyetDinhDcCHdr detail(Long id) throws Exception {
