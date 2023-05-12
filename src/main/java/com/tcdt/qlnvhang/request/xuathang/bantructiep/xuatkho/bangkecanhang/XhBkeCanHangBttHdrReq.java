@@ -26,9 +26,12 @@ public class XhBkeCanHangBttHdrReq extends BaseRequest {
 
     private String soBangKe;
 
-    private Long idQd;
+    private Long idQdNv;
 
-    private String soQd;
+    private String soQdNv;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayQdNv;
 
     private Long idHd;
 
@@ -37,8 +40,6 @@ public class XhBkeCanHangBttHdrReq extends BaseRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKyHd;
 
-    private Long  idDdiemXh;
-
     private String maDiemKho;
 
     private String maNhaKho;
@@ -46,8 +47,6 @@ public class XhBkeCanHangBttHdrReq extends BaseRequest {
     private String maNganKho;
 
     private String maLoKho;
-
-    private BigDecimal soLuong;
 
     private Long idPhieuXuat;
 
@@ -77,7 +76,7 @@ public class XhBkeCanHangBttHdrReq extends BaseRequest {
 
     private String moTaHangHoa;
 
-    private String dviTinh;
+    private String donViTinh;
 
     @Transient
     private List<XhBkeCanHangBttDtlReq> children = new ArrayList<>();

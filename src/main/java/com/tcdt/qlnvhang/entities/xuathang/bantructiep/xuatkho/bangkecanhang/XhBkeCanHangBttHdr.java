@@ -7,7 +7,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,9 +35,12 @@ public class XhBkeCanHangBttHdr extends TrangThaiBaseEntity implements Serializa
 
     private String soBangKe;
 
-    private Long idQd;
+    private Long idQdNv;
 
-    private String soQd;
+    private String soQdNv;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayQdNv;
 
     private Long idHd;
 
@@ -46,8 +48,6 @@ public class XhBkeCanHangBttHdr extends TrangThaiBaseEntity implements Serializa
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKyHd;
-
-    private Long  idDdiemXh;
 
     private String maDiemKho;
     @Transient
@@ -64,8 +64,6 @@ public class XhBkeCanHangBttHdr extends TrangThaiBaseEntity implements Serializa
     private String maLoKho;
     @Transient
     private String tenLoKho;
-
-    private BigDecimal soLuong;
 
     private Long idPhieuXuat;
 
@@ -101,7 +99,7 @@ public class XhBkeCanHangBttHdr extends TrangThaiBaseEntity implements Serializa
 
     private String moTaHangHoa;
 
-    private String dviTinh;
+    private String donViTinh;
 
     @Transient
     private List<XhBkeCanHangBttDtl> children = new ArrayList<>();
