@@ -84,6 +84,9 @@ public class XhQdNvXhBttHdr extends TrangThaiBaseEntity implements Serializable 
     @Transient
     private String tenTrangThaiHd;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayKyHd;
+
     @Transient
     private List<XhQdNvXhBttDtl> children = new ArrayList<>();
 

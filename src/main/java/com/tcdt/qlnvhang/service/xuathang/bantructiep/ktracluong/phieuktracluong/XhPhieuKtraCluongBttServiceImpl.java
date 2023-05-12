@@ -287,7 +287,7 @@ public class XhPhieuKtraCluongBttServiceImpl extends BaseServiceImpl implements 
             XhPhieuKtraCluongBttHdr hdr = data.get(i);
             objs=new Object[rowsName.length];
             objs[0]=i;
-            objs[1]=hdr.getSoQd();
+            objs[1]=hdr.getSoQdNv();
             objs[2]=hdr.getNamKh();
             objs[3]=hdr.getNgayQd();
             objs[4]=hdr.getTenDiemKho();

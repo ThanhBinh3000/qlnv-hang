@@ -94,10 +94,13 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
             }
         }
         THKeHoachDieuChuyenTongCucHdr created = tongCucHdrRepository.save(data);
-        if (!chiTiet.isEmpty()) {
-            for (THKeHoachDieuChuyenTongCucDtl ct : chiTiet) {
-                ct.setHdrId(created.getId());
-            }
+
+        if (chiTiet.isEmpty()) {
+            throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
+        }else {
+                for (THKeHoachDieuChuyenTongCucDtl ct : chiTiet) {
+                    ct.setHdrId(created.getId());
+                }
         }
         thKeHoachDieuChuyenTongCucDtlRepository.saveAll(chiTiet);
 //        if (created.getId() > 0) {
@@ -205,6 +208,9 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
             req.setMaDVi(cqt.getMaDvi());
             if (req.getLoaiDieuChuyen().equals(Contains.GIUA_2_CHI_CUC_TRONG_1_CUC)) {
                 List<THKeHoachDieuChuyenCucHdr> dcnbKeHoachDcHdrs = thKeHoachDieuChuyenCucHdrRepository.findByDonViAndTrangThaiTongCuc(req.getMaDVi(), Contains.DADUYET_LDC, Contains.GIUA_2_CHI_CUC_TRONG_1_CUC, thoiGianTongHop.toLocalDate());
+                if(dcnbKeHoachDcHdrs.isEmpty()){
+                    throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
+                }
                 for (THKeHoachDieuChuyenCucHdr entry : dcnbKeHoachDcHdrs) {
                     Hibernate.initialize(entry.getThKeHoachDieuChuyenCucKhacCucDtls());
                     THKeHoachDieuChuyenCucHdr khhc = SerializationUtils.clone(entry);
@@ -213,11 +219,14 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
                     chiTiet.setHdrId(null);
                     chiTiet.setThKhDcHdrId(khhc.getId());
                     Long tongDuToanKp = dcnbKeHoachDcDtlRepository.findByMaDviCucAndTypeAndLoaiDcTongCucChiCuc(req.getMaDVi(), Contains.DIEU_CHUYEN, Contains.GIUA_2_CHI_CUC_TRONG_1_CUC, Contains.DADUYET_LDCC, req.getThoiGianTongHop());
-                    chiTiet.setTongDuToanKp(tongDuToanKp);
+                    chiTiet.setTongDuToanKp(tongDuToanKp == null ? 0 : tongDuToanKp);
                     result.add(chiTiet);
                 }
             } else if (req.getLoaiDieuChuyen().equals(Contains.GIUA_2_CUC_DTNN_KV)) {
                 List<THKeHoachDieuChuyenCucKhacCucDtl> dcnbKeHoachDcHdrs = thKeHoachDieuChuyenCucKhacCucDtlRepository.findByDonViAndTrangThaiAndLoaiDcCuc(req.getMaDVi(), Contains.DADUYET_LDC, Contains.GIUA_2_CUC_DTNN_KV, thoiGianTongHop.toLocalDate());
+                if(dcnbKeHoachDcHdrs.isEmpty()){
+                    throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
+                }
                 Map<String, List<THKeHoachDieuChuyenCucKhacCucDtl>> postsPerType = dcnbKeHoachDcHdrs.stream()
                         .collect(groupingBy(THKeHoachDieuChuyenCucKhacCucDtl::getMaCucNhan));
                 for (Map.Entry<String, List<THKeHoachDieuChuyenCucKhacCucDtl>> entry : postsPerType.entrySet()) {
@@ -247,7 +256,7 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
                 });
                     });
                     Long tongDuToanKp = dcnbKeHoachDcDtlRepository.findByMaDviCucAndTypeAndLoaiDcTongCucCuc(req.getMaDVi(), chiTiet.getMaCucNhan(), Contains.DIEU_CHUYEN, Contains.GIUA_2_CUC_DTNN_KV, Contains.DADUYET_LDCC, req.getThoiGianTongHop());
-                    chiTiet.setTongDuToanKp(tongDuToanKp);
+                    chiTiet.setTongDuToanKp(tongDuToanKp == null ? 0 : tongDuToanKp);
                     result.add(chiTiet);
                 }
             }

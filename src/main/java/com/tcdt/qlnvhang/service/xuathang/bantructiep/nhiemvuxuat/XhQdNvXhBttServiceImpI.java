@@ -337,6 +337,7 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
                 Optional<XhHopDongBttHdr> optionalHd = xhHopDongBttHdrRepository.findById(data.getIdHd());
                 if (optionalHd.isPresent()){
                     optionalHd.get().setSoQdNv(data.getSoQdNv());
+                    optionalHd.get().setIdQdNv(data.getId());
                     xhHopDongBttHdrRepository.save(optionalHd.get());
                 }
             }

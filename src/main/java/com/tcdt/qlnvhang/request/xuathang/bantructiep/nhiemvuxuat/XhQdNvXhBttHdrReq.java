@@ -62,6 +62,9 @@ public class XhQdNvXhBttHdrReq extends BaseRequest {
 
     private String phanLoai;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayKyHd;
+
     private List<XhQdNvXhBttDtlReq> children = new ArrayList<>();
 
     @Transient

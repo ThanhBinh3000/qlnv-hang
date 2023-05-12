@@ -43,9 +43,12 @@ public class XhPhieuXkhoBtt extends TrangThaiBaseEntity implements Serializable 
 
     private BigDecimal co;
 
-    private Long idQd;
+    private Long idQdNv;
 
-    private String soQd;
+    private String soQdNv;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayQdNv;
 
     private Long idHd;
 
@@ -53,8 +56,6 @@ public class XhPhieuXkhoBtt extends TrangThaiBaseEntity implements Serializable 
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKyHd;
-
-    private Long  idDdiemXh;
 
     private String maDiemKho;
     @Transient
@@ -72,7 +73,7 @@ public class XhPhieuXkhoBtt extends TrangThaiBaseEntity implements Serializable 
     @Transient
     private String tenLoKho;
 
-    private Long idPhieuKtraCluong;
+    private Long idPhieu;
 
     private String soPhieu;
 
@@ -114,7 +115,7 @@ public class XhPhieuXkhoBtt extends TrangThaiBaseEntity implements Serializable 
 
     private String  maSo;
 
-    private String dviTinh;
+    private String donViTinh;
 
     private BigDecimal soLuongChungTu;
 
@@ -125,6 +126,6 @@ public class XhPhieuXkhoBtt extends TrangThaiBaseEntity implements Serializable 
     private String ghiChu;
 
     @Transient
-    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
+    private List<FileDinhKem> fileDinhKem = new ArrayList<>();
 
 }

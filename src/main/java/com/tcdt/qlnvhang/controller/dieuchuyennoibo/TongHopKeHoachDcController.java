@@ -179,13 +179,19 @@ public class TongHopKeHoachDcController extends BaseController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> createTableCuc(@CurrentUser CustomUserDetails currentUser,@RequestBody  TongHopKeHoachDieuChuyenSearch req) throws Exception {
         BaseResponse resp = new BaseResponse();
+        try {
             if (Objects.equals(req.getLoaiDieuChuyen(), Contains.GIUA_2_CHI_CUC_TRONG_1_CUC)) {
                 resp.setData(thKeHoachDieuChuyenService.createPlanChiCuc(currentUser, req));
             } else if (Objects.equals(req.getLoaiDieuChuyen(), Contains.GIUA_2_CUC_DTNN_KV)) {
                 resp.setData(thKeHoachDieuChuyenService.createPlanCuc(currentUser, req));
             }
-        resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        }catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Lập thông tin : {}", e);
+        }
             return ResponseEntity.ok(resp);
     }
 
