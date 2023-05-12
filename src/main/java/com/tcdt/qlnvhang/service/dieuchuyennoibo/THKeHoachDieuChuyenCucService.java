@@ -100,12 +100,6 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         if (currentUser == null) {
             throw new Exception("Bad request.");
         }
-        List<THKeHoachDieuChuyenCucHdr> maTongHop = thKeHoachDieuChuyenHdrRepository.findByMaTongHop(String.valueOf(objReq.getMaTongHop()));
-        if (!maTongHop.isEmpty() && objReq.getMaTongHop().split("/").length == 1) {
-            if (maTongHop.get(0).getId().equals(objReq.getId())) {
-                throw new Exception("Mã tổng hợp đã tồn tại");
-            }
-        }
         List<THKeHoachDieuChuyenCucHdr> soDeXuat = thKeHoachDieuChuyenHdrRepository.findBySoDeXuat(objReq.getSoDeXuat());
         if (!soDeXuat.isEmpty() && objReq.getSoDeXuat().split("/").length == 1) {
             if (soDeXuat.get(0).getId().equals(objReq.getId())) {
@@ -291,13 +285,6 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         if(!optional.get().getTrangThai().equals(Contains.DUTHAO) && !optional.get().getTrangThai().equals(Contains.YEU_CAU_XAC_DINH_DIEM_NHAP)){
             throw new Exception("Không được phép chỉnh sửa dữ liệu");
         }
-        List<THKeHoachDieuChuyenCucHdr> maTongHop = thKeHoachDieuChuyenHdrRepository.findByMaTongHop(String.valueOf(optional.get().getMaTongHop()));
-        if (!maTongHop.isEmpty() && objReq.getMaTongHop().split("/").length == 1) {
-            if (maTongHop.get(0).getId().equals(objReq.getId())) {
-                throw new Exception("Mã tổng hợp đã tồn tại");
-            }
-        }
-
         List<THKeHoachDieuChuyenCucHdr> soDeXuat = thKeHoachDieuChuyenHdrRepository.findBySoDeXuat(optional.get().getSoDeXuat());
         if (!soDeXuat.isEmpty() && objReq.getSoDeXuat().split("/").length == 1) {
             if (soDeXuat.get(0).getId().equals(objReq.getId())) {
@@ -415,9 +402,9 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
             Map<String, List<DcnbKeHoachDcHdr>> postsPerType = dcnbKeHoachDcHdrs.stream()
                     .collect(groupingBy(DcnbKeHoachDcHdr::getMaCucNhan));
             for (Map.Entry<String, List<DcnbKeHoachDcHdr>> entry : postsPerType.entrySet()) {
-                    if(dcnbKeHoachDcHdrs.isEmpty()) {
-                        throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
-                    }
+                if(dcnbKeHoachDcHdrs.isEmpty()) {
+                    throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
+                }
                 THKeHoachDieuChuyenCucKhacCucDtlReq dtl = new THKeHoachDieuChuyenCucKhacCucDtlReq();
                 dtl.setMaCucNhan(entry.getKey());
                 List<DcnbKeHoachDcHdr> khhc = entry.getValue();
