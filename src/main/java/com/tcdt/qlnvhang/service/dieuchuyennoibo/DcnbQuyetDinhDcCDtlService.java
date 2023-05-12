@@ -102,6 +102,24 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
                 } else {
                     throw new Exception("dcnbKeHoachDcHdr.id phải là null!");
                 }
+            }else {
+                if (e.getKeHoachDcHdrId() == null) {
+                    if (e.getDanhSachKeHoach() != null) {
+                        Optional<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcnbKeHoachDcHdrRepository.findById(e.getDanhSachKeHoach().get(0).getHdrId());
+                        if (!dcnbKeHoachDcHdr.isPresent()) {
+                            throw new Exception("Không tìm thấy kế hoạch id = "+ e.getDanhSachKeHoach().get(0).getHdrId());
+                        }
+                        e.getDanhSachKeHoach().forEach(e1 -> {
+                            e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr.get());
+                        });
+                        dcnbKeHoachDcHdr.get().setDanhSachHangHoa(e.getDanhSachKeHoach());
+                        DcnbKeHoachDcHdr dcnbKeHoachDcHdrNew = dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr.get());
+                        e.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdrNew);
+                        e.setKeHoachDcHdrId(dcnbKeHoachDcHdrNew.getId());
+                    }
+                } else {
+                    throw new Exception("dcnbKeHoachDcHdr.id phải là null!");
+                }
             }
             e.setDcnbQuyetDinhDcCHdr(data);
         }
@@ -200,6 +218,24 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
                     }
                     dcnbKeHoachDcHdr.setDanhSachHangHoa(e.getDanhSachKeHoach());
                     dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr);
+                } else {
+                    throw new Exception("dcnbKeHoachDcHdr.id phải khác null!");
+                }
+            }else {
+                if (e.getKeHoachDcHdrId() != null) {
+                    if (e.getDanhSachKeHoach() != null) {
+                        Optional<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcnbKeHoachDcHdrRepository.findById(e.getDanhSachKeHoach().get(0).getHdrId());
+                        if (!dcnbKeHoachDcHdr.isPresent()) {
+                            throw new Exception("Không tìm thấy kế hoạch id = "+ e.getDanhSachKeHoach().get(0).getHdrId());
+                        }
+                        e.getDanhSachKeHoach().forEach(e1 -> {
+                            e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr.get());
+                        });
+                        dcnbKeHoachDcHdr.get().setDanhSachHangHoa(e.getDanhSachKeHoach());
+                        DcnbKeHoachDcHdr dcnbKeHoachDcHdrNew = dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr.get());
+                        e.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdrNew);
+                        e.setKeHoachDcHdrId(dcnbKeHoachDcHdrNew.getId());
+                    }
                 } else {
                     throw new Exception("dcnbKeHoachDcHdr.id phải khác null!");
                 }
