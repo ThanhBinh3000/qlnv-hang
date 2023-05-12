@@ -23,7 +23,7 @@ public interface XhBkeCanHangBttHdrRepository extends JpaRepository<XhBkeCanHang
             "AND (:#{#param.maDvi} IS NULL OR BK.maDvi = :#{#param.maDvi})")
     Page<XhBkeCanHangBttHdr> searchPage(@Param("param") XhBkeCanHangBttHdrReq param, Pageable pageable);
 
-    List<XhBkeCanHangBttHdr> findAllByIdQd(Long idQd);
+    List<XhBkeCanHangBttHdr> findAllByIdQdNv(Long idQdNv);
 
     Optional<XhBkeCanHangBttHdr> findBySoPhieuXuat(String soPhieuXuat);
 }
