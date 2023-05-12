@@ -20,6 +20,7 @@ public interface THKeHoachDieuChuyenCucHdrRepository extends JpaRepository<THKeH
             "AND (:#{#param.maDVi} IS NULL OR hdr.maDvi LIKE CONCAT(:#{#param.maDVi},'%')) " +
             "AND (:#{#param.namKeHoach} IS NULL OR hdr.namKeHoach = :#{#param.namKeHoach}) " +
             "AND LOWER(hdr.id) LIKE CONCAT('%',LOWER(:#{#param.id}),'%') " +
+            "AND (:#{#param.loaiDieuChuyen} IS NULL OR hdr.loaiDieuChuyen = :#{#param.loaiDieuChuyen})" +
             "AND ((:#{#param.tuNgay}  IS NULL OR hdr.ngayTongHop >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR hdr.ngayTongHop <= :#{#param.denNgay}) ) " +
             "AND (:#{#param.trichYeu} IS NULL OR LOWER(hdr.trichYeu) LIKE CONCAT('%',LOWER(:#{#param.trichYeu}),'%')) " +
@@ -63,7 +64,7 @@ public interface THKeHoachDieuChuyenCucHdrRepository extends JpaRepository<THKeH
     @Transactional()
     @Modifying
     @Query(value = "UPDATE DCNB_TH_KE_HOACH_DCC_HDR SET ID_THOP_TC = to_number(:idTh) WHERE ID IN :danhSachKeHoach", nativeQuery = true)
-    void updateIdTongHop(Long id, List<Long> danhSachKeHoach);
+    void updateIdTongHop(Long idTh, List<Long> danhSachKeHoach);
 
     List<THKeHoachDieuChuyenCucHdr> findBySoDeXuat(String soDeXuat);
 }
