@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -20,8 +21,7 @@ public class XhTlTongHopHdr extends BaseEntity implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlTongHopHdr.TABLE_NAME + "_SEQ")
-  @SequenceGenerator(sequenceName = XhTlTongHopHdr.TABLE_NAME
-      + "_SEQ", allocationSize = 1, name = XhTlTongHopHdr.TABLE_NAME + "_SEQ")
+  @SequenceGenerator(sequenceName = XhTlTongHopHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhTlTongHopHdr.TABLE_NAME + "_SEQ")
   private Long id;
   private Integer nam;
   private String maDvi;
@@ -60,10 +60,10 @@ public class XhTlTongHopHdr extends BaseEntity implements Serializable {
 
   public void setMaDvi(String maDvi) {
     this.maDvi = maDvi;
-    this.maDvql = maDvi.substring(0, maDvi.length() - 2);
+    this.maDvql = DataUtils.isNullOrEmpty(maDvi) ? maDvi : maDvi.substring(0, maDvi.length() - 2);
+
   }
 
   @OneToMany(mappedBy = "tongHopHdr", cascade = CascadeType.ALL)
   private List<XhTlTongHopDtl> tongHopDtl = new ArrayList<>();
-
 }
