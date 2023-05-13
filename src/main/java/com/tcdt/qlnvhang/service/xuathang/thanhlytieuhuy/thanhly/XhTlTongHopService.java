@@ -22,6 +22,7 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -82,7 +83,8 @@ public class XhTlTongHopService extends BaseServiceImpl {
     XhTlTongHopHdr created = xhTlTongHopRepository.save(data);
     created.setMaDanhSach(created.getId() + created.getMaDanhSach());
     created = xhTlTongHopRepository.save(created);
-    return created;
+    return detail(Arrays.asList(created.getId())).get(0);
+
   }
 
   @Transactional
