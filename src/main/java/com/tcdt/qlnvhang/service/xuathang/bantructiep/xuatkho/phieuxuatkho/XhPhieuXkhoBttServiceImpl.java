@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPh
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPhieuXkhoBttReposytory;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPhieuXkhoBttReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -12,6 +13,7 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -225,11 +227,50 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl implements XhPhie
 
     @Override
     public void deleteMulti(List<Long> listMulti) throws Exception {
+        if(StringUtils.isEmpty(listMulti)){
+            throw new Exception("Xóa thất bại, không tìm thấy dữ liệu ");
+        }
 
+        List<XhPhieuXkhoBtt> list = xhPhieuXkhoBttReposytory.findAllById(listMulti);
+        if (list.isEmpty()){
+            throw new Exception("Không tìm thấy dữ liệu cần xóa");
+        }
+
+        for (XhPhieuXkhoBtt hdr : list){
+            this.delete(hdr.getId());
+        }
     }
 
     @Override
     public void export(XhPhieuXkhoBttReq req, HttpServletResponse response) throws Exception {
-
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        req.setPaggingReq(paggingReq);
+        Page<XhPhieuXkhoBtt> page = this.searchPage(req);
+        List<XhPhieuXkhoBtt> data = page.getContent();
+        String title="Danh sách phiếu xuất kho bán trực tiếp";
+        String[] rowsName = new String[]{"STT","Số QĐ giao NVXH", "Năm KH", "Thời hạn XH trước ngày", "Điển kho", "Lô kho", "Số phiếu xuất kho", "Ngày xuất kho", "Số phiếu KNCL", "Ngày giám định", "Trạng thái"};
+        String filename="danh-sach-phieu-xuat-kho-ban-truc-tiep.xlsx";
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs=null;
+        for (int i = 0; i < data.size(); i++) {
+            XhPhieuXkhoBtt hdr = data.get(i);
+            objs=new Object[rowsName.length];
+            objs[0]=i;
+            objs[1]=hdr.getSoQdNv();
+            objs[2]=hdr.getNamKh();
+            objs[3]=hdr.getNgayQdNv();
+            objs[4]=hdr.getTenDiemKho();
+            objs[5]=hdr.getTenLoKho();
+            objs[6]=hdr.getSoPhieuXuat();
+            objs[7]=hdr.getNgayXuatKho();
+            objs[8]=hdr.getSoPhieu();
+            objs[9]=hdr.getNgayKnghiem();
+            objs[10]=hdr.getTenTrangThai();
+            dataList.add(objs);
+        }
+        ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+        ex.export();
     }
 }
