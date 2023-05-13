@@ -57,7 +57,9 @@ public class XhTlTongHopService extends BaseServiceImpl {
       });
       s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
       s.setTenDvi(mapDmucDvi.containsKey(s.getMaDvi()) ? mapDmucDvi.get(s.getMaDvi()) : null);
-      s.setTenDvql(mapDmucDvi.containsKey(s.getMaDvql()) ? mapDmucDvi.get(s.getMaDvql()) : null);
+      String maDvql = DataUtils.isNullOrEmpty(s.getMaDvi()) ? s.getMaDvi() : s.getMaDvi().substring(0, s.getMaDvi().length() - 2);
+      s.setMaDvql(maDvql);
+      s.setTenDvql(mapDmucDvi.containsKey(maDvql) ? mapDmucDvi.get(maDvql) : null);
     });
     return search;
   }
@@ -130,7 +132,9 @@ public class XhTlTongHopService extends BaseServiceImpl {
       });
       data.setTenTrangThai(TrangThaiAllEnum.getLabelById(data.getTrangThai()));
       data.setTenDvi(mapDmucDvi.containsKey(data.getMaDvi()) ? mapDmucDvi.get(data.getMaDvi()) : null);
-      data.setTenDvql(mapDmucDvi.containsKey(data.getMaDvql()) ? mapDmucDvi.get(data.getMaDvql()) : null);
+      String maDvql = DataUtils.isNullOrEmpty(data.getMaDvi()) ? data.getMaDvi() : data.getMaDvi().substring(0, data.getMaDvi().length() - 2);
+      data.setMaDvql(maDvql);
+      data.setTenDvql(mapDmucDvi.containsKey(maDvql) ? mapDmucDvi.get(maDvql) : null);
     });
     return allById;
   }
