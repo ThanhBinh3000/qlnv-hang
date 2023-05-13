@@ -172,7 +172,7 @@ public class XhTlTongHopService extends BaseServiceImpl {
     }
 
     String status = optional.get().getTrangThai() + statusReq.getTrangThai();
-    if (status.equals(TrangThaiAllEnum.DU_THAO.getId() + TrangThaiAllEnum.CHO_DUYET_TP.getId())) {
+    if (status.equals(TrangThaiAllEnum.DU_THAO.getId() + TrangThaiAllEnum.DA_TONG_HOP.getId())) {
       optional.get().setNguoiGduyetId(currentUser.getUser().getId());
       optional.get().setNgayGduyet(LocalDate.now());
     } else {
