@@ -1,18 +1,12 @@
 package com.tcdt.qlnvhang.request.xuathang.bantructiep.hopdong.bangkebanle;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.BaseRequest;
-import com.tcdt.qlnvhang.util.Contains;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 public class XhBangKeBttReq extends BaseRequest {
 
-    @ApiModelProperty(notes = "Bắt buộc set đối với update")
     private Long id;
 
     private Integer namKh;
@@ -31,8 +25,7 @@ public class XhBangKeBttReq extends BaseRequest {
 
     private String diaChi;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayBanHang;
+    private LocalDate ngayBanHang;
 
     private String loaiVthh;
 
@@ -52,10 +45,7 @@ public class XhBangKeBttReq extends BaseRequest {
 
     private String ghiChu;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayBanHangTu;
+    private LocalDate ngayBanHangTu;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayBanHangDen;
-
+    private LocalDate ngayBanHangDen;
 }

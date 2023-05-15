@@ -1,28 +1,25 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = XhHopDongBttHdr.TABLE_NAME)
 @Data
-public class XhHopDongBttHdr extends TrangThaiBaseEntity implements Serializable {
+public class XhHopDongBttHdr implements Serializable {
+
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_HOP_DONG_BTT_HDR";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = TABLE_NAME +"_SEQ")
     @SequenceGenerator(sequenceName =  TABLE_NAME+ "_SEQ", allocationSize = 1, name = TABLE_NAME+ "_SEQ")
+
     private Long id;
 
     private Integer namHd;
@@ -31,17 +28,11 @@ public class XhHopDongBttHdr extends TrangThaiBaseEntity implements Serializable
 
     private String soQdKq;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
-    private Date ngayKyQd;
+    private LocalDate ngayKyQd;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
-    private Date ngayMkho;
+    private LocalDate ngayMkho;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
-    private Date ngayKyQdPd;
+    private LocalDate ngayKyQdPd;
 
     private String soQdPd;
 
@@ -55,9 +46,7 @@ public class XhHopDongBttHdr extends TrangThaiBaseEntity implements Serializable
 
     private String tenHd;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
-    private Date ngayHluc;
+    private LocalDate ngayHluc;
 
     private String ghiChuNgayHluc;
 
@@ -69,13 +58,9 @@ public class XhHopDongBttHdr extends TrangThaiBaseEntity implements Serializable
 
     private Integer tgianThienHd;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
-    private Date tgianGnhanTu;
+    private LocalDate tgianGnhanTu;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
-    private Date tgianGnhanDen;
+    private LocalDate tgianGnhanDen;
 
     private String ghiChuTgianGnhan;
 
@@ -153,6 +138,28 @@ public class XhHopDongBttHdr extends TrangThaiBaseEntity implements Serializable
     @Transient
     private String tenTrangThaiXh;
 
+    private String trangThai;
+    @Transient
+    private String tenTrangThai;
+
+    private LocalDate ngayTao;
+
+    private Long nguoiTaoId;
+
+    private LocalDate ngaySua;
+
+    private Long nguoiSuaId;
+
+    private LocalDate ngayGuiDuyet;
+
+    private Long nguoiGuiDuyetId;
+
+    private LocalDate ngayPduyet;
+
+    private Long nguoiPduyetId;
+
+    private String lyDoTuChoi;
+
     @Transient
     private List<String> listMaDviTsan = new ArrayList<>();
 
@@ -174,19 +181,13 @@ public class XhHopDongBttHdr extends TrangThaiBaseEntity implements Serializable
 
     private String soPhuLuc;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
-    private Date ngayHlucPhuLuc;
+    private LocalDate ngayHlucPhuLuc;
 
     private String noiDungPhuLuc;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
-    private Date ngayHlucSauDcTu;
+    private LocalDate ngayHlucSauDcTu;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
-    private Date ngayHlucSauDcDen;
+    private LocalDate ngayHlucSauDcDen;
 
     private Integer tgianThienHdSauDc;
 

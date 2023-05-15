@@ -1,21 +1,16 @@
 package com.tcdt.qlnvhang.service.xuathang.bantructiep.nhiemvuxuat;
-
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdr;
-
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttDvi;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttHdr;
-
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.hopdong.XhHopDongBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdrRepository;
-
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttDviRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttHdrRepository;
-
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttDviReq;
@@ -39,8 +34,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
-
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -77,11 +72,9 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
                 req.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<XhQdNvXhBttHdr> data = xhQdNvXhBttHdrRepository.searchPage(
                 req,
-                pageable
-        );
+                pageable);
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
-
         data.getContent().forEach(f ->{
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenTrangThaiXh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiXh()));
@@ -95,19 +88,16 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
 
     @Override
     public XhQdNvXhBttHdr create(XhQdNvXhBttHdrReq req) throws Exception {
-
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null){
             throw new Exception("Bad request.");
         }
-
         if (!StringUtils.isEmpty(req.getSoQdNv())){
             List<XhQdNvXhBttHdr> checkSoQd = xhQdNvXhBttHdrRepository.findBySoQdNv(req.getSoQdNv());
             if (!checkSoQd.isEmpty()){
                 throw new Exception("Số quyết định" + req.getSoQdNv() + "đã tồn tại");
             }
         }
-
         XhHopDongBttHdr dataHd = new XhHopDongBttHdr();
         XhQdPdKhBttHdr dataQdPdKq = new XhQdPdKhBttHdr();
         if (req.getPhanLoai().equals("HD")){
@@ -123,10 +113,9 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
                 }
             dataQdPdKq = qOptionalQdPdKh.get();
         }
-
         XhQdNvXhBttHdr  dataMap = new XhQdNvXhBttHdr();
         BeanUtils.copyProperties(req, dataMap, "id");
-        dataMap.setNgayTao(getDateTimeNow());
+        dataMap.setNgayTao(LocalDate.now());
         dataMap.setNguoiTaoId(getUser().getId());
         dataMap.setTrangThai(Contains.DUTHAO);
         dataMap.setTrangThaiXh(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
@@ -136,22 +125,18 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
             dataMap.setMaDviTsan(String.join(",",req.getListMaDviTsan()));
         }
         XhQdNvXhBttHdr created = xhQdNvXhBttHdrRepository.save(dataMap);
-
         if (!DataUtils.isNullOrEmpty(req.getFileDinhKem())) {
             List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), created.getId(), XhQdNvXhBttHdr.TABLE_NAME+ "_CAN_CU");
             created.setFileDinhKem(fileDinhKem);
         }
-
         if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
             List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhQdNvXhBttHdr.TABLE_NAME);
             created.setFileDinhKems(fileDinhKems);
         }
-
         if (req.getPhanLoai().equals("HD")){
             dataHd.setTrangThaiXh(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
             xhHopDongBttHdrRepository.save(dataHd);
         }
-
         this.saveDetail(req, dataMap.getId());
         return created;
     }
@@ -180,16 +165,13 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         if (userInfo == null) {
             throw new Exception("Bad request.");
         }
-
         if (StringUtils.isEmpty(req.getId())){
             throw new Exception("Sửa thất bại không tìm thấy dữ liệu ");
         }
-
         Optional<XhQdNvXhBttHdr> qOptional = xhQdNvXhBttHdrRepository.findById(req.getId());
         if (!qOptional.isPresent()){
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
-
         if (!StringUtils.isEmpty(req.getSoQdNv())) {
             if (!req.getSoQdNv().equals(qOptional.get().getSoQdNv())) {
                 List<XhQdNvXhBttHdr> checkSoQdNv = xhQdNvXhBttHdrRepository.findBySoQdNv(req.getSoQdNv());
@@ -200,7 +182,6 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         }
 
         XhQdNvXhBttHdr dataDB = qOptional.get();
-
         if (req.getPhanLoai().equals("HD")){
             Optional<XhHopDongBttHdr> qOptionalHd = xhHopDongBttHdrRepository.findById(req.getIdHd());
             if (!qOptionalHd.isPresent()){
@@ -212,44 +193,35 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
                 throw new Exception("Không tìm thấy quyết định phê duyệt kế hoạch bán trực tiếp");
             }
         }
-
         BeanUtils.copyProperties(req, dataDB, "id");
-        dataDB.setNgaySua(getDateTimeNow());
+        dataDB.setNgaySua(LocalDate.now());
         dataDB.setNguoiSuaId(getUser().getId());
         if(!ObjectUtils.isEmpty(req.getListMaDviTsan())){
             dataDB.setMaDviTsan(String.join(",",req.getListMaDviTsan()));
         }
         XhQdNvXhBttHdr created = xhQdNvXhBttHdrRepository.save(dataDB);
-
-
         fileDinhKemService.delete(dataDB.getId(), Collections.singleton(XhQdNvXhBttHdr.TABLE_NAME + "_BAN_HANH"));
         List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), created.getId(), XhQdNvXhBttHdr.TABLE_NAME + "_CAN_CU");
         created.setFileDinhKem(fileDinhKem);
-
         fileDinhKemService.delete(dataDB.getId(), Collections.singleton(XhQdNvXhBttHdr.TABLE_NAME));
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhQdNvXhBttHdr.TABLE_NAME);
         created.setFileDinhKems(fileDinhKems);
-
         this.saveDetail(req, dataDB.getId());
         return created;
     }
 
     @Override
     public XhQdNvXhBttHdr detail(Long id) throws Exception {
-        if (StringUtils.isEmpty(id))
+        if (StringUtils.isEmpty(id)){
             throw new Exception("Không tồn tại bản ghi");
-
+        }
         Optional<XhQdNvXhBttHdr> qOptional = xhQdNvXhBttHdrRepository.findById(id);
-
         if (!qOptional.isPresent()){
             throw new UnsupportedOperationException("Bản ghi không tồn tại");
         }
-
         XhQdNvXhBttHdr data = qOptional.get();
-
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
-
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
         data.setTenTrangThaiHd(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiHd()));
         data.setTenDvi(hashMapDvi.get(data.getMaDvi()));
@@ -258,7 +230,6 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         if (!DataUtils.isNullObject(data.getMaDviTsan())) {
             data.setListMaDviTsan(Arrays.asList(data.getMaDviTsan().split(",")));
         }
-
         List<XhHopDongBttHdr> hopDongBttHdrList = xhHopDongBttHdrRepository.findAllByIdQdNv(id);
         hopDongBttHdrList.forEach(f ->{
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
@@ -267,10 +238,8 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         data.setListHopDongBtt(hopDongBttHdrList);
         List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdNvXhBttHdr.TABLE_NAME+ "_CAN_CU"));
         data.setFileDinhKem(fileDinhKem);
-
         List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdNvXhBttHdr.TABLE_NAME));
         data.setFileDinhKems(fileDinhKems);
-
         List<XhQdNvXhBttDtl> dtlList  = xhQdNvXhBttDtlRepository.findAllByIdHdr(data.getId());
         for (XhQdNvXhBttDtl dtl : dtlList){
             List<XhQdNvXhBttDvi> dviList = xhQdNvXhBttDviRepository.findAllByIdDtl(dtl.getId());
@@ -289,26 +258,21 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
 
     @Override
     public XhQdNvXhBttHdr approve(XhQdNvXhBttHdrReq req) throws Exception {
-       UserInfo userInfo = SecurityContextService.getUser();
-
-       if (userInfo == null){
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null){
            throw new Exception("Bad request. ");
-       }
-
+        }
         if (StringUtils.isEmpty(req.getId())){
             throw new Exception("Không tìm thấy dữ liệu");
         }
-
         Optional<XhQdNvXhBttHdr> optional = xhQdNvXhBttHdrRepository.findById(req.getId());
         if (!optional.isPresent()){
             throw new Exception("Không tìm thấy dữ liệu");
         }
-
         XhQdNvXhBttHdr data = optional.get();
         String status = req.getTrangThai() + data.getTrangThai();
         if(req.getTrangThai().equals(NhapXuatHangTrangThaiEnum.DA_HOAN_THANH.getId())
                 && data.getTrangThaiHd().equals(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId())) {
-
             data.setTrangThaiHd(req.getTrangThai());
         }else {
             switch (status) {
@@ -316,18 +280,18 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
                 case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
                 case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
                     data.setNguoiGuiDuyetId(userInfo.getId());
-                    data.setNgayGuiDuyet(getDateTimeNow());
+                    data.setNgayGuiDuyet(LocalDate.now());
                     break;
                 case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
                 case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
                 case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
                     data.setNguoiPduyetId(userInfo.getId());
-                    data.setNgayPduyet(getDateTimeNow());
+                    data.setNgayPduyet(LocalDate.now());
                     data.setLyDoTuChoi(req.getLyDoTuChoi());
                     break;
                 case Contains.BAN_HANH + Contains.CHODUYET_LDC:
                     data.setNguoiPduyetId(userInfo.getId());
-                    data.setNgayPduyet(getDateTimeNow());
+                    data.setNgayPduyet(LocalDate.now());
                     break;
                 default:
                     throw new Exception("Phê duyệt không thành công");
@@ -351,20 +315,16 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         if (StringUtils.isEmpty(id)){
             throw new Exception("Xóa thất bại không tìm thấy dữ liệu");
         }
-
         Optional<XhQdNvXhBttHdr> optional = xhQdNvXhBttHdrRepository.findById(id);
         if (!optional.isPresent()){
             throw new Exception("Không tìm thấy dữ liệu cần xóa");
         }
-
         XhQdNvXhBttHdr hdr = optional.get();
-
         if (!hdr.getTrangThai().equals(Contains.DUTHAO)
                 && !hdr.getTrangThai().equals(Contains.TU_CHOI_TP)
                 && !hdr.getTrangThai().equals(Contains.TUCHOI_LDC)) {
             throw new Exception("Chỉ thực hiện xóa với kế hoạch ở trạng thái bản nháp hoặc từ chối ");
         }
-
         List<XhQdNvXhBttDtl> dtlList = xhQdNvXhBttDtlRepository.findAllByIdHdr(id);
         for (XhQdNvXhBttDtl dtl : dtlList){
             xhQdNvXhBttDviRepository.deleteAllByIdDtl(dtl.getId());
@@ -372,7 +332,6 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         xhQdNvXhBttDtlRepository.deleteAllByIdHdr(id);
         xhQdNvXhBttHdrRepository.delete(hdr);
         fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhQdNvXhBttHdr.TABLE_NAME));
-
         if(hdr.getPhanLoai().equals("HD")){
             Optional<XhHopDongBttHdr> hopDongBttHdr = xhHopDongBttHdrRepository.findById(hdr.getIdHd());
             if (hopDongBttHdr.isPresent()){
@@ -388,12 +347,10 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         if (StringUtils.isEmpty(listMulti)){
             throw new Exception("Xóa thất bại, không tìm thấy dữ liệu");
         }
-
         List<XhQdNvXhBttHdr> list = xhQdNvXhBttHdrRepository.findByIdIn(listMulti);
         if (list.isEmpty()){
             throw new Exception("Không tìm thấy dữ liệu cần xóa");
         }
-
         for (XhQdNvXhBttHdr hdr : list){
             this.delete(hdr.getId());
         }
@@ -407,7 +364,6 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         req.setPaggingReq(paggingReq);
         Page<XhQdNvXhBttHdr> page = this.searchPage(req);
         List<XhQdNvXhBttHdr> data = page.getContent();
-
         String title="Danh sách quyết định giao nhiệm vụ xuất hàng";
         String[] rowsName = new String[]{"STT","Năm xuất", "Số quyết định", "Ngày quyết định", "Số hợp đồng", "Loại hàng hóa", "Chủng loại hành hóa", "Thời gian giao nhận hàng", "Trích yếu quyết định", "Số BB tịnh kho", "Số BB hao dôi", "Trạng thái QĐ", "Trạng thái XH"};
         String filename="danh-sach-dx-kh-ban-truc-tiep.xlsx";

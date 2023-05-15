@@ -1,22 +1,18 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.dexuat;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "XH_DX_KH_BAN_TRUC_TIEP_HDR")
 @Data
-public class XhDxKhBanTrucTiepHdr extends TrangThaiBaseEntity implements Serializable {
+public class XhDxKhBanTrucTiepHdr implements Serializable {
+
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_DX_KH_BAN_TRUC_TIEP_HDR";
 
@@ -58,11 +54,9 @@ public class XhDxKhBanTrucTiepHdr extends TrangThaiBaseEntity implements Seriali
 
     private String tchuanCluong;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date tgianDkienTu;
+    private LocalDate tgianDkienTu;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date tgianDkienDen;
+    private LocalDate tgianDkienDen;
 
     private Integer tgianTtoan;
 
@@ -86,8 +80,7 @@ public class XhDxKhBanTrucTiepHdr extends TrangThaiBaseEntity implements Seriali
 
     private String soQdPd;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayKyQd;
+    private LocalDate ngayKyQd;
 
     private String trangThaiTh;
     @Transient
@@ -99,13 +92,31 @@ public class XhDxKhBanTrucTiepHdr extends TrangThaiBaseEntity implements Seriali
 
     private String donViTinh;
 
+    private String trangThai;
+    @Transient
+    private String tenTrangThai;
+
+    private LocalDate ngayTao;
+
+    private Long nguoiTaoId;
+
+    private LocalDate ngaySua;
+
+    private Long nguoiSuaId;
+
+    private LocalDate ngayGuiDuyet;
+
+    private Long nguoiGuiDuyetId;
+
+    private LocalDate ngayPduyet;
+
+    private Long nguoiPduyetId;
+
+    private String lyDoTuChoi;
+
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
     @Transient
     private List<XhDxKhBanTrucTiepDtl> children = new ArrayList<>();
-
-
-
-
 }

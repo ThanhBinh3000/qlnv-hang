@@ -1,13 +1,9 @@
 package com.tcdt.qlnvhang.request.xuathang.bantructiep.tochuctrienkhai.thongtin;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.BaseRequest;
-import com.tcdt.qlnvhang.util.Contains;
 import lombok.Getter;
 import lombok.Setter;
-
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -18,23 +14,17 @@ public class SearchXhTcTtinBttReq extends BaseRequest {
 
     private String maDvi;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private  Date  ngayCgiaTu;
+    private LocalDate ngayCgiaTu;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date  ngayCgiaDen;
+    private LocalDate  ngayCgiaDen;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayTaoTu;
+    private LocalDate ngayTaoTu;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayTaoDen;
+    private LocalDate ngayTaoDen;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayDuyetTu;
+    private LocalDate ngayDuyetTu;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayDuyetDen;
+    private LocalDate ngayDuyetDen;
 
     private String maDviChiCuc;
 
@@ -49,5 +39,4 @@ public class SearchXhTcTtinBttReq extends BaseRequest {
     private List<String> pthucBanTrucTiep = new ArrayList<>();
 
     private Integer typeSoQdKq;
-
 }

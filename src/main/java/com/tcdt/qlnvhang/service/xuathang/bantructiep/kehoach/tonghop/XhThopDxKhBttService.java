@@ -1,5 +1,4 @@
 package com.tcdt.qlnvhang.service.xuathang.bantructiep.kehoach.tonghop;
-
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.tonghop.XhThopDxKhBttDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.tonghop.XhThopDxKhBttHdr;
@@ -26,10 +25,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -38,8 +37,10 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
 
     @Autowired
     private XhDxKhBanTrucTiepHdrRepository xhDxKhBanTrucTiepHdrRepository;
+
     @Autowired
     private XhThopDxKhBttRepository xhThopDxKhBttRepository;
+
     @Autowired
     private XhThopDxKhBttDtlRepository xhThopDxKhBttDtlRepository;
 
@@ -62,7 +63,6 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
         if (userInfo == null) {
             throw new Exception("Bad request.");
         }
-
         List<XhDxKhBanTrucTiepHdr>  dxuatBtt = xhDxKhBanTrucTiepHdrRepository.listTongHop(
                 req.getNamKh(),
                 req.getLoaiVthh(),
@@ -72,12 +72,9 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
         if (dxuatBtt.isEmpty()){
             throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
         }
-
         XhThopDxKhBttHdr thopHdr = new XhThopDxKhBttHdr();
-
         Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-
         thopHdr.setNamKh(req.getNamKh());
         thopHdr.setLoaiVthh(req.getLoaiVthh());
         thopHdr.setTenLoaiVthh(listDanhMucHangHoa.get(req.getLoaiVthh()));
@@ -86,11 +83,7 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
         thopHdr.setNgayDuyetTu(req.getNgayDuyetTu());
         thopHdr.setNgayDuyetDen(req.getNgayDuyetDen());
         thopHdr.setMaDvi(userInfo.getDvql());
-
-
-
         List<XhThopDxKhBttDtl> thopDtls = new ArrayList<>();
-
         for (XhDxKhBanTrucTiepHdr dxuat : dxuatBtt) {
             XhThopDxKhBttDtl thopDtl = new XhThopDxKhBttDtl();
             BeanUtils.copyProperties(dxuat,thopDtl,"id");
@@ -104,7 +97,6 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
             thopDtl.setTrangThai(dxuat.getTrangThai());
             thopDtl.setTongSoLuong(dxuat.getTongSoLuong());
             thopDtls.add(thopDtl);
-
             thopHdr.setLoaiHinhNx(dxuat.getLoaiHinhNx());
             thopHdr.setKieuNx(dxuat.getKieuNx());
         }
@@ -119,11 +111,11 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
             throw new Exception("Bad request.");
         XhThopDxKhBttHdr thopHdr = sumarryData(req,servletRequest);
         thopHdr.setId(req.getIdTh());
-        thopHdr.setNgayTao(new Date());
+        thopHdr.setNgayTao(LocalDate.now());
         thopHdr.setNguoiTaoId(getUser().getId());
         thopHdr.setNoiDungThop(req.getNoiDungThop());
         thopHdr.setTrangThai(Contains.CHUATAO_QD);
-        thopHdr.setNgayThop(new Date());
+        thopHdr.setNgayThop(LocalDate.now());
         thopHdr.setMaDvi(userInfo.getDvql());
         xhThopDxKhBttRepository.save(thopHdr);
         for (XhThopDxKhBttDtl dtl : thopHdr.getChildren()){
@@ -152,7 +144,7 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
         }
         XhThopDxKhBttHdr dataDTB = qOptional.get();
         XhThopDxKhBttHdr dataMap = ObjectMapperUtils.map(objReq, XhThopDxKhBttHdr.class);
-        dataMap.setNgaySua(getDateTimeNow());
+        dataMap.setNgaySua(LocalDate.now());
         dataMap.setNguoiTaoId(getUser().getId());
         updateObjectToObject(dataDTB, dataMap);
         xhThopDxKhBttRepository.save(dataDTB);
@@ -161,11 +153,13 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
 
 
     public XhThopDxKhBttHdr detail(String ids) throws Exception {
-        if (StringUtils.isEmpty(ids))
+        if (StringUtils.isEmpty(ids)){
             throw new UnsupportedOperationException("Không tồn tại bản ghi");
+        }
         Optional<XhThopDxKhBttHdr> qOptional = xhThopDxKhBttRepository.findById(Long.parseLong(ids));
-        if (!qOptional.isPresent())
+        if (!qOptional.isPresent()){
             throw new UnsupportedOperationException("Không tồn tại bản ghi");
+        }
         XhThopDxKhBttHdr hdrThop = qOptional.get();
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapDmucDvi = getListDanhMucDvi(Contains.CAP_CUC,null,"01");

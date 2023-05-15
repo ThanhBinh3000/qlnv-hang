@@ -1,36 +1,26 @@
 package com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.pheduyet;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import com.tcdt.qlnvhang.util.Contains;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-
 import javax.persistence.Transient;
-import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
 public class XhQdPdKhBttHdrReq extends BaseRequest {
-    @ApiModelProperty(notes = "Bắt buộc set đối với update")
+
     private Long id;
 
     private Integer namKh;
 
     private String maDvi;
 
-    @Size(max = 20, message = "Số quyết định không được vượt quá 20 ký tự")
-    @ApiModelProperty(example = "20-QD/TCDT")
     private String soQdPd;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayKyQd;
+    private LocalDate ngayKyQd;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayHluc;
+    private LocalDate ngayHluc;
 
     private Long idThHdr;
 
@@ -40,8 +30,6 @@ public class XhQdPdKhBttHdrReq extends BaseRequest {
 
     private String trichYeu;
 
-    @Size(max = 20, message = "Loại vật tư hàng hóa không được vượt quá 20 ký tự")
-    @ApiModelProperty(example = "00")
     private String loaiVthh;
 
     private String cloaiVthh;
@@ -75,12 +63,9 @@ public class XhQdPdKhBttHdrReq extends BaseRequest {
     @Transient
     private List<FileDinhKemReq> fileDinhKem = new ArrayList<>();
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayKyQdTu;
+    private LocalDate ngayKyQdTu;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayKyQdDen;
+    private LocalDate ngayKyQdDen;
 
     private String maCuc;
-
 }
