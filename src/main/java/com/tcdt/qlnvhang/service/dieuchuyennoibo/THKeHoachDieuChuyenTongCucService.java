@@ -94,7 +94,6 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
             }
         }
         THKeHoachDieuChuyenTongCucHdr created = tongCucHdrRepository.save(data);
-
         if (chiTiet.isEmpty()) {
             throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
         }else {
@@ -208,9 +207,6 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
             req.setMaDVi(cqt.getMaDvi());
             if (req.getLoaiDieuChuyen().equals(Contains.GIUA_2_CHI_CUC_TRONG_1_CUC)) {
                 List<THKeHoachDieuChuyenCucHdr> dcnbKeHoachDcHdrs = thKeHoachDieuChuyenCucHdrRepository.findByDonViAndTrangThaiTongCuc(req.getMaDVi(), Contains.DADUYET_LDC, Contains.GIUA_2_CHI_CUC_TRONG_1_CUC, thoiGianTongHop.toLocalDate());
-                if(dcnbKeHoachDcHdrs.isEmpty()){
-                    throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
-                }
                 for (THKeHoachDieuChuyenCucHdr entry : dcnbKeHoachDcHdrs) {
                     Hibernate.initialize(entry.getThKeHoachDieuChuyenCucKhacCucDtls());
                     THKeHoachDieuChuyenCucHdr khhc = SerializationUtils.clone(entry);
@@ -224,9 +220,6 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
                 }
             } else if (req.getLoaiDieuChuyen().equals(Contains.GIUA_2_CUC_DTNN_KV)) {
                 List<THKeHoachDieuChuyenCucKhacCucDtl> dcnbKeHoachDcHdrs = thKeHoachDieuChuyenCucKhacCucDtlRepository.findByDonViAndTrangThaiAndLoaiDcCuc(req.getMaDVi(), Contains.DADUYET_LDC, Contains.GIUA_2_CUC_DTNN_KV, thoiGianTongHop.toLocalDate());
-                if(dcnbKeHoachDcHdrs.isEmpty()){
-                    throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
-                }
                 Map<String, List<THKeHoachDieuChuyenCucKhacCucDtl>> postsPerType = dcnbKeHoachDcHdrs.stream()
                         .collect(groupingBy(THKeHoachDieuChuyenCucKhacCucDtl::getMaCucNhan));
                 for (Map.Entry<String, List<THKeHoachDieuChuyenCucKhacCucDtl>> entry : postsPerType.entrySet()) {
@@ -260,6 +253,9 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
                     result.add(chiTiet);
                 }
             }
+        }
+        if(result.isEmpty()){
+            throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
         }
         return result;
     }

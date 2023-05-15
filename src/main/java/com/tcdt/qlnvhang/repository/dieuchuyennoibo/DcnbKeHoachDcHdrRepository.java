@@ -40,6 +40,7 @@ public interface DcnbKeHoachDcHdrRepository extends JpaRepository<DcnbKeHoachDcH
     void deleteAllByIdIn(List<Long> listId);
 
     List<DcnbKeHoachDcHdr> findByIdIn(List<Long> ids);
+    List<DcnbKeHoachDcHdr> findByParentIdIn(List<Long> ids);
 
     List<DcnbKeHoachDcHdr> findAllByIdIn(List<Long> listId);
 
@@ -49,10 +50,16 @@ public interface DcnbKeHoachDcHdrRepository extends JpaRepository<DcnbKeHoachDcH
             "JOIN DCNB_KE_HOACH_DC_DTL dtl ON dtl.HDR_ID = hdr.ID WHERE dtl.CLOAI_VTHH = ?1 AND dtl.MA_LO_KHO = ?2", nativeQuery = true)
     BigDecimal countTongKeHoachDeXuat(String cloaiVthh, String maLoKho);
 
-    @Query(value = "SELECT distinct hdr FROM DcnbKeHoachDcHdr hdr WHERE hdr.maDvi = ?1  " +
+    @Query(value = "SELECT distinct hdr FROM DcnbKeHoachDcHdr hdr " +
+            "LEFT JOIN QlnvDmDonvi dvi ON dvi.maDvi = hdr.maDvi WHERE dvi.parent.maDvi = ?1  " +
             "AND hdr.trangThai = ?2 AND hdr.loaiDc = ?3 AND hdr.type = ?4 "+
             "AND hdr.ngayTao <= ?5 AND hdr.idThop is null ")
-    List<DcnbKeHoachDcHdr> findByDonViAndTrangThaiCuc(String maDVi, String trangThai, String loaiDieuChuyen, String type, LocalDateTime thoiGianTongHop);
+    List<DcnbKeHoachDcHdr> findByDonViAndTrangThaiCucCuc(String maDVi, String trangThai, String loaiDieuChuyen, String type, LocalDateTime thoiGianTongHop);
+
+    @Query(value = "SELECT distinct hdr FROM DcnbKeHoachDcHdr hdr WHERE hdr.maDvi = ?1 " +
+            "AND hdr.trangThai = ?2 AND hdr.loaiDc = ?3 AND hdr.type = ?4 "+
+            "AND hdr.ngayTao <= ?5 AND (hdr.idThop is null )")
+    List<DcnbKeHoachDcHdr> findByDonViAndTrangThaiCucChiCuc(String maDVi, String trangThai, String loaiDieuChuyen, String type, LocalDateTime thoiGianTongHop);
 
     @Modifying
     @Query(nativeQuery = true, value = "UPDATE  DCNB_KE_HOACH_DC_HDR SET  TRANG_THAI = ?3 WHERE PARENT_ID = (SELECT HDR_ID FROM DCNB_KE_HOACH_DC_DTL WHERE ID = to_number(?1)) AND TYPE= ?2")
@@ -63,4 +70,9 @@ public interface DcnbKeHoachDcHdrRepository extends JpaRepository<DcnbKeHoachDcH
     @Query(value = "UPDATE DCNB_KE_HOACH_DC_HDR SET ID_THOP = to_number(:idTh),MA_THOP = to_char(:idTh) WHERE ID IN :danhSachKeHoach", nativeQuery = true)
     void updateIdTongHop(Long idTh,List<Long> danhSachKeHoach);
 
+    List<DcnbKeHoachDcHdr> findByParentIdAndType(Long dcKeHoachDcHdrId,String type);
+    @Transactional()
+    @Modifying
+    @Query(value = "UPDATE DCNB_KE_HOACH_DC_HDR SET TRANG_THAI = '67', XD_LAI_DIEM_NHAP = 1 WHERE ID = ?1 AND LOAI_DC = ?2", nativeQuery = true)
+    void updateTrangThaiTuChoiAndType(Long id, String loaiDieuChuyen);
 }

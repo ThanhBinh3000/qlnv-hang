@@ -53,4 +53,12 @@ public interface DcnbKeHoachDcDtlRepository extends JpaRepository<DcnbKeHoachDcD
             "WHERE h.maDviCuc = ?1 AND h.maCucNhan = ?2 AND h.trangThai = ?3 AND h.loaiDc = ?4 AND h.type = ?5 " +
             "AND h.ngayTao <= ?6")
     Long findByMaDviCucAndCucNhan(String maDVi, String maCucNhan, String daduyetLdcc, String giua2CucDtnnKv, String dieuChuyen, LocalDateTime thoiGianTongHop);
+
+    @Query(value ="SELECT distinct dtl FROM DcnbKeHoachDcDtl dtl left join DcnbKeHoachDcHdr hdr on hdr.id = dtl.hdrId " +
+            "WHERE dtl.maChiCucNhan IN ?1 AND hdr.parentId = ?2 AND hdr.type = ?3")
+    List<DcnbKeHoachDcDtl> findByChiCucNhan(List<String> maChiCucNhan, Long dcnbHdrId, String type);
+
+    @Query(value ="SELECT distinct dtl FROM DcnbKeHoachDcDtl dtl left join DcnbKeHoachDcHdr hdr on hdr.id = dtl.hdrId " +
+            "WHERE dtl.hdrId = ?1 AND hdr.type = ?2 ")
+    List<DcnbKeHoachDcDtl> findByDcnbKeHoachDcHdrIdAndType(Long dcKeHoachDcHdrId,String type);
 }

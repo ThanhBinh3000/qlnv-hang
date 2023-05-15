@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 
 @Data
@@ -17,6 +18,7 @@ import java.util.Date;
 public class TongHopKeHoachDieuChuyenSearch extends BaseRequest {
     private Long id;
     private Integer namKeHoach;
+    private String trangthai;
     private String maTongHop;
     private String soDeXuat;
     private String loaiDieuChuyen;
@@ -27,4 +29,6 @@ public class TongHopKeHoachDieuChuyenSearch extends BaseRequest {
     private String maDVi;
     private String loaiHangHoa;
     private String chungLoaiHangHoa;
+    private String maChiCucNhan;
+    private List<Long> dcnbKeHoachDcHdrId;
 }

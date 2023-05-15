@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.repository.dieuchuyennoibo;
 
+import com.tcdt.qlnvhang.request.search.TongHopKeHoachDieuChuyenSearch;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.THKeHoachDieuChuyenNoiBoCucDtl;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
