@@ -1,5 +1,4 @@
 package com.tcdt.qlnvhang.service.xuathang.daugia.quyetdinhdieuchinhbdg;
-
 import com.tcdt.qlnvhang.entities.xuathang.daugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgDtl;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgPl;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgPlDtl;
@@ -29,9 +28,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-
-
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -59,11 +57,9 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl implements XhQdD
                 req.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<XhQdDchinhKhBdgHdr> data = xhQdDchinhKhBdgHdrRepository.searchPage(
                 req,
-                pageable
-        );
+                pageable);
         Map<String, String> hashMapDmHh = getListDanhMucHangHoa();
         Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
-
         data.getContent().forEach(f ->{
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
@@ -74,46 +70,40 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl implements XhQdD
 
     @Override
     public XhQdDchinhKhBdgHdr create(XhQdDchinhKhBdgReq req) throws Exception {
-
         if (!StringUtils.isEmpty(req.getSoQdDc())){
             List<XhQdDchinhKhBdgHdr> checkSoQdDc = xhQdDchinhKhBdgHdrRepository.findBySoQdDc(req.getSoQdDc());
             if (!checkSoQdDc.isEmpty()){
                 throw new Exception("Số quyết định điều chỉnh" + req.getSoQdDc() + "đã tồn tại");
             }
         }
-
         XhQdDchinhKhBdgHdr dataMap = new XhQdDchinhKhBdgHdr();
         BeanUtils.copyProperties(req, dataMap, "id");
-        dataMap.setNgayTao(getDateTimeNow());
+        dataMap.setNgayTao(LocalDate.now());
         dataMap.setNguoiTaoId(getUser().getId());
         dataMap.setTrangThai(Contains.DUTHAO);
         dataMap.setMaDvi(getUser().getDvql());
         XhQdDchinhKhBdgHdr created = xhQdDchinhKhBdgHdrRepository.save(dataMap);
-
         if (!DataUtils.isNullOrEmpty(req.getFileDinhKem())) {
             List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), created.getId(), XhQdDchinhKhBdgHdr.TABLE_NAME+ "_BAN_HANH");
             created.setFileDinhKem(fileDinhKem);
         }
-
         if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
             List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhQdDchinhKhBdgHdr.TABLE_NAME);
             created.setFileDinhKems(fileDinhKems);
         }
-
         saveDetail(req, dataMap.getId());
-        return created;
+        return dataMap;
     }
 
     void saveDetail(XhQdDchinhKhBdgReq req, Long idHdr){
         xhQdDchinhKhBdgDtlRepository.deleteAllByIdHdr(idHdr);
-        for (XhQdDchinhKhBdgDtlReq  dtlReq : req.getChildren()){
+        for (XhQdDchinhKhBdgDtlReq dtlReq : req.getChildren()){
             XhQdDchinhKhBdgDtl dtl = new XhQdDchinhKhBdgDtl();
             BeanUtils.copyProperties(dtlReq, dtl, "id");
             dtl.setIdHdr(idHdr);
-            dtl.setLoaiVthh(req.getLoaiVthh());
-            dtl.setCloaiVthh(req.getCloaiVthh());
+            dtl.setIdQdGoc(req.getIdQdGoc());
             xhQdDchinhKhBdgDtlRepository.save(dtl);
-            xhQdDchinhKhBdgPlRepository.deleteByIdDcDtl(dtlReq.getId());
+            xhQdDchinhKhBdgPlRepository.deleteAllByIdDcDtl(dtlReq.getId());
             for (XhQdDchinhKhBdgPlReq plReq : dtlReq.getChildren()){
                 XhQdDchinhKhBdgPl pl = new XhQdDchinhKhBdgPl();
                 BeanUtils.copyProperties(plReq, pl, "id");
@@ -123,6 +113,7 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl implements XhQdD
                 for (XhQdDchinhKhBdgPlDtlReq plDtlReq : plReq.getChildren()){
                     XhQdDchinhKhBdgPlDtl plDtl = new XhQdDchinhKhBdgPlDtl();
                     BeanUtils.copyProperties(plDtlReq, plDtl, "id");
+                    plDtl.setId(null);
                     plDtl.setIdPhanLo(pl.getId());
                     xhQdDchinhKhBdgPlDtlRepository.save(plDtl);
                 }
@@ -143,7 +134,7 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl implements XhQdD
 
         XhQdDchinhKhBdgHdr dataDB = qOptional.get();
         BeanUtils.copyProperties(req, dataDB, "id");
-        dataDB.setNgaySua(getDateTimeNow());
+        dataDB.setNgaySua(LocalDate.now());
         dataDB.setNguoiSuaId(getUser().getId());
         XhQdDchinhKhBdgHdr created = xhQdDchinhKhBdgHdrRepository.save(dataDB);
 
@@ -188,8 +179,8 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl implements XhQdD
         List<XhQdDchinhKhBdgDtl> xhQdDchinhKhBdgDtlList = new ArrayList<>();
         for (XhQdDchinhKhBdgDtl dtl : xhQdDchinhKhBdgDtlRepository.findAllByIdHdr(id)){
             List<XhQdDchinhKhBdgPl> xhQdDchinhKhBdgPlList = new ArrayList<>();
-            for (XhQdDchinhKhBdgPl pl : xhQdDchinhKhBdgPlRepository.findByIdDcDtl(dtl.getId())){
-                List<XhQdDchinhKhBdgPlDtl> xhQdDchinhKhBdgPlDtlList = xhQdDchinhKhBdgPlDtlRepository.findByIdPhanLo(pl.getId());
+            for (XhQdDchinhKhBdgPl pl : xhQdDchinhKhBdgPlRepository.findAllByIdDcDtl(dtl.getId())){
+                List<XhQdDchinhKhBdgPlDtl> xhQdDchinhKhBdgPlDtlList = xhQdDchinhKhBdgPlDtlRepository.findAllByIdPhanLo(pl.getId());
                 xhQdDchinhKhBdgPlDtlList.forEach(f ->{
                     f.setTenDiemKho(StringUtils.isEmpty(f.getMaDiemKho())? null : mapDmucDvi.get(f.getMaDiemKho()));
                     f.setTenNhaKho(StringUtils.isEmpty(f.getMaNhaKho())? null : mapDmucDvi.get(f.getMaNhaKho()));
@@ -201,8 +192,6 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl implements XhQdD
                 xhQdDchinhKhBdgPlList.add(pl);
             };
             dtl.setTenDvi(StringUtils.isEmpty(dtl.getMaDvi()) ? null : mapDmucDvi.get(dtl.getMaDvi()));
-            dtl.setTenLoaiVthh(StringUtils.isEmpty(dtl.getLoaiVthh())? null : hashMapDmHh.get(dtl.getLoaiVthh()));
-            dtl.setTenCloaiVthh(StringUtils.isEmpty(dtl.getCloaiVthh())? null : hashMapDmHh.get(dtl.getCloaiVthh()));
             dtl.setChildren(xhQdDchinhKhBdgPlList);
             xhQdDchinhKhBdgDtlList.add(dtl);
         }
@@ -212,7 +201,33 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl implements XhQdD
 
     @Override
     public XhQdDchinhKhBdgHdr approve(XhQdDchinhKhBdgReq req) throws Exception {
-        return null;
+        if (StringUtils.isEmpty(req.getId())){
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        XhQdDchinhKhBdgHdr detail = detail(req.getId());
+        String status = req.getTrangThai() + detail.getTrangThai();
+        switch (status){
+            case Contains.CHODUYET_LDV + Contains.DUTHAO:
+            case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
+                detail.setNguoiGuiDuyetId(getUser().getId());
+                detail.setNgayGuiDuyet(LocalDate.now());
+                break;
+            case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
+                detail.setNguoiPduyetId(getUser().getId());
+                detail.setNgayPduyet(LocalDate.now());
+                detail.setLyDoTuChoi(req.getLyDoTuChoi());
+                break;
+            case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
+            case Contains.BAN_HANH + Contains.DADUYET_LDV:
+                detail.setNguoiPduyetId(getUser().getId());
+                detail.setNgayPduyet(LocalDate.now());
+                break;
+            default:
+                throw new Exception("Phê duyệt không thành công");
+        }
+        detail.setTrangThai(req.getTrangThai());
+        XhQdDchinhKhBdgHdr createCheck = xhQdDchinhKhBdgHdrRepository.save(detail);
+        return createCheck;
     }
 
     @Override
@@ -234,11 +249,11 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl implements XhQdD
         List<XhQdDchinhKhBdgDtl> xhQdDchinhKhBdgDtlList = xhQdDchinhKhBdgDtlRepository.findAllByIdHdr(hdr.getId());
         if (!CollectionUtils.isEmpty(xhQdDchinhKhBdgDtlList)){
             for (XhQdDchinhKhBdgDtl dtl : xhQdDchinhKhBdgDtlList){
-                List<XhQdDchinhKhBdgPl> xhQdDchinhKhBdgPlList = xhQdDchinhKhBdgPlRepository.findByIdDcDtl(dtl.getId());
+                List<XhQdDchinhKhBdgPl> xhQdDchinhKhBdgPlList = xhQdDchinhKhBdgPlRepository.findAllByIdDcDtl(dtl.getId());
                 for (XhQdDchinhKhBdgPl pl : xhQdDchinhKhBdgPlList){
                     xhQdDchinhKhBdgPlDtlRepository.deleteAllByIdPhanLo(pl.getId());
                 }
-                xhQdDchinhKhBdgPlRepository.deleteByIdDcDtl(dtl.getId());
+                xhQdDchinhKhBdgPlRepository.deleteAllByIdDcDtl(dtl.getId());
             }
             xhQdDchinhKhBdgDtlRepository.deleteAll(xhQdDchinhKhBdgDtlList);
         }

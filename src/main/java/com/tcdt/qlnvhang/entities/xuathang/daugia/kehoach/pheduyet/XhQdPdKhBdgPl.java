@@ -1,7 +1,5 @@
 package com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet;
-
 import lombok.Data;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -26,9 +24,9 @@ public class XhQdPdKhBdgPl implements Serializable {
     @Transient
     private String tenDvi;
 
-    private String slChiTieu;
+    private BigDecimal slChiTieu;
 
-    private String slKeHoachDd;
+    private BigDecimal slKeHoachDd;
 
     private BigDecimal soLuongChiCuc;
 
