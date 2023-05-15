@@ -347,6 +347,8 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
         String status = optional.get().getTrangThai() + statusReq.getTrangThai();
         switch (status) {
             case Contains.YC_CHICUC_PHANBO_DC + Contains.DA_PHANBO_DC_CHODUYET_TBP_TVQT:
+            case Contains.DA_PHANBO_DC_TUCHOI_TP + Contains.DA_PHANBO_DC_CHODUYET_TBP_TVQT:
+            case Contains.DA_PHANBO_DC_TUCHOI_LDC + Contains.DA_PHANBO_DC_CHODUYET_TBP_TVQT:
             case Contains.DA_PHANBO_DC_TUCHOI_TBP_TVQT + Contains.DA_PHANBO_DC_CHODUYET_TBP_TVQT:
             case Contains.DA_PHANBO_DC_TUCHOI_LDCC + Contains.DA_PHANBO_DC_CHODUYET_TBP_TVQT:
                 optional.get().setNgayGduyet(LocalDate.now());
@@ -370,6 +372,7 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
                 optional.get().setNgayDuyetLdcc(LocalDate.now());
                 optional.get().setNguoiDuyetLdccId(currentUser.getUser().getId());
                 optional.get().setDaXdinhDiemNhap(true);
+                optional.get().setXdLaiDiemNhap(false);
                 Optional<DcnbKeHoachDcDtl> parentHdr = dcnbKeHoachDcDtlRepository.findById(optional.get().getParentId());
                 if (parentHdr.isPresent()) {
                     parentHdr.get().setDaXdinhDiemNhap(true);

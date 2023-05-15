@@ -93,6 +93,9 @@ public class DcnbKeHoachDcHdr extends BaseEntity implements Serializable, Clonea
   private BigDecimal tongDuToanKp;
   @Column(name = "DA_XDINH_DIEM_NHAP")
   private Boolean daXdinhDiemNhap;
+  @Column(name = "XD_LAI_DIEM_NHAP")
+  private Boolean xdLaiDiemNhap;
+
   @Transient
   private String tenTrangThai;
   @Transient

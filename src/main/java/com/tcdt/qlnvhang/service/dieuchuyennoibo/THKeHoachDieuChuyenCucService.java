@@ -80,13 +80,13 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
             throw new Exception("Chức năng chỉ dành cho cấp cục");
         }
         Optional<THKeHoachDieuChuyenCucHdr> optional = thKeHoachDieuChuyenHdrRepository.findById(idSearchReq.getId());
-        if (optional.isPresent() && (optional.get().getTrangThai().equals(Contains.DUTHAO)|| optional.get().getTrangThai().equals(Contains.YEU_CAU_XAC_DINH_DIEM_NHAP))){
+        if (optional.isPresent() && (optional.get().getTrangThai().equals(Contains.DUTHAO)|| optional.get().getTrangThai().equals(Contains.YC_CHICUC_PHANBO_DC))){
             THKeHoachDieuChuyenCucHdr data = optional.get();
-            data.setTrangThai(Contains.YEU_CAU_XAC_DINH_DIEM_NHAP);
+            data.setTrangThai(Contains.YC_CHICUC_PHANBO_DC);
             THKeHoachDieuChuyenCucHdr created = thKeHoachDieuChuyenHdrRepository.save(data);
             for (THKeHoachDieuChuyenNoiBoCucDtl boCucDtl : created.getThKeHoachDieuChuyenNoiBoCucDtls()) {
                 for(DcnbKeHoachDcDtl dcnbKeHoachDcDtl : boCucDtl.getDcnbKeHoachDcHdr().getDanhSachHangHoa()) {
-                    dcHdrRepository.updateTrangThaiNdc(dcnbKeHoachDcDtl.getId(), Contains.NHAN_DIEU_CHUYEN);
+                    dcHdrRepository.updateTrangThaiNdc(dcnbKeHoachDcDtl.getId(), Contains.NHAN_DIEU_CHUYEN, Contains.YC_CHICUC_PHANBO_DC);
                 }
             }
             return created;
@@ -282,7 +282,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
-        if(!optional.get().getTrangThai().equals(Contains.DUTHAO) && !optional.get().getTrangThai().equals(Contains.YEU_CAU_XAC_DINH_DIEM_NHAP)){
+        if(!optional.get().getTrangThai().equals(Contains.DUTHAO) && !optional.get().getTrangThai().equals(Contains.YC_CHICUC_PHANBO_DC)){
             throw new Exception("Không được phép chỉnh sửa dữ liệu");
         }
         List<THKeHoachDieuChuyenCucHdr> soDeXuat = thKeHoachDieuChuyenHdrRepository.findBySoDeXuat(optional.get().getSoDeXuat());
@@ -306,29 +306,47 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         String status = optional.get().getTrangThai() + statusReq.getTrangThai();
         switch (status) {
             case Contains.DUTHAO + Contains.CHODUYET_TP:
-            case Contains.YEU_CAU_XAC_DINH_DIEM_NHAP + Contains.CHODUYET_TP:
+            case Contains.YC_CHICUC_PHANBO_DC + Contains.CHODUYET_TP:
             case Contains.TU_CHOI_TP + Contains.CHODUYET_TP:
                 optional.get().setNguoiGDuyetId(currentUser.getUser().getId());
                 optional.get().setNgayGDuyet(LocalDate.now());
+                // CHECK TRẠNG THÁI BẢN KẾ HOẠCH ĐÃ XACS ĐỊNH ĐIỂM NHẬP HỢP LỆ CHƯA. (LDCC DA DUYET, DA_PHANBO_DC_CHODUYET_TP, DA_PHANBO_DC_CHODUYET_LDC)
+
+                // update trạng thái của kế hoạch hdr của bản tổng hợp này về trạng thái DA_PHANBO_DC_CHODUYET_TP
+
                 break;
             case Contains.CHODUYET_TP + Contains.TU_CHOI_TP:
                 optional.get().setNguoiDuyetTpId(currentUser.getUser().getId());
                 optional.get().setNgayDuyetTp(LocalDate.now());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
+                // update trạng thái của kế hoạch hdr của bản tổng hợp này về trạng thái  DA_PHANBO_DC_TUCHOI_TP
+                // LẤY RA THẰNG NÀO BỊ TỪ CHỐI? vd CHI CỤC a
+
                 break;
             case Contains.TU_CHOI_LDC + Contains.CHODUYET_TP:
+                optional.get().setNguoiDuyetLdcId(currentUser.getUser().getId());
+                optional.get().setNgayDuyetLdc(LocalDate.now());
+                optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
+                // update trạng thái của kế hoạch hdr của bản tổng hợp này về trạng thái DA_PHANBO_DC_CHODUYET_TP
             case Contains.CHODUYET_LDC + Contains.TU_CHOI_LDC:
                 optional.get().setNguoiDuyetLdcId(currentUser.getUser().getId());
                 optional.get().setNgayDuyetLdc(LocalDate.now());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
+                // update trạng thái của kế hoạch hdr của bản tổng hợp này về trạng thái DA_PHANBO_DC_TUCHOI_LDC
+                // LẤY RA THẰNG NÀO BỊ TỪ CHỐI? vd CHI CỤC a
+
                 break;
             case Contains.CHODUYET_TP + Contains.CHODUYET_LDC:
                 optional.get().setNguoiDuyetTpId(currentUser.getUser().getId());
                 optional.get().setNgayDuyetTp(LocalDate.now());
+                // update trạng thái của kế hoạch hdr của bản tổng hợp này về trạng thái DA_PHANBO_DC_CHODUYET_LDC
+
                 break;
             case Contains.CHODUYET_LDC + Contains.DA_DUYET_LDC:
                 optional.get().setNguoiDuyetLdcId(currentUser.getUser().getId());
                 optional.get().setNgayDuyetLdc(LocalDate.now());
+                // update trạng thái của kế hoạch hdr của bản tổng hợp này về trạng thái DA_PHANBO_DC_DADUYET_LDC
+
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
