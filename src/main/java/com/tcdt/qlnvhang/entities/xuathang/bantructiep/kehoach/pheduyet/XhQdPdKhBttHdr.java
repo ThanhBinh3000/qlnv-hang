@@ -1,21 +1,17 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
-
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "XH_QD_PD_KH_BTT_HDR")
 @Data
-public class XhQdPdKhBttHdr extends TrangThaiBaseEntity implements Serializable {
+public class XhQdPdKhBttHdr implements Serializable {
+
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_QD_PD_KH_BTT_HDR";
 
@@ -32,11 +28,9 @@ public class XhQdPdKhBttHdr extends TrangThaiBaseEntity implements Serializable 
 
     private String soQdPd;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayKyQd;
+    private LocalDate ngayKyQd;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayHluc;
+    private LocalDate ngayHluc;
 
     private Long idThHdr;
 
@@ -76,6 +70,28 @@ public class XhQdPdKhBttHdr extends TrangThaiBaseEntity implements Serializable 
 
     private String kieuNx;
 
+    private String trangThai;
+    @Transient
+    private String tenTrangThai;
+
+    private LocalDate ngayTao;
+
+    private Long nguoiTaoId;
+
+    private LocalDate ngaySua;
+
+    private Long nguoiSuaId;
+
+    private LocalDate ngayGuiDuyet;
+
+    private Long nguoiGuiDuyetId;
+
+    private LocalDate ngayPduyet;
+
+    private Long nguoiPduyetId;
+
+    private String lyDoTuChoi;
+
     @Transient
     private List<XhQdPdKhBttDtl> children = new ArrayList<>();
 
@@ -84,8 +100,4 @@ public class XhQdPdKhBttHdr extends TrangThaiBaseEntity implements Serializable 
 
     @Transient
     private List<FileDinhKem> fileDinhKem = new ArrayList<>();
-
-
-
-
 }

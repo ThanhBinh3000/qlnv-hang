@@ -1,21 +1,14 @@
 package com.tcdt.qlnvhang.request.xuathang.bantructiep.xuatkho.bangkecanhang;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.BaseRequest;
-import com.tcdt.qlnvhang.util.Contains;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-
 import javax.persistence.Transient;
-import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
 public class XhBkeCanHangBttHdrReq extends BaseRequest {
 
-    @ApiModelProperty(notes = "Bắt buộc set đối với update")
     private Long id;
 
     private Integer namKh;
@@ -30,15 +23,13 @@ public class XhBkeCanHangBttHdrReq extends BaseRequest {
 
     private String soQdNv;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayQdNv;
+    private LocalDate ngayQdNv;
 
     private Long idHd;
 
     private String soHd;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayKyHd;
+    private LocalDate ngayKyHd;
 
     private String maDiemKho;
 
@@ -52,8 +43,7 @@ public class XhBkeCanHangBttHdrReq extends BaseRequest {
 
     private String soPhieuXuat;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayXuatKho;
+    private LocalDate ngayXuatKho;
 
     private String diaDiemKho;
 
@@ -67,8 +57,7 @@ public class XhBkeCanHangBttHdrReq extends BaseRequest {
 
     private String diaChiNguoiGiao;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date tgianGiaoNhan;
+    private LocalDate tgianGiaoNhan;
 
     private String loaiVthh;
 

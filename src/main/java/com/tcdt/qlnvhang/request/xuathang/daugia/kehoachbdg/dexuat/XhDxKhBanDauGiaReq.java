@@ -1,20 +1,17 @@
 package com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.dexuat;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGiaDtl;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
-
 import javax.persistence.Transient;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
 public class XhDxKhBanDauGiaReq extends BaseRequest {
+
     private Long id;
 
     private String maDvi;
@@ -43,11 +40,9 @@ public class XhDxKhBanDauGiaReq extends BaseRequest {
 
     private String tchuanCluong;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date tgianDkienTu;
+    private LocalDate tgianDkienTu;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date tgianDkienDen;
+    private LocalDate tgianDkienDen;
 
     private Integer tgianTtoan;
 
@@ -79,13 +74,11 @@ public class XhDxKhBanDauGiaReq extends BaseRequest {
 
     private Long idThop;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayKyQd;
+    private LocalDate ngayKyQd;
 
     private String donViTinh;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayTao;
+    private LocalDate ngayTao;
 
     private List<String> trangThaiList = new ArrayList<>();
 
@@ -95,16 +88,11 @@ public class XhDxKhBanDauGiaReq extends BaseRequest {
     @Transient
     private List<XhDxKhBanDauGiaDtl> children = new ArrayList<>();
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayTaoTu;
+    private LocalDate ngayTaoTu;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayTaoDen;
+    private LocalDate ngayTaoDen;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayDuyetTu;
+    private LocalDate ngayDuyetTu;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayDuyetDen;
-
+    private LocalDate ngayDuyetDen;
 }

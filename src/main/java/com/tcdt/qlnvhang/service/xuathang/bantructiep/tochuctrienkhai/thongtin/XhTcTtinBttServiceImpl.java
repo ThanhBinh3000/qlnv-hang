@@ -25,11 +25,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.*;
-
 
 @Service
 public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
@@ -50,8 +49,7 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<XhQdPdKhBttDtl> dtl = xhQdPdKhBttDtlRepository.search(
                 req,
-                pageable
-        );
+                pageable);
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
         dtl.getContent().forEach(f -> {
@@ -83,7 +81,7 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
             dtl.setTrangThai(NhapXuatHangTrangThaiEnum.DANGCAPNHAT.getId());
             dtl.setPthucBanTrucTiep(ObjReq.getPthucBanTrucTiep());
             dtl.setDiaDiemChaoGia(ObjReq.getDiaDiemChaoGia());
-            dtl.setNgayNhanCgia(getDateTimeNow());
+            dtl.setNgayNhanCgia(LocalDate.now());
             dtl.setNgayMkho(ObjReq.getNgayMkho());
             dtl.setNgayKthuc(ObjReq.getNgayKthuc());
             dtl.setGhiChu(ObjReq.getGhiChu());

@@ -1,29 +1,24 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.bienbanlaymau;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "XH_BB_LAY_MAU_BTT_HDR")
 @Data
-public class XhBbLayMauBttHdr extends TrangThaiBaseEntity implements Serializable {
+public class XhBbLayMauBttHdr implements Serializable {
+
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_BB_LAY_MAU_BTT_HDR";
 
     @Id
 //    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_BB_LAY_MAU_BTT_HDR_SEQ")
 //    @SequenceGenerator(sequenceName = "XH_BB_LAY_MAU_BTT_HDR_SEQ", allocationSize = 1, name = "XH_BB_LAY_MAU_BTT_HDR_SEQ")
-    @Column(name = "ID")
     private Long id;
 
     private Integer namKh;
@@ -38,15 +33,13 @@ public class XhBbLayMauBttHdr extends TrangThaiBaseEntity implements Serializabl
 
     private String soQdNv;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayQd;
+    private LocalDate ngayQd;
 
     private String soHd;
 
     private String loaiBienBan;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayKyHd;
+    private LocalDate ngayKyHd;
 
     private Long idKtv;
     @Transient
@@ -54,8 +47,7 @@ public class XhBbLayMauBttHdr extends TrangThaiBaseEntity implements Serializabl
 
     private String soBienBan;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayLayMau;
+    private LocalDate ngayLayMau;
 
     private String dviKnghiem;
 
@@ -99,10 +91,31 @@ public class XhBbLayMauBttHdr extends TrangThaiBaseEntity implements Serializabl
 
     private String soBbTinhKho;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayXuatDocKho;
+    private LocalDate ngayXuatDocKho;
 
     private String soBbHaoDoi;
+
+    private String trangThai;
+    @Transient
+    private String tenTrangThai;
+
+    private LocalDate ngayTao;
+
+    private Long nguoiTaoId;
+
+    private LocalDate ngaySua;
+
+    private Long nguoiSuaId;
+
+    private LocalDate ngayGuiDuyet;
+
+    private Long nguoiGuiDuyetId;
+
+    private LocalDate ngayPduyet;
+
+    private Long nguoiPduyetId;
+
+    private String lyDoTuChoi;
 
     @Transient
     private List<XhBbLayMauBttDtl> children = new ArrayList<>();

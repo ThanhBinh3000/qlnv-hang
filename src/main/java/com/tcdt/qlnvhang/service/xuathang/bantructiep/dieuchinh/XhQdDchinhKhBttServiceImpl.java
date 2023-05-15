@@ -1,5 +1,4 @@
 package com.tcdt.qlnvhang.service.xuathang.bantructiep.dieuchinh;
-
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.dieuchinh.XhQdDchinhKhBttDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.dieuchinh.XhQdDchinhKhBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.dieuchinh.XhQdDchinhKhBttSl;
@@ -34,8 +33,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -65,8 +64,7 @@ public class XhQdDchinhKhBttServiceImpl extends BaseServiceImpl implements XhQdD
                 req.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<XhQdDchinhKhBttHdr> data = xhQdDchinhKhBttHdrRepository.searchPage(
                 req,
-                pageable
-        );
+                pageable);
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
         data.getContent().forEach(f ->{
@@ -80,16 +78,14 @@ public class XhQdDchinhKhBttServiceImpl extends BaseServiceImpl implements XhQdD
 
     @Override
     public XhQdDchinhKhBttHdr create(XhQdDchinhKhBttHdrReq req) throws Exception {
-
         UserInfo userInfo = SecurityContextService.getUser();
         List<XhQdDchinhKhBttHdr> checkSoQd = xhQdDchinhKhBttHdrRepository.findBySoQdDc(req.getSoQdDc());
         if (!checkSoQd.isEmpty()){
             throw new Exception("Số quyết định" + req.getSoQdDc() + "đã tồn tại");
         }
-
         XhQdDchinhKhBttHdr dataMap = ObjectMapperUtils.map(req, XhQdDchinhKhBttHdr.class);
         dataMap.setTrangThai(Contains.DUTHAO);
-        dataMap.setNgayTao(new Date());
+        dataMap.setNgayTao(LocalDate.now());
         dataMap.setNguoiTaoId(userInfo.getId());
         XhQdDchinhKhBttHdr created = xhQdDchinhKhBttHdrRepository.save(dataMap);
         Optional<XhQdPdKhBttHdr> qdPdKhBttHdr =  xhQdPdKhBttHdrRepository.findById(req.getIdQdGoc());
@@ -97,17 +93,14 @@ public class XhQdDchinhKhBttServiceImpl extends BaseServiceImpl implements XhQdD
             qdPdKhBttHdr.get().setTypeQdDc(true);
             xhQdPdKhBttHdrRepository.save(qdPdKhBttHdr.get());
         }
-
         if (!DataUtils.isNullOrEmpty(req.getFileDinhKem())) {
             List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), created.getId(), XhQdDchinhKhBttHdr.TABLE_NAME+ "_BAN_HANH");
             created.setFileDinhKem(fileDinhKems);
         }
-
         if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
             List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhQdDchinhKhBttHdr.TABLE_NAME);
             created.setFileDinhKems(fileDinhKems);
         }
-
         saveDetail(req, dataMap.getId());
         return dataMap;
     }
@@ -142,29 +135,21 @@ public class XhQdDchinhKhBttServiceImpl extends BaseServiceImpl implements XhQdD
        if (StringUtils.isEmpty(req.getId())){
            throw new Exception("Sủa thất bại không tìm thấy dữ liệu");
        }
-
         Optional<XhQdDchinhKhBttHdr> qOptional = xhQdDchinhKhBttHdrRepository.findById(req.getId());
-
        if (!qOptional.isPresent()){
            throw new UnsupportedOperationException("Không tồn tại bản ghi");
        }
-
        XhQdDchinhKhBttHdr data = qOptional.get();
-
         BeanUtils.copyProperties(req,data,"id");
-        data.setNgaySua(new Date());
+        data.setNgaySua(LocalDate.now());
         data.setNguoiSuaId(getUser().getId());
         XhQdDchinhKhBttHdr created = xhQdDchinhKhBttHdrRepository.save(data);
-
         fileDinhKemService.delete(data.getId(), Collections.singleton(XhQdDchinhKhBttHdr.TABLE_NAME + "_BAN_HANH"));
         List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), created.getId(), XhQdDchinhKhBttHdr.TABLE_NAME + "_BAN_HANH");
         created.setFileDinhKem(fileDinhKem);
-
         fileDinhKemService.delete(data.getId(), Collections.singleton(XhQdDchinhKhBttHdr.TABLE_NAME));
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhQdDchinhKhBttHdr.TABLE_NAME);
         created.setFileDinhKems(fileDinhKems);
-
-
         saveDetail(req, data.getId());
         return created;
     }
@@ -174,24 +159,17 @@ public class XhQdDchinhKhBttServiceImpl extends BaseServiceImpl implements XhQdD
        if (StringUtils.isEmpty(id)){
            throw new Exception("Bản ghi không tồm tại");
        }
-
        Optional<XhQdDchinhKhBttHdr> qOptional = xhQdDchinhKhBttHdrRepository.findById(id);
-
        if (!qOptional.isPresent()){
            throw new UnsupportedOperationException("Bản ghi không tồn tại");
        }
-
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
-
         XhQdDchinhKhBttHdr hdr = qOptional.get();
-
         List<FileDinhKem> fileDinhKem = fileDinhKemService.search(hdr.getId(), Arrays.asList(XhQdDchinhKhBttHdr.TABLE_NAME+ "_BAN_HANH"));
         hdr.setFileDinhKem(fileDinhKem);
-
         List<FileDinhKem> fileDinhKems = fileDinhKemService.search(hdr.getId(), Arrays.asList(XhQdDchinhKhBttHdr.TABLE_NAME));
         hdr.setFileDinhKems(fileDinhKems);
-
         List<XhQdDchinhKhBttDtl> xhQdDchinhKhBttDtlList = new ArrayList<>();
         for (XhQdDchinhKhBttDtl dtl : xhQdDchinhKhBttDtlRepository.findAllByIdDcHdr(id)){
             List<XhQdDchinhKhBttSl> xhQdDchinhKhBttSlList = new ArrayList<>();
@@ -230,17 +208,17 @@ public class XhQdDchinhKhBttServiceImpl extends BaseServiceImpl implements XhQdD
             case Contains.CHODUYET_LDV + Contains.DUTHAO:
             case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
                 detail.setNguoiGuiDuyetId(getUser().getId());
-                detail.setNgayGuiDuyet(getDateTimeNow());
+                detail.setNgayGuiDuyet(LocalDate.now());
                 break;
             case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
                 detail.setNguoiPduyetId(getUser().getId());
-                detail.setNgayPduyet(getDateTimeNow());
+                detail.setNgayPduyet(LocalDate.now());
                 detail.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
             case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
             case Contains.BAN_HANH + Contains.DADUYET_LDV:
                 detail.setNguoiPduyetId(getUser().getId());
-                detail.setNgayPduyet(getDateTimeNow());
+                detail.setNgayPduyet(LocalDate.now());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
@@ -255,24 +233,19 @@ public class XhQdDchinhKhBttServiceImpl extends BaseServiceImpl implements XhQdD
         if (StringUtils.isEmpty(id)){
             throw new Exception("Sửa thất bại, không tìm thấy dữ liệu");
         }
-
         Optional<XhQdDchinhKhBttHdr> optional = xhQdDchinhKhBttHdrRepository.findById(id);
         if (!optional.isPresent()){
             throw new Exception("Không tìm thấy dữ liệu cần xóa");
         }
-
         XhQdDchinhKhBttHdr hdr = optional.get();
-
         if (!hdr.getTrangThai().equals(Contains.DUTHAO)){
             throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái dự thảo");
         }
-
         Optional<XhQdPdKhBttHdr> qdPdKhBttHdr =  xhQdPdKhBttHdrRepository.findById(hdr.getIdQdGoc());
         if (qdPdKhBttHdr.isPresent()){
             qdPdKhBttHdr.get().setTypeQdDc(false);
             xhQdPdKhBttHdrRepository.save(qdPdKhBttHdr.get());
         }
-
         List<XhQdDchinhKhBttDtl> xhQdDchinhKhBttDtlList = xhQdDchinhKhBttDtlRepository.findAllByIdDcHdr(hdr.getId());
         if (!CollectionUtils.isEmpty(xhQdDchinhKhBttDtlList)){
             for (XhQdDchinhKhBttDtl dtl : xhQdDchinhKhBttDtlList) {
@@ -287,7 +260,6 @@ public class XhQdDchinhKhBttServiceImpl extends BaseServiceImpl implements XhQdD
         xhQdDchinhKhBttHdrRepository.delete(hdr);
         fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhQdDchinhKhBttHdr.TABLE_NAME));
         fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhQdDchinhKhBttHdr.TABLE_NAME+"_BAN_HANH"));
-
     }
 
     @Override
@@ -295,16 +267,13 @@ public class XhQdDchinhKhBttServiceImpl extends BaseServiceImpl implements XhQdD
         if (StringUtils.isEmpty(listMulti)){
             throw new Exception("Xóa thất bại, Không tìm thấy dữ liệu");
         }
-
         List<XhQdDchinhKhBttHdr> list = xhQdDchinhKhBttHdrRepository.findByIdIn(listMulti);
         if (list.isEmpty()){
             throw new Exception("Không tìm thấy dữ liệu cần xóa");
         }
-
         for (XhQdDchinhKhBttHdr hdr : list){
             this.delete(hdr.getId());
         }
-
     }
 
     @Override

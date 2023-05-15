@@ -1,5 +1,4 @@
 package com.tcdt.qlnvhang.service.xuathang.bantructiep.kehoach.dexuat;
-
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepDdiem;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdr;
@@ -26,9 +25,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -136,7 +135,7 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl implements XhD
         }
         XhDxKhBanTrucTiepHdr data = qOptional.get();
         BeanUtils.copyProperties(req, data, "id", "trangThaiTh");
-        data.setNgaySua(getDateTimeNow());
+        data.setNgaySua(LocalDate.now());
         data.setNguoiSuaId(userInfo.getId());
         int slDviTsan = data.getChildren().stream()
                 .flatMap(item -> item.getChildren().stream())
@@ -203,17 +202,17 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl implements XhD
             case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
             case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
                 data.setNguoiGuiDuyetId(userInfo.getId());
-                data.setNgayGuiDuyet(getDateTimeNow());
+                data.setNgayGuiDuyet(LocalDate.now());
             case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
             case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
                 data.setNguoiPduyetId(userInfo.getId());
-                data.setNgayPduyet(getDateTimeNow());
+                data.setNgayPduyet(LocalDate.now());
                 data.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
             case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
             case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
                 data.setNguoiPduyetId(userInfo.getId());
-                data.setNgayPduyet(getDateTimeNow());
+                data.setNgayPduyet(LocalDate.now());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
@@ -306,5 +305,4 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl implements XhD
            return xhDxKhBanTrucTiepHdrRepository.getGiaBanToiThieuLt(cloaiVthh, maDvi, namKh);
        }
     }
-
 }

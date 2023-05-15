@@ -1,23 +1,19 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.tonghop;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
-import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "XH_THOP_DX_KH_BTT_HDR")
 @Data
-public class XhThopDxKhBttHdr extends TrangThaiBaseEntity implements Serializable {
+public class XhThopDxKhBttHdr implements Serializable {
+
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_THOP_DX_KH_BTT_HDR";
 
@@ -26,8 +22,7 @@ public class XhThopDxKhBttHdr extends TrangThaiBaseEntity implements Serializabl
 //    @SequenceGenerator(sequenceName = "XH_THOP_DX_KH_MTT_SEQ", allocationSize = 1, name = "XH_THOP_DX_KH_MTT_SEQ")
     private Long id;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayThop;
+    private LocalDate ngayThop;
 
     private String loaiVthh;
     @Transient
@@ -37,11 +32,9 @@ public class XhThopDxKhBttHdr extends TrangThaiBaseEntity implements Serializabl
     @Transient
     private String tenCloaiVthh;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayDuyetTu;
+    private LocalDate ngayDuyetTu;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayDuyetDen;
+    private LocalDate ngayDuyetDen;
 
     private String noiDungThop;
 
@@ -56,6 +49,28 @@ public class XhThopDxKhBttHdr extends TrangThaiBaseEntity implements Serializabl
     private String loaiHinhNx;
 
     private String kieuNx;
+
+    private String trangThai;
+    @Transient
+    private String tenTrangThai;
+
+    private LocalDate ngayTao;
+
+    private Long nguoiTaoId;
+
+    private LocalDate ngaySua;
+
+    private Long nguoiSuaId;
+
+    private LocalDate ngayGuiDuyet;
+
+    private Long nguoiGuiDuyetId;
+
+    private LocalDate ngayPduyet;
+
+    private Long nguoiPduyetId;
+
+    private String lyDoTuChoi;
 
     @Transient
     private List<XhThopDxKhBttDtl> children = new ArrayList<>();

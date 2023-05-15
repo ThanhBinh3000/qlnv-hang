@@ -1,29 +1,25 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.phieuktracluong;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "XH_PHIEU_KTRA_CLUONG_BTT_HDR")
 @Data
-public class XhPhieuKtraCluongBttHdr extends TrangThaiBaseEntity implements Serializable {
+public class XhPhieuKtraCluongBttHdr implements Serializable {
+
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_PHIEU_KTRA_CLUONG_BTT_HDR";
 
     @Id
 //    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_PHIEU_KTRA_CLUONG_BTT_SEQ")
 //    @SequenceGenerator(sequenceName = "XH_PHIEU_KTRA_CLUONG_BTT_SEQ", allocationSize = 1, name = "XH_PHIEU_KTRA_CLUONG_BTT_SEQ")
-    @Column(name = "ID")
+
     private Long id;
 
     private Integer namKh;
@@ -42,8 +38,7 @@ public class XhPhieuKtraCluongBttHdr extends TrangThaiBaseEntity implements Seri
 
     private String soQdNv;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayQd;
+    private LocalDate ngayQd;
 
     private String soPhieu;
 
@@ -91,11 +86,9 @@ public class XhPhieuKtraCluongBttHdr extends TrangThaiBaseEntity implements Seri
 
     private String hthucBquan;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayLayMau;
+    private LocalDate ngayLayMau;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayKnghiem;
+    private LocalDate ngayKnghiem;
 
     private String ketQua;
 
@@ -103,14 +96,33 @@ public class XhPhieuKtraCluongBttHdr extends TrangThaiBaseEntity implements Seri
 
     private String soBbXuatDoc;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayXuatDocKho;
+    private LocalDate ngayXuatDocKho;
+
+    private String trangThai;
+    @Transient
+    private String tenTrangThai;
+
+    private LocalDate ngayTao;
+
+    private Long nguoiTaoId;
+
+    private LocalDate ngaySua;
+
+    private Long nguoiSuaId;
+
+    private LocalDate ngayGuiDuyet;
+
+    private Long nguoiGuiDuyetId;
+
+    private LocalDate ngayPduyet;
+
+    private Long nguoiPduyetId;
+
+    private String lyDoTuChoi;
 
     @Transient
     private FileDinhKem fileDinhKem;
 
     @Transient
     private List<XhPhieuKtraCluongBttDtl> children = new ArrayList<>();
-
-
 }
