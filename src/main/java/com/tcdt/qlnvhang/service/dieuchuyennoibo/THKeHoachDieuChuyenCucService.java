@@ -197,8 +197,8 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         return allById;
     }
 
-    public List<THKeHoachDieuChuyenNoiBoCucDtl> danhSachChiCucNhanDc(TongHopKeHoachDieuChuyenSearch req) throws Exception{
-        List<THKeHoachDieuChuyenNoiBoCucDtl> danhSachChiCucNhanDc = thKeHoachDieuChuyenNoiBoCucDtlRepository.findByHdrId(req.getId());
+    public List<DcnbKeHoachDcDtl> danhSachChiCucNhanDc(TongHopKeHoachDieuChuyenSearch req) throws Exception{
+        List<DcnbKeHoachDcDtl> danhSachChiCucNhanDc = dcnbKeHoachDcDtlRepository.findByDcnbKhHdrId(req.getId());
         return danhSachChiCucNhanDc;
     }
 
