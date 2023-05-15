@@ -33,7 +33,11 @@ public interface DcnbKeHoachDcDtlRepository extends JpaRepository<DcnbKeHoachDcD
             "WHERE KHHDR.MA_DVI = ?1 AND KHHDR.TRANG_THAI = ?2 AND (TO_DATE(TO_CHAR(KHHDR.NGAY_TAO,'YYYY-MM-DD'),'YYYY-MM-DD') <= TO_DATE(?3,'YYYY-MM-DD')) AND KHHDR.LOAI_DC = 'CUC' AND KHHDR.TYPE = 'DC'")
     List<DcnbKeHoachDcDtl> findByDonViChaAndTrangThaiCuc(String maDvi,String trangThai, String thoiGianTongHop);
 
-    List<DcnbKeHoachDcDtl> findByDcnbKeHoachDcHdrIdAndId(Long hdrId, Long id);
+    @Query(nativeQuery = true,value ="SELECT * FROM DCNB_KE_HOACH_DC_DTL dtl \n" +
+            "LEFT JOIN DCNB_TH_KE_HOACH_DCC_NBC_DTL d ON d.DCNB_KE_HOACH_DC_DTL_ID = dtl.ID \n" +
+            "LEFT JOIN DCNB_TH_KE_HOACH_DCC_HDR h ON h.ID = d.DCNB_TH_KE_HOACH_DCC_HDR_ID \n" +
+            "WHERE h.ID = ?1")
+    List<DcnbKeHoachDcDtl> findByDcnbKhHdrId(Long id);
 
     @Query(value ="SELECT SUM(d.duToanKphi) FROM DcnbKeHoachDcDtl d " +
             "WHERE d.dcnbKeHoachDcHdr.maDviCuc = ?1 AND d.dcnbKeHoachDcHdr.type = ?2 AND d.dcnbKeHoachDcHdr.loaiDc = ?3 AND d.dcnbKeHoachDcHdr.trangThai = ?4 " +
