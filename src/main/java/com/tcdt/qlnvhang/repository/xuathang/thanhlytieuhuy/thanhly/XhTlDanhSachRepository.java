@@ -11,14 +11,14 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
-public interface XhTlDanhSachRepository extends JpaRepository<XhTlDanhSachHdr,Long> {
+public interface XhTlDanhSachRepository extends JpaRepository<XhTlDanhSachHdr, Long> {
   @Query("SELECT c FROM XhTlDanhSachHdr c WHERE 1=1 " +
       "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
-      "AND (:#{#param.type} IS NULL OR c.type = :#{#param.type}) " +
       "AND (:#{#param.loaiVthh} IS NULL OR c.loaiVthh = :#{#param.loaiVthh}) " +
+      "AND (:#{#param.type} IS NULL OR ('TH' = :#{#param.loaiVthh} AND c.maTongHop IS NOT NULL))" +
       "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
-  Page<XhTlDanhSachHdr> searchPage (@Param("param") XhTlDanhSachRequest param, Pageable pageable);
+  Page<XhTlDanhSachHdr> searchPage(@Param("param") XhTlDanhSachRequest param, Pageable pageable);
 
 
   void deleteAllByIdIn(List<Long> listId);

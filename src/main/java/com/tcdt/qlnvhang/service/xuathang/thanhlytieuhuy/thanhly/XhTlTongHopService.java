@@ -2,12 +2,15 @@ package com.tcdt.qlnvhang.service.xuathang.thanhlytieuhuy.thanhly;
 
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlDanhSachRepository;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlTongHopRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlTongHopRequest;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlDanhSachHdr;
+import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlTongHopDtl;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlTongHopHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -22,10 +25,12 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class XhTlTongHopService extends BaseServiceImpl {
@@ -33,17 +38,20 @@ public class XhTlTongHopService extends BaseServiceImpl {
 
   @Autowired
   private XhTlTongHopRepository xhTlTongHopRepository;
+  @Autowired
+  private XhTlDanhSachRepository xhTlDanhSachRepository;
 
   @Autowired
   private FileDinhKemService fileDinhKemService;
 
   public Page<XhTlTongHopHdr> searchPage(CustomUserDetails currentUser, XhTlTongHopRequest req) throws Exception {
-    String dvql = currentUser.getDvql();
-//    if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
-//      req.setDvql(dvql.substring(0, 4));
-//    } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
-//      req.setDvql(dvql);
-//    }
+    req.setDvql(currentUser.getDvql());
+    if (!DataUtils.isNullObject(req.getNgayTaoTu())) {
+      req.setNgayTaoTu(req.getNgayTaoTu().toLocalDate().atTime(LocalTime.MAX));
+    }
+    if (!DataUtils.isNullObject(req.getNgayTaoDen())) {
+      req.setNgayTaoDen(req.getNgayTaoTu().toLocalDate().atTime(LocalTime.MIN));
+    }
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<XhTlTongHopHdr> search = xhTlTongHopRepository.searchPage(req, pageable);
 
@@ -85,6 +93,16 @@ public class XhTlTongHopService extends BaseServiceImpl {
     XhTlTongHopHdr created = xhTlTongHopRepository.save(data);
     created.setMaDanhSach(created.getId() + created.getMaDanhSach());
     created = xhTlTongHopRepository.save(created);
+    Long id = created.getId();
+    String ma = created.getMaDanhSach();
+    //set ma tong hop cho danh sach
+    List<Long> listIdDsHdr = created.getTongHopDtl().stream().map(XhTlTongHopDtl::getIdDsHdr).collect(Collectors.toList());
+    List<XhTlDanhSachHdr> listDsHdr = xhTlDanhSachRepository.findByIdIn(listIdDsHdr);
+    listDsHdr.forEach(s -> {
+      s.setIdTongHop(id);
+      s.setMaTongHop(ma);
+    });
+    xhTlDanhSachRepository.saveAll(listDsHdr);
     return detail(Arrays.asList(created.getId())).get(0);
 
   }

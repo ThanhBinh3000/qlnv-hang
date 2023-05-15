@@ -7,6 +7,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,5 +53,9 @@ public class XhTlTongHopRequest extends BaseRequest {
   private String type;
 
   private String dvql;
+  private String maCuc;
+  private String maChiCuc;
+  private LocalDateTime ngayTaoTu;
+  private LocalDateTime ngayTaoDen;
   private List<XhTlTongHopDtl> tongHopDtl = new ArrayList<>();
 }
