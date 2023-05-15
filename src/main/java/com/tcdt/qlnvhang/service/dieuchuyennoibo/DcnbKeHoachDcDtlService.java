@@ -419,19 +419,21 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
         List<DcnbKeHoachDcHdr> data = page.getContent();
 
         String title = "Danh sách phương án xuất cứu trợ, viện trợ ";
-        String[] rowsName = new String[]{"STT", "Năm kH", "Số công văn/đề xuất", "Ngày duyệt LĐ Cục", "Loại điều chuyển", "Đơn vị đề xuất", "Trạng thái",};
+        String[] rowsName = new String[]{"STT", "Năm kế hoạch", "Số công văn/đề xuất", "Ngày lập KH", "Ngày duyệt LĐ Chi cục", "Loại điều chuyển", "Đơn vị đề xuất","Trạng thái"};
         String fileName = "danh-sach-ke-hoach-dieu-chuyen-noi-bo-hang-dtqg.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
         for (int i = 0; i < data.size(); i++) {
             DcnbKeHoachDcHdr dx = data.get(i);
             objs = new Object[rowsName.length];
-            objs[0] = i;
+            objs[0] = i+1;
             objs[1] = dx.getNam();
             objs[2] = dx.getSoDxuat();
-            objs[3] = dx.getNgayDuyetLdcc();
-            objs[4] = dx.getLoaiDc();
-            objs[5] = dx.getTenDvi();
+            objs[3] = dx.getNgayLapKh();
+            objs[4] = dx.getNgayDuyetLdcc();
+            objs[5] = dx.getTenLoaiDc();
+            objs[6] = dx.getTenDvi();
+            objs[7] = dx.getTenTrangThai();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
