@@ -81,7 +81,7 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
             if (Contains.DCNB.equals(data.getLoaiDc()) && Contains.CAP_CUC.equals(currentUser.getUser().getCapDvi())) {
                 // được phép thêm mới kế hoạch và update kế hoạch (ngầm)
                 if (e.getKeHoachDcHdrId() == null) {
-                    if (e.getDanhSachKeHoach() != null) {
+                    if (e.getDanhSachKeHoach() != null && !e.getDanhSachKeHoach().isEmpty()) {
                         DcnbKeHoachDcHdr dcnbKeHoachDcHdr = new DcnbKeHoachDcHdr();
                         dcnbKeHoachDcHdr.setType(Contains.NHAN_DIEU_CHUYEN_TS);
                         dcnbKeHoachDcHdr.setMaDviPq(e.getDanhSachKeHoach().get(0).getMaChiCucNhan());
@@ -104,7 +104,7 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
                 }
             }else {
                 if (e.getKeHoachDcHdrId() == null) {
-                    if (e.getDanhSachKeHoach() != null) {
+                    if (e.getDanhSachKeHoach() != null && !e.getDanhSachKeHoach().isEmpty()) {
                         Optional<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcnbKeHoachDcHdrRepository.findById(e.getDanhSachKeHoach().get(0).getHdrId());
                         if (!dcnbKeHoachDcHdr.isPresent()) {
                             throw new Exception("Không tìm thấy kế hoạch id = "+ e.getDanhSachKeHoach().get(0).getHdrId());
@@ -157,7 +157,7 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
             if (Contains.DCNB.equals(data.getLoaiDc()) && Contains.CAP_CUC.equals(currentUser.getUser().getCapDvi())) {
                 // được phép thêm mới kế hoạch và update kế hoạch (ngầm)
                 if (e.getKeHoachDcHdrId() != null) {
-                    if (e.getDanhSachKeHoach() != null) {
+                    if (e.getDanhSachKeHoach() != null && !e.getDanhSachKeHoach().isEmpty()) {
                         DcnbKeHoachDcHdr dcnbKeHoachDcHdr = new DcnbKeHoachDcHdr();
                         dcnbKeHoachDcHdr.setType(Contains.NHAN_DIEU_CHUYEN_TS);
                         dcnbKeHoachDcHdr.setMaDviPq(e.getDanhSachKeHoach().get(0).getMaChiCucNhan());
@@ -182,7 +182,7 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
                         dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr);
                     }
                 } else {
-                    if (e.getDanhSachKeHoach() != null) {
+                    if (e.getDanhSachKeHoach() != null && !e.getDanhSachKeHoach().isEmpty()) {
                         DcnbKeHoachDcHdr dcnbKeHoachDcHdr = new DcnbKeHoachDcHdr();
                         dcnbKeHoachDcHdr.setType(Contains.NHAN_DIEU_CHUYEN_TS);
                         dcnbKeHoachDcHdr.setMaDviPq(e.getDanhSachKeHoach().get(0).getMaDiemKhoNhan());
@@ -210,7 +210,7 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
                     if (!keHoachDcHdrOpt.isPresent()) {
                         throw new Exception("dcnbKeHoachDcHdr.id không tìm thấy trong hệ thống!");
                     }
-                    if (e.getDanhSachKeHoach() != null) {
+                    if (e.getDanhSachKeHoach() != null && !e.getDanhSachKeHoach().isEmpty()) {
                         e.getDanhSachKeHoach().forEach(e1 -> {
                             e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
                             e1.setDaXdinhDiemNhap(true);
@@ -223,7 +223,7 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
                 }
             }else {
                 if (e.getKeHoachDcHdrId() != null) {
-                    if (e.getDanhSachKeHoach() != null) {
+                    if (e.getDanhSachKeHoach() != null && !e.getDanhSachKeHoach().isEmpty()) {
                         Optional<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcnbKeHoachDcHdrRepository.findById(e.getDanhSachKeHoach().get(0).getHdrId());
                         if (!dcnbKeHoachDcHdr.isPresent()) {
                             throw new Exception("Không tìm thấy kế hoạch id = "+ e.getDanhSachKeHoach().get(0).getHdrId());
