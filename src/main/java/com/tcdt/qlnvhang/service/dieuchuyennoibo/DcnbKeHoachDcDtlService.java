@@ -418,7 +418,7 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
         Page<DcnbKeHoachDcHdr> page = this.searchPage(currentUser, objReq);
         List<DcnbKeHoachDcHdr> data = page.getContent();
 
-        String title = "Danh sách phương án xuất cứu trợ, viện trợ ";
+        String title = "Danh sách kế hoạch điều chuyển nội bộ ";
         String[] rowsName = new String[]{"STT", "Năm kế hoạch", "Số công văn/đề xuất", "Ngày lập KH", "Ngày duyệt LĐ Chi cục", "Loại điều chuyển", "Đơn vị đề xuất","Trạng thái"};
         String fileName = "danh-sach-ke-hoach-dieu-chuyen-noi-bo-hang-dtqg.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
