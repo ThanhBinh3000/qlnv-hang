@@ -45,6 +45,9 @@ public class THKeHoachDieuChuyenCucKhacCucDtl implements Serializable {
     @Column(name = "TONG_DU_TOAN_KPHI")
     private Long tongDuToanKinhPhi;
 
+    @Column(name = "PHE_DUYET")
+    private Boolean pheDuyet;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HDR_ID",referencedColumnName="ID", insertable = false, updatable = false)
     @JsonIgnore

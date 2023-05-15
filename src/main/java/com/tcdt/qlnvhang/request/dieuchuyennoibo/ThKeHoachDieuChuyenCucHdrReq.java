@@ -61,6 +61,10 @@ public class ThKeHoachDieuChuyenCucHdrReq {
 
     private LocalDateTime thoiGianTongHop;
 
+    private LocalDate ngayTrinhDuyetTc;
+
+    private LocalDate ngayPheDuyetTc;
+
     List<THKeHoachDieuChuyenNoiBoCucDtl> thKeHoachDieuChuyenNoiBoCucDtls;
 
     List<THKeHoachDieuChuyenCucKhacCucDtl> thKeHoachDieuChuyenCucKhacCucDtls;

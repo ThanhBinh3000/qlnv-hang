@@ -98,6 +98,12 @@ public class THKeHoachDieuChuyenCucHdr implements Serializable {
     @Column(name = "ID_THOP_TC")
     private Long idThTongCuc;
 
+    @Column(name = "NGAY_TRINH_DUYET_TC")
+    private LocalDate ngayTrinhDuyetTc;
+
+    @Column(name = "NGAY_PHE_DUYET_TC")
+    private LocalDate ngayPheDuyetTc;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "DCNB_TH_KE_HOACH_DCC_HDR_ID")
     private List<THKeHoachDieuChuyenNoiBoCucDtl> thKeHoachDieuChuyenNoiBoCucDtls = new ArrayList<>();
