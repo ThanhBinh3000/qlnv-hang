@@ -48,9 +48,9 @@ public class DcnbQuyetDinhDcTcHdr extends BaseEntity implements Serializable, Cl
   private Long nguoiGduyetId;
   private LocalDate ngayPduyet;
   private Long nguoiPduyetId;
-  private Long qdinhNhapCucId;
+  private String qdinhNhapCucId;
   private String soQdinhNhapCuc;
-  private Long qdinhXuatCucId;
+  private String qdinhXuatCucId;
   private String soQdinhXuatCuc;
 
   @Transient

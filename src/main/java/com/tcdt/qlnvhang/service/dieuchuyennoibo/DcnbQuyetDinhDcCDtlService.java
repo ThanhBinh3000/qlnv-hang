@@ -2,10 +2,7 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcDtlRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcHdrRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbQuyetDinhDcCDtlRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbQuyetDinhDcCHdrRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -44,7 +41,8 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
 
     @Autowired
     private DcnbQuyetDinhDcCHdrRepository dcnbQuyetDinhDcCHdrRepository;
-
+    @Autowired
+    private DcnbQuyetDinhDcTcHdrRepository dcnbQuyetDinhDcTcHdrRepository;
     @Autowired
     private DcnbQuyetDinhDcCDtlRepository dcnbQuyetDinhDcCDtlRepository;
     @Autowired
@@ -355,7 +353,41 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
             case Contains.CHODUYET_LDC + Contains.BAN_HANH:
                 optional.get().setNgayDuyetTc(LocalDate.now());
                 optional.get().setNguoiDuyetTcId(currentUser.getUser().getId());
-
+                Optional<DcnbQuyetDinhDcTcHdr> dcnbQuyetDinhDcTcHdr = dcnbQuyetDinhDcTcHdrRepository.findById(optional.get().getCanCuQdTc());
+                if(dcnbQuyetDinhDcTcHdr.isPresent()){
+                    if("00".equals(optional.get().getLoaiQdinh())){
+                        String qdinhNhapCucId = dcnbQuyetDinhDcTcHdr.get().getQdinhNhapCucId();
+                        if(qdinhNhapCucId == null){
+                            qdinhNhapCucId = "";
+                        }else {
+                            qdinhNhapCucId+=","+optional.get().getId();
+                        }
+                        dcnbQuyetDinhDcTcHdr.get().setQdinhNhapCucId(qdinhNhapCucId);
+                        String soQdinh = dcnbQuyetDinhDcTcHdr.get().getSoQdinhNhapCuc();
+                        if(soQdinh == null){
+                            soQdinh = "";
+                        }else {
+                            soQdinh+=","+optional.get().getSoQdinh();
+                        }
+                        dcnbQuyetDinhDcTcHdr.get().setSoQdinhNhapCuc(soQdinh);
+                    }
+                    if("01".equals(optional.get().getLoaiQdinh())){
+                        String qdinhXuatCucId = dcnbQuyetDinhDcTcHdr.get().getQdinhXuatCucId();
+                        if(qdinhXuatCucId == null){
+                            qdinhXuatCucId = "";
+                        }else {
+                            qdinhXuatCucId+=","+optional.get().getId();
+                        }
+                        dcnbQuyetDinhDcTcHdr.get().setQdinhXuatCucId(qdinhXuatCucId);
+                        String soQdinh = dcnbQuyetDinhDcTcHdr.get().getSoQdinhXuatCuc();
+                        if(soQdinh == null){
+                            soQdinh = "";
+                        }else {
+                            soQdinh+=","+optional.get().getSoQdinh();
+                        }
+                        dcnbQuyetDinhDcTcHdr.get().setSoQdinhXuatCuc(soQdinh);
+                    }
+                }
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
