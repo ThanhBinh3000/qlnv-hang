@@ -1,8 +1,5 @@
 package com.tcdt.qlnvhang.entities.xuathang.daugia.quyetdinhdieuchinhbdg;
-
-import com.tcdt.qlnvhang.entities.BaseEntity;
 import lombok.Data;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -10,7 +7,7 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = XhQdDchinhKhBdgPlDtl.TABLE_NAME)
 @Data
-public class XhQdDchinhKhBdgPlDtl extends BaseEntity implements Serializable {
+public class XhQdDchinhKhBdgPlDtl implements Serializable {
   private static final long serialVersionUID = 1L;
   public static final String TABLE_NAME = "XH_QD_DC_KH_BDG_PL_DTL";
 
@@ -22,36 +19,40 @@ public class XhQdDchinhKhBdgPlDtl extends BaseEntity implements Serializable {
   private Long idPhanLo;
 
   private String maDiemKho;
-
-  private String maNhaKho;
-
-  private String maNganKho;
-
-  private String maLoKho;
-
-  private String maDviTsan;
-
-  private BigDecimal duDau;
-
-  private BigDecimal soLuong;
-
-  private BigDecimal donGiaDeXuat;
-
-  private BigDecimal donGiaVat;
-
-  private String dviTinh;
-
-  // Transient
   @Transient
   private String tenDiemKho;
 
+  private String maNhaKho;
   @Transient
   private String tenNhaKho;
 
+  private String maNganKho;
   @Transient
   private String tenNganKho;
 
+  private String maLoKho;
   @Transient
   private String tenLoKho;
+
+  private String maDviTsan;
+
+  private BigDecimal tonKho;
+
+  private BigDecimal soLuongDeXuat;
+
+  private BigDecimal donGiaDeXuat;
+
+  @Transient
+  private BigDecimal donGiaDuocDuyet;
+
+  private String donViTinh;
+
+  private String loaiVthh;
+  @Transient
+  private String tenLoaiVthh;
+
+  private String cloaiVthh;
+  @Transient
+  private String tenCloaiVthh;
 
 }

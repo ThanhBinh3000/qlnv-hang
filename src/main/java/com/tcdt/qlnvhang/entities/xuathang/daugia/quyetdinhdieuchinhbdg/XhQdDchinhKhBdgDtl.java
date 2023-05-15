@@ -1,15 +1,10 @@
 package com.tcdt.qlnvhang.entities.xuathang.daugia.quyetdinhdieuchinhbdg;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGia;
-import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -26,45 +21,29 @@ public class XhQdDchinhKhBdgDtl implements Serializable {
 
   private Long idHdr;
 
+  private Long idQdGoc;
+
   private String maDvi;
   @Transient
   private String tenDvi;
 
-  private String loaiVthh;
-  @Transient
-  private String tenLoaiVthh;
-
-  private String cloaiVthh;
-  @Transient
-  private String tenCloaiVthh;
+  private String diaChi;
 
   private String soDxuat;
 
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-  private Date ngayTao;
+  private LocalDate ngayTao;
 
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-  private Date ngayPduyet;
-
-  @Temporal(TemporalType.DATE)
-  private Date tgianDkienTu;
-
-  @Temporal(TemporalType.DATE)
-  private Date tgianDkienDen;
+  private LocalDate ngayPduyet;
 
   private String trichYeu;
 
-  private BigDecimal tongSoLuong;
-
   private Integer slDviTsan;
 
-  private BigDecimal tongTienGiaKhoiDiemDx;
+  private BigDecimal tongSoLuong;
 
-  private BigDecimal tongKhoanTienDatTruocDx;
+  private LocalDate tgianDkienTu;
 
-  private String moTaHangHoa;
-
-  private String diaChi;
+  private LocalDate tgianDkienDen;
 
   private Integer tgianTtoan;
 
@@ -83,12 +62,5 @@ public class XhQdDchinhKhBdgDtl implements Serializable {
   private BigDecimal khoanTienDatTruoc;
 
   @Transient
-  private XhQdDchinhKhBdgHdr xhQdPdKhBdg;
-
-  @Transient
-  private XhDxKhBanDauGia xhDxKhBanDauGia;
-
-  @Transient
   private List<XhQdDchinhKhBdgPl> children = new ArrayList<>();
-
 }

@@ -1,9 +1,6 @@
 package com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.pheduyet;
-
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-
-import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +14,9 @@ public class XhQdPdKhBdgPlReq {
 
     private String maDvi;
 
-    private String slChiTieu;
+    private BigDecimal slChiTieu;
 
-    private String slKeHoachDd;
+    private BigDecimal slKeHoachDd;
 
     private BigDecimal soLuongChiCuc;
 

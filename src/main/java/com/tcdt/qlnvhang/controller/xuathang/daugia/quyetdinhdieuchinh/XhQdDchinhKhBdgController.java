@@ -1,5 +1,4 @@
 package com.tcdt.qlnvhang.controller.xuathang.daugia.quyetdinhdieuchinh;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
@@ -17,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -52,10 +50,10 @@ public class XhQdDchinhKhBdgController extends BaseController {
     @ApiOperation(value = "Tạo mới lương thực", response = List.class)
     @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<BaseResponse> insert( @Valid @RequestBody XhQdDchinhKhBdgReq objReq) {
+    public ResponseEntity<BaseResponse> insert( @Valid @RequestBody XhQdDchinhKhBdgReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhQdDchinhKhBdgService.create(objReq));
+            resp.setData(xhQdDchinhKhBdgService.create(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

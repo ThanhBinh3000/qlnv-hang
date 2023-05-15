@@ -1,0 +1,148 @@
+package com.tcdt.qlnvhang.table.dieuchuyennoibo;
+
+import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.table.FileDinhKem;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = DcnbBienBanLayMauHdr.TABLE_NAME)
+@Getter
+@Setter
+public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cloneable{
+    private static final long serialVersionUID = 1L;
+    public static final String TABLE_NAME = "DCNB_BIEN_BAN_LAY_MAU_HDR";
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = DcnbBienBanLayMauHdr.TABLE_NAME
+            + "_SEQ", allocationSize = 1, name = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
+    private Long id;
+
+    @Column(name = "LOAI_BB")
+    private String loaiBb;
+
+    @Column(name = "NAM")
+    private Integer nam;
+
+    @Column(name = "MA_DVI")
+    private String maDvi;
+
+    @Column(name = "QHNS_ID")
+    private Long qhnsId;
+
+    @Column(name = "MA_QHNS")
+    private String maQhns;
+
+    @Column(name = "QDINH_DCC_ID")
+    private Long qDinhDccId;
+
+    @Column(name = "SO_QDINH_DCC")
+    private String soQdinhDcc;
+
+    @Column(name = "KTV_BAO_QUAN")
+    private String ktvBaoQuan;
+
+    @Column(name = "KTV_BAO_QUAN_ID")
+    private Long ktvBaoQuanId;
+
+    @Column(name = "SO_BB_LAY_MAU")
+    private String soBbLayMau;
+
+    @Column(name = "NGAY_LAY_MAU")
+    private LocalDate ngayLayMau;
+
+    @Column(name = "DV_KIEM_NGHIEM")
+    private String dViKiemNghiem;
+
+    @Column(name = "DIA_DIEM_LAY_MAU")
+    private String diaDiemLayMau;
+
+    @Column(name = "LOAI_VTHH")
+    private String loaiVthh;
+
+    @Column(name = "CLOAI_VTHH")
+    private String cloaiVthh;
+
+    @Column(name = "MA_DIEM_KHO")
+    private String maDiemKho;
+
+    @Column(name = "TEN_DIEM_KHO")
+    private String tenDiemKho;
+
+    @Column(name = "MA_NHA_KHO")
+    private String maNhaKho;
+
+    @Column(name = "TEN_NHA_KHO")
+    private String tenNhaKho;
+
+    @Column(name = "MA_NGAN_KHO")
+    private String maNganKho;
+
+    @Column(name = "TEN_NGAN_KHO")
+    private String tenNganKho;
+
+    @Column(name = "MA_LO_KHO")
+    private String maLoKho;
+
+    @Column(name = "TEN_LO_KHO")
+    private String tenLoKho;
+
+    @Column(name = "THAY_DOI_THU_KHO")
+    private Boolean thayDoiThuKho;
+
+    @Column(name = "SO_LUONG_MAU")
+    private Long soLuongMau;
+
+    @Column(name = "PP_LAY_MAU")
+    private String pPLayMau;
+
+    @Column(name = "CHI_TIEU_KIEM_TRA")
+    private String chiTieuKiemTra;
+
+    @Column(name = "TRANG_THAI")
+    private String trangThai;
+
+    @Column(name = "LY_DO_TU_CHOI")
+    private String lyDoTuChoi;
+
+    @Column(name = "NGUOI_GDUYET")
+    private Long nguoiGDuyet;
+
+    @Column(name = "NGAY_GDUYET")
+    private LocalDate ngayGDuyet;
+
+    @Column(name = "NGUOI_PDUYET")
+    private Long nguoiPDuyet;
+
+    @Column(name = "NGAY_PDUYET")
+    private LocalDate ngayPDuyet;
+
+    @Column(name = "KET_QUA_NIEM_PHONG")
+    private String ketQuaNiemPhong;
+
+    @Column(name = "DIA_DIEM_BAN_GIAO")
+    private String diaDiemBanGiao;
+
+    @Column(name = "LOAI_DC")
+    private String loaiDc;
+
+    @Column(name = "TYPE")
+    private String type;
+
+    @Transient
+    private List<FileDinhKem> canCu = new ArrayList<>();
+
+    @Transient
+    private List<FileDinhKem> bienBanLayMauDinhKem = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "HDR_ID")
+    private List<DcnbBienBanLayMauDtl> dcnbBienBanLayMauDtl = new ArrayList<>();
+}
