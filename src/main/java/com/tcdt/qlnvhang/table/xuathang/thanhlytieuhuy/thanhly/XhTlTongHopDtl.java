@@ -23,6 +23,7 @@ public class XhTlTongHopDtl extends BaseEntity implements Serializable {
   @SequenceGenerator(sequenceName = XhTlTongHopDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhTlTongHopDtl.TABLE_NAME + "_SEQ")
   private Long id;
   private Long idTongHop;
+  private Long idDsHdr;
   private String maTongHop;
   private String maDiaDiem;
   private String loaiVthh;
