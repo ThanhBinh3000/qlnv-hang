@@ -33,7 +33,11 @@ public interface DcnbKeHoachDcDtlRepository extends JpaRepository<DcnbKeHoachDcD
             "WHERE KHHDR.MA_DVI = ?1 AND KHHDR.TRANG_THAI = ?2 AND (TO_DATE(TO_CHAR(KHHDR.NGAY_TAO,'YYYY-MM-DD'),'YYYY-MM-DD') <= TO_DATE(?3,'YYYY-MM-DD')) AND KHHDR.LOAI_DC = 'CUC' AND KHHDR.TYPE = 'DC'")
     List<DcnbKeHoachDcDtl> findByDonViChaAndTrangThaiCuc(String maDvi,String trangThai, String thoiGianTongHop);
 
-    List<DcnbKeHoachDcDtl> findByDcnbKeHoachDcHdrIdAndId(Long hdrId, Long id);
+    @Query(value ="SELECT dtl.maChiCucNhan FROM DcnbKeHoachDcDtl dtl \n" +
+            "LEFT JOIN THKeHoachDieuChuyenNoiBoCucDtl d ON d.dcKeHoachDcDtlId = dtl.id \n" +
+            "LEFT JOIN THKeHoachDieuChuyenCucHdr h ON h.id = d.tHKeHoachDieuChuyenCucHdr.id \n" +
+            "WHERE h.id = ?1 GROUP BY dtl.maChiCucNhan ")
+    List<Object[]> findByDcnbKhHdrId(Long id);
 
     @Query(value ="SELECT SUM(d.duToanKphi) FROM DcnbKeHoachDcDtl d " +
             "WHERE d.dcnbKeHoachDcHdr.maDviCuc = ?1 AND d.dcnbKeHoachDcHdr.type = ?2 AND d.dcnbKeHoachDcHdr.loaiDc = ?3 AND d.dcnbKeHoachDcHdr.trangThai = ?4 " +
@@ -53,4 +57,12 @@ public interface DcnbKeHoachDcDtlRepository extends JpaRepository<DcnbKeHoachDcD
             "WHERE h.maDviCuc = ?1 AND h.maCucNhan = ?2 AND h.trangThai = ?3 AND h.loaiDc = ?4 AND h.type = ?5 " +
             "AND h.ngayTao <= ?6")
     Long findByMaDviCucAndCucNhan(String maDVi, String maCucNhan, String daduyetLdcc, String giua2CucDtnnKv, String dieuChuyen, LocalDateTime thoiGianTongHop);
+
+    @Query(value ="SELECT distinct dtl FROM DcnbKeHoachDcDtl dtl left join DcnbKeHoachDcHdr hdr on hdr.id = dtl.hdrId " +
+            "WHERE dtl.maChiCucNhan IN ?1 AND (hdr.parentId = ?2 OR hdr.id = ?2)")
+    List<DcnbKeHoachDcDtl> findByChiCucNhan(List<String> maChiCucNhan, Long dcnbHdrId);
+
+    @Query(value ="SELECT distinct dtl FROM DcnbKeHoachDcDtl dtl left join DcnbKeHoachDcHdr hdr on hdr.id = dtl.hdrId " +
+            "WHERE dtl.hdrId = ?1 AND hdr.type = ?2 ")
+    List<DcnbKeHoachDcDtl> findByDcnbKeHoachDcHdrIdAndType(Long dcKeHoachDcHdrId,String type);
 }

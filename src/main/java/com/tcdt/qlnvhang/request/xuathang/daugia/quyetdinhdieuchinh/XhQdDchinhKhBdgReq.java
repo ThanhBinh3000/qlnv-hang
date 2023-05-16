@@ -1,19 +1,15 @@
 package com.tcdt.qlnvhang.request.xuathang.daugia.quyetdinhdieuchinh;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
-
-import javax.persistence.Column;
 import javax.persistence.Transient;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
 public class XhQdDchinhKhBdgReq extends BaseRequest {
+
     private Long id;
 
     private Integer nam;
@@ -22,21 +18,15 @@ public class XhQdDchinhKhBdgReq extends BaseRequest {
 
     private String soQdDc;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
-    private Date ngayKyDc;
+    private LocalDate ngayKyDc;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
-    private Date ngayHlucDc;
+    private LocalDate ngayHlucDc;
 
     private String soQdGoc;
 
     private Long idQdGoc;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
-    private Date ngayKyQdGoc;
+    private LocalDate ngayKyQdGoc;
 
     private String trichYeu;
 
@@ -65,9 +55,8 @@ public class XhQdDchinhKhBdgReq extends BaseRequest {
     @Transient
     private List<FileDinhKemReq> fileDinhKem = new ArrayList<>();
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayDuyetTu;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayDuyetDen;
+    private LocalDate ngayKyDcTu;
+
+    private LocalDate ngayKyDcDen;
 }
 
