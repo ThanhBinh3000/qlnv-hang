@@ -21,7 +21,10 @@ public class SearchXhDgBangKeReq extends BaseRequest {
   private String maNganKho;
   private String maLoKho;
   private String idPhieuXuatKho;
+  private String soPhieuXuatKho;
   private String ngayXuat;
+  private String ngayXuatTu;
+  private String ngayXuatDen;
   private String diaDiemKho;
   private String loaiVthh;
   private String cloaiVthh;
