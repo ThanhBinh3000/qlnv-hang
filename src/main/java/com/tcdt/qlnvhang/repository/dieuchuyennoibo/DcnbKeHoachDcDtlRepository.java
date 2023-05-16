@@ -19,7 +19,7 @@ public interface DcnbKeHoachDcDtlRepository extends JpaRepository<DcnbKeHoachDcD
     List<DcnbKeHoachDcDtl> findByDcnbKeHoachDcHdrIdIn(List<Long> ids);
 
     @Query(value ="SELECT distinct dtl FROM DcnbKeHoachDcDtl dtl left join DcnbKeHoachDcHdr hdr on hdr.id = dtl.hdrId " +
-            "WHERE hdr.maDvi = ?1 AND hdr.trangThai = ?2 AND hdr.type = ?3 AND hdr.loaiDc = ?4 AND hdr.ngayTao <= ?5")
+            "WHERE hdr.maDvi = ?1 AND hdr.trangThai = ?2 AND hdr.type = ?3 AND hdr.loaiDc = ?4 AND hdr.ngayTao <= ?5 AND hdr.idThop is null ")
     List<DcnbKeHoachDcDtl> findByDonViAndTrangThaiChiCuc(String maDvi, String trangThai,String type,String loaiDieuChuyen, LocalDateTime thoiGianTongHop);
 
     @Query(nativeQuery = true,value ="SELECT * FROM DCNB_KE_HOACH_DC_DTL KHDTL\n" +
