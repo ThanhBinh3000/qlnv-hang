@@ -262,9 +262,15 @@ public class DcnbKeHoachDcHdrService extends BaseServiceImpl {
                         BigDecimal slHienThoi = new BigDecimal(res.get(0).getSlHienThoi());
                         BigDecimal slConLai = new BigDecimal(0);
                         if(hh.getCoLoKho()){
-                            slConLai = slHienThoi.subtract(getTongKeHoachDeXuat(hh.getCloaiVthh(), hh.getMaLoKho(), optional.get().getId()));
+                            BigDecimal total = danhSachHangHoa.stream().filter(item -> item.getMaLoKho().equals(hh.getMaLoKho()))
+                                    .map(DcnbKeHoachDcDtl::getSoLuongDc)
+                                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+                            slConLai = slHienThoi.subtract(total);
                         }else {
-                            slConLai = slHienThoi.subtract(getTongKeHoachDeXuat(hh.getCloaiVthh(), hh.getMaNganKho(), optional.get().getId()));
+                            BigDecimal total = danhSachHangHoa.stream().filter(item -> item.getMaNganKho().equals(hh.getMaNganKho()))
+                                    .map(DcnbKeHoachDcDtl::getSoLuongDc)
+                                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+                            slConLai = slHienThoi.subtract(total);
                         }
 
                         int result = slConLai.compareTo(BigDecimal.valueOf(0));
