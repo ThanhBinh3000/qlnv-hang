@@ -370,7 +370,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                 if(optional.get().getLoaiDieuChuyen().equals(Contains.GIUA_2_CHI_CUC_TRONG_1_CUC)) {
                     optional.get().getThKeHoachDieuChuyenNoiBoCucDtls().forEach(data ->{
                         List<String> danhSachKeHoach = Arrays.asList(statusReq.getMaChiCucNhan().split(","));
-                        List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtl = dcnbKeHoachDcDtlRepository.findByChiCucNhan(danhSachKeHoach,data.getDcKeHoachDcHdrId(),Contains.NHAN_DIEU_CHUYEN);
+                        List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtl = dcnbKeHoachDcDtlRepository.findByChiCucNhan(danhSachKeHoach,data.getDcKeHoachDcHdrId());
                         dcnbKeHoachDcDtl.forEach(e -> {
                             e.setXdLaiDiemNhap(true);
                             e.getDcnbKeHoachDcHdr().setTrangThai(Contains.DA_PHANBO_DC_TUCHOI_TP);
@@ -403,7 +403,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                 if(optional.get().getLoaiDieuChuyen().equals(Contains.GIUA_2_CHI_CUC_TRONG_1_CUC)) {
                     optional.get().getThKeHoachDieuChuyenNoiBoCucDtls().forEach(data ->{
                         List<String> danhSachKeHoach = Arrays.asList(statusReq.getMaChiCucNhan().split(","));
-                        List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtl = dcnbKeHoachDcDtlRepository.findByChiCucNhan(danhSachKeHoach,data.getDcKeHoachDcHdrId(),Contains.NHAN_DIEU_CHUYEN);
+                        List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtl = dcnbKeHoachDcDtlRepository.findByChiCucNhan(danhSachKeHoach,data.getDcKeHoachDcHdrId());
                         dcnbKeHoachDcDtl.forEach(e -> {
                             e.setXdLaiDiemNhap(true);;
                             e.getDcnbKeHoachDcHdr().setTrangThai(Contains.DA_PHANBO_DC_TUCHOI_LDC);
@@ -505,7 +505,6 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                 ThKeHoachDieuChuyenNoiBoCucDtlReq dtl = new ModelMapper().map(khhc, ThKeHoachDieuChuyenNoiBoCucDtlReq.class);
                 dtl.setId(null);
                 dtl.setDcKeHoachDcHdrId(khhc.getId());
-                dtl.setDcKeHoachDcDtlId(khh.getId());
                 dtl.setHdrId(null);
                 List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(dtl.getDcKeHoachDcHdrId());
                 dtl.setDcnbKeHoachDcDtls(dcnbKeHoachDcDtls);
