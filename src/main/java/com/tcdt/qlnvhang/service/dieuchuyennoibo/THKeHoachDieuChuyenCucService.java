@@ -330,7 +330,6 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                 optional.get().setNguoiGDuyetId(currentUser.getUser().getId());
                 optional.get().setNgayGDuyet(LocalDate.now());
                 // CHECK TRẠNG THÁI BẢN KẾ HOẠCH ĐÃ XACS ĐỊNH ĐIỂM NHẬP HỢP LỆ CHƯA. (LDCC DA DUYET, DA_PHANBO_DC_CHODUYET_TP, DA_PHANBO_DC_CHODUYET_LDC)
-
                 // Update trạng thái của kế hoạch hdr của bản tổng hợp này về trạng thái DA_PHANBO_DC_CHODUYET_TP
                 if(optional.get().getLoaiDieuChuyen().equals(Contains.GIUA_2_CHI_CUC_TRONG_1_CUC)) {
                     optional.get().getThKeHoachDieuChuyenNoiBoCucDtls().forEach(data -> {
@@ -347,17 +346,6 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                             e.getDcnbKeHoachDcHdr().setTrangThai(Contains.DA_PHANBO_DC_CHODUYET_TP);
                             dcHdrRepository.save(e.getDcnbKeHoachDcHdr());
                         });
-                    });
-                }
-                if(optional.get().getLoaiDieuChuyen().equals(Contains.GIUA_2_CUC_DTNN_KV)) {
-                    optional.get().getThKeHoachDieuChuyenCucKhacCucDtls().forEach(data ->{
-                        List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcHdrRepository.findByParentIdIn(statusReq.getDcnbKeHoachDcHdrId());
-                        dcnbKeHoachDcHdr.forEach(e->{
-                            e.setPheDuyet(false);
-                            e.setTrangThai(Contains.TU_CHOI_TP);
-                            dcHdrRepository.save(e);
-                        });
-
                     });
                 }
                 break;
@@ -431,7 +419,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                         List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcHdrRepository.findByParentIdIn(statusReq.getDcnbKeHoachDcHdrId());
                         dcnbKeHoachDcHdr.forEach(e->{
                             e.setPheDuyet(false);
-                            e.setTrangThai(Contains.TU_CHOI_LDC);
+                            e.setTrangThai(Contains.TU_CHOI_TP);
                             dcHdrRepository.save(e);
                         });
 
@@ -450,6 +438,17 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                             e.getDcnbKeHoachDcHdr().setTrangThai(Contains.DA_PHANBO_DC_DADUYET_LDC);
                             dcHdrRepository.save(e.getDcnbKeHoachDcHdr());
                         });
+                    });
+                }
+                if(optional.get().getLoaiDieuChuyen().equals(Contains.GIUA_2_CUC_DTNN_KV)) {
+                    optional.get().getThKeHoachDieuChuyenCucKhacCucDtls().forEach(data ->{
+                        List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcHdrRepository.findByParentIdIn(statusReq.getDcnbKeHoachDcHdrId());
+                        dcnbKeHoachDcHdr.forEach(e->{
+                            e.setPheDuyet(false);
+                            e.setTrangThai(Contains.TU_CHOI_LDC);
+                            dcHdrRepository.save(e);
+                        });
+
                     });
                 }
                 break;
