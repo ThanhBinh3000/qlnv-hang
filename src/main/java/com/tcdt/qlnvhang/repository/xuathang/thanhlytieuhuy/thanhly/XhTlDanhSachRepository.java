@@ -15,6 +15,8 @@ public interface XhTlDanhSachRepository extends JpaRepository<XhTlDanhSachHdr, L
   @Query("SELECT c FROM XhTlDanhSachHdr c WHERE 1=1 " +
       "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
       "AND (:#{#param.loaiVthh} IS NULL OR c.loaiVthh = :#{#param.loaiVthh}) " +
+      "AND ((:#{#param.ngayDeXuatTu}  IS NULL OR c.ngayDeXuat >= :#{#param.ngayDeXuatTu})" +
+      "AND (:#{#param.ngayDeXuatDen}  IS NULL OR c.ngayDeXuat <= :#{#param.ngayDeXuatDen}) ) " +
       "AND (:#{#param.type} IS NULL OR ('TH' = :#{#param.loaiVthh} AND c.maTongHop IS NOT NULL))" +
       "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )

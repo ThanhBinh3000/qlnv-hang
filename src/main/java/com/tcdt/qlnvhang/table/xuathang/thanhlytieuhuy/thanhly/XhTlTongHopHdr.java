@@ -3,6 +3,8 @@ package com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,7 +15,8 @@ import java.util.List;
 
 @Entity
 @Table(name = XhTlTongHopHdr.TABLE_NAME)
-@Data
+@Getter
+@Setter
 public class XhTlTongHopHdr extends BaseEntity implements Serializable {
 
   private static final long serialVersionUID = 1L;
