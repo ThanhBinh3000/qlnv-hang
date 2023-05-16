@@ -78,9 +78,7 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
         data.setLoaiHangHoa(objReq.getLoaiHangHoa());
         data.setChungLoaiHangHoa(objReq.getChungLoaiHangHoa());
         data.setTenLoaiHangHoa(objReq.getTenLoaiHangHoa());
-        data.setNgaytao(LocalDate.now());
         data.setNgayTongHop(LocalDate.now());
-        data.setNguoiTaoId(currentUser.getUser().getId());
         data.setNamKeHoach(objReq.getNamKeHoach());
         data.setLoaiDieuChuyen(objReq.getLoaiDieuChuyen());
         List<THKeHoachDieuChuyenTongCucDtl> chiTiet = new ArrayList<>();
@@ -191,8 +189,6 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
         THKeHoachDieuChuyenTongCucHdr data = optional.get();
         THKeHoachDieuChuyenTongCucHdr dataMap = new ModelMapper().map(objReq, THKeHoachDieuChuyenTongCucHdr.class);
         BeanUtils.copyProperties(data,dataMap);
-        data.setNguoiSuaId(currentUser.getUser().getId());
-        data.setNgaySua(LocalDate.now());
         THKeHoachDieuChuyenTongCucHdr created = tongCucHdrRepository.save(data);
         tongCucHdrRepository.save(created);
         return created;

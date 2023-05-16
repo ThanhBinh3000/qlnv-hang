@@ -113,7 +113,6 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         data.setMaDvi(currentUser.getUser().getDvql());
         data.setTenDvi(currentUser.getUser().getTenDvi());
         data.setTrangThai(Contains.DUTHAO);
-        data.setNgaytao(LocalDate.now());
         data.setNgayTongHop(objReq.getNgayTongHop());
         data.setThoiGianTongHop(objReq.getThoiGianTongHop());
         data.setNguoiTaoId(currentUser.getUser().getId());
@@ -318,7 +317,6 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         THKeHoachDieuChuyenCucHdr dataMap = new ModelMapper().map(objReq, THKeHoachDieuChuyenCucHdr.class);
         BeanUtils.copyProperties(data,dataMap);
         data.setNguoiSuaId(currentUser.getUser().getId());
-        data.setNgaySua(LocalDate.now());
         THKeHoachDieuChuyenCucHdr created = thKeHoachDieuChuyenHdrRepository.save(data);
         thKeHoachDieuChuyenHdrRepository.save(created);
         return created;

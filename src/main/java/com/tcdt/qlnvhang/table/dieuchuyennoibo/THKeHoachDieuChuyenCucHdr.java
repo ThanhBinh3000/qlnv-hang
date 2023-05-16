@@ -20,23 +20,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class THKeHoachDieuChuyenCucHdr implements Serializable {
+public class THKeHoachDieuChuyenCucHdr extends BaseEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DCNB_TH_KE_HOACH_DCC_HDR_SEQ")
     @SequenceGenerator(sequenceName = "DCNB_TH_KE_HOACH_DCC_HDR_SEQ", allocationSize = 1, name = "DCNB_TH_KE_HOACH_DCC_HDR_SEQ")
     private Long id;
-
-    @Column(name = "NGAY_TAO")
-    private LocalDate ngaytao;
-
-    @Column(name = "NGUOI_TAO_ID")
-    private Long nguoiTaoId;
-
-    @Column(name = "NGAY_SUA")
-    private LocalDate ngaySua;
-
-    @Column(name = "NGUOI_SUA_ID")
-    private Long nguoiSuaId;
 
     @Column(name = "MA_TONG_HOP")
     private Long maTongHop;

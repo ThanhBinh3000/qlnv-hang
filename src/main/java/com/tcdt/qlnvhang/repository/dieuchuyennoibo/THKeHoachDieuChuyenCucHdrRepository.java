@@ -24,7 +24,7 @@ public interface THKeHoachDieuChuyenCucHdrRepository extends JpaRepository<THKeH
             "AND ((:#{#param.tuNgay}  IS NULL OR hdr.ngayTongHop >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR hdr.ngayTongHop <= :#{#param.denNgay}) ) " +
             "AND (:#{#param.trichYeu} IS NULL OR LOWER(hdr.trichYeu) LIKE CONCAT('%',LOWER(:#{#param.trichYeu}),'%')) " +
-            "ORDER BY hdr.id desc,hdr.ngaySua desc, hdr.namKeHoach desc, hdr.ngaytao desc")
+            "ORDER BY hdr.id desc,hdr.ngaySua desc, hdr.namKeHoach desc, hdr.ngayTao desc")
     Page<THKeHoachDieuChuyenCucHdr> search(@Param("param") TongHopKeHoachDieuChuyenSearch param, Pageable pageable);
 
     List<THKeHoachDieuChuyenCucHdr> findAllByIdIn(List<Long> id);
@@ -36,7 +36,7 @@ public interface THKeHoachDieuChuyenCucHdrRepository extends JpaRepository<THKeH
     @Query(value = "SELECT distinct h FROM THKeHoachDieuChuyenCucHdr h \n" +
             "LEFT JOIN THKeHoachDieuChuyenNoiBoCucDtl dtl ON dtl.hdrId = h.id \n" +
             "WHERE h.maDvi = ?1 AND h.trangThai = ?2 AND h.loaiDieuChuyen = ?3 \n" +
-            "AND h.ngaytao <= ?4")
+            "AND h.ngayTao <= ?4")
     List<THKeHoachDieuChuyenCucHdr> findByDonViAndTrangThaiTongCuc(String maDVi, String trangThai, String loaiDieuChuyen, LocalDate thoiGianTongHop);
 
     @Query(nativeQuery = true, value = "SELECT  h.* FROM DCNB_TH_KE_HOACH_DCC_HDR h  " +
