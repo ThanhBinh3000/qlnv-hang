@@ -330,6 +330,8 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
     public DcnbQuyetDinhDcCHdr approve(CustomUserDetails currentUser, StatusReq statusReq, Optional<DcnbQuyetDinhDcCHdr> optional) throws Exception {
         String status = optional.get().getTrangThai() + statusReq.getTrangThai();
         switch (status) {
+            case Contains.DUTHAO + Contains.YC_CHICUC_PHANBO_DC:
+                break;
             case Contains.DUTHAO + Contains.CHODUYET_TP:
             case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
             case Contains.TUCHOI_LDC + Contains.CHODUYET_TP:

@@ -33,6 +33,7 @@ public interface DcnbKeHoachDcHdrRepository extends JpaRepository<DcnbKeHoachDcH
             "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.loaiDc} IS NULL OR c.loaiDc = :#{#param.loaiDc}) " +
             "AND (:#{#param.type} IS NULL OR c.type = :#{#param.type}) " +
+            "AND c.type in ('DC','NDC') " +
             "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
     )
     Page<DcnbKeHoachDcHdr> search(@Param("param") SearchDcnbKeHoachDc param, Pageable pageable);
