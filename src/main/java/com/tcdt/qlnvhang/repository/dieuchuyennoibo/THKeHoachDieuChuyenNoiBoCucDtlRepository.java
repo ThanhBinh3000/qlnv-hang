@@ -27,6 +27,6 @@ public interface THKeHoachDieuChuyenNoiBoCucDtlRepository extends JpaRepository<
             "WHERE h.maDvi = ?1 AND h.trangThai = ?2 AND h.loaiDieuChuyen = ?3 " +
             "AND (?4 IS NULL OR dtl.loaiVthh = ?4) \n" +
             "AND (?5 IS NULL OR dtl.cloaiVthh = ?5)\n" +
-            "AND h.ngaytao <= ?6 ")
+            "AND h.ngayTao <= ?6 ")
     List<THKeHoachDieuChuyenNoiBoCucDtl> findByDonViAndTrangThaiTongCuc(String maDVi, String daduyetLdc, String giua2ChiCucTrong1Cuc, String loaiHangHoa, String chungLoaiHangHoa, LocalDate thoiGianTongHop);
 }
