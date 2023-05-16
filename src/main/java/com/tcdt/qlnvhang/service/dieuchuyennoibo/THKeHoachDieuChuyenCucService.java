@@ -140,7 +140,9 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                         .collect(Collectors.toList());
                 dcHdrRepository.updateIdTongHop(created.getId(),danhSachKeHoach);
             }
-            return created;
+            created.setMaTongHop(created.getId());
+            THKeHoachDieuChuyenCucHdr createdSave = thKeHoachDieuChuyenHdrRepository.save(created);
+            return createdSave;
         } else if (Objects.equals(data.getLoaiDieuChuyen(), Contains.GIUA_2_CUC_DTNN_KV)) {
             TongHopKeHoachDieuChuyenSearch tongHopSearch = new ModelMapper().map(objReq, TongHopKeHoachDieuChuyenSearch.class);
             List<THKeHoachDieuChuyenCucKhacCucDtlReq> planCuc = createPlanCuc(currentUser, tongHopSearch);
@@ -164,7 +166,9 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                     dcHdrRepository.updateIdTongHop(created.getId(),danhSachKeHoach);
                 });
             }
-            return created;
+            created.setMaTongHop(created.getId());
+            THKeHoachDieuChuyenCucHdr createdSave = thKeHoachDieuChuyenHdrRepository.save(created);
+            return createdSave;
         }
         return null;
     }
