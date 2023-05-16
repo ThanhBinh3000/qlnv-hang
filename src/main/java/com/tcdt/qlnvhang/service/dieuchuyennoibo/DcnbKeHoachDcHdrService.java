@@ -3,7 +3,6 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxKhlcntDsgthauCtietVt1;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcDtlRepository;
@@ -55,8 +54,8 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
-    private static final Logger logger = LoggerFactory.getLogger(DcnbKeHoachDcDtlService.class);
+public class DcnbKeHoachDcHdrService extends BaseServiceImpl {
+    private static final Logger logger = LoggerFactory.getLogger(DcnbKeHoachDcHdrService.class);
 
     @Autowired
     private DcnbKeHoachDcHdrRepository dcnbKeHoachDcHdrRepository;
