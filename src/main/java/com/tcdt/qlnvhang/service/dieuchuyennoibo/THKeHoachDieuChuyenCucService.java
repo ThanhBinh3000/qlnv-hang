@@ -113,7 +113,6 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         data.setMaDvi(currentUser.getUser().getDvql());
         data.setTenDvi(currentUser.getUser().getTenDvi());
         data.setTrangThai(Contains.DUTHAO);
-        data.setNgaytao(LocalDate.now());
         data.setNgayTongHop(objReq.getNgayTongHop());
         data.setThoiGianTongHop(objReq.getThoiGianTongHop());
         data.setNguoiTaoId(currentUser.getUser().getId());
@@ -318,7 +317,6 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         THKeHoachDieuChuyenCucHdr dataMap = new ModelMapper().map(objReq, THKeHoachDieuChuyenCucHdr.class);
         BeanUtils.copyProperties(data,dataMap);
         data.setNguoiSuaId(currentUser.getUser().getId());
-        data.setNgaySua(LocalDate.now());
         THKeHoachDieuChuyenCucHdr created = thKeHoachDieuChuyenHdrRepository.save(data);
         thKeHoachDieuChuyenHdrRepository.save(created);
         return created;
@@ -418,17 +416,17 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                         });
                     });
                 }
-                if(optional.get().getLoaiDieuChuyen().equals(Contains.GIUA_2_CUC_DTNN_KV)) {
-                    optional.get().getThKeHoachDieuChuyenCucKhacCucDtls().forEach(data ->{
-                        List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcHdrRepository.findByParentIdIn(statusReq.getDcnbKeHoachDcHdrId());
-                        dcnbKeHoachDcHdr.forEach(e->{
-                            e.setPheDuyet(false);
-                            e.setTrangThai(Contains.TU_CHOI_TP);
-                            dcHdrRepository.save(e);
-                        });
-
-                    });
-                }
+//                if(optional.get().getLoaiDieuChuyen().equals(Contains.GIUA_2_CUC_DTNN_KV)) {
+//                    optional.get().getThKeHoachDieuChuyenCucKhacCucDtls().forEach(data ->{
+//                        List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcHdrRepository.findByParentIdIn(statusReq.getDcnbKeHoachDcHdrId());
+//                        dcnbKeHoachDcHdr.forEach(e->{
+//                            e.setPheDuyet(false);
+//                            e.setTrangThai(Contains.TU_CHOI_TP);
+//                            dcHdrRepository.save(e);
+//                        });
+//
+//                    });
+//                }
                 break;
             case Contains.CHODUYET_LDC + Contains.DA_DUYET_LDC:
                 optional.get().setNguoiDuyetLdcId(currentUser.getUser().getId());
@@ -444,17 +442,17 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                         });
                     });
                 }
-                if(optional.get().getLoaiDieuChuyen().equals(Contains.GIUA_2_CUC_DTNN_KV)) {
-                    optional.get().getThKeHoachDieuChuyenCucKhacCucDtls().forEach(data ->{
-                        List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcHdrRepository.findByParentIdIn(statusReq.getDcnbKeHoachDcHdrId());
-                        dcnbKeHoachDcHdr.forEach(e->{
-                            e.setPheDuyet(false);
-                            e.setTrangThai(Contains.TU_CHOI_LDC);
-                            dcHdrRepository.save(e);
-                        });
-
-                    });
-                }
+//                if(optional.get().getLoaiDieuChuyen().equals(Contains.GIUA_2_CUC_DTNN_KV)) {
+//                    optional.get().getThKeHoachDieuChuyenCucKhacCucDtls().forEach(data ->{
+//                        List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcHdrRepository.findByParentIdIn(statusReq.getDcnbKeHoachDcHdrId());
+//                        dcnbKeHoachDcHdr.forEach(e->{
+//                            e.setPheDuyet(false);
+//                            e.setTrangThai(Contains.TU_CHOI_LDC);
+//                            dcHdrRepository.save(e);
+//                        });
+//
+//                    });
+//                }
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
@@ -545,13 +543,13 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
 //                dtl.setId(null);
 //                dtl.setDcnbKeHoachDcHdrId(khh.getId());
 //                dtl.setHdrId(null);
-                Long tongDuToanKinhPhi = dcnbKeHoachDcDtlRepository.findByMaDviCucAndCucNhan(currentUser.getDvql(),dtl.getMaCucNhan(),Contains.DADUYET_LDCC,Contains.GIUA_2_CUC_DTNN_KV,Contains.DIEU_CHUYEN,req.getThoiGianTongHop());
+                Long tongDuToanKinhPhi = dcnbKeHoachDcDtlRepository.findByMaDviCucAndCucNhan(currentUser.getDvql(),dtl.getMaCucNhan(),Contains.DADUYET_LDCC,Contains.GIUA_2_CUC_DTNN_KV,Contains.DIEU_CHUYEN,req.getThoiGianTongHop(),listId);
                 dtl.setTongDuToanKinhPhi((tongDuToanKinhPhi == null) ? 0 : tongDuToanKinhPhi);
                 result.add(dtl);
             }
-        if(result.isEmpty()){
-            throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
-        }
+//        if(result.isEmpty()){
+//            throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
+//        }
         return result;
     }
 }

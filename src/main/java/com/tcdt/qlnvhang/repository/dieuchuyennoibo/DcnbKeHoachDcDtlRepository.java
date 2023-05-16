@@ -19,7 +19,7 @@ public interface DcnbKeHoachDcDtlRepository extends JpaRepository<DcnbKeHoachDcD
     List<DcnbKeHoachDcDtl> findByDcnbKeHoachDcHdrIdIn(List<Long> ids);
 
     @Query(value ="SELECT distinct dtl FROM DcnbKeHoachDcDtl dtl left join DcnbKeHoachDcHdr hdr on hdr.id = dtl.hdrId " +
-            "WHERE hdr.maDvi = ?1 AND hdr.trangThai = ?2 AND hdr.type = ?3 AND hdr.loaiDc = ?4 AND hdr.ngayTao <= ?5")
+            "WHERE hdr.maDvi = ?1 AND hdr.trangThai = ?2 AND hdr.type = ?3 AND hdr.loaiDc = ?4 AND hdr.ngayTao <= ?5 AND hdr.idThop is null ")
     List<DcnbKeHoachDcDtl> findByDonViAndTrangThaiChiCuc(String maDvi, String trangThai,String type,String loaiDieuChuyen, LocalDateTime thoiGianTongHop);
 
     @Query(nativeQuery = true,value ="SELECT * FROM DCNB_KE_HOACH_DC_DTL KHDTL\n" +
@@ -55,8 +55,8 @@ public interface DcnbKeHoachDcDtlRepository extends JpaRepository<DcnbKeHoachDcD
     @Query(value ="SELECT SUM(d.duToanKphi) FROM DcnbKeHoachDcDtl d " +
             "LEFT JOIN DcnbKeHoachDcHdr h ON h.id = d.hdrId " +
             "WHERE h.maDviCuc = ?1 AND h.maCucNhan = ?2 AND h.trangThai = ?3 AND h.loaiDc = ?4 AND h.type = ?5 " +
-            "AND h.ngayTao <= ?6")
-    Long findByMaDviCucAndCucNhan(String maDVi, String maCucNhan, String daduyetLdcc, String giua2CucDtnnKv, String dieuChuyen, LocalDateTime thoiGianTongHop);
+            "AND h.ngayTao <= ?6 AND h.id IN ?7")
+    Long findByMaDviCucAndCucNhan(String maDVi, String maCucNhan, String daduyetLdcc, String giua2CucDtnnKv, String dieuChuyen, LocalDateTime thoiGianTongHop,List<Long> dcNbKhId);
 
     @Query(value ="SELECT distinct dtl FROM DcnbKeHoachDcDtl dtl left join DcnbKeHoachDcHdr hdr on hdr.id = dtl.hdrId " +
             "WHERE dtl.maChiCucNhan IN ?1 AND (hdr.parentId = ?2 OR hdr.id = ?2)")
