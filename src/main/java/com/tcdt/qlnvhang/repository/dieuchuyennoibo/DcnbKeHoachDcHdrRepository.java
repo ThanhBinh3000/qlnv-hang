@@ -48,8 +48,12 @@ public interface DcnbKeHoachDcHdrRepository extends JpaRepository<DcnbKeHoachDcH
     Optional<DcnbKeHoachDcHdr> findFirstBySoDxuat(String soDxuat);
 
     @Query(value = "SELECT CAST(COUNT(dtl.SO_LUONG_DC) AS DECIMAL) FROM DCNB_KE_HOACH_DC_HDR hdr " +
-            "JOIN DCNB_KE_HOACH_DC_DTL dtl ON dtl.HDR_ID = hdr.ID WHERE dtl.CLOAI_VTHH = ?1 AND dtl.MA_LO_KHO = ?2", nativeQuery = true)
-    BigDecimal countTongKeHoachDeXuat(String cloaiVthh, String maLoKho);
+            "JOIN DCNB_KE_HOACH_DC_DTL dtl ON dtl.HDR_ID = hdr.ID WHERE dtl.CLOAI_VTHH = ?1 AND dtl.MA_LO_KHO = ?2 AND hdr.id = ?3", nativeQuery = true)
+    BigDecimal countTongKeHoachDeXuatLoKho(String cloaiVthh, String maLoKho, Long hdrId);
+
+    @Query(value = "SELECT CAST(COUNT(dtl.SO_LUONG_DC) AS DECIMAL) FROM DCNB_KE_HOACH_DC_HDR hdr " +
+            "JOIN DCNB_KE_HOACH_DC_DTL dtl ON dtl.HDR_ID = hdr.ID WHERE dtl.CLOAI_VTHH = ?1 AND dtl.MA_NGAN_KHO = ?2 AND hdr.id = ?3", nativeQuery = true)
+    BigDecimal countTongKeHoachDeXuatNganKho(String cloaiVthh, String maNganKho, Long hdrId);
 
     @Query(value = "SELECT distinct hdr FROM DcnbKeHoachDcHdr hdr " +
             "LEFT JOIN QlnvDmDonvi dvi ON dvi.maDvi = hdr.maDvi WHERE dvi.parent.maDvi = ?1  " +

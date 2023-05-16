@@ -260,7 +260,13 @@ public class DcnbKeHoachDcHdrService extends BaseServiceImpl {
                             throw new Exception("Chủng loại hàng hóa không đúng trong kho hiện thời!");
                         }
                         BigDecimal slHienThoi = new BigDecimal(res.get(0).getSlHienThoi());
-                        BigDecimal slConLai = slHienThoi.subtract((getTongKeHoachDeXuat(hh.getCloaiVthh(), hh.getMaLoKho()).subtract(getTongSoLuongXuatKho(hh.getCloaiVthh(), hh.getMaLoKho()))));
+                        BigDecimal slConLai = new BigDecimal(0);
+                        if(hh.getCoLoKho()){
+                            slConLai = slHienThoi.subtract(getTongKeHoachDeXuat(hh.getCloaiVthh(), hh.getMaLoKho(), optional.get().getId()));
+                        }else {
+                            slConLai = slHienThoi.subtract(getTongKeHoachDeXuat(hh.getCloaiVthh(), hh.getMaNganKho(), optional.get().getId()));
+                        }
+
                         int result = slConLai.compareTo(BigDecimal.valueOf(0));
                         if (result < 0) {
                             throw new Exception(hh.getTenLoKho() + ": Không đủ số lượng xuất hàng!");
@@ -338,8 +344,12 @@ public class DcnbKeHoachDcHdrService extends BaseServiceImpl {
         return new BigDecimal(0);
     }
 
-    private BigDecimal getTongKeHoachDeXuat(String cloaiVthh, String maLoKho) {
-        return dcnbKeHoachDcHdrRepository.countTongKeHoachDeXuat(cloaiVthh, maLoKho);
+    private BigDecimal getTongKeHoachDeXuat(String cloaiVthh, String maLoKho, Long hdrId) {
+        if(maLoKho.length() == 16){
+            return dcnbKeHoachDcHdrRepository.countTongKeHoachDeXuatLoKho(cloaiVthh, maLoKho, hdrId);
+        }else {
+            return dcnbKeHoachDcHdrRepository.countTongKeHoachDeXuatNganKho(cloaiVthh, maLoKho, hdrId);
+        }
     }
 
     public DcnbKeHoachDcHdr approveNhanDieuChuyen(CustomUserDetails currentUser, StatusReq statusReq, Optional<DcnbKeHoachDcHdr> optional) throws Exception {
