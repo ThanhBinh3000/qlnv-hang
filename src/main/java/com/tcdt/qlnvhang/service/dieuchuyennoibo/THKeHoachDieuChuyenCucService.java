@@ -1,19 +1,15 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
 
-import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
-import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.request.search.TongHopKeHoachDieuChuyenSearch;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
@@ -30,12 +26,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import javax.persistence.EntityManager;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import javax.xml.bind.ValidationException;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -197,9 +191,13 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         return allById;
     }
 
-    public List<DcnbKeHoachDcDtl> danhSachChiCucNhanDc(TongHopKeHoachDieuChuyenSearch req) throws Exception{
-        List<DcnbKeHoachDcDtl> danhSachChiCucNhanDc = dcnbKeHoachDcDtlRepository.findByDcnbKhHdrId(req.getId());
-        return danhSachChiCucNhanDc;
+    public List<String> danhSachChiCucNhanDc(TongHopKeHoachDieuChuyenSearch req) throws Exception{
+        List<String> ltStr = new ArrayList<>();
+        List<Object[]> danhSachChiCucNhanDc = dcnbKeHoachDcDtlRepository.findByDcnbKhHdrId(req.getId());
+        danhSachChiCucNhanDc.forEach(item ->{
+            ltStr.add(item[0].toString());
+        });
+        return ltStr;
     }
 
     @Transient
