@@ -68,6 +68,8 @@ public class XhTcTtinBdgHdr extends TrangThaiBaseEntity implements Serializable 
 
   private String buocGia;
 
+  private String ghiChuBuocGia;
+
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
   private Date tgianXemTu;
 

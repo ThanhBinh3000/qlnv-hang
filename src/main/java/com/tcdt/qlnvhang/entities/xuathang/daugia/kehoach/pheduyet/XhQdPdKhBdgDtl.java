@@ -55,9 +55,6 @@ public class XhQdPdKhBdgDtl implements Serializable {
 
     private String diaChi;
 
-    @Column(name="SO_QD_PD_KQ_BDG")
-    private String soQdPdKqBdg;
-
     private String trangThai;
 
     private Integer tgianTtoan;
@@ -102,4 +99,20 @@ public class XhQdPdKhBdgDtl implements Serializable {
     public String getTenTrangThai() {
         return NhapXuatHangTrangThaiEnum.getTenById(this.getTrangThai());
     }
+
+//    Thông tin đấu giá
+    @Column(name="SO_QD_PD_KQ_BDG")
+    private String soQdPdKqBdg;
+
+    @Column(name="NGAY_KY_QD_PD_KQ_BDG")
+    private LocalDate ngayKyQdPdKqBdg;
+
+    private Integer soDviTsanThanhCong;
+
+    private Integer soDviTsanKhongThanh;
+
+    private String ketQuaDauGia;
+
+    private String soQdDcBdg;
+
 }

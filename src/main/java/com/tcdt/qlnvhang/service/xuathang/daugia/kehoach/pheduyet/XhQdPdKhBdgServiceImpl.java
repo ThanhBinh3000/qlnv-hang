@@ -249,6 +249,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
         data.setTenLoaiVthh(hashMapDmHh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(hashMapDmHh.get(data.getCloaiVthh()));
         data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
+        data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
         List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdPdKhBdg.TABLE_NAME+ "_BAN_HANH"));
         data.setFileDinhKem(fileDinhKem);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdPdKhBdg.TABLE_NAME));

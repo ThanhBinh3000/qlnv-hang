@@ -65,12 +65,7 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
         if (userInfo == null) {
             throw new Exception("Bad request.");
         }
-        List<XhDxKhBanDauGia> dxuatList = xhDxKhBanDauGiaRepository.listTongHop(
-                req.getNamKh(),
-                req.getLoaiVthh(),
-                req.getCloaiVthh(),
-                convertDateToString(req.getNgayDuyetTu()),
-                convertDateToString(req.getNgayDuyetDen()));
+        List<XhDxKhBanDauGia> dxuatList = xhDxKhBanDauGiaRepository.listTongHop(req);
         if (dxuatList.isEmpty()) {
             throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
         }
