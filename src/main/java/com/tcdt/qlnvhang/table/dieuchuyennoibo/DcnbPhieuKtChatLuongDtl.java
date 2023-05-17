@@ -16,8 +16,8 @@ public class DcnbPhieuKtChatLuongDtl implements Serializable {
     public static final String TABLE_NAME = "DCNB_PHIEU_KT_CHAT_LUONG_DTL";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbPhieuKtChatLuongDtl.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = DcnbPhieuKtChatLuongDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbPhieuKtChatLuongDtl.TABLE_NAME + "_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DCNB_PHIEU_KT_CHLUONG_DTL_SEQ")
+    @SequenceGenerator(sequenceName ="DCNB_PHIEU_KT_CHLUONG_DTL_SEQ", allocationSize = 1, name = "DCNB_PHIEU_KT_CHLUONG_DTL_SEQ")
     private Long id;
 
     @Column(name = "HDR_ID")
