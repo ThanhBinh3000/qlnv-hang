@@ -20,7 +20,7 @@ public class XhTcTtinBdgNlq implements Serializable {
   @SequenceGenerator(sequenceName = "XH_TC_TTIN_BDG_NLQ_SEQ", allocationSize = 1, name = "XH_TC_TTIN_BDG_NLQ_SEQ")
   private Long id;
   private Long idTtinHdr;
-  private String hoVaTen;
+  private String hoaVaTen;
   private String soCccd;
   private String chucVu;
   private String diaChi;

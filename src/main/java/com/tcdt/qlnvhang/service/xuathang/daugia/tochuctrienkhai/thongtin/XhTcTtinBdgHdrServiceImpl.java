@@ -82,14 +82,15 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
         data.setLanDauGia(byIdQdPdDtl.size()+1);
         XhTcTtinBdgHdr created =  xhTcTtinBdgHdrRepository.save(data);
 
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKem())) {
+            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), created.getId(), XhTcTtinBdgHdr.TABLE_NAME+ "_CAN_CU");
+            created.setFileDinhKem(fileDinhKem);
+        }
         if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
             List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhTcTtinBdgHdr.TABLE_NAME);
             created.setFileDinhKems(fileDinhKems);
         }
-
         this.saveDetail(req, data.getId(),false);
-
-
         return created;
     }
 
@@ -136,10 +137,15 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
         data.setNgaySua(new Date());
         data.setNguoiSuaId(getUser().getId());
         XhTcTtinBdgHdr created = xhTcTtinBdgHdrRepository.save(data);
-        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
-            List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhTcTtinBdgHdr.TABLE_NAME);
-            data.setFileDinhKems(fileDinhKems);
-        }
+
+        fileDinhKemService.delete(data.getId(), Collections.singleton(XhTcTtinBdgHdr.TABLE_NAME + "_CAN_CU"));
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), created.getId(), XhTcTtinBdgHdr.TABLE_NAME + "_CAN_CU");
+        created.setFileDinhKem(fileDinhKem);
+
+        fileDinhKemService.delete(data.getId(), Collections.singleton(XhTcTtinBdgHdr.TABLE_NAME));
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhTcTtinBdgHdr.TABLE_NAME);
+        created.setFileDinhKems(fileDinhKems);
+
         this.saveDetail(req, data.getId(),true);
         return created;
     }
@@ -174,8 +180,10 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
         data.setChildren(byIdTtinHdr);
         data.setTenLoaiVthh(listDanhMucHangHoa.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(listDanhMucHangHoa.get(data.getCloaiVthh()));
-        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhTcTtinBdgHdr.TABLE_NAME));
-        data.setFileDinhKems(fileDinhKem);
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhTcTtinBdgHdr.TABLE_NAME+ "_CAN_CU"));
+        data.setFileDinhKem(fileDinhKem);
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhTcTtinBdgHdr.TABLE_NAME));
+        data.setFileDinhKems(fileDinhKems);
         return data;
     }
 
@@ -204,6 +212,7 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
 
         xhTcTtinBdgDtlRepository.deleteByIdTtinHdr(id);
         fileDinhKemService.delete(data.getId(), Collections.singleton(XhTcTtinBdgHdr.TABLE_NAME));
+        fileDinhKemService.delete(data.getId(), Collections.singleton(XhTcTtinBdgHdr.TABLE_NAME+"_CAN_CU"));
 
         xhTcTtinBdgHdrRepository.delete(data);
 
