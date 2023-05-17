@@ -92,6 +92,11 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
             }
         }
         THKeHoachDieuChuyenTongCucHdr created = tongCucHdrRepository.save(data);
+        if (created.getId() > 0) {
+            List<Long> danhSachKeHoach = chiTiet.stream().map(THKeHoachDieuChuyenTongCucDtl::getThKhDcHdrId)
+                    .collect(Collectors.toList());
+            thKeHoachDieuChuyenCucHdrRepository.updateIdTongHop(created.getId(),danhSachKeHoach);
+        }
         if (chiTiet.isEmpty()) {
             throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
         }else {
@@ -100,11 +105,6 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
                 }
         }
         thKeHoachDieuChuyenTongCucDtlRepository.saveAll(chiTiet);
-        if (created.getId() > 0) {
-            List<Long> danhSachKeHoach = created.getThKeHoachDieuChuyenTongCucDtls().stream().map(THKeHoachDieuChuyenTongCucDtl::getThKhDcHdrId)
-                    .collect(Collectors.toList());
-            thKeHoachDieuChuyenCucHdrRepository.updateIdTongHop(created.getId(),danhSachKeHoach);
-        }
         return created;
     }
 
