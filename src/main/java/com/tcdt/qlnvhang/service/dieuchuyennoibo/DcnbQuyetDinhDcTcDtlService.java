@@ -60,11 +60,6 @@ public class DcnbQuyetDinhDcTcDtlService extends BaseServiceImpl {
     private LuuKhoClient luuKhoClient;
 
     public Page<DcnbQuyetDinhDcTcHdr> searchPage(CustomUserDetails currentUser, SearchDcnbQuyetDinhDcTc req) throws Exception {
-        String dvql = currentUser.getDvql();
-        req.setMaDvi(dvql);
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            req.setMaDvi(dvql.substring(0, 2));
-        }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<DcnbQuyetDinhDcTcHdr> search = dcnbQuyetDinhDcTcHdrRepository.search(req, pageable);
         return search;
@@ -268,8 +263,6 @@ public class DcnbQuyetDinhDcTcDtlService extends BaseServiceImpl {
     }
 
     public List<DcnbQuyetDinhDcTcHdr> danhSachQuyetDinh(CustomUserDetails currentUser,SearchDcnbQuyetDinhDcTc objReq) {
-        String dvql = currentUser.getDvql();
-        objReq.setMaDvi(dvql);
         List<DcnbQuyetDinhDcTcHdr> danhSachs = dcnbQuyetDinhDcTcHdrRepository.findDanhSachQuyetDinh(objReq);
         return danhSachs;
     }
