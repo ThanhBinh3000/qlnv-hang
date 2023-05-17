@@ -208,8 +208,11 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
                     ThKeHoachDieuChuyenTongCucDtlReq chiTiet = new ModelMapper().map(khhc, ThKeHoachDieuChuyenTongCucDtlReq.class);
                     chiTiet.setId(null);
                     chiTiet.setHdrId(null);
+                    chiTiet.setMaCucDxuat(req.getMaDVi());
+                    chiTiet.setTenCucDxuat(cqt.getTenDvi());
+                    chiTiet.setSoDxuat(khhc.getSoDeXuat());
                     chiTiet.setThKhDcHdrId(khhc.getId());
-                    Long tongDuToanKp = dcnbKeHoachDcDtlRepository.findByMaDviCucAndTypeAndLoaiDcTongCucChiCuc(req.getMaDVi(), Contains.DIEU_CHUYEN, Contains.GIUA_2_CHI_CUC_TRONG_1_CUC, Contains.DADUYET_LDCC, req.getThoiGianTongHop());
+                    Long tongDuToanKp = dcnbKeHoachDcDtlRepository.findByMaDviCucAndTypeAndLoaiDcTongCucChiCuc(req.getMaDVi(), Contains.DIEU_CHUYEN, Contains.GIUA_2_CHI_CUC_TRONG_1_CUC, Contains.DADUYET_LDCC, req.getThoiGianTongHop(),khhc.getId());
                     chiTiet.setTongDuToanKp(tongDuToanKp == null ? 0 : tongDuToanKp);
                     result.add(chiTiet);
                 }
@@ -243,7 +246,7 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
                     data2.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
                 });
                     });
-                    Long tongDuToanKp = dcnbKeHoachDcDtlRepository.findByMaDviCucAndTypeAndLoaiDcTongCucCuc(req.getMaDVi(), chiTiet.getMaCucNhan(), Contains.DIEU_CHUYEN, Contains.GIUA_2_CUC_DTNN_KV, Contains.DADUYET_LDCC, req.getThoiGianTongHop());
+                    Long tongDuToanKp = dcnbKeHoachDcDtlRepository.findByMaDviCucAndTypeAndLoaiDcTongCucCuc(req.getMaDVi(), chiTiet.getMaCucNhan(), Contains.DIEU_CHUYEN, Contains.GIUA_2_CUC_DTNN_KV, Contains.DADUYET_LDCC, req.getThoiGianTongHop(), chiTiet.getThKhDcHdrId());
                     chiTiet.setTongDuToanKp(tongDuToanKp == null ? 0 : tongDuToanKp);
                     result.add(chiTiet);
                 }
