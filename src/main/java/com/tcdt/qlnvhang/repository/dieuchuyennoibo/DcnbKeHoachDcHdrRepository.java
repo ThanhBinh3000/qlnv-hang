@@ -61,7 +61,7 @@ public interface DcnbKeHoachDcHdrRepository extends JpaRepository<DcnbKeHoachDcH
             "AND hdr.ngayTao <= ?5 AND hdr.idThop is null ")
     List<DcnbKeHoachDcHdr> findByDonViAndTrangThaiCucCuc(String maDVi, String trangThai, String loaiDieuChuyen, String type, LocalDateTime thoiGianTongHop);
 
-    @Query(value = "SELECT distinct hdr FROM DcnbKeHoachDcHdr hdr WHERE hdr.maDvi = ?1 " +
+    @Query(value = "FROM DcnbKeHoachDcHdr hdr WHERE hdr.maDvi = ?1 " +
             "AND hdr.trangThai = ?2 AND hdr.loaiDc = ?3 AND hdr.type = ?4 "+
             "AND hdr.ngayTao <= ?5 AND (hdr.idThop is null )")
     List<DcnbKeHoachDcHdr> findByDonViAndTrangThaiCucChiCuc(String maDVi, String trangThai, String loaiDieuChuyen, String type, LocalDateTime thoiGianTongHop);

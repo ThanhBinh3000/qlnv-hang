@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -37,7 +38,7 @@ public interface THKeHoachDieuChuyenCucHdrRepository extends JpaRepository<THKeH
             "LEFT JOIN THKeHoachDieuChuyenNoiBoCucDtl dtl ON dtl.hdrId = h.id \n" +
             "WHERE h.maDvi = ?1 AND h.trangThai = ?2 AND h.loaiDieuChuyen = ?3 \n" +
             "AND h.ngayTao <= ?4")
-    List<THKeHoachDieuChuyenCucHdr> findByDonViAndTrangThaiTongCuc(String maDVi, String trangThai, String loaiDieuChuyen, LocalDate thoiGianTongHop);
+    List<THKeHoachDieuChuyenCucHdr> findByDonViAndTrangThaiTongCuc(String maDVi, String trangThai, String loaiDieuChuyen, LocalDateTime thoiGianTongHop);
 
     @Query(nativeQuery = true, value = "SELECT  h.* FROM DCNB_TH_KE_HOACH_DCC_HDR h  " +
             "            LEFT JOIN DCNB_TH_KE_HOACH_DCC_KC_DTL dtl ON dtl.hdr_Id = h.id " +

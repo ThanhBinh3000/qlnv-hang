@@ -100,11 +100,11 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
                 }
         }
         thKeHoachDieuChuyenTongCucDtlRepository.saveAll(chiTiet);
-//        if (created.getId() > 0) {
-//            List<Long> danhSachKeHoach = created.getThKeHoachDieuChuyenTongCucDtls().stream().map(THKeHoachDieuChuyenTongCucDtl::getThKhDcHdrId)
-//                    .collect(Collectors.toList());
-//            thKeHoachDieuChuyenCucHdrRepository.updateIdTongHop(created.getId(),danhSachKeHoach);
-//        }
+        if (created.getId() > 0) {
+            List<Long> danhSachKeHoach = created.getThKeHoachDieuChuyenTongCucDtls().stream().map(THKeHoachDieuChuyenTongCucDtl::getThKhDcHdrId)
+                    .collect(Collectors.toList());
+            thKeHoachDieuChuyenCucHdrRepository.updateIdTongHop(created.getId(),danhSachKeHoach);
+        }
         return created;
     }
 
@@ -146,10 +146,10 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
             }
             THKeHoachDieuChuyenTongCucHdr data = optional.get();
             List<THKeHoachDieuChuyenTongCucDtl> list = thKeHoachDieuChuyenTongCucDtlRepository.findByHdrId(data.getId());
-//            list.forEach(e ->{
-//                e.getThKeHoachDieuChuyenCucHdr().setIdThTongCuc(null);
-//                thKeHoachDieuChuyenCucHdrRepository.save(e.getThKeHoachDieuChuyenCucHdr());
-//            });
+            list.forEach(e ->{
+                e.getThKeHoachDieuChuyenCucHdr().setIdThTongCuc(null);
+                thKeHoachDieuChuyenCucHdrRepository.save(e.getThKeHoachDieuChuyenCucHdr());
+            });
             thKeHoachDieuChuyenTongCucDtlRepository.deleteAll(list);
             tongCucHdrRepository.delete(data);
         }
@@ -197,12 +197,11 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
     @Transactional
     public List<ThKeHoachDieuChuyenTongCucDtlReq> createPlan(CustomUserDetails currentUser, TongHopKeHoachDieuChuyenSearch req) throws Exception {
         List<QlnvDmDonvi> donvis = qlnvDmDonviRepository.findByMaDviChaAndTrangThai(currentUser.getDvql(), "01");
-        LocalDateTime thoiGianTongHop = req.getThoiGianTongHop();
         List<ThKeHoachDieuChuyenTongCucDtlReq> result = new ArrayList<>();
         for (QlnvDmDonvi cqt : donvis) {
             req.setMaDVi(cqt.getMaDvi());
             if (req.getLoaiDieuChuyen().equals(Contains.GIUA_2_CHI_CUC_TRONG_1_CUC)) {
-                List<THKeHoachDieuChuyenCucHdr> dcnbKeHoachDcHdrs = thKeHoachDieuChuyenCucHdrRepository.findByDonViAndTrangThaiTongCuc(req.getMaDVi(), Contains.DADUYET_LDC, Contains.GIUA_2_CHI_CUC_TRONG_1_CUC, thoiGianTongHop.toLocalDate());
+                List<THKeHoachDieuChuyenCucHdr> dcnbKeHoachDcHdrs = thKeHoachDieuChuyenCucHdrRepository.findByDonViAndTrangThaiTongCuc(req.getMaDVi(), Contains.DADUYET_LDC, Contains.GIUA_2_CHI_CUC_TRONG_1_CUC, req.getThoiGianTongHop());
                 for (THKeHoachDieuChuyenCucHdr entry : dcnbKeHoachDcHdrs) {
                     Hibernate.initialize(entry.getThKeHoachDieuChuyenCucKhacCucDtls());
                     THKeHoachDieuChuyenCucHdr khhc = SerializationUtils.clone(entry);
@@ -215,7 +214,7 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
                     result.add(chiTiet);
                 }
             } else if (req.getLoaiDieuChuyen().equals(Contains.GIUA_2_CUC_DTNN_KV)) {
-                List<THKeHoachDieuChuyenCucKhacCucDtl> dcnbKeHoachDcHdrs = thKeHoachDieuChuyenCucKhacCucDtlRepository.findByDonViAndTrangThaiAndLoaiDcCuc(req.getMaDVi(), Contains.DADUYET_LDC, Contains.GIUA_2_CUC_DTNN_KV, thoiGianTongHop.toLocalDate());
+                List<THKeHoachDieuChuyenCucKhacCucDtl> dcnbKeHoachDcHdrs = thKeHoachDieuChuyenCucKhacCucDtlRepository.findByDonViAndTrangThaiAndLoaiDcCuc(req.getMaDVi(), Contains.DADUYET_LDC, Contains.GIUA_2_CUC_DTNN_KV, req.getThoiGianTongHop());
                 Map<String, List<THKeHoachDieuChuyenCucKhacCucDtl>> postsPerType = dcnbKeHoachDcHdrs.stream()
                         .collect(groupingBy(THKeHoachDieuChuyenCucKhacCucDtl::getMaCucNhan));
                 for (Map.Entry<String, List<THKeHoachDieuChuyenCucKhacCucDtl>> entry : postsPerType.entrySet()) {
