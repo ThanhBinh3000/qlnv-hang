@@ -16,15 +16,14 @@ public class ThongTinDauGiaDtlReq extends BaseRequest {
   private Long idTtinHdr;
 
   private String maDvi;
+  private BigDecimal soLuongChiCuc;
 
   private String diaChi;
 
-  private BigDecimal soLuong;
-  private BigDecimal soLuongChiCuc;
+  private BigDecimal soTienDatTruocChiCuc;
 
   public void setSoLuongChiCuc(BigDecimal soLuongChiCuc) {
     this.soLuongChiCuc = soLuongChiCuc;
-    this.soLuong = this.soLuongChiCuc;
   }
 
   private List<ThongTinDauGiaPloReq> children = new ArrayList<>();

@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -33,6 +34,8 @@ public class XhTcTtinBdgHdr extends TrangThaiBaseEntity implements Serializable 
   private Integer nam;
 
   private String maDvi;
+  @Transient
+  private String tenDvi;
 
   private String maThongBao;
 
@@ -128,12 +131,17 @@ public class XhTcTtinBdgHdr extends TrangThaiBaseEntity implements Serializable 
   private String ghiChu;
 
   private String loaiVthh;
+  @Transient
+  private String tenLoaiVthh;
 
   private String cloaiVthh;
+  @Transient
+  private String tenCloaiVthh;
 
   private String moTaHangHoa;
 
-  // Transient
+  private BigDecimal khoanTienDatTruoc;
+
   @Transient
   private List<XhTcTtinBdgDtl> children = new ArrayList<>();
 
@@ -144,12 +152,6 @@ public class XhTcTtinBdgHdr extends TrangThaiBaseEntity implements Serializable 
   private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
   @Transient
-  private String tenLoaiVthh;
-
-  @Transient
-  private String tenCloaiVthh;
-
-  @Transient
-  private String tenDvi;
+  private List<FileDinhKem> fileDinhKem = new ArrayList<>();
 
 }
