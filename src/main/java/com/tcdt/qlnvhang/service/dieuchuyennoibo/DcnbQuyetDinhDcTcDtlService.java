@@ -62,6 +62,9 @@ public class DcnbQuyetDinhDcTcDtlService extends BaseServiceImpl {
     public Page<DcnbQuyetDinhDcTcHdr> searchPage(CustomUserDetails currentUser, SearchDcnbQuyetDinhDcTc req) throws Exception {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
+        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            req.setMaDvi(dvql.substring(0, 2));
+        }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<DcnbQuyetDinhDcTcHdr> search = dcnbQuyetDinhDcTcHdrRepository.search(req, pageable);
         return search;
