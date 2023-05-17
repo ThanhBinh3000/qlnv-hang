@@ -77,7 +77,8 @@ public class BienBanLayMauService extends BaseServiceImpl {
         data.setKtvBaoQuan(currentUser.getUser().getUsername());
         data.setMaQhns(cqt.getMaQhns());
         data.setMaDvi(cqt.getMaDvi());
-//        data.
+        data.setLoaiDc(objReq.getLoaiDc());
+        data.setThayDoiThuKho(true);
 //        data.setType(Contains.DIEU_CHUYEN);
         data.setTrangThai(Contains.DUTHAO);
         data.setNgayTao(LocalDateTime.now());
