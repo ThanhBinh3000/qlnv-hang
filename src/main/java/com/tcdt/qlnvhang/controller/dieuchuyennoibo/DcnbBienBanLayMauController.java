@@ -35,7 +35,7 @@ public class DcnbBienBanLayMauController {
     @Autowired
     BienBanLayMauService bienBanLayMauService;
 
-    @ApiOperation(value = "Tra cứu thông tin đề xuất", response = List.class)
+    @ApiOperation(value = "Tra cứu thông tin biên bản", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser,
@@ -55,7 +55,7 @@ public class DcnbBienBanLayMauController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Tạo mới thông tin đề xuất ", response = List.class)
+    @ApiOperation(value = "Tạo mới thông tin biên bản ", response = List.class)
     @PostMapping(value =  PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody DcnbBienBanLayMauHdrReq objReq) {
@@ -73,7 +73,7 @@ public class DcnbBienBanLayMauController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Cập nhật thông tin đề xuất", response = List.class)
+    @ApiOperation(value = "Cập nhật thông tin biên bản", response = List.class)
     @PostMapping(value =  PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody DcnbBienBanLayMauHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
@@ -90,7 +90,7 @@ public class DcnbBienBanLayMauController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Lấy chi tiết thông tin đề xuất", response = List.class)
+    @ApiOperation(value = "Lấy chi tiết thông tin biên bản", response = List.class)
     @GetMapping(value =  PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> detail(
@@ -126,7 +126,7 @@ public class DcnbBienBanLayMauController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xoá thông tin đề xuất", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Xoá thông tin biên bản", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping(value =  PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
