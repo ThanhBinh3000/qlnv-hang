@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Transient;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -122,13 +123,15 @@ public class ThongTinDauGiaReq extends BaseRequest {
 
   private String moTaHangHoa;
 
-  // Transient
+  private BigDecimal khoanTienDatTruoc;
 
   private List<ThongTinDauGiaDtlReq> children = new ArrayList<>();
+
+  private List<ThongTinDauGiaNtgReq> listNguoiTgia = new ArrayList<>();
 
   @Transient
   private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 
-  private List<ThongTinDauGiaNtgReq> listNguoiTgia = new ArrayList<>();
-
+  @Transient
+  private List<FileDinhKemReq> fileDinhKem = new ArrayList<>();
 }

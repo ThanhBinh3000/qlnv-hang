@@ -9,7 +9,7 @@ import lombok.Setter;
 public class ThongTinDauGiaNtgReq extends BaseRequest {
 
   private Long id;
-  private String hoVaTen;
+  private String hoaVaTen;
   private String soCccd;
   private String chucVu;
   private String diaChi;
