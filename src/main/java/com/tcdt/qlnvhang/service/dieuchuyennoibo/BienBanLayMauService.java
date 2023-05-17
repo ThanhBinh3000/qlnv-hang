@@ -68,7 +68,7 @@ public class BienBanLayMauService extends BaseServiceImpl {
         }
         Optional<DcnbBienBanLayMauHdr> optional = dcnbBienBanLayMauHdrRepository.findFirstBySoBbLayMau(objReq.getSoBbLayMau());
         if (optional.isPresent() && objReq.getSoBbLayMau().split("/").length == 1) {
-            throw new Exception("số đề xuất đã tồn tại");
+            throw new Exception("số biên bản lấy mẫu đã tồn tại");
         }
         DcnbBienBanLayMauHdr data = new DcnbBienBanLayMauHdr();
         BeanUtils.copyProperties(objReq, data);
@@ -104,7 +104,7 @@ public class BienBanLayMauService extends BaseServiceImpl {
         if (org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoBbLayMau())) {
             if (soDxuat.isPresent() && objReq.getSoBbLayMau().split("/").length == 1) {
                 if (!soDxuat.get().getId().equals(objReq.getId())) {
-                    throw new Exception("số quyết định đã tồn tại");
+                    throw new Exception("số biên bản lấy mẫu đã tồn tại");
                 }
             }
         }

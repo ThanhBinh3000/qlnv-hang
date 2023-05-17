@@ -147,6 +147,12 @@ public class DcnbPhieuKtChatLuongHdr extends BaseEntity implements Serializable,
     @Column(name = "NGUOI_DUYET_TP")
     private Long nguoiDuyetTp;
 
+    @Column(name = "SO_BB_TINH_KHO")
+    private String soBbTinhKho;
+
+    @Column(name = "NGAY_XUAT_DOC_KHO")
+    private LocalDate ngayXuatDocKho;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
     private List<DcnbPhieuKtChatLuongDtl> dcnbPhieuKtChatLuongDtl = new ArrayList<>();
