@@ -1,4 +1,5 @@
 package com.tcdt.qlnvhang.service.xuathang.daugia.kehoach.dexuat;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGiaDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGiaPhanLoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGiaRepository;
@@ -54,6 +55,7 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
     Map<String, String> hashMapDmhh = getListDanhMucHangHoa();
     Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
     data.getContent().forEach(f -> {
+      f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
       f.setTenLoaiVthh(hashMapDmhh.get(f.getLoaiVthh()));
       f.setTenCloaiVthh(hashMapDmhh.get(f.getCloaiVthh()));
       f.setMaDvi(listDanhMucDvi.get(f.getMaDvi()));
@@ -190,6 +192,7 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
     data.setTenLoaiVthh(hasMapVthh.get(data.getLoaiVthh()));
     data.setTenCloaiVthh(hasMapVthh.get(data.getCloaiVthh()));
     data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
+    data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
     data.setChildren(dtlList);
     return data;
   }

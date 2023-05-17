@@ -57,6 +57,8 @@ public class ThongTinDauGiaReq extends BaseRequest {
 
   private String buocGia;
 
+  private String ghiChuBuocGia;
+
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
   private Date tgianXemTu;
 

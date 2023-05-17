@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.xuathang.bantructiep.kehoach.tonghop;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.tonghop.XhThopDxKhBttDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.tonghop.XhThopDxKhBttHdr;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.tonghop.XhThopDxKhBttDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.tonghop.XhThopDxKhBttRepository;
@@ -54,6 +55,7 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
         data.getContent().forEach(f->{
             f.setTenLoaiVthh(hashMapVthh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(hashMapVthh.get(f.getCloaiVthh()));
+            f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
         });
         return data;
     }
@@ -63,12 +65,7 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
         if (userInfo == null) {
             throw new Exception("Bad request.");
         }
-        List<XhDxKhBanTrucTiepHdr>  dxuatBtt = xhDxKhBanTrucTiepHdrRepository.listTongHop(
-                req.getNamKh(),
-                req.getLoaiVthh(),
-                req.getCloaiVthh(),
-                convertDateToString(req.getNgayDuyetTu()),
-                convertDateToString(req.getNgayDuyetDen()));
+        List<XhDxKhBanTrucTiepHdr>  dxuatBtt = xhDxKhBanTrucTiepHdrRepository.listTongHop(req);
         if (dxuatBtt.isEmpty()){
             throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
         }
@@ -168,6 +165,7 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
         List<XhThopDxKhBttDtl> listTh = xhThopDxKhBttDtlRepository.findByIdThopHdr(hdrThop.getId());
         listTh.forEach(f -> {
             f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : hashMapDmucDvi.get(f.getMaDvi()));
+            f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
         });
         hdrThop.setChildren(listTh);
         return hdrThop;
