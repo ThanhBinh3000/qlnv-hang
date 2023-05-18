@@ -47,6 +47,8 @@ public class HhDxKhMttThopHdr extends TrangThaiBaseEntity implements Serializabl
 
     @Transient
     List<HhDxKhMttThopDtl> children =new ArrayList<>();
+    @Transient
+    Long qdPdMttId;
 
 
 }

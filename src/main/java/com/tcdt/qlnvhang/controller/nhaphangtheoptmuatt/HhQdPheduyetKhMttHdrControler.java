@@ -107,6 +107,25 @@ public class HhQdPheduyetKhMttHdrControler {
         return ResponseEntity.ok(resp);
     }
 
+    @ApiOperation(value = "Lấy chi tiết Quyết định phê duyệt kế hoạch mua trực tiếp", response = List.class)
+    @GetMapping(value =PathContains.QD_PD_MTT + PathContains.URL_CHI_TIET + "/detailByIdThhdr", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> detailBySoQd(HttpServletRequest request,
+                                                  @Valid @RequestBody HhQdPheduyetKhMttHdrReq objReq, HttpServletResponse response) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(hhQdPheduyetKhMttHdrService.detailBySoQd(objReq.getSoQd()));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tra cứu Quyết định phê duyệt kế hoạch lựa chọn nhà thầu trace: {}", e);
+        }
+
+        return ResponseEntity.ok(resp);
+    }
+
     @ApiOperation(value = "Xoá quyết định phê duyệt kế hoạch mua tiếp", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping(value = PathContains.QD_PD_MTT +PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)

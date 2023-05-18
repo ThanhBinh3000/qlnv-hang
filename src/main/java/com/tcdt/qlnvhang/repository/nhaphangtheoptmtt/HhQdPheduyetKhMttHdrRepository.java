@@ -24,7 +24,7 @@ public interface HhQdPheduyetKhMttHdrRepository extends JpaRepository<HhQdPheduy
             "AND (:#{#param.soQd} IS NULL OR LOWER(DX.soQd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQd}),'%' ) ) )" +
             "AND (:#{#param.trichYeu} IS NULL OR LOWER(DX.trichYeu) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.trichYeu}),'%'))) " +
             "AND (:#{#param.ngayQdTu} IS NULL OR DX.ngayQd >= :#{#param.ngayQdTu}) " +
-            "AND (:#{#param.ngayQdTu} IS NULL OR DX.ngayQd <= :#{#param.ngayQdTu}) " +
+            "AND (:#{#param.ngayQdDen} IS NULL OR DX.ngayQd <= :#{#param.ngayQdDen}) " +
             "AND (:#{#param.loaiVthh} IS NULL OR DX.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
             "AND (:#{#param.lastest} IS NULL OR LOWER(DX.lastest) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.lastest}),'%'))) " +
             "AND (:#{#param.trangThai} IS NULL OR DX.trangThai = :#{#param.trangThai}) " +
@@ -52,5 +52,8 @@ public interface HhQdPheduyetKhMttHdrRepository extends JpaRepository<HhQdPheduy
     @Modifying
     @Query(value = "UPDATE HH_QD_PHE_DUYET_KHMTT_HDR SET TRANG_THAI_TKHAI =:trangThaiTkhai  WHERE ID =TO_NUMBER(:id) ", nativeQuery = true)
     void updateTrangThaiTkhai(Long id, String trangThaiTkhai);
+
+    Optional<HhQdPheduyetKhMttHdr> findByIdThHdrAndLastest(Long idThHdr, Boolean lastest);
+    Optional<HhQdPheduyetKhMttHdr> findBySoQdAndLastest(String soQd, Boolean lastest);
 
 }

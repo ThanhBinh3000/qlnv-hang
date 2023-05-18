@@ -252,6 +252,50 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         return data;
     }
 
+    public HhQdPheduyetKhMttHdr detailBySoQd(String soQd) throws Exception{
+        if (StringUtils.isEmpty(soQd))
+            throw new UnsupportedOperationException("Không tồn tại bản ghi");
+
+        Optional<HhQdPheduyetKhMttHdr> qOptional = hhQdPheduyetKhMttHdrRepository.findBySoQdAndLastest(soQd, false);
+
+
+        if (!qOptional.isPresent()){
+            throw new UnsupportedOperationException("Bản ghi không tồn tại");
+        }
+
+        Map<String, String> hashMapVthh = getListDanhMucHangHoa();
+        Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
+
+        HhQdPheduyetKhMttHdr data = qOptional.get();
+        data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
+        data.setTenDvi(hashMapDvi.get(data.getMaDvi()));
+        data.setTenLoaiVthh(hashMapVthh.get(data.getLoaiVthh()));
+        data.setTenCloaiVthh(hashMapVthh.get(data.getCloaiVthh()));
+
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(HhQdPheduyetKhMttHdr.TABLE_NAME));
+        data.setFileDinhKems(fileDinhKem);
+
+        List<HhQdPheduyetKhMttDx> dxList = new ArrayList<>();
+        for (HhQdPheduyetKhMttDx dx : hhQdPheduyetKhMttDxRepository.findAllByIdQdHdr(data.getId())){
+            List<HhQdPheduyetKhMttSLDD> slddList = new ArrayList<>();
+            for (HhQdPheduyetKhMttSLDD sldd : hhQdPheduyetKhMttSLDDRepository.findAllByIdQdDtl(dx.getId())){
+                List<HhQdPdKhMttSlddDtl> slddDtlList = hhQdPdKhMttSlddDtlRepository.findAllByIdDiaDiem(sldd.getId());
+                slddDtlList.forEach(f ->{
+                    f.setTenDiemKho(hashMapDvi.get(f.getMaDiemKho()));
+                });
+                sldd.setTenDvi(hashMapDvi.get(sldd.getMaDvi()));
+                sldd.setChildren(slddDtlList);
+                slddList.add(sldd);
+            }
+            dx.setTenDvi(StringUtils.isEmpty(dx.getMaDvi()) ? null : hashMapDvi.get(dx.getMaDvi()));
+            dx.setChildren(slddList);
+            dxList.add(dx);
+        }
+
+        data.setChildren(dxList);
+        return data;
+    }
+
     @Transactional()
     public void delete(Long id) throws Exception{
         if (StringUtils.isEmpty(id))
