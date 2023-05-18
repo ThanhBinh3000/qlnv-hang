@@ -166,6 +166,7 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl implements XhQdD
 
         XhQdDchinhKhBdgHdr data = qOptional.get();
 
+        data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
         data.setTenLoaiVthh(hashMapDmHh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(hashMapDmHh.get(data.getCloaiVthh()));
         data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));

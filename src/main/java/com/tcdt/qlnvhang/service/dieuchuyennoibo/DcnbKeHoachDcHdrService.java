@@ -388,11 +388,6 @@ public class DcnbKeHoachDcHdrService extends BaseServiceImpl {
                 optional.get().setNguoiDuyetLdccId(currentUser.getUser().getId());
                 optional.get().setDaXdinhDiemNhap(true);
                 optional.get().setXdLaiDiemNhap(false);
-                Optional<DcnbKeHoachDcDtl> parentHdr = dcnbKeHoachDcDtlRepository.findById(optional.get().getParentId());
-                if (parentHdr.isPresent()) {
-                    parentHdr.get().setDaXdinhDiemNhap(true);
-                    dcnbKeHoachDcDtlRepository.save(parentHdr.get());
-                }
                 // update lại các kho nhận điều chuyển trong danh sách hàng hóa cha.
                 List<DcnbKeHoachDcDtl> danhSachHangHoa = optional.get().getDanhSachHangHoa();
                 for (DcnbKeHoachDcDtl hh : danhSachHangHoa) {
@@ -414,6 +409,15 @@ public class DcnbKeHoachDcHdrService extends BaseServiceImpl {
                         parentDtl.get().setSlDcConLai(hh.getSlDcConLai());
                         parentDtl.get().setDaXdinhDiemNhap(true);
                         dcnbKeHoachDcDtlRepository.save(parentDtl.get());
+                    }
+                }
+
+                Optional<DcnbKeHoachDcHdr> parentHdr = dcnbKeHoachDcHdrRepository.findById(optional.get().getParentId());
+                if (parentHdr.isPresent()) {
+                    boolean allMatch = parentHdr.get().getDanhSachHangHoa().stream().allMatch(n -> (n.getDaXdinhDiemNhap() != null && n.getDaXdinhDiemNhap() == true));
+                    if(allMatch){
+                        parentHdr.get().setDaXdinhDiemNhap(true);
+                        dcnbKeHoachDcHdrRepository.save(parentHdr.get());
                     }
                 }
                 break;

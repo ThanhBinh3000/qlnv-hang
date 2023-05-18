@@ -23,7 +23,7 @@ public interface DcnbBienBanLayMauHdrRepository extends JpaRepository<DcnbBienBa
             "AND LOWER(hdr.soQdinhDcc) LIKE CONCAT('%',LOWER(:#{#param.soBbLayMau}),'%') " +
             "AND ((:#{#param.tuNgay}  IS NULL OR hdr.ngayLayMau >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR hdr.ngayLayMau <= :#{#param.denNgay}) ) " +
-            "GROUP BY hdr.soQdinhDcc, hdr.nam")
+            "ORDER BY hdr.soQdinhDcc desc, hdr.nam desc")
     Page<DcnbBienBanLayMauHdr> search(@Param("param")SearchDcnbBienBanLayMau param, Pageable pageable);
 
     Optional<DcnbBienBanLayMauHdr> findFirstBySoBbLayMau (String soBbLayMau);

@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -14,11 +15,11 @@ public interface THKeHoachDieuChuyenCucKhacCucDtlRepository extends JpaRepositor
 
     List<THKeHoachDieuChuyenCucKhacCucDtl> findAllByHdrIdIn(List<Long> idList);
 
-    @Query(nativeQuery = true, value="SELECT d.* FROM DCNB_TH_KE_HOACH_DCC_KC_DTL d\n" +
-            "LEFT JOIN DCNB_TH_KE_HOACH_DCC_HDR hdr ON hdr.id = d.hdr_Id \n" +
-            "WHERE hdr.ma_Dvi = ?1 AND hdr.trang_Thai = ?2 AND hdr.loai_Dc = ?3 " +
-            "AND (hdr.ngay_tao <= ?4)")
-    List<THKeHoachDieuChuyenCucKhacCucDtl> findByDonViAndTrangThaiAndLoaiDcCuc(String maDVi, String trangThai, String loaiDieuChuyen, LocalDate thoiGianTongHop);
+    @Query(value="FROM THKeHoachDieuChuyenCucKhacCucDtl d\n" +
+            "LEFT JOIN THKeHoachDieuChuyenCucHdr hdr ON hdr.id = d.hdrId \n" +
+            "WHERE hdr.maDvi = ?1 AND hdr.trangThai = ?2 AND hdr.loaiDieuChuyen = ?3 " +
+            "AND hdr.ngayTao <= ?4 AND (hdr.idThTongCuc is null)")
+    List<THKeHoachDieuChuyenCucKhacCucDtl> findByDonViAndTrangThaiAndLoaiDcCuc(String maDVi, String trangThai, String loaiDieuChuyen, LocalDateTime thoiGianTongHop);
 
     List<THKeHoachDieuChuyenCucKhacCucDtl> findAllByHdrIdAndId(Long thKhDcHdrId, Long thKhDcDtlId);
 }

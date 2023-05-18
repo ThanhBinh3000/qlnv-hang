@@ -29,7 +29,7 @@ public class DcnbBienBanLayMauDtl implements Serializable {
     @Column(name = "LOAI_DAI_DIEN")
     private String loaiDaiDien;
 
-    @Column(name = "DAI_DIEN")
+    @Column(name = "DAI_DIEN_CUC")
     private String daiDienCuc;
 
     @Column(name = "DAI_DIEN_CHI_CUC")

@@ -9,12 +9,12 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBienBanLayMauHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbBienBanLayMau;
-import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchPhieuKtChatLuong;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanLayMauDtl;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanLayMauHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class BienBanLayMauService extends BaseServiceImpl {
@@ -69,7 +68,7 @@ public class BienBanLayMauService extends BaseServiceImpl {
         }
         Optional<DcnbBienBanLayMauHdr> optional = dcnbBienBanLayMauHdrRepository.findFirstBySoBbLayMau(objReq.getSoBbLayMau());
         if (optional.isPresent() && objReq.getSoBbLayMau().split("/").length == 1) {
-            throw new Exception("số đề xuất đã tồn tại");
+            throw new Exception("số biên bản lấy mẫu đã tồn tại");
         }
         DcnbBienBanLayMauHdr data = new DcnbBienBanLayMauHdr();
         BeanUtils.copyProperties(objReq, data);
@@ -77,7 +76,8 @@ public class BienBanLayMauService extends BaseServiceImpl {
         data.setKtvBaoQuan(currentUser.getUser().getUsername());
         data.setMaQhns(cqt.getMaQhns());
         data.setMaDvi(cqt.getMaDvi());
-//        data.
+        data.setLoaiDc(objReq.getLoaiDc());
+        data.setThayDoiThuKho(true);
 //        data.setType(Contains.DIEU_CHUYEN);
         data.setTrangThai(Contains.DUTHAO);
         data.setNgayTao(LocalDateTime.now());
@@ -104,7 +104,7 @@ public class BienBanLayMauService extends BaseServiceImpl {
         if (org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoBbLayMau())) {
             if (soDxuat.isPresent() && objReq.getSoBbLayMau().split("/").length == 1) {
                 if (!soDxuat.get().getId().equals(objReq.getId())) {
-                    throw new Exception("số quyết định đã tồn tại");
+                    throw new Exception("số biên bản lấy mẫu đã tồn tại");
                 }
             }
         }

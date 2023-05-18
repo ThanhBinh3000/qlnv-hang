@@ -22,39 +22,37 @@ public class XhTcTtinBdgPlo implements Serializable {
 
     private Long idTtinDtl;
 
-    private BigDecimal donGiaDeXuat;
+    private String maDiemKho;
+    @Transient
+    private String tenDiemKho;
 
-    private BigDecimal donGiaVat;
+    private String maNhaKho;
+    @Transient
+    private String tenNhaKho;
 
-    private BigDecimal duDau;
+    private String maNganKho;
+    @Transient
+    private String tenNganKho;
 
-    private String dviTinh;
+    private String maLoKho;
+    @Transient
+    private String tenLoKho;
 
     private String maDviTsan;
 
-    private String maDiemKho;
+    private BigDecimal tonKho;
 
-    private String maNhaKho;
+    private BigDecimal soLuongDeXuat;
 
-    private String maNganKho;
+    private String donViTinh;
 
-    private String maLoKho;
+    private BigDecimal donGiaDuocDuyet;
 
-    private BigDecimal soLuong;
+    private BigDecimal donGiaDeXuat;
 
     private Integer soLanTraGia;
 
     private BigDecimal donGiaTraGia;
 
     private String toChucCaNhan;
-
-    @Transient
-    private String tenDiemKho;
-    @Transient
-    private String tenNhaKho;
-    @Transient
-    private String tenNganKho;
-    @Transient
-    private String tenLoKho;
-
 }

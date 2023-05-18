@@ -144,9 +144,14 @@ public class TongHopKeHoachDcTcController extends BaseController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> createTableTongCuc(@CurrentUser CustomUserDetails currentUser,@RequestBody  TongHopKeHoachDieuChuyenSearch req) throws Exception {
         BaseResponse resp = new BaseResponse();
-        resp.setData(thKeHoachDieuChuyenTongCucService.createPlan(currentUser, req));
-        resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-        resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        try {
+            resp.setData(thKeHoachDieuChuyenTongCucService.createPlan(currentUser, req));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        }catch (Exception e){
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+        }
         return ResponseEntity.ok(resp);
     }
 

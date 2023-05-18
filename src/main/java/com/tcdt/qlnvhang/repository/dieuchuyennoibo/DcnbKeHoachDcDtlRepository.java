@@ -41,14 +41,14 @@ public interface DcnbKeHoachDcDtlRepository extends JpaRepository<DcnbKeHoachDcD
 
     @Query(value ="SELECT SUM(d.duToanKphi) FROM DcnbKeHoachDcDtl d " +
             "WHERE d.dcnbKeHoachDcHdr.maDviCuc = ?1 AND d.dcnbKeHoachDcHdr.type = ?2 AND d.dcnbKeHoachDcHdr.loaiDc = ?3 AND d.dcnbKeHoachDcHdr.trangThai = ?4 " +
-            "AND d.dcnbKeHoachDcHdr.ngayTao <= ?5")
-    Long findByMaDviCucAndTypeAndLoaiDcTongCucChiCuc(String maDVi, String type, String loaiDieuChuyen, String trangThai,LocalDateTime thoigianTongHop);
+            "AND d.dcnbKeHoachDcHdr.ngayTao <= ?5 AND d.dcnbKeHoachDcHdr.idThop = ?6")
+    Long findByMaDviCucAndTypeAndLoaiDcTongCucChiCuc(String maDVi, String type, String loaiDieuChuyen, String trangThai,LocalDateTime thoigianTongHop, Long idThop);
 
     @Query(value ="SELECT SUM(d.duToanKphi) FROM DcnbKeHoachDcDtl d " +
             "LEFT JOIN DcnbKeHoachDcHdr h ON h.id = d.hdrId " +
             "WHERE h.maDviCuc = ?1 AND h.maCucNhan = ?2 AND h.type = ?3 AND h.loaiDc = ?4 AND h.trangThai = ?5 " +
-            "AND h.ngayTao <= ?6")
-    Long findByMaDviCucAndTypeAndLoaiDcTongCucCuc(String maDVi,String cucNhan, String type, String loaiDieuChuyen, String trangThai, LocalDateTime thoigianTongHop);
+            "AND h.ngayTao <= ?6 AND h.idThop = ?7")
+    Long findByMaDviCucAndTypeAndLoaiDcTongCucCuc(String maDVi,String cucNhan, String type, String loaiDieuChuyen, String trangThai, LocalDateTime thoigianTongHop, Long idThop);
 
 
     List<DcnbKeHoachDcDtl> findByIdIn(List<Long> idList);

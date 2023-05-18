@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.dexuat;
 
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdr;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdrReq;
+import com.tcdt.qlnvhang.request.xuathang.daugia.XhThopChiTieuReq;
 import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,17 +36,16 @@ public interface XhDxKhBanTrucTiepHdrRepository extends JpaRepository<XhDxKhBanT
             "AND (:#{#param.maDvi} IS NULL OR DX.maDvi = :#{#param.maDvi})")
     Page<XhDxKhBanTrucTiepHdr> searchPage(@Param("param") XhDxKhBanTrucTiepHdrReq param, Pageable pageable);
 
-    @Query(value = "select * from XH_DX_KH_BAN_TRUC_TIEP_HDR DX where (:namKh IS NULL OR DX.NAM_KH = TO_NUMBER(:namKh)) " +
-            " AND (:loaiVthh IS NULL OR DX.LOAI_VTHH = :loaiVthh) " +
-            " AND (:cloaiVthh IS NULL OR DX.CLOAI_VTHH = :cloaiVthh) " +
-            " AND (:ngayDuyetTu IS NULL OR DX.NGAY_PDUYET >=  TO_DATE(:ngayDuyetTu,'yyyy-MM-dd')) " +
-            " AND (:ngayDuyetDen IS NULL OR DX.NGAY_PDUYET <= TO_DATE(:ngayDuyetDen,'yyyy-MM-dd'))" +
-            " AND DX.TRANG_THAI = '"+ Contains.DADUYET_LDC+"'" +
-            " AND DX.TRANG_THAI_TH = '"+ Contains.CHUATONGHOP+"'" +
-            " AND DX.ID_THOP is null "+
-            " AND DX.SO_QD_PD is null "
-            ,nativeQuery = true)
-    List<XhDxKhBanTrucTiepHdr> listTongHop(Integer namKh, String loaiVthh, String cloaiVthh,String ngayDuyetTu, String ngayDuyetDen);
+    @Query("SELECT TH from XhDxKhBanTrucTiepHdr TH WHERE 1 = 1 " +
+            "AND (:#{#param.loaiVthh} IS NULL OR TH.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
+            "AND (:#{#param.cloaiVthh} IS NULL OR TH.cloaiVthh LIKE CONCAT(:#{#param.cloaiVthh},'%'))  " +
+            "AND (:#{#param.ngayDuyetTu} IS NULL OR TH.ngayPduyet >= :#{#param.ngayDuyetTu}) " +
+            "AND (:#{#param.ngayDuyetDen} IS NULL OR TH.ngayPduyet <= :#{#param.ngayDuyetDen}) " +
+            "AND TH.idThop IS NULL " +
+            "AND TH.soQdPd IS NULL " +
+            "AND TH.trangThai ='" + Contains.DADUYET_LDC+ "'" +
+            "AND TH.trangThaiTh ='" + Contains.CHUATONGHOP+ "'")
+    List<XhDxKhBanTrucTiepHdr> listTongHop(@Param("param") XhThopChiTieuReq param);
 
     @Transactional()
     @Modifying

@@ -249,6 +249,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
         data.setTenLoaiVthh(hashMapDmHh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(hashMapDmHh.get(data.getCloaiVthh()));
         data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
+        data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
         List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdPdKhBdg.TABLE_NAME+ "_BAN_HANH"));
         data.setFileDinhKem(fileDinhKem);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdPdKhBdg.TABLE_NAME));
@@ -265,22 +266,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
                     f.setTenLoKho(mapDmucDvi.get(f.getMaLoKho()));
                     f.setTenLoaiVthh(hashMapDmHh.get(f.getLoaiVthh()));
                     f.setTenCloaiVthh(hashMapDmHh.get(f.getCloaiVthh()));
-                    BigDecimal donGiaDuocDuyet = BigDecimal.ZERO;
-                    if(data.getLoaiVthh().startsWith("02")){
-                        donGiaDuocDuyet = xhQdPdKhBdgDtlRepository.getDonGiaVatVt(data.getCloaiVthh(), data.getNam());
-                        if (!DataUtils.isNullObject(donGiaDuocDuyet) && !StringUtils.isEmpty(dtl.getTongSoLuong()) && !StringUtils.isEmpty(dtl.getKhoanTienDatTruoc())){
-                            BigDecimal tongKhoanTienDtTheoDgiaDd = dtl.getTongSoLuong().multiply(donGiaDuocDuyet).multiply(dtl.getKhoanTienDatTruoc()).divide(BigDecimal.valueOf(100));
-                            f.setDonGiaDuocDuyet(donGiaDuocDuyet);
-                            dtl.setTongKhoanTienDtTheoDgiaDd(tongKhoanTienDtTheoDgiaDd);
-                        }
-                    }else {
-                        donGiaDuocDuyet = xhQdPdKhBdgDtlRepository.getDonGiaVatLt(data.getCloaiVthh(), dtl.getMaDvi(), data.getNam());
-                        if (!DataUtils.isNullObject(donGiaDuocDuyet) && !StringUtils.isEmpty(dtl.getTongSoLuong()) && !StringUtils.isEmpty(dtl.getKhoanTienDatTruoc())){
-                            BigDecimal tongKhoanTienDtTheoDgiaDd = dtl.getTongSoLuong().multiply(donGiaDuocDuyet).multiply(dtl.getKhoanTienDatTruoc()).divide(BigDecimal.valueOf(100));
-                            f.setDonGiaDuocDuyet(donGiaDuocDuyet);
-                            dtl.setTongKhoanTienDtTheoDgiaDd(tongKhoanTienDtTheoDgiaDd);
-                        }
-                    }
+                    this.donGiaDuocDuyet(data, dtl, f);
                 });
                 dsg.setTenDvi(mapDmucDvi.get(dsg.getMaDvi()));
                 dsg.setChildren(xhQdPdKhBdgPlDtlList);
@@ -293,6 +279,25 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
         }
         data.setChildren(xhQdPdKhBdgDtlList);
         return data;
+    }
+
+    void donGiaDuocDuyet(XhQdPdKhBdg data, XhQdPdKhBdgDtl dtl, XhQdPdKhBdgPlDtl f) {
+        BigDecimal donGiaDuocDuyet = BigDecimal.ZERO;
+        if(data.getLoaiVthh().startsWith("02")){
+            donGiaDuocDuyet = xhQdPdKhBdgDtlRepository.getDonGiaVatVt(data.getCloaiVthh(), data.getNam());
+            if (!DataUtils.isNullObject(donGiaDuocDuyet) && !StringUtils.isEmpty(dtl.getTongSoLuong()) && !StringUtils.isEmpty(dtl.getKhoanTienDatTruoc())){
+                BigDecimal tongKhoanTienDtTheoDgiaDd = dtl.getTongSoLuong().multiply(donGiaDuocDuyet).multiply(dtl.getKhoanTienDatTruoc()).divide(BigDecimal.valueOf(100));
+                f.setDonGiaDuocDuyet(donGiaDuocDuyet);
+                dtl.setTongKhoanTienDtTheoDgiaDd(tongKhoanTienDtTheoDgiaDd);
+            }
+        }else {
+            donGiaDuocDuyet = xhQdPdKhBdgDtlRepository.getDonGiaVatLt(data.getCloaiVthh(), dtl.getMaDvi(), data.getNam());
+            if (!DataUtils.isNullObject(donGiaDuocDuyet) && !StringUtils.isEmpty(dtl.getTongSoLuong()) && !StringUtils.isEmpty(dtl.getKhoanTienDatTruoc())){
+                BigDecimal tongKhoanTienDtTheoDgiaDd = dtl.getTongSoLuong().multiply(donGiaDuocDuyet).multiply(dtl.getKhoanTienDatTruoc()).divide(BigDecimal.valueOf(100));
+                f.setDonGiaDuocDuyet(donGiaDuocDuyet);
+                dtl.setTongKhoanTienDtTheoDgiaDd(tongKhoanTienDtTheoDgiaDd);
+            }
+        }
     }
 
     @Override
@@ -471,6 +476,10 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
         }
         XhQdPdKhBdgDtl data = qOptional.get();
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+
+        XhQdPdKhBdg hdr = xhQdPdKhBdgRepository.findById(data.getIdQdHdr()).get();
+        data.setXhQdPdKhBdg(hdr);
+
         List<XhQdPdKhBdgPl> xhQdPdKhBdgPlList = new ArrayList<>();
         for (XhQdPdKhBdgPl dsg : xhQdPdKhBdgPlRepository.findByIdQdDtl(data.getId())) {
             List<XhQdPdKhBdgPlDtl> xhQdPdKhBdgPlDtlList = xhQdPdKhBdgPlDtlRepository.findByIdPhanLo(dsg.getId());
@@ -479,6 +488,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
                 f.setTenNhaKho(mapDmucDvi.get(f.getMaNhaKho()));
                 f.setTenNganKho(mapDmucDvi.get(f.getMaNganKho()));
                 f.setTenLoKho(mapDmucDvi.get(f.getMaLoKho()));
+                this.donGiaDuocDuyet(hdr, data, f);
             });
             dsg.setTenDvi(mapDmucDvi.get(dsg.getMaDvi()));
             dsg.setChildren(xhQdPdKhBdgPlDtlList);
