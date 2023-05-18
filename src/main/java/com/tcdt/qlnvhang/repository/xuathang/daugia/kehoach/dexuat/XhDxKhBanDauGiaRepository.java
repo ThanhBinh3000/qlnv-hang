@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.dexuat;
 
+import com.tcdt.qlnvhang.request.xuathang.daugia.XhThopChiTieuReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.dexuat.XhDxKhBanDauGiaReq;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGia;
 import com.tcdt.qlnvhang.util.Contains;
@@ -33,23 +34,24 @@ public interface XhDxKhBanDauGiaRepository extends JpaRepository<XhDxKhBanDauGia
             "AND (:#{#param.trangThaiList == null || #param.trangThaiList.isEmpty() } = true OR DX.trangThai IN :#{#param.trangThaiList}) ")
     Page<XhDxKhBanDauGia> searchPage(@Param("param") XhDxKhBanDauGiaReq param, Pageable pageable);
 
+    @Query("SELECT TH from XhDxKhBanDauGia TH WHERE 1 = 1 " +
+            "AND (:#{#param.loaiVthh} IS NULL OR TH.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
+            "AND (:#{#param.cloaiVthh} IS NULL OR TH.cloaiVthh LIKE CONCAT(:#{#param.cloaiVthh},'%'))  " +
+            "AND (:#{#param.ngayDuyetTu} IS NULL OR TH.ngayPduyet >= :#{#param.ngayDuyetTu}) " +
+            "AND (:#{#param.ngayDuyetDen} IS NULL OR TH.ngayPduyet <= :#{#param.ngayDuyetDen}) " +
+            "AND TH.idThop IS NULL " +
+            "AND TH.soQdPd IS NULL " +
+            "AND TH.trangThai ='" + Contains.DADUYET_LDC+ "'" +
+            "AND TH.trangThaiTh ='" + Contains.CHUATONGHOP+ "'")
+    List<XhDxKhBanDauGia> listTongHop(@Param("param") XhThopChiTieuReq param);
+
     Optional<XhDxKhBanDauGia> findBySoDxuat(String soDxuat);
 
     List<XhDxKhBanDauGia> findAllByIdIn(List<Long> listId);
 
     XhDxKhBanDauGia findAllByLoaiVthhAndCloaiVthhAndNamKhAndMaDviAndTrangThaiNot(String loaiVthh, String cloaiVthh, Integer namKh, String maDvi, String trangThai);
 
-    @Query(value = "select * from XH_DX_KH_BAN_DAU_GIA DX where (:namKh IS NULL OR DX.NAM_KH = TO_NUMBER(:namKh)) " +
-            " AND (:loaiVthh IS NULL OR DX.LOAI_VTHH = :loaiVthh) " +
-            " AND (:cloaiVthh IS NULL OR DX.CLOAI_VTHH = :cloaiVthh) " +
-            " AND (:ngayDuyetTu IS NULL OR DX.NGAY_PDUYET >=  TO_DATE(:ngayDuyetTu,'yyyy-MM-dd')) " +
-            " AND (:ngayDuyetDen IS NULL OR DX.NGAY_PDUYET <= TO_DATE(:ngayDuyetDen,'yyyy-MM-dd'))" +
-            " AND DX.TRANG_THAI = '"+ Contains.DA_DUYET_CBV+"'" +
-            " AND DX.TRANG_THAI_TH = '"+ Contains.CHUATONGHOP+"'" +
-            " AND DX.ID_THOP is null "+
-            " AND DX.SO_QD_PD is null "
-            ,nativeQuery = true)
-    List<XhDxKhBanDauGia> listTongHop(Integer namKh, String loaiVthh, String cloaiVthh,String ngayDuyetTu, String ngayDuyetDen);
+
 
     XhDxKhBanDauGia findAllById(Long idDxuat);
 

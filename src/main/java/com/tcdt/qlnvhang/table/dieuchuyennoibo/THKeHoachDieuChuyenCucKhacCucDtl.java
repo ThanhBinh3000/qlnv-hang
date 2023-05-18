@@ -2,10 +2,7 @@ package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
@@ -17,7 +14,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Table(name = "DCNB_TH_KE_HOACH_DCC_KC_DTL")
 @Builder
 @NoArgsConstructor
@@ -29,8 +27,8 @@ public class THKeHoachDieuChuyenCucKhacCucDtl implements Serializable {
     @SequenceGenerator(sequenceName = "DCNB_TH_KH_DCC_KC_DTL_SEQ", allocationSize = 1, name = "DCNB_TH_KH_DCC_KC_DTL_SEQ")
     private Long id;
 
-//    @Column(name = "NGAY_GDUYET_TC")
-//    private LocalDate ngayGduyetTc;
+    @Column(name = "NGAY_GUI_DUYET_TC")
+    private LocalDate ngayGduyetTc;
 
     @Column(name = "HDR_ID")
     private Long hdrId;
@@ -46,6 +44,9 @@ public class THKeHoachDieuChuyenCucKhacCucDtl implements Serializable {
 
     @Column(name = "TONG_DU_TOAN_KPHI")
     private Long tongDuToanKinhPhi;
+
+    @Column(name = "PHE_DUYET")
+    private Boolean pheDuyet;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HDR_ID",referencedColumnName="ID", insertable = false, updatable = false)

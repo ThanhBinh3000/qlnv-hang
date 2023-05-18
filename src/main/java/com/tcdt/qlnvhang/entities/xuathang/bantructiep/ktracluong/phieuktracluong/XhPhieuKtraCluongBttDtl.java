@@ -32,4 +32,6 @@ public class XhPhieuKtraCluongBttDtl implements Serializable {
 
     private String kieu;
 
+    private String danhGia;
+
 }

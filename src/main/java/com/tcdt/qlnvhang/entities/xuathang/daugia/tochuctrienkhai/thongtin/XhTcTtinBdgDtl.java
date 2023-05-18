@@ -25,13 +25,14 @@ public class XhTcTtinBdgDtl implements Serializable {
   private Long idTtinHdr;
 
   private String maDvi;
+  @Transient
+  private String tenDvi;
+
+  private BigDecimal soLuongChiCuc;
 
   private String diaChi;
 
-  private BigDecimal soLuong;
-
-  @Transient
-  private String tenDvi;
+  private BigDecimal soTienDatTruocChiCuc;
 
   @Transient
   List<XhTcTtinBdgPlo> children = new ArrayList<>();

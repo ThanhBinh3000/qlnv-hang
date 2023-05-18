@@ -1,21 +1,14 @@
 package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.THKeHoachDieuChuyenTongCucDtl;
-import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
-import javax.persistence.Column;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
-public class ThKeHoachDieuChuyenTongCucHdrReq {
+public class ThKeHoachDieuChuyenTongCucHdrReq implements Serializable {
     private Long id;
 
     private LocalDate ngaytao;
@@ -30,7 +23,7 @@ public class ThKeHoachDieuChuyenTongCucHdrReq {
 
     private LocalDate ngayTongHop;
 
-    private String noiDung;
+    private String trichYeu;
 
     private Integer namKeHoach;
 
@@ -53,6 +46,8 @@ public class ThKeHoachDieuChuyenTongCucHdrReq {
     private String tenDVi;
 
     private LocalDateTime thoiGianTongHop;
+
+    private Long idThTongCuc;
 
     List<ThKeHoachDieuChuyenTongCucDtlReq> thKeHoachDieuChuyenTongCucDtls;
 }

@@ -13,29 +13,18 @@ import java.util.Date;
 import java.util.List;
 
 
-@Data
+@Getter
+@Setter
 @Table(name = "DCNB_TH_KE_HOACH_DCC_HDR")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class THKeHoachDieuChuyenCucHdr implements Serializable {
+public class THKeHoachDieuChuyenCucHdr extends BaseEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DCNB_TH_KE_HOACH_DCC_HDR_SEQ")
     @SequenceGenerator(sequenceName = "DCNB_TH_KE_HOACH_DCC_HDR_SEQ", allocationSize = 1, name = "DCNB_TH_KE_HOACH_DCC_HDR_SEQ")
     private Long id;
-
-    @Column(name = "NGAY_TAO")
-    private LocalDate ngaytao;
-
-    @Column(name = "NGUOI_TAO_ID")
-    private Long nguoiTaoId;
-
-    @Column(name = "NGAY_SUA")
-    private LocalDate ngaySua;
-
-    @Column(name = "NGUOI_SUA_ID")
-    private Long nguoiSuaId;
 
     @Column(name = "MA_TONG_HOP")
     private Long maTongHop;
@@ -93,6 +82,15 @@ public class THKeHoachDieuChuyenCucHdr implements Serializable {
 
     @Column(name = "THOI_GIAN_TONG_HOP")
     private LocalDateTime thoiGianTongHop;
+
+    @Column(name = "ID_THOP_TC")
+    private Long idThTongCuc;
+
+    @Column(name = "NGAY_TRINH_DUYET_TC")
+    private LocalDate ngayTrinhDuyetTc;
+
+    @Column(name = "NGAY_PHE_DUYET_TC")
+    private LocalDate ngayPheDuyetTc;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "DCNB_TH_KE_HOACH_DCC_HDR_ID")

@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.xuathang.bantructiep.hopdong;
 
 import lombok.Data;
 
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 
 @Data
@@ -9,6 +10,8 @@ public class XhHopDongBttDviReq {
     private Long id;
 
     private Long idDtl;
+
+    private Long idHdr;
 
     private String maDiemKho;
 
@@ -20,18 +23,18 @@ public class XhHopDongBttDviReq {
 
     private String maDviTsan;
 
-    private BigDecimal duDau;
+    private BigDecimal tonKho;
 
-    private BigDecimal soLuong;
+    private BigDecimal soLuongDeXuat;
+
+    private String donViTinh;
 
     private BigDecimal donGiaDeXuat;
 
-    private BigDecimal donGiaVat;
+    private BigDecimal donGiaDuocDuyet;
 
-    private String dviTinh;
+    private BigDecimal soLuongKyHd;
 
-
-
-
+    private BigDecimal donGiaKyHd;
 
 }

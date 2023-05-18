@@ -1,25 +1,22 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.bangkebanle;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
-import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "XH_BANG_KE_BTT")
 @Data
-public class XhBangKeBtt extends TrangThaiBaseEntity implements Serializable {
+public class XhBangKeBtt  implements Serializable {
+
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_BANG_KE_BTT";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_BANG_KE_BTT_SEQ")
     @SequenceGenerator(sequenceName = "XH_BANG_KE_BTT_SEQ", allocationSize = 1, name = "XH_BANG_KE_BTT_SEQ")
+
     private Long id;
 
     private Integer namKh;
@@ -40,9 +37,7 @@ public class XhBangKeBtt extends TrangThaiBaseEntity implements Serializable {
 
     private String diaChi;
 
-    @Temporal(TemporalType.DATE)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayBanHang;
+    private LocalDate ngayBanHang;
 
     private String loaiVthh;
     @Transient
@@ -65,4 +60,26 @@ public class XhBangKeBtt extends TrangThaiBaseEntity implements Serializable {
     private String cmt;
 
     private String ghiChu;
+
+    private String trangThai;
+    @Transient
+    private String tenTrangThai;
+
+    private LocalDate ngayTao;
+
+    private Long nguoiTaoId;
+
+    private LocalDate ngaySua;
+
+    private Long nguoiSuaId;
+
+    private LocalDate ngayGuiDuyet;
+
+    private Long nguoiGuiDuyetId;
+
+    private LocalDate ngayPduyet;
+
+    private Long nguoiPduyetId;
+
+    private String lyDoTuChoi;
 }

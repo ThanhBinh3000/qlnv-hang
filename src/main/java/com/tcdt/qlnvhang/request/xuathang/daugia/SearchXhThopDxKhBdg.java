@@ -1,24 +1,24 @@
 package com.tcdt.qlnvhang.request.xuathang.daugia;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.BaseRequest;
-import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
-
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 public class SearchXhThopDxKhBdg extends BaseRequest {
-    Integer namKh;
-    String loaiVthh;
-    String cloaiVthh;
-    String noiDungThop;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    Date ngayThopTu;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    Date ngayThopDen;
 
-    String TrangThai;
-    String typeLoaiVthh;
+   private Integer namKh;
 
+   private String loaiVthh;
+
+   private String cloaiVthh;
+
+   private String noiDungThop;
+
+   private LocalDate ngayThopTu;
+
+   private LocalDate ngayThopDen;
+
+   private String TrangThai;
+
+   private String typeLoaiVthh;
 }

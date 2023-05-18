@@ -1,22 +1,16 @@
 package com.tcdt.qlnvhang.request.xuathang.bantructiep.ktracluong.bienbanlaymau;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import com.tcdt.qlnvhang.util.Contains;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-
 import javax.persistence.Transient;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
 public class XhBbLayMauBttHdrReq extends BaseRequest {
 
-    @ApiModelProperty(notes = "Bắt buộc set đối với update")
     private Long id;
 
     private Integer namKh;
@@ -25,26 +19,23 @@ public class XhBbLayMauBttHdrReq extends BaseRequest {
 
     private String maQhns;
 
-    private Long idQd;
+    private Long idQdNv;
 
-    private String soQd;
+    private String soQdNv;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayQd;
+    private LocalDate ngayQd;
 
     private String soHd;
 
     private String loaiBienBan;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayHd;
+    private LocalDate ngayKyHd;
 
     private Long idKtv;
 
     private String soBienBan;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayLayMau;
+    private LocalDate ngayLayMau;
 
     private String dviKnghiem;
 
@@ -76,8 +67,7 @@ public class XhBbLayMauBttHdrReq extends BaseRequest {
 
     private String soBbTinhKho;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayXuatDocKho;
+    private LocalDate ngayXuatDocKho;
 
     private String soBbHaoDoi;
 
@@ -93,8 +83,7 @@ public class XhBbLayMauBttHdrReq extends BaseRequest {
     @Transient
     private List<FileDinhKemReq> fileNiemPhong = new ArrayList<>();
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayLayMauTu;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayLayMauDen;
+    private LocalDate ngayLayMauTu;
+
+    private LocalDate ngayLayMauDen;
 }

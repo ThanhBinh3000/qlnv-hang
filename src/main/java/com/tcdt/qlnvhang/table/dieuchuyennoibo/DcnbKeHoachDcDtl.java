@@ -95,6 +95,8 @@ public class DcnbKeHoachDcDtl implements Serializable {
     private Boolean coLoKhoNhan;
     @Column(name = "DA_XDINH_DIEM_NHAP")
     private Boolean daXdinhDiemNhap;
+    @Column(name = "XD_LAI_DIEM_NHAP")
+    private Boolean xdLaiDiemNhap;
     @Column(name = "HDR_ID", insertable = true, updatable = true)
     private Long hdrId;
     @ManyToOne(fetch = FetchType.LAZY)

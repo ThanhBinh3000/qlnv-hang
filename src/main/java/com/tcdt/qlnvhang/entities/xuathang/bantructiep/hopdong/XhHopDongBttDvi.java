@@ -19,9 +19,13 @@ public class XhHopDongBttDvi {
 
     private Long idDtl;
 
+    private Long idHdr;
+
     private String maDiemKho;
     @Transient
     private String tenDiemKho;
+
+    private String diaDiemKho;
 
     private String maNhaKho;
     @Transient
@@ -37,13 +41,18 @@ public class XhHopDongBttDvi {
 
     private String maDviTsan;
 
-    private BigDecimal duDau;
+    private BigDecimal tonKho;
 
-    private BigDecimal soLuong;
+    private BigDecimal soLuongDeXuat;
+
+    private String donViTinh;
 
     private BigDecimal donGiaDeXuat;
 
-    private BigDecimal donGiaVat;
+    private BigDecimal donGiaDuocDuyet;
 
-    private String dviTinh;
+    private BigDecimal soLuongKyHd;
+
+    private BigDecimal donGiaKyHd;
+
 }

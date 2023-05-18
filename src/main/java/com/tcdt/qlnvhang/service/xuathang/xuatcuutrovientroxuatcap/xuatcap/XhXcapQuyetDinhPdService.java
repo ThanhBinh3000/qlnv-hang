@@ -35,7 +35,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 public class XhXcapQuyetDinhPdService extends BaseServiceImpl {
 
 
@@ -77,7 +76,7 @@ public class XhXcapQuyetDinhPdService extends BaseServiceImpl {
     if (currentUser == null) {
       throw new Exception("Bad request.");
     }
-    if (!DataUtils.isNullObject(objReq.getSoQdPd())) {
+    if (!DataUtils.isNullObject(objReq.getSoQd())) {
       Optional<XhXcapQuyetDinhPdHdr> optional = xhXcapQuyetDinhPdHdrRepository.findBySoQd(objReq.getSoQd());
       if (optional.isPresent()) {
         throw new Exception("số quyết định đã tồn tại");

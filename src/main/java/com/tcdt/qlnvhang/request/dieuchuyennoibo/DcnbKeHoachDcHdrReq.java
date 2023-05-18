@@ -43,6 +43,7 @@ public class DcnbKeHoachDcHdrReq {
   private String tenDviCuc;
   private String tenTrangThai;
   private Boolean daXdinhDiemNhap;
+  private Boolean xdLaiDiemNhap;
   private List<FileDinhKemReq> canCu = new ArrayList<>();
   private List<DcnbKeHoachDcDtl> danhSachHangHoa = new ArrayList<>();
   private List<DcnbPhuongAnDc> phuongAnDieuChuyen = new ArrayList<>();

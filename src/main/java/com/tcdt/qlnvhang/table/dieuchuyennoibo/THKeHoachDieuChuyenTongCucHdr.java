@@ -8,32 +8,20 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Table(name = "DCNB_TH_KE_HOACH_DCTC_HDR")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class THKeHoachDieuChuyenTongCucHdr implements Serializable {
+public class THKeHoachDieuChuyenTongCucHdr extends BaseEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DCNB_TH_KH_DCTC_HDR_SEQ")
     @SequenceGenerator(sequenceName = "DCNB_TH_KH_DCTC_HDR_SEQ", allocationSize = 1, name = "DCNB_TH_KH_DCTC_HDR_SEQ")
     private Long id;
-
-    @Column(name = "NGAY_TAO")
-    private LocalDate ngaytao;
-
-    @Column(name = "NGUOI_TAO_ID")
-    private Long nguoiTaoId;
-
-    @Column(name = "NGAY_SUA")
-    private LocalDate ngaySua;
-
-    @Column(name = "NGUOI_SUA_ID")
-    private Long nguoiSuaId;
 
     @Column(name = "MA_TONG_HOP")
     private String maTongHop;
@@ -42,7 +30,7 @@ public class THKeHoachDieuChuyenTongCucHdr implements Serializable {
     private LocalDate ngayTongHop;
 
     @Column(name = "NOI_DUNG")
-    private String noiDung;
+    private String trichYeu;
 
     @Column(name = "NAM_KE_HOACH")
     private Integer namKeHoach;

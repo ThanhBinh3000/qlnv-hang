@@ -10,15 +10,9 @@ import java.math.BigDecimal;
 @Setter
 public class ThongTinDauGiaPloReq extends BaseRequest {
 
-  private BigDecimal donGiaDeXuat;
+  private Long id;
 
-  private BigDecimal donGiaVat;
-
-  private BigDecimal duDau;
-
-  private String dviTinh;
-
-  private String maDviTsan;
+  private Long idTtinDtl;
 
   private String maDiemKho;
 
@@ -28,11 +22,24 @@ public class ThongTinDauGiaPloReq extends BaseRequest {
 
   private String maLoKho;
 
-  private BigDecimal soLuong;
+  private String maDviTsan;
+
+  private BigDecimal tonKho;
+  private BigDecimal soLuongDeXuat;
+
+  private String donViTinh;
+
+  private BigDecimal donGiaDuocDuyet;
+
+  private BigDecimal donGiaDeXuat;
 
   private Integer soLanTraGia;
 
   private BigDecimal donGiaTraGia;
 
   private String toChucCaNhan;
+
+  public void setSoLuongDeXuat(BigDecimal soLuongDeXuat) {
+    this.soLuongDeXuat = soLuongDeXuat;
+  }
 }

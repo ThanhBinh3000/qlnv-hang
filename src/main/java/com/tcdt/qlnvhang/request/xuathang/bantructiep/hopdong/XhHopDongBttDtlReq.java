@@ -13,14 +13,13 @@ public class XhHopDongBttDtlReq {
 
     private Long idHdr;
 
-    private String maDvi;
-
     private BigDecimal soLuongChiCuc;
 
-    private BigDecimal donGiaVat;
+    private BigDecimal soLuongBanTrucTiepHd;
+
+    private String maDvi;
 
     private String diaChi;
-
 
     //    phu luc
     private Long idHdDtl;

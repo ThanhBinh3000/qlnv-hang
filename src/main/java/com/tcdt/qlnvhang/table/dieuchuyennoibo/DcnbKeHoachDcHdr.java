@@ -36,7 +36,7 @@ public class DcnbKeHoachDcHdr extends BaseEntity implements Serializable, Clonea
   @Column(name = "TEN_LOAI_DC")
   private String tenLoaiDc;
   @Column(name = "TYPE")
-  private String type;
+  private String type; // DC, NDC, NDCTS
   @Column(name = "NAM")
   private Integer nam;
   @Column(name = "SO_DXUAT")
@@ -93,6 +93,10 @@ public class DcnbKeHoachDcHdr extends BaseEntity implements Serializable, Clonea
   private BigDecimal tongDuToanKp;
   @Column(name = "DA_XDINH_DIEM_NHAP")
   private Boolean daXdinhDiemNhap;
+  @Column(name = "XD_LAI_DIEM_NHAP")
+  private Boolean xdLaiDiemNhap;
+  @Column(name = "PHE_DUYET")
+  private Boolean pheDuyet;
   @Transient
   private String tenTrangThai;
   @Transient

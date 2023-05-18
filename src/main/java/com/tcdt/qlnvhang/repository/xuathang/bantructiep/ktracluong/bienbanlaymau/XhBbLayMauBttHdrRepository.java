@@ -18,7 +18,7 @@ public interface XhBbLayMauBttHdrRepository extends JpaRepository<XhBbLayMauBttH
     @Query("SELECT LM from XhBbLayMauBttHdr LM WHERE 1 = 1 " +
             "AND (:#{#param.namKh} IS NULL OR LM.namKh = :#{#param.namKh}) " +
             "AND (:#{#param.soBienBan} IS NULL OR LOWER(LM.soBienBan) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soBienBan}),'%' ) ) )" +
-            "AND (:#{#param.soQd} IS NULL OR LOWER(LM.soQd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQd}),'%' ) ) )" +
+            "AND (:#{#param.soQdNv} IS NULL OR LOWER(LM.soQdNv) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQdNv}),'%' ) ) )" +
             "AND (:#{#param.dviKnghiem} IS NULL OR LOWER(LM.dviKnghiem) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.dviKnghiem}),'%'))) " +
             "AND (:#{#param.ngayLayMauTu} IS NULL OR LM.ngayLayMau >= :#{#param.ngayLayMauTu}) " +
             "AND (:#{#param.ngayLayMauDen} IS NULL OR LM.ngayLayMau <= :#{#param.ngayLayMauDen}) " +

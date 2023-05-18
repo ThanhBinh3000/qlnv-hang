@@ -1,20 +1,15 @@
 package com.tcdt.qlnvhang.request.xuathang.bantructiep.tochuctrienkhai.ketqua;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import com.tcdt.qlnvhang.util.Contains;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import javax.persistence.Column;
 import javax.persistence.Transient;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
 public class XhKqBttHdrReq extends BaseRequest  {
-    @ApiModelProperty(notes = "Bắt buộc set đối với update")
+
     private Long id;
 
     private Long idPdKhDtl;
@@ -25,13 +20,9 @@ public class XhKqBttHdrReq extends BaseRequest  {
 
     private String soQdKq;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
-    private Date ngayKy;
+    private LocalDate ngayKy;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
-    private Date ngayHluc;
+    private LocalDate ngayHluc;
 
     private String soQdPd;
 
@@ -41,13 +32,9 @@ public class XhKqBttHdrReq extends BaseRequest  {
 
     private String diaDiemChaoGia;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
-    private Date ngayMkho;
+    private LocalDate ngayMkho;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
-    private Date ngayKthuc;
+    private LocalDate ngayKthuc;
 
     private String loaiVthh;
 
@@ -75,11 +62,19 @@ public class XhKqBttHdrReq extends BaseRequest  {
 
     private String maChiCuc;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    Date  ngayCgiaTu;
+    private LocalDate  ngayCgiaTu;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    Date  ngayCgiaDen;
+    private LocalDate  ngayCgiaDen;
 
     private String trangThaiHd;
+
+    private String soHd;
+
+    private String tenHd;
+
+    private String tenDviMua;
+
+    private LocalDate  ngayPduyetTu;
+
+    private LocalDate ngayPduyetDen;
 }

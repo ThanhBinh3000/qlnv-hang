@@ -1,23 +1,19 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.ketqua;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttHdr;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
-
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
 @Entity
 @Table(name = XhKqBttHdr.TABLE_NAME)
 @Data
-public class XhKqBttHdr extends TrangThaiBaseEntity implements Serializable {
+public class XhKqBttHdr implements Serializable {
+
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_KQ_BTT_HDR";
 
@@ -35,14 +31,9 @@ public class XhKqBttHdr extends TrangThaiBaseEntity implements Serializable {
 
     private String soQdKq;
 
+    private LocalDate ngayKy;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
-    private Date ngayKy;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
-    private Date ngayHluc;
+    private LocalDate ngayHluc;
 
     private String soQdPd;
 
@@ -54,13 +45,9 @@ public class XhKqBttHdr extends TrangThaiBaseEntity implements Serializable {
 
     private String diaDiemChaoGia;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
-    private Date ngayMkho;
+    private LocalDate ngayMkho;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
-    private Date ngayKthuc;
+    private LocalDate ngayKthuc;
 
     private String loaiVthh;
     @Transient
@@ -85,6 +72,28 @@ public class XhKqBttHdr extends TrangThaiBaseEntity implements Serializable {
     private String loaiHinhNx;
 
     private String kieuNx;
+
+    private String trangThai;
+    @Transient
+    private String tenTrangThai;
+
+    private LocalDate ngayTao;
+
+    private Long nguoiTaoId;
+
+    private LocalDate ngaySua;
+
+    private Long nguoiSuaId;
+
+    private LocalDate ngayGuiDuyet;
+
+    private Long nguoiGuiDuyetId;
+
+    private LocalDate ngayPduyet;
+
+    private Long nguoiPduyetId;
+
+    private String lyDoTuChoi;
 
     @Transient
     private List<FileDinhKem> fileCanCu = new ArrayList<>();

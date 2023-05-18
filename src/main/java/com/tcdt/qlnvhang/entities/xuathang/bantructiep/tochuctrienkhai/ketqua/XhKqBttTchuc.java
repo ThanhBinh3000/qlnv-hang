@@ -1,19 +1,16 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.ketqua;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "XH_KQ_BTT_TCHUC")
 @Data
 public class XhKqBttTchuc implements Serializable {
+
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_KQ_BTT_TCHUC";
 
@@ -32,8 +29,7 @@ public class XhKqBttTchuc implements Serializable {
 
     private String sdt;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayChaoGia;
+    private LocalDate ngayChaoGia;
 
     private BigDecimal soLuong;
 
@@ -48,5 +44,4 @@ public class XhKqBttTchuc implements Serializable {
 
     @Transient
     private  XhKqBttDdiem xhKqBttDdiem;
-
 }

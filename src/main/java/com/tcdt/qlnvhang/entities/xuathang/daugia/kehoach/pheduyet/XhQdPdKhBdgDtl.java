@@ -1,17 +1,13 @@
 package com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGia;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdr;
-import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -38,17 +34,13 @@ public class XhQdPdKhBdgDtl implements Serializable {
 
     private String soDxuat;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayTao;
+    private LocalDate ngayTao;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayPduyet;
+    private LocalDate ngayPduyet;
 
-    @Temporal(TemporalType.DATE)
-    private Date tgianDkienTu;
+    private LocalDate tgianDkienTu;
 
-    @Temporal(TemporalType.DATE)
-    private Date tgianDkienDen;
+    private LocalDate tgianDkienDen;
 
     private String trichYeu;
 
@@ -62,9 +54,6 @@ public class XhQdPdKhBdgDtl implements Serializable {
     private String moTaHangHoa;
 
     private String diaChi;
-
-    @Column(name="SO_QD_PD_KQ_BDG")
-    private String soQdPdKqBdg;
 
     private String trangThai;
 
@@ -110,4 +99,20 @@ public class XhQdPdKhBdgDtl implements Serializable {
     public String getTenTrangThai() {
         return NhapXuatHangTrangThaiEnum.getTenById(this.getTrangThai());
     }
+
+//    Thông tin đấu giá
+    @Column(name="SO_QD_PD_KQ_BDG")
+    private String soQdPdKqBdg;
+
+    @Column(name="NGAY_KY_QD_PD_KQ_BDG")
+    private LocalDate ngayKyQdPdKqBdg;
+
+    private Integer soDviTsanThanhCong;
+
+    private Integer soDviTsanKhongThanh;
+
+    private String ketQuaDauGia;
+
+    private String soQdDcBdg;
+
 }

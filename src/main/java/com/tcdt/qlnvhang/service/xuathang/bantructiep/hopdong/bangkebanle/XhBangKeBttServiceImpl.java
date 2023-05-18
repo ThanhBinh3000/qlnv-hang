@@ -1,5 +1,4 @@
 package com.tcdt.qlnvhang.service.xuathang.bantructiep.hopdong.bangkebanle;
-
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.bangkebanle.XhBangKeBtt;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.hopdong.bangkebanle.XhBangKeBttRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -16,8 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,8 +34,7 @@ public class XhBangKeBttServiceImpl extends BaseServiceImpl implements XhBangKeB
                 req.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<XhBangKeBtt> data = xhBangKeBttRepository.searchPage(
                 req,
-                pageable
-        );
+                pageable);
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
         data.getContent().forEach(f ->{
@@ -57,19 +55,18 @@ public class XhBangKeBttServiceImpl extends BaseServiceImpl implements XhBangKeB
     @Override
     public XhBangKeBtt create(XhBangKeBttReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null)
+        if (userInfo == null){
             throw new Exception("Bad request.");
-
+        }
         if (!StringUtils.isEmpty(req.getSoBangKe())){
             Optional<XhBangKeBtt> qOptional = xhBangKeBttRepository.findBySoBangKe(req.getSoBangKe());
             if (qOptional.isPresent()){
                 throw new Exception("Số bảng kê" + req.getSoBangKe() + " đã tồn tại");
             }
         }
-
         XhBangKeBtt data = new XhBangKeBtt();
         BeanUtils.copyProperties(req, data, "id");
-        data.setNgayTao(getDateTimeNow());
+        data.setNgayTao(LocalDate.now());
         data.setNguoiTaoId(userInfo.getId());
         xhBangKeBttRepository.save(data);
         return data;
@@ -78,16 +75,16 @@ public class XhBangKeBttServiceImpl extends BaseServiceImpl implements XhBangKeB
     @Override
     public XhBangKeBtt update(XhBangKeBttReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null)
+        if (userInfo == null){
             throw new Exception("Bad request.");
-
-        if (StringUtils.isEmpty(req.getId()))
+        }
+        if (StringUtils.isEmpty(req.getId())){
             throw new Exception("Sửa thất bại, không tìm thấy dữ liệu");
-
+        }
         Optional<XhBangKeBtt> qOptional = xhBangKeBttRepository.findById(req.getId());
-        if (!qOptional.isPresent())
+        if (!qOptional.isPresent()){
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
-
+        }
         if (!StringUtils.isEmpty(req.getSoBangKe())){
             Optional<XhBangKeBtt> bangKeBtt = xhBangKeBttRepository.findBySoBangKe(req.getSoBangKe());
             if (bangKeBtt.isPresent()){
@@ -96,10 +93,9 @@ public class XhBangKeBttServiceImpl extends BaseServiceImpl implements XhBangKeB
                 }
             }
         }
-
         XhBangKeBtt data = qOptional.get();
         BeanUtils.copyProperties(req, data, "id");
-        data.setNgaySua(getDateTimeNow());
+        data.setNgaySua(LocalDate.now());
         data.setNguoiSuaId(userInfo.getId());
         xhBangKeBttRepository.save(data);
         return data;
@@ -108,16 +104,12 @@ public class XhBangKeBttServiceImpl extends BaseServiceImpl implements XhBangKeB
     @Override
     public XhBangKeBtt detail(Long id) throws Exception {
         Optional<XhBangKeBtt> qOptional = xhBangKeBttRepository.findById(id);
-
         if (!qOptional.isPresent()){
             throw new UnsupportedOperationException("Không tồn tại bản ghi");
         }
-
         XhBangKeBtt data = qOptional.get();
-
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
-
         data.setTenLoaiVthh(hashMapVthh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(hashMapVthh.get(data.getCloaiVthh()));
         data.setTenDvi(hashMapDvi.get(data.getMaDvi()));
@@ -134,14 +126,11 @@ public class XhBangKeBttServiceImpl extends BaseServiceImpl implements XhBangKeB
         if (StringUtils.isEmpty(id)){
             throw new Exception("Xóa thất bại không tìm thấy dữ liệu");
         }
-
         Optional<XhBangKeBtt> optional = xhBangKeBttRepository.findById(id);
         if (!optional.isPresent()){
             throw new Exception("Không tìm thấy dữ liệu cần xóa");
         }
-
         xhBangKeBttRepository.delete(optional.get());
-
     }
 
     @Override
@@ -149,12 +138,10 @@ public class XhBangKeBttServiceImpl extends BaseServiceImpl implements XhBangKeB
         if (StringUtils.isEmpty(listMulti)) {
             throw new Exception("Xóa thất bại, không tìm thấy dữ liệu");
         }
-
         List<XhBangKeBtt> list = xhBangKeBttRepository.findByIdIn(listMulti);
         if (list.isEmpty()){
             throw new Exception(" Không tìm thấy dữ liệu cần xóa");
         }
-
         for (XhBangKeBtt bangKeBtt : list){
             this.delete(bangKeBtt.getId());
         }
@@ -168,7 +155,6 @@ public class XhBangKeBttServiceImpl extends BaseServiceImpl implements XhBangKeB
         req.setPaggingReq(paggingReq);
         Page<XhBangKeBtt> page = this.searchPage(req);
         List<XhBangKeBtt> data = page.getContent();
-
         String title="Danh sách bảng kê bán lẻ";
         String[] rowsName = new String[]{"STT","Năm kế hoạch", "Số bảng kê", "Số quyết định", "Tên người mua", "Địa chỉ", "Số CMT/CCCD", "Loại hàng hóa", "Chủng loại hàng hóa", "Số lượng", "Đơn giá", "Thanh tiền"};
         String filename="danh-sach-dx-kh-ban-truc-tiep.xlsx";

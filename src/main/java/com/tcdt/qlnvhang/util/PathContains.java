@@ -275,6 +275,16 @@ public class PathContains {
 
 	public static final String GIA_BAN_TOI_THIEU = "/gia-ban-toi-thieu";
 
+	public static final String XUAT_THANH_LY = "/xuat-thanh-ly";
+
+	public static final String DANH_SACH = "/danh-sach";
+	public static final String TONG_HOP = "/tong-hop";
+	public static final String QUYET_DINH_THANH_LY = "/quyet-dinh-thanh-ly";
+
+	public static final String THONG_BAO_KET_QUA = "/thong-bao-ket-qua";
+
+	public static final String BAO_CAO_KET_QUA = "/bao-cao-ket-qua";
+
 	// điều chuyển nội bộ
 
 	public static final String DIEU_CHUYEN_NOI_BO = "/dieu-chuyen-noi-bo";
@@ -283,4 +293,6 @@ public class PathContains {
 	public static final String TONG_HOP_KE_HOACH_DIEU_CHUYEN_C = "/tong-hop-ke-hoach-dieu-chuyen-c";
 	public static final String QUYET_DINH_DIEU_CHUYEN_TC = "/quyet-dinh-dieu-chuyen-tc";
 	public static final String QUYET_DINH_DIEU_CHUYEN_C = "/quyet-dinh-dieu-chuyen-c";
+	public static final String BIEN_BAN_LAY_MAU_BAN_GIAO_MAU = "/bien-ban-lay-mau";
+	public static final String PHIEU_KIEM_TRA_CHAT_LUONG = "/phieu-kiem-tra-chat-luong";
 }

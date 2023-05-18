@@ -3,7 +3,6 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxKhlcntDsgthauCtietVt1;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcDtlRepository;
@@ -55,8 +54,8 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
-    private static final Logger logger = LoggerFactory.getLogger(DcnbKeHoachDcDtlService.class);
+public class DcnbKeHoachDcHdrService extends BaseServiceImpl {
+    private static final Logger logger = LoggerFactory.getLogger(DcnbKeHoachDcHdrService.class);
 
     @Autowired
     private DcnbKeHoachDcHdrRepository dcnbKeHoachDcHdrRepository;
@@ -126,7 +125,7 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
         Optional<DcnbKeHoachDcHdr> soDxuat = dcnbKeHoachDcHdrRepository.findFirstBySoDxuat(objReq.getSoDxuat());
         if (org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoDxuat())) {
             if (soDxuat.isPresent() && objReq.getSoDxuat().split("/").length == 1) {
-                if (!soDxuat.get().getId().equals(objReq.getId())) {
+                if (!soDxuat.get().getId().equals(objReq.getId()) && !Contains.NHAN_DIEU_CHUYEN.equals(optional.get().getType())) {
                     throw new Exception("số đề xuất đã tồn tại");
                 }
             }
@@ -261,7 +260,19 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
                             throw new Exception("Chủng loại hàng hóa không đúng trong kho hiện thời!");
                         }
                         BigDecimal slHienThoi = new BigDecimal(res.get(0).getSlHienThoi());
-                        BigDecimal slConLai = slHienThoi.subtract((getTongKeHoachDeXuat(hh.getCloaiVthh(), hh.getMaLoKho()).subtract(getTongSoLuongXuatKho(hh.getCloaiVthh(), hh.getMaLoKho()))));
+                        BigDecimal slConLai = new BigDecimal(0);
+                        if(hh.getCoLoKho()){
+                            BigDecimal total = danhSachHangHoa.stream().filter(item -> item.getMaLoKho().equals(hh.getMaLoKho()))
+                                    .map(DcnbKeHoachDcDtl::getSoLuongDc)
+                                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+                            slConLai = slHienThoi.subtract(total);
+                        }else {
+                            BigDecimal total = danhSachHangHoa.stream().filter(item -> item.getMaNganKho().equals(hh.getMaNganKho()))
+                                    .map(DcnbKeHoachDcDtl::getSoLuongDc)
+                                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+                            slConLai = slHienThoi.subtract(total);
+                        }
+
                         int result = slConLai.compareTo(BigDecimal.valueOf(0));
                         if (result < 0) {
                             throw new Exception(hh.getTenLoKho() + ": Không đủ số lượng xuất hàng!");
@@ -339,14 +350,20 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
         return new BigDecimal(0);
     }
 
-    private BigDecimal getTongKeHoachDeXuat(String cloaiVthh, String maLoKho) {
-        return dcnbKeHoachDcHdrRepository.countTongKeHoachDeXuat(cloaiVthh, maLoKho);
+    private BigDecimal getTongKeHoachDeXuat(String cloaiVthh, String maLoKho, Long hdrId) {
+        if(maLoKho.length() == 16){
+            return dcnbKeHoachDcHdrRepository.countTongKeHoachDeXuatLoKho(cloaiVthh, maLoKho, hdrId);
+        }else {
+            return dcnbKeHoachDcHdrRepository.countTongKeHoachDeXuatNganKho(cloaiVthh, maLoKho, hdrId);
+        }
     }
 
     public DcnbKeHoachDcHdr approveNhanDieuChuyen(CustomUserDetails currentUser, StatusReq statusReq, Optional<DcnbKeHoachDcHdr> optional) throws Exception {
         String status = optional.get().getTrangThai() + statusReq.getTrangThai();
         switch (status) {
             case Contains.YC_CHICUC_PHANBO_DC + Contains.DA_PHANBO_DC_CHODUYET_TBP_TVQT:
+            case Contains.DA_PHANBO_DC_TUCHOI_TP + Contains.DA_PHANBO_DC_CHODUYET_TBP_TVQT:
+            case Contains.DA_PHANBO_DC_TUCHOI_LDC + Contains.DA_PHANBO_DC_CHODUYET_TBP_TVQT:
             case Contains.DA_PHANBO_DC_TUCHOI_TBP_TVQT + Contains.DA_PHANBO_DC_CHODUYET_TBP_TVQT:
             case Contains.DA_PHANBO_DC_TUCHOI_LDCC + Contains.DA_PHANBO_DC_CHODUYET_TBP_TVQT:
                 optional.get().setNgayGduyet(LocalDate.now());
@@ -370,11 +387,7 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
                 optional.get().setNgayDuyetLdcc(LocalDate.now());
                 optional.get().setNguoiDuyetLdccId(currentUser.getUser().getId());
                 optional.get().setDaXdinhDiemNhap(true);
-                Optional<DcnbKeHoachDcDtl> parentHdr = dcnbKeHoachDcDtlRepository.findById(optional.get().getParentId());
-                if (parentHdr.isPresent()) {
-                    parentHdr.get().setDaXdinhDiemNhap(true);
-                    dcnbKeHoachDcDtlRepository.save(parentHdr.get());
-                }
+                optional.get().setXdLaiDiemNhap(false);
                 // update lại các kho nhận điều chuyển trong danh sách hàng hóa cha.
                 List<DcnbKeHoachDcDtl> danhSachHangHoa = optional.get().getDanhSachHangHoa();
                 for (DcnbKeHoachDcDtl hh : danhSachHangHoa) {
@@ -398,6 +411,15 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
                         dcnbKeHoachDcDtlRepository.save(parentDtl.get());
                     }
                 }
+
+                Optional<DcnbKeHoachDcHdr> parentHdr = dcnbKeHoachDcHdrRepository.findById(optional.get().getParentId());
+                if (parentHdr.isPresent()) {
+                    boolean allMatch = parentHdr.get().getDanhSachHangHoa().stream().allMatch(n -> (n.getDaXdinhDiemNhap() != null && n.getDaXdinhDiemNhap() == true));
+                    if(allMatch){
+                        parentHdr.get().setDaXdinhDiemNhap(true);
+                        dcnbKeHoachDcHdrRepository.save(parentHdr.get());
+                    }
+                }
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
@@ -415,20 +437,22 @@ public class DcnbKeHoachDcDtlService extends BaseServiceImpl {
         Page<DcnbKeHoachDcHdr> page = this.searchPage(currentUser, objReq);
         List<DcnbKeHoachDcHdr> data = page.getContent();
 
-        String title = "Danh sách phương án xuất cứu trợ, viện trợ ";
-        String[] rowsName = new String[]{"STT", "Năm kH", "Số công văn/đề xuất", "Ngày duyệt LĐ Cục", "Loại điều chuyển", "Đơn vị đề xuất", "Trạng thái",};
+        String title = "Danh sách kế hoạch điều chuyển nội bộ ";
+        String[] rowsName = new String[]{"STT", "Năm kế hoạch", "Số công văn/đề xuất", "Ngày lập KH", "Ngày duyệt LĐ Chi cục", "Loại điều chuyển", "Đơn vị đề xuất","Trạng thái"};
         String fileName = "danh-sach-ke-hoach-dieu-chuyen-noi-bo-hang-dtqg.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
         for (int i = 0; i < data.size(); i++) {
             DcnbKeHoachDcHdr dx = data.get(i);
             objs = new Object[rowsName.length];
-            objs[0] = i;
+            objs[0] = i+1;
             objs[1] = dx.getNam();
             objs[2] = dx.getSoDxuat();
-            objs[3] = dx.getNgayDuyetLdcc();
-            objs[4] = dx.getLoaiDc();
-            objs[5] = dx.getTenDvi();
+            objs[3] = dx.getNgayLapKh();
+            objs[4] = dx.getNgayDuyetLdcc();
+            objs[5] = dx.getTenLoaiDc();
+            objs[6] = dx.getTenDvi();
+            objs[7] = dx.getTenTrangThai();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);

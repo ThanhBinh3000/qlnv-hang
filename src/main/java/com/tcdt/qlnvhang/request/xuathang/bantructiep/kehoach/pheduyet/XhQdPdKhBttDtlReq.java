@@ -1,48 +1,29 @@
 package com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.pheduyet;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tcdt.qlnvhang.util.Contains;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
 public class XhQdPdKhBttDtlReq {
-    @ApiModelProperty(notes = "Bắt buộc set đối với update")
+
     private Long id;
 
     private Long idQdHdr;
 
     private Long idDxHdr;
 
-    @NotNull(message = "Không được để trống")
-    @Size(max = 20, message = "Mã đơn vị không được vượt quá 20 ký tự")
-    @ApiModelProperty(example = "HNO")
-    String maDvi;
+    private String maDvi;
 
-    @NotNull(message = "Không được để trống")
-    @Size(max = 20, message = "Số đề xuất không được vượt quá 20 ký tự")
-    @ApiModelProperty(example = "Tên dự án")
-    String soDxuat;
+    private String soDxuat;
 
-    @NotNull(message = "Không được để trống")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    Date ngayTao;
+    private LocalDate ngayTao;
 
-    @NotNull(message = "Không được để trống")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    Date ngayPduyet;
+    private LocalDate ngayPduyet;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    Date tgianDkienTu;
+    private LocalDate tgianDkienTu;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    Date tgianDkienDen;
+    private LocalDate tgianDkienDen;
 
     private String trichYeu;
 
@@ -69,5 +50,4 @@ public class XhQdPdKhBttDtlReq {
     private String thongBaoKh;
 
     private List<XhQdPdKhBttDviReq> children;
-
 }

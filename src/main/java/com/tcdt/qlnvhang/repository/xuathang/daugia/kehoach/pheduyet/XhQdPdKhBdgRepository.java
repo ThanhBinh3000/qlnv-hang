@@ -1,32 +1,31 @@
 package com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.pheduyet;
-
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdg;
+import com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.pheduyet.XhQdPdKhBdgReq;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 @Repository
 public interface XhQdPdKhBdgRepository extends JpaRepository<XhQdPdKhBdg,Long> {
 
-    @Query(value = "select * from XH_QD_PD_KH_BDG BDG " +
-            " where (:namKh IS NULL OR BDG.NAM = TO_NUMBER(:namKh)) " +
-            "AND (:soQdPd IS NULL OR LOWER(BDG.SO_QD_PD) LIKE LOWER(CONCAT(CONCAT('%',:soQdPd),'%' ) ) )" +
-            "AND (:trichYeu IS NULL OR LOWER(BDG.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%',:trichYeu),'%')))" +
-            "AND (:ngayKyQdTu IS NULL OR BDG.NGAY_KY_QD >=  TO_DATE(:ngayKyQdTu,'yyyy-MM-dd')) " +
-            "AND (:ngayKyQdDen IS NULL OR BDG.NGAY_KY_QD <= TO_DATE(:ngayKyQdDen,'yyyy-MM-dd'))" +
-            "AND (:soTrHdr IS NULL OR LOWER(BDG.SO_TR_HDR) LIKE LOWER(CONCAT(CONCAT('%',:soTrHdr),'%' ) ) )" +
-            "AND (:loaiVthh IS NULL OR LOWER(BDG.LOAI_VTHH) LIKE LOWER(CONCAT(:loaiVthh,'%' ) ) )" +
-            "AND (:trangThai IS NULL OR BDG.TRANG_THAI = :trangThai)" +
-            " AND (:lastest IS NULL OR BDG.LASTEST = TO_NUMBER(:lastest)) " +
-            "AND (:maDvi IS NULL OR LOWER(BDG.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))  "
-            ,nativeQuery = true)
-    Page<XhQdPdKhBdg> searchPage(Integer namKh, String soQdPd, String trichYeu, String ngayKyQdTu, String ngayKyQdDen, String soTrHdr, String loaiVthh, String trangThai,Integer lastest, String maDvi,  Pageable pageable);
-
+    @Query("SELECT QD from XhQdPdKhBdg QD WHERE 1 = 1 " +
+            "AND (:#{#param.nam} IS NULL OR QD.nam = :#{#param.nam}) " +
+            "AND (:#{#param.soQdPd} IS NULL OR LOWER(QD.soQdPd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQdPd}),'%' ) ) )" +
+            "AND (:#{#param.trichYeu} IS NULL OR LOWER(QD.trichYeu) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.trichYeu}),'%'))) " +
+            "AND (:#{#param.ngayKyQdTu} IS NULL OR QD.ngayKyQd >= :#{#param.ngayKyQdTu}) " +
+            "AND (:#{#param.ngayKyQdDen} IS NULL OR QD.ngayKyQd <= :#{#param.ngayKyQdDen}) " +
+            "AND (:#{#param.soTrHdr} IS NULL OR LOWER(QD.soTrHdr) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soTrHdr}),'%'))) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR QD.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
+            "AND (:#{#param.lastest} IS NULL OR LOWER(QD.lastest) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.lastest}),'%'))) " +
+            "AND (:#{#param.trangThai} IS NULL OR QD.trangThai = :#{#param.trangThai}) " +
+            "AND (:#{#param.maDvi} IS NULL OR QD.maDvi = :#{#param.maDvi})")
+    Page<XhQdPdKhBdg> searchPage(@Param("param") XhQdPdKhBdgReq param, Pageable pageable);
 
     List<XhQdPdKhBdg> findBySoQdPd(String soQdPd);
+
     List <XhQdPdKhBdg> findAllByIdIn(List<Long> ids);
 }

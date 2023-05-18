@@ -1,16 +1,11 @@
 package com.tcdt.qlnvhang.request.xuathang.bantructiep.hopdong;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
-
 import javax.persistence.Transient;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -24,14 +19,11 @@ public class XhHopDongBttHdrReq extends BaseRequest {
 
     private String soQdKq;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayKyQdKq;
+    private LocalDate ngayKyQd;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayMkho;
+    private LocalDate ngayMkho;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayKyQdPd;
+    private LocalDate ngayKyQdPd;
 
     private String soQdPd;
 
@@ -45,8 +37,7 @@ public class XhHopDongBttHdrReq extends BaseRequest {
 
     private String tenHd;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayHluc;
+    private LocalDate ngayHluc;
 
     private String ghiChuNgayHluc;
 
@@ -56,11 +47,9 @@ public class XhHopDongBttHdrReq extends BaseRequest {
 
     private Integer tgianThienHd;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date tgianGnhanTu;
+    private LocalDate tgianGnhanTu;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date tgianGnhanDen;
+    private LocalDate tgianGnhanDen;
 
     private String ghiChuTgianGnhan;
 
@@ -130,8 +119,8 @@ public class XhHopDongBttHdrReq extends BaseRequest {
 
     private String trangThaiXh;
 
-//    @Transient
-//    private List<String> listMaDviTsan = new ArrayList<>();
+    @Transient
+    private List<String> listMaDviTsan = new ArrayList<>();
 
     @Transient
     private List<FileDinhKemReq> canCuPhapLy = new ArrayList<>();
@@ -150,16 +139,13 @@ public class XhHopDongBttHdrReq extends BaseRequest {
 
     private String soPhuLuc;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayHlucPhuLuc;
+    private LocalDate ngayHlucPhuLuc;
 
     private String noiDungPhuLuc;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayHlucSauDcTu;
+    private LocalDate ngayHlucSauDcTu;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayHlucSauDcDen;
+    private LocalDate ngayHlucSauDcDen;
 
     private Integer tgianThienHdSauDc;
 
@@ -176,4 +162,12 @@ public class XhHopDongBttHdrReq extends BaseRequest {
     private List<XhHopDongBttDtlReq> phuLucDtl = new ArrayList<>();
 
     private BigDecimal donGiaBanTrucTiep;
+
+    private String soQdNv;
+
+    private Long idQdNv;
+
+//    cấp chi cục
+   @Transient
+   private List<XhHopDongBttDviReq> xhHopDongBttDviList = new ArrayList<>();
 }
