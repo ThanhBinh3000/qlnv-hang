@@ -73,12 +73,11 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
         data.setMaDVi(currentUser.getUser().getDvql());
         data.setTenDVi(currentUser.getUser().getTenDvi());
         data.setTrangThai(Contains.CHUATAO_QD);
-        data.setNgayTongHop(objReq.getNgayTongHop());
+        data.setNgayTongHop(objReq.getNgaytao());
         data.setThoiGianTongHop(objReq.getThoiGianTongHop());
         data.setLoaiHangHoa(objReq.getLoaiHangHoa());
         data.setChungLoaiHangHoa(objReq.getChungLoaiHangHoa());
         data.setTenLoaiHangHoa(objReq.getTenLoaiHangHoa());
-        data.setNgayTongHop(LocalDate.now());
         data.setNamKeHoach(objReq.getNamKeHoach());
         data.setLoaiDieuChuyen(objReq.getLoaiDieuChuyen());
         List<THKeHoachDieuChuyenTongCucDtl> chiTiet = new ArrayList<>();

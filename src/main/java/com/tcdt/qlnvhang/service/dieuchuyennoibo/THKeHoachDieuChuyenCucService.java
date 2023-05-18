@@ -57,8 +57,6 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
     @Autowired
     private DcnbKeHoachDcHdrRepository dcHdrRepository;
 
-    @Autowired
-    private FileDinhKemService fileDinhKemService;
 
 
     public Page<THKeHoachDieuChuyenCucHdr> searchPageCuc(CustomUserDetails currentUser, TongHopKeHoachDieuChuyenSearch req) throws Exception {
@@ -102,12 +100,6 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         if (currentUser == null) {
             throw new Exception("Bad request.");
         }
-//        List<THKeHoachDieuChuyenCucHdr> soDeXuat = thKeHoachDieuChuyenHdrRepository.findBySoDeXuat(objReq.getSoDeXuat());
-//        if (!soDeXuat.isEmpty() && objReq.getSoDeXuat().split("/").length == 1) {
-//            if (soDeXuat.get(0).getId().equals(objReq.getId())) {
-//                throw new Exception("Số đề xuất đã tồn tại");
-//            }
-//        }
         THKeHoachDieuChuyenCucHdr data = new THKeHoachDieuChuyenCucHdr();
         BeanUtils.copyProperties(objReq, data);
         data.setMaDvi(currentUser.getUser().getDvql());
@@ -269,7 +261,6 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
             });
         });
         thKeHoachDieuChuyenCucKhacCucDtlRepository.saveAll(listTongHopKeHoachKhacCuc);
-
         thKeHoachDieuChuyenCucKhacCucDtlRepository.deleteAll(listTongHopKeHoachKhacCuc);
         thKeHoachDieuChuyenHdrRepository.deleteAll(list);
     }
@@ -395,7 +386,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                         List<String> danhSachKeHoach = Arrays.asList(statusReq.getMaChiCucNhan().split(","));
                         List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtl = dcnbKeHoachDcDtlRepository.findByChiCucNhan(danhSachKeHoach,data.getDcKeHoachDcHdrId());
                         dcnbKeHoachDcDtl.forEach(e -> {
-                            e.setXdLaiDiemNhap(true);;
+                            e.setXdLaiDiemNhap(true);
                             e.getDcnbKeHoachDcHdr().setTrangThai(Contains.DA_PHANBO_DC_TUCHOI_LDC);
                             dcHdrRepository.save(e.getDcnbKeHoachDcHdr());
                         });
