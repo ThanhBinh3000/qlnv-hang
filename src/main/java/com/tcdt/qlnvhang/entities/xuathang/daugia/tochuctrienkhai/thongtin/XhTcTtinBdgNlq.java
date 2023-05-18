@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -26,5 +27,6 @@ public class XhTcTtinBdgNlq implements Serializable {
   private String diaChi;
   private String giayTo;
   private String loai;  //KM-khach moi    DGV-dau gia vien    NTG-nguoi tham gia
+  private BigDecimal idVirtual;
 
 }
