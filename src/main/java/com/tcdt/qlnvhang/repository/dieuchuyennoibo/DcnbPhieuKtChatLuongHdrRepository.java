@@ -23,7 +23,7 @@ public interface DcnbPhieuKtChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "AND ((:#{#param.tuNgay}  IS NULL OR c.ngayKiem >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR c.ngayKiem <= :#{#param.denNgay}) ) " +
             "AND (:#{#param.soBbLayMau} IS NULL OR LOWER(c.soBbLayMau) LIKE CONCAT('%',LOWER(:#{#param.soBbLayMau}),'%')) " +
-            "GROUP BY c.soQdinhDc,c.nam"
+            "ORDER BY c.soQdinhDc desc,c.nam desc "
     )
     Page<DcnbPhieuKtChatLuongHdr> search(@Param("param")SearchPhieuKtChatLuong req, Pageable pageable);
 
