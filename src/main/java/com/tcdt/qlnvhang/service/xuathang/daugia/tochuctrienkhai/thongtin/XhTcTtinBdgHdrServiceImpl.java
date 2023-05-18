@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.xuathang.daugia.tochuctrienkhai.thongtin;
 
+import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGia;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgDtlRepository;
@@ -54,10 +55,13 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
 
 
     @Override
-    public Page<XhTcTtinBdgHdr> searchPage(ThongTinDauGiaReq objReq) throws Exception {
-        Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
-        Page<XhTcTtinBdgHdr> page = xhTcTtinBdgHdrRepository.search(objReq,pageable);
-        return page;
+    public Page<XhTcTtinBdgHdr> searchPage(ThongTinDauGiaReq req) throws Exception {
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),
+                req.getPaggingReq().getLimit(), Sort.by("id").descending());
+        Page<XhTcTtinBdgHdr> data = xhTcTtinBdgHdrRepository.search(
+                req,
+                pageable);
+        return data;
     }
 
     @Override

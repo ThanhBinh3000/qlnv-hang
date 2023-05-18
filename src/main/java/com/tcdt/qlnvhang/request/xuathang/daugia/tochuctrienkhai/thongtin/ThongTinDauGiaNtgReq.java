@@ -4,6 +4,8 @@ import com.tcdt.qlnvhang.request.BaseRequest;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 public class ThongTinDauGiaNtgReq extends BaseRequest {
@@ -15,5 +17,6 @@ public class ThongTinDauGiaNtgReq extends BaseRequest {
   private String diaChi;
   private String giayTo;
   private String loai;  //KM-khach moi    DGV-dau gia vien    NTG-nguoi tham gia
+  private BigDecimal idVirtual;
 
 }
