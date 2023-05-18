@@ -43,6 +43,7 @@ public class HhDxKhMttThopDtl implements Serializable {
     private BigDecimal tongSoLuong;
 
     private BigDecimal tongTienGomThue;
+    private BigDecimal tongMucDt;
 
     private BigDecimal donGiaVat;
 

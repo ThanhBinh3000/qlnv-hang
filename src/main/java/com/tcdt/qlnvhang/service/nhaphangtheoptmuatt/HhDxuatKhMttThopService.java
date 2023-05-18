@@ -10,6 +10,7 @@ import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhDxKhMttThopHdrReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhDxKhMttThopReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.HhQdPheduyetKhMttHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
 import com.tcdt.qlnvhang.util.Contains;
@@ -42,6 +43,8 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
 
     @Autowired
     private HhDxuatKhMttThopDtlRepository hhDxuatKhMttThopDtlRepository;
+    @Autowired
+    private HhQdPheduyetKhMttHdrRepository hhQdPheduyetKhMttHdrRepository;
 
 
 
@@ -54,6 +57,10 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
                 pageable);
         Map<String, String> hashMapDmhh = getListDanhMucHangHoa();
         data.getContent().forEach(f -> {
+            Optional<HhQdPheduyetKhMttHdr> hhQdPheduyetKhMttHdr = hhQdPheduyetKhMttHdrRepository.findByIdThHdrAndLastest(f.getId(), true);
+            if(hhQdPheduyetKhMttHdr.isPresent()){
+                f.setQdPdMttId(hhQdPheduyetKhMttHdr.get().getId());
+            }
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmhh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmhh.get(f.getCloaiVthh()));
