@@ -65,6 +65,12 @@ public class THKeHoachDieuChuyenTongCucHdr extends BaseEntity implements Seriali
     @Column(name = "THOI_GIAN_TONG_HOP")
     private LocalDateTime thoiGianTongHop;
 
+    @Column(name = "QDDC_ID")
+    private Long qdDcId;
+
+    @Column(name = "SO_QDDC")
+    private String soQddc;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
     private List<THKeHoachDieuChuyenTongCucDtl> thKeHoachDieuChuyenTongCucDtls = new ArrayList<>();
