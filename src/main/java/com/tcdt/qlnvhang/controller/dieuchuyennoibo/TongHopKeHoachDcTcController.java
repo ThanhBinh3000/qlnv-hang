@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.controller.dieuchuyennoibo;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CurrentUser;
@@ -20,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.*;
 
@@ -155,7 +157,7 @@ public class TongHopKeHoachDcTcController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Cập nhật thông tin đề xuất", response = List.class)
+    @ApiOperation(value = "Cập nhật thông tin tổng hợp kế hoạch", response = List.class)
     @PostMapping(value =  PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody ThKeHoachDieuChuyenTongCucHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
@@ -172,24 +174,24 @@ public class TongHopKeHoachDcTcController extends BaseController {
     }
 
 
-//    @ApiOperation(value = "Kết xuất danh sách mua", response = List.class)
-//    @PostMapping(value =  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
-//    @ResponseStatus(HttpStatus.OK)
-//    public void exportList(@CurrentUser CustomUserDetails currentUser ,@Valid @RequestBody  TongHopKeHoachDieuChuyenSearch objReq, HttpServletResponse response) throws Exception {
-//        try {
-//            thKeHoachDieuChuyenService.export( currentUser,objReq, response);
-//
-//        } catch (Exception e) {
-//            log.error("Kết xuất danh sách dánh sách mua : {}", e);
-//            final Map<String, Object> body = new HashMap<>();
-//            body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-//            body.put("msg", e.getMessage());
-//            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-//            response.setCharacterEncoding("UTF-8");
-//            final ObjectMapper mapper = new ObjectMapper();
-//            mapper.writeValue(response.getOutputStream(), body);
-//
-//        }
-//    }
+    @ApiOperation(value = "Kết xuất danh sách tổng hợp kế hoạch", response = List.class)
+    @PostMapping(value =  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public void exportList(@CurrentUser CustomUserDetails currentUser ,@Valid @RequestBody  TongHopKeHoachDieuChuyenSearch objReq, HttpServletResponse response) throws Exception {
+        try {
+            thKeHoachDieuChuyenTongCucService.export( currentUser,objReq, response);
+
+        } catch (Exception e) {
+            log.error("Kết xuất danh sách dánh sách mua : {}", e);
+            final Map<String, Object> body = new HashMap<>();
+            body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            body.put("msg", e.getMessage());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("UTF-8");
+            final ObjectMapper mapper = new ObjectMapper();
+            mapper.writeValue(response.getOutputStream(), body);
+
+        }
+    }
 }
 
