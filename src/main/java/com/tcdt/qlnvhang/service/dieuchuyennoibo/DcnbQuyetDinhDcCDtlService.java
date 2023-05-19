@@ -368,7 +368,10 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
             case Contains.CHODUYET_LDC + Contains.BAN_HANH:
                 optional.get().setNgayDuyetTc(LocalDate.now());
                 optional.get().setNguoiDuyetTcId(currentUser.getUser().getId());
-                Optional<DcnbQuyetDinhDcTcHdr> dcnbQuyetDinhDcTcHdr = dcnbQuyetDinhDcTcHdrRepository.findById(optional.get().getCanCuQdTc());
+                Optional<DcnbQuyetDinhDcTcHdr> dcnbQuyetDinhDcTcHdr = Optional.empty();
+                if(optional.get().getCanCuQdTc() != null){
+                    dcnbQuyetDinhDcTcHdr = dcnbQuyetDinhDcTcHdrRepository.findById(optional.get().getCanCuQdTc());
+                }
                 if(dcnbQuyetDinhDcTcHdr.isPresent()){
                     if("00".equals(optional.get().getLoaiQdinh())){
                         String qdinhNhapCucId = dcnbQuyetDinhDcTcHdr.get().getQdinhNhapCucId();
