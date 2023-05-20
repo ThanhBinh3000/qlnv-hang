@@ -8,7 +8,6 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoRequest;
-import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoRequest;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -139,15 +138,11 @@ public class XhTlHoSoService extends BaseServiceImpl {
       throw new Exception("Không tìm thấy dữ liệu");
     }
 
-    Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
+    Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
     Map<String, String> mapVthh = getListDanhMucHangHoa();
     List<XhTlHoSoHdr> allById = xhTlHoSoRepository.findAllById(ids);
     allById.forEach(data -> {
-      if (mapDmucDvi.containsKey(data.getMaDvi())) {
-        data.setTenDvi(mapDmucDvi.get(data.getMaDvi()).get("tenDvi").toString());
-      }
       data.setTenTrangThai(TrangThaiAllEnum.getLabelById(data.getTrangThai()));
-
       List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhTlHoSoHdr.TABLE_NAME));
       data.setFileDinhKem(fileDinhKem);
 
@@ -155,8 +150,8 @@ public class XhTlHoSoService extends BaseServiceImpl {
       data.setCanCu(canCu);
 
       data.getHoSoDtl().forEach(s -> {
-        s.setTenLoaiVthh(StringUtils.isEmpty(s.getLoaiVthh()) ? null : mapVthh.get(s.getLoaiVthh()));
-        s.setTenCloaiVthh(StringUtils.isEmpty(s.getCloaiVthh()) ? null : mapVthh.get(s.getCloaiVthh()));
+        s.setMapDmucDvi(mapDmucDvi);
+        s.setMapVthh(mapVthh);
       });
 
     });
