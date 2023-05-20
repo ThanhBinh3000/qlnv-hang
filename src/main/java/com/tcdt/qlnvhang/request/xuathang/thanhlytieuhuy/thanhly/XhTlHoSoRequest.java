@@ -19,11 +19,11 @@ public class XhTlHoSoRequest extends BaseRequest {
   private Integer nam;
   private String maDvi;
   private String soHoSo;
-  private String idDanhSach;
+  private Long idDanhSach;
   private String maDanhSach;
-  private String idQd;
+  private Long idQd;
   private String soQd;
-  private String idTb;
+  private Long idTb;
   private String soTb;
   private LocalDate ngayTaoHs;
   private LocalDate thoiGianTlTu;
