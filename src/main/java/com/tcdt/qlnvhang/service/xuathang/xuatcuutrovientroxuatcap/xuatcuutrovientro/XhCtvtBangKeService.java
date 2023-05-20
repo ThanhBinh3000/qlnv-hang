@@ -272,8 +272,8 @@ public class XhCtvtBangKeService extends BaseServiceImpl {
     List<XhCtvtBangKeHdr> data = page.getContent();
 
     String title = "Danh sách phiếu xuất kho ";
-    String[] rowsName = new String[]{"STT", "Số QĐ giao nhiệm vụ XH", "Năm KH", "Thời hạn XH trước ngày", "Điểm kho", "Lô kho", "Số phiếu xuất kho", "Ngày xuất kho", "Số phiếu KNCL", "Ngày giám đinh", "Trạng thái"};
-    String fileName = "danh-sach-phieu-xuat-kho";
+    String[] rowsName = new String[]{"STT", "Số QĐ giao nhiệm vụ XH", "Năm KH", "Thời hạn XH trước ngày", "Điểm kho", "Lô kho", "Số bảng kê", "Số phiếu XK", "Ngày XK", "Trạng thái"};
+    String fileName = "danh-sach-bang-ke-can-hang.xlsx";
     List<Object[]> dataList = new ArrayList<Object[]>();
     Object[] objs = null;
     for (int i = 0; i < data.size(); i++) {
@@ -284,12 +284,11 @@ public class XhCtvtBangKeService extends BaseServiceImpl {
       objs[2] = dx.getNam();
       objs[3] = dx.getNgayQdGiaoNvXh();
       objs[4] = dx.getTenDiemKho();
-      objs[5] = dx.getTenLoKho();
-   /*   objs[6] = dx.getSoPhieuXuatKho();
-      objs[7] = dx.getNgayXuatKho();
-      objs[8] = dx.getSoPhieuKnCl();
-      objs[9] = dx.getNgayKn();*/
-      objs[10] = dx.getTenTrangThai();
+      objs[5] = dx.getTenLoKho()+'-'+dx.getTenNganKho();
+      objs[6] = dx.getSoBangKe();
+      objs[7] = dx.getSoPhieuXuatKho();
+      objs[8] = dx.getNgayXuat();
+      objs[9] = dx.getTenTrangThai();
       dataList.add(objs);
     }
     ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
