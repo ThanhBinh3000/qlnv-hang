@@ -1,19 +1,21 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
+import com.tcdt.qlnvhang.entities.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = DcnbBienBanLayMauHdr.TABLE_NAME)
+@Table(name = DcnbBangKeCanHangHdr.TABLE_NAME)
 @Getter
 @Setter
-public class DcnbBangKeCanHangHdr {
+public class DcnbBangKeCanHangHdr extends BaseEntity implements Serializable, Cloneable{
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "DCNB_BANG_KE_CAN_HANG_HDR";
 
@@ -46,9 +48,6 @@ public class DcnbBangKeCanHangHdr {
     @Column(name = "SO_QDINH_DCC")
     private String soQdinhDcc;
 
-    @Column(name = "NGAY_XUAT_KHO")
-    private LocalDate ngayXuatKho;
-
     @Column(name = "THOI_HAN_DIEU_CHUYEN")
     private LocalDate thoiHanDieuChuyen;
 
@@ -58,23 +57,14 @@ public class DcnbBangKeCanHangHdr {
     @Column(name = "PHIEU_XUAT_KHO_ID")
     private Long phieuXuatKhoId;
 
+    @Column(name = "NGAY_XUAT_KHO")
+    private LocalDate ngayXuatKho;
+
     @Column(name = "SO_PHIEU_XUAT_KHO")
     private String soPhieuXuatKho;
 
     @Column(name = "SO_BB_LAY_MAU")
     private String soBbLayMau;
-
-    @Column(name = "NGAY_LAY_MAU")
-    private LocalDate ngayLayMau;
-
-    @Column(name = "DV_KIEM_NGHIEM")
-    private String dViKiemNghiem;
-
-    @Column(name = "DIA_DIEM_LAY_MAU")
-    private String diaDiemLayMau;
-
-    @Column(name = "LOAI_HANG")
-    private String loaiHang;
 
     @Column(name = "LOAI_VTHH")
     private String loaiVthh;

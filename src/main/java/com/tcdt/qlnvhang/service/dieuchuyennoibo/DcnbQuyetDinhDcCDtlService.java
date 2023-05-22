@@ -133,13 +133,10 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
         return created;
     }
 
-    public List<String> danhSachSoQdDieuChuyen(SearchDcnbQuyetDinhDcC req) throws Exception{
+    public List<Object[]> danhSachSoQdDieuChuyen(SearchDcnbQuyetDinhDcC req) throws Exception{
         List<String> ltStr = new ArrayList<>();
         List<Object[]> danhSachSoQdDieuChuyen = dcnbQuyetDinhDcCHdrRepository.findByLoaiDcAndTrangThai(req.getLoaiDc(),Contains.BAN_HANH,req.getLoaiVthh());
-        danhSachSoQdDieuChuyen.forEach(item ->{
-            ltStr.add(item[0].toString());
-        });
-        return ltStr;
+        return danhSachSoQdDieuChuyen;
     }
 
     @Transactional
