@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,4 +20,5 @@ public class SearchDcnbQuyetDinhDcC extends BaseRequest {
   private String soQdinh;
   private String trichYeu;
   private String trangThai;
+  private List<String> loaiVthh;
 }

@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.ThKeHoachDieuChuyenTongCucDtlReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.ThKeHoachDieuChuyenTongCucHdrReq;
 import com.tcdt.qlnvhang.request.search.TongHopKeHoachDieuChuyenSearch;
@@ -12,6 +13,7 @@ import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.hibernate.Hibernate;
@@ -24,6 +26,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.Transient;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import javax.xml.bind.ValidationException;
 import java.time.LocalDate;
@@ -73,7 +76,7 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
         data.setMaDVi(currentUser.getUser().getDvql());
         data.setTenDVi(currentUser.getUser().getTenDvi());
         data.setTrangThai(Contains.CHUATAO_QD);
-        data.setNgayTongHop(objReq.getNgaytao());
+        data.setNgayTongHop(objReq.getNgayTongHop());
         data.setThoiGianTongHop(objReq.getThoiGianTongHop());
         data.setLoaiHangHoa(objReq.getLoaiHangHoa());
         data.setChungLoaiHangHoa(objReq.getChungLoaiHangHoa());
@@ -103,8 +106,9 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
                     ct.setHdrId(created.getId());
                 }
         }
-        thKeHoachDieuChuyenTongCucDtlRepository.saveAll(chiTiet);
-        return created;
+        created.setMaTongHop(created.getId());
+        THKeHoachDieuChuyenTongCucHdr createdSave = tongCucHdrRepository.save(created);
+        return createdSave;
     }
 
     public List<THKeHoachDieuChuyenTongCucHdr> detail(List<Long> ids) throws Exception {
@@ -255,6 +259,36 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
             throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
         }
         return result;
+    }
+
+    @Transactional
+    public void export(CustomUserDetails currentUser, TongHopKeHoachDieuChuyenSearch objReq, HttpServletResponse response) throws Exception {
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        objReq.setPaggingReq(paggingReq);
+        Page<THKeHoachDieuChuyenTongCucHdr> page = this.searchPage(currentUser, objReq);
+        List<THKeHoachDieuChuyenTongCucHdr> data = page.getContent();
+        String title = "Danh sách tổng hợp kế hoạch điều chuyển";
+        String[] rowsName = new String[]{"STT", "Năm KH", "Mã tổng hợp", "Loại điều chuyển", "Ngày tổng hợp", "Nội dung tổng hợp","Số QĐ PD KHĐC", "Trạng thái",};
+        String fileName = "danh-sach-tong-hop-ke-hoach-dieu-chuyen-noi-bo-hang-dtqg.xlsx";
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+        for (int i = 0; i < data.size(); i++) {
+            THKeHoachDieuChuyenTongCucHdr dx = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i;
+            objs[1] = dx.getNamKeHoach();
+            objs[2] = dx.getMaTongHop();
+            objs[3] = dx.getLoaiDieuChuyen();
+            objs[4] = dx.getNgayTongHop();
+            objs[5] = dx.getTrichYeu();
+            objs[6] = dx.getSoQddc();
+            objs[7] = dx.getTrangThai();
+            dataList.add(objs);
+        }
+        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
+        ex.export();
     }
 }
 

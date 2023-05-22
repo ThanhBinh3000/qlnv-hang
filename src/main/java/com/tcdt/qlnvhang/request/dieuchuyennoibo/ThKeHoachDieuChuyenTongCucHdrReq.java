@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,7 +20,7 @@ public class ThKeHoachDieuChuyenTongCucHdrReq implements Serializable {
 
     private Long nguoiSuaId;
 
-    private String maTongHop;
+    private Long maTongHop;
 
     private LocalDate ngayTongHop;
 
@@ -48,6 +49,10 @@ public class ThKeHoachDieuChuyenTongCucHdrReq implements Serializable {
     private LocalDateTime thoiGianTongHop;
 
     private Long idThTongCuc;
+
+    private Long qdDcId;
+
+    private String soQddc;
 
     List<ThKeHoachDieuChuyenTongCucDtlReq> thKeHoachDieuChuyenTongCucDtls;
 }

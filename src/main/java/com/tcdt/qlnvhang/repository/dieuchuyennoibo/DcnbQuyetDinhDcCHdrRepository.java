@@ -41,10 +41,10 @@ public interface DcnbQuyetDinhDcCHdrRepository extends JpaRepository<DcnbQuyetDi
             "JOIN DCNB_KE_HOACH_DC_DTL dtl ON dtl.HDR_ID = hdr.ID WHERE dtl.CLOAI_VTHH = ?1 AND dtl.MA_LO_KHO = ?2", nativeQuery = true)
     BigDecimal countTongKeHoachDeXuat(String cloaiVthh, String maLoKho);
 
-    @Query(value ="SELECT hdr.soQdinh FROM DcnbQuyetDinhDcCHdr hdr " +
-            " LEFT JOIN DcnbQuyetDinhDcCDtl dtl ON dtl.hdrId = hdr.id " +
+    @Query(value ="SELECT distinct hdr.id,hdr.soQdinh,hdr.ngayKyQdinh,d.loaiVthh,d.tenLoaiVthh FROM DcnbQuyetDinhDcCHdr hdr " +
+            "LEFT JOIN DcnbQuyetDinhDcCDtl dtl ON dtl.hdrId = hdr.id " +
             "LEFT JOIN DcnbKeHoachDcHdr h On h.id = dtl.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl d ON d.hdrId = h.id \n" +
-            "WHERE hdr.loaiDc = ?1 AND hdr.trangThai = ?2 AND d.loaiVthh = ?3 group by hdr.soQdinh")
-    List<Object[]> findByLoaiDcAndTrangThai(String loaiDc, String trangThai, String loaiVthh);
+            "WHERE hdr.loaiDc = ?1 AND hdr.trangThai = ?2 AND d.loaiVthh IN ?3 ")
+    List<Object[]> findByLoaiDcAndTrangThai(String loaiDc, String trangThai, List<String> loaiVthh);
 }
