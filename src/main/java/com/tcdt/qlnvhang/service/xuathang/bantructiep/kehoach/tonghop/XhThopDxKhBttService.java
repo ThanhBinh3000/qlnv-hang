@@ -93,6 +93,7 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
             thopDtl.setSlDviTsan(dxuat.getSlDviTsan());
             thopDtl.setTrangThai(dxuat.getTrangThai());
             thopDtl.setTongSoLuong(dxuat.getTongSoLuong());
+            thopDtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(thopDtl.getTrangThai()));
             thopDtls.add(thopDtl);
             thopHdr.setLoaiHinhNx(dxuat.getLoaiHinhNx());
             thopHdr.setKieuNx(dxuat.getKieuNx());
@@ -162,6 +163,7 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
         Map<String, String> hashMapDmucDvi = getListDanhMucDvi(Contains.CAP_CUC,null,"01");
         hdrThop.setTenLoaiVthh(hashMapVthh.get(hdrThop.getLoaiVthh()));
         hdrThop.setTenCloaiVthh(hashMapVthh.get(hdrThop.getCloaiVthh()));
+        hdrThop.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(hdrThop.getTrangThai()));
         List<XhThopDxKhBttDtl> listTh = xhThopDxKhBttDtlRepository.findByIdThopHdr(hdrThop.getId());
         listTh.forEach(f -> {
             f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : hashMapDmucDvi.get(f.getMaDvi()));

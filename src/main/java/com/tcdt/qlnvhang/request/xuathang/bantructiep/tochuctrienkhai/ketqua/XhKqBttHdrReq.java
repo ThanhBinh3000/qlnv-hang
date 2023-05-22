@@ -48,6 +48,8 @@ public class XhKqBttHdrReq extends BaseRequest  {
 
     private String kieuNx;
 
+    private String soDxuat;
+
     @Transient
     private List<FileDinhKemReq> fileCanCu = new ArrayList<>();
 

@@ -106,12 +106,7 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
         data.setTrangThaiHd(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
         data.setTrangThaiXh(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
         XhKqBttHdr created =  xhKqBttHdrRepository.save(data);
-        Optional<XhQdPdKhBttDtl> dtl = xhQdPdKhBttDtlRepository.findById(created.getIdPdKhDtl());
-        if (dtl.isPresent()){
-            dtl.get().setIdSoQdKq(created.getId());
-            dtl.get().setTypeSoQdKq(true);
-            xhQdPdKhBttDtlRepository.save(dtl.get());
-        }
+
         if (!DataUtils.isNullOrEmpty(req.getFileCanCu())) {
             List<FileDinhKem> FileCanCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCu(), created.getId(), XhKqBttHdr.TABLE_NAME);
             created.setFileCanCu(FileCanCu);
@@ -287,6 +282,7 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
                 Optional<XhQdPdKhBttDtl> qdPdKhBttDtl = xhQdPdKhBttDtlRepository.findById(data.getIdPdKhDtl());
                 if (qdPdKhBttDtl.isPresent()){
                     qdPdKhBttDtl.get().setSoQdKq(data.getSoQdKq());
+                    qdPdKhBttDtl.get().setIdSoQdKq(data.getId());
                     xhQdPdKhBttDtlRepository.save(qdPdKhBttDtl.get());
                 }
             }
@@ -307,12 +303,6 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
             throw new Exception("Chỉ được xóa bản ghi khi ở trạng thái là dự thảo");
         }
         XhKqBttHdr hdr = optional.get();
-        Optional<XhQdPdKhBttDtl> qdPdKhBttDtl = xhQdPdKhBttDtlRepository.findById(hdr.getIdPdKhDtl());
-        if (qdPdKhBttDtl.isPresent()){
-            qdPdKhBttDtl.get().setIdSoQdKq(null);
-            qdPdKhBttDtl.get().setTypeSoQdKq(false);
-            xhQdPdKhBttDtlRepository.save(qdPdKhBttDtl.get());
-        }
         List<XhKqBttDtl> xhKqBttDtlList = xhKqBttDtlRepository.findAllByIdHdr(hdr.getId());
         if (!CollectionUtils.isEmpty(xhKqBttDtlList)){
             for (XhKqBttDtl dtl : xhKqBttDtlList){

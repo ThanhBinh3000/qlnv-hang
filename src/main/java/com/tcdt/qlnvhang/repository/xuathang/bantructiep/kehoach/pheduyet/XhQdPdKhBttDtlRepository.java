@@ -31,7 +31,6 @@ public interface XhQdPdKhBttDtlRepository extends JpaRepository<XhQdPdKhBttDtl ,
             "AND (:#{#param.tochucCanhan} IS NULL OR LOWER(cg.tochucCanhan) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.tochucCanhan}),'%'))) " +
             "AND (:#{#param.pthucBanTrucTiep == null || #param.pthucBanTrucTiep.isEmpty() } = TRUE OR dtl.pthucBanTrucTiep IN :#{#param.pthucBanTrucTiep}) "+
             "AND (:#{#param.trangThai} IS NULL OR dtl.trangThai = :#{#param.trangThai}) " +
-            "AND (:#{#param.typeSoQdKq} IS NULL OR LOWER(dtl.typeSoQdKq) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.typeSoQdKq}),'%'))) " +
             "AND (:#{#param.lastest} IS NULL OR LOWER(hdr.lastest) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.lastest}),'%'))) " +
             "AND (:#{#param.loaiVthh } IS NULL OR LOWER(hdr.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh},'%')) "
     )

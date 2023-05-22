@@ -237,12 +237,12 @@ public class Contains {
 	public static final String ACTIVE = "Y";
 	public static final String DISABLE = "N";
 
-	// Phương thức tổ chức triển khai mua trực tiếp
-	public static final String CHAO_GIA = "Chào giá";
-	public static final String UY_QUYEN = "Ủy quyền";
-	public static final String MUA_LE = "Mua lẻ";
+	// Phương thức tổ chức triển khai mua bán trực tiếp
+	public static final String CHAO_GIA = "01";
+	public static final String UY_QUYEN = "02";
+	public static final String MUA_LE = "03";
 
-	public static final String BAN_LE = "Bán lẻ";
+	public static final String BAN_LE = "03";
 
 	public static final String DAU_TU = "DT";
 

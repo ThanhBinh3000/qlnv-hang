@@ -64,8 +64,6 @@ public class XhQdPdKhBttHdr implements Serializable {
 
     private String soQdCc;
 
-    private Boolean typeQdDc;
-
     private String loaiHinhNx;
 
     private String kieuNx;

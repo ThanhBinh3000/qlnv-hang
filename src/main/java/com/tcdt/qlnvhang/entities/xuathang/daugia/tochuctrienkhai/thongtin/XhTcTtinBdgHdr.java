@@ -142,6 +142,8 @@ public class XhTcTtinBdgHdr extends TrangThaiBaseEntity implements Serializable 
 
   private BigDecimal khoanTienDatTruoc;
 
+  private String thongBaoKhongThanh;
+
   @Transient
   private List<XhTcTtinBdgDtl> children = new ArrayList<>();
 
