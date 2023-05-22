@@ -48,7 +48,7 @@ public interface DcnbQuyetDinhDcCHdrRepository extends JpaRepository<DcnbQuyetDi
             "LEFT JOIN DcnbQuyetDinhDcCDtl dtl ON dtl.hdrId = hdr.id \n" +
             "LEFT JOIN DcnbKeHoachDcHdr h On h.id  = dtl.keHoachDcHdrId \n" +
             "LEFT JOIN DcnbKeHoachDcDtl d ON d.hdrId  = h.id " +
-            "WHERE hdr.loaiDc  = ?1 AND hdr.trangThai = ?2 AND d.loaiVthh IN('0102','0101')")
+            "WHERE hdr.loaiDc  = ?1 AND hdr.trangThai = ?2 AND d.loaiVthh IN ?3")
 
     List<DcnbQuyetDinhDcCHdrDTO> findByLoaiDcAndTrangThai(String loaiDc, String trangThai, List<String> loaiVthh);
 }
