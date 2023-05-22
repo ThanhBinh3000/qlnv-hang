@@ -123,7 +123,6 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
         dataMap.setNguoiTaoId(getUser().getId());
         dataMap.setTrangThai(Contains.DUTHAO);
         dataMap.setLastest(false);
-        dataMap.setTypeQdDc(false);
         dataMap.setMaDvi(getUser().getDvql());
         XhQdPdKhBttHdr created =  xhQdPdKhBttHdrRepository.save(dataMap);
         if (!DataUtils.isNullOrEmpty(req.getFileDinhKem())) {

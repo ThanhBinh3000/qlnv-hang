@@ -84,8 +84,6 @@ public class XhQdPdKhBttDtl implements Serializable {
 
     private Long idSoQdKq;
 
-    private Boolean typeSoQdKq;
-
     private String trangThai;
     @Transient
     private String tenTrangThai;
