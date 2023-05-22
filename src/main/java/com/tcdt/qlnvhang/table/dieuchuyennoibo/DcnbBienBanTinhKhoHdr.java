@@ -6,26 +6,29 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Table(name = DcnbBangKeCanHangHdr.TABLE_NAME)
+@Table(name = DcnbBienBanTinhKhoHdr.TABLE_NAME)
 @Getter
 @Setter
-public class DcnbBangKeCanHangHdr extends BaseEntity implements Serializable, Cloneable{
+public class DcnbBienBanTinhKhoHdr extends BaseEntity implements Serializable, Cloneable{
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "DCNB_BANG_KE_CAN_HANG_HDR";
+    public static final String TABLE_NAME = "DCNB_BIEN_BAN_TINH_KHO_HDR";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanLayMauDtl.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = DcnbBienBanLayMauDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanLayMauDtl.TABLE_NAME + "_SEQ")
     private Long id;
 
     @Column(name = "NAM")
     private Integer nam;
+
+    @Column(name = "SO_BB_TINH_KHO")
+    private String soBbTinhKho;
+
+    @Column(name = "BANG_KE_CAN_HANG_ID")
+    private Long bangKeCanHangId;
 
     @Column(name = "SO_BANG_KE")
     private String soBangKe;
@@ -48,6 +51,9 @@ public class DcnbBangKeCanHangHdr extends BaseEntity implements Serializable, Cl
     @Column(name = "SO_QDINH_DCC")
     private String soQdinhDcc;
 
+    @Column(name = "NGAY_XUAT_KHO")
+    private LocalDate ngayXuatKho;
+
     @Column(name = "THOI_HAN_DIEU_CHUYEN")
     private LocalDate thoiHanDieuChuyen;
 
@@ -56,9 +62,6 @@ public class DcnbBangKeCanHangHdr extends BaseEntity implements Serializable, Cl
 
     @Column(name = "PHIEU_XUAT_KHO_ID")
     private Long phieuXuatKhoId;
-
-    @Column(name = "NGAY_XUAT_KHO")
-    private LocalDate ngayXuatKho;
 
     @Column(name = "SO_PHIEU_XUAT_KHO")
     private String soPhieuXuatKho;
@@ -128,44 +131,4 @@ public class DcnbBangKeCanHangHdr extends BaseEntity implements Serializable, Cl
 
     @Column(name = "TYPE")
     private String type;
-
-    @Column(name = "MA_LANH_DAO_CHI_CUC")
-    private String maLanhDaoChiCuc;
-
-    @Column(name = "TEN_LANH_DAO_CHI_CUC")
-    private String tenLanhDaoChiCuc;
-
-    @Column(name = "THU_KHO_ID")
-    private Long thuKhoId;
-
-    @Column(name = "TEN_THU_KHO")
-    private String tenThuKho;
-
-    @Column(name = "TEN_NGUOI_GIAO_HANG")
-    private String tenNguoiGiaoHang;
-
-    @Column(name = "CCCD")
-    private String cccd;
-
-    @Column(name = "DON_VI_NGUOI_GIAO_HANG")
-    private String donViNguoiGiaoHang;
-
-    @Column(name = "DIA_CHI_DON_VI_NGUOI_GIAO_HANG")
-    private String diaChiDonViNguoiGiaoHang;
-
-    @Column(name = "TONG_TRONG_LUONG_BAO_BI")
-    private BigDecimal tongTrongLuongBaoBi;
-
-    @Column(name = "TONG_TRONG_LUONG_CA_BAO_BI")
-    private BigDecimal tongTrongLuongCabaoBi;
-
-    @Column(name = "TONG_TRONG_LUONG_TRU_BI")
-    private BigDecimal tongTrongLuongTruBi;
-
-    @Column(name = "TONG_TRONG_LUONG_TRU_BI_TEXT")
-    private String tongTrongLuongTruBiText;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "HDR_ID")
-    private List<DcnbBangKeCanHangDtl> dcnbBangKeCanHangDtl = new ArrayList<>();
 }

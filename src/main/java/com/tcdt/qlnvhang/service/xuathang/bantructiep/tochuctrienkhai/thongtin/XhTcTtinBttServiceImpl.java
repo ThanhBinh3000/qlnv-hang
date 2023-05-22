@@ -57,6 +57,7 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
                 XhQdPdKhBttHdr hdr = xhQdPdKhBttHdrRepository.findById(f.getIdQdHdr()).get();
                 hdr.setTenLoaiVthh(hashMapVthh.get(hdr.getLoaiVthh()));
                 hdr.setTenCloaiVthh(hashMapVthh.get(hdr.getCloaiVthh()));
+                hdr.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(hdr.getTrangThai()));
                 f.setXhQdPdKhBttHdr(hdr);
 //                set tên hàng hóa và số quyết định PD để tìm kiếm cho quyết định PD kết quả chào giá
                 f.setSoQdPd(hdr.getSoQdPd());
@@ -87,7 +88,6 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
             dtl.setGhiChu(ObjReq.getGhiChu());
             dtl.setMaDvi(getUser().getDvql());
             dtl.setThoiHanBan(ObjReq.getThoiHanBan());
-            dtl.setTypeSoQdKq(false);
             if (ObjReq.getPthucBanTrucTiep().equals(Contains.UY_QUYEN)) {
                 if (!DataUtils.isNullOrEmpty(ObjReq.getFileDinhKemUyQuyen())) {
                     List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(ObjReq.getFileDinhKemUyQuyen(), dtl.getId(), XhQdPdKhBttDtl.TABLE_NAME);

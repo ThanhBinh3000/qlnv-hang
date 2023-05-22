@@ -48,8 +48,6 @@ public class XhQdPdKhBttHdrReq extends BaseRequest {
 
     private String soQdCc;
 
-    private Integer typeQdDc;
-
     private String loaiHinhNx;
 
     private String kieuNx;

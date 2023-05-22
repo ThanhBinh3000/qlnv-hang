@@ -73,6 +73,8 @@ public class XhKqBttHdr implements Serializable {
 
     private String kieuNx;
 
+    private String soDxuat;
+
     private String trangThai;
     @Transient
     private String tenTrangThai;
