@@ -20,7 +20,7 @@ public class ThKeHoachDieuChuyenTongCucHdrReq implements Serializable {
 
     private Long nguoiSuaId;
 
-    private String maTongHop;
+    private Long maTongHop;
 
     private LocalDate ngayTongHop;
 

@@ -24,7 +24,7 @@ public class THKeHoachDieuChuyenTongCucHdr extends BaseEntity implements Seriali
     private Long id;
 
     @Column(name = "MA_TONG_HOP")
-    private String maTongHop;
+    private Long maTongHop;
 
     @Column(name = "NGAY_TONG_HOP")
     private LocalDate ngayTongHop;
