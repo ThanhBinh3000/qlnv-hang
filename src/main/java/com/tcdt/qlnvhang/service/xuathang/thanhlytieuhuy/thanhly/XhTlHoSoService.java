@@ -199,20 +199,34 @@ public class XhTlHoSoService extends BaseServiceImpl {
 
     String status = statusReq.getTrangThai() + optional.get().getTrangThai();
     switch (status) {
-      case Contains.CHODUYET_LDV + Contains.DUTHAO:
+      case Contains.CHODUYET_TP + Contains.DUTHAO:
+      case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
+      case Contains.CHODUYET_LDV + Contains.DADUYET_LDC:
       case Contains.CHODUYET_LDTC + Contains.CHODUYET_LDV:
-      case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
-      case Contains.CHODUYET_LDV + Contains.TUCHOI_LDTC:
         optional.get().setNguoiGduyetId(currentUser.getUser().getId());
         optional.get().setNgayGduyet(LocalDate.now());
         break;
+      case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
+        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+        optional.get().setNgayDuyetLan1(LocalDate.now());
+        break;
+      case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
+        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+        optional.get().setNgayDuyetLan2(LocalDate.now());
+        break;
+      case Contains.DADUYET_LDTC + Contains.CHODUYET_LDTC:
+        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+        optional.get().setNgayDuyetLan3(LocalDate.now());
+        break;
+      case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
+      case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
       case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
       case Contains.TUCHOI_LDTC + Contains.CHODUYET_LDTC:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
         optional.get().setNgayPduyet(LocalDate.now());
         optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
         break;
-      case Contains.BAN_HANH + Contains.CHODUYET_LDTC:
+      case Contains.DA_DUYET_BTC + Contains.DADUYET_LDTC:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
         optional.get().setNgayPduyet(LocalDate.now());
         break;
