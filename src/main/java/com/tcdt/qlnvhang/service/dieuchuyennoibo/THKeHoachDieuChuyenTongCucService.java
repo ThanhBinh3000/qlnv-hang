@@ -106,8 +106,9 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
                     ct.setHdrId(created.getId());
                 }
         }
-        thKeHoachDieuChuyenTongCucDtlRepository.saveAll(chiTiet);
-        return created;
+        created.setMaTongHop(created.getId());
+        THKeHoachDieuChuyenTongCucHdr createdSave = tongCucHdrRepository.save(created);
+        return createdSave;
     }
 
     public List<THKeHoachDieuChuyenTongCucHdr> detail(List<Long> ids) throws Exception {
