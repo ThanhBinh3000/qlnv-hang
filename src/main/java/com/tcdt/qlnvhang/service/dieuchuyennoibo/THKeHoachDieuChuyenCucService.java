@@ -276,7 +276,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
         }
         List<THKeHoachDieuChuyenCucHdr> soDeXuat = thKeHoachDieuChuyenHdrRepository.findBySoDeXuat(optional.get().getSoDeXuat());
         if(soDeXuat.isEmpty()){
-            throw new Exception("Bản ổng hợp chưa có số đề xuất");
+            throw new Exception("Bản tổng hợp chưa có số đề xuất");
         }
         if (!soDeXuat.isEmpty() && optional.get().getSoDeXuat().split("/").length == 1) {
            if (soDeXuat.get(0).getId().equals(optional.get().getId())) {
@@ -336,6 +336,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                         List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtl = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrIdAndType(data.getDcKeHoachDcHdrId(),Contains.NHAN_DIEU_CHUYEN);
                         dcnbKeHoachDcDtl.forEach(e -> {
                             e.getDcnbKeHoachDcHdr().setXdLaiDiemNhap(false);
+                            e.setXdLaiDiemNhap(false);
                             e.getDcnbKeHoachDcHdr().setTrangThai(Contains.DA_PHANBO_DC_CHODUYET_TP);
                             dcHdrRepository.save(e.getDcnbKeHoachDcHdr());
                         });
@@ -355,6 +356,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                         dcnbKeHoachDcDtl.forEach(e -> {
                             e.setXdLaiDiemNhap(true);
                             e.getDcnbKeHoachDcHdr().setTrangThai(Contains.DA_PHANBO_DC_TUCHOI_TP);
+                            e.getDcnbKeHoachDcHdr().setXdLaiDiemNhap(true);
                             dcHdrRepository.save(e.getDcnbKeHoachDcHdr());
                         });
                     });
@@ -370,6 +372,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                         List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtl = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrIdAndType(data.getDcKeHoachDcHdrId(),Contains.NHAN_DIEU_CHUYEN);
                         dcnbKeHoachDcDtl.forEach(e -> {
                             e.setXdLaiDiemNhap(false);
+                            e.getDcnbKeHoachDcHdr().setXdLaiDiemNhap(false);
                             e.getDcnbKeHoachDcHdr().setTrangThai(Contains.DA_PHANBO_DC_CHODUYET_TP);
                             dcHdrRepository.save(e.getDcnbKeHoachDcHdr());
                         });
@@ -387,6 +390,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                         List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtl = dcnbKeHoachDcDtlRepository.findByChiCucNhan(danhSachKeHoach,data.getDcKeHoachDcHdrId());
                         dcnbKeHoachDcDtl.forEach(e -> {
                             e.setXdLaiDiemNhap(true);
+                            e.getDcnbKeHoachDcHdr().setXdLaiDiemNhap(true);
                             e.getDcnbKeHoachDcHdr().setTrangThai(Contains.DA_PHANBO_DC_TUCHOI_LDC);
                             dcHdrRepository.save(e.getDcnbKeHoachDcHdr());
                         });
@@ -402,6 +406,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                         List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtl = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrIdAndType(data.getDcKeHoachDcHdrId(),Contains.NHAN_DIEU_CHUYEN);
                         dcnbKeHoachDcDtl.forEach(e -> {
                             e.setXdLaiDiemNhap(false);
+                            e.getDcnbKeHoachDcHdr().setXdLaiDiemNhap(false);
                             e.getDcnbKeHoachDcHdr().setTrangThai(Contains.DA_PHANBO_DC_CHODUYET_LDC);
                             dcHdrRepository.save(e.getDcnbKeHoachDcHdr());
                         });
@@ -415,7 +420,6 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                             e.setTrangThai(Contains.TU_CHOI_TP);
                             dcHdrRepository.save(e);
                         });
-
                     });
                 }
                 break;
@@ -427,6 +431,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                     optional.get().getThKeHoachDieuChuyenNoiBoCucDtls().forEach(data -> {
                         List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtl = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrIdAndType(data.getDcKeHoachDcHdrId(),Contains.NHAN_DIEU_CHUYEN);
                         dcnbKeHoachDcDtl.forEach(e -> {
+                            e.setXdLaiDiemNhap(false);
                             e.setXdLaiDiemNhap(false);
                             e.getDcnbKeHoachDcHdr().setTrangThai(Contains.DA_PHANBO_DC_DADUYET_LDC);
                             dcHdrRepository.save(e.getDcnbKeHoachDcHdr());
@@ -441,7 +446,6 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
                             e.setTrangThai(Contains.TU_CHOI_LDC);
                             dcHdrRepository.save(e);
                         });
-
                     });
                 }
                 break;
