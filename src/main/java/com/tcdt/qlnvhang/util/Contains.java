@@ -106,6 +106,9 @@ public class Contains {
 	public static final String DANG_THUC_HIEN = "44";
 	public static final String DA_HOAN_THANH = "45";
 
+	public static final String CHO_DUYET_BTC = "49";
+	public static final String TU_CHOI_BTC = "50";
+	public static final String DA_DUYET_BTC = "51";
 	public static final String DA_TAO_CBV = "52";
 	public static final String DA_DUYET_CBV = "53";
 	public static final String TU_CHOI_CBV = "54";
