@@ -1,12 +1,15 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = DcnbBienBanTinhKhoHdr.TABLE_NAME)
@@ -129,6 +132,36 @@ public class DcnbBienBanTinhKhoHdr extends BaseEntity implements Serializable, C
     @Column(name = "LOAI_DC")
     private String loaiDc;
 
+    @Column(name = "NGUYEN_NHAN")
+    private String nguyeNhan;
+
+    @Column(name = "KIEN_NGHI")
+    private String kienNghi;
+
+    @Column(name = "GHI_CHU")
+    private String ghiChu;
+
+    @Column(name = "KTV_BAO_QUAN")
+    private String ktvBaoQuan;
+
+    @Column(name = "KTV_BAO_QUAN_ID")
+    private Long ktvBaoQuanId;
+
+    @Column(name = "KE_TOAN")
+    private String keToan;
+
+    @Column(name = "KE_TOAN_ID")
+    private Long keToanId;
+
+    @Column(name = "LANH_DAO_CHI_CUC")
+    private String lanhDaoChiCuc;
+
+    @Column(name = "LANH_DAO_CHI_CUC_ID")
+    private Long lanhDaoChiCucId;
+
     @Column(name = "TYPE")
     private String type;
+
+    @Transient
+    private List<FileDinhKem> fileBbTinhKhoDaKy = new ArrayList<>();
 }

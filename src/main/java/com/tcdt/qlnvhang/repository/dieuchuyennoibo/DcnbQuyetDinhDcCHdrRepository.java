@@ -43,12 +43,12 @@ public interface DcnbQuyetDinhDcCHdrRepository extends JpaRepository<DcnbQuyetDi
     BigDecimal countTongKeHoachDeXuat(String cloaiVthh, String maLoKho);
 
     @Query("SELECT new com.tcdt.qlnvhang.response.DieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO(" +
-            "hdr.id, hdr.soQdinh , hdr.ngayKyQdinh,d.loaiVthh,d.tenLoaiVthh) " +
+            "hdr.id, hdr.soQdinh , hdr.ngayKyQdinh) " +
             "FROM DcnbQuyetDinhDcCHdr hdr\n" +
             "LEFT JOIN DcnbQuyetDinhDcCDtl dtl ON dtl.hdrId = hdr.id \n" +
             "LEFT JOIN DcnbKeHoachDcHdr h On h.id  = dtl.keHoachDcHdrId \n" +
             "LEFT JOIN DcnbKeHoachDcDtl d ON d.hdrId  = h.id " +
-            "WHERE hdr.loaiDc  = ?1 AND hdr.trangThai = ?2 AND d.loaiVthh IN ?3")
+            "WHERE hdr.loaiDc  = ?1 AND hdr.trangThai = ?2 AND h.maDvi = ?3")
 
-    List<DcnbQuyetDinhDcCHdrDTO> findByLoaiDcAndTrangThai(String loaiDc, String trangThai, List<String> loaiVthh);
+    List<DcnbQuyetDinhDcCHdrDTO> findByLoaiDcAndTrangThai(String loaiDc, String trangThai,String maDonVi);
 }

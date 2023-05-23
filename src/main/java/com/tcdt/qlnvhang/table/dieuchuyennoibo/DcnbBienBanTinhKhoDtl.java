@@ -21,5 +21,4 @@ public class DcnbBienBanTinhKhoDtl {
     @Column(name = "HDR_ID")
     private Long hdrId;
 
-
 }
