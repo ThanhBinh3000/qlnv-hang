@@ -28,6 +28,9 @@ public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cl
     @Column(name = "LOAI_BB")
     private String loaiBb;
 
+    @Column(name = "THOI_HAN_DIEU_CHUYEN")
+    private LocalDate thoiHanDieuChuyen;
+
     @Column(name = "NAM")
     private Integer nam;
 

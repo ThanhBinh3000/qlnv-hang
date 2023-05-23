@@ -147,11 +147,20 @@ public class DcnbPhieuKtChatLuongHdr extends BaseEntity implements Serializable,
     @Column(name = "NGUOI_DUYET_TP")
     private Long nguoiDuyetTp;
 
+    @Column(name = "BB_TINH_KHO_ID")
+    private Long bbTinhKhoId;
+
     @Column(name = "SO_BB_TINH_KHO")
     private String soBbTinhKho;
 
     @Column(name = "NGAY_XUAT_DOC_KHO")
     private LocalDate ngayXuatDocKho;
+
+    @Column(name = "BB_HAO_DOI_ID")
+    private Long bbHaoDoiId;
+
+    @Column(name = "SO_BB_HAO_DOI")
+    private String soBbHaoDoi;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
