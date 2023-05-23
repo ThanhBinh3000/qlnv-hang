@@ -37,6 +37,9 @@ public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cl
     @Column(name = "MA_DVI")
     private String maDvi;
 
+    @Column(name = "TEN_DVI")
+    private String tenDvi;
+
     @Column(name = "QHNS_ID")
     private Long qhnsId;
 

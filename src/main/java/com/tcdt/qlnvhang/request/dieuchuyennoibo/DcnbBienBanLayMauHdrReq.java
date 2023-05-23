@@ -22,6 +22,8 @@ public class DcnbBienBanLayMauHdrReq implements Serializable {
 
     private String maDvi;
 
+    private String tenDvi;
+
     private Long qhnsId;
 
     private String maQhns;
