@@ -201,17 +201,19 @@ public class XhTlHoSoService extends BaseServiceImpl {
     switch (status) {
       case Contains.CHODUYET_TP + Contains.DUTHAO:
       case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+      case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
+      case Contains.CHODUYET_TP + Contains.TUCHOI_LDV:
+      case Contains.CHODUYET_TP + Contains.TUCHOI_LDTC:
       case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
       case Contains.CHODUYET_LDV + Contains.DADUYET_LDC:
-      case Contains.CHODUYET_LDTC + Contains.CHODUYET_LDV:
         optional.get().setNguoiGduyetId(currentUser.getUser().getId());
         optional.get().setNgayGduyet(LocalDate.now());
         break;
-      case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
+      case Contains.CHODUYET_LDV + Contains.CHODUYET_LDC:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
         optional.get().setNgayDuyetLan1(LocalDate.now());
         break;
-      case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
+      case Contains.CHODUYET_LDTC + Contains.CHODUYET_LDV:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
         optional.get().setNgayDuyetLan2(LocalDate.now());
         break;
