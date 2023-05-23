@@ -201,6 +201,9 @@ public class XhTlHoSoService extends BaseServiceImpl {
     switch (status) {
       case Contains.CHODUYET_TP + Contains.DUTHAO:
       case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+      case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
+      case Contains.CHODUYET_TP + Contains.TUCHOI_LDV:
+      case Contains.CHODUYET_TP + Contains.TUCHOI_LDTC:
       case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
       case Contains.CHODUYET_LDV + Contains.DADUYET_LDC:
       case Contains.CHODUYET_LDTC + Contains.CHODUYET_LDV:
