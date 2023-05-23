@@ -42,11 +42,23 @@ public class DcnbBienBanTinhKhoHdr extends BaseEntity implements Serializable, C
     @Column(name = "MA_DVI")
     private String maDvi;
 
+    @Column(name = "TEN_DVI")
+    private String tenDvi;
+
     @Column(name = "QHNS_ID")
     private Long qhnsId;
 
     @Column(name = "MA_QHNS")
     private String maQhns;
+
+    @Column(name = "NGAY_BAT_DAU_XUAT")
+    private LocalDate ngayBatDauXuat;
+
+    @Column(name = "NGAY_KET_THUC_XUAT")
+    private LocalDate ngayKeThucXuat;
+
+    @Column(name = "THOI_HAN_XUAT_HANG")
+    private LocalDate thoiHanXuatHang;
 
     @Column(name = "QDINH_DCC_ID")
     private Long qDinhDccId;
@@ -141,17 +153,26 @@ public class DcnbBienBanTinhKhoHdr extends BaseEntity implements Serializable, C
     @Column(name = "GHI_CHU")
     private String ghiChu;
 
+    @Column(name = "NGAY_PDUYET_KTV_BAO_QUAN")
+    private LocalDate ngayPduyetKtvBQ;
+
     @Column(name = "KTV_BAO_QUAN")
     private String ktvBaoQuan;
 
     @Column(name = "KTV_BAO_QUAN_ID")
     private Long ktvBaoQuanId;
 
+    @Column(name = "NGAY_PDUYET_KE_TOAN")
+    private LocalDate ngayPduyetKt;
+
     @Column(name = "KE_TOAN")
     private String keToan;
 
     @Column(name = "KE_TOAN_ID")
     private Long keToanId;
+
+    @Column(name = "NGAY_PDUYET_LDCC")
+    private LocalDate ngayPduyetLdcc;
 
     @Column(name = "LANH_DAO_CHI_CUC")
     private String lanhDaoChiCuc;
@@ -164,4 +185,8 @@ public class DcnbBienBanTinhKhoHdr extends BaseEntity implements Serializable, C
 
     @Transient
     private List<FileDinhKem> fileBbTinhKhoDaKy = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "HDR_ID")
+    private List<DcnbBienBanTinhKhoDtl> dcnbBienBanTinhKhoDtl = new ArrayList<>();
 }

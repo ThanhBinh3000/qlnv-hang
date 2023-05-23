@@ -46,7 +46,11 @@ public class DcnbBienBanLayMauHdrReq implements Serializable {
 
     private String loaiVthh;
 
+    private String tenLoaiVthh;
+
     private String cloaiVthh;
+
+    private String tenCloaiVthh;
 
     private String maDiemKho;
 
@@ -103,5 +107,6 @@ public class DcnbBienBanLayMauHdrReq implements Serializable {
     private Long bbHaoDoiId;
 
     private List<FileDinhKemReq> canCu = new ArrayList<>();
+    private List<FileDinhKemReq> bienBanLayMauDinhKem = new ArrayList<>();
     private List<DcnbBienBanLayMauDtl> dcnbBienBanLayMauDtl = new ArrayList<>();
 }

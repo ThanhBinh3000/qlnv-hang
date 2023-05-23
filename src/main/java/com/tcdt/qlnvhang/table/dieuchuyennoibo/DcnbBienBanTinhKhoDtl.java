@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,7 +19,12 @@ public class DcnbBienBanTinhKhoDtl {
     @SequenceGenerator(sequenceName = DcnbBienBanLayMauDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanLayMauDtl.TABLE_NAME + "_SEQ")
     private Long id;
 
-    @Column(name = "HDR_ID")
+    @Column(name = "HDR_ID", insertable = true, updatable = true)
     private Long hdrId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
+    @JsonIgnore
+    private DcnbBienBanTinhKhoHdr dcnbBienBanTinhKhoHdr;
 
 }
