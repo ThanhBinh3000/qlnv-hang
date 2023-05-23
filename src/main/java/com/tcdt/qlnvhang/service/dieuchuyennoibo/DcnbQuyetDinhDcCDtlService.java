@@ -134,8 +134,7 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
     }
 
     public List<DcnbQuyetDinhDcCHdrDTO> danhSachSoQdDieuChuyen(SearchDcnbQuyetDinhDcC req) throws Exception{
-        List<String> ltStr = new ArrayList<>();
-        List<DcnbQuyetDinhDcCHdrDTO> danhSachSoQdDieuChuyen = dcnbQuyetDinhDcCHdrRepository.findByLoaiDcAndTrangThai(req.getLoaiDc(),Contains.BAN_HANH,req.getLoaiVthh());
+        List<DcnbQuyetDinhDcCHdrDTO> danhSachSoQdDieuChuyen = dcnbQuyetDinhDcCHdrRepository.findByLoaiDcAndTrangThai(req.getLoaiDc(),Contains.BAN_HANH, req.getMaDvi());
         return danhSachSoQdDieuChuyen;
     }
 
