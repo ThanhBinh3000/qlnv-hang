@@ -200,6 +200,7 @@ public class XhTlHoSoService extends BaseServiceImpl {
     String status = statusReq.getTrangThai() + optional.get().getTrangThai();
     switch (status) {
       case Contains.CHODUYET_TP + Contains.DUTHAO:
+      case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
       case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
       case Contains.CHODUYET_LDV + Contains.DADUYET_LDC:
       case Contains.CHODUYET_LDTC + Contains.CHODUYET_LDV:
