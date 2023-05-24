@@ -27,6 +27,7 @@ public class DcnbQuyetDinhDcCHdr extends BaseEntity implements Serializable, Clo
   @SequenceGenerator(sequenceName = DcnbQuyetDinhDcCHdr.TABLE_NAME
       + "_SEQ", allocationSize = 1, name = DcnbQuyetDinhDcCHdr.TABLE_NAME + "_SEQ")
   private Long id;
+  private Long parentId;
   private String loaiDc;
   private String tenLoaiDc;
   private Integer nam;
@@ -37,7 +38,6 @@ public class DcnbQuyetDinhDcCHdr extends BaseEntity implements Serializable, Clo
   private String trichYeu;
   private String maDvi;
   private String tenDvi;
-
   private String loaiQdinh;
   private String tenLoaiQdinh;
   private BigDecimal tongDuToanKp;
@@ -46,8 +46,8 @@ public class DcnbQuyetDinhDcCHdr extends BaseEntity implements Serializable, Clo
   private Long dxuatId;
   private String soDxuat;
   private LocalDate ngayTrinhDuyetTc;
-
-
+  @Column(name = "TYPE")
+  private String type; // DC, NDC, NDCTS
   @Access(value=AccessType.PROPERTY)
   private String trangThai;
   private String lyDoTuChoi;
@@ -55,6 +55,10 @@ public class DcnbQuyetDinhDcCHdr extends BaseEntity implements Serializable, Clo
   private Long nguoiGduyetId;
   private LocalDate ngayPduyet;
   private Long nguoiPduyetId;
+  @Column(name = "NGAY_DUYET_LDCC")
+  private LocalDate ngayDuyetLdcc;
+  @Column(name = "NGUOI_DUYET_LDCC_ID")
+  private Long nguoiDuyetLdccId;
   @Transient
   private String tenTrangThai;
   @Transient

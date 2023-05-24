@@ -13,7 +13,7 @@ import java.util.List;
 @Table(name = DcnbQuyetDinhDcCDtl.TABLE_NAME)
 @Getter
 @Setter
-public class DcnbQuyetDinhDcCDtl implements Serializable {
+public class DcnbQuyetDinhDcCDtl implements Serializable, Cloneable {
 
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "DCNB_QUYET_DINH_DC_C_DTL";
@@ -22,6 +22,7 @@ public class DcnbQuyetDinhDcCDtl implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbQuyetDinhDcCDtl.TABLE_NAME + "_SEQ")
     @SequenceGenerator(sequenceName = DcnbQuyetDinhDcCDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbQuyetDinhDcCDtl.TABLE_NAME + "_SEQ")
     private Long id;
+    private Long parentId;
     @Column(name = "DCNB_KE_HOACH_DC_HDR_ID")
     private Long keHoachDcHdrId;
     @Column(name = "HDR_ID", insertable = true, updatable = true)
