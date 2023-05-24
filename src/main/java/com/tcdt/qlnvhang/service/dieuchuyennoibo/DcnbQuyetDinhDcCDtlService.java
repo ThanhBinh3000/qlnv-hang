@@ -521,6 +521,7 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
                         }
                     });
                     clonedObj.setDanhSachQuyetDinh(quyetDinhDcCDtlsClone);
+                    clonedObj.setTrangThai(Contains.YC_CHICUC_PHANBO_DC);
                     dcnbQuyetDinhDcCHdrRepository.save(clonedObj);
                     fileDinhKemService.delete(clonedObj.getId(), Lists.newArrayList(DcnbQuyetDinhDcCHdr.TABLE_NAME + "_CAN_CU"));
                     List<FileDinhKemReq> fileDinhKemReqs = clonedObj.getCanCu().stream()
