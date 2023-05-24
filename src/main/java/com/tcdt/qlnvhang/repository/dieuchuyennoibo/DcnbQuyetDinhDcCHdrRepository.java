@@ -19,7 +19,7 @@ public interface DcnbQuyetDinhDcCHdrRepository extends JpaRepository<DcnbQuyetDi
 
     @Query(value = "SELECT distinct c FROM DcnbQuyetDinhDcCHdr c WHERE 1=1 " +
             "AND (:#{#param.soQdinh} IS NULL OR LOWER(c.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdinh}),'%')) " +
-            "AND (:#{#param.maDvi} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDvi},'%')) " +
+            "AND (:#{#param.maDvi} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDvi},'')) " +
             "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
             "AND ((:#{#param.ngayDuyetTcTu}  IS NULL OR c.ngayDuyetTc >= :#{#param.ngayDuyetTcTu})" +
             "AND (:#{#param.ngayDuyetTcDen}  IS NULL OR c.ngayDuyetTc <= :#{#param.ngayDuyetTcDen}) ) " +
