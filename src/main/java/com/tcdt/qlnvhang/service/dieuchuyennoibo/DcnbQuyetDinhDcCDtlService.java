@@ -82,6 +82,7 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
         BeanUtils.copyProperties(objReq, data);
         data.setMaDvi(currentUser.getDvql());
         data.setTrangThai(Contains.DUTHAO);
+        data.setType(Contains.DIEU_CHUYEN);
 
         for (DcnbQuyetDinhDcCDtl e : objReq.getDanhSachQuyetDinh()) {
             if (Contains.DCNB.equals(data.getLoaiDc()) && Contains.CAP_CUC.equals(currentUser.getUser().getCapDvi())) {
@@ -171,6 +172,7 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
 
         DcnbQuyetDinhDcCHdr data = optional.get();
         objReq.setMaDvi(data.getMaDvi());
+        objReq.setType( data.getType());
         BeanUtils.copyProperties(objReq, data);
         data.setDanhSachQuyetDinh(objReq.getDanhSachQuyetDinh());
         for (DcnbQuyetDinhDcCDtl e : objReq.getDanhSachQuyetDinh()) {
