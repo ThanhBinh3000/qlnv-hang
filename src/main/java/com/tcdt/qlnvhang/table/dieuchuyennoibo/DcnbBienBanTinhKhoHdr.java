@@ -180,8 +180,20 @@ public class DcnbBienBanTinhKhoHdr extends BaseEntity implements Serializable, C
     @Column(name = "LANH_DAO_CHI_CUC_ID")
     private Long lanhDaoChiCucId;
 
-    @Column(name = "TYPE")
-    private String type;
+    @Column(name = "TONG_SL_XUAT_THEO_QD")
+    private Double tongSlXuatTheoQd;
+
+    @Column(name = "TONG_SL_XUAT_THEO_TT")
+    private Double tongSlXuatTheoTt;
+
+    @Column(name = "SL_CON_LAI_THEO_SS")
+    private Double slConLaiTheoSs;
+
+    @Column(name = "SL_CON_LAI_THEO_TT")
+    private Double slConLaiTheoTt;
+
+    @Column(name = "CHENH_LECH_SL_CON_LAI")
+    private Double chenhLechSlConLai;
 
     @Transient
     private List<FileDinhKem> fileBbTinhKhoDaKy = new ArrayList<>();

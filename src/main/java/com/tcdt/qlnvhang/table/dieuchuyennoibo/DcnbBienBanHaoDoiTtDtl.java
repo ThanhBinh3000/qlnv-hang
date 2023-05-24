@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,16 +7,16 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = DcnbBienBanLayMauHdr.TABLE_NAME)
+@Table(name = DcnbBienBanHaoDoiTtDtl.TABLE_NAME)
 @Getter
 @Setter
-public class DcnbBienBanTinhKhoDtl {
+public class DcnbBienBanHaoDoiTtDtl {
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "DCNB_BIEN_BAN_TINH_KHO_TT_DTL";
+    public static final String TABLE_NAME = "DCNB_BIEN_BAN_HAO_DOI_TT_DTL";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanLayMauDtl.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = DcnbBienBanLayMauDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanLayMauDtl.TABLE_NAME + "_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanHaoDoiTtDtl.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = DcnbBienBanHaoDoiTtDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanHaoDoiTtDtl.TABLE_NAME + "_SEQ")
     private Long id;
 
     @Column(name = "HDR_ID", insertable = true, updatable = true)
@@ -36,11 +35,5 @@ public class DcnbBienBanTinhKhoDtl {
     private LocalDate ngayXuatKho;
 
     @Column(name = "SO_LUONG_XUAT")
-    private Long soLuongXuat;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
-    @JsonIgnore
-    private DcnbBienBanTinhKhoHdr dcnbBienBanTinhKhoHdr;
-
+    private Double soLuongXuat;
 }
