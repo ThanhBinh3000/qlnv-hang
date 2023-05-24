@@ -33,7 +33,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = PathContains.DIEU_CHUYEN_NOI_BO +PathContains.PHIEU_KIEM_TRA_CHAT_LUONG)
 @Slf4j
-@Api(tags = "Điều chuyển nội bộ - Biên bản lấy mẫu, bàn giao mẫu")
+@Api(tags = "Điều chuyển nội bộ - Phiếu kiểm tra chất lượng")
 public class DcnbPhieuKiemTraChatLuongController {
     @Autowired
     PhieuKiemTraChatLuongService phieuKiemTraChatLuongService;
