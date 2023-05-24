@@ -286,6 +286,10 @@ public class PathContains {
 
 	public static final String BAO_CAO_KET_QUA = "/bao-cao-ket-qua";
 
+	public static final String XUAT_TIEU_HUY = "/xuat-tieu-huy";
+
+	public static final String QUYET_DINH_TIEU_HUY = "/quyet-dinh-tieu-huy";
+
 	// điều chuyển nội bộ
 
 	public static final String DIEU_CHUYEN_NOI_BO = "/dieu-chuyen-noi-bo";
