@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
+import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKtChatLuongDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKtChatLuongHdrRepository;
@@ -34,7 +35,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class PhieuKiemTraChatLuongService extends BaseServiceImpl {
+public class DcnbPhieuKiemTraChatLuongService extends BaseServiceImpl {
 
     @Autowired
     DcnbPhieuKtChatLuongHdrRepository dcnbPhieuKtChatLuongHdrRepository;
@@ -105,6 +106,9 @@ public class PhieuKiemTraChatLuongService extends BaseServiceImpl {
         data.setNgaySua(LocalDateTime.now());
         data.setDcnbPhieuKtChatLuongDtl(objReq.getDcnbPhieuKtChatLuongDtl());
         DcnbPhieuKtChatLuongHdr created = dcnbPhieuKtChatLuongHdrRepository.save(data);
+        fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbPhieuKtChatLuongHdr.TABLE_NAME + "_CAN_CU"));
+        List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getBienBanLayMauDinhKem(), created.getId(), DcnbPhieuKtChatLuongHdr.TABLE_NAME + "_CAN_CU");
+        data.setBienBanLayMauDinhKem(bienBanLayMauDinhKem);
         return created;
     }
 

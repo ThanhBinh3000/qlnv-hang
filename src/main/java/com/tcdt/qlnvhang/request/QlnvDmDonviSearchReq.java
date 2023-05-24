@@ -4,6 +4,8 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class QlnvDmDonviSearchReq {
 	String maDvi;
@@ -16,5 +18,7 @@ public class QlnvDmDonviSearchReq {
 	String loaiDvi;
 	String trangThai;
 	String maDviCha;
+	List<String> listMaDvi;
+	String type;
 	PaggingReq paggingReq;
 }

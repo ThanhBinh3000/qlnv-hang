@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.repository.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbQuyetDinhDcC;
+import com.tcdt.qlnvhang.response.DieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbQuyetDinhDcCHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +19,7 @@ public interface DcnbQuyetDinhDcCHdrRepository extends JpaRepository<DcnbQuyetDi
 
     @Query(value = "SELECT distinct c FROM DcnbQuyetDinhDcCHdr c WHERE 1=1 " +
             "AND (:#{#param.soQdinh} IS NULL OR LOWER(c.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdinh}),'%')) " +
-            "AND (:#{#param.maDvi} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDvi},'%')) " +
+            "AND (:#{#param.maDvi} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDvi},'')) " +
             "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
             "AND ((:#{#param.ngayDuyetTcTu}  IS NULL OR c.ngayDuyetTc >= :#{#param.ngayDuyetTcTu})" +
             "AND (:#{#param.ngayDuyetTcDen}  IS NULL OR c.ngayDuyetTc <= :#{#param.ngayDuyetTcDen}) ) " +
@@ -41,10 +42,12 @@ public interface DcnbQuyetDinhDcCHdrRepository extends JpaRepository<DcnbQuyetDi
             "JOIN DCNB_KE_HOACH_DC_DTL dtl ON dtl.HDR_ID = hdr.ID WHERE dtl.CLOAI_VTHH = ?1 AND dtl.MA_LO_KHO = ?2", nativeQuery = true)
     BigDecimal countTongKeHoachDeXuat(String cloaiVthh, String maLoKho);
 
-    @Query(value ="SELECT distinct hdr.id,hdr.soQdinh,hdr.ngayKyQdinh,d.loaiVthh,d.tenLoaiVthh FROM DcnbQuyetDinhDcCHdr hdr " +
-            "LEFT JOIN DcnbQuyetDinhDcCDtl dtl ON dtl.hdrId = hdr.id " +
-            "LEFT JOIN DcnbKeHoachDcHdr h On h.id = dtl.keHoachDcHdrId " +
-            "LEFT JOIN DcnbKeHoachDcDtl d ON d.hdrId = h.id \n" +
-            "WHERE hdr.loaiDc = ?1 AND hdr.trangThai = ?2 AND d.loaiVthh IN ?3 ")
-    List<Object[]> findByLoaiDcAndTrangThai(String loaiDc, String trangThai, List<String> loaiVthh);
+    @Query("SELECT new com.tcdt.qlnvhang.response.DieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO(" +
+            "hdr.id, hdr.soQdinh , hdr.ngayKyQdinh) " +
+            "FROM DcnbQuyetDinhDcCHdr hdr\n" +
+            "LEFT JOIN DcnbQuyetDinhDcCDtl dtl ON dtl.hdrId = hdr.id \n" +
+            "LEFT JOIN DcnbKeHoachDcHdr h On h.id  = dtl.keHoachDcHdrId \n" +
+            "LEFT JOIN DcnbKeHoachDcDtl d ON d.hdrId  = h.id " +
+            "WHERE hdr.loaiDc  = ?1 AND hdr.trangThai = ?2 AND (h.maDvi = ?3 OR hdr.maDvi = ?3) group by hdr.id,hdr.soQdinh,hdr.ngayKyQdinh")
+    List<DcnbQuyetDinhDcCHdrDTO> findByLoaiDcAndTrangThai(String loaiDc, String trangThai,String maDonVi);
 }

@@ -16,9 +16,13 @@ public class DcnbBienBanLayMauHdrReq implements Serializable {
 
     private String loaiBb;
 
+    private LocalDate thoiHanDieuChuyen;
+
     private Integer nam;
 
     private String maDvi;
+
+    private String tenDvi;
 
     private Long qhnsId;
 
@@ -30,6 +34,8 @@ public class DcnbBienBanLayMauHdrReq implements Serializable {
 
     private String ktvBaoQuan;
 
+    private Long ktvBaoQuanId;
+
     private String soBbLayMau;
 
     private LocalDate ngayLayMau;
@@ -40,7 +46,11 @@ public class DcnbBienBanLayMauHdrReq implements Serializable {
 
     private String loaiVthh;
 
+    private String tenLoaiVthh;
+
     private String cloaiVthh;
+
+    private String tenCloaiVthh;
 
     private String maDiemKho;
 
@@ -58,7 +68,7 @@ public class DcnbBienBanLayMauHdrReq implements Serializable {
 
     private String tenLoKho;
 
-    private Long thayDoiThuKho;
+    private Boolean thayDoiThuKho;
 
     private Long soLuongMau;
 
@@ -70,11 +80,11 @@ public class DcnbBienBanLayMauHdrReq implements Serializable {
 
     private String lyDoTuChoi;
 
-    private String nguoiGDuyet;
+    private Long nguoiGDuyet;
 
     private LocalDate ngayGDuyet;
 
-    private String nguoiPDuyet;
+    private Long nguoiPDuyet;
 
     private LocalDate ngayPDuyet;
 
@@ -86,6 +96,17 @@ public class DcnbBienBanLayMauHdrReq implements Serializable {
 
     private String type;
 
+    private String soBbTinhKho;
+
+    private Long bbTinhKhoId;
+
+    private LocalDate ngayXuatDocKho;
+
+    private String soBbHaoDoi;
+
+    private Long bbHaoDoiId;
+
     private List<FileDinhKemReq> canCu = new ArrayList<>();
+    private List<FileDinhKemReq> bienBanLayMauDinhKem = new ArrayList<>();
     private List<DcnbBienBanLayMauDtl> dcnbBienBanLayMauDtl = new ArrayList<>();
 }
