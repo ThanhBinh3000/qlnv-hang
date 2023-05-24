@@ -8,6 +8,7 @@ import lombok.Data;
 
 import javax.persistence.Transient;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -27,8 +28,7 @@ public class XhTcTtinBttReq {
 
     private String sdt;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayChaoGia;
+    private LocalDate ngayChaoGia;
 
     private BigDecimal soLuong;
 

@@ -9,6 +9,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbQuyetDinhDcCHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbQuyetDinhDcC;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.response.DieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO;
 import com.tcdt.qlnvhang.service.feign.LuuKhoClient;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -145,13 +146,9 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
         return created;
     }
 
-    public List<String> danhSachSoQdDieuChuyen(SearchDcnbQuyetDinhDcC req) throws Exception{
-        List<String> ltStr = new ArrayList<>();
-        List<Object[]> danhSachSoQdDieuChuyen = dcnbQuyetDinhDcCHdrRepository.findByLoaiDcAndTrangThai(req.getLoaiDc(),Contains.BAN_HANH,null);
-        danhSachSoQdDieuChuyen.forEach(item ->{
-            ltStr.add(item[0].toString());
-        });
-        return ltStr;
+    public List<DcnbQuyetDinhDcCHdrDTO> danhSachSoQdDieuChuyen(SearchDcnbQuyetDinhDcC req) throws Exception{
+        List<DcnbQuyetDinhDcCHdrDTO> danhSachSoQdDieuChuyen = dcnbQuyetDinhDcCHdrRepository.findByLoaiDcAndTrangThai(req.getLoaiDc(),Contains.BAN_HANH, req.getMaDvi());
+        return danhSachSoQdDieuChuyen;
     }
 
     @Transactional

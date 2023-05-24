@@ -22,7 +22,7 @@ public interface DcnbBangKeCanHangHdrRepository extends JpaRepository<DcnbBangKe
             "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
             "AND ((:#{#param.tuNgay}  IS NULL OR c.ngayXuatKho >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR c.ngayXuatKho <= :#{#param.denNgay}) ) " +
-            "AND (:#{#param.soQdinhDcc} IS NULL OR c.soQdinhDcc = :#{#param.soQdinhDcc}) " +
+            "AND (:#{#param.soQdinhDcc} IS NULL OR LOWER(c.soQdinhDcc) LIKE CONCAT('%',LOWER(:#{#param.soBbLayMau}),'%')) " +
             "AND (:#{#param.loaiDc} IS NULL OR c.loaiDc = :#{#param.loaiDc}) " +
             "ORDER BY c.soQdinhDcc desc , c.nam desc, c.id desc")
     Page<DcnbBangKeCanHangHdr> search(@Param("param")SearchBangKeCanHang req, Pageable pageable);

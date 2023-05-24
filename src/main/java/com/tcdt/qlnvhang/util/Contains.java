@@ -106,6 +106,9 @@ public class Contains {
 	public static final String DANG_THUC_HIEN = "44";
 	public static final String DA_HOAN_THANH = "45";
 
+	public static final String CHO_DUYET_BTC = "49";
+	public static final String TU_CHOI_BTC = "50";
+	public static final String DA_DUYET_BTC = "51";
 	public static final String DA_TAO_CBV = "52";
 	public static final String DA_DUYET_CBV = "53";
 	public static final String TU_CHOI_CBV = "54";
@@ -234,12 +237,12 @@ public class Contains {
 	public static final String ACTIVE = "Y";
 	public static final String DISABLE = "N";
 
-	// Phương thức tổ chức triển khai mua trực tiếp
-	public static final String CHAO_GIA = "Chào giá";
-	public static final String UY_QUYEN = "Ủy quyền";
-	public static final String MUA_LE = "Mua lẻ";
+	// Phương thức tổ chức triển khai mua bán trực tiếp
+	public static final String CHAO_GIA = "01";
+	public static final String UY_QUYEN = "02";
+	public static final String MUA_LE = "03";
 
-	public static final String BAN_LE = "Bán lẻ";
+	public static final String BAN_LE = "03";
 
 	public static final String DAU_TU = "DT";
 
