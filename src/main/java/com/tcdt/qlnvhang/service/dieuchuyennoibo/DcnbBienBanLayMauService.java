@@ -11,9 +11,6 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBienBanLayMauHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbBienBanLayMau;
-import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbQuyetDinhDcC;
-import com.tcdt.qlnvhang.response.DieuChuyenNoiBo.BienBanNghiemThuLanDauDTO;
-import com.tcdt.qlnvhang.response.DieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -43,7 +40,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class BienBanLayMauService extends BaseServiceImpl {
+public class DcnbBienBanLayMauService extends BaseServiceImpl {
 
     @Autowired
     DcnbBienBanLayMauHdrRepository dcnbBienBanLayMauHdrRepository;

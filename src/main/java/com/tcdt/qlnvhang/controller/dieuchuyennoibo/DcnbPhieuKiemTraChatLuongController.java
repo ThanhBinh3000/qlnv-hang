@@ -6,13 +6,10 @@ import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBienBanLayMauHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbPhieuKtChatLuongHdrReq;
-import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbBienBanLayMau;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchPhieuKtChatLuong;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.dieuchuyennoibo.BienBanLayMauService;
-import com.tcdt.qlnvhang.service.dieuchuyennoibo.PhieuKiemTraChatLuongService;
+import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbPhieuKiemTraChatLuongService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,7 +33,7 @@ import java.util.Map;
 @Api(tags = "Điều chuyển nội bộ - Phiếu kiểm tra chất lượng")
 public class DcnbPhieuKiemTraChatLuongController {
     @Autowired
-    PhieuKiemTraChatLuongService phieuKiemTraChatLuongService;
+    DcnbPhieuKiemTraChatLuongService dcnbPhieuKiemTraChatLuongService;
 
     @ApiOperation(value = "Tra cứu thông tin đề xuất", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -45,7 +42,7 @@ public class DcnbPhieuKiemTraChatLuongController {
                                                   @RequestBody SearchPhieuKtChatLuong objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(phieuKiemTraChatLuongService.searchPage(currentUser,objReq));
+            resp.setData(dcnbPhieuKiemTraChatLuongService.searchPage(currentUser,objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch ( Exception e) {
@@ -64,7 +61,7 @@ public class DcnbPhieuKiemTraChatLuongController {
     public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody DcnbPhieuKtChatLuongHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(phieuKiemTraChatLuongService.save(currentUser,objReq));
+            resp.setData(dcnbPhieuKiemTraChatLuongService.save(currentUser,objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -81,7 +78,7 @@ public class DcnbPhieuKiemTraChatLuongController {
     public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody DcnbPhieuKtChatLuongHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(phieuKiemTraChatLuongService.update(currentUser,objReq));
+            resp.setData(dcnbPhieuKiemTraChatLuongService.update(currentUser,objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -100,7 +97,7 @@ public class DcnbPhieuKiemTraChatLuongController {
             @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids")List<Long> ids) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(phieuKiemTraChatLuongService.detail(ids).get(0));
+            resp.setData(dcnbPhieuKiemTraChatLuongService.detail(ids).get(0));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -117,7 +114,7 @@ public class DcnbPhieuKiemTraChatLuongController {
     public ResponseEntity<BaseResponse> updateStatus( @CurrentUser CustomUserDetails currentUser,@Valid @RequestBody StatusReq stReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            phieuKiemTraChatLuongService.approve(currentUser,stReq);
+            dcnbPhieuKiemTraChatLuongService.approve(currentUser,stReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -135,7 +132,7 @@ public class DcnbPhieuKiemTraChatLuongController {
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            phieuKiemTraChatLuongService.delete(idSearchReq);
+            dcnbPhieuKiemTraChatLuongService.delete(idSearchReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -154,7 +151,7 @@ public class DcnbPhieuKiemTraChatLuongController {
     public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            phieuKiemTraChatLuongService.deleteMulti(idSearchReq);
+            dcnbPhieuKiemTraChatLuongService.deleteMulti(idSearchReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -171,7 +168,7 @@ public class DcnbPhieuKiemTraChatLuongController {
     @ResponseStatus(HttpStatus.OK)
     public void exportList(@CurrentUser CustomUserDetails currentUser ,@Valid @RequestBody  SearchPhieuKtChatLuong objReq, HttpServletResponse response) throws Exception {
         try {
-            phieuKiemTraChatLuongService.export( currentUser,objReq, response);
+            dcnbPhieuKiemTraChatLuongService.export( currentUser,objReq, response);
 
         } catch (Exception e) {
             log.error("Kết xuất danh sách dánh sách mua : {}", e);
