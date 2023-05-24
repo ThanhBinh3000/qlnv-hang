@@ -130,6 +130,22 @@ public abstract class BaseServiceImpl {
     return data;
   }
 
+  public Map<String, String> getListDanhMucDviByMadviIn(List<String> listMaDvi, String trangThai) {
+    QlnvDmDonviSearchReq objRequest = new QlnvDmDonviSearchReq();
+    objRequest.setListMaDvi(listMaDvi);
+    objRequest.setTrangThai(trangThai);
+    ResponseEntity<String> response = categoryServiceProxy.getDanhMucDviByMaDviIn(getAuthorizationToken(request),
+            objRequest);
+    String str = Request.getAttrFromJson(response.getBody(), "data");
+    HashMap<String, String> data = new HashMap<String, String>();
+    List<Map<String, Object>> retMap = new Gson().fromJson(str, new TypeToken<List<HashMap<String, Object>>>() {
+    }.getType());
+    for (Map<String, Object> map : retMap) {
+      data.put(String.valueOf(map.get("maDvi")), String.valueOf(map.get("tenDvi")));
+    }
+    return data;
+  }
+
   public Map<String, Map<String, Object>> getListDanhMucDviObject(String capDvi, String maDviCha, String trangThai) {
     QlnvDmDonviSearchReq objRequest = new QlnvDmDonviSearchReq();
     objRequest.setCapDvi(capDvi);

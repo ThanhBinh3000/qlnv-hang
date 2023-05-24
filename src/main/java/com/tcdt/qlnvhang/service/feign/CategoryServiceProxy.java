@@ -63,4 +63,9 @@ public interface CategoryServiceProxy {
 	@Headers({"Accept: application/json; charset=utf-8", "Content-Type: application/x-www-form-urlencoded"})
 	public ResponseEntity<String> getDanhMucHangHoaAll(
 			@RequestHeader(value = "Authorization", required = true) String authorizationHeader, Map m);
+
+	@PostMapping("/dmuc-donvi/tat-ca/maDvi-in")
+	@Headers({ "Accept: application/json; charset=utf-8", "Content-Type: application/x-www-form-urlencoded" })
+	public ResponseEntity<String> getDanhMucDviByMaDviIn(
+			@RequestHeader(value = "Authorization", required = true) String authorizationHeader,@RequestBody QlnvDmDonviSearchReq objReq);
 }
