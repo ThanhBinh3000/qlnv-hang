@@ -394,16 +394,30 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
                 for (DcnbQuyetDinhDcCDtl hh : danhSachQuyetDinh) {
                     List<DcnbKeHoachDcDtl> danhSachKeHoach = hh.getDanhSachKeHoach();
                     for (DcnbKeHoachDcDtl kh: danhSachKeHoach){
+                        Optional<DcnbKeHoachDcDtl> parentDtl = dcnbKeHoachDcDtlRepository.findById(kh.getParentId());
+                        if (parentDtl.isPresent()) {
+                            parentDtl.get().setMaDiemKhoNhan(kh.getMaDiemKhoNhan());
+                            parentDtl.get().setTenDiemKhoNhan(kh.getTenDiemKhoNhan());
+                            parentDtl.get().setMaNhaKhoNhan(kh.getMaNhaKhoNhan());
+                            parentDtl.get().setTenNhaKhoNhan(kh.getTenNhaKhoNhan());
+                            parentDtl.get().setMaNganKhoNhan(kh.getMaNganKhoNhan());
+                            parentDtl.get().setTenNganKhoNhan(kh.getTenNganKhoNhan());
+                            parentDtl.get().setCoLoKhoNhan(kh.getCoLoKhoNhan());
+                            parentDtl.get().setMaLoKhoNhan(kh.getMaLoKhoNhan());
+                            parentDtl.get().setTenLoKhoNhan(kh.getTenLoKhoNhan());
+                            parentDtl.get().setTichLuongKd(kh.getTichLuongKd());
+                            parentDtl.get().setSoLuongPhanBo(kh.getSoLuongPhanBo());
+                            parentDtl.get().setSlDcConLai(kh.getSlDcConLai());
+                            parentDtl.get().setDaXdinhDiemNhap(true);
+                            dcnbKeHoachDcDtlRepository.save(parentDtl.get());
+                        }
                         kh.setDaXdinhDiemNhap(true);
                         dcnbKeHoachDcDtlRepository.save(kh);
                     }
                 }
-                Map<Long, List<DcnbQuyetDinhDcCDtl>> groupedById = danhSachQuyetDinh.stream()
-                        .collect(Collectors.groupingBy(DcnbQuyetDinhDcCDtl::getHdrId));
-
-                // Print the result
-                groupedById.forEach((id, userList) -> {
-                    Optional<DcnbKeHoachDcHdr> parentHdr = dcnbKeHoachDcHdrRepository.findById(id);
+                for (DcnbQuyetDinhDcCDtl hh : danhSachQuyetDinh) {
+                    Optional<DcnbKeHoachDcHdr> hdr = dcnbKeHoachDcHdrRepository.findById(hh.getKeHoachDcHdrId());
+                    Optional<DcnbKeHoachDcHdr> parentHdr = dcnbKeHoachDcHdrRepository.findById(hdr.get().getParentId());
                     if (parentHdr.isPresent()) {
                         boolean allMatch = parentHdr.get().getDanhSachHangHoa().stream().allMatch(n -> (n.getDaXdinhDiemNhap() != null && n.getDaXdinhDiemNhap() == true));
                         if(allMatch){
@@ -411,7 +425,7 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
                             dcnbKeHoachDcHdrRepository.save(parentHdr.get());
                         }
                     }
-                });
+                }
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
