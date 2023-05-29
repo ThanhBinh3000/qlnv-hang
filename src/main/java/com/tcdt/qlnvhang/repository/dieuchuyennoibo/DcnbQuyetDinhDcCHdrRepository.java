@@ -19,7 +19,7 @@ public interface DcnbQuyetDinhDcCHdrRepository extends JpaRepository<DcnbQuyetDi
 
     @Query(value = "SELECT distinct c FROM DcnbQuyetDinhDcCHdr c WHERE 1=1 " +
             "AND (:#{#param.soQdinh} IS NULL OR LOWER(c.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdinh}),'%')) " +
-            "AND (:#{#param.maDvi} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDvi},'%')) " +
+            "AND (:#{#param.maDvi} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDvi},'')) " +
             "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
             "AND ((:#{#param.ngayDuyetTcTu}  IS NULL OR c.ngayDuyetTc >= :#{#param.ngayDuyetTcTu})" +
             "AND (:#{#param.ngayDuyetTcDen}  IS NULL OR c.ngayDuyetTc <= :#{#param.ngayDuyetTcDen}) ) " +
@@ -48,6 +48,6 @@ public interface DcnbQuyetDinhDcCHdrRepository extends JpaRepository<DcnbQuyetDi
             "LEFT JOIN DcnbQuyetDinhDcCDtl dtl ON dtl.hdrId = hdr.id \n" +
             "LEFT JOIN DcnbKeHoachDcHdr h On h.id  = dtl.keHoachDcHdrId \n" +
             "LEFT JOIN DcnbKeHoachDcDtl d ON d.hdrId  = h.id " +
-            "WHERE hdr.loaiDc  = ?1 AND hdr.trangThai = ?2 AND h.maDvi = ?3 group by hdr.id,hdr.soQdinh,hdr.ngayKyQdinh")
+            "WHERE hdr.loaiDc  = ?1 AND hdr.trangThai = ?2 AND (h.maDvi = ?3 OR hdr.maDvi = ?3) group by hdr.id,hdr.soQdinh,hdr.ngayKyQdinh")
     List<DcnbQuyetDinhDcCHdrDTO> findByLoaiDcAndTrangThai(String loaiDc, String trangThai,String maDonVi);
 }

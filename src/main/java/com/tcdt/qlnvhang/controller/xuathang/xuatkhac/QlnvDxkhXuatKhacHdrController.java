@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.controller.xuatkhac;
+package com.tcdt.qlnvhang.controller.xuathang.xuatkhac;
 
 import java.util.List;
 import java.util.Optional;

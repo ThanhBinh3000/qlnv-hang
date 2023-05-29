@@ -35,7 +35,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class PhieuKiemTraChatLuongService extends BaseServiceImpl {
+public class DcnbPhieuKiemTraChatLuongService extends BaseServiceImpl {
 
     @Autowired
     DcnbPhieuKtChatLuongHdrRepository dcnbPhieuKtChatLuongHdrRepository;
