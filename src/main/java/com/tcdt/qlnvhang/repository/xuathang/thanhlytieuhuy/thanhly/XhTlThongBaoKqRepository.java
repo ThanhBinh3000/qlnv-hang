@@ -11,9 +11,9 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
-public interface XhTlThongBaoKqRepository extends JpaRepository<XhTlThongBaoKq,Long> {
+public interface XhTlThongBaoKqRepository extends JpaRepository<XhTlThongBaoKq, Long> {
 
-  @Query("SELECT DISTINCT  c FROM XhTlThongBaoKq c " +
+  @Query("SELECT   c FROM XhTlThongBaoKq c " +
       " WHERE 1=1 " +
       "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
       "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
@@ -24,7 +24,7 @@ public interface XhTlThongBaoKqRepository extends JpaRepository<XhTlThongBaoKq,L
       "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
       "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
-  Page<XhTlThongBaoKq> search (@Param("param") SearchXhTlQuyetDinh param, Pageable pageable);
+  Page<XhTlThongBaoKq> search(@Param("param") SearchXhTlQuyetDinh param, Pageable pageable);
 
 
   void deleteAllByIdIn(List<Long> listId);

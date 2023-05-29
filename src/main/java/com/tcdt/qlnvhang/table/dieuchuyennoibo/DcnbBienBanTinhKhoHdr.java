@@ -1,12 +1,15 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = DcnbBienBanTinhKhoHdr.TABLE_NAME)
@@ -39,11 +42,23 @@ public class DcnbBienBanTinhKhoHdr extends BaseEntity implements Serializable, C
     @Column(name = "MA_DVI")
     private String maDvi;
 
+    @Column(name = "TEN_DVI")
+    private String tenDvi;
+
     @Column(name = "QHNS_ID")
     private Long qhnsId;
 
     @Column(name = "MA_QHNS")
     private String maQhns;
+
+    @Column(name = "NGAY_BAT_DAU_XUAT")
+    private LocalDate ngayBatDauXuat;
+
+    @Column(name = "NGAY_KET_THUC_XUAT")
+    private LocalDate ngayKeThucXuat;
+
+    @Column(name = "THOI_HAN_XUAT_HANG")
+    private LocalDate thoiHanXuatHang;
 
     @Column(name = "QDINH_DCC_ID")
     private Long qDinhDccId;
@@ -129,6 +144,61 @@ public class DcnbBienBanTinhKhoHdr extends BaseEntity implements Serializable, C
     @Column(name = "LOAI_DC")
     private String loaiDc;
 
-    @Column(name = "TYPE")
-    private String type;
+    @Column(name = "NGUYEN_NHAN")
+    private String nguyeNhan;
+
+    @Column(name = "KIEN_NGHI")
+    private String kienNghi;
+
+    @Column(name = "GHI_CHU")
+    private String ghiChu;
+
+    @Column(name = "NGAY_PDUYET_KTV_BAO_QUAN")
+    private LocalDate ngayPduyetKtvBQ;
+
+    @Column(name = "KTV_BAO_QUAN")
+    private String ktvBaoQuan;
+
+    @Column(name = "KTV_BAO_QUAN_ID")
+    private Long ktvBaoQuanId;
+
+    @Column(name = "NGAY_PDUYET_KE_TOAN")
+    private LocalDate ngayPduyetKt;
+
+    @Column(name = "KE_TOAN")
+    private String keToan;
+
+    @Column(name = "KE_TOAN_ID")
+    private Long keToanId;
+
+    @Column(name = "NGAY_PDUYET_LDCC")
+    private LocalDate ngayPduyetLdcc;
+
+    @Column(name = "LANH_DAO_CHI_CUC")
+    private String lanhDaoChiCuc;
+
+    @Column(name = "LANH_DAO_CHI_CUC_ID")
+    private Long lanhDaoChiCucId;
+
+    @Column(name = "TONG_SL_XUAT_THEO_QD")
+    private Double tongSlXuatTheoQd;
+
+    @Column(name = "TONG_SL_XUAT_THEO_TT")
+    private Double tongSlXuatTheoTt;
+
+    @Column(name = "SL_CON_LAI_THEO_SS")
+    private Double slConLaiTheoSs;
+
+    @Column(name = "SL_CON_LAI_THEO_TT")
+    private Double slConLaiTheoTt;
+
+    @Column(name = "CHENH_LECH_SL_CON_LAI")
+    private Double chenhLechSlConLai;
+
+    @Transient
+    private List<FileDinhKem> fileBbTinhKhoDaKy = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "HDR_ID")
+    private List<DcnbBienBanTinhKhoDtl> dcnbBienBanTinhKhoDtl = new ArrayList<>();
 }

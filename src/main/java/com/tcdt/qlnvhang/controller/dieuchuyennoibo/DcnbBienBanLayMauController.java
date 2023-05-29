@@ -9,7 +9,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBienBanLayMauHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbBienBanLayMau;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.dieuchuyennoibo.BienBanLayMauService;
+import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBienBanLayMauService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,7 +33,7 @@ import java.util.Map;
 @Api(tags = "Điều chuyển nội bộ - Biên bản lấy mẫu, bàn giao mẫu")
 public class DcnbBienBanLayMauController {
     @Autowired
-    BienBanLayMauService bienBanLayMauService;
+    DcnbBienBanLayMauService dcnbBienBanLayMauService;
 
     @ApiOperation(value = "Tra cứu thông tin biên bản", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -42,7 +42,7 @@ public class DcnbBienBanLayMauController {
                                                   @RequestBody SearchDcnbBienBanLayMau objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(bienBanLayMauService.searchPage(currentUser,objReq));
+            resp.setData(dcnbBienBanLayMauService.searchPage(currentUser,objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch ( Exception e) {
@@ -61,7 +61,7 @@ public class DcnbBienBanLayMauController {
     public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody DcnbBienBanLayMauHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(bienBanLayMauService.save(currentUser,objReq));
+            resp.setData(dcnbBienBanLayMauService.save(currentUser,objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -78,7 +78,7 @@ public class DcnbBienBanLayMauController {
     public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody DcnbBienBanLayMauHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(bienBanLayMauService.update(currentUser,objReq));
+            resp.setData(dcnbBienBanLayMauService.update(currentUser,objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -97,7 +97,7 @@ public class DcnbBienBanLayMauController {
             @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids")List<Long> ids) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(bienBanLayMauService.detail(ids).get(0));
+            resp.setData(dcnbBienBanLayMauService.detail(ids).get(0));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -114,7 +114,7 @@ public class DcnbBienBanLayMauController {
     public ResponseEntity<BaseResponse> updateStatus( @CurrentUser CustomUserDetails currentUser,@Valid @RequestBody StatusReq stReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            bienBanLayMauService.approve(currentUser,stReq);
+            dcnbBienBanLayMauService.approve(currentUser,stReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -132,7 +132,7 @@ public class DcnbBienBanLayMauController {
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            bienBanLayMauService.delete(idSearchReq);
+            dcnbBienBanLayMauService.delete(idSearchReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -150,7 +150,7 @@ public class DcnbBienBanLayMauController {
     @ResponseStatus(HttpStatus.OK)
     public void exportList(@CurrentUser CustomUserDetails currentUser ,@Valid @RequestBody  SearchDcnbBienBanLayMau objReq, HttpServletResponse response) throws Exception {
         try {
-            bienBanLayMauService.export( currentUser,objReq, response);
+            dcnbBienBanLayMauService.export( currentUser,objReq, response);
 
         } catch (Exception e) {
             log.error("Kết xuất danh sách dánh sách mua : {}", e);

@@ -15,16 +15,16 @@ import java.util.Optional;
 @Repository
 public interface DcnbBienBanLayMauHdrRepository extends JpaRepository<DcnbBienBanLayMauHdr, Long> {
 
-    @Query(value = "SELECT distinct hdr FROM DcnbBienBanLayMauHdr hdr WHERE 1=1 " +
+    @Query(value = "SELECT distinct hdr FROM DcnbBienBanLayMauHdr hdr LEFT JOIN DcnbBienBanLayMauDtl d On d.hdrId = hdr.id WHERE 1=1 " +
             "AND (:#{#param.maDvi} IS NULL OR hdr.maDvi LIKE CONCAT(:#{#param.maDvi},'%')) " +
             "AND (:#{#param.DViKiemNghiem} IS NULL OR hdr.dViKiemNghiem LIKE CONCAT(:#{#param.DViKiemNghiem},'%')) " +
             "AND (:#{#param.nam} IS NULL OR hdr.nam = :#{#param.nam}) " +
-            "AND LOWER(hdr.soBbLayMau) LIKE CONCAT('%',LOWER(:#{#param.soBbLayMau}),'%') " +
-            "AND LOWER(hdr.soQdinhDcc) LIKE CONCAT('%',LOWER(:#{#param.soBbLayMau}),'%') " +
+            "AND (:#{#param.soBbLayMau} IS NULL OR LOWER(hdr.soBbLayMau) LIKE CONCAT('%',LOWER(:#{#param.soBbLayMau}),'%')) " +
+            "AND (:#{#param.soQdinhDcc} IS NULL OR LOWER(hdr.soQdinhDcc) LIKE CONCAT('%',LOWER(:#{#param.soBbLayMau}),'%')) " +
             "AND ((:#{#param.tuNgay}  IS NULL OR hdr.ngayLayMau >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR hdr.ngayLayMau <= :#{#param.denNgay}) ) " +
             "ORDER BY hdr.soQdinhDcc desc, hdr.nam desc")
-    Page<DcnbBienBanLayMauHdr> search(@Param("param")SearchDcnbBienBanLayMau param, Pageable pageable);
+    Page<DcnbBienBanLayMauHdr> search(@Param("param") SearchDcnbBienBanLayMau param, Pageable pageable);
 
     Optional<DcnbBienBanLayMauHdr> findFirstBySoBbLayMau (String soBbLayMau);
 

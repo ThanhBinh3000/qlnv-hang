@@ -28,11 +28,17 @@ public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cl
     @Column(name = "LOAI_BB")
     private String loaiBb;
 
+    @Column(name = "THOI_HAN_DIEU_CHUYEN")
+    private LocalDate thoiHanDieuChuyen;
+
     @Column(name = "NAM")
     private Integer nam;
 
     @Column(name = "MA_DVI")
     private String maDvi;
+
+    @Column(name = "TEN_DVI")
+    private String tenDvi;
 
     @Column(name = "QHNS_ID")
     private Long qhnsId;
@@ -67,8 +73,14 @@ public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cl
     @Column(name = "LOAI_VTHH")
     private String loaiVthh;
 
+    @Column(name = "TEN_LOAI_VTHH")
+    private String tenLoaiVthh;
+
     @Column(name = "CLOAI_VTHH")
     private String cloaiVthh;
+
+    @Column(name = "TEN_CLOAI_VTHH")
+    private String tenCloaiVthh;
 
     @Column(name = "MA_DIEM_KHO")
     private String maDiemKho;
@@ -139,11 +151,17 @@ public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cl
     @Column(name = "SO_BB_TINH_KHO")
     private String soBbTinhKho;
 
+    @Column(name = "BB_TINH_KHO_ID")
+    private Long bbTinhKhoId;
+
     @Column(name = "NGAY_XUAT_DOC_KHO")
     private LocalDate ngayXuatDocKho;
 
     @Column(name = "SO_BB_HAO_DOI")
     private String soBbHaoDoi;
+
+    @Column(name = "BB_HAO_DOI_ID")
+    private Long bbHaoDoiId;
 
     @Transient
     private List<FileDinhKem> canCu = new ArrayList<>();
