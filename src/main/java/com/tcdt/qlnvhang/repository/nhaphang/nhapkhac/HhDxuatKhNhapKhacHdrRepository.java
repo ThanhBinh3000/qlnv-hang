@@ -5,8 +5,10 @@ import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhDxuatKhNhapKhacSearch;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,4 +31,11 @@ public interface HhDxuatKhNhapKhacHdrRepository  extends JpaRepository<HhDxuatKh
                     "  ORDER BY khnk.ngaySua desc , khnk.ngayTao desc, khnk.id desc"
             )
     Page<HhDxuatKhNhapKhacHdr> search(HhDxuatKhNhapKhacSearch req, Pageable pageable);
+
+    @Transactional()
+    @Modifying
+    @Query(value = "UPDATE HH_DX_KHNK_HDR SET TRANG_THAI_TH=:trangThaiTh WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
+    void updateStatusInList(List<String> soDxuatList, String trangThaiTh);
+
+    List<HhDxuatKhNhapKhacHdr> findAllByTrangThaiAndTrangThaiTh(String trangThai, String trangThaiTh);
 }

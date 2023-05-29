@@ -516,7 +516,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			objs[3] = convertDate(qd.getNgayQdinh());
 			objs[4] = qd.getSoHd();
 			objs[5] = qd.getTenLoaiVthh();
-			objs[6] = qd.getCloaiVthh();
+			objs[6] = qd.getTenCloaiVthh();
 			objs[7] = convertDate(qd.getTgianNkho());
 			objs[8] = qd.getTrichYeu();
 			objs[9] = NhapXuatHangTrangThaiEnum.getTenById(qd.getTrangThai());

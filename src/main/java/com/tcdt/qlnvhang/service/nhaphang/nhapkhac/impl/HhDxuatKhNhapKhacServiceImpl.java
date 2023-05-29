@@ -126,11 +126,11 @@ public class HhDxuatKhNhapKhacServiceImpl extends BaseServiceImpl implements HhD
         qOptional.get().setFileDinhKems(fileDinhKemService.search(qOptional.get().getId(), Collections.singletonList(HhDxuatKhNhapKhacHdr.TABLE_NAME)));
         List<HhDxuatKhNhapKhacDtl> dtls = hhDxuatKhNhapKhacDtlRepository.findAllByHdrId(qOptional.get().getId());
         dtls.forEach(dtl -> {
-            dtl.setTenCuc(mapDmucDvi.get(dtl.getMaCuc()));
-            dtl.setTenChiCuc(mapDmucDvi.get(dtl.getMaChiCuc()));
-            dtl.setTenDiemKho(mapDmucDvi.get(dtl.getMaDiemKho()));
-            dtl.setTenNhaKho(mapDmucDvi.get(dtl.getMaNhaKho()));
-            dtl.setTenNganLoKho(mapDmucDvi.get(dtl.getMaLoKho()) + " - " + mapDmucDvi.get(dtl.getMaNganKho()));
+//            dtl.setTenCuc(mapDmucDvi.get(dtl.getMaCuc()));
+//            dtl.setTenChiCuc(mapDmucDvi.get(dtl.getMaChiCuc()));
+//            dtl.setTenDiemKho(mapDmucDvi.get(dtl.getMaDiemKho()));
+//            dtl.setTenNhaKho(mapDmucDvi.get(dtl.getMaNhaKho()));
+//            dtl.setTenNganLoKho(mapDmucDvi.get(dtl.getMaLoKho()) + " - " + mapDmucDvi.get(dtl.getMaNganKho()));
             dtl.setTenCloaiVthh(mapVthh.get(dtl.getCloaiVthh()));
         });
         HhDxuatKhNhapKhacDTO data = new HhDxuatKhNhapKhacDTO();
@@ -225,6 +225,33 @@ public class HhDxuatKhNhapKhacServiceImpl extends BaseServiceImpl implements HhD
     @Override
     public void xuatFile(HhDxuatKhNhapKhacSearch req , HttpServletResponse response) {
 
+    }
+
+    @Override
+    public List<HhDxuatKhNhapKhacDTO> findAllByTrangThaiAndTrangThaiTh(String trangThai, String trangThaiTh) {
+        List<HhDxuatKhNhapKhacHdr> listHdr = hhDxuatKhNhapKhacHdrRepository.findAllByTrangThaiAndTrangThaiTh(Contains.DA_DUYET_CBV, Contains.CHUATONGHOP);
+        List<HhDxuatKhNhapKhacDTO> result = new ArrayList<>();
+        listHdr.forEach(item ->{
+            HhDxuatKhNhapKhacDTO dataChild = new HhDxuatKhNhapKhacDTO();
+            Map<String, String> mapVthh = getListDanhMucHangHoa();
+            Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
+            Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+            Map<String, String> mapKieuNx = getListDanhMucChung("KIEU_NHAP_XUAT");
+            item.setTenLoaiVthh(mapVthh.get(item.getLoaiVthh()));
+            item.setTenLoaiHinhNx(mapLoaiHinhNx.get(item.getLoaiHinhNx()));
+            item.setTenKieuNx(mapKieuNx.get(item.getKieuNx()));
+            item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+            item.setTenDvi(mapDmucDvi.get(item.getMaDviDxuat()));
+            dataChild.setHdr(item);
+            List<HhDxuatKhNhapKhacDtl> listDtl = hhDxuatKhNhapKhacDtlRepository.findAllByHdrId(item.getId());
+            listDtl.forEach(dtl ->{
+                dtl.setTenDvi(mapDmucDvi.get(dtl.getMaDvi()));
+                dtl.setTenCloaiVthh(mapVthh.get(dtl.getCloaiVthh()));
+            });
+            dataChild.setDtl(listDtl);
+            result.add(dataChild);
+        });
+        return result;
     }
 
     private void luuChiTiet(HhDxuatKhNhapKhacHdrReq req, HhDxuatKhNhapKhacHdr created) {

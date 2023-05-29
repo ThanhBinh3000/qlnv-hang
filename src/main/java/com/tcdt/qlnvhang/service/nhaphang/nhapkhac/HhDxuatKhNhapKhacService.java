@@ -9,6 +9,7 @@ import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhDxuatKhNhapKhacSearch;
 import org.springframework.data.domain.Page;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 public interface HhDxuatKhNhapKhacService {
     Page<HhDxuatKhNhapKhacHdr> timKiem(HhDxuatKhNhapKhacSearch req);
@@ -19,4 +20,5 @@ public interface HhDxuatKhNhapKhacService {
     void xoa (IdSearchReq idSearchReq) throws Exception;
     void xoaNhieu (IdSearchReq idSearchReq) throws Exception;
     void xuatFile(HhDxuatKhNhapKhacSearch req , HttpServletResponse response);
+    List<HhDxuatKhNhapKhacDTO> findAllByTrangThaiAndTrangThaiTh(String trangThai, String trangThaiTh);
 }

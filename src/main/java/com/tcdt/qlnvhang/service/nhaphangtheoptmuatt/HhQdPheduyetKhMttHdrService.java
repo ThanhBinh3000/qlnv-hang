@@ -112,7 +112,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         dataMap.setNguoiTaoId(getUser().getId());
         dataMap.setTrangThai(Contains.DUTHAO);
         dataMap.setLastest(false);
-        dataMap.setMaDvi(getUser().getDvql());
+        dataMap.setMaDvi(dataDx.getMaDvi());
         HhQdPheduyetKhMttHdr created=hhQdPheduyetKhMttHdrRepository.save(dataMap);
 
         if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
@@ -164,6 +164,8 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
 
     @Transactional
     public HhQdPheduyetKhMttHdr update(HhQdPheduyetKhMttHdrReq req) throws Exception {
+        HhDxKhMttThopHdr dataTh = new HhDxKhMttThopHdr();
+        HhDxuatKhMttHdr dataDx = new HhDxuatKhMttHdr();
         if (StringUtils.isEmpty(req.getId())){
             throw new Exception("Sửa thất bại, không tìm thấy dữ liệu");
         }
@@ -186,17 +188,20 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
             if (!qOptionalTh.isPresent()){
                 throw new Exception("Không tìm thấy tổng hợp kế hoạch mua trực tiếp");
             }
+            dataTh = qOptionalTh.get();
         }else{
             Optional<HhDxuatKhMttHdr> byId = hhDxuatKhMttRepository.findById(req.getIdTrHdr());
             if(!byId.isPresent()){
                 throw new Exception("Không tìm thấy đề xuất kế hoạch mua trực tiếp");
             }
+            dataDx = byId.get();
         }
 
         HhQdPheduyetKhMttHdr dataDB = qOptional.get();
         BeanUtils.copyProperties(req, dataDB, "id");
         dataDB.setNgaySua(getDateTimeNow());
         dataDB.setNguoiSuaId(getUser().getId());
+        dataDB.setMaDvi(dataDx.getMaDvi());
         HhQdPheduyetKhMttHdr  createCheck = hhQdPheduyetKhMttHdrRepository.save(dataDB);
 
         if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
