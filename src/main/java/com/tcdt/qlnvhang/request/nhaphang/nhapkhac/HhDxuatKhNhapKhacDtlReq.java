@@ -13,6 +13,7 @@ public class HhDxuatKhNhapKhacDtlReq {
     private String maNhaKho;
     private String maNganKho;
     private String maLoKho;
+    private String cloaiVthh;
     private BigDecimal slTonKho;
     private BigDecimal slHaoDoiDinhMuc;
     private BigDecimal slDoiThua;

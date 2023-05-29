@@ -16,11 +16,22 @@ public class HhDxuatKhNhapKhacDtl {
     @SequenceGenerator(sequenceName = "HH_DX_KHNK_DTL_SEQ", allocationSize = 1, name = "HH_DX_KHNK_DTL_SEQ")
     private Long id;
     private Long hdrId;
-    private Long parentId;
-    private Long dviLevel;
-    private String maDvi;
+    private String maCuc;
     @Transient
-    private String tenDvi;
+    private String tenCuc;
+    private String maChiCuc;
+    @Transient
+    private String tenChiCuc;
+    private String maDiemKho;
+    @Transient
+    private String tenDiemKho;
+    private String maNhaKho;
+    @Transient
+    private String tenNhaKho;
+    private String maNganKho;
+    private String maLoKho;
+    @Transient
+    private String tenNganLoKho;
     @Transient
     private String tenCloaiVthh;
     private String cloaiVthh;

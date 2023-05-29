@@ -21,6 +21,7 @@ public class HhDxuatKhNhapKhacHdrReq {
     private Date ngayDxuat;
     private String trangThai;
     private BigDecimal tongSlNhap;
+    private BigDecimal tongThanhTien;
     private List<FileDinhKemReq> fileDinhKems;
     private List<FileDinhKemReq> canCuPhapLy;
     private List<HhDxuatKhNhapKhacDtlReq> details;
