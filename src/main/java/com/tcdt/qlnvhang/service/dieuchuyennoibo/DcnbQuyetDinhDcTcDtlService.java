@@ -11,7 +11,6 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbQuyetDinhDcTcHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbQuyetDinhDcTc;
-import com.tcdt.qlnvhang.request.search.TongHopKeHoachDieuChuyenSearch;
 import com.tcdt.qlnvhang.service.feign.LuuKhoClient;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -265,7 +264,13 @@ public class DcnbQuyetDinhDcTcDtlService extends BaseServiceImpl {
     public List<DcnbQuyetDinhDcTcHdr> danhSachQuyetDinh(CustomUserDetails currentUser,SearchDcnbQuyetDinhDcTc objReq) {
         String dvql = currentUser.getDvql();
         objReq.setMaDvi(dvql);
-        List<DcnbQuyetDinhDcTcHdr> danhSachs = dcnbQuyetDinhDcTcHdrRepository.findDanhSachQuyetDinh(objReq);
+        List<DcnbQuyetDinhDcTcHdr> danhSachs = new ArrayList<>();
+        if(Contains.QD_NHAP.equals(objReq.getLoaiQdinh())){
+            danhSachs = dcnbQuyetDinhDcTcHdrRepository.findDanhSachQuyetDinhNhan(objReq);
+        }
+        if(Contains.QD_XUAT.equals(objReq.getLoaiQdinh())){
+            danhSachs = dcnbQuyetDinhDcTcHdrRepository.findDanhSachQuyetDinhXuat(objReq);
+        }
         return danhSachs;
     }
 }
