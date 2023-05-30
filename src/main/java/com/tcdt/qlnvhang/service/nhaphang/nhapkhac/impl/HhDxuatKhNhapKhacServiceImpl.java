@@ -245,7 +245,7 @@ public class HhDxuatKhNhapKhacServiceImpl extends BaseServiceImpl implements HhD
             dataChild.setHdr(item);
             List<HhDxuatKhNhapKhacDtl> listDtl = hhDxuatKhNhapKhacDtlRepository.findAllByHdrId(item.getId());
             listDtl.forEach(dtl ->{
-                dtl.setTenDvi(mapDmucDvi.get(dtl.getMaDvi()));
+//                dtl.setTenDvi(mapDmucDvi.get(dtl.getMaDvi()));
                 dtl.setTenCloaiVthh(mapVthh.get(dtl.getCloaiVthh()));
             });
             dataChild.setDtl(listDtl);
