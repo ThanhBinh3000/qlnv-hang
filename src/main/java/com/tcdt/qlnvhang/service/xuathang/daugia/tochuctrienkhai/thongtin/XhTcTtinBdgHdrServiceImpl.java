@@ -164,11 +164,14 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
         }
         XhTcTtinBdgHdr data = byId.get();
 
-        data.setListNguoiTgia(xhTcTtinBdgNlqRepository.findByIdTtinHdr(id));
+//        data.setListNguoiTgia(xhTcTtinBdgNlqRepository.findByIdTtinHdr(id));
+        List<XhTcTtinBdgNlq> xhTcTtinBdgNlqList = xhTcTtinBdgNlqRepository.findByIdTtinHdr(data.getId());
+        data.setListNguoiTgia(xhTcTtinBdgNlqList);
+
         Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
         Map<String,String> listDanhMucHangHoa = getListDanhMucHangHoa();
 
-        List<XhTcTtinBdgDtl> byIdTtinHdr = xhTcTtinBdgDtlRepository.findByIdTtinHdr(id);
+        List<XhTcTtinBdgDtl> byIdTtinHdr = xhTcTtinBdgDtlRepository.findByIdTtinHdr(data.getId());
         byIdTtinHdr.forEach(item -> {
             item.setTenDvi(listDanhMucDvi.get(item.getMaDvi()));
             List<XhTcTtinBdgPlo> byIdTtinDtl = xhTcTtinBdgPloRepository.findByIdTtinDtl(item.getId());

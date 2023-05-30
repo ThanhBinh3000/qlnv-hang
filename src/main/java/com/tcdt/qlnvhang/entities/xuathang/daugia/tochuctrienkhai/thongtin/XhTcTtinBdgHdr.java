@@ -148,7 +148,7 @@ public class XhTcTtinBdgHdr extends TrangThaiBaseEntity implements Serializable 
   private List<XhTcTtinBdgDtl> children = new ArrayList<>();
 
   @Transient
-  List<XhTcTtinBdgNlq> listNguoiTgia = new ArrayList<>();
+  private List<XhTcTtinBdgNlq> listNguoiTgia = new ArrayList<>();
 
   @Transient
   private List<FileDinhKem> fileDinhKems = new ArrayList<>();
