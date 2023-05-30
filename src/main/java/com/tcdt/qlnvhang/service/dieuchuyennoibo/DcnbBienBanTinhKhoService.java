@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
+import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBienBanLayMauDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBienBanTinhKhoDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBienBanTinhKhoHdrRepository;
@@ -11,7 +13,9 @@ import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBangKeCanHangHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBienBanTinhKhoHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchBangKeCanHang;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbBienBanTinhKho;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -29,10 +33,7 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,6 +44,12 @@ public class DcnbBienBanTinhKhoService extends BaseServiceImpl {
 
     @Autowired
     DcnbBienBanTinhKhoDtlRepository dcnbBienBanTinhKhoDtlRepository;
+
+    @Autowired
+    FileDinhKemService fileDinhKemService;
+
+    @Autowired
+    FileDinhKemRepository fileDinhKemRepository;
 
     public Page<DcnbBienBanTinhKhoHdr> searchPage(CustomUserDetails currentUser, SearchDcnbBienBanTinhKho req) throws Exception {
         String dvql = currentUser.getDvql();
@@ -65,8 +72,10 @@ public class DcnbBienBanTinhKhoService extends BaseServiceImpl {
         BeanUtils.copyProperties(objReq, data);
         data.setMaDvi(currentUser.getDvql());
         data.setTenDvi(currentUser.getUser().getTenDvi());
-
+        objReq.getDcnbBienBanTinhKhoDtl().forEach(e -> e.setDcnbBienBanTinhKhoHdr(data));
         DcnbBienBanTinhKhoHdr created = dcnbBienBanTinhKhoHdrRepository.save(data);
+        List<FileDinhKem> bienBanTinhKhoDaKy = fileDinhKemService.saveListFileDinhKem(objReq.getFileBbTinhKhoDaKy(), created.getId(), DcnbBienBanTinhKhoHdr.TABLE_NAME + "_BB_TINH_KHO_DA_KY");
+        data.setFileBbTinhKhoDaKy(bienBanTinhKhoDaKy);
         return created;
     }
 
@@ -95,6 +104,9 @@ public class DcnbBienBanTinhKhoService extends BaseServiceImpl {
         if (objReq.getDcnbBienBanTinhKhoDtl() != null) {
         }
         DcnbBienBanTinhKhoHdr created = dcnbBienBanTinhKhoHdrRepository.save(data);
+        fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbBienBanTinhKhoHdr.TABLE_NAME + "_BB_TINH_KHO_DA_KY"));
+        List<FileDinhKem> bienBanTinhKhoDaKy = fileDinhKemService.saveListFileDinhKem(objReq.getFileBbTinhKhoDaKy(), created.getId(), DcnbBienBanTinhKhoHdr.TABLE_NAME + "_BB_TINH_KHO_DA_KY");
+        data.setFileBbTinhKhoDaKy(bienBanTinhKhoDaKy);
         return created;
     }
 
@@ -107,6 +119,10 @@ public class DcnbBienBanTinhKhoService extends BaseServiceImpl {
             throw new Exception("Không tìm thấy dữ liệu");
         }
         List<DcnbBienBanTinhKhoHdr> allById = dcnbBienBanTinhKhoHdrRepository.findAllById(ids);
+        allById.forEach(e -> {
+            List<FileDinhKem> bienBanTinhKhoDaKy = fileDinhKemRepository.findByDataIdAndDataTypeIn(e.getId(), Collections.singleton(DcnbBienBanTinhKhoHdr.TABLE_NAME + "_BB_TINH_KHO_DA_KY"));
+            e.setFileBbTinhKhoDaKy(bienBanTinhKhoDaKy);
+        });
         return allById;
     }
 
