@@ -12,6 +12,7 @@ public class SearchDcnbQuyetDinhDcTc extends BaseRequest {
   private Integer nam;
   private String maDvi;
   private String loaiDc;
+  private String loaiQdinh;
   private LocalDate ngayHieuLucTu;
   private LocalDate ngayHieuLucDen;
   private LocalDate ngayDuyetTcTu;
