@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.HhBbNghiemthuKlstRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBienBanLayMauDtlRepository;
@@ -10,8 +11,10 @@ import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKtChatLuongHdrRepos
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBienBanLayMauDtlReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBienBanLayMauHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbBienBanLayMau;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -31,12 +34,10 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class DcnbBienBanLayMauService extends BaseServiceImpl {
@@ -49,6 +50,9 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
 
     @Autowired
     QlnvDmDonviRepository qlnvDmDonviRepository;
+
+    @Autowired
+    FileDinhKemRepository fileDinhKemRepository;
 
     @Autowired
     FileDinhKemService fileDinhKemService;
@@ -93,7 +97,6 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
         data.setNguoiTaoId(currentUser.getUser().getId());
         objReq.getDcnbBienBanLayMauDtl().forEach(e -> e.setDcnbBienBanLayMauHdr(data));
         DcnbBienBanLayMauHdr created = dcnbBienBanLayMauHdrRepository.save(data);
-
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), DcnbBienBanLayMauHdr.TABLE_NAME + "_CAN_CU");
         created.setCanCu(canCu);
         List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getBienBanLayMauDinhKem(), created.getId(), DcnbBienBanLayMauHdr.TABLE_NAME + "_BIEN_BAN_LAY_MAU");
@@ -123,27 +126,29 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
         data.setDcnbBienBanLayMauDtl(objReq.getDcnbBienBanLayMauDtl());
         DcnbBienBanLayMauHdr created = dcnbBienBanLayMauHdrRepository.save(data);
 
-        fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbKeHoachDcHdr.TABLE_NAME + "_CAN_CU"));
+        fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbBienBanLayMauHdr.TABLE_NAME + "_CAN_CU"));
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), DcnbBienBanLayMauHdr.TABLE_NAME + "_CAN_CU");
         created.setCanCu(canCu);
 
-        fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbKeHoachDcHdr.TABLE_NAME + "_BIEN_BAN_LAY_MAU"));
+        fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbBienBanLayMauHdr.TABLE_NAME + "_BIEN_BAN_LAY_MAU"));
         List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getBienBanLayMauDinhKem(), created.getId(), DcnbBienBanLayMauHdr.TABLE_NAME + "_BIEN_BAN_LAY_MAU");
         created.setBienBanLayMauDinhKem(bienBanLayMauDinhKem);
         return created;
     }
 
     public List<DcnbBienBanLayMauHdr> detail(List<Long> ids) throws Exception {
-        if (DataUtils.isNullOrEmpty(ids))
-            throw new Exception("Tham số không hợp lệ.");
-        List<DcnbBienBanLayMauHdr> optional = dcnbBienBanLayMauHdrRepository.findByIdIn(ids);
-        if (DataUtils.isNullOrEmpty(optional)) {
-            throw new Exception("Không tìm thấy dữ liệu");
-        }
         List<DcnbBienBanLayMauHdr> allById = dcnbBienBanLayMauHdrRepository.findAllById(ids);
         allById.forEach(data -> {
+            List<FileDinhKem> canCu = fileDinhKemRepository.findByDataIdAndDataTypeIn(data.getId(), Collections.singleton(DcnbBienBanLayMauHdr.TABLE_NAME + "_CAN_CU"));
+            data.setCanCu(canCu);
+            List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemRepository.findByDataIdAndDataTypeIn(data.getId(),Collections.singleton(DcnbBienBanLayMauHdr.TABLE_NAME + "_BIEN_BAN_LAY_MAU") );
+            data.setBienBanLayMauDinhKem(bienBanLayMauDinhKem);
                 List<DcnbBienBanLayMauDtl> khs = dcnbBienBanLayMauDtlRepository.findByHdrId(data.getId());
                 data.setDcnbBienBanLayMauDtl(khs);
+                khs.forEach(dtl->{
+                    List<FileDinhKem> fileDinhKemChupMauNiemPhong = fileDinhKemRepository.findByDataIdAndDataTypeIn(dtl.getId(), Collections.singleton(DcnbBienBanLayMauDtl.TABLE_NAME + "_MAU_DA_NIEM_PHONG"));
+                    dtl.setFileDinhKemChupMauNiemPhong(fileDinhKemChupMauNiemPhong);
+                });
             });
         return allById;
     }
