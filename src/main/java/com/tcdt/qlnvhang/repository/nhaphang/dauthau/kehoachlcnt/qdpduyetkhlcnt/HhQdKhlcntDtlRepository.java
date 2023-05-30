@@ -18,7 +18,7 @@ public interface HhQdKhlcntDtlRepository extends JpaRepository<HhQdKhlcntDtl, Lo
 
     HhQdKhlcntDtl findByIdQdHdr(Long idQdHdr);
 
-    @Query(value = "SELECT HDR.ID,COUNT( DISTINCT GT.ID_QD_DTL ) AS C " +
+    @Query(value = "SELECT HDR.ID,COUNT( DISTINCT GT.ID ) AS C " +
             " FROM HH_QD_KHLCNT_HDR HDR " +
             " JOIN HH_QD_KHLCNT_DTL dtl ON hdr.id = dtl.ID_QD_HDR " +
             " JOIN HH_QD_KHLCNT_DSGTHAU gt ON dtl.id = gt.ID_QD_DTL " +
@@ -28,7 +28,7 @@ public interface HhQdKhlcntDtlRepository extends JpaRepository<HhQdKhlcntDtl, Lo
             , nativeQuery = true)
     List<Object[]> countAllBySoGthau(Collection<Long> qdIds);
 
-    @Query(value = "SELECT HDR.ID,COUNT( DISTINCT GT.ID_QD_DTL ) AS C " +
+    @Query(value = "SELECT HDR.ID,COUNT( DISTINCT GT.ID ) AS C " +
             " FROM HH_QD_KHLCNT_HDR HDR " +
             " JOIN HH_QD_KHLCNT_DTL dtl ON hdr.id = dtl.ID_QD_HDR " +
             " JOIN HH_QD_KHLCNT_DSGTHAU gt ON dtl.id = gt.ID_QD_DTL " +
