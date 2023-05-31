@@ -3,9 +3,11 @@ package com.tcdt.qlnvhang.service.nhaphang.nhapkhac.impl;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhDxuatKhNhapKhacDtl;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhDxuatKhNhapKhacHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhThopKhNhapKhac;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhDxuatKhNhapKhacDtlRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhDxuatKhNhapKhacHdrRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhThopKhNhapKhacRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhDxuatKhNhapKhacDTO;
@@ -39,7 +41,9 @@ public class HhDxuatKhNhapKhacServiceImpl extends BaseServiceImpl implements HhD
     @Autowired
     private HhDxuatKhNhapKhacDtlRepository hhDxuatKhNhapKhacDtlRepository;
     @Autowired
-    FileDinhKemService fileDinhKemService;
+    private HhThopKhNhapKhacRepository hhThopKhNhapKhacRepository;
+    @Autowired
+    private FileDinhKemService fileDinhKemService;
 
     @Override
     public Page<HhDxuatKhNhapKhacHdr> timKiem(HhDxuatKhNhapKhacSearch req) {
@@ -52,8 +56,19 @@ public class HhDxuatKhNhapKhacServiceImpl extends BaseServiceImpl implements HhD
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         data.getContent().forEach(f -> {
+            if(f.getThopId() != null){
+                Optional<HhThopKhNhapKhac> thop = hhThopKhNhapKhacRepository.findById(f.getThopId());
+                if (thop.isPresent()){
+                    f.setMaTh(thop.get().getMaTh());
+                    f.setTrangThaiTh(thop.get().getTrangThai());
+                }
+            }
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
-            f.setTenTrangThaiTh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiTh()));
+            if (f.getTrangThaiTh() != null) {
+                f.setTenTrangThaiTh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiTh()));
+            } else {
+                f.setTenTrangThaiTh(NhapXuatHangTrangThaiEnum.CHUATONGHOP.getTen());
+            }
             f.setTenLoaiVthh(mapVthh.get(f.getLoaiVthh()));
             f.setTenDvi(mapDmucDvi.get(f.getMaDviDxuat()));
         });
@@ -73,7 +88,6 @@ public class HhDxuatKhNhapKhacServiceImpl extends BaseServiceImpl implements HhD
         dataMap.setNgayTao(getDateTimeNow());
         dataMap.setNguoiTao(getUser().getUsername());
         dataMap.setTrangThai(Contains.DUTHAO);
-        dataMap.setTrangThaiTh(Contains.CHUATONGHOP);
         HhDxuatKhNhapKhacHdr created = hhDxuatKhNhapKhacHdrRepository.save(dataMap);
         luuFile(req, created);
         luuChiTiet(req, created);

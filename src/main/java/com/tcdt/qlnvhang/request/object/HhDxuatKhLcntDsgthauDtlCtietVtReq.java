@@ -14,6 +14,7 @@ public class HhDxuatKhLcntDsgthauDtlCtietVtReq {
 	Integer soLuong;
 
 	String maDvi;
+	String diaDiemNhap;
 
 	List<HhDxuatKhLcntDsgthauDtlCtietVt1Req> children = new ArrayList<>();
 
