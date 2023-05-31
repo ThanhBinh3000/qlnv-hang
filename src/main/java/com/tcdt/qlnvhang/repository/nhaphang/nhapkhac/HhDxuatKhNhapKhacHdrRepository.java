@@ -17,6 +17,7 @@ import java.util.Optional;
 public interface HhDxuatKhNhapKhacHdrRepository  extends JpaRepository<HhDxuatKhNhapKhacHdr, Long> {
     Optional<HhDxuatKhNhapKhacHdr> findBySoDxuat (String soDx);
     List<HhDxuatKhNhapKhacHdr> findAllByIdIn (List<Long> ids);
+    List<HhDxuatKhNhapKhacHdr> findAllByNamKhoachAndLoaiHinhNxAndLoaiVthhAndTrangThaiInAndTrangThaiTh (Integer nam, String kieuNx, String loaiVthh, List<String> trangThai, String trangThaiTh);
     @Query(
             value = "SELECT khnk " +
                     "FROM HhDxuatKhNhapKhacHdr khnk " +

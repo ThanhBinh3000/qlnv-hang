@@ -40,6 +40,8 @@ public class HhDxuatKhNhapKhacHdr {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayDxuat;
     private String trangThai;
+    private Long thopId;
+    @Transient
     private String maTh;
     private String trangThaiTh;
     @Transient

@@ -8,20 +8,22 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class HhDxuatKhNhapKhacSearch extends BaseRequest {
+public class HhThopKhNhapKhacSearch extends BaseRequest {
     private Integer namKhoach;
-    private String soDxuat;
-    private String maDviDxuat;
+    private String maTh;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
-    Date tuNgayDxuat;
+    private Date tuNgayTh;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
-    Date denNgayDxuat;
+    private Date denNgayTh;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
-    Date tuNgayDuyet;
+    private Date tuNgayKy;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
-    Date denNgayDuyet;
-    String tuNgayDxuatStr;
-    String denNgayDxuatStr;
-    String tuNgayDuyetStr;
-    String denNgayDuyetStr;
+    private Date denNgayKy;
+    private String tuNgayThStr;
+    private String denNgayThStr;
+    private String tuNgayKyStr;
+    private String denNgayKyStr;
+    private String loaiHinhNx;
+    private String loaiVthh;
+
 }
