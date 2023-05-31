@@ -116,6 +116,24 @@ public class DchinhDxuatKhLcntController extends BaseController {
 		return ResponseEntity.ok(resp);
 	}
 
+	@ApiOperation(value = "Lấy chi tiết thông tin by idQdGoc", response = List.class)
+	@GetMapping(value = PathContains.URL_CHI_TIET + "/findByIdQdGoc/{idQdGoc}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> findByIdQdGoc(
+			@ApiParam(value = "ID", example = "1", required = true) @PathVariable("idQdGoc") Long idQdGoc) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(dchinhDxuatKhLcntService.findByIdQdGoc(idQdGoc));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error(e.getMessage());
+		}
+		return ResponseEntity.ok(resp);
+	}
+
 	@ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03/Xoá-04", response = List.class)
 	@PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BaseResponse> updateStatus(HttpServletRequest request,@Valid  @RequestBody StatusReq stReq) {

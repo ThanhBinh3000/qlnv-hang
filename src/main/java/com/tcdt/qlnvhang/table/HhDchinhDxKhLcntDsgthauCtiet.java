@@ -2,6 +2,8 @@ package com.tcdt.qlnvhang.table;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.*;
 
 import lombok.Data;
@@ -39,5 +41,7 @@ public class HhDchinhDxKhLcntDsgthauCtiet implements Serializable {
 	private BigDecimal thanhTien;
 
 	private Long idGoiThau;
+	@Transient
+	private List<HhDchinhDxKhLcntDsgthauCtietVt> children = new ArrayList<>();
 
 }
