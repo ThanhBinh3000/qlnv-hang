@@ -108,7 +108,7 @@ public class HhQdKhlcntHdr implements Serializable {
 	Date tgianDthau;
 
 	@Temporal(TemporalType.DATE)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date tgianNhang;
 
 	@Temporal(TemporalType.DATE)

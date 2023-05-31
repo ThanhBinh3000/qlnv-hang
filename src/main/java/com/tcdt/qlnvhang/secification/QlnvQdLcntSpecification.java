@@ -194,7 +194,7 @@ public class QlnvQdLcntSpecification {
 				if (ObjectUtils.isEmpty(objReq))
 					return predicate;
 
-				String soQdinh = objReq.getSoQdinh();
+				String soQdinh = objReq.getSoQdDc();
 				String soQdinhGoc = objReq.getSoQdinhGoc();
 				Date tuNgayQdinh = objReq.getTuNgayQd();
 				Date denNgayQdinh = objReq.getDenNgayQd();

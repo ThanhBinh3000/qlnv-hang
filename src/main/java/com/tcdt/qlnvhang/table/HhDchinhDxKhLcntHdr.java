@@ -80,6 +80,12 @@ public class HhDchinhDxKhLcntHdr extends TrangThaiBaseEntity implements Serializ
 	Integer gtriDthau;
 
 	Integer gtriHdong;
+	@Transient
+	Integer gthauTrung;
+	@Transient
+	Integer soHdKy;
+	@Transient
+	Integer tgianNhapKho;
 
 	@Transient
 	private List<HhDchinhDxKhLcntDtl> listDieuChinh = new ArrayList<>();
@@ -88,7 +94,7 @@ public class HhDchinhDxKhLcntHdr extends TrangThaiBaseEntity implements Serializ
 	private List<FileDKemJoinHhDchinhDxKhLcntHdr> fileDinhKem = new ArrayList<>();
 
 	@Transient
-	private List<HhDchinhDxKhLcntDtl> hhQdKhlcntDtlList = new ArrayList<>();
+	private List<HhDchinhDxKhLcntDtl> children = new ArrayList<>();
 
 	@Transient
 	private Long soGoiThau;
