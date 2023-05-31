@@ -16,9 +16,10 @@ import java.util.Optional;
 @Repository
 public interface DcnbPhieuKtChatLuongHdrRepository extends JpaRepository<DcnbPhieuKtChatLuongHdr, Long> {
 
-    @Query(value = "SELECT distinct c FROM DcnbPhieuKtChatLuongHdr c WHERE 1=1 " +
+    @Query(value = "SELECT distinct c FROM DcnbPhieuKtChatLuongHdr c  LEFT JOIN QlnvDmDonvi dvi ON dvi.maDvi = c.maDvi WHERE 1=1 " +
             "AND (:#{#param.soQdinhDcc} IS NULL OR LOWER(c.soQdinhDc) LIKE CONCAT('%',LOWER(:#{#param.soQdinhDcc}),'%')) " +
-            "AND (:#{#param.maDvi} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDvi},'%')) " +
+            "AND ((:#{#param.maDvi} IS NULL OR c.maDvi = :#{#param.maDvi}) " +
+            "OR (:#{#param.maDvi} IS NULL OR dvi.parent.maDvi = :#{#param.maDvi}))" +
             "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
             "AND ((:#{#param.tuNgay}  IS NULL OR c.ngayKiem >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR c.ngayKiem <= :#{#param.denNgay}) ) " +
