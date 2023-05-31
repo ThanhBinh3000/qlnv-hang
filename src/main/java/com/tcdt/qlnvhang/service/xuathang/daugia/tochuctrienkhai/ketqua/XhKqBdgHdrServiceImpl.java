@@ -1,7 +1,9 @@
 package com.tcdt.qlnvhang.service.xuathang.daugia.tochuctrienkhai.ketqua;
 
+import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgDtl;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.hopdong.XhHopDongHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.tochuctrienkhai.ketqua.XhKqBdgHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.tochuctrienkhai.ketqua.XhKqBdgHdrReq;
@@ -36,6 +38,9 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
 
   @Autowired
   private XhHopDongHdrRepository xhHopDongHdrRepository;
+
+  @Autowired
+  private XhQdPdKhBdgDtlRepository xhQdPdKhBdgDtlRepository;
 
   @Autowired
   private FileDinhKemService fileDinhKemService;
@@ -76,13 +81,16 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
       throw new Exception("Mã thông báo này đã được quyết định kết quả bán đấu giá, xin vui lòng chọn mã thông báo khác");
     }
     XhKqBdgHdr created = xhKqBdgHdrRepository.save(data);
+
+    if (!DataUtils.isNullOrEmpty(req.getFileDinhKem())) {
+      List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), created.getId(), XhKqBdgHdr.TABLE_NAME+ "_BAN_HANH");
+      created.setFileDinhKem(fileDinhKem);
+    }
     if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
       List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhKqBdgHdr.TABLE_NAME);
       created.setFileDinhKems(fileDinhKems);
-
-      List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), created.getId(), XhKqBdgHdr.TABLE_NAME);
-      created.setFileDinhKem(fileDinhKem);
     }
+
     return created;
   }
 
@@ -100,11 +108,15 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
     data.setNgaySua(new Date());
     data.setNguoiSuaId(getUser().getId());
     XhKqBdgHdr created = xhKqBdgHdrRepository.save(data);
-    List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhKqBdgHdr.TABLE_NAME);
-    data.setFileDinhKems(fileDinhKems);
 
-    List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), created.getId(), XhKqBdgHdr.TABLE_NAME);
-    data.setFileDinhKem(fileDinhKem);
+    fileDinhKemService.delete(data.getId(), Collections.singleton(XhKqBdgHdr.TABLE_NAME + "_BAN_HANH"));
+    List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), created.getId(), XhKqBdgHdr.TABLE_NAME + "_BAN_HANH");
+    created.setFileDinhKem(fileDinhKem);
+
+    fileDinhKemService.delete(data.getId(), Collections.singleton(XhKqBdgHdr.TABLE_NAME));
+    List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhKqBdgHdr.TABLE_NAME);
+    created.setFileDinhKems(fileDinhKems);
+
     return created;
   }
 
@@ -122,9 +134,10 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
     data.setListHopDong(xhHopDongHdrRepository.findAllBySoQdKq(data.getSoQdKq()));
     Map<String, String> listDanhMucDvi = getListDanhMucDvi("2", null, "01");
     data.setTenDvi(listDanhMucDvi.get(data.getMaDvi()));
+    List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhKqBdgHdr.TABLE_NAME+ "_BAN_HANH"));
+    data.setFileDinhKem(fileDinhKem);
     List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhKqBdgHdr.TABLE_NAME));
     data.setFileDinhKems(fileDinhKems);
-    data.setFileDinhKem(fileDinhKems);
     return data;
   }
 
@@ -172,6 +185,15 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
           throw new Exception("Phê duyệt không thành công");
       }
       data.setTrangThai(req.getTrangThai());
+      if (req.getTrangThai().equals(Contains.BAN_HANH)) {
+        Optional<XhQdPdKhBdgDtl> qdPdKhBttDtl = xhQdPdKhBdgDtlRepository.findById(data.getIdPdKhDtl());
+        if (qdPdKhBttDtl.isPresent()){
+          qdPdKhBttDtl.get().setSoQdPdKqBdg(data.getSoQdKq());
+          qdPdKhBttDtl.get().setNgayKyQdPdKqBdg(data.getNgayKy());
+          qdPdKhBttDtl.get().setIdQdPdKqBdg(data.getId());
+          xhQdPdKhBdgDtlRepository.save(qdPdKhBttDtl.get());
+        }
+      }
     }
     return xhKqBdgHdrRepository.save(data);
   }
@@ -190,6 +212,7 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
     }
     xhKqBdgHdrRepository.delete(byId.get());
     fileDinhKemService.delete(byId.get().getId(), Collections.singleton(XhKqBdgHdr.TABLE_NAME));
+    fileDinhKemService.delete(byId.get().getId(), Collections.singleton(XhKqBdgHdr.TABLE_NAME + "_BAN_HANH"));
 
   }
 

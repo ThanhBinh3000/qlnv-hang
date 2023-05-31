@@ -158,13 +158,14 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
         if (ObjectUtils.isEmpty(id)) {
             throw new Exception("Không tìm thấy dữ liệu");
         }
+
         Optional<XhTcTtinBdgHdr> byId = xhTcTtinBdgHdrRepository.findById(id);
         if (!byId.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu");
         }
+
         XhTcTtinBdgHdr data = byId.get();
 
-//        data.setListNguoiTgia(xhTcTtinBdgNlqRepository.findByIdTtinHdr(id));
         List<XhTcTtinBdgNlq> xhTcTtinBdgNlqList = xhTcTtinBdgNlqRepository.findByIdTtinHdr(data.getId());
         data.setListNguoiTgia(xhTcTtinBdgNlqList);
 
@@ -172,24 +173,28 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
         Map<String,String> listDanhMucHangHoa = getListDanhMucHangHoa();
 
         List<XhTcTtinBdgDtl> byIdTtinHdr = xhTcTtinBdgDtlRepository.findByIdTtinHdr(data.getId());
-        byIdTtinHdr.forEach(item -> {
-            item.setTenDvi(listDanhMucDvi.get(item.getMaDvi()));
-            List<XhTcTtinBdgPlo> byIdTtinDtl = xhTcTtinBdgPloRepository.findByIdTtinDtl(item.getId());
-            byIdTtinDtl.forEach(x -> {
-                x.setTenDiemKho(listDanhMucDvi.get(x.getMaDiemKho()));
-                x.setTenNhaKho(listDanhMucDvi.get(x.getMaNhaKho()));
-                x.setTenNganKho(listDanhMucDvi.get(x.getMaNganKho()));
-                x.setTenLoKho(listDanhMucDvi.get(x.getMaLoKho()));
+        for (XhTcTtinBdgDtl dataDtl : byIdTtinHdr){
+            dataDtl.setTenDvi(listDanhMucDvi.get(dataDtl.getMaDvi()));
+            List<XhTcTtinBdgPlo> byIdTtinDtl = xhTcTtinBdgPloRepository.findByIdTtinDtl(dataDtl.getId());
+            byIdTtinDtl.forEach(f ->{
+                f.setTenDiemKho(listDanhMucDvi.get(f.getMaDiemKho()));
+                f.setTenNhaKho(listDanhMucDvi.get(f.getMaNhaKho()));
+                f.setTenNganKho(listDanhMucDvi.get(f.getMaNganKho()));
+                f.setTenLoKho(listDanhMucDvi.get(f.getMaLoKho()));
             });
-            item.setChildren(byIdTtinDtl);
-        });
+            dataDtl.setChildren(byIdTtinDtl);
+        }
         data.setChildren(byIdTtinHdr);
+
         data.setTenLoaiVthh(listDanhMucHangHoa.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(listDanhMucHangHoa.get(data.getCloaiVthh()));
+
         List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhTcTtinBdgHdr.TABLE_NAME+ "_CAN_CU"));
         data.setFileDinhKem(fileDinhKem);
+
         List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhTcTtinBdgHdr.TABLE_NAME));
         data.setFileDinhKems(fileDinhKems);
+
         return data;
     }
 

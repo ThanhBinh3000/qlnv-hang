@@ -1,22 +1,18 @@
 package com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.ketqua;
-
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.hopdong.XhHopDongHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import lombok.Getter;
-import lombok.Setter;
-
+import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
 @Entity
 @Table(name = XhKqBdgHdr.TABLE_NAME)
+@Data
 public class XhKqBdgHdr extends TrangThaiBaseEntity implements Serializable {
   private static final long serialVersionUID = 1L;
   public static final String TABLE_NAME = "XH_KQ_BDG_HDR";
@@ -28,6 +24,10 @@ public class XhKqBdgHdr extends TrangThaiBaseEntity implements Serializable {
 
   private Integer nam;
 
+  private Long idPdKhDtl;
+
+  private Long idThongTin;
+
   private String maDvi;
   @Transient
   private String tenDvi;
@@ -35,7 +35,6 @@ public class XhKqBdgHdr extends TrangThaiBaseEntity implements Serializable {
   private String soQdKq;
 
   private String trichYeu;
-
 
   private LocalDate ngayHluc;
 
@@ -86,11 +85,9 @@ public class XhKqBdgHdr extends TrangThaiBaseEntity implements Serializable {
   private Long tongSlXuat;
 
   private Long thanhTien;
-
   private String trangThaiHd;
   @Transient
   private String tenTrangThaiHd;
-
   private String trangThaiXh;
   @Transient
   private String tenTrangThaiXh;
@@ -100,8 +97,6 @@ public class XhKqBdgHdr extends TrangThaiBaseEntity implements Serializable {
 
   @Transient
   private List<FileDinhKem> fileDinhKem = new ArrayList<>();
-
-
 
   @Transient
   private List<XhHopDongHdr> listHopDong;
