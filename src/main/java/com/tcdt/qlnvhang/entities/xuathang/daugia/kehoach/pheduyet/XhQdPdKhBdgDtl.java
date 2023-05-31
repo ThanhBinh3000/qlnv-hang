@@ -104,6 +104,8 @@ public class XhQdPdKhBdgDtl implements Serializable {
     @Column(name="SO_QD_PD_KQ_BDG")
     private String soQdPdKqBdg;
 
+    private Long idQdPdKqBdg;
+
     @Column(name="NGAY_KY_QD_PD_KQ_BDG")
     private LocalDate ngayKyQdPdKqBdg;
 

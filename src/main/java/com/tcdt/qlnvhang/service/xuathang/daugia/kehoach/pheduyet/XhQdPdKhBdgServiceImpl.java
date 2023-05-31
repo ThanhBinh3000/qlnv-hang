@@ -439,14 +439,16 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
             XhQdPdKhBdg pduyet = data.get(i);
             objs = new Object[rowsName.length];
             objs[0] = i;
-            objs[1] = pduyet.getSoQdPd();
-            objs[2] = pduyet.getNgayKyQd();
-            objs[3] = pduyet.getTrichYeu();
-            objs[4] = pduyet.getSoTrHdr();
-            objs[5] = pduyet.getIdThHdr();
-            objs[6] = pduyet.getTenLoaiVthh();
+            objs[1] = pduyet.getNam();
+            objs[2] = pduyet.getSoQdPd();
+            objs[3] = pduyet.getNgayKyQd();
+            objs[4] = pduyet.getTrangThai();
+            objs[5] = pduyet.getSoTrHdr();
+            objs[6] = pduyet.getIdThHdr();
             objs[7] = pduyet.getTenCloaiVthh();
-            objs[8] = pduyet.getTenTrangThai();
+            objs[8] = pduyet.getSlDviTsan();
+            objs[9] = null;
+            objs[10] = pduyet.getTenTrangThai();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);

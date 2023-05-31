@@ -30,14 +30,14 @@ import java.util.Map;
 @Api(tags = "Xuất hàng - Bán đấu giá - Tổ chức triền khai KH bán đấu giá - Quyết định phê duyệt kết quả bán đấu giá ")
 public class XhPdKqBdgController extends BaseController {
     @Autowired
-    private XhKqBdgHdrService service;
+    private XhKqBdgHdrService xhKqBdgHdrService;
 
     @ApiOperation(value = "Tra cứu ", response = List.class)
     @PostMapping(value=  PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody XhKqBdgHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.searchPage(objReq));
+            resp.setData(xhKqBdgHdrService.searchPage(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -53,7 +53,7 @@ public class XhPdKqBdgController extends BaseController {
     public ResponseEntity<BaseResponse> save(@Valid @RequestBody XhKqBdgHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.create(objReq));
+            resp.setData(xhKqBdgHdrService.create(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -69,7 +69,7 @@ public class XhPdKqBdgController extends BaseController {
     public ResponseEntity<BaseResponse> update(@Valid @RequestBody XhKqBdgHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.update(objReq));
+            resp.setData(xhKqBdgHdrService.update(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -87,7 +87,7 @@ public class XhPdKqBdgController extends BaseController {
             @ApiParam(value = "ID", example = "1", required = true) @PathVariable("id") Long id) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.detail(id));
+            resp.setData(xhKqBdgHdrService.detail(id));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -103,7 +103,7 @@ public class XhPdKqBdgController extends BaseController {
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            service.delete(idSearchReq.getId());
+            xhKqBdgHdrService.delete(idSearchReq.getId());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -119,7 +119,7 @@ public class XhPdKqBdgController extends BaseController {
     public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            service.deleteMulti(idSearchReq.getIdList());
+            xhKqBdgHdrService.deleteMulti(idSearchReq.getIdList());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -136,7 +136,7 @@ public class XhPdKqBdgController extends BaseController {
     public void exportListQdBtcBnToExcel(@Valid @RequestBody XhKqBdgHdrReq objReq, HttpServletResponse response) throws Exception{
 
         try {
-            service.export(objReq,response);
+            xhKqBdgHdrService.export(objReq,response);
         } catch (Exception e) {
 
             log.error("Kết xuất danh sách : {}", e);
@@ -159,7 +159,7 @@ public class XhPdKqBdgController extends BaseController {
     public void exportQdHdToExcel(@Valid @RequestBody XhKqBdgHdrReq objReq, HttpServletResponse response) throws Exception{
 
         try {
-            service.exportQdHd(objReq,response);
+            xhKqBdgHdrService.exportQdHd(objReq,response);
         } catch (Exception e) {
 
             log.error("Kết xuất danh sách : {}", e);
@@ -181,7 +181,7 @@ public class XhPdKqBdgController extends BaseController {
     public ResponseEntity<BaseResponse> updateStatus( @RequestBody XhKqBdgHdrReq stReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.approve(stReq));
+            resp.setData(xhKqBdgHdrService.approve(stReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
