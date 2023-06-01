@@ -104,9 +104,10 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
 
     List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getCanCu(), dataMap.getId(), XhHopDongHdr.TABLE_NAME + "_CAN_CU");
     dataMap.setCanCu(canCu);
-    List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getCanCu(), dataMap.getId(), XhHopDongHdr.TABLE_NAME + "_FILE_DINH_KEM");
+    List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), dataMap.getId(), XhHopDongHdr.TABLE_NAME + "_FILE_DINH_KEM");
     dataMap.setFileDinhKems(fileDinhKem);
-
+    List<FileDinhKem> filePhuLuc = fileDinhKemService.saveListFileDinhKem(req.getFilePhuLuc(), dataMap.getId(), XhHopDongHdr.TABLE_NAME + "_PHU_LUC");
+    dataMap.setFilePhuLuc(filePhuLuc);
     saveDetail(req, dataMap.getId());
     return dataMap;
   }
