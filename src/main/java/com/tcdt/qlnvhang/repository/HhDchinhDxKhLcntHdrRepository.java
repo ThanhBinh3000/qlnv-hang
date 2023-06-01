@@ -15,6 +15,7 @@ import java.util.Optional;
 public interface HhDchinhDxKhLcntHdrRepository extends CrudRepository<HhDchinhDxKhLcntHdr, Long> {
 
     Optional<HhDchinhDxKhLcntHdr> findBySoQdDc(String soQd);
+    Optional<HhDchinhDxKhLcntHdr> findByIdQdGoc(Long idQdGoc);
 
     List<HhDchinhDxKhLcntHdr> findAllByIdIn (List<Long> ids);
 
@@ -25,13 +26,13 @@ public interface HhDchinhDxKhLcntHdrRepository extends CrudRepository<HhDchinhDx
 
     @Query(value = " SELECT * FROM HH_DC_DX_LCNT_HDR  HDR"+
             " WHERE (:nam IS NULL OR HDR.NAM = TO_NUMBER(:nam)) "+
-            " AND (:soQd IS NULL OR LOWER(HDR.SO_QD_DC) LIKE LOWER(CONCAT(CONCAT('%', :soQd),'%'))) "+
+            " AND (:soQdDc IS NULL OR LOWER(HDR.SO_QD_DC) LIKE LOWER(CONCAT(CONCAT('%', :soQdDc),'%'))) "+
             " AND (:trichYeu IS NULL OR LOWER(HDR.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%'))) "+
             " AND (:loaiVthh IS NULL OR HDR.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) " +
             " AND (:tuNgayQd IS NULL OR HDR.NGAY_QD >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) "+
             " AND (:denNgayQd IS NULL OR HDR.NGAY_QD <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) ",
             nativeQuery = true)
-    Page<HhDchinhDxKhLcntHdr> selectPage(Integer nam, String soQd,String trichYeu,String loaiVthh, String tuNgayQd, String denNgayQd, Pageable pageable);
+    Page<HhDchinhDxKhLcntHdr> selectPage(Integer nam, String soQdDc,String trichYeu,String loaiVthh, String tuNgayQd, String denNgayQd, Pageable pageable);
 
 //    @Query(value = "SELECT * FROM HH_QD_KHLCNT_HDR DC_DX " +
 //            " WHERE (:namKh IS NULL OR DC_DX.NAM_KHOACH = TO_NUMBER(:namKh)) "+

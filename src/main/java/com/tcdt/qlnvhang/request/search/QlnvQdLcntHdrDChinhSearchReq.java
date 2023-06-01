@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class QlnvQdLcntHdrDChinhSearchReq extends BaseRequest {
 
-	String soQdinh;
+	String soQdDc;
 	String soQdGiaoCtkh;
 	String soQdinhGoc;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)

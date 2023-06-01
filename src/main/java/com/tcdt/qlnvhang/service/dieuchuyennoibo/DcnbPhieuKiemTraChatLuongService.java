@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKtChatLuongDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKtChatLuongHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -28,10 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,6 +43,9 @@ public class DcnbPhieuKiemTraChatLuongService extends BaseServiceImpl {
 
     @Autowired
     FileDinhKemService fileDinhKemService;
+
+    @Autowired
+    FileDinhKemRepository fileDinhKemRepository;
 
     public Page<DcnbPhieuKtChatLuongHdr> searchPage(CustomUserDetails currentUser, SearchPhieuKtChatLuong req) throws Exception {
         String dvql = currentUser.getDvql();
@@ -121,6 +122,8 @@ public class DcnbPhieuKiemTraChatLuongService extends BaseServiceImpl {
         }
         List<DcnbPhieuKtChatLuongHdr> allById = dcnbPhieuKtChatLuongHdrRepository.findAllById(ids);
         allById.forEach(data -> {
+            List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemRepository.findByDataIdAndDataTypeIn(data.getId(),Collections.singleton(DcnbPhieuKtChatLuongHdr.TABLE_NAME + "_CAN_CU"));
+            data.setBienBanLayMauDinhKem(bienBanLayMauDinhKem);
             List<DcnbPhieuKtChatLuongDtl> khs = dcnbPhieuKtChatLuongDtlRepository.findByHdrId(data.getId());
             data.setDcnbPhieuKtChatLuongDtl(khs);
         });
@@ -141,6 +144,7 @@ public class DcnbPhieuKiemTraChatLuongService extends BaseServiceImpl {
         DcnbPhieuKtChatLuongHdr data = optional.get();
         List<DcnbPhieuKtChatLuongDtl> list = dcnbPhieuKtChatLuongDtlRepository.findByHdrId(data.getId());
         dcnbPhieuKtChatLuongDtlRepository.deleteAll(list);
+        fileDinhKemService.delete(idSearchReq.getId(), Lists.newArrayList(DcnbBienBanLayMauHdr.TABLE_NAME + "_CAN_CU"));
         dcnbPhieuKtChatLuongHdrRepository.delete(data);
     }
 
@@ -154,6 +158,7 @@ public class DcnbPhieuKiemTraChatLuongService extends BaseServiceImpl {
         List<Long> listId = list.stream().map(DcnbPhieuKtChatLuongHdr::getId).collect(Collectors.toList());
         List<DcnbPhieuKtChatLuongDtl> listDtl = dcnbPhieuKtChatLuongDtlRepository.findByHdrIdIn(listId);
         dcnbPhieuKtChatLuongDtlRepository.deleteAll(listDtl);
+        fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(DcnbBienBanLayMauHdr.TABLE_NAME + "_CAN_CU"));
         dcnbPhieuKtChatLuongHdrRepository.deleteAll(list);
     }
 

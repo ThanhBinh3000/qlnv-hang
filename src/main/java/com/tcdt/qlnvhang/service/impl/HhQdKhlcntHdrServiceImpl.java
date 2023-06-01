@@ -513,9 +513,9 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		};
 		dtl.setChildren(byIdQdDtl);
 		dtl.setSoGthau(countSlGThau);
-		long countThanhCong = byIdQdDtl.stream().filter(x -> x.getTrangThai().equals(NhapXuatHangTrangThaiEnum.THANH_CONG.getId())).map(y -> y.getIdQdDtl())
+		long countThanhCong = byIdQdDtl.stream().filter(x -> x.getTrangThai().equals(NhapXuatHangTrangThaiEnum.THANH_CONG.getId())).map(y -> y.getId())
 				.distinct().count();
-		long countThatBai = byIdQdDtl.stream().filter(x -> x.getTrangThai().equals(NhapXuatHangTrangThaiEnum.THAT_BAI.getId())).map(y -> y.getIdQdDtl())
+		long countThatBai = byIdQdDtl.stream().filter(x -> x.getTrangThai().equals(NhapXuatHangTrangThaiEnum.THAT_BAI.getId())).map(y -> y.getId())
 				.distinct().count();
 		dtl.setSoGthauTrung(countThanhCong);
 		dtl.setSoGthauTruot(countThatBai);
@@ -796,7 +796,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		Page<HhQdKhlcntHdr> data = hhQdKhlcntHdrRepository.selectPage(req.getNamKhoach(), req.getLoaiVthh(), req.getSoQd(), req.getTrichYeu(),
 				convertDateToString(req.getTuNgayQd()),
 				convertDateToString(req.getDenNgayQd()),
-				req.getTrangThai(), req.getLastest(),
+				req.getTrangThai(), 1,
 				req.getMaDvi(),
 				req.getTrangThaiDtl(),
 				req.getTrangThaiDt(),

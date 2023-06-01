@@ -23,6 +23,7 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,6 +39,7 @@ import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class DcnbBienBanLayMauService extends BaseServiceImpl {
@@ -95,7 +97,12 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
         data.setTrangThai(Contains.DUTHAO);
         data.setNgayTao(LocalDateTime.now());
         data.setNguoiTaoId(currentUser.getUser().getId());
-        objReq.getDcnbBienBanLayMauDtl().forEach(e -> e.setDcnbBienBanLayMauHdr(data));
+        objReq.getDcnbBienBanLayMauDtl().forEach(e -> {
+            e.setDcnbBienBanLayMauHdr(data);
+            List<FileDinhKemReq> fileDinhKemReqs = e.getFileDinhKemChupMauNiemPhong().stream().map(n -> new FileDinhKemReq()).collect(Collectors.toList());
+            List<FileDinhKem> fileDinhKemMauNiemPhong = fileDinhKemService.saveListFileDinhKem(fileDinhKemReqs,e.getId(),DcnbBienBanLayMauDtl.TABLE_NAME + "_MAU_DA_NIEM_PHONG");
+            e.setFileDinhKemChupMauNiemPhong(fileDinhKemMauNiemPhong);
+        });
         DcnbBienBanLayMauHdr created = dcnbBienBanLayMauHdrRepository.save(data);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), DcnbBienBanLayMauHdr.TABLE_NAME + "_CAN_CU");
         created.setCanCu(canCu);
@@ -125,6 +132,12 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
         BeanUtils.copyProperties(objReq, data);
         data.setDcnbBienBanLayMauDtl(objReq.getDcnbBienBanLayMauDtl());
         DcnbBienBanLayMauHdr created = dcnbBienBanLayMauHdrRepository.save(data);
+        data.getDcnbBienBanLayMauDtl().forEach(e ->{
+            fileDinhKemService.delete(e.getId(),Lists.newArrayList(DcnbBienBanLayMauDtl.TABLE_NAME + "_MAU_DA_NIEM_PHONG"));
+            List<FileDinhKemReq> fileDinhKemReqs = e.getFileDinhKemChupMauNiemPhong().stream().map(n -> new FileDinhKemReq()).collect(Collectors.toList());
+            List<FileDinhKem> fileDinhKemMauNiemPhong = fileDinhKemService.saveListFileDinhKem(fileDinhKemReqs,e.getId(),DcnbBienBanLayMauDtl.TABLE_NAME + "_MAU_DA_NIEM_PHONG");
+            e.setFileDinhKemChupMauNiemPhong(fileDinhKemMauNiemPhong);
+        });
 
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbBienBanLayMauHdr.TABLE_NAME + "_CAN_CU"));
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), DcnbBienBanLayMauHdr.TABLE_NAME + "_CAN_CU");
@@ -166,7 +179,12 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
         }
         DcnbBienBanLayMauHdr data = optional.get();
         List<DcnbBienBanLayMauDtl> list = dcnbBienBanLayMauDtlRepository.findByHdrId(data.getId());
+        list.forEach(e->{
+            fileDinhKemService.delete(e.getId(), Lists.newArrayList(DcnbBienBanLayMauHdr.TABLE_NAME + "_MAU_DA_NIEM_PHONG"));
+        });
         dcnbBienBanLayMauDtlRepository.deleteAll(list);
+        fileDinhKemService.delete(idSearchReq.getId(), Lists.newArrayList(DcnbBienBanLayMauHdr.TABLE_NAME + "_CAN_CU"));
+        fileDinhKemService.delete(idSearchReq.getId(), Lists.newArrayList(DcnbBienBanLayMauHdr.TABLE_NAME + "_BIEN_BAN_LAY_MAU"));
         dcnbBienBanLayMauHdrRepository.delete(data);
     }
 

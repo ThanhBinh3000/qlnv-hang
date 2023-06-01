@@ -15,8 +15,9 @@ import java.util.Optional;
 @Repository
 public interface DcnbBienBanLayMauHdrRepository extends JpaRepository<DcnbBienBanLayMauHdr, Long> {
 
-    @Query(value = "SELECT distinct hdr FROM DcnbBienBanLayMauHdr hdr LEFT JOIN DcnbBienBanLayMauDtl d On d.hdrId = hdr.id WHERE 1=1 " +
-            "AND (:#{#param.maDvi} IS NULL OR hdr.maDvi LIKE CONCAT(:#{#param.maDvi},'%')) " +
+    @Query(value = "SELECT distinct hdr FROM DcnbBienBanLayMauHdr hdr LEFT JOIN DcnbBienBanLayMauDtl d On d.hdrId = hdr.id LEFT JOIN QlnvDmDonvi dvi ON dvi.maDvi = hdr.maDvi WHERE 1=1 " +
+            "AND ((:#{#param.maDvi} IS NULL OR hdr.maDvi = :#{#param.maDvi}) " +
+            "OR (:#{#param.maDvi} IS NULL OR dvi.parent.maDvi = :#{#param.maDvi}))"+
             "AND (:#{#param.DViKiemNghiem} IS NULL OR hdr.dViKiemNghiem LIKE CONCAT(:#{#param.DViKiemNghiem},'%')) " +
             "AND (:#{#param.nam} IS NULL OR hdr.nam = :#{#param.nam}) " +
             "AND (:#{#param.soBbLayMau} IS NULL OR LOWER(hdr.soBbLayMau) LIKE CONCAT('%',LOWER(:#{#param.soBbLayMau}),'%')) " +
