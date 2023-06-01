@@ -19,6 +19,7 @@ public class HhDxKhlcntDsgthauCtietVt {
 	Integer soLuong;
 
 	String maDvi;
+	String diaDiemNhap;
 
 	Long idGoiThauCtiet;
 

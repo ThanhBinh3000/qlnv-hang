@@ -16,6 +16,10 @@ public class XhKqBdgHdrReq extends BaseRequest {
 
   private Integer nam;
 
+  private Long idPdKhDtl;
+
+  private Long idThongTin;
+
   private String maDvi;
 
   private String soQdKq;

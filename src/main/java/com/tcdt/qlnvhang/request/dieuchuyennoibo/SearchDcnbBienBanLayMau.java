@@ -16,4 +16,5 @@ public class SearchDcnbBienBanLayMau extends BaseRequest {
     private LocalDate tuNgay;
     private LocalDate denNgay;
     private String maDvi;
+    private String loaiDc;
 }
