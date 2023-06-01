@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 public class ThongTinDauGiaNtgReq extends BaseRequest {
 
   private Long id;
-  private String hoaVaTen;
+  private String hoVaTen;
   private String soCccd;
   private String chucVu;
   private String diaChi;
