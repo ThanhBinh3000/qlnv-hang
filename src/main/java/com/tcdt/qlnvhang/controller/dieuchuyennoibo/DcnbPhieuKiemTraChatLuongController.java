@@ -4,11 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBienBanLayMauHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbPhieuKtChatLuongHdrReq;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbBienBanLayMau;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchPhieuKtChatLuong;
 import com.tcdt.qlnvhang.response.BaseResponse;
+import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBienBanLayMauService;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbPhieuKiemTraChatLuongService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
@@ -35,6 +38,9 @@ public class DcnbPhieuKiemTraChatLuongController {
     @Autowired
     DcnbPhieuKiemTraChatLuongService dcnbPhieuKiemTraChatLuongService;
 
+    @Autowired
+    DcnbBienBanLayMauHdrRepository dcnbBienBanLayMauHdrRepository;
+
     @ApiOperation(value = "Tra cứu thông tin đề xuất", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -43,6 +49,27 @@ public class DcnbPhieuKiemTraChatLuongController {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(dcnbPhieuKiemTraChatLuongService.searchPage(currentUser,objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch ( Exception e) {
+            e.printStackTrace();
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tra cứu thông tin : {}", e);
+        }
+
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Tra cứu biên bản lấy mẫu", response = List.class)
+    @PostMapping(value = "bien-ban-lay-mau", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> getListBienBanLayMau(@CurrentUser CustomUserDetails currentUser,
+                                                  @RequestBody SearchDcnbBienBanLayMau param) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            param.setMaDvi(currentUser.getDvql());
+            resp.setData(dcnbBienBanLayMauHdrRepository.searchList(param));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch ( Exception e) {

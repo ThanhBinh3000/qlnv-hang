@@ -76,7 +76,7 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
         reqQd.setPaggingReq(req.getPaggingReq());
         reqQd.setNam(req.getNam());
         reqQd.setSoQdinh(req.getSoQdinhDcc());
-
+        reqQd.setLoaiDc(req.getLoaiDc());
         Page<DcnbQuyetDinhDcCHdr> dcnbQuyetDinhDcCHdrs = dcnbQuyetDinhDcCDtlService.searchPage(currentUser, reqQd);
 
         String dvql = currentUser.getDvql();
