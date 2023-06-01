@@ -14,6 +14,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBienBanLayMauDtlReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBienBanLayMauHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbBienBanLayMau;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbQuyetDinhDcC;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -65,13 +66,27 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
     @Autowired
     DcnbPhieuKtChatLuongHdrRepository dcnbPhieuKtChatLuongHdrRepository;
 
+    @Autowired
+    DcnbQuyetDinhDcCDtlService dcnbQuyetDinhDcCDtlService;
 
-    public Page<DcnbBienBanLayMauHdr> searchPage(CustomUserDetails currentUser, SearchDcnbBienBanLayMau req) throws Exception {
+
+    public Page<DcnbQuyetDinhDcCHdr> searchPage(CustomUserDetails currentUser, SearchDcnbBienBanLayMau req) throws Exception {
+
+        SearchDcnbQuyetDinhDcC reqQd = new SearchDcnbQuyetDinhDcC();
+        reqQd.setPaggingReq(req.getPaggingReq());
+        reqQd.setNam(req.getNam());
+        reqQd.setSoQdinh(req.getSoQdinhDcc());
+
+        Page<DcnbQuyetDinhDcCHdr> dcnbQuyetDinhDcCHdrs = dcnbQuyetDinhDcCDtlService.searchPage(currentUser, reqQd);
+
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
-        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        Page<DcnbBienBanLayMauHdr> search = dcnbBienBanLayMauHdrRepository.search(req, pageable);
-        return search;
+        dcnbQuyetDinhDcCHdrs.forEach( item -> {
+            req.setSoQdinhDcc(item.getSoQdinh());
+            item.setDcnbBienBanLayMauHdrList(dcnbBienBanLayMauHdrRepository.searchList(req));
+        });
+
+        return dcnbQuyetDinhDcCHdrs;
     }
 
     @Transactional
@@ -229,33 +244,33 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
     }
 
     public void export(CustomUserDetails currentUser, SearchDcnbBienBanLayMau objReq, HttpServletResponse response) throws Exception {
-        PaggingReq paggingReq = new PaggingReq();
-        paggingReq.setPage(0);
-        paggingReq.setLimit(Integer.MAX_VALUE);
-        objReq.setPaggingReq(paggingReq);
-        Page<DcnbBienBanLayMauHdr> page = this.searchPage(currentUser, objReq);
-        List<DcnbBienBanLayMauHdr> data = page.getContent();
-
-        String title = "Danh sách phương án xuất cứu trợ, viện trợ ";
-        String[] rowsName = new String[]{"STT", "Năm kH", "Số công văn/đề xuất", "Ngày duyệt LĐ Cục", "Loại điều chuyển", "Đơn vị đề xuất", "Trạng thái",};
-        String fileName = "danh-sach-ke-hoach-dieu-chuyen-noi-bo-hang-dtqg.xlsx";
-        List<Object[]> dataList = new ArrayList<Object[]>();
-        Object[] objs = null;
-        for (int i = 0; i < data.size(); i++) {
-            DcnbBienBanLayMauHdr dx = data.get(i);
-            objs = new Object[rowsName.length];
-            objs[0] = i;
-            objs[1] = dx.getSoQdinhDcc();
-            objs[2] = dx.getNam();
-            objs[3] = dx.getNgayTao();
-            objs[4] = dx.getTenDiemKho();
-            objs[5] = dx.getTenLoKho();
-            objs[6] = dx.getThayDoiThuKho();
-            objs[7] = dx.getSoBbLayMau();
-            objs[8] = dx.getNgayLayMau();
-            dataList.add(objs);
-        }
-        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
-        ex.export();
+//        PaggingReq paggingReq = new PaggingReq();
+//        paggingReq.setPage(0);
+//        paggingReq.setLimit(Integer.MAX_VALUE);
+//        objReq.setPaggingReq(paggingReq);
+//        Page<DcnbBienBanLayMauHdr> page = this.searchPage(currentUser, objReq);
+//        List<DcnbBienBanLayMauHdr> data = page.getContent();
+//
+//        String title = "Danh sách phương án xuất cứu trợ, viện trợ ";
+//        String[] rowsName = new String[]{"STT", "Năm kH", "Số công văn/đề xuất", "Ngày duyệt LĐ Cục", "Loại điều chuyển", "Đơn vị đề xuất", "Trạng thái",};
+//        String fileName = "danh-sach-ke-hoach-dieu-chuyen-noi-bo-hang-dtqg.xlsx";
+//        List<Object[]> dataList = new ArrayList<Object[]>();
+//        Object[] objs = null;
+//        for (int i = 0; i < data.size(); i++) {
+//            DcnbBienBanLayMauHdr dx = data.get(i);
+//            objs = new Object[rowsName.length];
+//            objs[0] = i;
+//            objs[1] = dx.getSoQdinhDcc();
+//            objs[2] = dx.getNam();
+//            objs[3] = dx.getNgayTao();
+//            objs[4] = dx.getTenDiemKho();
+//            objs[5] = dx.getTenLoKho();
+//            objs[6] = dx.getThayDoiThuKho();
+//            objs[7] = dx.getSoBbLayMau();
+//            objs[8] = dx.getNgayLayMau();
+//            dataList.add(objs);
+//        }
+//        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
+//        ex.export();
     }
 }
