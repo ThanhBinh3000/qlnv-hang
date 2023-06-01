@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdr;
 import com.tcdt.qlnvhang.util.Contains;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -54,6 +55,7 @@ public class HhQdKhlcntDtlReq {
 	BigDecimal donGiaTamTinh;
 	BigDecimal tongTien;
 	Long soGthau;
+	String tchuanCluong;
 
 	@NotNull(message = "Không được để trống")
 	@Size(max = 4, message = "Năm kế hoạch không được vượt quá 4 ký tự")
