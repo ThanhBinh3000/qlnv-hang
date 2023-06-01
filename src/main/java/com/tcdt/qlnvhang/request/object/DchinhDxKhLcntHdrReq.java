@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -68,7 +69,9 @@ public class DchinhDxKhLcntHdrReq extends BaseRequest {
 	String ldoTuchoi;
 	
 	String loaiQd;
-	
+	@Transient
+	String tchuanCluong;
+
 //	@NotNull(message = "Không được để trống")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date tuNgayThien;

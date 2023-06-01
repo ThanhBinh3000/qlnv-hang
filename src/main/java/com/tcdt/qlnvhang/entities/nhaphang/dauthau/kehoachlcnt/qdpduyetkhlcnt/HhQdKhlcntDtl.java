@@ -74,6 +74,7 @@ public class HhQdKhlcntDtl implements Serializable {
 	BigDecimal donGiaNhaThau;
 
 	Long idNhaThau;
+	Long idDcDxHdr;
 
 	@Transient
 	private HhQdKhlcntHdr hhQdKhlcntHdr;

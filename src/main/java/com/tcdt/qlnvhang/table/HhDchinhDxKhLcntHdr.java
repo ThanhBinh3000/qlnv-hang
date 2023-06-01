@@ -62,6 +62,9 @@ public class HhDchinhDxKhLcntHdr extends TrangThaiBaseEntity implements Serializ
 	String loaiHdong;
 
 	String nguonVon;
+	String maDvi;
+	@Transient
+	String tenDvi;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date tgianBdauTchuc;
