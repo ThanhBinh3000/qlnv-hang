@@ -82,12 +82,12 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl implements XhBbLayMau
 			throw new Exception("Bad request.");
 		}
 
-		if (!StringUtils.isEmpty(req.getSoBienBan())){
-			Optional<XhBbLayMau> qOptional = xhBbLayMauRepository.findBySoBienBan(req.getSoBienBan());
-			if (qOptional.isPresent()){
-				throw new Exception("Số biên bản " + req.getSoBienBan() + " đã tồn tại ");
-			}
-		}
+//		if (!StringUtils.isEmpty(req.getSoBienBan())){
+//			Optional<XhBbLayMau> qOptional = xhBbLayMauRepository.findBySoBienBan(req.getSoBienBan());
+//			if (qOptional.isPresent()){
+//				throw new Exception("Số biên bản " + req.getSoBienBan() + " đã tồn tại ");
+//			}
+//		}
 
 		XhBbLayMau data = new XhBbLayMau();
 		BeanUtils.copyProperties(req,data,"id");

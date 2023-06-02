@@ -149,6 +149,9 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		dataMap.setFileDinhKem(fileDinhKemList);
 
 		hdrRepository.save(dataMap);
+		HhQdKhlcntDtl hhQdKhlcntDtl =  hhQdKhlcntDtlRepository.findByIdQdHdr(dataMap.getIdQdGoc());
+		hhQdKhlcntDtl.setIdDcDxHdr(dataMap.getId());
+		hhQdKhlcntDtlRepository.save(hhQdKhlcntDtl);
 		this.saveCtietLT(dataMap.getId(),objReq);
 		return dataMap;
 	}
@@ -278,6 +281,10 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 			HhDchinhDxKhLcntDtl qd = ObjectMapperUtils.map(dx, HhDchinhDxKhLcntDtl.class);
 			qd.setId(null);
 			qd.setIdDxDcHdr(idHdr);
+			qd.setTchuanCluong(objReq.getTchuanCluong());
+			qd.setHthucLcnt(objReq.getHthucLcnt());
+			qd.setPthucLcnt(objReq.getPthucLcnt());
+			qd.setLoaiHdong(objReq.getLoaiHdong());
 			dtlRepository.save(qd);
 			for (HhQdKhlcntDsgthauReq gtList : dx.getChildren()){
 				HhDchinhDxKhLcntDsgthau gt = ObjectMapperUtils.map(gtList, HhDchinhDxKhLcntDsgthau.class);
@@ -424,6 +431,10 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		qOptional.get().setTenLoaiVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getLoaiVthh()));
 		qOptional.get().setTenCloaiVthh(StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getCloaiVthh()));
 		qOptional.get().setTenTrangThai(TrangThaiAllEnum.getLabelById(qOptional.get().getTrangThai()));
+		qOptional.get().setTenHthucLcnt(hashMapHtLcnt.get(qOptional.get().getHthucLcnt()));
+		qOptional.get().setTenPthucLcnt(hashMapPthucDthau.get(qOptional.get().getPthucLcnt()));
+		qOptional.get().setTenLoaiHdong(hashMapLoaiHdong.get(qOptional.get().getLoaiHdong()));
+		qOptional.get().setTenDvi(mapDmucDvi.get(qOptional.get().getMaDvi()));
 		List<HhDchinhDxKhLcntDtl> dtlList = new ArrayList<>();
 		for(HhDchinhDxKhLcntDtl dtl : dtlRepository.findAllByIdDxDcHdr(Long.parseLong(ids))){
 			List<HhDchinhDxKhLcntDsgthau> gThauList = new ArrayList<>();
@@ -493,14 +504,20 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		if (!optional.get().getTrangThai().equals(Contains.DUTHAO)){
 			throw new Exception("Chỉ cho phép xóa bản ghi ở trạng thái dự thảo");
 		}
+		HhQdKhlcntDtl hhQdKhlcntDtl = hhQdKhlcntDtlRepository.findByIdQdHdr(optional.get().getIdQdGoc());
+		hhQdKhlcntDtl.setIdDcDxHdr(null);
+		hhQdKhlcntDtlRepository.save(hhQdKhlcntDtl);
 		List<HhDchinhDxKhLcntDtl> listDtl=dtlRepository.findAllByIdDxDcHdr(optional.get().getId());
 		List<Long> idListDtl=listDtl.stream().map(HhDchinhDxKhLcntDtl::getId).collect(Collectors.toList());
 		List<HhDchinhDxKhLcntDsgthau>  listGthau = gThauRepository.findAllByIdDcDxDtlIn(idListDtl);
 		List<Long> idListGthau=listGthau.stream().map(HhDchinhDxKhLcntDsgthau::getId).collect(Collectors.toList());
 		List<HhDchinhDxKhLcntDsgthauCtiet> listGthauCtiet=gThauCietRepository.findAllByIdGoiThauIn(idListGthau);
+		List<Long> idListGthauCtiet=listGthauCtiet.stream().map(HhDchinhDxKhLcntDsgthauCtiet::getId).collect(Collectors.toList());
+		List<HhDchinhDxKhLcntDsgthauCtietVt> listGthauCtietVt=gThauCietVtRepository.findAllByIdGoiThauCtietIn(idListGthauCtiet);
 		dtlRepository.deleteAll(listDtl);
 		gThauRepository.deleteAll(listGthau);
 		gThauCietRepository.deleteAll(listGthauCtiet);
+		gThauCietVtRepository.deleteAll(listGthauCtietVt);
 		fileDinhKemService.delete(optional.get().getId(),  Lists.newArrayList("HH_DC_DX_LCNT_HDR"));
 		hdrRepository.delete(optional.get());
 	}
@@ -525,9 +542,49 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 
 	}
 	@Transient
-	public HhDchinhDxKhLcntHdr findByIdQdGoc(Long idQdGoc) throws Exception {
-		Optional<HhDchinhDxKhLcntHdr> data = hdrRepository.findByIdQdGoc(idQdGoc);
-		return data.get();
+	public HhDchinhDxKhLcntHdr findByIdQdGoc(Long idQdGoc) {
+		Optional<HhDchinhDxKhLcntHdr> qOptional = hdrRepository.findByIdQdGoc(idQdGoc);
+		System.out.println(qOptional);
+		if (!qOptional.isPresent())
+			throw new UnsupportedOperationException("Không tồn tại bản ghi");
+
+		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
+		Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
+		Map<String,String> hashMapPthucDthau = getListDanhMucChung("PT_DTHAU");
+		Map<String,String> hashMapNguonVon = getListDanhMucChung("NGUON_VON");
+		Map<String,String> hashMapHtLcnt = getListDanhMucChung("HT_LCNT");
+		Map<String,String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
+
+		qOptional.get().setTenLoaiVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getLoaiVthh()));
+		qOptional.get().setTenCloaiVthh(StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getCloaiVthh()));
+		qOptional.get().setTenTrangThai(TrangThaiAllEnum.getLabelById(qOptional.get().getTrangThai()));
+		List<HhDchinhDxKhLcntDtl> dtlList = new ArrayList<>();
+		for(HhDchinhDxKhLcntDtl dtl : dtlRepository.findAllByIdDxDcHdr(qOptional.get().getId())){
+			List<HhDchinhDxKhLcntDsgthau> gThauList = new ArrayList<>();
+			for(HhDchinhDxKhLcntDsgthau gThau : gThauRepository.findAllByIdDcDxDtl(dtl.getId())){
+				List<HhDchinhDxKhLcntDsgthauCtiet> gthauCtietList = gThauCietRepository.findAllByIdGoiThau(gThau.getId());
+				gthauCtietList.forEach(f -> {
+					f.setTenDvi(mapDmucDvi.get(f.getMaDvi()));
+					f.setTenDiemKho(mapDmucDvi.get(f.getMaDiemKho()));
+					List<HhDchinhDxKhLcntDsgthauCtietVt> gthauCtietVtList = gThauCietVtRepository.findAllByIdGoiThauCtiet(f.getId());
+					f.setChildren(gthauCtietVtList);
+				});
+				gThau.setTenCloaiVthh(hashMapDmHh.get(gThau.getCloaiVthh()));
+				gThau.setTenLoaiHdong(hashMapLoaiHdong.get(gThau.getLoaiHdong()));
+				gThau.setTenNguonVon(hashMapNguonVon.get(gThau.getNguonVon()));
+				gThau.setTenPthucLcnt(hashMapPthucDthau.get(gThau.getPthucLcnt()));
+				gThau.setTenHthucLcnt(hashMapHtLcnt.get(gThau.getHthucLcnt()));
+				gThau.setChildren(gthauCtietList);
+				gThauList.add(gThau);
+			};
+			dtl.setTenDvi(StringUtils.isEmpty(dtl.getMaDvi()) ? null : mapDmucDvi.get(dtl.getMaDvi()));
+			dtl.setChildren(gThauList);
+			dtlList.add(dtl);
+		}
+
+		qOptional.get().setChildren(dtlList);
+
+		return qOptional.get();
 	}
 
 

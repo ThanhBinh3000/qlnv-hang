@@ -36,10 +36,15 @@ public class HhDchinhDxKhLcntDtl implements Serializable {
 	String cloaiVthh;
 	String dviTinh;
 	String hthucLcnt;
+	@Transient
+	String tenHthucLcnt;
 	String pthucLcnt;
+	@Transient
+	String tenPthucLcnt;
 	String loaiHdong;
 	String nguonVon;
 	String tgianBdauLcnt;
+	String tchuanCluong;
 	Integer tgianThienHd;
 	private Long idHdr;
 

@@ -20,6 +20,8 @@ public class XhHopDongDdiemNhapKho {
 
     private String maDiemKho;
 
+    private String diaChi;
+
     private String maNhaKho;
 
     private String maNganKho;

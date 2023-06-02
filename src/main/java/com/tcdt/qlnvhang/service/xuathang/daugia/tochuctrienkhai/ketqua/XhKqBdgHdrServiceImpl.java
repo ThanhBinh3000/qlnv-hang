@@ -176,8 +176,7 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
           data.setLyDoTuChoi(req.getLyDoTuChoi());
           break;
         case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
-        case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
-        case Contains.BAN_HANH + Contains.DADUYET_LDC:
+        case Contains.BAN_HANH + Contains.CHODUYET_LDC:
           data.setNguoiPduyetId(userInfo.getId());
           data.setNgayPduyet(getDateTimeNow());
           break;
