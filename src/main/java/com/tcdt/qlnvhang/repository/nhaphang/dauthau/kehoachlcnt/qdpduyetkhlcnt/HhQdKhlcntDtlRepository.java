@@ -24,7 +24,7 @@ public interface HhQdKhlcntDtlRepository extends JpaRepository<HhQdKhlcntDtl, Lo
             " JOIN HH_QD_KHLCNT_DSGTHAU gt ON dtl.id = gt.ID_QD_DTL " +
             "  WHERE 1=1 " +
             "  AND HDR.ID IN (:qdIds) " +
-            "  AND HDR.LASTEST = 1 GROUP BY HDR.ID "
+            "  AND HDR.LASTEST = 0 GROUP BY HDR.ID "
             , nativeQuery = true)
     List<Object[]> countAllBySoGthau(Collection<Long> qdIds);
 
@@ -34,7 +34,7 @@ public interface HhQdKhlcntDtlRepository extends JpaRepository<HhQdKhlcntDtl, Lo
             " JOIN HH_QD_KHLCNT_DSGTHAU gt ON dtl.id = gt.ID_QD_DTL " +
             "  WHERE 1=1 " +
             "  AND HDR.ID IN (:qdIds) " +
-            "  AND HDR.LASTEST = 1 " +
+            "  AND HDR.LASTEST = 0 " +
             "  AND (:trangThai is null or GT.TRANG_THAI = :trangThai) GROUP BY HDR.ID"
             , nativeQuery = true)
     List<Object[]> countAllBySoGthauStatus(Collection<Long> qdIds,String trangThai);

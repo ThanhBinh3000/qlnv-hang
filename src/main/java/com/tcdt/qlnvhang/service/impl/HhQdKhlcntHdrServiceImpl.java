@@ -201,6 +201,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 						HhQdKhlcntDsgthauCtietVt ctietVt = new ModelMapper().map(ctietReq,HhQdKhlcntDsgthauCtietVt.class);
 						ctietVt.setId(null);
 						ctietVt.setIdGoiThauCtiet(dataDdNhap.getId());
+						ctietVt.setDiaDiemNhap(ctietReq.getDiaDiemNhap());
 						hhQdKhlcntDsgthauCtietVtRepository.save(ctietVt);
 					}
 				}
@@ -796,7 +797,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		Page<HhQdKhlcntHdr> data = hhQdKhlcntHdrRepository.selectPage(req.getNamKhoach(), req.getLoaiVthh(), req.getSoQd(), req.getTrichYeu(),
 				convertDateToString(req.getTuNgayQd()),
 				convertDateToString(req.getDenNgayQd()),
-				req.getTrangThai(), 1,
+				req.getTrangThai(), req.getLastest(),
 				req.getMaDvi(),
 				req.getTrangThaiDtl(),
 				req.getTrangThaiDt(),

@@ -23,4 +23,5 @@ public class HhQdKhlcntDsgthauCtietVt {
 	private BigDecimal soLuong;
 
 	private Long idGoiThauCtiet;
+	String diaDiemNhap;
 }
