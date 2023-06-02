@@ -7,6 +7,7 @@ import com.tcdt.qlnvhang.repository.HhBbNghiemthuKlstRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBienBanLayMauDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBienBanLayMauHdrRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKtChatLuongHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -69,6 +70,9 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
     @Autowired
     DcnbQuyetDinhDcCDtlService dcnbQuyetDinhDcCDtlService;
 
+    @Autowired
+    DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
+
 
     public Page<DcnbQuyetDinhDcCHdr> searchPage(CustomUserDetails currentUser, SearchDcnbBienBanLayMau req) throws Exception {
 
@@ -123,6 +127,11 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
         created.setCanCu(canCu);
         List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getBienBanLayMauDinhKem(), created.getId(), DcnbBienBanLayMauHdr.TABLE_NAME + "_BIEN_BAN_LAY_MAU");
         created.setBienBanLayMauDinhKem(bienBanLayMauDinhKem);
+        List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByQdDcIdAndMaLoKho(created.getQDinhDccId(),created.getMaLoKho());
+        dcnbKeHoachDcDtls.forEach(e->{
+            e.setBbLayMauId(created.getId());
+            dcnbKeHoachDcDtlRepository.save(e);
+        });
         return created;
     }
 

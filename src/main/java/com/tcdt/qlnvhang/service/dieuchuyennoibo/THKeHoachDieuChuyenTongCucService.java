@@ -191,8 +191,9 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
 //        }
         THKeHoachDieuChuyenTongCucHdr data = optional.get();
         THKeHoachDieuChuyenTongCucHdr dataMap = new ModelMapper().map(objReq, THKeHoachDieuChuyenTongCucHdr.class);
-        BeanUtils.copyProperties(data,dataMap);
+        BeanUtils.copyProperties(dataMap,data);
         THKeHoachDieuChuyenTongCucHdr created = tongCucHdrRepository.save(data);
+        data.setNguoiSuaId(currentUser.getUser().getId());
         tongCucHdrRepository.save(created);
         return created;
     }
