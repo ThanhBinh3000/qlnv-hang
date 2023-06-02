@@ -39,7 +39,7 @@ public interface DcnbQuyetDinhDcCHdrRepository extends JpaRepository<DcnbQuyetDi
 
     List<DcnbQuyetDinhDcCHdr> findAllByIdIn(List<Long> listId);
 
-    Optional<DcnbQuyetDinhDcCHdr> findFirstBySoQdinh(String soQdinh);
+    Optional<DcnbQuyetDinhDcCHdr> findFirstBySoQdinhAndType(String soQdinh, String type);
 
     @Query(value = "SELECT CAST(COUNT(dtl.SO_LUONG_DC) AS DECIMAL) FROM DCNB_KE_HOACH_DC_HDR hdr " +
             "JOIN DCNB_KE_HOACH_DC_DTL dtl ON dtl.HDR_ID = hdr.ID WHERE dtl.CLOAI_VTHH = ?1 AND dtl.MA_LO_KHO = ?2", nativeQuery = true)
