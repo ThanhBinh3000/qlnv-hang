@@ -105,4 +105,6 @@ public class DcnbKeHoachDcDtl implements Serializable {
     @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
     @JsonIgnore
     private DcnbKeHoachDcHdr dcnbKeHoachDcHdr;
+    @Transient
+    private DcnbBienBanLayMauHdr dcnbBienBanLayMauHdr;
 }

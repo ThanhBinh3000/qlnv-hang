@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.HhBbNghiemthuKlstRepository;
@@ -76,20 +78,29 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
 
     public Page<DcnbQuyetDinhDcCHdr> searchPage(CustomUserDetails currentUser, SearchDcnbBienBanLayMau req) throws Exception {
 
+        // Get Tree quyết định
         SearchDcnbQuyetDinhDcC reqQd = new SearchDcnbQuyetDinhDcC();
         reqQd.setPaggingReq(req.getPaggingReq());
         reqQd.setNam(req.getNam());
         reqQd.setSoQdinh(req.getSoQdinhDcc());
         reqQd.setLoaiDc(req.getLoaiDc());
+        reqQd.setTrangThai(NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
         Page<DcnbQuyetDinhDcCHdr> dcnbQuyetDinhDcCHdrs = dcnbQuyetDinhDcCDtlService.searchPage(currentUser, reqQd);
 
+        // Gắn data vào biên bản lấy mẫu vào tree
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
-        dcnbQuyetDinhDcCHdrs.forEach( item -> {
-            req.setSoQdinhDcc(item.getSoQdinh());
-            item.setDcnbBienBanLayMauHdrList(dcnbBienBanLayMauHdrRepository.searchList(req));
+        dcnbQuyetDinhDcCHdrs.forEach( hdr -> {
+            hdr.getDanhSachQuyetDinh().forEach( dtl -> {
+                DcnbKeHoachDcHdr dcnbKeHoachDcHdr = dtl.getDcnbKeHoachDcHdr();
+                if(dcnbKeHoachDcHdr != null){
+                    dcnbKeHoachDcHdr.getDanhSachHangHoa().stream().filter(dtlKh -> !Objects.isNull(dtlKh.getBbLayMauId())).forEach(dtlKh -> {
+                        Optional<DcnbBienBanLayMauHdr> byId = dcnbBienBanLayMauHdrRepository.findById(dtlKh.getBbLayMauId());
+                        dtlKh.setDcnbBienBanLayMauHdr(byId.get());
+                    });
+                }
+            });
         });
-
         return dcnbQuyetDinhDcCHdrs;
     }
 
