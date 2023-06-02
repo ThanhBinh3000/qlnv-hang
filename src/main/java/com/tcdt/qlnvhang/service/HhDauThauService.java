@@ -1,7 +1,10 @@
 package com.tcdt.qlnvhang.service;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
+import com.tcdt.qlnvhang.request.search.HhDthauSearchReq;
 import com.tcdt.qlnvhang.request.search.HhQdKhlcntSearchReq;
 import com.tcdt.qlnvhang.table.HhDthauNthauDuthau;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDtl;
@@ -9,6 +12,7 @@ import org.springframework.data.domain.Page;
 
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.HhDthauReq;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -34,5 +38,5 @@ public interface HhDauThauService {
 //	@Transactional(rollbackOn = Exception.class)
 //	void delete(IdSearchReq idSearchReq) throws Exception;
 //
-//	void exportList(@Valid @RequestBody HhDthauSearchReq objReq, HttpServletResponse response) throws  Exception;
+	void exportList(@Valid @RequestBody HhDthauSearchReq objReq, HttpServletResponse response) throws  Exception;
 }

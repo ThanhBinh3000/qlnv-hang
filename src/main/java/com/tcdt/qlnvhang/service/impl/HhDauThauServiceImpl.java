@@ -13,6 +13,7 @@ import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.HhDthauNthauDuthauReq;
 import com.tcdt.qlnvhang.request.object.HhDthauReq;
+import com.tcdt.qlnvhang.request.search.HhDthauSearchReq;
 import com.tcdt.qlnvhang.request.search.HhQdKhlcntSearchReq;
 import com.tcdt.qlnvhang.service.HhDauThauService;
 import com.tcdt.qlnvhang.service.HhQdKhlcntHdrService;
@@ -26,6 +27,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -224,6 +226,11 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
         }else{
             approveLuongThuc(stReq);
         }
+
+    }
+
+    @Override
+    public void exportList(HhDthauSearchReq objReq, HttpServletResponse response) throws Exception {
 
     }
 
