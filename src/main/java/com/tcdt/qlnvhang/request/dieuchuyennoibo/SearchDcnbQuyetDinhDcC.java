@@ -22,4 +22,5 @@ public class SearchDcnbQuyetDinhDcC extends BaseRequest {
   private String trangThai;
   private String type;
   private List<String> loaiVthh;
+  private String loaiQdinh;
 }

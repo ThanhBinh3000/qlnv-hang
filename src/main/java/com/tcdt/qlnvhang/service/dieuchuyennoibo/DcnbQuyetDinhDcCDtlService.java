@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
+import antlr.Utils;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
@@ -72,6 +73,17 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
             req.setType(Contains.DIEU_CHUYEN);
         }
         Page<DcnbQuyetDinhDcCHdr> search = dcnbQuyetDinhDcCHdrRepository.search(req, pageable);
+        search.forEach( item -> {
+            if(item.getDanhSachQuyetDinh() != null && !item.getDanhSachQuyetDinh().isEmpty()){
+                List<DcnbQuyetDinhDcCDtl> danhSachQuyetDinh = item.getDanhSachQuyetDinh();
+                danhSachQuyetDinh.forEach(i -> {
+                    if(!Objects.isNull(i.getKeHoachDcHdrId())){
+                        Optional<DcnbKeHoachDcHdr> byId = dcnbKeHoachDcHdrRepository.findById(i.getKeHoachDcHdrId());
+                        byId.ifPresent(i::setDcnbKeHoachDcHdr);
+                    }
+                });
+            }
+        });
         return search;
     }
 
@@ -79,6 +91,9 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
     public DcnbQuyetDinhDcCHdr save(CustomUserDetails currentUser, DcnbQuyetDinhDcCHdrReq objReq) throws Exception {
         if (currentUser == null) {
             throw new Exception("Bad request.");
+        }
+        if(!currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)){
+            throw new Exception("Chức năng thêm mới chỉ dành cho cấp cục");
         }
         Optional<DcnbQuyetDinhDcCHdr> optional = dcnbQuyetDinhDcCHdrRepository.findFirstBySoQdinhAndType(objReq.getSoQdinh(),Contains.DIEU_CHUYEN);
         if (optional.isPresent() && objReq.getSoQdinh().split("/").length == 1) {
