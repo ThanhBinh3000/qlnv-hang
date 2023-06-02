@@ -278,6 +278,8 @@ public class PathContains {
 
 	public static final String XUAT_THANH_LY = "/xuat-thanh-ly";
 
+	public static final String SUA_CHUA = "/sua-chua";
+
 	public static final String XUAT_KHAC = "/xuat-khac";
 
 	public static final String DANH_SACH = "/danh-sach";
