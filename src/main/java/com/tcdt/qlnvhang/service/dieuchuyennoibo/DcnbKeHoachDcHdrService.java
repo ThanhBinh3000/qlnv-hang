@@ -94,6 +94,7 @@ public class DcnbKeHoachDcHdrService extends BaseServiceImpl {
         }
         DcnbKeHoachDcHdr data = new DcnbKeHoachDcHdr();
         BeanUtils.copyProperties(objReq, data);
+        data.setSoDxuat(objReq.getSoDxuat() + "/DCNB");
         data.setMaDviPq(currentUser.getDvql());
         data.setType(Contains.DIEU_CHUYEN);
         data.setTrangThai(Contains.DUTHAO);

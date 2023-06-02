@@ -15,14 +15,6 @@ import java.util.List;
 public class ThKeHoachDieuChuyenCucHdrReq {
     private Long id;
 
-    private LocalDate ngaytao;
-
-    private Long nguoiTaoId;
-
-    private LocalDate ngaySua;
-
-    private Long nguoiSuaId;
-
     private String maTongHop;
 
     private String soDeXuat;
