@@ -16,6 +16,7 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
@@ -307,9 +308,11 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
 //        }
         THKeHoachDieuChuyenCucHdr data = optional.get();
         THKeHoachDieuChuyenCucHdr dataMap = new ModelMapper().map(objReq, THKeHoachDieuChuyenCucHdr.class);
-        BeanUtils.copyProperties(dataMap,data);
+        BeanUtils.copyProperties(data,dataMap);
+        dataMap.setSoDeXuat(objReq.getSoDeXuat());
+        dataMap.setTrichYeu(objReq.getTrichYeu());
         data.setNguoiSuaId(currentUser.getUser().getId());
-        THKeHoachDieuChuyenCucHdr created = thKeHoachDieuChuyenHdrRepository.save(data);
+        THKeHoachDieuChuyenCucHdr created = thKeHoachDieuChuyenHdrRepository.save(dataMap);
         thKeHoachDieuChuyenHdrRepository.save(created);
         return created;
     }
