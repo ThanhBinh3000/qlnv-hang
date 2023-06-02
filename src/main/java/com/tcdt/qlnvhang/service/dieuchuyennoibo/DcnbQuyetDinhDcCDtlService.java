@@ -66,6 +66,12 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
+        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            req.setType(Contains.NHAN_DIEU_CHUYEN);
+        }
+        if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            req.setType(Contains.DIEU_CHUYEN);
+        }
         Page<DcnbQuyetDinhDcCHdr> search = dcnbQuyetDinhDcCHdrRepository.search(req, pageable);
         search.forEach( item -> {
             if(item.getDanhSachQuyetDinh() != null && !item.getDanhSachQuyetDinh().isEmpty()){
