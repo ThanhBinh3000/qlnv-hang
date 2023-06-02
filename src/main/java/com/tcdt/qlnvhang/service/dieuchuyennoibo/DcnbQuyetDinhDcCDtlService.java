@@ -462,103 +462,13 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
         String status = optional.get().getTrangThai() + statusReq.getTrangThai();
         switch (status) {
             case Contains.DUTHAO + Contains.YC_CHICUC_PHANBO_DC:
-                // xử lý clone cho chi cục với TYPE là NDC
-                List<DcnbQuyetDinhDcCDtl> danhSachQuyetDinh = optional.get().getDanhSachQuyetDinh();
-                List<DcnbKeHoachDcDtl> danhSachKeHoachs = new ArrayList<>();
-                for(DcnbQuyetDinhDcCDtl qdd: danhSachQuyetDinh){
-                    danhSachKeHoachs.addAll(qdd.getDanhSachKeHoach());
-                }
-                Map<String, List<DcnbKeHoachDcDtl>> groupedByMaCc = danhSachKeHoachs.stream()
-                        .collect(Collectors.groupingBy(DcnbKeHoachDcDtl::getMaChiCucNhan));
-                AtomicBoolean loiData = new AtomicBoolean(false);
-                groupedByMaCc.forEach((maChiCucThue, khList) -> {
-                    DcnbQuyetDinhDcCHdr clonedObj = SerializationUtils.clone(optional.get());
-                    clonedObj.setParentId(clonedObj.getId());
-                    clonedObj.setId(null);
-                    clonedObj.setMaDvi(maChiCucThue);
-                    clonedObj.setTenDvi(khList.get(0).getTenChiCucNhan());
-                    clonedObj.setType(Contains.NHAN_DIEU_CHUYEN);
-                    Map<Long, List<DcnbKeHoachDcDtl>> groupedByKhh = khList.stream()
-                            .collect(Collectors.groupingBy(DcnbKeHoachDcDtl::getHdrId));
-                    List<DcnbQuyetDinhDcCDtl> quyetDinhDcCDtlsClone = new ArrayList<>();
-
-                    groupedByKhh.forEach((dcnbKeHoachDcHdrId, dcnbKeHoachDcDtlList) -> {
-                        List<DcnbQuyetDinhDcCDtl> quyetDinhDcCDtls = danhSachQuyetDinh.stream().filter(item -> dcnbKeHoachDcHdrId.equals(item.getKeHoachDcHdrId())).map(itemMap -> {
-                            DcnbQuyetDinhDcCDtl clonedDtl = SerializationUtils.clone(itemMap);
-                            clonedDtl.setParentId(clonedDtl.getId());
-                            clonedDtl.setId(null);
-                            Optional<DcnbKeHoachDcHdr> keHoachDcHdrOpt = null;
-                            try {
-                                keHoachDcHdrOpt = Optional.ofNullable(dcnbKeHoachDcHdrService.details(dcnbKeHoachDcHdrId));
-                            } catch (Exception e) {
-                                throw new RuntimeException(e);
-                            }
-                            DcnbKeHoachDcHdr keHoachHdrObj = SerializationUtils.clone(keHoachDcHdrOpt.get());
-                            keHoachHdrObj.setParentId(keHoachHdrObj.getId());
-                            keHoachHdrObj.setId(null);
-                            keHoachHdrObj.setMaDviPq(maChiCucThue);
-                            keHoachHdrObj.setType(Contains.NHAN_DIEU_CHUYEN);
-                            keHoachHdrObj.setTrangThai(statusReq.getTrangThai());
-                            keHoachHdrObj.setDanhSachHangHoa(keHoachHdrObj.getDanhSachHangHoa().stream()
-                                    .filter(item -> item.getMaChiCucNhan().equals(maChiCucThue)).map(itemMap1 -> {
-                                        itemMap1.setParentId(itemMap1.getId());
-                                        itemMap1.setId(null);
-                                        return itemMap1;
-                                    }).collect(Collectors.toList()));
-                            keHoachHdrObj.setPhuongAnDieuChuyen(keHoachHdrObj.getPhuongAnDieuChuyen().stream()
-                                    .filter(item -> item.getMaChiCucNhan().equals(maChiCucThue)).map(itemMap1 -> {
-                                        itemMap1.setParentId(itemMap1.getId());
-                                        itemMap1.setId(null);
-                                        return itemMap1;
-                                    }).collect(Collectors.toList()));
-                            keHoachHdrObj.setCanCu(keHoachHdrObj.getCanCu().stream().map(itemMap1 -> {
-                                itemMap1.setId(null);
-                                itemMap1.setDataId(null);
-                                return itemMap1;
-                            }).collect(Collectors.toList()));
-                            BigDecimal total = keHoachHdrObj.getDanhSachHangHoa().stream().map(DcnbKeHoachDcDtl::getDuToanKphi)
-                                    .reduce(BigDecimal.ZERO, BigDecimal::add);
-                            keHoachHdrObj.setTongDuToanKp(total);
-
-                            keHoachHdrObj = dcnbKeHoachDcHdrRepository.save(keHoachHdrObj);
-
-                            clonedDtl.setDcnbKeHoachDcHdr(keHoachHdrObj);
-                            clonedDtl.setKeHoachDcHdrId(keHoachHdrObj.getId());
-
-                            fileDinhKemService.delete(keHoachHdrObj.getId(), Lists.newArrayList(DcnbKeHoachDcHdr.TABLE_NAME + "_CAN_CU"));
-                            List<FileDinhKemReq> fileDinhKemReqs = keHoachHdrObj.getCanCu().stream()
-                                    .map(person -> new ModelMapper().map(person, FileDinhKemReq.class))
-                                    .collect(Collectors.toList());
-                            List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(fileDinhKemReqs, keHoachHdrObj.getId(), DcnbKeHoachDcHdr.TABLE_NAME + "_CAN_CU");
-                            keHoachHdrObj.setCanCu(canCu);
-
-                            return clonedDtl;
-                        }).collect(Collectors.toList());
-                        if(quyetDinhDcCDtls.size() > 1){
-                            loiData.set(true);
-                        }else{
-                            DcnbQuyetDinhDcCDtl quyetDinhDcCDtl = quyetDinhDcCDtls.get(0);
-                            quyetDinhDcCDtlsClone.add(quyetDinhDcCDtl);
-                        }
-                    });
-                    clonedObj.setDanhSachQuyetDinh(quyetDinhDcCDtlsClone);
-                    clonedObj.setTrangThai(Contains.YC_CHICUC_PHANBO_DC);
-                    dcnbQuyetDinhDcCHdrRepository.save(clonedObj);
-                    fileDinhKemService.delete(clonedObj.getId(), Lists.newArrayList(DcnbQuyetDinhDcCHdr.TABLE_NAME + "_CAN_CU"));
-                    List<FileDinhKemReq> fileDinhKemReqs = clonedObj.getCanCu().stream()
-                            .map(person -> new ModelMapper().map(person, FileDinhKemReq.class))
-                            .collect(Collectors.toList());
-                    List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(fileDinhKemReqs, clonedObj.getId(), DcnbQuyetDinhDcCHdr.TABLE_NAME + "_CAN_CU");
-                    clonedObj.setCanCu(canCu);
-                });
-
-                if(loiData.get()){
-                    throw new Exception("Mỗi DcnbQuyetDinhDcCDtl chỉ có 1 dcnbKeHoachDcHdrId!");
-                }
+                cloneQuyetDinhDcC(statusReq, optional);
                 break;
+            case Contains.YC_CHICUC_PHANBO_DC + Contains.CHODUYET_TP:
             case Contains.DUTHAO + Contains.CHODUYET_TP:
             case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
             case Contains.TUCHOI_LDC + Contains.CHODUYET_TP:
+                // validate kế hoạch hdr đã xác điịnh điểm nhập hết chưa?
                 optional.get().setNgayGduyet(LocalDate.now());
                 optional.get().setNguoiGduyetId(currentUser.getUser().getId());
                 break;
@@ -617,6 +527,9 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
                         dcnbQuyetDinhDcTcHdr.get().setSoQdinhXuatCuc(soQdinh);
                     }
                 }
+                if(!Contains.GIUA_2_CUC_DTNN_KV.equals(optional.get().getLoaiQdinh())){ // khác điều chuyển "khác cục"
+                    cloneQuyetDinhDcC(statusReq, optional);
+                }
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
@@ -624,6 +537,102 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
         optional.get().setTrangThai(statusReq.getTrangThai());
         DcnbQuyetDinhDcCHdr created = dcnbQuyetDinhDcCHdrRepository.save(optional.get());
         return created;
+    }
+
+    private void cloneQuyetDinhDcC(StatusReq statusReq, Optional<DcnbQuyetDinhDcCHdr> optional) throws Exception {
+        // xử lý clone cho chi cục với TYPE là NDC
+        List<DcnbQuyetDinhDcCDtl> danhSachQuyetDinh = optional.get().getDanhSachQuyetDinh();
+        List<DcnbKeHoachDcDtl> danhSachKeHoachs = new ArrayList<>();
+        for(DcnbQuyetDinhDcCDtl qdd: danhSachQuyetDinh){
+            danhSachKeHoachs.addAll(qdd.getDanhSachKeHoach());
+        }
+        Map<String, List<DcnbKeHoachDcDtl>> groupedByMaCc = danhSachKeHoachs.stream()
+                .collect(Collectors.groupingBy(DcnbKeHoachDcDtl::getMaChiCucNhan));
+        AtomicBoolean loiData = new AtomicBoolean(false);
+        groupedByMaCc.forEach((maChiCucThue, khList) -> {
+            DcnbQuyetDinhDcCHdr clonedObj = SerializationUtils.clone(optional.get());
+            clonedObj.setParentId(clonedObj.getId());
+            clonedObj.setId(null);
+            clonedObj.setMaDvi(maChiCucThue);
+            clonedObj.setTenDvi(khList.get(0).getTenChiCucNhan());
+            clonedObj.setType(Contains.NHAN_DIEU_CHUYEN);
+            Map<Long, List<DcnbKeHoachDcDtl>> groupedByKhh = khList.stream()
+                    .collect(Collectors.groupingBy(DcnbKeHoachDcDtl::getHdrId));
+            List<DcnbQuyetDinhDcCDtl> quyetDinhDcCDtlsClone = new ArrayList<>();
+
+            groupedByKhh.forEach((dcnbKeHoachDcHdrId, dcnbKeHoachDcDtlList) -> {
+                List<DcnbQuyetDinhDcCDtl> quyetDinhDcCDtls = danhSachQuyetDinh.stream().filter(item -> dcnbKeHoachDcHdrId.equals(item.getKeHoachDcHdrId())).map(itemMap -> {
+                    DcnbQuyetDinhDcCDtl clonedDtl = SerializationUtils.clone(itemMap);
+                    clonedDtl.setParentId(clonedDtl.getId());
+                    clonedDtl.setId(null);
+                    Optional<DcnbKeHoachDcHdr> keHoachDcHdrOpt = null;
+                    try {
+                        keHoachDcHdrOpt = Optional.ofNullable(dcnbKeHoachDcHdrService.details(dcnbKeHoachDcHdrId));
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                    DcnbKeHoachDcHdr keHoachHdrObj = SerializationUtils.clone(keHoachDcHdrOpt.get());
+                    keHoachHdrObj.setParentId(keHoachHdrObj.getId());
+                    keHoachHdrObj.setId(null);
+                    keHoachHdrObj.setMaDviPq(maChiCucThue);
+                    keHoachHdrObj.setType(Contains.NHAN_DIEU_CHUYEN);
+                    keHoachHdrObj.setTrangThai(statusReq.getTrangThai());
+                    keHoachHdrObj.setDanhSachHangHoa(keHoachHdrObj.getDanhSachHangHoa().stream()
+                            .filter(item -> item.getMaChiCucNhan().equals(maChiCucThue)).map(itemMap1 -> {
+                                itemMap1.setParentId(itemMap1.getId());
+                                itemMap1.setId(null);
+                                return itemMap1;
+                            }).collect(Collectors.toList()));
+                    keHoachHdrObj.setPhuongAnDieuChuyen(keHoachHdrObj.getPhuongAnDieuChuyen().stream()
+                            .filter(item -> item.getMaChiCucNhan().equals(maChiCucThue)).map(itemMap1 -> {
+                                itemMap1.setParentId(itemMap1.getId());
+                                itemMap1.setId(null);
+                                return itemMap1;
+                            }).collect(Collectors.toList()));
+                    keHoachHdrObj.setCanCu(keHoachHdrObj.getCanCu().stream().map(itemMap1 -> {
+                        itemMap1.setId(null);
+                        itemMap1.setDataId(null);
+                        return itemMap1;
+                    }).collect(Collectors.toList()));
+                    BigDecimal total = keHoachHdrObj.getDanhSachHangHoa().stream().map(DcnbKeHoachDcDtl::getDuToanKphi)
+                            .reduce(BigDecimal.ZERO, BigDecimal::add);
+                    keHoachHdrObj.setTongDuToanKp(total);
+
+                    keHoachHdrObj = dcnbKeHoachDcHdrRepository.save(keHoachHdrObj);
+
+                    clonedDtl.setDcnbKeHoachDcHdr(keHoachHdrObj);
+                    clonedDtl.setKeHoachDcHdrId(keHoachHdrObj.getId());
+
+                    fileDinhKemService.delete(keHoachHdrObj.getId(), Lists.newArrayList(DcnbKeHoachDcHdr.TABLE_NAME + "_CAN_CU"));
+                    List<FileDinhKemReq> fileDinhKemReqs = keHoachHdrObj.getCanCu().stream()
+                            .map(person -> new ModelMapper().map(person, FileDinhKemReq.class))
+                            .collect(Collectors.toList());
+                    List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(fileDinhKemReqs, keHoachHdrObj.getId(), DcnbKeHoachDcHdr.TABLE_NAME + "_CAN_CU");
+                    keHoachHdrObj.setCanCu(canCu);
+
+                    return clonedDtl;
+                }).collect(Collectors.toList());
+                if(quyetDinhDcCDtls.size() > 1){
+                    loiData.set(true);
+                }else{
+                    DcnbQuyetDinhDcCDtl quyetDinhDcCDtl = quyetDinhDcCDtls.get(0);
+                    quyetDinhDcCDtlsClone.add(quyetDinhDcCDtl);
+                }
+            });
+            clonedObj.setDanhSachQuyetDinh(quyetDinhDcCDtlsClone);
+            clonedObj.setTrangThai(Contains.YC_CHICUC_PHANBO_DC);
+            dcnbQuyetDinhDcCHdrRepository.save(clonedObj);
+            fileDinhKemService.delete(clonedObj.getId(), Lists.newArrayList(DcnbQuyetDinhDcCHdr.TABLE_NAME + "_CAN_CU"));
+            List<FileDinhKemReq> fileDinhKemReqs = clonedObj.getCanCu().stream()
+                    .map(person -> new ModelMapper().map(person, FileDinhKemReq.class))
+                    .collect(Collectors.toList());
+            List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(fileDinhKemReqs, clonedObj.getId(), DcnbQuyetDinhDcCHdr.TABLE_NAME + "_CAN_CU");
+            clonedObj.setCanCu(canCu);
+        });
+
+        if(loiData.get()){
+            throw new Exception("Mỗi DcnbQuyetDinhDcCDtl chỉ có 1 dcnbKeHoachDcHdrId!");
+        }
     }
 
     public void export(CustomUserDetails currentUser, SearchDcnbQuyetDinhDcC objReq, HttpServletResponse response) throws Exception {
