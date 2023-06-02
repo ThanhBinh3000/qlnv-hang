@@ -97,10 +97,14 @@ public class DcnbKeHoachDcDtl implements Serializable {
     private Boolean daXdinhDiemNhap;
     @Column(name = "XD_LAI_DIEM_NHAP")
     private Boolean xdLaiDiemNhap;
+    @Column(name = "BB_LAY_MAU_ID")
+    private Long bbLayMauId;
     @Column(name = "HDR_ID", insertable = true, updatable = true)
     private Long hdrId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
     @JsonIgnore
     private DcnbKeHoachDcHdr dcnbKeHoachDcHdr;
+    @Transient
+    private DcnbBienBanLayMauHdr dcnbBienBanLayMauHdr;
 }

@@ -1,14 +1,15 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
 
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
-import com.tcdt.qlnvhang.request.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.THKeHoachDieuChuyenCucKhacCucDtlReq;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.ThKeHoachDieuChuyenCucHdrReq;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.ThKeHoachDieuChuyenNoiBoCucDtlReq;
 import com.tcdt.qlnvhang.request.search.TongHopKeHoachDieuChuyenSearch;
-import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
@@ -275,7 +276,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
             throw new Exception("Không tìm thấy dữ liệu");
         }
         List<THKeHoachDieuChuyenCucHdr> soDeXuat = thKeHoachDieuChuyenHdrRepository.findBySoDeXuat(optional.get().getSoDeXuat());
-        if(soDeXuat.isEmpty()){
+        if(soDeXuat.get(0).getSoDeXuat() == null){
             throw new Exception("Bản tổng hợp chưa có số đề xuất");
         }
         if (!soDeXuat.isEmpty() && optional.get().getSoDeXuat().split("/").length == 1) {
@@ -306,7 +307,7 @@ public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
 //        }
         THKeHoachDieuChuyenCucHdr data = optional.get();
         THKeHoachDieuChuyenCucHdr dataMap = new ModelMapper().map(objReq, THKeHoachDieuChuyenCucHdr.class);
-        BeanUtils.copyProperties(data,dataMap);
+        BeanUtils.copyProperties(dataMap,data);
         data.setNguoiSuaId(currentUser.getUser().getId());
         THKeHoachDieuChuyenCucHdr created = thKeHoachDieuChuyenHdrRepository.save(data);
         thKeHoachDieuChuyenHdrRepository.save(created);

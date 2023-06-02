@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
+import antlr.Utils;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
@@ -65,7 +66,24 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
+        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            req.setType(Contains.NHAN_DIEU_CHUYEN);
+        }
+        if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            req.setType(Contains.DIEU_CHUYEN);
+        }
         Page<DcnbQuyetDinhDcCHdr> search = dcnbQuyetDinhDcCHdrRepository.search(req, pageable);
+        search.forEach( item -> {
+            if(item.getDanhSachQuyetDinh() != null && !item.getDanhSachQuyetDinh().isEmpty()){
+                List<DcnbQuyetDinhDcCDtl> danhSachQuyetDinh = item.getDanhSachQuyetDinh();
+                danhSachQuyetDinh.forEach(i -> {
+                    if(!Objects.isNull(i.getKeHoachDcHdrId())){
+                        Optional<DcnbKeHoachDcHdr> byId = dcnbKeHoachDcHdrRepository.findById(i.getKeHoachDcHdrId());
+                        byId.ifPresent(i::setDcnbKeHoachDcHdr);
+                    }
+                });
+            }
+        });
         return search;
     }
 
@@ -74,7 +92,10 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
         if (currentUser == null) {
             throw new Exception("Bad request.");
         }
-        Optional<DcnbQuyetDinhDcCHdr> optional = dcnbQuyetDinhDcCHdrRepository.findFirstBySoQdinh(objReq.getSoQdinh());
+        if(!currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)){
+            throw new Exception("Chức năng thêm mới chỉ dành cho cấp cục");
+        }
+        Optional<DcnbQuyetDinhDcCHdr> optional = dcnbQuyetDinhDcCHdrRepository.findFirstBySoQdinhAndType(objReq.getSoQdinh(),Contains.DIEU_CHUYEN);
         if (optional.isPresent() && objReq.getSoQdinh().split("/").length == 1) {
             throw new Exception("số quyết định đã tồn tại");
         }
@@ -161,7 +182,7 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
-        Optional<DcnbQuyetDinhDcCHdr> soDxuat = dcnbQuyetDinhDcCHdrRepository.findFirstBySoQdinh(objReq.getSoQdinh());
+        Optional<DcnbQuyetDinhDcCHdr> soDxuat = dcnbQuyetDinhDcCHdrRepository.findFirstBySoQdinhAndType(objReq.getSoQdinh(),Contains.DIEU_CHUYEN);
         if (org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoQdinh())) {
             if (soDxuat.isPresent() && objReq.getSoQdinh().split("/").length == 1) {
                 if (!soDxuat.get().getId().equals(objReq.getId())) {

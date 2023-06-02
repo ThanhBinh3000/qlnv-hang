@@ -23,4 +23,6 @@ public class SearchDcnbKeHoachDc extends BaseRequest {
   private String cloaiVthh;
   private String trichYeu;
   private String trangThai;
+  private Long bbLayMauId;
+  private Long idQdDc;
 }

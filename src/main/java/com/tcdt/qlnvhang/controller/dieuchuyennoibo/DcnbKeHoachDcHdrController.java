@@ -9,6 +9,7 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbKeHoachDcHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbKeHoachDc;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbQuyetDinhDcC;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbKeHoachDcHdrService;
 import com.tcdt.qlnvhang.util.PathContains;
@@ -89,6 +90,23 @@ public class DcnbKeHoachDcHdrController extends BaseController {
       resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
       resp.setMsg(e.getMessage());
       log.error("Cập nhật thông tin : {}", e);
+    }
+    return ResponseEntity.ok(resp);
+  }
+
+  @ApiOperation(value = "Danh sách lô kho", response = List.class)
+  @PostMapping(value = "/danh-sach-lo-kho", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<BaseResponse> danhSachLoKho(@RequestBody SearchDcnbKeHoachDc objReq) {
+    BaseResponse resp = new BaseResponse();
+    try {
+      resp.setData(dcnbKeHoachDcHdrService.danhSachMaLokho(objReq));
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (Exception e) {
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Tra cứu thông tin : {}", e);
     }
     return ResponseEntity.ok(resp);
   }
