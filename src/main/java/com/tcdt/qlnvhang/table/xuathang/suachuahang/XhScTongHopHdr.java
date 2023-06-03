@@ -19,7 +19,7 @@ import java.util.List;
 public class XhScTongHopHdr extends BaseEntity implements Serializable {
 
   private static final long serialVersionUID = 1L;
-  public static final String TABLE_NAME = "XH_TL_TONG_HOP_HDR";
+  public static final String TABLE_NAME = "XH_SC_TONG_HOP_HDR";
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhScTongHopHdr.TABLE_NAME + "_SEQ")
