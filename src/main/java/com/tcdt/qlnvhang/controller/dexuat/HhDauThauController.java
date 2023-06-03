@@ -168,10 +168,9 @@ public class HhDauThauController {
 	@ApiOperation(value = "Kết xuất danh sách thông tin đấu thầu", response = List.class)
 	@PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public void exportList( @Valid @RequestBody HhDthauSearchReq objReq,HttpServletResponse response) throws Exception{
+	public void exportList( @Valid @RequestBody HhQdKhlcntSearchReq objReq,HttpServletResponse response) throws Exception{
 		try {
 			service.exportList(objReq,response);
-
 		} catch (Exception e) {
 			log.error("Kết xuất danh sách  thông tin đấu thầu trace: {}", e);
 			final Map<String, Object> body = new HashMap<>();
