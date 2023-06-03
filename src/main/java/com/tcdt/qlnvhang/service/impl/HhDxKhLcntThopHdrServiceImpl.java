@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
+import com.tcdt.qlnvhang.entities.FileDKemJoinDxKhlcntThopHdr;
+import com.tcdt.qlnvhang.entities.FileDKemJoinQdKhlcntHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxKhlcntDsgthau;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdr;
@@ -175,6 +177,15 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		thopHdr.setGhiChu(objReq.getGhiChu());
 		thopHdr.setId(objReq.getId());
 		thopHdr.setSoQdCc(objReq.getSoQdCc());
+		// Add danh sach file dinh kem o Master
+		List<FileDKemJoinDxKhlcntThopHdr> fileDinhKemList = new ArrayList<FileDKemJoinDxKhlcntThopHdr>();
+		if (objReq.getFileDinhKems() != null) {
+			fileDinhKemList = ObjectMapperUtils.mapAll(objReq.getFileDinhKems(), FileDKemJoinDxKhlcntThopHdr.class);
+			fileDinhKemList.forEach(f -> {
+				f.setDataType(HhDxKhLcntThopHdr.TABLE_NAME);
+				f.setCreateDate(new Date());
+			});
+		}
 		hhDxKhLcntThopHdrRepository.save(thopHdr);
 		for (HhDxKhLcntThopDtl dtl : thopHdr.getHhDxKhLcntThopDtlList()){
 			dtl.setIdThopHdr(thopHdr.getId());
@@ -204,6 +215,15 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		thopHdr.setGhiChu(objReq.getGhiChu());
 		thopHdr.setId(objReq.getId());
 		thopHdr.setSoQdCc(objReq.getSoQdCc());
+		List<FileDKemJoinDxKhlcntThopHdr> fileDinhKemList = new ArrayList<FileDKemJoinDxKhlcntThopHdr>();
+		if (objReq.getFileDinhKems() != null) {
+			fileDinhKemList = ObjectMapperUtils.mapAll(objReq.getFileDinhKems(), FileDKemJoinDxKhlcntThopHdr.class);
+			fileDinhKemList.forEach(f -> {
+				f.setDataType(HhDxKhLcntThopHdr.TABLE_NAME);
+				f.setCreateDate(new Date());
+			});
+		}
+		thopHdr.setFileDinhKems(fileDinhKemList);
 		hhDxKhLcntThopHdrRepository.save(thopHdr);
 		for (HhDxKhLcntThopDtl dtl : thopHdr.getHhDxKhLcntThopDtlList()){
 			dtl.setIdThopHdr(thopHdr.getId());
