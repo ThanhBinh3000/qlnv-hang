@@ -707,7 +707,12 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         List<Long> ids = page.getContent().stream().map(HhDxuatKhLcntHdr::getId).collect(Collectors.toList());
-        List<Object[]> listGthau = hhDxuatKhLcntHdrRepository.getQdPdKhLcnt(ids, NhapXuatHangTrangThaiEnum.THANH_CONG.getId());
+        List<Object[]> listGthau;
+        if (req.getLoaiVthh() != null && req.getLoaiVthh().startsWith("02")) {
+            listGthau = hhDxuatKhLcntHdrRepository.getQdPdKhLcntVt(ids, NhapXuatHangTrangThaiEnum.THANH_CONG.getId());
+        } else {
+            listGthau = hhDxuatKhLcntHdrRepository.getQdPdKhLcnt(ids, NhapXuatHangTrangThaiEnum.THANH_CONG.getId());
+        }
         Map<Long, Map<String, String>> hhDxKhlcnt = new HashMap<>();
         for (Object[] it : listGthau) {
             Map<String, String> dataQd = new HashMap<>();
