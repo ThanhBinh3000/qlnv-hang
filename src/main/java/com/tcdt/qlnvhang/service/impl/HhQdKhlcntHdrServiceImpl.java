@@ -351,7 +351,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	public HhQdKhlcntHdr detail(String ids) throws Exception {
 		if (StringUtils.isEmpty(ids))
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
-
+		System.out.println("id loi " + ids);
 		Optional<HhQdKhlcntHdr> qOptional = hhQdKhlcntHdrRepository.findById(Long.parseLong(ids));
 
 

@@ -170,7 +170,7 @@ public class HhDauThauController {
 	@ResponseStatus(HttpStatus.OK)
 	public void exportList( @Valid @RequestBody HhDthauSearchReq objReq,HttpServletResponse response) throws Exception{
 		try {
-//			service.exportList(objReq,response);
+			service.exportList(objReq,response);
 
 		} catch (Exception e) {
 			log.error("Kết xuất danh sách  thông tin đấu thầu trace: {}", e);
