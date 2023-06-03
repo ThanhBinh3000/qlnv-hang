@@ -281,7 +281,7 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
             case Contains.TU_CHOI_CBV + Contains.DADUYET_LDC:
                 optional.setNguoiPduyetId(userInfo.getId());
                 optional.setNgayPduyet(getDateTimeNow());
-                optional.setLyDoTuChoi(stReq.getLyDo());
+                optional.setLyDoTuChoi(stReq.getLyDoTuChoi());
                 break;
             case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
             case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:

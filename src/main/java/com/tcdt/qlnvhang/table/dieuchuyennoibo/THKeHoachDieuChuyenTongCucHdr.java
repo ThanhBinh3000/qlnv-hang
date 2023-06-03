@@ -71,6 +71,18 @@ public class THKeHoachDieuChuyenTongCucHdr extends BaseEntity implements Seriali
     @Column(name = "SO_QDDC")
     private String soQddc;
 
+    @Column(name = "LOAI_HINH_NHAP_XUAT")
+    private String loaiHinhNhapXuat;
+
+    @Column(name = "TEN_LOAI_HINH_NHAP_XUAT")
+    private String tenLoaiHinhNhapXuat;
+
+    @Column(name = "KIEU_NHAP_XUAT")
+    private String kieuNhapXuat;
+
+    @Column(name = "TEN_KIEU_NHAP_XUAT")
+    private String tenKieuNhapXuat;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
     private List<THKeHoachDieuChuyenTongCucDtl> thKeHoachDieuChuyenTongCucDtls = new ArrayList<>();
