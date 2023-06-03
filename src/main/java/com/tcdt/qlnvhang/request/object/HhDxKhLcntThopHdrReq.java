@@ -9,6 +9,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class HhDxKhLcntThopHdrReq extends HhDxKhLcntTChiThopReq {
@@ -23,5 +25,6 @@ public class HhDxKhLcntThopHdrReq extends HhDxKhLcntTChiThopReq {
 	String ghiChu;
 
 	String soQdCc;
+	private List<FileDinhKemReq> fileDinhKems;
 
 }

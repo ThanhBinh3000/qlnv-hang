@@ -38,5 +38,5 @@ public interface HhDauThauService {
 //	@Transactional(rollbackOn = Exception.class)
 //	void delete(IdSearchReq idSearchReq) throws Exception;
 //
-	void exportList(@Valid @RequestBody HhDthauSearchReq objReq, HttpServletResponse response) throws  Exception;
+	void exportList(@Valid @RequestBody HhQdKhlcntSearchReq objReq, HttpServletResponse response) throws  Exception;
 }

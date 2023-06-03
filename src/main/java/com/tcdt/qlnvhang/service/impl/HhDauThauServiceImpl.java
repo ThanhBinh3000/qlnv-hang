@@ -10,6 +10,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.Hh
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDsgthauRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDtlRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdrRepository;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.HhDthauNthauDuthauReq;
 import com.tcdt.qlnvhang.request.object.HhDthauReq;
@@ -18,6 +19,7 @@ import com.tcdt.qlnvhang.request.search.HhQdKhlcntSearchReq;
 import com.tcdt.qlnvhang.service.HhDauThauService;
 import com.tcdt.qlnvhang.service.HhQdKhlcntHdrService;
 import com.tcdt.qlnvhang.table.*;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -230,8 +232,42 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
     }
 
     @Override
-    public void exportList(HhDthauSearchReq objReq, HttpServletResponse response) throws Exception {
+    public void exportList(HhQdKhlcntSearchReq objReq, HttpServletResponse response) throws Exception {
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        objReq.setPaggingReq(paggingReq);
+        Page<HhQdKhlcntHdr> page = this.hhQdKhlcntHdrService.getAllPage(objReq);
+        List<HhQdKhlcntHdr> data = page.getContent();
 
+        String title = "Danh sách các gói thầu";
+        String[] rowsName = new String[]{"STT", "Năm kế hoạch", "Số KH/đề xuất", "Số QĐ PD KHLCNT", "Số QĐ PD KQLCNT", "Ngày QĐ PD KQLCNT", "Tổng số gói thầu", "Số gói thầu đã trúng", "Số gói thầu đã trượt",
+                "Thời gian thực hiện dự án", "Phương thức LCNT", "Chủng loại hàng hóa", "Trạng thái"};
+        String filename = "Danh_sach_cac_goi_thau.xlsx";
+
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+        for (int i = 0; i < data.size(); i++) {
+            HhQdKhlcntHdr dx = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i;
+            objs[1] = dx.getNamKhoach();
+            objs[2] = dx.getSoDxuatKhlcnt() != null ? dx.getSoDxuatKhlcnt() : dx.getSoTrHdr();
+            objs[3] = dx.getSoQd();
+            objs[4] = dx.getSoQdPdKqLcnt();
+            objs[5] = objReq.getLoaiVthh().equals("02") ? dx.getNgayPduyet() : convertDate(dx.getNgayPduyet());
+            objs[6] = dx.getSoGthau();
+            objs[7] = dx.getSoGthauTrung();
+            objs[8] = dx.getSoGthauTruot();
+            objs[9] = convertDate(dx.getTgianNhang());
+            objs[10] = dx.getTenPthucLcnt();
+            objs[11] = dx.getTenCloaiVthh();
+            objs[12] = objReq.getLoaiVthh().equals("02") ? dx.getTenTrangThaiDt() : dx.getTenTrangThai();
+            dataList.add(objs);
+        }
+
+        ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+        ex.export();
     }
 
     void approveLuongThuc(HhDthauReq stReq) throws Exception {
