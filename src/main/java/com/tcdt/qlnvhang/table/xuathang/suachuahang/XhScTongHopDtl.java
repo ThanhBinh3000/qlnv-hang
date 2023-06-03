@@ -16,7 +16,7 @@ import java.util.Map;
 @Data
 public class XhScTongHopDtl extends BaseEntity implements Serializable {
   private static final long serialVersionUID = 1L;
-  public static final String TABLE_NAME = "XH_TL_TONG_HOP_DTL";
+  public static final String TABLE_NAME = "XH_SC_TONG_HOP_DTL";
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhScTongHopDtl.TABLE_NAME + "_SEQ")
