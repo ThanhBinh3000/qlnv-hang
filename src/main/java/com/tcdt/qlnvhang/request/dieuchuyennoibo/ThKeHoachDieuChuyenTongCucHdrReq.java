@@ -54,5 +54,13 @@ public class ThKeHoachDieuChuyenTongCucHdrReq implements Serializable {
 
     private String soQddc;
 
+    private String loaiHinhNhapXuat;
+
+    private String tenLoaiHinhNhapXuat;
+
+    private String kieuNhapXuat;
+
+    private String tenKieuNhapXuat;
+
     List<ThKeHoachDieuChuyenTongCucDtlReq> thKeHoachDieuChuyenTongCucDtls;
 }

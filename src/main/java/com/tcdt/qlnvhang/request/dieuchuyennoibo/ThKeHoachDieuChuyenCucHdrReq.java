@@ -1,14 +1,11 @@
 package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.THKeHoachDieuChuyenCucKhacCucDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.THKeHoachDieuChuyenNoiBoCucDtl;
-import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -56,6 +53,14 @@ public class ThKeHoachDieuChuyenCucHdrReq {
     private LocalDate ngayTrinhDuyetTc;
 
     private LocalDate ngayPheDuyetTc;
+
+    private String loaiHinhNhapXuat;
+
+    private String tenLoaiHinhNhapXuat;
+
+    private String kieuNhapXuat;
+
+    private String tenKieuNhapXuat;
 
     List<THKeHoachDieuChuyenNoiBoCucDtl> thKeHoachDieuChuyenNoiBoCucDtls;
 

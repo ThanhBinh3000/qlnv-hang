@@ -92,6 +92,18 @@ public class THKeHoachDieuChuyenCucHdr extends BaseEntity implements Serializabl
     @Column(name = "NGAY_PHE_DUYET_TC")
     private LocalDate ngayPheDuyetTc;
 
+    @Column(name = "LOAI_HINH_NHAP_XUAT")
+    private String loaiHinhNhapXuat;
+
+    @Column(name = "TEN_LOAI_HINH_NHAP_XUAT")
+    private String tenLoaiHinhNhapXuat;
+
+    @Column(name = "KIEU_NHAP_XUAT")
+    private String kieuNhapXuat;
+
+    @Column(name = "TEN_KIEU_NHAP_XUAT")
+    private String tenKieuNhapXuat;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "DCNB_TH_KE_HOACH_DCC_HDR_ID")
     private List<THKeHoachDieuChuyenNoiBoCucDtl> thKeHoachDieuChuyenNoiBoCucDtls = new ArrayList<>();
