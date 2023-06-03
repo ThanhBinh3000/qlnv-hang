@@ -50,10 +50,12 @@ public class HhDxuatKhLcntCcxdgDtl implements Serializable {
 
 	public void setChildren(List<FileDKemJoinDxKhLcntCcxdg> children) {
 		this.children.clear();
-		for (FileDKemJoinDxKhLcntCcxdg child : children) {
-			child.setParent(this);
+		if (children != null) {
+			for (FileDKemJoinDxKhLcntCcxdg child : children) {
+				child.setParent(this);
+			}
+			this.children.addAll(children);
 		}
-		this.children.addAll(children);
 	}
 
 	public void addChild(FileDKemJoinDxKhLcntCcxdg child) {
