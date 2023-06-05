@@ -21,6 +21,7 @@ public class SearchDcnbQuyetDinhDcC extends BaseRequest {
   private String trichYeu;
   private String trangThai;
   private String type;
+  private List<String> types;
   private List<String> loaiVthh;
   private String loaiQdinh;
 }
