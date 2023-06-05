@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +16,7 @@ import java.util.List;
 @Table(name = DcnbPhieuXuatKhoHdr.TABLE_NAME)
 @Getter
 @Setter
-public class DcnbPhieuXuatKhoHdr extends BaseEntity implements Serializable, Cloneable{
+public class DcnbPhieuXuatKhoHdr extends BaseEntity implements Serializable, Cloneable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "DCNB_PHIEU_XUAT_KHO_HDR";
 
@@ -80,6 +81,9 @@ public class DcnbPhieuXuatKhoHdr extends BaseEntity implements Serializable, Clo
     private Long nguoiPduyetId;
     private String lyDoTuChoi;
     private String type;
+
+    @Transient
+    List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")

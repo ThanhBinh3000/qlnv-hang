@@ -9,6 +9,7 @@ import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbPhieuXuatKhoHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchPhieuXuatKho;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.HhPhuLucHd;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuXuatKhoHdr;
 import com.tcdt.qlnvhang.util.Contains;
