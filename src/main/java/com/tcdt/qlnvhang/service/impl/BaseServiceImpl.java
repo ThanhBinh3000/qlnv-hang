@@ -16,13 +16,17 @@ import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.QlnvDmDonviSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.request.object.HhDmDviLquanSearchReq;
 import com.tcdt.qlnvhang.response.CommonResponse;
 import com.tcdt.qlnvhang.service.feign.CategoryServiceProxy;
 import com.tcdt.qlnvhang.service.feign.SystemServiceProxy;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.QlnvDanhMuc;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanLayMauHdr;
 import com.tcdt.qlnvhang.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +76,9 @@ public abstract class BaseServiceImpl {
 
   @Autowired
   private SystemServiceProxy systemServiceProxy;
+
+  @Autowired
+  private FileDinhKemService fileDinhKemService;
 
   public QlnvDmDonvi getDviByMa(String maDvi, HttpServletRequest req) throws Exception {
     QlnvDmDonvi qlnvDmDonvi = null;
@@ -500,6 +507,10 @@ public abstract class BaseServiceImpl {
     ResponseEntity<String> response = systemServiceProxy.getSequence(sequenceName);
     String id = Request.getAttrFromJson(response.getBody(), "data");
     return DataUtils.safeToLong(id);
+  }
+
+  public void saveFileDinhKem(List<FileDinhKemReq> fileDinhKems,Long idHdr,String tableName){
+    List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(fileDinhKems,idHdr, tableName);
   }
 }
 

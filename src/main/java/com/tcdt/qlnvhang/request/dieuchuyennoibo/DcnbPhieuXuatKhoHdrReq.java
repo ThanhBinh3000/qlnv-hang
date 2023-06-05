@@ -1,28 +1,17 @@
-package com.tcdt.qlnvhang.table.dieuchuyennoibo;
+package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
-import com.tcdt.qlnvhang.entities.BaseEntity;
-import com.tcdt.qlnvhang.table.FileDinhKem;
-import lombok.Getter;
-import lombok.Setter;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeCanHangDtl;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuXuatKhoDtl;
+import lombok.Data;
 
-import javax.persistence.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = DcnbPhieuXuatKhoHdr.TABLE_NAME)
-@Getter
-@Setter
-public class DcnbPhieuXuatKhoHdr extends BaseEntity implements Serializable, Cloneable {
-    private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "DCNB_PHIEU_XUAT_KHO_HDR";
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
+@Data
+public class DcnbPhieuXuatKhoHdrReq {
     private Long id;
     private Integer nam;
     private String maDvi;
@@ -75,17 +64,10 @@ public class DcnbPhieuXuatKhoHdr extends BaseEntity implements Serializable, Clo
     private BigDecimal thanhTienBc;
     private String ghiChu;
     private String trangThai;
-    private LocalDate ngayGduyet;
-    private Long nguoiGduyetId;
-    private LocalDate ngayPduyet;
-    private Long nguoiPduyetId;
     private String lyDoTuChoi;
     private String type;
 
-    @Transient
-    List<FileDinhKem> fileDinhKems = new ArrayList<>();
+    private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "HDR_ID")
     private List<DcnbPhieuXuatKhoDtl> dcnbPhieuXuatKhoDtl = new ArrayList<>();
 }

@@ -444,6 +444,9 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 					f.setTenDvi(mapDmucDvi.get(f.getMaDvi()));
 					f.setTenDiemKho(mapDmucDvi.get(f.getMaDiemKho()));
 					List<HhDchinhDxKhLcntDsgthauCtietVt> gthauCtietVtList = gThauCietVtRepository.findAllByIdGoiThauCtiet(f.getId());
+					gthauCtietVtList.forEach(ct ->{
+						ct.setTenDvi(mapDmucDvi.get(ct.getMaDvi()));
+					});
 					f.setChildren(gthauCtietVtList);
 				});
 				gThau.setTenCloaiVthh(hashMapDmHh.get(gThau.getCloaiVthh()));

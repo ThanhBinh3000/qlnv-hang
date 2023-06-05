@@ -7,7 +7,8 @@ import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBienBanLayMauHdrReq;
-import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbBienBanLayMau;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbPhieuXuatKhoHdrReq;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchPhieuXuatKho;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBienBanLayMauService;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbPhieuXuatKhoService;
@@ -41,10 +42,10 @@ public class DcnbPhieuXuatKhoController {
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser,
-                                                  @RequestBody SearchDcnbBienBanLayMau objReq) {
+                                                  @RequestBody SearchPhieuXuatKho objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-//            resp.setData(service.searchPage(currentUser,objReq));
+            resp.setData(service.searchPage(currentUser,objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch ( Exception e) {
@@ -60,10 +61,10 @@ public class DcnbPhieuXuatKhoController {
     @ApiOperation(value = "Tạo mới thông tin biên bản ", response = List.class)
     @PostMapping(value =  PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody DcnbBienBanLayMauHdrReq objReq) {
+    public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody DcnbPhieuXuatKhoHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-//            resp.setData(service.save(currentUser,objReq));
+            resp.setData(service.save(currentUser,objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -77,10 +78,10 @@ public class DcnbPhieuXuatKhoController {
 
     @ApiOperation(value = "Cập nhật thông tin biên bản", response = List.class)
     @PostMapping(value =  PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody DcnbBienBanLayMauHdrReq objReq) {
+    public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody DcnbPhieuXuatKhoHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-//            resp.setData(service.update(currentUser,objReq));
+            resp.setData(service.update(currentUser,objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -93,13 +94,13 @@ public class DcnbPhieuXuatKhoController {
     }
 
     @ApiOperation(value = "Lấy chi tiết thông tin biên bản", response = List.class)
-    @GetMapping(value =  PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value =  PathContains.URL_CHI_TIET + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> detail(
-            @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids")List<Long> ids) {
+            @ApiParam(value = "ID thông tin phụ lục hợp đồng", example = "1", required = true) @PathVariable("id") Long id) {
         BaseResponse resp = new BaseResponse();
         try {
-//            resp.setData(service.detail(ids).get(0));
+            resp.setData(service.detail(id));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -116,7 +117,7 @@ public class DcnbPhieuXuatKhoController {
     public ResponseEntity<BaseResponse> updateStatus( @CurrentUser CustomUserDetails currentUser,@Valid @RequestBody StatusReq stReq) {
         BaseResponse resp = new BaseResponse();
         try {
-//            service.approve(currentUser,stReq);
+            service.approve(currentUser,stReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -134,7 +135,7 @@ public class DcnbPhieuXuatKhoController {
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-//            service.delete(idSearchReq);
+            service.delete(idSearchReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -150,9 +151,9 @@ public class DcnbPhieuXuatKhoController {
     @ApiOperation(value = "Kết xuất danh sách biên bản lấy mẫu", response = List.class)
     @PostMapping(value =  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void exportList(@CurrentUser CustomUserDetails currentUser ,@Valid @RequestBody  SearchDcnbBienBanLayMau objReq, HttpServletResponse response) throws Exception {
+    public void exportList(@CurrentUser CustomUserDetails currentUser ,@Valid @RequestBody SearchPhieuXuatKho objReq, HttpServletResponse response) throws Exception {
         try {
-//            service.export( currentUser,objReq, response);
+            service.export( currentUser,objReq, response);
 
         } catch (Exception e) {
             log.error("Kết xuất danh sách dánh sách mua : {}", e);

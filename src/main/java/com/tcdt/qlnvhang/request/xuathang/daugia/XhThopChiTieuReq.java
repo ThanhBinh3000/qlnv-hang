@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.xuathang.daugia;
 import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,4 +17,8 @@ public class XhThopChiTieuReq {
     private LocalDate ngayDuyetTu;
 
     private LocalDate ngayDuyetDen;
+
+    private String trangThaiTh;
+
+    private List<String> listTrangThai;
 }
