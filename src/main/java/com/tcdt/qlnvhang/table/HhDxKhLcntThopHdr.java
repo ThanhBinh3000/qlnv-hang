@@ -21,7 +21,13 @@ import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import com.tcdt.qlnvhang.entities.FileDKemJoinDxKhlcntThopHdr;
+import com.tcdt.qlnvhang.entities.FileDKemJoinDxKhlcntThopHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdr;
 import lombok.Data;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = HhDxKhLcntThopHdr.TABLE_NAME)
@@ -101,4 +107,24 @@ public class HhDxKhLcntThopHdr implements Serializable {
 
 	@Transient
 	private List<HhDxKhLcntThopDtl> hhDxKhLcntThopDtlList = new ArrayList<>();
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@Fetch(value = FetchMode.SUBSELECT)
+	@JoinColumn(name = "dataId")
+	@JsonManagedReference
+	@Where(clause = "data_type='" + HhDxKhLcntThopHdr.TABLE_NAME + "'")
+	private List<FileDKemJoinDxKhlcntThopHdr> fileDinhKems = new ArrayList<>();
+
+	public void setFileDinhKems(List<FileDKemJoinDxKhlcntThopHdr> children) {
+		this.fileDinhKems.clear();
+		for (FileDKemJoinDxKhlcntThopHdr child : children) {
+			child.setParent(this);
+		}
+		this.fileDinhKems.addAll(children);
+	}
+
+	public void addFileDinhKems(FileDKemJoinDxKhlcntThopHdr child) {
+		child.setParent(this);
+		this.fileDinhKems.add(child);
+	}
 }

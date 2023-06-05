@@ -52,6 +52,8 @@ public class HhDxuatKhLcntHdrReq {
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayKy;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date ngayTao;
 
 	@NotNull(message = "Không được để trống")
 	@Size(max = 20, message = "Mã đơn vị không được vượt quá 20 ký tự")

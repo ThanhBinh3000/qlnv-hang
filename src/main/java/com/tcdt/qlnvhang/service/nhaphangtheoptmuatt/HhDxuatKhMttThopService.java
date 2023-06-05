@@ -88,7 +88,6 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
             BeanUtils.copyProperties(dXuat,thopDtl,"id");
             thopDtl.setIdDxHdr(dXuat.getId());
             thopDtl.setTenDvi(mapDmucDvi.get(dXuat.getMaDvi()));
-            thopDtls.add(thopDtl);
             tChuanCluong = tChuanCluong.concat(dXuat.getTchuanCluong() + "");
             soQdcc = soQdcc.concat(dXuat.getSoQdCc() + "");
             thopDtls.add(thopDtl);

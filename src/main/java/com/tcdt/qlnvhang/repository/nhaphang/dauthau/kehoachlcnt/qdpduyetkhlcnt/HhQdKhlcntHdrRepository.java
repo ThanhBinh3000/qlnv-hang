@@ -15,8 +15,9 @@ public interface HhQdKhlcntHdrRepository extends BaseRepository<HhQdKhlcntHdr, L
 	List<HhQdKhlcntHdr> findBySoQd(String soQd);
 	List<HhQdKhlcntHdr> findAllByIdIn(List<Long> ids);
 
-	@Query(value = " SELECT DISTINCT QD_HDR.* FROM HH_QD_KHLCNT_HDR QD_HDR " +
+	@Query(value = " SELECT DISTINCT QD_HDR.*, QD_PD_HDR.NGAY_PDUYET AS NGAY_PD_QD_PDKQ_KHLCNT FROM HH_QD_KHLCNT_HDR QD_HDR " +
 			" LEFT JOIN HH_QD_KHLCNT_DTL QD_DTL ON QD_HDR.ID = QD_DTL.ID_QD_HDR " +
+			" LEFT JOIN HH_QD_PDUYET_KQLCNT_HDR QD_PD_HDR ON QD_HDR.ID = QD_PD_HDR.ID_QD_PD_KHLCNT " +
 			" WHERE (:namKh IS NULL OR QD_HDR.NAM_KHOACH = TO_NUMBER(:namKh)) "+
 			" AND (:loaiVthh IS NULL OR QD_HDR.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) "+
 			" AND (:soQd IS NULL OR LOWER(QD_HDR.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQd),'%'))) "+
@@ -28,7 +29,7 @@ public interface HhQdKhlcntHdrRepository extends BaseRepository<HhQdKhlcntHdr, L
 			" AND (:maDvi IS NULL OR QD_DTL.MA_DVI = :maDvi) " +
 			" AND (:trangThaiDtl IS NULL OR QD_DTL.TRANG_THAI = :trangThaiDtl) " +
 			" AND (:trangThaiDt IS NULL OR QD_HDR.TRANG_THAI_DT = :trangThaiDt )"
-			, countQuery = " SELECT COUNT(DISTINCT QD_HDR.ID) FROM HH_QD_KHLCNT_HDR  QD_HDR LEFT JOIN HH_QD_KHLCNT_DTL QD_DTL ON QD_HDR.ID = QD_DTL.ID_QD_HDR WHERE (:namKh IS NULL OR QD_HDR.NAM_KHOACH = TO_NUMBER(:namKh)) "+
+			, countQuery = " SELECT COUNT(DISTINCT QD_HDR.ID) FROM HH_QD_KHLCNT_HDR  QD_HDR LEFT JOIN HH_QD_KHLCNT_DTL QD_DTL ON QD_HDR.ID = QD_DTL.ID_QD_HDR LEFT JOIN HH_QD_PDUYET_KQLCNT_HDR QD_PD_HDR ON QD_HDR.ID = QD_PD_HDR.ID_QD_PD_KHLCNT WHERE (:namKh IS NULL OR QD_HDR.NAM_KHOACH = TO_NUMBER(:namKh)) "+
 					" AND (:loaiVthh IS NULL OR QD_HDR.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) "+
 					" AND (:soQd IS NULL OR LOWER(QD_HDR.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQd),'%'))) "+
 					" AND (:trichYeu IS NULL OR LOWER(QD_HDR.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%'))) "+

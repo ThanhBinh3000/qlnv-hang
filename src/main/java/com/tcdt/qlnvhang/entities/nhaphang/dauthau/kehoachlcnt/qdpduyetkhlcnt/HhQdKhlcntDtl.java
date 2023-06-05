@@ -74,6 +74,7 @@ public class HhQdKhlcntDtl implements Serializable {
 	BigDecimal donGiaNhaThau;
 
 	Long idNhaThau;
+	@Column(name="ID_DC_DX_HDR")
 	Long idDcDxHdr;
 
 	@Transient
