@@ -139,9 +139,9 @@ public class DcnbBBNTBQHdr extends BaseEntity implements Serializable, Cloneable
     private String lyDoTuChoi;
 
     @Transient
-    private List<FileDinhKem> bienBan = new ArrayList<>();
+    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
-    private List<DcnbBBNTBQDtl> dcnbBienBanLayMauDtl = new ArrayList<>();
+    private List<DcnbBBNTBQDtl> dcnbBBNTBQDtl = new ArrayList<>();
 }
