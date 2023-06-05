@@ -15,6 +15,8 @@ public class XhDdiemNhapKhoReq {
 
     private String maDiemKho;
 
+    private String diaChi;
+
     private String maNhaKho;
 
     private String maNganKho;

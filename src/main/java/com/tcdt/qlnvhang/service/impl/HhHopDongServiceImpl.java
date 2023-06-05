@@ -235,7 +235,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
       throw new UnsupportedOperationException("Không tồn tại bản ghi");
 
 
-//    Map<String, String> mapDmucDvi = getMapTenDvi();
+    Map<String, String> mapDmucDvi = getMapTenDvi();
 //    Map<String, String> hashMapDviLquan = getListDanhMucDviLq("NT");
 
     Map<String, String> mapVthh = getListDanhMucHangHoa();
@@ -253,20 +253,20 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
     allByIdHdr.forEach(item -> {
       List<HhHopDongDdiemNhapKho> allByIdHdongDtl = hhHopDongDdiemNhapKhoRepository.findAllByIdHdongDtl(item.getId());
       allByIdHdongDtl.forEach(s -> {
-//          s.setTenDvi(mapDmucDvi.get(s.getMaDvi()));
-        QlnvDmDonvi dvi;
-        if (qOptional.get().getLoaiVthh().startsWith("02")) {
-          dvi = qlnvDmDonviRepository.findByMaDvi(s.getMaDvi());
-          if (dvi != null) {
-            s.setTenDvi(dvi.getTenDvi());
-          }
-        } else {
-          dvi = qlnvDmDonviRepository.findByMaDvi(s.getMaDiemKho());
-          if (dvi != null) {
-            s.setTenDiemKho(dvi.getTenDvi());
-            s.setDiaDiemNhap(dvi.getDiaChi());
-          }
-        }
+        s.setTenDvi(mapDmucDvi.get(s.getMaDvi()));
+//        QlnvDmDonvi dvi = qlnvDmDonviRepository.findByMaDvi(s.getMaDvi());
+//        s.setTenDvi(dvi.getTenDvi());
+//        if (qOptional.get().getLoaiVthh().startsWith("02")) {
+//          dvi = qlnvDmDonviRepository.findByMaDvi(s.getMaDvi());
+//          if (dvi != null) {
+//            s.setTenDvi(dvi.getTenDvi());
+//          }
+//        } else {
+//          dvi = qlnvDmDonviRepository.findByMaDvi(s.getMaDvi());
+//          if (dvi != null) {
+//            s.setTenDvi(dvi.getTenDvi());
+//          }
+//        }
           List<HhHopDongDdiemNhapKhoVt> allByIdHdongDdiemNkho = hhHopDongDdiemNhapKhoVtRepository.findAllByIdHdongDdiemNkho(s.getId());
           allByIdHdongDdiemNkho.forEach( x -> {
             QlnvDmDonvi dviCon = qlnvDmDonviRepository.findByMaDvi(x.getMaDvi());

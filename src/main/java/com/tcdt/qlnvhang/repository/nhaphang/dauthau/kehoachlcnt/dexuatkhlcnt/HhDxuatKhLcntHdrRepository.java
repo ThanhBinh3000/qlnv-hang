@@ -111,6 +111,16 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 			, nativeQuery = true)
 	List<Object[]> getQdPdKhLcnt(Collection<Long> dxIds, String trangThai);
 
+	@Query(value = "SELECT DX_HDR.ID AS A,QD_HDR.ID,QD_HDR.SO_QD," +
+			"       NVL((SELECT COUNT(QD_GT.ID)  FROM  HH_QD_KHLCNT_DSGTHAU QD_GT WHERE (:trangThai is null or QD_GT.TRANG_THAI = :trangThai) AND QD_GT.ID_QD_DTL = QD_DTL.ID GROUP BY QD_DTL.ID),0) AS C " +
+			" FROM HH_DX_KHLCNT_HDR DX_HDR , HH_QD_KHLCNT_DTL QD_DTL , HH_QD_KHLCNT_HDR QD_HDR " +
+			" WHERE DX_HDR.ID = QD_HDR.ID_TR_HDR " +
+			" AND QD_HDR.ID = QD_DTL.ID_QD_HDR " +
+			" AND QD_HDR.LASTEST = 1 " +
+			" AND DX_HDR.ID IN (:dxIds) "
+			, nativeQuery = true)
+	List<Object[]> getQdPdKhLcntVt(Collection<Long> dxIds, String trangThai);
+
 	@Query(value = " SELECT dtl.GIA_QD_VAT_BTC FROM KH_PAG_QD_BTC_CTIET dtl " +
 			"JOIN KH_PAG_QD_BTC hdr ON dtl.QD_BTC_ID = hdr.ID " +
 			" WHERE hdr.TRANG_THAI = '29' AND hdr.LOAI_GIA = 'LG01'  AND hdr.CLOAI_VTHH = :cloaiVthh AND dtl.MA_DVI = :maDvi AND hdr.NAM_KE_HOACH = :namKhoach AND hdr.NGAY_HIEU_LUC <= SYSDATE " +
@@ -137,4 +147,11 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 			" AND (:idThopHdr IS NULL OR HDR.ID = :idThopHdr) ",
 			nativeQuery = true)
 	Optional<HhDxuatKhLcntHdr> getByIdThopHrd(Long idThopHdr);
+	@Query(value = "SELECT DX.* FROM HH_DX_KHLCNT_HDR DX " +
+			" JOIN HH_DX_KHLCNT_THOP_DTL dtl ON dx.id = dtl.ID_DX_HDR "+
+			" JOIN HH_DX_KHLCNT_THOP_HDR hdr ON dtl.ID_THOP_HDR = HDR.ID "+
+			" WHERE 1=1 "+
+			" AND (:idThopHdr IS NULL OR HDR.ID = :idThopHdr) ",
+			nativeQuery = true)
+	List<HhDxuatKhLcntHdr> getAllByIdThopHrd(Long idThopHdr);
 }

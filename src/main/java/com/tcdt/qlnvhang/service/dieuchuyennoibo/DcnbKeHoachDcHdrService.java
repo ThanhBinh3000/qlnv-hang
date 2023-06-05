@@ -13,9 +13,12 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbKeHoachDcHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbKeHoachDc;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbQuyetDinhDcC;
 import com.tcdt.qlnvhang.request.feign.TrangThaiHtReq;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
+import com.tcdt.qlnvhang.response.DieuChuyenNoiBo.DcnbKeHoachDcDtlDTO;
+import com.tcdt.qlnvhang.response.DieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO;
 import com.tcdt.qlnvhang.response.feign.TrangThaiHtResponce;
 import com.tcdt.qlnvhang.service.feign.LuuKhoClient;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -91,6 +94,7 @@ public class DcnbKeHoachDcHdrService extends BaseServiceImpl {
         }
         DcnbKeHoachDcHdr data = new DcnbKeHoachDcHdr();
         BeanUtils.copyProperties(objReq, data);
+        data.setSoDxuat(objReq.getSoDxuat() + "/DCNB");
         data.setMaDviPq(currentUser.getDvql());
         data.setType(Contains.DIEU_CHUYEN);
         data.setTrangThai(Contains.DUTHAO);
@@ -111,6 +115,11 @@ public class DcnbKeHoachDcHdrService extends BaseServiceImpl {
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), DcnbKeHoachDcHdr.TABLE_NAME + "_CAN_CU");
         created.setCanCu(canCu);
         return created;
+    }
+
+    public List<DcnbKeHoachDcDtlDTO> danhSachMaLokho(SearchDcnbKeHoachDc req) throws Exception{
+        List<DcnbKeHoachDcDtlDTO> danhSachMaLoKho = dcnbKeHoachDcDtlRepository.findByQdDcIdAndBbLayMauId(req.getIdQdDc());
+        return danhSachMaLoKho;
     }
 
     @Transactional

@@ -8,6 +8,7 @@ import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlDanhSachReq
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlDanhSachHdr;
+import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,11 +31,9 @@ public class XhTlDanhSachService extends BaseServiceImpl {
 
   public Page<XhTlDanhSachHdr> searchPage(CustomUserDetails currentUser, XhTlDanhSachRequest req) throws Exception {
     String dvql = currentUser.getDvql();
-//    if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
-//      req.setDvql(dvql.substring(0, 4));
-//    } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
-//      req.setDvql(dvql);
-//    }
+    if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
+      req.setDvql(dvql.substring(0, 6));
+    }
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<XhTlDanhSachHdr> search = xhTlDanhSachRepository.searchPage(req, pageable);
 

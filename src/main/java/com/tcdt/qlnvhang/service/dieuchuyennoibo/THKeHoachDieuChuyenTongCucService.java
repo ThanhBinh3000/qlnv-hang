@@ -93,6 +93,7 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
                 chiTiet.add(ctTongHop);
             }
         }
+        data.setThKeHoachDieuChuyenTongCucDtls(chiTiet);
         THKeHoachDieuChuyenTongCucHdr created = tongCucHdrRepository.save(data);
         if (created.getId() > 0) {
             List<Long> danhSachKeHoach = chiTiet.stream().map(THKeHoachDieuChuyenTongCucDtl::getThKhDcHdrId)
@@ -192,7 +193,9 @@ public class THKeHoachDieuChuyenTongCucService extends BaseServiceImpl {
         THKeHoachDieuChuyenTongCucHdr data = optional.get();
         THKeHoachDieuChuyenTongCucHdr dataMap = new ModelMapper().map(objReq, THKeHoachDieuChuyenTongCucHdr.class);
         BeanUtils.copyProperties(data,dataMap);
-        THKeHoachDieuChuyenTongCucHdr created = tongCucHdrRepository.save(data);
+        dataMap.setTrichYeu(objReq.getTrichYeu());
+        THKeHoachDieuChuyenTongCucHdr created = tongCucHdrRepository.save(dataMap);
+        data.setNguoiSuaId(currentUser.getUser().getId());
         tongCucHdrRepository.save(created);
         return created;
     }

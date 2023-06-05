@@ -47,7 +47,7 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	String tenTrangThai;
 	@Transient
 	String tenTrangThaiTh;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	@Temporal(TemporalType.DATE)
 	Date ngayTao;
 	String nguoiTao;
 	Date ngaySua;

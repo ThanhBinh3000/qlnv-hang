@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.repository.dieuchuyennoibo;
 
+import com.tcdt.qlnvhang.response.DieuChuyenNoiBo.DcnbKeHoachDcDtlDTO;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -65,4 +66,15 @@ public interface DcnbKeHoachDcDtlRepository extends JpaRepository<DcnbKeHoachDcD
     @Query(value ="SELECT distinct dtl FROM DcnbKeHoachDcDtl dtl left join DcnbKeHoachDcHdr hdr on hdr.id = dtl.hdrId " +
             "WHERE dtl.hdrId = ?1 AND hdr.type = ?2 ")
     List<DcnbKeHoachDcDtl> findByDcnbKeHoachDcHdrIdAndType(Long dcKeHoachDcHdrId,String type);
+
+    @Query(value = "SELECT distinct dtl FROM DcnbKeHoachDcDtl dtl "+
+            "LEFT JOIN DcnbKeHoachDcHdr hdr ON hdr.id = dtl.hdrId "+
+            "WHERE hdr.idQdDc = ?1 AND dtl.maLoKho = ?2")
+    List<DcnbKeHoachDcDtl> findByQdDcIdAndMaLoKho(Long qDinhDccId, String maLoKho);
+
+    @Query(value = "SELECT new com.tcdt.qlnvhang.response.DieuChuyenNoiBo.DcnbKeHoachDcDtlDTO(" +
+            " dtl.maLoKho,dtl.tenLoKho) FROM DcnbKeHoachDcDtl dtl "+
+            "LEFT JOIN DcnbKeHoachDcHdr hdr ON hdr.id = dtl.hdrId "+
+            "WHERE hdr.idQdDc = ?1 AND dtl.bbLayMauId IS NULL ")
+    List<DcnbKeHoachDcDtlDTO> findByQdDcIdAndBbLayMauId(Long qDinhDccId);
 }
