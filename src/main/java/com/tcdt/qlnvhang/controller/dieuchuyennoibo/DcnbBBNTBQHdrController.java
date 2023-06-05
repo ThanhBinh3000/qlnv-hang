@@ -4,14 +4,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBienBanLayMauHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBienBanLayMauHdrReq;
-import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbPhieuXuatKhoHdrReq;
-import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchPhieuXuatKho;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBBNTBQHdrReq;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbPhieuKtChatLuongHdrReq;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbBienBanLayMau;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchPhieuKtChatLuong;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBienBanLayMauService;
-import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbPhieuXuatKhoService;
+import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBBNTBQHdrService;
+import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBBNTBQHdrServiceImpl;
+import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbPhieuKiemTraChatLuongService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,22 +33,21 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = PathContains.DIEU_CHUYEN_NOI_BO + PathContains.PHIEU_XUAT_KHO)
+@RequestMapping(value = PathContains.DIEU_CHUYEN_NOI_BO +PathContains.BB_NGHIEM_THU_BAO_QUAN_LAN_DAU)
 @Slf4j
-@Api(tags = "Điều chuyển nội bộ - Phiếu xuất kho")
-public class DcnbPhieuXuatKhoController {
-
+@Api(tags = "Điều chuyển nội bộ - Biên bản nghiệm thu bảo quản lần đầu")
+public class DcnbBBNTBQHdrController {
     @Autowired
-    DcnbPhieuXuatKhoService service;
+    DcnbBBNTBQHdrServiceImpl service;
 
-    @ApiOperation(value = "Tra cứu thông tin biên bản", response = List.class)
+
+    @ApiOperation(value = "Tra cứu thông tin đề xuất", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser,
-                                                  @RequestBody SearchPhieuXuatKho objReq) {
+    public ResponseEntity<BaseResponse> colection(@RequestBody DcnbBBNTBQHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.searchPage(currentUser,objReq));
+            resp.setData(service.searchPage(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch ( Exception e) {
@@ -58,13 +60,33 @@ public class DcnbPhieuXuatKhoController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Tạo mới thông tin biên bản ", response = List.class)
+//    @ApiOperation(value = "Tra cứu biên bản lấy mẫu", response = List.class)
+//    @PostMapping(value = "bien-ban-lay-mau", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ResponseStatus(HttpStatus.OK)
+//    public ResponseEntity<BaseResponse> getListBienBanLayMau(RequestBody DcnbBBNTBQHdrReq param) {
+//        BaseResponse resp = new BaseResponse();
+//        try {
+//            param.setMaDvi(currentUser.getDvql());
+//            resp.setData(dcnbBienBanLayMauHdrRepository.searchList(param));
+//            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+//            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+//        } catch ( Exception e) {
+//            e.printStackTrace();
+//            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+//            resp.setMsg(e.getMessage());
+//            log.error("Tra cứu thông tin : {}", e);
+//        }
+//
+//        return ResponseEntity.ok(resp);
+//    }
+
+    @ApiOperation(value = "Tạo mới thông tin đề xuất ", response = List.class)
     @PostMapping(value =  PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody DcnbPhieuXuatKhoHdrReq objReq) {
+    public ResponseEntity<BaseResponse> insert(@Valid @RequestBody DcnbBBNTBQHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.save(currentUser,objReq));
+            resp.setData(service.create(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -76,12 +98,12 @@ public class DcnbPhieuXuatKhoController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Cập nhật thông tin biên bản", response = List.class)
+    @ApiOperation(value = "Cập nhật thông tin đề xuất", response = List.class)
     @PostMapping(value =  PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody DcnbPhieuXuatKhoHdrReq objReq) {
+    public ResponseEntity<BaseResponse> update(@Valid @RequestBody DcnbBBNTBQHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.update(currentUser,objReq));
+            resp.setData(service.update(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -93,11 +115,11 @@ public class DcnbPhieuXuatKhoController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Lấy chi tiết thông tin biên bản", response = List.class)
+    @ApiOperation(value = "Lấy chi tiết thông tin đề xuất", response = List.class)
     @GetMapping(value =  PathContains.URL_CHI_TIET + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> detail(
-            @ApiParam(value = "ID thông tin phụ lục hợp đồng", example = "1", required = true) @PathVariable("id") Long id) {
+            @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("id")Long id) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(service.detail(id));
@@ -114,10 +136,10 @@ public class DcnbPhieuXuatKhoController {
 
     @ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 thông tin", response = List.class)
     @PostMapping(value =  PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> updateStatus( @CurrentUser CustomUserDetails currentUser,@Valid @RequestBody StatusReq stReq) {
+    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody DcnbBBNTBQHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            service.approve(currentUser,stReq);
+            service.approve(objReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -129,13 +151,13 @@ public class DcnbPhieuXuatKhoController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xoá thông tin biên bản", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Xoá thông tin đề xuất", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping(value =  PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            service.delete(idSearchReq);
+            service.delete(idSearchReq.getId());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -148,13 +170,30 @@ public class DcnbPhieuXuatKhoController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Kết xuất danh sách biên bản lấy mẫu", response = List.class)
+    @ApiOperation(value = "Xoá danh sách thông tin đề xuất", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value =  PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            service.deleteMulti(idSearchReq.getIds());
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Xoá thông tin : {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Kết xuất danh sách mua", response = List.class)
     @PostMapping(value =  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void exportList(@CurrentUser CustomUserDetails currentUser ,@Valid @RequestBody SearchPhieuXuatKho objReq, HttpServletResponse response) throws Exception {
+    public void exportList(@Valid @RequestBody  DcnbBBNTBQHdrReq objReq, HttpServletResponse response) throws Exception {
         try {
-            service.export( currentUser,objReq, response);
-
+            service.export(objReq, response);
         } catch (Exception e) {
             log.error("Kết xuất danh sách dánh sách mua : {}", e);
             final Map<String, Object> body = new HashMap<>();

@@ -303,8 +303,11 @@ public class PathContains {
 	public static final String TONG_HOP_KE_HOACH_DIEU_CHUYEN_C = "/tong-hop-ke-hoach-dieu-chuyen-c";
 	public static final String QUYET_DINH_DIEU_CHUYEN_TC = "/quyet-dinh-dieu-chuyen-tc";
 	public static final String QUYET_DINH_DIEU_CHUYEN_C = "/quyet-dinh-dieu-chuyen-c";
+	public static final String QUYET_DINH_DIEU_CHUYEN_CC = "/quyet-dinh-dieu-chuyen-cc";
 	public static final String BIEN_BAN_LAY_MAU_BAN_GIAO_MAU = "/bien-ban-lay-mau";
 	public static final String PHIEU_KIEM_TRA_CHAT_LUONG = "/phieu-kiem-tra-chat-luong";
+
+	public static final String BB_NGHIEM_THU_BAO_QUAN_LAN_DAU = "/bb-nghiem-thu-bao-quan-lan-dau";
 
 	public static final String BANG_KE_CAN_HANG = "/bang-ke-can-hang";
 	//Nhập khác
