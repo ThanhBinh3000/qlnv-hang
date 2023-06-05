@@ -306,6 +306,8 @@ public class PathContains {
 	public static final String BIEN_BAN_LAY_MAU_BAN_GIAO_MAU = "/bien-ban-lay-mau";
 	public static final String PHIEU_KIEM_TRA_CHAT_LUONG = "/phieu-kiem-tra-chat-luong";
 
+	public static final String PHIEU_KIEM_NGHIEM_CHAT_LUONG = "/phieu-kiem-nghiem-chat-luong";
+
 	public static final String BANG_KE_CAN_HANG = "/bang-ke-can-hang";
 	//Nhập khác
 	public static final String NHAP_KHAC = "/nhap-khac";
