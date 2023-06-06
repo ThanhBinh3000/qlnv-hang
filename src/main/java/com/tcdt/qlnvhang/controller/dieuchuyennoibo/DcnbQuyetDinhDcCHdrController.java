@@ -11,6 +11,7 @@ import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbQuyetDinhDcCHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbQuyetDinhDcC;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbQuyetDinhDcCDtlService;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -80,10 +81,10 @@ public class DcnbQuyetDinhDcCHdrController extends BaseController {
   @ApiOperation(value = "Danh sách số quyết định", response = List.class)
   @PostMapping(value = "/danh-sach-so-quyet-dinh", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<BaseResponse> danhSachChiCucDeXuat(@RequestBody SearchDcnbQuyetDinhDcC objReq) {
+  public ResponseEntity<BaseResponse> danhSachChiCucDeXuat(@CurrentUser CustomUserDetails currentUser, @RequestBody SearchDcnbQuyetDinhDcC objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(dcnbQuyetDinhDcCDtlService.danhSachSoQdDieuChuyen(objReq));
+      resp.setData(dcnbQuyetDinhDcCDtlService.danhSachSoQdDieuChuyen(currentUser,objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
