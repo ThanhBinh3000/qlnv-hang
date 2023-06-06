@@ -102,6 +102,8 @@ public class XhPhieuXkhoBtt implements Serializable {
 
     private LocalDate tgianGiaoNhan;
 
+    private Long idBangKe;
+
     private String soBangKe;
 
     private String  maSo;

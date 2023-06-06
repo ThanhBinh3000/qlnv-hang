@@ -185,10 +185,11 @@ public class XhBkeCanHangBttServiceImpl extends BaseServiceImpl implements XhBke
                 throw new Exception("Phê duyệt không thành công");
         }
         data.setTrangThai(req.getTrangThai());
-        if(req.getTrangThai().equals(Contains.CHODUYET_LDCC)) {
-            Optional<XhPhieuXkhoBtt> xhPhieuXkhoBtt = xhPhieuXkhoBttReposytory.findById(req.getIdPhieuXuat());
+        if(req.getTrangThai().equals(Contains.DADUYET_LDCC)) {
+            Optional<XhPhieuXkhoBtt> xhPhieuXkhoBtt = xhPhieuXkhoBttReposytory.findById(data.getIdPhieuXuat());
             if (xhPhieuXkhoBtt.isPresent()){
                 xhPhieuXkhoBtt.get().setSoBangKe(data.getSoBangKe());
+                xhPhieuXkhoBtt.get().setIdBangKe(data.getId());
                 xhPhieuXkhoBttReposytory.save(xhPhieuXkhoBtt.get());
             }
         }

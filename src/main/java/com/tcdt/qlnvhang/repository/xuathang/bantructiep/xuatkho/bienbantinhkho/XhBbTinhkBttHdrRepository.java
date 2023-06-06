@@ -12,11 +12,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface XhBbTinhkBttHdrRepository extends JpaRepository<XhBbTinhkBttHdr, Long> {
 
-    @Query("SELECT DX from XhBbTinhkBttHdr DX WHERE 1 = 1 " +
-            "AND (:#{#param.namKh} IS NULL OR DX.namKh = :#{#param.namKh}) " +
-            "AND (:#{#param.soBbTinhKho} IS NULL OR LOWER(DX.soBbTinhKho) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soBbTinhKho}),'%' ) ) )" +
-            "AND (:#{#param.trangThai} IS NULL OR DX.trangThai = :#{#param.trangThai}) " +
-            "AND (:#{#param.maDvi} IS NULL OR DX.maDvi = :#{#param.maDvi})")
+    @Query("SELECT TK from XhBbTinhkBttHdr TK WHERE 1 = 1 " +
+            "AND (:#{#param.namKh} IS NULL OR TK.namKh = :#{#param.namKh}) " +
+            "AND (:#{#param.soBbTinhKho} IS NULL OR LOWER(TK.soBbTinhKho) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soBbTinhKho}),'%' ) ) )" +
+            "AND (:#{#param.soQdNv} IS NULL OR LOWER(TK.soQdNv) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQdNv}),'%' ) ) )" +
+            "AND (:#{#param.trangThai} IS NULL OR TK.trangThai = :#{#param.trangThai}) " +
+            "AND (:#{#param.ngayBdauXuatTu} IS NULL OR TK.ngayBdauXuat >= :#{#param.ngayBdauXuatTu}) " +
+            "AND (:#{#param.ngayBdauXuatDen} IS NULL OR TK.ngayBdauXuat <= :#{#param.ngayBdauXuatDen}) " +
+            "AND (:#{#param.ngayKthucXuatTu} IS NULL OR TK.ngayKthucXuat >= :#{#param.ngayKthucXuatTu}) " +
+            "AND (:#{#param.ngayKthucXuatDen} IS NULL OR TK.ngayKthucXuat <= :#{#param.ngayKthucXuatDen}) " +
+            "AND (:#{#param.ngayQdNvTu} IS NULL OR TK.ngayQdNv >= :#{#param.ngayQdNvTu}) " +
+            "AND (:#{#param.ngayQdNvDen} IS NULL OR TK.ngayQdNv <= :#{#param.ngayQdNvDen}) " +
+            "AND (:#{#param.maDvi} IS NULL OR TK.maDvi = :#{#param.maDvi})")
     Page<XhBbTinhkBttHdr> searchPage(@Param("param") XhBbTinhkBttHdrReq param, Pageable pageable);
 
 
