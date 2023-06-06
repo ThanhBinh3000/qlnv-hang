@@ -3,8 +3,7 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKnChatLuongDtlRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKnChatLuongHdrRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKnChatLuongDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKnChatLuongHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -16,6 +15,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanLayMauHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuKnChatLuongDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuKnChatLuongHdr;
 import com.tcdt.qlnvhang.util.Contains;
@@ -52,6 +52,9 @@ public class DcnbPhieuKiemNghiemChatLuongService extends BaseServiceImpl {
     @Autowired
     FileDinhKemRepository fileDinhKemRepository;
 
+    @Autowired
+    DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
+
     public Page<DcnbPhieuKnChatLuongHdr> searchPage(CustomUserDetails currentUser, SearchPhieuKnChatLuong req) throws Exception {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
@@ -82,6 +85,12 @@ public class DcnbPhieuKiemNghiemChatLuongService extends BaseServiceImpl {
         DcnbPhieuKnChatLuongHdr created = dcnbPhieuKnChatLuongHdrRepository.save(data);
         List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getBienBanLayMauDinhKem(), created.getId(), DcnbPhieuKnChatLuongHdr.TABLE_NAME + "_CAN_CU");
         data.setBienBanLayMauDinhKem(bienBanLayMauDinhKem);
+        List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByQdDcIdAndMaLoKho(created.getQdDcId(),created.getMaLoKho());
+        dcnbKeHoachDcDtls.forEach(e->{
+            e.setPhieuKnChatLuongId(created.getId());
+            e.setSoPhieuKnChatLuong(created.getSoPhieu());
+            dcnbKeHoachDcDtlRepository.save(e);
+        });
         return created;
     }
 
