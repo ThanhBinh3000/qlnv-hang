@@ -141,6 +141,7 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
         List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByQdDcIdAndMaLoKho(created.getQDinhDccId(),created.getMaLoKho());
         dcnbKeHoachDcDtls.forEach(e->{
             e.setBbLayMauId(created.getId());
+            e.setSoBbLayMau(created.getSoBbLayMau());
             dcnbKeHoachDcDtlRepository.save(e);
         });
         return created;
