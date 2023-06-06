@@ -1,7 +1,9 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -14,6 +16,7 @@ import com.tcdt.qlnvhang.service.feign.LuuKhoClient;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -60,6 +63,8 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
     private DcnbKeHoachDcHdrService dcnbKeHoachDcHdrService;
     @Autowired
     private LuuKhoClient luuKhoClient;
+    @Autowired
+    private QlnvDmDonviRepository qlnvDmDonviRepository;
 
     public Page<DcnbQuyetDinhDcCHdr> searchPage(CustomUserDetails currentUser, SearchDcnbQuyetDinhDcC req) throws Exception {
         String dvql = currentUser.getDvql();
@@ -168,8 +173,9 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
         return created;
     }
 
-    public List<DcnbQuyetDinhDcCHdrDTO> danhSachSoQdDieuChuyen(SearchDcnbQuyetDinhDcC req) throws Exception{
-        List<DcnbQuyetDinhDcCHdrDTO> danhSachSoQdDieuChuyen = dcnbQuyetDinhDcCHdrRepository.findByLoaiDcAndTrangThai(req.getLoaiDc(),Contains.BAN_HANH, req.getMaDvi(), req.getLoaiQdinh());
+    public List<DcnbQuyetDinhDcCHdrDTO> danhSachSoQdDieuChuyen(CustomUserDetails currentUser, SearchDcnbQuyetDinhDcC req) throws Exception{
+        String maDviCha = qlnvDmDonviRepository.findByMaDviAndTrangThai(currentUser.getDvql(), "01");
+        List<DcnbQuyetDinhDcCHdrDTO> danhSachSoQdDieuChuyen = dcnbQuyetDinhDcCHdrRepository.findByLoaiDcAndTrangThai(req.getLoaiDc(),Contains.BAN_HANH, maDviCha, req.getLoaiQdinh());
         return danhSachSoQdDieuChuyen;
     }
 
