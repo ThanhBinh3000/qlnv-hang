@@ -67,7 +67,5 @@ public class DcnbBBNTBQHdrReq extends BaseRequest {
     private String nhanXet;
     private String trangThai;
     private String lyDoTuChoi;
-
-    private List<FileDinhKem> bienBan = new ArrayList<>();
-    private List<DcnbBBNTBQDtl> dcnbBBNTBQDtlDtl = new ArrayList<>();
+    private List<DcnbBBNTBQDtl> dcnbBBNTBQDtlList = new ArrayList<>();
 }
