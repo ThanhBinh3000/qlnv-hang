@@ -70,6 +70,7 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
         }
         if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             req.setType(null);
+            req.setTypes(new ArrayList<>());
         }
         Page<DcnbQuyetDinhDcCHdr> search = dcnbQuyetDinhDcCHdrRepository.search(req, pageable);
         search.forEach( item -> {
