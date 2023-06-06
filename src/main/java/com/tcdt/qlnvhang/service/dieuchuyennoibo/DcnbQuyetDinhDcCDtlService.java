@@ -527,9 +527,12 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
                         dcnbQuyetDinhDcTcHdr.get().setSoQdinhXuatCuc(soQdinh);
                     }
                 }
-                if(!Contains.GIUA_2_CUC_DTNN_KV.equals(optional.get().getLoaiQdinh())){ // khác điều chuyển "khác cục"
+                if(Contains.GIUA_2_CHI_CUC_TRONG_1_CUC.equals(optional.get().getLoaiQdinh())){ // khác điều chuyển "khác cục"
                     // clone chi cục nhận
                     cloneQuyetDinhDcCNhan(statusReq, optional);
+                    // clone chi cục xuat
+                    cloneQuyetDinhDcCXuat(statusReq, optional);
+                }else if(Contains.DCNB.equals(optional.get().getLoaiQdinh())){
                     // clone chi cục xuat
                     cloneQuyetDinhDcCXuat(statusReq, optional);
                 }
