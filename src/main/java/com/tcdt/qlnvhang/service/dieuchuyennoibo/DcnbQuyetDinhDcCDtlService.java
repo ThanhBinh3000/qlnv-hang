@@ -168,7 +168,7 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
     }
 
     public List<DcnbQuyetDinhDcCHdrDTO> danhSachSoQdDieuChuyen(SearchDcnbQuyetDinhDcC req) throws Exception{
-        List<DcnbQuyetDinhDcCHdrDTO> danhSachSoQdDieuChuyen = dcnbQuyetDinhDcCHdrRepository.findByLoaiDcAndTrangThai(req.getLoaiDc(),Contains.BAN_HANH, req.getMaDvi());
+        List<DcnbQuyetDinhDcCHdrDTO> danhSachSoQdDieuChuyen = dcnbQuyetDinhDcCHdrRepository.findByLoaiDcAndTrangThai(req.getLoaiDc(),Contains.BAN_HANH, req.getMaDvi(), req.getLoaiQdinh());
         return danhSachSoQdDieuChuyen;
     }
 

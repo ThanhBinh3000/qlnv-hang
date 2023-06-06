@@ -147,17 +147,17 @@ public class DcnbBienBanTinhKhoService extends BaseServiceImpl {
         dcnbBienBanTinhKhoHdrRepository.delete(data);
     }
 
-    @Transient
-    public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
-        List<DcnbBienBanTinhKhoHdr> list = dcnbBienBanTinhKhoHdrRepository.findAllByIdIn(idSearchReq.getIdList());
-
-        if (list.isEmpty()) {
-            throw new Exception("Bản ghi không tồn tại");
-        }
-        List<Long> listId = list.stream().map(DcnbBienBanTinhKhoHdr::getId).collect(Collectors.toList());
-        List<DcnbBienBanTinhKhoDtl> listBangKe = dcnbBienBanTinhKhoDtlRepository.findByHdrIdIn(listId);
-        dcnbBienBanTinhKhoDtlRepository.deleteAll(listBangKe);
-    }
+//    @Transient
+//    public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
+//        List<DcnbBienBanTinhKhoHdr> list = dcnbBienBanTinhKhoHdrRepository.findAllByIdIn(idSearchReq.getIdList());
+//
+//        if (list.isEmpty()) {
+//            throw new Exception("Bản ghi không tồn tại");
+//        }
+//        List<Long> listId = list.stream().map(DcnbBienBanTinhKhoHdr::getId).collect(Collectors.toList());
+//        List<DcnbBienBanTinhKhoDtl> listBangKe = dcnbBienBanTinhKhoDtlRepository.findByHdrIdIn(listId);
+//        dcnbBienBanTinhKhoDtlRepository.deleteAll(listBangKe);
+//    }
 
     @Transactional
     public void approve(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
