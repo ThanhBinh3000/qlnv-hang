@@ -153,19 +153,19 @@ public class DcnbPhieuKiemNghiemChatLuongService extends BaseServiceImpl {
         dcnbPhieuKnChatLuongHdrRepository.delete(data);
     }
 
-    @Transient
-    public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
-        List<DcnbPhieuKnChatLuongHdr> list = dcnbPhieuKnChatLuongHdrRepository.findAllByIdIn(idSearchReq.getIdList());
-
-        if (list.isEmpty()) {
-            throw new Exception("Bản ghi không tồn tại");
-        }
-        List<Long> listId = list.stream().map(DcnbPhieuKnChatLuongHdr::getId).collect(Collectors.toList());
-        List<DcnbPhieuKnChatLuongDtl> listDtl = dcnbPhieuKnChatLuongDtlRepository.findByHdrIdIn(listId);
-        dcnbPhieuKnChatLuongDtlRepository.deleteAll(listDtl);
-        fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(DcnbBienBanLayMauHdr.TABLE_NAME + "_CAN_CU"));
-        dcnbPhieuKnChatLuongHdrRepository.deleteAll(list);
-    }
+//    @Transient
+//    public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
+//        List<DcnbPhieuKnChatLuongHdr> list = dcnbPhieuKnChatLuongHdrRepository.findAllByIdIn(idSearchReq.getIdList());
+//
+//        if (list.isEmpty()) {
+//            throw new Exception("Bản ghi không tồn tại");
+//        }
+//        List<Long> listId = list.stream().map(DcnbPhieuKnChatLuongHdr::getId).collect(Collectors.toList());
+//        List<DcnbPhieuKnChatLuongDtl> listDtl = dcnbPhieuKnChatLuongDtlRepository.findByHdrIdIn(listId);
+//        dcnbPhieuKnChatLuongDtlRepository.deleteAll(listDtl);
+//        fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(DcnbBienBanLayMauHdr.TABLE_NAME + "_CAN_CU"));
+//        dcnbPhieuKnChatLuongHdrRepository.deleteAll(list);
+//    }
 
     public void approve(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
         if (StringUtils.isEmpty(statusReq.getId())) {

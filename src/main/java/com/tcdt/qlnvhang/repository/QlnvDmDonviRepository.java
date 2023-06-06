@@ -52,4 +52,7 @@ public interface QlnvDmDonviRepository extends CrudRepository<QlnvDmDonvi, Long>
 
 	@Query(value = "SELECT dv.parent.maDvi FROM QlnvDmDonvi dv WHERE dv.maDvi = ?1 AND dv.trangThai = ?2")
 	Set<String> findMaDviChaByMaDviAndTrangThai(String maDvi, String trangThai);
+
+	@Query(value = "SELECT dv.parent.maDvi FROM QlnvDmDonvi dv WHERE dv.maDvi = ?1 AND dv.trangThai = ?2")
+	String findByMaDviAndTrangThai(String maDvi, String trangThai);
 }
