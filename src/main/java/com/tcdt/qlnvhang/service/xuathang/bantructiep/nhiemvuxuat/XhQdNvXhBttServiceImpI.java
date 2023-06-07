@@ -100,7 +100,7 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         }
         XhHopDongBttHdr dataHd = new XhHopDongBttHdr();
         XhQdPdKhBttHdr dataQdPdKq = new XhQdPdKhBttHdr();
-        if (req.getPhanLoai().equals("HD")){
+        if (req.getPhanLoai().equals("01")){
             Optional<XhHopDongBttHdr> qOptionalHd = xhHopDongBttHdrRepository.findById(req.getIdHd());
             if (!qOptionalHd.isPresent()){
                 throw new Exception("Không tìm thấy hợp đồng bán trực tiếp");
@@ -133,7 +133,7 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
             List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhQdNvXhBttHdr.TABLE_NAME);
             created.setFileDinhKems(fileDinhKems);
         }
-        if (req.getPhanLoai().equals("HD")){
+        if (req.getPhanLoai().equals("01")){
             dataHd.setTrangThaiXh(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
             xhHopDongBttHdrRepository.save(dataHd);
         }
@@ -182,7 +182,7 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         }
 
         XhQdNvXhBttHdr dataDB = qOptional.get();
-        if (req.getPhanLoai().equals("HD")){
+        if (req.getPhanLoai().equals("01")){
             Optional<XhHopDongBttHdr> qOptionalHd = xhHopDongBttHdrRepository.findById(req.getIdHd());
             if (!qOptionalHd.isPresent()){
                 throw new Exception("Không tìm thấy hợp đồng bán trực tiếp");
@@ -297,7 +297,7 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
                     throw new Exception("Phê duyệt không thành công");
             }
             data.setTrangThai(req.getTrangThai());
-            if (req.getTrangThai().equals(Contains.BAN_HANH) && data.getPhanLoai().equals("HD")){
+            if (req.getTrangThai().equals(Contains.BAN_HANH) && data.getPhanLoai().equals("01")){
                 Optional<XhHopDongBttHdr> optionalHd = xhHopDongBttHdrRepository.findById(data.getIdHd());
                 if (optionalHd.isPresent()){
                     optionalHd.get().setSoQdNv(data.getSoQdNv());
@@ -332,7 +332,7 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         xhQdNvXhBttDtlRepository.deleteAllByIdHdr(id);
         xhQdNvXhBttHdrRepository.delete(hdr);
         fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhQdNvXhBttHdr.TABLE_NAME));
-        if(hdr.getPhanLoai().equals("HD")){
+        if(hdr.getPhanLoai().equals("01")){
             Optional<XhHopDongBttHdr> hopDongBttHdr = xhHopDongBttHdrRepository.findById(hdr.getIdHd());
             if (hopDongBttHdr.isPresent()){
                 hopDongBttHdr.get().setIdHd(null);

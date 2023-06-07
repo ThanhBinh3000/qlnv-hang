@@ -71,6 +71,8 @@ public class XhBbLayMauBttHdrReq extends BaseRequest {
 
     private String soBbHaoDoi;
 
+    private String phanLoai;
+
     @Transient
     private List<XhBbLayMauBttDtlReq> children = new ArrayList<>();
 

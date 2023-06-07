@@ -71,7 +71,7 @@ public class XhQdNvXhBttHdr implements Serializable {
     @Transient
     private String tenTrangThaiXh;
 
-    private String phanLoai;
+    private String phanLoai; // 01 : chào giá; 02 : Ủy quyền
 
     private String trangThaiHd;
     @Transient

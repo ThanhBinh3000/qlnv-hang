@@ -70,7 +70,7 @@ public class XhPhieuKtraCluongBttHdrReq extends BaseRequest {
     private LocalDate ngayXuatDocKho;
 
     @Transient
-    private FileDinhKemReq fileDinhKem;
+    private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 
     @Transient
     private List<XhPhieuKtraCluongBttDtlReq> children = new ArrayList<>();
