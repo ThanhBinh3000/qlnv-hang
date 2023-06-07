@@ -121,7 +121,7 @@ public class XhPhieuKtraCluongBttHdr implements Serializable {
     private String lyDoTuChoi;
 
     @Transient
-    private FileDinhKem fileDinhKem;
+    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
     @Transient
     private List<XhPhieuKtraCluongBttDtl> children = new ArrayList<>();

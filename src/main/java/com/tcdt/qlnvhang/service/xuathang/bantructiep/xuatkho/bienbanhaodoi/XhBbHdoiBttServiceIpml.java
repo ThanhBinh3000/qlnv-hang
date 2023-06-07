@@ -2,10 +2,12 @@ package com.tcdt.qlnvhang.service.xuathang.bantructiep.xuatkho.bienbanhaodoi;
 
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bienbanhaodoi.XhBbHdoiBttDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bienbanhaodoi.XhBbHdoiBttHdr;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bienbantinhkho.XhBbTinhkBttHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.xuatkho.bienbanhaodoi.XhBbHdoiBttDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.xuatkho.bienbanhaodoi.XhBbHdoiBttHdrRepository;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.xuatkho.bienbanhaodoi.XhBbHdoiBttDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.xuatkho.bienbanhaodoi.XhBbHdoiBttHdrReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
@@ -15,6 +17,7 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +26,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -60,6 +65,7 @@ public class XhBbHdoiBttServiceIpml extends BaseServiceImpl implements XhBbHdoiB
             f.setTenNhaKho(StringUtils.isEmpty(f.getMaNhaKho()) ? null : hashMapDvi.get(f.getMaNhaKho()));
             f.setTenNganKho(StringUtils.isEmpty(f.getMaNganKho()) ? null : hashMapDvi.get(f.getMaNganKho()));
             f.setTenLoKho(StringUtils.isEmpty(f.getMaLoKho()) ? null : hashMapDvi.get(f.getMaLoKho()));
+            f.setChildren(xhBbHdoiBttDtlRepository.findAllByIdHdr(f.getId()));
         });
         return data;
     }
@@ -75,16 +81,16 @@ public class XhBbHdoiBttServiceIpml extends BaseServiceImpl implements XhBbHdoiB
 
         XhBbHdoiBttHdr data = new XhBbHdoiBttHdr();
         BeanUtils.copyProperties(req, data, "id");
-        data.setNgayTao(getDateTimeNow());
+        data.setNgayTao(LocalDate.now());
         data.setNguoiTaoId(userInfo.getId());
         data.setTrangThai(Contains.DU_THAO);
         data.setMaDvi(userInfo.getDvql());
         data.setIdThuKho(userInfo.getId());
         data.setId(Long.valueOf(data.getSoBbHaoDoi().split("/")[0]));
         XhBbHdoiBttHdr created = xhBbHdoiBttHdrRepository.save(data);
-        if (!DataUtils.isNullObject(req.getFileDinhKem())) {
-            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(req.getFileDinhKem()), created.getId(), XhBbHdoiBttHdr.TABLE_NAME);
-            created.setFileDinhKem(fileDinhKem.get(0));
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
+            List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhBbHdoiBttHdr.TABLE_NAME);
+            data.setFileDinhKems(fileDinhKemList);
         }
 
         saveDetail(req, data.getId());
@@ -117,14 +123,13 @@ public class XhBbHdoiBttServiceIpml extends BaseServiceImpl implements XhBbHdoiB
 
         XhBbHdoiBttHdr dataDB = qOptional.get();
         BeanUtils.copyProperties(req, dataDB, "id");
-        dataDB.setNgaySua(getDateTimeNow());
+        dataDB.setNgaySua(LocalDate.now());
         dataDB.setNguoiSuaId(getUser().getId());
         XhBbHdoiBttHdr created = xhBbHdoiBttHdrRepository.save(dataDB);
 
-        if (!DataUtils.isNullObject(req.getFileDinhKem())) {
-            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Arrays.asList(req.getFileDinhKem()), created.getId(), XhBbHdoiBttHdr.TABLE_NAME);
-            dataDB.setFileDinhKem(fileDinhKem.get(0));
-        }
+        fileDinhKemService.delete(created.getId(), Collections.singleton(XhBbHdoiBttHdr.TABLE_NAME));
+        List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhBbTinhkBttHdr.TABLE_NAME);
+        dataDB.setFileDinhKems(fileDinhKemList);
 
         this.saveDetail(req, dataDB.getId());
         return created;
@@ -168,10 +173,8 @@ public class XhBbHdoiBttServiceIpml extends BaseServiceImpl implements XhBbHdoiB
         data.setTenNganKho(hashMapDvi.get(data.getMaNganKho()));
         data.setTenLoKho(hashMapDvi.get(data.getMaLoKho()));
 
-        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhBbHdoiBttHdr.TABLE_NAME));
-        if (!DataUtils.isNullOrEmpty(fileDinhKem)) {
-            data.setFileDinhKem(fileDinhKem.get(0));
-        }
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhBbHdoiBttHdr.TABLE_NAME));
+        if (!CollectionUtils.isEmpty(fileDinhKems)) data.setFileDinhKems(fileDinhKems);
 
         data.setChildren(xhBbHdoiBttDtlRepository.findAllByIdHdr(id));
 
@@ -207,18 +210,18 @@ public class XhBbHdoiBttServiceIpml extends BaseServiceImpl implements XhBbHdoiB
             case Contains.CHODUYET_KTVBQ + Contains.TUCHOI_LDCC:
                 data.setNguoiGuiDuyetId(userInfo.getId());
                 data.setIdKtv(userInfo.getId());
-                data.setNgayGuiDuyet(new Date());
+                data.setNgayGuiDuyet(LocalDate.now());
                 break;
             case Contains.TUCHOI_KTVBQ + Contains.CHODUYET_KTVBQ:
             case Contains.TUCHOI_KT + Contains.CHODUYET_KT:
             case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
                 data.setNguoiPduyetId(userInfo.getId());
-                data.setNgayPduyet(new Date());
+                data.setNgayPduyet(LocalDate.now());
                 data.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
             case Contains.DADUYET_LDCC + Contains.CHODUYET_LDCC:
                 data.setNguoiPduyetId(userInfo.getId());
-                data.setNgayPduyet(new Date());
+                data.setNgayPduyet(LocalDate.now());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
@@ -250,11 +253,48 @@ public class XhBbHdoiBttServiceIpml extends BaseServiceImpl implements XhBbHdoiB
 
     @Override
     public void deleteMulti(List<Long> listMulti) throws Exception {
+        if (StringUtils.isEmpty(listMulti)){
+            throw new Exception("Xóa thất bại, không tìm thấy dữ liệu ");
+        }
 
+        List<XhBbHdoiBttHdr> list = xhBbHdoiBttHdrRepository.findAllById(listMulti);
+        if (list.isEmpty()){
+            throw new Exception("Không tìm thấy dữ liệu cần xóa");
+        }
+        for (XhBbHdoiBttHdr hdr : list){
+            this.delete(hdr.getId());
+        }
     }
 
     @Override
     public void export(XhBbHdoiBttHdrReq req, HttpServletResponse response) throws Exception {
-
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        req.setPaggingReq(paggingReq);
+        Page<XhBbHdoiBttHdr> page = this.searchPage(req);
+        List<XhBbHdoiBttHdr> data = page.getContent();
+        String title="Danh sách biên bản hao đôi";
+        String[] rowsName = new String[]{"STT","Số QĐ giao NV XH", "Năm KH", "Thời hạn XH trước ngày", "Số BB hao dôi", "Ngày bắt đầu xuất", "Ngày kết thúc xuất", "Số phiếu XK", "Số Bảng kê", "Ngày xuất kho", "Điểm kho", "Lô khô", "Trạng thái"};
+        String filename="danh-sach-biển-ban-lay-mau-ban-truc-tiep.xlsx";
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs=null;
+        for (int i = 0; i < data.size(); i++) {
+            XhBbHdoiBttHdr hdr = data.get(i);
+            objs=new Object[rowsName.length];
+            objs[0]=i;
+            objs[1]=hdr.getSoQdNv();
+            objs[2]=hdr.getNamKh();
+            objs[3]=hdr.getNgayQdNv();
+            objs[4]=hdr.getSoBbHaoDoi();
+            objs[5]=hdr.getNgayKthucNhap();
+            objs[6]=hdr.getNgayKthucXuat();
+//            objs[7]=hdr.getS;
+//            objs[8]=hdr.getNgayXuatKho();
+            objs[9]=hdr.getTenTrangThai();
+            dataList.add(objs);
+        }
+        ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+        ex.export();
     }
 }
