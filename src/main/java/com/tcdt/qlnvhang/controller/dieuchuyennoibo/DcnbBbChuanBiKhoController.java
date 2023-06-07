@@ -4,8 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBBNTBQHdrReq;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbChuanBiKhoHdrReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBBNTBQHdrServiceImpl;
+import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBbChuanBiKhoServiceImpl;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,18 +25,18 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = PathContains.DIEU_CHUYEN_NOI_BO +PathContains.BB_NGHIEM_THU_BAO_QUAN_LAN_DAU)
+@RequestMapping(value = PathContains.DIEU_CHUYEN_NOI_BO +PathContains.BIEN_BAN_CHUAN_BI_KHO)
 @Slf4j
-@Api(tags = "Điều chuyển nội bộ - Biên bản nghiệm thu bảo quản lần đầu")
-public class DcnbBBNTBQHdrController {
+@Api(tags = "Điều chuyển nội bộ - Biên bản chuẩn bị kho")
+public class DcnbBbChuanBiKhoController {
     @Autowired
-    DcnbBBNTBQHdrServiceImpl service;
+    DcnbBbChuanBiKhoServiceImpl service;
 
 
     @ApiOperation(value = "Tra cứu thông tin đề xuất", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> colection(@RequestBody DcnbBBNTBQHdrReq objReq) {
+    public ResponseEntity<BaseResponse> colection(@RequestBody DcnbBbChuanBiKhoHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(service.searchPage(objReq));
@@ -74,7 +75,7 @@ public class DcnbBBNTBQHdrController {
     @ApiOperation(value = "Tạo mới thông tin đề xuất ", response = List.class)
     @PostMapping(value =  PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<BaseResponse> insert(@Valid @RequestBody DcnbBBNTBQHdrReq objReq) {
+    public ResponseEntity<BaseResponse> insert(@RequestBody DcnbBbChuanBiKhoHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(service.create(objReq));
@@ -91,7 +92,7 @@ public class DcnbBBNTBQHdrController {
 
     @ApiOperation(value = "Cập nhật thông tin đề xuất", response = List.class)
     @PostMapping(value =  PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> update(@Valid @RequestBody DcnbBBNTBQHdrReq objReq) {
+    public ResponseEntity<BaseResponse> update(@Valid @RequestBody DcnbBbChuanBiKhoHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(service.update(objReq));
@@ -127,7 +128,7 @@ public class DcnbBBNTBQHdrController {
 
     @ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 thông tin", response = List.class)
     @PostMapping(value =  PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody DcnbBBNTBQHdrReq objReq) {
+    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody DcnbBbChuanBiKhoHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             service.approve(objReq);
@@ -182,7 +183,7 @@ public class DcnbBBNTBQHdrController {
     @ApiOperation(value = "Kết xuất danh sách mua", response = List.class)
     @PostMapping(value =  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void exportList(@Valid @RequestBody  DcnbBBNTBQHdrReq objReq, HttpServletResponse response) throws Exception {
+    public void exportList(@Valid @RequestBody  DcnbBbChuanBiKhoHdrReq objReq, HttpServletResponse response) throws Exception {
         try {
             service.export(objReq, response);
         } catch (Exception e) {

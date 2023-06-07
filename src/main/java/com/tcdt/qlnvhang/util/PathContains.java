@@ -220,6 +220,10 @@ public class PathContains {
 
 	public static final String BIEN_BAN_GIAO_NHAN_VT = "/bien-ban-giao-nhan-vt";
 
+	public static final String BIEN_BAN_NHAP_DAY_KHO = "/bien-ban-nhap-day-kho";
+
+	public static final String BIEN_BAN_GIAO_NHAN = "/bien-ban-giao-nhan";
+
 	public static final String NHAP_HANG = "/nhap-hang";
 
 
