@@ -42,10 +42,10 @@ import java.util.stream.Collectors;
 public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
 
     @Autowired
-    private DcnbBBNTBQHdrRepository dcnbBBNTBQHdrRepository;
+    private DcnbBBNTBQHdrRepository hdrRepository;
 
     @Autowired
-    private DcnbBBNTBQDtlRepository dcnbBBNTBQDtlRepository;
+    private DcnbBBNTBQDtlRepository dtlRepository;
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
@@ -54,7 +54,7 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
     @Override
     public Page<DcnbBBNTBQHdr> searchPage(DcnbBBNTBQHdrReq req) throws Exception {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        Page<DcnbBBNTBQHdr> search = dcnbBBNTBQHdrRepository.search(req, pageable);
+        Page<DcnbBBNTBQHdr> search = hdrRepository.search(req, pageable);
         return search;
     }
 
@@ -67,7 +67,7 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
         if(!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
             throw new Exception("Văn bản này chỉ có thêm ở cấp chi cục");
         }
-        Optional<DcnbBBNTBQHdr> optional = dcnbBBNTBQHdrRepository.findBySoBban(req.getSoBban());
+        Optional<DcnbBBNTBQHdr> optional = hdrRepository.findBySoBban(req.getSoBban());
         if (optional.isPresent()) {
             throw new Exception("Số biên bản đã tồn tại");
         }
@@ -79,10 +79,10 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
         req.getDcnbBBNTBQDtlList().forEach(e -> {
             e.setDcnbBBNTBQHdr(data);
         });
-        DcnbBBNTBQHdr created = dcnbBBNTBQHdrRepository.save(data);
+        DcnbBBNTBQHdr created = hdrRepository.save(data);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBBNTBQHdr.TABLE_NAME);
         created.setFileDinhKems(canCu);
-        return null;
+        return created;
     }
 
     @Override
@@ -94,14 +94,14 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
         if(!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
             throw new Exception("Văn bản này chỉ có thêm ở cấp chi cục");
         }
-        Optional<DcnbBBNTBQHdr> optional = dcnbBBNTBQHdrRepository.findById(req.getId());
+        Optional<DcnbBBNTBQHdr> optional = hdrRepository.findById(req.getId());
         if (!optional.isPresent()) {
             throw new Exception("Số biên bản không tồn tại");
         }
         DcnbBBNTBQHdr data = optional.get();
         BeanUtils.copyProperties(req,data);
         data.setDcnbBBNTBQDtl(req.getDcnbBBNTBQDtlList());
-        DcnbBBNTBQHdr created = dcnbBBNTBQHdrRepository.save(data);
+        DcnbBBNTBQHdr created = hdrRepository.save(data);
         fileDinhKemService.delete(created.getId(), Lists.newArrayList(DcnbBBNTBQHdr.TABLE_NAME));
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBBNTBQHdr.TABLE_NAME);
         created.setFileDinhKems(canCu);
@@ -117,7 +117,7 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
         if(Objects.isNull(id)){
             throw new Exception("Id is null");
         }
-        Optional<DcnbBBNTBQHdr> optional = dcnbBBNTBQHdrRepository.findById(id);
+        Optional<DcnbBBNTBQHdr> optional = hdrRepository.findById(id);
         if (!optional.isPresent()) {
             throw new Exception("Số biên bản không tồn tại");
         }
@@ -128,17 +128,60 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
 
     @Override
     public DcnbBBNTBQHdr approve(DcnbBBNTBQHdrReq req) throws Exception {
-        return null;
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null){
+            throw new Exception("Access denied.");
+        }
+        DcnbBBNTBQHdr hdr = detail(req.getId());
+        String status = hdr.getTrangThai() + req.getTrangThai();
+        switch (status) {
+            case Contains.TUCHOI_TK + Contains.DUTHAO:
+            case Contains.TUCHOI_KT + Contains.DUTHAO:
+            case Contains.TUCHOI_LDCC + Contains.DUTHAO:
+            case Contains.DUTHAO + Contains.CHODUYET_TK:
+                break;
+            case Contains.CHODUYET_TK + Contains.CHODUYET_KT:
+                hdr.setThuKho(userInfo.getFullName());
+                break;
+            case Contains.CHODUYET_KT + Contains.CHODUYET_LDCC:
+                hdr.setKeToan(userInfo.getFullName());
+                break;
+            case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
+                hdr.setLdChiCuc(userInfo.getFullName());
+                break;
+            case Contains.CHODUYET_TK + Contains.TUCHOI_TK:
+            case Contains.CHODUYET_KT + Contains.TUCHOI_KT:
+            case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
+                hdr.setLyDoTuChoi(req.getLyDoTuChoi());
+                break;
+            default:
+                throw new Exception("Phê duyệt không thành công");
+        }
+        hdr.setTrangThai(req.getTrangThai());
+        DcnbBBNTBQHdr created = hdrRepository.save(hdr);
+        return created;
     }
 
     @Override
     public void delete(Long id) throws Exception {
-
+        DcnbBBNTBQHdr detail = detail(id);
+        hdrRepository.delete(detail);
+        dtlRepository.deleteAllByHdrId(id);
     }
 
     @Override
     public void deleteMulti(List<Long> listMulti) throws Exception {
-
+        if(listMulti != null && !listMulti.isEmpty()){
+            listMulti.forEach( i -> {
+                try {
+                    delete(i);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }else{
+            throw new Exception("List id is null");
+        }
     }
 
     @Override

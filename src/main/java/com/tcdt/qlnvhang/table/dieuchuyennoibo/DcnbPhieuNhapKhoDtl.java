@@ -25,7 +25,6 @@ public class DcnbPhieuNhapKhoDtl extends BaseEntity implements Serializable, Clo
     @Column(name = "HDR_ID", insertable = true, updatable = true)
     private Long hdrId;
     private String noiDung;
-
     private String maSo;
     private String dviTinh;
     private BigDecimal soLuongNhapDc;
