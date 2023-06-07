@@ -117,6 +117,8 @@ public class XhBbLayMauBttHdr implements Serializable {
 
     private String lyDoTuChoi;
 
+    private String phanLoai;
+
     @Transient
     private List<XhBbLayMauBttDtl> children = new ArrayList<>();
 
