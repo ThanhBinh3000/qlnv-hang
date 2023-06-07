@@ -7,6 +7,7 @@ import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhDxuatKhNhapKhacHdrRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhThopKhNhapKhacRepository;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhDxuatKhNhapKhacHdrReq;
+import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhThopKhNhapKhacDTO;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhThopKhNhapKhacReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhThopKhNhapKhacSearch;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -26,6 +27,7 @@ import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -69,7 +71,7 @@ public class HhThopKhNhapKhacServiceImpl extends BaseServiceImpl implements HhTh
             });
             return data;
             }
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
@@ -82,7 +84,40 @@ public class HhThopKhNhapKhacServiceImpl extends BaseServiceImpl implements HhTh
         HhThopKhNhapKhac created = hhThopKhNhapKhacRepository.save(dataMap);
         luuFile(req, created);
         luuChiTiet(req, created);
-        return null;
+        return created;
+    }
+
+    @Override
+    public HhThopKhNhapKhac capNhat(HhThopKhNhapKhacReq req) throws Exception {
+        if (StringUtils.isEmpty(req.getId())) {
+            throw new Exception("Sửa thất bại, không tìm thấy dữ liệu");
+        }
+        Optional<HhThopKhNhapKhac> hhThopKhNhapKhac = hhThopKhNhapKhacRepository.findById(req.getId());
+        if (!hhThopKhNhapKhac.isPresent()) {
+            throw new Exception("Không tìm thấy dữ liệu cần sửa");
+        }
+        hhThopKhNhapKhac.get().setNgaySua(getDateTimeNow());
+        hhThopKhNhapKhac.get().setNguoiSua(getUser().getUsername());
+        hhThopKhNhapKhac.get().setNoiDungTh(req.getNoiDungTh());
+        luuFile(req, hhThopKhNhapKhac.get());
+        return hhThopKhNhapKhacRepository.save(hhThopKhNhapKhac.get());
+    }
+
+    @Override
+    public HhThopKhNhapKhacDTO chiTiet(Long id) throws Exception {
+        Optional<HhThopKhNhapKhac> hhThopKhNhapKhac = hhThopKhNhapKhacRepository.findById(id);
+        if (!hhThopKhNhapKhac.isPresent()) {
+            throw new Exception("Không tìm thấy dữ liệu cần sửa");
+        }
+        HhThopKhNhapKhacDTO data = new HhThopKhNhapKhacDTO();
+        Map<String, String> mapVthh = getListDanhMucHangHoa();
+        Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
+        hhThopKhNhapKhac.get().setTenLoaiHinhNx(mapLoaiHinhNx.get(hhThopKhNhapKhac.get().getLoaiHinhNx()));
+        hhThopKhNhapKhac.get().setTenLoaiVthh(mapVthh.get(hhThopKhNhapKhac.get().getLoaiVthh()));
+        hhThopKhNhapKhac.get().setFileDinhKems(fileDinhKemService.search(hhThopKhNhapKhac.get().getId(), Collections.singletonList(HhThopKhNhapKhac.TABLE_NAME)));
+        data.setHdr(hhThopKhNhapKhac.get());
+        data.setDtl(hhDxuatKhNhapKhacHdrRepository.findAllByThopId(hhThopKhNhapKhac.get().getId()));
+        return data;
     }
 
     private void luuFile(HhThopKhNhapKhacReq req, HhThopKhNhapKhac created) {
@@ -106,5 +141,6 @@ public class HhThopKhNhapKhacServiceImpl extends BaseServiceImpl implements HhTh
             }
         }
         created.setTongSlNhap(tongSl);
+        hhThopKhNhapKhacRepository.save(created);
     }
 }
