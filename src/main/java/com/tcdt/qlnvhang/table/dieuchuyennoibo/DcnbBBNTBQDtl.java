@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Table(name = DcnbBBNTBQDtl.TABLE_NAME)
 @Getter
 @Setter
-public class DcnbBBNTBQDtl extends BaseEntity implements Serializable, Cloneable{
+public class DcnbBBNTBQDtl implements Serializable, Cloneable{
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "DCNB_BB_NT_BQ_DTL";
 

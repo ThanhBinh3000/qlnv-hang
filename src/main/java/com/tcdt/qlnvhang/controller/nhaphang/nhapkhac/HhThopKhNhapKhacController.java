@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.controller.nhaphang.nhapkhac;
 
 import com.tcdt.qlnvhang.enums.EnumResponse;
+import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhDxuatKhNhapKhacHdrReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhThopKhNhapKhacReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhThopKhNhapKhacSearch;
 import com.tcdt.qlnvhang.response.BaseResponse;
@@ -8,6 +9,7 @@ import com.tcdt.qlnvhang.service.nhaphang.nhapkhac.HhThopKhNhapKhacService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +79,41 @@ public class HhThopKhNhapKhacController {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
             log.error("Tạo mới trace: {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Cập nhật", response = List.class)
+    @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> update(@Valid HttpServletRequest request,
+                                               @RequestBody HhThopKhNhapKhacReq objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(service.capNhat(objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Cập nhật trace: {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Lấy chi tiết", response = List.class)
+    @GetMapping(value = PathContains.URL_CHI_TIET + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> detail(
+            @ApiParam(value = "ID", example = "1", required = true) @PathVariable("id") Long id) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(service.chiTiet(id));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Lấy chi tiết trace: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
