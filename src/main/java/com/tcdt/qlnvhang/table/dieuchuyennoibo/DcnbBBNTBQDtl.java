@@ -23,25 +23,17 @@ public class DcnbBBNTBQDtl implements Serializable, Cloneable{
     private Long id;
     @Column(name = "HDR_ID")
     private Long hdrId;
-    @Column(name = "DANH_MUC_NHOM_HANG")
-    private String dmNhomHang;
-    @Column(name = "MAT_HANG")
-    private String matHang;
-    @Column(name = "DON_VI_TINH")
+    private String danhMuc;
+    private String nhomHang;
     private String donViTinh;
-    @Column(name = "SO_LUONG_TRONG_NAM")
-    private Double slTrongNam;
-    @Column(name = "DON_GIA")
-    private Double donGia;
-    @Column(name = "THANH_TIEN_TRONG_NAM")
-    private Double thanhTienTrongNam;
-    @Column(name = "SO_LUONG_NAM_TRUOC")
-    private Double slNamTruoc;
-    @Column(name = "THANH_TIEN_NAM_TRUOC")
-    private Double thanhTienNamTruoc;
-    @Column(name = "TONG_GIA_TRI")
+    private String matHang;
+    private String donViTinhMh;
     private Double tongGiaTri;
-    @Column(name = "TYPE")
+    private Double soLuongTrongNam;
+    private Double donGia;
+    private Double thanhTienTrongNam;
+    private Double soLuongNamTruoc;
+    private Double thanhTienNamTruoc;
     private String type;
 
     @ManyToOne(fetch = FetchType.LAZY)
