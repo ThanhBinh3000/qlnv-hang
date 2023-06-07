@@ -170,7 +170,7 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
         if (!qOptional.isPresent())
             throw new Exception("không tìm thấy dữ liệu cần sửa");
 
-        if (!StringUtils.isEmpty(req.getSoDxuat())){
+        if (!StringUtils.isEmpty(req.getSoDxuat()) && !req.getSoDxuat().equals(qOptional.get().getSoDxuat())){
             Optional<HhDxuatKhMttHdr> deXuat = hhDxuatKhMttRepository.findBySoDxuat(req.getSoDxuat());
             if (deXuat.isPresent()){
                 if (!deXuat.get().getId().equals(req.getId())){
@@ -189,10 +189,8 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
         }
 
         HhDxuatKhMttHdr dataDTB = qOptional.get();
-        BeanUtils.copyProperties(req, dataDTB, "id", "trangThaiTh");
-
-
-
+        HhDxuatKhMttHdr dataMap = ObjectMapperUtils.map(req, HhDxuatKhMttHdr.class);
+        updateObjectToObject(dataDTB, dataMap);
         dataDTB.setNgaySua(getDateTimeNow());
         dataDTB.setNguoiSuaId(userInfo.getId());
 

@@ -2,12 +2,15 @@ package com.tcdt.qlnvhang.entities.nhaphang.nhapkhac;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = HhThopKhNhapKhac.TABLE_NAME)
@@ -47,4 +50,6 @@ public class HhThopKhNhapKhac {
     private String tenTrangThai;
     private String dvt;
     private BigDecimal tongSlNhap;
+    @Transient
+    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 }
