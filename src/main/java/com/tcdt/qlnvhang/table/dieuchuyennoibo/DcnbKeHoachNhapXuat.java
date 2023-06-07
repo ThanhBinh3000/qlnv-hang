@@ -27,4 +27,7 @@ public class DcnbKeHoachNhapXuat {
     @Column(name = "TABLE_NAME")
     private String tableName;
 
+    @Column(name = "TYPE")
+    private String type;
+
 }
