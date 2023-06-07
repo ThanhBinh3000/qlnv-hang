@@ -91,7 +91,7 @@ public class HhQdPdNhapKhacServiceImpl extends BaseServiceImpl implements HhQdPd
 //                throw new Exception("Không tìm thấy tổng hợp kế hoạch lựa chọn nhà thầu");
 //            }
         }else{
-            Optional<HhDxuatKhNhapKhacHdr> byId = hhDxuatKhNhapKhacHdrRepository.findById(req.getChildren().get(0).getId());
+            Optional<HhDxuatKhNhapKhacHdr> byId = hhDxuatKhNhapKhacHdrRepository.findById(req.getDetails().get(0).getId());
             if(!byId.isPresent()){
                 throw new Exception("Không tìm thấy đề xuất kế hoạch lựa chọn nhà thầu");
             }
@@ -110,7 +110,7 @@ public class HhQdPdNhapKhacServiceImpl extends BaseServiceImpl implements HhQdPd
         if(req.getPhanLoai().equals("TH")){
 
         }else{
-            dataMap.getChildren().forEach(item ->{
+            dataMap.getDetails().forEach(item ->{
                 dataMap.setIdDx(item.getId());
             });
         }
@@ -128,7 +128,7 @@ public class HhQdPdNhapKhacServiceImpl extends BaseServiceImpl implements HhQdPd
         if(req.getPhanLoai().equals("TH")){
 //            hhDxKhLcntThopHdrRepository.updateTrangThai(dataMap.getIdThHdr(), Contains.DADUTHAO_QD);
         }else{
-            hhDxuatKhNhapKhacHdrRepository.updateStatusInList(Arrays.asList(req.getChildren().get(0).getSoDxuat()), Contains.DADUTHAO_QD);
+            hhDxuatKhNhapKhacHdrRepository.updateStatusInList(Arrays.asList(req.getDetails().get(0).getSoDxuat()), Contains.DADUTHAO_QD);
         }
 
         saveDetail(req,dataMap);
@@ -139,13 +139,16 @@ public class HhQdPdNhapKhacServiceImpl extends BaseServiceImpl implements HhQdPd
     void saveDetail(HhQdPdNhapKhacHdrReq objReq, HhQdPdNhapKhacHdr dataMap){
         try {
             hhQdPdNhapKhacDtlRepository.deleteAllByIdHdr(dataMap.getId());
-            for (HhDxuatKhNhapKhacHdrReq dxHdr : objReq.getChildren()){
+            for (HhDxuatKhNhapKhacHdrReq dxHdr : objReq.getDetails()){
                 dxHdr.getDetails().forEach(dtl ->{
                     HhQdPdNhapKhacDtl qd = ObjectMapperUtils.map(dtl, HhQdPdNhapKhacDtl.class);
                     qd.setId(null);
                     qd.setIdHdr(dataMap.getId());
                     qd.setIdDxHdr(dxHdr.getId());
                     qd.setTrangThai(Contains.CHUACAPNHAT);
+                    qd.setTongSlNhap(dxHdr.getTongSlNhap());
+                    qd.setTongThanhTien(dxHdr.getTongThanhTien());
+                    qd.setCloaiVthh(dxHdr.getCloaiVthh());
                     hhQdPdNhapKhacDtlRepository.save(qd);
                 });
             }
@@ -245,7 +248,7 @@ public class HhQdPdNhapKhacServiceImpl extends BaseServiceImpl implements HhQdPd
             dtl.setTenNganLoKho(mapDmucDvi.get(dtl.getMaLoKho()) + " - " + mapDmucDvi.get(dtl.getMaNganKho()));
             dtl.setTenCloaiVthh(mapVthh.get(dtl.getCloaiVthh()));
         });
-        qOptional.get().setChildren(dtls);
+        qOptional.get().setDetails(dtls);
         return qOptional.get();
     }
 
@@ -301,6 +304,11 @@ public class HhQdPdNhapKhacServiceImpl extends BaseServiceImpl implements HhQdPd
                 && !qOptional.get().getTrangThai().equals(Contains.TUCHOI_TP)
                 && !qOptional.get().getTrangThai().equals(Contains.TUCHOI_LDC)) {
             throw new Exception("Chỉ thực hiện xóa với kế hoạch ở trạng thái bản nháp hoặc từ chối");
+        }
+        if(qOptional.get().getIdTh() != null){
+
+        }else{
+            hhDxuatKhNhapKhacHdrRepository.updateStatusInList(Arrays.asList(qOptional.get().getSoDxuat()), NhapXuatHangTrangThaiEnum.CHUATONGHOP.getId());
         }
         fileDinhKemService.delete(qOptional.get().getId(), Lists.newArrayList(HhQdPdNhapKhacHdr.TABLE_NAME + CAN_CU));
         fileDinhKemService.delete(qOptional.get().getId(), Lists.newArrayList(HhQdPdNhapKhacHdr.TABLE_NAME));
