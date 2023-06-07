@@ -24,6 +24,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
@@ -60,6 +61,7 @@ public class XhBbTinhkBttServiceImpl extends BaseServiceImpl implements XhBbTinh
             f.setTenNhaKho(StringUtils.isEmpty(f.getMaNhaKho()) ? null : hashMapDvi.get(f.getMaNhaKho()));
             f.setTenNganKho(StringUtils.isEmpty(f.getMaNganKho()) ? null : hashMapDvi.get(f.getMaNganKho()));
             f.setTenLoKho(StringUtils.isEmpty(f.getMaLoKho()) ? null : hashMapDvi.get(f.getMaLoKho()));
+            f.setChildren(xhBbTinhkBttDtlRepository.findAllByIdHdr(f.getId()));
         });
         return data;
     }
@@ -79,11 +81,11 @@ public class XhBbTinhkBttServiceImpl extends BaseServiceImpl implements XhBbTinh
         data.setIdThuKho(userInfo.getId());
         data.setId(Long.valueOf(data.getSoBbTinhKho().split("/")[0]));
         XhBbTinhkBttHdr created = xhBbTinhkBttHdrRepository.save(data);
-        if (!DataUtils.isNullObject(req.getFileDinhKem())) {
-            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(req.getFileDinhKem()), created.getId(), XhBbTinhkBttHdr.TABLE_NAME);
-            created.setFileDinhKem(fileDinhKem.get(0));
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
+            List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhBbTinhkBttHdr.TABLE_NAME);
+            data.setFileDinhKems(fileDinhKemList);
         }
-        saveDetail(req, data.getId());
+        saveDetail(req, created.getId());
         return created;
     }
 
@@ -115,10 +117,9 @@ public class XhBbTinhkBttServiceImpl extends BaseServiceImpl implements XhBbTinh
         dataDB.setNgaySua(LocalDate.now());
         dataDB.setNguoiSuaId(getUser().getId());
         XhBbTinhkBttHdr created = xhBbTinhkBttHdrRepository.save(dataDB);
-        if (!DataUtils.isNullObject(req.getFileDinhKem())) {
-            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Arrays.asList(req.getFileDinhKem()), created.getId(), XhBbTinhkBttHdr.TABLE_NAME);
-            dataDB.setFileDinhKem(fileDinhKem.get(0));
-        }
+        fileDinhKemService.delete(created.getId(), Collections.singleton(XhBbTinhkBttHdr.TABLE_NAME));
+        List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhBbTinhkBttHdr.TABLE_NAME);
+        dataDB.setFileDinhKems(fileDinhKemList);
         this.saveDetail(req, dataDB.getId());
         return created;
     }
@@ -153,10 +154,8 @@ public class XhBbTinhkBttServiceImpl extends BaseServiceImpl implements XhBbTinh
         data.setTenNhaKho(hashMapDvi.get(data.getMaNganKho()));
         data.setTenNganKho(hashMapDvi.get(data.getMaNganKho()));
         data.setTenLoKho(hashMapDvi.get(data.getMaLoKho()));
-        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhBbTinhkBttHdr.TABLE_NAME));
-        if (!DataUtils.isNullOrEmpty(fileDinhKem)) {
-            data.setFileDinhKem(fileDinhKem.get(0));
-        }
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhBbTinhkBttHdr.TABLE_NAME));
+        if (!CollectionUtils.isEmpty(fileDinhKems)) data.setFileDinhKems(fileDinhKems);
         data.setChildren(xhBbTinhkBttDtlRepository.findAllByIdHdr(id));
         return data;
     }

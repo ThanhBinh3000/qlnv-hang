@@ -37,7 +37,7 @@ public interface THKeHoachDieuChuyenCucHdrRepository extends JpaRepository<THKeH
     @Query(value = "SELECT distinct h FROM THKeHoachDieuChuyenCucHdr h \n" +
             "LEFT JOIN THKeHoachDieuChuyenNoiBoCucDtl dtl ON dtl.hdrId = h.id \n" +
             "WHERE h.maDvi = ?1 AND h.trangThai = ?2 AND h.loaiDieuChuyen = ?3 \n" +
-            "AND h.ngayTao <= ?4")
+            "AND h.ngayTao <= ?4 AND (h.idThTongCuc is null)")
     List<THKeHoachDieuChuyenCucHdr> findByDonViAndTrangThaiTongCuc(String maDVi, String trangThai, String loaiDieuChuyen, LocalDateTime thoiGianTongHop);
 
     @Query(nativeQuery = true, value = "SELECT  h.* FROM DCNB_TH_KE_HOACH_DCC_HDR h  " +

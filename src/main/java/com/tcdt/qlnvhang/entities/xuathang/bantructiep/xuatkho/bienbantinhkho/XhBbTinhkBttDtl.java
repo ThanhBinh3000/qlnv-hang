@@ -21,9 +21,15 @@ public class XhBbTinhkBttDtl implements Serializable {
 
     private Long idHdr;
 
+    private Long idPhieu;
+
     private String soPhieu;
 
+    private Long idPhieuXuat;
+
     private String soPhieuXuat;
+
+    private Long idBangKe;
 
     private String soBangKe;
 

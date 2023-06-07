@@ -170,23 +170,23 @@ public class DcnbPhieuKiemNghiemChatLuongController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xoá danh sách thông tin đề xuất", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PostMapping(value =  PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
-        BaseResponse resp = new BaseResponse();
-        try {
-            dcnbPhieuKiemNghiemChatLuongService.deleteMulti(idSearchReq);
-            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-        } catch (Exception e) {
-            e.printStackTrace();
-            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-            resp.setMsg(e.getMessage());
-            log.error("Xoá thông tin : {}", e);
-        }
-        return ResponseEntity.ok(resp);
-    }
+//    @ApiOperation(value = "Xoá danh sách thông tin đề xuất", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+//    @PostMapping(value =  PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ResponseStatus(HttpStatus.OK)
+//    public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
+//        BaseResponse resp = new BaseResponse();
+//        try {
+//            dcnbPhieuKiemNghiemChatLuongService.deleteMulti(idSearchReq);
+//            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+//            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+//            resp.setMsg(e.getMessage());
+//            log.error("Xoá thông tin : {}", e);
+//        }
+//        return ResponseEntity.ok(resp);
+//    }
 
     @ApiOperation(value = "Kết xuất danh sách mua", response = List.class)
     @PostMapping(value =  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)

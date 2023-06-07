@@ -2,10 +2,7 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcDtlRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcHdrRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbQuyetDinhDcTcDtlRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbQuyetDinhDcTcHdrRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -56,6 +53,8 @@ public class DcnbQuyetDinhDcTcDtlService extends BaseServiceImpl {
     @Autowired
     private DcnbKeHoachDcHdrRepository dcnbKeHoachDcHdrRepository;
     @Autowired
+    private THKeHoachDieuChuyenTongCucHdrRepository thKeHoachDieuChuyenTongCucHdrRepository;
+    @Autowired
     private LuuKhoClient luuKhoClient;
 
     public Page<DcnbQuyetDinhDcTcHdr> searchPage(CustomUserDetails currentUser, SearchDcnbQuyetDinhDcTc req) throws Exception {
@@ -84,6 +83,11 @@ public class DcnbQuyetDinhDcTcDtlService extends BaseServiceImpl {
         List<FileDinhKem> quyetDinh = fileDinhKemService.saveListFileDinhKem(objReq.getQuyetDinh(), created.getId(), DcnbQuyetDinhDcTcHdr.TABLE_NAME + "_QUYET_DINH");
         created.setCanCu(canCu);
         created.setQuyetDinh(quyetDinh);
+        List<THKeHoachDieuChuyenTongCucHdr> thKeHoachDieuChuyenTongCucHdrs = thKeHoachDieuChuyenTongCucHdrRepository.findByMaTongHop(created.getMaThop());
+        thKeHoachDieuChuyenTongCucHdrs.forEach(e ->{
+            e.setTrangThai(Contains.DADUTHAO_QD);
+            thKeHoachDieuChuyenTongCucHdrRepository.save(e);
+        });
         return created;
     }
 
@@ -167,6 +171,11 @@ public class DcnbQuyetDinhDcTcDtlService extends BaseServiceImpl {
         fileDinhKemService.delete(data.getId(), Lists.newArrayList(DcnbQuyetDinhDcTcHdr.TABLE_NAME + "_CAN_CU"));
         fileDinhKemService.delete(data.getId(), Lists.newArrayList(DcnbQuyetDinhDcTcHdr.TABLE_NAME + "_QUYET_DINH"));
         dcnbQuyetDinhDcTcHdrRepository.delete(data);
+        List<THKeHoachDieuChuyenTongCucHdr> thKeHoachDieuChuyenTongCucHdrs = thKeHoachDieuChuyenTongCucHdrRepository.findByMaTongHop(data.getMaThop());
+        thKeHoachDieuChuyenTongCucHdrs.forEach(e ->{
+            e.setTrangThai(Contains.CHUATAO_QD);
+            thKeHoachDieuChuyenTongCucHdrRepository.save(e);
+        });
     }
 
     @Transient
@@ -209,6 +218,12 @@ public class DcnbQuyetDinhDcTcDtlService extends BaseServiceImpl {
                 optional.get().setNgayPduyet(LocalDate.now());
                 optional.get().setNguoiPduyetId(currentUser.getUser().getId());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
+                if(!optional.get().getMaThop().isEmpty()){
+                List<THKeHoachDieuChuyenTongCucHdr> thKeHoachDieuChuyenTongCucHdrs = thKeHoachDieuChuyenTongCucHdrRepository.findByMaTongHop(optional.get().getMaThop());
+                thKeHoachDieuChuyenTongCucHdrs.forEach(e ->{
+                    e.setTrangThai(Contains.TU_CHOI_BAN_HANH_QD);
+                    thKeHoachDieuChuyenTongCucHdrRepository.save(e);
+                });}
                 break;
             case Contains.CHODUYET_LDV + Contains.CHODUYET_LDTC:
                 optional.get().setNgayPduyet(LocalDate.now());
@@ -218,11 +233,22 @@ public class DcnbQuyetDinhDcTcDtlService extends BaseServiceImpl {
                 optional.get().setNgayDuyetTc(LocalDate.now());
                 optional.get().setNguoiDuyetTcId(currentUser.getUser().getId());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
+                if(!optional.get().getMaThop().isEmpty()){
+                    List<THKeHoachDieuChuyenTongCucHdr> thKeHoachDieuChuyenTongCucHdrs = thKeHoachDieuChuyenTongCucHdrRepository.findByMaTongHop(optional.get().getMaThop());
+                    thKeHoachDieuChuyenTongCucHdrs.forEach(e ->{
+                        e.setTrangThai(Contains.TU_CHOI_BAN_HANH_QD);
+                        thKeHoachDieuChuyenTongCucHdrRepository.save(e);
+                    });}
                 break;
             case Contains.CHODUYET_LDTC + Contains.BAN_HANH:
                 optional.get().setNgayDuyetTc(LocalDate.now());
                 optional.get().setNguoiDuyetTcId(currentUser.getUser().getId());
-
+                if(!optional.get().getMaThop().isEmpty()){
+                    List<THKeHoachDieuChuyenTongCucHdr> thKeHoachDieuChuyenTongCucHdrs = thKeHoachDieuChuyenTongCucHdrRepository.findByMaTongHop(optional.get().getMaThop());
+                    thKeHoachDieuChuyenTongCucHdrs.forEach(e ->{
+                        e.setTrangThai(Contains.DABANHANH_QD);
+                        thKeHoachDieuChuyenTongCucHdrRepository.save(e);
+                    });}
                 // xử lý clone tờ kế hoạch cho các chi cục
                 break;
             default:

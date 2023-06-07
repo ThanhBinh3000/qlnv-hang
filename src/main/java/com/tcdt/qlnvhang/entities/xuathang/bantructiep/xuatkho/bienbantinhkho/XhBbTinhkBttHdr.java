@@ -72,7 +72,9 @@ public class XhBbTinhkBttHdr implements Serializable {
 
     private BigDecimal slThucTe;
 
-    private BigDecimal slChenhLech;
+    private BigDecimal slThua;
+
+    private BigDecimal slThieu;
 
     private String nguyenNhan;
 
@@ -120,5 +122,5 @@ public class XhBbTinhkBttHdr implements Serializable {
     private List<XhBbTinhkBttDtl> children = new ArrayList<>();
 
     @Transient
-    private FileDinhKem fileDinhKem;
+    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 }

@@ -54,7 +54,9 @@ public class XhBbTinhkBttHdrReq extends BaseRequest {
 
     private BigDecimal slThucTe;
 
-    private BigDecimal slChenhLech;
+    private BigDecimal slThua;
+
+    private BigDecimal slThieu;
 
     private String nguyenNhan;
 
@@ -68,9 +70,21 @@ public class XhBbTinhkBttHdrReq extends BaseRequest {
 
     private Long idKeToan;
 
+    private LocalDate ngayBdauXuatTu;
+
+    private LocalDate ngayBdauXuatDen;
+
+    private LocalDate ngayKthucXuatTu;
+
+    private LocalDate ngayKthucXuatDen;
+
+    private LocalDate ngayQdNvTu;
+
+    private LocalDate ngayQdNvDen;
+
     @Transient
     private List<XhBbTinhkBttDtlReq> children = new ArrayList<>();
 
     @Transient
-    private FileDinhKemReq fileDinhKem;
+    private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 }
