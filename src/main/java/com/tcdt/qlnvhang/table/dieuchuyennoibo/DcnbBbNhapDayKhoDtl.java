@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @Table(name = DcnbBbNhapDayKhoDtl.TABLE_NAME)
 @Getter
 @Setter
-public class DcnbBbNhapDayKhoDtl extends BaseEntity implements Serializable, Cloneable{
+public class DcnbBbNhapDayKhoDtl implements Serializable, Cloneable{
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "DCNB_BB_NHAP_DAY_KHO_DTL";
 
