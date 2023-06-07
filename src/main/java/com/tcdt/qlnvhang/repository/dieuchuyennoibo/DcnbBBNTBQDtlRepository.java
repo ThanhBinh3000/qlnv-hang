@@ -12,6 +12,6 @@ public interface DcnbBBNTBQDtlRepository extends JpaRepository<DcnbBBNTBQDtl, Lo
 
 //    List<DcnbPhieuXuatKhoDtl> findAllByHdrId(Long hdrId);
 //
-//    void deleteByHdrId(Long hdrId);
+    void deleteAllByHdrId(Long hdrId);
 
 }

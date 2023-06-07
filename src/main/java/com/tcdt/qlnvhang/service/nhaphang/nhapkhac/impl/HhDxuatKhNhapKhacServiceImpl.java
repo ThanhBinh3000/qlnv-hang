@@ -88,6 +88,7 @@ public class HhDxuatKhNhapKhacServiceImpl extends BaseServiceImpl implements HhD
         dataMap.setNgayTao(getDateTimeNow());
         dataMap.setNguoiTao(getUser().getUsername());
         dataMap.setTrangThai(Contains.DUTHAO);
+        dataMap.setTrangThaiTh(Contains.CHUATONGHOP);
         HhDxuatKhNhapKhacHdr created = hhDxuatKhNhapKhacHdrRepository.save(dataMap);
         luuFile(req, created);
         luuChiTiet(req, created);
@@ -140,11 +141,11 @@ public class HhDxuatKhNhapKhacServiceImpl extends BaseServiceImpl implements HhD
         qOptional.get().setFileDinhKems(fileDinhKemService.search(qOptional.get().getId(), Collections.singletonList(HhDxuatKhNhapKhacHdr.TABLE_NAME)));
         List<HhDxuatKhNhapKhacDtl> dtls = hhDxuatKhNhapKhacDtlRepository.findAllByHdrId(qOptional.get().getId());
         dtls.forEach(dtl -> {
-//            dtl.setTenCuc(mapDmucDvi.get(dtl.getMaCuc()));
-//            dtl.setTenChiCuc(mapDmucDvi.get(dtl.getMaChiCuc()));
-//            dtl.setTenDiemKho(mapDmucDvi.get(dtl.getMaDiemKho()));
-//            dtl.setTenNhaKho(mapDmucDvi.get(dtl.getMaNhaKho()));
-//            dtl.setTenNganLoKho(mapDmucDvi.get(dtl.getMaLoKho()) + " - " + mapDmucDvi.get(dtl.getMaNganKho()));
+            dtl.setTenCuc(mapDmucDvi.get(dtl.getMaCuc()));
+            dtl.setTenChiCuc(mapDmucDvi.get(dtl.getMaChiCuc()));
+            dtl.setTenDiemKho(mapDmucDvi.get(dtl.getMaDiemKho()));
+            dtl.setTenNhaKho(mapDmucDvi.get(dtl.getMaNhaKho()));
+            dtl.setTenNganLoKho(mapDmucDvi.get(dtl.getMaLoKho()) + " - " + mapDmucDvi.get(dtl.getMaNganKho()));
             dtl.setTenCloaiVthh(mapVthh.get(dtl.getCloaiVthh()));
         });
         HhDxuatKhNhapKhacDTO data = new HhDxuatKhNhapKhacDTO();
@@ -259,7 +260,11 @@ public class HhDxuatKhNhapKhacServiceImpl extends BaseServiceImpl implements HhD
             dataChild.setHdr(item);
             List<HhDxuatKhNhapKhacDtl> listDtl = hhDxuatKhNhapKhacDtlRepository.findAllByHdrId(item.getId());
             listDtl.forEach(dtl ->{
-//                dtl.setTenDvi(mapDmucDvi.get(dtl.getMaDvi()));
+                dtl.setTenCuc(mapDmucDvi.get(dtl.getMaCuc()));
+                dtl.setTenChiCuc(mapDmucDvi.get(dtl.getMaChiCuc()));
+                dtl.setTenDiemKho(mapDmucDvi.get(dtl.getMaDiemKho()));
+                dtl.setTenNhaKho(mapDmucDvi.get(dtl.getMaNhaKho()));
+                dtl.setTenNganLoKho(mapDmucDvi.get(dtl.getMaLoKho()) + " - " + mapDmucDvi.get(dtl.getMaNganKho()));
                 dtl.setTenCloaiVthh(mapVthh.get(dtl.getCloaiVthh()));
             });
             dataChild.setDtl(listDtl);

@@ -17,7 +17,7 @@ public class HhQdPdNhapKhacHdrReq {
     private String maDvi;
     private String loaiHinhNx;
     private String kieuNx;
-    private String soDx;
+    private String soDxuat;
     private String trichYeu;
     private String phanLoai;
     private String soQd;
@@ -29,8 +29,7 @@ public class HhQdPdNhapKhacHdrReq {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayQd;
     private String trangThai;
-    private BigDecimal tongSlNhap;
     private Boolean lastest;
     private List<FileDinhKemReq> fileDinhKems;
-    private List<HhDxuatKhNhapKhacHdrReq> children;
+    private List<HhDxuatKhNhapKhacHdrReq> details;
 }

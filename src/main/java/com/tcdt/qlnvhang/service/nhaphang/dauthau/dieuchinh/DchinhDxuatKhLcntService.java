@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.nhaphang.dauthau.dieuchinh;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.FileDKemJoinHhDchinhDxKhLcntHdr;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.*;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDsgthau;
@@ -85,9 +86,23 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 				convertDateToString(objReq.getTuNgayQd()),
 				convertDateToString(objReq.getDenNgayQd()),
 				pageable);
+		List<Long> ids = data.getContent().stream().map(HhDchinhDxKhLcntHdr::getId).collect(Collectors.toList());
+		List<Object[]> listGthau = hdrRepository.countAllBySoGthau(ids);
+		List<Object[]> listGthau2 = hdrRepository.countAllBySoGthauStatus(ids, NhapXuatHangTrangThaiEnum.THANH_CONG.getId());
+		Map<String,String> soGthau = new HashMap<>();
+		Map<String,String> soGthau2 = new HashMap<>();
+		for (Object[] it: listGthau) {
+			soGthau.put(it[0].toString(),it[1].toString());
+		}
+		for (Object[] it: listGthau2) {
+			soGthau2.put(it[0].toString(),it[1].toString());
+		}
 		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 		data.getContent().forEach(f->{
 			f.setTenLoaiVthh(hashMapDmHh.get(f.getLoaiVthh()));
+			f.setTenCloaiVthh(hashMapDmHh.get(f.getCloaiVthh()));
+			f.setGthauTrung(StringUtils.isEmpty(soGthau2.get(f.getId().toString())) ? 0 : Integer.parseInt(soGthau2.get(f.getId().toString())));
+			f.setSoGoiThau(StringUtils.isEmpty(soGthau.get(f.getId().toString())) ? 0 : Long.parseLong(soGthau.get(f.getId().toString())));
 		});
 		return data;
 	}

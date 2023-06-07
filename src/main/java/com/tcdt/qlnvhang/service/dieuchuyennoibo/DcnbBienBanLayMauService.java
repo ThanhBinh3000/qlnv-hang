@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.enums.TrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.HhBbNghiemthuKlstRepository;
@@ -12,9 +11,7 @@ import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBienBanLayMauHdrReposito
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKtChatLuongHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
-import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBienBanLayMauDtlReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBienBanLayMauHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbBienBanLayMau;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbQuyetDinhDcC;
@@ -25,21 +22,15 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
-import com.tcdt.qlnvhang.util.DataUtils;
-import com.tcdt.qlnvhang.util.ExportExcel;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -70,7 +61,7 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
     DcnbPhieuKtChatLuongHdrRepository dcnbPhieuKtChatLuongHdrRepository;
 
     @Autowired
-    DcnbQuyetDinhDcCDtlService dcnbQuyetDinhDcCDtlService;
+    DcnbQuyetDinhDcCHdrService dcnbQuyetDinhDcCHdrService;
 
     @Autowired
     DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
@@ -85,7 +76,7 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
         reqQd.setSoQdinh(req.getSoQdinhDcc());
         reqQd.setLoaiDc(req.getLoaiDc());
         reqQd.setTrangThai(NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
-        Page<DcnbQuyetDinhDcCHdr> dcnbQuyetDinhDcCHdrs = dcnbQuyetDinhDcCDtlService.searchPage(currentUser, reqQd);
+        Page<DcnbQuyetDinhDcCHdr> dcnbQuyetDinhDcCHdrs = dcnbQuyetDinhDcCHdrService.searchPage(currentUser, reqQd);
 
         // Gắn data vào biên bản lấy mẫu vào tree
         String dvql = currentUser.getDvql();
