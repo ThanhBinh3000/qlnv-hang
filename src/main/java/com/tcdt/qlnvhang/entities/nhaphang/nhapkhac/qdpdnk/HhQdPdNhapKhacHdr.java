@@ -3,7 +3,6 @@ package com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.qdpdnk;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tcdt.qlnvhang.entities.FileDKemJoinQdPdNkHdr;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 import org.hibernate.annotations.Fetch;
@@ -31,10 +30,10 @@ public class HhQdPdNhapKhacHdr {
     @Transient
     private String tenLoaiVthh;
     private Long idDx;
-    private String soDx;
+    private String soDxuat;
     private Long idTh;
-    private Integer tongSlDx;
-    private Integer tongTtienDx;
+    private Integer tongSlNhap;
+    private Integer tongThanhTien;
     private String dvt;
     private String noiDung;
     private String trichYeu;
@@ -72,7 +71,7 @@ public class HhQdPdNhapKhacHdr {
     @Fetch(value = FetchMode.SUBSELECT)
     @JoinColumn(name = "dataId")
     @JsonManagedReference
-    @Where(clause = "data_type='" + HhQdKhlcntHdr.TABLE_NAME + "'")
+    @Where(clause = "data_type='" + HhQdPdNhapKhacHdr.TABLE_NAME + "'")
     private List<FileDKemJoinQdPdNkHdr> fileDinhKems = new ArrayList<>();
 
     public void setFileDinhKems(List<FileDKemJoinQdPdNkHdr> children) {
@@ -88,5 +87,5 @@ public class HhQdPdNhapKhacHdr {
         this.fileDinhKems.add(child);
     }
     @Transient
-    private List<HhQdPdNhapKhacDtl> children = new ArrayList<>();
+    private List<HhQdPdNhapKhacDtl> details = new ArrayList<>();
 }
