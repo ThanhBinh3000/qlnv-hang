@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
 import com.google.common.collect.Lists;
-import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
@@ -16,7 +15,6 @@ import com.tcdt.qlnvhang.service.feign.LuuKhoClient;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -44,8 +42,8 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
-    private static final Logger logger = LoggerFactory.getLogger(DcnbQuyetDinhDcCDtlService.class);
+public class DcnbQuyetDinhDcCHdrService extends BaseServiceImpl {
+    private static final Logger logger = LoggerFactory.getLogger(DcnbQuyetDinhDcCHdrService.class);
 
     @Autowired
     private DcnbQuyetDinhDcCHdrRepository dcnbQuyetDinhDcCHdrRepository;
@@ -217,7 +215,7 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
                         }
                         dcnbKeHoachDcHdr.setId(keHoachDcHdrOpt.get().getId());
                         dcnbKeHoachDcHdr.setType(Contains.NHAN_DIEU_CHUYEN_TS);
-                        dcnbKeHoachDcHdr.setMaDviPq(e.getDcnbKeHoachDcHdr().getMaDvi());
+                        dcnbKeHoachDcHdr.setMaDviPq(e.getDanhSachKeHoach().get(0).getMaChiCucNhan());
 
                         BigDecimal total = e.getDanhSachKeHoach().stream().map(DcnbKeHoachDcDtl::getDuToanKphi)
                                 .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -533,12 +531,12 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
                         dcnbQuyetDinhDcTcHdr.get().setSoQdinhXuatCuc(soQdinh);
                     }
                 }
-                if(Contains.GIUA_2_CHI_CUC_TRONG_1_CUC.equals(optional.get().getLoaiQdinh())){ // khác điều chuyển "khác cục"
+                if(Contains.GIUA_2_CHI_CUC_TRONG_1_CUC.equals(optional.get().getLoaiDc())){ // khác điều chuyển "khác cục"
                     // clone chi cục nhận
                     cloneQuyetDinhDcCNhan(statusReq, optional);
                     // clone chi cục xuat
                     cloneQuyetDinhDcCXuat(statusReq, optional);
-                }else if(Contains.DCNB.equals(optional.get().getLoaiQdinh())){
+                }else if(Contains.DCNB.equals(optional.get().getLoaiDc())){
                     // clone chi cục xuat
                     cloneQuyetDinhDcCXuat(statusReq, optional);
                 }
@@ -573,6 +571,7 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
             clonedObj.setMaDvi(maChiCucThue);
             clonedObj.setTenDvi(khList.get(0).getTenChiCucNhan());
             clonedObj.setType(Contains.DIEU_CHUYEN);
+            clonedObj.setTrangThai(statusReq.getTrangThai());
             Map<Long, List<DcnbKeHoachDcDtl>> groupedByKhh = khList.stream()
                     .collect(Collectors.groupingBy(DcnbKeHoachDcDtl::getHdrId));
             List<DcnbQuyetDinhDcCDtl> quyetDinhDcCDtlsClone = new ArrayList<>();
@@ -668,6 +667,7 @@ public class DcnbQuyetDinhDcCDtlService extends BaseServiceImpl {
             clonedObj.setMaDvi(maChiCucThue);
             clonedObj.setTenDvi(khList.get(0).getTenChiCucNhan());
             clonedObj.setType(Contains.NHAN_DIEU_CHUYEN);
+            clonedObj.setTrangThai(statusReq.getTrangThai());
             Map<Long, List<DcnbKeHoachDcDtl>> groupedByKhh = khList.stream()
                     .collect(Collectors.groupingBy(DcnbKeHoachDcDtl::getHdrId));
             List<DcnbQuyetDinhDcCDtl> quyetDinhDcCDtlsClone = new ArrayList<>();

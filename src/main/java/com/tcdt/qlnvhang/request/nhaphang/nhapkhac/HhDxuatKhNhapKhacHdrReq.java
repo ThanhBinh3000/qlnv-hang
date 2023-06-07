@@ -18,6 +18,7 @@ public class HhDxuatKhNhapKhacHdrReq {
     private String trichYeu;
     private String loaiVthh;
     private String cloaiVthh;
+    private String dvt;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayDxuat;
     private String trangThai;

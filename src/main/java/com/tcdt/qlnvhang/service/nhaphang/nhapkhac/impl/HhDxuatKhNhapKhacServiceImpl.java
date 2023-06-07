@@ -88,6 +88,7 @@ public class HhDxuatKhNhapKhacServiceImpl extends BaseServiceImpl implements HhD
         dataMap.setNgayTao(getDateTimeNow());
         dataMap.setNguoiTao(getUser().getUsername());
         dataMap.setTrangThai(Contains.DUTHAO);
+        dataMap.setTrangThaiTh(Contains.CHUATONGHOP);
         HhDxuatKhNhapKhacHdr created = hhDxuatKhNhapKhacHdrRepository.save(dataMap);
         luuFile(req, created);
         luuChiTiet(req, created);
