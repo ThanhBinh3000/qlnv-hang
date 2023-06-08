@@ -18,8 +18,8 @@ public class DcnbKeHoachNhapXuat {
     @SequenceGenerator(sequenceName =  "DCNB_KE_HOACH_XUAT_NHAP_SEQ", allocationSize = 1, name = "DCNB_KE_HOACH_XUAT_NHAP_SEQ")
     private Long id;
 
-    @Column(name = "KH_DC_DTL_ID")
-    private Long khDcDtlId;
+    @Column(name = "ID_KH_DC_DTL")
+    private Long idKhDcDtl;
 
     @Column(name = "ID_HDR")
     private Long idHdr;
@@ -27,7 +27,16 @@ public class DcnbKeHoachNhapXuat {
     @Column(name = "TABLE_NAME")
     private String tableName;
 
+    // 	public static final String QD_NHAP = "00";
+    //	public static final String QD_XUAT = "01";
     @Column(name = "TYPE")
     private String type;
+
+    @Transient
+    private DcnbBienBanLayMauHdr dcnbBienBanLayMauHdr;
+
+    @Transient
+    private DcnbBBNTBQHdr dcnbBBNTBQHdr;
+
 
 }
