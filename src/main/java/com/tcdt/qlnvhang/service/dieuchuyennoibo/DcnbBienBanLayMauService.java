@@ -13,6 +13,8 @@ import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBienBanLayMauHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbBienBanLayMau;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbQuyetDinhDcC;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.response.DieuChuyenNoiBo.DcnbBienBanLayMauHdrDTO;
+import com.tcdt.qlnvhang.response.DieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -91,7 +93,7 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
 //                    });
                 dcnbKeHoachDcHdr.getDanhSachHangHoa().forEach(khdtls->{
                     try {
-                    dcnbKeHoachNhapXuatService.detailKhDtl(khdtls.getId());
+                        hdr.setDcnbBienBanLayMauHdrList(dcnbKeHoachNhapXuatService.detailKhDtl(khdtls.getId()));
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
@@ -100,6 +102,18 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
             });
         });
         return dcnbQuyetDinhDcCHdrs;
+    }
+
+
+    public List<DcnbBienBanLayMauHdrDTO> danhSachSoQdDieuChuyen(CustomUserDetails currentUser, SearchDcnbBienBanLayMau req) throws Exception{
+        String maDviCha = qlnvDmDonviRepository.findByMaDviAndTrangThai(currentUser.getDvql(), "01");
+        List<DcnbBienBanLayMauHdrDTO> danhSachSoQdDieuChuyen = dcnbBienBanLayMauHdrRepository.findByLoaiDcAndTrangThai(req.getLoaiDc(),Contains.BAN_HANH, maDviCha, Contains.QD_XUAT);
+        return danhSachSoQdDieuChuyen;
+    }
+
+    public List<DcnbBienBanLayMauHdrDTO> danhSachLoKho(CustomUserDetails currentUser, SearchDcnbBienBanLayMau req) throws Exception{
+        List<DcnbBienBanLayMauHdrDTO> danhSachSoQdDieuChuyen = dcnbBienBanLayMauHdrRepository.findByLoaiDcAndTrangThai1(req.getLoaiDc(),req.getQDinhDccId(),Contains.BAN_HANH, Contains.QD_XUAT);
+        return danhSachSoQdDieuChuyen;
     }
 
     @Transactional
