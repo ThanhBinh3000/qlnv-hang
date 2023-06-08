@@ -61,5 +61,5 @@ public interface DcnbBienBanLayMauHdrRepository extends JpaRepository<DcnbBienBa
             "FROM DcnbBienBanLayMauHdr hdr\n" +
             "LEFT JOIN DcnbKeHoachNhapXuat kh ON kh.idHdr = hdr.id " +
             "WHERE hdr.loaiDc  = ?1 AND hdr.qDinhDccId = ?2 AND hdr.trangThai = ?3  AND kh.type = ?4 group by hdr.maLoKho")
-    List<DcnbBienBanLayMauHdrDTO> findByLoaiDcAndTrangThai1(String loaiDc,Long qDinhDccId, String trangThai, String type);
+    List<DcnbBienBanLayMauHdrDTO> findByLoaiDcAndQDinhDccIdAndTrangThai(String loaiDc,Long qDinhDccId, String trangThai, String type);
 }

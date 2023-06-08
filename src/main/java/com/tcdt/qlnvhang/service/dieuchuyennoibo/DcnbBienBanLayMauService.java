@@ -9,6 +9,7 @@ import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBBNTBQHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBienBanLayMauHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbBienBanLayMau;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbQuyetDinhDcC;
@@ -85,20 +86,15 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
         req.setMaDvi(dvql);
         dcnbQuyetDinhDcCHdrs.forEach( hdr -> {
             hdr.getDanhSachQuyetDinh().forEach( dtl -> {
-                DcnbKeHoachDcHdr dcnbKeHoachDcHdr = dtl.getDcnbKeHoachDcHdr();
-//                if(dcnbKeHoachDcHdr != null){
-//                    dcnbKeHoachDcHdr.getDanhSachHangHoa().stream().filter(dtlKh -> !Objects.isNull(dtlKh.getBbLayMauId())).forEach(dtlKh -> {
-//                        Optional<DcnbBienBanLayMauHdr> byId = dcnbBienBanLayMauHdrRepository.findById(dtlKh.getBbLayMauId());
-//                        dtlKh.setDcnbBienBanLayMauHdr(byId.get());
-//                    });
-                dcnbKeHoachDcHdr.getDanhSachHangHoa().forEach(khdtls->{
+                DcnbKeHoachDcHdr keHoachHdr = dtl.getDcnbKeHoachDcHdr();
+                keHoachHdr.getDanhSachHangHoa().forEach( keHoachDtl -> {
                     try {
-                        hdr.setDcnbBienBanLayMauHdrList(dcnbKeHoachNhapXuatService.detailKhDtl(khdtls.getId()));
+                        DcnbKeHoachNhapXuat keHoachNhapXuat = dcnbKeHoachNhapXuatService.detailKhDtl(keHoachDtl.getId());
+                        keHoachDtl.setDcnbKeHoachNhapXuat(keHoachNhapXuat);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                 });
-//                }
             });
         });
         return dcnbQuyetDinhDcCHdrs;
@@ -112,7 +108,7 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
     }
 
     public List<DcnbBienBanLayMauHdrDTO> danhSachLoKho(CustomUserDetails currentUser, SearchDcnbBienBanLayMau req) throws Exception{
-        List<DcnbBienBanLayMauHdrDTO> danhSachSoQdDieuChuyen = dcnbBienBanLayMauHdrRepository.findByLoaiDcAndTrangThai1(req.getLoaiDc(),req.getQDinhDccId(),Contains.BAN_HANH, Contains.QD_XUAT);
+        List<DcnbBienBanLayMauHdrDTO> danhSachSoQdDieuChuyen = dcnbBienBanLayMauHdrRepository.findByLoaiDcAndQDinhDccIdAndTrangThai(req.getLoaiDc(),req.getQDinhDccId(),Contains.BAN_HANH, Contains.QD_XUAT);
         return danhSachSoQdDieuChuyen;
     }
 

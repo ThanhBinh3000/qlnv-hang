@@ -1,12 +1,8 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBBNTBQHdrRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBienBanLayMauHdrRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachNhapXuatRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanLayMauHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachNhapXuat;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.DataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +20,15 @@ public class DcnbKeHoachNhapXuatService extends BaseServiceImpl {
 
     @Autowired
     private DcnbBienBanLayMauHdrRepository dcnbBienBanLayMauHdrRepository;
+
+    @Autowired
+    private DcnbPhieuKnChatLuongHdrRepository dcnbPhieuKnChatLuongHdrRepository;
+
+    @Autowired
+    private DcnbBangKeCanHangHdrRepository dcnbBangKeCanHangHdrRepository;
+
+    @Autowired
+    private DcnbBienBanTinhKhoHdrRepository dcnbBienBanTinhKhoHdrRepository;
 
     @Autowired
     private DcnbBBNTBQHdrRepository dcnbBBNTBQHdrRepository;
@@ -71,6 +76,19 @@ public class DcnbKeHoachNhapXuatService extends BaseServiceImpl {
                     case DcnbBBNTBQHdr.TABLE_NAME:
                         Optional<DcnbBBNTBQHdr> dcnbBBNTBQHdr = dcnbBBNTBQHdrRepository.findById(khDtl.getIdHdr());
                         dcnbBBNTBQHdr.ifPresent(khDtl::setDcnbBBNTBQHdr);
+                        break;
+                    case DcnbPhieuKnChatLuongHdr.TABLE_NAME:
+                        Optional<DcnbPhieuKnChatLuongHdr> dcnbPhieuKnChatLuongHdr = dcnbPhieuKnChatLuongHdrRepository.findById(khDtl.getIdHdr());
+                        dcnbPhieuKnChatLuongHdr.ifPresent(khDtl::setDcnbPhieuKnChatLuongHdr);
+                        break;
+                    case DcnbBangKeCanHangHdr.TABLE_NAME:
+                        Optional<DcnbBangKeCanHangHdr> dcnbBangKeCanHangHdr = dcnbBangKeCanHangHdrRepository.findById(khDtl.getIdHdr());
+                        dcnbBangKeCanHangHdr.ifPresent(khDtl::setDcnbBangKeCanHangHdr);
+                        break;
+                    case DcnbBienBanTinhKhoHdr.TABLE_NAME:
+                        Optional<DcnbBienBanTinhKhoHdr> dcnbBienBanTinhKhoHdr = dcnbBienBanTinhKhoHdrRepository.findById(khDtl.getIdHdr());
+                        dcnbBienBanTinhKhoHdr.ifPresent(khDtl::setDcnbBienBanTinhKhoHdr);
+                        break;
                     default:
                         break;
                 }

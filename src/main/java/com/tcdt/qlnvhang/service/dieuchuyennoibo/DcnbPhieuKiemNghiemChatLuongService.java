@@ -61,14 +61,6 @@ public class DcnbPhieuKiemNghiemChatLuongService extends BaseServiceImpl {
     @Autowired
     DcnbKeHoachNhapXuatService dcnbKeHoachNhapXuatService;
 
-    public Page<DcnbPhieuKnChatLuongHdr> searchPage1(CustomUserDetails currentUser, SearchPhieuKnChatLuong req) throws Exception {
-        String dvql = currentUser.getDvql();
-        req.setMaDvi(dvql);
-        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        Page<DcnbPhieuKnChatLuongHdr> search = dcnbPhieuKnChatLuongHdrRepository.search(req, pageable);
-        return search;
-    }
-
     public Page<DcnbQuyetDinhDcCHdr> searchPage(CustomUserDetails currentUser, SearchPhieuKnChatLuong req) throws Exception {
 
         // Get Tree quyết định
@@ -85,22 +77,18 @@ public class DcnbPhieuKiemNghiemChatLuongService extends BaseServiceImpl {
         req.setMaDvi(dvql);
         dcnbQuyetDinhDcCHdrs.forEach( hdr -> {
             hdr.getDanhSachQuyetDinh().forEach( dtl -> {
-                DcnbKeHoachDcHdr dcnbKeHoachDcHdr = dtl.getDcnbKeHoachDcHdr();
-//                if(dcnbKeHoachDcHdr != null){
-//                    dcnbKeHoachDcHdr.getDanhSachHangHoa().stream().filter(dtlKh -> !Objects.isNull(dtlKh.getBbLayMauId())).forEach(dtlKh -> {
-//                        Optional<DcnbBienBanLayMauHdr> byId = dcnbBienBanLayMauHdrRepository.findById(dtlKh.getBbLayMauId());
-//                        dtlKh.setDcnbBienBanLayMauHdr(byId.get());
-//                    });
-                dcnbKeHoachDcHdr.getDanhSachHangHoa().forEach(khdtls->{
+                DcnbKeHoachDcHdr keHoachHdr = dtl.getDcnbKeHoachDcHdr();
+                keHoachHdr.getDanhSachHangHoa().forEach( keHoachDtl -> {
                     try {
-                        hdr.setDcnbBienBanLayMauHdrList(dcnbKeHoachNhapXuatService.detailKhDtl(khdtls.getId()));
+                        DcnbKeHoachNhapXuat keHoachNhapXuat = dcnbKeHoachNhapXuatService.detailKhDtl(keHoachDtl.getId());
+                        keHoachDtl.setDcnbKeHoachNhapXuat(keHoachNhapXuat);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                 });
-//                }
             });
         });
+
         return dcnbQuyetDinhDcCHdrs;
     }
     @Transactional
@@ -130,7 +118,7 @@ public class DcnbPhieuKiemNghiemChatLuongService extends BaseServiceImpl {
             DcnbKeHoachNhapXuat keHoachNhapXuat = new DcnbKeHoachNhapXuat();
             keHoachNhapXuat.setIdKhDcDtl(e.getId());
             keHoachNhapXuat.setIdHdr(created.getId());
-            keHoachNhapXuat.setTableName(DcnbBienBanTinhKhoHdr.TABLE_NAME);
+            keHoachNhapXuat.setTableName(DcnbPhieuKnChatLuongHdr.TABLE_NAME);
             keHoachNhapXuat.setType(Contains.QD_XUAT);
             try {
                 dcnbKeHoachNhapXuatService.saveOrUpdate(keHoachNhapXuat);
@@ -288,7 +276,9 @@ public class DcnbPhieuKiemNghiemChatLuongService extends BaseServiceImpl {
         paggingReq.setPage(0);
         paggingReq.setLimit(Integer.MAX_VALUE);
         objReq.setPaggingReq(paggingReq);
-        Page<DcnbPhieuKnChatLuongHdr> page = this.searchPage1(currentUser, objReq);
+        objReq.setMaDvi(currentUser.getDvql());
+        Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit());
+        Page<DcnbPhieuKnChatLuongHdr> page = dcnbPhieuKnChatLuongHdrRepository.search(objReq,pageable);
         List<DcnbPhieuKnChatLuongHdr> data = page.getContent();
 
         String title = "Danh sách phương án xuất cứu trợ, viện trợ ";
