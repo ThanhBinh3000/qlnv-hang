@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @Setter
 public class SearchDcnbBienBanLayMau extends BaseRequest {
     private Integer nam;
+    private Long qDinhDccId;
     private String soQdinhDcc;
     private String soBbLayMau;
     private String dViKiemNghiem;

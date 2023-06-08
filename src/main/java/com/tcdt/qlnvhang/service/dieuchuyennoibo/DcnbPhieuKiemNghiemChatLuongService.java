@@ -81,22 +81,28 @@ public class DcnbPhieuKiemNghiemChatLuongService extends BaseServiceImpl {
         Page<DcnbQuyetDinhDcCHdr> dcnbQuyetDinhDcCHdrs = dcnbQuyetDinhDcCHdrService.searchPage(currentUser, reqQd);
 
         // Gắn data vào biên bản lấy mẫu vào tree
-//        String dvql = currentUser.getDvql();
-//        req.setMaDvi(dvql);
-//        dcnbQuyetDinhDcCHdrs.forEach( hdr -> {
-//            hdr.getDanhSachQuyetDinh().forEach( dtl -> {
-//                DcnbKeHoachDcHdr dcnbKeHoachDcHdr = dtl.getDcnbKeHoachDcHdr();
+        String dvql = currentUser.getDvql();
+        req.setMaDvi(dvql);
+        dcnbQuyetDinhDcCHdrs.forEach( hdr -> {
+            hdr.getDanhSachQuyetDinh().forEach( dtl -> {
+                DcnbKeHoachDcHdr dcnbKeHoachDcHdr = dtl.getDcnbKeHoachDcHdr();
 //                if(dcnbKeHoachDcHdr != null){
 //                    dcnbKeHoachDcHdr.getDanhSachHangHoa().stream().filter(dtlKh -> !Objects.isNull(dtlKh.getBbLayMauId())).forEach(dtlKh -> {
 //                        Optional<DcnbBienBanLayMauHdr> byId = dcnbBienBanLayMauHdrRepository.findById(dtlKh.getBbLayMauId());
 //                        dtlKh.setDcnbBienBanLayMauHdr(byId.get());
 //                    });
+                dcnbKeHoachDcHdr.getDanhSachHangHoa().forEach(khdtls->{
+                    try {
+                        hdr.setDcnbBienBanLayMauHdrList(dcnbKeHoachNhapXuatService.detailKhDtl(khdtls.getId()));
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                });
 //                }
-//            });
-//        });
+            });
+        });
         return dcnbQuyetDinhDcCHdrs;
     }
-
     @Transactional
     public DcnbPhieuKnChatLuongHdr save(CustomUserDetails currentUser, DcnbPhieuKnChatLuongHdrReq objReq) throws Exception {
         if (currentUser == null) {
