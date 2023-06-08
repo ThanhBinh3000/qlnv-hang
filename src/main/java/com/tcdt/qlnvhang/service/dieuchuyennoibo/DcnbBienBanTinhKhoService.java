@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBienBanLayMauDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBienBanTinhKhoDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBienBanTinhKhoHdrRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcDtlRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -51,6 +52,12 @@ public class DcnbBienBanTinhKhoService extends BaseServiceImpl {
     @Autowired
     FileDinhKemRepository fileDinhKemRepository;
 
+    @Autowired
+    DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
+
+    @Autowired
+    DcnbKeHoachNhapXuatService dcnbKeHoachNhapXuatService;
+
     public Page<DcnbBienBanTinhKhoHdr> searchPage(CustomUserDetails currentUser, SearchDcnbBienBanTinhKho req) throws Exception {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
@@ -76,6 +83,19 @@ public class DcnbBienBanTinhKhoService extends BaseServiceImpl {
         DcnbBienBanTinhKhoHdr created = dcnbBienBanTinhKhoHdrRepository.save(data);
         List<FileDinhKem> bienBanTinhKhoDaKy = fileDinhKemService.saveListFileDinhKem(objReq.getFileBbTinhKhoDaKy(), created.getId(), DcnbBienBanTinhKhoHdr.TABLE_NAME + "_BB_TINH_KHO_DA_KY");
         data.setFileBbTinhKhoDaKy(bienBanTinhKhoDaKy);
+        List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByQdDcIdAndMaLoKho(created.getQDinhDccId(),created.getMaLoKho());
+        dcnbKeHoachDcDtls.forEach(e-> {
+            DcnbKeHoachNhapXuat keHoachNhapXuat = new DcnbKeHoachNhapXuat();
+            keHoachNhapXuat.setIdKhDcDtl(e.getId());
+            keHoachNhapXuat.setIdHdr(created.getId());
+            keHoachNhapXuat.setTableName(DcnbBienBanTinhKhoHdr.TABLE_NAME);
+            keHoachNhapXuat.setType(Contains.QD_XUAT);
+            try {
+                dcnbKeHoachNhapXuatService.saveOrUpdate(keHoachNhapXuat);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         return created;
     }
 
