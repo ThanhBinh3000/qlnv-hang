@@ -591,7 +591,7 @@ public class DcnbQuyetDinhDcCHdrService extends BaseServiceImpl {
                     keHoachHdrObj.setParentId(keHoachHdrObj.getId());
                     keHoachHdrObj.setId(null);
                     keHoachHdrObj.setMaDviPq(maChiCucThue);
-                    keHoachHdrObj.setType(Contains.NHAN_DIEU_CHUYEN);
+                    keHoachHdrObj.setType(Contains.NHAN_DIEU_CHUYEN_TS);
                     keHoachHdrObj.setTrangThai(statusReq.getTrangThai());
                     keHoachHdrObj.setDanhSachHangHoa(keHoachHdrObj.getDanhSachHangHoa().stream()
                             .filter(item -> item.getMaChiCucNhan().equals(maChiCucThue)).map(itemMap1 -> {
@@ -687,7 +687,7 @@ public class DcnbQuyetDinhDcCHdrService extends BaseServiceImpl {
                     keHoachHdrObj.setParentId(keHoachHdrObj.getId());
                     keHoachHdrObj.setId(null);
                     keHoachHdrObj.setMaDviPq(maChiCucThue);
-                    keHoachHdrObj.setType(Contains.NHAN_DIEU_CHUYEN);
+                    keHoachHdrObj.setType(Contains.NHAN_DIEU_CHUYEN_TS);
                     keHoachHdrObj.setTrangThai(statusReq.getTrangThai());
                     keHoachHdrObj.setDanhSachHangHoa(keHoachHdrObj.getDanhSachHangHoa().stream()
                             .filter(item -> item.getMaChiCucNhan().equals(maChiCucThue)).map(itemMap1 -> {
