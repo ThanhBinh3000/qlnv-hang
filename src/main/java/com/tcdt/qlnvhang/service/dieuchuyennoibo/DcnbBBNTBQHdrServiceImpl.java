@@ -1,42 +1,33 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBBNTBQDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBBNTBQHdrRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBangKeCanHangDtlRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBangKeCanHangHdrRepository;
-import com.tcdt.qlnvhang.request.IdSearchReq;
-import com.tcdt.qlnvhang.request.PaggingReq;
-import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBBNTBQHdrReq;
-import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBangKeCanHangHdrReq;
-import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchBangKeCanHang;
-import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbQuyetDinhDcC;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
-import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachNhapXuat;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbQuyetDinhDcCHdr;
 import com.tcdt.qlnvhang.util.Contains;
-import com.tcdt.qlnvhang.util.DataUtils;
-import com.tcdt.qlnvhang.util.ExportExcel;
-import org.hibernate.Hibernate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
-import javax.transaction.Transactional;
-import java.time.LocalDate;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
@@ -49,6 +40,12 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
+
+    @Autowired
+    private DcnbKeHoachNhapXuatService dcnbKeHoachNhapXuatService;
+
+    @Autowired
+    private DcnbQuyetDinhDcCHdrService dcnbQuyetDinhDcCHdrService;
 
 
     @Override
@@ -82,6 +79,11 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
         DcnbBBNTBQHdr created = hdrRepository.save(data);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBBNTBQHdr.TABLE_NAME);
         created.setFileDinhKems(canCu);
+        DcnbKeHoachNhapXuat kh = new DcnbKeHoachNhapXuat();
+        kh.setIdHdr(created.getId());
+        kh.setTableName(DcnbKeHoachNhapXuat.TABLE_NAME);
+        kh.setIdKhDcDtl(data.getIdKeHoachDtl());
+        dcnbKeHoachNhapXuatService.saveOrUpdate(kh);
         return created;
     }
 
@@ -187,5 +189,32 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
     @Override
     public void export(DcnbBBNTBQHdrReq req, HttpServletResponse response) throws Exception {
 
+    }
+
+    @Override
+    public Page<DcnbQuyetDinhDcCHdr> searchPage(CustomUserDetails currentUser, DcnbBBNTBQHdrReq req) throws Exception {
+        // Get Tree quyết định
+        SearchDcnbQuyetDinhDcC reqQd = new SearchDcnbQuyetDinhDcC();
+        reqQd.setPaggingReq(req.getPaggingReq());
+        reqQd.setNam(req.getNam());
+        reqQd.setSoQdinh(req.getSoQdDcCuc());
+        reqQd.setLoaiDc(req.getLoaiDc());
+        reqQd.setTrangThai(NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
+        Page<DcnbQuyetDinhDcCHdr> dcnbQuyetDinhDcCHdrs = dcnbQuyetDinhDcCHdrService.searchPage(currentUser, reqQd);
+        dcnbQuyetDinhDcCHdrs.forEach( hdrQd -> {
+            hdrQd.getDanhSachQuyetDinh().forEach( dtlQd -> {
+                DcnbKeHoachDcHdr keHoachHdr = dtlQd.getDcnbKeHoachDcHdr();
+                keHoachHdr.getDanhSachHangHoa().forEach( keHoachDtl -> {
+                    try {
+                        DcnbKeHoachNhapXuat keHoachNhapXuat = dcnbKeHoachNhapXuatService.detailKhDtl(keHoachDtl.getId());
+                        keHoachDtl.setDcnbKeHoachNhapXuat(keHoachNhapXuat);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+
+                });
+            });
+        });
+        return dcnbQuyetDinhDcCHdrs;
     }
 }

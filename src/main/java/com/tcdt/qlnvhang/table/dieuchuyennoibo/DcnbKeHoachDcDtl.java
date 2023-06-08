@@ -121,4 +121,6 @@ public class DcnbKeHoachDcDtl implements Serializable {
     private DcnbKeHoachDcHdr dcnbKeHoachDcHdr;
     @Transient
     private DcnbBienBanLayMauHdr dcnbBienBanLayMauHdr;
+    @Transient
+    private DcnbKeHoachNhapXuat dcnbKeHoachNhapXuat;
 }

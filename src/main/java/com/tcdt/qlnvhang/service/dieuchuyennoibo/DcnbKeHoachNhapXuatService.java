@@ -1,8 +1,10 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBBNTBQHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBienBanLayMauHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachNhapXuatRepository;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQHdr;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanLayMauHdr;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachNhapXuat;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -22,6 +24,9 @@ public class DcnbKeHoachNhapXuatService extends BaseServiceImpl {
 
     @Autowired
     private DcnbBienBanLayMauHdrRepository dcnbBienBanLayMauHdrRepository;
+
+    @Autowired
+    private DcnbBBNTBQHdrRepository dcnbBBNTBQHdrRepository;
 
     @Transactional
     public DcnbKeHoachNhapXuat saveOrUpdate(DcnbKeHoachNhapXuat objReq) throws Exception {
@@ -62,10 +67,10 @@ public class DcnbKeHoachNhapXuatService extends BaseServiceImpl {
                         Optional<DcnbBienBanLayMauHdr> dcnbBienBanLayMauHdr = dcnbBienBanLayMauHdrRepository.findById(khDtl.getIdHdr());
                         dcnbBienBanLayMauHdr.ifPresent(khDtl::setDcnbBienBanLayMauHdr);
                         break;
-//                    // Biên bản .....
-//                    case DcnbBienBanLayMauHdr.TABLE_NAME:
-//                        Optional<DcnbBienBanLayMauHdr> byId = dcnbBienBanLayMauHdrRepository.findById(khDtl.getIdHdr());
-//                        byId.ifPresent(khDtl::setDcnbBienBanLayMauHdr);
+                    // Biên bản .....
+                    case DcnbBBNTBQHdr.TABLE_NAME:
+                        Optional<DcnbBBNTBQHdr> dcnbBBNTBQHdr = dcnbBBNTBQHdrRepository.findById(khDtl.getIdHdr());
+                        dcnbBBNTBQHdr.ifPresent(khDtl::setDcnbBBNTBQHdr);
                     default:
                         break;
                 }

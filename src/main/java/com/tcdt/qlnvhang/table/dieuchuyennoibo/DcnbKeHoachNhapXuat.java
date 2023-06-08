@@ -35,5 +35,8 @@ public class DcnbKeHoachNhapXuat {
     @Transient
     private DcnbBienBanLayMauHdr dcnbBienBanLayMauHdr;
 
+    @Transient
+    private DcnbBBNTBQHdr dcnbBBNTBQHdr;
+
 
 }
