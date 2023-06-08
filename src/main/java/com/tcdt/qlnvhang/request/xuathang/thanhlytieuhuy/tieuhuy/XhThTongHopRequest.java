@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.tieuhuy;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlTongHopDtl;
+import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy.XhThTongHopDtl;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -56,5 +57,5 @@ public class XhThTongHopRequest extends BaseRequest {
   private String maChiCuc;
   private LocalDateTime ngayTaoTu;
   private LocalDateTime ngayTaoDen;
-  private List<XhTlTongHopDtl> tongHopDtl = new ArrayList<>();
+  private List<XhThTongHopDtl> tongHopDtl = new ArrayList<>();
 }
