@@ -28,13 +28,30 @@ public interface DcnbQuyetDinhDcCHdrRepository extends JpaRepository<DcnbQuyetDi
             "AND (:#{#param.ngayDuyetTcDen}  IS NULL OR c.ngayDuyetTc <= :#{#param.ngayDuyetTcDen}) ) " +
             "AND (:#{#param.trichYeu} IS NULL OR LOWER(c.trichYeu) LIKE CONCAT('%',LOWER(:#{#param.trichYeu}),'%')) " +
             "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
-            "AND (:#{#param.type} IS NULL OR c.type = :#{#param.type}) " +
+            "AND (:#{#param.types.isEmpty() } = true OR c.type NOT IN :#{#param.types}) " +
+            "AND (:#{#param.loaiDc} IS NULL OR c.loaiDc = :#{#param.loaiDc}) " +
+            "AND (:#{#param.loaiQdinh} IS NULL OR c.loaiQdinh = :#{#param.loaiQdinh}) " +
+            "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
+    )
+    Page<DcnbQuyetDinhDcCHdr> searchCuc(@Param("param") SearchDcnbQuyetDinhDcC param, Pageable pageable);
+
+    @Query(value = "SELECT distinct c FROM DcnbQuyetDinhDcCHdr c " +
+            " LEFT JOIN DcnbQuyetDinhDcCDtl dtl on c.id = dtl.hdrId " +
+            " LEFT JOIN DcnbKeHoachDcHdr kh on dtl.keHoachDcHdrId = kh.id " +
+            " WHERE 1=1 " +
+            "AND (:#{#param.soQdinh} IS NULL OR LOWER(c.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdinh}),'%')) " +
+            "AND ((:#{#param.maDvi} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDvi},'')) OR (:#{#param.maDvi} IS NULL OR kh.maDvi LIKE CONCAT(:#{#param.maDvi},''))) " +
+            "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
+            "AND ((:#{#param.ngayDuyetTcTu}  IS NULL OR c.ngayDuyetTc >= :#{#param.ngayDuyetTcTu})" +
+            "AND (:#{#param.ngayDuyetTcDen}  IS NULL OR c.ngayDuyetTc <= :#{#param.ngayDuyetTcDen}) ) " +
+            "AND (:#{#param.trichYeu} IS NULL OR LOWER(c.trichYeu) LIKE CONCAT('%',LOWER(:#{#param.trichYeu}),'%')) " +
+            "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.types.isEmpty() } = true OR c.type IN :#{#param.types}) " +
             "AND (:#{#param.loaiDc} IS NULL OR c.loaiDc = :#{#param.loaiDc}) " +
             "AND (:#{#param.loaiQdinh} IS NULL OR c.loaiQdinh = :#{#param.loaiQdinh}) " +
             "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
     )
-    Page<DcnbQuyetDinhDcCHdr> search(@Param("param") SearchDcnbQuyetDinhDcC param, Pageable pageable);
+    Page<DcnbQuyetDinhDcCHdr> searchChiCuc(@Param("param") SearchDcnbQuyetDinhDcC param, Pageable pageable);
 
     void deleteAllByIdIn(List<Long> listId);
 
@@ -54,6 +71,6 @@ public interface DcnbQuyetDinhDcCHdrRepository extends JpaRepository<DcnbQuyetDi
             "LEFT JOIN DcnbQuyetDinhDcCDtl dtl ON dtl.hdrId = hdr.id \n" +
             "LEFT JOIN DcnbKeHoachDcHdr h On h.id  = dtl.keHoachDcHdrId \n" +
             "LEFT JOIN DcnbKeHoachDcDtl d ON d.hdrId  = h.id " +
-            "WHERE hdr.loaiDc  = ?1 AND hdr.trangThai = ?2 AND hdr.maDvi = ?3 AND (hdr.loaiQdinh is null or hdr.loaiQdinh = ?4) group by hdr.id,hdr.soQdinh,hdr.ngayKyQdinh")
+            "WHERE hdr.loaiDc  = ?1 AND hdr.trangThai = ?2 AND hdr.maDvi = ?3 AND (hdr.loaiQdinh is null or hdr.loaiQdinh = ?4) and hdr.type is null group by hdr.id,hdr.soQdinh,hdr.ngayKyQdinh")
     List<DcnbQuyetDinhDcCHdrDTO> findByLoaiDcAndTrangThai(String loaiDc, String trangThai,String maDonVi, String loaiQdinh);
 }

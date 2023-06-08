@@ -6,16 +6,16 @@ import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.HhBbNghiemthuKlstRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBienBanLayMauDtlRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBienBanLayMauHdrRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcDtlRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKtChatLuongHdrRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBBNTBQHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBienBanLayMauHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbBienBanLayMau;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbQuyetDinhDcC;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.response.DieuChuyenNoiBo.DcnbBienBanLayMauHdrDTO;
+import com.tcdt.qlnvhang.response.DieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -55,6 +55,9 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
     FileDinhKemService fileDinhKemService;
 
     @Autowired
+    DcnbKeHoachNhapXuatService dcnbKeHoachNhapXuatService;
+
+    @Autowired
     HhBbNghiemthuKlstRepository hhBbNghiemthuKlstRepository;
 
     @Autowired
@@ -83,16 +86,30 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
         req.setMaDvi(dvql);
         dcnbQuyetDinhDcCHdrs.forEach( hdr -> {
             hdr.getDanhSachQuyetDinh().forEach( dtl -> {
-                DcnbKeHoachDcHdr dcnbKeHoachDcHdr = dtl.getDcnbKeHoachDcHdr();
-                if(dcnbKeHoachDcHdr != null){
-                    dcnbKeHoachDcHdr.getDanhSachHangHoa().stream().filter(dtlKh -> !Objects.isNull(dtlKh.getBbLayMauId())).forEach(dtlKh -> {
-                        Optional<DcnbBienBanLayMauHdr> byId = dcnbBienBanLayMauHdrRepository.findById(dtlKh.getBbLayMauId());
-                        dtlKh.setDcnbBienBanLayMauHdr(byId.get());
-                    });
-                }
+                DcnbKeHoachDcHdr keHoachHdr = dtl.getDcnbKeHoachDcHdr();
+                keHoachHdr.getDanhSachHangHoa().forEach( keHoachDtl -> {
+                    try {
+                        DcnbKeHoachNhapXuat keHoachNhapXuat = dcnbKeHoachNhapXuatService.detailKhDtl(keHoachDtl.getId());
+                        keHoachDtl.setDcnbKeHoachNhapXuat(keHoachNhapXuat);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                });
             });
         });
         return dcnbQuyetDinhDcCHdrs;
+    }
+
+
+    public List<DcnbBienBanLayMauHdrDTO> danhSachSoQdDieuChuyen(CustomUserDetails currentUser, SearchDcnbBienBanLayMau req) throws Exception{
+        String maDviCha = qlnvDmDonviRepository.findByMaDviAndTrangThai(currentUser.getDvql(), "01");
+        List<DcnbBienBanLayMauHdrDTO> danhSachSoQdDieuChuyen = dcnbBienBanLayMauHdrRepository.findByLoaiDcAndTrangThai(req.getLoaiDc(),Contains.BAN_HANH, maDviCha, Contains.QD_XUAT);
+        return danhSachSoQdDieuChuyen;
+    }
+
+    public List<DcnbBienBanLayMauHdrDTO> danhSachLoKho(CustomUserDetails currentUser, SearchDcnbBienBanLayMau req) throws Exception{
+        List<DcnbBienBanLayMauHdrDTO> danhSachSoQdDieuChuyen = dcnbBienBanLayMauHdrRepository.findByLoaiDcAndQDinhDccIdAndTrangThai(req.getLoaiDc(),req.getQDinhDccId(),Contains.BAN_HANH, Contains.QD_XUAT);
+        return danhSachSoQdDieuChuyen;
     }
 
     @Transactional
@@ -131,9 +148,16 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
         created.setBienBanLayMauDinhKem(bienBanLayMauDinhKem);
         List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByQdDcIdAndMaLoKho(created.getQDinhDccId(),created.getMaLoKho());
         dcnbKeHoachDcDtls.forEach(e->{
-            e.setBbLayMauId(created.getId());
-            e.setSoBbLayMau(created.getSoBbLayMau());
-            dcnbKeHoachDcDtlRepository.save(e);
+            DcnbKeHoachNhapXuat keHoachNhapXuat = new DcnbKeHoachNhapXuat();
+            keHoachNhapXuat.setIdKhDcDtl(e.getId());
+            keHoachNhapXuat.setIdHdr(created.getId());
+            keHoachNhapXuat.setTableName(DcnbBienBanLayMauHdr.TABLE_NAME);
+            keHoachNhapXuat.setType(Contains.QD_XUAT);
+            try {
+                dcnbKeHoachNhapXuatService.saveOrUpdate(keHoachNhapXuat);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
         });
         return created;
     }

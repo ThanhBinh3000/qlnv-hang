@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.repository.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbBienBanLayMau;
+import com.tcdt.qlnvhang.response.DieuChuyenNoiBo.DcnbBienBanLayMauHdrDTO;
+import com.tcdt.qlnvhang.response.DieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanLayMauHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -47,4 +49,17 @@ public interface DcnbBienBanLayMauHdrRepository extends JpaRepository<DcnbBienBa
     List<DcnbBienBanLayMauHdr> findByIdIn(List<Long> ids);
 
     List<DcnbBienBanLayMauHdr> findAllByIdIn(List<Long> idList);
+    @Query("SELECT new com.tcdt.qlnvhang.response.DieuChuyenNoiBo.DcnbBienBanLayMauHdrDTO(" +
+            "hdr.qDinhDccId, hdr.soQdinhDcc , hdr.ngayLayMau) " +
+            "FROM DcnbBienBanLayMauHdr hdr\n" +
+            "LEFT JOIN DcnbKeHoachNhapXuat kh ON kh.idHdr = hdr.id " +
+            "WHERE hdr.loaiDc  = ?1 AND hdr.trangThai = ?2 AND hdr.maDvi = ?3 AND kh.type = ?4 group by hdr.id,hdr.soQdinhDcc , hdr.ngayLayMau")
+    List<DcnbBienBanLayMauHdrDTO> findByLoaiDcAndTrangThai(String loaiDc, String trangThai, String maDviCha, String type);
+
+    @Query("SELECT new com.tcdt.qlnvhang.response.DieuChuyenNoiBo.DcnbBienBanLayMauHdrDTO(" +
+            "hdr.maLoKho) " +
+            "FROM DcnbBienBanLayMauHdr hdr\n" +
+            "LEFT JOIN DcnbKeHoachNhapXuat kh ON kh.idHdr = hdr.id " +
+            "WHERE hdr.loaiDc  = ?1 AND hdr.qDinhDccId = ?2 AND hdr.trangThai = ?3  AND kh.type = ?4 group by hdr.maLoKho")
+    List<DcnbBienBanLayMauHdrDTO> findByLoaiDcAndQDinhDccIdAndTrangThai(String loaiDc,Long qDinhDccId, String trangThai, String type);
 }
