@@ -31,8 +31,8 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = PathContains.DX_KH + PathContains.NHAP_XUAT)
-@Api(tags = "Nhập hàng - Đấu Thầu - Nhập kho - Quyết định giao nhiệm vụ nhập hàng")
+@RequestMapping(value = PathContains.NHAP_KHAC + PathContains.NHAP_XUAT)
+@Api(tags = "Nhập hàng - Đấu Thầu - Nhập kho - Quyết định giao nhiệm vụ nhập hàng")bug
 public class HhQdGiaoNvuNhapHangKhacController {
 
 	@Autowired
