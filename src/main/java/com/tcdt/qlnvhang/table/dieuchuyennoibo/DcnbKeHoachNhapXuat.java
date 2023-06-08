@@ -38,5 +38,8 @@ public class DcnbKeHoachNhapXuat {
     @Transient
     private DcnbBBNTBQHdr dcnbBBNTBQHdr;
 
+    @Transient
+    private DcnbPhieuKnChatLuongHdr dcnbPhieuKnChatLuongHdr;
+
 
 }

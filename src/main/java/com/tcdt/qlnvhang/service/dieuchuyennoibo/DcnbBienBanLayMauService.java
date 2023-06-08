@@ -6,10 +6,7 @@ import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.HhBbNghiemthuKlstRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBienBanLayMauDtlRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBienBanLayMauHdrRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcDtlRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKtChatLuongHdrRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBienBanLayMauHdrReq;
@@ -55,6 +52,9 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
     FileDinhKemService fileDinhKemService;
 
     @Autowired
+    DcnbKeHoachNhapXuatService dcnbKeHoachNhapXuatService;
+
+    @Autowired
     HhBbNghiemthuKlstRepository hhBbNghiemthuKlstRepository;
 
     @Autowired
@@ -84,12 +84,19 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
         dcnbQuyetDinhDcCHdrs.forEach( hdr -> {
             hdr.getDanhSachQuyetDinh().forEach( dtl -> {
                 DcnbKeHoachDcHdr dcnbKeHoachDcHdr = dtl.getDcnbKeHoachDcHdr();
-                if(dcnbKeHoachDcHdr != null){
-                    dcnbKeHoachDcHdr.getDanhSachHangHoa().stream().filter(dtlKh -> !Objects.isNull(dtlKh.getBbLayMauId())).forEach(dtlKh -> {
-                        Optional<DcnbBienBanLayMauHdr> byId = dcnbBienBanLayMauHdrRepository.findById(dtlKh.getBbLayMauId());
-                        dtlKh.setDcnbBienBanLayMauHdr(byId.get());
-                    });
-                }
+//                if(dcnbKeHoachDcHdr != null){
+//                    dcnbKeHoachDcHdr.getDanhSachHangHoa().stream().filter(dtlKh -> !Objects.isNull(dtlKh.getBbLayMauId())).forEach(dtlKh -> {
+//                        Optional<DcnbBienBanLayMauHdr> byId = dcnbBienBanLayMauHdrRepository.findById(dtlKh.getBbLayMauId());
+//                        dtlKh.setDcnbBienBanLayMauHdr(byId.get());
+//                    });
+                dcnbKeHoachDcHdr.getDanhSachHangHoa().forEach(khdtls->{
+                    try {
+                    dcnbKeHoachNhapXuatService.detailKhDtl(khdtls.getId());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+//                }
             });
         });
         return dcnbQuyetDinhDcCHdrs;
@@ -134,9 +141,13 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
             DcnbKeHoachNhapXuat keHoachNhapXuat = new DcnbKeHoachNhapXuat();
             keHoachNhapXuat.setIdKhDcDtl(e.getId());
             keHoachNhapXuat.setIdHdr(created.getId());
-            keHoachNhapXuat.setTableName("BIEN_BAN_LAY_MAU_HDR");
+            keHoachNhapXuat.setTableName(DcnbBienBanLayMauHdr.TABLE_NAME);
             keHoachNhapXuat.setType(Contains.QD_XUAT);
-            dcnbKeHoachDcDtlRepository.save(e);
+            try {
+                dcnbKeHoachNhapXuatService.saveOrUpdate(keHoachNhapXuat);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
         });
         return created;
     }
