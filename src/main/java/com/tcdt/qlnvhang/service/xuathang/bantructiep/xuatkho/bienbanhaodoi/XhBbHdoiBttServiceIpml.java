@@ -60,11 +60,11 @@ public class XhBbHdoiBttServiceIpml extends BaseServiceImpl implements XhBbHdoiB
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
         data.getContent().forEach(f ->{
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
-            f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : hashMapDvi.get(f.getMaDvi()));
-            f.setTenDiemKho(StringUtils.isEmpty(f.getMaDiemKho()) ? null : hashMapDvi.get(f.getMaDiemKho()));
-            f.setTenNhaKho(StringUtils.isEmpty(f.getMaNhaKho()) ? null : hashMapDvi.get(f.getMaNhaKho()));
-            f.setTenNganKho(StringUtils.isEmpty(f.getMaNganKho()) ? null : hashMapDvi.get(f.getMaNganKho()));
-            f.setTenLoKho(StringUtils.isEmpty(f.getMaLoKho()) ? null : hashMapDvi.get(f.getMaLoKho()));
+            f.setTenDvi(StringUtils.isEmpty(f.getMaDvi())?null:hashMapDvi.get(f.getMaDvi()));
+            f.setTenDiemKho(StringUtils.isEmpty(f.getMaDiemKho())?null:hashMapDvi.get(f.getMaDiemKho()));
+            f.setTenNhaKho(StringUtils.isEmpty(f.getMaNhaKho())?null:hashMapDvi.get(f.getMaNhaKho()));
+            f.setTenNganKho(StringUtils.isEmpty(f.getMaNganKho())?null:hashMapDvi.get(f.getMaNganKho()));
+            f.setTenLoKho(StringUtils.isEmpty(f.getMaLoKho())?null:hashMapDvi.get(f.getMaLoKho()));
             f.setChildren(xhBbHdoiBttDtlRepository.findAllByIdHdr(f.getId()));
         });
         return data;
@@ -73,11 +73,10 @@ public class XhBbHdoiBttServiceIpml extends BaseServiceImpl implements XhBbHdoiB
 
     @Override
     public XhBbHdoiBttHdr create(XhBbHdoiBttHdrReq req) throws Exception {
-        UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null){
-            throw new Exception("Bad request.");
+        if(req == null) return null;
 
-        }
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null) throw new Exception("Bad request.");
 
         XhBbHdoiBttHdr data = new XhBbHdoiBttHdr();
         BeanUtils.copyProperties(req, data, "id");
@@ -109,17 +108,13 @@ public class XhBbHdoiBttServiceIpml extends BaseServiceImpl implements XhBbHdoiB
 
     @Override
     public XhBbHdoiBttHdr update(XhBbHdoiBttHdrReq req) throws Exception {
-        UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null)
-            throw new Exception("Bad request.");
+        if (req == null) return null;
 
-        if (StringUtils.isEmpty(req.getId()))
-            throw new Exception("Sửa thất bại, không tìm thấy dữ liệu");
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null) throw new Exception("Bad request.");
 
         Optional<XhBbHdoiBttHdr> qOptional = xhBbHdoiBttHdrRepository.findById(req.getId());
-        if (!qOptional.isPresent()){
-            throw new Exception("Không tìm thấy dữ liệu cần sửa");
-        }
+        if (!qOptional.isPresent()) throw new Exception("Không tìm thấy biên bản hao dôi cần sửa");
 
         XhBbHdoiBttHdr dataDB = qOptional.get();
         BeanUtils.copyProperties(req, dataDB, "id");
@@ -137,18 +132,24 @@ public class XhBbHdoiBttServiceIpml extends BaseServiceImpl implements XhBbHdoiB
 
     @Override
     public XhBbHdoiBttHdr detail(Long id) throws Exception {
-        if (StringUtils.isEmpty(id))
-            throw new Exception("Không tồn tại bản ghi");
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null) throw new Exception("Bad request.");
 
         Optional<XhBbHdoiBttHdr> qOptional = xhBbHdoiBttHdrRepository.findById(id);
         if (!qOptional.isPresent()){
-            throw new UnsupportedOperationException("Bản ghi không tồn tại");
+            throw new UnsupportedOperationException("Không tìm thấy biên bản hao dôi");
         }
 
-        Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
 
         XhBbHdoiBttHdr data = qOptional.get();
+
+        data.setTenDvi(StringUtils.isEmpty(data.getMaDvi())?null:hashMapDvi.get(data.getMaDvi()));
+        data.setTenDiemKho(StringUtils.isEmpty(data.getMaDiemKho())?null:hashMapDvi.get(data.getMaDiemKho()));
+        data.setTenNhaKho(StringUtils.isEmpty(data.getMaNhaKho())?null:hashMapDvi.get(data.getMaNhaKho()));
+        data.setTenNganKho(StringUtils.isEmpty(data.getMaNganKho())?null:hashMapDvi.get(data.getMaNganKho()));
+        data.setTenLoKho(StringUtils.isEmpty(data.getMaLoKho())?null:hashMapDvi.get(data.getMaLoKho()));
+        data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
 
         if (!Objects.isNull(data.getIdThuKho())){
             data.setTenThuKho(userInfoRepository.findById(data.getIdThuKho()).get().getFullName());
@@ -166,20 +167,12 @@ public class XhBbHdoiBttServiceIpml extends BaseServiceImpl implements XhBbHdoiB
             data.setTenNguoiPduyet(userInfoRepository.findById(data.getNguoiPduyetId()).get().getFullName());
         }
 
-        data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
-        data.setTenDvi(hashMapDvi.get(data.getMaDvi()));
-        data.setTenDiemKho(hashMapDvi.get(data.getMaDiemKho()));
-        data.setTenNhaKho(hashMapDvi.get(data.getMaNganKho()));
-        data.setTenNganKho(hashMapDvi.get(data.getMaNganKho()));
-        data.setTenLoKho(hashMapDvi.get(data.getMaLoKho()));
-
         List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhBbHdoiBttHdr.TABLE_NAME));
         if (!CollectionUtils.isEmpty(fileDinhKems)) data.setFileDinhKems(fileDinhKems);
 
         data.setChildren(xhBbHdoiBttDtlRepository.findAllByIdHdr(id));
 
         return data;
-
     }
 
     @Override

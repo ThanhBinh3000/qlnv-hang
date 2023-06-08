@@ -16,14 +16,14 @@ import java.util.List;
 @Repository
 public interface XhThopDxKhBttRepository extends JpaRepository<XhThopDxKhBttHdr, Long> {
 
-    @Query("SELECT  DX from XhThopDxKhBttHdr DX WHERE 1 = 1 " +
-            "AND (:#{#param.namKh} IS NULL OR DX.namKh = :#{#param.namKh}) " +
-            "AND (:#{#param.loaiVthh} IS NULL OR DX.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
-            "AND (:#{#param.cloaiVthh} IS NULL OR DX.cloaiVthh LIKE CONCAT(:#{#param.cloaiVthh},'%')) " +
-            "AND (:#{#param.noiDungThop} IS NULL OR LOWER(DX.noiDungThop) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.noiDungThop}),'%'))) " +
-            "AND (:#{#param.ngayThopTu} IS NULL OR DX.ngayThop >= :#{#param.ngayThopTu}) " +
-            "AND (:#{#param.ngayThopDen} IS NULL OR DX.ngayThop <= :#{#param.ngayThopDen}) " +
-            "AND (:#{#param.trangThai} IS NULL OR DX.trangThai = :#{#param.trangThai})")
+    @Query("SELECT  TH from XhThopDxKhBttHdr TH WHERE 1 = 1 " +
+            "AND (:#{#param.namKh} IS NULL OR TH.namKh = :#{#param.namKh}) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR TH.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
+            "AND (:#{#param.cloaiVthh} IS NULL OR TH.cloaiVthh LIKE CONCAT(:#{#param.cloaiVthh},'%')) " +
+            "AND (:#{#param.noiDungThop} IS NULL OR LOWER(TH.noiDungThop) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.noiDungThop}),'%'))) " +
+            "AND (:#{#param.ngayThopTu} IS NULL OR TH.ngayThop >= :#{#param.ngayThopTu}) " +
+            "AND (:#{#param.ngayThopDen} IS NULL OR TH.ngayThop <= :#{#param.ngayThopDen}) " +
+            "AND (:#{#param.trangThai} IS NULL OR TH.trangThai = :#{#param.trangThai})")
     Page<XhThopDxKhBttHdr> searchPage(@Param("param") SearchXhThopDxKhBtt param, Pageable pageable);
 
 

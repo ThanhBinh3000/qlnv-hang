@@ -67,6 +67,10 @@ public class XhBkeCanHangBttHdrReq extends BaseRequest {
 
     private String donViTinh;
 
+    private LocalDate ngayXuatKhoTu;
+
+    private LocalDate ngayXuatKhoDen;
+
     @Transient
     private List<XhBkeCanHangBttDtlReq> children = new ArrayList<>();
 }

@@ -58,24 +58,24 @@ public class XhBkeCanHangBttServiceImpl extends BaseServiceImpl implements XhBke
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
         data.getContent().forEach(f ->{
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
-            f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : hashMapDvi.get(f.getMaDvi()));
-            f.setTenDiemKho(StringUtils.isEmpty(f.getMaDiemKho()) ? null : hashMapDvi.get(f.getMaDiemKho()));
-            f.setTenNhaKho(StringUtils.isEmpty(f.getMaNhaKho()) ? null : hashMapDvi.get(f.getMaNhaKho()));
-            f.setTenNganKho(StringUtils.isEmpty(f.getMaNganKho()) ? null : hashMapDvi.get(f.getMaNganKho()));
-            f.setTenLoKho(StringUtils.isEmpty(f.getMaLoKho()) ? null : hashMapDvi.get(f.getMaLoKho()));
-            f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapVthh.get(f.getLoaiVthh()));
-            f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapVthh.get(f.getCloaiVthh()));
+            f.setTenDvi(StringUtils.isEmpty(f.getMaDvi())?null:hashMapDvi.get(f.getMaDvi()));
+            f.setTenDiemKho(StringUtils.isEmpty(f.getMaDiemKho())?null:hashMapDvi.get(f.getMaDiemKho()));
+            f.setTenNhaKho(StringUtils.isEmpty(f.getMaNhaKho())?null:hashMapDvi.get(f.getMaNhaKho()));
+            f.setTenNganKho(StringUtils.isEmpty(f.getMaNganKho())?null:hashMapDvi.get(f.getMaNganKho()));
+            f.setTenLoKho(StringUtils.isEmpty(f.getMaLoKho())?null:hashMapDvi.get(f.getMaLoKho()));
+            f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh())?null:hashMapVthh.get(f.getLoaiVthh()));
+            f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh())?null:hashMapVthh.get(f.getCloaiVthh()));
         });
         return data;
     }
 
     @Override
     public XhBkeCanHangBttHdr create(XhBkeCanHangBttHdrReq req) throws Exception {
-        UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null){
-            throw new Exception("Bad request.");
+        if(req == null) return null;
 
-        }
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null) throw new Exception("Bad request.");
+
         XhBkeCanHangBttHdr data = new XhBkeCanHangBttHdr();
         BeanUtils.copyProperties(req, data, "id");
         data.setNgayTao(LocalDate.now());
@@ -101,52 +101,50 @@ public class XhBkeCanHangBttServiceImpl extends BaseServiceImpl implements XhBke
 
     @Override
     public XhBkeCanHangBttHdr update(XhBkeCanHangBttHdrReq req) throws Exception {
+        if (req == null) return null;
+
         UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null){
-            throw new Exception("Bad request.");
-        }
-        if (StringUtils.isEmpty(req.getId())){
-            throw new Exception("Sửa thất bại, không tìm thấy dữ liệu");
-        }
+        if (userInfo == null) throw new Exception("Bad request.");
+
         Optional<XhBkeCanHangBttHdr> qOptional = xhBkeCanHangBttHdrRepository.findById(req.getId());
-        if (!qOptional.isPresent()){
-            throw new Exception("Không tìm thấy dữ liệu cần sửa");
-        }
-        XhBkeCanHangBttHdr dataDB = qOptional.get();
-        BeanUtils.copyProperties(req, dataDB, "id");
-        dataDB.setNgaySua(LocalDate.now());
-        dataDB.setNguoiSuaId(getUser().getId());
-        xhBkeCanHangBttHdrRepository.save(dataDB);
-        this.saveDetail(req, dataDB.getId());
-        return dataDB;
+        if (!qOptional.isPresent()) throw new Exception("Không tìm thấy bảng kê cân hàng cần sửa");
+
+        XhBkeCanHangBttHdr data = qOptional.get();
+        BeanUtils.copyProperties(req, data, "id");
+        data.setNgaySua(LocalDate.now());
+        data.setNguoiSuaId(getUser().getId());
+        xhBkeCanHangBttHdrRepository.save(data);
+        this.saveDetail(req, data.getId());
+        return data;
     }
 
     @Override
     public XhBkeCanHangBttHdr detail(Long id) throws Exception {
-        if (StringUtils.isEmpty(id)){
-            throw new Exception("Không tồn tại bản ghi");
-        }
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null) throw new Exception("Bad request.");
+
         Optional<XhBkeCanHangBttHdr> qOptional = xhBkeCanHangBttHdrRepository.findById(id);
-        if (!qOptional.isPresent()){
-            throw new UnsupportedOperationException("Bản ghi không tồn tại");
-        }
+        if (!qOptional.isPresent()) throw new UnsupportedOperationException("Không tìm thấy bảng cân kê hàng");
+
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
+
         XhBkeCanHangBttHdr data = qOptional.get();
+        data.setTenDvi(StringUtils.isEmpty(data.getMaDvi())?null:hashMapDvi.get(data.getMaDvi()));
+        data.setTenDiemKho(StringUtils.isEmpty(data.getMaDiemKho())?null:hashMapDvi.get(data.getMaDiemKho()));
+        data.setTenNhaKho(StringUtils.isEmpty(data.getMaNhaKho())?null:hashMapDvi.get(data.getMaNhaKho()));
+        data.setTenNganKho(StringUtils.isEmpty(data.getMaNganKho())?null:hashMapDvi.get(data.getMaNganKho()));
+        data.setTenLoKho(StringUtils.isEmpty(data.getMaLoKho())?null:hashMapDvi.get(data.getMaLoKho()));
+        data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh())?null:hashMapVthh.get(data.getLoaiVthh()));
+        data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh())?null:hashMapVthh.get(data.getCloaiVthh()));
+        data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
+
         if (!Objects.isNull(data.getIdThuKho())){
             data.setTenThuKho(userInfoRepository.findById(data.getIdThuKho()).get().getFullName());
         }
         if (!Objects.isNull(data.getNguoiPduyetId())){
             data.setTenNguoiPduyet(userInfoRepository.findById(data.getNguoiPduyetId()).get().getFullName());
         }
-        data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
-        data.setTenLoaiVthh(hashMapVthh.get(data.getLoaiVthh()));
-        data.setTenCloaiVthh(hashMapVthh.get(data.getCloaiVthh()));
-        data.setTenDvi(hashMapDvi.get(data.getMaDvi()));
-        data.setTenDiemKho(hashMapDvi.get(data.getMaDiemKho()));
-        data.setTenNhaKho(hashMapDvi.get(data.getMaNganKho()));
-        data.setTenNganKho(hashMapDvi.get(data.getMaNganKho()));
-        data.setTenLoKho(hashMapDvi.get(data.getMaLoKho()));
         data.setChildren(xhBkeCanHangBttDtlRepository.findAllByIdHdr(id));
         return data;
     }

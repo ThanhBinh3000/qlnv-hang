@@ -56,29 +56,29 @@ public class XhBbLayMauBttServiceImpl extends BaseServiceImpl implements  XhBbLa
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
         data.getContent().forEach(f ->{
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
-            f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : hashMapDvi.get(f.getMaDvi()));
-            f.setTenDiemKho(StringUtils.isEmpty(f.getMaDiemKho()) ? null : hashMapDvi.get(f.getMaDiemKho()));
-            f.setTenNhaKho(StringUtils.isEmpty(f.getMaNhaKho()) ? null : hashMapDvi.get(f.getMaNhaKho()));
-            f.setTenNganKho(StringUtils.isEmpty(f.getMaNganKho()) ? null : hashMapDvi.get(f.getMaNganKho()));
-            f.setTenLoKho(StringUtils.isEmpty(f.getMaLoKho()) ? null : hashMapDvi.get(f.getMaLoKho()));
-            f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapVthh.get(f.getLoaiVthh()));
-            f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapVthh.get(f.getCloaiVthh()));
+            f.setTenDvi(StringUtils.isEmpty(f.getMaDvi())?null:hashMapDvi.get(f.getMaDvi()));
+            f.setTenDiemKho(StringUtils.isEmpty(f.getMaDiemKho())?null:hashMapDvi.get(f.getMaDiemKho()));
+            f.setTenNhaKho(StringUtils.isEmpty(f.getMaNhaKho())?null:hashMapDvi.get(f.getMaNhaKho()));
+            f.setTenNganKho(StringUtils.isEmpty(f.getMaNganKho())?null:hashMapDvi.get(f.getMaNganKho()));
+            f.setTenLoKho(StringUtils.isEmpty(f.getMaLoKho())?null:hashMapDvi.get(f.getMaLoKho()));
+            f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh())?null:hashMapVthh.get(f.getLoaiVthh()));
+            f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh())?null:hashMapVthh.get(f.getCloaiVthh()));
         });
         return data;
     }
 
     @Override
     public XhBbLayMauBttHdr create(XhBbLayMauBttHdrReq req) throws Exception {
+        if(req == null) return null;
+
         UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null) {
-            throw new Exception("Bad request.");
-        }
+        if (userInfo == null) throw new Exception("Bad request.");
+
         if (!StringUtils.isEmpty(req.getSoBienBan())){
             Optional<XhBbLayMauBttHdr> qOptional = xhBbLayMauBttHdrRepository.findBySoBienBan(req.getSoBienBan());
-            if (qOptional.isPresent()){
-                throw new Exception("Số biên bản " + req.getSoBienBan() + " đã tồn tại ");
-            }
+            if (qOptional.isPresent()) throw new Exception("Số biên bản " + req.getSoBienBan() + " đã tồn tại ");
         }
+
         XhBbLayMauBttHdr data = new XhBbLayMauBttHdr();
         BeanUtils.copyProperties(req, data, "id");
         data.setNgayTao(LocalDate.now());
@@ -88,6 +88,7 @@ public class XhBbLayMauBttServiceImpl extends BaseServiceImpl implements  XhBbLa
         data.setId(Long.parseLong(data.getSoBienBan().split("/")[0]));
         data.setIdKtv(userInfo.getId());
         XhBbLayMauBttHdr created = xhBbLayMauBttHdrRepository.save(data);
+
         if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
             List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhBbLayMauBttHdr.TABLE_NAME);
             created.setFileDinhKems(fileDinhKems);
@@ -100,6 +101,7 @@ public class XhBbLayMauBttServiceImpl extends BaseServiceImpl implements  XhBbLa
             List<FileDinhKem> fileNienPhong = fileDinhKemService.saveListFileDinhKem(req.getFileNiemPhong(), created.getId(), XhBbLayMauBttHdr.TABLE_NAME + "_NIEM_PHONG");
             created.setFileNiemPhong(fileNienPhong);
         }
+
         saveDetail(req, data.getId());
         return created;
     }
@@ -116,66 +118,71 @@ public class XhBbLayMauBttServiceImpl extends BaseServiceImpl implements  XhBbLa
 
     @Override
     public XhBbLayMauBttHdr update(XhBbLayMauBttHdrReq req) throws Exception {
+        if (req == null) return null;
+
         UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null) {
-            throw new Exception("Bad request.");
-        }
-        if (StringUtils.isEmpty(req.getId())){
-            throw new Exception("Sủa thất bại, không tìm thấy dữ liệu");
-        }
-        Optional<XhBbLayMauBttHdr> qOptional = xhBbLayMauBttHdrRepository.findById(req.getId());
-        if (!qOptional.isPresent()){
-            throw new Exception("Không tìm thấy dữ liệu cần sửa");
-        }
-        XhBbLayMauBttHdr dataDB = qOptional.get();
-        BeanUtils.copyProperties(req, dataDB, "id");
-        dataDB.setNgaySua(LocalDate.now());
-        dataDB.setNguoiSuaId(userInfo.getId());
-        XhBbLayMauBttHdr created = xhBbLayMauBttHdrRepository.save(dataDB);
-        fileDinhKemService.delete(dataDB.getId(), Collections.singleton(XhBbLayMauBttHdr.TABLE_NAME));
+        if (userInfo == null) throw new Exception("Bad request.");
+
+        Optional<XhBbLayMauBttHdr> optional = xhBbLayMauBttHdrRepository.findById(req.getId());
+        if (!optional.isPresent()) throw new Exception("Biên bản lấy mẫu/bàn giao mẫu không tồn tại");
+
+        XhBbLayMauBttHdr data = optional.get();
+        BeanUtils.copyProperties(req, data, "id");
+        data.setNgaySua(LocalDate.now());
+        data.setNguoiSuaId(userInfo.getId());
+        XhBbLayMauBttHdr created = xhBbLayMauBttHdrRepository.save(data);
+
+        fileDinhKemService.delete(created.getId(), Collections.singleton(XhBbLayMauBttHdr.TABLE_NAME));
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhBbLayMauBttHdr.TABLE_NAME);
         created.setFileDinhKems(fileDinhKems);
-        fileDinhKemService.delete(dataDB.getId(), Collections.singleton(XhBbLayMauBttHdr.TABLE_NAME+ "_CAN_CU"));
+
+        fileDinhKemService.delete(created.getId(), Collections.singleton(XhBbLayMauBttHdr.TABLE_NAME+ "_CAN_CU"));
         List<FileDinhKem> canCuPhapLy = fileDinhKemService.saveListFileDinhKem(req.getCanCuPhapLy(), created.getId(), XhBbLayMauBttHdr.TABLE_NAME + "_CAN_CU");
         created.setCanCuPhapLy(canCuPhapLy);
-        fileDinhKemService.delete(dataDB.getId(), Collections.singleton(XhBbLayMauBttHdr.TABLE_NAME+ "_NIEM_PHONG"));
+
+        fileDinhKemService.delete(created.getId(), Collections.singleton(XhBbLayMauBttHdr.TABLE_NAME+ "_NIEM_PHONG"));
         List<FileDinhKem> fileNiemPhong = fileDinhKemService.saveListFileDinhKem(req.getFileNiemPhong(), created.getId(), XhBbLayMauBttHdr.TABLE_NAME + "_NIEM_PHONG");
         created.setFileNiemPhong(fileNiemPhong);
-        this.saveDetail(req, dataDB.getId());
+
+        this.saveDetail(req, created.getId());
         return created;
     }
 
     @Override
     public XhBbLayMauBttHdr detail(Long id) throws Exception {
-       if (StringUtils.isEmpty(id)){
-           throw new Exception("Không tồn tại bản ghi");
-       }
-       Optional<XhBbLayMauBttHdr> qOptional = xhBbLayMauBttHdrRepository.findById(id);
-       if (!qOptional.isPresent()){
-           throw new UnsupportedOperationException("Bản ghi không tồn tại");
-       }
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null) throw new Exception("Bad request.");
+
+        Optional<XhBbLayMauBttHdr> optional = xhBbLayMauBttHdrRepository.findById(id);
+        if (!optional.isPresent()) throw new UnsupportedOperationException("Biên bản lấy mẫu/bàn giao mẫu không tồn tại");
+
+        XhBbLayMauBttHdr data = optional.get();
+
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
-        XhBbLayMauBttHdr data = qOptional.get();
+
+        data.setTenDvi(StringUtils.isEmpty(data.getMaDvi())?null:hashMapDvi.get(data.getMaDvi()));
+        data.setTenDiemKho(StringUtils.isEmpty(data.getMaDiemKho())?null:hashMapDvi.get(data.getMaDiemKho()));
+        data.setTenNhaKho(StringUtils.isEmpty(data.getMaNhaKho())?null:hashMapDvi.get(data.getMaNhaKho()));
+        data.setTenNganKho(StringUtils.isEmpty(data.getMaNganKho())?null:hashMapDvi.get(data.getMaNganKho()));
+        data.setTenLoKho(StringUtils.isEmpty(data.getMaLoKho())?null:hashMapDvi.get(data.getMaLoKho()));
+        data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh())?null:hashMapVthh.get(data.getLoaiVthh()));
+        data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh())?null:hashMapVthh.get(data.getCloaiVthh()));
+        data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
+        if(!Objects.isNull(data.getIdKtv())){
+           data.setTenKtv(userInfoRepository.findById(data.getIdKtv()).get().getFullName());
+        }
         List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhBbLayMauBttHdr.TABLE_NAME));
         data.setFileDinhKems(fileDinhKem);
+
         List<FileDinhKem> canCuPhapLy = fileDinhKemService.search(data.getId(), Arrays.asList(XhBbLayMauBttHdr.TABLE_NAME + "_CAN_CU"));
         data.setCanCuPhapLy(canCuPhapLy);
+
         List<FileDinhKem> fileNiemPhong = fileDinhKemService.search(data.getId(), Arrays.asList(XhBbLayMauBttHdr.TABLE_NAME + "_NIEM_PHONG"));
         data.setFileNiemPhong(fileNiemPhong);
-        data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
-        data.setTenDvi(hashMapDvi.get(data.getMaDvi()));
-        data.setTenDiemKho(hashMapDvi.get(data.getMaDiemKho()));
-        data.setTenNhaKho(hashMapDvi.get(data.getMaNganKho()));
-        data.setTenNganKho(hashMapDvi.get(data.getMaNganKho()));
-        data.setTenLoKho(hashMapDvi.get(data.getMaLoKho()));
-        data.setTenLoaiVthh(hashMapVthh.get(data.getLoaiVthh()));
-        data.setTenCloaiVthh(hashMapVthh.get(data.getCloaiVthh()));
-        if(!Objects.isNull(data.getIdKtv())){
-            data.setTenKtv(userInfoRepository.findById(data.getIdKtv()).get().getFullName());
-        }
-        data.setChildren(xhBbLayMauBttDtlRepository.findAllByIdHdr(id));
-        return data;
+
+       data.setChildren(xhBbLayMauBttDtlRepository.findAllByIdHdr(id));
+       return data;
     }
 
     @Override
