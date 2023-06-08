@@ -41,5 +41,11 @@ public class DcnbKeHoachNhapXuat {
     @Transient
     private DcnbPhieuKnChatLuongHdr dcnbPhieuKnChatLuongHdr;
 
+    @Transient
+    private DcnbBangKeCanHangHdr dcnbBangKeCanHangHdr;
+
+    @Transient
+    private DcnbBienBanTinhKhoHdr dcnbBienBanTinhKhoHdr;
+
 
 }

@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBangKeCanHangDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBangKeCanHangHdrRepository;
@@ -9,10 +10,7 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeCanHangDtl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeCanHangHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbHoSoKyThuatHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbHoSoTaiLieuDtl;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -44,13 +42,42 @@ public class DcnbBangKeCanHangService extends BaseServiceImpl {
     @Autowired
     private DcnbBangKeCanHangDtlRepository dcnbBangKeCanHangDtlRepository;
 
+    @Autowired
+    private DcnbQuyetDinhDcCHdrService dcnbQuyetDinhDcCHdrService;
 
-    public Page<DcnbBangKeCanHangHdr> searchPage(CustomUserDetails currentUser, SearchBangKeCanHang req) throws Exception {
+    @Autowired
+    private DcnbKeHoachNhapXuatService dcnbKeHoachNhapXuatService;
+
+
+    public Page<DcnbQuyetDinhDcCHdr> searchPage(CustomUserDetails currentUser, SearchBangKeCanHang req) throws Exception {
+
+        // Get Tree quyết định
+        SearchDcnbQuyetDinhDcC reqQd = new SearchDcnbQuyetDinhDcC();
+        reqQd.setPaggingReq(req.getPaggingReq());
+        reqQd.setNam(req.getNam());
+        reqQd.setSoQdinh(req.getSoQdinhDcc());
+        reqQd.setLoaiDc(req.getLoaiDc());
+        reqQd.setTrangThai(NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
+        Page<DcnbQuyetDinhDcCHdr> dcnbQuyetDinhDcCHdrs = dcnbQuyetDinhDcCHdrService.searchPage(currentUser, reqQd);
+
+        // Gắn data vào biên bản lấy mẫu vào tree
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
-        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        Page<DcnbBangKeCanHangHdr> search = dcnbBangKeCanHangHdrRepository.search(req, pageable);
-        return search;
+        dcnbQuyetDinhDcCHdrs.forEach( hdr -> {
+            hdr.getDanhSachQuyetDinh().forEach( dtl -> {
+                DcnbKeHoachDcHdr keHoachHdr = dtl.getDcnbKeHoachDcHdr();
+                keHoachHdr.getDanhSachHangHoa().forEach( keHoachDtl -> {
+                    try {
+                        DcnbKeHoachNhapXuat keHoachNhapXuat = dcnbKeHoachNhapXuatService.detailKhDtl(keHoachDtl.getId());
+                        keHoachDtl.setDcnbKeHoachNhapXuat(keHoachNhapXuat);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+            });
+        });
+
+        return dcnbQuyetDinhDcCHdrs;
     }
 
     @Transactional
@@ -185,7 +212,9 @@ public class DcnbBangKeCanHangService extends BaseServiceImpl {
         paggingReq.setPage(0);
         paggingReq.setLimit(Integer.MAX_VALUE);
         objReq.setPaggingReq(paggingReq);
-        Page<DcnbBangKeCanHangHdr> page = this.searchPage(currentUser, objReq);
+        objReq.setMaDvi(currentUser.getDvql());
+        Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit());
+        Page<DcnbBangKeCanHangHdr> page = dcnbBangKeCanHangHdrRepository.search(objReq,pageable);
         List<DcnbBangKeCanHangHdr> data = page.getContent();
 
         String title = "Danh sách bảng kê cân hàng ";

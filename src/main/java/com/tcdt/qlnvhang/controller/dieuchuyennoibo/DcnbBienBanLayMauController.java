@@ -183,7 +183,7 @@ public class DcnbBienBanLayMauController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Danh sách số quyết định", response = List.class)
+    @ApiOperation(value = "Danh sách lô kho", response = List.class)
     @PostMapping(value = "/danh-sach-lo-kho", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> danhSachLoKho(@CurrentUser CustomUserDetails currentUser, @RequestBody SearchDcnbBienBanLayMau objReq) {

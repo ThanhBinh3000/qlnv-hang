@@ -71,7 +71,7 @@ public interface DcnbKeHoachDcDtlRepository extends JpaRepository<DcnbKeHoachDcD
             "LEFT JOIN DcnbKeHoachDcHdr hdr ON hdr.id = dtl.hdrId "+
             "LEFT JOIN DcnbQuyetDinhDcCDtl d ON d.keHoachDcHdrId = hdr.id "+
             "LEFT JOIN DcnbQuyetDinhDcCHdr h ON  h.id = d.hdrId"+
-            " WHERE h.id = ?1 AND dtl.maLoKho = ?2")
+            " WHERE h.id = ?1 AND dtl.maLoKho = ?2 AND h.type is null")
     List<DcnbKeHoachDcDtl> findByQdDcIdAndMaLoKho(Long qDinhDccId, String maLoKho);
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.DieuChuyenNoiBo.DcnbKeHoachDcDtlDTO(" +

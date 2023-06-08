@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @Setter
 public class SearchBangKeCanHang extends BaseRequest {
     private Integer nam;
+    private String loaiDc;
     private String soQdinhDcc;
     private String soBangKe;
     private LocalDate tuNgay;
