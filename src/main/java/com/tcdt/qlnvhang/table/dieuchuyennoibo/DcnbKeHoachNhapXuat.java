@@ -32,6 +32,9 @@ public class DcnbKeHoachNhapXuat {
     @Column(name = "TYPE")
     private String type;
 
+    @Column(name = "PARENT_ID")
+    private Long parentId;
+
     @Transient
     private DcnbBienBanLayMauHdr dcnbBienBanLayMauHdr;
 
