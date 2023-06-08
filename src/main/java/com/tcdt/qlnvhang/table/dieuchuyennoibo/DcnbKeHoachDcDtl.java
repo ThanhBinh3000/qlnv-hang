@@ -113,6 +113,13 @@ public class DcnbKeHoachDcDtl implements Serializable {
 //    private Long bienBanTinhKhoId;
 //    @Column(name = "SO_BIEN_BAN_TINH_KHO")
 //    private String soBienBanTinhKho;
+    @Column(name = "THU_KHO")
+    private String thuKho;
+    @Column(name = "THU_KHO_NHAN")
+    private String thuKhoNhan;
+    @Column(name = "THAY_DOI_THU_KHO")
+    private Boolean thayDoiThuKho;
+
     @Column(name = "HDR_ID", insertable = true, updatable = true)
     private Long hdrId;
     @ManyToOne(fetch = FetchType.LAZY)
