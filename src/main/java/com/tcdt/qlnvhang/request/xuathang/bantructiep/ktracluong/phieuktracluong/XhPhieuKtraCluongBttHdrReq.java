@@ -69,6 +69,12 @@ public class XhPhieuKtraCluongBttHdrReq extends BaseRequest {
 
     private LocalDate ngayXuatDocKho;
 
+    private String maChiCuc;
+
+    private LocalDate ngayKnghiemTu;
+
+    private LocalDate ngayKnghiemDen;
+
     @Transient
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 

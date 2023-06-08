@@ -25,6 +25,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -47,70 +48,70 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
 
     public Page<XhQdPdKhBttDtl> selectPage(SearchXhTcTtinBttReq req) throws Exception {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").descending());
-        Page<XhQdPdKhBttDtl> dtl = xhQdPdKhBttDtlRepository.search(
+        Page<XhQdPdKhBttDtl> dataDtl = xhQdPdKhBttDtlRepository.search(
                 req,
                 pageable);
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
-        dtl.getContent().forEach(f -> {
+        dataDtl.getContent().forEach(f -> {
             try {
                 XhQdPdKhBttHdr hdr = xhQdPdKhBttHdrRepository.findById(f.getIdQdHdr()).get();
-                hdr.setTenLoaiVthh(hashMapVthh.get(hdr.getLoaiVthh()));
-                hdr.setTenCloaiVthh(hashMapVthh.get(hdr.getCloaiVthh()));
+                hdr.setTenLoaiVthh(StringUtils.isEmpty(hdr.getLoaiVthh())?null:hashMapVthh.get(hdr.getLoaiVthh()));
+                hdr.setTenCloaiVthh(StringUtils.isEmpty(hdr.getCloaiVthh())?null:hashMapVthh.get(hdr.getCloaiVthh()));
                 hdr.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(hdr.getTrangThai()));
                 f.setXhQdPdKhBttHdr(hdr);
 //                set tên hàng hóa và số quyết định PD để tìm kiếm cho quyết định PD kết quả chào giá
                 f.setSoQdPd(hdr.getSoQdPd());
-                f.setTenLoaiVthh(hashMapVthh.get(hdr.getLoaiVthh()));
-                f.setTenCloaiVthh(hashMapVthh.get(hdr.getCloaiVthh()));
+                f.setTenLoaiVthh(StringUtils.isEmpty(hdr.getLoaiVthh())?null:hashMapVthh.get(hdr.getLoaiVthh()));
+                f.setTenCloaiVthh(StringUtils.isEmpty(hdr.getCloaiVthh())?null:hashMapVthh.get(hdr.getCloaiVthh()));
+                f.setTenDvi(StringUtils.isEmpty(f.getMaDvi())?null:hashMapDvi.get(f.getMaDvi()));
+                f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(f.getTrangThai()));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(f.getTrangThai()));
-            f.setTenDvi(hashMapDvi.get(f.getMaDvi()));
         });
-        return dtl;
+        return dataDtl;
     }
 
     @Transactional()
-    public List<XhTcTtinBtt> create(XhCgiaReq ObjReq) throws Exception {
-        Optional<XhQdPdKhBttDtl> byId = xhQdPdKhBttDtlRepository.findById(ObjReq.getIdDtl());
-        XhQdPdKhBttDtl dtl = byId.get();
-        if (!byId.isPresent()) {
+    public List<XhTcTtinBtt> create(XhCgiaReq req) throws Exception {
+        Optional<XhQdPdKhBttDtl> dataQdDtl = xhQdPdKhBttDtlRepository.findById(req.getIdDtl());
+        XhQdPdKhBttDtl dataDtl = dataQdDtl.get();
+        if (!dataQdDtl.isPresent()) {
             throw new Exception("Bản ghi không tồn tại");
         } else {
-            dtl.setTrangThai(NhapXuatHangTrangThaiEnum.DANGCAPNHAT.getId());
-            dtl.setPthucBanTrucTiep(ObjReq.getPthucBanTrucTiep());
-            dtl.setDiaDiemChaoGia(ObjReq.getDiaDiemChaoGia());
-            dtl.setNgayNhanCgia(LocalDate.now());
-            dtl.setNgayMkho(ObjReq.getNgayMkho());
-            dtl.setNgayKthuc(ObjReq.getNgayKthuc());
-            dtl.setGhiChu(ObjReq.getGhiChu());
-            dtl.setMaDvi(getUser().getDvql());
-            dtl.setThoiHanBan(ObjReq.getThoiHanBan());
-            if (ObjReq.getPthucBanTrucTiep().equals(Contains.UY_QUYEN)) {
-                if (!DataUtils.isNullOrEmpty(ObjReq.getFileDinhKemUyQuyen())) {
-                    List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(ObjReq.getFileDinhKemUyQuyen(), dtl.getId(), XhQdPdKhBttDtl.TABLE_NAME);
-                    dtl.setFileDinhKemUyQuyen(fileDinhKemList);
+            dataDtl.setTrangThai(NhapXuatHangTrangThaiEnum.DANGCAPNHAT.getId());
+            dataDtl.setPthucBanTrucTiep(req.getPthucBanTrucTiep());
+            dataDtl.setDiaDiemChaoGia(req.getDiaDiemChaoGia());
+            dataDtl.setNgayNhanCgia(LocalDate.now());
+            dataDtl.setNgayMkho(req.getNgayMkho());
+            dataDtl.setNgayKthuc(req.getNgayKthuc());
+            dataDtl.setGhiChu(req.getGhiChu());
+            dataDtl.setMaDvi(getUser().getDvql());
+            dataDtl.setThoiHanBan(req.getThoiHanBan());
+            if (req.getPthucBanTrucTiep().equals(Contains.UY_QUYEN)) {
+                if (!DataUtils.isNullOrEmpty(req.getFileDinhKemUyQuyen())) {
+                    List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemUyQuyen(), dataDtl.getId(), XhQdPdKhBttDtl.TABLE_NAME);
+                    dataDtl.setFileDinhKemUyQuyen(fileDinhKemList);
                 }
             }
-            if (ObjReq.getPthucBanTrucTiep().equals(Contains.BAN_LE)) {
-                if (!DataUtils.isNullOrEmpty(ObjReq.getFileDinhKemMuaLe())) {
-                    List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(ObjReq.getFileDinhKemMuaLe(), dtl.getId(), XhQdPdKhBttDtl.TABLE_NAME);
-                    dtl.setFileDinhKemMuaLe(fileDinhKemList);
+            if (req.getPthucBanTrucTiep().equals(Contains.BAN_LE)) {
+                if (!DataUtils.isNullOrEmpty(req.getFileDinhKemMuaLe())) {
+                    List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemMuaLe(), dataDtl.getId(), XhQdPdKhBttDtl.TABLE_NAME);
+                    dataDtl.setFileDinhKemMuaLe(fileDinhKemList);
                 }
             }
-            xhQdPdKhBttDtlRepository.save(dtl);
+            xhQdPdKhBttDtlRepository.save(dataDtl);
         }
         List<XhTcTtinBtt> bttList = new ArrayList<>();
-        for (XhQdPdKhBttDviReq dviReq : ObjReq.getChildren()){
+        for (XhQdPdKhBttDviReq dviReq : req.getChildren()){
             for (XhQdPdKhBttDviDtlReq dviDtlReq : dviReq.getChildren()){
                 xhTcTtinBttRepository.deleteAllByIdDviDtl(dviDtlReq.getId());
                 for (XhTcTtinBttReq chaoGiaReq : dviDtlReq.getChildren()) {
                     XhTcTtinBtt chaoGiaList = new XhTcTtinBtt();
                     BeanUtils.copyProperties(chaoGiaReq, chaoGiaList, "id");
                     chaoGiaList.setId(null);
-                    chaoGiaList.setIdQdPdDtl(ObjReq.getIdDtl());
+                    chaoGiaList.setIdQdPdDtl(req.getIdDtl());
                     XhTcTtinBtt save = xhTcTtinBttRepository.save(chaoGiaList);
                     fileDinhKemService.delete(save.getId(), Collections.singleton(XhTcTtinBtt.TABLE_NAME));
                     if (!DataUtils.isNullObject(chaoGiaReq.getFileDinhKems())) {

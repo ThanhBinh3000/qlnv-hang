@@ -56,30 +56,30 @@ public class XhPhieuKtraCluongBttServiceImpl extends BaseServiceImpl implements 
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
         data.getContent().forEach(f ->{
+            f.setTenDvi(StringUtils.isEmpty(f.getMaDvi())?null:hashMapDvi.get(f.getMaDvi()));
+            f.setTenDiemKho(StringUtils.isEmpty(f.getMaDiemKho())?null:hashMapDvi.get(f.getMaDiemKho()));
+            f.setTenNhaKho(StringUtils.isEmpty(f.getMaNhaKho())?null:hashMapDvi.get(f.getMaNhaKho()));
+            f.setTenNganKho(StringUtils.isEmpty(f.getMaNganKho())?null:hashMapDvi.get(f.getMaNganKho()));
+            f.setTenLoKho(StringUtils.isEmpty(f.getMaLoKho())?null:hashMapDvi.get(f.getMaLoKho()));
+            f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh())?null:hashMapVthh.get(f.getLoaiVthh()));
+            f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh())?null:hashMapVthh.get(f.getCloaiVthh()));
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
-            f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : hashMapDvi.get(f.getMaDvi()));
-            f.setTenDiemKho(StringUtils.isEmpty(f.getMaDiemKho()) ? null : hashMapDvi.get(f.getMaDiemKho()));
-            f.setTenNhaKho(StringUtils.isEmpty(f.getMaNhaKho()) ? null : hashMapDvi.get(f.getMaNhaKho()));
-            f.setTenNganKho(StringUtils.isEmpty(f.getMaNganKho()) ? null : hashMapDvi.get(f.getMaNganKho()));
-            f.setTenLoKho(StringUtils.isEmpty(f.getMaLoKho()) ? null : hashMapDvi.get(f.getMaLoKho()));
-            f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapVthh.get(f.getLoaiVthh()));
-            f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapVthh.get(f.getCloaiVthh()));
         });
         return data;
     }
 
     @Override
     public XhPhieuKtraCluongBttHdr create(XhPhieuKtraCluongBttHdrReq req) throws Exception {
+        if(req == null) return null;
+
         UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null) {
-            throw new Exception("Bad request.");
-        }
+        if (userInfo == null) throw new Exception("Bad request.");
+
         if (StringUtils.isEmpty(req.getSoPhieu())){
             Optional<XhPhieuKtraCluongBttHdr> qOptional = xhPhieuKtraCluongBttHdrRepository.findBySoPhieu(req.getSoPhieu());
-            if (qOptional.isPresent()){
-                throw new Exception("Số Phiếu " + req.getSoPhieu() + "đã tồn tại");
-            }
+            if (qOptional.isPresent()) throw new Exception("Số Phiếu " + req.getSoPhieu() + "đã tồn tại");
         }
+
         XhPhieuKtraCluongBttHdr data = new XhPhieuKtraCluongBttHdr();
         BeanUtils.copyProperties(req, data,"id");
         data.setNgayTao(LocalDate.now());
@@ -112,52 +112,53 @@ public class XhPhieuKtraCluongBttServiceImpl extends BaseServiceImpl implements 
 
     @Override
     public XhPhieuKtraCluongBttHdr update(XhPhieuKtraCluongBttHdrReq req) throws Exception {
-        if(Objects.isNull(req)){
-            throw new Exception("Bad reqeust");
-        }
+        if (req == null) return null;
+
         UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null) {
-            throw new Exception("Bad request.");
-        }
-        if (StringUtils.isEmpty(req.getId())){
-            throw new Exception("Sủa thất bại, không tìm thấy dữ liệu");
-        }
-        Optional<XhPhieuKtraCluongBttHdr> qOptional = xhPhieuKtraCluongBttHdrRepository.findById(req.getId());
-        if (!qOptional.isPresent()){
-            throw new Exception("Không tìm thấy dữ liệu cần sửa");
-        }
-        XhPhieuKtraCluongBttHdr dataDB = qOptional.get();
-        BeanUtils.copyProperties(req, dataDB, "id");
-        dataDB.setNgaySua(LocalDate.now());
-        dataDB.setNguoiSuaId(userInfo.getId());
-        XhPhieuKtraCluongBttHdr created = xhPhieuKtraCluongBttHdrRepository.save(dataDB);
+        if (userInfo == null) throw new Exception("Bad request.");
+
+        Optional<XhPhieuKtraCluongBttHdr> optional = xhPhieuKtraCluongBttHdrRepository.findById(req.getId());
+        if (!optional.isPresent())throw new Exception("Không tìm thấy phiếu kiểm tra chất lượng");
+
+        XhPhieuKtraCluongBttHdr data = optional.get();
+        BeanUtils.copyProperties(req, data, "id");
+        data.setNgaySua(LocalDate.now());
+        data.setNguoiSuaId(userInfo.getId());
+        XhPhieuKtraCluongBttHdr created = xhPhieuKtraCluongBttHdrRepository.save(data);
 
         fileDinhKemService.delete(created.getId(), Collections.singleton(XhPhieuKtraCluongBttHdr.TABLE_NAME));
         List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhPhieuKtraCluongBttHdr.TABLE_NAME);
-        dataDB.setFileDinhKems(fileDinhKemList);
+        data.setFileDinhKems(fileDinhKemList);
 
-        this.saveDetail(req, dataDB.getId());
+        this.saveDetail(req, data.getId());
         return created;
     }
 
     @Override
     public XhPhieuKtraCluongBttHdr detail(Long id) throws Exception {
-        if (StringUtils.isEmpty(id)){
-            throw new Exception("Không tồn tại bản ghi");
-        }
-        Optional<XhPhieuKtraCluongBttHdr> qOptional = xhPhieuKtraCluongBttHdrRepository.findById(id);
-        if (!qOptional.isPresent()){
-            throw new UnsupportedOperationException("Bản ghi không tồn tại");
-        }
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null) throw new Exception("Bad request.");
+
+        Optional<XhPhieuKtraCluongBttHdr> optional = xhPhieuKtraCluongBttHdrRepository.findById(id);
+        if (!optional.isPresent()) throw new UnsupportedOperationException("Không tìm thấy phiếu kiểm tra chất lượng");
+
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
-        XhPhieuKtraCluongBttHdr data = qOptional.get();
+
+        XhPhieuKtraCluongBttHdr data = optional.get();
+
         List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhPhieuKtraCluongBttHdr.TABLE_NAME));
         if (!CollectionUtils.isEmpty(fileDinhKems)) data.setFileDinhKems(fileDinhKems);
+
+        data.setTenDvi(StringUtils.isEmpty(data.getMaDvi())?null:hashMapDvi.get(data.getMaDvi()));
+        data.setTenDiemKho(StringUtils.isEmpty(data.getMaDiemKho())?null:hashMapDvi.get(data.getMaDiemKho()));
+        data.setTenNhaKho(StringUtils.isEmpty(data.getMaNhaKho())?null:hashMapDvi.get(data.getMaNhaKho()));
+        data.setTenNganKho(StringUtils.isEmpty(data.getMaNganKho())?null:hashMapDvi.get(data.getMaNganKho()));
+        data.setTenLoKho(StringUtils.isEmpty(data.getMaLoKho())?null:hashMapDvi.get(data.getMaLoKho()));
+        data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh())?null:hashMapVthh.get(data.getLoaiVthh()));
+        data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh())?null:hashMapVthh.get(data.getCloaiVthh()));
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
-        data.setTenLoaiVthh(hashMapVthh.get(data.getLoaiVthh()));
-        data.setTenCloaiVthh(hashMapVthh.get(data.getCloaiVthh()));
-        data.setTenDvi(hashMapDvi.get(data.getMaDvi()));
+
         if(!Objects.isNull(data.getIdKtv())){
             data.setTenKtv(userInfoRepository.findById(data.getIdKtv()).get().getFullName());
         }
@@ -167,27 +168,29 @@ public class XhPhieuKtraCluongBttServiceImpl extends BaseServiceImpl implements 
         if(!Objects.isNull(data.getIdNgKnghiem())){
             data.setTenNguoiKiemNghiem(userInfoRepository.findById(data.getIdNgKnghiem()).get().getFullName());
         }
-        data.setTenDiemKho(hashMapDvi.get(data.getMaDiemKho()));
-        data.setTenNhaKho(hashMapDvi.get(data.getMaNganKho()));
-        data.setTenNganKho(hashMapDvi.get(data.getMaNganKho()));
-        data.setTenLoKho(hashMapDvi.get(data.getMaLoKho()));
+
         data.setChildren(xhPhieuKtraCluongBttDtlRepository.findAllByIdHdr(id));
         return data;
     }
 
     @Override
     public XhPhieuKtraCluongBttHdr approve(XhPhieuKtraCluongBttHdrReq req) throws Exception {
-        UserInfo userInfo = UserUtils.getUserInfo();
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null) throw new Exception("Bad request.");
+
         if(Objects.isNull(req.getId())){
             throw new Exception("Bad reqeust");
         }
+
         if (!Contains.CAP_CUC.equals(userInfo.getCapDvi())){
             throw new Exception("Bad Request");
         }
+
         Optional<XhPhieuKtraCluongBttHdr> optional = xhPhieuKtraCluongBttHdrRepository.findById(req.getId());
         if (!optional.isPresent()){
             throw new Exception("Không tìm thấy dữ liệu cần xóa");
         }
+
         XhPhieuKtraCluongBttHdr data = optional.get();
         String status = req.getTrangThai() + data.getTrangThai();
         switch (status) {
