@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
@@ -10,14 +11,13 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbPhieuKnChatLuongHdrReq;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbBienBanLayMau;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbQuyetDinhDcC;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchPhieuKnChatLuong;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanLayMauHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuKnChatLuongDtl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuKnChatLuongHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -55,12 +55,43 @@ public class DcnbPhieuKiemNghiemChatLuongService extends BaseServiceImpl {
     @Autowired
     DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
 
-    public Page<DcnbPhieuKnChatLuongHdr> searchPage(CustomUserDetails currentUser, SearchPhieuKnChatLuong req) throws Exception {
+    @Autowired
+    DcnbQuyetDinhDcCHdrService dcnbQuyetDinhDcCHdrService;
+
+    public Page<DcnbPhieuKnChatLuongHdr> searchPage1(CustomUserDetails currentUser, SearchPhieuKnChatLuong req) throws Exception {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<DcnbPhieuKnChatLuongHdr> search = dcnbPhieuKnChatLuongHdrRepository.search(req, pageable);
         return search;
+    }
+
+    public Page<DcnbQuyetDinhDcCHdr> searchPage(CustomUserDetails currentUser, SearchPhieuKnChatLuong req) throws Exception {
+
+        // Get Tree quyết định
+        SearchDcnbQuyetDinhDcC reqQd = new SearchDcnbQuyetDinhDcC();
+        reqQd.setPaggingReq(req.getPaggingReq());
+        reqQd.setNam(req.getNam());
+        reqQd.setSoQdinh(req.getSoQdinhDcc());
+        reqQd.setLoaiDc(req.getLoaiDc());
+        reqQd.setTrangThai(NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
+        Page<DcnbQuyetDinhDcCHdr> dcnbQuyetDinhDcCHdrs = dcnbQuyetDinhDcCHdrService.searchPage(currentUser, reqQd);
+
+        // Gắn data vào biên bản lấy mẫu vào tree
+//        String dvql = currentUser.getDvql();
+//        req.setMaDvi(dvql);
+//        dcnbQuyetDinhDcCHdrs.forEach( hdr -> {
+//            hdr.getDanhSachQuyetDinh().forEach( dtl -> {
+//                DcnbKeHoachDcHdr dcnbKeHoachDcHdr = dtl.getDcnbKeHoachDcHdr();
+//                if(dcnbKeHoachDcHdr != null){
+//                    dcnbKeHoachDcHdr.getDanhSachHangHoa().stream().filter(dtlKh -> !Objects.isNull(dtlKh.getBbLayMauId())).forEach(dtlKh -> {
+//                        Optional<DcnbBienBanLayMauHdr> byId = dcnbBienBanLayMauHdrRepository.findById(dtlKh.getBbLayMauId());
+//                        dtlKh.setDcnbBienBanLayMauHdr(byId.get());
+//                    });
+//                }
+//            });
+//        });
+        return dcnbQuyetDinhDcCHdrs;
     }
 
     @Transactional
@@ -87,8 +118,8 @@ public class DcnbPhieuKiemNghiemChatLuongService extends BaseServiceImpl {
         data.setBienBanLayMauDinhKem(bienBanLayMauDinhKem);
         List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByQdDcIdAndMaLoKho(created.getQdDcId(),created.getMaLoKho());
         dcnbKeHoachDcDtls.forEach(e->{
-            e.setPhieuKnChatLuongId(created.getId());
-            e.setSoPhieuKnChatLuong(created.getSoPhieu());
+//            e.setPhieuKnChatLuongId(created.getId());
+//            e.setSoPhieuKnChatLuong(created.getSoPhieu());
             dcnbKeHoachDcDtlRepository.save(e);
         });
         return created;
@@ -228,7 +259,7 @@ public class DcnbPhieuKiemNghiemChatLuongService extends BaseServiceImpl {
         paggingReq.setPage(0);
         paggingReq.setLimit(Integer.MAX_VALUE);
         objReq.setPaggingReq(paggingReq);
-        Page<DcnbPhieuKnChatLuongHdr> page = this.searchPage(currentUser, objReq);
+        Page<DcnbPhieuKnChatLuongHdr> page = this.searchPage1(currentUser, objReq);
         List<DcnbPhieuKnChatLuongHdr> data = page.getContent();
 
         String title = "Danh sách phương án xuất cứu trợ, viện trợ ";
