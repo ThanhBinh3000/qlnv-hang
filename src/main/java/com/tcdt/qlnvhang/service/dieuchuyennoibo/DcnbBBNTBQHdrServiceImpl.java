@@ -81,7 +81,7 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
         created.setFileDinhKems(canCu);
         DcnbKeHoachNhapXuat kh = new DcnbKeHoachNhapXuat();
         kh.setIdHdr(created.getId());
-        kh.setTableName(DcnbKeHoachNhapXuat.TABLE_NAME);
+        kh.setTableName(DcnbBBNTBQHdr.TABLE_NAME);
         kh.setIdKhDcDtl(data.getIdKeHoachDtl());
         dcnbKeHoachNhapXuatService.saveOrUpdate(kh);
         return created;
