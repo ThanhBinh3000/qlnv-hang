@@ -25,6 +25,8 @@ import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -70,33 +72,11 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
     DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
 
 
-    public Page<DcnbQuyetDinhDcCHdr> searchPage(CustomUserDetails currentUser, SearchDcnbBienBanLayMau req) throws Exception {
-
-        // Get Tree quyết định
-        SearchDcnbQuyetDinhDcC reqQd = new SearchDcnbQuyetDinhDcC();
-        reqQd.setPaggingReq(req.getPaggingReq());
-        reqQd.setNam(req.getNam());
-        reqQd.setSoQdinh(req.getSoQdinhDcc());
-        reqQd.setLoaiDc(req.getLoaiDc());
-        reqQd.setTrangThai(NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
-        Page<DcnbQuyetDinhDcCHdr> dcnbQuyetDinhDcCHdrs = dcnbQuyetDinhDcCHdrService.searchPage(currentUser, reqQd);
-
-        // Gắn data vào biên bản lấy mẫu vào tree
+    public Page<DcnbBienBanLayMauHdrDTO> searchPage(CustomUserDetails currentUser, SearchDcnbBienBanLayMau req) throws Exception {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
-        dcnbQuyetDinhDcCHdrs.forEach( hdr -> {
-            hdr.getDanhSachQuyetDinh().forEach( dtl -> {
-                DcnbKeHoachDcHdr keHoachHdr = dtl.getDcnbKeHoachDcHdr();
-                keHoachHdr.getDanhSachHangHoa().forEach( keHoachDtl -> {
-                    try {
-                        DcnbKeHoachNhapXuat keHoachNhapXuat = dcnbKeHoachNhapXuatService.detailKhDtl(keHoachDtl.getId());
-                        keHoachDtl.setDcnbKeHoachNhapXuat(keHoachNhapXuat);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                });
-            });
-        });
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
+        Page<DcnbBienBanLayMauHdrDTO> dcnbQuyetDinhDcCHdrs = dcnbBienBanLayMauHdrRepository.searchPage(req, pageable);
         return dcnbQuyetDinhDcCHdrs;
     }
 
