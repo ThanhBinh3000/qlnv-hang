@@ -25,6 +25,8 @@ import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -70,46 +72,12 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
     DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
 
 
-    public Page<DcnbQuyetDinhDcCHdr> searchPage(CustomUserDetails currentUser, SearchDcnbBienBanLayMau req) throws Exception {
-
-        // Get Tree quyết định
-        SearchDcnbQuyetDinhDcC reqQd = new SearchDcnbQuyetDinhDcC();
-        reqQd.setPaggingReq(req.getPaggingReq());
-        reqQd.setNam(req.getNam());
-        reqQd.setSoQdinh(req.getSoQdinhDcc());
-        reqQd.setLoaiDc(req.getLoaiDc());
-        reqQd.setTrangThai(NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
-        Page<DcnbQuyetDinhDcCHdr> dcnbQuyetDinhDcCHdrs = dcnbQuyetDinhDcCHdrService.searchPage(currentUser, reqQd);
-
-        // Gắn data vào biên bản lấy mẫu vào tree
+    public Page<DcnbBienBanLayMauHdrDTO> searchPage(CustomUserDetails currentUser, SearchDcnbBienBanLayMau req) throws Exception {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
-        dcnbQuyetDinhDcCHdrs.forEach( hdr -> {
-            hdr.getDanhSachQuyetDinh().forEach( dtl -> {
-                DcnbKeHoachDcHdr keHoachHdr = dtl.getDcnbKeHoachDcHdr();
-                keHoachHdr.getDanhSachHangHoa().forEach( keHoachDtl -> {
-                    try {
-                        DcnbKeHoachNhapXuat keHoachNhapXuat = dcnbKeHoachNhapXuatService.detailKhDtl(keHoachDtl.getId());
-                        keHoachDtl.setDcnbKeHoachNhapXuat(keHoachNhapXuat);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                });
-            });
-        });
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
+        Page<DcnbBienBanLayMauHdrDTO> dcnbQuyetDinhDcCHdrs = dcnbBienBanLayMauHdrRepository.searchPage(req, pageable);
         return dcnbQuyetDinhDcCHdrs;
-    }
-
-
-    public List<DcnbBienBanLayMauHdrDTO> danhSachSoQdDieuChuyen(CustomUserDetails currentUser, SearchDcnbBienBanLayMau req) throws Exception{
-        String maDviCha = qlnvDmDonviRepository.findByMaDviAndTrangThai(currentUser.getDvql(), "01");
-        List<DcnbBienBanLayMauHdrDTO> danhSachSoQdDieuChuyen = dcnbBienBanLayMauHdrRepository.findByLoaiDcAndTrangThai(req.getLoaiDc(),Contains.BAN_HANH, maDviCha, Contains.QD_XUAT);
-        return danhSachSoQdDieuChuyen;
-    }
-
-    public List<DcnbBienBanLayMauHdrDTO> danhSachLoKho(CustomUserDetails currentUser, SearchDcnbBienBanLayMau req) throws Exception{
-        List<DcnbBienBanLayMauHdrDTO> danhSachSoQdDieuChuyen = dcnbBienBanLayMauHdrRepository.findByLoaiDcAndQDinhDccIdAndTrangThai(req.getLoaiDc(),req.getQDinhDccId(),Contains.BAN_HANH, Contains.QD_XUAT);
-        return danhSachSoQdDieuChuyen;
     }
 
     @Transactional
@@ -130,8 +98,8 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
         data.setMaDvi(cqt.getMaDvi());
         data.setTenDvi(cqt.getTenDvi());
         data.setLoaiDc(objReq.getLoaiDc());
+        // Biên bản lấy mẫu thì auto thay đổi thủ kho
         data.setThayDoiThuKho(true);
-//        data.setType(Contains.DIEU_CHUYEN);
         data.setTrangThai(Contains.DUTHAO);
         data.setNgayTao(LocalDateTime.now());
         data.setNguoiTaoId(currentUser.getUser().getId());
@@ -308,5 +276,12 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
 //        }
 //        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
 //        ex.export();
+    }
+
+    public List<DcnbBienBanLayMauHdrDTO> danhSachBienBan(CustomUserDetails currentUser, SearchDcnbBienBanLayMau objReq) {
+        // TO DO
+//         Lấy ra các biên bản lấy mẫu của câấp dưới - trạng thái ban hành và có qDinhDccId được truyền lên (qDinhDccId truyền lên là qDinhDccId gốc)
+//         DcnbBienBanLayMauHdrDTO JOIN  với QUYET định và wherer theo parentID  = qDinhDccId
+         return null;
     }
 }
