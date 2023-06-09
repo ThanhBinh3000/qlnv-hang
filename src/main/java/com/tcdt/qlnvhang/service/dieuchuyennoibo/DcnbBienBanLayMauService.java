@@ -278,6 +278,7 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
         // TO DO
 //         Lấy ra các biên bản lấy mẫu của câấp dưới - trạng thái ban hành và có qDinhDccId được truyền lên (qDinhDccId truyền lên là qDinhDccId gốc)
 //         DcnbBienBanLayMauHdrDTO JOIN  với QUYET định và wherer theo parentID  = qDinhDccId
-         return null;
+        List<DcnbBienBanLayMauHdrDTO> dcnbBienBanLayMauHdrDTOList = dcnbBienBanLayMauHdrRepository.findByMaDviAndTrangThaiAndQdinhDcId(currentUser.getDvql(),Contains.BAN_HANH,objReq.getQDinhDccId());
+         return dcnbBienBanLayMauHdrDTOList;
     }
 }

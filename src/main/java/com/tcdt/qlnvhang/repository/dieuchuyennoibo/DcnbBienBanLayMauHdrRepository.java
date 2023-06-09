@@ -54,4 +54,9 @@ public interface DcnbBienBanLayMauHdrRepository extends JpaRepository<DcnbBienBa
     List<DcnbBienBanLayMauHdr> findByIdIn(List<Long> ids);
 
     List<DcnbBienBanLayMauHdr> findAllByIdIn(List<Long> idList);
+    @Query(value = "SELECT distinct hdr FROM DcnbBienBanLayMauHdr hdr \n" +
+            "LEFT JOIN DcnbQuyetDinhDcCHdr h ON h.id = hdr.qDinhDccId  \n" +
+            "LEFT JOIN QlnvDmDonvi dvi ON dvi.maDvi = hdr.maDvi "+
+            "WHERE dvi.parent.maDvi = ?1 AND hdr.trangThai = ?2 AND h.parentId  = ?3")
+    List<DcnbBienBanLayMauHdrDTO> findByMaDviAndTrangThaiAndQdinhDcId(String dvql, String banHanh, Long qDinhDccId);
 }
