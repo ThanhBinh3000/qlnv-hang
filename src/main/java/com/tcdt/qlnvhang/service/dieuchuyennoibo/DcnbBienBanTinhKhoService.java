@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBienBanLayMauDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBienBanTinhKhoDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBienBanTinhKhoHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcDtlRepository;
@@ -33,7 +32,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class DcnbBienBanTinhKhoService extends BaseServiceImpl {
@@ -78,8 +76,8 @@ public class DcnbBienBanTinhKhoService extends BaseServiceImpl {
                 DcnbKeHoachDcHdr keHoachHdr = dtl.getDcnbKeHoachDcHdr();
                 keHoachHdr.getDanhSachHangHoa().forEach( keHoachDtl -> {
                     try {
-                        DcnbKeHoachNhapXuat keHoachNhapXuat = dcnbKeHoachNhapXuatService.detailKhDtl(keHoachDtl.getId());
-                        keHoachDtl.setDcnbKeHoachNhapXuat(keHoachNhapXuat);
+                        DcnbKeHoachDcDtlTT keHoachNhapXuat = dcnbKeHoachNhapXuatService.detailKhDtl(keHoachDtl.getId());
+                        keHoachDtl.setDcnbKeHoachDcDtlTT(keHoachNhapXuat);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
@@ -109,16 +107,16 @@ public class DcnbBienBanTinhKhoService extends BaseServiceImpl {
         data.setFileBbTinhKhoDaKy(bienBanTinhKhoDaKy);
         List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByQdDcIdAndMaLoKho(created.getQDinhDccId(),created.getMaLoKho());
         dcnbKeHoachDcDtls.forEach(e-> {
-            DcnbKeHoachNhapXuat keHoachNhapXuat = new DcnbKeHoachNhapXuat();
-            keHoachNhapXuat.setIdKhDcDtl(e.getId());
-            keHoachNhapXuat.setIdHdr(created.getId());
-            keHoachNhapXuat.setTableName(DcnbBienBanTinhKhoHdr.TABLE_NAME);
-            keHoachNhapXuat.setType(Contains.QD_XUAT);
-            try {
-                dcnbKeHoachNhapXuatService.saveOrUpdate(keHoachNhapXuat);
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
+//            DcnbKeHoachDcDtlTT keHoachNhapXuat = new DcnbKeHoachDcDtlTT();
+//            keHoachNhapXuat.setIdKhDcDtl(e.getId());
+//            keHoachNhapXuat.setIdHdr(created.getId());
+//            keHoachNhapXuat.setTableName(DcnbBienBanTinhKhoHdr.TABLE_NAME);
+//            keHoachNhapXuat.setType(Contains.QD_XUAT);
+//            try {
+//                dcnbKeHoachNhapXuatService.saveOrUpdate(keHoachNhapXuat);
+//            } catch (Exception ex) {
+//                throw new RuntimeException(ex);
+//            }
         });
         return created;
     }
