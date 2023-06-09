@@ -112,7 +112,7 @@ public class HhQdKhlcntHdrReq {
 
 	String dienGiai;
 
-	String yKien;
+	String ykienThamGia;
 
 	Integer gtriDthau;
 

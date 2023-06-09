@@ -121,17 +121,16 @@ public class HhDxuatKhLcntHdrReq {
 	@NotNull(message = "Không được để trống")
 	Integer gtriHdong;
 
-	@Size(max = 500, message = "Ghi chú không được vượt quá 500 ký tự")
 	String ghiChu;
 
 	String dienGiai;
+	String ykienThamGia;
 
 	String loaiHinhNx;
 
 	String kieuNx;
 
 	String diaChiDvi;
-
 	BigDecimal donGiaVat;
 
 	private List<FileDinhKemReq> fileDinhKemReq =  new ArrayList<>();

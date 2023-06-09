@@ -135,8 +135,7 @@ public class HhQdKhlcntHdr implements Serializable {
 
 	String dienGiai;
 
-	@JsonProperty("yKien")
-	String yKien;
+	String ykienThamGia;
 
 	@Temporal(TemporalType.DATE)
 	Date ngayHluc;
