@@ -33,7 +33,7 @@ public class DcnbBBNTBQHdrDTO {
     private String tenNganKhoNhan;
 //    private String trangThaiNhan;
 //    private String tenTrangThaiNhan;
-    private Long soLapBBKLot;
+    private String soLapBBKLot;
     private LocalDate ngayLapBBKLot;
     private LocalDate ngayKetThucNtKeLot;
     private BigDecimal tongKinhPhiTT;
