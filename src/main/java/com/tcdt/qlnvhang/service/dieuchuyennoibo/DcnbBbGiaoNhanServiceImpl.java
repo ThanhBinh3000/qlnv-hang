@@ -1,8 +1,6 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
 import com.google.common.collect.Lists;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbChuanBiKhoDtlRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbChuanBiKhoHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbGiaoNhanDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbGiaoNhanHdrRepository;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbGiaoNhanHdrReq;
@@ -11,9 +9,8 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbChuanBiKhoHdr;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbGiaoNhanHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachNhapXuat;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtlTT;
 import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,11 +67,11 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
         DcnbBbGiaoNhanHdr created = hdrRepository.save(data);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBBNTBQHdr.TABLE_NAME);
         created.setFileDinhKems(canCu);
-        DcnbKeHoachNhapXuat kh = new DcnbKeHoachNhapXuat();
-        kh.setIdHdr(created.getId());
-        kh.setTableName(DcnbBbGiaoNhanHdr.TABLE_NAME);
-        kh.setIdKhDcDtl(data.getIdKeHoachDtl());
-        dcnbKeHoachNhapXuatService.saveOrUpdate(kh);
+//        DcnbKeHoachDcDtlTT kh = new DcnbKeHoachDcDtlTT();
+//        kh.setIdHdr(created.getId());
+//        kh.setTableName(DcnbBbGiaoNhanHdr.TABLE_NAME);
+//        kh.setIdKhDcDtl(data.getIdKeHoachDtl());
+//        dcnbKeHoachNhapXuatService.saveOrUpdate(kh);
         return created;
     }
 

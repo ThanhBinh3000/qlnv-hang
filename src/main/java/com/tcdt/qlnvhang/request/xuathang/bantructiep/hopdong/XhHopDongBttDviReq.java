@@ -15,6 +15,8 @@ public class XhHopDongBttDviReq {
 
     private String maDiemKho;
 
+    private String diaDiemKho;
+
     private String maNhaKho;
 
     private String maNganKho;

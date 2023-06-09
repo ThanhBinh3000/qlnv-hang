@@ -1,14 +1,11 @@
 package com.tcdt.qlnvhang.repository.dieuchuyennoibo;
 
-import com.tcdt.qlnvhang.response.DieuChuyenNoiBo.DcnbKeHoachDcDtlDTO;
-import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbKeHoachDcDtlDTO;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -74,7 +71,7 @@ public interface DcnbKeHoachDcDtlRepository extends JpaRepository<DcnbKeHoachDcD
             " WHERE h.id = ?1 AND dtl.maLoKho = ?2 AND h.type is null")
     List<DcnbKeHoachDcDtl> findByQdDcIdAndMaLoKho(Long qDinhDccId, String maLoKho);
 
-    @Query(value = "SELECT new com.tcdt.qlnvhang.response.DieuChuyenNoiBo.DcnbKeHoachDcDtlDTO(" +
+    @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbKeHoachDcDtlDTO(" +
             " dtl.maLoKho,dtl.tenLoKho) FROM DcnbKeHoachDcDtl dtl "+
             "LEFT JOIN DcnbKeHoachDcHdr hdr ON hdr.id = dtl.hdrId "+
             "WHERE hdr.id = ?1 AND dtl.bbLayMauId IS NULL ")

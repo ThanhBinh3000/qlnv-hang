@@ -10,7 +10,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbQuyetDinhDcCHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbQuyetDinhDcC;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import com.tcdt.qlnvhang.response.DieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO;
 import com.tcdt.qlnvhang.service.feign.LuuKhoClient;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;

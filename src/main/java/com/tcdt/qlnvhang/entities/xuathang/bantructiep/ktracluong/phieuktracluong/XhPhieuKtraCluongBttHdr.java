@@ -120,6 +120,10 @@ public class XhPhieuKtraCluongBttHdr implements Serializable {
 
     private String lyDoTuChoi;
 
+    private String soHd;
+
+    private Long idHd;
+
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 

@@ -1,7 +1,7 @@
 package com.tcdt.qlnvhang.repository.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbQuyetDinhDcC;
-import com.tcdt.qlnvhang.response.DieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbQuyetDinhDcCHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,20 +22,20 @@ public interface DcnbQuyetDinhDcCHdrRepository extends JpaRepository<DcnbQuyetDi
             " LEFT JOIN DcnbKeHoachDcHdr kh on dtl.keHoachDcHdrId = kh.id " +
             " WHERE 1=1 " +
             "AND (:#{#param.soQdinh} IS NULL OR LOWER(c.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdinh}),'%')) " +
-            "AND ((:#{#param.maDvi} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDvi},'')) OR (:#{#param.maDvi} IS NULL OR kh.maDvi LIKE CONCAT(:#{#param.maDvi},''))) " +
+            "AND (:#{#param.maDvi} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDvi},'%')) " +
             "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
             "AND ((:#{#param.ngayDuyetTcTu}  IS NULL OR c.ngayDuyetTc >= :#{#param.ngayDuyetTcTu})" +
             "AND (:#{#param.ngayDuyetTcDen}  IS NULL OR c.ngayDuyetTc <= :#{#param.ngayDuyetTcDen}) ) " +
             "AND (:#{#param.trichYeu} IS NULL OR LOWER(c.trichYeu) LIKE CONCAT('%',LOWER(:#{#param.trichYeu}),'%')) " +
             "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
-            "AND (:#{#param.types.isEmpty() } = true OR c.type NOT IN :#{#param.types}) " +
+            "AND c.type IS NULL " +
             "AND (:#{#param.loaiDc} IS NULL OR c.loaiDc = :#{#param.loaiDc}) " +
             "AND (:#{#param.loaiQdinh} IS NULL OR c.loaiQdinh = :#{#param.loaiQdinh}) " +
             "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
     )
     Page<DcnbQuyetDinhDcCHdr> searchCuc(@Param("param") SearchDcnbQuyetDinhDcC param, Pageable pageable);
 
-    @Query(value = "SELECT distinct new com.tcdt.qlnvhang.response.DieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO(c.id,c.soQdinh, c.ngayKyQdinh) FROM DcnbQuyetDinhDcCHdr c " +
+    @Query(value = "SELECT distinct new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO(c.id,c.soQdinh, c.ngayKyQdinh) FROM DcnbQuyetDinhDcCHdr c " +
             " LEFT JOIN DcnbQuyetDinhDcCDtl dtl on c.id = dtl.hdrId " +
             " LEFT JOIN DcnbKeHoachDcHdr kh on dtl.keHoachDcHdrId = kh.id " +
             " WHERE 1=1 " +
@@ -64,14 +64,14 @@ public interface DcnbQuyetDinhDcCHdrRepository extends JpaRepository<DcnbQuyetDi
             "AND (:#{#param.ngayDuyetTcDen}  IS NULL OR c.ngayDuyetTc <= :#{#param.ngayDuyetTcDen}) ) " +
             "AND (:#{#param.trichYeu} IS NULL OR LOWER(c.trichYeu) LIKE CONCAT('%',LOWER(:#{#param.trichYeu}),'%')) " +
             "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
-            "AND (:#{#param.types.isEmpty() } = true OR c.type IN :#{#param.types}) " +
+            "AND c.type IN :#{#param.types} " +
             "AND (:#{#param.loaiDc} IS NULL OR c.loaiDc = :#{#param.loaiDc}) " +
             "AND (:#{#param.loaiQdinh} IS NULL OR c.loaiQdinh = :#{#param.loaiQdinh}) " +
             "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
     )
     Page<DcnbQuyetDinhDcCHdr> searchChiCuc(@Param("param") SearchDcnbQuyetDinhDcC param, Pageable pageable);
 
-    @Query(value = "SELECT distinct new com.tcdt.qlnvhang.response.DieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO(c.id,c.soQdinh, c.ngayKyQdinh) FROM DcnbQuyetDinhDcCHdr c " +
+    @Query(value = "SELECT distinct new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO(c.id,c.soQdinh, c.ngayKyQdinh) FROM DcnbQuyetDinhDcCHdr c " +
             " LEFT JOIN DcnbQuyetDinhDcCDtl dtl on c.id = dtl.hdrId " +
             " LEFT JOIN DcnbKeHoachDcHdr kh on dtl.keHoachDcHdrId = kh.id " +
             " WHERE 1=1 " +
@@ -101,7 +101,7 @@ public interface DcnbQuyetDinhDcCHdrRepository extends JpaRepository<DcnbQuyetDi
             "JOIN DCNB_KE_HOACH_DC_DTL dtl ON dtl.HDR_ID = hdr.ID WHERE dtl.CLOAI_VTHH = ?1 AND dtl.MA_LO_KHO = ?2", nativeQuery = true)
     BigDecimal countTongKeHoachDeXuat(String cloaiVthh, String maLoKho);
 
-    @Query("SELECT new com.tcdt.qlnvhang.response.DieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO(" +
+    @Query("SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO(" +
             "hdr.id, hdr.soQdinh , hdr.ngayKyQdinh) " +
             "FROM DcnbQuyetDinhDcCHdr hdr\n" +
             "LEFT JOIN DcnbQuyetDinhDcCDtl dtl ON dtl.hdrId = hdr.id \n" +

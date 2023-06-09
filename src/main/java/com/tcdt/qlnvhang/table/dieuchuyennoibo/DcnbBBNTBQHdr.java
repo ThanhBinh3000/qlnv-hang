@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,9 +102,9 @@ public class DcnbBBNTBQHdr extends BaseEntity implements Serializable, Cloneable
     @Column(name = "DINH_MUC_TT")
     private Double dinhMucTT;
     @Column(name = "TONG_SO_KINH_PHI_DA_TH")
-    private Double tongKinhPhiDaTh;
+    private BigDecimal tongKinhPhiDaTh;
     @Column(name = "TONG_SO_KINH_PHI_DA_TH_BC")
-    private Double tongKinhPhiDaThBc;
+    private BigDecimal tongKinhPhiDaThBc;
     @Column(name = "MA_DIEM_KHO_XUAT")
     private String maDiemKhoXuat;
     @Column(name = "TEN_DIEM_KHO_XUAT")
@@ -139,6 +140,10 @@ public class DcnbBBNTBQHdr extends BaseEntity implements Serializable, Cloneable
 
     @Column(name = "LY_DO_TU_CHOI")
     private String lyDoTuChoi;
+
+    private Long soLapBBKLot;
+    private LocalDate ngayLapBBKLot;
+    private LocalDate ngayKetThucNtKeLot;
 
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();

@@ -1,9 +1,7 @@
-package com.tcdt.qlnvhang.response.DieuChuyenNoiBo;
+package com.tcdt.qlnvhang.response.dieuChuyenNoiBo;
 
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDate;
 
 @Getter
 @Setter

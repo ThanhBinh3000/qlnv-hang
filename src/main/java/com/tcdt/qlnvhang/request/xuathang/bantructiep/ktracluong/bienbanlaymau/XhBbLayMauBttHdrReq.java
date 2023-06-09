@@ -25,6 +25,8 @@ public class XhBbLayMauBttHdrReq extends BaseRequest {
 
     private LocalDate ngayQd;
 
+    private Long idHd;
+
     private String soHd;
 
     private String loaiBienBan;

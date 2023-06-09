@@ -1,7 +1,7 @@
 package com.tcdt.qlnvhang.repository.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbBienBanLayMau;
-import com.tcdt.qlnvhang.response.DieuChuyenNoiBo.DcnbBienBanLayMauHdrDTO;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBienBanLayMauHdrDTO;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanLayMauHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,8 +15,8 @@ import java.util.Optional;
 
 @Repository
 public interface DcnbBienBanLayMauHdrRepository extends JpaRepository<DcnbBienBanLayMauHdr, Long> {
-    @Query(value = "SELECT new com.tcdt.qlnvhang.response.DieuChuyenNoiBo.DcnbBienBanLayMauHdrDTO(" +
-            "bblm.id,qdc.id,qdc.soQdinh,qdc.nam,bblm.thoiHanDieuChuyen,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
+    @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBienBanLayMauHdrDTO(" +
+            "bblm.id,qdc.id,qdc.soQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
             "khdcd.tenLoKho, khdcd.thayDoiThuKho,bblm.soBbLayMau,bblm.ngayLayMau,bblm.soBbTinhKho,bblm.ngayXuatDocKho," +
             "bblm.soBbHaoDoi,bblm.trangThai, bblm.trangThai) FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbBienBanLayMauHdr bblm On bblm.qDinhDccId = qdc.id " +

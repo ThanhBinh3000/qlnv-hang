@@ -1,8 +1,6 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
 import com.google.common.collect.Lists;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbChuanBiKhoDtlRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbChuanBiKhoHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuNhapKhoDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuNhapKhoHdrRepository;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbPhieuNhapKhoHdrReq;
@@ -11,8 +9,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbChuanBiKhoHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachNhapXuat;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtlTT;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuNhapKhoHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.beans.BeanUtils;
@@ -70,11 +67,11 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
         DcnbPhieuNhapKhoHdr created = hdrRepository.save(data);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBBNTBQHdr.TABLE_NAME);
         created.setFileDinhKems(canCu);
-        DcnbKeHoachNhapXuat kh = new DcnbKeHoachNhapXuat();
-        kh.setIdHdr(created.getId());
-        kh.setTableName(DcnbPhieuNhapKhoHdr.TABLE_NAME);
-        kh.setIdKhDcDtl(data.getIdKeHoachDtl());
-        dcnbKeHoachNhapXuatService.saveOrUpdate(kh);
+//        DcnbKeHoachDcDtlTT kh = new DcnbKeHoachDcDtlTT();
+//        kh.setIdHdr(created.getId());
+//        kh.setTableName(DcnbPhieuNhapKhoHdr.TABLE_NAME);
+//        kh.setIdKhDcDtl(data.getIdKeHoachDtl());
+//        dcnbKeHoachNhapXuatService.saveOrUpdate(kh);
         return created;
     }
 
