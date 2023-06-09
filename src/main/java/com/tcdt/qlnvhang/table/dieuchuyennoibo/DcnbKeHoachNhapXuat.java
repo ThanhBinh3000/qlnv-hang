@@ -21,6 +21,9 @@ public class DcnbKeHoachNhapXuat {
     @Column(name = "ID_KH_DC_DTL")
     private Long idKhDcDtl;
 
+    @Column(name = "ID_KH_DC_DTL_GOC")
+    private Long idKhDcDtlGoc;
+
     @Column(name = "ID_HDR")
     private Long idHdr;
 
