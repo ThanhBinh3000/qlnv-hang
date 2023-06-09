@@ -66,7 +66,7 @@ public class DcnbQuyetDinhDcCHdr extends BaseEntity implements Serializable, Clo
   @Transient
   private List<FileDinhKem> quyetDinh = new ArrayList<>();
   @Transient
-  private DcnbKeHoachNhapXuat dcnbBienBanLayMauHdrList ;
+  private DcnbKeHoachDcDtlTT dcnbBienBanLayMauHdrList ;
 
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "HDR_ID")

@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
-import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBangKeCanHangDtlRepository;
@@ -68,8 +67,8 @@ public class DcnbBangKeCanHangService extends BaseServiceImpl {
                 DcnbKeHoachDcHdr keHoachHdr = dtl.getDcnbKeHoachDcHdr();
                 keHoachHdr.getDanhSachHangHoa().forEach( keHoachDtl -> {
                     try {
-                        DcnbKeHoachNhapXuat keHoachNhapXuat = dcnbKeHoachNhapXuatService.detailKhDtl(keHoachDtl.getId());
-                        keHoachDtl.setDcnbKeHoachNhapXuat(keHoachNhapXuat);
+                        DcnbKeHoachDcDtlTT keHoachNhapXuat = dcnbKeHoachNhapXuatService.detailKhDtl(keHoachDtl.getId());
+                        keHoachDtl.setDcnbKeHoachDcDtlTT(keHoachNhapXuat);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }

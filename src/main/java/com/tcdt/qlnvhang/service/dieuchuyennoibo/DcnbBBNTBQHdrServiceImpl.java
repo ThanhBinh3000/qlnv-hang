@@ -1,20 +1,17 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
 import com.google.common.collect.Lists;
-import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBBNTBQDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBBNTBQHdrRepository;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBBNTBQHdrReq;
-import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbQuyetDinhDcC;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBNTBQHdrDTO;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachNhapXuat;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbQuyetDinhDcCHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtlTT;
 import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,14 +48,21 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
         Page<DcnbBBNTBQHdr> search = hdrRepository.search(req, pageable);
         return search;
     }
-
+    @Override
+    public Page<DcnbBBNTBQHdrDTO> searchPage(CustomUserDetails currentUser, DcnbBBNTBQHdrReq req) throws Exception {
+        String dvql = currentUser.getDvql();
+        req.setMaDvi(dvql);
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
+        Page<DcnbBBNTBQHdrDTO> dcnbQuyetDinhDcCHdrs = hdrRepository.searchPage(req, pageable);
+        return dcnbQuyetDinhDcCHdrs;
+    }
     @Override
     public DcnbBBNTBQHdr create(DcnbBBNTBQHdrReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null){
+        if (userInfo == null) {
             throw new Exception("Access denied.");
         }
-        if(!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
+        if (!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             throw new Exception("Văn bản này chỉ có thêm ở cấp chi cục");
         }
         Optional<DcnbBBNTBQHdr> optional = hdrRepository.findBySoBban(req.getSoBban());
@@ -76,21 +80,21 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
         DcnbBBNTBQHdr created = hdrRepository.save(data);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBBNTBQHdr.TABLE_NAME);
         created.setFileDinhKems(canCu);
-        DcnbKeHoachNhapXuat kh = new DcnbKeHoachNhapXuat();
-        kh.setIdHdr(created.getId());
-        kh.setTableName(DcnbBBNTBQHdr.TABLE_NAME);
-        kh.setIdKhDcDtl(data.getIdKeHoachDtl());
-        dcnbKeHoachNhapXuatService.saveOrUpdate(kh);
+//        DcnbKeHoachDcDtlTT kh = new DcnbKeHoachDcDtlTT();
+//        kh.setIdHdr(created.getId());
+//        kh.setTableName(DcnbBBNTBQHdr.TABLE_NAME);
+//        kh.setIdKhDcDtl(data.getIdKeHoachDtl());
+//        dcnbKeHoachNhapXuatService.saveOrUpdate(kh);
         return created;
     }
 
     @Override
     public DcnbBBNTBQHdr update(DcnbBBNTBQHdrReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null){
+        if (userInfo == null) {
             throw new Exception("Access denied.");
         }
-        if(!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
+        if (!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             throw new Exception("Văn bản này chỉ có thêm ở cấp chi cục");
         }
         Optional<DcnbBBNTBQHdr> optional = hdrRepository.findById(req.getId());
@@ -98,7 +102,7 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
             throw new Exception("Số biên bản không tồn tại");
         }
         DcnbBBNTBQHdr data = optional.get();
-        BeanUtils.copyProperties(req,data);
+        BeanUtils.copyProperties(req, data);
         data.setDcnbBBNTBQDtl(req.getDcnbBBNTBQDtlList());
         DcnbBBNTBQHdr created = hdrRepository.save(data);
         fileDinhKemService.delete(created.getId(), Lists.newArrayList(DcnbBBNTBQHdr.TABLE_NAME));
@@ -110,10 +114,10 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
     @Override
     public DcnbBBNTBQHdr detail(Long id) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null){
+        if (userInfo == null) {
             throw new Exception("Access denied.");
         }
-        if(Objects.isNull(id)){
+        if (Objects.isNull(id)) {
             throw new Exception("Id is null");
         }
         Optional<DcnbBBNTBQHdr> optional = hdrRepository.findById(id);
@@ -128,7 +132,7 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
     @Override
     public DcnbBBNTBQHdr approve(DcnbBBNTBQHdrReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null){
+        if (userInfo == null) {
             throw new Exception("Access denied.");
         }
         DcnbBBNTBQHdr hdr = detail(req.getId());
@@ -170,15 +174,15 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
 
     @Override
     public void deleteMulti(List<Long> listMulti) throws Exception {
-        if(listMulti != null && !listMulti.isEmpty()){
-            listMulti.forEach( i -> {
+        if (listMulti != null && !listMulti.isEmpty()) {
+            listMulti.forEach(i -> {
                 try {
                     delete(i);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
             });
-        }else{
+        } else {
             throw new Exception("List id is null");
         }
     }
@@ -186,32 +190,5 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
     @Override
     public void export(DcnbBBNTBQHdrReq req, HttpServletResponse response) throws Exception {
 
-    }
-
-    @Override
-    public Page<DcnbQuyetDinhDcCHdr> searchPage(CustomUserDetails currentUser, DcnbBBNTBQHdrReq req) throws Exception {
-        // Get Tree quyết định
-        SearchDcnbQuyetDinhDcC reqQd = new SearchDcnbQuyetDinhDcC();
-        reqQd.setPaggingReq(req.getPaggingReq());
-        reqQd.setNam(req.getNam());
-        reqQd.setSoQdinh(req.getSoQdDcCuc());
-        reqQd.setLoaiDc(req.getLoaiDc());
-        reqQd.setTrangThai(NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
-        Page<DcnbQuyetDinhDcCHdr> dcnbQuyetDinhDcCHdrs = dcnbQuyetDinhDcCHdrService.searchPage(currentUser, reqQd);
-        dcnbQuyetDinhDcCHdrs.forEach( hdrQd -> {
-            hdrQd.getDanhSachQuyetDinh().forEach( dtlQd -> {
-                DcnbKeHoachDcHdr keHoachHdr = dtlQd.getDcnbKeHoachDcHdr();
-                keHoachHdr.getDanhSachHangHoa().forEach( keHoachDtl -> {
-                    try {
-                        DcnbKeHoachNhapXuat keHoachNhapXuat = dcnbKeHoachNhapXuatService.detailKhDtl(keHoachDtl.getId());
-                        keHoachDtl.setDcnbKeHoachNhapXuat(keHoachNhapXuat);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-
-                });
-            });
-        });
-        return dcnbQuyetDinhDcCHdrs;
     }
 }

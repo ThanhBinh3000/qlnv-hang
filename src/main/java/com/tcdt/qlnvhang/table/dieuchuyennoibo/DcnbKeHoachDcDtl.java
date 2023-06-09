@@ -3,7 +3,6 @@ package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Immutable;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -129,5 +128,5 @@ public class DcnbKeHoachDcDtl implements Serializable {
     @Transient
     private DcnbBienBanLayMauHdr dcnbBienBanLayMauHdr;
     @Transient
-    private DcnbKeHoachNhapXuat dcnbKeHoachNhapXuat;
+    private DcnbKeHoachDcDtlTT dcnbKeHoachDcDtlTT;
 }
