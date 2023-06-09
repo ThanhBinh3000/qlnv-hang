@@ -54,7 +54,7 @@ public class HhThopKhNhapKhacServiceImpl extends BaseServiceImpl implements HhTh
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenLoaiVthh(mapVthh.get(f.getLoaiVthh()));
         });
-        return null;
+        return data;
     }
 
     @Override
@@ -79,6 +79,7 @@ public class HhThopKhNhapKhacServiceImpl extends BaseServiceImpl implements HhTh
     public HhThopKhNhapKhac themMoi(HhThopKhNhapKhacReq req) throws Exception {
         HhThopKhNhapKhac dataMap = new ModelMapper().map(req, HhThopKhNhapKhac.class);
         dataMap.setNgayTao(getDateTimeNow());
+        dataMap.setNgayTh(getDateTimeNow());
         dataMap.setNguoiTao(getUser().getUsername());
         dataMap.setTrangThai(Contains.DUTHAO);
         HhThopKhNhapKhac created = hhThopKhNhapKhacRepository.save(dataMap);
@@ -114,6 +115,7 @@ public class HhThopKhNhapKhacServiceImpl extends BaseServiceImpl implements HhTh
         Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
         hhThopKhNhapKhac.get().setTenLoaiHinhNx(mapLoaiHinhNx.get(hhThopKhNhapKhac.get().getLoaiHinhNx()));
         hhThopKhNhapKhac.get().setTenLoaiVthh(mapVthh.get(hhThopKhNhapKhac.get().getLoaiVthh()));
+        hhThopKhNhapKhac.get().setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(hhThopKhNhapKhac.get().getTrangThai()));
         hhThopKhNhapKhac.get().setFileDinhKems(fileDinhKemService.search(hhThopKhNhapKhac.get().getId(), Collections.singletonList(HhThopKhNhapKhac.TABLE_NAME)));
         data.setHdr(hhThopKhNhapKhac.get());
         data.setDtl(hhDxuatKhNhapKhacHdrRepository.findAllByThopId(hhThopKhNhapKhac.get().getId()));
