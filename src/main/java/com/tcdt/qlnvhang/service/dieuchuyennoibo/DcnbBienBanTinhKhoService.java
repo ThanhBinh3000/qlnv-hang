@@ -11,6 +11,8 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.*;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeCanHangHdrDTO;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBienBanTinhKhoHdrDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -57,34 +59,11 @@ public class DcnbBienBanTinhKhoService extends BaseServiceImpl {
     @Autowired
     DcnbQuyetDinhDcCHdrService dcnbQuyetDinhDcCHdrService;
 
-    public Page<DcnbQuyetDinhDcCHdr> searchPage(CustomUserDetails currentUser, SearchPhieuKnChatLuong req) throws Exception {
-
-        // Get Tree quyết định
-        SearchDcnbQuyetDinhDcC reqQd = new SearchDcnbQuyetDinhDcC();
-        reqQd.setPaggingReq(req.getPaggingReq());
-        reqQd.setNam(req.getNam());
-        reqQd.setSoQdinh(req.getSoQdinhDcc());
-        reqQd.setLoaiDc(req.getLoaiDc());
-        reqQd.setTrangThai(NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
-        Page<DcnbQuyetDinhDcCHdr> dcnbQuyetDinhDcCHdrs = dcnbQuyetDinhDcCHdrService.searchPage(currentUser, reqQd);
-
-        // Gắn data vào biên bản lấy mẫu vào tree
+    public Page<DcnbBienBanTinhKhoHdrDTO> searchPage(CustomUserDetails currentUser, SearchDcnbBienBanTinhKho req) throws Exception {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
-        dcnbQuyetDinhDcCHdrs.forEach( hdr -> {
-            hdr.getDanhSachQuyetDinh().forEach( dtl -> {
-                DcnbKeHoachDcHdr keHoachHdr = dtl.getDcnbKeHoachDcHdr();
-                keHoachHdr.getDanhSachHangHoa().forEach( keHoachDtl -> {
-                    try {
-                        DcnbKeHoachDcDtlTT keHoachNhapXuat = dcnbKeHoachNhapXuatService.detailKhDtl(keHoachDtl.getId());
-                        keHoachDtl.setDcnbKeHoachDcDtlTT(keHoachNhapXuat);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                });
-            });
-        });
-
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
+        Page<DcnbBienBanTinhKhoHdrDTO> dcnbQuyetDinhDcCHdrs = dcnbBienBanTinhKhoHdrRepository.searchPage(req, pageable);
         return dcnbQuyetDinhDcCHdrs;
     }
 
@@ -269,8 +248,8 @@ public class DcnbBienBanTinhKhoService extends BaseServiceImpl {
         objReq.setPaggingReq(paggingReq);
         objReq.setMaDvi(currentUser.getDvql());
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit());
-        Page<DcnbBienBanTinhKhoHdr> page = dcnbBienBanTinhKhoHdrRepository.search(objReq,pageable);
-        List<DcnbBienBanTinhKhoHdr> data = page.getContent();
+        Page<DcnbBienBanTinhKhoHdrDTO> page = dcnbBienBanTinhKhoHdrRepository.searchPage(objReq,pageable);
+        List<DcnbBienBanTinhKhoHdrDTO> data = page.getContent();
 
         String title = "Danh sách bảng kê cân hàng ";
         String[] rowsName = new String[]{"STT", "Năm kế hoạch", "Số công văn/đề xuất", "Ngày lập KH", "Ngày duyệt LĐ Chi cục", "Loại điều chuyển", "Đơn vị đề xuất", "Trạng thái"};
@@ -278,17 +257,17 @@ public class DcnbBienBanTinhKhoService extends BaseServiceImpl {
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
         for (int i = 0; i < data.size(); i++) {
-            DcnbBienBanTinhKhoHdr dx = data.get(i);
+            DcnbBienBanTinhKhoHdrDTO dx = data.get(i);
             objs = new Object[rowsName.length];
             objs[0] = i + 1;
             objs[1] = dx.getNam();
-            objs[2] = dx.getSoQdinhDcc();
+            objs[2] = dx.getSoQdinh();
             objs[3] = dx.getNam();
             objs[4] = dx.getThoiHanDieuChuyen();
             objs[5] = dx.getTenDiemKho();
             objs[6] = dx.getTenLoKho();
             objs[7] = dx.getSoPhieuXuatKho();
-            objs[8] = dx.getSoBangKe();
+            objs[8] = dx.getSoBbTinhKho();
             objs[9] = dx.getNgayXuatKho();
             objs[10] = dx.getTrangThai();
             dataList.add(objs);
