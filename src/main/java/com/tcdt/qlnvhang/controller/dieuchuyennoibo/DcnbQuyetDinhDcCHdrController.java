@@ -78,12 +78,29 @@ public class DcnbQuyetDinhDcCHdrController extends BaseController {
 
 
   @ApiOperation(value = "Danh sách số quyết định", response = List.class)
-  @PostMapping(value = "/danh-sach-so-quyet-dinh", produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(value = "/danh-sach-so-quyet-dinh-cho-chi-cuc", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<BaseResponse> danhSachChiCucDeXuat(@CurrentUser CustomUserDetails currentUser, @RequestBody SearchDcnbQuyetDinhDcC objReq) {
+  public ResponseEntity<BaseResponse> danhSachQuyetDinhChiCuc(@CurrentUser CustomUserDetails currentUser, @RequestBody SearchDcnbQuyetDinhDcC objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(dcnbQuyetDinhDcCHdrService.danhSachSoQdDieuChuyen(currentUser,objReq));
+      resp.setData(dcnbQuyetDinhDcCHdrService.danhSachQuyetDinhChiCuc(currentUser,objReq));
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (Exception e) {
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Tra cứu thông tin : {}", e);
+    }
+    return ResponseEntity.ok(resp);
+  }
+
+  @ApiOperation(value = "Danh sách số quyết định", response = List.class)
+  @PostMapping(value = "/danh-sach-so-quyet-dinh-cho-cuc", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<BaseResponse> danhSachQuyetDinhCuc(@CurrentUser CustomUserDetails currentUser, @RequestBody SearchDcnbQuyetDinhDcC objReq) {
+    BaseResponse resp = new BaseResponse();
+    try {
+      resp.setData(dcnbQuyetDinhDcCHdrService.danhSachQuyetDinhCuc(currentUser,objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {

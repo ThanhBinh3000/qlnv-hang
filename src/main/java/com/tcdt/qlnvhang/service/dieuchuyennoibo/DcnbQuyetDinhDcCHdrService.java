@@ -172,10 +172,18 @@ public class DcnbQuyetDinhDcCHdrService extends BaseServiceImpl {
         return created;
     }
 
-    public List<DcnbQuyetDinhDcCHdrDTO> danhSachSoQdDieuChuyen(CustomUserDetails currentUser, SearchDcnbQuyetDinhDcC req) throws Exception{
-        String maDviCha = qlnvDmDonviRepository.findByMaDviAndTrangThai(currentUser.getDvql(), "01");
-        List<DcnbQuyetDinhDcCHdrDTO> danhSachSoQdDieuChuyen = dcnbQuyetDinhDcCHdrRepository.findByLoaiDcAndTrangThai(req.getLoaiDc(),Contains.BAN_HANH, maDviCha, req.getLoaiQdinh());
-        return danhSachSoQdDieuChuyen;
+    public List<DcnbQuyetDinhDcCHdrDTO> danhSachQuyetDinhChiCuc(CustomUserDetails currentUser, SearchDcnbQuyetDinhDcC req) throws Exception{
+        // 2 trường hợp
+        // trường 1: chi cục lấy ra quyết định của cục
+        // trường 2: cục lấy ra quyết định của cục nhưng phải được bh biên bản lấy mẫu
+        if(currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)){
+            String dvql = currentUser.getDvql();
+            req.setMaDvi(dvql);
+            req.setTypes(Arrays.asList(Contains.NHAN_DIEU_CHUYEN, Contains.DIEU_CHUYEN));
+            List<DcnbQuyetDinhDcCHdrDTO> danhSachSoQdDieuChuyen = dcnbQuyetDinhDcCHdrRepository.searchListChiCuc(req);
+            return danhSachSoQdDieuChuyen;
+        }
+        return null;
     }
 
     @Transactional
@@ -774,5 +782,19 @@ public class DcnbQuyetDinhDcCHdrService extends BaseServiceImpl {
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
+    }
+
+    public List<DcnbQuyetDinhDcCHdrDTO> danhSachQuyetDinhCuc(CustomUserDetails currentUser, SearchDcnbQuyetDinhDcC req) {
+        // 2 trường hợp
+        // trường 1: chi cục lấy ra quyết định của cục
+        // trường 2: cục lấy ra quyết định của cục nhưng phải được bh biên bản lấy mẫu
+        if(!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)){
+            String dvql = currentUser.getDvql();
+            req.setMaDvi(dvql);
+            req.setTypes(Arrays.asList(Contains.NHAN_DIEU_CHUYEN, Contains.DIEU_CHUYEN));
+            List<DcnbQuyetDinhDcCHdrDTO> danhSachSoQdDieuChuyen = dcnbQuyetDinhDcCHdrRepository.searchListCuc(req);
+            return danhSachSoQdDieuChuyen;
+        }
+        return null;
     }
 }
