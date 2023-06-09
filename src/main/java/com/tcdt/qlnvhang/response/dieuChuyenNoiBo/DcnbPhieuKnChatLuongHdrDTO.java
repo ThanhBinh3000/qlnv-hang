@@ -27,5 +27,8 @@ public class DcnbPhieuKnChatLuongHdrDTO {
     private String bbHaoDoi;
     private String trangThai;
     private String tenTrangThai;
-
+    private String maHangHoa;
+    private String tenHangHoa;
+    private String maChLoaiHangHoa;
+    private String tenChLoaiHangHoa;
 }
