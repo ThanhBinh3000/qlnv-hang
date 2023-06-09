@@ -17,6 +17,8 @@ public class DcnbBienBanLayMauHdrDTO {
     private String tenDiemKho;
     private String maloKho;
     private String tenloKho;
+    private String maNganKho;
+    private String tenNganKho;
     private Boolean thayDoiThuKho;
     private String soBBLayMau;
     private LocalDate ngaylayMau;

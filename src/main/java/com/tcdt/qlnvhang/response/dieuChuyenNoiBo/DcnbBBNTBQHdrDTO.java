@@ -21,12 +21,16 @@ public class DcnbBBNTBQHdrDTO {
     private String tenDiemKhoXuat;
     private String maloKhoXuat;
     private String tenloKhoXuat;
+    private String maNganKhoXuat;
+    private String tenNganKhoXuat;
 //    private String trangThaiXuat;
 //    private String tenTrangThaiXuat;
     private String maDiemKhoNhan;
     private String tenDiemKhoNhan;
     private String maloKhoNhan;
     private String tenloKhoNhan;
+    private String maNganKhoNhan;
+    private String tenNganKhoNhan;
 //    private String trangThaiNhan;
 //    private String tenTrangThaiNhan;
     private Long soLapBBKLot;
