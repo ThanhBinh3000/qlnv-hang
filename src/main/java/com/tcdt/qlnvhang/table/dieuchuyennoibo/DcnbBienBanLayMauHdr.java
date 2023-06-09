@@ -169,6 +169,9 @@ public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cl
     @Transient
     private List<FileDinhKem> bienBanLayMauDinhKem = new ArrayList<>();
 
+    @Transient
+    private List<FileDinhKem> fileDinhKemChupMauNiemPhong = new ArrayList<>();
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
     private List<DcnbBienBanLayMauDtl> dcnbBienBanLayMauDtl = new ArrayList<>();
