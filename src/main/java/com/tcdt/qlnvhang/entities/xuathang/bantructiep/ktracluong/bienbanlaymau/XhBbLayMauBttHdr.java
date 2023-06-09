@@ -35,6 +35,8 @@ public class XhBbLayMauBttHdr implements Serializable {
 
     private LocalDate ngayQd;
 
+    private Long idHd;
+
     private String soHd;
 
     private String loaiBienBan;
