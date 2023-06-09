@@ -100,18 +100,6 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
         return dcnbQuyetDinhDcCHdrs;
     }
 
-
-    public List<DcnbBienBanLayMauHdrDTO> danhSachSoQdDieuChuyen(CustomUserDetails currentUser, SearchDcnbBienBanLayMau req) throws Exception{
-        String maDviCha = qlnvDmDonviRepository.findByMaDviAndTrangThai(currentUser.getDvql(), "01");
-        List<DcnbBienBanLayMauHdrDTO> danhSachSoQdDieuChuyen = dcnbBienBanLayMauHdrRepository.findByLoaiDcAndTrangThai(req.getLoaiDc(),Contains.BAN_HANH, maDviCha, Contains.QD_XUAT);
-        return danhSachSoQdDieuChuyen;
-    }
-
-    public List<DcnbBienBanLayMauHdrDTO> danhSachLoKho(CustomUserDetails currentUser, SearchDcnbBienBanLayMau req) throws Exception{
-        List<DcnbBienBanLayMauHdrDTO> danhSachSoQdDieuChuyen = dcnbBienBanLayMauHdrRepository.findByLoaiDcAndQDinhDccIdAndTrangThai(req.getLoaiDc(),req.getQDinhDccId(),Contains.BAN_HANH, Contains.QD_XUAT);
-        return danhSachSoQdDieuChuyen;
-    }
-
     @Transactional
     public DcnbBienBanLayMauHdr save(CustomUserDetails currentUser, DcnbBienBanLayMauHdrReq objReq) throws Exception {
         QlnvDmDonvi cqt = qlnvDmDonviRepository.findByMaDvi(currentUser.getDvql());
@@ -130,8 +118,8 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
         data.setMaDvi(cqt.getMaDvi());
         data.setTenDvi(cqt.getTenDvi());
         data.setLoaiDc(objReq.getLoaiDc());
+        // Biên bản lấy mẫu thì auto thay đổi thủ kho
         data.setThayDoiThuKho(true);
-//        data.setType(Contains.DIEU_CHUYEN);
         data.setTrangThai(Contains.DUTHAO);
         data.setNgayTao(LocalDateTime.now());
         data.setNguoiTaoId(currentUser.getUser().getId());
@@ -308,5 +296,12 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
 //        }
 //        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
 //        ex.export();
+    }
+
+    public List<DcnbBienBanLayMauHdrDTO> danhSachBienBan(CustomUserDetails currentUser, SearchDcnbBienBanLayMau objReq) {
+        // TO DO
+//         Lấy ra các biên bản lấy mẫu của câấp dưới - trạng thái ban hành và có qDinhDccId được truyền lên (qDinhDccId truyền lên là qDinhDccId gốc)
+//         DcnbBienBanLayMauHdrDTO JOIN  với QUYET định và wherer theo parentID  = qDinhDccId
+         return null;
     }
 }

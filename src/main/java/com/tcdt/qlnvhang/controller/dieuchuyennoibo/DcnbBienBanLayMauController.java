@@ -166,30 +166,13 @@ public class DcnbBienBanLayMauController {
         }
     }
 
-    @ApiOperation(value = "Danh sách số quyết định", response = List.class)
-    @PostMapping(value = "/danh-sach-so-quyet-dinh", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> danhSachSoQuyetDinh(@CurrentUser CustomUserDetails currentUser, @RequestBody SearchDcnbBienBanLayMau objReq) {
-        BaseResponse resp = new BaseResponse();
-        try {
-            resp.setData(dcnbBienBanLayMauService.danhSachSoQdDieuChuyen(currentUser,objReq));
-            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-        } catch (Exception e) {
-            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-            resp.setMsg(e.getMessage());
-            log.error("Tra cứu thông tin : {}", e);
-        }
-        return ResponseEntity.ok(resp);
-    }
-
     @ApiOperation(value = "Danh sách lô kho", response = List.class)
-    @PostMapping(value = "/danh-sach-lo-kho", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/danh-sach-bien-ban", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> danhSachLoKho(@CurrentUser CustomUserDetails currentUser, @RequestBody SearchDcnbBienBanLayMau objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(dcnbBienBanLayMauService.danhSachLoKho(currentUser,objReq));
+            resp.setData(dcnbBienBanLayMauService.danhSachBienBan(currentUser,objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

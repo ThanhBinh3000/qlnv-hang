@@ -33,6 +33,9 @@ public class DcnbKeHoachNhapXuatService extends BaseServiceImpl {
     @Autowired
     private DcnbBBNTBQHdrRepository dcnbBBNTBQHdrRepository;
 
+    @Autowired
+    private DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
+
     @Transactional
     public DcnbKeHoachNhapXuat saveOrUpdate(DcnbKeHoachNhapXuat objReq) throws Exception {
         if(Objects.isNull(objReq.getIdKhDcDtl())){
@@ -45,6 +48,11 @@ public class DcnbKeHoachNhapXuatService extends BaseServiceImpl {
         if(checkHasKeHoachNx(objReq.getIdKhDcDtl(),objReq.getTableName())){
             throw new Exception("ID KH DTL : "+objReq.getIdKhDcDtl()+", Table Name :"+ objReq.getTableName()+" already exist");
         }
+        Optional<DcnbKeHoachDcDtl> byId = dcnbKeHoachDcDtlRepository.findById(objReq.getIdKhDcDtl());
+        if(!byId.isPresent()){
+            throw new Exception("Kế hoạch DTL " + objReq.getIdKhDcDtl() + " is null");
+        }
+        DcnbKeHoachDcDtl dtl = byId.get();
         DcnbKeHoachNhapXuat save = hdrRepository.save(objReq);
         return save;
     }

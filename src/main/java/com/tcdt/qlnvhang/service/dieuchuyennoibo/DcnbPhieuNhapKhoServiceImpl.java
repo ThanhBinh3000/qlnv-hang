@@ -12,6 +12,7 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQHdr;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbChuanBiKhoHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachNhapXuat;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuNhapKhoHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.beans.BeanUtils;
@@ -36,6 +37,9 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
+
+    @Autowired
+    private DcnbKeHoachNhapXuatService dcnbKeHoachNhapXuatService;
 
     @Override
     public Page<DcnbPhieuNhapKhoHdr> searchPage(DcnbPhieuNhapKhoHdrReq req) throws Exception {
@@ -66,6 +70,11 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
         DcnbPhieuNhapKhoHdr created = hdrRepository.save(data);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBBNTBQHdr.TABLE_NAME);
         created.setFileDinhKems(canCu);
+        DcnbKeHoachNhapXuat kh = new DcnbKeHoachNhapXuat();
+        kh.setIdHdr(created.getId());
+        kh.setTableName(DcnbPhieuNhapKhoHdr.TABLE_NAME);
+        kh.setIdKhDcDtl(data.getIdKeHoachDtl());
+        dcnbKeHoachNhapXuatService.saveOrUpdate(kh);
         return created;
     }
 

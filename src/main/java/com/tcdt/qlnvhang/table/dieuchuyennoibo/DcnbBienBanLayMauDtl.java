@@ -29,23 +29,8 @@ public class DcnbBienBanLayMauDtl implements Serializable {
     @Column(name = "LOAI_DAI_DIEN")
     private String loaiDaiDien;
 
-    @Column(name = "DAI_DIEN_CUC")
-    private String daiDienCuc;
-
-    @Column(name = "DAI_DIEN_CHI_CUC")
-    private String daiDienChiCuc;
-
-    @Column(name = "SL_MAU_HANG_KIEM_TRA")
-    private Long slMauHangKiemTra;
-
-    @Column(name = "PHUONG_PHAP_LAY_MAU")
-    private String phuongPhapLayMau;
-
-    @Column(name = "CHI_TIEU_KIEM_TRA")
-    private String chiTieuKiemTra;
-
-    @Column(name = "DA_NIEM_PHONG_MAU")
-    private Boolean daNiemPhongMau;
+    @Column(name = "TEN_DAI_DIEN")
+    private String tenDaiDien;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
