@@ -259,7 +259,7 @@ public class DcnbPhieuKiemNghiemChatLuongService extends BaseServiceImpl {
         List<DcnbPhieuKnChatLuongHdrDTO> data = page.getContent();
 
         String title = "Danh sách phương án xuất cứu trợ, viện trợ ";
-        String[] rowsName = new String[]{"STT", "Năm kH", "Số công văn/đề xuất", "Ngày duyệt LĐ Cục", "Loại điều chuyển", "Đơn vị đề xuất", "Trạng thái",};
+        String[] rowsName = new String[]{"STT", "Số QĐ ĐC của Cục","Năm KH","Thời hạn điều chuyển", "Điểm kho","Lô kho","Thay đổi thủ kho", "Số phiếu KNCL", "Ngày kiểm nghiệm","Số BBLM/BGM","Ngày lấy mẫu","Số BB tịnh kho", "Trạng thái",};
         String fileName = "danh-sach-ke-hoach-dieu-chuyen-noi-bo-hang-dtqg.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
@@ -274,7 +274,12 @@ public class DcnbPhieuKiemNghiemChatLuongService extends BaseServiceImpl {
             objs[5] = dx.getTenloKho();
             objs[6] = dx.getThayDoiThuKho();
             objs[7] = dx.getSoPhieuKnChatLuong();
-            objs[8] = dx.getSoBBLayMau();
+            objs[8] = dx.getNgayKiemNghiem();
+            objs[9] = dx.getSoBBLayMau();
+            objs[10] = dx.getNgaylayMau();
+            objs[11] = dx.getSoBBTinhKho();
+            objs[12] = dx.getNgayXuatDocKho();
+            objs[13] = dx.getTrangThai();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
