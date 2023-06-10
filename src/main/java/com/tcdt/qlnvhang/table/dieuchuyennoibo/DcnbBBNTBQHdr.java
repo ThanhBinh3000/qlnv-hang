@@ -140,12 +140,12 @@ public class DcnbBBNTBQHdr extends BaseEntity implements Serializable, Cloneable
 
     @Column(name = "LY_DO_TU_CHOI")
     private String lyDoTuChoi;
-    @Column(name = "SO_BBK_LOT")
-    private String soLapBBKLot;
-    @Column(name = "NGAY_LAP_BBK_LOT")
-    private LocalDate ngayLapBBKLot;
-    @Column(name = "NGAY_KET_THUC_NT_KE_LOT")
-    private LocalDate ngayKetThucNtKeLot;
+//    @Column(name = "SO_BBK_LOT")
+//    private String soLapBBKLot;
+//    @Column(name = "NGAY_LAP_BBK_LOT")
+//    private LocalDate ngayLapBBKLot;
+//    @Column(name = "NGAY_KET_THUC_NT_KE_LOT")
+//    private LocalDate ngayKetThucNtKeLot;
 
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
