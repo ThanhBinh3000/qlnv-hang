@@ -94,23 +94,6 @@ public class DcnbKeHoachDcHdrController extends BaseController {
     return ResponseEntity.ok(resp);
   }
 
-  @ApiOperation(value = "Danh sách lô kho", response = List.class)
-  @PostMapping(value = "/danh-sach-lo-kho", produces = MediaType.APPLICATION_JSON_VALUE)
-  @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<BaseResponse> danhSachLoKho(@RequestBody SearchDcnbKeHoachDc objReq) {
-    BaseResponse resp = new BaseResponse();
-    try {
-      resp.setData(dcnbKeHoachDcHdrService.danhSachMaLokho(objReq));
-      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-    } catch (Exception e) {
-      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-      resp.setMsg(e.getMessage());
-      log.error("Tra cứu thông tin : {}", e);
-    }
-    return ResponseEntity.ok(resp);
-  }
-
   @ApiOperation(value = "Lấy chi tiết thông tin đề xuất", response = List.class)
   @GetMapping(value =  PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
