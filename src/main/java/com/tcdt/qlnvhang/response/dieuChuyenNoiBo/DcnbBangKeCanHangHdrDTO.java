@@ -31,4 +31,6 @@ public class DcnbBangKeCanHangHdrDTO {
     private String tenNhaKho;
     private String donViTinh;
     private String tenDonViTinh;
+    private String maNganKho;
+    private String tenNganKho;
 }
