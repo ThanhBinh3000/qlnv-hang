@@ -1,12 +1,14 @@
 package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
 public class SearchDcnbBienBanTinhKho extends BaseRequest {
     private Integer nam;
     private String soQdinhDcc;
