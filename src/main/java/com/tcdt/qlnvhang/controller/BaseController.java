@@ -20,6 +20,9 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.tcdt.qlnvhang.service.feign.BaoCaoClient;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +50,8 @@ public class BaseController {
 
 	@Autowired
 	private CategoryServiceProxy categoryServiceProxy;
+	@Autowired
+	private BaoCaoClient baoCaoClient;
 
 	@Autowired
 	DanhMucRepository danhMucRepository;
@@ -274,5 +279,14 @@ public class BaseController {
 			}
 		}
 		return MapCategory.map;
+	}
+
+	public ReportTemplate findByTenFile(HttpServletRequest request, ReportTemplateRequest obj) throws Exception {
+		// Call feign get dvql
+		BaseRequest baseRequest = new BaseRequest();
+		baseRequest.setStr(getDvql(request));
+		ReportTemplate response = baoCaoClient.findByTenFile(this.getAuthorizationToken(request),
+				obj);
+		return response;
 	}
 }

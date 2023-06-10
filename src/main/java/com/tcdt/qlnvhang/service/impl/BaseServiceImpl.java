@@ -19,6 +19,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.request.object.HhDmDviLquanSearchReq;
 import com.tcdt.qlnvhang.response.CommonResponse;
+import com.tcdt.qlnvhang.service.feign.BaoCaoClient;
 import com.tcdt.qlnvhang.service.feign.CategoryServiceProxy;
 import com.tcdt.qlnvhang.service.feign.SystemServiceProxy;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -27,6 +28,8 @@ import com.tcdt.qlnvhang.table.QlnvDanhMuc;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanLayMauHdr;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +59,8 @@ import java.util.*;
 public abstract class BaseServiceImpl {
   @Autowired
   private CategoryServiceProxy categoryServiceProxy;
+  @Autowired
+  private BaoCaoClient baoCaoClient;
 
   @Autowired
   DanhMucRepository danhMucRepository;
@@ -501,6 +506,11 @@ public abstract class BaseServiceImpl {
       data.put(String.valueOf(map.get("maHangHoa")), String.valueOf(map.get("tenHangHoa")));
     }
     return data;
+  }
+
+  public ReportTemplate findByTenFile(ReportTemplateRequest obj) {
+    ReportTemplate response = baoCaoClient.findByTenFile(getAuthorizationToken(request),obj);
+    return response;
   }
 
   public Long getNextSequence(String sequenceName) {
