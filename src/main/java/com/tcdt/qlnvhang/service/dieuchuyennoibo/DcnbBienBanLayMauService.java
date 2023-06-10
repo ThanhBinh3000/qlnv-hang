@@ -101,9 +101,6 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
         data.setNguoiTaoId(currentUser.getUser().getId());
         objReq.getDcnbBienBanLayMauDtl().forEach(e -> {
             e.setDcnbBienBanLayMauHdr(data);
-            List<FileDinhKemReq> fileDinhKemReqs = e.getFileDinhKemChupMauNiemPhong().stream().map(n -> new FileDinhKemReq()).collect(Collectors.toList());
-            List<FileDinhKem> fileDinhKemMauNiemPhong = fileDinhKemService.saveListFileDinhKem(fileDinhKemReqs,e.getId(),DcnbBienBanLayMauDtl.TABLE_NAME + "_MAU_DA_NIEM_PHONG");
-            e.setFileDinhKemChupMauNiemPhong(fileDinhKemMauNiemPhong);
         });
         DcnbBienBanLayMauHdr created = dcnbBienBanLayMauHdrRepository.save(data);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), DcnbBienBanLayMauHdr.TABLE_NAME + "_CAN_CU");
@@ -111,6 +108,8 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
         List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getBienBanLayMauDinhKem(), created.getId(), DcnbBienBanLayMauHdr.TABLE_NAME + "_BIEN_BAN_LAY_MAU");
         created.setBienBanLayMauDinhKem(bienBanLayMauDinhKem);
         List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByQdDcIdAndMaLoKho(created.getQDinhDccId(),created.getMaLoKho());
+        List<FileDinhKem> fileDinhKemMauNiemPhong = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemChupMauNiemPhong(),created.getId(),DcnbBienBanLayMauHdr.TABLE_NAME + "_MAU_DA_NIEM_PHONG");
+        created.setFileDinhKemChupMauNiemPhong(fileDinhKemMauNiemPhong);
         dcnbKeHoachDcDtls.forEach(e->{
 //            DcnbKeHoachDcDtlTT keHoachNhapXuat = new DcnbKeHoachDcDtlTT();
 //            keHoachNhapXuat.setIdKhDcDtl(e.getId());
@@ -147,12 +146,10 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
         BeanUtils.copyProperties(objReq, data);
         data.setDcnbBienBanLayMauDtl(objReq.getDcnbBienBanLayMauDtl());
         DcnbBienBanLayMauHdr created = dcnbBienBanLayMauHdrRepository.save(data);
-        data.getDcnbBienBanLayMauDtl().forEach(e ->{
-            fileDinhKemService.delete(e.getId(),Lists.newArrayList(DcnbBienBanLayMauDtl.TABLE_NAME + "_MAU_DA_NIEM_PHONG"));
-            List<FileDinhKemReq> fileDinhKemReqs = e.getFileDinhKemChupMauNiemPhong().stream().map(n -> new FileDinhKemReq()).collect(Collectors.toList());
-            List<FileDinhKem> fileDinhKemMauNiemPhong = fileDinhKemService.saveListFileDinhKem(fileDinhKemReqs,e.getId(),DcnbBienBanLayMauDtl.TABLE_NAME + "_MAU_DA_NIEM_PHONG");
-            e.setFileDinhKemChupMauNiemPhong(fileDinhKemMauNiemPhong);
-        });
+
+        fileDinhKemService.delete(objReq.getId(),Lists.newArrayList(DcnbBienBanLayMauHdr.TABLE_NAME + "_MAU_DA_NIEM_PHONG"));
+        List<FileDinhKem> fileDinhKemMauNiemPhong = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemChupMauNiemPhong(),created.getId(),DcnbBienBanLayMauHdr.TABLE_NAME + "_MAU_DA_NIEM_PHONG");
+        created.setFileDinhKemChupMauNiemPhong(fileDinhKemMauNiemPhong);
 
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbBienBanLayMauHdr.TABLE_NAME + "_CAN_CU"));
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), DcnbBienBanLayMauHdr.TABLE_NAME + "_CAN_CU");
@@ -169,14 +166,13 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
         allById.forEach(data -> {
             List<FileDinhKem> canCu = fileDinhKemRepository.findByDataIdAndDataTypeIn(data.getId(), Collections.singleton(DcnbBienBanLayMauHdr.TABLE_NAME + "_CAN_CU"));
             data.setCanCu(canCu);
+
             List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemRepository.findByDataIdAndDataTypeIn(data.getId(),Collections.singleton(DcnbBienBanLayMauHdr.TABLE_NAME + "_BIEN_BAN_LAY_MAU") );
             data.setBienBanLayMauDinhKem(bienBanLayMauDinhKem);
-                List<DcnbBienBanLayMauDtl> khs = dcnbBienBanLayMauDtlRepository.findByHdrId(data.getId());
-                data.setDcnbBienBanLayMauDtl(khs);
-                khs.forEach(dtl->{
-                    List<FileDinhKem> fileDinhKemChupMauNiemPhong = fileDinhKemRepository.findByDataIdAndDataTypeIn(dtl.getId(), Collections.singleton(DcnbBienBanLayMauDtl.TABLE_NAME + "_MAU_DA_NIEM_PHONG"));
-                    dtl.setFileDinhKemChupMauNiemPhong(fileDinhKemChupMauNiemPhong);
-                });
+
+            List<FileDinhKem> fileDinhKemChupMauNiemPhong = fileDinhKemRepository.findByDataIdAndDataTypeIn(data.getId(), Collections.singleton(DcnbBienBanLayMauHdr.TABLE_NAME + "_MAU_DA_NIEM_PHONG"));
+            data.setFileDinhKemChupMauNiemPhong(fileDinhKemChupMauNiemPhong);
+
             });
         return allById;
     }
@@ -194,12 +190,10 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
         }
         DcnbBienBanLayMauHdr data = optional.get();
         List<DcnbBienBanLayMauDtl> list = dcnbBienBanLayMauDtlRepository.findByHdrId(data.getId());
-        list.forEach(e->{
-            fileDinhKemService.delete(e.getId(), Lists.newArrayList(DcnbBienBanLayMauHdr.TABLE_NAME + "_MAU_DA_NIEM_PHONG"));
-        });
         dcnbBienBanLayMauDtlRepository.deleteAll(list);
         fileDinhKemService.delete(idSearchReq.getId(), Lists.newArrayList(DcnbBienBanLayMauHdr.TABLE_NAME + "_CAN_CU"));
         fileDinhKemService.delete(idSearchReq.getId(), Lists.newArrayList(DcnbBienBanLayMauHdr.TABLE_NAME + "_BIEN_BAN_LAY_MAU"));
+        fileDinhKemService.delete(idSearchReq.getId(), Lists.newArrayList(DcnbBienBanLayMauHdr.TABLE_NAME + "_MAU_DA_NIEM_PHONG"));
         dcnbBienBanLayMauHdrRepository.delete(data);
     }
 
