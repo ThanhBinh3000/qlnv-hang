@@ -36,4 +36,5 @@ public class DcnbPhieuKnChatLuongHdrDTO {
     private String thuKho;
     private String maNganKho;
     private String tenNganKho;
+    private LocalDate ngayHieuLuc;
 }
