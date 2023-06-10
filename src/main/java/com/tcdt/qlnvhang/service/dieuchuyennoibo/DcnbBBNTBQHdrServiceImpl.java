@@ -11,7 +11,6 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtlTT;
 import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +52,13 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        Page<DcnbBBNTBQHdrDTO> dcnbQuyetDinhDcCHdrs = hdrRepository.searchPage(req, pageable);
+        Page<DcnbBBNTBQHdrDTO> dcnbQuyetDinhDcCHdrs = null;
+        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            dcnbQuyetDinhDcCHdrs = hdrRepository.searchPageChiCuc(req, pageable);
+        }else {
+            dcnbQuyetDinhDcCHdrs = hdrRepository.searchPage(req, pageable);
+        }
+
         return dcnbQuyetDinhDcCHdrs;
     }
     @Override
