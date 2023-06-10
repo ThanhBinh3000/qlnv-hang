@@ -99,7 +99,7 @@ public class DcnbQuyetDinhDcCHdrService extends BaseServiceImpl {
         if(!currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)){
             throw new Exception("Chức năng thêm mới chỉ dành cho cấp cục");
         }
-        Optional<DcnbQuyetDinhDcCHdr> optional = dcnbQuyetDinhDcCHdrRepository.findFirstBySoQdinhAndType(objReq.getSoQdinh(),Contains.DIEU_CHUYEN);
+        Optional<DcnbQuyetDinhDcCHdr> optional = dcnbQuyetDinhDcCHdrRepository.findFirstBySoQdinhAndTypeIsNull(objReq.getSoQdinh());
         if (optional.isPresent() && objReq.getSoQdinh().split("/").length == 1) {
             throw new Exception("số quyết định đã tồn tại");
         }
@@ -195,7 +195,7 @@ public class DcnbQuyetDinhDcCHdrService extends BaseServiceImpl {
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
-        Optional<DcnbQuyetDinhDcCHdr> soDxuat = dcnbQuyetDinhDcCHdrRepository.findFirstBySoQdinhAndType(objReq.getSoQdinh(),Contains.DIEU_CHUYEN);
+        Optional<DcnbQuyetDinhDcCHdr> soDxuat = dcnbQuyetDinhDcCHdrRepository.findFirstBySoQdinhAndTypeIsNull(objReq.getSoQdinh());
         if (org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoQdinh())) {
             if (soDxuat.isPresent() && objReq.getSoQdinh().split("/").length == 1) {
                 if (!soDxuat.get().getId().equals(objReq.getId())) {
