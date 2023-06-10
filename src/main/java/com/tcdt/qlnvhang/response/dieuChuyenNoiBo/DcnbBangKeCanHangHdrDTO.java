@@ -33,4 +33,9 @@ public class DcnbBangKeCanHangHdrDTO {
     private String tenDonViTinh;
     private String maNganKho;
     private String tenNganKho;
+    private String nguoiGiaoHang;
+    private String soCmt;
+    private String ctyNguoiGh;
+    private String diaChi;
+    private LocalDate thoiGianGiaoNhan;
 }

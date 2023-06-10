@@ -204,16 +204,15 @@ public class DcnbBangKeCanHangService extends BaseServiceImpl {
             DcnbBangKeCanHangHdrDTO dx = data.get(i);
             objs = new Object[rowsName.length];
             objs[0] = i + 1;
-            objs[1] = dx.getNam();
-            objs[2] = dx.getSoQdinh();
-            objs[3] = dx.getNam();
-            objs[4] = dx.getThoiHanDieuChuyen();
-            objs[5] = dx.getTenDiemKho();
-            objs[6] = dx.getTenLoKho();
-            objs[7] = dx.getSoPhieuXuatKho();
-            objs[8] = dx.getSoBangKeXuatDcLt();
-            objs[9] = dx.getNgayXuatKho();
-            objs[10] = dx.getTrangThai();
+            objs[1] = dx.getSoQdinh();
+            objs[2] = dx.getNam();
+            objs[3] = dx.getThoiHanDieuChuyen();
+            objs[4] = dx.getTenDiemKho();
+            objs[5] = dx.getTenLoKho();
+            objs[6] = dx.getSoPhieuXuatKho();
+            objs[7] = dx.getSoBangKeXuatDcLt();
+            objs[8] = dx.getNgayXuatKho();
+            objs[9] = dx.getTrangThai();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
