@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.repository.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbBienBanLayMau;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBienBanLayMauHdrDTO;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbLoKhoDTO;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanLayMauHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -59,4 +60,16 @@ public interface DcnbBienBanLayMauHdrRepository extends JpaRepository<DcnbBienBa
             "LEFT JOIN QlnvDmDonvi dvi ON dvi.maDvi = hdr.maDvi "+
             "WHERE dvi.parent.maDvi = ?1 AND hdr.trangThai = ?2 AND h.parentId  = ?3")
     List<DcnbBienBanLayMauHdrDTO> findByMaDviAndTrangThaiAndQdinhDcId(String dvql, String banHanh, Long qDinhDccId);
+    @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbLoKhoDTO(" +
+            "dtl.maNhaKho, dtl.tenNhaKho, dtl.maDiemKho, dtl.tenDiemKho, dtl.maNganKho, dtl.tenNganKho, dtl.maLoKho, dtl.tenLoKho )"+
+            "FROM DcnbQuyetDinhDcCHdr qdh " +
+            "LEFT JOIN DcnbQuyetDinhDcCDtl qdd on qdd.hdrId = qdh.id " +
+            "LEFT JOIN DcnbKeHoachDcHdr khh on  khh.id = qdd.keHoachDcHdrId " +
+            "LEFT JOIN DcnbKeHoachDcDtl dtl on  dtl.hdrId = khh.id " +
+            "WHERE 1 = 1 " +
+            "AND (qdh.id = :#{#param.qDinhDccId}) " +
+            "AND ((dtl.maLoKho IS NULL AND not exists (SELECT distinct hdr.id FROM DcnbBienBanLayMauHdr hdr where hdr.qDinhDccId = :#{#param.qDinhDccId} AND hdr.maNganKho = dtl.maNganKho )) " +
+            "OR (dtl.maLoKho IS NOT NULL AND not exists (SELECT distinct hdr.id FROM DcnbBienBanLayMauHdr hdr where hdr.qDinhDccId = :#{#param.qDinhDccId} AND hdr.maLoKho = dtl.maLoKho )))"
+    )
+    List<DcnbLoKhoDTO> danhSachMaLokho(@Param("param") SearchDcnbBienBanLayMau objReq);
 }
