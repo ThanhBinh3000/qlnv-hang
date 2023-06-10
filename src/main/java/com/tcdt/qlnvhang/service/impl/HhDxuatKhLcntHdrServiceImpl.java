@@ -1,15 +1,17 @@
 package com.tcdt.qlnvhang.service.impl;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
+import com.tcdt.qlnvhang.common.DocxToPdfConverter;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.*;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhDxKhLcntThopDtlRepository;
@@ -17,7 +19,9 @@ import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.*;
 import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.object.*;
+import com.tcdt.qlnvhang.service.feign.BaoCaoClient;
 import com.tcdt.qlnvhang.table.HhDxKhLcntThopDtl;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +67,10 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 
     @Autowired
     private HhDxKhLcntThopDtlRepository hhDxKhLcntThopDtlRepository;
+    @Autowired
+    DocxToPdfConverter docxToPdfConverter;
+    @Autowired
+    private BaoCaoClient baoCaoClient;
 
 
     Long shgtNext = new Long(0);
@@ -366,6 +374,16 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         Optional<HhDxuatKhLcntHdr> data = hhDxuatKhLcntHdrRepository.findBySoDxuat(soDx);
         return data.get();
     }
+
+    @Override
+    public String preview(HhDxuatKhLcntHdrReq hhDxuatKhLcntHdr) throws Exception {
+        ReportTemplate model = findByTenFile(hhDxuatKhLcntHdr.getReportTemplateRequest());
+//        ByteArrayInputStream inputStream = new ByteArrayInputStream("/Users/hoangmanhhai/Documents/test.docx");
+        InputStream inputStream = new ByteArrayInputStream(model.getFileUpload());
+        docxToPdfConverter.convertDocxToPdf(inputStream, docxToPdfConverter.convertObjectToMap(hhDxuatKhLcntHdr));
+        return docxToPdfConverter.convertToBase64("/Users/hoangmanhhai/Documents/tecapro_2023/QLNV/qlnv-hang/target/DocxResume.pdf");
+    }
+
 
     @Override
     public Page<HhDxuatKhLcntHdr> colection(HhDxuatKhLcntSearchReq objReq, HttpServletRequest req) throws Exception {

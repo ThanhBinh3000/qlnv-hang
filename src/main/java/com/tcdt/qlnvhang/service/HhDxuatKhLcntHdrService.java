@@ -25,6 +25,7 @@ public interface HhDxuatKhLcntHdrService {
 
 	HhDxuatKhLcntHdr detail(Long id) throws Exception;
 	HhDxuatKhLcntHdr detail(String soDx) throws Exception;
+	String preview(HhDxuatKhLcntHdrReq hhDxuatKhLcntHdr) throws Exception;
 
 	Page<HhDxuatKhLcntHdr> colection(HhDxuatKhLcntSearchReq objReq, HttpServletRequest req) throws Exception;
 
