@@ -90,19 +90,6 @@ public class DcnbPhieuKiemNghiemChatLuongService extends BaseServiceImpl {
         DcnbPhieuKnChatLuongHdr created = dcnbPhieuKnChatLuongHdrRepository.save(data);
         List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getBienBanLayMauDinhKem(), created.getId(), DcnbPhieuKnChatLuongHdr.TABLE_NAME + "_CAN_CU");
         data.setBienBanLayMauDinhKem(bienBanLayMauDinhKem);
-        List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByQdDcIdAndMaLoKho(created.getQdDcId(),created.getMaLoKho());
-        dcnbKeHoachDcDtls.forEach(e-> {
-//            DcnbKeHoachDcDtlTT keHoachNhapXuat = new DcnbKeHoachDcDtlTT();
-//            keHoachNhapXuat.setIdKhDcDtl(e.getId());
-//            keHoachNhapXuat.setIdHdr(created.getId());
-//            keHoachNhapXuat.setTableName(DcnbPhieuKnChatLuongHdr.TABLE_NAME);
-//            keHoachNhapXuat.setType(Contains.QD_XUAT);
-//            try {
-//                dcnbKeHoachNhapXuatService.saveOrUpdate(keHoachNhapXuat);
-//            } catch (Exception ex) {
-//                throw new RuntimeException(ex);
-//            }
-        });
         return created;
     }
 
@@ -136,19 +123,6 @@ public class DcnbPhieuKiemNghiemChatLuongService extends BaseServiceImpl {
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbPhieuKnChatLuongHdr.TABLE_NAME + "_CAN_CU"));
         List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getBienBanLayMauDinhKem(), created.getId(), DcnbPhieuKnChatLuongHdr.TABLE_NAME + "_CAN_CU");
         data.setBienBanLayMauDinhKem(bienBanLayMauDinhKem);
-        List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByQdDcIdAndMaLoKho(created.getQdDcId(),created.getMaLoKho());
-        dcnbKeHoachDcDtls.forEach(e-> {
-//            DcnbKeHoachDcDtlTT keHoachNhapXuat = new DcnbKeHoachDcDtlTT();
-//            keHoachNhapXuat.setIdKhDcDtl(e.getId());
-//            keHoachNhapXuat.setIdHdr(created.getId());
-//            keHoachNhapXuat.setTableName(DcnbPhieuKnChatLuongHdr.TABLE_NAME);
-//            keHoachNhapXuat.setType(Contains.QD_XUAT);
-//            try {
-//                dcnbKeHoachNhapXuatService.saveOrUpdate(keHoachNhapXuat);
-//            } catch (Exception ex) {
-//                throw new RuntimeException(ex);
-//            }
-        });
         return created;
     }
 
@@ -239,6 +213,21 @@ public class DcnbPhieuKiemNghiemChatLuongService extends BaseServiceImpl {
             case Contains.CHODUYET_LDC + Contains.DA_DUYET_LDC:
                 optional.get().setNguoiPDuyet(currentUser.getUser().getId());
                 optional.get().setNgayPDuyet(LocalDate.now());
+                List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByQdDcIdAndMaLoKho(optional.get().getQdDcId(),optional.get().getMaLoKho());
+                dcnbKeHoachDcDtls.forEach(e-> {
+                    DcnbKeHoachDcDtlTT keHoachNhapXuat = new DcnbKeHoachDcDtlTT();
+                    keHoachNhapXuat.setKeHoachDcHdrId(e.getHdrId());
+                    keHoachNhapXuat.setKeHoachDcDtlId(e.getId());
+                    keHoachNhapXuat.setKeHoachDcParentDtlId(e.getParentId());
+                    keHoachNhapXuat.setKeHoachDcParentHdrId(e.getDcnbKeHoachDcHdr().getParentId());
+                    keHoachNhapXuat.setHdrId(optional.get().getId());
+                    keHoachNhapXuat.setType(DcnbPhieuKnChatLuongHdr.TABLE_NAME);
+                    try {
+                        dcnbKeHoachNhapXuatService.saveOrUpdate(keHoachNhapXuat);
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
+                });
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");

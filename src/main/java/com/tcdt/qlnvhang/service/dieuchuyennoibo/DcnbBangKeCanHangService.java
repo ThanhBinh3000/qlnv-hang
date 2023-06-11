@@ -4,6 +4,8 @@ import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBangKeCanHangDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBangKeCanHangHdrRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcDtlRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -48,6 +50,12 @@ public class DcnbBangKeCanHangService extends BaseServiceImpl {
 
     @Autowired
     private DcnbKeHoachNhapXuatService dcnbKeHoachNhapXuatService;
+
+    @Autowired
+    private DcnbKeHoachDcHdrRepository dcnbKeHoachDcHdrRepository;
+
+    @Autowired
+    private DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
 
 
     public Page<DcnbBangKeCanHangHdrDTO> searchPage(CustomUserDetails currentUser, SearchBangKeCanHang req) throws Exception {
@@ -176,6 +184,21 @@ public class DcnbBangKeCanHangService extends BaseServiceImpl {
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
                 optional.get().setNgayPDuyet(LocalDate.now());
                 optional.get().setNguoiPDuyet(currentUser.getUser().getId());
+                List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByQdDcIdAndMaLoKho(optional.get().getQDinhDccId(),optional.get().getMaLoKho());
+                dcnbKeHoachDcDtls.forEach(e-> {
+                    DcnbKeHoachDcDtlTT keHoachNhapXuat = new DcnbKeHoachDcDtlTT();
+                    keHoachNhapXuat.setKeHoachDcHdrId(e.getHdrId());
+                    keHoachNhapXuat.setKeHoachDcDtlId(e.getId());
+                    keHoachNhapXuat.setKeHoachDcParentDtlId(e.getParentId());
+                    keHoachNhapXuat.setKeHoachDcParentHdrId(e.getDcnbKeHoachDcHdr().getParentId());
+                    keHoachNhapXuat.setHdrId(optional.get().getId());
+                    keHoachNhapXuat.setType(DcnbBangKeCanHangHdr.TABLE_NAME);
+                    try {
+                        dcnbKeHoachNhapXuatService.saveOrUpdate(keHoachNhapXuat);
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
+                });
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
