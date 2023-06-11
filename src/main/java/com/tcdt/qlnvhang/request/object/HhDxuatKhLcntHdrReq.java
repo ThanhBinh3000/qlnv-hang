@@ -134,7 +134,7 @@ public class HhDxuatKhLcntHdrReq {
 
 	String diaChiDvi;
 	BigDecimal donGiaVat;
-	@Transient
+	String tenDviCha;
 	private ReportTemplateRequest reportTemplateRequest;
 
 	private List<FileDinhKemReq> fileDinhKemReq =  new ArrayList<>();

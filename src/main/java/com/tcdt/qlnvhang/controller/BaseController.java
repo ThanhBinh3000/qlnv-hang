@@ -285,8 +285,12 @@ public class BaseController {
 		// Call feign get dvql
 		BaseRequest baseRequest = new BaseRequest();
 		baseRequest.setStr(getDvql(request));
-		ReportTemplate response = baoCaoClient.findByTenFile(this.getAuthorizationToken(request),
+		ResponseEntity<String> response = baoCaoClient.findByTenFile(this.getAuthorizationToken(request),
 				obj);
-		return response;
+		String str = Request.getAttrFromJson(response.getBody(), "data");
+		Type type = new TypeToken<QlnvDmDonvi>() {
+		}.getType();
+		ReportTemplate objDonVi = new Gson().fromJson(str, type);
+		return objDonVi;
 	}
 }
