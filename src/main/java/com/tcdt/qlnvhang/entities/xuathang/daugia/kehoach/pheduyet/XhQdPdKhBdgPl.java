@@ -32,14 +32,7 @@ public class XhQdPdKhBdgPl implements Serializable {
 
     private String donViTinh;
 
-    @Transient
-    private BigDecimal soTienDtruocDx;
-
     private String diaChi;
-
-    @Transient
-    private BigDecimal soTienDtruocDd;
-
 
     @Transient
     List<XhQdPdKhBdgPlDtl> children =new ArrayList<>();

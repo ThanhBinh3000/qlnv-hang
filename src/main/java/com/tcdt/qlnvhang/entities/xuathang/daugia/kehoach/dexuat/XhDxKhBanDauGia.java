@@ -75,18 +75,6 @@ public class XhDxKhBanDauGia  implements Serializable {
 
     private BigDecimal tongSoLuong;
 
-    @Transient
-    private BigDecimal tongTienGiaKhoiDiemDx;
-
-    @Transient
-    private BigDecimal tongTienGiaKdTheoDgiaDd;
-
-    @Transient
-    private BigDecimal tongKhoanTienDatTruocDx;
-
-    @Transient
-    private BigDecimal tongKhoanTienDtTheoDgiaDd;
-
     private String ghiChu;
 
     private Integer slDviTsan;
@@ -126,6 +114,12 @@ public class XhDxKhBanDauGia  implements Serializable {
     private Long nguoiPduyetId;
 
     private String lyDoTuChoi;
+
+    @Transient
+    private BigDecimal tongTienGiaKdTheoDgiaDd;
+
+    @Transient
+    private BigDecimal tongKhoanTienDtTheoDgiaDd;
 
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
