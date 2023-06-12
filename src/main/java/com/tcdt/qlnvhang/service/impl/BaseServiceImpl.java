@@ -509,8 +509,12 @@ public abstract class BaseServiceImpl {
   }
 
   public ReportTemplate findByTenFile(ReportTemplateRequest obj) {
-    ReportTemplate response = baoCaoClient.findByTenFile(getAuthorizationToken(request),obj);
-    return response;
+    ResponseEntity<String> response = baoCaoClient.findByTenFile(getAuthorizationToken(request),obj);
+    String str = Request.getAttrFromJson(response.getBody(), "data");
+    Type type = new TypeToken<ReportTemplate>() {
+    }.getType();
+    ReportTemplate objDonVi = new Gson().fromJson(str, type);
+    return objDonVi;
   }
 
   public Long getNextSequence(String sequenceName) {
