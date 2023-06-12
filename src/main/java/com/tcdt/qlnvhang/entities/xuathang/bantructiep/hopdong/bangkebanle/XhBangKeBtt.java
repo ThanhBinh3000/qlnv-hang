@@ -23,13 +23,15 @@ public class XhBangKeBtt  implements Serializable {
 
     private String soBangKe;
 
-    private String soQd;
-
     private String maDvi;
     @Transient
     private String tenDvi;
 
-    private BigDecimal soLuong;
+    private String idQdNv;
+
+    private String soQdNv;
+
+    private BigDecimal soLuongBanTrucTiep;
 
     private BigDecimal soLuongConLai;
 
@@ -47,7 +49,7 @@ public class XhBangKeBtt  implements Serializable {
     @Transient
     private String tenCloaiVthh;
 
-    private BigDecimal soLuongBtt;
+    private BigDecimal soLuongBanLe;
 
     private BigDecimal donGia;
 
@@ -61,25 +63,8 @@ public class XhBangKeBtt  implements Serializable {
 
     private String ghiChu;
 
-    private String trangThai;
-    @Transient
-    private String tenTrangThai;
-
     private LocalDate ngayTao;
 
     private Long nguoiTaoId;
 
-    private LocalDate ngaySua;
-
-    private Long nguoiSuaId;
-
-    private LocalDate ngayGuiDuyet;
-
-    private Long nguoiGuiDuyetId;
-
-    private LocalDate ngayPduyet;
-
-    private Long nguoiPduyetId;
-
-    private String lyDoTuChoi;
 }

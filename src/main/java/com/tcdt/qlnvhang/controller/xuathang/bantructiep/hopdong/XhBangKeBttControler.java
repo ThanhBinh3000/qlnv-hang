@@ -70,7 +70,7 @@ public class XhBangKeBttControler extends BaseController {
     public ResponseEntity<BaseResponse> update(@Valid @RequestBody XhBangKeBttReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhBangKeBttService.update(req));
+//            resp.setData(xhBangKeBttService.update(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

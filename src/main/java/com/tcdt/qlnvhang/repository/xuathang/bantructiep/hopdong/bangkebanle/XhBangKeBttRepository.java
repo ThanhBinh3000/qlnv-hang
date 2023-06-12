@@ -18,12 +18,11 @@ public interface XhBangKeBttRepository extends JpaRepository<XhBangKeBtt, Long> 
     @Query("SELECT BK from XhBangKeBtt BK WHERE 1 = 1 " +
             "AND (:#{#param.namKh} IS NULL OR BK.namKh = :#{#param.namKh}) " +
             "AND (:#{#param.soBangKe} IS NULL OR LOWER(BK.soBangKe) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soBangKe}),'%' ) ) )" +
-            "AND (:#{#param.soQd} IS NULL OR LOWER(BK.soQd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQd}),'%'))) " +
+            "AND (:#{#param.soQdNv} IS NULL OR LOWER(BK.soQdNv) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQdNv}),'%'))) " +
             "AND (:#{#param.tenNguoiMua} IS NULL OR LOWER(BK.tenNguoiMua) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.tenNguoiMua}),'%' ) ) )" +
             "AND (:#{#param.ngayBanHangTu} IS NULL OR BK.ngayBanHang >= :#{#param.ngayBanHangTu}) " +
             "AND (:#{#param.ngayBanHangDen} IS NULL OR BK.ngayBanHang <= :#{#param.ngayBanHangDen}) " +
             "AND (:#{#param.loaiVthh} IS NULL OR BK.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
-            "AND (:#{#param.trangThai} IS NULL OR BK.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.maDvi} IS NULL OR BK.maDvi = :#{#param.maDvi})")
     Page<XhBangKeBtt> searchPage(@Param("param") XhBangKeBttReq param, Pageable pageable);
 
