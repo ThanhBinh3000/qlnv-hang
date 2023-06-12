@@ -28,7 +28,7 @@ public interface DcnbBBNTBQHdrRepository extends JpaRepository<DcnbBBNTBQHdr, Lo
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBNTBQHdrDTO(" +
             "bblm.id, qdc.id,qdc.soQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
             "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho, khdcd.maDiemKhoNhan, khdcd.tenDiemKhoNhan, khdcd.maLoKhoNhan, khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan, bblm.soBban," +
-            "bblm.ngayLap,bblm.ngayKetThucNt , bblm.tongKinhPhiDaTh,bblm.tongKinhPhiDaThBc ,bblm.trangThai, bblm.trangThai) FROM DcnbQuyetDinhDcCHdr qdc " +
+            "bblm.ngayLap,bblm.ngayKetThucNt , bblm.tongKinhPhiDaTh,bblm.tongKinhPhiDaTh ,bblm.trangThai, bblm.trangThai) FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbBBNTBQHdr bblm On bblm.qdDcCucId = qdc.id " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
@@ -44,7 +44,7 @@ public interface DcnbBBNTBQHdrRepository extends JpaRepository<DcnbBBNTBQHdr, Lo
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBNTBQHdrDTO(" +
             "bblm.id, qdc.id,qdc.soQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
             "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho, khdcd.maDiemKhoNhan, khdcd.tenDiemKhoNhan, khdcd.maLoKhoNhan, khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan, bblm.soBban," +
-            "bblm.ngayLap,bblm.ngayKetThucNt , bblm.tongKinhPhiDaTh,bblm.tongKinhPhiDaThBc ,bblm.trangThai, bblm.trangThai) FROM DcnbQuyetDinhDcCHdr qdc " +
+            "bblm.ngayLap,bblm.ngayKetThucNt , bblm.tongKinhPhiDaTh,bblm.tongKinhPhiDaTh ,bblm.trangThai, bblm.trangThai) FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbQuyetDinhDcCHdr qdc2 On qdc2.id = qdc.parentId " +
             "LEFT JOIN DcnbBBNTBQHdr bblm On bblm.qdDcCucId = qdc.id " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
