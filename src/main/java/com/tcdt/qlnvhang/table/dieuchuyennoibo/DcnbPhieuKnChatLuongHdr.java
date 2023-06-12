@@ -30,6 +30,9 @@ public class DcnbPhieuKnChatLuongHdr extends BaseEntity implements Serializable,
     @Column(name = "MA_DVI")
     private String maDvi;
 
+    @Column(name = "TEN_DVI")
+    private String tenDvi;
+
     @Column(name = "MA_QHNS")
     private String maQhns;
 
@@ -167,6 +170,12 @@ public class DcnbPhieuKnChatLuongHdr extends BaseEntity implements Serializable,
 
     @Column(name = "SO_BB_HAO_DOI")
     private String soBbHaoDoi;
+
+    @Column(name = "TYPE")
+    private String type;
+
+    @Column(name = "LOAI_DC")
+    private String loaiDc;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")

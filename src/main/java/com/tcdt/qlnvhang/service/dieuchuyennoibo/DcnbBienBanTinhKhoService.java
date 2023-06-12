@@ -80,6 +80,7 @@ public class DcnbBienBanTinhKhoService extends BaseServiceImpl {
         BeanUtils.copyProperties(objReq, data);
         data.setMaDvi(currentUser.getDvql());
         data.setTenDvi(currentUser.getUser().getTenDvi());
+        data.setType(objReq.getType());
         objReq.getDcnbBienBanTinhKhoDtl().forEach(e -> e.setDcnbBienBanTinhKhoHdr(data));
         DcnbBienBanTinhKhoHdr created = dcnbBienBanTinhKhoHdrRepository.save(data);
         List<FileDinhKem> bienBanTinhKhoDaKy = fileDinhKemService.saveListFileDinhKem(objReq.getFileBbTinhKhoDaKy(), created.getId(), DcnbBienBanTinhKhoHdr.TABLE_NAME + "_BB_TINH_KHO_DA_KY");
