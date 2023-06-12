@@ -231,13 +231,13 @@ public class DcnbBienBanHaoDoiService extends BaseServiceImpl {
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByQdDcIdAndMaLoKho(optional.get().getQDinhDccId(),optional.get().getMaLoKho());
                 dcnbKeHoachDcDtls.forEach(e-> {
-                    DcnbKeHoachDcDtlTT keHoachNhapXuat = new DcnbKeHoachDcDtlTT();
+                    DcnbDataLink keHoachNhapXuat = new DcnbDataLink();
                     keHoachNhapXuat.setKeHoachDcHdrId(e.getHdrId());
                     keHoachNhapXuat.setKeHoachDcDtlId(e.getId());
-                    keHoachNhapXuat.setKeHoachDcParentDtlId(e.getParentId());
-                    keHoachNhapXuat.setKeHoachDcParentHdrId(e.getDcnbKeHoachDcHdr().getParentId());
-                    keHoachNhapXuat.setHdrId(optional.get().getId());
-                    keHoachNhapXuat.setType(DcnbBienBanHaoDoiHdr.TABLE_NAME);
+//                    keHoachNhapXuat.setKeHoachDcParentDtlId(e.getParentId());
+//                    keHoachNhapXuat.setKeHoachDcParentHdrId(e.getDcnbKeHoachDcHdr().getParentId());
+//                    keHoachNhapXuat.setHdrId(optional.get().getId());
+//                    keHoachNhapXuat.setType(DcnbBienBanHaoDoiHdr.TABLE_NAME);
                     try {
                         dcnbKeHoachNhapXuatService.saveOrUpdate(keHoachNhapXuat);
                     } catch (Exception ex) {
