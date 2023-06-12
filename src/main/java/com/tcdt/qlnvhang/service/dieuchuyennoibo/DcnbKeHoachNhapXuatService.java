@@ -3,13 +3,10 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
-import com.tcdt.qlnvhang.util.DataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -37,7 +34,7 @@ public class DcnbKeHoachNhapXuatService extends BaseServiceImpl {
     private DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
 
     @Transactional
-    public DcnbKeHoachDcDtlTT saveOrUpdate(DcnbKeHoachDcDtlTT objReq) throws Exception {
+    public DcnbDataLink saveOrUpdate(DcnbDataLink objReq) throws Exception {
 //        if(Objects.isNull(objReq.getIdKhDcDtl())){
 //            throw new Exception("IdKhDcDtl is null");
 //        }else if(Objects.isNull(objReq.getIdHdr())) {
@@ -53,12 +50,12 @@ public class DcnbKeHoachNhapXuatService extends BaseServiceImpl {
 //            throw new Exception("Kế hoạch DTL " + objReq.getIdKhDcDtl() + " is null");
 //        }
 //        DcnbKeHoachDcDtl dtl = byId.get();
-        DcnbKeHoachDcDtlTT save = hdrRepository.save(objReq);
+        DcnbDataLink save = hdrRepository.save(objReq);
         return save;
     }
 
-    public DcnbKeHoachDcDtlTT detail(Long id) throws Exception {
-        Optional<DcnbKeHoachDcDtlTT> byId = hdrRepository.findById(id);
+    public DcnbDataLink detail(Long id) throws Exception {
+        Optional<DcnbDataLink> byId = hdrRepository.findById(id);
         if(byId.isPresent()){
             return byId.get();
         }else{
@@ -66,8 +63,8 @@ public class DcnbKeHoachNhapXuatService extends BaseServiceImpl {
         }
     }
 
-    public DcnbKeHoachDcDtlTT detailKhDtl(Long idKhDtl) throws Exception {
-        DcnbKeHoachDcDtlTT keHoachNhapXuat = new DcnbKeHoachDcDtlTT();
+    public DcnbDataLink detailKhDtl(Long idKhDtl) throws Exception {
+        DcnbDataLink keHoachNhapXuat = new DcnbDataLink();
 //        List<DcnbKeHoachDcDtlTT> idKhDcDtlList = hdrRepository.findByIdKhDcDtl(idKhDtl);
 //        if(idKhDcDtlList != null && !idKhDcDtlList.isEmpty()){
 //            keHoachNhapXuat.setIdKhDcDtl(idKhDtl);

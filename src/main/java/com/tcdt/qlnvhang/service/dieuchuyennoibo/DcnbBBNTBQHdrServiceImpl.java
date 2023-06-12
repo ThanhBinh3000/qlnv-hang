@@ -78,18 +78,12 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
         DcnbBBNTBQHdr data = new DcnbBBNTBQHdr();
         BeanUtils.copyProperties(req, data);
         data.setMaDvi(userInfo.getDvql());
-        data.setId(Long.parseLong(req.getSoBban().split("/")[0]));
-        req.getDcnbBBNTBQDtlList().forEach(e -> {
+        data.getDcnbBBNTBQDtl().forEach(e -> {
             e.setDcnbBBNTBQHdr(data);
         });
         DcnbBBNTBQHdr created = hdrRepository.save(data);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBBNTBQHdr.TABLE_NAME);
         created.setFileDinhKems(canCu);
-//        DcnbKeHoachDcDtlTT kh = new DcnbKeHoachDcDtlTT();
-//        kh.setIdHdr(created.getId());
-//        kh.setTableName(DcnbBBNTBQHdr.TABLE_NAME);
-//        kh.setIdKhDcDtl(data.getIdKeHoachDtl());
-//        dcnbKeHoachNhapXuatService.saveOrUpdate(kh);
         return created;
     }
 
@@ -108,7 +102,7 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
         }
         DcnbBBNTBQHdr data = optional.get();
         BeanUtils.copyProperties(req, data);
-        data.setDcnbBBNTBQDtl(req.getDcnbBBNTBQDtlList());
+        data.setDcnbBBNTBQDtl(req.getDcnbBBNTBQDtl());
         DcnbBBNTBQHdr created = hdrRepository.save(data);
         fileDinhKemService.delete(created.getId(), Lists.newArrayList(DcnbBBNTBQHdr.TABLE_NAME));
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBBNTBQHdr.TABLE_NAME);

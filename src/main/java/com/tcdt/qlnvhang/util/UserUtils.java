@@ -1,7 +1,9 @@
 package com.tcdt.qlnvhang.util;
 
+import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.table.UserInfo;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.StringTokenizer;
@@ -23,5 +25,9 @@ public class UserUtils {
 			// we only want the client
 			return new StringTokenizer(xForwardedForHeader, ",").nextToken().trim();
 		}
+	}
+
+	public static CustomUserDetails getUserLoginInfo() throws Exception {
+		return (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
 }

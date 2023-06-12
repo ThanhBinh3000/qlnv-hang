@@ -98,20 +98,6 @@ public class DcnbKeHoachDcDtl implements Serializable {
     private Boolean xdLaiDiemNhap;
     @Column(name = "BB_LAY_MAU_ID")
     private Long bbLayMauId;
-//    @Column(name = "SO_BB_LAY_MAU")
-//    private String soBbLayMau;
-//    @Column(name = "PHIEU_KN_CHAT_LUONG_ID")
-//    private Long phieuKnChatLuongId;
-//    @Column(name = "SO_PHIEU_KN_CHAT_LUONG")
-//    private String soPhieuKnChatLuong;
-//    @Column(name = "BANG_KE_CAN_HANG_ID")
-//    private Long bangKeCanHangId;
-//    @Column(name = "SO_BANG_KE_CAN_HANG")
-//    private String soBangKeCanHang;
-//    @Column(name = "BIEN_BAN_TINH_KHO_ID")
-//    private Long bienBanTinhKhoId;
-//    @Column(name = "SO_BIEN_BAN_TINH_KHO")
-//    private String soBienBanTinhKho;
     @Column(name = "THU_KHO")
     private String thuKho;
     @Column(name = "THU_KHO_NHAN")
@@ -128,5 +114,5 @@ public class DcnbKeHoachDcDtl implements Serializable {
     @Transient
     private DcnbBienBanLayMauHdr dcnbBienBanLayMauHdr;
     @Transient
-    private DcnbKeHoachDcDtlTT dcnbKeHoachDcDtlTT;
+    private DcnbDataLink dcnbDataLink;
 }

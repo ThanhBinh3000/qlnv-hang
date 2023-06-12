@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
 import com.google.common.collect.Lists;
-import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.HhBbNghiemthuKlstRepository;
@@ -11,9 +10,6 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBienBanLayMauHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbBienBanLayMau;
-import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbKeHoachDc;
-import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBienBanLayMauHdrDTO;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbLoKhoDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -22,20 +18,13 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
@@ -43,7 +32,6 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class DcnbBienBanLayMauService extends BaseServiceImpl {
@@ -230,15 +218,15 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
                 // xử lý clone tờ kế hoạch cho các chi cục
                 List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByQdDcIdAndMaLoKho(optional.get().getQDinhDccId(),optional.get().getMaLoKho());
                 dcnbKeHoachDcDtls.forEach(e->{
-                    DcnbKeHoachDcDtlTT keHoachNhapXuat = new DcnbKeHoachDcDtlTT();
-                    keHoachNhapXuat.setKeHoachDcDtlId(e.getId());
-                    keHoachNhapXuat.setKeHoachDcHdrId(e.getHdrId());
-                    keHoachNhapXuat.setKeHoachDcParentHdrId(e.getDcnbKeHoachDcHdr().getParentId());
-                    keHoachNhapXuat.setKeHoachDcParentDtlId(e.getParentId());
-                    keHoachNhapXuat.setHdrId(optional.get().getId());
-                    keHoachNhapXuat.setType(DcnbBienBanLayMauHdr.TABLE_NAME);
+                    DcnbDataLink dataLink = new DcnbDataLink();
+                    dataLink.setKeHoachDcDtlId(e.getId());
+                    dataLink.setKeHoachDcHdrId(e.getHdrId());
+//                    dataLink.setKeHoachDcParentHdrId(e.getDcnbKeHoachDcHdr().getParentId());
+//                    dataLink.setKeHoachDcParentDtlId(e.getParentId());
+//                    dataLink.setHdrId(optional.get().getId());
+//                    dataLink.setType(DcnbBienBanLayMauHdr.TABLE_NAME);
                 try {
-                    dcnbKeHoachNhapXuatService.saveOrUpdate(keHoachNhapXuat);
+                    dcnbKeHoachNhapXuatService.saveOrUpdate(dataLink);
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }
