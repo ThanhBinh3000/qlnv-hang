@@ -64,6 +64,9 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
     DcnbQuyetDinhDcCHdrService dcnbQuyetDinhDcCHdrService;
 
     @Autowired
+    DcnbQuyetDinhDcCHdrRepository dcnbQuyetDinhDcCHdrRepository;
+
+    @Autowired
     DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
 
 
@@ -221,6 +224,10 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
                     DcnbDataLink dataLink = new DcnbDataLink();
                     dataLink.setKeHoachDcDtlId(e.getId());
                     dataLink.setKeHoachDcHdrId(e.getHdrId());
+                    dataLink.setXdcBblmId(optional.get().getId());
+                    dataLink.setQdCcId(optional.get().getQDinhDccId());
+                    DcnbQuyetDinhDcCHdr dcnbQuyetDinhDcCHdr = dcnbQuyetDinhDcCHdrRepository.findById(optional.get().getQDinhDccId()).get();
+                    dataLink.setQdCcParentId(dcnbQuyetDinhDcCHdr.getParentId());
 //                    dataLink.setKeHoachDcParentHdrId(e.getDcnbKeHoachDcHdr().getParentId());
 //                    dataLink.setKeHoachDcParentDtlId(e.getParentId());
 //                    dataLink.setHdrId(optional.get().getId());
