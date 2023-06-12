@@ -1,10 +1,13 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = DcnbBienBanHaoDoiTtDtl.TABLE_NAME)
@@ -36,4 +39,13 @@ public class DcnbBienBanHaoDoiTtDtl {
 
     @Column(name = "SO_LUONG_XUAT")
     private Double soLuongXuat;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
+    @JsonIgnore
+    private DcnbBienBanHaoDoiHdr dcnbBienBanHaoDoiHdr;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "HDR_ID")
+    private List<DcnbBienBanHaoDoiDtl> dcnbBienBanHaoDoiDtl = new ArrayList<>();
 }
