@@ -3,7 +3,6 @@ package com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.dexuat;
 import com.tcdt.qlnvhang.request.xuathang.daugia.XhThopChiTieuReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.dexuat.XhDxKhBanDauGiaReq;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGia;
-import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -90,6 +89,4 @@ public interface XhDxKhBanDauGiaRepository extends JpaRepository<XhDxKhBanDauGia
       " FETCH FIRST 1 ROWS ONLY ",
       nativeQuery = true)
   BigDecimal getGiaBanToiThieuLt(String cloaiVthh, String maDvi, Integer namKhoach);
-
-
 }

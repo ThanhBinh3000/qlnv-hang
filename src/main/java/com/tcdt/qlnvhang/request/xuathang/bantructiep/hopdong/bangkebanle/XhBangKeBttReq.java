@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.request.xuathang.bantructiep.hopdong.bangkebanle;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import lombok.Data;
+
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -13,11 +15,13 @@ public class XhBangKeBttReq extends BaseRequest {
 
     private String soBangKe;
 
-    private String soQd;
-
     private String maDvi;
 
-    private BigDecimal soLuong;
+    private String idQdNv;
+
+    private String soQdNv;
+
+    private BigDecimal soLuongBanTrucTiep;
 
     private BigDecimal soLuongConLai;
 
@@ -31,7 +35,7 @@ public class XhBangKeBttReq extends BaseRequest {
 
     private String cloaiVthh;
 
-    private BigDecimal soLuongBtt;
+    private BigDecimal soLuongBanLe;
 
     private BigDecimal donGia;
 
@@ -44,6 +48,10 @@ public class XhBangKeBttReq extends BaseRequest {
     private String cmt;
 
     private String ghiChu;
+
+    private LocalDate ngayTao;
+
+    private Long nguoiTaoId;
 
     private LocalDate ngayBanHangTu;
 

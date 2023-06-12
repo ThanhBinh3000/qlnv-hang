@@ -38,26 +38,20 @@ public class XhBangKeBttServiceImpl extends BaseServiceImpl implements XhBangKeB
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
         data.getContent().forEach(f ->{
-
-            if (hashMapDvi.get((f.getMaDvi())) != null) {
-                f.setTenDvi(hashMapVthh.get(f.getMaDvi()));
-            }
-            if (hashMapVthh.get((f.getLoaiVthh())) !=null){
-                f.setTenLoaiVthh(hashMapVthh.get(f.getLoaiVthh()));
-            }
-            if (hashMapVthh.get((f.getCloaiVthh())) !=null){
-                f.setTenCloaiVthh(hashMapVthh.get(f.getTenCloaiVthh()));
-            }
+            f.setTenDvi(StringUtils.isEmpty(f.getMaDvi())?null:hashMapDvi.get(f.getMaDvi()));
+            f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh())?null:hashMapVthh.get(f.getLoaiVthh()));
+            f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh())?null:hashMapVthh.get(f.getCloaiVthh()));
         });
         return data;
     }
 
     @Override
     public XhBangKeBtt create(XhBangKeBttReq req) throws Exception {
+        if(req == null) return null;
+
         UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null){
-            throw new Exception("Bad request.");
-        }
+        if (userInfo == null) throw new Exception("Bad request.");
+
         if (!StringUtils.isEmpty(req.getSoBangKe())){
             Optional<XhBangKeBtt> qOptional = xhBangKeBttRepository.findBySoBangKe(req.getSoBangKe());
             if (qOptional.isPresent()){
@@ -74,45 +68,24 @@ public class XhBangKeBttServiceImpl extends BaseServiceImpl implements XhBangKeB
 
     @Override
     public XhBangKeBtt update(XhBangKeBttReq req) throws Exception {
-        UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null){
-            throw new Exception("Bad request.");
-        }
-        if (StringUtils.isEmpty(req.getId())){
-            throw new Exception("Sửa thất bại, không tìm thấy dữ liệu");
-        }
-        Optional<XhBangKeBtt> qOptional = xhBangKeBttRepository.findById(req.getId());
-        if (!qOptional.isPresent()){
-            throw new Exception("Không tìm thấy dữ liệu cần sửa");
-        }
-        if (!StringUtils.isEmpty(req.getSoBangKe())){
-            Optional<XhBangKeBtt> bangKeBtt = xhBangKeBttRepository.findBySoBangKe(req.getSoBangKe());
-            if (bangKeBtt.isPresent()){
-                if (!bangKeBtt.get().getId().equals(req.getId())){
-                    throw new Exception("Số bảng kê" + req.getSoBangKe() + "đã tồn tại");
-                }
-            }
-        }
-        XhBangKeBtt data = qOptional.get();
-        BeanUtils.copyProperties(req, data, "id");
-        data.setNgaySua(LocalDate.now());
-        data.setNguoiSuaId(userInfo.getId());
-        xhBangKeBttRepository.save(data);
-        return data;
+        return null;
     }
+
 
     @Override
     public XhBangKeBtt detail(Long id) throws Exception {
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null) throw new Exception("Bad request.");
+
         Optional<XhBangKeBtt> qOptional = xhBangKeBttRepository.findById(id);
-        if (!qOptional.isPresent()){
-            throw new UnsupportedOperationException("Không tồn tại bản ghi");
-        }
+        if (!qOptional.isPresent()) throw new UnsupportedOperationException("Bảng kê bán lẻ không tồn tại");
+
         XhBangKeBtt data = qOptional.get();
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
-        data.setTenLoaiVthh(hashMapVthh.get(data.getLoaiVthh()));
-        data.setTenCloaiVthh(hashMapVthh.get(data.getCloaiVthh()));
-        data.setTenDvi(hashMapDvi.get(data.getMaDvi()));
+        data.setTenDvi(StringUtils.isEmpty(data.getMaDvi())?null:hashMapDvi.get(data.getMaDvi()));
+        data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh())?null:hashMapVthh.get(data.getLoaiVthh()));
+        data.setTenCloaiVthh(StringUtils.isEmpty(data.getTenCloaiVthh())?null:hashMapVthh.get(data.getCloaiVthh()));
         return data;
     }
 
@@ -166,13 +139,13 @@ public class XhBangKeBttServiceImpl extends BaseServiceImpl implements XhBangKeB
             objs[0]=i;
             objs[1]=hdr.getNamKh();
             objs[2]=hdr.getSoBangKe();
-            objs[3]=hdr.getSoQd();
+            objs[3]=hdr.getSoQdNv();
             objs[4]=hdr.getTenNguoiMua();
             objs[5]=hdr.getDiaChi();
             objs[6]=hdr.getCmt();
             objs[7]=hdr.getTenLoaiVthh();
             objs[8]=hdr.getTenCloaiVthh();
-            objs[9]=hdr.getSoLuong();
+            objs[9]=hdr.getSoLuongBanLe();
             objs[10]=hdr.getDonGia();
             objs[11]=hdr.getThanhTien();
             dataList.add(objs);
