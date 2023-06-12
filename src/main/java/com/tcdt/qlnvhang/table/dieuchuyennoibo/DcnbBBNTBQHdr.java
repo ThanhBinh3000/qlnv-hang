@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Getter;
 import lombok.Setter;
@@ -123,6 +124,7 @@ public class DcnbBBNTBQHdr extends BaseEntity implements Serializable, Cloneable
     private String tenLoKhoXuat;
     @Column(name = "NHAN_XET")
     private String nhanXet;
+    @Access(value=AccessType.PROPERTY)
     @Column(name = "TRANG_THAI")
     private String trangThai;
     @Column(name = "NGUOI_TAO_ID")
@@ -137,20 +139,19 @@ public class DcnbBBNTBQHdr extends BaseEntity implements Serializable, Cloneable
     private LocalDate ngayPduyet;
     @Column(name = "NGUOI_PDUYET_ID")
     private Long nguoiPduyetId;
-
     @Column(name = "LY_DO_TU_CHOI")
     private String lyDoTuChoi;
-//    @Column(name = "SO_BBK_LOT")
-//    private String soLapBBKLot;
-//    @Column(name = "NGAY_LAP_BBK_LOT")
-//    private LocalDate ngayLapBBKLot;
-//    @Column(name = "NGAY_KET_THUC_NT_KE_LOT")
-//    private LocalDate ngayKetThucNtKeLot;
 
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
-
+    @Transient
+    private String tenTrangThai;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
     private List<DcnbBBNTBQDtl> dcnbBBNTBQDtl = new ArrayList<>();
+
+    public void setTrangThai(String trangThai) {
+        this.trangThai = trangThai;
+        this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
+    }
 }

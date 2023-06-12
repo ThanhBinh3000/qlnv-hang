@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.repository.dieuchuyennoibo;
 
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbChuanBiKhoHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchBangKeCanHang;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbChuanBiKhoHdrDTO;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeCanHangHdr;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbChuanBiKhoHdr;
 import org.springframework.data.domain.Page;
@@ -34,4 +36,21 @@ public interface DcnbBbChuanBiKhoHdrRepository extends JpaRepository<DcnbBbChuan
     List<DcnbBbChuanBiKhoHdr> findByIdIn(List<Long> ids);
 
     List<DcnbBbChuanBiKhoHdr> findAllByIdIn(List<Long> idList);
+//    @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbChuanBiKhoHdrDTO(" +
+//            "bbcb.id, qdc.id,qdc.soQdinh,qdc.nam,khdcd.thoiGianDkDc, bbcb.soBban, bbcb.ngayLap,  bbcb.soBban, bbcb.ngayLap, khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
+//            "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho, khdcd.maDiemKhoNhan, khdcd.tenDiemKhoNhan, khdcd.maLoKhoNhan, khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan, bbcb.soBban," +
+//            "bbcb.ngayLap,bbcb.ngayKetThucNt , bbcb.tongKinhPhiDaTh,bbcb.tongKinhPhiDaTh ,bbcb.trangThai, bbcb.trangThai) FROM DcnbQuyetDinhDcCHdr qdc " +
+//            "LEFT JOIN DcnbBbChuanBiKhoHdr bbcb On bbcb.qdDcCucId = qdc.id " +
+//            "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
+//            "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
+//            "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
+//            "LEFT JOIN DcnbKeHoachDcDtlTT khdcdtt On khdcdtt.hdrId = khdcd.id " +
+//            "WHERE 1 =1 " +
+//            "AND qdc.trangThai = '29'" +
+//            "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}) OR (:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}))" +
+//            "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
+//            "ORDER BY bbcb.soQdDcCuc desc, bbcb.nam desc")
+//    Page<DcnbBbChuanBiKhoHdrDTO> searchPageChiCuc(DcnbBbChuanBiKhoHdrReq req, Pageable pageable);
+//
+//    Page<DcnbBbChuanBiKhoHdrDTO> searchPage(DcnbBbChuanBiKhoHdrReq req, Pageable pageable);
 }

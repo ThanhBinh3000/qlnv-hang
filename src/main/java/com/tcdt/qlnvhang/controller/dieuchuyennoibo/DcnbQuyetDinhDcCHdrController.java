@@ -33,7 +33,6 @@ import java.util.Map;
 @Slf4j
 @Api(tags = "Điều chuyển nội bộ - Quyết định điều chuyển cục")
 public class DcnbQuyetDinhDcCHdrController extends BaseController {
-  //    DcnbQuyetDinhDcTcHdr
   @Autowired
   DcnbQuyetDinhDcCHdrService dcnbQuyetDinhDcCHdrService;
 
