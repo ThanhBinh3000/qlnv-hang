@@ -28,6 +28,7 @@ public class XhXkDanhSachService extends BaseServiceImpl {
 
     public Page<XhXkDanhSachHdr> searchPage(CustomUserDetails currentUser, XhXkDanhSachRequest req) throws Exception {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
+        req.setDvql(currentUser.getDvql());
         Page<XhXkDanhSachHdr> search = xhXkDanhSachRepository.searchPage(req, pageable);
         //set label
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");

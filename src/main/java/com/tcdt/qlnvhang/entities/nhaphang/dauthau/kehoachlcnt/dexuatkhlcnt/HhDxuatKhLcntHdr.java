@@ -42,6 +42,8 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	String maDvi;
 	@Transient
 	String tenDvi;
+	@Transient
+	String tenDviCha;
 	String trangThai;
 	@Transient
 	String tenTrangThai;

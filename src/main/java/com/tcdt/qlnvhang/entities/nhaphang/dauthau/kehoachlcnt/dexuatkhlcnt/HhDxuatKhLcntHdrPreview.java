@@ -1,0 +1,96 @@
+package com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.tcdt.qlnvhang.entities.FileDKemJoinDxKhLcntHdr;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
+import com.tcdt.qlnvhang.util.Contains;
+import lombok.Data;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Where;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+
+@Data
+public class HhDxuatKhLcntHdrPreview implements Serializable {
+
+	private Long id;
+	String soDxuat;
+	String loaiVthh;
+	String tenLoaiVthh;
+	String tenNguonVon;
+	String tenHthucLcnt;
+	String soQd;
+	String trichYeu;
+	String maDvi;
+	String tenDvi;
+	String tenDviCha;
+	String trangThai;
+	String tenTrangThai;
+	String tenTrangThaiTh;
+	@Temporal(TemporalType.DATE)
+	Date ngayTao;
+	String nguoiTao;
+	Date ngaySua;
+	String nguoiSua;
+	String ldoTuchoi;
+	Date ngayGuiDuyet;
+	String nguoiGuiDuyet;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date ngayPduyet;
+	String nguoiPduyet;
+	@Temporal(TemporalType.DATE)
+	Date ngayKy;
+	Integer namKhoach;
+	String ghiChu;
+	String cloaiVthh;
+	String tenCloaiVthh;
+	String moTaHangHoa;
+	String tenDuAn;
+	BigDecimal tongMucDt;
+	BigDecimal tongMucDtDx;
+	String loaiHdong;
+	String tenLoaiHdong;
+	String tchuanCluong;
+	String nguonVon;
+	String hthucLcnt;
+	String pthucLcnt;
+	String tenPthucLcnt;
+	String tgianBdauTchuc;
+	String tgianMthau;
+	String tgianDthau;
+	Integer tgianThien;
+	String tgianNhang;
+	Integer gtriDthau;
+	Integer gtriHdong;
+	String dienGiai;
+	String trangThaiTh;
+	String loaiHinhNx;
+	String tenLoaiHinhNx;
+	String kieuNx;
+	String tenKieuNx;
+	String diaChiDvi;
+	BigDecimal donGiaVat;
+	String soQdPdKqLcnt;
+	Long idQdPdKqLcnt;
+	Integer soGthauTrung;
+
+	private ReportTemplateRequest reportTemplateRequest;
+	private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
+	private List<HhDxKhlcntDsgthau> dsGtDtlList = new ArrayList<>();
+	private Long soGoiThau;
+	private List<HhDxuatKhLcntCcxdgDtl> ccXdgDtlList = new ArrayList<>();
+	private Long maTh;
+	private BigDecimal qdGiaoChiTieuId;
+	String ykienThamGia;
+
+}

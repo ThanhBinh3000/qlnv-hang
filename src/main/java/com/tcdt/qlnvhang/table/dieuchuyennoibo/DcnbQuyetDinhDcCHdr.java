@@ -59,6 +59,7 @@ public class DcnbQuyetDinhDcCHdr extends BaseEntity implements Serializable, Clo
   private LocalDate ngayDuyetLdcc;
   @Column(name = "NGUOI_DUYET_LDCC_ID")
   private Long nguoiDuyetLdccId;
+  private LocalDate ngayHieuLuc;
   @Transient
   private String tenTrangThai;
   @Transient

@@ -121,18 +121,6 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
         List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByQdDcIdAndMaLoKho(created.getQDinhDccId(),created.getMaLoKho());
         List<FileDinhKem> fileDinhKemMauNiemPhong = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemChupMauNiemPhong(),created.getId(),DcnbBienBanLayMauHdr.TABLE_NAME + "_MAU_DA_NIEM_PHONG");
         created.setFileDinhKemChupMauNiemPhong(fileDinhKemMauNiemPhong);
-        dcnbKeHoachDcDtls.forEach(e->{
-//            DcnbKeHoachDcDtlTT keHoachNhapXuat = new DcnbKeHoachDcDtlTT();
-//            keHoachNhapXuat.setIdKhDcDtl(e.getId());
-//            keHoachNhapXuat.setIdHdr(created.getId());
-//            keHoachNhapXuat.setTableName(DcnbBienBanLayMauHdr.TABLE_NAME);
-//            keHoachNhapXuat.setType(Contains.QD_XUAT);
-//            try {
-//                dcnbKeHoachNhapXuatService.saveOrUpdate(keHoachNhapXuat);
-//            } catch (Exception ex) {
-//                throw new RuntimeException(ex);
-//            }
-        });
         return created;
     }
 
@@ -239,6 +227,21 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
                 optional.get().setNguoiPDuyet(currentUser.getUser().getId());
 
                 // xử lý clone tờ kế hoạch cho các chi cục
+                List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByQdDcIdAndMaLoKho(optional.get().getQDinhDccId(),optional.get().getMaLoKho());
+                dcnbKeHoachDcDtls.forEach(e->{
+                    DcnbKeHoachDcDtlTT keHoachNhapXuat = new DcnbKeHoachDcDtlTT();
+                    keHoachNhapXuat.setKeHoachDcDtlId(e.getId());
+                    keHoachNhapXuat.setKeHoachDcHdrId(e.getHdrId());
+                    keHoachNhapXuat.setKeHoachDcParentHdrId(e.getDcnbKeHoachDcHdr().getParentId());
+                    keHoachNhapXuat.setKeHoachDcParentDtlId(e.getParentId());
+                    keHoachNhapXuat.setHdrId(optional.get().getId());
+                    keHoachNhapXuat.setType(DcnbBienBanLayMauHdr.TABLE_NAME);
+                try {
+                    dcnbKeHoachNhapXuatService.saveOrUpdate(keHoachNhapXuat);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+                    });
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");

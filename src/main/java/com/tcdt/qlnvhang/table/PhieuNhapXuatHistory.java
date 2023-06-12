@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -30,6 +31,8 @@ public class PhieuNhapXuatHistory implements Serializable {
   private String maKho;
   private LocalDate ngayDuyet;
   private String kieu;
+  private int namNhap;
+  private BigDecimal thanhTien;
 
   @Transient
   private String maCuc;

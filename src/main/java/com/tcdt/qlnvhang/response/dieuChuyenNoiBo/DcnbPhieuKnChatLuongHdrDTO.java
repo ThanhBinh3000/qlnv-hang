@@ -34,4 +34,9 @@ public class DcnbPhieuKnChatLuongHdrDTO {
     private String maNhaKho;
     private String tenNhaKho;
     private String thuKho;
+    private String maNganKho;
+    private String tenNganKho;
+    private LocalDate ngayHieuLuc;
+    private String donViTinh;
+    private String tenDonViTinh;
 }

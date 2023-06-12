@@ -90,19 +90,6 @@ public class DcnbPhieuKiemNghiemChatLuongService extends BaseServiceImpl {
         DcnbPhieuKnChatLuongHdr created = dcnbPhieuKnChatLuongHdrRepository.save(data);
         List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getBienBanLayMauDinhKem(), created.getId(), DcnbPhieuKnChatLuongHdr.TABLE_NAME + "_CAN_CU");
         data.setBienBanLayMauDinhKem(bienBanLayMauDinhKem);
-        List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByQdDcIdAndMaLoKho(created.getQdDcId(),created.getMaLoKho());
-        dcnbKeHoachDcDtls.forEach(e-> {
-//            DcnbKeHoachDcDtlTT keHoachNhapXuat = new DcnbKeHoachDcDtlTT();
-//            keHoachNhapXuat.setIdKhDcDtl(e.getId());
-//            keHoachNhapXuat.setIdHdr(created.getId());
-//            keHoachNhapXuat.setTableName(DcnbPhieuKnChatLuongHdr.TABLE_NAME);
-//            keHoachNhapXuat.setType(Contains.QD_XUAT);
-//            try {
-//                dcnbKeHoachNhapXuatService.saveOrUpdate(keHoachNhapXuat);
-//            } catch (Exception ex) {
-//                throw new RuntimeException(ex);
-//            }
-        });
         return created;
     }
 
@@ -136,19 +123,6 @@ public class DcnbPhieuKiemNghiemChatLuongService extends BaseServiceImpl {
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbPhieuKnChatLuongHdr.TABLE_NAME + "_CAN_CU"));
         List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getBienBanLayMauDinhKem(), created.getId(), DcnbPhieuKnChatLuongHdr.TABLE_NAME + "_CAN_CU");
         data.setBienBanLayMauDinhKem(bienBanLayMauDinhKem);
-        List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByQdDcIdAndMaLoKho(created.getQdDcId(),created.getMaLoKho());
-        dcnbKeHoachDcDtls.forEach(e-> {
-//            DcnbKeHoachDcDtlTT keHoachNhapXuat = new DcnbKeHoachDcDtlTT();
-//            keHoachNhapXuat.setIdKhDcDtl(e.getId());
-//            keHoachNhapXuat.setIdHdr(created.getId());
-//            keHoachNhapXuat.setTableName(DcnbPhieuKnChatLuongHdr.TABLE_NAME);
-//            keHoachNhapXuat.setType(Contains.QD_XUAT);
-//            try {
-//                dcnbKeHoachNhapXuatService.saveOrUpdate(keHoachNhapXuat);
-//            } catch (Exception ex) {
-//                throw new RuntimeException(ex);
-//            }
-        });
         return created;
     }
 
@@ -239,6 +213,21 @@ public class DcnbPhieuKiemNghiemChatLuongService extends BaseServiceImpl {
             case Contains.CHODUYET_LDC + Contains.DA_DUYET_LDC:
                 optional.get().setNguoiPDuyet(currentUser.getUser().getId());
                 optional.get().setNgayPDuyet(LocalDate.now());
+                List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByQdDcIdAndMaLoKho(optional.get().getQdDcId(),optional.get().getMaLoKho());
+                dcnbKeHoachDcDtls.forEach(e-> {
+                    DcnbKeHoachDcDtlTT keHoachNhapXuat = new DcnbKeHoachDcDtlTT();
+                    keHoachNhapXuat.setKeHoachDcHdrId(e.getHdrId());
+                    keHoachNhapXuat.setKeHoachDcDtlId(e.getId());
+                    keHoachNhapXuat.setKeHoachDcParentDtlId(e.getParentId());
+                    keHoachNhapXuat.setKeHoachDcParentHdrId(e.getDcnbKeHoachDcHdr().getParentId());
+                    keHoachNhapXuat.setHdrId(optional.get().getId());
+                    keHoachNhapXuat.setType(DcnbPhieuKnChatLuongHdr.TABLE_NAME);
+                    try {
+                        dcnbKeHoachNhapXuatService.saveOrUpdate(keHoachNhapXuat);
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
+                });
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
@@ -259,7 +248,7 @@ public class DcnbPhieuKiemNghiemChatLuongService extends BaseServiceImpl {
         List<DcnbPhieuKnChatLuongHdrDTO> data = page.getContent();
 
         String title = "Danh sách phương án xuất cứu trợ, viện trợ ";
-        String[] rowsName = new String[]{"STT", "Năm kH", "Số công văn/đề xuất", "Ngày duyệt LĐ Cục", "Loại điều chuyển", "Đơn vị đề xuất", "Trạng thái",};
+        String[] rowsName = new String[]{"STT", "Số QĐ ĐC của Cục","Năm KH","Thời hạn điều chuyển", "Điểm kho","Lô kho","Thay đổi thủ kho", "Số phiếu KNCL", "Ngày kiểm nghiệm","Số BBLM/BGM","Ngày lấy mẫu","Số BB tịnh kho", "Trạng thái",};
         String fileName = "danh-sach-ke-hoach-dieu-chuyen-noi-bo-hang-dtqg.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
@@ -274,7 +263,12 @@ public class DcnbPhieuKiemNghiemChatLuongService extends BaseServiceImpl {
             objs[5] = dx.getTenloKho();
             objs[6] = dx.getThayDoiThuKho();
             objs[7] = dx.getSoPhieuKnChatLuong();
-            objs[8] = dx.getSoBBLayMau();
+            objs[8] = dx.getNgayKiemNghiem();
+            objs[9] = dx.getSoBBLayMau();
+            objs[10] = dx.getNgaylayMau();
+            objs[11] = dx.getSoBBTinhKho();
+            objs[12] = dx.getNgayXuatDocKho();
+            objs[13] = dx.getTrangThai();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);

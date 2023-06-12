@@ -84,19 +84,6 @@ public class DcnbBienBanTinhKhoService extends BaseServiceImpl {
         DcnbBienBanTinhKhoHdr created = dcnbBienBanTinhKhoHdrRepository.save(data);
         List<FileDinhKem> bienBanTinhKhoDaKy = fileDinhKemService.saveListFileDinhKem(objReq.getFileBbTinhKhoDaKy(), created.getId(), DcnbBienBanTinhKhoHdr.TABLE_NAME + "_BB_TINH_KHO_DA_KY");
         data.setFileBbTinhKhoDaKy(bienBanTinhKhoDaKy);
-        List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByQdDcIdAndMaLoKho(created.getQDinhDccId(),created.getMaLoKho());
-        dcnbKeHoachDcDtls.forEach(e-> {
-//            DcnbKeHoachDcDtlTT keHoachNhapXuat = new DcnbKeHoachDcDtlTT();
-//            keHoachNhapXuat.setIdKhDcDtl(e.getId());
-//            keHoachNhapXuat.setIdHdr(created.getId());
-//            keHoachNhapXuat.setTableName(DcnbBienBanTinhKhoHdr.TABLE_NAME);
-//            keHoachNhapXuat.setType(Contains.QD_XUAT);
-//            try {
-//                dcnbKeHoachNhapXuatService.saveOrUpdate(keHoachNhapXuat);
-//            } catch (Exception ex) {
-//                throw new RuntimeException(ex);
-//            }
-        });
         return created;
     }
 
@@ -232,6 +219,21 @@ public class DcnbBienBanTinhKhoService extends BaseServiceImpl {
                 optional.get().setLanhDaoChiCucId(currentUser.getUser().getId());
                 optional.get().setLanhDaoChiCuc(currentUser.getUser().getUsername());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
+                List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByQdDcIdAndMaLoKho(optional.get().getQDinhDccId(),optional.get().getMaLoKho());
+                dcnbKeHoachDcDtls.forEach(e-> {
+                    DcnbKeHoachDcDtlTT keHoachNhapXuat = new DcnbKeHoachDcDtlTT();
+                    keHoachNhapXuat.setKeHoachDcHdrId(e.getHdrId());
+                    keHoachNhapXuat.setKeHoachDcDtlId(e.getId());
+                    keHoachNhapXuat.setKeHoachDcParentDtlId(e.getParentId());
+                    keHoachNhapXuat.setKeHoachDcParentHdrId(e.getDcnbKeHoachDcHdr().getParentId());
+                    keHoachNhapXuat.setHdrId(optional.get().getId());
+                    keHoachNhapXuat.setType(DcnbBienBanTinhKhoHdr.TABLE_NAME);
+                    try {
+                        dcnbKeHoachNhapXuatService.saveOrUpdate(keHoachNhapXuat);
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
+                });
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
@@ -260,16 +262,15 @@ public class DcnbBienBanTinhKhoService extends BaseServiceImpl {
             DcnbBienBanTinhKhoHdrDTO dx = data.get(i);
             objs = new Object[rowsName.length];
             objs[0] = i + 1;
-            objs[1] = dx.getNam();
-            objs[2] = dx.getSoQdinh();
-            objs[3] = dx.getNam();
-            objs[4] = dx.getThoiHanDieuChuyen();
-            objs[5] = dx.getTenDiemKho();
-            objs[6] = dx.getTenLoKho();
-            objs[7] = dx.getSoPhieuXuatKho();
-            objs[8] = dx.getSoBbTinhKho();
-            objs[9] = dx.getNgayXuatKho();
-            objs[10] = dx.getTrangThai();
+            objs[1] = dx.getSoQdinh();
+            objs[2] = dx.getNam();
+            objs[3] = dx.getThoiHanDieuChuyen();
+            objs[4] = dx.getTenDiemKho();
+            objs[5] = dx.getTenLoKho();
+            objs[6] = dx.getSoPhieuXuatKho();
+            objs[7] = dx.getSoBbTinhKho();
+            objs[8] = dx.getNgayXuatKho();
+            objs[9] = dx.getTrangThai();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);

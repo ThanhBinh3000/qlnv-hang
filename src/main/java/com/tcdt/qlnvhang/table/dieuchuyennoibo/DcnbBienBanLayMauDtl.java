@@ -37,8 +37,4 @@ public class DcnbBienBanLayMauDtl implements Serializable {
     @JsonIgnore
     private DcnbBienBanLayMauHdr dcnbBienBanLayMauHdr;
 
-    @Transient
-    private List<FileDinhKem> fileDinhKemChupMauNiemPhong = new ArrayList<>();
-
-
 }
