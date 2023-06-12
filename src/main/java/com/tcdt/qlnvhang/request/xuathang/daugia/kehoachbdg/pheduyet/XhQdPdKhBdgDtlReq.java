@@ -47,7 +47,7 @@ public class XhQdPdKhBdgDtlReq {
 
     private String pthucGnhan;
 
-    private String thongBaoKh;
+    private String thongBao;
 
     private BigDecimal khoanTienDatTruoc;
 

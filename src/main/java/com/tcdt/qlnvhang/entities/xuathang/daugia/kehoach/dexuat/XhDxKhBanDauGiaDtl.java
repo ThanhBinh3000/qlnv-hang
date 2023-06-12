@@ -34,13 +34,13 @@ public class XhDxKhBanDauGiaDtl implements Serializable {
 
     private String donViTinh;
 
-    @Transient
-    private BigDecimal soTienDtruocDx;
-
     private String diaChi;
 
     @Transient
-    private BigDecimal soTienDtruocDd;
+    private BigDecimal soTienDtruocDxChiCuc;
+
+    @Transient
+    private BigDecimal soTienDtruocDdChiCuc;
 
     @Transient
     private List<XhDxKhBanDauGiaPhanLo> children = new ArrayList<>();
