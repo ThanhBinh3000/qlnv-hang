@@ -60,8 +60,6 @@ public class DcnbQuyetDinhDcCHdrService extends BaseServiceImpl {
     @Autowired
     private DcnbKeHoachDcHdrService dcnbKeHoachDcHdrService;
     @Autowired
-    private DcnbDataLink luuKhoClient;
-    @Autowired
     private QlnvDmDonviRepository qlnvDmDonviRepository;
     @Autowired
     private DcnbDataLinkRepository dcnbDataLinkRepository;
