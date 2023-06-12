@@ -4,10 +4,12 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbDataLink;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface DcnbDataLinkRepository extends JpaRepository<DcnbDataLink, Long> {
 
-//    List<DcnbKeHoachDcDtlTT> findByIdKhDcDtl(Long idKhDcDtl);
+    DcnbDataLink findByKeHoachDcDtlId(Long idKhDcDtl);
 //
-//    Optional<DcnbKeHoachDcDtlTT> findByIdKhDcDtlAndTableName(Long idKhDcDtl, String tableName);
+    List<DcnbDataLink> findByKeHoachDcHdrId(Long idKhDcHdr);
 }
