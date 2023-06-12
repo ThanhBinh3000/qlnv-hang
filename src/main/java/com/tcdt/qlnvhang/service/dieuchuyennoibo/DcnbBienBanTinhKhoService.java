@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
 import com.google.common.collect.Lists;
-import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBienBanTinhKhoDtlRepository;
@@ -11,7 +10,6 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.*;
-import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeCanHangHdrDTO;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBienBanTinhKhoHdrDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -221,15 +219,15 @@ public class DcnbBienBanTinhKhoService extends BaseServiceImpl {
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByQdDcIdAndMaLoKho(optional.get().getQDinhDccId(),optional.get().getMaLoKho());
                 dcnbKeHoachDcDtls.forEach(e-> {
-                    DcnbKeHoachDcDtlTT keHoachNhapXuat = new DcnbKeHoachDcDtlTT();
-                    keHoachNhapXuat.setKeHoachDcHdrId(e.getHdrId());
-                    keHoachNhapXuat.setKeHoachDcDtlId(e.getId());
-                    keHoachNhapXuat.setKeHoachDcParentDtlId(e.getParentId());
-                    keHoachNhapXuat.setKeHoachDcParentHdrId(e.getDcnbKeHoachDcHdr().getParentId());
-                    keHoachNhapXuat.setHdrId(optional.get().getId());
-                    keHoachNhapXuat.setType(DcnbBienBanTinhKhoHdr.TABLE_NAME);
+                    DcnbDataLink dataLink = new DcnbDataLink();
+                    dataLink.setKeHoachDcHdrId(e.getHdrId());
+                    dataLink.setKeHoachDcDtlId(e.getId());
+//                    dataLink.setKeHoachDcParentDtlId(e.getParentId());
+//                    dataLink.setKeHoachDcParentHdrId(e.getDcnbKeHoachDcHdr().getParentId());
+//                    dataLink.setHdrId(optional.get().getId());
+//                    dataLink.setType(DcnbBienBanTinhKhoHdr.TABLE_NAME);
                     try {
-                        dcnbKeHoachNhapXuatService.saveOrUpdate(keHoachNhapXuat);
+                        dcnbKeHoachNhapXuatService.saveOrUpdate(dataLink);
                     } catch (Exception ex) {
                         throw new RuntimeException(ex);
                     }
