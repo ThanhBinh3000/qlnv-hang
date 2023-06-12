@@ -104,7 +104,7 @@ public class DcnbBBNTBQHdr extends BaseEntity implements Serializable, Cloneable
     @Column(name = "TONG_SO_KINH_PHI_DA_TH")
     private BigDecimal tongKinhPhiDaTh;
     @Column(name = "TONG_SO_KINH_PHI_DA_TH_BC")
-    private BigDecimal tongKinhPhiDaThBc;
+    private String tongKinhPhiDaThBc;
     @Column(name = "MA_DIEM_KHO_XUAT")
     private String maDiemKhoXuat;
     @Column(name = "TEN_DIEM_KHO_XUAT")
