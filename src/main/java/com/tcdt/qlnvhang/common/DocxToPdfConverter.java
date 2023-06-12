@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.common;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdrPreview;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
 import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
 import org.apache.poi.xwpf.usermodel.*;
@@ -31,40 +32,13 @@ public class DocxToPdfConverter {
     private Environment env;
 
     @Transactional
-    public String convertDocxToPdf(InputStream inputFile, HhDxuatKhLcntHdrPreview object) {
+    public ReportTemplateResponse convertDocxToPdf(InputStream inputFile, Map<String, String> fieldValues) {
         try
         {
-            Map<String, String> fieldValues = new HashMap<>();
-            fieldValues = convertObjectToMap(object);
-            List<String> tenCanCuPhapLy = new ArrayList<>();
-            if(object.getFileDinhKems().size() > 0){
-                for (FileDinhKemReq ten : object.getFileDinhKems()) {
-                    tenCanCuPhapLy.add(ten.getNoiDung());
-                }
-            }
-            StringBuilder fileDinhKems = new StringBuilder();
-            for (String ten : tenCanCuPhapLy) {
-                fileDinhKems.append("- ").append(ten).append("\n");
-            }
-            String fileDinhKemsTextString = fileDinhKems.toString();
-            fieldValues.put("fileDinhKems", fileDinhKemsTextString);
             ByteArrayOutputStream outputStreamPdf = new ByteArrayOutputStream();
+            ByteArrayOutputStream outputStreamWord = new ByteArrayOutputStream();
+            ReportTemplateResponse reportTemplateResponse = new ReportTemplateResponse();
             XWPFDocument document = new XWPFDocument( inputFile );
-//            for (XWPFParagraph paragraph : document.getParagraphs()) {
-//                for (XWPFRun run : paragraph.getRuns()) {
-//                    String text = run.getText(0);
-//
-//                    if (text != null) {
-//                        for (Map.Entry<String, String> entry : fieldValues.entrySet()) {
-//                            String key = "${" + entry.getKey().trim() + "}";
-//                            String value = entry.getValue();
-//                            text = text.replace(key, value);
-//                        }
-//                        run.setText(text, 0);
-//                    }
-//                }
-//            }
-//            document.write(outputStreamPdf);
             for (XWPFParagraph p : document.getParagraphs()) {
                 replace2(p, fieldValues);
             }
@@ -77,6 +51,7 @@ public class DocxToPdfConverter {
                     }
                 }
             }
+            document.write(outputStreamWord);
             PdfOptions options = PdfOptions.create();
             options.fontProvider((familyName, encoding, size, style, color) -> {
                 try {
@@ -88,7 +63,10 @@ public class DocxToPdfConverter {
             });
             PdfConverter.getInstance().convert( document, outputStreamPdf, options );
             byte[] pdfBytes = outputStreamPdf.toByteArray();
-            return convertToBase64(pdfBytes);
+            byte[] wordBytes = outputStreamWord.toByteArray();
+            reportTemplateResponse.setPdfSrc(convertToBase64(pdfBytes));
+            reportTemplateResponse.setWordSrc(convertToBase64(wordBytes));
+            return reportTemplateResponse;
         }
         catch ( Throwable e )
         {
