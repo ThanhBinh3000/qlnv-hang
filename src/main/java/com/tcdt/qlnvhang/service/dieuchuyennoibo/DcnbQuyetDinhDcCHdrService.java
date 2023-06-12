@@ -60,9 +60,11 @@ public class DcnbQuyetDinhDcCHdrService extends BaseServiceImpl {
     @Autowired
     private DcnbKeHoachDcHdrService dcnbKeHoachDcHdrService;
     @Autowired
-    private LuuKhoClient luuKhoClient;
+    private DcnbDataLink luuKhoClient;
     @Autowired
     private QlnvDmDonviRepository qlnvDmDonviRepository;
+    @Autowired
+    private DcnbDataLinkRepository dcnbDataLinkRepository;
 
     public Page<DcnbQuyetDinhDcCHdr> searchPage(CustomUserDetails currentUser, SearchDcnbQuyetDinhDcC req) throws Exception {
         String dvql = currentUser.getDvql();
@@ -446,6 +448,16 @@ public class DcnbQuyetDinhDcCHdrService extends BaseServiceImpl {
                             parentDtl.get().setSlDcConLai(kh.getSlDcConLai());
                             parentDtl.get().setDaXdinhDiemNhap(true);
                             dcnbKeHoachDcDtlRepository.save(parentDtl.get());
+
+                            DcnbDataLink dataLink = new DcnbDataLink();
+                            dataLink.setKeHoachDcDtlId(kh.getId());
+                            dataLink.setKeHoachDcHdrId(kh.getHdrId());
+                            dataLink.setKeHoachDcDtlParentId(parentDtl.get().getId());
+                            dataLink.setKeHoachDcHdrParentId(parentDtl.get().getHdrId());
+                            dataLink.setQdCcId( optional.get().getId());
+                            dataLink.setQdCcParentId( optional.get().getParentId());
+                            dataLink.setQdCtcId( optional.get().getCanCuQdTc());
+                            dcnbDataLinkRepository.save(dataLink);
                         }
                         kh.setDaXdinhDiemNhap(true);
                         dcnbKeHoachDcDtlRepository.save(kh);
@@ -548,6 +560,22 @@ public class DcnbQuyetDinhDcCHdrService extends BaseServiceImpl {
                 }else if(Contains.DCNB.equals(optional.get().getLoaiDc())){
                     // clone chi cục xuat
                     cloneQuyetDinhDcCXuat(statusReq, optional);
+                }
+                if(!Contains.GIUA_2_CUC_DTNN_KV.equals(optional.get().getLoaiDc())){
+                    List<DcnbQuyetDinhDcCDtl> danhSachQuyetDinh = optional.get().getDanhSachQuyetDinh();
+                    for(DcnbQuyetDinhDcCDtl ds : danhSachQuyetDinh){
+                        for(DcnbKeHoachDcDtl kh : ds.getDanhSachKeHoach()){
+                            DcnbDataLink dataLink = new DcnbDataLink();
+                            dataLink.setKeHoachDcDtlId(null);
+                            dataLink.setKeHoachDcHdrId(null);
+                            dataLink.setKeHoachDcDtlParentId(kh.getId());
+                            dataLink.setKeHoachDcHdrParentId(kh.getHdrId());
+                            dataLink.setQdCcId(null);
+                            dataLink.setQdCcParentId(optional.get().getParentId());
+                            dataLink.setQdCtcId(optional.get().getCanCuQdTc());
+                            dcnbDataLinkRepository.save(dataLink);
+                        }
+                    }
                 }
                 break;
             default:

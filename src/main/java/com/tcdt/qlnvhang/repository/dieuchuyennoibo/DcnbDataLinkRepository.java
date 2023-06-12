@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DcnbKeHoachNhapXuatRepository extends JpaRepository<DcnbDataLink, Long> {
+public interface DcnbDataLinkRepository extends JpaRepository<DcnbDataLink, Long> {
 
 //    List<DcnbKeHoachDcDtlTT> findByIdKhDcDtl(Long idKhDcDtl);
 //

@@ -13,7 +13,7 @@ import java.util.Optional;
 public class DcnbKeHoachNhapXuatService extends BaseServiceImpl {
 
     @Autowired
-    private DcnbKeHoachNhapXuatRepository hdrRepository;
+    private DcnbDataLinkRepository hdrRepository;
 
     @Autowired
     private DcnbBienBanLayMauHdrRepository dcnbBienBanLayMauHdrRepository;
