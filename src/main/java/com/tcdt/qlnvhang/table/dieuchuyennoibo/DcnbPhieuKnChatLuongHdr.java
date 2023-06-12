@@ -147,6 +147,12 @@ public class DcnbPhieuKnChatLuongHdr extends BaseEntity implements Serializable,
     @Column(name = "NGUOI_DUYET_TP")
     private Long nguoiDuyetTp;
 
+    @Column(name = "NGUOI_DUYET_LD_CUC")
+    private Long nguoiDuyetLdCuc;
+
+    @Column(name = "NGAY_DUYET_LD_CUC")
+    private LocalDate ngayDuyetLdCuc;
+
     @Column(name = "BB_TINH_KHO_ID")
     private Long bbTinhKhoId;
 
