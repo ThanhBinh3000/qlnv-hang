@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 public interface BaoCaoClient {
 
 	@PostMapping("/report-template/findByTenFile")
-	@Headers({ "Accept: application/json; charset=utf-8", "Content-Type: application/x-www-form-urlencoded" })
+	@Headers({ "Accept: application/json; charset=utf-8","Content-Type: application/x-www-form-urlencoded"  })
 	public ResponseEntity<String> findByTenFile(@RequestHeader(value = "Authorization", required = true) String authorizationHeader,
 												@RequestBody ReportTemplateRequest objReq);
 
