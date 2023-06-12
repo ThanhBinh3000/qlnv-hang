@@ -85,7 +85,10 @@ public class DcnbPhieuKiemNghiemChatLuongService extends BaseServiceImpl {
         data.setNguoiTaoId(currentUser.getUser().getId());
         data.setNgayTao(LocalDateTime.now());
         data.setMaDvi(currentUser.getDvql());
+        data.setTenDvi(currentUser.getUser().getTenDvi());
         data.setTrangThai(Contains.DUTHAO);
+        data.setType(objReq.getType());
+        data.setLoaiDc(objReq.getLoaiDc());
         objReq.getDcnbPhieuKnChatLuongDtl().forEach(e -> e.setDcnbPhieuKnChatLuongHdr(data));
         DcnbPhieuKnChatLuongHdr created = dcnbPhieuKnChatLuongHdrRepository.save(data);
         List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getBienBanLayMauDinhKem(), created.getId(), DcnbPhieuKnChatLuongHdr.TABLE_NAME + "_CAN_CU");

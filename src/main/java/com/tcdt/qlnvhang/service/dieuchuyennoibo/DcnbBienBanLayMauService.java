@@ -105,6 +105,7 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
         data.setMaDvi(cqt.getMaDvi());
         data.setTenDvi(cqt.getTenDvi());
         data.setLoaiDc(objReq.getLoaiDc());
+        data.setType(objReq.getType());
         // Biên bản lấy mẫu thì auto thay đổi thủ kho
         data.setThayDoiThuKho(true);
         data.setTrangThai(Contains.DUTHAO);

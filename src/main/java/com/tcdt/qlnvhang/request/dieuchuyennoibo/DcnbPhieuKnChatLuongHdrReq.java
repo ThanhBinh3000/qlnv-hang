@@ -17,6 +17,8 @@ public class DcnbPhieuKnChatLuongHdrReq {
 
     private String maDvi;
 
+    private String tenDvi;
+
     private String maQhns;
 
     private Long qdDcId;
@@ -108,6 +110,10 @@ public class DcnbPhieuKnChatLuongHdrReq {
     private Long nguoiDuyetLdCuc;
 
     private LocalDate ngayDuyetLdCuc;
+
+    private String type;
+
+    private String loaiDc;
 
     private List<FileDinhKemReq> bienBanLayMauDinhKem = new ArrayList<>();
 
