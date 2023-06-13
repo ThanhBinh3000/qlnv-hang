@@ -69,7 +69,7 @@ public class XhQdPdKhBdgDtl implements Serializable {
 
     private String pthucGnhan;
 
-    private String thongBaoKh;
+    private String thongBao;
 
     private BigDecimal khoanTienDatTruoc;
 

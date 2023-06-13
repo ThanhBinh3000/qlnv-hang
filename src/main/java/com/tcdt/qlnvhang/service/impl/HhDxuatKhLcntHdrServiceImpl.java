@@ -23,6 +23,7 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.object.*;
 import com.tcdt.qlnvhang.service.feign.BaoCaoClient;
 import com.tcdt.qlnvhang.table.HhDxKhLcntThopDtl;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
@@ -380,7 +381,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
     }
 
     @Override
-    public String preview(HhDxuatKhLcntHdrReq hhDxuatKhLcntHdrReq) throws Exception {
+    public ReportTemplateResponse preview(HhDxuatKhLcntHdrReq hhDxuatKhLcntHdrReq) throws Exception {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         ReportTemplate model = findByTenFile(hhDxuatKhLcntHdrReq.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
@@ -411,7 +412,22 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         object.setTgianMthau(hhDxuatKhLcntHdrReq.getTgianMthau() != null ? formatter.format(hhDxuatKhLcntHdrReq.getTgianMthau()) : null);
         object.setTgianNhang(hhDxuatKhLcntHdrReq.getTgianNhang() != null ? formatter.format(hhDxuatKhLcntHdrReq.getTgianNhang()) : null);
         object.setSoGoiThau(hhDxuatKhLcntDsgtDtlRepository.countByIdDxKhlcnt(hhDxuatKhLcntHdrReq.getId()));
-        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+
+        Map<String, String> fieldValues = new HashMap<>();
+        fieldValues = docxToPdfConverter.convertObjectToMap(object);
+        List<String> tenCanCuPhapLy = new ArrayList<>();
+        if(object.getFileDinhKems().size() > 0){
+            for (FileDinhKemReq ten : object.getFileDinhKems()) {
+                tenCanCuPhapLy.add(ten.getNoiDung());
+            }
+        }
+        StringBuilder fileDinhKems = new StringBuilder();
+        for (String ten : tenCanCuPhapLy) {
+            fileDinhKems.append("- ").append(ten).append("\n");
+        }
+        String fileDinhKemsTextString = fileDinhKems.toString();
+        fieldValues.put("fileDinhKems", fileDinhKemsTextString);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, fieldValues);
     }
 
 

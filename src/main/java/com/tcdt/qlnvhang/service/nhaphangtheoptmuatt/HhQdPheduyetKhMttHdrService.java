@@ -112,7 +112,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         dataMap.setNguoiTaoId(getUser().getId());
         dataMap.setTrangThai(Contains.DUTHAO);
         dataMap.setLastest(false);
-        dataMap.setMaDvi(dataDx.getMaDvi());
+        dataMap.setMaDvi(getUser().getDvql());
         HhQdPheduyetKhMttHdr created=hhQdPheduyetKhMttHdrRepository.save(dataMap);
 
         if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
@@ -330,9 +330,9 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         fileDinhKemService.delete(optional.get().getId(), Collections.singleton(HhQdPheduyetKhMttHdr.TABLE_NAME));
 
         if (optional.get().getPhanLoai().equals("TH")){
-            hhDxuatKhMttThopRepository.updateTrangThai(optional.get().getIdThHdr(), NhapXuatHangTrangThaiEnum.CHUATAO_QD.getId());
+            hhDxuatKhMttThopRepository.updateTrangThaiAndSoQd(optional.get().getIdThHdr(), NhapXuatHangTrangThaiEnum.CHUATAO_QD.getId());
         }else {
-            hhDxuatKhMttRepository.updateStatusTh(optional.get().getIdTrHdr(), NhapXuatHangTrangThaiEnum.CHUATONGHOP.getId());
+            hhDxuatKhMttRepository.updateIdSoQdPd(optional.get().getIdTrHdr());
         }
     }
 

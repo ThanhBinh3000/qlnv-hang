@@ -50,6 +50,8 @@ public class XhQdPdKhBdgReq extends BaseRequest {
 
     private String kieuNx;
 
+    private String maCuc;
+
     private List<XhQdPdKhBdgDtlReq> children;
 
     @Transient

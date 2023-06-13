@@ -8,6 +8,8 @@ import org.apache.tomcat.jni.Local;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = DcnbBienBanHaoDoiHdr.TABLE_NAME)
@@ -18,8 +20,8 @@ public class DcnbBienBanHaoDoiHdr extends BaseEntity implements Serializable {
     public static final String TABLE_NAME = "DCNB_BIEN_BAN_HAO_DOI_HDR";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanHaoDoiHdr.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = DcnbBienBanHaoDoiHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanHaoDoiHdr.TABLE_NAME + "_SEQ")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanHaoDoiHdr.TABLE_NAME + "_SEQ")
+//    @SequenceGenerator(sequenceName = DcnbBienBanHaoDoiHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanHaoDoiHdr.TABLE_NAME + "_SEQ")
     private Long id;
 
     @Column(name = "LOAI_DC")
@@ -133,14 +135,32 @@ public class DcnbBienBanHaoDoiHdr extends BaseEntity implements Serializable {
     @Column(name = "THU_KHO")
     private String thuKho;
 
-    @Column(name = "KTHUAT_VIEN")
-    private String kThuatVien;
+    @Column(name = "NGAY_PDUYET_KTV_BAO_QUAN")
+    private LocalDate ngayPduyetKtvBQ;
+
+    @Column(name = "KTV_BAO_QUAN")
+    private String ktvBaoQuan;
+
+    @Column(name = "KTV_BAO_QUAN_ID")
+    private Long ktvBaoQuanId;
+
+    @Column(name = "NGAY_PDUYET_KE_TOAN")
+    private LocalDate ngayPduyetKt;
 
     @Column(name = "KE_TOAN")
     private String keToan;
 
-    @Column(name = "LD_CHI_CUC")
-    private String ldChiCuc;
+    @Column(name = "KE_TOAN_ID")
+    private Long keToanId;
+
+    @Column(name = "NGAY_PDUYET_LDCCUC")
+    private LocalDate ngayPduyetLdcc;
+
+    @Column(name = "LANH_DAO_CHI_CUC")
+    private String lanhDaoChiCuc;
+
+    @Column(name = "LANH_DAO_CHI_CUC_ID")
+    private Long lanhDaoChiCucId;
 
     @Column(name = "TRANG_THAI")
     private String trangThai;
@@ -154,4 +174,7 @@ public class DcnbBienBanHaoDoiHdr extends BaseEntity implements Serializable {
     @Column(name = "LY_DO_TU_CHOI")
     private String lyDoTuChoi;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "HDR_ID")
+    private List<DcnbBienBanHaoDoiTtDtl> dcnbBienBanHaoDoiTtDtl = new ArrayList<>();
 }

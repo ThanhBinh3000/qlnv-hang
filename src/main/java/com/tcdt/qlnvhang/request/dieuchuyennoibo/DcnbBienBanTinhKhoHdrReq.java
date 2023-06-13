@@ -12,9 +12,7 @@ import java.util.List;
 @Data
 public class DcnbBienBanTinhKhoHdrReq {
     private Long id;
-
     private Integer nam;
-
     private String soBbTinhKho;
 
     private Long bangKeCanHangId;
@@ -25,9 +23,17 @@ public class DcnbBienBanTinhKhoHdrReq {
 
     private String maDvi;
 
+    private String tenDvi;
+
     private Long qhnsId;
 
     private String maQhns;
+
+    private LocalDate ngayBatDauXuat;
+
+    private LocalDate ngayKeThucXuat;
+
+    private LocalDate thoiHanXuatHang;
 
     private Long qDinhDccId;
 
@@ -79,10 +85,6 @@ public class DcnbBienBanTinhKhoHdrReq {
 
     private LocalDate ngayGDuyet;
 
-    private Long nguoiPDuyet;
-
-    private LocalDate ngayPDuyet;
-
     private String loaiDc;
 
     private String nguyeNhan;
@@ -91,17 +93,33 @@ public class DcnbBienBanTinhKhoHdrReq {
 
     private String ghiChu;
 
+    private LocalDate ngayPduyetKtvBQ;
+
     private String ktvBaoQuan;
 
     private Long ktvBaoQuanId;
+
+    private LocalDate ngayPduyetKt;
 
     private String keToan;
 
     private Long keToanId;
 
+    private LocalDate ngayPduyetLdcc;
+
     private String lanhDaoChiCuc;
 
     private Long lanhDaoChiCucId;
+
+    private Double tongSlXuatTheoQd;
+
+    private Double tongSlXuatTheoTt;
+
+    private Double slConLaiTheoSs;
+
+    private Double slConLaiTheoTt;
+
+    private Double chenhLechSlConLai;
 
     private String type;
 

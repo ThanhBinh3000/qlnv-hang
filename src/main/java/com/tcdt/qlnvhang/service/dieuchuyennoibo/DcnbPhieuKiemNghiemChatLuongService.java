@@ -82,7 +82,10 @@ public class DcnbPhieuKiemNghiemChatLuongService extends BaseServiceImpl {
         data.setNguoiTaoId(currentUser.getUser().getId());
         data.setNgayTao(LocalDateTime.now());
         data.setMaDvi(currentUser.getDvql());
+        data.setTenDvi(currentUser.getUser().getTenDvi());
         data.setTrangThai(Contains.DUTHAO);
+        data.setType(objReq.getType());
+        data.setLoaiDc(objReq.getLoaiDc());
         objReq.getDcnbPhieuKnChatLuongDtl().forEach(e -> e.setDcnbPhieuKnChatLuongHdr(data));
         DcnbPhieuKnChatLuongHdr created = dcnbPhieuKnChatLuongHdrRepository.save(data);
         List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getBienBanLayMauDinhKem(), created.getId(), DcnbPhieuKnChatLuongHdr.TABLE_NAME + "_CAN_CU");
@@ -199,8 +202,8 @@ public class DcnbPhieuKiemNghiemChatLuongService extends BaseServiceImpl {
                 break;
             case Contains.TU_CHOI_LDC + Contains.CHODUYET_TP:
             case Contains.CHODUYET_LDC + Contains.TU_CHOI_LDC:
-                optional.get().setNguoiPDuyet(currentUser.getUser().getId());
-                optional.get().setNgayPDuyet(LocalDate.now());
+                optional.get().setNguoiDuyetLdCuc(currentUser.getUser().getId());
+                optional.get().setNgayDuyetLdCuc(LocalDate.now());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 break;
             case Contains.CHODUYET_TP + Contains.CHODUYET_LDC:
@@ -208,8 +211,8 @@ public class DcnbPhieuKiemNghiemChatLuongService extends BaseServiceImpl {
                 optional.get().setNgayDuyetTp(LocalDate.now());
                 break;
             case Contains.CHODUYET_LDC + Contains.DA_DUYET_LDC:
-                optional.get().setNguoiPDuyet(currentUser.getUser().getId());
-                optional.get().setNgayPDuyet(LocalDate.now());
+                optional.get().setNguoiDuyetLdCuc(currentUser.getUser().getId());
+                optional.get().setNgayDuyetLdCuc(LocalDate.now());
                 List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByQdDcIdAndMaLoKho(optional.get().getQdDcId(),optional.get().getMaLoKho());
                 dcnbKeHoachDcDtls.forEach(e-> {
                     DcnbDataLink dataLink = new DcnbDataLink();

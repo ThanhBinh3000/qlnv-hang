@@ -20,8 +20,8 @@ public class DcnbPhieuKnChatLuongHdr extends BaseEntity implements Serializable,
     public static final String TABLE_NAME = "DCNB_PHIEU_KN_CHAT_LUONG_HDR";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DCNB_PHIEU_KN_CLUONG_HDR_SEQ")
-    @SequenceGenerator(sequenceName = "DCNB_PHIEU_KN_CLUONG_HDR_SEQ", allocationSize = 1, name = "DCNB_PHIEU_KN_CLUONG_HDR_SEQ")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DCNB_PHIEU_KN_CLUONG_HDR_SEQ")
+//    @SequenceGenerator(sequenceName = "DCNB_PHIEU_KN_CLUONG_HDR_SEQ", allocationSize = 1, name = "DCNB_PHIEU_KN_CLUONG_HDR_SEQ")
     private Long id;
 
     @Column(name = "NAM")
@@ -29,6 +29,9 @@ public class DcnbPhieuKnChatLuongHdr extends BaseEntity implements Serializable,
 
     @Column(name = "MA_DVI")
     private String maDvi;
+
+    @Column(name = "TEN_DVI")
+    private String tenDvi;
 
     @Column(name = "MA_QHNS")
     private String maQhns;
@@ -139,13 +142,19 @@ public class DcnbPhieuKnChatLuongHdr extends BaseEntity implements Serializable,
     private String lyDoTuChoi;
 
     @Column(name = "THAY_DOI_THU_KHO")
-    private Long thayDoiThuKho;
+    private Boolean thayDoiThuKho;
 
     @Column(name = "NGAY_DUYET_TP")
     private LocalDate ngayDuyetTp;
 
     @Column(name = "NGUOI_DUYET_TP")
     private Long nguoiDuyetTp;
+
+    @Column(name = "NGUOI_DUYET_LD_CUC")
+    private Long nguoiDuyetLdCuc;
+
+    @Column(name = "NGAY_DUYET_LD_CUC")
+    private LocalDate ngayDuyetLdCuc;
 
     @Column(name = "BB_TINH_KHO_ID")
     private Long bbTinhKhoId;
@@ -161,6 +170,12 @@ public class DcnbPhieuKnChatLuongHdr extends BaseEntity implements Serializable,
 
     @Column(name = "SO_BB_HAO_DOI")
     private String soBbHaoDoi;
+
+    @Column(name = "TYPE")
+    private String type;
+
+    @Column(name = "LOAI_DC")
+    private String loaiDc;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
