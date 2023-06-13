@@ -44,7 +44,7 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl{
     private DcnbQuyetDinhDcCHdrServiceImpl dcnbQuyetDinhDcCHdrServiceImpl;
 
     @Autowired
-    private DcnbDataLinkRepository dcnbDataLinkRepository;
+    private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
 
     @Autowired
     private DcnbKeHoachDcHdrRepository dcnbKeHoachDcHdrRepository;
@@ -180,21 +180,20 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl{
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
                 optional.get().setNgayPDuyet(LocalDate.now());
                 optional.get().setNguoiPDuyet(currentUser.getUser().getId());
-                List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByQdDcIdAndMaLoKho(optional.get().getQDinhDccId(),optional.get().getMaLoKho());
-                dcnbKeHoachDcDtls.forEach(e-> {
-                    DcnbDataLink dataLink = new DcnbDataLink();
-                    dataLink.setKeHoachDcHdrId(e.getHdrId());
-                    dataLink.setKeHoachDcDtlId(e.getId());
-//                    dataLink.setKeHoachDcParentDtlId(e.getParentId());
-//                    dataLink.setKeHoachDcParentHdrId(e.getDcnbKeHoachDcHdr().getParentId());
-//                    dataLink.setHdrId(optional.get().getId());
-//                    dataLink.setType(DcnbBangKeCanHangHdr.TABLE_NAME);
-                    try {
-                        dcnbDataLinkRepository.save(dataLink);
-                    } catch (Exception ex) {
-                        throw new RuntimeException(ex);
-                    }
-                });
+                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(optional.get().getMaDvi(),
+                        optional.get().getQDinhDccId(),
+                        optional.get().getMaNganKho(),
+                        optional.get().getMaLoKho());
+                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
+                dataLinkDtl.setLinkId(optional.get().getId());
+                dataLinkDtl.setHdrId(dataLink.getId());
+                if ("00".equals(optional.get().getType())) { // xuất
+                    dataLinkDtl.setType("XDC" + DcnbBangKeCanHangHdr.TABLE_NAME);
+                } else if ("01".equals(optional.get().getType())) {
+                    dataLinkDtl.setType("NDC" + DcnbBangKeCanHangHdr.TABLE_NAME);
+                } else {
+                    throw new Exception("Type phải là 00 hoặc 01!");
+                }
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");

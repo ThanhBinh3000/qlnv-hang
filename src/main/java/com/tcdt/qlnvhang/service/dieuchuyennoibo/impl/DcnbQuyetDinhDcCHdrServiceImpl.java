@@ -61,7 +61,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
     @Autowired
     private QlnvDmDonviRepository qlnvDmDonviRepository;
     @Autowired
-    private DcnbDataLinkRepository dcnbDataLinkRepository;
+    private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
 
     public Page<DcnbQuyetDinhDcCHdr> searchPage(CustomUserDetails currentUser, SearchDcnbQuyetDinhDcC req) throws Exception {
         String dvql = currentUser.getDvql();
@@ -446,7 +446,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                             parentDtl.get().setDaXdinhDiemNhap(true);
                             dcnbKeHoachDcDtlRepository.save(parentDtl.get());
 
-                            DcnbDataLink dataLink = new DcnbDataLink();
+                            DcnbDataLinkHdr dataLink = new DcnbDataLinkHdr();
                             dataLink.setKeHoachDcDtlId(kh.getId());
                             dataLink.setKeHoachDcHdrId(kh.getHdrId());
                             dataLink.setKeHoachDcDtlParentId(parentDtl.get().getId());
@@ -454,7 +454,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                             dataLink.setQdCcId( optional.get().getId());
                             dataLink.setQdCcParentId( optional.get().getParentId());
                             dataLink.setQdCtcId( optional.get().getCanCuQdTc());
-                            dcnbDataLinkRepository.save(dataLink);
+                            dcnbDataLinkHdrRepository.save(dataLink);
                         }
                         kh.setDaXdinhDiemNhap(true);
                         dcnbKeHoachDcDtlRepository.save(kh);
@@ -657,7 +657,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
             clonedObj = dcnbQuyetDinhDcCHdrRepository.save(clonedObj);
             for(DcnbQuyetDinhDcCDtl ds : clonedObj.getDanhSachQuyetDinh()){
                 for(DcnbKeHoachDcDtl kh : ds.getDanhSachKeHoach()){
-                    DcnbDataLink dataLink = new DcnbDataLink();
+                    DcnbDataLinkHdr dataLink = new DcnbDataLinkHdr();
                     dataLink.setKeHoachDcDtlId(kh.getId());
                     dataLink.setKeHoachDcHdrId(kh.getHdrId());
                     Optional<DcnbKeHoachDcDtl> parentDtl = dcnbKeHoachDcDtlRepository.findById(kh.getParentId());
@@ -666,7 +666,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                     dataLink.setQdCcId(clonedObj.getId());
                     dataLink.setQdCcParentId(clonedObj.getParentId());
                     dataLink.setQdCtcId(clonedObj.getCanCuQdTc());
-                    dcnbDataLinkRepository.save(dataLink);
+                    dcnbDataLinkHdrRepository.save(dataLink);
                 }
             }
             fileDinhKemService.delete(clonedObj.getId(), Lists.newArrayList(DcnbQuyetDinhDcCHdr.TABLE_NAME + "_CAN_CU"));
@@ -769,7 +769,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
             if(isClone){
                 for(DcnbQuyetDinhDcCDtl ds : clonedObj.getDanhSachQuyetDinh()){
                     for(DcnbKeHoachDcDtl kh : ds.getDanhSachKeHoach()){
-                        DcnbDataLink dataLink = new DcnbDataLink();
+                        DcnbDataLinkHdr dataLink = new DcnbDataLinkHdr();
                         dataLink.setKeHoachDcDtlId(kh.getId());
                         dataLink.setKeHoachDcHdrId(kh.getHdrId());
                         Optional<DcnbKeHoachDcDtl> parentDtl = dcnbKeHoachDcDtlRepository.findById(kh.getParentId());
@@ -778,7 +778,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         dataLink.setQdCcId(clonedObj.getId());
                         dataLink.setQdCcParentId(clonedObj.getParentId());
                         dataLink.setQdCtcId(clonedObj.getCanCuQdTc());
-                        dcnbDataLinkRepository.save(dataLink);
+                        dcnbDataLinkHdrRepository.save(dataLink);
                     }
                 }
             }

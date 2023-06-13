@@ -56,7 +56,9 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
     DcnbQuyetDinhDcCHdrServiceImpl dcnbQuyetDinhDcCHdrServiceImpl;
 
     @Autowired
-    private DcnbDataLinkRepository dcnbDataLinkRepository;
+    private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
+    @Autowired
+    private DcnbDataLinkDtlRepository dcnbDataLinkDtlRepository;
 
     public Page<DcnbPhieuKnChatLuongHdrDTO> searchPage(CustomUserDetails currentUser, SearchPhieuKnChatLuong req) throws Exception {
         String dvql = currentUser.getDvql();
@@ -213,21 +215,21 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
             case Contains.CHODUYET_LDC + Contains.DA_DUYET_LDC:
                 optional.get().setNguoiDuyetLdCuc(currentUser.getUser().getId());
                 optional.get().setNgayDuyetLdCuc(LocalDate.now());
-                List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByQdDcIdAndMaLoKho(optional.get().getQdDcId(),optional.get().getMaLoKho());
-                dcnbKeHoachDcDtls.forEach(e-> {
-                    DcnbDataLink dataLink = new DcnbDataLink();
-                    dataLink.setKeHoachDcHdrId(e.getHdrId());
-                    dataLink.setKeHoachDcDtlId(e.getId());
-//                    dataLink.setKeHoachDcParentDtlId(e.getParentId());
-//                    dataLink.setKeHoachDcParentHdrId(e.getDcnbKeHoachDcHdr().getParentId());
-//                    dataLink.setHdrId(optional.get().getId());
-//                    dataLink.setType(DcnbPhieuKnChatLuongHdr.TABLE_NAME);
-                    try {
-                        dcnbDataLinkRepository.save(dataLink);
-                    } catch (Exception ex) {
-                        throw new RuntimeException(ex);
-                    }
-                });
+                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(optional.get().getMaDvi(),
+                        optional.get().getQdDcId(),
+                        optional.get().getMaNganKho(),
+                        optional.get().getMaLoKho());
+                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
+                dataLinkDtl.setLinkId(optional.get().getId());
+                dataLinkDtl.setHdrId(dataLink.getId());
+                if ("00".equals(optional.get().getType())) { // xuất
+                    dataLinkDtl.setType("XDC" + DcnbPhieuKnChatLuongHdr.TABLE_NAME);
+                } else if ("01".equals(optional.get().getType())) {
+                    dataLinkDtl.setType("NDC" + DcnbPhieuKnChatLuongHdr.TABLE_NAME);
+                } else {
+                    throw new Exception("Type phải là 00 hoặc 01!");
+                }
+                dcnbDataLinkDtlRepository.save(dataLinkDtl);
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
