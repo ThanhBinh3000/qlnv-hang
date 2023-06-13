@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.service.dieuchuyennoibo;
+package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
@@ -34,7 +34,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
-public class DcnbBienBanLayMauService extends BaseServiceImpl {
+public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
 
     @Autowired
     DcnbBienBanLayMauHdrRepository dcnbBienBanLayMauHdrRepository;
@@ -52,7 +52,7 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
     FileDinhKemService fileDinhKemService;
 
     @Autowired
-    DcnbKeHoachNhapXuatService dcnbKeHoachNhapXuatService;
+    private DcnbDataLinkRepository dcnbDataLinkRepository;
 
     @Autowired
     HhBbNghiemthuKlstRepository hhBbNghiemthuKlstRepository;
@@ -61,7 +61,7 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
     DcnbPhieuKtChatLuongHdrRepository dcnbPhieuKtChatLuongHdrRepository;
 
     @Autowired
-    DcnbQuyetDinhDcCHdrService dcnbQuyetDinhDcCHdrService;
+    DcnbQuyetDinhDcCHdrServiceImpl dcnbQuyetDinhDcCHdrServiceImpl;
 
     @Autowired
     DcnbQuyetDinhDcCHdrRepository dcnbQuyetDinhDcCHdrRepository;
@@ -233,7 +233,7 @@ public class DcnbBienBanLayMauService extends BaseServiceImpl {
 //                    dataLink.setHdrId(optional.get().getId());
 //                    dataLink.setType(DcnbBienBanLayMauHdr.TABLE_NAME);
                 try {
-                    dcnbKeHoachNhapXuatService.saveOrUpdate(dataLink);
+                    dcnbDataLinkRepository.save(dataLink);
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }

@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.service.dieuchuyennoibo;
+package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
@@ -16,7 +16,6 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
@@ -39,7 +38,7 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.groupingBy;
 
 @Service
-public class THKeHoachDieuChuyenCucService extends BaseServiceImpl {
+public class THKeHoachDieuChuyenCucServiceImpl extends BaseServiceImpl {
 
     @Autowired
     private THKeHoachDieuChuyenCucHdrRepository thKeHoachDieuChuyenHdrRepository;

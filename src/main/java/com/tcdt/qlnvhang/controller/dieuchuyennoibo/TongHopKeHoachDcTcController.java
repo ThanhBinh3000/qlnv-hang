@@ -9,7 +9,7 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.ThKeHoachDieuChuyenTongCucHdrReq;
 import com.tcdt.qlnvhang.request.search.TongHopKeHoachDieuChuyenSearch;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.dieuchuyennoibo.THKeHoachDieuChuyenTongCucService;
+import com.tcdt.qlnvhang.service.dieuchuyennoibo.impl.THKeHoachDieuChuyenTongCucServiceImpl;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,7 +32,7 @@ import java.util.*;
 public class TongHopKeHoachDcTcController extends BaseController {
 
     @Autowired
-    THKeHoachDieuChuyenTongCucService thKeHoachDieuChuyenTongCucService;
+    THKeHoachDieuChuyenTongCucServiceImpl thKeHoachDieuChuyenTongCucServiceImpl;
 
     @ApiOperation(value = "Tra cứu thông tin tổng hợp", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -40,7 +40,7 @@ public class TongHopKeHoachDcTcController extends BaseController {
     public ResponseEntity<BaseResponse> colectionTongCuc(@CurrentUser CustomUserDetails currentUser,@RequestBody TongHopKeHoachDieuChuyenSearch objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(thKeHoachDieuChuyenTongCucService.searchPage(currentUser, objReq));
+            resp.setData(thKeHoachDieuChuyenTongCucServiceImpl.searchPage(currentUser, objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -58,7 +58,7 @@ public class TongHopKeHoachDcTcController extends BaseController {
     public ResponseEntity<BaseResponse> danhSachMaTongHop(@RequestBody TongHopKeHoachDieuChuyenSearch objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(thKeHoachDieuChuyenTongCucService.danhSachMaTongHop(objReq));
+            resp.setData(thKeHoachDieuChuyenTongCucServiceImpl.danhSachMaTongHop(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -76,7 +76,7 @@ public class TongHopKeHoachDcTcController extends BaseController {
     public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody ThKeHoachDieuChuyenTongCucHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(thKeHoachDieuChuyenTongCucService.save(currentUser,objReq));
+            resp.setData(thKeHoachDieuChuyenTongCucServiceImpl.save(currentUser,objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -94,7 +94,7 @@ public class TongHopKeHoachDcTcController extends BaseController {
             @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids")List<Long> ids) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(thKeHoachDieuChuyenTongCucService.detail(ids).get(0));
+            resp.setData(thKeHoachDieuChuyenTongCucServiceImpl.detail(ids).get(0));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -111,7 +111,7 @@ public class TongHopKeHoachDcTcController extends BaseController {
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            thKeHoachDieuChuyenTongCucService.delete(idSearchReq);
+            thKeHoachDieuChuyenTongCucServiceImpl.delete(idSearchReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -129,7 +129,7 @@ public class TongHopKeHoachDcTcController extends BaseController {
     public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            thKeHoachDieuChuyenTongCucService.deleteMulti(idSearchReq);
+            thKeHoachDieuChuyenTongCucServiceImpl.deleteMulti(idSearchReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -147,7 +147,7 @@ public class TongHopKeHoachDcTcController extends BaseController {
     public ResponseEntity<BaseResponse> createTableTongCuc(@CurrentUser CustomUserDetails currentUser,@RequestBody  TongHopKeHoachDieuChuyenSearch req) throws Exception {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(thKeHoachDieuChuyenTongCucService.createPlan(currentUser, req));
+            resp.setData(thKeHoachDieuChuyenTongCucServiceImpl.createPlan(currentUser, req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         }catch (Exception e){
@@ -162,7 +162,7 @@ public class TongHopKeHoachDcTcController extends BaseController {
     public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody ThKeHoachDieuChuyenTongCucHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(thKeHoachDieuChuyenTongCucService.update(currentUser,objReq));
+            resp.setData(thKeHoachDieuChuyenTongCucServiceImpl.update(currentUser,objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -179,7 +179,7 @@ public class TongHopKeHoachDcTcController extends BaseController {
     @ResponseStatus(HttpStatus.OK)
     public void exportList(@CurrentUser CustomUserDetails currentUser ,@Valid @RequestBody  TongHopKeHoachDieuChuyenSearch objReq, HttpServletResponse response) throws Exception {
         try {
-            thKeHoachDieuChuyenTongCucService.export( currentUser,objReq, response);
+            thKeHoachDieuChuyenTongCucServiceImpl.export( currentUser,objReq, response);
 
         } catch (Exception e) {
             log.error("Kết xuất danh sách dánh sách mua : {}", e);

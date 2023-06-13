@@ -6,11 +6,10 @@ import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.IdSearchReq;
-import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.ThKeHoachDieuChuyenCucHdrReq;
 import com.tcdt.qlnvhang.request.search.TongHopKeHoachDieuChuyenSearch;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.dieuchuyennoibo.THKeHoachDieuChuyenCucService;
+import com.tcdt.qlnvhang.service.dieuchuyennoibo.impl.THKeHoachDieuChuyenCucServiceImpl;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
@@ -34,7 +33,7 @@ import java.util.*;
 public class TongHopKeHoachDcController extends BaseController {
 
     @Autowired
-    THKeHoachDieuChuyenCucService thKeHoachDieuChuyenService;
+    THKeHoachDieuChuyenCucServiceImpl thKeHoachDieuChuyenService;
 
 
     @ApiOperation(value = "Tra cứu thông tin tổng hợp", response = List.class)

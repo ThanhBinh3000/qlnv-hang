@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.service.dieuchuyennoibo;
+package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
@@ -55,8 +55,8 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class DcnbKeHoachDcHdrService extends BaseServiceImpl {
-    private static final Logger logger = LoggerFactory.getLogger(DcnbKeHoachDcHdrService.class);
+public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
+    private static final Logger logger = LoggerFactory.getLogger(DcnbKeHoachDcHdrServiceImpl.class);
 
     @Autowired
     private DcnbKeHoachDcHdrRepository dcnbKeHoachDcHdrRepository;

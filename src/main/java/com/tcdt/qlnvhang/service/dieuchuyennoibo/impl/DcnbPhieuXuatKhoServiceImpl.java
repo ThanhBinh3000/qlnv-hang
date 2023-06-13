@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.service.dieuchuyennoibo;
+package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuXuatKhoDtlRepository;
@@ -9,11 +9,8 @@ import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbPhieuXuatKhoHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchPhieuXuatKho;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.HhPhuLucHd;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuXuatKhoHdr;
 import com.tcdt.qlnvhang.util.Contains;
-import com.tcdt.qlnvhang.util.DataUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,11 +25,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 @Service
-public class DcnbPhieuXuatKhoService extends BaseServiceImpl {
+public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
 
     @Autowired
     private DcnbPhieuXuatKhoHdrRepository hdrRepository;

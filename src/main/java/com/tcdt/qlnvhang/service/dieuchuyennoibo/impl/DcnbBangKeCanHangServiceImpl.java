@@ -1,10 +1,7 @@
-package com.tcdt.qlnvhang.service.dieuchuyennoibo;
+package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBangKeCanHangDtlRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBangKeCanHangHdrRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcDtlRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcHdrRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -35,7 +32,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class DcnbBangKeCanHangService extends BaseServiceImpl {
+public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl{
 
     @Autowired
     private DcnbBangKeCanHangHdrRepository dcnbBangKeCanHangHdrRepository;
@@ -44,10 +41,10 @@ public class DcnbBangKeCanHangService extends BaseServiceImpl {
     private DcnbBangKeCanHangDtlRepository dcnbBangKeCanHangDtlRepository;
 
     @Autowired
-    private DcnbQuyetDinhDcCHdrService dcnbQuyetDinhDcCHdrService;
+    private DcnbQuyetDinhDcCHdrServiceImpl dcnbQuyetDinhDcCHdrServiceImpl;
 
     @Autowired
-    private DcnbKeHoachNhapXuatService dcnbKeHoachNhapXuatService;
+    private DcnbDataLinkRepository dcnbDataLinkRepository;
 
     @Autowired
     private DcnbKeHoachDcHdrRepository dcnbKeHoachDcHdrRepository;
@@ -193,7 +190,7 @@ public class DcnbBangKeCanHangService extends BaseServiceImpl {
 //                    dataLink.setHdrId(optional.get().getId());
 //                    dataLink.setType(DcnbBangKeCanHangHdr.TABLE_NAME);
                     try {
-                        dcnbKeHoachNhapXuatService.saveOrUpdate(dataLink);
+                        dcnbDataLinkRepository.save(dataLink);
                     } catch (Exception ex) {
                         throw new RuntimeException(ex);
                     }

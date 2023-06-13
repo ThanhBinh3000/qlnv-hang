@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.service.dieuchuyennoibo;
+package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
@@ -11,7 +11,6 @@ import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbQuyetDinhDcCHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbQuyetDinhDcC;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO;
-import com.tcdt.qlnvhang.service.feign.LuuKhoClient;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -42,8 +41,8 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class DcnbQuyetDinhDcCHdrService extends BaseServiceImpl {
-    private static final Logger logger = LoggerFactory.getLogger(DcnbQuyetDinhDcCHdrService.class);
+public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
+    private static final Logger logger = LoggerFactory.getLogger(DcnbQuyetDinhDcCHdrServiceImpl.class);
 
     @Autowired
     private DcnbQuyetDinhDcCHdrRepository dcnbQuyetDinhDcCHdrRepository;
@@ -58,7 +57,7 @@ public class DcnbQuyetDinhDcCHdrService extends BaseServiceImpl {
     @Autowired
     private DcnbKeHoachDcHdrRepository dcnbKeHoachDcHdrRepository;
     @Autowired
-    private DcnbKeHoachDcHdrService dcnbKeHoachDcHdrService;
+    private DcnbKeHoachDcHdrServiceImpl dcnbKeHoachDcHdrServiceImpl;
     @Autowired
     private QlnvDmDonviRepository qlnvDmDonviRepository;
     @Autowired
@@ -618,7 +617,7 @@ public class DcnbQuyetDinhDcCHdrService extends BaseServiceImpl {
                     clonedDtl.setId(null);
                     Optional<DcnbKeHoachDcHdr> keHoachDcHdrOpt = null;
                     try {
-                        keHoachDcHdrOpt = Optional.ofNullable(dcnbKeHoachDcHdrService.details(dcnbKeHoachDcHdrId));
+                        keHoachDcHdrOpt = Optional.ofNullable(dcnbKeHoachDcHdrServiceImpl.details(dcnbKeHoachDcHdrId));
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
@@ -714,7 +713,7 @@ public class DcnbQuyetDinhDcCHdrService extends BaseServiceImpl {
                     clonedDtl.setId(null);
                     Optional<DcnbKeHoachDcHdr> keHoachDcHdrOpt = null;
                     try {
-                        keHoachDcHdrOpt = Optional.ofNullable(dcnbKeHoachDcHdrService.details(dcnbKeHoachDcHdrId));
+                        keHoachDcHdrOpt = Optional.ofNullable(dcnbKeHoachDcHdrServiceImpl.details(dcnbKeHoachDcHdrId));
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
