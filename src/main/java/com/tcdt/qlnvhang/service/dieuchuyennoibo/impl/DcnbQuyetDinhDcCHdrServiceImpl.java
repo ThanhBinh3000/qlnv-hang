@@ -61,7 +61,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
     @Autowired
     private QlnvDmDonviRepository qlnvDmDonviRepository;
     @Autowired
-    private DcnbDataLinkRepository dcnbDataLinkRepository;
+    private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
 
     public Page<DcnbQuyetDinhDcCHdr> searchPage(CustomUserDetails currentUser, SearchDcnbQuyetDinhDcC req) throws Exception {
         String dvql = currentUser.getDvql();
@@ -446,7 +446,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                             parentDtl.get().setDaXdinhDiemNhap(true);
                             dcnbKeHoachDcDtlRepository.save(parentDtl.get());
 
-                            DcnbDataLink dataLink = new DcnbDataLink();
+                            DcnbDataLinkHdr dataLink = new DcnbDataLinkHdr();
                             dataLink.setKeHoachDcDtlId(kh.getId());
                             dataLink.setKeHoachDcHdrId(kh.getHdrId());
                             dataLink.setKeHoachDcDtlParentId(parentDtl.get().getId());
@@ -454,7 +454,8 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                             dataLink.setQdCcId( optional.get().getId());
                             dataLink.setQdCcParentId( optional.get().getParentId());
                             dataLink.setQdCtcId( optional.get().getCanCuQdTc());
-                            dcnbDataLinkRepository.save(dataLink);
+                            dataLink.setType(Contains.NHAN_DIEU_CHUYEN);
+                            dcnbDataLinkHdrRepository.save(dataLink);
                         }
                         kh.setDaXdinhDiemNhap(true);
                         dcnbKeHoachDcDtlRepository.save(kh);
@@ -484,7 +485,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
         String status = optional.get().getTrangThai() + statusReq.getTrangThai();
         switch (status) {
             case Contains.DUTHAO + Contains.YC_CHICUC_PHANBO_DC:
-                cloneQuyetDinhDcCNhan(statusReq, optional);
+                cloneQuyetDinhDcCNhan(statusReq, optional, false);
                 break;
             case Contains.YC_CHICUC_PHANBO_DC + Contains.CHODUYET_TP:
             case Contains.DUTHAO + Contains.CHODUYET_TP:
@@ -551,28 +552,12 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                 }
                 if(Contains.GIUA_2_CHI_CUC_TRONG_1_CUC.equals(optional.get().getLoaiDc())){ // khác điều chuyển "khác cục"
                     // clone chi cục nhận
-                    cloneQuyetDinhDcCNhan(statusReq, optional);
+                    cloneQuyetDinhDcCNhan(statusReq, optional, true);
                     // clone chi cục xuat
                     cloneQuyetDinhDcCXuat(statusReq, optional);
-                }else if(Contains.DCNB.equals(optional.get().getLoaiDc())){
+                }else {
                     // clone chi cục xuat
                     cloneQuyetDinhDcCXuat(statusReq, optional);
-                }
-                if(!Contains.GIUA_2_CUC_DTNN_KV.equals(optional.get().getLoaiDc())){
-                    List<DcnbQuyetDinhDcCDtl> danhSachQuyetDinh = optional.get().getDanhSachQuyetDinh();
-                    for(DcnbQuyetDinhDcCDtl ds : danhSachQuyetDinh){
-                        for(DcnbKeHoachDcDtl kh : ds.getDanhSachKeHoach()){
-                            DcnbDataLink dataLink = new DcnbDataLink();
-                            dataLink.setKeHoachDcDtlId(null);
-                            dataLink.setKeHoachDcHdrId(null);
-                            dataLink.setKeHoachDcDtlParentId(kh.getId());
-                            dataLink.setKeHoachDcHdrParentId(kh.getHdrId());
-                            dataLink.setQdCcId(null);
-                            dataLink.setQdCcParentId(optional.get().getParentId());
-                            dataLink.setQdCtcId(optional.get().getCanCuQdTc());
-                            dcnbDataLinkRepository.save(dataLink);
-                        }
-                    }
                 }
                 break;
             default:
@@ -670,7 +655,22 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                 }
             });
             clonedObj.setDanhSachQuyetDinh(quyetDinhDcCDtlsClone);
-            dcnbQuyetDinhDcCHdrRepository.save(clonedObj);
+            clonedObj = dcnbQuyetDinhDcCHdrRepository.save(clonedObj);
+            for(DcnbQuyetDinhDcCDtl ds : clonedObj.getDanhSachQuyetDinh()){
+                for(DcnbKeHoachDcDtl kh : ds.getDanhSachKeHoach()){
+                    DcnbDataLinkHdr dataLink = new DcnbDataLinkHdr();
+                    dataLink.setKeHoachDcDtlId(kh.getId());
+                    dataLink.setKeHoachDcHdrId(kh.getHdrId());
+                    Optional<DcnbKeHoachDcDtl> parentDtl = dcnbKeHoachDcDtlRepository.findById(kh.getParentId());
+                    dataLink.setKeHoachDcDtlParentId(parentDtl.get().getId());
+                    dataLink.setKeHoachDcHdrParentId(parentDtl.get().getHdrId());
+                    dataLink.setQdCcId(clonedObj.getId());
+                    dataLink.setQdCcParentId(clonedObj.getParentId());
+                    dataLink.setQdCtcId(clonedObj.getCanCuQdTc());
+                    dataLink.setType(Contains.DIEU_CHUYEN);
+                    dcnbDataLinkHdrRepository.save(dataLink);
+                }
+            }
             fileDinhKemService.delete(clonedObj.getId(), Lists.newArrayList(DcnbQuyetDinhDcCHdr.TABLE_NAME + "_CAN_CU"));
             List<FileDinhKemReq> fileDinhKemReqs = clonedObj.getCanCu().stream()
                     .map(person -> new ModelMapper().map(person, FileDinhKemReq.class))
@@ -684,7 +684,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
         }
     }
 
-    private void cloneQuyetDinhDcCNhan(StatusReq statusReq, Optional<DcnbQuyetDinhDcCHdr> optional) throws Exception {
+    private void cloneQuyetDinhDcCNhan(StatusReq statusReq, Optional<DcnbQuyetDinhDcCHdr> optional, boolean isClone) throws Exception {
         // xử lý clone cho chi cục với TYPE là NDC
         List<DcnbQuyetDinhDcCDtl> danhSachQuyetDinh = optional.get().getDanhSachQuyetDinh();
         List<DcnbKeHoachDcDtl> danhSachKeHoachs = new ArrayList<>();
@@ -767,7 +767,25 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
             });
             clonedObj.setDanhSachQuyetDinh(quyetDinhDcCDtlsClone);
             clonedObj.setTrangThai(Contains.YC_CHICUC_PHANBO_DC);
-            dcnbQuyetDinhDcCHdrRepository.save(clonedObj);
+            clonedObj = dcnbQuyetDinhDcCHdrRepository.save(clonedObj);
+            if(isClone){
+                for(DcnbQuyetDinhDcCDtl ds : clonedObj.getDanhSachQuyetDinh()){
+                    for(DcnbKeHoachDcDtl kh : ds.getDanhSachKeHoach()){
+                        DcnbDataLinkHdr dataLink = new DcnbDataLinkHdr();
+                        dataLink.setKeHoachDcDtlId(kh.getId());
+                        dataLink.setKeHoachDcHdrId(kh.getHdrId());
+                        Optional<DcnbKeHoachDcDtl> parentDtl = dcnbKeHoachDcDtlRepository.findById(kh.getParentId());
+                        dataLink.setKeHoachDcDtlParentId(parentDtl.get().getId());
+                        dataLink.setKeHoachDcHdrParentId(parentDtl.get().getHdrId());
+                        dataLink.setQdCcId(clonedObj.getId());
+                        dataLink.setQdCcParentId(clonedObj.getParentId());
+                        dataLink.setQdCtcId(clonedObj.getCanCuQdTc());
+                        dataLink.setType(Contains.NHAN_DIEU_CHUYEN);
+                        dcnbDataLinkHdrRepository.save(dataLink);
+                    }
+                }
+            }
+
             fileDinhKemService.delete(clonedObj.getId(), Lists.newArrayList(DcnbQuyetDinhDcCHdr.TABLE_NAME + "_CAN_CU"));
             List<FileDinhKemReq> fileDinhKemReqs = clonedObj.getCanCu().stream()
                     .map(person -> new ModelMapper().map(person, FileDinhKemReq.class))

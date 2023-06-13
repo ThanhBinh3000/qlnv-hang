@@ -22,4 +22,5 @@ public class SearchDcnbBienBanLayMau extends BaseRequest {
     private String loaiDc;
     private String trangThai;
     private String type;
+    private String typeDataLink;
 }

@@ -3,7 +3,7 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbNhapDayKhoDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbNhapDayKhoHdrRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbNhapDayKhoHdrReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBbNhapDayKhoService;
@@ -36,7 +36,7 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
     private FileDinhKemService fileDinhKemService;
 
     @Autowired
-    private DcnbDataLinkRepository dcnbDataLinkRepository;
+    private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
 
     @Override
     public Page<DcnbBbNhapDayKhoHdr> searchPage(DcnbBbNhapDayKhoHdrReq req) throws Exception {

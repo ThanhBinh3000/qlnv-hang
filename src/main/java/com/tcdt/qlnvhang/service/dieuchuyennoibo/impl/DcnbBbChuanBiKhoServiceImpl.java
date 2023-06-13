@@ -3,10 +3,7 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBBNTBQDtlRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBBNTBQHdrRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbChuanBiKhoDtlRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbChuanBiKhoHdrRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbChuanBiKhoHdrReq;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBNTBQHdrDTO;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbChuanBiKhoHdrDTO;
@@ -15,9 +12,7 @@ import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBbChuanBiKhoService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbChuanBiKhoHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanTinhKhoHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.springframework.beans.BeanUtils;
@@ -40,6 +35,10 @@ public class DcnbBbChuanBiKhoServiceImpl implements DcnbBbChuanBiKhoService {
 
     @Autowired
     private DcnbBbChuanBiKhoHdrRepository hdrRepository;
+    @Autowired
+    private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
+    @Autowired
+    private DcnbDataLinkDtlRepository dcnbDataLinkDtlRepository;
 
     @Autowired
     private DcnbBbChuanBiKhoDtlRepository dtlRepository;
@@ -159,6 +158,15 @@ public class DcnbBbChuanBiKhoServiceImpl implements DcnbBbChuanBiKhoService {
                 break;
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
                 hdr.setIdLanhDao(userInfo.getId());
+                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(hdr.getMaDvi(),
+                        hdr.getQdDcCucId(),
+                        hdr.getMaNganKho(),
+                        hdr.getMaLoKho());
+                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
+                dataLinkDtl.setLinkId(hdr.getId());
+                dataLinkDtl.setHdrId(dataLink.getId());
+                dataLinkDtl.setType(DcnbBbChuanBiKhoHdr.TABLE_NAME);
+                dcnbDataLinkDtlRepository.save(dataLinkDtl);
                 break;
             // Arena từ chối
             case Contains.CHODUYET_TK + Contains.TUCHOI_TK:

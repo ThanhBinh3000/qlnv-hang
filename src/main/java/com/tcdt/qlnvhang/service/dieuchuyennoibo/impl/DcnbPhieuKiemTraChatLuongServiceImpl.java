@@ -3,6 +3,8 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkDtlRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKtChatLuongDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKtChatLuongHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -37,6 +39,10 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
 
     @Autowired
     DcnbPhieuKtChatLuongHdrRepository dcnbPhieuKtChatLuongHdrRepository;
+    @Autowired
+    DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
+    @Autowired
+    DcnbDataLinkDtlRepository dcnbDataLinkDtlRepository;
 
     @Autowired
     DcnbPhieuKtChatLuongDtlRepository dcnbPhieuKtChatLuongDtlRepository;
@@ -200,6 +206,15 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
             case Contains.CHODUYET_LDC + Contains.DA_DUYET_LDC:
                 optional.get().setNguoiPDuyet(currentUser.getUser().getId());
                 optional.get().setNgayPDuyet(LocalDate.now());
+                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(optional.get().getMaDvi(),
+                        optional.get().getQdDcId(),
+                        optional.get().getMaNganKho(),
+                        optional.get().getMaLoKho());
+                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
+                dataLinkDtl.setLinkId(optional.get().getId());
+                dataLinkDtl.setHdrId(dataLink.getId());
+                dataLinkDtl.setType(DcnbPhieuKtChatLuongHdr.TABLE_NAME);
+                dcnbDataLinkDtlRepository.save(dataLinkDtl);
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
