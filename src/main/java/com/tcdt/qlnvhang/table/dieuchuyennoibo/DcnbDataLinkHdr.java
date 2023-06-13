@@ -37,6 +37,8 @@ public class DcnbDataLinkHdr {
     private Long qdCcParentId;
     @Column(name = "QD_CTC_ID")
     private Long qdCtcId;
+    @Column(name = "TYPE")
+    private String type;
 
     @Transient
     private List<DcnbDataLinkDtl> dataLinkDtls = new ArrayList<>();

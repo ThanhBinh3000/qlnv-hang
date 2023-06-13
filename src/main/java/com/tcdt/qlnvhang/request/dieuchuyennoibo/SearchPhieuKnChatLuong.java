@@ -22,4 +22,5 @@ public class SearchPhieuKnChatLuong extends BaseRequest {
     private String soBbXuatDocKho;
     private String loaiDc;
     private String type;
+    private String typeDataLink;
 }

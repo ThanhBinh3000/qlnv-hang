@@ -64,7 +64,20 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        Page<DcnbPhieuKnChatLuongHdrDTO> dcnbQuyetDinhDcCHdrs = dcnbPhieuKnChatLuongHdrRepository.searchPage(req, pageable);
+
+        Page<DcnbPhieuKnChatLuongHdrDTO> dcnbQuyetDinhDcCHdrs = null;
+        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            dcnbQuyetDinhDcCHdrs = dcnbPhieuKnChatLuongHdrRepository.searchPageChiCuc(req, pageable);
+        }
+        if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            if("00".equals(req.getType())){
+                req.setTypeDataLink(Contains.DIEU_CHUYEN);
+            }else if("01".equals(req.getType())){
+                req.setTypeDataLink(Contains.NHAN_DIEU_CHUYEN);
+            }
+            dcnbQuyetDinhDcCHdrs = dcnbPhieuKnChatLuongHdrRepository.searchPageCuc(req, pageable);
+        }
+
         return dcnbQuyetDinhDcCHdrs;
     }
     @Transactional
@@ -246,7 +259,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         objReq.setPaggingReq(paggingReq);
         objReq.setMaDvi(currentUser.getDvql());
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit());
-        Page<DcnbPhieuKnChatLuongHdrDTO> page = dcnbPhieuKnChatLuongHdrRepository.searchPage(objReq,pageable);
+        Page<DcnbPhieuKnChatLuongHdrDTO> page = dcnbPhieuKnChatLuongHdrRepository.searchPageChiCuc(objReq,pageable);
         List<DcnbPhieuKnChatLuongHdrDTO> data = page.getContent();
 
         String title = "Danh sách phương án xuất cứu trợ, viện trợ ";

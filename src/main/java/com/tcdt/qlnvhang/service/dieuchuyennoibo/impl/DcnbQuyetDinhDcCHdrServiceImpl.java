@@ -454,6 +454,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                             dataLink.setQdCcId( optional.get().getId());
                             dataLink.setQdCcParentId( optional.get().getParentId());
                             dataLink.setQdCtcId( optional.get().getCanCuQdTc());
+                            dataLink.setType(Contains.NHAN_DIEU_CHUYEN);
                             dcnbDataLinkHdrRepository.save(dataLink);
                         }
                         kh.setDaXdinhDiemNhap(true);
@@ -666,6 +667,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                     dataLink.setQdCcId(clonedObj.getId());
                     dataLink.setQdCcParentId(clonedObj.getParentId());
                     dataLink.setQdCtcId(clonedObj.getCanCuQdTc());
+                    dataLink.setType(Contains.DIEU_CHUYEN);
                     dcnbDataLinkHdrRepository.save(dataLink);
                 }
             }
@@ -778,6 +780,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         dataLink.setQdCcId(clonedObj.getId());
                         dataLink.setQdCcParentId(clonedObj.getParentId());
                         dataLink.setQdCtcId(clonedObj.getCanCuQdTc());
+                        dataLink.setType(Contains.NHAN_DIEU_CHUYEN);
                         dcnbDataLinkHdrRepository.save(dataLink);
                     }
                 }

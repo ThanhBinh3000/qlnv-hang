@@ -7,6 +7,7 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeCanHangHdrDTO;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBienBanLayMauHdrDTO;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
@@ -57,7 +58,19 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl{
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        Page<DcnbBangKeCanHangHdrDTO> dcnbQuyetDinhDcCHdrs = dcnbBangKeCanHangHdrRepository.searchPage(req, pageable);
+
+        Page<DcnbBangKeCanHangHdrDTO> dcnbQuyetDinhDcCHdrs = null;
+        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            dcnbQuyetDinhDcCHdrs = dcnbBangKeCanHangHdrRepository.searchPage(req, pageable);
+        }
+        if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            if("00".equals(req.getType())){
+                req.setTypeDataLink(Contains.DIEU_CHUYEN);
+            }else if("01".equals(req.getType())){
+                req.setTypeDataLink(Contains.NHAN_DIEU_CHUYEN);
+            }
+            dcnbQuyetDinhDcCHdrs = dcnbBangKeCanHangHdrRepository.searchPageCuc(req, pageable);
+        }
         return dcnbQuyetDinhDcCHdrs;
     }
 
