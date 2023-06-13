@@ -119,7 +119,7 @@ public class XhBbLayMauBttHdr implements Serializable {
 
     private String lyDoTuChoi;
 
-    private String phanLoai;
+    private String pthucBanTrucTiep; // 01 : chào giá; 02 : Ủy quyền; 03 : Bán lẻ
 
     @Transient
     private List<XhBbLayMauBttDtl> children = new ArrayList<>();
