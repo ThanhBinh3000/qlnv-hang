@@ -10,7 +10,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbQuyetDinhDcCHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbQuyetDinhDcC;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbQuyetDinhDcCHdrService;
+import com.tcdt.qlnvhang.service.dieuchuyennoibo.impl.DcnbQuyetDinhDcCHdrServiceImpl;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,7 +34,7 @@ import java.util.Map;
 @Api(tags = "Điều chuyển nội bộ - Quyết định điều chuyển cục")
 public class DcnbQuyetDinhDcCHdrController extends BaseController {
   @Autowired
-  DcnbQuyetDinhDcCHdrService dcnbQuyetDinhDcCHdrService;
+  DcnbQuyetDinhDcCHdrServiceImpl dcnbQuyetDinhDcCHdrServiceImpl;
 
 
   @ApiOperation(value = "Tra cứu thông tin đề xuất", response = List.class)
@@ -44,7 +44,7 @@ public class DcnbQuyetDinhDcCHdrController extends BaseController {
                                                 @RequestBody SearchDcnbQuyetDinhDcC objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(dcnbQuyetDinhDcCHdrService.searchPage(currentUser,objReq));
+      resp.setData(dcnbQuyetDinhDcCHdrServiceImpl.searchPage(currentUser,objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch ( Exception e) {
@@ -63,7 +63,7 @@ public class DcnbQuyetDinhDcCHdrController extends BaseController {
   public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody DcnbQuyetDinhDcCHdrReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(dcnbQuyetDinhDcCHdrService.save(currentUser,objReq));
+      resp.setData(dcnbQuyetDinhDcCHdrServiceImpl.save(currentUser,objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -82,7 +82,7 @@ public class DcnbQuyetDinhDcCHdrController extends BaseController {
   public ResponseEntity<BaseResponse> danhSachQuyetDinhChiCuc(@CurrentUser CustomUserDetails currentUser, @RequestBody SearchDcnbQuyetDinhDcC objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(dcnbQuyetDinhDcCHdrService.danhSachQuyetDinhChiCuc(currentUser,objReq));
+      resp.setData(dcnbQuyetDinhDcCHdrServiceImpl.danhSachQuyetDinhChiCuc(currentUser,objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -99,7 +99,7 @@ public class DcnbQuyetDinhDcCHdrController extends BaseController {
   public ResponseEntity<BaseResponse> danhSachQuyetDinhCuc(@CurrentUser CustomUserDetails currentUser, @RequestBody SearchDcnbQuyetDinhDcC objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(dcnbQuyetDinhDcCHdrService.danhSachQuyetDinhCuc(currentUser,objReq));
+      resp.setData(dcnbQuyetDinhDcCHdrServiceImpl.danhSachQuyetDinhCuc(currentUser,objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -115,7 +115,7 @@ public class DcnbQuyetDinhDcCHdrController extends BaseController {
   public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody DcnbQuyetDinhDcCHdrReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(dcnbQuyetDinhDcCHdrService.update(currentUser,objReq));
+      resp.setData(dcnbQuyetDinhDcCHdrServiceImpl.update(currentUser,objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -134,7 +134,7 @@ public class DcnbQuyetDinhDcCHdrController extends BaseController {
       @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids")List<Long> ids) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(dcnbQuyetDinhDcCHdrService.detail(ids).get(0));
+      resp.setData(dcnbQuyetDinhDcCHdrServiceImpl.detail(ids).get(0));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -151,7 +151,7 @@ public class DcnbQuyetDinhDcCHdrController extends BaseController {
   public ResponseEntity<BaseResponse> updateStatus( @CurrentUser CustomUserDetails currentUser,@Valid @RequestBody StatusReq stReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      dcnbQuyetDinhDcCHdrService.approve(currentUser,stReq);
+      dcnbQuyetDinhDcCHdrServiceImpl.approve(currentUser,stReq);
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -170,7 +170,7 @@ public class DcnbQuyetDinhDcCHdrController extends BaseController {
   public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      dcnbQuyetDinhDcCHdrService.delete(idSearchReq);
+      dcnbQuyetDinhDcCHdrServiceImpl.delete(idSearchReq);
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -189,7 +189,7 @@ public class DcnbQuyetDinhDcCHdrController extends BaseController {
   public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      dcnbQuyetDinhDcCHdrService.deleteMulti(idSearchReq);
+      dcnbQuyetDinhDcCHdrServiceImpl.deleteMulti(idSearchReq);
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -206,7 +206,7 @@ public class DcnbQuyetDinhDcCHdrController extends BaseController {
   @ResponseStatus(HttpStatus.OK)
   public void exportList(@CurrentUser CustomUserDetails currentUser ,@Valid @RequestBody  SearchDcnbQuyetDinhDcC objReq, HttpServletResponse response) throws Exception {
     try {
-      dcnbQuyetDinhDcCHdrService.export( currentUser,objReq, response);
+      dcnbQuyetDinhDcCHdrServiceImpl.export( currentUser,objReq, response);
 
     } catch (Exception e) {
       log.error("Kết xuất danh sách dánh sách mua : {}", e);

@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.service.dieuchuyennoibo;
+package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
@@ -35,7 +35,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
-public class DcnbPhieuKiemNghiemChatLuongService extends BaseServiceImpl {
+public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
 
     @Autowired
     DcnbPhieuKnChatLuongHdrRepository dcnbPhieuKnChatLuongHdrRepository;
@@ -53,10 +53,10 @@ public class DcnbPhieuKiemNghiemChatLuongService extends BaseServiceImpl {
     DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
 
     @Autowired
-    DcnbQuyetDinhDcCHdrService dcnbQuyetDinhDcCHdrService;
+    DcnbQuyetDinhDcCHdrServiceImpl dcnbQuyetDinhDcCHdrServiceImpl;
 
     @Autowired
-    DcnbKeHoachNhapXuatService dcnbKeHoachNhapXuatService;
+    private DcnbDataLinkRepository dcnbDataLinkRepository;
 
     public Page<DcnbPhieuKnChatLuongHdrDTO> searchPage(CustomUserDetails currentUser, SearchPhieuKnChatLuong req) throws Exception {
         String dvql = currentUser.getDvql();
@@ -223,7 +223,7 @@ public class DcnbPhieuKiemNghiemChatLuongService extends BaseServiceImpl {
 //                    dataLink.setHdrId(optional.get().getId());
 //                    dataLink.setType(DcnbPhieuKnChatLuongHdr.TABLE_NAME);
                     try {
-                        dcnbKeHoachNhapXuatService.saveOrUpdate(dataLink);
+                        dcnbDataLinkRepository.save(dataLink);
                     } catch (Exception ex) {
                         throw new RuntimeException(ex);
                     }

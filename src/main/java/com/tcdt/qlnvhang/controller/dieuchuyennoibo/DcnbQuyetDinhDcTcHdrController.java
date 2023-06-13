@@ -10,7 +10,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbQuyetDinhDcTcHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbQuyetDinhDcTc;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbQuyetDinhDcTcDtlService;
+import com.tcdt.qlnvhang.service.dieuchuyennoibo.impl.DcnbQuyetDinhDcTcDtlServiceImpl;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,7 +35,7 @@ import java.util.Map;
 public class DcnbQuyetDinhDcTcHdrController extends BaseController {
   //    DcnbQuyetDinhDcTcHdr
   @Autowired
-  DcnbQuyetDinhDcTcDtlService dcnbQuyetDinhDcTcDtlService;
+  DcnbQuyetDinhDcTcDtlServiceImpl dcnbQuyetDinhDcTcDtlServiceImpl;
 
   @ApiOperation(value = "Tra cứu thông tin đề xuất", response = List.class)
   @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -44,7 +44,7 @@ public class DcnbQuyetDinhDcTcHdrController extends BaseController {
                                                 @RequestBody SearchDcnbQuyetDinhDcTc objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(dcnbQuyetDinhDcTcDtlService.searchPage(currentUser,objReq));
+      resp.setData(dcnbQuyetDinhDcTcDtlServiceImpl.searchPage(currentUser,objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch ( Exception e) {
@@ -63,7 +63,7 @@ public class DcnbQuyetDinhDcTcHdrController extends BaseController {
   public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody DcnbQuyetDinhDcTcHdrReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(dcnbQuyetDinhDcTcDtlService.save(currentUser,objReq));
+      resp.setData(dcnbQuyetDinhDcTcDtlServiceImpl.save(currentUser,objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -81,7 +81,7 @@ public class DcnbQuyetDinhDcTcHdrController extends BaseController {
   public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody DcnbQuyetDinhDcTcHdrReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(dcnbQuyetDinhDcTcDtlService.update(currentUser,objReq));
+      resp.setData(dcnbQuyetDinhDcTcDtlServiceImpl.update(currentUser,objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -100,7 +100,7 @@ public class DcnbQuyetDinhDcTcHdrController extends BaseController {
       @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids")List<Long> ids) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(dcnbQuyetDinhDcTcDtlService.detail(ids).get(0));
+      resp.setData(dcnbQuyetDinhDcTcDtlServiceImpl.detail(ids).get(0));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -117,7 +117,7 @@ public class DcnbQuyetDinhDcTcHdrController extends BaseController {
   public ResponseEntity<BaseResponse> updateStatus( @CurrentUser CustomUserDetails currentUser,@Valid @RequestBody StatusReq stReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      dcnbQuyetDinhDcTcDtlService.approve(currentUser,stReq);
+      dcnbQuyetDinhDcTcDtlServiceImpl.approve(currentUser,stReq);
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -136,7 +136,7 @@ public class DcnbQuyetDinhDcTcHdrController extends BaseController {
   public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      dcnbQuyetDinhDcTcDtlService.delete(idSearchReq);
+      dcnbQuyetDinhDcTcDtlServiceImpl.delete(idSearchReq);
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -155,7 +155,7 @@ public class DcnbQuyetDinhDcTcHdrController extends BaseController {
   public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      dcnbQuyetDinhDcTcDtlService.deleteMulti(idSearchReq);
+      dcnbQuyetDinhDcTcDtlServiceImpl.deleteMulti(idSearchReq);
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -172,7 +172,7 @@ public class DcnbQuyetDinhDcTcHdrController extends BaseController {
   @ResponseStatus(HttpStatus.OK)
   public void exportList(@CurrentUser CustomUserDetails currentUser ,@Valid @RequestBody  SearchDcnbQuyetDinhDcTc objReq, HttpServletResponse response) throws Exception {
     try {
-      dcnbQuyetDinhDcTcDtlService.export( currentUser,objReq, response);
+      dcnbQuyetDinhDcTcDtlServiceImpl.export( currentUser,objReq, response);
 
     } catch (Exception e) {
       log.error("Kết xuất danh sách dánh sách mua : {}", e);
@@ -193,7 +193,7 @@ public class DcnbQuyetDinhDcTcHdrController extends BaseController {
   public ResponseEntity<BaseResponse> danhSachQuyetDinh(@CurrentUser CustomUserDetails currentUser,@RequestBody SearchDcnbQuyetDinhDcTc objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(dcnbQuyetDinhDcTcDtlService.danhSachQuyetDinh(currentUser,objReq));
+      resp.setData(dcnbQuyetDinhDcTcDtlServiceImpl.danhSachQuyetDinh(currentUser,objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {

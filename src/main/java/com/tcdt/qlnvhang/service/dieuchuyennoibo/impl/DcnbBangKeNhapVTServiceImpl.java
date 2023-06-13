@@ -1,6 +1,7 @@
-package com.tcdt.qlnvhang.service.dieuchuyennoibo;
+package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBangKeNhapVTReq;
+import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBangKeNhapVTService;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeNhapVTHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Service
-public class DcnbBangKeNhapVTServiceImpl implements DcnbBangKeNhapVTService{
+public class DcnbBangKeNhapVTServiceImpl implements DcnbBangKeNhapVTService {
     @Override
     public Page<DcnbBangKeNhapVTHdr> searchPage(DcnbBangKeNhapVTReq req) throws Exception {
         return null;

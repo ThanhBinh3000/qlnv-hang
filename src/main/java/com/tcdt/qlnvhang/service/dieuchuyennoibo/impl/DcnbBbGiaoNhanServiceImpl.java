@@ -1,15 +1,17 @@
-package com.tcdt.qlnvhang.service.dieuchuyennoibo;
+package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.google.common.collect.Lists;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuNhapKhoDtlRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuNhapKhoHdrRepository;
-import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbPhieuNhapKhoHdrReq;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbGiaoNhanDtlRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbGiaoNhanHdrRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkRepository;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbGiaoNhanHdrReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBbGiaoNhanService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuNhapKhoHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbGiaoNhanHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,27 +25,27 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
-public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
+public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
 
     @Autowired
-    private DcnbPhieuNhapKhoHdrRepository hdrRepository;
+    private DcnbBbGiaoNhanHdrRepository hdrRepository;
 
     @Autowired
-    private DcnbPhieuNhapKhoDtlRepository dtlRepository;
+    private DcnbBbGiaoNhanDtlRepository dtlRepository;
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
 
     @Autowired
-    private DcnbKeHoachNhapXuatService dcnbKeHoachNhapXuatService;
+    private DcnbDataLinkRepository dcnbDataLinkRepository;
 
     @Override
-    public Page<DcnbPhieuNhapKhoHdr> searchPage(DcnbPhieuNhapKhoHdrReq req) throws Exception {
+    public Page<DcnbBbGiaoNhanHdr> searchPage(DcnbBbGiaoNhanHdrReq req) throws Exception {
         return null;
     }
 
     @Override
-    public DcnbPhieuNhapKhoHdr create(DcnbPhieuNhapKhoHdrReq req) throws Exception {
+    public DcnbBbGiaoNhanHdr create(DcnbBbGiaoNhanHdrReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null){
             throw new Exception("Access denied.");
@@ -51,31 +53,31 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
         if(!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
             throw new Exception("Văn bản này chỉ có thêm ở cấp chi cục");
         }
-        Optional<DcnbPhieuNhapKhoHdr> optional = hdrRepository.findBySoPhieuNhapKho(req.getSoPhieuNhapKho());
+        Optional<DcnbBbGiaoNhanHdr> optional = hdrRepository.findFirstBySoBb(req.getSoBb());
         if (optional.isPresent()) {
             throw new Exception("Số biên bản đã tồn tại");
         }
 
-        DcnbPhieuNhapKhoHdr data = new DcnbPhieuNhapKhoHdr();
+        DcnbBbGiaoNhanHdr data = new DcnbBbGiaoNhanHdr();
         BeanUtils.copyProperties(req, data);
         data.setMaDvi(userInfo.getDvql());
-        data.setId(Long.parseLong(req.getSoPhieuNhapKho().split("/")[0]));
+        data.setId(Long.parseLong(req.getSoBb().split("/")[0]));
         req.getChildren().forEach(e -> {
             e.setParent(data);
         });
-        DcnbPhieuNhapKhoHdr created = hdrRepository.save(data);
+        DcnbBbGiaoNhanHdr created = hdrRepository.save(data);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBBNTBQHdr.TABLE_NAME);
         created.setFileDinhKems(canCu);
 //        DcnbKeHoachDcDtlTT kh = new DcnbKeHoachDcDtlTT();
 //        kh.setIdHdr(created.getId());
-//        kh.setTableName(DcnbPhieuNhapKhoHdr.TABLE_NAME);
+//        kh.setTableName(DcnbBbGiaoNhanHdr.TABLE_NAME);
 //        kh.setIdKhDcDtl(data.getIdKeHoachDtl());
 //        dcnbKeHoachNhapXuatService.saveOrUpdate(kh);
         return created;
     }
 
     @Override
-    public DcnbPhieuNhapKhoHdr update(DcnbPhieuNhapKhoHdrReq req) throws Exception {
+    public DcnbBbGiaoNhanHdr update(DcnbBbGiaoNhanHdrReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null){
             throw new Exception("Access denied.");
@@ -83,14 +85,14 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
         if(!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
             throw new Exception("Văn bản này chỉ có thêm ở cấp chi cục");
         }
-        Optional<DcnbPhieuNhapKhoHdr> optional = hdrRepository.findById(req.getId());
+        Optional<DcnbBbGiaoNhanHdr> optional = hdrRepository.findById(req.getId());
         if (!optional.isPresent()) {
             throw new Exception("Số biên bản không tồn tại");
         }
-        DcnbPhieuNhapKhoHdr data = optional.get();
+        DcnbBbGiaoNhanHdr data = optional.get();
         BeanUtils.copyProperties(req,data);
         data.setChildren(req.getChildren());
-        DcnbPhieuNhapKhoHdr update = hdrRepository.save(data);
+        DcnbBbGiaoNhanHdr update = hdrRepository.save(data);
         fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbBBNTBQHdr.TABLE_NAME));
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), update.getId(), DcnbBBNTBQHdr.TABLE_NAME);
         update.setFileDinhKems(canCu);
@@ -98,7 +100,7 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
     }
 
     @Override
-    public DcnbPhieuNhapKhoHdr detail(Long id) throws Exception {
+    public DcnbBbGiaoNhanHdr detail(Long id) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null){
             throw new Exception("Access denied.");
@@ -106,58 +108,48 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
         if(Objects.isNull(id)){
             throw new Exception("Id is null");
         }
-        Optional<DcnbPhieuNhapKhoHdr> optional = hdrRepository.findById(id);
+        Optional<DcnbBbGiaoNhanHdr> optional = hdrRepository.findById(id);
         if (!optional.isPresent()) {
             throw new Exception("Số biên bản không tồn tại");
         }
-        DcnbPhieuNhapKhoHdr data = optional.get();
+        DcnbBbGiaoNhanHdr data = optional.get();
         data.setFileDinhKems(fileDinhKemService.search(id, Collections.singleton(DcnbBBNTBQHdr.TABLE_NAME)));
         return data;
     }
 
     @Override
-    public DcnbPhieuNhapKhoHdr approve(DcnbPhieuNhapKhoHdrReq req) throws Exception {
+    public DcnbBbGiaoNhanHdr approve(DcnbBbGiaoNhanHdrReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null){
             throw new Exception("Access denied.");
         }
-        DcnbPhieuNhapKhoHdr hdr = detail(req.getId());
+        DcnbBbGiaoNhanHdr hdr = detail(req.getId());
         String status = hdr.getTrangThai() + req.getTrangThai();
         switch (status) {
             // Arena các roll back approve
-            case Contains.TUCHOI_TK + Contains.DUTHAO:
-            case Contains.TUCHOI_KT + Contains.DUTHAO:
-            case Contains.TUCHOI_LDCC + Contains.DUTHAO:
+            case Contains.TUCHOI_LDC + Contains.DUTHAO:
                 break;
             // Arena các cấp duuyệt
-            case Contains.DUTHAO + Contains.CHODUYET_TK:
+            case Contains.DUTHAO + Contains.CHODUYET_LDC:
                 break;
-            case Contains.CHODUYET_TK + Contains.CHODUYET_KT:
-                hdr.setIdThuKho(userInfo.getId());
-                break;
-            case Contains.CHODUYET_KT + Contains.CHODUYET_LDCC:
-//                hdr.setIdKeToan(userInfo.getId());
-                break;
-            case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
+            case Contains.CHODUYET_LDC + Contains.DADUYET_LDCC:
                 hdr.setIdLanhDao(userInfo.getId());
                 break;
             // Arena từ chối
-            case Contains.CHODUYET_TK + Contains.TUCHOI_TK:
-            case Contains.CHODUYET_KT + Contains.TUCHOI_KT:
-            case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
+            case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
                 hdr.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
         }
         hdr.setTrangThai(req.getTrangThai());
-        DcnbPhieuNhapKhoHdr created = hdrRepository.save(hdr);
+        DcnbBbGiaoNhanHdr created = hdrRepository.save(hdr);
         return created;
     }
 
     @Override
     public void delete(Long id) throws Exception {
-        DcnbPhieuNhapKhoHdr detail = detail(id);
+        DcnbBbGiaoNhanHdr detail = detail(id);
         hdrRepository.delete(detail);
         dtlRepository.deleteAllByHdrId(id);
     }
@@ -178,7 +170,7 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
     }
 
     @Override
-    public void export(DcnbPhieuNhapKhoHdrReq req, HttpServletResponse response) throws Exception {
+    public void export(DcnbBbGiaoNhanHdrReq req, HttpServletResponse response) throws Exception {
 
     }
 }

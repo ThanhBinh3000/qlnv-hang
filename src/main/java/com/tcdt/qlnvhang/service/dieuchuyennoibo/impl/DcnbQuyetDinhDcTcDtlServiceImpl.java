@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.service.dieuchuyennoibo;
+package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
@@ -38,8 +38,8 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class DcnbQuyetDinhDcTcDtlService extends BaseServiceImpl {
-    private static final Logger logger = LoggerFactory.getLogger(DcnbQuyetDinhDcTcDtlService.class);
+public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
+    private static final Logger logger = LoggerFactory.getLogger(DcnbQuyetDinhDcTcDtlServiceImpl.class);
 
     @Autowired
     private DcnbQuyetDinhDcTcHdrRepository dcnbQuyetDinhDcTcHdrRepository;

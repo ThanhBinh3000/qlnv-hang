@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.service.dieuchuyennoibo;
+package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
@@ -33,7 +33,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class DcnbPhieuKiemTraChatLuongService extends BaseServiceImpl {
+public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
 
     @Autowired
     DcnbPhieuKtChatLuongHdrRepository dcnbPhieuKtChatLuongHdrRepository;

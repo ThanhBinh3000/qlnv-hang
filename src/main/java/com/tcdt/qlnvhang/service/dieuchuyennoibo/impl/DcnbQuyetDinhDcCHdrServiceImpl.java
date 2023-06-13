@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.service.dieuchuyennoibo;
+package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
@@ -11,7 +11,6 @@ import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbQuyetDinhDcCHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbQuyetDinhDcC;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO;
-import com.tcdt.qlnvhang.service.feign.LuuKhoClient;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -42,8 +41,8 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class DcnbQuyetDinhDcCHdrService extends BaseServiceImpl {
-    private static final Logger logger = LoggerFactory.getLogger(DcnbQuyetDinhDcCHdrService.class);
+public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
+    private static final Logger logger = LoggerFactory.getLogger(DcnbQuyetDinhDcCHdrServiceImpl.class);
 
     @Autowired
     private DcnbQuyetDinhDcCHdrRepository dcnbQuyetDinhDcCHdrRepository;
@@ -58,11 +57,11 @@ public class DcnbQuyetDinhDcCHdrService extends BaseServiceImpl {
     @Autowired
     private DcnbKeHoachDcHdrRepository dcnbKeHoachDcHdrRepository;
     @Autowired
-    private DcnbKeHoachDcHdrService dcnbKeHoachDcHdrService;
-    @Autowired
-    private LuuKhoClient luuKhoClient;
+    private DcnbKeHoachDcHdrServiceImpl dcnbKeHoachDcHdrServiceImpl;
     @Autowired
     private QlnvDmDonviRepository qlnvDmDonviRepository;
+    @Autowired
+    private DcnbDataLinkRepository dcnbDataLinkRepository;
 
     public Page<DcnbQuyetDinhDcCHdr> searchPage(CustomUserDetails currentUser, SearchDcnbQuyetDinhDcC req) throws Exception {
         String dvql = currentUser.getDvql();
@@ -446,6 +445,16 @@ public class DcnbQuyetDinhDcCHdrService extends BaseServiceImpl {
                             parentDtl.get().setSlDcConLai(kh.getSlDcConLai());
                             parentDtl.get().setDaXdinhDiemNhap(true);
                             dcnbKeHoachDcDtlRepository.save(parentDtl.get());
+
+                            DcnbDataLink dataLink = new DcnbDataLink();
+                            dataLink.setKeHoachDcDtlId(kh.getId());
+                            dataLink.setKeHoachDcHdrId(kh.getHdrId());
+                            dataLink.setKeHoachDcDtlParentId(parentDtl.get().getId());
+                            dataLink.setKeHoachDcHdrParentId(parentDtl.get().getHdrId());
+                            dataLink.setQdCcId( optional.get().getId());
+                            dataLink.setQdCcParentId( optional.get().getParentId());
+                            dataLink.setQdCtcId( optional.get().getCanCuQdTc());
+                            dcnbDataLinkRepository.save(dataLink);
                         }
                         kh.setDaXdinhDiemNhap(true);
                         dcnbKeHoachDcDtlRepository.save(kh);
@@ -549,6 +558,22 @@ public class DcnbQuyetDinhDcCHdrService extends BaseServiceImpl {
                     // clone chi cục xuat
                     cloneQuyetDinhDcCXuat(statusReq, optional);
                 }
+                if(!Contains.GIUA_2_CUC_DTNN_KV.equals(optional.get().getLoaiDc())){
+                    List<DcnbQuyetDinhDcCDtl> danhSachQuyetDinh = optional.get().getDanhSachQuyetDinh();
+                    for(DcnbQuyetDinhDcCDtl ds : danhSachQuyetDinh){
+                        for(DcnbKeHoachDcDtl kh : ds.getDanhSachKeHoach()){
+                            DcnbDataLink dataLink = new DcnbDataLink();
+                            dataLink.setKeHoachDcDtlId(null);
+                            dataLink.setKeHoachDcHdrId(null);
+                            dataLink.setKeHoachDcDtlParentId(kh.getId());
+                            dataLink.setKeHoachDcHdrParentId(kh.getHdrId());
+                            dataLink.setQdCcId(null);
+                            dataLink.setQdCcParentId(optional.get().getParentId());
+                            dataLink.setQdCtcId(optional.get().getCanCuQdTc());
+                            dcnbDataLinkRepository.save(dataLink);
+                        }
+                    }
+                }
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
@@ -592,7 +617,7 @@ public class DcnbQuyetDinhDcCHdrService extends BaseServiceImpl {
                     clonedDtl.setId(null);
                     Optional<DcnbKeHoachDcHdr> keHoachDcHdrOpt = null;
                     try {
-                        keHoachDcHdrOpt = Optional.ofNullable(dcnbKeHoachDcHdrService.details(dcnbKeHoachDcHdrId));
+                        keHoachDcHdrOpt = Optional.ofNullable(dcnbKeHoachDcHdrServiceImpl.details(dcnbKeHoachDcHdrId));
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
@@ -688,7 +713,7 @@ public class DcnbQuyetDinhDcCHdrService extends BaseServiceImpl {
                     clonedDtl.setId(null);
                     Optional<DcnbKeHoachDcHdr> keHoachDcHdrOpt = null;
                     try {
-                        keHoachDcHdrOpt = Optional.ofNullable(dcnbKeHoachDcHdrService.details(dcnbKeHoachDcHdrId));
+                        keHoachDcHdrOpt = Optional.ofNullable(dcnbKeHoachDcHdrServiceImpl.details(dcnbKeHoachDcHdrId));
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
