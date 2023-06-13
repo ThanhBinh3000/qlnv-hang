@@ -9,9 +9,8 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbKeHoachDcHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbKeHoachDc;
-import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbQuyetDinhDcC;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbKeHoachDcHdrService;
+import com.tcdt.qlnvhang.service.dieuchuyennoibo.impl.DcnbKeHoachDcHdrServiceImpl;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,7 +34,7 @@ import java.util.Map;
 @Api(tags = "Điều chuyển nội bộ - Kế hoạch điều chuyển")
 public class DcnbKeHoachDcHdrController extends BaseController {
   @Autowired
-  DcnbKeHoachDcHdrService dcnbKeHoachDcHdrService;
+  DcnbKeHoachDcHdrServiceImpl dcnbKeHoachDcHdrServiceImpl;
 
 
   @ApiOperation(value = "Tra cứu thông tin đề xuất", response = List.class)
@@ -45,7 +44,7 @@ public class DcnbKeHoachDcHdrController extends BaseController {
                                                 @RequestBody SearchDcnbKeHoachDc objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(dcnbKeHoachDcHdrService.searchPage(currentUser,objReq));
+      resp.setData(dcnbKeHoachDcHdrServiceImpl.searchPage(currentUser,objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch ( Exception e) {
@@ -64,7 +63,7 @@ public class DcnbKeHoachDcHdrController extends BaseController {
   public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody DcnbKeHoachDcHdrReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(dcnbKeHoachDcHdrService.save(currentUser,objReq));
+      resp.setData(dcnbKeHoachDcHdrServiceImpl.save(currentUser,objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -82,7 +81,7 @@ public class DcnbKeHoachDcHdrController extends BaseController {
   public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody DcnbKeHoachDcHdrReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(dcnbKeHoachDcHdrService.update(currentUser,objReq));
+      resp.setData(dcnbKeHoachDcHdrServiceImpl.update(currentUser,objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -94,23 +93,6 @@ public class DcnbKeHoachDcHdrController extends BaseController {
     return ResponseEntity.ok(resp);
   }
 
-  @ApiOperation(value = "Danh sách lô kho", response = List.class)
-  @PostMapping(value = "/danh-sach-lo-kho", produces = MediaType.APPLICATION_JSON_VALUE)
-  @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<BaseResponse> danhSachLoKho(@RequestBody SearchDcnbKeHoachDc objReq) {
-    BaseResponse resp = new BaseResponse();
-    try {
-      resp.setData(dcnbKeHoachDcHdrService.danhSachMaLokho(objReq));
-      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-    } catch (Exception e) {
-      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-      resp.setMsg(e.getMessage());
-      log.error("Tra cứu thông tin : {}", e);
-    }
-    return ResponseEntity.ok(resp);
-  }
-
   @ApiOperation(value = "Lấy chi tiết thông tin đề xuất", response = List.class)
   @GetMapping(value =  PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
@@ -118,7 +100,7 @@ public class DcnbKeHoachDcHdrController extends BaseController {
       @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids")List<Long> ids) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(dcnbKeHoachDcHdrService.details(ids).get(0));
+      resp.setData(dcnbKeHoachDcHdrServiceImpl.details(ids).get(0));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -137,7 +119,7 @@ public class DcnbKeHoachDcHdrController extends BaseController {
           @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids")List<Long> ids) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(dcnbKeHoachDcHdrService.detailDtl(ids));
+      resp.setData(dcnbKeHoachDcHdrServiceImpl.detailDtl(ids));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -154,7 +136,7 @@ public class DcnbKeHoachDcHdrController extends BaseController {
   public ResponseEntity<BaseResponse> updateStatus( @CurrentUser CustomUserDetails currentUser,@Valid @RequestBody StatusReq stReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      dcnbKeHoachDcHdrService.approve(currentUser,stReq);
+      dcnbKeHoachDcHdrServiceImpl.approve(currentUser,stReq);
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -173,7 +155,7 @@ public class DcnbKeHoachDcHdrController extends BaseController {
   public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      dcnbKeHoachDcHdrService.delete(idSearchReq);
+      dcnbKeHoachDcHdrServiceImpl.delete(idSearchReq);
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -192,7 +174,7 @@ public class DcnbKeHoachDcHdrController extends BaseController {
   public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      dcnbKeHoachDcHdrService.deleteMulti(idSearchReq);
+      dcnbKeHoachDcHdrServiceImpl.deleteMulti(idSearchReq);
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -209,7 +191,7 @@ public class DcnbKeHoachDcHdrController extends BaseController {
   @ResponseStatus(HttpStatus.OK)
   public void exportList(@CurrentUser CustomUserDetails currentUser ,@Valid @RequestBody  SearchDcnbKeHoachDc objReq, HttpServletResponse response) throws Exception {
     try {
-      dcnbKeHoachDcHdrService.export( currentUser,objReq, response);
+      dcnbKeHoachDcHdrServiceImpl.export( currentUser,objReq, response);
 
     } catch (Exception e) {
       log.error("Kết xuất danh sách dánh sách mua : {}", e);

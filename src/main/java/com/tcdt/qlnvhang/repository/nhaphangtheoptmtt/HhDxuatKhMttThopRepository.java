@@ -43,4 +43,9 @@ public interface HhDxuatKhMttThopRepository extends JpaRepository<HhDxKhMttThopH
     @Query(value = "UPDATE HH_DX_KHMTT_THOP_HDR SET TRANG_THAI =:trangThai WHERE ID = :idThHdr", nativeQuery = true)
     void updateTrangThai(Long idThHdr, String trangThai);
 
+    @Transactional()
+    @Modifying
+    @Query(value = "UPDATE HH_DX_KHMTT_THOP_HDR SET TRANG_THAI =:trangThai, SO_QD_PDUYET = null WHERE ID = :idThHdr", nativeQuery = true)
+    void updateTrangThaiAndSoQd(Long idThHdr, String trangThai);
+
 }

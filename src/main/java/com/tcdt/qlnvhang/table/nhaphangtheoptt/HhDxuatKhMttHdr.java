@@ -1,7 +1,10 @@
 package com.tcdt.qlnvhang.table.nhaphangtheoptt;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,7 +17,7 @@ import java.util.List;
 @Entity
 @Table(name = "HH_DX_KHMTT_HDR")
 @Data
-public class HhDxuatKhMttHdr extends TrangThaiBaseEntity implements Serializable {
+public class HhDxuatKhMttHdr implements Serializable {
 
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "HH_DX_KHMTT_HDR";
@@ -98,6 +101,50 @@ public class HhDxuatKhMttHdr extends TrangThaiBaseEntity implements Serializable
 
     @Transient
     private List<HhDxuatKhMttCcxdg> ccXdgDtlList = new ArrayList<>();
+
+    private String trangThai;
+
+    @Transient
+    private String tenTrangThai;
+
+
+    @Temporal(TemporalType.DATE)
+    private Date ngayTao;
+
+    @Column(columnDefinition = "Number")
+    private Long nguoiTaoId;
+
+    @Transient
+    private String tenNguoiTao;
+
+    @Column(columnDefinition = "Date")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngaySua;
+
+    @Column(columnDefinition = "Number")
+    private Long nguoiSuaId;
+
+    @Column(columnDefinition = "Number")
+    private Long nguoiGuiDuyetId;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    @Column(columnDefinition = "Date")
+    private Date ngayGuiDuyet;
+
+    @Column(columnDefinition = "Number")
+    private Long nguoiPduyetId;
+
+    @Transient
+    private String tenNguoiPduyet;
+
+    @Temporal(TemporalType.DATE)
+    private Date ngayPduyet;
+
+    private String lyDoTuChoi;
+
+    public String getTenTrangThai() {
+        return NhapXuatHangTrangThaiEnum.getTenById(trangThai);
+    }
 
 
 }

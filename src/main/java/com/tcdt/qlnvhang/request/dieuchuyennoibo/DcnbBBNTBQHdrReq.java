@@ -55,8 +55,8 @@ public class DcnbBBNTBQHdrReq extends BaseRequest {
     private String phuongThucBaoQuan;
     private Double dinhMucDuocGiao;
     private Double dinhMucTT;
-    private Double tongKinhPhiDaTh;
-    private Double tongKinhPhiDaThBc;
+    private BigDecimal tongKinhPhiDaTh;
+    private String tongKinhPhiDaThBc;
     private String maDiemKhoXuat;
     private String tenDiemKhoXuat;
     private String maNhaKhoXuat;
@@ -68,5 +68,5 @@ public class DcnbBBNTBQHdrReq extends BaseRequest {
     private String nhanXet;
     private String trangThai;
     private String lyDoTuChoi;
-    private List<DcnbBBNTBQDtl> dcnbBBNTBQDtlList = new ArrayList<>();
+    private List<DcnbBBNTBQDtl> dcnbBBNTBQDtl = new ArrayList<>();
 }

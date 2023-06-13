@@ -20,8 +20,8 @@ public class DcnbBienBanTinhKhoHdr extends BaseEntity implements Serializable, C
     public static final String TABLE_NAME = "DCNB_BIEN_BAN_TINH_KHO_HDR";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanLayMauDtl.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = DcnbBienBanLayMauDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanLayMauDtl.TABLE_NAME + "_SEQ")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanLayMauDtl.TABLE_NAME + "_SEQ")
+//    @SequenceGenerator(sequenceName = DcnbBienBanLayMauDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanLayMauDtl.TABLE_NAME + "_SEQ")
     private Long id;
 
     @Column(name = "NAM")
@@ -135,12 +135,6 @@ public class DcnbBienBanTinhKhoHdr extends BaseEntity implements Serializable, C
     @Column(name = "NGAY_GDUYET")
     private LocalDate ngayGDuyet;
 
-    @Column(name = "NGUOI_PDUYET")
-    private Long nguoiPDuyet;
-
-    @Column(name = "NGAY_PDUYET")
-    private LocalDate ngayPDuyet;
-
     @Column(name = "LOAI_DC")
     private String loaiDc;
 
@@ -171,7 +165,7 @@ public class DcnbBienBanTinhKhoHdr extends BaseEntity implements Serializable, C
     @Column(name = "KE_TOAN_ID")
     private Long keToanId;
 
-    @Column(name = "NGAY_PDUYET_LDCC")
+    @Column(name = "NGAY_PDUYET_LDCCUC")
     private LocalDate ngayPduyetLdcc;
 
     @Column(name = "LANH_DAO_CHI_CUC")
@@ -194,6 +188,9 @@ public class DcnbBienBanTinhKhoHdr extends BaseEntity implements Serializable, C
 
     @Column(name = "CHENH_LECH_SL_CON_LAI")
     private Double chenhLechSlConLai;
+
+    @Column(name = "TYPE")
+    private String type;
 
     @Transient
     private List<FileDinhKem> fileBbTinhKhoDaKy = new ArrayList<>();

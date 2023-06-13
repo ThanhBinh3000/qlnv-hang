@@ -9,7 +9,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbHoSoKyThuatHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbHoSoKyThuat;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbHoSoKyThuatHdrService;
+import com.tcdt.qlnvhang.service.dieuchuyennoibo.impl.DcnbHoSoKyThuatHdrServiceImpl;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,7 +33,7 @@ import java.util.Map;
 @Api(tags = "Điều chuyển nội bộ - Hồ sơ kỹ thuật")
 public class DcnbHoSoKyThuatHdrController {
     @Autowired
-    private DcnbHoSoKyThuatHdrService dcnbHoSoKyThuatHdrService;
+    private DcnbHoSoKyThuatHdrServiceImpl dcnbHoSoKyThuatHdrServiceImpl;
 
 
     @ApiOperation(value = "Tra cứu thông tin đề xuất", response = List.class)
@@ -43,7 +43,7 @@ public class DcnbHoSoKyThuatHdrController {
                                                   @RequestBody SearchDcnbHoSoKyThuat objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(dcnbHoSoKyThuatHdrService.searchPage(currentUser,objReq));
+            resp.setData(dcnbHoSoKyThuatHdrServiceImpl.searchPage(currentUser,objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch ( Exception e) {
@@ -62,7 +62,7 @@ public class DcnbHoSoKyThuatHdrController {
     public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody DcnbHoSoKyThuatHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(dcnbHoSoKyThuatHdrService.save(currentUser,objReq));
+            resp.setData(dcnbHoSoKyThuatHdrServiceImpl.save(currentUser,objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -80,7 +80,7 @@ public class DcnbHoSoKyThuatHdrController {
     public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody DcnbHoSoKyThuatHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(dcnbHoSoKyThuatHdrService.update(currentUser,objReq));
+            resp.setData(dcnbHoSoKyThuatHdrServiceImpl.update(currentUser,objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -99,7 +99,7 @@ public class DcnbHoSoKyThuatHdrController {
             @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids")List<Long> ids) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(dcnbHoSoKyThuatHdrService.details(ids).get(0));
+            resp.setData(dcnbHoSoKyThuatHdrServiceImpl.details(ids).get(0));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -118,7 +118,7 @@ public class DcnbHoSoKyThuatHdrController {
             @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids")List<Long> ids) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(dcnbHoSoKyThuatHdrService.detailDtl(ids));
+            resp.setData(dcnbHoSoKyThuatHdrServiceImpl.detailDtl(ids));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -135,7 +135,7 @@ public class DcnbHoSoKyThuatHdrController {
     public ResponseEntity<BaseResponse> updateStatus( @CurrentUser CustomUserDetails currentUser,@Valid @RequestBody StatusReq stReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            dcnbHoSoKyThuatHdrService.approve(currentUser,stReq);
+            dcnbHoSoKyThuatHdrServiceImpl.approve(currentUser,stReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -154,7 +154,7 @@ public class DcnbHoSoKyThuatHdrController {
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            dcnbHoSoKyThuatHdrService.delete(idSearchReq);
+            dcnbHoSoKyThuatHdrServiceImpl.delete(idSearchReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -173,7 +173,7 @@ public class DcnbHoSoKyThuatHdrController {
     public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            dcnbHoSoKyThuatHdrService.deleteMulti(idSearchReq);
+            dcnbHoSoKyThuatHdrServiceImpl.deleteMulti(idSearchReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -190,7 +190,7 @@ public class DcnbHoSoKyThuatHdrController {
     @ResponseStatus(HttpStatus.OK)
     public void exportList(@CurrentUser CustomUserDetails currentUser ,@Valid @RequestBody  SearchDcnbHoSoKyThuat objReq, HttpServletResponse response) throws Exception {
         try {
-            dcnbHoSoKyThuatHdrService.export( currentUser,objReq, response);
+            dcnbHoSoKyThuatHdrServiceImpl.export( currentUser,objReq, response);
 
         } catch (Exception e) {
             log.error("Kết xuất danh sách dánh sách mua : {}", e);

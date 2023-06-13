@@ -108,5 +108,6 @@ public class DcnbBienBanLayMauHdrReq implements Serializable {
 
     private List<FileDinhKemReq> canCu = new ArrayList<>();
     private List<FileDinhKemReq> bienBanLayMauDinhKem = new ArrayList<>();
+    private List<FileDinhKemReq> fileDinhKemChupMauNiemPhong = new ArrayList<>();
     private List<DcnbBienBanLayMauDtl> dcnbBienBanLayMauDtl = new ArrayList<>();
 }

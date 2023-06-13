@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuKnChatLuongDtl;
 import lombok.Data;
 
+import javax.persistence.Column;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,8 @@ public class DcnbPhieuKnChatLuongHdrReq {
     private Integer nam;
 
     private String maDvi;
+
+    private String tenDvi;
 
     private String maQhns;
 
@@ -88,7 +91,7 @@ public class DcnbPhieuKnChatLuongHdrReq {
 
     private String lyDoTuChoi;
 
-    private Long thayDoiThuKho;
+    private Boolean thayDoiThuKho;
 
     private LocalDate ngayDuyetTp;
 
@@ -103,6 +106,14 @@ public class DcnbPhieuKnChatLuongHdrReq {
     private Long bbHaoDoiId;
 
     private String soBbHaoDoi;
+
+    private Long nguoiDuyetLdCuc;
+
+    private LocalDate ngayDuyetLdCuc;
+
+    private String type;
+
+    private String loaiDc;
 
     private List<FileDinhKemReq> bienBanLayMauDinhKem = new ArrayList<>();
 

@@ -14,8 +14,10 @@ import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.UserActivityService;
 import com.tcdt.qlnvhang.service.feign.LuuKhoClient;
 import com.tcdt.qlnvhang.table.PhieuNhapXuatHistory;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtPhieuXuatKho;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
+import org.apache.poi.ss.formula.functions.T;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -40,94 +42,118 @@ import java.util.regex.Pattern;
 @Component
 public class LoggingAspect {
 
-    private static final Logger logger = LoggerFactory.getLogger(LoggingAspect.class);
-    private final static String SYSTEM = "hang";
+  private static final Logger logger = LoggerFactory.getLogger(LoggingAspect.class);
+  private final static String SYSTEM = "hang";
 
-    @Autowired
-    private Gson gson;
-    @Autowired
-    private UserActivityService userActivityService;
-    @Autowired
-    ObjectMapper objectMapper;
-    @Autowired
-    private LuuKhoClient luuKhoClient;
-    @Autowired
-    private NhPhieuNhapKhoCtRepository nhPhieuNhapKhoCtRepository;
+  @Autowired
+  private Gson gson;
+  @Autowired
+  private UserActivityService userActivityService;
+  @Autowired
+  ObjectMapper objectMapper;
+  @Autowired
+  private LuuKhoClient luuKhoClient;
+  @Autowired
+  private NhPhieuNhapKhoCtRepository nhPhieuNhapKhoCtRepository;
 
-    @Pointcut("within(com.tcdt.qlnvhang..*) && bean(*Controller))")
-    public void v3Controller() {
-    }
 
-    @Pointcut("execution(* com.tcdt.qlnvhang.controller.nhaphang.dauthau.nhapkho.NhPhieuNhapKhoController.updateStatus(..))")
-    public void phieuNhapXuatPointCut() {
-    }
+  @Pointcut("within(com.tcdt.qlnvhang..*) && bean(*Controller))")
+  public void v3Controller() {
+  }
 
-    @Before("v3Controller()")
-    public void logBefore(JoinPoint joinPoint) {
-        try {
-            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-            String userAgent = request.getHeader("User-Agent");
-            if (ObjectUtils.isEmpty(userAgent)) {
-                userAgent = request.getHeader("user-agent");
-            }
-            Matcher m = Pattern.compile("\\(([^)]+)\\)").matcher(userAgent);
-            if (m.find()) {
-                userAgent = m.group(1);
-            }
-            if (!String.class.equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal().getClass())) {
-                CustomUserDetails user = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-                UserActivity entity = new UserActivity();
-                entity.setIp(UserUtils.getClientIpAddress(request));
-                entity.setRequestMethod(request.getMethod());
-                entity.setRequestUrl(request.getRequestURI());
-                entity.setUserId(user.getUser().getId());
-                entity.setSystem(SYSTEM);
-                entity.setUserAgent(userAgent);
-                entity.setRequestBody(getBody(joinPoint.getArgs()));
-                entity.setUserName(user.getUser().getUsername());
-                Map<String, String[]> parameterMap = request.getParameterMap();
-                if (parameterMap != null && !parameterMap.isEmpty()) {
-                    entity.setRequestParameter(gson.toJson(parameterMap));
-                }
-                userActivityService.log(entity);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+  @Pointcut("execution(* com.tcdt.qlnvhang.controller.nhaphang.dauthau.nhapkho.NhPhieuNhapKhoController.updateStatus(..)) ||" +
+      "execution(* com.tcdt.qlnvhang.controller.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtPhieuXuatKhoController.updateStatus(..))")
+  public void phieuNhapXuatPointCut() {
+  }
+
+  @Before("v3Controller()")
+  public void logBefore(JoinPoint joinPoint) {
+    try {
+      HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+      String userAgent = request.getHeader("User-Agent");
+      if (ObjectUtils.isEmpty(userAgent)) {
+        userAgent = request.getHeader("user-agent");
+      }
+      Matcher m = Pattern.compile("\\(([^)]+)\\)").matcher(userAgent);
+      if (m.find()) {
+        userAgent = m.group(1);
+      }
+      if (!String.class.equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal().getClass())) {
+        CustomUserDetails user = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserActivity entity = new UserActivity();
+        entity.setIp(UserUtils.getClientIpAddress(request));
+        entity.setRequestMethod(request.getMethod());
+        entity.setRequestUrl(request.getRequestURI());
+        entity.setUserId(user.getUser().getId());
+        entity.setSystem(SYSTEM);
+        entity.setUserAgent(userAgent);
+        entity.setRequestBody(getBody(joinPoint.getArgs()));
+        entity.setUserName(user.getUser().getUsername());
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        if (parameterMap != null && !parameterMap.isEmpty()) {
+          entity.setRequestParameter(gson.toJson(parameterMap));
         }
+        userActivityService.log(entity);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
     }
+  }
 
 
-    @AfterReturning(value = "phieuNhapXuatPointCut()", returning = "result")
-    public void phieuNhapXuatAfterLog(JoinPoint joinPoint, ResponseEntity<BaseResponse> result) {
-        try {
-            if (result != null && result.getBody().getMsg().equals(EnumResponse.RESP_SUCC.getDescription())) {
-                NhPhieuNhapKho nhPhieuNhapKho = objectMapper.convertValue(result.getBody().getData(), NhPhieuNhapKho.class);
-                if (nhPhieuNhapKho.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDCC.getId())) {
-                    NhPhieuNhapKhoCt nhPhieuNhapKhoCt = nhPhieuNhapKhoCtRepository.findAllByIdPhieuNkHdr(nhPhieuNhapKho.getId()).get(0);
-                    PhieuNhapXuatHistory phieuNhapXuatHistory = new PhieuNhapXuatHistory();
-                    phieuNhapXuatHistory.setSoLuong(DataUtils.safeToLong(nhPhieuNhapKhoCt.getSoLuongThucNhap()));
-                    phieuNhapXuatHistory.setLoaiVthh(nhPhieuNhapKho.getLoaiVthh());
-                    phieuNhapXuatHistory.setCloaiVthh(nhPhieuNhapKho.getCloaiVthh());
-                    phieuNhapXuatHistory.setMaKho(nhPhieuNhapKho.getMaLoKho());
-                    phieuNhapXuatHistory.setNgayDuyet(DataUtils.convertToLocalDate(nhPhieuNhapKho.getNgayPduyet()));
-                    phieuNhapXuatHistory.setLoaiNhapXuat(1);//fix tam 1 la nhap -1 la xuat
-                    phieuNhapXuatHistory.setKieu("NHAP_XUAT");//nhap xuat hoac khoi tao so du dau ky
-                    luuKhoClient.synchronizeData(phieuNhapXuatHistory);
-                    logger.info("Cập nhật kho theo Phiếu nhập kho {}", nhPhieuNhapKho);
-                }
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+  @AfterReturning(value = "phieuNhapXuatPointCut()", returning = "result")
+  public void phieuNhapXuatAfterLog(JoinPoint joinPoint, ResponseEntity<BaseResponse> result) {
+    try {
+      if (joinPoint.getTarget().toString().contains("NhPhieuNhapKhoController")) {
+        if (result != null && result.getBody().getMsg().equals(EnumResponse.RESP_SUCC.getDescription())) {
+          NhPhieuNhapKho rowData = objectMapper.convertValue(result.getBody().getData(), NhPhieuNhapKho.class);
+          if (rowData.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDCC.getId())) {
+            NhPhieuNhapKhoCt nhPhieuNhapKhoCt = nhPhieuNhapKhoCtRepository.findAllByIdPhieuNkHdr(rowData.getId()).get(0);
+            PhieuNhapXuatHistory phieuNhapXuatHistory = new PhieuNhapXuatHistory();
+            phieuNhapXuatHistory.setSoLuong(DataUtils.safeToLong(nhPhieuNhapKhoCt.getSoLuongThucNhap()));
+            phieuNhapXuatHistory.setLoaiVthh(rowData.getLoaiVthh());
+            phieuNhapXuatHistory.setCloaiVthh(rowData.getCloaiVthh());
+            phieuNhapXuatHistory.setMaKho(rowData.getMaLoKho());
+            phieuNhapXuatHistory.setNgayDuyet(DataUtils.convertToLocalDate(rowData.getNgayPduyet()));
+            phieuNhapXuatHistory.setLoaiNhapXuat(1);//fix tam 1 la nhap -1 la xuat
+            phieuNhapXuatHistory.setKieu("NHAP_XUAT");//nhap xuat hoac khoi tao so du dau ky
+            luuKhoClient.synchronizeData(phieuNhapXuatHistory);
+            logger.info("Cập nhật kho theo Phiếu nhập kho NhPhieuNhapKhoController {}", rowData);
+          }
         }
+      } else if (joinPoint.getTarget().toString().contains("XhCtvtPhieuXuatKhoController")) {
+        if (result != null && result.getBody().getMsg().equals(EnumResponse.RESP_SUCC.getDescription())) {
+          XhCtvtPhieuXuatKho rowData = objectMapper.convertValue(result.getBody().getData(), XhCtvtPhieuXuatKho.class);
+          if (rowData.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDCC.getId())) {
+            PhieuNhapXuatHistory phieuNhapXuatHistory = new PhieuNhapXuatHistory();
+            phieuNhapXuatHistory.setSoLuong(DataUtils.safeToLong(rowData.getThucXuat()));
+            phieuNhapXuatHistory.setLoaiVthh(rowData.getLoaiVthh());
+            phieuNhapXuatHistory.setCloaiVthh(rowData.getCloaiVthh());
+            phieuNhapXuatHistory.setMaKho(rowData.getMaLoKho());
+            phieuNhapXuatHistory.setNgayDuyet(rowData.getNgayPduyet());
+            phieuNhapXuatHistory.setLoaiNhapXuat(-1);//fix tam 1 la nhap -1 la xuat
+            phieuNhapXuatHistory.setKieu("NHAP_XUAT");//nhap xuat hoac khoi tao so du dau ky
+            luuKhoClient.synchronizeData(phieuNhapXuatHistory);
+            logger.info("Cập nhật kho theo Phiếu nhập kho XhCtvtPhieuXuatKhoController {}", rowData);
+          }
+        }
+      }
+    } catch (Exception e) {
+      throw new RuntimeException(e);
     }
+  }
 
-    public String getBody(Object[] args) {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            return mapper.writeValueAsString(args);
-        } catch (JsonProcessingException e) {
+  public String getBody(Object[] args) {
+    try {
+      ObjectMapper mapper = new ObjectMapper();
+      return mapper.writeValueAsString(args);
+    } catch (JsonProcessingException e) {
 //            throw new RuntimeException(e);
-            return null;
-        }
+      return null;
     }
+  }
+
+  public <C> C test(Object data, Class<C> clazz) {
+    return objectMapper.convertValue(data, clazz);
+  }
 }

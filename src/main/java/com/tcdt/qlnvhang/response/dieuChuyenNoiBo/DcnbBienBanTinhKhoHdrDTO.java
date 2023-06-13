@@ -27,5 +27,14 @@ public class DcnbBienBanTinhKhoHdrDTO {
     private LocalDate ngayXuatKho;
     private String trangThai;
     private String tenTrangThai;
-
+    private String maHangHoa;
+    private String tenHangHoa;
+    private String maChLoaiHangHoa;
+    private String tenChLoaiHangHoa;
+    private String maNhaKho;
+    private String tenNhaKho;
+    private String maNganKho;
+    private String tenNganKho;
+    private LocalDate ngayHieuLuc;
+    private LocalDate ngayKyQdinh;
 }

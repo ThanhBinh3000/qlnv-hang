@@ -25,9 +25,7 @@ public class XhXkDanhSachRequest extends BaseRequest {
   private LocalDate ngayPduyet;
   private Long nguoiPduyetId;
   private String lyDoTuChoi;
-  private BigDecimal tongSlHienTai;
-  private BigDecimal tongSlDeXuat;
-  private BigDecimal tongSlDaDuyet;
+  private BigDecimal tongSlHetHan;
 
   private Long idHdr;
   private Long idTongHop;
@@ -36,10 +34,7 @@ public class XhXkDanhSachRequest extends BaseRequest {
   private String loaiVthh;
   private String cloaiVthh;
   private String donViTinh;
-  private BigDecimal slHienTai;
-  private BigDecimal slDeXuat;
-  private BigDecimal slDaDuyet;
-  private BigDecimal thanhTien;
+  private BigDecimal slHetHan;
   private LocalDate ngayNhapKho;
   private LocalDate ngayDeXuat;
   private LocalDate ngayDeXuatTu;

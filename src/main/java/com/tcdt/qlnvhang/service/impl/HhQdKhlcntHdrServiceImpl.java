@@ -115,7 +115,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		HhQdKhlcntHdr dataMap = ObjectMapperUtils.map(objReq, HhQdKhlcntHdr.class);
 
 		dataMap.setNgayTao(getDateTimeNow());
-		dataMap.setTrangThai(Contains.DUTHAO);
+		dataMap.setTrangThai(Contains.DANG_NHAP_DU_LIEU);
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setFileDinhKems(fileDinhKemList);
 		dataMap.setLastest(objReq.getLastest());
@@ -153,7 +153,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		HhQdKhlcntHdr dataMap = ObjectMapperUtils.map(objReq, HhQdKhlcntHdr.class);
 
 		dataMap.setNgayTao(getDateTimeNow());
-		dataMap.setTrangThai(Contains.DUTHAO);
+		dataMap.setTrangThai(Contains.DANG_NHAP_DU_LIEU);
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setFileDinhKems(fileDinhKemList);
 		dataMap.setLastest(objReq.getLastest());
@@ -603,7 +603,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	HhQdKhlcntHdr approveVatTu(StatusReq stReq,HhQdKhlcntHdr dataDB) throws Exception {
 		String status = stReq.getTrangThai() + dataDB.getTrangThai();
 		switch (status) {
-			case Contains.BAN_HANH + Contains.DUTHAO:
+			case Contains.BAN_HANH + Contains.DANG_NHAP_DU_LIEU:
 				dataDB.setNguoiPduyet(getUser().getUsername());
 				dataDB.setNgayPduyet(getDateTimeNow());
 				break;
@@ -632,7 +632,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	HhQdKhlcntHdr approveLT(StatusReq stReq, HhQdKhlcntHdr dataDB) throws Exception{
 		String status = stReq.getTrangThai() + dataDB.getTrangThai();
 		switch (status) {
-			case Contains.BAN_HANH + Contains.DUTHAO:
+			case Contains.BAN_HANH + Contains.DANG_NHAP_DU_LIEU:
 				dataDB.setNguoiPduyet(getUser().getUsername());
 				dataDB.setNgayPduyet(getDateTimeNow());
 				break;
@@ -719,7 +719,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		if (!optional.isPresent())
 			throw new Exception("Không tìm thấy dữ liệu cần xoá");
 
-		if (!optional.get().getTrangThai().equals(Contains.DUTHAO) && !optional.get().getTrangThai().equals(Contains.TUCHOI_LDV)){
+		if (!optional.get().getTrangThai().equals(Contains.DANG_NHAP_DU_LIEU) && !optional.get().getTrangThai().equals(Contains.TUCHOI_LDV)){
 			throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối");
 		}
 		/**

@@ -1,15 +1,19 @@
 package com.tcdt.qlnvhang.service.impl;
 
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.text.SimpleDateFormat;
 
+import com.tcdt.qlnvhang.common.DocxToPdfConverter;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.*;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhDxKhLcntThopDtlRepository;
@@ -17,7 +21,12 @@ import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.*;
 import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.object.*;
+import com.tcdt.qlnvhang.service.feign.BaoCaoClient;
 import com.tcdt.qlnvhang.table.HhDxKhLcntThopDtl;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
+import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +72,10 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 
     @Autowired
     private HhDxKhLcntThopDtlRepository hhDxKhLcntThopDtlRepository;
+    @Autowired
+    DocxToPdfConverter docxToPdfConverter;
+    @Autowired
+    private BaoCaoClient baoCaoClient;
 
 
     Long shgtNext = new Long(0);
@@ -366,6 +379,57 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         Optional<HhDxuatKhLcntHdr> data = hhDxuatKhLcntHdrRepository.findBySoDxuat(soDx);
         return data.get();
     }
+
+    @Override
+    public ReportTemplateResponse preview(HhDxuatKhLcntHdrReq hhDxuatKhLcntHdrReq) throws Exception {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        ReportTemplate model = findByTenFile(hhDxuatKhLcntHdrReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        List<String> listDvi = new ArrayList<>();
+        listDvi.add(hhDxuatKhLcntHdrReq.getMaDvi());
+        listDvi.add(hhDxuatKhLcntHdrReq.getMaDvi().substring(0, hhDxuatKhLcntHdrReq.getMaDvi().length() - 2));
+
+        HhDxuatKhLcntHdrPreview object = new ModelMapper().map(hhDxuatKhLcntHdrReq, HhDxuatKhLcntHdrPreview.class);
+        Map<String, String> mapDmucDvi = getListDanhMucDviByMadviIn(listDvi, "01");
+        Map<String, String> mapVthh = getListDanhMucHangHoa();
+        Map<String, String> hashMapNguonVon = getListDanhMucChung("NGUON_VON");
+        Map<String, String> hashMapHtLcnt = getListDanhMucChung("HT_LCNT");
+        Map<String, String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
+        Map<String,String> hashMapPthucDthau = getListDanhMucChung("PT_DTHAU");
+
+        object.setTenDvi(mapDmucDvi.get(hhDxuatKhLcntHdrReq.getMaDvi()));
+        object.setTenDviCha(mapDmucDvi.get(hhDxuatKhLcntHdrReq.getMaDvi().substring(0, hhDxuatKhLcntHdrReq.getMaDvi().length() - 2)));
+        object.setTenLoaiVthh(mapVthh.get(hhDxuatKhLcntHdrReq.getLoaiVthh()));
+        object.setTenCloaiVthh(mapVthh.get(hhDxuatKhLcntHdrReq.getCloaiVthh()));
+        object.setTenHthucLcnt(hashMapHtLcnt.get(hhDxuatKhLcntHdrReq.getHthucLcnt()));
+        object.setTenNguonVon(hashMapNguonVon.get(hhDxuatKhLcntHdrReq.getNguonVon()));
+        object.setTenLoaiHdong(hashMapLoaiHdong.get(hhDxuatKhLcntHdrReq.getLoaiHdong()));
+        object.setTenPthucLcnt(hashMapPthucDthau.get(hhDxuatKhLcntHdrReq.getPthucLcnt()));
+        object.getFileDinhKems().addAll(hhDxuatKhLcntHdrReq.getFileDinhKemReq());
+        object.setTgianBdauTchuc(hhDxuatKhLcntHdrReq.getTgianBdauTchuc() != null ? formatter.format(hhDxuatKhLcntHdrReq.getTgianBdauTchuc()) : null);
+        object.setTgianDthau(hhDxuatKhLcntHdrReq.getTgianDthau() != null ? formatter.format(hhDxuatKhLcntHdrReq.getTgianDthau()) : null);
+        object.setTgianMthau(hhDxuatKhLcntHdrReq.getTgianMthau() != null ? formatter.format(hhDxuatKhLcntHdrReq.getTgianMthau()) : null);
+        object.setTgianNhang(hhDxuatKhLcntHdrReq.getTgianNhang() != null ? formatter.format(hhDxuatKhLcntHdrReq.getTgianNhang()) : null);
+        object.setSoGoiThau(hhDxuatKhLcntDsgtDtlRepository.countByIdDxKhlcnt(hhDxuatKhLcntHdrReq.getId()));
+
+        Map<String, String> fieldValues = new HashMap<>();
+        fieldValues = docxToPdfConverter.convertObjectToMap(object);
+        List<String> tenCanCuPhapLy = new ArrayList<>();
+        if(object.getFileDinhKems().size() > 0){
+            for (FileDinhKemReq ten : object.getFileDinhKems()) {
+                tenCanCuPhapLy.add(ten.getNoiDung());
+            }
+        }
+        StringBuilder fileDinhKems = new StringBuilder();
+        for (String ten : tenCanCuPhapLy) {
+            fileDinhKems.append("- ").append(ten).append("\n");
+        }
+        String fileDinhKemsTextString = fileDinhKems.toString();
+        fieldValues.put("fileDinhKems", fileDinhKemsTextString);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, fieldValues);
+    }
+
 
     @Override
     public Page<HhDxuatKhLcntHdr> colection(HhDxuatKhLcntSearchReq objReq, HttpServletRequest req) throws Exception {

@@ -27,8 +27,9 @@ public interface HhQdPheduyetKhMttHdrRepository extends JpaRepository<HhQdPheduy
             "AND (:#{#param.ngayQdDen} IS NULL OR DX.ngayQd <= :#{#param.ngayQdDen}) " +
             "AND (:#{#param.loaiVthh} IS NULL OR DX.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
             "AND (:#{#param.lastest} IS NULL OR LOWER(DX.lastest) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.lastest}),'%'))) " +
-            "AND (:#{#param.trangThai} IS NULL OR DX.trangThai = :#{#param.trangThai}) " +
-            "AND (:#{#param.maDvi} IS NULL OR DX.maDvi LIKE CONCAT(:#{#param.maDvi},'%')) ")
+            "AND (:#{#param.trangThai} IS NULL OR DX.trangThai = :#{#param.trangThai}) "
+//            + "AND (:#{#param.maDvi} IS NULL OR DX.maDvi LIKE CONCAT(:#{#param.maDvi},'%')) "
+    )
     Page<HhQdPheduyetKhMttHdr> searchPage(@Param("param") HhQdPheduyetKhMttHdrSearchReq param, Pageable pageable);
 
     List<HhQdPheduyetKhMttHdr> findBySoQd(String soQd);

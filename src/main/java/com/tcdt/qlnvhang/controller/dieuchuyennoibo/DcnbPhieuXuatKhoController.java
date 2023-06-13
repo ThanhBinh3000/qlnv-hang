@@ -6,12 +6,10 @@ import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBienBanLayMauHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbPhieuXuatKhoHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchPhieuXuatKho;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBienBanLayMauService;
-import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbPhieuXuatKhoService;
+import com.tcdt.qlnvhang.service.dieuchuyennoibo.impl.DcnbPhieuXuatKhoServiceImpl;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,7 +34,7 @@ import java.util.Map;
 public class DcnbPhieuXuatKhoController {
 
     @Autowired
-    DcnbPhieuXuatKhoService service;
+    DcnbPhieuXuatKhoServiceImpl service;
 
     @ApiOperation(value = "Tra cứu thông tin biên bản", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)

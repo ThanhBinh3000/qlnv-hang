@@ -20,9 +20,9 @@ public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cl
     public static final String TABLE_NAME = "DCNB_BIEN_BAN_LAY_MAU_HDR";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = DcnbBienBanLayMauHdr.TABLE_NAME
-            + "_SEQ", allocationSize = 1, name = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
+//    @SequenceGenerator(sequenceName = DcnbBienBanLayMauHdr.TABLE_NAME
+//            + "_SEQ", allocationSize = 1, name = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
     private Long id;
 
     @Column(name = "LOAI_BB")
@@ -57,6 +57,15 @@ public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cl
 
     @Column(name = "KTV_BAO_QUAN_ID")
     private Long ktvBaoQuanId;
+
+    @Column(name = "THU_KHO")
+    private Long thuKho;
+
+    @Column(name = "TEN_THU_KHO")
+    private String tenThuKho;
+
+    @Column(name = "DON_VI_TINH")
+    private String donViTinh;
 
     @Column(name = "SO_BB_LAY_MAU")
     private String soBbLayMau;
@@ -168,6 +177,9 @@ public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cl
 
     @Transient
     private List<FileDinhKem> bienBanLayMauDinhKem = new ArrayList<>();
+
+    @Transient
+    private List<FileDinhKem> fileDinhKemChupMauNiemPhong = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")

@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -37,4 +38,9 @@ public class DcnbBienBanHaoDoiDtl implements Serializable {
 
     @Column(name = "SL_HAO")
     private Double slHao;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
+    @JsonIgnore
+    private DcnbBienBanHaoDoiTtDtl dcnbBienBanHaoDoiTtDtl;
 }

@@ -20,8 +20,8 @@ public class DcnbBangKeCanHangHdr extends BaseEntity implements Serializable, Cl
     public static final String TABLE_NAME = "DCNB_BANG_KE_CAN_HANG_HDR";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
+//    @SequenceGenerator(sequenceName = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
     private Long id;
 
     @Column(name = "NAM")
@@ -35,6 +35,9 @@ public class DcnbBangKeCanHangHdr extends BaseEntity implements Serializable, Cl
 
     @Column(name = "MA_DVI")
     private String maDvi;
+
+    @Column(name = "TEN_DVI")
+    private String tenDvi;
 
     @Column(name = "QHNS_ID")
     private Long qhnsId;
@@ -117,10 +120,10 @@ public class DcnbBangKeCanHangHdr extends BaseEntity implements Serializable, Cl
     @Column(name = "NGAY_GDUYET")
     private LocalDate ngayGDuyet;
 
-    @Column(name = "NGUOI_PDUYET")
+    @Column(name = "NGUOI_PDUYET_LDCCUC")
     private Long nguoiPDuyet;
 
-    @Column(name = "NGAY_PDUYET")
+    @Column(name = "NGAY_PDUYET_LDCCUC")
     private LocalDate ngayPDuyet;
 
     @Column(name = "LOAI_DC")

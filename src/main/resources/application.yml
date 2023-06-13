@@ -50,3 +50,7 @@ management:
       application: ${spring.application.name}
 
 #Logging
+
+#path font pdf
+path:
+  url: "src/main/resources/font/times.ttf"

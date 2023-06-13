@@ -7,10 +7,12 @@ import java.util.List;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.util.Contains;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -132,6 +134,8 @@ public class HhDxuatKhLcntHdrReq {
 
 	String diaChiDvi;
 	BigDecimal donGiaVat;
+	String tenDviCha;
+	private ReportTemplateRequest reportTemplateRequest;
 
 	private List<FileDinhKemReq> fileDinhKemReq =  new ArrayList<>();
 

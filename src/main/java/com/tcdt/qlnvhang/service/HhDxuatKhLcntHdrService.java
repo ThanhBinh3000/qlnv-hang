@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
 import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import org.springframework.data.domain.Page;
 
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -25,6 +26,7 @@ public interface HhDxuatKhLcntHdrService {
 
 	HhDxuatKhLcntHdr detail(Long id) throws Exception;
 	HhDxuatKhLcntHdr detail(String soDx) throws Exception;
+	ReportTemplateResponse preview(HhDxuatKhLcntHdrReq hhDxuatKhLcntHdr) throws Exception;
 
 	Page<HhDxuatKhLcntHdr> colection(HhDxuatKhLcntSearchReq objReq, HttpServletRequest req) throws Exception;
 

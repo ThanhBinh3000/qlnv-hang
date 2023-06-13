@@ -59,14 +59,13 @@ public class DcnbQuyetDinhDcCHdr extends BaseEntity implements Serializable, Clo
   private LocalDate ngayDuyetLdcc;
   @Column(name = "NGUOI_DUYET_LDCC_ID")
   private Long nguoiDuyetLdccId;
+  private LocalDate ngayHieuLuc;
   @Transient
   private String tenTrangThai;
   @Transient
   private List<FileDinhKem> canCu = new ArrayList<>();
   @Transient
   private List<FileDinhKem> quyetDinh = new ArrayList<>();
-  @Transient
-  private DcnbKeHoachDcDtlTT dcnbBienBanLayMauHdrList ;
 
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "HDR_ID")
