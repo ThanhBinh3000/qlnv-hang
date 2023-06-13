@@ -85,7 +85,7 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
             throw new Exception("Bad request.");
         }
         Optional<DcnbBienBanLayMauHdr> optional = dcnbBienBanLayMauHdrRepository.findFirstBySoBbLayMau(objReq.getSoBbLayMau());
-        if (optional.isPresent() && objReq.getSoBbLayMau().split("/").length == 1) {
+        if (optional.isPresent() && objReq.getSoBbLayMau() !=null && objReq.getSoBbLayMau().split("/").length == 1) {
             throw new Exception("số biên bản lấy mẫu đã tồn tại");
         }
         DcnbBienBanLayMauHdr data = new DcnbBienBanLayMauHdr();
