@@ -26,8 +26,8 @@ public interface DcnbBBNTBQHdrRepository extends JpaRepository<DcnbBBNTBQHdr, Lo
     //
     Optional<DcnbBBNTBQHdr> findBySoBban(String soBban);
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBNTBQHdrDTO(" +
-            "bblm.id, qdc.id,qdc.soQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
-            "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho, khdcd.maDiemKhoNhan, khdcd.tenDiemKhoNhan, khdcd.maLoKhoNhan, khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan, bblm.soBban," +
+            "bblm.id, qdc.id,qdc.soQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maNhaKho,khdcd.tenNhaKho,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
+            "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho, khdcd.maNhaKhoNhan,khdcd.tenNhaKhoNhan,khdcd.maDiemKhoNhan, khdcd.tenDiemKhoNhan, khdcd.maLoKhoNhan, khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan, bblm.soBban," +
             "bblm.ngayLap,bblm.ngayKetThucNt , bblm.tongKinhPhiDaTh,bblm.tongKinhPhiDaTh ,bblm.trangThai, bblm.trangThai,khdcd.tenLoaiVthh,khdcd.tenCloaiVthh, khdcd.tichLuongKd, khdcd.tenDonViTinh, khdcd.loaiVthh) FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbBBNTBQHdr bblm On bblm.qdDcCucId = qdc.id " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
@@ -41,8 +41,8 @@ public interface DcnbBBNTBQHdrRepository extends JpaRepository<DcnbBBNTBQHdr, Lo
     Page<DcnbBBNTBQHdrDTO> searchPageChiCuc(@Param("param") DcnbBBNTBQHdrReq req, Pageable pageable);
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBNTBQHdrDTO(" +
-            "bblm.id, qdc.id,qdc.soQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
-            "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho, khdcd.maDiemKhoNhan, khdcd.tenDiemKhoNhan, khdcd.maLoKhoNhan, khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan, bblm.soBban," +
+            "bblm.id, qdc.id,qdc.soQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maNhaKho,khdcd.tenNhaKho,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
+            "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho, khdcd.maNhaKhoNhan,khdcd.tenNhaKhoNhan, khdcd.maDiemKhoNhan, khdcd.tenDiemKhoNhan, khdcd.maLoKhoNhan, khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan, bblm.soBban," +
             "bblm.ngayLap,bblm.ngayKetThucNt , bblm.tongKinhPhiDaTh,bblm.tongKinhPhiDaTh ,bblm.trangThai, bblm.trangThai,khdcd.tenLoaiVthh,khdcd.tenCloaiVthh, khdcd.tichLuongKd, khdcd.tenDonViTinh, khdcd.loaiVthh) FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbQuyetDinhDcCHdr qdc2 On qdc2.id = qdc.parentId " +
             "LEFT JOIN DcnbBBNTBQHdr bblm On bblm.qdDcCucId = qdc.id " +

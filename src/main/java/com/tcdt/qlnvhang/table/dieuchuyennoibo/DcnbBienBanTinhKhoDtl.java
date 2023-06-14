@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = DcnbBienBanLayMauHdr.TABLE_NAME)
+@Table(name = DcnbBienBanTinhKhoDtl.TABLE_NAME)
 @Getter
 @Setter
 public class DcnbBienBanTinhKhoDtl {

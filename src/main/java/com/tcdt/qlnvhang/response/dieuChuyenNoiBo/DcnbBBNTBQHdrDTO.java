@@ -17,6 +17,8 @@ public class DcnbBBNTBQHdrDTO {
     private String soQdinh;
     private Integer namKh;
     private LocalDate thoiHanDieuChuyen;
+    private String maNhaKhoXuat;
+    private String tenNhaKhoXuat;
     private String maDiemKhoXuat;
     private String tenDiemKhoXuat;
     private String maloKhoXuat;
@@ -25,6 +27,8 @@ public class DcnbBBNTBQHdrDTO {
     private String tenNganKhoXuat;
     //    private String trangThaiXuat;
 //    private String tenTrangThaiXuat;
+    private String maNhaKhoNhan;
+    private String tenNhaKhoNhan;
     private String maDiemKhoNhan;
     private String tenDiemKhoNhan;
     private String maloKhoNhan;
