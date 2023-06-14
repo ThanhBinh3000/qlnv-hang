@@ -28,7 +28,7 @@ public interface DcnbPhieuXuatKhoHdrRepository extends JpaRepository<DcnbPhieuXu
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
             "WHERE 1 =1 "+
-            "AND qdc.trangThai = '29' AND (pxk.type IS NULL OR (:#{#param.type} IS NULL OR pxk.type = :#{#param.type})) "+
+            "AND qdc.trangThai = '29' "+
             "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}))"+
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
             "ORDER BY pxk.soPhieuXuatKho desc, pxk.nam desc")
@@ -44,7 +44,7 @@ public interface DcnbPhieuXuatKhoHdrRepository extends JpaRepository<DcnbPhieuXu
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
             "WHERE 1 =1 "+
-            "AND qdc.trangThai = '29' AND (pxk.type IS NULL OR (:#{#param.type} IS NULL OR pxk.type = :#{#param.type})) "+
+            "AND qdc.trangThai = '29' "+
             "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}))"+
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
             "ORDER BY pxk.soPhieuXuatKho desc, pxk.nam desc")

@@ -57,19 +57,9 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<DcnbPhieuXuatKhoHdrDTO> searchDto = null;
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            if("00".equals(req.getType())){
-                req.setTypeDataLink(Contains.DIEU_CHUYEN);
-            }else if("01".equals(req.getType())){
-                req.setTypeDataLink(Contains.NHAN_DIEU_CHUYEN);
-            }
             searchDto = hdrRepository.searchPageChiCuc(req, pageable);
         }
         if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            if("00".equals(req.getType())){
-                req.setTypeDataLink(Contains.DIEU_CHUYEN);
-            }else if("01".equals(req.getType())){
-                req.setTypeDataLink(Contains.NHAN_DIEU_CHUYEN);
-            }
             searchDto = hdrRepository.searchPageCuc(req, pageable);
         }
         return searchDto;
