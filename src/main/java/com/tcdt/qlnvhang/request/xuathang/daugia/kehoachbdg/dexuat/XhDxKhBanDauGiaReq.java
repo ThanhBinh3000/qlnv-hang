@@ -80,6 +80,8 @@ public class XhDxKhBanDauGiaReq extends BaseRequest {
 
     private LocalDate ngayTao;
 
+    private LocalDate ngayPduyet;
+
     private List<String> trangThaiList = new ArrayList<>();
 
     @Transient
