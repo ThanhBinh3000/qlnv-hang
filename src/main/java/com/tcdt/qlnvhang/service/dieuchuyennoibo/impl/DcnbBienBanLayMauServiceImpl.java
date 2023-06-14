@@ -78,6 +78,11 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<DcnbBienBanLayMauHdrDTO> dcnbQuyetDinhDcCHdrs = null;
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            if("00".equals(req.getType())){
+                req.setTypeDataLink(Contains.DIEU_CHUYEN);
+            }else if("01".equals(req.getType())){
+                req.setTypeDataLink(Contains.NHAN_DIEU_CHUYEN);
+            }
             dcnbQuyetDinhDcCHdrs = dcnbBienBanLayMauHdrRepository.searchPageChiCuc(req, pageable);
         }
         if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
