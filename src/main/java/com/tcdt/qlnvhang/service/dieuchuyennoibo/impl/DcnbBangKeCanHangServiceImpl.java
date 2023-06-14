@@ -59,9 +59,9 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl{
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
 
-        Page<DcnbBangKeCanHangHdrDTO> dcnbQuyetDinhDcCHdrs = null;
+        Page<DcnbBangKeCanHangHdrDTO> searchDto = null;
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            dcnbQuyetDinhDcCHdrs = dcnbBangKeCanHangHdrRepository.searchPage(req, pageable);
+            searchDto = dcnbBangKeCanHangHdrRepository.searchPage(req, pageable);
         }
         if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             if("00".equals(req.getType())){
@@ -69,9 +69,9 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl{
             }else if("01".equals(req.getType())){
                 req.setTypeDataLink(Contains.NHAN_DIEU_CHUYEN);
             }
-            dcnbQuyetDinhDcCHdrs = dcnbBangKeCanHangHdrRepository.searchPageCuc(req, pageable);
+            searchDto = dcnbBangKeCanHangHdrRepository.searchPageCuc(req, pageable);
         }
-        return dcnbQuyetDinhDcCHdrs;
+        return searchDto;
     }
 
     @Transactional

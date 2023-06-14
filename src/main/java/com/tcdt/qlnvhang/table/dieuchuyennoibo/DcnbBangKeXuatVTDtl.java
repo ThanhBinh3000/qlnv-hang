@@ -14,11 +14,11 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = DcnbBangKeNhapVTDtl.TABLE_NAME)
-public class DcnbBangKeNhapVTDtl {
+@Table(name = DcnbBangKeXuatVTDtl.TABLE_NAME)
+public class DcnbBangKeXuatVTDtl {
 
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "DCNB_BANG_KE_NHAP_VT_DTL";
+    public static final String TABLE_NAME = "DCNB_BANG_KE_XUAT_VT_DTL";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanLayMauDtl.TABLE_NAME + "_SEQ")

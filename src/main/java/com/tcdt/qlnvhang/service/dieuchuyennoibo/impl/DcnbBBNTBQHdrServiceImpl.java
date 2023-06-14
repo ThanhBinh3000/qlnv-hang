@@ -59,14 +59,14 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        Page<DcnbBBNTBQHdrDTO> dcnbQuyetDinhDcCHdrs = null;
+        Page<DcnbBBNTBQHdrDTO> searchDto = null;
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            dcnbQuyetDinhDcCHdrs = hdrRepository.searchPageChiCuc(req, pageable);
+            searchDto = hdrRepository.searchPageChiCuc(req, pageable);
         }else {
-            dcnbQuyetDinhDcCHdrs = hdrRepository.searchPage(req, pageable);
+            searchDto = hdrRepository.searchPage(req, pageable);
         }
 
-        return dcnbQuyetDinhDcCHdrs;
+        return searchDto;
     }
     @Override
     public DcnbBBNTBQHdr create(DcnbBBNTBQHdrReq req) throws Exception {

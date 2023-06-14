@@ -4,16 +4,10 @@ import com.tcdt.qlnvhang.request.BaseRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.time.LocalDate;
-
 @Data
 @AllArgsConstructor
-public class SearchDcnbBienBanHaoDoi extends BaseRequest {
+public class DcnbBangKeXuatVTReq extends BaseRequest {
     private Integer nam;
-    private String soQdinhDcc;
-    private String soBbHaoDoi;
-    private LocalDate tuNgay;
-    private LocalDate denNgay;
     private String maDvi;
     private String loaiDc;
     private String loaiQdinh;

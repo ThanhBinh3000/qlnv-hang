@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = DcnbBienBanLayMauDtl.TABLE_NAME)
+@Table(name = DcnbBBKetThucNKDtl.TABLE_NAME)
 public class DcnbBBKetThucNKDtl {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "DCNB_BB_KET_THUC_NK_DTL";

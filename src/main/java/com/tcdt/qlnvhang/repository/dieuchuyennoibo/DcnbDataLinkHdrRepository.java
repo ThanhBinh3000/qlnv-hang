@@ -13,9 +13,9 @@ public interface DcnbDataLinkHdrRepository extends JpaRepository<DcnbDataLinkHdr
             "LEFT JOIN DcnbQuyetDinhDcCHdr qdch On qdch.id = hdr.qdCcId " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdch.id = qdcd.hdrId " +
             "WHERE 1 =1 "+
-            "AND (khdch.maDvi = ?1 )"+
-            "AND (khdch.id = ?2) " +
-            "AND ((khdcd.maLoKho IS NULL OR khdcd.maLoKho = ?3) OR  (khdcd.maNganKho = ?4)) " +
+            "AND (qdch.maDvi = ?1 )"+
+            "AND (qdch.id = ?2) " +
+            "AND ((khdcd.maLoKho IS NULL OR khdcd.maLoKho = ?4) OR  (khdcd.maNganKho = ?3)) " +
             "ORDER BY khdch.soQdDc desc, khdch.nam desc")
     DcnbDataLinkHdr findDataLinkChiCuc(String maDvi, Long qDinhDccId, String maNganKho, String maLoKho);
     @Query(value = "SELECT hdr FROM DcnbDataLinkHdr hdr " +
@@ -24,9 +24,9 @@ public interface DcnbDataLinkHdrRepository extends JpaRepository<DcnbDataLinkHdr
             "LEFT JOIN DcnbQuyetDinhDcCHdr qdch On qdch.id = hdr.qdCcParentId " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdch.id = qdcd.hdrId " +
             "WHERE 1 =1 "+
-            "AND (khdch.maDvi = ?1 )"+
-            "AND (khdch.id = ?2) " +
-            "AND ((khdcd.maLoKho IS NULL OR khdcd.maLoKho = ?3) OR  (khdcd.maNganKho = ?4)) " +
+            "AND (qdch.maDvi = ?1 )"+
+            "AND (qdch.id = ?2) " +
+            "AND ((khdcd.maLoKho IS NULL OR khdcd.maLoKho = ?4) OR  (khdcd.maNganKho = ?3)) " +
             "ORDER BY khdch.soQdDc desc, khdch.nam desc")
     DcnbDataLinkHdr findDataLinkCuc(String maDvi, Long qdDcId, String maNganKho, String maLoKho);
 }

@@ -17,5 +17,6 @@ public class SearchPhieuXuatKho extends BaseRequest {
     private LocalDate denNgay;
     private String maDvi;
     private String loaiDc;
+    private String loaiQdinh;
     private String trangThai;
 }

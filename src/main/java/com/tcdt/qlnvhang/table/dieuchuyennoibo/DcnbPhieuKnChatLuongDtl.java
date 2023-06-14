@@ -6,7 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 @Entity
-@Table(name = DcnbPhieuKtChatLuongDtl.TABLE_NAME)
+@Table(name = DcnbPhieuKnChatLuongDtl.TABLE_NAME)
 @Getter
 @Setter
 public class DcnbPhieuKnChatLuongDtl {
