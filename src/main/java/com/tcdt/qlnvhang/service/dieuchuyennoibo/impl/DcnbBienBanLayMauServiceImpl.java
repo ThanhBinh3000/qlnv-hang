@@ -76,14 +76,9 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        Page<DcnbBienBanLayMauHdrDTO> dcnbQuyetDinhDcCHdrs = null;
+        Page<DcnbBienBanLayMauHdrDTO> searchDto = null;
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            if("00".equals(req.getType())){
-                req.setTypeDataLink(Contains.DIEU_CHUYEN);
-            }else if("01".equals(req.getType())){
-                req.setTypeDataLink(Contains.NHAN_DIEU_CHUYEN);
-            }
-            dcnbQuyetDinhDcCHdrs = dcnbBienBanLayMauHdrRepository.searchPageChiCuc(req, pageable);
+            searchDto = dcnbBienBanLayMauHdrRepository.searchPageChiCuc(req, pageable);
         }
         if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             if("00".equals(req.getType())){
@@ -91,9 +86,9 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
             }else if("01".equals(req.getType())){
                 req.setTypeDataLink(Contains.NHAN_DIEU_CHUYEN);
             }
-            dcnbQuyetDinhDcCHdrs = dcnbBienBanLayMauHdrRepository.searchPageCuc(req, pageable);
+            searchDto = dcnbBienBanLayMauHdrRepository.searchPageCuc(req, pageable);
         }
-        return dcnbQuyetDinhDcCHdrs;
+        return searchDto;
     }
 
     @Transactional

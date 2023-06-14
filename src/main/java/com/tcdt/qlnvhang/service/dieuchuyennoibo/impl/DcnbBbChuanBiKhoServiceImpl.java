@@ -55,14 +55,14 @@ public class DcnbBbChuanBiKhoServiceImpl implements DcnbBbChuanBiKhoService {
         CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
         req.setMaDvi(currentUser.getDvql());
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        Page<DcnbBbChuanBiKhoHdrDTO> dcnbQuyetDinhDcCHdrs = null;
+        Page<DcnbBbChuanBiKhoHdrDTO> searchDto = null;
 //        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-//            dcnbQuyetDinhDcCHdrs = hdrRepository.searchPageChiCuc(req, pageable);
+//            searchDto = hdrRepository.searchPageChiCuc(req, pageable);
 //        }else {
-//            dcnbQuyetDinhDcCHdrs = hdrRepository.searchPage(req, pageable);
+//            searchDto = hdrRepository.searchPage(req, pageable);
 //        }
 
-        return dcnbQuyetDinhDcCHdrs;
+        return searchDto;
     }
 
     @Override

@@ -22,6 +22,7 @@ public class SearchDcnbBienBanLayMau extends BaseRequest {
     private LocalDate denNgay;
     private String maDvi;
     private String loaiDc;
+    private String loaiQdinh;
     private List<String> loaiDcs = new ArrayList<>();
     private String trangThai;
     private String type;
