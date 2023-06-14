@@ -161,7 +161,6 @@ public class DcnbPhieuKtChatLuongHdr extends BaseEntity implements Serializable,
 
     @Column(name = "SO_BB_HAO_DOI")
     private String soBbHaoDoi;
-
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
     private List<DcnbPhieuKtChatLuongDtl> dcnbPhieuKtChatLuongDtl = new ArrayList<>();
