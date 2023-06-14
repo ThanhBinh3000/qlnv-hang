@@ -43,6 +43,8 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	@Transient
 	String tenDvi;
 	@Transient
+	String tenDviLapDx;
+	@Transient
 	String tenDviCha;
 	String trangThai;
 	@Transient
@@ -97,6 +99,11 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	String tenKieuNx;
 	String diaChiDvi;
 	BigDecimal donGiaVat;
+	String dienGiaiTongMucDt;
+	String quyMo;
+	String cviecDaTh;
+	String cviecKhongTh;
+	String maDviLapDx;
 	@Transient
 	String soQdPdKqLcnt;
 	@Transient

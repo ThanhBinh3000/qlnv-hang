@@ -342,6 +342,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         qOptional.get().setTenLoaiVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : mapVthh.get(qOptional.get().getLoaiVthh()));
         qOptional.get().setTenCloaiVthh(StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null : mapVthh.get(qOptional.get().getCloaiVthh()));
         qOptional.get().setTenDvi(mapDmucDvi.get(qOptional.get().getMaDvi()));
+        qOptional.get().setTenDviLapDx(mapDmucDvi.get(qOptional.get().getMaDviLapDx()) + " - " + mapDmucDvi.get(qOptional.get().getMaDvi()));
         qOptional.get().setCcXdgDtlList(hhDxuatKhLcntCcxdgDtlRepository.findByIdDxKhlcnt(qOptional.get().getId()));
         qOptional.get().setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qOptional.get().getTrangThai()));
 
