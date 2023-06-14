@@ -22,10 +22,12 @@ import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.object.*;
 import com.tcdt.qlnvhang.service.feign.BaoCaoClient;
+import com.tcdt.qlnvhang.table.DmDonViDTO;
 import com.tcdt.qlnvhang.table.HhDxKhLcntThopDtl;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
+import com.tcdt.qlnvhang.table.report.HhDxKhlcntDsgthauReport;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.*;
 import org.modelmapper.ModelMapper;
@@ -391,15 +393,16 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         listDvi.add(hhDxuatKhLcntHdrReq.getMaDvi().substring(0, hhDxuatKhLcntHdrReq.getMaDvi().length() - 2));
 
         HhDxuatKhLcntHdrPreview object = new ModelMapper().map(hhDxuatKhLcntHdrReq, HhDxuatKhLcntHdrPreview.class);
-        Map<String, String> mapDmucDvi = getListDanhMucDviByMadviIn(listDvi, "01");
+        Map<String, DmDonViDTO> mapDmucDvi = getListDanhMucDviByMadviIn(listDvi, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapNguonVon = getListDanhMucChung("NGUON_VON");
         Map<String, String> hashMapHtLcnt = getListDanhMucChung("HT_LCNT");
         Map<String, String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
-        Map<String,String> hashMapPthucDthau = getListDanhMucChung("PT_DTHAU");
+        Map<String, String> hashMapPthucDthau = getListDanhMucChung("PT_DTHAU");
 
-        object.setTenDvi(mapDmucDvi.get(hhDxuatKhLcntHdrReq.getMaDvi()));
-        object.setTenDviCha(mapDmucDvi.get(hhDxuatKhLcntHdrReq.getMaDvi().substring(0, hhDxuatKhLcntHdrReq.getMaDvi().length() - 2)));
+        object.setTenDvi(mapDmucDvi.get(hhDxuatKhLcntHdrReq.getMaDvi()).getTenDvi());
+        object.setDiaChiDvi(mapDmucDvi.get(hhDxuatKhLcntHdrReq.getMaDvi()).getDiaChi());
+        object.setTenDviCha(mapDmucDvi.get(hhDxuatKhLcntHdrReq.getMaDvi().substring(0, hhDxuatKhLcntHdrReq.getMaDvi().length() - 2)).getTenDvi());
         object.setTenLoaiVthh(mapVthh.get(hhDxuatKhLcntHdrReq.getLoaiVthh()));
         object.setTenCloaiVthh(mapVthh.get(hhDxuatKhLcntHdrReq.getCloaiVthh()));
         object.setTenHthucLcnt(hashMapHtLcnt.get(hhDxuatKhLcntHdrReq.getHthucLcnt()));
@@ -412,11 +415,25 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         object.setTgianMthau(hhDxuatKhLcntHdrReq.getTgianMthau() != null ? formatter.format(hhDxuatKhLcntHdrReq.getTgianMthau()) : null);
         object.setTgianNhang(hhDxuatKhLcntHdrReq.getTgianNhang() != null ? formatter.format(hhDxuatKhLcntHdrReq.getTgianNhang()) : null);
         object.setSoGoiThau(hhDxuatKhLcntDsgtDtlRepository.countByIdDxKhlcnt(hhDxuatKhLcntHdrReq.getId()));
-
+        if (object.getId() != null) {
+            List<HhDxKhlcntDsgthau> dsGthauList = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcnt(object.getId());
+            for (HhDxKhlcntDsgthau dsG : dsGthauList) {
+                HhDxKhlcntDsgthauReport data = new ModelMapper().map(dsG, HhDxKhlcntDsgthauReport.class);
+                object.setTongSl(docxToPdfConverter.convertNullToZero(object.getTongSl()) + docxToPdfConverter.convertNullToZero(data.getSoLuong()));
+                object.setTongThanhTien(docxToPdfConverter.convertNullToZero(object.getTongThanhTien()).add((docxToPdfConverter.convertNullToZero(BigDecimal.valueOf(data.getSoLuong())).multiply(docxToPdfConverter.convertNullToZero(data.getDonGiaTamTinh())).multiply(BigDecimal.valueOf(1000)))));
+                data.setThanhTien(docxToPdfConverter.convertNullToZero(BigDecimal.valueOf(data.getSoLuong())).multiply(data.getDonGiaTamTinh()).multiply(BigDecimal.valueOf(1000)));
+                List<HhDxKhlcntDsgthauCtiet> dsCtiet = hhDxKhlcntDsgthauCtietRepository.findByIdGoiThau(dsG.getId());
+                for (HhDxKhlcntDsgthauCtiet dsCt : dsCtiet) {
+                    data.setDiaDiemNhapKho(dsCt.getDiaDiemNhap());
+                }
+                data.setDiaDiemNhapKho(data.getDiaDiemNhapKho() + " - " + object.getTenDvi() + " - " + object.getDiaChiDvi());
+                object.getDsGtDtlList().add(data);
+            }
+        }
         Map<String, String> fieldValues = new HashMap<>();
         fieldValues = docxToPdfConverter.convertObjectToMap(object);
         List<String> tenCanCuPhapLy = new ArrayList<>();
-        if(object.getFileDinhKems().size() > 0){
+        if (object.getFileDinhKems().size() > 0) {
             for (FileDinhKemReq ten : object.getFileDinhKems()) {
                 tenCanCuPhapLy.add(ten.getNoiDung());
             }
@@ -427,7 +444,10 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         }
         String fileDinhKemsTextString = fileDinhKems.toString();
         fieldValues.put("fileDinhKems", fileDinhKemsTextString);
-        return docxToPdfConverter.convertDocxToPdf(inputStream, fieldValues);
+
+        List<String> tableValues = docxToPdfConverter.convertDataReplaceToTable(object.getDsGtDtlList());
+        System.out.println(tableValues);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, fieldValues, tableValues);
     }
 
 
