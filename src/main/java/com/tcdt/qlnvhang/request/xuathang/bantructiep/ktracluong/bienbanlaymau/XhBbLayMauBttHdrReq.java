@@ -73,7 +73,7 @@ public class XhBbLayMauBttHdrReq extends BaseRequest {
 
     private String soBbHaoDoi;
 
-    private String phanLoai;
+    private String pthucBanTrucTiep;
 
     @Transient
     private List<XhBbLayMauBttDtlReq> children = new ArrayList<>();

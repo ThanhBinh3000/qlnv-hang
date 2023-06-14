@@ -53,9 +53,11 @@ public class XhQdNvXhBttHdrReq extends BaseRequest {
 
     private String trangThaiXh;
 
-    private String phanLoai;
+    private String pthucBanTrucTiep;
 
     private LocalDate ngayKyHd;
+
+    private String phanLoai;
 
     private List<XhQdNvXhBttDtlReq> children = new ArrayList<>();
 

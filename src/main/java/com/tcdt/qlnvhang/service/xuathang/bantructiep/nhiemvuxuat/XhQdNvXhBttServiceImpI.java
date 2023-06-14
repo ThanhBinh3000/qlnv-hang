@@ -98,7 +98,7 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
 
         XhHopDongBttHdr dataHd = new XhHopDongBttHdr();
         XhQdPdKhBttHdr dataQdPdKq = new XhQdPdKhBttHdr();
-        if (req.getPhanLoai().equals("01")){
+        if (req.getPhanLoai().equals("CG")){
             Optional<XhHopDongBttHdr> qOptionalHd = xhHopDongBttHdrRepository.findById(req.getIdHd());
             if (!qOptionalHd.isPresent()){
                 throw new Exception("Không tìm thấy hợp đồng bán trực tiếp");
@@ -132,7 +132,7 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
             List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhQdNvXhBttHdr.TABLE_NAME);
             created.setFileDinhKems(fileDinhKems);
         }
-        if (req.getPhanLoai().equals("01")){
+        if (req.getPhanLoai().equals("CG")){
             dataHd.setTrangThaiXh(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
             xhHopDongBttHdrRepository.save(dataHd);
         }
@@ -179,7 +179,7 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         }
 
         XhQdNvXhBttHdr data = qOptional.get();
-        if (req.getPhanLoai().equals("01")){
+        if (req.getPhanLoai().equals("CG")){
             Optional<XhHopDongBttHdr> qOptionalHd = xhHopDongBttHdrRepository.findById(req.getIdHd());
             if (!qOptionalHd.isPresent()){
                 throw new Exception("Không tìm thấy hợp đồng bán trực tiếp");
@@ -187,7 +187,7 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         }else {
             Optional<XhQdPdKhBttHdr> qOptionalQdNv = xhQdPdKhBttHdrRepository.findById(req.getIdQdPd());
             if (!qOptionalQdNv.isPresent()) {
-                throw new Exception("Không tim thấy quyết định giao nhiệm vụ xuất hàng");
+                throw new Exception("Không tìm thấy quyết định phê duyệt kế hoạch bán trực tiếp");
             }
         }
         BeanUtils.copyProperties(req, data, "id");
@@ -300,7 +300,7 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
                     throw new Exception("Phê duyệt không thành công");
             }
             data.setTrangThai(req.getTrangThai());
-            if (req.getTrangThai().equals(Contains.BAN_HANH) && data.getPhanLoai().equals("01")){
+            if (req.getTrangThai().equals(Contains.BAN_HANH) && data.getPhanLoai().equals("CG")){
                 Optional<XhHopDongBttHdr> optionalHd = xhHopDongBttHdrRepository.findById(data.getIdHd());
                 if (optionalHd.isPresent()){
                     optionalHd.get().setSoQdNv(data.getSoQdNv());
@@ -335,7 +335,7 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
         xhQdNvXhBttDtlRepository.deleteAllByIdHdr(id);
         xhQdNvXhBttHdrRepository.delete(hdr);
         fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhQdNvXhBttHdr.TABLE_NAME));
-        if(hdr.getPhanLoai().equals("01")){
+        if(hdr.getPhanLoai().equals("CG")){
             Optional<XhHopDongBttHdr> hopDongBttHdr = xhHopDongBttHdrRepository.findById(hdr.getIdHd());
             if (hopDongBttHdr.isPresent()){
                 hopDongBttHdr.get().setIdHd(null);
