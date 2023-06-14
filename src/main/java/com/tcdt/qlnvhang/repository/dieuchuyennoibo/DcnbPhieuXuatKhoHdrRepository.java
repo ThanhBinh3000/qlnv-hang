@@ -28,11 +28,12 @@ public interface DcnbPhieuXuatKhoHdrRepository extends JpaRepository<DcnbPhieuXu
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
             "WHERE 1 =1 "+
-            "AND qdc.trangThai = '29' AND qdc.loaiDc = :#{#param.loaiDc} AND (pxk.type IS NULL OR (:#{#param.type} IS NULL OR pxk.type = :#{#param.type})) "+
+            "AND qdc.trangThai = '29' AND (pxk.type IS NULL OR (:#{#param.type} IS NULL OR pxk.type = :#{#param.type})) "+
             "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}))"+
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
             "ORDER BY pxk.soPhieuXuatKho desc, pxk.nam desc")
     Page<DcnbPhieuXuatKhoHdrDTO> searchPageChiCuc(@Param("param")SearchPhieuXuatKho req, Pageable pageable);
+
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuXuatKhoHdrDTO(" +
             "pxk.id,qdc.id,qdc.soQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maNhaKho,khdcd.tenNhaKho, khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
             "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho, khdcd.thayDoiThuKho,pxk.soPhieuXuatKho,pxk.ngayXuatKho,pxk.soPhieuKtChatLuong,pxk.ngayKyPhieuKtChatLuong," +
@@ -43,7 +44,7 @@ public interface DcnbPhieuXuatKhoHdrRepository extends JpaRepository<DcnbPhieuXu
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
             "WHERE 1 =1 "+
-            "AND qdc.trangThai = '29' AND qdc.loaiDc = :#{#param.loaiDc} AND (pxk.type IS NULL OR (:#{#param.type} IS NULL OR pxk.type = :#{#param.type})) "+
+            "AND qdc.trangThai = '29' AND (pxk.type IS NULL OR (:#{#param.type} IS NULL OR pxk.type = :#{#param.type})) "+
             "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}))"+
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
             "ORDER BY pxk.soPhieuXuatKho desc, pxk.nam desc")
