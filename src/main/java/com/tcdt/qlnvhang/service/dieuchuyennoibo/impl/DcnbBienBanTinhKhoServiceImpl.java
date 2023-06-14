@@ -61,8 +61,15 @@ public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        Page<DcnbBienBanTinhKhoHdrDTO> dcnbQuyetDinhDcCHdrs = dcnbBienBanTinhKhoHdrRepository.searchPage(req, pageable);
-        return dcnbQuyetDinhDcCHdrs;
+        Page<DcnbBienBanTinhKhoHdrDTO> searchDto = null;
+
+        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            searchDto = dcnbBienBanTinhKhoHdrRepository.searchPageChiCuc(req, pageable);
+        }
+        if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            searchDto = dcnbBienBanTinhKhoHdrRepository.searchPageCuc(req, pageable);
+        }
+        return searchDto;
     }
 
     @Transactional
@@ -243,7 +250,7 @@ public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
         objReq.setPaggingReq(paggingReq);
         objReq.setMaDvi(currentUser.getDvql());
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit());
-        Page<DcnbBienBanTinhKhoHdrDTO> page = dcnbBienBanTinhKhoHdrRepository.searchPage(objReq,pageable);
+        Page<DcnbBienBanTinhKhoHdrDTO> page = dcnbBienBanTinhKhoHdrRepository.searchPageChiCuc(objReq,pageable);
         List<DcnbBienBanTinhKhoHdrDTO> data = page.getContent();
 
         String title = "Danh sách bảng kê cân hàng ";

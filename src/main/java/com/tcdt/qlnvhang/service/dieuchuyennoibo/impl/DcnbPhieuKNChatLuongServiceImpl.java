@@ -65,9 +65,9 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
 
-        Page<DcnbPhieuKnChatLuongHdrDTO> dcnbQuyetDinhDcCHdrs = null;
+        Page<DcnbPhieuKnChatLuongHdrDTO> searchDto = null;
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            dcnbQuyetDinhDcCHdrs = dcnbPhieuKnChatLuongHdrRepository.searchPageChiCuc(req, pageable);
+            searchDto = dcnbPhieuKnChatLuongHdrRepository.searchPageChiCuc(req, pageable);
         }
         if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             if("00".equals(req.getType())){
@@ -75,10 +75,10 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
             }else if("01".equals(req.getType())){
                 req.setTypeDataLink(Contains.NHAN_DIEU_CHUYEN);
             }
-            dcnbQuyetDinhDcCHdrs = dcnbPhieuKnChatLuongHdrRepository.searchPageCuc(req, pageable);
+            searchDto = dcnbPhieuKnChatLuongHdrRepository.searchPageCuc(req, pageable);
         }
 
-        return dcnbQuyetDinhDcCHdrs;
+        return searchDto;
     }
     @Transactional
     public DcnbPhieuKnChatLuongHdr save(CustomUserDetails currentUser, DcnbPhieuKnChatLuongHdrReq objReq) throws Exception {
