@@ -228,7 +228,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
             case Contains.CHODUYET_LDC + Contains.DA_DUYET_LDC:
                 optional.get().setNguoiDuyetLdCuc(currentUser.getUser().getId());
                 optional.get().setNgayDuyetLdCuc(LocalDate.now());
-                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(optional.get().getMaDvi(),
+                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkCuc(optional.get().getMaDvi(),
                         optional.get().getQdDcId(),
                         optional.get().getMaNganKho(),
                         optional.get().getMaLoKho());

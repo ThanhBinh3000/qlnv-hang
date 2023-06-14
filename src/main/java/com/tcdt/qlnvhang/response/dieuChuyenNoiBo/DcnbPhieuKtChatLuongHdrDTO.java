@@ -9,13 +9,13 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class DcnbPhieuKtChatLuongHdrDTO {
     private Long id;
-    private Long bBLayMauId;
+    private Long bBNtLdId;
     private Long qDinhDccId;
     private String soQdinh;
-    private String soBbLayMau;
-    private LocalDate ngayLayMau;
+    private String soBBNtLd;
+    private LocalDate ngayGiamDinh;
     private Integer nam;
-    private LocalDate thoiHanDieuChuyen;
+    private String ketQuaDanhGia;
     private String maNhaKho;
     private String tenNhaKho;
     private String maDiemKho;
