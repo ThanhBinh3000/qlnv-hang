@@ -49,4 +49,5 @@ public class DcnbBBNTBQHdrDTO {
     private BigDecimal tichLuongKd;
     private String tenDonViTinh;
     private String loaiVthh;
+    private String  cloaiVthh;
 }
