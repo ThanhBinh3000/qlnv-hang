@@ -159,8 +159,8 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
                 hdr.setLdChiCuc(userInfo.getFullName());
                 DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(hdr.getMaDvi(),
                         hdr.getQdDcCucId(),
-                        hdr.getMaNganKho(),
-                        hdr.getMaLoKho());
+                        hdr.getMaNganKhoXuat(),
+                        hdr.getMaLoKhoXuat());
                 DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
                 dataLinkDtl.setLinkId(hdr.getId());
                 dataLinkDtl.setHdrId(dataLink.getId());
