@@ -182,6 +182,7 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl implements XhD
                     diaDiem.setTenLoKho(StringUtils.isEmpty(diaDiem.getMaLoKho())?null:mapDmucDvi.get(diaDiem.getMaLoKho()));
                     diaDiem.setTenLoaiVthh(StringUtils.isEmpty(diaDiem.getLoaiVthh())?null:mapDmucVthh.get(diaDiem.getLoaiVthh()));
                     diaDiem.setTenCloaiVthh(StringUtils.isEmpty(diaDiem.getCloaiVthh())?null:mapDmucVthh.get(diaDiem.getCloaiVthh()));
+                    this.donGiaDuocDuyet(data, diaDiem);
                     });
                 dataDtl.setTenDvi(StringUtils.isEmpty(dataDtl.getMaDvi())?null:mapDmucDvi.get(dataDtl.getMaDvi()));
                 dataDtl.setChildren(dataDtlDdiemList);
@@ -194,6 +195,21 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl implements XhD
             List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhDxKhBanTrucTiepHdr.TABLE_NAME));
             if (!CollectionUtils.isEmpty(fileDinhKems)) data.setFileDinhKems(fileDinhKems);
         return data;
+    }
+
+    void donGiaDuocDuyet(XhDxKhBanTrucTiepHdr data, XhDxKhBanTrucTiepDdiem diaDiem){
+        BigDecimal donGiaDuocDuyet = BigDecimal.ZERO;
+        if(data.getLoaiVthh().startsWith("02")){
+            donGiaDuocDuyet = xhDxKhBanTrucTiepDdiemRepository.getDonGiaVatVt(data.getCloaiVthh(), data.getNamKh());
+            if (!DataUtils.isNullObject(donGiaDuocDuyet)){
+                diaDiem.setDonGiaDuocDuyet(donGiaDuocDuyet);
+            }
+        }else {
+            donGiaDuocDuyet = xhDxKhBanTrucTiepDdiemRepository.getDonGiaVatLt(data.getCloaiVthh(), data.getMaDvi(), data.getNamKh());
+            if (!DataUtils.isNullObject(donGiaDuocDuyet)){
+                diaDiem.setDonGiaDuocDuyet(donGiaDuocDuyet);
+            }
+        }
     }
 
     @Override
