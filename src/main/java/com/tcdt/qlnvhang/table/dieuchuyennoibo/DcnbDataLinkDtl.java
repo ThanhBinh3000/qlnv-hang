@@ -6,12 +6,12 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = DcnbDataLinkHdr.TABLE_NAME)
+@Table(name = DcnbDataLinkDtl.TABLE_NAME)
 @Getter
 @Setter
 public class DcnbDataLinkDtl {
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "DCNB_DATA_LINK_HDR";
+    public static final String TABLE_NAME = "DCNB_DATA_LINK_DTL";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = TABLE_NAME +"_SEQ")

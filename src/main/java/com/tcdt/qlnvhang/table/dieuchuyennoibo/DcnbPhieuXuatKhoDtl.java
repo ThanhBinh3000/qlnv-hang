@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = DcnbBienBanLayMauDtl.TABLE_NAME)
+@Table(name = DcnbPhieuXuatKhoDtl.TABLE_NAME)
 public class DcnbPhieuXuatKhoDtl {
 
     private static final long serialVersionUID = 1L;

@@ -18,4 +18,6 @@ public class SearchPhieuXuatKho extends BaseRequest {
     private String maDvi;
     private String loaiDc;
     private String trangThai;
+    private String type;
+    private String typeDataLink;
 }

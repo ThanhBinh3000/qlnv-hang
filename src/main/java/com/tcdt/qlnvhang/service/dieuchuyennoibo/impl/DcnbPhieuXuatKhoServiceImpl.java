@@ -9,6 +9,8 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbPhieuXuatKhoHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchPhieuXuatKho;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBienBanLayMauHdrDTO;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuXuatKhoHdrDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbChuanBiKhoHdr;
@@ -49,12 +51,28 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
     @Autowired
     private DcnbDataLinkDtlRepository dcnbDataLinkDtlRepository;
 
-    public Page<DcnbPhieuXuatKhoHdr> searchPage(CustomUserDetails currentUser, SearchPhieuXuatKho req) throws Exception {
+    public Page<DcnbPhieuXuatKhoHdrDTO> searchPage(CustomUserDetails currentUser, SearchPhieuXuatKho req) throws Exception {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        Page<DcnbPhieuXuatKhoHdr> search = hdrRepository.search(req, pageable);
-        return search;
+        Page<DcnbPhieuXuatKhoHdrDTO> searchDto = null;
+        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            if("00".equals(req.getType())){
+                req.setTypeDataLink(Contains.DIEU_CHUYEN);
+            }else if("01".equals(req.getType())){
+                req.setTypeDataLink(Contains.NHAN_DIEU_CHUYEN);
+            }
+            searchDto = hdrRepository.searchPageChiCuc(req, pageable);
+        }
+        if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            if("00".equals(req.getType())){
+                req.setTypeDataLink(Contains.DIEU_CHUYEN);
+            }else if("01".equals(req.getType())){
+                req.setTypeDataLink(Contains.NHAN_DIEU_CHUYEN);
+            }
+            searchDto = hdrRepository.searchPageCuc(req, pageable);
+        }
+        return searchDto;
     }
 
     @Transactional
