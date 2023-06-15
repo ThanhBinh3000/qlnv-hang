@@ -126,6 +126,10 @@ public class HhDxuatKhLcntHdrReq {
 	String ghiChu;
 
 	String dienGiai;
+	String dienGiaiTongMucDt;
+	String quyMo;
+	String cviecDaTh;
+	String cviecKhongTh;
 	String ykienThamGia;
 
 	String loaiHinhNx;
@@ -135,6 +139,7 @@ public class HhDxuatKhLcntHdrReq {
 	String diaChiDvi;
 	BigDecimal donGiaVat;
 	String tenDviCha;
+	String maDviLapDx;
 	private ReportTemplateRequest reportTemplateRequest;
 
 	private List<FileDinhKemReq> fileDinhKemReq =  new ArrayList<>();
