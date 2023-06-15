@@ -70,11 +70,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
             searchDto = dcnbPhieuKnChatLuongHdrRepository.searchPageChiCuc(req, pageable);
         }
         if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            if("00".equals(req.getType())){
-                req.setTypeDataLink(Contains.DIEU_CHUYEN);
-            }else if("01".equals(req.getType())){
-                req.setTypeDataLink(Contains.NHAN_DIEU_CHUYEN);
-            }
+            req.setTypeDataLink(Contains.DIEU_CHUYEN);
             searchDto = dcnbPhieuKnChatLuongHdrRepository.searchPageCuc(req, pageable);
         }
 
