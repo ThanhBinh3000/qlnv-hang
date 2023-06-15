@@ -54,6 +54,21 @@ public class DcnbPhieuKtChatLuongHdrReq {
     private String tenThuKho;
 
     private Long thuKhoId;
+    private String maDiemKhoXuat;
+
+    private String tenDiemKhoXuat;
+
+    private String maNhaKhoXuat;
+
+    private String tenNhaKhoXuat;
+
+    private String maNganKhoXuat;
+
+    private String tenNganKhoXuat;
+
+    private String maLoKhoXuat;
+
+    private String tenLoKhoXuat;
 
     private String soBbLayMau;
 
