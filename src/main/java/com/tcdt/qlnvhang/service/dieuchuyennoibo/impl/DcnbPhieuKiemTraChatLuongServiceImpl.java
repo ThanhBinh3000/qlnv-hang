@@ -11,6 +11,7 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.*;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKtChatLuongHdrDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -53,11 +54,11 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
     @Autowired
     FileDinhKemRepository fileDinhKemRepository;
 
-    public Page<DcnbPhieuKtChatLuongHdr> searchPage(CustomUserDetails currentUser, SearchPhieuKtChatLuong req) throws Exception {
+    public Page<DcnbPhieuKtChatLuongHdrDTO> searchPage(CustomUserDetails currentUser, SearchPhieuKtChatLuong req) throws Exception {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        Page<DcnbPhieuKtChatLuongHdr> search = dcnbPhieuKtChatLuongHdrRepository.search(req, pageable);
+        Page<DcnbPhieuKtChatLuongHdrDTO> search = dcnbPhieuKtChatLuongHdrRepository.search(req, pageable);
         return search;
     }
 
@@ -221,8 +222,8 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
         paggingReq.setPage(0);
         paggingReq.setLimit(Integer.MAX_VALUE);
         objReq.setPaggingReq(paggingReq);
-        Page<DcnbPhieuKtChatLuongHdr> page = this.searchPage(currentUser, objReq);
-        List<DcnbPhieuKtChatLuongHdr> data = page.getContent();
+        Page<DcnbPhieuKtChatLuongHdrDTO> page = this.searchPage(currentUser, objReq);
+        List<DcnbPhieuKtChatLuongHdrDTO> data = page.getContent();
 
         String title = "Danh sách phương án xuất cứu trợ, viện trợ ";
         String[] rowsName = new String[]{"STT", "Năm kH", "Số công văn/đề xuất", "Ngày duyệt LĐ Cục", "Loại điều chuyển", "Đơn vị đề xuất", "Trạng thái",};
@@ -230,17 +231,12 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
         for (int i = 0; i < data.size(); i++) {
-            DcnbPhieuKtChatLuongHdr dx = data.get(i);
+            DcnbPhieuKtChatLuongHdrDTO dx = data.get(i);
             objs = new Object[rowsName.length];
             objs[0] = i;
-            objs[1] = dx.getSoQdinhDc();
+            objs[1] = dx.getSoQdinh();
             objs[2] = dx.getNam();
-            objs[3] = dx.getNgayTao();
-            objs[4] = dx.getTenDiemKho();
-            objs[5] = dx.getTenLoKho();
             objs[6] = dx.getThayDoiThuKho();
-            objs[7] = dx.getSoBbLayMau();
-            objs[8] = dx.getNgayLayMau();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);

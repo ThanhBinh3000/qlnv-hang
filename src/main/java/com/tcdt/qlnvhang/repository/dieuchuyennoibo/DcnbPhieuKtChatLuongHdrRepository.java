@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.repository.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbBienBanLayMau;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchPhieuKtChatLuong;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKtChatLuongHdrDTO;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuKtChatLuongHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -42,7 +43,7 @@ public interface DcnbPhieuKtChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "AND ((:#{#param.tuNgay}  IS NULL OR pktcl.ngayKiem >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR pktcl.ngayKiem <= :#{#param.denNgay}) ) " +
             "ORDER BY pktcl.soQdinhDc desc, pktcl.nam desc")
-    Page<DcnbPhieuKtChatLuongHdr> search(@Param("param")SearchPhieuKtChatLuong req, Pageable pageable);
+    Page<DcnbPhieuKtChatLuongHdrDTO> search(@Param("param")SearchPhieuKtChatLuong req, Pageable pageable);
 
     Optional<DcnbPhieuKtChatLuongHdr> findFirstBySoPhieu(String soPhieu);
 
