@@ -416,18 +416,23 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         object.setTgianMthau(hhDxuatKhLcntHdrReq.getTgianMthau() != null ? formatter.format(hhDxuatKhLcntHdrReq.getTgianMthau()) : null);
         object.setTgianNhang(hhDxuatKhLcntHdrReq.getTgianNhang() != null ? formatter.format(hhDxuatKhLcntHdrReq.getTgianNhang()) : null);
         object.setSoGoiThau(hhDxuatKhLcntDsgtDtlRepository.countByIdDxKhlcnt(hhDxuatKhLcntHdrReq.getId()));
+        String diaDiem = "";
         if (object.getId() != null) {
             List<HhDxKhlcntDsgthau> dsGthauList = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcnt(object.getId());
             for (HhDxKhlcntDsgthau dsG : dsGthauList) {
+                diaDiem = "";
                 HhDxKhlcntDsgthauReport data = new ModelMapper().map(dsG, HhDxKhlcntDsgthauReport.class);
                 object.setTongSl(docxToPdfConverter.convertNullToZero(object.getTongSl()) + docxToPdfConverter.convertNullToZero(data.getSoLuong()));
-                object.setTongThanhTien(docxToPdfConverter.convertNullToZero(object.getTongThanhTien()).add((docxToPdfConverter.convertNullToZero(BigDecimal.valueOf(data.getSoLuong())).multiply(docxToPdfConverter.convertNullToZero(data.getDonGiaTamTinh())).multiply(BigDecimal.valueOf(1000)))));
-                data.setThanhTien(docxToPdfConverter.convertNullToZero(BigDecimal.valueOf(data.getSoLuong())).multiply(data.getDonGiaTamTinh()).multiply(BigDecimal.valueOf(1000)));
+                object.setTongThanhTien(docxToPdfConverter.convertNullToZero(object.getTongThanhTien()).add((docxToPdfConverter.convertNullToZero(BigDecimal.valueOf(data.getSoLuong())).multiply(docxToPdfConverter.convertNullToZero(dsG.getDonGiaTamTinh())).multiply(BigDecimal.valueOf(1000)))));
+                data.setThanhTien(docxToPdfConverter.convertNullToZero(BigDecimal.valueOf(data.getSoLuong())).multiply(dsG.getDonGiaTamTinh()).multiply(BigDecimal.valueOf(1000)));
                 List<HhDxKhlcntDsgthauCtiet> dsCtiet = hhDxKhlcntDsgthauCtietRepository.findByIdGoiThau(dsG.getId());
                 for (HhDxKhlcntDsgthauCtiet dsCt : dsCtiet) {
-                    data.setDiaDiemNhapKho(dsCt.getDiaDiemNhap());
+                    List<String>  str = new ArrayList<>(Arrays.asList(dsCt.getDiaDiemNhap().split(",")));
+                    for (int i = 0; i < str.size(); i++) {
+                        diaDiem = diaDiem + str.get(i) + " - ";
+                    }
                 }
-                data.setDiaDiemNhapKho(data.getDiaDiemNhapKho() + " - " + object.getTenDvi() + " - " + object.getDiaChiDvi());
+                data.setDiaDiemNhapKho(diaDiem + object.getTenDvi() + " - " + object.getDiaChiDvi());
                 object.getDsGtDtlList().add(data);
             }
         }
