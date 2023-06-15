@@ -13,7 +13,7 @@ public class DcnbPhieuKtChatLuongHdrDTO {
     private Long qDinhDccId;
     private String soQdinh;
     private String soBBNtLd;
-    private LocalDate ngayGiamDinh;
+    private LocalDate thoiGianDieuChuyen;
     private Integer nam;
     private String ketQuaDanhGia;
     private String maNhaKhoXuat;
