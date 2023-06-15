@@ -18,8 +18,13 @@ import java.util.Optional;
 public interface DcnbPhieuKtChatLuongHdrRepository extends JpaRepository<DcnbPhieuKtChatLuongHdr, Long> {
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKtChatLuongHdrDTO(" +
-            "pktcl.id,bbntbq.id,qdc.id,qdc.soQdinh,bbntbq.soBban,bbntbq.ngayPduyet,qdc.nam,pktcl.nhanXetKetLuan,khdcd.maNhaKho,khdcd.tenNhaKho,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
-            "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho, khdcd.thayDoiThuKho,pktcl.soPhieu,pktcl.ngayKiem,pktcl.ngayKiem, pktcl.trangThai,pktcl.trangThai) FROM DcnbQuyetDinhDcCHdr qdc " +
+            "pktcl.id,bbntbq.id,qdc.id,qdc.soQdinh,bbntbq.soBban,bbntbq.ngayPduyet,qdc.nam,pktcl.nhanXetKetLuan,khdcd.maNhaKho," +
+            "khdcd.tenNhaKho,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
+            "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho, khdcd.thayDoiThuKho,pktcl.soPhieu,pktcl.ngayKiem,pktcl.ngayKiem," +
+            "khdcd.maNhaKhoNhan,khdcd.tenNhaKhoNhan,khdcd.maDiemKhoNhan,khdcd.tenDiemKhoNhan,khdcd.maLoKhoNhan," +
+            "khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan,"+
+            "pktcl.trangThai,pktcl.trangThai) " +
+            "FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbDataLinkHdr dtlh On dtlh.qdCcParentId = qdc.id " +
             "LEFT JOIN DcnbPhieuKtChatLuongHdr pktcl On pktcl.qdDcId = qdc.id " +
             "LEFT JOIN DcnbBBNTBQHdr bbntbq On bbntbq.qdDcCucId = qdc.id " +
