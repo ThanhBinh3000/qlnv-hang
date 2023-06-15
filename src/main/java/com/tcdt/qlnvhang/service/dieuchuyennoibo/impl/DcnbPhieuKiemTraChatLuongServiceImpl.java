@@ -201,8 +201,8 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
                 optional.get().setNgayPDuyet(LocalDate.now());
                 DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkCuc(optional.get().getMaDvi(),
                         optional.get().getQdDcId(),
-                        optional.get().getMaNganKho(),
-                        optional.get().getMaLoKho());
+                        optional.get().getMaNganKhoXuat(),
+                        optional.get().getMaLoKhoXuat());
                 DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
                 dataLinkDtl.setLinkId(optional.get().getId());
                 dataLinkDtl.setHdrId(dataLink.getId());
