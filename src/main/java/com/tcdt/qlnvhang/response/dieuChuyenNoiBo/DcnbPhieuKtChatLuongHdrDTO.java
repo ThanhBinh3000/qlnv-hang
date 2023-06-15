@@ -25,9 +25,11 @@ public class DcnbPhieuKtChatLuongHdrDTO {
     private String maNganKhoXuat;
     private String tenNganKhoXuat;
     private Boolean thayDoiThuKho;
-    private String soPhieuKNChatLuong;
-    private LocalDate ngayKiemNghiem;
-    private LocalDate ngayXuatDocKho;
+    private String soPhieuKtChatLuong;
+    private LocalDate ngayGiamDinh;
+    private String ketQua;
+    private String soPhieuNhapKho;
+    private LocalDate ngayNhapKho;
     private String maNhaKhoNhan;
     private String tenNhaKhoNhan;
     private String maDiemKhoNhan;

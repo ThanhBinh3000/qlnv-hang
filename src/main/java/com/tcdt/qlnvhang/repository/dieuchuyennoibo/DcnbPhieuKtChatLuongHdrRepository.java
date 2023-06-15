@@ -20,7 +20,7 @@ public interface DcnbPhieuKtChatLuongHdrRepository extends JpaRepository<DcnbPhi
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKtChatLuongHdrDTO(" +
             "pktcl.id,bbntbq.id,qdc.id,qdc.soQdinh,bbntbq.soBban,khdcd.thoiGianDkDc,qdc.nam,pktcl.nhanXetKetLuan,khdcd.maNhaKho," +
             "khdcd.tenNhaKho,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
-            "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho, khdcd.thayDoiThuKho,pktcl.soPhieu,pktcl.ngayKiem,pktcl.ngayKiem," +
+            "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho, khdcd.thayDoiThuKho,pktcl.soPhieu,pktcl.ngayKiem,pktcl.nhanXetKetLuan,pnk.soPhieuNhapKho, pnk.ngayLap, " +
             "khdcd.maNhaKhoNhan,khdcd.tenNhaKhoNhan,khdcd.maDiemKhoNhan,khdcd.tenDiemKhoNhan,khdcd.maLoKhoNhan," +
             "khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan,"+
             "pktcl.trangThai,pktcl.trangThai) " +
