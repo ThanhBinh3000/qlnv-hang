@@ -371,10 +371,11 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
   }
 
   @Override
-  public ReportTemplateResponse preview(HttpServletResponse response) throws Exception {
+  public ReportTemplateResponse preview(String tenBaoCao) throws Exception {
     try {
       ReportTemplateRequest reportTemplateRequest = new ReportTemplateRequest();
-      reportTemplateRequest.setFileName("de-xuat-ke-hoach-ban-dau-gia.docx");
+//      reportTemplateRequest.setFileName("de-xuat-ke-hoach-ban-dau-gia.docx");
+      reportTemplateRequest.setFileName(tenBaoCao);
       ReportTemplate model = findByTenFile(reportTemplateRequest);
       byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
       ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
@@ -387,24 +388,4 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
     }
     return null;
   }
-
-  /*public static byte[] convertDocxToPdf(byte[] docxBytes) throws IOException, Docx4JException {
-    // Load DOCX as ByteArrayInputStream
-    ByteArrayInputStream docxInputStream = new ByteArrayInputStream(docxBytes);
-
-    // Create WordprocessingMLPackage from the DOCX input stream
-    WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(docxInputStream);
-
-    // Set PDF conversion settings
-    PdfSettings pdfSettings = new PdfSettings();
-    pdfSettings.setWmlPackage(wordMLPackage);
-    pdfSettings.setMargins(MarginsWellKnown.NORMAL);
-
-    // Perform PDF conversion
-    ByteArrayOutputStream pdfOutputStream = new ByteArrayOutputStream();
-    PdfConversion conversion = new org.docx4j.convert.out.pdf.viaXSLFO.Conversion(wordMLPackage);
-    conversion.output(pdfOutputStream, pdfSettings);
-
-    return pdfOutputStream.toByteArray();
-  }*/
 }

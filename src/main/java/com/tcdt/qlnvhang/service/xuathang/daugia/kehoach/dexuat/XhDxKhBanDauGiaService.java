@@ -18,7 +18,6 @@ public interface XhDxKhBanDauGiaService extends BaseService<XhDxKhBanDauGia, XhD
 
   BigDecimal getGiaBanToiThieu(String cloaiVthh, String maDvi, Integer namKh);
 
-  //    byte[] preview(HttpServletResponse response) throws Exception;
-  ReportTemplateResponse preview(HttpServletResponse response) throws Exception;
+  ReportTemplateResponse preview(String tenBaoCao) throws Exception;
 
 }
