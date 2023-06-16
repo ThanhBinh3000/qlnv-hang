@@ -28,6 +28,7 @@ import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.report.HhDxKhlcntDsgthauReport;
+import com.tcdt.qlnvhang.table.report.ListDsGthauDTO;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.*;
 import org.modelmapper.ModelMapper;
@@ -450,6 +451,19 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         }
         String fileDinhKemsTextString = fileDinhKems.toString();
         fieldValues.put("fileDinhKems", fileDinhKemsTextString);
+
+        List<String> dsGthau = new ArrayList<>();
+        if (object.getListDsGthau().size() > 0) {
+            for (ListDsGthauDTO ten : object.getListDsGthau()) {
+                dsGthau.add(ten.getTenDvi() + ": " + ten.getSoLuong());
+            }
+        }
+        StringBuilder listDsGthau = new StringBuilder();
+        for (String ten : dsGthau) {
+            listDsGthau.append("+ ").append(ten).append(" tấn").append("\n");
+        }
+        String listDsGthauTextString = listDsGthau.toString();
+        fieldValues.put("listDsGthau", listDsGthauTextString);
 
         List<String> tableValues = docxToPdfConverter.convertDataReplaceToTable(object.getDsGtDtlList());
         System.out.println(tableValues);

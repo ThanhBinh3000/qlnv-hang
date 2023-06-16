@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.report.HhDxKhlcntDsgthauReport;
+import com.tcdt.qlnvhang.table.report.ListDsGthauDTO;
 import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
@@ -83,6 +84,7 @@ public class HhDxuatKhLcntHdrPreview implements Serializable {
 	BigDecimal tongThanhTien;
 
 	private ReportTemplateRequest reportTemplateRequest;
+	private List<ListDsGthauDTO> listDsGthau;
 	private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 	private List<HhDxKhlcntDsgthauReport> dsGtDtlList = new ArrayList<>();
 	private Long soGoiThau;
