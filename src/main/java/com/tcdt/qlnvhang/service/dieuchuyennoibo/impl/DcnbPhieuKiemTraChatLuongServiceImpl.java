@@ -3,12 +3,15 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkDtlRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKtChatLuongDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKtChatLuongHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.*;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKtChatLuongHdrDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -37,6 +40,10 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
 
     @Autowired
     DcnbPhieuKtChatLuongHdrRepository dcnbPhieuKtChatLuongHdrRepository;
+    @Autowired
+    DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
+    @Autowired
+    DcnbDataLinkDtlRepository dcnbDataLinkDtlRepository;
 
     @Autowired
     DcnbPhieuKtChatLuongDtlRepository dcnbPhieuKtChatLuongDtlRepository;
@@ -47,11 +54,19 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
     @Autowired
     FileDinhKemRepository fileDinhKemRepository;
 
-    public Page<DcnbPhieuKtChatLuongHdr> searchPage(CustomUserDetails currentUser, SearchPhieuKtChatLuong req) throws Exception {
+    public Page<DcnbPhieuKtChatLuongHdrDTO> searchPage(CustomUserDetails currentUser, SearchPhieuKtChatLuong req) throws Exception {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        Page<DcnbPhieuKtChatLuongHdr> search = dcnbPhieuKtChatLuongHdrRepository.search(req, pageable);
+        if(req.getIsVatTu() == null){
+            req.setIsVatTu(false);
+        }
+        if(req.getIsVatTu()){
+            req.setDsLoaiHang(Arrays.asList("VT"));
+        }else {
+            req.setDsLoaiHang(Arrays.asList("LT","M"));
+        }
+        Page<DcnbPhieuKtChatLuongHdrDTO> search = dcnbPhieuKtChatLuongHdrRepository.search(req, pageable);
         return search;
     }
 
@@ -73,7 +88,9 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
         data.setNgayTao(LocalDateTime.now());
         data.setMaDvi(currentUser.getDvql());
         data.setTrangThai(Contains.DUTHAO);
-        objReq.getDcnbPhieuKtChatLuongDtl().forEach(e -> e.setDcnbPhieuKtChatLuongHdr(data));
+        if(objReq.getDcnbPhieuKtChatLuongDtl()!= null){
+            objReq.getDcnbPhieuKtChatLuongDtl().forEach(e -> e.setDcnbPhieuKtChatLuongHdr(data));
+        }
         DcnbPhieuKtChatLuongHdr created = dcnbPhieuKtChatLuongHdrRepository.save(data);
         List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getBienBanLayMauDinhKem(), created.getId(), DcnbPhieuKtChatLuongHdr.TABLE_NAME + "_CAN_CU");
         data.setBienBanLayMauDinhKem(bienBanLayMauDinhKem);
@@ -177,29 +194,28 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
     public DcnbPhieuKtChatLuongHdr approve(CustomUserDetails currentUser, StatusReq statusReq, Optional<DcnbPhieuKtChatLuongHdr> optional) throws Exception {
         String status = optional.get().getTrangThai() + statusReq.getTrangThai();
         switch (status) {
-            case Contains.DUTHAO + Contains.CHODUYET_TP:
-            case Contains.TU_CHOI_TP + Contains.CHODUYET_TP:
+            case Contains.DUTHAO + Contains.CHODUYET_LDC:
+            case Contains.TU_CHOI_LDC + Contains.CHODUYET_LDC:
                 optional.get().setNguoiGDuyet(currentUser.getUser().getId());
                 optional.get().setNgayGDuyet(LocalDate.now());
                 break;
-            case Contains.CHODUYET_TP + Contains.TU_CHOI_TP:
-                optional.get().setNguoiDuyetTp(currentUser.getUser().getId());
-                optional.get().setNgayDuyetTp(LocalDate.now());
-                optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
-                break;
-            case Contains.TU_CHOI_LDC + Contains.CHODUYET_TP:
             case Contains.CHODUYET_LDC + Contains.TU_CHOI_LDC:
                 optional.get().setNguoiPDuyet(currentUser.getUser().getId());
                 optional.get().setNgayPDuyet(LocalDate.now());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 break;
-            case Contains.CHODUYET_TP + Contains.CHODUYET_LDC:
-                optional.get().setNguoiDuyetTp(currentUser.getUser().getId());
-                optional.get().setNgayDuyetTp(LocalDate.now());
-                break;
             case Contains.CHODUYET_LDC + Contains.DA_DUYET_LDC:
                 optional.get().setNguoiPDuyet(currentUser.getUser().getId());
                 optional.get().setNgayPDuyet(LocalDate.now());
+                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkCuc(optional.get().getMaDvi(),
+                        optional.get().getQdDcId(),
+                        optional.get().getMaNganKhoXuat(),
+                        optional.get().getMaLoKhoXuat());
+                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
+                dataLinkDtl.setLinkId(optional.get().getId());
+                dataLinkDtl.setHdrId(dataLink.getId());
+                dataLinkDtl.setType(DcnbPhieuKtChatLuongHdr.TABLE_NAME);
+                dcnbDataLinkDtlRepository.save(dataLinkDtl);
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
@@ -214,8 +230,8 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
         paggingReq.setPage(0);
         paggingReq.setLimit(Integer.MAX_VALUE);
         objReq.setPaggingReq(paggingReq);
-        Page<DcnbPhieuKtChatLuongHdr> page = this.searchPage(currentUser, objReq);
-        List<DcnbPhieuKtChatLuongHdr> data = page.getContent();
+        Page<DcnbPhieuKtChatLuongHdrDTO> page = this.searchPage(currentUser, objReq);
+        List<DcnbPhieuKtChatLuongHdrDTO> data = page.getContent();
 
         String title = "Danh sách phương án xuất cứu trợ, viện trợ ";
         String[] rowsName = new String[]{"STT", "Năm kH", "Số công văn/đề xuất", "Ngày duyệt LĐ Cục", "Loại điều chuyển", "Đơn vị đề xuất", "Trạng thái",};
@@ -223,17 +239,12 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
         for (int i = 0; i < data.size(); i++) {
-            DcnbPhieuKtChatLuongHdr dx = data.get(i);
+            DcnbPhieuKtChatLuongHdrDTO dx = data.get(i);
             objs = new Object[rowsName.length];
             objs[0] = i;
-            objs[1] = dx.getSoQdinhDc();
+            objs[1] = dx.getSoQdinh();
             objs[2] = dx.getNam();
-            objs[3] = dx.getNgayTao();
-            objs[4] = dx.getTenDiemKho();
-            objs[5] = dx.getTenLoKho();
             objs[6] = dx.getThayDoiThuKho();
-            objs[7] = dx.getSoBbLayMau();
-            objs[8] = dx.getNgayLayMau();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);

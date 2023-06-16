@@ -114,5 +114,5 @@ public class DcnbKeHoachDcDtl implements Serializable {
     @Transient
     private DcnbBienBanLayMauHdr dcnbBienBanLayMauHdr;
     @Transient
-    private DcnbDataLink dcnbDataLink;
+    private DcnbDataLinkHdr dcnbDataLinkHdr;
 }

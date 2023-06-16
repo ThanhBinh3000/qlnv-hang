@@ -4,7 +4,8 @@ import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBBNTBQDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBBNTBQHdrRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkDtlRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBBNTBQHdrReq;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBNTBQHdrDTO;
 import com.tcdt.qlnvhang.service.SecurityContextService;
@@ -13,6 +14,9 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanHaoDoiHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbDataLinkDtl;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbDataLinkHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +41,9 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
     private FileDinhKemService fileDinhKemService;
 
     @Autowired
-    private DcnbDataLinkRepository dcnbDataLinkRepository;
-
+    private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
+    @Autowired
+    private DcnbDataLinkDtlRepository dcnbDataLinkDtlRepository;
     @Autowired
     private DcnbQuyetDinhDcCHdrServiceImpl dcnbQuyetDinhDcCHdrServiceImpl;
 
@@ -54,14 +59,22 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        Page<DcnbBBNTBQHdrDTO> dcnbQuyetDinhDcCHdrs = null;
+        Page<DcnbBBNTBQHdrDTO> searchDto = null;
+        if (req.getIsVatTu() == null) {
+            req.setIsVatTu(false);
+        }
+        if (req.getIsVatTu()) {
+            req.setDsLoaiHang(Arrays.asList("VT"));
+        } else {
+            req.setDsLoaiHang(Arrays.asList("LT", "M"));
+        }
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            dcnbQuyetDinhDcCHdrs = hdrRepository.searchPageChiCuc(req, pageable);
+            searchDto = hdrRepository.searchPageChiCuc(req, pageable);
         }else {
-            dcnbQuyetDinhDcCHdrs = hdrRepository.searchPage(req, pageable);
+            searchDto = hdrRepository.searchPage(req, pageable);
         }
 
-        return dcnbQuyetDinhDcCHdrs;
+        return searchDto;
     }
     @Override
     public DcnbBBNTBQHdr create(DcnbBBNTBQHdrReq req) throws Exception {
@@ -152,6 +165,15 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
                 break;
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
                 hdr.setLdChiCuc(userInfo.getFullName());
+                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(hdr.getMaDvi(),
+                        hdr.getQdDcCucId(),
+                        hdr.getMaNganKhoXuat(),
+                        hdr.getMaLoKhoXuat());
+                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
+                dataLinkDtl.setLinkId(hdr.getId());
+                dataLinkDtl.setHdrId(dataLink.getId());
+                dataLinkDtl.setType(DcnbBBNTBQHdr.TABLE_NAME);
+                dcnbDataLinkDtlRepository.save(dataLinkDtl);
                 break;
             case Contains.CHODUYET_TK + Contains.TUCHOI_TK:
             case Contains.CHODUYET_KT + Contains.TUCHOI_KT:

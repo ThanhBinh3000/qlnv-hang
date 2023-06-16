@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = PathContains.DIEU_CHUYEN_NOI_BO +PathContains.BANG_KE_VAT_TU)
+@RequestMapping(value = PathContains.DIEU_CHUYEN_NOI_BO +PathContains.BANG_KE_NHAP_VAT_TU)
 @Slf4j
 @Api(tags = "Điều chuyển nội bộ - Bảng kê nhập vật tư")
 public class DcnbBangKeNhapVTController {

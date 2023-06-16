@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.repository.dieuchuyennoibo;
 
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbNhapDayKhoHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchBangKeCanHang;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbNhapDayKhoHdrDTO;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeCanHangHdr;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbNhapDayKhoHdr;
 import org.springframework.data.domain.Page;
@@ -34,4 +36,10 @@ public interface DcnbBbNhapDayKhoHdrRepository extends JpaRepository<DcnbBbNhapD
     List<DcnbBbNhapDayKhoHdr> findByIdIn(List<Long> ids);
 
     List<DcnbBbNhapDayKhoHdr> findAllByIdIn(List<Long> idList);
+    @Query(value = "SELECT distinct c FROM DcnbBbNhapDayKhoHdr c " +
+            "WHERE 1=1 " +
+            "AND c.trangThai = '17' " +
+            "AND (:#{#param.maDvi} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDvi},'%')) " +
+            "ORDER BY c.soQdDcCuc desc , c.nam desc, c.id desc")
+    List<DcnbBbNhapDayKhoHdrDTO> searchList(DcnbBbNhapDayKhoHdrReq param);
 }

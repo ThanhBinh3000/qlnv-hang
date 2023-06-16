@@ -1,7 +1,8 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.google.common.collect.Lists;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkDtlRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuNhapKhoDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuNhapKhoHdrRepository;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbPhieuNhapKhoHdrReq;
@@ -10,8 +11,7 @@ import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbPhieuNhapKhoService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuNhapKhoHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,9 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
     private FileDinhKemService fileDinhKemService;
 
     @Autowired
-    private DcnbDataLinkRepository dcnbDataLinkRepository;
+    private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
+    @Autowired
+    private DcnbDataLinkDtlRepository dcnbDataLinkDtlRepository;
 
     @Override
     public Page<DcnbPhieuNhapKhoHdr> searchPage(DcnbPhieuNhapKhoHdrReq req) throws Exception {
@@ -142,6 +144,15 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
                 break;
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
                 hdr.setIdLanhDao(userInfo.getId());
+                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(hdr.getMaDvi(),
+                        hdr.getQdDcCucId(),
+                        hdr.getMaNganKho(),
+                        hdr.getMaLoKho());
+                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
+                dataLinkDtl.setLinkId(hdr.getId());
+                dataLinkDtl.setHdrId(dataLink.getId());
+                dataLinkDtl.setType(DcnbPhieuNhapKhoHdr.TABLE_NAME);
+                dcnbDataLinkDtlRepository.save(dataLinkDtl);
                 break;
             // Arena từ chối
             case Contains.CHODUYET_TK + Contains.TUCHOI_TK:

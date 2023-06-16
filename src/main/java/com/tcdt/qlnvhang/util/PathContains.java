@@ -217,6 +217,10 @@ public class PathContains {
 	// Nhập kho vật tư: Bảng kê vật tư
 	public static final String BANG_KE_VAT_TU = "/bang-ke-vt";
 
+	public static final String BANG_KE_NHAP_VAT_TU = "/bang-ke-nhap-vt";
+
+	public static final String BANG_KE_XUAT_VAT_TU = "/bang-ke-xuat-vt";
+
 	public static final String BIEN_BAN_KET_THUC_NHAP_KHO_VT = "/bien-ban-ket-thuc-nhap-kho-vt";
 
 	public static final String BIEN_BAN_GIAO_NHAN_VT = "/bien-ban-giao-nhan-vt";

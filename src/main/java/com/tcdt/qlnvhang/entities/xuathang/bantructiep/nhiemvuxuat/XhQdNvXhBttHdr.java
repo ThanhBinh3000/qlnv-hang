@@ -71,7 +71,7 @@ public class XhQdNvXhBttHdr implements Serializable {
     @Transient
     private String tenTrangThaiXh;
 
-    private String phanLoai; // 01 : chào giá; 02 : Ủy quyền
+    private String pthucBanTrucTiep; // 01 : chào giá; 02 : Ủy quyền; 03 : Bán lẻ
 
     private String trangThaiHd;
     @Transient
@@ -100,6 +100,8 @@ public class XhQdNvXhBttHdr implements Serializable {
     private Long nguoiPduyetId;
 
     private String lyDoTuChoi;
+
+    private String phanLoai;
 
     @Transient
     private List<XhQdNvXhBttDtl> children = new ArrayList<>();

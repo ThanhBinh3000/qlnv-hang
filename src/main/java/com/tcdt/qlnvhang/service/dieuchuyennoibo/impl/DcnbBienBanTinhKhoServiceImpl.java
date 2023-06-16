@@ -3,10 +3,7 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBienBanTinhKhoDtlRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBienBanTinhKhoHdrRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcDtlRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -53,7 +50,9 @@ public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
     DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
 
     @Autowired
-    private DcnbDataLinkRepository dcnbDataLinkRepository;
+    private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
+    @Autowired
+    private DcnbDataLinkDtlRepository dcnbDataLinkDtlRepository;
 
     @Autowired
     DcnbQuyetDinhDcCHdrServiceImpl dcnbQuyetDinhDcCHdrServiceImpl;
@@ -62,8 +61,15 @@ public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        Page<DcnbBienBanTinhKhoHdrDTO> dcnbQuyetDinhDcCHdrs = dcnbBienBanTinhKhoHdrRepository.searchPage(req, pageable);
-        return dcnbQuyetDinhDcCHdrs;
+        Page<DcnbBienBanTinhKhoHdrDTO> searchDto = null;
+
+        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            searchDto = dcnbBienBanTinhKhoHdrRepository.searchPageChiCuc(req, pageable);
+        }
+        if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            searchDto = dcnbBienBanTinhKhoHdrRepository.searchPageCuc(req, pageable);
+        }
+        return searchDto;
     }
 
     @Transactional
@@ -219,21 +225,15 @@ public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
                 optional.get().setLanhDaoChiCucId(currentUser.getUser().getId());
                 optional.get().setLanhDaoChiCuc(currentUser.getUser().getUsername());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
-                List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByQdDcIdAndMaLoKho(optional.get().getQDinhDccId(),optional.get().getMaLoKho());
-                dcnbKeHoachDcDtls.forEach(e-> {
-                    DcnbDataLink dataLink = new DcnbDataLink();
-                    dataLink.setKeHoachDcHdrId(e.getHdrId());
-                    dataLink.setKeHoachDcDtlId(e.getId());
-//                    dataLink.setKeHoachDcParentDtlId(e.getParentId());
-//                    dataLink.setKeHoachDcParentHdrId(e.getDcnbKeHoachDcHdr().getParentId());
-//                    dataLink.setHdrId(optional.get().getId());
-//                    dataLink.setType(DcnbBienBanTinhKhoHdr.TABLE_NAME);
-                    try {
-                        dcnbDataLinkRepository.save(dataLink);
-                    } catch (Exception ex) {
-                        throw new RuntimeException(ex);
-                    }
-                });
+                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(optional.get().getMaDvi(),
+                        optional.get().getQDinhDccId(),
+                        optional.get().getMaNganKho(),
+                        optional.get().getMaLoKho());
+                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
+                dataLinkDtl.setLinkId(optional.get().getId());
+                dataLinkDtl.setHdrId(dataLink.getId());
+                dataLinkDtl.setType(DcnbBienBanTinhKhoHdr.TABLE_NAME);
+                dcnbDataLinkDtlRepository.save(dataLinkDtl);
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
@@ -250,7 +250,7 @@ public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
         objReq.setPaggingReq(paggingReq);
         objReq.setMaDvi(currentUser.getDvql());
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit());
-        Page<DcnbBienBanTinhKhoHdrDTO> page = dcnbBienBanTinhKhoHdrRepository.searchPage(objReq,pageable);
+        Page<DcnbBienBanTinhKhoHdrDTO> page = dcnbBienBanTinhKhoHdrRepository.searchPageChiCuc(objReq,pageable);
         List<DcnbBienBanTinhKhoHdrDTO> data = page.getContent();
 
         String title = "Danh sách bảng kê cân hàng ";

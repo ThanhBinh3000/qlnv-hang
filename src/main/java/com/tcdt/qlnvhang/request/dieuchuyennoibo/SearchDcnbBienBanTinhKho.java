@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 public class SearchDcnbBienBanTinhKho extends BaseRequest {
@@ -18,5 +21,8 @@ public class SearchDcnbBienBanTinhKho extends BaseRequest {
     private LocalDate denNgay;
     private String maDvi;
     private String loaiDc;
+    private String loaiQdinh;
     private String type;
+    private Boolean isVatTu = false;
+    private List<String> dsLoaiHang = new ArrayList<>();
 }

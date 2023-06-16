@@ -45,6 +45,7 @@ public class XhDxKhBanTrucTiepDdiem implements Serializable {
 
     private BigDecimal donGiaDeXuat;
 
+    @Transient
     private BigDecimal donGiaDuocDuyet;
 
     private String loaiVthh;

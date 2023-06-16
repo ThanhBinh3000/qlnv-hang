@@ -20,9 +20,9 @@ public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cl
     public static final String TABLE_NAME = "DCNB_BIEN_BAN_LAY_MAU_HDR";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = DcnbBienBanLayMauHdr.TABLE_NAME
-            + "_SEQ", allocationSize = 1, name = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
+//    @SequenceGenerator(sequenceName = DcnbBienBanLayMauHdr.TABLE_NAME
+//            + "_SEQ", allocationSize = 1, name = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
     private Long id;
 
     @Column(name = "LOAI_BB")
@@ -66,6 +66,9 @@ public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cl
 
     @Column(name = "DON_VI_TINH")
     private String donViTinh;
+
+    @Column(name = "TEN_DON_VI_TINH")
+    private String tenDonViTinh;
 
     @Column(name = "SO_BB_LAY_MAU")
     private String soBbLayMau;

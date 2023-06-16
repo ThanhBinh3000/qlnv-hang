@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -21,5 +23,9 @@ public class SearchPhieuKnChatLuong extends BaseRequest {
     private String maDvi;
     private String soBbXuatDocKho;
     private String loaiDc;
+    private String loaiQdinh;
     private String type;
+    private String typeDataLink;
+    private Boolean isVatTu = false;
+    private List<String> dsLoaiHang = new ArrayList<>();
 }

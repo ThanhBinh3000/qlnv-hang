@@ -48,7 +48,9 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
     private DcnbQuyetDinhDcCHdrServiceImpl dcnbQuyetDinhDcCHdrServiceImpl;
 
     @Autowired
-    private DcnbDataLinkRepository dcnbDataLinkRepository;
+    private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
+    @Autowired
+    private DcnbDataLinkDtlRepository dcnbDataLinkDtlRepository;
 
     @Autowired
     private DcnbKeHoachDcHdrRepository dcnbKeHoachDcHdrRepository;
@@ -61,8 +63,14 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        Page<DcnbBienBanHaoDoiHdrDTO> dcnbQuyetDinhDcCHdrs = dcnbBienBanHaoDoiHdrRepository.searchPage(req, pageable);
-        return dcnbQuyetDinhDcCHdrs;
+        Page<DcnbBienBanHaoDoiHdrDTO> searchDto = null;
+        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            searchDto = dcnbBienBanHaoDoiHdrRepository.searchPageChiCuc(req, pageable);
+        }
+        if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            searchDto = dcnbBienBanHaoDoiHdrRepository.searchPageCuc(req, pageable);
+        }
+        return searchDto;
     }
 
     @Transactional
@@ -226,21 +234,15 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
                 optional.get().setLanhDaoChiCucId(currentUser.getUser().getId());
                 optional.get().setLanhDaoChiCuc(currentUser.getUser().getUsername());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
-                List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByQdDcIdAndMaLoKho(optional.get().getQDinhDccId(),optional.get().getMaLoKho());
-                dcnbKeHoachDcDtls.forEach(e-> {
-                    DcnbDataLink keHoachNhapXuat = new DcnbDataLink();
-                    keHoachNhapXuat.setKeHoachDcHdrId(e.getHdrId());
-                    keHoachNhapXuat.setKeHoachDcDtlId(e.getId());
-//                    keHoachNhapXuat.setKeHoachDcParentDtlId(e.getParentId());
-//                    keHoachNhapXuat.setKeHoachDcParentHdrId(e.getDcnbKeHoachDcHdr().getParentId());
-//                    keHoachNhapXuat.setHdrId(optional.get().getId());
-//                    keHoachNhapXuat.setType(DcnbBienBanHaoDoiHdr.TABLE_NAME);
-                    try {
-                        dcnbDataLinkRepository.save(keHoachNhapXuat);
-                    } catch (Exception ex) {
-                        throw new RuntimeException(ex);
-                    }
-                });
+                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(optional.get().getMaDvi(),
+                        optional.get().getQDinhDccId(),
+                        optional.get().getMaNganKho(),
+                        optional.get().getMaLoKho());
+                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
+                dataLinkDtl.setLinkId(optional.get().getId());
+                dataLinkDtl.setHdrId(dataLink.getId());
+                dataLinkDtl.setType(DcnbBienBanHaoDoiHdr.TABLE_NAME);
+                dcnbDataLinkDtlRepository.save(dataLinkDtl);
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
@@ -257,7 +259,7 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
         objReq.setPaggingReq(paggingReq);
         objReq.setMaDvi(currentUser.getDvql());
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit());
-        Page<DcnbBienBanHaoDoiHdrDTO> page = dcnbBienBanHaoDoiHdrRepository.searchPage(objReq,pageable);
+        Page<DcnbBienBanHaoDoiHdrDTO> page = dcnbBienBanHaoDoiHdrRepository.searchPageChiCuc(objReq,pageable);
         List<DcnbBienBanHaoDoiHdrDTO> data = page.getContent();
 
         String title = "Danh sách bảng kê cân hàng ";

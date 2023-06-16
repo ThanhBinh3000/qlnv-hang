@@ -1,14 +1,21 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkDtlRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuXuatKhoDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuXuatKhoHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbPhieuXuatKhoHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchPhieuXuatKho;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBienBanLayMauHdrDTO;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuXuatKhoHdrDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbChuanBiKhoHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbDataLinkDtl;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbDataLinkHdr;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuXuatKhoHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.beans.BeanUtils;
@@ -39,12 +46,23 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
     @Autowired
     private FileDinhKemService fileDinhKemService;
 
-    public Page<DcnbPhieuXuatKhoHdr> searchPage(CustomUserDetails currentUser, SearchPhieuXuatKho req) throws Exception {
+    @Autowired
+    private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
+    @Autowired
+    private DcnbDataLinkDtlRepository dcnbDataLinkDtlRepository;
+
+    public Page<DcnbPhieuXuatKhoHdrDTO> searchPage(CustomUserDetails currentUser, SearchPhieuXuatKho req) throws Exception {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        Page<DcnbPhieuXuatKhoHdr> search = hdrRepository.search(req, pageable);
-        return search;
+        Page<DcnbPhieuXuatKhoHdrDTO> searchDto = null;
+        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            searchDto = hdrRepository.searchPageChiCuc(req, pageable);
+        }
+        if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            searchDto = hdrRepository.searchPageCuc(req, pageable);
+        }
+        return searchDto;
     }
 
     @Transactional
@@ -163,6 +181,15 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
                 optional.get().setNgayPduyet(LocalDate.now());
                 optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(optional.get().getMaDvi(),
+                        optional.get().getQddcId(),
+                        optional.get().getMaNganKho(),
+                        optional.get().getMaLoKho());
+                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
+                dataLinkDtl.setLinkId(optional.get().getId());
+                dataLinkDtl.setHdrId(dataLink.getId());
+                dataLinkDtl.setType(DcnbPhieuXuatKhoHdr.TABLE_NAME);
+                dcnbDataLinkDtlRepository.save(dataLinkDtl);
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");

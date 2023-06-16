@@ -23,6 +23,7 @@ import com.tcdt.qlnvhang.service.feign.BaoCaoClient;
 import com.tcdt.qlnvhang.service.feign.CategoryServiceProxy;
 import com.tcdt.qlnvhang.service.feign.SystemServiceProxy;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
+import com.tcdt.qlnvhang.table.DmDonViDTO;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.QlnvDanhMuc;
 import com.tcdt.qlnvhang.table.UserInfo;
@@ -142,18 +143,23 @@ public abstract class BaseServiceImpl {
         return data;
     }
 
-    public Map<String, String> getListDanhMucDviByMadviIn(List<String> listMaDvi, String trangThai) {
+    public Map<String, DmDonViDTO> getListDanhMucDviByMadviIn(List<String> listMaDvi, String trangThai) {
         QlnvDmDonviSearchReq objRequest = new QlnvDmDonviSearchReq();
         objRequest.setListMaDvi(listMaDvi);
         objRequest.setTrangThai(trangThai);
         ResponseEntity<String> response = categoryServiceProxy.getDanhMucDviByMaDviIn(getAuthorizationToken(request),
                 objRequest);
         String str = Request.getAttrFromJson(response.getBody(), "data");
-        HashMap<String, String> data = new HashMap<String, String>();
+        HashMap<String, DmDonViDTO> data = new HashMap<String, DmDonViDTO>();
         List<Map<String, Object>> retMap = new Gson().fromJson(str, new TypeToken<List<HashMap<String, Object>>>() {
         }.getType());
         for (Map<String, Object> map : retMap) {
-            data.put(String.valueOf(map.get("maDvi")), String.valueOf(map.get("tenDvi")));
+            DmDonViDTO dto = new DmDonViDTO();
+            dto.setCapDvi(String.valueOf(map.get("capDvi")));
+            dto.setTenDvi(String.valueOf(map.get("tenDvi")));
+            dto.setMaDvi(String.valueOf(map.get("maDvi")));
+            dto.setDiaChi(String.valueOf(map.get("diaChi")));
+            data.put(String.valueOf(map.get("maDvi")), dto);
         }
         return data;
     }

@@ -17,21 +17,25 @@ public class DcnbBBNTBQHdrDTO {
     private String soQdinh;
     private Integer namKh;
     private LocalDate thoiHanDieuChuyen;
+    private String maNhaKhoXuat;
+    private String tenNhaKhoXuat;
     private String maDiemKhoXuat;
     private String tenDiemKhoXuat;
     private String maloKhoXuat;
     private String tenloKhoXuat;
     private String maNganKhoXuat;
     private String tenNganKhoXuat;
-//    private String trangThaiXuat;
+    //    private String trangThaiXuat;
 //    private String tenTrangThaiXuat;
+    private String maNhaKhoNhan;
+    private String tenNhaKhoNhan;
     private String maDiemKhoNhan;
     private String tenDiemKhoNhan;
     private String maloKhoNhan;
     private String tenloKhoNhan;
     private String maNganKhoNhan;
     private String tenNganKhoNhan;
-//    private String trangThaiNhan;
+    //    private String trangThaiNhan;
 //    private String tenTrangThaiNhan;
     private String soLapBBKLot;
     private LocalDate ngayLapBBKLot;
@@ -40,4 +44,10 @@ public class DcnbBBNTBQHdrDTO {
     private BigDecimal tongKinhPhiPd;
     private String trangThai;
     private String tenTrangThai;
+    private String tenLoaiVthh;
+    private String tenCloaiVthh;
+    private BigDecimal tichLuongKd;
+    private String tenDonViTinh;
+    private String loaiVthh;
+    private String  cloaiVthh;
 }

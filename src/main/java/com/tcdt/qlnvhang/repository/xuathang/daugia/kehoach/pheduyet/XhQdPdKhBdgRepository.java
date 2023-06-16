@@ -23,7 +23,7 @@ public interface XhQdPdKhBdgRepository extends JpaRepository<XhQdPdKhBdg,Long> {
             "AND (:#{#param.loaiVthh} IS NULL OR QD.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
             "AND (:#{#param.lastest} IS NULL OR LOWER(QD.lastest) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.lastest}),'%'))) " +
             "AND (:#{#param.trangThai} IS NULL OR QD.trangThai = :#{#param.trangThai}) " +
-            "AND (:#{#param.maCuc} IS NULL OR DTL.maDvi = :#{#param.maCuc}) " +
+            "AND (:#{#param.maDviCuc} IS NULL OR DTL.maDvi = :#{#param.maDviCuc}) " +
             "AND (:#{#param.maDvi} IS NULL OR QD.maDvi = :#{#param.maDvi})")
     Page<XhQdPdKhBdg> searchPage(@Param("param") XhQdPdKhBdgReq param, Pageable pageable);
 
