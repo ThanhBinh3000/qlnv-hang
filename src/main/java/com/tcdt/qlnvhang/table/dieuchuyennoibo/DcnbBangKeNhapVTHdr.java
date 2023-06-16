@@ -36,6 +36,8 @@ public class DcnbBangKeNhapVTHdr extends BaseEntity implements Serializable, Clo
     private LocalDate ngayNhap;
     @Column(name = "MA_DVI")
     private String maDvi;
+    @Column(name = "TEN_DVI")
+    private String tenDvi;
     @Column(name = "QHNS_ID")
     private Long qhnsId;
     @Column(name = "MA_QHNS")

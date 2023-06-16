@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.repository.dieuchuyennoibo;
 
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbGiaoNhanHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchBangKeCanHang;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbGiaoNhanHdrDTO;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeCanHangHdr;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbGiaoNhanHdr;
 import org.springframework.data.domain.Page;
@@ -34,4 +36,8 @@ public interface DcnbBbGiaoNhanHdrRepository extends JpaRepository<DcnbBbGiaoNha
     List<DcnbBbGiaoNhanHdr> findByIdIn(List<Long> ids);
 
     List<DcnbBbGiaoNhanHdr> findAllByIdIn(List<Long> idList);
+
+//    Page<DcnbBbGiaoNhanHdrDTO> searchPageChiCuc(DcnbBbGiaoNhanHdrReq req, Pageable pageable);
+//
+//    Page<DcnbBbGiaoNhanHdrDTO> searchPageCuc(DcnbBbGiaoNhanHdrReq req, Pageable pageable);
 }

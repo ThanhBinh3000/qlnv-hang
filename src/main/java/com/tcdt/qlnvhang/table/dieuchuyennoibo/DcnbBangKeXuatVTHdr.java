@@ -36,6 +36,8 @@ public class DcnbBangKeXuatVTHdr extends BaseEntity implements Serializable, Clo
     private LocalDate ngayNhap;
     @Column(name = "MA_DVI")
     private String maDvi;
+    @Column(name = "TEN_MA_DVI")
+    private String tenDvi;
     @Column(name = "QHNS_ID")
     private Long qhnsId;
     @Column(name = "MA_QHNS")
@@ -113,5 +115,5 @@ public class DcnbBangKeXuatVTHdr extends BaseEntity implements Serializable, Clo
     private String type;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
-    private List<DcnbBangKeNhapVTDtl> dcnbBangKeNhapVTDtl = new ArrayList<>();
+    private List<DcnbBangKeXuatVTDtl> dcnbBangKeXuatVTDtl = new ArrayList<>();
 }

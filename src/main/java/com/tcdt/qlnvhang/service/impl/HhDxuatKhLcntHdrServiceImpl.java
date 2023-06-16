@@ -28,6 +28,7 @@ import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.report.HhDxKhlcntDsgthauReport;
+import com.tcdt.qlnvhang.table.report.ListDsGthauDTO;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.*;
 import org.modelmapper.ModelMapper;
@@ -416,18 +417,23 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         object.setTgianMthau(hhDxuatKhLcntHdrReq.getTgianMthau() != null ? formatter.format(hhDxuatKhLcntHdrReq.getTgianMthau()) : null);
         object.setTgianNhang(hhDxuatKhLcntHdrReq.getTgianNhang() != null ? formatter.format(hhDxuatKhLcntHdrReq.getTgianNhang()) : null);
         object.setSoGoiThau(hhDxuatKhLcntDsgtDtlRepository.countByIdDxKhlcnt(hhDxuatKhLcntHdrReq.getId()));
+        String diaDiem = "";
         if (object.getId() != null) {
             List<HhDxKhlcntDsgthau> dsGthauList = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcnt(object.getId());
             for (HhDxKhlcntDsgthau dsG : dsGthauList) {
+                diaDiem = "";
                 HhDxKhlcntDsgthauReport data = new ModelMapper().map(dsG, HhDxKhlcntDsgthauReport.class);
                 object.setTongSl(docxToPdfConverter.convertNullToZero(object.getTongSl()) + docxToPdfConverter.convertNullToZero(data.getSoLuong()));
-                object.setTongThanhTien(docxToPdfConverter.convertNullToZero(object.getTongThanhTien()).add((docxToPdfConverter.convertNullToZero(BigDecimal.valueOf(data.getSoLuong())).multiply(docxToPdfConverter.convertNullToZero(data.getDonGiaTamTinh())).multiply(BigDecimal.valueOf(1000)))));
-                data.setThanhTien(docxToPdfConverter.convertNullToZero(BigDecimal.valueOf(data.getSoLuong())).multiply(data.getDonGiaTamTinh()).multiply(BigDecimal.valueOf(1000)));
+                object.setTongThanhTien(docxToPdfConverter.convertNullToZero(object.getTongThanhTien()).add((docxToPdfConverter.convertNullToZero(BigDecimal.valueOf(data.getSoLuong())).multiply(docxToPdfConverter.convertNullToZero(dsG.getDonGiaTamTinh())).multiply(BigDecimal.valueOf(1000)))));
+                data.setThanhTien(docxToPdfConverter.convertNullToZero(BigDecimal.valueOf(data.getSoLuong())).multiply(dsG.getDonGiaTamTinh()).multiply(BigDecimal.valueOf(1000)));
                 List<HhDxKhlcntDsgthauCtiet> dsCtiet = hhDxKhlcntDsgthauCtietRepository.findByIdGoiThau(dsG.getId());
                 for (HhDxKhlcntDsgthauCtiet dsCt : dsCtiet) {
-                    data.setDiaDiemNhapKho(dsCt.getDiaDiemNhap());
+                    List<String>  str = new ArrayList<>(Arrays.asList(dsCt.getDiaDiemNhap().split(",")));
+                    for (int i = 0; i < str.size(); i++) {
+                        diaDiem = diaDiem + str.get(i) + " - ";
+                    }
                 }
-                data.setDiaDiemNhapKho(data.getDiaDiemNhapKho() + " - " + object.getTenDvi() + " - " + object.getDiaChiDvi());
+                data.setDiaDiemNhapKho(diaDiem + object.getTenDvi() + " - " + object.getDiaChiDvi());
                 object.getDsGtDtlList().add(data);
             }
         }
@@ -445,6 +451,19 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         }
         String fileDinhKemsTextString = fileDinhKems.toString();
         fieldValues.put("fileDinhKems", fileDinhKemsTextString);
+
+        List<String> dsGthau = new ArrayList<>();
+        if (object.getListDsGthau().size() > 0) {
+            for (ListDsGthauDTO ten : object.getListDsGthau()) {
+                dsGthau.add(ten.getTenDvi() + ": " + ten.getSoLuong());
+            }
+        }
+        StringBuilder listDsGthau = new StringBuilder();
+        for (String ten : dsGthau) {
+            listDsGthau.append("+ ").append(ten).append(" tấn").append("\n");
+        }
+        String listDsGthauTextString = listDsGthau.toString();
+        fieldValues.put("listDsGthau", listDsGthauTextString);
 
         List<String> tableValues = docxToPdfConverter.convertDataReplaceToTable(object.getDsGtDtlList());
         System.out.println(tableValues);
