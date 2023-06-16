@@ -134,6 +134,24 @@ public class XhBbHdoiBttHdr implements Serializable {
 
     private String lyDoTuChoi;
 
+    private String phanLoai;
+
+    private String pthucBanTrucTiep;
+
+    private Long idBangKeBanLe;
+
+    private String soBangKeBanLe;
+
+    private LocalDate ngayTaoBangKe;
+
+    private String loaiVthh;
+    @Transient
+    private String tenLoaiVthh;
+
+    private String cloaiVthh;
+    @Transient
+    private String tenCloaiVthh;
+
     @Transient
     private List<XhBbHdoiBttDtl> children = new ArrayList<>();
 
