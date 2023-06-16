@@ -75,8 +75,6 @@ public class XhPhieuXkhoBttReq extends BaseRequest {
 
     private LocalDate tgianGiaoNhan;
 
-    private String soBangKe;
-
     private String  maSo;
 
     private String donViTinh;
@@ -92,6 +90,16 @@ public class XhPhieuXkhoBttReq extends BaseRequest {
     private LocalDate ngayXuatKhoTu;
 
     private LocalDate ngayXuatKhoDen;
+
+    private String phanLoai;
+
+    private String pthucBanTrucTiep;
+
+    private Long idBangKeBanLe;
+
+    private String soBangKeBanLe;
+
+    private LocalDate ngayTaoBangKe;
 
     @Transient
     private List<FileDinhKemReq> fileDinhKem = new ArrayList<>();

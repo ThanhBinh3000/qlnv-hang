@@ -85,6 +85,20 @@ public class XhBbHdoiBttHdrReq extends BaseRequest {
 
     private Long idKeToan;
 
+    private String phanLoai;
+
+    private String pthucBanTrucTiep;
+
+    private Long idBangKeBanLe;
+
+    private String soBangKeBanLe;
+
+    private LocalDate ngayTaoBangKe;
+
+    private String loaiVthh;
+
+    private String cloaiVthh;
+
     private LocalDate ngayTaoTu;
 
     private LocalDate ngayTaoDen;
