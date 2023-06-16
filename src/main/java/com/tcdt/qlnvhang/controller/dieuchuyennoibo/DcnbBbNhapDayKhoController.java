@@ -2,6 +2,8 @@ package com.tcdt.qlnvhang.controller.dieuchuyennoibo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.enums.EnumResponse;
+import com.tcdt.qlnvhang.jwt.CurrentUser;
+import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbNhapDayKhoHdrReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
@@ -51,25 +53,24 @@ public class DcnbBbNhapDayKhoController {
         return ResponseEntity.ok(resp);
     }
 
-//    @ApiOperation(value = "Tra cứu biên bản lấy mẫu", response = List.class)
-//    @PostMapping(value = "bien-ban-lay-mau", produces = MediaType.APPLICATION_JSON_VALUE)
-//    @ResponseStatus(HttpStatus.OK)
-//    public ResponseEntity<BaseResponse> getListBienBanLayMau(RequestBody DcnbBBNTBQHdrReq param) {
-//        BaseResponse resp = new BaseResponse();
-//        try {
-//            param.setMaDvi(currentUser.getDvql());
-//            resp.setData(dcnbBienBanLayMauHdrRepository.searchList(param));
-//            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-//            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-//        } catch ( Exception e) {
-//            e.printStackTrace();
-//            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-//            resp.setMsg(e.getMessage());
-//            log.error("Tra cứu thông tin : {}", e);
-//        }
-//
-//        return ResponseEntity.ok(resp);
-//    }
+    @ApiOperation(value = "Danh sách", response = List.class)
+    @PostMapping(value = "danh-sach", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> getDanhSach(@CurrentUser CustomUserDetails currentUser, @RequestBody DcnbBbNhapDayKhoHdrReq param) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(service.searchList(currentUser, param));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch ( Exception e) {
+            e.printStackTrace();
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tra cứu thông tin : {}", e);
+        }
+
+        return ResponseEntity.ok(resp);
+    }
 
     @ApiOperation(value = "Tạo mới thông tin đề xuất ", response = List.class)
     @PostMapping(value =  PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)

@@ -1,16 +1,11 @@
 package com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.tcdt.qlnvhang.entities.FileDKemJoinDxKhLcntHdr;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.report.HhDxKhlcntDsgthauReport;
 import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -18,6 +13,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 @Data
@@ -83,10 +79,12 @@ public class HhDxuatKhLcntHdrPreview implements Serializable {
 	String soQdPdKqLcnt;
 	Long idQdPdKqLcnt;
 	Integer soGthauTrung;
+	Integer tongSl;
+	BigDecimal tongThanhTien;
 
 	private ReportTemplateRequest reportTemplateRequest;
 	private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
-	private List<HhDxKhlcntDsgthau> dsGtDtlList = new ArrayList<>();
+	private List<HhDxKhlcntDsgthauReport> dsGtDtlList = new ArrayList<>();
 	private Long soGoiThau;
 	private List<HhDxuatKhLcntCcxdgDtl> ccXdgDtlList = new ArrayList<>();
 	private Long maTh;

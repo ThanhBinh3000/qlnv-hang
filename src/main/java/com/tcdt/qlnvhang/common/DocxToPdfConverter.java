@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
 import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
+import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.xwpf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -17,6 +18,8 @@ import com.lowagie.text.pdf.BaseFont;
 import javax.transaction.Transactional;
 import java.io.*;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -32,7 +35,7 @@ public class DocxToPdfConverter {
     private Environment env;
 
     @Transactional
-    public ReportTemplateResponse convertDocxToPdf(InputStream inputFile, Map<String, String> fieldValues) {
+    public ReportTemplateResponse convertDocxToPdf(InputStream inputFile, Map<String, String> fieldValues, List<String>  tableValues) {
         try
         {
             ByteArrayOutputStream outputStreamPdf = new ByteArrayOutputStream();
@@ -43,10 +46,11 @@ public class DocxToPdfConverter {
                 replace2(p, fieldValues);
             }
             for (XWPFTable tbl : document.getTables()) {
-                for (XWPFTableRow row : tbl.getRows()) {
+                List<XWPFTableRow> rows = new ArrayList<>(tbl.getRows());
+                for (XWPFTableRow row : rows) {
                     for (XWPFTableCell cell : row.getTableCells()) {
                         for (XWPFParagraph p : cell.getParagraphs()) {
-                            replace2(p, fieldValues);
+                            replaceTable(tbl, row, p, tableValues, fieldValues);
                         }
                     }
                 }
@@ -152,6 +156,52 @@ public class DocxToPdfConverter {
 
     }
 
+    private void replaceTable(XWPFTable tbl, XWPFTableRow row, XWPFParagraph p, List<String> data, Map<String, String> values) throws Exception {
+        String pText = p.getText();
+        int rowIndex = tbl.getRows().size() - 1;
+        if (pText.contains("${loop")) {
+            Pattern pat = Pattern.compile("\\$\\{(.+?)\\}");
+            Matcher m = pat.matcher(pText);
+            while (m.find()) {
+                String g = m.group(1);
+                String key = g;
+                if (data.size() > 0) {
+                    for (int i = 0; i < data.size(); i++) {
+                        List<String>  str = new ArrayList<>(Arrays.asList(data.get(i).split(",")));
+                        XWPFTableRow newRow = tbl.insertNewTableRow(tbl.getRows().indexOf(row) + i);
+                        for (int j = 0; j < row.getTableCells().size(); j++) {
+                            newRow.createCell();
+                            if (j >= 0 && j < str.size()) {
+                                newRow.getCell(j).setText(!str.get(j).equals("null") ? str.get(j) : " ");
+                            }
+                        }
+                        newRow.getCtRow().setTrPr(row.getCtRow().getTrPr());
+                    }
+                    for (XWPFRun run : p.getRuns()) {
+                        String text = run.getText(0);
+                        if (text != null && text.contains(key)) {
+                            // Xóa dòng nếu key được tìm thấy
+                            tbl.removeRow(rowIndex);
+                            break;
+                        }
+                    }
+                }
+            }
+        }else{
+            replace2(p, values);
+        }
+    }
+
+    public List<String> convertDataReplaceToTable(List<?> data){
+        List<String> tableValues = new ArrayList<>(data.size());
+        for (Object res : data) {
+            tableValues.add(res.toString());
+        }
+        System.out.println(tableValues);
+        return tableValues;
+    }
+
+
     private TreeMap<Integer, XWPFRun> getPosToRuns(XWPFParagraph paragraph) {
         int pos = 0;
         TreeMap<Integer, XWPFRun> map = new TreeMap<Integer, XWPFRun>();
@@ -166,6 +216,13 @@ public class DocxToPdfConverter {
 
         }
         return map;
+    }
+    public BigDecimal convertNullToZero(BigDecimal number) {
+        return number != null ? number : BigDecimal.ZERO;
+    }
+
+    public Integer convertNullToZero(Integer number) {
+        return number != null ? number : 0;
     }
 
     public Map<String, String> convertObjectToMap(Object object) {
@@ -198,6 +255,22 @@ public class DocxToPdfConverter {
         String base64String = Base64.getEncoder().encodeToString(byteArray);
         System.out.println(base64String);
         return base64String;
+    }
+
+    public String convertListStringToString(List<String> data){
+        StringBuilder res = new StringBuilder();
+        for (String item : data) {
+            res.append(item).append("\n");
+        }
+        return res.toString();
+    }
+
+    public String convertListBigDecimal(List<BigDecimal> data){
+        StringBuilder res = new StringBuilder();
+        for (BigDecimal item : data) {
+            res.append(item).append("\n");
+        }
+        return res.toString();
     }
 
 }

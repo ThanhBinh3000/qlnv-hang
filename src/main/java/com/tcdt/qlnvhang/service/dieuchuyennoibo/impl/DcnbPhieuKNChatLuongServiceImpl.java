@@ -70,11 +70,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
             searchDto = dcnbPhieuKnChatLuongHdrRepository.searchPageChiCuc(req, pageable);
         }
         if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            if("00".equals(req.getType())){
-                req.setTypeDataLink(Contains.DIEU_CHUYEN);
-            }else if("01".equals(req.getType())){
-                req.setTypeDataLink(Contains.NHAN_DIEU_CHUYEN);
-            }
+            req.setTypeDataLink(Contains.DIEU_CHUYEN);
             searchDto = dcnbPhieuKnChatLuongHdrRepository.searchPageCuc(req, pageable);
         }
 
@@ -228,7 +224,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
             case Contains.CHODUYET_LDC + Contains.DA_DUYET_LDC:
                 optional.get().setNguoiDuyetLdCuc(currentUser.getUser().getId());
                 optional.get().setNgayDuyetLdCuc(LocalDate.now());
-                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(optional.get().getMaDvi(),
+                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkCuc(optional.get().getMaDvi(),
                         optional.get().getQdDcId(),
                         optional.get().getMaNganKho(),
                         optional.get().getMaLoKho());

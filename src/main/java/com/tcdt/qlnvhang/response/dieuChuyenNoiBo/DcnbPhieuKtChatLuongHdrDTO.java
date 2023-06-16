@@ -9,25 +9,37 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class DcnbPhieuKtChatLuongHdrDTO {
     private Long id;
-    private Long bBLayMauId;
+    private Long bBNtLdId;
     private Long qDinhDccId;
     private String soQdinh;
-    private String soBbLayMau;
-    private LocalDate ngayLayMau;
+    private String soBBNtLd;
+    private LocalDate thoiGianDieuChuyen;
     private Integer nam;
-    private LocalDate thoiHanDieuChuyen;
-    private String maNhaKho;
-    private String tenNhaKho;
-    private String maDiemKho;
-    private String tenDiemKho;
-    private String maloKho;
-    private String tenloKho;
-    private String maNganKho;
-    private String tenNganKho;
+    private String ketQuaDanhGia;
+    private String maNhaKhoXuat;
+    private String tenNhaKhoXuat;
+    private String maDiemKhoXuat;
+    private String tenDiemKhoXuat;
+    private String maloKhoXuat;
+    private String tenloKhoXuat;
+    private String maNganKhoXuat;
+    private String tenNganKhoXuat;
     private Boolean thayDoiThuKho;
-    private String soPhieuKNChatLuong;
-    private LocalDate ngayKiemNghiem;
-    private LocalDate ngayXuatDocKho;
+    private String soPhieuKtChatLuong;
+    private LocalDate ngayGiamDinh;
+    private String ketQua;
+    private String soPhieuNhapKho;
+    private LocalDate ngayNhapKho;
+    private String maNhaKhoNhan;
+    private String tenNhaKhoNhan;
+    private String maDiemKhoNhan;
+    private String tenDiemKhoNhan;
+    private String maloKhoNhan;
+    private String tenloKhoNhan;
+    private String maNganKhoNhan;
+    private String tenNganKhoNhan;
+
     private String trangThai;
     private String tenTrangThai;
+
 }

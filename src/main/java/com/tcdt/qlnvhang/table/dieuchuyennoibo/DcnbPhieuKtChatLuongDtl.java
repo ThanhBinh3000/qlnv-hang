@@ -20,9 +20,6 @@ public class DcnbPhieuKtChatLuongDtl implements Serializable {
     @SequenceGenerator(sequenceName ="DCNB_PHIEU_KT_CHLUONG_DTL_SEQ", allocationSize = 1, name = "DCNB_PHIEU_KT_CHLUONG_DTL_SEQ")
     private Long id;
 
-    @Column(name = "HDR_ID")
-    private Long hdrId;
-
     @Column(name = "CHI_TIEU_CL")
     private String chiTieuCl;
 
@@ -37,6 +34,9 @@ public class DcnbPhieuKtChatLuongDtl implements Serializable {
 
     @Column(name = "DANH_GIA")
     private Long danhGia;
+
+    @Column(name = "HDR_ID", insertable = true, updatable = true)
+    private Long hdrId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
