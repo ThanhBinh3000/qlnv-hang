@@ -19,7 +19,7 @@ import java.util.Optional;
 public interface DcnbBangKeNhapVTHdrRepository extends JpaRepository<DcnbBangKeNhapVTHdr, Long> {
     Optional<DcnbBangKeNhapVTHdr> findFirstBySoBangKe(String soBangKe);
 
-    List<DcnbBangKeNhapVTDtl> findAllByIdIn(List<Long> listMulti);
+    List<DcnbBangKeNhapVTHdr> findAllByIdIn(List<Long> listMulti);
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeNhapVTHdrDTO(" +
             "bknvt.id,qdc.id,qdc.soQdinh,qdc.nam,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maNhaKho, khdcd.tenNhaKho,khdcd.maNganKho, khdcd.tenNganKho, khdcd.maLoKho," +
             "khdcd.tenLoKho,bblm.id,bblm.soBbLayMau, bknvt.soBangKe, bknvt.soBangKe,pnk.soPhieuNhapKho, pnk.id, pnk.ngayLap,bknvt.trangThai ,bknvt.trangThai) " +
