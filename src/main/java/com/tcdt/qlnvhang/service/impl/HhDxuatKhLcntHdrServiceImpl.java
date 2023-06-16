@@ -1,8 +1,6 @@
 package com.tcdt.qlnvhang.service.impl;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
@@ -13,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 
+import com.lowagie.text.Font;
+import com.lowagie.text.pdf.BaseFont;
 import com.tcdt.qlnvhang.common.DocxToPdfConverter;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.*;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
@@ -31,6 +31,17 @@ import com.tcdt.qlnvhang.table.report.HhDxKhlcntDsgthauReport;
 import com.tcdt.qlnvhang.table.report.ListDsGthauDTO;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.*;
+import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
+import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
+import fr.opensagres.xdocreport.converter.ConverterTypeTo;
+import fr.opensagres.xdocreport.converter.ConverterTypeVia;
+import fr.opensagres.xdocreport.converter.Options;
+import fr.opensagres.xdocreport.document.IXDocReport;
+import fr.opensagres.xdocreport.document.registry.XDocReportRegistry;
+import fr.opensagres.xdocreport.template.IContext;
+import fr.opensagres.xdocreport.template.TemplateEngineKind;
+import org.apache.velocity.tools.generic.DateTool;
+import org.apache.velocity.tools.generic.NumberTool;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -384,12 +395,102 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         return data.get();
     }
 
+//    @Override
+//    public ReportTemplateResponse preview(HhDxuatKhLcntHdrReq hhDxuatKhLcntHdrReq) throws Exception {
+//        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+//        ReportTemplate model = findByTenFile(hhDxuatKhLcntHdrReq.getReportTemplateRequest());
+//        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+//        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+//        List<String> listDvi = new ArrayList<>();
+//        listDvi.add(hhDxuatKhLcntHdrReq.getMaDvi());
+//        listDvi.add(hhDxuatKhLcntHdrReq.getMaDvi().substring(0, hhDxuatKhLcntHdrReq.getMaDvi().length() - 2));
+//
+//        HhDxuatKhLcntHdrPreview object = new ModelMapper().map(hhDxuatKhLcntHdrReq, HhDxuatKhLcntHdrPreview.class);
+//        Map<String, DmDonViDTO> mapDmucDvi = getListDanhMucDviByMadviIn(listDvi, "01");
+//        Map<String, String> mapVthh = getListDanhMucHangHoa();
+//        Map<String, String> hashMapNguonVon = getListDanhMucChung("NGUON_VON");
+//        Map<String, String> hashMapHtLcnt = getListDanhMucChung("HT_LCNT");
+//        Map<String, String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
+//        Map<String, String> hashMapPthucDthau = getListDanhMucChung("PT_DTHAU");
+//
+//        object.setTenDvi(mapDmucDvi.get(hhDxuatKhLcntHdrReq.getMaDvi()).getTenDvi());
+//        object.setDiaChiDvi(mapDmucDvi.get(hhDxuatKhLcntHdrReq.getMaDvi()).getDiaChi());
+//        object.setTenDviCha(mapDmucDvi.get(hhDxuatKhLcntHdrReq.getMaDvi().substring(0, hhDxuatKhLcntHdrReq.getMaDvi().length() - 2)).getTenDvi());
+//        object.setTenLoaiVthh(mapVthh.get(hhDxuatKhLcntHdrReq.getLoaiVthh()));
+//        object.setTenCloaiVthh(mapVthh.get(hhDxuatKhLcntHdrReq.getCloaiVthh()));
+//        object.setTenHthucLcnt(hashMapHtLcnt.get(hhDxuatKhLcntHdrReq.getHthucLcnt()));
+//        object.setTenNguonVon(hashMapNguonVon.get(hhDxuatKhLcntHdrReq.getNguonVon()));
+//        object.setTenLoaiHdong(hashMapLoaiHdong.get(hhDxuatKhLcntHdrReq.getLoaiHdong()));
+//        object.setTenPthucLcnt(hashMapPthucDthau.get(hhDxuatKhLcntHdrReq.getPthucLcnt()));
+//        object.getFileDinhKems().addAll(hhDxuatKhLcntHdrReq.getFileDinhKemReq());
+//        object.setTgianBdauTchuc(hhDxuatKhLcntHdrReq.getTgianBdauTchuc() != null ? formatter.format(hhDxuatKhLcntHdrReq.getTgianBdauTchuc()) : null);
+//        object.setTgianDthau(hhDxuatKhLcntHdrReq.getTgianDthau() != null ? formatter.format(hhDxuatKhLcntHdrReq.getTgianDthau()) : null);
+//        object.setTgianMthau(hhDxuatKhLcntHdrReq.getTgianMthau() != null ? formatter.format(hhDxuatKhLcntHdrReq.getTgianMthau()) : null);
+//        object.setTgianNhang(hhDxuatKhLcntHdrReq.getTgianNhang() != null ? formatter.format(hhDxuatKhLcntHdrReq.getTgianNhang()) : null);
+//        object.setSoGoiThau(hhDxuatKhLcntDsgtDtlRepository.countByIdDxKhlcnt(hhDxuatKhLcntHdrReq.getId()));
+//        String diaDiem = "";
+//        if (object.getId() != null) {
+//            List<HhDxKhlcntDsgthau> dsGthauList = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcnt(object.getId());
+//            for (HhDxKhlcntDsgthau dsG : dsGthauList) {
+//                diaDiem = "";
+//                HhDxKhlcntDsgthauReport data = new ModelMapper().map(dsG, HhDxKhlcntDsgthauReport.class);
+//                object.setTongSl(docxToPdfConverter.convertNullToZero(object.getTongSl()) + docxToPdfConverter.convertNullToZero(data.getSoLuong()));
+//                object.setTongThanhTien(docxToPdfConverter.convertNullToZero(object.getTongThanhTien()).add((docxToPdfConverter.convertNullToZero(BigDecimal.valueOf(data.getSoLuong())).multiply(docxToPdfConverter.convertNullToZero(dsG.getDonGiaTamTinh())).multiply(BigDecimal.valueOf(1000)))));
+//                data.setThanhTien(docxToPdfConverter.convertNullToZero(BigDecimal.valueOf(data.getSoLuong())).multiply(dsG.getDonGiaTamTinh()).multiply(BigDecimal.valueOf(1000)));
+//                List<HhDxKhlcntDsgthauCtiet> dsCtiet = hhDxKhlcntDsgthauCtietRepository.findByIdGoiThau(dsG.getId());
+//                for (HhDxKhlcntDsgthauCtiet dsCt : dsCtiet) {
+//                    List<String>  str = new ArrayList<>(Arrays.asList(dsCt.getDiaDiemNhap().split(",")));
+//                    for (int i = 0; i < str.size(); i++) {
+//                        diaDiem = diaDiem + str.get(i) + " - ";
+//                    }
+//                }
+//                data.setDiaDiemNhapKho(diaDiem + object.getTenDvi() + " - " + object.getDiaChiDvi());
+//                object.getDsGtDtlList().add(data);
+//            }
+//        }
+//        Map<String, String> fieldValues = new HashMap<>();
+//        fieldValues = docxToPdfConverter.convertObjectToMap(object);
+//        List<String> tenCanCuPhapLy = new ArrayList<>();
+//        if (object.getFileDinhKems().size() > 0) {
+//            for (FileDinhKemReq ten : object.getFileDinhKems()) {
+//                tenCanCuPhapLy.add(ten.getNoiDung());
+//            }
+//        }
+//        StringBuilder fileDinhKems = new StringBuilder();
+//        for (String ten : tenCanCuPhapLy) {
+//            fileDinhKems.append("- ").append(ten).append("\n");
+//        }
+//        String fileDinhKemsTextString = fileDinhKems.toString();
+//        fieldValues.put("fileDinhKems", fileDinhKemsTextString);
+//
+//        List<String> dsGthau = new ArrayList<>();
+//        if (object.getListDsGthau().size() > 0) {
+//            for (ListDsGthauDTO ten : object.getListDsGthau()) {
+//                dsGthau.add(ten.getTenDvi() + ": " + ten.getSoLuong());
+//            }
+//        }
+//        StringBuilder listDsGthau = new StringBuilder();
+//        for (String ten : dsGthau) {
+//            listDsGthau.append("+ ").append(ten).append(" tấn").append("\n");
+//        }
+//        String listDsGthauTextString = listDsGthau.toString();
+//        fieldValues.put("listDsGthau", listDsGthauTextString);
+//
+//        List<String> tableValues = docxToPdfConverter.convertDataReplaceToTable(object.getDsGtDtlList());
+//        System.out.println(tableValues);
+//        return docxToPdfConverter.convertDocxToPdf(inputStream, fieldValues, tableValues);
+//    }
+
     @Override
     public ReportTemplateResponse preview(HhDxuatKhLcntHdrReq hhDxuatKhLcntHdrReq) throws Exception {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         ReportTemplate model = findByTenFile(hhDxuatKhLcntHdrReq.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+
+//        IXDocReport report = XDocReportRegistry.getRegistry().loadReport(inputStream, TemplateEngineKind.Velocity);
+//        IContext context = report.createContext();
+
         List<String> listDvi = new ArrayList<>();
         listDvi.add(hhDxuatKhLcntHdrReq.getMaDvi());
         listDvi.add(hhDxuatKhLcntHdrReq.getMaDvi().substring(0, hhDxuatKhLcntHdrReq.getMaDvi().length() - 2));
@@ -437,37 +538,34 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
                 object.getDsGtDtlList().add(data);
             }
         }
-        Map<String, String> fieldValues = new HashMap<>();
-        fieldValues = docxToPdfConverter.convertObjectToMap(object);
-        List<String> tenCanCuPhapLy = new ArrayList<>();
-        if (object.getFileDinhKems().size() > 0) {
-            for (FileDinhKemReq ten : object.getFileDinhKems()) {
-                tenCanCuPhapLy.add(ten.getNoiDung());
-            }
-        }
-        StringBuilder fileDinhKems = new StringBuilder();
-        for (String ten : tenCanCuPhapLy) {
-            fileDinhKems.append("- ").append(ten).append("\n");
-        }
-        String fileDinhKemsTextString = fileDinhKems.toString();
-        fieldValues.put("fileDinhKems", fileDinhKemsTextString);
-
-        List<String> dsGthau = new ArrayList<>();
-        if (object.getListDsGthau().size() > 0) {
-            for (ListDsGthauDTO ten : object.getListDsGthau()) {
-                dsGthau.add(ten.getTenDvi() + ": " + ten.getSoLuong());
-            }
-        }
-        StringBuilder listDsGthau = new StringBuilder();
-        for (String ten : dsGthau) {
-            listDsGthau.append("+ ").append(ten).append(" tấn").append("\n");
-        }
-        String listDsGthauTextString = listDsGthau.toString();
-        fieldValues.put("listDsGthau", listDsGthauTextString);
-
-        List<String> tableValues = docxToPdfConverter.convertDataReplaceToTable(object.getDsGtDtlList());
-        System.out.println(tableValues);
-        return docxToPdfConverter.convertDocxToPdf(inputStream, fieldValues, tableValues);
+//        context.put("data", object);
+//        context.put("numberTool", new NumberTool());
+//        context.put("dateTool", new DateTool());
+//        OutputStream outDocx = new ByteArrayOutputStream();
+//        OutputStream outPdf = new ByteArrayOutputStream();
+//        //docx
+//        report.process(context, outDocx);
+//        byte[] resultDocx = ((ByteArrayOutputStream) outDocx).toByteArray();
+//        ReportTemplateResponse reportTemplateResponse = new ReportTemplateResponse();
+//        reportTemplateResponse.setWordSrc(Base64.getEncoder().encodeToString(resultDocx));
+//
+//        Options options = Options.getTo(ConverterTypeTo.PDF).via(ConverterTypeVia.XWPF);
+//        PdfOptions pdfOptions = PdfOptions.create();
+//        pdfOptions.fontProvider((familyName, encoding, size, style, color) -> {
+//            try {
+//                BaseFont baseFont = BaseFont.createFont("/Users/hoangmanhhai/Documents/tecapro_2023/QLNV/qlnv-hang/src/main/resources/font/times.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+//                return new Font(baseFont, size, style, color);
+//            } catch (Exception e) {
+//                throw new IllegalArgumentException("Font was not found" + e);
+//            }
+//        });
+//        options.subOptions(pdfOptions);
+//        report.convert(context, options, new FileOutputStream("/Users/hoangmanhhai/Documents/tecapro_2023/QLNV/qlnv-hang/target/output.pdf"));
+//
+//        outDocx.close();
+//        outPdf.close();
+//        return reportTemplateResponse;
+        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
     }
 
 

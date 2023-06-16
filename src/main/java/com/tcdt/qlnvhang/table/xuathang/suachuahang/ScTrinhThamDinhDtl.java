@@ -12,15 +12,15 @@ import java.time.LocalDate;
 import java.util.Map;
 
 @Entity
-@Table(name = XhScTongHopDtl.TABLE_NAME)
+@Table(name = ScTrinhThamDinhDtl.TABLE_NAME)
 @Data
-public class XhScTongHopDtl extends BaseEntity implements Serializable {
+public class ScTrinhThamDinhDtl extends BaseEntity implements Serializable {
   private static final long serialVersionUID = 1L;
-  public static final String TABLE_NAME = "XH_SC_TONG_HOP_DTL";
+  public static final String TABLE_NAME = "SC_TRINH_THAM_DINH_DTL";
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhScTongHopDtl.TABLE_NAME + "_SEQ")
-  @SequenceGenerator(sequenceName = XhScTongHopDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhScTongHopDtl.TABLE_NAME + "_SEQ")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = ScTrinhThamDinhDtl.TABLE_NAME + "_SEQ")
+  @SequenceGenerator(sequenceName = ScTrinhThamDinhDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = ScTrinhThamDinhDtl.TABLE_NAME + "_SEQ")
   private Long id;
   private Long idTongHop;
   private Long idDsHdr;
@@ -38,7 +38,9 @@ public class XhScTongHopDtl extends BaseEntity implements Serializable {
   private LocalDate ngayTongHop;
   private String lyDo;
   private String type;
-
+  BigDecimal soLuong;
+  BigDecimal donGia;
+  String ketQuaDanhGia;
   @JsonIgnore
   @Transient
   private Map<String, String> mapVthh;
@@ -99,6 +101,6 @@ public class XhScTongHopDtl extends BaseEntity implements Serializable {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "idHdr")
   @JsonIgnore
-  private XhScTongHopHdr tongHopHdr;
+  private ScTrinhThamDinhHdr hoSoHdr;
 
 }
