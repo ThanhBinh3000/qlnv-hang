@@ -9,20 +9,18 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 @Entity
-@Table(name = XhScDanhSachHdr.TABLE_NAME)
+@Table(name = ScDanhSachHdr.TABLE_NAME)
 @Data
-public class XhScDanhSachHdr extends BaseEntity implements Serializable {
+public class ScDanhSachHdr extends BaseEntity implements Serializable {
   private static final long serialVersionUID = 1L;
-  public static final String TABLE_NAME = "XH_SC_DANH_SACH_HDR";
+  public static final String TABLE_NAME = "SC_DANH_SACH_HDR";
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhScDanhSachHdr.TABLE_NAME + "_SEQ")
-  @SequenceGenerator(sequenceName = XhScDanhSachHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhScDanhSachHdr.TABLE_NAME + "_SEQ")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = ScDanhSachHdr.TABLE_NAME + "_SEQ")
+  @SequenceGenerator(sequenceName = ScDanhSachHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = ScDanhSachHdr.TABLE_NAME + "_SEQ")
   private Long id;
   private String maDvi;
   private Long idTongHop;
@@ -41,8 +39,6 @@ public class XhScDanhSachHdr extends BaseEntity implements Serializable {
   private String lyDo;
   private String trangThai;
   private String type;
-
-
   @JsonIgnore
   @Transient
   private Map<String, String> mapVthh;

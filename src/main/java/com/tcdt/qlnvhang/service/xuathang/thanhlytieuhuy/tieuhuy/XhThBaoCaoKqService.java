@@ -156,12 +156,12 @@ public class XhThBaoCaoKqService extends BaseServiceImpl {
       throw new Exception("Không tìm thấy dữ liệu");
     }
 
-    Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
+    Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
     Map<String, String> mapVthh = getListDanhMucHangHoa();
     List<XhThBaoCaoKqHdr> allById = xhThBaoCaoKqRepository.findAllById(ids);
     allById.forEach(data -> {
-      if (mapDmucDvi.containsKey(data.getMaDvi())) {
-        data.setTenDvi(mapDmucDvi.get(data.getMaDvi()).get("tenDvi").toString());
+      if (mapDmucDvi.get((data.getMaDvi())) != null) {
+        data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
       }
       data.setTenTrangThai(TrangThaiAllEnum.getLabelById(data.getTrangThai()));
 
@@ -169,7 +169,7 @@ public class XhThBaoCaoKqService extends BaseServiceImpl {
       data.setFileDinhKem(fileDinhKem);
 
       data.getBaoCaoKqDtl().forEach(s -> {
-
+        s.setMapDmucDvi(mapDmucDvi);
         s.setTenLoaiVthh(StringUtils.isEmpty(s.getLoaiVthh()) ? null : mapVthh.get(s.getLoaiVthh()));
         s.setTenCloaiVthh(StringUtils.isEmpty(s.getCloaiVthh()) ? null : mapVthh.get(s.getCloaiVthh()));
       });

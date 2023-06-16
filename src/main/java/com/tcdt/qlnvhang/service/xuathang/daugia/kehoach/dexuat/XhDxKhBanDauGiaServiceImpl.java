@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.xuathang.daugia.kehoach.dexuat;
 
+import com.tcdt.qlnvhang.common.DocxToPdfConverter;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGia;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGiaDtl;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGiaPhanLo;
@@ -21,16 +22,19 @@ import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
+import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
+import fr.opensagres.xdocreport.converter.ConverterTypeTo;
+import fr.opensagres.xdocreport.converter.ConverterTypeVia;
+import fr.opensagres.xdocreport.converter.Options;
 import fr.opensagres.xdocreport.core.XDocReportException;
 import fr.opensagres.xdocreport.document.IXDocReport;
 import fr.opensagres.xdocreport.document.registry.XDocReportRegistry;
 import fr.opensagres.xdocreport.template.IContext;
 import fr.opensagres.xdocreport.template.TemplateEngineKind;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.velocity.tools.generic.DateTool;
 import org.apache.velocity.tools.generic.NumberTool;
-import org.docx4j.Docx4J;
-import org.docx4j.model.structure.MarginsWellKnown;
-import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -42,10 +46,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
@@ -65,6 +66,8 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
   @Autowired
   private FileDinhKemService fileDinhKemService;
 
+  @Autowired
+  DocxToPdfConverter docxToPdfConverter;
   @Override
   public Page<XhDxKhBanDauGia> searchPage(XhDxKhBanDauGiaReq req) throws Exception {
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),
@@ -375,34 +378,8 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
       ReportTemplate model = findByTenFile(reportTemplateRequest);
       byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
       ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-
-//      InputStream in = FileUtils.openInputStream(new File("C:/Users/tqchi/Desktop/ke-hoach.docx"));
-
-      IXDocReport report = XDocReportRegistry.getRegistry().loadReport(inputStream, TemplateEngineKind.Velocity);
-      IContext context = report.createContext();
       XhDxKhBanDauGia detail = this.detail(4122l);
-      context.put("data", detail);
-      context.put("numberTool", new NumberTool());
-      context.put("dateTool", new DateTool());
-      OutputStream outDocx = new ByteArrayOutputStream();
-      OutputStream outPdf = new ByteArrayOutputStream();
-      //docx
-      report.process(context, outDocx);
-      byte[] resultDocx = ((ByteArrayOutputStream) outDocx).toByteArray();
-
-      //pdf
-//      ByteArrayInputStream docxInputStream = new ByteArrayInputStream(resultDocx);
-//      WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(docxInputStream);
-//      ByteArrayOutputStream pdfOutputStream = new ByteArrayOutputStream();
-//      Docx4J.toPDF(wordMLPackage, outPdf);
-//      byte[] resultPdf = pdfOutputStream.toByteArray();
-
-      ReportTemplateResponse reportTemplateResponse = new ReportTemplateResponse();
-      reportTemplateResponse.setWordSrc(Base64.getEncoder().encodeToString(resultDocx));
-//      reportTemplateResponse.setPdfSrc(Base64.getEncoder().encodeToString(resultPdf));
-      outDocx.close();
-      outPdf.close();
-      return reportTemplateResponse;
+      return docxToPdfConverter.convertDocxToPdf(inputStream,detail);
     } catch (IOException e) {
       e.printStackTrace();
     } catch (XDocReportException e) {

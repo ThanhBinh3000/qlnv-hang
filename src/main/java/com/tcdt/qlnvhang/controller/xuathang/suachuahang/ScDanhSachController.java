@@ -5,7 +5,7 @@ import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlDanhSachRequest;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.xuathang.suachuahang.XhScDanhSachService;
+import com.tcdt.qlnvhang.service.suachuahang.ScDanhSachService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -20,12 +20,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = PathContains.XUAT_HANG_DTQG + PathContains.SUA_CHUA + PathContains.DANH_SACH)
+@RequestMapping(value = PathContains.SUA_CHUA + PathContains.DANH_SACH)
 @Slf4j
-@Api(tags = "Xuất hàng DTQG - Sửa chữa hàng - Danh sách tất cả hàng cần sửa chữa")
-public class XhScDanhSachController {
+@Api(tags = "Sửa chữa hàng DTQG - Toàn bộ danh sách hàng DTQG cần sửa chữa")
+public class ScDanhSachController {
   @Autowired
-  XhScDanhSachService xhScDanhSachService;
+  ScDanhSachService scDanhSachService;
 
   @ApiOperation(value = "Tra cứu", response = List.class)
   @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -33,7 +33,7 @@ public class XhScDanhSachController {
   public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser, @RequestBody XhTlDanhSachRequest objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhScDanhSachService.searchPage(currentUser, objReq));
+      resp.setData(scDanhSachService.searchPage(currentUser, objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -51,7 +51,7 @@ public class XhScDanhSachController {
   public ResponseEntity<BaseResponse> detail(@ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids") List<Long> ids) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhScDanhSachService.detail(ids).get(0));
+      resp.setData(scDanhSachService.detail(ids).get(0));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
