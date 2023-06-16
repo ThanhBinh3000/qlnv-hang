@@ -81,6 +81,7 @@ public class HhDxuatKhLcntHdrPreview implements Serializable {
 	Long idQdPdKqLcnt;
 	Integer soGthauTrung;
 	Integer tongSl;
+	Integer tongSlChiTieu = 0;
 	BigDecimal tongThanhTien;
 
 	private ReportTemplateRequest reportTemplateRequest;
