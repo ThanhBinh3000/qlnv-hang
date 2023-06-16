@@ -68,5 +68,7 @@ public class DcnbBBNTBQHdrReq extends BaseRequest {
     private String nhanXet;
     private String trangThai;
     private String lyDoTuChoi;
+    private Boolean isVatTu = false;
+    private List<String> dsLoaiHang = new ArrayList<>();
     private List<DcnbBBNTBQDtl> dcnbBBNTBQDtl = new ArrayList<>();
 }

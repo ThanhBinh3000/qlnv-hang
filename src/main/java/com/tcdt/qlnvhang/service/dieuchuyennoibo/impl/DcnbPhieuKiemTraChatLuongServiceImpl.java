@@ -58,6 +58,14 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
+        if(req.getIsVatTu() == null){
+            req.setIsVatTu(false);
+        }
+        if(req.getIsVatTu()){
+            req.setDsLoaiHang(Arrays.asList("VT"));
+        }else {
+            req.setDsLoaiHang(Arrays.asList("LT","M"));
+        }
         Page<DcnbPhieuKtChatLuongHdrDTO> search = dcnbPhieuKtChatLuongHdrRepository.search(req, pageable);
         return search;
     }

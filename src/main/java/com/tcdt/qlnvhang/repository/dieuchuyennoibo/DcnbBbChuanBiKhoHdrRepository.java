@@ -28,7 +28,7 @@ public interface DcnbBbChuanBiKhoHdrRepository extends JpaRepository<DcnbBbChuan
             "AND (:#{#param.soQdinhDcc} IS NULL OR LOWER(c.soQdinhDcc) LIKE CONCAT('%',LOWER(:#{#param.soBbLayMau}),'%')) " +
             "AND (:#{#param.loaiDc} IS NULL OR c.loaiDc = :#{#param.loaiDc}) " +
             "ORDER BY c.soQdinhDcc desc , c.nam desc, c.id desc")
-    Page<DcnbBbChuanBiKhoHdr> search(@Param("param")SearchBangKeCanHang req, Pageable pageable);
+    Page<DcnbBbChuanBiKhoHdr> search(@Param("param") SearchBangKeCanHang req, Pageable pageable);
 
     Optional<DcnbBbChuanBiKhoHdr> findBySoBban(String soBban);
 
@@ -36,21 +36,39 @@ public interface DcnbBbChuanBiKhoHdrRepository extends JpaRepository<DcnbBbChuan
     List<DcnbBbChuanBiKhoHdr> findByIdIn(List<Long> ids);
 
     List<DcnbBbChuanBiKhoHdr> findAllByIdIn(List<Long> idList);
-//    @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbChuanBiKhoHdrDTO(" +
-//            "bbcb.id, qdc.id,qdc.soQdinh,qdc.nam,khdcd.thoiGianDkDc, bbcb.soBban, bbcb.ngayLap,  bbcb.soBban, bbcb.ngayLap, khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
-//            "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho, khdcd.maDiemKhoNhan, khdcd.tenDiemKhoNhan, khdcd.maLoKhoNhan, khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan, bbcb.soBban," +
-//            "bbcb.ngayLap,bbcb.ngayKetThucNt , bbcb.tongKinhPhiDaTh,bbcb.tongKinhPhiDaTh ,bbcb.trangThai, bbcb.trangThai) FROM DcnbQuyetDinhDcCHdr qdc " +
-//            "LEFT JOIN DcnbBbChuanBiKhoHdr bbcb On bbcb.qdDcCucId = qdc.id " +
-//            "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
-//            "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
-//            "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
-//            "LEFT JOIN DcnbKeHoachDcDtlTT khdcdtt On khdcdtt.hdrId = khdcd.id " +
-//            "WHERE 1 =1 " +
-//            "AND qdc.trangThai = '29'" +
-//            "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}) OR (:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}))" +
-//            "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
-//            "ORDER BY bbcb.soQdDcCuc desc, bbcb.nam desc")
-//    Page<DcnbBbChuanBiKhoHdrDTO> searchPageChiCuc(DcnbBbChuanBiKhoHdrReq req, Pageable pageable);
-//
-//    Page<DcnbBbChuanBiKhoHdrDTO> searchPage(DcnbBbChuanBiKhoHdrReq req, Pageable pageable);
+
+    @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbChuanBiKhoHdrDTO(" +
+            "bbcb.id, qdc.id,qdc.soQdinh,qdc.nam,khdcd.thoiGianDkDc, bbcb.soBban, bbcb.ngayLap, pnk.id, pnk.soPhieuNhapKho, bbktnk.id," +
+            " bbktnk.soBb,bbktnk.ngayKetThucNhap,khdcd.maDiemKho, khdcd.tenDiemKho, khdcd.maLoKho, " +
+            "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho, bbcb.trangThai, bbcb.trangThai) FROM DcnbQuyetDinhDcCHdr qdc " +
+            "LEFT JOIN DcnbBbChuanBiKhoHdr bbcb On bbcb.qdDcCucId = qdc.id " +
+            "LEFT JOIN DcnbPhieuNhapKhoHdr pnk On pnk.qdDcCucId = qdc.id " +
+            "LEFT JOIN DcnbBBKetThucNKHdr bbktnk On bbktnk.qDinhDccId = qdc.id " +
+            "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
+            "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
+            "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
+            "WHERE 1 =1 " +
+            "AND qdc.trangThai = '29'" +
+            "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}) OR (:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}))" +
+            "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
+            "ORDER BY bbcb.soQdDcCuc desc, bbcb.nam desc")
+    Page<DcnbBbChuanBiKhoHdrDTO> searchPageChiCuc(@Param("param")DcnbBbChuanBiKhoHdrReq req, Pageable pageable);
+
+    @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbChuanBiKhoHdrDTO(" +
+            "bbcb.id, qdc.id,qdc.soQdinh,qdc.nam,khdcd.thoiGianDkDc, bbcb.soBban, bbcb.ngayLap, pnk.id, pnk.soPhieuNhapKho, bbktnk.id," +
+            " bbktnk.soBb,bbktnk.ngayKetThucNhap,khdcd.maDiemKho, khdcd.tenDiemKho, khdcd.maLoKho, " +
+            "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho, bbcb.trangThai, bbcb.trangThai) FROM DcnbQuyetDinhDcCHdr qdc " +
+            "LEFT JOIN DcnbDataLinkHdr dtlh On dtlh.qdCcParentId = qdc.id " +
+            "LEFT JOIN DcnbBbChuanBiKhoHdr bbcb On bbcb.qdDcCucId = dtlh.qdCcId " +
+            "LEFT JOIN DcnbPhieuNhapKhoHdr pnk On pnk.qdDcCucId = dtlh.qdCcId " +
+            "LEFT JOIN DcnbBBKetThucNKHdr bbktnk On bbktnk.qDinhDccId = dtlh.qdCcId " +
+            "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = dtlh.qdCcId " +
+            "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
+            "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
+            "WHERE 1 =1 " +
+            "AND qdc.trangThai = '29'" +
+            "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}) OR (:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}))" +
+            "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
+            "ORDER BY bbcb.soQdDcCuc desc, bbcb.nam desc")
+    Page<DcnbBbChuanBiKhoHdrDTO> searchPage(@Param("param")DcnbBbChuanBiKhoHdrReq req, Pageable pageable);
 }
