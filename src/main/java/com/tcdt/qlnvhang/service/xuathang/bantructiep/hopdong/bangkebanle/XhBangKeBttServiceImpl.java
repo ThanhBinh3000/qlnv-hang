@@ -85,7 +85,7 @@ public class XhBangKeBttServiceImpl extends BaseServiceImpl implements XhBangKeB
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
         data.setTenDvi(StringUtils.isEmpty(data.getMaDvi())?null:hashMapDvi.get(data.getMaDvi()));
         data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh())?null:hashMapVthh.get(data.getLoaiVthh()));
-        data.setTenCloaiVthh(StringUtils.isEmpty(data.getTenCloaiVthh())?null:hashMapVthh.get(data.getCloaiVthh()));
+        data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh())?null:hashMapVthh.get(data.getCloaiVthh()));
         return data;
     }
 
