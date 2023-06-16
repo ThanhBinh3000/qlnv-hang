@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.table.report.ListDsGthauDTO;
 import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.util.Contains;
 
@@ -141,6 +142,7 @@ public class HhDxuatKhLcntHdrReq {
 	String tenDviCha;
 	String maDviLapDx;
 	private ReportTemplateRequest reportTemplateRequest;
+	private List<ListDsGthauDTO> listDsGthau;
 
 	private List<FileDinhKemReq> fileDinhKemReq =  new ArrayList<>();
 

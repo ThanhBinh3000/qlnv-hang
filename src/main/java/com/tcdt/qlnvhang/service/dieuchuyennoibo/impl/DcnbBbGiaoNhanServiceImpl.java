@@ -1,10 +1,14 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbGiaoNhanDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbGiaoNhanHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbGiaoNhanHdrReq;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeXuatVTHdrDTO;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbGiaoNhanHdrDTO;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBbGiaoNhanService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -13,16 +17,17 @@ import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQHdr;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbGiaoNhanHdr;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.ExportExcel;
+import com.tcdt.qlnvhang.util.UserUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
@@ -42,6 +47,21 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
     @Override
     public Page<DcnbBbGiaoNhanHdr> searchPage(DcnbBbGiaoNhanHdrReq req) throws Exception {
         return null;
+    }
+
+    @Override
+    public Page<DcnbBbGiaoNhanHdrDTO> searchPage(CustomUserDetails currentUser, DcnbBbGiaoNhanHdrReq req) throws Exception {
+        String dvql = currentUser.getDvql();
+        req.setMaDvi(dvql);
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
+        Page<DcnbBbGiaoNhanHdrDTO> searchDto = null;
+//        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+//            searchDto = hdrRepository.searchPageChiCuc(req, pageable);
+//        }
+//        if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+//            searchDto = hdrRepository.searchPageCuc(req, pageable);
+//        }
+        return searchDto;
     }
 
     @Override
@@ -68,11 +88,6 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
         DcnbBbGiaoNhanHdr created = hdrRepository.save(data);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBBNTBQHdr.TABLE_NAME);
         created.setFileDinhKems(canCu);
-//        DcnbKeHoachDcDtlTT kh = new DcnbKeHoachDcDtlTT();
-//        kh.setIdHdr(created.getId());
-//        kh.setTableName(DcnbBbGiaoNhanHdr.TABLE_NAME);
-//        kh.setIdKhDcDtl(data.getIdKeHoachDtl());
-//        dcnbKeHoachNhapXuatService.saveOrUpdate(kh);
         return created;
     }
 
@@ -170,7 +185,28 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
     }
 
     @Override
-    public void export(DcnbBbGiaoNhanHdrReq req, HttpServletResponse response) throws Exception {
+    public void export(DcnbBbGiaoNhanHdrReq objReq, HttpServletResponse response) throws Exception {
+        CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        objReq.setPaggingReq(paggingReq);
+        objReq.setMaDvi(currentUser.getDvql());
+        Page<DcnbBbGiaoNhanHdrDTO> page = searchPage(currentUser,objReq);
+        List<DcnbBbGiaoNhanHdrDTO> data = page.getContent();
 
+        String title = "Danh sách bảng kê cân hàng ";
+        String[] rowsName = new String[]{"STT", "Năm kế hoạch", "Số công văn/đề xuất", "Ngày lập KH", "Ngày duyệt LĐ Chi cục", "Loại điều chuyển", "Đơn vị đề xuất", "Trạng thái"};
+        String fileName = "danh-sach-ke-hoach-dieu-chuyen-noi-bo-hang-dtqg.xlsx";
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+        for (int i = 0; i < data.size(); i++) {
+            DcnbBbGiaoNhanHdrDTO dx = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i + 1;
+            dataList.add(objs);
+        }
+        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
+        ex.export();
     }
 }

@@ -11,6 +11,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface DcnbBangKeXuatVTHdrRepository extends JpaRepository<DcnbBangKeXuatVTHdr, Long> {
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeXuatVTHdrDTO(" +
@@ -53,4 +56,8 @@ public interface DcnbBangKeXuatVTHdrRepository extends JpaRepository<DcnbBangKeX
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
             "ORDER BY bkxvt.soQdinhDcc desc, bkxvt.nam desc")
     Page<DcnbBangKeXuatVTHdrDTO> searchPageCuc(@Param("param")DcnbBangKeXuatVTReq req, Pageable pageable);
+
+    Optional<DcnbBangKeXuatVTHdr> findFirstBySoBangKe(String soBangKe);
+
+    List<DcnbBangKeXuatVTHdr> findAllByIdIn(List<Long> listMulti);
 }

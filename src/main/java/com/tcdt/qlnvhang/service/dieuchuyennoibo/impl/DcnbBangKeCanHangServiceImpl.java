@@ -25,6 +25,7 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -70,8 +71,7 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl{
         }
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             searchDto = dcnbBangKeCanHangHdrRepository.searchPage(req, pageable);
-        }
-        if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+        }else  {
             req.setTypeDataLink(Contains.DIEU_CHUYEN);
             searchDto = dcnbBangKeCanHangHdrRepository.searchPageCuc(req, pageable);
         }
@@ -91,7 +91,9 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl{
         BeanUtils.copyProperties(objReq, data);
         data.setMaDvi(currentUser.getDvql());
         data.setTenDvi(currentUser.getUser().getTenDvi());
-        objReq.getDcnbBangKeCanHangDtl().forEach(e->e.setDcnbBangKeCanHangHdr(data));
+        if(objReq.getDcnbBangKeCanHangDtl() !=null){
+            objReq.getDcnbBangKeCanHangDtl().forEach(e->e.setDcnbBangKeCanHangHdr(data));
+        }
         DcnbBangKeCanHangHdr created = dcnbBangKeCanHangHdrRepository.save(data);
         return created;
     }
@@ -118,8 +120,6 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl{
         objReq.setMaDvi(data.getMaDvi());
         BeanUtils.copyProperties(objReq, data);
         data.setDcnbBangKeCanHangDtl(objReq.getDcnbBangKeCanHangDtl());
-        if (objReq.getDcnbBangKeCanHangDtl() != null) {
-        }
         DcnbBangKeCanHangHdr created = dcnbBangKeCanHangHdrRepository.save(data);
         return created;
     }
