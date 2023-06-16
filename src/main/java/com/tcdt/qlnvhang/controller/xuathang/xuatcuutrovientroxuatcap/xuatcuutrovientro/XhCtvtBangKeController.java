@@ -13,10 +13,19 @@ import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBangKeService;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBangKeHdr;
 import com.tcdt.qlnvhang.util.PathContains;
+import fr.opensagres.xdocreport.converter.ConverterTypeTo;
+import fr.opensagres.xdocreport.converter.ConverterTypeVia;
+import fr.opensagres.xdocreport.converter.Options;
+import fr.opensagres.xdocreport.core.XDocReportException;
+import fr.opensagres.xdocreport.document.IXDocReport;
+import fr.opensagres.xdocreport.document.registry.XDocReportRegistry;
+import fr.opensagres.xdocreport.template.IContext;
+import fr.opensagres.xdocreport.template.TemplateEngineKind;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,6 +34,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -181,6 +191,35 @@ public class XhCtvtBangKeController extends BaseController {
       final ObjectMapper mapper = new ObjectMapper();
       mapper.writeValue(response.getOutputStream(), body);
 
+    }
+  }
+
+  public static void main(String[] args) {
+    try {
+      // 1) Load Docx file by filling Velocity template engine and cache
+      // it to the registry
+
+      InputStream in = FileUtils.openInputStream(new File("C:/Users/tqchi/Desktop/ke-hoach1.docx"));
+      IXDocReport report = XDocReportRegistry.getRegistry().loadReport(
+          in, TemplateEngineKind.Velocity);
+
+
+      // 2) Create context Java model
+      IContext context = report.createContext();
+
+
+      // 3) Generate report by merging Java model with the Docx
+      OutputStream out = new FileOutputStream(new File(
+          "DocxProjectWithVelocity_Out.pdf"));
+      // report.process(context, out);
+      Options options = Options.getTo(ConverterTypeTo.PDF).via(
+          ConverterTypeVia.XWPF);
+      report.convert(context, options, out);
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (XDocReportException e) {
+      e.printStackTrace();
     }
   }
 }
