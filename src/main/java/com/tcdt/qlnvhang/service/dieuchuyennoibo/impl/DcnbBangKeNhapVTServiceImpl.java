@@ -153,13 +153,7 @@ public class DcnbBangKeNhapVTServiceImpl implements DcnbBangKeNhapVTService {
                 DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
                 dataLinkDtl.setLinkId(optional.get().getId());
                 dataLinkDtl.setHdrId(dataLink.getId());
-                if ("00".equals(optional.get().getType())) { // xuất
-                    dataLinkDtl.setType("XDC" + DcnbBangKeNhapVTHdr.TABLE_NAME);
-                } else if ("01".equals(optional.get().getType())) {
-                    dataLinkDtl.setType("NDC" + DcnbBangKeNhapVTHdr.TABLE_NAME);
-                } else {
-                    throw new Exception("Type phải là 00 hoặc 01!");
-                }
+                dataLinkDtl.setType(DcnbBangKeNhapVTHdr.TABLE_NAME);
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
@@ -183,12 +177,12 @@ public class DcnbBangKeNhapVTServiceImpl implements DcnbBangKeNhapVTService {
 
     @Override
     public void deleteMulti(List<Long> listMulti) throws Exception {
-        List<DcnbBangKeNhapVTDtl> list = hdrRepository.findAllByIdIn(listMulti);
+        List<DcnbBangKeNhapVTHdr> list = hdrRepository.findAllByIdIn(listMulti);
 
         if (list.isEmpty()) {
             throw new Exception("Bản ghi không tồn tại");
         }
-        List<Long> listId = list.stream().map(DcnbBangKeNhapVTDtl::getId).collect(Collectors.toList());
+        List<Long> listId = list.stream().map(DcnbBangKeNhapVTHdr::getId).collect(Collectors.toList());
         List<DcnbBangKeNhapVTDtl> listBangKe = dtlRepository.findByHdrIdIn(listId);
         dtlRepository.deleteAll(listBangKe);
     }
@@ -201,7 +195,6 @@ public class DcnbBangKeNhapVTServiceImpl implements DcnbBangKeNhapVTService {
         paggingReq.setLimit(Integer.MAX_VALUE);
         objReq.setPaggingReq(paggingReq);
         objReq.setMaDvi(currentUser.getDvql());
-        Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit());
         Page<DcnbBangKeNhapVTHdrDTO> page = searchPage(currentUser,objReq);
         List<DcnbBangKeNhapVTHdrDTO> data = page.getContent();
 
