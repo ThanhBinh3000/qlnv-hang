@@ -14,7 +14,6 @@ public class HhDxKhlcntDsgthauReport {
 	private int stt;
 	private String goiThau;
 	private int soLuong;
-	private BigDecimal donGiaTamTinh;
 	private BigDecimal thanhTien;
 	private String diaDiemNhapKho;
 	private String ghiChu;
