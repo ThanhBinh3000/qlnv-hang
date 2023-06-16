@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,4 +21,6 @@ public class SearchPhieuXuatKho extends BaseRequest {
     private String loaiDc;
     private String loaiQdinh;
     private String trangThai;
+    private Boolean isVatTu = false;
+    private List<String> dsLoaiHang = new ArrayList<>();
 }
