@@ -1,7 +1,7 @@
 package com.tcdt.qlnvhang.repository.xuathang.suachuahang;
 
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlDanhSachRequest;
-import com.tcdt.qlnvhang.table.xuathang.suachuahang.XhScDanhSachHdr;
+import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScDanhSachHdr;
 import feign.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,8 +10,8 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface XhScDanhSachRepository extends JpaRepository<XhScDanhSachHdr, Long> {
-  @Query("SELECT c FROM XhScDanhSachHdr c WHERE 1=1 " +
+public interface ScDanhSachRepository extends JpaRepository<ScDanhSachHdr, Long> {
+  @Query("SELECT c FROM ScDanhSachHdr c WHERE 1=1 " +
       "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
       "AND (:#{#param.loaiVthh} IS NULL OR c.loaiVthh = :#{#param.loaiVthh}) " +
       "AND ((:#{#param.ngayDeXuatTu}  IS NULL OR c.ngayDeXuat >= :#{#param.ngayDeXuatTu})" +
@@ -19,10 +19,18 @@ public interface XhScDanhSachRepository extends JpaRepository<XhScDanhSachHdr, L
       "AND (:#{#param.type} IS NULL OR ('TH' = :#{#param.type} AND c.maTongHop IS NULL))" +
       "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
-  Page<XhScDanhSachHdr> searchPage(@Param("param") XhTlDanhSachRequest param, Pageable pageable);
+  Page<ScDanhSachHdr> searchPage(@Param("param") XhTlDanhSachRequest param, Pageable pageable);
+
+  @Query("SELECT c FROM ScDanhSachHdr c  " +
+          " LEFT JOIN ScTongHopDtl th on c.id = th.idDsHdr WHERE 1=1 " +
+          " AND th.id is null " +
+          " AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
+          "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
+  )
+  List<ScDanhSachHdr> listTongHop(@Param("param") XhTlDanhSachRequest param);
 
 
   void deleteAllByIdIn(List<Long> listId);
 
-  List<XhScDanhSachHdr> findByIdIn(List<Long> ids);
+  List<ScDanhSachHdr> findByIdIn(List<Long> ids);
 }
