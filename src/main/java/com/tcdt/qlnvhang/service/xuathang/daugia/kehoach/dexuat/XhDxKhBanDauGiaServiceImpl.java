@@ -1,4 +1,8 @@
 package com.tcdt.qlnvhang.service.xuathang.daugia.kehoach.dexuat;
+
+import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGia;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGiaDtl;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGiaPhanLo;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGiaDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGiaPhanLoRepository;
@@ -10,13 +14,23 @@ import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGia;
-import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGiaDtl;
-import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGiaPhanLo;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import fr.opensagres.xdocreport.core.XDocReportException;
+import fr.opensagres.xdocreport.document.IXDocReport;
+import fr.opensagres.xdocreport.document.registry.XDocReportRegistry;
+import fr.opensagres.xdocreport.template.IContext;
+import fr.opensagres.xdocreport.template.TemplateEngineKind;
+import org.apache.velocity.tools.generic.DateTool;
+import org.apache.velocity.tools.generic.NumberTool;
+import org.docx4j.Docx4J;
+import org.docx4j.model.structure.MarginsWellKnown;
+import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,7 +40,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
@@ -54,12 +73,12 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
         req,
         pageable);
     Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
-    Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
+    Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
 
     data.getContent().forEach(f -> {
-      f.setTenDvi(StringUtils.isEmpty(f.getMaDvi())?null:mapDmucDvi.get(f.getMaDvi()));
-      f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh())?null:mapDmucVthh.get(f.getLoaiVthh()));
-      f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh())?null:mapDmucVthh.get(f.getCloaiVthh()));
+      f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
+      f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : mapDmucVthh.get(f.getLoaiVthh()));
+      f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : mapDmucVthh.get(f.getCloaiVthh()));
       f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
       if (DataUtils.isNullObject(f.getIdThop())) {
         f.setTenTrangThaiTh("Chưa tổng hợp");
@@ -72,7 +91,7 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
 
   @Override
   public XhDxKhBanDauGia create(XhDxKhBanDauGiaReq req) throws Exception {
-    if(req == null) return null;
+    if (req == null) return null;
 
     UserInfo userInfo = SecurityContextService.getUser();
     if (userInfo == null) throw new Exception("Bad request.");
@@ -86,8 +105,8 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
     BeanUtils.copyProperties(req, data, "id");
 
     int slDviTsan = data.getChildren().stream()
-            .flatMap(item -> item.getChildren().stream())
-            .map(XhDxKhBanDauGiaPhanLo::getMaDviTsan).collect(Collectors.toSet()).size();
+        .flatMap(item -> item.getChildren().stream())
+        .map(XhDxKhBanDauGiaPhanLo::getMaDviTsan).collect(Collectors.toSet()).size();
     data.setSlDviTsan(DataUtils.safeToInt(slDviTsan));
 
     data.setMaDvi(userInfo.getDvql());
@@ -144,8 +163,8 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
     BeanUtils.copyProperties(req, data, "id", "trangThaiTh");
 
     int slDviTsan = data.getChildren().stream()
-            .flatMap(item -> item.getChildren().stream())
-            .map(XhDxKhBanDauGiaPhanLo::getMaDviTsan).collect(Collectors.toSet()).size();
+        .flatMap(item -> item.getChildren().stream())
+        .map(XhDxKhBanDauGiaPhanLo::getMaDviTsan).collect(Collectors.toSet()).size();
     data.setSlDviTsan(DataUtils.safeToInt(slDviTsan));
 
     data.setNgaySua(LocalDate.now());
@@ -171,47 +190,47 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
     XhDxKhBanDauGia data = optional.get();
 
     Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
-    Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
+    Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
 
     List<XhDxKhBanDauGiaDtl> dataDtlList = xhDxKhBanDauGiaDtlRepository.findAllByIdHdr(data.getId());
-      for (XhDxKhBanDauGiaDtl dataDtl : dataDtlList) {
-        List<XhDxKhBanDauGiaPhanLo> dataPhanLoList = xhDxKhBanDauGiaPhanLoRepository.findByIdDtl(dataDtl.getId());
-        dataPhanLoList.forEach(phanLo -> {
-          phanLo.setTenDiemKho(StringUtils.isEmpty(phanLo.getMaDiemKho())?null:mapDmucDvi.get(phanLo.getMaDiemKho()));
-          phanLo.setTenNhaKho(StringUtils.isEmpty(phanLo.getMaNhaKho())?null:mapDmucDvi.get(phanLo.getMaNhaKho()));
-          phanLo.setTenNganKho(StringUtils.isEmpty(phanLo.getMaNganKho())?null:mapDmucDvi.get(phanLo.getMaNganKho()));
-          phanLo.setTenLoKho(StringUtils.isEmpty(phanLo.getMaLoKho())?null:mapDmucDvi.get(phanLo.getMaLoKho()));
-          phanLo.setTenLoaiVthh(StringUtils.isEmpty(phanLo.getLoaiVthh())?null:mapDmucVthh.get(phanLo.getLoaiVthh()));
-          phanLo.setTenCloaiVthh(StringUtils.isEmpty(phanLo.getCloaiVthh())?null:mapDmucVthh.get(phanLo.getCloaiVthh()));
-          this.donGiaDuocDuyet(data, phanLo);
-        });
-        dataDtl.setTenDvi(StringUtils.isEmpty(dataDtl.getMaDvi())?null:mapDmucDvi.get(dataDtl.getMaDvi()));
-        dataDtl.setChildren(dataPhanLoList);
-      }
-      data.setTenDvi(StringUtils.isEmpty(data.getMaDvi())?null:mapDmucDvi.get(data.getMaDvi()));
-      data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh())?null:mapDmucVthh.get(data.getLoaiVthh()));
-      data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh())?null:mapDmucVthh.get(data.getCloaiVthh()));
-      data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
-      data.setChildren(dataDtlList);
-      List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhDxKhBanDauGia.TABLE_NAME));
-      if (!CollectionUtils.isEmpty(fileDinhKems)) data.setFileDinhKems(fileDinhKems);
+    for (XhDxKhBanDauGiaDtl dataDtl : dataDtlList) {
+      List<XhDxKhBanDauGiaPhanLo> dataPhanLoList = xhDxKhBanDauGiaPhanLoRepository.findByIdDtl(dataDtl.getId());
+      dataPhanLoList.forEach(phanLo -> {
+        phanLo.setTenDiemKho(StringUtils.isEmpty(phanLo.getMaDiemKho()) ? null : mapDmucDvi.get(phanLo.getMaDiemKho()));
+        phanLo.setTenNhaKho(StringUtils.isEmpty(phanLo.getMaNhaKho()) ? null : mapDmucDvi.get(phanLo.getMaNhaKho()));
+        phanLo.setTenNganKho(StringUtils.isEmpty(phanLo.getMaNganKho()) ? null : mapDmucDvi.get(phanLo.getMaNganKho()));
+        phanLo.setTenLoKho(StringUtils.isEmpty(phanLo.getMaLoKho()) ? null : mapDmucDvi.get(phanLo.getMaLoKho()));
+        phanLo.setTenLoaiVthh(StringUtils.isEmpty(phanLo.getLoaiVthh()) ? null : mapDmucVthh.get(phanLo.getLoaiVthh()));
+        phanLo.setTenCloaiVthh(StringUtils.isEmpty(phanLo.getCloaiVthh()) ? null : mapDmucVthh.get(phanLo.getCloaiVthh()));
+        this.donGiaDuocDuyet(data, phanLo);
+      });
+      dataDtl.setTenDvi(StringUtils.isEmpty(dataDtl.getMaDvi()) ? null : mapDmucDvi.get(dataDtl.getMaDvi()));
+      dataDtl.setChildren(dataPhanLoList);
+    }
+    data.setTenDvi(StringUtils.isEmpty(data.getMaDvi()) ? null : mapDmucDvi.get(data.getMaDvi()));
+    data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh()) ? null : mapDmucVthh.get(data.getLoaiVthh()));
+    data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh()) ? null : mapDmucVthh.get(data.getCloaiVthh()));
+    data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
+    data.setChildren(dataDtlList);
+    List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhDxKhBanDauGia.TABLE_NAME));
+    if (!CollectionUtils.isEmpty(fileDinhKems)) data.setFileDinhKems(fileDinhKems);
     return data;
   }
 
-  void  donGiaDuocDuyet(XhDxKhBanDauGia data, XhDxKhBanDauGiaPhanLo phanLo){
+  void donGiaDuocDuyet(XhDxKhBanDauGia data, XhDxKhBanDauGiaPhanLo phanLo) {
     BigDecimal donGiaDuocDuyet = BigDecimal.ZERO;
-    if(data.getLoaiVthh().startsWith("02")){
+    if (data.getLoaiVthh().startsWith("02")) {
       donGiaDuocDuyet = xhDxKhBanDauGiaPhanLoRepository.getDonGiaVatVt(data.getCloaiVthh(), data.getNamKh());
-      if (!DataUtils.isNullObject(donGiaDuocDuyet)){
+      if (!DataUtils.isNullObject(donGiaDuocDuyet)) {
         phanLo.setDonGiaDuocDuyet(donGiaDuocDuyet);
         BigDecimal tongTienGiaKdTheoDgiaDd = data.getTongSoLuong().multiply(donGiaDuocDuyet);
         BigDecimal tongKhoanTienDtTheoDgiaDd = data.getTongSoLuong().multiply(donGiaDuocDuyet).multiply(data.getKhoanTienDatTruoc()).divide(BigDecimal.valueOf(100));
         data.setTongTienGiaKdTheoDgiaDd(tongTienGiaKdTheoDgiaDd);
         data.setTongKhoanTienDtTheoDgiaDd(tongKhoanTienDtTheoDgiaDd);
       }
-    }else {
+    } else {
       donGiaDuocDuyet = xhDxKhBanDauGiaPhanLoRepository.getDonGiaVatLt(data.getCloaiVthh(), data.getMaDvi(), data.getNamKh());
-      if (!DataUtils.isNullObject(donGiaDuocDuyet)){
+      if (!DataUtils.isNullObject(donGiaDuocDuyet)) {
         phanLo.setDonGiaDuocDuyet(donGiaDuocDuyet);
         BigDecimal tongTienGiaKdTheoDgiaDd = data.getTongSoLuong().multiply(donGiaDuocDuyet);
         BigDecimal tongKhoanTienDtTheoDgiaDd = data.getTongSoLuong().multiply(donGiaDuocDuyet).multiply(data.getKhoanTienDatTruoc()).divide(BigDecimal.valueOf(100));
@@ -343,8 +362,72 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
   public BigDecimal getGiaBanToiThieu(String cloaiVthh, String maDvi, Integer namKh) {
     if (cloaiVthh.startsWith("02")) {
       return xhDxKhBanDauGiaRepository.getGiaBanToiThieuVt(cloaiVthh, namKh);
-    }else {
+    } else {
       return xhDxKhBanDauGiaRepository.getGiaBanToiThieuLt(cloaiVthh, maDvi, namKh);
     }
   }
+
+  @Override
+  public ReportTemplateResponse preview(HttpServletResponse response) throws Exception {
+    try {
+      ReportTemplateRequest reportTemplateRequest = new ReportTemplateRequest();
+      reportTemplateRequest.setFileName("de-xuat-ke-hoach-ban-dau-gia.docx");
+      ReportTemplate model = findByTenFile(reportTemplateRequest);
+      byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+      ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+
+//      InputStream in = FileUtils.openInputStream(new File("C:/Users/tqchi/Desktop/ke-hoach.docx"));
+
+      IXDocReport report = XDocReportRegistry.getRegistry().loadReport(inputStream, TemplateEngineKind.Velocity);
+      IContext context = report.createContext();
+      XhDxKhBanDauGia detail = this.detail(4122l);
+      context.put("data", detail);
+      context.put("numberTool", new NumberTool());
+      context.put("dateTool", new DateTool());
+      OutputStream outDocx = new ByteArrayOutputStream();
+      OutputStream outPdf = new ByteArrayOutputStream();
+      //docx
+      report.process(context, outDocx);
+      byte[] resultDocx = ((ByteArrayOutputStream) outDocx).toByteArray();
+
+      //pdf
+//      ByteArrayInputStream docxInputStream = new ByteArrayInputStream(resultDocx);
+//      WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(docxInputStream);
+//      ByteArrayOutputStream pdfOutputStream = new ByteArrayOutputStream();
+//      Docx4J.toPDF(wordMLPackage, outPdf);
+//      byte[] resultPdf = pdfOutputStream.toByteArray();
+
+      ReportTemplateResponse reportTemplateResponse = new ReportTemplateResponse();
+      reportTemplateResponse.setWordSrc(Base64.getEncoder().encodeToString(resultDocx));
+//      reportTemplateResponse.setPdfSrc(Base64.getEncoder().encodeToString(resultPdf));
+      outDocx.close();
+      outPdf.close();
+      return reportTemplateResponse;
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (XDocReportException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  /*public static byte[] convertDocxToPdf(byte[] docxBytes) throws IOException, Docx4JException {
+    // Load DOCX as ByteArrayInputStream
+    ByteArrayInputStream docxInputStream = new ByteArrayInputStream(docxBytes);
+
+    // Create WordprocessingMLPackage from the DOCX input stream
+    WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(docxInputStream);
+
+    // Set PDF conversion settings
+    PdfSettings pdfSettings = new PdfSettings();
+    pdfSettings.setWmlPackage(wordMLPackage);
+    pdfSettings.setMargins(MarginsWellKnown.NORMAL);
+
+    // Perform PDF conversion
+    ByteArrayOutputStream pdfOutputStream = new ByteArrayOutputStream();
+    PdfConversion conversion = new org.docx4j.convert.out.pdf.viaXSLFO.Conversion(wordMLPackage);
+    conversion.output(pdfOutputStream, pdfSettings);
+
+    return pdfOutputStream.toByteArray();
+  }*/
 }

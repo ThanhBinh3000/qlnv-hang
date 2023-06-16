@@ -220,11 +220,6 @@
 		</dependency>
 		<dependency>
 			<groupId>fr.opensagres.xdocreport</groupId>
-			<artifactId>fr.opensagres.poi.xwpf.converter.pdf</artifactId>
-			<version>2.0.2</version>
-		</dependency>
-		<dependency>
-			<groupId>fr.opensagres.xdocreport</groupId>
 			<artifactId>xdocreport</artifactId>
 			<version>2.0.2</version>
 		</dependency>
@@ -238,12 +233,48 @@
 			<artifactId>fr.opensagres.xdocreport.template</artifactId>
 			<version>2.0.2</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/fr.opensagres.xdocreport/fr.opensagres.xdocreport.template.velocity -->
+		<dependency>
+			<groupId>fr.opensagres.xdocreport</groupId>
+			<artifactId>fr.opensagres.xdocreport.template.velocity</artifactId>
+			<version>2.0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.velocity</groupId>
+			<artifactId>velocity</artifactId>
+			<version>1.7</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.velocity</groupId>
+			<artifactId>velocity-tools</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/fr.opensagres.xdocreport/fr.opensagres.xdocreport.template.freemarker -->
+		<dependency>
+			<groupId>fr.opensagres.xdocreport</groupId>
+			<artifactId>fr.opensagres.xdocreport.template.freemarker</artifactId>
+			<version>2.0.2</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/fr.opensagres.xdocreport/fr.opensagres.xdocreport.converter.docx.xwpf -->
+		<dependency>
+			<groupId>fr.opensagres.xdocreport</groupId>
+			<artifactId>fr.opensagres.xdocreport.converter.docx.xwpf</artifactId>
+			<version>2.0.2</version>
+		</dependency>
 		<dependency>
 			<groupId>com.itextpdf</groupId>
 			<artifactId>itext7-core</artifactId>
 			<version>7.2.4</version>
 			<type>pom</type>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.lowagie/itext -->
+		<dependency>
+			<groupId>com.lowagie</groupId>
+			<artifactId>itext</artifactId>
+			<version>2.1.7</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.apache.xmlgraphics</groupId>
 			<artifactId>fop</artifactId>
