@@ -52,7 +52,7 @@ public interface DcnbBbChuanBiKhoHdrRepository extends JpaRepository<DcnbBbChuan
             "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}) OR (:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}))" +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
             "ORDER BY bbcb.soQdDcCuc desc, bbcb.nam desc")
-    Page<DcnbBbChuanBiKhoHdrDTO> searchPageChiCuc(DcnbBbChuanBiKhoHdrReq req, Pageable pageable);
+    Page<DcnbBbChuanBiKhoHdrDTO> searchPageChiCuc(@Param("param")DcnbBbChuanBiKhoHdrReq req, Pageable pageable);
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbChuanBiKhoHdrDTO(" +
             "bbcb.id, qdc.id,qdc.soQdinh,qdc.nam,khdcd.thoiGianDkDc, bbcb.soBban, bbcb.ngayLap, pnk.id, pnk.soPhieuNhapKho, bbktnk.id," +
@@ -70,5 +70,5 @@ public interface DcnbBbChuanBiKhoHdrRepository extends JpaRepository<DcnbBbChuan
             "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}) OR (:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}))" +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
             "ORDER BY bbcb.soQdDcCuc desc, bbcb.nam desc")
-    Page<DcnbBbChuanBiKhoHdrDTO> searchPage(DcnbBbChuanBiKhoHdrReq req, Pageable pageable);
+    Page<DcnbBbChuanBiKhoHdrDTO> searchPage(@Param("param")DcnbBbChuanBiKhoHdrReq req, Pageable pageable);
 }
