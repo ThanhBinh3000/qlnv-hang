@@ -22,5 +22,6 @@ public class SearchPhieuXuatKho extends BaseRequest {
     private String loaiQdinh;
     private String trangThai;
     private Boolean isVatTu = false;
+    private Boolean thayDoiThuKho;
     private List<String> dsLoaiHang = new ArrayList<>();
 }

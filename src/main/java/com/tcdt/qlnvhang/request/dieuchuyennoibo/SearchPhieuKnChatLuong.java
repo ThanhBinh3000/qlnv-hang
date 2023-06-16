@@ -27,5 +27,6 @@ public class SearchPhieuKnChatLuong extends BaseRequest {
     private String type;
     private String typeDataLink;
     private Boolean isVatTu = false;
+    private Boolean thayDoiThuKho;
     private List<String> dsLoaiHang = new ArrayList<>();
 }

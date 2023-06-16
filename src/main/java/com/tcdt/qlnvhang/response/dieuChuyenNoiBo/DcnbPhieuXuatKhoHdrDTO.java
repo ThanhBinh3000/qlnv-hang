@@ -3,12 +3,12 @@ package com.tcdt.qlnvhang.response.dieuChuyenNoiBo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
 public class DcnbPhieuXuatKhoHdrDTO {
-//    Số QĐ ĐC của Cục	Năm KH	Thời hạn điều chuyển	Điểm kho	Lô kho	Số Phiếu xuất kho	Ngày xuất kho	Số phiếu KNCL	Ngày giám định	Trạng thái
     private Long id;
     private Long qDinhDccId;
     private String soQdinh;
@@ -25,8 +25,17 @@ public class DcnbPhieuXuatKhoHdrDTO {
     private Boolean thayDoiThuKho;
     private String soPhieuXuatKho;
     private LocalDate ngayXuatKho;
+    private Long phieuKiemNghiemId;
     private String soPhieuKiemNghiemCl;
     private LocalDate ngayGiamDinh;
+    private String maHangHoa;
+    private String tenHangHoa;
+    private String maChLoaiHangHoa;
+    private String tenChLoaiHangHoa;
+    private String ktvBaoQuan;
+    private String donViTinh;
+    private BigDecimal slDienChuyen;
+
     private String trangThai;
     private String tenTrangThai;
 }

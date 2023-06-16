@@ -24,5 +24,6 @@ public class SearchDcnbBienBanTinhKho extends BaseRequest {
     private String loaiQdinh;
     private String type;
     private Boolean isVatTu = false;
+    private Boolean thayDoiThuKho;
     private List<String> dsLoaiHang = new ArrayList<>();
 }
