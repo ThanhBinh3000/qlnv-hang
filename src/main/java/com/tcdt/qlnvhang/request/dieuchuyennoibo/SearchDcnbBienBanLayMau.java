@@ -27,4 +27,5 @@ public class SearchDcnbBienBanLayMau extends BaseRequest {
     private String trangThai;
     private String type;
     private String typeDataLink;
+    private Boolean isVatTu;
 }

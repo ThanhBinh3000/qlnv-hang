@@ -64,11 +64,7 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl{
             searchDto = dcnbBangKeCanHangHdrRepository.searchPage(req, pageable);
         }
         if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            if("00".equals(req.getType())){
-                req.setTypeDataLink(Contains.DIEU_CHUYEN);
-            }else if("01".equals(req.getType())){
-                req.setTypeDataLink(Contains.NHAN_DIEU_CHUYEN);
-            }
+            req.setTypeDataLink(Contains.DIEU_CHUYEN);
             searchDto = dcnbBangKeCanHangHdrRepository.searchPageCuc(req, pageable);
         }
         return searchDto;

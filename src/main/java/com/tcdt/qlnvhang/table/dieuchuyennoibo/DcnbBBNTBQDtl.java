@@ -35,6 +35,8 @@ public class DcnbBBNTBQDtl implements Serializable, Cloneable{
     private Double soLuongNamTruoc;
     private Double thanhTienNamTruoc;
     private String type;
+    private Boolean isParent;
+    private String idParent;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
