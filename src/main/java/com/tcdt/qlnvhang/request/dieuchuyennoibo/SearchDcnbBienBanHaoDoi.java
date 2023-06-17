@@ -20,5 +20,6 @@ public class SearchDcnbBienBanHaoDoi extends BaseRequest {
     private String loaiDc;
     private String loaiQdinh;
     private Boolean isVatTu = false;
+    private Boolean thayDoiThuKho;
     private List<String> dsLoaiHang = new ArrayList<>();
 }
