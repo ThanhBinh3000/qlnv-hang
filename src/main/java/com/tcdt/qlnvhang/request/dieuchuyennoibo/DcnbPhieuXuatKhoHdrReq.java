@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeCanHangDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuXuatKhoDtl;
 import lombok.Data;
 
@@ -33,9 +32,9 @@ public class DcnbPhieuXuatKhoHdrReq {
     private String tenNganKho;
     private String maLoKho;
     private String tenLoKho;
-    private Long phieuKtChatLuongHdrId;
-    private String soPhieuKtChatLuong;
-    private LocalDate ngayKyPhieuKtChatLuong;
+    private Long phieuKnChatLuongHdrId;
+    private String soPhieuKnChatLuong;
+    private LocalDate ngayKyPhieuKnChatLuong;
     private String loaiVthh;
     private String tenLoaiVthh;
     private String cloaiVthh;
@@ -64,6 +63,10 @@ public class DcnbPhieuXuatKhoHdrReq {
     private BigDecimal thanhTienBc;
     private String ghiChu;
     private String trangThai;
+    private LocalDate ngayGduyet;
+    private Long nguoiGduyetId;
+    private LocalDate ngayPduyet;
+    private Long nguoiPduyetId;
     private String lyDoTuChoi;
     private String type;
 
