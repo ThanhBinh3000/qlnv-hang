@@ -132,6 +132,7 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
         DcnbPhieuXuatKhoHdr data = optional.get();
         List<DcnbPhieuXuatKhoDtl> list = dtlRepository.findByHdrId(data.getId());
         dtlRepository.deleteAll(list);
+        hdrRepository.delete(data);
     }
 
 //    @Transient
