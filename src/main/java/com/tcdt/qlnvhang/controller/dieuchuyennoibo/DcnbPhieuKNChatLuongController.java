@@ -33,7 +33,7 @@ import java.util.Map;
 @Api(tags = "Điều chuyển nội bộ - Phiếu kiểm nghiệm chất lượng")
 public class DcnbPhieuKNChatLuongController {
     @Autowired
-    DcnbPhieuKNChatLuongServiceImpl dcnbPhieuKNChatLuongServiceImpl;
+    DcnbPhieuKNChatLuongServiceImpl dcnbPhieuKNChatLuongService;
 
     @Autowired
     DcnbBienBanLayMauHdrRepository dcnbBienBanLayMauHdrRepository;
@@ -45,7 +45,7 @@ public class DcnbPhieuKNChatLuongController {
                                                   @RequestBody SearchPhieuKnChatLuong objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(dcnbPhieuKNChatLuongServiceImpl.searchPage(currentUser,objReq));
+            resp.setData(dcnbPhieuKNChatLuongService.searchPage(currentUser,objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch ( Exception e) {
@@ -85,7 +85,7 @@ public class DcnbPhieuKNChatLuongController {
     public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody DcnbPhieuKnChatLuongHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(dcnbPhieuKNChatLuongServiceImpl.save(currentUser,objReq));
+            resp.setData(dcnbPhieuKNChatLuongService.save(currentUser,objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -102,7 +102,7 @@ public class DcnbPhieuKNChatLuongController {
     public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody DcnbPhieuKnChatLuongHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(dcnbPhieuKNChatLuongServiceImpl.update(currentUser,objReq));
+            resp.setData(dcnbPhieuKNChatLuongService.update(currentUser,objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -121,7 +121,7 @@ public class DcnbPhieuKNChatLuongController {
             @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids")List<Long> ids) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(dcnbPhieuKNChatLuongServiceImpl.detail(ids).get(0));
+            resp.setData(dcnbPhieuKNChatLuongService.detail(ids).get(0));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -138,7 +138,7 @@ public class DcnbPhieuKNChatLuongController {
     public ResponseEntity<BaseResponse> updateStatus( @CurrentUser CustomUserDetails currentUser,@Valid @RequestBody StatusReq stReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            dcnbPhieuKNChatLuongServiceImpl.approve(currentUser,stReq);
+            dcnbPhieuKNChatLuongService.approve(currentUser,stReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -156,7 +156,7 @@ public class DcnbPhieuKNChatLuongController {
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            dcnbPhieuKNChatLuongServiceImpl.delete(idSearchReq);
+            dcnbPhieuKNChatLuongService.delete(idSearchReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -169,30 +169,12 @@ public class DcnbPhieuKNChatLuongController {
         return ResponseEntity.ok(resp);
     }
 
-//    @ApiOperation(value = "Xoá danh sách thông tin đề xuất", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
-//    @PostMapping(value =  PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
-//    @ResponseStatus(HttpStatus.OK)
-//    public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
-//        BaseResponse resp = new BaseResponse();
-//        try {
-//            dcnbPhieuKiemNghiemChatLuongService.deleteMulti(idSearchReq);
-//            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-//            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-//            resp.setMsg(e.getMessage());
-//            log.error("Xoá thông tin : {}", e);
-//        }
-//        return ResponseEntity.ok(resp);
-//    }
-
     @ApiOperation(value = "Kết xuất danh sách mua", response = List.class)
     @PostMapping(value =  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void exportList(@CurrentUser CustomUserDetails currentUser ,@Valid @RequestBody  SearchPhieuKnChatLuong objReq, HttpServletResponse response) throws Exception {
         try {
-            dcnbPhieuKNChatLuongServiceImpl.export( currentUser,objReq, response);
+            dcnbPhieuKNChatLuongService.export( currentUser,objReq, response);
 
         } catch (Exception e) {
             log.error("Kết xuất danh sách dánh sách mua : {}", e);
@@ -205,5 +187,22 @@ public class DcnbPhieuKNChatLuongController {
             mapper.writeValue(response.getOutputStream(), body);
 
         }
+    }
+
+    @ApiOperation(value = "Danh sách số quyết định", response = List.class)
+    @PostMapping(value = "/danh-sach", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> danhSach(@CurrentUser CustomUserDetails currentUser, @RequestBody SearchPhieuXuatKho objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(dcnbPhieuKNChatLuongService.danhSach(currentUser,objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tra cứu thông tin : {}", e);
+        }
+        return ResponseEntity.ok(resp);
     }
 }
