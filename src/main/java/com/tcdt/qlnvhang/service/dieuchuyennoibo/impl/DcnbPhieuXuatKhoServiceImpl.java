@@ -30,6 +30,7 @@ import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -129,8 +130,8 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
             throw new Exception("Bản ghi không tồn tại");
         }
         DcnbPhieuXuatKhoHdr data = optional.get();
-        dtlRepository.deleteByHdrId(data.getId());
-        hdrRepository.delete(data);
+        List<DcnbPhieuXuatKhoDtl> list = dtlRepository.findByHdrId(data.getId());
+        dtlRepository.deleteAll(list);
     }
 
 //    @Transient

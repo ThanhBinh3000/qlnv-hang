@@ -15,4 +15,5 @@ public interface DcnbPhieuXuatKhoDtlRepository extends JpaRepository<DcnbPhieuXu
 
     void deleteByHdrId(Long hdrId);
 
+    List<DcnbPhieuXuatKhoDtl> findByHdrId(Long id);
 }
