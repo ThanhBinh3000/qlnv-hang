@@ -165,9 +165,14 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
 
     @Override
     public void delete(Long id) throws Exception {
-        DcnbPhieuNhapKhoHdr detail = detail(id);
-        hdrRepository.delete(detail);
-        dtlRepository.deleteAllByHdrId(id);
+        Optional<DcnbPhieuNhapKhoHdr> optional = hdrRepository.findById(id);
+        if (!optional.isPresent()) {
+            throw new Exception("Bản ghi không tồn tại");
+        }
+        DcnbPhieuNhapKhoHdr data = optional.get();
+        List<DcnbPhieuNhapKhoDtl> list = dtlRepository.findByHdrId(data.getId());
+        dtlRepository.deleteAll(list);
+        hdrRepository.delete(data);
     }
 
     @Override

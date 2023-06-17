@@ -9,9 +9,9 @@ import java.util.List;
 
 @Repository
 public interface DcnbPhieuNhapKhoDtlRepository extends JpaRepository<DcnbPhieuNhapKhoDtl, Long> {
-    List<DcnbBangKeCanHangDtl> findByHdrId(Long id);
+    List<DcnbPhieuNhapKhoDtl> findByHdrId(Long id);
 
-    List<DcnbBangKeCanHangDtl> findByHdrIdIn(List<Long> listId);
+    List<DcnbPhieuNhapKhoDtl> findByHdrIdIn(List<Long> listId);
 
     void deleteAllByHdrId(long hdrId);
 }
