@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
+import java.util.HashMap;
 
 @Service
 public interface XhDxKhBanDauGiaService extends BaseService<XhDxKhBanDauGia, XhDxKhBanDauGiaReq, Long> {
@@ -18,6 +19,5 @@ public interface XhDxKhBanDauGiaService extends BaseService<XhDxKhBanDauGia, XhD
 
   BigDecimal getGiaBanToiThieu(String cloaiVthh, String maDvi, Integer namKh);
 
-  ReportTemplateResponse preview(String tenBaoCao) throws Exception;
-
+  ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception;
 }
