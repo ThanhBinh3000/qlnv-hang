@@ -70,11 +70,6 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
         DcnbPhieuNhapKhoHdr created = hdrRepository.save(data);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBBNTBQHdr.TABLE_NAME);
         created.setFileDinhKems(canCu);
-//        DcnbKeHoachDcDtlTT kh = new DcnbKeHoachDcDtlTT();
-//        kh.setIdHdr(created.getId());
-//        kh.setTableName(DcnbPhieuNhapKhoHdr.TABLE_NAME);
-//        kh.setIdKhDcDtl(data.getIdKeHoachDtl());
-//        dcnbKeHoachNhapXuatService.saveOrUpdate(kh);
         return created;
     }
 

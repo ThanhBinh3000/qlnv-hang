@@ -57,10 +57,10 @@ public class DcnbPhieuXuatKhoHdrReq {
     private Long bangKeChId;
     private String donViTinh;
     private BigDecimal tongSoLuong;
-    private BigDecimal tongSoLuongBc;
+    private String tongSoLuongBc;
     private BigDecimal donGia;
     private BigDecimal thanhTien;
-    private BigDecimal thanhTienBc;
+    private String thanhTienBc;
     private String ghiChu;
     private String trangThai;
     private LocalDate ngayGduyet;
