@@ -13,10 +13,7 @@ import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBienBanLayMauHdrDTO;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuXuatKhoHdrDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbChuanBiKhoHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbDataLinkDtl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbDataLinkHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuXuatKhoHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +27,7 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Optional;
@@ -79,9 +77,13 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
         DcnbPhieuXuatKhoHdr data = new DcnbPhieuXuatKhoHdr();
         BeanUtils.copyProperties(objReq, data);
         data.setMaDvi(currentUser.getDvql());
+        if(objReq.getDcnbPhieuXuatKhoDtl() !=null){
+            objReq.getDcnbPhieuXuatKhoDtl().forEach(e -> {
+                e.setDcnbPhieuXuatKhoHdr(data);
+            });
+        }
         DcnbPhieuXuatKhoHdr created = hdrRepository.save(data);
         saveFileDinhKem(objReq.getFileDinhKems(),created.getId(),DcnbPhieuXuatKhoHdr.TABLE_NAME);
-        saveDetail(objReq,data);
         return created;
     }
 
@@ -100,19 +102,10 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
 
         DcnbPhieuXuatKhoHdr data = optional.get();
         BeanUtils.copyProperties(objReq, data);
+        data.setDcnbPhieuXuatKhoDtl(objReq.getDcnbPhieuXuatKhoDtl());
         DcnbPhieuXuatKhoHdr created = hdrRepository.save(data);
         saveFileDinhKem(objReq.getFileDinhKems(),created.getId(),DcnbPhieuXuatKhoHdr.TABLE_NAME);
-        saveDetail(objReq,data);
         return created;
-    }
-
-
-    private void saveDetail(DcnbPhieuXuatKhoHdrReq objReq,DcnbPhieuXuatKhoHdr hdr){
-        dtlRepository.deleteByHdrId(hdr.getId());
-        objReq.getDcnbPhieuXuatKhoDtl().forEach( item -> {
-            item.setHdrId(hdr.getId());
-        });
-        dtlRepository.saveAll(objReq.getDcnbPhieuXuatKhoDtl());
     }
 
     public DcnbPhieuXuatKhoHdr detail(Long id) throws Exception {
