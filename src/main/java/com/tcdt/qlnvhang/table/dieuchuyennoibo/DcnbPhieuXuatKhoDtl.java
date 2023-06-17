@@ -34,7 +34,7 @@ public class DcnbPhieuXuatKhoDtl {
     private String cloaiVthh;
     private String tenCloaiVthh;
     private String maSo;
-    private String onViTinh;;
+    private String donViTinh;;
     private BigDecimal slDcThucTe;
     private BigDecimal kinhPhiDc;
     private BigDecimal duToanKinhPhiDc;
