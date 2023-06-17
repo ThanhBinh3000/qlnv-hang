@@ -5,11 +5,9 @@ import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
 import com.tcdt.qlnvhang.request.IdSearchReq;
-import com.tcdt.qlnvhang.request.object.HhDxuatKhLcntHdrReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.dexuat.XhDxKhBanDauGiaReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGiaService;
-import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -215,10 +213,10 @@ public class XhKhBanDauGiaController extends BaseController {
   @ApiOperation(value = "Xem truoc", response = List.class)
   @PostMapping(value = PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<BaseResponse> preview(@RequestBody HashMap<String, Object> request) {
+  public ResponseEntity<BaseResponse> preview(@RequestBody HashMap<String, Object> body) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhDxKhBanDauGiaService.preview(DataUtils.safeToString(request.get("tenBaoCao"))));
+      resp.setData(xhDxKhBanDauGiaService.preview(body));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
