@@ -114,7 +114,7 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
             throw new Exception("Tham số không hợp lệ.");
         }
         Optional<DcnbPhieuXuatKhoHdr> optional = hdrRepository.findById(id);
-        if (optional.isPresent()) {
+        if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu");
         }
         DcnbPhieuXuatKhoHdr data = optional.get();
