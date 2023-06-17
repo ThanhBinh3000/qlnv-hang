@@ -142,6 +142,17 @@ public class XhPhieuXkhoBtt implements Serializable {
 
     private String lyDoTuChoi;
 
+    private String phanLoai;
+
+    private String pthucBanTrucTiep;
+
+    private Long idBangKeBanLe;
+
+    private String soBangKeBanLe;
+
+    private LocalDate ngayTaoBangKe;
+
+
     @Transient
     private List<FileDinhKem> fileDinhKem = new ArrayList<>();
 }

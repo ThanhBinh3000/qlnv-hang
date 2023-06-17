@@ -70,6 +70,24 @@ public class XhBbTinhkBttHdrReq extends BaseRequest {
 
     private Long idKeToan;
 
+    private String phanLoai;
+
+    private String pthucBanTrucTiep;
+
+    private Long idBangKeBanLe;
+
+    private String soBangKeBanLe;
+
+    private String loaiVthh;
+    @Transient
+    private String tenLoaiVthh;
+
+    private String cloaiVthh;
+    @Transient
+    private String tenCloaiVthh;
+
+    private LocalDate ngayTaoBangKe;
+
     private LocalDate ngayBdauXuatTu;
 
     private LocalDate ngayBdauXuatDen;

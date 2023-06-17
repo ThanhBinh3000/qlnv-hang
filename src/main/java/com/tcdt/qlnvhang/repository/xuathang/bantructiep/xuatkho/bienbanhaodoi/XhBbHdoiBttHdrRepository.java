@@ -24,6 +24,7 @@ public interface XhBbHdoiBttHdrRepository extends JpaRepository<XhBbHdoiBttHdr, 
             "AND (:#{#param.ngayQdNvTu} IS NULL OR HD.ngayQdNv >= :#{#param.ngayQdNvTu}) " +
             "AND (:#{#param.ngayQdNvDen} IS NULL OR HD.ngayQdNv <= :#{#param.ngayQdNvDen}) " +
             "AND (:#{#param.trangThai} IS NULL OR HD.trangThai = :#{#param.trangThai}) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR HD.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
             "AND (:#{#param.maDvi} IS NULL OR HD.maDvi = :#{#param.maDvi})")
     Page<XhBbHdoiBttHdr> searchPage(@Param("param") XhBbHdoiBttHdrReq param, Pageable pageable);
 

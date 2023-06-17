@@ -22,19 +22,7 @@ import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
-import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
-import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
-import fr.opensagres.xdocreport.converter.ConverterTypeTo;
-import fr.opensagres.xdocreport.converter.ConverterTypeVia;
-import fr.opensagres.xdocreport.converter.Options;
 import fr.opensagres.xdocreport.core.XDocReportException;
-import fr.opensagres.xdocreport.document.IXDocReport;
-import fr.opensagres.xdocreport.document.registry.XDocReportRegistry;
-import fr.opensagres.xdocreport.template.IContext;
-import fr.opensagres.xdocreport.template.TemplateEngineKind;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.velocity.tools.generic.DateTool;
-import org.apache.velocity.tools.generic.NumberTool;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -68,6 +56,7 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
 
   @Autowired
   DocxToPdfConverter docxToPdfConverter;
+
   @Override
   public Page<XhDxKhBanDauGia> searchPage(XhDxKhBanDauGiaReq req) throws Exception {
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),
@@ -371,15 +360,16 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
   }
 
   @Override
-  public ReportTemplateResponse preview(HttpServletResponse response) throws Exception {
+  public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
     try {
       ReportTemplateRequest reportTemplateRequest = new ReportTemplateRequest();
-      reportTemplateRequest.setFileName("de-xuat-ke-hoach-ban-dau-gia.docx");
+//      reportTemplateRequest.setFileName("de-xuat-ke-hoach-ban-dau-gia.docx");
+      reportTemplateRequest.setFileName(DataUtils.safeToString(body.get("tenBaoCao")));
       ReportTemplate model = findByTenFile(reportTemplateRequest);
       byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
       ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-      XhDxKhBanDauGia detail = this.detail(4122l);
-      return docxToPdfConverter.convertDocxToPdf(inputStream,detail);
+      XhDxKhBanDauGia detail = this.detail(DataUtils.safeToLong(body.get("id")));
+      return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
     } catch (IOException e) {
       e.printStackTrace();
     } catch (XDocReportException e) {
@@ -387,24 +377,4 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
     }
     return null;
   }
-
-  /*public static byte[] convertDocxToPdf(byte[] docxBytes) throws IOException, Docx4JException {
-    // Load DOCX as ByteArrayInputStream
-    ByteArrayInputStream docxInputStream = new ByteArrayInputStream(docxBytes);
-
-    // Create WordprocessingMLPackage from the DOCX input stream
-    WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(docxInputStream);
-
-    // Set PDF conversion settings
-    PdfSettings pdfSettings = new PdfSettings();
-    pdfSettings.setWmlPackage(wordMLPackage);
-    pdfSettings.setMargins(MarginsWellKnown.NORMAL);
-
-    // Perform PDF conversion
-    ByteArrayOutputStream pdfOutputStream = new ByteArrayOutputStream();
-    PdfConversion conversion = new org.docx4j.convert.out.pdf.viaXSLFO.Conversion(wordMLPackage);
-    conversion.output(pdfOutputStream, pdfSettings);
-
-    return pdfOutputStream.toByteArray();
-  }*/
 }

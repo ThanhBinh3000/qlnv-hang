@@ -17,6 +17,7 @@ public interface XhBbTinhkBttHdrRepository extends JpaRepository<XhBbTinhkBttHdr
             "AND (:#{#param.soBbTinhKho} IS NULL OR LOWER(TK.soBbTinhKho) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soBbTinhKho}),'%' ) ) )" +
             "AND (:#{#param.soQdNv} IS NULL OR LOWER(TK.soQdNv) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQdNv}),'%' ) ) )" +
             "AND (:#{#param.trangThai} IS NULL OR TK.trangThai = :#{#param.trangThai}) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR TK.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
             "AND (:#{#param.ngayBdauXuatTu} IS NULL OR TK.ngayBdauXuat >= :#{#param.ngayBdauXuatTu}) " +
             "AND (:#{#param.ngayBdauXuatDen} IS NULL OR TK.ngayBdauXuat <= :#{#param.ngayBdauXuatDen}) " +
             "AND (:#{#param.ngayKthucXuatTu} IS NULL OR TK.ngayKthucXuat >= :#{#param.ngayKthucXuatTu}) " +
