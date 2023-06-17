@@ -11,6 +11,7 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbPhieuKnChatLuongHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchPhieuKnChatLuong;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchPhieuXuatKho;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKnChatLuongHdrDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -294,5 +295,12 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
+    }
+
+    public List<DcnbPhieuKnChatLuongHdrDTO> danhSach(CustomUserDetails currentUser, SearchPhieuXuatKho objReq) {
+        String dvql = currentUser.getDvql();
+        objReq.setMaDvi(dvql);
+        List<DcnbPhieuKnChatLuongHdrDTO> searchDto = dcnbPhieuKnChatLuongHdrRepository.searchListChiCuc(objReq);
+        return searchDto;
     }
 }
