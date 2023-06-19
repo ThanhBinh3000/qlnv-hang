@@ -364,12 +364,14 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
     try {
       ReportTemplateRequest reportTemplateRequest = new ReportTemplateRequest();
 //      reportTemplateRequest.setFileName("de-xuat-ke-hoach-ban-dau-gia.docx");
+
       reportTemplateRequest.setFileName(DataUtils.safeToString(body.get("tenBaoCao")));
       ReportTemplate model = findByTenFile(reportTemplateRequest);
       byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
       ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
       XhDxKhBanDauGia detail = this.detail(DataUtils.safeToLong(body.get("id")));
-      return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+      FileInputStream fileInputStream = new FileInputStream(new File("src/main/resources/Đề xuất kế hoạch bán đấu giá.docx"));
+      return docxToPdfConverter.convertDocxToPdf(fileInputStream, detail);
     } catch (IOException e) {
       e.printStackTrace();
     } catch (XDocReportException e) {

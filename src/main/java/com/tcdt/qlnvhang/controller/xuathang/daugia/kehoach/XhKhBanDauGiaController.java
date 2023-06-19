@@ -8,11 +8,13 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.dexuat.XhDxKhBanDauGiaReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGiaService;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.velocity.tools.generic.NumberTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,9 +24,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 @RestController
 @RequestMapping(value = PathContains.XUAT_HANG_DTQG + PathContains.DAU_GIA + PathContains.DX_KH_BDG)
@@ -216,6 +220,12 @@ public class XhKhBanDauGiaController extends BaseController {
   public ResponseEntity<BaseResponse> preview(@RequestBody HashMap<String, Object> body) {
     BaseResponse resp = new BaseResponse();
     try {
+      /*ReportTemplateResponse preview = xhDxKhBanDauGiaService.preview(body);
+      Path destinationFile = Paths.get("src/main/resources", new Date().getTime()+".docx");
+      byte[] decodedImg = Base64.getDecoder()
+          .decode(preview.getWordSrc().getBytes(StandardCharsets.UTF_8));
+      Files.write(destinationFile, decodedImg);*/
+
       resp.setData(xhDxKhBanDauGiaService.preview(body));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
