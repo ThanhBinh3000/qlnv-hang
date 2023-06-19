@@ -47,7 +47,7 @@ public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cl
     private String maQhns;
 
     @Column(name = "QDINH_DCC_ID")
-    private Long qDinhDccId;
+    private Long qdDcCucId;
 
     @Column(name = "SO_QDINH_DCC")
     private String soQdinhDcc;
