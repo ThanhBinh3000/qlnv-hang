@@ -54,4 +54,6 @@ public interface DcnbQuyetDinhDcTcHdrRepository extends JpaRepository<DcnbQuyetD
             "ORDER BY hdr.NGAY_SUA desc , hdr.NGAY_TAO desc, hdr.id desc", nativeQuery = true
     )
     List<DcnbQuyetDinhDcTcHdr> findDanhSachQuyetDinhNhan(@Param("param")SearchDcnbQuyetDinhDcTc objReq);
+
+    List<DcnbQuyetDinhDcTcHdr> findByIdThopIn(List<Long> ids);
 }
