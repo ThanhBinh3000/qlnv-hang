@@ -127,7 +127,7 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
         created.setCanCu(canCu);
         List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getBienBanLayMauDinhKem(), created.getId(), DcnbBienBanLayMauHdr.TABLE_NAME + "_BIEN_BAN_LAY_MAU");
         created.setBienBanLayMauDinhKem(bienBanLayMauDinhKem);
-        List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByQdDcIdAndMaLoKho(created.getQdDcCucId(), created.getMaLoKho());
+        List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = dcnbKeHoachDcDtlRepository.findByQdDcIdAndMaLoKho(created.getQDinhDccId(), created.getMaLoKho());
         List<FileDinhKem> fileDinhKemMauNiemPhong = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemChupMauNiemPhong(), created.getId(), DcnbBienBanLayMauHdr.TABLE_NAME + "_MAU_DA_NIEM_PHONG");
         created.setFileDinhKemChupMauNiemPhong(fileDinhKemMauNiemPhong);
         return created;
@@ -236,7 +236,7 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
                 optional.get().setNguoiPDuyet(currentUser.getUser().getId());
 
                 DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(optional.get().getMaDvi(),
-                        optional.get().getQdDcCucId(),
+                        optional.get().getQDinhDccId(),
                         optional.get().getMaNganKho(),
                         optional.get().getMaLoKho());
                 DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
