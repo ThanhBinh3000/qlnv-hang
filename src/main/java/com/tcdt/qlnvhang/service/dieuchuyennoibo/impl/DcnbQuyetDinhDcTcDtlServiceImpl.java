@@ -53,7 +53,7 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
     @Autowired
     private DcnbKeHoachDcHdrRepository dcnbKeHoachDcHdrRepository;
     @Autowired
-    private THKeHoachDieuChuyenTongCucHdrRepository thKeHoachDieuChuyenTongCucHdrRepository;
+    private THKeHoachDieuChuyenTongCucHdrRepository thKeHoachDCTCHdrRepository;
     @Autowired
     private LuuKhoClient luuKhoClient;
 
@@ -84,10 +84,10 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
         created.setCanCu(canCu);
         created.setQuyetDinh(quyetDinh);
         if(created.getIdThop() != null){
-            Optional<THKeHoachDieuChuyenTongCucHdr> thKeHoach = thKeHoachDieuChuyenTongCucHdrRepository.findById(created.getIdThop());
+            Optional<THKeHoachDieuChuyenTongCucHdr> thKeHoach = thKeHoachDCTCHdrRepository.findById(created.getIdThop());
             if(thKeHoach.isPresent()){
                 thKeHoach.get().setTrangThai(Contains.DADUTHAO_QD);
-                thKeHoachDieuChuyenTongCucHdrRepository.save(thKeHoach.get());
+                thKeHoachDCTCHdrRepository.save(thKeHoach.get());
             }
         }
         return created;
@@ -104,10 +104,10 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
         }
         // chuyển cái cũ về chưa tạo quyết định
         if(optional.get().getIdThop() != null){
-            Optional<THKeHoachDieuChuyenTongCucHdr> thKeHoach = thKeHoachDieuChuyenTongCucHdrRepository.findById(optional.get().getIdThop());
+            Optional<THKeHoachDieuChuyenTongCucHdr> thKeHoach = thKeHoachDCTCHdrRepository.findById(optional.get().getIdThop());
             if(thKeHoach.isPresent()){
                 thKeHoach.get().setTrangThai(Contains.CHUATAO_QD);
-                thKeHoachDieuChuyenTongCucHdrRepository.save(thKeHoach.get());
+                thKeHoachDCTCHdrRepository.save(thKeHoach.get());
             }
         }
         Optional<DcnbQuyetDinhDcTcHdr> soDxuat = dcnbQuyetDinhDcTcHdrRepository.findFirstBySoQdinh(objReq.getSoQdinh());
@@ -134,10 +134,10 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
         created.setCanCu(canCu);
         created.setQuyetDinh(quyetDinh);
         if(created.getIdThop() != null){
-            Optional<THKeHoachDieuChuyenTongCucHdr> thKeHoach = thKeHoachDieuChuyenTongCucHdrRepository.findById(created.getIdThop());
+            Optional<THKeHoachDieuChuyenTongCucHdr> thKeHoach = thKeHoachDCTCHdrRepository.findById(created.getIdThop());
             if(thKeHoach.isPresent()){
                 thKeHoach.get().setTrangThai(Contains.DADUTHAO_QD);
-                thKeHoachDieuChuyenTongCucHdrRepository.save(thKeHoach.get());
+                thKeHoachDCTCHdrRepository.save(thKeHoach.get());
             }
         }
         return created;
@@ -188,11 +188,13 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
         fileDinhKemService.delete(data.getId(), Lists.newArrayList(DcnbQuyetDinhDcTcHdr.TABLE_NAME + "_CAN_CU"));
         fileDinhKemService.delete(data.getId(), Lists.newArrayList(DcnbQuyetDinhDcTcHdr.TABLE_NAME + "_QUYET_DINH"));
         dcnbQuyetDinhDcTcHdrRepository.delete(data);
-        List<THKeHoachDieuChuyenTongCucHdr> thKeHoachDieuChuyenTongCucHdrs = thKeHoachDieuChuyenTongCucHdrRepository.findByMaTongHop(data.getMaThop());
-        thKeHoachDieuChuyenTongCucHdrs.forEach(e ->{
-            e.setTrangThai(Contains.CHUATAO_QD);
-            thKeHoachDieuChuyenTongCucHdrRepository.save(e);
-        });
+        if(optional.get().getIdThop() != null){
+            Optional<THKeHoachDieuChuyenTongCucHdr> thKeHoach = thKeHoachDCTCHdrRepository.findById(optional.get().getIdThop());
+            if(thKeHoach.isPresent()){
+                thKeHoach.get().setTrangThai(Contains.CHUATAO_QD);
+                thKeHoachDCTCHdrRepository.save(thKeHoach.get());
+            }
+        }
     }
 
     @Transient
@@ -236,10 +238,10 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
                 optional.get().setNguoiPduyetId(currentUser.getUser().getId());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 if(!optional.get().getMaThop().isEmpty()){
-                List<THKeHoachDieuChuyenTongCucHdr> thKeHoachDieuChuyenTongCucHdrs = thKeHoachDieuChuyenTongCucHdrRepository.findByMaTongHop(optional.get().getMaThop());
+                List<THKeHoachDieuChuyenTongCucHdr> thKeHoachDieuChuyenTongCucHdrs = thKeHoachDCTCHdrRepository.findByMaTongHop(optional.get().getMaThop());
                 thKeHoachDieuChuyenTongCucHdrs.forEach(e ->{
                     e.setTrangThai(Contains.TU_CHOI_BAN_HANH_QD);
-                    thKeHoachDieuChuyenTongCucHdrRepository.save(e);
+                    thKeHoachDCTCHdrRepository.save(e);
                 });}
                 break;
             case Contains.CHODUYET_LDV + Contains.CHODUYET_LDTC:
@@ -251,18 +253,18 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
                 optional.get().setNguoiDuyetTcId(currentUser.getUser().getId());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 if(optional.get().getIdThop() != null) {
-                    Optional<THKeHoachDieuChuyenTongCucHdr> thKeHoachDieu = thKeHoachDieuChuyenTongCucHdrRepository.findById(optional.get().getIdThop());
+                    Optional<THKeHoachDieuChuyenTongCucHdr> thKeHoachDieu = thKeHoachDCTCHdrRepository.findById(optional.get().getIdThop());
                     thKeHoachDieu.get().setTrangThai(Contains.TU_CHOI_BAN_HANH_QD);
-                    thKeHoachDieuChuyenTongCucHdrRepository.save(thKeHoachDieu.get());
+                    thKeHoachDCTCHdrRepository.save(thKeHoachDieu.get());
                 }
                 break;
             case Contains.CHODUYET_LDTC + Contains.BAN_HANH:
                 optional.get().setNgayDuyetTc(LocalDate.now());
                 optional.get().setNguoiDuyetTcId(currentUser.getUser().getId());
                 if(optional.get().getIdThop() != null) {
-                    Optional<THKeHoachDieuChuyenTongCucHdr> thKeHoachDieu = thKeHoachDieuChuyenTongCucHdrRepository.findById(optional.get().getIdThop());
+                    Optional<THKeHoachDieuChuyenTongCucHdr> thKeHoachDieu = thKeHoachDCTCHdrRepository.findById(optional.get().getIdThop());
                     thKeHoachDieu.get().setTrangThai(Contains.DABANHANH_QD);
-                    thKeHoachDieuChuyenTongCucHdrRepository.save(thKeHoachDieu.get());
+                    thKeHoachDCTCHdrRepository.save(thKeHoachDieu.get());
                 }
                 break;
             default:

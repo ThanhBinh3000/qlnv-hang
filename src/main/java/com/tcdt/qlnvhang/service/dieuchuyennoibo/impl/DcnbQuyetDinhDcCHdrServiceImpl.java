@@ -98,8 +98,8 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
         if(!currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)){
             throw new Exception("Chức năng thêm mới chỉ dành cho cấp cục");
         }
-        Optional<DcnbQuyetDinhDcCHdr> optional = dcnbQuyetDinhDcCHdrRepository.findFirstBySoQdinhAndTypeIsNull(objReq.getSoQdinh());
-        if (optional.isPresent() && objReq.getSoQdinh().split("/").length == 1) {
+        List<DcnbQuyetDinhDcCHdr> optionalList = dcnbQuyetDinhDcCHdrRepository.findBySoQdinh(objReq.getSoQdinh());
+        if (!optionalList.isEmpty()) {
             throw new Exception("số quyết định đã tồn tại");
         }
         DcnbQuyetDinhDcCHdr data = new DcnbQuyetDinhDcCHdr();
