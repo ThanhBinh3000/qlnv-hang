@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class DcnbBienBanLayMauHdrDTO {
     private Long id;
-    private Long qDinhDccId;
+    private Long qDDccId;
     private String soQdinh;
     private Integer namKh;
     private LocalDate thoiHanDieuChuyen;

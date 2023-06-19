@@ -1,15 +1,15 @@
 package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class SearchPhieuKtChatLuong extends BaseRequest {
     private String loaiDc;
     private String loaiQdinh;

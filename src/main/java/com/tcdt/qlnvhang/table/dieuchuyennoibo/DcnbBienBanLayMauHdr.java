@@ -2,8 +2,7 @@ package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,8 +12,9 @@ import java.util.List;
 
 @Entity
 @Table(name = DcnbBienBanLayMauHdr.TABLE_NAME)
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cloneable{
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "DCNB_BIEN_BAN_LAY_MAU_HDR";
@@ -47,7 +47,7 @@ public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cl
     private String maQhns;
 
     @Column(name = "QDINH_DCC_ID")
-    private Long qDinhDccId;
+    private Long qdccId;
 
     @Column(name = "SO_QDINH_DCC")
     private String soQdinhDcc;

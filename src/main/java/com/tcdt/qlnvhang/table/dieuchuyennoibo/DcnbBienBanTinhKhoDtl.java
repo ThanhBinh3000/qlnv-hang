@@ -1,16 +1,16 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = DcnbBienBanTinhKhoDtl.TABLE_NAME)
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class DcnbBienBanTinhKhoDtl {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "DCNB_BIEN_BAN_TINH_KHO_TT_DTL";

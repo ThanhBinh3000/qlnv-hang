@@ -1,8 +1,7 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,8 +10,9 @@ import java.util.List;
 
 @Entity
 @Table(name = DcnbQuyetDinhDcCDtl.TABLE_NAME)
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class DcnbQuyetDinhDcCDtl implements Serializable, Cloneable {
 
     private static final long serialVersionUID = 1L;

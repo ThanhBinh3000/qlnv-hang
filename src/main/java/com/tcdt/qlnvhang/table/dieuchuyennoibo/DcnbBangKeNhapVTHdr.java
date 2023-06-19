@@ -1,8 +1,7 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,8 +11,9 @@ import java.util.List;
 
 @Entity
 @Table(name = DcnbBangKeNhapVTHdr.TABLE_NAME)
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class DcnbBangKeNhapVTHdr extends BaseEntity implements Serializable, Cloneable{
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "DCNB_BANG_KE_NHAP_VT_HDR";

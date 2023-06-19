@@ -1,13 +1,13 @@
 package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Setter
-@Getter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class DcnbKeHoachDcDtlReq {
   private String maChiCucNhan;
   private LocalDate thoiGianDkDc;

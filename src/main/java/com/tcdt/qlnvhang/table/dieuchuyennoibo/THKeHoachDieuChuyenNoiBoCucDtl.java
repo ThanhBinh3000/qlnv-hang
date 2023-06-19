@@ -12,8 +12,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Table(name = "DCNB_TH_KE_HOACH_DCC_NBC_DTL")
 @Builder
 @NoArgsConstructor

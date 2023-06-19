@@ -10,8 +10,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Table(name = "DCNB_TH_KE_HOACH_DCTC_HDR")
 @Builder
 @NoArgsConstructor

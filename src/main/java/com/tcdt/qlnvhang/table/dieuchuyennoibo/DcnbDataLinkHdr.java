@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -9,8 +8,9 @@ import java.util.List;
 
 @Entity
 @Table(name = DcnbDataLinkHdr.TABLE_NAME)
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class DcnbDataLinkHdr {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "DCNB_DATA_LINK_HDR";
