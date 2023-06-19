@@ -20,7 +20,7 @@ public interface DcnbBienBanLayMauHdrRepository extends JpaRepository<DcnbBienBa
             "bblm.id,qdc.id,qdc.soQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
             "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho, khdcd.thayDoiThuKho,bblm.soBbLayMau,bblm.ngayLayMau,bblm.soBbTinhKho,bblm.ngayXuatDocKho," +
             "bblm.soBbHaoDoi,bblm.trangThai, bblm.trangThai,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.maNhaKho,khdcd.tenNhaKho) FROM DcnbQuyetDinhDcCHdr qdc " +
-            "LEFT JOIN DcnbBienBanLayMauHdr bblm On bblm.qDinhDccId = qdc.id " +
+            "LEFT JOIN DcnbBienBanLayMauHdr bblm On bblm.qdDcCucId = qdc.id " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
@@ -60,10 +60,10 @@ public interface DcnbBienBanLayMauHdrRepository extends JpaRepository<DcnbBienBa
 
     List<DcnbBienBanLayMauHdr> findAllByIdIn(List<Long> idList);
     @Query(value = "SELECT distinct hdr FROM DcnbBienBanLayMauHdr hdr \n" +
-            "LEFT JOIN DcnbQuyetDinhDcCHdr h ON h.id = hdr.qDinhDccId  \n" +
+            "LEFT JOIN DcnbQuyetDinhDcCHdr h ON h.id = hdr.qdDcCucId  \n" +
             "LEFT JOIN QlnvDmDonvi dvi ON dvi.maDvi = hdr.maDvi "+
             "WHERE dvi.parent.maDvi = ?1 AND hdr.trangThai = ?2 AND h.parentId  = ?3")
-    List<DcnbBienBanLayMauHdrDTO> findByMaDviAndTrangThaiAndQdinhDcId(String dvql, String banHanh, Long qDinhDccId);
+    List<DcnbBienBanLayMauHdrDTO> findByMaDviAndTrangThaiAndQdinhDcId(String dvql, String banHanh, Long qdDcCucId);
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbLoKhoDTO(" +
             "dtl.maNhaKho, dtl.tenNhaKho, dtl.maDiemKho, dtl.tenDiemKho, dtl.maNganKho, dtl.tenNganKho, dtl.maLoKho, dtl.tenLoKho )"+
             "FROM DcnbQuyetDinhDcCHdr qdh " +
@@ -71,9 +71,9 @@ public interface DcnbBienBanLayMauHdrRepository extends JpaRepository<DcnbBienBa
             "LEFT JOIN DcnbKeHoachDcHdr khh on  khh.id = qdd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl dtl on  dtl.hdrId = khh.id " +
             "WHERE 1 = 1 " +
-            "AND (qdh.id = :#{#param.qDinhDccId}) " +
-            "AND ((dtl.maLoKho IS NULL AND not exists (SELECT distinct hdr.id FROM DcnbBienBanLayMauHdr hdr where hdr.qDinhDccId = :#{#param.qDinhDccId} AND hdr.maNganKho = dtl.maNganKho )) " +
-            "OR (dtl.maLoKho IS NOT NULL AND not exists (SELECT distinct hdr.id FROM DcnbBienBanLayMauHdr hdr where hdr.qDinhDccId = :#{#param.qDinhDccId} AND hdr.maLoKho = dtl.maLoKho )))"
+            "AND (qdh.id = :#{#param.qdDcCucId}) " +
+            "AND ((dtl.maLoKho IS NULL AND not exists (SELECT distinct hdr.id FROM DcnbBienBanLayMauHdr hdr where hdr.qdDcCucId = :#{#param.qdDcCucId} AND hdr.maNganKho = dtl.maNganKho )) " +
+            "OR (dtl.maLoKho IS NOT NULL AND not exists (SELECT distinct hdr.id FROM DcnbBienBanLayMauHdr hdr where hdr.qdDcCucId = :#{#param.qdDcCucId} AND hdr.maLoKho = dtl.maLoKho )))"
     )
     List<DcnbLoKhoDTO> danhSachMaLokho(@Param("param") SearchDcnbBienBanLayMau objReq);
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBienBanLayMauHdrDTO(" +
@@ -81,7 +81,7 @@ public interface DcnbBienBanLayMauHdrRepository extends JpaRepository<DcnbBienBa
             "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho, khdcd.thayDoiThuKho,bblm.soBbLayMau,bblm.ngayLayMau,bblm.soBbTinhKho,bblm.ngayXuatDocKho," +
             "bblm.soBbHaoDoi,bblm.trangThai, bblm.trangThai,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.maNhaKho,khdcd.tenNhaKho) FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbDataLinkHdr dtlh On dtlh.qdCcParentId = qdc.id " +
-            "LEFT JOIN DcnbBienBanLayMauHdr bblm On bblm.qDinhDccId = dtlh.qdCcId " +
+            "LEFT JOIN DcnbBienBanLayMauHdr bblm On bblm.qdDcCucId = dtlh.qdCcId " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = dtlh.qdCcId " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
