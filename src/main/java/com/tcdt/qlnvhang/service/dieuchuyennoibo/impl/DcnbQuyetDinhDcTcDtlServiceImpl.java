@@ -72,6 +72,10 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
         if (optional.isPresent() && objReq.getSoQdinh().split("/").length == 1) {
             throw new Exception("số quyết định đã tồn tại");
         }
+        List<DcnbQuyetDinhDcTcHdr> quyetDinhDcTcHdrs = dcnbQuyetDinhDcTcHdrRepository.findByIdIn(Arrays.asList(objReq.getIdThop()));
+        if(!quyetDinhDcTcHdrs.isEmpty()){
+            throw new Exception("Mã tổng hợp đã được tạo Quyết định!");
+        }
         DcnbQuyetDinhDcTcHdr data = new DcnbQuyetDinhDcTcHdr();
         BeanUtils.copyProperties(objReq, data);
         data.setMaDvi(currentUser.getDvql());
@@ -314,5 +318,32 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
             danhSachs = dcnbQuyetDinhDcTcHdrRepository.findDanhSachQuyetDinhXuat(objReq);
         }
         return danhSachs;
+    }
+
+    public List<DcnbQuyetDinhDcTcHdr> detailTheoTongHop(List<Long> ids) throws Exception {
+        if (DataUtils.isNullOrEmpty(ids))
+            throw new Exception("Tham số không hợp lệ.");
+        List<DcnbQuyetDinhDcTcHdr> optional = dcnbQuyetDinhDcTcHdrRepository.findByIdThopIn(ids);
+        if (DataUtils.isNullOrEmpty(optional)) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        List<DcnbQuyetDinhDcTcHdr> allById = dcnbQuyetDinhDcTcHdrRepository.findAllById(ids);
+        allById.forEach(data -> {
+            List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Arrays.asList(DcnbQuyetDinhDcTcHdr.TABLE_NAME + "_CAN_CU"));
+            data.setCanCu(canCu);
+            List<FileDinhKem> quyetDinh = fileDinhKemService.search(data.getId(), Arrays.asList(DcnbQuyetDinhDcTcHdr.TABLE_NAME + "_QUYET_DINH"));
+            data.setQuyetDinh(quyetDinh);
+
+            List<DcnbQuyetDinhDcTcDtl> sachQuyetDinh = data.getDanhSachQuyetDinh();
+            sachQuyetDinh.forEach(data1 -> {
+                Optional<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcnbKeHoachDcHdrRepository.findById(data1.getKeHoachDcHdrId());
+                if (dcnbKeHoachDcHdr.isPresent()) {
+                    data1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr.get());
+                }
+                List<DcnbKeHoachDcDtl> khs = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(data1.getKeHoachDcHdrId());
+                data1.setDanhSachKeHoach(khs);
+            });
+        });
+        return allById;
     }
 }
