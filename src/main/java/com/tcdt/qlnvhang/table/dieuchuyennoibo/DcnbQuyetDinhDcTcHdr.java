@@ -3,8 +3,7 @@ package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,8 +13,9 @@ import java.util.List;
 
 @Entity
 @Table(name = DcnbQuyetDinhDcTcHdr.TABLE_NAME)
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class DcnbQuyetDinhDcTcHdr extends BaseEntity implements Serializable, Cloneable{
 
   private static final long serialVersionUID = 1L;

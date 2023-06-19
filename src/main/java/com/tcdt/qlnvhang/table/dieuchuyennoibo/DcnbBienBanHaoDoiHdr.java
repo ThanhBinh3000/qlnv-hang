@@ -1,8 +1,7 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.apache.tomcat.jni.Local;
 
 import javax.persistence.*;
@@ -13,8 +12,9 @@ import java.util.List;
 
 @Entity
 @Table(name = DcnbBienBanHaoDoiHdr.TABLE_NAME)
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class DcnbBienBanHaoDoiHdr extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "DCNB_BIEN_BAN_HAO_DOI_HDR";

@@ -2,8 +2,7 @@ package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,8 +11,9 @@ import java.util.List;
 
 @Entity
 @Table(name = DcnbBienBanLayMauDtl.TABLE_NAME)
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class DcnbBienBanLayMauDtl implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "DCNB_BIEN_BAN_LAY_MAU_DTL";

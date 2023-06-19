@@ -1,14 +1,14 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = DcnbDataLinkDtl.TABLE_NAME)
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class DcnbDataLinkDtl {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "DCNB_DATA_LINK_DTL";

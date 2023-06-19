@@ -1,16 +1,16 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name = DcnbPhieuKtChatLuongDtl.TABLE_NAME)
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class DcnbPhieuKtChatLuongDtl implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "DCNB_PHIEU_KT_CHAT_LUONG_DTL";

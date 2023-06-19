@@ -2,7 +2,9 @@ package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanLayMauDtl;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import java.io.Serializable;
@@ -11,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class DcnbBienBanLayMauHdrReq implements Serializable {
     private Long id;
 
@@ -28,7 +32,7 @@ public class DcnbBienBanLayMauHdrReq implements Serializable {
 
     private String maQhns;
 
-    private Long qDinhDccId;
+    private Long qdccId;
 
     private String soQdinhDcc;
 

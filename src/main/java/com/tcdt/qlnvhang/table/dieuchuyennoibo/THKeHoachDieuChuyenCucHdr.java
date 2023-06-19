@@ -13,8 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 
-@Getter
-@Setter
+@Data
 @Table(name = "DCNB_TH_KE_HOACH_DCC_HDR")
 @Builder
 @NoArgsConstructor
