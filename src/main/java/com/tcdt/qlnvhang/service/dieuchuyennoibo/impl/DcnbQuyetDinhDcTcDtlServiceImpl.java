@@ -188,11 +188,13 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
         fileDinhKemService.delete(data.getId(), Lists.newArrayList(DcnbQuyetDinhDcTcHdr.TABLE_NAME + "_CAN_CU"));
         fileDinhKemService.delete(data.getId(), Lists.newArrayList(DcnbQuyetDinhDcTcHdr.TABLE_NAME + "_QUYET_DINH"));
         dcnbQuyetDinhDcTcHdrRepository.delete(data);
-        List<THKeHoachDieuChuyenTongCucHdr> thKeHoachDieuChuyenTongCucHdrs = thKeHoachDCTCHdrRepository.findByMaTongHop(data.getMaThop());
-        thKeHoachDieuChuyenTongCucHdrs.forEach(e ->{
-            e.setTrangThai(Contains.CHUATAO_QD);
-            thKeHoachDCTCHdrRepository.save(e);
-        });
+        if(optional.get().getIdThop() != null){
+            Optional<THKeHoachDieuChuyenTongCucHdr> thKeHoach = thKeHoachDCTCHdrRepository.findById(optional.get().getIdThop());
+            if(thKeHoach.isPresent()){
+                thKeHoach.get().setTrangThai(Contains.CHUATAO_QD);
+                thKeHoachDCTCHdrRepository.save(thKeHoach.get());
+            }
+        }
     }
 
     @Transient
