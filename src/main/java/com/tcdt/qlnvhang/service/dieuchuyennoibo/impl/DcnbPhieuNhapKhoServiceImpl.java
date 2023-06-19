@@ -63,7 +63,9 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
         DcnbPhieuNhapKhoHdr data = new DcnbPhieuNhapKhoHdr();
         BeanUtils.copyProperties(req, data);
         data.setMaDvi(userInfo.getDvql());
-        data.setId(Long.parseLong(req.getSoPhieuNhapKho().split("/")[0]));
+        if(req.getSoPhieuNhapKho() != null){
+            data.setId(Long.parseLong(req.getSoPhieuNhapKho().split("/")[0]));
+        }
         req.getChildren().forEach(e -> {
             e.setParent(data);
         });
