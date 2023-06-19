@@ -235,10 +235,19 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
             case Contains.CHODUYET_LDC + Contains.DA_DUYET_LDC:
                 optional.get().setNguoiDuyetLdCuc(currentUser.getUser().getId());
                 optional.get().setNgayDuyetLdCuc(LocalDate.now());
-                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkCuc(optional.get().getMaDvi(),
-                        optional.get().getQdDcId(),
-                        optional.get().getMaNganKho(),
-                        optional.get().getMaLoKho());
+                DcnbDataLinkHdr dataLink = null;
+                if ("00".equals(optional.get().getType())) { // xuất
+                    dataLink = dcnbDataLinkHdrRepository.findDataLinkCuc(optional.get().getMaDvi(),
+                            optional.get().getQdDcId(),
+                            optional.get().getMaNganKho(),
+                            optional.get().getMaLoKho());
+                } else if ("01".equals(optional.get().getType())) {
+                    dataLink = dcnbDataLinkHdrRepository.findDataLinkCucNhan(optional.get().getMaDvi(),
+                            optional.get().getQdDcId(),
+                            optional.get().getMaNganKho(),
+                            optional.get().getMaLoKho());
+                }
+
                 DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
                 dataLinkDtl.setLinkId(optional.get().getId());
                 dataLinkDtl.setHdrId(dataLink.getId());

@@ -3,8 +3,6 @@ package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -14,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class SearchDcnbBienBanLayMau extends BaseRequest {
     private Integer nam;
-    private Long qDinhDccId;
+    private Long qdDcCucId;
     private String soQdinhDcc;
     private String soBbLayMau;
     private String dViKiemNghiem;
