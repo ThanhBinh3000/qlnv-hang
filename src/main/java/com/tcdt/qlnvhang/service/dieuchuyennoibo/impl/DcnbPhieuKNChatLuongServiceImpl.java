@@ -306,10 +306,26 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         ex.export();
     }
 
-    public List<DcnbPhieuKnChatLuongHdrDTO> danhSach(CustomUserDetails currentUser, SearchPhieuKnChatLuong objReq) {
-        String dvql = currentUser.getDvql();
-        objReq.setMaDvi(dvql);
-        List<DcnbPhieuKnChatLuongHdrDTO> searchDto = dcnbPhieuKnChatLuongHdrRepository.searchListChiCuc(objReq);
+    public List<DcnbPhieuKnChatLuongHdrDTO> danhSach(CustomUserDetails currentUser, SearchPhieuKnChatLuong req) {
+        List<DcnbPhieuKnChatLuongHdrDTO> searchDto = null;
+
+        if(req.getIsVatTu() == null){
+            req.setIsVatTu(false);
+        }
+        if(req.getIsVatTu()){
+            req.setDsLoaiHang(Arrays.asList("VT"));
+        }else {
+            req.setDsLoaiHang(Arrays.asList("LT","M"));
+        }
+
+        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            searchDto = dcnbPhieuKnChatLuongHdrRepository.searchListChiCuc(req);
+        }
+        if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            req.setTypeDataLink(Contains.DIEU_CHUYEN);
+            searchDto = dcnbPhieuKnChatLuongHdrRepository.searchPageListCuc(req);
+        }
+
         return searchDto;
     }
 }
