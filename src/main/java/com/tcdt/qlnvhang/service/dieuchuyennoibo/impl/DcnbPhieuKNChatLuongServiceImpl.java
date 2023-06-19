@@ -297,7 +297,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         ex.export();
     }
 
-    public List<DcnbPhieuKnChatLuongHdrDTO> danhSach(CustomUserDetails currentUser, SearchPhieuXuatKho objReq) {
+    public List<DcnbPhieuKnChatLuongHdrDTO> danhSach(CustomUserDetails currentUser, SearchPhieuKnChatLuong objReq) {
         String dvql = currentUser.getDvql();
         objReq.setMaDvi(dvql);
         List<DcnbPhieuKnChatLuongHdrDTO> searchDto = dcnbPhieuKnChatLuongHdrRepository.searchListChiCuc(objReq);

@@ -192,7 +192,7 @@ public class DcnbPhieuKNChatLuongController {
     @ApiOperation(value = "Danh sách số quyết định", response = List.class)
     @PostMapping(value = "/danh-sach", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> danhSach(@CurrentUser CustomUserDetails currentUser, @RequestBody SearchPhieuXuatKho objReq) {
+    public ResponseEntity<BaseResponse> danhSach(@CurrentUser CustomUserDetails currentUser, @RequestBody SearchPhieuKnChatLuong objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(dcnbPhieuKNChatLuongService.danhSach(currentUser,objReq));

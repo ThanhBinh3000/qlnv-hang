@@ -95,5 +95,5 @@ public interface DcnbPhieuKnChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "AND ((:#{#param.tuNgay}  IS NULL OR pkncl.ngayKiem >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR pkncl.ngayKiem <= :#{#param.denNgay}) ) " +
             "ORDER BY pkncl.soQdinhDc desc, pkncl.nam desc")
-    List<DcnbPhieuKnChatLuongHdrDTO> searchListChiCuc(@Param("param")SearchPhieuXuatKho objReq);
+    List<DcnbPhieuKnChatLuongHdrDTO> searchListChiCuc(@Param("param")SearchPhieuKnChatLuong objReq);
 }
