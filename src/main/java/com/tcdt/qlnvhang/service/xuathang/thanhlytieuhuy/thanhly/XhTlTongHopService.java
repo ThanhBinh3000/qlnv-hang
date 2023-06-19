@@ -164,6 +164,13 @@ public class XhTlTongHopService extends BaseServiceImpl {
       throw new Exception("Bản ghi không tồn tại");
     }
     XhTlTongHopHdr data = optional.get();
+    List<XhTlDanhSachHdr> listDanhSach = xhTlDanhSachRepository.findByIdIn(Arrays.asList(data.getId()));
+    listDanhSach.forEach(s -> {
+      s.setIdTongHop(null);
+      s.setMaTongHop(null);
+      s.setNgayTongHop(null);
+    });
+    xhTlDanhSachRepository.saveAll(listDanhSach);
     xhTlTongHopRepository.delete(data);
   }
 
