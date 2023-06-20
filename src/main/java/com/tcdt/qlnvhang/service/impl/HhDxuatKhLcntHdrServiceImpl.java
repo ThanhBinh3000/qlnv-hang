@@ -488,9 +488,6 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
 
-//        IXDocReport report = XDocReportRegistry.getRegistry().loadReport(inputStream, TemplateEngineKind.Velocity);
-//        IContext context = report.createContext();
-
         List<String> listDvi = new ArrayList<>();
         listDvi.add(hhDxuatKhLcntHdrReq.getMaDvi());
         listDvi.add(hhDxuatKhLcntHdrReq.getMaDvi().substring(0, hhDxuatKhLcntHdrReq.getMaDvi().length() - 2));
@@ -538,33 +535,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
                 object.getDsGtDtlList().add(data);
             }
         }
-//        context.put("data", object);
-//        context.put("numberTool", new NumberTool());
-//        context.put("dateTool", new DateTool());
-//        OutputStream outDocx = new ByteArrayOutputStream();
-//        OutputStream outPdf = new ByteArrayOutputStream();
-//        //docx
-//        report.process(context, outDocx);
-//        byte[] resultDocx = ((ByteArrayOutputStream) outDocx).toByteArray();
-//        ReportTemplateResponse reportTemplateResponse = new ReportTemplateResponse();
-//        reportTemplateResponse.setWordSrc(Base64.getEncoder().encodeToString(resultDocx));
-//
-//        Options options = Options.getTo(ConverterTypeTo.PDF).via(ConverterTypeVia.XWPF);
-//        PdfOptions pdfOptions = PdfOptions.create();
-//        pdfOptions.fontProvider((familyName, encoding, size, style, color) -> {
-//            try {
-//                BaseFont baseFont = BaseFont.createFont("/Users/hoangmanhhai/Documents/tecapro_2023/QLNV/qlnv-hang/src/main/resources/font/times.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-//                return new Font(baseFont, size, style, color);
-//            } catch (Exception e) {
-//                throw new IllegalArgumentException("Font was not found" + e);
-//            }
-//        });
-//        options.subOptions(pdfOptions);
-//        report.convert(context, options, new FileOutputStream("/Users/hoangmanhhai/Documents/tecapro_2023/QLNV/qlnv-hang/target/output.pdf"));
-//
-//        outDocx.close();
-//        outPdf.close();
-//        return reportTemplateResponse;
+
         return docxToPdfConverter.convertDocxToPdf(inputStream, object);
     }
 

@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.nhaphangtheoptt;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.request.HhQdPheduyetKhMttSLDDReq;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.util.Contains;
 import io.swagger.annotations.ApiModelProperty;
@@ -38,4 +39,5 @@ public class HhCgiaReq {
     private List<FileDinhKemReq> fileDinhKemMuaLe = new ArrayList<>();
 
     private List<HhChiTietTTinChaoGiaReq> children = new ArrayList<>();
+    private List<HhQdPheduyetKhMttSLDDReq> danhSachCtiet = new ArrayList<>();
 }

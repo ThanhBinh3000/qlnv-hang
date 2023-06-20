@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
+import com.tcdt.qlnvhang.request.HhQdPheduyetKhMttSLDDReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.*;
 
@@ -107,23 +108,23 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
             hdrOptional.get().setPtMuaTrucTiep(objReq.getPthucMuaTrucTiep());
             hhQdPheduyetKhMttHdrRepository.save(hdrOptional.get());
         }
-
-        hhCtietTtinCgiaRepository.deleteAllByIdQdDtl(objReq.getIdQdDtl());
         List<HhChiTietTTinChaoGia> chaoGiaList = new ArrayList<>();
-        for (HhChiTietTTinChaoGiaReq chaoGiaReq : objReq.getChildren()){
-            HhChiTietTTinChaoGia chaoGia = new HhChiTietTTinChaoGia();
-            BeanUtils.copyProperties(chaoGiaReq, chaoGia, "id");
-            chaoGia.setId(null);
-            chaoGia.setIdQdDtl(objReq.getIdQdDtl());
-            HhChiTietTTinChaoGia save = hhCtietTtinCgiaRepository.save(chaoGia);
+        for (HhQdPheduyetKhMttSLDDReq hhQdPheduyetKhMttSLDDReq : objReq.getDanhSachCtiet()) {
+            hhCtietTtinCgiaRepository.deleteAllByIdQdPdSldd(hhQdPheduyetKhMttSLDDReq.getId());
+            for (HhChiTietTTinChaoGiaReq child : hhQdPheduyetKhMttSLDDReq.getListChaoGia()) {
+                HhChiTietTTinChaoGia chaoGia = new HhChiTietTTinChaoGia();
+                BeanUtils.copyProperties(child, chaoGia, "id");
+                chaoGia.setId(null);
+                HhChiTietTTinChaoGia save = hhCtietTtinCgiaRepository.save(chaoGia);
+                if (!DataUtils.isNullObject(child.getFileDinhKems())) {
+                    List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(child.getFileDinhKems()), save.getId(), HhChiTietTTinChaoGia.TABLE_NAME);
+                    chaoGia.setFileDinhKems(fileDinhKems.get(0));
+                }
 
-            if (!DataUtils.isNullObject(chaoGiaReq.getFileDinhKems())) {
-                List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(chaoGiaReq.getFileDinhKems()), save.getId(), HhChiTietTTinChaoGia.TABLE_NAME);
-                chaoGia.setFileDinhKems(fileDinhKems.get(0));
+                chaoGiaList.add(chaoGia);
             }
-
-            chaoGiaList.add(chaoGia);
         }
+
         return chaoGiaList;
     }
 

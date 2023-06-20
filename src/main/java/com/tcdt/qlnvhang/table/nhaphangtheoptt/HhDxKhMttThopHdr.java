@@ -44,6 +44,7 @@ public class HhDxKhMttThopHdr extends TrangThaiBaseEntity implements Serializabl
     private String soQdCc;
 
     private String tchuanCluong;
+    private Long idQdPduyet;
 
     @Transient
     List<HhDxKhMttThopDtl> children =new ArrayList<>();
