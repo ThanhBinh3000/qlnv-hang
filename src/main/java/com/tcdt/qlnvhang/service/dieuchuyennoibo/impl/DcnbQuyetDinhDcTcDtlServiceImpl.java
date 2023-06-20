@@ -260,12 +260,10 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
                 optional.get().setNgayPduyet(LocalDate.now());
                 optional.get().setNguoiPduyetId(currentUser.getUser().getId());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
-                if (!optional.get().getMaThop().isEmpty()) {
-                    List<THKeHoachDieuChuyenTongCucHdr> thKeHoachDieuChuyenTongCucHdrs = thKeHoachDCTCHdrRepository.findByMaTongHop(optional.get().getMaThop());
-                    thKeHoachDieuChuyenTongCucHdrs.forEach(e -> {
-                        e.setTrangThai(Contains.TU_CHOI_BAN_HANH_QD);
-                        thKeHoachDCTCHdrRepository.save(e);
-                    });
+                if (optional.get().getIdThop() != null) {
+                    Optional<THKeHoachDieuChuyenTongCucHdr> thKeHoachDieu = thKeHoachDCTCHdrRepository.findById(optional.get().getIdThop());
+                    thKeHoachDieu.get().setTrangThai(Contains.TU_CHOI_BAN_HANH_QD);
+                    thKeHoachDCTCHdrRepository.save(thKeHoachDieu.get());
                 }
                 break;
             case Contains.CHODUYET_LDV + Contains.CHODUYET_LDTC:
