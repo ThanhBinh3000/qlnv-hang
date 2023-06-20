@@ -111,6 +111,24 @@ public class DcnbQuyetDinhDcTcHdrController extends BaseController {
     }
     return ResponseEntity.ok(resp);
   }
+  @ApiOperation(value = "Lấy chi tiết thông tin đề xuất", response = List.class)
+  @GetMapping(value =  PathContains.URL_CHI_TIET + "theo-tong-hop-id/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<BaseResponse> detailTheoTongHop(
+          @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids")List<Long> ids) {
+    BaseResponse resp = new BaseResponse();
+    try {
+      resp.setData(dcnbQuyetDinhDcTcDtlServiceImpl.detailTheoTongHop(ids).get(0));
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (Exception e) {
+      e.printStackTrace();
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Lấy chi tiết thông tin : {}", e);
+    }
+    return ResponseEntity.ok(resp);
+  }
 
   @ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 thông tin", response = List.class)
   @PostMapping(value =  PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
