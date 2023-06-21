@@ -22,6 +22,7 @@ public class XhThHoSoDtl extends BaseEntity implements Serializable {
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhThHoSoDtl.TABLE_NAME + "_SEQ")
   @SequenceGenerator(sequenceName = XhThHoSoDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhThHoSoDtl.TABLE_NAME + "_SEQ")
   private Long id;
+  private Integer nam;
   private Long idTongHop;
   private Long idDsHdr;
   private String maTongHop;
