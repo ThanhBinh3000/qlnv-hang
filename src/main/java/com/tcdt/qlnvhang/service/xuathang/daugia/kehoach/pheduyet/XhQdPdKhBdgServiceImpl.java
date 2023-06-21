@@ -511,7 +511,70 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
         return data;
     }
 
-      public XhQdPdKhBdgDtl approveDtl(XhQdPdKhBdgReq stReq) throws Exception {
+    @Override
+    public Page<XhQdPdKhBdgDtl> searchDtlPage(XhQdPdKhBdgDtlReq req) throws Exception {
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").descending());
+        Page<XhQdPdKhBdgDtl> dataDtl = xhQdPdKhBdgDtlRepository.searchDtl(
+                req,
+                pageable
+        );
+        Map<String, String> hashMapVthh = getListDanhMucHangHoa();
+        Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
+        dataDtl.getContent().forEach(f ->{
+            try {
+                XhQdPdKhBdg hdr = xhQdPdKhBdgRepository.findById(f.getIdQdHdr()).get();
+                f.setNam(hdr.getNam());
+                f.setSoQdPd(hdr.getSoQdPd());
+                f.setTenLoaiVthh(StringUtils.isEmpty(hdr.getLoaiVthh())?null:hashMapVthh.get(hdr.getLoaiVthh()));
+                f.setTenCloaiVthh(StringUtils.isEmpty(hdr.getCloaiVthh())?null:hashMapVthh.get(hdr.getCloaiVthh()));
+                f.setTenDvi(StringUtils.isEmpty(f.getMaDvi())?null:hashMapDvi.get(f.getMaDvi()));
+                f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(f.getTrangThai()));
+                f.setXhQdPdKhBdg(hdr);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+        return dataDtl;
+    }
+
+    @Override
+    public void exportDtl(XhQdPdKhBdgDtlReq req, HttpServletResponse response) throws Exception {
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        req.setPaggingReq(paggingReq);
+        Page<XhQdPdKhBdgDtl> page = this.searchDtlPage(req);
+        List<XhQdPdKhBdgDtl> data = page.getContent();
+        String title = "Danh sách quản lý thông tin bán đấu giá";
+        String[] rowsName = new String[]{"STT", "Năm kế hoạch", "Số QĐ PD KHBĐG", "Số QĐ ĐC KHBĐG", "Số QĐ PD KQBĐG", "Số KH/đề xuất", "Ngày QĐ PD KQBĐG", "Tổng số ĐV tài sản", "Số ĐV tài sản ĐG thành công", "Số ĐV tài sản ĐG không thành công", "Thời hạn giao nhận hàng", "Chủng loại hàng hóa", "Trạng thái thực hiện", "Kết quả đấu giá"};
+        String filename = "danh-sach-quan-ly-thong-tin-ban-dau-gia.xlsx";
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+        for (int i = 0; i < data.size(); i++) {
+            XhQdPdKhBdgDtl dtl = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i;
+            objs[1] = dtl.getNam();
+            objs[2] = dtl.getSoQdPd();
+            objs[3] = dtl.getSoQdDcBdg();
+            objs[4] = dtl.getSoQdPdKqBdg();
+            objs[5] = dtl.getSoDxuat();
+            objs[6] = dtl.getNgayKyQdPdKqBdg();
+            objs[7] = dtl.getSlDviTsan();
+            objs[8] = dtl.getSoDviTsanThanhCong();
+            objs[9] = dtl.getSoDviTsanKhongThanh();
+            objs[10] = null;
+            objs[11] = dtl.getTenCloaiVthh();
+            objs[12] = dtl.getTenTrangThai();
+            objs[13] = dtl.getKetQuaDauGia();
+            dataList.add(objs);
+        }
+        ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+        ex.export();
+    }
+
+
+    public XhQdPdKhBdgDtl approveDtl(XhQdPdKhBdgReq stReq) throws Exception {
           if (ObjectUtils.isEmpty(stReq.getId())) {
               throw new Exception("Không tồn tại bản ghi");
           }
