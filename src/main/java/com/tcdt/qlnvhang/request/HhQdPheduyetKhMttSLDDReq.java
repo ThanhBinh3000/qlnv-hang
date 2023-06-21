@@ -1,9 +1,12 @@
 package com.tcdt.qlnvhang.request;
 
+import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhChiTietTTinChaoGiaReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhQdPdKhMttSlddDtlReq;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhChiTietTTinChaoGia;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,5 +42,7 @@ public class HhQdPheduyetKhMttSLDDReq {
     private BigDecimal soLuong;
 
     List<HhQdPdKhMttSlddDtlReq> children = new ArrayList<>();
+    @Transient
+    private List<HhChiTietTTinChaoGiaReq> listChaoGia = new ArrayList<>();
 
 }

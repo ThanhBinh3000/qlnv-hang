@@ -14,7 +14,7 @@ public interface HhQdPheduyetKhMttDxRepository extends JpaRepository<HhQdPheduye
 
     @Query("SELECT DISTINCT dtl FROM HhQdPheduyetKhMttDx dtl " +
             " left join HhQdPheduyetKhMttHdr hdr on hdr.id = dtl.idQdHdr " +
-            " left join HhChiTietTTinChaoGia cg on dtl.id = cg.idQdDtl WHERE 1=1 " +
+            " left join HhChiTietTTinChaoGia cg on dtl.id = cg.idQdPdSldd WHERE 1=1 " +
             "AND (:#{#param.namKh} IS NULL OR hdr.namKh = :#{#param.namKh}) " +
             "AND (:#{#param.ngayCgiaTu} IS NULL OR dtl.ngayNhanCgia >= :#{#param.ngayCgiaTu}) " +
             "AND (:#{#param.ngayCgiadDen} IS NULL OR dtl.ngayNhanCgia <= :#{#param.ngayCgiadDen}) " +
