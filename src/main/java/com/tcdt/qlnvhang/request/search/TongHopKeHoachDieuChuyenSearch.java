@@ -31,4 +31,5 @@ public class TongHopKeHoachDieuChuyenSearch extends BaseRequest {
     private String chungLoaiHangHoa;
     private String maChiCucNhan;
     private List<Long> dcnbKeHoachDcHdrId;
+    private Long qdtcId;
 }
