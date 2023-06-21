@@ -67,10 +67,10 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 			" WHERE KHLCNT.LOAI_VTHH = :loaiVthh \n" +
 			" AND KHLCNT.CLOAI_VTHH = :cloaiVthh \n" +
 			" AND KHLCNT.NAM_KHOACH = :namKh \n" +
-			" AND KHLCNT.HTHUC_LCNT = :hthucLcnt \n" +
-			" AND KHLCNT.PTHUC_LCNT = :pthucLcnt \n" +
-			" AND KHLCNT.LOAI_HDONG = :loaiHdong \n" +
-			" AND KHLCNT.NGUON_VON = :nguonVon " +
+			" AND (:hthucLcnt IS NULL OR KHLCNT.HTHUC_LCNT = :hthucLcnt) \n" +
+			" AND (:pthucLcnt IS NULL OR KHLCNT.PTHUC_LCNT = :pthucLcnt) \n" +
+			" AND (:loaiHdong IS NULL OR KHLCNT.LOAI_HDONG = :loaiHdong) \n" +
+			" AND (:nguonVon IS NULL OR KHLCNT.NGUON_VON = :nguonVon) " +
 			" AND KHLCNT.TRANG_THAI = '"+ Contains.DADUYET_LDC + "'" +
 			" AND KHLCNT.TRANG_THAI_TH = '"+ Contains.CHUATONGHOP+ "' ", nativeQuery = true)
 	List<HhDxuatKhLcntHdr> listTongHop(String loaiVthh,String cloaiVthh,Integer namKh, String hthucLcnt,String pthucLcnt, String loaiHdong,String nguonVon);

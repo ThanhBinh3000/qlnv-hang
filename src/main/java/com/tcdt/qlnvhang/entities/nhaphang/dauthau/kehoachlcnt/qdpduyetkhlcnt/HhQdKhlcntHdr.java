@@ -11,6 +11,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.Contains;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -128,6 +129,8 @@ public class HhQdKhlcntHdr implements Serializable {
 	Integer namKhoach;
 
 	Integer tgianThien;
+	Integer tgianThienHd;
+	Integer vat;
 
 	Integer gtriDthau;
 
@@ -153,6 +156,11 @@ public class HhQdKhlcntHdr implements Serializable {
 	String maDvi;
 
 	String trangThaiDt;
+	String noiDungQd;
+	String tenDuAn;
+	String dienGiaiTongMucDt;
+	String quyMo;
+	BigDecimal tongMucDtDx;
 
 	@Transient
 	String tenDvi;
@@ -180,6 +188,8 @@ public class HhQdKhlcntHdr implements Serializable {
 
 	@Transient
 	private List<HhQdKhlcntDtl> children = new ArrayList<>();
+	@Transient
+	private List<HhQdKhlcntDsgthau> dsGthau = new ArrayList<>();
 
 	@Transient
 	BigDecimal tongTien;
@@ -195,6 +205,8 @@ public class HhQdKhlcntHdr implements Serializable {
 	String tenTrangThaiDt;
 	@Transient
 	String soDxuatKhlcnt;
+	@Transient
+	private List<FileDinhKem> listCcPhapLy;
 
 	public String getTenTrangThai() {
 		return NhapXuatHangTrangThaiEnum.getTenById(this.getTrangThai());
