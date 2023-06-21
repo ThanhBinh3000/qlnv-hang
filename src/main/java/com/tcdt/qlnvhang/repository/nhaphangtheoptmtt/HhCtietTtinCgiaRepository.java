@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface HhCtietTtinCgiaRepository extends JpaRepository<HhChiTietTTinChaoGia,Long> {
 
-    void deleteAllByIdQdDtl(Long idQdDtl);
+    void deleteAllByIdQdPdSldd(Long idQdDtl);
 
-    List<HhChiTietTTinChaoGia> findAllByIdQdDtl(Long idQdDtl);
+    List<HhChiTietTTinChaoGia> findAllByIdQdPdSldd(Long idQdPdSldd);
 
 }

@@ -93,8 +93,6 @@ public class XhQdPdKhBdgDtl implements Serializable {
     @Transient
     private List<XhQdPdKhBdgPl> children= new ArrayList<>();
 
-    @Transient
-    List<XhTcTtinBdgHdr> listTtinDg = new ArrayList<>();
 
     public String getTenTrangThai() {
         return NhapXuatHangTrangThaiEnum.getTenById(this.getTrangThai());
@@ -116,5 +114,20 @@ public class XhQdPdKhBdgDtl implements Serializable {
     private String ketQuaDauGia;
 
     private String soQdDcBdg;
+
+    @Transient
+    private Integer nam;
+
+    @Transient
+    private String soQdPd;
+
+    @Transient
+    private String tenLoaiVthh;
+
+    @Transient
+    private String tenCloaiVthh;
+
+    @Transient
+    List<XhTcTtinBdgHdr> listTtinDg = new ArrayList<>();
 
 }

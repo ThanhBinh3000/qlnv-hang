@@ -13,7 +13,7 @@ import java.util.Date;
 public class HhChiTietTTinChaoGiaReq {
     private Long id;
 
-    private Long idQdDtl;
+    private Long idQdPdSldd;
 
     private String canhanTochuc;
 

@@ -255,22 +255,30 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
             case Contains.TUCHOI_LDTC + Contains.CHODUYET_LDV:
                 optional.get().setNgayGduyet(LocalDate.now());
                 optional.get().setNguoiGduyetId(currentUser.getUser().getId());
+                if (optional.get().getIdThop() != null) {
+                    Optional<THKeHoachDieuChuyenTongCucHdr> thKeHoachDieu = thKeHoachDCTCHdrRepository.findById(optional.get().getIdThop());
+                    thKeHoachDieu.get().setTrangThai(Contains.DADUTHAO_QD);
+                    thKeHoachDCTCHdrRepository.save(thKeHoachDieu.get());
+                }
                 break;
             case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
                 optional.get().setNgayPduyet(LocalDate.now());
                 optional.get().setNguoiPduyetId(currentUser.getUser().getId());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
-                if (!optional.get().getMaThop().isEmpty()) {
-                    List<THKeHoachDieuChuyenTongCucHdr> thKeHoachDieuChuyenTongCucHdrs = thKeHoachDCTCHdrRepository.findByMaTongHop(optional.get().getMaThop());
-                    thKeHoachDieuChuyenTongCucHdrs.forEach(e -> {
-                        e.setTrangThai(Contains.TU_CHOI_BAN_HANH_QD);
-                        thKeHoachDCTCHdrRepository.save(e);
-                    });
+                if (optional.get().getIdThop() != null) {
+                    Optional<THKeHoachDieuChuyenTongCucHdr> thKeHoachDieu = thKeHoachDCTCHdrRepository.findById(optional.get().getIdThop());
+                    thKeHoachDieu.get().setTrangThai(Contains.TU_CHOI_BAN_HANH_QD);
+                    thKeHoachDCTCHdrRepository.save(thKeHoachDieu.get());
                 }
                 break;
             case Contains.CHODUYET_LDV + Contains.CHODUYET_LDTC:
                 optional.get().setNgayPduyet(LocalDate.now());
                 optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+                if (optional.get().getIdThop() != null) {
+                    Optional<THKeHoachDieuChuyenTongCucHdr> thKeHoachDieu = thKeHoachDCTCHdrRepository.findById(optional.get().getIdThop());
+                    thKeHoachDieu.get().setTrangThai(Contains.DADUTHAO_QD);
+                    thKeHoachDCTCHdrRepository.save(thKeHoachDieu.get());
+                }
                 break;
             case Contains.CHODUYET_LDTC + Contains.TUCHOI_LDTC:
                 optional.get().setNgayDuyetTc(LocalDate.now());
@@ -282,9 +290,18 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
                     thKeHoachDCTCHdrRepository.save(thKeHoachDieu.get());
                 }
                 break;
-            case Contains.CHODUYET_LDTC + Contains.BAN_HANH:
+            case Contains.CHODUYET_LDTC + Contains.DADUYET_LDTC:
                 optional.get().setNgayDuyetTc(LocalDate.now());
                 optional.get().setNguoiDuyetTcId(currentUser.getUser().getId());
+                if (optional.get().getIdThop() != null) {
+                    Optional<THKeHoachDieuChuyenTongCucHdr> thKeHoachDieu = thKeHoachDCTCHdrRepository.findById(optional.get().getIdThop());
+                    thKeHoachDieu.get().setTrangThai(Contains.DADUTHAO_QD);
+                    thKeHoachDCTCHdrRepository.save(thKeHoachDieu.get());
+                }
+                break;
+            case Contains.DADUYET_LDTC + Contains.BAN_HANH:
+                optional.get().setNgayBanHanhTc(LocalDate.now());
+                optional.get().setNguoiBanHanhTcId(currentUser.getUser().getId());
                 if (optional.get().getIdThop() != null) {
                     Optional<THKeHoachDieuChuyenTongCucHdr> thKeHoachDieu = thKeHoachDCTCHdrRepository.findById(optional.get().getIdThop());
                     thKeHoachDieu.get().setTrangThai(Contains.DABANHANH_QD);
