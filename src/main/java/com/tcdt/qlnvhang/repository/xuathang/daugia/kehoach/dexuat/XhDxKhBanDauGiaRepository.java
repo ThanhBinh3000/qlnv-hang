@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.dexuat;
 import com.tcdt.qlnvhang.request.xuathang.daugia.XhThopChiTieuReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.dexuat.XhDxKhBanDauGiaReq;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGia;
+import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -41,8 +42,8 @@ public interface XhDxKhBanDauGiaRepository extends JpaRepository<XhDxKhBanDauGia
           "AND (:#{#param.ngayDuyetDen} IS NULL OR TH.ngayPduyet <= :#{#param.ngayDuyetDen}) " +
           "AND TH.idThop IS NULL " +
           "AND TH.soQdPd IS NULL " +
-          "AND (:#{#param.listTrangThai == null} = true OR TH.trangThai in :#{#param.listTrangThai}) " +
-          "AND (:#{#param.trangThaiTh} IS NULL OR TH.trangThaiTh = :#{#param.trangThaiTh}) ")
+          "AND TH.trangThai ='" + Contains.DA_DUYET_CBV+ "'" +
+          "AND TH.trangThaiTh ='" + Contains.CHUATONGHOP+ "'")
   List<XhDxKhBanDauGia> listTongHop(@Param("param") XhThopChiTieuReq param);
 
   Optional<XhDxKhBanDauGia> findBySoDxuat(String soDxuat);

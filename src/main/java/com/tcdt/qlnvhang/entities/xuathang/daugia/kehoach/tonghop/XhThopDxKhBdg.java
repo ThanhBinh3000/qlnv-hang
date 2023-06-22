@@ -1,4 +1,5 @@
 package com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.tonghop;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
@@ -71,4 +72,7 @@ public class XhThopDxKhBdg implements Serializable {
 
     @Transient
     private List<XhThopDxKhBdgDtl> children = new ArrayList<>();
+
+    @Transient
+    private List<FileDinhKem> fileDinhKem = new ArrayList<>();
 }
