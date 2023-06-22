@@ -132,7 +132,7 @@ public class XhThQuyetDinhService extends BaseServiceImpl {
     objReq.getQuyetDinhDtl().forEach(s -> {
       s.setQuyetDinhHdr(null);
     });
-    BeanUtils.copyProperties(objReq, data, "id");
+    BeanUtils.copyProperties(objReq, data, "id","maDvi");
     data.getQuyetDinhDtl().forEach(s -> {
       s.setQuyetDinhHdr(data);
     });
