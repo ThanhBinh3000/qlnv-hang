@@ -124,7 +124,7 @@ public class XhTlBaoCaoKqService extends BaseServiceImpl {
     objReq.getBaoCaoKqDtl().forEach(s -> {
       s.setBaoCaoKqHdr(null);
     });
-    BeanUtils.copyProperties(objReq, data, "id");
+    BeanUtils.copyProperties(objReq, data, "id","maDvi");
     data.getBaoCaoKqDtl().forEach(s -> {
       s.setBaoCaoKqHdr(data);
     });
