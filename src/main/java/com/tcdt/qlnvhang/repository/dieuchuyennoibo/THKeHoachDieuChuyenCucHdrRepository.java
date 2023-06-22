@@ -59,7 +59,7 @@ public interface THKeHoachDieuChuyenCucHdrRepository extends JpaRepository<THKeH
     @Query(value = "SELECT distinct hdr FROM THKeHoachDieuChuyenCucHdr hdr WHERE 1=1 " +
             "AND (:#{#param.loaiDieuChuyen} IS NULL OR hdr.loaiDieuChuyen = :#{#param.loaiDieuChuyen}) " +
             "AND (:#{#param.namKeHoach} IS NULL OR hdr.namKeHoach = :#{#param.namKeHoach}) " +
-            "AND hdr.id not in (select distinct qdtc.idDxuat from DcnbQuyetDinhDcTcHdr qdtc where (:#{#param.id} IS NULL OR qdtc.id != :#{#param.qdtcId} ) )" +
+            "AND hdr.id not in (select distinct qdtc.idDxuat from DcnbQuyetDinhDcTcHdr qdtc where 1 =1 AND qdtc.idDxuat is not null and (:#{#param.id} IS NULL OR qdtc.id != :#{#param.qdtcId} ) )" +
             "AND (:#{#param.soDeXuat} IS NULL OR LOWER(hdr.soDeXuat) LIKE CONCAT('%',LOWER(:#{#param.soDeXuat}),'%')) ")
     List<THKeHoachDieuChuyenCucHdr> filterSoDeXuat(@Param("param") TongHopKeHoachDieuChuyenSearch req);
 
