@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.tcdt.qlnvhang.common.DocxToPdfConverter;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
@@ -85,6 +86,9 @@ public abstract class BaseServiceImpl {
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
+
+    @Autowired
+    public DocxToPdfConverter docxToPdfConverter;
 
     public QlnvDmDonvi getDviByMa(String maDvi, HttpServletRequest req) throws Exception {
         QlnvDmDonvi qlnvDmDonvi = null;
