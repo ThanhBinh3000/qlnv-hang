@@ -54,9 +54,6 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
   @Autowired
   private FileDinhKemService fileDinhKemService;
 
-  @Autowired
-  DocxToPdfConverter docxToPdfConverter;
-
   @Override
   public Page<XhDxKhBanDauGia> searchPage(XhDxKhBanDauGiaReq req) throws Exception {
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),
@@ -363,15 +360,12 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl implements XhDxK
   public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
     try {
       ReportTemplateRequest reportTemplateRequest = new ReportTemplateRequest();
-//      reportTemplateRequest.setFileName("de-xuat-ke-hoach-ban-dau-gia.docx");
-
       reportTemplateRequest.setFileName(DataUtils.safeToString(body.get("tenBaoCao")));
       ReportTemplate model = findByTenFile(reportTemplateRequest);
       byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
       ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
       XhDxKhBanDauGia detail = this.detail(DataUtils.safeToLong(body.get("id")));
-      FileInputStream fileInputStream = new FileInputStream(new File("src/main/resources/Đề xuất kế hoạch bán đấu giá.docx"));
-      return docxToPdfConverter.convertDocxToPdf(fileInputStream, detail);
+      return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
     } catch (IOException e) {
       e.printStackTrace();
     } catch (XDocReportException e) {
