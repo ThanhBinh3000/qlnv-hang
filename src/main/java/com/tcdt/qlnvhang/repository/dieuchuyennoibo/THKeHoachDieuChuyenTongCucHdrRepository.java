@@ -34,7 +34,7 @@ public interface THKeHoachDieuChuyenTongCucHdrRepository extends JpaRepository<T
             "AND (:#{#param.loaiDieuChuyen} IS NULL OR hdr.loaiDieuChuyen = :#{#param.loaiDieuChuyen}) "+
             "AND (:#{#param.id} IS NULL OR LOWER(hdr.id) LIKE CONCAT('%',LOWER(:#{#param.id}),'%')) " +
             "AND (:#{#param.namKeHoach} IS NULL OR hdr.namKeHoach = :#{#param.namKeHoach}) " +
-            "AND hdr.id not in (select distinct qdtc.idThop from DcnbQuyetDinhDcTcHdr qdtc where 1 =1 AND (:#{#param.id} IS NULL OR qdtc.id != :#{#param.qdtcId} ))" +
+            "AND hdr.id not in (select distinct qdtc.idThop from DcnbQuyetDinhDcTcHdr qdtc where 1 =1 AND qdtc.idThop is not null AND (:#{#param.id} IS NULL OR qdtc.id != :#{#param.qdtcId} ))" +
             "ORDER BY hdr.maTongHop desc")
     List<THKeHoachDieuChuyenTongCucHdr> filterMaTongHop(@Param("param") TongHopKeHoachDieuChuyenSearch param);
 

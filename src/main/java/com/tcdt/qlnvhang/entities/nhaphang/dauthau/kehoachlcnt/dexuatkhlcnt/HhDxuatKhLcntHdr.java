@@ -139,5 +139,5 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	@Transient
 	private BigDecimal qdGiaoChiTieuId;
 	String ykienThamGia;
-
+	Integer quy;
 }

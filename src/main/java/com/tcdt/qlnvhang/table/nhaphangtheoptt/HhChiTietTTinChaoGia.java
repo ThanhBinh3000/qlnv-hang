@@ -22,7 +22,7 @@ public class HhChiTietTTinChaoGia implements Serializable {
     @SequenceGenerator(sequenceName = "HH_CTIET_TTIN_CHAO_GIA_SEQ", allocationSize = 1, name = "HH_CTIET_TTIN_CHAO_GIA_SEQ")
     private Long id;
 
-    private Long idQdDtl;
+    private Long idQdPdSldd;
 
     private String canhanTochuc;
 

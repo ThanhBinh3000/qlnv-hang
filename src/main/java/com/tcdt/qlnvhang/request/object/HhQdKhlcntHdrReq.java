@@ -119,12 +119,20 @@ public class HhQdKhlcntHdrReq {
 	Integer gtriHdong;
 
 	String maDvi;
+	String noiDungQd;
+	String tenDuAn;
+	String dienGiaiTongMucDt;
+	String quyMo;
+	BigDecimal tongMucDtDx;
+	Integer tgianThienHd;
+	Integer vat;
 
 	// Lương thực
 	private List<HhQdKhlcntDtlReq> children = new ArrayList<>();
 
 	private List<FileDinhKemReq> fileDinhKems;
+	private List<FileDinhKemReq> listCcPhapLy;
 	// Vật tư
-//	private List<HhQdKhlcntDsgthauReq> dsGoiThau;
+	private List<HhQdKhlcntDsgthauReq> dsGoiThau;
 
 }

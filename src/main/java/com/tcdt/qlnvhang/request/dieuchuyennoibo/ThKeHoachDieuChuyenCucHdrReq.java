@@ -1,11 +1,13 @@
 package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.THKeHoachDieuChuyenCucKhacCucDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.THKeHoachDieuChuyenNoiBoCucDtl;
 import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -61,7 +63,7 @@ public class ThKeHoachDieuChuyenCucHdrReq {
     private String kieuNhapXuat;
 
     private String tenKieuNhapXuat;
-
+    private List<FileDinhKemReq> canCu = new ArrayList<>();
     List<THKeHoachDieuChuyenNoiBoCucDtl> thKeHoachDieuChuyenNoiBoCucDtls;
 
     List<THKeHoachDieuChuyenCucKhacCucDtl> thKeHoachDieuChuyenCucKhacCucDtls;
