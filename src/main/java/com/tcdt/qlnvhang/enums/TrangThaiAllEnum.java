@@ -61,14 +61,15 @@ public enum TrangThaiAllEnum {
   DA_PHANBO_DC_CHODUYET_TBP_TVQT("60", "Đã xác định điểm nhập, chờ duyệt – TBP TVQT"),
   DA_PHANBO_DC_TUCHOI_TBP_TVQT("61", "Đã xác định điểm nhập, từ chối – TBP TVQT"),
   DA_PHANBO_DC_CHODUYET_LDCC("62", "Đã xác định điểm nhập, chờ duyệt – LĐ Chi cục"),
-  DA_PHANBO_DC_TUCHOI_LDCC("63","Đã xác định điểm nhập, từ chối – LĐ Chi cục"),
+  DA_PHANBO_DC_TUCHOI_LDCC("63", "Đã xác định điểm nhập, từ chối – LĐ Chi cục"),
   DA_PHANBO_DC_DADUYET_LDCC("64", "Đã xác định điểm nhập, đã duyệt – LĐ Chi cục"),
-  DA_PHANBO_DC_CHODUYET_TP ("65","Đã xác định điểm nhập, chờ duyệt – TP"),
-  DA_PHANBO_DC_TUCHOI_TP ("66","Đã xác định điểm nhập, từ chối – TP"),
-  DA_PHANBO_DC_CHODUYET_LDC ("67","Đã xác định điểm nhập, chờ duyệt – LĐ Cục"),
-  DA_PHANBO_DC_TUCHOI_LDC("68","Đã xác định điểm nhập, từ chối – LĐ Cục"),
-  DA_PHANBO_DC_DADUYET_LDC ("69","Đã xác định điểm nhập, đã duyệt – LĐ Cục");
-
+  DA_PHANBO_DC_CHODUYET_TP("65", "Đã xác định điểm nhập, chờ duyệt – TP"),
+  DA_PHANBO_DC_TUCHOI_TP("66", "Đã xác định điểm nhập, từ chối – TP"),
+  DA_PHANBO_DC_CHODUYET_LDC("67", "Đã xác định điểm nhập, chờ duyệt – LĐ Cục"),
+  DA_PHANBO_DC_TUCHOI_LDC("68", "Đã xác định điểm nhập, từ chối – LĐ Cục"),
+  DA_PHANBO_DC_DADUYET_LDC("69", "Đã xác định điểm nhập, đã duyệt – LĐ Cục"),
+  CHUA_CHOT("71", "Chưa chốt"),
+  DA_CHOT("72", "Đã chốt");
 
 
   private final String id;

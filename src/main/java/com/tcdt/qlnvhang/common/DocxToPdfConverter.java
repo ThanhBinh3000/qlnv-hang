@@ -16,6 +16,7 @@ import fr.opensagres.xdocreport.template.TemplateEngineKind;
 import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.xwpf.usermodel.*;
 import org.apache.velocity.tools.generic.DateTool;
+import org.apache.velocity.tools.generic.MathTool;
 import org.apache.velocity.tools.generic.NumberTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -56,6 +57,7 @@ public class DocxToPdfConverter {
             context.put("data", data);
             context.put("numberTool", new NumberTool());
             context.put("dateTool", new DateTool());
+            context.put("mathTool", new MathTool());
             context.put("locale",new Locale("vi", "VN"));
             report.process(context, outputStreamWord);
             Options options = Options.getTo(ConverterTypeTo.PDF).via(ConverterTypeVia.XWPF);
