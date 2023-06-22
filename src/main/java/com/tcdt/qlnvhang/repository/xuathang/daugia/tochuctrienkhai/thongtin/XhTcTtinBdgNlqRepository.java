@@ -9,5 +9,5 @@ public interface XhTcTtinBdgNlqRepository extends JpaRepository<XhTcTtinBdgNlq, 
 
   List<XhTcTtinBdgNlq> findByIdTtinHdr(Long idTtinHdr);
 
-  void deleteByIdTtinHdr(Long id);
+  void deleteAllByIdTtinHdr(Long idTtinHdr);
 }
