@@ -141,6 +141,7 @@ public class HhDxuatKhLcntHdrReq {
 	BigDecimal donGiaVat;
 	String tenDviCha;
 	String maDviLapDx;
+	Integer quy;
 	private ReportTemplateRequest reportTemplateRequest;
 	private List<ListDsGthauDTO> listDsGthau;
 

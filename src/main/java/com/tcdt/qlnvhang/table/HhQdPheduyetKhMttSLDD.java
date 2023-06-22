@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.table;
 
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhChiTietTTinChaoGia;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhQdPdKhMttSlddDtl;
 import lombok.Data;
 
@@ -51,5 +52,7 @@ public class HhQdPheduyetKhMttSLDD implements Serializable {
 
     @Transient
     private List<HhQdPdKhMttSlddDtl> children = new ArrayList<>();
+    @Transient
+    private List<HhChiTietTTinChaoGia> listChaoGia = new ArrayList<>();
 
 }
