@@ -139,6 +139,8 @@ public class THKeHoachDieuChuyenCucServiceImpl extends BaseServiceImpl {
             }
             created.setMaTongHop(created.getId());
             THKeHoachDieuChuyenCucHdr createdSave = thKeHoachDieuChuyenHdrRepository.save(created);
+            List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), THKeHoachDieuChuyenCucHdr.TABLE_NAME + "_CAN_CU");
+            createdSave.setCanCu(canCu);
             return createdSave;
         } else if (Objects.equals(data.getLoaiDieuChuyen(), Contains.GIUA_2_CUC_DTNN_KV)) {
             TongHopKeHoachDieuChuyenSearch tongHopSearch = new ModelMapper().map(objReq, TongHopKeHoachDieuChuyenSearch.class);
@@ -164,8 +166,8 @@ public class THKeHoachDieuChuyenCucServiceImpl extends BaseServiceImpl {
                 });
             }
             created.setMaTongHop(created.getId());
-            List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), THKeHoachDieuChuyenCucHdr.TABLE_NAME + "_CAN_CU");
             THKeHoachDieuChuyenCucHdr createdSave = thKeHoachDieuChuyenHdrRepository.save(created);
+            List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), THKeHoachDieuChuyenCucHdr.TABLE_NAME + "_CAN_CU");
             createdSave.setCanCu(canCu);
             return createdSave;
         }
@@ -323,9 +325,9 @@ public class THKeHoachDieuChuyenCucServiceImpl extends BaseServiceImpl {
         dataMap.setTrichYeu(objReq.getTrichYeu());
         data.setNguoiSuaId(currentUser.getUser().getId());
         THKeHoachDieuChuyenCucHdr created = thKeHoachDieuChuyenHdrRepository.save(dataMap);
+        created = thKeHoachDieuChuyenHdrRepository.save(created);
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(THKeHoachDieuChuyenCucHdr.TABLE_NAME + "_CAN_CU"));
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), THKeHoachDieuChuyenCucHdr.TABLE_NAME + "_CAN_CU");
-        created = thKeHoachDieuChuyenHdrRepository.save(created);
         created.setCanCu(canCu);
         return created;
     }

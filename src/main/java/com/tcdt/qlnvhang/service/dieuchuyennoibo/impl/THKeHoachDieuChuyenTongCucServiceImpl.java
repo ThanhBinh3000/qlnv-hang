@@ -112,7 +112,7 @@ public class THKeHoachDieuChuyenTongCucServiceImpl extends BaseServiceImpl {
         }
         created.setMaTongHop(created.getId());
         THKeHoachDieuChuyenTongCucHdr createdSave = tongCucHdrRepository.save(created);
-        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), THKeHoachDieuChuyenTongCucHdr.TABLE_NAME + "_CAN_CU");
+        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), createdSave.getId(), THKeHoachDieuChuyenTongCucHdr.TABLE_NAME + "_CAN_CU");
         created.setCanCu(canCu);
         return createdSave;
     }
