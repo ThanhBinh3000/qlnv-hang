@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.service.suachuahang;
+package com.tcdt.qlnvhang.service.suachuahang.impl;
 
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class ScDanhSachService extends BaseServiceImpl {
+public class ScDanhSachServiceImpl extends BaseServiceImpl {
 
 
   @Autowired

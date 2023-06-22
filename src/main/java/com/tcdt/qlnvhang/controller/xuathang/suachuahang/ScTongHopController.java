@@ -1,14 +1,10 @@
 package com.tcdt.qlnvhang.controller.xuathang.suachuahang;
 
 import com.tcdt.qlnvhang.enums.EnumResponse;
-import com.tcdt.qlnvhang.jwt.CurrentUser;
-import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.IdSearchReq;
-import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.suachua.ScTongHopReq;
-import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlTongHopRequest;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.suachuahang.ScTongHopServiceImpl;
+import com.tcdt.qlnvhang.service.suachuahang.impl.ScTongHopServiceImpl;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

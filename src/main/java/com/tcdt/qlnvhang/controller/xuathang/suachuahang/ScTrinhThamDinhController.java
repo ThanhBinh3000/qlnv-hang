@@ -4,12 +4,9 @@ import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.DeleteReq;
-import com.tcdt.qlnvhang.request.IdSearchReq;
-import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.suachua.TrinhVaThamDinhReq;
-import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoRequest;
+import com.tcdt.qlnvhang.request.suachua.ScTrinhVaThamDinhReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.suachuahang.ScTrinhVaThamDinhServiceImpl;
+import com.tcdt.qlnvhang.service.suachuahang.impl.ScTrinhVaThamDinhServiceImpl;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,7 +32,7 @@ public class ScTrinhThamDinhController {
   @ApiOperation(value = "Tra cứu", response = List.class)
   @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<BaseResponse> colection(@RequestBody TrinhVaThamDinhReq objReq) {
+  public ResponseEntity<BaseResponse> colection(@RequestBody ScTrinhVaThamDinhReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
       resp.setData(xhScHoSoService.searchPage(objReq));
@@ -53,7 +50,7 @@ public class ScTrinhThamDinhController {
   @ApiOperation(value = "Tạo mới", response = List.class)
   @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
-  public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody TrinhVaThamDinhReq objReq) {
+  public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody ScTrinhVaThamDinhReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
       resp.setData(xhScHoSoService.create(objReq));
@@ -70,7 +67,7 @@ public class ScTrinhThamDinhController {
 
   @ApiOperation(value = "Cập nhật", response = List.class)
   @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<BaseResponse> update(@Valid @RequestBody TrinhVaThamDinhReq objReq) {
+  public ResponseEntity<BaseResponse> update(@Valid @RequestBody ScTrinhVaThamDinhReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
       resp.setData(xhScHoSoService.update(objReq));
@@ -103,7 +100,7 @@ public class ScTrinhThamDinhController {
 
   @ApiOperation(value = "Trình duyệt", response = List.class)
   @PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<BaseResponse> updateStatus(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody TrinhVaThamDinhReq stReq) {
+  public ResponseEntity<BaseResponse> updateStatus(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody ScTrinhVaThamDinhReq stReq) {
     BaseResponse resp = new BaseResponse();
     try {
       xhScHoSoService.approve(stReq);

@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.service.suachuahang;
+package com.tcdt.qlnvhang.service.suachuahang.impl;
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
@@ -11,6 +11,7 @@ import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlDanhSachReq
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.service.suachuahang.ScTongHopService;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScDanhSachHdr;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTongHopDtl;
