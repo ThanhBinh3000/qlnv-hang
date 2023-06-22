@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,6 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 public class THKeHoachDieuChuyenCucHdr extends BaseEntity implements Serializable {
+    public static final String TABLE_NAME = "DCNB_TH_KE_HOACH_DCC_HDR";
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DCNB_TH_KE_HOACH_DCC_HDR_SEQ")
     @SequenceGenerator(sequenceName = "DCNB_TH_KE_HOACH_DCC_HDR_SEQ", allocationSize = 1, name = "DCNB_TH_KE_HOACH_DCC_HDR_SEQ")
@@ -102,7 +104,8 @@ public class THKeHoachDieuChuyenCucHdr extends BaseEntity implements Serializabl
 
     @Column(name = "TEN_KIEU_NHAP_XUAT")
     private String tenKieuNhapXuat;
-
+    @Transient
+    private List<FileDinhKem> canCu = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "DCNB_TH_KE_HOACH_DCC_HDR_ID")
     private List<THKeHoachDieuChuyenNoiBoCucDtl> thKeHoachDieuChuyenNoiBoCucDtls = new ArrayList<>();
