@@ -323,6 +323,11 @@ public class THKeHoachDieuChuyenCucServiceImpl extends BaseServiceImpl {
             case Contains.DUTHAO + Contains.CHODUYET_TP:
             case Contains.YC_CHICUC_PHANBO_DC + Contains.CHODUYET_TP:
             case Contains.TU_CHOI_TP + Contains.CHODUYET_TP:
+                if(optional.get().getLoaiDieuChuyen().equals(Contains.GIUA_2_CUC_DTNN_KV)) {
+                    if(Contains.TU_CHOI_TP.equals(optional.get().getTrangThai())) {
+                        throw new Exception("Luồng giữa 2 cục dự trữ nhà nước khu vực đã hết luồng!");
+                    }
+                }
                 optional.get().setNguoiGDuyetId(currentUser.getUser().getId());
                 optional.get().setNgayGDuyet(LocalDate.now());
                 // CHECK TRẠNG THÁI BẢN KẾ HOẠCH ĐÃ XACS ĐỊNH ĐIỂM NHẬP HỢP LỆ CHƯA. (LDCC DA DUYET, DA_PHANBO_DC_CHODUYET_TP, DA_PHANBO_DC_CHODUYET_LDC)
@@ -364,8 +369,31 @@ public class THKeHoachDieuChuyenCucServiceImpl extends BaseServiceImpl {
                         });
                     });
                 }
+                if(optional.get().getLoaiDieuChuyen().equals(Contains.GIUA_2_CUC_DTNN_KV)) {
+                    optional.get().getThKeHoachDieuChuyenCucKhacCucDtls().forEach(data ->{
+                        String[] keHoachIdArrs = data.getDcnbKeHoachDcHdrId().split(",");
+                        List<String> keHoachIds = Arrays.asList(keHoachIdArrs);
+                        ArrayList<Long> ids = new ArrayList<>();
+                        for (String str : keHoachIds) {
+                            long value = Long.parseLong(str);
+                            ids.add(value);
+                        }
+                        List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtl = dcnbKeHoachDcDtlRepository.findByIdIn(ids);
+                        dcnbKeHoachDcDtl.forEach(e -> {
+                            e.setXdLaiDiemNhap(true);
+                            e.getDcnbKeHoachDcHdr().setTrangThai(Contains.TUCHOI_TP);
+                            e.getDcnbKeHoachDcHdr().setXdLaiDiemNhap(true);
+                            dcHdrRepository.save(e.getDcnbKeHoachDcHdr());
+                        });
+                    });
+                }
                 break;
             case Contains.TU_CHOI_LDC + Contains.CHODUYET_TP:
+                if(optional.get().getLoaiDieuChuyen().equals(Contains.GIUA_2_CUC_DTNN_KV)) {
+                    if(Contains.TU_CHOI_LDC.equals(optional.get().getTrangThai())) {
+                        throw new Exception("Luồng giữa 2 cục dự trữ nhà nước khu vực đã hết luồng!");
+                    }
+                }
                 optional.get().setNguoiDuyetLdcId(currentUser.getUser().getId());
                 optional.get().setNgayDuyetLdc(LocalDate.now());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
@@ -399,6 +427,24 @@ public class THKeHoachDieuChuyenCucServiceImpl extends BaseServiceImpl {
                         });
                     });
                 }
+                if(optional.get().getLoaiDieuChuyen().equals(Contains.GIUA_2_CUC_DTNN_KV)) {
+                    optional.get().getThKeHoachDieuChuyenCucKhacCucDtls().forEach(data ->{
+                        String[] keHoachIdArrs = data.getDcnbKeHoachDcHdrId().split(",");
+                        List<String> keHoachIds = Arrays.asList(keHoachIdArrs);
+                        ArrayList<Long> ids = new ArrayList<>();
+                        for (String str : keHoachIds) {
+                            long value = Long.parseLong(str);
+                            ids.add(value);
+                        }
+                        List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtl = dcnbKeHoachDcDtlRepository.findByIdIn(ids);
+                        dcnbKeHoachDcDtl.forEach(e -> {
+                            e.setXdLaiDiemNhap(true);
+                            e.getDcnbKeHoachDcHdr().setTrangThai(Contains.TUCHOI_TP);
+                            e.getDcnbKeHoachDcHdr().setXdLaiDiemNhap(true);
+                            dcHdrRepository.save(e.getDcnbKeHoachDcHdr());
+                        });
+                    });
+                }
                 break;
             case Contains.CHODUYET_TP + Contains.CHODUYET_LDC:
                 optional.get().setNguoiDuyetTpId(currentUser.getUser().getId());
@@ -415,16 +461,6 @@ public class THKeHoachDieuChuyenCucServiceImpl extends BaseServiceImpl {
                         });
                     });
                 }
-                if(optional.get().getLoaiDieuChuyen().equals(Contains.GIUA_2_CUC_DTNN_KV)) {
-                    optional.get().getThKeHoachDieuChuyenCucKhacCucDtls().forEach(data ->{
-                        List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcHdrRepository.findByParentIdIn(statusReq.getDcnbKeHoachDcHdrId());
-                        dcnbKeHoachDcHdr.forEach(e->{
-                            e.setPheDuyet(false);
-                            e.setTrangThai(Contains.TU_CHOI_TP);
-                            dcHdrRepository.save(e);
-                        });
-                    });
-                }
                 break;
             case Contains.CHODUYET_LDC + Contains.DA_DUYET_LDC:
                 optional.get().setNguoiDuyetLdcId(currentUser.getUser().getId());
@@ -438,16 +474,6 @@ public class THKeHoachDieuChuyenCucServiceImpl extends BaseServiceImpl {
                             e.setXdLaiDiemNhap(false);
                             e.getDcnbKeHoachDcHdr().setTrangThai(Contains.DA_PHANBO_DC_DADUYET_LDC);
                             dcHdrRepository.save(e.getDcnbKeHoachDcHdr());
-                        });
-                    });
-                }
-                if(optional.get().getLoaiDieuChuyen().equals(Contains.GIUA_2_CUC_DTNN_KV)) {
-                    optional.get().getThKeHoachDieuChuyenCucKhacCucDtls().forEach(data ->{
-                        List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcHdrRepository.findByParentIdIn(statusReq.getDcnbKeHoachDcHdrId());
-                        dcnbKeHoachDcHdr.forEach(e->{
-                            e.setPheDuyet(false);
-                            e.setTrangThai(Contains.TU_CHOI_LDC);
-                            dcHdrRepository.save(e);
                         });
                     });
                 }
