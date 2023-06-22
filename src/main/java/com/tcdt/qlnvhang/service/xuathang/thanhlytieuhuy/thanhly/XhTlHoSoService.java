@@ -111,7 +111,7 @@ public class XhTlHoSoService extends BaseServiceImpl {
     objReq.getHoSoDtl().forEach(s -> {
       s.setHoSoHdr(null);
     });
-    BeanUtils.copyProperties(objReq, data, "id");
+    BeanUtils.copyProperties(objReq, data, "id","maDvi");
     data.getHoSoDtl().forEach(s -> {
       s.setHoSoHdr(data);
     });
