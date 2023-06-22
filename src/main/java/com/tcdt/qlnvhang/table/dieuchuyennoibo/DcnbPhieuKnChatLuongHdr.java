@@ -20,8 +20,8 @@ public class DcnbPhieuKnChatLuongHdr extends BaseEntity implements Serializable,
     public static final String TABLE_NAME = "DCNB_PHIEU_KN_CHAT_LUONG_HDR";
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DCNB_PHIEU_KN_CLUONG_HDR_SEQ")
-//    @SequenceGenerator(sequenceName = "DCNB_PHIEU_KN_CLUONG_HDR_SEQ", allocationSize = 1, name = "DCNB_PHIEU_KN_CLUONG_HDR_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DCNB_PHIEU_KN_CLUONG_HDR_SEQ")
+    @SequenceGenerator(sequenceName = "DCNB_PHIEU_KN_CLUONG_HDR_SEQ", allocationSize = 1, name = "DCNB_PHIEU_KN_CLUONG_HDR_SEQ")
     private Long id;
 
     @Column(name = "NAM")
