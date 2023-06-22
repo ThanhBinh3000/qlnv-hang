@@ -1,11 +1,13 @@
 package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import lombok.Data;
 
 import javax.persistence.Column;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -61,6 +63,6 @@ public class ThKeHoachDieuChuyenTongCucHdrReq implements Serializable {
     private String kieuNhapXuat;
 
     private String tenKieuNhapXuat;
-
+    private List<FileDinhKemReq> canCu = new ArrayList<>();
     List<ThKeHoachDieuChuyenTongCucDtlReq> thKeHoachDieuChuyenTongCucDtls;
 }
