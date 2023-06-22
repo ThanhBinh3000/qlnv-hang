@@ -18,7 +18,4 @@ public class XhThopChiTieuReq {
 
     private LocalDate ngayDuyetDen;
 
-    private String trangThaiTh;
-
-    private List<String> listTrangThai;
 }

@@ -9,10 +9,12 @@ import com.tcdt.qlnvhang.request.xuathang.daugia.SearchXhThopDxKhBdg;
 import com.tcdt.qlnvhang.request.xuathang.daugia.XhThopChiTieuReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.tonghop.XhThopDxKhBdgReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGia;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.tonghop.XhThopDxKhBdgDtl;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.tonghop.XhThopDxKhBdg;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -46,6 +48,9 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
 
     @Autowired
     private XhDxKhBanDauGiaRepository xhDxKhBanDauGiaRepository;
+
+    @Autowired
+    FileDinhKemService fileDinhKemService;
 
     public Page<XhThopDxKhBdg> searchPage(SearchXhThopDxKhBdg req) throws Exception {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),
@@ -149,7 +154,12 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
         data.setNgayThop(LocalDate.now());
         data.setMaDvi(userInfo.getDvql());
 
-        xhThopDxKhBdgRepository.save(data);
+        XhThopDxKhBdg created = xhThopDxKhBdgRepository.save(data);
+
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKem())) {
+            List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), created.getId(), XhThopDxKhBdg.TABLE_NAME);
+            created.setFileDinhKem(fileDinhKem);
+        }
         for (XhThopDxKhBdgDtl tongHopKeHoachDauGiaDtl : data.getChildren()) {
             tongHopKeHoachDauGiaDtl.setIdThopHdr(data.getId());
             xhThopDxKhBdgDtlRepository.save(tongHopKeHoachDauGiaDtl);
@@ -159,7 +169,7 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
                     .collect(Collectors.toList());
             xhDxKhBanDauGiaRepository.updateStatusInList(soDxuatList, Contains.DATONGHOP,data.getId());
         }
-        return data;
+        return created;
     }
 
     @Transactional()
@@ -181,8 +191,13 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
         dataMap.setNgaySua(LocalDate.now());
         dataMap.setNguoiTaoId(getUser().getId());
         updateObjectToObject(data, dataMap);
-        xhThopDxKhBdgRepository.save(data);
-        return data;
+        XhThopDxKhBdg created = xhThopDxKhBdgRepository.save(data);
+
+        fileDinhKemService.delete(created.getId(), Collections.singleton(XhThopDxKhBdg.TABLE_NAME));
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), created.getId(), XhThopDxKhBdg.TABLE_NAME);
+        created.setFileDinhKem(fileDinhKem);
+
+        return created;
     }
 
     public XhThopDxKhBdg detail(String ids) throws Exception {
@@ -206,6 +221,8 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
             data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh())?null:mapDmucVthh.get(data.getCloaiVthh()));
             data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
             data.setChildren(dataDtlList);
+            List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhThopDxKhBdg.TABLE_NAME));
+            data.setFileDinhKem(fileDinhKem);
             return data;
     }
 
@@ -233,6 +250,7 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
         }
         xhThopDxKhBdgDtlRepository.deleteAll(listDls);
         xhThopDxKhBdgRepository.delete(optional.get());
+        fileDinhKemService.delete(optional.get().getId(), Collections.singleton(XhThopDxKhBdg.TABLE_NAME));
 
     }
 
