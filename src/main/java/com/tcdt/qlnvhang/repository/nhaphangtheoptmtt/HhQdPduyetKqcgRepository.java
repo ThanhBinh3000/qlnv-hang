@@ -23,6 +23,7 @@ public interface HhQdPduyetKqcgRepository extends JpaRepository<HhQdPduyetKqcgHd
             "AND (:#{#param.ngayCgiaTu} IS NULL OR DTL.ngayNhanCgia >= :#{#param.ngayCgiaTu}) " +
             "AND (:#{#param.ngayCgiaDen} IS NULL OR DTL.ngayNhanCgia <= :#{#param.ngayCgiaDen}) " +
             "AND (:#{#param.loaiVthh } IS NULL OR LOWER(QD.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
+            "AND (:#{#param.trangThai } IS NULL OR LOWER(QD.trangThai) = :#{#param.trangThai}) " +
             "AND (:#{#param.maDvi} IS NULL OR QD.maDvi = :#{#param.maDvi}) "
     )
     Page<HhQdPduyetKqcgHdr> searchPage(@Param("param") SearchHhQdPduyetKqcg param, Pageable pageable);
