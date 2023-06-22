@@ -182,7 +182,7 @@ public class THKeHoachDieuChuyenCucServiceImpl extends BaseServiceImpl {
         }
         List<THKeHoachDieuChuyenCucHdr> allById = thKeHoachDieuChuyenHdrRepository.findAllById(ids);
         allById.forEach(data -> {
-            List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Arrays.asList(DcnbQuyetDinhDcCHdr.TABLE_NAME + "_CAN_CU"));
+            List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Arrays.asList(THKeHoachDieuChuyenCucHdr.TABLE_NAME + "_CAN_CU"));
             data.setCanCu(canCu);
             data.getThKeHoachDieuChuyenNoiBoCucDtls().forEach(data1 -> {
                 Hibernate.initialize(data1.getDcnbKeHoachDcHdr());
