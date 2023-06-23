@@ -73,11 +73,14 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
     public Page<DcnbKeHoachDcHdr> searchPage(CustomUserDetails currentUser, SearchDcnbKeHoachDc req) throws Exception {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
+        Page<DcnbKeHoachDcHdr> search = null;
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             req.setType(Contains.DIEU_CHUYEN);
+            search = dcnbKeHoachDcHdrRepository.searchCuc(req, pageable);
+        }else {
+            search = dcnbKeHoachDcHdrRepository.search(req, pageable);
         }
-        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        Page<DcnbKeHoachDcHdr> search = dcnbKeHoachDcHdrRepository.search(req, pageable);
         return search;
     }
 
