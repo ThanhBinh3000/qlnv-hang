@@ -38,6 +38,26 @@ public interface DcnbKeHoachDcHdrRepository extends JpaRepository<DcnbKeHoachDcH
     )
     Page<DcnbKeHoachDcHdr> search(@Param("param") SearchDcnbKeHoachDc param, Pageable pageable);
 
+    @Query(value = "SELECT distinct c FROM DcnbKeHoachDcHdr c left join c.danhSachHangHoa h  WHERE 1=1 " +
+            "AND (:#{#param.maDvi} IS NULL OR c.maDviPq LIKE CONCAT(:#{#param.maDvi},'%')) " +
+            "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
+            "AND (:#{#param.soDxuat} IS NULL OR LOWER(c.soDxuat) LIKE CONCAT('%',LOWER(:#{#param.soDxuat}),'%')) " +
+            "AND ((:#{#param.ngayLapKhTu}  IS NULL OR c.ngayLapKh >= :#{#param.ngayLapKhTu})" +
+            "AND (:#{#param.ngayLapKhDen}  IS NULL OR c.ngayLapKh <= :#{#param.ngayLapKhDen}) ) " +
+            "AND ((:#{#param.ngayDuyetLdccTu}  IS NULL OR c.ngayDuyetLdcc >= :#{#param.ngayDuyetLdccTu})" +
+            "AND (:#{#param.ngayDuyetLdccDen}  IS NULL OR c.ngayDuyetLdcc <= :#{#param.ngayDuyetLdccDen}) ) " +
+            "AND (:#{#param.trichYeu} IS NULL OR LOWER(c.trichYeu) LIKE CONCAT('%',LOWER(:#{#param.trichYeu}),'%')) " +
+            "AND (:#{#param.cloaiVthh} IS NULL OR h.cloaiVthh = :#{#param.cloaiVthh}) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR h.loaiVthh = :#{#param.loaiVthh}) " +
+            "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
+            "AND ( c.trangThai != '00') " +
+            "AND (:#{#param.loaiDc} IS NULL OR c.loaiDc = :#{#param.loaiDc}) " +
+            "AND (:#{#param.type} IS NULL OR c.type = :#{#param.type}) " +
+            "AND c.type in ('DC','NDC') " +
+            "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
+    )
+    Page<DcnbKeHoachDcHdr> searchCuc(@Param("param") SearchDcnbKeHoachDc param, Pageable pageable);
+
     void deleteAllByIdIn(List<Long> listId);
 
     List<DcnbKeHoachDcHdr> findByIdIn(List<Long> ids);
