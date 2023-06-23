@@ -117,7 +117,9 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         dcnbKeHoachDcHdr.setType(Contains.NHAN_DIEU_CHUYEN_TS);
                         dcnbKeHoachDcHdr.setMaDviPq(e.getDanhSachKeHoach().get(0).getMaChiCucNhan());
                         dcnbKeHoachDcHdr.setPhuongAnDieuChuyen(new ArrayList<>());
-                        BigDecimal total = e.getDanhSachKeHoach().stream().map(DcnbKeHoachDcDtl::getDuToanKphi)
+                        BigDecimal total = e.getDanhSachKeHoach().stream()
+                                .map(DcnbKeHoachDcDtl::getDuToanKphi)
+                                .map(kphi -> kphi != null ? kphi : BigDecimal.ZERO)
                                 .reduce(BigDecimal.ZERO, BigDecimal::add);
                         dcnbKeHoachDcHdr.setTongDuToanKp(total);
                         e.getDanhSachKeHoach().forEach(e1 -> {
@@ -225,7 +227,9 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         dcnbKeHoachDcHdr.setType(Contains.NHAN_DIEU_CHUYEN_TS);
                         dcnbKeHoachDcHdr.setMaDviPq(e.getDanhSachKeHoach().get(0).getMaChiCucNhan());
 
-                        BigDecimal total = e.getDanhSachKeHoach().stream().map(DcnbKeHoachDcDtl::getDuToanKphi)
+                        BigDecimal total = e.getDanhSachKeHoach().stream()
+                                .map(DcnbKeHoachDcDtl::getDuToanKphi)
+                                .map(kphi -> kphi != null ? kphi : BigDecimal.ZERO)
                                 .reduce(BigDecimal.ZERO, BigDecimal::add);
                         dcnbKeHoachDcHdr.setTongDuToanKp(total);
                         e.getDanhSachKeHoach().forEach(e1 -> {
@@ -243,7 +247,9 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         dcnbKeHoachDcHdr.setMaDviPq(e.getDanhSachKeHoach().get(0).getMaDiemKhoNhan());
                         dcnbKeHoachDcHdr.setPhuongAnDieuChuyen(new ArrayList<>());
 
-                        BigDecimal total = e.getDanhSachKeHoach().stream().map(DcnbKeHoachDcDtl::getDuToanKphi)
+                        BigDecimal total = e.getDanhSachKeHoach().stream()
+                                .map(DcnbKeHoachDcDtl::getDuToanKphi)
+                                .map(kphi -> kphi != null ? kphi : BigDecimal.ZERO)
                                 .reduce(BigDecimal.ZERO, BigDecimal::add);
                         dcnbKeHoachDcHdr.setTongDuToanKp(total);
                         e.getDanhSachKeHoach().forEach(e1 -> {
