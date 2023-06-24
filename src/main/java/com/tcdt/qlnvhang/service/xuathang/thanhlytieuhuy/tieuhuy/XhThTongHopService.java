@@ -124,7 +124,7 @@ public class XhThTongHopService extends BaseServiceImpl {
     }
 
     XhThTongHopHdr data = optional.get();
-    BeanUtils.copyProperties(objReq, data, "id");
+    BeanUtils.copyProperties(objReq, data, "id","maDvi");
     data.getTongHopDtl().forEach(s -> {
       s.setTongHopHdr(data);
     });

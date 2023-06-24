@@ -118,6 +118,7 @@ public class XhTlThongBaoKqService extends BaseServiceImpl {
     }
 
     XhTlThongBaoKq data = optional.get();
+    BeanUtils.copyProperties(objReq, data, "id","maDvi");
     XhTlThongBaoKq created = xhTlThongBaoKqRepository.save(data);
 
     if (!DataUtils.isNullObject(data.getIdHoSo())) {
