@@ -93,12 +93,14 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
             List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhTcTtinBdgHdr.TABLE_NAME);
             created.setFileDinhKems(fileDinhKems);
         }
-        this.saveDetail(req, created.getId());
+        this.saveDetail(req, created.getId(), false);
         return created;
     }
 
-    void saveDetail(ThongTinDauGiaReq req, Long id) {
-        xhTcTtinBdgNlqRepository.deleteAllByIdTtinHdr(id);
+    void saveDetail(ThongTinDauGiaReq req, Long id, Boolean check) {
+        if(check == true){
+            xhTcTtinBdgNlqRepository.deleteAllByIdTtinHdr(id);
+        }
         for (ThongTinDauGiaNtgReq nlqReq : req.getListNguoiTgia()) {
             XhTcTtinBdgNlq nlq = new XhTcTtinBdgNlq();
             BeanUtils.copyProperties(nlqReq,nlq,"id");
@@ -106,13 +108,17 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
             nlq.setIdTtinHdr(id);
             xhTcTtinBdgNlqRepository.save(nlq);
         }
-        xhTcTtinBdgDtlRepository.deleteAllByIdTtinHdr(id);
+        if(check == true){
+            xhTcTtinBdgDtlRepository.deleteAllByIdTtinHdr(id);
+        }
         for (ThongTinDauGiaDtlReq dtlReq : req.getChildren()) {
             XhTcTtinBdgDtl dtl = new XhTcTtinBdgDtl();
             BeanUtils.copyProperties(dtlReq, dtl, "id");
             dtl.setIdTtinHdr(id);
             xhTcTtinBdgDtlRepository.save(dtl);
-            xhTcTtinBdgPloRepository.deleteAllByIdTtinDtl(dtlReq.getId());
+            if(check == true){
+                xhTcTtinBdgPloRepository.deleteAllByIdTtinDtl(dtlReq.getId());
+            }
             for (ThongTinDauGiaPloReq ploReq : dtlReq.getChildren()) {
                 XhTcTtinBdgPlo ploDtl = new XhTcTtinBdgPlo();
                 BeanUtils.copyProperties(ploReq,ploDtl,"id");
@@ -143,7 +149,7 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhTcTtinBdgHdr.TABLE_NAME);
         created.setFileDinhKems(fileDinhKems);
 
-        this.saveDetail(req, data.getId());
+        this.saveDetail(req, data.getId(), true);
         return created;
     }
 
