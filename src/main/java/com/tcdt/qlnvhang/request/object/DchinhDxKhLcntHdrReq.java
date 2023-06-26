@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -23,6 +22,7 @@ public class DchinhDxKhLcntHdrReq extends BaseRequest {
 	private Integer nam;
 
 	String soQdDc;
+	String soTtrDc;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayQd;
@@ -35,7 +35,7 @@ public class DchinhDxKhLcntHdrReq extends BaseRequest {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayQdGoc;
 
-	String idQdGoc;
+	Long idQdGoc;
 
 	String trichYeu;
 
@@ -114,4 +114,5 @@ public class DchinhDxKhLcntHdrReq extends BaseRequest {
 	private List<HhQdKhlcntDtlReq> children = new ArrayList<>();
 
 	private List<FileDinhKemReq> fileDinhKems;
+	private List<HhQdKhlcntDsgthauReq> dsGoiThau;
 }

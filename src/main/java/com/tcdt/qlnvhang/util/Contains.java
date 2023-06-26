@@ -127,6 +127,7 @@ public class Contains {
 
 	public static final String DANG_NHAP_DU_LIEU = "78";
 	public static final String TU_CHOI_BAN_HANH_QD = "79";
+	public static final String DA_LAP = "80";
 
 	// Trang thai response
 	public static final int RESP_SUCC = 0;

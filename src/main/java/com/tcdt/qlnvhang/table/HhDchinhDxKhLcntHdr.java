@@ -34,6 +34,7 @@ public class HhDchinhDxKhLcntHdr extends TrangThaiBaseEntity implements Serializ
 	String soQdDc;
 
 	String soQdGoc;
+	String soTtrDc;
 
 	Long idQdGoc;
 
@@ -83,6 +84,8 @@ public class HhDchinhDxKhLcntHdr extends TrangThaiBaseEntity implements Serializ
 	Integer gtriDthau;
 
 	Integer gtriHdong;
+	private Boolean lastest;
+	private Integer lanDieuChinh;
 	@Transient
 	Integer gthauTrung;
 	@Transient
@@ -92,7 +95,8 @@ public class HhDchinhDxKhLcntHdr extends TrangThaiBaseEntity implements Serializ
 
 	@Transient
 	private List<HhDchinhDxKhLcntDtl> listDieuChinh = new ArrayList<>();
-
+	@Transient
+	private List<HhDchinhDxKhLcntDsgthau> dsGthau = new ArrayList<>();
 	@Transient
 	private List<FileDKemJoinHhDchinhDxKhLcntHdr> fileDinhKem = new ArrayList<>();
 
