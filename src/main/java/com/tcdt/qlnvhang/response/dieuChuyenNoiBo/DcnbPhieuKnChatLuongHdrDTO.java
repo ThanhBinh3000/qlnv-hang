@@ -40,4 +40,7 @@ public class DcnbPhieuKnChatLuongHdrDTO {
     private LocalDate ngayHieuLuc;
     private String donViTinh;
     private String tenDonViTinh;
+    private Long thuKhoId;
+    private Long thuKhoNhanId;
+    private String thuKhoNhan;
 }

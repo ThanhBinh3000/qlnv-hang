@@ -100,8 +100,12 @@ public class DcnbKeHoachDcDtl implements Serializable {
     private Long bbLayMauId;
     @Column(name = "THU_KHO")
     private String thuKho;
+    @Column(name = "THU_KHO_ID")
+    private Long thuKhoId;
     @Column(name = "THU_KHO_NHAN")
     private String thuKhoNhan;
+    @Column(name = "THU_KHO_NHAN_ID")
+    private Long thuKhoNhanId;
     @Column(name = "THAY_DOI_THU_KHO")
     private Boolean thayDoiThuKho;
 
