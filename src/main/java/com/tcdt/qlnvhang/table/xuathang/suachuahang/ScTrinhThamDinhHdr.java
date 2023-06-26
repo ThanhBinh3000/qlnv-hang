@@ -55,4 +55,5 @@ public class ScTrinhThamDinhHdr extends BaseEntity implements Serializable {
   private String tenDvql;
   @OneToMany(mappedBy = "hoSoHdr", cascade = CascadeType.ALL)
   private List<ScTrinhThamDinhDtl> hoSoDtl = new ArrayList<>();
+  private String trangThai;
 }

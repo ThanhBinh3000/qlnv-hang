@@ -28,8 +28,6 @@ public class ScTongHopHdr extends BaseEntity implements Serializable {
   private String maDvi;
   private String maDanhSach;
   private String tenDanhSach;
-  private LocalDate thoiGianThTu;
-  private LocalDate thoiGianThDen;
   private String trangThai;
   @Transient
   private String tenTrangThai;
