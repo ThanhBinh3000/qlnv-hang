@@ -101,7 +101,9 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
         data.setTrangThai(Contains.DUTHAO);
         data.setDaXdinhDiemNhap(false);
         if(objReq.getDanhSachHangHoa() !=null){
-            BigDecimal total = objReq.getDanhSachHangHoa().stream().map(DcnbKeHoachDcDtl::getDuToanKphi)
+            BigDecimal total = objReq.getDanhSachHangHoa().stream()
+                    .map(DcnbKeHoachDcDtl::getDuToanKphi)
+                    .map(kphi -> kphi != null ? kphi : BigDecimal.ZERO)
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
             data.setTongDuToanKp(total);
             objReq.getDanhSachHangHoa().forEach(e -> {
@@ -149,7 +151,9 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
         data.setPhuongAnDieuChuyen(objReq.getPhuongAnDieuChuyen());
         data.setDaXdinhDiemNhap(false);
         if(objReq.getDanhSachHangHoa() !=null){
-            BigDecimal total = objReq.getDanhSachHangHoa().stream().map(DcnbKeHoachDcDtl::getDuToanKphi)
+            BigDecimal total = objReq.getDanhSachHangHoa().stream()
+                    .map(DcnbKeHoachDcDtl::getDuToanKphi)
+                    .map(kphi -> kphi != null ? kphi : BigDecimal.ZERO)
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
             data.setTongDuToanKp(total);
             objReq.getDanhSachHangHoa().forEach(e -> {
@@ -335,7 +339,9 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
                         itemMap.setDataId(null);
                         return itemMap;
                     }).collect(Collectors.toList()));
-                    BigDecimal total = clonedObj.getDanhSachHangHoa().stream().map(DcnbKeHoachDcDtl::getDuToanKphi)
+                    BigDecimal total = clonedObj.getDanhSachHangHoa().stream()
+                            .map(DcnbKeHoachDcDtl::getDuToanKphi)
+                            .map(kphi -> kphi != null ? kphi : BigDecimal.ZERO)
                             .reduce(BigDecimal.ZERO, BigDecimal::add);
                     clonedObj.setTongDuToanKp(total);
                     clonedObj = dcnbKeHoachDcHdrRepository.save(clonedObj);
