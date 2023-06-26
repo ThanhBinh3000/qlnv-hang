@@ -5,7 +5,7 @@ import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlDanhSachRequest;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.suachuahang.ScDanhSachService;
+import com.tcdt.qlnvhang.service.suachuahang.impl.ScDanhSachServiceImpl;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,7 +25,7 @@ import java.util.List;
 @Api(tags = "Sửa chữa hàng DTQG - Toàn bộ danh sách hàng DTQG cần sửa chữa")
 public class ScDanhSachController {
   @Autowired
-  ScDanhSachService scDanhSachService;
+  ScDanhSachServiceImpl scDanhSachServiceImpl;
 
   @ApiOperation(value = "Tra cứu", response = List.class)
   @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -33,7 +33,7 @@ public class ScDanhSachController {
   public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser, @RequestBody XhTlDanhSachRequest objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(scDanhSachService.searchPage(currentUser, objReq));
+      resp.setData(scDanhSachServiceImpl.searchPage(currentUser, objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -51,7 +51,7 @@ public class ScDanhSachController {
   public ResponseEntity<BaseResponse> detail(@ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids") List<Long> ids) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(scDanhSachService.detail(ids).get(0));
+      resp.setData(scDanhSachServiceImpl.detail(ids).get(0));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {

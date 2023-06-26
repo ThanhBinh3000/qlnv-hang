@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
-public class DcnbBbGiaoNhanHdrDTO {
+public class DcnbBBKetThucNKHdrDTO {
     private Long id;
     private Long qdDcCucId;
     private String soQdinh;
@@ -28,14 +28,19 @@ public class DcnbBbGiaoNhanHdrDTO {
     private String donViTinh;
     private String tenDonViTinh;
 
-    private String soHoSoKt;
-    private Long hoSoKtId;
-    private String soBienBanGiaoNhan;
-    private String soBienBanKetThucNk;
-    private Long bienBanKetThucNkId;
-    private LocalDate ngayKetThucNk;
-    private String soBienBanLayMau;
-    private Long bienBanLayMauId;
+    private String soBBKtNH;
+    private LocalDate ngayKetThucNhapHang;
+
+    private String soHoSoKyThuat;
+    private Long hoSoKyThuatId;
+    private String soPhieuNhapKho;
+    private Long phieuNhapKhoId;
+    private LocalDate ngayNhapKho;
+
+    private String soBbLayMau;
+    private Long bbLayMauId;
+    private String soBbGuiHang;
+    private Long bbGuiHangId;
 
     private String trangThai;
     private String tenTrangThai;

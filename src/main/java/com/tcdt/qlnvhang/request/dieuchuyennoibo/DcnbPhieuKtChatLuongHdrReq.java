@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuKtChatLuongDtl;
 import lombok.Data;
 
 import javax.persistence.Column;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -119,6 +120,17 @@ public class DcnbPhieuKtChatLuongHdrReq {
     private Long bbHaoDoiId;
 
     private String soBbHaoDoi;
+    private String nguoiGiaoHang;
+    private String soCmt;
+    private String dVGiaoHang;
+    private String diaChiDonViGiaoHang;
+    private String bienSoXe;
+    private BigDecimal slNhapTheoQd;
+    private BigDecimal slNhapTheoKb;
+    private BigDecimal slNhapTheoKt;
+    private String soChungThuGiamDinh;
+    private LocalDate ngayGiamDinh;
+    private String toChucGiamDinh;
 
     private List<FileDinhKemReq> bienBanLayMauDinhKem = new ArrayList<>();
 

@@ -7,6 +7,7 @@ import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbNhapDayKhoHdrRepositor
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbNhapDayKhoHdrReq;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbNhapDayKhoHdrDTO;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuNhapKhoHdrDTO;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBbNhapDayKhoService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -14,9 +15,12 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.UserUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
@@ -43,6 +47,19 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
     @Override
     public Page<DcnbBbNhapDayKhoHdr> searchPage(DcnbBbNhapDayKhoHdrReq req) throws Exception {
         return null;
+    }
+    public Page<DcnbBbNhapDayKhoHdrDTO> search(DcnbBbNhapDayKhoHdrReq req) throws Exception {
+        CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
+        req.setMaDvi(currentUser.getDvql());
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
+        Page<DcnbBbNhapDayKhoHdrDTO> searchDto = null;
+        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            searchDto = hdrRepository.searchPageChiCuc(req, pageable);
+        } else {
+            searchDto = hdrRepository.searchPage(req, pageable);
+        }
+
+        return searchDto;
     }
 
     @Override

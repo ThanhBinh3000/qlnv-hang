@@ -1,21 +1,15 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
-import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbGiaoNhanDtlRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbGiaoNhanHdrRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBBKetThucNKDtlRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBBKetThucNKHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
-import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbGiaoNhanHdrReq;
-import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeXuatVTHdrDTO;
-import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbGiaoNhanHdrDTO;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBBKetThucNKReq;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBKetThucNKHdrDTO;
 import com.tcdt.qlnvhang.service.SecurityContextService;
-import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBbGiaoNhanService;
-import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
-import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBBKetThucNKService;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbGiaoNhanHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBKetThucNKHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -27,34 +21,28 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
-public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
-
+public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
     @Autowired
-    private DcnbBbGiaoNhanHdrRepository hdrRepository;
-
+    private DcnbBBKetThucNKHdrRepository hdrRepository;
     @Autowired
-    private DcnbBbGiaoNhanDtlRepository dtlRepository;
-
-    @Autowired
-    private FileDinhKemService fileDinhKemService;
-
-    @Autowired
-    private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
+    private DcnbBBKetThucNKDtlRepository dtlRepository;
 
     @Override
-    public Page<DcnbBbGiaoNhanHdr> searchPage(DcnbBbGiaoNhanHdrReq req) throws Exception {
+    public Page<DcnbBBKetThucNKHdr> searchPage(DcnbBBKetThucNKReq req) throws Exception {
         return null;
     }
 
-    @Override
-    public Page<DcnbBbGiaoNhanHdrDTO> searchPage(CustomUserDetails currentUser, DcnbBbGiaoNhanHdrReq req) throws Exception {
+    public Page<DcnbBBKetThucNKHdrDTO> search(CustomUserDetails currentUser, DcnbBBKetThucNKReq req) throws Exception {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        Page<DcnbBbGiaoNhanHdrDTO> searchDto = null;
+        Page<DcnbBBKetThucNKHdrDTO> searchDto = null;
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             searchDto = hdrRepository.searchPageChiCuc(req, pageable);
         }
@@ -65,34 +53,32 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
     }
 
     @Override
-    public DcnbBbGiaoNhanHdr create(DcnbBbGiaoNhanHdrReq req) throws Exception {
+    public DcnbBBKetThucNKHdr create(DcnbBBKetThucNKReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null){
+        if (userInfo == null) {
             throw new Exception("Access denied.");
         }
-        if(!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
+        if (!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             throw new Exception("Văn bản này chỉ có thêm ở cấp chi cục");
         }
-        Optional<DcnbBbGiaoNhanHdr> optional = hdrRepository.findFirstBySoBb(req.getSoBb());
+        Optional<DcnbBBKetThucNKHdr> optional = hdrRepository.findFirstBySoBb(req.getSoBb());
         if (optional.isPresent()) {
             throw new Exception("Số biên bản đã tồn tại");
         }
 
-        DcnbBbGiaoNhanHdr data = new DcnbBbGiaoNhanHdr();
+        DcnbBBKetThucNKHdr data = new DcnbBBKetThucNKHdr();
         BeanUtils.copyProperties(req, data);
         data.setMaDvi(userInfo.getDvql());
         data.setId(Long.parseLong(req.getSoBb().split("/")[0]));
-        req.getChildren().forEach(e -> {
-            e.setParent(data);
+        req.getBcnbBBKetThucNKDtl().forEach(e -> {
+            e.setDcnbBBKetThucNKHdr(data);
         });
-        DcnbBbGiaoNhanHdr created = hdrRepository.save(data);
-        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBBNTBQHdr.TABLE_NAME);
-        created.setFileDinhKems(canCu);
+        DcnbBBKetThucNKHdr created = hdrRepository.save(data);
         return created;
     }
 
     @Override
-    public DcnbBbGiaoNhanHdr update(DcnbBbGiaoNhanHdrReq req) throws Exception {
+    public DcnbBBKetThucNKHdr update(DcnbBBKetThucNKReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null){
             throw new Exception("Access denied.");
@@ -100,22 +86,19 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
         if(!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
             throw new Exception("Văn bản này chỉ có thêm ở cấp chi cục");
         }
-        Optional<DcnbBbGiaoNhanHdr> optional = hdrRepository.findById(req.getId());
+        Optional<DcnbBBKetThucNKHdr> optional = hdrRepository.findById(req.getId());
         if (!optional.isPresent()) {
             throw new Exception("Số biên bản không tồn tại");
         }
-        DcnbBbGiaoNhanHdr data = optional.get();
+        DcnbBBKetThucNKHdr data = optional.get();
         BeanUtils.copyProperties(req,data);
-        data.setChildren(req.getChildren());
-        DcnbBbGiaoNhanHdr update = hdrRepository.save(data);
-        fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbBBNTBQHdr.TABLE_NAME));
-        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), update.getId(), DcnbBBNTBQHdr.TABLE_NAME);
-        update.setFileDinhKems(canCu);
+        data.setBcnbBBKetThucNKDtl(req.getBcnbBBKetThucNKDtl());
+        DcnbBBKetThucNKHdr update = hdrRepository.save(data);
         return update;
     }
 
     @Override
-    public DcnbBbGiaoNhanHdr detail(Long id) throws Exception {
+    public DcnbBBKetThucNKHdr detail(Long id) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null){
             throw new Exception("Access denied.");
@@ -123,48 +106,46 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
         if(Objects.isNull(id)){
             throw new Exception("Id is null");
         }
-        Optional<DcnbBbGiaoNhanHdr> optional = hdrRepository.findById(id);
+        Optional<DcnbBBKetThucNKHdr> optional = hdrRepository.findById(id);
         if (!optional.isPresent()) {
             throw new Exception("Số biên bản không tồn tại");
         }
-        DcnbBbGiaoNhanHdr data = optional.get();
-        data.setFileDinhKems(fileDinhKemService.search(id, Collections.singleton(DcnbBBNTBQHdr.TABLE_NAME)));
+        DcnbBBKetThucNKHdr data = optional.get();
         return data;
     }
 
     @Override
-    public DcnbBbGiaoNhanHdr approve(DcnbBbGiaoNhanHdrReq req) throws Exception {
+    public DcnbBBKetThucNKHdr approve(DcnbBBKetThucNKReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null){
             throw new Exception("Access denied.");
         }
-        DcnbBbGiaoNhanHdr hdr = detail(req.getId());
+        DcnbBBKetThucNKHdr hdr = detail(req.getId());
         String status = hdr.getTrangThai() + req.getTrangThai();
         switch (status) {
-            // Arena các roll back approve
-            case Contains.TUCHOI_LDC + Contains.DUTHAO:
-                break;
-            // Arena các cấp duuyệt
             case Contains.DUTHAO + Contains.CHODUYET_LDC:
+            case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
+                hdr.setNguoiGDuyet(userInfo.getId());
                 break;
             case Contains.CHODUYET_LDC + Contains.DADUYET_LDCC:
-                hdr.setIdLanhDao(userInfo.getId());
+                hdr.setNguoiPDuyet(userInfo.getId());
                 break;
             // Arena từ chối
             case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
+                hdr.setNguoiPDuyet(userInfo.getId());
                 hdr.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
         }
         hdr.setTrangThai(req.getTrangThai());
-        DcnbBbGiaoNhanHdr created = hdrRepository.save(hdr);
+        DcnbBBKetThucNKHdr created = hdrRepository.save(hdr);
         return created;
     }
 
     @Override
     public void delete(Long id) throws Exception {
-        DcnbBbGiaoNhanHdr detail = detail(id);
+        DcnbBBKetThucNKHdr detail = detail(id);
         hdrRepository.delete(detail);
         dtlRepository.deleteAllByHdrId(id);
     }
@@ -185,15 +166,15 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
     }
 
     @Override
-    public void export(DcnbBbGiaoNhanHdrReq objReq, HttpServletResponse response) throws Exception {
+    public void export(DcnbBBKetThucNKReq objReq, HttpServletResponse response) throws Exception {
         CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
         PaggingReq paggingReq = new PaggingReq();
         paggingReq.setPage(0);
         paggingReq.setLimit(Integer.MAX_VALUE);
         objReq.setPaggingReq(paggingReq);
         objReq.setMaDvi(currentUser.getDvql());
-        Page<DcnbBbGiaoNhanHdrDTO> page = searchPage(currentUser,objReq);
-        List<DcnbBbGiaoNhanHdrDTO> data = page.getContent();
+        Page<DcnbBBKetThucNKHdrDTO> page = search(currentUser,objReq);
+        List<DcnbBBKetThucNKHdrDTO> data = page.getContent();
 
         String title = "Danh sách bảng kê cân hàng ";
         String[] rowsName = new String[]{"STT", "Năm kế hoạch", "Số công văn/đề xuất", "Ngày lập KH", "Ngày duyệt LĐ Chi cục", "Loại điều chuyển", "Đơn vị đề xuất", "Trạng thái"};
@@ -201,7 +182,7 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
         for (int i = 0; i < data.size(); i++) {
-            DcnbBbGiaoNhanHdrDTO dx = data.get(i);
+            DcnbBBKetThucNKHdrDTO dx = data.get(i);
             objs = new Object[rowsName.length];
             objs[0] = i + 1;
             dataList.add(objs);

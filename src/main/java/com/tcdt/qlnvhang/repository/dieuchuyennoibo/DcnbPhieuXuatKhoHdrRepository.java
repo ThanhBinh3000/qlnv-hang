@@ -24,9 +24,8 @@ public interface DcnbPhieuXuatKhoHdrRepository extends JpaRepository<DcnbPhieuXu
             "khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh, khdcd.tenCloaiVthh,pkncl.nguoiKt,khdcd.donViTinh,khdcd.soLuongDc,khdcd.duToanKphi," +
             "pxk.trangThai, pxk.trangThai) " +
             "FROM DcnbQuyetDinhDcCHdr qdc " +
-            "LEFT JOIN DcnbDataLinkHdr dtlh On dtlh.qdCcId = qdc.id " +
             "LEFT JOIN DcnbPhieuXuatKhoHdr pxk On pxk.qddcId = qdc.id " +
-            "LEFT JOIN DcnbPhieuKnChatLuongHdr pkncl On pkncl.qdDcId = dtlh.qdCcParentId " +
+            "LEFT JOIN DcnbPhieuKnChatLuongHdr pkncl On pkncl.qdDcId = qdc.id " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +

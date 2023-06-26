@@ -16,11 +16,11 @@ import java.util.Optional;
 
 @Repository
 public interface DcnbPhieuKnChatLuongHdrRepository extends JpaRepository<DcnbPhieuKnChatLuongHdr, Long> {
-
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKnChatLuongHdrDTO(" +
             "pkncl.id,bblm.id,qdc.id,qdc.soQdinh,qdc.ngayHieuLuc,qdc.nam,khdcd.thoiGianDkDc,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
             "khdcd.tenLoKho, khdcd.thayDoiThuKho,pkncl.soPhieu,pkncl.ngayKiem,bblm.soBbLayMau,bblm.ngayLayMau,bblm.soBbTinhKho,bblm.ngayXuatDocKho," +
-            "bblm.soBbHaoDoi,pkncl.trangThai,pkncl.trangThai,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.maNhaKho,khdcd.tenNhaKho,khdcd.thuKho,khdcd.maNganKho,khdcd.tenNganKho, qdc.ngayHieuLuc,khdcd.donViTinh,khdcd.tenDonViTinh) FROM DcnbQuyetDinhDcCHdr qdc " +
+            "bblm.soBbHaoDoi,pkncl.trangThai,pkncl.trangThai,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.maNhaKho,khdcd.tenNhaKho,khdcd.thuKho,khdcd.maNganKho,khdcd.tenNganKho, qdc.ngayHieuLuc,khdcd.donViTinh,khdcd.tenDonViTinh," +
+            " khdcd.thuKhoId, khdcd.thuKhoNhanId, khdcd.thuKhoNhan) FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbBienBanLayMauHdr bblm On bblm.qdccId = qdc.id " +
             "LEFT JOIN DcnbPhieuKnChatLuongHdr pkncl On pkncl.qdDcId = qdc.id " +
             "LEFT JOIN DcnbBbNhapDayKhoHdr bbndk On bbndk.qdDcCucId = qdc.id " +
@@ -28,11 +28,11 @@ public interface DcnbPhieuKnChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
-            "WHERE 1 =1 "+
-            "AND qdc.trangThai = '29' AND qdc.loaiDc = :#{#param.loaiDc} AND (:#{#param.type} IS NULL OR pkncl.type = :#{#param.type}) "+
-            "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) "+
-            "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) "+
-            "AND ((:#{#param.maDvi} IS NULL OR khdch.maDviPq = :#{#param.maDvi}) OR (:#{#param.maDvi} IS NULL OR khdch.maDviPq = :#{#param.maDvi}))"+
+            "WHERE 1 =1 " +
+            "AND qdc.trangThai = '29' AND qdc.loaiDc = :#{#param.loaiDc} AND (:#{#param.type} IS NULL OR pkncl.type = :#{#param.type}) " +
+            "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
+            "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
+            "AND ((:#{#param.maDvi} IS NULL OR khdch.maDviPq = :#{#param.maDvi}) OR (:#{#param.maDvi} IS NULL OR khdch.maDviPq = :#{#param.maDvi}))" +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
             "AND (:#{#param.thayDoiThuKho} IS NULL OR khdcd.thayDoiThuKho = :#{#param.thayDoiThuKho}) " +
             "AND (:#{#param.soPhieu} IS NULL OR LOWER(pkncl.soPhieu) LIKE CONCAT('%',LOWER(:#{#param.soPhieu}),'%')) " +
@@ -50,7 +50,8 @@ public interface DcnbPhieuKnChatLuongHdrRepository extends JpaRepository<DcnbPhi
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKnChatLuongHdrDTO(" +
             "pkncl.id,bblm.id,qdc.id,qdc.soQdinh,qdc.ngayHieuLuc,qdc.nam,khdcd.thoiGianDkDc,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
             "khdcd.tenLoKho, khdcd.thayDoiThuKho,pkncl.soPhieu,pkncl.ngayKiem,bblm.soBbLayMau,bblm.ngayLayMau,bblm.soBbTinhKho,bblm.ngayXuatDocKho," +
-            "bblm.soBbHaoDoi,pkncl.trangThai,pkncl.trangThai,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.maNhaKho,khdcd.tenNhaKho,khdcd.thuKho,khdcd.maNganKho,khdcd.tenNganKho, qdc.ngayHieuLuc,khdcd.donViTinh,khdcd.tenDonViTinh) FROM DcnbQuyetDinhDcCHdr qdc " +
+            "bblm.soBbHaoDoi,pkncl.trangThai,pkncl.trangThai,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.maNhaKho,khdcd.tenNhaKho,khdcd.thuKho,khdcd.maNganKho,khdcd.tenNganKho, qdc.ngayHieuLuc,khdcd.donViTinh,khdcd.tenDonViTinh," +
+            " khdcd.thuKhoId, khdcd.thuKhoNhanId, khdcd.thuKhoNhan) FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbDataLinkHdr dtlh On dtlh.qdCcParentId = qdc.id " +
             "LEFT JOIN DcnbBienBanLayMauHdr bblm On bblm.qdccId = dtlh.qdCcId " +
             "LEFT JOIN DcnbBbNhapDayKhoHdr bbndk On bbndk.qdDcCucId = qdc.id " +
@@ -75,7 +76,8 @@ public interface DcnbPhieuKnChatLuongHdrRepository extends JpaRepository<DcnbPhi
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKnChatLuongHdrDTO(" +
             "pkncl.id,bblm.id,qdc.id,qdc.soQdinh,qdc.ngayHieuLuc,qdc.nam,khdcd.thoiGianDkDc,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
             "khdcd.tenLoKho, khdcd.thayDoiThuKho,pkncl.soPhieu,pkncl.ngayKiem,bblm.soBbLayMau,bblm.ngayLayMau,bblm.soBbTinhKho,bblm.ngayXuatDocKho," +
-            "bblm.soBbHaoDoi,pkncl.trangThai,pkncl.trangThai,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.maNhaKho,khdcd.tenNhaKho,khdcd.thuKho,khdcd.maNganKho,khdcd.tenNganKho, qdc.ngayHieuLuc,khdcd.donViTinh,khdcd.tenDonViTinh) FROM DcnbQuyetDinhDcCHdr qdc " +
+            "bblm.soBbHaoDoi,pkncl.trangThai,pkncl.trangThai,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.maNhaKho,khdcd.tenNhaKho,khdcd.thuKho,khdcd.maNganKho,khdcd.tenNganKho, qdc.ngayHieuLuc,khdcd.donViTinh,khdcd.tenDonViTinh," +
+            " khdcd.thuKhoId, khdcd.thuKhoNhanId, khdcd.thuKhoNhan) FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbBienBanLayMauHdr bblm On bblm.qdccId = qdc.id " +
             "LEFT JOIN DcnbPhieuKnChatLuongHdr pkncl On pkncl.qdDcId = qdc.id " +
             "LEFT JOIN DcnbBbNhapDayKhoHdr bbndk On bbndk.qdDcCucId = qdc.id " +
@@ -99,7 +101,8 @@ public interface DcnbPhieuKnChatLuongHdrRepository extends JpaRepository<DcnbPhi
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKnChatLuongHdrDTO(" +
             "pkncl.id,bblm.id,qdc.id,qdc.soQdinh,qdc.ngayHieuLuc,qdc.nam,khdcd.thoiGianDkDc,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
             "khdcd.tenLoKho, khdcd.thayDoiThuKho,pkncl.soPhieu,pkncl.ngayKiem,bblm.soBbLayMau,bblm.ngayLayMau,bblm.soBbTinhKho,bblm.ngayXuatDocKho," +
-            "bblm.soBbHaoDoi,pkncl.trangThai,pkncl.trangThai,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.maNhaKho,khdcd.tenNhaKho,khdcd.thuKho,khdcd.maNganKho,khdcd.tenNganKho, qdc.ngayHieuLuc,khdcd.donViTinh,khdcd.tenDonViTinh) FROM DcnbQuyetDinhDcCHdr qdc " +
+            "bblm.soBbHaoDoi,pkncl.trangThai,pkncl.trangThai,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.maNhaKho,khdcd.tenNhaKho,khdcd.thuKho,khdcd.maNganKho,khdcd.tenNganKho, qdc.ngayHieuLuc,khdcd.donViTinh,khdcd.tenDonViTinh," +
+            " khdcd.thuKhoId, khdcd.thuKhoNhanId, khdcd.thuKhoNhan) FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbBienBanLayMauHdr bblm On bblm.qdccId = qdc.id " +
             "LEFT JOIN DcnbPhieuKnChatLuongHdr pkncl On pkncl.qdDcId = qdc.id " +
             "LEFT JOIN DcnbBbNhapDayKhoHdr bbndk On bbndk.qdDcCucId = qdc.id " +
