@@ -1,27 +1,38 @@
-package com.tcdt.qlnvhang.service.suachuahang;
+package com.tcdt.qlnvhang.service.suachuahang.impl;
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
+import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScDanhSachRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScTongHopDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScTongHopHdrRepository;
 import com.tcdt.qlnvhang.request.suachua.ScTongHopReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlDanhSachRequest;
+import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.service.suachuahang.ScTongHopService;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScDanhSachHdr;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTongHopDtl;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTongHopHdr;
+import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.UserUtils;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.bag.CollectionBag;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class ScTongHopServiceImpl extends BaseServiceImpl implements ScTongHopService {
@@ -37,7 +48,22 @@ public class ScTongHopServiceImpl extends BaseServiceImpl implements ScTongHopSe
 
   @Override
   public Page<ScTongHopHdr> searchPage(ScTongHopReq req) throws Exception {
-    return null;
+    UserInfo currentUser = SecurityContextService.getUser();
+    if (currentUser == null){
+      throw new Exception("Access denied.");
+    }
+    String dvql = currentUser.getDvql();
+    if (!currentUser.getCapDvi().equals(Contains.CAP_TONG_CUC)) {
+      req.setMaDvi(dvql.substring(0, 6));
+    }
+    Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
+    Page<ScTongHopHdr> search = hdrRepository.searchPage(req, pageable);
+
+    //set label
+    search.getContent().forEach(s -> {
+      s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
+    });
+    return search;
   }
 
   @Override
@@ -69,12 +95,29 @@ public class ScTongHopServiceImpl extends BaseServiceImpl implements ScTongHopSe
 
   @Override
   public ScTongHopHdr update(ScTongHopReq req) throws Exception {
-    return null;
+    UserInfo currentUser = SecurityContextService.getUser();
+
+    if (currentUser == null) {
+      throw new Exception("Bad request.");
+    }
+    Optional<ScTongHopHdr> optional = hdrRepository.findById(req.getId());
+    if (optional.isEmpty()) {
+      throw new Exception("Không tìm thấy dữ liệu cần sửa");
+    }
+
+    ScTongHopHdr data = optional.get();
+    BeanUtils.copyProperties(req, data, "id");
+    ScTongHopHdr created = hdrRepository.save(data);
+    return created;
   }
 
   @Override
   public ScTongHopHdr detail(Long id) throws Exception {
-    return null;
+    Optional<ScTongHopHdr> optional = hdrRepository.findById(id);
+    if(optional.isEmpty()){
+      throw new Exception("Bản ghi không tồn tại");
+    }
+    return optional.get();
   }
 
   @Override
@@ -84,12 +127,26 @@ public class ScTongHopServiceImpl extends BaseServiceImpl implements ScTongHopSe
 
   @Override
   public void delete(Long id) throws Exception {
-
+    Optional<ScTongHopHdr> optional = hdrRepository.findById(id);
+    if (optional.isEmpty()) {
+      throw new Exception("Bản ghi không tồn tại");
+    }
+    hdrRepository.delete(optional.get());
   }
 
   @Override
   public void deleteMulti(List<Long> listMulti) throws Exception {
-
+    if(CollectionUtils.isNotEmpty(listMulti)){
+      listMulti.forEach( i -> {
+        try {
+          delete(i);
+        } catch (Exception e) {
+          throw new RuntimeException(e);
+        }
+      });
+    }else{
+      throw new Exception("List id is null");
+    }
   }
 
   @Override
