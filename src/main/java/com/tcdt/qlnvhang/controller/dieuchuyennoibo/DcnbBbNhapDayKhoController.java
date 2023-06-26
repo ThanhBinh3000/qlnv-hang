@@ -40,7 +40,7 @@ public class DcnbBbNhapDayKhoController {
     public ResponseEntity<BaseResponse> colection(@RequestBody DcnbBbNhapDayKhoHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.searchPage(objReq));
+            resp.setData(service.search(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch ( Exception e) {

@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DcnbBBKetThucNKDtlRepository extends JpaRepository<DcnbBBKetThucNKDtl, Long> {
+    void deleteAllByHdrId(Long id);
 }
