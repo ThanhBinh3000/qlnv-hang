@@ -101,7 +101,7 @@ public class ScTongHopServiceImpl extends BaseServiceImpl implements ScTongHopSe
       throw new Exception("Bad request.");
     }
     Optional<ScTongHopHdr> optional = hdrRepository.findById(req.getId());
-    if (optional.isEmpty()) {
+    if (!optional.isPresent()) {
       throw new Exception("Không tìm thấy dữ liệu cần sửa");
     }
 
@@ -114,7 +114,7 @@ public class ScTongHopServiceImpl extends BaseServiceImpl implements ScTongHopSe
   @Override
   public ScTongHopHdr detail(Long id) throws Exception {
     Optional<ScTongHopHdr> optional = hdrRepository.findById(id);
-    if(optional.isEmpty()){
+    if(!optional.isPresent()){
       throw new Exception("Bản ghi không tồn tại");
     }
     return optional.get();
@@ -128,7 +128,7 @@ public class ScTongHopServiceImpl extends BaseServiceImpl implements ScTongHopSe
   @Override
   public void delete(Long id) throws Exception {
     Optional<ScTongHopHdr> optional = hdrRepository.findById(id);
-    if (optional.isEmpty()) {
+    if (!optional.isPresent()) {
       throw new Exception("Bản ghi không tồn tại");
     }
     hdrRepository.delete(optional.get());
