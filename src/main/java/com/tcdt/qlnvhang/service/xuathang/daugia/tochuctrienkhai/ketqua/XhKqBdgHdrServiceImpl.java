@@ -49,9 +49,13 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
   public Page<XhKqBdgHdr> searchPage(XhKqBdgHdrReq req) throws Exception {
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").descending());
     Page<XhKqBdgHdr> page = xhKqBdgHdrRepository.search(req, pageable);
-    Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
+    Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
+    Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+
     page.getContent().forEach(f -> {
-      f.setTenLoaiVthh(listDanhMucHangHoa.get(f.getLoaiVthh()));
+      f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
+      f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : mapDmucVthh.get(f.getLoaiVthh()));
+      f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : mapDmucVthh.get(f.getCloaiVthh()));
     });
     return page;
   }
@@ -65,15 +69,16 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
     if (!StringUtils.isEmpty(req.getSoQdKq())) {
       Optional<XhKqBdgHdr> qOptional = xhKqBdgHdrRepository.findBySoQdKq(req.getSoQdKq());
       if (qOptional.isPresent()) {
-        throw new Exception("Hợp đồng số " + req.getSoQdKq() + " đã tồn tại");
+        throw new Exception("Số quyết định phê duyệt " + req.getSoQdKq() + " đã tồn tại");
       }
     }
     XhKqBdgHdr data = new XhKqBdgHdr();
     BeanUtils.copyProperties(req, data, "id");
+
     data.setNam(LocalDate.now().getYear());
-    data.setNguoiTaoId(getUser().getId());
+    data.setNguoiTaoId(userInfo.getId());
     data.setNgayTao(new Date());
-    data.setMaDvi(getUser().getDvql());
+    data.setMaDvi(userInfo.getDvql());
     data.setTrangThaiHd(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
     data.setTrangThaiXh(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
     XhKqBdgHdr byMaThongBao = xhKqBdgHdrRepository.findByMaThongBao(req.getMaThongBao());
@@ -107,6 +112,8 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
     BeanUtils.copyProperties(req, data, "id");
     data.setNgaySua(new Date());
     data.setNguoiSuaId(getUser().getId());
+    data.setTrangThaiHd(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
+    data.setTrangThaiXh(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
     XhKqBdgHdr created = xhKqBdgHdrRepository.save(data);
 
     fileDinhKemService.delete(data.getId(), Collections.singleton(XhKqBdgHdr.TABLE_NAME + "_BAN_HANH"));
