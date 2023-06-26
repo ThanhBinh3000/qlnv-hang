@@ -18,6 +18,7 @@ public interface THKeHoachDieuChuyenCucKhacCucDtlRepository extends JpaRepositor
     @Query(value="FROM THKeHoachDieuChuyenCucKhacCucDtl d\n" +
             "LEFT JOIN THKeHoachDieuChuyenCucHdr hdr ON hdr.id = d.hdrId \n" +
             "WHERE hdr.maDvi = ?1 AND hdr.trangThai = ?2 AND hdr.loaiDieuChuyen = ?3 " +
+            "AND hdr.id not in (select distinct qdtc.idDxuat from DcnbQuyetDinhDcTcHdr qdtc where 1 =1 AND qdtc.idDxuat is not null )" +
             "AND hdr.ngayTao <= ?4 AND (hdr.idThTongCuc is null)")
     List<THKeHoachDieuChuyenCucKhacCucDtl> findByDonViAndTrangThaiAndLoaiDcCuc(String maDVi, String trangThai, String loaiDieuChuyen, LocalDateTime thoiGianTongHop);
 

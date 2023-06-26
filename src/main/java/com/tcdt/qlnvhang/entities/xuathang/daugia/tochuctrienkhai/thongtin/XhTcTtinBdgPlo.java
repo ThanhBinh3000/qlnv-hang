@@ -50,6 +50,8 @@ public class XhTcTtinBdgPlo implements Serializable {
 
     private BigDecimal donGiaDeXuat;
 
+    private BigDecimal soTienDatTruoc;
+
     private Integer soLanTraGia;
 
     private BigDecimal donGiaTraGia;

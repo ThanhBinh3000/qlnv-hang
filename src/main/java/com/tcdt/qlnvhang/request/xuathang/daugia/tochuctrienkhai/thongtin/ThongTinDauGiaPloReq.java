@@ -33,6 +33,8 @@ public class ThongTinDauGiaPloReq extends BaseRequest {
 
   private BigDecimal donGiaDeXuat;
 
+  private BigDecimal soTienDatTruoc;
+
   private Integer soLanTraGia;
 
   private BigDecimal donGiaTraGia;

@@ -41,6 +41,8 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
+    @Autowired
+    private HhQdPheduyetKhMttSLDDRepository hhQdPheduyetKhMttSLDDRepository;
 
 
     public Page<HhQdPheduyetKhMttDx> selectPage(SearchHhPthucTkhaiReq req) throws Exception {
@@ -57,6 +59,14 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
                 hdr.setTenLoaiVthh(hashMapVthh.get(hdr.getLoaiVthh()));
                 hdr.setTenCloaiVthh(hashMapVthh.get(hdr.getCloaiVthh()));
                 f.setHhQdPheduyetKhMttHdr(hdr);
+
+
+                List<HhQdPheduyetKhMttSLDD> obj = hhQdPheduyetKhMttSLDDRepository.findAllByIdQdDtl(f.getId());
+                for (HhQdPheduyetKhMttSLDD hhQdPheduyetKhMttSLDD : obj) {
+                    List<HhChiTietTTinChaoGia> chaoGiaList = hhCtietTtinCgiaRepository.findAllByIdQdPdSldd(hhQdPheduyetKhMttSLDD.getId());
+                    hhQdPheduyetKhMttSLDD.setListChaoGia(chaoGiaList);
+                }
+                f.setChildren(obj);
             }catch (Exception e){
                 throw new RuntimeException(e);
             }

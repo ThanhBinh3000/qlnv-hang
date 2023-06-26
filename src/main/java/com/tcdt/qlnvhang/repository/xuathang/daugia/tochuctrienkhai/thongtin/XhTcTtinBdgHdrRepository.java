@@ -17,7 +17,7 @@ public interface XhTcTtinBdgHdrRepository extends JpaRepository<XhTcTtinBdgHdr, 
           " left join XhQdPdKhBdg hdr on hdr.id = dtl.idQdHdr WHERE 1=1 " +
       "AND (:#{#param.maDvi} IS NULL OR dtl.maDvi = :#{#param.maDvi}) " +
       "AND (:#{#param.nam} IS NULL OR hdr.nam = :#{#param.nam}) " +
-          "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
+      "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
       "AND (:#{#param.loaiVthh } IS NULL OR LOWER(hdr.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh},'%')) "
   )
   Page<XhTcTtinBdgHdr> search(@Param("param") ThongTinDauGiaReq param, Pageable pageable);
