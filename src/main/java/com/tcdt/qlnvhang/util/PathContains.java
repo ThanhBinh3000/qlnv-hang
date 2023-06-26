@@ -291,6 +291,8 @@ public class PathContains {
 
 	public static final String XUAT_KHAC = "/xuat-khac";
 
+	public static final String KTCL_LT_TRUOC_HET_HAN = "/ktcl-lt-truoc-het-han";
+
 	public static final String DANH_SACH = "/danh-sach";
 	public static final String TONG_HOP = "/tong-hop";
 	public static final String HO_SO = "/ho-so";
