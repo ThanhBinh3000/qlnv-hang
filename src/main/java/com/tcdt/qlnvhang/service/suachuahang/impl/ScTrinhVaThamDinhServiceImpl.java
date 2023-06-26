@@ -80,7 +80,7 @@ public class ScTrinhVaThamDinhServiceImpl extends BaseServiceImpl implements ScT
     public ScTrinhThamDinh update(ScTrinhVaThamDinhReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         Optional<ScTrinhThamDinh> optional = hdrRepository.findById(req.getId());
-        if (optional.isEmpty()){
+        if (!optional.isPresent()){
             throw new Exception("Bản ghi không tồn tại");
         }
         ScTrinhThamDinh hdr = optional.get();
@@ -103,7 +103,7 @@ public class ScTrinhVaThamDinhServiceImpl extends BaseServiceImpl implements ScT
     @Override
     public ScTrinhThamDinh detail(Long id) throws Exception {
         Optional<ScTrinhThamDinh> optional = hdrRepository.findById(id);
-        if (optional.isEmpty()) {
+        if (!optional.isPresent()) {
             throw new Exception("Bản ghi không tồn tại");
         }
         ScTrinhThamDinh data = optional.get();
@@ -118,7 +118,7 @@ public class ScTrinhVaThamDinhServiceImpl extends BaseServiceImpl implements ScT
     @Override
     public ScTrinhThamDinh approve(ScTrinhVaThamDinhReq req) throws Exception {
         Optional<ScTrinhThamDinh> optional = hdrRepository.findById(req.getId());
-        if (optional.isEmpty()) {
+        if (!optional.isPresent()) {
             throw new Exception("Bản ghi không tồn tại");
         }
         ScTrinhThamDinh hdr = optional.get();
@@ -153,8 +153,8 @@ public class ScTrinhVaThamDinhServiceImpl extends BaseServiceImpl implements ScT
     @Transient
     @Override
     public void delete(Long id) throws Exception {
-        var optional = hdrRepository.findById(id);
-        if (optional.isEmpty()) {
+        Optional<ScTrinhThamDinh> optional = hdrRepository.findById(id);
+        if (!optional.isPresent()) {
             throw new Exception("Bản ghi không tồn tại");
         }
         fileDinhKemService.delete(id, Lists.newArrayList(ScTrinhThamDinh.TABLE_NAME + "_CAN_CU"));

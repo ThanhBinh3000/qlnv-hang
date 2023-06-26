@@ -55,7 +55,7 @@ public class ScQuyetDinhScImpl extends BaseServiceImpl {
 
     public ScQuyetDinhSc update(CustomUserDetails currentUser, ScQuyetDinhReq req) throws Exception {
         Optional<ScQuyetDinhSc> optional = scQuyetDinhScRepository.findById(req.getId());
-        if (optional.isEmpty()){
+        if (!optional.isPresent()){
             throw new Exception("Bản ghi không tồn tại");
         }
         ScQuyetDinhSc hdr = optional.get();
@@ -73,7 +73,7 @@ public class ScQuyetDinhScImpl extends BaseServiceImpl {
 
     public ScQuyetDinhSc detail(Long id) throws Exception {
         Optional<ScQuyetDinhSc> optional = scQuyetDinhScRepository.findById(id);
-        if (optional.isEmpty()) {
+        if (!optional.isPresent()) {
             throw new Exception("Bản ghi không tồn tại");
         }
         ScQuyetDinhSc data = optional.get();
@@ -87,8 +87,8 @@ public class ScQuyetDinhScImpl extends BaseServiceImpl {
 
     @Transient
     public void delete(Long id) throws Exception {
-        var optional = scQuyetDinhScRepository.findById(id);
-        if (optional.isEmpty()) {
+        Optional<ScQuyetDinhSc> optional = scQuyetDinhScRepository.findById(id);
+        if (!optional.isPresent()) {
             throw new Exception("Bản ghi không tồn tại");
         }
         fileDinhKemService.delete(id, Lists.newArrayList(ScQuyetDinhSc.TABLE_NAME + "_CAN_CU"));
@@ -112,7 +112,7 @@ public class ScQuyetDinhScImpl extends BaseServiceImpl {
 
     public void approve(Long id) throws Exception {
         Optional<ScQuyetDinhSc> optional = scQuyetDinhScRepository.findById(id);
-        if (optional.isEmpty()){
+        if (!optional.isPresent()){
             throw new Exception("Bản ghi không tồn tại");
         }
         ScQuyetDinhSc data = optional.get();
