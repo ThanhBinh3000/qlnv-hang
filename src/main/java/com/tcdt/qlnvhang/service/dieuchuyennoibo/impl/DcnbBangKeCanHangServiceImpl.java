@@ -197,10 +197,18 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl{
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
                 optional.get().setNgayPDuyet(LocalDate.now());
                 optional.get().setNguoiPDuyet(currentUser.getUser().getId());
-                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(optional.get().getMaDvi(),
-                        optional.get().getQDinhDccId(),
-                        optional.get().getMaNganKho(),
-                        optional.get().getMaLoKho());
+                DcnbDataLinkHdr dataLink = null;
+                if ("00".equals(optional.get().getType())) { // xuất
+                    dataLink = dcnbDataLinkHdrRepository.findDataLinkCuc(optional.get().getMaDvi(),
+                            optional.get().getQDinhDccId(),
+                            optional.get().getMaNganKho(),
+                            optional.get().getMaLoKho());
+                } else if ("01".equals(optional.get().getType())) {
+                    dataLink = dcnbDataLinkHdrRepository.findDataLinkCucNhan(optional.get().getMaDvi(),
+                            optional.get().getQDinhDccId(),
+                            optional.get().getMaNganKho(),
+                            optional.get().getMaLoKho());
+                }
                 DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
                 dataLinkDtl.setLinkId(optional.get().getId());
                 dataLinkDtl.setHdrId(dataLink.getId());
