@@ -6,6 +6,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -185,6 +186,30 @@ public class DcnbPhieuKtChatLuongHdr extends BaseEntity implements Serializable,
 
     @Column(name = "SO_BB_HAO_DOI")
     private String soBbHaoDoi;
+
+    @Column(name = "NGUOI_GIAO_HANG")
+    private String nguoiGiaoHang;
+    @Column(name = "SO_CMT")
+    private String soCmt;
+    @Column(name = "DON_VI_GIAO_HANG")
+    private String dVGiaoHang;
+    @Column(name = "DIA_CHI_DON_VI_GIAO_HANG")
+    private String diaChiDonViGiaoHang;
+    @Column(name = "BIEN_SO_XE")
+    private String bienSoXe;
+    @Column(name = "SL_NHAP_THEO_QD")
+    private BigDecimal slNhapTheoQd;
+    @Column(name = "SL_NHAP_THEO_KB")
+    private BigDecimal slNhapTheoKb;
+    @Column(name = "SL_NHAP_THEO_KT")
+    private BigDecimal slNhapTheoKt;
+    @Column(name = "SO_CHUNG_THU_GIAM_DINH")
+    private String soChungThuGiamDinh;
+    @Column(name = "NGAY_GIAM_DINH")
+    private LocalDate ngayGiamDinh;
+    @Column(name = "TO_CHUC_GIAM_DINH")
+    private String toChucGiamDinh;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
     private List<DcnbPhieuKtChatLuongDtl> dcnbPhieuKtChatLuongDtl = new ArrayList<>();
