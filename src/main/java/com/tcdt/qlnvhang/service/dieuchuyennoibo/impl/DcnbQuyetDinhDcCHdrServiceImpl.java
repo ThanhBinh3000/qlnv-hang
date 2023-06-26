@@ -635,7 +635,9 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         itemMap1.setDataId(null);
                         return itemMap1;
                     }).collect(Collectors.toList()));
-                    BigDecimal total = dcnbKeHoachDcHdrClone.getDanhSachHangHoa().stream().map(DcnbKeHoachDcDtl::getDuToanKphi)
+                    BigDecimal total = dcnbKeHoachDcHdrClone.getDanhSachHangHoa().stream()
+                            .map(DcnbKeHoachDcDtl::getDuToanKphi)
+                            .map(kphi -> kphi != null ? kphi : BigDecimal.ZERO)
                             .reduce(BigDecimal.ZERO, BigDecimal::add);
                     dcnbKeHoachDcHdrClone.setTongDuToanKp(total);
 
