@@ -38,6 +38,9 @@ public class DcnbHoSoKyThuatHdr extends BaseEntity implements Serializable, Clon
   private Long bienBanLayMauId;
   @Column(name = "SO_QDNH")
   private String soQdnh;
+  @Column(name = "ID_QDNH")
+  private Long idQdnh;
+
   @Column(name = "TEN_CBTHSKT")
   private String tenCbthskt;
   @Column(name = "CBTHSKT_ID")

@@ -2,6 +2,8 @@ package com.tcdt.qlnvhang.controller.dieuchuyennoibo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.enums.EnumResponse;
+import com.tcdt.qlnvhang.jwt.CurrentUser;
+import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbGiaoNhanHdrReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
@@ -24,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = PathContains.DIEU_CHUYEN_NOI_BO +PathContains.BIEN_BAN_GIAO_NHAN)
+@RequestMapping(value = PathContains.DIEU_CHUYEN_NOI_BO + PathContains.BIEN_BAN_GIAO_NHAN)
 @Slf4j
 @Api(tags = "Điều chuyển nội bộ - Biên bản giao nhận")
 public class DcnbBbGiaoNhanController {
@@ -34,13 +36,13 @@ public class DcnbBbGiaoNhanController {
     @ApiOperation(value = "Tra cứu thông tin đề xuất", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> colection(@RequestBody DcnbBbGiaoNhanHdrReq objReq) {
+    public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser, @RequestBody DcnbBbGiaoNhanHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.searchPage(objReq));
+            resp.setData(service.searchPage(currentUser, objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-        } catch ( Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
@@ -71,7 +73,7 @@ public class DcnbBbGiaoNhanController {
 //    }
 
     @ApiOperation(value = "Tạo mới thông tin đề xuất ", response = List.class)
-    @PostMapping(value =  PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<BaseResponse> insert(@Valid @RequestBody DcnbBbGiaoNhanHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
@@ -89,7 +91,7 @@ public class DcnbBbGiaoNhanController {
     }
 
     @ApiOperation(value = "Cập nhật thông tin đề xuất", response = List.class)
-    @PostMapping(value =  PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> update(@Valid @RequestBody DcnbBbGiaoNhanHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -106,10 +108,10 @@ public class DcnbBbGiaoNhanController {
     }
 
     @ApiOperation(value = "Lấy chi tiết thông tin đề xuất", response = List.class)
-    @GetMapping(value =  PathContains.URL_CHI_TIET + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = PathContains.URL_CHI_TIET + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> detail(
-            @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("id")Long id) {
+            @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("id") Long id) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(service.detail(id));
@@ -125,7 +127,7 @@ public class DcnbBbGiaoNhanController {
     }
 
     @ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 thông tin", response = List.class)
-    @PostMapping(value =  PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody DcnbBbGiaoNhanHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -142,7 +144,7 @@ public class DcnbBbGiaoNhanController {
     }
 
     @ApiOperation(value = "Xoá thông tin đề xuất", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PostMapping(value =  PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
@@ -161,7 +163,7 @@ public class DcnbBbGiaoNhanController {
     }
 
     @ApiOperation(value = "Xoá danh sách thông tin đề xuất", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PostMapping(value =  PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
@@ -179,9 +181,9 @@ public class DcnbBbGiaoNhanController {
     }
 
     @ApiOperation(value = "Kết xuất danh sách mua", response = List.class)
-    @PostMapping(value =  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void exportList(@Valid @RequestBody  DcnbBbGiaoNhanHdrReq objReq, HttpServletResponse response) throws Exception {
+    public void exportList(@Valid @RequestBody DcnbBbGiaoNhanHdrReq objReq, HttpServletResponse response) throws Exception {
         try {
             service.export(objReq, response);
         } catch (Exception e) {

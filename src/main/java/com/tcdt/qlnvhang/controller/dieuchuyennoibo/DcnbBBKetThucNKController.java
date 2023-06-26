@@ -2,6 +2,8 @@ package com.tcdt.qlnvhang.controller.dieuchuyennoibo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.enums.EnumResponse;
+import com.tcdt.qlnvhang.jwt.CurrentUser;
+import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBBKetThucNKReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
@@ -35,10 +37,10 @@ public class DcnbBBKetThucNKController {
     @ApiOperation(value = "Tra cứu ", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> colection(@RequestBody DcnbBBKetThucNKReq objReq) {
+    public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser, @RequestBody DcnbBBKetThucNKReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.searchPage(objReq));
+            resp.setData(service.search(currentUser, objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch ( Exception e) {

@@ -3,11 +3,12 @@ package com.tcdt.qlnvhang.response.dieuChuyenNoiBo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
-public class DcnbBbGiaoNhanHdrDTO {
+public class DcnbPhieuNhapKhoHdrDTO {
     private Long id;
     private Long qdDcCucId;
     private String soQdinh;
@@ -21,21 +22,21 @@ public class DcnbBbGiaoNhanHdrDTO {
     private String tenloKho;
     private String maNganKho;
     private String tenNganKho;
+    private Boolean thayDoiThuKho;
+    private String soPhieuXuatKho;
+    private LocalDate ngayXuatKho;
+    private Long bbLayMauId;
+    private String soBbLayMau;
+    private Long bangKeVtId;
+    private String soBangKeVt;
     private String maHangHoa;
     private String tenHangHoa;
     private String maChLoaiHangHoa;
     private String tenChLoaiHangHoa;
     private String donViTinh;
-    private String tenDonViTinh;
-
-    private String soHoSoKt;
-    private Long hoSoKtId;
-    private String soBienBanGiaoNhan;
-    private String soBienBanKetThucNk;
-    private Long bienBanKetThucNkId;
-    private LocalDate ngayKetThucNk;
-    private String soBienBanLayMau;
-    private Long bienBanLayMauId;
+    private String tenDonvitinh;
+    private BigDecimal slDienChuyen;
+    private BigDecimal duToanKinhPhiDc;
 
     private String trangThai;
     private String tenTrangThai;
