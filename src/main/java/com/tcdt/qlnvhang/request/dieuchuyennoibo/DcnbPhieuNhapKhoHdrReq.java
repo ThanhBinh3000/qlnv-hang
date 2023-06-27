@@ -15,6 +15,7 @@ import java.util.List;
 public class DcnbPhieuNhapKhoHdrReq extends BaseRequest {
 
     private Long id;
+    private String loaiQdinh;
     private String loaiDc;
     private Integer nam;
     private String maDvi;
@@ -24,9 +25,7 @@ public class DcnbPhieuNhapKhoHdrReq extends BaseRequest {
     private LocalDate ngayLap;
     private BigDecimal soNo;
     private BigDecimal soCo;
-    @Column(name = "SO_BB_CB_KHO")
     private String soBbCbKho;
-    @Column(name = "BB_CB_KHO_ID")
     private Long bBCbKhoId;
     private String soQdDcCuc;
     private Long qdDcCucId;

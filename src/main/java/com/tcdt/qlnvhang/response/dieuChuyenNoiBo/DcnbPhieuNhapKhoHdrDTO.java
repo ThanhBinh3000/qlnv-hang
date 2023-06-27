@@ -23,8 +23,8 @@ public class DcnbPhieuNhapKhoHdrDTO {
     private String maNganKho;
     private String tenNganKho;
     private Boolean thayDoiThuKho;
-    private String soPhieuXuatKho;
-    private LocalDate ngayXuatKho;
+    private String soPhieuNhapKho;
+    private LocalDate ngayNhapKho;
     private Long bangKeVtId;
     private String soBangKeVt;
     private String maHangHoa;
