@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
-
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -9,11 +8,13 @@ import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhDxKhMttTChiThopReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhDxKhMttThopHdrReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhDxKhMttThopReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.HhQdPheduyetKhMttHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import org.springframework.beans.BeanUtils;
@@ -28,7 +29,6 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -45,7 +45,8 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
     private HhDxuatKhMttThopDtlRepository hhDxuatKhMttThopDtlRepository;
     @Autowired
     private HhQdPheduyetKhMttHdrRepository hhQdPheduyetKhMttHdrRepository;
-
+    @Autowired
+    private FileDinhKemService fileDinhKemService;
 
 
 
@@ -114,6 +115,9 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
         thopHdr.setMaDvi(objReq.getMaDvi());
         thopHdr.setNoiDungThop(objReq.getNoiDungThop());
         hhDxuatKhMttThopRepository.save(thopHdr);
+        if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKems())) {
+            fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), thopHdr.getId(), HhDxKhMttThopHdr.TABLE_NAME);
+        }
         for (HhDxKhMttThopDtl dtl : thopHdr.getChildren()) {
             dtl.setIdThopHdr(thopHdr.getId());
             hhDxuatKhMttThopDtlRepository.save(dtl);
@@ -123,7 +127,7 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
                     .collect(Collectors.toList());
             hhDxuatKhMttRepository.updateStatusInList(soDxuatList, Contains.DATONGHOP, thopHdr.getId());
         }
-return thopHdr;
+        return thopHdr;
     }
 
     @Transactional()
@@ -167,7 +171,7 @@ return thopHdr;
 
         });
         hdrThop.setChildren(listTh);
-
+        hdrThop.setFileDinhKems(fileDinhKemService.search(qOptional.get().getId(), Collections.singletonList(HhDxKhMttThopHdr.TABLE_NAME)));
         return hdrThop;
     }
 
