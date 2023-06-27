@@ -1,10 +1,8 @@
 package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeCanHangDtl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbQuyetDinhDcCDtl;
 import lombok.Data;
 
-import javax.persistence.Column;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -38,9 +36,17 @@ public class DcnbBangKeCanHangHdrReq {
 
     private Long phieuXuatKhoId;
 
+    private LocalDate ngayXuatKho;
+
     private String soPhieuXuatKho;
 
-    private String loaiHang;
+    private Long phieuNhapKhoId;
+
+    private LocalDate ngayNhapKho;
+
+    private String soPhieuNhapKho;
+
+    private String soBbLayMau;
 
     private String loaiVthh;
 
