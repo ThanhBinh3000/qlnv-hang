@@ -18,9 +18,13 @@ public interface DcnbBangKeCanHangHdrRepository extends JpaRepository<DcnbBangKe
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeCanHangHdrDTO(" +
             "bkch.id,pxk.id,qdc.id,qdc.soQdinh,qdc.nam,khdcd.thoiGianDkDc,pxk.maDiemKho,pxk.tenDiemKho,pxk.maLoKho," +
-            "pxk.tenLoKho,pxk.soPhieuXuatKho,bkch.soBangKe,pxk.ngayXuatKho,bkch.trangThai,bkch.trangThai,pxk.loaiVthh,pxk.tenLoaiVthh,pxk.cloaiVthh,pxk.tenCloaiVthh,pxk.maNhaKho,pxk.tenNhaKho,pxk.donViTinh,khdcd.tenDonViTinh,pxk.maNganKho,pxk.tenNganKho,pxk.nguoiGiaoHang,pxk.soCmt,pxk.ctyNguoiGh,pxk.diaChi,pxk.thoiGianGiaoNhan) FROM DcnbQuyetDinhDcCHdr qdc " +
+            "pxk.tenLoKho,pxk.soPhieuXuatKho,bkch.soBangKe,pxk.ngayXuatKho,pnk.soPhieuNhapKho, pnk.ngayLap ,bkch.trangThai,bkch.trangThai,pxk.loaiVthh," +
+            "pxk.tenLoaiVthh,pxk.cloaiVthh,pxk.tenCloaiVthh,pxk.maNhaKho,pxk.tenNhaKho,pxk.donViTinh,khdcd.tenDonViTinh," +
+            "pxk.maNganKho,pxk.tenNganKho,pxk.nguoiGiaoHang,pxk.soCmt,pxk.ctyNguoiGh,pxk.diaChi,pxk.thoiGianGiaoNhan) " +
+            "FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbBangKeCanHangHdr bkch ON bkch.qDinhDccId = qdc.id "+
-            "LEFT JOIN DcnbPhieuXuatKhoHdr pxk ON pxk.qddcId = qdc.id " +
+            "LEFT JOIN DcnbPhieuXuatKhoHdr pxk ON pxk.id = bkch.phieuXuatKhoId " +
+            "LEFT JOIN DcnbPhieuNhapKhoHdr pnk ON pnk.id = bkch.phieuNhapKhoId " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
@@ -47,10 +51,14 @@ public interface DcnbBangKeCanHangHdrRepository extends JpaRepository<DcnbBangKe
     List<DcnbBangKeCanHangHdr> findAllByIdIn(List<Long> idList);
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeCanHangHdrDTO(" +
             "bkch.id,pxk.id,qdc.id,qdc.soQdinh,qdc.nam,khdcd.thoiGianDkDc,pxk.maDiemKho,pxk.tenDiemKho,pxk.maLoKho," +
-            "pxk.tenLoKho,pxk.soPhieuXuatKho,bkch.soBangKe,pxk.ngayXuatKho,bkch.trangThai,bkch.trangThai,pxk.loaiVthh,pxk.tenLoaiVthh,pxk.cloaiVthh,pxk.tenCloaiVthh,pxk.maNhaKho,pxk.tenNhaKho,pxk.donViTinh,khdcd.tenDonViTinh,pxk.maNganKho,pxk.tenNganKho,pxk.nguoiGiaoHang,pxk.soCmt,pxk.ctyNguoiGh,pxk.diaChi,pxk.thoiGianGiaoNhan) FROM DcnbQuyetDinhDcCHdr qdc " +
+            "pxk.tenLoKho,pxk.soPhieuXuatKho,bkch.soBangKe,pxk.ngayXuatKho,pnk.soPhieuNhapKho, pnk.ngayLap ,bkch.trangThai,bkch.trangThai,pxk.loaiVthh," +
+            "pxk.tenLoaiVthh,pxk.cloaiVthh,pxk.tenCloaiVthh,pxk.maNhaKho,pxk.tenNhaKho,pxk.donViTinh,khdcd.tenDonViTinh," +
+            "pxk.maNganKho,pxk.tenNganKho,pxk.nguoiGiaoHang,pxk.soCmt,pxk.ctyNguoiGh,pxk.diaChi,pxk.thoiGianGiaoNhan) " +
+            "FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbDataLinkHdr dtlh On dtlh.qdCcParentId = qdc.id " +
             "LEFT JOIN DcnbBangKeCanHangHdr bkch ON bkch.qDinhDccId = dtlh.qdCcId "+
-            "LEFT JOIN DcnbPhieuXuatKhoHdr pxk ON pxk.qddcId = dtlh.qdCcId " +
+            "LEFT JOIN DcnbPhieuXuatKhoHdr pxk ON pxk.id = bkch.phieuXuatKhoId " +
+            "LEFT JOIN DcnbPhieuNhapKhoHdr pnk ON pnk.id = bkch.phieuNhapKhoId " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = dtlh.qdCcId " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +

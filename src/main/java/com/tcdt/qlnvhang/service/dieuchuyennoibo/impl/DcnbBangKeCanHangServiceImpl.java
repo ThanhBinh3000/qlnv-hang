@@ -7,7 +7,6 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeCanHangHdrDTO;
-import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBienBanLayMauHdrDTO;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
@@ -25,7 +24,6 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +32,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl{
+public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
 
     @Autowired
     private DcnbBangKeCanHangHdrRepository dcnbBangKeCanHangHdrRepository;
@@ -61,17 +59,17 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl{
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
 
         Page<DcnbBangKeCanHangHdrDTO> searchDto = null;
-        if(req.getIsVatTu() == null){
+        if (req.getIsVatTu() == null) {
             req.setIsVatTu(false);
         }
-        if(req.getIsVatTu()){
+        if (req.getIsVatTu()) {
             req.setDsLoaiHang(Arrays.asList("VT"));
-        }else {
-            req.setDsLoaiHang(Arrays.asList("LT","M"));
+        } else {
+            req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             searchDto = dcnbBangKeCanHangHdrRepository.searchPage(req, pageable);
-        }else  {
+        } else {
             req.setTypeDataLink(Contains.DIEU_CHUYEN);
             searchDto = dcnbBangKeCanHangHdrRepository.searchPageCuc(req, pageable);
         }
@@ -91,8 +89,8 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl{
         BeanUtils.copyProperties(objReq, data);
         data.setMaDvi(currentUser.getDvql());
         data.setTenDvi(currentUser.getUser().getTenDvi());
-        if(objReq.getDcnbBangKeCanHangDtl() !=null){
-            objReq.getDcnbBangKeCanHangDtl().forEach(e->e.setDcnbBangKeCanHangHdr(data));
+        if (objReq.getDcnbBangKeCanHangDtl() != null) {
+            objReq.getDcnbBangKeCanHangDtl().forEach(e -> e.setDcnbBangKeCanHangHdr(data));
         }
         DcnbBangKeCanHangHdr created = dcnbBangKeCanHangHdrRepository.save(data);
         return created;
@@ -235,7 +233,7 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl{
         objReq.setPaggingReq(paggingReq);
         objReq.setMaDvi(currentUser.getDvql());
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit());
-        Page<DcnbBangKeCanHangHdrDTO> page = dcnbBangKeCanHangHdrRepository.searchPage(objReq,pageable);
+        Page<DcnbBangKeCanHangHdrDTO> page = dcnbBangKeCanHangHdrRepository.searchPage(objReq, pageable);
         List<DcnbBangKeCanHangHdrDTO> data = page.getContent();
 
         String title = "Danh sách bảng kê cân hàng ";
@@ -252,9 +250,9 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl{
             objs[3] = dx.getThoiHanDieuChuyen();
             objs[4] = dx.getTenDiemKho();
             objs[5] = dx.getTenLoKho();
-            objs[6] = dx.getSoPhieuXuatKho();
-            objs[7] = dx.getSoBangKeXuatDcLt();
-            objs[8] = dx.getNgayXuatKho();
+            objs[6] = dx.getSoPhieuXuatKho() == null ? dx.getSoPhieuNhapKho() : dx.getSoPhieuXuatKho();
+            objs[7] = dx.getSoBangKe();
+            objs[8] = dx.getNgayXuatKho() ==null ? dx.getNgayNhapKho(): dx.getNgayXuatKho();
             objs[9] = dx.getTrangThai();
             dataList.add(objs);
         }

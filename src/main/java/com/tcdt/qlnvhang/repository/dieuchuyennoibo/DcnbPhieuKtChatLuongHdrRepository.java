@@ -23,7 +23,7 @@ public interface DcnbPhieuKtChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "khdcd.tenNhaKho,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
             "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho, khdcd.thayDoiThuKho,pktcl.soPhieu,pktcl.ngayKiem,pktcl.nhanXetKetLuan,pnk.soPhieuNhapKho, pnk.ngayLap, " +
             "khdcd.maNhaKhoNhan,khdcd.tenNhaKhoNhan,khdcd.maDiemKhoNhan,khdcd.tenDiemKhoNhan,khdcd.maLoKhoNhan," +
-            "khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan,"+
+            "khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan," +
             "pktcl.trangThai,pktcl.trangThai) " +
             "FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbDataLinkHdr dtlh On dtlh.qdCcParentId = qdc.id " +
@@ -34,22 +34,39 @@ public interface DcnbPhieuKtChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
-            "WHERE 1 =1 "+
-            "AND qdc.trangThai = '29' AND qdc.loaiDc = :#{#param.loaiDc} "+
-            "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) "+
-            "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) "+
-            "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}) OR (:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}))"+
+            "WHERE 1 =1 " +
+            "AND qdc.trangThai = '29' AND qdc.loaiDc = :#{#param.loaiDc} " +
+            "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
+            "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
+            "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}) OR (:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}))" +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
             "AND (:#{#param.soPhieu} IS NULL OR LOWER(pktcl.soPhieu) LIKE CONCAT('%',LOWER(:#{#param.soPhieu}),'%')) " +
             "AND (:#{#param.soQdinhDcc} IS NULL OR LOWER(pktcl.soQdinhDc) LIKE CONCAT('%',LOWER(:#{#param.soQdinhDcc}),'%')) " +
             "AND ((:#{#param.tuNgay}  IS NULL OR pktcl.ngayKiem >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR pktcl.ngayKiem <= :#{#param.denNgay}) ) " +
             "ORDER BY pktcl.soQdinhDc desc, pktcl.nam desc")
-    Page<DcnbPhieuKtChatLuongHdrDTO> search(@Param("param")SearchPhieuKtChatLuong req, Pageable pageable);
+    Page<DcnbPhieuKtChatLuongHdrDTO> search(@Param("param") SearchPhieuKtChatLuong req, Pageable pageable);
 
     Optional<DcnbPhieuKtChatLuongHdr> findFirstBySoPhieu(String soPhieu);
 
     List<DcnbPhieuKtChatLuongHdr> findByIdIn(List<Long> ids);
 
     List<DcnbPhieuKtChatLuongHdr> findAllByIdIn(List<Long> idList);
+
+    @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKtChatLuongHdrLsDTO(pktcl.id, pktcl.soPhieu) " +
+            "FROM DcnbPhieuKtChatLuongHdr pktcl " +
+            "WHERE 1 =1 " +
+            "AND pktcl.trangThai = '05' " +
+            "AND ((:#{#param.maDvi} IS NULL OR pktcl.maDvi = :#{#param.maDvi}))" +
+            "AND (:#{#param.nam} IS NULL OR pktcl.nam = :#{#param.nam}) " +
+            "AND (:#{#param.maNganKho} IS NULL OR pktcl.maNganKho = :#{#param.maNganKho}) " +
+            "AND (:#{#param.maNganKhoXuat} IS NULL OR pktcl.maNganKhoXuat = :#{#param.maNganKhoXuat}) " +
+            "AND (:#{#param.maLoKho} IS NULL OR pktcl.maLoKho = :#{#param.maLoKho}) " +
+            "AND (:#{#param.maLoKhoXuat} IS NULL OR pktcl.maLoKhoXuat = :#{#param.maLoKhoXuat}) " +
+            "AND (:#{#param.soPhieu} IS NULL OR LOWER(pktcl.soPhieu) LIKE CONCAT('%',LOWER(:#{#param.soPhieu}),'%')) " +
+            "AND (:#{#param.soQdinhDcc} IS NULL OR LOWER(pktcl.soQdinhDc) LIKE CONCAT('%',LOWER(:#{#param.soQdinhDcc}),'%')) " +
+            "AND ((:#{#param.tuNgay}  IS NULL OR pktcl.ngayKiem >= :#{#param.tuNgay})" +
+            "AND (:#{#param.denNgay}  IS NULL OR pktcl.ngayKiem <= :#{#param.denNgay}) ) " +
+            "ORDER BY pktcl.soQdinhDc desc, pktcl.nam desc")
+    List<DcnbPhieuKtChatLuongHdrDTO> searchList(@Param("param") SearchPhieuKtChatLuong req);
 }

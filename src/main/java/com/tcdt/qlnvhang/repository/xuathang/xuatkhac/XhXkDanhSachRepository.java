@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface XhXkDanhSachRepository extends JpaRepository<XhXkDanhSachHdr, Long> {
   @Query("SELECT c FROM XhXkDanhSachHdr c WHERE 1=1 " +
@@ -27,4 +28,6 @@ public interface XhXkDanhSachRepository extends JpaRepository<XhXkDanhSachHdr, L
   void deleteAllByIdIn(List<Long> listId);
 
   List<XhXkDanhSachHdr> findByIdIn(List<Long> ids);
+
+  Optional<XhXkDanhSachHdr> findByIdTongHop(Long ids);
 }

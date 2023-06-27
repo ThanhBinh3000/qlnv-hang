@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DcnbPhieuNhapKhoHdr extends BaseEntity implements Serializable, Cloneable{
+public class DcnbPhieuNhapKhoHdr extends BaseEntity implements Serializable, Cloneable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "DCNB_PHIEU_NHAP_KHO_HDR";
 
@@ -34,6 +34,10 @@ public class DcnbPhieuNhapKhoHdr extends BaseEntity implements Serializable, Clo
     private LocalDate ngayLap;
     private BigDecimal soNo;
     private BigDecimal soCo;
+    @Column(name = "SO_BB_CB_KHO")
+    private String soBbCbKho;
+    @Column(name = "BB_CB_KHO_ID")
+    private Long bBCbKhoId;
     private String soQdDcCuc;
     private Long qdDcCucId;
     private LocalDate ngayQdDcCuc;
@@ -46,10 +50,29 @@ public class DcnbPhieuNhapKhoHdr extends BaseEntity implements Serializable, Clo
     private Long idPhieuKtraCluong;
     private String loaiVthh;
     private String cloaiVthh;
-    private Long idThuKho;
+    @Column(name = "TEN_LOAI_VTHH")
+    private String tenLoaiVthh;
+    @Column(name = "TEN_CLOAI_VTHH")
+    private String tenCloaiVthh;
+    @Column(name = "ID_NGUOI_LAP")
+    private Long idNguoiLap;
+    @Column(name = "TEN_NGUOI_LAP")
+    private String tenNguoiLap;
     private Long idLanhDao;
+    @Column(name = "TEN_LANH_DAO")
+    private String tenLanhDao;
+    @Column(name = "ID_THU_KHO")
+    private Long idThuKho;
+    @Column(name = "TEN_THU_KHO")
+    private String tenThuKho;
+    @Column(name = "ID_KY_THUAT_VIEN")
     private Long idKyThuatVien;
+    @Column(name = "TEN_KY_THUAT_VIEN")
+    private String tenKyThuatVien;
+    @Column(name = "ID_KE_TOAN_TRUONG")
+    private Long idKeToanTruong;
     private String keToanTruong;
+
     private String hoVaTenNguoiGiao;
     private String cmndNguoiGiao;
     private String donViNguoiGiao;
@@ -59,8 +82,6 @@ public class DcnbPhieuNhapKhoHdr extends BaseEntity implements Serializable, Clo
     private String kieuNx;
     private String bbNghiemThuBqld;
     private BigDecimal soLuongQdDcCuc;
-    private String soBangKeCanHang;
-    private Long idBangKeCanHang;
     private String ghiChu;
     private String trangThai;
     private String lyDoTuChoi;

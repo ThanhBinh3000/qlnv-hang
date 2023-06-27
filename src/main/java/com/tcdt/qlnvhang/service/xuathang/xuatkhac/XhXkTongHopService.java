@@ -95,7 +95,7 @@ public class XhXkTongHopService extends BaseServiceImpl {
     data.getTongHopDtl().forEach(s -> s.setTongHopHdr(data));
 
     XhXkTongHopHdr created = xhXkTongHopRepository.save(data);
-    created.setMaDanhSach(created.getId() + created.getMaDanhSach());
+    created.setMaDanhSach(created.getMaDanhSach()+created.getId() );
     created = xhXkTongHopRepository.save(created);
     Long id = created.getId();
     String ma = created.getMaDanhSach();
@@ -168,6 +168,14 @@ public class XhXkTongHopService extends BaseServiceImpl {
       throw new Exception("Bản ghi không tồn tại");
     }
     XhXkTongHopHdr data = optional.get();
+    if (!DataUtils.isNullObject(data.getId())) {
+      xhXkDanhSachRepository.findByIdTongHop(data.getId())
+              .ifPresent(item -> {
+                item.setIdTongHop(null);
+                item.setMaTongHop(null);
+                xhXkDanhSachRepository.save(item);
+              });
+    }
     xhXkTongHopRepository.delete(data);
   }
 
@@ -178,6 +186,17 @@ public class XhXkTongHopService extends BaseServiceImpl {
     if (list.isEmpty()) {
       throw new Exception("Bản ghi không tồn tại");
     }
+    list.forEach(data->{
+      if (!DataUtils.isNullObject(data.getId())) {
+        xhXkDanhSachRepository.findByIdTongHop(data.getId())
+                .ifPresent(item -> {
+                  item.setIdTongHop(null);
+                  item.setMaTongHop(null);
+                  xhXkDanhSachRepository.save(item);
+                });
+      }
+    });
+
     xhXkTongHopRepository.deleteAll(list);
 
   }
