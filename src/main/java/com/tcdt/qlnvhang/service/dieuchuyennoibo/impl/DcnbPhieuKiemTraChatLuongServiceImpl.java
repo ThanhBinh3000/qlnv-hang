@@ -12,6 +12,7 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKtChatLuongHdrDTO;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKtChatLuongHdrLsDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -251,9 +252,9 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
         ex.export();
     }
 
-    public List<DcnbPhieuKtChatLuongHdrDTO> searchList(CustomUserDetails currentUser, SearchPhieuKtChatLuong req) {
+    public List<DcnbPhieuKtChatLuongHdrLsDTO> searchList(CustomUserDetails currentUser, SearchPhieuKtChatLuong req) {
         String dvql = currentUser.getDvql();
-        req.setMaDvi(dvql);
+        req.setMaDvi(dvql.substring(0, 6));
         if(req.getIsVatTu() == null){
             req.setIsVatTu(false);
         }
@@ -262,7 +263,7 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
         }else {
             req.setDsLoaiHang(Arrays.asList("LT","M"));
         }
-        List<DcnbPhieuKtChatLuongHdrDTO> search = dcnbPhieuKtChatLuongHdrRepository.searchList(req);
+        List<DcnbPhieuKtChatLuongHdrLsDTO> search = dcnbPhieuKtChatLuongHdrRepository.searchList(req);
         return search;
     }
 }

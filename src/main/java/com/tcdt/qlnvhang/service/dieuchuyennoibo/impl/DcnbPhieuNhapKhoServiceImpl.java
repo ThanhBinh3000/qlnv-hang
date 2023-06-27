@@ -216,4 +216,12 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
     public void export(DcnbPhieuNhapKhoHdrReq req, HttpServletResponse response) throws Exception {
 
     }
+
+    @Override
+    public List<DcnbPhieuNhapKhoHdrDTO> searchList(DcnbPhieuNhapKhoHdrReq objReq) throws Exception {
+        CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
+        objReq.setMaDvi(currentUser.getDvql());
+        List<DcnbPhieuNhapKhoHdrDTO> searchDto =  hdrRepository.searchList(objReq);;
+        return searchDto;
+    }
 }

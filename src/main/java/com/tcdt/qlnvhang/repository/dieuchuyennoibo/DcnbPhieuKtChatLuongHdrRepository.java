@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.repository.dieuchuyennoibo;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbBienBanLayMau;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchPhieuKtChatLuong;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKtChatLuongHdrDTO;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKtChatLuongHdrLsDTO;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuKtChatLuongHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -68,5 +69,5 @@ public interface DcnbPhieuKtChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "AND ((:#{#param.tuNgay}  IS NULL OR pktcl.ngayKiem >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR pktcl.ngayKiem <= :#{#param.denNgay}) ) " +
             "ORDER BY pktcl.soQdinhDc desc, pktcl.nam desc")
-    List<DcnbPhieuKtChatLuongHdrDTO> searchList(@Param("param") SearchPhieuKtChatLuong req);
+    List<DcnbPhieuKtChatLuongHdrLsDTO> searchList(@Param("param") SearchPhieuKtChatLuong req);
 }

@@ -78,4 +78,10 @@ public interface DcnbPhieuNhapKhoHdrRepository extends JpaRepository<DcnbPhieuNh
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
             "ORDER BY pnk.soPhieuNhapKho desc, pnk.nam desc")
     Page<DcnbPhieuNhapKhoHdrDTO> searchPage(@Param("param")DcnbPhieuNhapKhoHdrReq req, Pageable pageable);
+    @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuNhapKhoHdrListDTO(" +
+            "pnk.id,pnk.soPhieuNhapKho,pnk.ngayLap) " +
+            "FROM DcnbPhieuNhapKhoHdr pnk " +
+            "WHERE 1 =1 " +
+            "ORDER BY pnk.soPhieuNhapKho desc, pnk.nam desc")
+    List<DcnbPhieuNhapKhoHdrDTO> searchList(DcnbPhieuNhapKhoHdrReq objReq);
 }
