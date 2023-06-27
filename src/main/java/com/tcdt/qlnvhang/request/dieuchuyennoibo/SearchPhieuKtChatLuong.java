@@ -23,5 +23,9 @@ public class SearchPhieuKtChatLuong extends BaseRequest {
     private String maDvi;
     private String soBbXuatDocKho;
     private Boolean isVatTu = false;
+    private String maNganKho;
+    private String maNganKhoXuat;
+    private String maLoKho;
+    private String maLoKhoXuat;
     private List<String> dsLoaiHang = new ArrayList<>();
 }

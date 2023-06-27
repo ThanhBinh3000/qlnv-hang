@@ -250,4 +250,19 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
     }
+
+    public List<DcnbPhieuKtChatLuongHdrDTO> searchList(CustomUserDetails currentUser, SearchPhieuKtChatLuong req) {
+        String dvql = currentUser.getDvql();
+        req.setMaDvi(dvql);
+        if(req.getIsVatTu() == null){
+            req.setIsVatTu(false);
+        }
+        if(req.getIsVatTu()){
+            req.setDsLoaiHang(Arrays.asList("VT"));
+        }else {
+            req.setDsLoaiHang(Arrays.asList("LT","M"));
+        }
+        List<DcnbPhieuKtChatLuongHdrDTO> search = dcnbPhieuKtChatLuongHdrRepository.searchList(req);
+        return search;
+    }
 }
