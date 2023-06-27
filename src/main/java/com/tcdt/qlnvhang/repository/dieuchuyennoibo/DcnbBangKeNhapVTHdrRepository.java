@@ -26,7 +26,7 @@ public interface DcnbBangKeNhapVTHdrRepository extends JpaRepository<DcnbBangKeN
             "FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbBangKeNhapVTHdr bknvt ON bknvt.qDinhDccId = qdc.id "+
             "LEFT JOIN DcnbBienBanLayMauHdr bblm ON bblm.qdccId = qdc.id "+
-            "LEFT JOIN DcnbPhieuNhapKhoHdr pnk ON pnk.qdDcCucId = qdc.id " +
+            "LEFT JOIN DcnbPhieuNhapKhoHdr pnk ON pnk.id = bknvt.phieuXuatKhoId " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
@@ -47,7 +47,7 @@ public interface DcnbBangKeNhapVTHdrRepository extends JpaRepository<DcnbBangKeN
             "LEFT JOIN DcnbDataLinkHdr dtlh On dtlh.qdCcParentId = qdc.id " +
             "LEFT JOIN DcnbBangKeNhapVTHdr bknvt ON bknvt.qDinhDccId = dtlh.qdCcId "+
             "LEFT JOIN DcnbBienBanLayMauHdr bblm ON bblm.qdccId = dtlh.qdCcId "+
-            "LEFT JOIN DcnbPhieuNhapKhoHdr pnk ON pnk.qdDcCucId = dtlh.qdCcId " +
+            "LEFT JOIN DcnbPhieuNhapKhoHdr pnk ON pnk.id = bknvt.phieuXuatKhoId " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = dtlh.qdCcId " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +

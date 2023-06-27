@@ -25,8 +25,6 @@ public class DcnbPhieuNhapKhoHdrDTO {
     private Boolean thayDoiThuKho;
     private String soPhieuXuatKho;
     private LocalDate ngayXuatKho;
-    private Long bbLayMauId;
-    private String soBbLayMau;
     private Long bangKeVtId;
     private String soBangKeVt;
     private String maHangHoa;
@@ -37,6 +35,10 @@ public class DcnbPhieuNhapKhoHdrDTO {
     private String tenDonvitinh;
     private BigDecimal slDienChuyen;
     private BigDecimal duToanKinhPhiDc;
+
+    private Long phieuKiemTraId;
+    private String soPhieuKiemTraCl;
+    private LocalDate ngayGiamDinh;
 
     private String trangThai;
     private String tenTrangThai;
