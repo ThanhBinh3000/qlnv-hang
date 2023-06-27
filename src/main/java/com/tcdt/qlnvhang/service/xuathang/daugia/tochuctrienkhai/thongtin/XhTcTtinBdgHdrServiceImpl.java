@@ -28,6 +28,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
@@ -61,6 +62,15 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
         Page<XhTcTtinBdgHdr> data = xhTcTtinBdgHdrRepository.search(
                 req,
                 pageable);
+
+        Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+
+        data.getContent().forEach(f ->{
+            f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
+            f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : mapDmucVthh.get(f.getLoaiVthh()));
+            f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : mapDmucVthh.get(f.getCloaiVthh()));
+        });
         return data;
     }
 
@@ -76,6 +86,11 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
         Optional<XhQdPdKhBdgDtl> byId = xhQdPdKhBdgDtlRepository.findById(data.getIdQdPdDtl());
         if(byId.isPresent()){
             byId.get().setTrangThai(NhapXuatHangTrangThaiEnum.DANGCAPNHAT.getId());
+//            if(req.getKetQua().equals(1)){
+//                byId.get().setSoDviTsanThanhCong(req.getSoLuongTrung());
+//            }else {
+//                byId.get().setSoDviTsanKhongThanh(req.getSoLuongTruot());
+//            }
             xhQdPdKhBdgDtlRepository.save(byId.get());
         }else{
             throw new Exception("Không tìm thấy Quyết định phê duyệt kế hoạch bán đấu giá");
@@ -139,6 +154,7 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
         BeanUtils.copyProperties(req, data, "id");
         data.setNgaySua(new Date());
         data.setNguoiSuaId(getUser().getId());
+        data.setMaDvi(getUser().getDvql());
         XhTcTtinBdgHdr created = xhTcTtinBdgHdrRepository.save(data);
 
         fileDinhKemService.delete(data.getId(), Collections.singleton(XhTcTtinBdgHdr.TABLE_NAME + "_CAN_CU"));
@@ -220,6 +236,15 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
         byIdTtinHdr.forEach(item -> {
             xhTcTtinBdgPloRepository.deleteAllByIdTtinDtl(item.getId());
         });
+
+//        Optional<XhQdPdKhBdgDtl> xhQdPdKhBdgDtl = xhQdPdKhBdgDtlRepository.findById(data.getIdQdPdDtl());
+//        if(byId.isPresent()){
+//                xhQdPdKhBdgDtl.get().setSoDviTsanThanhCong(null);
+//                xhQdPdKhBdgDtl.get().setSoDviTsanKhongThanh(null);
+//            xhQdPdKhBdgDtlRepository.save(xhQdPdKhBdgDtl.get());
+//        }else{
+//            throw new Exception("Không tìm thấy Quyết định phê duyệt kế hoạch bán đấu giá");
+//        }
 
         xhTcTtinBdgDtlRepository.deleteAllByIdTtinHdr(id);
         fileDinhKemService.delete(data.getId(), Collections.singleton(XhTcTtinBdgHdr.TABLE_NAME));
