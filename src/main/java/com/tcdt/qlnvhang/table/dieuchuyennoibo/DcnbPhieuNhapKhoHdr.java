@@ -34,6 +34,8 @@ public class DcnbPhieuNhapKhoHdr extends BaseEntity implements Serializable, Clo
     private LocalDate ngayLap;
     private BigDecimal soNo;
     private BigDecimal soCo;
+    private String soBbCbKho;
+    private Long bBCbKhoId;
     private String soQdDcCuc;
     private Long qdDcCucId;
     private LocalDate ngayQdDcCuc;
@@ -46,10 +48,19 @@ public class DcnbPhieuNhapKhoHdr extends BaseEntity implements Serializable, Clo
     private Long idPhieuKtraCluong;
     private String loaiVthh;
     private String cloaiVthh;
-    private Long idThuKho;
+    private String tenLoaiVthh;
+    private String tenCloaiVthh;
+    private Long idNguoiLap;
+    private String tenNguoiLap;
     private Long idLanhDao;
+    private String tenLanhDao;
+    private Long idThuKho;
+    private String tenThuKho;
     private Long idKyThuatVien;
+    private String tenKyThuatVien;
+    private Long idKeToanTruong;
     private String keToanTruong;
+
     private String hoVaTenNguoiGiao;
     private String cmndNguoiGiao;
     private String donViNguoiGiao;
@@ -59,8 +70,6 @@ public class DcnbPhieuNhapKhoHdr extends BaseEntity implements Serializable, Clo
     private String kieuNx;
     private String bbNghiemThuBqld;
     private BigDecimal soLuongQdDcCuc;
-    private String soBangKeCanHang;
-    private Long idBangKeCanHang;
     private String ghiChu;
     private String trangThai;
     private String lyDoTuChoi;
