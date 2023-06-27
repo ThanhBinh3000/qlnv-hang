@@ -17,6 +17,7 @@ public interface HhDchinhDxKhLcntHdrRepository extends CrudRepository<HhDchinhDx
 
     Optional<HhDchinhDxKhLcntHdr> findBySoQdDc(String soQd);
     Optional<HhDchinhDxKhLcntHdr> findByIdQdGoc(Long idQdGoc);
+    Optional<HhDchinhDxKhLcntHdr> findByIdQdGocAndLastest(Long idQdGoc, Boolean lastest);
 
     List<HhDchinhDxKhLcntHdr> findAllByIdIn (List<Long> ids);
 

@@ -70,6 +70,9 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 
 	@Autowired
 	private FileDinhKemService fileDinhKemService;
+
+	@Autowired
+	private HhDchinhDxKhLcntHdrRepository hhDchinhDxKhLcntHdrRepository;
 	@Override
 	@Transactional
 	public HhQdKhlcntHdr create(HhQdKhlcntHdrReq objReq) throws Exception {
@@ -159,7 +162,6 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		dataMap.setTrangThai(Contains.DANG_NHAP_DU_LIEU);
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setFileDinhKems(fileDinhKemList);
-//		dataMap.setLastest(objReq.getLastest());
 		dataMap.setTrangThaiDt(NhapXuatHangTrangThaiEnum.CHUACAPNHAT.getId());
 		dataMap.setMaDvi(getUser().getDvql());
 		hhQdKhlcntHdrRepository.save(dataMap);
@@ -521,6 +523,12 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		data.setDsGthau(hhQdKhlcntDsgthauData);
 		data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
 		data.setTenTrangThaiDt(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiDt()));
+		if (data.getIdTrHdr() != null) {
+			Optional<HhDxuatKhLcntHdr> dxuatKhLcntHdr = hhDxuatKhLcntHdrRepository.findById(data.getIdTrHdr());
+			dxuatKhLcntHdr.ifPresent(data::setDxKhlcntHdr);
+		}
+		Optional<HhDchinhDxKhLcntHdr> dchinhDxKhLcntHdr = hhDchinhDxKhLcntHdrRepository.findByIdQdGocAndLastest(data.getId(), Boolean.TRUE);
+		dchinhDxKhLcntHdr.ifPresent(data::setDchinhDxKhLcntHdr);
 	}
 
 	@Override
