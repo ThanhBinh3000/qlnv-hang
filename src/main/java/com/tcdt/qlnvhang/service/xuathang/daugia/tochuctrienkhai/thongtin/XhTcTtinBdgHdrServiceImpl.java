@@ -19,6 +19,7 @@ import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.thongtin.XhTcT
 import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgNlq;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgPlo;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,11 +87,7 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
         Optional<XhQdPdKhBdgDtl> byId = xhQdPdKhBdgDtlRepository.findById(data.getIdQdPdDtl());
         if(byId.isPresent()){
             byId.get().setTrangThai(NhapXuatHangTrangThaiEnum.DANGCAPNHAT.getId());
-//            if(req.getKetQua().equals(1)){
-//                byId.get().setSoDviTsanThanhCong(req.getSoLuongTrung());
-//            }else {
-//                byId.get().setSoDviTsanKhongThanh(req.getSoLuongTruot());
-//            }
+
             xhQdPdKhBdgDtlRepository.save(byId.get());
         }else{
             throw new Exception("Không tìm thấy Quyết định phê duyệt kế hoạch bán đấu giá");
@@ -113,15 +110,17 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
     }
 
     void saveDetail(ThongTinDauGiaReq req, Long id, Boolean check) {
-        if(check == true){
+        if(check == true && req.getKetQua().equals(0)){
             xhTcTtinBdgNlqRepository.deleteAllByIdTtinHdr(id);
         }
-        for (ThongTinDauGiaNtgReq nlqReq : req.getListNguoiTgia()) {
-            XhTcTtinBdgNlq nlq = new XhTcTtinBdgNlq();
-            BeanUtils.copyProperties(nlqReq,nlq,"id");
-            nlq.setId(null);
-            nlq.setIdTtinHdr(id);
-            xhTcTtinBdgNlqRepository.save(nlq);
+        if(req.getKetQua().equals(1)){
+            for (ThongTinDauGiaNtgReq nlqReq : req.getListNguoiTgia()) {
+                XhTcTtinBdgNlq nlq = new XhTcTtinBdgNlq();
+                BeanUtils.copyProperties(nlqReq,nlq,"id");
+                nlq.setId(null);
+                nlq.setIdTtinHdr(id);
+                xhTcTtinBdgNlqRepository.save(nlq);
+            }
         }
         if(check == true){
             xhTcTtinBdgDtlRepository.deleteAllByIdTtinHdr(id);
@@ -139,6 +138,11 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
                 BeanUtils.copyProperties(ploReq,ploDtl,"id");
                 ploDtl.setIdTtinDtl(dtl.getId());
                 ploDtl.setId(null);
+                if(req.getKetQua().equals(0) && check == true){
+                    ploDtl.setSoLanTraGia(null);
+                    ploDtl.setDonGiaTraGia(null);
+                    ploDtl.setToChucCaNhan(null);
+                }
                 xhTcTtinBdgPloRepository.save(ploDtl);
             }
         }
@@ -152,6 +156,7 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
         }
         XhTcTtinBdgHdr data = byId.get();
         BeanUtils.copyProperties(req, data, "id");
+
         data.setNgaySua(new Date());
         data.setNguoiSuaId(getUser().getId());
         data.setMaDvi(getUser().getDvql());
@@ -166,6 +171,26 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
         created.setFileDinhKems(fileDinhKems);
 
         this.saveDetail(req, data.getId(), true);
+
+        Optional<XhQdPdKhBdgDtl> xhQdPdKhBdgDtl = xhQdPdKhBdgDtlRepository.findById(data.getIdQdPdDtl());
+        if(xhQdPdKhBdgDtl.isPresent()){
+            xhQdPdKhBdgDtl.get().setTrangThai(NhapXuatHangTrangThaiEnum.DANGCAPNHAT.getId());
+//            count lên số lượng đơn vị tài sản;
+            if(req.getTrangThai().equals(Contains.DA_HOAN_THANH)){
+                Integer countSlDviTsanThanhCong = xhQdPdKhBdgDtlRepository.countSlDviTsanThanhCong(data.getIdQdPdDtl(), data.getMaDvi());
+                xhQdPdKhBdgDtl.get().setSoDviTsanThanhCong(countSlDviTsanThanhCong);
+
+                Integer soDviTsanKhongThanh = 0;
+                soDviTsanKhongThanh = xhQdPdKhBdgDtl.get().getSlDviTsan() - countSlDviTsanThanhCong;
+                xhQdPdKhBdgDtl.get().setSoDviTsanKhongThanh(soDviTsanKhongThanh);
+
+//                Integer countSlDviTsanKhongThanhCong = xhQdPdKhBdgDtlRepository.countSlDviTsanKhongThanhCong(data.getIdQdPdDtl(), data.getMaDvi());
+//                xhQdPdKhBdgDtl.get().setSoDviTsanKhongThanh(countSlDviTsanKhongThanhCong);
+            }
+            xhQdPdKhBdgDtlRepository.save(xhQdPdKhBdgDtl.get());
+        }else{
+            throw new Exception("Không tìm thấy Quyết định phê duyệt kế hoạch bán đấu giá");
+        }
         return created;
     }
 
@@ -236,15 +261,6 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
         byIdTtinHdr.forEach(item -> {
             xhTcTtinBdgPloRepository.deleteAllByIdTtinDtl(item.getId());
         });
-
-//        Optional<XhQdPdKhBdgDtl> xhQdPdKhBdgDtl = xhQdPdKhBdgDtlRepository.findById(data.getIdQdPdDtl());
-//        if(byId.isPresent()){
-//                xhQdPdKhBdgDtl.get().setSoDviTsanThanhCong(null);
-//                xhQdPdKhBdgDtl.get().setSoDviTsanKhongThanh(null);
-//            xhQdPdKhBdgDtlRepository.save(xhQdPdKhBdgDtl.get());
-//        }else{
-//            throw new Exception("Không tìm thấy Quyết định phê duyệt kế hoạch bán đấu giá");
-//        }
 
         xhTcTtinBdgDtlRepository.deleteAllByIdTtinHdr(id);
         fileDinhKemService.delete(data.getId(), Collections.singleton(XhTcTtinBdgHdr.TABLE_NAME));
