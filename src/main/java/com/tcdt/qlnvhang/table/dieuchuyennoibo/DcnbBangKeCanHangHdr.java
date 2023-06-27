@@ -20,8 +20,8 @@ public class DcnbBangKeCanHangHdr extends BaseEntity implements Serializable, Cl
     public static final String TABLE_NAME = "DCNB_BANG_KE_CAN_HANG_HDR";
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
-//    @SequenceGenerator(sequenceName = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
     private Long id;
 
     @Column(name = "NAM")
@@ -65,6 +65,15 @@ public class DcnbBangKeCanHangHdr extends BaseEntity implements Serializable, Cl
 
     @Column(name = "SO_PHIEU_XUAT_KHO")
     private String soPhieuXuatKho;
+
+    @Column(name = "PHIEU_NHAP_KHO_ID")
+    private Long phieuNhapKhoId;
+
+    @Column(name = "NGAY_NHAP_KHO")
+    private LocalDate ngayNhapKho;
+
+    @Column(name = "SO_PHIEU_NHAP_KHO")
+    private String soPhieuNhapKho;
 
     @Column(name = "SO_BB_LAY_MAU")
     private String soBbLayMau;
