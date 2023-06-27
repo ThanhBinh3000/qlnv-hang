@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.nhaphang.nhapkhac;
 
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhDxuatKhNhapKhacHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhThopKhNhapKhac;
+import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhThopKhNhapKhacDTO;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhThopKhNhapKhacReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhThopKhNhapKhacSearch;
@@ -15,4 +16,6 @@ public interface HhThopKhNhapKhacService {
     HhThopKhNhapKhac themMoi (HhThopKhNhapKhacReq req) throws Exception;
     HhThopKhNhapKhac capNhat (HhThopKhNhapKhacReq req) throws Exception;
     HhThopKhNhapKhacDTO chiTiet (Long id) throws Exception;
+    void delete(IdSearchReq idSearchReq) throws Exception;
+    void deleteMulti(IdSearchReq idSearchReq) throws Exception;
 }
