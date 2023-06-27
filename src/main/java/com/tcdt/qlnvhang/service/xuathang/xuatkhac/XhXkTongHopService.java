@@ -223,17 +223,22 @@ public class XhXkTongHopService extends BaseServiceImpl {
     for (int i = 0; i < data.size(); i++) {
       XhXkTongHopHdr qd = data.get(i);
       objs = new Object[rowsName.length];
-      objs[0] = i;
-      objs[1] = qd.getNam();
-      objs[2] = qd.getMaDanhSach();
       for (XhXkTongHopDtl dtl : qd.getTongHopDtl()) {
+        objs[0] = i;
+        objs[1] = qd.getNam();
+        objs[2] = qd.getMaDanhSach();
         objs[3] = dtl.getTenChiCuc();
         objs[4] = dtl.getTenLoaiVthh();
         objs[5] = dtl.getTenCloaiVthh();
         objs[6] = dtl.getTenDiemKho();
         objs[7] = dtl.getTenLoKho();
+        objs[8] = dtl.getNgayNhapKho();
+        objs[9] = dtl.getSlHienTai();
+        objs[10] = dtl.getDonViTinh();
+        objs[11] = dtl.getNgayDeXuat();
+        objs[12] = qd.getTenTrangThai();
+        objs[13] = dtl.getTrangThaiKtCl();
       }
-      objs[3] = qd.getTenTrangThai();
       dataList.add(objs);
     }
     ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);

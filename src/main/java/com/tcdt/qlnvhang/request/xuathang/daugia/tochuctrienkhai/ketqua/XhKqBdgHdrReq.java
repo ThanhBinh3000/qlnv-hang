@@ -56,6 +56,8 @@ public class XhKqBdgHdrReq extends BaseRequest {
 
   private String ghiChu;
 
+  private Long idQdPd;
+
   private String soQdPd;
 
   private String hinhThucDauGia;
