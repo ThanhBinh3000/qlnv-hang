@@ -169,12 +169,12 @@ public class XhXkTongHopService extends BaseServiceImpl {
     }
     XhXkTongHopHdr data = optional.get();
     if (!DataUtils.isNullObject(data.getId())) {
-      xhXkDanhSachRepository.findByIdTongHop(data.getId())
-              .ifPresent(item -> {
-                item.setIdTongHop(null);
-                item.setMaTongHop(null);
-                xhXkDanhSachRepository.save(item);
-              });
+      List<XhXkDanhSachHdr> items = xhXkDanhSachRepository.findAllByIdTongHop(data.getId());
+      items.forEach(item -> {
+        item.setIdTongHop(null);
+        item.setMaTongHop(null);
+        xhXkDanhSachRepository.save(item);
+      });
     }
     xhXkTongHopRepository.delete(data);
   }
@@ -188,12 +188,12 @@ public class XhXkTongHopService extends BaseServiceImpl {
     }
     list.forEach(data->{
       if (!DataUtils.isNullObject(data.getId())) {
-        xhXkDanhSachRepository.findByIdTongHop(data.getId())
-                .ifPresent(item -> {
-                  item.setIdTongHop(null);
-                  item.setMaTongHop(null);
-                  xhXkDanhSachRepository.save(item);
-                });
+        List<XhXkDanhSachHdr> items = xhXkDanhSachRepository.findAllByIdTongHop(data.getId());
+        items.forEach(item -> {
+          item.setIdTongHop(null);
+          item.setMaTongHop(null);
+          xhXkDanhSachRepository.save(item);
+        });
       }
     });
 
