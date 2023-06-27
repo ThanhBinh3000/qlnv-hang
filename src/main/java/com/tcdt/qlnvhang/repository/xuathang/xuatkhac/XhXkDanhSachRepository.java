@@ -29,5 +29,5 @@ public interface XhXkDanhSachRepository extends JpaRepository<XhXkDanhSachHdr, L
 
   List<XhXkDanhSachHdr> findByIdIn(List<Long> ids);
 
-  Optional<XhXkDanhSachHdr> findByIdTongHop(Long ids);
+  List<XhXkDanhSachHdr> findAllByIdTongHop(Long ids);
 }
