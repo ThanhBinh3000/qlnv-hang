@@ -127,6 +127,8 @@ public class ThongTinDauGiaReq extends BaseRequest {
 
   private String thongBaoKhongThanh;
 
+  private Integer soDviTsan;
+
   private List<ThongTinDauGiaDtlReq> children = new ArrayList<>();
 
   private List<ThongTinDauGiaNtgReq> listNguoiTgia = new ArrayList<>();
