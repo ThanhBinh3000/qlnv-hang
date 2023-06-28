@@ -148,7 +148,6 @@ public class HhQdPdNhapKhacServiceImpl extends BaseServiceImpl implements HhQdPd
                     qd.setTrangThai(Contains.CHUACAPNHAT);
                     qd.setTongSlNhap(dxHdr.getTongSlNhap());
                     qd.setTongThanhTien(dxHdr.getTongThanhTien());
-                    qd.setCloaiVthh(dxHdr.getCloaiVthh());
                     hhQdPdNhapKhacDtlRepository.save(qd);
                 });
             }
@@ -240,14 +239,16 @@ public class HhQdPdNhapKhacServiceImpl extends BaseServiceImpl implements HhQdPd
         }else{
 
         }
-        dtls.forEach(dtl -> {
+        Integer sumSlNhap = 0;
+        for (HhQdPdNhapKhacDtl dtl : dtls) {
             dtl.setTenCuc(mapDmucDvi.get(dtl.getMaCuc()));
             dtl.setTenChiCuc(mapDmucDvi.get(dtl.getMaChiCuc()));
             dtl.setTenDiemKho(mapDmucDvi.get(dtl.getMaDiemKho()));
             dtl.setTenNhaKho(mapDmucDvi.get(dtl.getMaNhaKho()));
             dtl.setTenNganLoKho(mapDmucDvi.get(dtl.getMaLoKho()) + " - " + mapDmucDvi.get(dtl.getMaNganKho()));
             dtl.setTenCloaiVthh(mapVthh.get(dtl.getCloaiVthh()));
-        });
+            qOptional.get().setTongSlNhap(sumSlNhap +=  dtl.getSlDoiThua().intValue());
+        }
         qOptional.get().setDetails(dtls);
         return qOptional.get();
     }

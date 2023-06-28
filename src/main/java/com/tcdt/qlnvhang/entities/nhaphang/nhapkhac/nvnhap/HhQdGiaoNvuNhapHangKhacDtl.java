@@ -19,7 +19,7 @@ import java.util.List;
 @Entity
 @Table(name = "NH_QD_GIAO_NVU_NHAPXUAT_KHAC_CT")
 @Data
-public class NhQdGiaoNvuNhapHangKhacDtl implements Serializable {
+public class HhQdGiaoNvuNhapHangKhacDtl implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

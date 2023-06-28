@@ -19,6 +19,6 @@ public interface HhDxuatKhNhapKhacService {
     HhDxuatKhNhapKhacHdr pheDuyet(StatusReq stReq) throws Exception;
     void xoa (IdSearchReq idSearchReq) throws Exception;
     void xoaNhieu (IdSearchReq idSearchReq) throws Exception;
-    void xuatFile(HhDxuatKhNhapKhacSearch req , HttpServletResponse response);
+    void xuatFile(HhDxuatKhNhapKhacSearch req , HttpServletResponse response) throws Exception;
     List<HhDxuatKhNhapKhacDTO> findAllByTrangThaiAndTrangThaiTh(String trangThai, String trangThaiTh);
 }

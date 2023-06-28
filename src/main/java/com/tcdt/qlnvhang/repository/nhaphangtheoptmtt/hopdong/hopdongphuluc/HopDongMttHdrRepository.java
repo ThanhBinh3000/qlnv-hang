@@ -32,4 +32,9 @@ public interface HopDongMttHdrRepository extends JpaRepository<HopDongMttHdr, Lo
   @Transactional
   List<HopDongMttHdr> findAllByIdQdKq(Long idQdKq);
 
+  @Transactional
+  List<HopDongMttHdr> findAllByIdQdPdKqSldd(Long idQdPdKqSldd);
+
+  void deleteAllByIdQdPdKqSldd(Long idQdPdKqSldd);
+
 }
