@@ -144,8 +144,15 @@ public class DcnbBbChuanBiKhoServiceImpl implements DcnbBbChuanBiKhoService {
         String status = hdr.getTrangThai() + req.getTrangThai();
         switch (status) {
             // Arena các cấp duuyệt
-            case Contains.DUTHAO + Contains.CHODUYET_LDCC:
-            case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
+            case Contains.DUTHAO + Contains.CHODUYET_TK:
+            case Contains.TUCHOI_LDCC + Contains.CHODUYET_TK:
+            case Contains.TUCHOI_TK + Contains.CHODUYET_TK:
+                break;
+            case Contains.CHODUYET_TK + Contains.TUCHOI_TK:
+                hdr.setIdThuKho(userInfo.getId());
+                break;
+            case Contains.CHODUYET_TK + Contains.CHODUYET_LDCC:
+                hdr.setIdThuKho(userInfo.getId());
                 break;
             case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
                 hdr.setLyDoTuChoi(req.getLyDoTuChoi());
