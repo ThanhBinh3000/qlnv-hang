@@ -288,7 +288,7 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
     String title = "QUẢN LÝ KÝ HỢP ĐỒNG BÁN HÀNG DTQG THEO PHƯƠNG THỨC BÁN ĐẤU GIÁ";
     String[] rowsName = new String[]{"STT", "Năm Kế hoạch", "QĐ PD KHBĐG", "QĐ PD KQBĐG", "Tổng sô ĐV tài sản",
         "Số ĐVTS ĐG thành công", "SL HĐ đã ký", "Thời hạn thanh toán", "Chủng loại hành hóa", "ĐV thực hiện",
-        "TCCN thắng đấu giá", "Tổng SL xuất bán", "Thành tiền(đ)", "Trạng thái HĐ", "Trạng thái XH"};
+         "Tổng SL xuất bán", "Thành tiền(đ)", "Trạng thái HĐ", "Trạng thái XH"};
     String fileName = "quan-ly-ky-hop-dong-ban-hang-dtqg-theo-phuong-thuc-ban-dau-gia.xlsx";
     List<Object[]> dataList = new ArrayList<Object[]>();
     Object[] objs = null;
@@ -304,7 +304,6 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
       objs[6] = hdr.getSlHdDaKy();
       objs[7] = hdr.getThoiHanTt();
       objs[8] = hdr.getTenDvi();
-      objs[9] = hdr.getToChucCaNhanDg();
       objs[10] = hdr.getTongSlXuat();
       objs[11] = hdr.getThanhTien();
       objs[12] = hdr.getTenTrangThaiHd();
