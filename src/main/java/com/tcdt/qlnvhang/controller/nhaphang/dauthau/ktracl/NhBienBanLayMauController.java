@@ -82,7 +82,7 @@ public class NhBienBanLayMauController {
 
 	@ApiOperation(value = "Chi tiết thông tin", response = Page.class)
 	@GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BaseResponse> detail(@PathVariable("id") Long id) {
+	public ResponseEntity<BaseResponse> detail(@PathVariable("ids") Long id) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			resp.setData(service.detail(id));

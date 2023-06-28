@@ -6,6 +6,8 @@ import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhThopKhNhapKhac;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhDxuatKhNhapKhacHdrRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhThopKhNhapKhacRepository;
+import com.tcdt.qlnvhang.request.IdSearchReq;
+import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhDxuatKhNhapKhacHdrReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhThopKhNhapKhacDTO;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhThopKhNhapKhacReq;
@@ -81,7 +83,7 @@ public class HhThopKhNhapKhacServiceImpl extends BaseServiceImpl implements HhTh
         dataMap.setNgayTao(getDateTimeNow());
         dataMap.setNgayTh(getDateTimeNow());
         dataMap.setNguoiTao(getUser().getUsername());
-        dataMap.setTrangThai(Contains.DUTHAO);
+        dataMap.setTrangThai(Contains.CHUATAO_QD);
         HhThopKhNhapKhac created = hhThopKhNhapKhacRepository.save(dataMap);
         luuFile(req, created);
         luuChiTiet(req, created);
@@ -120,6 +122,51 @@ public class HhThopKhNhapKhacServiceImpl extends BaseServiceImpl implements HhTh
         data.setHdr(hhThopKhNhapKhac.get());
         data.setDtl(hhDxuatKhNhapKhacHdrRepository.findAllByThopId(hhThopKhNhapKhac.get().getId()));
         return data;
+    }
+
+    @Override
+    public void delete(IdSearchReq idSearchReq) throws Exception {
+        if (idSearchReq.getId() == null) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        Optional<HhThopKhNhapKhac> hhThopKhNhapKhac = hhThopKhNhapKhacRepository.findById(idSearchReq.getId());
+        if (!hhThopKhNhapKhac.isPresent()) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        if (!hhThopKhNhapKhac.get().getTrangThai().equals(Contains.CHUATAO_QD)) {
+            throw new Exception("Chỉ thực hiện xóa với bản ghi chưa được tạo quyết định.");
+        }
+        List<HhDxuatKhNhapKhacHdr> dxuatKhNhapKhacHdrList =  hhDxuatKhNhapKhacHdrRepository.findAllByThopId(hhThopKhNhapKhac.get().getId());
+        dxuatKhNhapKhacHdrList.forEach(item -> {
+            item.setThopId(null);
+            item.setTrangThaiTh(Contains.CHUATONGHOP);
+            hhDxuatKhNhapKhacHdrRepository.save(item);
+        });
+        fileDinhKemService.delete(hhThopKhNhapKhac.get().getId(), Lists.newArrayList(HhThopKhNhapKhac.TABLE_NAME));
+        hhThopKhNhapKhacRepository.delete(hhThopKhNhapKhac.get());
+    }
+
+    @Override
+    public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
+        if (StringUtils.isEmpty(idSearchReq.getIdList()))
+            throw new Exception("Xoá thất bại, không tìm thấy dữ liệu");
+        List<HhThopKhNhapKhac> list = hhThopKhNhapKhacRepository.findAllByIdIn(idSearchReq.getIdList());
+        if (list.isEmpty()) {
+            throw new Exception("Không tìm thấy dữ liệu cần xoá");
+        }
+        for (HhThopKhNhapKhac item : list) {
+            if (!item.getTrangThai().equals(Contains.CHUATAO_QD)) {
+                throw new Exception("Chỉ thực hiện xóa với bản ghi chưa được tạo quyết định.");
+            }
+            List<HhDxuatKhNhapKhacHdr> dxuatKhNhapKhacHdrList =  hhDxuatKhNhapKhacHdrRepository.findAllByThopId(item.getId());
+            dxuatKhNhapKhacHdrList.forEach(data -> {
+                data.setThopId(null);
+                data.setTrangThaiTh(Contains.CHUATONGHOP);
+                hhDxuatKhNhapKhacHdrRepository.save(data);
+            });
+            fileDinhKemService.delete(item.getId(), Lists.newArrayList(HhThopKhNhapKhac.TABLE_NAME));
+        }
+        hhThopKhNhapKhacRepository.deleteAll(list);
     }
 
     private void luuFile(HhThopKhNhapKhacReq req, HhThopKhNhapKhac created) {

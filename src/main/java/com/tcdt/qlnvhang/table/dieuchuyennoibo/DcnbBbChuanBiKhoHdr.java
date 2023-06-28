@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.*;
 
@@ -46,6 +47,10 @@ public class DcnbBbChuanBiKhoHdr extends BaseEntity implements Serializable, Clo
     private String maNhaKho;
     private String maNganKho;
     private String maLoKho;
+    private String tenDiemKho;
+    private String tenNhaKho;
+    private String tenNganKho;
+    private String tenLoKho;
     private String loaiHinhKho;
     private String loaiVthh;
     private String cloaiVthh;
@@ -58,6 +63,7 @@ public class DcnbBbChuanBiKhoHdr extends BaseEntity implements Serializable, Clo
     private BigDecimal dinhMucGiao;
     private BigDecimal dinhMucThucTe;
     private String nhanXet;
+    @Access(value=AccessType.PROPERTY)
     private String trangThai;
     private String lyDoTuChoi;
 
@@ -67,4 +73,10 @@ public class DcnbBbChuanBiKhoHdr extends BaseEntity implements Serializable, Clo
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
     private List<DcnbBbChuanBiKhoDtl> children = new ArrayList<>();
+    @Transient
+    private String tenTrangThai;
+    public void setTrangThai(String trangThai) {
+        this.trangThai = trangThai;
+        this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
+    }
 }

@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = DcnbBienBanLayMauDtl.TABLE_NAME)
+@Table(name = DcnbBangKeCanHangDtl.TABLE_NAME)
 public class DcnbBangKeCanHangDtl {
 
     private static final long serialVersionUID = 1L;
@@ -26,14 +26,14 @@ public class DcnbBangKeCanHangDtl {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "HDR_ID",insertable = true, updatable = true)
+    @Column(name = "HDR_ID")
     private Long hdrId;
 
     @Column(name = "MA_CAN")
     private String maCan;
 
     @Column(name = "SO_BAO_BI")
-    private BigDecimal soBaoBi;
+    private String soBaoBi;
 
     @Column(name = "TRONG_LUONG_CA_BAO_BI")
     private BigDecimal trongLuongCaBaoBi;
