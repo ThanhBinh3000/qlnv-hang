@@ -8,6 +8,7 @@ import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhThopKhNhapKhacReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhThopKhNhapKhacSearch;
 import org.springframework.data.domain.Page;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface HhThopKhNhapKhacService {
@@ -18,4 +19,5 @@ public interface HhThopKhNhapKhacService {
     HhThopKhNhapKhacDTO chiTiet (Long id) throws Exception;
     void delete(IdSearchReq idSearchReq) throws Exception;
     void deleteMulti(IdSearchReq idSearchReq) throws Exception;
+    void exportList(HhThopKhNhapKhacSearch objReq, HttpServletResponse response) throws Exception;
 }

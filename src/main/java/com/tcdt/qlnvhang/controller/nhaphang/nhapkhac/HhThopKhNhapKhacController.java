@@ -1,9 +1,8 @@
 package com.tcdt.qlnvhang.controller.nhaphang.nhapkhac;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.IdSearchReq;
-import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhDxuatKhNhapKhacHdrReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhThopKhNhapKhacReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhThopKhNhapKhacSearch;
 import com.tcdt.qlnvhang.response.BaseResponse;
@@ -21,8 +20,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -154,5 +156,24 @@ public class HhThopKhNhapKhacController {
         }
 
         return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Kết xuất danh sách đề xuất kế hoạch lựa chọn nhà thầu", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(PathContains.URL_KET_XUAT)
+    @ResponseStatus(HttpStatus.OK)
+    public void exportDsKhlcnt(@Valid @RequestBody HhThopKhNhapKhacSearch searchReq, HttpServletResponse response)
+            throws Exception {
+        try {
+            service.exportList(searchReq, response);
+        } catch (Exception e) {
+            log.error("Kết xuất danh sách đề xuất kế hoạch lựa chọn nhà thầu trace: {}", e);
+            final Map<String, Object> body = new HashMap<>();
+            body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            body.put("msg", e.getMessage());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("UTF-8");
+            final ObjectMapper mapper = new ObjectMapper();
+            mapper.writeValue(response.getOutputStream(), body);
+        }
     }
 }
