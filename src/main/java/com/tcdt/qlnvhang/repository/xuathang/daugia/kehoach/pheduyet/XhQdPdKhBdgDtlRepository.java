@@ -48,4 +48,16 @@ public interface XhQdPdKhBdgDtlRepository extends JpaRepository<XhQdPdKhBdgDtl,L
     )
     Page<XhQdPdKhBdgDtl> searchDtl(@Param("param") XhQdPdKhBdgDtlReq param, Pageable pageable);
 
+    @Query(value = " SELECT NVL(SUM(TTHDR.SO_DVI_TSAN),0) FROM XH_QD_PD_KH_BDG_DTL DTL" +
+            " INNER JOIN XH_TC_TTIN_BDG_HDR TTHDR on DTL.ID = TTHDR.ID_QD_PD_DTL" +
+            " WHERE TTHDR.KET_QUA = 1 AND DTL.ID = :idQdPdDtl AND DTL.MA_DVI = :maDvi AND TTHDR.TRANG_THAI='45'",
+            nativeQuery = true)
+    Integer countSlDviTsanThanhCong(Long idQdPdDtl, String maDvi);
+
+//    @Query(value = " SELECT NVL(SUM(TTHDR.SO_DVI_TSAN),0) FROM XH_QD_PD_KH_BDG_DTL DTL" +
+//            " INNER JOIN XH_TC_TTIN_BDG_HDR TTHDR on DTL.ID = TTHDR.ID_QD_PD_DTL" +
+//            " WHERE TTHDR.KET_QUA = 0 AND DTL.ID = :idQdPdDtl AND DTL.MA_DVI = :maDvi AND TTHDR.TRANG_THAI='45'",
+//            nativeQuery = true)
+//    Integer countSlDviTsanKhongThanhCong(Long idQdPdDtl, String maDvi);
+
 }

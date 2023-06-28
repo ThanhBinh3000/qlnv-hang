@@ -1,10 +1,12 @@
 package com.tcdt.qlnvhang.request.nhaphangtheoptt;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.util.Contains;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class HhDxKhMttThopHdrReq extends HhDxKhMttTChiThopReq {
@@ -27,7 +29,7 @@ public class HhDxKhMttThopHdrReq extends HhDxKhMttTChiThopReq {
     private String soQdCc;
 
     private String tchuanCluong;
-
+    private List<FileDinhKemReq> fileDinhKems;
 }
 
 

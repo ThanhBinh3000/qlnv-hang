@@ -10,8 +10,10 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.HhDchinhDxKhLcntHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -190,7 +192,10 @@ public class HhQdKhlcntHdr implements Serializable {
 	private List<HhQdKhlcntDtl> children = new ArrayList<>();
 	@Transient
 	private List<HhQdKhlcntDsgthau> dsGthau = new ArrayList<>();
-
+	@Transient
+	private HhDxuatKhLcntHdr dxKhlcntHdr;
+	@Transient
+	private HhDchinhDxKhLcntHdr dchinhDxKhLcntHdr ;
 	@Transient
 	BigDecimal tongTien;
 	@Transient
