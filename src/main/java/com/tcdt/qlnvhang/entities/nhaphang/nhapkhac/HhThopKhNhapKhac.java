@@ -55,4 +55,6 @@ public class HhThopKhNhapKhac {
     private Date ngayKyQd;
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
+    @Transient
+    private List<HhDxuatKhNhapKhacHdr> dxHdr;
 }

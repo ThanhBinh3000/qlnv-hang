@@ -122,6 +122,23 @@ public class HhThopKhNhapKhacController {
         return ResponseEntity.ok(resp);
     }
 
+    @ApiOperation(value = "Lấy danh sách tổng hợp chưa được tạo quyết định", response = List.class)
+    @GetMapping(value = "/ds-th-chua-tao-qd", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> layDsTongHopChuaTaoQd() {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(service.layDsTongHopChuaTaoQd());
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Lấy chi tiết trace: {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
     @ApiOperation(value = "Xoá", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
