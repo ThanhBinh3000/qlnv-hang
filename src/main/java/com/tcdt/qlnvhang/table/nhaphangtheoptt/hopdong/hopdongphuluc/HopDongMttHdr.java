@@ -30,6 +30,7 @@ public class HopDongMttHdr extends TrangThaiBaseEntity implements Serializable {
   private Integer namHd;
 
   private Long idQdKq;
+  private Long idQdPdKqSldd;
 
   private String soQdKq;
 
