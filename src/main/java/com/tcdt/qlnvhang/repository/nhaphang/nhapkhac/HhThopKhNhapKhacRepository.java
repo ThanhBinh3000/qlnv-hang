@@ -26,4 +26,5 @@ public interface HhThopKhNhapKhacRepository extends JpaRepository<HhThopKhNhapKh
     )
     Page<HhThopKhNhapKhac> search(HhThopKhNhapKhacSearch req, Pageable pageable);
     List<HhThopKhNhapKhac> findAllByIdIn(List<Long> ids);
+    List<HhThopKhNhapKhac> findAllBySoQdIsNull();
 }

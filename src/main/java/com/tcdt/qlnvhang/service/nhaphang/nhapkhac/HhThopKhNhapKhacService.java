@@ -13,6 +13,7 @@ import java.util.List;
 
 public interface HhThopKhNhapKhacService {
     Page<HhThopKhNhapKhac> timKiem(HhThopKhNhapKhacSearch req);
+    List<HhThopKhNhapKhac> layDsTongHopChuaTaoQd();
     List<HhDxuatKhNhapKhacHdr> layDsDxuatChuaTongHop (HhThopKhNhapKhacSearch req);
     HhThopKhNhapKhac themMoi (HhThopKhNhapKhacReq req) throws Exception;
     HhThopKhNhapKhac capNhat (HhThopKhNhapKhacReq req) throws Exception;
