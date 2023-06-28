@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface HhThopKhNhapKhacRepository extends JpaRepository<HhThopKhNhapKhac, Long> {
     @Query(
@@ -23,4 +25,5 @@ public interface HhThopKhNhapKhacRepository extends JpaRepository<HhThopKhNhapKh
                     "  ORDER BY thop.ngaySua desc , thop.ngayTao desc, thop.id desc"
     )
     Page<HhThopKhNhapKhac> search(HhThopKhNhapKhacSearch req, Pageable pageable);
+    List<HhThopKhNhapKhac> findAllByIdIn(List<Long> ids);
 }
