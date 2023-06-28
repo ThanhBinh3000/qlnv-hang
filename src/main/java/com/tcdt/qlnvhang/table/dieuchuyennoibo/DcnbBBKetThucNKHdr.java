@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import lombok.*;
 
 import javax.persistence.*;
@@ -88,6 +89,7 @@ public class DcnbBBKetThucNKHdr extends BaseEntity implements Serializable, Clon
     @Column(name = "DON_VI_TINH")
     private String donViTinh;
     @Column(name = "TRANG_THAI")
+    @Access(value=AccessType.PROPERTY)
     private String trangThai;
     @Column(name = "LY_DO_TU_CHOI")
     private String lyDoTuChoi;
@@ -118,4 +120,10 @@ public class DcnbBBKetThucNKHdr extends BaseEntity implements Serializable, Clon
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
     private List<DcnbBBKetThucNKDtl> bcnbBBKetThucNKDtl = new ArrayList<>();
+    @Transient
+    private String tenTrangThai;
+    public void setTrangThai(String trangThai) {
+        this.trangThai = trangThai;
+        this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
+    }
 }
