@@ -21,6 +21,7 @@ public interface HhQdPdNhapKhacHdrRepository extends JpaRepository<HhQdPdNhapKha
                     " WHERE (:#{#req.namKhoach} IS NULL OR qdnk.namKhoach = :#{#req.namKhoach}) " +
                     "  AND (:#{#req.soDxuat} IS NULL OR LOWER(qdnk.soDxuat) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.soDxuat}),'%'))) " +
                     "  AND (:#{#req.maDvi} IS NULL OR LOWER(qdnk.maDvi) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.maDvi}),'%')))" +
+                    "  AND (:#{#req.lastest} IS NULL OR LOWER(qdnk.lastest) = :#{#req.lastest}) " +
                     "  AND (:#{#req.tuNgayQdPdStr} IS NULL OR qdnk.ngayKyQd >= TO_DATE(:#{#req.tuNgayQdPdStr}, 'YYYY-MM-DD HH24:MI:SS'))" +
                     "  AND (:#{#req.denNgayQdPdStr} IS NULL OR qdnk.ngayKyQd <= TO_DATE(:#{#req.denNgayQdPdStr}, 'YYYY-MM-DD HH24:MI:SS'))" +
                     "  AND (:#{#req.tuNgayDuyetStr} IS NULL OR qdnk.ngayPduyet >= TO_DATE(:#{#req.tuNgayDuyetStr}, 'YYYY-MM-DD HH24:MI:SS'))" +
