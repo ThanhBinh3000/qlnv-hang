@@ -21,8 +21,8 @@ public class DcnbBienBanHaoDoiHdr extends BaseEntity implements Serializable {
     public static final String TABLE_NAME = "DCNB_BIEN_BAN_HAO_DOI_HDR";
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanHaoDoiHdr.TABLE_NAME + "_SEQ")
-//    @SequenceGenerator(sequenceName = DcnbBienBanHaoDoiHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanHaoDoiHdr.TABLE_NAME + "_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanHaoDoiHdr.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = DcnbBienBanHaoDoiHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanHaoDoiHdr.TABLE_NAME + "_SEQ")
     private Long id;
 
     @Column(name = "LOAI_DC")
