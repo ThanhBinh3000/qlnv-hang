@@ -110,7 +110,7 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
     }
 
     void saveDetail(ThongTinDauGiaReq req, Long id, Boolean check) {
-        if(check == true && req.getKetQua().equals(0)){
+        if(check == true){
             xhTcTtinBdgNlqRepository.deleteAllByIdTtinHdr(id);
         }
         if(req.getKetQua().equals(1)){

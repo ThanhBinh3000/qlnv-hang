@@ -78,8 +78,6 @@ public class XhKqBdgHdrReq extends BaseRequest {
 
   private LocalDate thoiHanTt;
 
-  private String toChucCaNhanDg;
-
   private Long tongSlXuat;
 
   private Long thanhTien;
