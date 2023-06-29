@@ -47,6 +47,7 @@ public class HhQdPdNhapKhacHdr {
     private String tenKieuNx;
     private String trangThai;
     private String maDvi;
+    private String lyDoTuChoi;
     @Transient
     private String tenDvi;
     @Transient
