@@ -10,7 +10,7 @@ import java.util.Date;
 @Data
 public class HhQdPdNhapKhacSearch extends BaseRequest {
     private Integer namKhoach;
-    private String soDxuat;
+    private String soQd;
     private String maDvi;
     private String trangThai;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
