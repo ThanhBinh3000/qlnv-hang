@@ -69,5 +69,5 @@ public class HhDxuatKhNhapKhacHdr {
     @Transient
     private List<FileDinhKem> canCuPhapLy = new ArrayList<>();
     @Transient
-    private List<HhDxuatKhNhapKhacDtl> children;
+    private List<HhDxuatKhNhapKhacDtl> details;
 }

@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhDxuatKhNhapKhacDtl;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhDxuatKhNhapKhacHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhThopKhNhapKhac;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhDxuatKhNhapKhacDtlRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhDxuatKhNhapKhacHdrRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhThopKhNhapKhacRepository;
@@ -68,7 +69,7 @@ public class HhThopKhNhapKhacServiceImpl extends BaseServiceImpl implements HhTh
 
     @Override
     public List<HhThopKhNhapKhac> layDsTongHopChuaTaoQd() {
-        List<HhThopKhNhapKhac> thop = hhThopKhNhapKhacRepository.findAllBySoQdIsNull();
+        List<HhThopKhNhapKhac> thop = hhThopKhNhapKhacRepository.findAllByTrangThai(TrangThaiAllEnum.CHUA_TONG_HOP.getId());
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String,String> hashMapLoaiNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
@@ -80,6 +81,7 @@ public class HhThopKhNhapKhacServiceImpl extends BaseServiceImpl implements HhTh
             listDxuat.forEach(i -> {
                 i.setTenLoaiHinhNx(hashMapLoaiNx.get(i.getLoaiHinhNx()));
                 i.setTenKieuNx(hashMapKieuNx.get(i.getKieuNx()));
+                i.setTenLoaiVthh(mapVthh.get(i.getLoaiVthh()));
                 List<HhDxuatKhNhapKhacDtl> dtls = hhDxuatKhNhapKhacDtlRepository.findAllByHdrId(i.getId());
                 dtls.forEach(dtl -> {
                     dtl.setTenCuc(mapDmucDvi.get(dtl.getMaCuc()));
@@ -89,7 +91,7 @@ public class HhThopKhNhapKhacServiceImpl extends BaseServiceImpl implements HhTh
                     dtl.setTenNganLoKho(mapDmucDvi.get(dtl.getMaLoKho()) + " - " + mapDmucDvi.get(dtl.getMaNganKho()));
                     dtl.setTenCloaiVthh(mapVthh.get(dtl.getCloaiVthh()));
                 });
-                i.setChildren(dtls);
+                i.setDetails(dtls);
             });
             f.setDxHdr(listDxuat);
         });

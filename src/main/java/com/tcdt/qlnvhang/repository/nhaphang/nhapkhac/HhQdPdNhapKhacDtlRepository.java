@@ -11,4 +11,5 @@ import java.util.List;
 public interface HhQdPdNhapKhacDtlRepository extends JpaRepository<HhQdPdNhapKhacDtl, Long> {
     void deleteAllByIdHdr (Long hdrId);
     List<HhQdPdNhapKhacDtl> findAllByIdHdr (Long hdrId);
+    List<HhQdPdNhapKhacDtl> findAllByIdDxHdr (Long hdrId);
 }
