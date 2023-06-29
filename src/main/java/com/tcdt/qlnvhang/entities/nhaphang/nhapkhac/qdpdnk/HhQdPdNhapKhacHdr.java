@@ -3,6 +3,8 @@ package com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.qdpdnk;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tcdt.qlnvhang.entities.FileDKemJoinQdPdNkHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhDxuatKhNhapKhacHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhThopKhNhapKhac;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 import org.hibernate.annotations.Fetch;
@@ -88,4 +90,7 @@ public class HhQdPdNhapKhacHdr {
     }
     @Transient
     private List<HhQdPdNhapKhacDtl> details = new ArrayList<>();
+    @Transient
+    private List<HhDxuatKhNhapKhacHdr> children;
+
 }

@@ -13,6 +13,7 @@ import java.util.List;
 public class HhQdPdNhapKhacHdrReq {
     private Long id;
     private Long IdDx;
+    private Long IdTh;
     private Integer namKhoach;
     private String maDvi;
     private String loaiHinhNx;
