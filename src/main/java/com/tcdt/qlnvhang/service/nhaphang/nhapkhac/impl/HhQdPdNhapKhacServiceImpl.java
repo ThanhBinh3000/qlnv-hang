@@ -217,9 +217,11 @@ public class HhQdPdNhapKhacServiceImpl extends BaseServiceImpl implements HhQdPd
         dataDB.setFileDinhKems(fileDinhKemList);
 
         hhQdPdNhapKhacHdrRepository.save(dataDB);
-        Optional<HhThopKhNhapKhac> hhThopKhNhapKhac = hhThopKhNhapKhacRepository.findById(dataDB.getIdTh());
-        hhThopKhNhapKhac.get().setSoQd(dataMap.getSoQd());
-        hhThopKhNhapKhacRepository.save(hhThopKhNhapKhac.get());
+        if(dataDB.getIdTh() != null){
+            Optional<HhThopKhNhapKhac> hhThopKhNhapKhac = hhThopKhNhapKhacRepository.findById(dataDB.getIdTh());
+            hhThopKhNhapKhac.get().setSoQd(dataMap.getSoQd());
+            hhThopKhNhapKhacRepository.save(hhThopKhNhapKhac.get());
+        }
         this.saveDetail(objReq,dataDB);
 
         return dataDB;
