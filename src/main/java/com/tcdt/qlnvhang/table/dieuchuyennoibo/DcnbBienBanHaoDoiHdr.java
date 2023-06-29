@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import lombok.*;
 import org.apache.tomcat.jni.Local;
 
@@ -20,8 +21,8 @@ public class DcnbBienBanHaoDoiHdr extends BaseEntity implements Serializable {
     public static final String TABLE_NAME = "DCNB_BIEN_BAN_HAO_DOI_HDR";
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanHaoDoiHdr.TABLE_NAME + "_SEQ")
-//    @SequenceGenerator(sequenceName = DcnbBienBanHaoDoiHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanHaoDoiHdr.TABLE_NAME + "_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanHaoDoiHdr.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = DcnbBienBanHaoDoiHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanHaoDoiHdr.TABLE_NAME + "_SEQ")
     private Long id;
 
     @Column(name = "LOAI_DC")
@@ -163,6 +164,7 @@ public class DcnbBienBanHaoDoiHdr extends BaseEntity implements Serializable {
     private Long lanhDaoChiCucId;
 
     @Column(name = "TRANG_THAI")
+    @Access(value=AccessType.PROPERTY)
     private String trangThai;
 
     @Column(name = "NGAY_GDUYET")
@@ -177,4 +179,10 @@ public class DcnbBienBanHaoDoiHdr extends BaseEntity implements Serializable {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
     private List<DcnbBienBanHaoDoiTtDtl> dcnbBienBanHaoDoiTtDtl = new ArrayList<>();
+    @Transient
+    private String tenTrangThai;
+    public void setTrangThai(String trangThai) {
+        this.trangThai = trangThai;
+        this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
+    }
 }

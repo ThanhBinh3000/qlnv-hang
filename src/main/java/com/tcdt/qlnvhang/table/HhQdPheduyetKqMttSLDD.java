@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhChiTietKqTTinChaoGia;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhChiTietTTinChaoGia;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhQdPdKQMttSlddDtl;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhQdPdKhMttSlddDtl;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc.HopDongMttHdr;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -56,5 +57,7 @@ public class HhQdPheduyetKqMttSLDD implements Serializable {
     private List<HhQdPdKQMttSlddDtl> children = new ArrayList<>();
     @Transient
     private List<HhChiTietKqTTinChaoGia> listChaoGia = new ArrayList<>();
+    @Transient
+    private List<HopDongMttHdr> listHdong = new ArrayList<>();
 
 }

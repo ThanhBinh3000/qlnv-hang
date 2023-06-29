@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.*;
 
@@ -52,6 +53,7 @@ public class THKeHoachDieuChuyenCucHdr extends BaseEntity implements Serializabl
     private LocalDate thDenNgay;
 
     @Column(name = "TRANG_THAI")
+    @Access(value=AccessType.PROPERTY)
     private String trangThai;
 
     @Column(name = "NGAY_GDUYET")
@@ -113,4 +115,10 @@ public class THKeHoachDieuChuyenCucHdr extends BaseEntity implements Serializabl
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
     private List<THKeHoachDieuChuyenCucKhacCucDtl> thKeHoachDieuChuyenCucKhacCucDtls = new ArrayList<>();
+    @Transient
+    private String tenTrangThai;
+    public void setTrangThai(String trangThai) {
+        this.trangThai = trangThai;
+        this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
+    }
 }

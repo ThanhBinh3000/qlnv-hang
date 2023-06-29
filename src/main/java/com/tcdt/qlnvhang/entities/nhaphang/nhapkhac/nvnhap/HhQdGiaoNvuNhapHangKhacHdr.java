@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.entities.FileDKemJoinQdNhapHangKhac;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuknghiemcl.PhieuKnghiemCluongHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbangiaonhan.NhBbGiaoNhanVt;
+import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.qdpdnk.HhQdPdNhapKhacDtl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
@@ -20,28 +21,28 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = NhQdGiaoNvuNhapHangKhacHdr.TABLE_NAME)
+@Table(name = HhQdGiaoNvuNhapHangKhacHdr.TABLE_NAME)
 @Data
-public class NhQdGiaoNvuNhapHangKhacHdr implements Serializable {
+public class HhQdGiaoNvuNhapHangKhacHdr implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public static final String TABLE_NAME = "NH_QD_GIAO_NVU_NHAPXUAT_KHAC";
+	public static final String TABLE_NAME = "HH_QD_GIAO_NVU_NHAPXUAT_KHAC";
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "QD_GIAO_NVU_NHAPXUAT_KHAC_SEQ")
-	@SequenceGenerator(sequenceName = "QD_GIAO_NVU_NHAPXUAT_KHAC_SEQ", allocationSize = 1, name = "QD_GIAO_NVU_NHAPXUAT_KHAC_SEQ")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_QD_GIAO_NVU_NHAP_KHAC_SEQ")
+	@SequenceGenerator(sequenceName = "HH_QD_GIAO_NVU_NHAP_KHAC_SEQ", allocationSize = 1, name = "HH_QD_GIAO_NVU_NHAP_KHAC_SEQ")
 	private Long id;
+	private Long idQdPdNk;
 
 	String soQd;
+	String soQdPd;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-	Date ngayQdinh;
+	Date ngayQd;
 
 	String maDvi;
-
-	String loaiQd;
 
 	String trangThai;
 
@@ -63,32 +64,19 @@ public class NhQdGiaoNvuNhapHangKhacHdr implements Serializable {
 	Date ngayPduyet;
 	String nguoiPduyet;
 
-	String ghiChu;
-
-	String capDvi;
-
 	String loaiVthh;
 
 	String cloaiVthh;
+	String dvt;
 
 	String trichYeu;
 
-	Integer namNhap;
+	Integer nam;
 
-	Long idHd;
-
-	String soHd;
-
-	String tenGoiThau;
-
-	String donViTinh;
-
-	Long soLuong;
+	Long tongSlNhap;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-	Date tgianNkho;
-
-	String moTaHangHoa;
+	Date tgianNkMnhat;
 
 	@Transient
 	String tenDvi;
@@ -100,16 +88,22 @@ public class NhQdGiaoNvuNhapHangKhacHdr implements Serializable {
 	String tenTrangThai;
 
 	@Transient
-	String trangThaiDuyet;
+	String tenTrangThaiNh;
 
 	@Transient
 	String tenLoaiVthh;
 
 	@Transient
 	String tenCloaiVthh;
+	String loaiHinhNx;
+	@Transient
+	String tenLoaiHinhNx;
+	@Transient
+	String tenKieuNx;
+	String kieuNx;
 
 	@Transient
-	private List<NhQdGiaoNvuNhapHangKhacDtl> dtlList = new ArrayList<>();
+	private List<HhQdPdNhapKhacDtl> dtlList = new ArrayList<>();
 
 	@Transient
 	private HhHopDongHdr hopDong;
@@ -118,7 +112,7 @@ public class NhQdGiaoNvuNhapHangKhacHdr implements Serializable {
 	@Fetch(value = FetchMode.SUBSELECT)
 	@JoinColumn(name = "dataId")
 	@JsonManagedReference
-	@Where(clause = "data_type='" + NhQdGiaoNvuNhapHangKhacHdr.TABLE_NAME + "'")
+	@Where(clause = "data_type='" + HhQdGiaoNvuNhapHangKhacHdr.TABLE_NAME + "'")
 	private List<FileDKemJoinQdNhapHangKhac> children2 = new ArrayList<>();
 
 	public void setChildren2(List<FileDKemJoinQdNhapHangKhac> children2) {

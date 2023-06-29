@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.*;
 
@@ -20,9 +21,12 @@ public class DcnbBienBanTinhKhoHdr extends BaseEntity implements Serializable, C
     public static final String TABLE_NAME = "DCNB_BIEN_BAN_TINH_KHO_HDR";
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanLayMauDtl.TABLE_NAME + "_SEQ")
-//    @SequenceGenerator(sequenceName = DcnbBienBanLayMauDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanLayMauDtl.TABLE_NAME + "_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanLayMauDtl.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = DcnbBienBanLayMauDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanLayMauDtl.TABLE_NAME + "_SEQ")
     private Long id;
+
+    @Column(name = "LOAI_DC")
+    private String loaiDc;
 
     @Column(name = "NAM")
     private Integer nam;
@@ -124,6 +128,7 @@ public class DcnbBienBanTinhKhoHdr extends BaseEntity implements Serializable, C
     private Boolean thayDoiThuKho;
 
     @Column(name = "TRANG_THAI")
+    @Access(value=AccessType.PROPERTY)
     private String trangThai;
 
     @Column(name = "LY_DO_TU_CHOI")
@@ -134,9 +139,6 @@ public class DcnbBienBanTinhKhoHdr extends BaseEntity implements Serializable, C
 
     @Column(name = "NGAY_GDUYET")
     private LocalDate ngayGDuyet;
-
-    @Column(name = "LOAI_DC")
-    private String loaiDc;
 
     @Column(name = "NGUYEN_NHAN")
     private String nguyeNhan;
@@ -198,4 +200,10 @@ public class DcnbBienBanTinhKhoHdr extends BaseEntity implements Serializable, C
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
     private List<DcnbBienBanTinhKhoDtl> dcnbBienBanTinhKhoDtl = new ArrayList<>();
+    @Transient
+    private String tenTrangThai;
+    public void setTrangThai(String trangThai) {
+        this.trangThai = trangThai;
+        this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
+    }
 }
