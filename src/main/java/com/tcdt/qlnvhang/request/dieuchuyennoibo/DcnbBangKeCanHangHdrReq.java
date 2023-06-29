@@ -32,6 +32,8 @@ public class DcnbBangKeCanHangHdrReq {
 
     private LocalDate thoiHanDieuChuyen;
 
+    private LocalDate thoiGianGiaoHang;
+
     private LocalDate ngayKyQdDcc;
 
     private Long phieuXuatKhoId;
