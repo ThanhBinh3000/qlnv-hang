@@ -11,4 +11,6 @@ import java.util.List;
 public interface DcnbPhieuNhapKhoService extends BaseService<DcnbPhieuNhapKhoHdr, DcnbPhieuNhapKhoHdrReq,Long> {
 
     List<DcnbPhieuNhapKhoHdrListDTO> searchList(DcnbPhieuNhapKhoHdrReq objReq) throws Exception;
+
+    List<DcnbPhieuNhapKhoHdrListDTO> searchListChung(DcnbPhieuNhapKhoHdrReq objReq) throws Exception;
 }

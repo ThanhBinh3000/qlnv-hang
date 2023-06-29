@@ -213,4 +213,12 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
         List<DcnbPhieuNhapKhoHdrListDTO> searchDto =  hdrRepository.searchList(objReq);;
         return searchDto;
     }
+
+    @Override
+    public List<DcnbPhieuNhapKhoHdrListDTO> searchListChung(DcnbPhieuNhapKhoHdrReq objReq) throws Exception {
+        CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
+        objReq.setMaDvi(currentUser.getDvql());
+        List<DcnbPhieuNhapKhoHdrListDTO> searchDto =  hdrRepository.searchListChung(objReq);;
+        return searchDto;
+    }
 }
