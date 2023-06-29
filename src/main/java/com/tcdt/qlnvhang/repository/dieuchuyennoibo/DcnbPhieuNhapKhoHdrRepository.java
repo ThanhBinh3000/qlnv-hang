@@ -88,9 +88,10 @@ public interface DcnbPhieuNhapKhoHdrRepository extends JpaRepository<DcnbPhieuNh
     List<DcnbPhieuNhapKhoHdrListDTO> searchList(@Param("param")DcnbPhieuNhapKhoHdrReq objReq);
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuNhapKhoHdrListDTO(" +
-            "pnk.id,pnk.soPhieuNhapKho,pnk.ngayLap,pnk.tongSoLuong, pktcl.id, pktcl.soPhieu,bknvt.id, bknvt.soBangKe ) " +
+            "pnk.id,pnk.soPhieuNhapKho,pnk.ngayLap,pnk.tongSoLuong, pktcl.id, pktcl.soPhieu,bkchh.id, bkchh.soBangKe,bknvt.id, bknvt.soBangKe ) " +
             "FROM DcnbPhieuNhapKhoHdr pnk " +
             "LEFT JOIN DcnbPhieuKtChatLuongHdr pktcl On pktcl.id = pnk.idPhieuKtraCluong " +
+            "LEFT JOIN DcnbBangKeCanHangHdr bkchh On bkchh.phieuNhapKhoId = pnk.id " +
             "LEFT JOIN DcnbBangKeNhapVTHdr bknvt On bknvt.phieuNhapKhoId = pnk.id " +
             "WHERE 1 =1 " +
             "AND ((:#{#param.qdDcCucId} IS NULL OR pnk.qdDcCucId = :#{#param.qdDcCucId}))"+
