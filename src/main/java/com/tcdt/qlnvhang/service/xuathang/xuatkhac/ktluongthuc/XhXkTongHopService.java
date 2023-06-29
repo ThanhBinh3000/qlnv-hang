@@ -1,19 +1,15 @@
-package com.tcdt.qlnvhang.service.xuathang.xuatkhac;
+package com.tcdt.qlnvhang.service.xuathang.xuatkhac.ktluongthuc;
 
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
-import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.XhXkDanhSachRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.XhXkTongHopRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktluongthuc.XhXkDanhSachRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktluongthuc.XhXkTongHopRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.SearchXhCtvtBangKeReq;
-import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.SearchXhCtvtPhieuXuatKho;
 import com.tcdt.qlnvhang.request.xuathang.xuatkhac.XhXkTongHopRequest;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBangKeHdr;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtPhieuXuatKho;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.XhXkDanhSachHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.XhXkTongHopDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.XhXkTongHopHdr;
