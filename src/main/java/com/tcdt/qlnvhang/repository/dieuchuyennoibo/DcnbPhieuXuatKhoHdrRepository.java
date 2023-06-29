@@ -67,14 +67,16 @@ public interface DcnbPhieuXuatKhoHdrRepository extends JpaRepository<DcnbPhieuXu
             "pxk.id,pxk.soPhieuXuatKho,pxk.ngayTaoPhieu) " +
             "FROM DcnbPhieuXuatKhoHdr pxk " +
             "WHERE 1 =1 " +
+            "AND ((:#{#param.qdinhDccId} IS NULL OR pxk.qddcId = :#{#param.qdinhDccId}))"+
             "ORDER BY pxk.soPhieuXuatKho desc, pxk.nam desc")
-    List<DcnbPhieuXuatKhoHdrListDTO> searchList(SearchPhieuXuatKho req);
+    List<DcnbPhieuXuatKhoHdrListDTO> searchList(@Param("param")SearchPhieuXuatKho req);
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuXuatKhoHdrListDTO(" +
             "pxk.id,pxk.soPhieuXuatKho,pxk.ngayTaoPhieu, pxk.tongSoLuong, pkncl.id, pkncl.soPhieu,bkchh.id, bkchh.soBangKe ) " +
             "FROM DcnbPhieuXuatKhoHdr pxk " +
             "LEFT JOIN DcnbPhieuKnChatLuongHdr pkncl On pkncl.id = pxk.phieuKnChatLuongHdrId " +
             "LEFT JOIN DcnbBangKeCanHangHdr bkchh On bkchh.phieuXuatKhoId = pxk.id " +
             "WHERE 1 =1 " +
+            "AND ((:#{#param.qdinhDccId} IS NULL OR pxk.qddcId = :#{#param.qdinhDccId}))"+
             "ORDER BY pxk.soPhieuXuatKho desc, pxk.nam desc")
-    List<DcnbPhieuXuatKhoHdrListDTO> searchListChung(SearchPhieuXuatKho req);
+    List<DcnbPhieuXuatKhoHdrListDTO> searchListChung(@Param("param")SearchPhieuXuatKho req);
 }
