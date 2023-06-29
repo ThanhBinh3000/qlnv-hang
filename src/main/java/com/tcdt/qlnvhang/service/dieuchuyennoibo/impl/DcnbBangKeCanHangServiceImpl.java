@@ -197,12 +197,12 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
                 optional.get().setNguoiPDuyet(currentUser.getUser().getId());
                 DcnbDataLinkHdr dataLink = null;
                 if ("00".equals(optional.get().getType())) { // xuất
-                    dataLink = dcnbDataLinkHdrRepository.findDataLinkCuc(optional.get().getMaDvi(),
+                    dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(optional.get().getMaDvi(),
                             optional.get().getQDinhDccId(),
                             optional.get().getMaNganKho(),
                             optional.get().getMaLoKho());
                 } else if ("01".equals(optional.get().getType())) {
-                    dataLink = dcnbDataLinkHdrRepository.findDataLinkCucNhan(optional.get().getMaDvi(),
+                    dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCucNhan(optional.get().getMaDvi(),
                             optional.get().getQDinhDccId(),
                             optional.get().getMaNganKho(),
                             optional.get().getMaLoKho());
