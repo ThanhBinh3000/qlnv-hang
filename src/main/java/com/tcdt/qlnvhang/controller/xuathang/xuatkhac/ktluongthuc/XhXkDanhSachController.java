@@ -1,13 +1,11 @@
-package com.tcdt.qlnvhang.controller.xuathang.xuatkhac;
+package com.tcdt.qlnvhang.controller.xuathang.xuatkhac.ktluongthuc;
 
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
-import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlDanhSachRequest;
 import com.tcdt.qlnvhang.request.xuathang.xuatkhac.XhXkDanhSachRequest;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.xuathang.thanhlytieuhuy.thanhly.XhTlDanhSachService;
-import com.tcdt.qlnvhang.service.xuathang.xuatkhac.XhXkDanhSachService;
+import com.tcdt.qlnvhang.service.xuathang.xuatkhac.ktluongthuc.XhXkDanhSachService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
