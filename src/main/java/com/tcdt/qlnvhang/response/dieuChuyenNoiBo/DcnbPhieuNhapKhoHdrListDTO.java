@@ -18,6 +18,8 @@ public class DcnbPhieuNhapKhoHdrListDTO {
     private String soPhieuKiemTraCl;
     private Long bangKeCanHangId;
     private String soBangKeCanHang;
+    private Long bangKeNhapVtId;
+    private String soBangKeNhapVt;
 
     public DcnbPhieuNhapKhoHdrListDTO(Long id, String soPhieuNhapKho, LocalDate ngayNhapKho) {
         this.id = id;
