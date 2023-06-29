@@ -83,8 +83,9 @@ public interface DcnbPhieuNhapKhoHdrRepository extends JpaRepository<DcnbPhieuNh
             "pnk.id,pnk.soPhieuNhapKho,pnk.ngayLap) " +
             "FROM DcnbPhieuNhapKhoHdr pnk " +
             "WHERE 1 =1 " +
+            "AND ((:#{#param.qdinhDccId} IS NULL OR pnk.qdDcCucId = :#{#param.qdDcCucId}))"+
             "ORDER BY pnk.soPhieuNhapKho desc, pnk.nam desc")
-    List<DcnbPhieuNhapKhoHdrListDTO> searchList(DcnbPhieuNhapKhoHdrReq objReq);
+    List<DcnbPhieuNhapKhoHdrListDTO> searchList(@Param("param")DcnbPhieuNhapKhoHdrReq objReq);
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuNhapKhoHdrListDTO(" +
             "pnk.id,pnk.soPhieuNhapKho,pnk.ngayLap,pnk.tongSoLuong, pktcl.id, pktcl.soPhieu,bknvt.id, bknvt.soBangKe ) " +
@@ -92,6 +93,7 @@ public interface DcnbPhieuNhapKhoHdrRepository extends JpaRepository<DcnbPhieuNh
             "LEFT JOIN DcnbPhieuKtChatLuongHdr pktcl On pktcl.id = pnk.idPhieuKtraCluong " +
             "LEFT JOIN DcnbBangKeNhapVTHdr bknvt On bknvt.phieuNhapKhoId = pnk.id " +
             "WHERE 1 =1 " +
+            "AND ((:#{#param.qdinhDccId} IS NULL OR pnk.qdDcCucId = :#{#param.qdDcCucId}))"+
             "ORDER BY pnk.soPhieuNhapKho desc, pnk.nam desc")
-    List<DcnbPhieuNhapKhoHdrListDTO> searchListChung(DcnbPhieuNhapKhoHdrReq objReq);
+    List<DcnbPhieuNhapKhoHdrListDTO> searchListChung(@Param("param")DcnbPhieuNhapKhoHdrReq objReq);
 }
