@@ -55,6 +55,9 @@ public class DcnbBangKeCanHangHdr extends BaseEntity implements Serializable, Cl
     @Column(name = "THOI_HAN_DIEU_CHUYEN")
     private LocalDate thoiHanDieuChuyen;
 
+    @Column(name = "THOI_GIAN_GIAO_HANG")
+    private LocalDate thoiGianGiaoHang;
+
     @Column(name = "NGAY_KY_QD_DCC")
     private LocalDate ngayKyQdDcc;
 
