@@ -1,7 +1,7 @@
 package com.tcdt.qlnvhang.request.xuathang.xuatkhac;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
-import com.tcdt.qlnvhang.table.xuathang.xuatkhac.XhXkTongHopDtl;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkTongHopDtl;
 import lombok.Data;
 
 import java.math.BigDecimal;

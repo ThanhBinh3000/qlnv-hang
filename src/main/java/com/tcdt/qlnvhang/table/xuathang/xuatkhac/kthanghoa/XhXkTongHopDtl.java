@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.table.xuathang.xuatkhac;
+package com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.util.DataUtils;
