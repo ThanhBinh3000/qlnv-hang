@@ -23,11 +23,11 @@ public interface DcnbBBKetThucNKHdrRepository extends JpaRepository<DcnbBBKetThu
             "FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbBBKetThucNKHdr bbkt On bbkt.qDinhDccId = qdc.id " +
             "LEFT JOIN DcnbBBKetThucNKDtl bbktd On bbktd.hdrId = bbkt.id " +
-            "LEFT JOIN DcnbHoSoKyThuatHdr hskt On hskt.idQdnh = qdc.id " +
-            "LEFT JOIN DcnbBienBanLayMauHdr bblm On bblm.qdccId = qdc.id " +
+            "LEFT JOIN DcnbHoSoKyThuatHdr hskt On hskt.idQdnh = qdc.id  and bbkt.maLoKho = hskt.maLoKho and bbkt.maNganKho = hskt.maNganKho " +
+            "LEFT JOIN DcnbBienBanLayMauHdr bblm On bblm.qdccId = qdc.id and bbkt.maLoKho = bblm.maLoKho and bbkt.maNganKho = bblm.maNganKho " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
-            "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
+            "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id and bbkt.maLoKho = khdcd.maLoKhoNhan and bbkt.maNganKho = khdcd.maLoKhoNhan " +
             "WHERE 1 =1 " +
             "AND qdc.trangThai = '29'" +
             "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
@@ -44,11 +44,11 @@ public interface DcnbBBKetThucNKHdrRepository extends JpaRepository<DcnbBBKetThu
             "LEFT JOIN DcnbDataLinkHdr dtlh On dtlh.qdCcParentId = qdc.id " +
             "LEFT JOIN DcnbBBKetThucNKHdr bbkt On bbkt.qDinhDccId = qdc.id " +
             "LEFT JOIN DcnbBBKetThucNKDtl bbktd On bbktd.hdrId = bbkt.id " +
-            "LEFT JOIN DcnbHoSoKyThuatHdr hskt On hskt.idQdnh = qdc.id " +
-            "LEFT JOIN DcnbBienBanLayMauHdr bblm On bblm.qdccId = qdc.id " +
+            "LEFT JOIN DcnbHoSoKyThuatHdr hskt On hskt.idQdnh = qdc.id  and bbkt.maLoKho = hskt.maLoKho and bbkt.maNganKho = hskt.maNganKho " +
+            "LEFT JOIN DcnbBienBanLayMauHdr bblm On bblm.qdccId = qdc.id and bbkt.maLoKho = bblm.maLoKho and bbkt.maNganKho = bblm.maNganKho " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
-            "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
+            "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id and bbkt.maLoKho = khdcd.maLoKhoNhan and bbkt.maNganKho = khdcd.maLoKhoNhan " +
             "WHERE 1 =1 " +
             "AND qdc.trangThai = '29'" +
             "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
