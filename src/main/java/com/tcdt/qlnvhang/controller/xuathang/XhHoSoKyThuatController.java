@@ -1,12 +1,13 @@
-package com.tcdt.qlnvhang.controller.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
+package com.tcdt.qlnvhang.controller.xuathang;
 
 import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
-import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.SearchCtvtHoSoKyThuatReq;
+import com.tcdt.qlnvhang.request.xuathang.SearchHoSoKyThuatReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtHoSoKyThuatService;
+import com.tcdt.qlnvhang.service.xuathang.XhHoSoKyThuatService;
+import com.tcdt.qlnvhang.table.xuathang.hosokythuat.XhHoSoKyThuatHdr;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -20,22 +21,22 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = PathContains.XUAT_CUU_TRO + PathContains.KIEM_TRA_CHAT_LUONG + PathContains.HO_SO_KY_THUAT)
+@RequestMapping(value = PathContains.KIEM_TRA_CHAT_LUONG + PathContains.HO_SO_KY_THUAT)
 @Slf4j
 @Api(tags = "Xuất hàng DTQG - Xuất cứu trợ viện trợ - Phiếu kiểm nghiệm chất lượng")
-public class XhCtvtHoSoKyThuatController extends BaseController {
+public class XhHoSoKyThuatController extends BaseController {
 
   @Autowired
-  XhCtvtHoSoKyThuatService xhCtvtHoSoKyThuatService;
+  XhHoSoKyThuatService xhHoSoKyThuatService;
 
 
   @ApiOperation(value = "Tra cứu thông tin đề xuất", response = List.class)
   @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser, @RequestBody SearchCtvtHoSoKyThuatReq objReq) {
+  public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser, @RequestBody SearchHoSoKyThuatReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhCtvtHoSoKyThuatService.searchPage(currentUser, objReq));
+      resp.setData(xhHoSoKyThuatService.searchPage(currentUser, objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -47,31 +48,31 @@ public class XhCtvtHoSoKyThuatController extends BaseController {
     return ResponseEntity.ok(resp);
   }
 
-  //
-//  @ApiOperation(value = "Tạo mới thông tin đề xuất ", response = List.class)
-//  @PostMapping(value =  PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
-//  @ResponseStatus(HttpStatus.CREATED)
-//  public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhCtvtPhieuKnClHdrReq objReq) {
-//    BaseResponse resp = new BaseResponse();
-//    try {
-//      resp.setData(xhCtvtPhieuKnClHdrService.save(currentUser,objReq));
-//      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-//      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-//    } catch (Exception e) {
-//      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-//      resp.setMsg(e.getMessage());
-//      log.error("Tạo mới thông tin  : {}", e);
-//    }
-//    return ResponseEntity.ok(resp);
-//  }
-//
-//
-  @ApiOperation(value = "Cập nhật thông tin đề xuất", response = List.class)
-  @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @RequestBody SearchCtvtHoSoKyThuatReq objReq) {
+
+  @ApiOperation(value = "Tạo mới thông tin đề xuất ", response = List.class)
+  @PostMapping(value =  PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.CREATED)
+  public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @RequestBody XhHoSoKyThuatHdr objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhCtvtHoSoKyThuatService.update(currentUser, objReq));
+      resp.setData(xhHoSoKyThuatService.create(currentUser,objReq));
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (Exception e) {
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Tạo mới thông tin  : {}", e);
+    }
+    return ResponseEntity.ok(resp);
+  }
+
+
+  @ApiOperation(value = "Cập nhật thông tin đề xuất", response = List.class)
+  @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @RequestBody SearchHoSoKyThuatReq objReq) {
+    BaseResponse resp = new BaseResponse();
+    try {
+      resp.setData(xhHoSoKyThuatService.update(currentUser, objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -81,24 +82,23 @@ public class XhCtvtHoSoKyThuatController extends BaseController {
     }
     return ResponseEntity.ok(resp);
   }
-//
-//  @ApiOperation(value = "Lấy chi tiết thông tin đề xuất", response = List.class)
-//  @GetMapping(value =  PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
-//  @ResponseStatus(HttpStatus.OK)
-//  public ResponseEntity<BaseResponse> detail(
-//      @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids")List<Long> ids) {
-//    BaseResponse resp = new BaseResponse();
-//    try {
-//      resp.setData(xhCtvtPhieuKnClHdrService.detail(ids).get(0));
-//      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-//      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-//    } catch (Exception e) {
-//      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-//      resp.setMsg(e.getMessage());
-//      log.error("Lấy chi tiết thông tin : {}", e);
-//    }
-//    return ResponseEntity.ok(resp);
-//  }
+
+  @ApiOperation(value = "Lấy chi tiết", response = List.class)
+  @PostMapping(value = PathContains.URL_CHI_TIET, produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<BaseResponse> detailXh(@CurrentUser CustomUserDetails currentUser, @RequestBody SearchHoSoKyThuatReq objReq) {
+    BaseResponse resp = new BaseResponse();
+    try {
+      resp.setData(xhHoSoKyThuatService.detailXh(objReq));
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (Exception e) {
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Lấy chi tiết thông tin : {}", e);
+    }
+    return ResponseEntity.ok(resp);
+  }
 //
 //  @ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 thông tin", response = List.class)
 //  @PostMapping(value =  PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)

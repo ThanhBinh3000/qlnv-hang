@@ -159,7 +159,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
     }
     XhCtvtDeXuatHdr data = optional.get();
     data.getDeXuatPhuongAn().forEach(e -> e.setXhCtvtDeXuatHdr(null));
-    BeanUtils.copyProperties(objReq, data);
+    BeanUtils.copyProperties(objReq, data,"maDvi");
     data.getDeXuatPhuongAn().forEach(e -> e.setXhCtvtDeXuatHdr(data));
     XhCtvtDeXuatHdr created = xhCtvtDeXuatHdrRepository.save(data);
 
