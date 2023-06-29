@@ -32,7 +32,7 @@ public class DcnbBangKeCanHangHdrReq {
 
     private LocalDate thoiHanDieuChuyen;
 
-    private LocalDate thoiGianGiaoHang;
+    private LocalDate thoiGianGiaoNhan;
 
     private LocalDate ngayKyQdDcc;
 
