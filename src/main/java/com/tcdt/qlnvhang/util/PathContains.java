@@ -97,6 +97,7 @@ public class PathContains {
 	public static final String TTIN_DTHAU_GTHAU = "/ttin-dthau-gthau";
 	public static final String QD_PDUYET_KQLCNT = "/qd-pduyet-kqlcnt";
 	public static final String QD_PDUYET_KHNK = "/qd-pduyet-khnk";
+	public static final String QD_PDUYET_GIAO_NV_NK = "/qd-giao-nv-nhap-khac";
 	public static final String HOP_DONG = "/hop-dong";
 	public static final String QLY_HD_MUA_HANG = "/qly-hd-mua";
 
@@ -292,6 +293,8 @@ public class PathContains {
 	public static final String XUAT_KHAC = "/xuat-khac";
 
 	public static final String KTCL_LT_TRUOC_HET_HAN = "/ktcl-lt-truoc-het-han";
+
+	public static final String KTCL_VT_TRUOC_HET_HAN = "/ktcl-vt-truoc-het-han";
 
 	public static final String DANH_SACH = "/danh-sach";
 	public static final String TONG_HOP = "/tong-hop";

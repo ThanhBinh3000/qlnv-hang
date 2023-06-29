@@ -175,17 +175,17 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
                 dtl.setIdDiaDiem(sldd.getId());
                 hhQdPdKqMttSlddDtlRepository.save(dtl);
             }
-            hhCtietKqTtinCgiaRepository.deleteAllByIdQdPdKqSldd(hhQdPheduyetKqMttSLDDReq.getId());
-            for (HhChiTietKqTTinChaoGia list : hhQdPheduyetKqMttSLDDReq.getListChaoGia()) {
-                HhChiTietKqTTinChaoGia chaoGia = new HhChiTietKqTTinChaoGia();
-                BeanUtils.copyProperties(list, chaoGia, "id");
-                chaoGia.setId(null);
-                chaoGia.setIdQdPdKqSldd(sldd.getId());
-                HhChiTietKqTTinChaoGia save = hhCtietKqTtinCgiaRepository.save(chaoGia);
+            hopDongMttHdrRepository.deleteAllByIdQdPdKqSldd(hhQdPheduyetKqMttSLDDReq.getId());
+            for (HopDongMttHdr list : hhQdPheduyetKqMttSLDDReq.getListHdong()) {
+                HopDongMttHdr hopDong = new HopDongMttHdr();
+                BeanUtils.copyProperties(list, hopDong, "id");
+                hopDong.setId(null);
+                hopDong.setIdQdPdKqSldd(sldd.getId());
+                HopDongMttHdr save = hopDongMttHdrRepository.save(hopDong);
                 if (!DataUtils.isNullObject(list.getFileDinhKems())) {
                     List<FileDinhKemReq> fileDinhKemReq = new ArrayList<>((Collection) list.getFileDinhKems());
-                    List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(fileDinhKemReq, save.getId(), HhChiTietTTinChaoGia.TABLE_NAME);
-                    chaoGia.setFileDinhKems(fileDinhKems.get(0));
+                    List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(fileDinhKemReq, save.getId(), HopDongMttHdr.TABLE_NAME);
+                    hopDong.setFileDinhKems(fileDinhKems);
                 }
             }
         }
@@ -205,12 +205,7 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
 
-        List<HopDongMttHdr> allById = hopDongMttHdrRepository.findAllByIdQdKq(Long.parseLong(ids));
-        allById.forEach(f ->{
-            f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
-            f.setTenTrangThaiNh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiNh()));
-        });
-        data.setHopDongMttHdrList(allById);
+
 
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
         data.setTenTrangThaiHd(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiHd()));
@@ -231,7 +226,12 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
                 hhQdPdKQMttSlddDtl.setTenDiemKho(hashMapDvi.get(hhQdPdKQMttSlddDtl.getMaDiemKho()));
                 hhQdPdKQMttSlddDtls.add(hhQdPdKQMttSlddDtl);
             }
-            hhQdPheduyetKqMttSLDD.setListChaoGia(hhCtietKqTtinCgiaRepository.findAllByIdQdPdKqSldd(hhQdPheduyetKqMttSLDD.getId()));
+            List<HopDongMttHdr> allById = hopDongMttHdrRepository.findAllByIdQdPdKqSldd(hhQdPheduyetKqMttSLDD.getId());
+            allById.forEach(f ->{
+                f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+                f.setTenTrangThaiNh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiNh()));
+            });
+            hhQdPheduyetKqMttSLDD.setListHdong(allById);
             hhQdPheduyetKqMttSLDD.setChildren(hhQdPdKQMttSlddDtls);
         }
         data.setDanhSachCtiet(listGthau);

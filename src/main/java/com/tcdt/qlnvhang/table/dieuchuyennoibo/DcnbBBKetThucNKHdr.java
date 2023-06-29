@@ -104,6 +104,13 @@ public class DcnbBBKetThucNKHdr extends BaseEntity implements Serializable, Clon
 
     @Column(name = "NGAY_GDUYET_KTV")
     private LocalDate ngayPDuyetKtv;
+
+    @Column(name = "NGUOI_PDUYET_TVQT")
+    private Long nguoiPDuyetTvqt;
+
+    @Column(name = "NGAY_GDUYET_TVQT")
+    private LocalDate ngayPDuyetTvqt;
+
     @Column(name = "NGUOI_PDUYET_KT")
     private Long nguoiPDuyetKt;
 

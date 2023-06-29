@@ -61,6 +61,10 @@ public class DcnbPhieuNhapKhoHdrReq extends BaseRequest {
     private String kieuNx;
     private String bbNghiemThuBqld;
     private BigDecimal soLuongQdDcCuc;
+    private BigDecimal tongSoLuong;
+    private String tongSoLuongBc;
+    private BigDecimal tongKinhPhi;
+    private String tongKinhPhiBc;
     private String ghiChu;
     private String trangThai;
     private String lyDoTuChoi;

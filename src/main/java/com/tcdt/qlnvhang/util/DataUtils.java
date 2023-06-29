@@ -189,9 +189,12 @@ public class DataUtils {
   }
 
   public static LocalDate convertToLocalDate(Date date) {
-    Instant instant = date.toInstant();
-    ZoneId zoneId = ZoneId.systemDefault();
-    return instant.atZone(zoneId).toLocalDate();
+    if (!DataUtils.isNullObject(date)) {
+      Instant instant = date.toInstant();
+      ZoneId zoneId = ZoneId.systemDefault();
+      return instant.atZone(zoneId).toLocalDate();
+    }
+    return null;
   }
 
   public static BigDecimal safeToBigDecimal(Object value) {

@@ -36,6 +36,8 @@ public class DcnbPhieuXuatKhoHdrDTO {
     private String donViTinh;
     private BigDecimal slDienChuyen;
     private BigDecimal duToanKinhPhiDc;
+    private Long bKCanHangId;
+    private String soBKCanHang;
 
     private String trangThai;
     private String tenTrangThai;

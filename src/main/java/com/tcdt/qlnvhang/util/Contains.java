@@ -269,6 +269,13 @@ public class Contains {
 	public static final String GIUA_2_CUC_DTNN_KV = "CUC";
 	public static final String DCNB = "DCNB";
 
+
+	// Loai hàng hóa xuất khác
+	public static final String LT_6_THANG = "LT6";
+	public static final String VT_12_THANG = "VT12";
+	public static final String VT_6_THANG = "VT6";
+
+
 	public static final Map<String, String> mappingLoaiDx;
 	static {
 		mappingLoaiDx = Maps.<String, String>buildMap().put(Contains.DX_THANH_LY, "Thanh lý")

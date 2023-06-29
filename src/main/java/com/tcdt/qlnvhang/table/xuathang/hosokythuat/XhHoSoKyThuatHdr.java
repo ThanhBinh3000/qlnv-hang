@@ -1,47 +1,41 @@
-package com.tcdt.qlnvhang.table.xuathang.xuatkhac;
+package com.tcdt.qlnvhang.table.xuathang.hosokythuat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Entity
-@Table(name=XhXkTongHopDtl.TABLE_NAME)
+@Table(name = XhHoSoKyThuatHdr.TABLE_NAME)
 @Data
-
-public class XhXkTongHopDtl implements Serializable {
+public class XhHoSoKyThuatHdr extends BaseEntity implements Serializable {
   private static final long serialVersionUID = 1L;
-  public static final String TABLE_NAME = "XH_XK_TONG_HOP_DTL";
-  
+  public static final String TABLE_NAME = "XH_HO_SO_KY_THUAT_HDR";
+
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhXkTongHopDtl.TABLE_NAME + "_SEQ")
-  @SequenceGenerator(sequenceName = XhXkTongHopDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhXkTongHopDtl.TABLE_NAME + "_SEQ")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhHoSoKyThuatHdr.TABLE_NAME + "_SEQ")
+  @SequenceGenerator(sequenceName = XhHoSoKyThuatHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhHoSoKyThuatHdr.TABLE_NAME + "_SEQ")
   private Long id;
-  private Long idTongHop;
-  private Long idDsHdr;
-  private String maTongHop;
+  private String soHs;
+  private Long idHsktNh;
+  private String maDvi;
   private String maDiaDiem;
   private String loaiVthh;
   private String cloaiVthh;
-  private String donViTinh;
-  private BigDecimal slHienTai;
-  private BigDecimal slDeXuat;
-  private BigDecimal slDaDuyet;
-  private BigDecimal thanhTien;
-  private LocalDate ngayNhapKho;
-  private LocalDate ngayDeXuat;
-  private LocalDate ngayTongHop;
   private String lyDo;
+  private String trangThai;
   private String type;
-  private String trangThaiKtCl;
+  @OneToMany(mappedBy = "xhHoSoKyThuatHdr", cascade = CascadeType.ALL)
+  private List<XhHoSoKyThuatDtl> xhHoSoKyThuatDtl = new ArrayList<>();
 
-  @Transient
-  private String tenTrangThaiKtCl;
   @JsonIgnore
   @Transient
   private Map<String, String> mapVthh;
@@ -49,6 +43,8 @@ public class XhXkTongHopDtl implements Serializable {
   private String tenLoaiVthh;
   @Transient
   private String tenCloaiVthh;
+  @Transient
+  private String tenTrangThai;
   @JsonIgnore
   @Transient
   private Map<String, String> mapDmucDvi;
@@ -98,9 +94,8 @@ public class XhXkTongHopDtl implements Serializable {
       setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
     }
   }
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "idHdr")
-  @JsonIgnore
-  private XhXkTongHopHdr tongHopHdr;
+  public void setTrangThai(String trangThai) {
+    this.trangThai = trangThai;
+    this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
+  }
 }

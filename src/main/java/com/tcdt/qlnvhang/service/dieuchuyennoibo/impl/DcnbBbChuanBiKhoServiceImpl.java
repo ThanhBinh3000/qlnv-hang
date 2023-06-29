@@ -143,23 +143,23 @@ public class DcnbBbChuanBiKhoServiceImpl implements DcnbBbChuanBiKhoService {
         DcnbBbChuanBiKhoHdr hdr = detail(req.getId());
         String status = hdr.getTrangThai() + req.getTrangThai();
         switch (status) {
-            // Arena các roll back approve
-            case Contains.TUCHOI_TK + Contains.DUTHAO:
-            case Contains.TUCHOI_KT + Contains.DUTHAO:
-            case Contains.TUCHOI_LDCC + Contains.DUTHAO:
-                break;
             // Arena các cấp duuyệt
             case Contains.DUTHAO + Contains.CHODUYET_TK:
+            case Contains.TUCHOI_LDCC + Contains.CHODUYET_TK:
+            case Contains.TUCHOI_TK + Contains.CHODUYET_TK:
                 break;
-            case Contains.CHODUYET_TK + Contains.CHODUYET_KT:
+            case Contains.CHODUYET_TK + Contains.TUCHOI_TK:
                 hdr.setIdThuKho(userInfo.getId());
                 break;
-            case Contains.CHODUYET_KT + Contains.CHODUYET_LDCC:
-                hdr.setIdKeToan(userInfo.getId());
+            case Contains.CHODUYET_TK + Contains.CHODUYET_LDCC:
+                hdr.setIdThuKho(userInfo.getId());
+                break;
+            case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
+                hdr.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
                 hdr.setIdLanhDao(userInfo.getId());
-                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(hdr.getMaDvi(),
+                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCucNhan(hdr.getMaDvi(),
                         hdr.getQdDcCucId(),
                         hdr.getMaNganKho(),
                         hdr.getMaLoKho());
@@ -168,12 +168,6 @@ public class DcnbBbChuanBiKhoServiceImpl implements DcnbBbChuanBiKhoService {
                 dataLinkDtl.setHdrId(dataLink.getId());
                 dataLinkDtl.setType(DcnbBbChuanBiKhoHdr.TABLE_NAME);
                 dcnbDataLinkDtlRepository.save(dataLinkDtl);
-                break;
-            // Arena từ chối
-            case Contains.CHODUYET_TK + Contains.TUCHOI_TK:
-            case Contains.CHODUYET_KT + Contains.TUCHOI_KT:
-            case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
-                hdr.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");

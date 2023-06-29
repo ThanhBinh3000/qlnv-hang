@@ -1,8 +1,7 @@
 package com.tcdt.qlnvhang.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
-import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.nvnhap.NhQdGiaoNvuNhapHangKhacHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.nvnhap.HhQdGiaoNvuNhapHangKhacHdr;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -30,5 +29,5 @@ public class FileDKemJoinQdNhapHangKhac implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "dataId")
 	@JsonBackReference
-	private NhQdGiaoNvuNhapHangKhacHdr parent;
+	private HhQdGiaoNvuNhapHangKhacHdr parent;
 }
