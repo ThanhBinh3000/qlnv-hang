@@ -47,7 +47,7 @@ public interface DcnbPhieuNhapKhoHdrRepository extends JpaRepository<DcnbPhieuNh
             "FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbPhieuNhapKhoHdr pnk On pnk.qdDcCucId = qdc.id " +
             "LEFT JOIN DcnbPhieuKtChatLuongHdr pktcl On pktcl.id = pnk.idPhieuKtraCluong " +
-            "LEFT JOIN DcnbBangKeNhapVTHdr bknvt On bknvt.phieuXuatKhoId = pnk.id " +
+            "LEFT JOIN DcnbBangKeNhapVTHdr bknvt On bknvt.phieuNhapKhoId = pnk.id " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
@@ -68,7 +68,7 @@ public interface DcnbPhieuNhapKhoHdrRepository extends JpaRepository<DcnbPhieuNh
             "LEFT JOIN DcnbDataLinkHdr dtlh On dtlh.qdCcParentId = qdc.id " +
             "LEFT JOIN DcnbPhieuNhapKhoHdr pnk On pnk.qdDcCucId = dtlh.qdCcId " +
             "LEFT JOIN DcnbPhieuKtChatLuongHdr pktcl On pktcl.id = pnk.idPhieuKtraCluong " +
-            "LEFT JOIN DcnbBangKeNhapVTHdr bknvt On bknvt.phieuXuatKhoId = pnk.id " +
+            "LEFT JOIN DcnbBangKeNhapVTHdr bknvt On bknvt.phieuNhapKhoId = pnk.id " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = dtlh.qdCcId " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
@@ -85,4 +85,13 @@ public interface DcnbPhieuNhapKhoHdrRepository extends JpaRepository<DcnbPhieuNh
             "WHERE 1 =1 " +
             "ORDER BY pnk.soPhieuNhapKho desc, pnk.nam desc")
     List<DcnbPhieuNhapKhoHdrListDTO> searchList(DcnbPhieuNhapKhoHdrReq objReq);
+
+    @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuNhapKhoHdrListDTO(" +
+            "pnk.id,pnk.soPhieuNhapKho,pnk.ngayLap,pnk.tongSoLuong, pktcl.id, pktcl.soPhieu,bknvt.id, bknvt.soBangKe ) " +
+            "FROM DcnbPhieuNhapKhoHdr pnk " +
+            "LEFT JOIN DcnbPhieuKtChatLuongHdr pktcl On pktcl.id = pnk.idPhieuKtraCluong " +
+            "LEFT JOIN DcnbBangKeNhapVTHdr bknvt On bknvt.phieuNhapKhoId = pnk.id " +
+            "WHERE 1 =1 " +
+            "ORDER BY pnk.soPhieuNhapKho desc, pnk.nam desc")
+    List<DcnbPhieuNhapKhoHdrListDTO> searchListChung(DcnbPhieuNhapKhoHdrReq objReq);
 }

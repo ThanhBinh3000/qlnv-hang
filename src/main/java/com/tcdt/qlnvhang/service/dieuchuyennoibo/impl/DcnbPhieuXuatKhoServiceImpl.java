@@ -11,6 +11,7 @@ import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbPhieuXuatKhoHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchPhieuXuatKho;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBienBanLayMauHdrDTO;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuXuatKhoHdrDTO;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuXuatKhoHdrListDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
@@ -57,7 +58,7 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
         Page<DcnbPhieuXuatKhoHdrDTO> searchDto = null;
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             searchDto = hdrRepository.searchPageChiCuc(req, pageable);
-        }else  {
+        } else {
             searchDto = hdrRepository.searchPageCuc(req, pageable);
         }
         return searchDto;
@@ -72,19 +73,19 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
             throw new Exception("Chức năng chỉ dành cho cấp chi cục");
         }
         Optional<DcnbPhieuXuatKhoHdr> soDxuat = hdrRepository.findBySoPhieuXuatKho(objReq.getSoPhieuXuatKho());
-        if(soDxuat.isPresent()){
+        if (soDxuat.isPresent()) {
             throw new Exception("Số đề xuất đã tồn tại");
         }
         DcnbPhieuXuatKhoHdr data = new DcnbPhieuXuatKhoHdr();
         BeanUtils.copyProperties(objReq, data);
         data.setMaDvi(currentUser.getDvql());
-        if(objReq.getDcnbPhieuXuatKhoDtl() !=null){
+        if (objReq.getDcnbPhieuXuatKhoDtl() != null) {
             objReq.getDcnbPhieuXuatKhoDtl().forEach(e -> {
                 e.setDcnbPhieuXuatKhoHdr(data);
             });
         }
         DcnbPhieuXuatKhoHdr created = hdrRepository.save(data);
-        saveFileDinhKem(objReq.getFileDinhKems(),created.getId(),DcnbPhieuXuatKhoHdr.TABLE_NAME);
+        saveFileDinhKem(objReq.getFileDinhKems(), created.getId(), DcnbPhieuXuatKhoHdr.TABLE_NAME);
         return created;
     }
 
@@ -105,12 +106,12 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
         BeanUtils.copyProperties(objReq, data);
         data.setDcnbPhieuXuatKhoDtl(objReq.getDcnbPhieuXuatKhoDtl());
         DcnbPhieuXuatKhoHdr created = hdrRepository.save(data);
-        saveFileDinhKem(objReq.getFileDinhKems(),created.getId(),DcnbPhieuXuatKhoHdr.TABLE_NAME);
+        saveFileDinhKem(objReq.getFileDinhKems(), created.getId(), DcnbPhieuXuatKhoHdr.TABLE_NAME);
         return created;
     }
 
     public DcnbPhieuXuatKhoHdr detail(Long id) throws Exception {
-        if (ObjectUtils.isEmpty(id)){
+        if (ObjectUtils.isEmpty(id)) {
             throw new Exception("Tham số không hợp lệ.");
         }
         Optional<DcnbPhieuXuatKhoHdr> optional = hdrRepository.findById(id);
@@ -226,4 +227,19 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
 //        ex.export();
     }
 
+    public List<DcnbPhieuXuatKhoHdrListDTO> searchList(CustomUserDetails currentUser, SearchPhieuXuatKho req) {
+        String dvql = currentUser.getDvql();
+        req.setMaDvi(dvql);
+        List<DcnbPhieuXuatKhoHdrListDTO> searchDto = null;
+        searchDto = hdrRepository.searchList(req);
+        return searchDto;
+    }
+
+    public List<DcnbPhieuXuatKhoHdrListDTO> searchListChung(CustomUserDetails currentUser, SearchPhieuXuatKho req) {
+        String dvql = currentUser.getDvql();
+        req.setMaDvi(dvql);
+        List<DcnbPhieuXuatKhoHdrListDTO> searchDto = null;
+        searchDto = hdrRepository.searchListChung(req);
+        return searchDto;
+    }
 }

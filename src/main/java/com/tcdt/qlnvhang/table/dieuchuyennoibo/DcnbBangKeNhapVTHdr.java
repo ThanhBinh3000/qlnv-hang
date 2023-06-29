@@ -29,6 +29,10 @@ public class DcnbBangKeNhapVTHdr extends BaseEntity implements Serializable, Clo
     private String loaiVthh;
     @Column(name = "CLOAI_VTHH")
     private String cloaiVthh;
+    @Column(name = "TEN_LOAI_VTHH")
+    private String tenLoaiVthh;
+    @Column(name = "TEN_CLOAI_VTHH")
+    private String tenCloaiVthh;
     @Column(name = "NAM")
     private Integer nam;
     @Column(name = "SO_BANG_KE")
@@ -51,10 +55,10 @@ public class DcnbBangKeNhapVTHdr extends BaseEntity implements Serializable, Clo
     private LocalDate ngayKyQdinhDcc;
     @Column(name = "SO_HOP_DONG")
     private String soHopDong;
-    @Column(name = "PHIEU_XUAT_KHO_ID")
-    private Long phieuXuatKhoId;
-    @Column(name = "SO_PHIEU_XUAT_KHO")
-    private String soPhieuXuatKho;
+    @Column(name = "PHIEU_NHAP_KHO_ID")
+    private Long phieuNhapKhoId;
+    @Column(name = "SO_PHIEU_NHAP_KHO")
+    private String soPhieuNhapKho;
     @Column(name = "MA_DIEM_KHO")
     private String maDiemKho;
     @Column(name = "TEN_DIEM_KHO")
