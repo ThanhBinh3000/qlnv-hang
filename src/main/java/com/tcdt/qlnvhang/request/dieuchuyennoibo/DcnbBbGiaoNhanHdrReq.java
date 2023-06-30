@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbGiaoNhanDtl;
@@ -38,6 +39,10 @@ public class DcnbBbGiaoNhanHdrReq extends BaseRequest {
     private String maNhaKho;
     private String maNganKho;
     private String maLoKho;
+    private String tenDiemKho;
+    private String tenNhaKho;
+    private String tenNganKho;
+    private String tenLoKho;
     private String soHoSoKyThuat;
     private String loaiVthh;
     private String cloaiVthh;
@@ -51,7 +56,7 @@ public class DcnbBbGiaoNhanHdrReq extends BaseRequest {
     private Long idLanhDao;
     private String trangThai;
     private String lyDoTuChoi;
-    private List<FileDinhKem> fileCanCu = new ArrayList<>();
+    private List<FileDinhKemReq> fileCanCuReq = new ArrayList<>();
 
     private List<DcnbBbGiaoNhanDtl> danhSachDaiDien = new ArrayList<>();
     private List<DcnbBbGiaoNhanTTDtl> danhSachBangKe = new ArrayList<>();
