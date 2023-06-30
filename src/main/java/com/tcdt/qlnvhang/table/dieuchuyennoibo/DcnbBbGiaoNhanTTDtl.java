@@ -35,11 +35,11 @@ public class DcnbBbGiaoNhanTTDtl implements Serializable, Cloneable{
     @Column(name = "SO_PHIEU_NHAP_KHO")
     private String soPhieuNhapKho;
     @Column(name = "BANG_KE_NHAP_ID")
-    private Long bangKeNhapKhoId;
+    private Long bangKeNhapVtId;
     @Column(name = "SO_BANG_KE_NHAP")
-    private String soBangKeNhap;
+    private String soBangKeNhapVt;
     @Column(name = "NGAY_NHAP")
-    private LocalDate ngayNhap;
+    private LocalDate ngayNhapKho;
     @Column(name = "SO_LUONG")
     private BigDecimal soLuong;
 
