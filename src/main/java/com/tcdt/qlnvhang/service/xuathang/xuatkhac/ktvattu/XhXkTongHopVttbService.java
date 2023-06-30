@@ -207,7 +207,7 @@ public class XhXkTongHopVttbService extends BaseServiceImpl {
         String title = "Danh sách vật tư thiết bị có thời hạn lưu kho lớn hơn 12 tháng";
         String[] rowsName = new String[]{"STT", "Năm KH", "Mã danh sách", "Chi cục DTNN", "Loại hàng hóa", "Chủng loại",
                 "Điểm kho", "Ngăn/lô kho", "Ngày nhập kho", "SL hết hạn 12 tháng", "SL tồn", "DVT", "Ngày đề xuất", "Trạng thái", "Trạng thái kiểm tra chất lượng"};
-        String fileName = "danh-sach-hang-dtqg-con-6-thang-het-han-luu-kho-nhung-chua-co-ke-hoach-xuat.xlsx";
+        String fileName = "danh-sach-vat-tu-thiet-bi-co-thoi-han-luu-kho-lon-hon-12-thang.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
         for (int i = 0; i < data.size(); i++) {
@@ -229,8 +229,8 @@ public class XhXkTongHopVttbService extends BaseServiceImpl {
                 objs[12] = dtl.getNgayDeXuat();
                 objs[13] = qd.getTenTrangThai();
                 objs[14] = dtl.getTrangThaiKtCl();
+                dataList.add(objs);
             }
-            dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
