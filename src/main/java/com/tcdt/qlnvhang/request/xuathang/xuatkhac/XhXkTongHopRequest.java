@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.xuathang.xuatkhac;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkTongHopDtl;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkTongHopHdr;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -31,8 +32,8 @@ public class XhXkTongHopRequest extends BaseRequest {
   private String dvql;
   private String maCuc;
   private String maChiCuc;
+  private String loai;
   private LocalDateTime ngayTaoTu;
   private LocalDateTime ngayTaoDen;
-
   private List<XhXkTongHopDtl> tongHopDtl = new ArrayList<>();
 }

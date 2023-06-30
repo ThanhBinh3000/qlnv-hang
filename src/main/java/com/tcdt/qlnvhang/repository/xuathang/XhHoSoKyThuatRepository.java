@@ -37,7 +37,7 @@ public interface XhHoSoKyThuatRepository extends JpaRepository<XhHoSoKyThuatHdr,
 
   XhHoSoKyThuatHdr findByMaDiaDiem(String maDiaDiem);
 
-  XhHoSoKyThuatHdr findByIdHsktNhAndType(Long id,String type);
+  XhHoSoKyThuatHdr findByIdHsktAndType(Long id,String type);
 
   @Query("SELECT new com.tcdt.qlnvhang.response.xuathang.NhHoSoKyThuatDTO(" +
       "hs.id, hs.idQdGiaoNvNh , hs.soQdGiaoNvNh , hs.soBbLayMau , hs.soHd , hs.maDvi , hs.soHoSoKyThuat , hs.nam , hs.idBbLayMauXuat , hs.kqKiemTra , 'DT' , bb.maDiemKho , bb.maNhaKho , bb.maNganKho , bb.maLoKho, hs.ngayTao) " +
@@ -58,5 +58,4 @@ public interface XhHoSoKyThuatRepository extends JpaRepository<XhHoSoKyThuatHdr,
   )
   NhHoSoKyThuatDTO findHoSoKyThuatNh(Long id);
 
-  Optional<XhHoSoKyThuatHdr> findBySoHs (String soHs);
 }
