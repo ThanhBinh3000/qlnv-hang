@@ -43,4 +43,5 @@ public class XhXkDanhSachRequest extends BaseRequest {
   private String lyDo;
   private String loai;
   private String dvql;
+  private String type;
 }
