@@ -4,6 +4,7 @@ package com.tcdt.qlnvhang.table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -23,16 +24,18 @@ public class PhieuNhapXuatHistory implements Serializable {
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = PhieuNhapXuatHistory.TABLE_NAME + "_SEQ")
   @SequenceGenerator(sequenceName = PhieuNhapXuatHistory.TABLE_NAME + "_SEQ", allocationSize = 1, name = PhieuNhapXuatHistory.TABLE_NAME + "_SEQ")
   private Long id;
-
-  private Long soLuong;
-  private int loaiNhapXuat;
+  private BigDecimal soLuong;
+  private BigDecimal soLuongChungTu;
+  private String soPhieu;
+  private Integer loaiNhapXuat;
   private String loaiVthh;
   private String cloaiVthh;
   private String maKho;
   private LocalDate ngayDuyet;
   private String kieu;
-  private int namNhap;
+  private Integer namNhap;
   private BigDecimal thanhTien;
+  private Long maBanGhi;
 
   @Transient
   private String maCuc;
@@ -49,11 +52,13 @@ public class PhieuNhapXuatHistory implements Serializable {
 
   public void setMaKho(String maKho) {
     this.maKho = maKho;
-    setMaCuc(maKho.length() >= 6 ? maKho.substring(0, 6) : "");
-    setMaChiCuc(maKho.length() >= 8 ? maKho.substring(0, 8) : "");
-    setMaDiemKho(maKho.length() >= 10 ? maKho.substring(0, 10) : "");
-    setMaNhaKho(maKho.length() >= 12 ? maKho.substring(0, 12) : "");
-    setMaNganKho(maKho.length() >= 14 ? maKho.substring(0, 14) : "");
-    setMaLoKho(maKho.length() >= 16 ? maKho.substring(0, 16) : "");
+    if (!ObjectUtils.isEmpty(this.maKho)) {
+      setMaCuc(maKho.length() >= 6 ? maKho.substring(0, 6) : "");
+      setMaChiCuc(maKho.length() >= 8 ? maKho.substring(0, 8) : "");
+      setMaDiemKho(maKho.length() >= 10 ? maKho.substring(0, 10) : "");
+      setMaNhaKho(maKho.length() >= 12 ? maKho.substring(0, 12) : "");
+      setMaNganKho(maKho.length() >= 14 ? maKho.substring(0, 14) : "");
+      setMaLoKho(maKho.length() >= 16 ? maKho.substring(0, 16) : "");
+    }
   }
 }

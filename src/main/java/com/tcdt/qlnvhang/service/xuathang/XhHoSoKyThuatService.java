@@ -174,7 +174,7 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
     Map<String, String> mapVthh = getListDanhMucHangHoa();
 
     if (DataUtils.isNullObject(objReq.getId())) throw new Exception("Tham số không hợp lệ.");
-    XhHoSoKyThuatHdr xhHskt = xhHoSoKyThuatRepository.findByIdHsktAndType(objReq.getId(), objReq.getType());
+    XhHoSoKyThuatHdr xhHskt = xhHoSoKyThuatRepository.findByIdHsktNhAndType(objReq.getId(), objReq.getType());
     if (DataUtils.isNullObject(xhHskt)) {
       //tim kiem tu nhap hang va mapper
 //      NhHoSoKyThuatDTO nhHoSoKyThuatDTO = xhHoSoKyThuatRepository.findHoSoKyThuatNh(DataUtils.safeToLong(objReq.getId()));
@@ -257,7 +257,7 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
 
         xhHskt = new XhHoSoKyThuatHdr();
 
-        xhHskt.setIdHskt(objReq.getId());
+        xhHskt.setIdHsktNh(objReq.getId());
         xhHskt.setSoHskt(nhHoSoKyThuat.getSoHoSoKyThuat());
         xhHskt.setSoBbLayMauNh(nhHoSoKyThuat.getSoBbLayMau());
         xhHskt.setXhHoSoKyThuatDtl(listDtl);
