@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBBKetThucNKHdrRepository
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBBKetThucNKReq;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBKetThucNKHdrDTO;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBKetThucNKHdrListDTO;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBBKetThucNKService;
 import com.tcdt.qlnvhang.table.UserInfo;
@@ -54,6 +55,13 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
     }
 
     @Override
+    public List<DcnbBBKetThucNKHdrListDTO> searchList(CustomUserDetails currentUser, DcnbBBKetThucNKReq req) {
+        String dvql = currentUser.getDvql();
+        req.setMaDvi(dvql);
+        return hdrRepository.searchList(req);
+    }
+
+    @Override
     public DcnbBBKetThucNKHdr create(DcnbBBKetThucNKReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null) {
@@ -81,10 +89,10 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
     @Override
     public DcnbBBKetThucNKHdr update(DcnbBBKetThucNKReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null){
+        if (userInfo == null) {
             throw new Exception("Access denied.");
         }
-        if(!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
+        if (!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             throw new Exception("Văn bản này chỉ có thêm ở cấp chi cục");
         }
         Optional<DcnbBBKetThucNKHdr> optional = hdrRepository.findById(req.getId());
@@ -92,7 +100,7 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
             throw new Exception("Số biên bản không tồn tại");
         }
         DcnbBBKetThucNKHdr data = optional.get();
-        BeanUtils.copyProperties(req,data);
+        BeanUtils.copyProperties(req, data);
         data.setBcnbBBKetThucNKDtl(req.getBcnbBBKetThucNKDtl());
         DcnbBBKetThucNKHdr update = hdrRepository.save(data);
         return update;
@@ -101,10 +109,10 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
     @Override
     public DcnbBBKetThucNKHdr detail(Long id) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null){
+        if (userInfo == null) {
             throw new Exception("Access denied.");
         }
-        if(Objects.isNull(id)){
+        if (Objects.isNull(id)) {
             throw new Exception("Id is null");
         }
         Optional<DcnbBBKetThucNKHdr> optional = hdrRepository.findById(id);
@@ -118,7 +126,7 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
     @Override
     public DcnbBBKetThucNKHdr approve(DcnbBBKetThucNKReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null){
+        if (userInfo == null) {
             throw new Exception("Access denied.");
         }
         DcnbBBKetThucNKHdr hdr = detail(req.getId());
@@ -175,15 +183,15 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
 
     @Override
     public void deleteMulti(List<Long> listMulti) throws Exception {
-        if(listMulti != null && !listMulti.isEmpty()){
-            listMulti.forEach( i -> {
+        if (listMulti != null && !listMulti.isEmpty()) {
+            listMulti.forEach(i -> {
                 try {
                     delete(i);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
             });
-        }else{
+        } else {
             throw new Exception("List id is null");
         }
     }
@@ -196,7 +204,7 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
         paggingReq.setLimit(Integer.MAX_VALUE);
         objReq.setPaggingReq(paggingReq);
         objReq.setMaDvi(currentUser.getDvql());
-        Page<DcnbBBKetThucNKHdrDTO> page = search(currentUser,objReq);
+        Page<DcnbBBKetThucNKHdrDTO> page = search(currentUser, objReq);
         List<DcnbBBKetThucNKHdrDTO> data = page.getContent();
 
         String title = "Danh sách bảng kê cân hàng ";

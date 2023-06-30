@@ -178,7 +178,12 @@ public class DcnbBienBanHaoDoiHdr extends BaseEntity implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
-    private List<DcnbBienBanHaoDoiTtDtl> dcnbBienBanHaoDoiTtDtl = new ArrayList<>();
+    private List<DcnbBienBanHaoDoiTtDtl> danhSachBangKe = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "HDR_ID")
+    private List<DcnbBienBanHaoDoiDtl> thongTinHaoHut = new ArrayList<>();
+
     @Transient
     private String tenTrangThai;
     public void setTrangThai(String trangThai) {

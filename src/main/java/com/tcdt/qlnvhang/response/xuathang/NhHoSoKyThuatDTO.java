@@ -37,9 +37,11 @@ public class NhHoSoKyThuatDTO {
   private String tenCloaiVthh;
   private String trangThai;
   private String tenTrangThai;
-
   private String tenDvi;
   private LocalDate ngayTao;
+  private String soBbanKtraNquan;
+  private String soBbanKtraVhanh;
+  private String soBbanKtraHskt;
 
   public NhHoSoKyThuatDTO(Long id, Long idQdGiaoNvNh, String soQdGiaoNvNh, String soBbLayMau, String soHd, String maDvi, String soHoSoKyThuat, Integer nam, Integer idBbLayMauXuat, Boolean kqKiemTra, String loaiNhap, String maDiemKho, String maNhaKho, String maNganKho, String maLoKho, Date ngayTao) {
     this.id = id;

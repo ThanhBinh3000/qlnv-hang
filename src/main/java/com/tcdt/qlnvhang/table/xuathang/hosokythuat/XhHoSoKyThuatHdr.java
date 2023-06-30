@@ -3,12 +3,12 @@ package com.tcdt.qlnvhang.table.xuathang.hosokythuat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
-import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,8 +24,15 @@ public class XhHoSoKyThuatHdr extends BaseEntity implements Serializable {
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhHoSoKyThuatHdr.TABLE_NAME + "_SEQ")
   @SequenceGenerator(sequenceName = XhHoSoKyThuatHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhHoSoKyThuatHdr.TABLE_NAME + "_SEQ")
   private Long id;
-  private String soHs;
+  private String soHskt;
   private Long idHsktNh;
+  private Long soHsktNh;
+  private Long idBbLayMau;
+  private String soBbLayMau;
+  private String soBbLayMauNh;
+  private String soQdGiaoNvNh;
+  private LocalDate ngayTaoHskt;
+  private LocalDate ngayDuyetHskt;
   private String maDvi;
   private String maDiaDiem;
   private String loaiVthh;
@@ -48,6 +55,8 @@ public class XhHoSoKyThuatHdr extends BaseEntity implements Serializable {
   @JsonIgnore
   @Transient
   private Map<String, String> mapDmucDvi;
+  @Transient
+  private String tenDvi;
   @Transient
   private String tenCuc;
   @Transient
@@ -76,12 +85,14 @@ public class XhHoSoKyThuatHdr extends BaseEntity implements Serializable {
       String tenNhaKho = mapDmucDvi.containsKey(maNhaKho) ? mapDmucDvi.get(maNhaKho) : null;
       String tenNganKho = mapDmucDvi.containsKey(maNganKho) ? mapDmucDvi.get(maNganKho) : null;
       String tenLoKho = mapDmucDvi.containsKey(maLoKho) ? mapDmucDvi.get(maLoKho) : null;
+      String tenDvi = mapDmucDvi.containsKey(maDvi) ? mapDmucDvi.get(maDvi) : null;
       setTenCuc(tenCuc);
       setTenChiCuc(tenChiCuc);
       setTenDiemKho(tenDiemKho);
       setTenNhaKho(tenNhaKho);
       setTenNganKho(tenNganKho);
       setTenLoKho(tenLoKho);
+      setTenDvi(tenDvi);
     }
   }
 
@@ -94,6 +105,7 @@ public class XhHoSoKyThuatHdr extends BaseEntity implements Serializable {
       setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
     }
   }
+
   public void setTrangThai(String trangThai) {
     this.trangThai = trangThai;
     this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);

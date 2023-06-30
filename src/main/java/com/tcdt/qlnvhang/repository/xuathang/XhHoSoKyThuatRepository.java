@@ -58,5 +58,4 @@ public interface XhHoSoKyThuatRepository extends JpaRepository<XhHoSoKyThuatHdr,
   )
   NhHoSoKyThuatDTO findHoSoKyThuatNh(Long id);
 
-  Optional<XhHoSoKyThuatHdr> findBySoHs (String soHs);
 }
