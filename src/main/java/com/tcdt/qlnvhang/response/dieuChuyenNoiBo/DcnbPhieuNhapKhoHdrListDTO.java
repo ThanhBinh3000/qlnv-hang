@@ -12,4 +12,18 @@ public class DcnbPhieuNhapKhoHdrListDTO {
     private Long id;
     private String soPhieuNhapKho;
     private LocalDate ngayNhapKho;
+    private BigDecimal soLuong;
+
+    private Long phieuKiemTraClId;
+    private String soPhieuKiemTraCl;
+    private Long bangKeCanHangId;
+    private String soBangKeCanHang;
+    private Long bangKeNhapVtId;
+    private String soBangKeNhapVt;
+
+    public DcnbPhieuNhapKhoHdrListDTO(Long id, String soPhieuNhapKho, LocalDate ngayNhapKho) {
+        this.id = id;
+        this.soPhieuNhapKho = soPhieuNhapKho;
+        this.ngayNhapKho = ngayNhapKho;
+    }
 }

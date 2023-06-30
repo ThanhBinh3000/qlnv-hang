@@ -24,7 +24,7 @@ public interface HhQdGiaoNvNhapKhacHdrRepository extends JpaRepository<HhQdGiaoN
                     "  AND (:#{#req.trichYeu} IS NULL OR LOWER(qdnk.trichYeu) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.trichYeu}),'%')))" +
                     "  AND (:#{#req.loaiVthh} IS NULL OR LOWER(qdnk.loaiVthh) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.loaiVthh}),'%')))" +
                     "  AND (:#{#req.tuNgayQdStr} IS NULL OR qdnk.ngayQd >= TO_DATE(:#{#req.tuNgayQdStr}, 'YYYY-MM-DD HH24:MI:SS'))" +
-                    "  AND (:#{#req.denNgayQdStr} IS NULL OR qdnk.ngayQd <= TO_DATE(:#{#req.tuNgayQdStr}, 'YYYY-MM-DD HH24:MI:SS'))" +
+                    "  AND (:#{#req.denNgayQdStr} IS NULL OR qdnk.ngayQd <= TO_DATE(:#{#req.denNgayQdStr}, 'YYYY-MM-DD HH24:MI:SS'))" +
                     "  AND (:#{#req.trangThai} IS NULL OR qdnk.trangThai = :#{#req.trangThai}) "+
                     "  ORDER BY qdnk.ngaySua desc , qdnk.ngayTao desc, qdnk.id desc"
             )

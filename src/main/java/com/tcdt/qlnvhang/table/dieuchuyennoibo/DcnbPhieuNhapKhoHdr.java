@@ -83,6 +83,14 @@ public class DcnbPhieuNhapKhoHdr extends BaseEntity implements Serializable, Clo
     private String kieuNx;
     private String bbNghiemThuBqld;
     private BigDecimal soLuongQdDcCuc;
+    @Column(name = "TONG_SO_LUONG")
+    private BigDecimal tongSoLuong;
+    @Column(name = "TONG_SO_LUONG_BC")
+    private String tongSoLuongBc;
+    @Column(name = "TONG_KINH_PHI")
+    private BigDecimal tongKinhPhi;
+    @Column(name = "TONG_KINH_PHI_BC")
+    private String tongKinhPhiBc;
     private String ghiChu;
     @Access(value=AccessType.PROPERTY)
     private String trangThai;

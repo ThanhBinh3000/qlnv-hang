@@ -1,7 +1,7 @@
 package com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktluongthuc;
 
 import com.tcdt.qlnvhang.request.xuathang.xuatkhac.XhXkDanhSachRequest;
-import com.tcdt.qlnvhang.table.xuathang.xuatkhac.XhXkDanhSachHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkDanhSachHdr;
 import feign.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -137,7 +137,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
     BeanUtils.copyProperties(req, data, "id");
     data.setNgayTao(LocalDate.now());
     data.setNguoiTaoId(getUser().getId());
-    data.setTrangThai(Contains.DUTHAO);
+    data.setTrangThai(Contains.DANG_NHAP_DU_LIEU);
     data.setLastest(false);
     data.setMaDvi(userInfo.getDvql());
 
@@ -330,7 +330,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
     XhQdPdKhBdg dataDB = detail(req.getId());
     String status = req.getTrangThai() + dataDB.getTrangThai();
     switch (status) {
-      case Contains.BAN_HANH + Contains.DUTHAO:
+      case Contains.BAN_HANH + Contains.DANG_NHAP_DU_LIEU:
         dataDB.setNgayPduyet(LocalDate.now());
         dataDB.setNguoiPduyetId(getUser().getId());
         break;
@@ -390,8 +390,8 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
     if (!optional.isPresent()) {
       throw new Exception("Không tìm thấy dữ liệu cần xóa");
     }
-    if (!optional.get().getTrangThai().equals(Contains.DUTHAO)) {
-      throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái dự thảo");
+    if (!optional.get().getTrangThai().equals(Contains.DANG_NHAP_DU_LIEU)) {
+      throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái đang nhập dữ liệu");
     }
     List<XhQdPdKhBdgDtl> xhQdPdKhBdgDtl = xhQdPdKhBdgDtlRepository.findAllByIdQdHdr(optional.get().getId());
     if (!CollectionUtils.isEmpty(xhQdPdKhBdgDtl)) {
@@ -436,8 +436,8 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
       throw new Exception("Không tìm thấy dữ liệu cần xóa");
     }
     for (XhQdPdKhBdg bdg : listHdr) {
-      if (!bdg.getTrangThai().equals(Contains.DUTHAO)) {
-        throw new Exception("Chỉ thực hiện xóa bản nghi ở trạng thái dự thảo");
+      if (!bdg.getTrangThai().equals(Contains.DANG_NHAP_DU_LIEU)) {
+        throw new Exception("Chỉ thực hiện xóa bản nghi ở trạng thái đang nhập dữ liệu");
       } else {
         this.delete(bdg.getId());
       }

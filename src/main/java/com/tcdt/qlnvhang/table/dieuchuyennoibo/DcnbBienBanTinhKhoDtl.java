@@ -38,6 +38,15 @@ public class DcnbBienBanTinhKhoDtl {
     @Column(name = "SO_LUONG_XUAT")
     private Long soLuongXuat;
 
+    @Column(name = "SO_PHIEU_KT_CHAT_LUONG")
+    private String soPhieuKtChatLuong;
+
+    @Column(name = "SO_PHIEU_XUAT_KHO")
+    private String soPhieuXuatKho;
+
+    @Column(name = "SO_BANG_KE_CAN_HANG")
+    private String soBangKeCanHang;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
     @JsonIgnore

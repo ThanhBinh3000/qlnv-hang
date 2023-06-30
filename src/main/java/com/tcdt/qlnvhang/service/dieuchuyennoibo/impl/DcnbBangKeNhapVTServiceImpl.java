@@ -134,9 +134,20 @@ public class DcnbBangKeNhapVTServiceImpl implements DcnbBangKeNhapVTService {
     public DcnbBangKeNhapVTHdr approve(CustomUserDetails currentUser, StatusReq statusReq, Optional<DcnbBangKeNhapVTHdr> optional) throws Exception {
         String status = optional.get().getTrangThai() + statusReq.getTrangThai();
         switch (status) {
-            case Contains.DUTHAO + Contains.CHODUYET_LDCC:
+            case Contains.DUTHAO + Contains.CHODUYET_TBP_TVQT:
+            case Contains.TUCHOI_TBP_TVQT + Contains.CHODUYET_TBP_TVQT:
+            case Contains.TUCHOI_LDCC + Contains.CHODUYET_TBP_TVQT:
                 optional.get().setNgayGDuyet(LocalDate.now());
                 optional.get().setNguoiGDuyet(currentUser.getUser().getId());
+                break;
+            case Contains.CHODUYET_TBP_TVQT + Contains.TUCHOI_TBP_TVQT:
+                optional.get().setNgayPDuyetTvqt(LocalDate.now());
+                optional.get().setNguoiPDuyetTvqt(currentUser.getUser().getId());
+                optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
+                break;
+            case Contains.CHODUYET_TBP_TVQT + Contains.CHODUYET_LDCC:
+                optional.get().setNgayPDuyetTvqt(LocalDate.now());
+                optional.get().setNguoiPDuyetTvqt(currentUser.getUser().getId());
                 break;
             case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
                 optional.get().setNgayPDuyet(LocalDate.now());
@@ -146,7 +157,7 @@ public class DcnbBangKeNhapVTServiceImpl implements DcnbBangKeNhapVTService {
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
                 optional.get().setNgayPDuyet(LocalDate.now());
                 optional.get().setNguoiPDuyet(currentUser.getUser().getId());
-                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(optional.get().getMaDvi(),
+                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCucNhan(optional.get().getMaDvi(),
                         optional.get().getQDinhDccId(),
                         optional.get().getMaNganKho(),
                         optional.get().getMaLoKho());

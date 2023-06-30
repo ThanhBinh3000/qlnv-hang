@@ -1,7 +1,6 @@
-package com.tcdt.qlnvhang.table.xuathang.xuatkhac;
+package com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
-import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlTongHopDtl;
 import lombok.Getter;
 import lombok.Setter;
 
