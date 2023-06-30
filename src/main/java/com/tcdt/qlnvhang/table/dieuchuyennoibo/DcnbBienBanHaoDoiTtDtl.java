@@ -18,8 +18,8 @@ public class DcnbBienBanHaoDoiTtDtl {
     public static final String TABLE_NAME = "DCNB_BIEN_BAN_HAO_DOI_TT_DTL";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanHaoDoiTtDtl.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = DcnbBienBanHaoDoiTtDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanHaoDoiTtDtl.TABLE_NAME + "_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DCNB_BB_HAO_DOI_TT_DTL_SEQ")
+    @SequenceGenerator(sequenceName = "DCNB_BB_HAO_DOI_TT_DTL_SEQ", allocationSize = 1, name = "DCNB_BB_HAO_DOI_TT_DTL_SEQ")
     private Long id;
 
     @Column(name = "HDR_ID", insertable = true, updatable = true)
