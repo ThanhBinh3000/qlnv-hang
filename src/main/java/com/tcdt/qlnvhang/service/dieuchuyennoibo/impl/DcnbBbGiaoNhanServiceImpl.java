@@ -143,16 +143,12 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
         DcnbBbGiaoNhanHdr hdr = detail(req.getId());
         String status = hdr.getTrangThai() + req.getTrangThai();
         switch (status) {
-            // Arena các roll back approve
-            case Contains.TUCHOI_LDC + Contains.DUTHAO:
-                break;
-            // Arena các cấp duuyệt
+            case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
             case Contains.DUTHAO + Contains.CHODUYET_LDC:
                 break;
             case Contains.CHODUYET_LDC + Contains.DADUYET_LDCC:
                 hdr.setIdLanhDao(userInfo.getId());
                 break;
-            // Arena từ chối
             case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
                 hdr.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
