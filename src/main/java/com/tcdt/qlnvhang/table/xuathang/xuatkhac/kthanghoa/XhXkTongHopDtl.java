@@ -39,6 +39,7 @@ public class XhXkTongHopDtl implements Serializable {
   private String lyDo;
   private String type;
   private String trangThaiKtCl;
+  private BigDecimal slHetHan;
 
   @Transient
   private String tenTrangThaiKtCl;
