@@ -38,6 +38,10 @@ public class DcnbBbGiaoNhanHdrReq extends BaseRequest {
     private String maNhaKho;
     private String maNganKho;
     private String maLoKho;
+    private String tenDiemKho;
+    private String tenNhaKho;
+    private String tenNganKho;
+    private String tenLoKho;
     private String soHoSoKyThuat;
     private String loaiVthh;
     private String cloaiVthh;
