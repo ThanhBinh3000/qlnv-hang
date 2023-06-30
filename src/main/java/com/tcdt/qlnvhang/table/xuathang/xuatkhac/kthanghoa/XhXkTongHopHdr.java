@@ -37,6 +37,7 @@ public class XhXkTongHopHdr extends BaseEntity implements Serializable {
   private Long nguoiPduyetId;
   private String lyDoTuChoi;
   private BigDecimal tongSlHienTai;
+  private Integer capTh;
 
   @Transient
   private String tenTrangThai;

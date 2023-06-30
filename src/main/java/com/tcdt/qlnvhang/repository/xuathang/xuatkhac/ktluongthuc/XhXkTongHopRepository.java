@@ -21,6 +21,7 @@ public interface XhXkTongHopRepository extends JpaRepository<XhXkTongHopHdr, Lon
       "AND ((:#{#param.ngayTaoTu}  IS NULL OR c.ngayTao >= :#{#param.ngayTaoTu})" +
       "AND  (:#{#param.ngayTaoDen}  IS NULL OR c.ngayTao <= :#{#param.ngayTaoDen})) " +
       "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
+      "AND (:#{#param.capTh} IS NULL OR c.capTh = :#{#param.capTh}) " +
       "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
   Page<XhXkTongHopHdr> searchPage(@Param("param") XhXkTongHopRequest param, Pageable pageable);

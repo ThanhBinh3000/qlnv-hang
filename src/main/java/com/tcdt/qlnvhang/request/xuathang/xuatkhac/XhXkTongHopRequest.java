@@ -27,7 +27,7 @@ public class XhXkTongHopRequest extends BaseRequest {
   private Long nguoiPduyetId;
   private String lyDoTuChoi;
   private BigDecimal tongSlHienTai;
-
+  private Integer capTh;
   private String dvql;
   private String maCuc;
   private String maChiCuc;
