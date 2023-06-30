@@ -41,6 +41,11 @@ public class XhXkTongHopDtl implements Serializable {
   private String trangThaiKtCl;
   private BigDecimal slHetHan;
 
+  private Long idBienBan;
+  private String soBienBan;
+  private LocalDate ngayLayMau;
+  private String trangThaiBienBan;
+
   @Transient
   private String tenTrangThaiKtCl;
   @JsonIgnore
