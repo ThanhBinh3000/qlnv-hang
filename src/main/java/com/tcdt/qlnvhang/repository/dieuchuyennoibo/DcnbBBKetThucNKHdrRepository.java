@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.repository.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBBKetThucNKReq;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBKetThucNKHdrDTO;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBKetThucNKHdrListDTO;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBKetThucNKHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,11 +11,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface DcnbBBKetThucNKHdrRepository extends JpaRepository<DcnbBBKetThucNKHdr, Long> {
     Optional<DcnbBBKetThucNKHdr> findFirstBySoBb(String soBb);
+
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBKetThucNKHdrDTO(" +
             "bbkt.id,qdc.id,qdc.soQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maNhaKho,khdcd.tenNhaKho, khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
             "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho,khdcd.loaiVthh,khdcd.tenLoaiVthh, khdcd.cloaiVthh, khdcd.tenCloaiVthh,khdcd.donViTinh, khdcd.tenDonViTinh ," +
@@ -34,7 +37,8 @@ public interface DcnbBBKetThucNKHdrRepository extends JpaRepository<DcnbBBKetThu
             "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}))" +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
             "ORDER BY bbkt.soBb desc, bbkt.nam desc")
-    Page<DcnbBBKetThucNKHdrDTO> searchPageChiCuc(@Param("param")DcnbBBKetThucNKReq req, Pageable pageable);
+    Page<DcnbBBKetThucNKHdrDTO> searchPageChiCuc(@Param("param") DcnbBBKetThucNKReq req, Pageable pageable);
+
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBKetThucNKHdrDTO(" +
             "bbkt.id,qdc.id,qdc.soQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maNhaKho,khdcd.tenNhaKho, khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
             "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho,khdcd.loaiVthh,khdcd.tenLoaiVthh, khdcd.cloaiVthh, khdcd.tenCloaiVthh,khdcd.donViTinh, khdcd.tenDonViTinh ," +
@@ -55,5 +59,18 @@ public interface DcnbBBKetThucNKHdrRepository extends JpaRepository<DcnbBBKetThu
             "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}))" +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
             "ORDER BY bbkt.soBb desc, bbkt.nam desc")
-    Page<DcnbBBKetThucNKHdrDTO> searchPageCuc(@Param("param")DcnbBBKetThucNKReq req, Pageable pageable);
+    Page<DcnbBBKetThucNKHdrDTO> searchPageCuc(@Param("param") DcnbBBKetThucNKReq req, Pageable pageable);
+
+    @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBKetThucNKHdrListDTO(" +
+            "bbkt.id,qdc.id,bbkt.soBb) " +
+            "FROM DcnbBBKetThucNKHdr bbkt " +
+            "LEFT JOIN DcnbQuyetDinhDcCHdr qdc On bbkt.qDinhDccId = qdc.id " +
+            "WHERE 1 =1 " +
+            "AND qdc.trangThai = '29'" +
+            "AND ((:#{#param.qDinhDccId} IS NULL OR qdc.id = :#{#param.qDinhDccId})) " +
+            "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
+            "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}))" +
+            "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
+            "ORDER BY bbkt.soBb desc, bbkt.nam desc")
+    List<DcnbBBKetThucNKHdrListDTO> searchList(@Param("param") DcnbBBKetThucNKReq req);
 }
