@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.service.xuathang.daugia.tochuctrienkhai.thongtin;
 
-import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGia;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgDtlRepository;
@@ -183,6 +182,8 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl implements XhTcTt
                 Integer soDviTsanKhongThanh = 0;
                 soDviTsanKhongThanh = xhQdPdKhBdgDtl.get().getSlDviTsan() - countSlDviTsanThanhCong;
                 xhQdPdKhBdgDtl.get().setSoDviTsanKhongThanh(soDviTsanKhongThanh);
+
+                xhQdPdKhBdgDtl.get().setKetQuaDauGia( countSlDviTsanThanhCong + "/" + xhQdPdKhBdgDtl.get().getSlDviTsan());
 
 //                Integer countSlDviTsanKhongThanhCong = xhQdPdKhBdgDtlRepository.countSlDviTsanKhongThanhCong(data.getIdQdPdDtl(), data.getMaDvi());
 //                xhQdPdKhBdgDtl.get().setSoDviTsanKhongThanh(countSlDviTsanKhongThanhCong);

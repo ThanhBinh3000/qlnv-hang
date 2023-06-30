@@ -51,11 +51,14 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
     Page<XhKqBdgHdr> page = xhKqBdgHdrRepository.search(req, pageable);
     Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-
     page.getContent().forEach(f -> {
-      f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
-      f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : mapDmucVthh.get(f.getLoaiVthh()));
-      f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : mapDmucVthh.get(f.getCloaiVthh()));
+      try {
+        f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
+        f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : mapDmucVthh.get(f.getLoaiVthh()));
+        f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : mapDmucVthh.get(f.getCloaiVthh()));
+      }catch (Exception e){
+        throw new RuntimeException(e);
+      }
     });
     return page;
   }

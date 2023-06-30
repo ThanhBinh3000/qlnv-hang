@@ -19,5 +19,5 @@ public interface HhQdPdNhapKhacService {
     HhQdPdNhapKhacHdr pheDuyet(StatusReq stReq) throws Exception;
     void xoa (IdSearchReq idSearchReq) throws Exception;
     void xoaNhieu (IdSearchReq idSearchReq) throws Exception;
-    void xuatFile(HhQdPdNhapKhacSearch req , HttpServletResponse response);
+    void xuatFile(HhQdPdNhapKhacSearch req , HttpServletResponse response) throws Exception;
 }
