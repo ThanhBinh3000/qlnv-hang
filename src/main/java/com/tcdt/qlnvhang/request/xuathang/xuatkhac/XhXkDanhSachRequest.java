@@ -42,6 +42,5 @@ public class XhXkDanhSachRequest extends BaseRequest {
   private LocalDate ngayTongHop;
   private String lyDo;
   private String loai;
-
   private String dvql;
 }
