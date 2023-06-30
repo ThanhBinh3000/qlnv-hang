@@ -86,8 +86,10 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
             e.setParent(data);
         });
         DcnbBbGiaoNhanHdr created = hdrRepository.save(data);
-        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBbGiaoNhanHdr.TABLE_NAME);
-        created.setFileDinhKems(canCu);
+        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), DcnbBbGiaoNhanHdr.TABLE_NAME +"_CC");
+        List<FileDinhKem> dinhkem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBbGiaoNhanHdr.TABLE_NAME+"_DK");
+        created.setFileCanCu(canCu);
+        created.setFileDinhKems(dinhkem);
         return created;
     }
 
@@ -109,9 +111,12 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
         data.setDanhSachDaiDien(req.getDanhSachDaiDien());
         data.setDanhSachBangKe(req.getDanhSachBangKe());
         DcnbBbGiaoNhanHdr update = hdrRepository.save(data);
-        fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbBbGiaoNhanHdr.TABLE_NAME));
+        fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbBbGiaoNhanHdr.TABLE_NAME+"_CC"));
+        fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbBbGiaoNhanHdr.TABLE_NAME+"_DK"));
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), update.getId(), DcnbBbGiaoNhanHdr.TABLE_NAME);
-        update.setFileDinhKems(canCu);
+        List<FileDinhKem> dinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), update.getId(), DcnbBbGiaoNhanHdr.TABLE_NAME);
+        update.setFileCanCu(canCu);
+        update.setFileDinhKems(dinhKem);
         return update;
     }
 
@@ -129,7 +134,8 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
             throw new Exception("Số biên bản không tồn tại");
         }
         DcnbBbGiaoNhanHdr data = optional.get();
-        data.setFileDinhKems(fileDinhKemService.search(id, Collections.singleton(DcnbBbGiaoNhanHdr.TABLE_NAME)));
+        data.setFileCanCu(fileDinhKemService.search(id, Collections.singleton(DcnbBbGiaoNhanHdr.TABLE_NAME +"_CC")));
+        data.setFileDinhKems(fileDinhKemService.search(id, Collections.singleton(DcnbBbGiaoNhanHdr.TABLE_NAME +"_DK")));
         return data;
     }
 
