@@ -30,6 +30,8 @@ public class DcnbBangKeCanHangHdrReq {
 
     private String soQdinhDcc;
 
+    private LocalDate ngayKyQdinh;
+
     private LocalDate thoiHanDieuChuyen;
 
     private LocalDate thoiGianGiaoNhan;
