@@ -68,8 +68,8 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
         if (userInfo == null){
             throw new Exception("Access denied.");
         }
-        if(!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
-            throw new Exception("Văn bản này chỉ có thêm ở cấp chi cục");
+        if(!userInfo.getCapDvi().equals(Contains.CAP_CUC)){
+            throw new Exception("Văn bản này chỉ có thêm ở cấp cục");
         }
         Optional<DcnbBbGiaoNhanHdr> optional = hdrRepository.findFirstBySoBb(req.getSoBb());
         if (optional.isPresent()) {
@@ -98,8 +98,8 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
         if (userInfo == null){
             throw new Exception("Access denied.");
         }
-        if(!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
-            throw new Exception("Văn bản này chỉ có thêm ở cấp chi cục");
+        if(!userInfo.getCapDvi().equals(Contains.CAP_CUC)){
+            throw new Exception("Văn bản này chỉ có thêm ở cấp cục");
         }
         Optional<DcnbBbGiaoNhanHdr> optional = hdrRepository.findById(req.getId());
         if (!optional.isPresent()) {
