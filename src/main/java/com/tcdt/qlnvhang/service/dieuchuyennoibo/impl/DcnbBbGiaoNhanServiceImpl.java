@@ -82,7 +82,10 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
         BeanUtils.copyProperties(req, data);
         data.setMaDvi(userInfo.getDvql());
         data.setId(Long.parseLong(req.getSoBb().split("/")[0]));
-        req.getChildren().forEach(e -> {
+        req.getDanhSachDaiDien().forEach(e -> {
+            e.setParent(data);
+        });
+        req.getDanhSachBangKe().forEach(e -> {
             e.setParent(data);
         });
         DcnbBbGiaoNhanHdr created = hdrRepository.save(data);
@@ -106,7 +109,8 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
         }
         DcnbBbGiaoNhanHdr data = optional.get();
         BeanUtils.copyProperties(req,data);
-        data.setChildren(req.getChildren());
+        data.setDanhSachDaiDien(req.getDanhSachDaiDien());
+        data.setDanhSachBangKe(req.getDanhSachBangKe());
         DcnbBbGiaoNhanHdr update = hdrRepository.save(data);
         fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbBBNTBQHdr.TABLE_NAME));
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), update.getId(), DcnbBBNTBQHdr.TABLE_NAME);
