@@ -88,7 +88,7 @@ public class XhXkTongHopVttbService extends BaseServiceImpl {
         data.setTrangThai(Contains.DUTHAO);
         data.getTongHopDtl().forEach(s -> s.setTongHopHdr(data));
         XhXkTongHopHdr created = xhXkTongHopRepository.save(data);
-        created.setMaDanhSach(created.getMaDanhSach() + created.getId());
+        created.setMaDanhSach(created.getMaDanhSach() + "_" + created.getId());
         created = xhXkTongHopRepository.save(created);
         Long id = created.getId();
         String ma = created.getMaDanhSach();
@@ -143,6 +143,7 @@ public class XhXkTongHopVttbService extends BaseServiceImpl {
             items.forEach(item -> {
                 item.setIdTongHop(null);
                 item.setMaTongHop(null);
+                item.setTrangThai(TrangThaiAllEnum.CHUA_CHOT.getId());
                 xhXkDanhSachRepository.save(item);
             });
         }
