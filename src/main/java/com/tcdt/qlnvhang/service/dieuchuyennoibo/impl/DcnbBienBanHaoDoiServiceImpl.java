@@ -86,11 +86,11 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
         BeanUtils.copyProperties(objReq, data);
         data.setMaDvi(currentUser.getDvql());
         data.setTenDvi(currentUser.getUser().getTenDvi());
-        objReq.getDcnbBienBanHaoDoiTtDtl().forEach(e->{
+        objReq.getDanhSachBangKe().forEach(e -> {
             e.setDcnbBienBanHaoDoiHdr(data);
-                e.getDcnbBienBanHaoDoiDtl().forEach(dtl ->{
-                    dtl.setDcnbBienBanHaoDoiTtDtl(e);
-                });
+        });
+        objReq.getThongTinHaoHut().forEach(e -> {
+            e.setDcnbBienBanHaoDoiHdr(data);
         });
         DcnbBienBanHaoDoiHdr created = dcnbBienBanHaoDoiHdrRepository.save(data);
         return created;
@@ -118,9 +118,8 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
         objReq.setMaDvi(data.getMaDvi());
         objReq.setTenDvi(data.getTenDvi());
         BeanUtils.copyProperties(objReq, data);
-        data.setDcnbBienBanHaoDoiTtDtl(objReq.getDcnbBienBanHaoDoiTtDtl());
-        if (objReq.getDcnbBienBanHaoDoiTtDtl() != null) {
-        }
+        data.setDanhSachBangKe(objReq.getDanhSachBangKe());
+        data.setThongTinHaoHut(objReq.getThongTinHaoHut());
         DcnbBienBanHaoDoiHdr created = dcnbBienBanHaoDoiHdrRepository.save(data);
         return created;
     }
@@ -141,10 +140,8 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
         List<DcnbBienBanHaoDoiHdr> details = details(Arrays.asList(id));
         DcnbBienBanHaoDoiHdr result = details.isEmpty() ? null : details.get(0);
         if (result != null) {
-            Hibernate.initialize(result.getDcnbBienBanHaoDoiTtDtl());
-            result.getDcnbBienBanHaoDoiTtDtl().forEach(e ->{
-                Hibernate.initialize(e.getDcnbBienBanHaoDoiDtl());
-            });
+            Hibernate.initialize(result.getDanhSachBangKe());
+            Hibernate.initialize(result.getThongTinHaoHut());
         }
         return result;
     }
@@ -157,11 +154,9 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
         }
         DcnbBienBanHaoDoiHdr data = optional.get();
         List<DcnbBienBanHaoDoiTtDtl> list = dcnbBienBanHaoDoiTtDtlRepository.findByHdrId(data.getId());
-        data.getDcnbBienBanHaoDoiTtDtl().forEach(e->{
-            List<DcnbBienBanHaoDoiDtl> listDtl = dcnbBienBanHaoDoiDtlRepository.findByHdrId(e.getId());
-            dcnbBienBanHaoDoiDtlRepository.deleteAll(listDtl);
-        });
+        List<DcnbBienBanHaoDoiDtl> list2 = dcnbBienBanHaoDoiDtlRepository.findByHdrId(data.getId());
         dcnbBienBanHaoDoiTtDtlRepository.deleteAll(list);
+        dcnbBienBanHaoDoiDtlRepository.deleteAll(list2);
         dcnbBienBanHaoDoiHdrRepository.delete(data);
     }
 
@@ -174,7 +169,7 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
         }
         List<Long> listId = list.stream().map(DcnbBienBanHaoDoiHdr::getId).collect(Collectors.toList());
         List<DcnbBienBanHaoDoiTtDtl> listBangKe = dcnbBienBanHaoDoiTtDtlRepository.findByHdrIdIn(listId);
-        listBangKe.forEach(e->{
+        listBangKe.forEach(e -> {
             List<DcnbBienBanHaoDoiDtl> listDtl = dcnbBienBanHaoDoiDtlRepository.findByHdrId(e.getId());
             dcnbBienBanHaoDoiDtlRepository.deleteAll(listDtl);
         });
@@ -259,7 +254,7 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
         objReq.setPaggingReq(paggingReq);
         objReq.setMaDvi(currentUser.getDvql());
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit());
-        Page<DcnbBienBanHaoDoiHdrDTO> page = dcnbBienBanHaoDoiHdrRepository.searchPageChiCuc(objReq,pageable);
+        Page<DcnbBienBanHaoDoiHdrDTO> page = dcnbBienBanHaoDoiHdrRepository.searchPageChiCuc(objReq, pageable);
         List<DcnbBienBanHaoDoiHdrDTO> data = page.getContent();
 
         String title = "Danh sách bảng kê cân hàng ";

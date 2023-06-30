@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanHaoDoiDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanHaoDoiTtDtl;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
 public class DcnbBienBanHaoDoiHdrReq {
     private Long id;
 

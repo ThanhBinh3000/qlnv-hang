@@ -7,12 +7,9 @@ import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBienBanHaoDoiHdrReq;
-import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBienBanTinhKhoHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbBienBanHaoDoi;
-import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbBienBanTinhKho;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.impl.DcnbBienBanHaoDoiServiceImpl;
-import com.tcdt.qlnvhang.service.dieuchuyennoibo.impl.DcnbBienBanTinhKhoServiceImpl;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = PathContains.DIEU_CHUYEN_NOI_BO +PathContains.BIEN_BAN_TINH_KHO)
+@RequestMapping(value = PathContains.DIEU_CHUYEN_NOI_BO +PathContains.BIEN_BAN_HAO_DOI)
 @Slf4j
 @Api(tags = "Điều chuyển nội bộ - Biên bản hao dôi")
 public class DcnbBienBanHaoDoiController {
