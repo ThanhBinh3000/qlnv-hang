@@ -56,6 +56,8 @@ public class DcnbBangKeCanHangHdrReq {
 
     private String donViTinh;
 
+    private String tenDonViTinh;
+
     private String maDiemKho;
 
     private String tenDiemKho;
