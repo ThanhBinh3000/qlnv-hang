@@ -113,8 +113,8 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
         DcnbBbGiaoNhanHdr update = hdrRepository.save(data);
         fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbBbGiaoNhanHdr.TABLE_NAME+"_CC"));
         fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbBbGiaoNhanHdr.TABLE_NAME+"_DK"));
-        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), update.getId(), DcnbBbGiaoNhanHdr.TABLE_NAME);
-        List<FileDinhKem> dinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), update.getId(), DcnbBbGiaoNhanHdr.TABLE_NAME);
+        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), update.getId(), DcnbBbGiaoNhanHdr.TABLE_NAME+"_CC");
+        List<FileDinhKem> dinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), update.getId(), DcnbBbGiaoNhanHdr.TABLE_NAME+"_DK");
         update.setFileCanCu(canCu);
         update.setFileDinhKems(dinhKem);
         return update;
@@ -151,7 +151,7 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
             case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
             case Contains.DUTHAO + Contains.CHODUYET_LDC:
                 break;
-            case Contains.CHODUYET_LDC + Contains.DADUYET_LDCC:
+            case Contains.CHODUYET_LDC + Contains.DADUYET_LDC:
                 hdr.setIdLanhDao(userInfo.getId());
                 break;
             case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
