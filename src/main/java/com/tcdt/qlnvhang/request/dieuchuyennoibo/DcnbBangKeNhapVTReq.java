@@ -20,6 +20,8 @@ public class DcnbBangKeNhapVTReq extends BaseRequest {
     private String loaiDc;
     private String loaiVthh;
     private String cloaiVthh;
+    private String tenLoaiVthh;
+    private String tenCloaiVthh;
     private Integer nam;
     private String loaiQdinh;
     private String soBangKe;
@@ -31,8 +33,8 @@ public class DcnbBangKeNhapVTReq extends BaseRequest {
     private String soQdinhDcc;
     private LocalDate ngayKyQdinhDcc;
     private String soHopDong;
-    private Long phieuXuatKhoId;
-    private String soPhieuXuatKho;
+    private Long phieuNhapKhoId;
+    private String soPhieuNhapKho;
     private String maDiemKho;
     private String tenDiemKho;
     private String diaDaDiemKho;

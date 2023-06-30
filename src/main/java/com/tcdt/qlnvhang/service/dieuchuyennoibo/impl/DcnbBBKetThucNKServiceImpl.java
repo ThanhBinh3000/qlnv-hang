@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBBKetThucNKHdrRepository
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBBKetThucNKReq;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBKetThucNKHdrDTO;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBKetThucNKHdrListDTO;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBBKetThucNKService;
 import com.tcdt.qlnvhang.table.UserInfo;
@@ -21,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -53,6 +55,13 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
     }
 
     @Override
+    public List<DcnbBBKetThucNKHdrListDTO> searchList(CustomUserDetails currentUser, DcnbBBKetThucNKReq req) {
+        String dvql = currentUser.getDvql();
+        req.setMaDvi(dvql);
+        return hdrRepository.searchList(req);
+    }
+
+    @Override
     public DcnbBBKetThucNKHdr create(DcnbBBKetThucNKReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null) {
@@ -80,10 +89,10 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
     @Override
     public DcnbBBKetThucNKHdr update(DcnbBBKetThucNKReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null){
+        if (userInfo == null) {
             throw new Exception("Access denied.");
         }
-        if(!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
+        if (!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             throw new Exception("Văn bản này chỉ có thêm ở cấp chi cục");
         }
         Optional<DcnbBBKetThucNKHdr> optional = hdrRepository.findById(req.getId());
@@ -91,7 +100,7 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
             throw new Exception("Số biên bản không tồn tại");
         }
         DcnbBBKetThucNKHdr data = optional.get();
-        BeanUtils.copyProperties(req,data);
+        BeanUtils.copyProperties(req, data);
         data.setBcnbBBKetThucNKDtl(req.getBcnbBBKetThucNKDtl());
         DcnbBBKetThucNKHdr update = hdrRepository.save(data);
         return update;
@@ -100,10 +109,10 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
     @Override
     public DcnbBBKetThucNKHdr detail(Long id) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null){
+        if (userInfo == null) {
             throw new Exception("Access denied.");
         }
-        if(Objects.isNull(id)){
+        if (Objects.isNull(id)) {
             throw new Exception("Id is null");
         }
         Optional<DcnbBBKetThucNKHdr> optional = hdrRepository.findById(id);
@@ -117,23 +126,45 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
     @Override
     public DcnbBBKetThucNKHdr approve(DcnbBBKetThucNKReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null){
+        if (userInfo == null) {
             throw new Exception("Access denied.");
         }
         DcnbBBKetThucNKHdr hdr = detail(req.getId());
         String status = hdr.getTrangThai() + req.getTrangThai();
         switch (status) {
-            case Contains.DUTHAO + Contains.CHODUYET_LDC:
-            case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
+            case Contains.DUTHAO + Contains.CHODUYET_KTVBQ:
+            case Contains.TUCHOI_KTVBQ + Contains.CHODUYET_KTVBQ:
+            case Contains.TUCHOI_KT + Contains.CHODUYET_KTVBQ:
+            case Contains.TUCHOI_LDCC + Contains.CHODUYET_KTVBQ:
                 hdr.setNguoiGDuyet(userInfo.getId());
+                hdr.setNgayGDuyet(LocalDate.now());
+                break;
+            case Contains.CHODUYET_KTVBQ + Contains.TUCHOI_KTVBQ:
+                hdr.setNguoiPDuyetTvqt(userInfo.getId());
+                hdr.setNgayPDuyetTvqt(LocalDate.now());
+                break;
+            case Contains.CHODUYET_KTVBQ + Contains.CHODUYET_KT:
+                hdr.setNguoiPDuyetTvqt(userInfo.getId());
+                hdr.setNgayPDuyetTvqt(LocalDate.now());
+                hdr.setLyDoTuChoi(req.getLyDoTuChoi());
+                break;
+            case Contains.CHODUYET_KT + Contains.TUCHOI_KT:
+                hdr.setNguoiPDuyetKt(userInfo.getId());
+                hdr.setNgayPDuyetKt(LocalDate.now());
+                hdr.setLyDoTuChoi(req.getLyDoTuChoi());
+                break;
+            case Contains.CHODUYET_KT + Contains.CHODUYET_LDC:
+                hdr.setNguoiPDuyetKt(userInfo.getId());
+                hdr.setNgayPDuyetKt(LocalDate.now());
+                break;
+            case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
+                hdr.setNguoiPDuyet(userInfo.getId());
+                hdr.setNgayPDuyet(LocalDate.now());
+                hdr.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
             case Contains.CHODUYET_LDC + Contains.DADUYET_LDCC:
                 hdr.setNguoiPDuyet(userInfo.getId());
-                break;
-            // Arena từ chối
-            case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
-                hdr.setNguoiPDuyet(userInfo.getId());
-                hdr.setLyDoTuChoi(req.getLyDoTuChoi());
+                hdr.setNgayPDuyet(LocalDate.now());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
@@ -152,15 +183,15 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
 
     @Override
     public void deleteMulti(List<Long> listMulti) throws Exception {
-        if(listMulti != null && !listMulti.isEmpty()){
-            listMulti.forEach( i -> {
+        if (listMulti != null && !listMulti.isEmpty()) {
+            listMulti.forEach(i -> {
                 try {
                     delete(i);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
             });
-        }else{
+        } else {
             throw new Exception("List id is null");
         }
     }
@@ -173,7 +204,7 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
         paggingReq.setLimit(Integer.MAX_VALUE);
         objReq.setPaggingReq(paggingReq);
         objReq.setMaDvi(currentUser.getDvql());
-        Page<DcnbBBKetThucNKHdrDTO> page = search(currentUser,objReq);
+        Page<DcnbBBKetThucNKHdrDTO> page = search(currentUser, objReq);
         List<DcnbBBKetThucNKHdrDTO> data = page.getContent();
 
         String title = "Danh sách bảng kê cân hàng ";

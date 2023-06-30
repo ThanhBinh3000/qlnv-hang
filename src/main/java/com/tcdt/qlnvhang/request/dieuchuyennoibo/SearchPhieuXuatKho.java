@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class SearchPhieuXuatKho extends BaseRequest {
     private Integer nam;
+    private Long qdinhDccId;
     private String soQdinhDcc;
     private String soBbLayMau;
     private String dViKiemNghiem;
@@ -19,6 +20,8 @@ public class SearchPhieuXuatKho extends BaseRequest {
     private LocalDate denNgay;
     private String maDvi;
     private String loaiDc;
+    private String maLoKho;
+    private String maNganKho;
     private String loaiQdinh;
     private String trangThai;
     private Boolean isVatTu = false;
