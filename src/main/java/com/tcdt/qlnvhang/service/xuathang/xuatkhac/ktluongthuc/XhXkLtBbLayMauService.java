@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktluongthuc.XhXkLtBbLayMauHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktluongthuc.XhXkTongHopRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -38,6 +39,9 @@ public class XhXkLtBbLayMauService extends BaseServiceImpl {
   private XhXkLtBbLayMauHdrRepository xhXkLtBbLayMauHdrRepository;
 
   @Autowired
+  private XhXkTongHopRepository xhXkTongHopRepository;
+
+  @Autowired
   private FileDinhKemService fileDinhKemService;
 
   public Page<XhXkLtBbLayMauHdr> searchPage(CustomUserDetails currentUser, XhXkLtBbLayMauRequest req) throws Exception {
@@ -68,8 +72,20 @@ public class XhXkLtBbLayMauService extends BaseServiceImpl {
     BeanUtils.copyProperties(objReq, data);
     data.setMaDvi(currentUser.getUser().getDepartment());
     data.setTrangThai(Contains.DUTHAO);
-    data.getBbLayMauDtl().forEach(s->s.setBbLayMauHdr(data));
+    data.getBbLayMauDtl().forEach(s -> s.setBbLayMauHdr(data));
     XhXkLtBbLayMauHdr created = xhXkLtBbLayMauHdrRepository.save(data);
+    if (!DataUtils.isNullObject(objReq.getIdTongHop())) {
+      xhXkTongHopRepository.findById(objReq.getIdTongHop()).ifPresent(item -> {
+        item.getTongHopDtl().forEach(f -> {
+          if (f.getMaDiaDiem() == objReq.getMaDiaDiem()) {
+            f.setIdBienBan(objReq.getId());
+            f.setSoBienBan(objReq.getSoBienBan());
+            f.setNgayLayMau(objReq.getNgayLayMau());
+          }
+        });
+        xhXkTongHopRepository.save(item);
+      });
+    }
 
     List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkLtBbLayMauHdr.TABLE_NAME);
     created.setFileDinhKems(fileDinhKems);
@@ -78,11 +94,10 @@ public class XhXkLtBbLayMauService extends BaseServiceImpl {
     List<FileDinhKem> niemPhong = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemNiemPhong(), created.getId(), XhXkLtBbLayMauHdr.TABLE_NAME + "_NIEM_PHONG");
     created.setFileDinhKemNiemPhong(niemPhong);
 
-    
+
     return created;
   }
 
-  
 
   @Transactional
   public XhXkLtBbLayMauHdr update(CustomUserDetails currentUser, XhXkLtBbLayMauRequest objReq) throws Exception {
@@ -105,7 +120,18 @@ public class XhXkLtBbLayMauService extends BaseServiceImpl {
       s.setBbLayMauHdr(data);
     });
     XhXkLtBbLayMauHdr created = xhXkLtBbLayMauHdrRepository.save(data);
-
+    if (!DataUtils.isNullObject(objReq.getIdTongHop())) {
+      xhXkTongHopRepository.findById(objReq.getIdTongHop()).ifPresent(item -> {
+        item.getTongHopDtl().forEach(f -> {
+          if (f.getMaDiaDiem() == objReq.getMaDiaDiem()) {
+            f.setIdBienBan(objReq.getId());
+            f.setSoBienBan(objReq.getSoBienBan());
+            f.setNgayLayMau(objReq.getNgayLayMau());
+          }
+        });
+        xhXkTongHopRepository.save(item);
+      });
+    }
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhXkLtBbLayMauHdr.TABLE_NAME));
     List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkLtBbLayMauHdr.TABLE_NAME);
     created.setFileDinhKems(fileDinhKems);
@@ -115,14 +141,12 @@ public class XhXkLtBbLayMauService extends BaseServiceImpl {
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhXkLtBbLayMauHdr.TABLE_NAME + "_NIEM_PHONG"));
     List<FileDinhKem> niemPhong = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemNiemPhong(), created.getId(), XhXkLtBbLayMauHdr.TABLE_NAME + "_NIEM_PHONG");
     created.setFileDinhKemNiemPhong(niemPhong);
-    
     return created;
   }
 
 
   public List<XhXkLtBbLayMauHdr> detail(List<Long> ids) throws Exception {
-    if (DataUtils.isNullOrEmpty(ids))
-      throw new Exception("Tham số không hợp lệ.");
+    if (DataUtils.isNullOrEmpty(ids)) throw new Exception("Tham số không hợp lệ.");
     List<XhXkLtBbLayMauHdr> optional = xhXkLtBbLayMauHdrRepository.findByIdIn(ids);
     if (DataUtils.isNullOrEmpty(optional)) {
       throw new Exception("Không tìm thấy dữ liệu");
@@ -140,7 +164,6 @@ public class XhXkLtBbLayMauService extends BaseServiceImpl {
       data.setFileDinhKems(fileDinhKems);
       data.setCanCu(canCu);
       data.setFileDinhKemNiemPhong(niemPhong);
-      
     });
 
     return allById;
@@ -216,8 +239,7 @@ public class XhXkLtBbLayMauService extends BaseServiceImpl {
     List<XhXkLtBbLayMauHdr> data = page.getContent();
 
     String title = "Danh sách biên bản lấy mẫu bàn giao mẫu ";
-    String[] rowsName = new String[]{"STT", "Năm KH", "Mã danh sách hàng sắp hết hạn lưu kho", "Số BB LM/BGM", "Ngày lấy mẫu", "Điểm Kho",
-        "Nhà kho", "Ngăn kho", "Lô kho", "Trạng thái"};
+    String[] rowsName = new String[]{"STT", "Năm KH", "Mã danh sách hàng sắp hết hạn lưu kho", "Số BB LM/BGM", "Ngày lấy mẫu", "Điểm Kho", "Nhà kho", "Ngăn kho", "Lô kho", "Trạng thái"};
     String fileName = "danh-sach-bien-ban-lay-mau-ban-giao-mau.xlsx";
     List<Object[]> dataList = new ArrayList<Object[]>();
     Object[] objs = null;
