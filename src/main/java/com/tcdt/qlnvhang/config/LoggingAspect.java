@@ -34,6 +34,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -110,7 +111,9 @@ public class LoggingAspect {
           if (rowData.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDCC.getId())) {
             NhPhieuNhapKhoCt nhPhieuNhapKhoCt = nhPhieuNhapKhoCtRepository.findAllByIdPhieuNkHdr(rowData.getId()).get(0);
             PhieuNhapXuatHistory phieuNhapXuatHistory = new PhieuNhapXuatHistory();
-            phieuNhapXuatHistory.setSoLuong(DataUtils.safeToLong(nhPhieuNhapKhoCt.getSoLuongThucNhap()));
+            phieuNhapXuatHistory.setSoLuong(nhPhieuNhapKhoCt.getSoLuongThucNhap());
+            phieuNhapXuatHistory.setSoPhieu(rowData.getSoPhieuNhapKho());
+            phieuNhapXuatHistory.setSoLuongChungTu(nhPhieuNhapKhoCt.getSoLuongChungTu());
             phieuNhapXuatHistory.setLoaiVthh(rowData.getLoaiVthh());
             phieuNhapXuatHistory.setCloaiVthh(rowData.getCloaiVthh());
             phieuNhapXuatHistory.setMaKho(rowData.getMaLoKho());
@@ -126,7 +129,9 @@ public class LoggingAspect {
           XhCtvtPhieuXuatKho rowData = objectMapper.convertValue(result.getBody().getData(), XhCtvtPhieuXuatKho.class);
           if (rowData.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDCC.getId())) {
             PhieuNhapXuatHistory phieuNhapXuatHistory = new PhieuNhapXuatHistory();
-            phieuNhapXuatHistory.setSoLuong(DataUtils.safeToLong(rowData.getThucXuat()));
+            phieuNhapXuatHistory.setSoLuong(rowData.getThucXuat());
+            phieuNhapXuatHistory.setSoPhieu(rowData.getSoPhieuXuatKho());
+            phieuNhapXuatHistory.setSoLuongChungTu(BigDecimal.valueOf(Double.valueOf(rowData.getTheoChungTu())));
             phieuNhapXuatHistory.setLoaiVthh(rowData.getLoaiVthh());
             phieuNhapXuatHistory.setCloaiVthh(rowData.getCloaiVthh());
             phieuNhapXuatHistory.setMaKho(rowData.getMaLoKho());
