@@ -99,6 +99,7 @@ public class XhXkTongHopVttbService extends BaseServiceImpl {
             listDsHdr.forEach(s -> {
                 s.setIdTongHop(id);
                 s.setMaTongHop(ma);
+                s.setTrangThai(TrangThaiAllEnum.DA_CHOT.getId());
             });
             xhXkDanhSachRepository.saveAll(listDsHdr);
         }
