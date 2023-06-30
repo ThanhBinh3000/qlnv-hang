@@ -29,7 +29,7 @@ public class XhXkTongHopDtl implements Serializable {
   private String loaiVthh;
   private String cloaiVthh;
   private String donViTinh;
-  private BigDecimal slHienTai;
+  private BigDecimal slTonKho;
   private BigDecimal slDeXuat;
   private BigDecimal slDaDuyet;
   private BigDecimal thanhTien;
