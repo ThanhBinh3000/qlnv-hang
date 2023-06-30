@@ -42,5 +42,5 @@ public class DcnbBienBanHaoDoiDtl implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
     @JsonIgnore
-    private DcnbBienBanHaoDoiTtDtl dcnbBienBanHaoDoiTtDtl;
+    private DcnbBienBanHaoDoiHdr dcnbBienBanHaoDoiHdr;
 }

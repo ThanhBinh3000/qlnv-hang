@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbGiaoNhanDtl;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbGiaoNhanTTDtl;
 import lombok.Data;
 
 import javax.persistence.CascadeType;
@@ -52,5 +53,6 @@ public class DcnbBbGiaoNhanHdrReq extends BaseRequest {
     private String lyDoTuChoi;
     private List<FileDinhKem> fileCanCu = new ArrayList<>();
 
-    private List<DcnbBbGiaoNhanDtl> children = new ArrayList<>();
+    private List<DcnbBbGiaoNhanDtl> danhSachDaiDien = new ArrayList<>();
+    private List<DcnbBbGiaoNhanTTDtl> danhSachBangKe = new ArrayList<>();
 }

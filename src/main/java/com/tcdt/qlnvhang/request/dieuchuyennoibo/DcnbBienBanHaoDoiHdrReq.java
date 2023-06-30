@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanHaoDoiDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanHaoDoiTtDtl;
 import lombok.Data;
 
@@ -111,5 +112,7 @@ public class DcnbBienBanHaoDoiHdrReq {
 
     private String lyDoTuChoi;
 
-    private List<DcnbBienBanHaoDoiTtDtl> dcnbBienBanHaoDoiTtDtl = new ArrayList<>();
+    private List<DcnbBienBanHaoDoiTtDtl> danhSachBangKe = new ArrayList<>();
+
+    private List<DcnbBienBanHaoDoiDtl> thongTinHaoHut = new ArrayList<>();
 }
