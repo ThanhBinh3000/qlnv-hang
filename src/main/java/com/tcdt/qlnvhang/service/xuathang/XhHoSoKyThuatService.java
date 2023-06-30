@@ -257,7 +257,7 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
 
         xhHskt = new XhHoSoKyThuatHdr();
 
-        xhHskt.setIdHskt(objReq.getId());
+        xhHskt.setIdHsktNh(objReq.getId());
         xhHskt.setSoHskt(nhHoSoKyThuat.getSoHoSoKyThuat());
         xhHskt.setSoBbLayMauNh(nhHoSoKyThuat.getSoBbLayMau());
         xhHskt.setXhHoSoKyThuatDtl(listDtl);

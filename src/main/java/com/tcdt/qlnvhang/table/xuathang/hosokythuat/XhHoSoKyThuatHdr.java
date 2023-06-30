@@ -25,7 +25,8 @@ public class XhHoSoKyThuatHdr extends BaseEntity implements Serializable {
   @SequenceGenerator(sequenceName = XhHoSoKyThuatHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhHoSoKyThuatHdr.TABLE_NAME + "_SEQ")
   private Long id;
   private String soHskt;
-  private Long idHskt;
+  private Long idHsktNh;
+  private Long soHsktNh;
   private Long idBbLayMau;
   private String soBbLayMau;
   private String soBbLayMauNh;
@@ -55,6 +56,8 @@ public class XhHoSoKyThuatHdr extends BaseEntity implements Serializable {
   @Transient
   private Map<String, String> mapDmucDvi;
   @Transient
+  private String tenDvi;
+  @Transient
   private String tenCuc;
   @Transient
   private String tenChiCuc;
@@ -82,12 +85,14 @@ public class XhHoSoKyThuatHdr extends BaseEntity implements Serializable {
       String tenNhaKho = mapDmucDvi.containsKey(maNhaKho) ? mapDmucDvi.get(maNhaKho) : null;
       String tenNganKho = mapDmucDvi.containsKey(maNganKho) ? mapDmucDvi.get(maNganKho) : null;
       String tenLoKho = mapDmucDvi.containsKey(maLoKho) ? mapDmucDvi.get(maLoKho) : null;
+      String tenDvi = mapDmucDvi.containsKey(maDvi) ? mapDmucDvi.get(maDvi) : null;
       setTenCuc(tenCuc);
       setTenChiCuc(tenChiCuc);
       setTenDiemKho(tenDiemKho);
       setTenNhaKho(tenNhaKho);
       setTenNganKho(tenNganKho);
       setTenLoKho(tenLoKho);
+      setTenDvi(tenDvi);
     }
   }
 
