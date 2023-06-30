@@ -12,6 +12,7 @@ public class DcnbPhieuXuatKhoHdrDTO {
     private Long id;
     private Long qDinhDccId;
     private String soQdinh;
+    private LocalDate ngayKyQdinh;
     private Integer namKh;
     private LocalDate thoiHanDieuChuyen;
     private String maNhaKho;
