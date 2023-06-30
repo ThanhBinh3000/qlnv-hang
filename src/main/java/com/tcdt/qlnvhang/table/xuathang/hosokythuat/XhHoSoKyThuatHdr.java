@@ -9,6 +9,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,8 +25,14 @@ public class XhHoSoKyThuatHdr extends BaseEntity implements Serializable {
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhHoSoKyThuatHdr.TABLE_NAME + "_SEQ")
   @SequenceGenerator(sequenceName = XhHoSoKyThuatHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhHoSoKyThuatHdr.TABLE_NAME + "_SEQ")
   private Long id;
-  private String soHs;
-  private Long idHsktNh;
+  private String soHskt;
+  private Long idHskt;
+  private Long idBbLayMau;
+  private String soBbLayMau;
+  private String soBbLayMauNh;
+  private String soQdGiaoNvNh;
+private LocalDate ngayTaoHskt;
+private LocalDate ngayDuyetHskt;
   private String maDvi;
   private String maDiaDiem;
   private String loaiVthh;

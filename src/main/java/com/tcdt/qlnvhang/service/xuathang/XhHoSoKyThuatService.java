@@ -7,6 +7,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoK
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoKyThuatCt;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauRepository;
 import com.tcdt.qlnvhang.repository.kiemtrachatluong.NhHoSoBienBanRepository;
 import com.tcdt.qlnvhang.repository.vattu.hosokythuat.NhHoSoKyThuatRepository;
 import com.tcdt.qlnvhang.repository.xuathang.XhHoSoKyThuatRepository;
@@ -45,6 +46,8 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
   private FileDinhKemService fileDinhKemService;
   @Autowired
   private NhHoSoKyThuatService nhHoSoKyThuatService;
+  @Autowired
+  private BienBanLayMauRepository bienBanLayMauRepository;
 
   public Page<NhHoSoKyThuatDTO> searchPage(CustomUserDetails currentUser, SearchHoSoKyThuatReq req) throws Exception {
 
@@ -86,12 +89,12 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
     if (currentUser == null) {
       throw new Exception("Bad request.");
     }
-    if (!DataUtils.isNullObject(objReq.getSoHs())) {
+    /*if (!DataUtils.isNullObject(objReq.getSoHs())) {
       Optional<XhHoSoKyThuatHdr> optional = xhHoSoKyThuatRepository.findBySoHs(objReq.getSoHs());
       if (optional.isPresent()) {
         throw new Exception("số hồ sơ đã tồn tại");
       }
-    }
+    }*/
     XhHoSoKyThuatHdr data = new XhHoSoKyThuatHdr();
     BeanUtils.copyProperties(objReq, data);
     data.setMaDvi(currentUser.getUser().getDepartment());
@@ -253,7 +256,10 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
         }
 
         xhHskt = new XhHoSoKyThuatHdr();
-        xhHskt.setIdHsktNh(objReq.getId());
+
+        xhHskt.setIdHskt(objReq.getId());
+        xhHskt.setSoHskt(nhHoSoKyThuat.getSoHoSoKyThuat());
+        xhHskt.setSoBbLayMauNh(nhHoSoKyThuat.getSoBbLayMau());
         xhHskt.setXhHoSoKyThuatDtl(listDtl);
         xhHskt.setMapDmucDvi(mapDmucDvi);
         xhHskt.setMapVthh(mapVthh);
@@ -270,6 +276,7 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
           s1.setFileDinhKem(fileDinhKem);
         });
       });
+
       xhHskt.setMapDmucDvi(mapDmucDvi);
       xhHskt.setMapVthh(mapVthh);
     }
