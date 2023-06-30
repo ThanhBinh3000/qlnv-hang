@@ -17,6 +17,7 @@ public interface XhXkDanhSachRepository extends JpaRepository<XhXkDanhSachHdr, L
       "AND ((:#{#param.ngayDeXuatTu}  IS NULL OR c.ngayDeXuat >= :#{#param.ngayDeXuatTu})" +
       "AND (:#{#param.ngayDeXuatDen}  IS NULL OR c.ngayDeXuat <= :#{#param.ngayDeXuatDen}) ) " +
       "AND (:#{#param.loai} IS NULL OR c.loai = :#{#param.loai}) " +
+      "AND (:#{#param.type} IS NULL OR ('TH' = :#{#param.type} AND c.maTongHop IS NULL AND c.idTongHop IS NULL))" +
       "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
   Page<XhXkDanhSachHdr> searchPage(@Param("param") XhXkDanhSachRequest param, Pageable pageable);
