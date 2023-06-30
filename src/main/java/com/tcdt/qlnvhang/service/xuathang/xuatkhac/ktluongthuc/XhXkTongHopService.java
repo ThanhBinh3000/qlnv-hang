@@ -247,7 +247,7 @@ public class XhXkTongHopService extends BaseServiceImpl {
                 objs[6] = dtl.getTenDiemKho();
                 objs[7] = dtl.getTenLoKho();
                 objs[8] = dtl.getNgayNhapKho();
-                objs[9] = dtl.getSlHienTai();
+                objs[9] = dtl.getSlTonKho();
                 objs[10] = dtl.getDonViTinh();
                 objs[11] = dtl.getNgayDeXuat();
                 objs[12] = qd.getTenTrangThai();
