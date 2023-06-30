@@ -3,7 +3,6 @@ package com.tcdt.qlnvhang.table.xuathang.hosokythuat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
-import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 
@@ -31,8 +30,8 @@ public class XhHoSoKyThuatHdr extends BaseEntity implements Serializable {
   private String soBbLayMau;
   private String soBbLayMauNh;
   private String soQdGiaoNvNh;
-private LocalDate ngayTaoHskt;
-private LocalDate ngayDuyetHskt;
+  private LocalDate ngayTaoHskt;
+  private LocalDate ngayDuyetHskt;
   private String maDvi;
   private String maDiaDiem;
   private String loaiVthh;
@@ -101,6 +100,7 @@ private LocalDate ngayDuyetHskt;
       setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
     }
   }
+
   public void setTrangThai(String trangThai) {
     this.trangThai = trangThai;
     this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
