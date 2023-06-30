@@ -64,7 +64,10 @@ public class DcnbBbGiaoNhanHdr extends BaseEntity implements Serializable, Clone
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
-    private List<DcnbBbGiaoNhanDtl> children = new ArrayList<>();
+    private List<DcnbBbGiaoNhanDtl> danhSachDaiDien = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "HDR_ID")
+    private List<DcnbBbGiaoNhanTTDtl> danhSachBangKe = new ArrayList<>();
     @Transient
     private String tenTrangThai;
     public void setTrangThai(String trangThai) {

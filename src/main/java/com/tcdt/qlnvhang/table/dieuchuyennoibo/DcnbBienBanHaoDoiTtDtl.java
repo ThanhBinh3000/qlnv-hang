@@ -1,12 +1,12 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = DcnbBienBanHaoDoiTtDtl.TABLE_NAME)
@@ -18,8 +18,8 @@ public class DcnbBienBanHaoDoiTtDtl {
     public static final String TABLE_NAME = "DCNB_BIEN_BAN_HAO_DOI_TT_DTL";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanHaoDoiTtDtl.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = DcnbBienBanHaoDoiTtDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanHaoDoiTtDtl.TABLE_NAME + "_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DCNB_BB_HAO_DOI_TT_DTL_SEQ")
+    @SequenceGenerator(sequenceName = "DCNB_BB_HAO_DOI_TT_DTL_SEQ", allocationSize = 1, name = "DCNB_BB_HAO_DOI_TT_DTL_SEQ")
     private Long id;
 
     @Column(name = "HDR_ID", insertable = true, updatable = true)
@@ -40,12 +40,18 @@ public class DcnbBienBanHaoDoiTtDtl {
     @Column(name = "SO_LUONG_XUAT")
     private Double soLuongXuat;
 
+    @Column(name = "SO_PHIEU_KT_CHAT_LUONG")
+    private String soPhieuKtChatLuong;
+
+    @Column(name = "SO_PHIEU_XUAT_KHO")
+    private String soPhieuXuatKho;
+
+    @Column(name = "SO_BANG_KE_CAN_HANG")
+    private String soBangKeCanHang;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
     @JsonIgnore
     private DcnbBienBanHaoDoiHdr dcnbBienBanHaoDoiHdr;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "HDR_ID")
-    private List<DcnbBienBanHaoDoiDtl> dcnbBienBanHaoDoiDtl = new ArrayList<>();
 }
