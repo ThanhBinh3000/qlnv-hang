@@ -32,6 +32,7 @@ public class XhXkTongHopRequest extends BaseRequest {
   private String dvql;
   private String maCuc;
   private String maChiCuc;
+  private String loai;
   private LocalDateTime ngayTaoTu;
   private LocalDateTime ngayTaoDen;
   private List<XhXkTongHopDtl> tongHopDtl = new ArrayList<>();
