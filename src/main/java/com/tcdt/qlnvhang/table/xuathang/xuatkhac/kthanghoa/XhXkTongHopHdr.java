@@ -38,6 +38,9 @@ public class XhXkTongHopHdr extends BaseEntity implements Serializable {
   private String lyDoTuChoi;
   private BigDecimal tongSlHienTai;
   private Integer capTh;
+  //Lưu id và mã danh sách tổng hợp của tổng cục, bản ghi Cục (capth = 2) sẽ có giá trị 2 cột này.
+  private Long idThTc;
+  private String maDanhSachTc;
 
   @Transient
   private String tenTrangThai;
