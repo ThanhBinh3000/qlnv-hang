@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.controller.xuathang.xuatkhac;
+package com.tcdt.qlnvhang.controller.xuathang.xuatkhac.ktvattu;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.enums.EnumResponse;
@@ -27,10 +27,10 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = PathContains.XUAT_HANG_DTQG + PathContains.XUAT_KHAC + PathContains.KTCL_LT_TRUOC_HET_HAN + PathContains.TONG_HOP)
+@RequestMapping(value = PathContains.XUAT_HANG_DTQG + PathContains.XUAT_KHAC + PathContains.KTCL_VT_TRUOC_HET_HAN + PathContains.TONG_HOP)
 @Slf4j
-@Api(tags = "Xuất hàng DTQG - Xuất khác - Kiểm tra chất lượng LT trước hết hạn - Tổng hợp")
-public class XhXkTongHopController {
+@Api(tags = "Xuất hàng DTQG - Xuất khác - Kiểm tra chất lượng VT,TB trước hết hạn - Tổng hợp")
+public class XhXkTongHopVatTuController {
   @Autowired
   XhXkTongHopService xhXkTongHopService;
 
