@@ -25,6 +25,7 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
@@ -95,12 +96,15 @@ public class XhTlTongHopService extends BaseServiceImpl {
     created = xhTlTongHopRepository.save(created);
     Long id = created.getId();
     String ma = created.getMaDanhSach();
+    LocalDateTime ngay = created.getNgayTao();
+
     //set ma tong hop cho danh sach
     List<Long> listIdDsHdr = created.getTongHopDtl().stream().map(XhTlTongHopDtl::getIdDsHdr).collect(Collectors.toList());
     List<XhTlDanhSachHdr> listDsHdr = xhTlDanhSachRepository.findByIdIn(listIdDsHdr);
     listDsHdr.forEach(s -> {
       s.setIdTongHop(id);
       s.setMaTongHop(ma);
+      s.setNgayTongHop(ngay.toLocalDate());
     });
     xhTlDanhSachRepository.saveAll(listDsHdr);
     return detail(Arrays.asList(created.getId())).get(0);
@@ -164,7 +168,7 @@ public class XhTlTongHopService extends BaseServiceImpl {
       throw new Exception("Bản ghi không tồn tại");
     }
     XhTlTongHopHdr data = optional.get();
-    List<XhTlDanhSachHdr> listDanhSach = xhTlDanhSachRepository.findByIdIn(Arrays.asList(data.getId()));
+    List<XhTlDanhSachHdr> listDanhSach = xhTlDanhSachRepository.findAllByIdTongHop(data.getId());
     listDanhSach.forEach(s -> {
       s.setIdTongHop(null);
       s.setMaTongHop(null);
