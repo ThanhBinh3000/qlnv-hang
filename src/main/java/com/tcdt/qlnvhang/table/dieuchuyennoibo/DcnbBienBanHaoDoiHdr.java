@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.*;
 import org.apache.tomcat.jni.Local;
 
@@ -183,6 +184,9 @@ public class DcnbBienBanHaoDoiHdr extends BaseEntity implements Serializable {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
     private List<DcnbBienBanHaoDoiDtl> thongTinHaoHut = new ArrayList<>();
+
+    @Transient
+    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
     @Transient
     private String tenTrangThai;
