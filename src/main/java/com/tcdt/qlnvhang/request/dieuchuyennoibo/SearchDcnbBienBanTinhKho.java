@@ -15,6 +15,7 @@ import java.util.List;
 public class SearchDcnbBienBanTinhKho extends BaseRequest {
     private Integer nam;
     private String soQdinhDcc;
+    private String qdinhDccId;
     private String soBbTinhKho;
     private String dViKiemNghiem;
     private LocalDate tuNgay;
