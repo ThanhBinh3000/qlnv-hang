@@ -19,6 +19,8 @@ public class SearchDcnbBienBanTinhKho extends BaseRequest {
     private String dViKiemNghiem;
     private LocalDate tuNgay;
     private LocalDate denNgay;
+    private String maLoKho;
+    private String maNganKho;
     private String maDvi;
     private String loaiDc;
     private String loaiQdinh;
