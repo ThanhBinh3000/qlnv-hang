@@ -1,5 +1,7 @@
 package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanHaoDoiDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanHaoDoiTtDtl;
 import lombok.AllArgsConstructor;
@@ -117,4 +119,6 @@ public class DcnbBienBanHaoDoiHdrReq {
     private List<DcnbBienBanHaoDoiTtDtl> danhSachBangKe = new ArrayList<>();
 
     private List<DcnbBienBanHaoDoiDtl> thongTinHaoHut = new ArrayList<>();
+
+    private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 }
