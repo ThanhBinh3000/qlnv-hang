@@ -27,8 +27,11 @@ public class DcnbBbKqDcDtl extends BaseEntity implements Serializable, Cloneable
     private Long id;
     @Column(name = "HDR_ID", insertable = true, updatable = true)
     private Long hdrId;
+    @Column(name = "QD_DC_CUC_ID")
     private Long qdDcCucId;
+    @Column(name = "SO_QD_DC_CUC")
     private String soQdDcCuc;
+    @Column(name = "NGAY_KY_QD_CUC")
     private LocalDate ngayKyQdCuc;
     @Column(name = "LOAI_VTHH")
     private String loaiVthh;
@@ -60,13 +63,13 @@ public class DcnbBbKqDcDtl extends BaseEntity implements Serializable, Cloneable
     private String tenDonViTinh;
     @Column(name = "SL_TON")
     private BigDecimal slTon;
-    @Column(name = "SL_DiEU_CHUYEN_QD")
+    @Column(name = "SL_DIEU_CHUYEN_QD")
     private BigDecimal slDieuChuyenQd;
-    @Column(name = "SL_DiEU_CHUYEN_TT")
+    @Column(name = "SL_DIEU_CHUYEN_TT")
     private BigDecimal slDieuChuyenTt;
-    @Column(name = "KINH_PHi_THEO_QD")
+    @Column(name = "KINH_PHI_THEO_QD")
     private BigDecimal kinhPhiTheoQd;
-    @Column(name = "KINH_PHi_THEO_TT")
+    @Column(name = "KINH_PHI_THEO_TT")
     private BigDecimal kinhPhiTheoTt;
     @Column(name = "TRICH_YEU")
     private BigDecimal trichYeu;
