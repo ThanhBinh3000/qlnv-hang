@@ -65,8 +65,7 @@ public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
 
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             searchDto = dcnbBienBanTinhKhoHdrRepository.searchPageChiCuc(req, pageable);
-        }
-        if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+        } else {
             searchDto = dcnbBienBanTinhKhoHdrRepository.searchPageCuc(req, pageable);
         }
         return searchDto;
@@ -250,7 +249,7 @@ public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
         objReq.setPaggingReq(paggingReq);
         objReq.setMaDvi(currentUser.getDvql());
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit());
-        Page<DcnbBienBanTinhKhoHdrDTO> page = dcnbBienBanTinhKhoHdrRepository.searchPageChiCuc(objReq,pageable);
+        Page<DcnbBienBanTinhKhoHdrDTO> page = dcnbBienBanTinhKhoHdrRepository.searchPageChiCuc(objReq, pageable);
         List<DcnbBienBanTinhKhoHdrDTO> data = page.getContent();
 
         String title = "Danh sách bảng kê cân hàng ";
@@ -285,5 +284,13 @@ public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
             throw new Exception("Không tìm thấy dữ liệu");
         }
         return optional;
+    }
+
+    public List<DcnbBienBanTinhKhoHdrDTO> searchList(CustomUserDetails currentUser, SearchDcnbBienBanTinhKho req) {
+        String dvql = currentUser.getDvql();
+        req.setMaDvi(dvql);
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
+        List<DcnbBienBanTinhKhoHdrDTO> searchDto = dcnbBienBanTinhKhoHdrRepository.searchList(req);
+        return searchDto;
     }
 }
