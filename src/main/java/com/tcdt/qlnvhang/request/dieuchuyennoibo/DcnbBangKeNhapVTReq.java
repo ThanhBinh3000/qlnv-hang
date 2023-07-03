@@ -68,4 +68,10 @@ public class DcnbBangKeNhapVTReq extends BaseRequest {
     private String typeDataLink;
     private  Boolean thayDoiThuKho;
     private List<DcnbBangKeNhapVTDtl> dcnbbangkenhapvtdtl = new ArrayList<>();
+
+    private LocalDate tuNgayThoiHan;
+    private LocalDate denNgayThoiHan;
+
+    private LocalDate tuNgayNhapKho;
+    private LocalDate denNgayNhapKho;
 }

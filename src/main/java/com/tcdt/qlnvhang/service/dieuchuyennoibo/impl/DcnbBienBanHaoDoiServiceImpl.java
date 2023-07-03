@@ -71,8 +71,7 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
         Page<DcnbBienBanHaoDoiHdrDTO> searchDto = null;
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             searchDto = dcnbBienBanHaoDoiHdrRepository.searchPageChiCuc(req, pageable);
-        }
-        if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+        }else {
             searchDto = dcnbBienBanHaoDoiHdrRepository.searchPageCuc(req, pageable);
         }
         return searchDto;

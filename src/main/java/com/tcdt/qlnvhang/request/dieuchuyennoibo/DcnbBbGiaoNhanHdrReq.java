@@ -55,8 +55,16 @@ public class DcnbBbGiaoNhanHdrReq extends BaseRequest {
     private Long idLanhDao;
     private String trangThai;
     private String lyDoTuChoi;
+    private Boolean thayDoiThuKho;
+    private Boolean isVatTu = false;
+    private List<String> dsLoaiHang;
     private List<FileDinhKemReq> fileCanCuReq = new ArrayList<>();
 
     private List<DcnbBbGiaoNhanDtl> danhSachDaiDien = new ArrayList<>();
     private List<DcnbBbGiaoNhanTTDtl> danhSachBangKe = new ArrayList<>();
+
+    private LocalDate tuNgayKtnk;
+    private LocalDate denNgayKtnk;
+    private LocalDate tuNgayThoiHanNhap;
+    private LocalDate denNgayThoiHanNhap;
 }

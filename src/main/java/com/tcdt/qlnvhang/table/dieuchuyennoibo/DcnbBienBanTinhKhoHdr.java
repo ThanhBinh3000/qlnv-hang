@@ -34,6 +34,9 @@ public class DcnbBienBanTinhKhoHdr extends BaseEntity implements Serializable, C
     @Column(name = "SO_BB_TINH_KHO")
     private String soBbTinhKho;
 
+    @Column(name = "BB_TINH_KHO_ID")
+    private String bbTinhKhoId;
+
     @Column(name = "BANG_KE_CAN_HANG_ID")
     private Long bangKeCanHangId;
 
@@ -84,6 +87,9 @@ public class DcnbBienBanTinhKhoHdr extends BaseEntity implements Serializable, C
 
     @Column(name = "SO_PHIEU_XUAT_KHO")
     private String soPhieuXuatKho;
+
+    @Column(name = "BB_LAY_MAU_ID")
+    private Long bbLayMauId;
 
     @Column(name = "SO_BB_LAY_MAU")
     private String soBbLayMau;
