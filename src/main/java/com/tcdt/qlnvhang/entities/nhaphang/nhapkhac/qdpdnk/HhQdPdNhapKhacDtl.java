@@ -1,9 +1,11 @@
 package com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.qdpdnk;
 
+import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhBbNghiemThuNhapKhac;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = HhQdPdNhapKhacDtl.TABLE_NAME)
@@ -35,7 +37,11 @@ public class HhQdPdNhapKhacDtl {
     @Transient
     private String tenNhaKho;
     private String maNganKho;
+    @Transient
+    private String tenNganKho;
     private String maLoKho;
+    @Transient
+    private String tenLoKho;
     @Transient
     private String tenNganLoKho;
     @Transient
@@ -45,4 +51,6 @@ public class HhQdPdNhapKhacDtl {
     private BigDecimal slHaoDoiDinhMuc;
     private BigDecimal slDoiThua;
     private BigDecimal donGia;
+    @Transient
+    List<HhBbNghiemThuNhapKhac> bbNghiemThuNhapKhacList;
 }
