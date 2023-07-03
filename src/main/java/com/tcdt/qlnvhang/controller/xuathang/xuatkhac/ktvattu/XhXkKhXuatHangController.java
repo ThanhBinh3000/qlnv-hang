@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = PathContains.XUAT_HANG_DTQG + PathContains.XUAT_KHAC + PathContains.KH_XUAT_HANG)
+@RequestMapping(value = PathContains.XUAT_HANG_DTQG + PathContains.XUAT_KHAC + PathContains.KTCL_VT_TRUOC_HET_HAN + PathContains.KH_XUAT_HANG)
 @Slf4j
 @Api(tags = "Xuất hàng DTQG - Xuất khác - Danh sách kế hoạch xuất hàng vt,tb có thời hạn lưu kho lớn hơn 12 tháng của Cục DTNN KV")
 public class XhXkKhXuatHangController {
