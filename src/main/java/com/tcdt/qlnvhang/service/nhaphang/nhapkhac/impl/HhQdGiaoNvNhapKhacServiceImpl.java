@@ -197,6 +197,8 @@ public class HhQdGiaoNvNhapKhacServiceImpl extends BaseServiceImpl implements Hh
             dtl.setTenChiCuc(mapDmucDvi.get(dtl.getMaChiCuc()));
             dtl.setTenDiemKho(mapDmucDvi.get(dtl.getMaDiemKho()));
             dtl.setTenNhaKho(mapDmucDvi.get(dtl.getMaNhaKho()));
+            dtl.setTenNganKho(mapDmucDvi.get(dtl.getMaNganKho()));
+            dtl.setTenLoKho(mapDmucDvi.get(dtl.getMaLoKho()));
             dtl.setTenNganLoKho(mapDmucDvi.get(dtl.getMaLoKho()) + " - " + mapDmucDvi.get(dtl.getMaNganKho()));
             dtl.setTenCloaiVthh(mapVthh.get(dtl.getCloaiVthh()));
         });
