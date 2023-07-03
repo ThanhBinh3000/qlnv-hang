@@ -33,4 +33,7 @@ public class QlnvQdKQDGHangSearchReq extends BaseRequest {
 	@ApiModelProperty(example = "XXXCT123")
 	String soQdinh;
 
+	String loaiVthh;
+	String cloaiVthh;
+
 }
