@@ -331,4 +331,5 @@ public class PathContains {
 	public static final String NHAP_KHAC = "/nhap-khac";
 	public static final String TH_NK = "/thop-kh-nk";
 	public static final String DS_DX_CHUA_TH = "/dx-chua-th";
+	public static final String NHAP_XUAT_HISTORY = "/lich-su-nhap-xuat";
 }

@@ -26,4 +26,6 @@ public interface XhTlDanhSachRepository extends JpaRepository<XhTlDanhSachHdr, L
   void deleteAllByIdIn(List<Long> listId);
 
   List<XhTlDanhSachHdr> findByIdIn(List<Long> ids);
+
+  List<XhTlDanhSachHdr> findAllByIdTongHop (Long idTongHop);
 }

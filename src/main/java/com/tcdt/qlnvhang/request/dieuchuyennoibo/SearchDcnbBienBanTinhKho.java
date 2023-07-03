@@ -15,10 +15,13 @@ import java.util.List;
 public class SearchDcnbBienBanTinhKho extends BaseRequest {
     private Integer nam;
     private String soQdinhDcc;
+    private String qdinhDccId;
     private String soBbTinhKho;
     private String dViKiemNghiem;
     private LocalDate tuNgay;
     private LocalDate denNgay;
+    private String maLoKho;
+    private String maNganKho;
     private String maDvi;
     private String loaiDc;
     private String loaiQdinh;

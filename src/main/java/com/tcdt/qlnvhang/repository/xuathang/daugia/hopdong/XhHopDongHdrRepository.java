@@ -54,4 +54,9 @@ public interface XhHopDongHdrRepository extends BaseRepository<XhHopDongHdr,Long
 
     @Transactional
     List<XhHopDongHdr> findAllByIdHd(Long idHd);
+
+    @Query(value =  "SELECT COUNT(*) AS count FROM XH_HOP_DONG_HDR WHERE TRANG_THAI = '30' AND SO_QD_KQ =:soQdKq",
+            nativeQuery = true)
+    Long countSlHopDongDaKy(String soQdKq);
+
 }

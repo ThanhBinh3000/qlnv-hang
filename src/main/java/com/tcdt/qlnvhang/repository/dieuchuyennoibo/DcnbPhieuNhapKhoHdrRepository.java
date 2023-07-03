@@ -39,7 +39,7 @@ public interface DcnbPhieuNhapKhoHdrRepository extends JpaRepository<DcnbPhieuNh
     List<DcnbPhieuNhapKhoHdr> findAllByIdIn(List<Long> idList);
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuNhapKhoHdrDTO(" +
-            "pnk.id,qdc.id,qdc.soQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maNhaKho,khdcd.tenNhaKho, khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
+            "pnk.id,qdc.id,qdc.soQdinh,qdc.ngayKyQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maNhaKho,khdcd.tenNhaKho, khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
             "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho, khdcd.thayDoiThuKho,pnk.soPhieuNhapKho, pnk.ngayLap,  bknvt.id, bknvt.soBangKe," +
             "bknvt.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh, khdcd.tenCloaiVthh,khdcd.donViTinh, khdcd.tenDonViTinh,khdcd.soLuongDc,khdcd.duToanKphi," +
             "pnk.idPhieuKtraCluong, pnk.soPhieuKtraCluong, pktcl.ngayGiamDinh, " +
@@ -59,7 +59,7 @@ public interface DcnbPhieuNhapKhoHdrRepository extends JpaRepository<DcnbPhieuNh
             "ORDER BY pnk.soPhieuNhapKho desc, pnk.nam desc")
     Page<DcnbPhieuNhapKhoHdrDTO> searchPageChiCuc(@Param("param")DcnbPhieuNhapKhoHdrReq req, Pageable pageable);
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuNhapKhoHdrDTO(" +
-            "pnk.id,qdc.id,qdc.soQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maNhaKho,khdcd.tenNhaKho, khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
+            "pnk.id,qdc.id,qdc.soQdinh,qdc.ngayKyQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maNhaKho,khdcd.tenNhaKho, khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
             "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho, khdcd.thayDoiThuKho,pnk.soPhieuNhapKho, pnk.ngayLap,  bknvt.id, bknvt.soBangKe," +
             "bknvt.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh, khdcd.tenCloaiVthh,khdcd.donViTinh, khdcd.tenDonViTinh,khdcd.soLuongDc,khdcd.duToanKphi," +
             "pnk.idPhieuKtraCluong, pnk.soPhieuKtraCluong, pktcl.ngayGiamDinh, " +
@@ -83,17 +83,23 @@ public interface DcnbPhieuNhapKhoHdrRepository extends JpaRepository<DcnbPhieuNh
             "pnk.id,pnk.soPhieuNhapKho,pnk.ngayLap) " +
             "FROM DcnbPhieuNhapKhoHdr pnk " +
             "WHERE 1 =1 " +
-            "AND ((:#{#param.qdinhDccId} IS NULL OR pnk.qdDcCucId = :#{#param.qdDcCucId}))"+
+            "AND ((:#{#param.qdDcCucId} IS NULL OR pnk.qdDcCucId = :#{#param.qdDcCucId}))"+
+            "AND ((:#{#param.maLoKho} IS NULL OR pnk.maLoKho = :#{#param.maLoKho}))" +
+            "AND ((:#{#param.maNganKho} IS NULL OR pnk.maNganKho = :#{#param.maNganKho}))" +
             "ORDER BY pnk.soPhieuNhapKho desc, pnk.nam desc")
     List<DcnbPhieuNhapKhoHdrListDTO> searchList(@Param("param")DcnbPhieuNhapKhoHdrReq objReq);
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuNhapKhoHdrListDTO(" +
-            "pnk.id,pnk.soPhieuNhapKho,pnk.ngayLap,pnk.tongSoLuong, pktcl.id, pktcl.soPhieu,bknvt.id, bknvt.soBangKe ) " +
+            "pnk.id,pnk.soPhieuNhapKho,pnk.ngayLap,pnk.tongSoLuong, pktcl.id, pktcl.soPhieu,bkchh.id, bkchh.soBangKe,bknvt.id, bknvt.soBangKe, bbcbkh.id, bbcbkh.soBban ) " +
             "FROM DcnbPhieuNhapKhoHdr pnk " +
             "LEFT JOIN DcnbPhieuKtChatLuongHdr pktcl On pktcl.id = pnk.idPhieuKtraCluong " +
+            "LEFT JOIN DcnbBangKeCanHangHdr bkchh On bkchh.phieuNhapKhoId = pnk.id " +
             "LEFT JOIN DcnbBangKeNhapVTHdr bknvt On bknvt.phieuNhapKhoId = pnk.id " +
+            "LEFT JOIN DcnbBbChuanBiKhoHdr bbcbkh On bbcbkh.idPhieuNhapKho = pnk.id " +
             "WHERE 1 =1 " +
-            "AND ((:#{#param.qdinhDccId} IS NULL OR pnk.qdDcCucId = :#{#param.qdDcCucId}))"+
+            "AND ((:#{#param.qdDcCucId} IS NULL OR pnk.qdDcCucId = :#{#param.qdDcCucId}))" +
+            "AND ((:#{#param.maLoKho} IS NULL OR pnk.maLoKho = :#{#param.maLoKho}))" +
+            "AND ((:#{#param.maNganKho} IS NULL OR pnk.maNganKho = :#{#param.maNganKho}))" +
             "ORDER BY pnk.soPhieuNhapKho desc, pnk.nam desc")
     List<DcnbPhieuNhapKhoHdrListDTO> searchListChung(@Param("param")DcnbPhieuNhapKhoHdrReq objReq);
 }

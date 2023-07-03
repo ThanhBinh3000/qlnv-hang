@@ -51,6 +51,10 @@ public class DcnbHoSoKyThuatHdr extends BaseEntity implements Serializable, Clon
   private String maDiemKho;
   @Column(name = "TEN_DIEM_KHO")
   private String tenDiemKho;
+  @Column(name = "MA_NGAN_KHO")
+  private String maNganKho;
+  @Column(name = "TEN_NGAN_KHO")
+  private String tenNganKho;
   @Column(name = "MA_LO_KHO")
   private String maLoKho;
   @Column(name = "TEN_LO_KHO")

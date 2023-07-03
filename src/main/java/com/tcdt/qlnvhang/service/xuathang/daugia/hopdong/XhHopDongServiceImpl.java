@@ -275,8 +275,16 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
       throw new Exception("Phê duyệt không thành công");
     }
     optional.get().setTrangThai(req.getTrangThai());
+    XhHopDongHdr data = xhHopDongHdrRepository.save(optional.get());
+    Optional<XhKqBdgHdr> xhKqBdgHdr = xhKqBdgHdrRepository.findBySoQdKq(data.getSoQdKq());
+    if (xhKqBdgHdr.isPresent()){
+//      Đếm số bản ghi hợp đồng có trạng thái là 30 và update lại vào XhKqBdgHdr;
+      Long slHdongDaKy = xhHopDongHdrRepository.countSlHopDongDaKy(data.getSoQdKq());
+      xhKqBdgHdr.get().setSlHdDaKy(slHdongDaKy);
+      xhKqBdgHdrRepository.save(xhKqBdgHdr.get());
+    }
+    return data;
 
-    return xhHopDongHdrRepository.save(optional.get());
   }
 
   @Override

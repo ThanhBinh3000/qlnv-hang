@@ -69,8 +69,15 @@ public enum TrangThaiAllEnum {
   DA_PHANBO_DC_TUCHOI_LDC("68", "Đã xác định điểm nhập, từ chối – LĐ Cục"),
   DA_PHANBO_DC_DADUYET_LDC("69", "Đã xác định điểm nhập, đã duyệt – LĐ Cục"),
   CHUA_CHOT("71", "Chưa chốt"),
-  DA_CHOT("72", "Đã chốt");
-
+  DA_CHOT("72", "Đã chốt"),
+  DA_THANH_LY("73", "Đã thanh lý"),
+  DA_XUAT_KHO("74", "Đã xuất kho"),
+  DA_TIEU_HUY("75", "Đã tiêu hủy"),
+  GUI_DUYET("76", "Gửi duyệt"),
+  DANG_DUYET_CB_VU("77", "Đang duyệt cán bộ Vụ"),
+  DANG_NHAP_DU_LIEU("78", "Đang nhập dữ liệu"),
+  TU_CHOI_BAN_HANH_QD("79", "Từ chối ban hành QĐ"),
+  DA_LAP("80", "Đã lập");
 
   private final String id;
   private final String ten;

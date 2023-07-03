@@ -52,25 +52,6 @@ public class DcnbBbGiaoNhanController {
         return ResponseEntity.ok(resp);
     }
 
-//    @ApiOperation(value = "Tra cứu biên bản lấy mẫu", response = List.class)
-//    @PostMapping(value = "bien-ban-lay-mau", produces = MediaType.APPLICATION_JSON_VALUE)
-//    @ResponseStatus(HttpStatus.OK)
-//    public ResponseEntity<BaseResponse> getListBienBanLayMau(RequestBody DcnbBbGiaoNhanHdrReq param) {
-//        BaseResponse resp = new BaseResponse();
-//        try {
-//            param.setMaDvi(currentUser.getDvql());
-//            resp.setData(dcnbBienBanLayMauHdrRepository.searchList(param));
-//            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-//            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-//        } catch ( Exception e) {
-//            e.printStackTrace();
-//            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-//            resp.setMsg(e.getMessage());
-//            log.error("Tra cứu thông tin : {}", e);
-//        }
-//
-//        return ResponseEntity.ok(resp);
-//    }
 
     @ApiOperation(value = "Tạo mới thông tin đề xuất ", response = List.class)
     @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
