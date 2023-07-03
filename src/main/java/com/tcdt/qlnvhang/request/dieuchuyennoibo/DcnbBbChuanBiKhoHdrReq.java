@@ -56,4 +56,8 @@ public class DcnbBbChuanBiKhoHdrReq extends BaseRequest {
     private String lyDoTuChoi;
 
     private List<DcnbBbChuanBiKhoDtl> children = new ArrayList<>();
+    private LocalDate tuNgayLapBb;
+    private LocalDate denNgayLapBb;
+    private LocalDate tuNgayKtnk;
+    private LocalDate denNgayKtnk;
 }

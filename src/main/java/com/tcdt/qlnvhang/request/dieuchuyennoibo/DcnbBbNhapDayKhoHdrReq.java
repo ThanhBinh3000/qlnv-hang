@@ -48,4 +48,10 @@ public class DcnbBbNhapDayKhoHdrReq extends BaseRequest {
     private String trangThai;
     private String lyDoTuChoi;
     private List<DcnbBbNhapDayKhoDtl> children = new ArrayList<>();
+    private LocalDate tuNgayBdNhap;
+    private LocalDate denNgayBdNhap;
+    private LocalDate tuNgayKtNhap;
+    private LocalDate denNgayKtNhap;
+    private LocalDate tuNgayThoiHanNh;
+    private LocalDate denNgayThoiHanNh;
 }

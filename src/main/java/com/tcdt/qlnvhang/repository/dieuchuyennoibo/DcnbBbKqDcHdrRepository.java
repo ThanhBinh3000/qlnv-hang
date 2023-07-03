@@ -21,6 +21,8 @@ public interface DcnbBbKqDcHdrRepository extends JpaRepository<DcnbBbKqDcHdr, Lo
             "AND ((:#{#param.tuNgay}  IS NULL OR c.ngayBc >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR c.ngayBc <= :#{#param.denNgay}) ) " +
             "AND (:#{#param.soQdinhCuc} IS NULL OR LOWER(c.soQdDcCuc) LIKE CONCAT('%',LOWER(:#{#param.soQdinhCuc}),'%')) " +
+            "AND ((:#{#param.tuNgay}  IS NULL OR c.ngayBc >= :#{#param.tuNgay})" +
+            "AND (:#{#param.denNgay}  IS NULL OR c.ngayBc <= :#{#param.denNgay}) ) " +
             "ORDER BY c.soQdDcCuc desc , c.nam desc, c.id desc")
     Page<DcnbBbKqDcHdr> searchPage(@Param("param") DcnbBbKqDcSearch req, Pageable pageable);
 
@@ -30,6 +32,8 @@ public interface DcnbBbKqDcHdrRepository extends JpaRepository<DcnbBbKqDcHdr, Lo
             "AND ((:#{#param.tuNgay}  IS NULL OR c.ngayBc >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR c.ngayBc <= :#{#param.denNgay}) ) " +
             "AND (:#{#param.soQdinhCuc} IS NULL OR LOWER(c.soQdDcCuc) LIKE CONCAT('%',LOWER(:#{#param.soQdinhCuc}),'%')) " +
+            "AND ((:#{#param.tuNgay}  IS NULL OR c.ngayBc >= :#{#param.tuNgay})" +
+            "AND (:#{#param.denNgay}  IS NULL OR c.ngayBc <= :#{#param.denNgay}) ) " +
             "ORDER BY c.soQdDcCuc desc , c.nam desc, c.id desc")
     List<DcnbBbKqDcHdr> searchList(@Param("param")DcnbBbKqDcSearch req);
 

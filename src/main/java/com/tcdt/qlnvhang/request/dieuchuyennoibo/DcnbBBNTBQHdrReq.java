@@ -71,4 +71,8 @@ public class DcnbBBNTBQHdrReq extends BaseRequest {
     private Boolean isVatTu = false;
     private List<String> dsLoaiHang = new ArrayList<>();
     private List<DcnbBBNTBQDtl> dcnbBBNTBQDtl = new ArrayList<>();
+    private LocalDate tuNgayLap;
+    private LocalDate denNgayLap;
+    private LocalDate tuNgayKtnt;
+    private LocalDate denNgayKtnt;
 }
