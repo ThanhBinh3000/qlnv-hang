@@ -201,8 +201,7 @@ public class XhXkTongHopVttbService extends BaseServiceImpl {
         paggingReq.setPage(0);
         paggingReq.setLimit(Integer.MAX_VALUE);
         objReq.setPaggingReq(paggingReq);
-        Page<XhXkTongHopHdr> page = this.searchPage(currentUser, objReq);
-        List<XhXkTongHopHdr> data = page.getContent();
+        List<XhXkTongHopHdr> data = this.searchPage(currentUser, objReq).getContent();
 
         String title = "Danh sách vật tư thiết bị có thời hạn lưu kho lớn hơn 12 tháng";
         String[] rowsName = new String[]{"STT", "Năm KH", "Mã danh sách", "Chi cục DTNN", "Loại hàng hóa", "Chủng loại",
