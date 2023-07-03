@@ -32,7 +32,7 @@ public class ScPhieuXuatKhoHdr extends BaseEntity implements Serializable {
     private String maQhns;
     private String soPhieuXuatKho;
     private LocalDate ngayTaoPhieu;
-    private LocalDate NgayXuatKho;
+    private LocalDate ngayXuatKho;
     private Integer no;
     private String co;
     private String soQdGiaoNv;
