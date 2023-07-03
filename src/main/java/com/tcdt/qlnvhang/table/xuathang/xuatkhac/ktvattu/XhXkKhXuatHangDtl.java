@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkTongHopHdr;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,9 +33,9 @@ public class XhXkKhXuatHangDtl {
     BigDecimal slHetHan;
     LocalDateTime ngayNhapKho;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idHdr", insertable = false, updatable = false)
+    @JoinColumn(name = "idHdr")
     @JsonIgnore
-    private XhXkKhXuatHang xhXkKhXuatHang;
+    private XhXkKhXuatHang XhXkKhXuatHang;
     @Transient
     List<FileDinhKem> fileDinhKems;
 
