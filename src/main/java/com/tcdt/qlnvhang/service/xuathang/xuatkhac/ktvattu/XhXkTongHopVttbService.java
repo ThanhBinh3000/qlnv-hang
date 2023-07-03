@@ -201,12 +201,11 @@ public class XhXkTongHopVttbService extends BaseServiceImpl {
         paggingReq.setPage(0);
         paggingReq.setLimit(Integer.MAX_VALUE);
         objReq.setPaggingReq(paggingReq);
-        Page<XhXkTongHopHdr> page = this.searchPage(currentUser, objReq);
-        List<XhXkTongHopHdr> data = page.getContent();
+        List<XhXkTongHopHdr> data = this.searchPage(currentUser, objReq).getContent();
 
         String title = "Danh sách vật tư thiết bị có thời hạn lưu kho lớn hơn 12 tháng";
         String[] rowsName = new String[]{"STT", "Năm KH", "Mã danh sách", "Chi cục DTNN", "Loại hàng hóa", "Chủng loại",
-                "Điểm kho", "Ngăn/lô kho", "Ngày nhập kho", "SL hết hạn 12 tháng", "SL tồn", "DVT", "Ngày đề xuất", "Trạng thái", "Trạng thái kiểm tra chất lượng"};
+                "Điểm kho", "Ngăn/lô kho", "Ngày nhập kho", "SL hết hạn 12 tháng", "SL tồn", "DVT", "Ngày đề xuất", "Trạng thái"};
         String fileName = "danh-sach-vat-tu-thiet-bi-co-thoi-han-luu-kho-lon-hon-12-thang.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
@@ -228,7 +227,6 @@ public class XhXkTongHopVttbService extends BaseServiceImpl {
                 objs[11] = dtl.getDonViTinh();
                 objs[12] = dtl.getNgayDeXuat();
                 objs[13] = qd.getTenTrangThai();
-                objs[14] = dtl.getTrangThaiKtCl();
                 dataList.add(objs);
             }
         }
