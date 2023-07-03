@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
+import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -8,7 +10,9 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBienBanHaoDoiHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbBienBanHaoDoi;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBienBanHaoDoiHdrDTO;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -26,10 +30,7 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,6 +58,10 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
 
     @Autowired
     private DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
+    @Autowired
+    private FileDinhKemService fileDinhKemService;
+    @Autowired
+    private FileDinhKemRepository fileDinhKemRepository;
 
 
     public Page<DcnbBienBanHaoDoiHdrDTO> searchPage(CustomUserDetails currentUser, SearchDcnbBienBanHaoDoi req) throws Exception {
@@ -66,8 +71,7 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
         Page<DcnbBienBanHaoDoiHdrDTO> searchDto = null;
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             searchDto = dcnbBienBanHaoDoiHdrRepository.searchPageChiCuc(req, pageable);
-        }
-        if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+        }else {
             searchDto = dcnbBienBanHaoDoiHdrRepository.searchPageCuc(req, pageable);
         }
         return searchDto;
@@ -93,6 +97,8 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
             e.setDcnbBienBanHaoDoiHdr(data);
         });
         DcnbBienBanHaoDoiHdr created = dcnbBienBanHaoDoiHdrRepository.save(data);
+        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), DcnbBienBanHaoDoiHdr.TABLE_NAME);
+        created.setFileDinhKems(canCu);
         return created;
     }
 
@@ -121,6 +127,9 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
         data.setDanhSachBangKe(objReq.getDanhSachBangKe());
         data.setThongTinHaoHut(objReq.getThongTinHaoHut());
         DcnbBienBanHaoDoiHdr created = dcnbBienBanHaoDoiHdrRepository.save(data);
+        fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbBienBanHaoDoiHdr.TABLE_NAME));
+        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), DcnbBienBanHaoDoiHdr.TABLE_NAME);
+        created.setFileDinhKems(canCu);
         return created;
     }
 
@@ -133,6 +142,11 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
             throw new Exception("Không tìm thấy dữ liệu");
         }
         List<DcnbBienBanHaoDoiHdr> allById = dcnbBienBanHaoDoiHdrRepository.findAllById(ids);
+        optional.forEach(item -> {
+            List<FileDinhKem> canCu = fileDinhKemRepository.findByDataIdAndDataTypeIn(item.getId(), Collections.singleton(DcnbBienBanHaoDoiHdr.TABLE_NAME));
+            item.setFileDinhKems(canCu);
+        });
+
         return allById;
     }
 

@@ -49,11 +49,21 @@ public interface DcnbBbGiaoNhanHdrRepository extends JpaRepository<DcnbBbGiaoNha
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
+            "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND qdc.trangThai = '29'" +
+            "AND ((:#{#param.loaiDc} IS NULL OR qdc.loaiDc = :#{#param.loaiDc})) " +
             "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
-            "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}))" +
+            "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi})) " +
+            "AND ((:#{#param.thayDoiThuKho} IS NULL OR khdcd.thayDoiThuKho = :#{#param.thayDoiThuKho})) " +
+            "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) "+
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
+            "AND (:#{#param.soBb} IS NULL OR LOWER(bbgn.soBb) LIKE CONCAT('%',LOWER(:#{#param.soBb}),'%')) " +
+            "AND (:#{#param.soQdDcCuc} IS NULL OR LOWER(qdc.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdDcCuc}),'%')) " +
+            "AND ((:#{#param.tuNgayKtnk}  IS NULL OR bbgn.ngayKtNhap >= :#{#param.tuNgayKtnk})" +
+            "AND (:#{#param.denNgayKtnk}  IS NULL OR bbgn.ngayKtNhap <= :#{#param.denNgayKtnk}) ) " +
+            "AND ((:#{#param.tuNgayThoiHanNhap}  IS NULL OR khdcd.thoiGianDkDc >= :#{#param.tuNgayThoiHanNhap})" +
+            "AND (:#{#param.denNgayThoiHanNhap}  IS NULL OR khdcd.thoiGianDkDc <= :#{#param.denNgayThoiHanNhap}) ) " +
             "ORDER BY bbgn.soBb desc, bbgn.nam desc")
     Page<DcnbBbGiaoNhanHdrDTO> searchPageChiCuc(@Param("param") DcnbBbGiaoNhanHdrReq req, Pageable pageable);
 
@@ -62,19 +72,28 @@ public interface DcnbBbGiaoNhanHdrRepository extends JpaRepository<DcnbBbGiaoNha
             "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho,khdcd.loaiVthh,khdcd.tenLoaiVthh, khdcd.cloaiVthh, khdcd.tenCloaiVthh,khdcd.donViTinh, khdcd.tenDonViTinh ," +
             "hskt.soHoSoKyThuat, hskt.id, bbgn.soBb,bbktnk.soBb,bbktnk.id, bbktnk.ngayKetThucNhap, bblm.soBbLayMau,bblm.id, bbgn.trangThai, bbgn.trangThai) " +
             "FROM DcnbQuyetDinhDcCHdr qdc " +
-            "LEFT JOIN DcnbDataLinkHdr dtlh On dtlh.qdCcParentId = qdc.id " +
-            "LEFT JOIN DcnbBbGiaoNhanHdr bbgn On bbgn.qdDcCucId = dtlh.qdCcId " +
-            "LEFT JOIN DcnbHoSoKyThuatHdr hskt On hskt.idQdnh = qdc.id and bbgn.idHoSoKyThuat = hskt.id " +
-            "LEFT JOIN DcnbBBKetThucNKHdr bbktnk On bbktnk.qDinhDccId = qdc.id and bbgn.idBbKtNhapKho =  bbktnk.id " +
+            "LEFT JOIN DcnbBbGiaoNhanHdr bbgn On bbgn.qdDcCucId = qdc.id " +
+            "LEFT JOIN DcnbHoSoKyThuatHdr hskt On bbgn.idHoSoKyThuat = hskt.id " +
+            "LEFT JOIN DcnbBBKetThucNKHdr bbktnk On bbgn.idBbKtNhapKho =  bbktnk.id " +
             "LEFT JOIN DcnbBienBanLayMauHdr bblm On bblm.qdccId = qdc.id " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
+            "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND qdc.trangThai = '29' " +
+            "AND ((:#{#param.loaiDc} IS NULL OR qdc.loaiDc = :#{#param.loaiDc})) " +
             "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
             "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}))" +
+            "AND ((:#{#param.thayDoiThuKho} IS NULL OR khdcd.thayDoiThuKho = :#{#param.thayDoiThuKho})) " +
+            "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) "+
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
+            "AND (:#{#param.soBb} IS NULL OR LOWER(bbgn.soBb) LIKE CONCAT('%',LOWER(:#{#param.soBb}),'%')) " +
+            "AND (:#{#param.soQdDcCuc} IS NULL OR LOWER(qdc.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdDcCuc}),'%')) " +
+            "AND ((:#{#param.tuNgayKtnk}  IS NULL OR bbgn.ngayKtNhap >= :#{#param.tuNgayKtnk})" +
+            "AND (:#{#param.denNgayKtnk}  IS NULL OR bbgn.ngayKtNhap <= :#{#param.denNgayKtnk}) ) " +
+            "AND ((:#{#param.tuNgayThoiHanNhap}  IS NULL OR khdcd.thoiGianDkDc >= :#{#param.tuNgayThoiHanNhap})" +
+            "AND (:#{#param.denNgayThoiHanNhap}  IS NULL OR khdcd.thoiGianDkDc <= :#{#param.denNgayThoiHanNhap}) ) " +
             "ORDER BY bbgn.soBb desc, bbgn.nam desc")
     Page<DcnbBbGiaoNhanHdrDTO> searchPageCuc(@Param("param") DcnbBbGiaoNhanHdrReq req, Pageable pageable);
 }

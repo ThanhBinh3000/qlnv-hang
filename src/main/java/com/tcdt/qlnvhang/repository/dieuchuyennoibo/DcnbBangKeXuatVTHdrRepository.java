@@ -33,6 +33,12 @@ public interface DcnbBangKeXuatVTHdrRepository extends JpaRepository<DcnbBangKeX
             "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) "+
             "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}) OR (:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}))"+
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
+            "AND (:#{#param.soBangKe} IS NULL OR LOWER(bkxvt.soBangKe) LIKE CONCAT('%',LOWER(:#{#param.soBangKe}),'%')) " +
+            "AND (:#{#param.soQdinhDcc} IS NULL OR LOWER(qdc.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdinhDcc}),'%')) " +
+            "AND ((:#{#param.tuNgayThoiHan}  IS NULL OR bkxvt.thoiHanGiaoNhan >= :#{#param.tuNgayThoiHan})" +
+            "AND (:#{#param.denNgayThoiHan}  IS NULL OR bkxvt.thoiHanGiaoNhan <= :#{#param.denNgayThoiHan}) ) " +
+            "AND ((:#{#param.tuNgayXuatKho}  IS NULL OR pxk.ngayXuatKho >= :#{#param.tuNgayXuatKho})" +
+            "AND (:#{#param.denNgayXuatKho}  IS NULL OR pxk.ngayXuatKho <= :#{#param.denNgayXuatKho}) ) " +
             "ORDER BY bkxvt.soQdinhDcc desc, bkxvt.nam desc")
     Page<DcnbBangKeXuatVTHdrDTO> searchPageChiCuc(@Param("param")DcnbBangKeXuatVTReq req, Pageable pageable);
 
@@ -54,6 +60,12 @@ public interface DcnbBangKeXuatVTHdrRepository extends JpaRepository<DcnbBangKeX
             "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) "+
             "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}) OR (:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}))"+
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
+            "AND (:#{#param.soBangKe} IS NULL OR LOWER(bkxvt.soBangKe) LIKE CONCAT('%',LOWER(:#{#param.soBangKe}),'%')) " +
+            "AND (:#{#param.soQdinhDcc} IS NULL OR LOWER(qdc.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdinhDcc}),'%')) " +
+            "AND ((:#{#param.tuNgayThoiHan}  IS NULL OR bkxvt.thoiHanGiaoNhan >= :#{#param.tuNgayThoiHan})" +
+            "AND (:#{#param.denNgayThoiHan}  IS NULL OR bkxvt.thoiHanGiaoNhan <= :#{#param.denNgayThoiHan}) ) " +
+            "AND ((:#{#param.tuNgayXuatKho}  IS NULL OR pxk.ngayXuatKho >= :#{#param.tuNgayXuatKho})" +
+            "AND (:#{#param.denNgayXuatKho}  IS NULL OR pxk.ngayXuatKho <= :#{#param.denNgayXuatKho}) ) " +
             "ORDER BY bkxvt.soQdinhDcc desc, bkxvt.nam desc")
     Page<DcnbBangKeXuatVTHdrDTO> searchPageCuc(@Param("param")DcnbBangKeXuatVTReq req, Pageable pageable);
 

@@ -4,7 +4,6 @@ import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanTinhKhoDtl;
 import lombok.Data;
 
-import javax.persistence.Column;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +73,9 @@ public class DcnbBienBanTinhKhoHdrReq {
     private String maLoKho;
 
     private String tenLoKho;
+    private String thuKho;
+
+    private Long thuKhoId;
 
     private Boolean thayDoiThuKho;
 

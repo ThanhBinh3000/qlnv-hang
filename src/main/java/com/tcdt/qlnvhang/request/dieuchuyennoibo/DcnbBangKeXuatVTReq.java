@@ -64,4 +64,10 @@ public class DcnbBangKeXuatVTReq extends BaseRequest {
     private LocalDate ngayPDuyet;
     private String type;
     private List<DcnbBangKeXuatVTDtl> dcnbBangKeXuatVTDtl = new ArrayList<>();
+
+    private LocalDate tuNgayThoiHan;
+    private LocalDate denNgayThoiHan;
+
+    private LocalDate tuNgayXuatKho;
+    private LocalDate denNgayXuatKho;
 }

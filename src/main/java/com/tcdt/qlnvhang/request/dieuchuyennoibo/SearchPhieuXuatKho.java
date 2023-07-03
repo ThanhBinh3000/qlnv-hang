@@ -15,6 +15,7 @@ public class SearchPhieuXuatKho extends BaseRequest {
     private Long qdinhDccId;
     private String soQdinhDcc;
     private String soBbLayMau;
+    private String soPhieuXuatKho;
     private String dViKiemNghiem;
     private LocalDate tuNgay;
     private LocalDate denNgay;

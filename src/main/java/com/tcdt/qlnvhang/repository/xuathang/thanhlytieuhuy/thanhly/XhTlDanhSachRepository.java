@@ -14,7 +14,8 @@ import java.util.Optional;
 public interface XhTlDanhSachRepository extends JpaRepository<XhTlDanhSachHdr, Long> {
   @Query("SELECT c FROM XhTlDanhSachHdr c WHERE 1=1 " +
       "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
-      "AND (:#{#param.loaiVthh} IS NULL OR c.loaiVthh = :#{#param.loaiVthh}) " +
+      "AND (:#{#param.loaiVthh} IS NULL OR c.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
+      "AND (:#{#param.cloaiVthh} IS NULL OR c.cloaiVthh LIKE CONCAT(:#{#param.cloaiVthh},'%')) " +
       "AND ((:#{#param.ngayDeXuatTu}  IS NULL OR c.ngayDeXuat >= :#{#param.ngayDeXuatTu})" +
       "AND (:#{#param.ngayDeXuatDen}  IS NULL OR c.ngayDeXuat <= :#{#param.ngayDeXuatDen}) ) " +
       "AND (:#{#param.type} IS NULL OR ('TH' = :#{#param.type} AND c.maTongHop IS NULL))" +
@@ -26,4 +27,6 @@ public interface XhTlDanhSachRepository extends JpaRepository<XhTlDanhSachHdr, L
   void deleteAllByIdIn(List<Long> listId);
 
   List<XhTlDanhSachHdr> findByIdIn(List<Long> ids);
+
+  List<XhTlDanhSachHdr> findAllByIdTongHop (Long idTongHop);
 }

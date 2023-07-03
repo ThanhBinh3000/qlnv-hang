@@ -1,16 +1,14 @@
 package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbGiaoNhanDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbGiaoNhanTTDtl;
 import lombok.Data;
 
-import javax.persistence.CascadeType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -38,9 +36,15 @@ public class DcnbBbGiaoNhanHdrReq extends BaseRequest {
     private String maNhaKho;
     private String maNganKho;
     private String maLoKho;
+    private String tenDiemKho;
+    private String tenNhaKho;
+    private String tenNganKho;
+    private String tenLoKho;
     private String soHoSoKyThuat;
     private String loaiVthh;
     private String cloaiVthh;
+    private String tenLoaiVthh;
+    private String tenCloaiVthh;
     private String dviTinh;
     private LocalDate ngayBdNhap;
     private LocalDate ngayKtNhap;
@@ -51,8 +55,16 @@ public class DcnbBbGiaoNhanHdrReq extends BaseRequest {
     private Long idLanhDao;
     private String trangThai;
     private String lyDoTuChoi;
-    private List<FileDinhKem> fileCanCu = new ArrayList<>();
+    private Boolean thayDoiThuKho;
+    private Boolean isVatTu = false;
+    private List<String> dsLoaiHang;
+    private List<FileDinhKemReq> fileCanCuReq = new ArrayList<>();
 
     private List<DcnbBbGiaoNhanDtl> danhSachDaiDien = new ArrayList<>();
     private List<DcnbBbGiaoNhanTTDtl> danhSachBangKe = new ArrayList<>();
+
+    private LocalDate tuNgayKtnk;
+    private LocalDate denNgayKtnk;
+    private LocalDate tuNgayThoiHanNhap;
+    private LocalDate denNgayThoiHanNhap;
 }

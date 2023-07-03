@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScBangKeXuatVatTuHdrRep
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.suachua.ScBangKeXuatVatTuReq;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeNhapVTHdrDTO;
+import com.tcdt.qlnvhang.response.suachua.ScBangKeXuatVtDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.UserInfo;
@@ -39,11 +40,11 @@ public class ScBangKeXuatVatTuServiceImpl extends BaseServiceImpl {
     @Autowired
     private FileDinhKemService fileDinhKemService;
 
-    public Page<ScBangKeXuatVatTuHdr> searchPage(CustomUserDetails currentUser, ScBangKeXuatVatTuReq req) throws Exception {
+    public Page<ScBangKeXuatVtDTO> searchPage(CustomUserDetails currentUser, ScBangKeXuatVatTuReq req) throws Exception {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        Page<ScBangKeXuatVatTuHdr> searchDto = hdrRepository.searchPage(req, pageable);
+        Page<ScBangKeXuatVtDTO> searchDto = hdrRepository.searchPage(req, pageable);
         return searchDto;
     }
 
@@ -96,7 +97,10 @@ public class ScBangKeXuatVatTuServiceImpl extends BaseServiceImpl {
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu");
         }
-        return optional.get();
+        ScBangKeXuatVatTuHdr data = optional.get();
+        List<ScBangKeXuatVatTuDtl> list = dtlRepository.findByHdrId(id);
+        data.setScBangKeXuatVatTuDtls(list);
+        return data;
     }
 
 
@@ -110,42 +114,10 @@ public class ScBangKeXuatVatTuServiceImpl extends BaseServiceImpl {
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu");
         }
-        this.approve(currentUser, statusReq, optional); // Truyền giá trị của optional vào
+        ScBangKeXuatVatTuHdr data = optional.get();
+        data.setTrangThai(statusReq.getTrangThai());
+        hdrRepository.save(data);
     }
-
-    public ScBangKeXuatVatTuHdr approve(CustomUserDetails currentUser, StatusReq statusReq, Optional<ScBangKeXuatVatTuHdr> optional) throws Exception {
-//        String status = optional.get().getTrangThai() + statusReq.getTrangThai();
-//        switch (status) {
-//            case Contains.DUTHAO + Contains.CHODUYET_LDCC:
-//                optional.get().setNgayGDuyet(LocalDate.now());
-//                optional.get().setNguoiGDuyet(currentUser.getUser().getId());
-//                break;
-//            case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
-//                optional.get().setNgayPDuyet(LocalDate.now());
-//                optional.get().setNguoiPDuyet(currentUser.getUser().getId());
-//                optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
-//                break;
-//            case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
-//                optional.get().setNgayPDuyet(LocalDate.now());
-//                optional.get().setNguoiPDuyet(currentUser.getUser().getId());
-//                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(optional.get().getMaDvi(),
-//                        optional.get().getQDinhDccId(),
-//                        optional.get().getMaNganKho(),
-//                        optional.get().getMaLoKho());
-//                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
-//                dataLinkDtl.setLinkId(optional.get().getId());
-//                dataLinkDtl.setHdrId(dataLink.getId());
-//                dataLinkDtl.setType(DcnbBangKeNhapVTHdr.TABLE_NAME);
-//                break;
-//            default:
-//                throw new Exception("Phê duyệt không thành công");
-//        }
-//        optional.get().setTrangThai(statusReq.getTrangThai());
-//        DcnbBangKeNhapVTHdr created = hdrRepository.save(optional.get());
-//        return created;
-        return null;
-    }
-
 
     public void delete(Long id) throws Exception {
         Optional<ScBangKeXuatVatTuHdr> optional = hdrRepository.findById(id);

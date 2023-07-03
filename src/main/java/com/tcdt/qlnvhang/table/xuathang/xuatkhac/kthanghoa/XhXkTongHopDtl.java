@@ -29,7 +29,7 @@ public class XhXkTongHopDtl implements Serializable {
   private String loaiVthh;
   private String cloaiVthh;
   private String donViTinh;
-  private BigDecimal slHienTai;
+  private BigDecimal slTonKho;
   private BigDecimal slDeXuat;
   private BigDecimal slDaDuyet;
   private BigDecimal thanhTien;
@@ -39,6 +39,12 @@ public class XhXkTongHopDtl implements Serializable {
   private String lyDo;
   private String type;
   private String trangThaiKtCl;
+  private BigDecimal slHetHan;
+
+  private Long idBienBan;
+  private String soBienBan;
+  private LocalDate ngayLayMau;
+  private String trangThaiBienBan;
 
   @Transient
   private String tenTrangThaiKtCl;

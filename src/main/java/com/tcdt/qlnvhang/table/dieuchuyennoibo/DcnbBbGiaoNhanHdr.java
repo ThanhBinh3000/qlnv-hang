@@ -43,10 +43,18 @@ public class DcnbBbGiaoNhanHdr extends BaseEntity implements Serializable, Clone
     private String maNhaKho;
     private String maNganKho;
     private String maLoKho;
+    private String tenDiemKho;
+    private String tenNhaKho;
+    private String tenNganKho;
+    private String tenLoKho;
     private String soHoSoKyThuat;
     private Long idHoSoKyThuat;
     private String loaiVthh;
     private String cloaiVthh;
+    @Column(name = "TEN_LOAI_VTHH")
+    private String tenLoaiVthh;
+    @Column(name = "TEN_CLOAI_VTHH")
+    private String tenCloaiVthh;
     private String dviTinh;
     private LocalDate ngayBdNhap;
     private LocalDate ngayKtNhap;

@@ -7,14 +7,12 @@ import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbGiaoNhanHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbGiaoNhanHdrReq;
-import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeXuatVTHdrDTO;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbGiaoNhanHdrDTO;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBbGiaoNhanService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQHdr;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbGiaoNhanHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -55,10 +53,17 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<DcnbBbGiaoNhanHdrDTO> searchDto = null;
+        if(req.getIsVatTu() == null){
+            req.setIsVatTu(false);
+        }
+        if(req.getIsVatTu()){
+            req.setDsLoaiHang(Arrays.asList("VT"));
+        }else {
+            req.setDsLoaiHang(Arrays.asList("LT","M"));
+        }
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             searchDto = hdrRepository.searchPageChiCuc(req, pageable);
-        }
-        if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+        }else{
             searchDto = hdrRepository.searchPageCuc(req, pageable);
         }
         return searchDto;
@@ -70,8 +75,8 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
         if (userInfo == null){
             throw new Exception("Access denied.");
         }
-        if(!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
-            throw new Exception("Văn bản này chỉ có thêm ở cấp chi cục");
+        if(!userInfo.getCapDvi().equals(Contains.CAP_CUC)){
+            throw new Exception("Văn bản này chỉ có thêm ở cấp cục");
         }
         Optional<DcnbBbGiaoNhanHdr> optional = hdrRepository.findFirstBySoBb(req.getSoBb());
         if (optional.isPresent()) {
@@ -89,8 +94,10 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
             e.setParent(data);
         });
         DcnbBbGiaoNhanHdr created = hdrRepository.save(data);
-        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBBNTBQHdr.TABLE_NAME);
-        created.setFileDinhKems(canCu);
+        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), DcnbBbGiaoNhanHdr.TABLE_NAME +"_CC");
+        List<FileDinhKem> dinhkem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBbGiaoNhanHdr.TABLE_NAME+"_DK");
+        created.setFileCanCu(canCu);
+        created.setFileDinhKems(dinhkem);
         return created;
     }
 
@@ -100,8 +107,8 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
         if (userInfo == null){
             throw new Exception("Access denied.");
         }
-        if(!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
-            throw new Exception("Văn bản này chỉ có thêm ở cấp chi cục");
+        if(!userInfo.getCapDvi().equals(Contains.CAP_CUC)){
+            throw new Exception("Văn bản này chỉ có thêm ở cấp cục");
         }
         Optional<DcnbBbGiaoNhanHdr> optional = hdrRepository.findById(req.getId());
         if (!optional.isPresent()) {
@@ -112,9 +119,12 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
         data.setDanhSachDaiDien(req.getDanhSachDaiDien());
         data.setDanhSachBangKe(req.getDanhSachBangKe());
         DcnbBbGiaoNhanHdr update = hdrRepository.save(data);
-        fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbBBNTBQHdr.TABLE_NAME));
-        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), update.getId(), DcnbBBNTBQHdr.TABLE_NAME);
-        update.setFileDinhKems(canCu);
+        fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbBbGiaoNhanHdr.TABLE_NAME+"_CC"));
+        fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbBbGiaoNhanHdr.TABLE_NAME+"_DK"));
+        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), update.getId(), DcnbBbGiaoNhanHdr.TABLE_NAME+"_CC");
+        List<FileDinhKem> dinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), update.getId(), DcnbBbGiaoNhanHdr.TABLE_NAME+"_DK");
+        update.setFileCanCu(canCu);
+        update.setFileDinhKems(dinhKem);
         return update;
     }
 
@@ -132,7 +142,8 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
             throw new Exception("Số biên bản không tồn tại");
         }
         DcnbBbGiaoNhanHdr data = optional.get();
-        data.setFileDinhKems(fileDinhKemService.search(id, Collections.singleton(DcnbBBNTBQHdr.TABLE_NAME)));
+        data.setFileCanCu(fileDinhKemService.search(id, Collections.singleton(DcnbBbGiaoNhanHdr.TABLE_NAME +"_CC")));
+        data.setFileDinhKems(fileDinhKemService.search(id, Collections.singleton(DcnbBbGiaoNhanHdr.TABLE_NAME +"_DK")));
         return data;
     }
 
@@ -145,16 +156,12 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
         DcnbBbGiaoNhanHdr hdr = detail(req.getId());
         String status = hdr.getTrangThai() + req.getTrangThai();
         switch (status) {
-            // Arena các roll back approve
-            case Contains.TUCHOI_LDC + Contains.DUTHAO:
-                break;
-            // Arena các cấp duuyệt
+            case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
             case Contains.DUTHAO + Contains.CHODUYET_LDC:
                 break;
-            case Contains.CHODUYET_LDC + Contains.DADUYET_LDCC:
+            case Contains.CHODUYET_LDC + Contains.DADUYET_LDC:
                 hdr.setIdLanhDao(userInfo.getId());
                 break;
-            // Arena từ chối
             case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
                 hdr.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;

@@ -32,11 +32,7 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Service
 public class XhDgBangKeService extends BaseServiceImpl {
@@ -105,14 +101,6 @@ public class XhDgBangKeService extends BaseServiceImpl {
     data.setMaDvi(currentUser.getUser().getDepartment());
     data.setTrangThai(Contains.DUTHAO);
     XhDgBangKeHdr created = xhDgBangKeHdrRepository.save(data);
-    if (!DataUtils.isNullOrEmpty(created.getSoPhieuXuatKho())) {
-      Optional<XhDgPhieuXuatKho> phieuXuatKho = xhDgPhieuXuatKhoRepository.findById(created.getIdPhieuXuatKho());
-      if (phieuXuatKho.isPresent()) {
-        XhDgPhieuXuatKho phieu = phieuXuatKho.get();
-        phieu.setSoBangKeCh(created.getSoBangKe());
-        xhDgPhieuXuatKhoRepository.save(phieu);
-      }
-    }
     //dtl
     data.getBangKeDtl().forEach(s -> {
       s.setIdHdr(created.getId());
@@ -139,7 +127,6 @@ public class XhDgBangKeService extends BaseServiceImpl {
     XhDgBangKeHdr data = optional.get();
     BeanUtils.copyProperties(objReq, data);
     XhDgBangKeHdr created = xhDgBangKeHdrRepository.save(data);
-
     xhDgBangKeDtlRepository.deleteAllByIdHdr(created.getId());
     data.getBangKeDtl().forEach(s -> {
       s.setIdHdr(created.getId());
@@ -193,38 +180,29 @@ public class XhDgBangKeService extends BaseServiceImpl {
 
   @Transient
   public void delete(IdSearchReq idSearchReq) throws Exception {
+    if(Objects.isNull(idSearchReq.getId())){
+      throw new Exception("Bad request");
+    }
+
     Optional<XhDgBangKeHdr> optional = xhDgBangKeHdrRepository.findById(idSearchReq.getId());
     if (!optional.isPresent()) {
       throw new Exception("Bản ghi không tồn tại");
     }
-    XhDgBangKeHdr data = optional.get();
-    xhDgBangKeHdrRepository.delete(data);
-    if (!DataUtils.isNullOrEmpty(data.getSoPhieuXuatKho())) {
-      Optional<XhDgPhieuXuatKho> phieuXuatKho = xhDgPhieuXuatKhoRepository.findById(data.getIdPhieuXuatKho());
-      if (phieuXuatKho.isPresent()) {
-        XhDgPhieuXuatKho phieu = phieuXuatKho.get();
-        phieu.setSoBangKeCh(null);
-        xhDgPhieuXuatKhoRepository.save(phieu);
-      }
+
+    if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(optional.get().getTrangThai())) {
+      throw new Exception("Không thể xóa quyết định đã duyệt");
     }
+    List<XhDgBangKeDtl> bangKeDtl = xhDgBangKeDtlRepository.findAllByIdHdr(optional.get().getId());
+    if(bangKeDtl !=null && bangKeDtl.size() >0){
+      xhDgBangKeDtlRepository.deleteAll(bangKeDtl);
+    }
+    xhDgBangKeHdrRepository.delete(optional.get());
+
   }
 
   @Transient
   public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
-    List<XhDgBangKeHdr> list = xhDgBangKeHdrRepository.findAllByIdIn(idSearchReq.getIdList());
 
-    if (list.isEmpty()) {
-      throw new Exception("Bản ghi không tồn tại");
-    }
-    List<Long> listID = list.stream().map(XhDgBangKeHdr::getId).collect(Collectors.toList());
-    List<XhDgPhieuXuatKho> phieuXuatKho = xhDgPhieuXuatKhoRepository.findByIdIn(listID);
-    xhDgBangKeHdrRepository.deleteAll(list);
-    if (!DataUtils.isNullOrEmpty(phieuXuatKho)) {
-      for (XhDgPhieuXuatKho phieu : phieuXuatKho) {
-        phieu.setSoBangKeCh(null);
-        xhDgPhieuXuatKhoRepository.save(phieu);
-      }
-    }
   }
 
   @Transient
@@ -258,6 +236,13 @@ public class XhDgBangKeService extends BaseServiceImpl {
         throw new Exception("Phê duyệt không thành công");
     }
     optional.get().setTrangThai(statusReq.getTrangThai());
+    if(statusReq.getTrangThai().equals(Contains.DADUYET_LDCC)) {
+      Optional<XhDgPhieuXuatKho> xhDgPhieuXuatKho = xhDgPhieuXuatKhoRepository.findById(optional.get().getIdPhieuXuatKho());
+      if(xhDgPhieuXuatKho.isPresent()){
+        xhDgPhieuXuatKho.get().setSoBangKeCh(optional.get().getSoBangKe());
+        xhDgPhieuXuatKhoRepository.save(xhDgPhieuXuatKho.get());
+      }
+    }
     XhDgBangKeHdr created = xhDgBangKeHdrRepository.save(optional.get());
     return created;
   }

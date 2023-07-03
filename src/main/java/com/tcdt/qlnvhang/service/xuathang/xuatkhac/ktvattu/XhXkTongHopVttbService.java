@@ -88,7 +88,7 @@ public class XhXkTongHopVttbService extends BaseServiceImpl {
         data.setTrangThai(Contains.DUTHAO);
         data.getTongHopDtl().forEach(s -> s.setTongHopHdr(data));
         XhXkTongHopHdr created = xhXkTongHopRepository.save(data);
-        created.setMaDanhSach(created.getMaDanhSach() + created.getId());
+        created.setMaDanhSach(created.getMaDanhSach() + "_" + created.getId());
         created = xhXkTongHopRepository.save(created);
         Long id = created.getId();
         String ma = created.getMaDanhSach();
@@ -143,6 +143,7 @@ public class XhXkTongHopVttbService extends BaseServiceImpl {
             items.forEach(item -> {
                 item.setIdTongHop(null);
                 item.setMaTongHop(null);
+                item.setTrangThai(TrangThaiAllEnum.CHUA_CHOT.getId());
                 xhXkDanhSachRepository.save(item);
             });
         }
@@ -183,7 +184,7 @@ public class XhXkTongHopVttbService extends BaseServiceImpl {
         }
 
         String status = optional.get().getTrangThai() + statusReq.getTrangThai();
-        if (status.equals(TrangThaiAllEnum.DU_THAO.getId() + TrangThaiAllEnum.DA_TONG_HOP.getId())) {
+        if (status.equals(TrangThaiAllEnum.DU_THAO.getId() + TrangThaiAllEnum.GUI_DUYET.getId())) {
             optional.get().setNguoiGduyetId(currentUser.getUser().getId());
             optional.get().setNgayGduyet(LocalDate.now());
         } else {
@@ -200,13 +201,12 @@ public class XhXkTongHopVttbService extends BaseServiceImpl {
         paggingReq.setPage(0);
         paggingReq.setLimit(Integer.MAX_VALUE);
         objReq.setPaggingReq(paggingReq);
-        Page<XhXkTongHopHdr> page = this.searchPage(currentUser, objReq);
-        List<XhXkTongHopHdr> data = page.getContent();
+        List<XhXkTongHopHdr> data = this.searchPage(currentUser, objReq).getContent();
 
-        String title = "Danh sách hàng DTQG còn 6 tháng hết hạn lưu kho nhưng chưa có kế hoạch xuất";
+        String title = "Danh sách vật tư thiết bị có thời hạn lưu kho lớn hơn 12 tháng";
         String[] rowsName = new String[]{"STT", "Năm KH", "Mã danh sách", "Chi cục DTNN", "Loại hàng hóa", "Chủng loại",
-                "Điểm kho", "Ngăn/lô kho", "Ngày nhập kho", "SL tồn", "DVT", "Ngày đề xuất", "Trạng thái", "Trạng thái kiểm tra chất lượng"};
-        String fileName = "danh-sach-hang-dtqg-con-6-thang-het-han-luu-kho-nhung-chua-co-ke-hoach-xuat.xlsx";
+                "Điểm kho", "Ngăn/lô kho", "Ngày nhập kho", "SL hết hạn 12 tháng", "SL tồn", "DVT", "Ngày đề xuất", "Trạng thái"};
+        String fileName = "danh-sach-vat-tu-thiet-bi-co-thoi-han-luu-kho-lon-hon-12-thang.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
         for (int i = 0; i < data.size(); i++) {
@@ -222,13 +222,13 @@ public class XhXkTongHopVttbService extends BaseServiceImpl {
                 objs[6] = dtl.getTenDiemKho();
                 objs[7] = dtl.getTenLoKho();
                 objs[8] = dtl.getNgayNhapKho();
-                objs[9] = dtl.getSlHienTai();
-                objs[10] = dtl.getDonViTinh();
-                objs[11] = dtl.getNgayDeXuat();
-                objs[12] = qd.getTenTrangThai();
-                objs[13] = dtl.getTrangThaiKtCl();
+                objs[9] = dtl.getSlHetHan();
+                objs[10] = dtl.getSlTonKho();
+                objs[11] = dtl.getDonViTinh();
+                objs[12] = dtl.getNgayDeXuat();
+                objs[13] = qd.getTenTrangThai();
+                dataList.add(objs);
             }
-            dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();

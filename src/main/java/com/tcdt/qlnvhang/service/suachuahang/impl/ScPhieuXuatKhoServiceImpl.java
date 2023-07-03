@@ -8,6 +8,7 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchPhieuXuatKho;
 import com.tcdt.qlnvhang.request.suachua.ScPhieuXuatKhoReq;
+import com.tcdt.qlnvhang.response.suachua.ScPhieuXuatKhoDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -45,11 +46,11 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl {
     @Autowired
     private FileDinhKemService fileDinhKemService;
 
-    public Page<ScPhieuXuatKhoHdr> searchPage(CustomUserDetails currentUser, ScPhieuXuatKhoReq req) throws Exception {
+    public Page<ScPhieuXuatKhoDTO> searchPage(CustomUserDetails currentUser, ScPhieuXuatKhoReq req) throws Exception {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        Page<ScPhieuXuatKhoHdr> searchDto = scPhieuXuatKhoHdrRepository.searchPage(req, pageable);
+        Page<ScPhieuXuatKhoDTO> searchDto = scPhieuXuatKhoHdrRepository.searchPage(req, pageable);
 
         return searchDto;
     }
