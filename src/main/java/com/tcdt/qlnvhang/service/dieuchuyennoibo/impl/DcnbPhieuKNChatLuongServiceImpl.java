@@ -79,8 +79,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
 
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             searchDto = dcnbPhieuKnChatLuongHdrRepository.searchPageChiCuc(req, pageable);
-        }
-        if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+        }else {
             req.setTypeDataLink(Contains.DIEU_CHUYEN);
             searchDto = dcnbPhieuKnChatLuongHdrRepository.searchPageCuc(req, pageable);
         }
@@ -320,8 +319,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
 
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             searchDto = dcnbPhieuKnChatLuongHdrRepository.searchListChiCuc(req);
-        }
-        if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+        }else {
             req.setTypeDataLink(Contains.DIEU_CHUYEN);
             searchDto = dcnbPhieuKnChatLuongHdrRepository.searchPageListCuc(req);
         }

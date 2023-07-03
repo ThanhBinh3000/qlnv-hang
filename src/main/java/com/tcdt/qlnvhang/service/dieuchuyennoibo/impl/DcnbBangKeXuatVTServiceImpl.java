@@ -60,8 +60,7 @@ public class DcnbBangKeXuatVTServiceImpl implements DcnbBangKeXuatVTService {
         }
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             searchDto = hdrRepository.searchPageChiCuc(req, pageable);
-        }
-        if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+        }else {
             searchDto = hdrRepository.searchPageCuc(req, pageable);
         }
         return searchDto;

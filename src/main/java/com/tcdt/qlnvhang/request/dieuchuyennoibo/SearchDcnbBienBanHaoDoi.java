@@ -14,8 +14,14 @@ public class SearchDcnbBienBanHaoDoi extends BaseRequest {
     private Integer nam;
     private String soQdinhDcc;
     private String soBbHaoDoi;
-    private LocalDate tuNgay;
-    private LocalDate denNgay;
+    private LocalDate tuNgayLapBb;
+    private LocalDate denNgayLapBb;
+    private LocalDate tuNgayBdXuat;
+    private LocalDate denNgayBdXuat;
+    private LocalDate tuNgayKtXuat;
+    private LocalDate denNgayKtXuat;
+    private LocalDate tuNgayXhXuat;
+    private LocalDate denNgayXhXuat;
     private String maDvi;
     private String loaiDc;
     private String loaiQdinh;

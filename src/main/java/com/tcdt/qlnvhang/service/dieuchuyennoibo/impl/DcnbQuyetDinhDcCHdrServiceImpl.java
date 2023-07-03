@@ -71,8 +71,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
         req.setTypes(Arrays.asList(Contains.NHAN_DIEU_CHUYEN, Contains.DIEU_CHUYEN));
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             search = dcnbQuyetDinhDcCHdrRepository.searchChiCuc(req, pageable);
-        }
-        if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+        }else {
             search = dcnbQuyetDinhDcCHdrRepository.searchCuc(req, pageable);
         }
 

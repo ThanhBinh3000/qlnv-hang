@@ -87,8 +87,7 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
         }
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             searchDto = dcnbBienBanLayMauHdrRepository.searchPageChiCuc(req, pageable);
-        }
-        if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+        }else{
             req.setTypeDataLink(Contains.DIEU_CHUYEN);
             searchDto = dcnbBienBanLayMauHdrRepository.searchPageCuc(req, pageable);
         }
