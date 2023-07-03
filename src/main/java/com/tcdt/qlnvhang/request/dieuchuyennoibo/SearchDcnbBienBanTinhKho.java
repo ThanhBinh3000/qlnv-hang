@@ -18,8 +18,12 @@ public class SearchDcnbBienBanTinhKho extends BaseRequest {
     private String qdinhDccId;
     private String soBbTinhKho;
     private String dViKiemNghiem;
-    private LocalDate tuNgay;
-    private LocalDate denNgay;
+    private LocalDate tuNgayBdXuat;
+    private LocalDate denNgayBdXuat;
+    private LocalDate tuNgayKtXuat;
+    private LocalDate denNgayKtXuat;
+    private LocalDate tuNgayXhXuat;
+    private LocalDate denNgayXhXuat;
     private String maLoKho;
     private String maNganKho;
     private String maDvi;

@@ -39,6 +39,12 @@ public interface DcnbBBNTBQHdrRepository extends JpaRepository<DcnbBBNTBQHdr, Lo
             "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) "+
             "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}) OR (:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}))" +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
+            "AND (:#{#param.soQdDcCuc} IS NULL OR LOWER(qdc.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdDcCuc}),'%')) " +
+            "AND (:#{#param.soBban} IS NULL OR LOWER(bblm.soBban) LIKE CONCAT('%',LOWER(:#{#param.soBban}),'%')) " +
+            "AND ((:#{#param.tuNgayLap}  IS NULL OR bblm.ngayLap >= :#{#param.tuNgayLap})" +
+            "AND (:#{#param.denNgayLap}  IS NULL OR bblm.ngayLap <= :#{#param.denNgayLap}) ) " +
+            "AND ((:#{#param.tuNgayKtnt}  IS NULL OR bblm.ngayKetThucNt >= :#{#param.tuNgayKtnt})" +
+            "AND (:#{#param.denNgayKtnt}  IS NULL OR bblm.ngayKetThucNt <= :#{#param.denNgayKtnt}) ) " +
             "ORDER BY bblm.soQdDcCuc desc, bblm.nam desc")
     Page<DcnbBBNTBQHdrDTO> searchPageChiCuc(@Param("param") DcnbBBNTBQHdrReq req, Pageable pageable);
 
@@ -57,6 +63,12 @@ public interface DcnbBBNTBQHdrRepository extends JpaRepository<DcnbBBNTBQHdr, Lo
             "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) "+
             "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}) OR (:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}))" +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
+            "AND (:#{#param.soQdDcCuc} IS NULL OR LOWER(qdc.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdDcCuc}),'%')) " +
+            "AND (:#{#param.soBban} IS NULL OR LOWER(bblm.soBban) LIKE CONCAT('%',LOWER(:#{#param.soBban}),'%')) " +
+            "AND ((:#{#param.tuNgayLap}  IS NULL OR bblm.ngayLap >= :#{#param.tuNgayLap})" +
+            "AND (:#{#param.denNgayLap}  IS NULL OR bblm.ngayLap <= :#{#param.denNgayLap}) ) " +
+            "AND ((:#{#param.tuNgayKtnt}  IS NULL OR bblm.ngayKetThucNt >= :#{#param.tuNgayKtnt})" +
+            "AND (:#{#param.denNgayKtnt}  IS NULL OR bblm.ngayKetThucNt <= :#{#param.denNgayKtnt}) ) " +
             "AND qdc.type IS NULL " +
             "ORDER BY bblm.soQdDcCuc desc, bblm.nam desc")
     Page<DcnbBBNTBQHdrDTO> searchPage(@Param("param") DcnbBBNTBQHdrReq req, Pageable pageable);

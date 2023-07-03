@@ -69,4 +69,8 @@ public class DcnbBBKetThucNKReq extends BaseRequest {
     private LocalDate ngayPDuyet;
     private String type;
     private List<DcnbBBKetThucNKDtl> bcnbBBKetThucNKDtl = new ArrayList<>();
+    private LocalDate tuNgayKtnk;
+    private LocalDate denNgayKtnk;
+    private LocalDate tuNgayThoiHanNhap;
+    private LocalDate denNgayThoiHanNhap;
 }
