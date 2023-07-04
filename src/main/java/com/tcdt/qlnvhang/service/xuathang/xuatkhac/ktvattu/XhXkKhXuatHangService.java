@@ -34,6 +34,7 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,9 +49,6 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         req.setDvql(currentUser.getDvql());
         Page<XhXkKhXuatHang> search = xhXkKhXuatHangRepository.searchPage(req, pageable);
-        //set label
-//        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-//        Map<String, String> mapVthh = getListDanhMucHangHoa();
         search.getContent().forEach(s -> {
             s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
             s.setSoDvTaiSan(s.getXhXkKhXuatHangDtl().size());
@@ -78,7 +76,32 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
         //save file đính kèm
         fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkKhXuatHang.TABLE_NAME);
         return detail(created.getId());
+    }
 
+    @Transactional()
+    public XhXkKhXuatHang update(CustomUserDetails currentUser, XhXkKhXuatHangRequest objReq) throws Exception {
+        if (objReq.getId() == null) {
+            throw new Exception("Bad request!");
+        }
+        Optional<XhXkKhXuatHang> optional = xhXkKhXuatHangRepository.findById(objReq.getId());
+        if (!optional.isPresent()) throw new Exception("Đề xuất không tồn tại!");
+
+        if (objReq.getSoToTrinh().contains("/") && !ObjectUtils.isEmpty(objReq.getSoToTrinh().split("/")[0])) {
+            Optional<XhXkKhXuatHang> optionalBySoTt = xhXkKhXuatHangRepository.findBySoToTrinh(objReq.getSoToTrinh());
+            if (optionalBySoTt.isPresent() && optionalBySoTt.get().getId() != objReq.getId()) {
+                if (!optionalBySoTt.isPresent()) throw new Exception("Số tờ trình/kế hoạch đã tồn tại!");
+            }
+        }
+        XhXkKhXuatHang dx = optional.get();
+        dx.getXhXkKhXuatHangDtl().forEach(e -> e.setXhXkKhXuatHang(null));
+        BeanUtils.copyProperties(objReq, dx);
+        dx.getXhXkKhXuatHangDtl().forEach(e -> e.setXhXkKhXuatHang(dx));
+        dx.setXhXkKhXuatHangDtl(objReq.getXhXkKhXuatHangDtl());
+        XhXkKhXuatHang created = xhXkKhXuatHangRepository.save(dx);
+        fileDinhKemService.delete(dx.getId(), Collections.singleton(XhXkKhXuatHang.TABLE_NAME));
+        //save file đính kèm
+        fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkKhXuatHang.TABLE_NAME);
+        return detail(created.getId());
     }
 
     public XhXkKhXuatHang detail(Long id) throws Exception {
@@ -123,25 +146,34 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
     }
 
 
-//    public XhXkKhXuatHang approve(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
-//        if (StringUtils.isEmpty(statusReq.getId())) {
-//            throw new Exception("Không tìm thấy dữ liệu");
-//        }
-//        Optional<XhXkKhXuatHang> optional = xhXkKhXuatHangRepository.findById(Long.valueOf(statusReq.getId()));
-//        if (!optional.isPresent()) {
-//            throw new Exception("Không tìm thấy dữ liệu");
-//        }
-//        String status = optional.get().getTrangThai() + statusReq.getTrangThai();
-//        if (status.equals(TrangThaiAllEnum.DU_THAO.getId() + TrangThaiAllEnum.DA_TONG_HOP.getId())) {
-//            optional.get().setNguoiGduyetId(currentUser.getUser().getId());
-//            optional.get().setNgayGduyet(LocalDate.now());
-//        } else {
-//            throw new Exception("Phê duyệt không thành công");
-//        }
-//        optional.get().setTrangThai(statusReq.getTrangThai());
-//        XhXkKhXuatHang created = xhXkKhXuatHangRepository.save(optional.get());
-//        return created;
-//    }
+    public XhXkKhXuatHang pheDuyet(CustomUserDetails currentUser, StatusReq req) throws Exception {
+        Optional<XhXkKhXuatHang> dx = xhXkKhXuatHangRepository.findById(req.getId());
+        if (!dx.isPresent()) {
+            throw new Exception("Không tồn tại bản ghi");
+        }
+        XhXkKhXuatHang xhXkKhXuatHang = dx.get();
+        String status = xhXkKhXuatHang.getTrangThai() + req.getTrangThai();
+        switch (status) {
+            case Contains.DU_THAO + Contains.CHO_DUYET_TP:
+            case Contains.TU_CHOI_TP + Contains.CHO_DUYET_TP:
+            case Contains.TU_CHOI_LDC + Contains.CHO_DUYET_TP:
+                break;
+            case Contains.CHO_DUYET_TP + Contains.TU_CHOI_TP:
+            case Contains.CHO_DUYET_LDC + Contains.CHO_DUYET_TP:
+                xhXkKhXuatHang.setLyDoTuChoi(req.getLyDo());
+                break;
+            case Contains.CHO_DUYET_LDC + Contains.DA_DUYET_LDC:
+            case Contains.CHO_DUYET_TP + Contains.CHO_DUYET_LDC:
+                xhXkKhXuatHang.setNguoiDuyetId(currentUser.getUser().getId());
+                xhXkKhXuatHang.setNgayDuyet(LocalDate.now());
+                break;
+            default:
+                throw new Exception("Phê duyệt không thành công.");
+        }
+        xhXkKhXuatHang.setTrangThai(req.getTrangThai());
+        XhXkKhXuatHang model = xhXkKhXuatHangRepository.save(xhXkKhXuatHang);
+        return detail(model.getId());
+    }
 
 
     public void export(CustomUserDetails currentUser, XhXkKhXuatHangRequest objReq, HttpServletResponse response) throws Exception {
