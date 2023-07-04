@@ -12,4 +12,6 @@ public interface HhQdPdNhapKhacDtlRepository extends JpaRepository<HhQdPdNhapKha
     void deleteAllByIdHdr (Long hdrId);
     List<HhQdPdNhapKhacDtl> findAllByIdHdr (Long hdrId);
     List<HhQdPdNhapKhacDtl> findAllByIdDxHdr (Long hdrId);
+
+    HhQdPdNhapKhacDtl findByIdBbLayMau(Long idBbLayMau);
 }

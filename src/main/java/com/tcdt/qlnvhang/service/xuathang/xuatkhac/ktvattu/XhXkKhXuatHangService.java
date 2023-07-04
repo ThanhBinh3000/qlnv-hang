@@ -22,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
@@ -61,29 +62,23 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
         BeanUtils.copyProperties(objReq, data);
         data.setMaDvi(currentUser.getUser().getDvql());
         data.setTrangThai(Contains.DUTHAO);
-        data.getListXhXkKhXuatHangDtl().forEach(s -> s.setXhXkKhXuatHang(data));
+        data.getXhXkKhXuatHangDtl().forEach(s -> s.setXhXkKhXuatHang(data));
         XhXkKhXuatHang created = xhXkKhXuatHangRepository.save(data);
         created = xhXkKhXuatHangRepository.save(created);
-        return created;
+        return detail(created.getId());
 
     }
 
-//    public List<XhXkDanhSachHdr> detail(List<Long> ids) throws Exception {
-//        if (DataUtils.isNullOrEmpty(ids)) throw new Exception("Tham số không hợp lệ.");
-//        List<XhXkDanhSachHdr> optional = xhXkDanhSachRepository.findByIdIn(ids);
-//        if (DataUtils.isNullOrEmpty(optional)) {
-//            throw new Exception("Không tìm thấy dữ liệu");
-//        }
-//        List<XhXkDanhSachHdr> allById = xhXkDanhSachRepository.findAllById(ids);
-//        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-//        Map<String, String> mapVthh = getListDanhMucHangHoa();
-//        allById.forEach(data -> {
-//            data.setTenTrangThai(TrangThaiAllEnum.getLabelById(data.getTrangThai()));
-//            data.setMapDmucDvi(mapDmucDvi);
-//            data.setMapVthh(mapVthh);
-//        });
-//        return allById;
-//    }
+    public XhXkKhXuatHang detail(Long id) throws Exception {
+        if (ObjectUtils.isEmpty(id)) throw new Exception("Tham số không hợp lệ.");
+        Optional<XhXkKhXuatHang> optional = xhXkKhXuatHangRepository.findById(id);
+        if (!optional.isPresent()) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        XhXkKhXuatHang model = optional.get();
+        model.setTenTrangThai(TrangThaiAllEnum.getLabelById(model.getTrangThai()));
+        return model;
+    }
 
     public void export(CustomUserDetails currentUser, XhXkKhXuatHangRequest objReq, HttpServletResponse response) throws Exception {
         PaggingReq paggingReq = new PaggingReq();
