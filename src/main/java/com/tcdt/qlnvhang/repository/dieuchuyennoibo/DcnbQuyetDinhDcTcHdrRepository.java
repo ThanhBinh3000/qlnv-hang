@@ -25,6 +25,10 @@ public interface DcnbQuyetDinhDcTcHdrRepository extends JpaRepository<DcnbQuyetD
             "AND (:#{#param.trichYeu} IS NULL OR LOWER(c.trichYeu) LIKE CONCAT('%',LOWER(:#{#param.trichYeu}),'%')) " +
             "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.loaiDc} IS NULL OR c.loaiDc = :#{#param.loaiDc}) " +
+            "AND ((:#{#param.ngayHieuLucTu}  IS NULL OR c.ngayBanHanhTc >= :#{#param.ngayHieuLucTu})" +
+            "AND (:#{#param.ngayHieuLucDen}  IS NULL OR c.ngayBanHanhTc <= :#{#param.ngayHieuLucDen}) ) " +
+            "AND ((:#{#param.ngayDuyetTcTu}  IS NULL OR c.ngayKyQdinh >= :#{#param.ngayDuyetTcTu})" +
+            "AND (:#{#param.ngayDuyetTcDen}  IS NULL OR c.ngayKyQdinh <= :#{#param.ngayDuyetTcDen}) ) " +
             "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
     )
     Page<DcnbQuyetDinhDcTcHdr> search(@Param("param") SearchDcnbQuyetDinhDcTc param, Pageable pageable);
