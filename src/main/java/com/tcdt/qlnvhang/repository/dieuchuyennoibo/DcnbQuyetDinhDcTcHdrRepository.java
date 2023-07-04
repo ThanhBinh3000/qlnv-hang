@@ -57,11 +57,12 @@ public interface DcnbQuyetDinhDcTcHdrRepository extends JpaRepository<DcnbQuyetD
 
     @Query(value = "SELECT distinct * FROM DCNB_QUYET_DINH_DC_TC_HDR hdr WHERE 1=1 and hdr.TRANG_THAI = '29'" +
             "AND (:#{#param.soQdinh} IS NULL OR LOWER(hdr.SO_QDINH) LIKE CONCAT('%', CONCAT(LOWER(:#{#param.soQdinh}),'%'))) " +
-            "AND EXISTS(SELECT DISTINCT * FROM DCNB_QUYET_DINH_DC_TC_DTL dtl " +
+            "AND hdr.ID IN (SELECT DISTINCT dtl.HDR_ID FROM DCNB_QUYET_DINH_DC_TC_DTL dtl " +
             "JOIN DCNB_KE_HOACH_DC_HDR dchdr ON dtl.DCNB_KE_HOACH_DC_HDR_ID = dchdr.ID " +
             "JOIN DCNB_KE_HOACH_DC_DTL dcdtl ON dcdtl.HDR_ID = dchdr.ID " +
             "WHERE dtl.HDR_ID = hdr.ID AND (dcdtl.MA_CHI_CUC_NHAN = CONCAT(:#{#param.maDvi},'') OR dcdtl.MA_CHI_CUC_NHAN LIKE CONCAT(:#{#param.maDvi},'%') OR dchdr.MA_DVI LIKE CONCAT(:#{#param.maDvi},'%'))) " +
             "AND (:#{#param.loaiDc} IS NULL OR hdr.LOAI_DC = :#{#param.loaiDc}) " +
+            "AND  hdr.ID NOT IN (SELECT distinct dcch.CAN_CU_QD_TC FROM DCNB_QUYET_DINH_DC_C_HDR dcch WHERE dcch.CAN_CU_QD_TC is not null and 1 = 1 AND dcch.MA_DVI = :#{#param.maDvi} AND (dcch.ID != :#{#param.id})) " +
             "ORDER BY hdr.NGAY_SUA desc , hdr.NGAY_TAO desc, hdr.id desc", nativeQuery = true
     )
     List<DcnbQuyetDinhDcTcHdr> findDanhSachQuyetDinh(@Param("param")SearchDcnbQuyetDinhDcTc objReq);

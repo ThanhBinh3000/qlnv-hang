@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SearchDcnbQuyetDinhDcTc extends BaseRequest {
+  private Long id;
   private Integer nam;
   private String maDvi;
   private String loaiDc;
