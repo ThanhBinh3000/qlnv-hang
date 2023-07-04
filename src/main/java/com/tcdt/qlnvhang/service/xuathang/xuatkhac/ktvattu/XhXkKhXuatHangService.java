@@ -96,6 +96,7 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
             s.setMapDmucDvi(mapDmucDvi);
             s.setMapVthh(mapVthh);
         });
+        model.setTenDvi(mapDmucDvi.get(model.getMaDvi()));
         model.setSoDvTaiSan(model.getXhXkKhXuatHangDtl().size());
         model.setTenTrangThai(TrangThaiAllEnum.getLabelById(model.getTrangThai()));
         return model;
