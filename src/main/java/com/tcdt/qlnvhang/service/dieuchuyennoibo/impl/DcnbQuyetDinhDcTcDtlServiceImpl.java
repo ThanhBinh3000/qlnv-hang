@@ -354,8 +354,8 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
 //        if (Contains.QD_XUAT.equals(objReq.getLoaiQdinh())) {
 //            danhSachs = dcnbQuyetDinhDcTcHdrRepository.findDanhSachQuyetDinhXuat(objReq);
 //        }
-        if(objReq.getId() == null){
-            objReq.setId(-1l);
+        if(objReq.getQDinhCucId() == null){
+            objReq.setQDinhCucId(-1l);
         }
         danhSachs = dcnbQuyetDinhDcTcHdrRepository.findDanhSachQuyetDinh(objReq);
         return danhSachs;
