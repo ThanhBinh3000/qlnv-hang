@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ public class XhXkKhXuatHangDtl {
     String cloaiVthh;
     BigDecimal slTonKho;
     BigDecimal slHetHan;
-    LocalDateTime ngayNhapKho;
+    LocalDate ngayNhapKho;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idHdr")
     @JsonIgnore
