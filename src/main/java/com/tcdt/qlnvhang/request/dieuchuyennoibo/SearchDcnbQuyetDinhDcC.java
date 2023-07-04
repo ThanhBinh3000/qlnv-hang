@@ -17,6 +17,8 @@ public class SearchDcnbQuyetDinhDcC extends BaseRequest {
   private LocalDate ngayHieuLucDen;
   private LocalDate ngayDuyetTcTu;
   private LocalDate ngayDuyetTcDen;
+  private LocalDate ngayKyQdinhTu;
+  private LocalDate ngayKyQdinhDen;
   private String soQdinh;
   private String trichYeu;
   private String trangThai;

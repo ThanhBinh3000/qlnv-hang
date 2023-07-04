@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -21,13 +22,16 @@ public class ScTongHopHdr extends BaseEntity implements Serializable {
   public static final String TABLE_NAME = "SC_TONG_HOP_HDR";
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = ScTongHopHdr.TABLE_NAME + "_SEQ")
-  @SequenceGenerator(sequenceName = ScTongHopHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = ScTongHopHdr.TABLE_NAME + "_SEQ")
+//  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = ScTongHopHdr.TABLE_NAME + "_SEQ")
+//  @SequenceGenerator(sequenceName = ScTongHopHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = ScTongHopHdr.TABLE_NAME + "_SEQ")
   private Long id;
   private Integer nam;
   private String maDvi;
   private String maDanhSach;
   private String tenDanhSach;
+  private LocalDate thoiHanXuat;
+  private LocalDate thoiHanNhap;
+  private Date thoiGianTh;
   private String trangThai;
   @Transient
   private String tenTrangThai;

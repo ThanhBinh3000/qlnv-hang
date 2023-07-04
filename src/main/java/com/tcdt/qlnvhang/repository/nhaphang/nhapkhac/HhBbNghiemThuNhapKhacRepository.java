@@ -30,4 +30,5 @@ public interface HhBbNghiemThuNhapKhacRepository extends JpaRepository<HhBbNghie
     )
     Page<HhBbNghiemThuNhapKhac> search(HhBbNghiemThuNhapKhacSearch req, Pageable pageable);
     List<HhBbNghiemThuNhapKhac> findByIdQdGiaoNvNhAndMaLoKhoAndMaNganKho(Long idQdGiaoNvNh, String maLoKho, String maNganKho);
+    List<HhBbNghiemThuNhapKhac> findByIdQdGiaoNvNhAndMaLoKhoAndMaNganKhoAndTrangThai(Long idQdGiaoNvNh, String maLoKho, String maNganKho, String trangThai);
 }

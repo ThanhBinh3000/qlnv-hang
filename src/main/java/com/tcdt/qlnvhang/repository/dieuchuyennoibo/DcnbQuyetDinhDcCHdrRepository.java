@@ -31,6 +31,10 @@ public interface DcnbQuyetDinhDcCHdrRepository extends JpaRepository<DcnbQuyetDi
             "AND c.type IS NULL " +
             "AND (:#{#param.loaiDc} IS NULL OR c.loaiDc = :#{#param.loaiDc}) " +
             "AND (:#{#param.loaiQdinh} IS NULL OR c.loaiQdinh = :#{#param.loaiQdinh}) " +
+            "AND ((:#{#param.ngayHieuLucTu}  IS NULL OR c.ngayHieuLuc >= :#{#param.ngayHieuLucTu})" +
+            "AND (:#{#param.ngayHieuLucDen}  IS NULL OR c.ngayHieuLuc <= :#{#param.ngayHieuLucDen}) ) " +
+            "AND ((:#{#param.ngayKyQdinhTu}  IS NULL OR c.ngayKyQdinh >= :#{#param.ngayKyQdinhTu})" +
+            "AND (:#{#param.ngayKyQdinhDen}  IS NULL OR c.ngayKyQdinh <= :#{#param.ngayKyQdinhDen}) ) " +
             "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
     )
     Page<DcnbQuyetDinhDcCHdr> searchCuc(@Param("param") SearchDcnbQuyetDinhDcC param, Pageable pageable);

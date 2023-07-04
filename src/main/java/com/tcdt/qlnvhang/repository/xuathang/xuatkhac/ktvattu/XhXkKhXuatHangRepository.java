@@ -30,4 +30,5 @@ public interface XhXkKhXuatHangRepository extends JpaRepository<XhXkKhXuatHang, 
 
     List<XhXkKhXuatHang> findByIdIn(List<Long> ids);
 
+    Optional<XhXkKhXuatHang> findBySoToTrinh(String soToTrinh);
 }

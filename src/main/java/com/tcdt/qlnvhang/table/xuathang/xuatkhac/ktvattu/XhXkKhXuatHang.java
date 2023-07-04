@@ -24,29 +24,35 @@ public class XhXkKhXuatHang extends BaseEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_XK_KH_XUATHANG_SEQ")
     @SequenceGenerator(sequenceName = "XH_XK_KH_XUATHANG_SEQ", allocationSize = 1, name = "XH_XK_KH_XUATHANG_SEQ")
-    Long id;
-    Integer namKeHoach;
-    String maDvi;
-    String diaChi;
-    String loaiHinhNhapXuat;
-    String kieuNhapXuat;
-    String soToTrinh;
-    String trichYeu;
-    LocalDate ngayKeHoach;
-    LocalDate ngayDuyetKeHoach;
-    LocalDate thoiGianDuKienXuat;
-    String moTa;
-    String maTongHopDs;
-    Long idTongHopDs;
-    String trangThai;
+    private Long id;
+    private Integer namKeHoach;
+    private String maDvi;
+    private String diaChi;
+    private String loaiHinhNhapXuat;
+    private String kieuNhapXuat;
+    private String soToTrinh;
+    private String trichYeu;
+    private LocalDate ngayKeHoach;
+    private LocalDate ngayDuyetKeHoach;
+    private LocalDate thoiGianDuKienXuatTu;
+    private LocalDate thoiGianDuKienXuatDen;
+    private String moTa;
+    private String maTongHopDs;
+    private Long idTongHopDs;
+    private String trangThai;
+    private String lyDoTuChoi;
+    private Long nguoiDuyetId;
+    private LocalDate ngayDuyet;
+
     @OneToMany(mappedBy = "XhXkKhXuatHang", cascade = CascadeType.ALL)
-    private List<XhXkKhXuatHangDtl> listXhXkKhXuatHangDtl = new ArrayList<>();
+    private List<XhXkKhXuatHangDtl> xhXkKhXuatHangDtl = new ArrayList<>();
+
     @Transient
-    List<FileDinhKem> fileDinhKems;
+    private List<FileDinhKem> fileDinhKems;
     @Transient
-    String tenTrangThai;
+    private String tenTrangThai;
     @Transient
-    String tenDvi;
+    private String tenDvi;
     @Transient
-    Integer soDvTaiSan;
+    private Integer soDvTaiSan;
 }

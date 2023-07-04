@@ -5,10 +5,6 @@ import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhBbNghiemThuNhapKhacReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhBbNghiemThuNhapKhacSearch;
-import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhDxuatKhNhapKhacHdrReq;
-import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhDxuatKhNhapKhacSearch;
-import com.tcdt.qlnvhang.request.object.HhBbNghiemthuKlstHdrReq;
-import com.tcdt.qlnvhang.request.search.HhQdNhapxuatSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.nhaphang.nhapkhac.HhBbNghiemThuNhapKhacService;
 import com.tcdt.qlnvhang.util.PathContains;
@@ -164,5 +160,23 @@ public class HhBbNghiemThuNhapKhacController {
             final ObjectMapper mapper = new ObjectMapper();
             mapper.writeValue(response.getOutputStream(), body);
         }
+    }
+
+    @ApiOperation(value = "Tra cứu Bbntbqld theo mã ngăn lô kho", response = List.class)
+    @PostMapping(value = "/tim-kiem-bbntbqld", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> timKiemBbtheoMaNganLo(@Valid HttpServletRequest request,
+                                                  @RequestBody HhBbNghiemThuNhapKhacSearch objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(service.timKiemBbtheoMaNganLo(objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tra cứu Bbntbqld theo mã ngăn lô kho trace: {}", e);
+        }
+        return ResponseEntity.ok(resp);
     }
 }
