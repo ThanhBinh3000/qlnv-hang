@@ -41,7 +41,23 @@ public class ScTongHopController {
       resp.setMsg(e.getMessage());
       log.error("Tra cứu thông tin : {}", e);
     }
+    return ResponseEntity.ok(resp);
+  }
 
+  @ApiOperation(value = "Danh sách tổng hợp để trình và thẩm định", response = List.class)
+  @PostMapping(value = "/ds-trinh-tham-dinh", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<BaseResponse> listTrinhThamDinh(@RequestBody ScTongHopReq objReq) {
+    BaseResponse resp = new BaseResponse();
+    try {
+      resp.setData(scTongHopServiceImpl.dsTongHopTrinhVaThamDinh(objReq));
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (Exception e) {
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Tra cứu thông tin : {}", e);
+    }
     return ResponseEntity.ok(resp);
   }
 

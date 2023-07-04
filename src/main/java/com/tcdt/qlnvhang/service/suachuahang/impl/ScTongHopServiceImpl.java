@@ -1,5 +1,7 @@
 package com.tcdt.qlnvhang.service.suachuahang.impl;
 
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDtl;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
@@ -27,6 +29,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.util.*;
@@ -130,12 +133,28 @@ public class ScTongHopServiceImpl extends BaseServiceImpl implements ScTongHopSe
     if(!optional.isPresent()){
       throw new Exception("Bản ghi không tồn tại");
     }
+    HashMap<Long, List<ScTongHopDtl>> dataChilren = getDataChilren(Collections.singletonList(optional.get().getId()));
+    optional.get().setChildren(dataChilren.get(optional.get().getId()));
+
     return optional.get();
   }
 
   @Override
   public ScTongHopHdr approve(ScTongHopReq req) throws Exception {
-    return null;
+    Optional<ScTongHopHdr> optional = hdrRepository.findById(req.getId());
+    if(!optional.isPresent()){
+      throw new Exception("Thông tin tổng hợp không tồn tại");
+    }
+    String status = req.getTrangThai() + optional.get().getTrangThai();
+    if ((TrangThaiAllEnum.GUI_DUYET.getId() + TrangThaiAllEnum.DU_THAO.getId()).equals(status)) {
+      optional.get().setTrangThai(req.getTrangThai());
+    } else {
+      throw new Exception("Gửi duyệt không thành công");
+    }
+    hdrRepository.save(optional.get());
+
+
+    return optional.get();
   }
 
   @Override
@@ -158,4 +177,18 @@ public class ScTongHopServiceImpl extends BaseServiceImpl implements ScTongHopSe
 
   }
 
+  @Override
+  public List<ScTongHopHdr> dsTongHopTrinhVaThamDinh(ScTongHopReq req) throws Exception {
+    UserInfo currentUser = SecurityContextService.getUser();
+    if (currentUser == null){
+      throw new Exception("Access denied.");
+    }
+    String dvql = currentUser.getDvql();
+    if (currentUser.getCapDvi().equals(Contains.CAP_CUC)) {
+      req.setMaDviSr(dvql);
+    }
+    req.setTrangThai(TrangThaiAllEnum.GUI_DUYET.getId());
+    List<ScTongHopHdr> list = hdrRepository.listTongHopTrinhThamDinh(req);
+    return list;
+  }
 }
