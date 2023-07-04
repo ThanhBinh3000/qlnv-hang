@@ -29,6 +29,7 @@ public class XhXkKhXuatHangDtl {
     Long id;
     String maDiaDiem;
     String loaiVthh;
+    String donViTinh;
     String cloaiVthh;
     BigDecimal slTonKho;
     BigDecimal slHetHan;

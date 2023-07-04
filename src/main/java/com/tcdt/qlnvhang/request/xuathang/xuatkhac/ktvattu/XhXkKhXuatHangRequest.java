@@ -24,11 +24,13 @@ public class XhXkKhXuatHangRequest extends BaseRequest {
     LocalDate ngayKeHoach;
     LocalDate ngayDuyetKeHoach;
     LocalDate thoiGianDuKienXuat;
+    LocalDate thoiGianDuKienXuatTu;
+    LocalDate thoiGianDuKienXuatDen;
     String moTa;
     String maTongHopDs;
     Long idTongHopDs;
     String trangThai;
-    private List<XhXkKhXuatHangDtl> listXhXkKhXuatHangDtl = new ArrayList<>();
+    private List<XhXkKhXuatHangDtl> xhXkKhXuatHangDtl = new ArrayList<>();
     //search params
 
     LocalDate ngayKeHoachTu;
