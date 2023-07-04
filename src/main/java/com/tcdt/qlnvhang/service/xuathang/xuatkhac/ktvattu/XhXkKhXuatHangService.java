@@ -4,7 +4,9 @@ import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktluongthuc.XhXkDanhSachRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkKhXuatHangRepository;
+import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatkhac.XhXkDanhSachRequest;
 import com.tcdt.qlnvhang.request.xuathang.xuatkhac.XhXkTongHopRequest;
 import com.tcdt.qlnvhang.request.xuathang.xuatkhac.ktvattu.XhXkKhXuatHangRequest;
@@ -23,9 +25,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
+import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -80,6 +85,48 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
         model.setTenTrangThai(TrangThaiAllEnum.getLabelById(model.getTrangThai()));
         return model;
     }
+
+
+    @Transactional
+    public void delete(IdSearchReq idSearchReq) throws Exception {
+        Optional<XhXkKhXuatHang> optional = xhXkKhXuatHangRepository.findById(idSearchReq.getId());
+        if (!optional.isPresent()) {
+            throw new Exception("Bản ghi không tồn tại");
+        }
+        XhXkKhXuatHang data = optional.get();
+        xhXkKhXuatHangRepository.delete(data);
+    }
+
+    @Transient
+    public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
+        List<XhXkKhXuatHang> list = xhXkKhXuatHangRepository.findByIdIn(idSearchReq.getIdList());
+        if (list.isEmpty()) {
+            throw new Exception("Bản ghi không tồn tại");
+        }
+        xhXkKhXuatHangRepository.deleteAll(list);
+    }
+
+
+//    public XhXkKhXuatHang approve(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
+//        if (StringUtils.isEmpty(statusReq.getId())) {
+//            throw new Exception("Không tìm thấy dữ liệu");
+//        }
+//        Optional<XhXkKhXuatHang> optional = xhXkKhXuatHangRepository.findById(Long.valueOf(statusReq.getId()));
+//        if (!optional.isPresent()) {
+//            throw new Exception("Không tìm thấy dữ liệu");
+//        }
+//        String status = optional.get().getTrangThai() + statusReq.getTrangThai();
+//        if (status.equals(TrangThaiAllEnum.DU_THAO.getId() + TrangThaiAllEnum.DA_TONG_HOP.getId())) {
+//            optional.get().setNguoiGduyetId(currentUser.getUser().getId());
+//            optional.get().setNgayGduyet(LocalDate.now());
+//        } else {
+//            throw new Exception("Phê duyệt không thành công");
+//        }
+//        optional.get().setTrangThai(statusReq.getTrangThai());
+//        XhXkKhXuatHang created = xhXkKhXuatHangRepository.save(optional.get());
+//        return created;
+//    }
+
 
     public void export(CustomUserDetails currentUser, XhXkKhXuatHangRequest objReq, HttpServletResponse response) throws Exception {
         PaggingReq paggingReq = new PaggingReq();
