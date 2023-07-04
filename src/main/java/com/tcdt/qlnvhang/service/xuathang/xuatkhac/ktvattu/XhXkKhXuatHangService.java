@@ -62,10 +62,10 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
         BeanUtils.copyProperties(objReq, data);
         data.setMaDvi(currentUser.getUser().getDvql());
         data.setTrangThai(Contains.DUTHAO);
-        data.getListXhXkKhXuatHangDtl().forEach(s -> s.setXhXkKhXuatHang(data));
+        data.getXhXkKhXuatHangDtl().forEach(s -> s.setXhXkKhXuatHang(data));
         XhXkKhXuatHang created = xhXkKhXuatHangRepository.save(data);
         created = xhXkKhXuatHangRepository.save(created);
-        return created;
+        return detail(created.getId());
 
     }
 
