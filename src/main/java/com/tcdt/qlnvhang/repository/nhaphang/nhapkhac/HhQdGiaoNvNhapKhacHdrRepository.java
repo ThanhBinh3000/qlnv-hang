@@ -30,6 +30,23 @@ public interface HhQdGiaoNvNhapKhacHdrRepository extends JpaRepository<HhQdGiaoN
                     "  ORDER BY qdnk.ngaySua desc , qdnk.ngayTao desc, qdnk.id desc"
             )
     Page<HhQdGiaoNvuNhapHangKhacHdr> search(HhQdGiaoNvuNhapKhacSearch req, Pageable pageable);
+
+    @Query(
+            value = "SELECT qdgnv.* " +
+                    "FROM hh_qd_giao_nvu_nhapxuat_khac qdgnv LEFT JOIN hh_qd_pdnk_dtl pdtdl ON pdtdl.id_dx_hdr = qdgnv.id_qd_pd_nk " +
+                    " LEFT JOIN NH_BB_LAY_MAU_KHAC bblm ON bblm.ID_QD_GIAO_NV_NH = qdgnv.id " +
+                    " WHERE 1=1" +
+                    "  AND (:#{#req.maDvi} IS NULL OR LOWER(pdtdl.MA_CHI_CUC) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.maDvi}),'%')))" +
+                    "  AND (:#{#req.loaiVthh} IS NULL OR LOWER(qdgnv.LOAI_VTHH) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.loaiVthh}),'%')))" +
+                    "  AND (:#{#req.soQd} IS NULL OR LOWER(qdgnv.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.soQd}),'%')))" +
+                    "  AND (:#{#req.soBienBan} IS NULL OR LOWER(bblm.SO_BIEN_BAN) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.soBienBan}),'%')))" +
+                    "  AND (:#{#req.tuNgayLmStr} IS NULL OR bblm.NGAY_LAY_MAU >= TO_DATE(:#{#req.tuNgayLmStr}, 'YYYY-MM-DD HH24:MI:SS'))" +
+                    "  AND (:#{#req.denNgayLmStr} IS NULL OR bblm.NGAY_LAY_MAU <= TO_DATE(:#{#req.denNgayLmStr}, 'YYYY-MM-DD HH24:MI:SS'))" +
+                    "  AND (:#{#req.trangThai} IS NULL OR qdgnv.TRANG_THAI = :#{#req.trangThai}) "+
+                    "  AND (:#{#req.checkIdBbLayMau} = 0 OR pdtdl.ID_BB_LAY_MAU IS NULL) " +
+                    "  ORDER BY qdgnv.id desc", nativeQuery = true
+    )
+    Page<HhQdGiaoNvuNhapHangKhacHdr> dsQdNvuDuocLapBb(HhQdGiaoNvuNhapKhacSearch req, Pageable pageable);
     Optional<HhQdGiaoNvuNhapHangKhacHdr> findById(Long id);
     List<HhQdGiaoNvuNhapHangKhacHdr> findBySoQd(String soQd);
     @Query(

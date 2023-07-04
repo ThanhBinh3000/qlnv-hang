@@ -91,6 +91,24 @@ public class HhQdGiaoNvNhapKhacHdrController {
         return ResponseEntity.ok(resp);
     }
 
+    @ApiOperation(value = "Tra cứu", response = List.class)
+    @PostMapping(value = "/ds-qd-nvu-duoc-lap-bb", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> dsQdNvuDuocLapBb(@Valid HttpServletRequest request,
+                                                  @RequestBody HhQdGiaoNvuNhapKhacSearch objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(service.dsQdNvuDuocLapBb(objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tra cứu trace: {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
     @ApiOperation(value = "Lấy chi tiết", response = List.class)
     @GetMapping(value = PathContains.URL_CHI_TIET + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -162,10 +180,28 @@ public class HhQdGiaoNvNhapKhacHdrController {
     @ApiOperation(value = "Kết xuất danh sách đề xuất kế hoạch nhập khác", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping(PathContains.URL_KET_XUAT)
     @ResponseStatus(HttpStatus.OK)
-    public void exportDsKhlcnt(@Valid @RequestBody HhQdGiaoNvuNhapKhacSearch searchReq, HttpServletResponse response)
+    public void export(@Valid @RequestBody HhQdGiaoNvuNhapKhacSearch searchReq, HttpServletResponse response)
             throws Exception {
         try {
             service.xuatFile(searchReq, response);
+        } catch (Exception e) {
+            final Map<String, Object> body = new HashMap<>();
+            body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            body.put("msg", e.getMessage());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("UTF-8");
+            final ObjectMapper mapper = new ObjectMapper();
+            mapper.writeValue(response.getOutputStream(), body);
+        }
+    }
+
+    @ApiOperation(value = "Kết xuất danh sách đề xuất kế hoạch nhập khác", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(PathContains.URL_KET_XUAT + "/bblm")
+    @ResponseStatus(HttpStatus.OK)
+    public void exportBbLm(@Valid @RequestBody HhQdGiaoNvuNhapKhacSearch searchReq, HttpServletResponse response)
+            throws Exception {
+        try {
+            service.xuatFileBbLm(searchReq, response);
         } catch (Exception e) {
             final Map<String, Object> body = new HashMap<>();
             body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

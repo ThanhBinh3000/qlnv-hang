@@ -10,10 +10,12 @@ import java.util.Date;
 @Data
 public class HhQdGiaoNvuNhapKhacSearch extends BaseRequest {
     private Integer nam;
+    private Integer checkIdBbLayMau;
     private String soQd;
     private String maDvi;
     private String trangThai;
     private String loaiVthh;
+    private String soBienBan;
     private String trichYeu;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
     Date tuNgayQd;
@@ -27,4 +29,11 @@ public class HhQdGiaoNvuNhapKhacSearch extends BaseRequest {
     String denNgayQdStr;
     String tuNgayDuyetStr;
     String denNgayDuyetStr;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
+    Date tuNgayLm;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
+    Date denNgayLm;
+    String tuNgayLmStr;
+    String denNgayLmStr;
 }

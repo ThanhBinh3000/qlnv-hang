@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.qdpdnk;
 
+import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.kiemtracl.bblaymaubangiaomau.BienBanLayMauKhac;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhBbNghiemThuNhapKhac;
 import lombok.Data;
 
@@ -19,6 +20,7 @@ public class HhQdPdNhapKhacDtl {
     private Long id;
     private Long idHdr;
     private Long idDxHdr;
+    private Long idBbLayMau;
     private BigDecimal tongSlNhap;
     private BigDecimal tongThanhTien;
     private String maCuc;
@@ -53,4 +55,6 @@ public class HhQdPdNhapKhacDtl {
     private BigDecimal donGia;
     @Transient
     List<HhBbNghiemThuNhapKhac> bbNghiemThuNhapKhacList;
+    @Transient
+    private BienBanLayMauKhac bbLayMau;
 }
