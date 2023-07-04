@@ -26,7 +26,6 @@ public interface XhHopDongHdrRepository extends BaseRepository<XhHopDongHdr,Long
             "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
             "AND (:#{#param.soQdKq} IS NULL OR c.soQdKq = :#{#param.soQdKq}) " +
             "AND (:#{#param.loaiVthh } IS NULL OR LOWER(c.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
-            "AND (:#{#param.typeQdGnv} IS NULL OR LOWER(c.typeQdGnv) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.typeQdGnv}),'%'))) " +
             "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) "
     )
     Page<XhHopDongHdr> selectPage(@Param("param") XhHopDongHdrReq param, Pageable pageable);

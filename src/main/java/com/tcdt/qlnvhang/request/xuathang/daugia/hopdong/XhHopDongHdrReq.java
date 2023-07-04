@@ -106,8 +106,6 @@ public class XhHopDongHdrReq extends BaseRequest {
 
     private String ghiChu;
 
-    private Integer typeQdGnv;
-
     private String toChucTrungDg;
 
     private String loaiHinhNx;
