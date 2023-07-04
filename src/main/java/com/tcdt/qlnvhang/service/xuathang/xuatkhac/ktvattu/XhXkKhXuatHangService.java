@@ -146,7 +146,7 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
     }
 
 
-    public XhXkKhXuatHang pheDuyet(StatusReq req) throws Exception {
+    public XhXkKhXuatHang pheDuyet(CustomUserDetails currentUser, StatusReq req) throws Exception {
         Optional<XhXkKhXuatHang> dx = xhXkKhXuatHangRepository.findById(req.getId());
         if (!dx.isPresent()) {
             throw new Exception("Không tồn tại bản ghi");
@@ -159,11 +159,13 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
             case Contains.TU_CHOI_LDC + Contains.CHO_DUYET_TP:
                 break;
             case Contains.CHO_DUYET_TP + Contains.TU_CHOI_TP:
-            case Contains.CHO_DUYET_LDC + Contains.TU_CHOI_LDC:
+            case Contains.CHO_DUYET_LDC + Contains.CHO_DUYET_TP:
                 xhXkKhXuatHang.setLyDoTuChoi(req.getLyDo());
                 break;
             case Contains.CHO_DUYET_LDC + Contains.DA_DUYET_LDC:
             case Contains.CHO_DUYET_TP + Contains.CHO_DUYET_LDC:
+                xhXkKhXuatHang.setNguoiDuyetId(currentUser.getUser().getId());
+                xhXkKhXuatHang.setNgayDuyet(LocalDate.now());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công.");
