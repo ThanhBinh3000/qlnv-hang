@@ -88,8 +88,15 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
             throw new Exception("Không tìm thấy dữ liệu");
         }
         XhXkKhXuatHang model = optional.get();
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+        Map<String, String> mapVthh = getListDanhMucHangHoa();
         List<FileDinhKem> fileDinhKem = fileDinhKemService.search(model.getId(), Arrays.asList(XhXkKhXuatHang.TABLE_NAME));
         model.setFileDinhKems(fileDinhKem);
+        model.getXhXkKhXuatHangDtl().forEach(s -> {
+            s.setMapDmucDvi(mapDmucDvi);
+            s.setMapVthh(mapVthh);
+        });
+        model.setSoDvTaiSan(model.getXhXkKhXuatHangDtl().size());
         model.setTenTrangThai(TrangThaiAllEnum.getLabelById(model.getTrangThai()));
         return model;
     }
