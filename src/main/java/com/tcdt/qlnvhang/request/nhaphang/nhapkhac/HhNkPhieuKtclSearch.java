@@ -6,27 +6,24 @@ import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
 import java.util.Date;
-
 @Data
-public class HhBbNghiemThuNhapKhacSearch extends BaseRequest {
+public class HhNkPhieuKtclSearch extends BaseRequest {
     private Integer namKhoach;
     private String soQd;
-    private String soBbNtBq;
-    private String loaiVthh;
+    private String soPhieu;
     private String maDvi;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
     private Date tuNgayLP;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
     private Date denNgayLP;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
-    private Date tuNgayKT;
+    private Date tuNgayGD;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
-    private Date denNgayKT;
+    private Date denNgayGD;
     private String tuNgayLPStr;
     private String denNgayLPStr;
-    private String tuNgayKTStr;
-    private String denNgayKTStr;
-    private String maNganKho;
-    private String maLoKho;
-    private Long idQdGiaoNvnh;
+    private String tuNgayGDStr;
+    private String denNgayGDStr;
+    private String kqDanhGia;
+    private String loaiVthh;
 }
