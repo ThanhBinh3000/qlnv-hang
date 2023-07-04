@@ -8,9 +8,11 @@ import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhQdGiaoNvuNhapKhacSearch;
 import org.springframework.data.domain.Page;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 public interface HhQdGiaoNvNhapKhacService {
     Page<HhQdGiaoNvuNhapHangKhacHdr> timKiem(HhQdGiaoNvuNhapKhacSearch req);
+    Page<HhQdGiaoNvuNhapHangKhacHdr> dsQdNvuDuocLapBb(HhQdGiaoNvuNhapKhacSearch req);
     HhQdGiaoNvuNhapHangKhacHdr themMoi (HhQdGiaoNvuNhapKhacHdrReq req) throws Exception;
     HhQdGiaoNvuNhapHangKhacHdr capNhat (HhQdGiaoNvuNhapKhacHdrReq req) throws Exception;
     HhQdGiaoNvuNhapHangKhacHdr chiTiet (Long id) throws Exception;
@@ -18,4 +20,5 @@ public interface HhQdGiaoNvNhapKhacService {
     void xoa (IdSearchReq idSearchReq) throws Exception;
     void xoaNhieu (IdSearchReq idSearchReq) throws Exception;
     void xuatFile(HhQdGiaoNvuNhapKhacSearch req , HttpServletResponse response) throws Exception;
+    void xuatFileBbLm(HhQdGiaoNvuNhapKhacSearch req , HttpServletResponse response) throws Exception;
 }

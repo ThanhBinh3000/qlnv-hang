@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktluongthuc.XhXkDanhSachRe
 import com.tcdt.qlnvhang.request.xuathang.xuatkhac.XhXkDanhSachRequest;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkDanhSachHdr;
+import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,8 +23,13 @@ public class XhXkDanhSachService extends BaseServiceImpl {
     private XhXkDanhSachRepository xhXkDanhSachRepository;
 
     public Page<XhXkDanhSachHdr> searchPage(CustomUserDetails currentUser, XhXkDanhSachRequest req) throws Exception {
+        String dvql = currentUser.getDvql();
+        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            req.setDvql(dvql.substring(0, 6));
+        } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
+            req.setDvql(dvql);
+        }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        req.setDvql(currentUser.getDvql());
         Page<XhXkDanhSachHdr> search = xhXkDanhSachRepository.searchPage(req, pageable);
         //set label
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");

@@ -24,5 +24,7 @@ public class ScTongHopDtl implements Serializable {
   private Long id;
   private Long idHdr;
   private Long idDsHdr;
+  @Transient
+  private ScDanhSachHdr scDanhSachHdr;
 
 }

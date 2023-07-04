@@ -348,12 +348,16 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
         String dvql = currentUser.getDvql();
         objReq.setMaDvi(dvql);
         List<DcnbQuyetDinhDcTcHdr> danhSachs = new ArrayList<>();
-        if (Contains.QD_NHAP.equals(objReq.getLoaiQdinh())) {
-            danhSachs = dcnbQuyetDinhDcTcHdrRepository.findDanhSachQuyetDinhNhan(objReq);
+//        if (Contains.QD_NHAP.equals(objReq.getLoaiQdinh())) {
+//            danhSachs = dcnbQuyetDinhDcTcHdrRepository.findDanhSachQuyetDinhNhan(objReq);
+//        }
+//        if (Contains.QD_XUAT.equals(objReq.getLoaiQdinh())) {
+//            danhSachs = dcnbQuyetDinhDcTcHdrRepository.findDanhSachQuyetDinhXuat(objReq);
+//        }
+        if(objReq.getQDinhCucId() == null){
+            objReq.setQDinhCucId(-1l);
         }
-        if (Contains.QD_XUAT.equals(objReq.getLoaiQdinh())) {
-            danhSachs = dcnbQuyetDinhDcTcHdrRepository.findDanhSachQuyetDinhXuat(objReq);
-        }
+        danhSachs = dcnbQuyetDinhDcTcHdrRepository.findDanhSachQuyetDinh(objReq);
         return danhSachs;
     }
 
