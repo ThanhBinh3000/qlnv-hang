@@ -28,7 +28,7 @@ public class XhXkKhXuatHangRequest extends BaseRequest {
     String maTongHopDs;
     Long idTongHopDs;
     String trangThai;
-    private List<XhXkKhXuatHangDtl> listXhXkKhXuatHangDtl = new ArrayList<>();
+    private List<XhXkKhXuatHangDtl> xhXkKhXuatHangDtl = new ArrayList<>();
     //search params
 
     LocalDate ngayKeHoachTu;

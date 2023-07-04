@@ -43,6 +43,7 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
 //        Map<String, String> mapVthh = getListDanhMucHangHoa();
         search.getContent().forEach(s -> {
             s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
+            s.setSoDvTaiSan(s.getXhXkKhXuatHangDtl().size());
         });
         return search;
     }
