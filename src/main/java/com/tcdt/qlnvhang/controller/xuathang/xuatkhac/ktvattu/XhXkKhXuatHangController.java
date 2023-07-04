@@ -54,6 +54,23 @@ public class XhXkKhXuatHangController {
         return ResponseEntity.ok(resp);
     }
 
+    @ApiOperation(value = "Tạo mới", response = List.class)
+    @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhXkKhXuatHangRequest objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(xhXkKhXuatHangService.save(currentUser, objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tạo mới thông tin  : {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
 //  @ApiOperation(value = "Lấy chi tiết", response = List.class)
 //  @GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
 //  @ResponseStatus(HttpStatus.OK)
