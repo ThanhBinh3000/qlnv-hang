@@ -8,6 +8,7 @@ import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhBbNghiemThuNhapKhacSearch;
 import org.springframework.data.domain.Page;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 public interface HhBbNghiemThuNhapKhacService {
     Page<HhQdGiaoNvuNhapHangKhacHdr> timKiem(HhBbNghiemThuNhapKhacSearch req) throws Exception;
@@ -17,4 +18,5 @@ public interface HhBbNghiemThuNhapKhacService {
     HhBbNghiemThuNhapKhac pheDuyet(StatusReq stReq) throws Exception;
     Object getDataKho(String maDvi) throws Exception;
     void exportBbNtBq (HhBbNghiemThuNhapKhacSearch req, HttpServletResponse response) throws Exception;
+    List<HhBbNghiemThuNhapKhac> timKiemBbtheoMaNganLo (HhBbNghiemThuNhapKhacSearch objReq) throws Exception;
 }
