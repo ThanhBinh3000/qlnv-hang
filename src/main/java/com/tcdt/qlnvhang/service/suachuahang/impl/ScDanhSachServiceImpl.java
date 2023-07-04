@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class ScDanhSachServiceImpl extends BaseServiceImpl {
@@ -63,5 +65,20 @@ public class ScDanhSachServiceImpl extends BaseServiceImpl {
       data.setMapVthh(mapVthh);
     });
     return allById;
+  }
+
+  public ScDanhSachHdr detail(Long ids) throws Exception {
+    if (Objects.isNull(ids)) throw new Exception("Tham số không hợp lệ.");
+    Optional<ScDanhSachHdr> optional = scDanhSachRepository.findById(ids);
+    if (!optional.isPresent()) {
+      throw new Exception("Không tìm thấy dữ liệu");
+    }
+
+    Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+    Map<String, String> mapVthh = getListDanhMucHangHoa();
+    optional.get().setTenTrangThai(TrangThaiAllEnum.getLabelById(optional.get().getTrangThai()));
+    optional.get().setMapDmucDvi(mapDmucDvi);
+    optional.get().setMapVthh(mapVthh);
+    return optional.get();
   }
 }

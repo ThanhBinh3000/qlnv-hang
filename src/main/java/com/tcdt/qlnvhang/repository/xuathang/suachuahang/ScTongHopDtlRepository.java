@@ -15,6 +15,10 @@ import java.util.Optional;
 
 public interface ScTongHopDtlRepository extends JpaRepository<ScTongHopDtl, Long> {
 
-  List<ScTongHopHdr> findByIdIn(List<Long> ids);
+  List<ScTongHopDtl> findByIdIn(List<Long> ids);
+
+  void deleteAllByIdHdr(Long idHdr);
+
+  List<ScTongHopDtl> findAllByIdHdr(Long idHdr);
 
 }

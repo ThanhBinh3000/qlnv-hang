@@ -34,7 +34,8 @@ public class XhXkKhXuatHang extends BaseEntity implements Serializable {
     String trichYeu;
     LocalDate ngayKeHoach;
     LocalDate ngayDuyetKeHoach;
-    LocalDate thoiGianDuKienXuat;
+    LocalDate thoiGianDuKienXuatTu;
+    LocalDate thoiGianDuKienXuatDen;
     String moTa;
     String maTongHopDs;
     Long idTongHopDs;
