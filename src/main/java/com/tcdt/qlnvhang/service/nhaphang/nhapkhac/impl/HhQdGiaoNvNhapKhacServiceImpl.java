@@ -1,30 +1,28 @@
 package com.tcdt.qlnvhang.service.nhaphang.nhapkhac.impl;
 
 import com.google.common.collect.Lists;
-import com.tcdt.qlnvhang.entities.FileDKemJoinQdNhapHangKhac;
-import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhDxuatKhNhapKhacHdr;
+
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNxDdiem;
+import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.kiemtracl.bblaymaubangiaomau.BienBanLayMauKhac;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.nvnhap.HhQdGiaoNvuNhapHangKhacHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.qdpdnk.HhQdPdNhapKhacDtl;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.qdpdnk.HhQdPdNhapKhacHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhDxuatKhNhapKhacHdrRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.BienBanLayMauKhacRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhQdGiaoNvNhapKhacHdrRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhQdPdNhapKhacDtlRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhQdPdNhapKhacHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhDxuatKhNhapKhacHdrReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhQdGiaoNvuNhapKhacHdrReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhQdGiaoNvuNhapKhacSearch;
-import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhQdPdNhapKhacSearch;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.nhaphang.nhapkhac.HhQdGiaoNvNhapKhacService;
-import com.tcdt.qlnvhang.util.Contains;
-import com.tcdt.qlnvhang.util.DataUtils;
-import com.tcdt.qlnvhang.util.ExportExcel;
-import com.tcdt.qlnvhang.util.ObjectMapperUtils;
+import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -46,7 +44,7 @@ public class HhQdGiaoNvNhapKhacServiceImpl extends BaseServiceImpl implements Hh
     @Autowired
     private HhQdPdNhapKhacHdrRepository hhQdPdNhapKhacHdrRepository;
     @Autowired
-    private HhDxuatKhNhapKhacHdrRepository hhDxuatKhNhapKhacHdrRepository;
+    private BienBanLayMauKhacRepository bienBanLayMauKhacRepository;
     @Autowired
     FileDinhKemService fileDinhKemService;
 
@@ -66,6 +64,34 @@ public class HhQdGiaoNvNhapKhacServiceImpl extends BaseServiceImpl implements Hh
             f.setTenLoaiVthh(mapVthh.get(f.getLoaiVthh()));
 //            f.setTenDvi(mapDmucDvi.get(f.getMaDviDxuat()));
         });
+        return data;
+    }
+
+    @Override
+    public Page<HhQdGiaoNvuNhapHangKhacHdr> dsQdNvuDuocLapBb(HhQdGiaoNvuNhapKhacSearch req) {
+        req.setTuNgayLmStr(convertFullDateToString(req.getTuNgayLm()));
+        req.setDenNgayLmStr(convertFullDateToString(req.getDenNgayLm()));
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
+        Map<String, String> mapVthh = getListDanhMucHangHoa();
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+        Page<HhQdGiaoNvuNhapHangKhacHdr> data = hhQdGiaoNvNhapKhacHdrRepository.dsQdNvuDuocLapBb(req, pageable);
+        for (HhQdGiaoNvuNhapHangKhacHdr item : data) {
+            item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+            item.setTenLoaiVthh(mapVthh.get(item.getLoaiVthh()));
+            List<HhQdPdNhapKhacDtl> dtlList = hhQdPdNhapKhacDtlRepository.findAllByIdHdr(item.getIdQdPdNk());
+            dtlList.forEach(dtl -> {
+                dtl.setTenCuc(mapDmucDvi.get(dtl.getMaCuc()));
+                dtl.setTenChiCuc(mapDmucDvi.get(dtl.getMaChiCuc()));
+                dtl.setTenDiemKho(mapDmucDvi.get(dtl.getMaDiemKho()));
+                dtl.setTenNhaKho(mapDmucDvi.get(dtl.getMaNhaKho()));
+                dtl.setTenNganLoKho(mapDmucDvi.get(dtl.getMaLoKho()) + " - " + mapDmucDvi.get(dtl.getMaNganKho()));
+                dtl.setTenCloaiVthh(mapVthh.get(dtl.getCloaiVthh()));
+                if(dtl.getIdBbLayMau() != null){
+                dtl.setBbLayMau(bienBanLayMauKhacRepository.findById(dtl.getIdBbLayMau()).get());
+                }
+            });
+            item.setDtlList(dtlList);
+        }
         return data;
     }
 
@@ -335,5 +361,57 @@ public class HhQdGiaoNvNhapKhacServiceImpl extends BaseServiceImpl implements Hh
         ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
         ex.export();
     }
+
+
+    @Override
+    public void xuatFileBbLm(HhQdGiaoNvuNhapKhacSearch req, HttpServletResponse response) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        req.setPaggingReq(paggingReq);
+        req.setMaDvi(userInfo.getDvql());
+        Page<HhQdGiaoNvuNhapHangKhacHdr> page = this.dsQdNvuDuocLapBb(req);
+        List<HhQdGiaoNvuNhapHangKhacHdr> data = page.getContent();
+
+        String title = "Danh sách biên bản lấy mẫu";
+        String[] rowsName = new String[]{"STT", "Số QĐ giao NVNH", "Năm kế hoạch", "Thời hạn NH trước ngày", "Điểm kho",
+                "Lô kho", "Số BB LM/BGM", "Ngày lấy mẫu", "Số BB nhập đầy kho", "Ngày nhập đầy kho", "Trạng thái"};
+        String filename = "Danh_sach_bien_ban_lay_mau.xlsx";
+
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+        Object[] objsb = null;
+        Object[] objsc = null;
+        for (int i = 0; i < data.size(); i++) {
+            HhQdGiaoNvuNhapHangKhacHdr qd = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i;
+            objs[1] = qd.getSoQd();
+            objs[2] = qd.getNam();
+            objs[3] = qd.getTgianNkMnhat();
+            dataList.add(objs);
+            for (int j = 0; j < qd.getDtlList().size(); j++) {
+                objsb = new Object[rowsName.length];
+                objsb[4] = qd.getDtlList().get(j).getTenDiemKho();
+                dataList.add(objsb);
+                if (qd.getDtlList().get(j).getBbLayMau() != null) {
+                    objsc = new Object[rowsName.length];
+                    objsb[5] = qd.getDtlList().get(j).getTenNganLoKho();
+                    objsc[6] = qd.getDtlList().get(j).getBbLayMau().getSoBienBan();
+                    objsc[7] = qd.getDtlList().get(j).getBbLayMau().getNgayLayMau();
+                    objsc[8] = "";
+                    objsc[9] = "";
+                    objsc[10] = qd.getDtlList().get(j).getTenTrangThai();
+                    dataList.add(objsc);
+                }
+            }
+        }
+
+        ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+        ex.export();
+
+    }
+
 
 }

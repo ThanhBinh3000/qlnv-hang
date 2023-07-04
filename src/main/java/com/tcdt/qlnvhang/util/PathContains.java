@@ -172,10 +172,11 @@ public class PathContains {
     public static final String DAU_THAU_VAT_TU = "/dau-thau-vt";
     public static final String THONG_TIN_DAU_THAU = "/tt-dau-thau";
 
-    // Bien Ban lay mau
-    public static final String BBAN_LAY_MAU = "/bban-lay-mau";
-    // Bien Ban ban giao mau
-    public static final String BBAN_GIAO_MAU = "/bban-giao-mau";
+	// Bien Ban lay mau
+	public static final String BBAN_LAY_MAU = "/bban-lay-mau";
+	public static final String BBAN_LAY_MAU_KHAC = "/bban-lay-mau-khac";
+	// Bien Ban ban giao mau
+	public static final String BBAN_GIAO_MAU = "/bban-giao-mau";
 
     // Phieu kiem nghiem chat luong hang
     public static final String KNGHIEM_CLUONG = "/knghiem-cluong";
