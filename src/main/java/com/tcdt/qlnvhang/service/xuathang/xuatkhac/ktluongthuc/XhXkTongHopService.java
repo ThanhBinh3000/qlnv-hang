@@ -45,7 +45,13 @@ public class XhXkTongHopService extends BaseServiceImpl {
   private FileDinhKemService fileDinhKemService;
 
   public Page<XhXkTongHopHdr> searchPage(CustomUserDetails currentUser, XhXkTongHopRequest req) throws Exception {
-    req.setDvql(currentUser.getDvql());
+    String dvql = currentUser.getDvql();
+    if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+      req.setDvql(dvql.substring(0, 6));
+    } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
+      req.setDvql(dvql);
+    }
+
     if (!DataUtils.isNullObject(req.getNgayTaoTu())) {
       req.setNgayTaoTu(req.getNgayTaoTu().toLocalDate().atTime(LocalTime.MAX));
     }
