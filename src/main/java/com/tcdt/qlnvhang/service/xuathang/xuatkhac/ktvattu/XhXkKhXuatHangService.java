@@ -160,7 +160,7 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
                 break;
             case Contains.CHO_DUYET_TP + Contains.TU_CHOI_TP:
             case Contains.CHO_DUYET_LDC + Contains.CHO_DUYET_TP:
-                xhXkKhXuatHang.setLyDoTuChoi(req.getLyDo());
+                xhXkKhXuatHang.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
             case Contains.CHO_DUYET_LDC + Contains.DA_DUYET_LDC:
             case Contains.CHO_DUYET_TP + Contains.CHO_DUYET_LDC:
