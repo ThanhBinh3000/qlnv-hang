@@ -181,6 +181,7 @@ public class HhDxuatKhNhapKhacServiceImpl extends BaseServiceImpl implements HhD
             case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
             case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
             case Contains.DA_DUYET_CBV + Contains.DA_DUYET_LDC:
+            case Contains.DA_TAO_CBV + Contains.DU_THAO:
                 qOptional.get().setNguoiPduyet(getUser().getUsername());
                 qOptional.get().setNgayPduyet(getDateTimeNow());
                 break;
@@ -243,8 +244,11 @@ public class HhDxuatKhNhapKhacServiceImpl extends BaseServiceImpl implements HhD
     }
 
     @Override
-    public List<HhDxuatKhNhapKhacDTO> findAllByTrangThaiAndTrangThaiTh(String trangThai, String trangThaiTh) {
-        List<HhDxuatKhNhapKhacHdr> listHdr = hhDxuatKhNhapKhacHdrRepository.findAllByTrangThaiAndTrangThaiTh(Contains.DA_DUYET_CBV, Contains.CHUATONGHOP);
+    public List<HhDxuatKhNhapKhacDTO> findAllByTrangThaiAndTrangThaiTh() {
+        List<String> trangThais = new ArrayList<>();
+        trangThais.add(Contains.DA_DUYET_CBV);
+        trangThais.add(Contains.DA_TAO_CBV);
+        List<HhDxuatKhNhapKhacHdr> listHdr = hhDxuatKhNhapKhacHdrRepository.findAllByTrangThaiInAndTrangThaiTh(trangThais, Contains.CHUATONGHOP);
         List<HhDxuatKhNhapKhacDTO> result = new ArrayList<>();
         listHdr.forEach(item ->{
             HhDxuatKhNhapKhacDTO dataChild = new HhDxuatKhNhapKhacDTO();

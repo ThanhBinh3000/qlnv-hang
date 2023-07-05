@@ -7,19 +7,17 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = HhBbNghiemThuNhapKhac.TABLE_NAME)
+@Table(name = HhNkPhieuKtcl.TABLE_NAME)
 @Data
-public class HhBbNghiemThuNhapKhac {
-    public static final String TABLE_NAME = "HH_BB_NGHIEM_THU_NHAP_KHAC";
-
+public class HhNkPhieuKtcl {
+    public static final String TABLE_NAME = "HH_NK_PHIEU_KTCL";
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_BB_NGHIEM_THU_NHAP_KHAC_SEQ")
-    @SequenceGenerator(sequenceName = "HH_BB_NGHIEM_THU_NHAP_KHAC_SEQ", allocationSize = 1, name = "HH_BB_NGHIEM_THU_NHAP_KHAC_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_NK_PHIEU_KTCL_SEQ")
+    @SequenceGenerator(sequenceName = "HH_NK_PHIEU_KTCL_SEQ", allocationSize = 1, name = "HH_NK_PHIEU_KTCL_SEQ")
     private Long id;
     private String maDvi;
     @Transient
@@ -28,6 +26,7 @@ public class HhBbNghiemThuNhapKhac {
     private String maQhns;
     private Long idQdGiaoNvNh;
     private String soQdGiaoNvNh;
+    private String soPhieu;
     private String soBbNtBq;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayTao;
@@ -43,12 +42,6 @@ public class HhBbNghiemThuNhapKhac {
     private Date ngayPduyet;
     private String nguoiPduyet;
     private String tenNguoiPduyet;
-    @Temporal(TemporalType.DATE)
-    private Date ngayNghiemThu;
-    private String thuKho;
-    private String tenThuKho;
-    private String keToan;
-    private String tenKeToan;
     private String loaiVthh;
     @Transient
     private String tenLoaiVthh;
@@ -67,25 +60,29 @@ public class HhBbNghiemThuNhapKhac {
     private String maLoKho;
     @Transient
     private String tenLoKho;
-    private String pthucBquan;
-    private String hthucBquan;
-    private BigDecimal dinhMucGiao;
-    private BigDecimal dinhMucThucTe;
-    private BigDecimal tongKinhPhiThucTe;
-    private BigDecimal tongKinhPhiGiao;
     private String trangThai;
     @Transient
     private String tenTrangThai;
     private String ldoTuChoi;
     private String ketLuan;
+    private String nguoiGiaoHang;
+    private String donViGiaoHang;
+    private String cmtNguoiGiaoHang;
+    private String diaChi;
+    private String bienSoXe;
+    private String soChungThuGiamDinh;
+    @Temporal(TemporalType.DATE)
+    private Date ngayGdinh;
+    private String tchucGdinh;
+    private BigDecimal soLuongTheoChungTu;
+    private BigDecimal soLuongKhKhaiBao;
+    private BigDecimal soLuongTtKtra;
+    private String kqDanhGia;
     @Transient
-    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
+    private List<HhNkPhieuKtclCt> listChiTieu;
     @Transient
-    private List<HhBbNghiemThuNhapKhacDtl> dviChuDongThucHien =new ArrayList<>();
-
+    private List<FileDinhKem> fileDinhKemCtgd;
     @Transient
-    private List<HhBbNghiemThuNhapKhacDtl> dmTongCucPdTruocThucHien =new ArrayList<>();
-    @Transient
-    private HhNkPhieuKtcl phieuKtcl;
+    private List<FileDinhKem> fileDinhKemKtcl;
 
 }

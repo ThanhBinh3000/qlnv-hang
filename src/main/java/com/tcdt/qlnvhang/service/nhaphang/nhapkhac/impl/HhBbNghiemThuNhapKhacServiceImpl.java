@@ -136,7 +136,7 @@ public class HhBbNghiemThuNhapKhacServiceImpl extends BaseServiceImpl implements
     public HhBbNghiemThuNhapKhac chiTiet(Long id) throws Exception {
         Optional<HhBbNghiemThuNhapKhac> qOptional = hhBbNghiemThuNhapKhacRepository.findById(id);
         if (!qOptional.isPresent()) {
-            throw new Exception("Không tìm thấy dữ liệu cần sửa.");
+            throw new Exception("Không tìm thấy dữ liệu.");
         }
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
@@ -233,7 +233,7 @@ public class HhBbNghiemThuNhapKhacServiceImpl extends BaseServiceImpl implements
         Page<HhQdGiaoNvuNhapHangKhacHdr> page = timKiem(req);
         List<HhQdGiaoNvuNhapHangKhacHdr> data = page.getContent();
         String title = "Danh sách lập biên bản nghiệm thu bản quản lần đầu nhập hàng dự trữ quốc gia";
-        String[] rowsName = new String[]{"STT", "Số QĐ giao NVNH", "Năm kế hoạch", "Thời hạn NH trước ngày", "Điểm kho", "Lô kho",
+        String[] rowsName = new String[]{"STT", "Số QĐ giao NVNH", "Năm kế hoạch", "Thời hạn NH trước ngày", "Điểm kho", "Ngăn lô kho",
                 "Số BB NT kê lót, BQLĐ", "Ngày lập biên bản", "Ngày kết thúc NT kê lót, BQLĐ", "Tổng kinh phí thực tế (đ)", "Tổng kinh phí TC PD (đ)", "Trạng thái"};
         String filename = "Ds_bb_ntbq_lan_dau.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
@@ -267,6 +267,11 @@ public class HhBbNghiemThuNhapKhacServiceImpl extends BaseServiceImpl implements
             ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
             ex.export();
         }
+    }
+
+    @Override
+    public List<HhBbNghiemThuNhapKhac> timKiemBbtheoMaNganLo(HhBbNghiemThuNhapKhacSearch objReq) throws Exception {
+        return hhBbNghiemThuNhapKhacRepository.findByIdQdGiaoNvNhAndMaLoKhoAndMaNganKhoAndTrangThai(objReq.getIdQdGiaoNvnh(), objReq.getMaLoKho(), objReq.getMaNganKho(), Contains.DADUYET_LDCC);
     }
 
     private void luuFile(HhBbNghiemThuNhapKhacReq objReq, HhBbNghiemThuNhapKhac created) {

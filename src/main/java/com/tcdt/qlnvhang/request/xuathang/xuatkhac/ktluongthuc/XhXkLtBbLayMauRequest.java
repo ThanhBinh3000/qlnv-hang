@@ -51,6 +51,6 @@ public class XhXkLtBbLayMauRequest extends BaseRequest {
 
     private List<FileDinhKemReq> fileDinhKemNiemPhong =new ArrayList<>();
 
-    private List<XhXkLtBbLayMauDtl> nguoiLienQuan = new ArrayList<>();
+    private List<XhXkLtBbLayMauDtl> bbLayMauDtl = new ArrayList<>();
 
 }

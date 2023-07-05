@@ -39,6 +39,8 @@ public class ScDanhSachHdr extends BaseEntity implements Serializable {
   private String lyDo;
   private String trangThai;
   private String type;
+  private BigDecimal donGiaDk;
+  private String ketQua;
   @JsonIgnore
   @Transient
   private Map<String, String> mapVthh;

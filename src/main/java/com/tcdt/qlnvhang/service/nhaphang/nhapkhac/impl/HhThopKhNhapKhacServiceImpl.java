@@ -154,12 +154,17 @@ public class HhThopKhNhapKhacServiceImpl extends BaseServiceImpl implements HhTh
         HhThopKhNhapKhacDTO data = new HhThopKhNhapKhacDTO();
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         hhThopKhNhapKhac.get().setTenLoaiHinhNx(mapLoaiHinhNx.get(hhThopKhNhapKhac.get().getLoaiHinhNx()));
         hhThopKhNhapKhac.get().setTenLoaiVthh(mapVthh.get(hhThopKhNhapKhac.get().getLoaiVthh()));
         hhThopKhNhapKhac.get().setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(hhThopKhNhapKhac.get().getTrangThai()));
         hhThopKhNhapKhac.get().setFileDinhKems(fileDinhKemService.search(hhThopKhNhapKhac.get().getId(), Collections.singletonList(HhThopKhNhapKhac.TABLE_NAME)));
         data.setHdr(hhThopKhNhapKhac.get());
-        data.setDtl(hhDxuatKhNhapKhacHdrRepository.findAllByThopId(hhThopKhNhapKhac.get().getId()));
+        List<HhDxuatKhNhapKhacHdr> dtls = hhDxuatKhNhapKhacHdrRepository.findAllByThopId(hhThopKhNhapKhac.get().getId());
+        dtls.forEach(i -> {
+            i.setTenDvi(mapDmucDvi.get(i.getMaDviDxuat()));
+        });
+        data.setDtl(dtls);
         return data;
     }
 

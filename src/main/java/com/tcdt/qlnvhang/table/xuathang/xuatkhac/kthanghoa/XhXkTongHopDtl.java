@@ -33,6 +33,7 @@ public class XhXkTongHopDtl implements Serializable {
   private BigDecimal slDeXuat;
   private BigDecimal slDaDuyet;
   private BigDecimal thanhTien;
+  private Integer tgianLuuKho;
   private LocalDate ngayNhapKho;
   private LocalDate ngayDeXuat;
   private LocalDate ngayTongHop;
@@ -48,6 +49,8 @@ public class XhXkTongHopDtl implements Serializable {
 
   @Transient
   private String tenTrangThaiKtCl;
+  @Transient
+  private String tenTrangThaiBienBan;
   @JsonIgnore
   @Transient
   private Map<String, String> mapVthh;

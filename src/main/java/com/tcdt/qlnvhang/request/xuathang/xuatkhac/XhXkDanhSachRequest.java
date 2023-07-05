@@ -35,6 +35,7 @@ public class XhXkDanhSachRequest extends BaseRequest {
   private String cloaiVthh;
   private String donViTinh;
   private BigDecimal slHetHan;
+  private Integer tgianLuuKho;
   private LocalDate ngayNhapKho;
   private LocalDate ngayDeXuat;
   private LocalDate ngayDeXuatTu;

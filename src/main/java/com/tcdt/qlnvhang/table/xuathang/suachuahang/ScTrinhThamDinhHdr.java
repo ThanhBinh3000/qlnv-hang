@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.xuathang.suachuahang;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,9 +28,6 @@ public class ScTrinhThamDinhHdr extends BaseEntity implements Serializable {
   private Integer nam;
   private String maDvi;
   private String soTtr;
-  private LocalDate ngayTaoHs;
-  private Long idDsHdr;
-  private String maDsHdr;
   private Long idThHdr;
   private String maThHdr;
   private LocalDate ngayDuyetLdc;
@@ -41,19 +39,22 @@ public class ScTrinhThamDinhHdr extends BaseEntity implements Serializable {
   private Long idQdSc;
   private String trichYeu;
   private String lyDoTuChoi;
+  private String trangThai;
+  private String ketQua;
   @Transient
-  private List<FileDinhKem> fileDinhKem=new ArrayList<>();;
+  private List<FileDinhKem> fileDinhKem = new ArrayList<>();;
   @Transient
-  private List<FileDinhKem> canCu = new ArrayList<>();
+  private List<FileDinhKem> fileCanCu = new ArrayList<>();
   @Transient
   private String tenTrangThai;
   @Transient
   private String tenDvi;
   @Transient
-  private String maDvql;
-  @Transient
-  private String tenDvql;
-  @OneToMany(mappedBy = "hoSoHdr", cascade = CascadeType.ALL)
-  private List<ScTrinhThamDinhDtl> hoSoDtl = new ArrayList<>();
-  private String trangThai;
+  private List<ScTrinhThamDinhDtl> children = new ArrayList<>();
+
+  public String getTenTrangThai(){
+    return TrangThaiAllEnum.getLabelById(getTrangThai());
+  }
+
+
 }

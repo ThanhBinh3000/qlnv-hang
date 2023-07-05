@@ -54,5 +54,5 @@ public class XhXkKhXuatHang extends BaseEntity implements Serializable {
     @Transient
     private String tenDvi;
     @Transient
-    private Integer soDvTaiSan;
+    private Integer soDviTaiSan;
 }

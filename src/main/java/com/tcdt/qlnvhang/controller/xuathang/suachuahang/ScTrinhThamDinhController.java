@@ -4,9 +4,9 @@ import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.DeleteReq;
-import com.tcdt.qlnvhang.request.suachua.ScTrinhVaThamDinhReq;
+import com.tcdt.qlnvhang.request.suachua.ScTrinhThamDinhHdrReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.suachuahang.impl.ScTrinhVaThamDinhServiceImpl;
+import com.tcdt.qlnvhang.service.suachuahang.impl.ScTrinhThamDinhServiceImpl;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,20 +22,20 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(PathContains.SUA_CHUA + PathContains.HO_SO)
+@RequestMapping(PathContains.SUA_CHUA + PathContains.TRINH_THAM_DINH)
 @Slf4j
 @Api(tags = "Sửa chữa hàng DTQG - Trình và thẩm định hàng DTQG cần sửa chữa")
 public class ScTrinhThamDinhController {
   @Autowired
-  ScTrinhVaThamDinhServiceImpl xhScHoSoService;
+  ScTrinhThamDinhServiceImpl service;
 
   @ApiOperation(value = "Tra cứu", response = List.class)
   @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<BaseResponse> colection(@RequestBody ScTrinhVaThamDinhReq objReq) {
+  public ResponseEntity<BaseResponse> colection(@RequestBody ScTrinhThamDinhHdrReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhScHoSoService.searchPage(objReq));
+      resp.setData(service.searchPage(objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -50,10 +50,10 @@ public class ScTrinhThamDinhController {
   @ApiOperation(value = "Tạo mới", response = List.class)
   @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
-  public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody ScTrinhVaThamDinhReq objReq) {
+  public ResponseEntity<BaseResponse> insert(@Valid @RequestBody ScTrinhThamDinhHdrReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhScHoSoService.create(objReq));
+      resp.setData(service.create(objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -67,10 +67,10 @@ public class ScTrinhThamDinhController {
 
   @ApiOperation(value = "Cập nhật", response = List.class)
   @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<BaseResponse> update(@Valid @RequestBody ScTrinhVaThamDinhReq objReq) {
+  public ResponseEntity<BaseResponse> update(@Valid @RequestBody ScTrinhThamDinhHdrReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhScHoSoService.update(objReq));
+      resp.setData(service.update(objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -87,7 +87,7 @@ public class ScTrinhThamDinhController {
   public ResponseEntity<BaseResponse> detail(@ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids") List<Long> ids) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhScHoSoService.detail(ids.get(0)));
+      resp.setData(service.detail(ids.get(0)));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -100,10 +100,10 @@ public class ScTrinhThamDinhController {
 
   @ApiOperation(value = "Trình duyệt", response = List.class)
   @PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<BaseResponse> updateStatus(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody ScTrinhVaThamDinhReq stReq) {
+  public ResponseEntity<BaseResponse> updateStatus(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody ScTrinhThamDinhHdrReq stReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      xhScHoSoService.approve(stReq);
+      service.approve(stReq);
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -121,7 +121,7 @@ public class ScTrinhThamDinhController {
   public ResponseEntity<BaseResponse> delete(@RequestParam("id") Long id) {
     BaseResponse resp = new BaseResponse();
     try {
-      xhScHoSoService.delete(id);
+      service.delete(id);
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -139,7 +139,7 @@ public class ScTrinhThamDinhController {
   public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody DeleteReq req) {
     BaseResponse resp = new BaseResponse();
     try {
-      xhScHoSoService.deleteMulti(req.getIds());
+      service.deleteMulti(req.getIds());
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -155,7 +155,7 @@ public class ScTrinhThamDinhController {
 //  @ResponseStatus(HttpStatus.OK)
 //  public void exportList(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhTlHoSoRequest objReq, HttpServletResponse response) throws Exception {
 //    try {
-//      xhScHoSoService.export(currentUser, objReq, response);
+//      service.export(currentUser, objReq, response);
 //
 //    } catch (Exception e) {
 //      log.error("Kết xuất danh sách dánh sách : {}", e);
