@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.qdpdnk;
 
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.kiemtracl.bblaymaubangiaomau.BienBanLayMauKhac;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhBbNghiemThuNhapKhac;
+import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.phieuknghiemcl.PhieuKnghiemCluongHangKhac;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -57,4 +58,6 @@ public class HhQdPdNhapKhacDtl {
     List<HhBbNghiemThuNhapKhac> bbNghiemThuNhapKhacList;
     @Transient
     private BienBanLayMauKhac bbLayMau;
+    @Transient
+    private PhieuKnghiemCluongHangKhac pKnghiemClHang;
 }
