@@ -51,7 +51,7 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
         Page<XhXkKhXuatHang> search = xhXkKhXuatHangRepository.searchPage(req, pageable);
         search.getContent().forEach(s -> {
             s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
-            s.setSoDvTaiSan(s.getXhXkKhXuatHangDtl().size());
+            s.setSoDviTaiSan(s.getXhXkKhXuatHangDtl().size());
         });
         return search;
     }
@@ -120,7 +120,7 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
             s.setMapVthh(mapVthh);
         });
         model.setTenDvi(mapDmucDvi.get(model.getMaDvi()));
-        model.setSoDvTaiSan(model.getXhXkKhXuatHangDtl().size());
+        model.setSoDviTaiSan(model.getXhXkKhXuatHangDtl().size());
         model.setTenTrangThai(TrangThaiAllEnum.getLabelById(model.getTrangThai()));
         return model;
     }
@@ -197,7 +197,7 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
             objs[3] = dx.getNgayKeHoach();
             objs[4] = dx.getNgayDuyetKeHoach();
             objs[5] = dx.getTrichYeu();
-            objs[6] = dx.getSoDvTaiSan();
+            objs[6] = dx.getSoDviTaiSan();
             objs[7] = dx.getTenTrangThai();
             dataList.add(objs);
         }
