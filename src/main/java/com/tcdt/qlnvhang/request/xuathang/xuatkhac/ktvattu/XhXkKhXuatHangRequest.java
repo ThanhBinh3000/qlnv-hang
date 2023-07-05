@@ -31,13 +31,21 @@ public class XhXkKhXuatHangRequest extends BaseRequest {
     String maTongHopDs;
     Long idTongHopDs;
     String trangThai;
+    Integer capDvi;
     List<XhXkKhXuatHangDtl> xhXkKhXuatHangDtl = new ArrayList<>();
     List<FileDinhKem> fileDinhKems;
+    //Entity Tổng hợp kế hoạch xuất hàng
+    String loai;
+    LocalDate thoiGianTh;
+    String noiDung;
+    String ghiChu;
+    Long idTh;
     //search params
-
     LocalDate ngayKeHoachTu;
     LocalDate ngayKeHoachDen;
     LocalDate ngayDuyetKeHoachTu;
     LocalDate ngayDuyetKeHoachDen;
+    LocalDate thoiGianThTu;
+    LocalDate thoiGianThDen;
     String dvql;
 }
