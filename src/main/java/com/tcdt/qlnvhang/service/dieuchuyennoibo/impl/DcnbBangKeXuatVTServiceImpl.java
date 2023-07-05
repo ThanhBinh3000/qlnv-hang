@@ -26,10 +26,7 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -70,39 +67,46 @@ public class DcnbBangKeXuatVTServiceImpl implements DcnbBangKeXuatVTService {
     public DcnbBangKeXuatVTHdr create(DcnbBangKeXuatVTReq objReq) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         String dvql = userInfo.getDvql();
-        Optional<DcnbBangKeXuatVTHdr> optional = hdrRepository.findFirstBySoBangKe(objReq.getSoBangKe());
-        if (optional.isPresent() && objReq.getSoBangKe().split("/").length == 1) {
-            throw new Exception("Số bảng kê đã tồn tại");
-        }
+//        Optional<DcnbBangKeXuatVTHdr> optional = hdrRepository.findFirstBySoBangKe(objReq.getSoBangKe());
+//        if (optional.isPresent() && objReq.getSoBangKe().split("/").length == 1) {
+//            throw new Exception("Số bảng kê đã tồn tại");
+//        }
         DcnbBangKeXuatVTHdr data = new DcnbBangKeXuatVTHdr();
         BeanUtils.copyProperties(objReq, data);
         data.setMaDvi(dvql);
         data.setTenDvi(userInfo.getTenDvi());
         objReq.getDcnbBangKeXuatVTDtl().forEach(e -> e.setBcnbBangKeXuatVTHdr(data));
         DcnbBangKeXuatVTHdr created = hdrRepository.save(data);
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BKXVT-"+ userInfo.getDvqlTenVietTat();
+        created.setSoBangKe(so);
+        hdrRepository.save(created);
         return created;
     }
 
     @Override
     public DcnbBangKeXuatVTHdr update(DcnbBangKeXuatVTReq objReq) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
         Optional<DcnbBangKeXuatVTHdr> optional = hdrRepository.findById(objReq.getId());
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
-        Optional<DcnbBangKeXuatVTHdr> soDxuat = hdrRepository.findFirstBySoBangKe(objReq.getSoBangKe());
-        if (org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoBangKe())) {
-            if (soDxuat.isPresent() && objReq.getSoBangKe().split("/").length == 1) {
-                if (!soDxuat.get().getId().equals(objReq.getId())) {
-                    throw new Exception("số bảng kê đã tồn tại");
-                }
-            }
-        }
+//        Optional<DcnbBangKeXuatVTHdr> soDxuat = hdrRepository.findFirstBySoBangKe(objReq.getSoBangKe());
+//        if (org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoBangKe())) {
+//            if (soDxuat.isPresent() && objReq.getSoBangKe().split("/").length == 1) {
+//                if (!soDxuat.get().getId().equals(objReq.getId())) {
+//                    throw new Exception("số bảng kê đã tồn tại");
+//                }
+//            }
+//        }
 
         DcnbBangKeXuatVTHdr data = optional.get();
         objReq.setMaDvi(data.getMaDvi());
         BeanUtils.copyProperties(objReq, data);
         data.setDcnbBangKeXuatVTDtl(objReq.getDcnbBangKeXuatVTDtl());
         DcnbBangKeXuatVTHdr created = hdrRepository.save(data);
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BKXVT-"+ userInfo.getDvqlTenVietTat();
+        created.setSoBangKe(so);
+        hdrRepository.save(created);
         return created;
     }
 

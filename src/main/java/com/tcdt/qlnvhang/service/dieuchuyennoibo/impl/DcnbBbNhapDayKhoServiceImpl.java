@@ -75,10 +75,10 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
         if(!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
             throw new Exception("Văn bản này chỉ có thêm ở cấp chi cục");
         }
-        Optional<DcnbBbNhapDayKhoHdr> optional = hdrRepository.findBySoBb(req.getSoBb());
-        if (optional.isPresent()) {
-            throw new Exception("Số biên bản đã tồn tại");
-        }
+//        Optional<DcnbBbNhapDayKhoHdr> optional = hdrRepository.findBySoBb(req.getSoBb());
+//        if (optional.isPresent()) {
+//            throw new Exception("Số biên bản đã tồn tại");
+//        }
 
         DcnbBbNhapDayKhoHdr data = new DcnbBbNhapDayKhoHdr();
         BeanUtils.copyProperties(req, data);
@@ -88,6 +88,9 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
             e.setParent(data);
         });
         DcnbBbNhapDayKhoHdr created = hdrRepository.save(data);
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BBNDK-"+ userInfo.getDvqlTenVietTat();
+        created.setSoBb(so);
+        hdrRepository.save(created);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBbNhapDayKhoHdr.TABLE_NAME);
         created.setFileDinhKems(canCu);
 //        DcnbKeHoachDcDtlTT kh = new DcnbKeHoachDcDtlTT();
@@ -115,6 +118,9 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
         BeanUtils.copyProperties(req,data);
         data.setChildren(req.getChildren());
         DcnbBbNhapDayKhoHdr update = hdrRepository.save(data);
+        String so = update.getId() + "/" + (new Date().getYear() + 1900) +"/BBNDK-"+ userInfo.getDvqlTenVietTat();
+        update.setSoBb(so);
+        hdrRepository.save(update);
         fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbBbNhapDayKhoHdr.TABLE_NAME));
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), update.getId(), DcnbBbNhapDayKhoHdr.TABLE_NAME);
         update.setFileDinhKems(canCu);

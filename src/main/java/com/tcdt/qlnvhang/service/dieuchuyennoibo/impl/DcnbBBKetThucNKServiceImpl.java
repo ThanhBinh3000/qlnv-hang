@@ -74,10 +74,10 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
         if (!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             throw new Exception("Văn bản này chỉ có thêm ở cấp chi cục");
         }
-        Optional<DcnbBBKetThucNKHdr> optional = hdrRepository.findFirstBySoBb(req.getSoBb());
-        if (optional.isPresent()) {
-            throw new Exception("Số biên bản đã tồn tại");
-        }
+//        Optional<DcnbBBKetThucNKHdr> optional = hdrRepository.findFirstBySoBb(req.getSoBb());
+//        if (optional.isPresent()) {
+//            throw new Exception("Số biên bản đã tồn tại");
+//        }
 
         DcnbBBKetThucNKHdr data = new DcnbBBKetThucNKHdr();
         BeanUtils.copyProperties(req, data);
@@ -87,6 +87,9 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
             e.setDcnbBBKetThucNKHdr(data);
         });
         DcnbBBKetThucNKHdr created = hdrRepository.save(data);
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BBKT-"+ userInfo.getDvqlTenVietTat();
+        created.setSoBb(so);
+        hdrRepository.save(created);
         return created;
     }
 
@@ -107,6 +110,9 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
         BeanUtils.copyProperties(req, data);
         data.setBcnbBBKetThucNKDtl(req.getBcnbBBKetThucNKDtl());
         DcnbBBKetThucNKHdr update = hdrRepository.save(data);
+        String so = update.getId() + "/" + (new Date().getYear() + 1900) +"/BBKT-"+ userInfo.getDvqlTenVietTat();
+        update.setSoBb(so);
+        hdrRepository.save(update);
         return update;
     }
 

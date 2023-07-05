@@ -100,10 +100,10 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
         if (currentUser == null) {
             throw new Exception("Bad request.");
         }
-        Optional<DcnbBienBanLayMauHdr> optional = dcnbBienBanLayMauHdrRepository.findFirstBySoBbLayMau(objReq.getSoBbLayMau());
-        if (optional.isPresent() && objReq.getSoBbLayMau() != null && objReq.getSoBbLayMau().split("/").length == 1) {
-            throw new Exception("số biên bản lấy mẫu đã tồn tại");
-        }
+//        Optional<DcnbBienBanLayMauHdr> optional = dcnbBienBanLayMauHdrRepository.findFirstBySoBbLayMau(objReq.getSoBbLayMau());
+//        if (optional.isPresent() && objReq.getSoBbLayMau() != null && objReq.getSoBbLayMau().split("/").length == 1) {
+//            throw new Exception("số biên bản lấy mẫu đã tồn tại");
+//        }
         DcnbBienBanLayMauHdr data = new DcnbBienBanLayMauHdr();
         BeanUtils.copyProperties(objReq, data);
         data.setKtvBaoQuanId(currentUser.getUser().getId());
@@ -122,6 +122,9 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
             e.setDcnbBienBanLayMauHdr(data);
         });
         DcnbBienBanLayMauHdr created = dcnbBienBanLayMauHdrRepository.save(data);
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BBLM-"+ currentUser.getUser().getDvqlTenVietTat();
+        created.setSoBbLayMau(so);
+        dcnbBienBanLayMauHdrRepository.save(created);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), DcnbBienBanLayMauHdr.TABLE_NAME + "_CAN_CU");
         created.setCanCu(canCu);
         List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getBienBanLayMauDinhKem(), created.getId(), DcnbBienBanLayMauHdr.TABLE_NAME + "_BIEN_BAN_LAY_MAU");
@@ -141,19 +144,21 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
-        Optional<DcnbBienBanLayMauHdr> soDxuat = dcnbBienBanLayMauHdrRepository.findFirstBySoBbLayMau(objReq.getSoBbLayMau());
-        if (org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoBbLayMau())) {
-            if (soDxuat.isPresent() && objReq.getSoBbLayMau().split("/").length == 1) {
-                if (!soDxuat.get().getId().equals(objReq.getId())) {
-                    throw new Exception("số biên bản lấy mẫu đã tồn tại");
-                }
-            }
-        }
+//        Optional<DcnbBienBanLayMauHdr> soDxuat = dcnbBienBanLayMauHdrRepository.findFirstBySoBbLayMau(objReq.getSoBbLayMau());
+//        if (org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoBbLayMau())) {
+//            if (soDxuat.isPresent() && objReq.getSoBbLayMau().split("/").length == 1) {
+//                if (!soDxuat.get().getId().equals(objReq.getId())) {
+//                    throw new Exception("số biên bản lấy mẫu đã tồn tại");
+//                }
+//            }
+//        }
         DcnbBienBanLayMauHdr data = optional.get();
         BeanUtils.copyProperties(objReq, data);
         data.setDcnbBienBanLayMauDtl(objReq.getDcnbBienBanLayMauDtl());
         DcnbBienBanLayMauHdr created = dcnbBienBanLayMauHdrRepository.save(data);
-
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BBLM-"+ currentUser.getUser().getDvqlTenVietTat();
+        created.setSoBbLayMau(so);
+        dcnbBienBanLayMauHdrRepository.save(created);
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbBienBanLayMauHdr.TABLE_NAME + "_MAU_DA_NIEM_PHONG"));
         List<FileDinhKem> fileDinhKemMauNiemPhong = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemChupMauNiemPhong(), created.getId(), DcnbBienBanLayMauHdr.TABLE_NAME + "_MAU_DA_NIEM_PHONG");
         created.setFileDinhKemChupMauNiemPhong(fileDinhKemMauNiemPhong);
