@@ -67,6 +67,8 @@ public class XhXkTongHopService extends BaseServiceImpl {
       s.getTongHopDtl().forEach(s1 -> {
         s1.setMapDmucDvi(mapDmucDvi);
         s1.setMapVthh(mapVthh);
+        s1.setTenTrangThaiBienBan(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
+        s1.setTenTrangThaiKtCl(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
       });
       s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
       s.setTenDvi(mapDmucDvi.containsKey(s.getMaDvi()) ? mapDmucDvi.get(s.getMaDvi()) : null);
