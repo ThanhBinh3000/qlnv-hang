@@ -211,6 +211,8 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
                             optional.get().getQDinhDccId(),
                             optional.get().getMaNganKho(),
                             optional.get().getMaLoKho());
+                }else {
+                    throw new Exception("Type phải là 00 hoặc 01!");
                 }
                 DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
                 dataLinkDtl.setLinkId(optional.get().getId());

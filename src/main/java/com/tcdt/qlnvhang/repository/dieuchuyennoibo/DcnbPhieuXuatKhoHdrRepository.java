@@ -30,8 +30,8 @@ public interface DcnbPhieuXuatKhoHdrRepository extends JpaRepository<DcnbPhieuXu
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
-            "LEFT JOIN DcnbPhieuKnChatLuongHdr pkncl On qdc.parentId = pkncl.qdDcId and pkncl.maLoKho = khdcd.maLoKho and pkncl.maNganKho = khdcd.maNganKho " +
-            "LEFT JOIN DcnbBangKeCanHangHdr bkchh On bkchh.qDinhDccId = qdc.id and bkchh.maLoKho = khdcd.maLoKho and bkchh.maNganKho = khdcd.maNganKho " +
+            "LEFT JOIN DcnbPhieuKnChatLuongHdr pkncl On qdc.parentId = pkncl.qdDcId and pkncl.maLoKho = khdcd.maLoKho and pkncl.maNganKho = khdcd.maNganKho and pkncl.trangThai = '05'" +
+            "LEFT JOIN DcnbBangKeCanHangHdr bkchh On bkchh.qDinhDccId = qdc.id and bkchh.maLoKho = khdcd.maLoKho and bkchh.maNganKho = khdcd.maNganKho and bkchh.trangThai = '17' " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 "+
             "AND qdc.trangThai = '29' AND qdc.loaiDc = :#{#param.loaiDc} "+
@@ -60,8 +60,8 @@ public interface DcnbPhieuXuatKhoHdrRepository extends JpaRepository<DcnbPhieuXu
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
-            "LEFT JOIN DcnbPhieuKnChatLuongHdr pkncl On qdc.parentId = pkncl.qdDcId and pkncl.maLoKho = khdcd.maLoKho and pkncl.maNganKho = khdcd.maNganKho " +
-            "LEFT JOIN DcnbBangKeCanHangHdr bkchh On bkchh.qDinhDccId = qdc.parentId and bkchh.maLoKho = khdcd.maLoKho and bkchh.maNganKho = khdcd.maNganKho " +
+            "LEFT JOIN DcnbPhieuKnChatLuongHdr pkncl On qdc.parentId = pkncl.qdDcId and pkncl.maLoKho = khdcd.maLoKho and pkncl.maNganKho = khdcd.maNganKho and pkncl.trangThai = '05' " +
+            "LEFT JOIN DcnbBangKeCanHangHdr bkchh On bkchh.qDinhDccId = qdc.parentId and bkchh.maLoKho = khdcd.maLoKho and bkchh.maNganKho = khdcd.maNganKho and bkchh.trangThai = '17' " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 "+
             "AND qdc.trangThai = '29' AND qdc.loaiDc = :#{#param.loaiDc} "+
