@@ -83,8 +83,6 @@ public class XhXkLtBbLayMauService extends BaseServiceImpl {
     created.setCanCu(canCu);
     List<FileDinhKem> niemPhong = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemNiemPhong(), created.getId(), XhXkLtBbLayMauHdr.TABLE_NAME + "_NIEM_PHONG");
     created.setFileDinhKemNiemPhong(niemPhong);
-
-
     return created;
   }
 
