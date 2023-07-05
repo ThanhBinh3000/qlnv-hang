@@ -189,6 +189,7 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
         String status = optional.get().getTrangThai() + statusReq.getTrangThai();
         switch (status) {
             case Contains.DUTHAO + Contains.CHODUYET_LDCC:
+            case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
                 optional.get().setNgayGDuyet(LocalDate.now());
                 optional.get().setNguoiGDuyet(currentUser.getUser().getId());
                 break;

@@ -219,6 +219,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         switch (status) {
             case Contains.DUTHAO + Contains.CHODUYET_TP:
             case Contains.TU_CHOI_TP + Contains.CHODUYET_TP:
+            case Contains.TU_CHOI_LDC + Contains.CHODUYET_TP:
                 optional.get().setNguoiGDuyet(currentUser.getUser().getId());
                 optional.get().setNgayGDuyet(LocalDate.now());
                 break;
@@ -227,7 +228,6 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
                 optional.get().setNgayDuyetTp(LocalDate.now());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 break;
-            case Contains.TU_CHOI_LDC + Contains.CHODUYET_TP:
             case Contains.CHODUYET_LDC + Contains.TU_CHOI_LDC:
                 optional.get().setNguoiDuyetLdCuc(currentUser.getUser().getId());
                 optional.get().setNgayDuyetLdCuc(LocalDate.now());
