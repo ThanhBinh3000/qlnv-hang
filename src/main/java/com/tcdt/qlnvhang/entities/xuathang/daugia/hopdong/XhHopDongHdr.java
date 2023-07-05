@@ -103,8 +103,6 @@ public class XhHopDongHdr extends TrangThaiBaseEntity {
 
     private String soQdGnv;
 
-    private Boolean typeQdGnv;
-
     private String toChucTrungDg;
 
     private String loaiHinhNx;

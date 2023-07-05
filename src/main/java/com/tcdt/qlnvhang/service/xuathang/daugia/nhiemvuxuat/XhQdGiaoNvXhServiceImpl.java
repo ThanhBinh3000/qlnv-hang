@@ -113,12 +113,6 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
     dataMap.setTenDvi(StringUtils.isEmpty(userInfo.getDvql()) ? null : mapDmucDvi.get(userInfo.getDvql()));
     XhQdGiaoNvXh created = xhQdGiaoNvXhRepository.save(dataMap);
 
-    Optional<XhHopDongHdr> hopDongHdr = xhHopDongHdrRepository.findById(created.getIdHd());
-    if (hopDongHdr.isPresent()) {
-      hopDongHdr.get().setTypeQdGnv(true);
-      xhHopDongHdrRepository.save(hopDongHdr.get());
-    }
-
     if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
       List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhQdGiaoNvXh.TABLE_NAME);
       created.setFileDinhKems(fileDinhKems);
@@ -275,12 +269,6 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
 
     if (!optional.get().getTrangThai().equals(Contains.DUTHAO)) {
       throw new Exception("Chỉ thực hiện xóa với kế hoạch ở trạng thái bản nháp hoặc từ chối");
-    }
-
-    Optional<XhHopDongHdr> hopDongHdr = xhHopDongHdrRepository.findById(optional.get().getIdHd());
-    if (hopDongHdr.isPresent()) {
-      hopDongHdr.get().setTypeQdGnv(false);
-      xhHopDongHdrRepository.save(hopDongHdr.get());
     }
 
     List<XhQdGiaoNvXhDtl> dtlList = xhQdGiaoNvXhDtlRepository.findAllByIdQdHdr(id);
