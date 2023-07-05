@@ -12,6 +12,8 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import freemarker.template.utility.DateUtil;
+import org.apache.commons.lang.time.DateUtils;
 import org.hibernate.Hibernate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +27,7 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -81,10 +80,10 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
         if (currentUser == null) {
             throw new Exception("Bad request.");
         }
-        Optional<DcnbBangKeCanHangHdr> optional = dcnbBangKeCanHangHdrRepository.findFirstBySoBangKe(objReq.getSoBangKe());
-        if (optional.isPresent() && objReq.getSoBangKe().split("/").length == 1) {
-            throw new Exception("Số bảng kê đã tồn tại");
-        }
+//        Optional<DcnbBangKeCanHangHdr> optional = dcnbBangKeCanHangHdrRepository.findFirstBySoBangKe(objReq.getSoBangKe());
+//        if (optional.isPresent() && objReq.getSoBangKe().split("/").length == 1) {
+//            throw new Exception("Số bảng kê đã tồn tại");
+//        }
         DcnbBangKeCanHangHdr data = new DcnbBangKeCanHangHdr();
         BeanUtils.copyProperties(objReq, data);
         data.setMaDvi(currentUser.getDvql());
@@ -93,6 +92,9 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
             objReq.getDcnbBangKeCanHangDtl().forEach(e -> e.setDcnbBangKeCanHangHdr(data));
         }
         DcnbBangKeCanHangHdr created = dcnbBangKeCanHangHdrRepository.save(data);
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BKCH-"+currentUser.getUser().getDvqlTenVietTat();
+        created.setSoBangKe(so);
+        dcnbBangKeCanHangHdrRepository.save(created);
         return created;
     }
 
@@ -105,20 +107,23 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
-        Optional<DcnbBangKeCanHangHdr> soDxuat = dcnbBangKeCanHangHdrRepository.findFirstBySoBangKe(objReq.getSoBangKe());
-        if (org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoBangKe())) {
-            if (soDxuat.isPresent() && objReq.getSoBangKe().split("/").length == 1) {
-                if (!soDxuat.get().getId().equals(objReq.getId())) {
-                    throw new Exception("số bảng kê đã tồn tại");
-                }
-            }
-        }
+//        Optional<DcnbBangKeCanHangHdr> soDxuat = dcnbBangKeCanHangHdrRepository.findFirstBySoBangKe(objReq.getSoBangKe());
+//        if (org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoBangKe())) {
+//            if (soDxuat.isPresent() && objReq.getSoBangKe().split("/").length == 1) {
+//                if (!soDxuat.get().getId().equals(objReq.getId())) {
+//                    throw new Exception("số bảng kê đã tồn tại");
+//                }
+//            }
+//        }
 
         DcnbBangKeCanHangHdr data = optional.get();
         objReq.setMaDvi(data.getMaDvi());
         BeanUtils.copyProperties(objReq, data);
         data.setDcnbBangKeCanHangDtl(objReq.getDcnbBangKeCanHangDtl());
         DcnbBangKeCanHangHdr created = dcnbBangKeCanHangHdrRepository.save(data);
+        String soBangKe = created.getId() + "/" + (new Date().getYear() + 1900) +"/BKCH-"+currentUser.getUser().getDvqlTenVietTat();
+        created.setSoBangKe(soBangKe);
+        dcnbBangKeCanHangHdrRepository.save(created);
         return created;
     }
 
@@ -184,6 +189,7 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
         String status = optional.get().getTrangThai() + statusReq.getTrangThai();
         switch (status) {
             case Contains.DUTHAO + Contains.CHODUYET_LDCC:
+            case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
                 optional.get().setNgayGDuyet(LocalDate.now());
                 optional.get().setNguoiGDuyet(currentUser.getUser().getId());
                 break;
@@ -206,6 +212,8 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
                             optional.get().getQDinhDccId(),
                             optional.get().getMaNganKho(),
                             optional.get().getMaLoKho());
+                }else {
+                    throw new Exception("Type phải là 00 hoặc 01!");
                 }
                 DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
                 dataLinkDtl.setLinkId(optional.get().getId());
@@ -252,7 +260,7 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
             objs[5] = dx.getTenLoKho();
             objs[6] = dx.getSoPhieuXuatKho() == null ? dx.getSoPhieuNhapKho() : dx.getSoPhieuXuatKho();
             objs[7] = dx.getSoBangKe();
-            objs[8] = dx.getNgayXuatKho() ==null ? dx.getNgayNhapKho(): dx.getNgayXuatKho();
+            objs[8] = dx.getNgayXuatKho() == null ? dx.getNgayNhapKho() : dx.getNgayXuatKho();
             objs[9] = dx.getTrangThai();
             dataList.add(objs);
         }

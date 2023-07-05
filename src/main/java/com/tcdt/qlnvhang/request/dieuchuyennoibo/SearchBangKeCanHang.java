@@ -23,7 +23,7 @@ public class SearchBangKeCanHang extends BaseRequest {
     private String maDvi;
     private String type;
     private String typeDataLink;
-    private Boolean isVatTu = false;
     private Boolean thayDoiThuKho;
+    private Boolean isVatTu = false;
     private List<String> dsLoaiHang = new ArrayList<>();
 }

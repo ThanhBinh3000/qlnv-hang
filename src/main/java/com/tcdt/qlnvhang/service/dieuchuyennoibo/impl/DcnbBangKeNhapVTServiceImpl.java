@@ -28,9 +28,7 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,6 +51,14 @@ public class DcnbBangKeNhapVTServiceImpl implements DcnbBangKeNhapVTService {
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<DcnbBangKeNhapVTHdrDTO> searchDto = null;
+        if (req.getIsVatTu() == null) {
+            req.setIsVatTu(false);
+        }
+        if (req.getIsVatTu()) {
+            req.setDsLoaiHang(Arrays.asList("VT"));
+        } else {
+            req.setDsLoaiHang(Arrays.asList("LT", "M"));
+        }
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             searchDto = hdrRepository.searchPage(req, pageable);
         } else {
@@ -66,39 +72,46 @@ public class DcnbBangKeNhapVTServiceImpl implements DcnbBangKeNhapVTService {
     public DcnbBangKeNhapVTHdr create(DcnbBangKeNhapVTReq objReq) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         String dvql = userInfo.getDvql();
-        Optional<DcnbBangKeNhapVTHdr> optional = hdrRepository.findFirstBySoBangKe(objReq.getSoBangKe());
-        if (optional.isPresent() && objReq.getSoBangKe().split("/").length == 1) {
-            throw new Exception("Số bảng kê đã tồn tại");
-        }
+//        Optional<DcnbBangKeNhapVTHdr> optional = hdrRepository.findFirstBySoBangKe(objReq.getSoBangKe());
+//        if (optional.isPresent() && objReq.getSoBangKe().split("/").length == 1) {
+//            throw new Exception("Số bảng kê đã tồn tại");
+//        }
         DcnbBangKeNhapVTHdr data = new DcnbBangKeNhapVTHdr();
         BeanUtils.copyProperties(objReq, data);
         data.setMaDvi(dvql);
         data.setTenDvi(userInfo.getTenDvi());
         objReq.getDcnbbangkenhapvtdtl().forEach(e -> e.setBcnbBangKeNhapVTHdr(data));
         DcnbBangKeNhapVTHdr created = hdrRepository.save(data);
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BKNVT-"+ userInfo.getDvqlTenVietTat();
+        created.setSoBangKe(so);
+        hdrRepository.save(created);
         return created;
     }
 
     @Override
     public DcnbBangKeNhapVTHdr update(DcnbBangKeNhapVTReq objReq) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
         Optional<DcnbBangKeNhapVTHdr> optional = hdrRepository.findById(objReq.getId());
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
-        Optional<DcnbBangKeNhapVTHdr> soDxuat = hdrRepository.findFirstBySoBangKe(objReq.getSoBangKe());
-        if (org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoBangKe())) {
-            if (soDxuat.isPresent() && objReq.getSoBangKe().split("/").length == 1) {
-                if (!soDxuat.get().getId().equals(objReq.getId())) {
-                    throw new Exception("số bảng kê đã tồn tại");
-                }
-            }
-        }
+//        Optional<DcnbBangKeNhapVTHdr> soDxuat = hdrRepository.findFirstBySoBangKe(objReq.getSoBangKe());
+//        if (org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoBangKe())) {
+//            if (soDxuat.isPresent() && objReq.getSoBangKe().split("/").length == 1) {
+//                if (!soDxuat.get().getId().equals(objReq.getId())) {
+//                    throw new Exception("số bảng kê đã tồn tại");
+//                }
+//            }
+//        }
 
         DcnbBangKeNhapVTHdr data = optional.get();
         objReq.setMaDvi(data.getMaDvi());
         BeanUtils.copyProperties(objReq, data);
         data.setDcnbBangKeNhapVTDtl(objReq.getDcnbbangkenhapvtdtl());
         DcnbBangKeNhapVTHdr created = hdrRepository.save(data);
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BKNVT-"+ userInfo.getDvqlTenVietTat();
+        created.setSoBangKe(so);
+        hdrRepository.save(created);
         return created;
     }
 

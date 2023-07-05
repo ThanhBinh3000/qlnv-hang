@@ -39,5 +39,5 @@ public interface HhDxuatKhNhapKhacHdrRepository  extends JpaRepository<HhDxuatKh
     @Query(value = "UPDATE HH_DX_KHNK_HDR SET TRANG_THAI_TH=:trangThaiTh WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
     void updateStatusInList(List<String> soDxuatList, String trangThaiTh);
 
-    List<HhDxuatKhNhapKhacHdr> findAllByTrangThaiAndTrangThaiTh(String trangThai, String trangThaiTh);
+    List<HhDxuatKhNhapKhacHdr> findAllByTrangThaiInAndTrangThaiTh(List<String> trangThai, String trangThaiTh);
 }

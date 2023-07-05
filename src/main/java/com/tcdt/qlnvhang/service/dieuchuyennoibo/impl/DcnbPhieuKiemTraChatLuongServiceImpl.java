@@ -79,10 +79,10 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
         if(!currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)){
             throw new Exception("Chức năng thêm mới chỉ dành cho cấp cục");
         }
-        Optional<DcnbPhieuKtChatLuongHdr> optional = dcnbPhieuKtChatLuongHdrRepository.findFirstBySoPhieu(objReq.getSoPhieu());
-        if (optional.isPresent() && objReq.getSoPhieu().split("/").length == 1) {
-            throw new Exception("Số phiếu đã tồn tại");
-        }
+//        Optional<DcnbPhieuKtChatLuongHdr> optional = dcnbPhieuKtChatLuongHdrRepository.findFirstBySoPhieu(objReq.getSoPhieu());
+//        if (optional.isPresent() && objReq.getSoPhieu().split("/").length == 1) {
+//            throw new Exception("Số phiếu đã tồn tại");
+//        }
         DcnbPhieuKtChatLuongHdr data = new DcnbPhieuKtChatLuongHdr();
         BeanUtils.copyProperties(objReq, data);
         data.setNguoiTaoId(currentUser.getUser().getId());
@@ -93,6 +93,9 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
             objReq.getDcnbPhieuKtChatLuongDtl().forEach(e -> e.setDcnbPhieuKtChatLuongHdr(data));
         }
         DcnbPhieuKtChatLuongHdr created = dcnbPhieuKtChatLuongHdrRepository.save(data);
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/PKTCL-"+ currentUser.getUser().getDvqlTenVietTat();
+        created.setSoPhieu(so);
+        dcnbPhieuKtChatLuongHdrRepository.save(created);
         List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getBienBanLayMauDinhKem(), created.getId(), DcnbPhieuKtChatLuongHdr.TABLE_NAME + "_CAN_CU");
         data.setBienBanLayMauDinhKem(bienBanLayMauDinhKem);
         return created;
@@ -110,14 +113,14 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
-        Optional<DcnbPhieuKtChatLuongHdr> soPhieu = dcnbPhieuKtChatLuongHdrRepository.findFirstBySoPhieu(objReq.getSoPhieu());
-        if (org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoPhieu())) {
-            if (soPhieu.isPresent() && objReq.getSoPhieu().split("/").length == 1) {
-                if (!soPhieu.get().getId().equals(objReq.getId())) {
-                    throw new Exception("Số phiếu đã tồn tại");
-                }
-            }
-        }
+//        Optional<DcnbPhieuKtChatLuongHdr> soPhieu = dcnbPhieuKtChatLuongHdrRepository.findFirstBySoPhieu(objReq.getSoPhieu());
+//        if (org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoPhieu())) {
+//            if (soPhieu.isPresent() && objReq.getSoPhieu().split("/").length == 1) {
+//                if (!soPhieu.get().getId().equals(objReq.getId())) {
+//                    throw new Exception("Số phiếu đã tồn tại");
+//                }
+//            }
+//        }
 
         DcnbPhieuKtChatLuongHdr data = optional.get();
         BeanUtils.copyProperties(objReq, data);
@@ -125,6 +128,9 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
         data.setNgaySua(LocalDateTime.now());
         data.setDcnbPhieuKtChatLuongDtl(objReq.getDcnbPhieuKtChatLuongDtl());
         DcnbPhieuKtChatLuongHdr created = dcnbPhieuKtChatLuongHdrRepository.save(data);
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/PKTCL-"+ currentUser.getUser().getDvqlTenVietTat();
+        created.setSoPhieu(so);
+        dcnbPhieuKtChatLuongHdrRepository.save(created);
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbPhieuKtChatLuongHdr.TABLE_NAME + "_CAN_CU"));
         List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getBienBanLayMauDinhKem(), created.getId(), DcnbPhieuKtChatLuongHdr.TABLE_NAME + "_CAN_CU");
         data.setBienBanLayMauDinhKem(bienBanLayMauDinhKem);

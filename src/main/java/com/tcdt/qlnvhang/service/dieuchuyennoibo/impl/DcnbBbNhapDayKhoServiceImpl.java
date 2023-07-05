@@ -23,10 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
@@ -52,6 +49,14 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
         req.setMaDvi(currentUser.getDvql());
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<DcnbBbNhapDayKhoHdrDTO> searchDto = null;
+        if(req.getIsVatTu() == null){
+            req.setIsVatTu(false);
+        }
+        if(req.getIsVatTu()){
+            req.setDsLoaiHang(Arrays.asList("VT"));
+        }else {
+            req.setDsLoaiHang(Arrays.asList("LT","M"));
+        }
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             searchDto = hdrRepository.searchPageChiCuc(req, pageable);
         } else {
@@ -70,10 +75,10 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
         if(!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
             throw new Exception("Văn bản này chỉ có thêm ở cấp chi cục");
         }
-        Optional<DcnbBbNhapDayKhoHdr> optional = hdrRepository.findBySoBb(req.getSoBb());
-        if (optional.isPresent()) {
-            throw new Exception("Số biên bản đã tồn tại");
-        }
+//        Optional<DcnbBbNhapDayKhoHdr> optional = hdrRepository.findBySoBb(req.getSoBb());
+//        if (optional.isPresent()) {
+//            throw new Exception("Số biên bản đã tồn tại");
+//        }
 
         DcnbBbNhapDayKhoHdr data = new DcnbBbNhapDayKhoHdr();
         BeanUtils.copyProperties(req, data);
@@ -83,6 +88,9 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
             e.setParent(data);
         });
         DcnbBbNhapDayKhoHdr created = hdrRepository.save(data);
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BBNDK-"+ userInfo.getDvqlTenVietTat();
+        created.setSoBb(so);
+        hdrRepository.save(created);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBbNhapDayKhoHdr.TABLE_NAME);
         created.setFileDinhKems(canCu);
 //        DcnbKeHoachDcDtlTT kh = new DcnbKeHoachDcDtlTT();
@@ -110,6 +118,9 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
         BeanUtils.copyProperties(req,data);
         data.setChildren(req.getChildren());
         DcnbBbNhapDayKhoHdr update = hdrRepository.save(data);
+        String so = update.getId() + "/" + (new Date().getYear() + 1900) +"/BBNDK-"+ userInfo.getDvqlTenVietTat();
+        update.setSoBb(so);
+        hdrRepository.save(update);
         fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbBbNhapDayKhoHdr.TABLE_NAME));
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), update.getId(), DcnbBbNhapDayKhoHdr.TABLE_NAME);
         update.setFileDinhKems(canCu);

@@ -9,6 +9,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.qdpdnk.HhQdPdNhapKhacDtl;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhNkPhieuKtclReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhNkPhieuKtclSearch;
@@ -19,6 +20,7 @@ import com.tcdt.qlnvhang.service.nhaphang.nhapkhac.HhNkPhieuKtclService;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +31,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class HhNkPhieuKtclServiceImpl extends BaseServiceImpl implements HhNkPhieuKtclService {
@@ -195,6 +195,53 @@ public class HhNkPhieuKtclServiceImpl extends BaseServiceImpl implements HhNkPhi
         fileDinhKemService.delete(qOptional.get().getId(), Lists.newArrayList(HhNkPhieuKtcl.TABLE_NAME + "_KTCL"));
         hhNkPhieuKtclCtRepository.deleteAllByPhieuKtChatLuongId(qOptional.get().getId());
         hhNkPhieuKtclRepository.delete(qOptional.get());
+    }
+
+    @Override
+    public void export(HhNkPhieuKtclSearch req, HttpServletResponse response) throws Exception {
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        req.setPaggingReq(paggingReq);
+        Page<HhQdGiaoNvuNhapHangKhacHdr> page = timKiem(req);
+        List<HhQdGiaoNvuNhapHangKhacHdr> data = page.getContent();
+        String title = "Danh sách phiếu kiểm tra chất lượng";
+        String[] rowsName = new String[]{"STT", "Số QĐ giao NVNH", "Năm kế hoạch", "Thời hạn NH trước ngày", "Điểm kho", "Ngăn lô kho",
+                "Số BB NT kê lót, BQLĐ", "Số phiếu KTCL", "Ngày giám định", "Kết quả đánh giá",
+                "Số phiếu nhập kho", "Ngày nhập kho", "Trạng thái"};
+        String filename = "Ds_phieu_ktcl.xlsx";
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+        Object[] objsb = null;
+        Object[] objsc = null;
+        for (int i = 0; i < data.size(); i++) {
+            HhQdGiaoNvuNhapHangKhacHdr qd = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i;
+            objs[1] = qd.getSoQd();
+            objs[2] = qd.getNam();
+            objs[3] = qd.getTgianNkMnhat();
+            dataList.add(objs);
+            for (int j = 0; j < qd.getDtlList().size(); j++) {
+                objsb = new Object[rowsName.length];
+                objsb[4] = qd.getDtlList().get(j).getTenDiemKho();
+                objsb[5] = qd.getDtlList().get(j).getTenLoKho() + " - " + qd.getDtlList().get(j).getTenNganKho();
+                dataList.add(objsb);
+                for (int k = 0; k < qd.getDtlList().get(i).getBbNghiemThuNhapKhacList().size(); k++) {
+                    objsc = new Object[rowsName.length];
+                    objsc[6] = qd.getDtlList().get(i).getBbNghiemThuNhapKhacList().get(k).getSoBbNtBq();
+                    if(qd.getDtlList().get(i).getBbNghiemThuNhapKhacList().get(k).getPhieuKtcl() != null) {
+                        objsc[7] = qd.getDtlList().get(i).getBbNghiemThuNhapKhacList().get(k).getPhieuKtcl().getSoPhieu();
+                        objsc[8] = qd.getDtlList().get(i).getBbNghiemThuNhapKhacList().get(k).getPhieuKtcl().getNgayGdinh();
+                        objsc[9] = qd.getDtlList().get(i).getBbNghiemThuNhapKhacList().get(k).getPhieuKtcl().getKqDanhGia();
+                        objsc[12] = qd.getDtlList().get(i).getBbNghiemThuNhapKhacList().get(k).getPhieuKtcl().getTenTrangThai();
+                    }
+                    dataList.add(objsc);
+                }
+            }
+        }
+        ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+        ex.export();
     }
 
     private void luuFile(HhNkPhieuKtclReq objReq, HhNkPhieuKtcl created){

@@ -54,4 +54,7 @@ public class DcnbBbNhapDayKhoHdrReq extends BaseRequest {
     private LocalDate denNgayKtNhap;
     private LocalDate tuNgayThoiHanNh;
     private LocalDate denNgayThoiHanNh;
+
+    private Boolean isVatTu = false;
+    private List<String> dsLoaiHang = new ArrayList<>();
 }

@@ -30,10 +30,7 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class DcnbBbKqDcServiceImpl implements DcnbBbKqDcService {
@@ -71,10 +68,10 @@ public class DcnbBbKqDcServiceImpl implements DcnbBbKqDcService {
         if (currentUser == null) {
             throw new Exception("Bad request.");
         }
-        Optional<DcnbBbKqDcHdr> optional = hdrRepository.findFirstBySoBc(objReq.getSoBc());
-        if (optional.isPresent() && objReq.getSoBc() != null && objReq.getSoBc().split("/").length == 1) {
-            throw new Exception("số biên bản lấy mẫu đã tồn tại");
-        }
+//        Optional<DcnbBbKqDcHdr> optional = hdrRepository.findFirstBySoBc(objReq.getSoBc());
+//        if (optional.isPresent() && objReq.getSoBc() != null && objReq.getSoBc().split("/").length == 1) {
+//            throw new Exception("số biên bản lấy mẫu đã tồn tại");
+//        }
         DcnbBbKqDcHdr data = new DcnbBbKqDcHdr();
         BeanUtils.copyProperties(objReq, data);
         data.setMaDvi(cqt.getMaDvi());
@@ -87,6 +84,9 @@ public class DcnbBbKqDcServiceImpl implements DcnbBbKqDcService {
             e.setDcnbBbKqDcHdr(data);
         });
         DcnbBbKqDcHdr created = hdrRepository.save(data);
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BCKQNX-"+ currentUser.getUser().getDvqlTenVietTat();
+        created.setSoBc(so);
+        hdrRepository.save(created);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), DcnbBbKqDcHdr.TABLE_NAME);
         created.setFileDinhKems(canCu);
         return created;
@@ -102,19 +102,21 @@ public class DcnbBbKqDcServiceImpl implements DcnbBbKqDcService {
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
-        Optional<DcnbBbKqDcHdr> soDxuat = hdrRepository.findFirstBySoBc(objReq.getSoBc());
-        if (org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoBc())) {
-            if (soDxuat.isPresent() && objReq.getSoBc().split("/").length == 1) {
-                if (!soDxuat.get().getId().equals(objReq.getId())) {
-                    throw new Exception("số biên bản lấy mẫu đã tồn tại");
-                }
-            }
-        }
+//        Optional<DcnbBbKqDcHdr> soDxuat = hdrRepository.findFirstBySoBc(objReq.getSoBc());
+//        if (org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoBc())) {
+//            if (soDxuat.isPresent() && objReq.getSoBc().split("/").length == 1) {
+//                if (!soDxuat.get().getId().equals(objReq.getId())) {
+//                    throw new Exception("số biên bản lấy mẫu đã tồn tại");
+//                }
+//            }
+//        }
         DcnbBbKqDcHdr data = optional.get();
         BeanUtils.copyProperties(objReq, data);
         data.setDanhSachDaiDien(objReq.getDanhSachDaiDien());
         DcnbBbKqDcHdr created = hdrRepository.save(data);
-
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BCKQNX-"+ currentUser.getUser().getDvqlTenVietTat();
+        created.setSoBc(so);
+        hdrRepository.save(created);
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbBbKqDcHdr.TABLE_NAME));
         List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), DcnbBbKqDcHdr.TABLE_NAME);
         created.setFileDinhKems(fileDinhKem);
