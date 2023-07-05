@@ -49,6 +49,8 @@ public class XhXkTongHopDtl implements Serializable {
 
   @Transient
   private String tenTrangThaiKtCl;
+  @Transient
+  private String tenTrangThaiBienBan;
   @JsonIgnore
   @Transient
   private Map<String, String> mapVthh;
