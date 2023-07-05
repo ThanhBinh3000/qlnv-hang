@@ -1,12 +1,14 @@
 package com.tcdt.qlnvhang.response.dieuChuyenNoiBo;
 
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import java.time.LocalDate;
 
 @Data
-@AllArgsConstructor
 public class DcnbBangKeNhapVTHdrDTO {
     private Long id;
     private Long qDinhDcId;
@@ -29,4 +31,28 @@ public class DcnbBangKeNhapVTHdrDTO {
     private LocalDate ngayNhapKho;
     private String trangThai;
     private String tenTrangThai;
+
+    public DcnbBangKeNhapVTHdrDTO(Long id, Long qDinhDcId, String soQdinh, Integer nam, String maDiemKho, String tenDiemKho, String maNhaKho, String tenNhaKho, String maNganKho, String tenNganKho, String maLoKho, String tenLoKho, Long bBLayMauId, String soBBLayMau, String soBangKe, String soBBGuiHang, String soPhieuNhapKho, Long phieuNhapKhoId, LocalDate ngayNhapKho, String trangThai, String tenTrangThai) {
+        this.id = id;
+        this.qDinhDcId = qDinhDcId;
+        this.soQdinh = soQdinh;
+        this.nam = nam;
+        this.maDiemKho = maDiemKho;
+        this.tenDiemKho = tenDiemKho;
+        this.maNhaKho = maNhaKho;
+        this.tenNhaKho = tenNhaKho;
+        this.maNganKho = maNganKho;
+        this.tenNganKho = tenNganKho;
+        this.maLoKho = maLoKho;
+        this.tenLoKho = tenLoKho;
+        this.bBLayMauId = bBLayMauId;
+        this.soBBLayMau = soBBLayMau;
+        this.soBangKe = soBangKe;
+        this.soBBGuiHang = soBBGuiHang;
+        this.soPhieuNhapKho = soPhieuNhapKho;
+        this.phieuNhapKhoId = phieuNhapKhoId;
+        this.ngayNhapKho = ngayNhapKho;
+        this.trangThai = trangThai;
+        this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
+    }
 }

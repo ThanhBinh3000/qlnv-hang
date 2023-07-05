@@ -1,12 +1,14 @@
 package com.tcdt.qlnvhang.response.dieuChuyenNoiBo;
 
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import java.time.LocalDate;
 
 @Data
-@AllArgsConstructor
 public class DcnbBienBanHaoDoiHdrDTO {
     private Long id;
     private Long bangKeCanHangId;
@@ -37,4 +39,36 @@ public class DcnbBienBanHaoDoiHdrDTO {
     private String maNganKho;
     private String tenNganKho;
     private LocalDate ngayKyQDinh;
+
+    public DcnbBienBanHaoDoiHdrDTO(Long id, Long bangKeCanHangId, Long bbTinhKhoId, Long qDinhDcId, Long phieuXuatKhoId, String soQdinh, Integer nam, LocalDate ngayHieuLuc, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String soBienBanHaoDoi, String soPhieuXuatKho, String soBangKeXuatDcLt, LocalDate ngayXuatKho, String trangThai, String tenTrangThai, String loaiVthh, String tenLoaiVthh, String cloaiVthh, String tenCloaiVthh, String maNhaKho, String tenNhaKho, String donViTinh, String tenDonViTinh, String maNganKho, String tenNganKho, LocalDate ngayKyQDinh) {
+        this.id = id;
+        this.bangKeCanHangId = bangKeCanHangId;
+        this.bbTinhKhoId = bbTinhKhoId;
+        this.qDinhDcId = qDinhDcId;
+        this.phieuXuatKhoId = phieuXuatKhoId;
+        this.soQdinh = soQdinh;
+        this.nam = nam;
+        this.ngayHieuLuc = ngayHieuLuc;
+        this.maDiemKho = maDiemKho;
+        this.tenDiemKho = tenDiemKho;
+        this.maLoKho = maLoKho;
+        this.tenLoKho = tenLoKho;
+        this.soBienBanHaoDoi = soBienBanHaoDoi;
+        this.soPhieuXuatKho = soPhieuXuatKho;
+        this.soBangKeXuatDcLt = soBangKeXuatDcLt;
+        this.ngayXuatKho = ngayXuatKho;
+        this.trangThai = trangThai;
+        this.tenTrangThai = tenTrangThai;
+        this.loaiVthh = loaiVthh;
+        this.tenLoaiVthh = tenLoaiVthh;
+        this.cloaiVthh = cloaiVthh;
+        this.tenCloaiVthh = tenCloaiVthh;
+        this.maNhaKho = maNhaKho;
+        this.tenNhaKho = tenNhaKho;
+        this.donViTinh = donViTinh;
+        this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
+        this.maNganKho = maNganKho;
+        this.tenNganKho = tenNganKho;
+        this.ngayKyQDinh = ngayKyQDinh;
+    }
 }
