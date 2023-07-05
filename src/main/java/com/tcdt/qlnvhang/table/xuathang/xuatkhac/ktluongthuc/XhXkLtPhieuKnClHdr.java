@@ -1,8 +1,10 @@
+
 package com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktluongthuc;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtPhieuKnClDtl;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 
@@ -15,42 +17,44 @@ import java.util.List;
 import java.util.Map;
 
 @Entity
-@Table(name = XhXkLtBbLayMauHdr.TABLE_NAME)
+@Table(name = XhXkLtPhieuKnClHdr.TABLE_NAME)
 @Data
-public class XhXkLtBbLayMauHdr extends BaseEntity implements Serializable {
+public class XhXkLtPhieuKnClHdr extends BaseEntity implements Serializable {
 
   private static final long serialVersionUID = 1L;
-  public static final String TABLE_NAME = "XH_XK_LT_BB_LAY_MAU_HDR";
+  public static final String TABLE_NAME = "XH_XK_LT_PHIEU_KN_CL_HDR";
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhXkLtBbLayMauHdr.TABLE_NAME + "_SEQ")
-  @SequenceGenerator(sequenceName = XhXkLtBbLayMauHdr.TABLE_NAME
-      + "_SEQ", allocationSize = 1, name = XhXkLtBbLayMauHdr.TABLE_NAME + "_SEQ")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhXkLtPhieuKnClHdr.TABLE_NAME + "_SEQ")
+  @SequenceGenerator(sequenceName = XhXkLtPhieuKnClHdr.TABLE_NAME
+      + "_SEQ", allocationSize = 1, name = XhXkLtPhieuKnClHdr.TABLE_NAME + "_SEQ")
   private Long id;
   private Integer nam;
   private String maDvi;
-  private String loaiBienBan;
   private String maQhNs;
+  private String soPhieu;
+  private LocalDate ngayLapPhieu;
+  private LocalDate ngayKnMau;
+  private Long idBienBan;
+  private String soBienBan;
+  private LocalDate ngayLayMau;
   private Long idTongHop;
   private String maDanhSach;
   private String tenDanhSach;
-  private String ktvBaoQuan;
-  private String soBienBan;
-  private LocalDate ngayLayMau;
-  private String dviKiemNghiem;
-  private String diaDiemLayMau;
+  private String nguoiKn;
+  private String truongPhong;
+  private String thuKho;
+  private String loaiVthh;
+  private String cloaiVthh;
+  private String moTaHangHoa;
   private String maDiaDiem;
   private BigDecimal slTon;
   private BigDecimal slHetHan;
   private Integer thoiHanLk;
   private String donViTinh;
-  private String loaiVthh;
-  private String cloaiVthh;
-  private String moTaHangHoa;
-  private Integer soLuongMau;
-  private String ppLayMau;
-  private String chiTieuKiemTra;
-  private Boolean ketQuaNiemPhong;
+  private String hinhThucBq;
+  private String noiDung;
+  private String ketLuan;
   private String trangThai;
   private LocalDate ngayGduyet;
   private Long nguoiGduyetId;
@@ -58,6 +62,7 @@ public class XhXkLtBbLayMauHdr extends BaseEntity implements Serializable {
   private Long nguoiPduyetId;
   private String lyDoTuChoi;
   private String type;
+
   @Transient
   private String tenDvi;
   @Transient
@@ -122,10 +127,7 @@ public class XhXkLtBbLayMauHdr extends BaseEntity implements Serializable {
   }
   @Transient
   private List<FileDinhKem> fileDinhKems =new ArrayList<>();
-  @Transient
-  private List<FileDinhKem> canCu =new ArrayList<>();
-  @Transient
-  private List<FileDinhKem> fileDinhKemNiemPhong =new ArrayList<>();
-  @OneToMany(mappedBy = "bbLayMauHdr", cascade = CascadeType.ALL)
-  private List<XhXkLtBbLayMauDtl> bbLayMauDtl = new ArrayList<>();
+  @OneToMany(mappedBy = "phieuKnClHdr", cascade = CascadeType.ALL)
+  private List<XhXkLtPhieuKnClDtl> phieuKnClDtl= new ArrayList<>();
+
 }
