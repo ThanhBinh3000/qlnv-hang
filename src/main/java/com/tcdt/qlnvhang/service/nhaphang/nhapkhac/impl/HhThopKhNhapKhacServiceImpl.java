@@ -69,7 +69,7 @@ public class HhThopKhNhapKhacServiceImpl extends BaseServiceImpl implements HhTh
 
     @Override
     public List<HhThopKhNhapKhac> layDsTongHopChuaTaoQd() {
-        List<HhThopKhNhapKhac> thop = hhThopKhNhapKhacRepository.findAllByTrangThai(TrangThaiAllEnum.CHUA_TONG_HOP.getId());
+        List<HhThopKhNhapKhac> thop = hhThopKhNhapKhacRepository.findAllByTrangThai(TrangThaiAllEnum.CHUA_TAO_QD.getId());
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String,String> hashMapLoaiNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
