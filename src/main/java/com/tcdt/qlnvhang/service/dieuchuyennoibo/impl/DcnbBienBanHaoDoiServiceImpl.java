@@ -222,6 +222,9 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
         String status = optional.get().getTrangThai() + statusReq.getTrangThai();
         switch (status) {
             case Contains.DUTHAO + Contains.CHODUYET_KTVBQ:
+            case Contains.TUCHOI_KTVBQ + Contains.CHODUYET_KTVBQ:
+            case Contains.TUCHOI_LDCC + Contains.CHODUYET_KTVBQ:
+            case Contains.TUCHOI_KT + Contains.CHODUYET_KTVBQ:
                 optional.get().setNgayGduyet(LocalDate.now());
                 optional.get().setNguoiGduyetId(currentUser.getUser().getId());
                 break;
