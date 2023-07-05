@@ -30,10 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
@@ -94,6 +91,9 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
             });
         }
         DcnbPhieuXuatKhoHdr created = hdrRepository.save(data);
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/PXK-"+ currentUser.getUser().getDvqlTenVietTat();
+        created.setSoPhieuXuatKho(so);
+        hdrRepository.save(created);
         saveFileDinhKem(objReq.getFileDinhKems(), created.getId(), DcnbPhieuXuatKhoHdr.TABLE_NAME);
         return created;
     }
@@ -115,6 +115,9 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
         BeanUtils.copyProperties(objReq, data);
         data.setDcnbPhieuXuatKhoDtl(objReq.getDcnbPhieuXuatKhoDtl());
         DcnbPhieuXuatKhoHdr created = hdrRepository.save(data);
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/PXK-"+ currentUser.getUser().getDvqlTenVietTat();
+        created.setSoPhieuXuatKho(so);
+        hdrRepository.save(created);
         saveFileDinhKem(objReq.getFileDinhKems(), created.getId(), DcnbPhieuXuatKhoHdr.TABLE_NAME);
         return created;
     }

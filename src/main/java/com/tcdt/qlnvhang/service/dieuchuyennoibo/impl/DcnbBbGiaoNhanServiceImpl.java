@@ -78,10 +78,10 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
         if(!userInfo.getCapDvi().equals(Contains.CAP_CUC)){
             throw new Exception("Văn bản này chỉ có thêm ở cấp cục");
         }
-        Optional<DcnbBbGiaoNhanHdr> optional = hdrRepository.findFirstBySoBb(req.getSoBb());
-        if (optional.isPresent()) {
-            throw new Exception("Số biên bản đã tồn tại");
-        }
+//        Optional<DcnbBbGiaoNhanHdr> optional = hdrRepository.findFirstBySoBb(req.getSoBb());
+//        if (optional.isPresent()) {
+//            throw new Exception("Số biên bản đã tồn tại");
+//        }
 
         DcnbBbGiaoNhanHdr data = new DcnbBbGiaoNhanHdr();
         BeanUtils.copyProperties(req, data);
@@ -94,6 +94,9 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
             e.setParent(data);
         });
         DcnbBbGiaoNhanHdr created = hdrRepository.save(data);
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BBGN-"+ userInfo.getDvqlTenVietTat();
+        created.setSoBb(so);
+        hdrRepository.save(created);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), DcnbBbGiaoNhanHdr.TABLE_NAME +"_CC");
         List<FileDinhKem> dinhkem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBbGiaoNhanHdr.TABLE_NAME+"_DK");
         created.setFileCanCu(canCu);
@@ -119,6 +122,9 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
         data.setDanhSachDaiDien(req.getDanhSachDaiDien());
         data.setDanhSachBangKe(req.getDanhSachBangKe());
         DcnbBbGiaoNhanHdr update = hdrRepository.save(data);
+        String so = update.getId() + "/" + (new Date().getYear() + 1900) +"/BBGN-"+ userInfo.getDvqlTenVietTat();
+        update.setSoBb(so);
+        hdrRepository.save(update);
         fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbBbGiaoNhanHdr.TABLE_NAME+"_CC"));
         fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbBbGiaoNhanHdr.TABLE_NAME+"_DK"));
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), update.getId(), DcnbBbGiaoNhanHdr.TABLE_NAME+"_CC");

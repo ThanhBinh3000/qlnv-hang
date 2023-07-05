@@ -85,10 +85,10 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
         if (!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             throw new Exception("Văn bản này chỉ có thêm ở cấp chi cục");
         }
-        Optional<DcnbBBNTBQHdr> optional = hdrRepository.findBySoBban(req.getSoBban());
-        if (optional.isPresent()) {
-            throw new Exception("Số biên bản đã tồn tại");
-        }
+//        Optional<DcnbBBNTBQHdr> optional = hdrRepository.findBySoBban(req.getSoBban());
+//        if (optional.isPresent()) {
+//            throw new Exception("Số biên bản đã tồn tại");
+//        }
 
         DcnbBBNTBQHdr data = new DcnbBBNTBQHdr();
         BeanUtils.copyProperties(req, data);
@@ -97,6 +97,9 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
             e.setDcnbBBNTBQHdr(data);
         });
         DcnbBBNTBQHdr created = hdrRepository.save(data);
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BBBQLD-"+ userInfo.getDvqlTenVietTat();
+        created.setSoBban(so);
+        hdrRepository.save(created);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBBNTBQHdr.TABLE_NAME);
         created.setFileDinhKems(canCu);
         return created;
@@ -119,6 +122,9 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
         BeanUtils.copyProperties(req, data);
         data.setDcnbBBNTBQDtl(req.getDcnbBBNTBQDtl());
         DcnbBBNTBQHdr created = hdrRepository.save(data);
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BBBQLD-"+ userInfo.getDvqlTenVietTat();
+        created.setSoBban(so);
+        hdrRepository.save(created);
         fileDinhKemService.delete(created.getId(), Lists.newArrayList(DcnbBBNTBQHdr.TABLE_NAME));
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBBNTBQHdr.TABLE_NAME);
         created.setFileDinhKems(canCu);
