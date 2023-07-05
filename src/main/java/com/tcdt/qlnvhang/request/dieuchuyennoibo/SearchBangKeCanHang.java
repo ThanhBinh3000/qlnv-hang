@@ -20,6 +20,8 @@ public class SearchBangKeCanHang extends BaseRequest {
     private String soBangKe;
     private LocalDate tuNgay;
     private LocalDate denNgay;
+    private String maLoKho;
+    private String maNganKho;
     private String maDvi;
     private String type;
     private String typeDataLink;
