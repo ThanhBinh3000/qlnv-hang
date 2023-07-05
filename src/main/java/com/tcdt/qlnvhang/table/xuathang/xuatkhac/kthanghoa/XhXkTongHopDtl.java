@@ -33,6 +33,7 @@ public class XhXkTongHopDtl implements Serializable {
   private BigDecimal slDeXuat;
   private BigDecimal slDaDuyet;
   private BigDecimal thanhTien;
+  private Integer tgianLuuKho;
   private LocalDate ngayNhapKho;
   private LocalDate ngayDeXuat;
   private LocalDate ngayTongHop;
