@@ -119,6 +119,7 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
         DcnbBangKeCanHangHdr data = optional.get();
         objReq.setMaDvi(data.getMaDvi());
         objReq.setType(optional.get().getType());
+        objReq.setLoaiDc(optional.get().getLoaiDc());
         BeanUtils.copyProperties(objReq, data);
         data.setDcnbBangKeCanHangDtl(objReq.getDcnbBangKeCanHangDtl());
         DcnbBangKeCanHangHdr created = dcnbBangKeCanHangHdrRepository.save(data);
