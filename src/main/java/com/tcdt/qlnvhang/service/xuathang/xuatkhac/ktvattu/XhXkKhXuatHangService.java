@@ -21,6 +21,7 @@ import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkKhXuatHang;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import org.apache.commons.collections.ListUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -203,5 +204,17 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
+    }
+
+
+    public List<XhXkKhXuatHang> searchListForTh(XhXkKhXuatHangRequest req) throws Exception {
+        List<XhXkKhXuatHang> listKeHoachs = xhXkKhXuatHangRepository.searchListTh(req);
+        if (listKeHoachs.isEmpty() || listKeHoachs.size() == 0)
+            throw new Exception("Không tìm thấy dữ liệu tổng hợp của cục");
+        listKeHoachs.forEach(s -> {
+            s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
+            s.setSoDviTaiSan(s.getXhXkKhXuatHangDtl().size());
+        });
+        return listKeHoachs;
     }
 }

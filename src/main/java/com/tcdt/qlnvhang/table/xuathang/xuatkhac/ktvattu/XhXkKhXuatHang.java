@@ -43,9 +43,17 @@ public class XhXkKhXuatHang extends BaseEntity implements Serializable {
     private String lyDoTuChoi;
     private Long nguoiDuyetId;
     private LocalDate ngayDuyet;
+    private Integer capDvi;
 
     @OneToMany(mappedBy = "XhXkKhXuatHang", cascade = CascadeType.ALL)
     private List<XhXkKhXuatHangDtl> xhXkKhXuatHangDtl = new ArrayList<>();
+
+    //Entity Tổng hợp kế hoạch xuất hàng
+    private String loai;
+    private LocalDate thoiGianTh;
+    private String noiDung;
+    private String ghiChu;
+    private Long idTh;
 
     @Transient
     private List<FileDinhKem> fileDinhKems;

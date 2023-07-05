@@ -31,4 +31,14 @@ public interface XhXkKhXuatHangRepository extends JpaRepository<XhXkKhXuatHang, 
     List<XhXkKhXuatHang> findByIdIn(List<Long> ids);
 
     Optional<XhXkKhXuatHang> findBySoToTrinh(String soToTrinh);
+
+    //Search kế hoạch để tổng hợp
+    @Query("SELECT distinct c FROM XhXkKhXuatHang c WHERE 1=1 " +
+            "AND (:#{#param.namKeHoach} IS NULL OR c.namKeHoach = :#{#param.namKeHoach}) " +
+            "AND (:#{#param.loai} IS NULL OR c.loai = :#{#param.loai}) " +
+            "AND (:#{#param.capDvi} IS NULL OR c.capDvi = :#{#param.capDvi}) " +
+            "AND (c.idTh is null) " +
+            "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
+    )
+    List<XhXkKhXuatHang> searchListTh(@Param("param") XhXkKhXuatHangRequest param);
 }
