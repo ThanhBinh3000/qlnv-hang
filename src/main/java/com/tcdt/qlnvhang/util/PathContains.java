@@ -180,6 +180,7 @@ public class PathContains {
 
     // Phieu kiem nghiem chat luong hang
     public static final String KNGHIEM_CLUONG = "/knghiem-cluong";
+    public static final String KNGHIEM_CLUONG_KHAC = "/knghiem-cluong-khac";
     public static final String KQUA_KNGHIEM = "/kqua-knghiem";
 
     //Quản lý hợp đồng mua vật tư
