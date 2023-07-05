@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public interface HhNkPhieuKtclService {
     Page<HhQdGiaoNvuNhapHangKhacHdr> timKiem(HhNkPhieuKtclSearch req) throws Exception;
+    HhNkPhieuKtcl timKiemPhieuKtclTheoMaNganLo(HhNkPhieuKtclSearch req) throws Exception;
     HhNkPhieuKtcl themMoi (HhNkPhieuKtclReq objReq) throws Exception;
     HhNkPhieuKtcl capNhat (HhNkPhieuKtclReq objReq) throws Exception;
     HhNkPhieuKtcl chiTiet (Long id) throws Exception;

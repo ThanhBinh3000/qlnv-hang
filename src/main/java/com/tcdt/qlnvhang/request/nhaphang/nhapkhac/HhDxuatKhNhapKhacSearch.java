@@ -12,6 +12,7 @@ public class HhDxuatKhNhapKhacSearch extends BaseRequest {
     private Integer namKhoach;
     private String soDxuat;
     private String maDviDxuat;
+    private String dvql;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
     Date tuNgayDxuat;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)

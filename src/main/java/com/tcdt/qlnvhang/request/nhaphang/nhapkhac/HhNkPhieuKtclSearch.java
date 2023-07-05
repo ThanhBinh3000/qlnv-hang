@@ -26,4 +26,7 @@ public class HhNkPhieuKtclSearch extends BaseRequest {
     private String denNgayGDStr;
     private String kqDanhGia;
     private String loaiVthh;
+    private String maNganKho;
+    private String maLoKho;
+    private Long idQdGiaoNvnh;
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhBbNghiemThuNhapKhacSearch;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhNkPhieuKtclReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhNkPhieuKtclSearch;
 import com.tcdt.qlnvhang.response.BaseResponse;
@@ -160,5 +161,23 @@ public class HhNkPhieuKtclController {
             final ObjectMapper mapper = new ObjectMapper();
             mapper.writeValue(response.getOutputStream(), body);
         }
+    }
+
+    @ApiOperation(value = "Tra cứu phiếu ktcl theo mã ngăn lô kho", response = List.class)
+    @PostMapping(value = "/tim-kiem-phieu-ktcl", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> timKiemBbtheoMaNganLo(@Valid HttpServletRequest request,
+                                                              @RequestBody HhNkPhieuKtclSearch objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(service.timKiemPhieuKtclTheoMaNganLo(objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tra cứu Bbntbqld theo mã ngăn lô kho trace: {}", e);
+        }
+        return ResponseEntity.ok(resp);
     }
 }
