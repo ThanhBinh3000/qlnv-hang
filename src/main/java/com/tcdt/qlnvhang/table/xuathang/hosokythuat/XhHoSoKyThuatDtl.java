@@ -47,10 +47,12 @@ public class XhHoSoKyThuatDtl extends BaseEntity implements Serializable {
   private String soSerial;
   private String noiDung;
   private String ketLuan;
+  private String trangThai;
   //  BB_KTRA_NGOAI_QUAN = "BBKTNQ",
   //  BB_KTRA_VAN_HANH = "BBKTVH",
   //  BB_KTRA_HOSO_KYTHUAT = "BBKTHSKT",
   private String loaiBb;
+  private String thoiDiemLap;
   @Transient
   private List<FileDinhKem> fileDinhKem = new ArrayList<>();
   @Transient
