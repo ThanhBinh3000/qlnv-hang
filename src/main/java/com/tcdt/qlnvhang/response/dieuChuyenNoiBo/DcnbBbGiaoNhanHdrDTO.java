@@ -1,12 +1,14 @@
 package com.tcdt.qlnvhang.response.dieuChuyenNoiBo;
 
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import java.time.LocalDate;
 
 @Data
-@AllArgsConstructor
 public class DcnbBbGiaoNhanHdrDTO {
     private Long id;
     private Long qdDcCucId;
@@ -36,7 +38,38 @@ public class DcnbBbGiaoNhanHdrDTO {
     private LocalDate ngayKetThucNk;
     private String soBienBanLayMau;
     private Long bienBanLayMauId;
-
     private String trangThai;
     private String tenTrangThai;
+
+    public DcnbBbGiaoNhanHdrDTO(Long id, Long qdDcCucId, String soQdinh, Integer namKh, LocalDate thoiHanDieuChuyen, String maNhaKho, String tenNhaKho, String maDiemKho, String tenDiemKho, String maloKho, String tenloKho, String maNganKho, String tenNganKho, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa, String donViTinh, String tenDonViTinh, String soHoSoKt, Long hoSoKtId, String soBienBanGiaoNhan, String soBienBanKetThucNk, Long bienBanKetThucNkId, LocalDate ngayKetThucNk, String soBienBanLayMau, Long bienBanLayMauId, String trangThai, String tenTrangThai) {
+        this.id = id;
+        this.qdDcCucId = qdDcCucId;
+        this.soQdinh = soQdinh;
+        this.namKh = namKh;
+        this.thoiHanDieuChuyen = thoiHanDieuChuyen;
+        this.maNhaKho = maNhaKho;
+        this.tenNhaKho = tenNhaKho;
+        this.maDiemKho = maDiemKho;
+        this.tenDiemKho = tenDiemKho;
+        this.maloKho = maloKho;
+        this.tenloKho = tenloKho;
+        this.maNganKho = maNganKho;
+        this.tenNganKho = tenNganKho;
+        this.maHangHoa = maHangHoa;
+        this.tenHangHoa = tenHangHoa;
+        this.maChLoaiHangHoa = maChLoaiHangHoa;
+        this.tenChLoaiHangHoa = tenChLoaiHangHoa;
+        this.donViTinh = donViTinh;
+        this.tenDonViTinh = tenDonViTinh;
+        this.soHoSoKt = soHoSoKt;
+        this.hoSoKtId = hoSoKtId;
+        this.soBienBanGiaoNhan = soBienBanGiaoNhan;
+        this.soBienBanKetThucNk = soBienBanKetThucNk;
+        this.bienBanKetThucNkId = bienBanKetThucNkId;
+        this.ngayKetThucNk = ngayKetThucNk;
+        this.soBienBanLayMau = soBienBanLayMau;
+        this.bienBanLayMauId = bienBanLayMauId;
+        this.trangThai = trangThai;
+        this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
+    }
 }

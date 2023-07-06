@@ -193,33 +193,4 @@ public class XhCtvtBangKeController extends BaseController {
 
     }
   }
-
-  public static void main(String[] args) {
-    try {
-      // 1) Load Docx file by filling Velocity template engine and cache
-      // it to the registry
-
-      InputStream in = FileUtils.openInputStream(new File("C:/Users/tqchi/Desktop/ke-hoach1.docx"));
-      IXDocReport report = XDocReportRegistry.getRegistry().loadReport(
-          in, TemplateEngineKind.Velocity);
-
-
-      // 2) Create context Java model
-      IContext context = report.createContext();
-
-
-      // 3) Generate report by merging Java model with the Docx
-      OutputStream out = new FileOutputStream(new File(
-          "DocxProjectWithVelocity_Out.pdf"));
-      // report.process(context, out);
-      Options options = Options.getTo(ConverterTypeTo.PDF).via(
-          ConverterTypeVia.XWPF);
-      report.convert(context, options, out);
-
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (XDocReportException e) {
-      e.printStackTrace();
-    }
-  }
 }

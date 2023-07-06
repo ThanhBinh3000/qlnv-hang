@@ -1,18 +1,15 @@
-package com.tcdt.qlnvhang.response.dieuChuyenNoiBo;
+package com.tcdt.qlnvhang.response.nhaphang.nhapkhac;
 
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
-public class DcnbPhieuXuatKhoHdrDTO {
+public class HhNkPhieuNhapKhoHdrDTO {
     private Long id;
-    private Long qDinhDccId;
+    private Long qdDcCucId;
     private String soQdinh;
     private LocalDate ngayKyQdinh;
     private Integer namKh;
@@ -26,27 +23,28 @@ public class DcnbPhieuXuatKhoHdrDTO {
     private String maNganKho;
     private String tenNganKho;
     private Boolean thayDoiThuKho;
-    private String soPhieuXuatKho;
-    private LocalDate ngayXuatKho;
-    private Long phieuKiemNghiemId;
-    private String soPhieuKiemNghiemCl;
-    private LocalDate ngayGiamDinh;
+    private String soPhieuNhapKho;
+    private LocalDate ngayNhapKho;
+    private Long bangKeVtId;
+    private String soBangKeVt;
     private String maHangHoa;
     private String tenHangHoa;
     private String maChLoaiHangHoa;
     private String tenChLoaiHangHoa;
-    private String ktvBaoQuan;
     private String donViTinh;
+    private String tenDonvitinh;
     private BigDecimal slDienChuyen;
     private BigDecimal duToanKinhPhiDc;
-    private Long bKCanHangId;
-    private String soBKCanHang;
+
+    private Long phieuKiemTraId;
+    private String soPhieuKiemTraCl;
+    private LocalDate ngayGiamDinh;
     private String trangThai;
     private String tenTrangThai;
 
-    public DcnbPhieuXuatKhoHdrDTO(Long id, Long qDinhDccId, String soQdinh, LocalDate ngayKyQdinh, Integer namKh, LocalDate thoiHanDieuChuyen, String maNhaKho, String tenNhaKho, String maDiemKho, String tenDiemKho, String maloKho, String tenloKho, String maNganKho, String tenNganKho, Boolean thayDoiThuKho, String soPhieuXuatKho, LocalDate ngayXuatKho, Long phieuKiemNghiemId, String soPhieuKiemNghiemCl, LocalDate ngayGiamDinh, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa, String ktvBaoQuan, String donViTinh, BigDecimal slDienChuyen, BigDecimal duToanKinhPhiDc, Long bKCanHangId, String soBKCanHang, String trangThai, String tenTrangThai) {
+    public HhNkPhieuNhapKhoHdrDTO(Long id, Long qdDcCucId, String soQdinh, LocalDate ngayKyQdinh, Integer namKh, LocalDate thoiHanDieuChuyen, String maNhaKho, String tenNhaKho, String maDiemKho, String tenDiemKho, String maloKho, String tenloKho, String maNganKho, String tenNganKho, Boolean thayDoiThuKho, String soPhieuNhapKho, LocalDate ngayNhapKho, Long bangKeVtId, String soBangKeVt, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa, String donViTinh, String tenDonvitinh, BigDecimal slDienChuyen, BigDecimal duToanKinhPhiDc, Long phieuKiemTraId, String soPhieuKiemTraCl, LocalDate ngayGiamDinh, String trangThai, String tenTrangThai) {
         this.id = id;
-        this.qDinhDccId = qDinhDccId;
+        this.qdDcCucId = qdDcCucId;
         this.soQdinh = soQdinh;
         this.ngayKyQdinh = ngayKyQdinh;
         this.namKh = namKh;
@@ -60,21 +58,21 @@ public class DcnbPhieuXuatKhoHdrDTO {
         this.maNganKho = maNganKho;
         this.tenNganKho = tenNganKho;
         this.thayDoiThuKho = thayDoiThuKho;
-        this.soPhieuXuatKho = soPhieuXuatKho;
-        this.ngayXuatKho = ngayXuatKho;
-        this.phieuKiemNghiemId = phieuKiemNghiemId;
-        this.soPhieuKiemNghiemCl = soPhieuKiemNghiemCl;
-        this.ngayGiamDinh = ngayGiamDinh;
+        this.soPhieuNhapKho = soPhieuNhapKho;
+        this.ngayNhapKho = ngayNhapKho;
+        this.bangKeVtId = bangKeVtId;
+        this.soBangKeVt = soBangKeVt;
         this.maHangHoa = maHangHoa;
         this.tenHangHoa = tenHangHoa;
         this.maChLoaiHangHoa = maChLoaiHangHoa;
         this.tenChLoaiHangHoa = tenChLoaiHangHoa;
-        this.ktvBaoQuan = ktvBaoQuan;
         this.donViTinh = donViTinh;
+        this.tenDonvitinh = tenDonvitinh;
         this.slDienChuyen = slDienChuyen;
         this.duToanKinhPhiDc = duToanKinhPhiDc;
-        this.bKCanHangId = bKCanHangId;
-        this.soBKCanHang = soBKCanHang;
+        this.phieuKiemTraId = phieuKiemTraId;
+        this.soPhieuKiemTraCl = soPhieuKiemTraCl;
+        this.ngayGiamDinh = ngayGiamDinh;
         this.trangThai = trangThai;
         this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
     }

@@ -33,6 +33,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.*;
 
+import static com.tcdt.qlnvhang.util.Contains.HO_SO_KY_THUAT.*;
+
 @Service
 public class XhHoSoKyThuatService extends BaseServiceImpl {
 
@@ -210,13 +212,14 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
           xhHoSoKyThuatDtl.setKetLuan(nhHoSoBienBan.getKetLuan());
           xhHoSoKyThuatDtl.setLoaiBb(nhHoSoBienBan.getLoaiBb());
           xhHoSoKyThuatDtl.setFileDinhKem(nhHoSoBienBan.getFileDinhKems());
+          xhHoSoKyThuatDtl.setThoiDiemLap(THOI_DIEM_NHAP_HANG);
           xhHoSoKyThuatDtl.setCanCu(null);
           xhHoSoKyThuatDtl.setVanBanBsung(null);
           xhHoSoKyThuatDtl.setTgianBsung(DataUtils.convertToLocalDate(nhHoSoBienBan.getTgianBsung()));
           xhHoSoKyThuatDtl.setFileDinhKem(nhHoSoBienBan.getFileDinhKems());
 
           //map chi tiet bien ban
-          if (nhHoSoBienBan.getLoaiBb().equals("BBKTHSKT")) {
+          if (nhHoSoBienBan.getLoaiBb().equals(BB_KTRA_HO_SO_KY_THUAT)) {
             List<NhHoSoKyThuatCt> children = nhHoSoKyThuat.getChildren();
             List<XhHoSoKyThuatRow> listHoSo = new ArrayList<>();
             for (NhHoSoKyThuatCt child : children) {
@@ -226,7 +229,7 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
               xhHoSoKyThuatRow.setSoLuong(DataUtils.safeToLong(child.getSoLuong()));
               xhHoSoKyThuatRow.setGhiChu(child.getGhiChu());
               xhHoSoKyThuatRow.setTrangThai("Đã Ký");
-              xhHoSoKyThuatRow.setType("HS");
+              xhHoSoKyThuatRow.setType(HO_SO);
               xhHoSoKyThuatRow.setFileDinhKem(Lists.newArrayList());
               listHoSo.add(xhHoSoKyThuatRow);
             }
@@ -239,25 +242,27 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
             XhHoSoKyThuatRow nlq = new XhHoSoKyThuatRow();
             nlq.setTen(child.getDaiDien());
             nlq.setLoai(child.getLoaiDaiDien());
-            nlq.setType("NLQ");
+            nlq.setType(NGUOI_LIEN_QUAN);
             listNlq.add(nlq);
           }
           listDtl.add(xhHoSoKyThuatDtl);
         }
         //3 bb mac dinh
         Queue<String> loaiBb = new LinkedList<>();
-        loaiBb.add("BBKTNQ");
-        loaiBb.add("BBKTVH");
-        loaiBb.add("BBKTHSKT");
+        loaiBb.add(BBAN_KTRA_NGOAI_QUAN);
+        loaiBb.add(BB_KTRA_VAN_HANH);
+        loaiBb.add(BB_KTRA_HO_SO_KY_THUAT);
         for (int i = 0; i < 3; i++) {
           XhHoSoKyThuatDtl dtlBbKt = new XhHoSoKyThuatDtl();
           dtlBbKt.setLoaiBb(loaiBb.poll());
+          dtlBbKt.setThoiDiemLap(THOI_DIEM_XUAT_HANG);
           listDtl.add(dtlBbKt);
         }
 
         xhHskt = new XhHoSoKyThuatHdr();
 
         xhHskt.setIdHsktNh(objReq.getId());
+        xhHskt.setIdHsktNh(nhHoSoKyThuat.getId());
         xhHskt.setSoHskt(nhHoSoKyThuat.getSoHoSoKyThuat());
         xhHskt.setSoBbLayMauNh(nhHoSoKyThuat.getSoBbLayMau());
         xhHskt.setXhHoSoKyThuatDtl(listDtl);
