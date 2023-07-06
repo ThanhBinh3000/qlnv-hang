@@ -188,7 +188,7 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
         Map<String, Long> mapCount = new HashMap<>();
         ArrayList<XhXkTongHopKhXuatCuc> listSumDtlByCuc = new ArrayList<>();
         //get List đề xuất kế hoạch của Cục đc bản ghi này tổng hợp nên.
-        List<XhXkKhXuatHang> listKeHoachs = xhXkKhXuatHangRepository.findByIdIn(Arrays.asList(model.getId()));
+        List<XhXkKhXuatHang> listKeHoachs = xhXkKhXuatHangRepository.findByIdThIn(Arrays.asList(model.getId()));
         List<String> soTotrinhs = listKeHoachs.stream().map(XhXkKhXuatHang::getSoToTrinh).collect(Collectors.toList());
         List<Long> idKeHoachs = listKeHoachs.stream().map(XhXkKhXuatHang::getId).collect(Collectors.toList());
         model.setListIdKeHoachs(idKeHoachs);
@@ -227,7 +227,7 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
         }
         XhXkKhXuatHang data = optional.get();
         //Update lại idTh cho bản ghi đề xuất của cục
-        List<XhXkKhXuatHang> listKh = xhXkKhXuatHangRepository.findByIdIn(Arrays.asList(data.getId()));
+        List<XhXkKhXuatHang> listKh = xhXkKhXuatHangRepository.findByIdThIn(Arrays.asList(data.getId()));
         if (!listKh.isEmpty()) {
             listKh.forEach(item -> {
                 item.setIdTh(null);
@@ -253,7 +253,7 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
         if (list.isEmpty()) {
             throw new Exception("Bản ghi không tồn tại");
         }
-        List<XhXkKhXuatHang> listKh = xhXkKhXuatHangRepository.findByIdIn(idSearchReq.getIdList());
+        List<XhXkKhXuatHang> listKh = xhXkKhXuatHangRepository.findByIdThIn(idSearchReq.getIdList());
         if (!listKh.isEmpty()) {
             listKh.forEach(item -> {
                 item.setIdTh(null);
