@@ -18,6 +18,7 @@ public interface XhXkKhXuatHangRepository extends JpaRepository<XhXkKhXuatHang, 
             "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
             "AND (:#{#param.namKeHoach} IS NULL OR c.namKeHoach = :#{#param.namKeHoach}) " +
             "AND (:#{#param.loai} IS NULL OR c.loai = :#{#param.loai}) " +
+            "AND (:#{#param.capDvi} IS NULL OR c.capDvi = :#{#param.capDvi}) " +
             "AND ((:#{#param.ngayKeHoachTu}  IS NULL OR c.ngayKeHoach >= :#{#param.ngayKeHoachTu})" +
             "AND  (:#{#param.ngayKeHoachDen}  IS NULL OR c.ngayKeHoach <= :#{#param.ngayKeHoachDen})) " +
             "AND ((:#{#param.ngayDuyetKeHoachTu}  IS NULL OR c.ngayDuyetKeHoach >= :#{#param.ngayDuyetKeHoachTu})" +
