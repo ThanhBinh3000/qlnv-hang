@@ -163,8 +163,8 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
           s1.setXhHoSoKyThuatDtl(s);
         });
       });
-      XhHoSoKyThuatHdr save = xhHoSoKyThuatRepository.save(xhHoSoKyThuatHdr);
-      return save;
+      xhHoSoKyThuatRepository.save(xhHoSoKyThuatHdr);
+      return xhHoSoKyThuatHdr;
     }
     return null;
   }
