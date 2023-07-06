@@ -51,7 +51,7 @@ public class XhXkKhXuatHang extends BaseEntity implements Serializable {
     //Entity Tổng hợp kế hoạch xuất hàng
     private String loai;
     private LocalDate thoiGianTh;
-    private String noiDung;
+    private String noiDungTh;
     private String ghiChu;
     private Long idTh;
 
