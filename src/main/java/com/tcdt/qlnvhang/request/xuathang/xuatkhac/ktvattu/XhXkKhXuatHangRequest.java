@@ -40,6 +40,7 @@ public class XhXkKhXuatHangRequest extends BaseRequest {
     String noiDung;
     String ghiChu;
     Long idTh;
+    List<Long> listIdKeHoachs;
     //search params
     LocalDate ngayKeHoachTu;
     LocalDate ngayKeHoachDen;
