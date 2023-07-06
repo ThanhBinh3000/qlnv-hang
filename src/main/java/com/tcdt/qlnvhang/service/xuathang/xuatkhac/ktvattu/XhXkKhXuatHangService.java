@@ -300,25 +300,44 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
         paggingReq.setLimit(Integer.MAX_VALUE);
         objReq.setPaggingReq(paggingReq);
         List<XhXkKhXuatHang> data = this.searchPage(currentUser, objReq).getContent();
-
-        String title = "Danh sách kế hoạch VT, TB có thời hạn lưu kho lớn hơn 12 tháng của Cục DTNN KV";
-        String[] rowsName = new String[]{"STT", "Năm kế hoạch", "Số KH/Tờ trình", "Ngày lập KH", "Ngày duyệt KH", "Trích yếu", "Số ĐV tài sản", "Trạng thái"};
-        String fileName = "ds-ke-hoach-vt-tb-co-thoi-han-luu-kho-lon-hon-12-thang-cua-cuc-dtnn-kv.xlsx";
-        List<Object[]> dataList = new ArrayList<>();
+        String title, fileName = "";
+        String[] rowsName;
         Object[] objs;
-        for (int i = 0; i < data.size(); i++) {
-            XhXkKhXuatHang dx = data.get(i);
-            objs = new Object[rowsName.length];
-            objs[0] = i;
-            objs[1] = dx.getNamKeHoach();
-            objs[2] = dx.getSoToTrinh();
-            objs[3] = dx.getNgayKeHoach();
-            objs[4] = dx.getNgayDuyetKeHoach();
-            objs[5] = dx.getTrichYeu();
-            objs[6] = dx.getSoDviTaiSan();
-            objs[7] = dx.getTenTrangThai();
-            dataList.add(objs);
+        List<Object[]> dataList = new ArrayList<>();
+        if (objReq.getLoai().equals("00")) {
+            title = "Danh sách kế hoạch VT, TB có thời hạn lưu kho lớn hơn 12 tháng của Cục DTNN KV";
+            fileName = "ds-ke-hoach-vt-tb-co-thoi-han-luu-kho-lon-hon-12-thang-cua-cuc-dtnn-kv.xlsx";
+            rowsName = new String[]{"STT", "Năm kế hoạch", "Số KH/Tờ trình", "Ngày lập KH", "Ngày duyệt KH", "Trích yếu", "Số ĐV tài sản", "Trạng thái"};
+            for (int i = 0; i < data.size(); i++) {
+                XhXkKhXuatHang dx = data.get(i);
+                objs = new Object[rowsName.length];
+                objs[0] = i;
+                objs[1] = dx.getNamKeHoach();
+                objs[2] = dx.getSoToTrinh();
+                objs[3] = dx.getNgayKeHoach();
+                objs[4] = dx.getNgayDuyetKeHoach();
+                objs[5] = dx.getTrichYeu();
+                objs[6] = dx.getSoDviTaiSan();
+                objs[7] = dx.getTenTrangThai();
+                dataList.add(objs);
+            }
+        } else {
+            title = "Danh sách tổng hợp kế hoạch xuất vật tư, thiết bị có thời hạn lưu kho lớn hơn 12";
+            fileName = "ds-tong-hop-ke-hoach-vt-tb-co-thoi-han-luu-kho-lon-hon-12-thang.xlsx";
+            rowsName = new String[]{"STT", "Mã tổng hợp", "Thời gian tổng hợp", "Nội dung tổng hợp", "Năm kế hoạch", "Trạng thái"};
+            for (int i = 0; i < data.size(); i++) {
+                XhXkKhXuatHang dx = data.get(i);
+                objs = new Object[rowsName.length];
+                objs[0] = i;
+                objs[1] = dx.getId();
+                objs[2] = dx.getThoiGianTh();
+                objs[3] = dx.getNoiDungTh();
+                objs[4] = dx.getNamKeHoach();
+                objs[5] = dx.getTenTrangThai();
+                dataList.add(objs);
+            }
         }
+
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
     }
