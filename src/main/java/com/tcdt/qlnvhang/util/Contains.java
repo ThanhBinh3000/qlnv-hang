@@ -282,6 +282,15 @@ public class Contains {
 				.put(Contains.DX_TIEU_HUY, "Tiêu hủy").get();
 	}
 
+	public static final Map<String, String> mappingPthucMtt;
+	static {
+		mappingPthucMtt = Maps.<String, String>buildMap().put(Contains.CHAO_GIA, "Chào giá")
+				.put(Contains.UY_QUYEN, "Úy quyền").put(Contains.MUA_LE, "Mua lẻ").get();
+	}
+	public static String getPthucMtt(String key) {
+		return Contains.mappingPthucMtt.get(key);
+	}
+
 	public static final Map<String, String> mappingLoaiDc;
 	static {
 		mappingLoaiDc = Maps.<String, String>buildMap().put(Contains.DC_GIA, "Điều chỉnh giá")
