@@ -101,8 +101,6 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
                 item.setIdTh(idTh);
             });
         }
-        //save file đính kèm
-//        fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkKhXuatHang.TABLE_NAME);
         return detail(created.getId());
     }
 
@@ -132,6 +130,23 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
         return detail(created.getId());
     }
 
+
+    @Transactional()
+    public XhXkKhXuatHang updateTongHop(CustomUserDetails currentUser, XhXkKhXuatHangRequest objReq) throws Exception {
+        if (objReq.getId() == null) {
+            throw new Exception("Bad request!");
+        }
+        Optional<XhXkKhXuatHang> optional = xhXkKhXuatHangRepository.findById(objReq.getId());
+        if (!optional.isPresent()) throw new Exception("Tổng hợp kế hoạch không tồn tại!");
+        XhXkKhXuatHang dx = optional.get();
+        dx.getXhXkKhXuatHangDtl().forEach(e -> e.setXhXkKhXuatHang(null));
+        BeanUtils.copyProperties(objReq, dx);
+        dx.getXhXkKhXuatHangDtl().forEach(e -> e.setXhXkKhXuatHang(dx));
+        dx.setXhXkKhXuatHangDtl(objReq.getXhXkKhXuatHangDtl());
+        XhXkKhXuatHang created = xhXkKhXuatHangRepository.save(dx);
+        return detail(created.getId());
+    }
+
     public XhXkKhXuatHang detail(Long id) throws Exception {
         if (ObjectUtils.isEmpty(id)) throw new Exception("Tham số không hợp lệ.");
         Optional<XhXkKhXuatHang> optional = xhXkKhXuatHangRepository.findById(id);
@@ -154,6 +169,46 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
     }
 
 
+    public XhXkKhXuatHang detailTongHop(Long id) throws Exception {
+        if (ObjectUtils.isEmpty(id)) throw new Exception("Tham số không hợp lệ.");
+        Optional<XhXkKhXuatHang> optional = xhXkKhXuatHangRepository.findById(id);
+        if (!optional.isPresent()) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        XhXkKhXuatHang model = optional.get();
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+        Map<String, String> mapVthh = getListDanhMucHangHoa();
+        model.getXhXkKhXuatHangDtl().forEach(s -> {
+            s.setMapDmucDvi(mapDmucDvi);
+            s.setMapVthh(mapVthh);
+        });
+        model.setTenDvi(mapDmucDvi.get(model.getMaDvi()));
+        model.setSoDviTaiSan(model.getXhXkKhXuatHangDtl().size());
+        model.setTenTrangThai(TrangThaiAllEnum.getLabelById(model.getTrangThai()));
+        Map<String, Long> mapCount = new HashMap<>();
+        ArrayList<XhXkTongHopKhXuatCuc> listSumDtlByCuc = new ArrayList<>();
+        //get List đề xuất kế hoạch của Cục đc bản ghi này tổng hợp nên.
+        List<XhXkKhXuatHang> listKeHoachs = xhXkKhXuatHangRepository.findByIdIn(Arrays.asList(model.getId()));
+        List<String> soTotrinhs = listKeHoachs.stream().map(XhXkKhXuatHang::getSoToTrinh).collect(Collectors.toList());
+        List<Long> idKeHoachs = listKeHoachs.stream().map(XhXkKhXuatHang::getId).collect(Collectors.toList());
+        model.setListIdKeHoachs(idKeHoachs);
+        model.setListSoKeHoachs(soTotrinhs);
+        mapCount = model.getXhXkKhXuatHangDtl().stream()
+                .collect(Collectors.groupingBy(XhXkKhXuatHangDtl::getTenCuc, Collectors.counting()));
+        if (!mapCount.isEmpty()) {
+            for (Map.Entry<String, Long> entry : mapCount.entrySet()) {
+                XhXkTongHopKhXuatCuc item = new XhXkTongHopKhXuatCuc();
+                item.setTenDvi(entry.getKey());
+                item.setSoDviTaiSan(entry.getValue());
+                item.setTenTrangThai(TrangThaiAllEnum.DA_DUYET_LDC.getTen());
+                item.setTrangThai(TrangThaiAllEnum.DA_DUYET_LDC.getId());
+                listSumDtlByCuc.add(item);
+            }
+        }
+        model.setListDxCuc(listSumDtlByCuc);
+        return model;
+    }
+
     @Transactional
     public void delete(IdSearchReq idSearchReq) throws Exception {
         Optional<XhXkKhXuatHang> optional = xhXkKhXuatHangRepository.findById(idSearchReq.getId());
@@ -164,11 +219,46 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
         xhXkKhXuatHangRepository.delete(data);
     }
 
+    @Transactional
+    public void deleteTongHop(IdSearchReq idSearchReq) throws Exception {
+        Optional<XhXkKhXuatHang> optional = xhXkKhXuatHangRepository.findById(idSearchReq.getId());
+        if (!optional.isPresent()) {
+            throw new Exception("Bản ghi không tồn tại");
+        }
+        XhXkKhXuatHang data = optional.get();
+        //Update lại idTh cho bản ghi đề xuất của cục
+        List<XhXkKhXuatHang> listKh = xhXkKhXuatHangRepository.findByIdIn(Arrays.asList(data.getId()));
+        if (!listKh.isEmpty()) {
+            listKh.forEach(item -> {
+                item.setIdTh(null);
+            });
+            xhXkKhXuatHangRepository.saveAll(listKh);
+        }
+        xhXkKhXuatHangRepository.delete(data);
+    }
+
+
     @Transient
     public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
         List<XhXkKhXuatHang> list = xhXkKhXuatHangRepository.findByIdIn(idSearchReq.getIdList());
         if (list.isEmpty()) {
             throw new Exception("Bản ghi không tồn tại");
+        }
+        xhXkKhXuatHangRepository.deleteAll(list);
+    }
+
+    @Transient
+    public void deleteMultiTongHop(IdSearchReq idSearchReq) throws Exception {
+        List<XhXkKhXuatHang> list = xhXkKhXuatHangRepository.findByIdIn(idSearchReq.getIdList());
+        if (list.isEmpty()) {
+            throw new Exception("Bản ghi không tồn tại");
+        }
+        List<XhXkKhXuatHang> listKh = xhXkKhXuatHangRepository.findByIdIn(idSearchReq.getIdList());
+        if (!listKh.isEmpty()) {
+            listKh.forEach(item -> {
+                item.setIdTh(null);
+            });
+            xhXkKhXuatHangRepository.saveAll(listKh);
         }
         xhXkKhXuatHangRepository.deleteAll(list);
     }
@@ -247,8 +337,8 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
         Map<String, Long> mapCount = new HashMap<>();
         List<String> soTotrinhs = listKeHoachs.stream().map(XhXkKhXuatHang::getSoToTrinh).collect(Collectors.toList());
         List<Long> idKeHoachs = listKeHoachs.stream().map(XhXkKhXuatHang::getId).collect(Collectors.toList());
-        resp.setListIdKeHoach(idKeHoachs);
-        resp.setListSoToTrinh(soTotrinhs);
+        resp.setListIdKeHoachs(idKeHoachs);
+        resp.setListSoKeHoachs(soTotrinhs);
         listKeHoachs.forEach(s -> {
             s.getXhXkKhXuatHangDtl().forEach(it -> {
                 it.setMapDmucDvi(mapDmucDvi);

@@ -78,7 +78,7 @@ public class XhXkTongHopKhXuatHangController {
     public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhXkKhXuatHangRequest objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhXkKhXuatHangService.update(currentUser, objReq));
+            resp.setData(xhXkKhXuatHangService.updateTongHop(currentUser, objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -96,7 +96,7 @@ public class XhXkTongHopKhXuatHangController {
     public ResponseEntity<BaseResponse> detail(@ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("id") Long id) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhXkKhXuatHangService.detail(id));
+            resp.setData(xhXkKhXuatHangService.detailTongHop(id));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -115,7 +115,7 @@ public class XhXkTongHopKhXuatHangController {
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            xhXkKhXuatHangService.delete(idSearchReq);
+            xhXkKhXuatHangService.deleteTongHop(idSearchReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -133,7 +133,7 @@ public class XhXkTongHopKhXuatHangController {
     public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            xhXkKhXuatHangService.deleteMulti(idSearchReq);
+            xhXkKhXuatHangService.deleteMultiTongHop(idSearchReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
