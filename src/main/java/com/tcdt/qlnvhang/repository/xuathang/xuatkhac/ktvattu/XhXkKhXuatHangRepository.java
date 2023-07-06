@@ -37,6 +37,7 @@ public interface XhXkKhXuatHangRepository extends JpaRepository<XhXkKhXuatHang, 
     @Query("SELECT distinct c FROM XhXkKhXuatHang c WHERE 1=1 " +
             "AND (:#{#param.namKeHoach} IS NULL OR c.namKeHoach = :#{#param.namKeHoach}) " +
             "AND (:#{#param.loai} IS NULL OR c.loai = :#{#param.loai}) " +
+            "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.capDvi} IS NULL OR c.capDvi = :#{#param.capDvi}) " +
             "AND (c.idTh is null) " +
             "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
