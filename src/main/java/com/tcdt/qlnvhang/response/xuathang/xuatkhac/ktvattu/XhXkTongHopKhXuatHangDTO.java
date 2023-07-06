@@ -9,6 +9,6 @@ import java.util.List;
 public class XhXkTongHopKhXuatHangDTO {
     List<XhXkTongHopKhXuatCuc> listDxCuc;
     List<XhXkKhXuatHangDtl> xhXkKhXuatHangDtl;
-    List<String> listSoToTrinh;
-    List<Long> listIdKeHoach;
+    List<String> listSoKeHoachs;
+    List<Long> listIdKeHoachs;
 }
