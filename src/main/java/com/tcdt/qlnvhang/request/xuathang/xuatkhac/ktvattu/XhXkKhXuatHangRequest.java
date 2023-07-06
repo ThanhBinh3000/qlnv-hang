@@ -37,7 +37,7 @@ public class XhXkKhXuatHangRequest extends BaseRequest {
     //Entity Tổng hợp kế hoạch xuất hàng
     String loai;
     LocalDate thoiGianTh;
-    String noiDung;
+    String noiDungTh;
     String ghiChu;
     Long idTh;
     List<Long> listIdKeHoachs;
