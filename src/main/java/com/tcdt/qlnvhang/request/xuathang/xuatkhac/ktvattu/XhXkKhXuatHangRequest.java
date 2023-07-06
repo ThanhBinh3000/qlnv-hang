@@ -24,7 +24,7 @@ public class XhXkKhXuatHangRequest extends BaseRequest {
     String trichYeu;
     LocalDate ngayKeHoach;
     LocalDate ngayDuyetKeHoach;
-    LocalDate thoiGianDuKienXuat;
+    //    LocalDate thoiGianDuKienXuat;
     LocalDate thoiGianDuKienXuatTu;
     LocalDate thoiGianDuKienXuatDen;
     String moTa;
