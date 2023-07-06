@@ -238,7 +238,7 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
             for (Map.Entry<String, Long> entry : mapCount.entrySet()) {
                 XhXkTongHopKhXuatCuc item = new XhXkTongHopKhXuatCuc();
                 item.setTenDvi(entry.getKey());
-                item.setSlDviTaiSan(entry.getValue());
+                item.setSoDviTaiSan(entry.getValue());
                 item.setTenTrangThai(TrangThaiAllEnum.DA_DUYET_LDC.getTen());
                 item.setTrangThai(TrangThaiAllEnum.DA_DUYET_LDC.getId());
                 listSumDtlByCuc.add(item);

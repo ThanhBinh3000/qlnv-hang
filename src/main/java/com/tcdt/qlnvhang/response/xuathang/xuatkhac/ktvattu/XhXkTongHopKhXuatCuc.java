@@ -6,7 +6,7 @@ import lombok.Data;
 public class XhXkTongHopKhXuatCuc {
 
     String maDvi;
-    Long slDviTaiSan;
+    Long soDviTaiSan;
     String trangThai;
     String tenTrangThai;
     String tenDvi;
