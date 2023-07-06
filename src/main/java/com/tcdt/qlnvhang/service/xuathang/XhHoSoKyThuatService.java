@@ -147,9 +147,22 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
   @Transactional
   public XhHoSoKyThuatHdr update(CustomUserDetails currentUser, XhHoSoKyThuatHdr objReq) throws Exception {
     Optional<XhHoSoKyThuatHdr> updateRow = xhHoSoKyThuatRepository.findById(objReq.getId());
-    if(updateRow.isPresent()){
+    if (updateRow.isPresent()) {
       XhHoSoKyThuatHdr xhHoSoKyThuatHdr = updateRow.get();
-      DataUtils.copyProperties(xhHoSoKyThuatHdr,objReq);
+      xhHoSoKyThuatHdr.getXhHoSoKyThuatDtl().forEach(s -> {
+        s.setXhHoSoKyThuatHdr(null);
+        s.getXhHoSoKyThuatRow().forEach(s1 -> {
+          s1.setXhHoSoKyThuatDtl(null);
+        });
+      });
+
+      DataUtils.copyProperties(objReq, xhHoSoKyThuatHdr);
+      xhHoSoKyThuatHdr.getXhHoSoKyThuatDtl().forEach(s -> {
+        s.setXhHoSoKyThuatHdr(xhHoSoKyThuatHdr);
+        s.getXhHoSoKyThuatRow().forEach(s1 -> {
+          s1.setXhHoSoKyThuatDtl(s);
+        });
+      });
       xhHoSoKyThuatRepository.save(xhHoSoKyThuatHdr);
       return xhHoSoKyThuatHdr;
     }
