@@ -86,6 +86,11 @@ public class HhNkPhieuKtclServiceImpl extends BaseServiceImpl implements HhNkPhi
     }
 
     @Override
+    public HhNkPhieuKtcl timKiemPhieuKtclTheoMaNganLo(HhNkPhieuKtclSearch req) throws Exception {
+        return hhNkPhieuKtclRepository.findByIdQdGiaoNvNhAndMaLoKhoAndMaNganKhoAndTrangThai(req.getIdQdGiaoNvnh(), req.getMaLoKho(), req.getMaNganKho(), Contains.DADUYET_LDCC);
+    }
+
+    @Override
     @Transactional
     public HhNkPhieuKtcl themMoi(HhNkPhieuKtclReq objReq) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
