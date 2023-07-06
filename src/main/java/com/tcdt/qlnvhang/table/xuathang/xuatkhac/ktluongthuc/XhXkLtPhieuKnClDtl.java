@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class XhXkLtPhieuKnClDtl implements Serializable {
 
   private static final long serialVersionUID = 1L;
-  public static final String TABLE_NAME = "XH_CTVT_PHIEU_KN_CL_DTL";
+  public static final String TABLE_NAME = "XH_XK_LT_PHIEU_KN_CL_DTL";
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhXkLtPhieuKnClDtl.TABLE_NAME + "_SEQ")
