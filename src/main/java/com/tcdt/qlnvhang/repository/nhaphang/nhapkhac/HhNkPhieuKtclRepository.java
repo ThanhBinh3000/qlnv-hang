@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface HhNkPhieuKtclRepository extends JpaRepository<HhNkPhieuKtcl, Long> {
     HhNkPhieuKtcl findByIdQdGiaoNvNhAndMaLoKhoAndMaNganKhoAndSoBbNtBq(Long idQdGiaoNvNh, String maLoKho, String maNganKho, String soBbNtBq);
+    HhNkPhieuKtcl findByIdQdGiaoNvNhAndMaLoKhoAndMaNganKhoAndTrangThai(Long idQdGiaoNvNh, String maLoKho, String maNganKho, String trangThai);
 }

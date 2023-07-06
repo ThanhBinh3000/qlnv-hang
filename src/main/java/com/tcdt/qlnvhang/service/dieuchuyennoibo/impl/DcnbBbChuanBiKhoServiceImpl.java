@@ -57,6 +57,14 @@ public class DcnbBbChuanBiKhoServiceImpl implements DcnbBbChuanBiKhoService {
         req.setMaDvi(currentUser.getDvql());
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<DcnbBbChuanBiKhoHdrDTO> searchDto = null;
+        if (req.getIsVatTu() == null) {
+            req.setIsVatTu(false);
+        }
+        if (req.getIsVatTu()) {
+            req.setDsLoaiHang(Arrays.asList("VT"));
+        } else {
+            req.setDsLoaiHang(Arrays.asList("LT", "M"));
+        }
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             searchDto = hdrRepository.searchPageChiCuc(req, pageable);
         } else {
@@ -75,10 +83,10 @@ public class DcnbBbChuanBiKhoServiceImpl implements DcnbBbChuanBiKhoService {
         if (!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             throw new Exception("Văn bản này chỉ có thêm ở cấp chi cục");
         }
-        Optional<DcnbBbChuanBiKhoHdr> optional = hdrRepository.findBySoBban(req.getSoBban());
-        if (optional.isPresent()) {
-            throw new Exception("Số biên bản đã tồn tại");
-        }
+//        Optional<DcnbBbChuanBiKhoHdr> optional = hdrRepository.findBySoBban(req.getSoBban());
+//        if (optional.isPresent()) {
+//            throw new Exception("Số biên bản đã tồn tại");
+//        }
 
         DcnbBbChuanBiKhoHdr data = new DcnbBbChuanBiKhoHdr();
         BeanUtils.copyProperties(req, data);
@@ -88,6 +96,9 @@ public class DcnbBbChuanBiKhoServiceImpl implements DcnbBbChuanBiKhoService {
             e.setParent(data);
         });
         DcnbBbChuanBiKhoHdr created = hdrRepository.save(data);
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BBCBK-"+ userInfo.getDvqlTenVietTat();
+        created.setSoBban(so);
+        hdrRepository.save(created);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBbChuanBiKhoHdr.TABLE_NAME);
         created.setFileDinhKems(canCu);
         return created;
@@ -110,6 +121,9 @@ public class DcnbBbChuanBiKhoServiceImpl implements DcnbBbChuanBiKhoService {
         BeanUtils.copyProperties(req, data);
         data.setChildren(req.getChildren());
         DcnbBbChuanBiKhoHdr update = hdrRepository.save(data);
+        String so = update.getId() + "/" + (new Date().getYear() + 1900) +"/BBCBK-"+ userInfo.getDvqlTenVietTat();
+        update.setSoBban(so);
+        hdrRepository.save(update);
         fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbBbChuanBiKhoHdr.TABLE_NAME));
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), update.getId(), DcnbBbChuanBiKhoHdr.TABLE_NAME);
         update.setFileDinhKems(canCu);

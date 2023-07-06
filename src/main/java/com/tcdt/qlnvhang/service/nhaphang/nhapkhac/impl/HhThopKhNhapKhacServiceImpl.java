@@ -53,23 +53,44 @@ public class HhThopKhNhapKhacServiceImpl extends BaseServiceImpl implements HhTh
 
     @Override
     public Page<HhThopKhNhapKhac> timKiem(HhThopKhNhapKhacSearch req) {
+        Map<String, String> mapVthh = getListDanhMucHangHoa();
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+        Map<String,String> hashMapLoaiNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
+        Map<String,String> hashMapKieuNx = getListDanhMucChung("KIEU_NHAP_XUAT");
         req.setTuNgayThStr(convertFullDateToString(req.getTuNgayTh()));
         req.setDenNgayThStr(convertFullDateToString(req.getDenNgayTh()));
         req.setTuNgayKyStr(convertFullDateToString(req.getTuNgayKy()));
         req.setDenNgayKyStr(convertFullDateToString(req.getDenNgayKy()));
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<HhThopKhNhapKhac> data = hhThopKhNhapKhacRepository.search(req, pageable);
-        Map<String, String> mapVthh = getListDanhMucHangHoa();
         data.getContent().forEach(f -> {
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenLoaiVthh(mapVthh.get(f.getLoaiVthh()));
+            List<HhDxuatKhNhapKhacHdr> listDxuat = hhDxuatKhNhapKhacHdrRepository.findAllByThopId(f.getId());
+            listDxuat.forEach(i -> {
+                i.setTenLoaiHinhNx(hashMapLoaiNx.get(i.getLoaiHinhNx()));
+                i.setTenKieuNx(hashMapKieuNx.get(i.getKieuNx()));
+                i.setTenLoaiVthh(mapVthh.get(i.getLoaiVthh()));
+                i.setTenDvi(mapDmucDvi.get(i.getMaDviDxuat()));
+                List<HhDxuatKhNhapKhacDtl> dtls = hhDxuatKhNhapKhacDtlRepository.findAllByHdrId(i.getId());
+                dtls.forEach(dtl -> {
+                    dtl.setTenCuc(mapDmucDvi.get(dtl.getMaCuc()));
+                    dtl.setTenChiCuc(mapDmucDvi.get(dtl.getMaChiCuc()));
+                    dtl.setTenDiemKho(mapDmucDvi.get(dtl.getMaDiemKho()));
+                    dtl.setTenNhaKho(mapDmucDvi.get(dtl.getMaNhaKho()));
+                    dtl.setTenNganLoKho(mapDmucDvi.get(dtl.getMaLoKho()) + " - " + mapDmucDvi.get(dtl.getMaNganKho()));
+                    dtl.setTenCloaiVthh(mapVthh.get(dtl.getCloaiVthh()));
+                });
+                i.setDetails(dtls);
+            });
+            f.setDxHdr(listDxuat);
         });
         return data;
     }
 
     @Override
     public List<HhThopKhNhapKhac> layDsTongHopChuaTaoQd() {
-        List<HhThopKhNhapKhac> thop = hhThopKhNhapKhacRepository.findAllByTrangThai(TrangThaiAllEnum.CHUA_TONG_HOP.getId());
+        List<HhThopKhNhapKhac> thop = hhThopKhNhapKhacRepository.findAllByTrangThai(TrangThaiAllEnum.CHUA_TAO_QD.getId());
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String,String> hashMapLoaiNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
@@ -82,6 +103,7 @@ public class HhThopKhNhapKhacServiceImpl extends BaseServiceImpl implements HhTh
                 i.setTenLoaiHinhNx(hashMapLoaiNx.get(i.getLoaiHinhNx()));
                 i.setTenKieuNx(hashMapKieuNx.get(i.getKieuNx()));
                 i.setTenLoaiVthh(mapVthh.get(i.getLoaiVthh()));
+                i.setTenDvi(mapDmucDvi.get(i.getMaDviDxuat()));
                 List<HhDxuatKhNhapKhacDtl> dtls = hhDxuatKhNhapKhacDtlRepository.findAllByHdrId(i.getId());
                 dtls.forEach(dtl -> {
                     dtl.setTenCuc(mapDmucDvi.get(dtl.getMaCuc()));
@@ -154,6 +176,7 @@ public class HhThopKhNhapKhacServiceImpl extends BaseServiceImpl implements HhTh
         HhThopKhNhapKhacDTO data = new HhThopKhNhapKhacDTO();
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
+        Map<String,String> hashMapKieuNx = getListDanhMucChung("KIEU_NHAP_XUAT");
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         hhThopKhNhapKhac.get().setTenLoaiHinhNx(mapLoaiHinhNx.get(hhThopKhNhapKhac.get().getLoaiHinhNx()));
         hhThopKhNhapKhac.get().setTenLoaiVthh(mapVthh.get(hhThopKhNhapKhac.get().getLoaiVthh()));
@@ -162,7 +185,20 @@ public class HhThopKhNhapKhacServiceImpl extends BaseServiceImpl implements HhTh
         data.setHdr(hhThopKhNhapKhac.get());
         List<HhDxuatKhNhapKhacHdr> dtls = hhDxuatKhNhapKhacHdrRepository.findAllByThopId(hhThopKhNhapKhac.get().getId());
         dtls.forEach(i -> {
+            i.setTenLoaiHinhNx(mapLoaiHinhNx.get(i.getLoaiHinhNx()));
+            i.setTenKieuNx(hashMapKieuNx.get(i.getKieuNx()));
+            i.setTenLoaiVthh(mapVthh.get(i.getLoaiVthh()));
             i.setTenDvi(mapDmucDvi.get(i.getMaDviDxuat()));
+            List<HhDxuatKhNhapKhacDtl> dxuatKhNhapKhacDtls = hhDxuatKhNhapKhacDtlRepository.findAllByHdrId(i.getId());
+            dxuatKhNhapKhacDtls.forEach(dtl -> {
+                dtl.setTenCuc(mapDmucDvi.get(dtl.getMaCuc()));
+                dtl.setTenChiCuc(mapDmucDvi.get(dtl.getMaChiCuc()));
+                dtl.setTenDiemKho(mapDmucDvi.get(dtl.getMaDiemKho()));
+                dtl.setTenNhaKho(mapDmucDvi.get(dtl.getMaNhaKho()));
+                dtl.setTenNganLoKho(mapDmucDvi.get(dtl.getMaLoKho()) + " - " + mapDmucDvi.get(dtl.getMaNganKho()));
+                dtl.setTenCloaiVthh(mapVthh.get(dtl.getCloaiVthh()));
+            });
+            i.setDetails(dxuatKhNhapKhacDtls);
         });
         data.setDtl(dtls);
         return data;

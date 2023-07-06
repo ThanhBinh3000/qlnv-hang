@@ -28,10 +28,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
@@ -60,6 +57,14 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
         req.setMaDvi(currentUser.getDvql());
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<DcnbPhieuNhapKhoHdrDTO> searchDto = null;
+        if(req.getIsVatTu() == null){
+            req.setIsVatTu(false);
+        }
+        if(req.getIsVatTu()){
+            req.setDsLoaiHang(Arrays.asList("VT"));
+        }else {
+            req.setDsLoaiHang(Arrays.asList("LT","M"));
+        }
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             searchDto = hdrRepository.searchPageChiCuc(req, pageable);
         } else {
@@ -78,10 +83,10 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
         if (!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             throw new Exception("Văn bản này chỉ có thêm ở cấp chi cục");
         }
-        Optional<DcnbPhieuNhapKhoHdr> optional = hdrRepository.findBySoPhieuNhapKho(req.getSoPhieuNhapKho());
-        if (optional.isPresent()) {
-            throw new Exception("Số biên bản đã tồn tại");
-        }
+//        Optional<DcnbPhieuNhapKhoHdr> optional = hdrRepository.findBySoPhieuNhapKho(req.getSoPhieuNhapKho());
+//        if (optional.isPresent()) {
+//            throw new Exception("Số biên bản đã tồn tại");
+//        }
 
         DcnbPhieuNhapKhoHdr data = new DcnbPhieuNhapKhoHdr();
         BeanUtils.copyProperties(req, data);
@@ -93,6 +98,9 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
             e.setParent(data);
         });
         DcnbPhieuNhapKhoHdr created = hdrRepository.save(data);
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/PNK-"+ userInfo.getDvqlTenVietTat();
+        created.setSoPhieuNhapKho(so);
+        hdrRepository.save(created);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbPhieuNhapKhoHdr.TABLE_NAME);
         created.setFileDinhKems(canCu);
         return created;
@@ -115,6 +123,9 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
         BeanUtils.copyProperties(req, data);
         data.setChildren(req.getChildren());
         DcnbPhieuNhapKhoHdr update = hdrRepository.save(data);
+        String so = update.getId() + "/" + (new Date().getYear() + 1900) +"/PNK-"+ userInfo.getDvqlTenVietTat();
+        update.setSoPhieuNhapKho(so);
+        hdrRepository.save(update);
         fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbPhieuNhapKhoHdr.TABLE_NAME));
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), update.getId(), DcnbPhieuNhapKhoHdr.TABLE_NAME);
         update.setFileDinhKems(canCu);

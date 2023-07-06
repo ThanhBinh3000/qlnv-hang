@@ -74,4 +74,7 @@ public class DcnbBangKeNhapVTReq extends BaseRequest {
 
     private LocalDate tuNgayNhapKho;
     private LocalDate denNgayNhapKho;
+
+    private Boolean isVatTu = false;
+    private List<String> dsLoaiHang = new ArrayList<>();
 }

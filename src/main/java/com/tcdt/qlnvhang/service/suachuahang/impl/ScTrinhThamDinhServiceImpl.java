@@ -3,16 +3,19 @@ package com.tcdt.qlnvhang.service.suachuahang.impl;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
+import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScDanhSachRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScTrinhThamDinhRepository;
-import com.tcdt.qlnvhang.request.suachua.ScTrinhVaThamDinhReq;
+import com.tcdt.qlnvhang.request.suachua.ScTrinhThamDinhDtlReq;
+import com.tcdt.qlnvhang.request.suachua.ScTrinhThamDinhHdrReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.service.suachuahang.ScTrinhVaThamDinhService;
+import com.tcdt.qlnvhang.service.suachuahang.ScTrinhThamDinhService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanLayMauHdr;
-import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTrinhThamDinh;
+import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScDanhSachHdr;
+import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTrinhThamDinhDtl;
+import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTrinhThamDinhHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.apache.commons.collections4.CollectionUtils;
@@ -27,12 +30,13 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ScTrinhVaThamDinhServiceImpl extends BaseServiceImpl implements ScTrinhVaThamDinhService {
+public class ScTrinhThamDinhServiceImpl extends BaseServiceImpl implements ScTrinhThamDinhService {
 
     @Autowired
     private ScTrinhThamDinhRepository hdrRepository;
@@ -41,10 +45,10 @@ public class ScTrinhVaThamDinhServiceImpl extends BaseServiceImpl implements ScT
     private FileDinhKemService fileDinhKemService;
 
     @Autowired
-    private FileDinhKemRepository fileDinhKemRepository;
+    private ScDanhSachRepository scDanhSachRepository;
 
     @Override
-    public Page<ScTrinhThamDinh> searchPage(ScTrinhVaThamDinhReq req) throws Exception {
+    public Page<ScTrinhThamDinhHdr> searchPage(ScTrinhThamDinhHdrReq req) throws Exception {
         UserInfo currentUser = SecurityContextService.getUser();
         if (currentUser == null) {
             throw new Exception("Access denied.");
@@ -54,74 +58,94 @@ public class ScTrinhVaThamDinhServiceImpl extends BaseServiceImpl implements ScT
             req.setMaDvi(dvql.substring(0, 6));
         }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        Page<ScTrinhThamDinh> search = hdrRepository.searchPage(req, pageable);
+        Page<ScTrinhThamDinhHdr> search = hdrRepository.searchPage(req, pageable);
         return search;
     }
 
     @Transactional
     @Override
-    public ScTrinhThamDinh create(ScTrinhVaThamDinhReq req) throws Exception {
+    public ScTrinhThamDinhHdr create(ScTrinhThamDinhHdrReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
-        ScTrinhThamDinh hdr = new ScTrinhThamDinh();
+        ScTrinhThamDinhHdr hdr = new ScTrinhThamDinhHdr();
         BeanUtils.copyProperties(req, hdr);
-
         hdr.setNam(LocalDate.now().getYear());
         hdr.setMaDvi(userInfo.getDvql());
         hdr.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
-        ScTrinhThamDinh created = hdrRepository.save(hdr);
-        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), ScTrinhThamDinh.TABLE_NAME + "_CAN_CU");
-        created.setCanCu(canCu);
-        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), ScTrinhThamDinh.TABLE_NAME + "_TAI_LIEU_DINH_KEM");
+        ScTrinhThamDinhHdr created = hdrRepository.save(hdr);
+        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), ScTrinhThamDinhHdr.TABLE_NAME + "_CAN_CU");
+        created.setFileCanCu(canCu);
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), ScTrinhThamDinhHdr.TABLE_NAME + "_DINH_KEM");
         created.setFileDinhKem(fileDinhKem);
+        List<ScTrinhThamDinhDtl> scTrinhThamDinhDtls = this.saveDtl(req, created.getId());
+        created.setChildren(scTrinhThamDinhDtls);
         return created;
     }
+
+    private List<ScTrinhThamDinhDtl> saveDtl(ScTrinhThamDinhHdrReq req,Long idHdr) throws Exception{
+        List<ScTrinhThamDinhDtlReq> children = req.getChildren();
+        List<ScTrinhThamDinhDtl> listDtl = new ArrayList<>();
+        req.getChildren().forEach( item -> {
+            ScTrinhThamDinhDtl dtl = new ScTrinhThamDinhDtl();
+            dtl.setIdHdr(idHdr);
+            dtl.setIdDsHdr(item.getId());
+            // Update lại data vào danh sách gốc
+            Optional<ScDanhSachHdr> dsHdr = scDanhSachRepository.findById(item.getId());
+            if(dsHdr.isPresent()){
+                dsHdr.get().setKetQua(item.getKetQua());
+                dsHdr.get().setDonGiaDk(item.getDonGiaDk());
+                ScDanhSachHdr save = scDanhSachRepository.save(dsHdr.get());
+                dtl.setScDanhSachHdr(save);
+            }else{
+                throw new RuntimeException("Không tìm thấy danh sách hàng cần sửa chữa");
+            }
+            listDtl.add(dtl);
+        });
+        return listDtl;
+    }
+
     @Transactional
     @Override
-    public ScTrinhThamDinh update(ScTrinhVaThamDinhReq req) throws Exception {
+    public ScTrinhThamDinhHdr update(ScTrinhThamDinhHdrReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
-        Optional<ScTrinhThamDinh> optional = hdrRepository.findById(req.getId());
+        Optional<ScTrinhThamDinhHdr> optional = hdrRepository.findById(req.getId());
         if (!optional.isPresent()){
             throw new Exception("Bản ghi không tồn tại");
         }
-        ScTrinhThamDinh hdr = optional.get();
+        ScTrinhThamDinhHdr hdr = optional.get();
         BeanUtils.copyProperties(req, hdr);
 
         hdr.setNam(LocalDate.now().getYear());
         hdr.setMaDvi(userInfo.getDvql());
         hdr.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
-        ScTrinhThamDinh created = hdrRepository.save(hdr);
-        fileDinhKemService.delete(req.getId(), Lists.newArrayList(ScTrinhThamDinh.TABLE_NAME + "_CAN_CU"));
-        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getCanCu(), created.getId(), ScTrinhThamDinh.TABLE_NAME + "_CAN_CU");
-        created.setCanCu(canCu);
-        fileDinhKemService.delete(req.getId(), Lists.newArrayList(ScTrinhThamDinh.TABLE_NAME + "_TAI_LIEU_DINH_KEM"));
-        List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getCanCu(), created.getId(), ScTrinhThamDinh.TABLE_NAME + "_TAI_LIEU_DINH_KEM");
+        ScTrinhThamDinhHdr created = hdrRepository.save(hdr);
+        fileDinhKemService.delete(req.getId(), Lists.newArrayList(ScTrinhThamDinhHdr.TABLE_NAME + "_CAN_CU"));
+        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), ScTrinhThamDinhHdr.TABLE_NAME + "_CAN_CU");
+        created.setFileCanCu(canCu);
+        fileDinhKemService.delete(req.getId(), Lists.newArrayList(ScTrinhThamDinhHdr.TABLE_NAME + "_TAI_LIEU_DINH_KEM"));
+        List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), ScTrinhThamDinhHdr.TABLE_NAME + "_TAI_LIEU_DINH_KEM");
         created.setFileDinhKem(fileDinhKemList);
-
+        List<ScTrinhThamDinhDtl> scTrinhThamDinhDtls = this.saveDtl(req, created.getId());
+        created.setChildren(scTrinhThamDinhDtls);
         return created;
     }
 
     @Override
-    public ScTrinhThamDinh detail(Long id) throws Exception {
-        Optional<ScTrinhThamDinh> optional = hdrRepository.findById(id);
+    public ScTrinhThamDinhHdr detail(Long id) throws Exception {
+        Optional<ScTrinhThamDinhHdr> optional = hdrRepository.findById(id);
         if (!optional.isPresent()) {
             throw new Exception("Bản ghi không tồn tại");
         }
-        ScTrinhThamDinh data = optional.get();
-        List<FileDinhKem> canCu = fileDinhKemRepository.findByDataIdAndDataTypeIn(data.getId(), Collections.singleton(ScTrinhThamDinh.TABLE_NAME + "_CAN_CU"));
-        data.setCanCu(canCu);
-
-        List<FileDinhKem> fileDinhKemList = fileDinhKemRepository.findByDataIdAndDataTypeIn(data.getId(), Collections.singleton(ScTrinhThamDinh.TABLE_NAME + "_TAI_LIEU_DINH_KEM"));
-        data.setFileDinhKem(fileDinhKemList);
+        ScTrinhThamDinhHdr data = optional.get();
         return data;
     }
 
     @Override
-    public ScTrinhThamDinh approve(ScTrinhVaThamDinhReq req) throws Exception {
-        Optional<ScTrinhThamDinh> optional = hdrRepository.findById(req.getId());
+    public ScTrinhThamDinhHdr approve(ScTrinhThamDinhHdrReq req) throws Exception {
+        Optional<ScTrinhThamDinhHdr> optional = hdrRepository.findById(req.getId());
         if (!optional.isPresent()) {
             throw new Exception("Bản ghi không tồn tại");
         }
-        ScTrinhThamDinh hdr = optional.get();
+        ScTrinhThamDinhHdr hdr = optional.get();
         String status = hdr.getTrangThai() + req.getTrangThai();
         switch (status) {
             // Arena các roll back approve
@@ -147,18 +171,18 @@ public class ScTrinhVaThamDinhServiceImpl extends BaseServiceImpl implements ScT
                 throw new Exception("Phê duyệt không thành công");
         }
         hdr.setTrangThai(req.getTrangThai());
-        ScTrinhThamDinh save = hdrRepository.save(hdr);
+        ScTrinhThamDinhHdr save = hdrRepository.save(hdr);
         return save;
     }
     @Transient
     @Override
     public void delete(Long id) throws Exception {
-        Optional<ScTrinhThamDinh> optional = hdrRepository.findById(id);
+        Optional<ScTrinhThamDinhHdr> optional = hdrRepository.findById(id);
         if (!optional.isPresent()) {
             throw new Exception("Bản ghi không tồn tại");
         }
-        fileDinhKemService.delete(id, Lists.newArrayList(ScTrinhThamDinh.TABLE_NAME + "_CAN_CU"));
-        fileDinhKemService.delete(id, Lists.newArrayList(ScTrinhThamDinh.TABLE_NAME + "_TAI_LIEU_DINH_KEM"));
+        fileDinhKemService.delete(id, Lists.newArrayList(ScTrinhThamDinhHdr.TABLE_NAME + "_CAN_CU"));
+        fileDinhKemService.delete(id, Lists.newArrayList(ScTrinhThamDinhHdr.TABLE_NAME + "_TAI_LIEU_DINH_KEM"));
         hdrRepository.delete(optional.get());
 
     }
@@ -179,7 +203,7 @@ public class ScTrinhVaThamDinhServiceImpl extends BaseServiceImpl implements ScT
     }
 
     @Override
-    public void export(ScTrinhVaThamDinhReq req, HttpServletResponse response) throws Exception {
+    public void export(ScTrinhThamDinhHdrReq req, HttpServletResponse response) throws Exception {
 
     }
 }

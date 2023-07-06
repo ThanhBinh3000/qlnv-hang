@@ -69,6 +69,14 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<DcnbBienBanHaoDoiHdrDTO> searchDto = null;
+        if(req.getIsVatTu() == null){
+            req.setIsVatTu(false);
+        }
+        if(req.getIsVatTu()){
+            req.setDsLoaiHang(Arrays.asList("VT"));
+        }else {
+            req.setDsLoaiHang(Arrays.asList("LT","M"));
+        }
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             searchDto = dcnbBienBanHaoDoiHdrRepository.searchPageChiCuc(req, pageable);
         }else {
@@ -82,10 +90,10 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
         if (currentUser == null) {
             throw new Exception("Bad request.");
         }
-        Optional<DcnbBienBanHaoDoiHdr> optional = dcnbBienBanHaoDoiHdrRepository.findFirstBySoBienBan(objReq.getSoBienBan());
-        if (optional.isPresent() && objReq.getSoBienBan().split("/").length == 1) {
-            throw new Exception("Số biên bản đã tồn tại");
-        }
+//        Optional<DcnbBienBanHaoDoiHdr> optional = dcnbBienBanHaoDoiHdrRepository.findFirstBySoBienBan(objReq.getSoBienBan());
+//        if (optional.isPresent() && objReq.getSoBienBan().split("/").length == 1) {
+//            throw new Exception("Số biên bản đã tồn tại");
+//        }
         DcnbBienBanHaoDoiHdr data = new DcnbBienBanHaoDoiHdr();
         BeanUtils.copyProperties(objReq, data);
         data.setMaDvi(currentUser.getDvql());
@@ -97,6 +105,9 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
             e.setDcnbBienBanHaoDoiHdr(data);
         });
         DcnbBienBanHaoDoiHdr created = dcnbBienBanHaoDoiHdrRepository.save(data);
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BBHD-"+ currentUser.getUser().getDvqlTenVietTat();
+        created.setSoBienBan(so);
+        dcnbBienBanHaoDoiHdrRepository.save(created);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), DcnbBienBanHaoDoiHdr.TABLE_NAME);
         created.setFileDinhKems(canCu);
         return created;
@@ -111,14 +122,14 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
-        Optional<DcnbBienBanHaoDoiHdr> soBienBan = dcnbBienBanHaoDoiHdrRepository.findFirstBySoBienBan(objReq.getSoBienBan());
-        if (org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoBienBan())) {
-            if (soBienBan.isPresent() && objReq.getSoBienBan().split("/").length == 1) {
-                if (!soBienBan.get().getId().equals(objReq.getId())) {
-                    throw new Exception("số biên bản đã tồn tại");
-                }
-            }
-        }
+//        Optional<DcnbBienBanHaoDoiHdr> soBienBan = dcnbBienBanHaoDoiHdrRepository.findFirstBySoBienBan(objReq.getSoBienBan());
+//        if (org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoBienBan())) {
+//            if (soBienBan.isPresent() && objReq.getSoBienBan().split("/").length == 1) {
+//                if (!soBienBan.get().getId().equals(objReq.getId())) {
+//                    throw new Exception("số biên bản đã tồn tại");
+//                }
+//            }
+//        }
 
         DcnbBienBanHaoDoiHdr data = optional.get();
         objReq.setMaDvi(data.getMaDvi());
@@ -127,6 +138,9 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
         data.setDanhSachBangKe(objReq.getDanhSachBangKe());
         data.setThongTinHaoHut(objReq.getThongTinHaoHut());
         DcnbBienBanHaoDoiHdr created = dcnbBienBanHaoDoiHdrRepository.save(data);
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BBHD-"+ currentUser.getUser().getDvqlTenVietTat();
+        created.setSoBienBan(so);
+        dcnbBienBanHaoDoiHdrRepository.save(created);
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbBienBanHaoDoiHdr.TABLE_NAME));
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), DcnbBienBanHaoDoiHdr.TABLE_NAME);
         created.setFileDinhKems(canCu);
@@ -208,6 +222,9 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
         String status = optional.get().getTrangThai() + statusReq.getTrangThai();
         switch (status) {
             case Contains.DUTHAO + Contains.CHODUYET_KTVBQ:
+            case Contains.TUCHOI_KTVBQ + Contains.CHODUYET_KTVBQ:
+            case Contains.TUCHOI_LDCC + Contains.CHODUYET_KTVBQ:
+            case Contains.TUCHOI_KT + Contains.CHODUYET_KTVBQ:
                 optional.get().setNgayGduyet(LocalDate.now());
                 optional.get().setNguoiGduyetId(currentUser.getUser().getId());
                 break;

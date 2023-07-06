@@ -17,6 +17,7 @@ public interface XhXkKhXuatHangRepository extends JpaRepository<XhXkKhXuatHang, 
     @Query("SELECT distinct c FROM XhXkKhXuatHang c WHERE 1=1 " +
             "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
             "AND (:#{#param.namKeHoach} IS NULL OR c.namKeHoach = :#{#param.namKeHoach}) " +
+            "AND (:#{#param.loai} IS NULL OR c.loai = :#{#param.loai}) " +
             "AND ((:#{#param.ngayKeHoachTu}  IS NULL OR c.ngayKeHoach >= :#{#param.ngayKeHoachTu})" +
             "AND  (:#{#param.ngayKeHoachDen}  IS NULL OR c.ngayKeHoach <= :#{#param.ngayKeHoachDen})) " +
             "AND ((:#{#param.ngayDuyetKeHoachTu}  IS NULL OR c.ngayDuyetKeHoach >= :#{#param.ngayDuyetKeHoachTu})" +
@@ -30,5 +31,18 @@ public interface XhXkKhXuatHangRepository extends JpaRepository<XhXkKhXuatHang, 
 
     List<XhXkKhXuatHang> findByIdIn(List<Long> ids);
 
+    List<XhXkKhXuatHang> findByIdThIn(List<Long> ids);
+
     Optional<XhXkKhXuatHang> findBySoToTrinh(String soToTrinh);
+
+    //Search kế hoạch để tổng hợp
+    @Query("SELECT distinct c FROM XhXkKhXuatHang c WHERE 1=1 " +
+            "AND (:#{#param.namKeHoach} IS NULL OR c.namKeHoach = :#{#param.namKeHoach}) " +
+            "AND (:#{#param.loai} IS NULL OR c.loai = :#{#param.loai}) " +
+            "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
+            "AND (:#{#param.capDvi} IS NULL OR c.capDvi = :#{#param.capDvi}) " +
+            "AND (c.idTh is null) " +
+            "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
+    )
+    List<XhXkKhXuatHang> searchListTh(@Param("param") XhXkKhXuatHangRequest param);
 }

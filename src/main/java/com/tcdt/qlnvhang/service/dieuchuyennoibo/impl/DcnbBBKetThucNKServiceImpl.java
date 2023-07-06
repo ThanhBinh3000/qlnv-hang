@@ -23,10 +23,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
@@ -45,6 +42,14 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<DcnbBBKetThucNKHdrDTO> searchDto = null;
+        if(req.getIsVatTu() == null){
+            req.setIsVatTu(false);
+        }
+        if(req.getIsVatTu()){
+            req.setDsLoaiHang(Arrays.asList("VT"));
+        }else {
+            req.setDsLoaiHang(Arrays.asList("LT","M"));
+        }
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             searchDto = hdrRepository.searchPageChiCuc(req, pageable);
         }else {
@@ -69,10 +74,10 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
         if (!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             throw new Exception("Văn bản này chỉ có thêm ở cấp chi cục");
         }
-        Optional<DcnbBBKetThucNKHdr> optional = hdrRepository.findFirstBySoBb(req.getSoBb());
-        if (optional.isPresent()) {
-            throw new Exception("Số biên bản đã tồn tại");
-        }
+//        Optional<DcnbBBKetThucNKHdr> optional = hdrRepository.findFirstBySoBb(req.getSoBb());
+//        if (optional.isPresent()) {
+//            throw new Exception("Số biên bản đã tồn tại");
+//        }
 
         DcnbBBKetThucNKHdr data = new DcnbBBKetThucNKHdr();
         BeanUtils.copyProperties(req, data);
@@ -82,6 +87,9 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
             e.setDcnbBBKetThucNKHdr(data);
         });
         DcnbBBKetThucNKHdr created = hdrRepository.save(data);
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BBKT-"+ userInfo.getDvqlTenVietTat();
+        created.setSoBb(so);
+        hdrRepository.save(created);
         return created;
     }
 
@@ -102,6 +110,9 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
         BeanUtils.copyProperties(req, data);
         data.setBcnbBBKetThucNKDtl(req.getBcnbBBKetThucNKDtl());
         DcnbBBKetThucNKHdr update = hdrRepository.save(data);
+        String so = update.getId() + "/" + (new Date().getYear() + 1900) +"/BBKT-"+ userInfo.getDvqlTenVietTat();
+        update.setSoBb(so);
+        hdrRepository.save(update);
         return update;
     }
 

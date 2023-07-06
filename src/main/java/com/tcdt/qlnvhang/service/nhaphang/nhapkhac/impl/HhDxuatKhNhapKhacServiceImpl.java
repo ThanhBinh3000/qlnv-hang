@@ -17,8 +17,10 @@ import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhDxuatKhNhapKhacSearch;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.nhaphang.nhapkhac.HhDxuatKhNhapKhacService;
+import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
+import com.tcdt.qlnvhang.util.UserUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,11 +48,13 @@ public class HhDxuatKhNhapKhacServiceImpl extends BaseServiceImpl implements HhD
     private FileDinhKemService fileDinhKemService;
 
     @Override
-    public Page<HhDxuatKhNhapKhacHdr> timKiem(HhDxuatKhNhapKhacSearch req) {
+    public Page<HhDxuatKhNhapKhacHdr> timKiem(HhDxuatKhNhapKhacSearch req) throws Exception {
         req.setTuNgayDxuatStr(convertFullDateToString(req.getTuNgayDxuat()));
         req.setDenNgayDxuatStr(convertFullDateToString(req.getDenNgayDxuat()));
         req.setTuNgayDuyetStr(convertFullDateToString(req.getTuNgayDuyet()));
         req.setDenNgayDxuatStr(convertFullDateToString(req.getDenNgayDuyet()));
+        UserInfo userInfo = UserUtils.getUserInfo();
+        req.setDvql(userInfo.getDvql());
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<HhDxuatKhNhapKhacHdr> data = hhDxuatKhNhapKhacHdrRepository.search(req, pageable);
         Map<String, String> mapVthh = getListDanhMucHangHoa();
@@ -181,6 +185,7 @@ public class HhDxuatKhNhapKhacServiceImpl extends BaseServiceImpl implements HhD
             case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
             case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
             case Contains.DA_DUYET_CBV + Contains.DA_DUYET_LDC:
+            case Contains.DA_TAO_CBV + Contains.DU_THAO:
                 qOptional.get().setNguoiPduyet(getUser().getUsername());
                 qOptional.get().setNgayPduyet(getDateTimeNow());
                 break;
@@ -243,8 +248,11 @@ public class HhDxuatKhNhapKhacServiceImpl extends BaseServiceImpl implements HhD
     }
 
     @Override
-    public List<HhDxuatKhNhapKhacDTO> findAllByTrangThaiAndTrangThaiTh(String trangThai, String trangThaiTh) {
-        List<HhDxuatKhNhapKhacHdr> listHdr = hhDxuatKhNhapKhacHdrRepository.findAllByTrangThaiAndTrangThaiTh(Contains.DA_DUYET_CBV, Contains.CHUATONGHOP);
+    public List<HhDxuatKhNhapKhacDTO> findAllByTrangThaiAndTrangThaiTh() {
+        List<String> trangThais = new ArrayList<>();
+        trangThais.add(Contains.DA_DUYET_CBV);
+        trangThais.add(Contains.DA_TAO_CBV);
+        List<HhDxuatKhNhapKhacHdr> listHdr = hhDxuatKhNhapKhacHdrRepository.findAllByTrangThaiInAndTrangThaiTh(trangThais, Contains.CHUATONGHOP);
         List<HhDxuatKhNhapKhacDTO> result = new ArrayList<>();
         listHdr.forEach(item ->{
             HhDxuatKhNhapKhacDTO dataChild = new HhDxuatKhNhapKhacDTO();

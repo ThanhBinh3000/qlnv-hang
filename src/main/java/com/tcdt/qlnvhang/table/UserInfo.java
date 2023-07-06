@@ -36,6 +36,8 @@ public class UserInfo {
 	String groupsArr;
 
 	@Transient
+	String dvqlTenVietTat;
+	@Transient
 	String maQd;
 	@Transient
 	String maTr;

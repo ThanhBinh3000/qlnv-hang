@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface HhDxuatKhNhapKhacService {
-    Page<HhDxuatKhNhapKhacHdr> timKiem(HhDxuatKhNhapKhacSearch req);
+    Page<HhDxuatKhNhapKhacHdr> timKiem(HhDxuatKhNhapKhacSearch req) throws Exception;
     HhDxuatKhNhapKhacHdr themMoi (HhDxuatKhNhapKhacHdrReq req) throws Exception;
     HhDxuatKhNhapKhacHdr capNhat (HhDxuatKhNhapKhacHdrReq req) throws Exception;
     HhDxuatKhNhapKhacDTO chiTiet (Long id) throws Exception;
@@ -20,5 +20,5 @@ public interface HhDxuatKhNhapKhacService {
     void xoa (IdSearchReq idSearchReq) throws Exception;
     void xoaNhieu (IdSearchReq idSearchReq) throws Exception;
     void xuatFile(HhDxuatKhNhapKhacSearch req , HttpServletResponse response) throws Exception;
-    List<HhDxuatKhNhapKhacDTO> findAllByTrangThaiAndTrangThaiTh(String trangThai, String trangThaiTh);
+    List<HhDxuatKhNhapKhacDTO> findAllByTrangThaiAndTrangThaiTh();
 }

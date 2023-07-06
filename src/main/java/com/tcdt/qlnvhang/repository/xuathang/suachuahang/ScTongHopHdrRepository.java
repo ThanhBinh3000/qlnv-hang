@@ -25,6 +25,17 @@ public interface ScTongHopHdrRepository extends JpaRepository<ScTongHopHdr, Long
   )
   Page<ScTongHopHdr> searchPage(@Param("param") ScTongHopReq param, Pageable pageable);
 
+  @Query(value = "SELECT c FROM ScTongHopHdr c " +
+          " LEFT JOIN ScTrinhThamDinhHdr tr on c.id = tr.idThHdr " +
+          " WHERE 1 = 1 " +
+          " AND tr.id is null " +
+          " AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
+          " AND (:#{#param.maDviSr} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDviSr},'%')) " +
+          " ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc "
+  )
+  List<ScTongHopHdr> listTongHopTrinhThamDinh(@Param("param") ScTongHopReq param);
+
+
   void deleteAllByIdIn(List<Long> listId);
 
   List<ScTongHopHdr> findByIdIn(List<Long> ids);

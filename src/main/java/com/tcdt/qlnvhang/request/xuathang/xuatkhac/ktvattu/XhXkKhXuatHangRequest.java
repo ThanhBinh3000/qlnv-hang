@@ -24,20 +24,29 @@ public class XhXkKhXuatHangRequest extends BaseRequest {
     String trichYeu;
     LocalDate ngayKeHoach;
     LocalDate ngayDuyetKeHoach;
-    LocalDate thoiGianDuKienXuat;
+    //    LocalDate thoiGianDuKienXuat;
     LocalDate thoiGianDuKienXuatTu;
     LocalDate thoiGianDuKienXuatDen;
     String moTa;
     String maTongHopDs;
     Long idTongHopDs;
     String trangThai;
+    Integer capDvi;
     List<XhXkKhXuatHangDtl> xhXkKhXuatHangDtl = new ArrayList<>();
     List<FileDinhKem> fileDinhKems;
+    //Entity Tổng hợp kế hoạch xuất hàng
+    String loai;
+    LocalDate thoiGianTh;
+    String noiDungTh;
+    String ghiChu;
+    Long idTh;
+    List<Long> listIdKeHoachs;
     //search params
-
     LocalDate ngayKeHoachTu;
     LocalDate ngayKeHoachDen;
     LocalDate ngayDuyetKeHoachTu;
     LocalDate ngayDuyetKeHoachDen;
+    LocalDate thoiGianThTu;
+    LocalDate thoiGianThDen;
     String dvql;
 }

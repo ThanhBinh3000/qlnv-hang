@@ -349,4 +349,17 @@ public class Contains {
 		public static String DAU_GIA_VIEN="DGV";
 		public static String NGUOI_THAM_GIA="NTG";
 	}
+
+	public static class HO_SO_KY_THUAT{
+		public static String BBAN_KTRA_NGOAI_QUAN="BBKTNQ";
+		public static String BB_KTRA_VAN_HANH="BBKTVH";
+		public static String BB_KTRA_HO_SO_KY_THUAT="BBKTHSKT";
+		public static String NGUOI_LIEN_QUAN="NLQ";
+		public static String HO_SO="HS";
+		public static String THOI_DIEM_NHAP_HANG="NHAP";
+		public static String THOI_DIEM_XUAT_HANG="XUAT";
+
+
+
+	}
 }

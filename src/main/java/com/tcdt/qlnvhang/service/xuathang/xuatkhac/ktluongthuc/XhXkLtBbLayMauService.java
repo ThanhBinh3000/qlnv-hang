@@ -13,6 +13,8 @@ import com.tcdt.qlnvhang.request.xuathang.xuatkhac.ktluongthuc.XhXkLtBbLayMauReq
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkTongHopDtl;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkTongHopHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktluongthuc.XhXkLtBbLayMauHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -74,27 +76,13 @@ public class XhXkLtBbLayMauService extends BaseServiceImpl {
     data.setTrangThai(Contains.DUTHAO);
     data.getBbLayMauDtl().forEach(s -> s.setBbLayMauHdr(data));
     XhXkLtBbLayMauHdr created = xhXkLtBbLayMauHdrRepository.save(data);
-    if (!DataUtils.isNullObject(objReq.getIdTongHop())) {
-      xhXkTongHopRepository.findById(objReq.getIdTongHop()).ifPresent(item -> {
-        item.getTongHopDtl().forEach(f -> {
-          if (f.getMaDiaDiem() == objReq.getMaDiaDiem()) {
-            f.setIdBienBan(objReq.getId());
-            f.setSoBienBan(objReq.getSoBienBan());
-            f.setNgayLayMau(objReq.getNgayLayMau());
-          }
-        });
-        xhXkTongHopRepository.save(item);
-      });
-    }
-
+    this.updateTongHopDtl(created, false);
     List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkLtBbLayMauHdr.TABLE_NAME);
     created.setFileDinhKems(fileDinhKems);
     List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), XhXkLtBbLayMauHdr.TABLE_NAME + "_CAN_CU");
     created.setCanCu(canCu);
     List<FileDinhKem> niemPhong = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemNiemPhong(), created.getId(), XhXkLtBbLayMauHdr.TABLE_NAME + "_NIEM_PHONG");
     created.setFileDinhKemNiemPhong(niemPhong);
-
-
     return created;
   }
 
@@ -120,18 +108,7 @@ public class XhXkLtBbLayMauService extends BaseServiceImpl {
       s.setBbLayMauHdr(data);
     });
     XhXkLtBbLayMauHdr created = xhXkLtBbLayMauHdrRepository.save(data);
-    if (!DataUtils.isNullObject(objReq.getIdTongHop())) {
-      xhXkTongHopRepository.findById(objReq.getIdTongHop()).ifPresent(item -> {
-        item.getTongHopDtl().forEach(f -> {
-          if (f.getMaDiaDiem() == objReq.getMaDiaDiem()) {
-            f.setIdBienBan(objReq.getId());
-            f.setSoBienBan(objReq.getSoBienBan());
-            f.setNgayLayMau(objReq.getNgayLayMau());
-          }
-        });
-        xhXkTongHopRepository.save(item);
-      });
-    }
+    this.updateTongHopDtl(created, false);
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhXkLtBbLayMauHdr.TABLE_NAME));
     List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkLtBbLayMauHdr.TABLE_NAME);
     created.setFileDinhKems(fileDinhKems);
@@ -179,6 +156,7 @@ public class XhXkLtBbLayMauService extends BaseServiceImpl {
     fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhXkLtBbLayMauHdr.TABLE_NAME));
     fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhXkLtBbLayMauHdr.TABLE_NAME + "_CAN_CU"));
     fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhXkLtBbLayMauHdr.TABLE_NAME + "_NIEM_PHONG"));
+    this.updateTongHopDtl(data, true);
     xhXkLtBbLayMauHdrRepository.delete(data);
   }
 
@@ -227,6 +205,7 @@ public class XhXkLtBbLayMauService extends BaseServiceImpl {
     }
     optional.get().setTrangThai(statusReq.getTrangThai());
     XhXkLtBbLayMauHdr created = xhXkLtBbLayMauHdrRepository.save(optional.get());
+    this.updateTongHopDtl(created, false);
     return created;
   }
 
@@ -239,7 +218,8 @@ public class XhXkLtBbLayMauService extends BaseServiceImpl {
     List<XhXkLtBbLayMauHdr> data = page.getContent();
 
     String title = "Danh sách biên bản lấy mẫu bàn giao mẫu ";
-    String[] rowsName = new String[]{"STT", "Năm KH", "Mã danh sách hàng sắp hết hạn lưu kho", "Số BB LM/BGM", "Ngày lấy mẫu", "Điểm Kho", "Nhà kho", "Ngăn kho", "Lô kho", "Trạng thái"};
+    String[] rowsName = new String[]{"STT", "Năm KH", "Mã DS LT <= 6 tháng hết hạn lưu kho", "Điểm Kho",  "Lô kho","Tồn kho","SL hết hạn (<= 6 tháng)",
+        "DVT","Thời hạn lưu kho (tháng)", "Số BB LM/BGM", "Ngày lấy mẫu", "Trạng thái"};
     String fileName = "danh-sach-bien-ban-lay-mau-ban-giao-mau.xlsx";
     List<Object[]> dataList = new ArrayList<Object[]>();
     Object[] objs = null;
@@ -249,17 +229,46 @@ public class XhXkLtBbLayMauService extends BaseServiceImpl {
       objs[0] = i;
       objs[1] = dx.getNam();
       objs[2] = dx.getMaDanhSach();
-      objs[3] = dx.getSoBienBan();
-      objs[4] = dx.getNgayLayMau();
-      objs[5] = dx.getTenDiemKho();
-      objs[6] = dx.getTenNhaKho();
-      objs[7] = dx.getTenNganKho();
-      objs[8] = dx.getTenLoKho();
-      objs[9] = dx.getTenTrangThai();
+      objs[3] = dx.getTenDiemKho();
+      objs[4] = (dx.getTenLoKho() != null && !dx.getTenLoKho().isEmpty()) ? dx.getTenLoKho() : dx.getTenNganKho();
+      objs[5] = dx.getSlTon();
+      objs[6] = dx.getSlHetHan();
+      objs[7] = dx.getDonViTinh();
+      objs[8] = dx.getThoiHanLk();
+      objs[9] = dx.getSoBienBan();
+      objs[10] = dx.getNgayLayMau();
+      objs[11] = dx.getTenTrangThai();
       dataList.add(objs);
     }
     ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
     ex.export();
+  }
+
+  public void updateTongHopDtl(XhXkLtBbLayMauHdr bienBan, boolean xoa) {
+    if (!DataUtils.isNullObject(bienBan.getIdTongHop())) {
+      Optional<XhXkTongHopHdr> listTongHop = xhXkTongHopRepository.findById(bienBan.getIdTongHop());
+      if (listTongHop.isPresent()) {
+        XhXkTongHopHdr item = listTongHop.get();
+        List<XhXkTongHopDtl> tongHopDtlList = item.getTongHopDtl();
+        for (XhXkTongHopDtl f : tongHopDtlList) {
+          if (f.getMaDiaDiem().equals(bienBan.getMaDiaDiem())) {
+            if (xoa) {
+              f.setIdBienBan(null);
+              f.setSoBienBan(null);
+              f.setNgayLayMau(null);
+              f.setTrangThaiBienBan(null);
+            } else {
+              f.setIdBienBan(bienBan.getId());
+              f.setSoBienBan(bienBan.getSoBienBan());
+              f.setNgayLayMau(bienBan.getNgayLayMau());
+              f.setTrangThaiBienBan(bienBan.getTrangThai());
+            }
+
+          }
+        }
+        xhXkTongHopRepository.save(item);
+      }
+    }
   }
 }
 

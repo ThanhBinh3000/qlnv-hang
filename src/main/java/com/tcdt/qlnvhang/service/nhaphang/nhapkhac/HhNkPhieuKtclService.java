@@ -8,11 +8,15 @@ import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhNkPhieuKtclReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhNkPhieuKtclSearch;
 import org.springframework.data.domain.Page;
 
+import javax.servlet.http.HttpServletResponse;
+
 public interface HhNkPhieuKtclService {
     Page<HhQdGiaoNvuNhapHangKhacHdr> timKiem(HhNkPhieuKtclSearch req) throws Exception;
+    HhNkPhieuKtcl timKiemPhieuKtclTheoMaNganLo(HhNkPhieuKtclSearch req) throws Exception;
     HhNkPhieuKtcl themMoi (HhNkPhieuKtclReq objReq) throws Exception;
     HhNkPhieuKtcl capNhat (HhNkPhieuKtclReq objReq) throws Exception;
     HhNkPhieuKtcl chiTiet (Long id) throws Exception;
     HhNkPhieuKtcl pheDuyet (StatusReq stReq) throws Exception;
     void xoa (IdSearchReq idSearchReq) throws Exception;
+    void export(HhNkPhieuKtclSearch searchReq, HttpServletResponse response) throws Exception;
 }

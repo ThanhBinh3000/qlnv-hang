@@ -71,4 +71,6 @@ public class DcnbPhieuNhapKhoHdrReq extends BaseRequest {
     private List<FileDinhKem> chungTuDinhKem = new ArrayList<>();
 
     private List<DcnbPhieuNhapKhoDtl> children = new ArrayList<>();
+    private Boolean isVatTu = false;
+    private List<String> dsLoaiHang = new ArrayList<>();
 }
