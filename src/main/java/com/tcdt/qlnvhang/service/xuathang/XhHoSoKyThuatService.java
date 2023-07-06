@@ -212,6 +212,7 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
           xhHoSoKyThuatDtl.setKetLuan(nhHoSoBienBan.getKetLuan());
           xhHoSoKyThuatDtl.setLoaiBb(nhHoSoBienBan.getLoaiBb());
           xhHoSoKyThuatDtl.setFileDinhKem(nhHoSoBienBan.getFileDinhKems());
+          xhHoSoKyThuatDtl.setThoiDiemLap(THOI_DIEM_NHAP_HANG);
           xhHoSoKyThuatDtl.setCanCu(null);
           xhHoSoKyThuatDtl.setVanBanBsung(null);
           xhHoSoKyThuatDtl.setTgianBsung(DataUtils.convertToLocalDate(nhHoSoBienBan.getTgianBsung()));
@@ -241,7 +242,7 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
             XhHoSoKyThuatRow nlq = new XhHoSoKyThuatRow();
             nlq.setTen(child.getDaiDien());
             nlq.setLoai(child.getLoaiDaiDien());
-            nlq.setType("NLQ");
+            nlq.setType(NGUOI_LIEN_QUAN);
             listNlq.add(nlq);
           }
           listDtl.add(xhHoSoKyThuatDtl);
@@ -254,6 +255,7 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
         for (int i = 0; i < 3; i++) {
           XhHoSoKyThuatDtl dtlBbKt = new XhHoSoKyThuatDtl();
           dtlBbKt.setLoaiBb(loaiBb.poll());
+          dtlBbKt.setThoiDiemLap(THOI_DIEM_XUAT_HANG);
           listDtl.add(dtlBbKt);
         }
 
