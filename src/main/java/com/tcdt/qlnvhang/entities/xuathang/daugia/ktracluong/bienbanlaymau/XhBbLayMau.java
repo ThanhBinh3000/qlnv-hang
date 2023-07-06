@@ -68,8 +68,6 @@ public class XhBbLayMau extends TrangThaiBaseEntity implements Serializable {
 
 	private String moTaHangHoa;
 
-	private Long idDdiemXh;
-
 	private String maDiemKho;
 
 	private String maNhaKho;

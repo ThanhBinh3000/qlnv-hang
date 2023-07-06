@@ -151,7 +151,10 @@ public class XhDgPhieuXuatKhoService extends BaseServiceImpl {
         data.setTenLoKho(mapDmucDvi.get(data.getMaLoKho()).get("tenDvi").toString());
       }
       if (data.getNguoiPduyetId() != null) {
-        data.setLdChiCuc(ObjectUtils.isEmpty(data.getNguoiPduyetId()) ? null : userInfoRepository.findById(data.getNguoiPduyetId()).get().getFullName());
+        data.setTenNguoiPduyet(ObjectUtils.isEmpty(data.getNguoiPduyetId()) ? null : userInfoRepository.findById(data.getNguoiPduyetId()).get().getFullName());
+      }
+      if (data.getIdKtv() != null){
+        data.setTenKtv(ObjectUtils.isEmpty(data.getIdKtv()) ? null : userInfoRepository.findById(data.getIdKtv()).get().getFullName());
       }
       data.setTenLoaiVthh(mapVthh.get(data.getLoaiVthh()));
       data.setTenCloaiVthh(mapVthh.get(data.getCloaiVthh()));

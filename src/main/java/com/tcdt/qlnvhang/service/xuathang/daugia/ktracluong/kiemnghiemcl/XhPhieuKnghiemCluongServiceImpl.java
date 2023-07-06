@@ -86,9 +86,9 @@ public class XhPhieuKnghiemCluongServiceImpl extends BaseServiceImpl implements 
         data.setNgayTao(new Date());
         data.setTrangThai(Contains.DUTHAO);
         data.setMaDvi(userInfo.getDvql());
-        data.setNam(LocalDate.now().getYear());
         data.setId(Long.parseLong(data.getSoPhieu().split("/")[0]));
         data.setIdNguoiKiemNghiem(userInfo.getId());
+        data.setIdTruongPhong(userInfo.getId());
         XhPhieuKnghiemCluong created = mainRepository.save(data);
 
         if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {

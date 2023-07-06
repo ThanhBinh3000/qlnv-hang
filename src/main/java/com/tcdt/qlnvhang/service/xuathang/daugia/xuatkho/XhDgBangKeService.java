@@ -100,6 +100,7 @@ public class XhDgBangKeService extends BaseServiceImpl {
     data.setId(DataUtils.safeToLong(data.getSoBangKe().split("/")[0]));
     data.setMaDvi(currentUser.getUser().getDepartment());
     data.setTrangThai(Contains.DUTHAO);
+    data.setNguoiGduyetId(currentUser.getUser().getId());
     XhDgBangKeHdr created = xhDgBangKeHdrRepository.save(data);
     //dtl
     data.getBangKeDtl().forEach(s -> {
@@ -166,15 +167,16 @@ public class XhDgBangKeService extends BaseServiceImpl {
       if (data.getNguoiPduyetId() != null) {
         data.setNguoiPduyet(ObjectUtils.isEmpty(data.getNguoiPduyetId()) ? null : userInfoRepository.findById(data.getNguoiPduyetId()).get().getFullName());
       }
+      if (data.getNguoiGduyetId() != null) {
+        data.setNguoiGduyet(ObjectUtils.isEmpty(data.getNguoiGduyetId()) ? null : userInfoRepository.findById(data.getNguoiGduyetId()).get().getFullName());
+      }
       data.setTenLoaiVthh(mapVthh.get(data.getLoaiVthh()));
       data.setTenCloaiVthh(mapVthh.get(data.getCloaiVthh()));
       data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
 
       List<XhDgBangKeDtl> allDtl = xhDgBangKeDtlRepository.findAllByIdHdr(data.getId());
       data.setBangKeDtl(allDtl);
-
     });
-
     return allById;
   }
 
