@@ -82,6 +82,30 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
         return detail(created.getId());
     }
 
+    @Transactional
+    public XhXkKhXuatHang saveTongHop(CustomUserDetails currentUser, XhXkKhXuatHangRequest objReq) throws Exception {
+        if (currentUser == null) {
+            throw new Exception("Bad request.");
+        }
+        XhXkKhXuatHang data = new XhXkKhXuatHang();
+        BeanUtils.copyProperties(objReq, data);
+        data.setMaDvi(currentUser.getUser().getDvql());
+        data.setTrangThai(TrangThaiAllEnum.CHUATAO_KH.getId());
+        data.getXhXkKhXuatHangDtl().forEach(s -> s.setXhXkKhXuatHang(data));
+        XhXkKhXuatHang created = xhXkKhXuatHangRepository.save(data);
+        Long idTh = created.getId();
+        //Set id TH cho bản ghi kế hoạch
+        List<XhXkKhXuatHang> listKh = xhXkKhXuatHangRepository.findByIdIn(objReq.getListIdKeHoachs());
+        if (!listKh.isEmpty()) {
+            listKh.forEach(item -> {
+                item.setIdTh(idTh);
+            });
+        }
+        //save file đính kèm
+//        fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkKhXuatHang.TABLE_NAME);
+        return detail(created.getId());
+    }
+
     @Transactional()
     public XhXkKhXuatHang update(CustomUserDetails currentUser, XhXkKhXuatHangRequest objReq) throws Exception {
         if (objReq.getId() == null) {
