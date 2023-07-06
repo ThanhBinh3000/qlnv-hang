@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,7 +15,8 @@ import java.util.List;
 
 @Entity
 @Table(name = XhHoSoKyThuatDtl.TABLE_NAME)
-@Data
+@Getter
+@Setter
 public class XhHoSoKyThuatDtl extends BaseEntity implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -61,7 +64,7 @@ public class XhHoSoKyThuatDtl extends BaseEntity implements Serializable {
   private List<FileDinhKem> vanBanBsung = new ArrayList<>();
   private LocalDate tgianBsung;
 
-  @OneToMany(mappedBy = "xhHoSoKyThuatDtl", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "xhHoSoKyThuatDtl", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<XhHoSoKyThuatRow> xhHoSoKyThuatRow = new ArrayList<>();
 
   @ManyToOne(fetch = FetchType.LAZY)
