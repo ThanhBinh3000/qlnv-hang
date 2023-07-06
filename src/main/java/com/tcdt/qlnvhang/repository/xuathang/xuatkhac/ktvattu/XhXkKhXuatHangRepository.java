@@ -31,6 +31,8 @@ public interface XhXkKhXuatHangRepository extends JpaRepository<XhXkKhXuatHang, 
 
     List<XhXkKhXuatHang> findByIdIn(List<Long> ids);
 
+    List<XhXkKhXuatHang> findByIdThIn(List<Long> ids);
+
     Optional<XhXkKhXuatHang> findBySoToTrinh(String soToTrinh);
 
     //Search kế hoạch để tổng hợp
