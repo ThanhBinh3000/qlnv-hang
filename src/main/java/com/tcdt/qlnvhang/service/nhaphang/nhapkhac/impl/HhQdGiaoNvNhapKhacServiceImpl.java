@@ -9,10 +9,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.nvnhap.HhQdGiaoNvuNhapHangKh
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.qdpdnk.HhQdPdNhapKhacDtl;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.qdpdnk.HhQdPdNhapKhacHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.BienBanLayMauKhacRepository;
-import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhQdGiaoNvNhapKhacHdrRepository;
-import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhQdPdNhapKhacDtlRepository;
-import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhQdPdNhapKhacHdrRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -45,6 +42,8 @@ public class HhQdGiaoNvNhapKhacServiceImpl extends BaseServiceImpl implements Hh
     private HhQdPdNhapKhacHdrRepository hhQdPdNhapKhacHdrRepository;
     @Autowired
     private BienBanLayMauKhacRepository bienBanLayMauKhacRepository;
+    @Autowired
+    private PhieuKnghiemCluongHangKhacRepository phieuKnghiemCluongHangKhacRepository;
     @Autowired
     FileDinhKemService fileDinhKemService;
 
@@ -88,6 +87,9 @@ public class HhQdGiaoNvNhapKhacServiceImpl extends BaseServiceImpl implements Hh
                 dtl.setTenCloaiVthh(mapVthh.get(dtl.getCloaiVthh()));
                 if(dtl.getIdBbLayMau() != null){
                 dtl.setBbLayMau(bienBanLayMauKhacRepository.findById(dtl.getIdBbLayMau()).get());
+                }
+                if(!StringUtils.isEmpty(dtl.getMaLoKho())){
+                    dtl.setPKnghiemClHang(phieuKnghiemCluongHangKhacRepository.findByMaLoKho(dtl.getMaLoKho()).isPresent() ? phieuKnghiemCluongHangKhacRepository.findByMaLoKho(dtl.getMaLoKho()).get() : null);
                 }
             });
             item.setDtlList(dtlList);
@@ -403,6 +405,58 @@ public class HhQdGiaoNvNhapKhacServiceImpl extends BaseServiceImpl implements Hh
                     objsc[8] = "";
                     objsc[9] = "";
                     objsc[10] = qd.getDtlList().get(j).getTenTrangThai();
+                    dataList.add(objsc);
+                }
+            }
+        }
+
+        ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+        ex.export();
+
+    }
+
+    @Override
+    public void xuatFilePkncl(HhQdGiaoNvuNhapKhacSearch req, HttpServletResponse response) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        req.setPaggingReq(paggingReq);
+        req.setMaDvi(userInfo.getDvql());
+        Page<HhQdGiaoNvuNhapHangKhacHdr> page = this.dsQdNvuDuocLapBb(req);
+        List<HhQdGiaoNvuNhapHangKhacHdr> data = page.getContent();
+
+        String title = "Danh sách lập và ký phiếu kiểm nghiệm chất lượng";
+        String[] rowsName = new String[]{"STT", "Số QĐ giao NVNH", "Năm kế hoạch", "Thời hạn NH trước ngày", "Điểm kho",
+                "Lô kho", "Số phiếu KNCL", "Ngày kiểm nghiệm", "Số BB LM/BGM", "Ngày lấy mẫu", "Số BB nhập đầy kho", "Ngày nhập đầy kho", "Trạng thái"};
+        String filename = "danh-sach-lap-va-ky-phieu-kiem-nghiem-chat-luong.xlsx";
+
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+        Object[] objsb = null;
+        Object[] objsc = null;
+        for (int i = 0; i < data.size(); i++) {
+            HhQdGiaoNvuNhapHangKhacHdr qd = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i;
+            objs[1] = qd.getSoQd();
+            objs[2] = qd.getNam();
+            objs[3] = qd.getTgianNkMnhat();
+            dataList.add(objs);
+            for (int j = 0; j < qd.getDtlList().size(); j++) {
+                objsb = new Object[rowsName.length];
+                objsb[4] = qd.getDtlList().get(j).getTenDiemKho();
+                dataList.add(objsb);
+                if (qd.getDtlList().get(j).getBbLayMau() != null) {
+                    objsc = new Object[rowsName.length];
+                    objsb[5] = qd.getDtlList().get(j).getTenNganLoKho();
+                    objsb[6] = qd.getDtlList().get(j).getPKnghiemClHang().getSoPhieuKiemNghiemCl();
+                    objsb[7] = qd.getDtlList().get(j).getPKnghiemClHang().getNgayKnghiem();
+                    objsc[8] = qd.getDtlList().get(j).getBbLayMau().getSoBienBan();
+                    objsc[9] = qd.getDtlList().get(j).getBbLayMau().getNgayLayMau();
+                    objsc[10] = "";
+                    objsc[11] = "";
+                    objsc[12] = qd.getDtlList().get(j).getTenTrangThai();
                     dataList.add(objsc);
                 }
             }

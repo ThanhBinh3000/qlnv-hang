@@ -21,6 +21,7 @@ public class SearchHhPthucTkhaiReq extends BaseRequest {
     Date  ngayCgiadDen;
 
     String loaiVthh;
+    String pthucMuaTrucTiep;
 
     String maDvi;
 

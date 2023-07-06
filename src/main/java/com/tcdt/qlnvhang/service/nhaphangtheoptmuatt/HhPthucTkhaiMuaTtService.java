@@ -70,6 +70,7 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
             }catch (Exception e){
                 throw new RuntimeException(e);
             }
+            f.setTenPthucMuaTrucTiep(Contains.getPthucMtt(f.getPthucMuaTrucTiep()));
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(f.getTrangThai()));
             f.setTenDvi(hashMapDvi.get(f.getMaDvi()));
             f.setTenLoaiVthh(hashMapVthh.get(f.getLoaiVthh()));
@@ -95,12 +96,14 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
             dx.setSoQd(objReq.getSoQd());
 
             if (objReq.getPthucMuaTrucTiep().equals(Contains.UY_QUYEN)) {
+                dx.setTrangThai(NhapXuatHangTrangThaiEnum.HOANTHANHCAPNHAT.getId());
                 if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKemUyQuyen())) {
                     List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemUyQuyen(), dx.getId(), HhQdPheduyetKhMttDx.TABLE_NAME);
                     dx.setFileDinhKemUyQuyen(fileDinhKemList);
                 }
             }
             if (objReq.getPthucMuaTrucTiep().equals(Contains.MUA_LE)) {
+                dx.setTrangThai(NhapXuatHangTrangThaiEnum.HOANTHANHCAPNHAT.getId());
                 if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKemMuaLe())) {
                     List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemMuaLe(), dx.getId(), HhQdPheduyetKhMttDx.TABLE_NAME);
                     dx.setFileDinhKemMuaLe(fileDinhKemList);

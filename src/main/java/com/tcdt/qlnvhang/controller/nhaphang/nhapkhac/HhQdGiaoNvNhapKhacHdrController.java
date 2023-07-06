@@ -212,4 +212,22 @@ public class HhQdGiaoNvNhapKhacHdrController {
             mapper.writeValue(response.getOutputStream(), body);
         }
     }
+
+    @ApiOperation(value = "Kết xuất danh sách đề xuất kế hoạch nhập khác", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(PathContains.URL_KET_XUAT + "/pkncl")
+    @ResponseStatus(HttpStatus.OK)
+    public void exportPkncl(@Valid @RequestBody HhQdGiaoNvuNhapKhacSearch searchReq, HttpServletResponse response)
+            throws Exception {
+        try {
+            service.xuatFilePkncl(searchReq, response);
+        } catch (Exception e) {
+            final Map<String, Object> body = new HashMap<>();
+            body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            body.put("msg", e.getMessage());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("UTF-8");
+            final ObjectMapper mapper = new ObjectMapper();
+            mapper.writeValue(response.getOutputStream(), body);
+        }
+    }
 }
