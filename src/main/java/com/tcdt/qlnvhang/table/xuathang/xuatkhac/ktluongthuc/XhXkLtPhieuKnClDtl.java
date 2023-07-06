@@ -27,6 +27,7 @@ public class XhXkLtPhieuKnClDtl implements Serializable {
   private String trangThai;
   private String ketQuaPt;
   private Long thuTu;
+  private String danhGia;
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name="idHdr")
   @JsonIgnore
