@@ -145,29 +145,15 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
   }
 
   @Transactional
-  public Object update(CustomUserDetails currentUser, SearchHoSoKyThuatReq objReq) throws Exception {
-    if (currentUser == null) {
-      throw new Exception("Bad request.");
+  public XhHoSoKyThuatHdr update(CustomUserDetails currentUser, XhHoSoKyThuatHdr objReq) throws Exception {
+    Optional<XhHoSoKyThuatHdr> updateRow = xhHoSoKyThuatRepository.findById(objReq.getId());
+    if(updateRow.isPresent()){
+      XhHoSoKyThuatHdr xhHoSoKyThuatHdr = updateRow.get();
+      DataUtils.copyProperties(xhHoSoKyThuatHdr,objReq);
+      xhHoSoKyThuatRepository.save(xhHoSoKyThuatHdr);
+      return xhHoSoKyThuatHdr;
     }
-    if (objReq.equals("DT")) {
-      Optional<NhHoSoKyThuat> optional = nhHoSoKyThuatRepository.findById(objReq.getId());
-      if (!optional.isPresent()) {
-        throw new Exception("Không tìm thấy dữ liệu cần sửa");
-      }
-
-      NhHoSoKyThuat data = optional.get();
-
-      data.setKqKiemTra(objReq.getKqKiemTra());
-      data.setIdBbLayMauXuat(objReq.getIdBbLayMauXuat());
-      NhHoSoKyThuat save = nhHoSoKyThuatRepository.save(data);
-      return save;
-    }
-    // TODO: 3/10/2023 truong hop cac loai nhap khac
-    else if (1 == 2) {
-      return null;
-    } else {
-      return null;
-    }
+    return null;
   }
 
   @Transactional
