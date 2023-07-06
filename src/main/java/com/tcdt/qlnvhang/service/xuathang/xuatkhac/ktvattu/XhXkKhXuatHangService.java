@@ -10,6 +10,8 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatkhac.XhXkDanhSachRequest;
 import com.tcdt.qlnvhang.request.xuathang.xuatkhac.XhXkTongHopRequest;
 import com.tcdt.qlnvhang.request.xuathang.xuatkhac.ktvattu.XhXkKhXuatHangRequest;
+import com.tcdt.qlnvhang.response.xuathang.xuatkhac.ktvattu.XhXkTongHopKhXuatCuc;
+import com.tcdt.qlnvhang.response.xuathang.xuatkhac.ktvattu.XhXkTongHopKhXuatHangDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -18,6 +20,7 @@ import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkDanhSachHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkTongHopDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkTongHopHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkKhXuatHang;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkKhXuatHangDtl;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -207,14 +210,42 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
     }
 
 
-    public List<XhXkKhXuatHang> searchListForTh(XhXkKhXuatHangRequest req) throws Exception {
+    public XhXkTongHopKhXuatHangDTO searchListForTh(XhXkKhXuatHangRequest req) throws Exception {
+        XhXkTongHopKhXuatHangDTO resp = new XhXkTongHopKhXuatHangDTO();
         List<XhXkKhXuatHang> listKeHoachs = xhXkKhXuatHangRepository.searchListTh(req);
         if (listKeHoachs.isEmpty() || listKeHoachs.size() == 0)
-            throw new Exception("Không tìm thấy dữ liệu tổng hợp của cục");
+            throw new Exception("Không tìm thấy dữ liệu kế hoạch của cục");
+
+        ArrayList<XhXkKhXuatHangDtl> listSumAllDtl = new ArrayList<>();
+        ArrayList<XhXkTongHopKhXuatCuc> listSumDtlByCuc = new ArrayList<>();
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+        Map<String, String> mapVthh = getListDanhMucHangHoa();
+        Map<String, Long> mapCount = new HashMap<>();
+        List<String> soTotrinhs = listKeHoachs.stream().map(XhXkKhXuatHang::getSoToTrinh).collect(Collectors.toList());
+        List<Long> idKeHoachs = listKeHoachs.stream().map(XhXkKhXuatHang::getId).collect(Collectors.toList());
+        resp.setListIdKeHoach(idKeHoachs);
+        resp.setListSoToTrinh(soTotrinhs);
         listKeHoachs.forEach(s -> {
-            s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
-            s.setSoDviTaiSan(s.getXhXkKhXuatHangDtl().size());
+            s.getXhXkKhXuatHangDtl().forEach(it -> {
+                it.setMapDmucDvi(mapDmucDvi);
+                it.setMapVthh(mapVthh);
+            });
+            listSumAllDtl.addAll(s.getXhXkKhXuatHangDtl());
         });
-        return listKeHoachs;
+        mapCount = listSumAllDtl.stream()
+                .collect(Collectors.groupingBy(XhXkKhXuatHangDtl::getTenCuc, Collectors.counting()));
+        if (!mapCount.isEmpty()) {
+            for (Map.Entry<String, Long> entry : mapCount.entrySet()) {
+                XhXkTongHopKhXuatCuc item = new XhXkTongHopKhXuatCuc();
+                item.setTenDvi(entry.getKey());
+                item.setSlDviTaiSan(entry.getValue());
+                item.setTenTrangThai(TrangThaiAllEnum.DA_DUYET_LDC.getTen());
+                item.setTrangThai(TrangThaiAllEnum.DA_DUYET_LDC.getId());
+                listSumDtlByCuc.add(item);
+            }
+        }
+        resp.setXhXkKhXuatHangDtl(listSumAllDtl);
+        resp.setListDxCuc(listSumDtlByCuc);
+        return resp;
     }
 }
