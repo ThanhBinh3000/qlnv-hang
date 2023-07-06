@@ -36,8 +36,7 @@ public class XhDgPhieuXuatKhoReq {
   private String cloaiVthh;
   private String moTaHangHoa;
   private String canBoLapPhieu;
-  private String ldChiCuc;
-  private String ktvBaoQuan;
+  private Long idKtv;
   private String keToanTruong;
   private String nguoiGiaoHang;
   private String soCmt;
@@ -50,7 +49,6 @@ public class XhDgPhieuXuatKhoReq {
   private String theoChungTu;
   private BigDecimal thucXuat;
   private String donGia;
-  private String thanhTien;
   private String ghiChu;
   private String trangThai;
   private LocalDate ngayGduyet;
@@ -58,7 +56,6 @@ public class XhDgPhieuXuatKhoReq {
   private LocalDate ngayPduyet;
   private Long nguoiPduyetId;
   private String lyDoTuChoi;
-  private String type;
   private String loaiHinhNx;
   private String kieuNhapXuat;
   private List<FileDinhKemReq> fileDinhKems =new ArrayList<>();

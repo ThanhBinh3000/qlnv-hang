@@ -32,11 +32,9 @@ public class XhPhieuKnghiemCluongReq extends BaseRequest {
 
 	private Long idQdGiaoNvXh;
 
-	private Long idKtv;
+	private Long idThuKho;
 
 	private String soPhieu;
-
-	private Long idDdiemXh;
 
 	private String maDiemKho;
 
