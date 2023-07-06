@@ -61,7 +61,7 @@ public class XhHoSoKyThuatDtl extends BaseEntity implements Serializable {
   private List<FileDinhKem> vanBanBsung = new ArrayList<>();
   private LocalDate tgianBsung;
 
-  @OneToMany(mappedBy = "xhHoSoKyThuatDtl", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "xhHoSoKyThuatDtl", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<XhHoSoKyThuatRow> xhHoSoKyThuatRow = new ArrayList<>();
 
   @ManyToOne(fetch = FetchType.LAZY)

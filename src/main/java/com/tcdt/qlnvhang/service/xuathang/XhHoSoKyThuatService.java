@@ -155,8 +155,8 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
           s1.setXhHoSoKyThuatDtl(null);
         });
       });
+      BeanUtils.copyProperties(objReq, xhHoSoKyThuatHdr);
 
-      DataUtils.copyProperties(objReq, xhHoSoKyThuatHdr);
       xhHoSoKyThuatHdr.getXhHoSoKyThuatDtl().forEach(s -> {
         s.setXhHoSoKyThuatHdr(xhHoSoKyThuatHdr);
         s.getXhHoSoKyThuatRow().forEach(s1 -> {

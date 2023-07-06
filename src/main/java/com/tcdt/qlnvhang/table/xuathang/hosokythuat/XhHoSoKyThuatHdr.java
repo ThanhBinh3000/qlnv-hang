@@ -40,7 +40,7 @@ public class XhHoSoKyThuatHdr extends BaseEntity implements Serializable {
   private String lyDo;
   private String trangThai;
   private String type;
-  @OneToMany(mappedBy = "xhHoSoKyThuatHdr", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "xhHoSoKyThuatHdr", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<XhHoSoKyThuatDtl> xhHoSoKyThuatDtl = new ArrayList<>();
 
   @JsonIgnore
