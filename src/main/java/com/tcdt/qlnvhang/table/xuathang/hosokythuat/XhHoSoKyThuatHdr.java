@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.util.DataUtils;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,7 +17,8 @@ import java.util.Map;
 
 @Entity
 @Table(name = XhHoSoKyThuatHdr.TABLE_NAME)
-@Data
+@Getter
+@Setter
 public class XhHoSoKyThuatHdr extends BaseEntity implements Serializable {
   private static final long serialVersionUID = 1L;
   public static final String TABLE_NAME = "XH_HO_SO_KY_THUAT_HDR";

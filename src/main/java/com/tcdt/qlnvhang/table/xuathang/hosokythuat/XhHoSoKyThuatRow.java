@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,7 +15,8 @@ import java.util.List;
 
 @Entity
 @Table(name = XhHoSoKyThuatRow.TABLE_NAME)
-@Data
+@Getter
+@Setter
 public class XhHoSoKyThuatRow extends BaseEntity implements Serializable {
 
   private static final long serialVersionUID = 1L;

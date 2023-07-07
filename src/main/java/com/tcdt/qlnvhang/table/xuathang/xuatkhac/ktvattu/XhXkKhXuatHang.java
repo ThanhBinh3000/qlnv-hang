@@ -35,6 +35,8 @@ public class XhXkKhXuatHang extends BaseEntity implements Serializable {
     private String trichYeu;
     private LocalDate ngayKeHoach;
     private LocalDate ngayDuyetKeHoach;
+    private LocalDate ngayDuyetBtc;
+    private LocalDate ngayTrinhDuyetBtc;
     private LocalDate thoiGianDuKienXuatTu;
     private LocalDate thoiGianDuKienXuatDen;
     private String moTa;
@@ -45,6 +47,8 @@ public class XhXkKhXuatHang extends BaseEntity implements Serializable {
     private Long nguoiDuyetId;
     private LocalDate ngayDuyet;
     private Integer capDvi;
+    private String soQdBtc;
+    private LocalDate ngayDxXuatHang;
 
     @OneToMany(mappedBy = "XhXkKhXuatHang", cascade = CascadeType.ALL)
     private List<XhXkKhXuatHangDtl> xhXkKhXuatHangDtl = new ArrayList<>();
@@ -54,7 +58,8 @@ public class XhXkKhXuatHang extends BaseEntity implements Serializable {
     private LocalDate thoiGianTh;
     private String noiDungTh;
     private String ghiChu;
-    private Long idTh;
+    //Dùng cho Tổng hợp và kế hoạch của Tổng cục - TH thì là ID bản ghi kế hoạch của Cục, KH của Tổng cục là ID của bản ghi TH
+    private Long idCanCu;
 
     @Transient
     private List<FileDinhKem> fileDinhKems;

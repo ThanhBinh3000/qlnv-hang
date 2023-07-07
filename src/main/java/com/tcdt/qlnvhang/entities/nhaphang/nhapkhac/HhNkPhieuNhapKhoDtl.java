@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.entities.nhaphang.nhapkhac;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuNhapKhoHdr;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,12 +29,13 @@ public class HhNkPhieuNhapKhoDtl extends BaseEntity implements Serializable, Clo
     private String noiDung;
     private String maSo;
     private String dviTinh;
-    private BigDecimal soLuongNhapDc;
-    private BigDecimal duToanKinhPhi;
-    private BigDecimal thucTeKinhPhi;
+    private BigDecimal soLuongNhap;
+    private BigDecimal soLuongNhapTt;
+    private BigDecimal donGia;
+    private BigDecimal thanhTien;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
     @JsonIgnore
-    private DcnbPhieuNhapKhoHdr parent;
+    private HhNkPhieuNhapKhoHdr parent;
 }

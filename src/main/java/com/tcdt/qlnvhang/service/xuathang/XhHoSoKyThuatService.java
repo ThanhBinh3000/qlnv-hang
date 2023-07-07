@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoB
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoBienBanCt;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoKyThuat;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoKyThuatCt;
+import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhThopKhNhapKhac;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauRepository;
@@ -147,9 +148,27 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
   @Transactional
   public XhHoSoKyThuatHdr update(CustomUserDetails currentUser, XhHoSoKyThuatHdr objReq) throws Exception {
     Optional<XhHoSoKyThuatHdr> updateRow = xhHoSoKyThuatRepository.findById(objReq.getId());
-    if(updateRow.isPresent()){
-      XhHoSoKyThuatHdr xhHoSoKyThuatHdr = updateRow.get();
-      DataUtils.copyProperties(xhHoSoKyThuatHdr,objReq);
+    if (updateRow.isPresent()) {
+      final XhHoSoKyThuatHdr xhHoSoKyThuatHdr = updateRow.get();
+      XhHoSoKyThuatHdr xhHoSoKyThuatHdrClone = xhHoSoKyThuatHdr;
+      List<XhHoSoKyThuatDtl> xhHoSoKyThuatDtl = xhHoSoKyThuatHdr.getXhHoSoKyThuatDtl();
+
+      xhHoSoKyThuatHdr.getXhHoSoKyThuatDtl().forEach(s -> {
+        s.setXhHoSoKyThuatHdr(null);
+        s.getXhHoSoKyThuatRow().forEach(s1 -> {
+          s1.setXhHoSoKyThuatDtl(null);
+        });
+      });
+
+      BeanUtils.copyProperties(objReq, xhHoSoKyThuatHdr);
+
+      xhHoSoKyThuatHdr.getXhHoSoKyThuatDtl().forEach(s -> {
+        s.setXhHoSoKyThuatHdr(xhHoSoKyThuatHdr);
+        s.getXhHoSoKyThuatRow().forEach(s1 -> {
+          s1.setXhHoSoKyThuatDtl(s);
+        });
+      });
+//      xhHoSoKyThuatHdr.setXhHoSoKyThuatDtl(xhHoSoKyThuatDtl);
       xhHoSoKyThuatRepository.save(xhHoSoKyThuatHdr);
       return xhHoSoKyThuatHdr;
     }
@@ -264,7 +283,7 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
 
         s.getXhHoSoKyThuatRow().forEach(s1 -> {
           List<FileDinhKem> fileDinhKem1 = fileDinhKemService.search(s1.getId(), Arrays.asList(XhHoSoKyThuatRow.TABLE_NAME + "_DINH_KEM"));
-          s1.setFileDinhKem(fileDinhKem);
+          s1.setFileDinhKem(fileDinhKem1);
         });
       });
 

@@ -4,16 +4,14 @@ import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBangKeNhapVTDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBangKeNhapVTHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuNhapKhoHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBangKeNhapVTReq;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeNhapVTHdrDTO;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBangKeNhapVTService;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeNhapVTDtl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeNhapVTHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbDataLinkDtl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbDataLinkHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -34,12 +32,13 @@ import java.util.stream.Collectors;
 @Service
 public class DcnbBangKeNhapVTServiceImpl implements DcnbBangKeNhapVTService {
     @Autowired
-    DcnbBangKeNhapVTHdrRepository hdrRepository;
+    private DcnbBangKeNhapVTHdrRepository hdrRepository;
     @Autowired
-    DcnbBangKeNhapVTDtlRepository dtlRepository;
+    private DcnbBangKeNhapVTDtlRepository dtlRepository;
     @Autowired
     private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
-
+    @Autowired
+    private DcnbPhieuNhapKhoHdrRepository dcnbPhieuNhapKhoHdrRepository;
 
     @Override
     public Page<DcnbBangKeNhapVTHdr> searchPage(DcnbBangKeNhapVTReq req) throws Exception {
@@ -82,7 +81,7 @@ public class DcnbBangKeNhapVTServiceImpl implements DcnbBangKeNhapVTService {
         data.setTenDvi(userInfo.getTenDvi());
         objReq.getDcnbbangkenhapvtdtl().forEach(e -> e.setBcnbBangKeNhapVTHdr(data));
         DcnbBangKeNhapVTHdr created = hdrRepository.save(data);
-        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BKNVT-"+ userInfo.getDvqlTenVietTat();
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BKNVT-" + userInfo.getDvqlTenVietTat();
         created.setSoBangKe(so);
         hdrRepository.save(created);
         return created;
@@ -109,7 +108,7 @@ public class DcnbBangKeNhapVTServiceImpl implements DcnbBangKeNhapVTService {
         BeanUtils.copyProperties(objReq, data);
         data.setDcnbBangKeNhapVTDtl(objReq.getDcnbbangkenhapvtdtl());
         DcnbBangKeNhapVTHdr created = hdrRepository.save(data);
-        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BKNVT-"+ userInfo.getDvqlTenVietTat();
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BKNVT-" + userInfo.getDvqlTenVietTat();
         created.setSoBangKe(so);
         hdrRepository.save(created);
         return created;
@@ -178,6 +177,13 @@ public class DcnbBangKeNhapVTServiceImpl implements DcnbBangKeNhapVTService {
                 dataLinkDtl.setLinkId(optional.get().getId());
                 dataLinkDtl.setHdrId(dataLink.getId());
                 dataLinkDtl.setType(DcnbBangKeNhapVTHdr.TABLE_NAME);
+
+                Optional<DcnbPhieuNhapKhoHdr> dcnbPhieuNhapKhoHdr = dcnbPhieuNhapKhoHdrRepository.findById(optional.get().getPhieuNhapKhoId());
+                if (dcnbPhieuNhapKhoHdr.isPresent()) {
+                    dcnbPhieuNhapKhoHdr.get().setBangKeVtId(optional.get().getId());
+                    dcnbPhieuNhapKhoHdr.get().setSoBangKeVt(optional.get().getSoBangKe());
+                    dcnbPhieuNhapKhoHdrRepository.save(dcnbPhieuNhapKhoHdr.get());
+                }
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
@@ -219,7 +225,7 @@ public class DcnbBangKeNhapVTServiceImpl implements DcnbBangKeNhapVTService {
         paggingReq.setLimit(Integer.MAX_VALUE);
         objReq.setPaggingReq(paggingReq);
         objReq.setMaDvi(currentUser.getDvql());
-        Page<DcnbBangKeNhapVTHdrDTO> page = searchPage(currentUser,objReq);
+        Page<DcnbBangKeNhapVTHdrDTO> page = searchPage(currentUser, objReq);
         List<DcnbBangKeNhapVTHdrDTO> data = page.getContent();
 
         String title = "Danh sách bảng kê cân hàng ";

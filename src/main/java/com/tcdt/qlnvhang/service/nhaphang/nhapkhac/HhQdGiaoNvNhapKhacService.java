@@ -21,4 +21,5 @@ public interface HhQdGiaoNvNhapKhacService {
     void xoaNhieu (IdSearchReq idSearchReq) throws Exception;
     void xuatFile(HhQdGiaoNvuNhapKhacSearch req , HttpServletResponse response) throws Exception;
     void xuatFileBbLm(HhQdGiaoNvuNhapKhacSearch req , HttpServletResponse response) throws Exception;
+    void xuatFilePkncl(HhQdGiaoNvuNhapKhacSearch req , HttpServletResponse response) throws Exception;
 }

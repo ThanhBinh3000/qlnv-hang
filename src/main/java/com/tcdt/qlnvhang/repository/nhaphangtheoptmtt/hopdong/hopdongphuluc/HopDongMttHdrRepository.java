@@ -33,8 +33,8 @@ public interface HopDongMttHdrRepository extends JpaRepository<HopDongMttHdr, Lo
   List<HopDongMttHdr> findAllByIdQdKq(Long idQdKq);
 
   @Transactional
-  List<HopDongMttHdr> findAllByIdQdPdKqSldd(Long idQdPdKqSldd);
+  List<HopDongMttHdr> findAllByIdQdPdSldd(Long idQdPdKqSldd);
 
-  void deleteAllByIdQdPdKqSldd(Long idQdPdKqSldd);
+  void deleteAllByIdQdPdSldd(Long idQdPdKqSldd);
 
 }

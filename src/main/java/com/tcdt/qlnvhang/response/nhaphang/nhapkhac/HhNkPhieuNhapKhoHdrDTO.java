@@ -5,24 +5,24 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 public class HhNkPhieuNhapKhoHdrDTO {
     private Long id;
     private Long qdDcCucId;
     private String soQdinh;
-    private LocalDate ngayKyQdinh;
+    private Date ngayKyQdinh;
     private Integer namKh;
-    private LocalDate thoiHanDieuChuyen;
+    private Date thoiHanDieuChuyen;
     private String maNhaKho;
     private String tenNhaKho;
     private String maDiemKho;
     private String tenDiemKho;
-    private String maloKho;
-    private String tenloKho;
+    private String maLoKho;
+    private String tenLoKho;
     private String maNganKho;
     private String tenNganKho;
-    private Boolean thayDoiThuKho;
     private String soPhieuNhapKho;
     private LocalDate ngayNhapKho;
     private Long bangKeVtId;
@@ -32,17 +32,15 @@ public class HhNkPhieuNhapKhoHdrDTO {
     private String maChLoaiHangHoa;
     private String tenChLoaiHangHoa;
     private String donViTinh;
-    private String tenDonvitinh;
     private BigDecimal slDienChuyen;
-    private BigDecimal duToanKinhPhiDc;
 
     private Long phieuKiemTraId;
     private String soPhieuKiemTraCl;
-    private LocalDate ngayGiamDinh;
+    private Date ngayGiamDinh;
     private String trangThai;
     private String tenTrangThai;
 
-    public HhNkPhieuNhapKhoHdrDTO(Long id, Long qdDcCucId, String soQdinh, LocalDate ngayKyQdinh, Integer namKh, LocalDate thoiHanDieuChuyen, String maNhaKho, String tenNhaKho, String maDiemKho, String tenDiemKho, String maloKho, String tenloKho, String maNganKho, String tenNganKho, Boolean thayDoiThuKho, String soPhieuNhapKho, LocalDate ngayNhapKho, Long bangKeVtId, String soBangKeVt, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa, String donViTinh, String tenDonvitinh, BigDecimal slDienChuyen, BigDecimal duToanKinhPhiDc, Long phieuKiemTraId, String soPhieuKiemTraCl, LocalDate ngayGiamDinh, String trangThai, String tenTrangThai) {
+    public HhNkPhieuNhapKhoHdrDTO(Long id, Long qdDcCucId, String soQdinh, Date ngayKyQdinh, Integer namKh, Date thoiHanDieuChuyen, String maNhaKho, String tenNhaKho, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String maNganKho, String tenNganKho, String soPhieuNhapKho, LocalDate ngayNhapKho, Long bangKeVtId, String soBangKeVt, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa, String donViTinh, BigDecimal slDienChuyen, Long phieuKiemTraId, String soPhieuKiemTraCl, Date ngayGiamDinh, String trangThai, String tenTrangThai) {
         this.id = id;
         this.qdDcCucId = qdDcCucId;
         this.soQdinh = soQdinh;
@@ -53,11 +51,10 @@ public class HhNkPhieuNhapKhoHdrDTO {
         this.tenNhaKho = tenNhaKho;
         this.maDiemKho = maDiemKho;
         this.tenDiemKho = tenDiemKho;
-        this.maloKho = maloKho;
-        this.tenloKho = tenloKho;
+        this.maLoKho = maLoKho;
+        this.tenLoKho = tenLoKho;
         this.maNganKho = maNganKho;
         this.tenNganKho = tenNganKho;
-        this.thayDoiThuKho = thayDoiThuKho;
         this.soPhieuNhapKho = soPhieuNhapKho;
         this.ngayNhapKho = ngayNhapKho;
         this.bangKeVtId = bangKeVtId;
@@ -67,9 +64,7 @@ public class HhNkPhieuNhapKhoHdrDTO {
         this.maChLoaiHangHoa = maChLoaiHangHoa;
         this.tenChLoaiHangHoa = tenChLoaiHangHoa;
         this.donViTinh = donViTinh;
-        this.tenDonvitinh = tenDonvitinh;
         this.slDienChuyen = slDienChuyen;
-        this.duToanKinhPhiDc = duToanKinhPhiDc;
         this.phieuKiemTraId = phieuKiemTraId;
         this.soPhieuKiemTraCl = soPhieuKiemTraCl;
         this.ngayGiamDinh = ngayGiamDinh;
