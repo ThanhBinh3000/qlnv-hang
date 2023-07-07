@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoB
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoBienBanCt;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoKyThuat;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoKyThuatCt;
+import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhThopKhNhapKhac;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauRepository;
@@ -282,7 +283,7 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
 
         s.getXhHoSoKyThuatRow().forEach(s1 -> {
           List<FileDinhKem> fileDinhKem1 = fileDinhKemService.search(s1.getId(), Arrays.asList(XhHoSoKyThuatRow.TABLE_NAME + "_DINH_KEM"));
-          s1.setFileDinhKem(fileDinhKem);
+          s1.setFileDinhKem(fileDinhKem1);
         });
       });
 
