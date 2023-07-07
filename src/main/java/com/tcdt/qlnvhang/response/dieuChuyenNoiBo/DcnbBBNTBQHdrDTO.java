@@ -1,13 +1,8 @@
 package com.tcdt.qlnvhang.response.dieuChuyenNoiBo;
 
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -23,8 +18,8 @@ public class DcnbBBNTBQHdrDTO {
     private String tenNhaKhoXuat;
     private String maDiemKhoXuat;
     private String tenDiemKhoXuat;
-    private String maloKhoXuat;
-    private String tenloKhoXuat;
+    private String maLoKhoXuat;
+    private String tenLoKhoXuat;
     private String maNganKhoXuat;
     private String tenNganKhoXuat;
     //    private String trangThaiXuat;
@@ -33,8 +28,8 @@ public class DcnbBBNTBQHdrDTO {
     private String tenNhaKhoNhan;
     private String maDiemKhoNhan;
     private String tenDiemKhoNhan;
-    private String maloKhoNhan;
-    private String tenloKhoNhan;
+    private String maLoKhoNhan;
+    private String tenLoKhoNhan;
     private String maNganKhoNhan;
     private String tenNganKhoNhan;
     //    private String trangThaiNhan;
@@ -53,7 +48,7 @@ public class DcnbBBNTBQHdrDTO {
     private String loaiVthh;
     private String  cloaiVthh;
 
-    public DcnbBBNTBQHdrDTO(Long id, Long qDinhDccId, String soQdinh, Integer namKh, LocalDate thoiHanDieuChuyen, String maNhaKhoXuat, String tenNhaKhoXuat, String maDiemKhoXuat, String tenDiemKhoXuat, String maloKhoXuat, String tenloKhoXuat, String maNganKhoXuat, String tenNganKhoXuat, String maNhaKhoNhan, String tenNhaKhoNhan, String maDiemKhoNhan, String tenDiemKhoNhan, String maloKhoNhan, String tenloKhoNhan, String maNganKhoNhan, String tenNganKhoNhan, String soLapBBKLot, LocalDate ngayLapBBKLot, LocalDate ngayKetThucNtKeLot, BigDecimal tongKinhPhiTT, BigDecimal tongKinhPhiPd, String trangThai, String tenTrangThai, String tenLoaiVthh, String tenCloaiVthh, BigDecimal tichLuongKd, String tenDonViTinh, String loaiVthh, String cloaiVthh) {
+    public DcnbBBNTBQHdrDTO(Long id, Long qDinhDccId, String soQdinh, Integer namKh, LocalDate thoiHanDieuChuyen, String maNhaKhoXuat, String tenNhaKhoXuat, String maDiemKhoXuat, String tenDiemKhoXuat, String maLoKhoXuat, String tenLoKhoXuat, String maNganKhoXuat, String tenNganKhoXuat, String maNhaKhoNhan, String tenNhaKhoNhan, String maDiemKhoNhan, String tenDiemKhoNhan, String maLoKhoNhan, String tenLoKhoNhan, String maNganKhoNhan, String tenNganKhoNhan, String soLapBBKLot, LocalDate ngayLapBBKLot, LocalDate ngayKetThucNtKeLot, BigDecimal tongKinhPhiTT, BigDecimal tongKinhPhiPd, String trangThai, String tenTrangThai, String tenLoaiVthh, String tenCloaiVthh, BigDecimal tichLuongKd, String tenDonViTinh, String loaiVthh, String cloaiVthh) {
         this.id = id;
         this.qDinhDccId = qDinhDccId;
         this.soQdinh = soQdinh;
@@ -63,16 +58,16 @@ public class DcnbBBNTBQHdrDTO {
         this.tenNhaKhoXuat = tenNhaKhoXuat;
         this.maDiemKhoXuat = maDiemKhoXuat;
         this.tenDiemKhoXuat = tenDiemKhoXuat;
-        this.maloKhoXuat = maloKhoXuat;
-        this.tenloKhoXuat = tenloKhoXuat;
+        this.maLoKhoXuat = maLoKhoXuat;
+        this.tenLoKhoXuat = tenLoKhoXuat;
         this.maNganKhoXuat = maNganKhoXuat;
         this.tenNganKhoXuat = tenNganKhoXuat;
         this.maNhaKhoNhan = maNhaKhoNhan;
         this.tenNhaKhoNhan = tenNhaKhoNhan;
         this.maDiemKhoNhan = maDiemKhoNhan;
         this.tenDiemKhoNhan = tenDiemKhoNhan;
-        this.maloKhoNhan = maloKhoNhan;
-        this.tenloKhoNhan = tenloKhoNhan;
+        this.maLoKhoNhan = maLoKhoNhan;
+        this.tenLoKhoNhan = tenLoKhoNhan;
         this.maNganKhoNhan = maNganKhoNhan;
         this.tenNganKhoNhan = tenNganKhoNhan;
         this.soLapBBKLot = soLapBBKLot;
