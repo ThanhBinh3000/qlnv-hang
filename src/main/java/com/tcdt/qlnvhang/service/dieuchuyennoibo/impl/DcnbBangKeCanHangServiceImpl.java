@@ -12,8 +12,6 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
-import freemarker.template.utility.DateUtil;
-import org.apache.commons.lang.time.DateUtils;
 import org.hibernate.Hibernate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,10 +65,20 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            searchDto = dcnbBangKeCanHangHdrRepository.searchPage(req, pageable);
-        } else {
+            if ("00".equals(req.getType())) { // kiểu xuất
+                searchDto = dcnbBangKeCanHangHdrRepository.searchPageChiCucXuat(req, pageable);
+            }
+            if ("01".equals(req.getType())) { // kiểu nhan
+                searchDto = dcnbBangKeCanHangHdrRepository.searchPageChiCucNhan(req, pageable);
+            }
+        }else{
             req.setTypeDataLink(Contains.DIEU_CHUYEN);
-            searchDto = dcnbBangKeCanHangHdrRepository.searchPageCuc(req, pageable);
+            if ("00".equals(req.getType())) { // kiểu xuất
+                searchDto = dcnbBangKeCanHangHdrRepository.searchPageCucXuat(req, pageable);
+            }
+            if ("01".equals(req.getType())) { // kiểu nhan
+                searchDto = dcnbBangKeCanHangHdrRepository.searchPageCucNhan(req, pageable);
+            }
         }
         return searchDto;
     }
@@ -243,7 +251,7 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
         objReq.setPaggingReq(paggingReq);
         objReq.setMaDvi(currentUser.getDvql());
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit());
-        Page<DcnbBangKeCanHangHdrDTO> page = dcnbBangKeCanHangHdrRepository.searchPage(objReq, pageable);
+        Page<DcnbBangKeCanHangHdrDTO> page = dcnbBangKeCanHangHdrRepository.searchPageChiCucXuat(objReq, pageable);
         List<DcnbBangKeCanHangHdrDTO> data = page.getContent();
 
         String title = "Danh sách bảng kê cân hàng ";
