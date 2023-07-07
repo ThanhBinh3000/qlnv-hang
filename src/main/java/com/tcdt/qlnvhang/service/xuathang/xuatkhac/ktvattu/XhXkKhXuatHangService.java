@@ -161,6 +161,7 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
         return detail(created.getId());
     }
 
+    @Transactional()
     public XhXkKhXuatHang detail(Long id) throws Exception {
         if (ObjectUtils.isEmpty(id)) throw new Exception("Tham số không hợp lệ.");
         Optional<XhXkKhXuatHang> optional = xhXkKhXuatHangRepository.findById(id);
@@ -182,7 +183,7 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
         return model;
     }
 
-
+    @Transactional()
     public XhXkKhXuatHang detailTongHop(Long id) throws Exception {
         if (ObjectUtils.isEmpty(id)) throw new Exception("Tham số không hợp lệ.");
         Optional<XhXkKhXuatHang> optional = xhXkKhXuatHangRepository.findById(id);
@@ -300,10 +301,17 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
                 break;
             case Contains.CHO_DUYET_TP + Contains.TU_CHOI_TP:
             case Contains.CHO_DUYET_LDC + Contains.CHO_DUYET_TP:
+            case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
+            case Contains.CHO_DUYET_BTC + Contains.TU_CHOI_BTC:
+            case Contains.CHODUYET_LDTC + Contains.TUCHOI_LDTC:
                 xhXkKhXuatHang.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
             case Contains.CHO_DUYET_LDC + Contains.DA_DUYET_LDC:
             case Contains.CHO_DUYET_TP + Contains.CHO_DUYET_LDC:
+            case Contains.CHODUYET_LDV + Contains.CHODUYET_LDTC:
+            case Contains.CHODUYET_LDTC + Contains.CHO_DUYET_BTC:
+            case Contains.CHO_DUYET_BTC + Contains.DA_DUYET_BTC:
+            case Contains.DU_THAO + Contains.CHODUYET_LDV:
                 xhXkKhXuatHang.setNguoiDuyetId(currentUser.getUser().getId());
                 xhXkKhXuatHang.setNgayDuyet(LocalDate.now());
                 break;
@@ -311,6 +319,14 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
                 throw new Exception("Phê duyệt không thành công.");
         }
         xhXkKhXuatHang.setTrangThai(req.getTrangThai());
+        //Check nếu là bản ghi kế hoạch của TỔng cục thì update trang thái bản ghi TH thành đã gửi duyệt KH
+        if (xhXkKhXuatHang.getCapDvi() == 1 && xhXkKhXuatHang.getLoai().equals("00")) {
+            Optional<XhXkKhXuatHang> itemTh = xhXkKhXuatHangRepository.findById(xhXkKhXuatHang.getIdCanCu());
+            if (itemTh.isPresent()) {
+                itemTh.get().setTrangThai(TrangThaiAllEnum.DAGUIDUYET_KH.getId());
+                xhXkKhXuatHangRepository.save(itemTh.get());
+            }
+        }
         XhXkKhXuatHang model = xhXkKhXuatHangRepository.save(xhXkKhXuatHang);
         return detail(model.getId());
     }
