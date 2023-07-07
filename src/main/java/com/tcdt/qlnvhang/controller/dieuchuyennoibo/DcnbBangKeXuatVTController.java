@@ -5,9 +5,11 @@ import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.IdSearchReq;
+import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBangKeXuatVTReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBangKeXuatVTService;
+import com.tcdt.qlnvhang.service.dieuchuyennoibo.impl.DcnbBangKeXuatVTServiceImpl;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,7 +33,7 @@ import java.util.Map;
 @Api(tags = "Điều chuyển nội bộ - Bảng kê xuất vật tư")
 public class DcnbBangKeXuatVTController {
     @Autowired
-    DcnbBangKeXuatVTService service;
+    public DcnbBangKeXuatVTServiceImpl service;
 
 
     @ApiOperation(value = "Tra cứu ", response = List.class)
@@ -109,10 +111,10 @@ public class DcnbBangKeXuatVTController {
 
     @ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 thông tin", response = List.class)
     @PostMapping(value =  PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody DcnbBangKeXuatVTReq objReq) {
+    public ResponseEntity<BaseResponse> updateStatus(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody StatusReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            service.approve(objReq);
+            service.approve(currentUser, objReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

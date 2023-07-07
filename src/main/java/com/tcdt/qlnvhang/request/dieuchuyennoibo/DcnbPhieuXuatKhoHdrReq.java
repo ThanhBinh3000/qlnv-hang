@@ -53,8 +53,10 @@ public class DcnbPhieuXuatKhoHdrReq {
     private String diaChi;
     private LocalDate thoiGianGiaoNhan;
     private BigDecimal soLuongCanDc;
-    private BigDecimal soBangKeCh;
+    private String soBangKeCh;
     private Long bangKeChId;
+    private String soBangKeVt;
+    private Long bangKeVtId;
     private String donViTinh;
     private BigDecimal tongSoLuong;
     private String tongSoLuongBc;

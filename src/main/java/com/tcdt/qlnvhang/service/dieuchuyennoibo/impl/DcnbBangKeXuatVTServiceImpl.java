@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBangKeXuatVTDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBangKeXuatVTHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuXuatKhoHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBangKeXuatVTReq;
@@ -37,6 +38,8 @@ public class DcnbBangKeXuatVTServiceImpl implements DcnbBangKeXuatVTService {
     DcnbBangKeXuatVTDtlRepository dtlRepository;
     @Autowired
     private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
+    @Autowired
+    private DcnbPhieuXuatKhoHdrRepository dcnbPhieuXuatKhoHdrRepository;
     @Override
     public Page<DcnbBangKeXuatVTHdr> searchPage(DcnbBangKeXuatVTReq req) throws Exception {
         return null;
@@ -162,6 +165,13 @@ public class DcnbBangKeXuatVTServiceImpl implements DcnbBangKeXuatVTService {
                 dataLinkDtl.setLinkId(optional.get().getId());
                 dataLinkDtl.setHdrId(dataLink.getId());
                 dataLinkDtl.setType(DcnbBangKeXuatVTHdr.TABLE_NAME);
+
+                Optional<DcnbPhieuXuatKhoHdr> dcnbPhieuXuatKhoHdr = dcnbPhieuXuatKhoHdrRepository.findById(optional.get().getPhieuXuatKhoId());
+                if(dcnbPhieuXuatKhoHdr.isPresent()){
+                    dcnbPhieuXuatKhoHdr.get().setBangKeVtId(optional.get().getId());
+                    dcnbPhieuXuatKhoHdr.get().setSoBangKeVt(optional.get().getSoBangKe());
+                    dcnbPhieuXuatKhoHdrRepository.save(dcnbPhieuXuatKhoHdr.get());
+                }
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
