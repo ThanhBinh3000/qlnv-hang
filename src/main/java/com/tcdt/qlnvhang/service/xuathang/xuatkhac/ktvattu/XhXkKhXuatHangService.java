@@ -230,6 +230,14 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
             throw new Exception("Bản ghi không tồn tại");
         }
         XhXkKhXuatHang data = optional.get();
+        //Kiểm tra nếu là xóa bản ghi kế hoạch của Tổng CỤc thì update bản ghi Tổng hợp về trạng thái chưa tạo KH
+        if (data.getCapDvi() == 1 && data.getLoai().equals("00")) {
+            Optional<XhXkKhXuatHang> itemTh = xhXkKhXuatHangRepository.findById(data.getIdCanCu());
+            if (itemTh.isPresent()) {
+                itemTh.get().setTrangThai(TrangThaiAllEnum.CHUATAO_KH.getId());
+                xhXkKhXuatHangRepository.save(itemTh.get());
+            }
+        }
         xhXkKhXuatHangRepository.delete(data);
     }
 
