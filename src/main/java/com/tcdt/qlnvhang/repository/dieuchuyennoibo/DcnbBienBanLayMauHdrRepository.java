@@ -40,7 +40,7 @@ public interface DcnbBienBanLayMauHdrRepository extends JpaRepository<DcnbBienBa
             "AND ((:#{#param.tuNgay}  IS NULL OR bblm.ngayLayMau >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR bblm.ngayLayMau <= :#{#param.denNgay}) ) " +
             "ORDER BY bblm.soQdinhDcc desc, bblm.nam desc")
-    Page<DcnbBienBanLayMauHdrDTO> searchPageChiCuc(@Param("param") SearchDcnbBienBanLayMau param, Pageable pageable);
+    Page<DcnbBienBanLayMauHdrDTO> searchPageChiCucXuat(@Param("param") SearchDcnbBienBanLayMau param, Pageable pageable);
 
     @Query(value = "SELECT distinct hdr FROM DcnbBienBanLayMauHdr hdr " +
             " LEFT JOIN DcnbBienBanLayMauDtl d On d.hdrId = hdr.id " +
@@ -103,5 +103,5 @@ public interface DcnbBienBanLayMauHdrRepository extends JpaRepository<DcnbBienBa
             "AND ((:#{#param.tuNgay}  IS NULL OR bblm.ngayLayMau >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR bblm.ngayLayMau <= :#{#param.denNgay}) ) " +
             "ORDER BY bblm.soQdinhDcc desc, bblm.nam desc")
-    Page<DcnbBienBanLayMauHdrDTO> searchPageCuc(@Param("param") SearchDcnbBienBanLayMau req, Pageable pageable);
+    Page<DcnbBienBanLayMauHdrDTO> searchPageCucXuat(@Param("param") SearchDcnbBienBanLayMau req, Pageable pageable);
 }
