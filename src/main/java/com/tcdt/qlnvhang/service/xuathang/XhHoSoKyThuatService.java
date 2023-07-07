@@ -22,6 +22,7 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.xuathang.hosokythuat.XhHoSoKyThuatDtl;
 import com.tcdt.qlnvhang.table.xuathang.hosokythuat.XhHoSoKyThuatHdr;
 import com.tcdt.qlnvhang.table.xuathang.hosokythuat.XhHoSoKyThuatRow;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQuyetDinhPdHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import org.springframework.beans.BeanUtils;
@@ -161,7 +162,6 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
       });
 
       BeanUtils.copyProperties(objReq, xhHoSoKyThuatHdr);
-
       xhHoSoKyThuatHdr.getXhHoSoKyThuatDtl().forEach(s -> {
         s.setXhHoSoKyThuatHdr(xhHoSoKyThuatHdr);
         s.getXhHoSoKyThuatRow().forEach(s1 -> {
@@ -178,6 +178,7 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
             BeanUtils.copyProperties(canCu, fileReq);
             listFileReq.add(fileReq);
           });
+          fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhHoSoKyThuatDtl.TABLE_NAME + "_CAN_CU"));
           fileDinhKemService.saveListFileDinhKem(listFileReq, s.getId(), XhHoSoKyThuatDtl.TABLE_NAME + "_CAN_CU");
         }
         if (!DataUtils.isNullOrEmpty((s.getFileDinhKem()))) {
@@ -187,6 +188,7 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
             BeanUtils.copyProperties(dinhKem, fileReq);
             listFileReq.add(fileReq);
           });
+          fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhHoSoKyThuatDtl.TABLE_NAME + "_DINH_KEM"));
           fileDinhKemService.saveListFileDinhKem(listFileReq, s.getId(), XhHoSoKyThuatDtl.TABLE_NAME + "_DINH_KEM");
         }
         s.getXhHoSoKyThuatRow().forEach(s1 -> {
@@ -197,6 +199,7 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
               BeanUtils.copyProperties(dinhKem, fileReq);
               listFileReq.add(fileReq);
             });
+            fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhHoSoKyThuatRow.TABLE_NAME + "_DINH_KEM"));
             fileDinhKemService.saveListFileDinhKem(listFileReq, s1.getId(), XhHoSoKyThuatRow.TABLE_NAME + "_DINH_KEM");
           }
         });
