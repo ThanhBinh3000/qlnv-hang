@@ -29,9 +29,10 @@ public class HhNkPhieuNhapKhoDtl extends BaseEntity implements Serializable, Clo
     private String noiDung;
     private String maSo;
     private String dviTinh;
-    private BigDecimal soLuongNhapDc;
-    private BigDecimal duToanKinhPhi;
-    private BigDecimal thucTeKinhPhi;
+    private BigDecimal soLuongNhap;
+    private BigDecimal soLuongNhapTt;
+    private BigDecimal donGia;
+    private BigDecimal thanhTien;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
