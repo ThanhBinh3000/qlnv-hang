@@ -322,7 +322,7 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
         //Check nếu là bản ghi kế hoạch của TỔng cục thì update trang thái bản ghi TH thành đã gửi duyệt KH
         if (xhXkKhXuatHang.getCapDvi() == 1 && xhXkKhXuatHang.getLoai().equals("00")) {
             Optional<XhXkKhXuatHang> itemTh = xhXkKhXuatHangRepository.findById(xhXkKhXuatHang.getIdCanCu());
-            if (itemTh.isPresent()) {
+            if (itemTh.isPresent() && !itemTh.get().getTrangThai().equals(TrangThaiAllEnum.DAGUIDUYET_KH.getId())) {
                 itemTh.get().setTrangThai(TrangThaiAllEnum.DAGUIDUYET_KH.getId());
                 xhXkKhXuatHangRepository.save(itemTh.get());
             }
