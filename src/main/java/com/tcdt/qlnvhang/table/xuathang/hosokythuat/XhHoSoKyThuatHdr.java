@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.util.DataUtils;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -43,7 +43,7 @@ public class XhHoSoKyThuatHdr extends BaseEntity implements Serializable {
   private String lyDo;
   private String trangThai;
   private String type;
-  @OneToMany(mappedBy = "xhHoSoKyThuatHdr", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "xhHoSoKyThuatHdr", cascade = CascadeType.ALL)
   private List<XhHoSoKyThuatDtl> xhHoSoKyThuatDtl = new ArrayList<>();
 
   @JsonIgnore

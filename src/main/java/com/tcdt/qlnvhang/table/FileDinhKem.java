@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
 @Entity
@@ -25,6 +27,7 @@ public class FileDinhKem implements Serializable {
 	String fileUrl;
 	String fileType;
 	String dataType;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE)
 	Date createDate;
 	Long dataId;
 	String noiDung;

@@ -13,7 +13,6 @@ import com.tcdt.qlnvhang.repository.vattu.hosokythuat.NhHoSoKyThuatRepository;
 import com.tcdt.qlnvhang.repository.xuathang.XhHoSoKyThuatRepository;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.request.xuathang.SearchHoSoKyThuatReq;
-import com.tcdt.qlnvhang.request.xuathang.XhHoSoKyThuatReq;
 import com.tcdt.qlnvhang.response.xuathang.NhHoSoKyThuatDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -149,16 +148,26 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
   public XhHoSoKyThuatHdr update(CustomUserDetails currentUser, XhHoSoKyThuatHdr objReq) throws Exception {
     Optional<XhHoSoKyThuatHdr> updateRow = xhHoSoKyThuatRepository.findById(objReq.getId());
     if (updateRow.isPresent()) {
-      XhHoSoKyThuatHdr xhHoSoKyThuatHdr = updateRow.get();
-      xhHoSoKyThuatHdr.getXhHoSoKyThuatDtl().forEach(s -> s.getXhHoSoKyThuatRow().clear());
-      xhHoSoKyThuatHdr.getXhHoSoKyThuatDtl().clear();
+      final XhHoSoKyThuatHdr xhHoSoKyThuatHdr = updateRow.get();
+      XhHoSoKyThuatHdr xhHoSoKyThuatHdrClone = xhHoSoKyThuatHdr;
+      List<XhHoSoKyThuatDtl> xhHoSoKyThuatDtl = xhHoSoKyThuatHdr.getXhHoSoKyThuatDtl();
+
+      xhHoSoKyThuatHdr.getXhHoSoKyThuatDtl().forEach(s -> {
+        s.setXhHoSoKyThuatHdr(null);
+        s.getXhHoSoKyThuatRow().forEach(s1 -> {
+          s1.setXhHoSoKyThuatDtl(null);
+        });
+      });
+
       BeanUtils.copyProperties(objReq, xhHoSoKyThuatHdr);
+
       xhHoSoKyThuatHdr.getXhHoSoKyThuatDtl().forEach(s -> {
         s.setXhHoSoKyThuatHdr(xhHoSoKyThuatHdr);
         s.getXhHoSoKyThuatRow().forEach(s1 -> {
           s1.setXhHoSoKyThuatDtl(s);
         });
       });
+//      xhHoSoKyThuatHdr.setXhHoSoKyThuatDtl(xhHoSoKyThuatDtl);
       xhHoSoKyThuatRepository.save(xhHoSoKyThuatHdr);
       return xhHoSoKyThuatHdr;
     }
