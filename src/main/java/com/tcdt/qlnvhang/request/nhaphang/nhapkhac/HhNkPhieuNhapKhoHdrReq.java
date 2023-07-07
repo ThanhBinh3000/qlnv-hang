@@ -1,8 +1,8 @@
 package com.tcdt.qlnvhang.request.nhaphang.nhapkhac;
 
+import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhNkPhieuNhapKhoDtl;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuNhapKhoDtl;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -14,7 +14,6 @@ import java.util.List;
 public class HhNkPhieuNhapKhoHdrReq extends BaseRequest {
 
     private Long id;
-    private String loaiQdinh;
     private String loaiDc;
     private Integer nam;
     private String maDvi;
@@ -69,6 +68,6 @@ public class HhNkPhieuNhapKhoHdrReq extends BaseRequest {
     private String lyDoTuChoi;
     private List<FileDinhKem> chungTuDinhKem = new ArrayList<>();
 
-    private List<DcnbPhieuNhapKhoDtl> children = new ArrayList<>();
+    private List<HhNkPhieuNhapKhoDtl> children = new ArrayList<>();
     private List<String> dsLoaiHang = new ArrayList<>();
 }

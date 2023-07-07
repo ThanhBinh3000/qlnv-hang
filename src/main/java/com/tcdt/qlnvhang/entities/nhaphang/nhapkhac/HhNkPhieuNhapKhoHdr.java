@@ -3,7 +3,6 @@ package com.tcdt.qlnvhang.entities.nhaphang.nhapkhac;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuNhapKhoDtl;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -43,8 +42,8 @@ public class HhNkPhieuNhapKhoHdr extends BaseEntity implements Serializable, Clo
     @Column(name = "BB_CB_KHO_ID")
     private Long bBCbKhoId;
     private String soQdDcCuc;
-    private Long qdDcCucId;
-    private LocalDate ngayQdDcCuc;
+    private Long qdNhapHangId;
+    private LocalDate ngayQdNhapHang;
     private Long idKeHoachDtl;
     private String maDiemKho;
     private String maNhaKho;
@@ -104,7 +103,7 @@ public class HhNkPhieuNhapKhoHdr extends BaseEntity implements Serializable, Clo
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
-    private List<DcnbPhieuNhapKhoDtl> children = new ArrayList<>();
+    private List<HhNkPhieuNhapKhoDtl> children = new ArrayList<>();
     @Transient
     private String tenTrangThai;
     public void setTrangThai(String trangThai) {
