@@ -77,10 +77,20 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         }
 
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            searchDto = dcnbPhieuKnChatLuongHdrRepository.searchPageChiCuc(req, pageable);
-        }else {
+            if ("00".equals(req.getType())) { // kiểu xuất
+                searchDto = dcnbPhieuKnChatLuongHdrRepository.searchPageChiCucXuat(req, pageable);
+            }
+            if ("01".equals(req.getType())) { // kiểu nhan
+                searchDto = dcnbPhieuKnChatLuongHdrRepository.searchPageChiCucNhan(req, pageable);
+            }
+        }else{
             req.setTypeDataLink(Contains.DIEU_CHUYEN);
-            searchDto = dcnbPhieuKnChatLuongHdrRepository.searchPageCuc(req, pageable);
+            if ("00".equals(req.getType())) { // kiểu xuất
+                searchDto = dcnbPhieuKnChatLuongHdrRepository.searchPageCucXuat(req, pageable);
+            }
+            if ("01".equals(req.getType())) { // kiểu nhan
+                searchDto = dcnbPhieuKnChatLuongHdrRepository.searchPageCucNhan(req, pageable);
+            }
         }
 
         return searchDto;
@@ -279,7 +289,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         objReq.setPaggingReq(paggingReq);
         objReq.setMaDvi(currentUser.getDvql());
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit());
-        Page<DcnbPhieuKnChatLuongHdrDTO> page = dcnbPhieuKnChatLuongHdrRepository.searchPageChiCuc(objReq,pageable);
+        Page<DcnbPhieuKnChatLuongHdrDTO> page = dcnbPhieuKnChatLuongHdrRepository.searchPageChiCucXuat(objReq,pageable);
         List<DcnbPhieuKnChatLuongHdrDTO> data = page.getContent();
 
         String title = "Danh sách phương án xuất cứu trợ, viện trợ ";

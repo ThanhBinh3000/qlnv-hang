@@ -90,16 +90,15 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
                 searchDto = dcnbBienBanLayMauHdrRepository.searchPageChiCucXuat(req, pageable);
             }
             if ("01".equals(req.getType())) { // kiểu nhan
-
+                searchDto = dcnbBienBanLayMauHdrRepository.searchPageChiCucNhan(req, pageable);
             }
-
         }else{
             req.setTypeDataLink(Contains.DIEU_CHUYEN);
             if ("00".equals(req.getType())) { // kiểu xuất
                 searchDto = dcnbBienBanLayMauHdrRepository.searchPageCucXuat(req, pageable);
             }
             if ("01".equals(req.getType())) { // kiểu nhan
-
+                searchDto = dcnbBienBanLayMauHdrRepository.searchPageCucNhan(req, pageable);
             }
         }
         return searchDto;
