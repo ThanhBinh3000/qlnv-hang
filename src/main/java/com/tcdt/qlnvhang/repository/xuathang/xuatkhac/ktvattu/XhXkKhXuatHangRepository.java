@@ -23,6 +23,8 @@ public interface XhXkKhXuatHangRepository extends JpaRepository<XhXkKhXuatHang, 
             "AND  (:#{#param.ngayKeHoachDen}  IS NULL OR c.ngayKeHoach <= :#{#param.ngayKeHoachDen})) " +
             "AND ((:#{#param.ngayDuyetKeHoachTu}  IS NULL OR c.ngayDuyetKeHoach >= :#{#param.ngayDuyetKeHoachTu})" +
             "AND  (:#{#param.ngayDuyetKeHoachDen}  IS NULL OR c.ngayDuyetKeHoach <= :#{#param.ngayDuyetKeHoachDen})) " +
+            "AND ((:#{#param.ngayDuyetBtcTu}  IS NULL OR c.ngayDuyetBtc >= :#{#param.ngayDuyetBtcTu})" +
+            "AND  (:#{#param.ngayDuyetBtcDen}  IS NULL OR c.ngayDuyetBtc <= :#{#param.ngayDuyetBtcDen})) " +
             "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
     )
     Page<XhXkKhXuatHang> searchPage(@Param("param") XhXkKhXuatHangRequest param, Pageable pageable);
@@ -32,7 +34,7 @@ public interface XhXkKhXuatHangRepository extends JpaRepository<XhXkKhXuatHang, 
 
     List<XhXkKhXuatHang> findByIdIn(List<Long> ids);
 
-    List<XhXkKhXuatHang> findByIdThIn(List<Long> ids);
+    List<XhXkKhXuatHang> findByIdCanCuIn(List<Long> ids);
 
     Optional<XhXkKhXuatHang> findBySoToTrinh(String soToTrinh);
 
@@ -42,7 +44,7 @@ public interface XhXkKhXuatHangRepository extends JpaRepository<XhXkKhXuatHang, 
             "AND (:#{#param.loai} IS NULL OR c.loai = :#{#param.loai}) " +
             "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.capDvi} IS NULL OR c.capDvi = :#{#param.capDvi}) " +
-            "AND (c.idTh is null) " +
+            "AND (c.idCanCu is null) " +
             "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
     )
     List<XhXkKhXuatHang> searchListTh(@Param("param") XhXkKhXuatHangRequest param);
