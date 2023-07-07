@@ -242,6 +242,7 @@ public class XhDgBangKeService extends BaseServiceImpl {
       Optional<XhDgPhieuXuatKho> xhDgPhieuXuatKho = xhDgPhieuXuatKhoRepository.findById(optional.get().getIdPhieuXuatKho());
       if(xhDgPhieuXuatKho.isPresent()){
         xhDgPhieuXuatKho.get().setSoBangKeCh(optional.get().getSoBangKe());
+        xhDgPhieuXuatKho.get().setIdBangKeCh(optional.get().getId());
         xhDgPhieuXuatKhoRepository.save(xhDgPhieuXuatKho.get());
       }
     }

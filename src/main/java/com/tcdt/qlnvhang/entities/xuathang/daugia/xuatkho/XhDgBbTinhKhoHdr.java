@@ -26,7 +26,7 @@ public class XhDgBbTinhKhoHdr extends BaseEntity implements Serializable {
   private Long id;
   private Integer nam;
   private String maDvi;
-  private String maQhNs;
+  private String maQhns;
   private String soBbTinhKho;
   private LocalDate ngayTaoBb;
   private Long idQdGiaoNvXh;
@@ -53,27 +53,24 @@ public class XhDgBbTinhKhoHdr extends BaseEntity implements Serializable {
   private String nguyenNhan;
   private String kienNghi;
   private String ghiChu;
-  private String thuKho;
-  private String ktvBaoQuan;
-  private String keToan;
-  private String ldChiCuc;
-  private String trangThai;
+  private Long idThuKho;
+  private Long idKtvBaoQuan;
+  private LocalDate ngayPduyetKtvBq;
+  private Long idKeToan;
+  private LocalDate ngayPduyetKt;
   private LocalDate ngayGduyet;
   private Long nguoiGduyetId;
   private LocalDate ngayPduyet;
   private Long nguoiPduyetId;
   private String lyDoTuChoi;
-  private String type;
+  private String trangThai;
+  private String donViTinh;
+
+//  @Transient
   @Transient
   private String tenDvi;
   @Transient
   private String diaChiDvi;
-  @Transient
-  private String tenLoaiVthh;
-  @Transient
-  private String tenCloaiVthh;
-  @Transient
-  private String tenTrangThai;
   @Transient
   private String tenDiemKho;
   @Transient
@@ -82,6 +79,16 @@ public class XhDgBbTinhKhoHdr extends BaseEntity implements Serializable {
   private String tenNganKho;
   @Transient
   private String tenLoKho;
+  @Transient
+  private String tenThuKho;
+  @Transient
+  private String tenKtvBaoQuan;
+  @Transient
+  private String tenKeToan;
+  @Transient
+  private String tenLanhDaoChiCuc;
+  @Transient
+  private String tenTrangThai;
   @Transient
   private List<FileDinhKem> fileDinhKems =new ArrayList<>();
   @OneToMany(mappedBy = "xhDgBbTinhKhoHdr", fetch = FetchType.LAZY)
