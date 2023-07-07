@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.response.xuathang.xuatkhac.ktvattu.XhXkTongHopKhXuatCuc;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,6 +35,7 @@ public class XhXkKhXuatHang extends BaseEntity implements Serializable {
     private String trichYeu;
     private LocalDate ngayKeHoach;
     private LocalDate ngayDuyetKeHoach;
+    private LocalDate ngayDuyetBtc;
     private LocalDate thoiGianDuKienXuatTu;
     private LocalDate thoiGianDuKienXuatDen;
     private String moTa;
@@ -51,9 +53,10 @@ public class XhXkKhXuatHang extends BaseEntity implements Serializable {
     //Entity Tổng hợp kế hoạch xuất hàng
     private String loai;
     private LocalDate thoiGianTh;
-    private String noiDung;
+    private String noiDungTh;
     private String ghiChu;
-    private Long idTh;
+    //Dùng cho Tổng hợp và kế hoạch của Tổng cục - TH thì là ID bản ghi kế hoạch của Cục, KH của Tổng cục là ID của bản ghi TH
+    private Long idCanCu;
 
     @Transient
     private List<FileDinhKem> fileDinhKems;
@@ -63,4 +66,10 @@ public class XhXkKhXuatHang extends BaseEntity implements Serializable {
     private String tenDvi;
     @Transient
     private Integer soDviTaiSan;
+    @Transient
+    private List<XhXkTongHopKhXuatCuc> listDxCuc;
+    @Transient
+    private List<String> listSoKeHoachs;
+    @Transient
+    private List<Long> listIdKeHoachs;
 }

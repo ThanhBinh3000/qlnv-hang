@@ -14,7 +14,7 @@ public class XhDgBangKeReq extends BaseRequest {
   private Long id;
   private Integer nam;
   private String maDvi;
-  private String maQhNs;
+  private String maQhns;
   private String soBangKe;
   private Long idQdGiaoNvXh;
   private String soQdGiaoNvXh;
@@ -30,23 +30,21 @@ public class XhDgBangKeReq extends BaseRequest {
   private String soPhieuXuatKho;
   private LocalDate ngayXuat;
   private String diaDiemKho;
-  private String loaiVthh;
-  private String cloaiVthh;
-  private String moTaHangHoa;
   private String nlqHoTen;
   private String nlqCmnd;
   private String nlqDonVi;
   private String nlqDiaChi;
   private LocalDate thoiGianGiaoNhan;
-  private Long tongTrongLuong;
+  private String loaiVthh;
+  private String cloaiVthh;
+  private String moTaHangHoa;
+  private String donViTinh;
   private Long tongTrongLuongBaoBi;
-  private Long tongTrongLuongHang;
   private LocalDate ngayGduyet;
   private Long nguoiGduyetId;
   private LocalDate ngayPduyet;
   private Long nguoiPduyetId;
   private String lyDoTuChoi;
   private String trangThai;
-  private String type;
   private List<XhDgBangKeDtl> bangKeDtl= new ArrayList<>();
 }

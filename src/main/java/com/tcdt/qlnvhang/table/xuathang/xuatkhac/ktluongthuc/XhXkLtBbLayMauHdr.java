@@ -8,6 +8,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,10 @@ public class XhXkLtBbLayMauHdr extends BaseEntity implements Serializable {
   private String dviKiemNghiem;
   private String diaDiemLayMau;
   private String maDiaDiem;
+  private BigDecimal slTon;
+  private BigDecimal slHetHan;
+  private Integer thoiHanLk;
+  private String donViTinh;
   private String loaiVthh;
   private String cloaiVthh;
   private String moTaHangHoa;
@@ -121,6 +126,6 @@ public class XhXkLtBbLayMauHdr extends BaseEntity implements Serializable {
   private List<FileDinhKem> canCu =new ArrayList<>();
   @Transient
   private List<FileDinhKem> fileDinhKemNiemPhong =new ArrayList<>();
-  @Transient
+  @OneToMany(mappedBy = "bbLayMauHdr", cascade = CascadeType.ALL)
   private List<XhXkLtBbLayMauDtl> bbLayMauDtl = new ArrayList<>();
 }

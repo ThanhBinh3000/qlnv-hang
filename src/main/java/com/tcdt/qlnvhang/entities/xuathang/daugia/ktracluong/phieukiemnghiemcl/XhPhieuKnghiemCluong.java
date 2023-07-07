@@ -56,8 +56,6 @@ public class XhPhieuKnghiemCluong extends TrangThaiBaseEntity implements Seriali
 
     private Long idThuKho;
 
-    private Long idDdiemXh;
-
     private String maDiemKho;
 
     private String maNhaKho;

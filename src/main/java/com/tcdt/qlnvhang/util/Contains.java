@@ -282,6 +282,15 @@ public class Contains {
 				.put(Contains.DX_TIEU_HUY, "Tiêu hủy").get();
 	}
 
+	public static final Map<String, String> mappingPthucMtt;
+	static {
+		mappingPthucMtt = Maps.<String, String>buildMap().put(Contains.CHAO_GIA, "Chào giá")
+				.put(Contains.UY_QUYEN, "Úy quyền").put(Contains.MUA_LE, "Mua lẻ").get();
+	}
+	public static String getPthucMtt(String key) {
+		return Contains.mappingPthucMtt.get(key);
+	}
+
 	public static final Map<String, String> mappingLoaiDc;
 	static {
 		mappingLoaiDc = Maps.<String, String>buildMap().put(Contains.DC_GIA, "Điều chỉnh giá")
@@ -348,5 +357,18 @@ public class Contains {
 		public static String KHACH_MOI="KM";
 		public static String DAU_GIA_VIEN="DGV";
 		public static String NGUOI_THAM_GIA="NTG";
+	}
+
+	public static class HO_SO_KY_THUAT{
+		public static String BBAN_KTRA_NGOAI_QUAN="BBKTNQ";
+		public static String BB_KTRA_VAN_HANH="BBKTVH";
+		public static String BB_KTRA_HO_SO_KY_THUAT="BBKTHSKT";
+		public static String NGUOI_LIEN_QUAN="NLQ";
+		public static String HO_SO="HS";
+		public static String THOI_DIEM_NHAP_HANG="NHAP";
+		public static String THOI_DIEM_XUAT_HANG="XUAT";
+
+
+
 	}
 }

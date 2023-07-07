@@ -40,42 +40,32 @@ public class XhDgBangKeHdr extends BaseEntity implements Serializable {
   private String maNhaKho;
   private String maNganKho;
   private String maLoKho;
-  private String maKho;
   private Long idPhieuXuatKho;
   private String soPhieuXuatKho;
   private LocalDate ngayXuat;
   private String diaDiemKho;
-  private String loaiVthh;
-  private String cloaiVthh;
-  private String moTaHangHoa;
   private String nlqHoTen;
   private String nlqCmnd;
   private String nlqDonVi;
   private String nlqDiaChi;
   private LocalDate thoiGianGiaoNhan;
-  private Long tongTrongLuong;
+  private String loaiVthh;
+  private String cloaiVthh;
+  private String moTaHangHoa;
+  private String donViTinh;
   private Long tongTrongLuongBaoBi;
-  private Long tongTrongLuongHang;
   private LocalDate ngayGduyet;
   private Long nguoiGduyetId;
   private LocalDate ngayPduyet;
   private Long nguoiPduyetId;
   private String lyDoTuChoi;
   private String trangThai;
-  private String type;
 
+// Transient
   @Transient
   private String tenDvi;
   @Transient
   private String diaChiDvi;
-  @Transient
-  private String tenLoaiVthh;
-  @Transient
-  private String tenCloaiVthh;
-  @Transient
-  private String tenTrangThai;
-  @Transient
-  private String tenChiCuc;
   @Transient
   private String tenDiemKho;
   @Transient
@@ -85,19 +75,15 @@ public class XhDgBangKeHdr extends BaseEntity implements Serializable {
   @Transient
   private String tenLoKho;
   @Transient
+  private String tenLoaiVthh;
+  @Transient
+  private String tenCloaiVthh;
+  @Transient
+  private String tenTrangThai;
+  @Transient
   private String nguoiPduyet;
   @Transient
   private String nguoiGduyet;
   @Transient
-  private String tenKho;
-  @Transient
   private List<XhDgBangKeDtl> bangKeDtl = new ArrayList<>();
-
-  public String getMaKho() {
-    return DataUtils.isNullOrEmpty(maLoKho) ? maNganKho : maLoKho;
-  }
-
-  public String getTenKho() {
-    return DataUtils.isNullOrEmpty(tenLoKho) ? tenNganKho : tenLoKho;
-  }
 }

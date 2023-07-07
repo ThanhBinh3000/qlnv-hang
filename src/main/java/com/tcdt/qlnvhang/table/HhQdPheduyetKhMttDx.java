@@ -85,6 +85,8 @@ public class HhQdPheduyetKhMttDx implements Serializable {
 
     // thông tin chào giá
     private String pthucMuaTrucTiep;
+    @Transient
+    private String tenPthucMuaTrucTiep;
 
     private String soQd;
 

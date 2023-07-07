@@ -64,8 +64,6 @@ public class XhBbLayMauRequest extends BaseRequest {
 
 	private String moTaHangHoa;
 
-	private Long idDdiemXh;
-
 	private String maDiemKho;
 
 	private String maNhaKho;

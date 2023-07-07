@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.xuathang.SearchHoSoKyThuatReq;
+import com.tcdt.qlnvhang.request.xuathang.XhHoSoKyThuatReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.xuathang.XhHoSoKyThuatService;
 import com.tcdt.qlnvhang.table.xuathang.hosokythuat.XhHoSoKyThuatHdr;
@@ -69,7 +70,7 @@ public class XhHoSoKyThuatController extends BaseController {
 
   @ApiOperation(value = "Cập nhật thông tin đề xuất", response = List.class)
   @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @RequestBody SearchHoSoKyThuatReq objReq) {
+  public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @RequestBody XhHoSoKyThuatHdr objReq) {
     BaseResponse resp = new BaseResponse();
     try {
       resp.setData(xhHoSoKyThuatService.update(currentUser, objReq));
