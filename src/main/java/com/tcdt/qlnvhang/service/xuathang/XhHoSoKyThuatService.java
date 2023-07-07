@@ -169,7 +169,38 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
         });
       });
 //      xhHoSoKyThuatHdr.setXhHoSoKyThuatDtl(xhHoSoKyThuatDtl);
-      xhHoSoKyThuatRepository.save(xhHoSoKyThuatHdr);
+      XhHoSoKyThuatHdr updated = xhHoSoKyThuatRepository.save(xhHoSoKyThuatHdr);
+      updated.getXhHoSoKyThuatDtl().forEach(s -> {
+        if (!DataUtils.isNullOrEmpty((s.getCanCu()))) {
+          List<FileDinhKemReq> listFileReq = new ArrayList<>();
+          s.getCanCu().forEach(canCu -> {
+            FileDinhKemReq fileReq = new FileDinhKemReq();
+            BeanUtils.copyProperties(canCu, fileReq);
+            listFileReq.add(fileReq);
+          });
+          fileDinhKemService.saveListFileDinhKem(listFileReq, s.getId(), XhHoSoKyThuatDtl.TABLE_NAME + "_CAN_CU");
+        }
+        if (!DataUtils.isNullOrEmpty((s.getFileDinhKem()))) {
+          List<FileDinhKemReq> listFileReq = new ArrayList<>();
+          s.getFileDinhKem().forEach(dinhKem -> {
+            FileDinhKemReq fileReq = new FileDinhKemReq();
+            BeanUtils.copyProperties(dinhKem, fileReq);
+            listFileReq.add(fileReq);
+          });
+          fileDinhKemService.saveListFileDinhKem(listFileReq, s.getId(), XhHoSoKyThuatDtl.TABLE_NAME + "_DINH_KEM");
+        }
+        s.getXhHoSoKyThuatRow().forEach(s1 -> {
+          if (!DataUtils.isNullOrEmpty((s1.getFileDinhKem()))) {
+            List<FileDinhKemReq> listFileReq = new ArrayList<>();
+            s1.getFileDinhKem().forEach(dinhKem -> {
+              FileDinhKemReq fileReq = new FileDinhKemReq();
+              BeanUtils.copyProperties(dinhKem, fileReq);
+              listFileReq.add(fileReq);
+            });
+            fileDinhKemService.saveListFileDinhKem(listFileReq, s1.getId(), XhHoSoKyThuatRow.TABLE_NAME + "_DINH_KEM");
+          }
+        });
+      });
       return xhHoSoKyThuatHdr;
     }
     return null;
