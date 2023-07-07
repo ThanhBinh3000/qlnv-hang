@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -64,7 +65,7 @@ public class XhHoSoKyThuatDtl extends BaseEntity implements Serializable {
   private List<FileDinhKem> vanBanBsung = new ArrayList<>();
   private LocalDate tgianBsung;
 
-  @OneToMany(mappedBy = "xhHoSoKyThuatDtl", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "xhHoSoKyThuatDtl", cascade = CascadeType.ALL)
   private List<XhHoSoKyThuatRow> xhHoSoKyThuatRow = new ArrayList<>();
 
   @ManyToOne(fetch = FetchType.LAZY)
