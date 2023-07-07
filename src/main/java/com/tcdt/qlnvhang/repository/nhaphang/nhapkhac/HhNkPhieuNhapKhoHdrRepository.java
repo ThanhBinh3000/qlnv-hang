@@ -18,7 +18,7 @@ public interface HhNkPhieuNhapKhoHdrRepository extends JpaRepository<HhNkPhieuNh
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.nhaphang.nhapkhac.HhNkPhieuNhapKhoHdrListDTO(" +
             "pnk.id,pnk.soPhieuNhapKho,pnk.ngayLap) " +
             "FROM HhNkPhieuNhapKhoHdr pnk " +
-            "LEFT JOIN HhQdGiaoNvuNhapHangKhacHdr qdgnv ON pnk.qdNhapHangId = qdgnv.id "+
+            "LEFT JOIN HhQdGiaoNvuNhapHangKhacHdr qdgnv ON pnk.qdGiaoNvId = qdgnv.id "+
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = pnk.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND qdgnv.trangThai = '29'" +
@@ -31,7 +31,7 @@ public interface HhNkPhieuNhapKhoHdrRepository extends JpaRepository<HhNkPhieuNh
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.nhaphang.nhapkhac.HhNkPhieuNhapKhoHdrListDTO(" +
             "pnk.id,pnk.soPhieuNhapKho,pnk.ngayLap) " +
             "FROM HhNkPhieuNhapKhoHdr pnk " +
-            "LEFT JOIN HhQdGiaoNvuNhapHangKhacHdr qdgnv ON pnk.qdNhapHangId = qdgnv.id "+
+            "LEFT JOIN HhQdGiaoNvuNhapHangKhacHdr qdgnv ON pnk.qdGiaoNvId = qdgnv.id "+
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = pnk.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND qdgnv.trangThai = '29'" +
@@ -51,7 +51,7 @@ public interface HhNkPhieuNhapKhoHdrRepository extends JpaRepository<HhNkPhieuNh
             "LEFT JOIN HhQdPdNhapKhacHdr hdr ON hdr.id = qdgnv.idQdPdNk " +
             "LEFT JOIN HhQdPdNhapKhacDtl dtl ON hdr.id = dtl.idHdr " +
             "LEFT JOIN HhQdGiaoNvuNhapHangKhacDtl qdcd ON qdcd.idHdr =  qdgnv.id " +
-            "LEFT JOIN HhNkPhieuNhapKhoHdr pnk On pnk.qdNhapHangId = qdgnv.id " +
+            "LEFT JOIN HhNkPhieuNhapKhoHdr pnk On pnk.qdGiaoNvId = qdgnv.id " +
             "LEFT JOIN HhNkPhieuKtcl pktcl On pktcl.id = pnk.idPhieuKtraCluong " +
             "LEFT JOIN HhNkBangKeNhapVTHdr bknvt On bknvt.phieuNhapKhoId = pnk.id " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = dtl.cloaiVthh " +
