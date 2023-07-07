@@ -13,8 +13,7 @@ import java.util.List;
 public class XhDgBbTinhKhoHdrReq {
   private Long id;
   private Integer nam;
-  private String maDvi;
-  private String maQhNs;
+  private String maQhns;
   private String soBbTinhKho;
   private LocalDate ngayTaoBb;
   private Long idQdGiaoNvXh;
@@ -41,17 +40,7 @@ public class XhDgBbTinhKhoHdrReq {
   private String nguyenNhan;
   private String kienNghi;
   private String ghiChu;
-  private String thuKho;
-  private String ktvBaoQuan;
-  private String keToan;
-  private String ldChiCuc;
-  private String trangThai;
-  private LocalDate ngayGduyet;
-  private Long nguoiGduyetId;
-  private LocalDate ngayPduyet;
-  private Long nguoiPduyetId;
-  private String lyDoTuChoi;
-  private String type;
+  private String donViTinh;
   private List<FileDinhKemReq> fileDinhKems =new ArrayList<>();
   private List<XhDgBbTinhKhoDtl> listPhieuXuatKho= new ArrayList<>();
 }

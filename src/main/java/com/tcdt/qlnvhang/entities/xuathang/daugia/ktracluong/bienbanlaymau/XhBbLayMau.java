@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -84,10 +83,14 @@ public class XhBbLayMau extends TrangThaiBaseEntity implements Serializable {
 
 	private Integer ketQuaNiemPhong;
 
+	private Long idBbTinhKho;
+
 	private String soBbTinhKho;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	private Date ngayXuatDocKho;
+
+	private Long idBbHaoDoi;
 
 	private String soBbHaoDoi;
 
