@@ -38,17 +38,13 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
     private DcnbBangKeCanHangDtlRepository dcnbBangKeCanHangDtlRepository;
 
     @Autowired
-    private DcnbQuyetDinhDcCHdrServiceImpl dcnbQuyetDinhDcCHdrServiceImpl;
-
-    @Autowired
     private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
 
     @Autowired
-    private DcnbKeHoachDcHdrRepository dcnbKeHoachDcHdrRepository;
+    private DcnbPhieuXuatKhoHdrRepository dcnbPhieuXuatKhoHdrRepository;
 
     @Autowired
-    private DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
-
+    private DcnbPhieuNhapKhoHdrRepository dcnbPhieuNhapKhoHdrRepository;
 
     public Page<DcnbBangKeCanHangHdrDTO> searchPage(CustomUserDetails currentUser, SearchBangKeCanHang req) throws Exception {
         String dvql = currentUser.getDvql();
@@ -71,7 +67,7 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
             if ("01".equals(req.getType())) { // kiểu nhan
                 searchDto = dcnbBangKeCanHangHdrRepository.searchPageChiCucNhan(req, pageable);
             }
-        }else{
+        } else {
             req.setTypeDataLink(Contains.DIEU_CHUYEN);
             if ("00".equals(req.getType())) { // kiểu xuất
                 searchDto = dcnbBangKeCanHangHdrRepository.searchPageCucXuat(req, pageable);
@@ -100,7 +96,7 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
             objReq.getDcnbBangKeCanHangDtl().forEach(e -> e.setDcnbBangKeCanHangHdr(data));
         }
         DcnbBangKeCanHangHdr created = dcnbBangKeCanHangHdrRepository.save(data);
-        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BKCH-"+currentUser.getUser().getDvqlTenVietTat();
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BKCH-" + currentUser.getUser().getDvqlTenVietTat();
         created.setSoBangKe(so);
         dcnbBangKeCanHangHdrRepository.save(created);
         return created;
@@ -131,7 +127,7 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
         BeanUtils.copyProperties(objReq, data);
         data.setDcnbBangKeCanHangDtl(objReq.getDcnbBangKeCanHangDtl());
         DcnbBangKeCanHangHdr created = dcnbBangKeCanHangHdrRepository.save(data);
-        String soBangKe = created.getId() + "/" + (new Date().getYear() + 1900) +"/BKCH-"+currentUser.getUser().getDvqlTenVietTat();
+        String soBangKe = created.getId() + "/" + (new Date().getYear() + 1900) + "/BKCH-" + currentUser.getUser().getDvqlTenVietTat();
         created.setSoBangKe(soBangKe);
         dcnbBangKeCanHangHdrRepository.save(created);
         return created;
@@ -217,12 +213,24 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
                             optional.get().getQDinhDccId(),
                             optional.get().getMaNganKho(),
                             optional.get().getMaLoKho());
+                    Optional<DcnbPhieuXuatKhoHdr> dcnbPhieuXuatKhoHdr = dcnbPhieuXuatKhoHdrRepository.findById(optional.get().getPhieuXuatKhoId());
+                    if(dcnbPhieuXuatKhoHdr.isPresent()){
+                        dcnbPhieuXuatKhoHdr.get().setBangKeChId(optional.get().getId());
+                        dcnbPhieuXuatKhoHdr.get().setSoBangKeCh(optional.get().getSoBangKe());
+                        dcnbPhieuXuatKhoHdrRepository.save(dcnbPhieuXuatKhoHdr.get());
+                    }
                 } else if ("01".equals(optional.get().getType())) {
                     dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCucNhan(optional.get().getMaDvi(),
                             optional.get().getQDinhDccId(),
                             optional.get().getMaNganKho(),
                             optional.get().getMaLoKho());
-                }else {
+                    Optional<DcnbPhieuNhapKhoHdr> dcnbPhieuNhapKhoHdr = dcnbPhieuNhapKhoHdrRepository.findById(optional.get().getPhieuXuatKhoId());
+                    if(dcnbPhieuNhapKhoHdr.isPresent()){
+                        dcnbPhieuNhapKhoHdr.get().setBangKeChId(optional.get().getId());
+                        dcnbPhieuNhapKhoHdr.get().setSoBangKeCh(optional.get().getSoBangKe());
+                        dcnbPhieuNhapKhoHdrRepository.save(dcnbPhieuNhapKhoHdr.get());
+                    }
+                } else {
                     throw new Exception("Type phải là 00 hoặc 01!");
                 }
                 DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
