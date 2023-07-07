@@ -11,7 +11,6 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbPhieuKnChatLuongHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchPhieuKnChatLuong;
-import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchPhieuXuatKho;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKnChatLuongHdrDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -296,7 +295,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
             objs[2] = dx.getNam();
             objs[3] = dx.getThoiHanDieuChuyen();
             objs[4] = dx.getTenDiemKho();
-            objs[5] = dx.getTenloKho();
+            objs[5] = dx.getTenLoKho();
             objs[6] = dx.getThayDoiThuKho();
             objs[7] = dx.getSoPhieuKnChatLuong();
             objs[8] = dx.getNgayKiemNghiem();

@@ -1,11 +1,8 @@
 package com.tcdt.qlnvhang.response.dieuChuyenNoiBo;
 
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
 import java.time.LocalDate;
 
 @Data
@@ -24,14 +21,14 @@ public class DcnbBbChuanBiKhoHdrDTO {
     private LocalDate ngayKtNhapKho;
     private String maDiemKho;
     private String tenDiemKho;
-    private String maloKho;
-    private String tenloKho;
+    private String maLoKho;
+    private String tenLoKho;
     private String maNganKho;
     private String tenNganKho;
     private String trangThai;
     private String tenTrangThai;
 
-    public DcnbBbChuanBiKhoHdrDTO(Long id, Long qDinhDccId, String soQdinh, Integer namKh, LocalDate thoiGianNhapKhoMuonNhat, String soBbChuanBiKho, LocalDate ngayBbChuanBiKho, Long phieuNhapKhoId, String soPhieuNhapKho, Long bbKetThucNKId, String soBbKetThucNK, LocalDate ngayKtNhapKho, String maDiemKho, String tenDiemKho, String maloKho, String tenloKho, String maNganKho, String tenNganKho, String trangThai, String tenTrangThai) {
+    public DcnbBbChuanBiKhoHdrDTO(Long id, Long qDinhDccId, String soQdinh, Integer namKh, LocalDate thoiGianNhapKhoMuonNhat, String soBbChuanBiKho, LocalDate ngayBbChuanBiKho, Long phieuNhapKhoId, String soPhieuNhapKho, Long bbKetThucNKId, String soBbKetThucNK, LocalDate ngayKtNhapKho, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String maNganKho, String tenNganKho, String trangThai, String tenTrangThai) {
         this.id = id;
         this.qDinhDccId = qDinhDccId;
         this.soQdinh = soQdinh;
@@ -46,8 +43,8 @@ public class DcnbBbChuanBiKhoHdrDTO {
         this.ngayKtNhapKho = ngayKtNhapKho;
         this.maDiemKho = maDiemKho;
         this.tenDiemKho = tenDiemKho;
-        this.maloKho = maloKho;
-        this.tenloKho = tenloKho;
+        this.maLoKho = maLoKho;
+        this.tenLoKho = tenLoKho;
         this.maNganKho = maNganKho;
         this.tenNganKho = tenNganKho;
         this.trangThai = trangThai;
