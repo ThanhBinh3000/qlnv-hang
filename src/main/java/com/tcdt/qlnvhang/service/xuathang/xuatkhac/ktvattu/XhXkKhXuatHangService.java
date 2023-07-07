@@ -53,9 +53,15 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         req.setDvql(currentUser.getDvql());
         Page<XhXkKhXuatHang> search = xhXkKhXuatHangRepository.searchPage(req, pageable);
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+        Map<String, String> mapVthh = getListDanhMucHangHoa();
         search.getContent().forEach(s -> {
             s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
             s.setSoDviTaiSan(s.getXhXkKhXuatHangDtl().size());
+            s.getXhXkKhXuatHangDtl().forEach(item -> {
+                item.setMapVthh(mapVthh);
+                item.setMapDmucDvi(mapDmucDvi);
+            });
         });
         return search;
     }
