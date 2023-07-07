@@ -36,6 +36,7 @@ public class XhXkKhXuatHang extends BaseEntity implements Serializable {
     private LocalDate ngayKeHoach;
     private LocalDate ngayDuyetKeHoach;
     private LocalDate ngayDuyetBtc;
+    private LocalDate ngayTrinhDuyetBtc;
     private LocalDate thoiGianDuKienXuatTu;
     private LocalDate thoiGianDuKienXuatDen;
     private String moTa;
@@ -46,6 +47,8 @@ public class XhXkKhXuatHang extends BaseEntity implements Serializable {
     private Long nguoiDuyetId;
     private LocalDate ngayDuyet;
     private Integer capDvi;
+    private String soQdBtc;
+    private LocalDate ngayDxXuatHang;
 
     @OneToMany(mappedBy = "XhXkKhXuatHang", cascade = CascadeType.ALL)
     private List<XhXkKhXuatHangDtl> xhXkKhXuatHangDtl = new ArrayList<>();
