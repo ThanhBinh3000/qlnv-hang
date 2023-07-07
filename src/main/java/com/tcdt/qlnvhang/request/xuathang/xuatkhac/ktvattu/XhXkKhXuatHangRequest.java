@@ -25,6 +25,7 @@ public class XhXkKhXuatHangRequest extends BaseRequest {
     LocalDate ngayKeHoach;
     LocalDate ngayDuyetKeHoach;
     //    LocalDate thoiGianDuKienXuat;
+    LocalDate ngayDuyetBtc;
     LocalDate thoiGianDuKienXuatTu;
     LocalDate thoiGianDuKienXuatDen;
     String moTa;
@@ -39,13 +40,15 @@ public class XhXkKhXuatHangRequest extends BaseRequest {
     LocalDate thoiGianTh;
     String noiDungTh;
     String ghiChu;
-    Long idTh;
+    Long idCanCu;
     List<Long> listIdKeHoachs;
     //search params
     LocalDate ngayKeHoachTu;
     LocalDate ngayKeHoachDen;
     LocalDate ngayDuyetKeHoachTu;
     LocalDate ngayDuyetKeHoachDen;
+    LocalDate ngayDuyetBtcTu;
+    LocalDate ngayDuyetBtcDen;
     LocalDate thoiGianThTu;
     LocalDate thoiGianThDen;
     String dvql;
