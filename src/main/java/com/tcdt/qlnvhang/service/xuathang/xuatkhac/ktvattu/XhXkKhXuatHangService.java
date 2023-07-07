@@ -79,10 +79,18 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
         }
         XhXkKhXuatHang data = new XhXkKhXuatHang();
         BeanUtils.copyProperties(objReq, data);
-        data.setMaDvi(currentUser.getUser().getDvql());
+//        data.setMaDvi(currentUser.getUser().getDvql());
         data.setTrangThai(Contains.DUTHAO);
         data.getXhXkKhXuatHangDtl().forEach(s -> s.setXhXkKhXuatHang(data));
         XhXkKhXuatHang created = xhXkKhXuatHangRepository.save(data);
+        //Nếu là quyết định của Tổng cục tạo, cập nhật lại trạng thái bản ghi tổng hợp thành đã tạo kế hoạch
+        if (objReq.getCapDvi() == 1) {
+            Optional<XhXkKhXuatHang> recordTh = xhXkKhXuatHangRepository.findById(objReq.getIdCanCu());
+            if (recordTh.isPresent()) {
+                recordTh.get().setTrangThai(TrangThaiAllEnum.DADUTHAO_KH.getId());
+                xhXkKhXuatHangRepository.save(recordTh.get());
+            }
+        }
         //save file đính kèm
         fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkKhXuatHang.TABLE_NAME);
         return detail(created.getId());
