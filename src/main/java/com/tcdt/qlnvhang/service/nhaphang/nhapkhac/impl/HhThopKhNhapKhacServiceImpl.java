@@ -4,10 +4,12 @@ import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhDxuatKhNhapKhacDtl;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhDxuatKhNhapKhacHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhThopKhNhapKhac;
+import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.qdpdnk.HhQdPdNhapKhacHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhDxuatKhNhapKhacDtlRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhDxuatKhNhapKhacHdrRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhQdPdNhapKhacHdrRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhThopKhNhapKhacRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -50,6 +52,8 @@ public class HhThopKhNhapKhacServiceImpl extends BaseServiceImpl implements HhTh
     private FileDinhKemService fileDinhKemService;
     @Autowired
     private HhDxuatKhNhapKhacDtlRepository hhDxuatKhNhapKhacDtlRepository;
+    @Autowired
+    private HhQdPdNhapKhacHdrRepository hhQdPdNhapKhacHdrRepository;
 
     @Override
     public Page<HhThopKhNhapKhac> timKiem(HhThopKhNhapKhacSearch req) {
@@ -213,8 +217,8 @@ public class HhThopKhNhapKhacServiceImpl extends BaseServiceImpl implements HhTh
         if (!hhThopKhNhapKhac.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu");
         }
-        if (!hhThopKhNhapKhac.get().getTrangThai().equals(Contains.CHUATAO_QD)) {
-            throw new Exception("Chỉ thực hiện xóa với bản ghi chưa được tạo quyết định.");
+        if (hhThopKhNhapKhac.get().getTrangThai().equals(Contains.DABANHANH_QD)) {
+            throw new Exception("Chỉ thực hiện xóa với bản ghi chưa ban hành quyết định.");
         }
         List<HhDxuatKhNhapKhacHdr> dxuatKhNhapKhacHdrList =  hhDxuatKhNhapKhacHdrRepository.findAllByThopId(hhThopKhNhapKhac.get().getId());
         dxuatKhNhapKhacHdrList.forEach(item -> {
@@ -223,6 +227,10 @@ public class HhThopKhNhapKhacServiceImpl extends BaseServiceImpl implements HhTh
             hhDxuatKhNhapKhacHdrRepository.save(item);
         });
         fileDinhKemService.delete(hhThopKhNhapKhac.get().getId(), Lists.newArrayList(HhThopKhNhapKhac.TABLE_NAME));
+        Optional<HhQdPdNhapKhacHdr> qdPdNhapKhacHdr = hhQdPdNhapKhacHdrRepository.findByIdTh(hhThopKhNhapKhac.get().getId());
+        if (qdPdNhapKhacHdr.isPresent() && !qdPdNhapKhacHdr.get().getTrangThai().equals(Contains.BAN_HANH)) {
+            hhQdPdNhapKhacHdrRepository.delete(qdPdNhapKhacHdr.get());
+        }
         hhThopKhNhapKhacRepository.delete(hhThopKhNhapKhac.get());
     }
 

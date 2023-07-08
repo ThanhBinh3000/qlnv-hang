@@ -163,13 +163,11 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 //				item.setTrangThai(Contains.DADUTHAO_QD);
 //			});
 //			hhHopDongDdiemNhapKhoRepository.saveAll(collect);
+			this.saveDetail(dataMap,objReq,false);
 		}else{
 			hhHopDongRepository.updateHopDong(dataMap.getIdHd(),Contains.DADUTHAO_QD);
+			this.saveDetailLt(dataMap,objReq,false);
 		}
-
-
-		this.saveDetail(dataMap,objReq,false);
-
 		return dataMap;
 	}
 
@@ -208,9 +206,11 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		if (!DataUtils.isNullObject(objReq.getFileDinhKems())) {
 			fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), NhQdGiaoNvuNhapxuatHdr.TABLE_NAME);
 		}
-
-		this.saveDetail(dataDB,objReq,true);
-
+		if (created.getLoaiVthh().startsWith("02")) {
+			this.saveDetail(dataDB,objReq,true);
+		} else {
+			this.saveDetailLt(dataDB,objReq,true);
+		}
 		return dataDB;
 	}
 
@@ -253,6 +253,28 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			dtl.setId(null);
 			dtl.setIdHdr(main.getId());
 			dtl.setTrangThai(TrangThaiAllEnum.CHUA_CAP_NHAT.getId());
+			dtlRepository.save(dtl);
+			if(!ObjectUtils.isEmpty(dtl.getChildren())){
+				List<NhQdGiaoNvuNxDdiem> ddNhap = ObjectMapperUtils.mapAll(dtl.getChildren(), NhQdGiaoNvuNxDdiem.class);
+				ddNhap.forEach( item -> {
+					item.setIdCt(dtl.getId());
+				});
+				ddiemNhapRepository.saveAll(ddNhap);
+			}
+		}
+	}
+
+	@Transactional()
+	void saveDetailLt(NhQdGiaoNvuNhapxuatHdr main, HhQdGiaoNvuNhapxuatHdrReq objReq , boolean isUpdate){
+		if(isUpdate){
+			dtlRepository.deleteAllByIdHdr(main.getId());
+		}
+		List<NhQdGiaoNvuNhapxuatDtl> dtls = ObjectMapperUtils.mapAll(objReq.getDetailList(), NhQdGiaoNvuNhapxuatDtl.class);
+		for (NhQdGiaoNvuNhapxuatDtl dtl : dtls) {
+			ddiemNhapRepository.deleteAllByIdCt(dtl.getId());
+			dtl.setId(null);
+			dtl.setIdHdr(main.getId());
+			dtl.setTrangThai(TrangThaiAllEnum.CHUA_THUC_HIEN.getId());
 			dtlRepository.save(dtl);
 			if(!ObjectUtils.isEmpty(dtl.getChildren())){
 				List<NhQdGiaoNvuNxDdiem> ddNhap = ObjectMapperUtils.mapAll(dtl.getChildren(), NhQdGiaoNvuNxDdiem.class);

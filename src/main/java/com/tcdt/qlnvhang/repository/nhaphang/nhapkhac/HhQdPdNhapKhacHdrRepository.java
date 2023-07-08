@@ -32,4 +32,5 @@ public interface HhQdPdNhapKhacHdrRepository extends JpaRepository<HhQdPdNhapKha
     Page<HhQdPdNhapKhacHdr> search(HhQdPdNhapKhacSearch req, Pageable pageable);
     Optional<HhQdPdNhapKhacHdr> findById(Long id);
     List<HhQdPdNhapKhacHdr> findBySoQd(String soQd);
+    Optional<HhQdPdNhapKhacHdr> findByIdTh (Long idTh);
 }
