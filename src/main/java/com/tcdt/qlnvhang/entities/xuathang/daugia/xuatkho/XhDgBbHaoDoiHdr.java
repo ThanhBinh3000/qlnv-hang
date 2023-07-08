@@ -27,9 +27,8 @@ public class XhDgBbHaoDoiHdr extends BaseEntity implements Serializable {
   private Long id;
   private Integer nam;
   private String maDvi;
-  private String maQhNs;
+  private String maQhns;
   private String soBbHaoDoi;
-  private LocalDate ngayTaoBb;
   private Long idQdGiaoNvXh;
   private String soQdGiaoNvXh;
   private LocalDate ngayQdGiaoNvXh;
@@ -45,46 +44,40 @@ public class XhDgBbHaoDoiHdr extends BaseEntity implements Serializable {
   private String moTaHangHoa;
   private Long idBbTinhKho;
   private String soBbTinhKho;
-  private LocalDate ngayBatDauXuat;
-  private LocalDate ngayKetThucXuat;
   private BigDecimal tongSlNhap;
   private LocalDate ngayKtNhap;
   private BigDecimal tongSlXuat;
   private LocalDate ngayKtXuat;
   private BigDecimal slHaoThucTe;
   private String tiLeHaoThucTe;
-  private BigDecimal slHaoThanhLy;
-  private String tiLeHaoThanhLy;
   private BigDecimal slHaoVuotDm;
   private String tiLeHaoVuotDm;
+  private BigDecimal slHaoThanhLy;
+  private String tiLeHaoThanhLy;
   private BigDecimal slHaoDuoiDm;
   private String tiLeHaoDuoiDm;
-  private String dinhMucHaoHut;
-  private BigDecimal sLHaoHutTheoDm;
+  private BigDecimal dinhMucHaoHut;
   private String nguyenNhan;
   private String kienNghi;
   private String ghiChu;
-  private String thuKho;
-  private String ktvBaoQuan;
-  private String keToan;
-  private String ldChiCuc;
-  private String trangThai;
-  private LocalDate ngayGduyet;
+  private Long idThuKho;
+  private Long idKtvBaoQuan;
+  private LocalDate ngayPduyetKtvBq;
+  private Long idKeToan;
+  private LocalDate ngayPduyetKt;
   private Long nguoiGduyetId;
-  private LocalDate ngayPduyet;
+  private LocalDate ngayGduyet;
   private Long nguoiPduyetId;
+  private LocalDate ngayPduyet;
+  private String donViTinh;
+  private String trangThai;
   private String lyDoTuChoi;
-  private String type;
+
+  //@Transient
   @Transient
   private String tenDvi;
   @Transient
   private String diaChiDvi;
-  @Transient
-  private String tenLoaiVthh;
-  @Transient
-  private String tenCloaiVthh;
-  @Transient
-  private String tenTrangThai;
   @Transient
   private String tenDiemKho;
   @Transient
@@ -93,6 +86,16 @@ public class XhDgBbHaoDoiHdr extends BaseEntity implements Serializable {
   private String tenNganKho;
   @Transient
   private String tenLoKho;
+  @Transient
+  private String tenThuKho;
+  @Transient
+  private String tenKtvBaoQuan;
+  @Transient
+  private String tenKeToan;
+  @Transient
+  private String tenLanhDaoChiCuc;
+  @Transient
+  private String tenTrangThai;
   @Transient
   private List<FileDinhKem> fileDinhKems = new ArrayList<>();
   @Transient

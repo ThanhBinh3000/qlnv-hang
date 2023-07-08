@@ -30,5 +30,4 @@ public class XhDgBbHaoDoiDtl extends BaseEntity implements Serializable {
   private String soBkCanHang;
   private LocalDate ngayXuatKho;
   private BigDecimal slXuat;
-
 }

@@ -94,6 +94,7 @@ public class XhDgBbHaoDoiService extends BaseServiceImpl {
     }
     XhDgBbHaoDoiHdr data = new XhDgBbHaoDoiHdr();
     BeanUtils.copyProperties(objReq, data);
+    data.setIdThuKho(currentUser.getUser().getId());
     data.setMaDvi(currentUser.getUser().getDepartment());
     data.setTrangThai(Contains.DUTHAO);
     XhDgBbHaoDoiHdr created=xhDgBbHaoDoiHdrRepository.save(data);
@@ -131,6 +132,7 @@ public class XhDgBbHaoDoiService extends BaseServiceImpl {
     }
     XhDgBbHaoDoiHdr data = optional.get();
     BeanUtils.copyProperties(objReq,data);
+    data.setIdThuKho(currentUser.getUser().getId());
     XhDgBbHaoDoiHdr created=xhDgBbHaoDoiHdrRepository.save(data);
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList( XhDgBbHaoDoiHdr.TABLE_NAME));
     List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhDgBbHaoDoiHdr.TABLE_NAME );
@@ -169,8 +171,17 @@ public class XhDgBbHaoDoiService extends BaseServiceImpl {
       if (mapDmucDvi.containsKey(data.getMaLoKho())) {
         data.setTenLoKho(mapDmucDvi.get(data.getMaLoKho()).get("tenDvi").toString());
       }
+      if(data.getIdThuKho() != null){
+        data.setTenThuKho(ObjectUtils.isEmpty(data.getIdThuKho())? null : userInfoRepository.findById(data.getIdThuKho()).get().getFullName());
+      }
+      if (data.getIdKtvBaoQuan() != null){
+        data.setTenKtvBaoQuan(ObjectUtils.isEmpty(data.getIdKtvBaoQuan()) ? null : userInfoRepository.findById(data.getIdKtvBaoQuan()).get().getFullName());
+      }
+      if (data.getIdKeToan() != null){
+        data.setTenKeToan(ObjectUtils.isEmpty(data.getIdKeToan()) ? null : userInfoRepository.findById(data.getIdKeToan()).get().getFullName());
+      }
       if (data.getNguoiPduyetId() != null) {
-        data.setLdChiCuc(ObjectUtils.isEmpty(data.getNguoiPduyetId()) ? null : userInfoRepository.findById(data.getNguoiPduyetId()).get().getFullName());
+        data.setTenLanhDaoChiCuc(ObjectUtils.isEmpty(data.getNguoiPduyetId()) ? null : userInfoRepository.findById(data.getNguoiPduyetId()).get().getFullName());
       }
       data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
       List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhDgBbHaoDoiHdr.TABLE_NAME));
@@ -224,16 +235,22 @@ public class XhDgBbHaoDoiService extends BaseServiceImpl {
     String status = statusReq.getTrangThai() + optional.get().getTrangThai();
     switch (status){
       case Contains.CHODUYET_KTVBQ + Contains.DUTHAO:
-//      case Contains.CHODUYET_KT + Contains.CHODUYET_KTVBQ:
-      case Contains.CHODUYET_LDCC + Contains.CHODUYET_KTVBQ:
       case Contains.CHODUYET_KTVBQ + Contains.TUCHOI_KTVBQ:
-//      case Contains.CHODUYET_KTVBQ + Contains.TUCHOI_KT:
+      case Contains.CHODUYET_KTVBQ + Contains.TUCHOI_KT:
       case Contains.CHODUYET_KTVBQ + Contains.TUCHOI_LDCC:
         optional.get().setNguoiGduyetId(currentUser.getUser().getId());
         optional.get().setNgayGduyet(LocalDate.now());
         break;
+      case Contains.CHODUYET_KT + Contains.CHODUYET_KTVBQ:
+        optional.get().setIdKtvBaoQuan(currentUser.getUser().getId());
+        optional.get().setNgayPduyetKtvBq(LocalDate.now());
+        break;
+      case Contains.CHODUYET_LDCC + Contains.CHODUYET_KT:
+        optional.get().setIdKeToan(currentUser.getUser().getId());
+        optional.get().setNgayPduyetKt(LocalDate.now());
+        break;
       case Contains.TUCHOI_KTVBQ + Contains.CHODUYET_KTVBQ:
-//      case Contains.TUCHOI_KT + Contains.CHODUYET_KT:
+      case Contains.TUCHOI_KT + Contains.CHODUYET_KT:
       case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
         optional.get().setNgayPduyet(LocalDate.now());
@@ -274,8 +291,8 @@ public class XhDgBbHaoDoiService extends BaseServiceImpl {
       objs[3]=dx.getNgayQdGiaoNvXh();
       objs[4]=dx.getSoBbHaoDoi();
       objs[5]=dx.getSoBbTinhKho();
-      objs[6]=dx.getNgayBatDauXuat();
-      objs[7]=dx.getNgayKetThucXuat();
+//      objs[6]=dx.getNgayBatDauXuat();
+//      objs[7]=dx.getNgayKetThucXuat();
       objs[8]=dx.getTenDiemKho();
       objs[9]=dx.getTenLoKho();
       Object[] finalObjs = objs;
