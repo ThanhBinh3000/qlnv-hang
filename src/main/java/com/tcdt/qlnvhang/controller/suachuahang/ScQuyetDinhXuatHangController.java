@@ -1,12 +1,13 @@
-package com.tcdt.qlnvhang.controller.xuathang.suachuahang;
+package com.tcdt.qlnvhang.controller.suachuahang;
 
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.DeleteReq;
-import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhReq;
+import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhXuatHangReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.suachuahang.impl.ScQuyetDinhScImpl;
+import com.tcdt.qlnvhang.service.suachuahang.impl.ScQuyetDinhXuatHangServiceImpl;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,20 +24,20 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = PathContains.SUA_CHUA + PathContains.QUYET_DINH_PHE_DUYET)
+@RequestMapping(value = PathContains.SUA_CHUA + PathContains.XUAT_HANG_DTQG)
 @Slf4j
-@Api(tags = "Sửa chữa hàng DTQG - Quyết định sửa chữa hàng DTQG")
-public class ScQuyetDinhScController {
+@Api(tags = "Sửa chữa hàng DTQG - Quyết định xuất hàng DTQG")
+public class ScQuyetDinhXuatHangController {
     @Autowired
-    ScQuyetDinhScImpl scQuyetDinhSc;
+    ScQuyetDinhXuatHangServiceImpl scQuyetDinhXuatHangService;
 
     @ApiOperation(value = "Tra cứu", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser,@RequestBody ScQuyetDinhReq objReq) {
+    public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser, @RequestBody ScQuyetDinhXuatHangReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(scQuyetDinhSc.searchPage(currentUser,objReq));
+            resp.setData(scQuyetDinhXuatHangService.searchPage(currentUser,objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -51,10 +52,10 @@ public class ScQuyetDinhScController {
     @ApiOperation(value = "Tạo mới", response = List.class)
     @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody ScQuyetDinhReq objReq) {
+    public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody ScQuyetDinhXuatHangReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(scQuyetDinhSc.create(currentUser,objReq));
+            resp.setData(scQuyetDinhXuatHangService.create(currentUser,objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -69,10 +70,10 @@ public class ScQuyetDinhScController {
     @ApiOperation(value = "Cập nhật", response = List.class)
     @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser,
-                                               @Valid @RequestBody ScQuyetDinhReq objReq) {
+                                               @Valid @RequestBody ScQuyetDinhXuatHangReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(scQuyetDinhSc.update(currentUser,objReq));
+            resp.setData(scQuyetDinhXuatHangService.update(currentUser,objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -89,7 +90,7 @@ public class ScQuyetDinhScController {
     public ResponseEntity<BaseResponse> detail(@ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("id") Long id) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(scQuyetDinhSc.detail(id));
+            resp.setData(scQuyetDinhXuatHangService.detail(id));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -102,10 +103,10 @@ public class ScQuyetDinhScController {
 
     @ApiOperation(value = "Trình duyệt", response = List.class)
     @PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> updateStatus(@NonNull @RequestParam(name = "id") Long id) {
+    public ResponseEntity<BaseResponse> updateStatus(@NonNull @RequestBody StatusReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            scQuyetDinhSc.approve(id);
+            scQuyetDinhXuatHangService.approve(req);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -123,7 +124,7 @@ public class ScQuyetDinhScController {
     public ResponseEntity<BaseResponse> delete(@RequestParam("id") Long id) {
         BaseResponse resp = new BaseResponse();
         try {
-            scQuyetDinhSc.delete(id);
+            scQuyetDinhXuatHangService.delete(id);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -141,7 +142,7 @@ public class ScQuyetDinhScController {
     public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody DeleteReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            scQuyetDinhSc.deleteMulti(req.getIds());
+            scQuyetDinhXuatHangService.deleteMulti(req.getIds());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

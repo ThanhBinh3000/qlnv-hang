@@ -15,7 +15,8 @@ public class ScTrinhThamDinhDtlReq {
     private Long id;
 
     private BigDecimal donGiaDk;
-
+    private BigDecimal slDaDuyet;
+    private BigDecimal donGiaPd;
     private String ketQua;
 
 

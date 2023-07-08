@@ -15,27 +15,26 @@ import java.util.List;
 @Data
 public class ScQuyetDinhSc extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "SC_QUYET_DINH";
+    public static final String TABLE_NAME = "SC_QUYET_DINH_SC";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = ScQuyetDinhSc.TABLE_NAME + "_SEQ")
     @SequenceGenerator(sequenceName = ScQuyetDinhSc.TABLE_NAME + "_SEQ", allocationSize = 1, name = ScQuyetDinhSc.TABLE_NAME + "_SEQ")
     private Long id;
-    @Column(name = "SO_QUYET_DINH")
     private String soQd;
     private String trichYeu;
     private LocalDate ngayKy;
-    private Long idToTrinh;
-    private String soToTrinh;
-    private LocalDate ngayDuyetToTrinh;
-    private LocalDate thoiHanXuatSc;
-    private LocalDate thoiHanNhapSc;
+    private String soTtr;
+    private Long idTtr;
+    private LocalDate ngayDuyetLdtc;
+    private LocalDate thoiHanXuat;
+    private LocalDate thoiHanNhap;
     private String trangThai;
     @Transient
     private String tenTrangThai;
     @Transient
     private List<FileDinhKem> fileDinhKem=new ArrayList<>();
     @Transient
-    private List<FileDinhKem> canCu = new ArrayList<>();
+    private List<FileDinhKem> fileCanCu = new ArrayList<>();
 
 }

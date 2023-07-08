@@ -1,8 +1,6 @@
 package com.tcdt.qlnvhang.repository.xuathang.suachuahang;
 
-import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhReq;
 import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhXuatHangReq;
-import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScQuyetDinhSc;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScQuyetDinhXuatHang;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

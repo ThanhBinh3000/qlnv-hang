@@ -4,17 +4,14 @@ import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
-import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScQuyetDinhScRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScQuyetDinhXuatHangRepository;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhReq;
+import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhScReq;
 import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhXuatHangReq;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScQuyetDinhSc;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScQuyetDinhXuatHang;
-import com.tcdt.qlnvhang.util.Contains;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,7 +122,7 @@ public class ScQuyetDinhXuatHangServiceImpl extends BaseServiceImpl {
         scQuyetDinhXuatHangRepository.save(data);
     }
 
-    public ScQuyetDinhXuatHang export(CustomUserDetails currentUser, ScQuyetDinhReq req) throws Exception {
+    public ScQuyetDinhXuatHang export(CustomUserDetails currentUser, ScQuyetDinhScReq req) throws Exception {
         return null;
     }
 
