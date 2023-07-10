@@ -32,7 +32,7 @@ public interface DcnbBBNTBQHdrRepository extends JpaRepository<DcnbBBNTBQHdr, Lo
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
-            "LEFT JOIN DcnbBBNTBQHdr bblm On bblm.qdDcCucId = qdc.id and khdcd.maLoKhoNhan =  bblm.maLoKho and  khdcd.maNganKhoNhan = bblm.maNganKho " +
+            "LEFT JOIN DcnbBBNTBQHdr bblm On bblm.qdDcCucId = qdc.id and khdcd.maLoKhoNhan =  bblm.maLoKho and  khdcd.maNganKhoNhan = bblm.maNganKho and khdcd.maLoKho =  bblm.maLoKhoXuat and  khdcd.maNganKho = bblm.maNganKhoXuat " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND qdc.trangThai = '29'" +
@@ -58,7 +58,7 @@ public interface DcnbBBNTBQHdrRepository extends JpaRepository<DcnbBBNTBQHdr, Lo
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
-            "LEFT JOIN DcnbBBNTBQHdr bblm On bblm.qdDcCucId = qdc.id and khdcd.maLoKhoNhan =  bblm.maLoKho and  khdcd.maNganKhoNhan = bblm.maNganKho " +
+            "LEFT JOIN DcnbBBNTBQHdr bblm On bblm.qdDcCucId = qdc.id and khdcd.maLoKhoNhan =  bblm.maLoKho and  khdcd.maNganKhoNhan = bblm.maNganKho and khdcd.maLoKho =  bblm.maLoKhoXuat and  khdcd.maNganKho = bblm.maNganKhoXuat " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND qdc.trangThai = '29'" +
