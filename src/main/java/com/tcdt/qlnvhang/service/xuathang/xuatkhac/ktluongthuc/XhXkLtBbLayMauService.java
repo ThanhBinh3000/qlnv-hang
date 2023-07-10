@@ -133,6 +133,7 @@ public class XhXkLtBbLayMauService extends BaseServiceImpl {
     List<XhXkLtBbLayMauHdr> allById = xhXkLtBbLayMauHdrRepository.findAllById(ids);
     allById.forEach(data -> {
       data.setMapDmucDvi(mapDmucDvi);
+      data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
       data.setMapVthh(mapVthh);
       data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
       List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhXkLtBbLayMauHdr.TABLE_NAME));
