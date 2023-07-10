@@ -27,10 +27,10 @@ public interface DcnbPhieuXuatKhoHdrRepository extends JpaRepository<DcnbPhieuXu
             "pxk.bangKeVtId, pxk.soBangKeVt," +
             "pxk.trangThai, pxk.trangThai) " +
             "FROM DcnbQuyetDinhDcCHdr qdc " +
-            "LEFT JOIN DcnbPhieuXuatKhoHdr pxk On pxk.qddcId = qdc.id " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
+            "LEFT JOIN DcnbPhieuXuatKhoHdr pxk On pxk.qddcId = qdc.id and pxk.maLoKho = khdcd.maLoKho and pxk.maNganKho = khdcd.maNganKho " +
             "LEFT JOIN DcnbPhieuKnChatLuongHdr pkncl On qdc.parentId = pkncl.qdDcId and pkncl.maLoKho = khdcd.maLoKho and pkncl.maNganKho = khdcd.maNganKho and pkncl.trangThai = '05'" +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
@@ -56,10 +56,10 @@ public interface DcnbPhieuXuatKhoHdrRepository extends JpaRepository<DcnbPhieuXu
             "pxk.trangThai, pxk.trangThai) " +
             "FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbDataLinkHdr dtlh On dtlh.qdCcId = qdc.id " +
-            "LEFT JOIN DcnbPhieuXuatKhoHdr pxk On pxk.qddcId = qdc.id " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
+            "LEFT JOIN DcnbPhieuXuatKhoHdr pxk On pxk.qddcId = qdc.id and pxk.maLoKho = khdcd.maLoKho and pxk.maNganKho = khdcd.maNganKho " +
             "LEFT JOIN DcnbPhieuKnChatLuongHdr pkncl On qdc.parentId = pkncl.qdDcId and pkncl.maLoKho = khdcd.maLoKho and pkncl.maNganKho = khdcd.maNganKho and pkncl.trangThai = '05' " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 "+
