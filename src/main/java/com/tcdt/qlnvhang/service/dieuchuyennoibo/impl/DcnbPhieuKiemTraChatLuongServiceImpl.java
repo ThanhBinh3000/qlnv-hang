@@ -214,15 +214,15 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
             case Contains.CHODUYET_LDC + Contains.DA_DUYET_LDC:
                 optional.get().setNguoiPDuyet(currentUser.getUser().getId());
                 optional.get().setNgayPDuyet(LocalDate.now());
-                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkCuc(optional.get().getMaDvi(),
-                        optional.get().getQdDcId(),
-                        optional.get().getMaNganKhoXuat(),
-                        optional.get().getMaLoKhoXuat());
-                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
-                dataLinkDtl.setLinkId(optional.get().getId());
-                dataLinkDtl.setHdrId(dataLink.getId());
-                dataLinkDtl.setType(DcnbPhieuKtChatLuongHdr.TABLE_NAME);
-                dcnbDataLinkDtlRepository.save(dataLinkDtl);
+//                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkCuc(optional.get().getMaDvi(),
+//                        optional.get().getQdDcId(),
+//                        optional.get().getMaNganKhoXuat(),
+//                        optional.get().getMaLoKhoXuat());
+//                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
+//                dataLinkDtl.setLinkId(optional.get().getId());
+//                dataLinkDtl.setHdrId(dataLink.getId());
+//                dataLinkDtl.setType(DcnbPhieuKtChatLuongHdr.TABLE_NAME);
+//                dcnbDataLinkDtlRepository.save(dataLinkDtl);
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");

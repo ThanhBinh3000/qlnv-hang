@@ -171,15 +171,15 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
                 break;
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
                 hdr.setLdChiCuc(userInfo.getFullName());
-                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(hdr.getMaDvi(),
-                        hdr.getQdDcCucId(),
-                        hdr.getMaNganKhoXuat(),
-                        hdr.getMaLoKhoXuat());
-                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
-                dataLinkDtl.setLinkId(hdr.getId());
-                dataLinkDtl.setHdrId(dataLink.getId());
-                dataLinkDtl.setType(DcnbBBNTBQHdr.TABLE_NAME);
-                dcnbDataLinkDtlRepository.save(dataLinkDtl);
+//                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(hdr.getMaDvi(),
+//                        hdr.getQdDcCucId(),
+//                        hdr.getMaNganKhoXuat(),
+//                        hdr.getMaLoKhoXuat());
+//                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
+//                dataLinkDtl.setLinkId(hdr.getId());
+//                dataLinkDtl.setHdrId(dataLink.getId());
+//                dataLinkDtl.setType(DcnbBBNTBQHdr.TABLE_NAME);
+//                dcnbDataLinkDtlRepository.save(dataLinkDtl);
                 break;
             case Contains.CHODUYET_TK + Contains.TUCHOI_TK:
             case Contains.CHODUYET_KT + Contains.TUCHOI_KT:

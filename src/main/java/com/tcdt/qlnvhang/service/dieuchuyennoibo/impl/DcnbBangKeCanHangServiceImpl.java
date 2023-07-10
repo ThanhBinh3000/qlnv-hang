@@ -207,42 +207,42 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
                 optional.get().setNgayPDuyet(LocalDate.now());
                 optional.get().setNguoiPDuyet(currentUser.getUser().getId());
-                DcnbDataLinkHdr dataLink = null;
-                if ("00".equals(optional.get().getType())) { // xuất
-                    dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(optional.get().getMaDvi(),
-                            optional.get().getQDinhDccId(),
-                            optional.get().getMaNganKho(),
-                            optional.get().getMaLoKho());
-                    Optional<DcnbPhieuXuatKhoHdr> dcnbPhieuXuatKhoHdr = dcnbPhieuXuatKhoHdrRepository.findById(optional.get().getPhieuXuatKhoId());
-                    if(dcnbPhieuXuatKhoHdr.isPresent()){
-                        dcnbPhieuXuatKhoHdr.get().setBangKeChId(optional.get().getId());
-                        dcnbPhieuXuatKhoHdr.get().setSoBangKeCh(optional.get().getSoBangKe());
-                        dcnbPhieuXuatKhoHdrRepository.save(dcnbPhieuXuatKhoHdr.get());
-                    }
-                } else if ("01".equals(optional.get().getType())) {
-                    dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCucNhan(optional.get().getMaDvi(),
-                            optional.get().getQDinhDccId(),
-                            optional.get().getMaNganKho(),
-                            optional.get().getMaLoKho());
-                    Optional<DcnbPhieuNhapKhoHdr> dcnbPhieuNhapKhoHdr = dcnbPhieuNhapKhoHdrRepository.findById(optional.get().getPhieuXuatKhoId());
-                    if(dcnbPhieuNhapKhoHdr.isPresent()){
-                        dcnbPhieuNhapKhoHdr.get().setBangKeChId(optional.get().getId());
-                        dcnbPhieuNhapKhoHdr.get().setSoBangKeCh(optional.get().getSoBangKe());
-                        dcnbPhieuNhapKhoHdrRepository.save(dcnbPhieuNhapKhoHdr.get());
-                    }
-                } else {
-                    throw new Exception("Type phải là 00 hoặc 01!");
-                }
-                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
-                dataLinkDtl.setLinkId(optional.get().getId());
-                dataLinkDtl.setHdrId(dataLink.getId());
-                if ("00".equals(optional.get().getType())) { // xuất
-                    dataLinkDtl.setType("XDC" + DcnbBangKeCanHangHdr.TABLE_NAME);
-                } else if ("01".equals(optional.get().getType())) {
-                    dataLinkDtl.setType("NDC" + DcnbBangKeCanHangHdr.TABLE_NAME);
-                } else {
-                    throw new Exception("Type phải là 00 hoặc 01!");
-                }
+//                DcnbDataLinkHdr dataLink = null;
+//                if ("00".equals(optional.get().getType())) { // xuất
+//                    dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(optional.get().getMaDvi(),
+//                            optional.get().getQDinhDccId(),
+//                            optional.get().getMaNganKho(),
+//                            optional.get().getMaLoKho());
+//                    Optional<DcnbPhieuXuatKhoHdr> dcnbPhieuXuatKhoHdr = dcnbPhieuXuatKhoHdrRepository.findById(optional.get().getPhieuXuatKhoId());
+//                    if(dcnbPhieuXuatKhoHdr.isPresent()){
+//                        dcnbPhieuXuatKhoHdr.get().setBangKeChId(optional.get().getId());
+//                        dcnbPhieuXuatKhoHdr.get().setSoBangKeCh(optional.get().getSoBangKe());
+//                        dcnbPhieuXuatKhoHdrRepository.save(dcnbPhieuXuatKhoHdr.get());
+//                    }
+//                } else if ("01".equals(optional.get().getType())) {
+//                    dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCucNhan(optional.get().getMaDvi(),
+//                            optional.get().getQDinhDccId(),
+//                            optional.get().getMaNganKho(),
+//                            optional.get().getMaLoKho());
+//                    Optional<DcnbPhieuNhapKhoHdr> dcnbPhieuNhapKhoHdr = dcnbPhieuNhapKhoHdrRepository.findById(optional.get().getPhieuXuatKhoId());
+//                    if(dcnbPhieuNhapKhoHdr.isPresent()){
+//                        dcnbPhieuNhapKhoHdr.get().setBangKeChId(optional.get().getId());
+//                        dcnbPhieuNhapKhoHdr.get().setSoBangKeCh(optional.get().getSoBangKe());
+//                        dcnbPhieuNhapKhoHdrRepository.save(dcnbPhieuNhapKhoHdr.get());
+//                    }
+//                } else {
+//                    throw new Exception("Type phải là 00 hoặc 01!");
+//                }
+//                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
+//                dataLinkDtl.setLinkId(optional.get().getId());
+//                dataLinkDtl.setHdrId(dataLink.getId());
+//                if ("00".equals(optional.get().getType())) { // xuất
+//                    dataLinkDtl.setType("XDC" + DcnbBangKeCanHangHdr.TABLE_NAME);
+//                } else if ("01".equals(optional.get().getType())) {
+//                    dataLinkDtl.setType("NDC" + DcnbBangKeCanHangHdr.TABLE_NAME);
+//                } else {
+//                    throw new Exception("Type phải là 00 hoặc 01!");
+//                }
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");

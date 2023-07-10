@@ -260,15 +260,15 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
                 optional.get().setLanhDaoChiCucId(currentUser.getUser().getId());
                 optional.get().setLanhDaoChiCuc(currentUser.getUser().getUsername());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
-                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(optional.get().getMaDvi(),
-                        optional.get().getQDinhDccId(),
-                        optional.get().getMaNganKho(),
-                        optional.get().getMaLoKho());
-                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
-                dataLinkDtl.setLinkId(optional.get().getId());
-                dataLinkDtl.setHdrId(dataLink.getId());
-                dataLinkDtl.setType(DcnbBienBanHaoDoiHdr.TABLE_NAME);
-                dcnbDataLinkDtlRepository.save(dataLinkDtl);
+//                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(optional.get().getMaDvi(),
+//                        optional.get().getQDinhDccId(),
+//                        optional.get().getMaNganKho(),
+//                        optional.get().getMaLoKho());
+//                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
+//                dataLinkDtl.setLinkId(optional.get().getId());
+//                dataLinkDtl.setHdrId(dataLink.getId());
+//                dataLinkDtl.setType(DcnbBienBanHaoDoiHdr.TABLE_NAME);
+//                dcnbDataLinkDtlRepository.save(dataLinkDtl);
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
