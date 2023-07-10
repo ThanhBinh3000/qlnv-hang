@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class HhNkPhieuNhapKhoDtl extends BaseEntity implements Serializable, Cloneable{
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "HhNk_PHIEU_NHAP_KHO_DTL";
+    public static final String TABLE_NAME = "HHNK_PHIEU_NHAP_KHO_DTL";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = HhNkPhieuNhapKhoDtl.TABLE_NAME + "_SEQ")
