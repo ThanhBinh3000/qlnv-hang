@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.xuathang;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.FileDKemJoinHoSoKyThuatDtl;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMau;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoBienBan;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoBienBanCt;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoKyThuat;
@@ -217,6 +218,10 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
 //      NhHoSoKyThuatDTO nhHoSoKyThuatDTO = xhHoSoKyThuatRepository.findHoSoKyThuatNh(DataUtils.safeToLong(objReq.getId()));
       NhHoSoKyThuat nhHoSoKyThuat = nhHoSoKyThuatService.detail(objReq.getId());
       if (!DataUtils.isNullObject(nhHoSoKyThuat)) {
+        Optional<BienBanLayMau> firstBySoBienBan = bienBanLayMauRepository.findFirstBySoBienBan(nhHoSoKyThuat.getSoBbLayMau());
+        if (!firstBySoBienBan.isPresent()) {
+          throw new Exception("Không tìm thấy biên bản lấy mẫu liên quan.");
+        }
         //map danh sach bien ban
         List<NhHoSoBienBan> listHoSoBienBan = nhHoSoKyThuat.getListHoSoBienBan();
         List<XhHoSoKyThuatDtl> listDtl = new ArrayList<>();
@@ -226,7 +231,7 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
           xhHoSoKyThuatDtl.setNgayLapBb(DataUtils.convertToLocalDate(nhHoSoBienBan.getNgayTao()));
           xhHoSoKyThuatDtl.setSoHskt(nhHoSoBienBan.getSoHoSoKyThuat());
           xhHoSoKyThuatDtl.setMaDviNhapHskt(nhHoSoBienBan.getMaDvi());
-          xhHoSoKyThuatDtl.setNgayTaoHskt(DataUtils.convertToLocalDate(nhHoSoBienBan.getNgayTao()));
+          xhHoSoKyThuatDtl.setNgayTao(DataUtils.convertToLocalDate(nhHoSoBienBan.getNgayTao()).atStartOfDay());
           xhHoSoKyThuatDtl.setIdBbLayMau(null);
           xhHoSoKyThuatDtl.setSoBbLayMau(nhHoSoBienBan.getSoBbLayMau());
           xhHoSoKyThuatDtl.setSoQdGiaoNvNh(nhHoSoBienBan.getSoQdGiaoNvNh());
@@ -297,11 +302,20 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
         }
 
         xhHskt = new XhHoSoKyThuatHdr();
-
         xhHskt.setIdHsktNh(objReq.getId());
         xhHskt.setIdHsktNh(nhHoSoKyThuat.getId());
-        xhHskt.setSoHskt(nhHoSoKyThuat.getSoHoSoKyThuat());
+        xhHskt.setSoHsktNh(nhHoSoKyThuat.getSoHoSoKyThuat());
         xhHskt.setSoBbLayMauNh(nhHoSoKyThuat.getSoBbLayMau());
+        xhHskt.setNgayTaoNh(DataUtils.convertToLocalDate(nhHoSoKyThuat.getNgayTao()));
+        xhHskt.setNgayDuyetNh(DataUtils.convertToLocalDate(nhHoSoKyThuat.getNgayPduyet()));
+
+        String maDiaDiem = "";
+        if (DataUtils.isNullOrEmpty(firstBySoBienBan.get().getMaLoKho())) {
+          maDiaDiem = firstBySoBienBan.get().getMaNganKho();
+        } else {
+          maDiaDiem = firstBySoBienBan.get().getMaLoKho();
+        }
+        xhHskt.setMaDiaDiem(maDiaDiem);
         xhHskt.setXhHoSoKyThuatDtl(listDtl);
         xhHskt.setMapDmucDvi(mapDmucDvi);
         xhHskt.setMapVthh(mapVthh);

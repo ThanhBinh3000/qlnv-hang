@@ -29,13 +29,13 @@ public class XhHoSoKyThuatHdr extends BaseEntity implements Serializable {
   private Long id;
   private String soHskt;
   private Long idHsktNh;
-  private Long soHsktNh;
+  private String soHsktNh;
   private Long idBbLayMau;
   private String soBbLayMau;
   private String soBbLayMauNh;
   private String soQdGiaoNvNh;
-  private LocalDate ngayTaoHskt;
-  private LocalDate ngayDuyetHskt;
+  private LocalDate ngayTaoNh;
+  private LocalDate ngayDuyetNh;
   private String maDvi;
   private String maDiaDiem;
   private String loaiVthh;

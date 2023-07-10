@@ -2,19 +2,20 @@ package com.tcdt.qlnvhang.service.suachuahang.impl;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScQuyetDinhScRepository;
 import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhScReq;
-import com.tcdt.qlnvhang.request.suachua.ScTrinhThamDinhHdrReq;
+import com.tcdt.qlnvhang.request.suachua.ScTongHopReq;
+import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.suachuahang.ScQuyetDinhScService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScQuyetDinhSc;
-import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTrinhThamDinhHdr;
+import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTongHopHdr;
 import com.tcdt.qlnvhang.util.Contains;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +39,7 @@ public class ScQuyetDinhScImpl extends BaseServiceImpl implements ScQuyetDinhScS
     private FileDinhKemService fileDinhKemService;
 
     @Autowired
-    private FileDinhKemRepository fileDinhKemRepository;
+    private ScTrinhThamDinhServiceImpl scTrinhThamDinhServiceImpl;
 
     @Override
     public Page<ScQuyetDinhSc> searchPage(ScQuyetDinhScReq req) throws Exception {
@@ -84,17 +86,32 @@ public class ScQuyetDinhScImpl extends BaseServiceImpl implements ScQuyetDinhScS
             throw new Exception("Bản ghi không tồn tại");
         }
         ScQuyetDinhSc data = optional.get();
-        List<FileDinhKem> canCu = fileDinhKemRepository.findByDataIdAndDataTypeIn(data.getId(), Collections.singleton(ScQuyetDinhSc.TABLE_NAME + "_CAN_CU"));
+        List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Collections.singleton(ScQuyetDinhSc.TABLE_NAME + "_CAN_CU"));
         data.setFileCanCu(canCu);
 
-        List<FileDinhKem> fileDinhKemList = fileDinhKemRepository.findByDataIdAndDataTypeIn(data.getId(), Collections.singleton(ScQuyetDinhSc.TABLE_NAME + "_DINH_KEM"));
+        List<FileDinhKem> fileDinhKemList = fileDinhKemService.search(data.getId(), Collections.singleton(ScQuyetDinhSc.TABLE_NAME + "_DINH_KEM"));
         data.setFileDinhKem(fileDinhKemList);
+
+        data.setScTrinhThamDinhHdr(scTrinhThamDinhServiceImpl.detail(data.getIdTtr()));
         return data;
     }
 
     @Override
     public ScQuyetDinhSc approve(ScQuyetDinhScReq req) throws Exception {
-        return null;
+        Optional<ScQuyetDinhSc> optional = scQuyetDinhScRepository.findById(req.getId());
+        if(!optional.isPresent()){
+            throw new Exception("Thông tin tổng hợp không tồn tại");
+        }
+        String status = req.getTrangThai() + optional.get().getTrangThai();
+        if ((TrangThaiAllEnum.BAN_HANH.getId() + TrangThaiAllEnum.DU_THAO.getId()).equals(status)) {
+            optional.get().setTrangThai(req.getTrangThai());
+            optional.get().setNgayKy(LocalDate.now());
+        } else {
+            throw new Exception("Gửi duyệt không thành công");
+        }
+        scQuyetDinhScRepository.save(optional.get());
+
+        return optional.get();
     }
 
     @Transient
@@ -118,5 +135,18 @@ public class ScQuyetDinhScImpl extends BaseServiceImpl implements ScQuyetDinhScS
 
     }
 
-
+    @Override
+    public List<ScQuyetDinhSc> dsQuyetDinhXuatHang(ScQuyetDinhScReq req) throws Exception {
+        UserInfo currentUser = SecurityContextService.getUser();
+        if (currentUser == null){
+            throw new Exception("Access denied.");
+        }
+        String dvql = currentUser.getDvql();
+//        if (currentUser.getCapDvi().equals(Contains.CAP_CUC)) {
+//            req.setMaDviSr(dvql);
+//        }
+        req.setTrangThai(TrangThaiAllEnum.BAN_HANH.getId());
+        List<ScQuyetDinhSc> list = scQuyetDinhScRepository.listQuyetDinhXuatHang(req);
+        return list;
+    }
 }
