@@ -26,7 +26,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = PathContains.NHAP_KHAC + PathContains.PHIEU_NHAP_KHO)
 @Slf4j
-@Api(tags = "Điều chuyển nội bộ - Phiếu nhập kho")
+@Api(tags = "Nhập khác - Phiếu nhập kho")
 public class HhNkPhieuNhapKhoController {
     @Autowired
     private HhNkPhieuNhapKhoServiceImpl service;
