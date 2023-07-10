@@ -238,11 +238,11 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
           xhHoSoKyThuatDtl.setIdQdGiaoNvNh(nhHoSoBienBan.getIdQdGiaoNvNh());
           xhHoSoKyThuatDtl.setDviCungCap(nhHoSoBienBan.getSoHd());
           xhHoSoKyThuatDtl.setTgianKtra(DataUtils.convertToLocalDate(nhHoSoBienBan.getTgianKtra()));
-          xhHoSoKyThuatDtl.setKquaKtra(null);
+          xhHoSoKyThuatDtl.setKquaKtra("");
           xhHoSoKyThuatDtl.setDiaDiemKtra(nhHoSoBienBan.getDiaDiemKiemTra());
           xhHoSoKyThuatDtl.setLoaiVthh(nhHoSoBienBan.getLoaiVthh());
           xhHoSoKyThuatDtl.setCloaiVthh(nhHoSoBienBan.getCloaiVthh());
-          xhHoSoKyThuatDtl.setTenVthh(null);
+          xhHoSoKyThuatDtl.setTenVthh("");
           xhHoSoKyThuatDtl.setSoLuongNhap(DataUtils.safeToLong(nhHoSoBienBan.getSoLuongNhap()));
           xhHoSoKyThuatDtl.setTgianNhap(DataUtils.convertToLocalDate(nhHoSoBienBan.getTgianNhap()));
           xhHoSoKyThuatDtl.setPpLayMau(nhHoSoBienBan.getPpLayMau());
