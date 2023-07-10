@@ -20,8 +20,8 @@ public class DcnbBangKeNhapVTHdr extends BaseEntity implements Serializable, Clo
     public static final String TABLE_NAME = "DCNB_BANG_KE_NHAP_VT_HDR";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBangKeNhapVTHdr.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = DcnbBangKeNhapVTHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBangKeNhapVTHdr.TABLE_NAME + "_SEQ")
     private Long id;
     @Column(name = "LOAI_DC")
     private String loaiDc;

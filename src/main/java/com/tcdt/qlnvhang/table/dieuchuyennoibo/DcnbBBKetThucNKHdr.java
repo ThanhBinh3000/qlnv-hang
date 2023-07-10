@@ -21,8 +21,8 @@ public class DcnbBBKetThucNKHdr extends BaseEntity implements Serializable, Clon
     public static final String TABLE_NAME = "DCNB_BB_KET_THUC_NK_HDR";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBBKetThucNKHdr.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = DcnbBBKetThucNKHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBBKetThucNKHdr.TABLE_NAME + "_SEQ")
     private Long id;
     @Column(name = "LOAI_DC")
     private String loaiDc;

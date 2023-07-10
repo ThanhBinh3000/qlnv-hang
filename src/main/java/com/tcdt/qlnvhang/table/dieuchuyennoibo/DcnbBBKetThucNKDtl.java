@@ -21,8 +21,8 @@ public class DcnbBBKetThucNKDtl {
     public static final String TABLE_NAME = "DCNB_BB_KET_THUC_NK_DTL";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanLayMauDtl.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = DcnbBienBanLayMauDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanLayMauDtl.TABLE_NAME + "_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBBKetThucNKDtl.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = DcnbBBKetThucNKDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBBKetThucNKDtl.TABLE_NAME + "_SEQ")
     @Column(name = "ID")
     private Long id;
 
