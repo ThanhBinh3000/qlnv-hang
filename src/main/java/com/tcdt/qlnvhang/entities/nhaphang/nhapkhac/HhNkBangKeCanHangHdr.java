@@ -1,8 +1,11 @@
-package com.tcdt.qlnvhang.table.dieuchuyennoibo;
+package com.tcdt.qlnvhang.entities.nhaphang.nhapkhac;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
-import lombok.*;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanLayMauHdr;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,17 +15,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = DcnbBangKeCanHangHdr.TABLE_NAME)
+@Table(name = HhNkBangKeCanHangHdr.TABLE_NAME)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DcnbBangKeCanHangHdr extends BaseEntity implements Serializable, Cloneable{
+public class HhNkBangKeCanHangHdr extends BaseEntity implements Serializable, Cloneable{
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "DCNB_BANG_KE_CAN_HANG_HDR";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBangKeCanHangHdr.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = DcnbBangKeCanHangHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBangKeCanHangHdr.TABLE_NAME + "_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
     private Long id;
 
     @Column(name = "NAM")
@@ -46,12 +49,8 @@ public class DcnbBangKeCanHangHdr extends BaseEntity implements Serializable, Cl
     @Column(name = "MA_QHNS")
     private String maQhns;
 
-    @Column(name = "QDINH_DCC_ID")
-    private Long qDinhDccId;
-
-    @Column(name = "SO_QDINH_DCC")
-    private String soQdinhDcc;
-
+    private Long idQdPdNk;
+    String soQdPdNk;
     @Column(name = "NGAY_KY_QDINH")
     private LocalDate ngayKyQdinh;
 
@@ -190,7 +189,7 @@ public class DcnbBangKeCanHangHdr extends BaseEntity implements Serializable, Cl
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
-    private List<DcnbBangKeCanHangDtl> dcnbBangKeCanHangDtl = new ArrayList<>();
+    private List<HhNkBangKeCanHangDtl> hhNkBangKeCanHangDtl = new ArrayList<>();
 
     @Transient
     private String tenTrangThai;

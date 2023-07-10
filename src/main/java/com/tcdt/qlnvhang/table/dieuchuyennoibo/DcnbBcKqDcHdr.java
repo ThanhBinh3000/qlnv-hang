@@ -9,24 +9,23 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = DcnbBbKqDcHdr.TABLE_NAME)
+@Table(name = DcnbBcKqDcHdr.TABLE_NAME)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DcnbBbKqDcHdr extends BaseEntity implements Serializable, Cloneable {
+public class DcnbBcKqDcHdr extends BaseEntity implements Serializable, Cloneable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "DCNB_BB_KQ_DC_HDR";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBbKqDcHdr.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = DcnbBbKqDcHdr.TABLE_NAME
-            + "_SEQ", allocationSize = 1, name = DcnbBbKqDcHdr.TABLE_NAME + "_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBcKqDcHdr.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = DcnbBcKqDcHdr.TABLE_NAME
+            + "_SEQ", allocationSize = 1, name = DcnbBcKqDcHdr.TABLE_NAME + "_SEQ")
     private Long id;
     private Integer nam;
     private String maDvi;
@@ -56,7 +55,7 @@ public class DcnbBbKqDcHdr extends BaseEntity implements Serializable, Cloneable
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
-    private List<DcnbBbKqDcDtl> danhSachDaiDien = new ArrayList<>();
+    private List<DcnbBcKqDcDtl> danhSachKetQua = new ArrayList<>();
     @Transient
     private String tenTrangThai;
 

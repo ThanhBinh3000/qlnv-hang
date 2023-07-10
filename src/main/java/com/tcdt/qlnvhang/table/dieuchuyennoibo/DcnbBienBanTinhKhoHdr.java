@@ -7,6 +7,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +22,8 @@ public class DcnbBienBanTinhKhoHdr extends BaseEntity implements Serializable, C
     public static final String TABLE_NAME = "DCNB_BIEN_BAN_TINH_KHO_HDR";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanLayMauDtl.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = DcnbBienBanLayMauDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanLayMauDtl.TABLE_NAME + "_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanTinhKhoHdr.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = DcnbBienBanTinhKhoHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanTinhKhoHdr.TABLE_NAME + "_SEQ")
     private Long id;
 
     @Column(name = "LOAI_DC")
@@ -189,19 +190,19 @@ public class DcnbBienBanTinhKhoHdr extends BaseEntity implements Serializable, C
     private Long lanhDaoChiCucId;
 
     @Column(name = "TONG_SL_XUAT_THEO_QD")
-    private Double tongSlXuatTheoQd;
+    private BigDecimal tongSlXuatTheoQd;
 
     @Column(name = "TONG_SL_XUAT_THEO_TT")
-    private Double tongSlXuatTheoTt;
+    private BigDecimal tongSlXuatTheoTt;
 
     @Column(name = "SL_CON_LAI_THEO_SS")
-    private Double slConLaiTheoSs;
+    private BigDecimal slConLaiTheoSs;
 
     @Column(name = "SL_CON_LAI_THEO_TT")
-    private Double slConLaiTheoTt;
+    private BigDecimal slConLaiTheoTt;
 
     @Column(name = "CHENH_LECH_SL_CON_LAI")
-    private Double chenhLechSlConLai;
+    private BigDecimal chenhLechSlConLai;
 
     @Column(name = "TYPE")
     private String type;
