@@ -14,7 +14,6 @@ import java.util.List;
 public class HhNkPhieuNhapKhoHdrReq extends BaseRequest {
 
     private Long id;
-    private String loaiDc;
     private Integer nam;
     private String maDvi;
     private String tenDvi;
@@ -23,33 +22,35 @@ public class HhNkPhieuNhapKhoHdrReq extends BaseRequest {
     private LocalDate ngayLap;
     private BigDecimal soNo;
     private BigDecimal soCo;
+    private String soQdGiaoNv;
+    private Long qdGiaoNvId;
+    private LocalDate ngayQdGiaoNv;
     private String soBbCbKho;
     private Long bBCbKhoId;
-    private String soQdDcCuc;
-    private Long qdDcCucId;
-    private LocalDate ngayQdDcCuc;
-    private Long idKeHoachDtl;
     private String maDiemKho;
     private String maNhaKho;
     private String maNganKho;
     private String maLoKho;
+    private String tenDiemKho;
+    private String tenNhaKho;
+    private String tenNganKho;
+    private String tenLoKho;
     private String soPhieuKtraCluong;
     private Long idPhieuKtraCluong;
     private String loaiVthh;
     private String cloaiVthh;
     private String tenLoaiVthh;
     private String tenCloaiVthh;
+    private Long idThuKho;
+    private String tenThuKho;
     private Long idNguoiLap;
     private String tenNguoiLap;
     private Long idLanhDao;
     private String tenLanhDao;
-    private Long idThuKho;
-    private String tenThuKho;
     private Long idKyThuatVien;
     private String tenKyThuatVien;
     private Long idKeToanTruong;
     private String keToanTruong;
-
     private String hoVaTenNguoiGiao;
     private String cmndNguoiGiao;
     private String donViNguoiGiao;
@@ -57,17 +58,22 @@ public class HhNkPhieuNhapKhoHdrReq extends BaseRequest {
     private LocalDate tgianGiaoNhanHang;
     private String loaiHinhNx;
     private String kieuNx;
+    private String bbNghiemThuBqldIds;
     private String bbNghiemThuBqld;
-    private BigDecimal soLuongQdDcCuc;
+    private String soBangKeCanHang;
+    private Long bangKeCanHangId;
+    private String soBangKeNhapVt;
+    private Long bangKeNhapVtId;
+    private String soBbKtNk;
+    private Long bbKtNkId;
     private BigDecimal tongSoLuong;
     private String tongSoLuongBc;
-    private BigDecimal tongKinhPhi;
-    private String tongKinhPhiBc;
     private String ghiChu;
     private String trangThai;
     private String lyDoTuChoi;
     private List<FileDinhKem> chungTuDinhKem = new ArrayList<>();
-
+    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
     private List<HhNkPhieuNhapKhoDtl> children = new ArrayList<>();
+    private String tenTrangThai;
     private List<String> dsLoaiHang = new ArrayList<>();
 }
