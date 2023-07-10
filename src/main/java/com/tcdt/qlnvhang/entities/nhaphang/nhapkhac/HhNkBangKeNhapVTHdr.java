@@ -21,7 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 public class HhNkBangKeNhapVTHdr extends BaseEntity implements Serializable, Cloneable{
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "HhNk_BANG_KE_NHAP_VT_HDR";
+    public static final String TABLE_NAME = "HHNK_BANG_KE_NHAP_VT_HDR";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
@@ -68,7 +68,7 @@ public class HhNkBangKeNhapVTHdr extends BaseEntity implements Serializable, Clo
     @Column(name = "TEN_DIEM_KHO")
     private String tenDiemKho;
     @Column(name = "DIA_DIEM_KHO")
-    private String diaDaDiemKho;
+    private String diaDiemKho;
     @Column(name = "MA_NHA_KHO")
     private String maNhaKho;
     @Column(name = "TEN_NHA_KHO")

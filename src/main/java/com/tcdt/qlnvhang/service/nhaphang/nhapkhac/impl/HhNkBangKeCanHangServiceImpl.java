@@ -97,8 +97,6 @@ public class HhNkBangKeCanHangServiceImpl extends BaseServiceImpl {
 
         HhNkBangKeCanHangHdr data = optional.get();
         objReq.setMaDvi(data.getMaDvi());
-        objReq.setType(optional.get().getType());
-        objReq.setLoaiDc(optional.get().getLoaiDc());
         BeanUtils.copyProperties(objReq, data);
         data.setHhNkBangKeCanHangDtl(objReq.getHhNkBangKeCanHangDtl());
         HhNkBangKeCanHangHdr created = hhnkBangKeCanHangHdrRepository.save(data);
@@ -182,7 +180,7 @@ public class HhNkBangKeCanHangServiceImpl extends BaseServiceImpl {
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
                 optional.get().setNgayPDuyet(LocalDate.now());
                 optional.get().setNguoiPDuyet(currentUser.getUser().getId());
-                Optional<HhNkPhieuNhapKhoHdr> dcnbPhieuNhapKhoHdr = hhnkPhieuNhapKhoHdrRepository.findById(optional.get().getPhieuXuatKhoId());
+                Optional<HhNkPhieuNhapKhoHdr> dcnbPhieuNhapKhoHdr = hhnkPhieuNhapKhoHdrRepository.findById(optional.get().getPhieuNhapKhoId());
                 if (dcnbPhieuNhapKhoHdr.isPresent()) {
                     dcnbPhieuNhapKhoHdr.get().setBangKeCanHangId(optional.get().getId());
                     dcnbPhieuNhapKhoHdr.get().setSoBangKeCanHang(optional.get().getSoBangKe());

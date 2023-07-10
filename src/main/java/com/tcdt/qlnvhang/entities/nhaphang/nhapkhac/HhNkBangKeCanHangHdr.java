@@ -21,11 +21,11 @@ import java.util.List;
 @NoArgsConstructor
 public class HhNkBangKeCanHangHdr extends BaseEntity implements Serializable, Cloneable{
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "DCNB_BANG_KE_CAN_HANG_HDR";
+    public static final String TABLE_NAME = "HHNK_BANG_KE_CAN_HANG_HDR";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = HhNkBangKeCanHangHdr.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = HhNkBangKeCanHangHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = HhNkBangKeCanHangHdr.TABLE_NAME + "_SEQ")
     private Long id;
 
     @Column(name = "NAM")
@@ -60,18 +60,6 @@ public class HhNkBangKeCanHangHdr extends BaseEntity implements Serializable, Cl
     @Column(name = "THOI_GIAN_GIAO_NHAN")
     private LocalDate thoiGianGiaoNhan;
 
-    @Column(name = "NGAY_KY_QD_DCC")
-    private LocalDate ngayKyQdDcc;
-
-    @Column(name = "PHIEU_XUAT_KHO_ID")
-    private Long phieuXuatKhoId;
-
-    @Column(name = "NGAY_XUAT_KHO")
-    private LocalDate ngayXuatKho;
-
-    @Column(name = "SO_PHIEU_XUAT_KHO")
-    private String soPhieuXuatKho;
-
     @Column(name = "PHIEU_NHAP_KHO_ID")
     private Long phieuNhapKhoId;
 
@@ -83,6 +71,9 @@ public class HhNkBangKeCanHangHdr extends BaseEntity implements Serializable, Cl
 
     @Column(name = "SO_BB_LAY_MAU")
     private String soBbLayMau;
+
+    @Column(name = "SO_BB_LAY_MAU_ID")
+    private Long soBbLayMauId;
 
     @Column(name = "LOAI_VTHH")
     private String loaiVthh;
@@ -103,7 +94,7 @@ public class HhNkBangKeCanHangHdr extends BaseEntity implements Serializable, Cl
     private String tenDiemKho;
 
     @Column(name = "DIA_DIEM_KHO")
-    private String diaDaDiemKho;
+    private String diaDiemKho;
 
     @Column(name = "MA_NHA_KHO")
     private String maNhaKho;
@@ -123,9 +114,6 @@ public class HhNkBangKeCanHangHdr extends BaseEntity implements Serializable, Cl
     @Column(name = "TEN_LO_KHO")
     private String tenLoKho;
 
-    @Column(name = "THAY_DOI_THU_KHO")
-    private Boolean thayDoiThuKho;
-
     @Column(name = "TRANG_THAI")
     @Access(value=AccessType.PROPERTY)
     private String trangThai;
@@ -144,12 +132,6 @@ public class HhNkBangKeCanHangHdr extends BaseEntity implements Serializable, Cl
 
     @Column(name = "NGAY_PDUYET_LDCCUC")
     private LocalDate ngayPDuyet;
-
-    @Column(name = "LOAI_DC")
-    private String loaiDc;
-
-    @Column(name = "TYPE")
-    private String type;
 
     @Column(name = "MA_LANH_DAO_CHI_CUC")
     private String maLanhDaoChiCuc;
