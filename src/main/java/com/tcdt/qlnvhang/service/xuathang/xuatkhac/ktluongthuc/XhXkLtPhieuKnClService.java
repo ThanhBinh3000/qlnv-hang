@@ -124,6 +124,7 @@ public class XhXkLtPhieuKnClService extends BaseServiceImpl {
     List<XhXkLtPhieuKnClHdr> allById = xhXkLtPhieuKnClRepository.findAllById(ids);
     allById.forEach(data -> {
       data.setMapDmucDvi(mapDmucDvi);
+      data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
       data.setMapVthh(mapVthh);
       data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
       List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhXkLtPhieuKnClHdr.TABLE_NAME));
